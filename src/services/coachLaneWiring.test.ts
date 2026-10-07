@@ -58,7 +58,7 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
   it('the plan arc is queued on its own lane (closed until WO-2 proves it true)', () => {
     // It carried kind 'plan', which the old DNA kind whitelist never listed, so
     // from 2026-09-27 to 2026-09-29 it was computed every turn and never heard.
-    expect(TEACH).toMatch(/queueSpokenHint\(probe\.fen\(\), line, 'planArc', e\.squares[,)]/);
+    expect(TEACH).toMatch(/queueSpokenHint\(probe\.fen\(\), line, 'planArc', NO_PROOF\.description, e\.squares[,)]/);
   });
 
   it('the coach callout is queued at the rank the model gives it', () => {
@@ -88,13 +88,13 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // parity — the verdict still leads, the evidence still follows it.)
     // (Najdorf re-walk 2026-09-27: the verdict stands down only when the grade
     // already names the SAME lost square — `lossInGrade`.)
-    expect(TEACH).toMatch(/const line = `\$\{fundamental\s*\?\s*`\$\{lossInGrade \? '' : bookSaid \? fundamental\.howOnly : fundamental\.verdict\}[\s\S]{0,160}?\$\{evidence\}[\s\S]{0,20}?`\.trim\(\)\s*:\s*`\$\{look\.line\}\$\{takeDefinition\(look\.pattern\)\}`\}\$\{concession \? ` \$\{concession\}` : ''\}`;/);
+    expect(TEACH).toMatch(/const line = `\$\{fundamental\s*\?\s*`\$\{lossInGrade \? '' : noteSlip\(learnMemRef\.current, fundamental\.id\)\}\$\{lossInGrade \? '' : bookSaid \? fundamental\.howOnly : fundamental\.verdict\}[\s\S]{0,160}?\$\{evidence\}[\s\S]{0,20}?`\.trim\(\)\s*:\s*`\$\{look\.line\}\$\{takeDefinition\(look\.pattern\)\}`\}\$\{concession \? ` \$\{concession\}` : ''\}`;/);
     // (unify-the-coach B3, 2026-10-01: the grade's missed pattern carries its
     // rule once a game, from the one definition ledger.)
     expect(TEACH).toMatch(/const concession = lookConcession\(fenBefore, move\.san, cpLoss, studentEvalAfterCp\);/);
     // A fundamental with NO material drawback still speaks, on its own.
     // (Colle re-walk 2026-09-27: graded on the student-move board, `move.fen`.)
-    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, bookSaidAlone \? fundamental\.howOnly : fundamental\.verdict, 'fundamental', \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
+    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, `\$\{noteSlip\(learnMemRef\.current, fundamental\.id\)\}\$\{bookSaidAlone \? fundamental\.howOnly : fundamental\.verdict\}`, 'fundamental', NO_PROOF\.stated, \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
   });
 
   it('the hint register speaks rather than only prompting', () => {
@@ -361,7 +361,7 @@ describe('the couplings that make the wiring safe', () => {
     // And it is the SHARED picker, so the matrix and the once-per-game budget
     // cannot drift between the two surfaces.
     expect(PLAY).toMatch(/pickTeachingReply\s*\(\s*game\.fen/);
-    expect(PLAY, 'the slip is not told who the student is').toMatch(/studentElo: liveElo/);
+    expect(PLAY, 'the slip is not told who the student is').toMatch(/studentElo: turnStrength\.studentElo/);
     // The composer's FIRST layer is the shared slip picker.
     const ENGINE = code(read('src/services/coachGameEngine.ts'));
     const composer = ENGINE.slice(ENGINE.indexOf('export async function pickTeachingReply('));

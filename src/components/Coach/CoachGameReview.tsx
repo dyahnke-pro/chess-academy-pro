@@ -13,6 +13,7 @@ const REVIEW_MULTIPV = 8;
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { explorationAnchorAction } from '../../services/reviewExplorationAnchor';
 import { usePieceSound } from '../../hooks/usePieceSound';
+import { walkableLine } from '../../services/proof';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { MoveListPanel } from './MoveListPanel';
 import { ReviewSummaryCard } from './ReviewSummaryCard';
@@ -2319,6 +2320,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     reviewWhyBusyRef.current = true;
     walkPlayback.pause('why');
     try {
+      // THE PROOF OF WHAT WAS JUST SAID comes first (one coach: Learn's Why
+      // reads the same thing) — the line the door kept with the claim.
+      const said = seg.proofs?.find((p) => p.line && p.line.sans.length > 0);
+      if (said?.line) {
+        const walk = walkableLine(said.line.fen, said.line.sans, said.line.sans[0]);
+        const answer = `${said.full.charAt(0).toUpperCase()}${said.full.slice(1)}${/[.!?]$/.test(said.full) ? '' : '.'}`;
+        const at = Date.now();
+        setAskMessages((prev) => [...prev, { id: `why-${ply}-${at}`, role: 'assistant', content: answer, timestamp: at }]);
+        setAskExpanded(true);
+        void voiceService.speakReadAloud(answer);
+        if (walk) setReviewWhy({ ply, line: walk });
+        return;
+      }
       const analysis = await stockfishEngine.analyzePosition(fen, 16, undefined, 'brain');
       const detail = await computeWhyBestMoveDetail({ fen, studentColor: playerColor, analysis, rating: playerRating, studentWeaknesses: weaknessSignalsRef.current, studentNeedContext: null });
       if (walkPlyRef.current !== ply) return;

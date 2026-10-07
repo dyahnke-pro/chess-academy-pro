@@ -14,7 +14,7 @@ describe('tiedDefender — the guard that cannot leave', () => {
 
   it('the move that created the tie is the event, said with its count', () => {
     const t = newTiedDefender(before, after, 'w');
-    expect(tiedDefenderLine(t!)).toBe('Their knight on d7 is tied down now: you hit the pawn on e5 once and it is guarded once — take the knight away and it falls. That is what pressure buys — a piece that cannot leave.');
+    expect(tiedDefenderLine(t!)).toBe('Their knight on d7 is tied down now: you hit the pawn on e5 once and it is guarded once — the knight is the guard that holds it. That is what pressure buys — a piece that cannot leave.');
   });
 
   it('no pressure, no tie; a loose piece is a hanging piece, not a tie', () => {

@@ -10,13 +10,13 @@
 //     starts it. Exact: every number is on the board.
 // PURE: chess.js + threatOut.
 import { Chess } from 'chess.js';
+import { computeExchangeLedger, describeProofResult } from './exchangeLedger';
 import { computeMustDefend, flipSideToMove } from './threatOut';
 import { withProof, type Proof } from './proof';
 import { MATE_POINTS, type FactStakes } from './factStakes';
 
 const COUNT = ['no', 'once', 'twice', 'three times', 'four times', 'five times'];
 const times = (n: number): string => COUNT[n] ?? `${n} times`;
-const WORTH = (v: number): string => (v >= 9 ? 'a queen' : v >= 5 ? 'a rook' : v >= 3 ? 'a piece' : v >= 2 ? 'two pawns' : 'a pawn');
 
 /** The proof behind a threat against `student` on `fen` (the opponent's move
  *  just played), about the piece on one of `squares`; null when there is no
@@ -45,11 +45,15 @@ export function threatProof(fen: string, student: 'w' | 'b', squares: readonly s
   let hits = 0;
   try { hits = probe.attackers(named.square as Parameters<Chess['attackers']>[0], foe).length; } catch { return null; }
   const guard = named.defenders === 0 ? 'nothing guards it' : `it is guarded ${times(named.defenders)}`;
-  const gain = named.defenders === 0 ? 'takes it for free' : `starts the trade, and they come out ${WORTH(named.value)} up`;
+  // The OUTCOME comes from the ledger over the capture (a free piece is a
+  // one-move line the ledger settles); a defended piece is said by its count,
+  // the board fact, since the trade's result is not played out here.
+  const free = named.defenders === 0 ? computeExchangeLedger(them, [cap.san], student) : null;
+  const result = free && free.settled && free.netPawns < 0 ? describeProofResult(free) : null;
   return {
     kind: 'count', exact: true,
-    short: `${cap.san} ${named.defenders === 0 ? 'takes it for free' : 'wins material'}`,
-    full: `It is attacked ${times(hits)} and ${guard}, so ${cap.san} ${gain}`,
+    short: result ? `${cap.san} — ${result}` : `attacked ${times(hits)}, ${guard}`,
+    full: result ? `It is attacked ${times(hits)} and ${guard}: ${cap.san} — ${result}` : `It is attacked ${times(hits)} and ${guard}`,
     line: { fen: them, sans: [cap.san] },
     squares: [named.square, cap.from],
   };

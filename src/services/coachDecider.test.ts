@@ -9,7 +9,7 @@ const PIN = '[tactic] Your bishop on g4 pins their bishop on e2 against their qu
 const BATTERY = '[tactic] Their queen on d1 and their bishop on e2 form a battery on the diagonal, bearing down on your bishop on g4.';
 const TRIVIA = '[consequence] It nudged the balance your way.';
 const SQ = new Map<string, readonly string[]>([[PIN, ['g4', 'e2', 'd1']], [BATTERY, ['d1', 'e2', 'g4']]]);
-const bundle = { board: CALM_BOARD, facts: [PIN, BATTERY, TRIVIA], squares: SQ, incoming: new Set([BATTERY]) };
+const bundle = { board: CALM_BOARD, proofs: new Map(), facts: [PIN, BATTERY, TRIVIA], squares: SQ, incoming: new Set([BATTERY]) };
 // `need` AND `momentBoost` are both REQUIRED on StudentContext, and null/0
 // are real answers — the
 // type says so because making it optional is exactly how review ended up
@@ -164,7 +164,7 @@ describe('a row closed as unsupported files every quiet fact under that gate (B9
   const B = '[delta] Your rook on f8\'s line just opened — it now reaches f2.';
   const sq = new Map<string, readonly string[]>([[A, ['f1', 'f7', 'f8', 'f2']], [B, ['f8', 'f2', 'f1', 'f7']]]);
   it('the subsumed loser is filed unsupported, like its winner', () => {
-    const d = decide(quiet, student, { board: CALM_BOARD, facts: [A, B], squares: sq }, 'walk');
+    const d = decide(quiet, student, { board: CALM_BOARD, proofs: new Map(), facts: [A, B], squares: sq }, 'walk');
     expect(d.speak).toBe(false);
     expect(d.reason).toBe('unsupported');
     expect(d.quiet.every((q) => q.why === 'unsupported')).toBe(true);
@@ -179,10 +179,27 @@ describe('a row closed as unsupported files every quiet fact under that gate (B9
 describe('a row closed because everything was already said names THAT gate (G2b, prod 2026-10-06)', () => {
   it('reason is said-already, and every quiet fact is filed under it', () => {
     const only = '[tactic] Your bishop on g4 pins their bishop on e2 against their queen on d1.';
-    const b = { board: CALM_BOARD, facts: [only], squares: new Map([[only, ['g4', 'e2', 'd1']]]), alreadySaid: new Set([only]) };
+    const b = { board: CALM_BOARD, proofs: new Map(), facts: [only], squares: new Map([[only, ['g4', 'e2', 'd1']]]), alreadySaid: new Set([only]) };
     const d = decide(blunder, student, b, 'interrupt');
     expect(d.speak).toBe(false);
     expect(d.reason).toBe('said-already');
     expect(d.quiet.every((q) => q.why === 'said-already')).toBe(true);
+  });
+});
+
+describe('the proof rides through the door (one-coach P3)', () => {
+  const T = '[threat] Their knight on f4 attacks your queen on g6.';
+  const SQS = new Map<string, readonly string[]>([[T, ['f4', 'g6']]]);
+  const proof = { kind: 'count' as const, exact: true, short: 'Nxg6', full: 'It is attacked once and nothing guards it: Nxg6 — they win a queen', squares: ['f4', 'g6'] };
+  it('a conclusion that carries its proof hands it back for Why', () => {
+    const d = decide(blunder, student, { board: CALM_BOARD, facts: [T], squares: SQS, proofs: new Map([[T, proof]]) }, 'walk');
+    expect(d.spoken).toContain(T);
+    expect(d.proofOf.get(T)).toBe(proof);
+    expect(d.unproven).toBe(0);
+  });
+  it('a conclusion with no proof still speaks today, and is counted', () => {
+    const d = decide(blunder, student, { board: CALM_BOARD, facts: [T], squares: SQS, proofs: new Map() }, 'walk');
+    expect(d.spoken).toContain(T);
+    expect(d.unproven).toBe(1);
   });
 });

@@ -20,6 +20,7 @@ import { matchClauseKind, boostFor, type WeaknessSignal } from './weaknessSignal
 import type { ClauseKind } from './positionFacts';
 import { stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
 import type { TeachingLayer } from './teachingLayers';
+import type { NoProofReason } from './proof';
 
 /** Every tag `computeMoveFacets` (and the review's own passes) can emit. The
  *  Record below is exhaustive over this union, so a NEW tag fails to compile
@@ -294,6 +295,43 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   badbishop: 'plan', complex: 'plan', minority: 'plan', worst: 'plan', 'opp-target': 'plan',
   verdict: 'plan', eval: 'plan', delta: 'plan', note: 'plan', stock: 'plan',
   'structure-plan': 'plan', 'opponent-intent': 'plan', 'student-leans': 'plan', 'opponent-leans': 'plan',
+};
+
+/**
+ * WHAT EACH FACT KIND OWES AS PROOF (one-coach P3, David 2026-10-07: "Should
+ * all computers retain the proof?" → yes; "Root cause"). A CONCLUSION — a cost,
+ * a threat, a tactic, a refutation, a race, a verdict on a move — is
+ * `'proven'`: it must arrive at the door with the `Proof` its computer found.
+ * Everything else names WHY it needs none (a name, a description of the
+ * board, a method or principle, a statement of the student's own record).
+ * Exhaustive over `FactKind`, so a new kind fails to compile until someone
+ * decides which it is. The door counts unproven conclusions on every decision
+ * row (`unproven`) — the backlog is measured until it reaches zero and the door
+ * refuses them (`proofBacklog.baseline`).
+ */
+export const FACT_PROOF: Record<FactKind, 'proven' | NoProofReason> = {
+  // CONCLUSIONS — each is something a line or a count on the board shows.
+  quality: 'proven', forced: 'proven', threat: 'proven', tactic: 'proven', trapped: 'proven',
+  refuted: 'proven', bluff: 'proven', loose: 'proven', sac: 'proven', 'sac-why': 'proven',
+  trade: 'proven', stopped: 'proven', 'their-cost': 'proven', timing: 'proven', 'plan-race': 'proven',
+  'must-defend': 'proven', 'latent-danger': 'proven', 'latent-chance': 'proven', 'key-moment': 'proven',
+  deliberation: 'proven', 'not-yet': 'proven', line: 'proven', 'stop-flaw': 'proven', convert: 'proven',
+  // PRINCIPLES AND HABITS — a rule of the game, taught; the board is the example.
+  principle: 'method', technique: 'method', method: 'method', rule: 'method', fundamental: 'method',
+  endgame: 'method', stock: 'method', concept: 'method', 'their-habit': 'stated',
+  // NAMES.
+  opening: 'name',
+  // THE PLAN AND THE STRUCTURE — a reading of the position, said as one.
+  point: 'description', contrast: 'description', 'plan-arc': 'description', 'plan-now': 'description',
+  'plan-opening': 'description', 'plan-middlegame': 'description', 'plan-line': 'description',
+  'structure-plan': 'description', 'opponent-intent': 'description', 'hole-access': 'description',
+  'speedrun-read': 'description', status: 'description', consequence: 'description',
+  // DESCRIPTIONS OF THE BOARD.
+  does: 'description', praise: 'description', move: 'description', count: 'description', royal: 'description',
+  king: 'description', note: 'description', delta: 'description', eval: 'description', passer: 'description',
+  rook7: 'description', badbishop: 'description', complex: 'description', minority: 'description',
+  worst: 'description', 'opp-target': 'description', verdict: 'description', structure: 'description',
+  'opp-dev': 'description', 'student-leans': 'description', 'opponent-leans': 'description',
 };
 
 /**

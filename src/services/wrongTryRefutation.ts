@@ -2,7 +2,8 @@ import { Chess } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
 import { punishmentOf } from './moveAllowed';
 import type { StockfishAnalysis, WalkableLine } from '../types';
-import { pvSans, walkableLine } from './moveInsight';
+import { pvSans } from './moveInsight';
+import { lineProof, walkableLine, type Proof } from './proof';
 
 /** The engine seam, so tests can hand in canned reads. */
 export interface RefutationEngine {
@@ -11,7 +12,10 @@ export interface RefutationEngine {
 
 export type WrongTryRead =
   /** The try loses something concrete: "Qe3? Then Bxg5, winning your pawn on g5." */
-  | { kind: 'refuted'; text: string; replySan: string; replyFrom: string; replyTo: string; line?: WalkableLine }
+  | { kind: 'refuted'; text: string; replySan: string; replyFrom: string; replyTo: string; line?: WalkableLine;
+      /** The try and the engine's answer, as the one Proof shape every coach
+       *  surface carries (one-coach P3) — what a record keeps. */
+      proof: Proof }
   /** The try is still good, just not the puzzle's line — said honestly. */
   | { kind: 'also-good'; text: string };
 
@@ -66,12 +70,13 @@ export async function readWrongTry(
   // The try and the engine's answer to it, walkable on the board.
   const replyLine = pvSans(afterTry, read.topLines?.[0]?.moves ?? [read.bestMove], 4);
   const line = walkableLine(fen, [trySan, ...replyLine], trySan) ?? undefined;
+  const proof = lineProof({ fen, sans: line ? line.plies.map((x) => x.san) : [trySan, reply.san] }) ?? { kind: 'line' as const, exact: false, short: `${trySan}, ${reply.san}`, full: `${trySan}, then ${reply.san}` };
   const p = punishmentOf(fen, trySan, reply.san);
   if (p) {
-    return { kind: 'refuted', text: `${trySan}? Then ${p.replySan}, ${p.gerund}.`, replySan: p.replySan, replyFrom: reply.from, replyTo: reply.to, line };
+    return { kind: 'refuted', text: `${trySan}? Then ${p.replySan}, ${p.gerund}.`, replySan: p.replySan, replyFrom: reply.from, replyTo: reply.to, line, proof };
   }
   if (read.isMate && moverEval < 0) {
-    return { kind: 'refuted', text: `${trySan}? Then ${reply.san}, and they have a forced mate.`, replySan: reply.san, replyFrom: reply.from, replyTo: reply.to, line };
+    return { kind: 'refuted', text: `${trySan}? Then ${reply.san}, and they have a forced mate.`, replySan: reply.san, replyFrom: reply.from, replyTo: reply.to, line, proof };
   }
   return null;
 }

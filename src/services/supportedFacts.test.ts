@@ -69,7 +69,7 @@ describe('decide — teaching points first on the LIVE vocabulary too', async ()
   const LEANS_HERE = 'Their bishop on g4 is doing all the work.';
   const LEANS_ELSEWHERE = 'Your rook on a1 is carrying your whole position.';
   const live = (facts: string[], kinds: Record<string, string>, sq: Record<string, string[]>) => ({
-    board: CALM_BOARD,
+    board: CALM_BOARD, proofs: new Map(),
     facts,
     squares: new Map(Object.entries(sq)),
     family: new Map(Object.entries(kinds)),

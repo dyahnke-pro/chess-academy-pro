@@ -51,7 +51,7 @@ export function puzzleMethodLine(
       momentBoost: NO_BOOST,
       layers: layerStandings(record.weaknesses, record.capabilities),
     },
-    { facts: [], board: CALM_BOARD, squares: new Map() },
+    { facts: [], board: CALM_BOARD, squares: new Map(), proofs: new Map() },
     'walk',
     { bestSan, cpLossCp: stakesCp, ignoredThreat: false, isStudentMove: true, saidHabits: said, ply: variety },
   );

@@ -40,7 +40,7 @@ const LOUD: ImportanceSignals = {
 };
 
 const bundle = {
-  board: CALM_BOARD,
+  board: CALM_BOARD, proofs: new Map(),
   facts: ['Your knight on f3 is hanging.'],
   squares: new Map<string, readonly string[]>([['Your knight on f3 is hanging.', ['f3']]]),
   incoming: new Set<string>(),

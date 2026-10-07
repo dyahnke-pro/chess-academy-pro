@@ -1688,6 +1688,11 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     const ledStaked = decisions.filter((d) => d.leadStaked === true);
     await add('DECIDER computed-order-carries-stakes', stakedRows.length > 0 && ledStaked.length > 0,
       `${stakedRows.length}/${decisions.length} rows carried stakes; ${ledStaked.length} led by a staked fact`);
+    // THE PROOF BACKLOG (one-coach P3): conclusions that spoke with no proof.
+    // Reported, not gated, until producers fill it; the row must CARRY it.
+    const unprovenRows = decisions.filter((d) => typeof d.unproven === 'number');
+    await add('DECIDER proof-backlog-measured', unprovenRows.length === decisions.length && decisions.length > 0,
+      `${decisions.reduce((n, d) => n + (d.unproven ?? 0), 0)} unproven conclusion(s) spoke across ${decisions.length} rows; by kind ${JSON.stringify(decisions.flatMap((d) => d.unprovenKinds ?? []).reduce((m, k) => ({ ...m, [k]: (m[k] ?? 0) + 1 }), {}))}`);
     const spoke = decisions.filter((d) => d.speak);
     // SUBSUMPTION — the knob behind "calling out the pins and the batteries was
     // a bit much" (David 2026-09-16). It is the mechanism the rule says to

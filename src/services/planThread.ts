@@ -16,6 +16,7 @@
 import type { Color } from 'chess.js';
 import { deriveNextPlanFacts, type PlanFact } from './nextPlans';
 import { planStoppedProof, planStoppedLine } from './planStopped';
+import { NO_PROOF, type FactProof } from './proof';
 
 /** How long a stated plan holds before an unexplained change may replace it. */
 export const PLAN_THREAD_HOLD_PLIES = 4;
@@ -36,6 +37,9 @@ export interface PlanThreadLine {
   squares: string[];
   /** Say-once key for the claim ledger. */
   claim: string;
+  /** The stop is proven off their move (exact, read from the board); a new
+   *  plan is a description of the position. */
+  proof: FactProof;
 }
 
 const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
@@ -56,7 +60,7 @@ export function planThreadTurn(
     const proof = planStoppedProof(t.stated.fact, args.fenBefore, args.fenAfter, args.student);
     if (proof) {
       t.stoppedInRow += 1;
-      out.push({ text: planStoppedLine(proof, t.stoppedInRow, args.fenAfter, args.student), squares: t.stated.fact.squares, claim: `plan:stopped:${t.stated.fact.id}:${args.ply}` });
+      out.push({ text: planStoppedLine(proof, t.stoppedInRow, args.fenAfter, args.student), squares: t.stated.fact.squares, claim: `plan:stopped:${t.stated.fact.id}:${args.ply}`, proof: { kind: 'squares', exact: true, short: proof, full: proof, squares: t.stated.fact.squares } });
       t.stated = null;
       t.lastStatedPly = null;   // a proven stop is not a wobble: the next plan follows at once
       t.wasStopped = true;
@@ -73,7 +77,7 @@ export function planThreadTurn(
     : t.stated || t.lastStatedPly !== null
       ? `The plan changes here — now it's to ${body}.`
       : `${cap(top.text)}.`;
-  out.push({ text, squares: top.squares, claim: `plan:student:struct:${top.id}:${args.ply}` });
+  out.push({ text, squares: top.squares, claim: `plan:student:struct:${top.id}:${args.ply}`, proof: NO_PROOF.description });
   t.stated = { fact: top, ply: args.ply };
   t.lastStatedPly = args.ply;
   t.wasStopped = false;

@@ -12,6 +12,7 @@ import { proofCut, describeProofResult } from './exchangeLedger';
 import { andList } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { costWords } from './engineConstants';
+import { lineProof, type Proof } from './proof';
 
 function stripGlyphs(s: string): string { return s.replace(/[+#!?]+$/, ''); }
 
@@ -242,4 +243,16 @@ export function refutedFromFan(input: {
   const { lineSans, proofResult } = provenPrefix(input.fenBefore, sans, input.moverWB);
   const facts = { alt: alt.san, games: alt.games, pct: alt.pct, costCp, line: null, concept: null, lineSans, proofResult, source: alt.source ?? 'masters' as const, job: droppedJob(input.fenBefore, sans) };
   return { ...facts, text: renderRefutedAlternative(facts, input.playedSan, stemKeyOf(input.fenBefore)) };
+}
+
+/** THE REFUTED ALTERNATIVE'S PROOF — the alternative, then the line that
+ *  punishes it, from the board it was considered on (one home: Review's
+ *  `[refuted]` facet and the live `refuted` clause both read it). */
+export function refutedAltProof(fenBefore: string, r: Pick<RefutedAlternative, 'alt' | 'lineSans'>): Proof | null {
+  try {
+    const sans = r.lineSans[0] === r.alt ? [...r.lineSans] : [r.alt, ...r.lineSans];
+    const v = new Chess(fenBefore);
+    for (const m of sans) v.move(m);
+    return lineProof({ fen: fenBefore, sans });
+  } catch { return null; }
 }

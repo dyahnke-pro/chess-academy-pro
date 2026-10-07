@@ -37,7 +37,9 @@ import { threatStoppedBy } from './opponentMovePurpose';
 import { recordedMoveCost } from './moveCost';
 import { trickSidestepped } from './forkTrick';
 import { findProphylaxis, prophylaxisProof } from './prophylaxis';
-import { newTiedDefender, tiedDefenderLine } from './tiedDefender';
+import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
+import { lineProofFromUci, type FactProof, type Proof } from './proof';
+import { refutedAltProof } from './refutedAlternativeCore';
 import { advantageWasMissed } from './reviewWithholding';
 import { costWords, isMateEval, MISTAKE_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 import { shareAdverb } from '../utils/shareWords';
@@ -262,6 +264,10 @@ export function computeMoveFacets(
    *  later pass reading a fresher line of the SAME ply can replace it — one
    *  ply, one line (clean-pass review walk 2026-10-04, G1 15.Ba2). */
   outVerdictReason?: { text: string | null },
+  /** THE PROOF each conclusion rests on, coupled here from the computer that
+   *  found it (one-coach P3) — the door counts a conclusion that arrives
+   *  without one. */
+  outProofs?: Map<string, FactProof>,
 ): string[] {
   const facets: string[] = [];
   // Record the KEY SQUARES a facet named, keyed by the facet text, so the
@@ -273,6 +279,9 @@ export function computeMoveFacets(
   const recIncoming = (facet: string, beneficiary: 'w' | 'b' | undefined): void => {
     if (!outIncoming || !beneficiary || !ctx.studentColorWB) return;
     if (beneficiary !== ctx.studentColorWB) outIncoming.add(facet);
+  };
+  const recProof = (facet: string, proof: Proof | null | undefined): void => {
+    if (outProofs && proof) outProofs.set(facet, proof);
   };
   const recStakes = (facet: string, stakes: FactStakes | null | undefined): void => {
     if (outStakes && stakes && stakes.points > 0) outStakes.set(facet, stakes);
@@ -557,6 +566,10 @@ export function computeMoveFacets(
     const positive = !costsPoints && !fellShort;
     const qf = `[${positive ? 'praise' : 'quality'}] ${subj}: ${qualityClause(ctx.classification, isStudent)}${swingBit}${betterBit}.`;
     facets.push(qf);
+    // The verdict's proof is the line its words name: the better move's own
+    // line when the reason came from it, the line after the move when the
+    // punishment did.
+    if (better) recProof(qf, reason ? lineProofFromUci(fenBefore, ctx.bestLineUci) : punishWhy ? lineProofFromUci(fenAfter, ctx.playedLineUci) : null);
     if (positive) {
       try {
         const pm = new Chess(fenBefore).move(san);
@@ -1040,6 +1053,7 @@ export function computeMoveFacets(
     const r = ctx.teaching.refutedAlt;
     const f = `[refuted] ${r.text}`;
     facets.push(f);
+    recProof(f, refutedAltProof(fenBefore, r));
     outIdentity?.set(f, `refuted:${r.alt.replace(/[+#!?]+$/, '')}`);
     recStakes(f, costStakes(r.costCp));
     try {
@@ -1135,6 +1149,7 @@ export function computeMoveFacets(
     if (ph && ph.intent.san === san && ctx.allSans[ply - 2] !== ph.prevention.san) {
       const f = `[timing] That is the ${ph.kind === 'pin' ? 'pin' : 'kick'} a quiet move would have stopped — ${prophylaxisProof(ph).full}.`;
       facets.push(f);
+      recProof(f, prophylaxisProof(ph));
       recSquares(f, [...ph.squares]);
     }
   }
@@ -1144,6 +1159,7 @@ export function computeMoveFacets(
     if (tie) {
       const f = `[point] ${tiedDefenderLine(tie)}`;
       facets.push(f);
+      recProof(f, tiedDefenderProof(tie));
       recSquares(f, [tie.defender.square, tie.target.square]);
     }
   }

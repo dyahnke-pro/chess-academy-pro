@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { positionAsk, positionPosed, pvSans, walkableLine } from '../../services/moveInsight';
+import { positionAsk, positionPosed, pvSans } from '../../services/moveInsight';
+import { walkableLine } from '../../services/proof';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { WalkLineButton } from '../Board/WalkLineButton';
 import { Chess } from 'chess.js';

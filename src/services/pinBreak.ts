@@ -18,6 +18,7 @@
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { withProof, type Proof, type ProofSize } from './proof';
+import { CAPTURE_VALUE } from './pieceValues';
 
 export type PinBreakHow = 'check' | 'threat' | 'discovery';
 
@@ -41,7 +42,7 @@ export interface PinBreak {
   line: { fen: string; reply: { san: string } | null; cap: { san: string; captured: PieceSymbol; to: Square } | null };
 }
 
-const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+const VALUE = CAPTURE_VALUE as Readonly<Record<PieceSymbol, number>>;
 
 function material(chess: Chess, color: Color): number {
   let sum = 0;

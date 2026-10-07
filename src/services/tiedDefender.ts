@@ -14,6 +14,8 @@
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import type { Proof } from './proof';
+import { MATERIAL_VALUE } from './pieceValues';
+import { PIECE_NAMES } from '../types/tacticTypes';
 
 export interface TiedDefender {
   defender: { square: Square; piece: PieceSymbol };
@@ -22,8 +24,8 @@ export interface TiedDefender {
   defenders: number;
 }
 
-const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-const VAL: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+const NAME = PIECE_NAMES as Readonly<Record<PieceSymbol, string>>;
+const VAL = MATERIAL_VALUE as Readonly<Record<PieceSymbol, number>>;
 const TIMES = ['no times', 'once', 'twice', 'three times', 'four times'];
 
 function lifted(fen: string, sq: Square): string | null {
@@ -65,7 +67,7 @@ export function tiedDefenderProof(t: TiedDefender): Proof {
   return {
     kind: 'count', exact: true,
     short: `you hit it ${TIMES[t.attackers] ?? `${t.attackers} times`} and it is guarded ${TIMES[t.defenders] ?? `${t.defenders} times`}`,
-    full: `you hit the ${NAME[t.target.piece]} on ${t.target.square} ${TIMES[t.attackers] ?? `${t.attackers} times`} and it is guarded ${TIMES[t.defenders] ?? `${t.defenders} times`} — take the ${NAME[t.defender.piece]} away and it falls`,
+    full: `you hit the ${NAME[t.target.piece]} on ${t.target.square} ${TIMES[t.attackers] ?? `${t.attackers} times`} and it is guarded ${TIMES[t.defenders] ?? `${t.defenders} times`} — the ${NAME[t.defender.piece]} is the guard that holds it`,
     squares: [t.defender.square, t.target.square],
   };
 }

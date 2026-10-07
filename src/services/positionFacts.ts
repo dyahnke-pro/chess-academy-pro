@@ -118,6 +118,9 @@ export interface LastMoveInput {
 }
 import type { TacticPatternType } from '../types/tacticTypes';
 import { conceptForBoard, definitionKey } from './conceptEngine';
+import { lineProof, type FactProof, type Proof } from './proof';
+import { threatProof } from './threatProof';
+import { refutedAltProof } from './refutedAlternativeCore';
 import { liveMethodBeat, habitIsOwed } from './methodBeat';
 import { habitNeedFrom } from './coachDecider';
 import { computeNeed, type StudentNeedContext } from './needScore';
@@ -348,6 +351,9 @@ export interface ClauseItem {
   kind: ClauseKind;
   rank: number;
   text: string;
+  /** The proof this clause rests on, from the computer that produced it
+   *  (one-coach P3). A conclusion kind without one is counted at the door. */
+  proof?: FactProof;
   /** For a `concept` clause: the concept's id (a TacticPatternType for tactic
    *  concepts) so the weakness boost can match it to the student's SPECIFIC
    *  hole through the canonical vocabulary bridge — a fork concept lands on a
@@ -938,7 +944,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     }
   } catch { /* the trade read is a bonus, never a blocker */ }
   const composedAll = applyWeaknessBoost(
-    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere && lm ? { id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, fundamentalClaim, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: input.alreadySaid }), ...tradeClauses],
+    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, fundamentalClaim, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: input.alreadySaid }), ...tradeClauses],
     input.studentWeaknesses ?? [],
   );
 
@@ -1074,6 +1080,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     },
     {
       facts: composed.map((c) => c.text),
+      proofs: new Map(composed.flatMap((c) => (c.proof ? [[c.text, c.proof] as const] : []))),
       squares: new Map(composed.flatMap((c) => (c.squares && c.squares.length ? [[c.text, c.squares] as const] : []))),
       // WHAT THEY ARE DOING TO YOU — the tie-break inside a same-claim group,
       // taken from the clause KIND (which computer produced it), never guessed
@@ -1283,7 +1290,7 @@ function buildClauses(a: {
   /** WO-TEACH-02 — see `computePositionFacts`. */
   /** The alternative, plus its squares on the board it was an alternative ON
    *  (the student's pre-move board — coupled there, never from prose). */
-  refuted: { fact: RefutedAlternative; squares: readonly string[] } | null;
+  refuted: { fact: RefutedAlternative; squares: readonly string[]; proof?: Proof | null } | null;
   rule: { id: string; text: string; squares: readonly string[]; gradeFen?: string } | null;
   stopped: ReadonlyArray<{ text: string; squares: readonly string[]; lines?: ReadonlyArray<{ fen: string; sans: readonly string[] }> }>;
   stock: string | null;
@@ -1440,6 +1447,9 @@ function buildClauses(a: {
       squares: [p.square],
       // The null-move probe's own net: taken on their next move.
       stakes: { points: mustDefend.net, plies: studentToMove ? 2 : 1 },
+      // Its proof — the count and the capture, the same read Learn's warning
+      // speaks (`threatProof`, one computer).
+      proof: threatProof(a.fen, studentSeat === 'white' ? 'w' : 'b', [p.square]) ?? undefined,
     });
   }
   // THE BLUFF (WO-LAYERS-01 step 4) — speaks in the opening too: "the knight
@@ -1458,13 +1468,13 @@ function buildClauses(a: {
   // WO-TEACH-02 — the same four teaching facts review carries as `[refuted]`,
   // `[rule]`, `[stopped]` and `[stock]`, ranked where their review twins sit.
   if (a.refuted) {
-    ranked.push({ kind: 'refuted', rank: 82, text: a.refuted.fact.text, stakes: costStakes(a.refuted.fact.costCp) ?? undefined, squares: [...a.refuted.squares] });
+    ranked.push({ kind: 'refuted', rank: 82, text: a.refuted.fact.text, stakes: costStakes(a.refuted.fact.costCp) ?? undefined, squares: [...a.refuted.squares], proof: a.refuted.proof ?? undefined });
   }
   // A rook or queen principle about a FILE claims that file — the key the
   // positional read's "owns the open d-file" writes too, so one file is one
   // saying across lanes (hand walk 2026-09-27, Rad8: said twice in one turn).
   if (a.rule) ranked.push({ kind: 'rule', rank: 29, text: a.rule.text, squares: [...a.rule.squares], ...(a.rule.gradeFen ? { gradeFen: a.rule.gradeFen } : {}), claim: /open-file|semi-open/.test(a.rule.id) && a.rule.squares[0] ? `file-${a.rule.squares[0][0]}` : undefined });
-  for (const st of a.stopped) ranked.push({ kind: 'stopped', rank: 27, text: st.text, squares: [...st.squares], lines: st.lines });
+  for (const st of a.stopped) ranked.push({ kind: 'stopped', rank: 27, text: st.text, squares: [...st.squares], lines: st.lines, proof: st.lines?.[0] ? lineProof(st.lines[0]) ?? undefined : undefined });
   if (a.stock) ranked.push({ kind: 'stock', rank: 35, text: a.stock });
   // §9 delayed-castling — speaks IN the opening too (the "castle now" moment),
   // ranked just under a live hanging threat. Its gate (central king + tension +

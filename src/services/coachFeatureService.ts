@@ -85,6 +85,7 @@ import { isMinorAtHome } from './development';
 import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
 import type { FacetTag } from './reviewFacetRank';
+import type { FactProof, Proof } from './proof';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -637,6 +638,10 @@ export interface ReviewMoveSegment {
    *  better-line pass can replace it with the reason read off its own, fresher
    *  line of the same ply (one ply, one line). */
   verdictReason?: string;
+  /** THE PROOFS OF WHAT THIS PLY SAID (one-coach P3) — the door's own
+   *  `proofOf`, in spoken order. Why reads these first, so the student hears
+   *  the proof of the claim the coach just made, the same way Learn does. */
+  proofs?: Proof[];
   /** Why no fundamental attached to this flagged student ply — the attributor's
    *  own reasons, stated when the ply is spoken (see buildReviewSegments). */
   fundamentalDeclined?: string[];
@@ -1904,6 +1909,8 @@ export function buildReviewSegments(
       // What each facet is worth on the board — coupled by the computer that
       // produced it; the door orders by it (factStakes.ts).
       const facetStakes = new Map<string, FactStakes>();
+      // THE PROOF each conclusion rests on, coupled the same way (one-coach P3).
+      const facetProofs = new Map<string, FactProof>();
       const facetIdentity = new Map<string, string>();
       const verdictReasonOut: { text: string | null } = { text: null };
       const facets = computeMoveFacets({
@@ -1933,7 +1940,7 @@ export function buildReviewSegments(
         prevCap,
         allSans: sansForRun,
         forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
-      }, facetSquares, facetIncoming, facetStakes, facetIdentity, verdictReasonOut);
+      }, facetSquares, facetIncoming, facetStakes, facetIdentity, verdictReasonOut, facetProofs);
       // THE CONVERSION METHOD (WO-LAYERS-01 step 5), on the student's move when
       // they are a piece or more up — the step the board is on, once per step
       // per game (the step only changes when the board does).
@@ -2276,6 +2283,7 @@ export function buildReviewSegments(
       // subsumption and to support. Re-key all three by position.
       const keptSquares = new Map<string, readonly string[]>();
       const keptStakes = new Map<string, FactStakes>();
+      const keptProofs = new Map<string, FactProof>();
       const keptIncoming = new Set<string>();
       // A [rule] fact that restates a facet (the passed-pawn rule beside the
       // [passer] read of the same pawn) joins that facet's claim family, so the
@@ -2288,6 +2296,7 @@ export function buildReviewSegments(
         if (fam) keptFamily.set(k, fam);
         const sq = facetSquares.get(raw); if (sq) keptSquares.set(k, sq);
         const st = facetStakes.get(raw); if (st) keptStakes.set(k, st);
+        const pf = facetProofs.get(raw); if (pf) keptProofs.set(k, pf);
         if (facetIncoming.has(raw)) keptIncoming.add(k);
       });
       // KEY-SQUARE HIGHLIGHTS (David 2026-09-13): every square a KEPT facet
@@ -2377,7 +2386,7 @@ export function buildReviewSegments(
           moveAdvice: null,
         },
         {
-          facts: kept, squares: keptSquares, incoming: keptIncoming, stakes: keptStakes, family: keptFamily,
+          facts: kept, squares: keptSquares, incoming: keptIncoming, stakes: keptStakes, family: keptFamily, proofs: keptProofs,
           // THE BOARD AFTER THIS PLY — a recapture pending, or mate for the
           // side to move (`boardState`). Review had no such guard at all: "You're
           // a piece up" one ply before the piece was taken back.
@@ -2554,6 +2563,7 @@ export function buildReviewSegments(
         ...(fundamentals.length ? { fundamentals } : {}),
         ...(segKeySquares.length ? { keySquares: segKeySquares } : {}),
         ...(verdictReasonOut.text ? { verdictReason: verdictReasonOut.text } : {}),
+        ...(doorNarration && decision.proofOf.size ? { proofs: [...decision.proofOf.values()] } : {}),
       });
       try {
         const pc = new Chess(fenPair.fenBefore).move(m.san);

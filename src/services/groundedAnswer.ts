@@ -12,7 +12,9 @@
  * Pure + side-effect-free so it's trivially testable and can't regress the
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
-import { mechanismContrast, moveMissed, pvSans, walkableLine } from './moveInsight';
+import { MATERIAL_VALUE } from './pieceValues';
+import { mechanismContrast, moveMissed, pvSans } from './moveInsight';
+import { walkableLine } from './proof';
 import { settledLeadFor, type LastMove } from './material';
 import { countWords } from '../utils/countWords';
 import { isSacrifice } from './factStakes';
@@ -25,7 +27,7 @@ import { tacticWord } from './tacticVocabulary';
 import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSITIONAL_TARGETS } from './keySquares';
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
-  legalSeeGain, legalSeeGainOn, landingIsSafe, capturesWinMaterial, legalSeeGainFor, seeReadsStanding, captureRead, signedLegalSeeFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
+  legalSeeGain, legalSeeGainOn, landingIsSafe, capturesWinMaterial, legalSeeGainFor, takingTheAttackerAnswers, seeReadsStanding, captureRead, signedLegalSeeFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
   strongestWeakestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
   namedPawnStructure, structureTransfer, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
@@ -634,9 +636,22 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
     };
   }
   const named = andList(wins.map((w) => `the ${REVIEW_PIECE_NAME[w.type]} on ${w.sq}`));
+  // ONE COACH (2026-10-07): the same check Learn's warning runs — when taking
+  // the cheapest attacker loses nothing, that capture IS the answer, and the
+  // chat says so instead of only "cover it".
+  const takeBack = ((): string => {
+    if (!isOpp || wins.length === 0) return '';
+    const cheapest = chess.attackers(wins[0].sq, them)
+      .map((sq) => ({ sq, t: chess.get(sq)?.type }))
+      .filter((x): x is { sq: Square; t: PieceSymbol } => !!x.t && x.t !== 'k')
+      .sort((x, y) => (MATERIAL_VALUE[x.t] ?? 0) - (MATERIAL_VALUE[y.t] ?? 0))[0];
+    return cheapest && takingTheAttackerAnswers(fen, cheapest.sq, me)
+      ? ` — but you can take their ${REVIEW_PIECE_NAME[cheapest.t]} on ${cheapest.sq}, and that answers it`
+      : '';
+  })();
   const winPart = wins.length > 0
     ? (isOpp
-        ? `they're eyeing ${named} — about ${wins[0].g} point${wins[0].g === 1 ? '' : 's'} if you don't cover it`
+        ? `they're eyeing ${named} — about ${wins[0].g} point${wins[0].g === 1 ? '' : 's'} if you don't cover it${takeBack}`
         : `you can win ${named} — about ${wins[0].g} point${wins[0].g === 1 ? '' : 's'}`)
     : '';
   const checkPart = inCheck ? `your king is in check` : '';

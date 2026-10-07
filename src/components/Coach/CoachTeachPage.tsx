@@ -300,17 +300,8 @@ import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingRating } from '../../services/coachGameEngine';
 import { opponentStrength } from '../../services/engineStrength';
 import { samePosition } from '../../utils/samePosition';
-import { findPinBreaks, pinBreakLine, pinBreakProof } from '../../services/pinBreak';
-import { lineProof, lineProofFromUci, isProof, NO_PROOF, type FactProof } from '../../services/proof';
-import { walkableLine } from '../../services/moveInsight';
-import { obligationLifted, obligationLiftedLine } from '../../services/obligationLifted';
-import { findQueenGrabTraps, queenGrabTrapLine, queenGrabTrapProof } from '../../services/queenGrabTrap';
-import { provenThreatLine, threatStakes } from '../../services/threatProof';
-import { trappedOnBoard } from '../../services/reviewTeachingPoints';
-import { findProphylaxis, prophylaxisLine, prophylaxisProof } from '../../services/prophylaxis';
-import { findTiedDefenders, newTiedDefender, tiedDefenderLine, tiedDefenderProof } from '../../services/tiedDefender';
-import { findEnablingMove, enablingMoveLine, enablingMoveProof } from '../../services/enablingMove';
-import { newPlanThread, planThreadTurn } from '../../services/planThread';
+import { lineProof, lineProofFromUci, isProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
+import { readBoard, readBoardAll, newPlanThread, type BoardRead } from '../../services/boardComputers';
 import { splitThink, stripThink, THINK_MARK, THINK_PAUSE_MS } from '../../utils/thinkPause';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
@@ -8193,26 +8184,24 @@ export function CoachTeachPage(): JSX.Element {
           // A PIN THAT BREAKS WITH TEMPO IS NOT A PIN (questions.md item 7):
           // the student is told before leaning on it.
           if (tacticLine && t.type === 'pin') {
-            const brk = findPinBreaks(args.fenAfterReply, studentCC === 'w' ? 'b' : 'w').find((b) => b.pinned === t.squares[1]);
+            const brk = readBoard('pinBreakTheirs', { fen: args.fenAfterReply, student: studentCC, pinned: t.squares[1] });
             if (brk) {
-              tacticLine = `${tacticLine} ${pinBreakLine(brk, studentCC)}`;
-              const pf = pinBreakProof(brk, studentCC);
-              tacticFactProof = pf;
-              if (pf.line) tacticLines = [pf.line];
+              tacticLine = `${tacticLine} ${brk.text}`;
+              tacticFactProof = brk.proof;
+              if (brk.lines) tacticLines = brk.lines;
             }
           }
         }
         // …and the same computer read from the other seat: the student's own
         // pinned piece that can walk out with tempo is their resource.
         if (!tacticLine) {
-          const own = findPinBreaks(args.fenAfterReply, studentCC)[0];
+          const own = readBoard('pinBreakOwn', { fen: args.fenAfterReply, student: studentCC });
           if (own) {
-            tacticKey = `pinbreak:${own.pinned}${own.to}`;
-            tacticLine = pinBreakLine(own, studentCC);
-            tacticSquares = [own.pinned, own.to, own.pinner];
-            const pf = pinBreakProof(own, studentCC);
-            tacticFactProof = pf;
-            if (pf.line) tacticLines = [pf.line];
+            tacticKey = own.key;
+            tacticLine = own.text;
+            tacticSquares = own.squares;
+            tacticFactProof = own.proof;
+            if (own.lines) tacticLines = own.lines;
           }
         }
       }
@@ -8245,19 +8234,20 @@ export function CoachTeachPage(): JSX.Element {
       // THE COST A WARNING CLAIMS, PROVEN (threatProof): the count and the
       // capture behind "this costs a piece", or the mating move.
       const proveThreat = (line: string): string => {
-        const { text, proof } = provenThreatLine(line, args.fenAfterReply, studentCC, threatSquares);
-        if (proof) { threatFactProof = proof; threatSquares = [...new Set([...threatSquares, ...(proof.squares ?? [])])]; }
-        return text;
+        const r = readBoard('threatCost', { line, fen: args.fenAfterReply, student: studentCC, squares: threatSquares });
+        if (!r) return line;
+        if (isProof(r.proof)) { threatFactProof = r.proof; threatSquares = r.squares; }
+        return r.text;
       };
       // A TRAPPED QUEEN OR ROOK LEADS THE TURN (unity U10, 52-errors #48: the
       // trapped queen arrived in a late wave, after a pin line and a callback).
       // The same board computer Review's trap lane reads, in the instant wave.
-      const trappedMine = ((): ReturnType<typeof trappedOnBoard> => { try { return trappedOnBoard(args.fenAfterReply, studentCC); } catch { return null; } })();
+      const trappedMine = readBoard('trapped', { fen: args.fenAfterReply, student: studentCC });
       if (trappedMine) {
-        const NAME_T: Record<string, string> = { q: 'queen', r: 'rook' };
-        threatKey = `trapped:${trappedMine.square}`;
-        threatSquares = [trappedMine.square, trappedMine.attackerSquare];
-        threatLine = proveThreat(`Careful — your ${NAME_T[trappedMine.piece] ?? 'piece'} on ${trappedMine.square} is attacked and has no safe square.`);
+        threatKey = trappedMine.key;
+        threatSquares = trappedMine.squares;
+        threatLine = trappedMine.text;
+        if (isProof(trappedMine.proof)) threatFactProof = trappedMine.proof;
       } else if (againstMe.length > 0) {
         const t = againstMe[0];
         // KEYED ON THE PATTERN, NOT EVERY SQUARE IN IT. A pin is the same pin
@@ -8923,26 +8913,18 @@ export function CoachTeachPage(): JSX.Element {
     })();
     // AN OBLIGATION LIFTS (teach-brief §3): their move took an attacker off a
     // piece the student had to look after — the move it was costing is free.
-    const liftLine = ((): { text: string; squares: string[] } | null => {
+    const liftLine = ((): BoardRead | null => {
       try {
         const b = new Chess();
         for (const san of args.historyAfterReply.slice(0, -1)) b.move(san);
-        const o = obligationLifted(b.fen(), args.fenAfterReply, studentCC);
-        return o ? { text: obligationLiftedLine(o), squares: [o.square, o.from, o.to] } : null;
+        return readBoard('obligationLifted', { fenBefore: b.fen(), fenAfter: args.fenAfterReply, student: studentCC });
       } catch { return null; }
     })();
-    deferIf(liftLine, 'theirMoveCost', liftLine?.text ?? null, NO_PROOF.stated, liftLine?.squares);
+    deferIf(liftLine, 'theirMoveCost', liftLine?.text ?? null, liftLine?.proof ?? NO_PROOF.description, liftLine?.squares);
     // CHECK THE QUEEN'S EXITS BEFORE YOU GRAB (teach-brief §3): a capture
     // that looks free and leaves the queen with no safe square after one reply.
-    const grab = ((): { text: string; squares: string[]; proof: FactProof } | null => {
-      try {
-        const t = findQueenGrabTraps(args.fenAfterReply)[0];
-        // The proof's detail goes to the BOARD: every exit and every guard.
-        if (!t) return null;
-        const text = queenGrabTrapLine(t);
-        return { text, squares: [t.from, t.to, t.replyFrom, t.replyTo, ...(queenGrabTrapProof(t).squares ?? [])], proof: queenGrabTrapProof(t) };
-      } catch { return null; }
-    })();
+    // The proof's detail goes to the BOARD: every exit and every guard.
+    const grab = readBoard('queenGrabTrap', { fen: args.fenAfterReply });
     deferIf(grab, 'rejectedTempting', grab?.text ?? null, grab?.proof ?? NO_PROOF.stated, grab?.squares);
     deferIf(computedLine, 'commentary', computedLine, NO_PROOF.description, undefined, undefined, computedLineArrows);
     deferIf(behaviorLine && !decidedByMaterial, 'behavior', behaviorLine, NO_PROOF.description, behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), behaviorClaims, behaviorArrows);
@@ -8950,7 +8932,7 @@ export function CoachTeachPage(): JSX.Element {
     const instantDecision = decideTurn([
       ...(gemLine ? [{ lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: tacticLines?.[0] && !isProof(tacticFactProof) ? (lineProof(tacticLines[0]) ?? tacticFactProof) : tacticFactProof }] : []),
-      ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, stakes: threatStakes(args.fenAfterReply, studentCC, threatSquares) ?? undefined, proof: threatFactProof }] : []),
+      ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: threatFactProof }] : []),
       ...(announceLine ? [{ lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name }] : []),
       // Rate-matched Danya behavior — board-truth. MERGED with the positional
       // read into ONE board-read lane (David 2026-09-13: "computer and observation
@@ -9705,13 +9687,14 @@ export function CoachTeachPage(): JSX.Element {
                     // once, its stop said with the PROOF read off their move,
                     // "good defending" when they stop two in a row.
                     try {
-                      const plansNow = planThreadTurn(learnMemRef.current.planThread ??= newPlanThread(), {
+                      const plansNow = readBoardAll('planThread', {
+                        thread: learnMemRef.current.planThread ??= newPlanThread(),
                         ply: move.history.length + 1, fenBefore: move.fen, fenAfter: probe.fen(),
                         student: playerColor === 'white' ? 'w' : 'b',
                       });
                       for (const pl of plansNow) {
                         const line = gradeNarrationText(pl.text, probe.fen(), 'CoachTeachPage.structuralPlan')?.trim();
-                        if (line) queueSpokenHint(probe.fen(), line, 'planArc', NO_PROOF.description, pl.squares, [pl.claim]);
+                        if (line) queueSpokenHint(probe.fen(), line, 'planArc', pl.proof, pl.squares, [pl.key]);
                       }
                     } catch { /* the plan is a bonus, never a blocker */ }
                   }
@@ -9890,21 +9873,18 @@ export function CoachTeachPage(): JSX.Element {
                     // named only where a move is earned and the engine agrees it is
                     // one of the best (its own top lines), never on a held move.
                     if (moveAdviceHere?.speak && !held && studentBest?.topLines) {
-                      const ph = findProphylaxis(probe.fen());
-                      const pUci = ph ? `${ph.prevention.from}${ph.prevention.to}` : null;
-                      if (ph && pUci && studentBest.topLines.some((l) => l.moves[0] === pUci)) {
-                        const text = prophylaxisLine(ph);
-                        queueSpokenHint(probe.fen(), text, 'prophylaxis', prophylaxisProof(ph), ph.squares, [`prophylaxis:${ph.intent.to}`], undefined,
-                          [{ from: ph.prevention.from, to: ph.prevention.to, role: 'play', vouchedBy: 'engine', source: 'learn.prophylaxis' }]);
+                      const ph = readBoard('prophylaxis', { fen: probe.fen(), engineFirstMoves: studentBest.topLines.map((l) => l.moves[0]).filter((m): m is string => !!m) });
+                      if (ph?.play) {
+                        queueSpokenHint(probe.fen(), ph.text, 'prophylaxis', ph.proof, ph.squares, [ph.key], undefined,
+                          [{ from: ph.play.from, to: ph.play.to, role: 'play', vouchedBy: 'engine', source: 'learn.prophylaxis' }]);
                       }
                       // MOVE ORDER (enablingMove): the engine's own line plays A first
                       // because A clears the road its next piece move needs.
                       const pv = studentBest.topLines[0]?.moves ?? [];
-                      const order = findEnablingMove(probe.fen(), pv);
-                      if (order) {
-                        const text = enablingMoveLine(order);
-                        queueSpokenHint(probe.fen(), text, 'moveOrder', enablingMoveProof(order), [order.opened, order.then.from, order.then.to], [`order:${order.first.san}>${order.then.san}`], undefined,
-                          [{ from: order.first.from, to: order.first.to, role: 'play', vouchedBy: 'engine', source: 'learn.moveOrder' }]);
+                      const order = readBoard('moveOrder', { fen: probe.fen(), pv });
+                      if (order?.play) {
+                        queueSpokenHint(probe.fen(), order.text, 'moveOrder', order.proof, order.squares, [order.key], undefined,
+                          [{ from: order.play.from, to: order.play.to, role: 'play', vouchedBy: 'engine', source: 'learn.moveOrder' }]);
                       }
                     }
                     standingRef.current.rememberAll(pf.remember);
@@ -10628,11 +10608,8 @@ export function CoachTeachPage(): JSX.Element {
                     // THE TIE THE MOVE CREATED (tiedDefender): their guard now cannot
                     // leave — said only while it still holds after their reply.
                     {
-                      const tie = newTiedDefender(fenBefore, move.fen, (playerColor === 'white' ? 'w' : 'b'));
-                      if (tie && findTiedDefenders(fenAfterReply, (playerColor === 'white' ? 'w' : 'b')).some((t) => t.defender.square === tie.defender.square && t.target.square === tie.target.square)) {
-                        const text = tiedDefenderLine(tie);
-                        queueSpokenHint(fenAfterReply, text, 'movePoint', tiedDefenderProof(tie), [tie.defender.square, tie.target.square], [`tied:${tie.defender.square}>${tie.target.square}`]);
-                      }
+                      const tie = readBoard('tiedDefender', { fenBefore, fenAfterMove: move.fen, fenAfterReply, student: playerColor === 'white' ? 'w' : 'b' });
+                      if (tie) queueSpokenHint(fenAfterReply, tie.text, 'movePoint', tie.proof, tie.squares, [tie.key]);
                     }
                     for (const h of studentMoveTeaching({
                       fenBefore, san: move.san, history: move.history, cpLoss, bothCp,

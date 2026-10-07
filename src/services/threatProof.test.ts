@@ -7,7 +7,7 @@ describe('threatProof — the cost a threat warning claims, proven on the board'
     const fen = '4k3/4q3/8/4N3/8/8/8/4K3 w - - 0 1';
     const p = threatProof(fen, 'w', ['e5']);
     expect(p?.exact).toBe(true);
-    expect(p?.full).toMatch(/attacked once and nothing guards it, so Qxe5\+ takes it for free/);
+    expect(p?.full).toMatch(/attacked once and nothing guards it: Qxe5\+ — they win a knight/);
     expect(p?.squares).toEqual(['e5', 'e7']);
   });
 

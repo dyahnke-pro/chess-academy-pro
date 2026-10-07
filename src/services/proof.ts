@@ -16,8 +16,9 @@
 //     squares are marked, coupled here, never scraped from the words.
 //   • WITHHOLDING: a proof that names the move a question asks for waits with
 //     the answer (the caller's surface rule decides; this type only carries it).
-import { Chess } from 'chess.js';
+import { Chess, type Move } from 'chess.js';
 import type { SpokenLine } from './voicePackage';
+import type { WalkableLine, WalkPly } from '../types';
 
 export type ProofKind = 'line' | 'squares' | 'count';
 
@@ -90,4 +91,19 @@ export const NO_PROOF: Record<NoProofReason, NoProof> = {
 };
 export function isProof(p: FactProof | null | undefined): p is Proof {
   return !!p && !('none' in p);
+}
+
+/** A spoken line as arrows + a Walk button: one shape for every surface. */
+export function walkableLine(startFen: string, sans: readonly string[], label: string): WalkableLine | null {
+  let c: Chess;
+  try { c = new Chess(startFen); } catch { return null; }
+  const plies: WalkPly[] = [];
+  for (const san of sans) {
+    const fenBefore = c.fen();
+    let m: Move | null = null;
+    try { m = c.move(san); } catch { m = null; }
+    if (!m) break;
+    plies.push({ san: m.san, uci: `${m.from}${m.to}${m.promotion ?? ''}`, fenBefore, fenAfter: c.fen() });
+  }
+  return plies.length > 0 ? { label, startFen, plies } : null;
 }

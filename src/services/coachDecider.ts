@@ -32,7 +32,8 @@
 import { boardVeto, type BoardState } from './boardState';
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
 import { selectFacts, supportedFacts, barForTier, type QuietFact } from './factSelector';
-import { factKind, factValue, FACT_ROLE, FACT_LAYER, type FactKind, type FacetRole } from './reviewFacetRank';
+import { factKind, factValue, FACT_ROLE, FACT_LAYER, FACT_PROOF, type FactKind, type FacetRole } from './reviewFacetRank';
+import { isProof, type FactProof, type Proof } from './proof';
 import { layerBonus, type LayerStandings } from './teachingLayers';
 import { STAKED_FLOOR } from './factStakes';
 import type { FactStakes } from './factStakes';
@@ -168,6 +169,13 @@ export interface FactBundle {
    *  composer passes each clause's `kind`; review's facets carry theirs in the
    *  `[tag]` prefix and may omit this. */
   family?: ReadonlyMap<string, string>;
+  /** THE PROOF EACH FACT RESTS ON (one-coach P3, 2026-10-07) — coupled at
+   *  emission by the computer that found it, like `squares` and `stakes`.
+   *  REQUIRED: a surface must answer, even with an empty map. A conclusion
+   *  kind (`FACT_PROOF[kind] === 'proven'`) that arrives without one is
+   *  counted on the row (`unproven`) — the backlog the door will refuse once
+   *  it reaches zero. */
+  proofs: ReadonlyMap<string, FactProof>;
 }
 
 /** What the student should have DONE differently in their head. Optional: a
@@ -230,6 +238,13 @@ export interface CoachDecision {
    *  narrating a move instead of teaching one — the thing the target
    *  (Naroditsky) never does. Required, so every construction answers it. */
   teaches: boolean;
+  /** The proof of every fact that SPOKE — Why reads it from here, never
+   *  re-derives it. */
+  proofOf: ReadonlyMap<string, Proof>;
+  /** Conclusions that spoke WITHOUT a proof — the measured backlog. */
+  unproven: number;
+  /** Their kinds, so the backlog names the producers that owe a proof. */
+  unprovenKinds: string[];
 }
 
 /**
@@ -244,6 +259,20 @@ export interface CoachDecision {
  *  without emitting is a decision nobody can audit, which is the whole reason
  *  this exists (David 2026-09-20: "I want audit tools on all algo based
  *  builds"). Gate: `coachDecisionEmits.test.ts`. */
+/** What the spoken facts carry as proof, and how many conclusions carried none. */
+function proofLedger(spoken: readonly string[], bundle: FactBundle): Pick<CoachDecision, 'proofOf' | 'unproven' | 'unprovenKinds'> {
+  const proofOf = new Map<string, Proof>();
+  let unproven = 0;
+  const unprovenKinds: string[] = [];
+  for (const t of spoken) {
+    const p = bundle.proofs.get(t);
+    if (isProof(p)) { proofOf.set(t, p); continue; }
+    const k = factKind(t, bundle.family);
+    if (k !== null && FACT_PROOF[k] === 'proven') { unproven += 1; unprovenKinds.push(k); }
+  }
+  return { proofOf, unproven, unprovenKinds };
+}
+
 function emit(
   posture: SurfacePosture,
   d: CoachDecision,
@@ -271,6 +300,8 @@ function emit(
       .map((q) => [q.text.slice(0, 80), (q.by ?? '').slice(0, 80)] as [string, string]),
     method,
     stakedCount: stakes?.size ?? 0,
+    unproven: d.unproven,
+    unprovenKinds: d.unprovenKinds,
     leadStaked: d.spoken.length > 0 ? (stakes?.has(d.spoken[0]) ?? false) : null,
   });
   return d;
@@ -315,7 +346,7 @@ export function decide(
   // emitted `quietBy` used to file both closes as `'below-bar'`, so the row
   // could name the gate in `reason` and then contradict itself per fact.
   if (!speaks) {
-    return emit(posture, { ...base, speak: false, reason: 'importance', teaches: false, spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'importance' as const })) }, student, false, bundle.stakes);
+    return emit(posture, { ...base, speak: false, reason: 'importance', teaches: false, spoken: [], ...proofLedger([], bundle), quiet: bundle.facts.map((text) => ({ text, why: 'importance' as const })) }, student, false, bundle.stakes);
   }
   // 2 — THE STUDENT. Absent need data reads as speak: a fresh install must meet
   // a teaching coach, not a mute one (the cold-start rule).
@@ -331,7 +362,7 @@ export function decide(
   // moment. The teaching / critical / swing / convert / none tiers stay
   // need-gated, which is where a familiar line SHOULD go quiet.
   if (student.need && !student.need.speak && !SPEAKS_ON_IMPORTANCE.has(importance.tier)) {
-    return emit(posture, { ...base, speak: false, reason: 'need', teaches: false, spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'need' as const })) }, student, false, bundle.stakes);
+    return emit(posture, { ...base, speak: false, reason: 'need', teaches: false, spoken: [], ...proofLedger([], bundle), quiet: bundle.facts.map((text) => ({ text, why: 'need' as const })) }, student, false, bundle.stakes);
   }
   // 3 + 4 — WHICH FACTS. Subsumption collapses one-claim duplicates; the floor
   // sweeps trivia. The floor may never mute a ply — that was step 2's job and
@@ -428,10 +459,10 @@ export function decide(
     const quiet = reason === 'unsupported'
       ? selection.quiet.map((q) => (q.why === 'subsumed' ? { ...q, why: 'unsupported' as const } : q))
       : selection.quiet;
-    return emit(posture, { ...base, speak: false, reason, teaches: false, spoken, quiet }, student, false, bundle.stakes);
+    return emit(posture, { ...base, speak: false, reason, teaches: false, spoken, quiet, ...proofLedger([], bundle) }, student, false, bundle.stakes);
   }
   const teaches = spoken.some((t) => roleOf(t) === 'teach');
-  return emit(posture, { ...base, speak: true, reason: 'spoken', teaches, spoken, quiet: selection.quiet }, student, methodSpoke, bundle.stakes);
+  return emit(posture, { ...base, speak: true, reason: 'spoken', teaches, spoken, quiet: selection.quiet, ...proofLedger(spoken, bundle) }, student, methodSpoke, bundle.stakes);
 }
 
 /** WHICH HABITS THIS STUDENT KEEPS BREAKING, read off the weakness spine.

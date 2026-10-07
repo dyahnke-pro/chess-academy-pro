@@ -13,6 +13,7 @@
 // PURE: chess.js.
 import { Chess, type PieceSymbol, type Square } from 'chess.js';
 import type { Proof } from './proof';
+import { PIECE_NAMES } from '../types/tacticTypes';
 
 export interface EnablingMove {
   first: { san: string; from: Square; to: Square };
@@ -21,7 +22,7 @@ export interface EnablingMove {
   opened: Square;
 }
 
-const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+const NAME = PIECE_NAMES as Readonly<Record<PieceSymbol, string>>;
 
 function between(from: Square, to: Square): Square[] {
   const f0 = from.charCodeAt(0) - 97, r0 = Number(from[1]) - 1;

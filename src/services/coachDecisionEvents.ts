@@ -84,6 +84,12 @@ export interface CoachDecisionRow {
    *  ply is ordered by the tie table alone. */
   stakedCount: number;
   leadStaked: boolean | null;
+  /** CONCLUSIONS THAT SPOKE WITHOUT THEIR PROOF (one-coach P3) — a cost, a
+   *  threat, a tactic said with nothing behind it. The backlog the door will
+   *  refuse once it reaches zero. */
+  unproven: number;
+  /** Their kinds — which producers owe a proof. */
+  unprovenKinds: string[];
 }
 
 type Listener = (row: CoachDecisionRow) => void;

@@ -228,7 +228,7 @@ const GRADE_CEILING_CP: Record<SpokenGradeLabel, number> = {
  *  it rounds to nothing and contradicts any grade. */
 export function costFitsGrade(label: SpokenGradeLabel, costCp: number | null | undefined): boolean {
   if (costCp == null || !Number.isFinite(costCp) || costCp < 5) return false;
-  return costCp < GRADE_CEILING_CP[label];
+  return costCp <= GRADE_CEILING_CP[label];   // a pawn is where an inaccuracy ends — "about a pawn" fits it
 }
 
 /** Did the mover have a forced mate (white-POV engine evals, mate sentinels)

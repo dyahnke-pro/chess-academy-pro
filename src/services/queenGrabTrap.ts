@@ -15,6 +15,7 @@ import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { trappedOnBoard } from './reviewTeachingPoints';
 import { legalSeeGainFor } from './positionReadingService';
 import { withProof, type Proof, type ProofSize } from './proof';
+import { PIECE_NAMES } from '../types/tacticTypes';
 
 export interface QueenGrabTrap {
   /** The tempting capture. */
@@ -32,7 +33,7 @@ export interface QueenGrabTrap {
   coverers: { piece: PieceSymbol; square: Square }[];
 }
 
-const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+const NAME = PIECE_NAMES as Readonly<Record<PieceSymbol, string>>;
 
 /** Every queen grab for the side to move that looks free and walks into a
  *  trap; [] when none. */

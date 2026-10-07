@@ -92,6 +92,19 @@ const INFRA = new Set([
   // they are NOT here. If you add something to this list, it must be provable
   // that it answers no question about the board.
   'standingFactMemory',
+  // `proof` is the CARRIER of a computed fact's proof (2026-10-07, one-coach
+  // P3): the Proof type, the no-proof reasons, and the renderers that say or
+  // walk a line a computer already proved (`withProof`, `lineProof`,
+  // `walkableLine`). It answers no question about the board — it never picks a
+  // move, reads a piece or judges a position; it replays the moves handed to
+  // it. Same class as `arrowDoor` (the board half) and `speakComputed` (the
+  // voice half).
+  'proof',
+  // `navigationRouter` and `trainingAidRouter` map a typed phrase to an app
+  // ROUTE from a curated alias table ("take me to tactics", "give me a fork
+  // drill") — routing, the category this list was written for, the same class
+  // as `coachSessionRouter`. Neither reads a board.
+  'navigationRouter', 'trainingAidRouter',
   // `coachActuator` is the HANDS registry and its one `actuate` door. It
   // answers NO question about the board — that is its written contract: "the
   // model NEVER supplies a chess value — code fills every argument from the
@@ -251,9 +264,9 @@ const SURFACES = [
 
 // ── SHRINK-ONLY CEILINGS, measured 2026-09-17. Lower them when you route a
 //    call through the composer. NEVER raise one.
-const TOTAL_CEILING = 253;
+const TOTAL_CEILING = 244; // 2026-10-07: boardComputers registry (P4 seed) + proof/routers named as INFRA
 const PER_FILE_CEILING: Record<string, number> = {
-  'components/Coach/CoachTeachPage.tsx': 60,
+  'components/Coach/CoachTeachPage.tsx': 59,
   'components/Coach/CoachGamePage.tsx': 33,
   'components/Coach/CoachGameReview.tsx': 32,
 };
@@ -294,7 +307,10 @@ describe('surface composition — the coach/third-coach divergence, measured', (
       // Strip comments: the docs explain the bug each one fixed, in chess terms.
       const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
       expect(
-        [...code.matchAll(/^import .*$/gm)].map((m) => m[0]),
+        // `import type` is erased at compile — it can carry a shape, never
+        // run a computation, so a memory may hold a typed value (2026-10-07:
+        // learnMemory keeps the plan thread and the last proof).
+        [...code.matchAll(/^import (?!type ).*$/gm)].map((m) => m[0]),
         `${mod} imports something — it is not pure memory`,
       ).toEqual([]);
       const chess = code.match(CHESS_WORDS);

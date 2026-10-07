@@ -8,6 +8,7 @@
 // makes; the page queues them into the Learn door, which ranks them.
 //
 // Pure: the engine reads are handed in by the page.
+import { CAPTURE_VALUE } from './pieceValues';
 import { NO_PROOF, type FactProof } from './proof';
 import { shareAdverb } from '../utils/shareWords';
 import { andList } from '../utils/andList';
@@ -656,7 +657,7 @@ export function openingIdentityTeaching(name: string, student: 'w' | 'b'): Teach
 }
 
 const PRIZE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
-const PRIZE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+const PRIZE_VALUE = CAPTURE_VALUE;
 const times = (n: number): string => (n === 1 ? 'once' : n === 2 ? 'twice' : `${countWords(n)} times`);
 
 /**

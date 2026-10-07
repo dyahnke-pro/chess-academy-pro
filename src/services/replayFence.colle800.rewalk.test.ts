@@ -51,8 +51,8 @@ describe('ply 27 — Ng5 hangs the knight, and the coach says so', () => {
   it('Learn grades the backward look on the student-move board', async () => {
     const { readFileSync } = await import('node:fs');
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    expect(src).toMatch(/queueSpokenHint\(fenAfterReply, line, look\.kind,\s*\/\^\[a-h\]\[1-8\]\$\/\.test\(look\.square\) \? \[look\.square\] : \[\], winClaim, move\.fen,/);
-    expect(src).toMatch(/queueSpokenHint\(fenAfterReply, `\$\{noteSlip\(learnMemRef\.current, fundamental\.id\)\}\$\{bookSaidAlone \? fundamental\.howOnly : fundamental\.verdict\}`, 'fundamental', \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
+    expect(src).toMatch(/queueSpokenHint\(fenAfterReply, line, look\.kind,[\s\S]{0,260}?\?\? NO_PROOF\.stated, \/\^\[a-h\]\[1-8\]\$\/\.test\(look\.square\) \? \[look\.square\] : \[\], winClaim, move\.fen,/);
+    expect(src).toMatch(/queueSpokenHint\(fenAfterReply, `\$\{noteSlip\(learnMemRef\.current, fundamental\.id\)\}\$\{bookSaidAlone \? fundamental\.howOnly : fundamental\.verdict\}`, 'fundamental', NO_PROOF\.stated, \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
     expect(src).toMatch(/fen: gradeFen \?\? pending\.fen/);
   });
 });

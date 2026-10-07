@@ -10,7 +10,8 @@
 //   2. computePositionFacts — the position briefing (who's winning, the plan,
 //      what must be defended, the real fork in the road) in the house register.
 // The result is spoken directly (preferRaw) — the purest G0, and instant.
-import { lastMoveFromPgn, positionAsk, walkableLine } from './moveInsight';
+import { lastMoveFromPgn, positionAsk } from './moveInsight';
+import { walkableLine } from './proof';
 import { Chess } from 'chess.js';
 import type { StockfishAnalysis } from '../types';
 import { explainBestMoveGrounded } from './groundedAnswer';

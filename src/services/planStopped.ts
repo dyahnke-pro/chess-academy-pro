@@ -55,7 +55,7 @@ const PROOF: Record<PlanKind, Proof> = {
   'weak-pawn': (plan, m) => {
     const w = plan.squares[0];
     if (!w) return null;
-    if (m.from === w) return `Their pawn on ${w} moved on to ${m.to}, so it is no longer the weak pawn you were besieging.`;
+    if (m.from === w) return `Their pawn moved from ${w} to ${m.to}, so it is no longer the weak pawn you were besieging.`;
     if (m.piece === 'p' && Math.abs(m.to.charCodeAt(0) - w.charCodeAt(0)) === 1) return `They played ${m.san}, so the pawn on ${w} has a neighbour now — it isn't weak any more.`;
     return null;
   },

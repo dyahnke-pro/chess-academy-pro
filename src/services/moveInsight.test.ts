@@ -3,8 +3,9 @@
 // checked the king???").
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { autopilotRecapture, doubleAttack, escapeSquareFirst, greekGift, positionPosed, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, walkableLine, pawnHook, hookCreated, castleByHand, fileToOpen, pawnCanGuard, emptyThreat, looseOwnPieces, noRetreat, materialPlan,  heavyTiedDown, skewer,  diagonalContest,
+import { autopilotRecapture, doubleAttack, escapeSquareFirst, greekGift, positionPosed, lastMoveAlong, lastMoveFromPgn, mechanismContrast, moveMissed, positionAsk, theirMoveChanged, pawnHook, hookCreated, castleByHand, fileToOpen, pawnCanGuard, emptyThreat, looseOwnPieces, noRetreat, materialPlan,  heavyTiedDown, skewer,  diagonalContest,
 } from './moveInsight';
+import { walkableLine } from './proof';
 
 // White: Ka1, Re2, Ng5. Black: Kh8, Qd8. Two checks — Nf7+ (forks king and
 // queen) and Rh2+ (only checks).

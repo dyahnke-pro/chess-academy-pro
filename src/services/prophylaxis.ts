@@ -17,6 +17,8 @@
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import type { Proof } from './proof';
+import { CAPTURE_VALUE } from './pieceValues';
+import { PIECE_NAMES } from '../types/tacticTypes';
 
 export type ProphylaxisKind = 'pin' | 'kick' | 'fork';
 
@@ -31,8 +33,8 @@ export interface Prophylaxis {
   squares: Square[];
 }
 
-const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-const VAL: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+const NAME = PIECE_NAMES as Readonly<Record<PieceSymbol, string>>;
+const VAL = CAPTURE_VALUE as Readonly<Record<PieceSymbol, number>>;
 
 function withTurn(fen: string, turn: Color): Chess | null {
   const p = fen.split(' ');

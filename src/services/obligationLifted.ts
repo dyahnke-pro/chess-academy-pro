@@ -9,6 +9,7 @@
 // being needed. PURE: chess.js + the must-defend computer the threat lane uses.
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { computeMustDefend } from './threatOut';
+import { PIECE_NAMES } from '../types/tacticTypes';
 
 export interface ObligationLifted {
   /** The student's piece that no longer has to be guarded. */
@@ -20,7 +21,7 @@ export interface ObligationLifted {
   theirPiece: PieceSymbol;
 }
 
-const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+const NAME = PIECE_NAMES as Readonly<Record<PieceSymbol, string>>;
 
 /**
  * `fenBefore`: the board their move was played from. `fenAfter`: the board

@@ -20,7 +20,8 @@
 // One computer, read by every coach surface: Learn drills and hints, the
 // puzzle boards, the chat compare, and review (through compareTwoMoves).
 import { Chess, type Move, type Square } from 'chess.js';
-import type { WalkableLine, WalkPly } from '../types';
+import { walkableLine } from './proof';
+import type { WalkableLine } from '../types';
 import { CAPTURE_VALUE } from './pieceValues';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { computeMustDefend } from './threatOut';
@@ -335,21 +336,6 @@ export function pvSans(fen: string, pvUci: readonly string[] | undefined, max = 
     } catch { break; }
   }
   return out;
-}
-
-/** A spoken line as arrows + a Walk button: one shape for every surface. */
-export function walkableLine(startFen: string, sans: readonly string[], label: string): WalkableLine | null {
-  let c: Chess;
-  try { c = new Chess(startFen); } catch { return null; }
-  const plies: WalkPly[] = [];
-  for (const san of sans) {
-    const fenBefore = c.fen();
-    let m: Move | null = null;
-    try { m = c.move(san); } catch { m = null; }
-    if (!m) break;
-    plies.push({ san: m.san, uci: `${m.from}${m.to}${m.promotion ?? ''}`, fenBefore, fenAfter: c.fen() });
-  }
-  return plies.length > 0 ? { label, startFen, plies } : null;
 }
 
 export interface MoveMissed {
