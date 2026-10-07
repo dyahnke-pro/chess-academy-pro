@@ -105,3 +105,7 @@ CHECK — the knight leaves with check, the pin breaks, the pinning bishop hangs
    mentioned that is not played on the board = an arrow; any square mentioned
    = a highlight (S10, V18).
    Measured on every walk: named moves arrowed 100%, wordless arrows 0.
+   ROOT CAUSE (David, confirmed by census C): duplicate computers, some attach
+   arrows and some don't, plus 5 independent prose->arrow resolvers. Fix: each
+   fact in the one chain CARRIES its moves and squares; arrows/highlights are
+   drawn from the fact, never re-derived from the sentence.
