@@ -9992,7 +9992,7 @@ export function CoachTeachPage(): JSX.Element {
                       if (rt) {
                         rejectedTemptingCountRef.current += 1;
                         captureEvent('rejected_tempting_offered', { surface: 'coach-teach', tempting: rt.temptingSan, refutation: rt.refutationSan });
-                        queueSpokenHint(probe.fen(), packageForRegister(rt.hint, discussion.hintDial.register), 'rejectedTempting', NO_PROOF.stated, undefined, undefined, undefined, [{ from: rt.refutation.from, to: rt.refutation.to, role: 'line', fen: rt.refutation.fenBefore, source: 'learn.rejectedTempting' }]);
+                        queueSpokenHint(probe.fen(), packageForRegister(rt.hint, discussion.hintDial.register), 'rejectedTempting', lineProof({ fen: probe.fen(), sans: [rt.temptingSan, rt.refutationSan] }) ?? NO_PROOF.stated, undefined, undefined, undefined, [{ from: rt.refutation.from, to: rt.refutation.to, role: 'line', fen: rt.refutation.fenBefore, source: 'learn.rejectedTempting' }]);
                       }
                     }
 
@@ -10423,7 +10423,7 @@ export function CoachTeachPage(): JSX.Element {
                       });
                       if (ans) {
                         learnMemRef.current.questionsAnswered.add(`${fenNow}|${ans.san}`);
-                        queueSpokenHint(fenNow, ans.text, 'threatAnswer', NO_PROOF.stated, asked.squares, [`threat-answer:${ans.arrow.from}${ans.arrow.to}`], undefined, [ans.arrow]);
+                        queueSpokenHint(fenNow, ans.text, 'threatAnswer', readBoard('threatCost', { line: ans.text, fen: fenNow, student: playerColor === 'white' ? 'w' : 'b', squares: asked.squares })?.proof ?? NO_PROOF.stated, asked.squares, [`threat-answer:${ans.arrow.from}${ans.arrow.to}`], undefined, [ans.arrow]);
                         captureEvent('threat_answer_queued', { surface: 'coach-teach', kind: ans.kind });
                       }
                     });
@@ -10723,7 +10723,7 @@ export function CoachTeachPage(): JSX.Element {
                           if (found) {
                             queueSpokenHint(fenAfterReply, foundText, 'heldMove', NO_PROOF.stated, [move.to], [`found-${move.san}`], fenBefore);
                           } else if (look?.namesBetter !== heldNow.san) {
-                            queueSpokenHint(fenAfterReply, missedText, 'heldMove', NO_PROOF.stated, [heldMove.to], [`held-best:${heldNow.san}`], fenBefore, undefined, [{ fen: fenBefore, sans: [heldNow.san] }]);
+                            queueSpokenHint(fenAfterReply, missedText, 'heldMove', lineProof({ fen: fenBefore, sans: [heldNow.san] }) ?? NO_PROOF.stated, [heldMove.to], [`held-best:${heldNow.san}`], fenBefore, undefined, [{ fen: fenBefore, sans: [heldNow.san] }]);
                           }
                         }
                         captureEvent('learn_move_held_answered', { surface: 'coach-teach', found, shown: heldNow.shown });
@@ -10750,7 +10750,7 @@ export function CoachTeachPage(): JSX.Element {
                             // ledger says it once (walk oct3b, 15…e5: "e5 prepares
                             // e4 …" twice in one breath).
                             const foundKeys = [`slip-found:${move.san}`, move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`];
-                            queueSpokenHint(fenAfterReply, text, 'slipAnswer', NO_PROOF.stated, [answer.to], found ? foundKeys : [`slip-answer:${studentBestSan}`], fenBefore, undefined, found ? undefined : [{ fen: fenBefore, sans: [studentBestSan as string] }]);
+                            queueSpokenHint(fenAfterReply, text, 'slipAnswer', found ? NO_PROOF.description : lineProof({ fen: fenBefore, sans: [studentBestSan as string] }) ?? NO_PROOF.stated, [answer.to], found ? foundKeys : [`slip-answer:${studentBestSan}`], fenBefore, undefined, found ? undefined : [{ fen: fenBefore, sans: [studentBestSan as string] }]);
                           }
                         }
                         captureEvent('learn_slip_answered', { surface: 'coach-teach', found });
@@ -10833,7 +10833,7 @@ export function CoachTeachPage(): JSX.Element {
                       // its own; the fundamental IS the teaching here.
                       const bookSaidAlone = fundamental.id === 'left-book-early'
                         && studentJustLeftBook(move.history, playerColor === 'white' ? 'w' : 'b');
-                      queueSpokenHint(fenAfterReply, `${noteSlip(learnMemRef.current, fundamental.id)}${bookSaidAlone ? fundamental.howOnly : fundamental.verdict}`, 'fundamental', NO_PROOF.stated, [], fundamental.id === 'botched-conversion' ? ['convert-method'] : undefined, move.fen, undefined, bookSaidAlone ? undefined : fundamental.lines);
+                      queueSpokenHint(fenAfterReply, `${noteSlip(learnMemRef.current, fundamental.id)}${bookSaidAlone ? fundamental.howOnly : fundamental.verdict}`, 'fundamental', NO_PROOF.method, [], fundamental.id === 'botched-conversion' ? ['convert-method'] : undefined, move.fen, undefined, bookSaidAlone ? undefined : fundamental.lines);
                       captureEvent('coach_fundamental_named', {
                         surface: 'coach-teach', fundamental: fundamental.id, cp_loss: Math.round(cpLoss),
                       });
@@ -10908,7 +10908,7 @@ export function CoachTeachPage(): JSX.Element {
                           recordTeachingEvidence(found, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
                         }
                       } catch { /* the verdict is a bonus, never a blocker */ }
-                      if (gambitLine) queueSpokenHint(fenAfterReply, gambitLine, 'movePoint', NO_PROOF.stated, [], [`gambit:${move.to}`]);
+                      if (gambitLine) queueSpokenHint(fenAfterReply, gambitLine, 'movePoint', NO_PROOF.description, [], [`gambit:${move.to}`]);
                       const point = gambitLine ? null : studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null, preStudentRead?.topLines?.find((l) => l.moves[0] === `${move.from}${move.to}${move.promotion ?? ''}`)?.moves ?? null);
                       // SPOKEN ON THE BOARD AFTER THEIR REPLY, SO TRUE THERE
                       // (fresh-game walk 2026-09-27: "That wins the pawn on c4 —
@@ -10927,7 +10927,7 @@ export function CoachTeachPage(): JSX.Element {
                       if (point && !nowLoose && !fileHeard) {
                         if (fileKey) positionalSaidRef.current.add(fileKey);
                         // A capture's point and the trade verdict are one claim about one square.
-                        queueSpokenHint(fenAfterReply, point, 'movePoint', NO_PROOF.stated, [], move.san.includes('x') ? [`capture:${move.to}:${move.history.length}`] : [`point:${move.history.length}`]);
+                        queueSpokenHint(fenAfterReply, point, 'movePoint', NO_PROOF.description, [], move.san.includes('x') ? [`capture:${move.to}:${move.history.length}`] : [`point:${move.history.length}`]);
                         captureEvent('coach_move_point_named', { surface: 'coach-teach' });
                       }
                       // WHY THIS MOVE HAD TO COME FIRST (census #1: "the key move
@@ -10997,7 +10997,7 @@ export function CoachTeachPage(): JSX.Element {
                           const prepRule = intentRule(intent, fenAfterReply, playerColor, learnMemRef.current.principleTaught);
                           if (prepRule) for (const k of prepRule.keys) learnMemRef.current.principleTaught.add(k);
                           const intentText = prepRule ? `${intent.text.replace(/\.$/, '')} — ${prepRule.text}.` : intent.text;
-                          queueSpokenHint(fenAfterReply, intentText, 'moveIntent', NO_PROOF.stated, intent.squares, [
+                          queueSpokenHint(fenAfterReply, intentText, 'moveIntent', NO_PROOF.description, intent.squares, [
                             ...(intent.prevents ? [`stops:${intent.prevents.uci}`] : []),
                             ...(intent.prepares ? [`prepares:${intent.prepares.uci}`] : []),
                             // "Bc4 clears the way to castle" and "castling is one
@@ -11078,7 +11078,7 @@ export function CoachTeachPage(): JSX.Element {
                       const theirRule = intentRule(theirIntent, fenAfterReply, playerColor, learnMemRef.current.principleTaught);
                       if (theirRule) for (const k of theirRule.keys) learnMemRef.current.principleTaught.add(k);
                       const theirText = theirRule ? `${theirIntent.text.replace(/\.$/, '')} — ${theirRule.text}.` : theirIntent.text;
-                      queueSpokenHint(fenAfterReply, theirText, 'theirIntent', NO_PROOF.stated, theirIntent.squares, [
+                      queueSpokenHint(fenAfterReply, theirText, 'theirIntent', NO_PROOF.description, theirIntent.squares, [
                         `their-prepares:${theirIntent.prepares.uci}`,
                         ...(theirIntent.prevents ? [`stops:${theirIntent.prevents.uci}`] : []),
                       ], move.fen);
@@ -11131,7 +11131,7 @@ export function CoachTeachPage(): JSX.Element {
                       const dictated = learnMemRef.current.lastReplyDictated !== null;
                       const verdict = theirOpeningVerdict([...move.history, cm.playedSan], playerColor === 'white' ? 'w' : 'b', oppLoss, !dictated);
                       if (verdict) {
-                        queueSpokenHint(fenAfterReply, verdict, 'theirMoveCost', NO_PROOF.stated, undefined, [`their-opening-verdict:${move.history.length + 1}`]);
+                        queueSpokenHint(fenAfterReply, verdict, 'theirMoveCost', NO_PROOF.description, undefined, [`their-opening-verdict:${move.history.length + 1}`]);
                         captureEvent('coach_their_opening_verdict', { surface: 'coach-teach', cost: Math.round(oppLoss) });
                       }
                     }

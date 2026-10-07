@@ -12,7 +12,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const SRC = resolve(__dirname, '..');
-const CEILING = 42; // 2026-10-07: CoachTeachPage 24, learnBoardTeaching 16, boardComputers 2
+const CEILING = 36; // 2026-10-07: measured after converting Learn's line-backed lanes (was 42)
 
 function walk(dir: string, out: string[] = []): string[] {
   for (const name of readdirSync(dir)) {
