@@ -197,6 +197,12 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
   useEffect(() => { currentPlyRef.current = currentPly; }, [currentPly]);
   const [narrationState, setNarrationState] = useState<ReviewNarrationState>('idle');
   const introSpokenRef = useRef(false);
+  /** THE GAME'S SPOKEN LEDGER (unity U9, 52-error walk #31: after a turning
+   *  question the walk re-spoke the previous three moves word for word). A ply
+   *  whose narration was spoken this game is not spoken again when the walk
+   *  passes it AUTOMATICALLY; a forward tap, a jump or a replay the student
+   *  asked for still speaks it. Cleared when the game changes. */
+  const spokenPliesRef = useRef<Set<number>>(new Set());
   // Did the CURRENT ply's narration finish speaking? Set false when a new
   // utterance starts, true when it resolves (or when the ply is silent / voice
   // is off). Lets Play RESUME correctly: a ply already narrated advances to the
@@ -262,6 +268,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     sawFirstNarrationRef.current = true;
     if (sameGame) return; // deepen/regeneration of the current game — leave it be
     introSpokenRef.current = false;
+    spokenPliesRef.current.clear();
     activeTokenRef.current += 1;
     voiceService.stop();
     setNarrationState('idle');
@@ -583,7 +590,10 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
       text = narration?.closing ?? null;
     } else {
       const seg = segments.find((s) => s.ply === bounded);
-      text = taughtRef.current?.has(bounded) ? null : seg?.narration ?? null;
+      const automatic = opts.navSource === 'auto' || opts.navSource === 'goForward-auto';
+      const repeat = automatic && spokenPliesRef.current.has(bounded);
+      text = taughtRef.current?.has(bounded) || repeat ? null : seg?.narration ?? null;
+      if (text) spokenPliesRef.current.add(bounded);
     }
     speakCurrent(bounded, text);
   }, [lastPly, narration, onPlyChange, segments, speakCurrent]);

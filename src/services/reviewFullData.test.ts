@@ -508,6 +508,27 @@ describe('studentAnswer — their slip is your chance (clean-win review 2026-10-
   });
 });
 
+describe('the answer to their slip is held when the student then missed it (unity U8, walk #29)', () => {
+  const facetsWithNext = (next: string): string => {
+    const fenBefore = '2rr2k1/7p/p5p1/3P1p2/NpPR4/1P5P/P5P1/6K1 b - - 0 30';
+    const fenAfter = '2r3k1/7p/p2r2p1/3P1p2/NpPR4/1P5P/P5P1/6K1 w - - 1 31';
+    const facets = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+      fenBefore, fenAfter, san: 'Rd6', ply: 2,
+      moverColor: 'black', playerColor: 'white', studentColorWB: 'w',
+      evaluation: 250, preMoveEval: 0, costCp: 250, classification: 'mistake', bestMoveSan: 'Rd7',
+      prevCap: { square: null, capturedValue: 0 }, allSans: ['Kg1', 'Rd6', next],
+      forcedRunStartPly: null, bestLineUci: [], playedLineUci: [], replyBestSan: 'c5',
+    });
+    return facets.find((f) => f.startsWith('[quality]')) ?? '';
+  };
+  it('names it when they played it', () => {
+    expect(facetsWithNext('c5')).toMatch(/your answer was c5/);
+  });
+  it('holds it when they played something else — that move is the question', () => {
+    expect(facetsWithNext('Kf2')).not.toMatch(/c5/);
+  });
+});
+
 describe('Review says what THEIR move gave up — Learn\'s theirMoveCost (David 2026-10-02)', () => {
   it('…Kf8 gives up castling, said on the opponent ply', () => {
     const fenBefore = 'rnbqk2r/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 5 4';

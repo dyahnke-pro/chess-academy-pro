@@ -36,6 +36,7 @@ import { principleLine, principleContrastLine } from './moveFundamentals';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { recordedMoveCost } from './moveCost';
 import { trickSidestepped } from './forkTrick';
+import { advantageWasMissed } from './reviewWithholding';
 import { costWords, isMateEval, MISTAKE_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 import { shareAdverb } from '../utils/shareWords';
 import { computeBoardDelta } from './boardDelta';
@@ -528,7 +529,10 @@ export function computeMoveFacets(
     // better move, nothing the student can use). With no material cost to
     // name, the teaching is the student's answer and its point, from the same
     // move-point computer Learn uses.
+    // …unless the student then MISSED it: that move is the question the walk
+    // may ask, never an answer given first (the one withholding rule, U8).
     const answer = opponentMoved && bestSan && fellShort && costsPoints && !reason && !punishWhy
+      && !advantageWasMissed(ctx.allSans[ply] ?? null, ctx.replyBestSan)
       ? studentAnswer(fenAfter, san, ctx.replyBestSan, ctx.playedLineUci)
       : null;
     const better = bestSan && fellShort

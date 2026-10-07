@@ -1037,11 +1037,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [criticalReveal, setCriticalReveal] = useState<{ correct: boolean; text: string } | null>(null);
   /** Plies this review has already spoken the moment at — one per game. */
   const criticalDoneRef = useRef<Set<number>>(new Set());
-  /** A critical moment whose beat YIELDED to a planned card on its ply (review
-   *  walk 2026-10-02, ply 77: the card took the stop, and the moment — "one
-   *  move kept you in it" — was never said anywhere). Said once that card has
-   *  closed and the walk has moved past it. */
-  const yieldedCriticalRef = useRef<{ ply: number; text: string } | null>(null);
   /** The game a moment has already been FOUND for — see the scan effect. A
    *  ref, not the state, because the effect is declared above the state and
    *  because reading state here would churn the dep list. */
@@ -1161,9 +1156,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       //
       // The beat yields. The forward does not: fall through so the planned
       // card opens on THIS step.
-      if (questionPlan.has(atPly)) {
-        if (criticalMoment.reveal) yieldedCriticalRef.current = { ply: atPly, text: criticalMoment.reveal };
-      }
+      // The turning card on this ply owns the moment: its reveal names the move
+      // and its one reason, so the critical beat is not said after it — it was
+      // a second answer to the same question, read off a different search
+      // (52-error walk #19: "the move was Bf5", then "Bxf3 keeps you in it").
       if (!questionPlan.has(atPly)) {
       captureEvent('review_critical_moment', {
         ply: atPly, register: criticalMoment.register, count: criticalMoment.count,
@@ -1530,26 +1526,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // sequence handlers below chime on auto-played defender/playback plies.
   const { playMoveSound } = usePieceSound();
 
-  // THE YIELDED MOMENT, SAID WHEN ITS CARD HAS CLOSED (see yieldedCriticalRef).
-  // Only past its ply, and only with no card, rewind, quiz or line playback
-  // open — so it never hands a card its answer and never talks over one.
-  useEffect(() => {
-    const y = yieldedCriticalRef.current;
-    if (!y || walkPlayback.currentPly < y.ply) return;
-    if (faucetPhase !== 'idle' || shotState || criticalCard || rewindOffer || principleQuizState) return;
-    yieldedCriticalRef.current = null;
-    void reviewSay(y.text).catch(() => undefined);
-  }, [walkPlayback.currentPly, faucetPhase, shotState, criticalCard, rewindOffer, principleQuizState, reviewSay]);
   /** §5: the flagged move's better-line seed, captured when the why-picker
    *  fires and consumed in resumeAfterFaucet to play the engine's PV out. */
   const pendingBetterLineRef = useRef<{ fenBefore: string; bestUci: string; playedSan: string; bestSan: string | null } | null>(null);
   /** Cancellation token for the better-line playback loop. */
   const betterLineTokenRef = useRef(0);
-
-  useEffect(() => {
-    // Fresh game → nothing carried over.
-    yieldedCriticalRef.current = null;
-  }, [props.gameId]);
 
 
   // The resume TAIL after the faucet (+ better-line playout) finishes: an armed

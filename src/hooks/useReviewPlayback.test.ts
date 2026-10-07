@@ -191,6 +191,21 @@ describe('useReviewPlayback', () => {
     await waitFor(() => expect(speakRecords.at(-1)?.text).toBe('Move two.'));
   });
 
+  it('the walk passing a ply it already spoke does not speak it again (unity U9, walk #31)', async () => {
+    const narration = makeNarration({ segments: [makeSegment({ ply: 1, narration: 'Move one.' }), makeSegment({ ply: 2, narration: 'Move two.' })] });
+    const { result } = renderHook(() => useReviewPlayback({ narration }));
+    await waitFor(() => expect(speakRecords.length).toBe(1)); // intro
+    act(() => { result.current.goForward(); });
+    await waitFor(() => expect(speakRecords.at(-1)?.text).toBe('Move one.'));
+    const spoken = speakRecords.length;
+    act(() => { result.current.goBack(); });
+    act(() => { result.current.goForward(); }); // the walk re-enters ply 1
+    expect(result.current.currentPly).toBe(1);
+    expect(speakRecords.length).toBe(spoken);
+    act(() => { result.current.goForward(); });
+    await waitFor(() => expect(speakRecords.at(-1)?.text).toBe('Move two.'));
+  });
+
   it('a flagged ply with no fundamental states WHY when it is spoken (cached narration emits nothing at build)', async () => {
     // Clean-pass review walk 2026-10-04, G2 ply 38: a narration built ahead of
     // the walk and served from the cache never re-emitted its decline.

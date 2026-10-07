@@ -38,6 +38,7 @@ import { classifyPhase } from './gamePhaseService';
 import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
 import { decide, habitNeedFrom } from './coachDecider';
+import { advantageWasMissed } from './reviewWithholding';
 import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
@@ -119,14 +120,7 @@ const REVIEW_TAG_FOR_LANE: Record<StudentMoveLane, FacetTag | null> = {
 };
 
 
-/** The student's next move was NOT the first move of the line that punishes
- *  the opponent's slip — so naming that line would hand over the move they
- *  had to find. Unknown on either side → not missed (nothing to hold). */
-export function advantageWasMissed(nextSan: string | null, lineFirstSan: string | null): boolean {
-  if (!nextSan || !lineFirstSan) return false;
-  const bare = (x: string): string => x.replace(/[+#!?]+$/, '');
-  return bare(nextSan) !== bare(lineFirstSan);
-}
+export { advantageWasMissed } from './reviewWithholding';
 
 export { detectBadHabits };
 
