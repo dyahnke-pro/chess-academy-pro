@@ -380,3 +380,24 @@ describe('a danger turn stays on the danger (prod tape 2026-10-06)', () => {
     expect(d.pkg.spoken).not.toContain('queenside push');
   });
 });
+
+describe('one claim, one seat (unity U6, Learn walk #26)', () => {
+  // Black's pawn on d5 stands between White's rook on d1 and Black's queen on
+  // d8: one geometry, read twice from opposite sides.
+  const FEN = '3q2k1/5ppp/8/3p4/8/8/5PPP/3R2K1 w - - 0 1';
+  it('two facts on the same squares speak once — the bigger stake wins', () => {
+    const d = decideTurn([
+      { lane: 'theirIntent', text: 'Their pawn on d5 is a discovered attack in waiting against the rook on d1.', fen: FEN, squares: ['d5', 'd1', 'd8'] },
+      { lane: 'tactic', text: 'Your rook on d1 pins their pawn on d5 against their queen on d8.', fen: FEN, squares: ['d1', 'd5', 'd8'] },
+    ]);
+    expect(d.spoke).toEqual(['tactic']);
+    expect(d.held).toContain('theirIntent');
+  });
+  it('facts on different squares both stay in the running', () => {
+    const d = decideTurn([
+      { lane: 'positional', text: 'Your pawn on h2 is weak.', fen: FEN, squares: ['h2'] },
+      { lane: 'tactic', text: 'Your rook on d1 pins their pawn on d5 against their queen on d8.', fen: FEN, squares: ['d1', 'd5', 'd8'] },
+    ]);
+    expect(d.held).not.toContain('tactic');
+  });
+});

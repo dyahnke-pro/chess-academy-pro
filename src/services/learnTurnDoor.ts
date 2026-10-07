@@ -28,6 +28,7 @@ import { COMPUTER_ROLES } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
 import { stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
+import { sameClaim } from './factSelector';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
 export type { SpokenLine, DrawnLine } from './voicePackage';
 export type { VoicePackage, VoiceFactKind } from './voicePackage';
@@ -368,8 +369,26 @@ export function decideTurn(
     return stakeValue(st) ?? 0;
   };
   const value = (x: { fact: VoiceFact; lane: LearnLane }): number => stakeOf(x.lane, x.fact.text) || LEARN_LANES[x.lane].lead;
+  // ONE CLAIM, ONE SEAT (unity U6, Learn walk #26: the d5 pawn was "a
+  // discovered attack in waiting" for them AND "pinned by your rook" — one
+  // geometry read from both sides). Facts about the same squares collapse to
+  // the one that matters: danger first, then the bigger stake. Squares are
+  // the facts' own, coupled at emission — never read back out of the prose.
+  const subsumed = new Set<{ fact: VoiceFact; lane: LearnLane }>();
+  for (const a of survivors) {
+    if (subsumed.has(a)) continue;
+    for (const b of survivors) {
+      if (a === b || subsumed.has(b)) continue;
+      if (!sameClaim({ sq: a.fact.squares ?? [], family: null }, { sq: b.fact.squares ?? [], family: null })) continue;
+      const ad = DANGER_LANES.has(a.lane); const bd = DANGER_LANES.has(b.lane);
+      const loser = ad !== bd ? (ad ? b : a) : value(b) > value(a) ? a : b;
+      subsumed.add(loser);
+      if (loser === a) break;
+    }
+  }
   let top: { fact: VoiceFact; lane: LearnLane } | null = null;
   for (const x of survivors) {
+    if (subsumed.has(x)) continue;
     if (!top) { top = x; continue; }
     const xd = DANGER_LANES.has(x.lane); const td = DANGER_LANES.has(top.lane);
     if (xd !== td) { if (xd) top = x; continue; }
@@ -414,6 +433,7 @@ export function decideTurn(
     const aside = !!ownLead && x !== ownLead && !DANGER_LANES.has(x.lane)
       && LEARN_LANES[x.lane].always !== true && !(beginner && BEGINNER_ALWAYS.has(x.lane))
       && !sq.some((q) => anchor.includes(q)) && !important;
+    if (subsumed.has(x)) { if (!held.includes(x.lane)) held.push(x.lane); continue; }
     if (!restates && !offTopic && !aside) {
       keep.push(x.fact);
       if (!spoke.includes(x.lane)) spoke.push(x.lane);
