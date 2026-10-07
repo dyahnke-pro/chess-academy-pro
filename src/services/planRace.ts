@@ -1,5 +1,6 @@
 import { Chess, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
+import type { Proof } from './proof';
 
 type Color = 'w' | 'b';
 
@@ -337,4 +338,18 @@ export function fileClaimed(fenBefore: string, san: string): { file: string; con
       ? `You took the open ${file}-file first — their rook could have reached it too, so now they have to contest it.`
       : `You took the open ${file}-file before either of their rooks could reach it.`,
   };
+}
+
+/** THE RACE'S PROOF — the counts it rests on, read off the board (exact).
+ *  The same `detectPlanRace` the clause speaks from; null when no race. */
+export function planRaceProof(fen: string, studentColor: Color): Proof | null {
+  const race = detectPlanRace(fen, studentColor);
+  if (!race) return null;
+  if (race.kind === 'passer-race') {
+    const p = (n: number): string => `${n} push${n === 1 ? '' : 'es'}`;
+    const counts = `your pawn on ${race.yourPawn} is ${p(race.yourPushes)} from queening, theirs on ${race.theirPawn} is ${p(race.theirPushes)}, and the move is ${race.youMoveFirst ? 'yours' : 'theirs'}`;
+    return { kind: 'count', exact: true, short: `${race.yourPushes} pushes against ${race.theirPushes}`, full: counts, squares: [race.yourPawn, race.theirPawn] };
+  }
+  const file = `the ${race.file}-file`;
+  return { kind: 'squares', exact: true, short: file, full: `both sides want ${file}`, squares: [`${race.file}1`, `${race.file}8`] };
 }

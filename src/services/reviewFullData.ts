@@ -12,7 +12,8 @@
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
 import { lastMoveFromSan } from './material';
-import { settledExchange } from './exchangeLedger';
+import { settledExchange, moverLineProof } from './exchangeLedger';
+import { threatProof } from './threatProof';
 import { inFluxAfter } from './boardState';
 import { readTrade } from './tradeQuality';
 import { readTiming, timingClause } from './moveTiming';
@@ -23,7 +24,7 @@ import { getPunishGemById } from '../data/lessons/punishGems';
 import { Chess, type Color, type Square } from 'chess.js';
 import { landedTacticFor, plyFactsForMove } from './pvPlayback';
 import { definitionKey, tacticInvariant } from './conceptEngine';
-import { findMinorityAttack, findColorComplexWeakness, signedLegalSeeFor } from './positionReadingService';
+import { findMinorityAttack, findColorComplexWeakness, signedLegalSeeFor, seeSequence } from './positionReadingService';
 import { detectTactics } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences, detectNewThreat } from './groundedAnswer';
@@ -38,7 +39,7 @@ import { recordedMoveCost } from './moveCost';
 import { trickSidestepped } from './forkTrick';
 import { findProphylaxis, prophylaxisProof } from './prophylaxis';
 import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
-import { lineProofFromUci, type FactProof, type Proof } from './proof';
+import { lineProof, lineProofFromUci, type FactProof, type Proof } from './proof';
 import { refutedAltProof } from './refutedAlternativeCore';
 import { advantageWasMissed } from './reviewWithholding';
 import { costWords, isMateEval, MISTAKE_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
@@ -50,7 +51,7 @@ import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './revie
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { nameEndgamePhase } from './reviewMoveTeaching';
 import { detectOpening } from './openingDetectionService';
-import { planRaceClause } from './planRace';
+import { planRaceClause, planRaceProof } from './planRace';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
 import { deriveNextPlanFacts } from './nextPlans';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
@@ -416,11 +417,15 @@ export function computeMoveFacets(
         : null;
       const judged = ctx.studentColorWB ? readTrade(fenBefore, san, ctx.studentColorWB, cost,
         ply >= 2 && ctx.teaching.prevFenBefore ? lastMoveFromSan(ctx.teaching.prevFenBefore, ctx.allSans[ply - 2]) : null) : null;
+      // THE TRADE'S PROOF: the capture, then every recapture on the square in
+      // least-valuable order — the exchange itself, exact (`seeSequence`).
+      const tradeProof = lineProof({ fen: fenBefore, sans: [san, ...seeSequence(fenAfter, tradeSq as Square)] }, true);
       if (judged) {
         const jf = `[trade] ${judged.text}`;
         facets.push(jf);
         recSquares(jf, judged.squares);
-      } else facets.push(f);
+        recProof(jf, tradeProof);
+      } else { facets.push(f); recProof(f, tradeProof); }
     } catch { /* no trade line */ }
   } else if (influence) { const f = `[${influenceShape.hitsPiece ? 'does' : 'delta'}] ${influence}`; facets.push(f); recSquares(f, influenceSquares); }
 
@@ -569,7 +574,7 @@ export function computeMoveFacets(
     // The verdict's proof is the line its words name: the better move's own
     // line when the reason came from it, the line after the move when the
     // punishment did.
-    if (better) recProof(qf, reason ? lineProofFromUci(fenBefore, ctx.bestLineUci) : punishWhy ? lineProofFromUci(fenAfter, ctx.playedLineUci) : null);
+    if (costsPoints || fellShort) recProof(qf, punishWhy ? lineProofFromUci(fenAfter, ctx.playedLineUci) : lineProofFromUci(fenBefore, ctx.bestLineUci));
     if (positive) {
       try {
         const pm = new Chess(fenBefore).move(san);
@@ -696,6 +701,17 @@ export function computeMoveFacets(
         (_m, side: string) => (side === me ? 'You have mate in one' : 'They have mate in one'));
       return seatPieceReferences(seated, fenAfter, ctx.studentColorWB);
     };
+    // A TACTIC'S PROOF is the engine line from this board, cut where it proves
+    // the material for the side the tactic favours — only when that side is to
+    // move (a standing threat for the side NOT to move has no line here yet).
+    const toMove = ((): 'w' | 'b' | null => { try { return new Chess(fenAfter).turn(); } catch { return null; } })();
+    // …and for the side NOT to move, the null-move read of what it wins: the
+    // count and the capture (`threatProof`, the same proof Learn's warning
+    // speaks).
+    const tacProof = (b: 'w' | 'b' | undefined, squares: readonly string[]): Proof | null => {
+      if (!b || !toMove) return null;
+      return b === toMove ? moverLineProof(fenAfter, ctx.playedLineUci, b) : threatProof(fenAfter, toMove, squares);
+    };
     for (const tac of t.tactics) {
       if (tac.type === 'none' || !tac.description) continue;
       // A fork SHAPE is tempo-blind — the static scanner reports it whether or
@@ -713,11 +729,11 @@ export function computeMoveFacets(
         // prose is the anti-pattern that caused this session's other bugs.
         if (v.status === 'live') {
           const f = `[tactic] ${seat(tac.description)} — it's the move, so the material comes off.`;
-          facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
+          facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary); recProof(f, tacProof(tac.beneficiary, tac.involvedSquares));
           recStakes(f, { points: v.winsPoints, plies: 1 }); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
         } else if (v.status === 'threat') {
           const f = `[tactic] Threat: ${seat(tac.description)} — the defender can't save everything.`;
-          facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
+          facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary); recProof(f, tacProof(tac.beneficiary, tac.involvedSquares));
           recStakes(f, { points: v.winsPoints || forkPoints(piecesOn(fenAfter, tac.involvedSquares.slice(1))), plies: 2 }); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
         }
         // status 'none' → unproven fork shape, say nothing (G0).
@@ -732,7 +748,7 @@ export function computeMoveFacets(
         // teaches only when the pin actually costs material.
         if (isScenicPawnPin(fenAfter, tac.type, tac.involvedSquares, tac.beneficiary)) continue;
         const f = `[tactic] ${seat(tac.description)}.`;
-        facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
+        facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary); recProof(f, tacProof(tac.beneficiary, tac.involvedSquares));
         recStakes(f, stakes); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
       }
     }
@@ -919,7 +935,7 @@ export function computeMoveFacets(
     // of terminal event — a cross-kind tempo number (pawn pushes vs rook moves)
     // is incomparable, and a confidently wrong number is worse than silence.
     const race = planRaceClause(fenAfter, studentColorWB, 'review');
-    if (race) facets.push(`[plan-race] ${cap(race)}.`);
+    if (race) { const f = `[plan-race] ${cap(race)}.`; facets.push(f); recProof(f, planRaceProof(fenAfter, studentColorWB)); }
   }
 
   // ── 7. SACRIFICE — compensation + mechanism + king-shield removal ──

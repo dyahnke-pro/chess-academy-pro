@@ -17,6 +17,7 @@
 // sentence that settles the ambiguity AND carries the lesson (why an engine
 // still calls that fork a mistake). Pure chess.js, no engine, no model (G0/G3).
 import { andList } from '../utils/andList';
+import type { Proof } from './proof';
 import { Chess, type Square } from 'chess.js';
 import { legalSeeGain, legalSeeGainFor } from './positionReadingService';
 import { MAX_PV_DEPTH_PLIES } from './ratingBands';
@@ -491,4 +492,19 @@ export function proofForMover(fen: string, uci: readonly string[], moverWB: 'w' 
   if (proof.mate) return proof.plies % 2 === 1 ? { text: `${moves} — and it's mate`, plies: proof.plies } : null;
   if (!proof.ledger || proof.ledger.netPawns <= 0) return null;
   return { text: `${moves} — ${describeProofResult(proof.ledger)}`, plies: proof.plies };
+}
+
+/** `proofForMover` as the one Proof shape (one-coach P3): the engine line from
+ *  `fen`, cut where it PROVES a gain or mate for the side that starts it.
+ *  An engine line, so `exact: false` (said short); null when it proves nothing
+ *  — then the claim it would back stays unproven, never a fake proof. */
+export function moverLineProof(fen: string, uci: readonly string[], moverWB: 'w' | 'b'): Proof | null {
+  const r = proofForMover(fen, uci, moverWB);
+  if (!r) return null;
+  const sans: string[] = [];
+  try {
+    const c = new Chess(fen);
+    for (const u of uci.slice(0, r.plies)) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined }).san);
+  } catch { return null; }
+  return { kind: 'line', exact: false, short: r.text, full: r.text, line: { fen, sans } };
 }
