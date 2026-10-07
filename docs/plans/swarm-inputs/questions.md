@@ -29,3 +29,9 @@
    explorer (proxy) returns named top games for an EXACT position — answers
    "a famous game reached this position". The bundled masters DB holds move
    counts only (no names, no games).
+   ALREADY BUILT (David): the Openings Masterclass/Elite tab carries 8
+   depersonalised repertoires built from real pro games — "The Universal
+   Grandmaster Repertoire" = Carlsen's 300 games (incl. 15 Catalans), "The
+   Speedrun Attacking Repertoire" = Naroditsky's, etc. The missing piece is
+   the coach reaching INTO them while teaching (cite a real game, credit the
+   game/move). Names still leak in the lesson text inside them (F0d).
