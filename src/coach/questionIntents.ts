@@ -9,7 +9,9 @@
 
 // The only import: a PURE data resolver (fundamentalLessons imports nothing but a
 // type), so the "no heavy imports" contract holds — regex intent detection only.
+import { Chess } from 'chess.js';
 import { resolveTaughtFundamental } from '../data/fundamentalLessons';
+import { pureBoardAspect } from '../services/boardQuestionRouter';
 import type { CoachSurface, AskOrigin, AskSource } from './types';
 
 /** Surfaces whose ask text is a CODE-AUTHORED prompt, not the student's words
@@ -3209,6 +3211,64 @@ export function isLiveBoardAsk(ask: string | undefined): boolean {
   return !!ask && LIVE_BOARD_ASK_RE.test(ask);
 }
 
+/** Words that ask what a piece IS now, not why it was moved. */
+const QUALITY_WORD = /\b(?:weak|weakness|strong|good|bad|active|passive|safe|unsafe|well[- ]placed|badly placed|misplaced|doing|useful|useless|trapped|exposed|healthy|isolated|backward|doubled|target|defended|protected|hanging|loose)\b/i;
+
+/**
+ * A NAMED MOVE THAT IS ON THE TAPE AND NOT ON THE BOARD is a question about the
+ * move that was played (question walk, 2026-09-27). "Why Nf1?", "Is b5 a sound
+ * sacrifice?", "Why did they play Be2?" — each named a move already made, and
+ * each was answered as a hypothetical: "Nf1 isn't a legal move in this
+ * position", or the pro-games ask-back. The text alone cannot tell; the BOARD
+ * can — the move is illegal now and was played earlier, so it is the played one.
+ *
+ * Only when the question is not itself hypothetical: "what happens if I take
+ * on b5" names a move to MAKE, and a match on an earlier …b5 would answer
+ * about the wrong move. Matched by coordinates at each ply, never by string.
+ */
+export function tapeMoveRef(
+  ask: string | undefined,
+  fen: string | undefined,
+  history: readonly string[],
+): RetrospectiveMoveRef | null {
+  if (!ask || history.length === 0) return null;
+  // A question about what a piece or square DOES NOW is not about the move
+  // that put it there (question walk 2026-10-08: "What is my bishop on c4
+  // aiming at?" and "who controls the e5 square?" were graded as Bc4 and e5).
+  if (pureBoardAspect(ask) !== null) return null;
+  if (/\b(?:if\s+i|if\s+we|can\s+i|could\s+i|should\s+i|shall\s+i|may\s+i|what\s+happens|what\s+if|let\s+me|i\s+want\s+to|how\s+about|(?:can|could|will|would|might)\s+(?:they|he|she|my\s+opponent))\b/i.test(ask)) return null;
+  const san = extractCandidateSan(ask);
+  if (!san) return null;
+  if (fen) {
+    try { if (new Chess(fen).move(san)) return null; } catch { /* not legal now — keep looking */ }
+  }
+  // A QUESTION ABOUT A PIECE THAT STILL STANDS THERE is about the piece, not
+  // the move that put it there (question walk 2026-09-27: "Is my d4 pawn
+  // weak?" was answered "your d4 on move 4 was the engine's top move"; "Is my
+  // bishop on e3 good or bad?" graded 10.Be3). The quality word says it asks
+  // about the piece NOW; the board says the piece is still on that square.
+  if (fen && QUALITY_WORD.test(ask)) {
+    const to = /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(san)?.[1];
+    const type = /^[KQRBN]/.test(san) ? san[0].toLowerCase() : 'p';
+    try {
+      const here = to ? new Chess(fen).get(to as never) as { type?: string } | undefined : undefined;
+      if (here?.type === type) return null;
+    } catch { /* unreadable board — fall through */ }
+  }
+  const c = new Chess();
+  let hit = false;
+  for (const played of history) {
+    const before = c.fen();
+    let mv;
+    try { mv = c.move(played); } catch { break; }
+    try {
+      const named = new Chess(before).move(san);
+      if (named && named.from === mv.from && named.to === mv.to) hit = true;
+    } catch { /* the named move was not legal at this ply */ }
+  }
+  return hit ? { kind: 'san', san } : null;
+}
+
 /** "how does White continue" — the side to move's next step, on this board. */
 const SIDE_CONTINUE_RE = /\bhow\s+(?:does|do|should|can|will|would)\s+(?:white|black)\s+(?:continue|proceed|go\s+on|play\s+on)\b/i;
 
@@ -3235,7 +3295,7 @@ export function buildQuestionGrounding(
   // ("what should I be thinking about") is about HOW TO THINK. Both are
   // computed first and SUPPRESS the present-tense move lanes they used to
   // fall into — a specific ask beats the generic one, decided here once.
-  const retroRef = retrospectiveMoveRef(a);
+  const retroRef = retrospectiveMoveRef(a) ?? tapeMoveRef(a, liveState.fen, liveState.moveHistory ?? []);
   const retrospective = retroRef !== null;
   const method = isMethodQuestion(a);
   // A board is on screen and the words point at it: record lanes yield.
@@ -3253,6 +3313,7 @@ export function buildQuestionGrounding(
     openingId: liveState.openingId,
     surface: coachSurfaceToRoute(surface),
     retrospectiveMoveQuestion: retrospective,
+    groundedBoardQuestion: pureBoardAspect(a) !== null,
     retrospectiveMoveRef: retroRef ?? undefined,
     methodQuestion: method,
     // "give me a hint" — the piece + the goal, the square withheld. Set here
@@ -3325,7 +3386,10 @@ export function buildQuestionGrounding(
     transferGapQuestion: isTransferGapQuestion(a),
     skillRadarQuestion: isSkillRadarQuestion(a),
     masterPlayQuestion: isMasterPlayQuestion(a) && !threat,
-    conceptQuestion: isConceptQuestion(a) && !threat,
+    // "What is the plan?" is the plan, never a glossary entry — the answering
+    // side has always suppressed it; the label now agrees (parity 2026-10-08).
+    conceptQuestion: isConceptQuestion(a) && !threat && !((isPlanQuestion(a) || sideContinue) && !isEndgameQuestion(a) && !method),
+    fundamentalLessonQuestion: isFundamentalLessonQuestion(a),
     playerGamesQuestion: isPlayerGamesQuestion(a) && !sideContinue,
     // "what is my weakest endgame?" is about the student's record, not how to
     // play an ending (probe 2026-10-08: it reached the technique lane first).

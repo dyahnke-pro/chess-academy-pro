@@ -56,4 +56,12 @@ describe('"the pawn or the queen" when only one can take', async () => {
     await expect(resolveCompareMoves('Should I recapture with the pawn or the queen?', fen, history))
       .resolves.toEqual({ only: 'dxe5', cannot: 'queen', square: 'e5' });
   });
+  it('a question about what a piece DOES now is not about the move that put it there (2026-10-08)', () => {
+    const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5';
+    const history = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'Nc3', 'Nf6'];
+    expect(tapeMoveRef('What is my bishop on c4 aiming at?', fen, history)).toBeNull();
+    expect(tapeMoveRef('who controls the e5 square?', fen, history)).toBeNull();
+    // Still the move: why it was played.
+    expect(tapeMoveRef('Why play Nc3?', fen, history)).toEqual({ kind: 'san', san: 'Nc3' });
+  });
 });

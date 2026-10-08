@@ -88,7 +88,10 @@ export function openingAnnouncement(
     // (nor do the DB's filler labels — "Normal Variation", "Rare Defenses",
     // hand walk 2026-09-25).
     if (!tail || GENERIC_TAIL.test(tail)) return null;
-    return `It's the ${tail}.`;
+    // WITH ITS FAMILY: a bare tail can name another opening outright — after
+    // "This game is the Sicilian Defense", "It's the French Variation" was
+    // heard as the French (live walk 2026-10-08).
+    return `It's the ${tail} of the ${spokenFamily}.`;
   }
   const who = departure.mover === studentColor ? 'You' : 'They';
   const main = departure.mainSan

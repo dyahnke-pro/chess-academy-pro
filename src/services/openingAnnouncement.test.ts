@@ -19,7 +19,12 @@ describe('openingAnnouncement — name it once, then once more where theory ends
   });
   it('a NAMED variation while still in book is named (hand walk 2340: "c3 — the Alapin")', () => {
     expect(openingAnnouncement({ name: 'Sicilian Defense: Alapin Variation' }, null, 'Sicilian Defense', 'w'))
-      .toBe("It's the Alapin Variation.");
+      .toBe("It's the Alapin Variation of the Sicilian Defense.");
+  });
+  it('a variation that shares a name with another opening is said with its family (live walk 2026-10-08)', () => {
+    // 1.e4 c5 2.Nf3 e6: "It's the French Variation" was heard as the French.
+    expect(openingAnnouncement({ name: 'Sicilian Defense: French Variation' }, null, 'Sicilian Defense', 'w'))
+      .toBe("It's the French Variation of the Sicilian Defense.");
   });
   it('filler tails are not variations (hand walk 2026-09-25)', () => {
     expect(openingAnnouncement({ name: 'Indian Defense: Normal Variation' }, null, 'Indian Defense', 'b')).toBeNull();

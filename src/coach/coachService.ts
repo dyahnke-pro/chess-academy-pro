@@ -32,6 +32,8 @@ import { findTradeMove, type ComparedMove } from '../services/groundedAnswer';
 import { logAppAudit } from '../services/appAuditor';
 import { tacticsAreFreshFor } from '../services/tacticsContextIdentity';
 import { pureBoardAspect } from '../services/boardQuestionRouter';
+import { tapeMoveRef } from './questionIntents';
+export { tapeMoveRef };
 import { buildEnginePlan, buildCandidateEval, buildAlternativesContext, buildOpponentHypotheticalEval } from '../services/enginePlanContext';
 import { scanPositionForTrap } from '../services/positionTrapScan';
 import { applyCandidateArrows, appendKeySquareHighlights } from '../services/coachAnswerGates';
@@ -211,7 +213,7 @@ import { splitMultiAsk,
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
   isWhyBestMoveQuestion, isCandidateMoveQuestion, isOpponentHypotheticalQuestion, tradeAsk, extractCandidateSan, isAlternativesQuestion, isHintRequest, positionalTopic, isGameMistakeQuestion,
-  retrospectiveMoveRef, type RetrospectiveMoveRef, compareMovesAsk, captureOnAsk, pawnStrengthAsk, isMateQuestion, isMethodQuestion, stripQuestionFiller, pieceOptionsRef,
+  retrospectiveMoveRef, compareMovesAsk, captureOnAsk, pawnStrengthAsk, isMateQuestion, isMethodQuestion, stripQuestionFiller, pieceOptionsRef,
   isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion, isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isLastMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessLifecycleQuestion, isWeaknessBriefingQuestion, openingExistenceQuery, openingIdentityQuery,
 } from './questionIntents';
 import { isAnyBoardQuestion } from './boardQuestions';
@@ -1607,6 +1609,16 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
         }),
       });
     }
+    // ONE QUESTION READER UNDER EVERY ANSWER (unification, 2026-10-08). The
+    // shared builder labels the turn for the door; this object answers it. A
+    // flag set only there was a DEAD LANE here — misconceptions and
+    // errors-by-situation could never be answered from chat. The shared read
+    // is now the base; the fields below (engine, tape, board) refine it.
+    const sharedQuestionRead = buildQuestionGrounding(askForIntents ?? '', {
+      fen: input.liveState.fen,
+      moveHistory: input.liveState.moveHistory,
+      studentColor: input.liveState.studentColor,
+    }, input.liveState.surface ?? 'standalone-chat');
     const autoGrounding =
       options.grounding ??
       // BOARD-VERDICT INTENTS ENGAGE GROUNDING WITHOUT A BOARD. This gate reads
@@ -1624,6 +1636,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       // decline honestly through the computed lane instead of being improvised.
       (input.liveState.fen || isAnyBoardQuestion(askForIntents) || isAttackAssessmentQuestion(askForIntents) || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || fundamentalLessonQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || opponentHypothetical !== undefined || trade !== undefined || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || nameOpeningQuestionEngage || opponentMoveQuestionEngage || lastMoveQuestionEngage || theoryQuestionEngage || weaknessLifecycleKindEngage !== null || weaknessBriefingQuestionEngage || endgameWeaknessQuestionEngage || isEndgameQuestion(askForIntents) || openingExistenceName !== null || openingIdentityName !== null || retrospectiveEngage || methodQuestionEngage
         ? {
+            ...sharedQuestionRead,
             currentFen: input.liveState.fen,
             // The side to move, as the surface already knows it. Threaded so
             // "whose turn is it?" is answerable even when the FEN never
@@ -1793,7 +1806,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             endgameWeaknessQuestion: endgameWeaknessQuestionEngage,
             tacticsProfileQuestion: tacticsProfileQuestionEngage,
             phaseQuestion: phaseQuestionEngage,
-            repertoireGapQuestion: repertoireGapQuestionEngage,
+            repertoireGapQuestion: repertoireGapQuestionEngage && !counterRepertoireQuestionEngage,
             repertoireGapKind: repertoireGapKind(askForIntents),
             accuracyQuestion: accuracyQuestionEngage,
             consistencyQuestion: consistencyQuestionEngage,
@@ -2495,60 +2508,6 @@ export const coachService = { ask };
 
 /** Re-export the toolbelt for tests / debugging. */
 export { COACH_TOOLS };
-
-/**
- * A NAMED MOVE THAT IS ON THE TAPE AND NOT ON THE BOARD is a question about the
- * move that was played (question walk, 2026-09-27). "Why Nf1?", "Is b5 a sound
- * sacrifice?", "Why did they play Be2?" — each named a move already made, and
- * each was answered as a hypothetical: "Nf1 isn't a legal move in this
- * position", or the pro-games ask-back. The text alone cannot tell; the BOARD
- * can — the move is illegal now and was played earlier, so it is the played one.
- *
- * Only when the question is not itself hypothetical: "what happens if I take
- * on b5" names a move to MAKE, and a match on an earlier …b5 would answer
- * about the wrong move. Matched by coordinates at each ply, never by string.
- */
-/** Words that ask what a piece IS now, not why it was moved. */
-const QUALITY_WORD = /\b(?:weak|weakness|strong|good|bad|active|passive|safe|unsafe|well[- ]placed|badly placed|misplaced|doing|useful|useless|trapped|exposed|healthy|isolated|backward|doubled|target|defended|protected|hanging|loose)\b/i;
-
-export function tapeMoveRef(
-  ask: string | undefined,
-  fen: string | undefined,
-  history: readonly string[],
-): RetrospectiveMoveRef | null {
-  if (!ask || history.length === 0) return null;
-  if (/\b(?:if\s+i|if\s+we|can\s+i|could\s+i|should\s+i|shall\s+i|may\s+i|what\s+happens|what\s+if|let\s+me|i\s+want\s+to|how\s+about|(?:can|could|will|would|might)\s+(?:they|he|she|my\s+opponent))\b/i.test(ask)) return null;
-  const san = extractCandidateSan(ask);
-  if (!san) return null;
-  if (fen) {
-    try { if (new Chess(fen).move(san)) return null; } catch { /* not legal now — keep looking */ }
-  }
-  // A QUESTION ABOUT A PIECE THAT STILL STANDS THERE is about the piece, not
-  // the move that put it there (question walk 2026-09-27: "Is my d4 pawn
-  // weak?" was answered "your d4 on move 4 was the engine's top move"; "Is my
-  // bishop on e3 good or bad?" graded 10.Be3). The quality word says it asks
-  // about the piece NOW; the board says the piece is still on that square.
-  if (fen && QUALITY_WORD.test(ask)) {
-    const to = /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(san)?.[1];
-    const type = /^[KQRBN]/.test(san) ? san[0].toLowerCase() : 'p';
-    try {
-      const here = to ? new Chess(fen).get(to as never) as { type?: string } | undefined : undefined;
-      if (here?.type === type) return null;
-    } catch { /* unreadable board — fall through */ }
-  }
-  const c = new Chess();
-  let hit = false;
-  for (const played of history) {
-    const before = c.fen();
-    let mv;
-    try { mv = c.move(played); } catch { break; }
-    try {
-      const named = new Chess(before).move(san);
-      if (named && named.from === mv.from && named.to === mv.to) hit = true;
-    } catch { /* the named move was not legal at this ply */ }
-  }
-  return hit ? { kind: 'san', san } : null;
-}
 
 /** Does the ask name a move that can be played on this board right now? */
 function namedMoveLegalNow(ask: string | undefined, fen: string | undefined): boolean {
