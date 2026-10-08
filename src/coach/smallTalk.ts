@@ -13,7 +13,7 @@ export type SmallTalkKind = 'thanks' | 'greeting' | 'agree' | 'goodbye' | 'uncle
 const KIND_RE: ReadonlyArray<[SmallTalkKind, RegExp]> = [
   ['thanks', /\b(?:thanks?|thank\s+you|thx|ty|cheers|appreciate\s+it)\b/i],
   ['goodbye', /\b(?:bye|goodbye|good\s*night|see\s+you|gotta\s+go|later)\b/i],
-  ['greeting', /^\s*(?:hi|hey|hello|yo|sup|good\s+(?:morning|afternoon|evening)|howdy)\b/i],
+  ['greeting', /^\s*(?:hi|hey|hello|yo|sup|good\s+(?:morning|afternoon|evening)|howdy|test(?:ing)?)\b/i],
   ['agree', /^\s*(?:ok(?:ay)?|k|cool|nice|great|got\s+it|i\s+see|makes\s+sense|sure|alright|yes|yeah|yep|wow|lol|haha)\b/i],
 ];
 
