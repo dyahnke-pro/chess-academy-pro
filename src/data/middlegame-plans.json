@@ -4001,7 +4001,7 @@
   "openingId": "catalan-opening",
   "title": "Open Catalan: Undermine and Recover the Pawn",
   "criticalPositionFen": "r2qkb1r/1ppb1ppp/p1n1pn2/8/2pP4/4PNP1/PP2QPBP/RNB2RK1 b kq - 2 8",
-  "overview": "In the Open Catalan, White does not chase the c4-pawn — they undermine its base with b3, recovers it with interest, and emerges with the bishop pair, the open a-file, and the long-diagonal bishop bearing on the queenside.",
+  "overview": "In the Open Catalan, White does not chase the c4-pawn: b3 undermines it, and after …cxb3 axb3 Black keeps the extra pawn while White gets the open a-file, the long-diagonal bishop and active knights. White plays a pawn down for activity.",
   "pawnBreaks": [
    {
     "move": "b3",
@@ -4050,12 +4050,12 @@
      "axb3 — White recaptures on b3, opening lines.",
      "…Be7 — Black develops the bishop to e7.",
      "Bb2 — the dark-squared bishop joins the long diagonal toward b7.",
-     "…O-O — Black castles, the extra c4-pawn still defended.",
+     "…O-O — Black castles, still a pawn up.",
      "Rc1 — White’s rook takes the c-file, eyeing the b3-pawn and the queenside.",
      "…Nb4 — the knight jumps to b4, defending and eyeing d3 and c2.",
      "Ne5 — White centralizes the knight, the typical Catalan pressure on the long diagonal.",
      "…Nfd5 — Black blockades d5 with the knight, a rock in the centre.",
-     "Na3 — White’s knight heads to recover the c4-pawn.",
+     "Na3 — White's knight hits the b5-pawn.",
      "…Be8 — repositioning the bishop to defend; Black holds the extra pawn in a complex, balanced Open Catalan."
     ],
     "sources": [
@@ -4070,12 +4070,12 @@
      "axb3 — recapture, open lines",
      "Be7 — develop the bishop",
      "Bb2 — the long diagonal to b7",
-     "O-O — castle, pawn held",
+     "O-O — castle, still a pawn up",
      "Rc1 — White takes the c-file",
      "Nb4 — eye d3/c2",
      "Ne5 — central pressure",
      "Nfd5 — blockade the centre",
-     "Na3 — go after c4",
+     "Na3 — hit b5",
      "Be8 — reposition, defend"
     ],
     "arrows": [
@@ -11915,7 +11915,7 @@
     "annotations": [
      "e4 — White grabs space and challenges the d5-knight.",
      "…Nb6 — the knight reroutes toward the c4 outpost, in front of White’s weak c3-pawn.",
-     "Be3 — White develops, but the c3-pawn remains a long-term weakness.",
+     "Be3 — White develops with a hit on the c5-queen; the c3-pawn remains a long-term weakness.",
      "…Qh5 — the queen swings to an active post; with the sounder structure Black presses on both wings."
     ],
     "arrows": [
@@ -41155,7 +41155,7 @@
   "openingId": "pro-gothamchess-caro-kann",
   "criticalPositionFen": "4k3/8/1p2p2q/3rP1pP/5p2/8/5PP1/4R1K1 w - - 0 45",
   "title": "Caro vs d3 Endgame: Q+P Technique vs IMRosen (2688)",
-  "overview": "From their win over IM a top grandmaster (2688). The quiet d3 sideline drifts into a queen-and-pawn ending where Black is the one with the active queen and the extra pawn. They trade the rooks off into a winning queen ending, centralises, and the connected kingside passers plus the active queen finish it. Even White's quietest try meets a clean technical conversion.",
+  "overview": "From their win over IM a top grandmaster (2688). The quiet d3 sideline drifts into a queen-and-pawn ending where Black is the one with the active queen and the extra pawn. Black trades the rooks off into a winning queen ending, centralises, and the connected kingside passers plus the active queen finish it. Even White's quietest try meets a clean technical conversion.",
   "pawnBreaks": [
    "…g5-g4 the kingside passers rolling forward"
   ],
@@ -41285,7 +41285,7 @@
      "Qxd1+ — won Q-ending"
     ],
     "title": "Caro vs d3 Endgame: Q+P Technique vs IMRosen (2688)",
-    "intro": "From their win over IM a top grandmaster (2688). The quiet d3 sideline drifts into a queen-and-pawn ending where Black is the one with the active queen and the extra pawn. They trade the rooks off into a winning queen ending, centralises, and the connected kingside passers plus the active queen finish it. Even White's quietest try meets a clean technical conversion.",
+    "intro": "From their win over IM a top grandmaster (2688). The quiet d3 sideline drifts into a queen-and-pawn ending where Black is the one with the active queen and the extra pawn. Black trades the rooks off into a winning queen ending, centralises, and the connected kingside passers plus the active queen finish it. Even White's quietest try meets a clean technical conversion.",
     "sources": [
      "book:caro-kann",
      "https://www.chess.com/openings/Caro-Kann-Defense",
@@ -41402,7 +41402,7 @@
   "openingId": "pro-gothamchess-caro-kann",
   "criticalPositionFen": "r7/1p3k1p/8/4B3/2b2pPP/4pP1B/1P1bK3/7R w - - 0 32",
   "title": "Caro Panov Endgame: R+B Conversion vs Bortnyk (2780)",
-  "overview": "How the Panov fianchetto cashes in. From their win over GM Mykola Bortnyk (2780), Black reaches a rook-and-bishop ending where the bishop dominates the long diagonal — exactly the piece the …g6/…Bg7 fianchetto put there to pressure the isolani. They centralise the rook, wins White's loose pawns, and the bishop's reach decides. The opening's plan becomes the endgame's engine.",
+  "overview": "How the Panov fianchetto cashes in. From their win over GM Mykola Bortnyk (2780), Black reaches a rook-and-bishop ending where the bishop dominates the long diagonal — exactly the piece the …g6/…Bg7 fianchetto put there to pressure the isolani. Black centralises the rook, wins White's loose pawns, and the bishop's reach decides. The opening's plan becomes the endgame's engine.",
   "pawnBreaks": [
    "…f4-f3 the passed pawn that the active bishop shepherds"
   ],
@@ -41512,7 +41512,7 @@
      "Bxf3 — bishop decides"
     ],
     "title": "Caro Panov Endgame: R+B Conversion vs Bortnyk (2780)",
-    "intro": "How the Panov fianchetto cashes in. From their win over GM Mykola Bortnyk (2780), Black reaches a rook-and-bishop ending where the bishop dominates the long diagonal — exactly the piece the …g6/…Bg7 fianchetto put there to pressure the isolani. They centralise the rook, wins White's loose pawns, and the bishop's reach decides. The opening's plan becomes the endgame's engine.",
+    "intro": "How the Panov fianchetto cashes in. From their win over GM Mykola Bortnyk (2780), Black reaches a rook-and-bishop ending where the bishop dominates the long diagonal — exactly the piece the …g6/…Bg7 fianchetto put there to pressure the isolani. Black centralises the rook, wins White's loose pawns, and the bishop's reach decides. The opening's plan becomes the endgame's engine.",
     "sources": [
      "book:caro-kann",
      "https://www.chess.com/openings/Caro-Kann-Defense",
@@ -45557,7 +45557,7 @@
      "bxa6"
     ],
     "annotations": [
-     "Bxb5+ — the bishop grabs a pawn with check.",
+     "Bxb5+ — the bishop takes the b5-bishop with check.",
      "…Nc6 — Black blocks the check.",
      "a4 — White starts the queenside pawn storm.",
      "…Be7 — Black develops.",
@@ -45567,7 +45567,7 @@
      "…bxa6 — Black captures with a wrecked queenside; White is clearly better."
     ],
     "learnCues": [
-     "Bxb5+ — win a pawn",
+     "Bxb5+ — take the bishop",
      "Nc6 — block",
      "a4 — start the storm",
      "Be7 — develop",
@@ -47810,7 +47810,7 @@
      "…c4 — Black spends the front twin at once, hitting your d3-pawn.",
      "h3 — a quiet insurance move first: g4 is covered before any piece dreams of it.",
      "…cxd3 — the trade Black wanted —",
-     "cxd3 — recaptured TOWARD the centre. Your pawn chain rebuilds itself; Black's c5-pawn now stands alone where two once were.",
+     "cxd3 — recaptured TOWARD the centre. Your pawn chain rebuilds itself, and Black's doubled c-pawns are down to one, on c6.",
      "…e5 — the centre stake.",
      "Nf3 — develop against it.",
      "…Nf6 — Black follows suit.",
@@ -49721,7 +49721,7 @@
      "Anand pulls the knight back to d3, eyeing the c5- and e5-outposts and keeping their options open.",
      "Black claims the open d-file with the first rook. In a queenless middlegame the one open file is the highway — seize it before White can.",
      "b3 props up the c4-pawn and gives the white king a breathing square.",
-     "The bishop swings to a3, hitting the b2-pawn and tying White's rook to the back rank. Black answers White's extra space with sheer activity.",
+     "The bishop swings to a3, eyeing the b2-square and White's queenside. Black answers White's extra space with activity.",
      "The knight bounds back to its dream square on e5.",
      "A rook lift: …Rd6 guards the sixth rank and clears d8 for its partner.",
      "White's rook contests the file from e2.",
@@ -54384,7 +54384,7 @@
   "openingId": "petrov-defence",
   "criticalPositionFen": "r2r2k1/pp1b1p1p/3b2pB/6Q1/3P4/2qB4/P4PPP/R4RK1 w - - 0 16",
   "title": "Petrov Steinitz: Trade Down and Grab b2",
-  "overview": "In the modern 3.d4 Steinitz Black neutralises by trading the dark bishops, then the active queen raids the loose b2-pawn while the rooks contest the open c-file — comfortable equality with an extra pawn in hand.",
+  "overview": "In the modern 3.d4 Steinitz, Black neutralises by trading the dark bishops; then the queen invades on b2, hitting a2 and the c1-rook, while the rooks contest the open c-file — comfortable equality.",
   "pawnBreaks": [],
   "pieceManeuvers": [
    {
@@ -54425,7 +54425,7 @@
      "Bxf8 takes the bishop.",
      "…Rxf8 recaptures, the rook comfortable on f8.",
      "Rac1 contests the c-file.",
-     "…Qb2 grabs the loose b2-pawn, the active queen deep in White's camp.",
+     "…Qb2 — the queen invades, hitting the a2-pawn and the c1-rook.",
      "Bc4 activates the bishop toward f7.",
      "…Rac8 contests the open c-file, Black active with an extra pawn."
     ],
@@ -54435,7 +54435,7 @@
      "Bxf8 — White takes.",
      "…Rxf8 — recapture.",
      "Rac1 — White takes the c-file.",
-     "…Qb2 — raid the b2-pawn!",
+     "…Qb2 — invade, hit a2 and c1",
      "Bc4 — White activates.",
      "…Rac8 — contest the c-file."
     ],
@@ -74043,7 +74043,7 @@
      "Black shores up …e6.",
      "Qf4 — press the dark squares.",
      "Black plays …h6.",
-     "Bh4 — keep the pin.",
+     "Bh4 — keep the diagonal.",
      "Black offers …Qg4.",
      "Qxg4 — trade, keep activity.",
      "Balanced, pawn compensated."
@@ -74406,7 +74406,7 @@
     ],
     "annotations": [
      "White nudges h3 for luft; you use the pause to begin trading down their attacking pieces.",
-     "…Nxe5 removes White's proud central knight — the first of the exchanges that neutralise the London.",
+     "…Nxe5 removes the London bishop from e5 — the first of the exchanges that neutralise the London.",
      "White recaptures with the knight, keeping a piece on the active square for now.",
      "…Nd7 offers to trade again, chipping away at White's coordinated setup.",
      "White swaps on d7; each exchange takes another attacker off the board.",
@@ -74416,7 +74416,7 @@
     ],
     "learnCues": [
      "White plays h3.",
-     "…Nxe5 — trade the central knight.",
+     "…Nxe5 — take the London bishop.",
      "White recaptures.",
      "…Nd7 — offer another trade.",
      "White swaps on d7.",
