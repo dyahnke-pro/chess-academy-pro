@@ -3,8 +3,9 @@
  * corpus games and counts, per fact kind, the CONCLUSIONS that spoke without
  * the proof their computer should have handed in. Writes
  * `audit-reports/proof-backlog.json` — the work list for P3, biggest first.
- * A report, not a gate: the engine is mocked (legal lines, not best ones), so
- * the counts rank producers; they are not a production rate.
+ * The engine is mocked (legal lines, not best ones), so the counts rank
+ * producers; they are not a production rate. Since 2026-10-08 it is also the
+ * gate: the backlog is zero and must stay zero.
  */
 import { describe, it, expect, vi } from 'vitest';
 import { Chess } from 'chess.js';
@@ -113,5 +114,9 @@ describe('proof backlog — which producers owe a proof', { timeout: 600_000 }, 
     writeFileSync('audit-reports/proof-backlog.json', JSON.stringify({ games: picked.map((g) => g.id), rows, unproven, byKind: ranked }, null, 2));
     console.log(`proof backlog: ${unproven} unproven over ${rows} decisions — ${ranked.map(([k, n]) => `${k}:${n}`).join(' ')}`);
     expect(rows).toBeGreaterThan(0);
+    // CLEARED 2026-10-08 (one-coach P3): every Review conclusion over this
+    // corpus carries its proof. A new producer that speaks a conclusion bare
+    // fails here — hand in the line, the squares or the count it found.
+    expect(unproven, `unproven by kind: ${ranked.map(([k, n]) => `${k}:${n}`).join(' ')}`).toBe(0);
   });
 });

@@ -31,7 +31,7 @@
 - `src/services/appAuditor.ts:2267`
 - `src/services/coachDecisionEmits.test.ts:32`
 - `src/services/coachDecisionEmits.test.ts:95`
-- `src/services/proofBacklog.report.test.ts:97`
+- `src/services/proofBacklog.report.test.ts:98`
 - `src/test/computedOrderWired.test.ts:26`
 
 ### `emitCoachDecision` (function) — 1 call site

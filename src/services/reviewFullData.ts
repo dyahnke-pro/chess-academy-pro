@@ -39,7 +39,7 @@ import { recordedMoveCost } from './moveCost';
 import { trickSidestepped } from './forkTrick';
 import { findProphylaxis, prophylaxisProof } from './prophylaxis';
 import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
-import { lineProof, lineProofFromUci, type FactProof, type Proof } from './proof';
+import { lineProof, lineProofFromUci, legalLineProof, squaresProof, type FactProof, type Proof } from './proof';
 import { refutedAltProof } from './refutedAlternativeCore';
 import { advantageWasMissed } from './reviewWithholding';
 import { costWords, isMateEval, MISTAKE_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
@@ -817,6 +817,9 @@ export function computeMoveFacets(
       const threat = `you're now threatening ${t.san} — it ${t.detail}`;
       const f = `[threat] ${threat.charAt(0).toUpperCase()}${threat.slice(1)}.`;
       facets.push(f);
+      // The proof is the geometry: the threatened move's landing square and
+      // the squares it hits (marked on Why).
+      recSquares(f, [t.san.replace(/[+#]/g, '').slice(-2), ...t.targetSquares]);
       // The student's next move cashes it (their opponent moves first: 2 plies).
       recStakes(f, t.kind === 'mate'
         ? { points: MATE_POINTS, plies: 2 }
@@ -955,7 +958,14 @@ export function computeMoveFacets(
         const comp = sacrificeCompensation(fenAfter, moverWB, moverPovCp, moverWB === studentColorWB, moverPovBeforeCp);
         // Seated: "It's a sacrifice" on the opponent's move read as the student's
         // own (prod 2026-09-23, QGD c4). The clauses are already seated.
-        if (comp.length) facets.push(`[sac] ${moverWB === studentColorWB ? 'Your' : 'Their'} move is a sacrifice — compensation: ${comp.join('; ')}.`);
+        if (comp.length) {
+          const f = `[sac] ${moverWB === studentColorWB ? 'Your' : 'Their'} move is a sacrifice — compensation: ${comp.join('; ')}.`;
+          facets.push(f);
+          // The compensation is shown by the play that follows: the engine's
+          // line after the sacrifice, said only through its first moves (or,
+          // with no line, the sacrificing move itself).
+          recProof(f, lineProofFromUci(fenAfter, ctx.playedLineUci ?? []) ?? legalLineProof(fenBefore, [san]));
+        }
         // WHY A SACRIFICE WORKS is never said of a move graded a mistake or a
         // blunder (review walk 2026-10-01, ply 38: "You gave up the bishop, but
         // … the attack rolls straight on" one clause after "that was a blunder,
@@ -1249,6 +1259,18 @@ export function computeMoveFacets(
   // ── 12. ENDGAME PHASE ──
   const phase = nameEndgamePhase(fenAfter);
   if (phase) facets.push(`[endgame] You've reached ${phase}.`);
+
+  // THE SQUARES ARE THE PROOF of a claim whose computer handed in no line
+  // (one-coach P3): the squares it read off the board, marked on Why. Never
+  // scraped from the words — only the squares the computer coupled above.
+  if (outProofs && outSquares) {
+    for (const f of facets) {
+      if (outProofs.has(f)) continue;
+      const sq = outSquares.get(f);
+      const p = sq ? squaresProof(f.replace(/^\[[a-z-]+\]\s*/, ''), sq) : null;
+      if (p) outProofs.set(f, p);
+    }
+  }
 
   return facets;
 }

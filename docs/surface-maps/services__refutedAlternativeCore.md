@@ -82,7 +82,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `refutedAltProof` (function) — 2 call sites
 - `src/services/positionFacts.ts:947`
-- `src/services/reviewFullData.ts:1072`
+- `src/services/reviewFullData.ts:1082`
 
 ## Tests
 
