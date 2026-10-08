@@ -23,12 +23,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `naturalDefenceFails` (function) — 3 call sites
 - `src/services/methodSignals.test.ts:15`
 - `src/services/methodSignals.test.ts:21`
-- `src/services/positionFacts.ts:863`
+- `src/services/positionFacts.ts:876`
 
 ### `forcingLine` (function) — 3 call sites
 - `src/services/methodSignals.test.ts:28`
 - `src/services/methodSignals.test.ts:31`
-- `src/services/positionFacts.ts:864`
+- `src/services/positionFacts.ts:877`
 
 ### `LineMark` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -36,7 +36,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `markSacrificeLine` (function) — 3 call sites
 - `src/services/methodSignals.test.ts:38`
 - `src/services/methodSignals.test.ts:42`
-- `src/services/positionFacts.ts:865`
+- `src/services/positionFacts.ts:878`
 
 ## Tests
 

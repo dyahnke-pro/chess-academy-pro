@@ -27,8 +27,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `newPlanThread` (function) — 6 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9709`
-- `src/services/boardComputers.test.ts:49`
-- `src/services/coachFeatureService.ts:1599`
+- `src/services/boardComputers.test.ts:50`
+- `src/services/coachFeatureService.ts:1623`
 - `src/services/planThread.test.ts:15`
 - `src/services/planThread.test.ts:24`
 - `src/services/planThread.test.ts:33`
@@ -37,7 +37,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `planThreadTurn` (function) — 6 call sites
-- `src/services/boardComputers.ts:191`
+- `src/services/boardComputers.ts:223`
 - `src/services/planThread.test.ts:16`
 - `src/services/planThread.test.ts:18`
 - `src/services/planThread.test.ts:27`

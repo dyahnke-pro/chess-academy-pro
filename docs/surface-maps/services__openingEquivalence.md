@@ -38,7 +38,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/orderComputers.test.ts:221`
 - `src/services/orderReads.ts:67`
 - `src/services/orderTeaching.ts:108`
-- `src/services/reviewFullData.ts:1106`
+- `src/services/reviewFullData.ts:1110`
 
 ## Tests
 

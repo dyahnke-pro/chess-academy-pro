@@ -86,10 +86,10 @@
 - `src/services/fundamentalReachesDecider.test.ts:137`
 - `src/services/needScore.ts:301`
 - `src/services/needScore.ts:315`
-- `src/services/positionFacts.ts:1249`
-- `src/services/positionFacts.ts:1271`
-- `src/services/reviewFacetRank.ts:460`
-- `src/services/reviewFacetRank.ts:508`
+- `src/services/positionFacts.ts:1260`
+- `src/services/positionFacts.ts:1282`
+- `src/services/reviewFacetRank.ts:499`
+- `src/services/reviewFacetRank.ts:547`
 - `src/services/studentMomentBoost.ts:119`
 - `src/services/teachingSelector.ts:175`
 - `src/services/weaknessSignal.test.ts:56`
@@ -115,9 +115,9 @@
 - `src/services/fundamentalReachesDecider.test.ts:130`
 - `src/services/fundamentalReachesDecider.test.ts:157`
 - `src/services/needScore.ts:312`
-- `src/services/positionFacts.ts:1215`
-- `src/services/reviewFacetRank.ts:459`
-- `src/services/reviewFacetRank.ts:507`
+- `src/services/positionFacts.ts:1226`
+- `src/services/reviewFacetRank.ts:498`
+- `src/services/reviewFacetRank.ts:546`
 - `src/services/weaknessSignal.test.ts:77`
 - `src/services/weaknessSignal.test.ts:80`
 - `src/services/weaknessSignal.test.ts:83`
@@ -129,7 +129,7 @@
 ### `matchTacticPattern` (function) — 10 call sites
 - `src/services/liveTacticsContext.ts:542`
 - `src/services/needScore.ts:310`
-- `src/services/positionFacts.ts:1213`
+- `src/services/positionFacts.ts:1224`
 - `src/services/tacticAlertService.ts:605`
 - `src/services/teachingSelector.ts:174`
 - `src/services/teachingSelector.ts:325`
@@ -139,9 +139,9 @@
 - `src/services/weaknessSignal.test.ts:107`
 
 ### `matchTag` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:1878`
+- `src/services/coachFeatureService.ts:1929`
 - `src/services/needScore.ts:299`
-- `src/services/positionFacts.ts:1215`
+- `src/services/positionFacts.ts:1226`
 - `src/services/teachingSelector.ts:326`
 - `src/services/weaknessSignal.test.ts:116`
 - `src/services/weaknessSignal.test.ts:119`
@@ -149,7 +149,7 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:119`
 
 ### `matchFundamental` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:2410`
+- `src/services/coachFeatureService.ts:2471`
 - `src/services/fundamentalReachesDecider.test.ts:88`
 - `src/services/fundamentalReachesDecider.test.ts:99`
 - `src/services/fundamentalReachesDecider.test.ts:129`

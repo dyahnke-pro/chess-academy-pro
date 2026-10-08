@@ -90,10 +90,10 @@
 - `src/services/planRace.test.ts:109`
 - `src/services/planRace.test.ts:115`
 - `src/services/planRace.test.ts:157`
-- `src/services/reviewFullData.ts:977`
+- `src/services/reviewFullData.ts:981`
 
 ### `fileClaimed` (function) — 4 call sites
-- `src/services/learnBoardTeaching.ts:214`
+- `src/services/learnBoardTeaching.ts:218`
 - `src/services/planRace.test.ts:140`
 - `src/services/planRace.test.ts:147`
 - `src/services/planRace.test.ts:148`
@@ -101,7 +101,7 @@
 ### `planRaceProof` (function) — 3 call sites
 - `src/services/kingAttackReads.test.ts:185`
 - `src/services/kingAttackReads.ts:705`
-- `src/services/reviewFullData.ts:978`
+- `src/services/reviewFullData.ts:982`
 
 ### `PawnSquareRace` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -121,12 +121,12 @@
 ### `pawnSquareTaken` (function) — 3 call sites
 - `src/services/orderComputers.test.ts:169`
 - `src/services/orderTeaching.ts:94`
-- `src/services/reviewFullData.ts:1099`
+- `src/services/reviewFullData.ts:1103`
 
 ### `pawnSquareRaceProof` (function) — 3 call sites
 - `src/services/orderReads.ts:110`
 - `src/services/orderTeaching.ts:96`
-- `src/services/reviewFullData.ts:1100`
+- `src/services/reviewFullData.ts:1104`
 
 ## Tests
 

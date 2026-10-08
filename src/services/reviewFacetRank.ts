@@ -46,7 +46,8 @@ export type FacetTag =
   | 'equivalence' | 'capture-choice' | 'kick'
   // Computers batch 2: reading their move, testing their prevention, the
   // game's end looking back, an honest unclear read, a known attack.
-  | 'their-read' | 'prevent-test' | 'game-end' | 'murky' | 'attack-pattern';
+  | 'their-read' | 'prevent-test' | 'game-end' | 'murky' | 'attack-pattern'
+  | 'judgement';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -107,6 +108,11 @@ export const FACET_RANK: Record<FacetTag, number> = {
   passer: 50,
   rook7: 48,
   structure: 46,
+  // A STRUCTURE JUDGEMENT (batch-6 computers, `structureReads`): the second
+  // weakness, the key pawn, the right piece for the square, the route that
+  // fails while the plan stands — a plan-layer teaching point. Just above the
+  // structure it judges, below every tactical fact.
+  judgement: 47,
   badbishop: 44,
   complex: 42,
   minority: 40,
@@ -232,6 +238,7 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   'game-end': 'teach',
   murky: 'teach',
   'attack-pattern': 'teach',
+  judgement: 'teach',
   timing: 'teach',
   'king-read': 'teach',
   equivalence: 'teach',
@@ -362,6 +369,7 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   // PLAN — structure, targets, the plan and the long read.
   'plan-now': 'plan', contrast: 'plan', 'capture-choice': 'plan', kick: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-arc': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',
   'prevent-test': 'plan', 'game-end': 'plan', murky: 'plan', 'attack-pattern': 'plan',
+  judgement: 'plan',
   'plan-line': 'plan', consequence: 'plan', structure: 'plan', passer: 'plan', rook7: 'plan',
   badbishop: 'plan', complex: 'plan', minority: 'plan', worst: 'plan', 'opp-target': 'plan',
   verdict: 'plan', eval: 'plan', delta: 'plan', note: 'plan', stock: 'plan',
@@ -386,6 +394,7 @@ export const FACT_PROOF: Record<FactKind, 'proven' | NoProofReason> = {
   refuted: 'proven', bluff: 'proven', loose: 'proven', sac: 'proven', 'sac-why': 'proven',
   trade: 'proven', stopped: 'proven', 'their-cost': 'proven', timing: 'proven', 'plan-race': 'proven',
   'their-read': 'proven', 'prevent-test': 'proven', 'game-end': 'proven', murky: 'proven', 'attack-pattern': 'proven',
+  judgement: 'proven',
   'must-defend': 'proven', 'latent-danger': 'proven', 'latent-chance': 'proven', 'key-moment': 'proven',
   deliberation: 'proven', 'not-yet': 'proven', line: 'proven', 'stop-flaw': 'proven', convert: 'proven',
   'king-read': 'proven',

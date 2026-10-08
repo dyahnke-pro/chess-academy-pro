@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1746 lines · 15 exports · 23 importers · 23 tests · 3 audits**
+**1759 lines · 15 exports · 23 importers · 23 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -91,7 +91,7 @@
 - `src/services/positionFacts.test.ts:306`
 - `src/services/positionFacts.test.ts:364`
 - `src/services/positionFacts.test.ts:365`
-- `src/services/positionReadComposer.ts:150`
+- `src/services/positionReadComposer.ts:154`
 - `src/services/whyBestMove.ts:141`
 
 ### `computePositionFacts` (function) — 86 call sites

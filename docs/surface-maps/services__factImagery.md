@@ -29,7 +29,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:197`
 - `src/services/exchangeIdeas.test.ts:198`
 - `src/services/exchangeIdeas.ts:812`
-- `src/services/reviewFullData.ts:928`
+- `src/services/reviewFullData.ts:932`
 
 ## Tests
 

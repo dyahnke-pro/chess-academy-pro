@@ -102,7 +102,8 @@ export type LearnLane =
   | 'captureChoice'
   | 'kickMap'
   | 'breakRace'
-  | 'patternFails';
+  | 'patternFails'
+  | 'structureJudgement';
 
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
  *  the positional read, structure, piece quality) — the tier the scoreboard
@@ -139,7 +140,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   mistake: 'but', drawback: 'but', fundamental: 'but', register: 'but', rejectedTempting: 'but', kneeJerk: 'but',
   moveOrder: 'refute', causalChain: 'refute',
   theirPurpose: 'their', theirIntent: 'their', theirMoveCost: 'their', coachMistake: 'their', gap: 'their',
-  tactic: 'point', planArc: 'point', openingIdea: 'point', structure: 'point', pieceQuality: 'point',
+  tactic: 'point', planArc: 'point', structureJudgement: 'point', openingIdea: 'point', structure: 'point', pieceQuality: 'point',
   positionFacts: 'point', commentary: 'point', positional: 'point', kingSafety: 'point', splitPosition: 'point',
   behavior: 'point',
   phase: 'verdict', character: 'verdict',
@@ -284,6 +285,11 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   stalemate: { kind: 'computed', why: 'you are winning and one of your moves would stalemate them', lead: 81 },
   phase: { kind: 'computed', why: 'the game has changed phase — take stock of what the position is about now', lead: 72 },
   kingSafety: { kind: 'observation', why: 'your own king is still in the centre and castling is ready', lead: 55 },
+  // THE STRUCTURE JUDGEMENTS (batch 6, `structureReads`): the second weakness,
+  // the key pawn, the semi-outpost, the right piece, the route that fails, the
+  // fighting line — a plan-layer reason, proven by its squares or its line.
+  // Below what a move is FOR, above the board descriptions.
+  structureJudgement: { kind: 'computed', why: 'a structural judgement — the weakness to aim at, the square, the piece, the route or the plan — proven on the board', lead: 54 },
   causalChain: { kind: 'tactic', why: 'a cross-move cause proven on the board — the earlier move that left the piece loose', lead: 80 },
 };
 

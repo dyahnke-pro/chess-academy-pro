@@ -30,6 +30,7 @@ import { PIECE_NAMES } from '../types/tacticTypes';
 import { planThreadTurn, type PlanThread } from './planThread';
 import { geometryReads, type GeometryContext } from './tacticGeometry';
 import type { TacticType } from '../types';
+import { studentMoveStructure, theirMoveStructure, boardStructure, linesStructure, type StructureRead } from './structureReads';
 
 export type CoachSurface = 'learn' | 'review' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
@@ -86,6 +87,14 @@ export interface BoardContexts {
    *  serves a plan, the kick that fails, the counterfactual fork, the pawn
    *  that can't block, interposition, the loaded line, the pinner pinned. */
   tacticGeometry: GeometryContext;
+  /** The structure judgements of the student's move (batch 6). */
+  structureMove: { fenBefore: string; san: string; student: Color; cpLoss: number; bestSan: string | null; bestUci: readonly string[]; reply: string | null };
+  /** What their move did to the student's structure and squares. */
+  structureTheirMove: { fenBefore: string; san: string; student: Color };
+  /** The standing structural facts, student to move. */
+  structureBoard: { fen: string; student: Color };
+  /** Plan choices off the student's MultiPV at `fen` (student to move). */
+  structureLines: { fen: string; student: Color; lines: readonly { moves: readonly string[]; evaluation: number; mate?: number | null }[] };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -102,6 +111,13 @@ const PLAY_ASK = { not: 'Play volunteers nothing (PLAY_VOLUNTEERS_COACHING); rea
 const CHAT_OWED = { not: 'owed — one-coach P4: a chat lane reads it from the registry' } as const;
 const TACTICS_NA = { not: 'a puzzle position poses one tactic; this computer explains a game move' } as const;
 const WEAK_OWED = { not: 'owed — one-coach P3: the record keeps the proof' } as const;
+
+/** A structure read in the registry's one shape. */
+function structureRead(r: StructureRead): BoardRead {
+  return { text: r.text, proof: r.proof, squares: r.squares, key: r.key, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.proof.line ? { lines: [r.proof.line] } : {}) };
+}
+const STRUCT_TACTICS = { not: 'a structural judgement is about a game\'s plan; a puzzle poses one tactic' } as const;
+const STRUCT_WEAK = { not: 'owed — the weakness record keeps tags, not the structure read; the held rows ride recordTeachingEvidence' } as const;
 
 function safe<T>(f: () => T | null): T | null {
   try { return f(); } catch { return null; }
@@ -186,6 +202,22 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       return { text, proof: proof ?? squaresProof(text, squares) ?? NO_PROOF.stated, squares: [...new Set([...squares, ...(proof?.squares ?? [])])], key: `threat:${squares.join('')}`, stakes: threatStakes(fen, student, squares) ?? undefined };
     }),
     surfaces: { learn: LEARN, review: { not: 'owed — Review warns from the stored threat, not this proof' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
+  },
+  structureMove: {
+    read: (ctx) => safe(() => studentMoveStructure(ctx).map(structureRead)),
+    surfaces: { learn: { wired: 'services/learnBoardTeaching.ts' }, review: REVIEW, play: PLAY_ASK, chat: { not: 'a move judgement answers "why was my move bad"; chat reads the board judgements (structureBoard)' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK },
+  },
+  structureTheirMove: {
+    read: ({ fenBefore, san, student }) => safe(() => theirMoveStructure(fenBefore, san, student).map(structureRead)),
+    surfaces: { learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: { not: 'about the opponent\'s last move; chat reads the board judgements (structureBoard)' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK },
+  },
+  structureBoard: {
+    read: ({ fen, student }) => safe(() => boardStructure(fen, student).map(structureRead)),
+    surfaces: { learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: { wired: 'services/groundedAnswer.ts' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK },
+  },
+  structureLines: {
+    read: ({ fen, student, lines }) => safe(() => linesStructure(fen, student, lines).map(structureRead)),
+    surfaces: { learn: LEARN, review: { not: 'Review stores one engine line per ply, not the MultiPV the fighting line compares' }, play: PLAY_ASK, chat: { not: 'chat\'s assessment has no MultiPV in hand' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK },
   },
   planThread: {
     read: ({ thread, ...args }) => safe(() => planThreadTurn(thread, args).map((l) => ({ text: l.text, proof: l.proof, squares: l.squares, key: l.claim }))),

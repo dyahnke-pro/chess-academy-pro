@@ -25,7 +25,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewMoveBriefing` (function) — 15 call sites
-- `src/services/coachFeatureService.ts:1797`
+- `src/services/coachFeatureService.ts:1848`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:11`
 - `src/services/reviewMoveBriefing.test.ts:23`

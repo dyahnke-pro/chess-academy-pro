@@ -108,6 +108,7 @@ export const COMPUTER_ROLES: Record<LearnLane, ComputerRole> = {
   positionFacts: { computer: 'positionFacts (via coachDecider)', tag: null, held: { state: 'wired', via: 'recordMoveEvidence (capabilitiesPosed)' }, broken: SLIP, askable: { state: 'wired', via: 'isPositionAssessmentQuestion' } },
   character: { computer: 'positionCharacter', tag: null, held: DESC('what the position is about'), broken: DESC('what the position is about'), askable: { state: 'wired', via: 'isPositionAssessmentQuestion' } },
   phase: { computer: 'phaseTransitionDetector', tag: null, held: DESC('the phase change'), broken: DESC('the phase change'), askable: { state: 'wired', via: 'isPhaseQuestion' } },
+  structureJudgement: { computer: 'structureReads (pawnJudgement / squareJudgement / planJudgement)', tag: null, held: { state: 'wired', via: 'recordTeachingEvidence' }, broken: SLIP, askable: { state: 'wired', via: 'isPositionAssessmentQuestion' } },
   kingSafety: { computer: 'kingSafety', tag: 'king-stuck-center', held: { state: 'wired', via: 'recordMoveEvidence (capabilitiesPosed)' }, broken: SLIP, askable: { state: 'wired', via: 'isPositionAssessmentQuestion' } },
 };
 

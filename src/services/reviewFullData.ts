@@ -75,6 +75,7 @@ import { theirMoveCost } from './theirMoveCost';
 import { readTheirMove } from './opponentMoveReads';
 import { playItAnyway } from './opponentMovePurpose';
 import { knownAttack } from './attackLibrary';
+import { studentMoveStructure, theirMoveStructure, boardStructure, type StructureRead } from './structureReads';
 
 interface Located { type: string; color: Color; square: string; }
 
@@ -1297,6 +1298,25 @@ export function computeMoveFacets(
       recProof(f, ka.proof);
       recSquares(f, ka.squares);
       outIdentity?.set(f, `hint:${ka.claim}`);
+    }
+  }
+  // …and THE STRUCTURE JUDGEMENTS (batch 6, `structureReads`) — the same
+  // computers Learn speaks: on the student's move what it did to the structure
+  // (and the standing facts of the board it was played on); on theirs what it
+  // did to the student's structure and squares. Each carries its proof.
+  if (studentColorWB) {
+    const reads: StructureRead[] = isStudent
+      ? [
+        ...studentMoveStructure({ fenBefore, san, student: studentColorWB, cpLoss: Math.max(0, ctx.costCp ?? 0), bestSan: ctx.bestMoveSan, bestUci: ctx.bestLineUci, reply: ctx.replyBestSan }),
+        ...boardStructure(fenBefore, studentColorWB),
+      ]
+      : theirMoveStructure(fenBefore, san, studentColorWB);
+    for (const r of reads) {
+      const f = `[judgement] ${r.text}`;
+      facets.push(f);
+      recSquares(f, r.squares);
+      recProof(f, r.proof);
+      recStakes(f, r.stakes);
     }
   }
   // …and the fork trick, both seats — the same computer Learn's composer reads

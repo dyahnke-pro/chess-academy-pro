@@ -20,6 +20,7 @@ describe('boardComputers — the one registry', () => {
         const viaRegistry = new RegExp(`readBoard(All)?\\('${id}'`).test(code);
         const fnByComputer: Partial<Record<ComputerId, RegExp>> = {
           prophylaxis: /findProphylaxis\(/, tiedDefender: /newTiedDefender\(/, trapped: /trappedOnBoard\(/,
+          structureMove: /studentMoveStructure\(/, structureTheirMove: /theirMoveStructure\(/, structureBoard: /boardStructure\(/,
         };
         if (!viaRegistry && !(fnByComputer[id]?.test(code))) bad.push(`${id}/${surface}: ${ans.wired} never calls it`);
       }

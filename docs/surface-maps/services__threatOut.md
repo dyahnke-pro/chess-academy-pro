@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**113 lines · 3 exports · 13 importers · 3 tests · 1 audits**
+**113 lines · 3 exports · 15 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,9 +15,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/forkTrick.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/liveTacticsContext.ts`
+- `src/services/methodSignals.ts`
 - `src/services/moveInsight.ts`
 - `src/services/mustDefendHabit.test.ts`
 - `src/services/obligationLifted.ts`
+- `src/services/opponentMoveReads.ts`
 - `src/services/playedMoveGrade.ts`
 - `src/services/positionFacts.ts`
 - `src/services/reviewHinge.ts`
@@ -41,15 +43,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatProof.ts:25`
 - `src/services/threatProof.ts:72`
 
-### `computeMustDefend` (function) — 22 call sites
-- `src/services/groundedAnswer.ts:620`
+### `computeMustDefend` (function) — 27 call sites
+- `src/services/groundedAnswer.ts:621`
 - `src/services/liveTacticsContext.ts:783`
+- `src/services/methodSignals.ts:38`
+- `src/services/methodSignals.ts:47`
 - `src/services/moveInsight.ts:189`
 - `src/services/mustDefendHabit.test.ts:13`
 - `src/services/obligationLifted.ts:49`
 - `src/services/obligationLifted.ts:51`
+- `src/services/opponentMoveReads.ts:265`
+- `src/services/opponentMoveReads.ts:266`
+- `src/services/opponentMoveReads.ts:267`
 - `src/services/playedMoveGrade.ts:125`
-- `src/services/positionFacts.ts:485`
+- `src/services/positionFacts.ts:489`
 - `src/services/replayFence.modern1690.test.ts:160`
 - `src/services/replayFence.modern1690.test.ts:165`
 - `src/services/reviewHinge.ts:36`

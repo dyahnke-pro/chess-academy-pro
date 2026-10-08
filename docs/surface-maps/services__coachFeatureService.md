@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5481 lines · 40 exports · 46 importers · 45 tests · 5 audits**
+**5542 lines · 41 exports · 47 importers · 46 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,6 +22,7 @@
 - `src/hooks/useReviewPlayback.test.ts`
 - `src/hooks/useReviewPlayback.ts`
 - `src/services/advantageWasMissed.test.ts`
+- `src/services/batch2Wiring.test.ts`
 - `src/services/coachFeatureService.causalChain.test.ts`
 - `src/services/coachFeatureService.cpLossSign.test.ts`
 - `src/services/coachFeatureService.introResult.test.ts`
@@ -119,6 +120,9 @@
 ### `generateReviewNarrationSegments` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `studentMoveCosts` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `buildProfileContext` (function) — 3 call sites
 - `src/services/coachFeatureService.test.ts:297`
 - `src/services/coachFeatureService.test.ts:309`
@@ -155,8 +159,9 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 70 call sites
+### `buildReviewSegments` (function) — 71 call sites
 - `src/components/Coach/CoachGameReview.tsx:1758`
+- `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
 - `src/services/coachFeatureService.causalChain.test.ts:50`
@@ -353,7 +358,7 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:562`
+- `src/services/reviewFullData.ts:566`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites
@@ -372,6 +377,7 @@
 - `src/components/Coach/ReviewCitationPreviews.test.tsx`
 - `src/hooks/useReviewPlayback.test.ts`
 - `src/services/advantageWasMissed.test.ts`
+- `src/services/batch2Wiring.test.ts`
 - `src/services/coachFeatureService.causalChain.test.ts`
 - `src/services/coachFeatureService.cpLossSign.test.ts`
 - `src/services/coachFeatureService.introResult.test.ts`
