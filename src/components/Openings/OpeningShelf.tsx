@@ -63,24 +63,34 @@ export function OpeningShelf({ openings, onOpen, onToggleFavorite }: OpeningShel
   return (
     <div data-testid="opening-shelf">
       <div className="grid grid-cols-2 gap-1 mb-4 p-1 bg-theme-surface rounded-xl" role="group" aria-label="Side you play" data-testid="side-toggle">
+        {/* Same chrome as the Openings tab bar: a neon left + bottom border
+            that glows, and a tinted fill on the selected side. */}
         {([
-          { id: 'white' as const, label: 'White', count: white.length, dot: 'bg-white border-neutral-400' },
-          { id: 'black' as const, label: 'Black', count: black.length, dot: 'bg-neutral-900 border-neutral-400' },
-        ]).map(({ id, label, count, dot }) => (
+          {
+            id: 'white' as const, label: 'White', count: white.length,
+            dot: 'bg-white border-neutral-400',
+            activeClasses: 'bg-slate-200/20 text-white',
+            borderColor: 'border-slate-200/80 shadow-[0_0_6px_rgba(226,232,240,0.6),0_0_14px_rgba(226,232,240,0.35),0_0_24px_rgba(226,232,240,0.2)]',
+          },
+          {
+            id: 'black' as const, label: 'Black', count: black.length,
+            dot: 'bg-neutral-900 border-neutral-400',
+            activeClasses: 'bg-zinc-500/25 text-zinc-100',
+            borderColor: 'border-zinc-500/80 shadow-[0_0_6px_rgba(113,113,122,0.7),0_0_14px_rgba(113,113,122,0.45),0_0_24px_rgba(113,113,122,0.25)]',
+          },
+        ]).map(({ id, label, count, dot, activeClasses, borderColor }) => (
           <button
             key={id}
             aria-pressed={side === id}
             onClick={() => pick(id)}
-            className={`flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold transition-colors ${
-              side === id
-                ? 'bg-theme-accent/30 text-theme-text ring-1 ring-theme-accent'
-                : 'text-theme-text-muted hover:text-theme-text'
+            className={`flex items-center justify-center gap-2 py-2 px-1 rounded-lg text-xs font-medium transition-all border-l-2 border-b-2 ${borderColor} ${
+              side === id ? activeClasses : 'text-theme-text-muted hover:text-theme-text'
             }`}
             data-testid={`side-toggle-${id}`}
           >
             <span className={`w-3 h-3 rounded-full border ${dot}`} />
             {label}
-            <span className="text-xs font-normal text-theme-text-muted">{count}</span>
+            <span className="font-normal opacity-70">{count}</span>
           </button>
         ))}
       </div>

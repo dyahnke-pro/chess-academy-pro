@@ -1516,11 +1516,10 @@ export function OpeningDetailPage(): JSX.Element {
   // Only WEAPONS surface — engine-verified real benefit (≥ +0.5). Practical
   // (DB-scored, unverified) and weak gems are hidden; the section repopulates
   // when the Stockfish CI (mine-punish-gems.yml) grades them (David 2026-05-24).
-  // Strongest first — the tactical crushes lead, the honest positional edges
-  // sit last (David 2026-05-24: order by strength, weak ones at the bottom).
-  const tabGems = getPunishGemsForTab(opening.id, tabSpinePgn)
-    .filter(isSurfaceableGem)
-    .sort((a, b) => (b.engineCp ?? 0) - (a.engineCp ?? 0));
+  // Most common first — the order comes from the gem lookup itself
+  // (`byMostCommon`, David 2026-10-08: "organized most common to least"),
+  // replacing the strongest-first order of 2026-05-24.
+  const tabGems = getPunishGemsForTab(opening.id, tabSpinePgn).filter(isSurfaceableGem);
 
   // Zone self-hide flags — NO blank/empty zones on the masterclass
   // (David 2026-05-21). A zone header renders only when it has content for
