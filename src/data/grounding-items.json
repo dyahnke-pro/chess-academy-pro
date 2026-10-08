@@ -1,6 +1,6 @@
 {
   "depth": 14,
-  "builtFens": 4073,
+  "builtFens": 4072,
   "items": [
     {
       "cat": "line",
@@ -71772,30 +71772,6 @@
       "cat": "plan",
       "id": "ruy-lopez",
       "color": "white",
-      "name": "ruy-lopez :: Ruy Lopez: Meet f4 by Liquidating the Centre",
-      "startFen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4PP2/1BN2N2/PPPP2PP/R1BQ1RK1 b - - 0 9",
-      "moves": [
-        "exf4",
-        "d3",
-        "d5",
-        "Bxf4",
-        "dxe4",
-        "dxe4",
-        "Na5",
-        "Qxd8",
-        "Rxd8"
-      ],
-      "terminalFen": "r1br2k1/2p1bppp/p4n2/np6/4PB2/1BN2N2/PPP3PP/R4RK1 w - - 0 14",
-      "eval": {
-        "cp": 0,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "plan",
-      "id": "ruy-lopez",
-      "color": "white",
       "name": "ruy-lopez :: Marshall Attack: A Pawn for the Initiative",
       "startFen": "r1bq1rk1/4bppp/p1p5/1p1nR3/8/1BP5/PP1P1PPP/RNBQ2K1 w - - 0 12",
       "moves": [
@@ -75919,7 +75895,7 @@
       "cat": "plan",
       "id": "pro-gothamchess-pirc-defense",
       "color": "black",
-      "name": "pro-gothamchess-pirc-defense :: Austrian Attack — d5, the Nd4 trade, and the recaptured centre",
+      "name": "pro-gothamchess-pirc-defense :: Austrian Attack — …c5, …Nd4 and a level middlegame",
       "startFen": "r1bqk2r/pp1nppbp/2np2p1/1Bp1P3/3P1P2/2N2N2/PPP3PP/R1BQK2R w KQkq - 1 8",
       "moves": [
         "d5",

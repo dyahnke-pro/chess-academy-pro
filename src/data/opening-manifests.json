@@ -11,7 +11,7 @@
   },
   "ruy-lopez": {
     "variations": 9,
-    "middlegamePlans": 9,
+    "middlegamePlans": 8,
     "endgamePlans": 6,
     "modelGames": 1,
     "weapons": 1,

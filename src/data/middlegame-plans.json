@@ -12206,7 +12206,7 @@
   "openingId": "nimzo-indian",
   "criticalPositionFen": "rnbq1rk1/p1p2ppp/1p2pn2/8/2QP4/P4N2/1P2PPPP/R1B1KB1R w KQ - 0 9",
   "title": "Nimzo Classical: Files and Light Squares",
-  "overview": "Black has traded the bishop for the c3-knight, loosening White's grip on e4. The plan: fianchetto the light bishop to a6 with tempo on the queen, break with …c5, and take over the open b- and c-files. The bishop pair White won is offset by Black's superior activity and structure.",
+  "overview": "Black has traded the bishop for the c3-knight, so White holds the bishop pair. The plan: put the light bishop on a6 with tempo on the queen, break with …c5, and use the half-open b-file and active pieces to offset White's bishops.",
   "pawnBreaks": [
    "…c5 to open the position",
    "…e5 once the centre is contained"
@@ -12243,9 +12243,9 @@
     ],
     "annotations": [
      "Bg5 pins the f6-knight and leans on the weakened light squares.",
-     "…Ba6 spears the c4-pawn down the a6-f1 diagonal, hitting White where the doubled pawns ache.",
-     "Qa4 props up the loose c4-pawn.",
-     "…h6 puts the question to the g5-bishop; either way Black owns the light squares around c4 and e4.",
+     "…Ba6 — the bishop hits the queen on c4 down the a6-f1 diagonal.",
+     "Qa4 — the queen steps off the diagonal.",
+     "…h6 puts the question to the g5-bishop.",
      "Bh4 — White keeps the pin on the f6-knight.",
      "…c5 — the thematic break, levering open the centre the bishop-trade prepared.",
      "dxc5 — White releases the central tension.",
@@ -12253,7 +12253,7 @@
      "Rd1 — White’s rook takes the d-file.",
      "…Qb6 — the queen eyes b2 and props up c5, pressing the queenside light squares.",
      "Bxf6 — White trades off the pinned knight.",
-     "…gxf6 — recapturing toward the centre; the doubled f-pawns grip e5 and open the g-file, and Black holds the bishop pair and the light squares."
+     "…gxf6 — recapturing toward the centre; the f-pawns grip e5, and the g-file is half-open for Black's rook."
     ],
     "title": "Nimzo Classical: Files and Light Squares",
     "arrows": [
@@ -12353,14 +12353,6 @@
       },
       {
        "square": "g5",
-       "color": "rgba(255, 235, 59, 0.5)"
-      },
-      {
-       "square": "c4",
-       "color": "rgba(255, 235, 59, 0.5)"
-      },
-      {
-       "square": "e4",
        "color": "rgba(255, 235, 59, 0.5)"
       }
      ],
@@ -12463,9 +12455,9 @@
     ],
     "learnCues": [
      "Bg5 — pin f6",
-     "Ba6 — spear c4",
-     "Qa4 — defend c4",
-     "h6 — own the light squares",
+     "Ba6 — hit the queen",
+     "Qa4 — queen steps away",
+     "h6 — question the bishop",
      "Bh4 — keep the pin",
      "c5 — the thematic break",
      "dxc5 — tension released",
@@ -24514,218 +24506,6 @@
      "",
      "Nxd4 — 4v3 majority wins the ending"
     ]
-   }
-  ]
- },
- {
-  "id": "mp-ruylopez-f4",
-  "openingId": "ruy-lopez",
-  "criticalPositionFen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4PP2/1BN2N2/PPPP2PP/R1BQ1RK1 b - - 0 9",
-  "title": "Ruy Lopez: Meet f4 by Liquidating the Centre",
-  "overview": "When White lashes out with an early f4 in the Ruy, Black does not panic — Black takes (…exf4), strikes in the centre with …d5, and liquidates. After the central pawns and queens come off, Black reaches a comfortable, equal ending with no weaknesses, White’s aggression having achieved nothing.",
-  "pawnBreaks": [
-   "…exf4 to accept and open lines",
-   "…d5 to strike the centre"
-  ],
-  "pieceManeuvers": [
-   "…Nd7 / …Na5 redeploying",
-   "trade queens into a safe ending",
-   "…Rd8 on the open file"
-  ],
-  "strategicThemes": [
-   "Liquidate White’s f4 aggression",
-   "Central break with …d5",
-   "Simplify to a sound ending"
-  ],
-  "endgameTransitions": [
-   "If the middlegame attack doesn't decide things, White's active rooks on the open f-file and potentially the e-file give lasting endgame activity. Active rooks on open files always outperform passive defenders.",
-   "The Ruy Lopez f4 plan often leads to positions where White retains the bishop pair after exchanging on f4. In an open endgame with the f-file available, two bishops combined with rook activity create a decisive advantage."
-  ],
-  "playableLines": [
-   {
-    "fen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4PP2/1BN2N2/PPPP2PP/R1BQ1RK1 b - - 0 9",
-    "moves": [
-     "exf4",
-     "d3",
-     "d5",
-     "Bxf4",
-     "dxe4",
-     "dxe4",
-     "Na5",
-     "Qxd8",
-     "Rxd8"
-    ],
-    "annotations": [
-     "…exf4 accepts — opening lines that favour the better-developed side.",
-     "d3 props the centre.",
-     "…d5! the central counter-strike.",
-     "Bxf4",
-     "…dxe4 liquidates the centre.",
-     "dxe4",
-     "…Na5 redeploys, eyeing c4.",
-     "Qxd8",
-     "…Rxd8 — queens off, and Black has a comfortable, equal ending. White’s f4 lunge gained nothing."
-    ],
-    "arrows": [
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [
-      {
-       "from": "a5",
-       "to": "c4",
-       "color": "rgba(34, 197, 94, 0.85)"
-      }
-     ],
-     [],
-     []
-    ],
-    "title": "Ruy Lopez: Meet f4 by Liquidating the Centre",
-    "highlights": [
-     [
-      {
-       "square": "f4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "c1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "c6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "c4",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ],
-     [
-      {
-       "square": "d8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f4",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ]
-    ],
-    "sources": [
-     "book:ruy-lopez",
-     "concept:pos-center",
-     "https://en.wikipedia.org/wiki/Ruy_Lopez"
-    ],
-    "learnCues": [
-     "…exf4 — accept, open lines",
-     "d3 — prop the centre",
-     "…d5 — strike the centre",
-     "Bxf4",
-     "…dxe4 — liquidate",
-     "dxe4",
-     "…Na5 — redeploy",
-     "Qxd8",
-     "…Rxd8 — equal ending"
-    ],
-    "intro": {
-     "say": "Against an early f4, Black doesn’t panic: take with …exf4, strike with …d5, and liquidate the centre. Queens come off and Black reaches a sound, equal ending — White’s aggression spent for nothing.",
-     "sayShort": "…exf4, …d5, liquidate to equality.",
-     "arrows": [
-      {
-       "from": "e5",
-       "to": "f4",
-       "color": "rgba(34, 197, 94, 0.85)"
-      },
-      {
-       "from": "d6",
-       "to": "d5",
-       "color": "rgba(34, 197, 94, 0.85)"
-      }
-     ],
-     "highlights": [
-      {
-       "square": "d5",
-       "color": "rgba(255, 235, 59, 0.5)"
-      },
-      {
-       "square": "e4",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ]
-    }
    }
   ]
  },
@@ -51607,20 +51387,20 @@
   "id": "mp-progothamchess-pirc-austrian-c5",
   "openingId": "pro-gothamchess-pirc-defense",
   "criticalPositionFen": "r1bqk2r/pp1nppbp/2np2p1/1Bp1P3/3P1P2/2N2N2/PPP3PP/R1BQK2R w KQkq - 1 8",
-  "title": "Austrian Attack — d5, the Nd4 trade, and the recaptured centre",
-  "overview": "The Austrian at its critical moment: Bb5+ interposed, e5 played, and Black counter-punching with …c5. The corpus continuation is a clean equation — push d5, absorb the …Nd4 leap by trading and recapturing with the queen, and castle into a dead-level middlegame where White's f4-e5 duo still tells the story. The Austrian's fire, banked into a position with structure and plans.",
+  "title": "Austrian Attack — …c5, …Nd4 and a level middlegame",
+  "overview": "Against the Austrian Attack with Bb5+ and e5, you counter with …c5. When White pushes d5, your knight jumps to d4 and trades itself off; after …cxd4 Qxd4 you castle and ask the b5-bishop with …a6. The engine calls it level.",
   "pawnBreaks": [
    {
-    "move": "d5 — push past the counter",
-    "explanation": "The pawn steps through the …c5 hit and gains space with tempo ideas on c6.",
+    "move": "…cxd4 — recapture toward the centre",
+    "explanation": "After the knight trade on d4, the c-pawn takes back.",
     "fen": ""
    }
   ],
   "pieceManeuvers": [
    {
-    "piece": "Queen",
-    "route": "d1 × d4 — the central recapture",
-    "explanation": "The knight trade hands the queen a legal, stable central post — Black cannot evict it profitably."
+    "piece": "Knight",
+    "route": "…Nc6-d4 — jump to the centre",
+    "explanation": "Instead of retreating from d5's attack, the knight jumps to d4 and trades itself off."
    }
   ],
   "strategicThemes": [
@@ -51645,24 +51425,24 @@
      "a6"
     ],
     "annotations": [
-     "d5 — through the counter: the pawn advances past …c5's hit and leans on c6.",
-     "…Nd4 — the central leap, Black's whole point.",
-     "Nxd4 — taken at once.",
-     "…cxd4 — the pawn recaptures —",
-     "Qxd4 — and the queen inherits the centre. Check the evictors: no knight reaches c6 or f5, no bishop hits d4. She stays.",
-     "…O-O — Black tucks the king.",
-     "O-O — so do you; the Austrian's fire banks into structure.",
-     "…a6 — the bishop is asked. Dead level on the engine, with the f4-e5 duo intact and every white plan pre-written — the Austrian, played like a system instead of a prayer."
+     "d5 — White pushes past the c5-pawn and hits the c6-knight.",
+     "…Nd4 — your knight jumps to the centre instead of retreating.",
+     "Nxd4 — White takes at once.",
+     "…cxd4 — you recapture with the pawn.",
+     "Qxd4 — White's queen takes back and sits in the centre.",
+     "…O-O — you castle.",
+     "O-O — White castles too.",
+     "…a6 — you ask the b5-bishop to decide; the engine calls it level."
     ],
     "learnCues": [
-     "d5 — through it",
-     "Nd4 — the leap",
-     "Nxd4 — at once",
-     "cxd4 — recaptured",
-     "Qxd4 — she stays",
-     "O-O — tucked",
-     "O-O — banked",
-     "a6 — the question"
+     "d5 — White hits c6",
+     "…Nd4 — jump to the centre",
+     "Nxd4 — White takes",
+     "…cxd4 — recapture",
+     "Qxd4 — queen to the centre",
+     "…O-O — castle",
+     "O-O — White castles",
+     "…a6 — ask the bishop"
     ],
     "arrows": [
      [],
@@ -51732,8 +51512,8 @@
       }
      ]
     ],
-    "title": "The Recaptured Centre",
-    "intro": "Push through the counter, trade the leap, and let the queen inherit d4 — the Austrian banked into structure.",
+    "title": "Austrian Attack — …c5, …Nd4 and a level middlegame",
+    "intro": "You meet the Austrian Attack with …c5 and the …Nd4 jump.",
     "sources": [
      "book:chess-fundamentals",
      "https://www.chess.com/openings/Pirc-Defense",
