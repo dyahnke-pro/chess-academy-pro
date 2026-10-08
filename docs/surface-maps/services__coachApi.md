@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6968 lines · 40 exports · 53 importers · 59 tests · 19 audits**
+**7008 lines · 41 exports · 53 importers · 59 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -116,13 +116,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `consumeCoachLines` (function) — 4 call sites
-- `src/coach/coachService.ts:1907`
+- `src/coach/coachService.ts:1933`
 - `src/services/coachApi.pieceOptions.test.ts:42`
 - `src/services/coachApi.pieceOptions.test.ts:44`
 - `src/services/coachApi.pieceOptions.test.ts:49`
 
 ### `consumeServedIntent` (function) — 1 call site
-- `src/coach/coachService.ts:1911`
+- `src/coach/coachService.ts:1937`
 
 ### `answerAttemptComparison` (function) — 4 call sites
 - `src/services/coachApi.attemptComparison.test.ts:30`
@@ -131,10 +131,10 @@
 - `src/services/coachApi.attemptComparison.test.ts:63`
 
 ### `consumeCoachActionOffer` (function) — 1 call site
-- `src/coach/coachService.ts:1901`
+- `src/coach/coachService.ts:1927`
 
 ### `consumeCoachKeySquares` (function) — 6 call sites
-- `src/coach/coachService.ts:1916`
+- `src/coach/coachService.ts:1942`
 - `src/services/coachApi.keySquares.test.ts:10`
 - `src/services/coachApi.keySquares.test.ts:12`
 - `src/services/coachApi.keySquares.test.ts:15`
@@ -189,6 +189,9 @@
 - `src/services/coachApi.uploadReminder.test.ts:106`
 - `src/services/coachApi.uploadReminder.test.ts:107`
 
+### `OPENING_PICKER_FLOOR` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `buildOpeningSuggestionReply` (function) — 11 call sites
 - `src/services/coachApi.groundingFallthrough.test.ts:10`
 - `src/services/coachApi.groundingFallthrough.test.ts:18`
@@ -234,8 +237,8 @@
 - `src/services/groundedMoveFeedback.test.ts:45`
 
 ### `translateToEnglish` (function) — 4 call sites
-- `src/coach/coachService.ts:576`
-- `src/components/Coach/CoachTeachPage.tsx:3597`
+- `src/coach/coachService.ts:580`
+- `src/components/Coach/CoachTeachPage.tsx:3598`
 - `src/services/coachSessionRouter.ts:117`
 - `src/services/coachSettingsAction.ts:242`
 
