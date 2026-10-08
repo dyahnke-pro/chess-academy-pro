@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**49 lines · 3 exports · 4 importers · 3 tests · 0 audits**
+**49 lines · 3 exports · 5 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,6 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/coach/ask/playName.ts`
 - `src/coach/smallTalk.test.ts`
 - `src/services/coachApi.banterContract.test.ts`
 - `src/services/coachApi.master-integration.test.ts`
@@ -22,9 +23,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `SmallTalkKind` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `smallTalkKind` (function) — 2 call sites
+### `smallTalkKind` (function) — 3 call sites
+- `src/coach/ask/playName.ts:87`
 - `src/coach/smallTalk.test.ts:12`
-- `src/services/coachApi.ts:2139`
+- `src/services/coachApi.ts:2162`
 
 ### `smallTalkReply` (function) — 7 call sites
 - `src/coach/smallTalk.test.ts:16`
@@ -32,8 +34,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachApi.banterContract.test.ts:14`
 - `src/services/coachApi.master-integration.test.ts:172`
 - `src/services/coachApi.master-integration.test.ts:332`
-- `src/services/coachApi.ts:2139`
-- `src/services/coachApi.ts:2158`
+- `src/services/coachApi.ts:2162`
+- `src/services/coachApi.ts:2185`
 
 ## Tests
 
