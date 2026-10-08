@@ -59,7 +59,7 @@ export const PRO_AMAN_NIMZO_INDIAN_VARIATION_LESSONS: Record<string, LessonScrip
         say: "White fianchettoes with g3, heading into Catalan waters; Black answers …d5, staking a firm claim in the centre. Black's setup is rock-solid and ready to develop smoothly.",
         sayShort: '…d5 — firm central claim.' }),
       b({ id: 'oo', moves: 'd4 Nf6 c4 e6 Nf3 Bb4+ Bd2 Be7 g3 d5 Bg2 O-O', highlights: [H('g8')],
-        say: "Both sides castle into a balanced middlegame. Black has a sound Catalan-style structure, the bishop pair is intact, and the plan is clear: develop the queenside, contest c4, and equalise with ease.",
+        say: "Black castles into a balanced middlegame. Black has a sound Catalan-style structure, the bishop pair is intact, and the plan is clear: develop the queenside, contest c4, and equalise with ease.",
         sayShort: '…O-O — balanced, sound game.' }),
     ],
   },

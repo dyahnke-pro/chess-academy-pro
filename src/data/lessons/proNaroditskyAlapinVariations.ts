@@ -108,7 +108,7 @@ const D5_OPEN: LessonScript = {
       id: 'd5-qd7',
       moves: 'e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3 Nc6 Be3 cxd4 Nb5 Qd7',
       highlights: [{ square: 'd7', color: KEY }],
-      say: "Qd7 retreats — the queen blocks Bd7 development, the Bf8 is locked in. White hasn't won material yet but has won three tempi against Black's structure. The next sequence consolidates: Nbxd4 (recapture) + Nxc6 (trade) + bishop pair lives.",
+      say: "Qd7 retreats — the queen takes the d7-square the c8-bishop wanted. White hasn't won material yet but has won three tempi against Black's structure. The next sequence consolidates: Nbxd4 (recapture) + Nxc6 (trade) + bishop pair lives.",
       sayShort: 'Qd7 — queen retreats, tempo gained.',
     }),
     b({
@@ -116,7 +116,7 @@ const D5_OPEN: LessonScript = {
       moves: 'e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3 Nc6 Be3 cxd4 Nb5 Qd7 Nbxd4 Be7 Nxc6 Qxc6 Ne5',
       arrows: [{ from: 'f3', to: 'e5', color: ATK }],
       highlights: [{ square: 'e5', color: KEY }, { square: 'c6', color: SOFT }],
-      say: "Nbxd4 / Be7 / Nxc6 / Qxc6 / Ne5 — the trade sequence that opens the position. Both Black knights are off; your knight lands on e5 attacking the queen on c6 AND eyeing f7. Black is technically equal in material but the pieces are uncoordinated.",
+      say: "Nbxd4 / Be7 / Nxc6 / Qxc6 / Ne5 — the trade sequence that opens the position. One pair of knights is off; your knight lands on e5 attacking the queen on c6 AND eyeing f7. Black is technically equal in material but the pieces are uncoordinated.",
       sayShort: 'Ne5 — central outpost, hit the queen.',
     }),
     b({
@@ -124,7 +124,7 @@ const D5_OPEN: LessonScript = {
       moves: 'e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3 Nc6 Be3 cxd4 Nb5 Qd7 Nbxd4 Be7 Nxc6 Qxc6 Ne5 Qe4 Bb5+',
       arrows: [{ from: 'f1', to: 'b5', color: ATK }, { from: 'b5', to: 'e8', color: VIS }],
       highlights: [{ square: 'b5', color: KEY }, { square: 'e8', color: ATK }],
-      say: "After ...Qe4 [Black's queen attacks your knight on e5], you play Bb5+! — the check on the king forces Kf8 (the only legal response; no interposition saves both pieces). Black's king sits awkwardly on f8 for the rest of the game. Your knight retreats next, and the structural edge converts in the R+minor+P endgame (27% of decisive games).",
+      say: "After ...Qe4 [Black's queen attacks your knight on e5], you play Bb5+! — the engine's answer for Black is …Kf8, and the king sits awkwardly on f8 for the rest of the game. Your knight retreats next, and the structural edge converts in the R+minor+P endgame (27% of decisive games).",
       sayShort: 'Bb5+ — fix Black\'s king on f8.',
     }),
   ],
@@ -194,7 +194,7 @@ const E6_FRENCH: LessonScript = {
       moves: 'e4 c5 c3 e6 d4 d5 e5 Nc6 Nf3 Bd7 Bd3 cxd4 O-O dxc3 Nxc3',
       arrows: [{ from: 'b1', to: 'c3', color: VIS }],
       highlights: [{ square: 'c3', color: KEY }, { square: 'd5', color: ATK }],
-      say: "Black grabs the pawn with …dxc3 and you recapture Nxc3 — now you have the open c-file PLUS the open b-file PLUS a development advantage. The pawn is a small price; the pieces all aim at Black's queenside king or central d5 weakness.",
+      say: "Black grabs the pawn with …dxc3 and you recapture Nxc3 — now you have the open c-file PLUS a development advantage. The pawn is a small price; the pieces all aim at Black's queenside king or central d5 weakness.",
       sayShort: 'Nxc3 — open lines for activity.',
     }),
     b({
@@ -209,8 +209,8 @@ const E6_FRENCH: LessonScript = {
       moves: 'e4 c5 c3 e6 d4 d5 e5 Nc6 Nf3 Bd7 Bd3 cxd4 O-O dxc3 Nxc3 a6 Re1',
       arrows: [{ from: 'f1', to: 'e1', color: VIS }],
       highlights: [{ square: 'e1', color: KEY }, { square: 'e6', color: ATK }],
-      say: "Re1 — rook to the open e-file, eyes the e6-pawn that's now permanently weak. Combined with Bd3 + Nc3 you have a textbook kingside-attack setup: every piece points at Black's king position once they castle, and the structure says you'll never run out of ideas.",
-      sayShort: 'Re1 — e-file for the attack.',
+      say: "Re1 — the rook backs up the e5-pawn, which cramps Black and keeps the e6-pawn fixed. Combined with Bd3 + Nc3 you have a textbook kingside-attack setup: every piece points at Black's king position once they castle, and the structure says you'll never run out of ideas.",
+      sayShort: 'Re1 — back up e5 for the attack.',
     }),
     b({
       id: 'e6-ng5',
@@ -398,7 +398,7 @@ const NC6_LINE: LessonScript = {
     b({
       id: 'nc6-bd3',
       moves: 'e4 c5 c3 Nc6 d4 cxd4 cxd4 d5 exd5 Qxd5 Nf3 e6 Nc3 Qd8 Bd3 Nf6 O-O Be7 a3',
-      arrows: [{ from: 'f1', to: 'd3', color: VIS }],
+      arrows: [],
       highlights: [{ square: 'd3', color: KEY }, { square: 'a3', color: SOFT }],
       say: "Bd3 / Nf6 / O-O / Be7 / a3 — you develop classically and prepare b4 expansion. The d4-pawn looks isolated but Black's c8-bishop is locked in by their own e6-pawn, so they can't pressure it. White converts the structural edge in the endgame, where the bishop pair and the queenside space carry the rest of the way.",
       sayShort: 'a3 — prepare b4 expansion.',
@@ -518,8 +518,8 @@ const NF6_E6_SUB: LessonScript = {
       id: 'e6sub-be7',
       moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 e6 d4 cxd4 cxd4 d6 Bc4 Be7 O-O O-O',
       highlights: [{ square: 'e7', color: KEY }, { square: 'g8', color: SOFT }],
-      say: "…Be7 / O-O / O-O — both sides castle quietly. The position is a textbook IQP middlegame: White has central control + active pieces + open files; Black has a solid structure + the isolated-d-pawn target. Plans diverge from here.",
-      sayShort: 'O-O — both castle, IQP middlegame.',
+      say: "…Be7 / O-O / O-O — both sides castle quietly. The position is a textbook central-space middlegame: White has central control + active pieces + open files; Black has a solid structure + the isolated-d-pawn target. Plans diverge from here.",
+      sayShort: 'O-O — both castle, central-space middlegame.',
     }),
     b({
       id: 'e6sub-qe2',
@@ -550,8 +550,8 @@ const NF6_E6_SUB: LessonScript = {
       moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 e6 d4 cxd4 cxd4 d6 Bc4 Be7 O-O O-O Qe2 Bd7 Rd1 Bc6 Nc3 Nxc3 bxc3',
       arrows: [{ from: 'b2', to: 'c3', color: VIS }],
       highlights: [{ square: 'c3', color: KEY }, { square: 'b1', color: SOFT }],
-      say: "…Nxc3 / bxc3 — the knight trade gives you doubled c-pawns, but they aren't a real weakness here. You get the open b-file for the rook AND the bishop pair AND a reinforced d4 centre. Black trades their best piece for a structural concession they can't punish, and the endgame steers cleanly in White's favour.",
-      sayShort: 'bxc3 — three pluses for one minus.',
+      say: "…Nxc3 / bxc3 — the knight trade leaves you a c3-pawn, but it isn't a real weakness here. You get the half-open b-file for the rook AND a reinforced d4 centre. Black trades their best piece for a structural concession they can't punish, and the endgame steers cleanly in White's favour.",
+      sayShort: 'bxc3 — b-file and a firmer d4.',
     }),
   ],
 };

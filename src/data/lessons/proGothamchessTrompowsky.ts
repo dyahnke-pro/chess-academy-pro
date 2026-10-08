@@ -49,7 +49,7 @@ export const PRO_GOTHAMCHESS_TROMPOWSKY_LESSON: LessonScript = {
       arrows: [{ from: 'h4', to: 'd8', color: VIS }],
       highlights: [{ square: 'f6', color: KEY }, { square: 'd8', color: SOFT }],
       say:
-        "Black puts the question with h6; you keep the bishop alive on h4. And now there's a real pin: with e6 played, the e7-square is empty, so the bishop on h4 pins the f6-knight straight to the queen on d8 down the long diagonal. The knight is glued in place.",
+        "Black puts the question with h6; you keep the bishop alive on h4. And now there's a real pin: with e6 played, the e7-square is empty, so the bishop on h4 pins the f6-knight straight to the queen on d8 down the h4–d8 diagonal. The knight is glued in place.",
       sayShort: 'Bh4 — now it pins to the queen.',
     }),
     b({

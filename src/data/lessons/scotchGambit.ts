@@ -62,7 +62,7 @@ export const SCOTCH_GAMBIT_LESSON: LessonScript = {
     b({
       id: 'develop',
       moves: 'e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 Be3',
-      say: "Both sides castle into the position; …Bc5 develops with a hit on the d4-knight, and Be3 calmly offers the trade, reinforcing the centre. White is in no hurry — the structure does the work.",
+      say: "White castles into the position; …Bc5 develops with a hit on the d4-knight, and Be3 calmly offers the trade, reinforcing the centre. White is in no hurry — the structure does the work.",
       sayShort: 'Be3 — shore up the centre, offer the trade.',
       highlights: [H('e3'), H('c5'), H('d4')],
     }),

@@ -42,8 +42,8 @@ const VS_NF3: LessonScript = {
       sayShort: '…Bg4 — pin Nf3, free the bishop.' }),
     b({ id: 'develop', moves: 'e4 d5 exd5 Nf6 Nf3 Nxd5 d4 Bg4 Be2 e6 O-O Be7',
       arrows: [], highlights: [{ square: 'e7', color: KEY }, { square: 'd5', color: SOFT }],
-      say: "After …e6 and …Be7 Black completes a solid, classical setup — bishop already developed outside the chain, knight strong on d5, ready to castle. A risk-free, equal Scandinavian where Black is comfortable in every piece.",
-      sayShort: '…e6, …Be7 — solid and equal.' }),
+      say: "After …e6 and …Be7 Black completes a solid, classical setup — bishop already developed outside the chain, knight strong on d5, ready to castle. A solid Scandinavian, though the engine gives White an edge of almost a pawn — solid rather than equal.",
+      sayShort: '…e6, …Be7 — solid; White slightly better.' }),
   ],
 };
 

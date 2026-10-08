@@ -80,7 +80,7 @@ export const PRO_NAR_FANTASY_CARO_LESSON: LessonScript = {
     b({
       id: 'plan', moves: 'e4 c6 d4 d5 f3 e6 Nc3 Bb4 a3 Bxc3+ bxc3 dxe4 fxe4 c5 Nf3 Nc6 Bd3',
       highlights: [{ square: 'd3', color: KEY }, { square: 'e4', color: SOFT }, { square: 'e5', color: SOFT }],
-      say: "Nc6 develops for Black and you bring the bishop to d3 — completing the ideal Fantasy setup. The plan is clear and strong: castle short so the rook lands on the open f-file, then push e5 at the right moment to cramp Black and spring the bishop's diagonal open toward h7, with both bishops trained on the kingside. The engine confirms White is clearly better here — the aggressive bet of move three has paid off in full.",
+      say: "Nc6 develops for Black and you bring the bishop to d3 — completing the ideal Fantasy setup. The plan is clear and strong: castle short so the rook lands on the half-open f-file, then push e5 at the right moment to cramp Black and spring the bishop's diagonal open toward h7, with both bishops trained on the kingside. The engine confirms White is clearly better here — the aggressive bet of move three has paid off in full.",
       sayShort: 'Bd3 — ideal setup, White is better.',
     }),
   ],

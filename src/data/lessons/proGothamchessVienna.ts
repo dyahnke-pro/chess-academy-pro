@@ -63,7 +63,7 @@ export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
       arrows: [{ from: 'f3', to: 'e4', color: VIS }],
       highlights: [{ square: 'e4', color: KEY }, { square: 'f7', color: SOFT }],
       say:
-        "Qf3 — the heart of the line. The queen hits the e4-knight and leans down the open f-file toward f7 at the same time. Black has to react, and every way they do leaves you with the initiative.",
+        "Qf3 — the heart of the line. The queen hits the e4-knight and leans down the half-open f-file toward f7 at the same time. Black has to react, and every way they do leaves you with the initiative.",
       sayShort: 'Qf3 — hit the knight and f7.',
     }),
     b({

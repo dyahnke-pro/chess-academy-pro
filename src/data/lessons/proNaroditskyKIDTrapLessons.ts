@@ -40,51 +40,6 @@ const SRC = [
 ];
 
 // =============================================================
-// TRAP 1: Mar del Plata Nh5-Nf4-Nxd4 conversion (30 games)
-// The canonical Classical KID weapon. After the Mar del Plata setup,
-// White plays f3 hoping to defend the centre, but Black's standard
-// kingside reroute (Nh5 → Nf4) wins material on d4 via Nxd4.
-// =============================================================
-const MAR_DEL_PLATA_CRUSH: LessonScript = {
-  openingId: 'pro-naroditsky-kid',
-  title: 'Weapon: Mar del Plata Nh5-Nf4-Nxd4 conversion',
-  minutes: 4,
-  orientation: 'black',
-  kind: 'trap',
-  sources: SRC,
-  beats: [
-    b({
-      id: 'mdp-setup',
-      moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8',
-      highlights: [H('e8'), H('d4', SOFT), H('e4', SOFT)],
-      say: "You've reached the Mar del Plata mainline after your ...e5 / ...exd4 / ...Re8 sequence. The rook hits e4 and White must defend the pawn. The natural-looking choice is f3 — and that's where the trap closes. 30 of his opponents have walked into the same conversion from this exact position.",
-      sayShort: 'Mar del Plata — Re8 hits e4.',
-    }),
-    b({
-      id: 'mdp-f3',
-      moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 Nc6',
-      highlights: [H('f3'), H('c6', SOFT), H('d4', SOFT)],
-      say: "f3 ...Nc6 — White defends e4 with the f-pawn and you develop the knight hitting d4. So far normal looking, but the f3 has just locked the kingside dark squares and committed the bishop on c1 to the wrong side of the pawn. The structural weakness is set.",
-      sayShort: 'f3 ...Nc6 — set the trap.',
-    }),
-    b({
-      id: 'mdp-nh5',
-      moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 Nc6 Be3 Nh5',
-      highlights: [H('h5'), H('f4', SOFT)],
-      say: "Be3 ...Nh5! The signature Mar del Plata reroute. The knight is heading for f4 — the prize square where it attacks the Be2 and pressures the kingside. White's f3 stopped Ng4 but not Nh5; the trap was already inevitable from the moment White committed to the Classical setup.",
-      sayShort: '...Nh5 — heading for f4.',
-    }),
-    b({
-      id: 'mdp-cash',
-      moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 Nc6 Be3 Nh5 Qd2 Nxd4',
-      highlights: [H('d4', ATK)],
-      say: "Qd2 ...Nxd4! Black's knight grabs the central piece BEFORE landing on f4. The Be3 was meant to support d4, but now the knight on h5 is loose and you've already won the central piece battle. Material gain + active position = winning Mar del Plata middlegame.",
-      sayShort: '...Nxd4 — win the central knight.',
-    }),
-  ],
-};
-
-// =============================================================
 // TRAP 2: Bf5 + Ne4 wins the bishop pair (Fianchetto, vs GM Bok)
 // In the Fianchetto Variation after ...c6, if White plays Nc3 without
 // preparation, Black gets the powerful Bf5 + Ne4 + Nxc3 sequence
@@ -233,7 +188,6 @@ interface TrapEntry {
 }
 
 const TRAPS: TrapEntry[] = [
-  { name: 'Mar del Plata Nh5-Nf4-Nxd4 conversion (30 games)', lesson: MAR_DEL_PLATA_CRUSH, kind: 'trap' },
   { name: 'Bf5 + Ne4 wins bishop pair (Fianchetto, GM Bok victim)', lesson: BF5_NE4_BISHOP_PAIR, kind: 'trap' },
   { name: 'Qxd8 trade hands Black the better endgame (Firouzja victim)', lesson: QXD8_BETTER_ENDGAME, kind: 'trap' },
   { name: '...Bg4 pin wins bishop pair (Four Pawns)', lesson: BG4_PIN_FOUR_PAWNS, kind: 'trap' },

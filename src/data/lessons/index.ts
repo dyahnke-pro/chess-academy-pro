@@ -730,7 +730,7 @@ const VARIATION_KEYWORDS: Record<string, string[]> = {
   'pirc-defence::150 Attack': ['150 attack', '150-attack'],
   'vienna-game::Vienna Gambit: Qf3': ['vienna gambit', 'gambit vienna', 'vienna f4', '3.f4 vienna', 'vienna gambit qf3', 'qf3 vienna', 'vienna gambit declined'],
   'vienna-game::Vienna Gambit': ['vienna gambit nf3', 'nf3 vienna gambit', 'vienna gambit classical'],
-  'vienna-game::Vienna vs 2...Nc6': ['vienna nc6', 'vs nc6 vienna', 'hamppe-allgaier', 'hamppe muzio', 'pierce gambit', 'steinitz gambit'],
+  'vienna-game::Vienna vs 2...Nc6': ['vienna nc6', 'vs nc6 vienna', 'hamppe-allgaier', 'hamppe muzio', 'steinitz gambit'],
   'vienna-game::Frankenstein-Dracula': ['frankenstein-dracula', 'frankenstein dracula', 'nxa8 raid', 'qh5 vienna'],
   'vienna-game::Paulsen Attack': ['paulsen vienna', 'vienna g3', '3.g3 vienna', 'vienna fianchetto'],
 };

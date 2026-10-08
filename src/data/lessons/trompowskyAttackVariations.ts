@@ -20,7 +20,7 @@ export const TROMPOWSKY_ATTACK_VARIATION_LESSONS: Record<string, LessonScript> =
         id: 'tn1',
         moves: ['d4', 'Nf6', 'Bg5', 'Ne4', 'Bf4'],
         highlights: [{ square: 'f4', color: KEY }, { square: 'e4', color: SOFT }],
-        say: "The Trompowsky — 2.Bg5 pins the f6-knight at once, and against the most common reply, Black's 2…Ne4 hitting the bishop, White simply retreats to f4. The bishop stays active on a great diagonal and White has avoided all the doubled-pawn structures. A low-theory, off-beat way to fight for the centre on White's terms.",
+        say: "The Trompowsky — Bg5 hits the f6-knight at once, and against the most common reply, Black's …Ne4 hitting the bishop, White simply retreats to f4. The bishop stays active on a great diagonal and White has avoided all the doubled-pawn structures. A low-theory, off-beat way to fight for the centre on White's terms.",
         sayShort: 'Bf4 — keep the bishop active.',
       },
       {

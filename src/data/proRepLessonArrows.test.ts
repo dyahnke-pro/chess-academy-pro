@@ -86,18 +86,7 @@ function arrowProblem(c: Chess, a: AnnotationArrow): string | null {
 // pedagogy mid-flight (CLAUDE.md parallel-sessions rule); flagged for a cleanup
 // pass. May ONLY shrink — the Carlsen build (and every new pro-rep lesson) is
 // authored clean. key = `${label} :: ${beat.id} :: ${from}-${to}`
-const BASELINE = new Set<string>([
-  'pro-gothamchess-caro-kann :: Advance Variation 3.e5 Bf5 :: c5 :: c6-c5',
-  'pro-gothamchess-scandinavian :: 2...Nf6 Scandinavian :: fianchetto :: f8-g7',
-  'pro-gothamchess-vienna :: Vienna Gambit Main Line :: qg3-nf3 :: f3-g3',
-  'pro-hikaru-reti :: vs ...d5 :: mid :: f1-d3',
-  'pro-naroditsky-alapin :: 2…Nc6 Line :: nc6-bd3 :: f1-d3',
-  // Pre-existing in parallel Caruana/Samay builds (merged 2026-06-01) — their
-  // lessons predate this gate; grandfathered, to be fixed by those builds.
-  'pro-caruana-najdorf (main) :: be7 :: f8-e7',
-  'pro-samayraina-french-white (main) :: bd3 :: f1-d3',
-  'pro-samayraina-french-white :: vs c5 break :: dxc5 :: f1-d3',
-]);
+const BASELINE = new Set<string>([]);
 
 const allViolations: string[] = [];
 

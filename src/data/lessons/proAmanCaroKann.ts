@@ -42,7 +42,7 @@ export const PRO_AMAN_CARO_KANN_LESSON: LessonScript = {
       say: "The other knight comes to e7 — heading for g6 to add pressure on the e5-pawn, and keeping the f-pawn free for a later …f6 break. Black's pieces work in harmony around the solid pawn wall.",
       sayShort: '…Ne7 — reroute toward g6.' }),
     b({ id: 'middlegame', moves: 'e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Nd7 O-O Ne7 Nh4 Bg6', arrows: [A('f5', 'g6')], highlights: [H('c5'), H('f6'), H('g6')],
-      say: "White tries to trade off Black's good bishop with Nh4, but …Bg6 calmly keeps it, retreating to a safe, useful diagonal. The bishop is preserved, the wall is intact, and Black has the classic Caro middlegame: solid structure, the good bishop alive, and the …c5 and …f6 breaks in hand. Comfortable equality with nothing to fear.",
+      say: "White goes after Black's good bishop with Nh4, and …Bg6 lets the trade happen: after Nxg6 hxg6 Black gets the half-open h-file in return. The wall is intact and Black has the classic Caro middlegame — solid structure and the …c5 and …f6 breaks in hand — though the engine gives White an edge of almost a pawn.",
       sayShort: '…Bg6 — keep the good bishop.' }),
   ],
 };

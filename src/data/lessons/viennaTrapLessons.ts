@@ -13,7 +13,7 @@ import type {
 // identity). The Vienna's arsenal IS its identity (David 2026-05-21:
 // "lots of traps/weapons") — so you don't cap to the Ruy's 5-trap cadence.
 //
-// Slate: 7 weapons + 1 warning, distributed across the 4 variation tabs.
+// Slate: 6 weapons + 1 warning, distributed across the 4 variation tabs.
 //
 //   WEAPONS (Black slips → White punishes, PGN ends with White better):
 //     1. wurzburger          → gambit                 — Wurzburger Trap
@@ -21,8 +21,7 @@ import type {
 //     3. hamppe-muzio        → vs 2…nc6              — castle into the gambit
 //     4. frankenstein-nxa8   → frankenstein-dracula   — Nxc7+ Nxa8 raid
 //     5. copycat-qg4         → main (Classical)       — Qg4 on g7 when Black mirrors
-//     6. pierce-gambit       → vs 2…nc6              — d4 attacking gambit
-//     7. steinitz-gambit     → vs 2…nc6              — d4 Qh4+ Ke2!? king-walk
+//     6. steinitz-gambit     → vs 2…nc6              — d4 Qh4+ Ke2!? king-walk
 //
 //   WARNINGS (White must avoid):
 //     1. nxe4-no-qh5         → frankenstein-dracula   — must play Qh5 vs ...Nxe4
@@ -116,7 +115,7 @@ const WURZBURGER: LessonScript = {
     {
       id: 'wt9',
       moves: ['e4','e5','Nc3','Nf6','f4','d5','fxe5','Nxe4','d3','Qh4+','g3','Nxg3','Nf3','Qh5','Nxd5'],
-      say: "Look at what the position now produces. The Nd5 is the IMMOVABLE outpost — central knight on a square Black cannot challenge with a pawn (the c-pawn would have to first move to c6, but Nxc7+ punishes that). The d5-pawn that Black built their whole opening around is gone. The g3-knight is hanging to hxg3 next turn — Black will lose THAT piece too. The Qh5 is far from the queenside where the c7-fork is incoming. And White still has the bishop pair, an open f-file for the rook once Nf3 develops, and full kingside safety with O-O-O coming any time. The Wurzburger doesn't just trap material — it produces a position with EVERY ADVANTAGE.",
+      say: "Look at what the position now produces. The Nd5 is the IMMOVABLE outpost — central knight on a square Black cannot challenge with a pawn (the c-pawn would have to first move to c6, but Nxc7+ punishes that). The d5-pawn that Black built their whole opening around is gone. The g3-knight is hanging to hxg3 next turn — Black will lose THAT piece too. The Qh5 is far from the queenside where the c7-fork is incoming. And White still has both bishops, a half-open f-file for the rook once Nf3 develops, and full kingside safety with O-O-O coming any time. The Wurzburger doesn't just trap material — it produces a position with EVERY ADVANTAGE.",
       sayShort: "Every White piece dominant — Nd5, bishops, open f-file.",
       highlights: [H('d5', SOFT)],
     },
@@ -207,7 +206,7 @@ const HAMPPE_ALLGAIER: LessonScript = {
       id: 'ha9',
       moves: ['e4','e5','Nc3','Nc6','f4','exf4','Nf3','g5','h4','g4','Ng5','h6','Nxf7','Kxf7','Bc4+','d5','Bxd5+','Ke8','d4'],
       highlights: [H('d5', KEY), H('e4', KEY), H('h1', SOFT)],
-      say: "What does the position PRODUCE? Look at the structural facts: White's d4-e4 pawn duo dominates the centre and Black has NO central pawns to push back; the Bd5 owns the long light diagonal and aims at b7 + the queenside; the h-file is open for the rook on h1 to swing toward h7 if Black ever brings their king to f7 or g8; Black's queenside pieces (Nb8, Bc8, Qd8, Ra8) are ALL still on their starting squares while White has 5 active pieces. The conversion plan: Bxf4 to recover one of the gambit pawns and aim at the h6-pawn, then Qd3 or Qf3 hitting the kingside, then O-O-O to bring the king-rook into the attack via the open h-file. Black will eventually develop, but the king on e8 is a permanent target — every White attacking move costs Black another defensive tempo. The verdict on the Hamppe-Allgaier: theoretically Black survives with computer-perfect defence, practically White wins more often than they lose. Steinitz's club's pet line, two centuries later still one of the most dangerous practical weapons in chess. Keep it loaded for when Black gives you …g5.",
+      say: "What does the position PRODUCE? Look at the structural facts: White's d4-e4 pawn duo dominates the centre and Black has NO central pawns to push back; the Bd5 owns the long light diagonal and aims at b7 + the queenside; the h-file is open for the rook on h1 to swing toward h7 if Black ever brings their king to f7 or g8; Black's queenside pieces (Nb8, Bc8, Qd8, Ra8) are ALL still on their starting squares while White has 5 active pieces. The conversion plan: Bxf4 to recover one of the gambit pawns and aim at the h6-pawn, then Qd3 or Qf3 hitting the kingside, then O-O-O to bring the rook into the attack. Black will eventually develop, but the king on e8 is a permanent target — every White attacking move costs Black another defensive tempo. The verdict on the Hamppe-Allgaier: theoretically Black survives with computer-perfect defence, practically White wins more often than they lose. Steinitz's club's pet line, two centuries later still one of the most dangerous practical weapons in chess. Keep it loaded for when Black gives you …g5.",
       sayShort: "d4-e4 centre, open h-file, Bd5 — crushing.",
     },
   ],
@@ -474,81 +473,6 @@ const COPYCAT_QG4: LessonScript = {
   ],
 };
 
-// ── WEAPON: The Pierce Gambit (d4) ───────────────────────────
-// Lives in the vs Nc6 line, alongside Hamppe-Allgaier/Muzio. After
-// f4 exf4, instead of Nf3 (developing with tempo), Pierce played
-// d4 — a classical pawn-storm gambit, accepting an even WORSE
-// material balance for control of the centre. Sharp positional gambit
-// rather than the Hamppe sacrifice complex; same vs Nc6 territory
-// but a completely different attacking idea. Full-coverage 7 beats.
-const PIERCE_GAMBIT: LessonScript = {
-  openingId: 'vienna-game',
-  sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
-  title: 'Weapon: The Pierce Gambit (d4)',
-  minutes: 5,
-  orientation: 'white',
-  beats: [
-    {
-      id: 'pg1',
-      moves: ['e4','e5','Nc3','Nc6','f4','exf4','d4'],
-      highlights: [H('d4', KEY), H('f4', SOFT)],
-      say: "The Pierce Gambit: d4! Instead of recapturing the f4-pawn with the knight (which gives Hamppe-Allgaier territory) or playing Nf3 (the most common move), White DOUBLES DOWN on the gambit by sacrificing a SECOND pawn — the d4-pawn — for central control. Pierce, a 19th-century English player, found that the open d-file and the central pawn duo were worth more than the two pawns Black grabs.",
-      sayShort: "d4! — the Pierce; sacrifice a second pawn.",
-    },
-    {
-      id: 'pg2',
-      moves: ['e4','e5','Nc3','Nc6','f4','exf4','d4','d5'],
-      highlights: [H('d5', KEY), H('e4', KEY)],
-      say: "d5 — Black's best reply, the principled counter in the centre (exactly the same idea as Lasker's recommendation against the regular Vienna Gambit). Black challenges White's e4-pawn back. The tension between the central pawns is immediate, and the position will open dramatically with the next pawn trade.",
-      sayShort: "d5 — counter in the centre; tension snaps.",
-    },
-    {
-      id: 'pg3',
-      moves: ['e4','e5','Nc3','Nc6','f4','exf4','d4','d5','exd5'],
-      highlights: [H('d5', KEY)],
-      say: "exd5 — White exchanges in the centre. The e-file is now wide open, the d5-square is contested, and Black's queen-knight on c6 is attacked by the d5-pawn. Black must respond to the central thrust, and the only way to do so is to capture the d5-pawn — but with WHICH piece?",
-      sayShort: 'exd5 — open centre, contested d5, c6-knight under threat.',
-    },
-    {
-      id: 'pg4',
-      moves: ['e4','e5','Nc3','Nc6','f4','exf4','d4','d5','exd5','Qxd5'],
-      arrows: [A('d5', 'd4', ATK)],
-      highlights: [H('d5', KEY), H('d4', KEY)],
-      say: "Qxd5 — Black grabs the pawn with the queen, putting maximum pressure on the d4-square. The Black queen now sits in the middle of the board attacking the d4-pawn that White sacrificed. From Black's view, two pawns in hand, queen actively placed, position should be winning. From Pierce's view, White is one move away from chasing the queen with tempo and unleashing a full development.",
-      sayShort: "Qxd5 — grabs the pawn, over-extends the queen.",
-    },
-    {
-      id: 'pg5',
-      moves: ['e4','e5','Nc3','Nc6','f4','exf4','d4','d5','exd5','Qxd5','Nf3'],
-      arrows: [A('c3', 'd5', ATK)],
-      highlights: [H('f3', KEY), H('c3', KEY), H('d5', KEY)],
-      say: "Nf3 — develop with tempo. Critically, the Nc3 has been ATTACKING the d5-queen since Black's queen landed there last move. Black must move the queen, which is one more lost tempo on top of the two pawns they chased. White is rapidly equalising material through development pressure.",
-      sayShort: "Nf3 — develops, hits d5; the queen flees again.",
-    },
-    {
-      id: 'pg6',
-      moves: ['e4','e5','Nc3','Nc6','f4','exf4','d4','d5','exd5','Qxd5','Nf3','Bg4'],
-      highlights: [H('g4', KEY), H('f3', SOFT)],
-      say: "Bg4 — Black pins the f3-knight to the queen on d1, trying to maintain their developmental edge. But the pin is just a tactical resource, not a winning advantage. White has the e-file, the d4-pawn lever still in their pocket (to be replaced by Bxf4 next), the bishop on f1 ready for c4 with attack on the queen again, and full piece coordination right around the corner. The two pawns Black grabbed cost them five tempi of forced reactions.",
-      sayShort: "Bg4 — pins, but White's lead compensates.",
-    },
-    {
-      id: 'pg7',
-      moves: ['e4','e5','Nc3','Nc6','f4','exf4','d4','d5','exd5','Qxd5','Nf3','Bg4'],
-      say: "The verdict on the Pierce Gambit: theoretically the position after these moves is balanced — engines say Black is slightly better with the two extra pawns IF they can survive the development race. The queen on d5 is the practical problem: every White piece comes out with tempo on it.",
-      sayShort: 'The verdict: engine equal, human practical White edge.',
-      highlights: [H('d5', SOFT)],
-    },
-    {
-      id: 'pg8',
-      moves: ['e4','e5','Nc3','Nc6','f4','exf4','d4','d5','exd5','Qxd5','Nf3','Bg4'],
-      highlights: [H('d5', KEY), H('f4', SOFT), H('g4', SOFT)],
-      say: "What does the Pierce position PRODUCE? Three concrete facts: the queen on d5 is a magnet — Bc4 hits it next move with another tempo, Nc3 already attacked it once, and every developing move continues the chase; the open e-file is wide open for White to throw the rook there with Re1 once castling lands; and the Bg4-pin on the f3-knight is FRAGILE because h3 just asks the bishop to commit, and any pin-piece-trade leaves Black even more behind in development. The conversion plan: Bc4 (third attack on d5, queen moves yet again), O-O (king-side safety + Re1), h3 (challenge the Bg4-pin), Bxf4 (recover the gambit pawn). By move 12 White will have full development, the bishop pair, the open e-file, and Black's queen still wandering. The Pierce is less wild than the Hamppe sacrifices but works the same way: punish Black for accepting a free pawn by making them spend every move defending.",
-      sayShort: "Queen on d5 hunted; convert with Bc4, O-O.",
-    },
-  ],
-};
-
 // ── WEAPON: Steinitz Gambit (d4 Qh4+ Ke2!?) ────────────────
 // The most outrageous weapon in the Vienna: in response to d4 Black
 // plays Qh4+ thinking he wins the f4-pawn AND development. White
@@ -568,8 +492,8 @@ const STEINITZ_GAMBIT: LessonScript = {
       id: 'sg1',
       moves: ['e4','e5','Nc3','Nc6','f4','exf4','d4'],
       highlights: [H('d4', KEY)],
-      say: "Same Pierce setup — d4! the central pawn gambit. But now suppose Black ventures the most aggressive reply imaginable.",
-      sayShort: "d4 — same Pierce setup; Black gets ambitious.",
+      say: "d4! — the Steinitz Gambit: White ignores the f4-pawn and grabs the centre. Now suppose Black ventures the most aggressive reply imaginable.",
+      sayShort: "d4 — the Steinitz; Black gets ambitious.",
     },
     {
       id: 'sg2',
@@ -626,7 +550,7 @@ const STEINITZ_GAMBIT: LessonScript = {
       id: 'sg9',
       moves: ['e4','e5','Nc3','Nc6','f4','exf4','d4','Qh4+','Ke2','d6','Nf3','Bg4','Bxf4'],
       highlights: [H('e2', KEY), H('h4', KEY), H('d4', SOFT), H('e4', SOFT)],
-      say: "What does the Steinitz position PRODUCE? Three structural facts that explain why a world champion played it: White has the d4-e4 pawn duo controlling the centre absolutely; the Bf4 just recovered the gambit pawn AND threatens Bxd6 next move winning ANOTHER pawn; and the Black queen on h4 is FAR from her army, a magnet that every White piece can attack as it comes out. The king on e2 looks scary but is actually well-protected: the Nf3 covers the e1-h4 diagonal-check threat, the Bf4 covers c1 ideas, and Black has no rook on the e-file to exploit. The conversion plan: Kd2 (eventually) to slide the king to safety on c1 after the queen is pacified, then Re1 swings the king-rook onto the open e-file, then push for an exchange of queens via Qd3-h7+ tactics to enter an endgame UP material. The opening's NAME is the verdict — a world champion played it because the practical chances are that good. Treat this as a weapon for blitz, rapid, and any game where your opponent can't memorise twenty-move only-move sequences. The king on e2 is not a bug — it's the feature.",
+      say: "What does the Steinitz position PRODUCE? Three structural facts that explain why a world champion played it: White has the d4-e4 pawn duo controlling the centre absolutely; the Bf4 just recovered the gambit pawn AND threatens Bxd6 next move winning ANOTHER pawn; and the Black queen on h4 is FAR from her army, a magnet that every White piece can attack as it comes out. The king on e2 looks scary but is actually well-protected: the Nf3 covers the e1-h4 diagonal-check threat, the Bf4 covers c1 ideas, and Black has no rook on the e-file to exploit. The conversion plan: Kd2 (eventually) to slide the king to safety on c1 after the queen is pacified, then Re1 swings the king-rook onto the half-open e-file, then push for an exchange of queens via Qd3-h7+ tactics to enter an endgame UP material. The opening's NAME is the verdict — a world champion played it because the practical chances are that good. Treat this as a weapon for blitz, rapid, and any game where your opponent can't memorise twenty-move only-move sequences. The king on e2 is not a bug — it's the feature.",
       sayShort: "Centre, Bf4 on d6, queen a magnet — convert.",
     },
   ],
@@ -650,7 +574,7 @@ const NXE4_NO_QH5: LessonScript = {
       id: 'wn1',
       moves: ['e4','e5','Nc3','Nf6','Bc4','Nxe4'],
       highlights: [H('e4', KEY)],
-      say: "The Frankenstein-Dracula starting position. Black has just played Nxe4 — grabbing the e4-pawn, banking on the pin from Bc4 to make the recapture awkward. The c3-knight is pinned, the e-pawn is gone, and White's instinct is to either recapture with Nxe4 or to develop calmly. Either instinct loses White's entire opening advantage.",
+      say: "The Frankenstein-Dracula starting position. Black has just played Nxe4 — grabbing the e4-pawn, banking on a trick: if Nxe4, …d5 hits the bishop and the knight together. The e-pawn is gone, and White's instinct is to either recapture with Nxe4 or to develop calmly. Either instinct loses White's entire opening advantage.",
       sayShort: "Nxe4 — only one right reply keeps the edge.",
     },
     {
@@ -685,7 +609,6 @@ export const VIENNA_TRAP_LESSONS: Record<string, LessonScript> = {
   'hamppe-muzio': HAMPPE_MUZIO,
   'frankenstein-nxa8': FRANKENSTEIN_NXA8,
   'copycat-qg4': COPYCAT_QG4,
-  'pierce-gambit': PIERCE_GAMBIT,
   'steinitz-gambit': STEINITZ_GAMBIT,
   'nxe4-no-qh5': NXE4_NO_QH5,
 };
@@ -710,7 +633,6 @@ export const VIENNA_TRAP_DEFS: ViennaTrapDef[] = [
   // Copycat lives on the vs Nc6 tab — in the Nf6 mainline the
   // f6-knight attacks g4, so the Qg4 punishment only works after Nc6.
   { id: 'copycat-qg4', name: 'Copycat: Qg4 punishes the mirror', kind: 'weapon', appliesTo: ['vs 2…nc6'] },
-  { id: 'pierce-gambit', name: 'The Pierce Gambit', kind: 'weapon', appliesTo: ['vs 2…nc6'] },
   { id: 'steinitz-gambit', name: "Steinitz's King-Walk Gambit", kind: 'weapon', appliesTo: ['vs 2…nc6'] },
   { id: 'nxe4-no-qh5', name: 'Watch out: Nxe4 demands Qh5', kind: 'warning', appliesTo: ['frankenstein-dracula'] },
 ];

@@ -22,7 +22,7 @@ function isLesson(v: unknown): v is LessonScript {
 
 /** Every LessonScript exported from src/data/lessons, deduped by identity. */
 export function allLessonScripts(): Array<{ file: string; lesson: LessonScript }> {
-  const mods: Record<string, Record<string, unknown>> = import.meta.glob('./lessons/*.ts', { eager: true });
+  const mods: Record<string, Record<string, unknown>> = import.meta.glob(['./lessons/*.ts', '!./lessons/*.test.ts'], { eager: true });
   const seen = new Set<LessonScript>();
   const out: Array<{ file: string; lesson: LessonScript }> = [];
   const take = (file: string, v: unknown): void => {

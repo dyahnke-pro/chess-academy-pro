@@ -27,7 +27,7 @@ const VS_D5: LessonScript = {
   beats: [
     b({ id: 'bb2', moves: 'Nf3 d5 b3 Nf6 Bb2', arrows: [A('b2', 'g7')], highlights: [H('b2')], say: "Against the solid ...d5, this repertoire fianchettoes — Bb2. The setup becomes a reversed London with an extra tempo: the dark-squared bishop leans down the long diagonal while White prepares the centre.", sayShort: 'Bb2 — reversed London, a tempo up.' }),
     b({ id: 'd4', moves: 'Nf3 d5 b3 Nf6 Bb2 e6 e3 Be7 d4', highlights: [H('d4')], say: "White builds the d4-e3 pawn chain behind the bishop. The position is rock-solid and flexible — White can press on either wing while the b2-bishop bides its time.", sayShort: 'd4 — build the centre.' }),
-    b({ id: 'mid', moves: 'Nf3 d5 b3 Nf6 Bb2 e6 e3 Be7 d4 O-O Bd3 b6 O-O Bb7 Nbd2', arrows: [A('f1', 'd3')], highlights: [H('d3')], say: "Both sides finish developing and fianchetto; White drops the bishop to d3 onto the b1-h7 diagonal toward Black's king. Two bishops, a broad centre, the freer game — the comfortable reversed-London pull.", sayShort: 'Bd3 — two bishops, easier game.' }),
+    b({ id: 'mid', moves: 'Nf3 d5 b3 Nf6 Bb2 e6 e3 Be7 d4 O-O Bd3 b6 O-O Bb7 Nbd2', arrows: [], highlights: [H('d3')], say: "Both sides finish developing and fianchetto; White drops the bishop to d3 onto the b1-h7 diagonal toward Black's king. Two bishops, a broad centre, the freer game — the comfortable reversed-London pull.", sayShort: 'Bd3 — two bishops, easier game.' }),
   ],
 };
 

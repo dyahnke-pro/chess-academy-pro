@@ -276,7 +276,6 @@ async function main() {
     //   hamppe-allgaier    (weapon)  → vs 2…Nc6
     //   hamppe-muzio       (weapon)  → vs 2…Nc6
     //   copycat-qg4        (weapon)  → vs 2…Nc6
-    //   pierce-gambit      (weapon)  → vs 2…Nc6
     //   steinitz-gambit    (weapon)  → vs 2…Nc6
     //   frankenstein-nxa8  (weapon)  → Frankenstein-Dracula
     //   nxe4-no-qh5        (warning) → Frankenstein-Dracula
@@ -284,7 +283,6 @@ async function main() {
     await probeViennaTile(page, 'vs 2…Nc6', 'hamppe-allgaier', 'Hamppe-Allgaier (vs 2…Nc6)');
     await probeViennaTile(page, 'vs 2…Nc6', 'hamppe-muzio', 'Hamppe-Muzio (vs 2…Nc6)');
     await probeViennaTile(page, 'vs 2…Nc6', 'copycat-qg4', 'Copycat-Qg4 (vs 2…Nc6)');
-    await probeViennaTile(page, 'vs 2…Nc6', 'pierce-gambit', 'Pierce Gambit (vs 2…Nc6)');
     await probeViennaTile(page, 'vs 2…Nc6', 'steinitz-gambit', 'Steinitz Gambit (vs 2…Nc6)');
     await probeViennaTile(page, 'Frankenstein-Dracula', 'frankenstein-nxa8', 'F-D Nxa8 (Frankenstein-Dracula)');
     await probeViennaTile(page, 'Frankenstein-Dracula', 'nxe4-no-qh5', 'Warning: 3…Nxe4 demands 4.Qh5');

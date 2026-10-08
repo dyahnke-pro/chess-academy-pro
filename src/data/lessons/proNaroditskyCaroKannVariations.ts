@@ -301,7 +301,7 @@ const EXCHANGE: LessonScript = {
       moves: 'e4 c6 d4 d5 exd5 cxd5 Bd3 Nf6 c3 Bg4 Qb3 Qc7 h3 Bh5',
       highlights: [{ square: 'h5', color: KEY }],
       say:
-        "Middlegame plan from the games: White typically plays h3 challenging your bishop, and the standard retreat is Bh5 — keeping the diagonal alive for now. From here your typical maneuvering is …e6, …Nbd7, …Bd6, castle, and a slow grind on the open c-file. His pattern across these games: the bishop pair if the Bg4 ever trades for a knight, and you win the endgame through structural advantage.",
+        "Middlegame plan from the games: White typically plays h3 challenging your bishop, and the standard retreat is Bh5 — keeping the diagonal alive for now. From here your typical maneuvering is …e6, …Nbd7, …Bd6, castle, and a slow grind on the half-open c-file. His pattern across these games: the bishop pair if the Bg4 ever trades for a knight, and you win the endgame through structural advantage.",
       sayShort: 'Bh5 — keep the diagonal alive.',
     }),
     // ============ ENDGAME ============
@@ -345,7 +345,7 @@ const CLASSICAL: LessonScript = {
       arrows: [{ from: 'f6', to: 'e4', color: ATK }],
       highlights: [{ square: 'f6', color: KEY }, { square: 'e4', color: SOFT }],
       say:
-        "Nxe4 (forced), and now the key move: Nf6 — the Tartakower Variation. The knight challenges the e4-knight directly. White has TWO responses: Nxf6+ doubling your pawns (the topic of this lesson), or Ng3 retreating. The Tartakower with the doubled f-pawns is what 80%+ of the games take.",
+        "Nxe4 (forced), and now the key move: Nf6 — the Tartakower Variation. The knight challenges the e4-knight directly. White has TWO responses: Nxf6+ doubling your pawns (the topic of this lesson), or Ng3 retreating. The Tartakower, where …exf6 doubles the f-pawns, is what 80%+ of the games take.",
       sayShort: 'Nf6 — Tartakower, dare the trade.',
     }),
     b({
@@ -380,7 +380,7 @@ const CLASSICAL: LessonScript = {
       arrows: [{ from: 'e8', to: 'e2', color: ATK }],
       highlights: [{ square: 'e8', color: KEY }],
       say:
-        "Re8+ — and here's why the doubled f-pawns were worth it. Your rook leaps to the half-open e-file with check, harassing White's pieces. White must respond (Ne2 is the standard — passive, exactly where you wanted them).",
+        "Re8+ — and here's why the doubled f-pawns were worth it. Your rook leaps to the open e-file with check, harassing White's pieces. White must respond (Ne2 is the standard — passive, exactly where you wanted them).",
       sayShort: 'Re8+ — file check.',
     }),
     b({
@@ -457,7 +457,7 @@ const FANTASY: LessonScript = {
       arrows: [{ from: 'f1', to: 'a6', color: VIS }],
       highlights: [{ square: 'e4', color: KEY }, { square: 'f2', color: SOFT }],
       say:
-        "fxe4 — White recaptures, opening the f-file. Now the structural cost of f3 is visible: White's king is exposed (the f2-square is weakening); the e4-pawn is isolated and on an open file; you have the lead in development.",
+        "fxe4 — White recaptures, opening the f-file. Now the structural cost of f3 is visible: White's king is exposed (the f2-square is weakening); the e4-pawn has lost its f-pawn support; you have the lead in development.",
       sayShort: 'fxe4 — White structure cracked.',
     }),
     b({
@@ -646,14 +646,14 @@ const ADVANCE_C5: LessonScript = {
       id: 'adv-c5-trade',
       moves: 'e4 c6 d4 d5 e5 c5 dxc5 e6',
       highlights: [{ square: 'e6', color: KEY }],
-      say: "dxc5 ...e6 — White takes the c-pawn, Black calmly plays ...e6 preparing recapture. You're temporarily down a pawn but White's c5-pawn is loose AND you have the open e-file coming.",
+      say: "dxc5 ...e6 — White takes the c-pawn, Black calmly plays ...e6 preparing recapture. You're temporarily down a pawn, but White's c5-pawn is loose and the bishop will take it back.",
       sayShort: '...e6 — calm preparation.',
     }),
     b({
       id: 'adv-c5-nc6',
       moves: 'e4 c6 d4 d5 e5 c5 dxc5 e6 Nf3 Bxc5',
       highlights: [{ square: 'c5', color: KEY }, { square: 'c6', color: SOFT }],
-      say: "Nf3 ...Bxc5 — Black recaptures the bishop ON c5 (NOT the knight from c6) because the bishop is the more active piece and the Bxc5 trade gives Black piece activity AND the open c-file for the rook later.",
+      say: "Nf3 ...Bxc5 — Black recaptures the bishop ON c5 (NOT the knight from c6) because the bishop is the more active piece and the Bxc5 trade gives Black piece activity AND the half-open c-file for the rook later.",
       sayShort: '...Bxc5 — bishop recaptures.',
     }),
     b({
@@ -674,7 +674,7 @@ const ADVANCE_C5: LessonScript = {
       id: 'adv-c5-conversion',
       moves: 'e4 c6 d4 d5 e5 c5 dxc5 e6 Nf3 Bxc5 Bd3 Nc6 O-O Nge7 Nbd2 Ng6 Nb3 Bb6 Re1 Qc7',
       highlights: [{ square: 'b6', color: KEY }, { square: 'c7', color: SOFT }],
-      say: "Nb3 ...Bb6 Re1 ...Qc7 — the position resolves. Black has the bishop pair, the queen on c7 controls the open file, and the Ng6+Nc6 knight pair is well-coordinated. This repertoire wins 292 of 528 (55%) in this line — the structural pressure on e5 + the open c-file convert.",
+      say: "Nb3 ...Bb6 Re1 ...Qc7 — the position resolves. Black's b6-bishop bites on d4, the queen on c7 controls the open file, and the Ng6+Nc6 knight pair is well-coordinated. This repertoire wins 292 of 528 (55%) in this line — the structural pressure on e5 + the half-open c-file convert.",
       sayShort: '...Qc7 — fully coordinated.',
     }),
   ],
@@ -769,7 +769,7 @@ const PANOV: LessonScript = {
       id: 'panov-bg5',
       moves: 'e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 Nc6 Bg5 Be6',
       highlights: [{ square: 'g5', color: SOFT }, { square: 'e6', color: KEY }],
-      say: "Bg5 ...Be6! White pins the f6-knight, Black develops the bishop to e6 supporting d5 AND eyeing the c4-pawn. The ...Be6 is the key move — it doesn't move the knight (yet) but threatens ...Bxc4 if White isn't careful.",
+      say: "Bg5 ...Be6! White hits the f6-knight, Black develops the bishop to e6 supporting d5 AND eyeing the c4-pawn. The ...Be6 is the key move — it doesn't move the knight (yet) but threatens ...Bxc4 if White isn't careful.",
       sayShort: '...Be6 — support + threat.',
     }),
     b({
@@ -783,7 +783,7 @@ const PANOV: LessonScript = {
       id: 'panov-c5',
       moves: 'e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 Nc6 Bg5 Be6 Be2 Qa5 c5',
       highlights: [{ square: 'c5', color: SOFT }],
-      say: "c5 — White locks the centre, accepting that the IQP is no longer maintainable. The position becomes a closed Panov where Black's piece activity outweighs White's space.",
+      say: "c5 — White locks the centre, giving up the d4-pawn's tension for a locked centre. The position becomes a closed Panov where Black's piece activity outweighs White's space.",
       sayShort: 'c5 — White locks.',
     }),
     b({

@@ -56,7 +56,7 @@ export const TROMPOWSKY_ATTACK_LESSON: LessonScript = {
       id: 'develop',
       moves: ['d4', 'Nf6', 'Bg5', 'Ne4', 'Bf4', 'd5', 'e3', 'c5', 'Bd3', 'Nf6', 'c3', 'Nc6', 'Nd2', 'Bg4', 'Ngf3', 'e6', 'O-O', 'Rc8'],
       highlights: [{ square: 'd2', color: SOFT }, { square: 'f3', color: SOFT }],
-      say: "The knights come out behind the pawns — Nd2 and then Ngf3 — and White castles into safety. Black pins with Bg4 and stacks their rook on the half-open c-file, hunting for counterplay against c3 and d4. Everything is developed; the position is balanced and rich. Now White goes looking for the two things the Trompowsky structure offers them: pressure on the queenside and a knight outpost in the centre.",
+      say: "The knights come out behind the pawns — Nd2 and then Ngf3 — and White castles into safety. Black pins with Bg4 and puts their rook on c8, hunting for counterplay against c3 and d4. Everything is developed; the position is balanced and rich. Now White goes looking for the two things the Trompowsky structure offers them: pressure on the queenside and a knight outpost in the centre.",
       sayShort: 'Nd2, Ngf3, O-O — fully mobilised.',
     },
     {
@@ -64,8 +64,8 @@ export const TROMPOWSKY_ATTACK_LESSON: LessonScript = {
       moves: M,
       arrows: [{ from: 'a4', to: 'c6', color: VIS }, { from: 'e5', to: 'g4', color: VIS }],
       highlights: [{ square: 'e5', color: KEY }, { square: 'c6', color: KEY }],
-      say: "Qa4 swings out, raking the diagonal toward Black's king and pinning the c6-knight to the queenside. Then the move the whole set-up was built for: Ne5! The knight leaps to the central outpost, where it cannot be driven away by a pawn, and from e5 it hits THREE black pieces at once — the c6-knight, the d7-knight, and the g4-bishop. White has emerged from a 'sideline' with the more active pieces, a dominant central knight, and an easy game to play. That is the Trompowsky's promise kept: skip the theory, and still come out on top.",
-      sayShort: 'Ne5 — the outpost forks three pieces.',
+      say: "Qa4 swings out, pressing the c6-knight. Then the move the whole set-up was built for: Ne5! The knight jumps to the central square, and from e5 it hits THREE black pieces at once — the c6-knight, the d7-knight, and the g4-bishop. Black usually trades it off with …Ncxe5, and after Bxe5 White's bishop takes over the e5-square with a small, comfortable edge. That is the Trompowsky's promise: skip the theory, and still come out with the easier game.",
+      sayShort: 'Ne5 — hits three pieces, small edge.',
     },
   ],
 };

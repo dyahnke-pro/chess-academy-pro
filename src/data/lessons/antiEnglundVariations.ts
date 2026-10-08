@@ -57,7 +57,7 @@ const NGE7_LESSON: LessonScript = {
       sayShort: "e4, Bg3 — big centre, still hold e5.",
       highlights: [H('e4', KEY), H('e5', KEY), H('g3', SOFT)] }),
     b({ id: 'eng-n7-3', moves: 'd4 e5 dxe5 Nc6 Nf3 Nge7 Bf4 h6 e4 Ng6 Bg3 Bb4+ c3 Be7 Nbd2 O-O Bb5 d6',
-      say: "c3 blunts the check, you develop the knight to d2, and Bb5 pins the c6-knight. Black castles into a passive position and plays d6 to challenge e5. You are a solid pawn up with a big centre and the more active pieces — the Englund gambiteer has nothing at all to show for the material.",
+      say: "c3 blunts the check, you develop the knight to d2, and Bb5 hits the c6-knight. Black castles into a passive position and plays d6 to challenge e5. You are a solid pawn up with a big centre and the more active pieces — the Englund gambiteer has nothing at all to show for the material.",
       sayShort: "Bb5 — pin, a solid pawn up.",
       highlights: [H('b5', KEY), H('e5', SOFT)] }),
     b({ id: 'eng-n7-4', moves: 'd4 e5 dxe5 Nc6 Nf3 Nge7 Bf4 h6 e4 Ng6 Bg3 Bb4+ c3 Be7 Nbd2 O-O Bb5 d6 exd6 Bxd6 O-O Bf4',

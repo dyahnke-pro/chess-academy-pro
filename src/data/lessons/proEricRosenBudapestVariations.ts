@@ -42,7 +42,7 @@ const VS_NC3: LessonScript = {
       sayShort: '…Bb4 — pin and pressure c3.' }),
     b({ id: 're8', moves: 'd4 Nf6 c4 e5 Nc3 exd4 Qxd4 Nc6 Qd1 Bb4 Nf3 O-O Bd2 Re8',
       arrows: [], highlights: [{ square: 'e8', color: KEY }, { square: 'e2', color: SOFT }],
-      say: "You castle and bring the rook to e8, seizing the open e-file and pinning White's pieces to the king. Black is fully mobilised with the more active army — declining the gambit cost White the initiative for nothing.",
+      say: "You castle and bring the rook to e8, seizing the half-open e-file and pinning White's e2-pawn to the king. Black is fully mobilised with the more active army — declining the gambit cost White the initiative for nothing.",
       sayShort: '…Re8 — seize the e-file, equal+.' }),
   ],
 };

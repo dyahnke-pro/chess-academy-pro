@@ -97,7 +97,7 @@ export const PRO_HIKARU_NIMZO_LARSEN_LESSON: LessonScript = {
       moves: 'b3 e5 Bb2 Nc6 e3 Nf6 Bb5 Bd6 Na3 Na5 Be2 a6 c4 O-O Nc2 Nc6 d4 exd4 exd4 Re8',
       arrows: [{ from: 'b2', to: 'g7', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }],
-      say: "Black trades on d4 and you recapture — exd4 — and there it is: the centre is open, White has a mobile d4-pawn, and the b2-bishop now rakes an unobstructed diagonal straight at Black's king. Black tucks a rook to e8 to contest the file.",
+      say: "Black trades on d4 and you recapture — exd4 — and there it is: the centre is open, White has a mobile d4-pawn, and the b2-bishop lines up on the long diagonal behind the d4-pawn, aimed at Black's king. Black tucks a rook to e8 to contest the file.",
       sayShort: 'exd4 — the diagonal is unleashed.',
     }),
     b({

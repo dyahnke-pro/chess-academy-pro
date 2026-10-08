@@ -119,7 +119,7 @@ export const PRO_NAR_ALAPIN_LESSON: LessonScript = {
       id: 'central-piece', moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4 Qd7 a5 Nd5 a6 b6 d4 e6 Ne5',
       arrows: [{ from: 'f3', to: 'e5', color: ATK }],
       highlights: [{ square: 'e5', color: KEY }, { square: 'c6', color: SOFT }],
-      say: "Black completes development with …e6 and you plant Ne5 — central outpost attacking Nc6 and dominating the dark squares. Black's structural weaknesses are obvious: the doubled c-pawn, the cramped queenside, the awkward Nd5 position.",
+      say: "Black completes development with …e6 and you plant Ne5 — central outpost attacking Nc6 and dominating the dark squares. Black's structural weaknesses are obvious: the loose c5-pawn, the cramped queenside, the awkward Nd5 position.",
       sayShort: 'Ne5 — central outpost.',
     }),
     b({
@@ -173,13 +173,13 @@ export const PRO_NAR_NAJDORF_LESSON: LessonScript = {
       id: 'bg5', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5',
       arrows: [{ from: 'g5', to: 'f6', color: ATK }],
       highlights: [{ square: 'g5', color: KEY }, { square: 'f6', color: SOFT }],
-      say: "Bg5 — the English Attack, White's most aggressive try and the one you'll meet most often. The bishop pins your f6-knight against the queen and threatens to take it, wrecking your kingside pawns. It also signals White's whole plan: castle long and throw the h- and g-pawns at your king. You must meet fire with a cool, prepared head.",
-      sayShort: 'Bg5 — the English Attack pin.',
+      say: "Bg5 — the main line, White's most aggressive try and the one you'll meet most often. The bishop eyes your f6-knight and threatens to take it, wrecking your kingside pawns. It also signals White's whole plan: castle long and throw the h- and g-pawns at your king. You must meet fire with a cool, prepared head.",
+      sayShort: 'Bg5 — the main line, eyeing f6.',
     }),
     b({
       id: 'e6', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6',
       highlights: [{ square: 'e6', color: KEY }, { square: 'e7', color: SOFT }],
-      say: "e6 — small and unflashy, and exactly right. You refuse to weaken your structure with anything loose, you open the door for the bishop to come to e7 and break the pin, and you keep the position compact. The Najdorf's discipline: don't panic at the pin, just solve it move by move.",
+      say: "e6 — small and unflashy, and exactly right. You refuse to weaken your structure with anything loose and you keep the position compact. Now the bishop does pin the f6-knight to the queen, and …Be7 next blocks that pin. The Najdorf's discipline: don't panic at the pin, just solve it move by move.",
       sayShort: 'e6 — refuse to weaken, prep Be7.',
     }),
     b({
@@ -193,7 +193,7 @@ export const PRO_NAR_NAJDORF_LESSON: LessonScript = {
       arrows: [{ from: 'c7', to: 'c3', color: ATK }],
       highlights: [{ square: 'c7', color: KEY }, { square: 'c3', color: SOFT }],
       say: "Qf3 lines White's queen up behind the coming storm; you answer Qc7. Look at where that queen points — straight down the half-open c-file at the c3-knight and toward the square White is about to castle into. That's the Najdorf's promise: the same file White wants to attack on is the file you already own. Your counterplay writes itself.",
-      sayShort: 'Qc7 — seize the open c-file.',
+      sayShort: 'Qc7 — seize the half-open c-file.',
     }),
     b({
       id: 'castle-long', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Be7 Qf3 Qc7 O-O-O',
@@ -204,7 +204,7 @@ export const PRO_NAR_NAJDORF_LESSON: LessonScript = {
     b({
       id: 'nbd7-g4-h6', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Be7 Qf3 Qc7 O-O-O Nbd7 g4 h6',
       highlights: [{ square: 'h6', color: KEY }, { square: 'g5', color: ATK }, { square: 'g4', color: SOFT }],
-      say: "You develop Nbd7, White launches g4 to start the storm, and you play the precise h6 — poking the bishop and forcing White to decide right now. Either it takes on f6 (doubling your pawns but handing you the open g-file to attack along) or it retreats to the rim on h4. Making the opponent commit on your terms is how you win the tempo battle.",
+      say: "You develop Nbd7, White launches g4 to start the storm, and you play the precise h6 — poking the bishop and forcing White to decide right now. Either it takes on f6 (doubling your pawns but handing you the half-open g-file to attack along) or it retreats to the rim on h4. Making the opponent commit on your terms is how you win the tempo battle.",
       sayShort: 'h6 — force the bishop to decide.',
     }),
     b({
@@ -275,7 +275,7 @@ export const PRO_NAR_KID_LESSON: LessonScript = {
       id: 're8', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8',
       arrows: [{ from: 'e8', to: 'e4', color: VIS }],
       highlights: [{ square: 'e8', color: KEY }, { square: 'e4', color: SOFT }],
-      say: "White recaptures on d4 with the knight, and you swing the rook to e8. Instantly it bears down the open e-file at White's e4-pawn — the head of the centre. Your pieces spring to life the moment the position opens; the passive-looking King's Indian setup was loaded all along.",
+      say: "White recaptures on d4 with the knight, and you swing the rook to e8. Instantly it bears down the half-open e-file at White's e4-pawn — the head of the centre. Your pieces spring to life the moment the position opens; the passive-looking King's Indian setup was loaded all along.",
       sayShort: 'Re8 — the rook hits e4.',
     }),
     b({
@@ -601,7 +601,7 @@ export const PRO_NAR_RUY_LESSON: LessonScript = {
       arrows: [{ from: 'a4', to: 'c6', color: ATK }],
       highlights: [{ square: 'a4', color: KEY }],
       say: "a6 asks the bishop the question, and you answer with Ba4 — the Morphy, the main line by a mile. You keep the bishop on the a4-e8 diagonal, still eyeing the c6-knight, and refuse to trade it off. Black's a6 wasn't a waste, but it committed a pawn; you've kept all your pressure and lost nothing.",
-      sayShort: 'Ba4 — keep the pin on c6.',
+      sayShort: 'Ba4 — keep the pressure on c6.',
     }),
     b({
       id: 'nf6', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6',

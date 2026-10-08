@@ -151,6 +151,24 @@ function pieceOn(chess: Chess, square: string, type: string): boolean {
 
 interface Check { re: RegExp; test: (chess: Chess, m: RegExpMatchArray) => boolean; why: (m: RegExpMatchArray) => string }
 
+function anyIsolatedD(chess: Chess): boolean { return fileIsolated(chess, 'd'); }
+
+function kingCastled(chess: Chess, color: Color): boolean {
+  for (const row of chess.board()) for (const sq of row) {
+    if (sq && sq.type === 'k' && sq.color === color) {
+      return color === 'w' ? ['g1', 'c1', 'b1', 'h1'].includes(sq.square) : ['g8', 'c8', 'b8', 'h8'].includes(sq.square);
+    }
+  }
+  return false;
+}
+
+const COUNT: Record<string, number> = { a: 1, an: 1, one: 1, two: 2, three: 3 };
+/** Material from `side`'s seat in pawns (minor 3, rook 5, queen 9). */
+function balanceFor(chess: Chess, side: Color): number {
+  const d = materialDiff(chess);
+  return side === 'w' ? d : -d;
+}
+
 const SQ = '([a-h][1-8])';
 const FILE = '([a-h])';
 
@@ -163,7 +181,34 @@ const CHECKS: Check[] = [
     test: (c, m) => isIsolatedAt(c, m[1]), why: (m) => `the pawn on ${m[1]} is not isolated (or not there)` },
   { re: new RegExp(`\\b${SQ}-pawn (?:is|stays|remains|becomes|now) (?:an? )?isolated\\b`, 'gi'),
     test: (c, m) => isIsolatedAt(c, m[1]), why: (m) => `the pawn on ${m[1]} is not isolated (or not there)` },
+  // IQP / isolani with no square named
+  { re: /\b(?:the |an |this )?(?:isolated queen'?s pawn|isolani|IQP)\b/gi,
+    test: (c) => anyIsolatedD(c), why: () => 'no isolated d-pawn on the board' },
+  { re: new RegExp(`\\bthe ${SQ}-pawn (?:is )?isolated\\b`, 'gi'),
+    test: (c, m) => isIsolatedAt(c, m[1]), why: (m) => `the pawn on ${m[1]} is not isolated (or not there)` },
   // doubled
+  { re: new RegExp(`\\bdoubled (?:white |black )?${FILE}-pawns?\\b`, 'gi'),
+    test: (c, m) => fileDoubled(c, m[1].toLowerCase()), why: (m) => `no doubled pawns on the ${m[1]}-file` },
+  { re: new RegExp(`\\bdoubled ${FILE}[1-8]-pawn\\b`, 'gi'),
+    test: (c, m) => fileDoubled(c, m[1].toLowerCase()), why: (m) => `no doubled pawns on the ${m[1]}-file` },
+  { re: new RegExp(`\\bdoubled [a-z]+ on the ${FILE}-file\\b`, 'gi'),
+    test: (c, m) => fileDoubled(c, m[1].toLowerCase()), why: (m) => `no doubled pawns on the ${m[1]}-file` },
+  // castling credited to a side
+  { re: /\b(White|Black) (?:now |then |calmly |finally )?castles\b/g,
+    test: (c, m) => kingCastled(c, m[1] === 'White' ? 'w' : 'b'), why: (m) => `${m[1]}'s king has not castled` },
+  { re: /\bBoth sides (?:have )?castle(?:d)?\b/g,
+    test: (c) => kingCastled(c, 'w') && kingCastled(c, 'b'), why: () => 'both kings have not castled' },
+  // pawn counts credited to a side
+  { re: /\b(White|Black) (?:is |stays |remains )?(?:still |now |nominally |clearly |simply )?(a|an|one|two|three) (?:clean |full |whole )?pawns? (up|down|ahead|behind)\b/g,
+    test: (c, m) => {
+      const n = COUNT[m[2].toLowerCase()]; const b = balanceFor(c, m[1] === 'White' ? 'w' : 'b');
+      const want = /up|ahead/.test(m[3]) ? n : -n;
+      return Math.abs(b - want) < 1;
+    },
+    why: (m) => `${m[1]} is not ${m[2]} pawn(s) ${m[3]}` },
+  { re: /\b(White|Black) (?:is |stays |remains )?(?:still |now )?(?:a |the )?(?:clean )?(?:exchange|piece) (up|down)\b/g,
+    test: (c, m) => { const b = balanceFor(c, m[1] === 'White' ? 'w' : 'b'); return m[2] === 'up' ? b >= 1 : b <= -1; },
+    why: (m) => `${m[1]} is not material ${m[2]}` },
   { re: new RegExp(`\\bdoubled ${FILE}-pawns\\b`, 'gi'),
     test: (c, m) => fileDoubled(c, m[1].toLowerCase()), why: (m) => `no doubled pawns on the ${m[1]}-file` },
   { re: new RegExp(`\\bdoubled pawns on the ${FILE}-file\\b`, 'gi'),
@@ -187,6 +232,11 @@ const CHECKS: Check[] = [
   { re: new RegExp(`\\bpins? the (knight|bishop|rook|queen|pawn) on ${SQ}\\b`, 'gi'),
     test: (c, m) => pieceOn(c, m[2], PIECE_LETTER[m[1].toLowerCase()]) && isPinnedAt(c, m[2]),
     why: (m) => `the ${m[1]} on ${m[2]} is not pinned` },
+  { re: new RegExp(`\\b(?:pinning|pins) the ${SQ}-(knight|bishop|rook|queen|pawn)\\b`, 'gi'),
+    test: (c, m) => pieceOn(c, m[1], PIECE_LETTER[m[2].toLowerCase()]) && isPinnedAt(c, m[1]),
+    why: (m) => `the ${m[2]} on ${m[1]} is not pinned` },
+  { re: new RegExp(`\\bthe pin on (?:the )?${SQ}\\b(?!'s)`, 'gi'),
+    test: (c, m) => isPinnedAt(c, m[1]), why: (m) => `nothing on ${m[1]} is pinned` },
   { re: new RegExp(`\\bthe ${SQ}-(knight|bishop|rook|queen|pawn) (?:is |stays |remains )?pinned\\b`, 'gi'),
     test: (c, m) => pieceOn(c, m[1], PIECE_LETTER[m[2].toLowerCase()]) && isPinnedAt(c, m[1]),
     why: (m) => `the ${m[2]} on ${m[1]} is not pinned` },
@@ -217,11 +267,27 @@ const CHECKS: Check[] = [
  *  sentence narrates (a beat recounts the last few moves, so "recaptures with
  *  the d7-knight" names a knight that has since moved). The window is the
  *  caller's to size; it never reaches past the line being spoken. */
+/** Words that put a claim in the future, a condition, a comparison or
+ *  another game ("will park the bishop on g7", "if Black takes, the doubled
+ *  pawns arrive", "the way it does in the Nf6 line"). Such a claim is not
+ *  about this board, so it is not judged against it. Looked for in the
+ *  clause before the claim (back to the last sentence or dash break). */
+const NOT_THIS_BOARD = /\b(?:will|would|if|once|after|later|preparing|prepares|prepare|to (?:plant|place|park|fianchetto)|park|looming|coming|arrive|arrives|either|compare|instead of|the way it does|original players|lets|could|can|threatens? to|aim|aiming to|heading|emerge|looming|gone|games|after a later|after the recapture|transposes|territory|structure|road|fight)\b/i;
+
+function clauseBefore(text: string, index: number): string {
+  const head = text.slice(0, index);
+  const cut = Math.max(head.lastIndexOf('. '), head.lastIndexOf('! '), head.lastIndexOf('? '), head.lastIndexOf('— '));
+  return head.slice(cut + 1);
+}
+
 export function checkBoardClaims(window: Chess[], text: string): BoardClaimViolation[] {
   const out: BoardClaimViolation[] = [];
   for (const chk of CHECKS) {
     for (const m of text.matchAll(chk.re)) {
       if (window.some((c) => chk.test(c, m))) continue;
+      const end = (m.index ?? 0) + m[0].length;
+      const after = text.slice(end, end + 50).split(/[.!?—;(]/)[0];
+      if (NOT_THIS_BOARD.test(clauseBefore(text, m.index ?? 0) + ' ' + m[0] + after)) continue;
       out.push({ claim: m[0], why: chk.why(m) });
     }
   }

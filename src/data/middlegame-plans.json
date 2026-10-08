@@ -44,7 +44,7 @@
      "a3 questions the b4-bishop.",
      "…Bxd2+ trades the bishop off, removing a defender and clearing the way to castle.",
      "Qxd2 recaptures.",
-     "…O-O-O! the king tucks to c8 and the rook swings to the open d-file, right behind the d4-wedge — rook and pawn pressing deep into White's position.",
+     "…O-O-O! the king tucks to c8 and the rook swings to the half-open d-file, right behind the d4-wedge — rook and pawn pressing deep into White's position.",
      "",
      "…Nh6 — developing the knight toward f5 or g4, eyeing the kingside; Black finishes mobilising before striking.",
      "",
@@ -493,7 +493,7 @@
     ],
     "annotations": [
      "Nc3 defends the d4-c4 centre and eyes d5.",
-     "…Bg4 pins the f3-knight, leaning on the d4-pawn behind it.",
+     "…Bg4 hits the f3-knight, the defender of the d4-pawn.",
      "b3 props up the c4-pawn and frees the c1-bishop.",
      "…Bf6 swings onto the long diagonal, doubling the pressure on d4 — Black is fully active and the centre is under siege.",
      "Be3 — White develops and bolsters the d4-pawn.",
@@ -2916,10 +2916,10 @@
     "annotations": [
      "Kh1 tucks the king.",
      "…exd4 opens the centre.",
-     "cxd4 leaves White an isolated d-pawn to defend.",
+     "cxd4 leaves White's d4- and e4-pawns to defend.",
      "…Bb4 pins and pressures.",
      "Nh4 heads for f5.",
-     "…Rae8 takes the open e-file.",
+     "…Rae8 takes the half-open e-file.",
      "e5 — White advances to gain space.",
      "…c5! the break hits White’s centre and Black’s pieces spring to full activity. Balanced, double-edged."
     ],
@@ -3034,7 +3034,7 @@
     "learnCues": [
      "Kh1 — tuck the king",
      "…exd4 — open the centre",
-     "cxd4 — White gets an IQP",
+     "cxd4 — White's centre is a target",
      "…Bb4 — pin",
      "Nh4 — head for f5",
      "…Rae8 — take the e-file",
@@ -4904,7 +4904,7 @@
      "b3 — prop c4",
      "Na6 — toward c5, active play",
      "Ng5 — White prods the bishop",
-     "Bc8 — keep the bishop pair",
+     "Bc8 — keep both bishops",
      "Bb2 — long diagonal",
      "Qe7 — connect rooks, prep breaks",
      "Qc2 — contest e4",
@@ -5240,7 +5240,7 @@
      "d3 — quietly underpinning e4 and c4 so the expansion needs no pieces left behind to babysit the centre.",
      "…a5 — striking at b4 to try to freeze the expansion before it gathers speed.",
      "b5 — the lever lands: the pawn jabs at c6, prising open the queenside exactly where White already presses.",
-     "…Nd4 — Black centralizes the knight for activity, but White's queenside initiative rolls on down the half-open b-file."
+     "…Nd4 — Black centralizes the knight for activity, but White's queenside initiative rolls on with the b5-pawn."
     ],
     "sources": [
      "concept:pos-center",
@@ -5782,7 +5782,7 @@
      "…a6 — Black makes queenside luft with a6.",
      "Bd2 — White develops the dark-squared bishop to d2.",
      "…Rb8 — Black prepares ...b5.",
-     "Rac1 — White seizes the open c-file.",
+     "Rac1 — White seizes the half-open c-file.",
      "…Bf5 — Black develops the bishop to f5.",
      "White grabs the centre with e4, gaining space and kicking the f5-bishop. With the broad pawn front and the bishop on g2 raking the long diagonal, White's reversed-Sicilian setup turns its extra tempo into a genuine pull.",
      "…Bd7 retreats the bishop. White has built the ideal Symmetrical-English structure — pawns on c4 and e4, pressure on the long diagonal, and the easier game on both wings."
@@ -6250,12 +6250,12 @@
     "annotations": [
      "d4 — White builds the big pawn centre.",
      "…Na5 — Black trades off the c4-bishop.",
-     "Be2 — White keeps the bishop pair tension.",
+     "Be2 — White keeps both bishops.",
      "…d6 — Black blunts the centre.",
      "Qa4+ — the check sets up regaining the pawn.",
      "…c6 — Black blocks the check.",
      "White opens the centre with dxe5, the most-played try against Lasker's solid defence — challenging Black's setup before the knight on a5 returns to the game.",
-     "…dxe5 recaptures, and the queens come near a trade. Lasker's antidote has neutralised the gambit's fire, but White retains the bishop pair and a small lead in development to press — the principled way to meet the Evans without falling into the attack."
+     "…dxe5 recaptures, and the queens come near a trade. Lasker's antidote has neutralised the gambit's fire, but White retains both bishops and a small lead in development to press — the principled way to meet the Evans without falling into the attack."
     ],
     "sources": [
      "book:evans-gambit",
@@ -6721,7 +6721,7 @@
      "Ne7"
     ],
     "annotations": [
-     "Bb5 pins the c6-knight, the Spanish Four Knights setup aiming for a slight, lasting pull.",
+     "Bb5 hits the c6-knight, the Spanish Four Knights setup aiming for a slight, lasting pull.",
      "…Bb4 mirrors, the symmetrical Metger response.",
      "White castles.",
      "…O-O — Black castles too, the position perfectly symmetrical.",
@@ -7887,7 +7887,7 @@
      "…g6 blunts the queen and shores up the kingside dark squares.",
      "White questions the b4-bishop with a3.",
      "…Bxc3+! Black trades to shatter White's queenside pawns — the structural damage is permanent.",
-     "White recaptures, accepting doubled, isolated c-pawns.",
+     "White recaptures, accepting doubled c-pawns.",
      "…Nxc3! The knight grabs a pawn and shatters White's queenside, exploiting the wrecked structure. Black emerges a pawn up with White's ruined queenside as a lasting target — Nakamura's precise punishment of Gashimov."
     ],
     "arrows": [
@@ -8462,7 +8462,7 @@
      "Kb8"
     ],
     "annotations": [
-     "White contests the open g-file with Rg1, trying to blunt the rook on g8.",
+     "White contests the half-open g-file with Rg1, trying to blunt the rook on g8.",
      "Black plants the knight on f5 — the dream square, hitting d4 and the dark squares around White, impossible to chase with a pawn.",
      "White untangles with Qf2, eyeing the f-file and the kingside.",
      "Black centralises with …Qc6, raking the long light diagonal toward g2 and supporting the passed c3-pawn — every piece now points at White.",
@@ -8473,7 +8473,7 @@
      "Rb3 — attacking the c3-pawn a second time; White is determined to win it.",
      "…O-O-O — castling long lands the rook on the open files and tucks the king behind its pawns; every piece in Black's plan is now home.",
      "Rxc3 — White finally collects the passer, but only after Black has activated every piece.",
-     "…Kb8 — the king tucks away; level material, but the open g-file, the centralized queen and the active rooks keep Black pressing."
+     "…Kb8 — the king tucks away; two pawns down, but the half-open g-file, the centralized queen and the active rooks keep Black pressing."
     ],
     "title": "The c3-Passer Attack",
     "arrows": [
@@ -10237,7 +10237,7 @@
      "…Bh3 forks the rook on f1, the critical counter.",
      "gxf4 dissolves the chain and rips the f-file open.",
      "…Bxf1 grabs the exchange on f1.",
-     "Qxf1 recaptures; for the exchange White owns the open f-file and the bare squares around f7.",
+     "Qxf1 recaptures; for the exchange White owns the bare squares around f7.",
      "…gxf4 wins the pawn back, but every White piece now swarms the f-file toward f7."
     ],
     "arrows": [
@@ -10408,7 +10408,7 @@
      "Bh3 — fork the f1-rook",
      "gxf4 — rip open the f-file",
      "Bxf1 — grab the exchange",
-     "Qxf1 — own the open f-file",
+     "Qxf1 — aim at f7",
      "gxf4 — but White swarms f7"
     ]
    }
@@ -11911,7 +11911,7 @@
     "annotations": [
      "e4 — White grabs space and challenges the d5-knight.",
      "…Nb6 — the knight reroutes toward the c4 outpost, in front of White’s weak c3-pawn.",
-     "Be3 — White develops, but the doubled c-pawns remain a long-term weakness.",
+     "Be3 — White develops, but the c3-pawn remains a long-term weakness.",
      "…Qh5 — the queen swings to an active post; with the sounder structure Black presses on both wings."
     ],
     "arrows": [
@@ -12875,7 +12875,7 @@
      "b5"
     ],
     "annotations": [
-     "Re1 centralises the rook on the half-open e-file; White must still nurse the doubled c-pawns.",
+     "Re1 centralises the rook on the open e-file; White must still nurse the doubled c-pawns.",
      "…Nxc4 — the knight leaps to the c4 outpost, immune to any pawn and glaring at the a3-pawn and the soft queenside.",
      "Bc1 tucks the bishop back to defend the queenside.",
      "…b5 clamps the queenside and locks the knight onto c4 — Black presses the one weakness on the board while White has none to target."
@@ -12991,7 +12991,7 @@
     ],
     "annotations": [
      "exd5 opens the centre, hoping to expose Black before development is complete.",
-     "…cxd5 recaptures toward the centre — Black accepts a free, active isolated d-pawn with open lines for every piece.",
+     "…cxd5 recaptures toward the centre — Black accepts a free, active pawn centre on d5 and e5 with open lines for every piece.",
      "dxe5 snatches the e5-pawn.",
      "…Nxe5 — the Hanham knight finally springs to its dream square in the centre, hitting the c4-bishop and dominating the board. The cramped Philidor has become a free, active middlegame where Black is at least equal."
     ],
@@ -14612,7 +14612,7 @@
      "…O-O — Black finally castles into safety.",
      "Nb3 — rerouting the knight toward the c5- and a5-outposts.",
      "…Rac8 — Black contests the c-file.",
-     "Rc3 — a rook lift, building heavy pressure on the half-open c-file.",
+     "Rc3 — a rook lift, building heavy pressure on the open c-file.",
      "…Rc6 — Black blockades; the game is balanced, with White’s e5-wedge the long-term trump."
     ],
     "learnCues": [
@@ -15608,7 +15608,7 @@
      "Re8"
     ],
     "annotations": [
-     "Rc1 — the open c-file, claimed first.",
+     "Rc1 — the half-open c-file, claimed first.",
      "…a5 — Black gains queenside space before deciding anything.",
      "Ne4 — the IQP's outrider: the knight takes the central post the pawn's presence pays for.",
      "…Bg4 — Black develops with the pin-shaped stare at f3.",
@@ -16085,7 +16085,7 @@
      "Raf1 — White doubles on the f-file.",
      "…Bd7 — Black develops, connecting.",
      "Qb4 — White probes the queenside.",
-     "…b6 — Black solidifies, a pawn up in a balanced game."
+     "…b6 — Black solidifies; material is level and the game balanced."
     ],
     "learnCues": [
      "Be3 — develop",
@@ -16095,7 +16095,7 @@
      "Raf1 — double up",
      "Bd7 — connect",
      "Qb4 — probe",
-     "b6 — Black is a pawn up"
+     "b6 — level material, balanced game"
     ],
     "arrows": [
      [],
@@ -16371,7 +16371,7 @@
      "f3 — White solidifies.",
      "…Re7 — Black doubles on the e-file.",
      "Bf5 — White’s bishop eyes the kingside.",
-     "…Rae8 — Black doubles the rooks on the open e-file; comfortable equality."
+     "…Rae8 — Black doubles the rooks on the half-open e-file; comfortable equality."
     ],
     "learnCues": [
      "Rxe2 — recapture",
@@ -17466,7 +17466,7 @@
     ],
     "annotations": [
      "Bxf4! — capture the knight with the bishop. You give up your dark-square bishop but win the centralised knight, breaking Black's piece coordination.",
-     "Black plays …gxf4 — forced recapture with the pawn. Now Black has doubled+isolated f-pawns and weakened the kingside structure.",
+     "Black plays …gxf4 — forced recapture with the pawn. Now Black has doubled f-pawns and weakened the kingside structure.",
      "Nd3 — the knight reroutes from e1 to d3 attacking the doubled pawn AND eyeing future Nb4 outposts. Slow technique pays off in the endgame.",
      "Black plays …Ra2 swinging the rook to the a-file trying to create activity. The rook attacks your a-pawn but it's just defended.",
      "Bb5 — slide the bishop from a6 to b5, defending the a4-pawn and preparing future trades. Quiet maneuvering converts the endgame slowly.",
@@ -18151,7 +18151,7 @@
      "…b6 — Black fianchettoes.",
      "Nxd5 — White trades the knights.",
      "…Qxd5 — Black recaptures.",
-     "Re1 — White takes the open e-file.",
+     "Re1 — White takes the half-open e-file.",
      "…Re8 — Black contests, but White is clearly on top."
     ],
     "learnCues": [
@@ -21113,7 +21113,7 @@
     "annotations": [
      "…Qc7 — the queen steps off the back rank, eyeing the c-file and freeing the rooks.",
      "Bg5 — White develops with pressure on the f6-knight.",
-     "…Rc8 — the rook claims the half-open c-file behind the queen.",
+     "…Rc8 — the rook claims the open c-file behind the queen.",
      "Rac1 — White contests the same file.",
      "…Bc5 — the bishop takes the c5 outpost, raking the centre; Black is comfortable."
     ],
@@ -22991,7 +22991,7 @@
      "",
      "",
      "",
-     "The Breyer's calling card — the knight retreats all the way home, to reroute through d7 and free the b7-bishop's long diagonal.",
+     "The Breyer's calling card — the knight retreats all the way home, to reroute through d7 and free the long diagonal for the bishop on its way to b7.",
      "",
      "",
      "",
@@ -26202,7 +26202,7 @@
      "d3 shores up the centre and frees the c1-bishop.",
      "…O-O-O castles long, rooks ready on the central files.",
      "Nbd2 completes White's development.",
-     "…Bg4 pins the f3-knight, keeping White tangled — the initiative lives on."
+     "…Bg4 hits the f3-knight, keeping White tangled — the initiative lives on."
     ],
     "learnCues": [
      "…Nc6 — develop with tempo",
@@ -26703,7 +26703,7 @@
     ],
     "annotations": [
      "White castles short.",
-     "…O-O-O castles long, the rook landing on the open d-file behind the flexible …Qd6 queen.",
+     "…O-O-O castles long, the rook landing on the half-open d-file behind the flexible …Qd6 queen.",
      "d5 chases the c6-knight and grabs space.",
      "…Ne5 centralises on a powerful square, hitting f3 and c4, while the rook already sits on the half-open d-file behind White's advanced d5-pawn. Black has active, fully-equal play and a ready-made target — the over-extended d5-pawn.",
      "Bf4 — White develops, eyeing c7 and d6.",
@@ -26947,7 +26947,7 @@
      "Qe2 defends and pressures the e4-pawn.",
      "…Nf6 develops with tempo, guarding the e4-pawn and eyeing the centre.",
      "Nxa7+ snatches a second pawn — but the knight lands offside on the rim.",
-     "…Bd7 develops, and the offside a7-knight becomes a target to round up. There is the Schliemann’s compensation: the bishop pair, the open f-file for the rook, a lead in development, and a rim-stuck knight — full activity for the pawns.",
+     "…Bd7 develops, and the offside a7-knight becomes a target to round up. There is the Schliemann’s compensation: active bishops, the half-open f-file for the rook, a lead in development, and a rim-stuck knight — full activity for the pawns.",
      "Bxd7+ — White trades to relieve the pressure.",
      "…Nxd7 — recapturing and developing; White’s a7-knight is still stranded offside.",
      "f4 — White lashes out in the centre.",
@@ -27654,7 +27654,7 @@
      "dxc5 — doubled c-pawns",
      "f4 — kingside space, prep f5",
      "Be6 — develop, offer a trade",
-     "Bb5 — pin the c6-knight",
+     "Bb5 — hit the c6-knight",
      "Rad8 — centralise; better structure"
     ]
    }
@@ -27878,7 +27878,7 @@
      "…Kd8 forced — Black forfeits castling, the king stuck in the centre.",
      "O-O White calmly castles, ahead in development.",
      "…Nf6 Black tries to develop and cover.",
-     "Rb1 seizes the open b-file, eyeing b7; White's lead tells."
+     "Rb1 seizes the half-open b-file, eyeing b7; White's lead tells."
     ],
     "learnCues": [
      "…Qxe4 — grab the pawn",
@@ -28627,7 +28627,7 @@
      "Qe2 connects toward queenside castling.",
      "…O-O Black castles short, away from White's coming attack.",
      "O-O-O White commits the king to the queenside.",
-     "…Qa5 the queen swings out, pinning the c3-knight and aiming at the white king.",
+     "…Qa5 the queen swings out, eyeing the c3-knight and aiming at the white king.",
      "f4 White grabs kingside space.",
      "…Bg4 harasses the e2-queen and feeds Black's queenside initiative."
     ],
@@ -29239,7 +29239,7 @@
      "Kb1 — White tucks the king and waits.",
      "Nc4 — Black switches the attack to the queenside.",
      "Bxc4 — White trades the strong knight.",
-     "Rxc4 — the rook pours down the open c-file.",
+     "Rxc4 — the rook pours down the half-open c-file.",
      "Nb3 — White retreats the knight, avoiding trades and eyeing a5 and c5.",
      "…Qc7 — the queen lifts onto the c-file behind the rook, the Soltis queenside pressure mounting.",
      "Bd4 — White offers to trade the dark bishops, Black’s strong Dragon bishop.",
@@ -29913,8 +29913,8 @@
     "annotations": [
      "a5 — White clamps the queenside, fixing the dark squares and eyeing the b6-hole.",
      "…b6 — Black strikes back at the a5-pawn, refusing the cramp and freeing the c8-bishop's path.",
-     "axb6 — White takes, but it hands Black the open b-file and a clear queenside target.",
-     "…Bb7 — the bishop swings to the long diagonal, pressing e4 while the rook eyes the open b-file."
+     "axb6 — White takes, but it hands Black the half-open b-file and a clear queenside target.",
+     "…Bb7 — the bishop swings to the long diagonal, pressing e4 while the rook eyes the half-open b-file."
     ],
     "arrows": [
      [],
@@ -30404,7 +30404,7 @@
      "Nd5 — White jumps the knight in rather than retreat.",
      "Bxd5 — Black trades it off.",
      "exd5 — and the b-file stands open at White's king.",
-     "…Nb6 swings the knight to hit the d5-pawn and eye the c4-square, while the open b-file already points at White's king. Black's queenside attack flows naturally — the Najdorf's pawn-storm-plus-piece-pressure in full swing."
+     "…Nb6 swings the knight to hit the d5-pawn and eye the c4-square, while the b4-pawn already points at White's king. Black's queenside attack flows naturally — the Najdorf's pawn-storm-plus-piece-pressure in full swing."
     ],
     "arrows": [
      [],
@@ -31863,7 +31863,7 @@
      "Rb1 — the souvenir claimed: the half-open file growls at the b6-queen that opened it.",
      "…Qd8 — she goes all the way home; the adventure is officially over.",
      "Ne2 — the last knight develops toward f4 and the kingside.",
-     "…Nd7 — Black untangles. A fifth of a pawn with the bishop pair, the b-file, and a king still in the centre across the board — the Raptor's chaos, filed and paid."
+     "…Nd7 — Black untangles. A fifth of a pawn with active bishops, the b-file, and a king still in the centre across the board — the Raptor's chaos, filed and paid."
     ],
     "learnCues": [
      "Nxd5 — take it apart",
@@ -33133,7 +33133,7 @@
      "Nb5 — White’s knight probes b5.",
      "…Nxb5 — Black trades it off.",
      "cxb5 — White recaptures.",
-     "…Rad8 — Black takes the open d-file; comfortable equality."
+     "…Rad8 — Black takes the half-open d-file; comfortable equality."
     ],
     "learnCues": [
      "Kh1 — tuck the king",
@@ -41929,7 +41929,7 @@
     ],
     "annotations": [
      "f4 — White prepares the kingside pawn structure for the f5+e6 break.",
-     "...Ra8! — KEY ROUTE: Black's rook activates on the open a-file, ready to slip behind.",
+     "...Ra8! — KEY ROUTE: Black's rook activates on the half-open a-file, ready to slip behind.",
      "Bc4 — White's bishop tries to challenge.",
      "...Ra3+! — KEY SQUARE a3. The rook check forces the king off its post AND threatens the back rank.",
      "Ke4 — White's king runs to the centre, looking for activity.",
@@ -45850,7 +45850,7 @@
      "…Bd7 — the bishop retreats from the coming exchanges.",
      "Qe1 — the queen steps off the d-file and eyes the kingside dark squares.",
      "…Qe7 — Black mirrors, connecting the rooks.",
-     "Rd1 — and the d-file belongs to White. Dead level on the engine — with the open f-file, the d-file rook, and the d4-guest still needing an eviction notice, the initiative reads White in every line that matters."
+     "Rd1 — and the d-file belongs to White. Dead level on the engine — with the half-open f-file, the d-file rook, and the d4-guest still needing an eviction notice, the initiative reads White in every line that matters."
     ],
     "learnCues": [
      "Be6 — the challenge",
@@ -48947,94 +48947,123 @@
  {
   "id": "mp-progothamchess-stafford-e5space",
   "openingId": "pro-gothamchess-stafford-refute",
-  "criticalPositionFen": "r1bqkb1r/ppp2ppp/2p1n3/4P3/8/3PB3/PPPN1PPP/R2QKB1R b KQkq - 4 8",
-  "title": "Stafford 5.e5 — the wedge cashes on the f-file",
-  "overview": "The 5.e5 refutation at its handover point: the knight chased through e4 and c5 to e6, White's pieces developed around the wedge. The finish is a study in one file — when Black trades on e3, the f-pawn recaptures and the f-file becomes the game; the queen swings to h5 eyeing f7, and Black's freeing …f6 try opens his own king instead. The engine reads nearly plus two: the Stafford's second refutation, cashed.",
+  "criticalPositionFen": "r3kb1r/ppp2ppp/2p1b3/4P3/3Pn2q/2P2Q2/PP3PPP/RNB1KB1R b KQkq - 0 8",
+  "title": "Stafford 5.e5 — short of squares for the e4-knight",
+  "overview": "The 5.e5 refutation at its handover point: d4 took c5 away, Qf3 guarded f2, and White is a clean pawn up. Black props the e4-knight with …f5, but it is running short of safe squares: d4 covers c5, the e5-pawn covers d6 and f6. White chases Black's queen with Be2, then f3 kicks the knight; Black grabs g2 for activity, but the engine still keeps White about a pawn and a half better.",
   "pawnBreaks": [
    {
-    "move": "fxe3 — recapture INTO the file",
-    "explanation": "The pawn recapture opens the f-file toward the king Black is about to castle.",
-    "fen": ""
-   },
-   {
-    "move": "exf6 — the wedge cashes",
-    "explanation": "Black's freeing try becomes the lever that opens his own king.",
+    "move": "f3 — kick the e4-knight",
+    "explanation": "With c5, d6 and f6 all covered, f3 leaves the knight short of safe squares.",
     "fen": ""
    }
   ],
   "pieceManeuvers": [
    {
-    "piece": "Queen",
-    "route": "d1 → e2 → h5 — the f7 swing",
-    "explanation": "The queen props e3 first, then swings to h5 where f7 feels the open file's whole future."
+    "piece": "Bishop",
+    "route": "f1 → e2 — develop with tempo on h5",
+    "explanation": "Be2 develops and chases the black queen off h5 before f3."
    }
   ],
   "strategicThemes": [
-   "Recapture toward the open file when the enemy king lives there.",
-   "The e5 wedge is both cramp and lever — it cashes the moment …f6 comes.",
-   "Plus two by move twelve: the gambit's second refutation is as clean as the first."
+   "Take squares away from an advanced knight before you attack it.",
+   "Guard f2 first: in the Stafford every Black idea aims there.",
+   "A clean extra pawn plus the e5-wedge: keep pieces on and convert."
   ],
   "endgameTransitions": [
-   "Up a pawn with the f-file: every trade simplifies toward a won rook ending."
+   "Up a pawn with Black's pieces loose: trades simplify toward a won ending."
   ],
   "playableLines": [
    {
-    "fen": "r1bqkb1r/ppp2ppp/2p1n3/4P3/8/3PB3/PPPN1PPP/R2QKB1R b KQkq - 4 8",
+    "fen": "r3kb1r/ppp2ppp/2p1b3/4P3/3Pn2q/2P2Q2/PP3PPP/RNB1KB1R b KQkq - 0 8",
     "moves": [
-     "Bc5",
-     "Qe2",
-     "Bxe3",
-     "fxe3",
-     "O-O",
+     "f5",
+     "Qf4",
      "Qh5",
-     "f6",
-     "exf6"
+     "Be2",
+     "Qg6",
+     "f3",
+     "Qxg2",
+     "Rf1"
     ],
     "annotations": [
-     "…Bc5 — Black finally develops, hitting your e3-bishop.",
-     "Qe2 — propped; the queen defends e3 and connects everything.",
-     "…Bxe3 — the trade comes —",
-     "fxe3 — and the recapture is the point: the f-pawn steps aside and the f-file opens toward Black's castling square.",
-     "…O-O — the king arrives on the file anyway; there was nowhere better.",
-     "Qh5 — the swing: the queen eyes f7 through the empty g6, and every white heavy piece knows the address.",
-     "…f6 — the freeing try, one structure too late —",
-     "exf6 — the wedge cashes, opening lines at the king that just moved in. Nearly plus two on the engine: the Stafford's 5.e5 refutation, complete with the extra pawn still in hand."
+     "…f5 — Black props the e4-knight with a pawn.",
+     "Qf4 — the queen steps up, covering g5 and g3 and eyeing the f5-pawn.",
+     "…Qh5 — Black's queen stays active on the kingside.",
+     "Be2 — develop with tempo: the bishop hits the queen on h5.",
+     "…Qg6 — the queen steps aside.",
+     "f3 — the point: the e4-knight is attacked, and c5, d6, f6, g5 and g3 are all covered.",
+     "…Qxg2 — Black grabs the g2-pawn and hits the h1-rook instead of saving the knight.",
+     "Rf1 — the rook steps away, and the e4-knight is still short of safe squares. The engine keeps White about a pawn and a half better."
     ],
     "learnCues": [
-     "Bc5 — at last, a piece",
-     "Qe2 — propped",
-     "Bxe3 — the trade",
-     "fxe3 — the file opens",
-     "O-O — nowhere better",
-     "Qh5 — the swing",
-     "f6 — too late",
-     "exf6 — the wedge cashes"
+     "…f5 — prop the knight",
+     "Qf4 — cover g5 and g3",
+     "…Qh5 — stay active",
+     "Be2 — hit the queen",
+     "…Qg6 — step aside",
+     "f3 — kick the knight",
+     "…Qxg2 — grab a pawn",
+     "Rf1 — knight still stuck"
     ],
     "arrows": [
      [],
-     [],
-     [],
-     [],
-     [],
      [
       {
-       "from": "h5",
-       "to": "f7",
+       "from": "f4",
+       "to": "f5",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
      [],
+     [
+      {
+       "from": "e2",
+       "to": "h5",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [],
+     [
+      {
+       "from": "f3",
+       "to": "e4",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
+     [
+      {
+       "from": "g2",
+       "to": "h1",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
      []
     ],
     "highlights": [
      [
       {
-       "square": "c5",
+       "square": "f5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "f4",
        "color": "rgba(255, 165, 0, 0.55)"
       },
       {
-       "square": "e3",
+       "square": "g5",
        "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "g3",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "h5",
+       "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
@@ -49043,52 +49072,48 @@
        "color": "rgba(255, 165, 0, 0.55)"
       },
       {
-       "square": "e3",
-       "color": "rgba(250, 204, 21, 0.5)"
-      }
-     ],
-     [
-      {
-       "square": "e3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
        "square": "h5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f7",
        "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
       {
-       "square": "f6",
+       "square": "g6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "f3",
        "color": "rgba(255, 165, 0, 0.55)"
       },
       {
-       "square": "e5",
+       "square": "e4",
+       "color": "rgba(250, 204, 21, 0.5)"
+      },
+      {
+       "square": "c5",
        "color": "rgba(250, 204, 21, 0.5)"
       }
      ],
      [
       {
-       "square": "f6",
+       "square": "g2",
        "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "h1",
+       "color": "rgba(250, 204, 21, 0.5)"
+      }
+     ],
+     [
+      {
+       "square": "f1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "e4",
+       "color": "rgba(250, 204, 21, 0.5)"
       }
      ]
     ],
@@ -52647,7 +52672,7 @@
      "…Re5 attacks the weak f5-pawn at once — the rook hits it from the side, the textbook way to win a pawn.",
      "White checks with Rd8+ to gain time.",
      "…Ke7 — the king strolls toward the centre, unbothered.",
-     "White's rook swings to the open a-file.",
+     "White's rook swings to a8, deep in Black's camp.",
      "…a6 shores up the queenside pawns so the rook can't snack on them.",
      "White tries Bc4, eyeing f7.",
      "…Rxf5 collects the weak pawn — Black is up a clean pawn, and the conversion begins.",
@@ -53373,7 +53398,7 @@
      "Black scrambles for rook activity.",
      "A check from d5 buys another tempo.",
      "The king runs to f6.",
-     "And b7 falls. White is up material with the bishop pair into a winning ending — the Evans development edge, paid in full."
+     "And b7 falls. White is up material into a winning ending — the Evans development edge, paid in full."
     ],
     "arrows": [
      [],
@@ -54275,7 +54300,7 @@
     "annotations": [
      "Nd4 offers the knight trade in the centre, clearing the way to plant the queen on d4.",
      "…Nxd4 accepts — Black is happy to swap a pair of knights and ease the cramp.",
-     "Qxd4 recaptures and centralises the queen on d4, raking the long diagonal and the open d-file.",
+     "Qxd4 recaptures and centralises the queen on d4, raking the long diagonal and the half-open d-file.",
      "…Bb7 contests the long diagonal and develops the last minor piece.",
      "f4! the thematic break — White grabs kingside space and readies f5 to pry at e6 and the black king.",
      "…Rc8 contests the c-file before White can claim it.",
@@ -55106,7 +55131,7 @@
      "Black strikes back at the e5-pawn, the head of White's chain.",
      "The rook swings to c3, eyeing c6 and keeping its options.",
      "Black's bishop returns to defend.",
-     "Rb3 leans on the b5-rook and the open b-file.",
+     "Rb3 leans on the b5-rook.",
      "Black grabs e5, but White's active rooks and the central pawns keep the balance with the far easier game."
     ],
     "arrows": [
@@ -55693,7 +55718,7 @@
      "Be3 develops and pressures the c5-knight.",
      "…Bd7 develops the light bishop, connecting the rooks and eyeing the queenside.",
      "Nd2 reroutes toward c4 and the queenside light squares.",
-     "…Rec8 contests the half-open c-file, where Black's pressure will build.",
+     "…Rec8 contests the open c-file, where Black's pressure will build.",
      "Bf1 redeploys the bishop to defend the queenside light squares.",
      "…Qd8 unpins and steps off the b-file, keeping the queen flexible for the c-file play."
     ],
@@ -55911,7 +55936,7 @@
      "Nxd4 recaptures, centralising the knight.",
      "…Nxd4 trades the centralised knight.",
      "Qxd4 recaptures with the queen.",
-     "…Rc8 swings the rook to the half-open c-file, pressuring c2.",
+     "…Rc8 swings the rook to the open c-file, pressuring c2.",
      "Bb3 redeploys the bishop off the exposed c-file.",
      "…d5 — the freeing break at last, liberating the pieces and opening the centre with full equality.",
      "e5 grabs space but Black's pieces are active and the position is balanced."
@@ -56226,7 +56251,7 @@
      "Rf1 reconnects the rook to the kingside.",
      "…Rc8 swings the rook to the open c-file, the long-diagonal bishop already pressing.",
      "h3 questions the active queen.",
-     "…Qd7 retreats to safety, Black a clean pawn up with the bishop on the long diagonal."
+     "…Qd7 retreats to safety; material is level, and Black's bishop bears down the long diagonal at d4."
     ],
     "learnCues": [
      "Kg1 — king to the corner.",
@@ -56541,7 +56566,7 @@
      "Rfc1 contests the c-file.",
      "…Rac8 brings the second rook toward the open lines.",
      "Ne1 reroutes toward d3.",
-     "…Bb4 activates the bishop, pressuring the d2-knight; Black's pieces are fully active and equal."
+     "…Bb4 activates the bishop, pressuring the e1-knight; Black's pieces are fully active and equal."
     ],
     "learnCues": [
      "Nc4 — White centralises.",
@@ -58167,18 +58192,18 @@
     "annotations": [
      "White develops the queen to e2 to connect the rooks and prepare to castle out of the danger — but it is already too late on the kingside.",
      "Black brings the light bishop to e6, completing development along the diagonal the early dxc6 opened up, and eyeing White's queenside.",
-     "Black castles long — the king tucks away on the queenside and, crucially, the a8-rook is now ready to follow its partner toward the white king.",
-     "The rook invades on h2, snatching a pawn and parking on the second rank right next to White's king.",
+     "White castles long, getting the king away from the kingside storm — but the h-file stays open for Black's rook.",
+     "The rook invades on h2, snatching a pawn and landing on White's second rank.",
      "White lashes out in the centre with d4, but it does nothing to stop the h-file invasion.",
-     "Rxh1 wins the exchange and leaves Black materially ahead with the initiative intact — the open h-file decided it, exactly as it did against a 2787."
+     "…Rxh1 trades a pair of rooks; after Rxh1 material is level and White, with the centre and the h-file, is slightly better — Black has to defend accurately from here."
     ],
     "learnCues": [
      "Qe2 — White connects, tries to castle",
      "…Be6 — the bishop joins in",
-     "…O-O-O — second rook toward the king",
+     "O-O-O — White's king runs queenside",
      "…Rxh2 — invade the open file",
      "d4 — too slow to matter",
-     "…Rxh1 — win the exchange"
+     "…Rxh1 — trade rooks, level material"
     ],
     "arrows": [
      [],
@@ -62082,7 +62107,7 @@
      "Nh3+"
     ],
     "annotations": [
-     "Rae1 brings the second rook to the open e-file — the first principle of rook endings is to get both rooks active.",
+     "Rae1 brings the second rook to the half-open e-file — the first principle of rook endings is to get both rooks active.",
      "Black tries to activate the knight.",
      "Re2 doubles the rooks and seizes the second rank, the most active post for a rook in the ending.",
      "Black contests with a rook to d6.",
@@ -62287,7 +62312,7 @@
      "White finishes developing with e3.",
      "Black castles — king safe, rook ready for the e-file.",
      "White develops the bishop.",
-     "…Re8 seizes the open e-file, pinning White's pieces toward the king and supporting the knight.",
+     "…Re8 lines up on the half-open e-file behind the queen and supports the knight.",
      "White castles.",
      "…d6 solidifies the e5-knight's outpost. Black has the more active army for the price of nothing — and the …Nd3 fork is always in the air."
     ],
@@ -63375,7 +63400,7 @@
      "c6"
     ],
     "annotations": [
-     "White develops Bg5, pinning the f6-knight.",
+     "White develops Bg5, pressing the f6-knight.",
      "Black castles into safety.",
      "White centralises the queen to e2.",
      "…Nb4! The knight jumps in, eyeing the c2 and d3 squares and provoking White.",
@@ -63478,7 +63503,7 @@
      "a5 clamps the queenside and fixes a long-term weakness on a6.",
      "Black props the centre.",
      "c3 supports d4 and gives the b3-bishop a retreat.",
-     "Black activates the rook on the half-open b-file.",
+     "Black activates the rook on b8, behind the b4-pawn.",
      "h3 makes luft and prevents any …Bg4 pin before White expands.",
      "Black doubles pressure but White has the space and the cleaner plan."
     ],
@@ -66061,7 +66086,7 @@
   "openingId": "pro-caruana-italian",
   "criticalPositionFen": "6k1/1p3pp1/p1p2nnp/P3p3/1PN1P3/2Pr2PP/3N1P1K/4R3 w - - 0 29",
   "title": "Italian ENDGAME — King and Rook Activity (vs michaelq2d5)",
-  "overview": "From his Pianissimo, this repertoire converts a knight ending the modern way: activate the king. With queens off, the king walks up the board — Kg2-f1-e2 — to support the rook and the queenside majority, while the c4-knight blockades. The lesson: in a same-material ending the player whose king joins the fight first usually wins.",
+  "overview": "From his Pianissimo, this repertoire converts a rook-and-knight ending the modern way: activate the king. With queens off, the king walks up the board — Kg2-f1-e2 — to support the rook and the queenside pawns, while the c4-knight blocks. The lesson: in a same-material ending the player whose king joins the fight first usually wins.",
   "pawnBreaks": [
    {
     "move": "h4 fix the kingside",
@@ -66097,7 +66122,7 @@
      "h4"
     ],
     "annotations": [
-     "Rc1 swings the rook to the half-open c-file behind the passed a-pawn.",
+     "Rc1 swings the rook to c1, behind the c3-pawn.",
      "Black brings his king toward the centre too.",
      "Kg2 — the king starts its march to support the queenside.",
      "Black hurries his king up.",
@@ -66206,7 +66231,7 @@
      ]
     ],
     "title": "Italian ENDGAME — King and Rook Activity (vs michaelq2d5)",
-    "intro": "From his Pianissimo, this repertoire converts a knight ending the modern way: activate the king. With queens off, the king walks up the board — Kg2-f1-e2 — to support the rook and the queenside majority, while the c4-knight blockades. The lesson: in a same-material ending the player whose king joins the fight first usually wins.",
+    "intro": "From his Pianissimo, this repertoire converts a rook-and-knight ending the modern way: activate the king. With queens off, the king walks up the board — Kg2-f1-e2 — to support the rook and the queenside pawns, while the c4-knight blocks. The lesson: in a same-material ending the player whose king joins the fight first usually wins.",
     "sources": [
      "concept:pos-material",
      "concept:pos-king-safety",
@@ -66712,7 +66737,7 @@
     "annotations": [
      "…h5 strikes at White’s kingside pawns, opening a second front.",
      "White captures on h5.",
-     "…Rxh5 activates the rook on the open h-file.",
+     "…Rxh5 activates the rook on the half-open h-file.",
      "The bishop eyes the kingside.",
      "…Nb6 reroutes the knight toward the strong c4-square.",
      "White centralises the king.",
@@ -67145,7 +67170,7 @@
      "White lunges a5 to fix the queenside.",
      "…bxa5 opens the b-file for counterplay.",
      "White recaptures with the knight.",
-     "…Rb8 swings to the open b-file.",
+     "…Rb8 swings to the half-open b-file.",
      "White grabs the a5-pawn."
     ],
     "learnCues": [
@@ -71911,7 +71936,7 @@
      "Bf6"
     ],
     "annotations": [
-     "The rook swings to the open a-file and the sixth rank, the most active post — activity first, before cashing in the extra pawns.",
+     "The rook swings to a6, along the sixth rank, the most active post — activity first, before cashing in the extra pawns.",
      "White grabs the d-pawn back, but Black keeps the bishop and the kingside majority.",
      "Black's extra kingside pawns begin to advance, gaining space and a future passed pawn.",
      "White's rook stays busy on the seventh.",
@@ -72447,7 +72472,7 @@
      "Nbd2"
     ],
     "annotations": [
-     "The rook lifts to the open e-file, backing the e4-pawn before the central break.",
+     "The rook goes to e1, backing the e4-pawn before the central break.",
      "Black expands on the queenside.",
      "The thematic central break — d4 opens lines for White's harmoniously placed pieces.",
      "Black develops the bishop to the long diagonal.",
@@ -73327,7 +73352,7 @@
      "White trades on f5.",
      "Recapturing toward the centre, opening the e-file and freeing the position.",
      "White contests the e-file.",
-     "The rook takes the half-open c-file for queenside pressure."
+     "The rook takes the open c-file for queenside pressure."
     ],
     "learnCues": [
      "Nc2 — reposition",
@@ -74347,7 +74372,7 @@
      "Kb1 — White tucks the king toward the corner.",
      "…Qa5 — the queen swings to the queenside, eyeing a2 and the c3-knight.",
      "Rc1 — White shores up along the c-file.",
-     "…Rab8 — the rook seizes the open b-file, and Black’s queenside avalanche begins."
+     "…Rab8 — the rook seizes the half-open b-file, and Black’s queenside avalanche begins."
     ],
     "learnCues": [
      "Bh6 — offer the trade",
@@ -76176,7 +76201,7 @@
      "Black nudges …a5 to gain a little queenside space, but it creates nothing concrete.",
      "Castling tucks the king away and connects the rooks — your development is already a step ahead.",
      "Black develops the bishop to d6, eyeing the b8-h2 diagonal but running into your solid setup.",
-     "Rfe1 takes the open e-file, the rook adding weight to the centre.",
+     "Rfe1 takes the half-open e-file, the rook adding weight to the centre.",
      "Black castles at last, but you are already coordinated and pressing.",
      "Rad1 seizes the d-file too — both rooks now command the centre.",
      "Black tries …Qb6 for counterplay, yet your two bishops and central grip leave you clearly the more comfortable."
@@ -76299,7 +76324,7 @@
      "a4 grabs queenside space and takes the b5-square away from Black's pieces — the first step of a wing plan.",
      "Black develops …Bd7, connecting his queenside and preparing to contest the a-file.",
      "Qd2 links the rooks and supports a coming knight jump, the queen eyeing the h6-square too.",
-     "Black lifts …Rc8 onto the half-open c-file, seeking his own counterplay.",
+     "Black lifts …Rc8 onto the open c-file, seeking his own counterplay.",
      "Nb5 leaps in, jabbing at the c7- and d6-squares and forcing Black to react.",
      "Black takes the knight with …Bxb5, the only way to relieve the pressure.",
      "axb5 recaptures toward the centre and swings the a-file wide open for your rook.",
@@ -76807,7 +76832,7 @@
      "Black shores up with …e6, blunting your light-squared bishop but conceding more time.",
      "Qf4 swings the queen to the active square, pressing the dark squares around Black's centre.",
      "Black plays …h6, questioning your bishop and gaining a touch of kingside room.",
-     "Bh4 keeps the pin alive, the bishop eyeing the f6-knight and the e7-square behind it.",
+     "Bh4 keeps the bishop on the h4–d8 diagonal, eyeing f6 and e7.",
      "Black offers a queen trade with …Qg4, hoping to blunt your initiative by simplifying.",
      "Qxg4 accepts — even with queens off, your lead in development gives full value for the pawn.",
      "Black recaptures …Bxg4; the position is balanced, your activity exactly offsetting the missing pawn."
@@ -77425,18 +77450,18 @@
      "a5"
     ],
     "annotations": [
-     "White trades on d6 to damage your structure, but you recapture and keep the two bishops.",
+     "White trades on d6, and you recapture with the queen — the bishops are off and the queenside is yours to expand.",
      "…Qxd6 recaptures actively, the queen well placed and the bishop pair now yours for the long game.",
      "White plays c3, shoring up d4 and preparing a slow queenside setup of his own.",
      "…Rb8 prepares the pawn storm, the rook lining up behind the coming …b5.",
      "White plays a3, trying to blunt your expansion before it gets going.",
      "…b5 rolls forward, claiming queenside space and giving your bishops room to breathe.",
      "White answers b4 to fix the queenside, but this only opens more lines for your bishop pair.",
-     "…a5 keeps the pressure on; with the two bishops and more space, Black is comfortable and pressing."
+     "…a5 keeps the pressure on; with more space, Black is comfortable and pressing."
     ],
     "learnCues": [
      "White trades on d6.",
-     "…Qxd6 — keep the bishop pair.",
+     "…Qxd6 — recapture, then expand queenside.",
      "White plays c3.",
      "…Rb8 — prepare the storm.",
      "White plays a3.",
@@ -77548,7 +77573,7 @@
     ],
     "annotations": [
      "White castles into the standard quiet Colle setup, hoping for a slow attacking build-up.",
-     "…Rc8 takes the half-open c-file, the rook eyeing White's c-pawn and the centre.",
+     "…Rc8 takes the open c-file, the rook eyeing c3 and the centre.",
      "White plays Rc1 to contest the file, matching your rook.",
      "…Re8 grabs the e-file too — both your rooks now command the centre.",
      "White shuffles …Na4, a knight heading nowhere useful on the rim.",
@@ -78885,7 +78910,7 @@
      "…Kf7 — the king steps up calmly, connecting the rook and clearing g6 — the f8-knight is coming for the cornered queen.",
      "e5 — White lashes out in the centre, trying to open lines before the queen gets trapped.",
      "…Bxe5 — the bishop eats the pawn and aims down the long diagonal at h2. Both bishops now rake toward White's king.",
-     "Qh3 — the queen scurries home down the open h-file, three tempi poorer. Black stands clearly better (~+1.5): a piece for the rook, the bishop pair, and every active square on the board."
+     "Qh3 — the queen scurries home down the half-open h-file, three tempi poorer. Black stands clearly better (~+1.5): a piece for the rook, the bishop pair, and every active square on the board."
     ],
     "learnCues": [
      "h6 — evict the knight",
@@ -79357,7 +79382,7 @@
      "…a6 — a quiet insurance move, taking b5 away and keeping the queenside pawns healthy.",
      "f4 — White lunges to evict the bishop — exactly the concession Black was waiting for.",
      "…Bxc3 — the bishop cashes itself in. It was Black's proudest piece; the doubled pawns it leaves behind are worth more.",
-     "bxc3 — White's queenside is wrecked: doubled c-pawns that no endgame will forgive.",
+     "bxc3 — White's queenside is wrecked: isolated a- and c-pawns that no endgame will forgive.",
      "…c5 — the break arrives with the structure fixed. Black's majority is mobile; White's isn't.",
      "e5 — White pushes past, gaining space. The engine says level — but every pawn weakness on the board belongs to White, and Black's plan writes itself."
     ],
@@ -81915,7 +81940,7 @@
      "Nc5 — the knight claims the outpost Black's bishop just vacated.",
      "…Bf5 — the other bishop finds its best diagonal, watching e4 and d3.",
      "Bd4 — White centralises, propping the e5-wedge.",
-     "…Qb8 — the queen takes the open b-file, pressing at the b2-pawn from long range.",
+     "…Qb8 — the queen takes the half-open b-file, pressing at the b2-pawn from long range.",
      "g4 — White lashes at the f5-bishop, spending another pawn move for space. The engine's half-pawn holds — and Black's bishop pair is still on the books."
     ],
     "learnCues": [
@@ -83294,7 +83319,7 @@
      "Qb6"
     ],
     "annotations": [
-     "Bh4 — the bishop keeps the pin on the f6-knight rather than concede it.",
+     "Bh4 — the bishop keeps its pressure on the f6-knight rather than concede it.",
      "…Re8 — the rook backs the e-file first; the coming central trade will open it.",
      "Rc1 — White covers the c-file against the …b5 pawns' ambitions.",
      "…exd4 — the release, on Black's clock: the cramped position breathes and the e-file opens onto White's e4-pawn.",

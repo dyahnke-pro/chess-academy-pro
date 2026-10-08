@@ -92,7 +92,7 @@ const VAGANIAN: LessonScript = {
       arrows: [{ from: 'e2', to: 'e4', color: VIS }],
       highlights: [{ square: 'd5', color: KEY }, { square: 'e4', color: KEY }, { square: 'b2', color: SOFT }],
       say:
-        "Black greedily snatches the b2-pawn with their queen; you don't care — you develop and build a giant d5-e4 pawn centre with the open h-file aimed at the king. The engine confirms White is clearly better here, around plus-two: the lead in development and the attack are worth far more than the pawn. Black's queen is stranded on b2 while your whole army points at their king. Pure Trompowsky chaos, and you're winning it.",
+        "Black greedily snatches the b2-pawn with their queen; you don't care — you develop and build a giant d5-e4 pawn centre with the half-open h-file aimed at the king. The engine confirms White is clearly better here, around plus-two: the lead in development and the attack are worth far more than the pawn. Black's queen is stranded on b2 while your whole army points at their king. Pure Trompowsky chaos, and you're winning it.",
       sayShort: 'e4 — big centre, winning attack.',
     }),
   ],

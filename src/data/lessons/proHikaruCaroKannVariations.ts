@@ -18,7 +18,7 @@ const ADVANCE: LessonScript = {
   beats: [
     b({ id: 'bf5', moves: 'e4 c6 d4 d5 e5 Bf5', arrows: [A('c8', 'f5')], highlights: [H('f5')], say: "White grabs space with e5, and here's the Caro's whole point: ...Bf5! The light-squared bishop develops OUTSIDE the pawn chain — the very piece that stays trapped in the French Defense.", sayShort: '…Bf5 — the bishop escapes.' }),
     b({ id: 'h6', moves: 'e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 h6', highlights: [H('e6')], say: "Black builds the solid wall with ...e6 behind the freed bishop, and ...h6 makes a safe square so White can't harass it with Nh4 or g4. Rock-solid.", sayShort: '…e6, …h6 — solid, bishop safe.' }),
-    b({ id: 'nd7', moves: 'e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 h6 O-O Nd7', highlights: [H('d7')], say: "Both sides castle and Black develops ...Nd7, heading to support the ...c5 break that will challenge White's advanced centre. Harmonious and low-risk.", sayShort: '…Nd7 — eye the ...c5 break.' }),
+    b({ id: 'nd7', moves: 'e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 h6 O-O Nd7', highlights: [H('d7')], say: "White castles and Black develops ...Nd7, heading to support the ...c5 break that will challenge White's advanced centre. Harmonious and low-risk.", sayShort: '…Nd7 — eye the ...c5 break.' }),
     b({ id: 'mid', moves: 'e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 h6 O-O Nd7 Nbd2 Ne7 Nb3 Qc7', arrows: [A('d8', 'c7')], highlights: [H('c7')], say: "Black reroutes the knight to e7 and centralises the queen on c7, pressuring the e5-pawn and preparing ...c5. The classic Caro: a solid wall, the good bishop already out, an easy plan against the centre. Comfortable equality with no weaknesses.", sayShort: '…Qc7 — pressure e5, no weaknesses.' }),
   ],
 };
@@ -28,7 +28,7 @@ const EXCHANGE: LessonScript = {
   beats: [
     b({ id: 'cxd5', moves: 'e4 c6 d4 d5 exd5 cxd5', highlights: [H('d5')], say: "The Exchange Variation trades in the centre, leaving a symmetrical structure. Black has the half-open c-file and a clean, easy game — no theory to fear.", sayShort: '…cxd5 — symmetrical, easy game.' }),
     b({ id: 'bf5', moves: 'e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 c3 g6 Nf3 Bf5', arrows: [A('c8', 'f5')], highlights: [H('f5')], say: "Black develops naturally — ...Nc6, ...g6, and ...Bf5 to trade off White's good light-squared bishop. The fianchetto and the active pieces give Black full equality.", sayShort: '…Bf5 — trade the good bishop.' }),
-    b({ id: 'mid', moves: 'e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 c3 g6 Nf3 Bf5 O-O', highlights: [H('f5')], say: "Both sides castle into a balanced, symmetrical middlegame. Black's pieces are harmoniously placed, the structure is sound, and there's nothing to fear — a comfortable game where understanding outweighs memory.", sayShort: 'O-O — balanced, comfortable.' }),
+    b({ id: 'mid', moves: 'e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 c3 g6 Nf3 Bf5 O-O', highlights: [H('f5')], say: "White castles into a balanced, symmetrical middlegame. Black's pieces are harmoniously placed, the structure is sound, and there's nothing to fear — a comfortable game where understanding outweighs memory.", sayShort: 'O-O — balanced, comfortable.' }),
   ],
 };
 

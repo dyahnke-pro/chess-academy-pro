@@ -19,7 +19,7 @@ export const SCHLIEMANN_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> 
     beats: [
       b({ id: 'sc1', moves: 'e4 e5 Nf3 Nc6 Bb5 f5 d4', say: "The Schönemann — White answers the …f5 thrust with the central counter 4.d4, opening lines fast to exploit Black's loosened kingside. The most direct test: White meets a flank strike with a blow in the centre.", sayShort: '4.d4 — White hits back in the centre.', highlights: [H('d4')] }),
       b({ id: 'sc2', moves: 'e4 e5 Nf3 Nc6 Bb5 f5 d4 fxe4 Nxe5 Nxe5 dxe5', say: "…fxe4 captures, and after the knight trades on e5 — Nxe5 …Nxe5 dxe5 — Black has a passed pawn on e4 and White a pawn on e5. The position is wide open, exactly the sharp fight the Schliemann player wants.", sayShort: '…fxe4 — open the position wide.', highlights: [H('e4'), H('e5')] }),
-      b({ id: 'sc3', moves: 'e4 e5 Nf3 Nc6 Bb5 f5 d4 fxe4 Nxe5 Nxe5 dxe5 c6', say: "…c6 questions the b5-bishop, gaining a tempo and clarifying the queenside. There is the Schönemann tabiya: a sharp, open middlegame with the bishop pair and a passed e4-pawn for Black — full compensation and a real fight after White's most aggressive try.", sayShort: '…c6 — kick the bishop, open game.', highlights: [H('c6'), H('e4', SOFT)] }),
+      b({ id: 'sc3', moves: 'e4 e5 Nf3 Nc6 Bb5 f5 d4 fxe4 Nxe5 Nxe5 dxe5 c6', say: "…c6 questions the b5-bishop, gaining a tempo and clarifying the queenside. There is the Schönemann tabiya: a sharp, open middlegame with free bishops and an advanced e4-pawn for Black — full compensation and a real fight after White's most aggressive try.", sayShort: '…c6 — kick the bishop, open game.', highlights: [H('c6'), H('e4', SOFT)] }),
     ],
   },
 
@@ -28,7 +28,7 @@ export const SCHLIEMANN_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> 
     beats: [
       b({ id: 'j1', moves: 'e4 e5 Nf3 Nc6 Bb5 f5 exf5', say: "White simply grabs the gambit pawn with 4.exf5. But accepting the pawn costs time and opens the f-file, and Black gets exactly the open, dynamic position the gambit is played for.", sayShort: '4.exf5 — White grabs the pawn.', highlights: [H('f5')] }),
       b({ id: 'j2', moves: 'e4 e5 Nf3 Nc6 Bb5 f5 exf5 e4', say: "…e4! the key counter — the pawn surges forward, kicking the f3-knight and gaining space and time. Black opens lines for the pieces and prepares to round up the f5-pawn with the initiative firmly in hand.", sayShort: '…e4 — surge forward, kick the knight.', highlights: [H('e4')] }),
-      b({ id: 'j3', moves: 'e4 e5 Nf3 Nc6 Bb5 f5 exf5 e4 Qe2 Qe7 Bxc6 dxc6', say: "Qe2 pressures the e4-pawn, …Qe7 defends it, and after Bxc6 …dxc6 Black recaptures toward the centre with the bishop pair and the open d-file. There is the Jänisch-Accepted tabiya: Black active and well-developed, the gambit pawn soon regained, with a comfortable, fighting game.", sayShort: '…dxc6 — bishop pair, open d-file.', highlights: [H('c6'), H('e4', SOFT)] }),
+      b({ id: 'j3', moves: 'e4 e5 Nf3 Nc6 Bb5 f5 exf5 e4 Qe2 Qe7 Bxc6 dxc6', say: "Qe2 pressures the e4-pawn, …Qe7 defends it, and after Bxc6 …dxc6 Black recaptures toward the centre with the bishop pair and the half-open d-file. There is the Jänisch-Accepted tabiya: Black active and well-developed, the gambit pawn soon regained, with a comfortable, fighting game.", sayShort: '…dxc6 — bishop pair, open d-file.', highlights: [H('c6'), H('e4', SOFT)] }),
     ],
   },
 

@@ -12,8 +12,8 @@ export const DANISH_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
     beats:[
       b({id:'s1',moves:'e4 e5 d4 exd4 c3 dxc3 Nxc3 Nc6 Bc4 Bb4',say:"In the Schlechter, Black declines the second pawn and develops actively with …Nc6 and …Bb4, pinning the c3-knight. White keeps the one-pawn gambit with a clear development lead and the bishop trained on f7.",sayShort:'Bc4 — one-pawn gambit, lead in development.',highlights:[H('c4'),H('b4')]}),
       b({id:'s2',moves:'e4 e5 d4 exd4 c3 dxc3 Nxc3 Nc6 Bc4 Bb4 Nf3 d6 O-O',say:"Nf3 and O-O — White is fully mobilised and castled while Black is still sorting out the queenside. Speed, not material, is the Danish currency.",sayShort:'O-O — fully mobilised, fast.',highlights:[H('f3')]}),
-      b({id:'s3',moves:'e4 e5 d4 exd4 c3 dxc3 Nxc3 Nc6 Bc4 Bb4 Nf3 d6 O-O Bxc3 bxc3 Nf6 Bg5',say:"…Bxc3 bxc3 hands White doubled c-pawns but the bishop pair and an open b-file; Bg5 pins the f6-knight, pressing Black's kingside.",sayShort:'Bg5 — pin, press the kingside.',highlights:[H('g5')]}),
-      b({id:'s4',moves:'e4 e5 d4 exd4 c3 dxc3 Nxc3 Nc6 Bc4 Bb4 Nf3 d6 O-O Bxc3 bxc3 Nf6 Bg5 O-O Re1 Bg4',say:"Re1 takes the open e-file and …Bg4 develops. White is a pawn down with the two bishops, open lines and pressure — full compensation, a typical comfortable Danish position.",sayShort:'Re1 — open file, full compensation.',highlights:[H('e1')]}),
+      b({id:'s3',moves:'e4 e5 d4 exd4 c3 dxc3 Nxc3 Nc6 Bc4 Bb4 Nf3 d6 O-O Bxc3 bxc3 Nf6 Bg5',say:"…Bxc3 bxc3 hands White a broken queenside but the bishop pair and an open b-file; Bg5 pins the f6-knight, pressing Black's kingside.",sayShort:'Bg5 — pin, press the kingside.',highlights:[H('g5')]}),
+      b({id:'s4',moves:'e4 e5 d4 exd4 c3 dxc3 Nxc3 Nc6 Bc4 Bb4 Nf3 d6 O-O Bxc3 bxc3 Nf6 Bg5 O-O Re1 Bg4',say:"Re1 takes the half-open e-file and …Bg4 develops. White is a pawn down with the two bishops, open lines and pressure — full compensation, a typical comfortable Danish position.",sayShort:'Re1 — open file, full compensation.',highlights:[H('e1')]}),
     ],
   },
 };

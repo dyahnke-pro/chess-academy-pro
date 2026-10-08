@@ -81,7 +81,7 @@ export const PRO_GOTHAMCHESS_ITALIAN_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5',
       highlights: [{ square: 'd5', color: KEY }],
       say:
-        "Black strikes back with d5, the freeing break — challenging your centre and your bishop at the same time. The right answer is to take, accepting an isolated d-pawn in return for fast, active piece play.",
+        "Black strikes back with d5, the freeing break — challenging your centre and your bishop at the same time. The right answer is to take: after exd5 you accept an isolated d-pawn in return for fast, active piece play.",
       sayShort: 'd5 — Black breaks back.',
     }),
     b({
