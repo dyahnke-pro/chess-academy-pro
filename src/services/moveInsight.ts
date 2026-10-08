@@ -45,6 +45,28 @@ import { findWorstPlacedPiece } from './nextPlans';
 import { detectLatentDanger, latentDangerClause } from './latentDanger';
 import { findTrappedPiece } from './reviewTeachingPoints';
 import { detectNewThreat } from './groundedAnswer';
+import { kingReadsForBestLine, type KingReadId } from './kingAttackReads';
+
+/** Which capability each king read POSES — exhaustive over the reads, so a new
+ *  read fails to compile until someone decides. Null: a standing fact the
+ *  student's move does not answer (the target, the shelter, the race). */
+const KING_READ_POSED: Record<KingReadId, { tag: MisconceptionTagId; weight: number } | null> = {
+  'mate-over-material': { tag: 'missed-tactic', weight: 90 },
+  'mate-division': { tag: 'missed-tactic', weight: 85 },
+  'material-not-mate': { tag: 'overvalued-attack', weight: 70 },
+  'king-square-checks': { tag: 'missed-opponents-threat', weight: 80 },
+  'stops-castling': { tag: 'missed-tactic', weight: 60 },
+  'lure-king': { tag: 'missed-tactic', weight: 60 },
+  'probing-check': { tag: 'calculation-depth', weight: 60 },
+  'centre-strike': { tag: 'mistimed-pawn-break', weight: 65 },
+  'wing-lever': { tag: 'mistimed-pawn-break', weight: 60 },
+  'sacrifice-conditions': { tag: 'king-stuck-center', weight: 70 },
+  'king-diagonal-walk': { tag: 'passive-king-endgame', weight: 65 },
+  'sacrifice-target': null,
+  'own-piece-shelter': null,
+  'own-castling-blocked': null,
+  'storm-race': null,
+};
 
 export type PositionMode = 'defend' | 'press' | 'reinforce' | 'improve';
 
@@ -721,7 +743,7 @@ export function escapeSquareFirst(fen: string, bestSan: string | undefined): { h
  */
 export function positionPosed(
   fen: string,
-  opts: { bestSan?: string; lastMove?: { fenBefore: string; san: string } },
+  opts: { bestSan?: string; lastMove?: { fenBefore: string; san: string }; /** The engine's line from the best move (UCI), when known — the mate read plays it out. */ bestLine?: readonly string[] },
 ): Array<{ tag: MisconceptionTagId; posedImportance: number }> {
   const out: Array<{ tag: MisconceptionTagId; posedImportance: number }> = [];
   const add = (tag: MisconceptionTagId, w: number): void => { if (!out.some((o) => o.tag === tag)) out.push({ tag, posedImportance: w }); };
@@ -745,6 +767,13 @@ export function positionPosed(
     if (takeTheSting(fen, me, opts.bestSan ?? null)) add('missed-opponents-threat', 80);
     if (queenGlue(fen, me)) add('hung-material', 60);
     if (retreatKeepsBreak(fen, me, opts.bestSan ?? null)) add('mistimed-pawn-break', 60);
+    // ATTACK, SACRIFICES AND KINGS (batch 4) — the king question the board
+    // posed: the same reads that teach it (`kingAttackReads`), both ways.
+    const line = opts.bestLine && opts.bestLine.length ? opts.bestLine : opts.bestSan ? [opts.bestSan] : [];
+    for (const r of line.length ? kingReadsForBestLine(fen, me, line) : []) {
+      const posed = KING_READ_POSED[r.id];
+      if (posed) add(posed.tag, posed.weight);
+    }
   } catch { /* an unreadable board posed nothing */ }
   return out;
 }

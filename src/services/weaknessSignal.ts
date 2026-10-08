@@ -228,6 +228,10 @@ export function matchClauseKind(kind: string, signals: readonly WeaknessSignal[]
     // bucket.
     case 'refuted':
       return bestMatch(signals, (s) => s.clusterId === 'left-book-early' || s.bucket === 'opening');
+    // The king reads (mate over material, the checks a king walks into, the
+    // castling squares) join the holes about kings: missed mates and threats.
+    case 'king-read':
+      return bestMatch(signals, (s) => s.clusterId === 'analysis:tactic:checkmate' || s.clusterId === 'analysis:tactic:back_rank' || s.clusterId === 'analysis:missed-threat');
     case 'convert': // failing to convert a won position
       return bestMatch(signals, (s) => s.clusterId.startsWith('analysis:conversion-endgame:') || s.bucket === 'endgame');
     case 'fundamental':

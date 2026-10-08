@@ -44,12 +44,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `computeMustDefend` (function) — 22 call sites
 - `src/services/groundedAnswer.ts:620`
 - `src/services/liveTacticsContext.ts:783`
-- `src/services/moveInsight.ts:167`
+- `src/services/moveInsight.ts:189`
 - `src/services/mustDefendHabit.test.ts:13`
 - `src/services/obligationLifted.ts:49`
 - `src/services/obligationLifted.ts:51`
 - `src/services/playedMoveGrade.ts:125`
-- `src/services/positionFacts.ts:477`
+- `src/services/positionFacts.ts:479`
 - `src/services/replayFence.modern1690.test.ts:160`
 - `src/services/replayFence.modern1690.test.ts:165`
 - `src/services/reviewHinge.ts:36`

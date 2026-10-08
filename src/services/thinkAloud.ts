@@ -14,14 +14,14 @@ import { settledNetForLine } from './exchangeLedger';
 import { sayMoveClause } from './spokenMove';
 import { countWords } from '../utils/countWords';
 import { pvSans, hookCreated, holeAccess } from './moveInsight';
-import { walkableLine } from './proof';
+import { walkableLine, NO_PROOF, type FactProof } from './proof';
+import { kingAttackReads, type KingRead } from './kingAttackReads';
 import { tempoCount } from './tempoCount';
 import { homeMinorCount } from './development';
 import type { FactStakes } from './factStakes';
 import type { GamePromise } from './learnBoardTeaching';
 import { speedRunReads } from './speedRunReads';
 import { readBoardAll } from './boardComputers';
-import type { Proof } from './proof';
 import type { TacticType } from '../types';
 
 const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
@@ -193,12 +193,13 @@ export function opponentHabits(sans: readonly string[], opp: 'w' | 'b'): Habit[]
 }
 
 export interface DepthClause {
-  kind: 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read' | 'tactic';
-  /** The proof the computer found (a `tactic` read always carries one). */
-  proof?: Proof;
+  kind: 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read' | 'tactic' | 'king-read';
   /** The motif, in the one tactic vocabulary — the weakness join. */
   motif?: TacticType;
   text: string;
+  /** The proof the clause rests on (a played line or the squares), or why it
+   *  waits — an idea said in place of a held move withholds its proof too. */
+  proof?: FactProof;
   /** The line the clause says, from the board it starts on (arrows). */
   lines?: Array<{ fen: string; sans: string[] }>;
   squares?: string[];
@@ -264,6 +265,10 @@ export function depthClauses(args: {
     // ugly move, the provoked commitment) wait for nameMove below.
     const reads = toMove === args.studentColor ? speedRunReads({ fen: args.fen, me: args.studentColor, lines: args.topLines, ...(args.lastOpponentMove ? { lastMove: args.lastOpponentMove } : {}), ...((): { lastOwnMove?: { fenBefore: string; san: string } } => { const o = ownLastMove(args.history, args.fen); return o ? { lastOwnMove: o } : {}; })() }) : [];
     const push = (r: (typeof reads)[number], text: string): void => { out.push({ kind: 'speedrun-read', text, ...(r.squares && text === r.text ? { squares: r.squares } : {}), ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.claim ? { claim: r.claim } : {}), ...(r.promise ? { promise: r.promise } : {}) }); };
+    // ATTACK, SACRIFICES AND KINGS (batch 4) — each read carries its proof.
+    const kings = toMove === args.studentColor ? kingAttackReads({ fen: args.fen, me: args.studentColor, lines: args.topLines }) : [];
+    const pushKing = (r: KingRead, text: string): void => { out.push({ kind: 'king-read', text, squares: r.squares, proof: text === r.text ? r.proof : NO_PROOF.withheld, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.claim ? { claim: r.claim } : {}), ...(r.lines && text === r.text ? { lines: r.lines } : {}) }); };
+    for (const r of kings.filter((x) => !x.namesMove)) pushKing(r, r.text);
     for (const r of reads.filter((x) => !x.namesMove)) push(r, r.text);
     // THE LINE TACTICS (tacticGeometry, via the one registry): each read
     // carries its proof. One that names the engine's move speaks it only where
@@ -282,9 +287,11 @@ export function depthClauses(args: {
     // elsewhere it speaks its IDEA — the habit of thought without the answer.
     if (!args.nameMove || toMove !== args.studentColor) {
       for (const r of reads.filter((x) => x.namesMove && x.idea)) push(r, r.idea as string);
+      for (const r of kings.filter((x) => x.namesMove && x.idea)) pushKing(r, r.idea as string);
       return out;
     }
     for (const r of reads.filter((x) => x.namesMove)) push(r, r.text);
+    for (const r of kings.filter((x) => x.namesMove)) pushKing(r, r.text);
     const top = args.topLines[0];
     const uci = top?.moves?.[0];
     if (!top || !uci) return out;

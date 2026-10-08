@@ -23,7 +23,7 @@
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
 - `src/services/coachFeatureService.ts:4103`
-- `src/services/reviewFullData.ts:553`
+- `src/services/reviewFullData.ts:554`
 
 ## Tests
 

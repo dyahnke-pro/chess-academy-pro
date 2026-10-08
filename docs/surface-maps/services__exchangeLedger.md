@@ -90,13 +90,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveComparison.ts:182`
 - `src/services/moveComparison.ts:183`
 - `src/services/moveInsight.lineAudit.test.ts:49`
-- `src/services/moveInsight.ts:366`
+- `src/services/moveInsight.ts:388`
 - `src/services/thinkAloud.ts:93`
 
 ### `settledExchange` (function) — 5 call sites
 - `src/services/playCommentary.ts:972`
 - `src/services/reviewConcepts.ts:91`
-- `src/services/reviewFullData.ts:360`
+- `src/services/reviewFullData.ts:361`
 - `src/services/reviewWalkOct2a.test.ts:15`
 - `src/services/tacticGeometry.ts:527`
 
@@ -168,7 +168,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.horizon.test.ts:38`
 
 ### `moverLineProof` (function) — 1 call site
-- `src/services/reviewFullData.ts:714`
+- `src/services/reviewFullData.ts:715`
 
 ## Tests
 
