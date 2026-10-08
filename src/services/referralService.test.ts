@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import 'fake-indexeddb/auto';
 import { db } from '../db/schema';
 import { loadFreeTier } from './freeTierService';
-import { getStatus, claimCode, reportQualifyingUse, grantReviewReward } from './referralService';
+import { getStatus, claimCode, reportQualifyingUse } from './referralService';
 
 // deviceIdentity + analytics are mocked so the service is exercised in isolation.
 vi.mock('./deviceIdentity', () => ({ getDeviceId: async () => 'test-device-123456' }));
@@ -73,17 +73,4 @@ describe('referralService', () => {
     expect((await loadFreeTier()).earnedOpeningCredits).toBe(1);
   });
 
-  it('grantReviewReward syncs the granted credit', async () => {
-    mockFetchOnce({ ok: true, granted: true, credits: 1 });
-    await grantReviewReward();
-    expect((await loadFreeTier()).earnedOpeningCredits).toBe(1);
-  });
-
-  it('grantReviewReward is a no-op when the server already rewarded (granted:false)', async () => {
-    mockFetchOnce({ ok: true, granted: false, credits: 1 });
-    await grantReviewReward();
-    // syncOpeningCredits only runs on granted:true — the ledger stays at 0 here
-    // (the credit was already synced on the earlier grant in real life).
-    expect((await loadFreeTier()).earnedOpeningCredits ?? 0).toBe(0);
-  });
 });

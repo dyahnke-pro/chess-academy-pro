@@ -130,22 +130,3 @@ export async function reportQualifyingUse(): Promise<void> {
   } catch { /* offline — the once-flag isn't set, so a later win retries */ }
 }
 
-/** Grant the one-time review reward (user tapped through the happy-path review
- *  prompt). Server-guarded to fire once per device. */
-export async function grantReviewReward(): Promise<void> {
-  try {
-    const device = await getDeviceId();
-    const res = await fetch(withWebOrigin(API), {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ action: 'reviewReward', device }),
-    });
-    if (!res.ok) return;
-    const data = (await res.json()) as { ok?: boolean; granted?: boolean; credits?: number };
-    if (data.granted) {
-      captureEvent('referral_reward_granted', { source: 'review', credits: Number(data.credits) || 0 });
-      await syncOpeningCredits(Number(data.credits) || 0);
-      notifyLedgerChanged();
-    }
-  } catch { /* best-effort */ }
-}

@@ -8,7 +8,7 @@ import { FeedbackForm } from './FeedbackForm';
  * ReviewPrompt — the two-step "happiness gate" before the store-review dialog.
  *
  * Step 1 ("ask"): "Enjoying Chess Academy Pro?" → Yes / Not really.
- *   - Yes        → request the native store-review dialog (public 5-stars).
+ *   - Yes        → open the App Store write-a-review page.
  *   - Not really → swap to the FeedbackForm so the gripe (and any lurking bug)
  *                  reaches David PRIVATELY instead of becoming a 1-star review.
  *

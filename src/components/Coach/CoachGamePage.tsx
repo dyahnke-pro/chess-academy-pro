@@ -1983,7 +1983,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
     // Rating harvest (David 2026-07-14): beating the coach in a real game (past
     // the trivial-game ply floor) is a genuine "win" moment — arm the review
-    // prompt so the native 5-star dialog gets requested at peak delight. Wins
+    // prompt at peak delight ("Yes" opens the App Store review page). Wins
     // only; losses/draws are never counted (the happiness gate + these positive-
     // only triggers keep the public rating honest).
     if (result === 'win' && shouldPersistFinishedGame(gameState.moves.length)) {

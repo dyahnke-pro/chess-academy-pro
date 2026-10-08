@@ -2,7 +2,8 @@ import { Capacitor } from '@capacitor/core';
 import { db } from '../db/schema';
 import { useReviewPromptStore } from '../stores/reviewPromptStore';
 import { logAppAudit } from './appAuditor';
-import { reportQualifyingUse, grantReviewReward } from './referralService';
+import { reportQualifyingUse } from './referralService';
+import { APP_STORE_WRITE_REVIEW_URL } from '../utils/appStoreLinks';
 
 /**
  * reviewPromptService — the brain behind the two-step App Store review prompt.
@@ -10,14 +11,18 @@ import { reportQualifyingUse, grantReviewReward } from './referralService';
  * STRATEGY (David 2026-06-28): never throw the store-review dialog at a user
  * cold. Instead, after a few GENUINE positive moments (a win — puzzle solved,
  * lesson mastered, game reviewed), show a soft in-app "Enjoying the app?" gate:
- *   - happy  → fire the native store-review dialog (public 5-stars)
+ *   - happy  → open the App Store write-a-review page
  *   - unhappy → route to private feedback (the bug reaches David, NOT the rating)
  * This protects the public rating from users who hit a lurking bug, and only
  * asks people who've actually felt the value.
  *
- * The native dialog is RATE-LIMITED by Apple/Google (they decide whether to
- * actually show it, ~3×/year), so we only ever *request* it — never force it —
- * and we only request it once per device unless reset.
+ * Why the review PAGE and not Apple's in-app dialog (David 2026-10-08): the
+ * dialog is rate-limited (~3×/year) and may silently not appear, and the app is
+ * never told — a user who tapped "Yes, I love it" could see nothing at all. The
+ * write-review page always opens because the user asked for it.
+ *
+ * No reward for reviewing: Apple's guidelines (5.6) forbid incentivized
+ * reviews, so the free-opening-for-a-review grant was removed the same day.
  */
 const META_KEY = 'review-prompt.v1';
 
@@ -114,17 +119,13 @@ export async function recordPositiveMoment(source: string): Promise<boolean> {
   return true;
 }
 
-/** User said "yes, love it" — request the native store-review dialog. */
+/** User said "yes, love it" — send them to the App Store review page. */
 export async function handlePositiveResponse(): Promise<void> {
   const state = await loadState();
   state.rated = true;
   await saveState(state);
-  void logAppAudit({ kind: 'review-prompt-positive', category: 'app', source: 'reviewPromptService', summary: 'requested store review' });
-  // Reward the happy-path tap-through with a free opening (David 2026-09-06).
-  // Apple never tells us the star count, so we reward the intent — server
-  // guards it to once per device.
-  void grantReviewReward();
-  await requestStoreReview();
+  void logAppAudit({ kind: 'review-prompt-positive', category: 'app', source: 'reviewPromptService', summary: 'opened App Store review page' });
+  requestStoreReview();
 }
 
 /** User said "not really" — we route to feedback in the UI; record it here. */
@@ -135,18 +136,18 @@ export async function handleNegativeResponse(): Promise<void> {
   void logAppAudit({ kind: 'review-prompt-negative', category: 'app', source: 'reviewPromptService', summary: 'routed to feedback' });
 }
 
-/** Fire the native store-review dialog (no-op on web — there's no native UI). */
-export async function requestStoreReview(): Promise<void> {
-  if (!Capacitor.isNativePlatform()) return;
+/** Open the App Store write-a-review page. iOS only — the web app has no
+ *  store listing and there is no Android listing yet. */
+export function requestStoreReview(): void {
+  if (Capacitor.getPlatform() !== 'ios') return;
   try {
-    const { InAppReview } = await import('@capacitor-community/in-app-review');
-    await InAppReview.requestReview();
+    window.location.href = APP_STORE_WRITE_REVIEW_URL;
   } catch (err) {
     void logAppAudit({
       kind: 'review-prompt-positive',
       category: 'app',
       source: 'reviewPromptService.requestStoreReview',
-      summary: `native review failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      summary: `review page failed to open: ${err instanceof Error ? err.message : 'unknown'}`,
     });
   }
 }

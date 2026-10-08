@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**158 lines · 7 exports · 7 importers · 2 tests · 0 audits**
+**159 lines · 7 exports · 7 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6130) — names `reviewPromptService`
+- **The standard post-deploy ritual** (CLAUDE.md:6150) — names `reviewPromptService`
 
 ## Who calls in
 
@@ -31,30 +31,33 @@
 ### `recordPositiveMoment` (function) — 13 call sites
 - `src/components/Coach/CoachGamePage.tsx:2025`
 - `src/components/Openings/SrsTrainerPage.tsx:315`
-- `src/components/Puzzles/AdaptivePuzzlePage.tsx:293`
-- `src/services/openingService.ts:528`
-- `src/services/openingService.ts:560`
-- `src/services/reviewPromptService.test.ts:21`
-- `src/services/reviewPromptService.test.ts:28`
-- `src/services/reviewPromptService.test.ts:35`
-- `src/services/reviewPromptService.test.ts:41`
-- `src/services/reviewPromptService.test.ts:44`
-- `src/services/reviewPromptService.test.ts:50`
-- `src/services/reviewPromptService.test.ts:51`
+- `src/components/Puzzles/AdaptivePuzzlePage.tsx:305`
+- `src/services/openingService.ts:531`
+- `src/services/openingService.ts:563`
+- `src/services/reviewPromptService.test.ts:23`
+- `src/services/reviewPromptService.test.ts:30`
+- `src/services/reviewPromptService.test.ts:37`
+- `src/services/reviewPromptService.test.ts:43`
+- `src/services/reviewPromptService.test.ts:46`
 - `src/services/reviewPromptService.test.ts:52`
+- `src/services/reviewPromptService.test.ts:53`
+- `src/services/reviewPromptService.test.ts:54`
 
-### `handlePositiveResponse` (function) — 1 call site
+### `handlePositiveResponse` (function) — 3 call sites
 - `src/components/Feedback/ReviewPrompt.tsx:31`
+- `src/services/reviewPromptService.test.ts:80`
+- `src/services/reviewPromptService.test.ts:86`
 
-### `handleNegativeResponse` (function) — 2 call sites
+### `handleNegativeResponse` (function) — 3 call sites
 - `src/components/Feedback/ReviewPrompt.tsx:36`
-- `src/services/reviewPromptService.test.ts:49`
+- `src/services/reviewPromptService.test.ts:51`
+- `src/services/reviewPromptService.test.ts:92`
 
 ### `requestStoreReview` (function) — 1 call site
-- `src/services/reviewPromptService.test.ts:57`
+- `src/services/reviewPromptService.test.ts:59`
 
 ### `resetReviewPromptState` (function) — 1 call site
-- `src/services/reviewPromptService.test.ts:15`
+- `src/services/reviewPromptService.test.ts:17`
 
 ## Tests
 

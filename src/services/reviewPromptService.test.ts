@@ -1,7 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { Capacitor } from '@capacitor/core';
 import {
   recordPositiveMoment,
   handleNegativeResponse,
+  handlePositiveResponse,
   requestStoreReview,
   resetReviewPromptState,
   POSITIVE_MOMENTS_THRESHOLD,
@@ -54,6 +56,40 @@ describe('reviewPromptService — two-step gate logic', () => {
   });
 
   it('requestStoreReview no-ops safely on web (no native UI)', async () => {
-    await expect(requestStoreReview()).resolves.toBeUndefined();
+    expect(() => requestStoreReview()).not.toThrow();
+  });
+});
+
+describe('reviewPromptService — "Yes, I love it" opens the App Store review page', () => {
+  const realLocation = window.location;
+  let href = '';
+  beforeEach(() => {
+    href = '';
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { set href(v: string) { href = v; }, get href() { return href; } },
+    });
+  });
+  afterEach(() => {
+    Object.defineProperty(window, 'location', { configurable: true, value: realLocation });
+    vi.restoreAllMocks();
+  });
+
+  it('on iOS, Yes opens the write-review page in the App Store app', async () => {
+    vi.spyOn(Capacitor, 'getPlatform').mockReturnValue('ios');
+    await handlePositiveResponse();
+    expect(href).toBe('itms-apps://apps.apple.com/app/id6776418777?action=write-review');
+  });
+
+  it('on the web app, Yes navigates nowhere (no store listing)', async () => {
+    vi.spyOn(Capacitor, 'getPlatform').mockReturnValue('web');
+    await handlePositiveResponse();
+    expect(href).toBe('');
+  });
+
+  it('Not really never sends anyone to the review page', async () => {
+    vi.spyOn(Capacitor, 'getPlatform').mockReturnValue('ios');
+    await handleNegativeResponse();
+    expect(href).toBe('');
   });
 });
