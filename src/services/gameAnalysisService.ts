@@ -914,8 +914,13 @@ function scheduleIdleRetire(): void {
  * quieter.
  */
 export interface PooledPvEngines {
-  engines: Array<PvEngine & MoveScorer>;
+  engines: Array<PvEngine & MoveScorer & BestOfEngine>;
   release: () => void;
+}
+
+/** An engine that can return the single best of a restricted set of moves. */
+export interface BestOfEngine {
+  bestOf(fen: string, ucis: readonly string[], depth: number): Promise<ScoredMove | null>;
 }
 
 export async function acquirePvEngines(
@@ -929,7 +934,13 @@ export async function acquirePvEngines(
     return null; // no worker at all — caller falls back to the singleton
   }
   if (workers.length === 0) return null;
-  const engines: Array<PvEngine & MoveScorer> = workers.map((w) => ({
+  const engines: Array<PvEngine & MoveScorer & BestOfEngine> = workers.map((w) => ({
+    /** The best of exactly these moves — one line, one search (searchmoves). */
+    async bestOf(fen: string, ucis: readonly string[], depth: number): Promise<ScoredMove | null> {
+      const fan = await w.analyzeFan(fen, 1, depth, budgetMs, ucis);
+      const l = fan[0];
+      return l ? { evaluation: l.evaluation, mate: l.mate, moves: l.moves } : null;
+    },
     async scoreMoves(fen: string, ucis: readonly string[], depth: number): Promise<ScoredMove[]> {
       const fan = await w.analyzeFan(fen, ucis.length, depth, budgetMs, ucis);
       return fan.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves }));

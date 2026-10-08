@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3474 lines · 108 exports · 48 importers · 39 tests · 4 audits**
+**3474 lines · 108 exports · 49 importers · 39 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,6 +22,7 @@
 - `src/coach/chatTurn.ts`
 - `src/coach/coachService.ts`
 - `src/coach/dispatchCoachTurn.ts`
+- `src/coach/followUp.ts`
 - `src/coach/openingIdentityQuery.test.ts`
 - `src/coach/pass3Questions.test.ts`
 - `src/coach/questionFiller.meaning.test.ts`
@@ -75,12 +76,12 @@
 - `src/coach/askSource.test.ts:30`
 - `src/coach/askSource.test.ts:31`
 - `src/coach/askSource.test.ts:32`
-- `src/coach/coachService.ts:533`
+- `src/coach/coachService.ts:534`
 - `src/coach/dispatchCoachTurn.ts:92`
 - `src/coach/dispatchCoachTurn.ts:128`
 
 ### `coachSurfaceToRoute` (function) — 2 call sites
-- `src/coach/coachService.ts:1870`
+- `src/coach/coachService.ts:1869`
 - `src/coach/questionIntents.surfaceForRoute.test.ts:35`
 
 ### `coachSurfaceForRoute` (function) — 5 call sites
@@ -91,7 +92,7 @@
 - `src/components/Coach/GameChatPanel.tsx:1306`
 
 ### `stripQuestionFiller` (function) — 8 call sites
-- `src/coach/coachService.ts:1249`
+- `src/coach/coachService.ts:1250`
 - `src/coach/questionFiller.meaning.test.ts:15`
 - `src/coach/questionFiller.meaning.test.ts:22`
 - `src/coach/questionIntents.routerE.test.ts:166`
@@ -101,7 +102,7 @@
 - `src/services/groundedAnswer.routerE.test.ts:144`
 
 ### `isPlanQuestion` (function) — 8 call sites
-- `src/coach/coachService.ts:1374`
+- `src/coach/coachService.ts:1373`
 - `src/coach/questionIntents.davidsQuestions.test.ts:76`
 - `src/coach/questionIntents.davidsQuestions.test.ts:81`
 - `src/coach/questionIntents.davidsQuestions.test.ts:87`
@@ -111,8 +112,8 @@
 - `src/services/endgameLaneOwnership.test.ts:24`
 
 ### `isAttackAssessmentQuestion` (function) — 4 call sites
-- `src/coach/coachService.ts:1616`
-- `src/coach/coachService.ts:1763`
+- `src/coach/coachService.ts:1615`
+- `src/coach/coachService.ts:1762`
 - `src/services/attackAssessment.test.ts:20`
 - `src/services/attackAssessment.test.ts:24`
 
@@ -120,7 +121,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `restrictedPieceInAsk` (function) — 10 call sites
-- `src/coach/coachService.ts:1683`
+- `src/coach/coachService.ts:1682`
 - `src/coach/questionIntents.askedPiece.test.ts:18`
 - `src/coach/questionIntents.askedPiece.test.ts:26`
 - `src/coach/questionIntents.askedPiece.test.ts:27`
@@ -132,13 +133,13 @@
 - `src/coach/questionIntents.askedPiece.test.ts:44`
 
 ### `isHintRequest` (function) — 2 call sites
-- `src/coach/coachService.ts:1402`
+- `src/coach/coachService.ts:1401`
 - `src/coach/questionIntents.routerE.test.ts:150`
 
 ### `isBestMoveQuestion` (function) — 14 call sites
 - `src/coach/batteryRouting.test.ts:23`
 - `src/coach/batteryRouting.test.ts:30`
-- `src/coach/coachService.ts:1401`
+- `src/coach/coachService.ts:1400`
 - `src/coach/isBestMoveQuestion.test.ts:10`
 - `src/coach/isBestMoveQuestion.test.ts:27`
 - `src/coach/isBestMoveQuestion.test.ts:41`
@@ -153,7 +154,7 @@
 
 ### `isAlternativesQuestion` (function) — 16 call sites
 - `src/coach/chatTurn.ts:115`
-- `src/coach/coachService.ts:1467`
+- `src/coach/coachService.ts:1466`
 - `src/coach/pass3Questions.test.ts:16`
 - `src/coach/questionIntents.test.ts:1382`
 - `src/coach/questionIntents.test.ts:1388`
@@ -170,8 +171,8 @@
 - `src/coach/questionIntents.test.ts:1402`
 
 ### `isWhyBestMoveQuestion` (function) — 18 call sites
-- `src/coach/coachService.ts:1350`
-- `src/coach/coachService.ts:1800`
+- `src/coach/coachService.ts:1349`
+- `src/coach/coachService.ts:1799`
 - `src/coach/pass3Questions.test.ts:13`
 - `src/coach/questionIntents.d1ConceptDeferral.test.ts:38`
 - `src/coach/questionIntents.davidsQuestions.test.ts:29`
@@ -190,27 +191,28 @@
 - `src/components/Coach/multiIntentRouting.test.ts:96`
 
 ### `isOpponentMoveQuestion` (function) — 5 call sites
-- `src/coach/coachService.ts:1343`
+- `src/coach/coachService.ts:1342`
 - `src/coach/questionIntents.test.ts:502`
 - `src/coach/questionIntents.test.ts:512`
 - `src/coach/questionIntents.test.ts:519`
 - `src/components/Coach/CoachTeachPage.tsx:5152`
 
 ### `isLastMoveQuestion` (function) — 4 call sites
-- `src/coach/coachService.ts:1344`
+- `src/coach/coachService.ts:1343`
 - `src/coach/questionIntents.test.ts:522`
 - `src/coach/questionIntents.test.ts:532`
 - `src/coach/questionIntents.test.ts:539`
 
-### `extractCandidateSan` (function) — 32 call sites
+### `extractCandidateSan` (function) — 33 call sites
 - `src/coach/coachService.tapeMove.test.ts:45`
 - `src/coach/coachService.tapeMove.test.ts:46`
 - `src/coach/coachService.tapeMove.test.ts:47`
 - `src/coach/coachService.tapeMove.test.ts:48`
-- `src/coach/coachService.ts:1533`
-- `src/coach/coachService.ts:1564`
-- `src/coach/coachService.ts:2493`
-- `src/coach/coachService.ts:2527`
+- `src/coach/coachService.ts:1532`
+- `src/coach/coachService.ts:1563`
+- `src/coach/coachService.ts:2492`
+- `src/coach/coachService.ts:2526`
+- `src/coach/followUp.ts:20`
 - `src/coach/questionIntents.davidsQuestions.test.ts:28`
 - `src/coach/questionIntents.davidsQuestions.test.ts:33`
 - `src/coach/questionIntents.davidsQuestions.test.ts:34`
@@ -238,7 +240,7 @@
 
 ### `pieceOptionsRef` (function) — 6 call sites
 - `src/coach/chatTurn.ts:76`
-- `src/coach/coachService.ts:1479`
+- `src/coach/coachService.ts:1478`
 - `src/services/pieceOptions.test.ts:94`
 - `src/services/pieceOptions.test.ts:97`
 - `src/services/pieceOptions.test.ts:98`
@@ -258,22 +260,22 @@
 
 ### `compareMovesAsk` (function) — 3 call sites
 - `src/coach/chatTurn.ts:119`
-- `src/coach/coachService.ts:2540`
-- `src/services/coachApi.ts:2492`
+- `src/coach/coachService.ts:2539`
+- `src/services/coachApi.ts:2522`
 
 ### `captureOnAsk` (function) — 2 call sites
-- `src/coach/coachService.ts:1708`
+- `src/coach/coachService.ts:1707`
 - `src/services/groundedAnswer.compare.test.ts:47`
 
 ### `pawnStrengthAsk` (function) — 5 call sites
-- `src/coach/coachService.ts:1709`
+- `src/coach/coachService.ts:1708`
 - `src/coach/questionWalk.sicilian1200.test.ts:27`
 - `src/coach/questionWalk.sicilian1200.test.ts:28`
 - `src/coach/questionWalk.sicilian1200.test.ts:31`
 - `src/services/groundedAnswer.compare.test.ts:63`
 
 ### `tradeAsk` (function) — 6 call sites
-- `src/coach/coachService.ts:1550`
+- `src/coach/coachService.ts:1549`
 - `src/services/groundedAnswer.trade.test.ts:11`
 - `src/services/groundedAnswer.trade.test.ts:12`
 - `src/services/groundedAnswer.trade.test.ts:13`
@@ -281,7 +283,7 @@
 - `src/services/groundedAnswer.trade.test.ts:15`
 
 ### `isOpponentHypotheticalQuestion` (function) — 6 call sites
-- `src/coach/coachService.ts:1563`
+- `src/coach/coachService.ts:1562`
 - `src/coach/pass3Questions.test.ts:21`
 - `src/coach/pass3Questions.test.ts:22`
 - `src/services/groundedAnswer.opponentHypothetical.test.ts:17`
@@ -289,7 +291,7 @@
 - `src/services/groundedAnswer.opponentHypothetical.test.ts:24`
 
 ### `isCandidateMoveQuestion` (function) — 15 call sites
-- `src/coach/coachService.ts:1532`
+- `src/coach/coachService.ts:1531`
 - `src/coach/pass3Questions.test.ts:27`
 - `src/coach/questionIntents.davidsQuestions.test.ts:27`
 - `src/coach/questionIntents.davidsQuestions.test.ts:53`
@@ -306,7 +308,7 @@
 - `src/services/groundedAnswer.trade.test.ts:16`
 
 ### `isTacticsQuestion` (function) — 9 call sites
-- `src/coach/coachService.ts:1758`
+- `src/coach/coachService.ts:1757`
 - `src/coach/pass3Questions.test.ts:35`
 - `src/coach/questionIntents.allLanes.test.ts:15`
 - `src/coach/questionIntents.allLanes.test.ts:16`
@@ -320,31 +322,31 @@
 - `src/coach/batteryRouting.test.ts:102`
 - `src/coach/batteryRouting.test.ts:106`
 - `src/coach/batteryRouting.test.ts:109`
-- `src/coach/coachService.ts:1443`
-- `src/services/coachApi.ts:2498`
-- `src/services/coachApi.ts:6217`
+- `src/coach/coachService.ts:1442`
+- `src/services/coachApi.ts:2528`
+- `src/services/coachApi.ts:6247`
 - `src/services/endgameRuleAnswer.test.ts:87`
 - `src/services/endgameRuleAnswer.test.ts:88`
 
 ### `isWhoseTurnQuestion` (function) — 4 call sites
 - `src/coach/batteryRouting.test.ts:120`
 - `src/coach/batteryRouting.test.ts:123`
-- `src/services/coachApi.ts:2498`
-- `src/services/coachApi.ts:2520`
+- `src/services/coachApi.ts:2528`
+- `src/services/coachApi.ts:2550`
 
 ### `isLiveColorQuestion` (function) — 4 call sites
 - `src/coach/batteryRouting.test.ts:128`
 - `src/coach/batteryRouting.test.ts:132`
-- `src/services/coachApi.ts:2498`
-- `src/services/coachApi.ts:2524`
+- `src/services/coachApi.ts:2528`
+- `src/services/coachApi.ts:2554`
 
 ### `isDrawQuestion` (function) — 3 call sites
 - `src/coach/batteryRouting.test.ts:137`
 - `src/coach/batteryRouting.test.ts:140`
-- `src/services/coachApi.ts:2498`
+- `src/services/coachApi.ts:2528`
 
 ### `isPositionAssessmentQuestion` (function) — 6 call sites
-- `src/coach/coachService.ts:1850`
+- `src/coach/coachService.ts:1849`
 - `src/coach/questionIntents.test.ts:889`
 - `src/coach/questionIntents.test.ts:1111`
 - `src/coach/tacticsProgressQuestion.test.ts:202`
@@ -352,7 +354,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:5164`
 
 ### `isMasterPlayQuestion` (function) — 5 call sites
-- `src/coach/coachService.ts:1817`
+- `src/coach/coachService.ts:1816`
 - `src/coach/questionIntents.test.ts:903`
 - `src/coach/questionIntents.test.ts:1119`
 - `src/coach/tacticsProgressQuestion.test.ts:87`
@@ -362,12 +364,12 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `endgameRuleMaterial` (function) — 2 call sites
-- `src/services/coachApi.ts:3837`
+- `src/services/coachApi.ts:3867`
 - `src/services/endgameRuleAnswer.test.ts:30`
 
 ### `isEndgameQuestion` (function) — 10 call sites
-- `src/coach/coachService.ts:1616`
-- `src/coach/coachService.ts:1846`
+- `src/coach/coachService.ts:1615`
+- `src/coach/coachService.ts:1845`
 - `src/coach/questionIntents.test.ts:587`
 - `src/coach/questionIntents.test.ts:915`
 - `src/coach/tacticsProgressQuestion.test.ts:172`
@@ -378,20 +380,20 @@
 - `src/services/endgameRuleAnswer.test.ts:33`
 
 ### `isEndgamePlayRequest` (function) — 5 call sites
-- `src/coach/coachService.ts:1310`
+- `src/coach/coachService.ts:1309`
 - `src/coach/questionIntents.test.ts:571`
 - `src/coach/questionIntents.test.ts:579`
 - `src/coach/questionIntents.test.ts:585`
-- `src/services/coachApi.ts:6405`
+- `src/services/coachApi.ts:6435`
 
 ### `isEndgameWeaknessQuestion` (function) — 4 call sites
-- `src/coach/coachService.ts:1310`
+- `src/coach/coachService.ts:1309`
 - `src/coach/questionIntents.test.ts:591`
 - `src/coach/questionIntents.test.ts:600`
 - `src/coach/questionIntents.test.ts:606`
 
 ### `isPlayerGamesQuestion` (function) — 10 call sites
-- `src/coach/coachService.ts:1842`
+- `src/coach/coachService.ts:1841`
 - `src/coach/questionIntents.secondPersonVeto.test.ts:21`
 - `src/coach/questionIntents.secondPersonVeto.test.ts:30`
 - `src/coach/questionIntents.secondPersonVeto.test.ts:38`
@@ -403,7 +405,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:5171`
 
 ### `isConceptQuestion` (function) — 11 call sites
-- `src/coach/coachService.ts:1294`
+- `src/coach/coachService.ts:1293`
 - `src/coach/questionIntents.allLanes.test.ts:22`
 - `src/coach/questionIntents.allLanes.test.ts:25`
 - `src/coach/questionIntents.d1ConceptDeferral.test.ts:59`
@@ -416,7 +418,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 
 ### `isFundamentalsQuestion` (function) — 15 call sites
-- `src/coach/coachService.ts:1295`
+- `src/coach/coachService.ts:1294`
 - `src/coach/questionIntents.test.ts:1470`
 - `src/coach/questionIntents.test.ts:1480`
 - `src/components/Coach/CoachTeachPage.tsx:5354`
@@ -433,7 +435,7 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:93`
 
 ### `isFundamentalLessonQuestion` (function) — 12 call sites
-- `src/coach/coachService.ts:1299`
+- `src/coach/coachService.ts:1298`
 - `src/coach/pass3Questions.test.ts:34`
 - `src/coach/questionIntents.test.ts:1495`
 - `src/coach/questionIntents.test.ts:1498`
@@ -447,7 +449,7 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:94`
 
 ### `fundamentalsTopicFromText` (function) — 6 call sites
-- `src/services/coachApi.ts:5355`
+- `src/services/coachApi.ts:5385`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:47`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:48`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:49`
@@ -455,14 +457,14 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:51`
 
 ### `isStructuralConceptTarget` (function) — 5 call sites
-- `src/coach/coachService.ts:1321`
-- `src/coach/coachService.ts:1374`
+- `src/coach/coachService.ts:1320`
+- `src/coach/coachService.ts:1373`
 - `src/coach/questionIntents.test.ts:981`
 - `src/coach/questionIntents.test.ts:1448`
 - `src/coach/questionIntents.test.ts:1452`
 
 ### `isTheoryQuestion` (function) — 7 call sites
-- `src/coach/coachService.ts:1345`
+- `src/coach/coachService.ts:1344`
 - `src/coach/openingIdentityQuery.test.ts:18`
 - `src/coach/questionIntents.test.ts:609`
 - `src/coach/questionIntents.test.ts:618`
@@ -471,7 +473,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:5154`
 
 ### `weaknessLifecycleKind` (function) — 3 call sites
-- `src/coach/coachService.ts:1308`
+- `src/coach/coachService.ts:1307`
 - `src/coach/questionIntents.test.ts:554`
 - `src/coach/questionIntents.test.ts:557`
 
@@ -479,12 +481,12 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isWeaknessBriefingQuestion` (function) — 3 call sites
-- `src/coach/coachService.ts:1309`
+- `src/coach/coachService.ts:1308`
 - `src/coach/questionIntents.test.ts:564`
 - `src/coach/questionIntents.test.ts:567`
 
 ### `isFamousGameQuestion` (function) — 6 call sites
-- `src/coach/coachService.ts:1300`
+- `src/coach/coachService.ts:1299`
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:134`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:141`
@@ -492,11 +494,11 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:143`
 
 ### `famousGameFromText` (function) — 2 call sites
-- `src/services/coachApi.ts:5310`
+- `src/services/coachApi.ts:5340`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:135`
 
 ### `isProgressQuestion` (function) — 27 call sites
-- `src/coach/coachService.ts:1292`
+- `src/coach/coachService.ts:1291`
 - `src/coach/questionIntents.gameMistake.test.ts:41`
 - `src/coach/questionIntents.gameMistake.test.ts:43`
 - `src/coach/questionIntents.routerE.test.ts:124`
@@ -525,7 +527,7 @@
 - `src/data/coachGreetings.test.ts:88`
 
 ### `isImprovementTrendQuestion` (function) — 7 call sites
-- `src/coach/coachService.ts:1293`
+- `src/coach/coachService.ts:1292`
 - `src/coach/questionIntents.paraphrase.test.ts:507`
 - `src/coach/questionIntents.test.ts:1254`
 - `src/coach/questionIntents.test.ts:1280`
@@ -534,7 +536,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 
 ### `isOpeningProfileQuestion` (function) — 8 call sites
-- `src/coach/coachService.ts:1301`
+- `src/coach/coachService.ts:1300`
 - `src/coach/questionIntents.routerE.test.ts:123`
 - `src/coach/questionIntents.test.ts:200`
 - `src/coach/questionIntents.test.ts:216`
@@ -544,11 +546,11 @@
 - `src/data/coachGreetings.test.ts:56`
 
 ### `openingProfileKind` (function) — 2 call sites
-- `src/coach/coachService.ts:1773`
+- `src/coach/coachService.ts:1772`
 - `src/coach/questionIntents.test.ts:217`
 
 ### `isStatsQuestion` (function) — 7 call sites
-- `src/coach/coachService.ts:1302`
+- `src/coach/coachService.ts:1301`
 - `src/coach/questionIntents.test.ts:227`
 - `src/coach/questionIntents.test.ts:256`
 - `src/coach/questionIntents.test.ts:264`
@@ -557,7 +559,7 @@
 - `src/data/coachGreetings.test.ts:57`
 
 ### `isStrengthsQuestion` (function) — 8 call sites
-- `src/coach/coachService.ts:1303`
+- `src/coach/coachService.ts:1302`
 - `src/coach/questionIntents.d1ConceptDeferral.test.ts:24`
 - `src/coach/questionIntents.d1ConceptDeferral.test.ts:60`
 - `src/coach/questionIntents.test.ts:267`
@@ -567,38 +569,38 @@
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 
 ### `isOpeningAccuracyQuestion` (function) — 5 call sites
-- `src/coach/coachService.ts:1304`
+- `src/coach/coachService.ts:1303`
 - `src/coach/questionIntents.test.ts:295`
 - `src/coach/questionIntents.test.ts:312`
 - `src/coach/questionIntents.test.ts:330`
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 
 ### `isOpeningTrapsQuestion` (function) — 5 call sites
-- `src/coach/coachService.ts:1305`
+- `src/coach/coachService.ts:1304`
 - `src/coach/questionIntents.test.ts:357`
 - `src/coach/questionIntents.test.ts:372`
 - `src/coach/questionIntents.test.ts:380`
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 
 ### `opensTrapsSystemAsk` (function) — 3 call sites
-- `src/coach/coachService.ts:1778`
+- `src/coach/coachService.ts:1777`
 - `src/coach/questionIntents.test.ts:388`
 - `src/coach/questionIntents.test.ts:392`
 
 ### `isReviewDueQuestion` (function) — 5 call sites
-- `src/coach/coachService.ts:1306`
+- `src/coach/coachService.ts:1305`
 - `src/coach/questionIntents.test.ts:395`
 - `src/coach/questionIntents.test.ts:412`
 - `src/coach/questionIntents.test.ts:422`
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 
 ### `isGameMistakeQuestion` (function) — 3 call sites
-- `src/coach/coachService.ts:1691`
+- `src/coach/coachService.ts:1690`
 - `src/coach/questionIntents.gameMistake.test.ts:20`
 - `src/coach/questionIntents.gameMistake.test.ts:29`
 
 ### `isMistakesQuestion` (function) — 7 call sites
-- `src/coach/coachService.ts:1307`
+- `src/coach/coachService.ts:1306`
 - `src/coach/questionIntents.gameMistake.test.ts:37`
 - `src/coach/questionIntents.test.ts:439`
 - `src/coach/questionIntents.test.ts:441`
@@ -607,37 +609,37 @@
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 
 ### `isTacticsProfileQuestion` (function) — 5 call sites
-- `src/coach/coachService.ts:1311`
+- `src/coach/coachService.ts:1310`
 - `src/coach/questionIntents.test.ts:670`
 - `src/coach/questionIntents.test.ts:679`
 - `src/coach/questionIntents.test.ts:686`
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 
 ### `isPhaseQuestion` (function) — 5 call sites
-- `src/coach/coachService.ts:1312`
+- `src/coach/coachService.ts:1311`
 - `src/coach/questionIntents.test.ts:689`
 - `src/coach/questionIntents.test.ts:699`
 - `src/coach/questionIntents.test.ts:706`
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 
 ### `isRepertoireGapQuestion` (function) — 4 call sites
-- `src/coach/coachService.ts:1313`
+- `src/coach/coachService.ts:1312`
 - `src/coach/questionIntents.test.ts:726`
 - `src/coach/questionIntents.test.ts:735`
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 
 ### `repertoireGapKind` (function) — 3 call sites
-- `src/coach/coachService.ts:1787`
+- `src/coach/coachService.ts:1786`
 - `src/coach/questionIntents.test.ts:710`
 - `src/coach/questionIntents.test.ts:727`
 
 ### `openingExistenceQuery` (function) — 3 call sites
-- `src/coach/coachService.ts:1334`
+- `src/coach/coachService.ts:1333`
 - `src/coach/questionIntents.openingExistence.test.ts:17`
 - `src/coach/questionIntents.openingExistence.test.ts:25`
 
 ### `openingIdentityQuery` (function) — 9 call sites
-- `src/coach/coachService.ts:1335`
+- `src/coach/coachService.ts:1334`
 - `src/coach/openingIdentityQuery.test.ts:6`
 - `src/coach/openingIdentityQuery.test.ts:7`
 - `src/coach/openingIdentityQuery.test.ts:8`
@@ -648,7 +650,7 @@
 - `src/coach/openingIdentityQuery.test.ts:15`
 
 ### `isCounterRepertoireQuestion` (function) — 6 call sites
-- `src/coach/coachService.ts:1321`
+- `src/coach/coachService.ts:1320`
 - `src/coach/questionIntents.counterRepertoire.test.ts:9`
 - `src/coach/questionIntents.counterRepertoire.test.ts:10`
 - `src/coach/questionIntents.counterRepertoire.test.ts:23`
@@ -656,14 +658,14 @@
 - `src/components/Coach/CoachTeachPage.tsx:5126`
 
 ### `isAccuracyQuestion` (function) — 5 call sites
-- `src/coach/coachService.ts:1322`
+- `src/coach/coachService.ts:1321`
 - `src/coach/questionIntents.test.ts:338`
 - `src/coach/questionIntents.test.ts:741`
 - `src/coach/questionIntents.test.ts:743`
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 
 ### `isConsistencyQuestion` (function) — 4 call sites
-- `src/coach/coachService.ts:1323`
+- `src/coach/coachService.ts:1322`
 - `src/coach/questionIntents.test.ts:747`
 - `src/coach/questionIntents.test.ts:749`
 - `src/components/Coach/CoachTeachPage.tsx:5354`
@@ -679,17 +681,17 @@
 - `src/coach/questionIntents.test.ts:667`
 
 ### `isConvertingQuestion` (function) — 4 call sites
-- `src/coach/coachService.ts:1324`
+- `src/coach/coachService.ts:1323`
 - `src/coach/questionIntents.test.ts:753`
 - `src/coach/questionIntents.test.ts:755`
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 
 ### `isColorQuestion` (function) — 2 call sites
-- `src/coach/coachService.ts:1325`
+- `src/coach/coachService.ts:1324`
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 
 ### `isRecordsQuestion` (function) — 6 call sites
-- `src/coach/coachService.ts:1326`
+- `src/coach/coachService.ts:1325`
 - `src/coach/questionIntents.test.ts:347`
 - `src/coach/questionIntents.test.ts:354`
 - `src/coach/questionIntents.test.ts:481`
@@ -700,7 +702,7 @@
 - `src/coach/batteryRouting.test.ts:85`
 - `src/coach/batteryRouting.test.ts:90`
 - `src/coach/batteryRouting.test.ts:91`
-- `src/coach/coachService.ts:1327`
+- `src/coach/coachService.ts:1326`
 - `src/coach/questionIntents.test.ts:637`
 - `src/coach/questionIntents.test.ts:1125`
 - `src/coach/questionIntents.test.ts:1126`
@@ -734,7 +736,7 @@
 - `src/data/coachGreetings.test.ts:88`
 
 ### `isMoveRatingQuestion` (function) — 7 call sites
-- `src/coach/coachService.ts:1800`
+- `src/coach/coachService.ts:1799`
 - `src/coach/questionIntents.test.ts:1159`
 - `src/coach/questionIntents.test.ts:1190`
 - `src/coach/questionIntents.test.ts:1198`
@@ -746,7 +748,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `retrospectiveMoveRef` (function) — 12 call sites
-- `src/coach/coachService.ts:1397`
+- `src/coach/coachService.ts:1396`
 - `src/coach/questionIntents.compareMyMove.test.ts:26`
 - `src/coach/questionIntents.routerE.test.ts:45`
 - `src/coach/questionIntents.routerE.test.ts:65`
@@ -767,7 +769,7 @@
 - `src/coach/questionIntents.routerE.test.ts:204`
 
 ### `isMethodQuestion` (function) — 3 call sites
-- `src/coach/coachService.ts:1400`
+- `src/coach/coachService.ts:1399`
 - `src/coach/questionIntents.routerE.test.ts:99`
 - `src/coach/questionIntents.routerE.test.ts:111`
 
@@ -775,7 +777,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `trainingRequestKind` (function) — 15 call sites
-- `src/coach/coachService.ts:1328`
+- `src/coach/coachService.ts:1327`
 - `src/coach/questionIntents.test.ts:1207`
 - `src/coach/questionIntents.test.ts:1230`
 - `src/coach/questionIntents.test.ts:1244`
@@ -798,20 +800,20 @@
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 
 ### `isPuzzleStatsQuestion` (function) — 2 call sites
-- `src/coach/coachService.ts:1329`
+- `src/coach/coachService.ts:1328`
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 
 ### `isTransferGapQuestion` (function) — 3 call sites
-- `src/coach/coachService.ts:1330`
+- `src/coach/coachService.ts:1329`
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 - `src/services/trainingAidRouter.ts:130`
 
 ### `isSkillRadarQuestion` (function) — 2 call sites
-- `src/coach/coachService.ts:1331`
+- `src/coach/coachService.ts:1330`
 - `src/components/Coach/CoachTeachPage.tsx:5354`
 
 ### `isTeachingMethodQuestion` (function) — 9 call sites
-- `src/coach/coachService.ts:1336`
+- `src/coach/coachService.ts:1335`
 - `src/coach/questionIntents.allLanes.test.ts:70`
 - `src/coach/questionIntents.allLanes.test.ts:74`
 - `src/coach/questionIntents.allLanes.test.ts:78`
@@ -822,7 +824,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:5192`
 
 ### `isSettingsQuestion` (function) — 5 call sites
-- `src/coach/coachService.ts:1337`
+- `src/coach/coachService.ts:1336`
 - `src/services/groundedAnswer.settings.test.ts:9`
 - `src/services/groundedAnswer.settings.test.ts:20`
 - `src/services/groundedAnswer.settings.test.ts:32`
@@ -837,14 +839,14 @@
 ### `isNameOpeningQuestion` (function) — 7 call sites
 - `src/coach/batteryRouting.test.ts:60`
 - `src/coach/batteryRouting.test.ts:69`
-- `src/coach/coachService.ts:1342`
+- `src/coach/coachService.ts:1341`
 - `src/coach/questionIntents.test.ts:485`
 - `src/coach/questionIntents.test.ts:493`
 - `src/coach/questionIntents.test.ts:499`
 - `src/components/Coach/CoachTeachPage.tsx:5153`
 
 ### `isAppHelpQuestion` (function) — 13 call sites
-- `src/coach/coachService.ts:1338`
+- `src/coach/coachService.ts:1337`
 - `src/coach/questionIntents.allLanes.test.ts:23`
 - `src/coach/questionIntents.test.ts:1301`
 - `src/coach/questionIntents.test.ts:1303`
@@ -862,7 +864,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `positionalTopic` (function) — 7 call sites
-- `src/coach/coachService.ts:1678`
+- `src/coach/coachService.ts:1677`
 - `src/coach/pass3Questions.test.ts:40`
 - `src/coach/questionIntents.allLanes.test.ts:85`
 - `src/coach/questionIntents.allLanes.test.ts:86`
@@ -871,13 +873,13 @@
 - `src/components/Coach/CoachTeachPage.tsx:5165`
 
 ### `isTimeTroubleQuestion` (function) — 1 call site
-- `src/coach/coachService.ts:1339`
+- `src/coach/coachService.ts:1338`
 
 ### `isLastGameQuestion` (function) — 1 call site
-- `src/coach/coachService.ts:1340`
+- `src/coach/coachService.ts:1339`
 
 ### `isLastGameMistakeQuestion` (function) — 5 call sites
-- `src/coach/coachService.ts:1341`
+- `src/coach/coachService.ts:1340`
 - `src/coach/questionIntents.test.ts:444`
 - `src/coach/questionIntents.test.ts:462`
 - `src/coach/questionIntents.test.ts:472`
@@ -945,7 +947,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `splitMultiAsk` (function) — 5 call sites
-- `src/coach/coachService.ts:2418`
+- `src/coach/coachService.ts:2417`
 - `src/coach/pass3Questions.test.ts:50`
 - `src/coach/pass3Questions.test.ts:54`
 - `src/coach/pass3Questions.test.ts:55`

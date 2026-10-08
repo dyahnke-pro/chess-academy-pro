@@ -10,12 +10,12 @@
 // engine proof is not exact). Pure.
 import type { Color, Square } from 'chess.js';
 import { legalLineProof, type Proof } from './proof';
-import { costStakes } from './factStakes';
+import { costStakes, isSacrifice } from './factStakes';
 import { andList } from '../utils/andList';
 import { CENTRAL_SQUARES } from './keySquares';
 import {
   type StructureRead, PIECE_NOUN, board, play, piecesOf, other, fileIdx, rankNum,
-  scope, uciToSans, bare,
+  scope, uciToSans, bare, sqAt, pawnAttacks,
 } from './structureJudgementKit';
 
 /** RIGHT IDEA, WRONG PIECE — the student's piece went to the square the
@@ -235,4 +235,89 @@ export function fightingLine(
     act: 'fighting-line', squares: [], proof, key: `fighting:${fen.split(' ')[0]}`,
     text: `It's level, so make chances: ${bare(fight[0])} creates the imbalance, ${andList(labels)}. ${bare(quiet[0])} keeps it quiet.`,
   };
+}
+
+/** THE WEDGE THAT PAYS LATER (missed computers, 2026-10-08). The student's pawn
+ *  goes deep (their fifth rank or beyond) and it IS the engine's move; later in
+ *  that same line a check of the student's can't be safely blocked, because the
+ *  wedge pawn covers the square a piece of theirs could block on. Every part is
+ *  played on the board: the line, the check, the block square, the piece that
+ *  could reach it, and the pawn still standing on its square. */
+export function wedgePaysLater(
+  fenBefore: string, san: string, student: Color, bestUci: readonly string[], cpLoss: number,
+): StructureRead | null {
+  if (cpLoss >= 50 || bestUci.length < 3) return null;
+  const first = play(fenBefore, san);
+  if (!first || first.mv.piece !== 'p' || first.mv.color !== student) return null;
+  if (`${first.mv.from}${first.mv.to}${first.mv.promotion ?? ''}` !== bestUci[0]) return null;
+  const wedge = first.mv.to;
+  const rel = student === 'w' ? rankNum(wedge) : 9 - rankNum(wedge);
+  if (rel < 5) return null;
+  const pv = uciToSans(fenBefore, bestUci);
+  const c = board(fenBefore);
+  if (!c) return null;
+  const them = other(student);
+  for (let i = 0; i < Math.min(pv.length, 9); i++) {
+    const mv = c.move(pv[i]);
+    if (i > 0 && (mv.from === wedge || mv.to === wedge)) return null; // the pawn moved or was taken
+    if (i === 0 || mv.color !== student || !c.inCheck()) continue;
+    if (mv.piece !== 'b' && mv.piece !== 'r' && mv.piece !== 'q') continue;
+    const king = piecesOf(c, them, 'k')[0];
+    if (!king) return null;
+    const df = Math.sign(fileIdx(king) - fileIdx(mv.to));
+    const dr = Math.sign(rankNum(king) - rankNum(mv.to));
+    const covered = pawnAttacks(wedge, student);
+    for (let k = 1; k < 8; k++) {
+      const sq = sqAt(fileIdx(mv.to) + df * k, rankNum(mv.to) + dr * k);
+      if (!sq || sq === king) break;
+      if (!covered.includes(sq)) continue;
+      const blocker = c.moves({ verbose: true }).find((m) => m.to === sq && m.piece !== 'k');
+      if (!blocker) continue;
+      const proof = legalLineProof(fenBefore, pv.slice(0, i + 1));
+      if (!proof) return null;
+      return {
+        act: 'placement-future-line', squares: [wedge, sq, mv.to], proof, key: `wedge:${wedge}:${sq}`,
+        text: `Your pawn on ${wedge} pays later: in the line, the check ${bare(mv.san)} can't be safely blocked on ${sq}, because the pawn covers it.`,
+      };
+    }
+  }
+  return null;
+}
+
+/** KEEP TACTICAL CHANCES IN A CLOSED POSITION (missed computers, 2026-10-08).
+ *  The pawns are locked (three or more pawns of the student's stand blocked by
+ *  one of theirs), the student played the engine's move, and the engine's own
+ *  line from it holds a sacrifice of the student's that they take. In a closed
+ *  position the chances are tactical; this names the one the line keeps. */
+export function closedTacticalChance(
+  fenBefore: string, san: string, student: Color, bestUci: readonly string[], cpLoss: number,
+): StructureRead | null {
+  if (cpLoss >= 50 || bestUci.length < 4) return null;
+  const first = play(fenBefore, san);
+  if (!first || first.mv.color !== student) return null;
+  if (`${first.mv.from}${first.mv.to}${first.mv.promotion ?? ''}` !== bestUci[0]) return null;
+  const them = other(student);
+  const after = first.after;
+  const locked = piecesOf(after, student, 'p').filter((p) => {
+    const ahead = sqAt(fileIdx(p), rankNum(p) + (student === 'w' ? 1 : -1));
+    const blocker = ahead ? after.get(ahead) : null;
+    return !!blocker && blocker.type === 'p' && blocker.color === them;
+  });
+  if (locked.length < 3) return null;
+  const pv = uciToSans(fenBefore, bestUci);
+  const c = board(fenBefore);
+  if (!c) return null;
+  for (let i = 0; i < Math.min(pv.length - 1, 11); i++) {
+    const fenAt = c.fen();
+    const mv = c.move(pv[i]);
+    if (i < 2 || mv.color !== student) continue;
+    if (!isSacrifice(fenAt, pv[i], pv[i + 1])) continue;
+    const proof = legalLineProof(fenBefore, pv.slice(0, i + 2));
+    if (!proof) return null;
+    return {
+      act: 'fighting-line', squares: [mv.to, ...locked], proof, key: `closed-sac:${mv.to}`,
+      text: `With the pawns locked, the chances here are tactical: this line keeps a sacrifice in the air — ${bare(mv.san)} comes later, and they take it.`,
+    };
+  }
+  return null;
 }

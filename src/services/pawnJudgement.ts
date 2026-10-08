@@ -324,3 +324,28 @@ export function mirroredAsymmetry(fen: string, student: Color): StructureRead | 
   }
   return null;
 }
+
+/** CHOOSING BETWEEN PAWN MOVES — the formation half (missed computers,
+ *  2026-10-08). The student pushed a pawn that built nothing, and the engine's
+ *  own move was a different pawn push that builds a named formation (the same
+ *  `formation` computer reads it). Said only when the choice cost something,
+ *  with the engine's move as the proof. */
+export function formationChoice(
+  fenBefore: string, san: string, student: Color, bestSan: string | null, cpLoss: number,
+): StructureRead | null {
+  if (!bestSan || cpLoss < 50 || bare(bestSan) === bare(san)) return null;
+  const played = play(fenBefore, san);
+  const best = play(fenBefore, bestSan);
+  if (!played || !best || played.mv.piece !== 'p' || best.mv.piece !== 'p') return null;
+  if (played.mv.color !== student) return null;
+  if (formation(fenBefore, san, student)) return null;
+  const built = formation(fenBefore, bestSan, student);
+  if (!built) return null;
+  const kind = built.key.split(':')[1] ?? 'formation';
+  const proof = legalLineProof(fenBefore, [bestSan]);
+  if (!proof) return null;
+  return {
+    act: 'formation', squares: built.squares, proof, key: `formation-choice:${built.key}`, stakes: costStakes(cpLoss) ?? undefined,
+    text: `Of the pawn moves, ${bare(bestSan)} was the one: it makes a ${kind} of ${andList(built.squares)}, and ${bare(san)} builds nothing.`,
+  };
+}

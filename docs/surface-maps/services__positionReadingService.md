@@ -152,7 +152,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewConcepts.ts:94`
 
 ### `legalSeeGainOn` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:2836`
+- `src/services/coachFeatureService.ts:2839`
 - `src/services/groundedAnswer.ts:7039`
 - `src/services/moveIntent.ts:292`
 - `src/services/moveIntent.ts:304`

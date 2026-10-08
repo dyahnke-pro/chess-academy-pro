@@ -305,6 +305,34 @@ describe('grounding — the grounded default (no free-compose)', () => {
     expect(counters.llmCalls).toBe(0);         // voiceFacts raw — the LLM decides nothing
   });
 
+  // A turn with no chess words is answered in code (answers swarm P7): never
+  // "I'm not sure what you mean" for a real question the board can answer.
+  describe('a turn with no chess words', () => {
+    const snap = { currentFen: STARTING_FEN, surface: '/coach/chat', engineBestMoveUci: 'g1f3', engineEvalCp: 30 };
+    const unclear = /not sure what you mean|did not catch that/i;
+    it.each(['should I resign?', 'am I doing ok?', 'what now?'])('"%s" on a live board gets the position read', async (q) => {
+      const counters = installFetchMock({ lichess: LICHESS_PAYLOAD, llmTexts: ['ignored'] });
+      const r = await getCoachChatResponse([{ role: 'user', content: q }], '', undefined, 'chat_response', 1024, undefined, undefined, snap);
+      expect(r).not.toMatch(unclear);
+      expect(counters.llmCalls).toBe(0);
+    });
+    it('"explain that again" repeats the last answer', async () => {
+      const counters = installFetchMock({ lichess: LICHESS_PAYLOAD, llmTexts: ['ignored'] });
+      const r = await getCoachChatResponse([
+        { role: 'user', content: 'what should I play?' },
+        { role: 'assistant', content: 'Nf3 develops a piece and guards e5.' },
+        { role: 'user', content: 'explain that again' },
+      ], '', undefined, 'chat_response', 1024, undefined, undefined, snap);
+      expect(r).toContain('Nf3 develops a piece and guards e5.');
+      expect(counters.llmCalls).toBe(0);
+    });
+    it('"thanks" stays a short acknowledgment', async () => {
+      installFetchMock({ lichess: LICHESS_PAYLOAD, llmTexts: ['ignored'] });
+      const r = await getCoachChatResponse([{ role: 'user', content: 'thanks' }], '', undefined, 'chat_response', 1024, undefined, undefined, snap);
+      expect(r).toBe(smallTalkReply('thanks'));
+    });
+  });
+
   it('serves the honest stock line when nothing can be grounded (no engine data)', async () => {
     const { response, counters } = await ask('what should I play here?', ['I recommend Nh6. Masters favor e4.']);
     // Honest about the missing engine read (see the note above on why this is

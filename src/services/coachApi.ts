@@ -2117,15 +2117,45 @@ export function isBoardQuestionTurn(
   );
 }
 
-/** The reply to a turn that reached the no-chess lane. Small talk is answered
- *  in code (smallTalk.ts). An unmatched turn that NAMES something — an opening,
- *  a player, a capitalised name — is a chess question no lane answers yet, so
- *  it gets the honest stock line rather than "I didn't catch that". */
-function banterReply(ask: string): string {
-  if (smallTalkKind(ask) !== 'unclear') return smallTalkReply(ask);
+/** "explain that again", "I don't get it", "what do you mean" — say the last
+ *  answer again rather than claim the student was unclear. */
+const REPEAT_ASK_RE = /\b(?:explain\s+(?:that|it)\s+again|say\s+(?:that|it)\s+again|repeat\s+(?:that|it)|come\s+again|i\s+(?:don'?t|do\s+not)\s+(?:get|understand)(?:\s+(?:it|that))?|what\s+do\s+you\s+mean)\b/i;
+/** "help", "what can you do" — the app's real capabilities. */
+const HELP_ASK_RE = /^\s*(?:help|what\s+can\s+you\s+do|what\s+do\s+you\s+do|how\s+does\s+this\s+work)\b/i;
+
+/** The answer to a turn with no chess words in it (answers swarm P7). All in
+ *  code: small talk gets a short acknowledgment; a repeat request gets the last
+ *  answer again; "help" gets the app's capabilities; on a live board any other
+ *  question ("should I resign?", "am I doing ok?", "what now?") gets the
+ *  position read; something named that no lane answers gets the honest stock
+ *  line; only then "I'm not sure what you mean". */
+async function answerNoChessTurn(
+  ask: string,
+  grounding: MasterGroundingOptions,
+  config: ProviderConfig | null,
+  studentLanguage: string | undefined,
+  messages: ReadonlyArray<{ role: string; content: string }>,
+): Promise<{ text: string; lane: string }> {
+  if (smallTalkKind(ask) !== 'unclear') return { text: smallTalkReply(ask), lane: 'conversational' };
+  if (REPEAT_ASK_RE.test(ask)) {
+    const last = [...messages].reverse().find((m) => m.role === 'assistant' && m.content.trim().length > 0);
+    const text = last?.content.replace(/\s*\[BOARD:[^\]]*\]/g, '').trim();
+    if (text) return { text: `Here it is again: ${text}`, lane: 'repeat-last' };
+  }
+  if (HELP_ASK_RE.test(ask)) {
+    const overview = assembleCapabilitiesOverview(CAPABILITY_HEADLINES);
+    if (overview) return { text: overview.facts, lane: 'app-help' };
+  }
+  // Something named (an opening, a player) is a question about THAT, never
+  // about the board — so it is checked before the position read.
   const namesSomething = /\b(?:opening|defen[cs]e|gambit|variation|attack|system)\b/i.test(ask)
     || /\b[A-Z][a-z]+/.test(ask.trim().slice(1));
-  return namesSomething ? STOCK_GROUNDING_FALLBACK : smallTalkReply(ask);
+  if (namesSomething) return { text: STOCK_GROUNDING_FALLBACK, lane: 'safe-default-stock' };
+  if (grounding.currentFen) {
+    const read = await serveGroundedPositionDefault(grounding, config, ask || undefined, undefined, studentLanguage);
+    if (read) return { text: read, lane: 'safe-default-position' };
+  }
+  return { text: smallTalkReply(ask), lane: 'conversational' };
 }
 
 /** Coverage telemetry: which lane served a coach turn. Drives the free-LLM
@@ -6801,10 +6831,10 @@ export async function getCoachChatResponse(
 
     // Non-chess conversational turn — answered in code (answers swarm P7):
     // acknowledge or ask what they meant. No model, so nothing to strip.
-    const reply = banterReply(originalQuery);
-    emitGroundingCoverage('conversational', surface, sessionId, { question: originalQuery.slice(0, 100) });
-    if (onStream) onStream(reply);
-    return reply;
+    const reply = await answerNoChessTurn(originalQuery, grounding, config, studentLanguage, messages);
+    emitGroundingCoverage(reply.lane, surface, sessionId, { question: originalQuery.slice(0, 100) });
+    if (onStream) onStream(reply.text);
+    return reply.text;
   }
 
   // ── Grounded path fall-through: THE GROUNDED DEFAULT (gate 0 — David
@@ -6849,10 +6879,10 @@ export async function getCoachChatResponse(
   // serve the constrained conversational reply (chess forbidden + swept),
   // never the position default. Mirrors the ungrounded chess-signal seal above.
   if (grounding && !isBoardQuestionTurn(originalQuery, grounding)) {
-    const reply = banterReply(originalQuery);
-    emitGroundingCoverage('conversational', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough-banter' });
-    if (onStream) onStream(reply);
-    return reply;
+    const reply = await answerNoChessTurn(originalQuery, grounding, config, studentLanguage, messages);
+    emitGroundingCoverage(reply.lane, surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough-banter' });
+    if (onStream) onStream(reply.text);
+    return reply.text;
   }
   // Batch D live flip — signal-map re-route before the generic position default.
   const fallthroughReroute = grounding ? await signalReroute(originalQuery, grounding, config, studentLanguage) : null;

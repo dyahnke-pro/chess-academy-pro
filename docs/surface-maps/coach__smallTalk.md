@@ -24,15 +24,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `smallTalkKind` (function) — 2 call sites
 - `src/coach/smallTalk.test.ts:12`
-- `src/services/coachApi.ts:2125`
+- `src/services/coachApi.ts:2139`
 
-### `smallTalkReply` (function) — 6 call sites
+### `smallTalkReply` (function) — 7 call sites
 - `src/coach/smallTalk.test.ts:16`
 - `src/coach/smallTalk.test.ts:17`
 - `src/services/coachApi.banterContract.test.ts:14`
 - `src/services/coachApi.master-integration.test.ts:172`
-- `src/services/coachApi.ts:2125`
-- `src/services/coachApi.ts:2128`
+- `src/services/coachApi.master-integration.test.ts:332`
+- `src/services/coachApi.ts:2139`
+- `src/services/coachApi.ts:2158`
 
 ## Tests
 

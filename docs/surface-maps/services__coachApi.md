@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6927 lines · 40 exports · 53 importers · 59 tests · 19 audits**
+**6957 lines · 40 exports · 53 importers · 59 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -116,13 +116,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `consumeCoachLines` (function) — 4 call sites
-- `src/coach/coachService.ts:1904`
+- `src/coach/coachService.ts:1903`
 - `src/services/coachApi.pieceOptions.test.ts:42`
 - `src/services/coachApi.pieceOptions.test.ts:44`
 - `src/services/coachApi.pieceOptions.test.ts:49`
 
 ### `consumeServedIntent` (function) — 1 call site
-- `src/coach/coachService.ts:1908`
+- `src/coach/coachService.ts:1907`
 
 ### `answerAttemptComparison` (function) — 4 call sites
 - `src/services/coachApi.attemptComparison.test.ts:30`
@@ -131,10 +131,10 @@
 - `src/services/coachApi.attemptComparison.test.ts:63`
 
 ### `consumeCoachActionOffer` (function) — 1 call site
-- `src/coach/coachService.ts:1898`
+- `src/coach/coachService.ts:1897`
 
 ### `consumeCoachKeySquares` (function) — 6 call sites
-- `src/coach/coachService.ts:1913`
+- `src/coach/coachService.ts:1912`
 - `src/services/coachApi.keySquares.test.ts:10`
 - `src/services/coachApi.keySquares.test.ts:12`
 - `src/services/coachApi.keySquares.test.ts:15`
@@ -234,7 +234,7 @@
 - `src/services/groundedMoveFeedback.test.ts:45`
 
 ### `translateToEnglish` (function) — 4 call sites
-- `src/coach/coachService.ts:571`
+- `src/coach/coachService.ts:572`
 - `src/components/Coach/CoachTeachPage.tsx:3597`
 - `src/services/coachSessionRouter.ts:117`
 - `src/services/coachSettingsAction.ts:242`
@@ -284,12 +284,12 @@
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:260`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:191`
-- `src/services/coachFeatureService.ts:441`
-- `src/services/coachFeatureService.ts:580`
-- `src/services/coachFeatureService.ts:581`
-- `src/services/coachFeatureService.ts:5247`
-- `src/services/coachFeatureService.ts:5400`
+- `src/services/coachFeatureService.ts:194`
+- `src/services/coachFeatureService.ts:444`
+- `src/services/coachFeatureService.ts:583`
+- `src/services/coachFeatureService.ts:584`
+- `src/services/coachFeatureService.ts:5290`
+- `src/services/coachFeatureService.ts:5443`
 - `src/services/coachLaneWiring.test.ts:144`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
@@ -347,7 +347,7 @@
 - `src/services/coachApi.currentAsk.test.ts:51`
 - `src/services/coachApi.currentAsk.test.ts:56`
 
-### `getCoachChatResponse` (function) — 23 call sites
+### `getCoachChatResponse` (function) — 26 call sites
 - `scripts/audit-coach-master-integration.mjs:327`
 - `scripts/audit-coach-master-integration.mjs:360`
 - `scripts/audit-coach-master-integration.mjs:413`
@@ -362,9 +362,12 @@
 - `src/services/coachApi.master-integration.test.ts:245`
 - `src/services/coachApi.master-integration.test.ts:260`
 - `src/services/coachApi.master-integration.test.ts:298`
+- `src/services/coachApi.master-integration.test.ts:315`
+- `src/services/coachApi.master-integration.test.ts:321`
 - `src/services/coachApi.master-integration.test.ts:331`
-- `src/services/coachApi.master-integration.test.ts:346`
-- `src/services/coachApi.master-integration.test.ts:360`
+- `src/services/coachApi.master-integration.test.ts:359`
+- `src/services/coachApi.master-integration.test.ts:374`
+- `src/services/coachApi.master-integration.test.ts:388`
 - `src/services/coachApi.pieceOptions.test.ts:30`
 - `src/services/coachApi.whyReasoning.integration.test.ts:60`
 - `src/services/coachApi.whyReasoning.integration.test.ts:80`
