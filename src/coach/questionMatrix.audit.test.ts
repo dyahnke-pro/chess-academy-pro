@@ -49,6 +49,9 @@ const INTENT_KEYS: ReadonlyArray<keyof MasterGroundingOptions> = [
   // and off-topic asks (questionIntents.routerE.test.ts), so a probe cannot pass
   // trivially through them.
   'retrospectiveMoveQuestion', 'methodQuestion', 'hintQuestion',
+  // A pure board aspect ("is my king safe?") is answered by the board
+  // dispatcher, not as a positional-topic essay (one reader, 2026-10-08).
+  'groundedBoardQuestion',
 ];
 
 function firedIntent(g: MasterGroundingOptions): boolean {

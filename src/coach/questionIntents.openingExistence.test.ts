@@ -29,7 +29,9 @@ describe('openingExistenceQuery', () => {
 describe('wiring pins', () => {
   it('coachService threads the name and engages without a board', () => {
     const s = readFileSync('src/coach/coachService.ts', 'utf8');
-    expect(s).toContain('openingExistenceName: openingExistenceName ?? undefined');
+    // The name arrives through the shared read (one reader, 2026-10-08).
+    expect(s).toContain('...sharedQuestionRead,');
+    expect(s).toContain('const openingExistenceName = sharedQuestionRead.openingExistenceName ?? null;');
     expect(s).toContain('|| openingExistenceName !== null');
   });
   it('coachApi answers from the DB and offers the middlegame-deep lesson', () => {

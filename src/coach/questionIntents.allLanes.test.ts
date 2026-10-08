@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 import {
   isTacticsQuestion, isConceptQuestion, isAppHelpQuestion,
   isSettingsQuestion, isTimeTroubleQuestion, isLastGameQuestion,
-  isTeachingMethodQuestion,
+  isTeachingMethodQuestion, buildQuestionGrounding,
 } from './questionIntents';
 
 describe('lane-overlap guards', () => {
@@ -28,17 +28,21 @@ describe('lane-overlap guards', () => {
 
 describe('the five once-unreachable lanes are threaded from coachService', () => {
   const SERVICE = readFileSync('src/coach/coachService.ts', 'utf8');
-  const cases: Array<[string, string, (q: string) => boolean, string]> = [
-    ['settings', 'settingsQuestion: settingsQuestionEngage', isSettingsQuestion, 'is voice on?'],
-    ['app-help', 'appHelpQuestion: appHelpQuestionEngage', isAppHelpQuestion, 'what does the Tactics tab do?'],
-    ['time-trouble', 'timeTroubleQuestion: timeTroubleQuestionEngage', isTimeTroubleQuestion, 'do I play too fast?'],
-    ['last-game', 'lastGameQuestion: lastGameQuestionEngage', isLastGameQuestion, 'did I win my last game?'],
-    ['teaching-method', 'teachingMethodQuestion: teachingMethodQuestionEngage', isTeachingMethodQuestion, 'how do you teach the Caro-Kann?'],
+  // ONE READER (2026-10-08): coachService no longer rewires each flag by hand —
+  // it spreads the shared read, so a flag the shared builder sets reaches the
+  // answer. Pinned by behaviour (the builder sets it) plus the one spread.
+  const cases: Array<[string, 'settingsQuestion' | 'appHelpQuestion' | 'timeTroubleQuestion' | 'lastGameQuestion' | 'teachingMethodQuestion', (q: string) => boolean, string]> = [
+    ['settings', 'settingsQuestion', isSettingsQuestion, 'is voice on?'],
+    ['app-help', 'appHelpQuestion', isAppHelpQuestion, 'what does the Tactics tab do?'],
+    ['time-trouble', 'timeTroubleQuestion', isTimeTroubleQuestion, 'do I play too fast?'],
+    ['last-game', 'lastGameQuestion', isLastGameQuestion, 'did I win my last game?'],
+    ['teaching-method', 'teachingMethodQuestion', isTeachingMethodQuestion, 'how do you teach the Caro-Kann?'],
   ];
-  for (const [name, wire, detector, q] of cases) {
+  for (const [name, flag, detector, q] of cases) {
     it(`${name}: detector fires and the flag is threaded`, () => {
       expect(detector(q), `detector dead for "${q}"`).toBe(true);
-      expect(SERVICE.includes(wire), `${wire} not threaded`).toBe(true);
+      expect(buildQuestionGrounding(q)[flag], `${flag} not set by the shared read`).toBe(true);
+      expect(SERVICE.includes('...sharedQuestionRead,'), 'coachService no longer spreads the shared read').toBe(true);
     });
   }
   it('all five also ENGAGE grounding without a board', () => {

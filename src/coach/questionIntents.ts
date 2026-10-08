@@ -3323,7 +3323,9 @@ export function buildQuestionGrounding(
     // too, and the plan lane dispatches before the (phase-gated) endgame lane —
     // so it answered with a middlegame plan on a non-endgame board (broken-map
     // #5). The endgame lane owns it; suppress plan when endgame fires.
-    planQuestion: (isPlanQuestion(a) || sideContinue) && !isEndgameQuestion(a) && !method && !threat,
+    // A structural target ("plan against an isolated pawn") is theory, not
+    // this board's plan — the answering side's rule, merged here (2026-10-08).
+    planQuestion: (isPlanQuestion(a) || sideContinue) && !isStructuralConceptTarget(a) && !isEndgameQuestion(a) && !method && !threat,
     // A NAMED-candidate ask ("is Qf3 ok") must EVALUATE that move, not deflect
     // to the best move — so it takes precedence over best-move / move-rating
     // (David 2026-07-10). whyBestMove still wins for "why is X best".
@@ -3365,7 +3367,7 @@ export function buildQuestionGrounding(
     // answer (a real "Caro khan" ask got told to play against the Elephant
     // Gambit, PostHog 2026-07-15). The counter-repertoire ask is the more
     // specific, correct read of the question — it wins outright.
-    repertoireGapQuestion: isRepertoireGapQuestion(a) && !isCounterRepertoireQuestion(a),
+    repertoireGapQuestion: isRepertoireGapQuestion(a) && !(isCounterRepertoireQuestion(a) && !isStructuralConceptTarget(a)),
     repertoireGapKind: repertoireGapKind(a),
     accuracyQuestion: isAccuracyQuestion(a),
     consistencyQuestion: isConsistencyQuestion(a),
@@ -3388,7 +3390,7 @@ export function buildQuestionGrounding(
     masterPlayQuestion: isMasterPlayQuestion(a) && !threat,
     // "What is the plan?" is the plan, never a glossary entry — the answering
     // side has always suppressed it; the label now agrees (parity 2026-10-08).
-    conceptQuestion: isConceptQuestion(a) && !threat && !((isPlanQuestion(a) || sideContinue) && !isEndgameQuestion(a) && !method),
+    conceptQuestion: isConceptQuestion(a) && !threat && !((isPlanQuestion(a) || sideContinue) && !isStructuralConceptTarget(a) && !isEndgameQuestion(a) && !method),
     fundamentalLessonQuestion: isFundamentalLessonQuestion(a),
     playerGamesQuestion: isPlayerGamesQuestion(a) && !sideContinue,
     // "what is my weakest endgame?" is about the student's record, not how to
@@ -3419,13 +3421,15 @@ export function buildQuestionGrounding(
     // General strategy/how-to ("how do I play against an IQP") → corpus theory
     // search. Suppressed when the concept or fundamentals lanes already own it,
     // so it's the fallback theory net, not a competitor (P-II.1).
-    theoryQuestion: isTheoryQuestion(a) && !isConceptQuestion(a) && !isFundamentalsQuestion(a) && !method,
+    theoryQuestion: isTheoryQuestion(a) && !isConceptQuestion(a) && !isFundamentalsQuestion(a) && !isFundamentalLessonQuestion(a) && !method,
     // Weakness LIFECYCLE / BRIEFING (Part III) — the archive-timeline read.
     // Take precedence over the generic mistakes/misconceptions/strengths lanes
     // (handled by suppressing those below).
     weaknessLifecycleKind: weaknessLifecycleKind(a) ?? undefined,
     weaknessBriefingQuestion: isWeaknessBriefingQuestion(a),
-    positionalTopic: positionalTopic(a) ?? undefined,
+    // A pure board aspect ("who controls e5?") is answered from the board,
+    // never as a positional-topic essay.
+    positionalTopic: pureBoardAspect(a) !== null ? undefined : (positionalTopic(a) ?? undefined),
   };
 }
 
