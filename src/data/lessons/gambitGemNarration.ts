@@ -22,56 +22,32 @@ export interface GambitGemNarration {
 }
 
 export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
-  // Kieseritzky: 3.Nf3 g5 4.h4 f6? — wrong way to prop g5 (book is 4...g4 5.Ne5). 5.Nxg5! and ...fxg5 6.Qh5+ rakes the open king.
-  'gambit-kings-gambit:e4_e5_f4_exf4_Nf3_g5_h4:f6': {
-    sources: ['book:kings-gambit', 'concept:pos-king-safety', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Kieseritzky_Gambit'],
-    watch: ['', '', '', '', '', '', '', '…f6? shores up g5 but walls in Black’s own kingside and leaves e6 and the king’s diagonal tender.', 'Nxg5! the knight just takes the pawn — and …fxg5 runs into Qh5+ raking the open king, so it can’t be taken back.', '', '', '', 'Qxf3 — White stands a clean pawn up with Black’s kingside wrecked and the king marooned on e8.', '', '', ''],
-    learn: ['', '', '', '', '', '', '', '', 'Nxg5! — …fxg5? Qh5+ rips the king', '', '', '', 'Qxf3 — a pawn up, king stuck', '', '', ''],
-  },
-  // Falkbeer: 3...e4 4.d3 f5? over-braces e4 instead of 4...Nf6. 5.dxe4 removes the cramping pawn, development lead decides.
-  'gambit-kings-gambit:e4_e5_f4_d5_exd5_e4_d3:f5': {
-    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/King%27s_Gambit,_Falkbeer_Countergambit'],
-    watch: ['', '', '', '', '', '', '', '…f5? braces the e4-pawn but tears holes on e6 and the light squares; the main road is …Nf6.', 'dxe4 — White simply removes the cramping pawn; …fxe4 would shed material, so Black has to let it go.', '', 'e5 — the passed pawn rolls and White’s lead in development decides.', '', '', '', '', ''],
-    learn: ['', '', '', '', '', '', '', '', 'dxe4 — remove the cramping pawn', '', 'e5 — the passer rolls', '', '', '', '', ''],
-  },
-  // Falkbeer deeper: 15...Bb4? parks the bishop loose with the king on e8. 16.Qb5+! forks; 18.Qxb4 wins a clean piece.
-  'gambit-kings-gambit:e4_e5_f4_d5_exd5_e4_d3_Nf6_dxe4_Nxe4_Nf3_Bc5_Qe2_Bf5_Nc3:Bb4': {
-    sources: ['concept:pos-tempo', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Gambit,_Falkbeer_Countergambit'],
-    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Bb4? pins nothing and parks the bishop on a loose square — with the king still on e8 that is a tactic waiting to happen.', 'Qb5+! the check also hits the stranded b4-bishop — a fork Black cannot meet.', '', 'Qxb4 — the bishop falls; White is a clean piece up.', '', '', '', '', ''],
-    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Qb5+! — check forks the loose bishop', '', 'Qxb4 — up a whole piece', '', '', '', '', ''],
-  },
   // Kieseritzky deeper: 15...Rg8? leaves the f6-queen exposed. 16.Nd5! forks queen and c7; Qxf4 recovers the pawn.
-  'gambit-kings-gambit:e4_e5_f4_exf4_Nf3_g5_h4_g4_Ne5_d6_Nxg4_Nf6_Nxf6+_Qxf6_Nc3:Rg8': {
+  'kings-gambit:e4_e5_f4_exf4_Nf3_g5_h4_g4_Ne5_d6_Nxg4_Nf6_Nxf6+_Qxf6_Nc3:Rg8': {
     sources: ['book:kings-gambit', 'concept:pos-center', 'concept:pos-tempo', 'https://en.wikipedia.org/wiki/Kieseritzky_Gambit'],
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Rg8? props up g4 but leaves the f6-queen out in the open.', 'Nd5! the knight forks the f6-queen and c7 — the queen must run and White grabs the centre.', '', '', '', 'Qxf4 — the gambit pawn is back, Black’s king is stuck on d8, and White dominates.', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nd5! — fork the f6-queen, eye c7', '', '', '', 'Qxf4 — pawn back, king stuck on d8', '', '', ''],
   },
-  // Falkbeer: after 5.dxe4 the point is to win the pawn straight back with 5...Nxe4. 5...Bc5? develops but forgets it — 6.Nc3 keeps White two pawns up.
-  'gambit-kings-gambit:e4_e5_f4_d5_exd5_e4_d3_Nf6_dxe4:Bc5': {
-    sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Gambit,_Falkbeer_Countergambit'],
-    watch: ['', '', '', '', '', '', '', '', '', '…Bc5 is natural development, but it forgets the e4-pawn — the whole point of the Falkbeer is to grab it back with …Nxe4, and Black has skipped it.', 'Nc3 calmly guards the extra pawn and eyes d5; White simply keeps a two-pawn plus.', '', 'e5 kicks the f6-knight and the centre rolls — White is two pawns up for nothing.', '', '', '', '', ''],
-    learn: ['', '', '', '', '', '', '', '', '', '', 'Nc3 — keep both extra pawns', '', 'e5 — roll the centre, two up', '', '', '', '', ''],
-  },
   // Evans Declined: 5.a4 threatens a5 trapping Bb6 (best is 5...a6). 5...d6? ignores it; 6.a5 and the bishop has no square — wins a piece.
-  'gambit-evans-gambit:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bb6_a4:d6': {
+  'evans-gambit:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bb6_a4:d6': {
     sources: ['concept:pos-tempo', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
     watch: ['', '', '', '', '', '', '', '', 'a4 threatens a5, hitting the b6-bishop — Black has to make a square with …a6 or …a5.', '…d6 develops but ignores the threat; now the bishop has nowhere safe to go.', 'a5! traps the bishop on b6 — it lunges to d4, but c3 will hit it there too and it runs out of squares.', '', '', '', 'cxd4 — the bishop is gone; White is up a full piece.', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', 'a5! — the b6-bishop is trapped', '', 'c3 — chase it, no squares left', '', 'cxd4 — win the piece', '', '', ''],
   },
   // Evans Declined: 15...Nxb4? grabs the b4-pawn, but the c6-knight was the b6-bishop's only minder. 16.a5! forks the bishop and c3 then wins the b4-knight.
-  'gambit-evans-gambit:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bb6_a4_a6_Nc3_Nf6_Nd5_Nxd5_exd5:Nxb4': {
+  'evans-gambit:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bb6_a4_a6_Nc3_Nf6_Nd5_Nxd5_exd5:Nxb4': {
     sources: ['concept:pos-tempo', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Nxb4 snatches the b4-pawn, but the c6-knight was the bishop’s only guard — greed on the queenside backfires.', 'a5! forks the b6-bishop; it scrambles to c5, and now c3 will pry the stranded b4-knight loose as well.', '', '', '', 'cxb4 — the knight falls, and bxc5 next collects the bishop too. White comes out a piece up.', '', 'bxc5 — and the bishop as well.', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'a5! — trap the bishop, win the knight', '', 'c3 — pry the b4-knight loose', '', 'cxb4 — collect the knight', '', 'bxc5 — and the bishop too', ''],
   },
   // Evans Accepted main line: 17...Nxe5? grabs the e5-pawn but drops the knight onto a pinning file with the king on e8. 18.Re1 pins and wins it.
-  'gambit-evans-gambit:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bxb4_c3_Ba5_d4_exd4_O-O_dxc3_Qb3_Qf6_e5:Nxe5': {
+  'evans-gambit:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bxb4_c3_Ba5_d4_exd4_O-O_dxc3_Qb3_Qf6_e5:Nxe5': {
     sources: ['concept:pos-king-safety', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Nxe5 grabs the pawn but plants the knight on the open e-file with the king still on e8.', 'Re1 pins the e5-knight against the king — it cannot be saved.', '', 'Rxe5 wins the knight; the pressure on f6 and the stuck Black king finish the job. White is winning.', '', '', '', 'Nxe5 — a clean piece up, the attack plays itself.', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Re1 — pin the knight to the king', '', 'Rxe5 — win the pinned knight', '', '', '', 'Nxe5 — a piece up', ''],
   },
   // Evans Accepted: with White's big d4+e4 centre, 15...Bb4? puts the bishop on a loose square. 16.d5! forks the c6-knight, gains tempo, dominates.
-  'gambit-evans-gambit:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bxb4_c3_Bc5_d4_exd4_O-O_d6_cxd4:Bb4': {
+  'evans-gambit:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bxb4_c3_Bc5_d4_exd4_O-O_d6_cxd4:Bb4': {
     sources: ['concept:pos-center', 'concept:pos-tempo', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Bb4 drops the bishop in front of White’s huge centre, where it has nothing to attack.', 'd5! the pawn hits the c6-knight and gains a tempo; White’s centre and bishop pair take over.', '', 'dxc6 — White comes out a pawn up with a dominating centre.', '', '', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'd5! — fork the knight, roll the centre', '', 'dxc6 — win the pawn, big centre', '', '', '', '', ''],
@@ -176,7 +152,7 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   // Budapest: 5.Qd5?! props up e5 with the queen. …d6! hits the pawn she is
   // guarding, and after the queens come off the g4-knight has Nxf2 winning the
   // g5-bishop back with interest.
-  'gambit-budapest-gambit:d4_Nf6_c4_e5_dxe5_Ng4_Bf4_Nc6:Qd5': {
+  'budapest-gambit:d4_Nf6_c4_e5_dxe5_Ng4_Bf4_Nc6:Qd5': {
     sources: ['concept:tac-fork', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
     watch: ['', '', '', '', '', '', '', '',
       'Qd5 holds the extra pawn on e5, but it is the queen doing the guarding \u2014 and a queen tied to a pawn is a target, not a defender.',
@@ -231,7 +207,7 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   },
   // Evans: after 9.Nc3 the centre is huge and f7 is the pressure point. …Nge7?
   // takes the last guard off g5, so Ng5! lands with Bc4 already aimed at f7.
-  'gambit-evans-gambit:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bxb4_c3_Bc5_d4_exd4_O-O_d6_cxd4_Bb6_Nc3:Nge7': {
+  'evans-gambit:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bxb4_c3_Bc5_d4_exd4_O-O_d6_cxd4_Bb6_Nc3:Nge7': {
     sources: ['concept:pos-king-safety', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Nge7 develops, but it hands the f7-square its worst possible defender count — the bishop on c4 is already staring at it and the knight no longer covers g5.', 'Ng5! Straight at f7. Two attackers, one defender, and Black cannot castle out of it in time.', '', 'Qh5 brings the third attacker to bear on f7. Black is now defending with pieces that have nowhere to go.', '', 'Nxh7 collects the pawn and hits the rook on f8 — the attack pays for itself.', '', 'Bg5 turns the last screw, hitting the d8-queen; material is level, but Black\'s king is stuck in the centre.', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Ng5 — pile onto f7', '', 'Qh5 — third attacker on f7', '', 'Nxh7 — pawn, and hits the rook', '', '', ''],
@@ -255,18 +231,10 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   // Bishop's Gambit: after Kf1, …Bc5 is the 36.9% try (124,564 games). d4! hits
   // the bishop AND takes the centre; Nf3 then chases the queen home, and Bxf4
   // recovers the gambit pawn with White far ahead in development.
-  'gambit-kings-gambit:e4_e5_f4_exf4_Bc4_Qh4+_Kf1:Bc5': {
+  'kings-gambit:e4_e5_f4_exf4_Bc4_Qh4+_Kf1:Bc5': {
     sources: ["concept:pos-initiative", "concept:pos-king-safety", "https://en.wikipedia.org/wiki/King%27s_Gambit"],
     watch: ['', '', '', '', '', '', '', '…Bc5 eyes the soft f2-g1 corner, but the bishop is standing on a square White wants to hit with tempo.', "d4! Gain the tempo and build the centre in one move. The bishop has to move again, and White's pawns take over the middle.", '', 'Nf3 asks the queen the same question. She has been the only black piece in play, and now she is the one losing time.', '…Qd8 — all the way home. Three queen moves for nothing, and White has the centre and the development.', 'Bxf4 finally collects the gambit pawn back. Material is level, but only White has a game.', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', 'd4 — tempo and the centre', '', 'Nf3 — kick the queen', '', 'Bxf4 — the pawn comes back', '', '', ''],
-  },
-  // Budapest: 4.f4 is the greedy hold (156,799 games) and it empties f2, opening
-  // the a7-g1 diagonal at White's own king. …Bc5! forces e3, which entombs the
-  // c1-bishop; …d6 then wins the grabbed pawn straight back.
-  'gambit-budapest-gambit:d4_Nf6_c4_e5_dxe5_Ng4:f4': {
-    sources: ["concept:pos-king-safety", "concept:pos-initiative", "https://en.wikipedia.org/wiki/Budapest_Gambit"],
-    watch: ['', '', '', '', '', '', 'f4 hangs on to the extra pawn, but it empties f2 — and the whole a7-g1 diagonal now runs straight at the white king.', '…Bc5! Onto that diagonal at once. With f2 gone and nothing on e3 or d4, White has to spend a move just to block it.', 'e3 is forced to shut the diagonal, and it buries the bishop on c1 behind its own pawns.', '…d6 undermines the e5-pawn. The thing White grabbed is now the thing White has to defend.', '', '', '', '…dxe5 — the pawn comes back, and Black has the better structure and the freer pieces for it.', ''],
-    learn: ['', '', '', '', '', '', '', '…Bc5 — onto the open diagonal', '', '…d6 — undermine e5', '', '', '', '…dxe5 — pawn back, better game', ''],
   },
   // Scotch Gambit: 5.O-O and …h6 (52,262 games) is a wasted tempo in a line where
   // White paid a pawn for exactly that time. c3! recovers it and cxd4 builds the
@@ -279,26 +247,10 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   // Kieseritzky: after Nxg4, …Bxg4 (29.3%, 35,599 games) removes Black's own
   // light-square defender. Qxg4 recaptures onto a wide-open board with the black
   // king already stripped of its pawn cover.
-  'gambit-kings-gambit:e4_e5_f4_exf4_Nf3_g5_h4_g4_Ne5_d6_Nxg4:Bxg4': {
+  'kings-gambit:e4_e5_f4_exf4_Nf3_g5_h4_g4_Ne5_d6_Nxg4:Bxg4': {
     sources: ["concept:pos-king-safety", "concept:pos-initiative", "https://en.wikipedia.org/wiki/King%27s_Gambit"],
     watch: ['', '', '', '', '', '', '', '', '', '', '', "…Bxg4 wins the piece back, but it trades away the one piece guarding the light squares around Black's king.", "Qxg4 recaptures and the queen arrives on an open board. Black's kingside pawns are gone and the king has nowhere to hide.", '', 'Bb5 develops with a threat — every white piece comes out hitting something while Black is still untangling.', '', '', '', "Qf5 plants the queen in the middle of Black's position. The f4-pawn is small comfort with a king this exposed.", ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'Qxg4 — recapture, queen active', '', 'Bb5 — develop with a threat', '', '', '', 'Qf5 — the queen moves in', ''],
-  },
-  // KGD: …Bg4 pins the f3-knight, but fxe5! shows the pin is an illusion — White
-  // is happy to give the knight to open the f-file, and after Qxf3 the queen
-  // stares at f7 with the bishop pair thrown in.
-  'gambit-kings-gambit:e4_e5_f4_Bc5_Nf3_d6_Nc3_Nf6_Bc4:Bg4': {
-    sources: ["concept:tac-pin", "concept:pos-initiative", "https://en.wikipedia.org/wiki/King%27s_Gambit"],
-    watch: ['', '', '', '', '', '', '', '', '', '…Bg4 pins the knight to the queen — but a pin only bites if the pinned piece has to stay.', 'fxe5! Ignore it. The f-file rips open and the pawn hits d6; the pin was never really a pin.', '', 'Qxf3 recaptures, and look where the queen lands — straight down the half-open f-file at f7.', '', 'Nd5 jumps into the hole. White has the bishop pair, the open file and the better king; the pin cost Black the initiative.', '', '', ''],
-    learn: ['', '', '', '', '', '', '', '', '', '', 'fxe5 — the pin was an illusion', '', 'Qxf3 — queen onto the half-open f-file', '', 'Nd5 — into the hole', '', '', ''],
-  },
-  // KGD: taking on f4 only after Nf3 and Nc3 are out gives Black none of the
-  // counterplay the accepted lines rely on. d4! hits the bishop and claims the
-  // centre; Bxf4 then recovers the pawn with everything developed.
-  'gambit-kings-gambit:e4_e5_f4_Bc5_Nf3_d6_Nc3:exf4': {
-    sources: ["concept:pos-center", "concept:pos-initiative", "https://en.wikipedia.org/wiki/King%27s_Gambit"],
-    watch: ['', '', '', '', '', '', '', '…exf4 accepts the pawn at last — but a move too late. White has already developed both knights, so Black gets none of the counterplay the real accepted lines are built on.', 'd4! Tempo on the bishop and the whole centre in one stroke. Black has to move the bishop again while White simply takes over.', '', 'Bxf4 collects the pawn straight back. White has the centre, both bishops out, and a free hand.', '', '', '', '', ''],
-    learn: ['', '', '', '', '', '', '', '', 'd4 — tempo, and the centre', '', 'Bxf4 — the pawn returns', '', '', '', '', ''],
   },
   // Danish declined: …Bb4+ then …Bxc3+ swaps off Black's most active piece and
   // gives White the bishop pair. bxc3 builds the c3+d4 centre and opens the
@@ -324,18 +276,10 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
     watch: ['', '', '', '', '', '', '', '', '', '', '', '…e5 grabs space and looks solid, but it puts a pawn on a dark square and leaves d5 with nothing to defend it ever again.', 'c4! The bind. Pawns on c4 and e4 own d5 between them, and Black can never free the position with …d5.', '', '', '', 'Be2 — no rush. When the opponent has no pawn break, White can just improve pieces one at a time.', '', 'Be3 completes it: Black is solid but has no plan, and White chooses where to play. That is what the hole on d5 costs.', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'c4 — clamp d5 for good', '', '', '', '', '', 'Be3 — solid, and completely passive', ''],
   },
-  // KGD: …Ng4 lunges at a defended f2 with no follow-up. Qe2 holds and prepares
-  // f5, after which the knight has no square and must trek home — two tempi for
-  // nothing while White takes the space.
-  'gambit-kings-gambit:e4_e5_f4_Bc5_Nf3_d6_Nc3_Nf6_Bc4_O-O_d3:Ng4': {
-    sources: ["concept:pos-initiative", "concept:pos-weak-squares", "https://en.wikipedia.org/wiki/King%27s_Gambit"],
-    watch: ['', '', '', '', '', '', '', '', '', '', '', '…Ng4 lunges at f2, but f2 is guarded and the knight has no follow-up — it has jumped to a square where nothing happens.', 'Qe2 — calm. Add a defender, and quietly prepare the pawn push that will ask the knight what it is actually doing out there.', '', 'f5! Now the knight on g4 is biting on granite, and it has no good square to go to.', '', '', '…Ngf6 — the knight comes all the way home. Two moves spent to end up where it started, and White owns the space.', '', ''],
-    learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'Qe2 — hold f2, prepare f5', '', 'f5 — the knight has no job', '', '', '', '', ''],
-  },
   // Budapest: h3 kicks a knight that wanted to go to e5 anyway. …Ngxe5 regains
   // the gambit pawn hitting f3; after the trade Black has the broad centre and
   // the open f-file, and h3 was a tempo White could not spare.
-  'gambit-budapest-gambit:d4_Nf6_c4_e5_dxe5_Ng4_Nf3_Nc6_Bf4_Bb4+_Nc3_Bxc3+_bxc3_Qe7_Qd5_f6:h3': {
+  'budapest-gambit:d4_Nf6_c4_e5_dxe5_Ng4_Nf3_Nc6_Bf4_Bb4+_Nc3_Bxc3+_bxc3_Qe7_Qd5_f6:h3': {
     sources: ["concept:pos-initiative", "concept:pos-center", "https://en.wikipedia.org/wiki/Budapest_Gambit"],
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'h3 shoos the knight away — but that knight has been aiming at e5 since move three, and shooing it is exactly what it wants.', '…Ngxe5! It simply takes the gambit pawn, and lands hitting the knight on f3 into the bargain.', '', '', "Trading on e5 hands Black a broad pawn front and opens the f-file straight at White's king.", "…fxe5 — the pawn is back, the file is open, and White's h3 turned out to be a wasted move in a position that needed development.", '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Ngxe5 — take it, with tempo', '', '', '', '…fxe5 — pawn back, file open', '', '', ''],
@@ -359,7 +303,7 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   // Bishop's Gambit: …Be7 develops but blocks the queen's retreat and cedes the
   // centre. e5! opens it with the black king still there; Nd5 forks c7 and e7,
   // Bb5+ costs castling, and Nxf4 takes the gambit pawn back.
-  'gambit-kings-gambit:e4_e5_f4_exf4_Bc4_Qh4+_Kf1_d6_Nf3_Qh5_d4_Nf6_Nc3:Be7': {
+  'kings-gambit:e4_e5_f4_exf4_Bc4_Qh4+_Kf1_d6_Nf3_Qh5_d4_Nf6_Nc3:Be7': {
     sources: ["concept:pos-king-safety", "concept:pos-center", "https://en.wikipedia.org/wiki/King%27s_Gambit"],
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', "…Be7 is a developing move that solves nothing — it blocks the queen's road home and leaves the centre to White.", "e5! Kick the knight and rip the centre open while Black's king is still in it.", '', 'Nd5 lands in the hole, hitting c7 and the bishop on e7 at the same time.', '', 'Bb5+ drags the king to d8 — castling gone for good.', '', 'Nxf4 finally collects the gambit pawn. White has the centre, the initiative, and a black king stranded on d8.', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', "e5 — open it while they're central", '', 'Nd5 — hits c7 and e7', '', '', '', 'Nxf4 — the pawn, and the game', ''],

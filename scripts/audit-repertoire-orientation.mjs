@@ -38,23 +38,6 @@ async function main() {
   const db = JSON.parse(
     await readFile('src/data/openings-lichess.json', 'utf8'),
   );
-  // Sidecar classifications (added 2026-05-18 to handle sacrificial-
-  // attack trap lines like Fried Liver / Muzio / Allgaier where the
-  // student is correctly DOWN material but has positional / king-
-  // safety / initiative compensation. Treat these as `kind: mistake`
-  // — they don't expect material +3 at end). Mirrors the pattern from
-  // src/data/trap-line-classifications.json which keys against
-  // pro-repertoires.json. Missing/unreadable sidecar is fine — every
-  // entry defaults to `kind: trap` as before.
-  let kindOverrides = {};
-  try {
-    const sidecar = JSON.parse(
-      await readFile('src/data/repertoire-trap-classifications.json', 'utf8'),
-    );
-    kindOverrides = sidecar?.classifications ?? {};
-  } catch {
-    // No sidecar present — keep all defaults.
-  }
   const dbArr = Array.isArray(db) ? db : Object.values(db);
   const dbPgns = new Set(dbArr.filter((e) => e?.pgn).map((e) => e.pgn));
 
@@ -115,12 +98,7 @@ async function main() {
 
   const results = [];
   for (const e of entries) {
-    // Sidecar can override the default `trap` kind for sacrificial-
-    // attack lines that don't expect +3 material at end.
-    const sidecarKey = `${e.openingId}::${e.name}`;
-    const kind = e.role === 'warning'
-      ? 'warning'
-      : (kindOverrides[sidecarKey] ?? 'trap');
+    const kind = e.role === 'warning' ? 'warning' : 'trap';
 
     const chess = new Chess();
     let parseError = null;
