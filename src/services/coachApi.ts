@@ -118,7 +118,7 @@ import { detectBoardQuestion, isAnyBoardQuestion } from '../coach/boardQuestions
 import { keySquareHighlightMarker } from './arrowEngine';
 import { topCandidateLane } from '../coach/querySignals';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
-import { fallThroughForKind } from '../coach/ask/answerTable';
+import { askBackAtCatchAll, type ChatKind } from '../coach/chatTurn';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
 // when the audit-stream is configured, letting the Playwright audit drive
@@ -724,7 +724,7 @@ let lastServedIntent: string | null = null;
 function askBackForKind(grounding: MasterGroundingOptions): string | null {
   const reading = grounding.askReading;
   if (!reading) return null;
-  return fallThroughForKind(reading, !!grounding.currentFen);
+  return askBackAtCatchAll(reading.kind, reading.clarify, !!grounding.currentFen);
 }
 
 export function consumeServedIntent(): string | null {
@@ -1349,10 +1349,10 @@ export interface MasterGroundingOptions {
    *  where a lane must read the words as typed (the piece-square
    *  false-premise check). */
   cleanAsk?: string;
-  /** What the question reader made of the ask (shadow-first, answers
-   *  rebuild step 3): consulted only at the catch-all, so a question that is
-   *  not about the board is asked back instead of answered with a board read. */
-  askReading?: { kind: import('../coach/ask/readQuestion').AskKind; clarify?: string };
+  /** What the door read the turn as: consulted only at the catch-all, so a
+   *  question that is not about the board is asked back instead of answered
+   *  with a board read. */
+  askReading?: { kind: ChatKind; clarify?: string };
   /** Game-scoped mistake ask ("biggest mistake in this game") + the reviewed
    *  game's computed worst student moment to answer it from. */
   gameMistakeQuestion?: boolean;

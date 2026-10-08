@@ -36,6 +36,7 @@ import {
   type BoardContext,
   type ConversationState,
   type FastPathLane,
+  type Referent,
 } from './chatTurn';
 import { parseChatTurn, type ParseResult, type Reader } from './chatTurnParser';
 import { emitChatTurn } from './chatTurnEvents';
@@ -48,6 +49,11 @@ export interface DispatchCoachTurnOptions extends CoachServiceOptions {
   /** Skip the deterministic action router (rare — a surface that must never
    *  navigate/route away, e.g. a locked in-lesson board). Default false. */
   skipActionRouter?: boolean;
+  /** A read the surface already started for this turn (`openTurnRead`), so
+   *  the turn is read ONCE: a surface whose own commands run first (Learn)
+   *  starts the read up front and hands it to the door only when the turn
+   *  reaches it. */
+  turnRead?: TurnReadHandle;
 }
 
 // ─── THE READ, IN SHADOW ───────────────────────────────────────────────────
@@ -132,6 +138,7 @@ export async function settleChatTurnRead(opts: {
     fastPathLane: opts.fastPathLane,
     servedIntent: opts.servedIntent,
     parsedKind: turn?.kind ?? null,
+    referents: turn && turn.referents.length > 0 ? turn.referents.map(describeReferent).join(' ') : null,
     parseSource: result?.source ?? 'llm-failed',
     valid: validation ? validation.ok : null,
     invalidReason: validation && !validation.ok ? validation.reason : null,
@@ -145,6 +152,49 @@ export async function settleChatTurnRead(opts: {
   });
 }
 
+function describeReferent(r: Referent): string {
+  switch (r.type) {
+    case 'move': return `move:${r.san}`;
+    case 'square': return `square:${r.square}`;
+    case 'piece': return `piece:${r.piece}@${r.square ?? '?'}${r.seat ? `/${r.seat}` : ''}`;
+    default: return r.type;
+  }
+}
+
+/** A read started before the surface knows whether the door will answer. */
+export interface TurnReadHandle {
+  /** The door takes the read; the shadow row is then the door's to emit. */
+  claim(): Promise<ParseResult | null>;
+}
+
+/**
+ * Start the read for a turn whose surface runs its own commands first (Learn:
+ * "play the Sicilian", stop/resume, a move). If the turn reaches the door, the
+ * door claims this read and serves from it; if a surface command answered it
+ * instead, the read is logged as a shadow row once it lands. One read either
+ * way — never a second model call for the same words.
+ */
+export function openTurnRead(input: CoachAskInput): TurnReadHandle | null {
+  if (!isStudentTurn(input)) return null;
+  const read = startChatTurnRead(input);
+  let claimed = false;
+  void read.then(() => new Promise((r) => setTimeout(r, UNCLAIMED_GRACE_MS))).then(() => {
+    if (claimed) return;
+    return settleChatTurnRead({
+      input,
+      read,
+      fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }),
+      servedIntent: null,
+      servedParsed: false,
+    });
+  }).catch(() => { /* telemetry never breaks a turn */ });
+  return { claim: () => { claimed = true; return read; } };
+}
+
+/** How long after the read lands a surface command is assumed to have
+ *  answered the turn (the door, when reached, claims it well before). */
+const UNCLAIMED_GRACE_MS = 3000;
+
 // ─── THE DOOR ──────────────────────────────────────────────────────────────
 
 export async function dispatchCoachTurn(
@@ -153,15 +203,18 @@ export async function dispatchCoachTurn(
 ): Promise<CoachAnswer> {
   const student = isStudentTurn(input);
   // The read starts NOW, in parallel with today's routing — no added latency.
-  const read = student ? startChatTurnRead(input) : null;
+  const read = student ? (options.turnRead?.claim() ?? startChatTurnRead(input)) : null;
   let servedParsed = false;
   let effectiveInput = input;
+  // The kind the reader placed this turn in, when it did (null: no reading).
+  let readKind: string | null = null;
   if (read && serveParsedRoute) {
     // FLAG ON: wait for the reading and, when it validated and its kind has a
     // live answerer, serve the canonical question that routes to it.
     const r = await read;
     // A kind with no lane today answers with its own computed sentence.
     const turn = r?.validation?.ok ? r.validation.turn : null;
+    readKind = turn?.kind ?? (r?.turn ? 'unclear' : null);
     if (turn && CHAT_KINDS[turn.kind].answerer === 'direct' && input.liveState.fen) {
       const studentWB = input.liveState.studentColor === 'black' ? 'b' : input.liveState.studentColor === 'white' ? 'w' : (input.liveState.fen.split(' ')[1] === 'b' ? 'b' : 'w');
       const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB);
@@ -177,6 +230,9 @@ export async function dispatchCoachTurn(
       effectiveInput = { ...input, ask: canonical };
       servedParsed = true;
     }
+    // The reading rides the turn to the catch-all (see askBackAtCatchAll).
+    if (turn) effectiveInput = { ...effectiveInput, reading: { kind: turn.kind } };
+    else if (r?.validation && !r.validation.ok) effectiveInput = { ...effectiveInput, reading: { kind: 'unclear', clarify: r.validation.clarify } };
   }
 
   let routedCommand = false;
@@ -193,7 +249,13 @@ export async function dispatchCoachTurn(
     return answer;
   };
 
-  if (!options.skipActionRouter) {
+  // THE READER DECIDES WHAT IS A COMMAND (2026-10-08): the action router acts
+  // on a turn read as a command, or on one the reader could not read at all.
+  // A turn read as a QUESTION is never hijacked into an action — the router's
+  // phrase match took "don't show me the arrows" as "show me [the opening]
+  // arrows" and offered a walkthrough.
+  const mayAct = readKind === null || readKind === 'command' || readKind === 'training-request' || readKind === 'unclear';
+  if (!options.skipActionRouter && mayAct) {
     try {
       const routed = await routeChatIntent(effectiveInput.ask, {
         currentFen: effectiveInput.liveState.fen,

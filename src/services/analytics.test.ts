@@ -127,6 +127,7 @@ describe('auditKindToEvent — curated allowlist', () => {
     // Full ask→answer capture (David 2026-07-10: "full access to the
     // conversations") mirrors as its own queryable product event.
     expect(auditKindToEvent('coach-brain-answered')).toBe('coach_answer');
+    expect(auditKindToEvent('chat-turn')).toBe('coach_turn_read');
   });
 
   it('mirrors voice / narration kinds so voice bugs are diagnosable in PostHog', () => {

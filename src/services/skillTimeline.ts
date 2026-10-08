@@ -27,6 +27,7 @@ export interface SlipRow {
   createdAt: number;
   sourceGameId?: string;
   counted?: boolean;
+  source?: string;
 }
 
 export interface EvidenceRow {
@@ -92,8 +93,14 @@ export function buildSkillTimelines(
     if (w >= 0 && w < weeks) row.weeks[w].missed++;
   };
 
+  // EVERY slip from a game counts, the same set the tiles count (David's
+  // phone 2026-10-08: 15 skills "to fix" over 599 analysed games and one lit
+  // column). A batch sweep files its slips `counted: false` until the game is
+  // reviewed; the tile reads them, so a timeline that skipped them drew those
+  // skills as never asked while calling them red. A puzzle miss is not a game
+  // slip and stays out.
   for (const s of slips) {
-    if (s.counted === false) continue;
+    if (s.source === 'puzzle') continue;
     miss(s.tag, when(s.createdAt, s.sourceGameId));
   }
   for (const e of evidence) {

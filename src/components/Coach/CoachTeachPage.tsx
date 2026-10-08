@@ -87,7 +87,7 @@ import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry, isBookLine } from '../../services/openingDetectionService';
-import { PLAY_OPENING_RE, resolvePlayName } from '../../coach/ask/playName';
+import { PLAY_OPENING_RE, readsAsQuestion, resolvePlayName } from '../../coach/ask/playName';
 import { openingAnnouncementForGame, theirOpeningVerdict, openingNameForBoard, spokenOpeningLabel, studentJustLeftBook, warmOpeningBook } from '../../services/openingAnnouncement';
 import { lastMoveCapturedOn, pendingRecapture, landingSquare } from '../../utils/justCaptured';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
@@ -273,7 +273,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { getFavoriteOpenings, getOpeningById, searchOpenings } from '../../services/openingService';
 import type { OpeningRecord, OpeningVariation } from '../../types';
 import type { LiveState, TacticsLiveContext, AskOrigin } from '../../coach/types';
-import { shadowReadTurn } from '../../coach/dispatchCoachTurn';
+import { dispatchCoachTurn, openTurnRead, type TurnReadHandle } from '../../coach/dispatchCoachTurn';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
@@ -1367,6 +1367,9 @@ export function CoachTeachPage(): JSX.Element {
   // that: each play_move handler writes the chess instance's current
   // FEN into it, and getLiveFen reads from this ref. */
   const liveFenRef = useRef(game.fen);
+  // The ONE read of the turn in flight (openTurnRead): the door claims it when
+  // the turn reaches the coach, so Learn never reads the same words twice.
+  const turnReadRef = useRef<TurnReadHandle | null>(null);
   /** The last move that reached the board, either side — the "prior move" a
    *  reason needs to tell a recapture from a win. Trusted only through
    *  `priorMoveLeadingTo`, so a reset can never make it lie. */
@@ -3285,8 +3288,9 @@ export function CoachTeachPage(): JSX.Element {
     // THE ONE-CHAT READ, in shadow (P0a, 2026-10-04): every turn the student
     // typed or spoke is read into the closed form and compared with today's
     // routing — logged, never served. Learn's own routers still answer.
+    turnReadRef.current = null;
     if (!opts?.kickoff && opts?.coachReplyPlayed === undefined && !opts?.teachIntent) {
-      shadowReadTurn({
+      turnReadRef.current = openTurnRead({
         surface: 'teach',
         ask: text,
         origin: opts?.origin,
@@ -5088,7 +5092,14 @@ export function CoachTeachPage(): JSX.Element {
         !isWalkthroughControlPhrase(workingInput) &&
         // A drill on the board makes every turn about THAT board, never a
         // request for a new opening (drill session 2026-10-05).
-        !activeDrillRef.current
+        !activeDrillRef.current &&
+        // ONE READER FOR EVERY SURFACE (answers rebuild, 2026-10-08): a bare
+        // word is an opening request only when it names one — exactly or as a
+        // near-miss typo. "Books" (0.60 → Rooks Swap Line) and "Dammit" (0.58 →
+        // Danish Gambit) share letters with an opening and name none; they go
+        // to the coach, which reads them the same way it does on every other
+        // screen.
+        resolvePlayName(workingInput).kind !== 'none'
       ) {
         // Bare-name routing: "The Vienna", "Pirc defense", "Italian".
         // Production audit (build 7e4f52b) caught "Pirc defense"
@@ -5199,6 +5210,14 @@ export function CoachTeachPage(): JSX.Element {
       // "walk me through the ENGINE LINE" is an engine-reasoning ask, not an
       // opening name — the fuzzy matcher popped a "did you mean…?" picker on
       // it (varied sweep, run allq-mss55zxn). No opening is named "engine".
+      // ONE READER (answers rebuild, 2026-10-08): the shared question reader
+      // decides first whether this turn is a question. A question is never an
+      // opening name, whatever words it shares with one — it goes to the same
+      // coach every other screen asks. The page-local guards above stay as the
+      // record of what each one caught until the reader is proven to cover them.
+      if (requestedName && !opts?.teachIntent && readsAsQuestion(text, true)) {
+        requestedName = null;
+      }
       if (requestedName && /\bengine\b/i.test(requestedName)) {
         requestedName = null;
       }
@@ -6805,9 +6824,18 @@ export function CoachTeachPage(): JSX.Element {
     }
 
     try {
-      const result = await coachService.ask(
-        { surface: 'teach', ask: effectiveAsk, liveState },
+      // ONE DOOR (2026-10-08): the student's own words go through the same
+      // door as every other screen — the same reading, the same rewrite into
+      // the question its lane answers, the same action router — sharing the
+      // read started at the top of this turn. A move report carries an
+      // injected directive, which is not the student's words: it keeps the
+      // direct call.
+      const viaDoor = effectiveAsk === text && turnReadRef.current !== null;
+      const askCoach = viaDoor ? dispatchCoachTurn : coachService.ask;
+      const result = await askCoach(
+        { surface: 'teach', ask: effectiveAsk, ...(opts?.origin ? { origin: opts.origin } : {}), liveState },
         {
+          ...(viaDoor && turnReadRef.current ? { turnRead: turnReadRef.current } : {}),
           // Provider routing: spine default (DeepSeek). The Anthropic
           // balance is exhausted as of 2026-05, so pinning Anthropic
           // here guaranteed an empty-budget 401 on every turn before

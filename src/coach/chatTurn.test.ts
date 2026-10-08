@@ -51,19 +51,45 @@ describe('the kind table is closed and complete', () => {
       topic: kind === 'concept' ? 'fork' : 'Sicilian',
       referents: [
         { type: 'piece', piece: 'n', square: 'f3', seat: 'me' },
-        { type: 'move', san: 'd4' },
-        { type: 'move', san: 'd3' },
+        { type: 'move', san: 'd4', played: false },
+        { type: 'move', san: 'd3', played: false },
       ],
     });
+    // A kind that names a move asks about THAT move (see `aboutNamedMove`):
+    // still to play → the candidate lane, already made → the retrospective one.
+    const NAMED_MOVE_LANE: Partial<Record<ChatKind, string>> = {
+      'best-move': 'candidate-move', 'why-best-move': 'candidate-move',
+      'move-rating': 'candidate-move', 'what-should-i-play': 'candidate-move',
+    };
     const misses: string[] = [];
     for (const k of ALL_CHAT_KINDS) {
       const q = canonicalAsk(turn(k));
       if (q === null) continue;
       const lane = fastPathLane(q, { fen: FEN });
-      if (lane !== CHAT_KINDS[k].lane) misses.push(`${k}: "${q}" → ${lane} (want ${CHAT_KINDS[k].lane})`);
+      const want = NAMED_MOVE_LANE[k] ?? CHAT_KINDS[k].lane;
+      if (lane !== want) misses.push(`${k}: "${q}" → ${lane} (want ${want})`);
     }
     expect(misses).toEqual([]);
   }, 30_000); // ~70 full grounding builds; generous under a loaded CI box
+});
+
+describe('a named move is never dropped by the rewrite (2026-10-08)', () => {
+  const t = (kind: ChatKind, san: string, played: boolean): ResolvedChatTurn =>
+    ({ kind, seat: 'me', topic: null, referents: [{ type: 'move', san, played }] });
+  it('"why is Ne4 best?" asks about Ne4, not the engine\'s move', () => {
+    expect(canonicalAsk(t('why-best-move', 'Ne4', false))).toBe('is Ne4 good here?');
+  });
+  it('"my knight to d5, was that good?" judges Nd5 where it was played', () => {
+    expect(canonicalAsk(t('move-rating', 'Nd5', true))).toBe('how good was Nd5?');
+    expect(fastPathLane('how good was Nd5?', { fen: FEN })).toBe('retrospective-move');
+  });
+  it('without a named move the old question stands', () => {
+    expect(canonicalAsk({ kind: 'move-rating', seat: 'me', topic: null, referents: [] })).toBe('was that a good move?');
+  });
+  it('validation marks a move already played', () => {
+    const v = validateChatTurn({ kind: 'move-rating', seat: 'me', topic: null, referents: [{ type: 'move', san: 'Nf3' }] }, { fen: FEN, history: HISTORY, studentColor: 'white' });
+    expect(v.ok && v.turn.referents[0]).toEqual({ type: 'move', san: 'Nf3', played: true });
+  });
 });
 
 describe('the fast path — walk defect 11', () => {
