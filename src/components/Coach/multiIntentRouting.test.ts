@@ -82,8 +82,10 @@ describe('multi-intent + bare-why wiring (source scan)', () => {
     const src = readFileSync('src/coach/coachService.ts', 'utf8');
     const block = src.slice(src.indexOf('BARE-"WHY?" CONTEXT CARRY'));
     expect(block.length).toBeGreaterThan(100);
-    // Rewrites into the canonical phrasing the why-best-move detector matches…
-    expect(block).toContain("askForIntents = 'why is that the best move?'");
+    // Rewrites (via the one follow-up resolver) into the canonical phrasing
+    // the why-best-move detector matches…
+    expect(block).toContain('askForIntents = resolveFollowUp(askForIntents, lastCoach)');
+    expect(readFileSync('src/coach/followUp.ts', 'utf8')).toContain("'why is that the best move?'");
     // …and only when the memory's last coach line is best-move-shaped.
     expect(block).toContain("msg.role === 'coach'");
   });
