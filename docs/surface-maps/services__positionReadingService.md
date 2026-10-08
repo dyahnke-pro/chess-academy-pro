@@ -254,7 +254,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/speedRunReads.ts:426`
 - `src/services/speedRunReads.ts:429`
 - `src/services/speedRunReads.ts:430`
-- `src/services/tacticAlertService.ts:334`
+- `src/services/tacticAlertService.ts:335`
 - `src/services/tacticVerification.ts:101`
 - `src/services/takingTheAttacker.test.ts:16`
 - `src/services/threatAnswer.ts:154`

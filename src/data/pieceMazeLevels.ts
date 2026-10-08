@@ -306,9 +306,3 @@ export const PIECE_MAZE_LEVELS: PieceMazeLevel[] = [
   { piece: 'pawn', id: 11, name: 'Tight Squeeze', pieceStart: 'e3', target: 'e7', obstacles: ['g8', 'g7', 'h7'], par: 4 },
   { piece: 'pawn', id: 12, name: 'Labyrinth', pieceStart: 'g1', target: 'g7', obstacles: ['d5', 'c2', 'e6', 'd7', 'h5'], par: 5 },
 ];
-
-export function getMazeLevelsForPiece(
-  piece: PieceMazeLevel['piece'],
-): PieceMazeLevel[] {
-  return PIECE_MAZE_LEVELS.filter((l) => l.piece === piece);
-}

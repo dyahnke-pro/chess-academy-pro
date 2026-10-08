@@ -63,29 +63,3 @@ export async function getAllWeakSpots(): Promise<OpeningWeakSpot[]> {
   const spots = await db.openingWeakSpots.toArray();
   return spots.sort((a, b) => b.failCount - a.failCount);
 }
-
-/**
- * Get the top N worst weak spots (most failed positions).
- */
-export async function getTopWeakSpots(limit: number = 10): Promise<OpeningWeakSpot[]> {
-  const all = await getAllWeakSpots();
-  return all.slice(0, limit);
-}
-
-/**
- * Get weak spots that haven't been drilled recently (stale > 3 days).
- */
-export async function getStaleWeakSpots(): Promise<OpeningWeakSpot[]> {
-  const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString();
-  const all = await getAllWeakSpots();
-  return all.filter(
-    (spot) => !spot.lastDrilledAt || spot.lastDrilledAt < threeDaysAgo,
-  );
-}
-
-/**
- * Clear a weak spot after user demonstrates mastery (e.g., 3 consecutive correct).
- */
-export async function clearWeakSpot(id: string): Promise<void> {
-  await db.openingWeakSpots.delete(id);
-}

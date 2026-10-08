@@ -152,9 +152,6 @@ async function main() {
     // page; dismiss it first or later clicks intercept + loadAll stalls
     // behind the modal (measured 2026-08-14: bubble adds ~6s cold).
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-    if (await bubble.isVisible().catch(() => false)) {
-      await page.locator('[data-testid="skill-band-intermediate"]').click();
-    }
     return 'page mounted';
   });
   if (!boot.ok) {

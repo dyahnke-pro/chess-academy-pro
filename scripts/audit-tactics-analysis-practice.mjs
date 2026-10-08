@@ -41,10 +41,6 @@ const SEED_GAME = {
 
 async function dismiss(page) {
   const bubble = page.locator(sel('strength-calibration-bubble'));
-  if (await bubble.isVisible({ timeout: 1500 }).catch(() => false)) {
-    await page.locator(sel('skill-band-intermediate')).click({ timeout: 5000 })
-      .catch(() => page.getByText('Intermediate', { exact: false }).first().click({ timeout: 4000 }).catch(() => {}));
-  }
   const help = page.locator(sel('page-help-modal'));
   if (await help.isVisible({ timeout: 1200 }).catch(() => false)) {
     await page.locator(`${sel('page-help-modal')} button`).first().click({ timeout: 3000 }).catch(() => {});

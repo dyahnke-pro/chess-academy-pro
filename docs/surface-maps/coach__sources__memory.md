@@ -4,22 +4,26 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**171 lines · 12 exports · 9 importers · 0 tests · 34 audits**
+**159 lines · 9 exports · 9 importers · 0 tests · 35 audits**
 
 ## Locked rules that govern this surface
 
 - **(top of file)** (CLAUDE.md:7) — names `memory`
-- **G2. Audit-stream pull on EVERY runtime-touching change.** (CLAUDE.md:727) — names `memory`
-- **G3. No chess content invented from memory.** (CLAUDE.md:769) — names `memory`
-- **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:803) — names `memory`
-- **G9.2 The PRO-REP BUILD PROCEDURE — step-by-step (locked David 2026-05-28).** (CLAUDE.md:1590) — names `memory`
-- **⏰ Standing notes** (CLAUDE.md:2558) — names `memory`
-- **🔴🔴 THE APP IS LIVE ON THE APP STORE WITH PAYING CUSTOMERS (David 2026-08-03, LOCKED: "Lock into your memory where I stand with the App Store. It's live, have 21 downloads, and 2 paying members").** (CLAUDE.md:3426) — names `memory`
-- **🔒🔒 A BUNDLED CORPUS CARRIES ONLY NOTES THE APP CAN ANCHOR — the floating half is FETCHED (David 2026-09-19: "no more non-positioned phrases at boot" … "i still want danyas corpus loaded at boot time if able. faster responses").** (CLAUDE.md:4203) — names `memory`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4387) — names `memory`
-- **Deployment Policy** (CLAUDE.md:5378) — names `memory`
-- **🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").** (CLAUDE.md:5536) — names `memory`
-- **The standard post-deploy ritual** (CLAUDE.md:5925) — names `memory`
+- **🔒🔒 EVERY FIX IS A ROOT-CAUSE FIX (David 2026-10-07, furious: "All fixes need to be root cause fixes. I want that saved to memory!").** (CLAUDE.md:312) — names `memory`
+- **G2. Audit-stream pull on EVERY runtime-touching change.** (CLAUDE.md:782) — names `memory`
+- **G3. No chess content invented from memory.** (CLAUDE.md:835) — names `memory`
+- **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:869) — names `memory`
+- **G9.2 The PRO-REP BUILD PROCEDURE — step-by-step (locked David 2026-05-28).** (CLAUDE.md:1698) — names `memory`
+- **🔒🔒 NEVER SEND MULTIPLE-CHOICE CARDS — ASK IN PLAIN WORDS (David 2026-10-06, emphatic: "I fucking hate [them]. Save to memory never to send me those again!!")** (CLAUDE.md:2507) — names `memory`
+- **⏰ Standing notes** (CLAUDE.md:2748) — names `memory`
+- **🔴🔴 THE APP IS LIVE ON THE APP STORE WITH PAYING CUSTOMERS (David 2026-08-03, LOCKED: "Lock into your memory where I stand with the App Store. It's live, have 21 downloads, and 2 paying members").** (CLAUDE.md:3616) — names `memory`
+- **🔒🔒 A BUNDLED CORPUS CARRIES ONLY NOTES THE APP CAN ANCHOR — the floating half is FETCHED (David 2026-09-19: "no more non-positioned phrases at boot" … "i still want danyas corpus loaded at boot time if able. faster responses").** (CLAUDE.md:4396) — names `memory`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4570) — names `memory`
+- **Deployment Policy** (CLAUDE.md:5625) — names `memory`
+- **🔒🔒 THE ACCURACY BAR IS 100% — every board claim true, no stopping short (David 2026-10-01: "We go until 100% accuracy. No reason to stop short. Set the new bar in memory")** (CLAUDE.md:5808) — names `memory`
+- **🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").** (CLAUDE.md:5852) — names `memory`
+- **The standard post-deploy ritual** (CLAUDE.md:6241) — names `memory`
+- **🔒🔒 ONE PUSH, NOT FIVE — ship-check remembers, and you check BEFORE you push (David 2026-09-24, furious: "You NEED TO FIGURE THIS SHIT OUT!! LOCK THIS IN FOR FUTURE SESSIONS").** (CLAUDE.md:6498) — names `memory`
 
 ## Who calls in
 
@@ -40,7 +44,7 @@
 - `src/services/coachActuator.ts:451`
 
 ### `readMemorySnapshot` (function) — 1 call site
-- `src/coach/envelope.ts:536`
+- `src/coach/envelope.ts:537`
 
 ### `memorySetIntendedOpening` (function) — 1 call site
 - `src/coach/tools/cerebrum/setIntendedOpening.ts:32`
@@ -49,18 +53,9 @@
 - `src/coach/tools/cerebrum/savePosition.ts:41`
 - `src/services/coachActuator.ts:477`
 
-### `memoryClearSavedPosition` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `memoryReadSavedPosition` (function) — 2 call sites
 - `src/coach/tools/cerebrum/restoreSavedPosition.ts:28`
 - `src/services/coachActuator.ts:484`
-
-### `memorySetAutoSavedPosition` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `memoryClearIntendedOpening` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `memoryRecordHintRequest` (function) — 1 call site
 - `src/coach/tools/cerebrum/recordHintRequest.ts:37`
@@ -86,6 +81,7 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-academy-courses.mjs`
 - `scripts/audit-ai-consent-persist.mjs`
+- `scripts/audit-board-bar-fold.mjs`
 - `scripts/audit-board-verdict-triage.mjs`
 - `scripts/audit-coach-all-questions-prod.mjs`
 - `scripts/audit-coach-chat.mjs`

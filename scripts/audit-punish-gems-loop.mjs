@@ -292,9 +292,6 @@ async function bootSeed(page) {
   // caveat #5). Pick a skill band and wait for it to detach.
   try {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-    if (await bubble.isVisible({ timeout: 8000 }).catch(() => false)) {
-      await page.locator('[data-testid="skill-band-intermediate"]').click().catch(() => {});
-    }
   } catch { /* no bubble */ }
   // Pro-rep entries land ~30s into the deferred seed, full seed ~50s (G1 caveat
   // #6) — 12s was far too short for a pro-gothamchess opening to be in Dexie.
@@ -382,9 +379,6 @@ const gemPlayable = async (p) => (await p.locator('[data-testid^="gem-watch-"]')
 // it a gem-watch click hangs 30s on an intercepted pointer and the pass throws.
 async function dismissModals(page) {
   const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-  if (await bubble.isVisible({ timeout: 1500 }).catch(() => false)) {
-    await page.locator('[data-testid="skill-band-intermediate"]').click().catch(() => {});
-  }
   const modal = page.locator('[data-testid="page-help-modal"]');
   if (await modal.count().catch(() => 0)) {
     await page.locator('[data-testid="page-help-close"]').first().click({ timeout: 3000 }).catch(() => {});

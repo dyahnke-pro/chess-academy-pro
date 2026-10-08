@@ -58,16 +58,6 @@ async function loadSidecar(): Promise<Sidecar | null> {
   return inflight;
 }
 
-/** Test seam — inject the sidecar without a fetch. */
-export function __setReviewOpeningsForTests(db: Sidecar | null): void {
-  cache = db;
-  inflight = null;
-}
-export function __resetReviewOpeningsForTests(): void {
-  cache = undefined;
-  inflight = null;
-}
-
 function buildFromRich(fen: string, entry: RichEntry): MasterPlayResult {
   const sorted = [...entry.moves].sort((a, b) => b.games - a.games);
   const totalGames = sorted.reduce((s, m) => s + (m.games || 0), 0);

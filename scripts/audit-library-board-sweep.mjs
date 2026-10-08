@@ -31,9 +31,6 @@ page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text(
 const nuke = async () => {
   try {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-    if (await bubble.isVisible({ timeout: 1200 })) {
-      await page.locator('[data-testid="skill-band-intermediate"]').click();
-    }
   } catch { /* none */ }
   await page.evaluate(() => document.querySelectorAll('[role="dialog"][aria-modal="true"]').forEach((n) => n.remove()));
 };

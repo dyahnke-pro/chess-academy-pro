@@ -16,7 +16,6 @@ await page.goto(PROD, { waitUntil: 'domcontentloaded', timeout: 20000 });
 await page.waitForTimeout(3000);
 const bubble = await page.locator('[data-testid="strength-calibration-bubble"]').count();
 if (bubble > 0) {
-  await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 });
 }
 
 console.log('waiting 60s for full deferred seed...');

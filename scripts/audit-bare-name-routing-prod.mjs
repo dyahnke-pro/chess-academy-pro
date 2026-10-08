@@ -63,7 +63,6 @@ const record = (id, pass, detail) => {
 
 async function dismissGates() {
   try {
-    await page.locator('[data-testid="skill-band-intermediate"]').click();
   } catch { /* none */ }
   try {
     const consent = page.locator('[data-testid="ai-consent-modal"]');

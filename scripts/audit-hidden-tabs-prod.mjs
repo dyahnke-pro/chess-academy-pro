@@ -19,7 +19,6 @@ await ctx.addInitScript(autoDismissCalibration);
 const page = await ctx.newPage();
 
 async function dismiss() {
-  try { const b = page.locator('[data-testid="strength-calibration-bubble"]');    await page.locator('[data-testid="skill-band-intermediate"]').click();  } catch {}
   try { const m = page.locator('[data-testid="page-help-modal"]'); await m.waitFor({ timeout: 4000 });
     await page.keyboard.press('Escape'); await m.waitFor({ state: 'detached', timeout: 5000 }); } catch {}
 }

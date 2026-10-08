@@ -31,17 +31,11 @@ const fetchReader: AnnotationReader = (key) => {
   const disk = (globalThis as DiskReaderHost).__readAnnotationFromDisk;
   return disk ? disk(key) : loadDataJson(`/data/annotations/${key}.json`);
 };
-let reader: AnnotationReader = fetchReader;
+const reader: AnnotationReader = fetchReader;
 
 /** Load one opening's annotations, or null when absent / unreachable. */
 export async function loadAnnotationFile(key: string): Promise<OpeningAnnotations | null> {
   if (!ANNOTATION_KEYS.has(key)) return null;
   const raw = await reader(key);
   return raw && typeof raw === 'object' && !Array.isArray(raw) ? (raw as OpeningAnnotations) : null;
-}
-
-/** Test seam — the vitest setup points this at the files on disk, since there
- *  is no server in node. Production code never calls it. */
-export function __setAnnotationReader(next: AnnotationReader | null): void {
-  reader = next ?? fetchReader;
 }

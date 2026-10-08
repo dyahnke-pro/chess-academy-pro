@@ -30,7 +30,6 @@ await ctx.addInitScript(autoDismissCalibration);
 const page = await ctx.newPage();
 
 async function dismissOnboarding() {
-  try {  await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 });  } catch { /* */ }
 }
 async function dismissHelp() {
   const m = page.locator('[data-testid="page-help-modal"]');

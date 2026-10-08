@@ -299,8 +299,6 @@ async function main() {
       const calib = page.locator('[data-testid="strength-calibration-bubble"]');
       if (await calib.count()) {
         acted = true;
-        await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 })
-          .catch(() => page.getByText('Intermediate', { exact: false }).first().click({ timeout: 4000 }).catch(() => undefined));
       }
       const help = page.locator('[data-testid="page-help-modal"]');
       if (await help.count()) {

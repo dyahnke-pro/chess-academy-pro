@@ -294,9 +294,6 @@ async function main() {
       // consent (Apple 5.1.1 modal, also blocking), Escape the help modal.
       const clearOverlays = async () => {
         const calib = page.locator('[data-testid="strength-calibration-bubble"]');
-        if (await calib.count()) {
-          await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000, force: true }).catch(() => {});
-        }
         const allow = page.locator('[data-testid="ai-consent-allow"]');
         if (await allow.isVisible().catch(() => false)) { await allow.click({ force: true }).catch(() => {}); await page.waitForTimeout(400); }
         const help = page.locator('[data-testid="page-help-modal"]');

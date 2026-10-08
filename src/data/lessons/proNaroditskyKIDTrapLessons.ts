@@ -249,9 +249,3 @@ export function getProNaroditskyKIDTrapPlayableLine(name: string): PlayableMiddl
   if (!lesson) return null;
   return lessonToPlayableLine(lesson);
 }
-
-export const PRO_NARODITSKY_KID_TRAPS_FOR_REPERTOIRE = TRAPS.map((t) => ({
-  name: t.name,
-  kind: t.kind,
-  pgn: t.lesson.beats[t.lesson.beats.length - 1].moves.join(' '),
-}));

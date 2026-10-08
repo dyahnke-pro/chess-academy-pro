@@ -52,7 +52,7 @@ await page.goto(`${URL}/openings/${OPENING}`,{waitUntil:'domcontentloaded',timeo
 await D('ai-consent-allow','consent');
 await page.evaluate(async()=>{try{localStorage.setItem('auditMoveHook','1');}catch{}const dbs=await indexedDB.databases();const nm=(dbs.find(d=>/chess/i.test(d.name||''))||{}).name;if(!nm)return;await new Promise(res=>{const q=indexedDB.open(nm);q.onsuccess=()=>{const db=q.result;if(!db.objectStoreNames.contains('profiles'))return res();const tx=db.transaction('profiles','readwrite');const ps=tx.objectStore('profiles');const g=ps.getAll();g.onsuccess=()=>{for(const p of g.result){p.preferences=p.preferences||{};p.preferences.voiceEnabled=true;p.preferences.coachNarration='full';p.rating=500;ps.put(p);}};tx.oncomplete=()=>res();};q.onerror=()=>res();setTimeout(res,5000);});}).catch(()=>{});
 console.log('seeded; reload');await page.reload({waitUntil:'domcontentloaded'});await page.waitForTimeout(2500);
-await D('ai-consent-allow','consent2');await D('skill-band-intermediate','calib');await page.waitForTimeout(1000);await D('page-help-close','help');await page.waitForTimeout(1500);
+await D('ai-consent-allow','consent2');await page.waitForTimeout(1000);await D('page-help-close','help');await page.waitForTimeout(1500);
 const ub=page.locator('[data-testid="unlock-all-btn"]').first();try{await ub.scrollIntoViewIfNeeded({timeout:8000});await ub.click({force:true,timeout:8000});await page.waitForTimeout(1200);}catch{}
 await D('weapons-unlock-all-btn','weapons');await page.waitForTimeout(2000);
 if(!(await page.locator('[data-testid="play-btn"]').isEnabled().catch(()=>false))){console.log('PLAY LOCKED — abort');await browser.close();process.exit(3);}

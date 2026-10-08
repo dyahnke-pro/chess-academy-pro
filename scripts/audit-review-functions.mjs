@@ -42,7 +42,7 @@ const txt = async (tid) => { try { return (await p.locator(`[data-testid="${tid}
 // ── onboarding ──
 await p.goto(`${URL}/`, { waitUntil: 'domcontentloaded', timeout: 60000 });
 await p.waitForTimeout(2500);
-for (const t of ['ai-consent-allow', 'skill-band-intermediate', 'page-help-close']) { try { await tap(t, 4000); } catch {} }
+for (const t of ['ai-consent-allow', 'page-help-close']) { try { await tap(t, 4000); } catch {} }
 
 // ── FS1 list-page filters ──
 await p.goto(`${URL}/coach/review`, { waitUntil: 'domcontentloaded', timeout: 60000 });

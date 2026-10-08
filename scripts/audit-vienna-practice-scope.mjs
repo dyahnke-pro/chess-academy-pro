@@ -58,7 +58,6 @@ async function dismissOverlays() {
   for (let i = 0; i < 6; i++) {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
     if (await bubble.isVisible().catch(() => false)) {
-      await page.locator('[data-testid="skill-band-intermediate"]').click().catch(() => {});
       await page.waitForTimeout(400);
       continue;
     }

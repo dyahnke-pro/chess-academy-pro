@@ -55,9 +55,6 @@ async function waitForEvent(intercepted, predicate, timeoutMs) {
 
 async function dismissOnboarding(page) {
   const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-  if (await bubble.count().catch(() => 0)) {
-    await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 }).catch(() => undefined);
-  }
   const help = page.locator('[data-testid="page-help-modal"]');
   if (await help.count().catch(() => 0)) {
     await page.keyboard.press('Escape').catch(() => undefined);

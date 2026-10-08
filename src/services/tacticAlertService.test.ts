@@ -9,6 +9,7 @@ import {
   hasRecentFailure,
   clearSessionOutcomes,
   getSessionOutcomes,
+  isTacticWeakness,
 } from './tacticAlertService';
 import type { StockfishAnalysis } from '../types';
 
@@ -21,8 +22,9 @@ vi.mock('./missedTacticService', () => ({
   },
 }));
 
-vi.mock('./tacticalProfileService', () => ({
-  getStoredTacticalProfile: (): Promise<null> => Promise.resolve(null),
+const weaknessSignals = vi.hoisted(() => ({ list: [] as unknown[] }));
+vi.mock('./weaknessSignalLoader', () => ({
+  loadWeaknessSignals: (): Promise<unknown[]> => Promise.resolve(weaknessSignals.list),
 }));
 
 describe('tacticAlertService', () => {
@@ -360,5 +362,18 @@ describe('isCriticalThreat — the victim moves first (walk 5, 2026-09-23)', () 
     const fen = 'r3k3/2N5/8/8/8/8/5PPP/6K1 b - - 0 1';
     const fork = { pattern: { type: 'fork', description: 'Knight on c7 forks king on e8 and rook on a8' }, fen, lineEval: 0, lineMate: null };
     expect(isCriticalThreat(fork as never, 'b', false, 1400)).toBe(true);
+  });
+});
+
+describe('isTacticWeakness — reads the ONE student model', () => {
+  it('is true only for a tactic the weakness spine holds open', async () => {
+    weaknessSignals.list = [{
+      clusterId: 'analysis:tactic:fork', bucket: 'tactical', label: 'Forks',
+      openCount: 4, severity: 70, puzzleThemes: ['fork'],
+    }];
+    expect(await isTacticWeakness('fork')).toBe(true);
+    expect(await isTacticWeakness('pin')).toBe(false);
+    weaknessSignals.list = [];
+    expect(await isTacticWeakness('fork')).toBe(false);
   });
 });

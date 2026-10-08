@@ -170,9 +170,6 @@ async function main() {
   const dismissOnboarding = async (page) => {
     await page.waitForTimeout(2500);
     const calib = page.locator('[data-testid="strength-calibration-bubble"]');
-    if (await calib.count().catch(() => 0)) {
-      await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 5000 }).catch(() => {});
-    }
   };
   const dismissHelp = async (page) => {
     const help = page.locator('[data-testid="page-help-close"]').first();

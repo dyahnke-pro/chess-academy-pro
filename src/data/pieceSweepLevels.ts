@@ -267,9 +267,3 @@ export const PIECE_SWEEP_LEVELS: PieceSweepLevel[] = [
     pieceStart: 'g4', targets: ["g6","h5","h7"], obstacles: [], par: 3,
   },
 ];
-
-export function getSweepLevelsForPiece(
-  piece: PieceSweepLevel['piece'],
-): PieceSweepLevel[] {
-  return PIECE_SWEEP_LEVELS.filter((l) => l.piece === piece);
-}

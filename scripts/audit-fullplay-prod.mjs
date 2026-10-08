@@ -55,7 +55,6 @@ async function dismissBubble() {
   for (let i = 0; i < 6; i++) {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
     if (!(await bubble.isVisible().catch(() => false))) return;
-    await page.locator('[data-testid="skill-band-intermediate"]').click().catch(() => {});
     await page.waitForTimeout(400);
   }
 }
@@ -153,9 +152,6 @@ async function highlightedSquares() {
   await page.evaluate(({ url, secret }) => { localStorage.setItem('auditStreamUrl', url); localStorage.setItem('auditStreamSecret', secret); localStorage.setItem('x-audit-secret', secret); localStorage.setItem('auditMoveHook', '1'); }, { url: listener.url, secret: LOCAL_LISTENER_SECRET });
   try {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-    if (await bubble.isVisible({ timeout: 8000 }).catch(() => false)) {
-      await page.locator('[data-testid="skill-band-intermediate"]').click().catch(() => {});
-    }
   } catch {}
   console.log('  waiting for deferred seed…');
   for (let i = 0; i < 30; i++) {

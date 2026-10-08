@@ -164,7 +164,6 @@ try {
   await page.waitForTimeout(3000);
   const bubbleCount = await page.locator('[data-testid="strength-calibration-bubble"]').count();
   if (bubbleCount > 0) {
-    await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 });
   }
 
   // Deferred-seed wait (per CLAUDE.md G1: pro-rep entries land ~30s, full seed ~50s)

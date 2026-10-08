@@ -81,9 +81,6 @@ async function main() {
   // Clear the strength-calibration bubble so the consent modal can surface.
   async function dismissCalibration() {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-    if (await bubble.count()) {
-      await page.locator('[data-testid="skill-band-intermediate"]').click().catch(() => undefined);
-    }
   }
 
   async function runFlow(decision /* 'granted' | 'denied' */) {

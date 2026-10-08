@@ -18,7 +18,6 @@ import {
   recordCoachLessonUsed as svcRecordCoachLessonUsed,
   recordCoachChatTurnUsed as svcRecordCoachChatTurnUsed,
   recordCoachSpend as svcRecordCoachSpend,
-  markCoachUnlockAnnouncementSeen as svcMarkCoachUnlockAnnouncementSeen,
   type ClaimResult,
 } from '../services/freeTierService';
 
@@ -45,7 +44,6 @@ export interface FreeTierState {
    *  persists + updates the mirror so the gate re-evaluates without a reload. */
   recordCoachSpend: (costUsd: number) => Promise<void>;
   /** Mark the coach-unlock announcement seen; persists + updates the mirror. */
-  markCoachUnlockSeen: () => Promise<void>;
 }
 
 const INITIAL_ROW: FreeTierRecord = {
@@ -93,10 +91,6 @@ export const useFreeTierStore = create<FreeTierState>((set) => ({
   },
   recordCoachSpend: async (costUsd: number) => {
     const row = await svcRecordCoachSpend(costUsd);
-    set({ row });
-  },
-  markCoachUnlockSeen: async () => {
-    const row = await svcMarkCoachUnlockAnnouncementSeen();
     set({ row });
   },
 }));

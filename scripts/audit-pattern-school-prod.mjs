@@ -35,11 +35,6 @@ await page.goto(`${BASE}/tactics/patterns`, { waitUntil: 'domcontentloaded', tim
 let quiet = 0;
 for (let i = 0; i < 30 && quiet < 2; i++) {
   let acted = false;
-  const band = page.locator('[data-testid="skill-band-intermediate"]');
-  if (await band.count().catch(() => 0)) {
-    await band.click({ timeout: 3000 }).catch(() => {});
-    acted = true;
-  }
   const consent = page.locator('[data-testid="ai-consent-allow"]');
   if (await consent.count().catch(() => 0)) {
     await consent.click({ timeout: 3000 }).catch(() => {});

@@ -119,13 +119,3 @@ export const BOARD_QUESTION_BUCKETS: readonly BucketDef[] = [
   { aspect: 'master-play', component: 'opening', theme: 'opening-knowledge', needsEngine: false, computer: 'assembleMasterPlayAnswer' },
   { aspect: 'opening-plans', component: 'opening', theme: 'opening-knowledge', needsEngine: false, computer: null },
 ];
-
-const BY_ASPECT: ReadonlyMap<QuestionAspect, BucketDef> = new Map(
-  BOARD_QUESTION_BUCKETS.map((b) => [b.aspect, b]),
-);
-export function bucketFor(aspect: QuestionAspect): BucketDef | undefined {
-  return BY_ASPECT.get(aspect);
-}
-export function themeFor(aspect: QuestionAspect): WeaknessTheme | undefined {
-  return BY_ASPECT.get(aspect)?.theme;
-}

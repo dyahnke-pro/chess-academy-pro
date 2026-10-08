@@ -31,8 +31,6 @@ export const BOARD_COLORS: BoardColorScheme[] = [
   },
 ];
 
-export const DEFAULT_BOARD_COLOR = 'neon';
-
 export function getBoardColor(id: string): BoardColorScheme {
   return BOARD_COLORS.find((bc) => bc.id === id) ?? BOARD_COLORS[0];
 }

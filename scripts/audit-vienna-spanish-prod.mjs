@@ -17,7 +17,6 @@ const SPANISH_MARKERS = ['Bienvenidos', 'ajedrez', 'apertura', 'blancas', 'cabal
 
 async function dismissOverlays(page) {
   try {
-    await page.locator('[data-testid="skill-band-intermediate"]').click();
   } catch { /* not shown */ }
   try {
     const help = page.locator('[data-testid="page-help-modal"]');

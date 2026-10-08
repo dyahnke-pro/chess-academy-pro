@@ -61,7 +61,6 @@ async function main() {
   console.log(`[probe] ${BASE}/coach/teach — ask: "${OPENING_ASK}"`);
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
-  await dismissIfPresent(page, '[data-testid="skill-band-intermediate"]', 15000);
   await dismissIfPresent(page, '[data-testid="page-help-modal"] button', 4000);
   await dismissIfPresent(page, '[data-testid="ai-consent-allow"]', 6000);
 

@@ -28,7 +28,6 @@ const OPENINGS = (process.env.AUDIT_OPENING ?? 'caro-kann,vienna-game,italian-ga
 
 async function dismissOverlays(page) {
   try {
-    await page.locator('[data-testid="skill-band-intermediate"]').click();
   } catch { /* not shown */ }
   try {
     const help = page.locator('[data-testid="page-help-modal"]');

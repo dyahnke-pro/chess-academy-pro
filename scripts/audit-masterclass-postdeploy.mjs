@@ -53,7 +53,6 @@ await page.goto(`${PROD}/`, { waitUntil: 'domcontentloaded', timeout: 25000 });
 
 await page.waitForTimeout(3000);
 if (await page.locator('[data-testid="strength-calibration-bubble"]').count() > 0) {
-  await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 }).catch(() => {});
 }
 process.stdout.write('  seeding');
 for (let i = 0; i < 14; i++) { await page.waitForTimeout(5000); process.stdout.write('.');

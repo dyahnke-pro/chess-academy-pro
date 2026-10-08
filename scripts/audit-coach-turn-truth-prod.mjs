@@ -599,7 +599,6 @@ async function waitCoachReply(page, sinceTs, timeoutMs = 45_000) {
 async function clearFirstRunOverlays(page) {
   for (const [modal, button] of [
     ['ai-consent-modal', 'ai-consent-allow'],
-    ['strength-calibration-bubble', 'skill-band-intermediate'],
   ]) {
     if (await page.locator(`[data-testid="${modal}"]`).isVisible().catch(() => false)) {
       await page.locator(`[data-testid="${button}"]`).first().click({ timeout: 5000 }).catch(() => {});

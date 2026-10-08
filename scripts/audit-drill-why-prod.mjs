@@ -122,9 +122,6 @@ async function main() {
     await page.locator('[data-testid="ai-consent-allow"]').click({ timeout: 4000 }).catch(() => {});
     // Strength-calibration bubble (CSS-dismiss safe path per CLAUDE.md G1).
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-    if (await bubble.count().catch(() => 0)) {
-      await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 4000 }).catch(() => {});
-    }
     await page.waitForTimeout(2500); // let boot + Dexie open settle
 
     // ── Seed the mistake puzzle straight into Dexie ────────────────────────

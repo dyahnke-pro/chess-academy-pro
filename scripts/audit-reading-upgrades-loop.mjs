@@ -92,7 +92,7 @@ async function dismissOnboarding(page) {
 }
 
 async function dismissBubbles(page) {
-  for (const sel of ['[data-testid="skill-band-intermediate"]', '[data-testid="page-help-close"]']) {
+  for (const sel of ['[data-testid="page-help-close"]']) {
     const el = page.locator(sel);
     if ((await el.count()) > 0) await el.first().click({ force: true }).catch(() => {});
   }

@@ -31,7 +31,6 @@ page.on('pageerror', (e) => pageErrors.push(e.message));
 try {
   await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
   try {
-    await page.click('[data-testid="skill-band-intermediate"]');
   } catch { /* no bubble */ }
 
   // Academy shelves (anti/gambits seed in the deferred backfill → re-poll)

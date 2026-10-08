@@ -200,23 +200,6 @@ export function hasCoachAccessLeft(state: Pick<FreeTierRecord, 'coachSpendUsd'>)
   return state.coachSpendUsd < FREE_COACH_SPEND_LIMIT_USD;
 }
 
-/** Whether the "the coach is free to try" announcement still needs to be
- *  shown. Pure. True for every non-Pro user who hasn't seen it yet —
- *  including a pre-existing row, which backfills `coachUnlockSeenAt: null`
- *  via loadFreeTier (see FreeTierRecord doc comment). */
-export function needsCoachUnlockAnnouncement(
-  state: Pick<FreeTierRecord, 'coachUnlockSeenAt'>,
-): boolean {
-  return state.coachUnlockSeenAt == null;
-}
-
-/** Mark the coach-unlock announcement as shown/dismissed (idempotent). */
-export async function markCoachUnlockAnnouncementSeen(): Promise<FreeTierRecord> {
-  const cur = await loadFreeTier();
-  if (cur.coachUnlockSeenAt != null) return cur;
-  return patch({ coachUnlockSeenAt: Date.now() });
-}
-
 export type ClaimResult =
   | 'ok' // just claimed this opening as the free one
   | 'already-claimed-this' // already the claimed free opening

@@ -122,11 +122,6 @@ function collect(): VerifiedLine[] {
 
 const LIBRARY: VerifiedLine[] = collect();
 
-/** All verified lines (traps + pitfalls) across all three surfaces. */
-export function getAllVerifiedLines(): readonly VerifiedLine[] {
-  return LIBRARY;
-}
-
 /** Verified lines for a specific opening (by canonical name match). */
 export function getVerifiedLinesForOpening(openingName: string): VerifiedLine[] {
   if (!openingName) return [];
@@ -136,19 +131,6 @@ export function getVerifiedLinesForOpening(openingName: string): VerifiedLine[] 
       lo.includes(l.openingName.toLowerCase()) ||
       l.openingName.toLowerCase().includes(lo),
   );
-}
-
-/** Coverage summary — used for the coach-memory pointer note + tests. */
-export function getLibrarySummary(): {
-  total: number; traps: number; pitfalls: number;
-  puzzleReady: number; bySource: Record<string, number>;
-} {
-  const traps = LIBRARY.filter((l) => l.role === 'trap').length;
-  const pitfalls = LIBRARY.filter((l) => l.role === 'pitfall').length;
-  const puzzleReady = LIBRARY.filter((l) => l.challengeFen !== null).length;
-  const bySource: Record<string, number> = {};
-  for (const l of LIBRARY) bySource[l.source] = (bySource[l.source] ?? 0) + 1;
-  return { total: LIBRARY.length, traps, pitfalls, puzzleReady, bySource };
 }
 
 /** Build a system-prompt block of verified trap/pitfall puzzles for an

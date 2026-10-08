@@ -26,7 +26,6 @@ page.on('pageerror', (e) => pErr.push(e.message));
 const errN = () => cErr.length + pErr.length;
 
 const nuke = async () => {
-  try { const b = page.locator(sel('strength-calibration-bubble')); if (await b.isVisible({ timeout: 3000 })) { await page.locator(sel('skill-band-intermediate')).click({ timeout: 4000 }).catch(() => {});  } } catch {}
   try { const h = page.locator(sel('page-help-modal')); if (await h.isVisible({ timeout: 1000 })) await page.locator(`${sel('page-help-modal')} button`).first().click({ timeout: 2000 }).catch(() => {}); } catch {}
 };
 const sq = (s) => page.locator(`[data-square="${s}"]`).first();

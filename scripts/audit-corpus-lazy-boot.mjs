@@ -68,7 +68,7 @@ async function main() {
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded' }).catch(() => {});
   await sleep(2000);
   // Best-effort dismiss: calibration bubble + AI consent + page help.
-  for (const sel of ['[data-testid="skill-band-intermediate"]', '[data-testid="ai-consent-allow"]', '[data-testid="page-help-modal"] button']) {
+  for (const sel of ['[data-testid="ai-consent-allow"]', '[data-testid="page-help-modal"] button']) {
     try { const el = page.locator(sel).first(); if (await el.isVisible({ timeout: 1500 })) await el.click({ timeout: 2000 }); } catch { /* not present */ }
   }
   await sleep(1500);

@@ -35,7 +35,6 @@ async function dismissGates(page) {
   // Strength-calibration bubble (fresh context) then any page-help modal.
   try {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-    await page.locator('[data-testid="skill-band-intermediate"]').click();
   } catch { /* not shown — fine */ }
   try {
     const help = page.locator('[data-testid="page-help-modal"]');

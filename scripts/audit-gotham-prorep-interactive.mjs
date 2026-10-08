@@ -30,7 +30,6 @@ async function freshPage() {
 
 async function dismissOnboarding(page) {
   try {
-    await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 });
   } catch { /* not shown */ }
 }
 async function dismissHelp(page) {

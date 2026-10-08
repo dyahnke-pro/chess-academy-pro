@@ -30,7 +30,6 @@ async function dismissOverlays(page) {
   // Strength-calibration bubble (fresh context) → pick Intermediate, wait gone.
   try {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-    await page.locator('[data-testid="skill-band-intermediate"]').click();
   } catch { /* not shown on this load */ }
   // Page-help modal that auto-opens on the surface.
   try {

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**105 lines · 3 exports · 1 importers · 0 tests · 0 audits**
+**95 lines · 1 exports · 1 importers · 0 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,12 +15,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachGameReview.tsx`
 
 ## Exports and every call site
-
-### `__setReviewOpeningsForTests` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `__resetReviewOpeningsForTests` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `reviewTheoryLookup` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

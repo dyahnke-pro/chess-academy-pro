@@ -30,10 +30,6 @@ const nuke = async () => {
   // onboarding strength bubble — dismiss by choosing a band (no DOM surgery).
   try {
     const b = page.locator(sel('strength-calibration-bubble'));
-    if (await b.isVisible({ timeout: 3000 })) {
-      await page.locator(sel('skill-band-intermediate')).click({ timeout: 4000 })
-        .catch(() => page.getByText('Intermediate', { exact: false }).first().click({ timeout: 4000 }).catch(() => {}));
-    }
   } catch { /* none */ }
   // page-help modal — close it via its own controls.
   try {

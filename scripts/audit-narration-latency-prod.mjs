@@ -110,7 +110,6 @@ async function main() {
 
   async function dismissOnboarding() {
     try {
-      await page.locator('[data-testid="skill-band-intermediate"]').click();
     } catch { /* not shown — fine */ }
     try {
       const help = page.locator('[data-testid="page-help-modal"]');

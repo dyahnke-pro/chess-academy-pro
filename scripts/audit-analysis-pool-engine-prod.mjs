@@ -130,7 +130,6 @@ async function main() {
     // Fresh context → the strength-calibration bubble eats the first click.
     try {
       const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-      await page.locator('[data-testid="skill-band-intermediate"]').click();
     } catch { /* no bubble — fine */ }
 
     // The AI-consent modal is the ONE sanctioned pop-up (CLAUDE.md) and it is a

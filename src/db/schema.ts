@@ -148,10 +148,9 @@ export interface FreeTierRecord {
    *  The old coachLessonsUsed/coachChatTurnsUsed counters stay as analytics but
    *  no longer gate. */
   coachSpendUsd: number;
-  /** Unix ms the "the coach is free to try" announcement was shown/dismissed,
-   *  or null if never shown. Drives CoachUnlockAnnouncement — fires once for
-   *  every non-Pro user, INCLUDING existing users whose row predates this
-   *  field (they backfill to null via loadFreeTier, so they see it too). */
+  /** Unix ms the old "the coach is free to try" announcement was dismissed.
+   *  The announcement was deleted 2026-10-08 (never mounted); the field stays
+   *  because it is persisted on devices and nothing reads it. */
   coachUnlockSeenAt: number | null;
   /** Unix ms of the last write — for debugging / future pruning. */
   updatedAt: number;

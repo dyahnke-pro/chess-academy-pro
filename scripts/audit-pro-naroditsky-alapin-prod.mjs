@@ -90,7 +90,6 @@ try {
   console.log('  dismissing strength-calibration onboarding');
   await page.waitForTimeout(3000);
   if (await page.locator('[data-testid="strength-calibration-bubble"]').count() > 0) {
-    await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 });
   }
 
   console.log('  waiting 50s for deferred seed (pro-rep + plans + flashcards)');

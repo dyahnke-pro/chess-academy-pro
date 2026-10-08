@@ -39,7 +39,6 @@ page.on('console', (m) => { if (m.type() === 'error' && /chess|lesson|narrat/i.t
 
 async function dismissOnboarding() {
   try {
-    await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 });
   } catch { /* already calibrated */ }
 }
 async function dismissHelp() {

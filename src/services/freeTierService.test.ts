@@ -32,8 +32,6 @@ import {
   recordCoachSpend,
   coachSpendRemaining,
   FREE_COACH_SPEND_LIMIT_USD,
-  needsCoachUnlockAnnouncement,
-  markCoachUnlockAnnouncementSeen,
 } from './freeTierService';
 
 beforeEach(async () => {
@@ -236,31 +234,6 @@ describe('coach access — gated on cumulative DeepSeek token cost ($1 lifetime)
     expect(hasCoachAccessLeft({ coachSpendUsd: FREE_COACH_SPEND_LIMIT_USD })).toBe(false);
     expect(hasCoachAccessLeft({ coachSpendUsd: 2 })).toBe(false);
     expect(coachSpendRemaining({ coachSpendUsd: 2 })).toBe(0);
-  });
-});
-
-describe('coach-unlock announcement', () => {
-  it('needs showing on a fresh ledger', () => {
-    expect(needsCoachUnlockAnnouncement({ coachUnlockSeenAt: null })).toBe(true);
-  });
-  it('needs showing on a legacy row backfilled by loadFreeTier', async () => {
-    await db.freeTier.put({
-      id: 'singleton',
-      puzzlesSolved: 0,
-      freeOpeningId: null,
-      kidFirstAccessAt: null,
-      updatedAt: 1,
-    } as never);
-    const row = await loadFreeTier();
-    expect(needsCoachUnlockAnnouncement(row)).toBe(true);
-  });
-  it('stops needing it once marked seen, and is idempotent', async () => {
-    const seen = await markCoachUnlockAnnouncementSeen();
-    expect(seen.coachUnlockSeenAt).toBeTypeOf('number');
-    expect(needsCoachUnlockAnnouncement(seen)).toBe(false);
-    const first = seen.coachUnlockSeenAt;
-    const again = await markCoachUnlockAnnouncementSeen();
-    expect(again.coachUnlockSeenAt).toBe(first); // idempotent, doesn't re-stamp
   });
 });
 

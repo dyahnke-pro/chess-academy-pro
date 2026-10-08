@@ -287,7 +287,7 @@
 - `src/services/coachApi.speakableFacts.test.ts:52`
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
-### `voiceFacts` (function) — 37 call sites
+### `voiceFacts` (function) — 35 call sites
 - `src/components/Coach/CoachGameReview.tsx:1645`
 - `src/components/Coach/CoachGameReview.tsx:1838`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
@@ -305,9 +305,7 @@
 - `src/services/coachLaneWiring.test.ts:144`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
-- `src/services/contentGenerationService.ts:133`
-- `src/services/contentGenerationService.ts:168`
-- `src/services/contentGenerationService.ts:202`
+- `src/services/contentGenerationService.ts:134`
 - `src/services/gameReviewService.ts:57`
 - `src/services/kidGameCoach.ts:230`
 - `src/services/mistakeNarrationVoice.ts:109`

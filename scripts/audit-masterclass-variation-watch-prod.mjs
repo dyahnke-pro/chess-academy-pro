@@ -66,7 +66,6 @@ async function dismissOverlays() {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
     if (await bubble.count() > 0) {
       acted = true;
-      await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 }).catch(() => null);
     }
     const help = page.locator('[data-testid="page-help-modal"]');
     if (await help.count() > 0) {

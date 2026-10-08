@@ -46,10 +46,6 @@ export type StatFilter =
   | { source: 'player-color'; color: 'white' | 'black'; label: string }
   | { source: 'critical-moments'; phase?: GamePhase; missed?: boolean; label: string };
 
-export interface StatFilterSet {
-  filters: StatFilter[];
-}
-
 // ─── Resolver ─────────────────────────────────────────────────────────────
 
 const AI_NAMES = ['AI Coach', 'Stockfish Bot'];

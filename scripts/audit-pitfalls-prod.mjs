@@ -131,9 +131,6 @@ async function freshPage() {
 async function dismissOverlays(page) {
   try {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-    if (await bubble.count()) {
-      await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 4000 }).catch(() => {});
-    }
   } catch { /* none */ }
   try {
     const modal = page.locator('[data-testid="page-help-modal"]');

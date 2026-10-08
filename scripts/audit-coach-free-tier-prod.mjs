@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 /**
  * audit-coach-free-tier-prod — post-deploy verification for the coach
- * metered-free-tier gate (accessPolicy / freeTierService / AccessGate /
- * CoachUnlockAnnouncement), shipped 2026-08-06.
+ * metered-free-tier gate (accessPolicy / freeTierService / AccessGate), shipped 2026-08-06.
  *
  * Three scenarios against LIVE prod:
- *   A. Fresh user (no freeTier row)      → /coach/home is OPEN, announcement fires.
+ *   A. Fresh user (no freeTier row)      → /coach/home is OPEN.
  *   B. Legacy user (pre-migration row, no coach fields) → /coach/home is STILL OPEN
  *      (proves the unlock reaches EXISTING users via loadFreeTier's backfill).
  *   C. Control — /academy stays WALLED (unaffected route, gate didn't break).
@@ -38,10 +37,6 @@ async function paywallVisible(page) {
   return (await page.locator('[data-testid="paywall-back-free"]').count()) > 0;
 }
 
-async function announcementVisible(page) {
-  return (await page.locator('[data-testid="coach-unlock-announcement"]').count()) > 0;
-}
-
 async function main() {
   console.log(`[coach-free-tier] base = ${BASE_URL}`);
   const executablePath = await resolveChromiumExecutable(HEADED);
@@ -55,10 +50,8 @@ async function main() {
     await page.goto(`${BASE_URL}/coach/home`, { waitUntil: 'domcontentloaded', timeout: 45_000 });
     await page.waitForTimeout(4000);
     const walled = await paywallVisible(page);
-    const announced = await announcementVisible(page);
-    console.log(`[A: fresh user] /coach/home walled=${walled} announcementVisible=${announced} url=${page.url()}`);
+    console.log(`[A: fresh user] /coach/home walled=${walled} url=${page.url()}`);
     results.push({ scenario: 'A-fresh-user-coach-open', pass: !walled });
-    results.push({ scenario: 'A-fresh-user-announcement-shown', pass: announced });
     await ctx.close();
   }
 
@@ -93,10 +86,8 @@ async function main() {
     await page.goto(`${BASE_URL}/coach/home`, { waitUntil: 'domcontentloaded', timeout: 45_000 });
     await page.waitForTimeout(4000);
     const walled = await paywallVisible(page);
-    const announced = await announcementVisible(page);
-    console.log(`[B: legacy user] /coach/home walled=${walled} announcementVisible=${announced} url=${page.url()}`);
+    console.log(`[B: legacy user] /coach/home walled=${walled} url=${page.url()}`);
     results.push({ scenario: 'B-legacy-user-coach-open', pass: !walled });
-    results.push({ scenario: 'B-legacy-user-announcement-shown', pass: announced });
     await ctx.close();
   }
 

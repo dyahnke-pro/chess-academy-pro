@@ -5,7 +5,6 @@ import type {
   GeneratedContent,
   GeneratedContentType,
   LichessExplorerResult,
-  MiddlegamePlan,
   OpeningRecord,
 } from '../types';
 
@@ -102,39 +101,6 @@ async function fetchGroundingData(fen: string): Promise<GroundingData> {
   return { explorerData, topMoves, gameStats };
 }
 
-// ─── LLM-Grounded Generation ────────────────────────────────────────────────
-
-/**
- * Generate a middlegame plan explanation grounded in Lichess data.
- * Returns the LLM-generated text or a cached version if available.
- */
-export async function generateMiddlegamePlanAnalysis(
-  opening: OpeningRecord,
-  plan: MiddlegamePlan,
-): Promise<string> {
-  const cached = await getCachedContent(opening.id, 'middlegame_plan');
-  if (cached) return cached.content;
-
-  const grounding = await fetchGroundingData(plan.criticalPositionFen);
-
-  // GROUNDED (David 2026-07-09: one LLM command). The plan's AUTHORED fields
-  // (title, overview, pawn-break + maneuver explanations, themes) ARE the facts,
-  // plus the real Lichess continuations. voiceFacts weaves them and adds nothing
-  // — no free "why/counterplay" reasoning to invent, no board-claim gate needed.
-  const facts = [
-    `Middlegame plan for the ${opening.name}: "${plan.title}".`,
-    plan.overview ? plan.overview : '',
-    ...(plan.pawnBreaks ?? []).map((b) => `Pawn break ${b.move}: ${b.explanation}`),
-    ...(plan.pieceManeuvers ?? []).map((m) => `Maneuver — the ${m.piece} via ${m.route}: ${m.explanation}`),
-    ...(plan.strategicThemes ?? []).map((t) => `Theme: ${t}`),
-    grounding.topMoves ? `Most-played continuations from this position:\n${grounding.topMoves}` : '',
-  ].filter(Boolean).join('\n');
-
-  const result = (await voiceFacts(facts, { intent: 'middlegame-plan', warm: true })) ?? facts;
-  await storeContent(opening.id, 'middlegame_plan', result, JSON.stringify(grounding));
-  return result;
-}
-
 /**
  * Generate a sideline explanation grounded in Lichess explorer data.
  */
@@ -174,30 +140,4 @@ export async function generateSidelineExplanation(
     console.warn('[contentGeneration] sideline cache write failed:', err);
   }
   return result;
-}
-
-/**
- * Generate a deep annotation for a critical moment in a model game,
- * grounded in position data from Lichess.
- */
-export async function generateModelGameAnnotation(
-  openingName: string,
-  fen: string,
-  _pgn: string,
-  moveNumber: number,
-  white: string,
-  black: string,
-): Promise<string> {
-  const grounding = await fetchGroundingData(fen);
-
-  // GROUNDED (David 2026-07-09: one LLM command). The annotation voices the real
-  // Lichess results + continuations at this position — no free reasoning about
-  // "what makes it critical" to invent. voiceFacts adds nothing.
-  const facts = [
-    `Position from ${white} versus ${black} at move ${moveNumber}, in the ${openingName}.`,
-    grounding.gameStats ? `Database results here: ${grounding.gameStats}` : '',
-    grounding.topMoves ? `Most-played continuations from this position:\n${grounding.topMoves}` : '',
-  ].filter(Boolean).join('\n');
-
-  return (await voiceFacts(facts, { intent: 'model-game-annotation', warm: true })) ?? facts;
 }

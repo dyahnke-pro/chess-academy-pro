@@ -31,11 +31,6 @@ export function scaledShadow(rgb: string, brightness: number): string {
   return `0 0 ${Math.round(8 * s)}px rgba(${rgb}, ${Math.min(1, 0.6 * s)}), 0 0 ${Math.round(16 * s)}px rgba(${rgb}, ${Math.min(1, 0.35 * s)}), 0 0 ${Math.round(28 * s)}px rgba(${rgb}, ${Math.min(1, 0.18 * s)})`;
 }
 
-export function scaledBorder(rgb: string, brightness: number): string {
-  const s = brightness / 100;
-  return `rgba(${rgb}, ${Math.min(1, 0.4 * s)})`;
-}
-
 /**
  * Build a CSS drop-shadow filter for piece glow, scaled by brightness.
  * Returns empty string when brightness is 0.

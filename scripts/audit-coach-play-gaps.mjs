@@ -128,8 +128,6 @@ async function main() {
       const calib = page.locator(sel('strength-calibration-bubble'));
       if (await calib.count()) {
         acted = true;
-        await page.locator(sel('skill-band-intermediate')).first().click({ timeout: 4000 })
-          .catch(() => page.getByText('Intermediate', { exact: false }).first().click({ timeout: 4000 }).catch(() => undefined));
       }
       const help = page.locator(sel('page-help-modal'));
       if (await help.count()) {

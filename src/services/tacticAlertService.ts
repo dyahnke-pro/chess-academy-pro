@@ -13,7 +13,8 @@
 
 import { Chess } from 'chess.js';
 import { detectTacticType } from './missedTacticService';
-import { getStoredTacticalProfile } from './tacticalProfileService';
+import { loadWeaknessSignals } from './weaknessSignalLoader';
+import { matchTacticPattern } from './weaknessSignal';
 import { alertSensitivityMultiplier } from './skillScaling';
 import { legalSeeGainFor } from './positionReadingService';
 import { tacticInvariant } from './conceptEngine';
@@ -592,22 +593,16 @@ export function buildTacticAlertMessage(
 // ─── Weakness-Aware Helpers ───────────────────────────────────────────────────
 
 /**
- * Check if a tactic type is among the player's weakest areas.
- * Uses the cached tactical profile.
+ * Whether a tactic type is one of this student's own weaknesses — read off the
+ * ONE student model (the weakness spine, via `loadWeaknessSignals`) through the
+ * canonical vocabulary bridge. Until 2026-10-08 this read a cached
+ * "tactical profile" that nothing had written since its computer lost its last
+ * caller, so it answered false for every student.
  */
 export async function isTacticWeakness(tacticType: TacticType): Promise<boolean> {
-  const profile = await getStoredTacticalProfile();
-  if (!profile) return false;
-  return profile.weakestTypes.includes(tacticType);
-}
-
-/**
- * Get the player's weakest tactic types from the cached profile.
- */
-export async function getWeakestTypes(): Promise<TacticType[]> {
-  const profile = await getStoredTacticalProfile();
-  if (!profile) return [];
-  return profile.weakestTypes;
+  const pattern = toTacticPatternType(tacticType);
+  if (!pattern) return false;
+  return matchTacticPattern(pattern, await loadWeaknessSignals()) !== null;
 }
 
 // ─── Session Tracking ─────────────────────────────────────────────────────────

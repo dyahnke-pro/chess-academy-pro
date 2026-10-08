@@ -20,8 +20,3 @@ export const FAIRY_TALE_CONFIG: KidGameConfig = {
   chapters: FAIRY_TALE_CHAPTERS,
   chapterOrder: JOURNEY_CHAPTER_ORDER,
 };
-
-export const KID_GAME_CONFIGS: KidGameConfig[] = [
-  PAWNS_JOURNEY_CONFIG,
-  FAIRY_TALE_CONFIG,
-];

@@ -118,7 +118,6 @@ async function walkWatch(id, label, expected) {
 
 // setup
 await page.goto(URL + '/', { waitUntil: 'domcontentloaded', timeout: 30000 });
-try {  await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 8000 });  } catch {}
 console.log('[setup] 60s seed…'); await page.waitForTimeout(60000);
 await openDetail(OPENINGS[0]);
 const unlock = await seedUnlockedOpenings(page, OPENINGS);

@@ -41,7 +41,6 @@ async function gotoRetry(path, tries = 3) {
   return false;
 }
 async function dismissOnboarding() {
-  try {  await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 4000 });  } catch { /* */ }
 }
 async function dismissHelp() { const m = page.locator('[data-testid="page-help-modal"]'); if (await m.count() > 0) { await page.keyboard.press('Escape').catch(() => null); await m.waitFor({ state: 'detached', timeout: 4000 }).catch(() => null); } }
 const bodyText = () => page.evaluate(() => document.body.innerText).catch(() => '');

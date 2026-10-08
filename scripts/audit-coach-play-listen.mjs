@@ -138,9 +138,6 @@ async function main() {
     };
     const clearOverlays = async () => {
       const calib = page.locator('[data-testid="strength-calibration-bubble"]');
-      if (await calib.count()) {
-        await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 }).catch(() => {});
-      }
       const help = page.locator('[data-testid="page-help-modal"]');
       if (await help.count()) { await page.keyboard.press('Escape'); await help.waitFor({ state: 'detached', timeout: 8000 }).catch(() => {}); }
     };

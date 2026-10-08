@@ -40,12 +40,6 @@ export const CAPTURE_VALUE: Readonly<Record<string, number>> = Object.freeze({
   p: 1, n: 3, b: 3, r: 5, q: 9, k: 100,
 });
 
-/** Spelled-out names, same MATERIAL semantics — several call sites key by
- *  `pawn`/`knight`/… rather than by the chess.js letter. */
-export const MATERIAL_VALUE_BY_NAME: Readonly<Record<string, number>> = Object.freeze({
-  pawn: 1, knight: 3, bishop: 3, rook: 5, queen: 9, king: 0,
-});
-
 /** Non-king material balance, WHITE minus BLACK, in pawns (MATERIAL semantics,
  *  king 0). The one reader of the question — three private copies of it, each
  *  with its own value table, were folded here 2026-09-29. */

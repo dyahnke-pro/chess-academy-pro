@@ -10,7 +10,7 @@
 
 ## SENSE — does the loop record what happens to the student?
 
-- **23** modules record a MISS.
+- **22** modules record a MISS.
 - **13** record a HOLD (`capabilityEvidence`).
 - **8** read the capability profile back.
 

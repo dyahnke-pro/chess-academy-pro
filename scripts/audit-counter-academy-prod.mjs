@@ -21,7 +21,6 @@ async function dismiss(page) {
   // strength calibration bubble
   try {
     if (await page.locator('[data-testid="strength-calibration-bubble"]').count()) {
-      await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 4000 }).catch(() => {});
     }
   } catch { /* noop */ }
   // page-help modal
