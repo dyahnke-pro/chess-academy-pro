@@ -105,3 +105,29 @@ describe('DEGRADE=llm — the coach still answers in the computed register', () 
     expect(out).toBe('Your knight on f3 eyes e5.');
   });
 });
+
+describe('a finished line is TRANSLATED, never re-seated (prod 2026-09-25)', () => {
+  // The Italian masterclass (student = White) says Black's knight comes to c6.
+  // Through the coach prompt German heard "Dein Springer kommt nach c6" — the
+  // 'student' perspective rule made the model assign every piece an owner and,
+  // with no seat in hand, it guessed. NEGATIVE CONTROL: drop `translateOnly`
+  // from the call (or its branch in voiceFacts) and both expectations fail.
+  const line = 'The most natural defence: the queen-knight comes to c6, its best square, propping up e5 a second time.';
+
+  it('sends the faithful-translation instruction, not the coach perspective rule', async () => {
+    reply = async () => 'Die natürlichste Verteidigung: Der Damenspringer kommt nach c6 und stützt e5 ein zweites Mal.';
+    await voiceFacts(line, { targetLanguage: 'German', intent: 'spoken-narration', translateOnly: true });
+    expect(calls.length).toBe(1);
+    const system = systemOf(calls[0]);
+    expect(system).toMatch(/gets no\s+owner in the translation either/);
+    expect(system).not.toMatch(/Every pawn, piece and square you name belongs to exactly one side/);
+    expect(calls[0].messages.find((m) => m.role === 'user')?.content).toMatch(/^TEXT TO TRANSLATE:/);
+  });
+
+  it('English text is never sent to translate', async () => {
+    const out = await voiceFacts(line, { targetLanguage: 'English', intent: 'spoken-narration', translateOnly: true, preferRaw: true });
+    expect(calls.length).toBe(0);
+    expect(out).toContain('queen-knight');
+  });
+});
+
