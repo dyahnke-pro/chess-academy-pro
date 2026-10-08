@@ -843,8 +843,6 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       // envelope assembled in coachService.ask carries the four sources
       // of truth (identity, memory, app map, live state) plus the full
       // toolbelt — so memory + manifest awareness arrive on every call.
-      // The drawer/post-game branch below still uses runAgentTurn until
-      // BRAIN-03 collapses it the same way.
       if (!isGameOver) {
         onBoardAnnotation?.([{ type: 'clear' }]);
         setIsStreaming(true);

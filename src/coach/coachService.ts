@@ -258,8 +258,7 @@ export interface CoachServiceOptions {
   /** When provided, the service routes through the provider's
    *  streaming path (if implemented) and pipes raw token chunks
    *  here as they arrive. The final returned `CoachAnswer.text` is
-   *  the post-action-stripped, full response — same semantics as
-   *  `runAgentTurn`'s `onChunk`. WO-BRAIN-02.
+   *  the post-action-stripped, full response. WO-BRAIN-02.
    *
    *  Streaming only applies to the FIRST turn of a multi-turn loop.
    *  Follow-up turns (when `maxToolRoundTrips > 1`) always run

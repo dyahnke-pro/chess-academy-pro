@@ -5,7 +5,8 @@
  * classes of issue:
  *
  *   1. Narration factual errors (piece-on-square, check/mate, etc.) —
- *      emitted by `narrationAuditor.recordAudit()`.
+ *      no live emitter since 2026-10-08 (the runtime auditor's only caller
+ *      was deleted); the kinds stay so rows already logged on devices type.
  *   2. Uncaught runtime errors — global `window.onerror` / unhandled
  *      promise rejections. Installed by `installGlobalErrorHooks()` on
  *      app boot.
@@ -61,7 +62,8 @@ export type AuditKind =
   // event): it used to borrow 'coach-tool-callback-rejected', so successful
   // forks showed up as rejections in the error data (David 2026-09-06).
   | 'walkthrough-fork-picked'
-  // Narration (from narrationAuditor)
+  // Narration — legacy kinds: no live emitter (2026-10-08); kept because
+  // rows already logged on devices carry them.
   | 'piece-on-square'
   | 'hanging-piece'
   | 'check-claim'

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1224 lines · 28 exports · 8 importers · 5 tests · 1 audits**
+**837 lines · 26 exports · 7 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,7 +17,6 @@
 - `src/coach/envelope.ts`
 - `src/components/Coach/CoachGamePage.tsx`
 - `src/hooks/useHintSystem.test.ts`
-- `src/services/coachAgentRunner.ts`
 - `src/services/coachApi.ts`
 - `src/services/coachPrompts.test.ts`
 - `src/services/coachPrompts.verbosity.test.ts`
@@ -34,12 +33,6 @@
 - `src/services/coachPrompts.verbosity.test.ts:38`
 
 ### `SYSTEM_PROMPT` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `COACH_CONVERSATION_RULES` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `AGENT_ACTION_GRAMMAR` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `WALKTHROUGH_PROMISE_CONTRACT` (const) — 0 call sites

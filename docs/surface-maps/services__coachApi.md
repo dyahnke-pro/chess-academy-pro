@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6979 lines · 41 exports · 54 importers · 59 tests · 19 audits**
+**6979 lines · 41 exports · 53 importers · 59 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,7 +39,6 @@
 - `src/hooks/useLiveCoach.ts`
 - `src/hooks/usePhaseNarration.ts`
 - `src/hooks/usePositionNarration.ts`
-- `src/services/coachAgentRunner.ts`
 - `src/services/coachApi.attemptComparison.test.ts`
 - `src/services/coachApi.banterContract.test.ts`
 - `src/services/coachApi.boardVerdict.integration.test.ts`
@@ -117,13 +116,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `consumeCoachLines` (function) — 4 call sites
-- `src/coach/coachService.ts:1905`
+- `src/coach/coachService.ts:1904`
 - `src/services/coachApi.pieceOptions.test.ts:42`
 - `src/services/coachApi.pieceOptions.test.ts:44`
 - `src/services/coachApi.pieceOptions.test.ts:49`
 
 ### `consumeServedIntent` (function) — 1 call site
-- `src/coach/coachService.ts:1909`
+- `src/coach/coachService.ts:1908`
 
 ### `answerAttemptComparison` (function) — 4 call sites
 - `src/services/coachApi.attemptComparison.test.ts:30`
@@ -132,10 +131,10 @@
 - `src/services/coachApi.attemptComparison.test.ts:63`
 
 ### `consumeCoachActionOffer` (function) — 1 call site
-- `src/coach/coachService.ts:1899`
+- `src/coach/coachService.ts:1898`
 
 ### `consumeCoachKeySquares` (function) — 6 call sites
-- `src/coach/coachService.ts:1914`
+- `src/coach/coachService.ts:1913`
 - `src/services/coachApi.keySquares.test.ts:10`
 - `src/services/coachApi.keySquares.test.ts:12`
 - `src/services/coachApi.keySquares.test.ts:15`
@@ -247,7 +246,7 @@
 - `src/services/groundedMoveFeedback.test.ts:45`
 
 ### `translateToEnglish` (function) — 4 call sites
-- `src/coach/coachService.ts:572`
+- `src/coach/coachService.ts:571`
 - `src/components/Coach/CoachTeachPage.tsx:3597`
 - `src/services/coachSessionRouter.ts:117`
 - `src/services/coachSettingsAction.ts:242`
@@ -360,13 +359,12 @@
 - `src/services/coachApi.currentAsk.test.ts:51`
 - `src/services/coachApi.currentAsk.test.ts:56`
 
-### `getCoachChatResponse` (function) — 24 call sites
+### `getCoachChatResponse` (function) — 23 call sites
 - `scripts/audit-coach-master-integration.mjs:327`
 - `scripts/audit-coach-master-integration.mjs:360`
 - `scripts/audit-coach-master-integration.mjs:413`
 - `src/coach/providers/deepseek.test.ts:7`
 - `src/coach/providers/deepseek.ts:74`
-- `src/services/coachAgentRunner.ts:246`
 - `src/services/coachApi.boardVerdict.integration.test.ts:69`
 - `src/services/coachApi.boardVerdict.integration.test.ts:118`
 - `src/services/coachApi.boardVerdict.integration.test.ts:132`

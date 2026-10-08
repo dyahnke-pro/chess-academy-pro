@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import {
   getCoachMemory,
   addCoachMemoryNote,
-  buildCoachMemoryBlock,
   extractAndRememberNotes,
   MAX_NOTES,
   MAX_NOTE_LENGTH,
@@ -109,19 +108,6 @@ describe('coachMemoryService', () => {
     await addCoachMemoryNote('ignored');
     const notes = await getCoachMemory();
     expect(notes).toEqual([]);
-  });
-
-  it('buildCoachMemoryBlock returns empty string when no notes', async () => {
-    expect(await buildCoachMemoryBlock()).toBe('');
-  });
-
-  it('buildCoachMemoryBlock formats notes as a bulleted block', async () => {
-    await addCoachMemoryNote('Rating ~1200 for 3 months');
-    await addCoachMemoryNote('Working on Sicilian Najdorf');
-    const block = await buildCoachMemoryBlock();
-    expect(block).toContain("Coach's memory");
-    expect(block).toContain('- Rating ~1200 for 3 months');
-    expect(block).toContain('- Working on Sicilian Najdorf');
   });
 
   describe('extractAndRememberNotes', () => {

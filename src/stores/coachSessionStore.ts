@@ -29,15 +29,6 @@ export interface CoachFocus {
   label: string | null;
 }
 
-export interface CoachActionRecord {
-  id: string;
-  name: string;
-  args: Record<string, unknown>;
-  result: 'ok' | 'error' | 'pending';
-  message?: string;
-  ts: number;
-}
-
 export interface PendingNarration {
   id: string;
   text: string;
@@ -50,7 +41,6 @@ interface CoachSessionState {
   isStreaming: boolean;
   focus: CoachFocus;
   currentRoute: string;
-  recentActions: CoachActionRecord[];
   narrationMode: boolean;
   pendingNarration: PendingNarration | null;
   hydrated: boolean;
@@ -64,7 +54,6 @@ interface CoachSessionActions {
   setFocus: (focus: Partial<CoachFocus>) => void;
   clearFocus: () => void;
   setCurrentRoute: (r: string) => void;
-  recordAction: (a: CoachActionRecord) => void;
   setNarrationMode: (v: boolean) => void;
   pushNarration: (n: { text: string; fen?: string }) => void;
   consumeNarration: () => PendingNarration | null;
@@ -73,7 +62,6 @@ interface CoachSessionActions {
 }
 
 const META_KEY = 'coachSession.v1';
-const RECENT_ACTIONS_LIMIT = 20;
 const MESSAGES_PERSIST_LIMIT = 60;
 
 const EMPTY_FOCUS: CoachFocus = { kind: null, value: null, label: null };
@@ -83,7 +71,6 @@ const DEFAULT_STATE: CoachSessionState = {
   isStreaming: false,
   focus: EMPTY_FOCUS,
   currentRoute: '/',
-  recentActions: [],
   narrationMode: false,
   pendingNarration: null,
   hydrated: false,
@@ -113,7 +100,7 @@ export const useCoachSessionStore = create<CoachSessionState & CoachSessionActio
       schedulePersist(get);
     },
     clearMessages: () => {
-      set({ messages: [], recentActions: [] });
+      set({ messages: [] });
       schedulePersist(get);
     },
     setStreaming: (v) => set({ isStreaming: v }),
@@ -132,12 +119,6 @@ export const useCoachSessionStore = create<CoachSessionState & CoachSessionActio
       schedulePersist(get);
     },
     setCurrentRoute: (r) => set({ currentRoute: r }),
-    recordAction: (a) => {
-      set((s) => ({
-        recentActions: [...s.recentActions, a].slice(-RECENT_ACTIONS_LIMIT),
-      }));
-      schedulePersist(get);
-    },
     setNarrationMode: (v) => {
       set({ narrationMode: v });
       schedulePersist(get);
@@ -164,7 +145,6 @@ export const useCoachSessionStore = create<CoachSessionState & CoachSessionActio
         set({
           messages: restored.messages,
           focus: restored.focus,
-          recentActions: restored.recentActions,
           narrationMode: restored.narrationMode,
           hydrated: true,
         });
@@ -182,7 +162,6 @@ export const useCoachSessionStore = create<CoachSessionState & CoachSessionActio
 interface PersistedShape {
   messages: ChatMessage[];
   focus: CoachFocus;
-  recentActions: CoachActionRecord[];
   narrationMode: boolean;
 }
 
@@ -199,7 +178,6 @@ async function writePersisted(state: CoachSessionState): Promise<void> {
   const payload: PersistedShape = {
     messages: state.messages.slice(-MESSAGES_PERSIST_LIMIT),
     focus: state.focus,
-    recentActions: state.recentActions.slice(-RECENT_ACTIONS_LIMIT),
     narrationMode: state.narrationMode,
   };
   try {

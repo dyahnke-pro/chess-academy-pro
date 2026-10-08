@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1694 lines · 2 exports · 10 importers · 6 tests · 6 audits**
+**1692 lines · 2 exports · 10 importers · 5 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
@@ -38,7 +38,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Kid/GameChapterPage.test.tsx`
 - `src/components/Openings/ModelGameViewer.test.tsx`
 - `src/components/Openings/PlayableLinePlayer.test.tsx`
-- `src/components/Play/GamesPage.test.tsx`
 
 ## Audits that reach it
 

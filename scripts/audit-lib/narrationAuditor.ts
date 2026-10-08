@@ -1,11 +1,10 @@
 /**
  * narrationAuditor
  * ----------------
- * Runtime sanity-check for coach-generated narration. Pure rules-based
- * (no LLM, no network, no cost). Runs fire-and-forget on every
- * narration the coach produces — when a claim in the prose can be
- * verified deterministically against the current FEN, we flag
- * mismatches to the shared app-auditor log.
+ * Offline sanity-check for narration CONTENT, used by scripts/audit-all.ts.
+ * Pure rules-based (no LLM, no network). Moved out of src/services
+ * 2026-10-08: its runtime half (recordAudit into the app log) was only ever
+ * called by the deleted free-LLM agent loop.
  *
  * What it catches:
  *   1. Piece-on-square claims that don't match the position
@@ -20,24 +19,13 @@
  *   - Plan claims ("preparing a kingside attack")
  *   - Opening-theory correctness
  *
- * Findings flow into `appAuditor.logAppAudit` so they appear
- * alongside every other audit kind in the unified Settings panel.
  */
 import { Chess } from 'chess.js';
-import { logAppAudit, getAppAuditLog } from './appAuditor';
-import type { AuditEntry } from './appAuditor';
 
 export interface AuditFlag {
   kind: 'piece-on-square' | 'hanging-piece' | 'check-claim' | 'mate-claim' | 'illegal-san';
   narrationExcerpt: string;
   explanation: string;
-}
-
-export interface AuditLogEntry {
-  timestamp: number;
-  fen: string;
-  context?: string;
-  flags: AuditFlag[];
 }
 
 /** SAN-move extractor (piece letter optional + destination square). */
@@ -265,75 +253,4 @@ export function auditNarration(
     seen.add(k);
     return true;
   });
-}
-
-/**
- * Run the rules-based checks and persist any findings. Fire-and-forget:
- * swallows write errors via appAuditor so a failed log never blocks
- * the speak/render path. One appAuditor entry per flag — the panel
- * groups them by originating narration.
- */
-export async function recordAudit(
-  fen: string,
-  narration: string,
-  context?: string,
-): Promise<void> {
-  const flags = auditNarration(fen, narration);
-  if (flags.length === 0) return;
-  await Promise.all(
-    flags.map((flag) =>
-      logAppAudit({
-        kind: flag.kind,
-        category: 'narration',
-        source: context ?? 'narration',
-        summary: flag.explanation,
-        details: flag.narrationExcerpt && flag.narrationExcerpt !== flag.kind
-          ? `excerpt: "${flag.narrationExcerpt}"`
-          : undefined,
-        fen,
-        context,
-      }),
-    ),
-  );
-}
-
-/** Narration-only slice of the unified audit log — filter by category
- *  so the existing panel and tests keep working while we transition to
- *  the unified UI. */
-export async function getAuditLog(): Promise<AuditLogEntry[]> {
-  const all = await getAppAuditLog();
-  const byFen = new Map<string, AuditLogEntry>();
-  for (const entry of all) {
-    if (entry.category !== 'narration' || !entry.fen) continue;
-    const key = `${entry.timestamp}::${entry.fen}`;
-    const existing = byFen.get(key);
-    const flag: AuditFlag = {
-      kind: entry.kind as AuditFlag['kind'],
-      narrationExcerpt: extractExcerpt(entry) ?? entry.kind,
-      explanation: entry.summary,
-    };
-    if (existing) {
-      existing.flags.push(flag);
-    } else {
-      byFen.set(key, {
-        timestamp: entry.timestamp,
-        fen: entry.fen,
-        context: entry.context,
-        flags: [flag],
-      });
-    }
-  }
-  return Array.from(byFen.values());
-}
-
-/** Clear the entire unified log (narration + app + subsystem). */
-export async function clearAuditLog(): Promise<void> {
-  const { clearAppAuditLog } = await import('./appAuditor');
-  await clearAppAuditLog();
-}
-
-function extractExcerpt(entry: AuditEntry): string | null {
-  if (!entry.details) return null;
-  const match = entry.details.match(/excerpt:\s*"([^"]+)"/);
-  return match ? match[1] : null;
 }

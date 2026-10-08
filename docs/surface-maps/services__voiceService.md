@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3124 lines · 18 exports · 107 importers · 94 tests · 23 audits**
+**3124 lines · 18 exports · 106 importers · 93 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
@@ -115,7 +115,6 @@
 - `src/hooks/useTeachWalkthrough.ts`
 - `src/hooks/useWalkthroughRunner.test.tsx`
 - `src/hooks/useWalkthroughRunner.ts`
-- `src/services/coachActionDispatcher.ts`
 - `src/services/coachAgentRunner.ts`
 - `src/services/sanitizeForTTS.test.ts`
 - `src/services/speakComputed.ts`
@@ -217,8 +216,7 @@
 - `src/services/voiceService.test.ts:24`
 - `src/services/voiceService.test.ts:28`
 
-### `detectSanitizerLeak` (function) — 6 call sites
-- `src/services/coachAgentRunner.ts:266`
+### `detectSanitizerLeak` (function) — 5 call sites
 - `src/services/sanitizeForTTS.test.ts:79`
 - `src/services/sanitizeForTTS.test.ts:128`
 - `src/services/sanitizeForTTS.test.ts:141`
@@ -362,7 +360,6 @@
 - `src/hooks/useStrictNarration.test.tsx`
 - `src/hooks/useTeachWalkthrough.test.tsx`
 - `src/hooks/useWalkthroughRunner.test.tsx`
-- `src/services/coachActionDispatcher.test.ts`
 - `src/services/coachAgentRunner.test.ts`
 - `src/services/sanitizeForTTS.test.ts`
 - `src/services/streamingSpeaker.test.ts`

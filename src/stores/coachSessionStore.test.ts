@@ -23,7 +23,6 @@ describe('coachSessionStore', () => {
   it('starts with empty state', () => {
     const s = useCoachSessionStore.getState();
     expect(s.messages).toEqual([]);
-    expect(s.recentActions).toEqual([]);
     expect(s.focus.kind).toBeNull();
     expect(s.narrationMode).toBe(false);
   });
@@ -35,27 +34,10 @@ describe('coachSessionStore', () => {
     expect(useCoachSessionStore.getState().messages).toHaveLength(2);
   });
 
-  it('records actions and caps the recent actions list', () => {
-    const store = useCoachSessionStore.getState();
-    for (let i = 0; i < 25; i += 1) {
-      store.recordAction({
-        id: `a-${i}`,
-        name: 'noop',
-        args: {},
-        result: 'ok',
-        ts: i,
-      });
-    }
-    expect(useCoachSessionStore.getState().recentActions.length).toBe(20);
-    // FIFO trim — earliest dropped, latest kept.
-    expect(useCoachSessionStore.getState().recentActions[19].id).toBe('a-24');
-  });
-
-  it('persists and restores messages, focus, and actions', async () => {
+  it('persists and restores messages, focus and narration mode', async () => {
     const store = useCoachSessionStore.getState();
     store.appendMessage(buildMessage('user', 'analyze my last game'));
     store.setFocus({ kind: 'game', value: 'game-1', label: 'vs Smith' });
-    store.recordAction({ id: 'a-1', name: 'analyze_game', args: { id: 'game-1' }, result: 'ok', message: 'ok', ts: 1 });
     store.setNarrationMode(true);
     await __flushPersistForTests();
 
@@ -67,7 +49,6 @@ describe('coachSessionStore', () => {
     expect(restored.messages).toHaveLength(1);
     expect(restored.focus.kind).toBe('game');
     expect(restored.focus.value).toBe('game-1');
-    expect(restored.recentActions).toHaveLength(1);
     expect(restored.narrationMode).toBe(true);
   });
 

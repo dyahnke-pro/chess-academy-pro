@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2604 lines · 67 exports · 30 importers · 31 tests · 15 audits**
+**2603 lines · 67 exports · 30 importers · 31 tests · 15 audits**
 
 ## Locked rules that govern this surface
 
@@ -97,7 +97,7 @@
 - `src/coach/questionIntents.test.ts:1039`
 - `src/coach/questionIntents.ts:222`
 - `src/coach/questionIntents.ts:3209`
-- `src/components/Coach/GameChatPanel.tsx:919`
+- `src/components/Coach/GameChatPanel.tsx:917`
 - `src/services/attackAssessment.test.ts:55`
 - `src/services/endgameLaneOwnership.test.ts:24`
 

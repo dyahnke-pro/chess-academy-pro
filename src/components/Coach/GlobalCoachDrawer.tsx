@@ -33,7 +33,7 @@ export function GlobalCoachDrawer(): JSX.Element | null {
   const sessionHydrated = useCoachSessionStore((s) => s.hydrated);
 
   // Hydrate the agent session on app boot so context-snapshot
-  // recentActions / focus survive reload.
+  // focus survives reload.
   useEffect(() => {
     if (!sessionHydrated) void hydrate();
   }, [hydrate, sessionHydrated]);

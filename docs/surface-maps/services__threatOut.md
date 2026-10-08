@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**113 lines · 3 exports · 13 importers · 3 tests · 0 audits**
+**113 lines · 3 exports · 13 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,10 +32,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `flipSideToMove` (function) — 8 call sites
+- `scripts/audit-lib/narrationAuditor.ts:73`
+- `scripts/audit-lib/narrationAuditor.ts:189`
 - `src/services/forkTrick.ts:138`
 - `src/services/liveTacticsContext.ts:781`
-- `src/services/narrationAuditor.ts:85`
-- `src/services/narrationAuditor.ts:201`
 - `src/services/threatOut.test.ts:6`
 - `src/services/threatOut.test.ts:10`
 - `src/services/threatProof.ts:25`
@@ -77,4 +77,4 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._
+- `scripts/audit-lib/narrationAuditor.ts`

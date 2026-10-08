@@ -28,7 +28,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onCoachDecision` (function) — 5 call sites
-- `src/services/appAuditor.ts:2265`
+- `src/services/appAuditor.ts:2267`
 - `src/services/coachDecisionEmits.test.ts:32`
 - `src/services/coachDecisionEmits.test.ts:95`
 - `src/services/proofBacklog.report.test.ts:97`
@@ -41,7 +41,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onNeedScore` (function) — 4 call sites
-- `src/services/appAuditor.ts:2217`
+- `src/services/appAuditor.ts:2219`
 - `src/services/coachDecisionEmits.test.ts:120`
 - `src/services/coachDecisionEmits.test.ts:147`
 - `src/services/positionFacts.liveFundamental.test.ts:50`
@@ -60,7 +60,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onLearnTurn` (function) — 1 call site
-- `src/services/appAuditor.ts:2291`
+- `src/services/appAuditor.ts:2293`
 
 ### `emitLearnTurn` (function) — 1 call site
 - `src/services/learnTurnDoor.ts:494`

@@ -77,18 +77,6 @@ export async function replaceCoachMemory(notes: string[]): Promise<void> {
   });
 }
 
-/**
- * Format the memory block for prompt injection. Returns an empty
- * string when there's nothing to add, so callers can concatenate
- * without worrying about blank sections.
- */
-export async function buildCoachMemoryBlock(): Promise<string> {
-  const notes = await getCoachMemory();
-  if (notes.length === 0) return '';
-  const lines = notes.map((n) => `- ${n}`).join('\n');
-  return `[Coach's memory — things you've learned about this student]\n${lines}`;
-}
-
 /** Regex matching the REMEMBER tag the coach emits in replies. */
 const REMEMBER_TAG_RE = /\[\[REMEMBER:\s*([^\]]+?)\s*\]\]/gi;
 

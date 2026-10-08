@@ -29,7 +29,7 @@
 import { Chess } from 'chess.js';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { auditNarration, type AuditFlag } from '../src/services/narrationAuditor';
+import { auditNarration, type AuditFlag } from './audit-lib/narrationAuditor';
 
 interface MoveAnnotation {
   san: string;
