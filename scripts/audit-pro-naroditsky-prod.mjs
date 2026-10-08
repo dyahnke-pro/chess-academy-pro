@@ -104,7 +104,8 @@ try {
 
   // Navigate to the pro player page
   console.log('  goto /openings/pro/naroditsky');
-  await page.goto(`${PROD}/openings/pro/naroditsky`, { waitUntil: 'networkidle', timeout: 20_000 });
+  // Caro-Kann is a Black course: the shelf shows one side at a time (?side=black).
+  await page.goto(`${PROD}/openings/pro/naroditsky?side=black`, { waitUntil: 'networkidle', timeout: 20_000 });
   const playerMount = await page.waitForSelector('[data-testid="pro-player-page"]', { timeout: 15_000 }).then(() => true).catch(() => false);
   rec('pro player page mounts on prod', playerMount ? 'PASS' : 'FAIL');
 
