@@ -54,6 +54,10 @@ export interface Slots {
   files: string[];
   /** The sentence offers alternatives ("X or Y"). */
   options: boolean;
+  /** "taking better than pushing", "instead of castling": two things set side by side. */
+  contrast: boolean;
+  /** Both a capture and a push are named ("take or push?"). */
+  takeAndPush: boolean;
   negated: boolean;
 }
 
@@ -103,6 +107,8 @@ export function tagSlots(raw: string): Slots {
     ask, action, past, judged,
     sans, squares, pieces, files,
     options: /\bor\b/.test(lower),
+    contrast: /\b(?:better|worse|stronger|weaker) than\b|\b(?:instead of|rather than|versus|vs\.?)\b/.test(lower),
+    takeAndPush: /\b(?:take|takes|taking|capture|capturing)\b/.test(lower) && /\b(?:push|pushing|advance|advancing)\b/.test(lower),
     negated: /\b(?:not|n't|never)\b/.test(lower),
   };
 }
@@ -143,6 +149,20 @@ function resolveOptions(chess: Chess, slots: Slots): string[] | null {
     const sa = one(target ? ma.filter((m) => m.to === target) : ma);
     const sb = one(target ? mb.filter((m) => m.to === target) : mb);
     return sa && sb && sa !== sb ? [sa, sb] : null;
+  }
+  // "take or push?", "why is taking better than pushing?" — the capture and
+  // the push of the SAME pawn when one pawn can do both; otherwise each must
+  // be the only one of its kind on the board.
+  if (slots.takeAndPush && slots.pieces.every((p) => p === 'p')) {
+    const caps = movesMatching(chess, { capture: true });
+    const pawnCaps = caps.filter((m) => m.piece === 'p');
+    const cap = one(caps) ? caps[0] : slots.pieces.includes('p') && one(pawnCaps) ? pawnCaps[0] : null;
+    if (!cap) return null;
+    const pushes = movesMatching(chess, { piece: 'p' }).filter((m) => !m.captured);
+    const own = cap.piece === 'p' ? pushes.filter((m) => m.from === cap.from) : pushes;
+    const single = own.filter((m) => Math.abs(Number(m.to[1]) - Number(m.from[1])) === 1);
+    const push = one(single.length ? single : own);
+    return push ? [cap.san, push] : null;
   }
   // "push the e or d pawn"
   if (slots.files.length >= 2) {
@@ -187,7 +207,8 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
   if (slots.negated && slots.ask !== 'why') return null;
 
   // "bishop or pawn?", "e or d pawn?", "Nf3 or Nc3?"
-  if (slots.options && (slots.ask === 'which' || slots.ask === 'whether')) {
+  if ((slots.options && (slots.ask === 'which' || slots.ask === 'whether'))
+    || (slots.contrast && slots.ask !== 'none')) {
     const pair = resolveOptions(chess, slots);
     if (pair) {
       return { kind: 'compare-moves', referents: pair.map((san): Referent => ({ type: 'move', san })), seat: 'me', topic: null };

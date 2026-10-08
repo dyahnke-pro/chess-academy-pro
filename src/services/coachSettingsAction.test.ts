@@ -37,6 +37,18 @@ describe('resolveSettingsCommand', () => {
     expect(resolveSettingsCommand('set dark mode')?.confirmation).toMatch(/theme/i);
   });
 
+  it('turns the board arrows and highlights off and back on', () => {
+    for (const q of ["Don't show me the arrows", 'hide the arrows', 'turn off the arrows', 'no more arrows please', 'arrows off']) {
+      expect(resolveSettingsCommand(q)?.prefsPatch, q).toEqual({ coachBoardMarkersOn: false });
+    }
+    for (const q of ['turn the arrows back on', 'arrows on', 'show the arrows again', 'enable highlights']) {
+      expect(resolveSettingsCommand(q)?.prefsPatch, q).toEqual({ coachBoardMarkersOn: true });
+    }
+    // Asking for a drawing is not a setting.
+    expect(resolveSettingsCommand('show me the arrows for that line')).toBeNull();
+    expect(resolveSettingsCommand('what do the arrows mean?')).toBeNull();
+  });
+
   it('returns null for a QUERY (not a command)', () => {
     expect(resolveSettingsCommand('is voice on?')).toBeNull();
     expect(resolveSettingsCommand('what are my settings?')).toBeNull();

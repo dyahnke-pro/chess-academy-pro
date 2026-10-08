@@ -86,6 +86,25 @@ export function resolveSettingsCommand(text: string): ResolvedCommand | null {
     };
   }
 
+  // ── Board arrows + highlights on/off ("Don't show me the arrows") ─────────
+  // One setting drives both, on every coach board. Off needs an off-word; on
+  // needs an explicit on-word — "show me the arrows for that line" asks for a
+  // drawing, not a setting, so a bare "show" is never read as ON.
+  if (/\b(?:arrows?|highlights?|board\s+markers?|coach\s+tips)\b/.test(t)) {
+    const off = /\b(?:don'?t|do\s+not|stop|no\s+more|hide|remove|disable|without|get\s+rid\s+of|clear)\b|\b(?:turn|switch|put)\s+(?:the\s+)?(?:\w+\s+){0,2}off\b|\boff\b/.test(t);
+    const on = !off && (/\b(?:turn|switch|put)\s+(?:the\s+)?(?:\w+\s+){0,2}(?:on|back)\b|\b(?:enable|bring\s+back|show\s+(?:the\s+)?(?:arrows?|highlights?)\s+again)\b/.test(t)
+      || /^\s*(?:arrows?|highlights?)\s+on\b/.test(t));
+    if (off || on) {
+      return {
+        key: 'coachBoardMarkersOn',
+        confirmation: off
+          ? 'Arrows and highlights are off now. Say "turn the arrows back on" to bring them back.'
+          : 'Arrows and highlights are on now.',
+        prefsPatch: { coachBoardMarkersOn: on },
+      };
+    }
+  }
+
   // ── Terse noun-first shortcuts ("hints on", "narration to full") ──────────
   // Real users drop the verb (matrix pass 5, 2026-07-10). Handle the
   // unambiguous noun+value forms up front, before the imperative-verb gate.

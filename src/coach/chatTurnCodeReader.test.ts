@@ -29,6 +29,18 @@ describe('the sentence computer — real student questions, read on the board', 
     expect(read('Should I take with the bishop or the pond', BOTH_TAKE_F6)?.kind).toBe('compare-moves');
     expect(moves('Should I take with the bishop or the pond', BOTH_TAKE_F6)).toEqual(['Bxf6', 'exf6']);
   });
+  it('"Why is taking better than pushing?" compares the pawn\'s capture with its push', () => {
+    // After 1.e4 d5: the e-pawn can take on d5 or push to e5.
+    const fen = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 2';
+    expect(read('Why is taking better than pushing?', fen, ['e4', 'd5'])?.kind).toBe('compare-moves');
+    expect(moves('Why is taking better than pushing?', fen)).toEqual(['exd5', 'e5']);
+    expect(moves('Should I take or push?', fen)).toEqual(['exd5', 'e5']);
+  });
+  it('"take or push" with two captures on the board is left to the model', () => {
+    expect(read('Should I take or push?', BOTH_TAKE_F6)).toBeNull();
+    // Naming the pawn settles it: its capture against its push.
+    expect(moves('Should the pawn take or push?', BOTH_TAKE_F6)).toEqual(['exf6', 'e6']);
+  });
   it('"Better to push the e or d pawn?" compares the two pushes', () => {
     const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
     expect(moves('Better to push the e or d pawn?', fen)).toEqual(['e3', 'd3']);

@@ -2,12 +2,23 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render as rtlRender, screen, waitFor, fireEvent, act } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
+import type { ReactNode } from 'react';
 import { GameChapterPage } from './GameChapterPage';
 
 // API-leak guard (WO-TEST-CLEANUP-01 Part A) — intercepts modern
 // brain entry point + all 6 network-wrapping coachApi exports.
 // Spread-original-override preserves type exports / constants /
 // helpers; only the network calls are replaced with vi.fn() resolves.
+// The page's own `transition` props override MotionConfig, and AnimatePresence
+// (mode="wait") holds the next step until the last one has animated out — so a
+// loaded run kept the puzzle behind the loader past every timeout (ship-check
+// 2026-10-08, 13/13 alone). The test reads state, not animation: render the
+// children straight through.
+vi.mock('framer-motion', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('framer-motion')>();
+  return { ...actual, AnimatePresence: ({ children }: { children?: ReactNode }) => <>{children}</> };
+});
+
 vi.mock('../../coach/coachService', () => ({
   coachService: {
     // Non-empty text so `hintState.nudgeText` populates and the
