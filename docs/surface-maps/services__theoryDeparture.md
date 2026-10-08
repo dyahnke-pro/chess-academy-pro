@@ -58,7 +58,7 @@
 
 ### `walkBookLine` (function) — 5 call sites
 - `src/components/Coach/CoachGameReview.tsx:2463`
-- `src/services/coachFeatureService.ts:4579`
+- `src/services/coachFeatureService.ts:4622`
 - `src/services/reviewOpeningTheory.ts:362`
 - `src/services/reviewOpeningTheory.ts:400`
 - `src/services/theoryDeparture.test.ts:112`

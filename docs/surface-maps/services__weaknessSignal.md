@@ -139,7 +139,7 @@
 - `src/services/weaknessSignal.test.ts:107`
 
 ### `matchTag` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:1929`
+- `src/services/coachFeatureService.ts:1932`
 - `src/services/needScore.ts:299`
 - `src/services/positionFacts.ts:1226`
 - `src/services/teachingSelector.ts:326`
@@ -149,7 +149,7 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:119`
 
 ### `matchFundamental` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:2471`
+- `src/services/coachFeatureService.ts:2474`
 - `src/services/fundamentalReachesDecider.test.ts:88`
 - `src/services/fundamentalReachesDecider.test.ts:99`
 - `src/services/fundamentalReachesDecider.test.ts:129`

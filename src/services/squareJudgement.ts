@@ -62,6 +62,59 @@ export function restriction(fen: string, student: Color): StructureRead | null {
   return null;
 }
 
+/** RESTRICTION, THE PAWN HALF — "h5 freezes their kingside pawns" (missed
+ *  computers, 2026-10-08). The student's pawn reaches its fifth rank next to an
+ *  enemy pawn still on its home square: that pawn can no longer move without
+ *  being taken — one step walks into the capture, two steps into en passant.
+ *  Each claim is played on the board (both pushes and both captures legal), and
+ *  it is said only of a move that cost nothing and only when the push really
+ *  changed something (before it, at least one of their pushes was safe). */
+export function pawnFreeze(fenBefore: string, san: string, student: Color, cpLoss: number): StructureRead | null {
+  if (cpLoss >= 50) return null;
+  const r = play(fenBefore, san);
+  if (!r || r.mv.piece !== 'p' || r.mv.captured || r.mv.color !== student) return null;
+  const to = r.mv.to;
+  const fifth = student === 'w' ? 5 : 4;
+  if (rankNum(to) !== fifth) return null;
+  const enemy = other(student);
+  const home = enemy === 'w' ? 2 : 7;
+  const frozen: { from: Square; one: Square; two: Square }[] = [];
+  for (const df of [-1, 1]) {
+    const from = sqAt(fileIdx(to) + df, home);
+    const one = sqAt(fileIdx(to) + df, home + fwd(enemy));
+    const two = sqAt(fileIdx(to) + df, home + 2 * fwd(enemy));
+    if (!from || !one || !two) continue;
+    if (!isPawnOf(r.after, from, enemy) || r.after.get(one) || r.after.get(two)) continue;
+    if (!pushIsTaken(r.after.fen(), enemy, from, one, to) || !pushIsTaken(r.after.fen(), enemy, from, two, to)) continue;
+    // It must be the push that froze it: before, one of their pushes was safe.
+    const before = withTurn(fenBefore, enemy);
+    if (before && pushIsTaken(fenBefore, enemy, from, one, null) && pushIsTaken(fenBefore, enemy, from, two, null)) continue;
+    frozen.push({ from, one, two });
+  }
+  if (frozen.length === 0) return null;
+  const f0 = frozen[0];
+  const file = f0.from[0];
+  const text = frozen.length === 1
+    ? `Your pawn on ${to} freezes their ${file}-pawn: ${file}${f0.one[1]} walks into a capture, and ${file}${f0.two[1]} is taken en passant.`
+    : `Your pawn on ${to} freezes their ${andList(frozen.map((x) => `${x.from[0]}-pawn`))}: each one that steps forward is taken, one square or two.`;
+  const squares = [to, ...frozen.flatMap((x) => [x.from, x.one, x.two])];
+  const proof = squaresProof(text, squares);
+  if (!proof) return null;
+  return { act: 'restriction', squares, proof, key: `freeze:${to}` , text };
+}
+
+/** After their pawn on `from` moves to `dest` (as if it were their turn), can a
+ *  pawn of the student's take it — directly or en passant? `by` names the one
+ *  pawn that must do it, or any pawn when null. */
+function pushIsTaken(fen: string, mover: Color, from: Square, dest: Square, by: Square | null): boolean {
+  const f = withTurn(fen, mover);
+  const c = f ? board(f) : null;
+  if (!c) return false;
+  try { c.move({ from, to: dest }); } catch { return false; }
+  return c.moves({ verbose: true }).some((m) => m.piece === 'p' && (by === null || m.from === by)
+    && (m.to === dest || (m.isEnPassant() && m.to[0] === dest[0])));
+}
+
 /** A PIECE IN FRONT OF ITS OWN PAWN — their minor piece blocks a pawn, so that
  *  pawn can never come up to support the pawn diagonally ahead of it. */
 export function pieceBlocksOwnPawn(fen: string, student: Color): StructureRead | null {

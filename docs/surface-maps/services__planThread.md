@@ -28,7 +28,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `newPlanThread` (function) — 6 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9709`
 - `src/services/boardComputers.test.ts:50`
-- `src/services/coachFeatureService.ts:1623`
+- `src/services/coachFeatureService.ts:1626`
 - `src/services/planThread.test.ts:15`
 - `src/services/planThread.test.ts:24`
 - `src/services/planThread.test.ts:33`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**239 lines · 6 exports · 2 importers · 1 tests · 0 audits**
+**324 lines · 8 exports · 4 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,6 +12,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/services/planJudgement.closedSac.test.ts`
+- `src/services/planJudgement.wedge.test.ts`
 - `src/services/structureJudgement.test.ts`
 - `src/services/structureReads.ts`
 
@@ -20,35 +22,49 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `rightIdeaWrongPiece` (function) — 3 call sites
 - `src/services/structureJudgement.test.ts:203`
 - `src/services/structureJudgement.test.ts:205`
-- `src/services/structureReads.ts:49`
+- `src/services/structureReads.ts:50`
 
 ### `keepPlanChangeRoute` (function) — 3 call sites
 - `src/services/structureJudgement.test.ts:210`
 - `src/services/structureJudgement.test.ts:213`
-- `src/services/structureReads.ts:50`
+- `src/services/structureReads.ts:51`
 
 ### `planOverOneMove` (function) — 3 call sites
 - `src/services/structureJudgement.test.ts:218`
 - `src/services/structureJudgement.test.ts:221`
-- `src/services/structureReads.ts:51`
+- `src/services/structureReads.ts:52`
 
 ### `placementFutureLine` (function) — 3 call sites
 - `src/services/structureJudgement.test.ts:226`
 - `src/services/structureJudgement.test.ts:229`
-- `src/services/structureReads.ts:93`
+- `src/services/structureReads.ts:98`
 
 ### `smallEdges` (function) — 3 call sites
 - `src/services/structureJudgement.test.ts:233`
 - `src/services/structureJudgement.test.ts:237`
-- `src/services/structureReads.ts:99`
+- `src/services/structureReads.ts:104`
 
 ### `fightingLine` (function) — 3 call sites
 - `src/services/structureJudgement.test.ts:242`
 - `src/services/structureJudgement.test.ts:248`
-- `src/services/structureReads.ts:92`
+- `src/services/structureReads.ts:97`
+
+### `wedgePaysLater` (function) — 4 call sites
+- `src/services/planJudgement.wedge.test.ts:11`
+- `src/services/planJudgement.wedge.test.ts:15`
+- `src/services/planJudgement.wedge.test.ts:18`
+- `src/services/structureReads.ts:64`
+
+### `closedTacticalChance` (function) — 4 call sites
+- `src/services/planJudgement.closedSac.test.ts:10`
+- `src/services/planJudgement.closedSac.test.ts:14`
+- `src/services/planJudgement.closedSac.test.ts:18`
+- `src/services/structureReads.ts:65`
 
 ## Tests
 
+- `src/services/planJudgement.closedSac.test.ts`
+- `src/services/planJudgement.wedge.test.ts`
 - `src/services/structureJudgement.test.ts`
 
 ## Audits that reach it

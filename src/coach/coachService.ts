@@ -231,6 +231,7 @@ export {
 };
 export type { TrainingKind } from './questionIntents';
 import { isStructuralConceptTarget } from './questionIntents';
+import { resolveFollowUp } from './followUp';
 
 export interface CoachServiceOptions {
   /** Override the active provider. Useful for tests. */
@@ -1277,13 +1278,11 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // builds and walks the PV) answers in context. Deterministic: the memory
     // text was written by code, and the rewrite only ever targets a lane that
     // computes its answer (G0).
-    if (askForIntents && /^\s*(?:why|how\s+come)[?!.\s]*$/i.test(askForIntents)) {
+    if (askForIntents) {
       const lastCoach = [...(envelope.memory.conversationHistory ?? [])]
         .reverse()
-        .find((msg) => msg.role === 'coach' && msg.text.trim().length > 0);
-      if (lastCoach && /\bbest\s+move\b|\bbetter\s+move\b|\bstrongest\s+move\b|\bi'?d\s+play\b/i.test(lastCoach.text)) {
-        askForIntents = 'why is that the best move?';
-      }
+        .find((msg) => msg.role === 'coach' && msg.text.trim().length > 0)?.text ?? null;
+      askForIntents = resolveFollowUp(askForIntents, lastCoach);
     }
     // Progress ("am I improving?") and concept ("what's a fork?") questions are
     // answered from the student's history / the book corpus — NO board needed —

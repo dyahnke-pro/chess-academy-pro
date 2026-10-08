@@ -10,14 +10,15 @@ import type { Color } from 'chess.js';
 import type { StructureRead } from './structureJudgementKit';
 import {
   secondWeakness, keyPawn, fixOnBishopColour, recaptureSealed, enPassantStructure, formation,
-  breakTradesWeakPawn, dontRepair, mirroredAsymmetry,
+  breakTradesWeakPawn, dontRepair, mirroredAsymmetry, formationChoice,
 } from './pawnJudgement';
 import {
-  restriction, pieceBlocksOwnPawn, semiOutpost, maskedWeakness, safeSquareRoute, fileEntryCovered,
+  restriction, pawnFreeze, pieceBlocksOwnPawn, semiOutpost, maskedWeakness, safeSquareRoute, fileEntryCovered,
   dontPlugFile, unmovedUnits, mutualRestriction, fileOpenedForDefender,
 } from './squareJudgement';
 import {
   rightIdeaWrongPiece, keepPlanChangeRoute, planOverOneMove, placementFutureLine, smallEdges, fightingLine,
+  wedgePaysLater, closedTacticalChance,
 } from './planJudgement';
 
 export type { StructureRead, StructureAct } from './structureJudgementKit';
@@ -58,6 +59,10 @@ export function studentMoveStructure(i: StudentMoveStructureInput): StructureRea
     safe(() => semiOutpost(fenBefore, san, student, cpLoss)),
     safe(() => safeSquareRoute(fenBefore, san, student, bestUci, cpLoss)),
     safe(() => formation(fenBefore, san, student)),
+    safe(() => pawnFreeze(fenBefore, san, student, cpLoss)),
+    safe(() => formationChoice(fenBefore, san, student, bestSan, cpLoss)),
+    safe(() => wedgePaysLater(fenBefore, san, student, bestUci, cpLoss)),
+    safe(() => closedTacticalChance(fenBefore, san, student, bestUci, cpLoss)),
   ].filter((r): r is StructureRead => r !== null);
 }
 

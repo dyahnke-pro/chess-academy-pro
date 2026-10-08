@@ -22,7 +22,7 @@ import { detectConcept } from './reviewConcepts';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
-import { refutedAlternative, candidatesForPosition, type RefutedAlternative } from './refutedAlternative';
+import { refutedAlternative, candidatesForPosition, SINGLETON_SCORER, type RefutedAlternative } from './refutedAlternative';
 import { recordedMoveCost } from './moveCost';
 import { findWorstPlacedPiece } from './nextPlans';
 import { transferClause, transferMotifOf, recordMotif, withTransfer, type MotifLedger } from './motifLedger';
@@ -50,7 +50,10 @@ import { noteSlip } from './learnBoardTeaching';
 import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
-import { MATE_POINTS, type FactStakes } from './factStakes';
+import { MATE_POINTS, isSacrifice, type FactStakes } from './factStakes';
+import { sacrificeLedger, type BestAmong, type SacrificeLedgerRead } from './sacrificeLedger';
+import { threatPurpose } from './threatPurpose';
+import type { BestOfEngine } from './gameAnalysisService';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead, buildMissedShotSignal } from './reviewTeachingPoints';
 import { computeGemCrush, buildReviewGemSay } from './gemCrushLines';
 import { buildOpeningMoveDetail } from './reviewStrategicOrientation';
@@ -3768,6 +3771,9 @@ function isForcingProjection(line: PvLine): boolean {
   return forcing / line.plies.length >= 0.6;
 }
 
+/** Depth of each sacrifice-ledger branch search (one restricted search each). */
+const SAC_LEDGER_DEPTH = 14;
+
 async function augmentWithProjections(
   segments: ReviewMoveSegment[],
   studentColorWB: 'w' | 'b',
@@ -4022,6 +4028,31 @@ async function augmentWithProjections(
       ).catch(() => null));
     });
   });
+  // SACRIFICE LEDGER (missed computers, 2026-10-08) — the student's
+  // sacrifices, both branches: their best capture of the offered piece and
+  // their best move that declines it, each one restricted search on the lane.
+  const sacSegments = segments.filter((s) => {
+    if (s.playerColor !== studentColorName) return false;
+    if (s.classification === 'mistake' || s.classification === 'blunder' || s.classification === 'miss') return false;
+    try { return isSacrifice(s.fenBefore, s.san, null); } catch { return false; }
+  });
+  const sacLedgers = sacSegments.map(() => deferred<SacrificeLedgerRead | null>());
+  sacSegments.forEach((sg, i) => {
+    poolTasks.push(async (engine) => {
+      const bestAmong: BestAmong = async (fen, ucis) => {
+        if (engine && 'bestOf' in engine) {
+          return (engine as unknown as BestOfEngine).bestOf(fen, ucis, SAC_LEDGER_DEPTH);
+        }
+        // The singleton's `searchmoves` search lists the restricted moves best first.
+        return (await SINGLETON_SCORER.scoreMoves(fen, ucis, SAC_LEDGER_DEPTH))[0] ?? null;
+      };
+      let to: string | null = null;
+      try { to = new Chess(sg.fenBefore).move(sg.san)?.to ?? null; } catch { to = null; }
+      sacLedgers[i].resolve(to
+        ? await raceTimeout(sacrificeLedger(sg.fenAfter, to, studentColorWB, bestAmong), PROJ_TIMEOUT_MS * 2, null).catch(() => null)
+        : null);
+    });
+  });
   const poolLine = (fen: string, maxPlies: number): Promise<PvLine | null> =>
     poolDone.get(poolKey(fen, maxPlies))?.promise ?? Promise.resolve(null);
   // A pool that cannot be had degrades to the singleton exactly as before:
@@ -4050,6 +4081,7 @@ async function augmentWithProjections(
       // Anything never reached (a lane threw) settles as "no line", never hangs.
       for (const d of poolDone.values()) d.resolve(null);
       for (const d of badPieceResults) d.resolve(null);
+      for (const d of sacLedgers) d.resolve(null);
     }
   })();
 
@@ -4259,6 +4291,13 @@ async function augmentWithProjections(
       : addVerdictReason(s.narration, line.plies[0].san, seated);
     if (seated) s.verdictReason = seated;
   }
+  // The sacrifice ledger, said on the sacrifice's own ply.
+  const ledgers = await raceTimeout(Promise.all(sacLedgers.map((d) => d.promise)), PROJ_TIMEOUT_MS * 2, sacSegments.map(() => null));
+  ledgers.forEach((r, i) => {
+    if (!r) return;
+    const s = sacSegments[i];
+    s.narration = `${s.narration ?? ''} ${r.text}`.trim();
+  });
   mark('better');
 
   // #4b — ENGINE-CONFIRMATION of the static threat call-outs (David
@@ -4445,6 +4484,10 @@ async function augmentWithProjections(
       let callOut = oppRun
         ? `Watch what they're building — left alone, their ${oppDeepKind} runs ${oppRun}.`
         : `Watch what they're building — left alone, their ${oppDeepKind} starts with ${line.plies[0].san}.`;
+      // Its REAL purpose — what the line wins, when that is not what their
+      // first move looks aimed at (missed computers, 2026-10-08).
+      const purpose = (() => { try { return threatPurpose(line, studentColorWB); } catch { return null; } })();
+      if (purpose) callOut += ` ${purpose}`;
       const next = segments[i + 1];
       if (next && next.playerColor === studentColorName && next.bestMoveSan) {
         callOut += ` Your defense starts with ${next.bestMoveSan}.`;
