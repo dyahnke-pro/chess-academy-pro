@@ -917,7 +917,7 @@
 - `src/coach/questionMatrix.audit.test.ts:83`
 - `src/coach/questionMatrix.audit.test.ts:124`
 - `src/coach/questionMatrix.audit.test.ts:142`
-- `src/services/kidGameCoach.ts:265`
+- `src/services/kidGameCoach.ts:253`
 
 ### `looksLikeQuestionNotAnOpeningName` (function) — 4 call sites
 - `src/coach/questionIntents.routerE.test.ts:187`

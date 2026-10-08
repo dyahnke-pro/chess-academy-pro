@@ -37,12 +37,11 @@ const HANGING: ReadingQuestion = {
   prompt: 'Which pieces are hanging? Find every one.', answer: 'These are hanging: d5 and a8.',
   acceptTokens: ['d5', 'a8'], answerSquares: ['d5', 'a8'], negative: false,
 };
+const gradeSpy = vi.hoisted(() => vi.fn());
 vi.mock('../../services/positionReadingService', async (importOriginal) => {
   const actual = await importOriginal<typeof import('../../services/positionReadingService')>();
-  return { ...actual, buildReadingQuestions: () => [HANGING] };
+  return { ...actual, buildReadingQuestions: () => [HANGING], gradeReadingAnswerDeterministic: gradeSpy };
 });
-const gradeSpy = vi.hoisted(() => vi.fn());
-vi.mock('../../services/positionReadingGrader', () => ({ gradeReadingAnswer: gradeSpy }));
 const recordSpy = vi.hoisted(() => vi.fn(async () => ({ outcome: 'held', prompted: false, evidence: true, wrongTagsWritten: [] })));
 vi.mock('../../services/answerRecord', () => ({ recordAnswer: recordSpy }));
 vi.mock('../../services/voiceService', () => ({ voiceService: { speak: vi.fn(async () => undefined) } }));

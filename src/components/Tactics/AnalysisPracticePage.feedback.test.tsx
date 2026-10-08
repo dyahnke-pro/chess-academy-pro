@@ -25,18 +25,16 @@ vi.mock('../../services/liveTacticsContext', () => ({
   buildFedTacticsContext: vi.fn(async () => TACTICS),
 }));
 // Only the material question, so the test drives exactly the walk's prompt.
+const gradeSpy = vi.hoisted(() => vi.fn());
 vi.mock('../../services/positionReadingService', async (importOriginal) => {
   const actual = await importOriginal<typeof import('../../services/positionReadingService')>();
   return {
     ...actual,
+    gradeReadingAnswerDeterministic: gradeSpy,
     buildReadingQuestions: (...args: Parameters<typeof actual.buildReadingQuestions>) =>
       actual.buildReadingQuestions(...args).filter((q) => q.type === 'material'),
   };
 });
-const gradeSpy = vi.hoisted(() => vi.fn());
-vi.mock('../../services/positionReadingGrader', () => ({
-  gradeReadingAnswer: gradeSpy,
-}));
 
 import { AnalysisPracticePage } from './AnalysisPracticePage';
 
@@ -78,7 +76,7 @@ describe('AnalysisPracticePage — every answer gets feedback', () => {
   });
 
   it('a wrong read that IS an answer shows "Not quite" with the tries left', async () => {
-    gradeSpy.mockResolvedValue({ verdict: 'wrong', correctAnswer: 'Material is even', note: 'no' });
+    gradeSpy.mockReturnValue({ verdict: 'wrong', correctAnswer: 'Material is even', note: 'no' });
     await openMaterialQuestion();
     send('white is up two');
     await waitFor(() => expect(screen.getByTestId('analysis-practice-feedback')).toHaveTextContent('Not quite — try again. 2 tries left.'));

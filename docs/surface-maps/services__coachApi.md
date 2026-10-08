@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7051 lines · 42 exports · 55 importers · 60 tests · 20 audits**
+**7051 lines · 42 exports · 54 importers · 59 tests · 20 audits**
 
 ## Locked rules that govern this surface
 
@@ -72,7 +72,6 @@
 - `src/services/openingGenerator.ts`
 - `src/services/openingSectionNarrator.test.ts`
 - `src/services/openingSectionNarrator.ts`
-- `src/services/positionReadingGrader.ts`
 - `src/services/smartSearchService.ts`
 - `src/services/speakComputed.ts`
 - `src/services/voiceFacts.perspective.test.ts`
@@ -307,7 +306,7 @@
 - `src/services/coachMoveCommentary.ts:293`
 - `src/services/contentGenerationService.ts:134`
 - `src/services/gameReviewService.ts:57`
-- `src/services/kidGameCoach.ts:230`
+- `src/services/kidGameCoach.ts:218`
 - `src/services/mistakeNarrationVoice.ts:109`
 - `src/services/openingGenerator.ts:2384`
 - `src/services/openingSectionNarrator.ts:84`
@@ -359,7 +358,7 @@
 - `src/services/coachApi.currentAsk.test.ts:51`
 - `src/services/coachApi.currentAsk.test.ts:56`
 
-### `getCoachChatResponse` (function) — 26 call sites
+### `getCoachChatResponse` (function) — 24 call sites
 - `scripts/audit-coach-master-integration.mjs:327`
 - `scripts/audit-coach-master-integration.mjs:360`
 - `scripts/audit-coach-master-integration.mjs:436`
@@ -382,17 +381,12 @@
 - `src/services/coachApi.whyReasoning.integration.test.ts:60`
 - `src/services/coachApi.whyReasoning.integration.test.ts:80`
 - `src/services/openingGenerator.ts:4080`
-- `src/services/positionReadingGrader.test.ts:6`
-- `src/services/positionReadingGrader.ts:67`
 - `src/services/smartSearchService.ts:50`
 - `src/test/kidIsolation.gate.test.ts:142`
 
-### `getKidLlmResponse` (function) — 5 call sites
+### `getKidLlmResponse` (function) — 2 call sites
 - `scripts/audit-coach-master-integration.mjs:410`
 - `src/services/coachApi.master-integration.test.ts:361`
-- `src/services/kidGameCoach.ts:147`
-- `src/services/kidGameCoach.ts:183`
-- `src/services/kidGameCoach.ts:214`
 
 ## Tests
 
@@ -445,7 +439,6 @@
 - `src/services/kidGameCoach.test.ts`
 - `src/services/middlegamePlanner.test.ts`
 - `src/services/openingSectionNarrator.test.ts`
-- `src/services/positionReadingGrader.test.ts`
 - `src/services/recapSeat.test.ts`
 - `src/services/reviewFullGameNarration.harness.test.ts`
 - `src/services/reviewRealSweep.test.ts`

@@ -2,9 +2,9 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
   describeKidMove,
   sanitizeKidCoachText,
-  generateKidMoveNarration,
-  generateKidMoveInstruction,
-  generateKidWrongMoveHint,
+  kidMoveNarration,
+  kidMoveInstruction,
+  kidWrongMoveHint,
   answerKidGameQuestion,
   answerKidGameQuestionWithKind,
 } from './kidGameCoach';
@@ -74,98 +74,38 @@ describe('sanitizeKidCoachText', () => {
   });
 });
 
-describe('generateKidMoveNarration', () => {
+describe('the guided-game coach lines are COMPUTED — no model writes them (kid P0, G0)', () => {
   beforeEach(() => vi.restoreAllMocks());
 
-  it('returns sanitized LLM prose when the call succeeds', async () => {
-    vi.spyOn(coachApi, 'getKidLlmResponse').mockResolvedValue('Your bishop slides out to aim at the weak square.');
-    const out = await generateKidMoveNarration({
-      fenBefore: SCHOLAR, san: 'Qf3', isPlayerMove: true,
-      teachingConcept: 'attacking a weakness', authoredNarration: 'Bring the queen to f3!',
-    });
-    expect(out).toBe('Your bishop slides out to aim at the weak square.');
-  });
-
-  it('falls back to authored narration when the LLM leaks only SAN', async () => {
-    vi.spyOn(coachApi, 'getKidLlmResponse').mockResolvedValue('Qf3');
-    const out = await generateKidMoveNarration({
-      fenBefore: SCHOLAR, san: 'Qf3', isPlayerMove: true,
-      authoredNarration: 'Bring the queen to f3!',
-    });
-    expect(out).toBe('Bring the queen to f3!');
-  });
-
-  it('falls back when the LLM rejects', async () => {
-    vi.spyOn(coachApi, 'getKidLlmResponse').mockRejectedValue(new Error('network'));
-    const out = await generateKidMoveNarration({
-      fenBefore: SCHOLAR, san: 'Qf3', isPlayerMove: true, authoredNarration: 'Bring the queen to f3!',
-    });
-    expect(out).toBe('Bring the queen to f3!');
-  });
-
-  it('falls back to authored when the no-key banner surfaces', async () => {
-    vi.spyOn(coachApi, 'getKidLlmResponse').mockResolvedValue('⚠️ No API key configured.');
-    const out = await generateKidMoveNarration({
-      fenBefore: SCHOLAR, san: 'Qf3', isPlayerMove: true, authoredNarration: 'Bring the queen to f3!',
-    });
-    expect(out).toBe('Bring the queen to f3!');
-  });
-
-  it('trusts the script (returns authored) when the move is illegal/desynced', async () => {
+  it('narration: the authored note leads; with none, chess.js words in the seat', () => {
     const spy = vi.spyOn(coachApi, 'getKidLlmResponse');
-    const out = await generateKidMoveNarration({
-      fenBefore: START, san: 'Qf3', isPlayerMove: true, authoredNarration: 'authored',
-    });
-    expect(out).toBe('authored');
+    expect(kidMoveNarration({ fenBefore: SCHOLAR, san: 'Qf3', isPlayerMove: true, authoredNarration: 'Bring the queen to f3!' }))
+      .toBe('Bring the queen to f3!');
+    expect(kidMoveNarration({ fenBefore: SCHOLAR, san: 'Qf3', isPlayerMove: true })).toBe('Your queen moves to f3.');
+    expect(kidMoveNarration({ fenBefore: SCHOLAR, san: 'Qf3', isPlayerMove: false, teachingConcept: 'attacking f7' }))
+      .toBe("Their queen moves to f3. That's the idea of attacking f7.");
     expect(spy).not.toHaveBeenCalled();
   });
-});
 
-describe('generateKidMoveInstruction', () => {
-  beforeEach(() => vi.restoreAllMocks());
+  it('narration: an illegal/desynced move says nothing rather than guess', () => {
+    expect(kidMoveNarration({ fenBefore: START, san: 'Qf3', isPlayerMove: true })).toBe('');
+  });
 
-  it('returns sanitized instruction prose on success', async () => {
-    vi.spyOn(coachApi, 'getKidLlmResponse').mockResolvedValue('Bring your queen out toward the middle of the board!');
-    const out = await generateKidMoveInstruction({
-      fenBefore: SCHOLAR, expectedSan: 'Qf3', teachingConcept: 'development', authored: 'Bring the queen to f3!',
-    });
-    expect(out).toContain('queen');
+  it('instruction: authored, else the scripted move as words, never notation', () => {
+    const spy = vi.spyOn(coachApi, 'getKidLlmResponse');
+    expect(kidMoveInstruction({ fenBefore: SCHOLAR, expectedSan: 'Qf3', authored: 'Bring the queen to f3!' })).toBe('Bring the queen to f3!');
+    const out = kidMoveInstruction({ fenBefore: SCHOLAR, expectedSan: 'Qf3' });
+    expect(out).toBe('Now move your queen to f3.');
     expect(out).not.toMatch(/Qf3/);
-  });
-
-  it('falls back to authored instruction on failure', async () => {
-    vi.spyOn(coachApi, 'getKidLlmResponse').mockRejectedValue(new Error('x'));
-    const out = await generateKidMoveInstruction({
-      fenBefore: SCHOLAR, expectedSan: 'Qf3', authored: 'Bring the queen to f3!',
-    });
-    expect(out).toBe('Bring the queen to f3!');
-  });
-
-  it('trusts the script when the move is illegal', async () => {
-    const spy = vi.spyOn(coachApi, 'getKidLlmResponse');
-    const out = await generateKidMoveInstruction({ fenBefore: START, expectedSan: 'Qf3', authored: 'authored' });
-    expect(out).toBe('authored');
+    expect(kidMoveInstruction({ fenBefore: START, expectedSan: 'Qf3' })).toBe('');
     expect(spy).not.toHaveBeenCalled();
   });
-});
 
-describe('generateKidWrongMoveHint', () => {
-  beforeEach(() => vi.restoreAllMocks());
-
-  it('returns sanitized encouragement on success', async () => {
-    vi.spyOn(coachApi, 'getKidLlmResponse').mockResolvedValue('Try bringing your queen toward the middle!');
-    const out = await generateKidWrongMoveHint({
-      fenBefore: SCHOLAR, expectedSan: 'Qf3', authoredResponse: 'Move the queen to f3!',
-    });
-    expect(out).toContain('queen');
-  });
-
-  it('falls back to authored response on failure', async () => {
-    vi.spyOn(coachApi, 'getKidLlmResponse').mockRejectedValue(new Error('x'));
-    const out = await generateKidWrongMoveHint({
-      fenBefore: SCHOLAR, expectedSan: 'Qf3', authoredResponse: 'Move the queen to f3!',
-    });
-    expect(out).toBe('Move the queen to f3!');
+  it('wrong-move nudge: authored, else a kind pointer at the scripted move', () => {
+    const spy = vi.spyOn(coachApi, 'getKidLlmResponse');
+    expect(kidWrongMoveHint({ fenBefore: SCHOLAR, expectedSan: 'Qf3', authoredResponse: 'Move the queen to f3!' })).toBe('Move the queen to f3!');
+    expect(kidWrongMoveHint({ fenBefore: SCHOLAR, expectedSan: 'Qf3' })).toBe('Not quite. Try to move your queen to f3.');
+    expect(spy).not.toHaveBeenCalled();
   });
 });
 

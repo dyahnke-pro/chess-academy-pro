@@ -6,9 +6,9 @@
  * asks carries a COMPUTED answer key — tactics/threats/hanging/material/mate
  * come from the engine + chess.js, and the grader only matches the student's
  * free-text answer against that key. This module computes the questions + the
- * answer keys + a deterministic grader; the LLM grading (natural-language
- * understanding) layers on top in `gradeReadingAnswer` with this as the
- * offline-testable fallback.
+ * answer keys + the ONE grader. It is deterministic on purpose: the model
+ * grader that used to sit on top decided the student's verdict and wrote it
+ * into their record (G0) — deleted 2026-10-08.
  *
  * The "hanging" answer key uses a proper static-exchange evaluation (SEE), not
  * the attacked-and-undefended heuristic — a defended piece still hangs when a

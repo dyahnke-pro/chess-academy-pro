@@ -9,9 +9,9 @@ import { voiceService } from '../../services/voiceService';
 import { GUIDED_GAMES } from '../../data/guidedGames';
 import { kidMoveEffect } from '../../services/kidBoardAnswers';
 import {
-  generateKidMoveNarration,
-  generateKidMoveInstruction,
-  generateKidWrongMoveHint,
+  kidMoveNarration,
+  kidMoveInstruction,
+  kidWrongMoveHint,
   answerKidGameQuestion,
 } from '../../services/kidGameCoach';
 import type { GuidedMove } from '../../types';
@@ -31,20 +31,7 @@ const QUICK_ASKS: ReadonlyArray<{ label: string; question: string }> = [
   { label: 'Help!', question: 'Can you help me find a good move?' },
 ];
 
-// The dynamic LLM coach falls back to the authored line internally on any
-// failure, but a slow model shouldn't leave the child waiting — cap the wait
-// and use the authored text if the model is taking too long.
-const COACH_NARRATION_TIMEOUT_MS = 4500;
-function withCoachTimeout(p: Promise<string>, fallback: string): Promise<string> {
-  return Promise.race([
-    p,
-    new Promise<string>((resolve) => setTimeout(() => resolve(fallback), COACH_NARRATION_TIMEOUT_MS)),
-  ]);
-}
-
 const AUTO_PLAY_DELAY_MS = 1200;
-// Long enough for the dynamic (LLM) wrong-move hint to land while the box is
-// still visible; the hint falls back to authored text well within this window.
 const WRONG_MOVE_DISPLAY_MS = 3600;
 // Per non-negotiable #5, per-move voice praise is banned. The
 // on-screen flash carries the per-move feedback; voice fires
@@ -71,7 +58,6 @@ export function GuidedGamePage(): JSX.Element {
   const [narrationText, setNarrationText] = useState('');
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [wrongAttempts, setWrongAttempts] = useState(0);
-  const [coachThinking, setCoachThinking] = useState(false);
   const [chatMessages, setChatMessages] = useState<CoachChatMsg[]>([]);
   const [chatInput, setChatInput] = useState('');
   const [chatBusy, setChatBusy] = useState(false);
@@ -104,36 +90,18 @@ export function GuidedGamePage(): JSX.Element {
     });
   }, []);
 
-  // ─── Live LLM coach (kid-safe, grounded) ───────────────────────────────
-  // The coach VOICE is now dynamic: the LLM rephrases the code-computed move
-  // (describeKidMove via chess.js) into fresh kid prose, routed through the
-  // kid-safe lane (getKidLlmResponse → Ruth, no SAN). The scripted move stays
-  // the source of truth (kid #17); the authored narration is the GROUNDED seed
-  // AND the fallback on any anomaly (kid P0). Mirrors the adult Play-with-Coach
-  // live commentary.
+  // ─── The coach line for each move (kid-safe, computed) ─────────────────
+  // The authored note leads; with none, chess.js words for the scripted move
+  // speak. No model writes it (kid P0, G0) — the scripted move is the truth.
   const narratePlayedMove = useCallback(
-    async (
+    (
       fenBefore: string,
       san: string,
       isPlayerMove: boolean,
       teachingConcept: string | undefined,
       authored: string | undefined,
-    ): Promise<void> => {
-      const fallback = authored ?? '';
-      // Show the authored text instantly (no dead air / instant for tests),
-      // then swap in the dynamic version + speak it once it lands.
-      if (fallback) setNarrationText(fallback);
-      setCoachThinking(true);
-      let text = fallback;
-      try {
-        text = await withCoachTimeout(
-          generateKidMoveNarration({ fenBefore, san, isPlayerMove, teachingConcept, authoredNarration: authored }),
-          fallback,
-        );
-      } catch {
-        text = fallback;
-      }
-      setCoachThinking(false);
+    ): void => {
+      const text = kidMoveNarration({ fenBefore, san, isPlayerMove, teachingConcept, authoredNarration: authored });
       if (text) {
         setNarrationText(text);
         kidSpeak(text);
@@ -142,30 +110,16 @@ export function GuidedGamePage(): JSX.Element {
     [kidSpeak],
   );
 
-  // Dynamic, kid-safe instruction for the move the child should play next
-  // (a guided game GUIDES). Grounded by the scripted move; authored fallback.
+  // The instruction for the move the child should play next (a guided game
+  // GUIDES): authored, else computed from the scripted move.
   const narrateInstruction = useCallback(
-    async (
+    (
       fenBefore: string,
       expectedSan: string,
       teachingConcept: string | undefined,
       authored: string | undefined,
-    ): Promise<void> => {
-      const fallback = authored ?? '';
-      // Instant authored display (no dead air / instant for tests), then the
-      // dynamic instruction swaps in + speaks when it lands.
-      if (fallback) setNarrationText(fallback);
-      setCoachThinking(true);
-      let text = fallback;
-      try {
-        text = await withCoachTimeout(
-          generateKidMoveInstruction({ fenBefore, expectedSan, teachingConcept, authored }),
-          fallback,
-        );
-      } catch {
-        text = fallback;
-      }
-      setCoachThinking(false);
+    ): void => {
+      const text = kidMoveInstruction({ fenBefore, expectedSan, teachingConcept, authored });
       if (text) {
         setNarrationText(text);
         kidSpeak(text);
@@ -249,10 +203,10 @@ export function GuidedGamePage(): JSX.Element {
       setMoveIndex(idx);
       setWrongAttempts(0);
 
-      // Dynamic, kid-safe coach commentary on the opponent's move (falls back
-      // to the authored narration). The opponent move IS narration-worthy.
+      // The coach line on the opponent's move (authored, else computed).
+      // The opponent move IS narration-worthy.
       if (move.narration) {
-        void narratePlayedMove(fenBefore, move.san, false, move.teachingConcept, move.narration);
+        narratePlayedMove(fenBefore, move.san, false, move.teachingConcept, move.narration);
       }
 
       if (move.isMilestone) {
@@ -290,12 +244,12 @@ export function GuidedGamePage(): JSX.Element {
     setWrongAttempts(0);
     setChatMessages([]);
 
-    // First move: opponent → dynamic commentary + auto-play; kid → dynamic
-    // "what to play" instruction. Both kid-safe, grounded, authored fallback.
+    // First move: opponent → its line + auto-play; kid → the "what to play"
+    // instruction. Both authored, else computed from the scripted move.
     if (game.moves[0]?.autoPlay) {
       playAutoMove(0);
     } else if (game.moves[0]) {
-      void narrateInstruction(game.startFen, game.moves[0].san, game.moves[0].teachingConcept, game.moves[0].narration);
+      narrateInstruction(game.startFen, game.moves[0].san, game.moves[0].teachingConcept, game.moves[0].narration);
     }
   }, [game, playAutoMove, narrateInstruction]);
 
@@ -332,8 +286,8 @@ export function GuidedGamePage(): JSX.Element {
         setStarsEarned((s) => s + 1);
         kidSpeak(MILESTONE_VOICE);
       }
-      // Non-milestone correct moves: visual celebration only. The dynamic
-      // coach voice fires after the feedback timeout below.
+      // Non-milestone correct moves: visual celebration only. The coach line
+      // fires after the feedback timeout below.
 
       feedbackTimeoutRef.current = setTimeout(() => {
         setFeedback(null);
@@ -341,27 +295,24 @@ export function GuidedGamePage(): JSX.Element {
 
         const nextIdx = currentMoveIdx + 1;
         if (nextIdx >= game.moves.length) {
-          // Final move — dynamic commentary on the child's move, then the outro.
-          void (async () => {
-            await narratePlayedMove(fenBefore, currentMove.san, true, currentMove.teachingConcept, currentMove.narration);
-            autoPlayTimeoutRef.current = setTimeout(() => {
-              setPhase('complete');
-              kidSpeak(game.storyOutro);
-              setNarrationText(game.storyOutro);
-            }, 900);
-          })();
+          // Final move — the line on the child's move, then the outro.
+          narratePlayedMove(fenBefore, currentMove.san, true, currentMove.teachingConcept, currentMove.narration);
+          autoPlayTimeoutRef.current = setTimeout(() => {
+            setPhase('complete');
+            kidSpeak(game.storyOutro);
+            setNarrationText(game.storyOutro);
+          }, 900);
           return;
         }
 
         if (game.moves[nextIdx].autoPlay) {
-          // Dynamic commentary on the child's move, then the opponent replies
+          // The line on the child's move, then the opponent replies
           // (auto-play narrates the opponent's move itself).
-          void narratePlayedMove(fenBefore, currentMove.san, true, currentMove.teachingConcept, currentMove.narration);
+          narratePlayedMove(fenBefore, currentMove.san, true, currentMove.teachingConcept, currentMove.narration);
           playAutoMove(nextIdx);
         } else {
-          // Next is the child's move — guide them to it with a dynamic,
-          // kid-safe instruction (grounded by the scripted move).
-          void narrateInstruction(
+          // Next is the child's move — guide them to it (the scripted move).
+          narrateInstruction(
             currentMove.fen,
             game.moves[nextIdx].san,
             game.moves[nextIdx].teachingConcept,
@@ -370,25 +321,13 @@ export function GuidedGamePage(): JSX.Element {
         }
       }, 1000);
     } else {
-      // Wrong move — dynamic, kind, kid-safe nudge toward the right idea
-      // (grounded by the expected move; falls back to the authored response).
+      // Wrong move — a kind nudge toward the scripted move (authored, else
+      // computed).
       setFeedback('wrong');
       setWrongAttempts((w) => w + 1);
-      const authoredWrong = currentMove.wrongMoveResponse ?? 'Not quite — try again!';
-      setWrongText(authoredWrong);
-      void (async () => {
-        let hint = authoredWrong;
-        try {
-          hint = await withCoachTimeout(
-            generateKidWrongMoveHint({ fenBefore, expectedSan, authoredResponse: authoredWrong }),
-            authoredWrong,
-          );
-        } catch {
-          hint = authoredWrong;
-        }
-        setWrongText(hint);
-        kidSpeak(hint);
-      })();
+      const hint = kidWrongMoveHint({ fenBefore, expectedSan, authoredResponse: currentMove.wrongMoveResponse });
+      setWrongText(hint);
+      kidSpeak(hint);
 
       // Reset the board to before this move
       setBoardKey((k) => k + 1);
@@ -611,11 +550,6 @@ export function GuidedGamePage(): JSX.Element {
               </span>
             ) : isPlayerTurn ? (
               'Your turn — make a move!'
-            ) : coachThinking ? (
-              <span className="flex items-center justify-center gap-2" data-testid="guided-game-coach-thinking">
-                <MessageCircle size={14} className="animate-pulse" />
-                Coach is thinking...
-              </span>
             ) : (
               'Watch and learn!'
             )}

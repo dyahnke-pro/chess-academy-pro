@@ -25,10 +25,6 @@ vi.mock('../../services/liveTacticsContext', () => ({
   buildFedTacticsContext: vi.fn(async () => TACTICS),
 }));
 
-// Grader → deterministic stub so no LLM/network.
-vi.mock('../../services/positionReadingGrader', () => ({
-  gradeReadingAnswer: vi.fn(async () => ({ verdict: 'correct', correctAnswer: 'Material is even', note: 'Nice.' })),
-}));
 
 import { AnalysisPracticePage } from './AnalysisPracticePage';
 
@@ -68,8 +64,6 @@ describe('AnalysisPracticePage', () => {
   });
 
   it('shows a progressive grounded HINT on a wrong answer (no answer handed over)', async () => {
-    const grader = await import('../../services/positionReadingGrader');
-    vi.mocked(grader.gradeReadingAnswer).mockResolvedValueOnce({ verdict: 'wrong', correctAnswer: 'Material is even', note: 'no' });
     await db.games.add({
       id: 'g1', pgn: GAME_PGN, white: 'Me', black: 'Them', result: '1-0',
       date: '2026-06-27', event: 'Test', eco: null, whiteElo: null, blackElo: null,

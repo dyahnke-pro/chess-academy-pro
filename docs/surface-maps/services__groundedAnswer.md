@@ -250,7 +250,7 @@
 - `src/services/groundedAnswer.test.ts:1225`
 - `src/services/groundedAnswer.test.ts:1238`
 - `src/services/groundedAnswer.test.ts:1239`
-- `src/services/kidGameCoach.ts:312`
+- `src/services/kidGameCoach.ts:300`
 
 ### `assembleCapabilitiesOverview` (function) — 1 call site
 - `src/services/coachApi.ts:5607`
@@ -261,7 +261,7 @@
 - `src/services/groundedAnswer.teaching.test.ts:38`
 - `src/services/groundedAnswer.teaching.test.ts:49`
 - `src/services/groundedAnswer.teaching.test.ts:57`
-- `src/services/kidGameCoach.ts:297`
+- `src/services/kidGameCoach.ts:285`
 
 ### `assembleMoveEvalAnswer` (function) — 21 call sites
 - `src/coach/questionWalk.sicilian1200.test.ts:78`
@@ -568,7 +568,7 @@
 - `src/services/groundedAnswer.test.ts:876`
 - `src/services/groundedAnswer.test.ts:891`
 - `src/services/groundedAnswer.test.ts:896`
-- `src/services/kidGameCoach.ts:277`
+- `src/services/kidGameCoach.ts:265`
 
 ### `FundamentalsTopic` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

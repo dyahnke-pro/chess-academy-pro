@@ -16,11 +16,11 @@ import {
   buildReadingQuestions,
   readingHint,
   readingAnswerShape,
+  gradeReadingAnswerDeterministic,
   type ReadingQuestion,
   type ReadingGrade,
   type SampledPosition,
 } from '../../services/positionReadingService';
-import { gradeReadingAnswer } from '../../services/positionReadingGrader';
 import { recordAnswer } from '../../services/answerRecord';
 import { wrongTapTag } from '../../services/wrongTapTag';
 import type { AnswerHelp } from '../../services/capabilityEvidence';
@@ -165,7 +165,6 @@ export function AnalysisPracticePage(): JSX.Element {
   const [qIndex, setQIndex] = useState(0);
   const [answer, setAnswer] = useState('');
   const [grade, setGrade] = useState<ReadingGrade | null>(null);
-  const [grading, setGrading] = useState(false);
   const [hintTier, setHintTier] = useState(0);            // 0 = none, 1-3
   // What the LAST submit got back, when it did not end the question. Every
   // submitted answer shows something (walk 2026-10-03: two answers the grader
@@ -285,7 +284,7 @@ export function AnalysisPracticePage(): JSX.Element {
   // The single grading path — text, a clicked square, or a played move all flow
   // through here (the answer key already carries acceptTokens for each mode).
   const gradeAnswer = useCallback(async (text: string) => {
-    if (!question || grading || grade || demoing || !text.trim()) return;
+    if (!question || grade || demoing || !text.trim()) return;
     // An answer to a DIFFERENT question ("Qa4+" to "who is ahead in material?")
     // is not a wrong read: say what kind of answer fits, cost no attempt.
     const shape = readingAnswerShape(question, text);
@@ -294,9 +293,8 @@ export function AnalysisPracticePage(): JSX.Element {
       setSelectedSquare(null);
       return;
     }
-    setGrading(true);
-    const g = await gradeReadingAnswer(question, text);
-    setGrading(false);
+    // The answer key decides — computed in code, never a model's verdict (G0).
+    const g = gradeReadingAnswerDeterministic(question, text);
     setFeedback(null);
     askedRef.current += 1;
     captureEvent('analysis_practice_answer', { questionType: question.type, verdict: g.verdict, hintTier, input: 'text' });
@@ -353,7 +351,7 @@ export function AnalysisPracticePage(): JSX.Element {
         ? { tone: 'partial', text: `Close — name the exact square or idea. ${tries}.` }
         : { tone: 'wrong', text: `Not quite — try again. ${tries}.` });
     }
-  }, [question, grading, grade, demoing, hintTier, playDemo, next, startTier, position, qIndex]);
+  }, [question, grade, demoing, hintTier, playDemo, next, startTier, position, qIndex]);
 
   // ── THE TAP PATH (P0c): a question with a computed square key is answered
   // by tapping, graded by the deterministic set grader through the one tap
@@ -619,7 +617,7 @@ export function AnalysisPracticePage(): JSX.Element {
                 <div className="flex gap-2 mt-3">
                   <button
                     onClick={showHint}
-                    disabled={hintTier >= 3 || grading}
+                    disabled={hintTier >= 3}
                     className="px-4 py-2.5 rounded-xl border-2 font-semibold disabled:opacity-40 flex items-center gap-2"
                     style={{ borderColor: 'rgba(245,158,11,0.4)', background: 'rgba(245,158,11,0.1)', color: 'var(--color-text)' }}
                     data-testid="analysis-practice-hint-btn"
@@ -628,12 +626,12 @@ export function AnalysisPracticePage(): JSX.Element {
                   </button>
                   <button
                     onClick={() => void gradeAnswer(answer)}
-                    disabled={!answer.trim() || grading}
+                    disabled={!answer.trim()}
                     className="flex-1 px-4 py-2.5 rounded-xl border-2 font-semibold disabled:opacity-40"
                     style={{ borderColor: 'rgba(99,102,241,0.5)', background: 'rgba(99,102,241,0.12)', color: 'var(--color-text)' }}
                     data-testid="analysis-practice-submit"
                   >
-                    {grading ? 'Checking…' : 'Send'}
+                    Send
                   </button>
                 </div>
               </>

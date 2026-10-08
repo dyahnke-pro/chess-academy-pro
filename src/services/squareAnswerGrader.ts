@@ -10,7 +10,7 @@
  * Analysis Practice, the Review reading card, lessons, the Setup Trainer.
  *
  * It replaces, for TAP answers, the path that turned a clicked square into a
- * text string and handed it to `gradeReadingAnswer` (an LLM verdict — G0: the
+ * text string and handed it to the old `gradeReadingAnswer` (an LLM verdict, deleted 2026-10-08 — G0: the
  * model decided whether the student was right). Typed answers still take that
  * text path today; this module never sees words.
  *

@@ -5,23 +5,21 @@
  * This is the kid-mode equivalent of the adult Play/Learn-with-Coach voice
  * (coachMoveCommentary / useLiveCoach), built to the LOCKED kid contract:
  *
- *   • Every LLM call routes through `getKidLlmResponse` (skipPersonality +
- *     KID_SAFETY_PROMPT — Ruth default, no SAN, age-appropriate). Importing the
- *     adult coach chat entry point here is BANNED (kid non-negotiable #3) — the
- *     kid-safe wrapper is the only sanctioned lane.
- *   • The LLM NEVER decides chess content (G0/kid #1/#17). The move played is
- *     the SCRIPTED san; the position facts are computed in code
- *     (`describeKidMove` via chess.js; the question box's answers in
- *     `kidBoardAnswers`).
- *     The model only rephrases those computed facts into fresh kid prose.
+ *   • The move narration, the instruction and the wrong-move nudge are
+ *     COMPUTED (the authored note, else chess.js words) — no model call. The
+ *     model used to "rephrase" them freely, which is chess content the board
+ *     never produced (kid P0, G0); removed 2026-10-08.
+ *   • The question box phrases computed facts through `voiceFacts({kidSafe})`
+ *     only (`kidBoardAnswers`). Importing the adult coach chat entry point here
+ *     is BANNED (kid non-negotiable #3).
  *   • Every output is sanitized (`sanitizeKidCoachText`) and falls back to the
  *     hand-authored static text on ANY anomaly (empty / no-key banner / SAN
  *     leak / over-length / throw). A hallucination in kid mode is a P0 bug —
  *     the authored text is always the safety net.
- *   • No per-move praise (kid #5) — the prompt restates the move's EFFECT.
+ *   • No per-move praise (kid #5) — the line restates the move's EFFECT.
  */
 import { Chess } from 'chess.js';
-import { getKidLlmResponse, voiceFacts } from './coachApi';
+import { voiceFacts } from './coachApi';
 import { logAppAudit } from './appAuditor';
 import { buildQuestionGrounding } from '../coach/questionIntents';
 import { assembleConceptAnswer, assembleTeachingAnswer, assembleAppHelpAnswer } from './groundedAnswer';
@@ -125,31 +123,30 @@ export interface KidMoveNarrationInput {
   authoredNarration?: string;
 }
 
-/**
- * Dynamic, kid-safe narration for a move that was just played. The LLM is
- * HANDED the computed move + concept and asked only to phrase it freshly for a
- * young child — it never decides what the move was. Falls back to the authored
- * narration on any anomaly. Returns the authored text (or '') when no key /
- * offline so the surface is never blocked.
- */
-export async function generateKidMoveNarration(input: KidMoveNarrationInput): Promise<string> {
-  const fallback = input.authoredNarration ?? '';
-  const moveDesc = describeKidMove(input.fenBefore, input.san);
-  if (!moveDesc) return fallback; // illegal/desync → trust the script
-  const who = input.isPlayerMove ? 'You' : 'Your opponent';
-  const concept = input.teachingConcept ? ` This shows the idea of ${input.teachingConcept}.` : '';
-  const seed = input.authoredNarration ? `\nThe lesson note for this move: "${input.authoredNarration}"` : '';
-  const prompt = `A move was just played in a friendly chess game for a young child.
-GROUND TRUTH (do not contradict, do not name any other move): ${who} just played — ${moveDesc}.${concept}${seed}
+/** The scripted move as kid words in the child's seat: "your knight moves to
+ *  f3" / "their bishop captures on e5, putting the king in check". Computed
+ *  from chess.js — the coach says only what the board shows (kid #17, G0). */
+function seatedMove(fenBefore: string, san: string, mine: boolean): string {
+  const desc = describeKidMove(fenBefore, san);
+  return desc ? desc.replace(/^the /, mine ? 'your ' : 'their ') : '';
+}
 
-Say ONE warm, simple sentence (max ~20 words) describing what this move DOES, for a 5-to-10-year-old. Spell out pieces and squares in words; never use chess notation. Do not say "great move" or praise — just describe the idea so the child learns. Speak as the friendly coach.`;
-  try {
-    const reply = await getKidLlmResponse([{ role: 'user', content: prompt }], '', 160);
-    const clean = sanitizeKidCoachText(reply);
-    return clean || fallback;
-  } catch {
-    return fallback;
-  }
+function capitalise(s: string): string {
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+}
+
+/**
+ * Narration for a move that was just played. The hand-authored note leads;
+ * with none, the computed move speaks. No model writes a word of it: the model
+ * used to "rephrase" this, and free prose around a move is chess content the
+ * board never produced (kid P0, G0). Empty when the move cannot be replayed.
+ */
+export function kidMoveNarration(input: KidMoveNarrationInput): string {
+  if (input.authoredNarration) return input.authoredNarration;
+  const move = seatedMove(input.fenBefore, input.san, input.isPlayerMove);
+  if (!move) return '';
+  const concept = input.teachingConcept ? ` That's the idea of ${input.teachingConcept}.` : '';
+  return `${capitalise(move)}.${concept}`;
 }
 
 export interface KidInstructionInput {
@@ -163,29 +160,32 @@ export interface KidInstructionInput {
   authored?: string;
 }
 
-/**
- * Dynamic, kid-safe instruction for the move the child should play next. A
- * guided game GUIDES — telling the child which piece to move where IS the
- * point — so the LLM is handed the computed move (`describeKidMove`) and asked
- * to phrase it as a friendly instruction, spelled out, never notation. Falls
- * back to the authored instruction on any anomaly.
- */
-export async function generateKidMoveInstruction(input: KidInstructionInput): Promise<string> {
-  const fallback = input.authored ?? '';
-  const moveDesc = describeKidMove(input.fenBefore, input.expectedSan);
-  if (!moveDesc) return fallback;
-  const concept = input.teachingConcept ? ` This teaches the idea of ${input.teachingConcept}.` : '';
-  const prompt = `In a friendly chess game for a young child, it is the child's turn to move.
-GROUND TRUTH — the move to guide them toward is: ${moveDesc}.${concept} (Describe the piece and the square in words; never reveal it as notation.)
-
-Say ONE warm, simple instruction (max ~20 words) telling them which piece to move and where, for a 5-to-10-year-old. No praise. Speak as the friendly coach.`;
+/** "move your knight to f3" / "castle your king to the kingside" — the
+ *  scripted move as an instruction, computed from chess.js. */
+function instructionFor(fenBefore: string, san: string): string {
   try {
-    const reply = await getKidLlmResponse([{ role: 'user', content: prompt }], '', 160);
-    const clean = sanitizeKidCoachText(reply);
-    return clean || fallback;
+    const move = new Chess(fenBefore).move(san);
+    const bare = move.san.replace(/[+#]/g, '');
+    if (bare === 'O-O') return 'castle your king to safety on the kingside';
+    if (bare === 'O-O-O') return 'castle your king to safety on the queenside';
+    const piece = pieceWord(move.piece);
+    return move.captured ? `capture on ${move.to} with your ${piece}` : `move your ${piece} to ${move.to}`;
   } catch {
-    return fallback;
+    return '';
   }
+}
+
+/**
+ * The instruction for the move the child should play next (a guided game
+ * GUIDES, so naming it is the point). The authored instruction leads; with
+ * none, the computed move speaks. No model call (kid P0, G0).
+ */
+export function kidMoveInstruction(input: KidInstructionInput): string {
+  if (input.authored) return input.authored;
+  const instruction = instructionFor(input.fenBefore, input.expectedSan);
+  if (!instruction) return '';
+  const concept = input.teachingConcept ? ` That's the idea of ${input.teachingConcept}.` : '';
+  return `Now ${instruction}.${concept}`;
 }
 
 export interface KidWrongMoveInput {
@@ -198,25 +198,13 @@ export interface KidWrongMoveInput {
 }
 
 /**
- * Dynamic, kid-safe encouragement after a wrong move. Grounded by the EXPECTED
- * scripted move (spelled out) so the nudge points at the right idea without
- * ever inventing chess. Falls back to the authored response.
+ * The nudge after a wrong move: the authored response, else a kind computed
+ * pointer at the scripted move. No model call (kid P0, G0).
  */
-export async function generateKidWrongMoveHint(input: KidWrongMoveInput): Promise<string> {
-  const fallback = input.authoredResponse ?? 'Not quite — try again!';
-  const moveDesc = describeKidMove(input.fenBefore, input.expectedSan);
-  if (!moveDesc) return fallback;
-  const prompt = `In a friendly chess game for a young child, the child tried a move that wasn't the one we're learning.
-GROUND TRUTH — the move to gently steer them toward is: ${moveDesc}. (Do not reveal it as notation; describe the piece and where it should go.)
-
-Say ONE kind, encouraging sentence (max ~20 words) nudging them toward that move, for a 5-to-10-year-old. No scolding, no praise, no chess notation. Speak as the friendly coach.`;
-  try {
-    const reply = await getKidLlmResponse([{ role: 'user', content: prompt }], '', 160);
-    const clean = sanitizeKidCoachText(reply);
-    return clean || fallback;
-  } catch {
-    return fallback;
-  }
+export function kidWrongMoveHint(input: KidWrongMoveInput): string {
+  if (input.authoredResponse) return input.authoredResponse;
+  const instruction = instructionFor(input.fenBefore, input.expectedSan);
+  return instruction ? `Not quite. Try to ${instruction}.` : 'Not quite. Try again.';
 }
 
 /**
