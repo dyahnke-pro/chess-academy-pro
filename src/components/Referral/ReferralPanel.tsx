@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Gift, X, Share2, Check } from 'lucide-react';
 import { getStatus, claimCode, type ClaimOutcome } from '../../services/referralService';
+import { APP_STORE_URL } from '../../utils/appStoreLinks';
 
 /**
  * ReferralPanel — "invite a friend, you both get a free opening class"
@@ -15,8 +16,6 @@ import { getStatus, claimCode, type ClaimOutcome } from '../../services/referral
  *
  * Portalled to document.body so a transformed ancestor can't clip it.
  */
-const APP_STORE_URL = 'https://apps.apple.com/app/id6776418777';
-
 const OUTCOME_COPY: Record<ClaimOutcome, string> = {
   ok: "You're in! Get your first win — a lesson, puzzle, or game review — and you'll both get a free opening class.",
   'already-claimed': "You've already redeemed a friend's code.",

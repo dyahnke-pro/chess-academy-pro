@@ -145,7 +145,7 @@ export const PRO_NARODITSKY_CARO_KANN_LESSON: LessonScript = {
       arrows: [{ from: 'g6', to: 'f4', color: VIS }, { from: 'g6', to: 'e5', color: ATK }],
       highlights: [{ square: 'g6', color: KEY }, { square: 'f4', color: SOFT }, { square: 'e5', color: SOFT }],
       say:
-        "Ng6 — exactly the move the lesson promised. The e7-knight reroutes to g6, eyeing both f4 (the prize outpost) and e5 (pressuring White's spearhead pawn). You bought this square ten moves ago when you played Nge7 instead of Nf6. Now it pays off. The knight on g6 is one of the most powerful piece-placements in the entire Caro repertoire.",
+        "Ng6 — exactly the move the lesson promised. The e7-knight reroutes to g6, eyeing both f4 (the prize outpost) and e5 (pressuring White's spearhead pawn). You bought this square when you played …Nge7 instead of …Nf6. Now it pays off. The knight on g6 is one of the most powerful piece-placements in the entire Caro repertoire.",
       sayShort: 'Ng6 — eye f4 and pressure e5.',
     }),
     b({
@@ -154,7 +154,7 @@ export const PRO_NARODITSKY_CARO_KANN_LESSON: LessonScript = {
       arrows: [{ from: 'b3', to: 'c5', color: ATK }],
       highlights: [{ square: 'b3', color: KEY }, { square: 'c5', color: KEY }],
       say:
-        "Nb3 — the knight lands and hits your c5-bishop. White is forcing you to decide. You can retreat (Bb6, the standard), or accept the trade. The principle: when a piece is attacked and you have a quiet retreat that keeps activity, take it. The bishop on b6 is still active, still on the diagonal, and now perfectly placed to support the queenside expansion that's coming.",
+        "Nb3 — the knight lands and hits your c5-bishop. White is forcing you to decide. You can retreat (Bb6, the standard), or accept the trade. The principle: when a piece is attacked and you have a quiet retreat that keeps activity, take it. After Bb6 the bishop is still active, still on the diagonal, and now perfectly placed to support the queenside expansion that's coming.",
       sayShort: 'Nb3 — White hits the bishop.',
     }),
     b({

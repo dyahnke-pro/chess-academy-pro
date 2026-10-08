@@ -191,6 +191,7 @@ export async function localizeSpokenText(text: string): Promise<string> {
     const out = await voiceFacts(source, {
       targetLanguage: languageName,
       intent: 'spoken-narration',
+      translateOnly: true,
     });
     const spoken = out?.trim() ? out.trim() : source;
     if (cache.size >= MAX_CACHED) cache.clear();

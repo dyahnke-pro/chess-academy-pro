@@ -70,7 +70,7 @@ export const PRO_ERICROSEN_LONDON_LESSON: LessonScript = {
       id: 'castle', moves: 'd4 Nf6 Bf4 g6 Nc3 d5 e3 Bg7 Nf3 O-O Be2 c5 Ne5 Nc6 O-O',
       arrows: [A('f4', 'b8')],
       highlights: [{ square: 'g1', color: SOFT }, { square: 'e5', color: KEY }],
-      say: "Black challenges the knight with Nc6 and you tuck the king away with castling. The position is exactly what the London wants: a rock-solid centre, the bishop raking the long dark diagonal, the e5-knight dug in, and a clear plan to come.",
+      say: "Black challenges the knight with Nc6 and you tuck the king away with castling. The position is exactly what the London wants: a rock-solid centre, the bishop active on f4, the e5-knight dug in, and a clear plan to come.",
       sayShort: 'O-O — solid, knight dug in.',
     }),
     b({

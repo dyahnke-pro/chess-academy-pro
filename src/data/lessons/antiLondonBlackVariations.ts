@@ -33,7 +33,7 @@ const STEINITZ_C3_LESSON: LessonScript = {
       sayShort: "…Nf6, …O-O — regroup, everything holds.",
       highlights: [H('e5', SOFT), H('f6', KEY)] }),
     b({ id: 'lon-st-4', moves: 'd4 d5 Bf4 c5 e3 Nc6 c3 Bf5 Qb3 Qd7 Nf3 e6 dxc5 Bxc5 Ne5 Qc8 Nd2 Nf6 Qa4 O-O Nxc6 bxc6',
-      say: "White trades on c6 and you recapture with the b-pawn. Yes, it leaves you with doubled c-pawns — but in return you get the bishop pair and a half-open b-file bearing down on White's queenside. The engine calls it dead level: you've met the London head-on and equalized with the more active pieces. The countergambit did its job.",
+      say: "White trades on c6 and you recapture with the b-pawn. Yes, it leaves your a-pawn isolated — but in return you get the bishop pair and a half-open b-file bearing down on White's queenside. The engine calls it dead level: you've met the London head-on and equalized with the more active pieces. The countergambit did its job.",
       sayShort: "…bxc6 — bishop pair, open b-file, equal.",
       highlights: [H('c6', SOFT), H('b2', ATK)] }),
   ],

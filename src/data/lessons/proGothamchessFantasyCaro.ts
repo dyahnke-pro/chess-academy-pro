@@ -102,7 +102,7 @@ export const PRO_GOTHAMCHESS_FANTASY_CARO_LESSON: LessonScript = {
       moves: 'e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 O-O Bc5 Ng5',
       highlights: [{ square: 'f7', color: KEY }, { square: 'e4', color: SOFT }],
       say:
-        "That's the Fantasy in one picture. Forget the missing pawn — count the attackers. The bishop on c4 and the knight on g5 both stab at f7, the rook sits on the open f-file behind them, and the king is the only defender. Bring the queen toward h5 or e2, recapture the d4-pawn when it's convenient, and keep adding force. A pawn was the bait; the attack is the catch.",
+        "That's the Fantasy in one picture. Forget the missing pawn — count the attackers. The bishop on c4 and the knight on g5 both stab at f7, the rook sits on the half-open f-file behind them, and the king is the only defender. Bring the queen toward h5 or e2, recapture the d4-pawn when it's convenient, and keep adding force. A pawn was the bait; the attack is the catch.",
       sayShort: 'the pawn bought the f7 attack.',
     }),
   ],

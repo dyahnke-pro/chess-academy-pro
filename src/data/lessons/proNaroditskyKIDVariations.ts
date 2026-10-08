@@ -100,7 +100,7 @@ const CLASSICAL_MAINLINE: LessonScript = {
     b({
       id: 'cm-c5-break', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 Nc6 Be3 Nh5 Qd2 Nf4 Bxf4 Nxd4 Bd3 c5',
       highlights: [{ square: 'c5', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "Bd3 develops the second bishop and you play …c5 — securing the knight outpost AND clamping White's queenside expansion. The Mar del Plata's central knight is now permanently anchored on d4 and Black has equal piece activity with the bishop pair coming back into the game.",
+      say: "Bd3 develops the second bishop and you play …c5 — securing the knight outpost AND clamping White's queenside expansion. The Mar del Plata's central knight is now permanently anchored on d4 and Black has equal piece activity with both bishops coming back into the game.",
       sayShort: '…c5 — secure the outpost.',
     }),
     b({
@@ -472,8 +472,8 @@ const FOUR_PAWNS: LessonScript = {
     b({
       id: 'fp-d5', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f4 O-O Nf3 e5 fxe5 dxe5 d5 c5',
       highlights: [{ square: 'd5', color: SOFT }, { square: 'c5', color: KEY }],
-      say: "d5 …c5 — White closes the centre and Black clamps the c-pawn position. The c5 push prepares the …Ne8-Nd6 reroute to the prize square AND fixes the white queenside structure. The position becomes a positional grind that favours active piece play.",
-      sayShort: '…c5 — clamp the centre.',
+      say: "d5 …c5 — White closes the centre, and this repertoire's choice (13 of 21 games) is …c5, clamping the queenside and preparing the …Ne8-d6 reroute. Be honest about it: the engine prefers …c6, challenging d5 at once, and after …c5 it gives White a clear edge. It is a practical choice that keeps the centre closed and the plans simple.",
+      sayShort: '…c5 — practical; engine prefers …c6.',
     }),
     b({
       id: 'fp-ne8', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f4 O-O Nf3 e5 fxe5 dxe5 d5 c5 Bd3 Ne8',
@@ -484,7 +484,7 @@ const FOUR_PAWNS: LessonScript = {
     b({
       id: 'fp-nd6', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f4 O-O Nf3 e5 fxe5 dxe5 d5 c5 Bd3 Ne8 O-O Nd6',
       highlights: [{ square: 'd6', color: KEY }, { square: 'c4', color: SOFT }, { square: 'e4', color: SOFT }],
-      say: "O-O …Nd6 — White castles, your knight lands. From d6 the knight pressures the c4 and e4 pawns simultaneously, and the c4-c5-d5-e4 pawn chain becomes a target. The Four Pawns's apparent space advantage is now a structural weakness.",
+      say: "O-O …Nd6 — White castles, your knight lands. From d6 the knight pressures the c4 and e4 pawns simultaneously, and White's c4-d5-e4 pawns become targets. The Four Pawns's apparent space advantage is now a structural weakness.",
       sayShort: '…Nd6 — outpost the prize square.',
     }),
     b({

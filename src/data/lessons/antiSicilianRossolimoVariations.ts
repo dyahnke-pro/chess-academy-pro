@@ -36,7 +36,7 @@ const E6_LESSON: LessonScript = {
       sayShort: "…e6 — no rush to trade on c6.",
       highlights: [H('e6', KEY), H('c6', SOFT)] }),
     b({ id: 're6-2', moves: 'e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1',
-      say: "Re1 backs the e-pawn; then, when a6 puts the question, the bishop simply steps home to f1. This is the whole point against e6 — you KEEP the bishop pair instead of giving it up, and from f1 it will help support a big pawn centre. No structural concession made.",
+      say: "Re1 backs the e-pawn; then, when a6 puts the question, the bishop simply steps home to f1. This is the whole point against e6 — you KEEP both bishops instead of giving one up, and from f1 it will help support a big pawn centre. No structural concession made.",
       sayShort: "Bf1 — keep the bishop, no concession.",
       arrows: [A('f1', 'a6', SOFT)], highlights: [H('f1', KEY)] }),
     b({ id: 're6-3', moves: 'e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 exd5 Nxd5 d4',

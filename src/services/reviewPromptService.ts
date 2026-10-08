@@ -2,7 +2,7 @@ import { Capacitor } from '@capacitor/core';
 import { db } from '../db/schema';
 import { useReviewPromptStore } from '../stores/reviewPromptStore';
 import { logAppAudit } from './appAuditor';
-import { reportQualifyingUse, grantReviewReward } from './referralService';
+import { reportQualifyingUse } from './referralService';
 
 /**
  * reviewPromptService — the brain behind the two-step App Store review prompt.
@@ -10,14 +10,18 @@ import { reportQualifyingUse, grantReviewReward } from './referralService';
  * STRATEGY (David 2026-06-28): never throw the store-review dialog at a user
  * cold. Instead, after a few GENUINE positive moments (a win — puzzle solved,
  * lesson mastered, game reviewed), show a soft in-app "Enjoying the app?" gate:
- *   - happy  → fire the native store-review dialog (public 5-stars)
+ *   - happy  → Apple's in-app review dialog (the user never leaves the app)
  *   - unhappy → route to private feedback (the bug reaches David, NOT the rating)
  * This protects the public rating from users who hit a lurking bug, and only
  * asks people who've actually felt the value.
  *
- * The native dialog is RATE-LIMITED by Apple/Google (they decide whether to
- * actually show it, ~3×/year), so we only ever *request* it — never force it —
- * and we only request it once per device unless reset.
+ * The native dialog is RATE-LIMITED by Apple (~3×/year per user) and never
+ * appears in TestFlight builds; we ask once per device, so the cap rarely
+ * bites. Apple does not say whether it showed, so there is no fallback
+ * (David 2026-10-08 chose staying in the app over the write-review page).
+ *
+ * No reward for reviewing: Apple's guidelines (5.6) forbid incentivized
+ * reviews, so the free-opening-for-a-review grant was removed the same day.
  */
 const META_KEY = 'review-prompt.v1';
 
@@ -114,16 +118,12 @@ export async function recordPositiveMoment(source: string): Promise<boolean> {
   return true;
 }
 
-/** User said "yes, love it" — request the native store-review dialog. */
+/** User said "yes, love it" — request Apple's in-app review dialog. */
 export async function handlePositiveResponse(): Promise<void> {
   const state = await loadState();
   state.rated = true;
   await saveState(state);
   void logAppAudit({ kind: 'review-prompt-positive', category: 'app', source: 'reviewPromptService', summary: 'requested store review' });
-  // Reward the happy-path tap-through with a free opening (David 2026-09-06).
-  // Apple never tells us the star count, so we reward the intent — server
-  // guards it to once per device.
-  void grantReviewReward();
   await requestStoreReview();
 }
 
@@ -135,7 +135,7 @@ export async function handleNegativeResponse(): Promise<void> {
   void logAppAudit({ kind: 'review-prompt-negative', category: 'app', source: 'reviewPromptService', summary: 'routed to feedback' });
 }
 
-/** Fire the native store-review dialog (no-op on web — there's no native UI). */
+/** Request the native in-app review dialog (no-op on web — no native UI). */
 export async function requestStoreReview(): Promise<void> {
   if (!Capacitor.isNativePlatform()) return;
   try {

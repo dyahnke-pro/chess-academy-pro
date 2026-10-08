@@ -76,21 +76,22 @@ const E5: LessonScript = {
       sayShort: 'e5 — kick the knight, grab space.',
     }),
     b({
-      id: 'd3',
-      moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d3 Nc5 Be3',
-      arrows: [{ from: 'd2', to: 'd3', color: VIS }],
-      highlights: [{ square: 'e4', color: SOFT }, { square: 'c5', color: SOFT }],
+      id: 'd4',
+      moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d4',
+      arrows: [{ from: 'd4', to: 'c5', color: VIS }],
+      highlights: [{ square: 'c5', color: KEY }, { square: 'f2', color: SOFT }],
       say:
-        "The knight jumps to e4, its only active square; you calmly kick it with d3. It retreats to c5, and you develop the bishop to e3, challenging it again. Notice the theme: you never let Black's pieces settle on a good square, and you never give back the pawn.",
-      sayShort: 'd3 — kick the knight again.',
+        "The knight jumps to e4, its only active square. Now the important move: d4, grabbing the centre and taking the c5-square away from Black's bishop. The tempting d3? is a trap for you — after …Bc5! the bishop hits f2, and Black's threats against your king come first. With d4 that bishop has nowhere good to go.",
+      sayShort: 'd4 — take c5 from the bishop.',
     }),
     b({
-      id: 'mg-nd2',
-      moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d3 Nc5 Be3 Ne6 Nd2',
-      highlights: [{ square: 'e5', color: KEY }, { square: 'd5', color: SOFT }],
+      id: 'mg-c3',
+      moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d4 Qh4 Qf3 Be6 c3',
+      arrows: [{ from: 'f3', to: 'f2', color: VIS }, { from: 'f3', to: 'e4', color: VIS }],
+      highlights: [{ square: 'f2', color: KEY }, { square: 'e4', color: SOFT }],
       say:
-        "Black's knight shuffles to e6 and you develop the last piece with Nd2. Here's the middlegame: you're a clean pawn up, the e5-pawn cramps Black, and their pieces have been chased around with no compensation in sight. The engine confirms White is clearly better. Develop, castle, and convert the extra pawn — the Stafford simply doesn't work against this.",
-      sayShort: 'Nd2 — develop, convert the pawn.',
+        "Black's queen jumps to h4 to hit f2, and Qf3 answers both problems at once: it guards f2 and attacks the e4-knight. After …Be6 c3 you hold everything — a clean pawn up, the e5-pawn cramping Black, and the engine gives White about a two-pawn edge. Develop the bishop, castle, and convert the extra pawn.",
+      sayShort: 'Qf3, c3 — guard f2, keep the pawn.',
     }),
   ],
 };

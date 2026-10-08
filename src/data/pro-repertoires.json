@@ -110,7 +110,7 @@
         {
           "name": "Slow Italian d3",
           "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6 a4 Ba7 Re1 O-O Nbd2 Be6",
-          "explanation": "When you don't want the IQP fireworks, 4.d3 is the calm system. You set up the Italian formation behind a closed centre: 5.O-O O-O 6.c3 (preparing d4 later) 6...d6 (Black mirrors) 7.a4 (preventing Black's …b5 expansion) 7...a6 — Black plays the prophylaxis dance. 8.a4 Ba7 (Black avoids the b6/a5 trade) 9.Re1 O-O 10.Nbd2 Be6 — both sides develop in mirror image. The middlegame plan: White wants Nf1-g3-Nh4 + f4 break; Black wants the same idea reversed. Same skill on both sides means a draw; better technique wins.",
+          "explanation": "When you don't want the open-centre fireworks, d3 is the calm system. You set up behind a closed centre: castle, c3 to prepare d4 later, and a4 to stop Black's …b5 expansion after …a6. Black tucks the bishop back to a7 and castles; Re1 and Nbd2 follow, and …Be6 offers to trade off your c4-bishop. The middlegame plan: White reroutes the knight via f1 to g3 and looks for the d4 or f4 break, and Black mirrors the same ideas. A slow, manoeuvring game where the better technique wins.",
           "sources": [
             "book:italian-game",
             "concept:pos-center",
@@ -253,8 +253,8 @@
         },
         {
           "name": "4...dxc6 5.e5 Line",
-          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d3 Nc5 Be3 Ne6 Nd2",
-          "explanation": "The aggressive alternative — push e5 to kick the f6-knight forward. After …Ne4, you've gained space at the cost of slightly weakening e5 itself. The follow-up plan is d3 (always d3!) attacking the knight, then Bxc5 trading off Black's most active piece. The extra pawn is intact and you've gained a strong central pawn — a slight improvement on the main refutation when you want to attack rather than consolidate.",
+          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d4 Qh4 Qf3 Be6 c3",
+          "explanation": "The aggressive alternative — push e5 to kick the f6-knight forward. After …Ne4, play d4: it grabs the centre and takes the c5-square away from Black's bishop. The natural-looking d3? is a trap for White — …Bc5! hits f2 and Black's threats come first. After d4 Qh4, Qf3 guards f2 and hits the e4-knight; with …Be6 c3 you keep the extra pawn, the cramping e5-pawn, and an engine edge of about two pawns.",
           "sources": [
             "book:chess-fundamentals",
             "https://www.chess.com/openings/Petrovs-Defense-Stafford-Gambit",
@@ -371,7 +371,7 @@
         {
           "name": "Fantasy Variation 3.f3",
           "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O Ngf6 c3 Bd6",
-          "explanation": "The Caro player's nightmare — White builds a massive pawn wall and plans to blast open the centre. This repertoire's defensive recipe: …e6 (don't take on e4!), then …Bb4 pressuring c3 and threatening to trade off White's most active piece. The …b6 + …Bb7 fianchetto activates the queenside bishop along the long diagonal. The position stays tense and double-edged but Black's pieces are coordinated.",
+          "explanation": "The Caro player's sharpest test — White props the centre with f3 and dares Black to take. This repertoire takes at once: …dxe4 fxe4, then strikes the wide centre with …e5. After Nf3 the bishop comes to g4 to pin the knight, …Nd7 and …Ngf6 develop, and …Bd6 completes the setup once White has castled. The position stays tense and double-edged, but Black's pieces are coordinated and the e4-pawn has lost its f-pawn support.",
           "sources": [
             "book:caro-kann",
             "concept:pos-center",
@@ -542,7 +542,7 @@
         {
           "name": "Main Line 3...Nf6 4.d4",
           "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 exd4 e5 Nd5 Qb3 Nb6 cxd4 d6 Bb5 Be6",
-          "explanation": "The sharpest Ponziani line — Black accepts the gambit and grabs e4 with the knight. White responds with 5.d5 attacking the c6-knight. Black's only real try is 5...Bc5! threatening Bxf2+ with discovered tactics. After 6.dxc6 (winning a pawn) Bxf2+! 7.Ke2 — the king walks into the centre, but it's actually safe there. Why? Because after 7...bxc6 (Black recovers the pawn via the open b-file), the position is theoretically balanced but practically explosive. White has a king on e2 looking exposed but with all pieces ready to develop; Black has a slight material advantage (gained the e4-pawn) but a wrecked structure (doubled c-pawns). The position favours whoever has studied it more. If you've watched this repertoire's video — that's you.",
+          "explanation": "The main Ponziani with …Nf6: after d4 exd4 you push e5, kicking the knight to d5. Qb3 hits the d5-knight and the b7-pawn at once, so Black retreats …Nb6. You recapture cxd4 for a broad centre, and after …d6 Bb5 pins the c6-knight to the king while …Be6 develops. White has the d4–e5 centre and active pieces.",
           "sources": [
             "book:chess-fundamentals",
             "https://www.chess.com/openings/Ponziani-Opening",
@@ -723,7 +723,7 @@
         "Avoids Najdorf/Dragon/Sveshnikov/Taimanov/Kan completely. The Sicilian player has spent years studying open lines — none of that helps in the Rossolimo. You're playing a different game and they're improvising from move 7."
       ],
       "traps": [
-        "After 3...g6? (the fianchetto attempt) — This repertoire's video has 200K views on this. Play 4.Bxc6! bxc6 (or dxc6) and Black's structure is permanently damaged. The dark-squared bishop wanted to go to g7 long-diagonal, but now the diagonal targets nothing because the e5-pawn is gone. Pure structural punishment."
+        "Against …g6 (the fianchetto setup), Bxc6 gives up the bishop to damage Black's pawns: after …dxc6 or …bxc6 Black has doubled c-pawns, a long-term target, in exchange for the bishop pair."
       ],
       "warnings": [
         "The Rossolimo ONLY works against 2…Nc6. If Black plays 2…d6 (Najdorf move order) or 2…e6 (Taimanov move order), you can't play Bb5+ because there's nothing to pin. Have a different anti-Sicilian (like the Closed Sicilian with c3 or the Alapin) in reserve.",
@@ -851,7 +851,7 @@
         {
           "name": "Advance Variation (3.e5 c5)",
           "pgn": "e4 c6 d4 d5 e5 c5 dxc5 e6 Nf3 Bxc5 Bd3 Nc6 O-O Nge7 Nbd2 Ng6 Nb3 Bb6 Re1 Qc7 a4 a6",
-          "explanation": "The Advance Variation with immediate ...c5 counter-strike — 528 games in the corpus,  55% score. Modern Caro theory says ...c5 is stronger than the classical ...Bf5 because it challenges White's centre directly. The 22-ply spine walks through the dxc5 trade, the Bxc5 recapture, and the Nge7-Ng6 reroute targeting the f4-e5 dark squares. The Black knight on g6 + bishop pair + open c-file gives steady positional pressure that converts in the R+min+P endgame.",
+          "explanation": "The Advance Variation with immediate ...c5 counter-strike — 528 games in the corpus,  55% score. Modern Caro theory says ...c5 is stronger than the classical ...Bf5 because it challenges White's centre directly. The line walks through the dxc5 trade, the Bxc5 recapture, and the Nge7-Ng6 reroute targeting the f4-e5 dark squares. The Black knight on g6 + bishop pair + open c-file gives steady positional pressure that converts in the R+min+P endgame.",
           "sources": [
             "book:caro-kann",
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
@@ -1058,7 +1058,7 @@
       "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Be7 Qf3 Qc7 O-O-O Nbd7",
       "color": "black",
       "style": "Sharp, Theoretical",
-      "overview": "The sharpest defense in chess. This repertoire's Najdorf scores 65.3% across 1,475 games — most against the English Attack (Bg5/f4/Qf3/O-O-O), the most-theoretical, most-dangerous setup White can choose. You play …a6 on move 5 to claim b5 forever, then accept the race: opposite-side castling, attack faster, win the king-hunt.",
+      "overview": "The sharpest defense in chess. This repertoire's Najdorf scores 65.3% across 1,475 games — most against the Bg5 main line (Bg5/f4/Qf3/O-O-O), the most-theoretical, most-dangerous setup White can choose. You play …a6 on move 5 to claim b5 forever, then accept the race: opposite-side castling, attack faster, win the king-hunt.",
       "keyIdeas": [
         "…a6 claims b5 forever. The move that defines the Najdorf. You don't develop anything on move 5; you just stake out b5 so White's Bb5 ideas are dead, your b5 pawn-storm is queued, and the …Bb7 fianchetto is set up.",
         "Opposite-side castling = race. When White plays O-O-O, you castle short and attack on the queenside (it's their king side now). The race is won by whoever opens lines faster — and the Najdorf's queenside is half-open from move 2.",
@@ -1161,7 +1161,7 @@
         {
           "name": "Classical Mar del Plata (Be2)",
           "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 Nc6 Be3 Nh5 Qd2 Nf4 Bxf4 Nxd4 Bd3 c5 Bh6 Be6 Bxg7 Kxg7",
-          "explanation": "TODO Pass B — Classical Mar del Plata mainline, 715 games. Spine walks through ply 30 with the canonical Be2 / Nf3 / Be3 / Qd2 setup vs Black's Nh5-Nf4 reroute + c5 + Be6 + Kxg7 endgame transition. Anchor to KID corpus voice.",
+          "explanation": "Classical Mar del Plata mainline, 715 games. The line follows the canonical Be2 / Nf3 / Be3 / Qd2 setup vs Black's Nh5-Nf4 reroute + c5 + Be6 + Kxg7 endgame transition. Anchor to KID corpus voice.",
           "sources": [
             "https://www.chess.com/openings/Kings-Indian-Defense",
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
@@ -1170,7 +1170,7 @@
         {
           "name": "Fianchetto Variation (g3)",
           "pgn": "d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nbd7 O-O e5 e4 c6 h3 Qa5 Be3 exd4 Nxd4 Re8",
-          "explanation": "TODO Pass B — Fianchetto Variation, 316 games. Spine walks through ply 22 with White's mirror fianchetto vs Black's Nbd7 → e5 → c6 → Qa5 → exd4 Yugoslav plan.",
+          "explanation": "Fianchetto Variation, 316 games. The line follows White's mirror fianchetto vs Black's Nbd7 → e5 → c6 → Qa5 → exd4 Yugoslav plan.",
           "sources": [
             "https://www.chess.com/openings/Kings-Indian-Defense-Fianchetto-Variation",
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
@@ -1179,7 +1179,7 @@
         {
           "name": "Anti-KID with Nf3 first",
           "pgn": "d4 Nf6 c4 g6 Nf3 Bg7 g3 O-O Bg2 d6 O-O Nbd7 Nc3 e5 e4 c6 h3 Qa5 Re1 exd4 Nxd4 Re8",
-          "explanation": "TODO Pass B — Anti-KID with Nf3 first, 592 games. White delays committing the centre by playing Nf3 before Nc3; transposes into Fianchetto-Yugoslav structures often.",
+          "explanation": "Anti-KID with Nf3 first, 592 games. White delays committing the centre by playing Nf3 before Nc3; transposes into Fianchetto-Yugoslav structures often.",
           "sources": [
             "https://www.chess.com/openings/Kings-Indian-Defense",
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
@@ -1188,7 +1188,7 @@
         {
           "name": "Makogonov (h3)",
           "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 h3 O-O Be3 c6 Nf3 Na6 Be2 e5 d5 Nh5 O-O Nf4 Re1 Nxe2+ Rxe2 c5 Qd2 f5 exf5 gxf5 Bg5 Qd7",
-          "explanation": "TODO Pass B — Makogonov Variation, 335 games. White plays h3 to deny ...Ng4 / ...Nh5 (but Black still gets ...Nh5 from f6 directly). Spine walks through ply 30 with Na6 reroute + d5 lock + Nh5-Nf4 + c5/f5 break plan.",
+          "explanation": "Makogonov Variation, 335 games. White plays h3 to deny ...Ng4 / ...Nh5 (but Black still gets ...Nh5 from f6 directly). The line follows Na6 reroute + d5 lock + Nh5-Nf4 + c5/f5 break plan.",
           "sources": [
             "https://www.chess.com/openings/Kings-Indian-Defense-Makogonov-Variation",
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
@@ -1197,7 +1197,7 @@
         {
           "name": "Sämisch (f3)",
           "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 a6 Qd2 c5 Nge2 Nc6 Rd1 cxd4 Nxd4 Nxd4 Bxd4 Be6 b3 Rc8 Be2 Qa5 O-O Nd7 Bxg7 Kxg7",
-          "explanation": "TODO Pass B — Sämisch Variation, 292 games. White's f3 stops ...Ng4 / ...Nh5 and prepares Be3 + Qd2 + O-O-O kingside storm. Spine walks through ply 30 with Black's Panno-style ...a6 + ...c5 plan and the trade-down endgame transition.",
+          "explanation": "Sämisch Variation, 292 games. White's f3 stops ...Ng4 / ...Nh5 and prepares Be3 + Qd2 + O-O-O kingside storm. The line follows Black's Panno-style ...a6 + ...c5 plan and the trade-down endgame transition.",
           "sources": [
             "https://www.chess.com/openings/Kings-Indian-Defense-Saemisch-Variation",
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
@@ -1206,7 +1206,7 @@
         {
           "name": "Petrosian / Nge2",
           "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nge2 O-O f3 c6 Be3 a6 c5 b5 cxd6 exd6 Nf4 Re8 Be2 b4 Na4 Nd5 Bd2",
-          "explanation": "TODO Pass B — Petrosian / Nge2 setup, 167 games. White's Nge2 keeps the c1-h6 diagonal open. Spine walks through ply 25 with Black's a6 + b5 queenside expansion + Re8 + Nd5.",
+          "explanation": "Petrosian / Nge2 setup, 167 games. White's Nge2 keeps the c1-h6 diagonal open. The line follows Black's a6 + b5 queenside expansion + Re8 + Nd5.",
           "sources": [
             "https://www.chess.com/openings/Kings-Indian-Defense",
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
@@ -1215,7 +1215,7 @@
         {
           "name": "Four Pawns Attack (f4)",
           "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f4 O-O Nf3 e5 fxe5 dxe5 d5 c5 Bd3 Ne8 O-O Nd6 Be3 Nd7",
-          "explanation": "TODO Pass B — Four Pawns Attack, 106 games. White's most aggressive setup with c4-d4-e4-f4. Spine walks through ply 22 with Black's ...e5 challenge, the fxe5 trade, then ...Ne8-Nd6 reroute targeting c4/e4.",
+          "explanation": "Four Pawns Attack, 106 games. White's most aggressive setup with c4-d4-e4-f4. The line follows Black's ...e5 challenge, the fxe5 trade, then ...Ne8-Nd6 reroute targeting c4/e4.",
           "sources": [
             "https://www.chess.com/openings/Kings-Indian-Defense-Four-Pawns-Attack",
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
@@ -1223,11 +1223,6 @@
         }
       ],
       "trapLines": [
-        {
-          "name": "Mar del Plata Nh5-Nf4-Nxd4 conversion (30 games)",
-          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 Nc6 Be3 Nh5 Qd2 Nxd4",
-          "explanation": "Mined from his archive — 30 games where opponents reached the standard Mar del Plata with f3 and watched Black win material via the Nh5-Nf4 reroute attacking d4 with tempo. The Classical KID's signature conversion."
-        },
         {
           "name": "Bf5 + Ne4 wins bishop pair (Fianchetto, GM Bok victim)",
           "pgn": "d4 Nf6 c4 g6 Nf3 Bg7 g3 O-O Bg2 d6 O-O c6 Nc3 Bf5 b3 Ne4 Bb2 Nxc3 Bxc3",
@@ -1808,7 +1803,7 @@
         },
         {
           "name": "Vaganian Attack (…Ne4)",
-          "pgn": "d4 Nf6 Bg5 Ne4 h4 c5 d5 Qb6 Nd2 Nxg5 hxg5 Qxb2 g6 fxg6 Ngf3 d6 e4 Qf6 Rb1 g5 e5 dxe5 Ne4 Qf4",
+          "pgn": "d4 Nf6 Bg5 Ne4 h4 c5 d5 Qb6 Nd2 Nxg5 hxg5 Qxb2 g6 fxg6 Ngf3 d6 e4 Qf6 e5 dxe5 Rb1 e6 Bb5+ Bd7",
           "explanation": "Black's sharpest reply — the Vaganian Attack chases the bishop with …Ne4 to capture and trade. The h4 reply opens the h-file for the rook; the d5 push grabs space; even after the exchange on g5 the doubled g-pawn is a kingside attacking weapon. Sharp positions favouring the side with the initiative — This repertoire's territory.",
           "sources": [
             "concept:pos-development",
@@ -2197,8 +2192,8 @@
       "variations": [
         {
           "name": "Rubinstein Main Line",
-          "pgn": "e4 e6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ gxf6 Nf3 Nc6 g3 e5 Bg2 Bg4 h3 Bxf3 Bxf3 Qxd4 Qe2 O-O-O O-O Rg8 Be3 Qd7 Rad1 Bd6 Bg2 Kb8 b4 Ne7 b5 f5 c4 f4",
-          "explanation": "The textbook Rubinstein. After …gxf6 + …Nc6 + …e5 + …Bg4, Black has active piece play and the bishop pair. The …Bxf3 trade removes White's best defender. 62.7% score across 1,596 games.",
+          "pgn": "e4 e6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ gxf6 Nf3 Nc6 g3 e5 Bg2 Bg4 h3 Bxf3 Bxf3 Qxd4 Qe2 O-O-O O-O Qd7 Bg2 Rg8 Qh5 Qe6 Be3 Bd6 c4 f5 Bd5 Qg6 Qxg6 Rxg6",
+          "explanation": "The textbook Rubinstein. After …gxf6 + …Nc6 + …e5 + …Bg4, Black has active piece play. The …Bxf3 trade removes White's best defender, and …Qxd4 collects the d-pawn. 62.7% score across 1,596 games.",
           "sources": [
             "concept:pos-development",
             "https://www.chess.com/openings/French-Defense",
@@ -3612,7 +3607,7 @@
         "2.c4 hits d5 immediately and leads to an open IQP game, not a slow Caro grind.",
         "Pile on d5 with Nc3 and Bg5 — pressure the defender of the isolated pawn.",
         "The IQP is dynamic: develop Bd3, plant a knight on e5, and attack the king (Bxh7 ideas). Only the endgame favours Black, so keep pieces on.",
-        "If Black plays the French-style …e6, the e5 advance gives a space-and-attack setup with the c8-bishop buried."
+        "If Black plays the French-style …e6 and …d5, trade with cxd5 rather than pushing e5, which lets Black clamp the centre with …d4."
       ],
       "traps": [
         "Bg5 plus cxd5 forces Black into the IQP structure where the d5/e5 outposts feed a kingside attack.",
@@ -3625,8 +3620,8 @@
       "variations": [
         {
           "name": "2…e6 (French-style)",
-          "pgn": "e4 c6 c4 e6 Nc3 d5 e5 d4 Nce2 c5 Ng3 Nc6 Nf3 Nge7",
-          "explanation": "When Black plays …e6 and …d5 you get a French structure with c4 already in hand. e5 grabs space and buries Black's light bishop; the Nce2-g3 reroute aims at f5 for a kingside attack behind the wedge.",
+          "pgn": "e4 c6 c4 e6 Nc3 d5 cxd5 cxd5 exd5 exd5 Nf3 Nc6 Bb5 Bc5 d4 Bb6",
+          "explanation": "When Black plays …e6 and …d5, skip the tempting e5 — it lets Black clamp the centre with …d4. Trade with cxd5 instead: after the exchanges the centre is symmetrical, the e- and c-files open, and the engine calls the position level. Bb5, d4, castling and the e-file give White easy piece play.",
           "sources": [
             "concept:pos-space",
             "https://api.chess.com/pub/player/samayraina/games/archives",
@@ -3821,8 +3816,8 @@
         },
         {
           "name": "…Bg4 Pin",
-          "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 c6 Bc4 Bg4 h3 Bxf3 Qxf3 e6",
-          "explanation": "Instead of …Bf5, the …Bg4 pin trades the bishop for White's f3-knight — the defender of d4. After …e6 Black has a rock-solid structure with no weaknesses and easy development. A comfortable, equal Scandinavian.",
+          "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 Bg4 h3 Bxf3 Qxf3 c6 Be3 e6",
+          "explanation": "Instead of …Bf5, play …Bg4 at once — before …c6 and before White's bishop reaches c4 — pinning the f3-knight, the defender of d4, and trading it after h3. (Played after …c6 Bc4, …Bg4? loses to Bxf7+.) After …c6 and …e6 Black has a solid structure with no weaknesses; White keeps both bishops and a small edge.",
           "sources": [
             "concept:tac-pin",
             "https://api.chess.com/pub/player/samayraina/games/archives",
@@ -4403,9 +4398,9 @@
       ],
       "warningLines": [
         {
-          "name": "...Nxe4 drops the queen",
+          "name": "...Nxe4 drops a piece",
           "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 Nxe4 Nxe4 h6 Bh4",
-          "explanation": "Watch out: against the Bg5 Najdorf, the greedy ...Nxe4 loses material on the spot — Nxe4 nets a clean piece for a single pawn, and the even sharper Bxd8 wins the queen outright. Always meet Bg5 with the solid ...e6."
+          "explanation": "Watch out: against the Bg5 Najdorf, the greedy …Nxe4 just loses a piece for a pawn — Nxe4 takes back and nothing wins the knight back. Meet Bg5 with the solid …e6."
         }
       ],
       "sources": [
@@ -4575,7 +4570,7 @@
         {
           "name": "...Nxe4 loses material",
           "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O e4 Nxe4 Qxe4 d5",
-          "explanation": "Watch out: in this sharp Nimzo with an early e4, grabbing the pawn with ...Nxe4 loses material to Nxe4. Hit the centre the right way with ...d5."
+          "explanation": "Watch out: in this sharp Nimzo with an early e4, grabbing the pawn with …Nxe4 loses material — Qxe4 takes back, and …d5 does not win it back. Hit the centre the right way with …d5 first."
         }
       ],
       "sources": [
@@ -5509,7 +5504,7 @@
         {
           "name": "Premature Nd5?? drops a piece",
           "pgn": "e4 c5 Nc3 Nc6 f4 e6 Nf3 Nge7 Nd5 exd5",
-          "explanation": "Watch out for the tempting Nd5, hitting c7 and e7 — here it is just a blunder. …exd5 wins the knight outright, since nothing recaptures on d5. Complete development and prepare the f4-f5 break first; the Nd5 jump only works once it is genuinely supported."
+          "explanation": "Watch out for the tempting Nd5, hitting c7 and e7 — here it is just a blunder. …exd5 wins the knight: if exd5, the e7-knight takes back on d5 and Black stays a piece up. Complete development and prepare the f4-f5 break first."
         }
       ],
       "sources": [

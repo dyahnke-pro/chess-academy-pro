@@ -55,7 +55,7 @@ const ROSSOLIMO: LessonScript = {
       sayShort: '…d6 — flexible, prepare …Bd7.' }),
     b({ id: 'bd7', moves: 'e4 c5 Nf3 Nc6 Bb5 d6 O-O Bd7 Re1 a6 Bf1',
       arrows: [], highlights: [{ square: 'd7', color: KEY }, { square: 'f1', color: SOFT }],
-      say: "…Bd7 unpins, and after …a6 White retreats the bishop to f1 rather than trade — admitting the pin led nowhere. You have an easy game with the bishop pair preserved and a sound pawn structure.",
+      say: "…Bd7 unpins, and after …a6 White retreats the bishop to f1 rather than trade — admitting the pin led nowhere. You have an easy game with both bishops preserved and a sound pawn structure.",
       sayShort: '…Bd7, …a6 — the pin fizzles.' }),
     b({ id: 'trade', moves: 'e4 c5 Nf3 Nc6 Bb5 d6 O-O Bd7 Re1 a6 Bf1 Bg4 h3 Bxf3 Qxf3 e6',
       arrows: [], highlights: [{ square: 'f3', color: KEY }, { square: 'd4', color: SOFT }],

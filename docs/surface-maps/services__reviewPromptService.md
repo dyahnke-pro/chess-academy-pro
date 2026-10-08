@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6130) — names `reviewPromptService`
+- **The standard post-deploy ritual** (CLAUDE.md:6284) — names `reviewPromptService`
 
 ## Who calls in
 
@@ -29,32 +29,35 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `recordPositiveMoment` (function) — 13 call sites
-- `src/components/Coach/CoachGamePage.tsx:2025`
+- `src/components/Coach/CoachGamePage.tsx:1990`
 - `src/components/Openings/SrsTrainerPage.tsx:315`
-- `src/components/Puzzles/AdaptivePuzzlePage.tsx:293`
-- `src/services/openingService.ts:528`
-- `src/services/openingService.ts:560`
-- `src/services/reviewPromptService.test.ts:21`
-- `src/services/reviewPromptService.test.ts:28`
-- `src/services/reviewPromptService.test.ts:35`
-- `src/services/reviewPromptService.test.ts:41`
-- `src/services/reviewPromptService.test.ts:44`
-- `src/services/reviewPromptService.test.ts:50`
-- `src/services/reviewPromptService.test.ts:51`
-- `src/services/reviewPromptService.test.ts:52`
+- `src/components/Puzzles/AdaptivePuzzlePage.tsx:305`
+- `src/services/openingService.ts:531`
+- `src/services/openingService.ts:563`
+- `src/services/reviewPromptService.test.ts:25`
+- `src/services/reviewPromptService.test.ts:32`
+- `src/services/reviewPromptService.test.ts:39`
+- `src/services/reviewPromptService.test.ts:45`
+- `src/services/reviewPromptService.test.ts:48`
+- `src/services/reviewPromptService.test.ts:54`
+- `src/services/reviewPromptService.test.ts:55`
+- `src/services/reviewPromptService.test.ts:56`
 
-### `handlePositiveResponse` (function) — 1 call site
+### `handlePositiveResponse` (function) — 3 call sites
 - `src/components/Feedback/ReviewPrompt.tsx:31`
+- `src/services/reviewPromptService.test.ts:71`
+- `src/services/reviewPromptService.test.ts:77`
 
-### `handleNegativeResponse` (function) — 2 call sites
+### `handleNegativeResponse` (function) — 3 call sites
 - `src/components/Feedback/ReviewPrompt.tsx:36`
-- `src/services/reviewPromptService.test.ts:49`
+- `src/services/reviewPromptService.test.ts:53`
+- `src/services/reviewPromptService.test.ts:83`
 
 ### `requestStoreReview` (function) — 1 call site
-- `src/services/reviewPromptService.test.ts:57`
+- `src/services/reviewPromptService.test.ts:61`
 
 ### `resetReviewPromptState` (function) — 1 call site
-- `src/services/reviewPromptService.test.ts:15`
+- `src/services/reviewPromptService.test.ts:19`
 
 ## Tests
 

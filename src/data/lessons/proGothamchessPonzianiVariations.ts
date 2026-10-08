@@ -120,7 +120,7 @@ const NXE4: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2 Bb6 Qd5 Nf2 Rg1 O-O cxb7 Bxb7 Qxb7',
       highlights: [{ square: 'b7', color: KEY }, { square: 'f2', color: SOFT }],
       say:
-        "The map unrolls: Qd5 forks knight and board, the rook slides to g1 keeping the trapped f2-knight sealed, the c6-pawn eats b7, and the queen finishes the tour by taking the bishop that recaptured. Count the wreckage — material level, your king walked, Black's knight stranded on f2. The engine calls it dead even; the corpus says the prepared side collects. The middlegame plan continues from this exact madness.",
+        "The map unrolls: Qd5 forks knight and board, the rook slides to g1 keeping the trapped f2-knight sealed, the c6-pawn eats b7, and the queen finishes the tour by taking the bishop that recaptured. Count the wreckage — you are a piece for a pawn up on the board, but your king walked and Black's knight still sits on f2. The engine calls it roughly even; the corpus says the prepared side collects. The middlegame plan continues from this exact madness.",
       sayShort: 'Qxb7 — the map complete.',
     }),
   ],

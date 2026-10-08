@@ -128,36 +128,6 @@ import {
   type RuyTrapDef,
 } from '../../data/lessons/ruyTrapLessons';
 import {
-  getProNaroditskyAlapinTrapPlayableLine,
-} from '../../data/lessons/proNaroditskyAlapinTrapLessons';
-import {
-  getProNaroditskyKIDTrapPlayableLine,
-} from '../../data/lessons/proNaroditskyKIDTrapLessons';
-import {
-  getProNaroditskyCaroTrapPlayableLine,
-} from '../../data/lessons/proNaroditskyCaroTrapLessons';
-import {
-  getProNaroditskyKIATrapPlayableLine,
-} from '../../data/lessons/proNaroditskyKIATrapLessons';
-import {
-  getProNaroditskyRossolimoTrapPlayableLine,
-} from '../../data/lessons/proNaroditskyRossolimoTrapLessons';
-import {
-  getProNaroditskyNajdorfTrapPlayableLine,
-} from '../../data/lessons/proNaroditskyNajdorfTrapLessons';
-import {
-  getProNaroditskyAlekhineTrapPlayableLine,
-} from '../../data/lessons/proNaroditskyAlekhineTrapLessons';
-import {
-  getProNaroditskyJobavaTrapPlayableLine,
-} from '../../data/lessons/proNaroditskyJobavaTrapLessons';
-import {
-  getProNaroditskyRuyTrapPlayableLine,
-} from '../../data/lessons/proNaroditskyRuyTrapLessons';
-import {
-  getProNaroditskyFantasyTrapPlayableLine,
-} from '../../data/lessons/proNaroditskyFantasyTrapLessons';
-import {
   VIENNA_TRAP_LESSONS,
   getViennaTrapsForTab,
   getViennaTrapPlayableLine,
@@ -270,7 +240,7 @@ const ACTIVE_DRILL_MODE = /(?:^|-)(?:learn|practice|play)$/;
 /** Legacy trap/warning TRAINING modes are drills too — the student plays the
  *  line — they just carry no rung suffix, so match them explicitly or they'd be
  *  a hole in the wall (drill any opening's traps free). */
-const ACTIVE_DRILL_EXTRA: ReadonlySet<string> = new Set(['train-traps', 'train-warnings']);
+const ACTIVE_DRILL_EXTRA: ReadonlySet<string> = new Set(['train-warnings']);
 
 type ViewMode =
   | 'detail'
@@ -280,17 +250,12 @@ type ViewMode =
   | 'variation-learn'
   | 'variation-practice'
   | 'variation-play'
-  | 'trap-learn'
-  | 'trap-practice'
-  | 'trap-play'
   | 'warning-learn'
   | 'warning-practice'
   | 'warning-play'
   | 'walkthrough'
   | 'variation-walkthrough'
-  | 'trap-walkthrough'
   | 'warning-walkthrough'
-  | 'train-traps'
   | 'train-warnings'
   | 'named-trap'
   | 'named-trap-learn'
@@ -339,7 +304,6 @@ export function OpeningDetailPage(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<ViewMode>('detail');
   const [activeVariationIndex, setActiveVariationIndex] = useState(-1);
-  const [activeTrapLineIndex, setActiveTrapLineIndex] = useState(-1);
   const [activeWarningLineIndex, setActiveWarningLineIndex] = useState(-1);
   const [activeNamedTrapId, setActiveNamedTrapId] = useState<string | null>(null);
   const [activeGemId, setActiveGemId] = useState<string | null>(null);
@@ -529,7 +493,6 @@ export function OpeningDetailPage(): JSX.Element {
     // dumped them on the main-line buttons and forced a tab re-select,
     // which silently broke the progression (David 2026-05-29 audit
     // caught this — variation Learn "not rendered" after Watch exit).
-    setActiveTrapLineIndex(-1);
     setActiveWarningLineIndex(-1);
     setActiveMiddlegamePlan(null);
     setQuizPlayFen(null);
@@ -1140,85 +1103,8 @@ export function OpeningDetailPage(): JSX.Element {
   // trap/warning lesson (modern PlayableLinePlayer + hand-written per-beat
   // narration); fall back to legacy WalkthroughMode when no curated lesson
   // exists for the entry's name.
-  if (viewMode === 'trap-walkthrough' && opening.trapLines?.[activeTrapLineIndex]) {
-    const trap = opening.trapLines[activeTrapLineIndex];
-    const curated =
-      opening.id === 'pro-naroditsky-alapin'
-        ? getProNaroditskyAlapinTrapPlayableLine(trap.name)
-        : opening.id === 'pro-naroditsky-kid'
-          ? getProNaroditskyKIDTrapPlayableLine(trap.name)
-          : opening.id === 'pro-naroditsky-caro-kann'
-            ? getProNaroditskyCaroTrapPlayableLine(trap.name)
-            : opening.id === 'pro-naroditsky-kia'
-              ? getProNaroditskyKIATrapPlayableLine(trap.name)
-              : opening.id === 'pro-naroditsky-rossolimo'
-                ? getProNaroditskyRossolimoTrapPlayableLine(trap.name)
-                : opening.id === 'pro-naroditsky-najdorf'
-                  ? getProNaroditskyNajdorfTrapPlayableLine(trap.name)
-                  : opening.id === 'pro-naroditsky-alekhine'
-                    ? getProNaroditskyAlekhineTrapPlayableLine(trap.name)
-                    : opening.id === 'pro-naroditsky-jobava-london'
-                      ? getProNaroditskyJobavaTrapPlayableLine(trap.name)
-                      : opening.id === 'pro-naroditsky-ruy-lopez'
-                        ? getProNaroditskyRuyTrapPlayableLine(trap.name)
-                        : opening.id === 'pro-naroditsky-fantasy-caro'
-                          ? getProNaroditskyFantasyTrapPlayableLine(trap.name)
-                          : null;
-    if (curated) {
-      return (
-        <PlayableLinePlayer
-          line={curated}
-          boardOrientation={opening.color}
-          mode="watch"
-          onComplete={handleExit}
-          onExit={handleExit}
-        />
-      );
-    }
-    return (
-      <WalkthroughMode
-        opening={opening}
-        customLine={trap}
-        subLineKey={`trap-${activeTrapLineIndex}`}
-        onExit={handleExit}
-      />
-    );
-  }
   if (viewMode === 'warning-walkthrough' && opening.warningLines?.[activeWarningLineIndex]) {
     const warn = opening.warningLines[activeWarningLineIndex];
-    const curated =
-      opening.id === 'pro-naroditsky-alapin'
-        ? getProNaroditskyAlapinTrapPlayableLine(warn.name)
-        : opening.id === 'pro-naroditsky-kid'
-          ? getProNaroditskyKIDTrapPlayableLine(warn.name)
-          : opening.id === 'pro-naroditsky-caro-kann'
-            ? getProNaroditskyCaroTrapPlayableLine(warn.name)
-            : opening.id === 'pro-naroditsky-kia'
-              ? getProNaroditskyKIATrapPlayableLine(warn.name)
-              : opening.id === 'pro-naroditsky-rossolimo'
-                ? getProNaroditskyRossolimoTrapPlayableLine(warn.name)
-                : opening.id === 'pro-naroditsky-najdorf'
-                  ? getProNaroditskyNajdorfTrapPlayableLine(warn.name)
-                  : opening.id === 'pro-naroditsky-alekhine'
-                    ? getProNaroditskyAlekhineTrapPlayableLine(warn.name)
-                    : opening.id === 'pro-naroditsky-jobava-london'
-                      ? getProNaroditskyJobavaTrapPlayableLine(warn.name)
-                      : opening.id === 'pro-naroditsky-ruy-lopez'
-                        ? getProNaroditskyRuyTrapPlayableLine(warn.name)
-                        : opening.id === 'pro-naroditsky-fantasy-caro'
-                          ? getProNaroditskyFantasyTrapPlayableLine(warn.name)
-                          : null;
-    if (curated) {
-      return (
-        <PlayableLinePlayer
-          line={curated}
-          boardOrientation={opening.color}
-          mode="watch"
-          onComplete={handleExit}
-          onExit={handleExit}
-        />
-      );
-    }
     return (
       <WalkthroughMode
         opening={opening}
@@ -1266,85 +1152,8 @@ export function OpeningDetailPage(): JSX.Element {
   // Learn mode (trap/warning lines). Same fallback chain as walkthrough:
   // curated pro-rep lesson via PlayableLinePlayer first, legacy DrillMode
   // when no curated lesson exists.
-  if (viewMode === 'trap-learn' && opening.trapLines?.[activeTrapLineIndex]) {
-    const trap = opening.trapLines[activeTrapLineIndex];
-    const curated =
-      opening.id === 'pro-naroditsky-alapin'
-        ? getProNaroditskyAlapinTrapPlayableLine(trap.name)
-        : opening.id === 'pro-naroditsky-kid'
-          ? getProNaroditskyKIDTrapPlayableLine(trap.name)
-          : opening.id === 'pro-naroditsky-caro-kann'
-            ? getProNaroditskyCaroTrapPlayableLine(trap.name)
-            : opening.id === 'pro-naroditsky-kia'
-              ? getProNaroditskyKIATrapPlayableLine(trap.name)
-              : opening.id === 'pro-naroditsky-rossolimo'
-                ? getProNaroditskyRossolimoTrapPlayableLine(trap.name)
-                : opening.id === 'pro-naroditsky-najdorf'
-                  ? getProNaroditskyNajdorfTrapPlayableLine(trap.name)
-                  : opening.id === 'pro-naroditsky-alekhine'
-                    ? getProNaroditskyAlekhineTrapPlayableLine(trap.name)
-                    : opening.id === 'pro-naroditsky-jobava-london'
-                      ? getProNaroditskyJobavaTrapPlayableLine(trap.name)
-                      : opening.id === 'pro-naroditsky-ruy-lopez'
-                        ? getProNaroditskyRuyTrapPlayableLine(trap.name)
-                        : opening.id === 'pro-naroditsky-fantasy-caro'
-                          ? getProNaroditskyFantasyTrapPlayableLine(trap.name)
-                          : null;
-    if (curated) {
-      return (
-        <PlayableLinePlayer
-          line={curated}
-          boardOrientation={opening.color}
-          mode="learn"
-          onComplete={handleComplete}
-          onExit={handleExit}
-        />
-      );
-    }
-    return (
-      <DrillMode
-        opening={opening}
-        customLine={trap}
-        onComplete={handleComplete}
-        onExit={handleExit}
-      />
-    );
-  }
   if (viewMode === 'warning-learn' && opening.warningLines?.[activeWarningLineIndex]) {
     const warn = opening.warningLines[activeWarningLineIndex];
-    const curated =
-      opening.id === 'pro-naroditsky-alapin'
-        ? getProNaroditskyAlapinTrapPlayableLine(warn.name)
-        : opening.id === 'pro-naroditsky-kid'
-          ? getProNaroditskyKIDTrapPlayableLine(warn.name)
-          : opening.id === 'pro-naroditsky-caro-kann'
-            ? getProNaroditskyCaroTrapPlayableLine(warn.name)
-            : opening.id === 'pro-naroditsky-kia'
-              ? getProNaroditskyKIATrapPlayableLine(warn.name)
-              : opening.id === 'pro-naroditsky-rossolimo'
-                ? getProNaroditskyRossolimoTrapPlayableLine(warn.name)
-                : opening.id === 'pro-naroditsky-najdorf'
-                  ? getProNaroditskyNajdorfTrapPlayableLine(warn.name)
-                  : opening.id === 'pro-naroditsky-alekhine'
-                    ? getProNaroditskyAlekhineTrapPlayableLine(warn.name)
-                    : opening.id === 'pro-naroditsky-jobava-london'
-                      ? getProNaroditskyJobavaTrapPlayableLine(warn.name)
-                      : opening.id === 'pro-naroditsky-ruy-lopez'
-                        ? getProNaroditskyRuyTrapPlayableLine(warn.name)
-                        : opening.id === 'pro-naroditsky-fantasy-caro'
-                          ? getProNaroditskyFantasyTrapPlayableLine(warn.name)
-                          : null;
-    if (curated) {
-      return (
-        <PlayableLinePlayer
-          line={curated}
-          boardOrientation={opening.color}
-          mode="learn"
-          onComplete={handleComplete}
-          onExit={handleExit}
-        />
-      );
-    }
     return (
       <DrillMode
         opening={opening}
@@ -1382,16 +1191,6 @@ export function OpeningDetailPage(): JSX.Element {
   }
 
   // Practice mode (trap/warning lines)
-  if (viewMode === 'trap-practice' && opening.trapLines?.[activeTrapLineIndex]) {
-    return (
-      <PracticeMode
-        opening={opening}
-        customLine={opening.trapLines[activeTrapLineIndex]}
-        onComplete={handleComplete}
-        onExit={handleExit}
-      />
-    );
-  }
   if (viewMode === 'warning-practice' && opening.warningLines?.[activeWarningLineIndex]) {
     return (
       <PracticeMode
@@ -1426,15 +1225,6 @@ export function OpeningDetailPage(): JSX.Element {
   }
 
   // Play mode (trap/warning lines)
-  if (viewMode === 'trap-play' && opening.trapLines?.[activeTrapLineIndex]) {
-    return (
-      <OpeningPlayMode
-        opening={opening}
-        customLine={opening.trapLines[activeTrapLineIndex]}
-        onExit={handleExit}
-      />
-    );
-  }
   if (viewMode === 'warning-play' && opening.warningLines?.[activeWarningLineIndex]) {
     return (
       <OpeningPlayMode
@@ -1446,17 +1236,6 @@ export function OpeningDetailPage(): JSX.Element {
   }
 
   // Train mode (traps or warnings)
-  if (viewMode === 'train-traps' && opening.trapLines && opening.trapLines.length > 0) {
-    return (
-      <TrainMode
-        opening={opening}
-        lines={opening.trapLines}
-        sectionLabel="Traps & Pitfalls"
-        onExit={handleExit}
-      />
-    );
-  }
-
   if (viewMode === 'train-warnings' && opening.warningLines && opening.warningLines.length > 0) {
     return (
       <TrainMode

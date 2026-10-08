@@ -39,7 +39,7 @@ export const PRO_AMAN_RETI_LESSON: LessonScript = {
       say: "White completes development simply — e3 to free the bishop, then Nc3 to add a piece to the centre. No tricks, just principled development with a small, durable edge.",
       sayShort: 'Nc3 — sound development.' }),
     b({ id: 'oo', moves: 'Nf3 d5 d4 Nf6 c4 e6 e3 Be7 Nc3 O-O Bd3 b6', highlights: [H('b6'), H('b7')],
-      say: "Both sides castle and Black fianchettoes with …b6 and …Bb7. White's bishop is well placed on d3 and the centre is firmly held. The plan now is to keep the tension, finish development, and look for the right moment to break.",
+      say: "Black castles and fianchettoes with …b6 and …Bb7. White's bishop is well placed on d3 and the centre is firmly held. The plan now is to keep the tension, finish development, and look for the right moment to break.",
       sayShort: 'Bd3 — bishop eyes the king.' }),
     b({ id: 'middlegame', moves: 'Nf3 d5 d4 Nf6 c4 e6 e3 Be7 Nc3 O-O Bd3 b6 cxd5 exd5 O-O', highlights: [H('d5'), H('c1')],
       say: "White resolves the centre with cxd5, leaving Black with a slightly loose isolated-ish d-pawn to watch, then castles into a healthy middlegame. White has the classic small edge: better development, a target on d5, and the easy plan of piling on it with the rooks and minor pieces. A sound, comfortable position built on good habits.",

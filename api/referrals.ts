@@ -25,7 +25,6 @@ const BYDEVICE_KEY = (device: string): string => `ref:bydevice:${device}`;
 const CLAIMED_KEY = (device: string): string => `ref:claimed:${device}`;
 const CREDITS_KEY = (device: string): string => `ref:credits:${device}`;
 const RECRUITS_KEY = (device: string): string => `ref:recruits:${device}`;
-const REVIEW_KEY = (device: string): string => `ref:review:${device}`;
 
 interface ClaimRec { referrer: string; ts: number; qualified: boolean }
 
@@ -201,15 +200,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
           store.incr(RECRUITS_KEY(rec.referrer)),
         ]);
         res.status(200).json({ ok: true, granted: true, credits: selfCredits });
-        return;
-      }
-
-      if (action === 'reviewReward') {
-        // One-time per device.
-        const wrote = await store.setIfAbsent(REVIEW_KEY(device), String(Date.now()));
-        if (!wrote) { res.status(200).json({ ok: true, granted: false, reason: 'already-rewarded', credits: await readInt(store, CREDITS_KEY(device)) }); return; }
-        const credits = await store.incr(CREDITS_KEY(device));
-        res.status(200).json({ ok: true, granted: true, credits });
         return;
       }
 

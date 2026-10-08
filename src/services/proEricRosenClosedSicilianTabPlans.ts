@@ -3,5 +3,5 @@
 // -endgame suffix); variation tabs resolve to [] (no dedicated plan yet).
 export function getProEricRosenClosedSicilianTabPlanIds(openingId: string, tabKey: string): string[] | null {
   if (openingId !== 'pro-ericrosen-closed-sicilian') return null;
-  return tabKey.toLowerCase() === 'main' ? ['mp-proericclosedsic-f5storm', 'mp-proericclosedsic-endgame'] : [];
+  return tabKey.toLowerCase() === 'main' ? ['mp-proericclosedsic-f5storm'] : [];
 }

@@ -35,7 +35,7 @@ export const ANTI_MODERN_150_LESSON: LessonScript = {
       sayShort: "O-O-O, Nd5 — opposite wings, outpost.",
       highlights: [H('d5', KEY)] }),
     b({ id: 'm150-4', moves: 'e4 g6 d4 Bg7 Nc3 d6 Be3 a6 Qd2 Nf6 f3 O-O O-O-O Nc6 Nd5 a5 Nxf6+ exf6',
-      say: "Nxf6+ trades on exactly the square that hurts: after …exf6, Black's kingside pawns shatter into doubled, isolated f-pawns and the e-file swings open toward their king. The shelter that was supposed to keep them safe is now a ruin. Every single trade has fed your attack.",
+      say: "Nxf6+ trades on exactly the square that hurts: after …exf6, Black's kingside pawns shatter into doubled f-pawns and the e-file swings open toward their king. The shelter that was supposed to keep them safe is now a ruin. Every single trade has fed your attack.",
       sayShort: "Nxf6+ — shatter the kingside pawns.",
       highlights: [H('f6', ATK), H('f7', SOFT)] }),
     b({ id: 'm150-5', moves: 'e4 g6 d4 Bg7 Nc3 d6 Be3 a6 Qd2 Nf6 f3 O-O O-O-O Nc6 Nd5 a5 Nxf6+ exf6 h4 f5 h5 fxe4',

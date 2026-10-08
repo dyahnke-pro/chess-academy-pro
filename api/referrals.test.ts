@@ -93,12 +93,4 @@ describe('api/referrals — codes, claim, qualify, review', () => {
     expect((await get('refNOREF_1')).credits).toBe(0);
   });
 
-  it('the review reward grants exactly once per device', async () => {
-    const d = 'refREVIEW_1';
-    const first = await post({ action: 'reviewReward', device: d });
-    expect(first.json).toMatchObject({ granted: true, credits: 1 });
-    const second = await post({ action: 'reviewReward', device: d });
-    expect(second.json.granted).toBe(false);
-    expect((await get(d)).credits).toBe(1);
-  });
 });

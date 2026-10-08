@@ -68,7 +68,7 @@ export const PRO_GOTHAMCHESS_FRENCH_DEFENSE_LESSON: LessonScript = {
       arrows: [{ from: 'g4', to: 'f3', color: VIS }],
       highlights: [{ square: 'g4', color: KEY }, { square: 'f3', color: SOFT }],
       say:
-        "White completes the fianchetto; you develop with Bg4, pinning the f3-knight to the queen. Here's your middlegame: a powerful centre, both bishops aimed at White's position, and the open g-file ready for a rook to come crashing down once you tuck your king away on the queenside. You're a touch worse on the engine's cold count — but this is rich, double-edged, attacking chess, and the player who understands the structure outplays the one who memorised a line. That's exactly the fight this repertoire wants from the French.",
+        "White completes the fianchetto; you develop with Bg4, pinning the f3-knight to the queen. Here's your middlegame: a powerful centre, both bishops aimed at White's position, and the half-open g-file ready for a rook to come crashing down once you tuck your king away on the queenside. You're a touch worse on the engine's cold count — but this is rich, double-edged, attacking chess, and the player who understands the structure outplays the one who memorised a line. That's exactly the fight this repertoire wants from the French.",
       sayShort: 'Bg4 — pin f3, rooks to the g-file.',
     }),
   ],

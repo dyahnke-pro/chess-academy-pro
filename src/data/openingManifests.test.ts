@@ -37,7 +37,7 @@ interface ManifestEntry {
   keyIdeas: number;
 }
 
-const repertoire = repertoireRaw as OpeningRecord[];
+const repertoire = repertoireRaw as unknown as OpeningRecord[];
 const middlegamePlans = middlegamePlansRaw as MiddlegamePlan[];
 const modelGames = modelGamesRaw as ModelGameLike[];
 

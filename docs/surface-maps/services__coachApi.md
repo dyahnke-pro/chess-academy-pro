@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6957 lines · 40 exports · 53 importers · 59 tests · 19 audits**
+**6968 lines · 40 exports · 53 importers · 59 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -273,7 +273,7 @@
 - `src/services/coachApi.speakableFacts.test.ts:52`
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
-### `voiceFacts` (function) — 37 call sites
+### `voiceFacts` (function) — 39 call sites
 - `scripts/audit-kid-static.mjs:53`
 - `scripts/audit-kid-static.mjs:64`
 - `src/components/Coach/CoachGameReview.tsx:1645`
@@ -308,6 +308,8 @@
 - `src/services/voiceFacts.perspective.test.ts:88`
 - `src/services/voiceFacts.perspective.test.ts:97`
 - `src/services/voiceFacts.perspective.test.ts:104`
+- `src/services/voiceFacts.perspective.test.ts:119`
+- `src/services/voiceFacts.perspective.test.ts:128`
 - `src/services/voiceFactsFidelity.test.ts:74`
 - `src/services/voiceFactsFidelity.test.ts:79`
 - `src/test/kidIsolation.gate.test.ts:36`

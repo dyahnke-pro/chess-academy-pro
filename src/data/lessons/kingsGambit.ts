@@ -120,7 +120,7 @@ export const KINGS_GAMBIT_LESSON: LessonScript = {
       moves: M,
       arrows: [{ from: 'f4', to: 'h6', color: ATK }],
       highlights: [{ square: 'f4', color: KEY }, { square: 'd5', color: SOFT }],
-      say: "The play flows: Nxc4 Nc3 Nb6 d5 — the centre rolls forward and clamps the position — Bg4 hits nothing for long, and White rounds it off with Bxf4, finally scooping the gambit pawn back with the bishop landing on a wide-open diagonal. Count the score: material is level, but White's bishop now sweeps the c1-h6 diagonal toward Black's king, the rook stands behind the f-file, the pawns own the centre, and Black is still untangling. The King's Gambit promised an attack for a pawn; the Modern main line delivers a lasting initiative for nothing.",
+      say: "The play flows: Nxc4 Nc3 Nb6 d5 — the centre rolls forward and clamps the position — Bg4 hits nothing for long, and White rounds it off with Bxf4, finally scooping the gambit pawn back with the bishop landing on a wide-open diagonal. Count the score: White is still a pawn down, but White's bishop now sweeps the c1-h6 diagonal toward Black's king, the rook stands behind the f-file, the pawns own the centre, and Black is still untangling. The King's Gambit promised an attack for a pawn; the Modern main line delivers a lasting initiative for nothing.",
       sayShort: 'Bxf4 — pawn recovered, initiative kept for free.',
     },
     {

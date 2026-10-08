@@ -43,7 +43,7 @@ const GAMBIT: LessonScript = {
       arrows: [{ from: 'd1', to: 'f3', color: VIS }],
       highlights: [{ square: 'e4', color: KEY }, { square: 'f7', color: SOFT }],
       say:
-        "You take on e5 and the knight grabs e4; now the heart of the line — Qf3. The queen attacks the e4-knight and leans down the open f-file toward f7 at the same time. Black is forced to react, and every reply hands you the initiative.",
+        "You take on e5 and the knight grabs e4; now the heart of the line — Qf3. The queen attacks the e4-knight and leans down the half-open f-file toward f7 at the same time. Black is forced to react, and every reply hands you the initiative.",
       sayShort: 'Qf3 — hit the knight and f7.',
     }),
     b({
@@ -58,7 +58,7 @@ const GAMBIT: LessonScript = {
     b({
       id: 'qg3-nf3',
       moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 bxc3 c5 Qg3 Nc6 Nf3',
-      arrows: [{ from: 'f3', to: 'g3', color: VIS }],
+      arrows: [],
       highlights: [{ square: 'g7', color: KEY }],
       say:
         "Black grabs space with c5; you swing the queen to g3, eyeing g7 and supporting the e5-pawn, then develop the knight to f3. Your whole army flows toward Black's kingside while they're still sorting out their pieces.",

@@ -20,7 +20,7 @@ export const PRO_SAMAYRAINA_CARO_WHITE_LESSON: LessonScript = {
       sayShort: 'c4 — the Panov, hit d5.' }),
     b({ id: 'nc3', moves: 'e4 c6 c4 d5 exd5 cxd5 d4 Nf6 Nc3 Nc6 Bg5',
       arrows: [A('c3', 'd5')], highlights: [{ square: 'g5', color: KEY }, { square: 'd5', color: SOFT }],
-      say: "You develop Nc3 and Bg5, piling pressure on the d5-pawn and pinning the f6-knight that defends it. This is the heart of the Panov: White presses the isolated-queen's-pawn structure while Black must defend precisely or get squeezed.",
+      say: "You develop Nc3 and Bg5, piling pressure on the d5-pawn and pressuring the f6-knight that defends it. This is the heart of the Panov: White presses the isolated-queen's-pawn structure while Black must defend precisely or get squeezed.",
       sayShort: 'Nc3, Bg5 — pressure d5.' }),
     b({ id: 'cxd5', moves: 'e4 c6 c4 d5 exd5 cxd5 d4 Nf6 Nc3 Nc6 Bg5 e6 Nf3 Be7 cxd5 Nxd5',
       arrows: [], highlights: [{ square: 'd5', color: KEY }],

@@ -22,7 +22,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 ---
 
 ## 000e. WO-UNITY-01 — one decider per question, Review keeps its identity (David 2026-10-07: "total unity wherever possible … step one is unification")
-- 🔴 U1 one turning point · U2 grade word from its cost · U3 one reason per move · U4 one engine read per position · U5 one plan thread · U6 one claim across seats · U7 question before alert (Learn) · U8 one withholding rule (Review) · U9 one per-game said-once ledger · U10 decider orders the ply — closes ~25 of the 52 walk errors; plan `docs/plans/2026-10-07-unity-step-one.md`; waiting on go
+- ✅ U1–U10 all landed 2026-10-07/08 (status in `docs/plans/2026-10-07-unity-step-one.md`) · 🔴 step 6: walk Learn AND Review on fresh games, every claim counted, then the ~27 non-unity errors by cause · 🟠 U10 lead order unconfirmed on a walk
 
 ## 000d. WO-INSIGHT-01 — the coach's insight, every section (David 2026-10-05: "This app is missing insight")
 - ✅ A `moveInsight` computer: positionAsk (defend / press / reinforce / improve, never names the move), moveMissed, doubleAttack, mechanismContrast, walkableLine · ✅ B wired: Learn drills (wrong move + hint), Learn Hint, chat compare (both lines), review (compareTwoMoves mechanism), Tactics + My Mistakes + Setup Trainer wrong tries, How to Think assess verdict, Play Why · ✅ C Walk button on every spoken line (`useLineWalk` + `WalkLineButton`, Learn moved onto it) · ✅ D drills: engine judges off-key moves (`judgeAlternative`), no closing line, Next button, typed next/skip, speech queue order · ✅ E hub tiles start their lesson (cancelled timer) · 🟠 David's hand walk on device · 🟡 more mechanisms (pin, discovered attack, overload) in `mechanismContrast`

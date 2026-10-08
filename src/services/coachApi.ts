@@ -82,6 +82,7 @@ import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpe
 import { fuzzyMatchOpening } from './openingFuzzyMatcher';
 import { containmentCheck, containmentAudit } from './voiceContainment';
 import { perspectiveRule, type PerspectiveMode } from './perspectiveRule';
+import { translationSystemPrompt } from './translationPrompt';
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
 import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights, getTimeTroubleProfile, getLastGameResult, getLastGameErrors, getRecentGamesErrors, getPlayerStyleProfile } from './gameInsightsService';
@@ -2936,6 +2937,10 @@ export async function voiceFacts(
      *  knows the colour passes it so "your" resolves, and a surface where the
      *  coach IS the opponent (Play, Learn guided play) says so. */
     perspective?: { mode: PerspectiveMode; studentSide?: 'white' | 'black' };
+    /** The text is a FINISHED line to translate, not facts to phrase: it is
+     *  translated faithfully and never re-seated (`translationSystemPrompt`).
+     *  Only meaningful with a non-English target language. */
+    translateOnly?: boolean;
   } = {},
 ): Promise<string | null> {
   // Lean-on-raw short-circuit — the computed facts ARE the answer; don't spend
@@ -3064,9 +3069,15 @@ export async function voiceFacts(
   // appended, never inlined, so a new register cannot ship without it and a
   // hand-written copy cannot drift (perspectiveRule.test.ts).
   const perspective = ' ' + perspectiveRule(opts.perspective?.mode ?? 'student', opts.perspective?.studentSide);
-  const system = systemBase + perspective + langInstruction;
+  // A finished line is TRANSLATED, never re-phrased: the coach prompt's
+  // perspective rule would make the model re-decide whose piece each word
+  // names, and with no seat in hand it guesses ("your knight" for Black's).
+  const translateOnly = translating && !!opts.translateOnly;
+  const system = translateOnly && targetLanguage
+    ? translationSystemPrompt(targetLanguage)
+    : systemBase + perspective + langInstruction;
   const user =
-    `FACTS (say these, add nothing):\n${facts}` +
+    (translateOnly ? `TEXT TO TRANSLATE:\n${facts}` : `FACTS (say these, add nothing):\n${facts}`) +
     // Directives reach the model here and NOWHERE else. They are never part of
     // `facts`, so no fallback in this function can ever speak them.
     (opts.directives?.trim() ? `\n\nHOW TO SAY IT (instructions for you — never speak these):\n${opts.directives.trim()}` : '') +

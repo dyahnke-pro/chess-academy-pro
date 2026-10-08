@@ -218,7 +218,7 @@ async function modelPhrase(text: string, languageName: string): Promise<string |
   try {
     // Lazy: the transcript must not pull the provider SDKs to render English.
     const { voiceFacts } = await import('./coachApi');
-    const out = await voiceFacts(text, { targetLanguage: languageName, intent: 'spoken-narration' });
+    const out = await voiceFacts(text, { targetLanguage: languageName, intent: 'spoken-narration', translateOnly: true });
     const said = out?.trim();
     if (!said) return null;
     if (modelCache.size >= MAX_CACHED) modelCache.clear();

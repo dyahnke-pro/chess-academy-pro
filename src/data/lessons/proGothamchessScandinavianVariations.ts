@@ -44,7 +44,7 @@ const NF6: LessonScript = {
       say: "The modern Scandinavian — instead of recapturing with the queen, you develop …Nf6, planning to win the d5-pawn back with a piece. This keeps the queen home and leads to a fluid, fianchetto-style game where Black is solid and active.",
       sayShort: 'Nf6 — regain d5 with a piece.' }),
     b({ id: 'fianchetto', moves: 'e4 d5 exd5 Nf6 d4 Nxd5 c4 Nb6 Nf3 g6 Nc3 Bg7 Be3 O-O Be2 Nc6',
-      arrows: [{ from: 'f8', to: 'g7', color: VIS }], highlights: [{ square: 'g7', color: KEY }, { square: 'd4', color: SOFT }],
+      arrows: [], highlights: [{ square: 'g7', color: KEY }, { square: 'd4', color: SOFT }],
       say: "You round up the pawn, get nudged to b6, and then fianchetto — …g6 and …Bg7 — aiming the bishop straight down the long diagonal at White's big centre. With …Nc6 added, you're pressuring the d4-pawn from two directions. You invited the big centre so you could attack it.",
       sayShort: 'Bg7 + …Nc6 — pressure d4.' }),
     b({ id: 'mg-e5', moves: 'e4 d5 exd5 Nf6 d4 Nxd5 c4 Nb6 Nf3 g6 Nc3 Bg7 Be3 O-O Be2 Nc6 O-O e5',

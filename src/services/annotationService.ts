@@ -149,10 +149,6 @@ const LEGACY_ID_TO_BASE: Record<string, string> = {
   // Gambits-list IDs (src/data/gambits.json) ────────────────────────
   // (Gambits use a `gambit-` prefix in their record IDs; the suffix
   // after that prefix is the canonical gambit name.)
-  'gambit-kings-gambit': 'king-s-gambit',
-  'gambit-evans-gambit': 'italian-game-evans-gambit',
-  'gambit-budapest-gambit': 'indian-defense-budapest-defense',
-  'gambit-benko-gambit': 'benko-gambit-accepted-central-storming-variation',
   'scotch-gambit': 'scotch-game-scotch-gambit',
   'vienna-gambit': 'vienna-game-vienna-gambit',
   'smith-morra-gambit': 'sicilian-defense-smith-morra-gambit',

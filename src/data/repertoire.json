@@ -396,7 +396,7 @@
     "explanation": "Against 2...Nc6, the Vienna Gambit with f4 is a true gambit: Black can grab and hold with ...g5, and the engine gives Black a small pull with perfect play — say so honestly. What White gets is everything else: after h4 h6, the calm Qd3 and Ng1! regroup (the knight re-routes as the g-pawns crash forward) leaves Black's kingside full of holes, the f-file half-open, and every practical game a fight on White's terms. A sharp, honest weapon — not a refutation.",
     "keyIdeas": [
      "Against 2…Nc6 White has TWO completely different paths: calm Italian-Vienna with 3.Bc4, or sharp 3.f4 leading to the historical sacrifices.",
-     "The 3.f4 path opens the doorway to Hamppe-Allgaier (Nxf7), Hamppe-Muzio (O-O sacrifice), Pierce Gambit (d4), and Steinitz's king-walk.",
+     "The 3.f4 path opens the doorway to Hamppe-Allgaier (Nxf7), Hamppe-Muzio (O-O sacrifice), and Steinitz's king-walk (d4).",
      "In the Bc4 line, the Bg5 pin + Nd5 fork (on Nf6 + c7) is the standard tactical motif — exactly the same as the Italian Game.",
      "2…Nc6 is the most common Black reply at amateur level (39% of replies) — knowing both paths is essential."
     ]
@@ -857,13 +857,6 @@
     "name": "Premature ...f5 Without Preparation",
     "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Be6 Be2 Bg5 O-O f5 exf5 Bxf5 Bg4 Nd4 Bxf5 Nxf5 Qg4 Nd4 Nce3",
     "explanation": "While ...f5 is Black's key break, playing it without proper preparation can backfire spectacularly. White responds with Bg4 challenging the bishop, and after exchanges the queen lands on g4 with strong pressure while Nce3 reinforcement dominates the light squares. The ...f5 break requires first playing ...Bg5 to vacate f6 and ...Rb8 for queenside play before launching forward."
-   },
-   {
-    "name": "Premature d5 Push",
-    "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Nf3 d5 exd5 Nxd5 Nxd5 Qxd5 Qxd5",
-    "explanation": "6...d5? overextends; White's exchanges leave Black with a shattered center.",
-    "source": "authored-verified",
-    "verifiedEval": "-720cp"
    }
   ]
  },
@@ -1094,14 +1087,7 @@
    }
   ],
   "trapLines": [],
-  "warningLines": [
-   {
-    "name": "Advance Bishop Exchange Danger",
-    "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Nd7 O-O Be7 Nh4 Bg6 Nxg6 hxg6 c3 c5 Nd2 Ngf6 Nf3 Qb6 dxc5 Nxc5",
-    "explanation": "In the Short/Advance Variation, White's Nh4 exchanges off Black's prized light-squared bishop — the very piece that distinguishes the Caro-Kann from the French. After Nxg6 hxg6, Black gets a half-open h-file but loses the bishop advantage permanently. Black must prevent this by playing ...c5 early before White gets Nh4 in, or by rerouting the bishop to h7 where it remains safe. Losing this bishop turns the position into a worse version of the French Defence.",
-    "shortExplanation": "Nh4 exchanges off the prized light-squared bishop, turning Caro-Kann into a worse French. Prevent with early ...c5 or ...Bh7."
-   }
-  ]
+  "warningLines": []
  },
  {
   "id": "pirc-defence",
@@ -1489,23 +1475,7 @@
     "explanation": "The Kaufmann Attack features Nc3 followed by Bf4, aiming for aggressive development with opposite-side castling. White builds pressure along the d-file and aims for a kingside attack, but Black's solid development with ...Be7, ...Be6, and ...O-O-O neutralizes the threats. The knight exchange on d4 simplifies the position, and after ...Bf6, Black's bishop controls the key long diagonal. Both sides castle queenside leading to a complex middlegame where Black's structural solidity provides a safe foundation for counterplay."
    }
   ],
-  "trapLines": [
-   {
-    "name": "Nxf7 Refutation",
-    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 Ng4 O-O Qh4 h3 Nxf2 Rxf2 Bxf2+ Kh1 Bxh3",
-    "explanation": "If White plays the rare Nxc6 line instead of the main 3.Nxe5, Black can build a devastating kingside attack. The ...Bc5 and ...Ng4 combination targets f2 with lethal force, and after ...Nxf2 Rxf2 Bxf2+, the king is exposed. The queen invades to e1 with check, and Black's pieces coordinate for a winning attack. White's extra pawn is irrelevant when the king is under constant fire from Black's bishops and queen."
-   },
-   {
-    "name": "Wrong Move Order Punishment",
-    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nxe4 Qe2 Qe7 Qxe4 d6 d4 dxe5 dxe5 Nc6 Bf4 Qb4+ Nc3 Qxb2 Nd5 Qxa1+",
-    "explanation": "If Black plays the wrong order with 3...Nxe4 instead of 3...d6, White gets Qe2 pinning the knight against the king. However, Black can still salvage the position by heading for the endgame with ...Qe7. After the queen trade and pawn exchanges, the resulting endgame is tricky but playable. The key is not to panic at the Qe2 pin but to trade queens and rely on the structural balance to achieve a drawable position."
-   },
-   {
-    "name": "Steinitz d4 Counter",
-    "pgn": "e4 e5 Nf3 Nf6 d4 Nxe4 Bd3 d5 Nxe5 Nd7 Nxd7 Bxd7 O-O Bd6 c4 c6 Nc3 Nxc3 bxc3 O-O Qc2 Re8 Re1 Rxe1+",
-    "explanation": "In the Steinitz Variation, Black can counter White's d4 with solid central play. After ...Nxe4 and ...d5, the position is symmetric but Black's bishop on d6 is actively placed. The knight exchange on c3 doubles White's pawns but opens the b-file for Black's counterplay. The resulting endgame is comfortable for Black with the bishop pair and pressure along the c-file. White's doubled c-pawns are a permanent structural weakness that Black can target."
-   }
-  ],
+  "trapLines": [],
   "warningLines": []
  },
  {
@@ -2283,7 +2253,7 @@
    {
     "name": "Premature Center Grab",
     "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 c5 Ne2 cxd4 cxd4 Bxd4 Nxd4 Qxd4 Bxf7+ Kxf7 Qxd4",
-    "explanation": "Snatching on c3 and grabbing the rook with ...Bxa1? lets White trap the bishop in the corner with a winning attack.",
+    "explanation": "Grabbing in the centre with …cxd4 cxd4 Bxd4 Nxd4 Qxd4?? drops the queen: Bxf7+! Kxf7 Qxd4 — White's queen was attacking d4 all along, and the bishop check comes first.",
     "source": "authored-verified",
     "verifiedEval": "-653cp"
    }
@@ -2612,15 +2582,7 @@
     "verifiedEval": "mate (white mated)"
    }
   ],
-  "warningLines": [
-   {
-    "name": "Fajarowicz Overreach",
-    "pgn": "d4 Nf6 c4 e5 dxe5 Ne4 Nf3 Nc6 Nbd2 Nxd2 Bxd2 Qe7 a3 Qxe5 Nxe5 Nxe5",
-    "explanation": "3...Ne4 (Fajarowicz) is greedy. After accurate development White consolidates the extra pawn and Black has nothing.",
-    "source": "authored-verified",
-    "verifiedEval": "-619cp"
-   }
-  ],
+  "warningLines": [],
   "isGambit": true
  },
  {
@@ -3103,15 +3065,7 @@
     "explanation": "When Black tries the tricky ...d3 counter-gambit to disrupt White's center, White calmly recaptures with the bishop and develops with tempo via Ba3 and Nbd2. The knight reroutes to e4 establishing a powerful outpost, then jumps to g5 creating dual threats. After Bd6 seizes the dark squares and forces the exchange of Black's rook, White emerges with superior piece activity and a lasting initiative against Black's weakened structure."
    }
   ],
-  "warningLines": [
-   {
-    "name": "Declining Into Passivity",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bb6 a4 a6 a5 Ba7 b5 axb5 Bxb5 Nge7 O-O O-O d4",
-    "explanation": "Declining with 4...Bb6 and drifting lets White's a4-a5 harass the bishop and seize a dominant center.",
-    "source": "authored-verified",
-    "verifiedEval": "-183cp"
-   }
-  ],
+  "warningLines": [],
   "isGambit": true
  },
  {

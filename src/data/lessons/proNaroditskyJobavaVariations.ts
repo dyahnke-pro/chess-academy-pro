@@ -45,7 +45,7 @@ const E6_FRENCH: LessonScript = {
     b({
       id: 'e6-bf4', moves: 'd4 d5 Nc3 e6 Bf4',
       highlights: [{ square: 'f4', color: KEY }],
-      say: "Bf4 — the bishop on its natural square. Unlike the regular London (Bd2/Be3), the Bf4 is active from move 3, controlling the long diagonal and the c7-square. Black's natural development is now constrained.",
+      say: "Bf4 — the bishop on its natural square, active from move 3 on the h2–b8 diagonal and eyeing the c7-square. Black's natural development is now constrained.",
       sayShort: 'Bf4 — active bishop.',
     }),
     b({
@@ -57,7 +57,7 @@ const E6_FRENCH: LessonScript = {
     b({
       id: 'e6-bd6', moves: 'd4 d5 Nc3 e6 Bf4 Nf6 e3 Bd6',
       highlights: [{ square: 'd6', color: KEY }, { square: 'f4', color: SOFT }],
-      say: "…Bd6 — Black offers the bishop trade. You have a choice: accept (Bxd6 cxd6, opens the c-file for Black) or decline (Bg3, keeping the bishop active). Most often you trade — the open c-file is fine for your developed Nc3.",
+      say: "…Bd6 — Black offers the bishop trade. You have a choice: accept (Bxd6 cxd6, opens the c-file for Black) or decline (Bg3, keeping the bishop active). Most often you trade — after …cxd6 the half-open c-file is fine for your developed Nc3.",
       sayShort: '…Bd6 — bishop trade offer.',
     }),
     b({

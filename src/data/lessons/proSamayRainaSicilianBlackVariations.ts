@@ -40,12 +40,12 @@ const VS_ALAPIN: LessonScript = {
       sayShort: '…d5 — strike the centre.' }),
     b({ id: 'bg4', moves: 'e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 Bg4',
       arrows: [A('g4', 'f3')], highlights: [{ square: 'g4', color: KEY }, { square: 'f3', color: KEY }],
-      say: "You recapture with Qxd5, develop Nf6, and pin the f3-knight with Bg4. Every move develops with purpose, and Black already eyes White's isolated d-pawn as the long-term target.",
+      say: "You recapture with Qxd5, develop Nf6, and pin the f3-knight with Bg4. Every move develops with purpose, and Black already eyes White's d4-pawn, isolated once …cxd4 cxd4 comes, as the long-term target.",
       sayShort: '…Bg4 — pin the f3-knight.' }),
     b({ id: 'plan', moves: 'e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 Bg4 Be2 e6 O-O Be7 h3 Bh5',
       highlights: [{ square: 'd4', color: KEY }, { square: 'h5', color: SOFT }],
-      say: "The plan: complete development with e6 and Be7, keep the pin alive by retreating the bishop to h5, and play against the isolated d-pawn. A comfortable, equal game where Black holds the clearer targets.",
-      sayShort: 'Plan: …e6, …Be7, target the IQP.' }),
+      say: "The plan: complete development with e6 and Be7, keep the pin alive by retreating the bishop to h5, and play against the d4-pawn, isolated once …cxd4 cxd4 comes. A comfortable, equal game where Black holds the clearer targets.",
+      sayShort: 'Plan: …e6, …Be7, target the d4-pawn.' }),
   ],
 };
 

@@ -67,7 +67,7 @@ export const ANTI_PIRC_BATTERY_LESSON: LessonScript = {
       sayShort: "Castle long — the d5 wedge holds.",
       highlights: [H('c1', SOFT), H('d5', SOFT), H('e7', RED)] }),
     b({ id: 'apb-8', moves: 'e4 d6 d4 Nf6 Nc3 g6 Nf3 Bg7 Be3 O-O Qd2 Nc6 d5 Nb8 Bh6 c6 Bxg7 Kxg7 a3 Nbd7 O-O-O cxd5 exd5 Nb6 Re1 Bd7 Ng5 Rc8',
-      say: "Into the middlegame: rook to the open e-file, and the knight leaps to g5 — suddenly f7 and h7 both need an answer, with the e7-pawn stuck on the open file behind them. The engine keeps White comfortably on top here with best play from both sides. From this position the plans are simple: pile on e7, probe f7, and let the space advantage grind. That's the whole system — battery, squeeze, trade, prophylaxis, pressure.",
+      say: "Into the middlegame: rook to the half-open e-file, and the knight leaps to g5 — suddenly f7 and h7 both need an answer, with the e7-pawn stuck on the open file behind them. The engine keeps White comfortably on top here with best play from both sides. From this position the plans are simple: pile on e7, probe f7, and let the space advantage grind. That's the whole system — battery, squeeze, trade, prophylaxis, pressure.",
       sayShort: "Ng5 — f7 and h7 both burn.",
       arrows: [A('g5', 'f7'), A('g5', 'h7'), A('e1', 'e7')],
       highlights: [H('g5', SOFT), H('f7', RED), H('h7', RED), H('e7', RED)] }),

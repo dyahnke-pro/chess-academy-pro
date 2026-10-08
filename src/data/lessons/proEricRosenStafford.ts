@@ -106,8 +106,8 @@ export const PRO_ERICROSEN_STAFFORD_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 c3 Ng4 d4 Qh4 g3 Qf6',
       arrows: [A('f6', 'f2'), A('c5', 'f2'), A('g4', 'f2')],
       highlights: [{ square: 'f6', color: KEY }, { square: 'f2', color: KEY }],
-      say: "White blocks the h4-square with g3, so the queen redeploys to f6 — and the pressure on f2 does not let up. Bishop, knight and queen still triangulate on that one square while White's king is stranded in the centre, unable to castle into safety. White is up a pawn and completely tied down. That is the trade the Stafford offers.",
-      sayShort: '…Qf6 — keep the clamp on f2.',
+      say: "White blocks the h4-square with g3, so the queen redeploys to f6, keeping the knight and queen trained on f2. But the d4-pawn now shuts the c5-bishop out, and the engine gives White a big edge — about two and a half pawns. This is where the Stafford runs out of steam against accurate play: it is a weapon for surprise, not a sound gambit.",
+      sayShort: '…Qf6 — f2 pressure, but White is better.',
     }),
     b({
       id: 'plan',

@@ -31,7 +31,7 @@ export const PRO_ERICROSEN_SCANDINAVIAN_LESSON: LessonScript = {
       sayShort: '…Bxe2, …Qxd5 — pawn back, safe queen.' }),
     b({ id: 'develop', moves: 'e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5 Nf3 Nc6 O-O O-O-O',
       arrows: [], highlights: [{ square: 'c6', color: KEY }, { square: 'c8', color: SOFT }],
-      say: "…Nc6 hits d4 and you castle queenside, throwing your king's rook into the game on the open d-file against White's centre. Black has a harmonious, active position with no weaknesses and an easy plan — a long way from the Scandinavian's dubious reputation.",
+      say: "…Nc6 hits d4 and you castle queenside, throwing your king's rook into the game on the half-open d-file against White's centre. Black has a harmonious, active position with no weaknesses and an easy plan — a long way from the Scandinavian's dubious reputation.",
       sayShort: '…Nc6, O-O-O — pressure the d-file.' }),
     b({ id: 'plan', moves: 'e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5 Nf3 Nc6 O-O O-O-O',
       arrows: [A('d8', 'd4')], highlights: [{ square: 'd4', color: KEY }, { square: 'e5', color: SOFT }],

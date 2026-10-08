@@ -44,7 +44,7 @@ export const PRO_AMAN_SICILIAN_KAN_LESSON: LessonScript = {
       say: "White develops the bishop to d3; Black answers …Nf6, hitting the e4-pawn and forcing White to attend to the centre before launching anything. Develop with a purpose — every move asks a question.",
       sayShort: '…Nf6 — hit e4, develop.' }),
     b({ id: 'd6', moves: 'e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Bd3 Nf6 O-O d6', highlights: [H('d6'), H('e5')],
-      say: "Both sides castle and Black plays …d6 — the small-centre Scheveningen shell. It controls e5, takes the sting out of any e4-e5 push, and gives the pieces a stable home. Solid first; the expansion comes next.",
+      say: "White castles and Black plays …d6 — the small-centre Scheveningen shell. It controls e5, takes the sting out of any e4-e5 push, and gives the pieces a stable home. Solid first; the expansion comes next.",
       sayShort: '…d6 — control e5, solid shell.' }),
     b({ id: 'nbd7', moves: 'e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Bd3 Nf6 O-O d6 f4 Nbd7', arrows: [A('b8', 'd7')], highlights: [H('d7'), H('b5'), H('e5')],
       say: "White grabs kingside space with f4, signalling a pawn-storm plan. Black stays unfazed with …Nbd7 — flexible development that keeps the knight ready to reroute and supports the …b5 and …e5 breaks. This is the classic opposite-wings picture.",

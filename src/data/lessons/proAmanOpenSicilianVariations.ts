@@ -50,7 +50,7 @@ export const PRO_AMAN_OPEN_SICILIAN_VARIATION_LESSONS: Record<string, LessonScri
     sources: SRC,
     beats: [
       b({ id: 'bg5', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bg5', arrows: [A('c1', 'g5')], highlights: [H('g5')],
-        say: "Against …Nc6, the Richter-Rauzer Bg5 pins the f6-knight and prepares queenside castling with a kingside pawn storm to come. The most aggressive Open Sicilian try.",
+        say: "Against …Nc6, the Richter-Rauzer Bg5 hits the f6-knight and prepares queenside castling with a kingside pawn storm to come. The most aggressive Open Sicilian try.",
         sayShort: 'Bg5 — pin, prepare O-O-O.' }),
       b({ id: 'castle', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bg5 e6 Qd2 a6 O-O-O', highlights: [H('c1')],
         say: "Qd2 connects the queen to the bishop and supports long castling. With opposite-side castling looming, both kings will be attacked — and White moves first.",

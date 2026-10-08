@@ -52,7 +52,7 @@ describe('audit traffic spends zero Upstash commands', () => {
         it(`/api/${route} ${method} from ${label} → 200, no Redis`, async () => {
           const { default: handler } = await ROUTES[route]();
           const res = mkRes();
-          await handler(req(method, headers, route === 'referrals' && method === 'POST' ? { body: { action: 'reviewReward', device: DEVICE } } : {}), res);
+          await handler(req(method, headers, route === 'referrals' && method === 'POST' ? { body: { action: 'qualify', device: DEVICE } } : {}), res);
           expect(res._status).toBe(200);
           expect(res._json).toMatchObject({ refused: 'audit' });
           expect(commands).toBe(0);

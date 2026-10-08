@@ -35,11 +35,11 @@
       "sayShort": "O-O — reyes seguros, …d6 apuntala e5, comienza la lucha."
     },
     "preparation": {
-      "say": "Las negras juegan c6 para liberar su alfil de dama, lo que obliga al alfil blanco a salir de la gran diagonal. Pero observa: el blanco no retrocede a e2 ni a d2. Juega Bb3, manteniendo el alfil apuntando a f7 desde la MISMA diagonal, una casilla atrás. Esta es la seña del Viena: cuando las negras hostigan, el alfil se reubica SIN perder su ángulo de ataque. Compáralo con la Ruy López, donde el alfil en a4-b3-c2 ejecuta exactamente el mismo baile: las geometrías riman.",
+      "say": "Las negras juegan c6, preparando …d5 o …b5 para expulsar al alfil de su diagonal. Las blancas no esperan: Bb3, un paso atrás que mantiene el alfil apuntando a f7 desde la MISMA diagonal. Esta es la seña del Viena: antes de que las negras puedan hostigarlo, el alfil se reubica SIN perder su ángulo de ataque. Compáralo con la Ruy López, donde el alfil en a4-b3-c2 ejecuta exactamente el mismo baile: las geometrías riman.",
       "sayShort": "Bb3 — retrocede, mantiene la diagonal hacia f7."
     },
     "the-vienna-knight": {
-      "say": "Ahora la jugada que define la Viena Clásica: ¡Ce2!? Las blancas retiran su propio caballo para iniciar una lenta travesía — c3 a e2 a g3, y desde g3 el caballo saltará hacia f5. La regla de Edward Lasker de la Española se aplica palabra por palabra en la Viena: un caballo en f5 no puede ser repelido. Todo el medio juego se organiza alrededor de esta casilla. Las blancas están dispuestas a gastar tres tiempos para llevar un caballo allí.",
+      "say": "Ahora la jugada que define la Viena Clásica: ¡Ce2!? Las blancas retiran su propio caballo para iniciar una lenta travesía — c3 a e2 a g3, y desde g3 el caballo saltará hacia f5. Un caballo en f5 es una espina: para expulsarlo las negras deben jugar …g6, lo que debilita las casillas alrededor de su propio rey. Todo el medio juego se organiza alrededor de esta casilla. Las blancas están dispuestas a gastar tres tiempos para llevar un caballo allí.",
       "sayShort": "Ce2 — rumbo al puesto avanzado de f5 vía g3."
     },
     "bishop-tour": {
@@ -51,8 +51,8 @@
       "sayShort": "¡d4! — la ruptura central largamente preparada detona."
     },
     "f5-arrival": {
-      "say": "Y aquí está el premio. Después de d4 exd4 cxd4, la columna e se abre, el caballo negro se apresura a e6, y las blancas colocan el caballo de c3-e2-g3 en f5 — el puesto avanzado inamovible que Lasker nombró. Desde f5, el caballo presiona d6 y h6, vigila el flanco de rey y no puede ser expulsado por un peón. Todo el plan de la Viena Clásica, doce movimientos tranquilos de largo, era alcanzar ESTA casilla. La lenta preparación se recompensa con una pieza hermosa.",
-      "sayShort": "Cf5 — el puesto avanzado de Lasker al que apuntaba el plan."
+      "say": "Y aquí está la casilla a la que apuntaba el plan. Después de d4 exd4 cxd4, la columna e queda semiabierta, el caballo negro se apresura a e6, y las blancas colocan el caballo de c3-e2-g3 en f5. Desde f5 el caballo presiona d6 y h6 y vigila el flanco de rey. No es intocable: …g6 puede expulsarlo, y el alfil de g4 ya vigila f5, así que la lucha por esta casilla es el medio juego, y el motor la considera aproximadamente equilibrada. Todo el plan de la Viena Clásica, doce movimientos tranquilos de largo, era traer un caballo AQUÍ.",
+      "sayShort": "Cf5 — la casilla a la que apuntaba el plan."
     },
     "branch-gambit": {
       "say": "Ahora — las negras no tienen por qué caer en el lento estrangulamiento. Pueden evitar la Clásica por completo jugando con más cuidado. Así que las blancas tienen una segunda arma, la que le da a la apertura su reputación violenta: f4. Edward Lasker escribió: 'Parecería un buen plan atraer ese peón, y esto se vuelve factible jugando f4 cuando él ya tiene un peón en e4.' Eso es exactamente el Gambito de Viena — f4 ataca el peón e5 de las negras. Las blancas no esperan a que el centro se abra — lo DESGARRAN. Un capítulo completamente diferente, una pestaña entera de esta clase magistral, pero comienza desde el mismo Nc3 que ya has visto.",
@@ -63,7 +63,7 @@
       "sayShort": "g3 — la Paulsen, la presión moderna de élite."
     },
     "branch-nc6": {
-      "say": "Y una última rama — las negras no tienen que jugar …Cf6. A nivel amateur, las negras juegan Cc6 incluso más a menudo que Cf6, defendiendo e5 con el caballo al estilo clásico de la Ruy. La respuesta de las blancas puede ser Ac4 — volviendo a temas italianos — pero las brillanteces históricas de la Viena VIVEN AQUÍ: el Hamppe-Allgaier, el Hamppe-Muzio, los gambitos Pierce y Steinitz. Sacrifica el peón del gambito, sacrifica un caballo en f7, sacrifica el derecho a enrocar — el propio Steinitz llevó a su rey a e2 y ganó. Una pestaña completa de esta clase magistral está dedicada a las líneas que surgen de Cc6.",
+      "say": "Y una última rama — las negras no tienen que jugar …Cf6. A nivel amateur, las negras juegan Cc6 incluso más a menudo que Cf6, defendiendo e5 con el caballo al estilo clásico de la Ruy. La respuesta de las blancas puede ser Ac4 — volviendo a temas italianos — pero las brillanteces históricas de la Viena VIVEN AQUÍ: el Hamppe-Allgaier, el Hamppe-Muzio, el gambito Steinitz. Sacrifica el peón del gambito, sacrifica un caballo en f7, sacrifica el derecho a enrocar — el propio Steinitz llevó a su rey a e2 y ganó. Una pestaña completa de esta clase magistral está dedicada a las líneas que surgen de Cc6.",
       "sayShort": "…Cc6 — la otra respuesta, hogar de los gambitos."
     },
     "close": {

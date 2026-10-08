@@ -127,7 +127,7 @@ const ANTI_FRENCH: LessonScript = {
       arrows: [{ from: 'c4', to: 'd5', color: VIS }],
       highlights: [{ square: 'd5', color: KEY }, { square: 'e5', color: SOFT }],
       say:
-        "Here's the plan. You keep the tension and pick your moment to release it: cxd5 to open the c-file for your rooks, or a later e4 to challenge the centre and free the Bb2's diagonal. The whole game is about that long diagonal and the half-open c-file. It's slow, it's strategic, and with the extra tempo it's a position where White presses and never risks much. Quintessential English.",
+        "Here's the plan. You keep the tension and pick your moment to release it: cxd5 to open the c-file for your rooks, or a later e4 to challenge the centre and free the Bb2's diagonal. The whole game is about that long diagonal and the c-file. It's slow, it's strategic, and with the extra tempo it's a position where White presses and never risks much. Quintessential English.",
       sayShort: 'cxd5 then e4 — open the bishop.',
     }),
   ],

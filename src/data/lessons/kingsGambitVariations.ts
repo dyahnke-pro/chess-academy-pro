@@ -121,8 +121,8 @@ export const KINGS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
         id: 'structure',
         moves: ['e4', 'e5', 'f4', 'exf4', 'Nf3', 'd6', 'd4', 'g5', 'h4', 'g4', 'Ng1', 'Bh6', 'Nc3', 'c6', 'Nge2', 'Qf6', 'g3', 'fxg3', 'Nxg3', 'Bxc1', 'Rxc1', 'Qh6', 'Bd3', 'Ne7'],
         highlights: [{ square: 'e4', color: KEY }],
-        say: "The dark-squared bishops come off — Bxc1 Rxc1 — and after Qh6 White develops the last bishop to d3, completing the build behind the e4-pawn, while Black untangles with Ne7. Material is level, the structure looks symmetrical, but White has more space, the safer king, and the more active pieces. This is the modern verdict on Fischer's defence: fully playable for Black, but White gets a pleasant, risk-free edge — exactly what a gambiteer is happy to settle for.",
-        sayShort: 'Bd3 — level material, lasting White pull.',
+        say: "The dark-squared bishops come off — Bxc1 Rxc1 — and after Qh6 White develops the last bishop to d3, completing the build behind the e4-pawn, while Black untangles with Ne7. White is a pawn down, the structure looks symmetrical, but White has more space, the safer king, and the more active pieces. This is the modern verdict on Fischer's defence: fully playable for Black, but White gets a pleasant, risk-free edge — exactly what a gambiteer is happy to settle for.",
+        sayShort: 'Bd3 — a pawn down, lasting White pull.',
       },
     ],
   },
@@ -208,7 +208,7 @@ export const KINGS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
         id: 'break',
         moves: ['e4', 'e5', 'f4', 'Bc5', 'Nf3', 'd6', 'c3', 'Nf6', 'd4', 'exd4', 'cxd4', 'Bb6', 'Nc3', 'O-O', 'e5', 'dxe5', 'fxe5'],
         highlights: [{ square: 'e5', color: KEY }, { square: 'f6', color: SOFT }],
-        say: "e5 — the breakthrough. White throws the centre pawn forward, and after dxe5 fxe5 the f-file finally rips open with the rook on f1 bearing down on f6 and f7. The e5-pawn cramps Black and the long-delayed kingside attack arrives. This is the reward for declining: the pawn White kept now becomes a battering ram, and the f-file the gambit was always about opens at last.",
+        say: "e5 — the breakthrough. White throws the centre pawn forward, and after dxe5 fxe5 the f-file finally rips open for White's rook, bearing down on f6 and f7. The e5-pawn cramps Black and the long-delayed kingside attack arrives. This is the reward for declining: the pawn White kept now becomes a battering ram, and the f-file the gambit was always about opens at last.",
         sayShort: 'e5, fxe5 — the centre breaks, f-file opens.',
       },
       {
@@ -266,7 +266,7 @@ export const KINGS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
         moves: ['e4', 'e5', 'f4', 'exf4', 'Bc4', 'Nf6', 'Nc3', 'c6', 'Bb3', 'd5', 'exd5', 'cxd5', 'd4', 'Bd6', 'Nge2', 'O-O', 'Bxf4', 'Bxf4', 'Nxf4'],
         arrows: [{ from: 'f4', to: 'd5', color: ATK }],
         highlights: [{ square: 'f4', color: KEY }, { square: 'd5', color: SOFT }],
-        say: "Both sides castle and the gambit pawn is recovered: Bxf4 Bxf4 Nxf4, with the knight landing on f4 eyeing the d5-pawn and the kingside. Material is level, the position is open and roughly balanced, but White has the old attacking diagonal, active knights, and the kind of free-flowing game the Bishop's Gambit was played to reach. The check Black never took has cost them nothing — and White has a comfortable, attacking middlegame.",
+        say: "Black castles and the gambit pawn is recovered: Bxf4 Bxf4 Nxf4, with the knight landing on f4 eyeing the d5-pawn and the kingside. Material is level, the position is open and roughly balanced, but White has the old attacking diagonal, active knights, and the kind of free-flowing game the Bishop's Gambit was played to reach. The check Black never took has cost them nothing — and White has a comfortable, attacking middlegame.",
         sayShort: 'Nxf4 — pawn back, open attacking game.',
       },
       {
@@ -347,7 +347,7 @@ export const KINGS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
         id: 'the-sac',
         moves: ['e4', 'e5', 'f4', 'exf4', 'Nf3', 'g5', 'Bc4', 'g4', 'O-O'],
         highlights: [{ square: 'f7', color: KEY }, { square: 'f3', color: SOFT }],
-        say: "O-O!! White castles and simply abandons the knight on f3. This is the Muzio Gambit: a whole piece offered for the open f-file, a colossal lead in development, and a direct line to f7. The rook on f1 already glares down the file. White is betting that an exposed king and three idle black pieces are worth more than a knight.",
+        say: "O-O!! White castles and simply abandons the knight on f3. This is the Muzio Gambit: a whole piece offered for the half-open f-file, a colossal lead in development, and a direct line to f7. The rook on f1 already glares down the file. White is betting that an exposed king and three idle black pieces are worth more than a knight.",
         sayShort: 'O-O — castle, give up the whole knight.',
       },
       {

@@ -86,7 +86,7 @@ const SLOW: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6',
       highlights: [{ square: 'd3', color: KEY }],
       say:
-        "When you don't want the IQP fireworks, there's the calm d3 — the Giuoco Pianissimo, the 'very quiet game.' You build the Italian formation behind a closed centre, castle, and settle in for a long maneuvering battle. No early contact; just slowly improving every piece.",
+        "When you don't want the open-centre fireworks, there's the calm d3 — the Giuoco Pianissimo, the 'very quiet game.' You build the Italian formation behind a closed centre, castle, and settle in for a long maneuvering battle. No early contact; just slowly improving every piece.",
       sayShort: 'd3 — the quiet build.',
     }),
     b({
