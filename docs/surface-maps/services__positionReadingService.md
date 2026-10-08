@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2829 lines · 88 exports · 87 importers · 27 tests · 2 audits**
+**2829 lines · 88 exports · 88 importers · 27 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -34,6 +34,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/deliberation.ts`
 - `src/services/drillReasons.ts`
 - `src/services/enginePlanContext.ts`
+- `src/services/exchangeIdeas.ts`
 - `src/services/exchangeLedger.ts`
 - `src/services/factStakes.ts`
 - `src/services/falseAlarm.ts`
@@ -120,11 +121,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/whyItFailed.ts:303`
 - `src/services/whyItFailed.ts:305`
 
-### `legalSeeGain` (function) — 14 call sites
+### `legalSeeGain` (function) — 21 call sites
 - `src/services/computedTruth.fuzz.test.ts:91`
 - `src/services/computedVoiceGrounding.test.ts:31`
 - `src/services/computedVoiceGrounding.test.ts:74`
 - `src/services/enginePlanContext.ts:237`
+- `src/services/exchangeIdeas.ts:329`
+- `src/services/exchangeIdeas.ts:330`
+- `src/services/exchangeIdeas.ts:447`
+- `src/services/exchangeIdeas.ts:466`
+- `src/services/exchangeIdeas.ts:473`
+- `src/services/exchangeIdeas.ts:478`
+- `src/services/exchangeIdeas.ts:627`
 - `src/services/exchangeLedger.ts:425`
 - `src/services/factStakes.ts:168`
 - `src/services/groundedAnswer.ts:1853`
@@ -205,7 +213,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttribution.ts:302`
 - `src/services/principleAttribution.ts:647`
 
-### `legalSeeGainFor` (function) — 64 call sites
+### `legalSeeGainFor` (function) — 65 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10061`
 - `src/services/arrowDoor.ts:161`
 - `src/services/bluffDetector.ts:53`
@@ -217,6 +225,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/deliberation.ts:44`
 - `src/services/deliberation.ts:436`
 - `src/services/deliberation.ts:437`
+- `src/services/exchangeIdeas.ts:136`
 - `src/services/exchangeLedger.ts:124`
 - `src/services/exchangeLedger.ts:354`
 - `src/services/exchangeLedger.ts:424`
@@ -271,7 +280,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tiedDefender.ts:45`
 - `src/services/tiedDefender.ts:52`
 
-### `asIfToMove` (function) — 2 call sites
+### `asIfToMove` (function) — 10 call sites
+- `src/services/exchangeIdeas.ts:251`
+- `src/services/exchangeIdeas.ts:320`
+- `src/services/exchangeIdeas.ts:324`
+- `src/services/exchangeIdeas.ts:346`
+- `src/services/exchangeIdeas.ts:366`
+- `src/services/exchangeIdeas.ts:420`
+- `src/services/exchangeIdeas.ts:460`
+- `src/services/exchangeIdeas.ts:566`
 - `src/services/learnWalkOct3c.test.ts:56`
 - `src/services/thinkingExchangeChain.ts:59`
 
@@ -289,7 +306,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttribution.ts:294`
 - `src/services/principleAttribution.ts:681`
 - `src/services/principleAttribution.ts:705`
-- `src/services/reviewFullData.ts:399`
+- `src/services/reviewFullData.ts:401`
 - `src/services/tradeQuality.ts:173`
 
 ### `takingTheAttackerAnswers` (function) — 6 call sites
@@ -309,10 +326,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticVerification.ts:75`
 - `src/services/tacticsDetector.ts:168`
 
-### `seeSequence` (function) — 3 call sites
+### `seeSequence` (function) — 5 call sites
+- `src/services/exchangeIdeas.ts:190`
+- `src/services/exchangeIdeas.ts:588`
 - `src/services/positionReadingService.test.ts:607`
 - `src/services/positionReadingService.test.ts:613`
-- `src/services/reviewFullData.ts:424`
+- `src/services/reviewFullData.ts:426`
 
 ### `minorCanReachSquare` (function) — 3 call sites
 - `src/services/danyaBehaviors.ts:785`
@@ -443,8 +462,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:97`
 - `src/services/positionalTruth.corpus.test.ts:102`
 - `src/services/replayFence.najdorf1500.test.ts:24`
-- `src/services/reviewFullData.ts:916`
-- `src/services/reviewFullData.ts:920`
+- `src/services/reviewFullData.ts:945`
+- `src/services/reviewFullData.ts:949`
 
 ### `MinorityAttack` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -459,8 +478,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:366`
 - `src/services/positionalTruth.corpus.test.ts:110`
 - `src/services/positionalTruth.corpus.test.ts:115`
-- `src/services/reviewFullData.ts:912`
-- `src/services/reviewFullData.ts:914`
+- `src/services/reviewFullData.ts:941`
+- `src/services/reviewFullData.ts:943`
 
 ### `pieceScope` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

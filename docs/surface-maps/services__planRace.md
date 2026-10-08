@@ -87,7 +87,7 @@
 - `src/services/planRace.test.ts:109`
 - `src/services/planRace.test.ts:115`
 - `src/services/planRace.test.ts:157`
-- `src/services/reviewFullData.ts:942`
+- `src/services/reviewFullData.ts:971`
 
 ### `fileClaimed` (function) — 4 call sites
 - `src/services/learnBoardTeaching.ts:207`
@@ -98,7 +98,7 @@
 ### `planRaceProof` (function) — 3 call sites
 - `src/services/kingAttackReads.test.ts:185`
 - `src/services/kingAttackReads.ts:705`
-- `src/services/reviewFullData.ts:943`
+- `src/services/reviewFullData.ts:972`
 
 ## Tests
 

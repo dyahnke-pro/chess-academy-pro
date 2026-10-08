@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**511 lines · 15 exports · 34 importers · 8 tests · 0 audits**
+**511 lines · 15 exports · 35 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFeatureService.ts`
 - `src/services/criticalMoment.ts`
 - `src/services/deliberation.ts`
+- `src/services/exchangeIdeas.ts`
 - `src/services/exchangeLedger.horizon.test.ts`
 - `src/services/exchangeLedger.test.ts`
 - `src/services/gemCrushLines.ts`
@@ -55,7 +56,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ExchangeLedger` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeExchangeLedger` (function) — 11 call sites
+### `computeExchangeLedger` (function) — 12 call sites
+- `src/services/exchangeIdeas.ts:589`
 - `src/services/exchangeLedger.test.ts:13`
 - `src/services/exchangeLedger.test.ts:51`
 - `src/services/exchangeLedger.test.ts:52`
@@ -68,7 +70,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/gemCrushLines.ts:273`
 - `src/services/threatProof.ts:51`
 
-### `netPieceWords` (function) — 3 call sites
+### `netPieceWords` (function) — 4 call sites
+- `src/services/exchangeIdeas.ts:591`
 - `src/services/lineCalc.ts:175`
 - `src/services/reviewPositionalAssessment.ts:140`
 - `src/services/tacticGeometry.ts:528`
@@ -96,7 +99,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `settledExchange` (function) — 5 call sites
 - `src/services/playCommentary.ts:972`
 - `src/services/reviewConcepts.ts:91`
-- `src/services/reviewFullData.ts:361`
+- `src/services/reviewFullData.ts:363`
 - `src/services/reviewWalkOct2a.test.ts:15`
 - `src/services/tacticGeometry.ts:527`
 
@@ -168,7 +171,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.horizon.test.ts:38`
 
 ### `moverLineProof` (function) — 1 call site
-- `src/services/reviewFullData.ts:715`
+- `src/services/reviewFullData.ts:717`
 
 ## Tests
 

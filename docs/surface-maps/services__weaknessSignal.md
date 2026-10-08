@@ -86,10 +86,10 @@
 - `src/services/fundamentalReachesDecider.test.ts:137`
 - `src/services/needScore.ts:301`
 - `src/services/needScore.ts:315`
-- `src/services/positionFacts.ts:1222`
-- `src/services/positionFacts.ts:1244`
-- `src/services/reviewFacetRank.ts:414`
-- `src/services/reviewFacetRank.ts:462`
+- `src/services/positionFacts.ts:1247`
+- `src/services/positionFacts.ts:1269`
+- `src/services/reviewFacetRank.ts:434`
+- `src/services/reviewFacetRank.ts:482`
 - `src/services/studentMomentBoost.ts:119`
 - `src/services/teachingSelector.ts:175`
 - `src/services/weaknessSignal.test.ts:56`
@@ -115,9 +115,9 @@
 - `src/services/fundamentalReachesDecider.test.ts:130`
 - `src/services/fundamentalReachesDecider.test.ts:157`
 - `src/services/needScore.ts:312`
-- `src/services/positionFacts.ts:1188`
-- `src/services/reviewFacetRank.ts:413`
-- `src/services/reviewFacetRank.ts:461`
+- `src/services/positionFacts.ts:1213`
+- `src/services/reviewFacetRank.ts:433`
+- `src/services/reviewFacetRank.ts:481`
 - `src/services/weaknessSignal.test.ts:77`
 - `src/services/weaknessSignal.test.ts:80`
 - `src/services/weaknessSignal.test.ts:83`
@@ -129,7 +129,7 @@
 ### `matchTacticPattern` (function) — 10 call sites
 - `src/services/liveTacticsContext.ts:542`
 - `src/services/needScore.ts:310`
-- `src/services/positionFacts.ts:1186`
+- `src/services/positionFacts.ts:1211`
 - `src/services/tacticAlertService.ts:605`
 - `src/services/teachingSelector.ts:174`
 - `src/services/teachingSelector.ts:325`
@@ -141,7 +141,7 @@
 ### `matchTag` (function) — 8 call sites
 - `src/services/coachFeatureService.ts:1878`
 - `src/services/needScore.ts:299`
-- `src/services/positionFacts.ts:1188`
+- `src/services/positionFacts.ts:1213`
 - `src/services/teachingSelector.ts:326`
 - `src/services/weaknessSignal.test.ts:116`
 - `src/services/weaknessSignal.test.ts:119`

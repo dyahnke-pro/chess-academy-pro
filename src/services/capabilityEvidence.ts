@@ -46,6 +46,7 @@ import { logAppAudit } from './appAuditor';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { leadingFundamentals, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
 import { stalemateWatch } from './stalemateWatch';
+import { captureAbandonsDuty } from './exchangeIdeas';
 import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
 
 /** How live the fundamental had to be on THIS board before answering it counts
@@ -436,8 +437,19 @@ export function capabilitiesPosed(
       if (stalemateWatch(fenBefore, moverColor === 'white' ? 'w' : 'b')) out.push({ tag: 'botched-conversion', posedImportance: STALEMATE_POSED });
     } catch { /* an unreadable board posed nothing */ }
   }
+  // A CAPTURE THAT LEAVES ITS POST (computers batch 5, the abandoned duty):
+  // the board asked "does that capture abandon a guard?". A capture that does
+  // costs the mate or the piece, so `movePlayedCleanly` sorts held from broken.
+  try {
+    const lost = captureAbandonsDuty(fenBefore);
+    const tag: MisconceptionTagId | null = lost === 'mate' ? 'missed-opponents-threat' : lost === 'material' ? 'hung-material' : null;
+    if (tag && !seen.has(tag)) { seen.add(tag); out.push({ tag, posedImportance: ABANDONED_DUTY_POSED }); }
+  } catch { /* an unreadable board posed nothing */ }
   return out;
 }
+
+/** A capture that would leave a mate or a piece behind is a real question. */
+const ABANDONED_DUTY_POSED = 85;
 
 /** A win on the line is a question worth the green bar. */
 const STALEMATE_POSED = 90;
