@@ -1848,7 +1848,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             playerGames: input.liveState.playerGames ?? undefined,
             // STEP D Phase 5 — "can I win this endgame?" → the syzygy tablebase
             // (assembleEndgameAnswer); the interception does the ≤7-piece lookup.
-            endgameQuestion: isEndgameQuestion(askForIntents),
+            endgameQuestion: isEndgameQuestion(askForIntents) && !endgameWeaknessQuestionEngage,
             // Phase 1 cont — "who's winning / how do I stand?" → eval + top
             // tactic (assemblePositionAssessment); grounds the biggest slice of
             // the free-reasoning chat fallback.

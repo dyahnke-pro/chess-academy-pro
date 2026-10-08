@@ -3318,7 +3318,9 @@ export function buildQuestionGrounding(
     masterPlayQuestion: isMasterPlayQuestion(a) && !threat,
     conceptQuestion: isConceptQuestion(a) && !threat,
     playerGamesQuestion: isPlayerGamesQuestion(a) && !sideContinue,
-    endgameQuestion: isEndgameQuestion(a),
+    // "what is my weakest endgame?" is about the student's record, not how to
+    // play an ending (probe 2026-10-08: it reached the technique lane first).
+    endgameQuestion: isEndgameQuestion(a) && !(isEndgameWeaknessQuestion(a) && !isEndgamePlayRequest(a)),
     positionAssessmentQuestion: (isPositionAssessmentQuestion(a) || (onBoard && /^\s*where\s+do\s+i\s+stand\b/i.test(a))) && !threat,
     // "how do I approach this?" reads as a teaching-method ask too; the METHOD
     // lane (how to think HERE, computed on this board) is the specific one.
