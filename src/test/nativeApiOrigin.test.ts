@@ -72,6 +72,7 @@ describe('native API origin', () => {
     });
     const offenders = findBareServerRequests(files);
     rmSync(dir, { recursive: true, force: true });
-    expect(offenders.length).toBeGreaterThanOrEqual(13);
+    // 12 since the review-reward request was removed (2026-10-08).
+    expect(offenders.length).toBeGreaterThanOrEqual(12);
   });
 });
