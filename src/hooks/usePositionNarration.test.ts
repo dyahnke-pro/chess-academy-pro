@@ -142,10 +142,11 @@ describe('usePositionNarration', () => {
 
     await waitFor(() => expect(voiceCalls.length).toBe(1));
     const call = voiceCalls[0];
-    // The phase is a computed sentence, present on every read.
-    expect(call.facts).toMatch(/Still in the opening\./);
+    // The phase is a computed sentence, present on every read — read off the
+    // BOARD (both sides castled here), never off the ply count (one-coach P2).
+    expect(call.facts).toMatch(/^(Still in the opening|This is the middlegame now)\./);
     // The positional read (readPosition) is computed on the board, both sides.
-    expect(call.facts.length).toBeGreaterThan('Still in the opening.'.length);
+    expect(call.facts.length).toBeGreaterThan('This is the middlegame now.'.length);
     // ONE seat end to end: the phraser is never asked to turn "they" into
     // "I" (on prod it turned it into "you" — a whose-piece inversion).
     expect(call.opts.perspective).toEqual({ mode: 'student', studentSide: 'white' });

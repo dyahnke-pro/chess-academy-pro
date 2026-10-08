@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1224 lines · 28 exports · 9 importers · 5 tests · 1 audits**
+**1224 lines · 28 exports · 8 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,7 +19,6 @@
 - `src/hooks/useHintSystem.test.ts`
 - `src/services/coachAgentRunner.ts`
 - `src/services/coachApi.ts`
-- `src/services/coachChatService.ts`
 - `src/services/coachPrompts.test.ts`
 - `src/services/coachPrompts.verbosity.test.ts`
 

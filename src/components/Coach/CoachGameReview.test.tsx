@@ -236,20 +236,6 @@ vi.mock('./PlayerInfoBar', () => ({
   ),
 }));
 
-vi.mock('./MoveNavigationControls', () => ({
-  MoveNavigationControls: ({ onFirst, onPrev, onNext, onLast, currentIndex, totalMoves }: {
-    onFirst: () => void; onPrev: () => void; onNext: () => void; onLast: () => void;
-    currentIndex: number; totalMoves: number;
-  }) => (
-    <div data-testid="move-nav-controls">
-      <button data-testid="nav-first" onClick={onFirst} disabled={currentIndex <= -1}>First</button>
-      <button data-testid="nav-prev" onClick={onPrev} disabled={currentIndex <= -1}>Prev</button>
-      <button data-testid="nav-next" onClick={onNext} disabled={currentIndex >= totalMoves - 1}>Next</button>
-      <button data-testid="nav-last" onClick={onLast} disabled={currentIndex >= totalMoves - 1}>Last</button>
-    </div>
-  ),
-}));
-
 vi.mock('./MoveListPanel', () => ({
   MoveListPanel: ({ currentMoveIndex, openingName }: { currentMoveIndex: number | null; openingName: string | null }) => (
     <div data-testid="move-list-panel" data-current-index={currentMoveIndex} data-opening={openingName ?? ''}>

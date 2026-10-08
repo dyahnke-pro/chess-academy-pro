@@ -1,0 +1,638 @@
+# How the reference coach teaches — CANONICAL CATALOGUE (condensed from 28 readers, 1,757 raw acts). Raw: teach-brief.raw.md; examples: teach.md — grep them.
+
+# The reference coach's teaching acts: canonical catalogue
+
+From teach-brief.raw.md: 28 readers, 1,757 acts over the 7,477-note voiced corpus and one raw transcript, merged into 458 distinct acts (104 built, 242 partial, 112 missing). Read with RULEBOOK.md F01 and F18.
+
+Section 2 line: act | when | verbs N | computer.
+- Verbs (F01), one letter each: R recognize, I identify, P plan, V prevent, S strategize, C consequence, G geometry, K knowledge.
+- N: how many of the 28 readers named it.
+- Computer: file:line of the function in src/services/<file>.ts. Plain = built; ~ = partial (part of the act, or too narrow); MISSING = none (section 3); MISSING (part: X) = most readers found none, X is the nearest ingredient.
+- Line numbers: working tree of 2026-10-07 (HEAD 62b835de5 plus staged edits).
+
+## 1. How he teaches
+
+- Every move gets at least a clause; the words follow the decision, not the move number. Raw speech: about 50 words a move, 20-47 on routine moves, 90-133 at decisions (src/services/thinkAloud.ts:2-3). Distilled notes: median about 20 words, p90 46 (7,477 notes).
+- On their move he says first what it changed, wants or gave up (a threat, a hole, a piece shut in, a guard dropped), with a one-word verdict if it slipped. On his own move: the move and its purpose, often two jobs.
+- The core shape (F18): the move and its point; the tempting alternative refuted by its concrete reply ("not X but Y, because Z"); the consequence as an if-then line in words, their reply named, to where it lands; a habit or nugget to close.
+- Weighing: candidates fall one at a time to a concrete cost (material, a square, a shut-in piece, a tempo); positional costs as often as tactical ones. Two close moves are split by the one difference that matters.
+- At a decision he flags the moment, then: their move, what it changed, the candidates, each one's flaw as a short line, the move, its jobs, the next step. In a crisis: every threat listed, the one move that meets them all, an answer ready for each try.
+- He thinks on THEIR move: in one slice over 40% of notes are about it, and long monologues often sit there, preparing the student's next choice.
+- One story per game: their first concession becomes the thesis (a target, a weak pawn, a break) and later moves point back to it. A plan is stated once; a mysterious move is paid off a move later. A thought can span two to four plies.
+- Principle, then the exception the board creates (f6 is bad unless it hits something). Habits are concrete triggers: count before you take, list the loose pieces, the three answers to a check, look for an in-between move before recapturing.
+- One note in fifteen asks a question ("what does d6 prepare?") and answers it at once: a model, not a quiz (F05 keeps real questions for long-standing weaknesses).
+- OPENING, densest and first (F02, V19): the opening named on its defining ply with its idea and reputation; main line or sideline; what players at the student's level play; the punishment for each deviation; the trap a move sets or sidesteps. Quiet-looking moves (c3, h3, a5) get the most words. Branch points, deviations and traps get 50-190 words, known book replies one clause; often one closing paragraph lays out the middlegame road.
+- MIDDLEGAME: terse while pieces manoeuvre, then the long tail at decisions (which capture, whether to sacrifice, where to castle). In one 1,500-note slice the 90+ word monologues were 17 middlegame, 7 opening, 0 endgame.
+- ENDGAME: short and rule-like, median 11-20 words by slice: king first, push the passer, simplify when ahead, avoid stalemate. A nugget every few moves; the conversion method named by the size of the edge.
+- By stretch (7,477 notes): moves 1-6, 61% of plies spoken at median 18 words; moves 7-12, 71% at 23 (the densest); plies 25-50, 66% at 19; plies 51+, 58% at 14. Once decided, the talk shrinks to the move and the method.
+- The student's move usually gets more words (median 17-25) than the opponent's (12-18, often just named unless it wants or costs something). A fifth to a third of notes are bare move calls; V11 still wants a clause on every move.
+- After the game (31 of 38 videos in one count) he rewinds to the 2-5 decision points ("if they X, you Y"), prunes side branches, plays out the finish behind a resignation and closes on takeaways; in the one raw transcript the review ran about 870 words against 692 for the game.
+- Not to copy: uncertainty, first-person self-correction, his own history, the corpus's rule conflicts, bare play-by-play (F18, V1).
+
+## 2. Every distinct teaching act
+
+### A. Opening: naming, theory, your level
+- Names the opening on its defining ply: its aim, its character, who it suits | 1st identifying ply | RK 20 | ~openingAnnouncement:54
+- The opening's bargain or paradox in one line; where theory must be known | after defining move | S 4 | ~openingIdentity:88
+- Names the square, break or piece the system lives for; later moves recall it | key square contested | PS 5 | ~mastersPlanRead:83
+- Contrasts a look-alike opening: the one difference and what it flips | look-alike line | RK 4 | ~positionReadingService:1065
+- Says it transposed, what differs in this version, what to do (often nothing) | transposing ply | R 5 | ~openingAnnouncement:54
+- What this order can still reach or dodge; the committing move; their trick | ambiguous orders | RV 5 | ~openingDetectionService:246
+- Picks the branch that fits the student's repertoire and steers back to it | odd early order | P 2 | ~openingAnnouncement:143
+- Repertoire move-order safety: X first, else a bad transposition or a tactic | moves 2-6 | VC 4 | ~moveOrder:65
+- Known opening with moves inserted or colours reversed; no independent value | unfamiliar order | RK 4 | MISSING
+- Repertoire advice: what suits you, what to study, one setup for everything | moves 1-4 | S 8 | MISSING (part: counterRepertoireService:54)
+- Cites a real game for the line (credit the game) and the game it gives | main-line branch | K 7 | ~proGameReferenceService:23
+- Lore and reputation: age, namesake, how its standing changed; myths fixed | notorious lines | K 4 | MISSING (part: masterPlayLookup:200)
+- Recalls the student's own record with this line (met often, or never) | own repertoire | P 4 | ~openingRecordBeat:29
+- Whose key pawn advance lands first decides the opening | mirror structures | S 1 | MISSING
+- Against offbeat setups: develop, take the centre, open it; no lunging checks | non-theory systems | S 2 | ~ruleException:70
+- Recognises a system from its first moves and names the setup that meets it | moves 2-8 | RS 2 | ~counterRepertoireService:54
+- Theory status: main road, must-know, sideline, dubious, old main; tabias | each book ply | RK 5 | theoryDeparture:73
+- What players at your level play here, and whether the popular move is good | popular junctions | RK 8 | refutedAlternativeCore:159
+- The popular wrong move at this level: a short refutation, the job it drops | most-played move errs | CV 8 | refutedAlternative:81
+- The known slip at this exact position for this level, and its punishment | known slip positions | IV 8 | gemCrushLines:564
+- Grades their opening: why weak, how common, the punishment, can it wait | they leave book | IC 10 | ~openingAnnouncement:54
+- Maps the crossroads: the named roads, a verdict on each, the one taken | branch points | RK 8 | ~openingBranches:56
+- Why theory is theory: the principle behind each main-line move, when it pays | book moves | RS 2 | ~openingIdentity:54
+- Where theory ends, and the one idea after it (develop the piece still home) | leaving book | IP 4 | bookDeparture:49
+- Out of book: the job the skipped book move did, the door the new one opens | departure ply | IC 2 | ~bookDeparture:49
+- Picks a line for practical value and learnability at the student's stage | both roads sound | S 3 | ~explorerTeachLine:60
+- Why a sideline exists, how sound it really is, its critical reply | offbeat line | SK 1 | ~openingIdentity:88
+- A rare, tempting move is rarely best: rule out what hands them something | they leave theory | I 2 | MISSING
+- A scary pawn grab, calculated instead of feared (sound ones carry surprise) | poisoned-pawn grabs | K 2 | ~speedRunReads:276
+- Does their deviation change your plan? If not, carry on; else adjust | harmless deviation | S 3 | ~falseAlarm:37
+
+### B. Traps and punishing the opening
+- Walks the trap: the natural slip, the forced punishment, why it fools people | trap plies, either seat | RC 7 | forkTrick:81
+- Warns before a known trap and gives the safe move; punishes if they slip | move before the slip | V 9 | gemCrushLines:564
+- Among close moves, picks the one that sets a trap, said before their reply | several close moves | P 6 | ~gemFinder:286
+- Your sound move also sets a trap for their natural reply; names the tactic | book or defensive move | PR 4 | ~gemFinder:286
+- The centre-fork trick: available, premature or walked into; how to dodge it | open games, moves 3-8 | RV 6 | forkTrick:81
+- Reads the trap THEY are setting (a poisoned capture) and gives the antidote | their trap-setting move | VR 3 | learnBoardTeaching:538
+- Plays the wrong move on purpose to show the refutation and how bad it is | known trap positions | C 1 | ~openingTrapDetector:80
+- A free pawn is a trap when behind, above all a grab that trades queens | capture while behind | V 1 | whyItFailed:170
+- The opening's recurring tactical motif, taught so it is spotted next time | motif's first time | R 1 | ~tacticsDetector:451
+- Teaches a trap or tactic by its deciding condition and the check that tells | before a familiar shot | RK 5 | ~forkTrick:81
+- A stock puzzle pattern that fails here: played out to the refuting resource | familiar shot refuted | RK 4 | MISSING (part: moveInsight:668)
+- Gambit menu: accept, accept and return, or decline; the condition that picks | facing a gambit | S 7 | ~reviewSacrifice:44
+- Material that comes straight back by force is no real sacrifice or gambit | gambit lines | C 2 | ~reviewSacrifice:44
+- Punishes a broken principle by keeping yours: develop with tempo, no lunges | early principle breaks | SC 7 | ~tempoCount:32
+
+### C. Thinking out loud: weighing, lines, order, timing
+- First the tempting move and its refutation: "not X but Y, because Z" | any obvious wrong option | C 18 | refutedAlternative:81
+- Rules candidates out one by one by a concrete (often positional) cost | real decisions | IC 14 | deliberation:144
+- Two good moves: the one difference (what each stops or threatens) decides | top moves close | S 4 | planChooser:29
+- Weighs aloud and changes its mind (modelled; the coach knows the answer) | middlegame decisions | I 2 | tacticalRead:615
+- Reduces a choice to one question: what will the opponent realistically do? | two reasonable plans | S 2 | ~deliberation:246
+- Candidate squares for one piece, each with a reason, down to the right one | piece with options | PC 4 | ~pieceOptions:126
+- Chase instead of capture: harass the advanced piece with gain of time | takeable intruder | P 1 | ~deliberation:144
+- Plays where you are strongest, not the tempting attack | tempting attack | S 1 | ~kingAttack:71
+- Weighs a concession against what it buys; free if they can't use it | moves that give something | SC 5 | ~tradeQuality:124
+- Explains the non-move: what you deliberately are NOT doing yet, and why | quiet moments | P 1 | ~speedRunReads:558
+- Safe vs ambitious (clinical or most problems): both named, one picked | different-risk options | S 2 | ~deliberation:306
+- Plays the line out in words, their replies named, ending on what it achieves | decisions resting on a line | C 17 | thinkAloud:114
+- The branch map: if X then Y, if Z then W; a second idea for the other reply | two sensible replies | CP 7 | ~openingBranches:56
+- Names their only viable reply or best try, and whether they found it | one holding move | IC 5 | ~criticalMoment:164
+- Hands them a dilemma: every reply costs something; their defence has a price | levers, checks, threats | C 5 | ~speedRunReads:521
+- Trusts the calculation over the material count | tactical finishes | C 1 | speedRunReads:276
+- Why it must come with check: the forced reply lets the follow-up land | forcing sequences | C 1 | ~groundedAnswer:3332
+- This capture is sound only if one specific follow-up comes next | hinged commitments | C 1 | ~criticalMoment:164
+- Counterfactual for their choice: had they played X, you would answer Y | after their choice | C 4 | ~opponentIntent:55
+- Flags the decision first: a fork in the road, how many moves hold | critical moments | RS 7 | criticalMoment:164
+- Critical-moment monologue: candidate, drawback, pattern, best reply, verdict | first real decision | IC 1 | ~thinkAloud:226
+- Signals that a winning shot exists without giving it away | winning tactics | R 1 | ~criticalMoment:287
+- Move order: X first, because Y now runs into a tactic or a reply with tempo | order-sensitive moves | CP 11 | moveOrder:65
+- Not yet, first this: insert the forcing or preparing move; the capture keeps | premature natural move | PC 13 | thinkAloud:145
+- Positional order: guard first, castle before opening, don't block your lever | development, pre-break | PV 5 | ~moveOrder:65
+- Flexible first: moves you need anyway; commit last; let them commit first | open move orders | PS 14 | ~speedRunReads:558
+- Says plainly when the move order doesn't matter (systems, locked centres) | flexible development | R 4 | ~speedRunReads:68
+- Order from what they have NOT played yet: what is needed now, what can wait | after their move | P 1 | MISSING
+- Now or not yet: wrong a ply ago, it works now because one thing changed | committal moves | PC 10 | ~moveTiming:47
+- Holds a resource (pin, kick, lever) until their commitment makes it bite | target not committed | P 3 | MISSING (part: speedRunReads:49)
+- Capture once their piece has moved (it moves twice); keep a move in reserve | opening tension | SK 2 | MISSING
+- Develops with tempo: when they lag, every move threatens; never give a tempo | development | R 8 | moveFundamentals:391
+- Picks the capture that leaves their recapturer on a square you can kick | forced recaptures | PC 1 | MISSING
+- Their piece placement hands you a future tempo | piece on a hittable square | I 1 | MISSING
+- Voices the student's worry about a scary or odd move, then answers it | counter-intuitive moves | C 10 | ~speedRunReads:276
+- A move's obvious point vs its real one; corrects the misread target | provocative moves | PC 3 | ~moveIntent:124
+
+### D. Reading their move
+- Reads what their move wants: threat or plan, where the piece heads | every intentful move | I 13 | opponentIntent:55
+- The threat-check habit: what does their move threaten? If nothing, carry on | every move | IV 4 | methodBeat:296
+- Don't panic: the real threat defined; a lone intruder or bluff shown empty | scary-looking moves | IV 20 | falseAlarm:37
+- A threat must mean something: no reflex queen hits; can they simply stop it? | empty attacking moves | IC 7 | ~moveInsight:909
+- The standing danger of this setup (f-pawn gone, the queen check stays live) | early uncastled kings | VI 4 | ~kingSafety:142
+- Names their looming tactic calmly, before it lands | their strike available | IV 1 | ~groundedAnswer:6890
+- The quiet strengthening move is the real danger, not the fizzled try | forcing play stops | IV 1 | MISSING
+- Wrecking the structure is a threat (a capture doubling pawns by the king) | unmasking moves | IC 1 | ~moveIntent:423
+- Names the single condition that would make their idea work | almost-working tactics | IR 1 | MISSING
+- Notices when an obligation lifts, and what that frees you to do | their defensive move | IP 1 | MISSING
+- What a threat is really for: a winning transition, not the piece it hits | clean-win transitions | PS 1 | MISSING
+- Worst case: with every move they want, can they win it? If not, don't defend | spend a move defending? | I 2 | ~kingSafety:297
+- What their move changed: a guard lifted, a square weakened, a piece loose | every opponent move | I 4 | moveInsight:573
+- What their move cost them (a hole, a shut-in bishop) and the route to use it | their lunges | IC 10 | theirMoveCost:60
+- Joins their natural move, its exact drawback and the punishment using it | popular flawed moves | CP 4 | ~theirMoveCost:60
+- A move's drawback, either seat: squares left, piece locked in, guard dropped | committal moves | IC 12 | moveInsight:523
+- Your own move's drawback, weighed honestly: why it can't hurt yet | committal own moves | CV 8 | moveInsight:523
+- The hidden drawback of their GOOD move, and how to use it later | their strong move | IC 2 | ~theirMoveCost:60
+- The reflex defence, and the piece on the other wing it abandons | natural defences | IC 1 | ~refutedAlternativeCore:63
+- A drawback that doesn't bite: what would make it matter, and why it doesn't | safe rule breaks | KC 4 | ~moveInsight:1102
+- Accepts a cost for activity or a payoff; names the payoff when it lands | plan moves with a cost | SC 2 | ~tradeQuality:71
+- Their slow move is a free tempo now; predicts when its cost lands | their quiet pawn moves | IC 2 | ~tempoCount:32
+- The purpose of their quiet or odd move: what it stops, what it prepares | moves threatening nothing | I 6 | opponentMovePurpose:58
+- Credit first, then the flaw: their real purpose, each cost honestly sized | purposeful flawed moves | I 3 | ~theirMoveCost:60
+- What the opponent keeps doing wrong across moves, and acting on it | repeated tendencies | I 2 | thinkAloud:180
+- Reads their state: a retreat backpedals; a king walk missed a block | any opponent move | I 1 | ~thinkAloud:180
+- What the opponent wrongly expected (a grab with a hidden resource behind it) | miscalculated grabs | I 3 | MISSING
+- Why they chose it (a habit from another opening) and the one-pawn antidote | misapplied system moves | IV 1 | MISSING
+- Their move contradicts the plan their own setup announced | out-of-step moves | I 2 | MISSING
+- When their move helped you: solved your problem or made your break possible | such moves | I 2 | MISSING
+- Predicts their next move (no other options exist) and plans around it | narrow replies | IP 2 | ~opponentIntent:55
+- Why they're stuck: a weak pawn ties the piece that must develop | stuck development | IV 1 | ~pieceOptions:63
+- Grades their move in a word, then why: what it walks into and the punishment | their slips | IC 8 | inaccuracyCall:997
+- Credits their good move or defence honestly, and flags when to calculate | their best defence | R 9 | ~opponentMovePurpose:58
+
+### E. Prevention
+- Prophylaxis: what would they play if it were their move? Take it away first | before their plan lands | V 11 | ~moveIntent:124
+- Takes first the square their piece or break wants (outpost, hole, luft) | quiet moments | V 7 | moveIntent:124
+- Takes the sting out: remove what the threat depends on, not the attacker | looming threats | V 5 | ~speedRunReads:409
+- Useful waiting moves: let them commit first; pre-defend the target | nothing forcing | VS 2 | speedRunReads:316
+- Not every idea needs stopping: allow and freeze it, or welcome the break | automatic prophylaxis | SV 9 | ~falseAlarm:37
+- Prevents by having the answer ready instead of stopping the move | their visible plan | V 4 | ~moveIntent:124
+- "Can you play it anyway?": tests whether their prevention really prevents | after their prophylaxis | C 1 | MISSING
+- Provokes a commitment or a weakening: puts the question, forces a pawn move | opening, middlegame | S 6 | ~speedRunReads:125
+- Vetoes their break with your structure or a piece | set-up decisions | V 2 | ~moveIntent:124
+- A standing watch on their one freeing break, the answer ready, every move | one-lever structures | V 1 | ~mastersPlanRead:83
+- Builds a clamp on the square they need, with the running count | key-square fights | PV 2 | ~moveIntent:124
+- Before kicking a piece, checks where it lands; covers that square first | driving a good knight | VG 1 | MISSING
+- Chooses between two stopping pawn moves by what each weakens | prophylactic pawn moves | VC 1 | ~thinkAloud:302
+- Removes an enemy pawn wedged into your king's side | wedged pawn | V 1 | MISSING
+- The glue move: one move that re-protects several loose parts | after a skirmish | V 1 | ~speedRunReads:576
+
+### F. Tactics and geometry
+- Illusory pin: the pinned piece escapes with check, threat or discovery | pins with a forcing escape | GK 7 | MISSING (part: pinGeometry:80)
+- Judges a pin: does it bite (not if a pawn guards it); whose is stronger | pins appear | RK 7 | ~pinGeometry:135
+- Exploits a real pin: pile on, hit it with a pawn, remove its defender | you hold a real pin | PG 3 | pinPressure:103
+- A pinned piece is no defender: attack what it was guarding | pin on a defender | GK 5 | ~positionReadingService:212
+- What a pin is really for: the pinned piece's job (guarding a central point) | pin on a guard | I 2 | tacticsDetector:630
+- The ways out of a pin and what each concedes; unpinning brings a threat back | your piece pinned | VC 5 | ~reviewMoveTeaching:205
+- Manages a standing pin: hold it, keep it through a recapture; mutual pins | long pins | S 2 | ~speedRunReads:203
+- Asks the pinning bishop to decide, or knows not to; what the trade changes | bishop pins knight | PC 2 | ~thinkAloud:302
+- A pinned pawn can push but not capture, so strike it with a pawn | pawn pinned on a file | G 1 | ~pinPressure:103
+- The would-be pinner is itself pinned, so the pin can't be made | pin fights | G 1 | MISSING
+- Pins king to queen on an opened file; checks on the second and seventh ranks | central file opens | RG 1 | ~tacticsDetector:193
+- Forkable squares: what a fork could hit before it exists, and its route | piece placement | RG 6 | latentFork:161
+- Names the double attack and its win (mate plus material: one defence fails) | double attacks | R 2 | tacticsDetector:119
+- Drives the king onto a forkable square; lists every check, backward ones too | king attacks | PG 1 | ~latentFork:161
+- Pawns attack too: pawn forks, a pawn winning a piece | middlegame tactics | R 1 | tacticsDetector:119
+- A fork that wins nothing can still serve a positional end | centralised knights | R 1 | MISSING
+- A weak-looking structure is robust: a latent pawn fork punishes the attack | d6-type setups | R 1 | ~latentFork:161
+- An alignment is a cue (queens facing, a king on a line): remove the shield | alignments, either side | RG 11 | ~latentDanger:87
+- Your own line danger: two pieces behind a cheaper one; step off first | before trades, quiet moves | VG 7 | latentDanger:87
+- X-rays through your piece or their pawn; luring a target onto the line | one piece in between | G 4 | ~positionReadingService:836
+- An x-ray down a file that stops their freeing break | prophylaxis | VG 1 | deliberation:144
+- Batteries: which piece leads, aimed at the mating square; forced defences | castled-king attacks | PC 2 | tacticsDetector:732
+- A slider aimed through your own unit is loaded: move it, the line opens | wedge structures | G 3 | MISSING (part: boardDelta:65)
+- The interposing move between two pieces facing on a line | rooks or queens facing | G 1 | MISSING
+- Before allowing a discovery, lists every square the front piece can jump to | your move aligns pieces | VG 1 | MISSING
+- Overloaded defender, a move ahead: one piece, pawn or square, two jobs | defender with two jobs | RG 6 | ~tacticsDetector:690
+- Hit the defender, not the target; control a square by removing its guard | target defended once | PG 3 | ~tacticsDetector:630
+- Decoy and deflection: drag a piece onto the fork square, lure a guard away | sole defenders | GR 3 | MISSING (part: tacticClassifier:457)
+- Interference: a piece cuts the line between their piece and its target | line tactics | GR 2 | MISSING
+- Clearance with tempo: your own piece blocks the tactic; move it with a threat | blocked tactics | G 1 | MISSING
+- Self-interference: the natural move or check blocks your own line | blocks and checks | GC 3 | MISSING
+- Defended by a tactic, not a guard: why a free pawn wasn't taken | loose-looking pieces | RC 7 | ~speedRunReads:171
+- The hidden tactic behind a quiet move, kept as a deterrent | concealed points | CV 2 | moveIntent:124
+- Names the tactic's mechanism or invariant so it is seen next time | each time it appears | RK 3 | conceptEngine:842
+- Coins a memorable label for a recurring shape | shape recurs | RK 1 | MISSING
+- Picks which piece makes the move by the tactic it keeps alive | two pieces can do it | C 1 | ~moveComparison:142
+- Don't move the attacked piece on reflex: look for the counter-blow first | your piece attacked | I 3 | ~kneeJerk:15
+- Their normal reply is tactically unavailable, so an odd move works | odd placements | RC 1 | MISSING
+- Never recapture or retreat on reflex: look for the in-between move first | automatic recaptures | RK 5 | ~moveInsight:642
+- Checks their in-between move one step further and refutes it | their zwischenzug | C 1 | MISSING
+- Desperado: a doomed piece takes the most it can on its way out | piece can't be saved | K 2 | ~exchangeLedger:136
+- Traps a piece: take its squares (who covers each), then kick and collect | piece short of squares | RPG 15 | ~tacticsDetector:451
+- A piece one push from trapped: trap it a move early; don't put yours there | rim pieces | VR 2 | ~tacticsDetector:451
+- Rescues your own stranded piece in time, or frees it with a tactic | your piece deep in | V 1 | ~moveInsight:957
+- It isn't going anywhere: improve first, collect later; don't open the net | trapped or pinned piece | PV 4 | ~speedRunReads:144
+- Logs every loose piece the moment it appears, both sides, before calculating | after trades, pushes | I 6 | loosePieces:35
+- Lists the loose pieces, then finds the one move that hits two | two loose targets | IG 3 | loosePieces:35
+- Loose kinds: undefended, defended once, the queen always; loose but safe | middlegame scans | IK 5 | ~loosePieces:35
+- Counts attackers and defenders by value before capturing or fearing a break | contested squares | KI 15 | countMethod:17
+- Counts, then names what complicates it (a pin, a tied guard) | misleading counts | KI 4 | countMethod:17
+- A pattern by counterfactual: if their queen stood there, it would fork | near-patterns | KG 1 | MISSING
+- Judges a check by its answer; of two checks, where each drives the king | checks available | C 2 | ~playCommentary:497
+- Meets a check with the block that develops, not one that helps their plan | early checks | PC 2 | ~checkMethod:32
+- A check whose point is the awkward square it forces the blocker onto | uncastled kings | GC 2 | speedRunReads:253
+- A pushed pawn can't block a future check, so that check becomes a target | old blocker pushed | GP 1 | MISSING
+- A check that also hits a piece can be answered by that piece blocking | check plus attack | KG 1 | ~checkMethod:32
+- Destination safety: who guards the landing square; no walking into forks | before a quiet move | V 2 | positionReadingService:155
+- Keeps a way back: a retreat square before the chase; no caging pawn move | exposed pieces | V 5 | moveInsight:957
+- Before a queen grab, counts her escape squares; can she get home? | poisoned grabs | VG 2 | ~tacticsDetector:451
+- Safety roll-call: re-scans for loose pieces after a flurry of exchanges | after a skirmish | I 2 | ~loosePieces:35
+
+### G. Attack, mate, sacrifices, king safety
+- Wing attacks: castle opposite, don't storm your king's wing, shut the centre | before a storm | S 4 | ~kingAttack:71
+- A storm's purpose (kick the knight, open a file); none needed if one is open | storms | PS 4 | ~kingAttack:71
+- Storm geometry: induce a hook, push so your file opens; the stalling pawn | opposite-side storms | PG 2 | ~moveInsight:782
+- The hook: their advanced shelter pawn is your lever | king behind a pushed pawn | P 5 | ~moveInsight:782
+- Meets a flank advance with a central strike, chosen from the menu of answers | wing pawn lunges | S 3 | MISSING (part: movePlan:76)
+- Builds before striking: one more piece, a rook lift; who isn't in yet? | castled-king attacks | P 7 | ~kingAttack:71
+- Attack method: fix the king, take its flight squares before checking | king hunts | PG 3 | ~moveInsight:701
+- Open up when ahead in development; a sac needs an undeveloped defence | development lead | S 2 | reviewSacrifice:44
+- Division of labour: each attacker gets its own job | king attacks | P 1 | MISSING
+- Lures the king toward your pieces (invites castling into the attack) | uncastled king | P 1 | MISSING
+- A probing check to see how they react | exposed king | P 1 | MISSING
+- Names the mating pattern, the finish order, and the resource that stops it | mating attacks | RK 3 | ~matePatterns:341
+- Mating net: count flight squares, seal the last, bring in the heavy pieces | broken shelter | RG 4 | ~matePatterns:341
+- The quiet decisive move: take the escape or blocking square first, then mate | one flight square left | PG 4 | ~moveInsight:701
+- Mate by squares: the mating square, add an attacker or decoy its lone guard | final attack phase | KG 4 | ~moveInsight:701
+- King hunt: herd it with distant checks, cut its retreat, keep it flowing | won king hunts | K 4 | ~moveInsight:701
+- Mate or material: skip a pawn when mate is faster; take insurance otherwise | both on offer | S 6 | MISSING (part: moveInsight:993)
+- Races: whose attack lands first; ignore the slower; watch only their mates | opposite castling | S 3 | MISSING (part: threatOut:71)
+- Back rank: a threat needs a piece to deliver mate; false alarms dismissed | after trades | IV 2 | ~tacticsDetector:384
+- Which material can force mate (bishop and knight can, two knights can't) | bare kings | K 2 | conceptEngine:243
+- A sac pattern (Greek gift, Bxf7+) with its conditions; unsound ones refuted | thematic sacs | RKC 5 | ~moveInsight:668
+- A sacrifice or gambit as a purchase: what it bought, is it enough, its clock | sacs, gambits | CS 9 | ~reviewSacrifice:44
+- Sizes a sac by its worst case first (at worst a perpetual), then the upside | speculative sacs | C 2 | MISSING
+- Price of opening lines: a pawn or two is fine; a piece only for forced mate | line-opening sacs | SC 1 | ~reviewSacrifice:113
+- The objection IS the point: the decoy or sacrifice that opens lines | sacs and decoys | C 1 | ~speedRunReads:276
+- What a sacrifice still gains if declined | at a sac | C 1 | MISSING
+- Plays the typical sac on trust once its trigger shows or attackers outnumber | castled-king storms | S 2 | ~kingSafety:297
+- A sac's conditions used defensively: castle, the Greek gift fails here | before castling | VK 1 | MISSING
+- Marks the sacrificial target early: pieces converging on one shelter pawn | converging pieces | RP 1 | MISSING
+- A standing sac threat makes the defender worry every move | piece aimed at a weak point | S 1 | MISSING
+- Places a piece so a future sacrifice is ready | development | P 1 | ~moveInsight:668
+- Sacrifices to open lines at a stuck king, linked to a known pattern | king stuck, behind | PR 1 | ~keySquares:97
+- Their king is stuck: blow the centre open, keep it open; speed first | uncastled after opening | SI 5 | kingSafety:142
+- Which side to castle: away from stripped pawns; opposite to race | before castling | SP 9 | ~speedRunReads:108
+- Opposite castling is a race of tempi: pieces lead too, speed over a pawn | opposite castling | S 6 | ~splitPosition:14
+- Castling isn't automatic: a closed centre keeps the king home | closed centres | S 2 | ~kingSafety:186
+- Castling by hand: the route, why the direct step fails, blocking checks | castling rights lost | PK 2 | ~kingSafety:202
+- Castling as geometry: cover their king's transit square; legal but impossible | uncastled enemy king | VG 5 | MISSING (part: positionalRead:147)
+- A queen trade where the king recaptures costs castling; make THEIR king take | early queen trades | C 2 | ~recaptureChoice:103
+- Which pawn makes real luft, ideally one with a second job | back-rank danger | VK 2 | ~moveFundamentals:780
+- An exposed king's square chosen by future checks and hooks | king driven out | PV 2 | MISSING
+- Don't push pawns in front of your own king or on the attacked wing | near your king | V 2 | moveInsight:826
+- Pictures the board after castling: the rook changes lines | before castling | VG 1 | MISSING
+- A king hides behind a piece on the attack line; move the shield with tempo | after a sac | RG 1 | MISSING
+
+### H. Trades and recaptures
+- Which recapture and why: toward the centre, a file, structure, development | every recapture choice | CS 21 | recaptureChoice:103
+- Prepares the recapture before the capture, so the trade is on your terms | likely exchanges | PV 4 | MISSING (part: recaptureChoice:103)
+- Steers THEIR recapture: your extra guard decides who takes back | multi-recapture trades | CP 3 | ~recaptureChoice:103
+- Judges each trade: kill their best piece, strip their king, keep your best | exchange decisions | S 15 | tradeJudgement:40
+- Keeps the tension (it burdens them, breeds tactics); releases on your terms | central contact | S 10 | speedRunReads:49
+- Refuses a trade that activates their worst piece or removes your supporter | tempting captures | CS 3 | ~tradeJudgement:40
+- Chooses the trade by what each piece guards; the break by the outpost made | key squares | PS 3 | ~tradeQuality:273
+- Colour bishops: trade their fianchetto bishop; keep yours if it guards holes | bishop trades | SK 6 | ~positionReadingService:694
+- Trades off their only developed piece, resetting their development | one active enemy piece | SP 1 | MISSING
+- Never trade a much-moved piece for a fresh one | opening trades | K 1 | MISSING
+- The defender's method: trade off your attacker; for you, thin their attack | trades mid-attack | IS 2 | MISSING
+- Gives up the exchange to keep the key attacking piece | attacking recaptures | S 2 | MISSING
+- Denies the exchange or break their opening is built on, even by an ugly move | one-exchange defences | V 1 | MISSING
+- A trade whose point is the recapture: the retaker abandons a duty | sole guards | RC 1 | MISSING
+- Don't assume they will make the trade you want | plans needing a trade | C 1 | MISSING
+- Aims for the most winning position, not the first queen trade | queen-trade offers | S 1 | ~deliberation:144
+- Duty parity: your tied guard costs nothing if their attacker is just as tied | probing heavy pieces | S 1 | MISSING
+- A maintenance trade: trading an indefensible pawn just keeps the balance | outnumbered pawn | IK 1 | MISSING
+- Imbalances by phase (minors v rook, queen v rooks, bishop pair), exceptions | imbalanced trades | K 8 | ~moveInsight:993
+
+### I. Structure, squares, pieces, plans
+- Names the structure the centre has fixed into, and its thematic break | centre fixes | RP 1 | ~positionReadingService:1078
+- Carries another opening's plan over (like a QGD), and where it breaks | structure settles | RP 12 | ~structureSignature:65
+- Chains and levers: name the break early, hit the base, the file it opens | closed centres | SP 7 | positionReadingService:418
+- Prepares a break (contest the square, pre-defend, rook behind); not too early | before a break | P 6 | ~positionReadingService:418
+- Chooses between two breaks by what each does to files and the other break | planning | PS 2 | mastersPlanRead:83
+- The one break the structure turns on: make yours, stop theirs | tabia reached | SP 1 | ~mastersPlanRead:83
+- A break that can never happen means a new plan | cramped structures | S 1 | ~mastersPlanRead:83
+- When central breaks are neutralised, goes round with a flank lever | both breaks answered | P 1 | MISSING
+- Who gains if the centre opens: keep it shut for space or king | pawn-break decisions | S 4 | ~speedRunReads:233
+- Opening a file cuts both ways: whose king does it reach first? | captures near kings | C 1 | MISSING
+- A development lead says open the centre now: early attacks, queens kept on | development lead | S 8 | ~reviewPositionalAssessment:81
+- Dynamic edges expire, static ones wait: cash the lead in time | temporary edges | S 7 | ~moveTiming:47
+- Temporary vs permanent: a short-term blemish for a lasting gain | plan decisions | S 5 | ~outpost:22
+- The threat is stronger than its execution: hold it, force a concession | threats that bind | S 5 | speedRunReads:144
+- Initiative over material: invest the attacked piece, don't save it on reflex | initiative positions | S 3 | ~speedRunReads:276
+- Transforms an edge: gives back material or a piece for a lasting one | static edges | S 6 | ~positionTransformation:83
+- Patience: finish developing, keep the tension, consolidate, then cash in | tempted to act early | S 8 | ~speedRunReads:49
+- The space clamp: restrict, improve slowly, refuse freeing trades, attack | you hold a bind | S 3 | ~positionReadingService:1661
+- Domination: no useful move for them; a piece chased or frozen by forks | binds, conversions | RS 2 | ~zugzwang:20
+- Two weaknesses: opens a second front before cashing the first | fixed target | S 5 | MISSING (part: positionReadingService:1194)
+- Small edges accumulate | quiet drifting games | S 2 | MISSING
+- The fighting line or the peaceful one; from equality, create an imbalance | equal positions | S 2 | MISSING
+- Serves the plan; isn't distracted by the one-move tactic | shiny one-movers | S 1 | MISSING
+- Keeps tactical chances alive in a closed position | closed positions | S 1 | MISSING
+- A weakness counts only if it can be attacked (doubled, isolated, IQP) | structure changes | IK 2 | ~positionReadingService:1194
+- Doubled pawns by phase and use: fine in endings, an asset holding the centre | doubling trades | K 3 | ~tradeQuality:124
+- IQP: hold the square in front; good or bad by activity; weakness shifts | IQP structures | KS 1 | ~positionReadingService:1078
+- The key pawn, and the chain that falls with it | one pawn holds all | I 1 | MISSING
+- Over-extension: pawns without piece support overreach and become targets | space grabs | IV 3 | ~speedRunReads:49
+- Overprotects the linchpin the whole system rests on | one carrying point | VP 2 | ~speedRunReads:218
+- Uses a pawn majority against their tied-down pieces | majorities | P 1 | ~tacticsDetector:690
+- Fixes their pawns on your bishop's colour so it can attack them | bishop endings | P 2 | MISSING
+- Restriction: blunt a fianchetto, take forward squares, freeze pawns | active enemy pieces | VS 8 | MISSING (part: positionReadingService:964)
+- Keeps their piece where it clogs their own system's pawn plan | fixed systems | PV 1 | MISSING
+- Keeps the pawn that can still kick their piece | enemy central piece | V 1 | ~positionReadingService:530
+- A piece in front of its pawn: a neighbour becomes isolated in all but name | developing moves | IC 1 | MISSING
+- A wedge pawn that cramps their setup and pays off later | centre fights | S 1 | MISSING
+- Resolves tension by pushing past to keep a protected passer, not capturing | pawn lunges | S 1 | ~speedRunReads:49
+- A break whose point is trading off YOUR weak pawn | backward or isolated pawn | P 1 | MISSING
+- Doesn't repair their structure; declines material that fixes their problem | winning positions | S 2 | MISSING
+- Chooses the structure on purpose between similar pawn moves | structural choices | S 1 | MISSING
+- Names the small pawn formation a setup builds and its purpose | setup moves | R 1 | MISSING
+- The structure's usual squares, built-in hole, standard tours (Kb1, Ne2-f4) | named structures | KP 5 | ~mastersPlanRead:83
+- Their recapture sealed your own weakness | exchanges by your weak pawn | C 1 | MISSING
+- En passant as a structural decision: take it, or keep the clamp | en passant chances | SK 2 | MISSING
+- Keeps a system's standard moves, breaks routine for a concrete concession | system openings | S 1 | ~theirMoveCost:60
+- Chooses the wing by where your pieces are and whether the break can happen | closed centres | S 1 | MISSING
+- Outposts: a hole no pawn can hit, the right piece, its route, its guard gone | holes appear | IPK 16 | outpost:39
+- A weak square isn't a weak pawn: holes stay; piece-guarded, still a hole | pawn advances | IK 4 | ~outpost:22
+- The semi-outpost: challengeable only at a cost, worth a knight route | no true outpost | P 1 | MISSING
+- Colour complexes: which piece uses the weak colour (queen too), warned early | key bishop traded | IPG 4 | ~positionReadingService:694
+- The masked weakness: a strong piece hides a hole; chase it and it returns | piece on a weak complex | IP 1 | MISSING
+- An open file is harmless when you cover its entry squares | file about to open | KV 1 | MISSING
+- Keeps squares and routes free; moves one piece aside so another arrives | manoeuvres | PV 2 | speedRunReads:325
+- Values a square for safety and onward routes, not activity now | quiet placement | P 1 | MISSING
+- Names the squares your unmoved units leave uncovered | early middlegame | I 1 | MISSING
+- The mirrored-square asymmetry in a symmetrical structure | symmetrical centres | K 1 | MISSING
+- Piece quality: a bad bishop is a big pawn, a buried piece is missing | misplaced pieces | IK 6 | pieceQuality:209
+- Improves the worst piece; in quiet positions that is the plan | quiet middlegames | P 6 | nextPlans:81
+- Plans a route by destination first, then the hops; recaps the journey | misplaced pieces | P 10 | forwardTeaching:186
+- Rooks: open file, seventh rank, behind the break, doubled; which rook first | files open | PK 4 | ~positionalRead:632
+- Which rook or piece: decided by what the other one is doing | rook placement | P 3 | ~moveContrast:64
+- Right idea, wrong piece: chooses which piece carries out the idea | two pieces could | PC 3 | MISSING (part: moveContrast:64)
+- When chased, picks a square that still works; a long retreat keeps its line | chased pieces | P 4 | ~speedRunReads:430
+- Kicks an annoying or unsupported central piece with a pawn | central intruders | P 2 | ~threatAnswer:58
+- What each piece is good at (bishop pair in open games), used as a reason | trade and outpost choices | K 2 | ~positionReadingService:1496
+- Values a quiet piece: a central or defensive piece can be the most important | manoeuvring | K 2 | ~perturbation:42
+- Doesn't park a piece on your own open file | half-open-file attacks | V 1 | MISSING
+- A two-sided ledger of mutual restriction between pieces | mutual restriction | S 1 | MISSING
+- Picks the developing square and why the natural one fails | development | PC 6 | ~moveContrast:64
+- Develops to a role, not as far forward as possible | developing squares | KP 2 | ~pieceOptions:63
+- Development order: develop and castle, rooks central, then concrete play | late opening | PK 1 | ~moveFundamentals:308
+- Adapts development to their setup, not the same squares every game | minor-piece development | P 1 | ~speedRunReads:325
+- A defensive move that buries your development, and how to repair it | buried pieces | C 1 | ~boardDelta:65
+- Meets an attacked pawn by advancing it with tempo | pawn hit by a piece | P 1 | moveFundamentals:308
+- A piece tied to a job (the queen as glue) can't stop your next move | sole defenders | I 5 | ~speedRunReads:576
+- Jobs change: a job ends and the piece is reassigned, or another takes over | guard changes | IP 5 | ~pieceOptions:63
+- States a move's purpose, either seat: what it prepares, stops and allows | quiet moves, opening | PV 12 | moveIntent:124
+- One move, several jobs: lists and ranks them; prefers the move doing more | multi-purpose moves | P 16 | deliberation:354
+- The plan the structure implies, as an itinerary (wing, breaks, routes) | setup completes | P 7 | nextPlans:161
+- The plan in numbered stages with checkpoints; progress marked later | structural middlegames | P 5 | ~planArc:236
+- One thesis per game: their first concession is the target later moves recall | moves 7-12, recalled | S 2 | ~teachingSelector:347
+- Names the most important feature (focal point, sole trump) and plans from it | quiet middlegames | SP 3 | ~positionCharacter:59
+- Teaser now, payoff later ("that was the point"); retargets if the door shuts | prepared moves pay off | P 17 | ~learnBoardTeaching:917
+- Re-checks the plan after each of their moves; switches if a resource appears | position changes | S 8 | ~planArc:236
+- When execution fails tactically, keeps the plan and changes the route | refuted execution | PS 2 | MISSING
+- Announces a change of mode: consolidate now, hit the gas, go technical | thresholds crossed | S 2 | positionCharacter:130
+- Their move switched off your plan: which plan, and why | plan-killing moves | I 1 | moveIntent:124
+- Holds the goal across moves and finishes the break it started | multi-move goals | S 2 | ~speedRunReads:379
+- The move useful whatever they do, played without long calculation | uncertainty | P 5 | ~speedRunReads:392
+- Tests a plan: best case, its floor if it fails, a move good in every branch | before committing | P 3 | ~speedRunReads:444
+- Most urgent first: secure the loose piece before grabbing; can you do both? | danger amid improvements | P 3 | ~speedRunReads:187
+- Places pieces for the break you'll make later | slow manoeuvring | P 2 | moveIntent:124
+- Judges a placement by the line it will get after your planned pawn moves | odd placements | PG 2 | MISSING
+- Marks the transition: the opening job is done, now the position needs a plan | development complete | S 2 | ~development:67
+- Names the keystone move: it solves your one problem and prepares the attack | one problem, one plan | PV 1 | ~moveIntent:124
+- Two advantages: chooses which one to play on | after a gain | S 1 | planChooser:29
+- Plan against plan: their best counter-plan, seen from their side | mutual plans | S 3 | ~lookaheadPlan:843
+- Skip the middleman: is the preparatory move needed at all? | before preparing a break | P 2 | speedRunReads:303
+- Target selection: name or create it, fix it, two ways to hit it, stack up | after structure settles | IP 10 | ~nextPlans:161
+- A new weakness with what it means: it is worth the defenders it ties down | weakness fixed | IP 2 | ~positionReadingService:1194
+- Indirect pressure: hits the chain's base or the target's defender | single-guarded pawn | P 2 | ~speedRunReads:472
+- Blockade both ways: block their passer; remove your passer's only blockader | passers appear | VP 2 | positionReadingService:1039
+
+### J. Defence, conversion, endgame
+- Against a threat or check: take, step off, block (forgotten), guard, counter | threats, checks | VK 7 | checkMethod:32
+- Lists every threat, then finds the one move that meets them all | double threats | IV 2 | ~threatOut:71
+- Meets a threat by making it cost them | tempo-needing threats | VC 1 | MISSING
+- Names the one move to avoid and the lone guard against mate | delicate king | V 1 | ~latentDanger:87
+- Refutes an unsound sac: no forced mate, no panic; find the one king move | their f7/f2 sac | VC 5 | ~reviewSacrifice:44
+- Two pieces attacked: the checklist (save both, counter-attack, or choose) | double attack on you | VK 1 | ~moveInsight:83
+- When worse: trade off the pressure, cover squares centrally, defend cheaply | worse but level | SV 1 | ~moveInsight:889
+- When lost: complicate, keep pieces active, set problems, bait a swindle | clearly lost | S 5 | ~tradeJudgement:40
+- Takes the perpetual when worse | repeating attacks | SC 1 | ~onlyMoveSequence:57
+- Converts by margin: consolidate, trade pieces, passer, cut-off, no stalemate | clearly winning | SP 18 | ~conversionMethod:44
+- When ahead: trade pieces not pawns; offer the queen trade at the right time | after winning material | S 8 | conversionMethod:44
+- When winning: the simplest clean win; ranks several wins with reasons | several wins | S 8 | MISSING (part: conversionMethod:44)
+- Keeps pressing as they collapse; one pawn and stopping is the common error | disorganised opponent | S 1 | ~safetyHabits:54
+- "Still wins, but X was cleaner": a forgiven imprecision, graded honestly | non-best winning moves | C 2 | inaccuracyCall:997
+- Endgame king: centralise it first, it is a fighter; hide it from rook checks | entering endings | KP 4 | ~endgamePawnReads:166
+- Rook behind passers, attack pawns from behind, pawns off the bishop's colour | endings | K 9 | endgameTechnique:408
+- Opposition, key squares, square of the pawn, bridge, cut-off, wrong bishop | technique positions | RK 1 | endgameTechnique:100
+- Zugzwang: win by making them move; queen against a pawn on the seventh | tempo endings | K 3 | zugzwang:38
+- Pawn endings: breakthrough, decoy passer, triangulation, king to the target | king-and-pawn endings | KP 4 | endgamePawnReads:77
+- King up, roll the passers, push don't defend, a pawn back for a won ending | winning endings | PK 4 | ~conversionMethod:44
+- Passer technique: make a second passer and escort it (knights block badly) | extra-pawn endings | KP 2 | ~endgamePawnReads:52
+- A passed pawn ties pieces down, both ways | advanced passer | KP 1 | ~endgameTechnique:408
+- Pawn races: count steps, the square of the pawn, a check to gain the tempo | promotion races | KC 3 | endgameTechnique:180
+- Majorities: the one a trade creates; two pawns hold three; don't rush | majorities | K 1 | ~endgamePawnReads:52
+- Stalemate safety: leave the cornered king a square; keep a spare pawn move | winning, king cornered | VK 2 | ~stalemateWatch:24
+- Push or hold: in light endings activity beats a pawn; a pawn down holds | marginal endings | S 2 | pushOrHold:42
+- Chooses the ending by structure: trades into the one exposing their weakness | before simplifying | S 3 | ~positionTransformation:83
+- Opposite bishops: drawish in endings, an attacker's weapon in the middlegame | opposite bishops | K 2 | ~pushOrHold:42
+- Calculate before trading into a pawn ending | last-piece trades | KC 1 | endgamePawnReads:112
+- Rook against pawn: cut off, lateral checks, deflect with a majority | rook vs pawns | K 1 | ~conceptEngine:425
+- Escaping the perpetual check | queen endings | K 1 | ~onlyMoveSequence:57
+
+### K. Method, habits, review, delivery
+- Asks the question aloud and answers it at once: the inner voice, not a quiz | before a reveal | IP 17 | ~thinkAloud:226
+- Closes on the habit that finds it next time, or a one-line portable rule | end of a key beat | KI 4 | methodBeat:116
+- Whenever X, look for Y: a knight's jump apart, fork; king-queen line, pin | trigger shapes | R 8 | methodBeat:116
+- Their threat first, then checks, captures, threats; candidates before lines | decisions | I 1 | methodBeat:296
+- The safety check before letting go: their checks, captures, forks, mates | before committing | V 10 | safetyHabits:25
+- End-of-line check: one move past the end; anything loose; is the motif back? | end of calculation | I 4 | ~safetyHabits:25
+- Finds tactics by asking what their last move gave up | after weakening moves | I 3 | moveInsight:573
+- After every pawn push: what did it stop guarding? | every pawn move | I 2 | moveInsight:523
+- Weak enemy king: start the search with captures and checks beside it | loosened shelter | I 1 | methodBeat:116
+- Goal, obstacle, remove it: which own pawn would you delete? | blocked plans | PI 7 | ~thinkAloud:145
+- The opening to-do list as a question (development, centre, king) | quiet opening | P 3 | ~moveInsight:130
+- Says when a decision doesn't matter (save time) and when it does (take time) | low-stakes moves | S 8 | speedRunReads:68
+- Practical play: engine verdict vs human difficulty; who has the easy moves | sharp choices | S 12 | ~criticalityScan:103
+- Triage: settle the simplest first, then calculate the one line that needs it | forcing positions | I 2 | ~moveOrder:65
+- When a line fails, back up to the last choice, not the start | failed lines | K 1 | ~speedRunReads:187
+- Avoids tunnel vision: what if they answer differently? | after choosing a line | V 1 | ~opponentIntent:55
+- After a good move at a critical moment, looks again for a better one | critical moments | I 1 | MISSING
+- Mid-attack habit: check for a plain material win first | attacks | I 1 | ~positionReadingService:379
+- Keeps brainstorming separate from forced lines | complex positions | I 1 | MISSING
+- Splits the board into separate battles | play on both wings | I 1 | ~splitPosition:14
+- After a move, asks which squares and lines just opened | line-clearing moves | I 1 | speedRunReads:233
+- Keeps a list of their weaknesses: the winning move is usually on it | winning positions | I 1 | ~positionReadingService:1194
+- Evaluation exercise: list the factors, then estimate | calm after a gain | I 2 | ~reviewPositionalAssessment:276
+- Calculate on your own turn, think about plans on theirs | any phase | K 1 | MISSING
+- Intuition vs calculation in known attacking structures | known attacks | K 1 | MISSING
+- Mindset at a moment: don't hurry, don't overpress, don't spiral after a slip | turning points | S 2 | ~safetyHabits:54
+- Reads their clock, speed and psychology, and plays into it | live clock games | S 1 | MISSING
+- Advice for the student's stage: what a strong player does vs what to do now | opening choices | S 2 | ~amateurPlayLookup:76
+- Turns their blunder into your habit warning: the thinking error behind it | after their error | V 2 | ~safetyHabits:25
+- Self-critique as the Learn opponent: what its weaker move gave up | coach's weak move | I 2 | concessionBeat:131
+- Invites the student to explore the position | rich positions, review | I 1 | MISSING
+- Routine moves get one plain clause; the words are saved for decisions | routine plies | R 5 | continuationMoveNarration:75
+- A refrain, shorter each time: rule, "there it is again", cue, silence | recurring ideas | K 2 | standingRefrains:236
+- Spreads one explanation (a numbered argument) over several plies | lines, routine moves | C 2 | ~thinkAloud:114
+- Defines a term in context the first time, then just uses it | first use of a term | K 4 | conceptEngine:838
+- Praise naming the improvement: a dodged habit, an idea applied | improvements | R 3 | ~moveInsight:642
+- Callback: you met this before (earlier move, past game); still alive | recurring ideas | RK 4 | motifLedger:31
+- Banks a weakness their forced move created, for later | forced pawn moves | IP 1 | theirMoveCost:60
+- The verdict in words, with reasons and what the next phase will feel like | pauses, phase changes | IS 10 | ~reviewPositionalAssessment:276
+- Honest sizing: a trick gives a small edge; an offbeat line is no forced win | after tricks | CS 2 | ~criticalMoment:144
+- How a position looks vs what it is, by listing their assets | misleading positions | I 2 | ~pieceQuality:209
+- Names the missed punishment or resource: the win handed back | missed chances | I 3 | missedTacticService:964
+- Admits honestly that the position is murky and unexplored | unstable evaluation | I 1 | MISSING
+- Recap: the kind of win, the decisive mistake, the moral | end of review | SK 4 | ~teachingSelector:347
+- Rewinds to the 2-5 decision points as if-then branches, side lines pruned | after the game | CS 1 | ~reviewTurningPoint:133
+- Names where the advantage slipped, and the last chance to hold | review | I 2 | turningPoints:211
+- Causal post-mortem: the blunder grew out of an earlier choice | recap | C 2 | ~causalChain:684
+- The game's most important move was a quiet one | recap | S 1 | MISSING
+- Why they resigned: the finish, the only defence, how it fails | resignation | C 1 | MISSING
+- The piece that did nothing all game, and why its road was dead | decided games | I 1 | MISSING
+- Mentions a stronger player's choice without making it a correction | after the student's move | K 1 | strongChoice:16
+- Reads the position by what is missing (an absent bishop changes a weakness) | after trades | I 1 | ~positionReadingService:694
+- Counts tempi: who spent moves on what, and what their wasted ones cost | lagging development | KI 6 | ~tempoCount:32
+
+### L. Principles, nuggets, knowledge
+- The rule, then the exception the board earns, and the fact behind it | rule-breaking good moves | KS 17 | ~ruleException:70
+- An opening principle with the reason it holds on THIS board | quiet opening moves | KP 4 | moveFundamentals:1373
+- Ranks one principle against another (a blocker chosen by what it allows) | conflicting principles | S 2 | ~checkMethod:32
+- A rule switches off when its premise changes (the phase, a lost condition) | changed conditions | KR 3 | ~ruleException:70
+- Corrects a beginner mistake by its concept even when nothing is lost | active opening moves | K 1 | ~tempoCount:32
+- Piece value both ways: defend and attack with the cheapest unit | choosing a piece | K 6 | moveInsight:889
+- Pawns are the best defenders, and the best attackers of pawns | advanced pieces or pawns | K 2 | ~speedRunReads:218
+- King and heavy pieces make poor guards; harass a heavy sole defender | heavy defenders | IP 4 | ~moveInsight:1022
+- The king walks a diagonal as fast as a straight line, so it chases two goals | king-and-pawn races | KG 1 | MISSING
+- A knight is worth its squares (eight central, two cornered); likes closed centres | knight decisions | KG 1 | MISSING
+- Pawn arithmetic: a wing pawn for a centre pawn is a bargain | centre-pawn fights | K 1 | MISSING
+- Material arithmetic toward level: a piece is worth three pawns | after sacs | K 1 | MISSING
+- Appearance vs reality: the ugly, passive or backward move is the right one | odd best moves | R 5 | ~speedRunReads:82
+- Vivid imagery tied to a board fact, to make a principle stick | after a principle | K 3 | MISSING
+- f7 and f2 are the opening's soft spots | passive development | K 1 | ~keySquares:97
+- Don't kick a piece toward the square it wants: that wastes your move | reflex kicks | K 4 | ~moveInsight:909
+- This is only safe because of that earlier move | prepared moves | KC 1 | MISSING
+- Don't block the c-pawn with the knight in d-pawn openings | d-pawn development | K 1 | MISSING
+- Two central enemy knights invite a pawn chase; kick with pawns, not pieces | early central knights | RP 1 | ~moveFundamentals:391
+
+## 3. Missing computers
+
+Every MISSING act in section 2, deduplicated, one example each. All are new (B6): bring them to David before building.
+
+Opening and traps
+- Opening equivalence, moves inserted or colours reversed: "an Alekhine with c3 and c5 thrown in favours Black."
+- Off-book method: "taking on d5 hands them d4 for a knight, so take on e5."
+- Mirror-structure race: "in this reversed King's Indian they never get time for ...e5, so e5 is yours."
+- Repertoire fit (record plus authored data): "this setup meets c4, d4 and Nf3, so you learn one plan."
+- Lore and reputation (authored data, never generated): "engines later showed the natural knight to f3 is the harder test."
+- Pattern fails here (F04's when-it-fails half): "the queen check and grab on g6 lose a piece here to a counter-check."
+
+Order and timing
+- Move-count ledger for trades (capture timing; a much-moved piece for a fresh one): "take on c4 only after their bishop reaches d3, so recapturing is its second move."
+- Order from what they have NOT played: "no knight on f3 yet, so nothing hits e5; develop the f6 knight first."
+- Kick map (who can be hit with tempo, where it lands): "take on e5 so their knight retakes there, then chase it."
+- Hold a resource until it bites: "save the check on b4 until their knight is on c3; then the capture doubles their pawns."
+
+Reading their move
+- Quiet danger: "their checks only draw; the calm rook move bringing in the last attacker is the threat."
+- Their idea's one condition: "the knight to c7 bites only if your rook is already on e8."
+- An obligation lifts: "with their bishop back on b3, e5 no longer hangs, so d6 isn't forced: castle."
+- A threat's real purpose: "the rook to d1 threatens c4 to force trades into an endgame where a7 falls."
+- Their move against their own setup (a habit, a move out of plan): "their bishop came to c4 by reflex; e6 shuts it out."
+- What they wrongly expected: "they took the 'free' pawn; your rook lands on the seventh with a threat."
+- When their move helped you: "their bishop to h5 lets you take it with gain of time."
+
+Prevention
+- "Can you play it anyway?": "they stopped f4? If they take, you take back and their knight loses a move."
+- The wedged pawn by your king: "take on f6 with the queen so no pawn of theirs stays there."
+
+Tactics and geometry
+- Pin broken with tempo (questions.md item 7): "the knight leaves with check and the pinning bishop hangs." It must also check that the escaping piece can't just be taken: in the brief's first gem, after 5.Ng5+ chess.js allows 5...Qxg5 (the queen sees g5 via e7 and f6).
+- The would-be pinner is itself pinned: "their bishop can't pin you from c5: your queen pins it to their king."
+- Interference both ways (it, clearance and deflection are theme-only today, missedTacticService.ts:737-740): "the knight check isn't mate: it blocks the queen's cover of the escape square."
+- Clearance with tempo: "move the g4 knight off with a capture that hits the queen, and the pin lands."
+- Decoy and deflection, live: "push b5 first; when the bishop takes, the queen check forks."
+- Discovery audit: "c3 kicks the knight but allows a discovery; check every square it can land on first."
+- Their in-between move, one step further: "their in-between check looks scary; your king steps up and wins the piece."
+- The fork that serves a plan: "knight to g5 hits bishop and rook; it wins nothing but loosens d5."
+- Their usual reply is unavailable: "b3 usually chases the b6 knight, but here b3 doesn't work."
+- Counterfactual pattern: "if their queen stood there, the knight jump to e4 would fork it."
+- A pushed pawn can't block a check: "their c-pawn is on c5, so a bishop check on b5 can't be met by c6."
+- Interposition between facing pieces: "the rook steps in between the rooks staring down the d-file."
+- The loaded line: "when your central pawn advances, the bishop behind it hits their king."
+
+Attack, sacrifices and kings
+- Mate or material: "skip the pieces; open the g-file and mate on h6 can't be stopped", or "no mate here: take the rook with check". conversionMethod.ts:120 says only "the attack is the fastest win".
+- Attack race across wings (planRace.ts:180 races only passers and files): "their queenside play is too slow; keep pushing the h-pawn."
+- Castling geometry, their transit squares and your rook's new line: "retake on b4 with the bishop: it sees f8, so no short castling."
+- Break chooser (centre strike, flank lever, which wing): "their kingside build-up is flimsy: strike in the centre now."
+- Lure the king: "e4 opens the bishop and invites them to castle into the attack."
+- Probing check: "check on e7 first, see where the king goes, then plan around it."
+- Division of labour: "one rook takes the h-file, the other the b-file, the king steps to g7: mate."
+- A sacrifice's conditions used in defence: "castle: their queen can't reach h4 or h5, so the h7 sacrifice fails."
+- Sacrifice ledger, worst case and declined branch (onlyMoveSequence.ts:57 can prove it; no caller): "take on g3; at worst it's a perpetual."
+- Standing sacrificial target: "your pieces converge on g3, so a sacrifice may land there."
+- An exposed king's square by future checks: "king to a1, not a2: on a2 a queen check on b3 comes with tempo."
+- The king sheltering on the attack line: "their king hides behind your f7 bishop; move it off the f-file."
+- The king's diagonal walk (an F01 nugget): "go diagonally: you approach their pawn and support yours at once."
+
+Trades
+- Trade off their only developed piece: "the bishop move drops a pawn but trades off their only active knight."
+- The defender's trade: "their knight takes on g3 and you recapture: they removed one of their own attackers."
+- Exchange sacrifice for the key attacker: "recapture with the rook; the light bishop is the piece that attacks."
+- Deny the exchange their opening is built on: "the knight to a4 stops the exchange on c3 the defence relies on."
+- The duty a recapture abandons: "after the queen trade their rook leaves the back rank; the e5 knight is frozen."
+- Can they decline the trade? "Offering the bishop trade only invites their bishop to e3; they choose."
+- Duty parity: "your rook is stuck guarding the b-pawn, but their queen is just as stuck attacking it."
+- Maintenance trade: "e5 can't be held, so take on d4; it wins nothing, it just keeps the pawn count."
+- Prepare the recapture (recaptureChoice.ts:103 runs only after the capture): "knight to e2 first, so a knight retakes on c3."
+
+Structure, squares, pieces and plans
+- Second weakness: "don't take the isolated pawn yet; open the queenside, then it falls to two weaknesses."
+- Restriction: "c6-d5-e4 leaves their long bishop staring at a wall; h5 freezes their kingside pawns."
+- Right idea, wrong piece: "a knight to d7 is right, but it is the c5-knight's job."
+- Keep the plan, change the route: "the knight jump fails to a trade; that rules out the route, not the plan."
+- Plan over the one-move shot: "the pin is a one-move idea; the bishop to f4 adds control of e5."
+- A placement judged by its future line: "the b2 bishop looks dead, but your planned c4 and d5 open it."
+- Keep tactical chances in a closed position: "leave the rook on h1 so the g5 sacrifice stays in the air."
+- Their recapture sealed your weakness: "their pawn on d5 walls your backward d6 off the d-file."
+- En passant as structure: "don't take en passant; your e-pawn keeps f3 shut."
+- The semi-outpost: "their e-pawn could one day reach e4, but for now d5 is a fine post."
+- Fix their pawns on your bishop's colour: "a4 freezes their a-pawn on a dark square for your bishop."
+- The key pawn: "f5 guards e4; if d5 drops, e4 goes with it."
+- Structure library (formations, choosing between pawn moves): "a6, b5 and c6 make a triangle backing the expansion."
+- A break that trades off your weak pawn: "push d5, the direct way to get rid of the weak d6-pawn."
+- Don't repair their structure: "leave their hanging f-pawn: it buries their own bishop."
+- Keep their piece clogging their system: "against the London, d6 keeps their knight on c3, the c-pawn's square."
+- A piece in front of its own pawn: "their knight on c3 blocks c2, so nothing can ever back up d4."
+- The wedge that pays later: "a pawn jammed on d4 later covers c3, so their knight can't block your check."
+- A square valued for safety and routes: "the queen on the a-file is safe there and can swing to b4."
+- The masked weakness: "their weak d4, d3 and e3 hide behind the d5 knight; chase it with c6."
+- The mirrored-square asymmetry: "your c-pawn can still reach c6; they can never cover d4 the same way."
+- File entry squares: "let them open the c-file: every square their rooks could use is covered."
+- Don't plug your own open file: "the bishop to f4 blocks your rook's f-file; push e5 instead."
+- Squares your unmoved units leave open: "their knight reaches f5 because your central pawn hasn't moved."
+- Mutual-restriction ledger: "their rim knight blocks your bishop, a fair price for a stuck knight."
+- A file opened for the defender: "take on g3 and, after the f-pawn recaptures, their rook owns the f-file."
+- Small edges accumulate (a trend across moves): "no single big mistake, but small ones piled up."
+- Fighting line or peaceful line: "it's level, so make chances: taking on c3 creates the imbalance."
+
+Defence and conversion
+- Make the threat cost them: "push h3; if they play the skewer anyway, you take their other bishop."
+- The simplest clean win: "several moves win; the rook to c7 is the simplest."
+
+Method and review
+- More method habits (methodBeat.ts:296 has four stems): look again; calculate on your turn, plan on theirs; mark a line forced or speculative. "The queen defends, but look again: a fork."
+- Why they resigned: "the queen swings to h6, giving up the rook; the mate threat leaves one defence, and it fails."
+- The piece that did nothing: "their a6 knight's only road ran through c5, where their own pawn stood."
+- The quiet move that decided it: "the key moment wasn't a tactic but g3, taking f4 from their knight."
+- An invitation to explore: "set this up and try the defences yourself; each runs into mate."
+- Honest murkiness from an unstable evaluation, never a guess (F18): "this is unexplored; keep it simple."
+- Known attacking structures as a library (never "it feels right", F18): "here the g- and h-pawn storm simply works."
+- Their clock and speed (needs clock data; Play's opponent is the engine): "they move instantly: set one quiet question."
+
+Principles and nuggets
+- Safe only because of an earlier move: "g3 is fine only because your king is already on h2."
+- Wing pawn for centre pawn: "a4 chases a guard of e4; you win their centre pawn for your rook pawn."
+- Material arithmetic in words (V8): "three pawns for the piece makes material level."
+- A knight is worth its squares: "eight in the centre, two in the corner."
+- Don't block the c-pawn in d-pawn openings: "put the bishop on d6, not the knight on c6."
+- Phrase bank keyed on the fact, imagery and labels (phrasing, F6/V12, not a board read): "a walled-in bishop bites rock."

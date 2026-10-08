@@ -25,14 +25,6 @@ vi.mock('../../services/coachApi', () => ({
   getCoachChatResponse: vi.fn().mockResolvedValue('Hello! How can I help?'),
 }));
 
-vi.mock('../../services/coachChatService', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('../../services/coachChatService')>();
-  return {
-    ...actual,
-    loadAnalysisContext: vi.fn().mockResolvedValue(''),
-  };
-});
-
 vi.mock('../../services/coachSessionRouter', () => ({
   routeChatIntent: vi.fn(),
 }));

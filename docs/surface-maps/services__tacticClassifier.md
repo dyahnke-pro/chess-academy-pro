@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**791 lines · 3 exports · 16 importers · 7 tests · 0 audits**
+**791 lines · 3 exports · 15 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,12 +26,11 @@
 - `src/services/tacticClassifier.skewer.test.ts`
 - `src/services/tacticClassifier.test.ts`
 - `src/services/tacticsDetector.ts`
-- `src/services/threatCheck.ts`
 - `src/test/kingIsNeverHanging.test.ts`
 
 ## Exports and every call site
 
-### `findHangingPieces` (function) — 15 call sites
+### `findHangingPieces` (function) — 14 call sites
 - `src/data/patternRegistry.ts:113`
 - `src/services/coachGameEngine.ts:301`
 - `src/services/deliberation.ts:123`
@@ -45,7 +44,6 @@
 - `src/services/playedMoveGrade.ts:141`
 - `src/services/searchDepth.ts:69`
 - `src/services/tacticsDetector.ts:820`
-- `src/services/threatCheck.ts:55`
 - `src/test/kingIsNeverHanging.test.ts:56`
 
 ### `classifyPosition` (function) — 31 call sites

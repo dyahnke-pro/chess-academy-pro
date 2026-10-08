@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5480 lines · 40 exports · 48 importers · 46 tests · 5 audits**
+**5480 lines · 40 exports · 46 importers · 45 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,12 +15,10 @@
 
 ## Who calls in
 
-- `src/components/Coach/CoachAnalysisView.tsx`
 - `src/components/Coach/CoachGamePage.tsx`
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/components/Coach/ReviewCitationPreviews.test.tsx`
 - `src/components/Coach/ReviewCitationPreviews.tsx`
-- `src/components/Stats/StatsPage.tsx`
 - `src/hooks/useReviewPlayback.test.ts`
 - `src/hooks/useReviewPlayback.ts`
 - `src/services/advantageWasMissed.test.ts`
@@ -121,11 +119,7 @@
 ### `generateReviewNarrationSegments` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildProfileContext` (function) — 7 call sites
-- `src/components/Coach/CoachAnalysisView.tsx:32`
-- `src/services/coachChatService.ts:353`
-- `src/services/coachChatService.ts:397`
-- `src/services/coachChatService.ts:422`
+### `buildProfileContext` (function) — 3 call sites
 - `src/services/coachFeatureService.test.ts:297`
 - `src/services/coachFeatureService.test.ts:309`
 - `src/services/coachFeatureService.test.ts:315`
@@ -362,8 +356,7 @@
 - `src/services/reviewFullData.ts:552`
 - `src/services/reviewWithholding.ts:13`
 
-### `detectBadHabits` (re-export) — 8 call sites
-- `src/components/Stats/StatsPage.tsx:65`
+### `detectBadHabits` (re-export) — 7 call sites
 - `src/services/badHabitDetector.ts:21`
 - `src/services/coachApi.ts:5188`
 - `src/services/coachFeatureService.test.ts:126`
@@ -377,7 +370,6 @@
 - `src/components/Coach/CoachGamePage.test.tsx`
 - `src/components/Coach/CoachGameReview.test.tsx`
 - `src/components/Coach/ReviewCitationPreviews.test.tsx`
-- `src/components/Stats/StatsPage.test.tsx`
 - `src/hooks/useReviewPlayback.test.ts`
 - `src/services/advantageWasMissed.test.ts`
 - `src/services/coachFeatureService.causalChain.test.ts`

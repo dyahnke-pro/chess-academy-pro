@@ -109,26 +109,13 @@ describe('the coach toolbelt is COMPLETE and INVOCABLE', () => {
   // ── THE OTHER HALF: every fact-computer must be REACHABLE too ──────────────
   //
   // A tool nothing can call and a computer nothing calls are the same defect.
-  // Measured 2026-09-17: FOUR spine modules have ZERO production importers —
-  // nothing in the app can reach them, whatever their tests say.
-  //
-  //   coachChatService.ts        10 exports. CoachChatPage does NOT import it;
-  //                              only its own test and a test-mock of that page.
-  //   tacticDrillService.ts       3 exports, and NO test either. A second drill
-  //                              queue builder sitting beside the live one —
-  //                              TacticDrillPage builds from puzzlesByOpening.
-  //   threatCheck.ts              2 exports. The computer behind the threat-check
-  //                              card David removed from Learn on 2026-08-05
-  //                              ("annoying AF"). The UI went; this stayed.
-  //   openingNameClaimValidator   1 export, only its own test.
-  //
-  // NOT deleted here. CLAUDE.md: prove it is actually dead, grep every consumer,
-  // dry-run the removal — and two of this sweep's own first candidates were
-  // FALSE (coachsCall is reached by a DYNAMIC import in CoachTeachPage; a static
-  // regex missed it). The ceiling stops the class GROWING while each is retired
-  // deliberately. It only ever shrinks.
+  // Measured 2026-09-17: FOUR spine modules had ZERO production importers
+  // (coachChatService, tacticDrillService, threatCheck, openingNameClaimValidator).
+  // All four were deleted 2026-10-08 after a grep of every consumer, static and
+  // dynamic (a dynamic import of a deleted path fails the typecheck). The
+  // ceiling is now 0: a spine computer nothing can reach is a defect.
   it('no NEW spine computer becomes unreachable', () => {
-    const ORPHAN_CEILING = 4;
+    const ORPHAN_CEILING = 0;
     const SPINE = /^src\/services\/(coach|narration|teaching|voice|weakness|review|tactic|position|concept|note|corpus|curated|method|fact|ply|opening|refuted|plan|grounded|mistake|drill|explain|pin|threat|importance|need|selector|decider|lookahead|dna|principle|exchange|criticality|attribut|transfer|foresight|habit|misconception|rating|amateur|theory|board|causal|skill|standing|endgame|mate)[A-Za-z]*\.ts$/;
     const walk = (d: string, o: string[] = []): string[] => {
       for (const e of readdirSync(d)) {
