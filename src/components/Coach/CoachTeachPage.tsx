@@ -10631,7 +10631,7 @@ export function CoachTeachPage(): JSX.Element {
                     }
                     for (const h of studentMoveTeaching({
                       fenBefore, san: move.san, history: move.history, cpLoss, bothCp,
-                      bestSan: studentBestSan, bestLine: preStudentRead.topLines?.[0], reply: reply ?? null,
+                      bestSan: studentBestSan, bestLine: preStudentRead.topLines?.[0], topLines: preStudentRead.topLines, reply: reply ?? null,
                       cpAfter: bothCp ? mid.evaluation * sign : null,
                       evalBefore: tradeTable,
                       popularTopSan: getCachedAmateurPlay(fenBefore)?.moves[0]?.san ?? null,

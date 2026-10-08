@@ -27,6 +27,7 @@ import type { AnalysisLine } from '../types';
 import type { LearnLane } from './learnTurnDoor';
 import type { ArrowClaim } from './arrowDoor';
 import { recaptureChoice } from './recaptureChoice';
+import { orderTeaching } from './orderTeaching';
 import { kingAttack } from './kingAttack';
 import { ruleException } from './ruleException';
 import { falseAlarm } from './falseAlarm';
@@ -125,6 +126,10 @@ export interface StudentMoveInput {
   /** The engine's eval AFTER the student's move, centipawns, student POV; null
    *  when either read is a mate. */
   cpAfter: number | null;
+  /** The engine's multi-PV lines at `fenBefore` (White POV), best first — for
+   *  the stock shot that fails here (`patternFails`). Absent → that lane is
+   *  silent. */
+  topLines?: readonly AnalysisLine[];
 }
 
 /** ONE VOCABULARY (plan "methodBeat — the live coach names the lesson STEP"):
@@ -146,6 +151,8 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   const out: TeachingHint[] = [];
   let to = '';
   try { to = new Chess(i.fenBefore).move(i.san).to; } catch { return out; }
+  // BATCH 1 — opening equivalence, order and timing (`orderTeaching`).
+  try { out.push(...orderTeaching(i)); } catch { /* a bonus, never a blocker */ }
   // THE COST A LANE MAY NAME AS A FAULT is the graded one (clean-pass walks
   // 11–12: "Blunder check … your rook on c8" on 27.Rc8, +12 → +6.9). One
   // grader for every lane that calls the move a mistake; a move it does not

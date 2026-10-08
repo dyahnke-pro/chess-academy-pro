@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**356 lines · 10 exports · 7 importers · 2 tests · 0 audits**
+**526 lines · 16 exports · 10 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,6 +18,9 @@
 - `src/services/boardPlan.ts`
 - `src/services/conceptEngine.ts`
 - `src/services/learnBoardTeaching.ts`
+- `src/services/orderComputers.test.ts`
+- `src/services/orderReads.ts`
+- `src/services/orderTeaching.ts`
 - `src/services/planRace.test.ts`
 - `src/services/reviewFullData.ts`
 
@@ -78,20 +81,46 @@
 - `src/services/planRace.test.ts:109`
 - `src/services/planRace.test.ts:115`
 - `src/services/planRace.test.ts:157`
-- `src/services/reviewFullData.ts:937`
+- `src/services/reviewFullData.ts:943`
 
 ### `fileClaimed` (function) — 4 call sites
-- `src/services/learnBoardTeaching.ts:207`
+- `src/services/learnBoardTeaching.ts:214`
 - `src/services/planRace.test.ts:140`
 - `src/services/planRace.test.ts:147`
 - `src/services/planRace.test.ts:148`
 
 ### `planRaceProof` (function) — 1 call site
-- `src/services/reviewFullData.ts:938`
+- `src/services/reviewFullData.ts:944`
+
+### `PawnSquareRace` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `pawnSquareRace` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `pawnSquareRaces` (function) — 2 call sites
+- `src/services/orderComputers.test.ts:163`
+- `src/services/orderComputers.test.ts:172`
+
+### `pawnSquareRaceRead` (function) — 3 call sites
+- `src/services/orderComputers.test.ts:165`
+- `src/services/orderComputers.test.ts:175`
+- `src/services/orderReads.ts:108`
+
+### `pawnSquareTaken` (function) — 3 call sites
+- `src/services/orderComputers.test.ts:169`
+- `src/services/orderTeaching.ts:94`
+- `src/services/reviewFullData.ts:1039`
+
+### `pawnSquareRaceProof` (function) — 3 call sites
+- `src/services/orderReads.ts:110`
+- `src/services/orderTeaching.ts:96`
+- `src/services/reviewFullData.ts:1040`
 
 ## Tests
 
 - `src/data/endgameConceptDrills.test.ts`
+- `src/services/orderComputers.test.ts`
 - `src/services/planRace.test.ts`
 
 ## Audits that reach it

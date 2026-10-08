@@ -2139,7 +2139,8 @@ export function buildReviewSegments(
       for (const f of facets) {
         // A refuted alternative is said once per game (identity `refuted:<move>`).
         { const id = facetIdentity.get(f); if (id?.startsWith('refuted:') && (refutedSaid.has(id) || !claim(id))) continue; }
-        { const id = facetIdentity.get(f); if (id?.startsWith('hint:') && (hintsSaid.has(id) || !claim(id))) continue; }
+        // `once:` — a batch-1 fact said once per game (the opening this board is).
+        { const id = facetIdentity.get(f); if ((id?.startsWith('hint:') || id?.startsWith('once:')) && (hintsSaid.has(id) || !claim(id))) continue; }
         // Positional VERDICT — atom-diffed. Speak the verdict WORD when it
         // changes, and only the REASONS not yet stated, so a growing edge adds
         // the new asset instead of re-reciting the pile every ply.
@@ -2515,7 +2516,7 @@ export function buildReviewSegments(
           if (!identity) continue;
           if (identity.startsWith('rule:')) { for (const k of identity.slice(5).split('|')) { principlesTaught.add(k); if (!principleTaughtAt.has(k)) principleTaughtAt.set(k, m.ply); } continue; }
           if (identity.startsWith('refuted:')) { refutedSaid.add(identity); continue; }
-          if (identity.startsWith('hint:')) { hintsSaid.add(identity); continue; }
+          if (identity.startsWith('hint:') || identity.startsWith('once:')) { hintsSaid.add(identity); continue; }
           // ONLY a tactic motif transfers (`transferMotifOf`).
           // `motif:<type>:<squares>` — the squares make it THIS instance, so a
           // standing tactic is never "the same idea as move N" of itself.

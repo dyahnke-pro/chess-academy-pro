@@ -20,6 +20,8 @@ import { homeMinorCount } from './development';
 import type { FactStakes } from './factStakes';
 import type { GamePromise } from './learnBoardTeaching';
 import { speedRunReads } from './speedRunReads';
+import { orderReads } from './orderReads';
+import type { FactProof } from './proof';
 
 const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 const NUM = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
@@ -190,8 +192,11 @@ export function opponentHabits(sans: readonly string[], opp: 'w' | 'b'): Habit[]
 }
 
 export interface DepthClause {
-  kind: 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read';
+  kind: 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read'
+    | 'equivalence' | 'timing' | 'refuted' | 'capture-choice' | 'plan-race' | 'kick';
   text: string;
+  /** Its proof, when the computer found one (batch-1 reads always carry it). */
+  proof?: FactProof;
   /** The line the clause says, from the board it starts on (arrows). */
   lines?: Array<{ fen: string; sans: string[] }>;
   squares?: string[];
@@ -258,6 +263,11 @@ export function depthClauses(args: {
     const reads = toMove === args.studentColor ? speedRunReads({ fen: args.fen, me: args.studentColor, lines: args.topLines, ...(args.lastOpponentMove ? { lastMove: args.lastOpponentMove } : {}), ...((): { lastOwnMove?: { fenBefore: string; san: string } } => { const o = ownLastMove(args.history, args.fen); return o ? { lastOwnMove: o } : {}; })() }) : [];
     const push = (r: (typeof reads)[number], text: string): void => { out.push({ kind: 'speedrun-read', text, ...(r.squares && text === r.text ? { squares: r.squares } : {}), ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.claim ? { claim: r.claim } : {}), ...(r.promise ? { promise: r.promise } : {}) }); };
     for (const r of reads.filter((x) => !x.namesMove)) push(r, r.text);
+    // BATCH 1 — opening equivalence, order and timing (`orderReads`), each
+    // with its proof. The ones that name the student's move wait for nameMove.
+    const order = orderReads({ fen: args.fen, history: args.history, student: args.studentColor, topLines: args.topLines, engineBest });
+    const pushOrder = (o: (typeof order)[number]): void => { out.push({ kind: o.kind, text: o.text, proof: o.proof, squares: o.squares, claim: o.claim, ...(o.lines ? { lines: o.lines } : {}), ...(o.stakes ? { stakes: o.stakes } : {}) }); };
+    for (const o of order.filter((x) => !x.namesMove)) pushOrder(o);
     // A read that names the move speaks it only where the move is earned;
     // elsewhere it speaks its IDEA — the habit of thought without the answer.
     if (!args.nameMove || toMove !== args.studentColor) {
@@ -265,6 +275,7 @@ export function depthClauses(args: {
       return out;
     }
     for (const r of reads.filter((x) => x.namesMove)) push(r, r.text);
+    for (const o of order.filter((x) => x.namesMove)) pushOrder(o);
     const top = args.topLines[0];
     const uci = top?.moves?.[0];
     if (!top || !uci) return out;
