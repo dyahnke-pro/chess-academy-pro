@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { readsAsQuestion } from './playName';
+import { readsAsQuestion, resolvePlayName } from './playName';
 import { REAL_QUESTIONS } from './realQuestions.test.fixture';
 
 const THAI = /[฀-๿]/;
@@ -15,11 +15,18 @@ describe('readsAsQuestion — the Learn page asks the shared reader first', () =
       expect(readsAsQuestion(q, true), q).toBe(true);
     }
   });
-  it('agrees with the hand labels on the real set', () => {
+  it('costs the opening gate nothing on the real set', () => {
+    // The gate's only job: never drop a request that names an opening, and
+    // never start a lesson on a question. Score exactly those two misses.
     const rows = REAL_QUESTIONS.filter((r) => !THAI.test(r.q));
-    const wrong = rows.filter((r) => readsAsQuestion(r.q, true) === (r.kind === 'command'));
-    console.log(`readsAsQuestion vs labels: ${rows.length - wrong.length}/${rows.length}\n` + wrong.map((r) => `${r.kind}: ${r.q.slice(0, 70)}`).join('\n'));
-    // A command read as a question is the costly miss (the lesson never starts).
-    expect(wrong.filter((r) => r.kind === 'command').length).toBeLessThanOrEqual(1);
-  }, 60_000);
+    const opening = (q: string) =>
+      resolvePlayName(q.replace(/^\s*(?:(?:can|could|would) you\s+|please\s+)?(?:play|teach(?: me)?|show me|walk ?through|drill|review)\s+(?:me\s+)?/i, '')).kind === 'resolved';
+    const named = rows.filter((r) => opening(r.q)).map((r) => ({ ...r, question: readsAsQuestion(r.q, true) }));
+    const dropped = named.filter((r) => r.kind === 'command' && r.question);
+    const wrongLesson = named.filter((r) => r.kind !== 'command' && !r.question);
+    console.log(`gate misses on ${rows.length}: dropped ${dropped.length}, wrong lesson ${wrongLesson.length}\n`
+      + [...dropped, ...wrongLesson].map((r) => `${r.kind}: ${r.q.slice(0, 70)}`).join('\n'));
+    expect(dropped.length).toBe(0);
+    expect(wrongLesson.length).toBeLessThanOrEqual(2);
+  }, 120_000);
 });

@@ -33,7 +33,7 @@ export interface ChatTurnRow {
   referents: string | null;
   /** How the reading was made: the deterministic square-answer path, the
    *  model, or why there is none. */
-  parseSource: 'square-answer' | 'llm' | 'llm-failed' | 'timeout';
+  parseSource: 'square-answer' | 'code' | 'llm' | 'llm-failed' | 'timeout';
   /** Did the reading survive validation against the board? null = no reading. */
   valid: boolean | null;
   /** Why validation refused it (a piece not on its square, an illegal move…). */

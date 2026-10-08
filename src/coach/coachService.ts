@@ -40,6 +40,7 @@ import { loadAnnotationContextForLive } from './sources/annotationContext';
 import { buildDanyaTeachingBlock } from '../services/danyaTeachingService';
 import { classifyPhase } from '../services/gamePhaseService';
 import { detectOpening } from '../services/openingDetectionService';
+import { dnaPass } from '../services/dnaRules';
 import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
 import { loadModelGamesForLive } from './sources/modelGames';
 import { loadPlayerGamesForLive, resolvePlayerIdFromAsk } from './sources/playerGames';
@@ -204,7 +205,7 @@ import { splitMultiAsk,
   isMasterPlayQuestion, isEndgameQuestion, isEndgamePlayRequest, isEndgameWeaknessQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion, isFundamentalLessonQuestion, isFamousGameQuestion,
   isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
-  isOpeningTrapsQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
+  isOpeningTrapsQuestion, isBoardTrapQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
   isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
@@ -1305,7 +1306,8 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const statsQuestionEngage = isStatsQuestion(askForIntents);
     const strengthsQuestionEngage = isStrengthsQuestion(askForIntents);
     const openingAccuracyQuestionEngage = isOpeningAccuracyQuestion(askForIntents);
-    const openingTrapsQuestionEngage = isOpeningTrapsQuestion(askForIntents);
+    const boardTrapAsk = !!input.liveState.fen && isBoardTrapQuestion(askForIntents);
+    const openingTrapsQuestionEngage = isOpeningTrapsQuestion(askForIntents) && !boardTrapAsk;
     const reviewDueQuestionEngage = isReviewDueQuestion(askForIntents);
     const mistakesQuestionEngage = isMistakesQuestion(askForIntents);
     const weaknessLifecycleKindEngage = weaknessLifecycleKind(askForIntents);
@@ -1439,9 +1441,13 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // on-demand build so a stuck engine can never hold the turn hostage.
     if (!resolvedEnginePlan
       && (whyBestMoveEngage || planQuestionEngage
-        // Only when the surface didn't already hand one over — the two that do
-        // must not pay for a second search.
-        || ((bestMoveQuestionEngage || hintRequestEngage) && !input.liveState.engineBestMoveUci)
+        // ONE READ PER POSITION (live walk 2026-10-08: "Why?" said "the engine
+        // plays e5", then "best move?" said Nc3, same board). A surface's
+        // threaded best move is the eval bar's cached read, which may be too
+        // shallow for this position; `buildEnginePlan` takes that same cache
+        // when it is deep enough and searches on when it is not. Every move
+        // question reads that one result, so two lanes cannot name two moves.
+        || bestMoveQuestionEngage || hintRequestEngage
         // "Can I checkmate them?" is answered with the mating line itself.
         || isMateQuestion(askForIntents))
       && input.liveState.fen && !input.liveState.reviewFlaggedMove) {
@@ -1740,7 +1746,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             //
             // `resolvedEnginePlan` IS `input.liveState.enginePlan` whenever the
             // surface threaded one, so this only ever adds the on-demand case.
-            engineBestMoveUci: input.liveState.engineBestMoveUci ?? resolvedEnginePlan?.bestMoveUci,
+            engineBestMoveUci: resolvedEnginePlan?.bestMoveUci ?? input.liveState.engineBestMoveUci,
             // The search depth the best move was found at — so the grounded lane
             // can refuse to voice a confident recommendation off a shallow (~depth
             // 2) read (the "told me to blunder" guard, David 2026-09-08). Prefer
@@ -1759,7 +1765,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // COMPUTE the answer (engine tactics / the student's bad-habit
             // profile) and voice it via voiceFacts. Studentcolor lets the
             // tactics answer warn about the STUDENT's hanging pieces.
-            tacticsQuestion: isTacticsQuestion(askForIntents),
+            tacticsQuestion: isTacticsQuestion(askForIntents) || boardTrapAsk,
             // "do I have an attack lined up / is my kingside attack good" — the
             // attacker-vs-defender count on the enemy king (assembleAttackAssessment).
             // Dispatched before tactics/positionAssessment so an ATTACK ask gets the
@@ -1847,7 +1853,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             playerGames: input.liveState.playerGames ?? undefined,
             // STEP D Phase 5 — "can I win this endgame?" → the syzygy tablebase
             // (assembleEndgameAnswer); the interception does the ≤7-piece lookup.
-            endgameQuestion: isEndgameQuestion(askForIntents),
+            endgameQuestion: isEndgameQuestion(askForIntents) && !endgameWeaknessQuestionEngage,
             // Phase 1 cont — "who's winning / how do I stand?" → eval + top
             // tactic (assemblePositionAssessment); grounds the biggest slice of
             // the free-reasoning chat fallback.
@@ -2425,17 +2431,17 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
       for (const part of parts) answers.push(await askImpl({ ...input, ask: part }, options));
       const lines = answers.flatMap((a) => a.lines ?? []);
       const offers = answers.flatMap((a) => a.actionOffer ?? []);
-      answer = {
+      answer = dnaOnAnswer({
         ...answers[answers.length - 1],
         text: answers.map((a) => a.text.trim()).filter(Boolean).join('\n\n'),
         toolCallIds: answers.flatMap((a) => a.toolCallIds),
         dispatchedToolNames: answers.flatMap((a) => a.dispatchedToolNames),
         ...(lines.length ? { lines } : {}),
         ...(offers.length ? { actionOffer: offers } : {}),
-      };
+      }, input.liveState.surface);
       return answer;
     }
-    answer = await askImpl(input, options);
+    answer = dnaOnAnswer(await askImpl(input, options), input.liveState.surface);
     return answer;
   } catch (e) {
     failure = e;
@@ -2463,6 +2469,24 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
       }),
     });
   }
+}
+
+/** Answers whose job IS the interface or a quoted passage: the DNA's
+ *  "no interface talk" rule would cut the answer itself ("tap Resume"). */
+const DNA_EXEMPT_INTENTS: ReadonlySet<string> = new Set(['app-help', 'settings', 'teaching-method', 'book-teaching']);
+
+/**
+ * THE DNA ON THE WRITTEN ANSWER (David 2026-10-08: "make sure all narrations
+ * pass through the DNA outline"). Every SPOKEN line already passes the DNA in
+ * `voiceService.speakInternal`; the chat bubble's text never did, so it could
+ * show "12.Nf3" or open with praise. The same pass, at the one exit every
+ * coach answer leaves through. A pass that would leave nothing keeps the
+ * answer — the student never gets a blank reply.
+ */
+export function dnaOnAnswer(answer: CoachAnswer, surface: string): CoachAnswer {
+  if (answer.servedIntent && DNA_EXEMPT_INTENTS.has(answer.servedIntent)) return answer;
+  const r = dnaPass(answer.text, { kid: surface === 'kid' });
+  return r.text && r.text !== answer.text ? { ...answer, text: r.text } : answer;
 }
 
 /** Single-method service object. Surfaces import this and call

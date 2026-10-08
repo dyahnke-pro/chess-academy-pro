@@ -19,9 +19,9 @@
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
-import { searchUntilStable, floorFor, sharpness, SEARCH_POLICY } from './searchDepth';
+import { searchUntilStable } from './searchDepth';
 import { legalSeeGain } from './positionReadingService';
-import { getCachedStockfish } from '../hooks/stockfishFenCache';
+import { getCachedStockfish, setCachedStockfish } from '../hooks/stockfishFenCache';
 import type { StockfishAnalysis } from '../types';
 import { opponentMoveBoard } from './tempoFen';
 import type { LiveState } from '../coach/types';
@@ -47,58 +47,39 @@ type EnginePlan = NonNullable<LiveState['enginePlan']>;
 export async function buildEnginePlan(
   fen: string,
   studentSide: 'white' | 'black',
-  /** How long a FRESH search may run when the cache has nothing. Ignored on a
-   *  cache hit, which is the common case on any surface with a live board.
-   *  Default sized so an answer arrives while the student is still looking at
-   *  it — see the note at the search below for why a budget, not a race. */
+  /** How long the fallback read may run when the settled search fails. */
   budgetMs: number = PLAN_BUDGET_MS,
 ): Promise<EnginePlan | null> {
-  // PREFER the eval-bar's CACHED analysis for this exact FEN (David 2026-07-10:
-  // "I'm getting two best moves … not the most accurate read"). The eval bar +
-  // child-position prefetch populate `stockfishFenCache` continuously, so the
-  // cache holds the SAME deep analysis the board is showing. Building the plan
-  // from it means the coach's best move MATCHES the displayed eval bar — one
-  // source of truth, no conflicting second best move — and it's instant. Only
-  // when the cache is empty/thin (a position the eval bar hasn't reached) do we
-  // run a fresh search. On a slow single-threaded engine a redundant fresh
-  // depth-18 search was returning a DIFFERENT (shallower) move than the cache —
-  // that was the "two best moves" bug.
-  const hasLine = (a: StockfishAnalysis | undefined): boolean =>
-    !!a && (!!a.topLines?.[0]?.moves?.length || !!a.bestMove);
-  let analysis: StockfishAnalysis | undefined = getCachedStockfish(fen);
-  // THE CACHE ANSWERS ONLY IF IT IS DEEP ENOUGH FOR THIS POSITION (David
-  // 2026-09-27: "algo the stockfish depth"). A quiet position is settled by
-  // the question floor; a sharp one needs more before the eval bar's read can
-  // stand as the answer. Below it, search until the answer stops changing.
-  if (hasLine(analysis) && (analysis?.depth ?? 0) < floorFor(SEARCH_POLICY.question, sharpness(fen))) {
-    try {
-      analysis = (await searchUntilStable(fen, 'question', stockfishEngine)).analysis;
-    } catch { /* keep the cached read — a shallower answer beats none */ }
+  // A QUESTION IS ANSWERED BY A SETTLED SEARCH, NEVER BY THE EVAL BAR'S CACHE
+  // (David 2026-10-08: "Eval bar is not the best way to find best move").
+  // The fen cache is filled by the background ponder — a depth-12 read cut
+  // off at 2.5s — and by the narration hooks; it was taken whenever its depth
+  // cleared the floor, with no check that its best move had stopped changing.
+  // So "Why?" and "best move?" named e5 and Nc3 on one board. Now every plan
+  // searches until the move is stable (`searchUntilStable`); the depths the
+  // cache already holds are engine-cache hits, so a settled position costs
+  // nothing extra. The settled read is written back, so the eval bar and the
+  // narration then read the same move the coach just named.
+  let analysis: StockfishAnalysis | undefined;
+  try {
+    analysis = (await searchUntilStable(fen, 'question', stockfishEngine)).analysis;
+    const cached = getCachedStockfish(fen);
+    if (analysis && (!cached || (cached.depth ?? 0) <= (analysis.depth ?? 0))) setCachedStockfish(fen, analysis);
+  } catch {
+    analysis = undefined;
   }
+  const hasLine = (x: StockfishAnalysis | undefined): boolean =>
+    !!x && (!!x.topLines?.[0]?.moves?.length || !!x.bestMove);
   if (!hasLine(analysis)) {
+    // The engine would not settle (dead worker): a budgeted read beats none.
     try {
-      // ── A BUDGET, NOT A DEADLINE SOMEONE ELSE ENFORCES ──────────────────
-      //
-      // This was `analyzePosition(fen, PLAN_DEPTH)` — an UNBOUNDED search to
-      // depth 18 — while the only caller wrapped it in a 6s `Promise.race`.
-      // A race abandons the WAITER; it does not stop the ENGINE. So on a
-      // surface with no eval bar keeping the cache warm (home-chat, review,
-      // masterclass — the six this build just reached), a move question
-      // started a depth-18 search, the student got the canned "I can't verify
-      // that precisely" line at six seconds, and the worker kept grinding on a
-      // result nobody would ever read, with the next question queued behind
-      // it. On the single-threaded iOS engine that is the whole budget for
-      // several moves, spent on an answer that was already thrown away.
-      //
-      // `analyzeWithBudget` is the primitive that actually self-limits: it
-      // checks its own depth-keyed cache, stops the search when the budget is
-      // up, and returns the best line found SO FAR. A shallower real answer
-      // beats a deep abandoned one, and beats the canned line outright.
       analysis = await stockfishEngine.analyzeWithBudget(fen, PLAN_DEPTH, budgetMs);
     } catch {
       analysis = undefined;
     }
   }
+  // Last resort, engine silent: whatever read the cache holds beats no answer.
+  if (!hasLine(analysis)) analysis = getCachedStockfish(fen);
   if (!analysis) return null;
   const uciSeq =
     analysis.topLines?.[0]?.moves?.length

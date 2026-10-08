@@ -14,8 +14,10 @@ vi.mock('./stockfishEngine', () => ({
   },
 }));
 const getCachedStockfish = vi.fn<(fen: string) => StockfishAnalysis | undefined>();
+const setCachedStockfish = vi.fn<(fen: string, a: StockfishAnalysis) => void>();
 vi.mock('../hooks/stockfishFenCache', () => ({
   getCachedStockfish: (fen: string) => getCachedStockfish(fen),
+  setCachedStockfish: (fen: string, a: StockfishAnalysis) => setCachedStockfish(fen, a),
 }));
 
 import { buildEnginePlan } from './enginePlanContext';
@@ -135,6 +137,7 @@ describe('a fresh plan search self-limits', () => {
     analyzePosition.mockReset();
     analyzeWithBudget.mockReset();
     getCachedStockfish.mockReset();
+    setCachedStockfish.mockReset();
   });
 
   it('uses the budgeted search, never the unbounded one', async () => {
@@ -156,11 +159,13 @@ describe('a fresh plan search self-limits', () => {
     expect(budget).toBeLessThanOrEqual(6000);
   });
 
-  it('honours a caller-supplied budget', async () => {
+  it('honours a caller-supplied budget on the fallback read', async () => {
     getCachedStockfish.mockReturnValue(undefined);
+    // The settled search dies on its first step; the budgeted fallback answers.
+    analyzeWithBudget.mockRejectedValueOnce(new Error('worker gone'));
     analyzeWithBudget.mockResolvedValue(analysis({ bestMove: 'd2d4', topLines: [{ rank: 1, moves: ['d2d4'], evaluation: 0, mate: null  }] }));
     await buildEnginePlan(START, 'white', 900);
-    expect(analyzeWithBudget.mock.calls[0]?.[2]).toBe(900);
+    expect(analyzeWithBudget.mock.calls.at(-1)?.[2]).toBe(900);
   });
 
   it('stamps the position it was computed for', async () => {
@@ -176,21 +181,25 @@ describe('a fresh plan search self-limits', () => {
     expect(plan?.fen).toBe(START);
   });
 
-  it('still prefers the cache and searches nothing when it hits', async () => {
-    // The property the "two best moves" fix turned on: a warm board must not
-    // pay for a second opinion that can disagree with the eval bar.
-    getCachedStockfish.mockReturnValue(analysis({ bestMove: 'g1f3', topLines: [{ rank: 1, moves: ['g1f3'], evaluation: 15, mate: null  }] }));
+  it('a cached read never answers alone: the settled search runs and its move wins (David 2026-10-08)', async () => {
+    // "Eval bar is not the best way to find best move." The cache is the
+    // ponder's depth-12, 2.5s read; trusting it named Nc3 while the why-lane
+    // named e5 on the same board.
+    getCachedStockfish.mockReturnValue(analysis({ depth: 12, bestMove: 'g1f3', topLines: [{ rank: 1, moves: ['g1f3'], evaluation: 15, mate: null  }] }));
+    analyzeWithBudget.mockImplementation(async (_f, depth) => analysis({ depth }));
     const plan = await buildEnginePlan(START, 'white');
-    expect(analyzeWithBudget, 'searched despite a cache hit').not.toHaveBeenCalled();
-    expect(analyzePosition).not.toHaveBeenCalled();
-    expect(plan?.bestMoveUci).toBe('g1f3');
+    expect(analyzeWithBudget, 'answered off the cache').toHaveBeenCalled();
+    expect(plan?.bestMoveUci).toBe('e2e4');
+    // Written back, so the eval bar and narration read the same move.
+    expect(setCachedStockfish).toHaveBeenCalledWith(START, expect.objectContaining({ bestMove: 'e2e4' }));
   });
 });
 
-describe('a cached read is the answer only when it is deep enough (algo depth, 2026-09-27)', () => {
+describe('the settled search, with the cache only as a dead-engine fallback', () => {
   beforeEach(() => {
     analyzeWithBudget.mockReset();
     getCachedStockfish.mockReset();
+    setCachedStockfish.mockReset();
   });
   it('a shallow cache is deepened by the settle search, and its answer wins', async () => {
     getCachedStockfish.mockReturnValue(analysis({ depth: 8, bestMove: 'a2a3', topLines: [{ rank: 1, evaluation: 5, mate: null, moves: ['a2a3'] }] }));
@@ -200,11 +209,11 @@ describe('a cached read is the answer only when it is deep enough (algo depth, 2
     expect(plan!.bestMoveUci).toBe('e2e4');
     expect(plan!.depth).toBeGreaterThanOrEqual(12);
   });
-  it('NEGATIVE CONTROL: a deep cache answers alone — no second search', async () => {
-    getCachedStockfish.mockReturnValue(analysis({ depth: 20 }));
-    const plan = await buildEnginePlan(START, 'white');
-    expect(analyzeWithBudget).not.toHaveBeenCalled();
-    expect(plan!.depth).toBe(20);
+  it('a deeper cached read is never overwritten by a shallower settled one', async () => {
+    getCachedStockfish.mockReturnValue(analysis({ depth: 24 }));
+    analyzeWithBudget.mockImplementation(async (_f, depth) => analysis({ depth }));
+    await buildEnginePlan(START, 'white');
+    expect(setCachedStockfish).not.toHaveBeenCalled();
   });
   it('a failed deepening keeps the cached read', async () => {
     getCachedStockfish.mockReturnValue(analysis({ depth: 8, topLines: [{ rank: 1, evaluation: 5, mate: null, moves: ['d2d4'] }], bestMove: 'd2d4' }));

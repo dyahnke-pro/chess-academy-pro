@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**67 lines · 4 exports · 3 importers · 2 tests · 2 audits**
+**93 lines · 5 exports · 3 importers · 2 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,22 +18,26 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
+### `normaliseAsk` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `PLAY_OPENING_RE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `PlayName` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `resolvePlayName` (function) — 4 call sites
+### `resolvePlayName` (function) — 5 call sites
 - `src/coach/ask/playName.test.ts:11`
 - `src/coach/ask/playName.test.ts:17`
+- `src/coach/ask/readsAsQuestion.test.ts:23`
 - `src/components/Coach/CoachTeachPage.tsx:5099`
 - `src/components/Coach/CoachTeachPage.tsx:5621`
 
 ### `readsAsQuestion` (function) — 4 call sites
 - `src/coach/ask/readsAsQuestion.test.ts:10`
 - `src/coach/ask/readsAsQuestion.test.ts:15`
-- `src/coach/ask/readsAsQuestion.test.ts:20`
+- `src/coach/ask/readsAsQuestion.test.ts:24`
 - `src/components/Coach/CoachTeachPage.tsx:5215`
 
 ## Tests

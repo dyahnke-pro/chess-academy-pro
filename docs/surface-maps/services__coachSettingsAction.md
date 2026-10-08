@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**278 lines · 3 exports · 3 importers · 1 tests · 1 audits**
+**297 lines · 3 exports · 3 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,7 +21,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `SettingsCommandResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `resolveSettingsCommand` (function) — 22 call sites
+### `resolveSettingsCommand` (function) — 26 call sites
 - `src/services/coachSettingsAction.test.ts:9`
 - `src/services/coachSettingsAction.test.ts:10`
 - `src/services/coachSettingsAction.test.ts:11`
@@ -38,21 +38,29 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachSettingsAction.test.ts:35`
 - `src/services/coachSettingsAction.test.ts:36`
 - `src/services/coachSettingsAction.test.ts:37`
-- `src/services/coachSettingsAction.test.ts:41`
 - `src/services/coachSettingsAction.test.ts:42`
-- `src/services/coachSettingsAction.test.ts:46`
-- `src/services/coachSettingsAction.test.ts:47`
+- `src/services/coachSettingsAction.test.ts:45`
 - `src/services/coachSettingsAction.test.ts:48`
 - `src/services/coachSettingsAction.test.ts:49`
+- `src/services/coachSettingsAction.test.ts:53`
+- `src/services/coachSettingsAction.test.ts:54`
+- `src/services/coachSettingsAction.test.ts:58`
+- `src/services/coachSettingsAction.test.ts:59`
+- `src/services/coachSettingsAction.test.ts:60`
+- `src/services/coachSettingsAction.test.ts:61`
 
 ### `applyCoachSetting` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3509`
-- `src/services/coachSessionRouter.ts:131`
+- `src/components/Coach/CoachTeachPage.tsx:4175`
+- `src/services/coachSessionRouter.ts:124`
 
 ## Tests
 
 - `src/services/coachSettingsAction.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-qa-4surface-prod.mjs`

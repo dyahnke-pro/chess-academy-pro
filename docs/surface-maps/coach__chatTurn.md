@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**659 lines · 26 exports · 11 importers · 7 tests · 3 audits**
+**661 lines · 26 exports · 13 importers · 8 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,9 +13,11 @@
 
 ## Who calls in
 
+- `src/coach/ask/playName.ts`
 - `src/coach/chatTurn.test.ts`
 - `src/coach/chatTurnAnswers.test.ts`
 - `src/coach/chatTurnAnswers.ts`
+- `src/coach/chatTurnCodeReader.ts`
 - `src/coach/chatTurnEval.test.ts`
 - `src/coach/chatTurnEval.ts`
 - `src/coach/chatTurnParser.test.ts`
@@ -33,7 +35,8 @@
 ### `FastPathLane` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `fastPathLane` (function) — 13 call sites
+### `fastPathLane` (function) — 14 call sites
+- `src/coach/ask/playName.ts:89`
 - `src/coach/chatTurn.test.ts:68`
 - `src/coach/chatTurn.test.ts:84`
 - `src/coach/chatTurn.test.ts:97`
@@ -90,7 +93,7 @@
 - `src/coach/chatTurn.test.ts:123`
 - `src/coach/chatTurn.test.ts:128`
 - `src/coach/chatTurn.test.ts:129`
-- `src/coach/chatTurnParser.ts:153`
+- `src/coach/chatTurnParser.ts:154`
 
 ### `BoardContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -98,7 +101,7 @@
 ### `ValidationResult` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `validateChatTurn` (function) — 14 call sites
+### `validateChatTurn` (function) — 15 call sites
 - `src/coach/chatTurn.test.ts:90`
 - `src/coach/chatTurn.test.ts:136`
 - `src/coach/chatTurn.test.ts:141`
@@ -111,8 +114,9 @@
 - `src/coach/chatTurn.test.ts:171`
 - `src/coach/chatTurn.test.ts:174`
 - `src/coach/chatTurn.test.ts:179`
-- `src/coach/chatTurnParser.ts:155`
-- `src/coach/chatTurnParser.ts:185`
+- `src/coach/chatTurnParser.ts:156`
+- `src/coach/chatTurnParser.ts:164`
+- `src/coach/chatTurnParser.ts:194`
 
 ### `ConversationState` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -146,6 +150,7 @@
 
 - `src/coach/chatTurn.test.ts`
 - `src/coach/chatTurnAnswers.test.ts`
+- `src/coach/chatTurnCodeReader.test.ts`
 - `src/coach/chatTurnEval.live.test.ts`
 - `src/coach/chatTurnEval.test.ts`
 - `src/coach/chatTurnParser.test.ts`

@@ -15,6 +15,7 @@
  * A failed or slow read is SILENT: the caller serves today's answer.
  */
 import { readChatTurnStructured } from '../services/coachApi';
+import { readTurnInCode } from './chatTurnCodeReader';
 import {
   ALL_CHAT_KINDS,
   CHAT_KINDS,
@@ -49,7 +50,7 @@ export interface ParseResult {
    *  the deterministic path, where nothing needed translating). */
   english: string | null;
   validation: ValidationResult | null;
-  source: 'square-answer' | 'llm' | 'llm-failed' | 'timeout';
+  source: 'square-answer' | 'code' | 'llm' | 'llm-failed' | 'timeout';
   latencyMs: number;
 }
 
@@ -155,7 +156,15 @@ export async function parseChatTurn(text: string, ctx: ParseContext): Promise<Pa
     return done({ turn: square, english: null, validation: validateChatTurn(square, ctx.board, memory), source: 'square-answer' });
   }
 
-  // 2. The model fills the form.
+  // 2. THE SENTENCE COMPUTER reads what it can with the board in hand — a
+  // choice between two moves, a question about one named move — before any
+  // model call (chatTurnCodeReader).
+  const coded = readTurnInCode(text, ctx.board);
+  if (coded) {
+    return done({ turn: coded, english: null, validation: validateChatTurn(coded, ctx.board, memory), source: 'code' });
+  }
+
+  // 3. The model fills the form.
   const reader = ctx.reader ?? readChatTurnStructured;
   const timeoutMs = ctx.timeoutMs ?? 6000;
   let timedOut = false;
@@ -181,6 +190,6 @@ export async function parseChatTurn(text: string, ctx: ParseContext): Promise<Pa
   const coerced = coerceChatTurn(raw);
   if (!coerced) return done({ turn: null, english: null, validation: null, source: 'llm-failed' });
 
-  // 3. Code checks the reading against the board.
+  // 4. Code checks the reading against the board.
   return done({ turn: coerced.turn, english: coerced.english, validation: validateChatTurn(coerced.turn, ctx.board, memory), source: 'llm' });
 }

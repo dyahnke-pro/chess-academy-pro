@@ -9,7 +9,27 @@
  */
 import { resolveOpeningEntry } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
-import { normaliseAsk, OPENING_NAME_FLOOR, readQuestion } from './readQuestion';
+import { fastPathLane } from '../chatTurn';
+import { smallTalkKind } from '../smallTalk';
+
+/** An opening match below this is a guess, and a guess must not start a game. */
+const OPENING_NAME_FLOOR = 0.85;
+
+/** Speech-to-text misses that change the meaning of a chess ask. */
+const VOICE_FIXES: ReadonlyArray<[RegExp, string]> = [
+  [/\bnights?\b/gi, 'knight'],
+  [/\bponds?\b/gi, 'pawn'],
+  [/\bblender\b/gi, 'blunder'],
+  [/\bcaro?\s*k?h?an+\b/gi, 'Caro-Kann'],
+  [/\bcato\s*khan\b/gi, 'Caro-Kann'],
+  [/\bcarro\s*khan\b/gi, 'Caro-Kann'],
+];
+
+export function normaliseAsk(text: string): string {
+  let t = text.replace(/[’‘]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, ' ').trim();
+  for (const [re, to] of VOICE_FIXES) t = t.replace(re, to);
+  return t;
+}
 
 /** "Play the Sicilian", "can you play the Caro-Kann?" — an imperative to play
  *  an OPENING. Not a move ("play e4", "can you play f4 instead?") and not a
@@ -39,28 +59,34 @@ export function resolvePlayName(raw: string): PlayName {
   return near.length > 0 ? { kind: 'candidates', names: near } : { kind: 'none' };
 }
 
-const QUESTION_LEAD_RE = /^\s*(?:what|how|why|which|when|where|who|is|are|do|does|did|can|could|should|would|was|were|will)\b/i;
+const QUESTION_LEAD_RE = /^\s*(?:(?:so|and|but|ok(?:ay)?|well)[,\s]+)?(?:what|how|why|which|when|where|who|is|are|do|does|did|can|could|should|would|was|were|will|am)\b/i;
+
+/** An imperative to study or play something: a request, never a question. */
+const REQUEST_RE =
+  /^\s*(?:(?:can|could|would|will) you\s+|please\s+|let'?s\s+|i want (?:you )?to\s+|i'?d like to\s+)?(?:play|teach(?: me)?|show me|walk ?through|drill|review|quiz me on)\b/i;
 
 /**
- * Does the shared question reader take this text as a QUESTION rather than a
- * request to study or play an opening? The Learn page asks this before it
- * treats short text as an opening name, so every screen reads a turn the same
- * way (one reader, not a page-local list of "this is actually a question"
- * exceptions).
+ * Is this turn a QUESTION rather than a request to study or play an opening?
+ * The Learn page asks before it treats short text as an opening name. It reads
+ * with the door's own lane computer (`fastPathLane`, the same detectors the
+ * coach answers with), so Learn and every other screen share one vocabulary.
  */
 export function readsAsQuestion(text: string, hasBoard: boolean): boolean {
+  const t = normaliseAsk(text);
   // A pasted lesson title ("Bishop's Opening: … greed — Qxf7 is mate") names
   // the opening before its colon: a request, whatever moves follow.
-  const titled = /^\s*([A-Z][^:?]{2,60}):/.exec(text);
+  const titled = /^\s*([A-Z][^:?]{2,60}):/.exec(t);
   if (titled && resolvePlayName(titled[1]).kind === 'resolved') return false;
-  const reading = readQuestion(text, { screen: 'learn', hasBoard }, {
-    nameOpening: (t) => {
-      const r = resolvePlayName(t);
-      return r.kind === 'resolved' ? { name: r.name, score: 1 }
-        : r.kind === 'candidates' ? { name: r.names[0], score: OPENING_NAME_FLOOR } : null;
-    },
-  });
-  if (reading.kind === 'command' || reading.kind === 'unclear') return false;
-  if (reading.kind === 'opening') return QUESTION_LEAD_RE.test(text);
-  return true;
+  const asks = QUESTION_LEAD_RE.test(t) || /\?\s*$/.test(t);
+  if (REQUEST_RE.test(t) && !/^\s*(?:what|how|why|which)\b/i.test(t)) {
+    // "Can you play f4 instead?" asks about a move; "can you play the Sicilian" asks for a game.
+    return asks && resolvePlayName(t.replace(REQUEST_RE, '')).kind === 'none';
+  }
+  if (asks) return true;
+  // Small talk names no opening, whatever letters it shares with one.
+  if (smallTalkKind(t) !== 'unclear') return true;
+  if (resolvePlayName(t).kind !== 'none') return false;
+  return fastPathLane(t, hasBoard ? { fen: START_FEN } : {}) !== 'none';
 }
+
+const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';

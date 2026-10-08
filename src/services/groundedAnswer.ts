@@ -2073,6 +2073,16 @@ export function assembleCandidateMoveAnswer(opts: {
   const evalText = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover, opts.studentColor);
   if (evalText) parts.push(`After it, ${evalText}.`);
   if (lineText) parts.push(lineText);
+  // THE BETTER MOVE COMES WITH ITS REASON (2026-10-08, David: "if they ask
+  // why it's best, they get the proof"). A named move that is not the best
+  // used to end at "versus Na3" — the student heard the alternative and never
+  // why. The same grounded reason the best-move answer gives, said once.
+  if (bestSan && cpLoss !== null && cpLoss > 30) {
+    const why = explainBestMoveGrounded(fen, null, opts.bestMoveUci, mover, null, null);
+    // "It wins the knight on f6." → "exf6 wins the knight on f6." — the
+    // verdict already said it is better; this says why, once.
+    if (why) parts.push(/^It\s/.test(why) ? why.replace(/^It\s/, `${bestSan} `) : `${bestSan}: ${why}`);
+  }
   if (freqText) parts.push(freqText);
   if (hedge) parts.push(hedge);
 

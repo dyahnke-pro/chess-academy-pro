@@ -1,0 +1,74 @@
+import { describe, expect, it } from 'vitest';
+import { readTurnInCode, tagSlots } from './chatTurnCodeReader';
+
+// Bishop on g5 and pawn on e5 can both take the knight on f6.
+const BOTH_TAKE_F6 = 'rnbqkb1r/pppp1ppp/5n2/4P1B1/8/8/PPP2PPP/RN1QKBNR w KQkq - 0 1';
+// After 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5: White can castle, push d3/d4, play Nc3…
+const ITALIAN = 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4';
+const ITALIAN_HISTORY = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5'];
+
+const read = (q: string, fen = ITALIAN, history = ITALIAN_HISTORY) => readTurnInCode(q, { fen, history, studentColor: 'white' });
+const moves = (q: string, fen?: string) => read(q, fen)?.referents.map((r) => (r.type === 'move' ? r.san : r.type));
+
+describe('the sentence computer — slots', () => {
+  it('fills the slots of a real question', () => {
+    const s = tagSlots('Should I take with the bishop or the pond');
+    expect(s).toMatchObject({ ask: 'which', action: 'capture', options: true, pieces: ['b', 'p'] });
+  });
+  it('a voiced move keeps its piece and joins its square', () => {
+    expect(tagSlots('Why is night e 4 best?')).toMatchObject({ ask: 'why', pieces: ['n'], squares: ['e4'], judged: true });
+  });
+  it('past tense is a move already made', () => {
+    expect(tagSlots('My knight to d5, was that a good move').past).toBe(true);
+    expect(tagSlots('Is Qf3 ok?').past).toBe(false);
+  });
+});
+
+describe('the sentence computer — real student questions, read on the board', () => {
+  it('"Should I take with the bishop or the pond" compares the two captures', () => {
+    expect(read('Should I take with the bishop or the pond', BOTH_TAKE_F6)?.kind).toBe('compare-moves');
+    expect(moves('Should I take with the bishop or the pond', BOTH_TAKE_F6)).toEqual(['Bxf6', 'exf6']);
+  });
+  it('"Why is taking better than pushing?" compares the pawn\'s capture with its push', () => {
+    // After 1.e4 d5: the e-pawn can take on d5 or push to e5.
+    const fen = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 2';
+    expect(read('Why is taking better than pushing?', fen, ['e4', 'd5'])?.kind).toBe('compare-moves');
+    expect(moves('Why is taking better than pushing?', fen)).toEqual(['exd5', 'e5']);
+    expect(moves('Should I take or push?', fen)).toEqual(['exd5', 'e5']);
+  });
+  it('"take or push" with two captures on the board is left to the model', () => {
+    expect(read('Should I take or push?', BOTH_TAKE_F6)).toBeNull();
+    // Naming the pawn settles it: its capture against its push.
+    expect(moves('Should the pawn take or push?', BOTH_TAKE_F6)).toEqual(['exf6', 'e6']);
+  });
+  it('"Better to push the e or d pawn?" compares the two pushes', () => {
+    const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    expect(moves('Better to push the e or d pawn?', fen)).toEqual(['e3', 'd3']);
+  });
+  it('"Probably just castle here right" asks about castling now', () => {
+    expect(read('Probably just castle here right')).toEqual({ kind: 'candidate-move', referents: [{ type: 'move', san: 'O-O' }], seat: 'me', topic: null });
+  });
+  it('"Why is night e 4 best?" is about Ne4 — not the engine\'s move — when no knight can reach e4 it is left to the model', () => {
+    expect(read('Why is night e 4 best?')).toBeNull();
+  });
+  it('"Why is Nc3 best?" is about Nc3', () => {
+    expect(moves('Why is Nc3 best?')).toEqual(['Nc3']);
+  });
+  it('"I\'m thinking pawn d3 so I can bring my bishop" weighs d3', () => {
+    expect(moves("I'm thinking pawn d3 so i can bring my bishop")).toEqual(['d3']);
+  });
+  it('"Was Bc4 a good move?" judges it where it was played', () => {
+    expect(read('Was Bc4 a good move?')?.kind).toBe('retrospective-move');
+  });
+  it('two legal moves that fit the words are not one move — left to the model', () => {
+    // Both knights cannot be told apart by "move my knight".
+    expect(read('should I move my knight?')).toBeNull();
+  });
+  it('a question with no move in it is left to the model', () => {
+    expect(read('What are my weaknesses?')).toBeNull();
+    expect(read("What's my plan?")).toBeNull();
+  });
+  it('"What is my bishop on c4 aiming at?" asks about that bishop', () => {
+    expect(read('What is my bishop on c4 aiming at?')).toEqual({ kind: 'what-about-piece', referents: [{ type: 'piece', piece: 'b', square: 'c4', seat: 'me' }], seat: 'me', topic: null });
+  });
+});
