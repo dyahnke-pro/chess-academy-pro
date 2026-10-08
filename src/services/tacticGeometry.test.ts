@@ -169,7 +169,7 @@ describe('11. a pushed pawn cannot block a check', () => {
 describe('12. interposition between facing pieces', () => {
   it('the rook steps between your queen and their rook on the d-file', () => {
     const r = proven(interposeFacing(live('3rk3/5ppp/8/8/R7/8/5PPP/3Q2K1 w - - 0 1', ['a4d4'])));
-    expect(r.text).toBe('The rook to d4 steps in between your queen on d1 and their rook on d8, facing each other down the d-file — your queen was hanging there.');
+    expect(r.text).toBe("The rook to d4 steps in between your queen on d1 and their rook on d8, facing each other down the d-file, taking your queen out of their rook's line.");
     expect(r.stakes?.points).toBe(9);
   });
   it('silent when the move lands on no facing line', () => {

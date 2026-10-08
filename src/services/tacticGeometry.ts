@@ -24,6 +24,7 @@ import { MATERIAL_VALUE } from './pieceValues';
 import { legalLineProof, lineProofFromUci, squaresProof, type Proof } from './proof';
 import type { FactStakes } from './factStakes';
 import { andList } from '../utils/andList';
+import { settledExchange, netPieceWords } from './exchangeLedger';
 
 export type GeometryAct =
   | 'pinner-pinned' | 'false-mate-block' | 'interference' | 'clearance' | 'decoy' | 'deflection'
@@ -521,8 +522,12 @@ export function kickFails(ctx: GeometryContext): GeometryRead | null {
   const afterKick = board(after.fen());
   if (!afterKick) return null;
   afterKick.move(shown.kick.san);
-  const taken = shown.punish.captured ?? 'p';
-  const what = shown.won >= VAL(taken) ? `winning a ${NAME[taken]}` : taken === 'r' && (shown.punish.piece === 'n' || shown.punish.piece === 'b') ? 'winning the exchange' : 'and it wins material';
+  // What the punishment nets is the LEDGER's to say (outcomeSentences gate):
+  // a finished exchange, named in pieces — or nothing is claimed at all.
+  const ledger = settledExchange(afterKick.fen(), [shown.punish.san], ctx.me, null);
+  const net = ledger && ledger.netPawns > 0 ? netPieceWords(ledger.studentWon, ledger.opponentWon) : null;
+  if (!net) return null;
+  const what = `winning ${net}`;
   const text = tense(ctx,
     `After ${sayMoveNoun(mv.san, ctx.fen)}, kicking it with ${sayMoveNoun(shown.kick.san, after.fen())} doesn't work here: ${sayMoveClause(shown.punish.san, afterKick.fen())}, ${what}.`,
     `After ${sayMoveNoun(mv.san, ctx.fen)}, kicking it with ${sayMoveNoun(shown.kick.san, after.fen())} would not have worked: ${sayMoveClause(shown.punish.san, afterKick.fen())}, ${what}.`);
@@ -635,7 +640,7 @@ export function interposeFacing(ctx: GeometryContext): GeometryRead | null {
     if (mine.piece.type === 'k' || theirs.piece.type === 'k') continue;
     const hanging = legalSeeGainFor(ctx.fen, mine.at, them);
     const line = lineName(mine.at, theirs.at);
-    const tail = hanging > 0 ? tense(ctx, ` — your ${NAME[mine.piece.type]} was hanging there`, ` — your ${NAME[mine.piece.type]} was hanging there`) : '';
+    const tail = hanging > 0 ? `, taking your ${NAME[mine.piece.type]} out of their ${NAME[theirs.piece.type]}'s line` : '';
     const text = tense(ctx,
       `${cap(sayMoveClause(mv.san, ctx.fen))} steps in between your ${NAME[mine.piece.type]} on ${mine.at} and their ${NAME[theirs.piece.type]} on ${theirs.at}, facing each other down the ${line}${tail}.`,
       `${cap(sayMoveClause(mv.san, ctx.fen))} would have stepped in between your ${NAME[mine.piece.type]} on ${mine.at} and their ${NAME[theirs.piece.type]} on ${theirs.at}, facing each other down the ${line}${tail}.`);
