@@ -11,6 +11,7 @@ import { Chess, type Square } from 'chess.js';
 import { MATERIAL_VALUE } from './pieceValues';
 import { lineProofFromUci, type Proof } from './proof';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { countWords } from '../utils/countWords';
 
 type Line = { moves: readonly string[]; evaluation: number; mate: number | null };
 
@@ -118,7 +119,7 @@ export function patternFails(fen: string, lines: readonly Line[], playedSan: str
     const end = (material(c, me) - material(c, them)) - startDiff;
     const lost = Math.max(-worst, -end) > 0 ? Math.min(-worst, -end) : 0;
     if ((!mated && lost < 1) || played < 2) continue;
-    const loses = mated ? 'the game to mate' : lost >= 9 ? 'the queen' : lost >= 5 ? 'a rook' : lost >= 3 ? 'a piece' : lost >= 2 ? 'two pawns' : 'a pawn';
+    const loses = mated ? 'the game to mate' : countWords(lost, { unit: true });
     const proof = lineProofFromUci(fen, plies.slice(0, played));
     if (!proof) continue;
     const tgt = new Chess(fen).get(pat.target as Square);
