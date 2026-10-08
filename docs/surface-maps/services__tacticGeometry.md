@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**727 lines · 19 exports · 3 importers · 1 tests · 0 audits**
+**736 lines · 19 exports · 3 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -89,7 +89,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticGeometry.test.ts:196`
 
 ### `geometryMotif` (function) — 2 call sites
-- `src/services/missedTacticService.ts:810`
+- `src/services/missedTacticService.ts:816`
 - `src/services/tacticGeometry.test.ts:221`
 
 ## Tests

@@ -99,6 +99,22 @@ const BATCH_GAME_LIMIT = 100;
  *  The bands target *player moves* (= half the UCI PV length since
  *  every player move alternates with an engine reply). Stockfish
  *  often returns a 10-12 move PV; we trim to the band's MAX. */
+
+/** The move that took `fens[idx - 1]` to `fens[idx]`, for the classifier's
+ *  in-between-move read. Null at the start or when the boards do not join. */
+function moveIntoFen(fens: readonly string[], idx: number): { fenBefore: string; san: string } | null {
+  if (idx < 1 || idx >= fens.length) return null;
+  const fenBefore = fens[idx - 1];
+  const target = fens[idx].split(' ').slice(0, 4).join(' ');
+  try {
+    const c = new Chess(fenBefore);
+    for (const m of c.moves({ verbose: true })) {
+      if (m.after.split(' ').slice(0, 4).join(' ') === target) return { fenBefore, san: m.san };
+    }
+  } catch { /* unreadable board — no previous move */ }
+  return null;
+}
+
 export interface DepthBand { min: number; max: number; label: string; }
 const RATING_BANDS: { upTo: number; band: DepthBand }[] = [
   { upTo: 1200, band: { min: 1, max: 3, label: 'beginner (1-3)' } },
@@ -580,7 +596,7 @@ async function analyzeGameWithStockfish(
     // precision (the detector returns null unless the shape is clearly a
     // trade), so the queue is not flooded. tacticType=null → the spine
     // buckets it as a positional (phase) weakness.
-    let tacticType: TacticType | null = detectTacticType(fen, bestMove, pvMoves);
+    let tacticType: TacticType | null = detectTacticType(fen, bestMove, pvMoves, moveIntoFen(fens, fenBeforeIdx) ?? undefined);
     let transformation: TransformationResult | null = null;
     if (tacticType === 'tactical_sequence') {
       transformation = (classification === 'mistake' || classification === 'blunder')
@@ -847,7 +863,7 @@ async function generateFromAnnotations(
     // Tactical quality gate — same filter as the imported-game path. The
     // tactical_sequence skip is DEFERRED to after playerMove/classification are
     // known, so the Phase 4 position-transformation exception can run.
-    let tacticType: TacticType | null = detectTacticType(fen, bestMove, pvMoves);
+    let tacticType: TacticType | null = detectTacticType(fen, bestMove, pvMoves, moveIntoFen(fens, fenIndex) ?? undefined);
     let transformation: TransformationResult | null = null;
 
     // Cap solution length at 6 ply for clean, focused drills.

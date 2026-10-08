@@ -1,4 +1,5 @@
 // All LLM API calls must go through this file only — per CLAUDE.md
+import { smallTalkKind, smallTalkReply } from '../coach/smallTalk';
 import { lastMoveFromHistory } from './material';
 import { dangerAnswerLines, planArcAnswerLines, studentMoveAnswerLines, theirMoveAnswerLines } from './learnBoardTeaching';
 import OpenAI from 'openai';
@@ -2030,34 +2031,10 @@ export function buildOpeningSuggestionReply(query: string): string | null {
 // replaces that hole with two structurally-safe lanes:
 //   • a CHESS turn we couldn't map → the computed position default (engine
 //     eval + best line) or the honest stock line — NEVER a free-LLM guess;
-//   • a NON-CHESS turn (greeting, thanks, meta) → a constrained conversational
-//     reply that is forbidden chess content and swept for stray chess claims.
+//   • a NON-CHESS turn (greeting, thanks, meta) → a computed small-talk reply
+//     (smallTalk.ts) — no model at all.
 // The LLM keeps ONLY phrasing; it never decides a chess fact again (G0).
 
-/** System-prompt addendum for the non-chess conversational lane. The LLM may
- *  ONLY talk conversationally here — it must state NO chess fact (move, eval,
- *  line, tactic, opening theory, "what masters/pros play"). If the student's
- *  message is actually a chess question, it must defer, not answer. */
-const NO_CHESS_CONTENT_ADDENDUM =
-  '\n\n═══ VOICE (the one coach register) ═══\n' +
-  // DNA register through GENERAL SPEAK too (David 2026-09-02: "tie the dna
-  // outline into general speak to maintain consistency"). Every computed
-  // answer is already spoken in this register; a greeting/thanks/meta reply
-  // must match it so the coach sounds like ONE person, not a chatbot bolted to
-  // an engine. This mirrors resolveWarmRegister's live "sitting next to you"
-  // register (docs/naroditsky-voice-register.md).
-  'Speak in the clear, warm-but-rigorous register of a great instructor sitting ' +
-  'next to the student: concept-first, plain-spoken, one clipped spark of warmth ' +
-  '("clean", "there it is") — never gushing, never corporate, never a wall of ' +
-  'text. Facts first, then the point.\n' +
-  '═══ GROUNDING (non-negotiable) ═══\n' +
-  'This is a conversational turn. You may be warm and brief, but you must NOT ' +
-  'state any chess content — no move, square, evaluation, opening line, tactic, ' +
-  'trap, plan, or claim about what masters/pros/engines play. Those are computed ' +
-  'elsewhere and verified; you never invent them. If the student is actually ' +
-  'asking a chess question, do NOT answer it — say you\'ll pull it up and invite ' +
-  'them to ask for the best move, the plan, or what\'s hanging. Otherwise just ' +
-  'respond naturally.';
 
 /** SAN-shaped token / explicit stat / master-play claim — the fabrication
  *  vectors we sweep from a conversational reply that strayed into chess. */
@@ -2140,23 +2117,15 @@ export function isBoardQuestionTurn(
   );
 }
 
-/** Sweep any sentence that strayed into chess content out of a conversational
- *  reply. Belt-and-suspenders for the non-chess lane: `validateClaims` is a
- *  no-op without a grounding context (casual chat), so this is the guard that
- *  keeps a stray SAN / stat / "masters play X" out. Never severs directive
- *  markers. Returns '' only when every sentence was chessy. */
-export function stripChessyStraySentences(text: string): string {
-  if (!text.trim()) return '';
-  const sentences = text.split(/(?<=[.!?])\s+/);
-  const kept: string[] = [];
-  for (const s of sentences) {
-    const trimmed = s.trim();
-    if (!trimmed) continue;
-    const hasMarker = /\[\[?[A-Z]/.test(trimmed); // protect directive markers
-    const strayed = !hasMarker && STRAY_CHESS_PATTERNS.some((re) => re.test(trimmed));
-    if (!strayed) kept.push(trimmed);
-  }
-  return kept.join(' ').trim();
+/** The reply to a turn that reached the no-chess lane. Small talk is answered
+ *  in code (smallTalk.ts). An unmatched turn that NAMES something — an opening,
+ *  a player, a capitalised name — is a chess question no lane answers yet, so
+ *  it gets the honest stock line rather than "I didn't catch that". */
+function banterReply(ask: string): string {
+  if (smallTalkKind(ask) !== 'unclear') return smallTalkReply(ask);
+  const namesSomething = /\b(?:opening|defen[cs]e|gambit|variation|attack|system)\b/i.test(ask)
+    || /\b[A-Z][a-z]+/.test(ask.trim().slice(1));
+  return namesSomething ? STOCK_GROUNDING_FALLBACK : smallTalkReply(ask);
 }
 
 /** Coverage telemetry: which lane served a coach turn. Drives the free-LLM
@@ -6830,27 +6799,12 @@ export async function getCoachChatResponse(
       return namedOpeningPicker;
     }
 
-    // Non-chess conversational turn — phrasing is fine (no chess fact to fake),
-    // but chess content is forbidden and swept as a belt-and-suspenders guard.
-    const convoResponse = await callOnce(buildSystemPromptFor(NO_CHESS_CONTENT_ADDENDUM), false);
-    const cleaned = stripChessyStraySentences(convoResponse);
-    if (cleaned) {
-      emitGroundingCoverage(cleaned === convoResponse.trim() ? 'conversational' : 'conversational-stripped', surface, sessionId, { question: originalQuery.slice(0, 100) });
-      if (onStream) onStream(cleaned);
-      return cleaned;
-    }
-    // A fully-stripped conversational reply is NOT a misrouted chess turn — a
-    // real chess signal in the user's message was already caught by the
-    // hasChessContentSignal seal above and never reaches here. Reaching this
-    // point means the USER's turn had no chess signal (genuine banter: "thanks
-    // so much coach") and the MODEL rambled into chess prose that the strip
-    // erased. Serving a grounded position default here (the old P-I.3 self-heal)
-    // leaked "the best move is e4…" onto a thank-you — the exact contract the
-    // banter audit catches. So no position readout on a no-chess-signal turn:
-    // serve the warm stock line. The model's ramble is discarded, as it should be.
-    emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'conversational-fully-stripped', question: originalQuery.slice(0, 100), ...signalHint(originalQuery, grounding) });
-    if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
-    return STOCK_GROUNDING_FALLBACK;
+    // Non-chess conversational turn — answered in code (answers swarm P7):
+    // acknowledge or ask what they meant. No model, so nothing to strip.
+    const reply = banterReply(originalQuery);
+    emitGroundingCoverage('conversational', surface, sessionId, { question: originalQuery.slice(0, 100) });
+    if (onStream) onStream(reply);
+    return reply;
   }
 
   // ── Grounded path fall-through: THE GROUNDED DEFAULT (gate 0 — David
@@ -6895,16 +6849,10 @@ export async function getCoachChatResponse(
   // serve the constrained conversational reply (chess forbidden + swept),
   // never the position default. Mirrors the ungrounded chess-signal seal above.
   if (grounding && !isBoardQuestionTurn(originalQuery, grounding)) {
-    const convoResponse = await callOnce(buildSystemPromptFor(NO_CHESS_CONTENT_ADDENDUM), false);
-    const cleaned = stripChessyStraySentences(convoResponse);
-    if (cleaned) {
-      emitGroundingCoverage(cleaned === convoResponse.trim() ? 'conversational' : 'conversational-stripped', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough-banter' });
-      if (onStream) onStream(cleaned);
-      return cleaned;
-    }
-    emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'grounded-banter-fully-stripped', question: originalQuery.slice(0, 100), path: 'grounded-fallthrough', ...signalHint(originalQuery, grounding) });
-    if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
-    return STOCK_GROUNDING_FALLBACK;
+    const reply = banterReply(originalQuery);
+    emitGroundingCoverage('conversational', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough-banter' });
+    if (onStream) onStream(reply);
+    return reply;
   }
   // Batch D live flip — signal-map re-route before the generic position default.
   const fallthroughReroute = grounding ? await signalReroute(originalQuery, grounding, config, studentLanguage) : null;

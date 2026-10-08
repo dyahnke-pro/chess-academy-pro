@@ -770,7 +770,13 @@ function isBackRankPly(before: Chess, uci: string): boolean {
  *                    engine walks the whole line, so a mate or tactic that
  *                    lands two plies later is still the move's motif.
  */
-export function detectTacticType(fen: string, bestMoveUci: string, pvUci?: readonly string[]): TacticType {
+export function detectTacticType(
+  fen: string,
+  bestMoveUci: string,
+  pvUci?: readonly string[],
+  /** The opponent's move that reached `fen`, when the caller has the game. */
+  previous?: { fenBefore: string; san: string },
+): TacticType {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return 'tactical_sequence'; }
   if (bestMoveUci.length < 4) return 'tactical_sequence';
@@ -807,7 +813,7 @@ export function detectTacticType(fen: string, bestMoveUci: string, pvUci?: reado
   // missed one reaches the record instead of the sentinel. Only on a real line
   // (the reads need the reply and the follow-up), never on a lone move.
   if (pvUci && pvUci.length >= 3 && pvUci[0] === bestMoveUci) {
-    const g = geometryMotif(fen, pvUci);
+    const g = geometryMotif(fen, pvUci, previous);
     if (g) return g;
   }
 

@@ -53,7 +53,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:69`
 
 ### `captureAbandonsDuty` (function) — 3 call sites
-- `src/services/capabilityEvidence.ts:459`
+- `src/services/capabilityEvidence.ts:460`
 - `src/services/exchangeIdeas.test.ts:233`
 - `src/services/exchangeIdeas.test.ts:234`
 
@@ -109,7 +109,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:159`
 - `src/services/exchangeIdeas.test.ts:162`
 
-### `cPawnBlock` (function) — 3 call sites
+### `cPawnBlock` (function) — 4 call sites
+- `src/services/capabilityEvidence.ts:492`
 - `src/services/exchangeIdeas.test.ts:166`
 - `src/services/exchangeIdeas.test.ts:168`
 - `src/services/exchangeIdeas.test.ts:169`

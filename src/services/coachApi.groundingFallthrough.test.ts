@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { hasChessContentSignal, stripChessyStraySentences, buildOpeningSuggestionReply } from './coachApi';
+import { hasChessContentSignal, buildOpeningSuggestionReply } from './coachApi';
 
 // Dead-end rescue (David 2026-07-17): when a coach turn would serve the honest
 // stock fallback because the student just NAMED an opening the surface never
@@ -95,33 +95,3 @@ describe('hasChessContentSignal', () => {
   });
 });
 
-describe('stripChessyStraySentences', () => {
-  it('drops sentences that stray into chess content', () => {
-    const input = "You're doing great! Play Nf3 to develop. Keep it up.";
-    const out = stripChessyStraySentences(input);
-    expect(out).not.toMatch(/Nf3/);
-    expect(out).toContain("You're doing great!");
-    expect(out).toContain('Keep it up.');
-  });
-
-  it('drops stat / eval / masters-play claims', () => {
-    expect(stripChessyStraySentences('Masters play this 55% of the time.')).toBe('');
-    expect(stripChessyStraySentences('You are +2.3 here.')).toBe('');
-    expect(stripChessyStraySentences('Grandmasters prefer the quiet line.')).toBe('');
-  });
-
-  it('keeps a clean conversational reply untouched', () => {
-    const input = 'Anytime! Ask me whenever you want a hand.';
-    expect(stripChessyStraySentences(input)).toBe(input);
-  });
-
-  it('returns empty when every sentence is chessy', () => {
-    expect(stripChessyStraySentences('Play e4. Then Bc4. Then Qh5.')).toBe('');
-  });
-
-  it('never severs a directive marker', () => {
-    const input = 'Nice work. [BOARD: arrow:e2-e4:green]';
-    const out = stripChessyStraySentences(input);
-    expect(out).toContain('[BOARD: arrow:e2-e4:green]');
-  });
-});
