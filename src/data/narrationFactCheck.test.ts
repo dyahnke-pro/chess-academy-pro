@@ -311,8 +311,6 @@ const BASELINE_VIOLATIONS = new Set<string>([
   // Lessons — existing claims that don't verify under chess.js (legacy
   // masterclass content predating this gate, 2026-05-28).
   'TRAP blackburne-shilling :: b2',
-  'TRAP blackburne-shilling :: b2 (short)',
-  'TRAP copycat-qg4 :: cq4 (short)',
   'TRAP frankenstein-nxa8 :: fn2',
   'TRAP frankenstein-nxa8 :: fn2 (short)',
   'TRAP karpov-qe2-mate :: ck-w1 (short)',

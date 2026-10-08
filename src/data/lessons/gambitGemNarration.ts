@@ -73,13 +73,13 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   // Evans Accepted: with White's big d4+e4 centre, 15...Bb4? puts the bishop on a loose square. 16.d5! forks the c6-knight, gains tempo, dominates.
   'gambit-evans-gambit:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bxb4_c3_Bc5_d4_exd4_O-O_d6_cxd4:Bb4': {
     sources: ['concept:pos-center', 'concept:pos-tempo', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
-    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Bb4 drops the bishop in front of White’s huge centre, where it has nothing to attack.', 'd5! the pawn forks the c6-knight and gains a tempo; White’s centre and bishop pair take over.', '', 'dxc6 — White wins a pawn and keeps a dominating centre with the two bishops.', '', '', '', '', ''],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Bb4 drops the bishop in front of White’s huge centre, where it has nothing to attack.', 'd5! the pawn hits the c6-knight and gains a tempo; White’s centre and bishop pair take over.', '', 'dxc6 — White comes out a pawn up with a dominating centre.', '', '', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'd5! — fork the knight, roll the centre', '', 'dxc6 — win the pawn, big centre', '', '', '', '', ''],
   },
   // Max Lange Attack: 9.Ng5 and the only move is 9...Qd5. 9...O-O? loses to fxg7 + Rxe6 + Nxe6+, the classic Max Lange combination.
   'scotch-gambit:e4_e5_Nf3_Nc6_d4_exd4_Bc4_Bc5_O-O_Nf6_e5_d5_exf6_dxc4_Re1+_Be6_Ng5:O-O': {
     sources: ['concept:pos-king-safety', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Max_Lange_Attack'],
-    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…O-O looks safe, but the f6-pawn and the e6-bishop hang by a thread — the only move was …Qd5.', 'fxg7! tears open the king; after …Kxg7 the rook crashes through.', '', 'Rxe6! removes the e6-guard — …fxe6 walks into Nxe6+ forking king and queen.', '', '', '', 'Nxe6+ then Nxd8 collects the queen — the Max Lange combination, decisive material.', ''],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…O-O looks safe, but the f6-pawn and the e6-bishop hang by a thread — the only move was …Qd5.', 'fxg7! tears open the king; after …Kxg7 the rook crashes through.', '', 'Rxe6! removes the e6-guard — …fxe6 walks into Nxe6+ forking king and queen.', '', 'Nxe6+ — the fork lands on the king and the queen.', '', 'Nxd8 collects the queen — the Max Lange combination, decisive material.', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'fxg7! — tear open the king', '', 'Rxe6! — remove the guard', '', 'Nxe6+ — fork king and queen', '', 'Nxd8 — win the queen', ''],
   },
   // Scotch Gambit: 14.h3 asks the g4-bishop. 15...h5? tries to glue it to the pin and just loses a piece to hxg4 + Ng5.
@@ -121,8 +121,8 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   // Danish double-gambit: the Bb2+Bd5 battery rakes the long diagonals. 11...c6? opens the a3–f8 diagonal — 12.Bxf7+! and Ba3+ wins the queen.
   'danish-gambit:e4_e5_d4_exd4_c3_dxc3_Bc4_cxb2_Bxb2_d5_Bxd5:c6': {
     sources: ['concept:pos-king-safety', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Danish_Gambit'],
-    watch: ['', '', '', '', '', '', '', '', '', '', '', '…c6 kicks the d5-bishop but opens the a3–f8 diagonal — fatal with the king still at home.', 'Bxf7+! the bishop crashes in; …Ke7 walks straight into Ba3+.', '', 'Ba3+ — the check skewers the king to the queen on d8.', '', 'Qxd8 — the queen falls for a bishop. White is winning.', '', '', ''],
-    learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'Bxf7+ — rip open the king', '', 'Ba3+ — skewer to the queen', '', 'Qxd8 — win the queen', '', '', ''],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '…c6 kicks the d5-bishop but opens the a3–f8 diagonal — fatal with the king still at home.', 'Bxf7+! the bishop crashes in; …Ke7 walks straight into Ba3+.', '', 'Ba3+ — the check pulls the king away from the d8-queen: once it takes on f7, Qxd8 wins the queen.', '', 'Qxd8 — the queen falls for a bishop. White is winning.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'Bxf7+ — rip open the king', '', 'Ba3+ — deflect the king, win the queen', '', 'Qxd8 — win the queen', '', '', ''],
   },
   // Smith-Morra: 11...Bg4? pins Nf3 with no knight on f6 to guard g4. 12.Bxf7+ Kxf7 13.Ng5+ and the discovered hit wins the bishop back; the king is wrecked. (Material even — the plus is the exposed king + regained tempo.)
   'smith-morra-gambit:e4_c5_d4_cxd4_c3_dxc3_Nxc3_Nc6_Nf3_d6_Bc4:Bg4': {
@@ -145,7 +145,7 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   // Stafford: with ...Bc5 and ...Ng4 already trained on f2, 9.c3? leaves it undefended. 9...Nxf2! forks queen and rook and cannot be taken.
   'stafford-gambit:e4_e5_Nf3_Nf6_Nxe5_Nc6_Nxc6_dxc6_d3_Bc5_Be2_Ng4:c3': {
     sources: ['concept:pos-king-safety', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Stafford_Gambit'],
-    watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'c3 ignores the knight already lurking on g4 — f2 is left undefended.', '…Nxf2! the knight forks queen and rook; taking it drops the queen to …Bc5-check, so it romps free.', '', '…Nxh1 pockets the rook — Black is up serious material.', '', '', '', '', ''],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'c3 ignores the knight already lurking on g4 — f2 is left undefended.', '…Nxf2! the knight forks queen and rook, and the king cannot take it: the c5-bishop guards f2.', '', '…Nxh1 pockets the rook — Black is up serious material.', '', '', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'Nxf2 — fork, it can’t be taken', '', 'Nxh1 — win the rook', '', '', '', '', ''],
   },
   // Englund: 4...Qb4+ and 5.c3? blocks the check but leaves the f4-bishop on the same open rank as the queen. 5...Qxf4! takes it for free.
@@ -157,8 +157,8 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   // The famous Englund trap: 6.Bc3? attacks the queen and seems to guard the a1-rook, but the bishop is overloaded. 6...Bb4! pins it; 7...Qxa1 wins the rook.
   'englund-gambit:d4_e5_dxe5_Nc6_Nf3_Qe7_Bf4_Qb4+_Bd2_Qxb2:Bc3': {
     sources: ['concept:pos-tempo', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
-    watch: ['', '', '', '', '', '', '', '', '', '', 'Bc3 attacks the queen and seems to defend the a1-rook — but the bishop is now overloaded.', '…Bb4! pins the c3-bishop to the rook; it can’t guard a1 and answer the pin at once.', '', '…Qxa1 — the queen swipes the corner rook. The classic Englund trap.', '', '', '', '', ''],
-    learn: ['', '', '', '', '', '', '', '', '', '', '', 'Bb4 — pin the overloaded bishop', '', 'Qxa1 — win the corner rook', '', '', '', '', ''],
+    watch: ['', '', '', '', '', '', '', '', '', '', 'Bc3 attacks the queen and seems to defend the a1-rook — but the bishop is now overloaded.', '…Bb4! pins the c3-bishop to the king, so it can no longer take the queen on b2, and the a1-rook falls.', '', '…Qxa1 — the queen swipes the corner rook. The classic Englund trap.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', 'Bb4 — pin it; the a1-rook falls', '', 'Qxa1 — win the corner rook', '', '', '', '', ''],
   },
   // Albin: 5.Bd3? puts the bishop on the ONE square Black's recapturing knight
   // already hits. …Nxe5 regains the gambit pawn and forks the d3-bishop and the
@@ -241,7 +241,7 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   // restores material and leaves White shattered with the king stuck in the middle.
   'stafford-gambit:e4_e5_Nf3_Nf6_Nxe5_Nc6_Nxc6_dxc6_Nc3_Bc5:d3': {
     sources: ["concept:pos-king-safety", "concept:pos-initiative", "https://en.wikipedia.org/wiki/Stafford_Gambit"],
-    watch: ['', '', '', '', '', '', '', '', '', '', 'd3 is the natural developing square, but it does nothing about f2 — and in this gambit f2 is the whole point. Only the king defends it.', '…Ng4! Straight at f2. Black gave up the pawn for exactly this: pieces pointing at a king still sitting in the centre.', 'Be3 is the only real way to prop up f2 — but it puts a bishop on a square the knight can simply take.', '', "fxe3 keeps material level, at the price of doubled e-pawns and an open f-file pointing back at White's own king.", '…Bxe3 takes the pawn straight back. Material is level, but only one king is safe.', '', '…Qg5 guards the bishop and adds a second piece to the dark-square squeeze. White still cannot castle.', ''],
+    watch: ['', '', '', '', '', '', '', '', '', '', 'd3 is the natural developing square, but it does nothing about f2 — and in this gambit f2 is the whole point. Only the king defends it.', '…Ng4! Straight at f2. Black gave up the pawn for exactly this: pieces pointing at a king still sitting in the centre.', 'Be3 is the only real way to prop up f2 — but it puts a bishop on a square the knight can simply take.', '', "fxe3 recaptures; after …Bxe3 material is level, and the f2-pawn is gone from in front of White's king.", '…Bxe3 takes the pawn straight back. Material is level, but only one king is safe.', '', '…Qg5 guards the bishop and adds a second piece to the dark-square squeeze. White still cannot castle.', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '…Ng4 — hit f2 at once', '', '', '', '…Bxe3 — pawn back, king exposed', '', '…Qg5 — guard e3, pile on', ''],
   },
   // Scotch Gambit: 11.Bxf7+ and 24% of players DECLINE with …Kf8. Declining is
@@ -289,8 +289,8 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   // stares at f7 with the bishop pair thrown in.
   'gambit-kings-gambit:e4_e5_f4_Bc5_Nf3_d6_Nc3_Nf6_Bc4:Bg4': {
     sources: ["concept:tac-pin", "concept:pos-initiative", "https://en.wikipedia.org/wiki/King%27s_Gambit"],
-    watch: ['', '', '', '', '', '', '', '', '', '…Bg4 pins the knight to the queen — but a pin only bites if the pinned piece has to stay.', 'fxe5! Ignore it. The f-file rips open and the pawn hits d6; the pin was never really a pin.', '', 'Qxf3 recaptures, and look where the queen lands — straight down the open f-file at f7.', '', 'Nd5 jumps into the hole. White has the bishop pair, the open file and the better king; the pin cost Black the initiative.', '', '', ''],
-    learn: ['', '', '', '', '', '', '', '', '', '', 'fxe5 — the pin was an illusion', '', 'Qxf3 — queen onto the open f-file', '', 'Nd5 — into the hole', '', '', ''],
+    watch: ['', '', '', '', '', '', '', '', '', '…Bg4 pins the knight to the queen — but a pin only bites if the pinned piece has to stay.', 'fxe5! Ignore it. The f-file rips open and the pawn hits d6; the pin was never really a pin.', '', 'Qxf3 recaptures, and look where the queen lands — straight down the half-open f-file at f7.', '', 'Nd5 jumps into the hole. White has the bishop pair, the open file and the better king; the pin cost Black the initiative.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', 'fxe5 — the pin was an illusion', '', 'Qxf3 — queen onto the half-open f-file', '', 'Nd5 — into the hole', '', '', ''],
   },
   // KGD: taking on f4 only after Nf3 and Nc3 are out gives Black none of the
   // counterplay the accepted lines rely on. d4! hits the bishop and claims the
@@ -305,7 +305,7 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   // b-file — doubled pawns are a cheap price for that.
   'danish-gambit:e4_e5_d4_exd4_c3_d5_exd5_Qxd5_cxd4_Nc6_Nf3_Bb4+_Nc3:Bxc3+': {
     sources: ["concept:pos-bishop-pair", "concept:pos-center", "https://en.wikipedia.org/wiki/Danish_Gambit"],
-    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…Bxc3+ releases the pin, but it trades off the piece that was doing all the annoying — and hands White the bishop pair for it.', 'bxc3! Recapture toward the middle. The pawns on c3 and d4 form a broad centre, the b-file opens, and White keeps both bishops.', '', '', 'O-O — the king is tucked away and every white piece points at the kingside. Doubled c-pawns are a small price for this.', '', '', '', '…Qd6 — Black is solid but passive. White has the two bishops, the centre and the open file; this is the pleasant side to play.'],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…Bxc3+ releases the pin, but it trades off the piece that was doing all the annoying — and hands White the bishop pair for it.', 'bxc3! Recapture toward the middle. The pawns on c3 and d4 form a broad centre, the b-file opens, and White keeps both bishops.', '', '', 'O-O — the king is tucked away and every white piece points at the kingside.', '', '', '', '…Qd6 — Black is solid but passive. White has the two bishops, the centre and the open file; this is the pleasant side to play.'],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'bxc3 — recapture toward the centre', '', '', 'O-O — king safe, pieces aimed', '', '', '', ''],
   },
   // Scotch Gambit: …h6 is a second quiet edge move in a line where White paid a
@@ -362,6 +362,6 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   'gambit-kings-gambit:e4_e5_f4_exf4_Bc4_Qh4+_Kf1_d6_Nf3_Qh5_d4_Nf6_Nc3:Be7': {
     sources: ["concept:pos-king-safety", "concept:pos-center", "https://en.wikipedia.org/wiki/King%27s_Gambit"],
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', "…Be7 is a developing move that solves nothing — it blocks the queen's road home and leaves the centre to White.", "e5! Kick the knight and rip the centre open while Black's king is still in it.", '', 'Nd5 lands in the hole, hitting c7 and the bishop on e7 at the same time.', '', 'Bb5+ drags the king to d8 — castling gone for good.', '', 'Nxf4 finally collects the gambit pawn. White has the centre, the initiative, and a black king stranded on d8.', ''],
-    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', "e5 — open it while he's central", '', 'Nd5 — hits c7 and e7', '', '', '', 'Nxf4 — the pawn, and the game', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', "e5 — open it while they're central", '', 'Nd5 — hits c7 and e7', '', '', '', 'Nxf4 — the pawn, and the game', ''],
   },
 };

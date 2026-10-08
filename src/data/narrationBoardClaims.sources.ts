@@ -3,6 +3,7 @@
 import { boardsFor, checkBoardClaims } from './narrationBoardClaims';
 import plansRaw from './middlegame-plans.json';
 import { GEM_NARRATION } from './lessons/punishGemNarration';
+import { GAMBIT_GEM_NARRATION } from './lessons/gambitGemNarration';
 import { ALL_GEMS, gemId } from './lessons/punishGems';
 import type { LessonScript, MiddlegamePlan } from '../types';
 
@@ -69,11 +70,13 @@ export function collectBoardClaimViolations(): BoardClaimRow[] {
       });
     });
   }
+  const gemText: Record<string, { watch: string[]; learn?: string[] }> = { ...GEM_NARRATION, ...GAMBIT_GEM_NARRATION };
   for (const gem of ALL_GEMS) {
-    const n = GEM_NARRATION[gemId(gem)];
-    if (!(gemId(gem) in GEM_NARRATION)) continue;
+    const n = gemText[gemId(gem)];
+    if (!n) continue;
     const ply = gem.playLine.trim().split(/\s+/);
-    n.watch.forEach((t, i) => check(rows, 'punishGemNarration.ts', `${gemId(gem)}#${i}`, ply.slice(0, i + 1), t));
+    n.watch.forEach((t, i) => check(rows, 'gem narration', `${gemId(gem)}#${i}`, ply.slice(0, i + 1), t));
+    n.learn?.forEach((t, i) => check(rows, 'gem narration', `${gemId(gem)}#${i} (cue)`, ply.slice(0, i + 1), t));
   }
   return rows;
 }

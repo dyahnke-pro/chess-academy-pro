@@ -51183,131 +51183,131 @@
  {
   "id": "mp-progothamchess-french-rubinstein-qxd4",
   "openingId": "pro-gothamchess-french-defense",
-  "criticalPositionFen": "1k1r2r1/pppqnp1p/3b4/1P2p3/2P2p2/4B1PP/P3QPB1/3R1RK1 w - - 0 19",
-  "title": "Rubinstein: …gxf6 + …e5 + …Qxd4 + …O-O-O Attack",
-  "overview": "The model line: deep in the middlegame the pieces trade off and the centre clarifies — a balanced, equal position (~level).",
+  "criticalPositionFen": "2kr4/ppp2p1p/2nb2r1/3Bpp2/2P5/4B1PP/PP3P2/R4RK1 w - - 0 19",
+  "title": "Rubinstein: …gxf6 + …e5 + …Qxd4 + …O-O-O — Active Pieces for a Pawn",
+  "overview": "After the queens come off, White can grab the f7-pawn, but Black's rook, bishop and f-pawn spring to life: …Rf6, …f4 and …Bc5 aim everything at White's king. The engine rates the result level to slightly better for Black.",
   "pawnBreaks": [
    {
-    "move": "...f-file pressure",
-    "explanation": "…fxe3 opens the f-file for Black.",
+    "move": "...f4",
+    "explanation": "…f5-f4 hits the e3-bishop and the g3-pawn and opens lines toward White's king.",
     "fen": ""
    }
   ],
   "pieceManeuvers": [
    {
-    "piece": "Queen",
-    "route": "...Qe6 centralise",
-    "explanation": "The queen centralises on e6, offering a trade."
+    "piece": "Rook",
+    "route": "...Rg6-f6",
+    "explanation": "The rook swings to f6, hitting the bishop on f7 and backing the f-pawn."
+   },
+   {
+    "piece": "Bishop",
+    "route": "...Bd6-c5",
+    "explanation": "The bishop moves to c5, aiming down the diagonal at f2."
    }
   ],
   "strategicThemes": [
-   "Simplify into equality.",
-   "Centralise the queen."
+   "Activity over a pawn.",
+   "Aim the pieces at the king."
   ],
   "endgameTransitions": [
-   "The balanced structure holds into the endgame."
+   "With queens off, Black's active rooks and bishop make up for the missing f7-pawn."
   ],
   "playableLines": [
    {
-    "fen": "1k1r2r1/pppqnp1p/3b4/1P2p3/2P2p2/4B1PP/P3QPB1/3R1RK1 w - - 0 19",
+    "fen": "2kr4/ppp2p1p/2nb2r1/3Bpp2/2P5/4B1PP/PP3P2/R4RK1 w - - 0 19",
     "moves": [
-     "c5",
-     "fxe3",
-     "Qxe3",
-     "Qe6",
-     "Qe4",
-     "Qc8",
-     "cxd6",
-     "cxd6"
+     "Bxf7",
+     "Rf6",
+     "Bd5",
+     "f4",
+     "Bc1",
+     "Bc5"
     ],
     "annotations": [
-     "c5 — White grabs space.",
-     "…fxe3 — Black captures, opening the f-file.",
-     "Qxe3 — White recaptures.",
-     "…Qe6 — Black centralises the queen, offering a trade.",
-     "Qe4 — White declines and centralises.",
-     "…Qc8 — Black repositions.",
-     "cxd6 — White captures.",
-     "…cxd6 — Black recaptures; a balanced, equal game."
+     "Bxf7 — White takes the f7-pawn with the d5-bishop.",
+     "…Rf6 — the rook hits the bishop on f7 and lines up behind the f-pawn.",
+     "Bd5 — the bishop drops back to the centre.",
+     "…f4 — the f-pawn advances, hitting the e3-bishop and the g3-pawn.",
+     "Bc1 — the bishop retreats.",
+     "…Bc5 — the bishop takes the diagonal toward f2; Black's pieces are all active for the pawn."
     ],
     "learnCues": [
-     "c5 — White grabs space",
-     "fxe3 — open the f-file",
-     "Qxe3 — recapture",
-     "Qe6 — centralise",
-     "Qe4 — decline",
-     "Qc8 — reposition",
-     "cxd6 — capture",
-     "cxd6 — equal"
+     "Bxf7 — White grabs f7",
+     "Rf6 — hit the bishop",
+     "Bd5 — bishop back",
+     "f4 — hit e3 and g3",
+     "Bc1 — bishop retreats",
+     "Bc5 — aim at f2"
     ],
     "arrows": [
      [],
-     [],
-     [],
      [
       {
-       "from": "d7",
-       "to": "e6",
+       "from": "f6",
+       "to": "f7",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
      [],
-     [],
+     [
+      {
+       "from": "f4",
+       "to": "e3",
+       "color": "rgba(40,185,95,0.92)"
+      },
+      {
+       "from": "f4",
+       "to": "g3",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
      [],
      []
     ],
     "highlights": [
      [
       {
+       "square": "f7",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "f6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "d5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "f4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "c1",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
        "square": "c5",
        "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
+      },
       {
-       "square": "e3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d6",
+       "square": "f2",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ]
     ],
-    "title": "French Rubinstein: Trade Down to Equality",
-    "intro": "Played out: the position simplifies to a balanced game where White holds steady.",
+    "title": "French Rubinstein: Active Pieces for a Pawn",
+    "intro": "Played out: White grabs a pawn, and Black answers by bringing every piece into play.",
     "sources": [
      "book:chess-fundamentals",
      "https://www.chess.com/openings/French-Defense",
