@@ -255,6 +255,14 @@ describe('buildEventProps — lean, safe payloads', () => {
     expect(props).not.toHaveProperty('feedback_rating');
   });
 
+  it('forwards the board a question was asked on, so it can be replayed', () => {
+    const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+    const props = buildEventProps(entry({ kind: 'coach-brain-ask-received', askText: 'is Nc3 good?', fen }));
+    expect(props.fen).toBe(fen);
+    // Only on a question: other events keep their payload small.
+    expect(buildEventProps(entry({ kind: 'coach-narration-spoken', fen }))).not.toHaveProperty('fen');
+  });
+
   it('bounds ask_text / answer_text at 4000 chars', () => {
     const props = buildEventProps(
       entry({ kind: 'coach-brain-answered', askText: 'a'.repeat(9000), answerText: 'b'.repeat(9000) }),

@@ -77,7 +77,11 @@ rec(`${walk.id}: player-card click → player page mounts (right URL)`, onPlayer
 // of pro openings into Dexie, which STALLS in-sandbox (G1.4). Reads of a single
 // opening by id (detail/deep-link, §3-4) come from the JSON and work. So the
 // list is 0 in-sandbox but populates on a real device.
-const pcards = await page.locator(`[data-testid^="opening-card-pro-${walk.id}"]`).count();
+// The shelf shows one side at a time — count White, then Black.
+const pcardsWhite = await page.locator(`[data-testid^="opening-card-pro-${walk.id}"]`).count();
+await page.locator('[data-testid="side-toggle-black"]').click().catch(() => 0);
+const pcards = pcardsWhite + await page.locator(`[data-testid^="opening-card-pro-${walk.id}"]`).count();
+await page.locator('[data-testid="side-toggle-white"]').click().catch(() => 0);
 if (pcards >= walk.min) {
   rec(`${walk.id}: player page lists openings (>=${walk.min})`, 'PASS', `${pcards} cards`);
 } else {

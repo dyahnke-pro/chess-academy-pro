@@ -313,7 +313,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `findTradeMove` (function) — 3 call sites
-- `src/coach/coachService.ts:1555`
+- `src/coach/coachService.ts:1559`
 - `src/services/groundedAnswer.trade.test.ts:20`
 - `src/services/groundedAnswer.trade.test.ts:38`
 

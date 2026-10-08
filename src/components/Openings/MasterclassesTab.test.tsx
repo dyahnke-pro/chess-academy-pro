@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { MasterclassesTab } from './MasterclassesTab';
@@ -45,9 +45,14 @@ describe('MasterclassesTab', () => {
       expect(screen.getByTestId('tab-masterclasses')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('Ruy Lopez')).toBeInTheDocument();
+    // White side by default, A–Z.
+    const white = screen.getAllByTestId(/^opening-card-/).map((el) => el.getAttribute('data-testid'));
+    expect(white).toEqual(['opening-card-ruy-lopez', 'opening-card-vienna-game']);
+    expect(screen.queryByText('Pirc Defence')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId('side-toggle-black'));
     expect(screen.getByText('Pirc Defence')).toBeInTheDocument();
-    expect(screen.getByText('Vienna Game')).toBeInTheDocument();
+    expect(screen.queryByText('Ruy Lopez')).not.toBeInTheDocument();
   });
 
   it('renders an empty message when the service returns no masterclasses', async () => {

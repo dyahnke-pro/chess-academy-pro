@@ -118,6 +118,7 @@ import { detectBoardQuestion, isAnyBoardQuestion } from '../coach/boardQuestions
 import { keySquareHighlightMarker } from './arrowEngine';
 import { topCandidateLane } from '../coach/querySignals';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
+import { fallThroughForKind } from '../coach/ask/answerTable';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
 // when the audit-stream is configured, letting the Playwright audit drive
@@ -718,6 +719,14 @@ export function consumeCoachLines(): WalkableLine[] | null {
  *  served, so the ONE-CHAT shadow can compare its reading against the truth
  *  rather than against a guess at the dispatch order. */
 let lastServedIntent: string | null = null;
+/** The catch-all's kind check: a reading that is not about the board is
+ *  asked back (see `fallThroughForKind`). No reading → today's behaviour. */
+function askBackForKind(grounding: MasterGroundingOptions): string | null {
+  const reading = grounding.askReading;
+  if (!reading) return null;
+  return fallThroughForKind(reading, !!grounding.currentFen);
+}
+
 export function consumeServedIntent(): string | null {
   const i = lastServedIntent;
   lastServedIntent = null;
@@ -1340,6 +1349,10 @@ export interface MasterGroundingOptions {
    *  where a lane must read the words as typed (the piece-square
    *  false-premise check). */
   cleanAsk?: string;
+  /** What the question reader made of the ask (shadow-first, answers
+   *  rebuild step 3): consulted only at the catch-all, so a question that is
+   *  not about the board is asked back instead of answered with a board read. */
+  askReading?: { kind: import('../coach/ask/readQuestion').AskKind; clarify?: string };
   /** Game-scoped mistake ask ("biggest mistake in this game") + the reviewed
    *  game's computed worst student moment to answer it from. */
   gameMistakeQuestion?: boolean;
@@ -1989,6 +2002,10 @@ const CAPABILITY_HEADLINES: ReadonlyArray<{ title: string; blurb: string }> = [
  *  question like "what are my weaknesses" matches nothing → caller serves the
  *  stock line unchanged). The `[CHOICES:]` marker is the app's existing chip
  *  mechanism (CoachTeachPage extracts it today; GameChatPanel now does too). */
+/** Below this a fuzzy opening match shares letters, not a name (measured on the
+ *  real questions: junk words 0.55–0.60, real typos 0.67+). */
+export const OPENING_PICKER_FLOOR = 0.65;
+
 export function buildOpeningSuggestionReply(query: string): string | null {
   const q = (query ?? '').trim();
   if (!q) return null;
@@ -2003,7 +2020,12 @@ export function buildOpeningSuggestionReply(query: string): string | null {
   if (/^(?:what|how|why|which|when|where|who|is|are|do|does|can|could|should|would|explain|describe|tell)\b/i.test(q)) {
     return null;
   }
-  const names = fuzzyMatchOpening(q).candidates.slice(0, 4).map((c) => c.canonicalName);
+  // A near-miss of a real name ("Najdorff" 0.67, "Caro Cann" 0.73) is a typo
+  // worth a "did you mean"; a word that merely shares letters ("Books" 0.60 →
+  // Rooks Swap Line, "Dammit" 0.58 → Danish Gambit) is not an opening at all.
+  const names = fuzzyMatchOpening(q).candidates
+    .filter((c) => c.score >= OPENING_PICKER_FLOOR)
+    .slice(0, 4).map((c) => c.canonicalName);
   if (names.length === 0) return null;
   const choices = `[CHOICES: ${names.join(' | ')}]`;
   if (names.length === 1) {
@@ -2147,6 +2169,10 @@ async function answerNoChessTurn(
     const overview = assembleCapabilitiesOverview(CAPABILITY_HEADLINES);
     if (overview) return { text: overview.facts, lane: 'app-help' };
   }
+  // The reader placed it somewhere other than the board: ask back about THAT
+  // rather than read the position to it.
+  const kindReply = askBackForKind(grounding);
+  if (kindReply) return { text: kindReply, lane: 'ask-back' };
   // Something named (an opening, a player) is a question about THAT, never
   // about the board — so it is checked before the position read.
   const namesSomething = /\b(?:opening|defen[cs]e|gambit|variation|attack|system)\b/i.test(ask)
@@ -6809,6 +6835,13 @@ export async function getCoachChatResponse(
         if (onStream) onStream(reroute.text);
         return reroute.text;
       }
+      const kindReply = askBackForKind(grounding);
+      if (kindReply) {
+        lastServedIntent = 'ask-back';
+        emitGroundingCoverage('ask-back', surface, sessionId, { question: originalQuery.slice(0, 100), kind: grounding.askReading?.kind ?? null });
+        if (onStream) onStream(kindReply);
+        return kindReply;
+      }
       // Compute the position default when the surface threaded engine data;
       // otherwise serve the honest stock line.
       const grounded = await serveGroundedPositionDefault(grounding, config, originalQuery || undefined, undefined, studentLanguage);
@@ -6901,6 +6934,13 @@ export async function getCoachChatResponse(
     emitGroundingCoverage(`signal-reroute:${fallthroughReroute.lane}`, surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough' });
     if (onStream) onStream(fallthroughReroute.text);
     return fallthroughReroute.text;
+  }
+  const kindReplyFallthrough = grounding ? askBackForKind(grounding) : null;
+  if (kindReplyFallthrough) {
+    lastServedIntent = 'ask-back';
+    emitGroundingCoverage('ask-back', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough', kind: grounding?.askReading?.kind ?? null });
+    if (onStream) onStream(kindReplyFallthrough);
+    return kindReplyFallthrough;
   }
   const grounded = grounding ? await serveGroundedPositionDefault(grounding, config, originalQuery || undefined, undefined, studentLanguage) : null;
   if (grounded) {

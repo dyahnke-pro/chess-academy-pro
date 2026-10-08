@@ -87,6 +87,7 @@ import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry, isBookLine } from '../../services/openingDetectionService';
+import { PLAY_OPENING_RE, resolvePlayName } from '../../coach/ask/playName';
 import { openingAnnouncementForGame, theirOpeningVerdict, openingNameForBoard, spokenOpeningLabel, studentJustLeftBook, warmOpeningBook } from '../../services/openingAnnouncement';
 import { lastMoveCapturedOn, pendingRecapture, landingSquare } from '../../utils/justCaptured';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
@@ -4836,7 +4837,10 @@ export function CoachTeachPage(): JSX.Element {
         // it is the most specific.
         { regex: /\bplay\s+(?:it\s+)?(?:for\s+)?real\s+(?:the\s+)?/i, stage: 'play-real' },
         // "play the Vienna against me" / "…with me" / "…versus me"
-        { regex: /\b(?:let'?s\s+|can\s+we\s+|could\s+we\s+|i\s+want\s+to\s+|wanna\s+)?play\s+(?:the\s+)?(?=.*\b(?:against|versus|vs\.?|with)\s+(?:me|you)\b)|\s*\b(?:against|versus|vs\.?|with)\s+(?:me|you)\b/gi, stage: 'play-real' },
+        { regex: /\b(?:let'?s\s+|can\s+we\s+|could\s+we\s+|(?:can|could|would|will)\s+you\s+|i\s+want\s+to\s+|wanna\s+)?play\s+(?:the\s+)?(?=.*\b(?:against|versus|vs\.?|with)\s+(?:me|you)\b)|\s*\b(?:against|versus|vs\.?|with)\s+(?:me|you)\b/gi, stage: 'play-real' },
+        // "Play the Sicilian" / "can you play the Caro-Kann?" — an opening, not
+        // a move ("play e4", "can you play f4 instead?" stay move asks).
+        { regex: PLAY_OPENING_RE, stage: 'play-real' },
         // "play me the Italian" — the coach is the opponent, not the lecturer.
         { regex: /\bplay\s+me\s+(?:the\s+)?/i, stage: 'play-real' },
         // "let's play the Caro" / "can we play the London". NOT "play through
@@ -5591,6 +5595,34 @@ export function CoachTeachPage(): JSX.Element {
         // better." Correct, board-true, and none of it teaching. A request to
         // play an opening is a request to be taught while playing it.
         if (stageHint === 'play-real' && requestedName) {
+          // 🔒 A NAME MUST RESOLVE BEFORE A GAME STARTS (answers rebuild,
+          // 2026-10-08). Live replay: "Let's do it" typed after a play picker
+          // started a game announced as "I'll play the Let's do it", and "Can
+          // you play the Carl O'Connor against me" as "I'll play the Can you
+          // Carl O'Connor". The words are resolved (voice slips mapped first:
+          // "Caro khan" → Caro-Kann); a near-miss offers its candidates; no
+          // match asks which opening — never a game named after a sentence.
+          const playName = resolvePlayName(requestedName);
+          if (playName.kind !== 'resolved') {
+            const askLine = playName.kind === 'candidates'
+              ? `Which one do you want to play?\n[CHOICES: ${playName.names.join(' | ')}]`
+              : 'Which opening do you want to play? Name it, like "the Vienna" or "the Caro-Kann".';
+            setMessages((prev) => [...prev, {
+              id: freshTurnId('play-name'), role: 'assistant', content: askLine, timestamp: Date.now(),
+            }]);
+            useCoachMemoryStore.getState().appendConversationMessage({
+              surface: 'chat-teach', role: 'coach', text: askLine, fen: gameRef.current.fen, trigger: null,
+            });
+            void speakComputed(askLine.replace(/\n\[CHOICES:[^\]]*\]/, ''), { forced: true, intent: 'learn' }).catch(() => undefined);
+            void logAppAudit({
+              kind: 'coach-surface-migrated',
+              category: 'subsystem',
+              source: 'CoachTeachPage.handleSubmit.playIntent',
+              summary: `play request "${requestedName.slice(0, 40)}" named no opening → ${playName.kind}`,
+            });
+            return;
+          }
+          requestedName = playName.name;
           // "play X AGAINST me" hands the opening to the COACH; the student
           // takes the other side. Any other phrasing ("let's play the Caro")
           // is the student wanting to play it themselves. `sideOverride` (an

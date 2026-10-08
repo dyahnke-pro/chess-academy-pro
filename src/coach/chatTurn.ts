@@ -585,3 +585,15 @@ export function canonicalAsk(turn: ResolvedChatTurn): string | null {
 export function kindAgreesWithLane(kind: ChatKind, lane: FastPathLane): boolean {
   return CHAT_KINDS[kind].lane === lane;
 }
+
+/** Every lane that fires for `ask`, in precedence order (the answer table's
+ *  fallback reads the next allowed one when today's first pick is refused). */
+export function firingLanes(ask: string, opts: { fen?: string; routedCommand?: boolean } = {}): FastPathLane[] {
+  const g = buildQuestionGrounding(ask, { fen: opts.fen });
+  const out: FastPathLane[] = opts.routedCommand ? ['command'] : [];
+  for (const lane of FAST_PATH_LANES) {
+    if (lane === 'command' || lane === 'none') continue;
+    if (LANE_FIRES[lane](g, ask)) out.push(lane);
+  }
+  return out;
+}

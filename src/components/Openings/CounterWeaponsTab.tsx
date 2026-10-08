@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Swords } from 'lucide-react';
 import { getAntiOpenings } from '../../services/openingService';
-import { OpeningCard } from './OpeningCard';
+import { OpeningShelf } from './OpeningShelf';
 import type { OpeningRecord } from '../../types';
 
 // Counter-Weapons tab (David 2026-07-07: "move the counter openings to their own
@@ -61,26 +60,12 @@ export function CounterWeaponsTab(): JSX.Element {
       <div className="mb-4 flex items-center gap-2 text-xs text-theme-text-muted">
         <Swords size={14} className="text-sky-400" />
         <span>
-          White anti-opening repertoires — beat the defenses amateurs struggle to
-          face, each with Watch / Learn / Practice / Play.
+          Anti-opening repertoires — ready-made answers to the systems amateurs
+          struggle to face, each with Watch / Learn / Practice / Play.
         </span>
       </div>
 
-      <div className="space-y-2">
-        {openings.map((opening, i) => (
-          <motion.div
-            key={opening.id}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: Math.min(i, 8) * 0.03, duration: 0.25 }}
-          >
-            <OpeningCard
-              opening={opening}
-              onClick={() => void navigate(`/openings/${opening.id}`)}
-            />
-          </motion.div>
-        ))}
-      </div>
+      <OpeningShelf openings={openings} onOpen={(o) => void navigate(`/openings/${o.id}`)} />
     </div>
   );
 }

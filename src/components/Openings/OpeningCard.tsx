@@ -5,6 +5,7 @@ import { Repeat, AlertCircle, Heart } from 'lucide-react';
 import { useStarAnimationStore } from '../../stores/starAnimationStore';
 import { getNeonColor, scaledShadow } from '../../utils/neonColors';
 import { useSettings } from '../../hooks/useSettings';
+import { shelfLabel } from '../../utils/openingShelf';
 
 interface OpeningCardProps {
   opening: OpeningRecord;
@@ -80,7 +81,7 @@ export function OpeningCard({ opening, onClick, onToggleFavorite }: OpeningCardP
           <div className="flex items-center gap-2">
             <span className={`font-mono text-xs font-semibold ${neon.ecoBadge}`}>{opening.eco}</span>
             <span className="text-sm font-semibold text-theme-text truncate">
-              {opening.name}
+              {shelfLabel(opening)}
             </span>
             {flagged && (
               <AlertCircle size={13} className="text-red-500 shrink-0" data-testid="needs-review" />
