@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1510 lines · 9 exports · 11 importers · 13 tests · 0 audits**
+**1561 lines · 9 exports · 12 importers · 14 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,7 @@
 - `src/services/boardDelta.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/hangingVsUndefended.test.ts`
+- `src/services/orderComputers.test.ts`
 - `src/services/prematureBreak.test.ts`
 - `src/services/reviewFullData.test.ts`
 - `src/services/reviewWalk2065.test.ts`
@@ -47,13 +48,14 @@
 ### `EVAL_FACET_MIN_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 43 call sites
+### `computeMoveFacets` (function) — 44 call sites
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
 - `src/services/coachFeatureService.ts:1920`
 - `src/services/exchangeIdeas.test.ts:207`
 - `src/services/forkTrick.test.ts:60`
 - `src/services/hangingVsUndefended.test.ts:11`
+- `src/services/orderComputers.test.ts:293`
 - `src/services/reviewFullData.test.ts:15`
 - `src/services/reviewFullData.test.ts:19`
 - `src/services/reviewFullData.test.ts:53`
@@ -93,7 +95,7 @@
 - `src/test/teach02Wired.test.ts:66`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:5372`
+- `src/services/coachFeatureService.ts:5373`
 - `src/services/reviewFullData.test.ts:204`
 - `src/services/reviewFullData.test.ts:207`
 - `src/services/reviewFullData.test.ts:215`
@@ -116,6 +118,7 @@
 - `src/services/exchangeIdeas.test.ts`
 - `src/services/forkTrick.test.ts`
 - `src/services/hangingVsUndefended.test.ts`
+- `src/services/orderComputers.test.ts`
 - `src/services/prematureBreak.test.ts`
 - `src/services/reviewFullData.test.ts`
 - `src/services/reviewNarrationFidelity.test.ts`

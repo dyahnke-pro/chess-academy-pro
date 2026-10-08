@@ -322,7 +322,9 @@ export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-c
   | 'king-read'
   // Trades, defence and conversion, principles (`exchangeIdeas.ts`) — the
   // same three names review's facets carry.
-  | 'trade-idea' | 'defence-idea' | 'nugget';
+  | 'trade-idea' | 'defence-idea' | 'nugget'
+  // Batch 1 (opening, order and timing) — the same names review's facets use.
+  | 'equivalence' | 'capture-choice' | 'kick' | 'plan-race' | 'timing';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
@@ -1032,7 +1034,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     nameMove: !!input.namesBestMove || (!heldVerdict && !!moveAdvice?.speak),
     ...(input.lastMove ? { lastStudentMove: { fenBefore: input.lastMove.fenBefore, san: input.lastMove.san } } : {}),
     ...(input.opponentLastMove ? { lastOpponentMove: input.opponentLastMove } : {}),
-  }).map((d) => ({ kind: d.kind, rank: d.kind === 'not-yet' ? 90 : d.kind === 'tactic' ? 84 : d.kind === 'king-read' ? 76 : d.kind === 'stop-flaw' ? 70 : d.kind === 'line' ? 60 : d.kind === 'hole-access' ? 50 : d.kind === 'speedrun-read' ? 45 : 40, text: d.text, ...(d.proof ? { proof: d.proof } : {}), ...(d.motif ? { motif: d.motif } : {}), ...(d.squares ? { squares: d.squares } : {}), ...(d.lines ? { lines: d.lines } : {}), ...(d.stakes ? { stakes: d.stakes } : {}), ...(d.claim ? { claim: d.claim } : {}), ...(d.promise ? { promise: d.promise } : {}) }));
+  }).map((d) => ({ kind: d.kind, rank: d.kind === 'not-yet' ? 90 : d.kind === 'tactic' ? 84 : d.kind === 'refuted' || d.kind === 'capture-choice' ? 80 : d.kind === 'king-read' ? 76 : d.kind === 'stop-flaw' ? 70 : d.kind === 'line' || d.kind === 'kick' || d.kind === 'plan-race' ? 60 : d.kind === 'timing' ? 55 : d.kind === 'hole-access' ? 50 : d.kind === 'speedrun-read' ? 45 : 40, text: d.text, ...(d.proof ? { proof: d.proof } : {}), ...(d.motif ? { motif: d.motif } : {}), ...(d.squares ? { squares: d.squares } : {}), ...(d.lines ? { lines: d.lines } : {}), ...(d.stakes ? { stakes: d.stakes } : {}), ...(d.claim ? { claim: d.claim } : {}), ...(d.promise ? { promise: d.promise } : {}) }));
   // TRADES, DEFENCE AND CONVERSION, PRINCIPLES (computers batch 5) — every
   // read carries its proof and its say-once claim; a read that names the
   // student's next move speaks only where the move is earned, like the depth.

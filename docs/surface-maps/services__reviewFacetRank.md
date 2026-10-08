@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**518 lines · 15 exports · 8 importers · 4 tests · 0 audits**
+**545 lines · 15 exports · 9 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,6 +19,7 @@
 - `src/services/coachFeatureService.ts`
 - `src/services/exchangeIdeas.test.ts`
 - `src/services/factSelector.ts`
+- `src/services/orderComputers.test.ts`
 - `src/services/reviewFacetRank.test.ts`
 - `src/services/supportedFacts.test.ts`
 - `src/services/tacticGeometry.test.ts`
@@ -86,6 +87,7 @@
 ## Tests
 
 - `src/services/exchangeIdeas.test.ts`
+- `src/services/orderComputers.test.ts`
 - `src/services/reviewFacetRank.test.ts`
 - `src/services/supportedFacts.test.ts`
 - `src/services/tacticGeometry.test.ts`

@@ -49,7 +49,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/obligationLifted.ts:49`
 - `src/services/obligationLifted.ts:51`
 - `src/services/playedMoveGrade.ts:125`
-- `src/services/positionFacts.ts:483`
+- `src/services/positionFacts.ts:485`
 - `src/services/replayFence.modern1690.test.ts:160`
 - `src/services/replayFence.modern1690.test.ts:165`
 - `src/services/reviewHinge.ts:36`

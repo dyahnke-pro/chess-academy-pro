@@ -41,6 +41,12 @@ import { findProphylaxis, prophylaxisProof } from './prophylaxis';
 import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
 import { lineProof, lineProofFromUci, legalLineProof, squaresProof, isProof, type FactProof, type Proof } from './proof';
 import { readBoardAll } from './boardComputers';
+import { tradeLedger } from './tempoCount';
+import { notYetPlayed } from './notYetPlayed';
+import { heldResource } from './holdResource';
+import { captureChoice } from './captureChoice';
+import { kickAfterRecapture } from './kickMap';
+import { openingEquivalence } from './openingEquivalence';
 import { refutedAltProof } from './refutedAlternativeCore';
 import { advantageWasMissed } from './reviewWithholding';
 import { costWords, isMateEval, MISTAKE_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
@@ -52,7 +58,7 @@ import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './revie
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { nameEndgamePhase } from './reviewMoveTeaching';
 import { detectOpening } from './openingDetectionService';
-import { planRaceClause, planRaceProof } from './planRace';
+import { planRaceClause, planRaceProof, pawnSquareTaken, pawnSquareRaceProof } from './planRace';
 import { kingReadsForBestLine } from './kingAttackReads';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
 import { deriveNextPlanFacts } from './nextPlans';
@@ -1062,6 +1068,51 @@ export function computeMoveFacets(
         recStakes(f, r.stakes);
       }
     } catch { /* a read is a bonus */ }
+  }
+
+  // ── 7d+. BATCH 1 — opening equivalence, order and timing. The same
+  // computers Learn speaks (`orderTeaching`), each with its proof.
+  {
+    const cleanCost = ctx.costCp ?? (negativeClass || ctx.classification === 'miss' ? 999 : 0);
+    const studentWB = ctx.studentColorWB;
+    const reply = ctx.allSans[ply] ?? null;
+    if (isStudent && studentWB) {
+      const say = (tag: string, text: string, proof: Proof | null, squares: readonly string[], identity: string): void => {
+        if (!proof) return;
+        const f = `[${tag}] ${text}`;
+        facets.push(f);
+        recProof(f, proof);
+        recSquares(f, squares);
+        outIdentity?.set(f, identity);
+      };
+      try {
+        const led = reply && cleanCost < 50 ? tradeLedger(ctx.allSans.slice(0, ply + 1), studentWB) : null;
+        if (led) say('timing', led.text, squaresProof(led.text, led.squares), [led.square], `ledger:${led.kind}:${led.square}`);
+        const ny = notYetPlayed(fenBefore, san, ctx.bestMoveSan, cleanCost);
+        if (ny) say('timing', ny.text, squaresProof(ny.text, ny.squares), ny.squares, `once:not-yet-played:${ny.target}`);
+        const hold = heldResource(fenBefore, san, ctx.bestMoveSan, cleanCost);
+        if (hold) { const lp = legalLineProof(hold.fen, hold.sans); say('timing', hold.text, lp ? { ...lp, squares: hold.squares } : null, hold.squares, `once:hold:${hold.resource}`); }
+        const cc = captureChoice(fenBefore, san, ctx.bestMoveSan, ctx.costCp ?? cleanCost);
+        if (cc) { const lp = legalLineProof(fenBefore, cc.bad); say('capture-choice', cc.text, lp ? { ...lp, squares: [cc.square] } : null, cc.squares, `capture-choice:${cc.square}`); }
+        const kick = cleanCost < 30 ? kickAfterRecapture(fenBefore, san, reply, ctx.bestLineUci) : null;
+        if (kick) { const lp = legalLineProof(fenBefore, kick.sans); say('kick', kick.text, lp ? { ...lp, squares: kick.squares } : null, kick.squares, `kick:${kick.kick.square}`); }
+        const won = pawnSquareTaken(fenBefore, san, cleanCost);
+        if (won) say('plan-race', won.text, pawnSquareRaceProof(fenBefore, won.race), won.squares, `pawn-race:${won.race.square}`);
+      } catch { /* a bonus, never a blocker */ }
+    }
+    // THE OPENING THIS BOARD IS — either seat, once a game (its identity).
+    if (studentWB && ply <= 24) {
+      try {
+        const eq = openingEquivalence(ctx.allSans.slice(0, ply), studentWB);
+        if (eq) {
+          const f = `[equivalence] ${eq.text}`;
+          facets.push(f);
+          recProof(f, eq.proof);
+          recSquares(f, eq.squares);
+          outIdentity?.set(f, `once:equivalence:${eq.name}`);
+        }
+      } catch { /* a bonus, never a blocker */ }
+    }
   }
 
   // ── 7a. THE BLUFF — "don't buy it" (WO-LAYERS-01 step 4). On the OPPONENT's

@@ -60,7 +60,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/hooks/usePhaseNarration.ts:430`
 - `src/hooks/usePhaseNarration.ts:882`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:2531`
+- `src/services/coachFeatureService.ts:2532`
 - `src/services/coachSurfaceScorecard.report.test.ts:116`
 - `src/services/coachSurfaceScorecard.report.test.ts:138`
 - `src/services/coachSurfaceScorecard.report.test.ts:149`
@@ -71,7 +71,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/dnaDoor.test.ts:42`
 - `src/services/dnaDoor.test.ts:49`
 - `src/services/laneReachability.test.ts:136`
-- `src/services/learnTurnDoor.ts:362`
+- `src/services/learnTurnDoor.ts:384`
 - `src/services/replayFence.najdorf1500.test.ts:50`
 - `src/services/reviewMoveBriefing.ts:408`
 - `src/services/ruleGradeFen.test.ts:9`
@@ -140,7 +140,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:9379`
 - `src/components/Coach/CoachTeachPage.tsx:10410`
 - `src/components/Coach/CoachTeachPage.tsx:11328`
-- `src/services/coachFeatureService.ts:2536`
+- `src/services/coachFeatureService.ts:2537`
 - `src/services/reviewMoveBriefing.ts:409`
 - `src/services/voicePackage.test.ts:415`
 - `src/services/voicePackage.test.ts:424`
@@ -153,7 +153,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:473`
+- `src/services/learnTurnDoor.ts:495`
 
 ### `LineArrow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -163,9 +163,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `keptLines` (function) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:11389`
-- `src/services/learnTurnDoor.test.ts:190`
-- `src/services/learnTurnDoor.test.ts:196`
-- `src/services/learnTurnDoor.test.ts:202`
+- `src/services/learnTurnDoor.test.ts:193`
+- `src/services/learnTurnDoor.test.ts:199`
+- `src/services/learnTurnDoor.test.ts:205`
 
 ### `stripMoveNumbers` (re-export) — 10 call sites
 - `scripts/convert-lichess-tsv.mjs:19`

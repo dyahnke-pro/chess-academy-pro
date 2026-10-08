@@ -23,6 +23,7 @@ import type { GamePromise } from './learnBoardTeaching';
 import { speedRunReads } from './speedRunReads';
 import { readBoardAll } from './boardComputers';
 import type { TacticType } from '../types';
+import { orderReads } from './orderReads';
 
 const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 const NUM = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
@@ -193,7 +194,8 @@ export function opponentHabits(sans: readonly string[], opp: 'w' | 'b'): Habit[]
 }
 
 export interface DepthClause {
-  kind: 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read' | 'tactic' | 'king-read';
+  kind: 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read' | 'tactic' | 'king-read'
+    | 'equivalence' | 'timing' | 'refuted' | 'capture-choice' | 'plan-race' | 'kick';
   /** The motif, in the one tactic vocabulary — the weakness join. */
   motif?: TacticType;
   text: string;
@@ -283,6 +285,11 @@ export function depthClauses(args: {
         out.push({ kind: 'tactic', text: g.text, squares: g.squares, claim: g.key, ...('kind' in g.proof ? { proof: g.proof } : {}), ...(g.stakes ? { stakes: g.stakes } : {}), ...(g.motif ? { motif: g.motif } : {}), ...(g.lines ? { lines: g.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}) });
       }
     }
+    // BATCH 1 — opening equivalence, order and timing (`orderReads`), each
+    // with its proof. The ones that name the student's move wait for nameMove.
+    const order = orderReads({ fen: args.fen, history: args.history, student: args.studentColor, topLines: args.topLines, engineBest });
+    const pushOrder = (o: (typeof order)[number]): void => { out.push({ kind: o.kind, text: o.text, proof: o.proof, squares: o.squares, claim: o.claim, ...(o.lines ? { lines: o.lines } : {}), ...(o.stakes ? { stakes: o.stakes } : {}) }); };
+    for (const o of order.filter((x) => !x.namesMove)) pushOrder(o);
     // A read that names the move speaks it only where the move is earned;
     // elsewhere it speaks its IDEA — the habit of thought without the answer.
     if (!args.nameMove || toMove !== args.studentColor) {
@@ -292,6 +299,7 @@ export function depthClauses(args: {
     }
     for (const r of reads.filter((x) => x.namesMove)) push(r, r.text);
     for (const r of kings.filter((x) => x.namesMove)) pushKing(r, r.text);
+    for (const o of order.filter((x) => x.namesMove)) pushOrder(o);
     const top = args.topLines[0];
     const uci = top?.moves?.[0];
     if (!top || !uci) return out;

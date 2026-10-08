@@ -24,7 +24,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `buildOpeningMoveDetail` (function) — 1 call site
-- `src/services/coachFeatureService.ts:3237`
+- `src/services/coachFeatureService.ts:3238`
 
 ### `PlanArrow` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -41,11 +41,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planBeatShape.test.ts:78`
 
 ### `buildOpeningDevelopmentPlan` (function) — 12 call sites
-- `src/services/coachFeatureService.ts:3071`
+- `src/services/coachFeatureService.ts:3072`
 - `src/services/planPrescriptions.test.ts:53`
 - `src/services/planPrescriptions.test.ts:61`
 - `src/services/planPrescriptions.test.ts:74`
-- `src/services/reviewFullData.ts:1280`
+- `src/services/reviewFullData.ts:1331`
 - `src/services/reviewStrategicOrientation.test.ts:58`
 - `src/services/reviewStrategicOrientation.test.ts:75`
 - `src/services/reviewStrategicOrientation.test.ts:76`
@@ -55,20 +55,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewStrategicOrientation.test.ts:120`
 
 ### `buildHisGroundedPlanBeat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3069`
+- `src/services/coachFeatureService.ts:3070`
 - `src/services/groundedPlanBeat.test.ts:21`
 - `src/services/groundedPlanBeat.test.ts:31`
 - `src/services/groundedPlanBeat.test.ts:55`
 
 ### `buildMastersGroundedPlanBeat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3070`
+- `src/services/coachFeatureService.ts:3071`
 - `src/services/groundedPlanBeat.test.ts:41`
 - `src/services/groundedPlanBeat.test.ts:49`
 - `src/services/groundedPlanBeat.test.ts:56`
 
 ### `buildMiddlegameOrientation` (function) — 16 call sites
-- `src/services/coachFeatureService.ts:3092`
-- `src/services/reviewFullData.ts:1286`
+- `src/services/coachFeatureService.ts:3093`
+- `src/services/reviewFullData.ts:1337`
 - `src/services/reviewStrategicOrientation.test.ts:4`
 - `src/services/reviewStrategicOrientation.test.ts:8`
 - `src/services/reviewStrategicOrientation.test.ts:18`

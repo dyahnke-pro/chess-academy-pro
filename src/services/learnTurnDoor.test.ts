@@ -67,7 +67,10 @@ describe('G8.5 — no lane without a live producer, no producer without a lane',
 
   // The board-level teaching lanes are produced in ONE composer the page calls
   // (surfaceComposition gate); a lane there counts only while the page calls it.
-  const BOARD_CODE = readFileSync('src/services/learnBoardTeaching.ts', 'utf8');
+  // `studentMoveTeaching` delegates batch 1 to `orderTeaching` — the same
+  // composer, so its lanes count only while learnBoardTeaching calls it.
+  const BOARD_CODE = readFileSync('src/services/learnBoardTeaching.ts', 'utf8')
+    + (/orderTeaching\(i\)/.test(readFileSync('src/services/learnBoardTeaching.ts', 'utf8')) ? readFileSync('src/services/orderTeaching.ts', 'utf8') : '');
   const pageCallsBoard = /studentMoveTeaching\(|theirMoveTeaching\(/.test(TEACH_CODE);
 
   it('every lane in the table is fed by live code in CoachTeachPage', () => {

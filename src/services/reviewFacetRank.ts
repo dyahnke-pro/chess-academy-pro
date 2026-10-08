@@ -39,7 +39,11 @@ export type FacetTag =
   // both sides, like `method`.
   | 'king-read'
   // Computers batch 5 (`exchangeIdeas.ts`) — one name on both sides.
-  | 'trade-idea' | 'defence-idea' | 'nugget';
+  | 'trade-idea' | 'defence-idea' | 'nugget'
+  // Batch 1 (opening, order and timing): the opening a board is equivalent to,
+  // the capture that hands them no square, the capture that drags a piece
+  // onto a square a pawn kicks it from.
+  | 'equivalence' | 'capture-choice' | 'kick';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -129,6 +133,14 @@ export const FACET_RANK: Record<FacetTag, number> = {
   stock: 35,
   // The conversion step the board is on — the method, not the task.
   technique: 34,
+  // THE CAPTURE THAT HANDS THEM NOTHING — "not X, because Y" for the choice
+  // between two pawn captures; ranks with the refuted alternative.
+  'capture-choice': 80,
+  // A capture that drags their piece onto a square a pawn then kicks it from.
+  kick: 33,
+  // The opening this board is with moves thrown in or the colours reversed —
+  // just above the opening's name.
+  equivalence: 29,
   // Two good moves, one difference — the plan layer's fine choice.
   contrast: 32,
   // WHEN, not just what — the move a turn early would have lost.
@@ -200,6 +212,9 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   nugget: 'teach',
   timing: 'teach',
   'king-read': 'teach',
+  equivalence: 'teach',
+  'capture-choice': 'teach',
+  kick: 'teach',
   'plan-race': 'teach',
   'plan-arc': 'teach',
   'plan-now': 'teach',
@@ -276,6 +291,11 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   'trade-idea': 'teach',
   'defence-idea': 'teach',
   nugget: 'teach',
+  equivalence: 'teach',
+  'capture-choice': 'teach',
+  kick: 'teach',
+  'plan-race': 'teach',
+  timing: 'teach',
   'student-leans': 'describe',
   'opponent-leans': 'describe',
 };
@@ -311,11 +331,11 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   'trade-idea': 'safety', 'defence-idea': 'safety',
   // PRINCIPLE — development, the king, the opening, converting.
   principle: 'principle', technique: 'principle', king: 'principle', opening: 'principle', endgame: 'principle',
-  rule: 'principle', nugget: 'principle',
+  rule: 'principle', nugget: 'principle', equivalence: 'principle',
   does: 'principle', point: 'plan', 'their-cost': 'plan', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
   status: 'principle', 'their-habit': 'principle', 'hole-access': 'plan', 'speedrun-read': 'plan',
   // PLAN — structure, targets, the plan and the long read.
-  'plan-now': 'plan', contrast: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-arc': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',
+  'plan-now': 'plan', contrast: 'plan', 'capture-choice': 'plan', kick: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-arc': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',
   'plan-line': 'plan', consequence: 'plan', structure: 'plan', passer: 'plan', rook7: 'plan',
   badbishop: 'plan', complex: 'plan', minority: 'plan', worst: 'plan', 'opp-target': 'plan',
   verdict: 'plan', eval: 'plan', delta: 'plan', note: 'plan', stock: 'plan',
@@ -344,6 +364,7 @@ export const FACT_PROOF: Record<FactKind, 'proven' | NoProofReason> = {
   'king-read': 'proven',
   // Batch 5: every read arrives with the line or squares it rests on.
   'trade-idea': 'proven', 'defence-idea': 'proven', nugget: 'proven',
+  equivalence: 'proven', 'capture-choice': 'proven', kick: 'proven',
   // PRINCIPLES AND HABITS — a rule of the game, taught; the board is the example.
   principle: 'method', technique: 'method', method: 'method', rule: 'method', fundamental: 'method',
   endgame: 'method', stock: 'method', concept: 'method', 'their-habit': 'stated',
@@ -402,6 +423,11 @@ const CLAUSE_TIE: Record<ClauseKind, number> = {
   'trade-idea': FACET_RANK['trade-idea'],
   'defence-idea': FACET_RANK['defence-idea'],
   nugget: FACET_RANK.nugget,
+  equivalence: FACET_RANK.equivalence,
+  'capture-choice': FACET_RANK['capture-choice'],
+  kick: FACET_RANK.kick,
+  'plan-race': FACET_RANK['plan-race'],
+  timing: FACET_RANK.timing,
 };
 export const TIE_ORDER: Record<FactKind, number> = { ...FACET_RANK, ...CLAUSE_TIE };
 
@@ -491,7 +517,8 @@ function clauseKindForTag(tag: FacetTag): string {
     case 'loose': case 'threat': case 'count': case 'royal': case 'trapped': return 'must-defend';
     case 'tactic': case 'sac': case 'sac-why': case 'forced': return 'latent-danger';
     case 'endgame': case 'passer': case 'consequence': case 'plan-race': return 'convert';
-    case 'refuted': return 'refuted';
+    case 'refuted': case 'equivalence': return 'refuted';
+    case 'timing': case 'capture-choice': case 'kick': return 'structure-plan';
     case 'rule': return 'fundamental';
     case 'principle': case 'structure': case 'complex': case 'minority':
     case 'badbishop': case 'worst': case 'plan-middlegame': case 'plan-now': return 'structure-plan';

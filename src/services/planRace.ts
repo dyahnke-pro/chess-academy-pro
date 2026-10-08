@@ -1,5 +1,6 @@
-import { Chess, type Square } from 'chess.js';
+import { Chess, type Move, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
+import { legalSeeGainFor } from './positionReadingService';
 import type { Proof } from './proof';
 
 type Color = 'w' | 'b';
@@ -473,4 +474,173 @@ export function planRaceProof(fen: string, studentColor: Color): Proof | null {
   }
   const file = `the ${race.file}-file`;
   return { kind: 'squares', exact: true, short: file, full: `both sides want ${file}`, squares: [`${race.file}1`, `${race.file}8`] };
+}
+
+// ── THE MIRROR-STRUCTURE RACE: TWO PAWNS, ONE SQUARE (batch 1) ───────────────
+// His "in this reversed King's Indian they never get time for …e5, so e5 is
+// yours". The same rule as the races above: it is a race only when both sides
+// run the SAME plan toward the SAME terminal event. Here the event is one
+// square on one file that BOTH sides' pawns can step onto in one move — the
+// first pawn there blocks the other for good, because a pawn cannot pass a
+// pawn in front of it. Counted in one unit (moves until the push is safe), the
+// side to move winning a tie. Anything not countable in that unit is silent.
+
+export interface PawnSquareRace {
+  /** The contested square. */
+  square: string;
+  /** The student's push onto it and their push, SAN on each side's turn. */
+  yourPush: string;
+  theirPush: string;
+  /** The student's supporting move, when one move is needed first; null when
+   *  the push is safe now. */
+  yourSupport: string | null;
+  /** Moves before the push is safe: 0 now, 1 after one supporting move. */
+  yourReady: 0 | 1;
+  /** Their count; null = not within one move. */
+  theirReady: 0 | 1 | null;
+}
+
+/** `fen` with `color` to move, or null when that board cannot exist (the other
+ *  king would stand in check). */
+function turnTo(fen: string, color: Color): Chess | null {
+  const parts = fen.split(' ');
+  parts[1] = color;
+  parts[3] = '-';
+  try {
+    const c = new Chess(parts.join(' '));
+    const other: Color = color === 'w' ? 'b' : 'w';
+    const king = c.board().flat().find((x) => x && x.type === 'k' && x.color === other);
+    if (king && c.attackers(king.square, color).length > 0) return null;
+    return c;
+  } catch { return null; }
+}
+
+/** The pushed pawn survives: the opponent wins nothing by the pin-aware
+ *  exchange count on its square. */
+function pawnSafeOn(board: Chess, square: string, owner: Color): boolean {
+  return legalSeeGainFor(board.fen(), square as Square, owner === 'w' ? 'b' : 'w') <= 0;
+}
+
+/** Moves before `side`'s push onto `square` is safe: 0, 1 (with the support),
+ *  or null. `board` must have `side` to move. */
+function readyIn(board: Chess, side: Color, square: string, legal: readonly Move[]): { ready: 0 | 1; push: string; support: string | null } | null {
+  const pushNow = legal.find((m) => m.piece === 'p' && m.to === square && !m.captured);
+  if (!pushNow) return null;
+  const after = new Chess(board.fen());
+  after.move(pushNow.san);
+  if (pawnSafeOn(after, square, side)) return { ready: 0, push: pushNow.san, support: null };
+  const guards = board.attackers(square as Square, side).length;
+  const scratch = new Chess(board.fen());
+  for (const m of legal) {
+    if (m.captured || m.piece === 'k' || m.san === pushNow.san || m.to === square) continue;
+    // Cheap first (lift and place, no move generation): a support adds a guard.
+    const piece = scratch.get(m.from);
+    if (!piece || m.isEnPassant() || m.isKingsideCastle() || m.isQueensideCastle()) continue;
+    scratch.remove(m.from);
+    scratch.put(piece, m.to);
+    const adds = scratch.attackers(square as Square, side).length > guards;
+    scratch.remove(m.to);
+    scratch.put(piece, m.from);
+    if (!adds) continue;
+    const b1 = new Chess(board.fen());
+    b1.move(m.san);
+    const again = turnTo(b1.fen(), side);
+    if (!again) continue;
+    const push = again.moves({ verbose: true }).find((x) => x.piece === 'p' && x.to === square && !x.captured);
+    if (!push) continue;
+    again.move(push.san);
+    if (pawnSafeOn(again, square, side)) return { ready: 1, push: pushNow.san, support: m.san };
+  }
+  return null;
+}
+
+/**
+ * The student, to move on `fen`: a square on files c–f that a pawn of each
+ * side can step onto in one move, the student's push safe now (or after one
+ * supporting move), and theirs not sooner. Null when there is no such square
+ * or the student is not first.
+ */
+export function pawnSquareRace(fen: string, student: Color): PawnSquareRace | null {
+  return pawnSquareRaces(fen, student)[0] ?? null;
+}
+
+/** Every such race on the board (one per contested square). */
+export function pawnSquareRaces(fen: string, student: Color): PawnSquareRace[] {
+  const races: PawnSquareRace[] = [];
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return races; }
+  if (board.turn() !== student || board.inCheck()) return races;
+  const them: Color = student === 'w' ? 'b' : 'w';
+  const theirBoard = turnTo(fen, them);
+  if (!theirBoard) return races;
+  const mineLegal = board.moves({ verbose: true });
+  const theirLegal = theirBoard.moves({ verbose: true });
+  // The key advances: the fourth and fifth ranks, files c–f.
+  for (const f of 'cdef') {
+    for (let r = 4; r <= 5; r += 1) {
+      const sq = `${f}${r}`;
+      if (board.get(sq as Square)) continue;
+      const theirPushLegal = theirLegal.some((m) => m.piece === 'p' && m.to === sq && !m.captured);
+      if (!theirPushLegal) continue;
+      const mine = readyIn(board, student, sq, mineLegal);
+      if (!mine) continue;
+      const theirs = readyIn(theirBoard, them, sq, theirLegal);
+      const theirReady = theirs ? theirs.ready : null;
+      // A RACE THE STUDENT IS AHEAD IN: their push is not safe within the
+      // same number of moves. A dead-level race on move one ("both of you want
+      // e5" after 1.e4) is every game's first move, not a lesson.
+      // A tie is still a race the MOVE decides — but not in the first moves,
+      // where "you get e5 first" is every game's opening.
+      const fullmove = Number(fen.split(' ')[5] ?? 1);
+      if (theirReady !== null && (theirReady < mine.ready || (theirReady === mine.ready && fullmove < 6))) continue;
+      const theirPush = theirLegal.find((m) => m.piece === 'p' && m.to === sq && !m.captured)?.san ?? '';
+      races.push({ square: sq, yourPush: mine.push, theirPush, yourSupport: mine.support, yourReady: mine.ready, theirReady });
+    }
+  }
+  return races;
+}
+
+/** The race said BEFORE the move — where the move may be named, and only when
+ *  the engine's move is the push or its support (never argue with the engine). */
+export function pawnSquareRaceRead(fen: string, student: Color, bestSan: string | null): { text: string; squares: string[]; race: PawnSquareRace } | null {
+  if (!bestSan) return null;
+  const strip = (x: string): string => x.replace(/[+#]$/, '');
+  const race = pawnSquareRaces(fen, student).find((r) => strip(bestSan) === strip(r.yourSupport ?? r.yourPush));
+  if (!race) return null;
+  const tp = student === 'w' ? `…${race.theirPush}` : race.theirPush;
+  const theirs = race.theirReady === race.yourReady ? `their ${tp} is ready too, but the move is yours` : `their ${tp} isn't ready yet`;
+  const text = race.yourSupport
+    ? `Both of you want a pawn on ${race.square}, and the first one there keeps it. ${race.yourSupport} makes ${race.yourPush} safe; ${theirs}, so ${race.square} is yours.`
+    : `Both of you want a pawn on ${race.square}, and the first one there keeps it. ${race.yourPush} is safe now; ${theirs}, so ${race.square} is yours.`;
+  return { text, squares: [race.square], race };
+}
+
+/** The race WON — said after the student's pawn landed on the contested
+ *  square first. Their pawn on that file can never reach it now. */
+export function pawnSquareTaken(fenBefore: string, san: string, cpLoss: number): { text: string; squares: string[]; race: PawnSquareRace } | null {
+  // Cheap first: only a quiet pawn push onto ranks four or five can win it.
+  if (cpLoss >= 30 || !/^[c-f][45]$/.test(san.replace(/[+#]$/, ''))) return null;
+  let board: Chess;
+  try { board = new Chess(fenBefore); } catch { return null; }
+  const race = pawnSquareRaces(fenBefore, board.turn()).find((r) => r.yourReady === 0 && r.yourPush.replace(/[+#]$/, '') === san.replace(/[+#]$/, ''));
+  if (!race) return null;
+  const tp = board.turn() === 'w' ? `…${race.theirPush}` : race.theirPush;
+  return {
+    text: `Your pawn reached ${race.square} first — their ${tp} can never come now, so ${race.square} is yours.`,
+    squares: [race.square],
+    race,
+  };
+}
+
+/** The race's proof — the contested square and the two pawns (exact). */
+export function pawnSquareRaceProof(fen: string, race: PawnSquareRace): Proof | null {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  const file = race.square[0];
+  const pawns: string[] = [];
+  for (let r = 1; r <= 8; r += 1) { const p = board.get(`${file}${r}` as Square); if (p && p.type === 'p') pawns.push(`${file}${r}`); }
+  const full = race.yourSupport
+    ? `${race.yourSupport} guards ${race.square}, then ${race.yourPush} lands safely; their pawn cannot pass yours once it stands there`
+    : `${race.yourPush} lands on ${race.square} safely now; their pawn cannot pass yours once it stands there`;
+  return { kind: 'squares', exact: true, short: `${race.square}, first`, full, squares: [race.square, ...pawns] };
 }

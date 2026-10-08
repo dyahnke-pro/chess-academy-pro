@@ -44,6 +44,15 @@ const DESC = (what: string): RoleState => ({ state: 'na', why: `a description of
 const SLIP: RoleState = { state: 'wired', via: 'captureMisconception' };
 
 export const COMPUTER_ROLES: Record<LearnLane, ComputerRole> = {
+  // ── batch 1 (opening equivalence, order and timing) — `orderTeaching` ──
+  openingEquivalence: { computer: 'openingEquivalence', tag: null, held: { state: 'na', why: 'a name for the board — the opening it is with moves thrown in — no answer of the student\'s to record' }, broken: { state: 'na', why: 'naming the reference opening poses no question the student can miss' }, askable: { state: 'wired', via: 'orderReads (depthClauses)' } },
+  tradeLedger: { computer: 'tempoCount.tradeLedger', tag: 'tempo-handed', held: { state: 'wired', via: 'recordTeachingEvidence' }, broken: SLIP, askable: { state: 'wired', via: 'orderReads (captureTooEarly)' } },
+  notYetPlayed: { computer: 'notYetPlayed', tag: 'neglected-development', held: { state: 'wired', via: 'recordTeachingEvidence' }, broken: SLIP, askable: { state: 'wired', via: 'orderReads (notYetIdea)' } },
+  holdResource: { computer: 'holdResource', tag: 'bad-trade', held: { state: 'wired', via: 'recordTeachingEvidence' }, broken: SLIP, askable: { state: 'wired', via: 'orderReads (holdIdea)' } },
+  captureChoice: { computer: 'captureChoice', tag: 'created-pawn-weakness', held: { state: 'wired', via: 'recordTeachingEvidence' }, broken: SLIP, askable: { state: 'wired', via: 'orderReads (captureChoiceIdea)' } },
+  kickMap: { computer: 'kickMap', tag: 'tempo-handed', held: { state: 'wired', via: 'recordTeachingEvidence' }, broken: SLIP, askable: { state: 'wired', via: 'orderReads (kickLineRead)' } },
+  breakRace: { computer: 'planRace.pawnSquareRace', tag: 'mistimed-pawn-break', held: { state: 'wired', via: 'recordTeachingEvidence' }, broken: SLIP, askable: { state: 'wired', via: 'orderReads (pawnSquareRaceRead)' } },
+  patternFails: { computer: 'patternFails', tag: 'calculation-depth', held: { state: 'wired', via: 'recordTeachingEvidence' }, broken: SLIP, askable: { state: 'wired', via: 'orderReads (patternFails)' } },
   gem: { computer: 'punishGems', tag: 'missed-tactic', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'isTacticsQuestion' } },
   tactic: { computer: 'tacticsDetector', tag: 'missed-tactic', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'isTacticsQuestion' } },
   threat: { computer: 'groundedAnswer.detectNewThreat', tag: 'missed-opponents-threat', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'isOpponentMoveQuestion' } },

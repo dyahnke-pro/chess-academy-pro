@@ -93,7 +93,16 @@ export type LearnLane =
   | 'autopilot'
   | 'keepPressing'
   | 'pawnEnding'
-  | 'strongChoice';
+  | 'strongChoice'
+  // ── batch 1: opening equivalence, order and timing (`orderTeaching`) ──
+  | 'openingEquivalence'
+  | 'tradeLedger'
+  | 'notYetPlayed'
+  | 'holdResource'
+  | 'captureChoice'
+  | 'kickMap'
+  | 'breakRace'
+  | 'patternFails';
 
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
  *  the positional read, structure, piece quality) — the tier the scoreboard
@@ -136,9 +145,22 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   phase: 'verdict', character: 'verdict',
   threat: 'now', threatAnswer: 'now', prophylaxis: 'now', gem: 'now', trapAhead: 'now', priorityFirst: 'now', countMethod: 'now',
   checkMethod: 'now', stalemate: 'now', blunderCheck: 'now', autopilot: 'now', keepPressing: 'now', pawnEnding: 'now',
+  openingEquivalence: 'name', tradeLedger: 'affirm', notYetPlayed: 'affirm', holdResource: 'affirm', captureChoice: 'affirm',
+  breakRace: 'affirm', kickMap: 'point', patternFails: 'refute',
 };
 
 export const LEARN_LANES: Record<LearnLane, LaneRule> = {
+  // ── batch 1 (opening equivalence, order and timing) ──
+  // The named opening this board is with moves thrown in or the colours
+  // reversed — rides with the name, said once a game.
+  openingEquivalence: { kind: 'computed', why: 'the named opening this board is, with a move each thrown in or the colours reversed', lead: 44, always: true },
+  tradeLedger: { kind: 'computed', why: 'the trade, counted in moves: their recapturing piece had already moved, or their much-moved piece went for a fresh one', lead: 67 },
+  notYetPlayed: { kind: 'computed', why: 'development first: the piece that would hit your pawn has not come out yet', lead: 63 },
+  holdResource: { kind: 'computed', why: 'a pin or check kept in hand until their knight develops into it', lead: 65 },
+  captureChoice: { kind: 'computed', why: 'which pawn capture — the other one hands their knight a square for good', lead: 71 },
+  kickMap: { kind: 'computed', why: 'the capture dragged their piece onto a square a pawn kicks it from, and where it can land', lead: 67 },
+  breakRace: { kind: 'computed', why: 'both sides wanted one square for a pawn and yours got there first', lead: 66 },
+  patternFails: { kind: 'computed', why: 'a stock shot that looks right and fails on this board, played out', lead: 72 },
   gem: { kind: 'gem', why: 'a verified punish the coach just handed over', lead: 100, always: true },
   tactic: { kind: 'tactic', why: 'a tactic the detectors proved for the student', lead: 90, always: true },
   threat: { kind: 'threat', why: 'danger to the student on this board', lead: 95, always: true },

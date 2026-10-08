@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**477 lines · 11 exports · 9 importers · 3 tests · 0 audits**
+**647 lines · 17 exports · 12 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,6 +20,9 @@
 - `src/services/kingAttackReads.test.ts`
 - `src/services/kingAttackReads.ts`
 - `src/services/learnBoardTeaching.ts`
+- `src/services/orderComputers.test.ts`
+- `src/services/orderReads.ts`
+- `src/services/orderTeaching.ts`
 - `src/services/planRace.test.ts`
 - `src/services/reviewFullData.ts`
 
@@ -87,10 +90,10 @@
 - `src/services/planRace.test.ts:109`
 - `src/services/planRace.test.ts:115`
 - `src/services/planRace.test.ts:157`
-- `src/services/reviewFullData.ts:971`
+- `src/services/reviewFullData.ts:977`
 
 ### `fileClaimed` (function) — 4 call sites
-- `src/services/learnBoardTeaching.ts:207`
+- `src/services/learnBoardTeaching.ts:214`
 - `src/services/planRace.test.ts:140`
 - `src/services/planRace.test.ts:147`
 - `src/services/planRace.test.ts:148`
@@ -98,12 +101,38 @@
 ### `planRaceProof` (function) — 3 call sites
 - `src/services/kingAttackReads.test.ts:185`
 - `src/services/kingAttackReads.ts:705`
-- `src/services/reviewFullData.ts:972`
+- `src/services/reviewFullData.ts:978`
+
+### `PawnSquareRace` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `pawnSquareRace` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `pawnSquareRaces` (function) — 2 call sites
+- `src/services/orderComputers.test.ts:163`
+- `src/services/orderComputers.test.ts:172`
+
+### `pawnSquareRaceRead` (function) — 3 call sites
+- `src/services/orderComputers.test.ts:165`
+- `src/services/orderComputers.test.ts:175`
+- `src/services/orderReads.ts:108`
+
+### `pawnSquareTaken` (function) — 3 call sites
+- `src/services/orderComputers.test.ts:169`
+- `src/services/orderTeaching.ts:94`
+- `src/services/reviewFullData.ts:1099`
+
+### `pawnSquareRaceProof` (function) — 3 call sites
+- `src/services/orderReads.ts:110`
+- `src/services/orderTeaching.ts:96`
+- `src/services/reviewFullData.ts:1100`
 
 ## Tests
 
 - `src/data/endgameConceptDrills.test.ts`
 - `src/services/kingAttackReads.test.ts`
+- `src/services/orderComputers.test.ts`
 - `src/services/planRace.test.ts`
 
 ## Audits that reach it

@@ -21,6 +21,9 @@ export function warmOpeningPositions(): void {
     .finally(() => { loading = false; });
 }
 
+/** Whether the index has loaded (a null answer before then means "not yet"). */
+export function openingPositionsLoaded(): boolean { return positions !== null; }
+
 /** For tests and for a caller that already holds the map. */
 export function setOpeningPositions(map: PositionMap | null): void { positions = map; }
 

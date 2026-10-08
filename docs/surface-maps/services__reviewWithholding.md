@@ -22,8 +22,8 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/coachFeatureService.ts:4103`
-- `src/services/reviewFullData.ts:556`
+- `src/services/coachFeatureService.ts:4104`
+- `src/services/reviewFullData.ts:562`
 
 ## Tests
 
