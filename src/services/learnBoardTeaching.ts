@@ -847,11 +847,13 @@ export function studentMoveAnswerLines(history: readonly string[], ply: number, 
   });
   const out = hints.map((h) => h.text);
   // WHAT A QUIET MOVE IS FOR — Learn's move point (Play on demand, David
-  // 2026-10-02). Quiet moves only: a capture's point is the trade.
-  if (out.length === 0 && !/x/.test(history[ply])) {
+  // 2026-10-02). Quiet moves only: a capture's point is the trade. The point
+  // answers "what was that for" and leads; a description of the board the
+  // move made (a pawn duo, a square it covers) follows it, never replaces it.
+  if (!/x/.test(history[ply])) {
     // Quiet moves only — nothing material is claimed, so no line is needed.
     const point = studentMovePoint(fenBefore, history[ply], ply >= 1 ? history[ply - 1] : null, null);
-    if (point) out.push(point);
+    if (point && !out.includes(point)) out.unshift(point);
   }
   return out;
 }
