@@ -7,7 +7,7 @@
 // theme rather than duplicating it).
 
 const TAB_PLANS: Record<string, string[]> = {
-  'main': ['mp-proericstafford-main-hstorm'],
+  'main': [],
   'five knights (5.nc3)': ['mp-proericstafford-nc3-openh'],
   'space grab (5.e5)': [],
   'knight retreat (4.nf3)': [],
