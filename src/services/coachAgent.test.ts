@@ -544,3 +544,12 @@ describe('parseCoachIntent — favorite-opening', () => {
     });
   });
 });
+
+describe('parseCoachIntent — a negated ask is never a walkthrough (2026-10-08)', () => {
+  it.each(["Don't show me the arrows", 'do not show me the French', 'stop teaching me the Vienna'])('"%s" is not a walkthrough', (q) => {
+    expect(parseCoachIntent(q).kind).not.toBe('walkthrough');
+  });
+  it('the positive ask still is', () => {
+    expect(parseCoachIntent('show me the French').kind).toBe('walkthrough');
+  });
+});

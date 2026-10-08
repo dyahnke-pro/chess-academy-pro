@@ -381,7 +381,12 @@ export function parseCoachIntent(query: string): CoachIntent {
     lower.match(/teach\s+(?:me\s+)?(?:the\s+main\s+line\s+of\s+)?(?:the\s+)?(.+)/) ||
     lower.match(/show\s+me\s+(?:the\s+)?(.+?)(?:\s+opening)?$/) ||
     lower.match(/study\s+(?:the\s+)?(.+)/);
-  if (walkthroughMatch) {
+  // A NEGATED ask is never a request: "don't show me the arrows" / "stop
+  // teaching me" (real student turns, 2026-10-08) read as "show me [the
+  // opening] arrows" and were offered a walkthrough of an opening called
+  // "arrows".
+  const negated = /^\s*(?:please\s+)?(?:don'?t|do\s+not|never|stop|no\s+more)\b/.test(lower);
+  if (walkthroughMatch && !negated) {
     const subject = cleanSubject(walkthroughMatch[1]);
     // A walkthrough subject is an opening NAME, not a sentence. If the
     // captured phrase reads like a question or carries clausal qualifiers

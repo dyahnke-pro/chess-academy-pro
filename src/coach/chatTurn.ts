@@ -194,8 +194,11 @@ export interface ChatTurn {
 
 /** A piece referent once the board has placed it. */
 export type ResolvedReferent =
-  | Exclude<Referent, { type: 'piece' }>
-  | { type: 'piece'; piece: PieceLetter; square: string; seat: Seat };
+  | Exclude<Referent, { type: 'piece' | 'move' }>
+  | { type: 'piece'; piece: PieceLetter; square: string; seat: Seat }
+  /** `played`: the move is not legal now but was made earlier (on the tape or
+   *  as the student's last try) — "why Nf1?" about a move already made. */
+  | { type: 'move'; san: string; played: boolean };
 
 export interface ResolvedChatTurn extends Omit<ChatTurn, 'referents'> {
   referents: ResolvedReferent[];
@@ -223,8 +226,23 @@ export interface KindSpec {
 const PIECE_WORD: Record<PieceLetter, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const firstPiece = (t: ResolvedChatTurn): Extract<ResolvedReferent, { type: 'piece' }> | null =>
   t.referents.find((r): r is Extract<ResolvedReferent, { type: 'piece' }> => r.type === 'piece') ?? null;
-const firstMove = (t: ResolvedChatTurn): string | null =>
-  (t.referents.find((r) => r.type === 'move') as { san: string } | undefined)?.san ?? null;
+const firstMoveRef = (t: ResolvedChatTurn): Extract<ResolvedReferent, { type: 'move' }> | null =>
+  t.referents.find((r): r is Extract<ResolvedReferent, { type: 'move' }> => r.type === 'move') ?? null;
+const firstMove = (t: ResolvedChatTurn): string | null => firstMoveRef(t)?.san ?? null;
+/**
+ * 🔒 A NAMED MOVE IS NEVER DROPPED (2026-10-08). The rewrite of a reading
+ * into the question its lane answers used to be fixed text for several kinds,
+ * so "my knight to d5, was that good?" became "was that a good move?" and the
+ * lane rated a different move, and "why is Ne4 best?" explained the engine's
+ * Na3. When the student named a move, the question is about THAT move: one
+ * still to play is weighed on the board now, one already made is judged where
+ * it was played.
+ */
+const aboutNamedMove = (fallback: string) => (t: ResolvedChatTurn): string => {
+  const m = firstMoveRef(t);
+  if (!m) return fallback;
+  return m.played ? `how good was ${m.san}?` : `is ${m.san} good here?`;
+};
 const topicOr = (t: ResolvedChatTurn, fmt: (x: string) => string, fallback: string | null): string | null =>
   (t.topic ? fmt(t.topic) : fallback);
 const fixed = (q: string) => (): string => q;
@@ -242,8 +260,8 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   // ── the board, now ──
   'piece-options': { gloss: 'could a piece have moved / where can a piece go ("couldn\'t he just move the queen?")', lane: 'piece-options', answerer: 'live',
     canonical: (t) => { const p = firstPiece(t); return p ? `${p.seat === 'them' ? "couldn't they move their" : 'could I move my'} ${PIECE_WORD[p.piece]}?` : null; } },
-  'best-move': { gloss: 'what is the best move here', lane: 'best-move', answerer: 'live', canonical: fixed("what's my best move?") },
-  'why-best-move': { gloss: 'why is the engine\'s best move best', lane: 'why-best-move', answerer: 'live', canonical: fixed('why is that the best move?') },
+  'best-move': { gloss: 'what is the best move here', lane: 'best-move', answerer: 'live', canonical: aboutNamedMove("what's my best move?") },
+  'why-best-move': { gloss: 'why is the engine\'s best move best', lane: 'why-best-move', answerer: 'live', canonical: aboutNamedMove('why is that the best move?') },
   alternatives: { gloss: 'what other moves are worth considering', lane: 'alternatives', answerer: 'live', canonical: fixed('what else could I play here?') },
   'candidate-move': { gloss: 'is a NAMED move good / what happens if I play it', lane: 'candidate-move', answerer: 'live',
     canonical: (t) => { const m = firstMove(t); return m ? `is ${m} good here?` : null; } },
@@ -264,7 +282,7 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   'player-games': { gloss: 'how a named pro plays this line', lane: 'player-games', answerer: 'live', canonical: null },
 
   // ── moves already played ──
-  'move-rating': { gloss: 'was the last move good', lane: 'move-rating', answerer: 'live', canonical: fixed('was that a good move?') },
+  'move-rating': { gloss: 'was the last move good', lane: 'move-rating', answerer: 'live', canonical: aboutNamedMove('was that a good move?') },
   'retrospective-move': { gloss: 'why was a move ALREADY PLAYED good or bad', lane: 'retrospective-move', answerer: 'live',
     canonical: (t) => { const m = firstMove(t); return m ? `how good was ${m}?` : 'how good was my last move?'; } },
   'opponent-move': { gloss: 'why did the opponent play their last move', lane: 'opponent-move', answerer: 'live', canonical: fixed('why did they play that?') },
@@ -323,7 +341,7 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   'compare-my-move': { gloss: 'why is a move better than WHAT I PLAYED (compares the student\'s own move with a better one)', lane: 'retrospective-move', answerer: 'live',
     canonical: fixed('why is that better than what I played?') },
   'what-did-their-move-change': { gloss: 'what did the opponent\'s last move change / threaten', lane: 'opponent-move', answerer: 'live', canonical: fixed('why did they play that?') },
-  'what-should-i-play': { gloss: 'what should I play here (the move, with its reason)', lane: 'best-move', answerer: 'live', canonical: fixed("what's my best move?") },
+  'what-should-i-play': { gloss: 'what should I play here (the move, with its reason)', lane: 'best-move', answerer: 'live', canonical: aboutNamedMove("what's my best move?") },
   'why-is-it-a-target': direct('why is a piece or square a target'),
   'count-attackers': direct('how many pieces attack a piece or square'),
   'count-defenders': direct('how many pieces defend a piece or square'),
@@ -441,7 +459,7 @@ export function validateChatTurn(turn: ChatTurn, board: BoardContext, memory: Co
       if (!moveIsReal(r.san, board)) {
         return { ok: false, reason: 'illegal-move', clarify: `${r.san} isn't a move I can find here — which move did you mean?` };
       }
-      out.push(r);
+      out.push({ type: 'move', san: r.san, played: !legalNow(r.san, board) });
       continue;
     }
     if (r.type === 'what-i-played') {
@@ -506,6 +524,11 @@ function resolvePiece(
     reason: 'piece-ambiguous',
     clarify: `Which ${name} — ${pool.map((c) => `the one on ${c.square}`).join(' or ')}?`,
   };
+}
+
+function legalNow(san: string, board: BoardContext): boolean {
+  if (!board.fen) return false;
+  try { return !!new Chess(board.fen).move(san); } catch { return false; }
 }
 
 /** A named move is real when it is legal now OR was played (on the tape) —
@@ -596,4 +619,40 @@ export function firingLanes(ask: string, opts: { fen?: string; routedCommand?: b
     if (LANE_FIRES[lane](g, ask)) out.push(lane);
   }
   return out;
+}
+
+// ─── THE CATCH-ALL'S ANSWER, BY KIND ───────────────────────────────────────
+
+/** Kinds about the student's own record. */
+const RECORD_KINDS: ReadonlySet<ChatKind> = new Set<ChatKind>([
+  'strengths', 'stats', 'opening-accuracy', 'review-due', 'weakness-lifecycle', 'weakness-briefing',
+  'mistakes', 'errors-by-situation', 'misconceptions', 'tactics-profile', 'phase-profile',
+  'repertoire-gap', 'accuracy', 'consistency', 'time-trouble', 'last-game', 'last-game-mistake',
+  'converting', 'color', 'records', 'record-vs', 'puzzle-stats', 'transfer-gap', 'skill-radar',
+  'trend', 'progress', 'opening-profile', 'endgame-weakness',
+]);
+const ACTION_KINDS: ReadonlySet<ChatKind> = new Set<ChatKind>(['command', 'training-request', 'settings', 'app-help', 'start-thinking-lesson']);
+const KNOWLEDGE_KINDS: ReadonlySet<ChatKind> = new Set<ChatKind>([
+  'concept', 'theory', 'teaching-method', 'opening-identity', 'opening-existence', 'counter-repertoire',
+  'opening-traps', 'book-teaching',
+]);
+
+/**
+ * What the catch-all says when no lane answered (2026-10-08). The catch-all
+ * reads the board — right for a question about the board, wrong for anything
+ * else: "what thinking errors have I made?" used to get the best move. So a
+ * turn the door read as something other than the board is asked back about
+ * THAT instead. Null lets the catch-all answer.
+ */
+export function askBackAtCatchAll(kind: ChatKind, clarify: string | undefined, hasBoard: boolean): string | null {
+  if (kind === 'chat' || kind === 'conversational-reply' || kind === 'stop') return null;
+  if (NEEDS_BOARD.has(kind) || kind === 'move-rating' || kind === 'retrospective-move' || kind === 'opponent-move' || kind === 'last-move' || kind === 'endgame' || kind === 'live-colour') {
+    return hasBoard ? null : (clarify ?? "Which position do you mean? Open it on the board and ask me again.");
+  }
+  if (clarify) return clarify;
+  if (RECORD_KINDS.has(kind)) return 'Do you mean your weaknesses, your openings, or your recent games?';
+  if (ACTION_KINDS.has(kind)) return "I can't do that from the chat. I can teach or play an opening, review a game, or set up a drill — which would you like?";
+  if (KNOWLEDGE_KINDS.has(kind)) return "I don't have an answer for that one yet. Ask me about a move, an opening or your games.";
+  if (kind === 'player-games' || kind === 'master-play') return "I only know the games in this app and the openings it teaches, not other players' records.";
+  return 'I am not sure what you mean. Could you say it another way?';
 }

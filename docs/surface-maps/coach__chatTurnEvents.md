@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**71 lines · 4 exports · 3 importers · 1 tests · 0 audits**
+**74 lines · 4 exports · 3 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,15 +21,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ChatTurnRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `onChatTurn` (function) — 2 call sites
+### `onChatTurn` (function) — 3 call sites
 - `src/coach/dispatchCoachTurn.test.ts:93`
-- `src/services/appAuditor.ts:2314`
+- `src/coach/dispatchCoachTurn.test.ts:198`
+- `src/services/appAuditor.ts:2342`
 
 ### `emitChatTurn` (function) — 1 call site
-- `src/coach/dispatchCoachTurn.ts:126`
+- `src/coach/dispatchCoachTurn.ts:135`
 
-### `resetChatTurnListeners` (function) — 1 call site
+### `resetChatTurnListeners` (function) — 2 call sites
 - `src/coach/dispatchCoachTurn.test.ts:92`
+- `src/coach/dispatchCoachTurn.test.ts:197`
 
 ## Tests
 

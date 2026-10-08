@@ -75,6 +75,10 @@ const DEFAULT_POSTHOG_HOST = 'https://us.i.posthog.com';
  */
 const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   'app-boot': 'app_opened',
+  // How the door READ each student question (kind, what it pointed at, valid
+  // or asked back) — without it a misread and a missing answer look the same
+  // from the answer text alone (2026-10-08).
+  'chat-turn': 'coach_turn_read',
   // Where the review's "Preparing…" wait goes, per phase, on real devices
   // (2026-09-23). Nothing about prep time reached PostHog before this.
   'review-prep-timing': 'review_prep_timing',
@@ -287,7 +291,7 @@ export function buildEventProps(entry: AuditEntry): Record<string, unknown> {
   // real defect unreproducible once the audit-stream buffer rotated. Scoped to
   // the gate kinds so the payload-size rationale still holds everywhere else,
   // and bounded tightly — the payload is a short JSON array of terms.
-  if (entry.details && (entry.kind === 'claim-validator-trip' || entry.kind === 'sanitizer-leak' || entry.kind === 'review-prep-timing')) {
+  if (entry.details && (entry.kind === 'claim-validator-trip' || entry.kind === 'sanitizer-leak' || entry.kind === 'review-prep-timing' || entry.kind === 'chat-turn')) {
     props.details = entry.details.slice(0, 500);
   }
   // Feedback reply-to + rating (David 2026-08-27). The user optionally typed an

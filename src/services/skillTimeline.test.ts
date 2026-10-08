@@ -35,16 +35,29 @@ describe('skillTimeline', () => {
     expect(line.weeks[0].score).toBeNull();
   });
 
-  it('skips uncounted slips and counts a broken answer as a mistake', () => {
+  it('skips puzzle misses and counts a broken answer as a mistake', () => {
     const [line] = buildSkillTimelines(
       ['missed-tactic'],
-      [{ tag: 'missed-tactic', createdAt: NOW, counted: false }],
+      [{ tag: 'missed-tactic', createdAt: NOW, source: 'puzzle', counted: false }],
       [{ tag: 'missed-tactic', outcome: 'broken', recordedAt: NOW - DAY, prompted: false }],
       new Map(),
       NOW,
     );
     expect(line.weeks[25].missed).toBe(1);
     expect(line.lastMistakeAt).toBe(NOW - DAY);
+  });
+
+  it('counts a batch-analysed game\'s slips (counted: false) in the week the game was played — the tiles count them too', () => {
+    const played = NOW - 10 * 7 * DAY;
+    const [line] = buildSkillTimelines(
+      ['missed-tactic'],
+      [{ tag: 'missed-tactic', createdAt: NOW, counted: false, source: 'auto-analysis', sourceGameId: 'g1' }],
+      [],
+      new Map([['g1', played]]),
+      NOW,
+    );
+    expect(line.weeks[15].missed).toBe(1);
+    expect(line.weeks[25].missed).toBe(0);
   });
 
   it('currentStrength ranks recent improvement above old success, null when never asked', () => {

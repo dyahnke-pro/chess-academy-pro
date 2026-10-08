@@ -28,6 +28,9 @@ export interface ChatTurnRow {
   servedIntent: string | null;
   /** The reader's kind, or null when it produced none. */
   parsedKind: string | null;
+  /** What the reading pointed at ("move:Ne4 piece:n@d5"), so a dropped named
+   *  move is visible next to the answer. Null when nothing was named. */
+  referents: string | null;
   /** How the reading was made: the deterministic square-answer path, the
    *  model, or why there is none. */
   parseSource: 'square-answer' | 'llm' | 'llm-failed' | 'timeout';

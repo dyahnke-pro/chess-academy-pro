@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**41 lines · 3 exports · 2 importers · 1 tests · 2 audits**
+**67 lines · 4 exports · 3 importers · 2 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/coach/ask/playName.test.ts`
+- `src/coach/ask/readsAsQuestion.test.ts`
 - `src/components/Coach/CoachTeachPage.tsx`
 
 ## Exports and every call site
@@ -23,14 +24,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PlayName` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `resolvePlayName` (function) — 3 call sites
+### `resolvePlayName` (function) — 4 call sites
 - `src/coach/ask/playName.test.ts:11`
 - `src/coach/ask/playName.test.ts:17`
-- `src/components/Coach/CoachTeachPage.tsx:5605`
+- `src/components/Coach/CoachTeachPage.tsx:5099`
+- `src/components/Coach/CoachTeachPage.tsx:5621`
+
+### `readsAsQuestion` (function) — 4 call sites
+- `src/coach/ask/readsAsQuestion.test.ts:10`
+- `src/coach/ask/readsAsQuestion.test.ts:15`
+- `src/coach/ask/readsAsQuestion.test.ts:20`
+- `src/components/Coach/CoachTeachPage.tsx:5215`
 
 ## Tests
 
 - `src/coach/ask/playName.test.ts`
+- `src/coach/ask/readsAsQuestion.test.ts`
 
 ## Audits that reach it
 

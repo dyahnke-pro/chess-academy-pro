@@ -926,6 +926,10 @@ export interface CoachAskInput {
   /** How the ask text came to exist. Omitted means the student typed or
    *  spoke it. */
   origin?: AskOrigin;
+  /** What the door read this turn as (its kind, or `unclear` with the line to
+   *  ask back). Set only by `dispatchCoachTurn`; consulted at the catch-all
+   *  so a turn not about the board is never answered with a board read. */
+  reading?: { kind: import('./chatTurn').ChatKind; clarify?: string };
 }
 
 export interface CoachAnswer {

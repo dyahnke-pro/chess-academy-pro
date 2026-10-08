@@ -39,10 +39,7 @@ import { assembleEnvelope } from './envelope';
 import { loadAnnotationContextForLive } from './sources/annotationContext';
 import { buildDanyaTeachingBlock } from '../services/danyaTeachingService';
 import { classifyPhase } from '../services/gamePhaseService';
-import { detectOpening, resolveOpeningEntry } from '../services/openingDetectionService';
-import { readQuestion, type AskReading, type Screen } from './ask/readQuestion';
-import { rewriteBeforeDispatch } from './ask/answerTable';
-import { firingLanes } from './chatTurn';
+import { detectOpening } from '../services/openingDetectionService';
 import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
 import { loadModelGamesForLive } from './sources/modelGames';
 import { loadPlayerGamesForLive, resolvePlayerIdFromAsk } from './sources/playerGames';
@@ -58,7 +55,6 @@ import type {
   CoachAskInput,
   CoachIdentity,
   CoachPersonality,
-  CoachSurface,
   IntensityLevel,
   Provider,
   ProviderName,
@@ -1256,7 +1252,6 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // board router with no PIECE in it and got the side-wide plan (PLAN §E5,
     // prod 2026-09-22). Content words, squares and opening names are untouched.
     let askForIntents = isInternalAsk ? undefined : stripQuestionFiller(stripInjectedBlocks(input.ask));
-    let askReading: AskReading | null = null;
     // KEYBOARD-MASH GUARD (2026-08-13 audit): "asdfghjkl" got a confident
     // best-move readout. A single token that is literally a keyboard-row run
     // (or one character repeated) is noise, not a question — answer with a
@@ -1292,26 +1287,6 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
         .reverse()
         .find((msg) => msg.role === 'coach' && msg.text.trim().length > 0)?.text ?? null;
       askForIntents = resolveFollowUp(askForIntents, lastCoach);
-      // THE QUESTION READER (answers rebuild step 3). It reads the turn ONCE
-      // against its moment; a record / learning / app question whose own
-      // lanes are silent is steered to its canonical question here, and the
-      // reading rides the grounding so the catch-all can ask back instead of
-      // reading the board to a question that was not about it.
-      askReading = readQuestion(askForIntents, {
-        screen: screenForSurface(input.liveState.surface),
-        hasBoard: !!input.liveState.fen,
-        ...(lastCoach ? { lastCoachLine: lastCoach } : {}),
-      }, { nameOpening: (t) => (resolveOpeningEntry(t) ? { name: t, score: 1 } : null) });
-      const steeredAsk = rewriteBeforeDispatch(askReading, firingLanes(askForIntents, { fen: input.liveState.fen }));
-      if (steeredAsk) {
-        void logAppAudit({
-          kind: 'coach-ask-steered',
-          category: 'subsystem',
-          source: 'coachService.ask',
-          summary: `${askReading.kind}: "${askForIntents.slice(0, 60)}" → "${steeredAsk}"`,
-        });
-        askForIntents = steeredAsk;
-      }
     }
     // Progress ("am I improving?") and concept ("what's a fork?") questions are
     // answered from the student's history / the book corpus — NO board needed —
@@ -1708,7 +1683,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // false-premise check must see exactly what the student typed;
             // lastUserMessage() on wrapped surfaces sees the envelope.
             cleanAsk: askForIntents,
-            ...(askReading ? { askReading: { kind: askReading.kind, ...(askReading.clarify ? { clarify: askReading.clarify } : {}) } } : {}),
+            ...(input.reading ? { askReading: input.reading } : {}),
             askedPiece: restrictedPieceInAsk(askForIntents),
             // A resolved comparison answers "why is that better than e5?"
             // itself — the generic why-best walk never mentions e5.
@@ -2487,18 +2462,6 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
         errored: failure ? true : false,
       }),
     });
-  }
-}
-
-/** The screen a surface lives on — a clue for the question reader. */
-function screenForSurface(surface: CoachSurface): Screen {
-  switch (surface) {
-    case 'teach': return 'learn';
-    case 'game-chat': return 'play';
-    case 'review': return 'review';
-    case 'home-chat': case 'smart-search': return 'home';
-    case 'standalone-chat': return 'chat';
-    default: return 'other';
   }
 }
 

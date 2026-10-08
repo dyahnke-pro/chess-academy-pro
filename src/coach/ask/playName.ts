@@ -9,7 +9,7 @@
  */
 import { resolveOpeningEntry } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
-import { normaliseAsk, OPENING_NAME_FLOOR } from './readQuestion';
+import { normaliseAsk, OPENING_NAME_FLOOR, readQuestion } from './readQuestion';
 
 /** "Play the Sicilian", "can you play the Caro-Kann?" — an imperative to play
  *  an OPENING. Not a move ("play e4", "can you play f4 instead?") and not a
@@ -37,4 +37,30 @@ export function resolvePlayName(raw: string): PlayName {
   if (fuzzy[0] && fuzzy[0].score >= OPENING_NAME_FLOOR) return { kind: 'resolved', name: fuzzy[0].canonicalName };
   const near = fuzzy.filter((c) => c.score >= NEAR_MISS_FLOOR).slice(0, 4).map((c) => c.canonicalName);
   return near.length > 0 ? { kind: 'candidates', names: near } : { kind: 'none' };
+}
+
+const QUESTION_LEAD_RE = /^\s*(?:what|how|why|which|when|where|who|is|are|do|does|did|can|could|should|would|was|were|will)\b/i;
+
+/**
+ * Does the shared question reader take this text as a QUESTION rather than a
+ * request to study or play an opening? The Learn page asks this before it
+ * treats short text as an opening name, so every screen reads a turn the same
+ * way (one reader, not a page-local list of "this is actually a question"
+ * exceptions).
+ */
+export function readsAsQuestion(text: string, hasBoard: boolean): boolean {
+  // A pasted lesson title ("Bishop's Opening: … greed — Qxf7 is mate") names
+  // the opening before its colon: a request, whatever moves follow.
+  const titled = /^\s*([A-Z][^:?]{2,60}):/.exec(text);
+  if (titled && resolvePlayName(titled[1]).kind === 'resolved') return false;
+  const reading = readQuestion(text, { screen: 'learn', hasBoard }, {
+    nameOpening: (t) => {
+      const r = resolvePlayName(t);
+      return r.kind === 'resolved' ? { name: r.name, score: 1 }
+        : r.kind === 'candidates' ? { name: r.names[0], score: OPENING_NAME_FLOOR } : null;
+    },
+  });
+  if (reading.kind === 'command' || reading.kind === 'unclear') return false;
+  if (reading.kind === 'opening') return QUESTION_LEAD_RE.test(text);
+  return true;
 }
