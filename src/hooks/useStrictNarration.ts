@@ -45,6 +45,12 @@ export interface UseStrictNarrationReturn {
   currentStep: number;
   isAutoPlaying: boolean;
   isSpeaking: boolean;
+  /** True once the LAST step has been shown AND its narration has finished
+   *  (or it had none). A lesson that leaves on "complete" must wait for this,
+   *  never for the last step merely arriving — the last step is usually the
+   *  wrap-up, and leaving on arrival cut it off or left it playing over the
+   *  next screen (David 2026-10-08). Resets when the student steps back. */
+  isFinished: boolean;
   /** Jump to a specific step, cancelling any in-flight speech. Pauses auto-play. */
   goToStep: (stepIndex: number) => void;
   /** Advance to the next step, cancelling speech. Pauses auto-play. */
@@ -74,6 +80,7 @@ export function useStrictNarration({
   const [currentStep, setCurrentStep] = useState(initialStepIndex);
   const [isAutoPlaying, setIsAutoPlaying] = useState(initialAutoPlay);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
 
   // Token incremented on every advance/pause/stop. Stale speech resolutions
   // check this before triggering the next step.
@@ -112,6 +119,8 @@ export function useStrictNarration({
       voiceService.stop();
       clearAdvanceTimer();
       applyStepRef.current(stepIndex);
+      const isLast = stepIndex >= stepCountRef.current - 1;
+      if (!isLast) setIsFinished(false);
 
       const narration = voiceEnabledRef.current ? getNarrationRef.current(stepIndex) : '';
 
@@ -125,9 +134,10 @@ export function useStrictNarration({
             if (myToken !== tokenRef.current) return;
             setCurrentStep(stepIndex + 1);
           }, Math.max(postNarrationDelayRef.current, 800));
-        } else if (stepIndex >= stepCountRef.current - 1) {
+        } else if (isLast) {
           setIsAutoPlaying(false);
         }
+        if (isLast) setIsFinished(true);
         return;
       }
 
@@ -138,8 +148,9 @@ export function useStrictNarration({
           return;
         }
         setIsSpeaking(false);
+        if (isLast) setIsFinished(true);
         if (!isAutoPlayingRef.current) return;
-        if (stepIndex >= stepCountRef.current - 1) {
+        if (isLast) {
           setIsAutoPlaying(false);
           return;
         }
@@ -248,6 +259,7 @@ export function useStrictNarration({
     currentStep,
     isAutoPlaying,
     isSpeaking,
+    isFinished,
     goToStep,
     next,
     prev,

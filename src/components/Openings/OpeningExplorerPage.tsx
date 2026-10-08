@@ -187,8 +187,8 @@ export function OpeningExplorerPage(): JSX.Element {
             title="How to use Openings"
             steps={[
               { label: 'Masterclasses', body: 'Deep, hand-built courses on full openings — Watch the ideas, Learn the moves, Practice them, Play them vs the coach.' },
-              { label: 'Pick what you play', body: 'Start with an opening you actually use as White or Black — not at random.' },
-              { label: 'Counter-Weapons', body: 'White anti-opening repertoires — clean, aggressive systems to beat the Sicilian, Caro, Pirc, Modern and the other defenses amateurs struggle against.' },
+              { label: 'Pick what you play', body: 'Flip the White / Black switch to your side — Black is split by what you are answering, 1.e4 or 1.d4. Start with an opening you actually use.' },
+              { label: 'Counter-Weapons', body: 'Anti-opening repertoires for both sides — ready-made answers to the Sicilian, Caro, Pirc, London, Catalan and the other systems amateurs struggle against.' },
               { label: 'Climb each line', body: 'Do the main line and every variation tab through Watch → Learn → Practice → Play.' },
               { label: 'Weapons', body: 'Each line shows the common mistakes opponents make and exactly how to punish them.' },
             ]}

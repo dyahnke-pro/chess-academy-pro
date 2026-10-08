@@ -157,7 +157,11 @@ async function main() {
     await page.locator('[data-testid="pro-player-card-naroditsky"]').click();
     await page.waitForURL(/\/openings\/pro\/naroditsky/, { timeout: 20_000 });
     await page.waitForTimeout(8000);
-    const tiles = await page.locator('[data-testid^="opening-card-pro-naroditsky"]').count();
+    // The shelf shows one side at a time — count White, then Black.
+    const whiteTiles = await page.locator('[data-testid^="opening-card-pro-naroditsky"]').count();
+    await page.locator('[data-testid="side-toggle-black"]').click().catch(() => 0);
+    const tiles = whiteTiles + await page.locator('[data-testid^="opening-card-pro-naroditsky"]').count();
+    await page.locator('[data-testid="side-toggle-white"]').click().catch(() => 0);
     rec('kept player page lists openings', tiles === 11 ? 'PASS' : 'FAIL', `tiles=${tiles} (expected 11)`);
 
     // a tile still opens its detail page

@@ -70,7 +70,7 @@ export function AiConsentModal(): JSX.Element | null {
             When you talk to the coach, your{' '}
             <strong className="text-theme-text">spoken words</strong> are transcribed to text for
             that question, and the coach's reply is sent to{' '}
-            <strong className="text-theme-text">AWS Polly</strong> to synthesize the voice.
+            <strong className="text-theme-text">Google Cloud Text-to-Speech</strong> to synthesize the voice.
           </li>
         </ul>
 

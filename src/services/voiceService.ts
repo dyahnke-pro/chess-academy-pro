@@ -739,6 +739,16 @@ class VoiceService {
    *  meanwhile (route change, mic barge-in, manual interrupt) and
    *  the queued utterance should abort. */
   private stopGeneration = 0;
+  /** Bumped ONLY by a real stop — the public `stop()` (a lesson closing, a
+   *  pause, the app backgrounding, a route change) — never by the internal
+   *  supersede every new line performs to cut the clip before it. A line that
+   *  is WAITING (translation, its turn, the spacing floor) when a real stop
+   *  lands must die, not wake up and play over the screen the student moved
+   *  to (David 2026-10-08: the closing beat of an opening started on the
+   *  completed screen). `stopGeneration` cannot answer that: the next queued
+   *  line's own supersede bumps it too, which would drop lines that are
+   *  legitimately waiting their turn. */
+  private cancelEpoch = 0;
   /** Read-only accessor for chain code. */
   get currentStopGeneration(): number {
     return this.stopGeneration;
@@ -1383,6 +1393,8 @@ class VoiceService {
     force: boolean,
     opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean; sentenceFirst?: boolean; verbatim?: boolean },
   ): Promise<void> {
+    // A real stop() while this line waits (below) cancels it — see cancelEpoch.
+    const epochAtEntry = this.cancelEpoch;
     // ── ONE SPACE BETWEEN TWO SENTENCES (prod, week of 2026-09-11) ──────────
     // A user heard, as one run-on:
     //   "…and pauses so you can pick what to explore.Material is even, and…"
@@ -1522,6 +1534,7 @@ class VoiceService {
     // ~70 call sites. No-op — and no import cost — on English.
     if (spokenLanguageName()) {
       text = await localizeSpokenText(text);
+      if (this.cancelEpoch !== epochAtEntry) return;
     }
     if (!/[\p{L}\p{N}]/u.test(text)) {
       void import('./appAuditor').then(({ logAppAudit }) => {
@@ -1632,6 +1645,7 @@ class VoiceService {
         } finally {
           this.speakWaiting -= 1;
         }
+        if (this.cancelEpoch !== epochAtEntry) return;
         // The clock moved while waiting, so the throttle floor below must be
         // measured from now rather than from when this call arrived.
         now = Date.now();
@@ -1664,6 +1678,8 @@ class VoiceService {
           setTimeout(resolve, VoiceService.THROTTLE_MS - (now - last.ts));
         });
       }
+      // A cancelled line was never said — do not record it in the ledgers.
+      if (this.cancelEpoch !== epochAtEntry) return;
       this.lastAdmittedSpeak = { text, ts: now };
       // Record in the say-once ledger too, pruning by age and then by size.
       this.spokenLedger.set(text, now);
@@ -1747,7 +1763,8 @@ class VoiceService {
         });
       });
     }
-    this.stop();
+    if (this.cancelEpoch !== epochAtEntry) return;
+    this.haltPlayback();
     // The generation THIS utterance runs under. Any later stop()/speak()
     // bumps it — and every supersession check downstream (playViaElement,
     // the stream gates, the cached-clip path) then resolves `false`. That
@@ -1995,6 +2012,13 @@ class VoiceService {
   }
 
   stop(): void {
+    this.cancelEpoch++;
+    this.haltPlayback();
+  }
+
+  /** Cut whatever is playing. Used by `stop()` and by every new line to take
+   *  over from the previous one — the latter must NOT cancel waiting lines. */
+  private haltPlayback(): void {
     // Bump the generation counter FIRST so any queued chain sees the
     // bump before it would otherwise dispatch its next utterance.
     this.stopGeneration++;

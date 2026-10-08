@@ -2,5 +2,5 @@
 // carries the middlegame plan; variation tabs resolve to [] until authored.
 export function getProSamayRainaOpenSicilianTabPlanIds(openingId: string, tabKey: string): string[] | null {
   if (openingId !== 'pro-samayraina-open-sicilian') return null;
-  return tabKey.toLowerCase() === 'main' ? ['mp-prosamayopensic-d5outpost'] : [];
+  return tabKey.toLowerCase() === 'main' ? ['mp-prosamayopensic-d5outpost', 'mp-prosamayOpenSicilian-endgame'] : [];
 }

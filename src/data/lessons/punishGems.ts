@@ -104,9 +104,18 @@ export function gemId(gem: PunishGem): string {
   return `${gem.openingId}:${gem.lineMoves.replace(/\s+/g, '_')}:${gem.inaccuracy}`;
 }
 
+/** Most common first (David 2026-10-08): by `games`, the number of games in
+ *  which the opponent actually played the slip — how often the student will
+ *  meet it. Never `freqPct`: that is a share of games at ONE position, so a
+ *  25% slip in a rare move-16 position outranks a 6% slip on move 3 that is
+ *  played in hundreds of times more games. */
+export function byMostCommon(a: PunishGem, b: PunishGem): number {
+  return b.games - a.games || a.inaccuracy.localeCompare(b.inaccuracy);
+}
+
 export function getPunishGemsForOpening(openingId: string | undefined | null): PunishGem[] {
   if (!openingId) return [];
-  return ALL_GEMS.filter((g) => g.openingId === openingId);
+  return ALL_GEMS.filter((g) => g.openingId === openingId).sort(byMostCommon);
 }
 
 /** Every gem (both lanes). A gem's `lineMoves` is a unique full opening spine, so

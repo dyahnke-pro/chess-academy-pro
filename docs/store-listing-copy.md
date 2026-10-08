@@ -80,7 +80,7 @@ plan is:
 ### Privacy / data-flow note (do NOT over-claim)
 
 The app runs **Stockfish locally** (WASM, on-device). But voice and chat are
-**not** on-device: TTS goes to **AWS Polly**, the coach LLM goes to
+**not** on-device: TTS goes to **Google Cloud Text-to-Speech**, the coach LLM goes to
 **DeepSeek + Anthropic**, product analytics go to **PostHog**, and cloud sync
 is **optional BYO-Supabase**. So copy must NOT say "your data never leaves your
 device." The accurate phrasing used below: **"engine analysis runs on your

@@ -3,7 +3,7 @@
 // cased (must match variationTabs.ts CURATED['evans-gambit']).
 
 export const EVANS_TAB_PLAN_IDS: Record<string, string[]> = {
-  main: ['mp-evansgambit-main'],
+  main: ['mp-evansgambit-main', 'mp-evansgambit-endgame'],
   declined: ['mp-evansgambit-declined'],
   compromised: ['mp-evansgambit-compromised'],
   lasker: ['mp-evansgambit-lasker'],

@@ -23,6 +23,7 @@
 import { Chess } from 'chess.js';
 import {
   getPunishGemsForOpening,
+  byMostCommon,
   isSurfaceableGem,
   gemId,
   gemNarrationFor,
@@ -197,7 +198,7 @@ export function gemPunishLessonsForOpening(
       if (a.tier !== b.tier) return a.tier === 'confirmed' ? -1 : 1;
       // Then by how often the slip actually appears — a weapon your opponent
       // never walks into is a worse lesson than one they play every game.
-      return b.freqPct - a.freqPct;
+      return byMostCommon(a, b);
     });
   const out: PunishLesson[] = [];
   for (const gem of ranked) {
