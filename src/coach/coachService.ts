@@ -532,6 +532,10 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // WHO PRODUCED THE TEXT (WO-STANDARD-01 H6): typed / hint / canned button /
     // internal — so the analytics recipe can count QUESTIONS, not taps.
     askSource: askSourceFor(input.liveState.surface, input.origin),
+    // THE BOARD THE QUESTION WAS ASKED ON — without it a question cannot be
+    // replayed or graded later (2026-10-08: none of 327 logged questions
+    // carried one, so their positions were unrecoverable).
+    ...(input.liveState.fen ? { fen: input.liveState.fen } : {}),
     details: JSON.stringify({
       surface: input.surface,
       askLen: input.ask.length,

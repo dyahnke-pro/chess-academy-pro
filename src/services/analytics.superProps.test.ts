@@ -38,9 +38,9 @@ describe('registerSuperProperties survives the lazy-load race', () => {
     analytics.initAnalytics();
     // The race: registration arrives while the import is still in flight.
     analytics.registerSuperProperties({ audit_run_id: 'run-x' });
-    // Let the mocked lazy import resolve — two bare microtask ticks are not
-    // enough for the dynamic-import chain under vitest.
-    await new Promise((r) => setTimeout(r, 25));
+    // Wait for the mocked lazy import to resolve. A fixed sleep (25ms) lost the
+    // race whenever the machine was busy; wait for the client to land instead.
+    await vi.waitFor(() => expect(capture.mock.calls.some(([name]) => name === 'app_session_started')).toBe(true), { timeout: 5000 });
 
     const registered = register.mock.calls.some(
       ([props]) => (props as Record<string, unknown>).audit_run_id === 'run-x',
