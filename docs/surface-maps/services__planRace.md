@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**356 lines · 10 exports · 7 importers · 2 tests · 0 audits**
+**477 lines · 11 exports · 9 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,6 +17,8 @@
 - `src/data/endgameConceptDrills.test.ts`
 - `src/services/boardPlan.ts`
 - `src/services/conceptEngine.ts`
+- `src/services/kingAttackReads.test.ts`
+- `src/services/kingAttackReads.ts`
 - `src/services/learnBoardTeaching.ts`
 - `src/services/planRace.test.ts`
 - `src/services/reviewFullData.ts`
@@ -35,6 +37,9 @@
 ### `FileCollision` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `StormRace` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `PlanRace` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -42,12 +47,14 @@
 - `src/services/planRace.test.ts:62`
 - `src/services/planRace.test.ts:64`
 
-### `detectPlanRace` (function) — 18 call sites
+### `detectPlanRace` (function) — 20 call sites
 - `scripts/endgame-drills/generate.ts:311`
 - `src/data/endgameConceptDrills.test.ts:32`
 - `src/data/endgameConceptDrills.test.ts:56`
 - `src/services/boardPlan.ts:124`
 - `src/services/conceptEngine.ts:606`
+- `src/services/kingAttackReads.test.ts:178`
+- `src/services/kingAttackReads.ts:702`
 - `src/services/planRace.test.ts:22`
 - `src/services/planRace.test.ts:27`
 - `src/services/planRace.test.ts:34`
@@ -62,9 +69,11 @@
 - `src/services/planRace.test.ts:173`
 - `src/services/planRace.test.ts:181`
 
-### `planRaceClause` (function) — 16 call sites
+### `planRaceClause` (function) — 18 call sites
 - `src/services/boardPlan.ts:125`
 - `src/services/conceptEngine.ts:608`
+- `src/services/kingAttackReads.test.ts:184`
+- `src/services/kingAttackReads.ts:704`
 - `src/services/planRace.test.ts:23`
 - `src/services/planRace.test.ts:38`
 - `src/services/planRace.test.ts:39`
@@ -78,7 +87,7 @@
 - `src/services/planRace.test.ts:109`
 - `src/services/planRace.test.ts:115`
 - `src/services/planRace.test.ts:157`
-- `src/services/reviewFullData.ts:937`
+- `src/services/reviewFullData.ts:938`
 
 ### `fileClaimed` (function) — 4 call sites
 - `src/services/learnBoardTeaching.ts:207`
@@ -86,12 +95,15 @@
 - `src/services/planRace.test.ts:147`
 - `src/services/planRace.test.ts:148`
 
-### `planRaceProof` (function) — 1 call site
-- `src/services/reviewFullData.ts:938`
+### `planRaceProof` (function) — 3 call sites
+- `src/services/kingAttackReads.test.ts:185`
+- `src/services/kingAttackReads.ts:705`
+- `src/services/reviewFullData.ts:939`
 
 ## Tests
 
 - `src/data/endgameConceptDrills.test.ts`
+- `src/services/kingAttackReads.test.ts`
 - `src/services/planRace.test.ts`
 
 ## Audits that reach it
