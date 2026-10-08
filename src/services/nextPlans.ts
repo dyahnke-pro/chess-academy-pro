@@ -125,6 +125,12 @@ export function isPinnedPiece(chess: Chess, sq: Square, color: Color): boolean {
     const df = Math.sign(f(sq) - f(king.square));
     const dr = Math.sign(r(sq) - r(king.square));
     if (df === 0 && dr === 0) return false;
+    // ON A KING LINE AT ALL (computers batch 3): a piece not on the king's file,
+    // rank or diagonal is never pinned to it. Without this the walk from the
+    // king ran off the board without meeting the piece and then read whatever
+    // slider sat beyond it — a rook on d6 "pinned" to a king on g1.
+    const ddf = Math.abs(f(sq) - f(king.square)); const ddr = Math.abs(r(sq) - r(king.square));
+    if (ddf !== 0 && ddr !== 0 && ddf !== ddr) return false;
     // Must be on a king ray with nothing between, and a slider behind it.
     let cf = f(king.square) + df;
     let cr = r(king.square) + dr;

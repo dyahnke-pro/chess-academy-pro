@@ -59,8 +59,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticAlertService.test.ts:144`
 - `src/services/tacticAlertService.test.ts:159`
 - `src/services/tacticAlertService.test.ts:170`
-- `src/services/tacticTypeUnification.test.ts:203`
-- `src/services/tacticTypeUnification.test.ts:210`
+- `src/services/tacticTypeUnification.test.ts:216`
+- `src/services/tacticTypeUnification.test.ts:223`
 
 ### `GameplayTacticAlert` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

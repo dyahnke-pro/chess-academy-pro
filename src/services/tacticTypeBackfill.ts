@@ -34,7 +34,9 @@ import type { ClassifiedTactic, MistakePuzzle, MoveAnnotation } from '../types';
 // 2026-10-01: classify on the solution LINE read from the source game's
 // stored annotation when the row holds only the best move (capture-built rows
 // did, so 666 of 997 cards on a real import were the catch-all).
-export const TACTIC_TYPE_REV = '2026-10-01-line-and-phase';
+// 2026-10-08: deflection, interference and clearance are read off the line by
+// the computer that teaches them (tacticGeometry) instead of the sentinel.
+export const TACTIC_TYPE_REV = '2026-10-08-line-tactics';
 
 export interface TacticTypeBackfillResult {
   /** Rows read across both stores. */
