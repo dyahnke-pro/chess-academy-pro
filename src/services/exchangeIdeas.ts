@@ -26,6 +26,8 @@ import { legalSeeGain, legalSeeGainFor, seeSequence, asIfToMove } from './positi
 import { countKingAttack } from './kingSafety';
 import { MATERIAL_VALUE } from './pieceValues';
 import { MATE_POINTS, type FactStakes } from './factStakes';
+import { computeExchangeLedger, netPieceWords } from './exchangeLedger';
+import { inFluxAfter } from './boardState';
 import { stemKeyOf } from '../utils/rotateStem';
 import { imageryFor } from './factImagery';
 
@@ -572,14 +574,27 @@ export function safeBecause(fenBefore: string, san: string, student: Side, prev:
     const text = `${san} is fine only because your ${where} — ${back}, ${cfMate.san.replace(/[+#]$/, '')} would be mate.`;
     return idea('safe-because', text, [p.m.to, p.m.from, cfMate.to], proof, `safe-because:${san}`);
   }
-  const real = theirBestGrab(realAfter)?.gain ?? 0;
-  const grab = theirBestGrab(cfAfter.c.fen());
-  if (!grab || grab.gain < real + 2) return null;
-  const victim = cfAfter.c.get(grab.m.to);
-  const proof = legalLineProof(cfFen, [san, grab.m.san], true);
-  if (!proof || !victim) return null;
-  const text = `${san} is fine only because your ${where} — ${back}, ${grab.m.san} would win your ${NAME[victim.type]}.`;
-  return idea('safe-because', text, [p.m.to, p.m.from, grab.m.to], proof, `safe-because:${san}`);
+  // What their best grab SETTLES at, proven over the line by the ledger — on
+  // the real board and with the earlier piece put back.
+  const settle = (fen: string): { grab: Move; line: string[]; net: number; lost: string | null } | null => {
+    const after = play(fen, san);
+    const g = after ? theirBestGrab(after.c.fen()) : null;
+    if (!after || !g) return null;
+    const taken = play(after.c.fen(), g.m.san);
+    if (!taken) return null;
+    const line = [san, g.m.san, ...seeSequence(taken.c.fen(), g.m.to)];
+    const ledger = computeExchangeLedger(fen, line, student);
+    if (!ledger || !ledger.settled) return null;
+    return { grab: g.m, line, net: ledger.netPawns, lost: netPieceWords(ledger.opponentWon, ledger.studentWon) };
+  };
+  const real = settle(fenBefore)?.net ?? 0;
+  const cfGrab = settle(cfFen);
+  if (!cfGrab || !cfGrab.lost || cfGrab.net > real - 2) return null;
+  const proof = legalLineProof(cfFen, cfGrab.line, true);
+  if (!proof) return null;
+  const text = `${san} is fine only because your ${where} — ${back}, ${cfGrab.grab.san} would cost you ${cfGrab.lost}.`;
+  const grab = cfGrab.grab;
+  return idea('safe-because', text, [p.m.to, p.m.from, grab.to], proof, `safe-because:${san}`);
 }
 
 // ── PRINCIPLES AND NUGGETS ────────────────────────────────────────────────
@@ -623,8 +638,7 @@ export function materialArithmetic(fenBefore: string, san: string, student: Side
   const before = load(fenBefore);
   const r = play(fenBefore, san);
   if (!before || !r || !r.m.captured) return null;
-  const after = r.c.fen();
-  if (legalSeeGain(after, r.m.to) > 0) return null; // still in flux
+  if (inFluxAfter(fenBefore, san)) return null; // a take-back is still pending — the one flux test
   const diff = (c: Chess): Record<string, number> => {
     const d: Record<string, number> = { q: 0, r: 0, m: 0, p: 0 };
     for (const row of c.board()) for (const x of row) {

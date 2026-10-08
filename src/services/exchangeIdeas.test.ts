@@ -237,3 +237,13 @@ describe('diagnose: a capture that abandons its post is posed to the student mod
     expect(posed).toContainEqual({ tag: 'hung-material', posedImportance: 85 });
   });
 });
+
+describe('safe only because — a material loss is settled by the ledger', () => {
+  it('a3 is safe only because the knight already guards the g3 bishop', () => {
+    const now = '6k1/5ppp/8/4q3/8/6B1/P5P1/5NK1 w - - 0 1';
+    const prev = { fenBefore: '6k1/5ppp/8/4q3/8/6B1/P2N2P1/6K1 w - - 0 1', san: 'Nf1' };
+    const r = wellFormed(safeBecause(now, 'a3', 'w', prev));
+    expect(r.text).toBe('a3 is fine only because your knight is already on f1 — with it back on d2, Qxg3 would cost you a bishop.');
+    expect(r.proof.line?.sans.slice(0, 2)).toEqual(['a3', 'Qxg3']);
+  });
+});
