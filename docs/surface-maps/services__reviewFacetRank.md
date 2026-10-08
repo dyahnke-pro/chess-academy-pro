@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**485 lines · 15 exports · 6 importers · 2 tests · 0 audits**
+**516 lines · 15 exports · 7 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@
 
 ## Who calls in
 
+- `src/services/batch2Wiring.test.ts`
 - `src/services/boardState.ts`
 - `src/services/coachDecider.ts`
 - `src/services/coachFeatureService.ts`
@@ -82,6 +83,7 @@
 
 ## Tests
 
+- `src/services/batch2Wiring.test.ts`
 - `src/services/reviewFacetRank.test.ts`
 - `src/services/supportedFacts.test.ts`
 

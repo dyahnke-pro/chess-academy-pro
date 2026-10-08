@@ -62,6 +62,9 @@ import { stemKeyOf } from '../utils/rotateStem';
 import { minorsAtHome } from './development';
 import { slipAnswerText, studentMovePoint } from './playCommentary';
 import { theirMoveCost } from './theirMoveCost';
+import { readTheirMove } from './opponentMoveReads';
+import { playItAnyway } from './opponentMovePurpose';
+import { knownAttack } from './attackLibrary';
 
 interface Located { type: string; color: Color; square: string; }
 
@@ -1144,6 +1147,45 @@ export function computeMoveFacets(
       facets.push(f);
       outIdentity?.set(f, `their-cost:${cost.kind}:${cost.squares[0] ?? ''}`);
       recSquares(f, cost.squares);
+    }
+  }
+  // …and the rest of READING THEIR MOVE (computers batch 2) — the same one
+  // producer Learn speaks from (`readTheirMove`), handed the review's engine
+  // line after their move (your reply first) in place of a live fan.
+  if (!isStudent && studentColorWB) {
+    const lines = ctx.playedLineUci.length > 0 && ctx.evaluation != null
+      ? [{ moves: ctx.playedLineUci, evaluation: ctx.evaluation, mate: null }] : [];
+    const prev = ply >= 2 && ctx.teaching.prevFenBefore && ctx.allSans[ply - 2]
+      ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null;
+    for (const r of readTheirMove({ fenBefore, san, student: studentColorWB, topLines: lines, prev })) {
+      const f = `[${r.kind === 'wedged-pawn' ? 'prevent-test' : 'their-read'}] ${r.text}`;
+      facets.push(f);
+      recProof(f, r.proof);
+      recStakes(f, r.stakes);
+      recSquares(f, r.squares);
+      outIdentity?.set(f, `hint:${r.claim}`);
+    }
+    // "Can you play it anyway?" — their reply stopped your threat on paper.
+    const any = stop && lines.length > 0 ? playItAnyway(stop, fenAfter, lines, studentColorWB) : null;
+    if (any) {
+      const f = `[prevent-test] ${any.text}`;
+      facets.push(f);
+      recProof(f, lineProof({ fen: fenAfter, sans: any.line }));
+      recSquares(f, any.squares);
+      outIdentity?.set(f, `hint:anyway:${any.san}`);
+    }
+  }
+  // A KNOWN ATTACKING STRUCTURE on the board the student moved from, by its
+  // conditions — once a game per hook.
+  if (isStudent && studentColorWB) {
+    const cp = ctx.preMoveEval != null ? ctx.preMoveEval * (studentColorWB === 'w' ? 1 : -1) : null;
+    const ka = knownAttack(fenBefore, studentColorWB, cp);
+    if (ka) {
+      const f = `[attack-pattern] ${ka.text}`;
+      facets.push(f);
+      recProof(f, ka.proof);
+      recSquares(f, ka.squares);
+      outIdentity?.set(f, `hint:${ka.claim}`);
     }
   }
   // …and the fork trick, both seats — the same computer Learn's composer reads

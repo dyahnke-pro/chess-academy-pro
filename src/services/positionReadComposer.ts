@@ -14,7 +14,7 @@ import { detectPhase } from './narratedContinuation';
 import { computePositionFacts, clauseText, type LastMoveInput } from './positionFacts';
 import type { EvalBoardFn } from './perturbation';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText } from './danyaTeachingService';
-import { lastMoveIfStudent, sansOfPgn } from './lastMoveOfLine';
+import { lastMoveIfStudent, lastMoveIfOpponent, sansOfPgn } from './lastMoveOfLine';
 import type { StudentNeedContext } from './needScore';
 import type { StockfishAnalysis } from '../types';
 import type { WeaknessSignal } from './weaknessSignal';
@@ -143,6 +143,10 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
         // PGN produces this board and the last mover is them; absent
         // otherwise. Never graded here → `cpLoss: null`.
         ...((): { lastMove?: LastMoveInput } => (lm ? { lastMove: lm } : {}))(),
+        // THEIR last move, when they made it — so the read of their move
+        // (computers batch 2: the quiet threat, the grab that was not free)
+        // reaches the student's tapped read as it does Learn.
+        ...((): { opponentLastMove?: { fenBefore: string; san: string } } => { const o = lastMoveIfOpponent(sans, i.playerColor, i.fen); return o ? { opponentLastMove: o } : {}; })(),
         studentNeedContext: i.studentNeedContext,
         history: sans,
       });

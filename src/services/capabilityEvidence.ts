@@ -46,6 +46,8 @@ import { logAppAudit } from './appAuditor';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { leadingFundamentals, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
 import { stalemateWatch } from './stalemateWatch';
+import { matesInOne } from './opponentMoveReads';
+import { asIfToMove } from './positionReadingService';
 import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
 
 /** How live the fundamental had to be on THIS board before answering it counts
@@ -428,6 +430,19 @@ export function capabilitiesPosed(
     seen.add(tag);
     out.push({ tag, posedImportance: f.weight });
   }
+  // A MATE THREAT AGAINST YOU (computers batch 2, the quiet-danger read): give
+  // them the move and they mate at once. The board asked "do you see it?" —
+  // the question `quietDanger` TEACHES, filed under the same tag the ignored-
+  // threat fundamental uses, so teaching and diagnosis speak one vocabulary.
+  if (!seen.has('missed-opponents-threat')) {
+    try {
+      const probe = asIfToMove(fenBefore, moverColor === 'white' ? 'b' : 'w');
+      if (probe && matesInOne(probe).length > 0) {
+        seen.add('missed-opponents-threat');
+        out.push({ tag: 'missed-opponents-threat', posedImportance: MATE_THREAT_POSED });
+      }
+    } catch { /* an unreadable board posed nothing */ }
+  }
   // A WON GAME WITH A STALEMATE ON THE BOARD (P3 heat map): the board asked
   // "which of your moves throws the win away?". A stalemating move costs the
   // whole game, so `movePlayedCleanly` sorts held from broken on its own.
@@ -441,6 +456,8 @@ export function capabilitiesPosed(
 
 /** A win on the line is a question worth the green bar. */
 const STALEMATE_POSED = 90;
+/** A mate in one against you is the sharpest question a board can ask. */
+const MATE_THREAT_POSED = 95;
 
 /**
  * Record what a move demonstrated — OR FAILED TO. Fire-and-forget; never throws

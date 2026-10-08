@@ -14,7 +14,10 @@ import { settledNetForLine } from './exchangeLedger';
 import { sayMoveClause } from './spokenMove';
 import { countWords } from '../utils/countWords';
 import { pvSans, hookCreated, holeAccess } from './moveInsight';
-import { walkableLine } from './proof';
+import { walkableLine, lineProof, type Proof } from './proof';
+import { readTheirMove } from './opponentMoveReads';
+import { threatStoppedBy, playItAnyway } from './opponentMovePurpose';
+import { knownAttack } from './attackLibrary';
 import { tempoCount } from './tempoCount';
 import { homeMinorCount } from './development';
 import type { FactStakes } from './factStakes';
@@ -190,8 +193,10 @@ export function opponentHabits(sans: readonly string[], opp: 'w' | 'b'): Habit[]
 }
 
 export interface DepthClause {
-  kind: 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read';
+  kind: 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read' | 'their-read' | 'prevent-test' | 'attack-pattern';
   text: string;
+  /** The proof its computer found (batch 2 kinds carry one; proof.ts). */
+  proof?: Proof;
   /** The line the clause says, from the board it starts on (arrows). */
   lines?: Array<{ fen: string; sans: string[] }>;
   squares?: string[];
@@ -251,6 +256,36 @@ export function depthClauses(args: {
       // Never argue with the engine: when the "obvious stop" IS its best move
       // (game 2, 10.Ng5 — the engine prefers h3), the human preference is not a fact.
       if (flaw && flaw.stopSan !== engineBest) out.push({ kind: 'stop-flaw', text: flaw.text });
+    }
+    // READING THEIR MOVE (computers batch 2) — on the student's turn, what
+    // their last move threatened quietly, needs, lifted, wrongly expected, or
+    // handed you. A read that names your move waits for `nameMove` like the
+    // speed-run reads below.
+    if (toMove === args.studentColor && args.lastOpponentMove) {
+      const own = ownLastMove(args.history, args.fen);
+      const prev = own && args.history.length >= 2 ? { fenBefore: own.fenBefore, san: own.san } : null;
+      for (const r of readTheirMove({ fenBefore: args.lastOpponentMove.fenBefore, san: args.lastOpponentMove.san, student: args.studentColor, topLines: args.topLines, prev })) {
+        if (r.namesMove && !args.nameMove) continue;
+        out.push({ kind: r.kind === 'wedged-pawn' ? 'prevent-test' : 'their-read', text: r.text, proof: r.proof, squares: r.squares, ...(r.stakes ? { stakes: r.stakes } : {}), claim: r.claim });
+      }
+      // "CAN YOU PLAY IT ANYWAY?" — their move stopped your threat on paper;
+      // the engine says the move still works.
+      if (args.nameMove && prev) {
+        try {
+          const mid = new Chess(prev.fenBefore); mid.move(prev.san);
+          const stop = threatStoppedBy(prev.fenBefore, mid.fen(), args.lastOpponentMove.san, args.studentColor);
+          const any = stop ? playItAnyway(stop, args.fen, args.topLines, args.studentColor) : null;
+          const proof = any ? lineProof({ fen: args.fen, sans: any.line }) : null;
+          if (any && proof) out.push({ kind: 'prevent-test', text: any.text, proof, squares: any.squares, lines: [{ fen: args.fen, sans: any.line }], claim: `anyway:${any.san}` });
+        } catch { /* a bonus */ }
+      }
+    }
+    // A KNOWN ATTACKING STRUCTURE, by its conditions (never "it feels right").
+    if (toMove === args.studentColor) {
+      const top = args.topLines[0];
+      const cp = top ? (top.mate != null ? (top.mate > 0 ? 100000 : -100000) : top.evaluation) * (args.studentColor === 'w' ? 1 : -1) : null;
+      const ka = knownAttack(args.fen, args.studentColor, cp);
+      if (ka) out.push({ kind: 'attack-pattern', text: ka.text, proof: ka.proof, squares: ka.squares, claim: ka.claim });
     }
     // His habits of thought that name no move: keep the tension, which side to
     // castle, "any move is fine". The ones that name the engine's move (the

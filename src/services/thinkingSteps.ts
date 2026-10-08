@@ -194,6 +194,11 @@ export const LIVE_HABIT_STEP: Record<LiveHabit, ThinkingStep> = {
   // A loose piece of theirs is a TARGET — "spot the trigger first".
   'loose-trigger': 'their-targets',
   candidates: 'candidates',
+  // Batch 2: check the plain answer before playing it; calculate the forcing
+  // line on your own turn; mark a sacrifice's line forced or speculative.
+  'look-again': 'is-my-move-safe',
+  'calc-now': 'calculate',
+  'mark-line': 'calculate',
 };
 
 /** The Learn lanes' method claims (`method:<id>` in learnBoardTeaching). */
