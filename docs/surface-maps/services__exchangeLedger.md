@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**511 lines · 15 exports · 33 importers · 8 tests · 0 audits**
+**511 lines · 15 exports · 34 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -42,6 +42,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewFullData.ts`
 - `src/services/reviewPositionalAssessment.ts`
 - `src/services/reviewWalkOct2a.test.ts`
+- `src/services/tacticGeometry.ts`
 - `src/services/thinkAloud.ts`
 - `src/services/threatProof.ts`
 - `src/services/whyItFailed.ts`
@@ -67,9 +68,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/gemCrushLines.ts:273`
 - `src/services/threatProof.ts:51`
 
-### `netPieceWords` (function) — 2 call sites
+### `netPieceWords` (function) — 3 call sites
 - `src/services/lineCalc.ts:175`
 - `src/services/reviewPositionalAssessment.ts:140`
+- `src/services/tacticGeometry.ts:528`
 
 ### `describeExchange` (function) — 5 call sites
 - `src/services/exchangeLedger.test.ts:19`
@@ -89,13 +91,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveComparison.ts:183`
 - `src/services/moveInsight.lineAudit.test.ts:49`
 - `src/services/moveInsight.ts:366`
-- `src/services/thinkAloud.ts:90`
+- `src/services/thinkAloud.ts:93`
 
-### `settledExchange` (function) — 4 call sites
+### `settledExchange` (function) — 5 call sites
 - `src/services/playCommentary.ts:972`
 - `src/services/reviewConcepts.ts:91`
-- `src/services/reviewFullData.ts:359`
+- `src/services/reviewFullData.ts:360`
 - `src/services/reviewWalkOct2a.test.ts:15`
+- `src/services/tacticGeometry.ts:527`
 
 ### `LineProof` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -165,7 +168,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.horizon.test.ts:38`
 
 ### `moverLineProof` (function) — 1 call site
-- `src/services/reviewFullData.ts:713`
+- `src/services/reviewFullData.ts:714`
 
 ## Tests
 

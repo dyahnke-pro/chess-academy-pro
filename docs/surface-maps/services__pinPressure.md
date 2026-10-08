@@ -39,7 +39,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinPressure.test.ts:43`
 - `src/services/pinPressure.test.ts:64`
 - `src/services/pinPressure.test.ts:69`
-- `src/services/positionFacts.ts:1658`
+- `src/services/positionFacts.ts:1663`
 - `src/services/principleAttribution.ts:733`
 - `src/services/principleAttribution.ts:742`
 - `src/services/principleAttribution.ts:767`
@@ -61,8 +61,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:284`
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:292`
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:294`
-- `src/services/positionFacts.ts:1659`
-- `src/services/positionFacts.ts:1666`
+- `src/services/positionFacts.ts:1664`
+- `src/services/positionFacts.ts:1671`
 - `src/services/tacticClassifier.ts:43`
 - `src/services/tacticClassifier.ts:201`
 - `src/services/tacticClassifier.ts:203`

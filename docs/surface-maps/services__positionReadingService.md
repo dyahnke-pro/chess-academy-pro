@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2829 lines · 88 exports · 85 importers · 27 tests · 2 audits**
+**2829 lines · 88 exports · 86 importers · 27 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -79,6 +79,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/speedRunReads.ts`
 - `src/services/tacticAlertService.ts`
 - `src/services/tacticClassifier.ts`
+- `src/services/tacticGeometry.ts`
 - `src/services/tacticVerification.ts`
 - `src/services/tacticsDetector.ts`
 - `src/services/takingTheAttacker.test.ts`
@@ -203,7 +204,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttribution.ts:302`
 - `src/services/principleAttribution.ts:647`
 
-### `legalSeeGainFor` (function) — 54 call sites
+### `legalSeeGainFor` (function) — 62 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10061`
 - `src/services/arrowDoor.ts:161`
 - `src/services/bluffDetector.ts:53`
@@ -253,6 +254,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/speedRunReads.ts:429`
 - `src/services/speedRunReads.ts:430`
 - `src/services/tacticAlertService.ts:335`
+- `src/services/tacticGeometry.ts:294`
+- `src/services/tacticGeometry.ts:390`
+- `src/services/tacticGeometry.ts:423`
+- `src/services/tacticGeometry.ts:429`
+- `src/services/tacticGeometry.ts:515`
+- `src/services/tacticGeometry.ts:516`
+- `src/services/tacticGeometry.ts:562`
+- `src/services/tacticGeometry.ts:641`
 - `src/services/tacticVerification.ts:101`
 - `src/services/takingTheAttacker.test.ts:16`
 - `src/services/threatAnswer.ts:154`
@@ -277,7 +286,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttribution.ts:294`
 - `src/services/principleAttribution.ts:681`
 - `src/services/principleAttribution.ts:705`
-- `src/services/reviewFullData.ts:397`
+- `src/services/reviewFullData.ts:398`
 - `src/services/tradeQuality.ts:173`
 
 ### `takingTheAttackerAnswers` (function) — 6 call sites
@@ -300,7 +309,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `seeSequence` (function) — 3 call sites
 - `src/services/positionReadingService.test.ts:607`
 - `src/services/positionReadingService.test.ts:613`
-- `src/services/reviewFullData.ts:422`
+- `src/services/reviewFullData.ts:423`
 
 ### `minorCanReachSquare` (function) — 3 call sites
 - `src/services/danyaBehaviors.ts:785`
@@ -431,8 +440,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:97`
 - `src/services/positionalTruth.corpus.test.ts:102`
 - `src/services/replayFence.najdorf1500.test.ts:24`
-- `src/services/reviewFullData.ts:914`
-- `src/services/reviewFullData.ts:918`
+- `src/services/reviewFullData.ts:915`
+- `src/services/reviewFullData.ts:919`
 
 ### `MinorityAttack` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -447,8 +456,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:366`
 - `src/services/positionalTruth.corpus.test.ts:110`
 - `src/services/positionalTruth.corpus.test.ts:115`
-- `src/services/reviewFullData.ts:910`
-- `src/services/reviewFullData.ts:912`
+- `src/services/reviewFullData.ts:911`
+- `src/services/reviewFullData.ts:913`
 
 ### `pieceScope` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

@@ -20,7 +20,7 @@ import { layerStandings } from './teachingLayers';
 import { seatBare } from '../utils/seatPieces';
 import { detectBluff, bluffClause, type Bluff } from './bluffDetector';
 import { readConversion } from './conversionMethod';
-import type { StockfishAnalysis } from '../types';
+import type { StockfishAnalysis, TacticType } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess, type Square } from 'chess.js';
 import type { GamePromise } from './learnBoardTeaching';
@@ -47,7 +47,7 @@ import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centra
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
 import { structurePlanFact } from './boardPlan';
 import { stepPlan, EMPTY_PLAN_STATE } from './planMemory';
-import { matchClauseKind, matchTacticPattern, boostFor, type WeaknessSignal } from './weaknessSignal';
+import { matchClauseKind, matchTacticPattern, matchTag, boostFor, type WeaknessSignal } from './weaknessSignal';
 import { studentMomentBoost } from './studentMomentBoost';
 import { capabilitiesPosed, movePlayedCleanly } from './capabilityEvidence';
 import { attributeLiveFundamental, uciToSanAt, type LiveFundamentalReads } from './liveFundamental';
@@ -314,7 +314,9 @@ export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-c
   // THE SPEED-RUN DEPTH (David 2026-10-05: "Should be from one place") — the
   // one producer `thinkAloud.depthClauses`, ranked by the one door like
   // every other fact.
-  | 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read';
+  | 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read'
+  // THE LINE TACTICS (tacticGeometry) — the same name review's facet uses.
+  | 'tactic';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
@@ -359,6 +361,9 @@ export interface ClauseItem {
    *  hole through the canonical vocabulary bridge — a fork concept lands on a
    *  fork-blind student's `analysis:tactic:fork`, not on a generic bucket. */
   conceptId?: string;
+  /** For a `tactic` clause: its motif in the analysis vocabulary, joined to
+   *  the student's `analysis:tactic:<motif>` hole. */
+  motif?: TacticType;
   /** THE GEOMETRY THIS CLAUSE IS ABOUT — coupled AT EMISSION from the computer
    *  that produced it, never scraped back out of the prose.
    *
@@ -1021,7 +1026,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     nameMove: !!input.namesBestMove || (!heldVerdict && !!moveAdvice?.speak),
     ...(input.lastMove ? { lastStudentMove: { fenBefore: input.lastMove.fenBefore, san: input.lastMove.san } } : {}),
     ...(input.opponentLastMove ? { lastOpponentMove: input.opponentLastMove } : {}),
-  }).map((d) => ({ kind: d.kind, rank: d.kind === 'not-yet' ? 90 : d.kind === 'stop-flaw' ? 70 : d.kind === 'line' ? 60 : d.kind === 'hole-access' ? 50 : d.kind === 'speedrun-read' ? 45 : 40, text: d.text, ...(d.squares ? { squares: d.squares } : {}), ...(d.lines ? { lines: d.lines } : {}), ...(d.stakes ? { stakes: d.stakes } : {}), ...(d.claim ? { claim: d.claim } : {}), ...(d.promise ? { promise: d.promise } : {}) }));
+  }).map((d) => ({ kind: d.kind, rank: d.kind === 'not-yet' ? 90 : d.kind === 'tactic' ? 84 : d.kind === 'stop-flaw' ? 70 : d.kind === 'line' ? 60 : d.kind === 'hole-access' ? 50 : d.kind === 'speedrun-read' ? 45 : 40, text: d.text, ...(d.proof ? { proof: d.proof } : {}), ...(d.motif ? { motif: d.motif } : {}), ...(d.squares ? { squares: d.squares } : {}), ...(d.lines ? { lines: d.lines } : {}), ...(d.stakes ? { stakes: d.stakes } : {}), ...(d.claim ? { claim: d.claim } : {}), ...(d.promise ? { promise: d.promise } : {}) }));
   const composed = [...composedBase, ...depth];
   const needVerdict = studentIsMoving && input.studentNeedContext
     ? computeNeed({
@@ -1176,9 +1181,9 @@ export function mustKey(square: string, fen: string): string {
  * (which feeds both the need score and, via its matched hole, the ranker).
  */
 function clauseHole(c: ClauseItem, signals: readonly WeaknessSignal[]): WeaknessSignal | null {
-  return c.kind === 'concept'
-    ? (c.conceptId ? matchTacticPattern(c.conceptId as TacticPatternType, signals) : null)
-    : matchClauseKind(c.kind, signals);
+  if (c.kind === 'concept') return c.conceptId ? matchTacticPattern(c.conceptId as TacticPatternType, signals) : null;
+  // A line tactic with a motif joins its own `analysis:tactic:<motif>` hole first.
+  return (c.kind === 'tactic' && c.motif ? matchTag(`analysis:tactic:${c.motif}`, signals) : null) ?? matchClauseKind(c.kind, signals);
 }
 
 

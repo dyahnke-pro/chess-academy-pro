@@ -252,6 +252,8 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   'stop-flaw': 'teach',
   'hole-access': 'teach',
   'speedrun-read': 'teach',
+  // The line tactics (tacticGeometry) — the same name and role as review's facet.
+  tactic: 'teach',
   'student-leans': 'describe',
   'opponent-leans': 'describe',
 };
@@ -369,6 +371,7 @@ const CLAUSE_TIE: Record<ClauseKind, number> = {
   'stop-flaw': FACET_RANK['opp-target'],
   'hole-access': FACET_RANK.structure,
   'speedrun-read': FACET_RANK['plan-now'],
+  tactic: FACET_RANK.tactic,
 };
 export const TIE_ORDER: Record<FactKind, number> = { ...FACET_RANK, ...CLAUSE_TIE };
 

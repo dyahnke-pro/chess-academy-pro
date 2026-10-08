@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**485 lines · 15 exports · 6 importers · 2 tests · 0 audits**
+**488 lines · 15 exports · 7 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,6 +20,7 @@
 - `src/services/factSelector.ts`
 - `src/services/reviewFacetRank.test.ts`
 - `src/services/supportedFacts.test.ts`
+- `src/services/tacticGeometry.test.ts`
 
 ## Exports and every call site
 
@@ -84,6 +85,7 @@
 
 - `src/services/reviewFacetRank.test.ts`
 - `src/services/supportedFacts.test.ts`
+- `src/services/tacticGeometry.test.ts`
 
 ## Audits that reach it
 

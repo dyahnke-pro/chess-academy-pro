@@ -6,6 +6,7 @@ import { capEval } from './accuracyService';
 import { conceptForLine } from './conceptEngine';
 import { classifyPosition } from './tacticClassifier';
 import { toTacticType } from './tacticVocabulary';
+import { geometryMotif } from './tacticGeometry';
 
 /** Minimum centipawn swing to qualify as a missed tactic */
 const MIN_EVAL_SWING = 100;
@@ -715,7 +716,9 @@ function detectXRay(chess: Chess, to: Square, movingColor: Color): boolean {
 // theme-only (Lichess puzzle tags), and `legacyTacticGeometry` has NO product
 // caller (the gate source-scans to keep it that way).
 
-export type TacticTypeAuthority = 'mechanics' | 'engine' | 'theme-only' | 'sentinel';
+/** 'geometry' — the line tactics the engine walker has no detector for, read
+ *  off the same line by the computer that teaches them (`tacticGeometry`). */
+export type TacticTypeAuthority = 'mechanics' | 'engine' | 'geometry' | 'theme-only' | 'sentinel';
 
 /** WHO decides each TacticType. Keyed by the FULL union, so a new member fails
  *  to compile until it is given an authority. 'theme-only' members are never
@@ -734,10 +737,10 @@ export const TACTIC_TYPE_AUTHORITY: Record<TacticType, TacticTypeAuthority> = {
   overloaded_piece: 'engine',
   trapped_piece: 'engine',
   checkmate: 'engine',
-  clearance: 'theme-only',
+  clearance: 'geometry',
   x_ray: 'theme-only',
-  deflection: 'theme-only',
-  interference: 'theme-only',
+  deflection: 'geometry',
+  interference: 'geometry',
   zwischenzug: 'theme-only',
   tactical_sequence: 'sentinel',
 };
@@ -797,6 +800,16 @@ export function detectTacticType(fen: string, bestMoveUci: string, pvUci?: reado
       }
     }
   } catch { /* an unwalkable line teaches nothing — fall through */ }
+
+  // 1b. THE LINE TACTICS the walker has no detector for — deflection (and the
+  // decoy, its analysis home), interference, clearance — read off the SAME
+  // line by the computer that teaches them (tacticGeometry, dual-use), so a
+  // missed one reaches the record instead of the sentinel. Only on a real line
+  // (the reads need the reply and the follow-up), never on a lone move.
+  if (pvUci && pvUci.length >= 3 && pvUci[0] === bestMoveUci) {
+    const g = geometryMotif(fen, pvUci);
+    if (g) return g;
+  }
 
   // 2. A capture of a piece that had no defender — board-certain.
   const victim = chess.get(to);

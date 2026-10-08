@@ -69,7 +69,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `nameEndgamePhase` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:3292`
-- `src/services/reviewFullData.ts:1260`
+- `src/services/reviewFullData.ts:1281`
 - `src/services/reviewMoveTeaching.test.ts:141`
 - `src/services/reviewMoveTeaching.test.ts:143`
 - `src/services/reviewMoveTeaching.test.ts:148`

@@ -48,7 +48,7 @@
 
 ### `classifyPosition` (function) — 31 call sites
 - `src/components/Coach/CoachGamePage.tsx:3320`
-- `src/services/missedTacticService.ts:755`
+- `src/services/missedTacticService.ts:758`
 - `src/services/pvPlayback.ts:421`
 - `src/services/tacticClassifier.test.ts:32`
 - `src/services/tacticClassifier.test.ts:40`

@@ -210,6 +210,9 @@ export function matchClauseKind(kind: string, signals: readonly WeaknessSignal[]
   switch (kind) {
     case 'must-defend': // about to drop a piece / miss an incoming threat
       return bestMatch(signals, (s) => s.clusterId === 'analysis:tactic:hanging_piece' || s.clusterId === 'analysis:missed-threat');
+    // A live `tactic` clause with no motif of its own (review's `[tactic]` facet
+    // bridges here too) keeps the pin/skewer join it always had.
+    case 'tactic':
     case 'latent-danger': // walking your own king/queen into a pin or skewer
       return bestMatch(signals, (s) => s.clusterId === 'analysis:tactic:pin' || s.clusterId === 'analysis:tactic:skewer');
     // A tactic the student can SET UP — the dual-use rule at its sharpest: the

@@ -78,7 +78,7 @@
 - `src/services/learnTurnDoor.test.ts:157`
 - `src/services/learnTurnDoor.test.ts:406`
 - `src/services/learnTurnDoor.test.ts:417`
-- `src/services/positionFacts.ts:1056`
+- `src/services/positionFacts.ts:1061`
 - `src/services/puzzleMethod.ts:41`
 
 ### `StudentContext` (interface) — 0 call sites
@@ -97,7 +97,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `judgeMoment` (function) — 12 call sites
-- `src/services/positionFacts.ts:715`
+- `src/services/positionFacts.ts:720`
 - `src/test/latentForkOpensTheDoor.test.ts:47`
 - `src/test/latentForkOpensTheDoor.test.ts:51`
 - `src/test/latentForkOpensTheDoor.test.ts:55`
@@ -197,7 +197,7 @@
 - `src/services/habitJoin.test.ts:92`
 - `src/services/habitJoin.test.ts:99`
 - `src/services/habitJoin.test.ts:100`
-- `src/services/positionFacts.ts:947`
+- `src/services/positionFacts.ts:952`
 
 ### `habitForCluster` (function) — 16 call sites
 - `src/services/habitJoin.test.ts:17`

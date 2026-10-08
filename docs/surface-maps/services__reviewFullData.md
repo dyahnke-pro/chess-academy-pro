@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1440 lines · 9 exports · 10 importers · 11 tests · 0 audits**
+**1461 lines · 9 exports · 11 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,6 +20,7 @@
 - `src/services/reviewWalk2065.test.ts`
 - `src/services/reviewWalkCT.test.ts`
 - `src/services/slipAnswer.test.ts`
+- `src/services/tacticGeometry.test.ts`
 - `src/services/unifiedBetterMoveReason.test.ts`
 - `src/test/teach02Wired.test.ts`
 
@@ -46,7 +47,7 @@
 ### `EVAL_FACET_MIN_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 40 call sites
+### `computeMoveFacets` (function) — 42 call sites
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
 - `src/services/coachFeatureService.ts:1920`
@@ -84,6 +85,8 @@
 - `src/services/reviewWalkCT.test.ts:49`
 - `src/services/reviewWalkCT.test.ts:69`
 - `src/services/reviewWalkCT.test.ts:86`
+- `src/services/tacticGeometry.test.ts:258`
+- `src/services/tacticGeometry.test.ts:263`
 - `src/services/unifiedBetterMoveReason.test.ts:36`
 - `src/test/teach02Wired.test.ts:26`
 - `src/test/teach02Wired.test.ts:66`
@@ -117,6 +120,7 @@
 - `src/services/reviewWalk2065.test.ts`
 - `src/services/reviewWalkCT.test.ts`
 - `src/services/slipAnswer.test.ts`
+- `src/services/tacticGeometry.test.ts`
 - `src/services/unifiedBetterMoveReason.test.ts`
 - `src/test/teach02Wired.test.ts`
 

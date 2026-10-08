@@ -20,20 +20,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `threatProof` (function) — 5 call sites
-- `src/services/positionFacts.ts:1448`
-- `src/services/reviewFullData.ts:713`
+- `src/services/positionFacts.ts:1453`
+- `src/services/reviewFullData.ts:714`
 - `src/services/threatProof.test.ts:8`
 - `src/services/threatProof.test.ts:17`
 - `src/services/threatProof.test.ts:23`
 
 ### `provenThreatLine` (function) — 3 call sites
-- `src/services/boardComputers.ts:165`
-- `src/services/boardComputers.ts:172`
+- `src/services/boardComputers.ts:178`
+- `src/services/boardComputers.ts:185`
 - `src/services/threatProof.test.ts:24`
 
 ### `threatStakes` (function) — 2 call sites
-- `src/services/boardComputers.ts:166`
-- `src/services/boardComputers.ts:173`
+- `src/services/boardComputers.ts:179`
+- `src/services/boardComputers.ts:186`
 
 ## Tests
 

@@ -28,6 +28,8 @@ import { provenThreatLine, threatStakes } from './threatProof';
 import { trappedOnBoard } from './reviewTeachingPoints';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { planThreadTurn, type PlanThread } from './planThread';
+import { geometryReads, type GeometryContext } from './tacticGeometry';
+import type { TacticType } from '../types';
 
 export type CoachSurface = 'learn' | 'review' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
@@ -47,6 +49,12 @@ export interface BoardRead {
   play?: { from: string; to: string };
   /** Lines the proof plays out, for the Show-the-line button. */
   lines?: SpokenLine[];
+  /** The motif the read names, in the ONE tactic vocabulary — the weakness join. */
+  motif?: TacticType;
+  /** The sentence names the engine's move: spoken only where a move is earned;
+   *  elsewhere `idea`, the habit without the answer. */
+  namesMove?: boolean;
+  idea?: string;
 }
 
 /** Each computer's own context — what it needs from the surface, no more. */
@@ -73,6 +81,11 @@ export interface BoardContexts {
   /** The student's plan, carried across moves: its stop proven off their
    *  move, then the next plan (mutates the thread held in the surface's memory). */
   planThread: { thread: PlanThread; ply: number; fenBefore: string; fenAfter: string; student: Color };
+  /** The line tactics (tacticGeometry): interference, clearance, decoy and
+   *  deflection, the discovery audit, their in-between move, the fork that
+   *  serves a plan, the kick that fails, the counterfactual fork, the pawn
+   *  that can't block, interposition, the loaded line, the pinner pinned. */
+  tacticGeometry: GeometryContext;
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -177,6 +190,23 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
   planThread: {
     read: ({ thread, ...args }) => safe(() => planThreadTurn(thread, args).map((l) => ({ text: l.text, proof: l.proof, squares: l.squares, key: l.claim }))),
     surfaces: { learn: LEARN, review: { not: 'P2 owed — Review runs its own thread loop over planStopped (coachFeatureService); collapse onto planThreadTurn' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
+  },
+  tacticGeometry: {
+    read: (ctx) => safe(() => geometryReads(ctx).map((r) => ({
+      text: r.text, proof: r.proof, squares: r.squares, key: r.claim,
+      ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.motif ? { motif: r.motif } : {}),
+      namesMove: r.namesMove, ...(r.idea ? { idea: r.idea } : {}),
+      ...(r.proof.line ? { lines: [r.proof.line] } : {}),
+    }))),
+    surfaces: {
+      // Learn and chat's position reads both go through the one producer.
+      learn: { wired: 'services/thinkAloud.ts' },
+      review: REVIEW,
+      play: PLAY_ASK,
+      chat: { wired: 'services/thinkAloud.ts' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'the record half is the classifier: missedTacticService.detectTacticType asks geometryMotif' },
+    },
   },
 };
 

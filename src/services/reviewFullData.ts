@@ -39,7 +39,8 @@ import { recordedMoveCost } from './moveCost';
 import { trickSidestepped } from './forkTrick';
 import { findProphylaxis, prophylaxisProof } from './prophylaxis';
 import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
-import { lineProof, lineProofFromUci, legalLineProof, squaresProof, type FactProof, type Proof } from './proof';
+import { lineProof, lineProofFromUci, legalLineProof, squaresProof, isProof, type FactProof, type Proof } from './proof';
+import { readBoardAll } from './boardComputers';
 import { refutedAltProof } from './refutedAlternativeCore';
 import { advantageWasMissed } from './reviewWithholding';
 import { costWords, isMateEval, MISTAKE_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
@@ -1187,6 +1188,26 @@ export function computeMoveFacets(
       facets.push(f);
       recProof(f, tiedDefenderProof(tie));
       recSquares(f, [tie.defender.square, tie.target.square]);
+    }
+  }
+
+  // …and THE LINE TACTICS (tacticGeometry, via the one registry — the same
+  // reads Learn speaks): what the best line had that the move did not play,
+  // and the false-mate / discovery audit of the move that WAS played. A read
+  // naming the best move never speaks when the student played it (G4.5.2,
+  // matched by coordinates, never SAN).
+  if (isStudent && studentColorWB) {
+    const playedUci = ((): string | null => { try { const m = new Chess(fenBefore).move(san); return m ? `${m.from}${m.to}` : null; } catch { return null; } })();
+    const playedBest = !!ctx.bestLineUci[0] && ctx.bestLineUci[0].slice(0, 4) === playedUci;
+    const lom = ply >= 2 && ctx.teaching.prevFenBefore ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : undefined;
+    for (const g of readBoardAll('tacticGeometry', { fen: fenBefore, me: studentColorWB, pv: ctx.bestLineUci, register: 'review', played: san, ...(lom ? { lastOpponentMove: lom } : {}) })) {
+      if (g.namesMove && playedBest) continue;
+      const f = `[tactic] ${g.text}`;
+      facets.push(f);
+      recProof(f, isProof(g.proof) ? g.proof : null);
+      recSquares(f, g.squares);
+      recStakes(f, g.stakes);
+      outIdentity?.set(f, g.key);
     }
   }
 

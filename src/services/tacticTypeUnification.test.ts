@@ -71,9 +71,22 @@ describe('TACTIC_TYPE_AUTHORITY — who decides each motif is DECLARED, exhausti
     expect(Object.keys(TACTIC_TYPE_AUTHORITY).sort()).toEqual([...ALL_TACTICS].sort());
   });
 
-  it('the theme-only motifs are exactly the five no classifier produces', () => {
+  it('the theme-only motifs are exactly the two no classifier produces', () => {
     const themeOnly = ALL_TACTICS.filter((t) => TACTIC_TYPE_AUTHORITY[t] === 'theme-only').sort();
-    expect(themeOnly).toEqual(['clearance', 'deflection', 'interference', 'x_ray', 'zwischenzug']);
+    expect(themeOnly).toEqual(['x_ray', 'zwischenzug']);
+  });
+
+  it('every geometry-authority motif is PROVEN by a line the classifier actually names', () => {
+    // The line tactics (tacticGeometry) — the computer that teaches them is the
+    // one that tags them, read off the solution line.
+    const GEOMETRY_FIXTURES: Array<{ tactic: TacticType; fen: string; line: string[] }> = [
+      { tactic: 'interference', fen: '3r2k1/5ppp/8/8/1N1nP3/8/1Q3PPP/6K1 w - - 0 1', line: ['b4d5', 'g7g6', 'b2d4', 'h7h6'] },
+      { tactic: 'deflection', fen: 'r7/p4ppk/2b5/8/1P6/6P1/P1P2P1P/3Q2K1 w - - 0 1', line: ['b4b5', 'c6b5', 'd1d3', 'g7g6', 'd3b5', 'a8b8'] },
+      { tactic: 'clearance', fen: '3q2kr/7p/4pn2/8/3N4/8/1B3PPP/R5K1 w - - 0 1', line: ['d4e6', 'd8d7', 'b2f6', 'h7h6'] },
+    ];
+    const members = ALL_TACTICS.filter((t) => TACTIC_TYPE_AUTHORITY[t] === 'geometry').sort();
+    expect(members).toEqual(GEOMETRY_FIXTURES.map((f) => f.tactic).sort());
+    for (const f of GEOMETRY_FIXTURES) expect(detectTacticType(f.fen, f.line[0], f.line), f.tactic).toBe(f.tactic);
   });
 
   it('the old geometry is DEAD in product code — no non-test file imports it (source scan)', () => {
