@@ -196,6 +196,16 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
     // read on as a question about the one move it names.
   }
 
+  // "What is my bishop on c4 aiming at?" / "what about their knight?" — a
+  // question about ONE piece, not a move: what it does, whether it is safe.
+  const lower = text.toLowerCase();
+  if (slots.pieces.length === 1 && slots.squares.length <= 1 && slots.sans.length === 0 && slots.action === 'none' && !slots.options
+    && /^\s*(?:what|how|is|are)\b/.test(lower)
+    && /\b(?:doing|aiming|aim|for|about|safe|loose|good|bad|active|attack(?:ing)?|eye(?:ing)?|look(?:ing)? at)\b/.test(lower)) {
+    const seat = /\b(?:their|his|her|opponent'?s)\b/.test(lower) ? 'them' as const : /\b(?:my|mine)\b/.test(lower) ? 'me' as const : null;
+    return { kind: 'what-about-piece', referents: [{ type: 'piece', piece: slots.pieces[0], square: slots.squares[0] ?? null, seat }], seat, topic: null };
+  }
+
   const hasMoveWords = slots.sans.length > 0 || slots.squares.length > 0 || slots.action !== 'none';
   if (!hasMoveWords || slots.ask === 'none') return null;
 

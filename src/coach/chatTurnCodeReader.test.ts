@@ -56,4 +56,7 @@ describe('the sentence computer — real student questions, read on the board', 
     expect(read('What are my weaknesses?')).toBeNull();
     expect(read("What's my plan?")).toBeNull();
   });
+  it('"What is my bishop on c4 aiming at?" asks about that bishop', () => {
+    expect(read('What is my bishop on c4 aiming at?')).toEqual({ kind: 'what-about-piece', referents: [{ type: 'piece', piece: 'b', square: 'c4', seat: 'me' }], seat: 'me', topic: null });
+  });
 });

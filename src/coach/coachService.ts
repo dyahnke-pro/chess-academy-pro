@@ -205,7 +205,7 @@ import { splitMultiAsk,
   isMasterPlayQuestion, isEndgameQuestion, isEndgamePlayRequest, isEndgameWeaknessQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion, isFundamentalLessonQuestion, isFamousGameQuestion,
   isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
-  isOpeningTrapsQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
+  isOpeningTrapsQuestion, isBoardTrapQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
   isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
@@ -1306,7 +1306,8 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const statsQuestionEngage = isStatsQuestion(askForIntents);
     const strengthsQuestionEngage = isStrengthsQuestion(askForIntents);
     const openingAccuracyQuestionEngage = isOpeningAccuracyQuestion(askForIntents);
-    const openingTrapsQuestionEngage = isOpeningTrapsQuestion(askForIntents);
+    const boardTrapAsk = !!input.liveState.fen && isBoardTrapQuestion(askForIntents);
+    const openingTrapsQuestionEngage = isOpeningTrapsQuestion(askForIntents) && !boardTrapAsk;
     const reviewDueQuestionEngage = isReviewDueQuestion(askForIntents);
     const mistakesQuestionEngage = isMistakesQuestion(askForIntents);
     const weaknessLifecycleKindEngage = weaknessLifecycleKind(askForIntents);
@@ -1760,7 +1761,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // COMPUTE the answer (engine tactics / the student's bad-habit
             // profile) and voice it via voiceFacts. Studentcolor lets the
             // tactics answer warn about the STUDENT's hanging pieces.
-            tacticsQuestion: isTacticsQuestion(askForIntents),
+            tacticsQuestion: isTacticsQuestion(askForIntents) || boardTrapAsk,
             // "do I have an attack lined up / is my kingside attack good" — the
             // attacker-vs-defender count on the enemy king (assembleAttackAssessment).
             // Dispatched before tactics/positionAssessment so an ATTACK ask gets the

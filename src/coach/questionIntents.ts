@@ -1965,6 +1965,15 @@ const OPENING_TRAPS_RE = anyOf([
   String.raw`\bhow\s+do\s+you\s+teach\s+(?:me\s+)?(?:these|the|opening)?\s*traps?\b`,
   String.raw`\bwhat\s+system\s+(?:do\s+you|does\s+it)\s+use\b`,
 ]);
+/** "Is there a trap in this position?" / "can you search for traps here?" —
+ *  a question about THE BOARD, answered by its tactics scan, not the list of
+ *  an opening's named traps (real student turns, 2026-10-08: both got "I don't
+ *  have named traps logged"). Only with a board in front of the student. */
+export function isBoardTrapQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  return /\btraps?\b/i.test(ask) && /\b(?:here|this position|the position|on the board|right now|now)\b/i.test(ask);
+}
+
 export function isOpeningTrapsQuestion(ask: string | undefined): boolean {
   return !!ask && OPENING_TRAPS_RE.test(ask);
 }
@@ -3266,7 +3275,7 @@ export function buildQuestionGrounding(
     bestMoveQuestion: isBestMoveQuestion(a) && !isCandidateMoveQuestion(a) && !isCounterRepertoireQuestion(a) && !method && !retrospective,
     whyBestMoveQuestion: isWhyBestMoveQuestion(a) && !retrospective,
     openingExistenceName: openingExistenceQuery(a) ?? undefined,
-    tacticsQuestion: isTacticsQuestion(a) || threat,
+    tacticsQuestion: isTacticsQuestion(a) || threat || (!!liveState.fen && isBoardTrapQuestion(a)),
     progressQuestion: isProgressQuestion(a) && !onBoard,
     trendQuestion: isImprovementTrendQuestion(a),
     openingProfileQuestion: isOpeningProfileQuestion(a),
@@ -3276,7 +3285,7 @@ export function buildQuestionGrounding(
     // FIXED lane owns it (it's a time-framed weakness read, not a static skill).
     strengthsQuestion: isStrengthsQuestion(a) && weaknessLifecycleKind(a) !== 'fixed',
     openingAccuracyQuestion: isOpeningAccuracyQuestion(a) && !onBoard,
-    openingTrapsQuestion: isOpeningTrapsQuestion(a) && !threat,
+    openingTrapsQuestion: isOpeningTrapsQuestion(a) && !threat && !(!!liveState.fen && isBoardTrapQuestion(a)),
     openingTrapsSystemAsk: opensTrapsSystemAsk(a),
     reviewDueQuestion: isReviewDueQuestion(a),
     // The generic mistakes answer yields to the two more-specific weakness
