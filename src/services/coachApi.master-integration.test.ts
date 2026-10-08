@@ -20,6 +20,7 @@
  * No `vi.mock()` of the new services (per WO).
  */
 
+import { smallTalkReply } from '../coach/smallTalk';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { getCoachChatResponse } from './coachApi';
 import { __resetMasterPlayLookupForTests } from './masterPlayLookup';
@@ -167,7 +168,9 @@ describe('grounding — intent detection', () => {
       undefined,
       { currentFen: STARTING_FEN, surface: '/coach/chat' },
     );
-    expect(r).toBe('Hello!');
+    // Answered in code since answers swarm P7 — the model is never called.
+    expect(r).toBe(smallTalkReply('hi'));
+    expect(counters.llmCalls).toBe(0);
     expect(counters.lichessCalls).toBe(0); // grounding never built context
   });
 

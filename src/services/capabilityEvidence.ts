@@ -46,7 +46,8 @@ import { logAppAudit } from './appAuditor';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { leadingFundamentals, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
 import { stalemateWatch } from './stalemateWatch';
-import { captureAbandonsDuty } from './exchangeIdeas';
+import { captureAbandonsDuty, cPawnBlock } from './exchangeIdeas';
+import { Chess } from 'chess.js';
 import { matesInOne } from './opponentMoveReads';
 import { asIfToMove } from './positionReadingService';
 import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
@@ -387,7 +388,7 @@ export function capabilitiesShown(
   cpLoss: number | null,
 ): Array<{ tag: MisconceptionTagId; posedImportance: number }> {
   if (!movePlayedCleanly(cpLoss)) return [];
-  return capabilitiesPosed(fenBefore, playedSan, moverColor);
+  return capabilitiesPosed(fenBefore, playedSan, moverColor).filter((p) => p.outcome !== 'broken');
 }
 
 /**
@@ -421,8 +422,8 @@ export function capabilitiesPosed(
   fenBefore: string,
   playedSan: string,
   moverColor: 'white' | 'black',
-): Array<{ tag: MisconceptionTagId; posedImportance: number }> {
-  const out: Array<{ tag: MisconceptionTagId; posedImportance: number }> = [];
+): Array<{ tag: MisconceptionTagId; posedImportance: number; outcome?: CapabilityOutcome }> {
+  const out: Array<{ tag: MisconceptionTagId; posedImportance: number; outcome?: CapabilityOutcome }> = [];
   const seen = new Set<string>();
   for (const f of leadingFundamentals(fenBefore, playedSan, moverColor)) {
     if (f.weight < POSED_IMPORTANCE_MIN) continue;   // the board never asked
@@ -460,7 +461,36 @@ export function capabilitiesPosed(
     const tag: MisconceptionTagId | null = lost === 'mate' ? 'missed-opponents-threat' : lost === 'material' ? 'hung-material' : null;
     if (tag && !seen.has(tag)) { seen.add(tag); out.push({ tag, posedImportance: ABANDONED_DUTY_POSED }); }
   } catch { /* an unreadable board posed nothing */ }
+  // THE QUEEN'S KNIGHT IN A D-PAWN OPENING (missed computers, 2026-10-08):
+  // the student's knight leaves b1/b8 while c3/c6 would block the c-pawn
+  // (`cPawnBlock`'s own conditions). The answer is WHERE it went, not what it
+  // cost — a blocked c-pawn rarely costs a pawn, so cpLoss would call the block
+  // "held". c3 → broken; any other square → held.
+  if (!seen.has('misplaced-piece')) {
+    try {
+      const block = queensKnightChoice(fenBefore, playedSan, moverColor === 'white' ? 'w' : 'b');
+      if (block) { seen.add('misplaced-piece'); out.push({ tag: 'misplaced-piece', posedImportance: C_PAWN_POSED, outcome: block }); }
+    } catch { /* an unreadable board posed nothing */ }
+  }
   return out;
+}
+
+/** A modest question: enough to count for NEED, below the green bar alone. */
+const C_PAWN_POSED = 60;
+
+/** Held / broken for the queen's-knight choice, or null when the board did
+ *  not ask it (the knight did not move, or c3/c6 would not block anything). */
+function queensKnightChoice(fenBefore: string, playedSan: string, side: 'w' | 'b'): CapabilityOutcome | null {
+  const c = new Chess(fenBefore);
+  if (c.turn() !== side) return null;
+  const home = side === 'w' ? 'b1' : 'b8';
+  const blockSq = side === 'w' ? 'c3' : 'c6';
+  const played = new Chess(fenBefore).move(playedSan);
+  if (!played || played.from !== home || played.piece !== 'n') return null;
+  let blockSan: string;
+  try { blockSan = c.move({ from: home, to: blockSq }).san; } catch { return null; }
+  if (!cPawnBlock(fenBefore, blockSan, side, null)) return null;
+  return played.to === blockSq ? 'broken' : 'held';
 }
 
 /** A capture that would leave a mate or a piece behind is a real question. */
@@ -521,7 +551,9 @@ export async function recordCapabilityEvidence(args: {
     const rows: CapabilityEvidenceRecord[] = shown.map((s) => ({
       id: newId(),
       tag: s.tag,
-      outcome,
+      // A posed question that carries its own answer (the knight choice) can
+      // only make the row BROKEN; held still needs a clean move overall.
+      outcome: s.outcome === 'broken' ? 'broken' : outcome,
       fen: args.fenBefore,
       playedSan: args.playedSan,
       posedImportance: s.posedImportance,

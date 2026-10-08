@@ -715,11 +715,20 @@ export function geometryReads(ctx: GeometryContext): GeometryRead[] {
  * deflection, interference or clearance reaches the student's record under the
  * one vocabulary instead of the "no named motif" sentinel.
  */
-export function geometryMotif(fen: string, pv: readonly string[]): TacticType | null {
+export function geometryMotif(
+  fen: string,
+  pv: readonly string[],
+  lastOpponentMove?: { fenBefore: string; san: string },
+): TacticType | null {
   const me = board(fen)?.turn();
   if (!me) return null;
-  const ctx: GeometryContext = { fen, me, pv, register: 'review' };
-  for (const read of [decoyDeflection, interferenceCut, clearanceTempo]) {
+  const ctx: GeometryContext = { fen, me, pv, register: 'review', ...(lastOpponentMove ? { lastOpponentMove } : {}) };
+  // Their in-between move needs the move before this one; with it, the miss
+  // (not stepping the king and keeping the piece) reaches the record too.
+  const reads = lastOpponentMove
+    ? [zwischenzugRefuted, decoyDeflection, interferenceCut, clearanceTempo]
+    : [decoyDeflection, interferenceCut, clearanceTempo];
+  for (const read of reads) {
     try { const r = read(ctx); if (r?.motif) return r.motif; } catch { /* next */ }
   }
   return null;

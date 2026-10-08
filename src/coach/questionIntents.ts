@@ -106,7 +106,15 @@ const anyOf = (alts: string[]): RegExp => new RegExp(alts.join('|'), 'i');
 const LEADING_FILLER_RE =
   /^(?:hey|hi|hiya|yo|ok|okay|kk?|alright|alrighty|so|well|um+|uh+|erm|hmm+|look|listen|like|and|but|also|please|yeah|yep|sup|dude|man|bro|ma'?am|sir|be\s+real\s+with\s+me|real\s+quick|quick\s+(?:one|question)|tell\s+me(?!\s+about\b)|i\s+mean|let\s+me\s+ask|i\s+(?:wanna|want\s+to)\s+know|i\s+was\s+wondering|can\s+you\s+tell\s+me(?!\s+about\b)|so\s+like)\b[\s,.:;–—-]*/i;
 const MID_FILLER_RE =
-  /\b(?:actually|honestly|basically|literally|seriously|really|just|even|simply|roughly|currently|kinda|sorta|pretty\s+much|i\s+guess|you\s+know|these\s+days|at\s+all|or\s+what|again|then)\b/gi;
+  /\b(?:actually|honestly|basically|literally|seriously|really|just|simply|roughly|currently|kinda|sorta|pretty\s+much|i\s+guess|you\s+know|these\s+days|at\s+all|or\s+what|again)\b/gi;
+
+// "even" is a hedge only in front of a verb or a verdict ("what am I even
+// doing", "is that even legal"). Anywhere else it is the answer being asked
+// about ("is the position even?", "an even trade"), so it stays — the old
+// blanket strip turned "is it even?" into "is it?" (answers swarm P0). "then"
+// is never filler: "what then?" asks for the next move.
+const HEDGE_EVEN_RE =
+  /\beven\s+(?=\w+ing\b|(?:good|bad|right|ok(?:ay)?|worth|possible|legal|playable|supposed|sound|know|do|does|have|need|want|make|matter|mean|work|try|care)\b)/gi;
 
 // Common misspellings of the high-frequency chess/self-knowledge nouns the
 // intent regexes key on (matrix pass 6, 2026-07-10). Same philosophy as the
@@ -155,6 +163,7 @@ export function stripQuestionFiller(ask: string | undefined): string {
   } while (s !== prev && s.length > 0);
   s = s
     .replace(MID_FILLER_RE, ' ')
+    .replace(HEDGE_EVEN_RE, ' ')
     .replace(TYPO_RE, (m) => COMMON_TYPOS[m.toLowerCase()] ?? m)
     .replace(/\s{2,}/g, ' ')
     .replace(/\s+([?.!,])/g, '$1')
@@ -1001,7 +1010,7 @@ const POSITION_ASSESSMENT_RE = anyOf([
   // NB: sharp / quiet / wild / complicated are NOT computed by the eval and were
   // REMOVED (David 2026-07-10, "answers must make sense") — they safe-default
   // honestly rather than answer sharpness with a pawn-count eval.
-  String.raw`\bis\s+(?:this|it|the)\s+(?:position\s+)?(?:drawish|balanced|level|equal)\b`,
+  String.raw`\bis\s+(?:this|it|the)\s+(?:position\s+)?(?:drawish|balanced|level|equal|even)\b`,
   // development state — "have I developed enough", "am I behind in development"
   String.raw`\bhave\s+i\s+developed\s+(?:enough|all\s+my\s+pieces)\b`,
   // center / space / initiative / attack (matrix pass 20).
@@ -3160,6 +3169,40 @@ export function isLastGameMistakeQuestion(ask: string | undefined): boolean {
  * exact same assemblers. Board fields are optional — board-independent intents
  * (progress / opening-profile / concept) ground with no FEN.
  */
+/** THE OPPONENT'S THREAT ON THIS BOARD — "what is their threat", "what are
+ *  they threatening", "what do they do now", "what should I watch out for?"
+ *  (answers swarm P1). These fell into the concept glossary, the master-play
+ *  explorer and the opening-trap list, none of which read the board. A
+ *  "watch out for" that names an opening ("…in the Caro-Kann") stays a trap ask:
+ *  the pattern is anchored to the end of the question. */
+const OPPONENT_THREAT_RE = anyOf([
+  String.raw`\b(?:their|the\s+opponent'?s|my\s+opponent'?s|his|her)\s+threats?\b`,
+  String.raw`\bwhat\s+(?:are|is)\s+(?:they|he|she|my\s+opponent|the\s+opponent)\s+threatening\b`,
+  String.raw`\bwhat\s+(?:do|does|will|would|can)\s+(?:they|he|she|my\s+opponent|the\s+opponent)\s+(?:want|do|threaten|play)\s+(?:now|next|here)\b`,
+  String.raw`^(?:what\s+(?:should|do)\s+i\s+(?:need\s+to\s+)?|what\s+to\s+)?watch\s+out\s+for(?:\s+(?:here|now|right\s+now))?\s*[?.!]*$`,
+  String.raw`\b(?:are|is)\s+(?:they|he|she|my\s+opponent|the\s+opponent)\s+threatening\s+(?:anything|something)\b`,
+]);
+export function isOpponentThreatQuestion(ask: string | undefined): boolean {
+  return !!ask && OPPONENT_THREAT_RE.test(ask.trim());
+}
+
+/** Words that pin a question to the LIVE BOARD rather than the student's
+ *  record — "how good is MY POSITION", "where do I stand", "how does White
+ *  continue". Precedence comes from these words, never a blanket rule: "do I
+ *  miss forks?" carries none of them and stays a record question. */
+const LIVE_BOARD_ASK_RE = anyOf([
+  String.raw`\b(?:this|my|the)\s+position\b`,
+  String.raw`\b(?:here|right\s+now|on\s+the\s+board|at\s+this\s+point)\b`,
+  String.raw`^\s*where\s+do\s+i\s+stand\s*[?.!]*$`,
+  String.raw`\bhow\s+(?:does|do|should|can|will|would)\s+(?:white|black)\s+(?:continue|proceed|go\s+on|play\s+(?:on|from\s+here))\b`,
+]);
+export function isLiveBoardAsk(ask: string | undefined): boolean {
+  return !!ask && LIVE_BOARD_ASK_RE.test(ask);
+}
+
+/** "how does White continue" — the side to move's next step, on this board. */
+const SIDE_CONTINUE_RE = /\bhow\s+(?:does|do|should|can|will|would)\s+(?:white|black)\s+(?:continue|proceed|go\s+on|play\s+on)\b/i;
+
 export function buildQuestionGrounding(
   ask: string,
   liveState: {
@@ -3186,6 +3229,10 @@ export function buildQuestionGrounding(
   const retroRef = retrospectiveMoveRef(a);
   const retrospective = retroRef !== null;
   const method = isMethodQuestion(a);
+  // A board is on screen and the words point at it: record lanes yield.
+  const onBoard = !!liveState.fen && isLiveBoardAsk(a);
+  const threat = !!liveState.fen && isOpponentThreatQuestion(a);
+  const sideContinue = !!liveState.fen && SIDE_CONTINUE_RE.test(a);
   return {
     currentFen: liveState.fen,
     moveHistory: liveState.moveHistory,
@@ -3206,7 +3253,7 @@ export function buildQuestionGrounding(
     // too, and the plan lane dispatches before the (phase-gated) endgame lane —
     // so it answered with a middlegame plan on a non-endgame board (broken-map
     // #5). The endgame lane owns it; suppress plan when endgame fires.
-    planQuestion: isPlanQuestion(a) && !isEndgameQuestion(a) && !method,
+    planQuestion: (isPlanQuestion(a) || sideContinue) && !isEndgameQuestion(a) && !method && !threat,
     // A NAMED-candidate ask ("is Qf3 ok") must EVALUATE that move, not deflect
     // to the best move — so it takes precedence over best-move / move-rating
     // (David 2026-07-10). whyBestMove still wins for "why is X best".
@@ -3219,8 +3266,8 @@ export function buildQuestionGrounding(
     bestMoveQuestion: isBestMoveQuestion(a) && !isCandidateMoveQuestion(a) && !isCounterRepertoireQuestion(a) && !method && !retrospective,
     whyBestMoveQuestion: isWhyBestMoveQuestion(a) && !retrospective,
     openingExistenceName: openingExistenceQuery(a) ?? undefined,
-    tacticsQuestion: isTacticsQuestion(a),
-    progressQuestion: isProgressQuestion(a),
+    tacticsQuestion: isTacticsQuestion(a) || threat,
+    progressQuestion: isProgressQuestion(a) && !onBoard,
     trendQuestion: isImprovementTrendQuestion(a),
     openingProfileQuestion: isOpeningProfileQuestion(a),
     openingProfileKind: openingProfileKind(a),
@@ -3228,8 +3275,8 @@ export function buildQuestionGrounding(
     // "what have I gotten better at" reads as strengths too — the lifecycle
     // FIXED lane owns it (it's a time-framed weakness read, not a static skill).
     strengthsQuestion: isStrengthsQuestion(a) && weaknessLifecycleKind(a) !== 'fixed',
-    openingAccuracyQuestion: isOpeningAccuracyQuestion(a),
-    openingTrapsQuestion: isOpeningTrapsQuestion(a),
+    openingAccuracyQuestion: isOpeningAccuracyQuestion(a) && !onBoard,
+    openingTrapsQuestion: isOpeningTrapsQuestion(a) && !threat,
     openingTrapsSystemAsk: opensTrapsSystemAsk(a),
     reviewDueQuestion: isReviewDueQuestion(a),
     // The generic mistakes answer yields to the two more-specific weakness
@@ -3268,11 +3315,11 @@ export function buildQuestionGrounding(
     puzzleStatsQuestion: isPuzzleStatsQuestion(a),
     transferGapQuestion: isTransferGapQuestion(a),
     skillRadarQuestion: isSkillRadarQuestion(a),
-    masterPlayQuestion: isMasterPlayQuestion(a),
-    conceptQuestion: isConceptQuestion(a),
-    playerGamesQuestion: isPlayerGamesQuestion(a),
+    masterPlayQuestion: isMasterPlayQuestion(a) && !threat,
+    conceptQuestion: isConceptQuestion(a) && !threat,
+    playerGamesQuestion: isPlayerGamesQuestion(a) && !sideContinue,
     endgameQuestion: isEndgameQuestion(a),
-    positionAssessmentQuestion: isPositionAssessmentQuestion(a),
+    positionAssessmentQuestion: (isPositionAssessmentQuestion(a) || (onBoard && /^\s*where\s+do\s+i\s+stand\b/i.test(a))) && !threat,
     // "how do I approach this?" reads as a teaching-method ask too; the METHOD
     // lane (how to think HERE, computed on this board) is the specific one.
     teachingMethodQuestion: isTeachingMethodQuestion(a) && !method,

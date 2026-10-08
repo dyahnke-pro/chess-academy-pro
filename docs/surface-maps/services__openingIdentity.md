@@ -25,8 +25,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `loadOpeningIdentity` (function) — 3 call sites
-- `src/services/coachApi.ts:5563`
-- `src/services/coachApi.ts:6092`
+- `src/services/coachApi.ts:5532`
+- `src/services/coachApi.ts:6061`
 - `src/services/openingGenerator.ts:2504`
 
 ### `warmOpeningIdentity` (function) — 2 call sites
@@ -46,8 +46,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.ts:81`
 
 ### `openingIdentityLine` (function) — 17 call sites
-- `src/services/coachApi.ts:5565`
-- `src/services/coachApi.ts:6094`
+- `src/services/coachApi.ts:5534`
+- `src/services/coachApi.ts:6063`
 - `src/services/learnBoardTeaching.ts:678`
 - `src/services/openingGenerator.ts:2505`
 - `src/services/openingIdentity.test.ts:18`

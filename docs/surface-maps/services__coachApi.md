@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6979 lines · 41 exports · 53 importers · 59 tests · 19 audits**
+**6927 lines · 40 exports · 53 importers · 59 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -89,7 +89,7 @@
 
 ### `__resetProviderCooldownsForTests` (function) — 4 call sites
 - `src/services/coachApi.boardVerdict.integration.test.ts:65`
-- `src/services/coachApi.master-integration.test.ts:119`
+- `src/services/coachApi.master-integration.test.ts:120`
 - `src/services/coachApi.pieceOptions.test.ts:18`
 - `src/services/coachApi.whyReasoning.integration.test.ts:49`
 
@@ -203,9 +203,9 @@
 - `src/services/coachApi.groundingFallthrough.test.ts:50`
 
 ### `hasChessContentSignal` (function) — 7 call sites
-- `src/services/coachApi.banterContract.test.ts:32`
-- `src/services/coachApi.banterContract.test.ts:42`
-- `src/services/coachApi.banterContract.test.ts:45`
+- `src/services/coachApi.banterContract.test.ts:14`
+- `src/services/coachApi.banterContract.test.ts:20`
+- `src/services/coachApi.banterContract.test.ts:23`
 - `src/services/coachApi.groundingFallthrough.test.ts:74`
 - `src/services/coachApi.groundingFallthrough.test.ts:88`
 - `src/services/coachApi.groundingFallthrough.test.ts:93`
@@ -213,18 +213,6 @@
 
 ### `isBoardQuestionTurn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
-
-### `stripChessyStraySentences` (function) — 10 call sites
-- `src/services/coachApi.banterContract.test.ts:23`
-- `src/services/coachApi.banterContract.test.ts:29`
-- `src/services/coachApi.banterContract.test.ts:37`
-- `src/services/coachApi.groundingFallthrough.test.ts:101`
-- `src/services/coachApi.groundingFallthrough.test.ts:108`
-- `src/services/coachApi.groundingFallthrough.test.ts:109`
-- `src/services/coachApi.groundingFallthrough.test.ts:110`
-- `src/services/coachApi.groundingFallthrough.test.ts:115`
-- `src/services/coachApi.groundingFallthrough.test.ts:119`
-- `src/services/coachApi.groundingFallthrough.test.ts:124`
 
 ### `MoveMomentKind` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -368,15 +356,15 @@
 - `src/services/coachApi.boardVerdict.integration.test.ts:69`
 - `src/services/coachApi.boardVerdict.integration.test.ts:118`
 - `src/services/coachApi.boardVerdict.integration.test.ts:132`
-- `src/services/coachApi.master-integration.test.ts:140`
-- `src/services/coachApi.master-integration.test.ts:160`
-- `src/services/coachApi.master-integration.test.ts:176`
-- `src/services/coachApi.master-integration.test.ts:242`
-- `src/services/coachApi.master-integration.test.ts:257`
-- `src/services/coachApi.master-integration.test.ts:295`
-- `src/services/coachApi.master-integration.test.ts:328`
-- `src/services/coachApi.master-integration.test.ts:343`
-- `src/services/coachApi.master-integration.test.ts:357`
+- `src/services/coachApi.master-integration.test.ts:141`
+- `src/services/coachApi.master-integration.test.ts:161`
+- `src/services/coachApi.master-integration.test.ts:179`
+- `src/services/coachApi.master-integration.test.ts:245`
+- `src/services/coachApi.master-integration.test.ts:260`
+- `src/services/coachApi.master-integration.test.ts:298`
+- `src/services/coachApi.master-integration.test.ts:331`
+- `src/services/coachApi.master-integration.test.ts:346`
+- `src/services/coachApi.master-integration.test.ts:360`
 - `src/services/coachApi.pieceOptions.test.ts:30`
 - `src/services/coachApi.whyReasoning.integration.test.ts:60`
 - `src/services/coachApi.whyReasoning.integration.test.ts:80`
