@@ -61,7 +61,11 @@ describe('gambit punish-gems (separate lane)', () => {
     const openingIds = [...new Set(GEMS.map((g) => g.openingId))];
     let surfacedTotal = 0;
     for (const openingId of openingIds) {
-      const all = getPunishGemsForOpening(openingId);
+      // A gambit-lane gem can share its opening id with masterclass gems
+      // (kings-gambit, evans-gambit, budapest-gambit); those are gated by
+      // punishGems.test, so this lane checks only its own file's gems.
+      const laneIds = new Set(GEMS.map(gemId));
+      const all = getPunishGemsForOpening(openingId).filter((g) => laneIds.has(gemId(g)));
       const surf = all.filter(isSurfaceableGem);
       const narratedHere = all.filter((g) => narratedIds.has(gemId(g)) && isWeaponGem(g));
       expect(
