@@ -2968,67 +2968,27 @@ Any claim about WHERE a piece stands, what it captures or attacks, or what squar
   }
 }
 
-function buildStageSystemPrompt(stage: OptionalStage, openingName?: string): string {
-  const schemas: Record<OptionalStage, string> = {
-    concepts: `Output a JSON array of ConceptCheckQuestion objects:
+/** The model prompt for the ONE prose-only stage, `concepts` (no moves). The
+ *  stages with moves are DB-only — their model schemas were deleted with the
+ *  model fallback (G3, 2026-10-08). */
+function buildConceptsStagePrompt(openingName?: string): string {
+  return `You are an expert chess coach generating ONE specific stage of an opening lesson. Output is RAW JSON — no markdown fences, no prose, no comments, no trailing commas. The first character must be \`[\` and the last must be \`]\`.
+
+Schema:
+Output a JSON array of ConceptCheckQuestion objects:
 interface ConceptCheckQuestion {
   prompt: string;            // Big-idea question, e.g. "Why does the Vienna play 2.Nc3 instead of 2.Nf3?"
   multiSelect?: boolean;     // true if multiple choices are correct
   choices: { text: string; correct: boolean; explanation: string }[];
 }
-Aim for 3-5 questions. Test the IDEA behind the opening, not memorization. Mix single-select and multi-select. Multi-select questions need 2+ correct choices.`,
-
-    findMove: `Output a JSON array of FindMoveQuestion objects:
-interface FindMoveQuestion {
-  path: string[];            // SAN sequence from the standard start position to the position being quizzed
-  prompt: string;            // Question, e.g. "White to play. What's the move?"
-  candidates: { san: string; label: string; correct: boolean; explanation: string }[];
-}
-Aim for 3-5 puzzles. Each candidate's SAN must be LEGAL from the path's resulting FEN. Exactly one candidate is correct. Each label is a brief intent ("Bc4 — eyes f7"). Test recognition at branch points and key moments of the opening.`,
-
-    drill: `Output a JSON array of DrillLine objects:
-interface DrillLine {
-  name: string;              // Display name
-  subtitle?: string;
-  moves: string[];           // Full SAN sequence from the standard start
-  studentSide?: 'white' | 'black';  // Defaults to 'white'
-}
-Aim for 3-5 lines. Each is a full opening line through to a clear middlegame transition (~10-15 plies). All SANs must be legal sequences from the starting position. studentSide should match the opening (white for openings; black for defenses like Sicilian/French/Caro-Kann/Pirc).`,
-
-    punish: `Output a JSON array of PunishLesson objects:
-interface PunishLesson {
-  name: string;              // Display name
-  setupMoves: string[];      // SAN sequence to the position BEFORE the inaccuracy
-  inaccuracy: string;        // Opponent's bad move (SAN, legal from setup position)
-  whyBad: string;            // 2-3 sentences explaining the principle violated
-  punishment: string;        // The student's punishing move (SAN, legal from post-inaccuracy)
-  whyPunish: string;         // 2-3 sentences explaining why it works
-  distractors: { san: string; label: string; explanation: string }[];  // 2-3 LEGAL alternatives that don't punish
-  followup?: { san: string; idea: string }[];  // Optional winning continuation
-}
-Aim for 3-5 lessons. Each setupMoves+inaccuracy+punishment+distractors must be LEGAL chess from the start position. Teach common amateur mistakes the student will face in real games.`,
-  };
-
-  return `You are an expert chess coach generating ONE specific stage of an opening lesson. Output is RAW JSON — no markdown fences, no prose, no comments, no trailing commas. The first character must be \`[\` and the last must be \`]\`.
-
-Schema:
-${schemas[stage]}
+Aim for 3-5 questions. Test the IDEA behind the opening, not memorization. Mix single-select and multi-select. Multi-select questions need 2+ correct choices.
 
 CRITICAL:
-- All chess moves must be LEGAL from their parent positions. The validation harness will reject illegal SANs.
-- DO NOT include PGN annotation marks (!, ?, !!, ??, !?, ?!) in any SAN string. Use "g4" not "g4?", "Nf6" not "Nf6??". Production audit caught the LLM doing this for punish.inaccuracy and the bare \`?\` made chess.js reject the move.
-- DO NOT prefix SANs with move numbers ("1.", "1...", etc.). Just the move: "e4", not "1.e4".
-- LEGAL-MOVE TRAPS (production audit caught these — DO NOT repeat):
-  • FIANCHETTO PREP: Bg7 / Bg2 / Bb7 / Bb2 require the pawn move FIRST (g6 / g3 / b6 / b3). The bishop's destination square must be EMPTY. Pirc move-order is ...d6, ...Nf6, ...g6, THEN ...Bg7.
-  • QUEENSIDE CASTLING (O-O-O): the b1 / b8 knight must be DEVELOPED. Castling cannot pass through a piece. If Nb1 is still on its starting square, you cannot O-O-O.
-  • KINGSIDE CASTLING (O-O): both the f1 bishop AND the g1 knight (or f8 / g8 for Black) must be developed.
-  • Pawns move FORWARD only. e4-to-e3 is illegal.
-- Coach voice: first-person, conversational, pedagogically clear.
-${stage === 'concepts' ? `- Single-select questions (multiSelect omitted or false) need EXACTLY ONE correct choice. If 2+ choices are correct, set multiSelect: true on that question.\n` : ''}${stage === 'findMove' ? `- Each question needs 2+ candidates. EXACTLY ONE is correct. The path SANs must be a legal sequence from the standard starting position.\n` : ''}${stage === 'drill' ? `- Trace the FULL move sequence with chess.js mentally before emitting. Each move must be legal from the position the prior moves create. studentSide MUST match the opening — black for Sicilian, French, Caro-Kann, Pirc, KID, Nimzo-Indian, Modern, Alekhine, Scandinavian, etc.; white for Italian, Vienna, Spanish, Queen's Gambit, etc.\n` : ''}${stage === 'punish' ? `- setupMoves + inaccuracy + punishment + each distractor + each followup move must ALL be legal in sequence. Distractors are LEGAL alternatives that don't punish as well — they are NOT illegal moves. Each lesson needs at least 2 distractors.
-- CRITICAL — STAY ON THE OPENING: setupMoves MUST match the canonical PGN of "${openingName}" exactly for the first N plies (where N = the canonical PGN's ply count). Production audit (build 1304700) caught the LLM emitting Dragon punishes (5...g6) under the Najdorf banner (5...a6) — same family but a different sub-variation. The OPENING POSITION CONTEXT block below shows the exact moves; do NOT substitute a different sub-line just because you find traps there easier to write.
-- The inaccuracy is what the OPPONENT plays AFTER the canonical line is reached. setupMoves usually ends RIGHT AT the canonical spine's end FEN (or at most 1-2 plies deeper on a known main-line continuation).
-\n` : ''}- Output JSON only. Validation pipeline rejects anything else.${buildStageTeachingBlock(openingName)}${buildBookSourceBlock(openingName)}${buildStagePositionBlock(openingName)}${buildLineFactsBlock(openingName)}`;
+- Coach voice: conversational, pedagogically clear.
+- Single-select questions (multiSelect omitted or false) need EXACTLY ONE correct choice. If 2+ choices are correct, set multiSelect: true on that question.
+- Output JSON only. Validation pipeline rejects anything else.${buildStageTeachingBlock(openingName)}${buildBookSourceBlock(openingName)}${buildStagePositionBlock(openingName)}${buildLineFactsBlock(openingName)}`;
 }
+
 
 // ─── DB-narration stage generators ──────────────────────────────────
 // Mirror of the walkthrough's DB-narration inversion: code provides
@@ -3966,11 +3926,8 @@ async function generateOneStage(
   // DB-narration path for drill + findMove. Code provides legal
   // moves from the Lichess DB; LLM only labels them. Eliminates
   // the "illegal SAN" repair class for these stages entirely.
-  // Skip on retry — if the DB path produced an empty/invalid set
-  // the first time, the legacy LLM gen path is the fallback. Other
-  // stages (concepts, punish) still go through the prose-only LLM
-  // gen below, since concepts has no SANs and punish's tactical
-  // moves aren't in the opening DB.
+  // A stage with moves is DB-only — there is no model fallback (G3). Only
+  // `concepts` (prose, no moves) reaches the model below.
   if (!retryContext && stage === 'drill') {
     try {
       const drillData = await generateDrillFromDb(openingName);
@@ -4071,7 +4028,16 @@ async function generateOneStage(
     }
   }
 
-  const systemPrompt = buildStageSystemPrompt(stage, openingName);
+  // Stages that carry MOVES come from the database or nowhere (G3). The model
+  // used to be the fallback here and wrote whole drill / find-the-move / punish
+  // lines itself, SANs included, when the DB had too little. Empty beats
+  // invented: the stage stays hidden. Only `concepts` (prose, no moves) still
+  // reaches the model below.
+  if (stage !== 'concepts') {
+    return { ok: false, reason: `no database material for ${stage} — moves never come from the model (G3)` };
+  }
+
+  const systemPrompt = buildConceptsStagePrompt(openingName);
   const userMessage = retryContext
     ? `Generate the ${stage} array for the opening: ${openingName}.\n\nYour previous attempt failed:\n${retryContext}\n\nProduce a new attempt that addresses the failures above. Keep moves SIMPLE and conservative — verify each SAN is legal from its parent position. Output JSON only.`
     : `Generate the ${stage} array for the opening: ${openingName}.`;

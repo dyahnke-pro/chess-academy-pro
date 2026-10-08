@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4390 lines · 38 exports · 18 importers · 16 tests · 10 audits**
+**4356 lines · 38 exports · 18 importers · 17 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
@@ -292,6 +292,7 @@
 - `src/services/noteSelectionDeterminism.test.ts`
 - `src/services/openingGenerator.computedBeats.test.ts`
 - `src/services/openingGenerator.gemBake.test.ts`
+- `src/services/openingGenerator.noModelMoves.test.ts`
 - `src/services/openingGenerator.test.ts`
 - `src/services/openingGenerator.twoBeats.test.ts`
 - `src/services/proRepertoireService.test.ts`

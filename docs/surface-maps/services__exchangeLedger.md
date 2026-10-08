@@ -126,7 +126,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lookaheadPlan.ts:597`
 - `src/services/lookaheadPlan.ts:659`
 - `src/services/moveOrder.ts:120`
-- `src/services/openingGenerator.ts:3602`
+- `src/services/openingGenerator.ts:3562`
 - `src/services/pieceOptions.ts:110`
 - `src/services/playedMoveGrade.ts:106`
 - `src/services/principleAttribution.ts:424`
