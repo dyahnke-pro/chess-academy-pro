@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3124 lines · 18 exports · 106 importers · 93 tests · 23 audits**
+**3148 lines · 18 exports · 106 importers · 96 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
@@ -227,7 +227,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `sanitizeForTTS` (function) — 50 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:723`
+- `src/components/Openings/OpeningDetailPage.tsx:686`
 - `src/components/Settings/VoiceSettingsPanel.tsx:118`
 - `src/components/Settings/VoiceSettingsPanel.tsx:160`
 - `src/hooks/useProseReader.ts:66`
@@ -346,6 +346,7 @@
 - `src/components/Tactics/TacticCreatePage.test.tsx`
 - `src/components/Tactics/TacticSetupBoard.ladder.test.tsx`
 - `src/components/Tactics/TacticSetupBoard.test.tsx`
+- `src/components/ui/AppLayout.routeStop.test.tsx`
 - `src/hooks/hintDialTally.test.ts`
 - `src/hooks/learnSilentCapture.test.ts`
 - `src/hooks/useDiscussionPractice.test.ts`
@@ -357,6 +358,7 @@
 - `src/hooks/usePositionNarration.degrade.test.ts`
 - `src/hooks/usePositionNarration.test.ts`
 - `src/hooks/useReviewPlayback.test.ts`
+- `src/hooks/useStrictNarration.finished.test.ts`
 - `src/hooks/useStrictNarration.test.tsx`
 - `src/hooks/useTeachWalkthrough.test.tsx`
 - `src/hooks/useWalkthroughRunner.test.tsx`
@@ -371,6 +373,7 @@
 - `src/services/voiceService.overlapPacing.test.ts`
 - `src/services/voiceService.sentenceFirst.test.ts`
 - `src/services/voiceService.speakWhenIdle.test.ts`
+- `src/services/voiceService.stopWhileWaiting.test.ts`
 - `src/services/voiceService.test.ts`
 - `src/services/voiceService.untilQuiet.test.ts`
 - `src/services/voiceServiceLegacyPref.test.ts`

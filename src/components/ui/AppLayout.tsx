@@ -1,4 +1,4 @@
-import { useCallback, useState, useRef, useEffect, Suspense } from 'react';
+import { useCallback, useState, useRef, useEffect, useLayoutEffect, Suspense } from 'react';
 import { PageFallback } from './PageFallback';
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import { usePullToRefresh, PULL_TO_REFRESH_THRESHOLD_PX } from '../../hooks/usePullToRefresh';
@@ -169,18 +169,32 @@ export function AppLayout(): JSX.Element {
   // reconstruct navigation flow from the audit log alone — joins with
   // coach-hub-tile-clicked etc. for a "what did the user actually tap?"
   // story without speculation.
+  // Stop any in-flight narration the moment the route changes — leaving a
+  // lesson/coach surface must silence its voice immediately, even if the
+  // unmounting component's own cleanup races the navigation (David 2026-06-18
+  // "the narration is not stopping when I leave the tab").
+  //
+  // A LAYOUT effect, deliberately: it runs before ANY passive effect of the
+  // destination page. A real stop() now also cancels lines still WAITING to
+  // speak (voiceService.cancelEpoch, 2026-10-08), so it must land before the
+  // new page asks for its first line — as a passive effect here it ran AFTER
+  // the children's (React runs parent effects last) and would have cancelled
+  // the destination's own opening line.
+  const stopRouteRef = useRef<string>('');
+  useLayoutEffect(() => {
+    const path = location.pathname + location.search + location.hash;
+    if (path === stopRouteRef.current) return;
+    const first = stopRouteRef.current === '';
+    stopRouteRef.current = path;
+    if (!first) voiceService.stop();
+  }, [location.pathname, location.search, location.hash]);
+
   const lastRouteRef = useRef<string>('');
   useEffect(() => {
     const path = location.pathname + location.search + location.hash;
     if (path === lastRouteRef.current) return;
     const from = lastRouteRef.current || '(initial)';
     lastRouteRef.current = path;
-    // Stop any in-flight narration the moment the route changes — leaving a
-    // lesson/coach surface must silence its voice immediately, even if the
-    // unmounting component's own cleanup races the navigation (David 2026-06-18
-    // "the narration is not stopping when I leave the tab"). Each destination
-    // re-initiates its own voice on mount, so a blanket stop here is safe.
-    if (from !== '(initial)') voiceService.stop();
     void logAppAudit({
       kind: 'route-changed',
       category: 'app',
