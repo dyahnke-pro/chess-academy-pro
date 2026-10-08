@@ -1,0 +1,219 @@
+/**
+ * chatTurnCodeReader — THE SENTENCE COMPUTER (2026-10-08, David: "teach a
+ * computer how to break apart a sentence … placing the words into noun verb
+ * adverb slots to understand what is being asked").
+ *
+ * It runs FIRST in the door, before the model reader, and it can do the one
+ * thing the model reader cannot: look at the board. Each word is tagged into
+ * a slot — the ASK (why / whether / which / what-if), the ACTION (take, push,
+ * sacrifice, castle…), the THING (a piece, a square, a move), the OPTIONS
+ * ("X or Y"), WHEN (now, or a move already made) — and the slots are resolved
+ * against the legal moves into the SAME closed form every reader fills
+ * (`ChatTurn`). One vocabulary, one form, one validation.
+ *
+ * It answers only what it can read for certain. Anything else returns null and
+ * the model reads it; a reading neither can make is asked back. It never
+ * guesses: two legal moves that fit the words are not one move.
+ */
+import { Chess, type Move } from 'chess.js';
+import type { BoardContext, ChatTurn, PieceLetter, Referent } from './chatTurn';
+
+// ─── WORDS → SLOTS ─────────────────────────────────────────────────────────
+
+/** Voice and typing slips that change what a chess sentence means. */
+const SLIPS: ReadonlyArray<[RegExp, string]> = [
+  [/\bnights?\b/gi, 'knight'],
+  [/\bponds?\b/gi, 'pawn'],
+  [/\bporn\b/gi, 'pawn'],
+  [/\bblender\b/gi, 'blunder'],
+  [/\bbishops?\b/gi, 'bishop'],
+];
+
+const PIECE_WORD: Record<string, PieceLetter> = {
+  pawn: 'p', pawns: 'p', knight: 'n', knights: 'n', horse: 'n', bishop: 'b',
+  rook: 'r', rooks: 'r', castle: 'r', queen: 'q', king: 'k',
+};
+
+export type Ask = 'why' | 'whether' | 'which' | 'what-if' | 'how-good' | 'none';
+export type Action = 'capture' | 'push' | 'sacrifice' | 'castle' | 'move' | 'none';
+
+export interface Slots {
+  ask: Ask;
+  action: Action;
+  /** The move was already made (past tense, "was that", "did I"). */
+  past: boolean;
+  /** "best" / "better" — the question weighs a move against the best. */
+  judged: boolean;
+  /** SAN tokens typed as such ("Ne4", "O-O"). */
+  sans: string[];
+  /** Squares named ("on h7", "to d5"). */
+  squares: string[];
+  /** Pieces named, in order. */
+  pieces: PieceLetter[];
+  /** File letters named as pawns ("the e or d pawn"). */
+  files: string[];
+  /** The sentence offers alternatives ("X or Y"). */
+  options: boolean;
+  negated: boolean;
+}
+
+const SAN_TOKEN = /\b(?:O-O(?:-O)?|[KQRBN][a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h]x[a-h][1-8](?:=[QRBN])?[+#]?|[a-h][1-8](?:=[QRBN])?[+#]?)\b/g;
+
+export function tagSlots(raw: string): Slots {
+  let text = raw.replace(/[’‘]/g, "'").replace(/\s+/g, ' ').trim();
+  for (const [re, to] of SLIPS) text = text.replace(re, to);
+  // "knight e 4" / "night e4" / "knight to e4" → keep the piece, join the square.
+  text = text.replace(/\b([a-h])\s+([1-8])\b/gi, '$1$2');
+  const lower = text.toLowerCase();
+
+  const ask: Ask =
+    /^\s*why\b|\bhow come\b/.test(lower) ? 'why'
+      : /^\s*(?:what if|what about|what happens if)\b/.test(lower) ? 'what-if'
+        : /^\s*(?:which|better to)\b|\bor\b.*\?*$/.test(lower) && /\bor\b/.test(lower) ? 'which'
+          : /^\s*how (?:good|bad) (?:is|was)\b|\bhow (?:was|is) (?:that|this|it) a\b/.test(lower) ? 'how-good'
+            : /^\s*(?:is|was|are|were|should|can|could|do|does|did|would|will)\b|\bright\??$|\bok(?:ay)?\??$|\bsound\??$|\bi'?m thinking\b|\bthinking (?:about|of)\b/.test(lower) ? 'whether'
+              : 'none';
+
+  const action: Action =
+    /\bsac(?:rifice|k)?\b/.test(lower) ? 'sacrifice'
+      : /\b(?:take|takes|taking|took|capture|captures|capturing|grab|win)\b/.test(lower) ? 'capture'
+        : /\b(?:push|pushing|pushed|advance)\b/.test(lower) ? 'push'
+          : /\b(?:castle|castling|castled)\b(?!\s+on\b)/.test(lower) && !/\b[a-h][1-8]\b/.test(lower) ? 'castle'
+            : /\b(?:move|moving|moved|go|bring|play|played|playing)\b/.test(lower) ? 'move'
+              : 'none';
+
+  const past = /\b(?:was|were|did|played|took|pushed|moved|castled|sacrificed|made)\b/.test(lower)
+    || /\bhow (?:was|is) (?:that|this) a\b/.test(lower);
+  const judged = /\b(?:best|better|good|bad|blunder|mistake|correct|wrong|ok(?:ay)?|sound)\b/.test(lower);
+
+  // A bare square is kept as a square; it becomes a pawn move only when the
+  // board says a pawn can go there (or went there).
+  const sans = (text.match(SAN_TOKEN) ?? []).filter((t) => !/^[a-h][1-8]$/.test(t));
+  const squares = [...lower.matchAll(/\b([a-h][1-8])\b/g)].map((m) => m[1]);
+  const pieces: PieceLetter[] = [];
+  for (const w of lower.split(/[^a-z']+/)) {
+    const p = PIECE_WORD[w];
+    // "castle" is a rook only when it is not the action.
+    if (p && !(w === 'castle' && action === 'castle')) pieces.push(p);
+  }
+  const files = [...lower.matchAll(/\b(?:the\s+)?([a-h])\s*(?:-|or|\s)?(?:pawn)?\b(?=[^a-z]*(?:or|pawn))/g)]
+    .map((m) => m[1]).filter((f, i, a) => a.indexOf(f) === i);
+
+  return {
+    ask, action, past, judged,
+    sans, squares, pieces, files,
+    options: /\bor\b/.test(lower),
+    negated: /\b(?:not|n't|never)\b/.test(lower),
+  };
+}
+
+// ─── SLOTS → MOVES, ON THE BOARD ───────────────────────────────────────────
+
+/** Legal moves now matching what the words say about one move. */
+function movesMatching(chess: Chess, s: { piece?: PieceLetter; to?: string; capture?: boolean; file?: string; castle?: boolean }): Move[] {
+  return chess.moves({ verbose: true }).filter((m) => {
+    if (s.castle) return m.san.startsWith('O-O');
+    if (s.piece && m.piece !== s.piece) return false;
+    if (s.to && m.to !== s.to) return false;
+    if (s.capture && !m.captured) return false;
+    if (s.file && (m.piece !== 'p' || m.from[0] !== s.file)) return false;
+    return true;
+  });
+}
+
+/** One SAN for a set of candidates, or null when the words fit more than one. */
+function one(moves: Move[]): string | null {
+  const uniq = [...new Set(moves.map((m) => m.san))];
+  return uniq.length === 1 ? uniq[0] : null;
+}
+
+/** The alternatives of a "which" question, as two SANs, or null. */
+function resolveOptions(chess: Chess, slots: Slots): string[] | null {
+  // "Nf3 or Nc3?"
+  if (slots.sans.length >= 2) return slots.sans.slice(0, 2);
+  const capture = slots.action === 'capture' || slots.action === 'sacrifice';
+  // "take with the bishop or the pawn" — each piece's capture; when both can
+  // take, they are taking the same thing: prefer a shared target.
+  if (slots.pieces.length >= 2) {
+    const [a, b] = slots.pieces;
+    const ma = movesMatching(chess, { piece: a, capture });
+    const mb = movesMatching(chess, { piece: b, capture });
+    const shared = ma.map((m) => m.to).filter((t) => mb.some((n) => n.to === t));
+    const target = shared.length === 1 ? shared[0] : undefined;
+    const sa = one(target ? ma.filter((m) => m.to === target) : ma);
+    const sb = one(target ? mb.filter((m) => m.to === target) : mb);
+    return sa && sb && sa !== sb ? [sa, sb] : null;
+  }
+  // "push the e or d pawn"
+  if (slots.files.length >= 2) {
+    const pick = (f: string): string | null => {
+      const ms = movesMatching(chess, { file: f });
+      // A push names the pawn, not the distance: one step when two are legal.
+      const single = ms.filter((m) => !m.captured && Math.abs(Number(m.to[1]) - Number(m.from[1])) === 1);
+      return one(single.length ? single : ms);
+    };
+    const sa = pick(slots.files[0]);
+    const sb = pick(slots.files[1]);
+    return sa && sb && sa !== sb ? [sa, sb] : null;
+  }
+  return null;
+}
+
+/** The one move a sentence names, legal now, or null. */
+function resolveNamedMoveNow(chess: Chess, slots: Slots): string | null {
+  if (slots.sans.length === 1) {
+    try { const m = new Chess(chess.fen()).move(slots.sans[0]); if (m) return m.san; } catch { /* not legal now */ }
+  }
+  if (slots.action === 'castle') return one(movesMatching(chess, { castle: true }).filter((m) => m.san === 'O-O')) ?? one(movesMatching(chess, { castle: true }));
+  const to = slots.squares[slots.squares.length - 1];
+  const piece = slots.pieces[0];
+  const capture = slots.action === 'capture' || slots.action === 'sacrifice';
+  if (to) return one(movesMatching(chess, { piece, to, capture: capture || undefined }));
+  return null;
+}
+
+// ─── THE READING ───────────────────────────────────────────────────────────
+
+/**
+ * Read a turn in code, or return null for the model. Only the move questions
+ * the model cannot place without the board are read here: a choice between
+ * two moves, and a question about one named move.
+ */
+export function readTurnInCode(text: string, board: BoardContext): ChatTurn | null {
+  if (!board.fen || text.length > 160) return null;
+  let chess: Chess;
+  try { chess = new Chess(board.fen); } catch { return null; }
+  const slots = tagSlots(text);
+  if (slots.negated && slots.ask !== 'why') return null;
+
+  // "bishop or pawn?", "e or d pawn?", "Nf3 or Nc3?"
+  if (slots.options && (slots.ask === 'which' || slots.ask === 'whether')) {
+    const pair = resolveOptions(chess, slots);
+    if (pair) {
+      return { kind: 'compare-moves', referents: pair.map((san): Referent => ({ type: 'move', san })), seat: 'me', topic: null };
+    }
+    // "was h3 good or an unnecessary pawn move?" offers words, not two moves:
+    // read on as a question about the one move it names.
+  }
+
+  const hasMoveWords = slots.sans.length > 0 || slots.squares.length > 0 || slots.action !== 'none';
+  if (!hasMoveWords || slots.ask === 'none') return null;
+
+  // A move already made: judge it where it was played (validation checks it
+  // is on the tape).
+  const pawnSan = slots.sans.length === 0 && slots.pieces.length === 0 && slots.squares.length === 1 ? slots.squares[0] : null;
+  const named = slots.sans.length === 1 ? slots.sans[0] : pawnSan;
+  if (slots.past && named) {
+    return { kind: 'retrospective-move', referents: [{ type: 'move', san: named }], seat: 'me', topic: null };
+  }
+
+  const now = resolveNamedMoveNow(chess, slots);
+  if (!now) {
+    // Named, but not playable now: a move already made ("why was Nf1 best?").
+    return named ? { kind: 'retrospective-move', referents: [{ type: 'move', san: named }], seat: 'me', topic: null } : null;
+  }
+  // Every question about one move still to play — "why is Ne4 best?", "is
+  // Qf3 ok?", "can I sac on h7?", "what if I push c5?" — is answered by
+  // weighing THAT move on the board now.
+  return { kind: 'candidate-move', referents: [{ type: 'move', san: now }], seat: 'me', topic: null };
+}

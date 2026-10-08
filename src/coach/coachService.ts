@@ -40,6 +40,7 @@ import { loadAnnotationContextForLive } from './sources/annotationContext';
 import { buildDanyaTeachingBlock } from '../services/danyaTeachingService';
 import { classifyPhase } from '../services/gamePhaseService';
 import { detectOpening } from '../services/openingDetectionService';
+import { dnaPass } from '../services/dnaRules';
 import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
 import { loadModelGamesForLive } from './sources/modelGames';
 import { loadPlayerGamesForLive, resolvePlayerIdFromAsk } from './sources/playerGames';
@@ -2425,17 +2426,17 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
       for (const part of parts) answers.push(await askImpl({ ...input, ask: part }, options));
       const lines = answers.flatMap((a) => a.lines ?? []);
       const offers = answers.flatMap((a) => a.actionOffer ?? []);
-      answer = {
+      answer = dnaOnAnswer({
         ...answers[answers.length - 1],
         text: answers.map((a) => a.text.trim()).filter(Boolean).join('\n\n'),
         toolCallIds: answers.flatMap((a) => a.toolCallIds),
         dispatchedToolNames: answers.flatMap((a) => a.dispatchedToolNames),
         ...(lines.length ? { lines } : {}),
         ...(offers.length ? { actionOffer: offers } : {}),
-      };
+      }, input.liveState.surface);
       return answer;
     }
-    answer = await askImpl(input, options);
+    answer = dnaOnAnswer(await askImpl(input, options), input.liveState.surface);
     return answer;
   } catch (e) {
     failure = e;
@@ -2463,6 +2464,24 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
       }),
     });
   }
+}
+
+/** Answers whose job IS the interface or a quoted passage: the DNA's
+ *  "no interface talk" rule would cut the answer itself ("tap Resume"). */
+const DNA_EXEMPT_INTENTS: ReadonlySet<string> = new Set(['app-help', 'settings', 'teaching-method', 'book-teaching']);
+
+/**
+ * THE DNA ON THE WRITTEN ANSWER (David 2026-10-08: "make sure all narrations
+ * pass through the DNA outline"). Every SPOKEN line already passes the DNA in
+ * `voiceService.speakInternal`; the chat bubble's text never did, so it could
+ * show "12.Nf3" or open with praise. The same pass, at the one exit every
+ * coach answer leaves through. A pass that would leave nothing keeps the
+ * answer — the student never gets a blank reply.
+ */
+export function dnaOnAnswer(answer: CoachAnswer, surface: string): CoachAnswer {
+  if (answer.servedIntent && DNA_EXEMPT_INTENTS.has(answer.servedIntent)) return answer;
+  const r = dnaPass(answer.text, { kid: surface === 'kid' });
+  return r.text && r.text !== answer.text ? { ...answer, text: r.text } : answer;
 }
 
 /** Single-method service object. Surfaces import this and call
