@@ -15,7 +15,7 @@
 //
 // PURE: every computer here is pure; this module adds no chess of its own.
 import type { Color } from 'chess.js';
-import { NO_PROOF, type FactProof } from './proof';
+import { NO_PROOF, squaresProof, type FactProof } from './proof';
 import type { FactStakes } from './factStakes';
 import type { SpokenLine } from './voicePackage';
 import { findPinBreaks, pinBreakLine, pinBreakProof } from './pinBreak';
@@ -163,14 +163,14 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       const squares = [t.square, t.attackerSquare];
       const line = `Careful — your ${PIECE_NAMES[t.piece] ?? 'piece'} on ${t.square} is attacked and has no safe square.`;
       const { text, proof } = provenThreatLine(line, fen, student, squares);
-      return { text, proof: proof ?? NO_PROOF.stated, squares: [...new Set([...squares, ...(proof?.squares ?? [])])], key: `trapped:${t.square}`, stakes: threatStakes(fen, student, squares) ?? undefined };
+      return { text, proof: proof ?? squaresProof(text, squares) ?? NO_PROOF.stated, squares: [...new Set([...squares, ...(proof?.squares ?? [])])], key: `trapped:${t.square}`, stakes: threatStakes(fen, student, squares) ?? undefined };
     }),
     surfaces: { learn: LEARN, review: { wired: 'services/reviewTeachingPoints.ts' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   threatCost: {
     read: ({ line, fen, student, squares }) => safe(() => {
       const { text, proof } = provenThreatLine(line, fen, student, squares);
-      return { text, proof: proof ?? NO_PROOF.stated, squares: [...new Set([...squares, ...(proof?.squares ?? [])])], key: `threat:${squares.join('')}`, stakes: threatStakes(fen, student, squares) ?? undefined };
+      return { text, proof: proof ?? squaresProof(text, squares) ?? NO_PROOF.stated, squares: [...new Set([...squares, ...(proof?.squares ?? [])])], key: `threat:${squares.join('')}`, stakes: threatStakes(fen, student, squares) ?? undefined };
     }),
     surfaces: { learn: LEARN, review: { not: 'owed — Review warns from the stored threat, not this proof' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },

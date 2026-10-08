@@ -9,7 +9,7 @@
 //
 // Pure: the engine reads are handed in by the page.
 import { CAPTURE_VALUE } from './pieceValues';
-import { lineProof, NO_PROOF, type FactProof } from './proof';
+import { lineProof, legalLineProof, squaresProof, NO_PROOF, type FactProof, type Proof } from './proof';
 import { shareAdverb } from '../utils/shareWords';
 import { andList } from '../utils/andList';
 import { countWords } from '../utils/countWords';
@@ -44,7 +44,7 @@ import type { PieceValue } from './pieceValueRead';
 import { kneeJerk } from './kneeJerk';
 import { autopilotGuard, blunderCheck, keepPressing } from './safetyHabits';
 import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted, kingCourse } from './endgamePawnReads';
-import { readZugzwang, zugzwangSentence } from './zugzwang';
+import { readZugzwang, zugzwangSentence, type ZugzwangRead } from './zugzwang';
 import { strongChoice, warmStrongChoice } from './strongChoice';
 import { stalemateWatch } from './stalemateWatch';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
@@ -163,7 +163,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
       const rc = recaptureChoice(i.fenBefore, i.san, bestRe, i.reply);
       // The right recapture chosen (no better one named) answers the
       // capture-toward-centre question — held (P4 dual-use).
-      if (rc) out.push({ lane: 'recapture', proof: NO_PROOF.stated, text: rc, squares: [to], claims: [`recapture-${to}`], event: null, arrows: [], ...(bestRe ? {} : { evidence: { tag: 'capture-toward-centre' as const, posedImportance: 60 } }) });
+      if (rc) out.push({ lane: 'recapture', proof: squaresProof(rc, [to]) ?? NO_PROOF.stated, text: rc, squares: [to], claims: [`recapture-${to}`], event: null, arrows: [], ...(bestRe ? {} : { evidence: { tag: 'capture-toward-centre' as const, posedImportance: 60 } }) });
     }
   } catch { /* a bonus, never a blocker */ }
 
@@ -177,8 +177,8 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
     if (i.bestSan && bare(i.bestSan) === bare(i.san) && i.bestLine?.moves?.length) {
       const ml = mateLine(i.fenBefore, i.bestLine.moves, me, i.san);
       const w = ml ? null : winningLine(i.fenBefore, i.san, i.bestLine.moves, me, priorFromHistory(i.history, i.fenBefore));
-      if (ml) out.push({ lane: 'movePoint', proof: lineProof({ fen: i.fenBefore, sans: ml.sans }) ?? NO_PROOF.stated, text: ml.text, squares: [to, ...ml.taken], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_mate_line', props: { surface: 'coach-teach', quiet: ml.quiet } }, arrows: mateArrows(ml, me) });
-      if (w) out.push({ lane: 'movePoint', proof: lineProof({ fen: i.fenBefore, sans: w.sans }) ?? NO_PROOF.stated, text: `That wins ${w.what}: ${andList(w.sans)}.`, squares: [to], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: w.arrows });
+      if (ml) out.push({ lane: 'movePoint', proof: lineProof({ fen: i.fenBefore, sans: ml.sans }) ?? squaresProof(ml.text, [to, ...ml.taken]) ?? NO_PROOF.stated, text: ml.text, squares: [to, ...ml.taken], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_mate_line', props: { surface: 'coach-teach', quiet: ml.quiet } }, arrows: mateArrows(ml, me) });
+      if (w) out.push({ lane: 'movePoint', proof: lineProof({ fen: i.fenBefore, sans: w.sans }) ?? squaresProof(`That wins ${w.what}`, [to]) ?? NO_PROOF.stated, text: `That wins ${w.what}: ${andList(w.sans)}.`, squares: [to], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: w.arrows });
     }
   } catch { /* a bonus, never a blocker */ }
 
@@ -205,7 +205,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   // move, and it records: the board asked who takes the file.
   if (i.cpLoss < 50) {
     const fc = fileClaimed(i.fenBefore, i.san);
-    if (fc) out.push({ lane: 'fileRace', proof: NO_PROOF.stated, text: fc.text, squares: [to], claims: [`file-race:${fc.file}`], event: { name: 'coach_file_claimed', props: { surface: 'coach-teach', contested: fc.contested } }, arrows: [], evidence: { tag: 'passive-rook', posedImportance: 60 } });
+    if (fc) out.push({ lane: 'fileRace', proof: squaresProof(fc.text, [to]) ?? NO_PROOF.stated, text: fc.text, squares: [to], claims: [`file-race:${fc.file}`], event: { name: 'coach_file_claimed', props: { surface: 'coach-teach', contested: fc.contested } }, arrows: [], evidence: { tag: 'passive-rook', posedImportance: 60 } });
   }
 
   // THE SAFETY HABITS (P3 method beats) — earned only by what the board did.
@@ -220,12 +220,12 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
     const st = spareTempoWasted(i.fenBefore, i.san, i.bestSan, faultCp);
     if (st) out.push({ lane: 'pawnEnding', proof: NO_PROOF.method, text: st, squares: [to], claims: ['method:spare-tempo'], event: { name: 'coach_spare_tempo_taught', props: { surface: 'coach-teach' } }, arrows: [] });
     const pe = pawnEndingTrade(i.fenBefore, i.san, i.reply, faultCp, i.cpAfter);
-    if (pe) out.push({ lane: 'pawnEnding', proof: NO_PROOF.stated, text: pe.text, squares: [to], claims: ['method:pawn-ending-trade'], event: { name: 'coach_pawn_ending_trade', props: { surface: 'coach-teach', verdict: pe.verdict } }, arrows: [] });
+    if (pe) out.push({ lane: 'pawnEnding', proof: (i.reply ? legalLineProof(i.fenBefore, [i.san, i.reply]) : null) ?? squaresProof(pe.text, [to]) ?? NO_PROOF.stated, text: pe.text, squares: [to], claims: ['method:pawn-ending-trade'], event: { name: 'coach_pawn_ending_trade', props: { surface: 'coach-teach', verdict: pe.verdict } }, arrows: [] });
     try {
       const me: 'w' | 'b' = i.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
       const c = new Chess(i.fenBefore); c.move(i.san);
       const decoy = outsidePasserDecoy(c.fen(), me);
-      if (decoy) out.push({ lane: 'pawnEnding', proof: NO_PROOF.stated, text: decoy.text, squares: decoy.squares, claims: [`decoy:${decoy.passer[0]}`], event: { name: 'coach_outside_passer_decoy', props: { surface: 'coach-teach' } }, arrows: [] });
+      if (decoy) out.push({ lane: 'pawnEnding', proof: squaresProof(decoy.text, decoy.squares) ?? NO_PROOF.stated, text: decoy.text, squares: decoy.squares, claims: [`decoy:${decoy.passer[0]}`], event: { name: 'coach_outside_passer_decoy', props: { surface: 'coach-teach' } }, arrows: [] });
     } catch { /* a bonus, never a blocker */ }
     const kp = keepPressing(i.fenBefore, i.san, i.bestSan, faultCp, i.cpAfter);
     if (kp) out.push({ lane: 'keepPressing', proof: NO_PROOF.method, text: kp, squares: [], claims: ['method:keep-pressing'], event: { name: 'coach_keep_pressing_taught', props: { surface: 'coach-teach' } }, arrows: [] });
@@ -235,7 +235,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   // completed, judged by the first reason the board supports.
   try {
     const tj = tradeJudgement(i.fenBefore, i.san, i.reply, new Chess(i.fenBefore).turn(), faultCp, i.evalBefore, ((pm) => (pm ? lastMoveFromSan(pm.fenBefore, pm.san) : null))(priorFromHistory(i.history, i.fenBefore)));
-    if (tj) out.push({ lane: 'trade', proof: NO_PROOF.stated, text: tj.text, squares: tj.squares, claims: [`trade-${tj.reason}`, `capture:${to}:${i.history.length}`, ...(tj.reason === 'their-best' ? [`piece-quality:${to}`] : [])], event: { name: 'coach_trade_judged', props: { surface: 'coach-teach', reason: tj.reason } }, arrows: [],
+    if (tj) out.push({ lane: 'trade', proof: (i.reply ? legalLineProof(i.fenBefore, [i.san, i.reply]) : null) ?? squaresProof(tj.text, tj.squares) ?? NO_PROOF.stated, text: tj.text, squares: tj.squares, claims: [`trade-${tj.reason}`, `capture:${to}:${i.history.length}`, ...(tj.reason === 'their-best' ? [`piece-quality:${to}`] : [])], event: { name: 'coach_trade_judged', props: { surface: 'coach-teach', reason: tj.reason } }, arrows: [],
       // A good trade the student chose is the 'bad-trade' question answered well.
       ...(tj.reason !== 'behind' && tj.reason !== 'gave-best' && tj.reason !== 'bad' ? { evidence: { tag: 'bad-trade' as const, posedImportance: 60 } } : {}) });
   } catch { /* a bonus, never a blocker */ }
@@ -251,7 +251,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
       const early = new Chess();
       for (const san of i.history.slice(0, -3)) early.move(san);
       const t = readTiming(early.fen(), i.fenBefore, i.san);
-      if (t) out.push({ lane: 'timing', proof: NO_PROOF.stated, text: `${timingClause(t)}.`, squares: [to, t.square], claims: [`timing:${i.san}`], event: { name: 'coach_move_timing_named', props: { surface: 'coach-teach' } }, arrows: [],
+      if (t) out.push({ lane: 'timing', proof: squaresProof(timingClause(t), [to, t.square]) ?? NO_PROOF.stated, text: `${timingClause(t)}.`, squares: [to, t.square], claims: [`timing:${i.san}`], event: { name: 'coach_move_timing_named', props: { surface: 'coach-teach' } }, arrows: [],
         // A pawn push played at the right moment answers the mistimed-break question.
         ...(/^[a-h]/.test(i.san) ? { evidence: { tag: 'mistimed-pawn-break' as const, posedImportance: 70 } } : {}) });
     } catch { /* a bonus, never a blocker */ }
@@ -263,7 +263,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
     const ka = kingAttack(i.fenBefore, i.san);
     if (ka) {
       out.push({
-        lane: 'kingAttack', proof: NO_PROOF.stated, text: ka.text, squares: ka.squares,
+        lane: 'kingAttack', proof: squaresProof(ka.text, ka.squares) ?? NO_PROOF.stated, text: ka.text, squares: ka.squares,
         // "Qe1 heads for their king — Qg3 next" and "Qe1 prepares Qg3" are one idea.
         claims: [`king-attack-${ka.kind}`, ...(ka.next ? [`prepares:${ka.next.uci}`] : [])],
         event: { name: 'coach_king_attack_named', props: { surface: 'coach-teach', kind: ka.kind } },
@@ -284,7 +284,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
       const live = boardAfter(i.fenBefore, i.san, i.reply);
       const stillThere = !!hitSq && !!live?.get(hitSq as never);
       out.push({
-        lane: 'ruleException', proof: NO_PROOF.stated, text: rx.text, squares: rx.squares, claims: [`rule-${rx.rule}-${to}`],
+        lane: 'ruleException', proof: squaresProof(rx.text, rx.squares) ?? NO_PROOF.stated, text: rx.text, squares: rx.squares, claims: [`rule-${rx.rule}-${to}`],
         event: { name: 'coach_rule_exception_named', props: { surface: 'coach-teach', rule: rx.rule } },
         arrows: stillThere ? [{ from: to, to: hitSq, role: 'vision', source: 'learn.ruleException' }] : [],
       });
@@ -306,7 +306,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
           // Their threat, red — only while it is still coming (not once played).
           const played = i.reply && i.reply.replace(/^…/, '') === fa.threat.san;
           out.push({
-            lane: 'falseAlarm', proof: NO_PROOF.stated, text: fa.text, squares: fa.squares, claims: [`false-alarm-${fa.threat.landing}`],
+            lane: 'falseAlarm', proof: squaresProof(fa.text, fa.squares) ?? NO_PROOF.stated, text: fa.text, squares: fa.squares, claims: [`false-alarm-${fa.threat.landing}`],
             event: { name: 'coach_false_alarm_named', props: { surface: 'coach-teach', kind: fa.threat.kind } },
             arrows: played ? [] : [{ from: fa.threat.from, to: fa.threat.landing, role: 'threat', source: 'learn.falseAlarm' }],
             // A threat rightly ignored (the engine's move, and not worse) is the
@@ -371,7 +371,7 @@ export function stalemateTeaching(fen: string, student: 'w' | 'b'): TeachingHint
   const w = stalemateWatch(fen, student);
   if (!w) return null;
   return {
-    lane: 'stalemate', proof: NO_PROOF.stated, text: w.text, squares: w.squares, claims: [`stalemate-watch:${fen.split(' ')[0]}`],
+    lane: 'stalemate', proof: squaresProof(w.text, w.squares) ?? NO_PROOF.stated, text: w.text, squares: w.squares, claims: [`stalemate-watch:${fen.split(' ')[0]}`],
     event: { name: 'coach_stalemate_warned', props: { surface: 'coach-teach', moves: w.moves.length } },
     arrows: [],
   };
@@ -409,7 +409,7 @@ export function splitPositionTeaching(fen: string, student: 'w' | 'b'): Teaching
   const sp = splitPosition(fen, student);
   if (!sp) return null;
   return {
-    lane: 'splitPosition', proof: NO_PROOF.stated, text: sp.text, squares: sp.squares, claims: ['split-position'],
+    lane: 'splitPosition', proof: squaresProof(sp.text, sp.squares) ?? NO_PROOF.stated, text: sp.text, squares: sp.squares, claims: ['split-position'],
     event: { name: 'coach_split_position_taught', props: { surface: 'coach-teach' } },
     arrows: [],
   };
@@ -576,7 +576,7 @@ export function trapAheadTeaching(fen: string, student: 'w' | 'b'): TeachingHint
     }
   } catch { /* no arrows — the line still speaks */ }
   return {
-    lane: 'trapAhead', proof: NO_PROOF.stated,
+    lane: 'trapAhead', proof: legalLineProof(fen, [t.san, ...t.punish]) ?? (/^[a-h][1-8]$/.test(to) ? squaresProof(moveNoun, [to]) : null) ?? NO_PROOF.stated,
     // How often, in words — the share itself is never spoken (shareWords.ts).
     text: `Careful here: ${moveNoun} looks natural, and club players ${shareAdverb(t.freqPct)} play it — but it walks into a known trap.`,
     squares: /^[a-h][1-8]$/.test(to) ? [to] : [], claims: [t.key],
@@ -912,13 +912,21 @@ export function announcesTheMove(spoke: readonly LearnLane[]): boolean {
   return spoke.some((l) => SAID_BEFORE_MOVE.has(l));
 }
 
+/** The tablebase's two results ARE the proof of zugzwang: what the student's
+ *  turn is worth, against what passing would be worth. Exact, never engine. */
+function zugzwangProof(z: ZugzwangRead): Proof {
+  const word = (r: number): string => (r > 0 ? 'you win' : r < 0 ? 'you lose' : 'it is a draw');
+  const body = `with the move ${word(z.onMove)}, but if you could pass ${word(z.ifPassed)}`;
+  return { kind: 'count', exact: true, short: body, full: body };
+}
+
 /** ZUGZWANG at the student's turn (tablebase, ≤7 pieces) — the fact that
  *  decides pawn endings, said once per position. Null out of range. */
 export async function zugzwangTeaching(fen: string): Promise<TeachingHint | null> {
   if (fen.split(' ')[0].replace(/[^a-zA-Z]/g, '').length > 7) return null;
   const z = await readZugzwang(fen);
   if (!z) return null;
-  return { lane: 'pawnEnding', proof: NO_PROOF.stated, text: zugzwangSentence(z, true), squares: [], claims: [`zugzwang:${fen.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_zugzwang_named', props: { surface: 'coach-teach', mutual: z.mutual } }, arrows: [] };
+  return { lane: 'pawnEnding', proof: zugzwangProof(z), text: zugzwangSentence(z, true), squares: [], claims: [`zugzwang:${fen.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_zugzwang_named', props: { surface: 'coach-teach', mutual: z.mutual } }, arrows: [] };
 }
 
 /** CHART A COURSE at the student's turn (kings and pawns only): the king's
@@ -926,7 +934,7 @@ export async function zugzwangTeaching(fen: string): Promise<TeachingHint | null
 export function kingCourseTeaching(fen: string, student: 'w' | 'b'): TeachingHint | null {
   const kc = kingCourse(fen, student);
   if (!kc) return null;
-  return { lane: 'pawnEnding', proof: NO_PROOF.stated, text: kc.text, squares: [kc.target], claims: ['king-course'], event: { name: 'coach_king_course', props: { surface: 'coach-teach' } }, arrows: [] };
+  return { lane: 'pawnEnding', proof: squaresProof(kc.text, [kc.target]) ?? NO_PROOF.stated, text: kc.text, squares: [kc.target], claims: ['king-course'], event: { name: 'coach_king_course', props: { surface: 'coach-teach' } }, arrows: [] };
 }
 
 // ─── THE THREAD ACROSS MOVES + THE STUDENT'S SLIPS (David 2026-10-06) ──────
