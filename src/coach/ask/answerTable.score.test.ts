@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { REAL_QUESTIONS } from './realQuestions.fixture';
+import { REAL_QUESTIONS } from './realQuestions.test.fixture';
 import { KIND_LANES, laneForKind, steerForKind } from './answerTable';
 import { readQuestion, type AskMoment } from './readQuestion';
 import { fastPathLane, firingLanes } from '../chatTurn';

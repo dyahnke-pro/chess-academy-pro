@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { readQuestion, type AskMoment } from './readQuestion';
-import { REAL_QUESTIONS } from './realQuestions.fixture';
+import { REAL_QUESTIONS } from './realQuestions.test.fixture';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
 
 const BOARD_SCREENS = new Set(['play', 'learn', 'puzzle', 'review', 'opening']);
