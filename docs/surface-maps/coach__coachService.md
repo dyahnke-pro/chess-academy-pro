@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2607 lines · 67 exports · 30 importers · 32 tests · 15 audits**
+**2626 lines · 68 exports · 31 importers · 33 tests · 15 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,6 +22,7 @@
 - `src/coach/coachService.askText.test.ts`
 - `src/coach/coachService.boardVerdict.integration.test.ts`
 - `src/coach/coachService.bookTeaching.test.ts`
+- `src/coach/coachService.dnaAnswer.test.ts`
 - `src/coach/coachService.staleTactics.integration.test.ts`
 - `src/coach/coachService.tapeMove.test.ts`
 - `src/coach/dispatchCoachTurn.ts`
@@ -69,6 +70,11 @@
 - `src/coach/coachService.askText.test.ts:13`
 - `src/coach/coachService.askText.test.ts:16`
 - `src/coach/coachService.askText.test.ts:17`
+
+### `dnaOnAnswer` (function) — 3 call sites
+- `src/coach/coachService.dnaAnswer.test.ts:8`
+- `src/coach/coachService.dnaAnswer.test.ts:12`
+- `src/coach/coachService.dnaAnswer.test.ts:16`
 
 ### `coachService` (const) — 1 call site
 - `scripts/audit-coach-review-gaps.mjs:740`
@@ -795,6 +801,7 @@
 - `src/coach/coachService.askText.test.ts`
 - `src/coach/coachService.boardVerdict.integration.test.ts`
 - `src/coach/coachService.bookTeaching.test.ts`
+- `src/coach/coachService.dnaAnswer.test.ts`
 - `src/coach/coachService.staleTactics.integration.test.ts`
 - `src/coach/coachService.tapeMove.test.ts`
 - `src/coach/dispatchCoachTurn.test.ts`

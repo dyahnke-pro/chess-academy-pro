@@ -4,14 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**187 lines · 7 exports · 2 importers · 1 tests · 1 audits**
+**196 lines · 7 exports · 3 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:2629) — names `Reader`
+- **⏰ Standing notes** (CLAUDE.md:2750) — names `Reader`
+- **The standard post-deploy ritual** (CLAUDE.md:6307) — names `chatTurnParser`
 
 ## Who calls in
 
+- `src/coach/chatTurnEval.live.test.ts`
 - `src/coach/chatTurnParser.test.ts`
 - `src/coach/dispatchCoachTurn.ts`
 
@@ -38,17 +40,19 @@
 - `src/coach/chatTurnParser.test.ts:28`
 - `src/coach/chatTurnParser.test.ts:29`
 
-### `parseChatTurn` (function) — 7 call sites
+### `parseChatTurn` (function) — 8 call sites
+- `src/coach/chatTurnEval.live.test.ts:50`
 - `src/coach/chatTurnParser.test.ts:48`
 - `src/coach/chatTurnParser.test.ts:56`
 - `src/coach/chatTurnParser.test.ts:66`
 - `src/coach/chatTurnParser.test.ts:72`
 - `src/coach/chatTurnParser.test.ts:78`
 - `src/coach/chatTurnParser.test.ts:84`
-- `src/coach/dispatchCoachTurn.ts:95`
+- `src/coach/dispatchCoachTurn.ts:104`
 
 ## Tests
 
+- `src/coach/chatTurnEval.live.test.ts`
 - `src/coach/chatTurnParser.test.ts`
 
 ## Audits that reach it
