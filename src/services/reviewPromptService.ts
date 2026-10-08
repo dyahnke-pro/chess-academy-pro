@@ -3,7 +3,6 @@ import { db } from '../db/schema';
 import { useReviewPromptStore } from '../stores/reviewPromptStore';
 import { logAppAudit } from './appAuditor';
 import { reportQualifyingUse } from './referralService';
-import { APP_STORE_WRITE_REVIEW_URL } from '../utils/appStoreLinks';
 
 /**
  * reviewPromptService — the brain behind the two-step App Store review prompt.
@@ -11,15 +10,15 @@ import { APP_STORE_WRITE_REVIEW_URL } from '../utils/appStoreLinks';
  * STRATEGY (David 2026-06-28): never throw the store-review dialog at a user
  * cold. Instead, after a few GENUINE positive moments (a win — puzzle solved,
  * lesson mastered, game reviewed), show a soft in-app "Enjoying the app?" gate:
- *   - happy  → open the App Store write-a-review page
+ *   - happy  → Apple's in-app review dialog (the user never leaves the app)
  *   - unhappy → route to private feedback (the bug reaches David, NOT the rating)
  * This protects the public rating from users who hit a lurking bug, and only
  * asks people who've actually felt the value.
  *
- * Why the review PAGE and not Apple's in-app dialog (David 2026-10-08): the
- * dialog is rate-limited (~3×/year) and may silently not appear, and the app is
- * never told — a user who tapped "Yes, I love it" could see nothing at all. The
- * write-review page always opens because the user asked for it.
+ * The native dialog is RATE-LIMITED by Apple (~3×/year per user) and never
+ * appears in TestFlight builds; we ask once per device, so the cap rarely
+ * bites. Apple does not say whether it showed, so there is no fallback
+ * (David 2026-10-08 chose staying in the app over the write-review page).
  *
  * No reward for reviewing: Apple's guidelines (5.6) forbid incentivized
  * reviews, so the free-opening-for-a-review grant was removed the same day.
@@ -119,13 +118,13 @@ export async function recordPositiveMoment(source: string): Promise<boolean> {
   return true;
 }
 
-/** User said "yes, love it" — send them to the App Store review page. */
+/** User said "yes, love it" — request Apple's in-app review dialog. */
 export async function handlePositiveResponse(): Promise<void> {
   const state = await loadState();
   state.rated = true;
   await saveState(state);
-  void logAppAudit({ kind: 'review-prompt-positive', category: 'app', source: 'reviewPromptService', summary: 'opened App Store review page' });
-  requestStoreReview();
+  void logAppAudit({ kind: 'review-prompt-positive', category: 'app', source: 'reviewPromptService', summary: 'requested store review' });
+  await requestStoreReview();
 }
 
 /** User said "not really" — we route to feedback in the UI; record it here. */
@@ -136,18 +135,18 @@ export async function handleNegativeResponse(): Promise<void> {
   void logAppAudit({ kind: 'review-prompt-negative', category: 'app', source: 'reviewPromptService', summary: 'routed to feedback' });
 }
 
-/** Open the App Store write-a-review page. iOS only — the web app has no
- *  store listing and there is no Android listing yet. */
-export function requestStoreReview(): void {
-  if (Capacitor.getPlatform() !== 'ios') return;
+/** Request the native in-app review dialog (no-op on web — no native UI). */
+export async function requestStoreReview(): Promise<void> {
+  if (!Capacitor.isNativePlatform()) return;
   try {
-    window.location.href = APP_STORE_WRITE_REVIEW_URL;
+    const { InAppReview } = await import('@capacitor-community/in-app-review');
+    await InAppReview.requestReview();
   } catch (err) {
     void logAppAudit({
       kind: 'review-prompt-positive',
       category: 'app',
       source: 'reviewPromptService.requestStoreReview',
-      summary: `review page failed to open: ${err instanceof Error ? err.message : 'unknown'}`,
+      summary: `native review failed: ${err instanceof Error ? err.message : 'unknown'}`,
     });
   }
 }

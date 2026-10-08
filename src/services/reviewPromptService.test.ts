@@ -11,6 +11,8 @@ import {
 import { useReviewPromptStore } from '../stores/reviewPromptStore';
 
 vi.mock('./appAuditor', () => ({ logAppAudit: vi.fn() }));
+const requestReview = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
+vi.mock('@capacitor-community/in-app-review', () => ({ InAppReview: { requestReview } }));
 
 describe('reviewPromptService — two-step gate logic', () => {
   beforeEach(async () => {
@@ -56,40 +58,29 @@ describe('reviewPromptService — two-step gate logic', () => {
   });
 
   it('requestStoreReview no-ops safely on web (no native UI)', async () => {
-    expect(() => requestStoreReview()).not.toThrow();
+    await expect(requestStoreReview()).resolves.toBeUndefined();
   });
 });
 
-describe('reviewPromptService — "Yes, I love it" opens the App Store review page', () => {
-  const realLocation = window.location;
-  let href = '';
-  beforeEach(() => {
-    href = '';
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: { set href(v: string) { href = v; }, get href() { return href; } },
-    });
-  });
-  afterEach(() => {
-    Object.defineProperty(window, 'location', { configurable: true, value: realLocation });
-    vi.restoreAllMocks();
-  });
+describe('reviewPromptService — "Yes, I love it" asks Apple for the in-app review', () => {
+  beforeEach(() => { requestReview.mockClear(); });
+  afterEach(() => { vi.restoreAllMocks(); });
 
-  it('on iOS, Yes opens the write-review page in the App Store app', async () => {
-    vi.spyOn(Capacitor, 'getPlatform').mockReturnValue('ios');
+  it('in the iOS app, Yes requests the in-app review dialog', async () => {
+    vi.spyOn(Capacitor, 'isNativePlatform').mockReturnValue(true);
     await handlePositiveResponse();
-    expect(href).toBe('itms-apps://apps.apple.com/app/id6776418777?action=write-review');
+    expect(requestReview).toHaveBeenCalledTimes(1);
   });
 
-  it('on the web app, Yes navigates nowhere (no store listing)', async () => {
-    vi.spyOn(Capacitor, 'getPlatform').mockReturnValue('web');
+  it('on the web app, Yes requests nothing (no native dialog)', async () => {
+    vi.spyOn(Capacitor, 'isNativePlatform').mockReturnValue(false);
     await handlePositiveResponse();
-    expect(href).toBe('');
+    expect(requestReview).not.toHaveBeenCalled();
   });
 
-  it('Not really never sends anyone to the review page', async () => {
-    vi.spyOn(Capacitor, 'getPlatform').mockReturnValue('ios');
+  it('Not really never asks for a review', async () => {
+    vi.spyOn(Capacitor, 'isNativePlatform').mockReturnValue(true);
     await handleNegativeResponse();
-    expect(href).toBe('');
+    expect(requestReview).not.toHaveBeenCalled();
   });
 });
