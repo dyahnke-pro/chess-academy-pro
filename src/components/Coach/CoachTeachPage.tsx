@@ -3215,13 +3215,10 @@ export function CoachTeachPage(): JSX.Element {
       fen: gameRef.current.fen,
       trigger: null,
     });
-    // Speak a tight summary — the full sentence above is long for
-    // voice. The position changing in the student's favor IS the
-    // acknowledgment (per CLAUDE.md narration rules); voice carries
-    // only the ask itself.
-    void voiceService
-      .speakForced(`Want to watch the middlegame and endgame play out? Or play the line out yourself?`)
-      .catch(() => undefined);
+    // NOT spoken (David 2026-10-08: the end-of-line closing remarks played
+    // after he was already back on the finished screen). The offer is on the
+    // screen as a chip and the Play button; the voice only repeated it, and it
+    // fired again every time the student returned to the leaf.
     void logAppAudit({
       kind: 'coach-surface-migrated',
       category: 'subsystem',

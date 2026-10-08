@@ -40,7 +40,7 @@ export function AiConsentSetting(): JSX.Element | null {
       </div>
       <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
         {granted
-          ? 'On — your board positions and questions are sent to our AI providers (DeepSeek, Anthropic) and AWS Polly to power the coach and its voice.'
+          ? 'On — your board positions and questions are sent to our AI providers (DeepSeek, Anthropic) and Google Cloud Text-to-Speech to power the coach and its voice.'
           : 'Off — the AI coach and voice are disabled and no gameplay data is sent to the AI providers. The rest of the app still works.'}
       </p>
       <button

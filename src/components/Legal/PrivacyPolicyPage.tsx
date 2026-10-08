@@ -13,11 +13,11 @@ import { Link } from 'react-router-dom';
  *  - Voice: microphone is used ONLY for in-app voice chat with the coach;
  *    audio is processed for speech-to-text and not stored.
  *  - Network: chess moves / prompts are sent to the AI providers
- *    (DeepSeek / Anthropic) for coaching responses, to AWS Polly for
+ *    (DeepSeek / Anthropic) for coaching responses, to Google Cloud Text-to-Speech for
  *    text-to-speech, and to Lichess / Chess.com when the user imports
  *    their games. No data is sold.
  */
-const LAST_UPDATED = 'July 2, 2026';
+const LAST_UPDATED = 'October 8, 2026';
 const CONTACT_EMAIL = 'dyahnke@gmail.com';
 
 export function PrivacyPolicyPage(): JSX.Element {
@@ -75,7 +75,7 @@ export function PrivacyPolicyPage(): JSX.Element {
               sent — we don't send the raw audio.
             </li>
             <li>
-              <strong>AWS Polly:</strong> the coach's text response is sent to
+              <strong>Google Cloud Text-to-Speech:</strong> the coach's text response is sent to
               synthesize spoken audio (text-to-speech).
             </li>
             <li>

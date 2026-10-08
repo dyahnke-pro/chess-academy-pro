@@ -163,7 +163,7 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
   }, [beats, beatSquares, clearRevealTimers]);
   const getNarration = useCallback((i: number) => beats[i]?.say ?? '', [beats]);
 
-  const { isAutoPlaying, next, prev, goToStep, toggleAutoPlay } = useStrictNarration({
+  const { isAutoPlaying, isFinished, next, prev, goToStep, toggleAutoPlay } = useStrictNarration({
     stepCount: beats.length,
     applyStep,
     getNarration,
@@ -221,14 +221,17 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
   // Clear any pending reveal timers on unmount.
   useEffect(() => () => clearRevealTimers(), [clearRevealTimers]);
 
-  // Fire onComplete once when the student reaches the final beat.
+  // Fire onComplete once the final beat has been SPOKEN, not when it arrives.
+  // The final beat is the wrap-up; the parent bounces to the opening page on
+  // complete, and firing on arrival either cut the wrap-up off or left it
+  // playing over that page (David 2026-10-08).
   const completedRef = useRef(false);
   useEffect(() => {
-    if (!completedRef.current && idx >= beats.length - 1) {
+    if (!completedRef.current && isFinished && idx >= beats.length - 1) {
       completedRef.current = true;
       onComplete?.();
     }
-  }, [idx, beats.length, onComplete]);
+  }, [isFinished, idx, beats.length, onComplete]);
 
   // Audit-only deterministic completion hook — gated behind the `auditMoveHook`
   // flag (mirrors PlayableLinePlayer's window.__playMove). The full-play audit
