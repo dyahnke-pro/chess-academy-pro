@@ -34138,7 +34138,7 @@
      "Be7"
     ],
     "annotations": [
-     "The bishop develops with a threat — c5 is attacked, and Black's choice is trade or defend, both of which speed White's plan.",
+     "Be3 — the bishop develops and backs up the d4-pawn, which already faces the c5-pawn; Black must choose between trading and defending.",
      "Black trades rather than defend a pawn that was always going to be a target.",
      "The knight recaptures into the centre. Count the activity: knight on d4, bishop on e3, rook already on e1 — against three developed Black pieces and a queenside asleep.",
      "The bishop finds d7 — modest, but everything else hangs a pawn or blocks the queen.",
@@ -34151,7 +34151,7 @@
      [
       {
        "from": "e3",
-       "to": "c5",
+       "to": "d4",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
@@ -34171,6 +34171,14 @@
     ],
     "highlights": [
      [
+      {
+       "square": "e3",
+       "color": "rgba(239,68,68,0.72)"
+      },
+      {
+       "square": "d4",
+       "color": "rgba(239,68,68,0.72)"
+      },
       {
        "square": "c5",
        "color": "rgba(239,68,68,0.72)"
@@ -34205,7 +34213,7 @@
      []
     ],
     "learnCues": [
-     "Be3 — ask c5 the question.",
+     "Be3 — back up d4",
      "The trade helps White.",
      "Nxd4 — pieces before pawns.",
      "Bd7 — the only tidy square.",
@@ -34374,7 +34382,7 @@
      "Black develops and prepares to castle — the structure is a French without light-squared bishops, which suits White's space.",
      "The rook claims the only open file before Black's rooks are ready to argue about it.",
      "Black tucks the king away. Nothing is loose yet — but nothing is active either.",
-     "The lift: Rc3. On the third rank the rook does two jobs — it leans on the file, and it stands one move from g3 or h3 if the king ever invites it.",
+     "The lift: Rc3. On the third rank the rook leans on the c-file toward the c6-knight, and it can swing across later once the f3-knight moves.",
      "Black contests the file, exactly as the position demands.",
      "And a3 — the little clamp his games play here. The b4-square is gone, the queenside is sealed, and White keeps both plans alive while Black has only the wait. Fourteen wins to five in his corpus from this structure."
     ],
@@ -34385,7 +34393,7 @@
      [
       {
        "from": "c3",
-       "to": "g3",
+       "to": "c6",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
@@ -34410,6 +34418,10 @@
       {
        "square": "c3",
        "color": "rgba(255,214,0,0.88)"
+      },
+      {
+       "square": "c6",
+       "color": "rgba(255,214,0,0.88)"
       }
      ],
      [],
@@ -34428,7 +34440,7 @@
      "French shape, no bishops.",
      "Rc1 — file first.",
      "Black castles, still passive.",
-     "Rc3 — the two-job lift.",
+     "Rc3 — the rook lift",
      "The file gets contested.",
      "a3 — seal it, keep both plans."
     ],
@@ -35921,7 +35933,7 @@
      "Black must take; letting e4 to e5 would bury the f6-knight.",
      "Knights come off first,",
      "and the pawn recaptures the piece — an even trade in material,",
-     "but not in geometry: the bishop lands on e4, the board's best diagonal, hitting b7 and eyeing h7 in the same breath.",
+     "but not in geometry: the bishop lands on e4, the board's best diagonal, hitting the c6-knight and eyeing h7 in the same breath.",
      "Black has to blunt it with f6, softening e6 forever — the concession the break was designed to extract.",
      "The queen slides to e2, taking the e-file behind the bishop.",
      "Black mirrors — but compare the bishops, compare the pawns around each king, and you have his seven-to-two score explained. A clean pull with zero risk."
@@ -35934,7 +35946,7 @@
      [
       {
        "from": "e4",
-       "to": "b7",
+       "to": "c6",
        "color": "rgba(40,185,95,0.92)"
       },
       {
@@ -35959,7 +35971,7 @@
      [],
      [
       {
-       "square": "b7",
+       "square": "c6",
        "color": "rgba(239,68,68,0.72)"
       },
       {
@@ -50549,7 +50561,7 @@
      "axb5 — the file opens —",
      "…axb5 — and closes again on your terms.",
      "Rxa8 — White trades the a-rooks.",
-     "…Qxa8 — and there is the quiet punchline: the queen lands behind the b7-bishop, both pieces stacked on the long diagonal, staring at the kingside White hasn't castled into yet. Level on the engine; five wins in five corpus games."
+     "…Qxa8 — the quiet punchline: the queen lands behind the b7-bishop, both pieces stacked on the long diagonal and aimed at the f3-knight. The engine calls it level."
     ],
     "learnCues": [
      "Nf3 — at last",
@@ -50578,7 +50590,7 @@
      [
       {
        "from": "a8",
-       "to": "g2",
+       "to": "f3",
        "color": "rgba(40,185,95,0.92)"
       }
      ]
@@ -57926,7 +57938,7 @@
   "openingId": "pro-ericrosen-london",
   "criticalPositionFen": "r1bq1rk1/pp2ppbp/2n2np1/2ppN3/3P1B2/2N1P3/PPP1BPPP/R2Q1RK1 b - - 3 8",
   "title": "The Ne5 outpost + Bd3 battery (main line)",
-  "overview": "From the main-line London the plan is to make the e5-knight the hub of a kingside attack: reroute the bishop to d3 aiming at h7, lift the queen to f3 or h5, and use the e5-knight and the f4-bishop as a battery against Black's king. A quiet-looking setup that turns violent.",
+  "overview": "From the main-line London the plan is to make the e5-knight the hub of a kingside attack: reroute the bishop to d3 aiming at the kingside, lift the queen to f3 or h5, and use the e5-knight and the f4-bishop as a battery against Black's king. A quiet-looking setup that turns violent.",
   "pawnBreaks": [],
   "pieceManeuvers": [
    "Bd3 — the battery bishop swings toward h7",
@@ -57951,15 +57963,15 @@
     ],
     "annotations": [
      "Black shores up the centre with e6, but it does nothing about the e5-knight that dominates the position.",
-     "The bishop swings to d3 — now it and the e5-knight both point at the black king's shelter on h7. This is the London attacking battery.",
+     "The bishop swings to d3, joining the e5-knight and pointing at the g6-pawn in front of Black's king.",
      "Black develops the queen to e7, connecting the rooks, but is purely reacting.",
-     "Qf3 brings the third attacker toward the kingside, eyeing f7 and the long light diagonal behind the e5-knight.",
+     "Qf3 brings the queen toward the kingside and eyes the d5-pawn down the long light diagonal.",
      "Black contests the d-file with a rook, but White is the one dictating play.",
      "Rfe1 completes development and supports a future e-file break; White has a clean, mounting kingside initiative — the standard London squeeze that beats very strong opposition."
     ],
     "learnCues": [
      "…e6 — solid but passive",
-     "Bd3 — battery toward h7",
+     "Bd3 — aim at g6",
      "…Qe7 — Black reacts",
      "Qf3 — queen joins in",
      "…Rd8 — contest the file",
@@ -57970,7 +57982,7 @@
      [
       {
        "from": "d3",
-       "to": "h7",
+       "to": "g6",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
@@ -57978,7 +57990,7 @@
      [
       {
        "from": "f3",
-       "to": "f7",
+       "to": "d5",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
@@ -57998,8 +58010,8 @@
        "color": "rgba(255, 165, 0, 0.55)"
       },
       {
-       "square": "h7",
-       "color": "rgba(255,214,0,0.88)"
+       "square": "g6",
+       "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
@@ -58014,8 +58026,8 @@
        "color": "rgba(255, 165, 0, 0.55)"
       },
       {
-       "square": "f7",
-       "color": "rgba(255,214,0,0.88)"
+       "square": "d5",
+       "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
@@ -58092,7 +58104,7 @@
      [],
      [
       {
-       "from": "h4",
+       "from": "h5",
        "to": "g6",
        "color": "rgba(40,185,95,0.92)"
       }
@@ -66594,13 +66606,7 @@
       }
      ],
      [],
-     [
-      {
-       "from": "f8",
-       "to": "e7",
-       "color": "rgba(40,185,95,0.92)"
-      }
-     ],
+     [],
      []
     ],
     "highlights": [
@@ -67132,8 +67138,8 @@
      [],
      [
       {
-       "from": "d7",
-       "to": "c6",
+       "from": "c6",
+       "to": "d4",
        "color": "rgba(40,185,95,0.92)"
       }
      ],
@@ -67180,6 +67186,10 @@
      [
       {
        "square": "c6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d4",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
