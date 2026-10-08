@@ -78,13 +78,11 @@ describe('the guided-game coach lines are COMPUTED — no model writes them (kid
   beforeEach(() => vi.restoreAllMocks());
 
   it('narration: the authored note leads; with none, chess.js words in the seat', () => {
-    const spy = vi.spyOn(coachApi, 'getKidLlmResponse');
     expect(kidMoveNarration({ fenBefore: SCHOLAR, san: 'Qf3', isPlayerMove: true, authoredNarration: 'Bring the queen to f3!' }))
       .toBe('Bring the queen to f3!');
     expect(kidMoveNarration({ fenBefore: SCHOLAR, san: 'Qf3', isPlayerMove: true })).toBe('Your queen moves to f3.');
     expect(kidMoveNarration({ fenBefore: SCHOLAR, san: 'Qf3', isPlayerMove: false, teachingConcept: 'attacking f7' }))
       .toBe("Their queen moves to f3. That's the idea of attacking f7.");
-    expect(spy).not.toHaveBeenCalled();
   });
 
   it('narration: an illegal/desynced move says nothing rather than guess', () => {
@@ -92,20 +90,16 @@ describe('the guided-game coach lines are COMPUTED — no model writes them (kid
   });
 
   it('instruction: authored, else the scripted move as words, never notation', () => {
-    const spy = vi.spyOn(coachApi, 'getKidLlmResponse');
     expect(kidMoveInstruction({ fenBefore: SCHOLAR, expectedSan: 'Qf3', authored: 'Bring the queen to f3!' })).toBe('Bring the queen to f3!');
     const out = kidMoveInstruction({ fenBefore: SCHOLAR, expectedSan: 'Qf3' });
     expect(out).toBe('Now move your queen to f3.');
     expect(out).not.toMatch(/Qf3/);
     expect(kidMoveInstruction({ fenBefore: START, expectedSan: 'Qf3' })).toBe('');
-    expect(spy).not.toHaveBeenCalled();
   });
 
   it('wrong-move nudge: authored, else a kind pointer at the scripted move', () => {
-    const spy = vi.spyOn(coachApi, 'getKidLlmResponse');
     expect(kidWrongMoveHint({ fenBefore: SCHOLAR, expectedSan: 'Qf3', authoredResponse: 'Move the queen to f3!' })).toBe('Move the queen to f3!');
     expect(kidWrongMoveHint({ fenBefore: SCHOLAR, expectedSan: 'Qf3' })).toBe('Not quite. Try to move your queen to f3.');
-    expect(spy).not.toHaveBeenCalled();
   });
 });
 
@@ -118,7 +112,7 @@ describe('answerKidGameQuestion — every answer computed, no free LLM (G0)', ()
   });
 
   it('NEVER asks the model to write the answer — the old free-LLM fallback is gone', async () => {
-    const llm = vi.spyOn(coachApi, 'getKidLlmResponse').mockResolvedValue('The black queen on d5 is hanging, grab it!');
+    const llm = vi.spyOn(coachApi, 'getCoachChatResponse').mockResolvedValue('The black queen on d5 is hanging, grab it!');
     for (const question of ['what should I do?', 'how am I doing?', 'hi!', 'why?', 'is my queen safe', 'where can my horse go']) {
       const out = await answerKidGameQuestion({ question, fen: SCHOLAR, playerColor: 'w', expectedNextSan: 'Qf3' });
       expect(out).not.toMatch(/d5/);

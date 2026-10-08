@@ -10,8 +10,8 @@
  *   - Layer D (post-validation): claim validator runs on the LLM's
  *     response; ungrounded SANs / numbers / entities trigger up to
  *     two retries; on exhaustion the stock fallback is served.
- *   - Kid contract: `getKidLlmResponse` does NOT engage grounding;
- *     master-play paths never touch kid LLM calls.
+ *   - Kid contract: there is no kid model lane (deleted 2026-10-08);
+ *     kids phrase computed facts through voiceFacts({kidSafe}).
  *   - Non-move-question chat: intent doesn't fire → grounding stays
  *     dormant → streaming behaves as before.
  *
@@ -21,7 +21,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { getCoachChatResponse, getKidLlmResponse } from './coachApi';
+import { getCoachChatResponse } from './coachApi';
 import { __resetMasterPlayLookupForTests } from './masterPlayLookup';
 import { _resetLichessCircuitBreaker } from './lichessExplorerService';
 import { __resetProviderCooldownsForTests } from './coachApi';
@@ -145,7 +145,6 @@ async function ask(message: string, llmReplies: string[]): Promise<{ response: s
     1024,
     undefined,
     undefined,
-    undefined,
     {
       currentFen: STARTING_FEN,
       surface: '/coach/chat',
@@ -166,7 +165,6 @@ describe('grounding — intent detection', () => {
       1024,
       undefined,
       undefined,
-      undefined,
       { currentFen: STARTING_FEN, surface: '/coach/chat' },
     );
     expect(r).toBe('Hello!');
@@ -181,7 +179,6 @@ describe('grounding — intent detection', () => {
       undefined,
       'chat_response',
       1024,
-      undefined,
       undefined,
       undefined,
       { currentFen: STARTING_FEN, surface: '/coach/chat' },
@@ -244,7 +241,7 @@ describe('grounding — intent detection', () => {
     ] });
     const r = await getCoachChatResponse(
       [{ role: 'user', content: 'what about the Caro-Kann?' }],
-      '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+      '', undefined, 'chat_response', 1024, undefined, undefined,
       { currentFen: STARTING_FEN, surface: '/coach/teach' },
     );
     // RIP #2: no free opening explanation. Grounding still stays dormant (the
@@ -263,7 +260,6 @@ describe('grounding — intent detection', () => {
       undefined,
       'chat_response',
       1024,
-      undefined,
       undefined,
       undefined,
       { currentFen: STARTING_FEN, surface: '/coach/chat', forceEngage: true },
@@ -298,7 +294,7 @@ describe('grounding — the grounded default (no free-compose)', () => {
     const counters = installFetchMock({ lichess: LICHESS_PAYLOAD, llmTexts: ['ignored'] });
     const r = await getCoachChatResponse(
       [{ role: 'user', content: 'what should I play here?' }],
-      '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+      '', undefined, 'chat_response', 1024, undefined, undefined,
       { currentFen: STARTING_FEN, surface: '/coach/chat', engineBestMoveUci: 'g1f3', engineEvalCp: 30 },
     );
     expect(r).toContain('f3');                 // Nf3 — the engine's COMPUTED best move
@@ -331,7 +327,7 @@ describe('grounding — the grounded default (no free-compose)', () => {
     ] });
     const r = await getCoachChatResponse(
       [{ role: 'user', content: 'I played Nc3. Your move.' }],
-      '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+      '', undefined, 'chat_response', 1024, undefined, undefined,
       { currentFen: STARTING_FEN, moveNarration: true, surface: '/coach/teach', sessionId: 'test-session',
         engineBestMoveUci: 'g1f3', engineEvalCp: 25 },
     );
@@ -346,26 +342,12 @@ describe('grounding — the grounded default (no free-compose)', () => {
     ] });
     const r = await getCoachChatResponse(
       [{ role: 'user', content: 'I played e4. Your move.' }],
-      '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+      '', undefined, 'chat_response', 1024, undefined, undefined,
       { currentFen: STARTING_FEN, surface: '/coach/teach', sessionId: 'test-session' },
     );
     expect(r).toMatch(/don'?t have an engine read|can'?t verify|nothing is decided yet/i);
     expect(r).not.toContain('Sicilian');  // the hallucinated naming NEVER surfaces
     expect(counters.llmCalls).toBe(0);
-  });
-});
-
-describe('kid contract — getKidLlmResponse never engages grounding', () => {
-  it('does not engage master-play even when kid LLM is asked a move question', async () => {
-    const counters = installFetchMock({ lichess: LICHESS_PAYLOAD, llmTexts: ['That\'s the white pawn.'] });
-    const r = await getKidLlmResponse(
-      [{ role: 'user', content: 'what should I play here?' }],
-      '',
-      512,
-    );
-    expect(r).toBe("That's the white pawn.");
-    // Lichess should NEVER be called for kid calls.
-    expect(counters.lichessCalls).toBe(0);
   });
 });
 

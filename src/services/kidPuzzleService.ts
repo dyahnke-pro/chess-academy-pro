@@ -25,8 +25,6 @@ import { getKidRating } from './kidRatingService';
 //
 // Hint + success message are static templates per piece — kid-safe by
 // construction (no LLM round-trip means no slang / personality leak).
-// A future PR can optionally LLM-annotate (hint TEXT ONLY, never
-// FEN/solution) through getKidLlmResponse if richer prose is wanted.
 
 const CHESS_PIECE_CHAPTERS: ReadonlySet<JourneyChapterId> = new Set<JourneyChapterId>([
   'pawn', 'rook', 'bishop', 'knight', 'queen', 'king',

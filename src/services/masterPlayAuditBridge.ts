@@ -23,16 +23,14 @@
  *   - The exposed surface is read-only (functions), not state.
  *     Nothing here grants extra capabilities beyond what the
  *     services already expose.
- *   - Kid contract: getKidLlmResponse is exposed alongside
- *     getCoachChatResponse so the audit can verify the kid path
- *     does NOT engage grounding. The bridge does not change kid
- *     behavior.
+ *   - The kid model lane was deleted 2026-10-08, so there is no kid
+ *     path to expose here.
  */
 
 import { lookupMasterPlay } from './masterPlayLookup';
 import { prefetchMasterPlay, prefetchWalkthroughSequence } from './masterPlayWatcher';
 import { masterPlayCache } from './masterPlayCache';
-import { getCoachChatResponse, getKidLlmResponse } from './coachApi';
+import { getCoachChatResponse } from './coachApi';
 import { validateClaims } from './claimValidator';
 
 declare global {
@@ -43,7 +41,6 @@ declare global {
       prefetchWalkthroughSequence: typeof prefetchWalkthroughSequence;
       masterPlayCache: typeof masterPlayCache;
       getCoachChatResponse: typeof getCoachChatResponse;
-      getKidLlmResponse: typeof getKidLlmResponse;
       validateClaims: typeof validateClaims;
     };
   }
@@ -65,7 +62,6 @@ function installBridge(): void {
     prefetchWalkthroughSequence,
     masterPlayCache,
     getCoachChatResponse,
-    getKidLlmResponse,
     validateClaims,
   };
 }

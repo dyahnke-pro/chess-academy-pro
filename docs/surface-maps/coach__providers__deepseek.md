@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**133 lines · 1 exports · 2 importers · 3 tests · 29 audits**
+**132 lines · 1 exports · 2 importers · 3 tests · 29 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:2801) — names `deepseek`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:2913) — names `deepseek`
-- **Tech Stack (exact versions)** (CLAUDE.md:3361) — names `deepseek`
+- **⏰ Standing notes** (CLAUDE.md:3127) — names `deepseek`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3243) — names `deepseek`
+- **Tech Stack (exact versions)** (CLAUDE.md:3691) — names `deepseek`
 
 ## Who calls in
 
@@ -29,6 +29,10 @@
 - `src/services/coachApi.whyReasoning.integration.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-analyse-comprehensive.mjs`
 - `scripts/audit-chat-comprehensive.mjs`

@@ -79,7 +79,6 @@ async function callDeepSeek(
       maxTokens,
       'medium',
       'deepseek',
-      undefined,        // skipPersonality — coach lane
       options?.grounding, // WO-COACH-MASTER-INTEGRATION
       options?.studentLanguage, // the turn's language, for the grounded lanes
     );

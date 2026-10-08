@@ -2,7 +2,7 @@
 /**
  * audit-kid-llm-hallucination — the kid P0 gate the kid non-negotiables have
  * cited since 2026-05-15 and nobody wrote (CLAUDE.md "Kids section" #17,
- * coachApi.ts getKidLlmResponse, docs/plans/2026-05-15-kids-section.md,
+ * docs/plans/2026-05-15-kids-section.md,
  * docs/plans/2026-10-04-learn-how-to-think.md "Kids are unified too").
  *
  * "An LLM hallucinating chess content in kid mode is a P0 bug." This drives the

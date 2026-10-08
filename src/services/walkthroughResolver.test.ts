@@ -26,7 +26,6 @@ vi.mock('./coachApi', async (importOriginal) => {
     getCoachCommentary: vi.fn().mockResolvedValue(''),
     getCoachChatResponse: vi.fn().mockResolvedValue(''),
     getCoachStructuredResponse: vi.fn().mockResolvedValue({}),
-    getKidLlmResponse: vi.fn().mockResolvedValue(''),
     callAnthropicWithTool: vi.fn().mockResolvedValue({}),
     callDeepseekWithTool: vi.fn().mockResolvedValue({}),
   };

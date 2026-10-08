@@ -59,7 +59,7 @@ describe('why-does-the-engine-like-it — full dispatch', () => {
     });
     const response = await getCoachChatResponse(
       [{ role: 'user', content: 'why is that the best move?' }],
-      '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+      '', undefined, 'chat_response', 1024, undefined, undefined,
       {
         currentFen: FORK_FEN,
         surface: '/coach/chat',
@@ -79,7 +79,7 @@ describe('why-does-the-engine-like-it — full dispatch', () => {
     installLLMMock(() => 'The engine plays Nc7+ — it forks the king on e8 and the rook on a8.');
     const response = await getCoachChatResponse(
       [{ role: 'user', content: 'explain the engine move' }],
-      '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+      '', undefined, 'chat_response', 1024, undefined, undefined,
       {
         currentFen: FORK_FEN,
         surface: '/coach/chat',

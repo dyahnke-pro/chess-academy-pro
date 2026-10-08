@@ -178,10 +178,6 @@ const DEEPSEEK_MODEL_MAP: Record<CoachTask, string> = {
   smart_search:            'deepseek-v4-flash',
   explore_reaction:        'deepseek-v4-flash',
   intent_classify:         'deepseek-v4-flash',
-  // Kid-mode puzzle annotation — short, neutral, JSON-shaped prose.
-  // Routed via getKidLlmResponse (skipPersonality=true) — see CLAUDE.md
-  // "Kids section non-negotiables".
-  kid_puzzle_gen:          'deepseek-v4-flash',
 
   // Per-event analysis → MID (deepseek-v4-pro)
   post_game_analysis:      'deepseek-v4-pro',
@@ -279,7 +275,6 @@ const TASK_CATEGORY: Record<CoachTask, 'commentary' | 'analysis' | 'reports'> = 
   smart_search:              'commentary',
   explore_reaction:          'commentary',
   intent_classify:           'commentary',
-  kid_puzzle_gen:            'commentary',
   interactive_review:        'commentary',
   chat_response:             'analysis',
   position_analysis_chat:    'analysis',
@@ -3572,20 +3567,12 @@ export async function getCoachChatResponse(
    *  and the error-time fallback chain still kicks in if the forced
    *  provider's call errors. */
   forceProvider?: AiProvider,
-  /** Kid-mode safety lane. When true, skips both
-   *  `loadPersonalityAddition` so the
-   *  user's coach personality dials (edgy / drill-sergeant / profanity
-   *  intensity) cannot bleed into kid surfaces. Kid callers should use
-   *  `getKidLlmResponse` rather than passing this flag directly. See
-   *  CLAUDE.md "Kids section non-negotiables" #3. */
-  skipPersonality?: boolean,
   /** WO-COACH-MASTER-INTEGRATION — when set, runs the four-layer
    *  master-play grounding pipeline for this turn. The function decides
    *  internally whether to engage based on intent detection. Surfaces
    *  pass `currentFen` from their game state; the watcher
    *  (`useMasterPlayWatcher`) keeps the cache warm so pre-injection is
-   *  near-instant. `getKidLlmResponse` does NOT pass this — kid lane
-   *  excluded by contract. */
+   *  near-instant. */
   grounding?: MasterGroundingOptions,
   /**
    * The language this TURN must answer in, computed once by the caller.
@@ -3646,11 +3633,7 @@ export async function getCoachChatResponse(
   // the "one coach across all tabs" feel. Failing this lookup
   // gracefully (no profile, fresh install) keeps the legacy flat
   // persona as the fallback so the surface still works.
-  //
-  // EXCEPTION: `skipPersonality` short-circuits both lookups so kid
-  // mode (and any future "neutral voice" surface) can guarantee no
-  // adult personality leaks in — see comment on the parameter above.
-  const personalityAddition = skipPersonality ? '' : await loadPersonalityAddition();
+  const personalityAddition = await loadPersonalityAddition();
 
   // ── "COULDN'T HE JUST MOVE THE QUEEN?" (WO-DANYA-01 C) ──
   // Computed whole in coachService (`computePieceOptions`): the piece's job,
@@ -6592,12 +6575,7 @@ export async function getCoachChatResponse(
   // the narration generator uses. The brain grounds its prose in
   // Capablanca / Lasker / Staunton rather than inventing stock
   // explanations. See chessConceptService.ts for the data shape.
-  //
-  // KID CONTRACT — book grounding is GATED on `skipPersonality === false`.
-  // Pre-1929 chess prose can carry archaic phrasings, SAN, and adult
-  // language tone that violates the kid-safety prompt. Surfaces that
-  // pass `skipPersonality: true` (kid path via `getKidLlmResponse`)
-  // get NO book grounding. CLAUDE.md kid §3 + §17.
+
   // Universal narration grounding: same loader stack `coachService.ask`
   // runs (annotation / book passages / middlegame plan / model games).
   // The legacy `buildCoachChatContext` covered only chess-concepts
@@ -6605,11 +6583,8 @@ export async function getCoachChatResponse(
   // sources so bypass paths (voice mic, puzzle feedback, smart search,
   // walkthrough LLM narrator, content generation, …) all ship with
   // the same shape of grounding the unified envelope already provides.
-  // Skipped on kid surfaces per CLAUDE.md kid §3.
   const allMessagesText = messages.map((m) => m.content).join(' ');
-  const narrationGrounding = skipPersonality
-    ? { block: '', loadedCount: 0, loaded: { annotation: false, bookPassages: false, middlegamePlan: false, modelGames: false, teaching: false } }
-    : await buildNarrationGroundingBlock({
+  const narrationGrounding = await buildNarrationGroundingBlock({
         askText: allMessagesText,
         // No reliable opening name or moveHistory in raw message text;
         // the bookGrounding loader detects opening via concept scan
@@ -6629,30 +6604,27 @@ export async function getCoachChatResponse(
   // a position/solution. (Capped at 4 lines, so it stays lean.) Previously
   // gated to puzzle/trap-shaped turns only; widened so the trap reference
   // is available like the book + lesson references — David 2026-05-20.
-  // Gated off kid surfaces (skipPersonality). See verifiedLineLibrary.
+  // See verifiedLineLibrary.
   let verifiedPuzzleBlock = '';
-  if (!skipPersonality) {
-    // The library fuzzy-matches an opening name inside the message text,
-    // so passing the raw text hits (and returns '') when no opening with
-    // verified lines is named.
-    const block = buildVerifiedPuzzleContext(allMessagesText);
-    if (block) {
-      verifiedPuzzleBlock = block;
-      void logAppAudit({
-        kind: 'book-grounding-injected',
-        category: 'subsystem',
-        source: 'coachApi.verifiedPuzzleLibrary',
-        summary: `verified trap/pitfall puzzle context injected (${block.length} chars)`,
-      });
-    }
+  // The library fuzzy-matches an opening name inside the message text,
+  // so passing the raw text hits (and returns '') when no opening with
+  // verified lines is named.
+  const block = buildVerifiedPuzzleContext(allMessagesText);
+  if (block) {
+    verifiedPuzzleBlock = block;
+    void logAppAudit({
+      kind: 'book-grounding-injected',
+      category: 'subsystem',
+      source: 'coachApi.verifiedPuzzleLibrary',
+      summary: `verified trap/pitfall puzzle context injected (${block.length} chars)`,
+    });
   }
 
   // Master-class reference: when the student names an opening (or subline)
   // we've built a verified master class for, hand the coach those teaching
   // ideas as reference so its answers stay consistent with the lessons.
   // FOR REFERENCE only — the coach answers naturally, not as a lecture.
-  // Gated off kid surfaces (skipPersonality) per the kid contract.
-  const lessonReferenceBlock = skipPersonality ? '' : buildLessonReferenceBlock(allMessagesText);
+  const lessonReferenceBlock = buildLessonReferenceBlock(allMessagesText);
   if (lessonReferenceBlock) {
     void logAppAudit({
       kind: 'book-grounding-injected',
@@ -6725,10 +6697,8 @@ export async function getCoachChatResponse(
   // `validateClaims` is a no-op without a grounding context, so the chess-signal
   // gate + the stray-chess sweep are the structural guards, not the validator.
   if (!groundingEngaged) {
-    // Callers that pass NO grounding keep their existing path for now: the kid
-    // lane (`getKidLlmResponse`, task `kid_puzzle_gen` — a P0-safe surface that
-    // gets its OWN grounded lane in this build, NOT the adult stock line),
-    // game commentary, and explicit opt-out callers. They're converted in
+    // Callers that pass NO grounding keep their existing path for now: game
+    // commentary and explicit opt-out callers (the kid lane is gone). They're converted in
     // Phase 2/3; nothing ships until the whole build (kid lane included) lands.
     // The seal below applies to GROUNDED coach surfaces (chat/teach/mic) whose
     // turn matched no assembler — the actual hallucination hole.
@@ -7001,50 +6971,8 @@ async function loadPersonalityAddition(): Promise<string> {
 // chokepoint. No surface free-composes report prose anymore, so the command +
 // its INJECTION-grounded, phrase-freely contract are gone.
 
-// ─── Kid-mode safety lane ──────────────────────────────────────────────
-//
-// All kid LLM calls go through this wrapper. Pins:
-//   1. `skipPersonality: true` — user's coach personality / profanity
-//      / mockery / flirt dials cannot bleed in.
-//   2. A kid-safety system prompt that asserts age-appropriate output,
-//      JSON-only when requested, no slang / negative language / taunting,
-//      ≤ 12 words per text field.
-//   3. `task: 'kid_puzzle_gen'` so audit-stream entries are filterable
-//      and per-task model maps stay tight.
-// Kid surfaces MUST use this wrapper instead of `getCoachChatResponse`
-// directly. See CLAUDE.md "Kids section non-negotiables" #3 & #17.
-
-const KID_SAFETY_PROMPT = `You are writing text for a child aged 5-10 learning chess.
-
-ABSOLUTE RULES:
-- Age-appropriate, friendly, encouraging tone — no slang, no sarcasm.
-- No negative language, no comparison to other kids, no taunting.
-- No idioms ("a piece of cake", "by the skin of your teeth"). Literal language only.
-- No standard algebraic notation. Spell out moves ("the knight takes the bishop", not "Nxc6").
-- ≤ 12 words per text field unless explicitly told otherwise.
-- Output JSON only when the user asks for JSON. No prose around it.
-- You are the position teaching the student. You are not "I", you are not a tutor character.`;
-
-/** Kid-mode LLM entry point. Forces neutral/Ruth personality and
- *  prepends the kid-safety system prompt. Returns the raw string just
- *  like `getCoachChatResponse`. Callers in kid surfaces must use this
- *  wrapper; importing `getCoachChatResponse` directly from a `Kid/`
- *  file is banned (see scripts/audit-kid-llm-hallucination.mjs). */
-export async function getKidLlmResponse(
-  messages: { role: 'user' | 'assistant'; content: string }[],
-  systemPromptAddition: string,
-  maxTokens: number = 1024,
-): Promise<string> {
-  const fullAddition = `${KID_SAFETY_PROMPT}\n\n${systemPromptAddition}`.trim();
-  return getCoachChatResponse(
-    messages,
-    fullAddition,
-    undefined,        // no streaming for kid puzzles
-    'kid_puzzle_gen', // task — audit-stream filterable
-    maxTokens,
-    undefined,        // no verbosity override
-    undefined,        // no forced provider
-    true,             // skipPersonality — the safety contract
-  );
-}
+// ─── Kid-mode safety lane — DELETED 2026-10-08 ─────────────────────────
+// `getKidLlmResponse` lost its last caller when the guided-game lines became
+// computed (kidGameCoach). No kid surface reaches a model for free prose any
+// more: the question box phrases computed facts through voiceFacts({kidSafe}).
 

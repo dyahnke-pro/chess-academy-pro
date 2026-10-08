@@ -112,10 +112,10 @@ describe('the door is actually wired at the render', () => {
     // The first cut of this door sat in CoachTeachPage's own map and missed
     // five surfaces. The fix is a census, not a list: any component rendering
     // a message's `.content` straight into JSX is a surface the door cannot
-    // reach. Kid surfaces are EXCLUDED by contract, not by oversight — a kid
-    // LLM call must route through `getKidLlmResponse`, and this door's model
-    // fallback calls `voiceFacts` directly, so wiring it there would break the
-    // kid personality wall. That is a decision for David, recorded here.
+    // reach. Kid surfaces are EXCLUDED by contract, not by oversight — kids
+    // phrase only through `voiceFacts({ kidSafe })`, and this door's model
+    // fallback calls `voiceFacts` without it, so wiring it there would break
+    // the kid personality wall. That is a decision for David, recorded here.
     const files = globSync('src/components/**/*.tsx').filter(
       (f) => !f.includes('.test.') && !f.includes('/Kid/'),
     );

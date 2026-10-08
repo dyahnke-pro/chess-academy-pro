@@ -358,7 +358,7 @@
 
 ### `detectBadHabits` (re-export) — 7 call sites
 - `src/services/badHabitDetector.ts:21`
-- `src/services/coachApi.ts:5188`
+- `src/services/coachApi.ts:5171`
 - `src/services/coachFeatureService.test.ts:126`
 - `src/services/coachFeatureService.test.ts:147`
 - `src/services/coachFeatureService.test.ts:166`

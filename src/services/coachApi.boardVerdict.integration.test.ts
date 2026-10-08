@@ -68,7 +68,7 @@ afterEach(() => { vi.restoreAllMocks(); });
 async function ask(q: string): Promise<string> {
   return getCoachChatResponse(
     [{ role: 'user', content: `[Ask]\n${q}` }],
-    '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+    '', undefined, 'chat_response', 1024, undefined, undefined,
     playGrounding(q),
   );
 }
@@ -116,7 +116,7 @@ describe('a comparison is not a board verdict (question walk 2026-09-27)', () =>
     } : {}),
   });
   const run = (q: string, withCompare: boolean) => getCoachChatResponse(
-    [{ role: 'user', content: `[Ask]\n${q}` }], '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+    [{ role: 'user', content: `[Ask]\n${q}` }], '', undefined, 'chat_response', 1024, undefined, undefined,
     grounding(q, withCompare),
   );
   it('"Why is that better than e5?" is answered by the comparison, naming e5', async () => {
@@ -130,7 +130,7 @@ describe('a comparison is not a board verdict (question walk 2026-09-27)', () =>
 describe('question run 2026-09-27 (Colle, White, move 15)', () => {
   const COLLE = 'r1bqrnk1/5ppp/p3p3/1p1pn1bN/3p2Q1/2PB4/PP3PPP/R1B1R1K1 w - - 0 16';
   const run = (q: string) => getCoachChatResponse(
-    [{ role: 'user', content: `[Ask]\n${q}` }], '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+    [{ role: 'user', content: `[Ask]\n${q}` }], '', undefined, 'chat_response', 1024, undefined, undefined,
     { currentFen: COLLE, surface: '/coach/teach', cleanAsk: q, studentColor: 'white' as const, engineBestMoveUci: 'e1e5', engineEvalCp: 50, groundedBoardQuestion: true, conceptQuestion: false },
   );
   it('"What does their bishop on c8 do?" reads that bishop, never a book passage', async () => {

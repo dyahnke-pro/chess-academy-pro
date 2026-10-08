@@ -42,27 +42,26 @@ function add(bucket, file, message) {
 }
 
 // ─── Contract #1: getCoachChatResponse import banned in Kid surfaces ──
-// Non-negotiable #3 — every kid LLM call must go through
-// getKidLlmResponse, which pins skipPersonality: true.
+// Non-negotiable #3 — no kid file reaches the adult chat entry. The kid model
+// lane is gone (2026-10-08); kids phrase computed facts via voiceFacts({kidSafe}).
 const kidSourceFiles = walk(KID_DIR).filter(
   (f) => /\.(ts|tsx)$/.test(f) && !/\.test\.(ts|tsx)$/.test(f),
 );
 for (const f of kidSourceFiles) {
   const src = readFileSync(f, 'utf8');
   if (/from ['"][^'"]*coachApi['"]/.test(src) && /getCoachChatResponse/.test(src)) {
-    add(errors, f, 'imports getCoachChatResponse — must use getKidLlmResponse');
+    add(errors, f, 'imports getCoachChatResponse — kids phrase only through voiceFacts({kidSafe})');
   }
 }
 
 // Same check, scoped to kid-related services: kidPuzzleService et al.
-// MUST call getKidLlmResponse, not getCoachChatResponse.
 const kidServiceFiles = readdirSync(SERVICES_DIR)
   .filter((f) => /^(kid|Kid)/.test(f) && /\.ts$/.test(f) && !/\.test\.ts$/.test(f))
   .map((f) => join(SERVICES_DIR, f));
 for (const f of kidServiceFiles) {
   const src = readFileSync(f, 'utf8');
   if (/getCoachChatResponse/.test(src)) {
-    add(errors, f, 'kid-prefixed service uses getCoachChatResponse — must use getKidLlmResponse');
+    add(errors, f, 'kid-prefixed service uses getCoachChatResponse — kids phrase only through voiceFacts({kidSafe})');
   }
 }
 
@@ -135,15 +134,6 @@ for (const f of kidSourceFiles) {
         add(warnings, f, `acknowledgment phrase routed to voice: ${match[0].slice(0, 50)}…`);
       }
     }
-  }
-}
-
-// ─── Info: list every kid LLM call site that DOES use getKidLlmResponse
-// (sanity that the wrapper is being adopted as expected).
-for (const f of kidServiceFiles) {
-  const src = readFileSync(f, 'utf8');
-  if (/getKidLlmResponse/.test(src)) {
-    add(info, f, 'uses getKidLlmResponse ✓');
   }
 }
 

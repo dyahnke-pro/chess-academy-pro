@@ -25,7 +25,7 @@
 ## Exports and every call site
 
 ### `getVerbosityInstruction` (function) — 7 call sites
-- `src/services/coachApi.ts:929`
+- `src/services/coachApi.ts:924`
 - `src/services/coachPrompts.verbosity.test.ts:23`
 - `src/services/coachPrompts.verbosity.test.ts:24`
 - `src/services/coachPrompts.verbosity.test.ts:26`

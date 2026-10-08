@@ -1210,9 +1210,9 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // surface didn't pass one explicitly. Every coach surface that
     // hands the spine a `liveState.fen` qualifies; the intent detector
     // inside `getCoachChatResponse` decides whether to actually engage
-    // the pipeline based on the user's last message. Kid surfaces use
-    // `getKidLlmResponse` directly (not coachService.ask), so this
-    // path is coach-lane-only by construction.
+    // the pipeline based on the user's last message. Kid surfaces never
+    // call coachService.ask (they phrase through voiceFacts({kidSafe})), so
+    // this path is coach-lane-only by construction.
     // Fold the player's real-game SANs (pre-loaded block + accumulated
     // player-tool results from prior trips) into gameSans so the claim
     // validator treats them as grounded — the chess.com-pro lesson fix (#4).

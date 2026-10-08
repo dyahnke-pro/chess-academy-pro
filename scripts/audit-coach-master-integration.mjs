@@ -398,31 +398,8 @@ async function main() {
     return result;
   });
 
-  // ── Scenario 6: Kid LLM call does NOT engage grounding ────────────
-  await scenario('kid.llm-call-does-not-engage-grounding', async () => {
-    const before = captured.length;
-    const result = await page.evaluate(async () => {
-      const bridge = (window).__masterPlayAudit;
-      if (!bridge) throw new Error('window.__masterPlayAudit not installed');
-      const coachApi = bridge;
-      const lib = (window).__masterAuditLib;
-      lib.llmTexts = ["That's the white pawn."];
-      const r = await coachApi.getKidLlmResponse(
-        [{ role: 'user', content: 'what should I play here?' }],
-        '',
-        512,
-      );
-      await new Promise((r) => setTimeout(r, 200));
-      return { response: r };
-    });
-    const newEvents = captured.slice(before).filter(isGroundingEngagementEvent);
-    if (newEvents.length > 0) {
-      throw new Error(
-        `kid LLM call emitted ${newEvents.length} master-play / claim-validator events — CONTRACT VIOLATION. kinds: ${newEvents.map((e) => e.kind).join(', ')} sources: ${newEvents.map((e) => e.source).join(', ')}`,
-      );
-    }
-    return result;
-  });
+  // Scenario 6 (kid LLM call) — DELETED 2026-10-08: the kid model lane is gone.
+
 
   // ── Scenario 7: Non-move-question does NOT engage pipeline ────────
   await scenario('intent.non-move-question-stays-out-of-pipeline', async () => {

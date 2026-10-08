@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7051 lines · 42 exports · 54 importers · 59 tests · 20 audits**
+**6979 lines · 41 exports · 54 importers · 59 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -286,7 +286,9 @@
 - `src/services/coachApi.speakableFacts.test.ts:52`
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
-### `voiceFacts` (function) — 35 call sites
+### `voiceFacts` (function) — 37 call sites
+- `scripts/audit-kid-static.mjs:53`
+- `scripts/audit-kid-static.mjs:64`
 - `src/components/Coach/CoachGameReview.tsx:1645`
 - `src/components/Coach/CoachGameReview.tsx:1838`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
@@ -361,7 +363,7 @@
 ### `getCoachChatResponse` (function) — 24 call sites
 - `scripts/audit-coach-master-integration.mjs:327`
 - `scripts/audit-coach-master-integration.mjs:360`
-- `scripts/audit-coach-master-integration.mjs:436`
+- `scripts/audit-coach-master-integration.mjs:413`
 - `src/coach/providers/deepseek.test.ts:7`
 - `src/coach/providers/deepseek.ts:74`
 - `src/services/coachAgentRunner.ts:246`
@@ -369,24 +371,20 @@
 - `src/services/coachApi.boardVerdict.integration.test.ts:118`
 - `src/services/coachApi.boardVerdict.integration.test.ts:132`
 - `src/services/coachApi.master-integration.test.ts:140`
-- `src/services/coachApi.master-integration.test.ts:161`
-- `src/services/coachApi.master-integration.test.ts:178`
-- `src/services/coachApi.master-integration.test.ts:245`
-- `src/services/coachApi.master-integration.test.ts:260`
-- `src/services/coachApi.master-integration.test.ts:299`
-- `src/services/coachApi.master-integration.test.ts:332`
-- `src/services/coachApi.master-integration.test.ts:347`
-- `src/services/coachApi.master-integration.test.ts:375`
+- `src/services/coachApi.master-integration.test.ts:160`
+- `src/services/coachApi.master-integration.test.ts:176`
+- `src/services/coachApi.master-integration.test.ts:242`
+- `src/services/coachApi.master-integration.test.ts:257`
+- `src/services/coachApi.master-integration.test.ts:295`
+- `src/services/coachApi.master-integration.test.ts:328`
+- `src/services/coachApi.master-integration.test.ts:343`
+- `src/services/coachApi.master-integration.test.ts:357`
 - `src/services/coachApi.pieceOptions.test.ts:30`
 - `src/services/coachApi.whyReasoning.integration.test.ts:60`
 - `src/services/coachApi.whyReasoning.integration.test.ts:80`
 - `src/services/openingGenerator.ts:4046`
 - `src/services/smartSearchService.ts:50`
 - `src/test/kidIsolation.gate.test.ts:142`
-
-### `getKidLlmResponse` (function) — 2 call sites
-- `scripts/audit-coach-master-integration.mjs:410`
-- `src/services/coachApi.master-integration.test.ts:361`
 
 ## Tests
 
@@ -468,7 +466,6 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-coach-training-recommendation.mjs`
 - `scripts/audit-coach-weakness-adversarial.mjs`
 - `scripts/audit-counter-repertoire.mjs`
-- `scripts/audit-kid-llm-hallucination.mjs`
 - `scripts/audit-kid-static.mjs`
 - `scripts/audit-learn-comprehensive.mjs`
 - `scripts/audit-lib/coach-question-matrix.mjs`

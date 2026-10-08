@@ -79,10 +79,10 @@ describe('deepseekProvider — the turn language reaches the grounded lanes', ()
   // Nc3…". The grounded lanes inside the brain voice their facts BEFORE any
   // model call, so the language instruction in the system prompt never reaches
   // them — they need the value, and this is the slot it travels in.
-  it('forwards studentLanguage as the 10th argument', async () => {
+  it('forwards studentLanguage as the 9th argument', async () => {
     getCoachChatResponse.mockResolvedValueOnce('ok');
     await deepseekProvider.call(envelope, { studentLanguage: 'Thai' });
-    expect(getCoachChatResponse.mock.calls[0][9]).toBe('Thai');
+    expect(getCoachChatResponse.mock.calls[0][8]).toBe('Thai');
   });
 
   it('passes nothing on an English turn, so the raw fast path is unchanged', async () => {

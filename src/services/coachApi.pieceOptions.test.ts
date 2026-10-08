@@ -29,7 +29,7 @@ afterEach(() => { vi.restoreAllMocks(); });
 function ask(grounding: Record<string, unknown>): Promise<string> {
   return getCoachChatResponse(
     [{ role: 'user', content: "couldn't he just move the queen?" }],
-    '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
+    '', undefined, 'chat_response', 1024, undefined, undefined,
     { currentFen: FEN, surface: 'coach-teach', cleanAsk: "couldn't he just move the queen?", studentColor: 'black', ...grounding },
   );
 }

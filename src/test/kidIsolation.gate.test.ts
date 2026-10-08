@@ -6,8 +6,8 @@
  * Kids are a DECLARED surface (`SURFACE_CONTRACT.kid`), not an island — but the
  * adult coach's phrasing and the adult student model must never reach a child:
  *   #3  no kid file imports `getCoachChatResponse` (the adult chat entry, which
- *       carries the coach personality); the kid seam is `getKidLlmResponse` /
- *       `voiceFacts({ kidSafe })`;
+ *       carries the coach personality); the ONLY kid seam to a model is
+ *       `voiceFacts({ kidSafe })`, which phrases computed facts;
  *   #10 kid mode never reads or writes coach state — so no `ConversationState`
  *       (the door's conversational memory), no weakness spine, no curriculum,
  *       and no direct `dispatchCoachTurn` (the adult door; when it learns the
@@ -33,7 +33,7 @@ interface Ban {
 }
 
 const KID_BANS: readonly Ban[] = [
-  { name: 'getCoachChatResponse', re: /\bgetCoachChatResponse\b/, why: 'adult chat entry (coach personality) — kid #3; use getKidLlmResponse / voiceFacts({ kidSafe })' },
+  { name: 'getCoachChatResponse', re: /\bgetCoachChatResponse\b/, why: 'adult chat entry (coach personality) — kid #3; phrase computed facts through voiceFacts({ kidSafe })' },
   { name: 'ConversationState', re: /\bConversationState\b/, why: 'the adult door\'s conversational memory — kid #10, kid memory is its own' },
   { name: 'weaknessSpine', re: /\bweaknessSpine\b/, why: 'the adult student model — kid #10' },
   { name: 'coachCurriculumService', re: /\bcoachCurriculumService\b/, why: 'the adult curriculum — kid #10' },
