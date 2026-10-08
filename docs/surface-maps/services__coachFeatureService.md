@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5480 lines · 40 exports · 46 importers · 45 tests · 5 audits**
+**5503 lines · 41 exports · 46 importers · 45 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -117,6 +117,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `generateReviewNarrationSegments` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `studentMoveCosts` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildProfileContext` (function) — 3 call sites
@@ -353,7 +356,7 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:552`
+- `src/services/reviewFullData.ts:553`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites

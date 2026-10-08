@@ -34,7 +34,8 @@ export type FacetTag =
   | 'verdict' | 'opening' | 'opp-dev' | 'opp-target' | 'endgame'
   | 'plan-now' | 'plan-race' | 'plan-arc' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
   | 'note' | 'method' | 'refuted' | 'bluff' | 'technique' | 'contrast' | 'timing' | 'praise'
-  | 'rule' | 'stopped' | 'stock' | 'trade' | 'point' | 'their-cost';
+  | 'rule' | 'stopped' | 'stock' | 'trade' | 'point' | 'their-cost'
+  | 'judgement';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -87,6 +88,11 @@ export const FACET_RANK: Record<FacetTag, number> = {
   passer: 50,
   rook7: 48,
   structure: 46,
+  // A STRUCTURE JUDGEMENT (batch-6 computers, `structureReads`): the second
+  // weakness, the key pawn, the right piece for the square, the route that
+  // fails while the plan stands — a plan-layer teaching point. Just above the
+  // structure it judges, below every tactical fact.
+  judgement: 47,
   badbishop: 44,
   complex: 42,
   minority: 40,
@@ -181,6 +187,7 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   contrast: 'teach',
   point: 'teach',
   'their-cost': 'teach',
+  judgement: 'teach',
   timing: 'teach',
   'plan-race': 'teach',
   'plan-arc': 'teach',
@@ -290,7 +297,7 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   does: 'principle', point: 'plan', 'their-cost': 'plan', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
   status: 'principle', 'their-habit': 'principle', 'hole-access': 'plan', 'speedrun-read': 'plan',
   // PLAN — structure, targets, the plan and the long read.
-  'plan-now': 'plan', contrast: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-arc': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',
+  'plan-now': 'plan', judgement: 'plan', contrast: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-arc': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',
   'plan-line': 'plan', consequence: 'plan', structure: 'plan', passer: 'plan', rook7: 'plan',
   badbishop: 'plan', complex: 'plan', minority: 'plan', worst: 'plan', 'opp-target': 'plan',
   verdict: 'plan', eval: 'plan', delta: 'plan', note: 'plan', stock: 'plan',
@@ -313,7 +320,7 @@ export const FACT_PROOF: Record<FactKind, 'proven' | NoProofReason> = {
   // CONCLUSIONS — each is something a line or a count on the board shows.
   quality: 'proven', forced: 'proven', threat: 'proven', tactic: 'proven', trapped: 'proven',
   refuted: 'proven', bluff: 'proven', loose: 'proven', sac: 'proven', 'sac-why': 'proven',
-  trade: 'proven', stopped: 'proven', 'their-cost': 'proven', timing: 'proven', 'plan-race': 'proven',
+  trade: 'proven', stopped: 'proven', 'their-cost': 'proven', judgement: 'proven', timing: 'proven', 'plan-race': 'proven',
   'must-defend': 'proven', 'latent-danger': 'proven', 'latent-chance': 'proven', 'key-moment': 'proven',
   deliberation: 'proven', 'not-yet': 'proven', line: 'proven', 'stop-flaw': 'proven', convert: 'proven',
   // PRINCIPLES AND HABITS — a rule of the game, taught; the board is the example.

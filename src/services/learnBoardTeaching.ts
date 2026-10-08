@@ -65,6 +65,8 @@ import { slipAnswerText, studentMovePoint } from './playCommentary';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { trickSidestepped } from './forkTrick';
 import { gameArcs } from './lookaheadPlan';
+import { studentMoveStructure } from './structureReads';
+import type { FactStakes } from './factStakes';
 
 export interface TeachingHint {
   lane: LearnLane;
@@ -87,6 +89,8 @@ export interface TeachingHint {
    *  emission. Only HELD rows — a miss is already recorded by the live slip
    *  capture, so a broken row here would count it twice. */
   evidence?: { tag: MisconceptionTagId; posedImportance: number };
+  /** What rides on it (`factStakes`), when its computer has a number. */
+  stakes?: FactStakes;
 }
 
 /** The board after the student's move and their reply, or null. */
@@ -333,6 +337,21 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
       }
     } catch { /* a bonus, never a blocker */ }
   }
+  // THE STRUCTURE JUDGEMENTS (batch 6, `structureReads`): what the move did
+  // to the structure, the squares and the plan — the right piece for the
+  // square, the route that fails while the plan stands, the file it plugged,
+  // the pawn it rightly left alone. Each carries its proof; a correct choice
+  // records HELD on its own tag (a miss is the live slip capture's).
+  try {
+    const me: 'w' | 'b' = i.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
+    for (const s of studentMoveStructure({ fenBefore: i.fenBefore, san: i.san, student: me, cpLoss: i.cpLoss, bestSan: i.bestSan, bestUci: i.bestLine?.moves ?? [], reply: i.reply })) {
+      out.push({
+        lane: 'structureJudgement', proof: s.proof, text: s.text, squares: s.squares, claims: [s.key],
+        event: { name: 'coach_structure_judgement', props: { surface: 'coach-teach', act: s.act } }, arrows: [],
+        ...(s.stakes ? { stakes: s.stakes } : {}), ...(s.held ? { evidence: s.held } : {}),
+      });
+    }
+  } catch { /* a bonus, never a blocker */ }
   return out.map(namedStep);
 }
 

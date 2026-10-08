@@ -39,6 +39,7 @@ import { gradeMove } from './accuracyService';
 import { readPosition } from './positionalRead';
 import { structurePlan } from './boardPlan';
 import { structureSignature } from './boardStructure';
+import { boardStructure } from './structureReads';
 import { materialEdgeWords } from './reviewPositionalAssessment';
 import { strategicWhyLed, strategicWhyImperative } from './moveFundamentals';
 import { threatMadeWhy } from './deliberation';
@@ -1535,6 +1536,17 @@ export function assemblePositionAssessment(opts: {
       }
       if (reads.length > 0) parts.push(...reads);
     } catch { /* the read is a bonus, never a blocker */ }
+  }
+  // THE STRUCTURE JUDGEMENTS (batch 6), on demand — the key pawn, the second
+  // weakness, the masked hole, the wall in front of their bishop: the same
+  // computers Learn and Review speak, read from the student's seat.
+  if (opts.fen) {
+    try {
+      for (const r of boardStructure(opts.fen, sc)) {
+        parts.push(r.text);
+        for (const sq of r.squares) if (/^[a-h][1-8]$/.test(sq) && !keySquares.includes(sq)) keySquares.push(sq);
+      }
+    } catch { /* the structure read is a bonus, never a blocker */ }
   }
 
   if (parts.length === 0) return null;

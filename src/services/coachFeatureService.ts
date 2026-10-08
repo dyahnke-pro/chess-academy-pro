@@ -71,6 +71,7 @@ import { renderCausalChain } from './causalChainVoice';
 import { matchFundamental, matchTag, type WeaknessSignal } from './weaknessSignal';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap, isMethodSentence } from './principleVoice';
+import { gameStructureTrend } from './structureReads';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type { BadHabit, CoachContext, UserProfile, CoachNarration, OpeningKey, BoardArrow } from '../types';
 import { admitArrow, admitArrows, type ArrowClaim } from './arrowDoor';
@@ -565,15 +566,37 @@ export async function generateReviewNarrationSegments(
     : blunders === 1 ? 'One blunder was the main turning point.'
     : total <= 1 ? 'This was cleanly played.'
     : 'A solid game with a few things to tighten up.';
+  // SMALL EDGES ACCUMULATE (batch 6): no single real mistake, yet several
+  // student moves each gave a little — read off the per-ply evals in hand.
+  const trend = gameStructureTrend(studentMoveCosts(md, studentColorWB));
   const closingFacts = [
     `In this game: ${blunders} blunder(s), ${mistakes} mistake(s), ${inaccuracies} inaccuracy/inaccuracies.`,
     verdict,
+    ...(trend ? [trend.text] : []),
     'Keep practicing and learning from each game.',
   ].join(' ');
 
   const intro = (await voiceFacts(introFacts, { intent: 'review-intro', preferRaw: true })) ?? introFacts;
   const closing = (await voiceFacts(closingFacts, { intent: 'review-closing', preferRaw: true })) ?? closingFacts;
   return { intro, closing };
+}
+
+/** The student's own moves with their engine cost, from the per-ply evals
+ *  (White-POV, after each ply). A ply whose eval either side reads as a mate
+ *  score is skipped — a mate number is not a centipawn cost. */
+export function studentMoveCosts(md: readonly NarrativeMoveData[], studentColorWB: 'White' | 'Black'): { san: string; cpLoss: number }[] {
+  const out: { san: string; cpLoss: number }[] = [];
+  const pov = (cp: number): number => (studentColorWB === 'White' ? cp : -cp);
+  for (let i = 0; i < md.length; i++) {
+    const m = md[i];
+    const mover: 'White' | 'Black' = m.moveNumber % 2 === 1 ? 'White' : 'Black';
+    if (m.isCoachMove || mover !== studentColorWB) continue;
+    const before = i === 0 ? 0 : md[i - 1].evaluation;
+    const after = m.evaluation;
+    if (before === null || after === null || Math.abs(before) >= 1000 || Math.abs(after) >= 1000) continue;
+    out.push({ san: m.san, cpLoss: Math.max(0, pov(before) - pov(after)) });
+  }
+  return out;
 }
 
 // ─── Build Context from Profile ─────────────────────────────────────────────

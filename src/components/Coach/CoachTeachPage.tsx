@@ -10086,6 +10086,18 @@ export function CoachTeachPage(): JSX.Element {
                         if (pcHint.event) captureEvent(pcHint.event.name, pcHint.event.props);
                       }
                     } catch { /* the chooser is a bonus, never a blocker */ }
+                    // THE STRUCTURE JUDGEMENTS ON THE BOARD (batch 6), student to
+                    // move: the key pawn, the second weakness, the masked hole, the
+                    // wall in front of their bishop — and off the same MultiPV, the
+                    // fighting line and the bishop the plan will open.
+                    try {
+                      const meS: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+                      const tl3 = studentBest?.topLines ?? [];
+                      for (const st of [
+                        ...readBoardAll('structureBoard', { fen: probe.fen(), student: meS }),
+                        ...readBoardAll('structureLines', { fen: probe.fen(), student: meS, lines: tl3.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate })) }),
+                      ]) queueSpokenHint(probe.fen(), st.text, 'structureJudgement', st.proof, st.squares, [st.key], undefined, undefined, undefined, st.stakes);
+                    } catch { /* the structure read is a bonus, never a blocker */ }
                     try {
                       const pv = studentBest?.topLines?.[0]?.moves;
                       const plan = Array.isArray(pv)
@@ -10638,7 +10650,7 @@ export function CoachTeachPage(): JSX.Element {
                     })) {
                       // Graded on the board the hint describes — right after the student's move
                       // (replay 2026-10-06: 6 of 239 true lines dropped on the reply's board).
-                      queueSpokenHint(fenAfterReply, h.text, h.lane, h.proof, h.squares, h.claims, move.fen, h.arrows);
+                      queueSpokenHint(fenAfterReply, h.text, h.lane, h.proof, h.squares, h.claims, move.fen, h.arrows, undefined, h.stakes);
                       if (h.event) captureEvent(h.event.name, h.event.props);
                       // DUAL-USE (P4): the lane that teaches it also records it.
                       recordTeachingEvidence(h, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
@@ -11060,6 +11072,14 @@ export function CoachTeachPage(): JSX.Element {
                   if (tempo) {
                     queueSpokenHint(fenAfterReply, tempo.text, tempo.lane, tempo.proof, tempo.squares, tempo.claims);
                     if (tempo.event) captureEvent(tempo.event.name, tempo.event.props);
+                  }
+                  // WHAT THEIR MOVE DID TO YOUR STRUCTURE (batch 6): a pawn that
+                  // walls your weak pawn off its file, a square your unmoved pawn
+                  // leaves open — through the one registry.
+                  if (replySan) {
+                    for (const st of readBoardAll('structureTheirMove', { fenBefore: move.fen, san: replySan, student: playerColor === 'white' ? 'w' : 'b' })) {
+                      queueSpokenHint(fenAfterReply, st.text, 'structureJudgement', st.proof, st.squares, [st.key], undefined, undefined, undefined, st.stakes);
+                    }
                   }
                   const split = splitPositionTeaching(fenAfterReply, playerColor === 'white' ? 'w' : 'b');
                   if (split) {
