@@ -269,23 +269,7 @@
         ]
       }
     ],
-    "warningLines": [
-      {
-        "name": "White Plays d3-Be2-O-O Accurately",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2",
-        "explanation": "When White knows the theory — d3, Be2, then quiet development — the Stafford's tricks are defused systematically. White's solid setup means Black's traps don't work, and the material deficit becomes the dominant factor."
-      },
-      {
-        "name": "Endgame Collapse: Black Has Nothing",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2",
-        "explanation": "If White develops sensibly with d3 + Be2 + O-O + Nc3 without falling for tricks, Black is simply down a pawn with no compensation. The Stafford is a one-trick pony — if the tricks don't fire, the endgame is lost."
-      },
-      {
-        "name": "Aggressive e5 Refutation",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6",
-        "explanation": "White's aggressive 5.e5 pushes Black's knight back immediately. From here White plans d3 + d4 to firmly grip the center; Black has no counterplay and is simply worse — this is the clearest refutation of the Stafford."
-      }
-    ]
+    "warningLines": []
   },
   {
     "id": "marshall-attack",

@@ -334,51 +334,6 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       "",
     ],
   },
-  // QGA — the …Nc6 c-pawn block (hand-curated 2026-07-16). The knight parks
-  // on the …c5 break's square; e4 builds the unopposed big centre. +0.86.
-  'qga:d4_d5_c4_dxc4_Nf3_Nf6_e3:Nc6': {
-    sources: ['concept:pos-center', 'concept:pawn-majority', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted'],
-    watch: [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "e3 \u2014 the calm recapture plan: the bishop will take on c4 and the centre question comes later.",
-      "\u2026Nc6? \u2014 development that blocks the c7-pawn, and with it the \u2026c5 break the whole QGA is built on. The knight just parked on its own counterplay.",
-      "Bxc4 \u2014 no refutation needed, just the recapture: White's edge is that Black's plan is gone.",
-      "\u2026a6 \u2014 Black gestures at queenside play.",
-      "Nc3 \u2014 White develops toward the centre he will soon own.",
-      "\u2026b5 \u2014 the pawns advance where the pieces should.",
-      "Bb3 \u2014 the bishop keeps the a2-g8 diagonal, unbothered.",
-      "\u2026e6 \u2014 Black finally opens the f8-bishop.",
-      "e4! \u2014 the point of everything: the big centre lands, and with c5 blocked there is no counter-strike against it.",
-      "\u2026Be7 \u2014 quiet development in a cramped house.",
-      "White castles. Count the position: the full centre, the better bishop, and Black's knight still standing on the c-pawn's square (+0.9).",
-      "\u2026Bb7 \u2014 the bishop stares at a centre it cannot bite.",
-    ],
-    learn: [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "e3 \u2014 calm recapture plan",
-      "",
-      "Bxc4 \u2014 just recapture",
-      "",
-      "Nc3 \u2014 toward the centre",
-      "",
-      "Bb3 \u2014 keep the diagonal",
-      "",
-      "e4 \u2014 the big centre, unopposed",
-      "",
-      "O-O \u2014 full centre, better game",
-      "",
-    ],
-  },
   // Anti-Sveshnikov 6.Nf3 — the …d5 break node (hand-curated 2026-07-16):
   // two of White's three common replies lose a piece to …Bxc3/…dxe4.
   'sicilian-sveshnikov:e4_c5_Nf3_Nc6_d4_cxd4_Nxd4_Nf6_Nc3_e5_Nf3_Bb4_Bd3_d5:a3': {
@@ -464,7 +419,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       "Nxe5 \u2014 the desperado grab.",
       "\u2026exd3! \u2014 Black takes the bishop; the desperado knight is a problem for later.",
       "Qxd3 \u2014 White regains a pawn.",
-      "\u2026Qxd3 \u2014 and Black trades queens a piece up. Simplification is the cleanest conversion.",
+      "…Qxd3 — and Black trades queens a piece for a pawn up. Simplification is the cleanest conversion.",
       "Nxd3 \u2014 the recapture.",
       "\u2026O-O \u2014 the king tucks away; every complication is gone.",
       "O-O-O \u2014 White castles into a lost ending: a clean piece down (+4.1) with nothing to attack.",
@@ -491,7 +446,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       "",
       "exd3 \u2014 take the bishop",
       "",
-      "Qxd3 \u2014 trade a piece up",
+      "Qxd3 — trade queens, piece for a pawn",
       "",
       "O-O \u2014 tuck and convert",
       "",
@@ -829,7 +784,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       "\u2026Bf4 \u2014 the extra piece starts trading down: simplification is the cleanest conversion.",
       "Rc3 \u2014 White dodges the trade.",
       "\u2026Nf6 \u2014 the knight joins, covering everything and eyeing e4 and g4.",
-      "Bxf4 \u2014 the trade comes anyway. A whole piece up (+4.4) with the safer king \u2014 the gift, declined by nobody and refuted by everybody.",
+      "Bxf4 — the trade comes anyway. A piece for a pawn up (+4.4) with the safer king — the gift, declined by nobody and refuted by everybody.",
     ],
     learn: [
       "",
@@ -1281,7 +1236,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       "\u2026Nf6 \u2014 Black develops a knight and walks straight past the battery: f7 is defended by nobody at all.",
       "Bxf7+! \u2014 the bishop crashes in. The king must move, and castling is gone for the rest of the game.",
       "\u2026Kf8 \u2014 the king shuffles aside; taking the bishop loses more to the queen check behind it.",
-      "Bc4 \u2014 the bishop strolls home, a clean pawn richer, still on its favourite diagonal.",
+      "Bc4 — the bishop strolls home with the f7-pawn in hand, still on its favourite diagonal.",
       "\u2026d6 \u2014 Black tries to blunt the centre.",
       "e5 \u2014 too late: the pawn rolls through with tempo on the f6-knight.",
       "\u2026Ne4 \u2014 the knight leaps to the only active square left.",
@@ -1309,7 +1264,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       "",
       "Bxf7 \u2014 crash in",
       "",
-      "Bc4 \u2014 stroll home a pawn up",
+      "Bc4 — bishop home, f7-pawn collected",
       "",
       "e5 \u2014 roll with tempo",
       "",
@@ -1989,7 +1944,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '',
       'Nxc7+ — the royal fork: king and the a8-rook.',
       '',
-      'Nxa8 takes the rook. Up the exchange, cleanly winning.',
+      'Nxa8 takes the rook. A rook and a pawn up, cleanly winning.',
       '', '', '',
     ],
     learn: [
@@ -2368,7 +2323,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       'Nxd4? Grabbing the pawn just loses a piece — there’s no follow-up.',
       'Nxd4 takes the knight. You’re up a clean piece.',
       '',
-      'Nb3 steps out of the bishop’s pin, keeping the extra piece.',
+      'Nb3 steps out of the bishop’s pin, keeping the piece for two pawns.',
       'Black tries Bxf2+ as a desperado —',
       'Rxf2 — it fizzles; the material holds.',
       '',
@@ -2973,7 +2928,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '',
       'Qxe1 recaptures; now the e4-knight is falling too.',
       '',
-      'Qxe4 — the dust settles two pawns up with the safer king. The greedy ...d5 just lost material.',
+      'Qxe4 — the dust settles a pawn up in material with the safer king. The greedy ...d5 just lost material.',
       '',
     ],
     learn: [
@@ -2986,7 +2941,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '',
       'Qxe1 — recapture.',
       '',
-      'Qxe4 — two pawns up.',
+      'Qxe4 — a pawn up, safer king.',
       '',
     ],
   },
@@ -3029,7 +2984,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       'Nxc3?? Black snatches a third pawn with the knight — but it’s a blunder. White checks first.',
       'Qe1+! The zwischenzug. The queen checks before recapturing — Black must block, and then the c3-knight simply falls.',
       '',
-      'Qxc3 wins the knight clean. White is a piece up for a pawn with the bishop pair — completely winning.',
+      'Qxc3 wins the knight clean. White is a piece up for two pawns with the bishop pair — completely winning.',
       '',
       'Bd3 develops toward the king; the extra piece will tell.',
       '',
@@ -3721,13 +3676,13 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     sources: ['book:kings-gambit', 'concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Falkbeer_Countergambit'],
   },
   'kings-gambit:e4_e5_f4_d5_exd5_e4_d3_Nf6_dxe4:Bc5': {
-    watch: ['', '', '', '', '', '', '', '', '', 'Bc5? Aggressive but loose — White simply develops and keeps the extra pawn.', 'Nc3 — developing with tempo, guarding e4 and preparing to push it.', '', 'e5 — the pawn advances, kicking the f6-knight; White consolidates a healthy extra pawn.', '', '', '', '', ''],
+    watch: ['', '', '', '', '', '', '', '', '', 'Bc5? Aggressive but loose — White simply develops and keeps both extra pawns.', 'Nc3 — developing with tempo, guarding e4 and preparing to push it.', '', 'e5 — the pawn advances, kicking the f6-knight; White consolidates two healthy extra pawns.', '', '', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', 'Nc3 — develop, guard e4.', '', 'e5 — kick the knight.', '', '', '', '', ''],
     sources: ['book:kings-gambit', 'concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Falkbeer_Countergambit'],
   },
   'kings-gambit:e4_e5_f4_d5_exd5_e4_d3_Nf6_dxe4_Nxe4_Nf3_Bc5_Qe2:Bf2+': {
-    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'Bf2+? A spite check that wrecks the bishop’s coordination — the king is fine.', 'Kd1 — the king steps up; the f2-bishop is now offside and Black’s centre knight falls.', '', '', '', 'Nxe4 — White collects the overextended knight.', '', 'Qxe4+ — and with check, White emerges a clean pawn up with the initiative.', ''],
-    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Kd1 — step up, bishop’s offside.', '', '', '', 'Nxe4 — collect the knight.', '', 'Qxe4+ — a pawn up, with tempo.', ''],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'Bf2+? A spite check that wrecks the bishop’s coordination — the king is fine.', 'Kd1 — the king steps up; the f2-bishop is now offside and Black’s centre knight falls.', '', '', '', 'Nxe4 — White collects the overextended knight.', '', 'Qxe4+ — and with check, White emerges two pawns up with the initiative.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Kd1 — step up, bishop’s offside.', '', '', '', 'Nxe4 — collect the knight.', '', 'Qxe4+ — two pawns up, with tempo.', ''],
     sources: ['book:kings-gambit', 'concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Falkbeer_Countergambit'],
   },
   'kings-gambit:e4_e5_f4_Bc5_Nf3_d6_Nc3:exf4': {
@@ -3814,7 +3769,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     sources: ['concept:pos-center', 'concept:pos-development', 'https://www.chess.com/openings/Italian-Game'],
   },
   'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3:d5': {
-    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'd5? Black strikes back in the centre a move too early, with the bishop loose on b4.', 'exd5 — White wins the pawn; after Nxd5 both the b4-bishop and the d5-knight become targets.', '', 'O-O — calmly completing development; White keeps the extra pawn and the initiative.', '', '', '', '', ''],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'd5? Black strikes back in the centre a move too early, with the bishop loose on b4.', 'exd5 — White wins the pawn; after Nxd5 both the b4-bishop and the d5-knight become targets.', '', 'O-O — calmly completing development; material is level, but White has the initiative.', '', '', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'exd5 — win the pawn.', '', 'O-O — keep the edge.', '', '', '', '', ''],
     sources: ['concept:pos-center', 'concept:pos-development', 'https://www.chess.com/openings/Italian-Game'],
   },
@@ -4449,7 +4404,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       'Nf3 — White develops naturally, preparing to expand in the centre with the big e4/d4 duo.',
       '…c5 — Black strikes at the centre, the principled freeing try.',
       'd5 — the punish. White rams the pawn forward, gaining a strong central space wedge and cramping Black’s position.',
-      '', '', 'exd5 — after the exchanges White has the freer game with the central space and the better-placed pieces.',
+      '', '', 'Qxd5 — White trades queens; after …exd5 White keeps the freer game with the central space.',
       '', '',
     ],
     learn: [
@@ -4458,7 +4413,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       'Nf3 — develop, prepare to expand',
       'c5 — Black strikes the centre',
       'd5 — ram the wedge, cramp Black',
-      '', '', 'exd5 — central space, White better',
+      '', '', 'Qxd5 — trade queens, freer game',
       '', '',
     ],
     sources: ['concept:pos-center', 'concept:pos-space', 'https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation'],
@@ -4522,7 +4477,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       'Qa5+?! The check looks active, but it just helps White develop with tempo.',
       'Nc3 — White blocks the check by developing a piece, gaining time and holding the extra c5-pawn.',
       '', 'Be3 — White reinforces the extra pawn and completes development.',
-      '', '', 'b4 — White gains queenside space, keeping the material and the initiative; clearly better.',
+      '', '', '…Nxe5 — Black wins the e5-pawn back, but b4 next hits the queen and keeps the c5-pawn.',
       '', '',
     ],
     learn: [
@@ -4530,7 +4485,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       'Qa5+ — an empty check',
       'Nc3 — block with development',
       '', 'Be3 — guard the extra pawn',
-      '', '', 'b4 — gain space, hold the pawn',
+      '', '', '…Nxe5 — Black grabs e5',
       '', '',
     ],
     sources: ['concept:pos-development', 'concept:pos-material', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation'],
@@ -4544,7 +4499,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       'c4?! Releasing the tension hands White a free hand on the kingside and a target to undermine.',
       'Qe2 — White repositions the queen, preparing b3 to chip at the c4-pawn.',
       '', 'b3 — White strikes at the base of the queenside chain, opening lines against the over-extended pawn.',
-      '', '', 'a4 — White expands and undermines further; with the freer game and the e5-wedge, White is comfortably better.',
+      '', '', '…a6 — Black props the b5-pawn before White\'s a4 arrives.',
       '', '',
     ],
     learn: [
@@ -4552,7 +4507,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       'c4 — releases the tension',
       'Qe2 — prepare b3',
       '', 'b3 — undermine the chain',
-      '', '', 'a4 — expand, White better',
+      '', '', '…a6 — prop the b5-pawn',
       '', '',
     ],
     sources: ['concept:pos-pawn-structure', 'concept:pos-space', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation'],
@@ -4757,8 +4712,8 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   // Naroditsky KID vs h3 (Black): the …Nh5 reroute clamps; …Bxc3 doubles White's pawns.
   'pro-naroditsky-kid:d4_Nf6_c4_g6_Nc3_Bg7_e4_d6_h3_O-O:f4': {
-    watch: ['', '', '', '', '', '', '', '', '', '', 'f4? — over-ambitious; it loosens the kingside and the g3-square.', '…Nh5 — the knight reroutes toward the weakened g3 and f4 squares.', '', '…Ng3 — the knight lands on g3, forking the rook and skewering the structure.', '', '', '…c5 — Black strikes the centre too.', '', '…Bxc3 — Black trades to saddle White with doubled, weak c-pawns and the better game.'],
-    learn: ['', '', '', '', '', '', '', '', '', '', '', 'Nh5 — reroute to g3.', '', 'Ng3 — fork the rook.', '', '', 'c5 — strike the centre.', '', 'Bxc3 — double the pawns, Black is better.'],
+    watch: ['', '', '', '', '', '', '', '', '', '', 'f4? — over-ambitious; it loosens the kingside and the g3-square.', '…Nh5 — the knight reroutes toward the weakened g3 and f4 squares.', '', '…Ng3 — the knight lands on g3, forking the rook and skewering the structure.', '', '', 'd5 — White pushes past the c5-pawn and closes the centre.', '', 'bxc3 — White recaptures and is left with doubled c-pawns.'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', 'Nh5 — reroute to g3.', '', 'Ng3 — fork the rook.', '', '', 'd5 — close the centre', '', 'bxc3 — doubled c-pawns'],
     sources: ['concept:pos-weak-square', 'concept:pos-outpost', 'https://www.chess.com/openings/Kings-Indian-Defense'],
   },
   // Naroditsky KID Sämisch (Black): the …b5! Benko-style break confirmed-crushes (+1.37).
@@ -4769,8 +4724,8 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   // Naroditsky KID vs f4 Four Pawns (Black): same …Nh5 → …Ng3 → …Bxc3 doubling plan.
   'pro-naroditsky-kid:d4_Nf6_c4_g6_Nc3_Bg7_e4_d6_f4_O-O:h3': {
-    watch: ['', '', '', '', '', '', '', '', '', '', 'h3? — slow, and it does nothing about the weak g3-square.', '…Nh5 — the knight heads for the holes f4 and g3 created.', '', '…Ng3 — landing on g3, forking the rook.', '', '', '…c5 — Black hits the centre.', '', '…Bxc3 — trading to give White doubled c-pawns and the worse structure.'],
-    learn: ['', '', '', '', '', '', '', '', '', '', '', 'Nh5 — reroute to g3.', '', 'Ng3 — fork the rook.', '', '', 'c5 — strike the centre.', '', 'Bxc3 — double the pawns, Black is better.'],
+    watch: ['', '', '', '', '', '', '', '', '', '', 'h3? — slow, and it does nothing about the weak g3-square.', '…Nh5 — the knight heads for the holes f4 and g3 created.', '', '…Ng3 — landing on g3, forking the rook.', '', '', 'd5 — White pushes past the c5-pawn and closes the centre.', '', 'bxc3 — White recaptures and is left with doubled c-pawns.'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', 'Nh5 — reroute to g3.', '', 'Ng3 — fork the rook.', '', '', 'd5 — close the centre', '', 'bxc3 — doubled c-pawns'],
     sources: ['concept:pos-weak-square', 'concept:pos-outpost', 'https://www.chess.com/openings/Kings-Indian-Defense-Four-Pawns-Attack'],
   },
 
@@ -4789,8 +4744,8 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   // Naroditsky Alapin: …Be6 allows Qb3 hitting b7 and the pinned bishop, winning a pawn.
   'pro-naroditsky-alapin:e4_c5_c3_Nf6_e5_Nd5_Nf3_d6_Bc4:Be6': {
-    watch: ['', '', '', '', '', '', '', '', '', '…Be6? — offering a trade, but it lets the queen swing out with tempo.', 'Qb3 — the queen swings out to hit b7, with the c4-bishop aimed down the diagonal at e6; Black’s loose queenside cannot hold both.', '…Nf4 — Black tries to muddy it.', 'Bxe6 — trading first.', '…Nxe6 — recapturing.', 'Qxb7 — White snaps the b7-pawn; a clean pawn up with the initiative.', '', '', '…dxe5 — Black opens lines, but White is a pawn up and better.'],
-    learn: ['', '', '', '', '', '', '', '', '', '', 'Qb3 — hit b7 and the bishop.', 'Nf4 — muddy it.', 'Bxe6 — trade first.', 'Nxe6 — recapture.', 'Qxb7 — grab the pawn.', '', '', 'dxe5 — White is a pawn up.'],
+    watch: ['', '', '', '', '', '', '', '', '', '…Be6? — offering a trade, but it lets the queen swing out with tempo.', 'Qb3 — the queen swings out to hit b7, with the c4-bishop aimed down the diagonal at e6; Black’s loose queenside cannot hold both.', '…Nf4 — Black tries to muddy it.', 'Bxe6 — trading first.', '…Nxe6 — recapturing.', 'Qxb7 — White snaps the b7-pawn; a clean pawn up with the initiative.', '', '', '…dxe5 — Black wins the pawn back and opens lines, but White is still better.'],
+    learn: ['', '', '', '', '', '', '', '', '', '', 'Qb3 — hit b7 and the bishop.', 'Nf4 — muddy it.', 'Bxe6 — trade first.', 'Nxe6 — recapture.', 'Qxb7 — grab the pawn.', '', '', 'dxe5 — pawn back, White still better.'],
     sources: ['concept:tac-double-attack', 'concept:pos-material', 'https://www.chess.com/openings/Sicilian-Defense-Alapin-Variation'],
   },
 
@@ -4841,7 +4796,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   "pro-ericrosen-sicilian:e4_c5_Nf3_e6_d4_cxd4_Nxd4_Nc6_Nc3_Qc7_Be3_a6_Qd2_Nf6_O-O-O_Bb4:a3": {
     sources: ["concept:tac-pin","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense-Taimanov-Variation"],
-    watch: ["","","","","","","","","","","","","","","","","a3? — White jabs at the b4-bishop, but the king has just castled long and the centre is a powder keg. This loses time the position cannot spare.","…Nxe4! — Black blasts the centre open, snatching e4 and exploiting the pin on the c3-knight and the loose queen on d1.","","…Nxc3 — collecting the knight; the b4-bishop and the central fork do the work.","","","","","After the smoke clears Black is a clean pawn up with much the safer king."],
+    watch: ["","","","","","","","","","","","","","","","","a3? — White jabs at the b4-bishop, but the king has just castled long and the centre is a powder keg. This loses time the position cannot spare.","…Nxe4! — Black blasts the centre open, snatching e4 and exploiting the pin on the c3-knight and the loose queen on d1.","","…Nxc3 — collecting the knight; the b4-bishop and the central fork do the work.","","","","","After the smoke clears Black is a clean piece up with much the safer king."],
     learn: ["","","","","","","","","","","","","","","","","","…Nxe4 — blast the centre open","","…Nxc3 — collect the knight","","","","",""],
   },
   "pro-ericrosen-sicilian:e4_c5_c3_d5_exd5_Qxd5_d4_Nf6_Nf3_e6_Na3_Nc6:Bf4": {
@@ -4871,12 +4826,12 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   "pro-ericrosen-stafford:e4_e5_Nf3_Nf6_Nxe5_Nc6_Nxc6_dxc6_Nc3_Bc5_Be2_h5:h3": {
     sources: ["concept:pos-initiative","concept:tac-pin","https://www.chess.com/openings/Stafford-Gambit"],
-    watch: ["","","","","","","","","","","","","h3? — a wasted tempo that stops nothing; Black already has the initiative.","…Qd4 — the queen centralises with threats against f2 and e4.","","…Nxe4! — the central pawn falls to a tactic exploiting the pinned c3-knight.","","","","…Qxd1+ — trading into an ending a clean pawn up with the better structure.",""],
+    watch: ["","","","","","","","","","","","","h3? — a wasted tempo that stops nothing; Black already has the initiative.","…Qd4 — the queen centralises with threats against f2 and e4.","","…Nxe4! — the central pawn falls to a tactic exploiting the pinned c3-knight.","","","","…Qxd1+ — trading queens into an ending with the better structure.",""],
     learn: ["","","","","","","","","","","","","","…Qd4 — centralise with threats","","…Nxe4 — win the centre pawn","","","","",""],
   },
   "pro-ericrosen-stafford:e4_e5_Nf3_Nf6_Nxe5_Nc6_Nxc6_dxc6_e5_Ne4_d4_Qh4:g3": {
     sources: ["concept:tac-sacrifice","concept:pos-king-safety","https://www.chess.com/openings/Stafford-Gambit"],
-    watch: ["","","","","","","","","","","","","g3? — it attacks the h4-queen but rips open the king. Black has a crushing tactic.","…Nxg3! — the knight sacrifices itself to tear open the f-file and the king.","","…Qe4+ — the queen forks the king and the loose pieces along the open lines.","","…Qxe3+ — collecting material with check; White's position collapses.","","",""],
+    watch: ["","","","","","","","","","","","","g3? — it attacks the h4-queen but rips open the king. Black has a strong tactic.","…Nxg3! — the knight sacrifices itself to tear open the f-file and the king.","","…Qe4+ — the queen forks the king and the loose pieces along the open lines.","","…Qxe3+ — collecting material with check; White's position collapses.","","",""],
     learn: ["","","","","","","","","","","","","","…Nxg3 — rip open the king","","…Qe4+ — fork on the open lines","","","","",""],
   },
   "pro-ericrosen-stafford:e4_e5_Nf3_Nf6_Nxe5_Nc6_Nf3_Nxe4_Nc3_d5:d4": {
@@ -4886,8 +4841,8 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   "pro-ericrosen-qgd:d4_d5_c4_e6_Nc3_Nf6_Bg5_c6_e3_Nbd7_Nf3_Qa5_Nd2_Bb4:Qb3": {
     sources: ["concept:tac-fork","concept:tac-pin","https://www.chess.com/openings/Queens-Gambit-Declined"],
-    watch: ["","","","","","","","","","","","","","","Qb3? — defending c4 but stepping into a Cambridge Springs tactic; the queen and knight are loose.","…dxc4! — the pawn grab springs the trap, opening lines against the pinned c3-knight.","","…Bxc3+ — wrecking White's structure, and the follow-up wins the g5-bishop.","","…Qxg5 — Black snaps off the bishop and emerges a clean piece up.","","",""],
-    learn: ["","","","","","","","","","","","","","","","…dxc4 — spring the trap","","…Bxc3+ — wreck the structure","","…Qxg5 — win the bishop","","",""],
+    watch: ["","","","","","","","","","","","","","","Qb3? — defending c4 but stepping into a Cambridge Springs tactic; the queen and knight are loose.","…dxc4! — the pawn grab opens lines against the pinned c3-knight.","","…Bxc3+ — wrecking White's structure, and the follow-up wins the g5-bishop.","","…Qxg5 — Black snaps off the bishop and emerges a clean piece up.","","",""],
+    learn: ["","","","","","","","","","","","","","","","…dxc4 — open the lines","","…Bxc3+ — wreck the structure","","…Qxg5 — win the bishop","","",""],
   },
   "pro-samayraina-open-sicilian:e4_c5_Nf3_Nc6_d4_cxd4_Nxd4_e5_Nb5:Qa5+": {
     sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense-Open"],
@@ -4901,7 +4856,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   "pro-samayraina-open-sicilian:e4_c5_Nf3_e6_d4_cxd4_Nxd4_Nc6_Nc3_Qc7_Be2_a6_O-O_Nf6_Be3_Bb4_f3:b5": {
     sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense-Open"],
-    watch: ["","","","","","","","","","","","","","","","","","b5? — the queenside push comes too early; it loosens Black’s pawns before he can support them.","a4! — striking at b5 at once; after …bxa4 Nxc6 Qxc6 Nxa4 White wins the pawn back with much the better structure.","","Nxa4 — the pawn is regained and Black’s queenside is left full of holes; White is clearly on top.","","","","",""],
+    watch: ["","","","","","","","","","","","","","","","","","b5? — the queenside push comes too early; it loosens Black’s pawns before he can support them.","a4! — striking at b5 at once; after …bxa4 Nxc6 Qxc6 Nxa4 White wins the pawn back with much the better structure.","","Nxc6 — White trades on c6 first; after …Qxc6 the knight takes back on a4 and the pawn is regained.","","","","",""],
     learn: ["","","","","","","","","","","","","","","","","","","a4 — crack the loose b5","","","","","","",""],
   },
   "pro-samayraina-open-sicilian:e4_c5_Nf3_g6_d4_cxd4_Nxd4_Nf6_Nc3_Bg7_Be2:Qa5": {
@@ -4926,7 +4881,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   "pro-samayraina-ruy:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O_f6_d4_exd4_Nxd4_c5_Nb3:Be6": {
     sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez"],
-    watch: ["","","","","","","","","","","","","","","","Be6? — a passive square; it invites a trade that leaves White with the better structure.","Qe2 — calmly improving. After …Bxb3 axb3 White owns the half-open a-file and the healthier pawns; the Exchange-Ruy edge tells.","","Nc3 — White develops harmoniously and presses the long-term structural pull.","","","","",""],
+    watch: ["","","","","","","","","","","","","","","","Be6? — a passive square; it invites a trade that leaves White with the better structure.","Qe2 — calmly improving. After …Bxb3 axb3 White owns the half-open a-file and the healthier pawns; the Exchange-Ruy edge tells.","","axb3 — White recaptures toward the centre and gets the half-open a-file for the rook.","","","","",""],
     learn: ["","","","","","","","","","","","","","","","","Qe2 — keep the structural pull","","","","","","",""],
   },
   "pro-samayraina-ruy:e4_e5_Nf3_Nc6_Bb5_d6_d4:a6": {
@@ -4936,7 +4891,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   "pro-samayraina-ruy:e4_e5_Nf3_Nc6_Bb5_d6_d4_Bd7_Nc3:Be7": {
     sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez"],
-    watch: ["","","","","","","","","","Be7? — it fails to defend e5; White removes the defender and wins the pawn.","Bxc6! — and after …Bxc6 dxe5 dxe5 Qxd8 Rxd8 Nxe5 White has won the e5-pawn cleanly.","","Nxe5 — a clean pawn to the good, with the simpler position.","","","","",""],
+    watch: ["","","","","","","","","","Be7? — it fails to defend e5; White removes the defender and wins the pawn.","Bxc6! — and after …Bxc6 dxe5 dxe5 Qxd8 Rxd8 Nxe5 White has won the e5-pawn cleanly.","","dxe5 — White trades in the centre; after …dxe5 the queens come off and Nxe5 picks up a pawn.","","","","",""],
     learn: ["","","","","","","","","","","Bxc6 — then dxe5 wins e5","","","","","","",""],
   },
   "pro-samayraina-ruy:e4_e5_Nf3_Nc6_Bb5_d6_d4_Bd7_Nc3_Nf6_O-O_Be7_Re1_exd4_Nxd4:Ne5": {
@@ -4946,7 +4901,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   "pro-samayraina-italian:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4:Bb6": {
     sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Italian-Game"],
-    watch: ["","","","","","","","","","","","Bb6? — too passive; it hands White the crushing central break for free.","e5! — storming the centre with tempo, kicking the f6-knight; in the complications White emerges a pawn up with a clamp.","","exd6 — White nets the pawn and keeps a dominating centre.","","","","",""],
+    watch: ["","","","","","","","","","","","Bb6? — too passive; it hands White the crushing central break for free.","e5! — storming the centre with tempo, kicking the f6-knight; in the complications White comes out with extra material and a clamp.","","Qe2 — the queen attacks the e4-knight.","","","","",""],
     learn: ["","","","","","","","","","","","","e5 — storm, win a pawn","","","","","","",""],
   },
   "pro-samayraina-italian:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3:O-O": {
@@ -4956,12 +4911,12 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   "pro-samayraina-italian:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3_Nxe4_O-O:d5": {
     sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Italian-Game"],
-    watch: ["","","","","","","","","","","","","","","","d5? — a premature break with the king still in the centre; it walks into a crushing knight jump.","Nxd5! — the knight crashes to the dominant d5-outpost; with Black’s king stuck in the centre and his pieces tangled, White is winning.","","Nxe7 — trading into a near-decisive grip while Black’s king languishes on e8.","","","","",""],
+    watch: ["","","","","","","","","","","","","","","","d5? — a premature break with the king still in the centre; it walks into a crushing knight jump.","Nxd5! — the knight crashes to the dominant d5-outpost; with Black’s king stuck in the centre and his pieces tangled, White is winning.","","Re1 — the rook hits the e4-knight down the open e-file.","","","","",""],
     learn: ["","","","","","","","","","","","","","","","","Nxd5 — seize the outpost","","","","","","",""],
   },
   "pro-samayraina-italian:e4_e5_Nf3_Nc6_Bc4_Nf6_d3_Be7_O-O_O-O_Re1:d5": {
     sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Italian-Game"],
-    watch: ["","","","","","","","","","","","d5? — striking too soon; it opens the e-file straight onto Black’s own pieces.","exd5! — and after …Nxd5 Nxe5! the e-file pin wins the e5-pawn; White is up material.","","Rxe5 — collecting the pawn down the pinned file; White is a clean pawn ahead.","","","","",""],
+    watch: ["","","","","","","","","","","","d5? — striking too soon; it opens the e-file straight onto Black’s own pieces.","exd5! — and after …Nxd5 Nxe5! the e-file pin wins the e5-pawn; White is up material.","","Nxe5 — White takes the e5-pawn with the knight; after …Nxe5 Rxe5 the pawn stays collected.","","","","",""],
     learn: ["","","","","","","","","","","","","exd5 — then Nxe5 wins a pawn","","","","","","",""],
   },
   "pro-samayraina-caro-white:e4_c6_d4_d5_exd5_cxd5_Bd3_Nc6_c3_Nf6_Bf4_Bg4_Qb3:b6": {
@@ -4986,7 +4941,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   "pro-samayraina-open-e5:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3_Nxe4:Qe2": {
     sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Ruy-Lopez"],
-    watch: ["","","","","","","","","","","","","","","Qe2? — White misplaces the queen and never challenges the strong e4-knight. Black breaks the centre open.","…d5! — the central break supports the e4-knight and tears White’s centre open; after …Bxc3 and …Nxc3 Black wins material.","","…Nxc3 — Black collects material with the dominant knight; he is clearly winning.","","","","",""],
+    watch: ["","","","","","","","","","","","","","","Qe2? — White misplaces the queen and never challenges the strong e4-knight. Black breaks the centre open.","…d5! — the central break supports the e4-knight and tears White’s centre open; after …Bxc3 and …Nxc3 Black wins material.","","…Bxc3 — Black trades the bishop on c3 before castling.","","","","",""],
     learn: ["","","","","","","","","","","","","","","","…d5 — break, the e4-knight rules","","","","","","",""],
   },
   "pro-samayraina-open-e5:e4_e5_Nf3_Nc6_d4_exd4:Ng5": {
@@ -4996,17 +4951,17 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   "pro-samayraina-sicilian-black:e4_c5_c3_Nf6_e5_Nd5_d4_cxd4_Nf3_Nc6_cxd4_d6:Bb5": {
     sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense"],
-    watch: ["","","","","","","","","","","","","Bb5? — the pin walks into a check that wins material.","…Qa5+! — the check ties in with …Nxc3; after Nc3 Nxc3 Bxc6+ bxc6 bxc3 Qxc3+ Black snaps a pawn with check.","","…Qxc3+ — Black regains the material with check and the bishop pair, clearly better.","","","","",""],
+    watch: ["","","","","","","","","","","","","Bb5? — the pin walks into a check that wins material.","…Qa5+! — the check ties in with …Nxc3; after Nc3 Nxc3 Bxc6+ bxc6 bxc3 Qxc3+ Black snaps a pawn with check.","","…Nxc3 — the knight takes on c3; after Bxc6+ bxc6 bxc3 the queen collects the pawn with check.","","","","",""],
     learn: ["","","","","","","","","","","","","","…Qa5+ — check, then win c3","","","","","","",""],
   },
   "pro-samayraina-sicilian-black:e4_c5_c3_Nf6_e5_Nd5_d4_cxd4_Nf3_Nc6_cxd4_d6_Bc4_Nb6_Bb5_dxe5:d5": {
     sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense"],
-    watch: ["","","","","","","","","","","","","","","","","d5? — overpushing; …a6 questions the bishop and the centre collapses in Black’s favour.","…a6 — hitting the b5-bishop; after Bxc6+ bxc6 dxc6 Qxd1+ Kxd1 White’s king is stranded and Black is clearly better.","","…f6 — Black undermines the c6-pawn; White’s stuck king and loose pawns leave Black on top.","","","","",""],
+    watch: ["","","","","","","","","","","","","","","","","d5? — overpushing; …a6 questions the bishop and the centre collapses in Black’s favour.","…a6 — hitting the b5-bishop; after Bxc6+ bxc6 dxc6 Qxd1+ Kxd1 White’s king is stranded and Black is clearly better.","","…bxc6 — Black recaptures, and White's d5-pawn takes on c6 next.","","","","",""],
     learn: ["","","","","","","","","","","","","","","","","","…a6 — question the bishop","","","","","","",""],
   },
   "pro-samayraina-scandi:e4_d5_exd5_Qxd5_Nc3_Qa5_d4_c6_Bd2_Qc7_Nf3_Nf6_Bc4_Bg4:Bxf7+": {
     sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Scandinavian-Defense"],
-    watch: ["","","","","","","","","","","","","","","Bxf7+? — a tempting but unsound sacrifice; the king is perfectly safe after taking.","…Kxf7! Black simply grabs the bishop. White has nothing for the piece — the sac is refuted.","","…Bxf3 — Black trades pieces to safety; a whole piece up, the king strolls back to g8 and consolidates.","","","","",""],
+    watch: ["","","","","","","","","","","","","","","Bxf7+? — a tempting but unsound sacrifice; the king is perfectly safe after taking.","…Kxf7! Black simply grabs the bishop. White has nothing for the piece — the sac is refuted.","","…Bxf3 — Black trades pieces to safety; a piece for a pawn up, the king strolls back to g8 and consolidates.","","","","",""],
     learn: ["","","","","","","","","","","","","","","","…Kxf7 — take it, refute the sac","","","","","","",""],
   },
   "pro-samayraina-scandi:e4_d5_exd5_Qxd5_Nc3_Qd8_d4_Nf6_Nf3_c6_Bc4_Bg4_h3_Bxf3_Qxf3_e6:Bg5": {
@@ -5056,7 +5011,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   "pro-caruana-italian:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d3_d6_O-O_Bg4_h3:h5": {
     sources: ["concept:tac-trap","concept:pos-initiative","https://www.chess.com/openings/Italian-Game"],
-    watch: ["","","","","","","","","","","","","","…h5?? — trying to hold the pin, but it collapses tactically.","hxg4! — taking the bishop; after …hxg4 Ng5 White crashes through on f7.","","","","Ng5 and Nxf7 win decisive material — the engine reads +2.3, three pawns up.","","",""],
+    watch: ["","","","","","","","","","","","","","…h5?? — trying to hold the pin, but it collapses tactically.","hxg4! — taking the bishop; after …hxg4 Ng5 White crashes through on f7.","","","","Nxf7 — the knight lands on f7, forking the queen on d8 and the rook on h8; the engine reads about +2.3.","","",""],
     learn: ["","","","","","","","","","","","","","","hxg4 — take it and crash through","","","","","","",""],
   },
   "pro-caruana-kid:d4_Nf6_c4_g6_Nc3_Bg7_e4_d6_h3_O-O:f4": {
@@ -5110,7 +5065,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // each playLine; narration placed at the inaccuracy + punish + follow-ups.
   "pro-aman-sicilian-kan:e4_c5_Nf3_e6_d4_cxd4_Nxd4_a6_Nc3_Qc7_Bd3_Nf6_O-O_d6_f4_Nbd7:f5": {
     sources: ["concept:pos-center","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense-Kan-Variation"],
-    watch: ["","","","","","","","","","","","","","","","","f5?! — White lunges in the centre before finishing development; the e5-square and the a7-g1 diagonal both go soft.","…Qb6! — the queen swings to b6, hitting d4 and the weakened g1-diagonal at once.","","…e5! — Black strikes back; the d4-knight has no good square and White cracks.","","…exd4 — the centre collapses in Black’s favour.","","…Qd8 — regrouping a clean pawn to the good.",""],
+    watch: ["","","","","","","","","","","","","","","","","f5?! — White lunges in the centre before finishing development; the e5-square and the a7-g1 diagonal both go soft.","…Qb6! — the queen swings to b6, hitting d4 and the weakened g1-diagonal at once.","","…e5! — Black strikes back; the d4-knight has no good square and White cracks.","","…exd4 — the centre collapses in Black’s favour.","","…Qd8 — regrouping a piece for a pawn to the good.",""],
     learn: ["","","","","","","","","","","","","","","","","","…Qb6 — hit d4 and the diagonal","","…e5 — strike the loose centre","","…exd4 — collapse the centre","","",""],
   },
   "pro-aman-sicilian-kan:e4_c5_c3_Nf6_e5_Nd5_d4_cxd4_Nf3_Nc6_Bc4_Nb6:Bxf7+": {
@@ -5255,13 +5210,13 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   "pro-aman-caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_exd4_Bc4_Be6_Bxe6_fxe6:Nxd4": {
     sources: ["concept:tac-fork","concept:pos-initiative","https://www.chess.com/openings/Caro-Kann-Defense"],
-    watch: ["","","","","","","","","","","","","","","Nxd4?! — again the recapture walks into the check with the king stuck in the centre.","…Qh4+! — the queen leaps to the open fourth rank; White must block or run.","Kf1 — the king loses castling rights.","…e5 — the pawn rolls forward, hitting d4 and seizing the centre.","","…Nf6 — developing with tempo toward the open king.","","…Qh5 — keeping the queen active, Black clearly on top.",""],
-    learn: ["","","","","","","","","","","","","","","","…Qh4+ — check, strand the king","","…e5 — roll the centre forward","","…Nf6 — develop at the king","","",""],
+    watch: ["","","","","","","","","","","","","","","Nxd4?! — again the recapture walks into the check with the king stuck in the centre.","…Qh4+! — the queen leaps to the open fourth rank; White must block or run.","Kf1 — the king loses castling rights.","…Bc5 — the bishop piles onto the d4-knight.","","…Nd7 — the queen's knight develops toward e5.","","…Ne7 — the last minor piece develops.",""],
+    learn: ["","","","","","","","","","","","","","","","…Qh4+ — check, strand the king","","…Bc5 — hit the d4-knight","","…Nd7 — develop","","",""],
   },
   "pro-aman-caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_exd4_Bc4_Be6_Bxe6_fxe6_O-O_Nf6:Ne5": {
     sources: ["concept:pos-center","concept:pos-initiative","https://www.chess.com/openings/Caro-Kann-Defense"],
-    watch: ["","","","","","","","","","","","","","","","","Ne5?! — the knight jumps in but has no support and can simply be challenged away.","…Be7! — calm development; the e5-knight has no real threat and must give ground.","Bf4 — trying to hold the outpost.","…O-O — Black tucks the king away, a pawn to the good.","","…Nbd7 — challenging the e5-knight directly.","","…Qe8 — repositioning, Black comfortably better.",""],
-    learn: ["","","","","","","","","","","","","","","","","","…Be7 — ignore it, stay solid","","…O-O — king to safety","","…Nbd7 — challenge the knight","","",""],
+    watch: ["","","","","","","","","","","","","","","","","Ne5?! — the knight jumps in but has no support and can simply be challenged away.","…Be7! — calm development; the e5-knight has no real threat and must give ground.","Bf4 — trying to hold the outpost.","…O-O — Black tucks the king away, a pawn to the good.","","…c5 — Black props the d4-pawn and grabs queenside space.","","…Qe8 — repositioning, Black comfortably better.",""],
+    learn: ["","","","","","","","","","","","","","","","","","…Be7 — ignore it, stay solid","","…O-O — king to safety","","…c5 — prop the d4-pawn","","",""],
   },
   "pro-aman-reti:Nf3_g6_d4_Bg7_e4_d6_c3_Nf6_Bd3_O-O_O-O_Nc6_h3_e5_Re1:exd4": {
     sources: ["concept:pos-center","concept:pos-space","https://www.chess.com/openings/Reti-Opening"],
@@ -5270,7 +5225,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   "pro-aman-reti:Nf3_Nf6_g3_d5_Bg2_c6_O-O_Bf5_d3_e6_Nbd2_h6_Re1:Bd6": {
     sources: ["concept:tac-fork","concept:pos-center","https://www.chess.com/openings/Reti-Opening"],
-    watch: ["","","","","","","","","","","","","","Bd6?! — the bishop blocks the d-pawn and stands in the path of e4 with nothing guarding f5.","e4! — the central break forks: it hits the f5-bishop and threatens e5 onto the d6-bishop.","Bh7 — the bishop flees to the corner, out of play.","e5 — the pawn jabs forward with tempo, forking d6 and f6.","","exf6 — White wins a clean piece via the fork.","Qxf6 — Black recaptures the pawn but stays a piece down.","a4 — gaining space, completely winning.",""],
+    watch: ["","","","","","","","","","","","","","Bd6?! — the bishop blocks the d-pawn and stands in the path of e4 with nothing guarding f5.","e4! — the central break forks: it hits the f5-bishop and threatens e5 onto the d6-bishop.","…Bg6 — the bishop steps back from the e4-pawn's attack.","e5 — the pawn jabs forward with tempo, forking d6 and f6.","","exf6 — White wins a clean piece via the fork.","Qxf6 — Black recaptures the pawn but stays a piece down.","Rb1 — the rook leaves the queen's long diagonal and prepares b4.",""],
     learn: ["","","","","","","","","","","","","","","e4 — break, fork bishop and centre","","e5 — jab forward, fork again","","exf6 — collect the piece","","",""],
   },
   "pro-aman-reti:Nf3_d5_g3_Nf6_Bg2_e6_O-O_Be7_d3_O-O_Nbd2_c5_e4:d4": {
@@ -5528,8 +5483,8 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   'qgd:d4_d5_c4_e6_Nc3_Nf6_Nf3_Bb4_Bg5_dxc4_e4_c5_Bxc4_cxd4:Qxd4': {
     sources: ["concept:pos-center", "concept:pawn-doubled", "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"],
-    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Qxd4? — recapturing with the queen, but trading queens leaves the e4-pawn hanging.', '…Qxd4 — forcing the trade.', 'Nxd4', '…Nxe4! — now the e4-pawn falls; queens are off and the fork on c3 is in the air.', 'Be3', '…Nxc3 — snapping off the knight—', 'a3', '…Ba5 — keeping the bishop; Black is a clean pawn up with the better structure into the endgame.', 'Bd2'],
-    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Qxd4 — trade, leave e4 loose.', '', '…Nxe4 — win the pawn.', '', '…Nxc3 — snap it off.', '', '…Ba5 — a clean pawn up.', ''],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Qxd4? — recapturing with the queen, but trading queens leaves the e4-pawn hanging.', '…Qxd4 — forcing the trade.', 'Nxd4', '…Nxe4! — now the e4-pawn falls; queens are off and the fork on c3 is in the air.', 'Be3', '…Nxc3 — snapping off the knight—', 'a3', '…Ba5 — keeping the bishop; Black stays clearly better into the endgame.', 'Bd2'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Qxd4 — trade, leave e4 loose.', '', '…Nxe4 — win the pawn.', '', '…Nxc3 — snap it off.', '', '…Ba5 — keep the bishop, clearly better.', ''],
   },
   'qgd:d4_d5_c4_e6_Nc3_Nf6_Bg5_Nbd7_Nf3_c6_e3_Qa5_Nd2_Bb4:Qb3': {
     sources: ["concept:tac-trap", "concept:tac-deflection", "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined,_Cambridge_Springs_Defense"],

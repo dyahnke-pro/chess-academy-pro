@@ -4398,9 +4398,9 @@
       ],
       "warningLines": [
         {
-          "name": "...Nxe4 drops the queen",
+          "name": "...Nxe4 drops a piece",
           "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 Nxe4 Nxe4 h6 Bh4",
-          "explanation": "Watch out: against the Bg5 Najdorf, the greedy ...Nxe4 loses material on the spot — Nxe4 nets a clean piece for a single pawn, and the even sharper Bxd8 wins the queen outright. Always meet Bg5 with the solid ...e6."
+          "explanation": "Watch out: against the Bg5 Najdorf, the greedy …Nxe4 just loses a piece for a pawn — Nxe4 takes back and nothing wins the knight back. Meet Bg5 with the solid …e6."
         }
       ],
       "sources": [
@@ -4570,7 +4570,7 @@
         {
           "name": "...Nxe4 loses material",
           "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O e4 Nxe4 Qxe4 d5",
-          "explanation": "Watch out: in this sharp Nimzo with an early e4, grabbing the pawn with ...Nxe4 loses material to Nxe4. Hit the centre the right way with ...d5."
+          "explanation": "Watch out: in this sharp Nimzo with an early e4, grabbing the pawn with …Nxe4 loses material — Qxe4 takes back, and …d5 does not win it back. Hit the centre the right way with …d5 first."
         }
       ],
       "sources": [
@@ -5504,7 +5504,7 @@
         {
           "name": "Premature Nd5?? drops a piece",
           "pgn": "e4 c5 Nc3 Nc6 f4 e6 Nf3 Nge7 Nd5 exd5",
-          "explanation": "Watch out for the tempting Nd5, hitting c7 and e7 — here it is just a blunder. …exd5 wins the knight outright, since nothing recaptures on d5. Complete development and prepare the f4-f5 break first; the Nd5 jump only works once it is genuinely supported."
+          "explanation": "Watch out for the tempting Nd5, hitting c7 and e7 — here it is just a blunder. …exd5 wins the knight: if exd5, the e7-knight takes back on d5 and Black stays a piece up. Complete development and prepare the f4-f5 break first."
         }
       ],
       "sources": [

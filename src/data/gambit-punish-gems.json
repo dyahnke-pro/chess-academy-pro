@@ -908,7 +908,7 @@
       "Qb6"
     ],
     "playLine": "e4 e5 d4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 d5 Bxd5 Nf6 Bxf7+ Ke7 Qb3 c5 e5 Ne4 Bd5 Qa5+ Kf1 Qa6+ Ne2 Ng5 Na3 Nc6 Rd1 Ne6 Nb5 Bd7 a4 Ncd4 Nexd4 cxd4 Bxd4 Nxd4 Rxd4 Qb6",
-    "engineCp": 304,
+    "engineCp": 292,
     "materialDelta": 0,
     "tier": "positional",
     "why": "At your level opponents play Ke7 here in 3% of games. Punish with the best move Qb3 — the engine has White clearly better (+3.0).",

@@ -85,8 +85,8 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   // Scotch Gambit: 14.h3 asks the g4-bishop. 15...h5? tries to glue it to the pin and just loses a piece to hxg4 + Ng5.
   'scotch-gambit:e4_e5_Nf3_Nc6_d4_exd4_Bc4_Bc5_O-O_d6_c3_dxc3_Nxc3_Bg4_h3:h5': {
     sources: ['concept:pos-king-safety', 'concept:pos-tempo', 'https://en.wikipedia.org/wiki/Scotch_Game'],
-    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…h5 tries to glue the bishop to the pin — but it just loses a piece.', 'hxg4! takes the bishop; after …hxg4 the knight leaps to g5 instead of retreating, eyeing f7.', '', 'Ng5 — White is a piece up for a pawn with the initiative crashing onto the kingside.', '', '', '', '', ''],
-    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'hxg4 — take the pinned bishop', '', 'Ng5 — a piece up, hit f7', '', '', '', '', ''],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…h5 tries to glue the bishop to the pin — but it just loses a piece.', 'hxg4! takes the bishop; after …hxg4 the knight leaps to g5 instead of retreating, eyeing f7.', '', 'Ng5 — White is a piece up for two pawns with the initiative crashing onto the kingside.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'hxg4 — take the pinned bishop', '', 'Ng5 — piece for two pawns, hit f7', '', '', '', '', ''],
   },
   // Frankenstein–Dracula: 4.Qh5 double-attacks e5 and the e4-knight; only 4...Nd6 holds. 4...g6? 5.Qxe5+ forks and wins the knight.
   'vienna-gambit:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5:g6': {
@@ -133,8 +133,8 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   // Stafford: 4.Nxf7? greedily forks queen and rook, but the knight is worth far more. 4...Kxf7 just takes it — Black is a piece up for a pawn.
   'stafford-gambit:e4_e5_Nf3_Nf6_Nxe5_Nc6:Nxf7': {
     sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Stafford_Gambit'],
-    watch: ['', '', '', '', '', '', 'Nxf7 grabs the pawn and forks queen and rook — but the knight is worth far more than the exchange it chases.', '…Kxf7 just takes the knight; Black is a clean piece up for a single pawn.', '', '…Nxe4 snatches a centre pawn too — Black is up a piece with an easy game.', '', '', '', '', ''],
-    learn: ['', '', '', '', '', '', '', 'Kxf7 — take the knight, piece up', '', 'Nxe4 — grab the centre pawn', '', 'd5 — blunt the check, stay up', '', '', ''],
+    watch: ['', '', '', '', '', '', 'Nxf7 grabs the pawn and forks queen and rook — but the knight is worth far more than the exchange it chases.', '…Kxf7 just takes the knight; Black has a piece for two pawns, and the e4-pawn falls next.', '', '…Nxe4 snatches a centre pawn too — Black is up a piece with an easy game.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', 'Kxf7 — take the knight, piece for two pawns', '', 'Nxe4 — grab the centre pawn', '', 'd5 — blunt the check, stay up', '', '', ''],
   },
   // The famous Stafford trap: 6.Bg5? "pins" the f6-knight — but the pin is an illusion. 6...Nxe4! and taking the queen runs into ...Bxf2+ and mate.
   'stafford-gambit:e4_e5_Nf3_Nf6_Nxe5_Nc6_Nxc6_dxc6_d3_Bc5:Bg5': {
@@ -233,7 +233,7 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   // takes the last guard off g5, so Ng5! lands with Bc4 already aimed at f7.
   'gambit-evans-gambit:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bxb4_c3_Bc5_d4_exd4_O-O_d6_cxd4_Bb6_Nc3:Nge7': {
     sources: ['concept:pos-king-safety', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
-    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Nge7 develops, but it hands the f7-square its worst possible defender count — the bishop on c4 is already staring at it and the knight no longer covers g5.', 'Ng5! Straight at f7. Two attackers, one defender, and Black cannot castle out of it in time.', '', 'Qh5 brings the third attacker to bear on f7. Black is now defending with pieces that have nowhere to go.', '', 'Nxh7 collects the pawn and hits the rook on f8 — the attack pays for itself.', '', 'Bg5 turns the last screw, pinning Black to the back rank while the extra pawn keeps.', ''],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Nge7 develops, but it hands the f7-square its worst possible defender count — the bishop on c4 is already staring at it and the knight no longer covers g5.', 'Ng5! Straight at f7. Two attackers, one defender, and Black cannot castle out of it in time.', '', 'Qh5 brings the third attacker to bear on f7. Black is now defending with pieces that have nowhere to go.', '', 'Nxh7 collects the pawn and hits the rook on f8 — the attack pays for itself.', '', 'Bg5 turns the last screw, hitting the d8-queen; material is level, but Black\'s king is stuck in the centre.', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Ng5 — pile onto f7', '', 'Qh5 — third attacker on f7', '', 'Nxh7 — pawn, and hits the rook', '', '', ''],
   },
   // Stafford: 6.d3? is natural and too slow — f2 is defended by the king alone,
@@ -249,7 +249,7 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   // down, and the bishop survives. Nxc3 rebuilds, then Qd5+ and Qxc5+ collect.
   'scotch-gambit:e4_e5_Nf3_Nc6_d4_exd4_Bc4_Bc5_c3_dxc3_Bxf7+:Kf8': {
     sources: ["concept:pos-king-safety", "concept:pos-initiative", "https://en.wikipedia.org/wiki/Scotch_Game"],
-    watch: ['', '', '', '', '', '', '', '', '', '', '', '…Kf8 declines the bishop. But the sacrifice has already done its work — the king has lost castling either way, and now Black is simply a pawn down with the bishop still sitting on f7.', 'Nxc3! No rush to save the bishop. White takes the gambit pawn back and finishes developing; the bishop on f7 is not going anywhere.', '', 'Qd5+ forces the king back, and it is the loose bishop on c5 that pays for it.', '', "Qxc5+ takes the bishop with check. White is a clear piece up with Black's king stranded in the centre of its own back rank.", '', '', ''],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '…Kf8 declines the bishop. But the sacrifice has already done its work — the king has lost castling either way, and now Black is simply a pawn down with the bishop still sitting on f7.', 'Nxc3! No rush to save the bishop. White takes the gambit pawn back and finishes developing; the bishop on f7 is not going anywhere.', '', 'Qd5+ forces the king back, and it is the loose bishop on c5 that pays for it.', '', "Qxc5+ takes the bishop back with check. Material is level, and Black's king is stuck on f8 without castling.", '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'Nxc3 — take the pawn, keep the bishop', '', 'Qd5+ — check, then win c5', '', 'Qxc5+ — the bishop, with check', '', '', ''],
   },
   // Bishop's Gambit: after Kf1, …Bc5 is the 36.9% try (124,564 games). d4! hits
@@ -281,7 +281,7 @@ export const GAMBIT_GEM_NARRATION: Record<string, GambitGemNarration> = {
   // king already stripped of its pawn cover.
   'gambit-kings-gambit:e4_e5_f4_exf4_Nf3_g5_h4_g4_Ne5_d6_Nxg4:Bxg4': {
     sources: ["concept:pos-king-safety", "concept:pos-initiative", "https://en.wikipedia.org/wiki/King%27s_Gambit"],
-    watch: ['', '', '', '', '', '', '', '', '', '', '', "…Bxg4 wins the piece back, but it trades away the one piece guarding the light squares around Black's king.", "Qxg4 recaptures and the queen arrives on an open board. Black's kingside pawns are gone and the king has nowhere to hide.", '', 'Bb5 develops with a threat — every white piece comes out hitting something while Black is still untangling.', '', '', '', "Qf5 plants the queen in the middle of Black's position. The extra pawn on f4 is small comfort with a king this exposed.", ''],
+    watch: ['', '', '', '', '', '', '', '', '', '', '', "…Bxg4 wins the piece back, but it trades away the one piece guarding the light squares around Black's king.", "Qxg4 recaptures and the queen arrives on an open board. Black's kingside pawns are gone and the king has nowhere to hide.", '', 'Bb5 develops with a threat — every white piece comes out hitting something while Black is still untangling.', '', '', '', "Qf5 plants the queen in the middle of Black's position. The f4-pawn is small comfort with a king this exposed.", ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'Qxg4 — recapture, queen active', '', 'Bb5 — develop with a threat', '', '', '', 'Qf5 — the queen moves in', ''],
   },
   // KGD: …Bg4 pins the f3-knight, but fxe5! shows the pin is an illusion — White
