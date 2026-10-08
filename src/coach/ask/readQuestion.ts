@@ -168,7 +168,9 @@ export function readQuestion(raw: string, moment: AskMoment, lookups: AskLookups
     const sanObject = text.match(SAN_RE);
     if (/^(?:can|could) you play\b/i.test(text) && sanObject) return words('command', `play: ${sanObject[0]}`);
     const opening = openingIn(text, lookups);
-    if (opening) return words('command', `opening: ${opening}`);
+    if (opening) {
+      return { kind: 'command', about: `opening: ${opening}`, via: 'words', clarify: `Do you want me to teach the ${opening}, or play it against you?` };
+    }
     return words('command', 'action');
   }
 

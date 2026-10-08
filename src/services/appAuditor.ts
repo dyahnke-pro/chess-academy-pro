@@ -204,6 +204,7 @@ export type AuditKind =
   | 'live-coach-trigger-suppressed'
   // Coach Brain spine (WO-BRAIN-01)
   | 'coach-brain-ask-received'
+  | 'coach-ask-steered'
   // Full ask→answer pair for durable conversation capture (David 2026-07-10:
   // "add the audit tools to tell what the asks are — full access to the
   // conversations"). Mirrored to PostHog as `coach_answer` carrying the
