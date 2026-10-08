@@ -378,9 +378,17 @@ export function bishopOffPlan(fenBefore: string, san: string, student: 'w' | 'b'
     const squares = [mv.to, p.to, aim];
     const proof = legalLineProof(after.fen(), [pSan], true);
     if (!proof) continue;
-    return { kind: 'bishop-off-plan', text, proof: { ...proof, squares, full: `${pSan} closes the diagonal from ${mv.to} to ${aim}, and they cannot win the pawn on ${p.to}` }, squares, namesMove: true, claim: `bishop-off-plan:${mv.to}` };
+    return { kind: 'bishop-off-plan', text, proof: { ...proof, squares, full: `${pSan} closes the diagonal from ${mv.to} to ${aim}; ${pawnCover(c, p.to, student)}` }, squares, namesMove: true, claim: `bishop-off-plan:${mv.to}` };
   }
   return null;
+}
+
+/** The board fact behind "the pawn is safe there": what guards it, or that
+ *  nothing of theirs attacks it (the exchange count decided it above). */
+function pawnCover(c: Chess, sq: Square, student: 'w' | 'b'): string {
+  const guards = c.attackers(sq, student).map((g) => `${PIECE[c.get(g)?.type ?? 'p']} on ${g}`);
+  if (c.attackers(sq, other(student)).length === 0) return `nothing of theirs attacks ${sq}`;
+  return guards.length ? `your ${guards.join(' and your ')} ${guards.length > 1 ? 'guard' : 'guards'} ${sq}` : `${sq} is covered`;
 }
 
 /** The longest diagonal from `sq` pointing into the opponent's half (forward
