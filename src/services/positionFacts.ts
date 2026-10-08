@@ -131,6 +131,7 @@ import { nextMoveAdvice, type MoveAdviceVerdict } from './nextMoveAdvice';
 import { depthClauses } from './thinkAloud';
 import { classifyPhase } from './gamePhaseService';
 import { looseTrigger } from './looseTrigger';
+import { exchangeIdeas } from './exchangeIdeas';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -314,7 +315,10 @@ export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-c
   // THE SPEED-RUN DEPTH (David 2026-10-05: "Should be from one place") — the
   // one producer `thinkAloud.depthClauses`, ranked by the one door like
   // every other fact.
-  | 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read';
+  | 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read'
+  // Trades, defence and conversion, principles (`exchangeIdeas.ts`) — the
+  // same three names review's facets carry.
+  | 'trade-idea' | 'defence-idea' | 'nugget';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
@@ -1022,7 +1026,26 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     ...(input.lastMove ? { lastStudentMove: { fenBefore: input.lastMove.fenBefore, san: input.lastMove.san } } : {}),
     ...(input.opponentLastMove ? { lastOpponentMove: input.opponentLastMove } : {}),
   }).map((d) => ({ kind: d.kind, rank: d.kind === 'not-yet' ? 90 : d.kind === 'stop-flaw' ? 70 : d.kind === 'line' ? 60 : d.kind === 'hole-access' ? 50 : d.kind === 'speedrun-read' ? 45 : 40, text: d.text, ...(d.squares ? { squares: d.squares } : {}), ...(d.lines ? { lines: d.lines } : {}), ...(d.stakes ? { stakes: d.stakes } : {}), ...(d.claim ? { claim: d.claim } : {}), ...(d.promise ? { promise: d.promise } : {}) }));
-  const composed = [...composedBase, ...depth];
+  // TRADES, DEFENCE AND CONVERSION, PRINCIPLES (computers batch 5) — every
+  // read carries its proof and its say-once claim; a read that names the
+  // student's next move speaks only where the move is earned, like the depth.
+  const ideaClauses: ClauseItem[] = [];
+  try {
+    const lmCost = lm ? gradedLoss(lm, studentColor) : null;
+    const lmBest = lm?.reads?.bestMoveUci ? uciToSanAt(lm.fenBefore, lm.reads.bestMoveUci) : null;
+    for (const x of exchangeIdeas({
+      fen,
+      student: studentColor,
+      lines: input.analysis.topLines,
+      studentMove: lm ? { fenBefore: lm.fenBefore, san: lm.san, costCp: lmCost, bestSan: lmBest, history: lm.historySans } : null,
+      opponentMove: input.opponentLastMove ?? null,
+      nameMove: !!input.namesBestMove || (!heldVerdict && !!moveAdvice?.speak),
+    })) {
+      if (input.alreadySaid?.has(x.claim)) continue;
+      ideaClauses.push({ kind: x.kind, rank: x.kind === 'nugget' ? 30 : 55, text: x.text, squares: x.squares, proof: x.proof, claim: x.claim, ...(x.stakes ? { stakes: x.stakes } : {}) });
+    }
+  } catch { /* a read is a bonus, never a blocker */ }
+  const composed = [...composedBase, ...depth, ...ideaClauses];
   const needVerdict = studentIsMoving && input.studentNeedContext
     ? computeNeed({
       ply: plyNumber,
@@ -1117,6 +1140,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       ...clauses.filter((c) => SAY_ONCE_KINDS.has(c.kind)).map((c) => c.text),
       ...(methodKey && clauses.some((c) => c.kind === 'method') ? [methodKey] : []),
       ...(tradeTargetKey && clauses.some((c) => c.kind === 'trade' && c.rank === 34) ? [tradeTargetKey] : []),
+      // A batch-5 read is said once a game, keyed on its own claim.
+      ...clauses.filter((c) => (c.kind === 'trade-idea' || c.kind === 'defence-idea' || c.kind === 'nugget') && c.claim).map((c) => c.claim as string),
       ...(planKey && clauses.some((c) => c.kind === 'structure-plan') ? [planKey, ...(planFact?.ideaKey ? [planFact.ideaKey] : [])] : []),
       ...convertRemember(clauses, input.fen, studentSeat),
       // The balance sheet's reasons, under the keys the positional read uses.

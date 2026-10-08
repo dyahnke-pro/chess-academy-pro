@@ -59,6 +59,8 @@ import { renderFundamentalVerdict } from './principleVoice';
 import { betterMoveReason, priorMoveLeadingTo, punishmentOf, toStudentSeat } from './inaccuracyCall';
 import { andList } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
+import { imageryFor } from './factImagery';
+import { exchangeIdeas } from './exchangeIdeas';
 import { minorsAtHome } from './development';
 import { slipAnswerText, studentMovePoint } from './playCommentary';
 import { theirMoveCost } from './theirMoveCost';
@@ -878,6 +880,30 @@ export function computeMoveFacets(
     if (trapMine) { const f = `[trapped] Careful — your ${trapMine.piece} on ${trapMine.square} is trapped: attacked by the ${trapMine.attackerPiece} on ${trapMine.attackerSquare} with no safe square. Look for the cheapest way out.`; facets.push(f); recSquares(f, [trapMine.square, trapMine.attackerSquare]); recStakes(f, exchangeStakes(fenAfter, [trapMine.square])); }
   }
 
+  // ── 6a. TRADES, DEFENCE, NUGGETS (computers batch 5) — the same reads the
+  // live composer speaks, each with its proof, said once per game (`hint:`).
+  if (studentColorWB) {
+    const moverSign = moverColor === 'white' ? 1 : -1;
+    const moveCost = ctx.costCp ?? (ctx.preMoveEval != null && ctx.evaluation != null && !isMateEval(ctx.preMoveEval) && !isMateEval(ctx.evaluation)
+      ? Math.max(0, (ctx.preMoveEval - ctx.evaluation) * moverSign) : null);
+    for (const x of exchangeIdeas({
+      fen: fenAfter,
+      student: studentColorWB,
+      lines: [],
+      continuation: isStudent ? ctx.playedLineUci : null,
+      studentMove: isStudent ? { fenBefore, san, costCp: moveCost, bestSan: ctx.bestMoveSan, history: ctx.allSans.slice(0, ply) } : null,
+      opponentMove: isStudent ? null : { fenBefore, san },
+      nameMove: false,
+    })) {
+      const f = `[${x.kind}] ${x.text}`;
+      facets.push(f);
+      recSquares(f, x.squares);
+      recProof(f, x.proof);
+      recStakes(f, x.stakes);
+      outIdentity?.set(f, `hint:${x.claim}`);
+    }
+  }
+
   // ── 6b. THE MISSING TEACHING POINTS (Naroditsky message catalog) ──
   if (studentColorWB) {
     const count = attackerDefenderCount(fenAfter, studentColorWB);
@@ -887,7 +913,10 @@ export function computeMoveFacets(
     const rook7 = rookOnSeventh(fenAfter, studentColorWB);
     if (rook7) facets.push(`[rook7] ${cap(rook7)}.`);
     const badB = badEnemyBishop(fenAfter, studentColorWB);
-    if (badB) facets.push(`[badbishop] ${cap(badB)}.`);
+    if (badB) {
+      const image = imageryFor('badbishop', stemKeyOf(`${fenAfter}|badbishop`));
+      facets.push(`[badbishop] ${cap(badB)}.${image ? ` ${image}` : ''}`);
+    }
     const worst = worstPlacedFriendlyPiece(fenAfter, studentColorWB);
     if (worst) facets.push(`[worst] ${cap(worst)}.`);
     const passer = struct?.pawns.passedPawns[studentColorWB][0] ?? null; // reuse §5's struct

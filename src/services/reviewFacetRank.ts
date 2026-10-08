@@ -34,7 +34,9 @@ export type FacetTag =
   | 'verdict' | 'opening' | 'opp-dev' | 'opp-target' | 'endgame'
   | 'plan-now' | 'plan-race' | 'plan-arc' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
   | 'note' | 'method' | 'refuted' | 'bluff' | 'technique' | 'contrast' | 'timing' | 'praise'
-  | 'rule' | 'stopped' | 'stock' | 'trade' | 'point' | 'their-cost';
+  | 'rule' | 'stopped' | 'stock' | 'trade' | 'point' | 'their-cost'
+  // Computers batch 5 (`exchangeIdeas.ts`) — one name on both sides.
+  | 'trade-idea' | 'defence-idea' | 'nugget';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -74,6 +76,11 @@ export const FACET_RANK: Record<FacetTag, number> = {
   sac: 72,
   'sac-why': 71,
   king: 70,
+  // TRADES, DEFENCE, NUGGETS (`exchangeIdeas.ts`): a staked read outranks by
+  // its stakes; unstaked, a trade or defence idea sits just above the
+  // authored note, a nugget beside the opening rule it is a cousin of.
+  'defence-idea': 67,
+  'trade-idea': 66,
   // THE AUTHORED TEACHING about this exact position (the farmed/voiced corpus
   // — 90% of what the coach has to say, per the corpus doctrine). Ranked ABOVE
   // the board description and BELOW everything forcing: it explains the idea,
@@ -96,6 +103,7 @@ export const FACET_RANK: Record<FacetTag, number> = {
   // The opening PRINCIPLE a quiet move follows, taught once per game (S2) —
   // above the opening's name, below the standing read.
   rule: 29,
+  nugget: 29,
   // What a clean move is FOR (Learn's move-point computer, `studentMovePoint`):
   // beside the rule it kept, never above the verdict on the move.
   point: 28,
@@ -181,6 +189,9 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   contrast: 'teach',
   point: 'teach',
   'their-cost': 'teach',
+  'trade-idea': 'teach',
+  'defence-idea': 'teach',
+  nugget: 'teach',
   timing: 'teach',
   'plan-race': 'teach',
   'plan-arc': 'teach',
@@ -252,6 +263,9 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   'stop-flaw': 'teach',
   'hole-access': 'teach',
   'speedrun-read': 'teach',
+  'trade-idea': 'teach',
+  'defence-idea': 'teach',
+  nugget: 'teach',
   'student-leans': 'describe',
   'opponent-leans': 'describe',
 };
@@ -284,9 +298,10 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   'must-defend': 'safety', 'latent-danger': 'safety', 'latent-chance': 'safety',
   'key-moment': 'safety', deliberation: 'safety', concept: 'safety',
   'not-yet': 'safety', line: 'safety', 'stop-flaw': 'safety',
+  'trade-idea': 'safety', 'defence-idea': 'safety',
   // PRINCIPLE — development, the king, the opening, converting.
   principle: 'principle', technique: 'principle', king: 'principle', opening: 'principle', endgame: 'principle',
-  rule: 'principle',
+  rule: 'principle', nugget: 'principle',
   does: 'principle', point: 'plan', 'their-cost': 'plan', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
   status: 'principle', 'their-habit': 'principle', 'hole-access': 'plan', 'speedrun-read': 'plan',
   // PLAN — structure, targets, the plan and the long read.
@@ -316,6 +331,8 @@ export const FACT_PROOF: Record<FactKind, 'proven' | NoProofReason> = {
   trade: 'proven', stopped: 'proven', 'their-cost': 'proven', timing: 'proven', 'plan-race': 'proven',
   'must-defend': 'proven', 'latent-danger': 'proven', 'latent-chance': 'proven', 'key-moment': 'proven',
   deliberation: 'proven', 'not-yet': 'proven', line: 'proven', 'stop-flaw': 'proven', convert: 'proven',
+  // Batch 5: every read arrives with the line or squares it rests on.
+  'trade-idea': 'proven', 'defence-idea': 'proven', nugget: 'proven',
   // PRINCIPLES AND HABITS — a rule of the game, taught; the board is the example.
   principle: 'method', technique: 'method', method: 'method', rule: 'method', fundamental: 'method',
   endgame: 'method', stock: 'method', concept: 'method', 'their-habit': 'stated',
@@ -369,6 +386,9 @@ const CLAUSE_TIE: Record<ClauseKind, number> = {
   'stop-flaw': FACET_RANK['opp-target'],
   'hole-access': FACET_RANK.structure,
   'speedrun-read': FACET_RANK['plan-now'],
+  'trade-idea': FACET_RANK['trade-idea'],
+  'defence-idea': FACET_RANK['defence-idea'],
+  nugget: FACET_RANK.nugget,
 };
 export const TIE_ORDER: Record<FactKind, number> = { ...FACET_RANK, ...CLAUSE_TIE };
 

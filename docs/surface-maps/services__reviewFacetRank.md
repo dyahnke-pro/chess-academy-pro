@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**485 lines · 15 exports · 6 importers · 2 tests · 0 audits**
+**505 lines · 15 exports · 7 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,6 +17,7 @@
 - `src/services/boardState.ts`
 - `src/services/coachDecider.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/exchangeIdeas.test.ts`
 - `src/services/factSelector.ts`
 - `src/services/reviewFacetRank.test.ts`
 - `src/services/supportedFacts.test.ts`
@@ -53,9 +54,10 @@
 ### `TIE_ORDER` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `factKind` (function) — 2 call sites
+### `factKind` (function) — 3 call sites
 - `src/services/coachDecider.ts:310`
 - `src/services/coachDecider.ts:411`
+- `src/services/exchangeIdeas.test.ts:178`
 
 ### `factValue` (function) — 1 call site
 - `src/services/coachDecider.ts:418`
@@ -82,6 +84,7 @@
 
 ## Tests
 
+- `src/services/exchangeIdeas.test.ts`
 - `src/services/reviewFacetRank.test.ts`
 - `src/services/supportedFacts.test.ts`
 
