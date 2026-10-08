@@ -147,7 +147,7 @@ describe('THE COMPUTER CUTS, NOT A CODE BRANCH (David 2026-09-16)', () => {
     // changed (`selectFacts(...)` → `decide(...)`). Assert the door, and let
     // `coachDecider.test.ts` own "no surface composes the decision by hand".
     const svc = readFileSync(join(process.cwd(), 'src/services/coachFeatureService.ts'), 'utf8');
-    expect(svc).toMatch(/\bdecide\(/);
+    expect(svc).toMatch(/\bcoachTurn\(/);
     // Silence must stay explainable — the quiet facts are emitted with a reason.
     expect(svc).toMatch(/decision\.quiet/);
   });
