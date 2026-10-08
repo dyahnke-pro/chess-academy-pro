@@ -87,6 +87,13 @@ export function useStrictNarration({
   const tokenRef = useRef(0);
   const isAutoPlayingRef = useRef(false);
   const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Set when NAVIGATION (goToStep/next/prev) is what paused auto-play. The
+  // navigated-to step is already speaking — playStep stopped the old line and
+  // started the new one in the same commit — so the pause must not stop the
+  // voice again. Without this the OFF branch below killed the new step's line:
+  // tapping Next during auto-play left the beat silent, and on the LAST beat
+  // the lesson never counted as finished (David 2026-10-08).
+  const navPausedRef = useRef(false);
   // Latest closures — avoids stale captures inside the speech promise chain.
   const applyStepRef = useRef(applyStep);
   const getNarrationRef = useRef(getNarration);
@@ -191,6 +198,11 @@ export function useStrictNarration({
     }
     if (isAutoPlaying) {
       playStep(currentStep);
+    } else if (navPausedRef.current) {
+      // Paused by navigation: the new step owns the voice. Just cancel any
+      // pending auto-advance (playStep already did) and leave its line alone.
+      navPausedRef.current = false;
+      clearAdvanceTimer();
     } else {
       tokenRef.current++;
       clearAdvanceTimer();
@@ -216,6 +228,7 @@ export function useStrictNarration({
   const goToStep = useCallback(
     (stepIndex: number) => {
       const clamped = Math.max(0, Math.min(stepCountRef.current, stepIndex));
+      if (isAutoPlayingRef.current) navPausedRef.current = true;
       setIsAutoPlaying(false);
       setCurrentStep(clamped);
     },
@@ -223,11 +236,13 @@ export function useStrictNarration({
   );
 
   const next = useCallback(() => {
+    if (isAutoPlayingRef.current) navPausedRef.current = true;
     setIsAutoPlaying(false);
     setCurrentStep((prev) => Math.min(stepCountRef.current, prev + 1));
   }, []);
 
   const prev = useCallback(() => {
+    if (isAutoPlayingRef.current) navPausedRef.current = true;
     setIsAutoPlaying(false);
     setCurrentStep((prev) => Math.max(0, prev - 1));
   }, []);
@@ -244,6 +259,7 @@ export function useStrictNarration({
   }, [currentStep]);
 
   const stopAll = useCallback(() => {
+    navPausedRef.current = false;
     tokenRef.current++;
     clearAdvanceTimer();
     voiceService.stop();
