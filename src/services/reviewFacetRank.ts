@@ -34,7 +34,10 @@ export type FacetTag =
   | 'verdict' | 'opening' | 'opp-dev' | 'opp-target' | 'endgame'
   | 'plan-now' | 'plan-race' | 'plan-arc' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
   | 'note' | 'method' | 'refuted' | 'bluff' | 'technique' | 'contrast' | 'timing' | 'praise'
-  | 'rule' | 'stopped' | 'stock' | 'trade' | 'point' | 'their-cost';
+  | 'rule' | 'stopped' | 'stock' | 'trade' | 'point' | 'their-cost'
+  // Attack, sacrifices and kings (kingAttackReads, batch 4) — one name on
+  // both sides, like `method`.
+  | 'king-read';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -62,6 +65,9 @@ export const FACET_RANK: Record<FacetTag, number> = {
   threat: 85,
   tactic: 84,
   trapped: 80,
+  // Mate over material, the castling squares, the king's square — the king is
+  // the game: just under a trapped piece, above a loose one.
+  'king-read': 79,
   // "Not X, because Y" — the move most players at this level reach for, and
   // the punishment. Below a live threat (that is the board), above the rest.
   refuted: 82,
@@ -182,6 +188,7 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   point: 'teach',
   'their-cost': 'teach',
   timing: 'teach',
+  'king-read': 'teach',
   'plan-race': 'teach',
   'plan-arc': 'teach',
   'plan-now': 'teach',
@@ -252,6 +259,7 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   'stop-flaw': 'teach',
   'hole-access': 'teach',
   'speedrun-read': 'teach',
+  'king-read': 'teach',
   'student-leans': 'describe',
   'opponent-leans': 'describe',
 };
@@ -283,7 +291,7 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   royal: 'safety', sac: 'safety', 'sac-why': 'safety', method: 'safety',
   'must-defend': 'safety', 'latent-danger': 'safety', 'latent-chance': 'safety',
   'key-moment': 'safety', deliberation: 'safety', concept: 'safety',
-  'not-yet': 'safety', line: 'safety', 'stop-flaw': 'safety',
+  'not-yet': 'safety', line: 'safety', 'stop-flaw': 'safety', 'king-read': 'safety',
   // PRINCIPLE — development, the king, the opening, converting.
   principle: 'principle', technique: 'principle', king: 'principle', opening: 'principle', endgame: 'principle',
   rule: 'principle',
@@ -316,6 +324,7 @@ export const FACT_PROOF: Record<FactKind, 'proven' | NoProofReason> = {
   trade: 'proven', stopped: 'proven', 'their-cost': 'proven', timing: 'proven', 'plan-race': 'proven',
   'must-defend': 'proven', 'latent-danger': 'proven', 'latent-chance': 'proven', 'key-moment': 'proven',
   deliberation: 'proven', 'not-yet': 'proven', line: 'proven', 'stop-flaw': 'proven', convert: 'proven',
+  'king-read': 'proven',
   // PRINCIPLES AND HABITS — a rule of the game, taught; the board is the example.
   principle: 'method', technique: 'method', method: 'method', rule: 'method', fundamental: 'method',
   endgame: 'method', stock: 'method', concept: 'method', 'their-habit': 'stated',
@@ -369,6 +378,7 @@ const CLAUSE_TIE: Record<ClauseKind, number> = {
   'stop-flaw': FACET_RANK['opp-target'],
   'hole-access': FACET_RANK.structure,
   'speedrun-read': FACET_RANK['plan-now'],
+  'king-read': FACET_RANK['king-read'],
 };
 export const TIE_ORDER: Record<FactKind, number> = { ...FACET_RANK, ...CLAUSE_TIE };
 

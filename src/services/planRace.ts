@@ -71,7 +71,100 @@ export interface FileCollision {
   theirsNow: boolean;
 }
 
-export type PlanRace = PasserRace | FileCollision;
+/**
+ * THE ATTACK RACE ACROSS WINGS (batch 4). Kings castled on opposite wings, each
+ * side storming the other's king with a pawn: the SAME plan kind (a pawn storm)
+ * toward the SAME terminal event (the pawn touching the king's pawn cover, so a
+ * file can open). Unit = pawn pushes until contact. Only RUNNING storm pawns
+ * count (the square ahead is empty), and only pawns that have already left home
+ * — a storm that has not started is not in the race.
+ */
+export interface StormRace {
+  kind: 'storm-race';
+  yourPawn: string;
+  theirPawn: string;
+  /** Pushes until your storm pawn attacks a pawn of their king's cover. */
+  yourPushes: number;
+  theirPushes: number;
+  youMoveFirst: boolean;
+  /** You make contact first; moving first wins a tie. */
+  youFirst: boolean;
+  /** The wing YOUR storm runs on (their king's wing). */
+  yourWing: 'kingside' | 'queenside';
+  theirWing: 'kingside' | 'queenside';
+}
+
+export type PlanRace = PasserRace | StormRace | FileCollision;
+
+const STORM_FILES = 'abcdefgh';
+/** The wing a king has castled to, or null in the centre / off the back ranks. */
+function castledWing(chess: Chess, color: Color): 'kingside' | 'queenside' | null {
+  for (const cell of chess.board().flat()) {
+    if (!cell || cell.type !== 'k' || cell.color !== color) continue;
+    const rank = Number(cell.square[1]);
+    const home = color === 'w' ? rank <= 2 : rank >= 7;
+    if (!home) return null;
+    if ('fgh'.includes(cell.square[0])) return 'kingside';
+    if ('abc'.includes(cell.square[0])) return 'queenside';
+    return null;
+  }
+  return null;
+}
+
+/** The fastest running storm pawn of `color` against a king on `wing`:
+ *  pushes until it attacks one of the enemy pawns on that wing. Null when no
+ *  advanced pawn there can reach contact within four pushes. */
+function stormRunner(chess: Chess, color: Color, wing: 'kingside' | 'queenside'): { sq: string; pushes: number } | null {
+  const files = wing === 'kingside' ? 'fgh' : 'abc';
+  const d = color === 'w' ? 1 : -1;
+  const home = color === 'w' ? 2 : 7;
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  let best: { sq: string; pushes: number } | null = null;
+  for (const cell of chess.board().flat()) {
+    if (!cell || cell.type !== 'p' || cell.color !== color || !files.includes(cell.square[0])) continue;
+    const f = STORM_FILES.indexOf(cell.square[0]);
+    const r0 = Number(cell.square[1]);
+    if (r0 === home) continue;   // the storm has not started with this pawn
+    for (let n = 0; n <= 4; n += 1) {
+      const r = r0 + n * d;
+      if (r < 1 || r > 8) break;
+      if (n > 0 && chess.get(`${cell.square[0]}${r}` as Square)) break;   // blocked: not running
+      const hits = [f - 1, f + 1].some((ff) => {
+        if (ff < 0 || ff > 7) return false;
+        const p = chess.get(`${STORM_FILES[ff]}${r + d}` as Square);
+        return !!p && p.type === 'p' && p.color === enemy;
+      });
+      if (hits) {
+        if (!best || n < best.pushes) best = { sq: cell.square, pushes: n };
+        break;
+      }
+    }
+  }
+  return best;
+}
+
+function detectStormRace(chess: Chess, studentColor: Color): StormRace | null {
+  const opp: Color = studentColor === 'w' ? 'b' : 'w';
+  const myKing = castledWing(chess, studentColor);
+  const theirKing = castledWing(chess, opp);
+  if (!myKing || !theirKing || myKing === theirKing) return null;
+  if (chess.inCheck()) return null;
+  const mine = stormRunner(chess, studentColor, theirKing);
+  const theirs = stormRunner(chess, opp, myKing);
+  if (!mine || !theirs) return null;
+  const youMoveFirst = chess.turn() === studentColor;
+  return {
+    kind: 'storm-race',
+    yourPawn: mine.sq,
+    theirPawn: theirs.sq,
+    yourPushes: mine.pushes,
+    theirPushes: theirs.pushes,
+    youMoveFirst,
+    youFirst: youMoveFirst ? mine.pushes <= theirs.pushes : mine.pushes < theirs.pushes,
+    yourWing: theirKing,
+    theirWing: myKing,
+  };
+}
 
 /**
  * Pushes (not ranks) to the promotion square. A pawn still on its start rank
@@ -208,7 +301,11 @@ export function detectPlanRace(fen: string, studentColor: Color): PlanRace | nul
     return race;
   }
 
-  // 2. BOTH sides want the same open file — a collision, not a speed contest.
+  // 2. Opposite-side castling, both storms running — the attack race.
+  const storm = detectStormRace(chess, studentColor);
+  if (storm) return storm;
+
+  // 3. BOTH sides want the same open file — a collision, not a speed contest.
   //    Only a file NEITHER side's heavy pieces already hold is contested.
   const heavyFiles: Record<Color, Set<string>> = { w: new Set(), b: new Set() };
   const rookCount: Record<Color, number> = { w: 0, b: 0 };
@@ -303,6 +400,25 @@ export function planRaceClause(
     return `${counts}${tempoNote}; ${lesson}${cover}`;
   }
 
+  if (race.kind === 'storm-race') {
+    const w = ['no', 'one', 'two', 'three', 'four'];
+    const n = (k: number): string => (k === 0 ? 'already touching' : `${w[k] ?? k} push${k === 1 ? '' : 'es'} from`);
+    const counts = past
+      ? `both kings faced a pawn storm: your pawn on ${race.yourPawn} was ${n(race.yourPushes)} their king's pawns, theirs on ${race.theirPawn} was ${n(race.theirPushes)} yours`
+      : `both kings face a pawn storm: your pawn on ${race.yourPawn} is ${n(race.yourPushes)} their king's pawns, theirs on ${race.theirPawn} is ${n(race.theirPushes)} yours`;
+    const tie = race.yourPushes === race.theirPushes
+      ? (race.youMoveFirst ? (past ? ', and the move was yours' : ', and the move is yours') : (past ? ', and the move was theirs' : ', and the move is theirs'))
+      : '';
+    const lesson = race.youFirst
+      ? (past
+        ? `their ${race.theirWing} play was too slow — keeping your storm going was the plan`
+        : `their ${race.theirWing} play is too slow — keep pushing on the ${race.yourWing}`)
+      : (past
+        ? `their storm arrived first — slowing it down came before pushing yours`
+        : `their storm arrives first — slow it down before you push yours`);
+    return `${counts}${tie}; ${lesson}`;
+  }
+
   // File collision — silent unless exactly one side can take it this move,
   // because "you both want it" with neither able to move there teaches nothing.
   if (race.yoursNow === race.theirsNow) return null;
@@ -349,6 +465,11 @@ export function planRaceProof(fen: string, studentColor: Color): Proof | null {
     const p = (n: number): string => `${n} push${n === 1 ? '' : 'es'}`;
     const counts = `your pawn on ${race.yourPawn} is ${p(race.yourPushes)} from queening, theirs on ${race.theirPawn} is ${p(race.theirPushes)}, and the move is ${race.youMoveFirst ? 'yours' : 'theirs'}`;
     return { kind: 'count', exact: true, short: `${race.yourPushes} pushes against ${race.theirPushes}`, full: counts, squares: [race.yourPawn, race.theirPawn] };
+  }
+  if (race.kind === 'storm-race') {
+    const w = ['no', 'one', 'two', 'three', 'four'];
+    const p = (n: number): string => `${w[n] ?? n} push${n === 1 ? '' : 'es'}`;
+    return { kind: 'count', exact: true, short: `${p(race.yourPushes)} against ${p(race.theirPushes)}`, full: `your storm pawn on ${race.yourPawn} needs ${p(race.yourPushes)} to touch their king's pawns, theirs on ${race.theirPawn} needs ${p(race.theirPushes)}, and the move is ${race.youMoveFirst ? 'yours' : 'theirs'}`, squares: [race.yourPawn, race.theirPawn] };
   }
   const file = `the ${race.file}-file`;
   return { kind: 'squares', exact: true, short: file, full: `both sides want ${file}`, squares: [`${race.file}1`, `${race.file}8`] };

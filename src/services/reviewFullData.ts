@@ -52,6 +52,7 @@ import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './revie
 import { nameEndgamePhase } from './reviewMoveTeaching';
 import { detectOpening } from './openingDetectionService';
 import { planRaceClause, planRaceProof } from './planRace';
+import { kingReadsForBestLine } from './kingAttackReads';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
 import { deriveNextPlanFacts } from './nextPlans';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
@@ -1002,6 +1003,25 @@ export function computeMoveFacets(
         recSquares(f, [t.square]);
       }
     } catch { /* a replay that fails has no earlier board */ }
+  }
+
+  // ── 7e. ATTACK, SACRIFICES AND KINGS (kingAttackReads, batch 4) — on a
+  // student ply whose move was NOT the engine's best, the king read the board
+  // posed and the move passed by: mate over material, the castling squares,
+  // the king's square by the checks, the diagonal walk. Never on the move they
+  // played (G4.5.2); the standing reads are Learn's, said live.
+  if (isStudent && studentColorWB && ctx.bestMoveSan && ctx.bestLineUci.length > 0
+    && ctx.bestMoveSan.replace(/[+#!?]+$/, '') !== san.replace(/[+#!?]+$/, '')) {
+    try {
+      for (const r of kingReadsForBestLine(fenBefore, studentColorWB, ctx.bestLineUci)) {
+        if (!r.namesMove || r.id === 'storm-race') continue;
+        const f = `[king-read] Here, ${r.text.charAt(0).toLowerCase()}${r.text.slice(1)}`;
+        facets.push(f);
+        recSquares(f, r.squares);
+        recProof(f, r.proof);
+        recStakes(f, r.stakes);
+      }
+    } catch { /* a read is a bonus */ }
   }
 
   // ── 7a. THE BLUFF — "don't buy it" (WO-LAYERS-01 step 4). On the OPPONENT's

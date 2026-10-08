@@ -291,6 +291,7 @@ export function capabilityPliesFromAnnotations(
       prompted: prompted.has(fenIndex + 1),
       alsoPosed: positionPosed(fens[fenIndex], {
         bestSan: ann.bestMove ? uciToSan(fens[fenIndex], ann.bestMove) || undefined : undefined,
+        ...(ann.pv?.afterBest?.length ? { bestLine: ann.pv.afterBest } : {}),
         lastMove: fenIndex > 0 && sanAt.has(fenIndex - 1)
           ? { fenBefore: fens[fenIndex - 1], san: sanAt.get(fenIndex - 1) as string }
           : undefined,
