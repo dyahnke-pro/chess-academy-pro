@@ -10,7 +10,7 @@ export const PRO_NARODITSKY_KID_TAB_PLAN_IDS: Record<string, string[]> = {
   'fianchetto variation (g3)': ['mp-pronaroKID-fianchetto-queenside', 'mp-pronaroKID-fianchetto-simplify'],
   'anti-kid with nf3 first': ['mp-pronaroKID-antikidnf3-yugoslav', 'mp-pronaroKID-antikidnf3-rooklift'],
   'makogonov (h3)': ['mp-pronaroKID-makogonov-kingside', 'mp-pronaroKID-makogonov-nc5'],
-  'sämisch (f3)': ['mp-pronaroKID-saemisch-queenside', 'mp-pronaroKID-saemisch-central'],
+  'sämisch (f3)': ['mp-pronaroKID-saemisch-queenside', 'mp-pronaroKID-saemisch-central', 'mp-pronaroKID-saemisch-endgame'],
   'petrosian / nge2': ['mp-pronaroKID-petrosian-central', 'mp-pronaroKID-petrosian-re8'],
   'four pawns attack (f4)': ['mp-pronaroKID-fourpawns-reroute', 'mp-pronaroKID-fourpawns-counter'],
 };

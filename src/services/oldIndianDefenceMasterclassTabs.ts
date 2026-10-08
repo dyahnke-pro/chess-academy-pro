@@ -7,5 +7,7 @@ const OLD_INDIAN_TAB_PLAN_IDS: Record<string, string> = {
 export function getOldIndianDefenceTabPlanIds(openingId: string, tabKey: string): string[] | null {
   if (openingId !== 'old-indian-defence') return null;
   const planId = OLD_INDIAN_TAB_PLAN_IDS[tabKey];
-  return planId ? [planId] : null;
+  if (!planId) return null;
+  // The opening's endgame plan renders under the main tab's endgame section.
+  return tabKey === 'main' ? [planId, 'mp-oldindiandefence-main-endgame'] : [planId];
 }

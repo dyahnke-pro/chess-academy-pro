@@ -12,5 +12,7 @@ const KINGS_GAMBIT_TAB_PLAN_IDS: Record<string, string> = {
 export function getKingsGambitTabPlanIds(openingId: string, tabKey: string): string[] | null {
   if (openingId !== 'kings-gambit') return null;
   const planId = KINGS_GAMBIT_TAB_PLAN_IDS[tabKey];
-  return planId ? [planId] : null;
+  if (!planId) return null;
+  // The opening's endgame plan renders under the main tab's endgame section.
+  return tabKey === 'main' ? [planId, 'mp-kings-gambit-endgame'] : [planId];
 }

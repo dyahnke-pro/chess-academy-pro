@@ -2,5 +2,5 @@
 // carries the middlegame plan; variation tabs resolve to [] until authored.
 export function getProSamayRainaItalianTabPlanIds(openingId: string, tabKey: string): string[] | null {
   if (openingId !== 'pro-samayraina-italian') return null;
-  return tabKey.toLowerCase() === 'main' ? ['mp-prosamayitalian-reroute'] : [];
+  return tabKey.toLowerCase() === 'main' ? ['mp-prosamayitalian-reroute', 'mp-prosamayItalian-endgame'] : [];
 }

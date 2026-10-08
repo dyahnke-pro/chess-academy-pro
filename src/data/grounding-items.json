@@ -1,6 +1,6 @@
 {
   "depth": 14,
-  "builtFens": 4071,
+  "builtFens": 4068,
   "items": [
     {
       "cat": "line",
@@ -69651,7 +69651,7 @@
       "cat": "plan",
       "id": "kings-gambit",
       "color": "white",
-      "name": "kings-gambit :: Open f-file pressure after fxe5",
+      "name": "kings-gambit :: The g3 lever against the f4-g5 chain",
       "startFen": "rnbqk1nr/ppp2pbp/3p4/6p1/2BPPp2/5N2/PPP3PP/RNBQ1RK1 b kq - 0 6",
       "moves": [
         "h6",
@@ -70719,7 +70719,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-alapin",
       "color": "white",
-      "name": "pro-naroditsky-alapin :: d5-open MIDDLEGAME — fxe3 + central conversion (vs Shankland 2934)",
+      "name": "pro-naroditsky-alapin :: d5-open MIDDLEGAME — fxe3 + central conversion (vs Shankland)",
       "startFen": "r1b2k1r/pp2bppp/4pn2/1B6/4q3/2P1BN2/PP3PPP/R2QK2R b KQ - 5 13",
       "moves": [
         "Ng4",
@@ -70763,7 +70763,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-alapin",
       "color": "white",
-      "name": "pro-naroditsky-alapin :: d6-mainline MIDDLEGAME — Bg5 + h3 + Be2 (vs Riley 2984)",
+      "name": "pro-naroditsky-alapin :: d6-mainline MIDDLEGAME — Bg5 + h3 + Be2 (vs Riley)",
       "startFen": "r1bq1rk1/1p1nnpbp/p2p2p1/3Pp3/4P3/2NBBN1P/PP3PP1/2RQ1RK1 w - - 0 13",
       "moves": [
         "b4",
@@ -70807,7 +70807,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-alapin",
       "color": "white",
-      "name": "pro-naroditsky-alapin :: e6-french MIDDLEGAME — Bxh6 sac + Qxh6 attack (vs Niko Theodorou 3131)",
+      "name": "pro-naroditsky-alapin :: e6-french MIDDLEGAME — Bxh6 sac + Qxh6 attack (vs Niko Theodorou)",
       "startFen": "r3k2r/1p1bnppp/pq2p2n/2bpP2Q/8/2NB3N/PP3PPP/R1B1R1K1 w kq - 8 13",
       "moves": [
         "Bxh6",
@@ -70851,7 +70851,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-alapin",
       "color": "white",
-      "name": "pro-naroditsky-alapin :: 2…g6 MIDDLEGAME — Bc4-Bb3 attack + knight harassment (vs Botez 2279)",
+      "name": "pro-naroditsky-alapin :: 2…g6 MIDDLEGAME — Bc4-Bb3 attack + knight harassment (vs Botez)",
       "startFen": "r1bq1rk1/pp2ppbp/1n4p1/8/2nP4/2N1BN1P/PPB2PP1/R2QK2R w KQ - 5 13",
       "moves": [
         "Bc1",
@@ -70895,7 +70895,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-alapin",
       "color": "white",
-      "name": "pro-naroditsky-alapin :: 2…Nc6 MIDDLEGAME — Bc2 + Bg5 + Bh6 attack (vs Zanyglobal 2899)",
+      "name": "pro-naroditsky-alapin :: 2…Nc6 MIDDLEGAME — Bc2 + Bg5 + Bh6 attack (vs Zanyglobal)",
       "startFen": "r2q1rk1/pb2bppp/1pn1pn2/8/3P4/P1NQ1N2/1PB2PPP/R1B2RK1 w - - 2 13",
       "moves": [
         "Bg5",
@@ -70918,7 +70918,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-alapin",
       "color": "white",
-      "name": "pro-naroditsky-alapin :: nf6-main MIDDLEGAME — Rd1 + central conversion (vs FaustinoOro 2971)",
+      "name": "pro-naroditsky-alapin :: nf6-main MIDDLEGAME — Rd1 + central conversion (vs FaustinoOro)",
       "startFen": "r3k2r/p2qbp1p/Pp2p1p1/2pnP3/6Q1/2P5/1P3PPP/RNB2RK1 w kq - 0 17",
       "moves": [
         "Rd1",
@@ -70962,7 +70962,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-alapin",
       "color": "white",
-      "name": "pro-naroditsky-alapin :: Spine 4…d6 MIDDLEGAME — Rd1 + central push (vs Salem-AR 3141)",
+      "name": "pro-naroditsky-alapin :: Spine 4…d6 MIDDLEGAME — Rd1 + central push (vs Salem-AR)",
       "startFen": "r2q2kr/pp4b1/2n1b2p/2Ppp1p1/2P5/5NQ1/PP3PPP/RNBR2K1 b - - 0 16",
       "moves": [
         "e4",
@@ -71006,7 +71006,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-alapin",
       "color": "white",
-      "name": "pro-naroditsky-alapin :: Spine 4…e6 MIDDLEGAME — Bc4 + Qe2 + central play (vs chessawp 3009)",
+      "name": "pro-naroditsky-alapin :: Spine 4…e6 MIDDLEGAME — Bc4 + Qe2 + central play (vs chessawp)",
       "startFen": "r2q1rk1/pp1nbppp/2bpp3/4P3/2BP4/2P2N2/P3QPPP/R1BR2K1 w - - 1 13",
       "moves": [
         "exd6",
@@ -71525,28 +71525,26 @@
       "id": "ruy-lopez",
       "color": "white",
       "name": "ruy-lopez :: The Berlin Endgame",
-      "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "startFen": "r1bk1b1r/ppp2ppp/2p5/4Pn2/8/5N2/PPP2PPP/RNB2RK1 w - - 0 9",
       "moves": [
-        "e4",
-        "e5",
-        "Nf3",
-        "Nc6",
-        "Bb5",
-        "Nf6",
-        "O-O",
-        "Nxe4",
-        "d4",
-        "Nd6",
-        "Bxc6",
-        "dxc6",
-        "dxe5",
-        "Nf5",
-        "Qxd8+",
-        "Kxd8"
+        "h3",
+        "h6",
+        "Rd1+",
+        "Ke8",
+        "Nc3",
+        "Bd7",
+        "Bf4",
+        "Rd8",
+        "Ne4",
+        "Be7",
+        "g4",
+        "Nh4",
+        "Nxh4",
+        "Bxh4"
       ],
-      "terminalFen": "r1bk1b1r/ppp2ppp/2p5/4Pn2/8/5N2/PPP2PPP/RNB2RK1 w - - 0 9",
+      "terminalFen": "3rk2r/pppb1pp1/2p4p/4P3/4NBPb/7P/PPP2P2/R2R2K1 w - - 0 16",
       "eval": {
-        "cp": 7,
+        "cp": 41,
         "mate": null,
         "depth": 14
       }
@@ -71576,45 +71574,6 @@
       "cat": "plan",
       "id": "ruy-lopez",
       "color": "white",
-      "name": "ruy-lopez :: Breyer: From Reroute to Endgame",
-      "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-      "moves": [
-        "e4",
-        "e5",
-        "Nf3",
-        "Nc6",
-        "Bb5",
-        "a6",
-        "Ba4",
-        "Nf6",
-        "O-O",
-        "Be7",
-        "Re1",
-        "b5",
-        "Bb3",
-        "d6",
-        "c3",
-        "O-O",
-        "h3",
-        "Nb8",
-        "d4",
-        "Nbd7",
-        "Nbd2",
-        "Bb7",
-        "Bc2",
-        "c5"
-      ],
-      "terminalFen": "r2q1rk1/1b1nbppp/p2p1n2/1pp1p3/3PP3/2P2N1P/PPBN1PP1/R1BQR1K1 w - - 0 13",
-      "eval": {
-        "cp": 60,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "plan",
-      "id": "ruy-lopez",
-      "color": "white",
       "name": "ruy-lopez :: Chigorin: Wing Play on the Closed Center",
       "startFen": "r1bn1rk1/2q1bppp/p2p1n2/1ppPp3/4P3/2P2N1P/PPB2PP1/R1BQRNK1 b - - 2 14",
       "moves": [
@@ -71626,49 +71585,6 @@
       "terminalFen": "r1bnnrk1/2q1bp1p/p2p2p1/1ppPp3/1P2P3/2P2NNP/P1B2PP1/R1BQR1K1 b - - 0 16",
       "eval": {
         "cp": 112,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "plan",
-      "id": "ruy-lopez",
-      "color": "white",
-      "name": "ruy-lopez :: Chigorin: Queenside Space into the Ending",
-      "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-      "moves": [
-        "e4",
-        "e5",
-        "Nf3",
-        "Nc6",
-        "Bb5",
-        "a6",
-        "Ba4",
-        "Nf6",
-        "O-O",
-        "Be7",
-        "Re1",
-        "b5",
-        "Bb3",
-        "d6",
-        "c3",
-        "O-O",
-        "h3",
-        "Na5",
-        "Bc2",
-        "c5",
-        "d4",
-        "Qc7",
-        "Nbd2",
-        "Bd7",
-        "Nf1",
-        "Rfe8",
-        "Ne3",
-        "g6"
-      ],
-      "terminalFen": "r3r1k1/2qbbp1p/p2p1np1/npp1p3/3PP3/2P1NN1P/PPB2PP1/R1BQR1K1 w - - 0 15",
-      "eval": {
-        "cp": 66,
         "mate": null,
         "depth": 14
       }
@@ -71715,34 +71631,6 @@
       "terminalFen": "r3kbnr/1pp3pp/p3bp2/2p5/4P3/1NN2P2/PPP3PP/R1BR2K1 b kq - 2 11",
       "eval": {
         "cp": -1,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "plan",
-      "id": "ruy-lopez",
-      "color": "white",
-      "name": "ruy-lopez :: Endgame: The Kingside Majority",
-      "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-      "moves": [
-        "e4",
-        "e5",
-        "Nf3",
-        "Nc6",
-        "Bb5",
-        "a6",
-        "Bxc6",
-        "dxc6",
-        "O-O",
-        "f6",
-        "d4",
-        "exd4",
-        "Nxd4"
-      ],
-      "terminalFen": "r1bqkbnr/1pp3pp/p1p2p2/8/3NP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 7",
-      "eval": {
-        "cp": 7,
         "mate": null,
         "depth": 14
       }
@@ -71798,41 +71686,6 @@
       "cat": "plan",
       "id": "ruy-lopez",
       "color": "white",
-      "name": "ruy-lopez :: Open Ruy: Activity into the Ending",
-      "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-      "moves": [
-        "e4",
-        "e5",
-        "Nf3",
-        "Nc6",
-        "Bb5",
-        "a6",
-        "Ba4",
-        "Nf6",
-        "O-O",
-        "Nxe4",
-        "d4",
-        "b5",
-        "Bb3",
-        "d5",
-        "dxe5",
-        "Be6",
-        "c3",
-        "Be7",
-        "Nbd2",
-        "O-O"
-      ],
-      "terminalFen": "r2q1rk1/2p1bppp/p1n1b3/1p1pP3/4n3/1BP2N2/PP1N1PPP/R1BQ1RK1 w - - 3 11",
-      "eval": {
-        "cp": 59,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "plan",
-      "id": "ruy-lopez",
-      "color": "white",
       "name": "ruy-lopez :: Zaitsev: The Rook Lift Attack",
       "startFen": "r2qrbk1/1b1n1pp1/p2p3p/1ppP4/Pn2P3/R4N1P/1P1N1PP1/1BBQR1K1 b - - 2 17",
       "moves": [
@@ -71844,45 +71697,6 @@
       "terminalFen": "r2qrbk1/1b1n1pp1/3p3p/1p1P4/1npNP3/R6P/1P1N1PP1/1BBQR1K1 b - - 1 19",
       "eval": {
         "cp": 41,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "plan",
-      "id": "ruy-lopez",
-      "color": "white",
-      "name": "ruy-lopez :: Zaitsev: Tension into Technique",
-      "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-      "moves": [
-        "e4",
-        "e5",
-        "Nf3",
-        "Nc6",
-        "Bb5",
-        "a6",
-        "Ba4",
-        "Nf6",
-        "O-O",
-        "Be7",
-        "Re1",
-        "b5",
-        "Bb3",
-        "d6",
-        "c3",
-        "O-O",
-        "h3",
-        "Bb7",
-        "d4",
-        "Re8",
-        "Nbd2",
-        "Bf8",
-        "a3",
-        "h6"
-      ],
-      "terminalFen": "r2qrbk1/1bp2pp1/p1np1n1p/1p2p3/3PP3/PBP2N1P/1P1N1PP1/R1BQR1K1 w - - 0 13",
-      "eval": {
-        "cp": 30,
         "mate": null,
         "depth": 14
       }
@@ -74015,7 +73829,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-kia",
       "color": "white",
-      "name": "pro-naroditsky-kia :: KIA vs ...e5 — R+min+P conversion (vs penguingm1 3291)",
+      "name": "pro-naroditsky-kia :: KIA vs ...e5 — R+min+P conversion (vs penguingm1)",
       "startFen": "2k5/ppp1n1p1/1b2p3/4PP1r/3P4/2P4P/PP4B1/R1B2RK1 w - - 0 30",
       "moves": [
         "fxe6",
@@ -74038,7 +73852,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-kia",
       "color": "white",
-      "name": "pro-naroditsky-kia :: KIA vs ...c6 — bishop pair conversion (vs wonderfultime 3218)",
+      "name": "pro-naroditsky-kia :: KIA vs ...c6 — bishop pair conversion (vs wonderfultime)",
       "startFen": "3rr1k1/pp3ppp/2p5/4Pb2/4NP2/4B1P1/P3R1B1/7K b - - 0 24",
       "moves": [
         "Bxe4",
@@ -74061,7 +73875,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-kia",
       "color": "white",
-      "name": "pro-naroditsky-kia :: KIA vs ...b6 — bishop end (vs penguingm1 3301)",
+      "name": "pro-naroditsky-kia :: KIA vs ...b6 — bishop end (vs penguingm1)",
       "startFen": "8/2p1n3/5k2/p1p4p/8/2P3B1/PP3P2/4R1K1 w - - 0 44",
       "moves": [
         "Bh4+",
@@ -74084,7 +73898,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-kia",
       "color": "white",
-      "name": "pro-naroditsky-kia :: KIA vs ...e6 — trade-down crush (vs wonderfultime 3254)",
+      "name": "pro-naroditsky-kia :: KIA vs ...e6 — trade-down crush (vs wonderfultime)",
       "startFen": "3rr1k1/pp1n4/4b1p1/2pppn2/6N1/2PP2PP/PP3PB1/R1B1R1K1 w - - 0 24",
       "moves": [
         "Nxe5",
@@ -74107,7 +73921,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-rossolimo",
       "color": "white",
-      "name": "pro-naroditsky-rossolimo :: Rossolimo c3 — N + B + passed-d-pawn conversion (vs lachesisQ 3069)",
+      "name": "pro-naroditsky-rossolimo :: Rossolimo c3 — N + B + passed-d-pawn conversion (vs lachesisQ)",
       "startFen": "2r1r2k/1p1N1p1p/3P2pB/p7/8/7P/1P1R1PPK/8 b - - 0 35",
       "moves": [
         "Rcd8",
@@ -74130,7 +73944,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-rossolimo",
       "color": "white",
-      "name": "pro-naroditsky-rossolimo :: Rossolimo Bc4 vs ...d6 — rook + bishop mating attack (vs artooon 3092)",
+      "name": "pro-naroditsky-rossolimo :: Rossolimo Bc4 vs ...d6 — rook + bishop mating attack (vs artooon)",
       "startFen": "5R2/6bk/3p2Bp/p2P4/P7/8/1P3PP1/4R1K1 b - - 0 36",
       "moves": [
         "Kxg6",
@@ -74153,7 +73967,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-rossolimo",
       "color": "white",
-      "name": "pro-naroditsky-rossolimo :: Rossolimo vs ...g6 — trade-down to R+P (vs wonderfultime 3212)",
+      "name": "pro-naroditsky-rossolimo :: Rossolimo vs ...g6 — trade-down to R+P (vs wonderfultime)",
       "startFen": "2r1rk2/pp3NB1/4p3/3bP2P/3n4/P7/1P3PP1/RB2R1K1 b - - 0 32",
       "moves": [
         "Kxf7",
@@ -74246,7 +74060,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-caro-kann",
       "color": "black",
-      "name": "pro-naroditsky-caro-kann :: Two Knights — d4 break R+min+P (vs penguingm1 3354)",
+      "name": "pro-naroditsky-caro-kann :: Two Knights — d4 break R+min+P (vs penguingm1)",
       "startFen": "r3kb1r/p2n1ppp/2b5/4p3/2P5/3P4/PP3PPP/R1B1R1K1 b kq - 2 16",
       "moves": [
         "Be7",
@@ -74269,7 +74083,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-caro-kann",
       "color": "black",
-      "name": "pro-naroditsky-caro-kann :: Classical — R+N king-hunt sacrifice (vs 0gZPanda 2995)",
+      "name": "pro-naroditsky-caro-kann :: Classical — R+N king-hunt sacrifice (vs 0gZPanda)",
       "startFen": "r5k1/pp4pp/2p3n1/3p4/5r2/2NP3P/PPP2P2/4R1RK w - - 0 21",
       "moves": [
         "Re2",
@@ -74292,7 +74106,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-caro-kann",
       "color": "black",
-      "name": "pro-naroditsky-caro-kann :: Exchange — King race in R+min+P (vs Genghis_K 3212)",
+      "name": "pro-naroditsky-caro-kann :: Exchange — King race in R+min+P (vs Genghis_K)",
       "startFen": "4kb1r/5ppp/5n2/8/3p4/5P2/PP1K1P1P/n1B4R w k - 0 17",
       "moves": [
         "Kd3",
@@ -74338,7 +74152,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-caro-kann",
       "color": "black",
-      "name": "pro-naroditsky-caro-kann :: Advance Bf5 — knight raid (vs spicycaterpillar 3218)",
+      "name": "pro-naroditsky-caro-kann :: Advance Bf5 — knight raid (vs spicycaterpillar)",
       "startFen": "3r1rk1/1p2nppp/1pn3b1/4P3/5P2/1N2B3/PP2B1PP/R4RK1 b - - 2 16",
       "moves": [
         "Nd5",
@@ -74361,7 +74175,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-caro-kann",
       "color": "black",
-      "name": "pro-naroditsky-caro-kann :: Fantasy — passed-pawn race in R+B+N (vs 0gZPanda 3168)",
+      "name": "pro-naroditsky-caro-kann :: Fantasy — passed-pawn race in R+B+N (vs 0gZPanda)",
       "startFen": "5rk1/5ppp/1pn5/4PP2/8/3BKP2/P6P/8 w - - 0 26",
       "moves": [
         "f4",
@@ -74384,7 +74198,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-caro-kann",
       "color": "black",
-      "name": "pro-naroditsky-caro-kann :: KIA Reti — pawn-up rook end (vs Firouzja2003 3166)",
+      "name": "pro-naroditsky-caro-kann :: KIA Reti — pawn-up rook end (vs Firouzja2003)",
       "startFen": "7k/p5p1/1p2P2p/2p2p1P/5P2/1P1r1BPK/P7/8 w - - 0 39",
       "moves": [
         "Bc6",
@@ -74407,7 +74221,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-caro-kann",
       "color": "black",
-      "name": "pro-naroditsky-caro-kann :: Modern transposition — N+N vs R+P endgame (vs Mykola-Bortnyk 3079)",
+      "name": "pro-naroditsky-caro-kann :: Modern transposition — N+N vs R+P endgame (vs Mykola-Bortnyk)",
       "startFen": "6k1/5p2/6p1/8/3Nr2p/8/P3N3/3K4 w - - 0 45",
       "moves": [
         "Nf3",
@@ -74430,7 +74244,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-caro-kann",
       "color": "black",
-      "name": "pro-naroditsky-caro-kann :: Panov — IQP conversion to R+min+P (vs Mykola-Bortnyk 3144)",
+      "name": "pro-naroditsky-caro-kann :: Panov — IQP conversion to R+min+P (vs Mykola-Bortnyk)",
       "startFen": "r2r2k1/pb3ppp/3bpn2/8/8/1PB2N2/1P3PPP/RN3RK1 b - - 8 16",
       "moves": [
         "Ne4",
@@ -74453,7 +74267,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-caro-kann",
       "color": "black",
-      "name": "pro-naroditsky-caro-kann :: d3 Sideline — bishop reign R+B vs R+N (vs 0gZPanda 3107)",
+      "name": "pro-naroditsky-caro-kann :: d3 Sideline — bishop reign R+B vs R+N (vs 0gZPanda)",
       "startFen": "5r2/p4pkp/6p1/4rbP1/5N2/2P4P/1P3PB1/3R2K1 w - - 0 30",
       "moves": [
         "h4",
@@ -77501,7 +77315,7 @@
       "cat": "plan",
       "id": "pro-hikaru-caro-kann",
       "color": "black",
-      "name": "pro-hikaru-caro-kann :: Exchange ENDGAME — Active King + …h5 (vs Eljanov 2990)",
+      "name": "pro-hikaru-caro-kann :: Exchange ENDGAME — Active King + …h5 (vs Eljanov)",
       "startFen": "4r3/1p2r1k1/2n1p2p/p2p4/P2P1p2/2P2N2/1P2RPP1/4R1K1 w - - 0 29",
       "moves": [
         "Ne5",
@@ -77524,7 +77338,7 @@
       "cat": "plan",
       "id": "pro-hikaru-pirc-modern",
       "color": "black",
-      "name": "pro-hikaru-pirc-modern :: Modern ENDGAME — the …Nd4 Outpost (vs vladislavkovalev 2838)",
+      "name": "pro-hikaru-pirc-modern :: Modern ENDGAME — the …Nd4 Outpost (vs vladislavkovalev)",
       "startFen": "1r2b3/R4pbk/6p1/3rp2p/4P2P/2n1BP2/4B1PK/5R2 w - - 0 31",
       "moves": [
         "exd5",
@@ -77547,7 +77361,7 @@
       "cat": "plan",
       "id": "pro-hikaru-nimzo-larsen",
       "color": "white",
-      "name": "pro-hikaru-nimzo-larsen :: Nimzo-Larsen ENDGAME — Bishop Pair + Queenside Passers (vs puz2010 2859)",
+      "name": "pro-hikaru-nimzo-larsen :: Nimzo-Larsen ENDGAME — Bishop Pair + Queenside Passers (vs puz2010)",
       "startFen": "6k1/2pn1pbp/3p2p1/P7/1P6/1B3P2/4K1PP/4B3 b - - 0 39",
       "moves": [
         "Bd4",
@@ -77572,7 +77386,7 @@
       "cat": "plan",
       "id": "pro-ericrosen-london",
       "color": "white",
-      "name": "pro-ericrosen-london :: R+minor+P conversion — collect the queenside (vs 3169)",
+      "name": "pro-ericrosen-london :: R+minor+P conversion — collect the queenside",
       "startFen": "1n2r1k1/r3b1p1/p3pn1p/2p5/1pN5/5NB1/PPP2PPP/3RR1K1 b - - 0 21",
       "moves": [
         "Rd7",
@@ -77593,7 +77407,7 @@
       "cat": "plan",
       "id": "pro-ericrosen-sicilian",
       "color": "black",
-      "name": "pro-ericrosen-sicilian :: R+minor+P — the Maroczy bishop-pair endgame (vs 3066)",
+      "name": "pro-ericrosen-sicilian :: R+minor+P — the Maroczy bishop-pair endgame",
       "startFen": "r4rk1/1b2bppp/p1n5/1p1B4/8/P3BN2/1P3PPP/R4RK1 b - - 0 17",
       "moves": [
         "Rfd8",
@@ -77614,7 +77428,7 @@
       "cat": "plan",
       "id": "pro-ericrosen-qgd",
       "color": "black",
-      "name": "pro-ericrosen-qgd :: R+minor+P — the Carlsbad pawn-structure endgame (vs 2997)",
+      "name": "pro-ericrosen-qgd :: R+minor+P — the Carlsbad pawn-structure endgame",
       "startFen": "r1b1k2r/pp3ppp/2p5/3pP3/2P5/1Nn1P3/P4PPP/R3KB1R w KQkq - 0 14",
       "moves": [
         "f3",
@@ -79185,7 +78999,7 @@
       "cat": "plan",
       "id": "pro-samayraina-italian",
       "color": "white",
-      "name": "pro-samayraina-italian :: Italian ENDGAME — the e5 break wins a piece (vs 1899)",
+      "name": "pro-samayraina-italian :: Italian ENDGAME — the e5 break wins a piece",
       "startFen": "8/pppr3r/3bpk1p/6p1/4P2P/2P3B1/PP1R1PP1/3R2K1 w - - 0 22",
       "moves": [
         "e5+",
@@ -79212,7 +79026,7 @@
       "cat": "plan",
       "id": "pro-samayraina-sicilian-black",
       "color": "black",
-      "name": "pro-samayraina-sicilian-black :: Najdorf ENDGAME — the a-pawn passer and the 2nd-rank rook (vs 2185)",
+      "name": "pro-samayraina-sicilian-black :: Najdorf ENDGAME — the a-pawn passer and the 2nd-rank rook",
       "startFen": "3r2k1/5ppp/5n2/pp2p2b/4P3/1B2NP2/PP4PP/5RK1 b - - 0 23",
       "moves": [
         "a4",
@@ -79240,7 +79054,7 @@
       "cat": "plan",
       "id": "pro-samayraina-open-sicilian",
       "color": "white",
-      "name": "pro-samayraina-open-sicilian :: Open Sicilian ENDGAME — rook behind the passed b-pawn (vs 1879)",
+      "name": "pro-samayraina-open-sicilian :: Open Sicilian ENDGAME — rook behind the passed b-pawn",
       "startFen": "2r1k2r/5ppp/4p3/1P6/2nRPP2/2b5/1PP3PP/5RK1 w k - 0 21",
       "moves": [
         "bxc3",
@@ -79267,7 +79081,7 @@
       "cat": "plan",
       "id": "pro-samayraina-sicilian-black",
       "color": "black",
-      "name": "pro-samayraina-sicilian-black :: Kalashnikov — the …d5 break (his data plan)",
+      "name": "pro-samayraina-sicilian-black :: Kalashnikov — the …d5 break",
       "startFen": "r1bq1rk1/p2pbppp/2p2n2/4p3/2B1P3/2N5/PPP2PPP/R1BQ1RK1 w - - 6 9",
       "moves": [
         "Re1",
