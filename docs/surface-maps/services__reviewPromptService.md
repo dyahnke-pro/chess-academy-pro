@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**159 lines · 7 exports · 7 importers · 2 tests · 0 audits**
+**158 lines · 7 exports · 7 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -34,30 +34,30 @@
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx:305`
 - `src/services/openingService.ts:531`
 - `src/services/openingService.ts:563`
-- `src/services/reviewPromptService.test.ts:23`
-- `src/services/reviewPromptService.test.ts:30`
-- `src/services/reviewPromptService.test.ts:37`
-- `src/services/reviewPromptService.test.ts:43`
-- `src/services/reviewPromptService.test.ts:46`
-- `src/services/reviewPromptService.test.ts:52`
-- `src/services/reviewPromptService.test.ts:53`
+- `src/services/reviewPromptService.test.ts:25`
+- `src/services/reviewPromptService.test.ts:32`
+- `src/services/reviewPromptService.test.ts:39`
+- `src/services/reviewPromptService.test.ts:45`
+- `src/services/reviewPromptService.test.ts:48`
 - `src/services/reviewPromptService.test.ts:54`
+- `src/services/reviewPromptService.test.ts:55`
+- `src/services/reviewPromptService.test.ts:56`
 
 ### `handlePositiveResponse` (function) — 3 call sites
 - `src/components/Feedback/ReviewPrompt.tsx:31`
-- `src/services/reviewPromptService.test.ts:80`
-- `src/services/reviewPromptService.test.ts:86`
+- `src/services/reviewPromptService.test.ts:71`
+- `src/services/reviewPromptService.test.ts:77`
 
 ### `handleNegativeResponse` (function) — 3 call sites
 - `src/components/Feedback/ReviewPrompt.tsx:36`
-- `src/services/reviewPromptService.test.ts:51`
-- `src/services/reviewPromptService.test.ts:92`
+- `src/services/reviewPromptService.test.ts:53`
+- `src/services/reviewPromptService.test.ts:83`
 
 ### `requestStoreReview` (function) — 1 call site
-- `src/services/reviewPromptService.test.ts:59`
+- `src/services/reviewPromptService.test.ts:61`
 
 ### `resetReviewPromptState` (function) — 1 call site
-- `src/services/reviewPromptService.test.ts:17`
+- `src/services/reviewPromptService.test.ts:19`
 
 ## Tests
 
