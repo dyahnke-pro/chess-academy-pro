@@ -1441,9 +1441,13 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // on-demand build so a stuck engine can never hold the turn hostage.
     if (!resolvedEnginePlan
       && (whyBestMoveEngage || planQuestionEngage
-        // Only when the surface didn't already hand one over — the two that do
-        // must not pay for a second search.
-        || ((bestMoveQuestionEngage || hintRequestEngage) && !input.liveState.engineBestMoveUci)
+        // ONE READ PER POSITION (live walk 2026-10-08: "Why?" said "the engine
+        // plays e5", then "best move?" said Nc3, same board). A surface's
+        // threaded best move is the eval bar's cached read, which may be too
+        // shallow for this position; `buildEnginePlan` takes that same cache
+        // when it is deep enough and searches on when it is not. Every move
+        // question reads that one result, so two lanes cannot name two moves.
+        || bestMoveQuestionEngage || hintRequestEngage
         // "Can I checkmate them?" is answered with the mating line itself.
         || isMateQuestion(askForIntents))
       && input.liveState.fen && !input.liveState.reviewFlaggedMove) {
@@ -1742,7 +1746,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             //
             // `resolvedEnginePlan` IS `input.liveState.enginePlan` whenever the
             // surface threaded one, so this only ever adds the on-demand case.
-            engineBestMoveUci: input.liveState.engineBestMoveUci ?? resolvedEnginePlan?.bestMoveUci,
+            engineBestMoveUci: resolvedEnginePlan?.bestMoveUci ?? input.liveState.engineBestMoveUci,
             // The search depth the best move was found at — so the grounded lane
             // can refuse to voice a confident recommendation off a shallow (~depth
             // 2) read (the "told me to blunder" guard, David 2026-09-08). Prefer
