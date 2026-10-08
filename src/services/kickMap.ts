@@ -8,6 +8,7 @@
 // their recapture, the pawn kick — so the plan is the engine's, never a guess;
 // the landing squares are counted on the board.
 import { Chess, type Square } from 'chess.js';
+import { MATERIAL_VALUE } from './pieceValues';
 import { legalSeeGainFor } from './positionReadingService';
 import { andList } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -24,7 +25,6 @@ export interface Kick {
 }
 
 const NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
-const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
 /** Can the student, to move on `fen`, hit their piece on `square` with a pawn
  *  push that does not simply lose the pawn? Returns the push and the piece's
@@ -99,7 +99,7 @@ export function kickLine(fen: string, pvUci: readonly string[]): Omit<KickLine, 
   const kick = kickOn(b1.fen(), cm.to);
   if (!kick || kick.kick.replace(/[+#]$/, '') !== k.replace(/[+#]$/, '')) return null;
   // A kick that is just a trade on equal terms is not the point.
-  if (VAL[rm.piece] <= 1) return null;
+  if (MATERIAL_VALUE[rm.piece] <= 1) return null;
   const km = new Chess(b1.fen()).move(k);
   return { sans: [c, r, k], squares: [cm.to, km.from, km.to, ...kick.landings], kick };
 }

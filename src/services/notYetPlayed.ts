@@ -9,6 +9,7 @@
 // ever AGREES with it — it explains why the engine's developing move is right
 // now, never argues for a different one.
 import { Chess, type Square } from 'chess.js';
+import { MATERIAL_VALUE } from './pieceValues';
 import { homeSquaresOf, isMinor } from './development';
 import { legalSeeGainFor } from './positionReadingService';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -48,7 +49,6 @@ function waitingTarget(fenAfter: string, student: 'w' | 'b', devTo: string): Omi
     && homeSquaresOf(m.piece, them).includes(m.from));
   let best: Omit<NotYetPlayed, 'text'> | null = null;
   let bestVal = 0;
-  const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
   for (const cell of board.board().flat()) {
     if (!cell || cell.color !== student || cell.type === 'k') continue;
     // Not hit by anything of theirs yet.
@@ -62,7 +62,7 @@ function waitingTarget(fenAfter: string, student: 'w' | 'b', devTo: string): Omi
       if (!probe.attackers(cell.square, them).includes(d.to)) continue;
       const gain = legalSeeGainFor(probe.fen(), cell.square, them);
       if (!(gain > 0)) continue;
-      const v = VAL[cell.type] ?? 0;
+      const v = MATERIAL_VALUE[cell.type] ?? 0;
       if (v > bestVal) { bestVal = v; best = { squares: [d.from, d.to, cell.square], theirMove: d.san, target: cell.square }; }
     }
   }

@@ -10,6 +10,7 @@
 //
 // A LEAF: chess.js over the game's own SAN history.
 import { Chess, type Square } from 'chess.js';
+import { MATERIAL_VALUE } from './pieceValues';
 import { homeSquaresOf } from './development';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
@@ -183,8 +184,7 @@ export function tradeLedger(history: readonly string[], student: 'w' | 'b'): Tra
     const spentMine = t.moved.get(mine.id) ?? 1;
     const victim = history.length >= 3 ? t.moves.slice(0, t.moves.length - 2).filter((m) => m.id === mine.capturedId).pop() : undefined;
     // A TRADE, like for like — winning their piece outright is a different lesson.
-    const VALUE: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
-    if (victim && victim.piece in NAME && VALUE[victim.piece] === VALUE[mine.piece] && spentTheirs >= 3 && spentTheirs >= spentMine + 2) {
+    if (victim && victim.piece in NAME && MATERIAL_VALUE[victim.piece] === MATERIAL_VALUE[mine.piece] && spentTheirs >= 3 && spentTheirs >= spentMine + 2) {
       const text = rotateStem([
         `Your ${NAME[mine.piece] ?? 'piece'}, on its ${ORDINAL[spentMine] ?? `${spentMine}th`} move, traded off their ${NAME[victim.piece]} that spent ${WORD[spentTheirs] ?? spentTheirs} moves getting to ${sq} — every one of those moves went off the board with it.`,
         `Their ${NAME[victim.piece]} took ${WORD[spentTheirs] ?? spentTheirs} moves to reach ${sq}; your ${NAME[mine.piece] ?? 'piece'} needed ${WORD[spentMine] ?? spentMine} to trade it off. That trade is a gift of time.`,
@@ -216,8 +216,7 @@ export function captureTooEarly(fen: string, student: 'w' | 'b', bestSan: string
     if (r.piece !== 'n' && r.piece !== 'b') continue;
     if (!homeSquaresOf(r.piece, them).includes(r.from)) continue;
     // An even trade: what was taken equals what is given back.
-    const val: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
-    if ((val[m.captured] ?? 0) !== (val[m.piece] ?? -1)) continue;
+    if (MATERIAL_VALUE[m.captured] !== MATERIAL_VALUE[m.piece]) continue;
     const name = NAME[r.piece];
     return {
       text: `Taking on ${m.to} now lets their ${name} take back straight from ${r.from}, which develops it at the same time. Wait until it has moved; then taking back costs it a second move.`,

@@ -8,6 +8,7 @@
 // engine's own line for that move, handed in (a multi-PV line), never
 // invented. An engine line is said short (proof.ts) and drawn in full.
 import { Chess, type Square } from 'chess.js';
+import { MATERIAL_VALUE } from './pieceValues';
 import { lineProofFromUci, type Proof } from './proof';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
@@ -28,7 +29,6 @@ export interface PatternFail {
   squares: string[];
 }
 
-const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 /** The tempting line must cost at least this much against the best line. */
 export const PATTERN_FAIL_GAP_CP = 150;
@@ -39,7 +39,7 @@ function seatCp(fen: string, l: Line): number {
 }
 
 function material(c: Chess, side: 'w' | 'b'): number {
-  return c.board().flat().reduce((s, x) => s + (x && x.color === side ? VAL[x.type] : 0), 0);
+  return c.board().flat().reduce((s, x) => s + (x && x.color === side ? MATERIAL_VALUE[x.type] : 0), 0);
 }
 
 /** The stock pattern a move looks like, read off the board. */
@@ -57,7 +57,7 @@ function patternOf(fen: string, san: string): { pattern: PatternFail['pattern'];
       const hits = board.attackers(cell.square, me).includes(m.to);
       if (!hits) continue;
       const loose = board.attackers(cell.square, them).length === 0;
-      if (loose || VAL[cell.type] > VAL[m.piece]) return { pattern: 'forking-check', target: cell.square };
+      if (loose || MATERIAL_VALUE[cell.type] > MATERIAL_VALUE[m.piece]) return { pattern: 'forking-check', target: cell.square };
     }
     return null;
   }
