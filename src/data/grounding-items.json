@@ -1,6 +1,6 @@
 {
   "depth": 14,
-  "builtFens": 4071,
+  "builtFens": 4068,
   "items": [
     {
       "cat": "line",
@@ -71525,28 +71525,26 @@
       "id": "ruy-lopez",
       "color": "white",
       "name": "ruy-lopez :: The Berlin Endgame",
-      "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "startFen": "r1bk1b1r/ppp2ppp/2p5/4Pn2/8/5N2/PPP2PPP/RNB2RK1 w - - 0 9",
       "moves": [
-        "e4",
-        "e5",
-        "Nf3",
-        "Nc6",
-        "Bb5",
-        "Nf6",
-        "O-O",
-        "Nxe4",
-        "d4",
-        "Nd6",
-        "Bxc6",
-        "dxc6",
-        "dxe5",
-        "Nf5",
-        "Qxd8+",
-        "Kxd8"
+        "h3",
+        "h6",
+        "Rd1+",
+        "Ke8",
+        "Nc3",
+        "Bd7",
+        "Bf4",
+        "Rd8",
+        "Ne4",
+        "Be7",
+        "g4",
+        "Nh4",
+        "Nxh4",
+        "Bxh4"
       ],
-      "terminalFen": "r1bk1b1r/ppp2ppp/2p5/4Pn2/8/5N2/PPP2PPP/RNB2RK1 w - - 0 9",
+      "terminalFen": "3rk2r/pppb1pp1/2p4p/4P3/4NBPb/7P/PPP2P2/R2R2K1 w - - 0 16",
       "eval": {
-        "cp": 7,
+        "cp": 41,
         "mate": null,
         "depth": 14
       }
@@ -71576,45 +71574,6 @@
       "cat": "plan",
       "id": "ruy-lopez",
       "color": "white",
-      "name": "ruy-lopez :: Breyer: From Reroute to Endgame",
-      "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-      "moves": [
-        "e4",
-        "e5",
-        "Nf3",
-        "Nc6",
-        "Bb5",
-        "a6",
-        "Ba4",
-        "Nf6",
-        "O-O",
-        "Be7",
-        "Re1",
-        "b5",
-        "Bb3",
-        "d6",
-        "c3",
-        "O-O",
-        "h3",
-        "Nb8",
-        "d4",
-        "Nbd7",
-        "Nbd2",
-        "Bb7",
-        "Bc2",
-        "c5"
-      ],
-      "terminalFen": "r2q1rk1/1b1nbppp/p2p1n2/1pp1p3/3PP3/2P2N1P/PPBN1PP1/R1BQR1K1 w - - 0 13",
-      "eval": {
-        "cp": 60,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "plan",
-      "id": "ruy-lopez",
-      "color": "white",
       "name": "ruy-lopez :: Chigorin: Wing Play on the Closed Center",
       "startFen": "r1bn1rk1/2q1bppp/p2p1n2/1ppPp3/4P3/2P2N1P/PPB2PP1/R1BQRNK1 b - - 2 14",
       "moves": [
@@ -71626,49 +71585,6 @@
       "terminalFen": "r1bnnrk1/2q1bp1p/p2p2p1/1ppPp3/1P2P3/2P2NNP/P1B2PP1/R1BQR1K1 b - - 0 16",
       "eval": {
         "cp": 112,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "plan",
-      "id": "ruy-lopez",
-      "color": "white",
-      "name": "ruy-lopez :: Chigorin: Queenside Space into the Ending",
-      "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-      "moves": [
-        "e4",
-        "e5",
-        "Nf3",
-        "Nc6",
-        "Bb5",
-        "a6",
-        "Ba4",
-        "Nf6",
-        "O-O",
-        "Be7",
-        "Re1",
-        "b5",
-        "Bb3",
-        "d6",
-        "c3",
-        "O-O",
-        "h3",
-        "Na5",
-        "Bc2",
-        "c5",
-        "d4",
-        "Qc7",
-        "Nbd2",
-        "Bd7",
-        "Nf1",
-        "Rfe8",
-        "Ne3",
-        "g6"
-      ],
-      "terminalFen": "r3r1k1/2qbbp1p/p2p1np1/npp1p3/3PP3/2P1NN1P/PPB2PP1/R1BQR1K1 w - - 0 15",
-      "eval": {
-        "cp": 66,
         "mate": null,
         "depth": 14
       }
@@ -71715,34 +71631,6 @@
       "terminalFen": "r3kbnr/1pp3pp/p3bp2/2p5/4P3/1NN2P2/PPP3PP/R1BR2K1 b kq - 2 11",
       "eval": {
         "cp": -1,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "plan",
-      "id": "ruy-lopez",
-      "color": "white",
-      "name": "ruy-lopez :: Endgame: The Kingside Majority",
-      "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-      "moves": [
-        "e4",
-        "e5",
-        "Nf3",
-        "Nc6",
-        "Bb5",
-        "a6",
-        "Bxc6",
-        "dxc6",
-        "O-O",
-        "f6",
-        "d4",
-        "exd4",
-        "Nxd4"
-      ],
-      "terminalFen": "r1bqkbnr/1pp3pp/p1p2p2/8/3NP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 7",
-      "eval": {
-        "cp": 7,
         "mate": null,
         "depth": 14
       }
@@ -71798,41 +71686,6 @@
       "cat": "plan",
       "id": "ruy-lopez",
       "color": "white",
-      "name": "ruy-lopez :: Open Ruy: Activity into the Ending",
-      "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-      "moves": [
-        "e4",
-        "e5",
-        "Nf3",
-        "Nc6",
-        "Bb5",
-        "a6",
-        "Ba4",
-        "Nf6",
-        "O-O",
-        "Nxe4",
-        "d4",
-        "b5",
-        "Bb3",
-        "d5",
-        "dxe5",
-        "Be6",
-        "c3",
-        "Be7",
-        "Nbd2",
-        "O-O"
-      ],
-      "terminalFen": "r2q1rk1/2p1bppp/p1n1b3/1p1pP3/4n3/1BP2N2/PP1N1PPP/R1BQ1RK1 w - - 3 11",
-      "eval": {
-        "cp": 59,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "plan",
-      "id": "ruy-lopez",
-      "color": "white",
       "name": "ruy-lopez :: Zaitsev: The Rook Lift Attack",
       "startFen": "r2qrbk1/1b1n1pp1/p2p3p/1ppP4/Pn2P3/R4N1P/1P1N1PP1/1BBQR1K1 b - - 2 17",
       "moves": [
@@ -71844,45 +71697,6 @@
       "terminalFen": "r2qrbk1/1b1n1pp1/3p3p/1p1P4/1npNP3/R6P/1P1N1PP1/1BBQR1K1 b - - 1 19",
       "eval": {
         "cp": 41,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "plan",
-      "id": "ruy-lopez",
-      "color": "white",
-      "name": "ruy-lopez :: Zaitsev: Tension into Technique",
-      "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-      "moves": [
-        "e4",
-        "e5",
-        "Nf3",
-        "Nc6",
-        "Bb5",
-        "a6",
-        "Ba4",
-        "Nf6",
-        "O-O",
-        "Be7",
-        "Re1",
-        "b5",
-        "Bb3",
-        "d6",
-        "c3",
-        "O-O",
-        "h3",
-        "Bb7",
-        "d4",
-        "Re8",
-        "Nbd2",
-        "Bf8",
-        "a3",
-        "h6"
-      ],
-      "terminalFen": "r2qrbk1/1bp2pp1/p1np1n1p/1p2p3/3PP3/PBP2N1P/1P1N1PP1/R1BQR1K1 w - - 0 13",
-      "eval": {
-        "cp": 30,
         "mate": null,
         "depth": 14
       }

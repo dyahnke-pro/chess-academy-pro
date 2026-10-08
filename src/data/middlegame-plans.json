@@ -22293,16 +22293,11 @@
   "openingId": "ruy-lopez",
   "criticalPositionFen": "r1bk1b1r/ppp2ppp/2p5/4Pn2/8/5N2/PPP2PPP/RNB2RK1 w - - 0 9",
   "title": "The Berlin Endgame",
-  "overview": "After the queens come off on move eight, the Berlin becomes a queenless middlegame that has frustrated the strongest players alive. Black holds the bishop pair but a king stuck in the centre and doubled c-pawns; White owns the e5-pawn, a healthy kingside majority, and the safer structure. Watch the tabiya arise, then learn to press it — patiently, the way Kramnik did against Kasparov.",
+  "overview": "After the queens come off on move eight, the Berlin becomes a queenless middlegame. Black holds the bishop pair but a king stuck in the centre and doubled c-pawns; White owns the e5-pawn, a healthy kingside majority, and the safer structure. Here White takes the d-file with check, brings the knight to e4 and kicks the f5-knight with g4 — the way Caruana pressed it against Carlsen.",
   "pawnBreaks": [
    {
-    "move": "f4 — support the wedge",
-    "explanation": "Buttress and expand the e5-pawn and the kingside majority.",
-    "fen": "r1bk1b1r/ppp2ppp/2p5/4Pn2/8/5N2/PPP2PPP/RNB2RK1 w - - 0 9"
-   },
-   {
     "move": "g4 — kick the f5-knight",
-    "explanation": "Gain space and challenge the well-placed knight when the time is right.",
+    "explanation": "Gain space and challenge the well-placed knight once h3 has covered g4.",
     "fen": "r1bk1b1r/ppp2ppp/2p5/4Pn2/8/5N2/PPP2PPP/RNB2RK1 w - - 0 9"
    }
   ],
@@ -22310,7 +22305,7 @@
    {
     "piece": "Knight",
     "route": "Nb1-c3-e4",
-    "explanation": "Reroute the queen-knight to reinforce e5 and eye the d6 and f6 holes."
+    "explanation": "Reroute the queen's knight to e4, eyeing the d6 and f6 squares."
    },
    {
     "piece": "Rook",
@@ -22329,237 +22324,98 @@
   ],
   "playableLines": [
    {
-    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fen": "r1bk1b1r/ppp2ppp/2p5/4Pn2/8/5N2/PPP2PPP/RNB2RK1 w - - 0 9",
     "moves": [
-     "e4",
-     "e5",
-     "Nf3",
-     "Nc6",
-     "Bb5",
-     "Nf6",
-     "O-O",
-     "Nxe4",
-     "d4",
-     "Nd6",
-     "Bxc6",
-     "dxc6",
-     "dxe5",
-     "Nf5",
-     "Qxd8+",
-     "Kxd8"
+     "h3",
+     "h6",
+     "Rd1+",
+     "Ke8",
+     "Nc3",
+     "Bd7",
+     "Bf4",
+     "Rd8",
+     "Ne4",
+     "Be7",
+     "g4",
+     "Nh4",
+     "Nxh4",
+     "Bxh4"
     ],
     "annotations": [
-     "",
-     "",
-     "",
-     "",
-     "",
-     "The Berlin Defence — Black ignores the bishop and hits e4.",
-     "White castles and offers the pawn.",
-     "Black takes it: the Open Berlin.",
-     "White strikes the centre rather than chase the pawn back.",
-     "The knight drops back to hit the bishop and douse White's initiative.",
-     "The same structural blow as the Exchange — White doubles Black's c-pawns.",
-     "",
-     "",
-     "The knight heads for d4 or e3.",
-     "The queens come off with check —",
-     "— and Black recaptures with the king, losing the right to castle. This is the Berlin endgame: Black has the bishop pair, but White owns the e5-pawn, a healthy kingside majority, and the safer king. A queenless grind where White presses for the long haul."
+     "h3 — a quiet first move: the g4-square is now covered, so g4 can come later to kick the f5-knight.",
+     "…h6 — Black does the same on the other side, keeping White's pieces off g5.",
+     "Rd1+ — the rook takes the open d-file with check, and Black's king, which can no longer castle, has to move.",
+     "…Ke8 — the king steps back to e8.",
+     "Nc3 — the queen's knight develops, heading for e4.",
+     "…Bd7 — Black develops the light bishop.",
+     "Bf4 — the bishop develops and guards the e5-pawn.",
+     "…Rd8 — Black contests the d-file.",
+     "Ne4 — the knight reaches e4, eyeing the f6- and d6-squares.",
+     "…Be7 — the other bishop develops.",
+     "g4 — now the pawn kicks the f5-knight.",
+     "…Nh4 — the knight jumps to h4 and hits the f3-knight.",
+     "Nxh4 — White trades it off.",
+     "…Bxh4 — Black recaptures and the bishop now eyes f2. White keeps a small edge: the e5-pawn, the kingside majority, and Black's king in the centre — the way Caruana pressed it against Carlsen in 2014."
     ],
     "arrows": [
      [],
      [],
      [],
      [],
-     [],
      [
       {
-       "from": "f6",
+       "from": "c3",
        "to": "e4",
-       "color": "rgba(34, 197, 94, 0.85)"
+       "color": "rgba(40,185,95,0.92)"
       }
      ],
      [],
-     [],
-     [],
+     [
+      {
+       "from": "f4",
+       "to": "e5",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
      [],
      [],
      [],
      [],
      [
       {
-       "from": "f5",
-       "to": "d4",
-       "color": "rgba(34, 197, 94, 0.85)"
-      },
-      {
-       "from": "f5",
-       "to": "e3",
-       "color": "rgba(34, 197, 94, 0.85)"
+       "from": "h4",
+       "to": "f3",
+       "color": "rgba(40,185,95,0.92)"
       }
      ],
      [],
-     []
+     [
+      {
+       "from": "h4",
+       "to": "f2",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ]
     ],
-    "title": "The Queenless Wall",
+    "title": "The Queenless Wall (Caruana–Carlsen, 2014)",
     "highlights": [
      [
       {
-       "square": "e4",
+       "square": "h3",
        "color": "rgba(255, 165, 0, 0.55)"
       },
       {
-       "square": "e2",
+       "square": "g4",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
       {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e7",
+       "square": "h6",
        "color": "rgba(255, 165, 0, 0.55)"
       }
      ],
      [
-      {
-       "square": "f3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "g1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "g8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e4",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ],
-     [
-      {
-       "square": "g1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d4",
-       "color": "rgba(255, 235, 59, 0.5)"
-      },
-      {
-       "square": "e3",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ],
-     [
-      {
-       "square": "d8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
       {
        "square": "d1",
        "color": "rgba(255, 165, 0, 0.55)"
@@ -22567,16 +22423,92 @@
      ],
      [
       {
-       "square": "d8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
        "square": "e8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "c3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "d7",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "f4",
        "color": "rgba(255, 165, 0, 0.55)"
       },
       {
        "square": "e5",
-       "color": "rgba(255, 235, 59, 0.5)"
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "d8",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "e4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "d6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f6",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "e7",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "g4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f5",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "h4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f3",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "h4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      }
+     ],
+     [
+      {
+       "square": "h4",
+       "color": "rgba(255, 165, 0, 0.55)"
+      },
+      {
+       "square": "f2",
+       "color": "rgba(255, 165, 0, 0.55)"
       }
      ]
     ],
@@ -22586,23 +22518,22 @@
      "https://en.wikipedia.org/wiki/Ruy_Lopez"
     ],
     "learnCues": [
-     "",
-     "",
-     "",
-     "",
-     "",
-     "Nf6 — the Berlin, hits e4",
-     "O-O — offer the pawn",
-     "Nxe4 — the Open Berlin",
-     "d4 — strike the centre",
-     "Nd6 — douse the initiative",
-     "Bxc6 — the structural blow",
-     "",
-     "",
-     "Nf5 — head for d4/e3",
-     "Qxd8+ — queens off with check",
-     "Kxd8 — lose castling; White grinds"
-    ]
+     "h3 — prepare g4",
+     "…h6 — cover g5",
+     "Rd1+ — take the d-file with check",
+     "…Ke8 — king steps back",
+     "Nc3 — heading for e4",
+     "…Bd7 — develop",
+     "Bf4 — guard e5",
+     "…Rd8 — contest the file",
+     "Ne4 — eye d6 and f6",
+     "…Be7 — develop",
+     "g4 — kick the knight",
+     "…Nh4 — hit the f3-knight",
+     "Nxh4 — trade it",
+     "…Bxh4 — small edge for White"
+    ],
+    "intro": "From the Berlin endgame position, White takes the d-file, brings the knight to e4 and kicks the f5-knight with g4."
    }
   ]
  },
@@ -22740,416 +22671,6 @@
   ]
  },
  {
-  "id": "mp-ruylopez-breyer-endgame",
-  "openingId": "ruy-lopez",
-  "criticalPositionFen": "r2q1rk1/1b1nbppp/p2p1n2/1pp1p3/3PP3/2P2N1P/PPBN1PP1/R1BQR1K1 w - - 0 13",
-  "title": "Breyer: From Reroute to Endgame",
-  "overview": "The Breyer is patience with a destination. Black's knight retreats all the way home to reroute through d7; White completes a harmonious build-up and — crucially — tucks the bishop to c2. Watch the structure lock, then understand where it's headed: a two-winged battle whose endgame favours White's kingside space.",
-  "pawnBreaks": [
-   {
-    "move": "d4-d5 / f2-f4",
-    "explanation": "Lock the centre with d5, then expand on the kingside with f4 — the space that wins the ending.",
-    "fen": "r2q1rk1/1b1nbppp/p2p1n2/1pp1p3/3PP3/2P2N1P/PPBN1PP1/R1BQR1K1 w - - 0 13"
-   }
-  ],
-  "pieceManeuvers": [
-   {
-    "piece": "Knight",
-    "route": "Nb8-d7",
-    "explanation": "The Breyer reroute — home and back out to d7, propping e5 and freeing the b7-bishop."
-   },
-   {
-    "piece": "Bishop",
-    "route": "Bb3-c2",
-    "explanation": "Prophylaxis: off b3 so Noah's Ark can never spring, and onto the b1-h7 diagonal for the kingside."
-   }
-  ],
-  "strategicThemes": [
-   "Bc2 makes the Noah's Ark trap structurally impossible — the maneuver IS the defence.",
-   "Two-winged play: White presses the kingside (f5, the space), Black the queenside.",
-   "The endgame is the Breyer's pay-off — White's space and the f5-outpost convert when the pieces come off."
-  ],
-  "endgameTransitions": [
-   "Trade into a heavy-piece or minor-piece ending and White's kingside space and the f5-square become decisive.",
-   "Black's queenside majority is the counter-trump; whoever's structure is sounder when the queens vanish wins."
-  ],
-  "playableLines": [
-   {
-    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "moves": [
-     "e4",
-     "e5",
-     "Nf3",
-     "Nc6",
-     "Bb5",
-     "a6",
-     "Ba4",
-     "Nf6",
-     "O-O",
-     "Be7",
-     "Re1",
-     "b5",
-     "Bb3",
-     "d6",
-     "c3",
-     "O-O",
-     "h3",
-     "Nb8",
-     "d4",
-     "Nbd7",
-     "Nbd2",
-     "Bb7",
-     "Bc2",
-     "c5"
-    ],
-    "annotations": [
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "The Breyer's calling card — the knight retreats all the way home, to reroute through d7 and free the long diagonal for the bishop on its way to b7.",
-     "",
-     "",
-     "",
-     "",
-     "And the quiet move that does double duty: Bc2. It develops toward the kingside AND tucks the bishop safely off b3 — sidestepping the Noah's Ark trap forever. The cage Black dreams of can never close. That single piece of prophylaxis is the whole reason the closed main lines retreat this bishop.",
-     "Black grabs queenside space and the centre locks. Now look past the middlegame: trade the heavy pieces and White's kingside space plus the f5-square are the trumps that decide the ending. The Breyer is patience that cashes out in the endgame."
-    ],
-    "arrows": [
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [
-      {
-       "from": "b8",
-       "to": "d7",
-       "color": "rgba(34, 197, 94, 0.85)"
-      }
-     ],
-     [],
-     [],
-     [],
-     [],
-     [],
-     []
-    ],
-    "title": "The Reroute, the Prophylaxis, the Plan",
-    "highlights": [
-     [
-      {
-       "square": "e4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "g1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "a7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "g8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "a4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "c2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "h3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "h2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "c6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d7",
-       "color": "rgba(255, 235, 59, 0.5)"
-      },
-      {
-       "square": "b7",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ],
-     [
-      {
-       "square": "d4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "c8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "c7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f5",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ]
-    ],
-    "sources": [
-     "book:ruy-lopez",
-     "concept:pos-center",
-     "https://en.wikipedia.org/wiki/Ruy_Lopez"
-    ],
-    "learnCues": [
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "Nb8 — the Breyer reroute home",
-     "",
-     "",
-     "",
-     "",
-     "Bc2 — develop, dodge Noah’s Ark",
-     "c5 — lock the centre; space tells"
-    ]
-   }
-  ]
- },
- {
   "id": "mp-ruylopez-chigorin",
   "openingId": "ruy-lopez",
   "title": "Chigorin: Wing Play on the Closed Center",
@@ -23258,501 +22779,6 @@
      "concept:att-kingside-storm",
      "concept:pos-outpost",
      "https://en.wikipedia.org/wiki/Ruy_Lopez"
-    ]
-   }
-  ]
- },
- {
-  "id": "mp-ruylopez-chigorin-endgame",
-  "openingId": "ruy-lopez",
-  "criticalPositionFen": "r3r1k1/2qbbp1p/p2p1np1/npp1p3/3PP3/2P1NN1P/PPB2PP1/R1BQR1K1 w - - 0 15",
-  "title": "Chigorin: Queenside Space into the Ending",
-  "overview": "For decades the Chigorin WAS the main line. Black's ...Na5 hits the Spanish bishop, ...c5 claims queenside space, and White retreats to c2 — both answering the knight and dodging the Noah's Ark trap. The knight tours to e3 hunting d5/f5. Where it's all heading: a queenside-minority versus central-space ending.",
-  "pawnBreaks": [
-   {
-    "move": "d4 then d5",
-    "explanation": "Build the centre and clamp with d5, fixing the structure for the two-winged ending.",
-    "fen": "r3r1k1/2qbbp1p/p2p1np1/npp1p3/3PP3/2P1NN1P/PPB2PP1/R1BQR1K1 w - - 0 15"
-   },
-   {
-    "move": "a4 (later)",
-    "explanation": "Probe the queenside to fix Black's majority before the endgame.",
-    "fen": "r3r1k1/2qbbp1p/p2p1np1/npp1p3/3PP3/2P1NN1P/PPB2PP1/R1BQR1K1 w - - 0 15"
-   }
-  ],
-  "pieceManeuvers": [
-   {
-    "piece": "Knight",
-    "route": "Nc6-a5",
-    "explanation": "Hits the b3-bishop — the Chigorin's defining idea (and the reason White must retreat it)."
-   },
-   {
-    "piece": "Bishop",
-    "route": "Bb3-c2",
-    "explanation": "Answers ...Na5 and dodges Noah's Ark in one — the maneuver is the trap's antidote."
-   },
-   {
-    "piece": "Knight",
-    "route": "Nb1-d2-f1-e3",
-    "explanation": "The long tour to e3, hunting the d5 and f5 outposts."
-   }
-  ],
-  "strategicThemes": [
-   "Bc2 is forced AND prophylactic — it parries ...Na5 and erases the Noah's Ark trap together.",
-   "Black's queenside minority versus White's central space — that imbalance carries into the ending.",
-   "The d5/f5 outposts are the prize; owning them in the endgame usually decides it."
-  ],
-  "endgameTransitions": [
-   "A queenside-minority-vs-central-space ending: White's space and outposts tell as pieces come off.",
-   "If Black's minority attack stalls, White's healthier centre converts the endgame."
-  ],
-  "playableLines": [
-   {
-    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "moves": [
-     "e4",
-     "e5",
-     "Nf3",
-     "Nc6",
-     "Bb5",
-     "a6",
-     "Ba4",
-     "Nf6",
-     "O-O",
-     "Be7",
-     "Re1",
-     "b5",
-     "Bb3",
-     "d6",
-     "c3",
-     "O-O",
-     "h3",
-     "Na5",
-     "Bc2",
-     "c5",
-     "d4",
-     "Qc7",
-     "Nbd2",
-     "Bd7",
-     "Nf1",
-     "Rfe8",
-     "Ne3",
-     "g6"
-    ],
-    "annotations": [
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "The Chigorin's signature — ...Na5 jumps at the b3-bishop and demands it move.",
-     "Bc2 — and it is not merely a retreat. It answers the knight AND tucks the bishop off b3, so the Noah's Ark trap can never spring. Prophylaxis and development in a single move.",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "The knight completes its tour to e3, eyeing the d5- and f5-outposts — the squares the whole middlegame revolves around.",
-     "Black blunts the knight with g6. Now the shape of the ending is set: Black's queenside minority pawns press, White's central space and the d5/f5 squares answer. Trade down and that space is the deciding word."
-    ],
-    "arrows": [
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [
-      {
-       "from": "a5",
-       "to": "b3",
-       "color": "rgba(34, 197, 94, 0.85)"
-      }
-     ],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [
-      {
-       "from": "e3",
-       "to": "d5",
-       "color": "rgba(34, 197, 94, 0.85)"
-      },
-      {
-       "from": "e3",
-       "to": "f5",
-       "color": "rgba(34, 197, 94, 0.85)"
-      }
-     ],
-     []
-    ],
-    "title": "The Knight Hits, the Bishop Hides, the Space Tells",
-    "highlights": [
-     [
-      {
-       "square": "e4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "g1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "a7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "g8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "a4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "c2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "h3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "h2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "c6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b3",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ],
-     [
-      {
-       "square": "c2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "c7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "c8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d5",
-       "color": "rgba(255, 235, 59, 0.5)"
-      },
-      {
-       "square": "f5",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ],
-     [
-      {
-       "square": "g6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "g7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d5",
-       "color": "rgba(255, 235, 59, 0.5)"
-      },
-      {
-       "square": "f5",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ]
-    ],
-    "sources": [
-     "book:ruy-lopez",
-     "concept:pos-center",
-     "https://en.wikipedia.org/wiki/Ruy_Lopez"
-    ],
-    "learnCues": [
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "Na5 — jump at the b3-bishop",
-     "Bc2 — retreat, dodge Noah’s Ark",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "Ne3 — toward the d5/f5 outposts",
-     "g6 — blunt the knight; space tells"
     ]
    }
   ]
@@ -24086,262 +23112,6 @@
      "f3 — challenge, prep the majority",
      "Be6 — hold the light squares",
      "Nc3 — the technical fight begins"
-    ]
-   }
-  ]
- },
- {
-  "id": "mp-ruylopez-exchange-endgame",
-  "openingId": "ruy-lopez",
-  "criticalPositionFen": "r1bqkbnr/1pp3pp/p1p2p2/8/3NP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 7",
-  "title": "Endgame: The Kingside Majority",
-  "overview": "The Exchange isn't really about the opening — it's about the ending. By trading on c6 and doubling Black's c-pawns, White earns a healthy kingside pawn majority that manufactures a passed pawn, while Black's crippled queenside makes nothing. Watch the structure form, then play it out — this is Fischer's whole reason for the line.",
-  "pawnBreaks": [
-   {
-    "move": "f4 / g4 / h4 — the kingside roll",
-    "explanation": "Advance the healthy kingside majority to manufacture the passed pawn.",
-    "fen": "r1bqkbnr/1pp3pp/p1p2p2/8/3NP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 7"
-   },
-   {
-    "move": "e5",
-    "explanation": "The central thrust that fixes the structure and frees the majority to roll.",
-    "fen": "r1bqkbnr/1pp3pp/p1p2p2/8/3NP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 7"
-   }
-  ],
-  "pieceManeuvers": [
-   {
-    "piece": "King",
-    "route": "centralise toward the kingside",
-    "explanation": "In a king-and-pawn ending the king is a fighting piece — march it up to escort the passer."
-   }
-  ],
-  "strategicThemes": [
-   "White's kingside 4-v-3 makes a passer; Black's doubled c-pawns make none — that single asymmetry is the whole game.",
-   "Trade pieces, not pawns: every exchange drags the position toward the winning king-and-pawn ending.",
-   "Black's compensation is the bishop pair and activity — keep things closed enough that structure outweighs it."
-  ],
-  "endgameTransitions": [
-   "The pure king-and-pawn ending is winning for White: the kingside majority queens a pawn while Black's queenside cannot.",
-   "Even with one pair of rooks left on, the outside passed pawn tends to decide in White's favour."
-  ],
-  "playableLines": [
-   {
-    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "moves": [
-     "e4",
-     "e5",
-     "Nf3",
-     "Nc6",
-     "Bb5",
-     "a6",
-     "Bxc6",
-     "dxc6",
-     "O-O",
-     "f6",
-     "d4",
-     "exd4",
-     "Nxd4"
-    ],
-    "annotations": [
-     "",
-     "",
-     "",
-     "",
-     "The Spanish bishop eyes c6 — the knight that holds e5 in place.",
-     "Black pokes the bishop: the Morphy move.",
-     "The Exchange. White gives up the bishop pair on purpose — the point is structural, and it lasts all the way into the endgame.",
-     "The forced recapture doubles Black's c-pawns: four queenside pawns on three files. They can never make a passed pawn.",
-     "",
-     "Black shores up e5.",
-     "White challenges the centre, steering toward the trade that defines the ending.",
-     "",
-     "Now read the pawns. White's kingside — e, f, g, h — is a clean four against three: that majority makes a passed pawn. Black's extra pawn is the doubled c, and it makes nothing. Trade every piece and White wins the king-and-pawn ending. This is why Fischer played the Exchange."
-    ],
-    "arrows": [
-     [],
-     [],
-     [],
-     [],
-     [
-      {
-       "from": "b5",
-       "to": "c6",
-       "color": "rgba(34, 197, 94, 0.85)"
-      }
-     ],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     []
-    ],
-    "title": "Fischer's Structural Endgame",
-    "highlights": [
-     [
-      {
-       "square": "e4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "g1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "c6",
-       "color": "rgba(255, 235, 59, 0.5)"
-      },
-      {
-       "square": "e5",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ],
-     [
-      {
-       "square": "a6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "a7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e5",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ],
-     [
-      {
-       "square": "d4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ]
-    ],
-    "sources": [
-     "book:ruy-lopez",
-     "concept:pos-center",
-     "https://en.wikipedia.org/wiki/Ruy_Lopez"
-    ],
-    "learnCues": [
-     "",
-     "",
-     "",
-     "",
-     "Bb5 — eye the c6-knight",
-     "a6 — the Morphy poke",
-     "Bxc6 — the structural Exchange",
-     "dxc6 — doubled c-pawns",
-     "",
-     "f6 — shore up e5",
-     "d4 — steer to the trade",
-     "",
-     "Nxd4 — 4v3 majority wins the ending"
     ]
    }
   ]
@@ -24780,367 +23550,6 @@
   ]
  },
  {
-  "id": "mp-ruylopez-open-endgame",
-  "openingId": "ruy-lopez",
-  "criticalPositionFen": "r2q1rk1/2p1bppp/p1n1b3/1p1pP3/4n3/1BP2N2/PP1N1PPP/R1BQ1RK1 w - - 3 11",
-  "title": "Open Ruy: Activity into the Ending",
-  "overview": "The Open Ruy is the antithesis of the closed manoeuvring lines — Black takes on e4 and the game opens at once. The structure that results, Black's mobile d5-pawn against White's e5 wedge, carries straight into a piece-activity endgame: not patience, but coordination.",
-  "pawnBreaks": [
-   {
-    "move": "d4 / c3-c4",
-    "explanation": "Open the centre with d4, then challenge d5 with c4 to clarify the structure for the ending.",
-    "fen": "r2q1rk1/2p1bppp/p1n1b3/1p1pP3/4n3/1BP2N2/PP1N1PPP/R1BQ1RK1 w - - 3 11"
-   },
-   {
-    "move": "f2-f4-f5",
-    "explanation": "Support and expand the e5-wedge to cramp Black before trading down.",
-    "fen": "r2q1rk1/2p1bppp/p1n1b3/1p1pP3/4n3/1BP2N2/PP1N1PPP/R1BQ1RK1 w - - 3 11"
-   }
-  ],
-  "pieceManeuvers": [
-   {
-    "piece": "Knight",
-    "route": "Nb1-d2-b3",
-    "explanation": "Reroute to b3, eyeing c5 and d4 and contesting the light squares."
-   },
-   {
-    "piece": "Bishop",
-    "route": "Bb3 stays active",
-    "explanation": "The Spanish bishop keeps the a2-g8 diagonal — a long-term trump into the ending."
-   }
-  ],
-  "strategicThemes": [
-   "The Open is activity, not patience — the better-coordinated army wins the ending.",
-   "Black's mobile d5-pawn vs White's e5-wedge is the defining imbalance, all the way down.",
-   "The bishop pair and open lines favour White if the position stays sharp into the endgame."
-  ],
-  "endgameTransitions": [
-   "An open, piece-active ending: White's bishop pair and the e5-wedge tell if coordination holds.",
-   "If Black's d5-pawn becomes weak rather than mobile, White's pressure converts the endgame."
-  ],
-  "playableLines": [
-   {
-    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "moves": [
-     "e4",
-     "e5",
-     "Nf3",
-     "Nc6",
-     "Bb5",
-     "a6",
-     "Ba4",
-     "Nf6",
-     "O-O",
-     "Nxe4",
-     "d4",
-     "b5",
-     "Bb3",
-     "d5",
-     "dxe5",
-     "Be6",
-     "c3",
-     "Be7",
-     "Nbd2",
-     "O-O"
-    ],
-    "annotations": [
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "The Open Ruy — Black grabs the e4-pawn instead of defending it. The position cracks open; this is the most active, least patient way to meet the Spanish.",
-     "White strikes the centre back at once — in the Open, the open lines are worth far more than a pawn.",
-     "",
-     "",
-     "Black props the knight with d5, claiming the centre and the e6-square for the bishop. Here is the structure that defines the Open: Black's mobile d5-pawn against White's e5 wedge.",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "Nbd2 — the knight reroutes to b3 to bear down on c5 and the d5/c5 light squares."
-    ],
-    "arrows": [
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     []
-    ],
-    "title": "The Open Structure into the Ending",
-    "highlights": [
-     [
-      {
-       "square": "e4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "g1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "a7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "g8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "a4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e6",
-       "color": "rgba(255, 235, 59, 0.5)"
-      },
-      {
-       "square": "e5",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ],
-     [
-      {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "c8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "c2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b3",
-       "color": "rgba(255, 235, 59, 0.5)"
-      },
-      {
-       "square": "c5",
-       "color": "rgba(255, 235, 59, 0.5)"
-      },
-      {
-       "square": "d5",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ]
-    ],
-    "sources": [
-     "book:ruy-lopez",
-     "concept:pos-center",
-     "https://en.wikipedia.org/wiki/Ruy_Lopez"
-    ],
-    "learnCues": [
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "Nxe4 — the Open Ruy grab",
-     "d4 — strike the centre back",
-     "",
-     "",
-     "d5 — prop the knight, claim space",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "O-O — Nbd2 heads to b3"
-    ]
-   }
-  ]
- },
- {
   "id": "mp-ruylopez-zaitsev",
   "openingId": "ruy-lopez",
   "title": "Zaitsev: The Rook Lift Attack",
@@ -25219,419 +23628,6 @@
      "concept:att-kingside-storm",
      "concept:pos-outpost",
      "https://en.wikipedia.org/wiki/Ruy_Lopez"
-    ]
-   }
-  ]
- },
- {
-  "id": "mp-ruylopez-zaitsev-endgame",
-  "openingId": "ruy-lopez",
-  "criticalPositionFen": "r2qrbk1/1bp2pp1/p1np1n1p/1p2p3/3PP3/PBP2N1P/1P1N1PP1/R1BQR1K1 w - - 0 13",
-  "title": "Zaitsev: Tension into Technique",
-  "overview": "Karpov's lifelong weapon. Black commits the bishop to b7 and the rook to e8, holding the centre at maximum tension — and here the bishop stays on b3, because the ...Bb7 setup never goes for the Noah's Ark. White plays the quiet a3 and waits; whichever way the tension breaks, the resulting structure favours White's technique.",
-  "pawnBreaks": [
-   {
-    "move": "d4-d5",
-    "explanation": "Clamp the centre and define the structure for the technical phase.",
-    "fen": "r2qrbk1/1bp2pp1/p1np1n1p/1p2p3/3PP3/PBP2N1P/1P1N1PP1/R1BQR1K1 w - - 0 13"
-   },
-   {
-    "move": "a3 then a4",
-    "explanation": "Restrain and then pressure the queenside before trading down.",
-    "fen": "r2qrbk1/1bp2pp1/p1np1n1p/1p2p3/3PP3/PBP2N1P/1P1N1PP1/R1BQR1K1 w - - 0 13"
-   }
-  ],
-  "pieceManeuvers": [
-   {
-    "piece": "Rook",
-    "route": "Re8 (and Ra1-a-file later)",
-    "explanation": "Black's ...Re8 backs the centre; White's a-file play targets the queenside in the ending."
-   },
-   {
-    "piece": "Bishop",
-    "route": "Be7-f8",
-    "explanation": "Black's regroup to f8 reinforces the king; White keeps the bishop pair as the long-term trump."
-   }
-  ],
-  "strategicThemes": [
-   "Hold the central tension; the side that resolves it on better terms owns the ending.",
-   "Here the bishop stays on b3 — the ...Bb7 setup never threatens Noah's Ark, so no retreat is needed.",
-   "White's bishop pair and central space are the technical trumps when the position simplifies."
-  ],
-  "endgameTransitions": [
-   "Once the tension breaks, an ending with the bishop pair and more space tends to favour White.",
-   "Precise move-order is everything — a single tempo decides whether the simplification helps or hurts."
-  ],
-  "playableLines": [
-   {
-    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "moves": [
-     "e4",
-     "e5",
-     "Nf3",
-     "Nc6",
-     "Bb5",
-     "a6",
-     "Ba4",
-     "Nf6",
-     "O-O",
-     "Be7",
-     "Re1",
-     "b5",
-     "Bb3",
-     "d6",
-     "c3",
-     "O-O",
-     "h3",
-     "Bb7",
-     "d4",
-     "Re8",
-     "Nbd2",
-     "Bf8",
-     "a3",
-     "h6"
-    ],
-    "annotations": [
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "The Zaitsev — Black commits the bishop to b7 and the rook to e8, holding the centre at maximum tension. Note the bishop stays on b3: the ...Bb7 plan never targets it, so there's no Noah's Ark to dodge here.",
-     "",
-     "",
-     "",
-     "",
-     "a3 — quiet prophylaxis, taking the b4-square from Black's pieces before the centre resolves.",
-     "The tension will break with d5 or ...exd4. Either way the position simplifies toward an ending where White's central space and the bishop pair are the lasting edge. Zaitsev is razor theory that, played accurately, drifts into White's favour in the endgame."
-    ],
-    "arrows": [
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     [],
-     []
-    ],
-    "title": "Maximum Tension, then the Better Structure",
-    "highlights": [
-     [
-      {
-       "square": "e4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "g1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "a7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "g8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "a4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "c3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "c2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "g8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "h3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "h2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "c8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e8",
-       "color": "rgba(255, 235, 59, 0.5)"
-      },
-      {
-       "square": "b3",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ],
-     [
-      {
-       "square": "d4",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "d2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f8",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "a2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b4",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ],
-     [
-      {
-       "square": "h6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "h7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "d5",
-       "color": "rgba(255, 235, 59, 0.5)"
-      }
-     ]
-    ],
-    "sources": [
-     "book:ruy-lopez",
-     "concept:pos-center",
-     "https://en.wikipedia.org/wiki/Ruy_Lopez"
-    ],
-    "learnCues": [
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "Bb7 — maximum central tension",
-     "",
-     "",
-     "",
-     "",
-     "a3 — prophylaxis, take b4",
-     "h6 — simplify; White’s space edges"
     ]
    }
   ]
