@@ -63,8 +63,9 @@ export function OpeningShelf({ openings, onOpen, onToggleFavorite }: OpeningShel
   return (
     <div data-testid="opening-shelf">
       <div className="grid grid-cols-2 gap-1 mb-4 p-1 bg-theme-surface rounded-xl" role="group" aria-label="Side you play" data-testid="side-toggle">
-        {/* Same chrome as the Openings tab bar: a neon left + bottom border
-            that glows, and a tinted fill on the selected side. */}
+        {/* Same chrome as the Openings tab bar, but the halo sits on the
+            SELECTED side only, so it visibly moves White ↔ Black (David
+            2026-10-08: "so user knows which they have selected easier"). */}
         {([
           {
             id: 'white' as const, label: 'White', count: white.length,
@@ -76,15 +77,15 @@ export function OpeningShelf({ openings, onOpen, onToggleFavorite }: OpeningShel
             id: 'black' as const, label: 'Black', count: black.length,
             dot: 'bg-neutral-900 border-neutral-400',
             activeClasses: 'bg-zinc-500/25 text-zinc-100',
-            borderColor: 'border-zinc-500/80 shadow-[0_0_6px_rgba(113,113,122,0.7),0_0_14px_rgba(113,113,122,0.45),0_0_24px_rgba(113,113,122,0.25)]',
+            borderColor: 'border-zinc-400/90 shadow-[0_0_6px_rgba(161,161,170,0.8),0_0_14px_rgba(161,161,170,0.5),0_0_24px_rgba(161,161,170,0.3)]',
           },
         ]).map(({ id, label, count, dot, activeClasses, borderColor }) => (
           <button
             key={id}
             aria-pressed={side === id}
             onClick={() => pick(id)}
-            className={`flex items-center justify-center gap-2 py-2 px-1 rounded-lg text-xs font-medium transition-all border-l-2 border-b-2 ${borderColor} ${
-              side === id ? activeClasses : 'text-theme-text-muted hover:text-theme-text'
+            className={`flex items-center justify-center gap-2 py-2 px-1 rounded-lg text-xs font-medium transition-all border-l-2 border-b-2 ${
+              side === id ? `${borderColor} ${activeClasses}` : 'border-transparent text-theme-text-muted hover:text-theme-text'
             }`}
             data-testid={`side-toggle-${id}`}
           >
