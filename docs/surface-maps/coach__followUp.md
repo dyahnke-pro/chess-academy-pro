@@ -17,13 +17,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `resolveFollowUp` (function) — 6 call sites
+### `resolveFollowUp` (function) — 7 call sites
 - `src/coach/coachService.ts:1285`
 - `src/coach/followUp.test.ts:7`
 - `src/coach/followUp.test.ts:10`
 - `src/coach/followUp.test.ts:13`
 - `src/coach/followUp.test.ts:16`
 - `src/coach/followUp.test.ts:17`
+- `src/components/Coach/multiIntentRouting.test.ts:87`
 
 ## Tests
 

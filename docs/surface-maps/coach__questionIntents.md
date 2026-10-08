@@ -188,7 +188,7 @@
 - `src/coach/questionIntents.whyBestMove.test.ts:73`
 - `src/coach/questionIntents.whyBestMove.test.ts:78`
 - `src/components/Coach/CoachTeachPage.tsx:5149`
-- `src/components/Coach/multiIntentRouting.test.ts:96`
+- `src/components/Coach/multiIntentRouting.test.ts:98`
 
 ### `isOpponentMoveQuestion` (function) — 5 call sites
 - `src/coach/coachService.ts:1342`
