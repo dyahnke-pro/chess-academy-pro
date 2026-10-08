@@ -104,3 +104,53 @@ export function threatStoppedBy(
   ], stemKeyOf(studentFenAfter));
   return { threat, reply: replySan, text };
 }
+
+/**
+ * "CAN YOU PLAY IT ANYWAY?" (computers batch 2, the reference coach's "they
+ * stopped f4? If they take, you take back and their knight loses a move"). The
+ * reply above stopped the student's threat on paper — the capture no longer
+ * nets what it did. Test it instead of trusting it: the same move is still
+ * legal now, and the engine rates it within a third of a pawn of its best for
+ * the student, so the prevention did not really prevent. Proven by the
+ * engine's own line for that move (`topLines`, white-POV, UCI), said short.
+ * Null when the move now costs, or the engine never looked at it.
+ */
+export interface PlayItAnyway { text: string; san: string; line: string[]; squares: string[] }
+export function playItAnyway(
+  stop: StoppedThreat,
+  fenNow: string,
+  topLines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>,
+  studentWB: 'w' | 'b',
+): PlayItAnyway | null {
+  if (stop.threat.kind === 'mate' || topLines.length === 0) return null;
+  let now: Chess;
+  try { now = new Chess(fenNow); } catch { return null; }
+  if (now.turn() !== studentWB) return null;
+  const sign = studentWB === 'w' ? 1 : -1;
+  const cp = (l: { evaluation: number; mate: number | null }): number => (l.mate != null ? (l.mate > 0 ? 100000 : -100000) : l.evaluation) * sign;
+  const best = cp(topLines[0]);
+  for (const l of topLines) {
+    const uci = l.moves[0];
+    if (!uci) continue;
+    let mv: ReturnType<Chess['move']>;
+    try { mv = new Chess(fenNow).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }); } catch { continue; }
+    if (mv.san.replace(/[+#]/g, '') !== stop.threat.san.replace(/[+#]/g, '')) continue;
+    if (best - cp(l) > 30) return null;
+    const line: string[] = [];
+    try {
+      const c = new Chess(fenNow);
+      for (const u of l.moves.slice(0, 4)) line.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san);
+    } catch { /* the line stops where it stops being legal */ }
+    if (line.length < 2) return null;
+    const bare = (x: string): string => x.replace(/[+#]/g, '');
+    const s = bare(mv.san);
+    const after = line.slice(1).map(bare).join(', then ');
+    const text = rotateStem([
+      `They meant to stop ${s}, but you can play it anyway: after ${s}, ${after}.`,
+      `Test their prevention — ${s} still works: after it, ${after}.`,
+      `Did they really stop ${s}? No — it is still good: after it, ${after}.`,
+    ], stemKeyOf(fenNow));
+    return { text, san: mv.san, line, squares: [mv.from, mv.to] };
+  }
+  return null;
+}

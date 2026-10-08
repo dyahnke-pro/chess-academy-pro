@@ -87,6 +87,7 @@ import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
 import type { FacetTag } from './reviewFacetRank';
 import type { FactProof, Proof } from './proof';
 import { newPhraseMemory } from '../utils/phraseMemory';
+import { whyItEnded, idlePiece, quietDecider, exploreInvite, murkyRead, type EndRead, type GamePly } from './gameEndReads';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -1766,6 +1767,33 @@ export function buildReviewSegments(
   // THE GAME'S PHRASE MEMORY (the DNA template): an idea said in full once in
   // this review, referred to after.
   const reviewPhrases = newPhraseMemory();
+  // LOOKING BACK OVER THE GAME (computers batch 2, `gameEndReads`): why it
+  // ended, the piece of theirs that never played, the quiet move it turned on,
+  // a position to set up and explore, and the moments the engine's own read
+  // would not hold still. Computed ONCE from the game's moves and the review's
+  // own numbers, then handed to the ply they belong to.
+  const endReadsAt = new Map<number, EndRead[]>();
+  if (studentColorWB) {
+    try {
+      const gamePlies: GamePly[] = fenChain.slice(0, usable).map((fp, k) => ({
+        san: moves[k].san, fenBefore: fp.fenBefore, fenAfter: fp.fenAfter,
+        evalAfter: moves[k].evaluation ?? null, bestMoveUci: moves[k].bestMove ?? null,
+        // The eval had the best move been played: the one-search number when
+        // the ply was searched for its cost, else the board's eval before it.
+        bestMoveEval: moves[k].bestMoveEval ?? moves[k].preMoveEval ?? null,
+      }));
+      const add = (r: EndRead | null): void => { if (r) endReadsAt.set(r.index, [...(endReadsAt.get(r.index) ?? []), r]); };
+      const ended = whyItEnded(gamePlies, studentColorWB);
+      add(ended);
+      add(idlePiece(gamePlies, studentColorWB));
+      add(quietDecider(gamePlies, studentColorWB));
+      for (let k = 0; k < gamePlies.length; k += 1) {
+        // The final board's own read already says what every move allows.
+        if (!(ended && k === gamePlies.length - 1)) add(exploreInvite(gamePlies, k, studentColorWB));
+        add(murkyRead(gamePlies[k], k, studentColorWB));
+      }
+    } catch { /* looking back is a bonus, never a blocker */ }
+  }
   for (let i = 0; i < usable; i++) {
     const m = moves[i];
     const fenPair = fenChain[i];
@@ -1945,6 +1973,16 @@ export function buildReviewSegments(
         allSans: sansForRun,
         forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
       }, facetSquares, facetIncoming, facetStakes, facetIdentity, verdictReasonOut, facetProofs);
+      // The game looked back on (batch 2) — each read once a game, through the
+      // `hint:` say-once ledger the Learn computers already ride.
+      for (const r of endReadsAt.get(i) ?? []) {
+        const raw = `[${r.kind === 'murky' ? 'murky' : 'game-end'}] ${r.text}`;
+        facets.push(raw);
+        facetIdentity.set(raw, `hint:${r.claim}`);
+        facetProofs.set(raw, r.proof);
+        if (r.squares.length) facetSquares.set(raw, r.squares);
+        if (r.stakes) facetStakes.set(raw, r.stakes);
+      }
       // THE CONVERSION METHOD (WO-LAYERS-01 step 5), on the student's move when
       // they are a piece or more up — the step the board is on, once per step
       // per game (the step only changes when the board does).

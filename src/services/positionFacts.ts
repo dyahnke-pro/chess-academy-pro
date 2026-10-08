@@ -122,6 +122,7 @@ import { lineProof, type FactProof, type Proof } from './proof';
 import { threatProof } from './threatProof';
 import { refutedAltProof } from './refutedAlternativeCore';
 import { liveMethodBeat, habitIsOwed } from './methodBeat';
+import { naturalDefenceFails, forcingLine, markSacrificeLine } from './methodSignals';
 import { habitNeedFrom } from './coachDecider';
 import { computeNeed, type StudentNeedContext } from './needScore';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
@@ -324,7 +325,10 @@ export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-c
   // same three names review's facets carry.
   | 'trade-idea' | 'defence-idea' | 'nugget'
   // Batch 1 (opening, order and timing) — the same names review's facets use.
-  | 'equivalence' | 'capture-choice' | 'kick' | 'plan-race' | 'timing';
+  | 'equivalence' | 'capture-choice' | 'kick' | 'plan-race' | 'timing'
+  // Computers batch 2, from the same one producer: reading their move, testing
+  // their prevention, a known attacking structure.
+  | 'their-read' | 'prevent-test' | 'attack-pattern';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
@@ -853,6 +857,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // repeats one verbatim.
   let methodBeat: string | null = null;
   let methodKey: string | null = null;
+  let methodProof: Proof | null = null;
   try {
     const halfmove = Number.parseInt(fen.split(' ')[5] ?? '0', 10) || 0;
     const mb = liveMethodBeat({
@@ -866,9 +871,15 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       realChoice: !!deliberation?.isRealChoice,
       tier: importance.tier,
       looseTarget: studentToMove ? looseTrigger(fen, bestSanHere) : null,
+      // Batch 2: look again, calculate on your turn, mark the line — each
+      // earned by a line the engine already handed over (methodSignals).
+      defenceFails: studentToMove ? naturalDefenceFails(fen, studentColor, analysis.topLines ?? []) : null,
+      forcingLine: studentToMove ? forcingLine(fen, analysis.topLines?.[0]) : null,
+      sacrificeLine: studentToMove ? markSacrificeLine(fen, analysis.topLines?.[0]) : null,
     }, halfmove, input.alreadySaid);
     methodBeat = mb?.text ?? null;
     methodKey = mb?.key ?? null;
+    methodProof = mb?.proof ?? null;
   } catch { methodBeat = null; }
 
   // ── WO-TEACH-02: the four teaching facts review carries as facets ─────────
@@ -957,7 +968,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     }
   } catch { /* the trade read is a bonus, never a blocker */ }
   const composedAll = applyWeaknessBoost(
-    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, fundamentalClaim, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: input.alreadySaid }), ...tradeClauses],
+    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, fundamentalClaim, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, methodProof, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: input.alreadySaid }), ...tradeClauses],
     input.studentWeaknesses ?? [],
   );
 
@@ -1034,7 +1045,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     nameMove: !!input.namesBestMove || (!heldVerdict && !!moveAdvice?.speak),
     ...(input.lastMove ? { lastStudentMove: { fenBefore: input.lastMove.fenBefore, san: input.lastMove.san } } : {}),
     ...(input.opponentLastMove ? { lastOpponentMove: input.opponentLastMove } : {}),
-  }).map((d) => ({ kind: d.kind, rank: d.kind === 'not-yet' ? 90 : d.kind === 'tactic' ? 84 : d.kind === 'refuted' || d.kind === 'capture-choice' ? 80 : d.kind === 'king-read' ? 76 : d.kind === 'stop-flaw' ? 70 : d.kind === 'line' || d.kind === 'kick' || d.kind === 'plan-race' ? 60 : d.kind === 'timing' ? 55 : d.kind === 'hole-access' ? 50 : d.kind === 'speedrun-read' ? 45 : 40, text: d.text, ...(d.proof ? { proof: d.proof } : {}), ...(d.motif ? { motif: d.motif } : {}), ...(d.squares ? { squares: d.squares } : {}), ...(d.lines ? { lines: d.lines } : {}), ...(d.stakes ? { stakes: d.stakes } : {}), ...(d.claim ? { claim: d.claim } : {}), ...(d.promise ? { promise: d.promise } : {}) }));
+  }).map((d) => ({ kind: d.kind, rank: d.kind === 'not-yet' ? 90 : d.kind === 'tactic' ? 84 : d.kind === 'refuted' || d.kind === 'capture-choice' ? 80 : d.kind === 'king-read' ? 76 : d.kind === 'their-read' ? 75 : d.kind === 'stop-flaw' ? 70 : d.kind === 'line' || d.kind === 'kick' || d.kind === 'plan-race' ? 60 : d.kind === 'timing' ? 55 : d.kind === 'hole-access' ? 50 : d.kind === 'speedrun-read' ? 45 : d.kind === 'prevent-test' ? 44 : d.kind === 'attack-pattern' ? 42 : 40, text: d.text, ...(d.proof ? { proof: d.proof } : {}), ...(d.motif ? { motif: d.motif } : {}), ...(d.squares ? { squares: d.squares } : {}), ...(d.lines ? { lines: d.lines } : {}), ...(d.stakes ? { stakes: d.stakes } : {}), ...(d.claim ? { claim: d.claim } : {}), ...(d.promise ? { promise: d.promise } : {}) }));
   // TRADES, DEFENCE AND CONVERSION, PRINCIPLES (computers batch 5) — every
   // read carries its proof and its say-once claim; a read that names the
   // student's next move speaks only where the move is earned, like the depth.
@@ -1352,6 +1363,8 @@ function buildClauses(a: {
   concept: { id: string; source: string; full: string; short?: string; instance?: string; squares: readonly string[]; boardFen?: string; line?: string[]; pinMove?: { fen: string; san: string } } | null;
   /** The habit to run in this position, present tense. Null when none earned. */
   methodBeat: string | null;
+  /** The proof a method beat's earning fact carries (batch 2 habits). */
+  methodProof?: Proof | null;
 }): ClauseItem[] {
   const { importance, speaks, criticalRead, plyNumber, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp, kingExposure, centralKingDanger, concept } = a;
   // THE WHETHER-QUESTION IS THE DOOR'S. This used to be a private escape hatch
@@ -1672,7 +1685,7 @@ function buildClauses(a: {
   // purpose so it CLOSES the beat — the board fact, then the idea, then the
   // routine that finds it next time. Gated on the same computed signals as the
   // retrospective register, so it is never generic advice on a quiet board.
-  if (a.methodBeat) ranked.push({ kind: 'method', rank: 10, text: a.methodBeat });
+  if (a.methodBeat) ranked.push({ kind: 'method', rank: 10, text: a.methodBeat, ...(a.methodProof ? { proof: a.methodProof } : {}) });
 
   return ranked.sort((a2, b2) => b2.rank - a2.rank);
 }

@@ -70,3 +70,18 @@ export function lastMoveIfStudent(
   // The line itself travels as raw data — the composer asks whether it is theory.
   return { fenBefore: lm.fenBefore, san: lm.san, cpLoss, historySans: sans, reads: null };
 }
+
+/** THE OPPONENT'S last move of the line, when THEY made it and it produces the
+ *  live board — the read of their move ("what did that do?") on a surface that
+ *  holds only the PGN (computers batch 2: chat's position read). Null when the
+ *  student moved last or the board does not match. */
+export function lastMoveIfOpponent(
+  sans: readonly string[],
+  studentColor: 'white' | 'black',
+  liveFen: string | null,
+): { fenBefore: string; san: string } | null {
+  const lm = lastMoveOfLine(sans);
+  if (!lm || lm.mover === studentColor) return null;
+  if (liveFen && boardOf(liveFen) !== boardOf(lm.fenAfter)) return null;
+  return { fenBefore: lm.fenBefore, san: lm.san };
+}

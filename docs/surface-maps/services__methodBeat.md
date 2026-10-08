@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**371 lines · 13 exports · 15 importers · 6 tests · 1 audits**
+**422 lines · 13 exports · 17 importers · 8 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:25) — names `methodBeat`
-- **Why determinism** (CLAUDE.md:57) — names `methodBeat`
-- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1065) — names `methodBeat`
+- **The tools are COMPUTERS** (CLAUDE.md:44) — names `methodBeat`
+- **Why determinism** (CLAUDE.md:76) — names `methodBeat`
+- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1106) — names `methodBeat`
 
 ## Who calls in
 
@@ -24,6 +24,8 @@
 - `src/services/methodBeat.live.test.ts`
 - `src/services/methodBeat.need.test.ts`
 - `src/services/methodBeat.test.ts`
+- `src/services/methodSignals.test.ts`
+- `src/services/mustDefendHabit.test.ts`
 - `src/services/positionFacts.ts`
 - `src/services/puzzleMethod.test.ts`
 - `src/services/puzzleMethod.ts`
@@ -48,11 +50,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `habitIsOwed` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:2626`
-- `src/services/positionFacts.ts:941`
+- `src/services/coachFeatureService.ts:2710`
+- `src/services/positionFacts.ts:958`
 
 ### `methodBeatFor` (function) — 45 call sites
-- `src/services/coachDecider.ts:402`
+- `src/services/coachDecider.ts:473`
 - `src/services/methodBeat.need.test.ts:19`
 - `src/services/methodBeat.need.test.ts:23`
 - `src/services/methodBeat.need.test.ts:29`
@@ -107,12 +109,18 @@
 ### `LiveMethodBeat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `liveHabitKey` (function) — 3 call sites
+### `liveHabitKey` (function) — 9 call sites
 - `src/services/learnFundamentalNarration.ts:125`
 - `src/services/methodBeat.live.test.ts:112`
 - `src/services/methodBeat.live.test.ts:119`
+- `src/services/methodSignals.test.ts:50`
+- `src/services/methodSignals.test.ts:53`
+- `src/services/methodSignals.test.ts:56`
+- `src/services/methodSignals.test.ts:57`
+- `src/services/methodSignals.test.ts:62`
+- `src/services/methodSignals.test.ts:63`
 
-### `liveMethodBeat` (function) — 8 call sites
+### `liveMethodBeat` (function) — 16 call sites
 - `src/services/looseTrigger.test.ts:17`
 - `src/services/looseTrigger.test.ts:18`
 - `src/services/looseTrigger.test.ts:19`
@@ -120,10 +128,18 @@
 - `src/services/methodBeat.live.test.ts:115`
 - `src/services/methodBeat.live.test.ts:118`
 - `src/services/methodBeat.test.ts:105`
-- `src/services/positionFacts.ts:839`
+- `src/services/methodSignals.test.ts:49`
+- `src/services/methodSignals.test.ts:53`
+- `src/services/methodSignals.test.ts:56`
+- `src/services/methodSignals.test.ts:62`
+- `src/services/methodSignals.test.ts:63`
+- `src/services/methodSignals.test.ts:66`
+- `src/services/methodSignals.test.ts:67`
+- `src/services/mustDefendHabit.test.ts:15`
+- `src/services/positionFacts.ts:850`
 
 ### `liveMethodBeatFor` (function) — 22 call sites
-- `src/services/groundedAnswer.ts:3572`
+- `src/services/groundedAnswer.ts:3580`
 - `src/services/methodBeat.live.test.ts:15`
 - `src/services/methodBeat.live.test.ts:19`
 - `src/services/methodBeat.live.test.ts:20`
@@ -152,6 +168,8 @@
 - `src/services/methodBeat.live.test.ts`
 - `src/services/methodBeat.need.test.ts`
 - `src/services/methodBeat.test.ts`
+- `src/services/methodSignals.test.ts`
+- `src/services/mustDefendHabit.test.ts`
 - `src/services/puzzleMethod.test.ts`
 - `src/services/thinkingSteps.test.ts`
 

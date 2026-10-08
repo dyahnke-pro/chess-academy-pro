@@ -77,7 +77,7 @@ describe('the older vocabularies map onto the steps', () => {
     expect(stepForMethodClaim('method:knee-jerk')).toBe('candidates');
     expect(stepForMethodClaim('method:toString')).toBeNull();
     expect(stepForMethodClaim('wins-line:abc')).toBeNull();
-    expect(Object.keys(LIVE_HABIT_STEP)).toHaveLength(4);
+    expect(Object.keys(LIVE_HABIT_STEP)).toHaveLength(7);
     expect(Object.keys(LEARN_METHOD_CLAIM_STEP)).toHaveLength(6);
   });
 });

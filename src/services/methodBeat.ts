@@ -19,6 +19,7 @@
 // the student has seen the evidence.
 import { isDecidingMoment } from './nextMoveAdvice';
 import type { ImportanceTier } from './narrationImportance';
+import type { Proof } from './proof';
 
 export interface MethodSignals {
   /** The moment's importance tier, from the one deciding computer. */
@@ -276,6 +277,16 @@ export interface LiveMethodSignals {
   /** TRIGGER → SCAN: a loose enemy piece the engine's quiet best move hits
    *  (`looseTrigger`) — "their bishop on b5". The trigger, never the move. */
   looseTarget?: string | null;
+  /** LOOK AGAIN (batch 2): the plain defence of an attacked piece of yours
+   *  that the engine rates far below its best (`methodSignals.naturalDefenceFails`),
+   *  with the line that refutes it. */
+  defenceFails?: { target: string; proof: Proof } | null;
+  /** CALCULATE ON YOUR TURN (batch 2): the engine's line opens with three
+   *  forcing plies (`methodSignals.forcingLine`) — its proof. */
+  forcingLine?: Proof | null;
+  /** MARK THE LINE (batch 2): the engine's move is a sacrifice, and the line
+   *  that follows is forced or speculative (`methodSignals.markSacrificeLine`). */
+  sacrificeLine?: { mark: 'forced' | 'speculative'; proof: Proof } | null;
 }
 
 /**
@@ -288,14 +299,28 @@ export interface LiveMethodSignals {
 /** The three live habits. Each is taught ONCE per game: the 2026-09-24 hand
  *  walk heard "their threat first, your idea second" three times in six moves —
  *  the stems rotate, so a text dedupe never matched. Keyed on the HABIT. */
-export type LiveHabit = 'opponent-threat' | 'forcing-scan' | 'loose-trigger' | 'candidates';
-export interface LiveMethodBeat { text: string; key: string }
+export type LiveHabit = 'opponent-threat' | 'forcing-scan' | 'loose-trigger' | 'candidates' | 'look-again' | 'calc-now' | 'mark-line';
+/** `proof` rides on the habits whose earning fact is a line (batch 2). */
+export interface LiveMethodBeat { text: string; key: string; proof?: Proof }
 /** The say-once key a caller carries forward in its `alreadySaid` set. */
 export function liveHabitKey(habit: LiveHabit): string { return `method:${habit}`; }
 
 export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: ReadonlySet<string>): LiveMethodBeat | null {
   if (!s.isStudentMove) return null;
   const owed = (habit: LiveHabit): boolean => !said?.has(liveHabitKey(habit));
+
+  // 0 — LOOK AGAIN (batch 2: "the queen defends, but look again: a fork").
+  // A piece of yours is attacked and the plain defence fails to a line the
+  // engine found. More specific than the threat habit below, so it goes first:
+  // the threat is seen; the habit is checking the answer before playing it.
+  if (s.defenceFails && isDecidingMoment(s.tier) && !bestIsMate(s.bestSan) && owed('look-again')) {
+    const t = s.defenceFails.target;
+    return { ...beat('look-again', [
+      `Defending ${t} is the natural move — but look again before you play it: the plain defence here runs into something.`,
+      `${cap(t)} needs help, and the first defence that comes to mind fails. Look again: check what their reply does to it.`,
+      `Look again before you guard ${t}: the obvious defence loses to a line of theirs. Check the answer before you play it.`,
+    ], plyForVariety), proof: s.defenceFails.proof };
+  }
 
   // 1 — THREAT IDENTIFICATION AS A HABIT. The board already names the threat
   // elsewhere in the briefing; this names the ROUTINE that finds it unprompted
@@ -344,6 +369,29 @@ export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: R
     ], plyForVariety);
   }
 
+  // 2c — MARK THE LINE FORCED OR SPECULATIVE (batch 2). The move that is
+  // there gives material away; before playing a sacrifice, say which kind of
+  // line it is — every reply forced, or real choices for them along the way.
+  if (s.sacrificeLine && isDecidingMoment(s.tier) && owed('mark-line')) {
+    return { ...beat('mark-line', s.sacrificeLine.mark === 'forced' ? [
+      'Before you give material, mark the line: here every reply of theirs is forced, so you can calculate it to the end.',
+      'Mark this line forced — they have no real choice at any step, so work it out to the end before you commit.',
+    ] : [
+      'Mark this line speculative before you give material: they have real choices along the way, so play it only if every landing suits you.',
+      'This sacrifice is speculative, not forced — their replies are not the only moves. Know that before you commit.',
+    ], plyForVariety), proof: s.sacrificeLine.proof };
+  }
+
+  // 2d — CALCULATE ON YOUR TURN, PLAN ON THEIRS (batch 2). The line that is
+  // there is checks and captures from the first move: a position to work out
+  // concretely now. Once the forcing scan has been taught, this is its pair.
+  if (s.forcingLine && isDecidingMoment(s.tier) && !owed('forcing-scan') && owed('calc-now')) {
+    return { ...beat('calc-now', [
+      'This is a position to calculate, and your own turn is the time for it: work the forcing line out now, and keep the long planning for while they think.',
+      'Calculate here, on your move — checks and captures run from the first move. Plans are for their turn.',
+    ], plyForVariety), proof: s.forcingLine };
+  }
+
   // 3 — CANDIDATE-MOVE DISCIPLINE. A real choice AND a moment that turns on it.
   // The briefing's `deliberation` clause says WHICH moves are in the running;
   // this teaches the routine of finding them yourself, which is the half the
@@ -359,6 +407,9 @@ export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: R
 
   return null; // empty > generic
 }
+
+function bestIsMate(bestSan: string | null): boolean { return (bestSan ?? '').endsWith('#'); }
+function cap(x: string): string { return x.charAt(0).toUpperCase() + x.slice(1); }
 
 function beat(habit: LiveHabit, stems: string[], ply: number): LiveMethodBeat {
   return { text: pick(stems, ply), key: liveHabitKey(habit) };
