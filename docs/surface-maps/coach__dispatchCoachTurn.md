@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**241 lines · 11 exports · 8 importers · 3 tests · 2 audits**
+**303 lines · 13 exports · 9 importers · 4 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,6 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/coach/coachService.askReader.integration.test.ts`
 - `src/coach/dispatchCoachTurn.test.ts`
 - `src/components/Board/VoiceChatMic.tsx`
 - `src/components/Coach/CoachAnalysePage.tsx`
@@ -37,7 +38,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `isServeParsedRouteOn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setChatTurnReaderForTests` (function) — 12 call sites
+### `setChatTurnReaderForTests` (function) — 14 call sites
+- `src/coach/coachService.askReader.integration.test.ts:31`
+- `src/coach/coachService.askReader.integration.test.ts:51`
 - `src/coach/dispatchCoachTurn.test.ts:101`
 - `src/coach/dispatchCoachTurn.test.ts:113`
 - `src/coach/dispatchCoachTurn.test.ts:120`
@@ -67,7 +70,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `settleChatTurnRead` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `dispatchCoachTurn` (function) — 28 call sites
+### `TurnReadHandle` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `openTurnRead` (function) — 1 call site
+- `src/components/Coach/CoachTeachPage.tsx:3290`
+
+### `dispatchCoachTurn` (function) — 29 call sites
+- `src/coach/coachService.askReader.integration.test.ts:32`
 - `src/coach/dispatchCoachTurn.test.ts:33`
 - `src/coach/dispatchCoachTurn.test.ts:43`
 - `src/coach/dispatchCoachTurn.test.ts:52`
@@ -91,17 +101,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachAnalysePage.tsx:232`
 - `src/components/Coach/CoachChatPage.tsx:284`
 - `src/components/Coach/ExplainPositionSessionView.tsx:236`
-- `src/components/Coach/GameChatPanel.tsx:977`
-- `src/components/Coach/GameChatPanel.tsx:1348`
-- `src/components/Coach/GameChatPanel.tsx:1557`
+- `src/components/Coach/GameChatPanel.tsx:975`
+- `src/components/Coach/GameChatPanel.tsx:1346`
+- `src/components/Coach/GameChatPanel.tsx:1555`
 - `src/components/Openings/MasterclassCoachChat.tsx:81`
 - `src/test/kidIsolation.gate.test.ts:131`
 
-### `shadowReadTurn` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3218`
+### `shadowReadTurn` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 
+- `src/coach/coachService.askReader.integration.test.ts`
 - `src/coach/dispatchCoachTurn.test.ts`
 - `src/components/Coach/GameChatPanel.surface.test.tsx`
 - `src/components/Openings/MasterclassCoachChat.boardaware.test.tsx`

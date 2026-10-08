@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**474 lines · 4 exports · 6 importers · 2 tests · 2 audits**
+**479 lines · 4 exports · 6 importers · 2 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **Shared types / services** (CLAUDE.md:5218) — names `coachAgent`
-- **Routing** (CLAUDE.md:5235) — names `CoachIntent`
+- **Shared types / services** (CLAUDE.md:5450) — names `coachAgent`
+- **Routing** (CLAUDE.md:5467) — names `CoachIntent`
 
 ## Who calls in
 
@@ -31,8 +31,8 @@
 ### `CoachIntent` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `parseCoachIntent` (function) — 82 call sites
-- `src/components/Coach/CoachTeachPage.tsx:4250`
+### `parseCoachIntent` (function) — 84 call sites
+- `src/components/Coach/CoachTeachPage.tsx:4652`
 - `src/components/Search/SmartSearchBar.tsx:91`
 - `src/components/Search/SmartSearchBar.tsx:195`
 - `src/services/coachAgent.test.ts:13`
@@ -111,7 +111,9 @@
 - `src/services/coachAgent.test.ts:525`
 - `src/services/coachAgent.test.ts:530`
 - `src/services/coachAgent.test.ts:537`
-- `src/services/coachSessionRouter.ts:210`
+- `src/services/coachAgent.test.ts:550`
+- `src/services/coachAgent.test.ts:553`
+- `src/services/coachSessionRouter.ts:192`
 - `src/services/inGameChatIntent.ts:157`
 - `src/services/openingIntentCapture.ts:58`
 

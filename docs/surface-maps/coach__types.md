@@ -4,22 +4,22 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**957 lines · 32 exports · 961 importers · 225 tests · 39 audits**
+**961 lines · 32 exports · 936 importers · 221 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
-- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:457) — names `types`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3121) — names `Provider`, `ProviderName`, `types`
-- **TypeScript** (CLAUDE.md:3578) — names `types`
-- **React** (CLAUDE.md:3588) — names `types`
-- **File Organization** (CLAUDE.md:3599) — names `types`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4090) — names `types`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4129) — names `CoachSurface`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4589) — names `types`
-- **Naming** (CLAUDE.md:5194) — names `CoachPersonality`
-- **Testing Best Practices** (CLAUDE.md:5239) — names `Provider`
-- **Shared types / services** (CLAUDE.md:5306) — names `types`
-- **The standard post-deploy ritual** (CLAUDE.md:6129) — names `TacticsLiveContext`
+- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:498) — names `types`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3242) — names `Provider`, `ProviderName`, `types`
+- **TypeScript** (CLAUDE.md:3699) — names `types`
+- **React** (CLAUDE.md:3709) — names `types`
+- **File Organization** (CLAUDE.md:3720) — names `types`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4211) — names `types`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4250) — names `CoachSurface`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4710) — names `types`
+- **Naming** (CLAUDE.md:5325) — names `CoachPersonality`
+- **Testing Best Practices** (CLAUDE.md:5370) — names `Provider`
+- **Shared types / services** (CLAUDE.md:5437) — names `types`
+- **The standard post-deploy ritual** (CLAUDE.md:6273) — names `TacticsLiveContext`
 
 ## Who calls in
 
@@ -42,7 +42,6 @@
 - `src/coach/envelope.ts`
 - `src/coach/providers/deepseek.test.ts`
 - `src/coach/providers/deepseek.ts`
-- `src/coach/providers/types.ts`
 - `src/coach/questionIntents.ts`
 - `src/coach/sources/annotationContext.ts`
 - `src/coach/sources/bookGrounding.ts`
@@ -84,10 +83,8 @@
 - `src/coach/tools/cerebrum/takeBackMove.ts`
 - `src/coach/tools/registry.ts`
 - `src/components/Academy/AcademyCourseCard.tsx`
-- `src/components/Academy/AcademyCourses.tsx`
 - `src/components/Academy/CourseSyllabusPage.tsx`
 - `src/components/Academy/CourseTrainerPage.tsx`
-- `src/components/Analysis/AnalysisBoardPage.tsx`
 - `src/components/Analysis/OpeningExplorerPanel.tsx`
 - `src/components/Board/BoardPageLayout.tsx`
 - `src/components/Board/ChessBoard.tsx`
@@ -97,12 +94,10 @@
 - `src/components/Board/GhostPieceOverlay.tsx`
 - `src/components/Board/LichessLines.tsx`
 - `src/components/Board/VoiceChatMic.tsx`
-- `src/components/BoardTest/BoardTestPage.tsx`
+- `src/components/Board/WalkLineButton.tsx`
 - `src/components/Coach/ChatMessage.test.tsx`
 - `src/components/Coach/ChatMessage.tsx`
 - `src/components/Coach/ChatMessage.walkLines.test.tsx`
-- `src/components/Coach/ClassificationBar.test.tsx`
-- `src/components/Coach/ClassificationBar.tsx`
 - `src/components/Coach/ClassificationPills.tsx`
 - `src/components/Coach/CoachAnalysePage.tsx`
 - `src/components/Coach/CoachChatPage.test.tsx`
@@ -110,7 +105,6 @@
 - `src/components/Coach/CoachGamePage.tsx`
 - `src/components/Coach/CoachGameReview.test.tsx`
 - `src/components/Coach/CoachGameReview.tsx`
-- `src/components/Coach/CoachOverlay.tsx`
 - `src/components/Coach/CoachPracticeSessionView.tsx`
 - `src/components/Coach/CoachReviewListPage.tsx`
 - `src/components/Coach/CoachReviewSessionPage.nonBlocking.test.tsx`
@@ -125,19 +119,15 @@
 - `src/components/Coach/ExplainPositionSessionView.tsx`
 - `src/components/Coach/GameChatPanel.test.tsx`
 - `src/components/Coach/GameChatPanel.tsx`
-- `src/components/Coach/GameImportCard.tsx`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx`
-- `src/components/Coach/GameSummaryStats.tsx`
 - `src/components/Coach/GlobalCoachDrawer.tsx`
 - `src/components/Coach/HintButton.tsx`
 - `src/components/Coach/KeyMomentNav.tsx`
-- `src/components/Coach/MoveActionButtons.tsx`
 - `src/components/Coach/MoveListPanel.tsx`
 - `src/components/Coach/PhaseGrades.tsx`
 - `src/components/Coach/ProGamesPage.test.tsx`
 - `src/components/Coach/ProGamesPage.tsx`
 - `src/components/Coach/ReviewGameCard.tsx`
-- `src/components/Coach/ReviewReadingChallenge.test.tsx`
 - `src/components/Coach/ReviewSummaryCard.test.tsx`
 - `src/components/Coach/ReviewSummaryCard.tsx`
 - `src/components/Coach/RolodexCard.test.tsx`
@@ -150,7 +140,6 @@
 - `src/components/Coach/TrainingPlanRolodexPage.tsx`
 - `src/components/Coach/classificationStyles.ts`
 - `src/components/Dashboard/DashboardPage.test.tsx`
-- `src/components/Flashcards/FlashcardStudyPage.tsx`
 - `src/components/Games/GameCard.tsx`
 - `src/components/Games/GameDatabasePage.test.tsx`
 - `src/components/Games/GameDatabasePage.tsx`
@@ -225,6 +214,8 @@
 - `src/components/Openings/OpeningExplorerPage.tsx`
 - `src/components/Openings/OpeningPlayMode.test.tsx`
 - `src/components/Openings/OpeningPlayMode.tsx`
+- `src/components/Openings/OpeningShelf.test.tsx`
+- `src/components/Openings/OpeningShelf.tsx`
 - `src/components/Openings/PlayableLinePlayer.test.tsx`
 - `src/components/Openings/PlayableLinePlayer.tsx`
 - `src/components/Openings/PracticeMode.test.tsx`
@@ -232,8 +223,6 @@
 - `src/components/Openings/ProPlayerCard.tsx`
 - `src/components/Openings/ProPlayerPage.tsx`
 - `src/components/Openings/ProRepertoiresTab.test.tsx`
-- `src/components/Openings/SidelineExplainer.test.tsx`
-- `src/components/Openings/SidelineExplainer.tsx`
 - `src/components/Openings/SrsTrainerPage.tsx`
 - `src/components/Openings/SublinePanel.test.tsx`
 - `src/components/Openings/SublinePanel.tsx`
@@ -243,7 +232,6 @@
 - `src/components/Openings/WalkthroughMode.test.tsx`
 - `src/components/Openings/WalkthroughMode.tsx`
 - `src/components/Play/BlindfolTrainer.tsx`
-- `src/components/Play/GamesPage.tsx`
 - `src/components/Play/GuessTheMove.tsx`
 - `src/components/Play/OpeningChallenge.tsx`
 - `src/components/Play/OpeningSpeedrun.tsx`
@@ -266,8 +254,6 @@
 - `src/components/Search/SmartSearchBar.tsx`
 - `src/components/Settings/OnboardingPage.test.tsx`
 - `src/components/Settings/SettingsPage.tsx`
-- `src/components/Stats/StatsPage.test.tsx`
-- `src/components/Stats/StatsPage.tsx`
 - `src/components/Tactics/AnalysisPracticePage.feedback.test.tsx`
 - `src/components/Tactics/AnalysisPracticePage.tap.test.tsx`
 - `src/components/Tactics/AnalysisPracticePage.test.tsx`
@@ -520,30 +506,20 @@
 - `src/data/lessons/proHikaruPircModernVariations.ts`
 - `src/data/lessons/proHikaruReti.ts`
 - `src/data/lessons/proHikaruRetiVariations.ts`
-- `src/data/lessons/proNaroditskyAlapinTrapLessons.ts`
 - `src/data/lessons/proNaroditskyAlapinVariations.ts`
-- `src/data/lessons/proNaroditskyAlekhineTrapLessons.ts`
 - `src/data/lessons/proNaroditskyAlekhineVariations.ts`
 - `src/data/lessons/proNaroditskyAllRemaining.ts`
 - `src/data/lessons/proNaroditskyCaroKann.ts`
 - `src/data/lessons/proNaroditskyCaroKannVariations.ts`
-- `src/data/lessons/proNaroditskyCaroTrapLessons.ts`
 - `src/data/lessons/proNaroditskyDragodorf.ts`
 - `src/data/lessons/proNaroditskyDragodorfVariations.ts`
 - `src/data/lessons/proNaroditskyFantasyCaro.ts`
 - `src/data/lessons/proNaroditskyFantasyCaroVariations.ts`
-- `src/data/lessons/proNaroditskyFantasyTrapLessons.ts`
-- `src/data/lessons/proNaroditskyJobavaTrapLessons.ts`
 - `src/data/lessons/proNaroditskyJobavaVariations.ts`
-- `src/data/lessons/proNaroditskyKIATrapLessons.ts`
 - `src/data/lessons/proNaroditskyKIAVariations.ts`
-- `src/data/lessons/proNaroditskyKIDTrapLessons.ts`
 - `src/data/lessons/proNaroditskyKIDVariations.ts`
-- `src/data/lessons/proNaroditskyNajdorfTrapLessons.ts`
 - `src/data/lessons/proNaroditskyNajdorfVariations.ts`
-- `src/data/lessons/proNaroditskyRossolimoTrapLessons.ts`
 - `src/data/lessons/proNaroditskyRossolimoVariations.ts`
-- `src/data/lessons/proNaroditskyRuyTrapLessons.ts`
 - `src/data/lessons/proNaroditskyRuyVariations.ts`
 - `src/data/lessons/proSamayRainaCaroWhite.ts`
 - `src/data/lessons/proSamayRainaCaroWhiteVariations.ts`
@@ -623,8 +599,8 @@
 - `src/data/lessons/viennaTrapLessons.ts`
 - `src/data/lessons/viennaVariations.ts`
 - `src/data/lessons/wlppNarration.test.ts`
-- `src/data/middlegameBookLessonAdapter.ts`
 - `src/data/modelGames-orientation.test.ts`
+- `src/data/narrationBoardClaims.sources.ts`
 - `src/data/narrationFactCheck.test.ts`
 - `src/data/opening-narrations.ts`
 - `src/data/openingManifests.test.ts`
@@ -642,6 +618,7 @@
 - `src/hooks/useDiscussionPractice.ts`
 - `src/hooks/useEndgamePlayout.ts`
 - `src/hooks/useHintSystem.ts`
+- `src/hooks/useLineWalk.ts`
 - `src/hooks/useLiveCoach.ts`
 - `src/hooks/usePhaseNarration.ts`
 - `src/hooks/usePositionNarration.ts`
@@ -661,12 +638,14 @@
 - `src/services/analyticsService.ts`
 - `src/services/annotationService.ts`
 - `src/services/arrowDoor.ts`
+- `src/services/arrowEngine.ts`
 - `src/services/autoAnalyzeGame.livePv.test.ts`
 - `src/services/autoAnalyzeGame.ts`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts`
 - `src/services/autoImportScheduler.ts`
 - `src/services/badHabitDetector.ts`
 - `src/services/boardAnnotationService.ts`
+- `src/services/boardComputers.ts`
 - `src/services/boardUtils.ts`
 - `src/services/bookDeparturePrecompute.ts`
 - `src/services/bookDepartureWeakness.ts`
@@ -676,20 +655,14 @@
 - `src/services/chesscomService.ts`
 - `src/services/claimChecker.measure.test.ts`
 - `src/services/classroomOpener.ts`
-- `src/services/coachActionDispatcher.ts`
 - `src/services/coachAgent.ts`
-- `src/services/coachAgentRunner.ts`
 - `src/services/coachAnswerGates.test.ts`
 - `src/services/coachAnswerGates.ts`
 - `src/services/coachApi.ts`
 - `src/services/coachBookMove.test.ts`
 - `src/services/coachBookMove.ts`
-- `src/services/coachChatService.test.ts`
-- `src/services/coachChatService.ts`
 - `src/services/coachCommentaryPolicy.test.ts`
 - `src/services/coachCommentaryPolicy.ts`
-- `src/services/coachContextEnricher.ts`
-- `src/services/coachContextSnapshot.ts`
 - `src/services/coachDrillService.mistakes.test.ts`
 - `src/services/coachDrillService.test.ts`
 - `src/services/coachDrillService.ts`
@@ -819,6 +792,7 @@
 - `src/services/mistakePuzzleService.test.ts`
 - `src/services/mistakePuzzleService.ts`
 - `src/services/modelGameService.ts`
+- `src/services/moveInsight.ts`
 - `src/services/moveIntent.measure.test.ts`
 - `src/services/moveIntent.takesAway.test.ts`
 - `src/services/moveIntent.test.ts`
@@ -826,6 +800,7 @@
 - `src/services/moveOrder.test.ts`
 - `src/services/moveOrder.ts`
 - `src/services/moveRating.ts`
+- `src/services/moveVerdictStore.ts`
 - `src/services/narratedContinuation.ts`
 - `src/services/narrationI18n.test.ts`
 - `src/services/narrationI18n.ts`
@@ -872,9 +847,8 @@
 - `src/services/proOpeningForks.test.ts`
 - `src/services/proRepertoireService.ts`
 - `src/services/promptedFind.wire.test.ts`
+- `src/services/proof.ts`
 - `src/services/puzzleDepth.ts`
-- `src/services/puzzleGenerator.test.ts`
-- `src/services/puzzleGenerator.ts`
 - `src/services/puzzleMissService.ts`
 - `src/services/puzzleService.test.ts`
 - `src/services/puzzleService.ts`
@@ -911,7 +885,6 @@
 - `src/services/strengthCalibrationService.ts`
 - `src/services/studentNeedLoader.test.ts`
 - `src/services/studentNeedLoader.ts`
-- `src/services/studentStateBlock.ts`
 - `src/services/sublineLesson.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
 - `src/services/syncService.test.ts`
@@ -924,7 +897,7 @@
 - `src/services/tacticClassifierService.test.ts`
 - `src/services/tacticClassifierService.ts`
 - `src/services/tacticCreateService.ts`
-- `src/services/tacticDrillService.ts`
+- `src/services/tacticGeometry.ts`
 - `src/services/tacticNarrationService.test.ts`
 - `src/services/tacticNarrationService.ts`
 - `src/services/tacticTypeBackfill.test.ts`
@@ -942,8 +915,9 @@
 - `src/services/teachingSelector.ts`
 - `src/services/themeService.test.ts`
 - `src/services/themeService.ts`
-- `src/services/tiltSignal.test.ts`
-- `src/services/tiltSignal.ts`
+- `src/services/thinkAloud.ts`
+- `src/services/thinkingLessonStart.ts`
+- `src/services/thinkingTransfer.load.test.ts`
 - `src/services/timeTroubleDetector.test.ts`
 - `src/services/timeTroubleDetector.ts`
 - `src/services/trainingSessionLedger.ts`
@@ -972,7 +946,6 @@
 - `src/stores/appStore.ts`
 - `src/stores/coachSessionStore.test.ts`
 - `src/stores/coachSessionStore.ts`
-- `src/stores/userContext.ts`
 - `src/test/benchmarks/dexie.perf.test.ts`
 - `src/test/benchmarks/stockfish.perf.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
@@ -982,6 +955,8 @@
 - `src/utils/commonMistakeLine.test.ts`
 - `src/utils/commonMistakeLine.ts`
 - `src/utils/computerOpponent.ts`
+- `src/utils/openingShelf.test.ts`
+- `src/utils/openingShelf.ts`
 - `src/utils/wlppLadder.test.ts`
 - `src/utils/wlppLadder.ts`
 
@@ -1097,7 +1072,6 @@
 - `src/components/Board/GhostPieceOverlay.test.tsx`
 - `src/components/Coach/ChatMessage.test.tsx`
 - `src/components/Coach/ChatMessage.walkLines.test.tsx`
-- `src/components/Coach/ClassificationBar.test.tsx`
 - `src/components/Coach/CoachChatPage.test.tsx`
 - `src/components/Coach/CoachGamePage.test.tsx`
 - `src/components/Coach/CoachGameReview.test.tsx`
@@ -1106,7 +1080,6 @@
 - `src/components/Coach/CoachTeachPage.drillOrientation.test.tsx`
 - `src/components/Coach/GameChatPanel.test.tsx`
 - `src/components/Coach/ProGamesPage.test.tsx`
-- `src/components/Coach/ReviewReadingChallenge.test.tsx`
 - `src/components/Coach/ReviewSummaryCard.test.tsx`
 - `src/components/Coach/RolodexCard.test.tsx`
 - `src/components/Coach/RolodexCardStack.test.tsx`
@@ -1136,10 +1109,10 @@
 - `src/components/Openings/MiddlegamePlansSection.test.tsx`
 - `src/components/Openings/OpeningDetailPage.test.tsx`
 - `src/components/Openings/OpeningPlayMode.test.tsx`
+- `src/components/Openings/OpeningShelf.test.tsx`
 - `src/components/Openings/PlayableLinePlayer.test.tsx`
 - `src/components/Openings/PracticeMode.test.tsx`
 - `src/components/Openings/ProRepertoiresTab.test.tsx`
-- `src/components/Openings/SidelineExplainer.test.tsx`
 - `src/components/Openings/SublinePanel.test.tsx`
 - `src/components/Openings/TrainMode.test.tsx`
 - `src/components/Openings/WalkthroughIntegration.test.tsx`
@@ -1152,7 +1125,6 @@
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
 - `src/components/Settings/OnboardingPage.test.tsx`
-- `src/components/Stats/StatsPage.test.tsx`
 - `src/components/Tactics/AnalysisPracticePage.feedback.test.tsx`
 - `src/components/Tactics/AnalysisPracticePage.tap.test.tsx`
 - `src/components/Tactics/AnalysisPracticePage.test.tsx`
@@ -1184,7 +1156,6 @@
 - `src/services/claimChecker.measure.test.ts`
 - `src/services/coachAnswerGates.test.ts`
 - `src/services/coachBookMove.test.ts`
-- `src/services/coachChatService.test.ts`
 - `src/services/coachCommentaryPolicy.test.ts`
 - `src/services/coachDrillService.mistakes.test.ts`
 - `src/services/coachDrillService.test.ts`
@@ -1263,7 +1234,6 @@
 - `src/services/proForkWalkthrough.test.ts`
 - `src/services/proOpeningForks.test.ts`
 - `src/services/promptedFind.wire.test.ts`
-- `src/services/puzzleGenerator.test.ts`
 - `src/services/puzzleService.test.ts`
 - `src/services/pvPlayback.test.ts`
 - `src/services/ratingIdempotence.test.ts`
@@ -1292,7 +1262,7 @@
 - `src/services/tacticsContextIdentity.test.ts`
 - `src/services/teachingEffectService.test.ts`
 - `src/services/themeService.test.ts`
-- `src/services/tiltSignal.test.ts`
+- `src/services/thinkingTransfer.load.test.ts`
 - `src/services/timeTroubleDetector.test.ts`
 - `src/services/variationTabs.hiddenLines.test.ts`
 - `src/services/walkthroughAdapter.test.ts`
@@ -1309,6 +1279,7 @@
 - `src/test/benchmarks/stockfish.perf.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 - `src/utils/commonMistakeLine.test.ts`
+- `src/utils/openingShelf.test.ts`
 - `src/utils/wlppLadder.test.ts`
 
 ## Audits that reach it
