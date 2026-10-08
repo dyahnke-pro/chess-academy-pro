@@ -373,7 +373,7 @@
 - `src/services/reviewTeachingPoints.ts:101`
 
 ### `describeMoveGeometry` (function) — 19 call sites
-- `src/components/Puzzles/PuzzleBoard.tsx:234`
+- `src/components/Puzzles/PuzzleBoard.tsx:242`
 - `src/components/Tactics/TacticSetupBoard.tsx:153`
 - `src/hooks/useHintSystem.ts:357`
 - `src/services/computedVoiceGrounding.test.ts:53`

@@ -144,6 +144,14 @@ export function PuzzleBoard({
   const moveWrongRef = useRef(0);
   const [ladderTop, setLadderTop] = useState(false);
   const completionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Every other delayed board step (the opponent's reply, the back-to-playing
+  // flip after a miss) is held here so leaving the puzzle cancels it — an
+  // untracked timer set state on a board that had already closed.
+  const stepTimersRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
+  const later = useCallback((fn: () => void, ms: number): void => {
+    const t = setTimeout(() => { stepTimersRef.current.delete(t); fn(); }, ms);
+    stepTimersRef.current.add(t);
+  }, []);
   const solveStartRef = useRef<number>(Date.now());
   const movesRef = useRef(parseUciMoves(puzzle.moves));
   const { playMoveSound } = usePieceSound();
@@ -385,6 +393,7 @@ export function PuzzleBoard({
     resetStruggle();
     void voiceService.warmup();
 
+    const stepTimers = stepTimersRef.current;
     // Auto-play the first move (opponent sets up the puzzle)
     const timer = setTimeout(() => {
       const moves = movesRef.current;
@@ -403,6 +412,8 @@ export function PuzzleBoard({
 
     return () => {
       clearTimeout(timer);
+      for (const t of stepTimers) clearTimeout(t);
+      stepTimers.clear();
       if (completionTimerRef.current) {
         clearTimeout(completionTimerRef.current);
         completionTimerRef.current = null;
@@ -577,7 +588,7 @@ export function PuzzleBoard({
       // Auto-play opponent's response
       if (nextIndex < allMoves.length) {
         const opponentMove = allMoves[nextIndex];
-        setTimeout(() => {
+        later(() => {
           const result = game.makeMove(opponentMove.from, opponentMove.to, opponentMove.promotion);
           if (result) {
             playMoveSound(result.san);
@@ -668,11 +679,11 @@ export function PuzzleBoard({
       });
 
       // Brief feedback then back to playing — user can keep trying.
-      setTimeout(() => {
+      later(() => {
         setState('playing');
       }, 1000);
     }
-  }, [state, disabled, moveIndex, pipsDone, seed, hintOnMiss, completePuzzle, playMoveSound, resetHints, triggerFlash, maxWrongAttempts, settings.voiceEnabled, puzzle.themes, puzzle.id, tacticType, game]);
+  }, [state, disabled, moveIndex, pipsDone, seed, hintOnMiss, completePuzzle, playMoveSound, resetHints, triggerFlash, maxWrongAttempts, settings.voiceEnabled, puzzle.themes, puzzle.id, tacticType, game, later]);
 
   // With ControlledChessBoard, the move is already applied to the game object
   const handleChessBoardMove = handleMove;

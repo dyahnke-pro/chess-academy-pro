@@ -167,7 +167,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `recordTacticOutcome` (function) — 9 call sites
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:831`
-- `src/components/Puzzles/PuzzleBoard.tsx:442`
+- `src/components/Puzzles/PuzzleBoard.tsx:453`
 - `src/components/Tactics/TacticSetupBoard.tsx:300`
 - `src/components/Tactics/TacticSetupBoard.tsx:446`
 - `src/hooks/useCoachTips.ts:230`
