@@ -9,5 +9,7 @@ const QGA_TAB_PLAN_IDS: Record<string, string> = {
 export function getQgaTabPlanIds(openingId: string, tabKey: string): string[] | null {
   if (openingId !== 'qga') return null;
   const planId = QGA_TAB_PLAN_IDS[tabKey];
-  return planId ? [planId] : null;
+  if (!planId) return null;
+  // The opening's endgame plan renders under the main tab's endgame section.
+  return tabKey === 'main' ? [planId, 'mp-qga-main-endgame'] : [planId];
 }

@@ -8,5 +8,7 @@ const ALBIN_TAB_PLAN_IDS: Record<string, string> = {
 export function getAlbinCountergambitTabPlanIds(openingId: string, tabKey: string): string[] | null {
   if (openingId !== 'albin-countergambit') return null;
   const planId = ALBIN_TAB_PLAN_IDS[tabKey];
-  return planId ? [planId] : null;
+  if (!planId) return null;
+  // The opening's endgame plan renders under the main tab's endgame section.
+  return tabKey === 'main' ? [planId, 'mp-albincountergambit-endgame'] : [planId];
 }

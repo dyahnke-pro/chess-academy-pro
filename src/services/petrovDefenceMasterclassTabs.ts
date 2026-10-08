@@ -10,5 +10,7 @@ const PETROV_DEFENCE_TAB_PLAN_IDS: Record<string, string> = {
 export function getPetrovDefenceTabPlanIds(openingId: string, tabKey: string): string[] | null {
   if (openingId !== 'petrov-defence') return null;
   const planId = PETROV_DEFENCE_TAB_PLAN_IDS[tabKey];
-  return planId ? [planId] : null;
+  if (!planId) return null;
+  // The opening's endgame plan renders under the main tab's endgame section.
+  return tabKey === 'main' ? [planId, 'mp-petrovdefence-main-endgame'] : [planId];
 }
