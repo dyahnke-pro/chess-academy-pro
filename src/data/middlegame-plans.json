@@ -17161,23 +17161,21 @@
   "id": "mp-pronaroAlapin-d5open-endgame",
   "openingId": "pro-naroditsky-alapin",
   "criticalPositionFen": "r1b5/1p3rkp/p2b2p1/2N1pp2/3P4/4P3/PPR1B1PP/2R3K1 w - - 0 26",
-  "title": "d5-open ENDGAME — R+B+N conversion vs the cramped king (vs Shankland 2934)",
-  "overview": "Past move 25 in the Shankland game, the position simplifies to a R+B+N+P endgame with Black's king STILL stuck near g7 (it moved from f8 but never reached real shelter). This plan shows the conversion: knight infiltration via Nc5, bishop reposition to f3 long-diagonal, and the cramped king finally cracks. 27.4% of d5-open decisive games reach this exact structure.",
+  "title": "2…d5 open — rook and bishop ending, a pawn up",
+  "overview": "The queens are off. White takes on e5, trades the c5-knight for Black's dark bishop, puts a rook on c5 and starts the a-pawn. White is a pawn up and the engine rates White clearly better.",
   "pawnBreaks": [
-   "dxe5 — capture opens lines",
-   "a4-a5 — queenside passer"
+   "dxe5 — capture and hit the d6-bishop",
+   "a4 — the a-pawn advances"
   ],
   "pieceManeuvers": [
-   "Rxc5 — rook on the c-file",
-   "Bf3 long-diagonal later",
-   "Nc5 dominates dark squares"
+   "Rxc5 — the rook takes over c5"
   ],
   "strategicThemes": [
-   "Slow conversion in R+B+N+P",
-   "Queenside passer + Black's stuck king"
+   "A pawn up in a rook and bishop ending",
+   "Push the a-pawn"
   ],
   "endgameTransitions": [
-   "Material wins on the queenside via the passer"
+   "With queens off, the extra pawn and the active rooks decide."
   ],
   "playableLines": [
    {
@@ -17191,12 +17189,12 @@
      "Re8"
     ],
     "annotations": [
-     "dxe5! — capture the e-pawn that Black just pushed. The trade opens the d-file AND attacks Black's bishop on d6, which has no good square (anywhere it goes, your Nc5 dominates more).",
-     "Black plays …Bxc5 — forced. The d6-bishop had to move; trading with your knight is the only way to avoid being kicked further.",
-     "Rxc5 — recapture with the rook. Now you have the rook on c5 dominating the queenside AND the pawn on e5 supporting central squares AND Black's pieces still uncoordinated.",
-     "Black plays …Be6 trying to develop the c8-bishop finally. But it's move 27 — too late. You're already in the endgame phase.",
-     "a4! — start the queenside passer. With Black's pieces tied to defence you can push the a-pawn unopposed. The whole structural plan from the opening pays off here: queenside passer + open files + bishop pair.",
-     "Black plays …Re8 trying to activate the rook. You'll continue a5 + Rfc1 + Bf3 setting up Rc7. Shankland (2934) couldn't hold the pressure — the conversion finishes in another 15 moves with material winning."
+     "dxe5 — White takes the e5-pawn, and the pawn on e5 now hits the d6-bishop.",
+     "…Bxc5 — the bishop takes the c5-knight rather than retreat.",
+     "Rxc5 — the rook recaptures and now hits the c8-bishop.",
+     "…Be6 — the bishop leaves the c-file and eyes the a2-pawn.",
+     "a4 — White pushes the a-pawn, taking it off the bishop's diagonal.",
+     "…Re8 — Black brings a rook to the e-file. White is a pawn up and clearly better."
     ],
     "arrows": [
      [],
@@ -17269,15 +17267,15 @@
      ]
     ],
     "learnCues": [
-     "dxe5 — capture, attack Bd6",
-     "…Bxc5 — forced bishop trade",
-     "Rxc5 — rook dominates c-file",
-     "…Be6 — Black's late development",
-     "a4 — queenside passer marches",
-     "…Re8 — Black tries activity"
+     "dxe5 — hit the d6-bishop",
+     "…Bxc5 — take the knight",
+     "Rxc5 — hit the c8-bishop",
+     "…Be6 — eye a2",
+     "a4 — push the a-pawn",
+     "…Re8 — rook to e8"
     ],
-    "title": "d5-open ENDGAME — R+B+N conversion vs the cramped king (vs Shankland 2934)",
-    "intro": "Past move 25 in the Shankland game, the position simplifies to a R+B+N+P endgame with Black's king STILL stuck near g7 (it moved from f8 but never reached real shelter). This plan shows the conversion: knight infiltration via Nc5, bishop reposition to f3 long-diagonal, and the cramped king finally cracks. 27.4% of d5-open decisive games reach this exact structure.",
+    "title": "2…d5 open — rook and bishop ending, a pawn up",
+    "intro": "Queens off: White trades on c5 and pushes the a-pawn.",
     "sources": [
      "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
      "https://www.chess.com/openings/Alapin-Sicilian-Defense",
@@ -17427,23 +17425,20 @@
   "id": "mp-pronaroAlapin-d6main-endgame",
   "openingId": "pro-naroditsky-alapin",
   "criticalPositionFen": "6k1/5pb1/B3b2p/4p1p1/P3Pn2/7P/1r3PPB/3RN1K1 w - - 0 26",
-  "title": "d6-mainline ENDGAME — R+B+B+N vs R+B+B+N (vs Riley 2984)",
-  "overview": "Past move 25 in the Riley game, the position reaches a pure R+B+B+N+P endgame with queens off — a very common Alapin endgame type (30.1% of d6-mainline decisive games). This plan walks the conversion: bishop activity on a6, slow piece improvement, and the eventual pawn-race finish that this repertoire converted at move 60+.",
-  "pawnBreaks": [
-   "…gxf4 — Black gets doubled pawns",
-   "a4 stays as the queenside passer"
-  ],
+  "title": "2…d6 mainline — remove the f4-knight, hit the pawns",
+  "overview": "The queens are off and White is a pawn up. White gives the h2-bishop for Black's strong f4-knight, leaving Black with doubled f-pawns, then the knight comes to d3 to hit the rook and the pawns. The engine rates White better.",
+  "pawnBreaks": [],
   "pieceManeuvers": [
-   "Bxf4 — trade the centralised knight",
-   "Nd3 — knight outpost prep",
-   "Bb5 — bishop reroute"
+   "Bxf4 — remove the f4-knight",
+   "Nd3 — hit the rook and the pawns",
+   "Bb5 — guard the a4-pawn"
   ],
   "strategicThemes": [
-   "Trade pieces to highlight weak pawn structure",
-   "Slow technique in equal-material endgame"
+   "Trade the strong knight",
+   "Target the doubled f-pawns"
   ],
   "endgameTransitions": [
-   "Pawn endgame after trades — passer decides"
+   "With queens off, the extra pawn and Black's doubled f-pawns tell."
   ],
   "playableLines": [
    {
@@ -17457,12 +17452,12 @@
      "Bf8"
     ],
     "annotations": [
-     "Bxf4! — capture the knight with the bishop. You give up your dark-square bishop but win the centralised knight, breaking Black's piece coordination.",
-     "Black plays …gxf4 — forced recapture with the pawn. Now Black has doubled f-pawns and weakened the kingside structure.",
-     "Nd3 — the knight reroutes from e1 to d3 attacking the doubled pawn AND eyeing future Nb4 outposts. Slow technique pays off in the endgame.",
-     "Black plays …Ra2 swinging the rook to the a-file trying to create activity. The rook attacks your a-pawn but it's just defended.",
-     "Bb5 — slide the bishop from a6 to b5, defending the a4-pawn and preparing future trades. Quiet maneuvering converts the endgame slowly.",
-     "Black plays …Bf8 trying to bring the bishop back into the game. This repertoire continued Nc1 + Be2 + Ba3 + Nd3 sequence with tempo on Black's awkward pieces, eventually winning the long endgame in 117 plies."
+     "Bxf4 — White gives the h2-bishop for the strong f4-knight.",
+     "…gxf4 — Black recaptures and is left with doubled f-pawns.",
+     "Nd3 — the knight hits the b2-rook and the e5- and f4-pawns.",
+     "…Ra2 — the rook steps away and hits the a4- and f2-pawns.",
+     "Bb5 — the bishop guards the a4-pawn.",
+     "…Bf8 — the bishop heads back; White is a pawn up and better."
     ],
     "arrows": [
      [],
@@ -17535,15 +17530,15 @@
      ]
     ],
     "learnCues": [
-     "Bxf4 — capture the centralised knight",
-     "…gxf4 — forced recapture",
-     "Nd3 — knight reroute",
-     "…Ra2 — Black tries activity",
-     "Bb5 — bishop reposition",
-     "…Bf8 — Black's defensive shuffling"
+     "Bxf4 — remove the knight",
+     "…gxf4 — doubled f-pawns",
+     "Nd3 — hit rook and pawns",
+     "…Ra2 — hit a4 and f2",
+     "Bb5 — guard a4",
+     "…Bf8 — bishop back"
     ],
-    "title": "d6-mainline ENDGAME — R+B+B+N vs R+B+B+N (vs Riley 2984)",
-    "intro": "Past move 25 in the Riley game, the position reaches a pure R+B+B+N+P endgame with queens off — a very common Alapin endgame type (30.1% of d6-mainline decisive games). This plan walks the conversion: bishop activity on a6, slow piece improvement, and the eventual pawn-race finish that this repertoire converted at move 60+.",
+    "title": "2…d6 mainline — remove the f4-knight, hit the pawns",
+    "intro": "Queens off: trade the f4-knight, then hit the pawns.",
     "sources": [
      "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
      "https://www.chess.com/openings/Alapin-Sicilian-Defense",
@@ -17699,24 +17694,18 @@
   "id": "mp-pronaroAlapin-e6french-endgame",
   "openingId": "pro-naroditsky-alapin",
   "criticalPositionFen": "1k6/1p2Qp1p/p3p3/3pP3/bP1q4/8/3KB2P/1R1R4 w - - 4 31",
-  "title": "e6-french ENDGAME — Q+R+B vs Q+B post-sac (vs Niko Theodorou 3131)",
-  "overview": "After the Bxh6 sacrifice plays out, the Theodorou game reaches a Q+R+R+B+P vs Q+B+P-mess position around move 30. Even though queens are still on, this is the CONVERSION PHASE — Black's king has no shelter, your pieces dominate every file. R+min+P endings appear in 22.3% of e6-french decisive games when tactics don't decide first; this plan shows the structural finishing technique.",
-  "pawnBreaks": [
-   "e5 stays as the structural anchor",
-   "b4 supports your queenside"
-  ],
+  "title": "2…e6 French-style — a rook up, escape the checks",
+  "overview": "White is a rook up with the queens still on, and Black's queen starts checking. White's king walks toward the queenside; the engine still rates White winning.",
+  "pawnBreaks": [],
   "pieceManeuvers": [
-   "Bd3 — bishop activates",
-   "King walk breaks the perpetual",
-   "Black's queen harassment fails"
+   "Bd3 — the bishop eyes h7",
+   "Kc1-b2 — the king walks out of the checks"
   ],
   "strategicThemes": [
-   "King walk converts material edge",
-   "Black has no real follow-up"
+   "A rook up: survive the checks",
+   "King walk to the queenside"
   ],
-  "endgameTransitions": [
-   "Material conversion when queens finally trade"
-  ],
+  "endgameTransitions": [],
   "playableLines": [
    {
     "fen": "1k6/1p2Qp1p/p3p3/3pP3/bP1q4/8/3KB2P/1R1R4 w - - 4 31",
@@ -17729,12 +17718,12 @@
      "Qd4+"
     ],
     "annotations": [
-     "Bd3 — bring the bishop into the attack, covering the king and threatening Bxh7. Black's queen on d4 has been the only active piece coordinating Black's defence.",
-     "Black plays …Qf2+ trying to keep the queens on and find perpetual ideas. The check forces your king to move.",
-     "Kc1 — sidestep the check to c1. Your king walks around the position but Black has no follow-up tactic — every check just costs Black another tempo with no gain.",
-     "Black plays …Qe3+ continuing the queen harassment. Looks scary but it's just a perpetual attempt — White is up material and the queens will eventually trade off.",
-     "Kb2 — keep walking. The king is safer on the queenside than it looks; Black's pieces all face the wrong direction.",
-     "Black plays …Qd4+ trying to force a draw by repetition. This repertoire's response in the actual game broke the cycle and converted to win — the structural advantage from the opening pays off even in this tactical mess."
+     "Bd3 — the bishop comes to d3 and eyes the h7-pawn.",
+     "…Qf2+ — Black starts checking.",
+     "Kc1 — the king steps away.",
+     "…Qe3+ — another check, also hitting the d3-bishop.",
+     "Kb2 — the king heads for the queenside; the d1-rook guards the bishop.",
+     "…Qd4+ — the checks continue. White is a rook up; the king keeps walking until they run out."
     ],
     "arrows": [
      [],
@@ -17807,15 +17796,15 @@
      ]
     ],
     "learnCues": [
-     "Bd3 — bring the bishop",
-     "…Qf2+ — perpetual attempt",
-     "Kc1 — sidestep",
-     "…Qe3+ — keep checking",
-     "Kb2 — walk safely",
-     "…Qd4+ — Black tries draw"
+     "Bd3 — eye h7",
+     "…Qf2+ — check",
+     "Kc1 — step away",
+     "…Qe3+ — check, hit d3",
+     "Kb2 — head for the queenside",
+     "…Qd4+ — more checks"
     ],
-    "title": "e6-french ENDGAME — Q+R+B vs Q+B post-sac (vs Niko Theodorou 3131)",
-    "intro": "After the Bxh6 sacrifice plays out, the Theodorou game reaches a Q+R+R+B+P vs Q+B+P-mess position around move 30. Even though queens are still on, this is the CONVERSION PHASE — Black's king has no shelter, your pieces dominate every file. R+min+P endings appear in 22.3% of e6-french decisive games when tactics don't decide first; this plan shows the structural finishing technique.",
+    "title": "2…e6 French-style — a rook up, escape the checks",
+    "intro": "A rook up with queens on: walk the king out of the checks.",
     "sources": [
      "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
      "https://www.chess.com/openings/Alapin-Sicilian-Defense",
@@ -17971,23 +17960,18 @@
   "id": "mp-pronaroAlapin-g6dragon-endgame",
   "openingId": "pro-naroditsky-alapin",
   "criticalPositionFen": "6k1/p3ppbp/1p6/4P2p/8/6BP/PPr2P2/R3R1K1 w - - 5 26",
-  "title": "2…g6 ENDGAME — R+B vs R+B post-tactics (vs Botez 2279)",
-  "overview": "Past move 25 in the Botez game, this repertoire has reached a R+B+P vs R+B+P endgame with extra material — the conversion of the structural advantage. This is the kind of endgame the g6-dragon's 26.4% R+min+P stat refers to, and the technique is straightforward: active rook + the bishop coordinating to the queenside.",
-  "pawnBreaks": [
-   "e5 stays as the central pawn",
-   "b2 stays — no weaknesses"
-  ],
+  "title": "2…g6 hyper-dragon — a rook up: activate the rooks",
+  "overview": "The queens are off and White is a rook up for a pawn. Black's lone rook prowls the second rank; White keeps the bishop safe and puts a rook on the open d-file, aiming at Rd8+. The engine rates White winning.",
+  "pawnBreaks": [],
   "pieceManeuvers": [
-   "Bf4 → Bg3 reposition",
-   "Rad1 — rook coordination",
-   "Black's rook activity neutralised"
+   "Rad1 — the rook takes the open d-file"
   ],
   "strategicThemes": [
-   "Quiet maneuvering in equal-piece endgame",
-   "Material edge converts via rook activity"
+   "A rook up: keep it simple",
+   "Use the open d-file"
   ],
   "endgameTransitions": [
-   "R+B+P endings finish with back-rank tactics"
+   "A rook up with queens off, the conversion is technique."
   ],
   "playableLines": [
    {
@@ -18001,12 +17985,12 @@
      "h6"
     ],
     "annotations": [
-     "Bf4 — repositions the dark-squared bishop to f4 attacking the d2-square indirectly. The bishop on g3 was passive; on f4 it controls more.",
-     "Black plays …Rc4 trying to activate the rook on the open c-file. The rook on c4 looks active but there's nothing to attack.",
-     "Bg3 — slide the bishop back. Quiet maneuvering; you're not in a hurry. Black has the worse position structurally and ANY trade benefits you.",
-     "Black plays …Rc2 doubling on the c-file. Trying to create chances on the 2nd rank — but your king is safe and the bishop covers everything.",
-     "Rad1 — both rooks now coordinate on the central files. You threaten Rd8+ ideas trapping Black's king.",
-     "Black plays …h6 giving the king a square. Too late — Rd8+ would have been crushing earlier. The Botez game ended with rooks invading on the back rank and Black resigning at move 30."
+     "Bf4 — the bishop steps up to f4.",
+     "…Rc4 — the rook attacks the f4-bishop.",
+     "Bg3 — the bishop drops back.",
+     "…Rc2 — the rook returns to the second rank, hitting the b2- and f2-pawns.",
+     "Rad1 — the rook takes the open d-file, eyeing Rd8+.",
+     "…h6 — Black makes room for the king on h7. White is a rook up and winning."
     ],
     "arrows": [
      [],
@@ -18079,15 +18063,15 @@
      ]
     ],
     "learnCues": [
-     "Bf4 — bishop reposition",
-     "…Rc4 — Black's rook activity",
-     "Bg3 — quiet retreat",
-     "…Rc2 — double rooks",
-     "Rad1 — coordinate the rooks",
-     "…h6 — king escape too late"
+     "Bf4 — bishop to f4",
+     "…Rc4 — hit the bishop",
+     "Bg3 — bishop back",
+     "…Rc2 — hit b2 and f2",
+     "Rad1 — take the d-file",
+     "…h6 — make room for the king"
     ],
-    "title": "2…g6 ENDGAME — R+B vs R+B post-tactics (vs Botez 2279)",
-    "intro": "Past move 25 in the Botez game, this repertoire has reached a R+B+P vs R+B+P endgame with extra material — the conversion of the structural advantage. This is the kind of endgame the g6-dragon's 26.4% R+min+P stat refers to, and the technique is straightforward: active rook + the bishop coordinating to the queenside.",
+    "title": "2…g6 hyper-dragon — a rook up: activate the rooks",
+    "intro": "A rook up with queens off: activate the rooks.",
     "sources": [
      "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
      "https://www.chess.com/openings/Alapin-Sicilian-Defense",
@@ -18237,24 +18221,20 @@
   "id": "mp-pronaroAlapin-nc6-endgame",
   "openingId": "pro-naroditsky-alapin",
   "criticalPositionFen": "r2qr1k1/pb5p/1p4pB/4P3/2n5/P6P/2BQ1PP1/R3R1K1 w - - 1 26",
-  "title": "2…Nc6 ENDGAME — Q+R+B post-tactics conversion (vs Zanyglobal 2899)",
-  "overview": "Past move 25 in the Zanyglobal game, the position reaches a Q+R+R+B+N+B structure with material edge. The conversion technique: e5/e6 pawn advance + bishop on b3 + queen invasion. This is the structural pattern that nc6-line's 33.7% R+min+P games convert through — even when queens stay on, the structural plan looks like an endgame.",
+  "title": "2…Nc6 — push the e-pawn, aim at the king",
+  "overview": "White is better with the queens on. The queen comes to f4 to hit the c4-knight and guard e5, the e-pawn advances to e6, two steps from queening, and the queen swings to h4 toward Black's king. The engine rates White winning.",
   "pawnBreaks": [
-   "e5-e6 — central pawn advance",
-   "c-file opens after trades"
+   "e6 — the e-pawn advances"
   ],
   "pieceManeuvers": [
-   "Qf4 — central queen",
-   "Qh4 — kingside swing",
-   "Bh6 dark-square pressure"
+   "Qf4 — hit c4, guard e5",
+   "Qh4 — swing toward the king"
   ],
   "strategicThemes": [
-   "Central pawn push + queen activation",
-   "Bishop pair coordinates with queen for crush"
+   "Advance the e-pawn",
+   "Queen and bishop against the king"
   ],
-  "endgameTransitions": [
-   "e6 + e7 promotion threats decide before deep endgame"
-  ],
+  "endgameTransitions": [],
   "playableLines": [
    {
     "fen": "r2qr1k1/pb5p/1p4pB/4P3/2n5/P6P/2BQ1PP1/R3R1K1 w - - 1 26",
@@ -18267,12 +18247,12 @@
      "Ne5"
     ],
     "annotations": [
-     "Qf4! — the queen swings to f4 attacking Black's knight on c4 and supporting the e5-pawn. The queen is now the most active piece, threatening tactics on Black's exposed king.",
-     "Black plays …Rc8 swinging the rook to the c-file trying to coordinate against your queenside. Looks principled but the rook on c8 doesn't actually threaten anything concrete.",
-     "e6! — the central pawn pushes opening files toward Black's king. The e6-pawn now blockades Black's kingside AND prepares e7 promotion threats.",
-     "Black plays …Qc7 trying to coordinate the queen with the rook on c8 to defend. Slow defensive setup.",
-     "Qh4 — the queen swings to h4 threatening Qh6 or Qxh7 ideas directly attacking Black's king. The h6-bishop coordinates with the queen for the kingside crush.",
-     "Black plays …Ne5 trying to find a knight outpost AND attack your queen on h4. This repertoire continued with Bb3 + Qc6 + e7+! winning material via the e-pawn promotion threat. The Zanyglobal game ended at move 31."
+     "Qf4 — the queen hits the c4-knight and guards the e5-pawn.",
+     "…Rc8 — the rook comes to c8 to guard the knight.",
+     "e6 — the e-pawn advances; it is two steps from queening.",
+     "…Qc7 — the queen hits White's queen on f4.",
+     "Qh4 — the queen sidesteps toward Black's king and still hits the c4-knight.",
+     "…Ne5 — the knight moves off the fourth rank; the engine rates White winning."
     ],
     "arrows": [
      [],
@@ -18345,15 +18325,15 @@
      ]
     ],
     "learnCues": [
-     "Qf4 — central queen swing",
-     "…Rc8 — Black coordinates",
-     "e6 — central pawn push",
-     "…Qc7 — defensive setup",
-     "Qh4 — kingside threats",
-     "…Ne5 — knight outpost attempt"
+     "Qf4 — hit c4, guard e5",
+     "…Rc8 — guard the knight",
+     "e6 — push the e-pawn",
+     "…Qc7 — hit the queen",
+     "Qh4 — swing to the kingside",
+     "…Ne5 — knight moves"
     ],
-    "title": "2…Nc6 ENDGAME — Q+R+B post-tactics conversion (vs Zanyglobal 2899)",
-    "intro": "Past move 25 in the Zanyglobal game, the position reaches a Q+R+R+B+N+B structure with material edge. The conversion technique: e5/e6 pawn advance + bishop on b3 + queen invasion. This is the structural pattern that nc6-line's 33.7% R+min+P games convert through — even when queens stay on, the structural plan looks like an endgame.",
+    "title": "2…Nc6 — push the e-pawn, aim at the king",
+    "intro": "Queens on: push the e-pawn and aim at the king.",
     "sources": [
      "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
      "https://www.chess.com/openings/Alapin-Sicilian-Defense",
@@ -18506,135 +18486,6 @@
   ]
  },
  {
-  "id": "mp-pronaroAlapin-nf6main-endgame",
-  "openingId": "pro-naroditsky-alapin",
-  "criticalPositionFen": "3r2k1/p2qbp2/Pp2p1p1/1Np1n2p/2P5/4BQ1P/1P3PP1/R5K1 w - - 0 26",
-  "title": "nf6-main ENDGAME — R+B+P conversion via queenside passer (vs FaustinoOro 2971)",
-  "overview": "Past move 25 in the FaustinoOro game, the position is a R+B+N endgame with the queenside passer (a6) — the SAME passer the queenside crawl created at move 11. R+minor+P endings appear in 29.4% of nf6-main decisive games; this is the conversion technique.",
-  "pawnBreaks": [
-   "a6 passer creates winning chances",
-   "b3 supports c4 structure"
-  ],
-  "pieceManeuvers": [
-   "Qb7 — invade the 7th rank",
-   "Re1 — rook activation",
-   "Nb5 stays on the prize square"
-  ],
-  "strategicThemes": [
-   "Slow conversion in R+minor+P",
-   "Queenside passer + active pieces decide"
-  ],
-  "endgameTransitions": [
-   "Tactics on the back rank or queenside finish the game"
-  ],
-  "playableLines": [
-   {
-    "fen": "3r2k1/p2qbp2/Pp2p1p1/1Np1n2p/2P5/4BQ1P/1P3PP1/R5K1 w - - 0 26",
-    "moves": [
-     "Qb7",
-     "Nc6",
-     "b3",
-     "Bf6",
-     "Re1",
-     "Be5"
-    ],
-    "annotations": [
-     "Qb7 — the queen invades the 7th rank, attacking Black's a7-pawn and aligning with the queenside passer on a6. Black has no safe square: …Qe7 loses to Qxa7; …Rd7 loses material.",
-     "Black plays …Nc6 trying to coordinate, but the knight on c6 blocks the c-file for the rook AND covers nothing useful. You have all the time in the world; he has to defend everything.",
-     "b3 — quiet move strengthening your structure. The c4-pawn is supported, the b2-pawn is mobile if needed. You're not in a hurry; the structural advantage doesn't go anywhere.",
-     "Black plays …Bf6 trying to activate the bishop. It hits your knight on b5 indirectly but doesn't actually do anything.",
-     "Re1 — finally the rook activates. The plan: Re1 + the queen + the Nb5 all aim at Black's pieces. Material starts dropping next.",
-     "Black plays …Be5 trying to trade pieces. You refuse — Bg5! comes next attacking the queen on d7 with tempo, then Re1 picks up the rook on d8 via tactics. The conversion finishes within 5-7 moves."
-    ],
-    "arrows": [
-     [],
-     [],
-     [],
-     [],
-     [],
-     []
-    ],
-    "highlights": [
-     [
-      {
-       "square": "f3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "c6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "b2",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "b3",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "e7",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "f6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "a1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e1",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ],
-     [
-      {
-       "square": "f6",
-       "color": "rgba(255, 165, 0, 0.55)"
-      },
-      {
-       "square": "e5",
-       "color": "rgba(255, 165, 0, 0.55)"
-      }
-     ]
-    ],
-    "learnCues": [
-     "Qb7 — invade the 7th rank",
-     "…Nc6 — Black blocks his own pieces",
-     "b3 — quiet structural improvement",
-     "…Bf6 — wasted activity",
-     "Re1 — finally the rook",
-     "…Be5 — Black tries to trade"
-    ],
-    "title": "nf6-main ENDGAME — R+B+P conversion via queenside passer (vs FaustinoOro 2971)",
-    "intro": "Past move 25 in the FaustinoOro game, the position is a R+B+N endgame with the queenside passer (a6) — the SAME passer the queenside crawl created at move 11. R+minor+P endings appear in 29.4% of nf6-main decisive games; this is the conversion technique.",
-    "sources": [
-     "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
-     "https://www.chess.com/openings/Alapin-Sicilian-Defense",
-     "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
-    ]
-   }
-  ]
- },
- {
   "id": "mp-pronaroAlapin-nf6main-mg",
   "openingId": "pro-naroditsky-alapin",
   "criticalPositionFen": "r3k2r/p2qbp1p/Pp2p1p1/2pnP3/6Q1/2P5/1P3PPP/RNB2RK1 w kq - 0 17",
@@ -18775,24 +18626,18 @@
   "id": "mp-pronaroAlapin-spined6-endgame",
   "openingId": "pro-naroditsky-alapin",
   "criticalPositionFen": "r4r2/pp1n2bk/3P2bp/2PN2p1/4qP2/4B3/PP3QPP/R2R2K1 w - - 7 26",
-  "title": "Spine 4…d6 ENDGAME — R+B+N+P conversion (vs Salem-AR 3141)",
-  "overview": "Past move 30 in the Salem-AR game, the position simplifies to a R+B+N+P endgame with material edge. The Bc4-gambit's 70.3% score is partly because Black's king fix on g8 from the opening NEVER resolves — the king walks for 100+ more moves. This plan shows the slow technique.",
-  "pawnBreaks": [
-   "d6-pawn — the passer stays as the threat",
-   "cxd6 in some lines opens the c-file"
-  ],
+  "title": "Spine 4…d6 Bc4 gambit — trade into a level middlegame",
+  "overview": "White trades the dark bishops and the knights to reach a simpler position with the passed d6-pawn as White's trump. The engine calls the result level.",
+  "pawnBreaks": [],
   "pieceManeuvers": [
-   "Nxf6+ — central knight trade with check",
-   "Bxf6 — eliminate the bishop pair",
-   "Bd4 — long-diagonal coordination"
+   "Bd4 — offer the bishop trade",
+   "Nxf6+ — trade knights with check"
   ],
   "strategicThemes": [
-   "Practical simplification per this repertoire's style",
-   "Trade pieces ahead of material — outplay in endgames"
+   "Trade pieces",
+   "The passed d6-pawn"
   ],
-  "endgameTransitions": [
-   "Long technical conversion — 181-ply Salem-AR game"
-  ],
+  "endgameTransitions": [],
   "playableLines": [
    {
     "fen": "r4r2/pp1n2bk/3P2bp/2PN2p1/4qP2/4B3/PP3QPP/R2R2K1 w - - 7 26",
@@ -18805,12 +18650,12 @@
      "Rxf6"
     ],
     "annotations": [
-     "Bd4 — the bishop slides to d4 covering the long diagonal AND defending against Black's tactical threats around f6. This is practical positional play — This repertoire's signature: outplay opponents in technically simple positions where time pressure tells.",
-     "Black plays …Nf6 challenging your centralized knight on d5. The knight on f6 looks active but invites the simplification trade you want.",
-     "Nxf6+! — exchange the central knight with check, removing Black's best piece. Per this repertoire's style: trade pieces when behind material to convert the structural edge, trade pieces when ahead material to simplify to a winning endgame.",
-     "Black plays …Bxf6 forced — the king on h7 was checked, no other interposition works.",
-     "Bxf6! — capture the bishop with your dark-squared bishop. You now have a material edge AND the bishop pair removed AND Black's pieces stuck defending.",
-     "Black plays …Rxf6 recapturing. The position simplifies further; you still have the d6-passer + active pieces vs Black's scattered defenders. The Salem-AR game continued with Re1 + Qxf4 + Re7+ technique converting in 181 plies."
+     "Bd4 — the bishop offers a trade against the g7-bishop on the long diagonal.",
+     "…Nf6 — the knight challenges the d5-knight.",
+     "Nxf6+ — White trades with check, and the knight on f6 also hits the e4-queen.",
+     "…Bxf6 — Black recaptures.",
+     "Bxf6 — White trades the bishops.",
+     "…Rxf6 — the rook recaptures and hits the d6- and f4-pawns. The engine calls it level."
     ],
     "arrows": [
      [],
@@ -18883,15 +18728,15 @@
      ]
     ],
     "learnCues": [
-     "Bd4 — quiet positional play",
-     "…Nf6 — challenge the centre",
-     "Nxf6+ — exchange with check",
-     "…Bxf6 — forced recapture",
-     "Bxf6 — trade off pieces",
-     "…Rxf6 — simplify the endgame"
+     "Bd4 — offer the trade",
+     "…Nf6 — challenge d5",
+     "Nxf6+ — trade with check",
+     "…Bxf6 — recapture",
+     "Bxf6 — trade bishops",
+     "…Rxf6 — level"
     ],
-    "title": "Spine 4…d6 ENDGAME — R+B+N+P conversion (vs Salem-AR 3141)",
-    "intro": "Past move 30 in the Salem-AR game, the position simplifies to a R+B+N+P endgame with material edge. The Bc4-gambit's 70.3% score is partly because Black's king fix on g8 from the opening NEVER resolves — the king walks for 100+ more moves. This plan shows the slow technique.",
+    "title": "Spine 4…d6 Bc4 gambit — trade into a level middlegame",
+    "intro": "Trade into a level middlegame with the passed d6-pawn.",
     "sources": [
      "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
      "https://www.chess.com/openings/Alapin-Sicilian-Defense",
@@ -19041,24 +18886,18 @@
   "id": "mp-pronaroAlapin-spinee6-endgame",
   "openingId": "pro-naroditsky-alapin",
   "criticalPositionFen": "r4r2/pp1n1ppk/7b/3P4/b4q2/5N1P/PB2QPP1/R2R2K1 w - - 0 21",
-  "title": "Spine 4…e6 ENDGAME — R+B+N+P conversion (vs chessawp 3009)",
-  "overview": "Past move 25 in the chessawp game, the position reaches a R+B+N+P+P endgame where the IQP structure has resolved favourably for White. The bishop pair + open d-file + the c-pawn + e-pawn duo create winning chances. This is the typical Spine 4…e6 conversion pattern.",
-  "pawnBreaks": [
-   "d5 still as the IQP",
-   "f-file potential later"
-  ],
+  "title": "Spine 4…e6 IQP — the rook fork on d4",
+  "overview": "With the queens on, White's rook jumps to d4 and forks the f4-queen and the a4-bishop. White wins the bishop, ends a pawn up, and the engine rates White clearly better.",
+  "pawnBreaks": [],
   "pieceManeuvers": [
-   "Rd4 — central invasion",
-   "Rxa4 — material grab",
-   "Rh4 — kingside swing"
+   "Rd4 — fork the queen and the bishop",
+   "Rh4 — escape along the fourth rank"
   ],
   "strategicThemes": [
-   "Material gain converts in equal endgames",
-   "Active rooks dominate cramped pieces"
+   "The rook fork",
+   "A pawn up with the queens on"
   ],
-  "endgameTransitions": [
-   "R+B+B+N+P endings where material edge tells"
-  ],
+  "endgameTransitions": [],
   "playableLines": [
    {
     "fen": "r4r2/pp1n1ppk/7b/3P4/b4q2/5N1P/PB2QPP1/R2R2K1 w - - 0 21",
@@ -19071,12 +18910,12 @@
      "Rfe8"
     ],
     "annotations": [
-     "Rd4! — invade the central square with the rook. The rook on d4 attacks Black's bishop on a4 AND covers the e-file for your queen.",
-     "Black plays …Qf5 trying to keep the queen active and protect pieces. Reasonable defence but your position keeps improving.",
-     "Rxa4! — capture the bishop. You win material and Black's pieces become uncoordinated. The Bb2 + queen + knight + rook all coordinate now.",
-     "Black plays …Nc5 attacking your rook on a4 — trying to force a retreat that buys time. But you have many good squares.",
-     "Rh4 — sidestep the knight attack with tempo on the kingside. The rook on h4 supports the eventual Rxh6 sacrifice or the queen swing.",
-     "Black plays …Rfe8 doubling on the e-file. Black's pieces look active but you're up material; conversion is just technique. The chessawp game ended at move 28 with material winning."
+     "Rd4 — the rook hits the f4-queen and the a4-bishop at once.",
+     "…Qf5 — the queen steps away.",
+     "Rxa4 — White takes the bishop and is now a pawn up.",
+     "…Nc5 — the knight hits the a4-rook.",
+     "Rh4 — the rook escapes along the fourth rank and hits the h6-bishop.",
+     "…Rfe8 — the rook hits the e2-queen. White is a pawn up and clearly better."
     ],
     "arrows": [
      [],
@@ -19149,15 +18988,15 @@
      ]
     ],
     "learnCues": [
-     "Rd4 — invade the centre",
-     "…Qf5 — defensive queen",
-     "Rxa4 — capture the bishop",
-     "…Nc5 — attack the rook",
-     "Rh4 — sidestep with tempo",
-     "…Rfe8 — double rooks"
+     "Rd4 — fork queen and bishop",
+     "…Qf5 — queen steps away",
+     "Rxa4 — win the bishop",
+     "…Nc5 — hit the rook",
+     "Rh4 — escape, hit h6",
+     "…Rfe8 — hit the queen"
     ],
-    "title": "Spine 4…e6 ENDGAME — R+B+N+P conversion (vs chessawp 3009)",
-    "intro": "Past move 25 in the chessawp game, the position reaches a R+B+N+P+P endgame where the IQP structure has resolved favourably for White. The bishop pair + open d-file + the c-pawn + e-pawn duo create winning chances. This is the typical Spine 4…e6 conversion pattern.",
+    "title": "Spine 4…e6 IQP — the rook fork on d4",
+    "intro": "The rook forks queen and bishop on d4.",
     "sources": [
      "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
      "https://www.chess.com/openings/Alapin-Sicilian-Defense",

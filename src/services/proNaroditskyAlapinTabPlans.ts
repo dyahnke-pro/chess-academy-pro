@@ -15,7 +15,6 @@ export const PRO_NARODITSKY_ALAPIN_TAB_PLAN_IDS: Record<string, string[]> = {
   // bugs (auto-generated narration + mid-opening anchors).
   main: [
     'mp-pronaroAlapin-nf6main-mg',
-    'mp-pronaroAlapin-nf6main-endgame',
   ],
   '2…d5 open variation': [
     'mp-pronaroAlapin-d5open-mg',

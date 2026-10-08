@@ -1,6 +1,6 @@
 {
   "depth": 14,
-  "builtFens": 4072,
+  "builtFens": 4071,
   "items": [
     {
       "cat": "line",
@@ -70698,7 +70698,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-alapin",
       "color": "white",
-      "name": "pro-naroditsky-alapin :: d5-open ENDGAME — R+B+N conversion vs the cramped king (vs Shankland 2934)",
+      "name": "pro-naroditsky-alapin :: 2…d5 open — rook and bishop ending, a pawn up",
       "startFen": "r1b5/1p3rkp/p2b2p1/2N1pp2/3P4/4P3/PPR1B1PP/2R3K1 w - - 0 26",
       "moves": [
         "dxe5",
@@ -70742,7 +70742,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-alapin",
       "color": "white",
-      "name": "pro-naroditsky-alapin :: d6-mainline ENDGAME — R+B+B+N vs R+B+B+N (vs Riley 2984)",
+      "name": "pro-naroditsky-alapin :: 2…d6 mainline — remove the f4-knight, hit the pawns",
       "startFen": "6k1/5pb1/B3b2p/4p1p1/P3Pn2/7P/1r3PPB/3RN1K1 w - - 0 26",
       "moves": [
         "Bxf4",
@@ -70786,7 +70786,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-alapin",
       "color": "white",
-      "name": "pro-naroditsky-alapin :: e6-french ENDGAME — Q+R+B vs Q+B post-sac (vs Niko Theodorou 3131)",
+      "name": "pro-naroditsky-alapin :: 2…e6 French-style — a rook up, escape the checks",
       "startFen": "1k6/1p2Qp1p/p3p3/3pP3/bP1q4/8/3KB2P/1R1R4 w - - 4 31",
       "moves": [
         "Bd3",
@@ -70830,7 +70830,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-alapin",
       "color": "white",
-      "name": "pro-naroditsky-alapin :: 2…g6 ENDGAME — R+B vs R+B post-tactics (vs Botez 2279)",
+      "name": "pro-naroditsky-alapin :: 2…g6 hyper-dragon — a rook up: activate the rooks",
       "startFen": "6k1/p3ppbp/1p6/4P2p/8/6BP/PPr2P2/R3R1K1 w - - 5 26",
       "moves": [
         "Bf4",
@@ -70874,7 +70874,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-alapin",
       "color": "white",
-      "name": "pro-naroditsky-alapin :: 2…Nc6 ENDGAME — Q+R+B post-tactics conversion (vs Zanyglobal 2899)",
+      "name": "pro-naroditsky-alapin :: 2…Nc6 — push the e-pawn, aim at the king",
       "startFen": "r2qr1k1/pb5p/1p4pB/4P3/2n5/P6P/2BQ1PP1/R3R1K1 w - - 1 26",
       "moves": [
         "Qf4",
@@ -70918,27 +70918,6 @@
       "cat": "plan",
       "id": "pro-naroditsky-alapin",
       "color": "white",
-      "name": "pro-naroditsky-alapin :: nf6-main ENDGAME — R+B+P conversion via queenside passer (vs FaustinoOro 2971)",
-      "startFen": "3r2k1/p2qbp2/Pp2p1p1/1Np1n2p/2P5/4BQ1P/1P3PP1/R5K1 w - - 0 26",
-      "moves": [
-        "Qb7",
-        "Nc6",
-        "b3",
-        "Bf6",
-        "Re1",
-        "Be5"
-      ],
-      "terminalFen": "3r2k1/pQ1q1p2/Ppn1p1p1/1Np1b2p/2P5/1P2B2P/5PP1/4R1K1 w - - 3 29",
-      "eval": {
-        "cp": -86,
-        "mate": null,
-        "depth": 14
-      }
-    },
-    {
-      "cat": "plan",
-      "id": "pro-naroditsky-alapin",
-      "color": "white",
       "name": "pro-naroditsky-alapin :: nf6-main MIDDLEGAME — Rd1 + central conversion (vs FaustinoOro 2971)",
       "startFen": "r3k2r/p2qbp1p/Pp2p1p1/2pnP3/6Q1/2P5/1P3PPP/RNB2RK1 w kq - 0 17",
       "moves": [
@@ -70962,7 +70941,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-alapin",
       "color": "white",
-      "name": "pro-naroditsky-alapin :: Spine 4…d6 ENDGAME — R+B+N+P conversion (vs Salem-AR 3141)",
+      "name": "pro-naroditsky-alapin :: Spine 4…d6 Bc4 gambit — trade into a level middlegame",
       "startFen": "r4r2/pp1n2bk/3P2bp/2PN2p1/4qP2/4B3/PP3QPP/R2R2K1 w - - 7 26",
       "moves": [
         "Bd4",
@@ -71006,7 +70985,7 @@
       "cat": "plan",
       "id": "pro-naroditsky-alapin",
       "color": "white",
-      "name": "pro-naroditsky-alapin :: Spine 4…e6 ENDGAME — R+B+N+P conversion (vs chessawp 3009)",
+      "name": "pro-naroditsky-alapin :: Spine 4…e6 IQP — the rook fork on d4",
       "startFen": "r4r2/pp1n1ppk/7b/3P4/b4q2/5N1P/PB2QPP1/R2R2K1 w - - 0 21",
       "moves": [
         "Rd4",
