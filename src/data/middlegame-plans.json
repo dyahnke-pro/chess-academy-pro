@@ -8424,7 +8424,7 @@
   "openingId": "french-defence",
   "criticalPositionFen": "r3k1r1/ppqbnp2/4p3/4P3/3Q1P2/P1p5/2P3PP/R1B1KB1R w KQq - 1 15",
   "title": "Winawer: The c3-Passer and the Open File",
-  "overview": "Out of the Poisoned-Pawn chaos, the dust settles in Black's favour: the passed pawn on c3 is a thorn one step from White's king, the g-file is open for the rook, and the knight is heading to the dominant f5-square. Black's pieces all point at the white king while the c3-pawn ties White down.",
+  "overview": "Out of the Poisoned-Pawn chaos Black has given two pawns for activity: a passed pawn on c3, the open g-file, and a knight bound for f5. White rounds up the c3-pawn in the end and the engine prefers White, but Black's pieces are far more active.",
   "pawnBreaks": [
    "The passed …c3-pawn cramps and ties down White",
    "…f6 to open lines if needed"
@@ -8461,17 +8461,17 @@
     ],
     "annotations": [
      "White contests the half-open g-file with Rg1, trying to blunt the rook on g8.",
-     "Black plants the knight on f5 — the dream square, hitting d4 and the dark squares around White, impossible to chase with a pawn.",
+     "Black plants the knight on f5, hitting the d4-queen and the dark squares around White.",
      "White untangles with Qf2, eyeing the f-file and the kingside.",
      "Black centralises with …Qc6, raking the long light diagonal toward g2 and supporting the passed c3-pawn — every piece now points at White.",
-     "Bd3 — White develops and eyes h7, hunting kingside counterplay.",
+     "Bd3 — White develops and challenges the f5-knight.",
      "…Qd5 — the queen seizes the centre on the long light diagonal, hitting g2 and freezing White in place.",
      "Rb1 — White swings the rook to the b-file, angling to round up the c3-passer.",
      "…Bc6 — the bishop lines up behind the queen; the battery glares down the diagonal at g2.",
      "Rb3 — attacking the c3-pawn a second time; White is determined to win it.",
      "…O-O-O — castling long lands the rook on the open files and tucks the king behind its pawns; every piece in Black's plan is now home.",
      "Rxc3 — White finally collects the passer, but only after Black has activated every piece.",
-     "…Kb8 — the king tucks away; two pawns down, but the half-open g-file, the centralized queen and the active rooks keep Black pressing."
+     "…Kb8 — the king tucks away. Black is two pawns down and the engine prefers White, but the half-open g-file, the centralised queen and the active rooks give Black real play."
     ],
     "title": "The c3-Passer Attack",
     "arrows": [
@@ -8496,7 +8496,13 @@
        "color": "rgba(34, 197, 94, 0.85)"
       }
      ],
-     [],
+     [
+      {
+       "from": "d3",
+       "to": "f5",
+       "color": "rgba(40,185,95,0.92)"
+      }
+     ],
      [
       {
        "from": "d5",
@@ -8584,7 +8590,7 @@
        "color": "rgba(255, 165, 0, 0.55)"
       },
       {
-       "square": "h7",
+       "square": "f5",
        "color": "rgba(255, 235, 59, 0.5)"
       }
      ],
@@ -8684,17 +8690,17 @@
     ],
     "learnCues": [
      "Rg1 — contest the g-file",
-     "Nf5 — the dream square, hits d4",
+     "Nf5 — hit the d4-queen",
      "Qf2 — untangle, eye the f-file",
      "Qc6 — rake g2, back the c3-passer",
-     "Bd3 — White eyes h7",
+     "Bd3 — hit the f5-knight",
      "Qd5 — centre, the long diagonal",
      "Rb1 — White hunts c3",
      "Bc6 — back the battery on g2",
      "Rb3 — second hit on c3",
      "O-O-O — rooks to the open files",
      "Rxc3 — White regains the pawn",
-     "Kb8 — king safe, pressure stays"
+     "Kb8 — king safe, active pieces"
     ]
    }
   ]
@@ -10188,7 +10194,7 @@
   "id": "mp-kings-gambit-open-f-file",
   "openingId": "kings-gambit",
   "criticalPositionFen": "rnbqk1nr/ppp2pbp/3p4/6p1/2BPPp2/5N2/PPP3PP/RNBQ1RK1 b kq - 1 6",
-  "title": "Open f-file pressure after fxe5",
+  "title": "The g3 lever against the f4-g5 chain",
   "overview": "The opening sacrifice of the f-pawn fully opens the f-file once O-O lands. The Rf1 immediately pressures f7 with the Bc4. Combined with Qe2 or Qd3 and a follow-up h2-h3 + Kh1 to safely store the king, White builds a heavy attack against Black's underdeveloped kingside.",
   "pawnBreaks": [
    {
@@ -10232,11 +10238,11 @@
      "c3 braces the d4-pawn and frees c2 for the bishop, preparing the g3 break.",
      "…Nc6 develops, pressing the d4-pawn.",
      "g3 strikes the base of the f4-g5 chain — the lever that pries the f-file open.",
-     "…Bh3 forks the rook on f1, the critical counter.",
+     "…Bh3 hits the f1-rook — the critical counter.",
      "gxf4 dissolves the chain and rips the f-file open.",
      "…Bxf1 grabs the exchange on f1.",
-     "Qxf1 recaptures; for the exchange White owns the bare squares around f7.",
-     "…gxf4 wins the pawn back, but every White piece now swarms the f-file toward f7."
+     "Qxf1 recaptures; for the exchange White gets open lines toward f7.",
+     "…gxf4 — Black takes back on f4. White has given the exchange for open lines against f7, and the engine prefers Black: this is a gambit line played for practical chances."
     ],
     "arrows": [
      [],
@@ -10403,11 +10409,11 @@
      "c3 — brace d4, prep g3",
      "Nc6 — press d4",
      "g3 — the lever on the chain",
-     "Bh3 — fork the f1-rook",
+     "Bh3 — hit the f1-rook",
      "gxf4 — rip open the f-file",
      "Bxf1 — grab the exchange",
      "Qxf1 — aim at f7",
-     "gxf4 — but White swarms f7"
+     "gxf4 — Black is better; practical chances"
     ]
    }
   ]
@@ -22586,7 +22592,7 @@
      "…Bg7 — Black completes the fianchetto, the bishop joining the long diagonal.",
      "b3! — White strikes at the c4-pawn, the weakness Black left when they locked the queenside. Lines begin to open.",
      "…cxb3 — Black gives up c4; the b-file half-opens.",
-     "…Bxb3 — the bishop recaptures on the a2-g8 diagonal. White has the half-open b-file and a lasting target on b5."
+     "Bxb3 — the bishop recaptures on the a2-g8 diagonal. White has the half-open b-file and a lasting target on b5."
     ],
     "arrows": [
      [],
@@ -22658,7 +22664,7 @@
      "…Bg7 — finish the fianchetto",
      "b3 — strike the c4-pawn",
      "…cxb3 — the b-file opens",
-     "…Bxb3 — target b5 on the half-open file"
+     "Bxb3 — target b5 on the half-open file"
     ],
     "sources": [
      "book:ruy-lopez",
@@ -30508,7 +30514,7 @@
   "openingId": "vienna-game",
   "title": "vs Nc6: Italian-Vienna Pressure on f7",
   "criticalPositionFen": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6",
-  "overview": "Against Nc6 White chooses the Italian-Vienna setup — Bc4 plus the Vienna f4 lever held in reserve. The Bc4 aims at f7, Bg5 pins the Nf6, and a future Nd5 fork on f6 + c7 lurks. Slow squeeze with sharp tactical undercurrents.",
+  "overview": "Against Nc6 White chooses the Italian-Vienna setup — Bc4 plus the Vienna f4 lever held in reserve. The Bc4 aims at f7, Bg5 pins the f6-knight to the queen, and Nd5 adds a second attacker on the pinned knight. A slow squeeze with sharp tactical undercurrents.",
   "pawnBreaks": [
    {
     "move": "f2-f4",
@@ -30520,12 +30526,12 @@
    {
     "piece": "Bishop",
     "route": "Bc1-g5 (pins the Nf6)",
-    "explanation": "The queen-bishop swings to g5, pinning the f6-knight against the queen — the same pin Lasker named in his treatise on King's Pawn openings."
+    "explanation": "The queen's bishop swings to g5, pinning the f6-knight against the queen."
    },
    {
     "piece": "Knight",
-    "route": "Nc3-d5 (fork on f6 + c7)",
-    "explanation": "Once Black is committed, Nd5 forks the f6-knight and threatens Nxc7+ winning the rook — the classic Italian-Vienna combination."
+    "route": "Nc3-d5",
+    "explanation": "Once Black is committed, Nd5 adds a second attacker on the pinned f6-knight."
    }
   ],
   "strategicThemes": [
@@ -30535,7 +30541,7 @@
   ],
   "playableLines": [
    {
-    "title": "vs Nc6: Italian-Vienna Bg5 pin + Nd5 fork",
+    "title": "vs Nc6: Italian-Vienna Bg5 pin and Nd5",
     "fen": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6",
     "moves": [
      "O-O",
@@ -30550,11 +30556,11 @@
     "annotations": [
      "O-O — White castles short, completing kingside development. Both sides head into the middlegame fully coordinated.",
      "…O-O — Black castles too. The position is now classical Italian-Vienna territory.",
-     "Bg5 — the queen-bishop pins the f6-knight against the queen. Same pin Lasker prescribed for King's Pawn openings.",
+     "Bg5 — the queen's bishop pins the f6-knight against the queen.",
      "…h6 — Black puts the question to the bishop, asking it to commit or retreat.",
      "Bh4 — bishop retreats but stays on the diagonal, keeping the pin alive on the now-vulnerable f6-knight.",
      "…Be6 — Black challenges the Bc4 by offering a trade on the a2-g8 diagonal.",
-     "Nd5! — the central knight jump. From d5 the knight forks the Nf6 AND threatens Nxc7 winning the rook. Black must defend twice.",
+     "Nd5! — the central knight jump, adding a second attacker on the pinned f6-knight.",
      "…Bxd5 — Black gives the bishop pair to remove the d5-knight; after exd5 White keeps the centre and space."
     ],
     "arrows": [
@@ -30691,7 +30697,7 @@
      "h6 — question the bishop",
      "Bh4 — retreat, keep the pin",
      "Be6 — challenge the c4-bishop",
-     "Nd5 — fork f6, threaten Nxc7",
+     "Nd5 — pile on the pinned knight",
      "…Bxd5 — remove the knight"
     ]
    }
@@ -38180,7 +38186,7 @@
      "...Nc2 — Black tries to win the bishop, creating counterplay.",
      "Bxc2! — White trades the bishop for the knight, maintaining material balance.",
      "Rxc2 — KEY SQUARE c2. The rook recaptures, coordinating with the rest.",
-     "...Rac1 — Black's rook joins the c-file battery.",
+     "Rac1 — White's rook challenges the c2-rook on the open file.",
      "Rec8 — PIECE ROUTE: Black tries to load the c-file.",
      "Rxc2 — the trade-down completes; White has the structurally winning rook endgame."
     ],
@@ -38282,7 +38288,7 @@
      "...Nc2 — counter",
      "Bxc2! — trade",
      "Rxc2 — recapture",
-     "...Rac1 — battery",
+     "Rac1 — challenge the rook",
      "Rec8 — load",
      "Rxc2 — simplify"
     ],
@@ -39404,7 +39410,7 @@
      "...Nxa2! — KEY SQUARE a2. Knight raid wins a pawn; Black is ahead in the pawn count.",
      "Bd4 — White tries to centralize the bishop and challenge the d5-knight.",
      "...Bc2 — KEY SQUARE c2. The light-squared bishop infiltrates White's queenside.",
-     "...Nc1! — KEY SQUARE c1. The first knight delivers, raiding White's back rank."
+     "Nc1 — White's knight drops back to c1 and attacks the a2-knight."
     ],
     "arrows": [
      [],
@@ -39506,7 +39512,7 @@
      "...Nxa2 — raid",
      "Bd4 — challenge",
      "...Bc2 — infiltrate",
-     "...Nc1 — back rank"
+     "Nc1 — White hits the a2-knight"
     ],
     "title": "Advance Bf5 — knight raid (vs spicycaterpillar)",
     "intro": "R+min+P from their win over spicycaterpillar (3218) in the Bf5 line past move 16. KEY SQUARES: d5 (knight outpost), b4 (queenside hop), a2 (pawn target), c1 (raid square). PIECE ROUTE: Ne7-Nd5 / Nc6-Nb4-Nxa2 — knight raid pattern that wins a pawn AND ties down White's pieces.",
@@ -42132,7 +42138,7 @@
      "…g6 — Black is lost; White is winning material and the attack."
     ],
     "learnCues": [
-     "Nxg5 — smash in",
+     "Nfxg5 — smash in",
      "h6 — try to trap it",
      "Qh5+ — queen joins",
      "Kd8 — king moves",
@@ -52554,7 +52560,7 @@
      "b3 — quiet, passer works",
      "…Rc6 — attack d6",
      "Bf3 — eye b7",
-     "…Rxd6 — win the passer",
+     "…Rcxd6 — win the passer",
      "Rxd6 — recapture",
      "…Rxd6 — rooks trade",
      "Bxb7 — collect in return"
@@ -64433,7 +64439,7 @@
      "…Be7 completes development.",
      "White lunges a5 to fix the queenside.",
      "…bxa5 opens the b-file for counterplay.",
-     "White recaptures with the knight.",
+     "Nb3 — the knight heads for the a5-pawn.",
      "…Rb8 swings to the half-open b-file.",
      "White grabs the a5-pawn."
     ],
@@ -64443,7 +64449,7 @@
      "…Be7 — develop",
      "a5 — fix queenside",
      "…bxa5 — open the b-file",
-     "Nb3 — recapture",
+     "Nb3 — hit a5",
      "…Rb8 — swing over",
      "Nxa5 — grab pawn"
     ],
@@ -66138,7 +66144,7 @@
     ],
     "learnCues": [
      "Re1 — centralise",
-     "…Nd7 — develop",
+     "…Nbd7 — develop",
      "a4 — probe",
      "…b4 — clamp",
      "Ne4 — centralise",

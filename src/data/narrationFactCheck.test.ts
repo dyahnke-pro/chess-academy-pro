@@ -330,10 +330,7 @@ const BASELINE_VIOLATIONS = new Set<string>([
   'VARIATION vienna-game::Frankenstein-Dracula :: fd-3 (short)',
   'VARIATION vienna-game::Vienna vs 2...Nc6 :: nc6-6',
   // Plans — existing claims that don't verify
-  'PLAN mp-frenchdefence-winawer line[0] move 5 :: mp-frenchdefence-winawer::0::4',
   'PLAN mp-italiangame-twoknights line[0] move 1 :: mp-italiangame-twoknights::0::0',
-  'PLAN mp-kings-gambit-open-f-file line[0] move 5 :: mp-kings-gambit-open-f-file::0::4',
-  'PLAN mp-viennagame-vs-nc6 line[0] move 7 :: mp-viennagame-vs-nc6::0::6',
   // Checker false-positive, NOT a content bug: the text says the knight is
   // "heading for g6 where it eyes f4 and h4" — from g6 a knight DOES attack f4
   // and h4 (the claim is about the destination square, which is correct). The
