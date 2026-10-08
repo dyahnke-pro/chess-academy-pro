@@ -2439,8 +2439,8 @@
   "id": "mp-budapestgambit-main",
   "openingId": "budapest-gambit",
   "criticalPositionFen": "rnbqkb1r/pppp1ppp/5n2/4p3/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
-  "title": "Budapest: Activity Around the e5-Knight",
-  "overview": "Out of the gambit Black has recouped the pawn and reached the position the Budapest is all about: a strong knight on e5, harmonious pieces, and the initiative. The plan is pure activity — develop the light bishop to f5, swing a rook to the e-file behind the e5-knight, and press White's slightly loose position. The surprise gambit has handed Black an easy, fighting game.",
+  "title": "Budapest: Win Back the e5-Pawn",
+  "overview": "White has just taken the gambit pawn on e5. Black hits it with …Ng4 and …Nc6, checks with …Bb4+ and adds …Qe7 as a third attacker against White's two defenders, so the pawn falls next. The engine calls it close to level.",
   "pawnBreaks": [
    {
     "move": "…Ngxe5 — regain the gambit pawn",
@@ -2461,9 +2461,8 @@
    }
   ],
   "strategicThemes": [
-   "The strong e5-knight",
-   "Active piece play",
-   "Pressing from a surprise gambit"
+   "Win back the e5-pawn",
+   "Active piece play"
   ],
   "endgameTransitions": [
    "The level material and active pieces give a comfortable endgame"
@@ -2587,8 +2586,8 @@
   "id": "mp-carokann-advance",
   "openingId": "caro-kann",
   "criticalPositionFen": "r2qk1nr/pp1n1ppp/2p1p3/b2pPb2/3P4/2P2N2/PP2BPPP/RNBQ1RK1 w kq - 3 8",
-  "title": "Caro Advance: Counterplay on d4 and the c-file",
-  "overview": "Black has reached the Caro Advance tabiya after …c5 and …cxd4 cxd4: the c-file is fully open and every black piece converges on White’s d4-pawn — the knight on c6, the queen on b6. White stands a shade better, but Black’s counterplay is concrete and well worth knowing: swarm d4 and contest the open c-file.",
+  "title": "Caro Advance: Undermine e5 with …f6",
+  "overview": "Black's dark bishop drops back to c7 to hit the e5-pawn, then …f6 attacks White's pawn chain from the side. After …fxe5 dxe5 Black castles with the f-file half-open for the rook. White stands a shade better; the engine calls it close to level.",
   "pawnBreaks": [
    {
     "move": "…f6 — the freeing break against the e5-wedge",
@@ -2600,7 +2599,7 @@
    {
     "piece": "Bishop",
     "route": "…Bc7 — reroute to the b8-h2 diagonal",
-    "explanation": "The bishop steps off a5 to its best diagonal, safe from a4-a5 and pointing at White’s king."
+    "explanation": "The bishop steps back to the b8-h2 diagonal, where it hits the e5-pawn."
    },
    {
     "piece": "Knight",
@@ -2609,9 +2608,9 @@
    }
   ],
   "strategicThemes": [
-   "Pressure the isolated d4-pawn",
-   "Own the open c-file",
-   "Concrete counterplay against White’s small pull"
+   "Undermine e5 with …f6",
+   "Reroute the dark bishop to c7",
+   "Use the half-open f-file"
   ],
   "endgameTransitions": [
    "Winning the d4-pawn steers toward an equal or better ending"
@@ -2632,8 +2631,8 @@
      "O-O"
     ],
     "annotations": [
-     "White grabs queenside space with a4, harassing the a5-bishop.",
-     "…Bc7 reroutes the bishop to the b8-h2 diagonal — safe from a4-a5 and eyeing White's kingside.",
+     "White grabs queenside space with a4.",
+     "…Bc7 reroutes the bishop to the b8-h2 diagonal, where it hits the e5-pawn.",
      "White develops the knight toward the f1-g3 regrouping.",
      "…f6! The thematic Advance break: Black strikes the e5-wedge, the pawn that cramps the whole position. Undermine the chain at its head and the game comes alive.",
      "White props up e5 with the rook.",
@@ -2641,7 +2640,7 @@
      "White reroutes the knight via f1.",
      "…fxe5 opens the f-file for the rook and dissolves White's cramping pawn.",
      "White recaptures, keeping a pawn on e5 for the moment.",
-     "…O-O tucks the king away. Black has freed the position with …f6, owns the f-file, and stands comfortably — the Advance's cramp is gone. Carlsen went on to outplay Giri from here."
+     "…O-O tucks the king away. Black has freed the position with …f6 and has the half-open f-file; the Advance's cramp is gone. Carlsen went on to outplay Giri from here."
     ],
     "arrows": [
      [],
@@ -6677,9 +6676,9 @@
  {
   "id": "mp-fourknightsgame-main",
   "openingId": "four-knights-game",
-  "title": "Spanish Four Knights: the Bishop Pair and the d4-d5 Space",
+  "title": "Spanish Four Knights: Reroute the Knight toward f5",
   "criticalPositionFen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
-  "overview": "The Metger middlegame: White owns the bishop pair after Bxc3 and the doubled c-pawns control extra central squares. The plan is to regroup the bishops, gain space with d4-d5, and slowly open the position where the two bishops outgun Black's bishop and knight.",
+  "overview": "In the symmetrical Four Knights both sides pin with the bishop and castle. White plays d3 and reroutes the c3-knight via e2 toward g3 and f5; Black copies with …Ne7. The engine gives White a slight edge.",
   "pawnBreaks": [
    {
     "move": "d3-d4 — the central break",
@@ -6700,9 +6699,8 @@
    }
   ],
   "strategicThemes": [
-   "Convert the bishop pair in the increasingly open position.",
-   "Gain space with d4-d5 and clamp Black's pieces.",
-   "Use the half-open b-file from the doubled c-pawns against the queenside."
+   "Reroute the c3-knight toward g3 and f5",
+   "Break with d4 later"
   ],
   "endgameTransitions": [
    "The two bishops and central space carry into a comfortable endgame edge."
@@ -6728,7 +6726,7 @@
      "d3 supports the centre and unblocks the c1-bishop, the quiet main line.",
      "…d6 mirrors again.",
      "Ne2! White breaks the symmetry first, rerouting the knight toward g3 and the f5-outpost — the key plan that gives White the initiative.",
-     "…Ne7 copies the idea, but White is a tempo ahead in the maneuvering race. The Ng3-f5 plan, the bishop pair, and the slight initiative give White the easier game — Yu Yangyi outplayed Mamedyarov from here."
+     "…Ne7 copies the idea, but White is a tempo ahead in the manoeuvring race. The Ng3-f5 plan gives White the slightly easier game — Yu Yangyi outplayed Mamedyarov from here."
     ],
     "arrows": [
      [],
@@ -6813,9 +6811,9 @@
  {
   "id": "mp-fourknightsgame-rubinstein",
   "openingId": "four-knights-game",
-  "title": "Rubinstein: the d4-Break that Unleashes the Bishops",
+  "title": "Rubinstein: Keep the Bishop, Take e5",
   "criticalPositionFen": "r1bqkb1r/pppp1ppp/5n2/1B2p3/3nP3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5",
-  "overview": "Having met the Rubinstein's …Nd4 with the calm Be2 and traded off Black's active b6-bishop, White holds the bishop pair in a sound position. The c3-pawn was played for one reason: to support the thematic d4-break that opens the centre and turns the two bishops loose.",
+  "overview": "Against the Rubinstein's …Nd4, White keeps the bishop with Ba4 and takes the e5-pawn. The knight drops back to d3, hitting the c5-bishop, and e5 chases the f6-knight back to e8. White is a pawn up; the engine calls it close to level.",
   "pawnBreaks": [
    {
     "move": "e4-e5 — the central wedge",
@@ -6836,9 +6834,9 @@
    }
   ],
   "strategicThemes": [
-   "Refuse provocation, keep the bishop pair.",
-   "Prepare and execute the d4-break to open the centre.",
-   "Let the two bishops dominate the resulting open lines."
+   "Keep the bishop with Ba4",
+   "Win the e5-pawn",
+   "Gain space with e5"
   ],
   "endgameTransitions": [
    "The bishop pair in an open position is a durable endgame trump."
@@ -6861,10 +6859,10 @@
      "Black develops the bishop actively to c5.",
      "Nxe5! White snatches the central pawn, accepting some structural risk for a clear extra pawn and the e5-wedge.",
      "Black castles, seeking development for the pawn.",
-     "White repositions the knight to d3, holding the extra material and shoring up the position.",
+     "White repositions the knight to d3, where it hits the c5-bishop and guards the extra pawn's squares.",
      "…Bb6 retreats the bishop to safety.",
      "e5! White expands, the central pawn cramping Black and gaining space for the pieces.",
-     "…Ne8 retreats the harassed knight. White is a clean pawn up with the e5-wedge and the more active game — Morozevich converted exactly this against Svidler."
+     "…Ne8 retreats the harassed knight. White is a pawn up with the e5-wedge, though the engine calls it close to level — Morozevich converted this against Svidler."
     ],
     "arrows": [
      [],
@@ -21034,7 +21032,7 @@
   "openingId": "qgd",
   "criticalPositionFen": "rnbqk2r/ppp1bppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQkq - 4 5",
   "title": "QGD: Blockading the Isolated d-Pawn",
-  "overview": "Out of the Orthodox freeing sequence Black has reached the ideal anti-IQP set-up: White is saddled with an isolated pawn on d4, and Black's job is the textbook two-step — first blockade the pawn with a knight on d5, then pile the heavy pieces onto the d-file until the weakness falls or White ties himself in knots defending it.",
+  "overview": "Black castles, asks the g5-bishop with …h6, and sets up the Tartakower with …b6 and …Bb7, putting the light bishop on the long diagonal. The …c5 break comes next. The engine calls it level.",
   "pawnBreaks": [
    {
     "move": "…c5 — the freeing break",
@@ -21055,9 +21053,9 @@
    }
   ],
   "strategicThemes": [
-   "Blockading the isolated d4-pawn",
-   "Piling up on the d-file",
-   "Trading into a better endgame"
+   "The Tartakower set-up with …b6 and …Bb7",
+   "Question the g5-bishop with …h6",
+   "Prepare …c5"
   ],
   "endgameTransitions": [
    "Every trade brings the isolated d4-pawn closer to falling in the endgame"
@@ -26121,26 +26119,25 @@
  {
   "id": "mp-scandinaviandefence-portuguese",
   "openingId": "scandinavian-defence",
-  "title": "Portuguese Scandinavian: Active Queen and the …e5 Break",
+  "title": "Portuguese Scandinavian: the Active Queen",
   "criticalPositionFen": "r3kb1r/ppp2ppp/4pn2/5q2/2P5/5P2/PP2Q1PP/RNBR2K1 w kq - 1 12",
-  "overview": "Where the opening leaves off — the Portuguese gambit has simplified into a balanced middlegame. Black’s queen is active on f5, the structure is sound, and White’s f3 has loosened the light squares. The plan is straightforward: finish developing, pin the c3-knight, and break in the centre with …e5 (or …c5), pressing the squares White weakened.",
+  "overview": "Black is a pawn up with an active queen. White's g4 chases it from f5; the queen checks on c5 and settles on c6, hitting the f3- and c4-pawns. The engine rates Black better.",
   "pawnBreaks": [],
   "pieceManeuvers": [
    {
     "piece": "Queen",
     "route": "…Qc5+",
-    "explanation": "The engine-backed continuation — Qc5+ is the strong move in this position, carrying out the plan above."
+    "explanation": "The queen steps out of the attack with check, hitting the c4-pawn."
    }
   ],
   "strategicThemes": [
-   "Black’s queen is active on f5 and the structure is sound — the position is equal, and Black completes development with tempo.",
-   "White’s f3 has weakened the light squares (e3, g3); Black’s pieces and the …e5/…c5 breaks press that soft complex.",
-   "A central majority and the active queen give Black comfortable, slightly easier play in a symmetrical-material middlegame."
+   "A pawn up with an active queen",
+   "White's g4 loosens the king"
   ],
   "endgameTransitions": [],
   "playableLines": [
    {
-    "title": "Pin, then break with …e5",
+    "title": "Portuguese Scandinavian: the Active Queen",
     "fen": "r3kb1r/ppp2ppp/4pn2/5q2/2P5/5P2/PP2Q1PP/RNBR2K1 w kq - 1 12",
     "moves": [
      "g4",
@@ -26149,10 +26146,10 @@
      "Qc6"
     ],
     "annotations": [
-     "g4 — White lunges to kick the queen, but every pawn push bleeds more light squares around his own king.",
+     "g4 — White lunges to kick the queen, but every pawn push loosens more squares around White's own king.",
      "…Qc5+ — the queen sidesteps with check, hitting the c4-pawn and the king at once.",
      "Be3 — White blocks the check, the bishop stepping in front of its own king.",
-     "…Qc6 — the queen regroups to c6, still gnawing at c4 and the airy squares near the white king."
+     "…Qc6 — the queen regroups to c6, hitting the f3- and c4-pawns."
     ],
     "arrows": [
      [],
@@ -26190,7 +26187,7 @@
      "g4 — White lunges, loosens",
      "…Qc5+ — check, hit c4",
      "Be3 — block the check",
-     "…Qc6 — gnaw the light squares"
+     "…Qc6 — hit f3 and c4"
     ],
     "sources": [
      "concept:pos-center",

@@ -68586,7 +68586,7 @@
       "cat": "plan",
       "id": "budapest-gambit",
       "color": "black",
-      "name": "budapest-gambit :: Budapest: Activity Around the e5-Knight",
+      "name": "budapest-gambit :: Budapest: Win Back the e5-Pawn",
       "startFen": "rnbqkb1r/pppp1ppp/5n2/4p3/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
       "moves": [
         "dxe5",
@@ -68609,7 +68609,7 @@
       "cat": "plan",
       "id": "caro-kann",
       "color": "black",
-      "name": "caro-kann :: Caro Advance: Counterplay on d4 and the c-file",
+      "name": "caro-kann :: Caro Advance: Undermine e5 with …f6",
       "startFen": "r2qk1nr/pp1n1ppp/2p1p3/b2pPb2/3P4/2P2N2/PP2BPPP/RNBQ1RK1 w kq - 3 8",
       "moves": [
         "a4",
@@ -69173,7 +69173,7 @@
       "cat": "plan",
       "id": "four-knights-game",
       "color": "white",
-      "name": "four-knights-game :: Spanish Four Knights: the Bishop Pair and the d4-d5 Space",
+      "name": "four-knights-game :: Spanish Four Knights: Reroute the Knight toward f5",
       "startFen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
       "moves": [
         "Bb5",
@@ -69196,7 +69196,7 @@
       "cat": "plan",
       "id": "four-knights-game",
       "color": "white",
-      "name": "four-knights-game :: Rubinstein: the d4-Break that Unleashes the Bishops",
+      "name": "four-knights-game :: Rubinstein: Keep the Bishop, Take e5",
       "startFen": "r1bqkb1r/pppp1ppp/5n2/1B2p3/3nP3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5",
       "moves": [
         "Ba4",
@@ -71980,7 +71980,7 @@
       "cat": "plan",
       "id": "scandinavian-defence",
       "color": "black",
-      "name": "scandinavian-defence :: Portuguese Scandinavian: Active Queen and the …e5 Break",
+      "name": "scandinavian-defence :: Portuguese Scandinavian: the Active Queen",
       "startFen": "r3kb1r/ppp2ppp/4pn2/5q2/2P5/5P2/PP2Q1PP/RNBR2K1 w kq - 1 12",
       "moves": [
         "g4",
