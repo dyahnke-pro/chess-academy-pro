@@ -85,7 +85,30 @@ let readerOverride: Reader | undefined;
 export function setChatTurnReaderForTests(reader: Reader | undefined): void { readerOverride = reader; }
 
 /** Test helper — forget every surface's conversation. */
-export function resetConversations(): void { conversations.clear(); }
+export function resetConversations(): void { conversations.clear(); lastLines.clear(); }
+
+/** The last line the coach proved on each surface — what "show me" / "play it
+ *  out" plays. Held where every answer leaves the door, so no surface has to
+ *  remember it (WO-CHAT-01). */
+const lastLines = new Map<CoachSurface, WalkableLine>();
+
+/** The line "show me" would play on this surface, or null. */
+export function lastLineFor(surface: CoachSurface): WalkableLine | null {
+  return lastLines.get(surface) ?? null;
+}
+
+function rememberLine(surface: CoachSurface, answer: Pick<CoachAnswer, 'lines'>): void {
+  const line = answer.lines?.[0];
+  if (line) lastLines.set(surface, line);
+}
+
+/** What "show me" answers: the line, or why there is none. */
+export function showLineAnswer(surface: CoachSurface): { text: string; line: WalkableLine | null } {
+  const line = lastLineFor(surface);
+  return line
+    ? { text: `Playing the line out on the board, from ${line.label}.`, line }
+    : { text: "There's no line to show yet — ask about a move or a threat first, then say \"show me\".", line: null };
+}
 
 export function conversationFor(surface: CoachSurface): ConversationState {
   return conversations.get(surface) ?? EMPTY_CONVERSATION;
@@ -304,7 +327,9 @@ export async function dispatchCoachTurn(
       servedParsed = true;
       void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent, servedParsed, answerText: text, outcome, startedAt })
         .catch(() => { /* telemetry never breaks a turn */ });
-      return { text, toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent, ...extra };
+      const out: CoachAnswer = { text, toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent, ...extra };
+      rememberLine(input.liveState.surface, out);
+      return out;
     };
     // A kind with no lane today answers with its own computed sentence.
     const turn = r?.validation?.ok ? r.validation.turn : null;
@@ -323,6 +348,13 @@ export async function dispatchCoachTurn(
     // me" → an opening called "me").
     if (turn?.steps && turn.steps.length > 0) {
       const surface = input.liveState.surface;
+      // "Show me" plays the line the coach last proved here — on the board,
+      // not in words (the surface walks `autoWalk`).
+      if (turn.steps.some((st) => st.action === 'show-line')) {
+        const shown = showLineAnswer(surface);
+        return serve(shown.text, shown.line ? 'request:show-line' : 'request:show-line:none', shown.line ? 'command' : 'asked-back',
+          shown.line ? { autoWalk: shown.line, lines: [shown.line] } : {});
+      }
       const conv = conversationFor(surface);
       const out = executeSteps(turn.steps, { hasBoard: !!input.liveState.fen, pending: conv.pending });
       if (out) {
@@ -386,6 +418,7 @@ export async function dispatchCoachTurn(
 
   let routedCommand = false;
   const finish = (raw: CoachAnswer): CoachAnswer => {
+    rememberLine(input.liveState.surface, raw);
     const answer = typeof raw.text === 'string' ? { ...raw, text: openSentence(raw.text) } : raw;
     if (read) {
       void settleChatTurnRead({

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo, type ReactNode } from 'react';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { WalkLineButton } from '../Board/WalkLineButton';
+import { BoardQuestionBox } from '../Board/BoardQuestionBox';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { autopilotRecapture, lastMoveAlong, positionAsk, positionPosed } from '../../services/moveInsight';
 import { spokenLineArrows } from '../../services/arrowEngine';
@@ -446,6 +447,22 @@ export function PuzzleBoard({
     });
   }, [terminal, puzzle.id, state, settings.voiceEnabled, solveGeometry, conceptExplanation]);
 
+  // A question asked once the puzzle is over holds the advance: the board
+  // waits on the solved position until the student taps Next, instead of
+  // moving on under their question (WO-CHAT-01 — the tactics screens answer).
+  const askHeldRef = useRef(false);
+  const [heldOutcome, setHeldOutcome] = useState<PuzzleOutcome | null>(null);
+  const [askHeld, setAskHeld] = useState(false);
+  useEffect(() => {
+    askHeldRef.current = false;
+    setAskHeld(false);
+    setHeldOutcome(null);
+  }, [puzzle.id]);
+  const holdForQuestion = useCallback((): void => {
+    askHeldRef.current = true;
+    setAskHeld(true);
+  }, []);
+
   // Complete the puzzle with outcome metadata
   const completePuzzle = useCallback((correct: boolean): void => {
     setTerminalId(puzzle.id); // resolved — teach the concept (render + speak below)
@@ -478,14 +495,16 @@ export function PuzzleBoard({
         void logPuzzleMisconception({ puzzleId: puzzle.id, themes: puzzle.themes, fen: solveFen, bestSan: solverFirstSan });
       }
     }
-    onComplete({
+    const outcome: PuzzleOutcome = {
       correct,
       usedHint: hintUsedRef.current,
       hadRetry: hasMadeMistakeRef.current,
       showedSolution: showedSolutionRef.current,
       cleanMoves: cleanMovesRef.current,
       solveTimeMs: Date.now() - solveStartRef.current,
-    });
+    };
+    if (askHeldRef.current) setHeldOutcome(outcome);
+    else onComplete(outcome);
   }, [onComplete, tacticType, subtitle, puzzle.id, puzzle.fen, puzzle.themes, puzzle.rating, surface, meter, solverFirstSan]);
 
   const handleMove = useCallback((move: MoveResult): void => {
@@ -872,6 +891,29 @@ export function PuzzleBoard({
         <p className="text-xs text-amber-500" data-testid="hint-nudge">
           {hintState.nudgeText}
         </p>
+      )}
+
+      {(state === 'correct' || terminal) && (
+        <div className="w-full max-w-md flex flex-col gap-2" onFocusCapture={holdForQuestion} data-testid="puzzle-after-solve">
+          <BoardQuestionBox
+            fen={solverFen}
+            studentColor={userColor}
+            route="/tactics"
+            onWalkLine={lineWalk.walk}
+            testIdPrefix="puzzle-ask"
+            placeholder="Why does it work? What if they play …?"
+          />
+          {askHeld && heldOutcome && (
+            <button
+              type="button"
+              onClick={() => { const o = heldOutcome; setHeldOutcome(null); askHeldRef.current = false; onComplete(o); }}
+              className="self-end px-4 py-2 rounded-lg bg-theme-accent text-white text-sm"
+              data-testid="puzzle-next-after-ask"
+            >
+              Next puzzle
+            </button>
+          )}
+        </div>
       )}
 
       {/* Status message — only show for correct (incorrect uses flash-only feedback) */}

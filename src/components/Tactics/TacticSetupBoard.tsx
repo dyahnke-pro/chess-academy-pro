@@ -3,6 +3,7 @@ import { positionAsk, positionPosed, pvSans } from '../../services/moveInsight';
 import { walkableLine } from '../../services/proof';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { WalkLineButton } from '../Board/WalkLineButton';
+import { BoardQuestionBox } from '../Board/BoardQuestionBox';
 import { Chess } from 'chess.js';
 import { ChessBoard } from '../Board/ChessBoard';
 import { HintButton } from '../Coach/HintButton';
@@ -285,6 +286,23 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
     return () => clearTimeout(timer);
   }, [boardState, isPlayerTurn, moveIndex, line]);
 
+  // The puzzle is over: the trainer moves on after a beat, unless the student
+  // starts a question — then it holds until they tap Next (a question box
+  // that vanishes two seconds after it appears answers nothing).
+  const [ended, setEnded] = useState(false);
+  const [held, setHeld] = useState(false);
+  const heldRef = useRef(false);
+  const resultRef = useRef<boolean | null>(null);
+  const endPuzzle = useCallback((result: boolean, ms: number): void => {
+    resultRef.current = result;
+    setEnded(true);
+    setTimeout(() => { if (!heldRef.current) onComplete(result); }, ms);
+  }, [onComplete]);
+  const holdForQuestion = useCallback((): void => {
+    heldRef.current = true;
+    setHeld(true);
+  }, []);
+
   const finishSolved = useCallback((): void => {
     if (hasCompleted.current) return;
     hasCompleted.current = true;
@@ -304,8 +322,8 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
       context: 'setup',
     });
     const counted = wrongAttemptsRef.current < MAX_WRONG_ATTEMPTS;
-    setTimeout(() => onComplete(counted), 1400);
-  }, [puzzle.tacticType, onComplete, payoffGeometry]);
+    endPuzzle(counted, 4000);
+  }, [puzzle.tacticType, endPuzzle, payoffGeometry]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (boardState !== 'thinking' || !isPlayerTurn) return;
@@ -444,7 +462,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
         setMessage(msg);
         void voiceService.speak(msg);
         recordTacticOutcome({ tacticType: puzzle.tacticType, found: false, wasCoached: true, context: 'setup' });
-        setTimeout(() => onComplete(false), 2200);
+        endPuzzle(false, 4500);
         return;
       }
       const p = parseUciMove(line[i]);
@@ -457,7 +475,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
     };
     setMessage('Here is the line');
     step();
-  }, [boardState, moveIndex, line, puzzle.tacticType, payoffGeometry, onComplete, clearWrongArrows, readStop]);
+  }, [boardState, moveIndex, line, puzzle.tacticType, payoffGeometry, endPuzzle, clearWrongArrows, readStop]);
 
   const statusColor = boardState === 'solved'
     ? 'var(--color-success)'
@@ -542,6 +560,30 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
         <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge" data-tier={hintTier}>
           {hintTier >= 3 ? hintState.nudgeText : ladderText}
         </p>
+      )}
+
+      {ended && (
+        <div className="px-1 flex flex-col gap-2" onFocusCapture={holdForQuestion} data-testid="setup-after-puzzle">
+          <BoardQuestionBox
+            fen={puzzle.setupFen}
+            studentColor={orientation}
+            route="/tactics/setup"
+            onWalkLine={lineWalk.walk}
+            engineBestMoveUci={line[0]}
+            testIdPrefix="setup-chat"
+            placeholder="Why does it work? What if they play …?"
+          />
+          {held && (
+            <button
+              type="button"
+              onClick={() => { if (resultRef.current !== null) onComplete(resultRef.current); }}
+              className="self-end px-4 py-2 rounded-lg bg-theme-accent text-white text-sm"
+              data-testid="setup-next-puzzle"
+            >
+              Next puzzle
+            </button>
+          )}
+        </div>
       )}
 
       {/* Move indicator */}

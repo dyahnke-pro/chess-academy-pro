@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**467 lines · 15 exports · 18 importers · 12 tests · 2 audits**
+**500 lines · 17 exports · 20 importers · 15 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,17 +18,19 @@
 - `src/coach/dispatchCoachTurn.noBoard.test.ts`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 - `src/coach/dispatchCoachTurn.positional.test.ts`
+- `src/coach/dispatchCoachTurn.showLine.test.ts`
 - `src/coach/dispatchCoachTurn.test.ts`
 - `src/coach/requestExecutor.test.ts`
+- `src/components/Board/BoardQuestionBox.tsx`
 - `src/components/Board/VoiceChatMic.tsx`
 - `src/components/Coach/CoachAnalysePage.tsx`
 - `src/components/Coach/CoachChatPage.tsx`
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Coach/ExplainPositionSessionView.tsx`
+- `src/components/Coach/GameChatPanel.test.tsx`
 - `src/components/Coach/GameChatPanel.tsx`
 - `src/components/Openings/MasterclassCoachChat.tsx`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx`
 - `src/components/Search/SmartSearchBar.tsx`
 
 ## Exports and every call site
@@ -38,16 +40,16 @@
 
 ### `setServeParsedRoute` (function) — 6 call sites
 - `src/coach/dispatchCoachTurn.test.ts:95`
-- `src/coach/dispatchCoachTurn.test.ts:175`
-- `src/coach/dispatchCoachTurn.test.ts:184`
-- `src/coach/dispatchCoachTurn.test.ts:206`
+- `src/coach/dispatchCoachTurn.test.ts:177`
+- `src/coach/dispatchCoachTurn.test.ts:186`
 - `src/coach/dispatchCoachTurn.test.ts:208`
-- `src/coach/dispatchCoachTurn.test.ts:216`
+- `src/coach/dispatchCoachTurn.test.ts:210`
+- `src/coach/dispatchCoachTurn.test.ts:218`
 
 ### `isServeParsedRouteOn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setChatTurnReaderForTests` (function) — 26 call sites
+### `setChatTurnReaderForTests` (function) — 32 call sites
 - `src/coach/chatTurnRow.outcome.test.ts:28`
 - `src/coach/chatTurnRow.outcome.test.ts:37`
 - `src/coach/coachService.askReader.integration.test.ts:31`
@@ -60,31 +62,44 @@
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:23`
 - `src/coach/dispatchCoachTurn.positional.test.ts:20`
 - `src/coach/dispatchCoachTurn.positional.test.ts:23`
-- `src/coach/dispatchCoachTurn.test.ts:101`
-- `src/coach/dispatchCoachTurn.test.ts:113`
-- `src/coach/dispatchCoachTurn.test.ts:120`
-- `src/coach/dispatchCoachTurn.test.ts:128`
-- `src/coach/dispatchCoachTurn.test.ts:136`
-- `src/coach/dispatchCoachTurn.test.ts:145`
-- `src/coach/dispatchCoachTurn.test.ts:155`
-- `src/coach/dispatchCoachTurn.test.ts:162`
-- `src/coach/dispatchCoachTurn.test.ts:169`
-- `src/coach/dispatchCoachTurn.test.ts:176`
-- `src/coach/dispatchCoachTurn.test.ts:186`
-- `src/coach/dispatchCoachTurn.test.ts:202`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:20`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:23`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:45`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:47`
+- `src/coach/dispatchCoachTurn.test.ts:103`
+- `src/coach/dispatchCoachTurn.test.ts:115`
+- `src/coach/dispatchCoachTurn.test.ts:122`
+- `src/coach/dispatchCoachTurn.test.ts:130`
+- `src/coach/dispatchCoachTurn.test.ts:138`
+- `src/coach/dispatchCoachTurn.test.ts:147`
+- `src/coach/dispatchCoachTurn.test.ts:157`
+- `src/coach/dispatchCoachTurn.test.ts:164`
+- `src/coach/dispatchCoachTurn.test.ts:171`
+- `src/coach/dispatchCoachTurn.test.ts:178`
+- `src/coach/dispatchCoachTurn.test.ts:188`
+- `src/coach/dispatchCoachTurn.test.ts:204`
 - `src/coach/requestExecutor.test.ts:56`
 - `src/coach/requestExecutor.test.ts:59`
+- `src/components/Coach/GameChatPanel.test.tsx:287`
+- `src/components/Coach/GameChatPanel.test.tsx:295`
 
-### `resetConversations` (function) — 6 call sites
+### `resetConversations` (function) — 7 call sites
 - `src/coach/dispatchCoachTurn.noBoard.test.ts:14`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:21`
 - `src/coach/dispatchCoachTurn.positional.test.ts:21`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:21`
 - `src/coach/dispatchCoachTurn.test.ts:94`
-- `src/coach/dispatchCoachTurn.test.ts:199`
+- `src/coach/dispatchCoachTurn.test.ts:201`
 - `src/coach/requestExecutor.test.ts:53`
 
+### `lastLineFor` (function) — 1 call site
+- `src/coach/dispatchCoachTurn.showLine.test.ts:50`
+
+### `showLineAnswer` (function) — 1 call site
+- `src/components/Coach/CoachTeachPage.tsx:3323`
+
 ### `conversationFor` (function) — 3 call sites
-- `src/coach/dispatchCoachTurn.test.ts:165`
+- `src/coach/dispatchCoachTurn.test.ts:167`
 - `src/coach/requestExecutor.test.ts:88`
 - `src/components/Coach/CoachTeachPage.tsx:3289`
 
@@ -101,53 +116,55 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `setPendingOffer` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3329`
-- `src/components/Coach/CoachTeachPage.tsx:11894`
-- `src/components/Coach/CoachTeachPage.tsx:13938`
+- `src/components/Coach/CoachTeachPage.tsx:3337`
+- `src/components/Coach/CoachTeachPage.tsx:11904`
+- `src/components/Coach/CoachTeachPage.tsx:13948`
 
-### `openTurnRead` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3395`
+### `openTurnRead` (function) — 2 call sites
+- `src/components/Coach/CoachTeachPage.tsx:3403`
+- `src/components/Coach/GameChatPanel.tsx:474`
 
 ### `isComputedAnswer` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7469`
+- `src/components/Coach/CoachTeachPage.tsx:7477`
 
-### `dispatchCoachTurn` (function) — 38 call sites
+### `dispatchCoachTurn` (function) — 39 call sites
 - `src/coach/chatTurnRow.outcome.test.ts:39`
 - `src/coach/coachService.askReader.integration.test.ts:32`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:35`
 - `src/coach/dispatchCoachTurn.noBoard.test.ts:20`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:25`
 - `src/coach/dispatchCoachTurn.positional.test.ts:25`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:25`
 - `src/coach/dispatchCoachTurn.test.ts:33`
 - `src/coach/dispatchCoachTurn.test.ts:43`
 - `src/coach/dispatchCoachTurn.test.ts:52`
 - `src/coach/dispatchCoachTurn.test.ts:59`
 - `src/coach/dispatchCoachTurn.test.ts:67`
-- `src/coach/dispatchCoachTurn.test.ts:102`
-- `src/coach/dispatchCoachTurn.test.ts:114`
-- `src/coach/dispatchCoachTurn.test.ts:121`
-- `src/coach/dispatchCoachTurn.test.ts:130`
-- `src/coach/dispatchCoachTurn.test.ts:137`
-- `src/coach/dispatchCoachTurn.test.ts:146`
-- `src/coach/dispatchCoachTurn.test.ts:147`
-- `src/coach/dispatchCoachTurn.test.ts:156`
-- `src/coach/dispatchCoachTurn.test.ts:163`
-- `src/coach/dispatchCoachTurn.test.ts:170`
-- `src/coach/dispatchCoachTurn.test.ts:177`
-- `src/coach/dispatchCoachTurn.test.ts:187`
-- `src/coach/dispatchCoachTurn.test.ts:207`
-- `src/coach/dispatchCoachTurn.test.ts:217`
+- `src/coach/dispatchCoachTurn.test.ts:104`
+- `src/coach/dispatchCoachTurn.test.ts:116`
+- `src/coach/dispatchCoachTurn.test.ts:123`
+- `src/coach/dispatchCoachTurn.test.ts:132`
+- `src/coach/dispatchCoachTurn.test.ts:139`
+- `src/coach/dispatchCoachTurn.test.ts:148`
+- `src/coach/dispatchCoachTurn.test.ts:149`
+- `src/coach/dispatchCoachTurn.test.ts:158`
+- `src/coach/dispatchCoachTurn.test.ts:165`
+- `src/coach/dispatchCoachTurn.test.ts:172`
+- `src/coach/dispatchCoachTurn.test.ts:179`
+- `src/coach/dispatchCoachTurn.test.ts:189`
+- `src/coach/dispatchCoachTurn.test.ts:209`
+- `src/coach/dispatchCoachTurn.test.ts:219`
 - `src/coach/requestExecutor.test.ts:60`
+- `src/components/Board/BoardQuestionBox.tsx:67`
 - `src/components/Board/VoiceChatMic.tsx:484`
-- `src/components/Coach/CoachAnalysePage.tsx:227`
+- `src/components/Coach/CoachAnalysePage.tsx:237`
 - `src/components/Coach/CoachChatPage.tsx:284`
-- `src/components/Coach/CoachGameReview.tsx:3028`
-- `src/components/Coach/ExplainPositionSessionView.tsx:234`
-- `src/components/Coach/GameChatPanel.tsx:975`
-- `src/components/Coach/GameChatPanel.tsx:1346`
-- `src/components/Coach/GameChatPanel.tsx:1555`
-- `src/components/Openings/MasterclassCoachChat.tsx:81`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:733`
+- `src/components/Coach/CoachGameReview.tsx:3033`
+- `src/components/Coach/ExplainPositionSessionView.tsx:241`
+- `src/components/Coach/GameChatPanel.tsx:1010`
+- `src/components/Coach/GameChatPanel.tsx:1388`
+- `src/components/Coach/GameChatPanel.tsx:1601`
+- `src/components/Openings/MasterclassCoachChat.tsx:88`
 - `src/components/Search/SmartSearchBar.tsx:335`
 - `src/test/kidIsolation.gate.test.ts:131`
 
@@ -162,11 +179,14 @@
 - `src/coach/dispatchCoachTurn.noBoard.test.ts`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 - `src/coach/dispatchCoachTurn.positional.test.ts`
+- `src/coach/dispatchCoachTurn.showLine.test.ts`
 - `src/coach/dispatchCoachTurn.test.ts`
 - `src/coach/requestExecutor.test.ts`
+- `src/components/Board/BoardQuestionBox.test.tsx`
 - `src/components/Coach/CoachAnalysePage.test.tsx`
 - `src/components/Coach/ExplainPositionSessionView.test.tsx`
 - `src/components/Coach/GameChatPanel.surface.test.tsx`
+- `src/components/Coach/GameChatPanel.test.tsx`
 - `src/components/Openings/MasterclassCoachChat.boardaware.test.tsx`
 
 ## Audits that reach it

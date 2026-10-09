@@ -244,7 +244,7 @@ describe('GameChatPanel', () => {
 
     const input = screen.getByTestId('chat-text-input');
     act(() => {
-      fireEvent.change(input, { target: { value: 'Show me' } });
+      fireEvent.change(input, { target: { value: 'What should I play?' } });
     });
     act(() => {
       fireEvent.click(screen.getByTestId('chat-send-btn'));

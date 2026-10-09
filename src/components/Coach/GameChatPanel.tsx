@@ -1299,6 +1299,8 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             },
           };
           setMessages((prev) => [...prev, assistantMsg]);
+          // "Show me": play the line the coach just proved, now.
+          if (answer.autoWalk) walkLine(answer.autoWalk);
           // WO-BRAIN-04: thread the coach reply into conversation
           // history so future envelopes carry the back-and-forth.
           useCoachMemoryStore.getState().appendConversationMessage({
@@ -1586,6 +1588,8 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             : {}),
         };
         setMessages((prev) => [...prev, assistantMsg]);
+          // "Show me": play the line the coach just proved, now.
+          if (answer.autoWalk) walkLine(answer.autoWalk);
         useCoachMemoryStore.getState().appendConversationMessage({
           surface: 'chat-home',
           role: 'coach',

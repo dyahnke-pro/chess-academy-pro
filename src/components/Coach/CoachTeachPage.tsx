@@ -274,7 +274,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { getFavoriteOpenings, getOpeningById, searchOpenings } from '../../services/openingService';
 import type { OpeningRecord, OpeningVariation } from '../../types';
 import type { LiveState, TacticsLiveContext, AskOrigin } from '../../coach/types';
-import { dispatchCoachTurn, openTurnRead, isComputedAnswer, conversationFor, setPendingOffer, type TurnReadHandle } from '../../coach/dispatchCoachTurn';
+import { dispatchCoachTurn, openTurnRead, isComputedAnswer, conversationFor, setPendingOffer, showLineAnswer, type TurnReadHandle } from '../../coach/dispatchCoachTurn';
 import type { ResolvedStep } from '../../coach/requestSteps';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
@@ -3317,6 +3317,14 @@ export function CoachTeachPage(): JSX.Element {
         case 'teach-opening': if (st.openingName) teach = st.openingName; break;
         case 'training-plan': void navigate('/coach/plan'); lines.push('Opening your training plan.'); break;
         case 'review-game': void navigate('/coach/review'); lines.push('Opening your games for review.'); break;
+        case 'show-line': {
+          // "Show me" plays the line the coach last proved here (the door
+          // holds it), the same walk the button under the answer does.
+          const shown = showLineAnswer('teach');
+          if (shown.line) walkLine(shown.line);
+          lines.push(shown.text);
+          break;
+        }
         case 'import-games':
           lines.push(st.account
             ? `Is ${st.account} your Chess.com or Lichess username? Import those games to find the patterns costing you points.`
@@ -3342,7 +3350,7 @@ export function CoachTeachPage(): JSX.Element {
       { id: uid('req-c'), role: 'assistant', content: reply, timestamp: Date.now(), ...(offer ? { actionOffer: offer } : {}) }]);
     void speakComputed(reply, { forced: true, intent: 'learn' }).catch(() => undefined);
     return { intent, text: reply };
-  }, [handleResetBoard, handleTakeBack, takeSeat, navigate]);
+  }, [handleResetBoard, handleTakeBack, takeSeat, navigate, walkLine]);
 
   const handleSubmit = useCallback(async (
     text: string,
@@ -7702,6 +7710,8 @@ export function CoachTeachPage(): JSX.Element {
             : {}),
           ...(result.lines && result.lines.length > 0 ? { lines: result.lines } : {}),
         }]);
+        // "Show me" answered at the door: play the line now.
+        if (result.autoWalk) walkLine(result.autoWalk);
         useCoachMemoryStore.getState().appendConversationMessage({
           surface: 'chat-teach',
           role: 'coach',

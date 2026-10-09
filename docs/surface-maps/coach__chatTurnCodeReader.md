@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**539 lines · 7 exports · 13 importers · 8 tests · 45 audits**
+**546 lines · 7 exports · 14 importers · 9 tests · 46 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,7 @@
 - `src/coach/developNext.test.ts`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 - `src/coach/dispatchCoachTurn.positional.test.ts`
+- `src/coach/dispatchCoachTurn.showLine.test.ts`
 - `src/coach/handWalk1009.test.ts`
 - `src/coach/questionIntents.ts`
 - `src/services/coachApi.ts`
@@ -32,7 +33,7 @@
 
 ### `Ask` (type) — 2 call sites
 - `src/components/Coach/CoachGamePage.tsx:5428`
-- `src/components/Coach/CoachGameReview.tsx:3852`
+- `src/components/Coach/CoachGameReview.tsx:3853`
 
 ### `Action` (type) — 1 call site
 - `scripts/audit-punish-gems-loop.mjs:821`
@@ -54,7 +55,7 @@
 ### `legalForOpponent` (function) — 1 call site
 - `src/coach/coachService.ts:1596`
 
-### `readTurnInCode` (function) — 40 call sites
+### `readTurnInCode` (function) — 42 call sites
 - `src/coach/chatTurnAnswers.test.ts:82`
 - `src/coach/chatTurnAnswers.test.ts:103`
 - `src/coach/chatTurnCodeReader.test.ts:10`
@@ -66,6 +67,8 @@
 - `src/coach/dispatchCoachTurn.positional.test.ts:47`
 - `src/coach/dispatchCoachTurn.positional.test.ts:48`
 - `src/coach/dispatchCoachTurn.positional.test.ts:49`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:32`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:36`
 - `src/coach/handWalk1009.test.ts:25`
 - `src/coach/handWalk1009.test.ts:30`
 - `src/coach/handWalk1009.test.ts:40`
@@ -103,6 +106,7 @@
 - `src/coach/developNext.test.ts`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 - `src/coach/dispatchCoachTurn.positional.test.ts`
+- `src/coach/dispatchCoachTurn.showLine.test.ts`
 - `src/coach/handWalk1009.test.ts`
 - `src/services/openingIdea.test.ts`
 - `src/zzp3.test.ts`
@@ -113,6 +117,7 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
+- `scripts/audit-chat-hard-prod.mjs`
 - `scripts/audit-chat-replay-prod.mjs`
 - `scripts/audit-chat-surfaces-prod.mjs`
 - `scripts/audit-coach-all-questions-prod.mjs`

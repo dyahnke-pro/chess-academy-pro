@@ -960,6 +960,10 @@ export interface CoachAnswer {
   /** Lines the grounded answer calculated — the surface draws them as arrows
    *  while it speaks and walks them on a button (WO-DANYA-01 C). */
   lines?: import('../types').WalkableLine[];
+  /** A line the surface should PLAY OUT now, unasked for by a tap — the
+   *  student said "show me" / "play it out" about the line the coach just
+   *  proved. Every surface with a board walks it (WO-CHAT-01). */
+  autoWalk?: import('../types').WalkableLine;
   /** The grounded lane that VOICED this answer (the `intent` its facts went
    *  through `voiceFacts` with), or absent when no grounded lane spoke. The
    *  ONE-CHAT shadow compares the parsed reading against it. */

@@ -266,6 +266,7 @@ export function CoachAnalysePage(): JSX.Element {
     // An answer the door computed does not stream: show it whole.
     if (finalText && !response) show(finalText);
     setAnswerLine(result.lines?.[0] ?? null);
+    if (result.autoWalk) lineWalk.walk(result.autoWalk);
     if (!finalText) {
       void logAppAudit({
         kind: 'llm-error',

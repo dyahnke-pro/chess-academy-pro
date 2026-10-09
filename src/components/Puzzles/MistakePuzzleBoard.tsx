@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { WalkLineButton } from '../Board/WalkLineButton';
+import { BoardQuestionBox } from '../Board/BoardQuestionBox';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { positionAsk, positionPosed } from '../../services/moveInsight';
 import { spokenLineArrows } from '../../services/arrowEngine';
@@ -18,14 +19,12 @@ import { useStudentRecord } from '../../hooks/useStudentRecord';
 import type { MethodHabit } from '../../services/methodBeat';
 import { voiceService } from '../../services/voiceService';
 import { explainPuzzleMoveGrounded } from '../../services/coachApi';
-import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
-import type { LiveState } from '../../coach/types';
 import { getCoachMove, resolveConfig } from '../../services/coachPlaySession';
 import { opponentStrength, studentPlayingRating } from '../../services/engineStrength';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { getPieceNameOnSquare } from '../../utils/puzzleHints';
-import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen, Play, HelpCircle, Eye, EyeOff, Target, ChevronRight, Send, MessageCircle } from 'lucide-react';
+import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen, Play, HelpCircle, Eye, EyeOff, Target, ChevronRight } from 'lucide-react';
 import { ShowMeButton } from '../Coach/ShowMeButton';
 import { useStruggleDetection } from '../../hooks/useStruggleDetection';
 import { detectTacticType } from '../../services/missedTacticService';
@@ -269,10 +268,6 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   // Lets the student ask follow-up questions about the position without
   // leaving the puzzle. David's directive 2026-05-19: "maybe add a chat
   // bar to talk to coach! see, now we are creating!"
-  const [chatInput, setChatInput] = useState('');
-  const [chatLoading, setChatLoading] = useState(false);
-  const [chatReply, setChatReply] = useState<string>('');
-  const [chatLine, setChatLine] = useState<WalkableLine | null>(null);
 
   // The tactic type for coaching — the RECORD's tag first (P4b: the persisted
   // tag IS the weakness bucket this puzzle lives in, so the coaching must name
@@ -698,68 +693,15 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     if (teach.currentText) setSubtitle(teach.currentText);
   }, [teach.currentText]);
 
-  // Ask Coach — chat handler for the post-solve chat bar. Sends the
-  // student's question + position context to the LLM, displays the
-  // reply inline + speaks it.
-  const handleAskCoach = useCallback(async (): Promise<void> => {
-    const question = chatInput.trim();
-    if (!question || chatLoading) return;
-    setChatLoading(true);
-    setChatReply('');
-    setChatLine(null);
-    voiceService.stop();
-    try {
-      // The student's question runs through the FULL grounded coach spine over
-      // the puzzle position (David 2026-09-06: coach facts must persist on EVERY
-      // tab, tactics included). So "is this sac sound?" / "do I have an attack?"
-      // get the real board answer here, not just the puzzle's best-move readout.
-      // The puzzle solution IS the engine best move, so thread it as the engine
-      // read; the student is the side to move. Everything stays G0 — the spine
-      // computes the facts and voiceFacts phrases them.
-      const stm: 'white' | 'black' = puzzle.fen.split(' ')[1] === 'b' ? 'black' : 'white';
-      const liveState: LiveState = {
-        surface: 'standalone-chat',
-        fen: puzzle.fen,
-        engineBestMoveUci: puzzle.bestMove,
-        whoseTurn: stm,
-        studentColor: stm,
-        currentRoute: '/tactics',
-        userJustDid: question,
-      };
-      let reply = '';
-      try {
-        // ONE COACH: the student's own words go through the same door as every
-        // other screen — the same reading, requests, language and proofs.
-        const answer = await dispatchCoachTurn(
-          { surface: 'standalone-chat', ask: question, liveState },
-          { maxToolRoundTrips: 1 },
-        );
-        reply = (answer.text ?? '').replace(/\s*\[BOARD:[^\]]*\]/g, '').trim();
-        // The proof the answer gave is walkable under the reply.
-        setChatLine(answer.lines?.[0] ?? null);
-      } catch {
-        reply = '';
-      }
-      // Fall back to the puzzle's best-move explanation when the spine has
-      // nothing to say (offline / empty), so the chat never dead-ends.
-      if (!reply) {
-        reply = await explainPuzzleMoveGrounded({
-          fen: puzzle.fen,
-          bestMoveUci: puzzle.bestMove,
-          bestMoveSan: puzzle.bestMoveSan,
-          playedSan: puzzle.playerMoveSan,
-          studentMessage: question,
-        });
-      }
-      setChatReply(reply);
-      void voiceService.speakGrounded(reply, puzzle.fen);
-      setChatInput('');
-    } catch {
-      setChatReply('Coach is unavailable right now — try again in a moment.');
-    } finally {
-      setChatLoading(false);
-    }
-  }, [chatInput, chatLoading, puzzle]);
+  // The post-solve question box's fallback: the puzzle's own best-move read,
+  // so a question never dead-ends when the coach has nothing.
+  const explainFallback = useCallback((question: string): Promise<string> => explainPuzzleMoveGrounded({
+    fen: puzzle.fen,
+    bestMoveUci: puzzle.bestMove,
+    bestMoveSan: puzzle.bestMoveSan,
+    playedSan: puzzle.playerMoveSan,
+    studentMessage: question,
+  }), [puzzle]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing') return;
@@ -1308,52 +1250,17 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
           {/* Coach chat — ask follow-up questions about the position
               without leaving the puzzle. Sends FEN + best move + tactic
               type as context. David's directive 2026-05-19. */}
-          <div className="flex flex-col gap-1.5" data-testid="puzzle-coach-chat">
-            <label htmlFor="puzzle-chat-input" className="text-xs text-theme-text-muted flex items-center gap-1">
-              <MessageCircle size={12} />
-              Ask the coach
-            </label>
-            <div className="flex items-stretch gap-2">
-              <input
-                id="puzzle-chat-input"
-                type="text"
-                value={chatInput}
-                onChange={(e) => setChatInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !chatLoading && chatInput.trim()) {
-                    e.preventDefault();
-                    void handleAskCoach();
-                  }
-                }}
-                placeholder="Why did this work? What about ...?"
-                disabled={chatLoading}
-                className="flex-1 px-3 py-2 rounded-lg bg-theme-surface text-sm text-theme-text placeholder:text-theme-text-muted border border-theme-border focus:outline-none focus:border-theme-accent disabled:opacity-50"
-                data-testid="puzzle-chat-input"
-              />
-              <button
-                type="button"
-                onClick={() => void handleAskCoach()}
-                disabled={chatLoading || !chatInput.trim()}
-                className="px-3 rounded-lg bg-theme-accent text-white disabled:opacity-40 hover:opacity-90 transition-opacity"
-                data-testid="puzzle-chat-send"
-                aria-label="Send question to coach"
-              >
-                <Send size={16} />
-              </button>
-            </div>
-            {chatLoading && (
-              <p className="text-xs text-theme-text-muted italic" data-testid="puzzle-chat-loading">
-                Coach is thinking…
-              </p>
-            )}
-            {chatReply && !chatLoading && (
-              <p className="text-sm text-theme-text bg-theme-accent/5 border border-theme-accent/30 rounded-lg p-3 mt-1" data-testid="puzzle-chat-reply">
-                {chatReply}
-              </p>
-            )}
-            {chatLine && !chatLoading && (
-              <WalkLineButton line={chatLine} onWalk={lineWalk.walk} testId="puzzle-chat-walk-line-btn" />
-            )}
+          <div data-testid="puzzle-coach-chat">
+            <BoardQuestionBox
+              fen={puzzle.fen}
+              studentColor={puzzle.fen.split(' ')[1] === 'b' ? 'black' : 'white'}
+              route="/tactics"
+              onWalkLine={lineWalk.walk}
+              engineBestMoveUci={puzzle.bestMove}
+              fallback={explainFallback}
+              testIdPrefix="puzzle-chat"
+              placeholder="Why did this work? What about ...?"
+            />
           </div>
 
           {/* Next puzzle — manual advance. No auto-timeout: student

@@ -102,6 +102,7 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
           // The answer is spine-grounded (dispatchCoachTurn → coachService.ask);
           // the post-hoc strip is DELETED (David 2026-07-09 — "finish ripping").
           const grounded = answer.text;
+          if (answer.autoWalk) lineWalk.walk(answer.autoWalk);
           useCoachMemoryStore.getState().appendConversationMessage({ surface: 'chat-home', role: 'coach', text: grounded, trigger: null });
           setMessages((prev) => [...prev, {
             id: `a-${Date.now()}`,

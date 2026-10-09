@@ -20,7 +20,7 @@ import { resolveOpeningEntry } from '../services/openingDetectionService';
  *  right today); these are the requests the walk saw fail. */
 export const REQUEST_ACTIONS = [
   'teach-opening', 'play-game', 'reset-board', 'take-back', 'flip-board',
-  'training-plan', 'import-games', 'review-game', 'start-now',
+  'training-plan', 'import-games', 'review-game', 'start-now', 'show-line',
 ] as const;
 export type RequestAction = typeof REQUEST_ACTIONS[number];
 
@@ -36,6 +36,7 @@ export const REQUEST_ACTION_GLOSS: Record<RequestAction, string> = {
   'import-games': 'import their games, or they gave a chess.com / lichess username (put it in `account`)',
   'review-game': 'review / go over a game they played',
   'start-now': 'start what was just offered ("go ahead", "let\'s go", "can I start now?")',
+  'show-line': 'play out on the board the line the coach just gave ("show me", "play it out", "walk me through it")',
 };
 
 export interface RequestStep {

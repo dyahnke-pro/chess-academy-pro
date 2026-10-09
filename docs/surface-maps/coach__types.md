@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**970 lines · 32 exports · 939 importers · 221 tests · 39 audits**
+**974 lines · 32 exports · 940 importers · 221 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
@@ -89,6 +89,7 @@
 - `src/components/Academy/CourseTrainerPage.tsx`
 - `src/components/Analysis/OpeningExplorerPanel.tsx`
 - `src/components/Board/BoardPageLayout.tsx`
+- `src/components/Board/BoardQuestionBox.tsx`
 - `src/components/Board/ChessBoard.tsx`
 - `src/components/Board/ControlledChessBoard.tsx`
 - `src/components/Board/EngineLines.tsx`

@@ -3108,6 +3108,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             prevText.trim().length > 0
               ? prevText
               : (spokenDisplayText.trim() || answer.text.replace(VOICE_MARKER_RE, '').trim()));
+          if (answer.autoWalk) lineWalk.walk(answer.autoWalk);
           if (answer.lines && answer.lines.length > 0) {
             const lines = answer.lines;
             setAskMessages((prev) => prev.map((m) => (m.id === assistantId ? { ...m, lines } : m)));

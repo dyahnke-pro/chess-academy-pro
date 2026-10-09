@@ -55,7 +55,7 @@ describe('one coach, one door', () => {
   });
 
   it.each([
-    'src/components/Puzzles/MistakePuzzleBoard.tsx',
+    'src/components/Board/BoardQuestionBox.tsx', // the tactics boards' question box
     'src/components/Coach/CoachGameReview.tsx',
     'src/components/Search/SmartSearchBar.tsx',
   ])('%s asks through the door', (file) => {

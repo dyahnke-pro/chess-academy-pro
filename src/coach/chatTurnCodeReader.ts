@@ -288,6 +288,7 @@ function theirOne(chess: Chess, piece: PieceLetter, enemy: 'w' | 'b'): string | 
  * the model cannot place without the board are read here: a choice between
  * two moves, and a question about one named move.
  */
+const SHOW_LINE_RE = /^(?:ok(?:ay)?[,\s]+|yes[,\s]+|sure[,\s]+|please\s+|can you\s+|could you\s+)?(?:show\s+me(?:\s+(?:that|it|this|the\s+line|that\s+line|the\s+moves|how|on\s+the\s+board|the\s+line\s+on\s+the\s+board))?|play\s+(?:it|that|this|the\s+line|that\s+line)\s+out|play\s+out\s+(?:the|that)\s+line|walk\s+me\s+through\s+(?:it|that|this|the\s+line|that\s+line))(?:\s+please)?\s*[?.!]*$/;
 const BEST_MOVE_ASK_RE = /^(?:so\s+|ok(?:ay)?\s+)?(?:what(?:'s|s|\s+is)\s+(?:the\s+|my\s+)?(?:best|strongest|right|top)\s+(?:move|continuation|play)|best\s+move|what\s+(?:should|do|would)\s+i\s+(?:play|do))(?:\s+(?:here|now|in\s+this\s+position))?\s*[?.!]*$/;
 
 export function readTurnInCode(text: string, board: BoardContext): ChatTurn | null {
@@ -309,6 +310,12 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
   // code: sent to the model it cost 16-20 s cold (all-screens walk
   // 2026-10-09). Anything longer, past tense or about them stays with the model.
   if (BEST_MOVE_ASK_RE.test(followUp)) return { kind: 'best-move', referents: [], seat: 'me', topic: null };
+  // "Show me" / "play it out" / "walk me through it" — play the line the
+  // coach just proved on the board (the door holds it per surface). Whole
+  // message only: "show me the Italian" is a lesson, not this.
+  if (SHOW_LINE_RE.test(followUp)) {
+    return { kind: 'command', referents: [], seat: null, topic: null, steps: [{ action: 'show-line', opening: null, side: null, account: null }] };
+  }
 
   const slots = tagSlots(text);
   if (slots.negated && slots.ask !== 'why') return null;
