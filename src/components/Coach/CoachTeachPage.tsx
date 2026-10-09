@@ -2163,6 +2163,27 @@ export function CoachTeachPage(): JSX.Element {
     }
   }, []);
 
+  /** TAKE A SEAT — the one place a student changes sides at the start of a
+   *  free game: the colour buttons, "let's play as black", and "I want to
+   *  play black" typed in chat all land here (walk 5: the typed request only
+   *  turned the board, so the student sat as Black with White to move and
+   *  nothing happened). On a fresh board as Black, the coach opens. */
+  const takeSeat = useCallback((seat: 'white' | 'black', say: (line: string) => void): void => {
+    setPlayerColor(seat);
+    gameRef.current.setOrientation(seat);
+    captureEvent('coach_free_game_seat', { surface: 'coach-teach', seat });
+    if (gameRef.current.history.length > 0) return;
+    if (seat === 'white') { say("You're White — your move."); return; }
+    say("You're Black — I'll open.");
+    void (async () => {
+      const opener = await resolveCoachReplyMoveRef.current?.(liveFenRef.current);
+      if (opener && gameRef.current.history.length === 0 && liveFenRef.current.split(' ')[1] === 'w' && playDictatedMove(opener)) {
+        captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'auto-open-black', san: opener });
+        say(`${opener} — your move.`);
+      }
+    })();
+  }, [playDictatedMove]);
+
   /** Start a real game of a named opening, here on Learn.
    *
    *  Lifted out of the play-intent branch so the LINE PICKER can start one
@@ -2233,7 +2254,7 @@ export function CoachTeachPage(): JSX.Element {
           && liveFenRef.current.split(' ')[1] === 'w'
           && playDictatedMove(opener)
         ) {
-          say(`${sanToSpeech(opener)} — your move.`);
+          say(`${opener} — your move.`);
           void logAppAudit({
             kind: 'coach-surface-migrated',
             category: 'subsystem',
@@ -3510,6 +3531,18 @@ export function CoachTeachPage(): JSX.Element {
       // the move, saw `ok`, and returned in silence, so the student's move
       // came off, nothing went on, and the coach never spoke again. The
       // correction branch below undoes AND plays; let it.
+      // A SEAT, NOT A VIEW: "I want to play black" / "let me play white" at
+      // the start of a game takes the seat (and the coach opens for Black).
+      // "Flip the board" stays a view turn — and mid-game the seats stay.
+      if (routed?.kind === 'set_orientation' && gameRef.current.history.length === 0 && !walkthrough.isActive
+        && /\b(?:let me play|i want to play|i'?d like to play|i'?ll play|put me|play as|i'?ll be|i want to be)\b/i.test(text)) {
+        setMessages((prev) => [...prev, { id: uid('cmd-u'), role: 'user', content: text, timestamp: Date.now() }]);
+        takeSeat(routed.orientation, (line) => {
+          setMessages((prev) => [...prev, { id: freshTurnId('free-game-seat'), role: 'assistant', content: line, timestamp: Date.now() }]);
+          void speakComputed(line, { forced: true, intent: 'learn' }).catch(() => undefined);
+        });
+        return;
+      }
       if (routed && !dictation && !correctionNamesAMove) {
         const action = actionForCommand(routed, {
           fen: liveFenRef.current,
@@ -5024,20 +5057,7 @@ export function CoachTeachPage(): JSX.Element {
             setMessages((prev) => [...prev, { id: freshTurnId('free-game-seat'), role: 'assistant', content: line, timestamp: Date.now() }]);
             void speakComputed(line, { forced: true, intent: 'learn' }).catch(() => undefined);
           };
-          setPlayerColor(seatAsked);
-          gameRef.current.setOrientation(seatAsked);
-          captureEvent('coach_free_game_seat', { surface: 'coach-teach', seat: seatAsked });
-          if (seatAsked === 'white') {
-            sayLine("You're White — your move.");
-          } else {
-            sayLine("You're Black — I'll open.");
-            void (async () => {
-              const opener = await resolveCoachReplyMoveRef.current?.(liveFenRef.current);
-              if (opener && gameRef.current.history.length === 0 && liveFenRef.current.split(' ')[1] === 'w' && playDictatedMove(opener)) {
-                sayLine(`${sanToSpeech(opener)} — your move.`);
-              }
-            })();
-          }
+          takeSeat(seatAsked, sayLine);
           return;
         }
         const namesNoOpening = /^(?:(?:this|that|the|current|my)\s+)?(?:position|board|game|line|here|it)$/i.test(stageStrippedInput)
@@ -12578,30 +12598,16 @@ export function CoachTeachPage(): JSX.Element {
                 </button>
                 <button
                   onClick={() => {
-                    setPlayerColor('black');
-                    game.setOrientation('black');
                     // The student took Black on a fresh board — the coach has
                     // White and MUST open, or the game just sits there (David
                     // 2026-07-12: he flipped to Black for the Benko and had to
-                    // push the coach's d4 himself). Book/engine pick the move
-                    // (or a dictated pending move); a deterministic ack speaks.
-                    if (gameRef.current.history.length === 0 && liveFenRef.current.split(' ')[1] === 'w') {
-                      void (async () => {
-                        const opening = await resolveCoachReplyMove(liveFenRef.current);
-                        if (
-                          opening &&
-                          gameRef.current.history.length === 0 &&
-                          liveFenRef.current.split(' ')[1] === 'w' &&
-                          playDictatedMove(opening)
-                        ) {
-                          captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'auto-open-black', san: opening });
-                          const ack = `I'll open with ${sanToSpeech(opening)}. Your move.`;
-                          setMessages((prev) => [...prev, { id: freshTurnId('coach-open'), role: 'assistant', content: ack, timestamp: Date.now() }]);
-                          voiceService.stop();
-                          void speakComputed(ack, { forced: true, intent: 'learn' }).catch(() => undefined);
-                        }
-                      })();
-                    }
+                    // push the coach's d4 himself). One seat function for the
+                    // button and the typed request.
+                    takeSeat('black', (line) => {
+                      setMessages((prev) => [...prev, { id: freshTurnId('coach-open'), role: 'assistant', content: line, timestamp: Date.now() }]);
+                      voiceService.stop();
+                      void speakComputed(line, { forced: true, intent: 'learn' }).catch(() => undefined);
+                    });
                   }}
                   disabled={game.history.length > 0}
                   className={`w-6 h-6 md:w-7 md:h-7 rounded-md flex items-center justify-center transition-colors disabled:opacity-40 ${
