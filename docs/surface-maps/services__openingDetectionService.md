@@ -78,7 +78,7 @@
 - `src/services/masterclassRedirect.ts:132`
 
 ### `detectOpening` (function) — 29 call sites
-- `src/coach/coachService.ts:936`
+- `src/coach/coachService.ts:937`
 - `src/coach/sources/annotationContext.ts:79`
 - `src/coach/sources/middlegamePlan.ts:51`
 - `src/coach/sources/modelGames.ts:57`

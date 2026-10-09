@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2551 lines · 68 exports · 36 importers · 38 tests · 15 audits**
+**2554 lines · 68 exports · 36 importers · 38 tests · 15 audits**
 
 ## Locked rules that govern this surface
 
@@ -357,7 +357,7 @@
 
 ### `buildQuestionGrounding` (re-export) — 44 call sites
 - `src/coach/chatTurn.ts:150`
-- `src/coach/chatTurn.ts:669`
+- `src/coach/chatTurn.ts:682`
 - `src/coach/groundingParity.test.ts:40`
 - `src/coach/questionIntents.allLanes.test.ts:44`
 - `src/coach/questionIntents.boardTrap.test.ts:8`

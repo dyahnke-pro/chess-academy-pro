@@ -384,6 +384,22 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
     }
   }
 
+  // "What does f6 attack?" / "what is their knight hitting?" — the named piece
+  // is the ATTACKER, the subject of the verb, not its target (live replay
+  // 2026-10-09: read as "can I attack f6?" and answered "nothing of yours can
+  // get at their pawn on f6"). A question about what one piece does.
+  const subjectAttack = /\bwhat\s+(?:does|is|can|will|could)\s+(?:the\s+|their\s+|my\s+|that\s+)?(?:(?:pawn|knight|bishop|rook|queen|king)\s+on\s+)?(?:[a-h][1-8]|pawn|knight|bishop|rook|queen|king|[nbrqk][a-h]?[1-8]?x?[a-h][1-8])\s+(?:attack|hit|target|eye|aim)/i;
+  if (subjectAttack.test(text)) {
+    let sq: string | null = slots.squares[0] ?? null;
+    if (!sq && slots.sans.length === 1) {
+      try { const m = new Chess(board.fen).move(slots.sans[0]); sq = m?.to ?? null; } catch { sq = null; }
+      if (!sq) { const dest = /([a-h][1-8])$/.exec(slots.sans[0])?.[1]; sq = dest ?? null; }
+    }
+    if (sq && chess.get(sq as Square)) {
+      return { kind: 'what-about-piece', referents: [{ type: 'square', square: sq }], seat: null, topic: null };
+    }
+  }
+
   // "Can I attack the b7 pawn?" / "how do I go after their bishop?" — the
   // moves that bring a piece of yours onto one of THEIRS. Not a move to that
   // square (pass 2: "attack the b7 pawn" was read as the pawn move b7).

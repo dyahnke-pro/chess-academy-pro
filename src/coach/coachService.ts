@@ -26,6 +26,7 @@
  *
  * See `docs/COACH-BRAIN-00.md` for the architecture this implements.
  */
+import { pinGroundingToReading, pinnedFlagFor } from './readingPin';
 import { teachFromBooks } from '../services/bookTeaching';
 import { Chess } from 'chess.js';
 import { legalForOpponent } from './chatTurnCodeReader';
@@ -1647,7 +1648,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       // coachApi. Whose-turn and colour are then answerable from `whoseTurn` /
       // `studentColor` alone; draw and mate still need the board, but they now
       // decline honestly through the computed lane instead of being improvised.
-      (input.liveState.fen || isAnyBoardQuestion(askForIntents) || isAttackAssessmentQuestion(askForIntents) || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || fundamentalLessonQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || opponentHypothetical !== undefined || trade !== undefined || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || nameOpeningQuestionEngage || opponentMoveQuestionEngage || lastMoveQuestionEngage || theoryQuestionEngage || weaknessLifecycleKindEngage !== null || weaknessBriefingQuestionEngage || endgameWeaknessQuestionEngage || isEndgameQuestion(askForIntents) || openingExistenceName !== null || openingIdentityName !== null || retrospectiveEngage || methodQuestionEngage
+      (input.liveState.fen || (input.reading && pinnedFlagFor(input.reading.kind)) || isAnyBoardQuestion(askForIntents) || isAttackAssessmentQuestion(askForIntents) || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || fundamentalLessonQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || opponentHypothetical !== undefined || trade !== undefined || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || nameOpeningQuestionEngage || opponentMoveQuestionEngage || lastMoveQuestionEngage || theoryQuestionEngage || weaknessLifecycleKindEngage !== null || weaknessBriefingQuestionEngage || endgameWeaknessQuestionEngage || isEndgameQuestion(askForIntents) || openingExistenceName !== null || openingIdentityName !== null || retrospectiveEngage || methodQuestionEngage
         ? {
             ...sharedQuestionRead,
             currentFen: input.liveState.fen,
@@ -1863,7 +1864,9 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
         ? {
             task: options.task,
             maxTokens: options.maxTokens,
-            grounding: autoGrounding,
+            // THE READING PICKS THE BRANCH (WO-CHAT-01 P3a): only the reading's
+            // question flag stays on, so the words cannot pick another branch.
+            grounding: autoGrounding ? pinGroundingToReading(autoGrounding, input.reading?.kind) : autoGrounding,
             ...(nonEnglishTurn ? { studentLanguage: turnLanguageName } : {}),
           }
         : undefined;

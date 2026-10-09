@@ -48,7 +48,7 @@ export const CASES = [
   { id: 'B9', setup: 'italian', ask: 'whats teh best move', from: 'walk' },
   { id: 'B10', setup: 'italian', ask: 'is my bishop on c4 good?', from: 'walk', must: [/c4/] },
   { id: 'B11', setup: 'italian', ask: 'can they attack my bishop?', from: 'walk', must: [/bishop/i], mustNot: [/^The best move is/] },
-  { id: 'B12', setup: 'italian', ask: 'what does {LAST} attack?', from: 'walk', mustNot: [COACH_AS_PLAYER, /was the engine's top move/] },
+  { id: 'B12', setup: 'italian', ask: 'what does {LAST} attack?', from: 'walk', must: [/\b(?:attacks?|hits?|eyes|controls?|covers?|guards?|aims? at)\b/i], mustNot: [COACH_AS_PLAYER, /was the engine's top move/, /can get at/] },
   { id: 'B13', setup: 'italian', ask: 'is anything hanging?', from: 'walk', mustNot: [/rook on a1|rook on h1/] },
   { id: 'B14', setup: 'italian', ask: 'what are my weaknesses?', from: 'walk', must: [/import|games/i] },
   { id: 'B15', setup: 'italian', ask: 'turn the voice off', from: 'walk', must: [/off/i] },

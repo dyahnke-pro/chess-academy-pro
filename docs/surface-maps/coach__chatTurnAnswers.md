@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**427 lines · 11 exports · 3 importers · 2 tests · 0 audits**
+**489 lines · 11 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,35 +18,36 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `answerIsLoose` (function) — 6 call sites
-- `src/coach/chatTurnAnswers.test.ts:21`
+### `answerIsLoose` (function) — 7 call sites
 - `src/coach/chatTurnAnswers.test.ts:22`
 - `src/coach/chatTurnAnswers.test.ts:23`
-- `src/coach/chatTurnAnswers.test.ts:25`
 - `src/coach/chatTurnAnswers.test.ts:26`
+- `src/coach/chatTurnAnswers.test.ts:28`
+- `src/coach/chatTurnAnswers.test.ts:29`
+- `src/coach/chatTurnAnswers.test.ts:31`
 - `src/coach/handWalk1009.test.ts:79`
 
 ### `answerCount` (function) — 4 call sites
-- `src/coach/chatTurnAnswers.test.ts:30`
-- `src/coach/chatTurnAnswers.test.ts:31`
-- `src/coach/chatTurnAnswers.test.ts:32`
-- `src/coach/chatTurnAnswers.test.ts:58`
+- `src/coach/chatTurnAnswers.test.ts:35`
+- `src/coach/chatTurnAnswers.test.ts:36`
+- `src/coach/chatTurnAnswers.test.ts:37`
+- `src/coach/chatTurnAnswers.test.ts:63`
 
 ### `answerControl` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `answerWhyTarget` (function) — 2 call sites
-- `src/coach/chatTurnAnswers.test.ts:36`
-- `src/coach/chatTurnAnswers.test.ts:37`
+- `src/coach/chatTurnAnswers.test.ts:41`
+- `src/coach/chatTurnAnswers.test.ts:42`
 
 ### `answerAboutPiece` (function) — 1 call site
-- `src/coach/chatTurnAnswers.test.ts:41`
+- `src/coach/chatTurnAnswers.test.ts:46`
 
 ### `directAnswer` (function) — 4 call sites
-- `src/coach/chatTurnAnswers.test.ts:48`
-- `src/coach/chatTurnAnswers.test.ts:49`
-- `src/coach/chatTurnAnswers.test.ts:50`
-- `src/coach/dispatchCoachTurn.ts:238`
+- `src/coach/chatTurnAnswers.test.ts:53`
+- `src/coach/chatTurnAnswers.test.ts:54`
+- `src/coach/chatTurnAnswers.test.ts:55`
+- `src/coach/dispatchCoachTurn.ts:342`
 
 ### `answerDefend` (function) — 3 call sites
 - `src/coach/handWalk1009.test.ts:97`
@@ -56,7 +57,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `answerWin` (function) — 1 call site
 - `src/coach/handWalk1009.test.ts:198`
 
-### `answerAttack` (function) — 1 call site
+### `answerAttack` (function) — 2 call sites
+- `src/coach/chatTurnAnswers.test.ts:73`
 - `src/coach/handWalk1009.test.ts:237`
 
 ### `answerMaterialChange` (function) — 2 call sites

@@ -25,14 +25,17 @@ describe('assembleRetrospectiveAnswer — the move ON THE TAPE, whose move it wa
     expect(a.facts).toMatch(/^Your Bc5 on move 3 was the engine's top move/);
     expect(a.facts).not.toMatch(/preferred/);
   });
-  it("the COACH's own move, not best — honest about the seat and names the engine's choice", () => {
+  // The coach never speaks as a player (RULEBOOK V1/V2, 2026-10-07): its own
+  // moves are "their" moves, and the honesty about strength is third person.
+  it("the COACH's own move, not best — 'their', honest about strength, names the engine's choice", () => {
     const a = assembleRetrospectiveAnswer({
       playedSan: 'a6', fenBefore: beforeBc5, moveNumber: 3, moverColor: 'black', mover: 'coach',
       bestMoveUci: 'f8c5', cpLoss: 60, quality: 'inaccuracy', missedMate: null, allowedMate: null,
     });
-    expect(a.facts).toMatch(/^My a6 on move 3/);
+    expect(a.facts).toMatch(/^Their a6 on move 3/);
     expect(a.facts).toMatch(/The engine preferred Bc5/);
-    expect(a.facts).toMatch(/my skill-level move/);
+    expect(a.facts).toMatch(/The opponent plays at your strength/);
+    expect(a.facts).not.toMatch(/\b(?:I|my|me)\b/);
     expect(a.bestMoveSan).toBe('Bc5');
   });
   it("a human OPPONENT's move (imported game in review) is 'Their …' and never 'my skill-level move'", () => {

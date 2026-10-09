@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { answerIsLoose, answerCount, answerWhyTarget, answerAboutPiece, directAnswer } from './chatTurnAnswers';
+import { answerIsLoose, answerCount, answerWhyTarget, answerAboutPiece, answerAttack, directAnswer } from './chatTurnAnswers';
+import { readTurnInCode } from './chatTurnCodeReader';
 import { EMPTY_CONVERSATION, type ResolvedChatTurn } from './chatTurn';
 
 // White: Bb5 pins nothing here; Black knight c6 guarded by b7 and d7 pawns.
@@ -20,10 +21,14 @@ describe('chat answers for the lesson\'s board questions (computed)', () => {
   it('is it loose: guarded, loose-and-attacked, and the student\'s own list', () => {
     expect(answerIsLoose(new Chess(RUY), 'c6', 'b')).toBe('Your knight on c6 is guarded.');
     expect(answerIsLoose(new Chess(LOOSE), 'c6', 'w')).toBe('Their knight on c6 is loose and attacked by the bishop on b5.');
-    expect(answerIsLoose(new Chess(LOOSE), null, 'b')).toMatch(/^Loose: your knight on c6/);
+    // No piece named: what can be WON leads (live walk B13 listed home-rank
+    // rooks nothing attacked). The bishop on b5 takes the unguarded knight.
+    expect(answerIsLoose(new Chess(LOOSE), null, 'b')).toMatch(/^Hanging: your knight on c6/);
     // "which of THEIR pieces are loose?" lists theirs, not yours.
-    expect(answerIsLoose(new Chess(LOOSE), null, 'w', 'them')).toMatch(/^Loose: their knight on c6/);
-    expect(answerIsLoose(new Chess(LOOSE), null, 'w', 'me')).toMatch(/^(Loose: your|Nothing of yours)/);
+    expect(answerIsLoose(new Chess(LOOSE), null, 'w', 'them')).toMatch(/^Hanging: their knight on c6/);
+    expect(answerIsLoose(new Chess(LOOSE), null, 'w', 'me')).toMatch(/^(Hanging: your|Nothing of yours is hanging)/);
+    // A home-rank piece nothing attacks is never offered as news.
+    expect(answerIsLoose(new Chess(), null, 'w')).toBe('Nothing of yours is hanging.');
   });
 
   it('counts attackers from the other side and defenders from its own', () => {
@@ -58,5 +63,20 @@ describe('who controls an empty square — both sides (live replay 2026-10-08)',
     const a = answerCount(c, 'e5', 'w', 'attackers');
     expect(a).toMatch(/^On e5: your knight on f3 against their /);
     expect(a).toMatch(/They control it\.$/);
+  });
+});
+
+describe('attack, both directions (WO-CHAT-01, live walk B11/B12)', () => {
+  // 1.e4 e5 2.Nf3 Nc6 3.Bc4 — White's bishop on c4.
+  const ITALIAN = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
+  it('"can they attack my bishop?" names their moves onto it', () => {
+    const a = answerAttack(new Chess(ITALIAN), 'c4' as never, 'w');
+    expect(a).toMatch(/^They can attack your bishop on c4: /);
+    expect(a).toMatch(/Na5|d5|b5/);
+  });
+  it('"what does Nc6 attack?" is read as a question about Nc6, the attacker', () => {
+    const t = readTurnInCode('what does Nc6 attack?', { fen: ITALIAN, history: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'], studentColor: 'white' });
+    expect(t?.kind).toBe('what-about-piece');
+    expect(t?.referents).toEqual([{ type: 'square', square: 'c6' }]);
   });
 });

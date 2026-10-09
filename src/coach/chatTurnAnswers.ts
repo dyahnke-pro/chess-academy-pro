@@ -81,9 +81,30 @@ export function answerIsLoose(chess: Chess, sq: Square | null, student: Color, s
   // No piece named: the side the turn asked about ("their pieces"), else yours.
   const side: Color = seat === 'them' ? (student === 'w' ? 'b' : 'w') : student;
   const whose = side === student ? 'your' : 'their';
-  const list = findLoosePieces(chess, side).filter((l) => l.type !== 'k');
-  if (list.length === 0) return `Nothing of ${whose === 'your' ? 'yours' : 'theirs'} is loose.`;
-  return `Loose: ${whose} ${andList(list.map((l) => `${name(l.type)} on ${l.square}`))}.`;
+  // WHAT CAN BE WON leads (live walk B13: "is anything hanging?" listed the
+  // rooks on a1 and h1 — unguarded, attacked by nothing, true and useless).
+  // Hanging = the other side wins material by taking it (the board's own
+  // capture count); then the loose pieces that are actually in play.
+  const other: Color = side === 'w' ? 'b' : 'w';
+  const hanging: string[] = [];
+  for (const row of chess.board()) for (const q of row) {
+    if (!q || q.color !== side || q.type === 'k') continue;
+    if (chess.attackers(q.square, other).length === 0) continue;
+    let gain: number | null = 0;
+    try { gain = captureRead(chess.fen(), q.square, other); } catch { gain = 0; }
+    if (gain !== null && gain > 0) hanging.push(`${name(q.type)} on ${q.square}`);
+  }
+  const homeRank = side === 'w' ? '1' : '8';
+  const loose = findLoosePieces(chess, side)
+    .filter((l) => l.type !== 'k' && !(l.type !== 'p' && l.square[1] === homeRank))
+    .filter((l) => !hanging.includes(`${name(l.type)} on ${l.square}`))
+    .map((l) => `${name(l.type)} on ${l.square}`);
+  const owner = whose === 'your' ? 'yours' : 'theirs';
+  const head = hanging.length
+    ? `Hanging: ${whose} ${andList(hanging)} — ${whose === 'your' ? 'they' : 'you'} can win material by taking.`
+    : `Nothing of ${owner} is hanging.`;
+  const tail = loose.length ? ` Unguarded but not attacked yet: ${whose} ${andList(loose)}.` : '';
+  return `${head}${tail}`;
 }
 
 /** Attackers come from the side that does NOT own the target; defenders from
@@ -322,7 +343,10 @@ export function answerAttack(chess: Chess, sq: Square | null, student: Color): s
   if (!sq) return null;
   const p = chess.get(sq);
   const enemy: Color = student === 'w' ? 'b' : 'w';
-  if (!p || p.color !== enemy) return null;
+  if (!p) return null;
+  // "Can they attack my bishop?" — the same question from the other side of
+  // the board (live walk B11 got the best move instead).
+  if (p.color === student) return answerAttackedBy(chess, sq, student);
   const subject = owned(chess, sq, student);
   const already = chess.attackers(sq, student);
   const lead = already.length ? `Your ${listOf(chess, already)} already ${already.length === 1 ? 'attacks' : 'attack'} ${subject}.` : '';
@@ -351,6 +375,44 @@ export function answerAttack(chess: Chess, sq: Square | null, student: Color): s
   return `${lead ? `${lead} ` : ''}To attack ${subject}: ${ways.join('; ')}.`;
 }
 
+
+/**
+ * CAN THEY ATTACK MY PIECE — which of their moves would bring a piece onto
+ * one of the student's (WO-CHAT-01 P3, walk B11). Their moves are read with
+ * their side to move (a null move when it is the student's turn); a move that
+ * just hands their arriving piece over is left out, as on the student's side.
+ */
+function answerAttackedBy(chess: Chess, sq: Square, student: Color): string {
+  const enemy: Color = student === 'w' ? 'b' : 'w';
+  const subject = owned(chess, sq, student);
+  const already = chess.attackers(sq, enemy);
+  const lead = already.length ? `Their ${listOf(chess, already)} already ${already.length === 1 ? 'attacks' : 'attack'} ${subject}.` : '';
+  const parts = chess.fen().split(' ');
+  parts[1] = enemy; parts[3] = '-';
+  let theirs: Chess;
+  try { theirs = new Chess(parts.join(' ')); } catch { return lead || `Nothing of theirs can get at ${subject} next move.`; }
+  const before = new Set<string>(already);
+  const byPiece = new Map<string, string[]>();
+  for (const m of theirs.moves({ verbose: true })) {
+    if (m.to === sq) continue;
+    const after = new Chess(theirs.fen());
+    after.move(m.san);
+    const asIf = after.fen().split(' ');
+    asIf[1] = enemy; asIf[3] = '-';
+    let b: Chess;
+    try { b = new Chess(asIf.join(' ')); } catch { continue; }
+    const added = b.attackers(sq, enemy).filter((a) => !before.has(a));
+    if (added.length === 0) continue;
+    let safe: number | null = 0;
+    try { safe = captureRead(after.fen(), m.to, student); } catch { safe = null; }
+    if (safe !== 0) continue;
+    const key = `${name(m.piece)} on ${m.from}`;
+    byPiece.set(key, [...(byPiece.get(key) ?? []), m.san]);
+  }
+  if (byPiece.size === 0) return lead || `Nothing of theirs can get at ${subject} safely next move.`;
+  const ways = [...byPiece.entries()].map(([who, sans]) => `${orList(sans)} brings their ${who} onto it`);
+  return `${lead ? `${lead} ` : ''}They can attack ${subject}: ${ways.join('; ')}.`;
+}
 
 /**
  * WHAT DID I JUST LOSE — "did I just lose a pawn?" (pass 3: 3.d4?? exf3 took

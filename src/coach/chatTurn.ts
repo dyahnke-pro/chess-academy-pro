@@ -561,8 +561,13 @@ function resolvePiece(
     if (!owner) return false;
     try { return (captureRead(chess.fen(), c.square as Square, owner === 'w' ? 'b' : 'w') ?? 0) > 0; } catch { return false; }
   });
+  // THE ONE IN PLAY: of the student's own, the only one that has left its
+  // starting square ("can they attack my bishop?" with bishops on c1 and c4
+  // means c4 — live walk B11 was asked back "which bishop?").
+  const mineInPlay = pool.filter((c) => c.seat === 'me' && !onHomeSquare(r.piece, c.square, student));
   const pick = inDanger.length === 1 ? inDanger[0]
-    : !r.seat && pool.filter((c) => c.seat === 'me').length === 1 ? pool.find((c) => c.seat === 'me') : undefined;
+    : !r.seat && pool.filter((c) => c.seat === 'me').length === 1 ? pool.find((c) => c.seat === 'me')
+    : r.seat !== 'them' && mineInPlay.length === 1 ? mineInPlay[0] : undefined;
   if (pick) return { ok: true, ref: { type: 'piece', piece: r.piece, square: pick.square, seat: pick.seat } };
   // Still several: with no side said, the question is about the student's
   // OWN pieces — "should the knight take?" asked of a White student was
@@ -574,6 +579,14 @@ function resolvePiece(
     reason: 'piece-ambiguous',
     clarify: `Which ${name} — ${asked.map((c) => `the one on ${c.square}`).join(' or ')}?`,
   };
+}
+
+/** Is a piece of the student's on one of its starting squares? */
+function onHomeSquare(piece: PieceLetter, square: string, student: 'white' | 'black'): boolean {
+  const rank = student === 'white' ? '1' : '8';
+  const pawnRank = student === 'white' ? '2' : '7';
+  const files: Record<PieceLetter, string> = { p: 'abcdefgh', n: 'bg', b: 'cf', r: 'ah', q: 'd', k: 'e' };
+  return square[1] === (piece === 'p' ? pawnRank : rank) && files[piece].includes(square[0]);
 }
 
 function legalNow(san: string, board: BoardContext): boolean {

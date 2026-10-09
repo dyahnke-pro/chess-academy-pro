@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**515 lines · 7 exports · 12 importers · 7 tests · 43 audits**
+**531 lines · 7 exports · 13 importers · 8 tests · 44 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@
 
 ## Who calls in
 
+- `src/coach/chatTurnAnswers.test.ts`
 - `src/coach/chatTurnCodeReader.test.ts`
 - `src/coach/chatTurnParser.ts`
 - `src/coach/coachService.ts`
@@ -44,18 +45,19 @@
 - `src/coach/chatTurnCodeReader.test.ts:19`
 - `src/coach/chatTurnCodeReader.test.ts:22`
 - `src/coach/chatTurnCodeReader.test.ts:23`
-- `src/services/coachApi.ts:2188`
+- `src/services/coachApi.ts:2192`
 - `src/services/whyNotLegal.ts:177`
 
 ### `pointsAtThisBoard` (function) — 1 call site
 - `src/coach/questionIntents.ts:1656`
 
 ### `legalForOpponent` (function) — 1 call site
-- `src/coach/coachService.ts:1590`
+- `src/coach/coachService.ts:1596`
 
-### `readTurnInCode` (function) — 38 call sites
+### `readTurnInCode` (function) — 39 call sites
+- `src/coach/chatTurnAnswers.test.ts:78`
 - `src/coach/chatTurnCodeReader.test.ts:10`
-- `src/coach/chatTurnParser.ts:167`
+- `src/coach/chatTurnParser.ts:185`
 - `src/coach/developNext.test.ts:24`
 - `src/coach/developNext.test.ts:26`
 - `src/coach/developNext.test.ts:27`
@@ -95,6 +97,7 @@
 
 ## Tests
 
+- `src/coach/chatTurnAnswers.test.ts`
 - `src/coach/chatTurnCodeReader.test.ts`
 - `src/coach/developNext.test.ts`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
@@ -109,6 +112,7 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
+- `scripts/audit-chat-replay-prod.mjs`
 - `scripts/audit-coach-all-questions-prod.mjs`
 - `scripts/audit-coach-answers-questions-prod.mjs`
 - `scripts/audit-coach-board-grind.mjs`

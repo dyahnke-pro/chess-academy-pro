@@ -19,7 +19,7 @@ describe('pinGroundingToReading', () => {
     expect(p.moveHistory).toEqual(['e4']);
   });
   it('a data flag the words did not yield is not invented', () => {
-    const p = pinGroundingToReading({ planQuestion: true }, 'opening-identity');
+    const p: { planQuestion?: boolean; openingIdentityName?: string } = pinGroundingToReading({ planQuestion: true } as { planQuestion?: boolean; openingIdentityName?: string }, 'opening-identity');
     expect(p.openingIdentityName).toBeUndefined();
     expect(p.planQuestion).toBeUndefined();
   });

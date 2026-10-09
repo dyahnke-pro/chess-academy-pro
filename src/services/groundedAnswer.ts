@@ -5938,7 +5938,10 @@ export interface RetrospectiveMoveLike {
 export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedAnswer {
   // ONE PERSPECTIVE (CLAUDE.md): the student is "your", the coach's own reply
   // is "my", a human opponent is "their" — never "we", never a bare colour.
-  const lead = `${r.mover === 'coach' ? 'My' : r.mover === 'opponent' ? 'Their' : 'Your'} ${r.playedSan} on move ${r.moveNumber}`;
+  // The coach never speaks as a player (RULEBOOK V1/V2, 2026-10-07): the
+  // moves it plays are the opponent's — "their", like a human opponent's
+  // (live walk B7: "My h6 … I play at your strength on purpose").
+  const lead = `${r.mover === 'student' ? 'Your' : 'Their'} ${r.playedSan} on move ${r.moveNumber}`;
   // What the move itself DID — the concrete geometry first, else the
   // fundamental it served. Board-computed, never invented.
   // The VERB-LED form: this clause follows "— it", and the self-contained form
@@ -5977,9 +5980,8 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
   }
 
   if (wasBest) {
-    const agree = r.mover === 'coach' ? ' That was my move, and the engine agrees with it.' : '';
     return {
-      facts: `${lead} was the engine's top move${didClause}.${agree}`,
+      facts: `${lead} was the engine's top move${didClause}.`,
       bestMoveSan: null, bestMoveFromTo: null, sources: ['engine:stockfish', 'board:chess.js'],
     };
   }
@@ -6019,7 +6021,7 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
   else verdict = `wasn't the engine's choice`;
 
   const seat = r.mover === 'coach'
-    ? ' That was my skill-level move, not the engine\'s — I play at your strength on purpose.'
+    ? ' The opponent plays at your strength, so it will not always pick the engine\'s move.'
     : '';
   return {
     facts: `${lead}${didClause}${didClause ? ', and it' : ''} ${verdict}.${better}${seat}`,
