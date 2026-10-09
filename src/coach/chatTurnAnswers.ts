@@ -194,6 +194,16 @@ export function answerAboutPiece(chess: Chess, sq: Square | null, student: Color
   const mine = own === student ? 'your' : 'their';
   const lines: string[] = [];
   if (hits.length) lines.push(`It attacks ${whose} ${andList(hits)}.`);
+  // "What does e5 attack?" — a piece that hits nothing still has an answer:
+  // a pawn names the squares it covers; a piece says it hits nothing yet
+  // (live replay B12 answered only "it is guarded").
+  else if (p.type === 'p') {
+    const dir = own === 'w' ? 1 : -1;
+    const f = sq.charCodeAt(0);
+    const r = Number(sq[1]) + dir;
+    const covers = [f - 1, f + 1].filter((c) => c >= 97 && c <= 104 && r >= 1 && r <= 8).map((c) => `${String.fromCharCode(c)}${r}`);
+    if (covers.length) lines.push(`It attacks nothing of ${whose === 'your' ? 'yours' : 'theirs'} right now; it covers ${andList(covers)}.`);
+  } else lines.push(`It attacks nothing of ${whose === 'your' ? 'yours' : 'theirs'} right now.`);
   if (checksKingLine) lines.push(`It gives check.`);
   if (guards.length) lines.push(`It guards ${mine} ${andList(guards)}.`);
   if (p.type !== 'k' && isPinnedPiece(chess, sq, own)) lines.push(`It is pinned to ${mine} king.`);

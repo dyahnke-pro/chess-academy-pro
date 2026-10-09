@@ -357,7 +357,7 @@
 
 ### `buildQuestionGrounding` (re-export) — 44 call sites
 - `src/coach/chatTurn.ts:150`
-- `src/coach/chatTurn.ts:682`
+- `src/coach/chatTurn.ts:685`
 - `src/coach/groundingParity.test.ts:40`
 - `src/coach/questionIntents.allLanes.test.ts:44`
 - `src/coach/questionIntents.boardTrap.test.ts:8`

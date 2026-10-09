@@ -54,7 +54,7 @@ export const CASES = [
   { id: 'B15', setup: 'italian', ask: 'turn the voice off', from: 'walk', must: [/off/i] },
   { id: 'B16', setup: 'italian', ask: 'thanks!', from: 'walk' },
   { id: 'B17', setup: 'italian', ask: 'what opening is this?', from: 'walk', must: [/\b(?:Game|Defen[cs]e|Opening|Attack|Gambit|System|Variation)\b/] },
-  { id: 'B18', setup: 'italian', ask: 'how do I castle?', from: 'walk', must: [/castl/i] },
+  { id: 'B18', setup: 'italian', ask: 'how do I castle?', from: 'walk', must: [/two squares/i, /rook/i] },
 
   // ── Requests, standalone chat ──────────────────────────────────────────
   // Each starts on a fresh /coach/chat unless `stay` (a follow-up asked where

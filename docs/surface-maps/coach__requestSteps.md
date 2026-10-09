@@ -46,7 +46,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/requestSteps.test.ts:13`
 
 ### `resolveSteps` (function) — 3 call sites
-- `src/coach/chatTurn.ts:505`
+- `src/coach/chatTurn.ts:508`
 - `src/coach/requestSteps.test.ts:29`
 - `src/coach/requestSteps.test.ts:34`
 

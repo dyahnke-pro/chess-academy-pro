@@ -159,7 +159,7 @@
 - `src/services/computedVoiceGrounding.test.ts:85`
 
 ### `assembleThreatAnswer` (function) — 4 call sites
-- `src/coach/chatTurnAnswers.ts:225`
+- `src/coach/chatTurnAnswers.ts:235`
 - `src/coach/handWalk1009.test.ts:320`
 - `src/services/groundedAnswer.threatTake.test.ts:8`
 - `src/services/groundedAnswer.threatTake.test.ts:15`
@@ -392,7 +392,7 @@
 - `src/services/reviewTeachingPoints.ts:101`
 
 ### `describeMoveGeometry` (function) — 20 call sites
-- `src/coach/chatTurnAnswers.ts:484`
+- `src/coach/chatTurnAnswers.ts:494`
 - `src/components/Puzzles/PuzzleBoard.tsx:242`
 - `src/components/Tactics/TacticSetupBoard.tsx:153`
 - `src/hooks/useHintSystem.ts:357`
@@ -417,7 +417,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `toObserverSeat` (function) — 4 call sites
-- `src/coach/chatTurnAnswers.ts:485`
+- `src/coach/chatTurnAnswers.ts:495`
 - `src/coach/handWalk1009.test.ts:173`
 - `src/coach/handWalk1009.test.ts:175`
 - `src/services/coachApi.ts:5672`

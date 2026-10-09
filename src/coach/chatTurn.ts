@@ -336,7 +336,10 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
 
   // ── knowledge ──
   concept: { gloss: 'what is a chess concept or RULE, or how a rule works (a fork, a pin, zugzwang; "how do I castle?", "how does en passant work?")', lane: 'concept', answerer: 'live',
-    canonical: (t) => topicOr(t, (x) => `what's a ${x.replace(/^(?:a|an|the)\s+/i, '')}?`, null) },
+    // The student's OWN words, never a rewording: "how do I castle?" re-worded
+    // to "what's a castling?" lost the rules answer, which reads the words
+    // (WO-CHAT-01 P3). The pin routes the turn; the words keep their content.
+    canonical: null },
   theory: { gloss: 'general how-to strategy ("how do I play against an isolated pawn")', lane: 'theory', answerer: 'live',
     canonical: (t) => topicOr(t, (x) => `how do I play against ${x}?`, null) },
   'teaching-method': { gloss: 'how the coach would teach something', lane: 'teaching-method', answerer: 'live',
