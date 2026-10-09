@@ -17,9 +17,9 @@ describe('sanToWords — moves a beginner can read', () => {
 describe('movesInWords — the notation rides after the words', () => {
   it('rewrites moves, leaves squares and plain words alone', () => {
     expect(movesInWords('Rxd4 was the move — it would take their knight on d4.'))
-      .toBe('rook takes on d4 (Rxd4) was the move — it would take their knight on d4.');
+      .toBe('Rook takes on d4 (Rxd4) was the move — it would take their knight on d4.');
     expect(movesInWords('The pawn on d5 is weak. Be careful.')).toBe('The pawn on d5 is weak. Be careful.');
-    expect(movesInWords('…Nf6 develops.')).toBe('knight to f6 (…Nf6) develops.');
+    expect(movesInWords('…Nf6 develops.')).toBe('Knight to f6 (…Nf6) develops.');
     expect(movesInWords('Then O-O.')).toBe('Then castles kingside (O-O).');
   });
 });

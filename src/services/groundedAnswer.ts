@@ -569,7 +569,7 @@ export function assemblePieceSafetyAnswer(fen: string, ask: string | null | unde
     return { facts: `Your ${name} on ${sq} is hit by ${named.join(' and ')} — there's a check on the board, so whether it can be taken is read once the check is answered.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
   }
   if (g > 0) {
-    return { facts: `Your ${name} on ${sq} is in trouble — ${named.join(' and ')} ${attackers.length > 1 ? 'hit' : 'hits'} it and ${g >= (MATERIAL_VALUE[type] ?? 99) ? 'it falls' : `you lose ${countWords(g)}`} unless you deal with it.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+    return { facts: `Your ${name} on ${sq} is in trouble — ${named.join(' and ')} ${attackers.length > 1 ? 'hit' : 'hits'} it and it is not defended enough — deal with it now.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
   }
   return { facts: `Your ${name} on ${sq} holds — ${named.join(' and ')} ${attackers.length > 1 ? 'eye' : 'eyes'} it, but it's defended enough that taking loses for them.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
@@ -613,7 +613,7 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
   })();
   const winPart = wins.length > 0
     ? (isOpp
-        ? `they're eyeing ${named}, and it falls if you don't cover it${takeBack}`
+        ? `they're eyeing ${named}, and it is not defended enough — cover it${takeBack}`
         : `you can win ${named}`)
     : '';
   const checkPart = inCheck ? `your king is in check` : '';
