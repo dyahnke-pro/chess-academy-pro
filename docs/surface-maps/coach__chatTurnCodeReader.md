@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**251 lines · 5 exports · 2 importers · 1 tests · 43 audits**
+**277 lines · 6 exports · 5 importers · 1 tests · 43 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,9 @@
 
 - `src/coach/chatTurnCodeReader.test.ts`
 - `src/coach/chatTurnParser.ts`
+- `src/coach/questionIntents.ts`
+- `src/services/coachApi.ts`
+- `src/services/whyNotLegal.ts`
 
 ## Exports and every call site
 
@@ -29,11 +32,16 @@
 ### `Slots` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `tagSlots` (function) — 4 call sites
+### `tagSlots` (function) — 6 call sites
 - `src/coach/chatTurnCodeReader.test.ts:15`
 - `src/coach/chatTurnCodeReader.test.ts:19`
 - `src/coach/chatTurnCodeReader.test.ts:22`
 - `src/coach/chatTurnCodeReader.test.ts:23`
+- `src/services/coachApi.ts:2188`
+- `src/services/whyNotLegal.ts:169`
+
+### `pointsAtThisBoard` (function) — 1 call site
+- `src/coach/questionIntents.ts:1652`
 
 ### `readTurnInCode` (function) — 2 call sites
 - `src/coach/chatTurnCodeReader.test.ts:10`

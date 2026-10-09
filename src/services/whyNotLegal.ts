@@ -8,6 +8,8 @@
  * of theirs reaches it. Each reason is read off chess.js — nothing guessed.
  */
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
+import { tagSlots } from '../coach/chatTurnCodeReader';
+import { castlingNow } from './chessRules';
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const SQ_RE = /^[a-h][1-8]$/;
@@ -59,23 +61,77 @@ function reachers(chess: Chess, dest: Square, color: Color): Square[] {
   return [...out];
 }
 
-/** Why the student cannot move to `dest` — or null when some move there IS legal. */
-export function whyNotLegal(fen: string, dest: string, student: 'white' | 'black'): string | null {
+/** The first piece standing between `from` and `to` on a straight line, or null. */
+function blockerOn(chess: Chess, from: Square, to: Square): Square | null {
+  const df = Math.sign(to.charCodeAt(0) - from.charCodeAt(0));
+  const dr = Math.sign(Number(to[1]) - Number(from[1]));
+  let f = from.charCodeAt(0) + df;
+  let r = Number(from[1]) + dr;
+  while (`${String.fromCharCode(f)}${r}` !== to) {
+    const sq = `${String.fromCharCode(f)}${r}` as Square;
+    if (chess.get(sq)) return sq;
+    f += df; r += dr;
+  }
+  return null;
+}
+
+/** Does a piece of this type move along this geometry at all (board ignored)? */
+function movesThatWay(type: PieceSymbol, from: Square, to: Square, color: Color): boolean {
+  const df = Math.abs(to.charCodeAt(0) - from.charCodeAt(0));
+  const dr = Math.abs(Number(to[1]) - Number(from[1]));
+  if (type === 'n') return (df === 1 && dr === 2) || (df === 2 && dr === 1);
+  if (type === 'k') return df <= 1 && dr <= 1;
+  if (type === 'b') return df === dr && df > 0;
+  if (type === 'r') return (df === 0) !== (dr === 0);
+  if (type === 'q') return (df === dr && df > 0) || ((df === 0) !== (dr === 0));
+  const fwd = (Number(to[1]) - Number(from[1])) * (color === 'w' ? 1 : -1);
+  return (df === 0 && (fwd === 1 || (fwd === 2 && Number(from[1]) === (color === 'w' ? 2 : 7)))) || (df === 1 && fwd === 1);
+}
+
+/** Why the student's `piece` (any piece when omitted) cannot go to `dest` —
+ *  or null when some such move IS legal. */
+export function whyNotLegal(fen: string, dest: string, student: 'white' | 'black', piece?: PieceSymbol): string | null {
   if (!SQ_RE.test(dest)) return null;
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   const color: Color = student === 'white' ? 'w' : 'b';
   const sq = dest as Square;
   if (chess.turn() !== color) return `It's their move right now — you can play once they have moved.`;
-  const legal = chess.moves({ verbose: true }).filter((m) => m.to === sq);
+  const legal = chess.moves({ verbose: true }).filter((m) => m.to === sq && (!piece || m.piece === piece));
   if (legal.length) return null;
   const onIt = chess.get(sq);
   if (onIt && onIt.color === color) return `${dest} has your own ${NAME[onIt.type]} on it — you cannot capture your own piece.`;
-  const from = reachers(chess, sq, color);
+  let from = reachers(chess, sq, color);
+  if (piece) {
+    const mine: Square[] = [];
+    for (const row of chess.board()) for (const p of row) if (p && p.color === color && p.type === piece) mine.push(p.square);
+    if (mine.length === 0) return `You have no ${NAME[piece]} left on the board.`;
+    from = from.filter((f) => chess.get(f)?.type === piece);
+    if (from.length === 0) {
+      // Name what stops each one: a piece in the way, or the wrong geometry.
+      // Only the pieces that COULD get there by their own movement are worth
+      // naming (blocked, or a pawn that needs a capture). The rest are noise:
+      // eight pawns that "do not move that way" teach nothing.
+      const plural = `${NAME[piece]}${piece === 'p' || mine.length > 1 ? 's' : ''}`;
+      const near = mine.filter((f) => movesThatWay(piece, f, sq, color));
+      if (near.length === 0) return mine.length === 1
+        ? `Your ${NAME[piece]} on ${mine[0]} does not move that way — it cannot reach ${dest}.`
+        : `None of your ${plural} can reach ${dest} from where they stand.`;
+      const why = near.map((f) => {
+        if (piece === 'p' && !onIt && f[0] !== dest[0] && movesThatWay('p', f, sq, color)) return `your pawn on ${f} moves diagonally only to capture, and ${dest} is empty`;
+        if (piece === 'p' && onIt && f[0] === dest[0]) return `your pawn on ${f} is blocked — a pawn cannot capture straight ahead`;
+        if (!movesThatWay(piece, f, sq, color)) return `your ${NAME[piece]} on ${f} does not move that way`;
+        const b = piece === 'n' || piece === 'k' ? null : blockerOn(chess, f, sq);
+        const bp = b ? chess.get(b) : undefined;
+        return b && bp ? `your ${NAME[piece]} on ${f} is blocked by ${bp.color === color ? 'your' : 'their'} ${NAME[bp.type]} on ${b}` : `your ${NAME[piece]} on ${f} cannot reach ${dest}`;
+      });
+      const text = `${NAME[piece].charAt(0).toUpperCase()}${NAME[piece].slice(1)} to ${dest} is not possible: ${why.join('; ')}.`;
+      return text;
+    }
+  }
   if (from.length === 0) {
     const pawnDiag = chess.attackers(sq, color).some((s) => chess.get(s)?.type === 'p');
     if (pawnDiag && !onIt) return `There is nothing on ${dest} to take — a pawn moves diagonally only when it captures.`;
-    // A slider whose line is blocked: name the blocker.
     return `None of your pieces can reach ${dest} from where they stand.`;
   }
   const checked = chess.inCheck();
@@ -87,14 +143,13 @@ export function whyNotLegal(fen: string, dest: string, student: 'white' | 'black
     if (!p) continue;
     const by = exposer(chess, f, sq, color);
     const by2 = by ? chess.get(by) : undefined;
-    const who = `Your ${NAME[p.type]} on ${f}`;
     if (p.type === 'k') {
       reasons.push(by && by2 ? `your king cannot go to ${dest} — their ${NAME[by2.type]} on ${by} would attack it there` : `your king cannot go to ${dest}`);
     } else if (checked && by && by2) {
       checker = `their ${NAME[by2.type]} on ${by}`;
       checkMovers.push(`your ${NAME[p.type]}`);
     } else if (by && by2) {
-      reasons.push(`${who} is pinned — moving it would expose your king to their ${NAME[by2.type]} on ${by}`);
+      reasons.push(`your ${NAME[p.type]} on ${f} is pinned — moving it would expose your king to their ${NAME[by2.type]} on ${by}`);
     }
   }
   if (checker) {
@@ -106,22 +161,52 @@ export function whyNotLegal(fen: string, dest: string, student: 'white' | 'black
   return `${text.charAt(0).toUpperCase()}${text.slice(1)}.`;
 }
 
-/** "It's not letting me take b5", "why can't I play Nb5?", "Bxf7 is illegal?" */
-const REFUSED_RE = /\b(?:not\s+letting\s+me|(?:won'?t|doesn'?t|does\s+not|will\s+not)\s+let\s+me|why\s+can'?t\s+i|why\s+cannot\s+i|i\s+can'?t|i\s+cannot|unable\s+to|(?:is|it'?s)\s+illegal|not\s+(?:a\s+)?legal|isn'?t\s+legal)\b/i;
+const LETTER: Record<string, PieceSymbol> = { K: 'k', Q: 'q', R: 'r', B: 'b', N: 'n' };
 
-/** The answer to a refused-move complaint, or null when it is not one. */
-export function answerRefusedMove(ask: string, fen: string, student: 'white' | 'black'): string | null {
-  const t = ask.replace(/[\u2018\u2019]/g, "'");
-  if (!REFUSED_RE.test(t)) return null;
-  const squares = [...t.toLowerCase().matchAll(/\b[nbrqk]?x?([a-h][1-8])\b/g)].map((m) => m[1]);
-  const dest = squares[squares.length - 1];
-  if (!dest) return null;
-  const why = whyNotLegal(fen, dest, student);
-  if (why) return why;
+/**
+ * A MOVE THE SENTENCE NAMES THAT THE BOARD WILL NOT ALLOW — whatever the
+ * wording ("it won't let me take b5", "is qf3 ok?", "Nb5 doesn't work",
+ * "castle?"). The sentence computer reads the move; the board decides.
+ * Null when the sentence names no move, when the move is legal for either
+ * side (a question about THEIR move is a hypothetical, not a refusal), or
+ * when it was played earlier in the game (a question about the past).
+ */
+export function illegalNamedMove(ask: string, fen: string, student: 'white' | 'black', history: readonly string[] = []): string | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
-  const legal = chess.moves({ verbose: true }).filter((m) => m.to === dest);
-  if (legal.length === 0) return null;
-  const list = legal.map((m) => `your ${NAME[m.piece]} from ${m.from} to ${m.to} (${m.san})`).join(', or ');
-  return `That is legal right now: ${list}. Drag the piece from its square to ${dest}.`;
+  const slots = tagSlots(ask);
+  const color: Color = student === 'white' ? 'w' : 'b';
+  // Castling: the action, or "O-O" typed.
+  if (slots.action === 'castle' || slots.sans.some((s) => s.startsWith('O-O'))) {
+    if (chess.turn() !== color) return null;
+    if (chess.moves({ verbose: true }).some((m) => m.isKingsideCastle() || m.isQueensideCastle())) return null;
+    if (history.some((h) => h.startsWith('O-O')) && slots.past) return null;
+    return castlingNow(chess, color);
+  }
+  const san = slots.sans.find((s) => !s.startsWith('O-O')) ?? null;
+  const dest = san ? (san.match(/([a-h][1-8])(?=[^a-h1-8]*$)/)?.[1] ?? null) : slots.squares[slots.squares.length - 1] ?? null;
+  if (!dest) return null;
+  const piece: PieceSymbol | undefined = san
+    ? (LETTER[san[0]] ?? 'p')
+    : slots.pieces.length === 1 ? slots.pieces[0] as PieceSymbol : undefined;
+  // A move must be meant: a SAN, an action, a named piece, or a judged bare square ("is d5 good?").
+  const meant = !!san || slots.action !== 'none' || slots.pieces.length > 0 || (slots.judged && slots.ask !== 'none') || slots.negated;
+  if (!meant) return null;
+  // A move asked about in the past tense that is not on the tape is a
+  // question about a different game — the past-move lane says so.
+  if (slots.past && !slots.negated) return null;
+  // Legal for the student now, or for them on their turn: not a refusal.
+  const fits = (c: Chess): boolean => c.moves({ verbose: true }).some((m) => m.to === dest && (!piece || m.piece === piece));
+  if (fits(chess)) return null;
+  // A move of THEIRS ("what if they play Bxc3") is a hypothetical, not a refusal.
+  if (slots.seat === 'them') return null;
+  // Played earlier in the game: a question about the past.
+  const replay = new Chess();
+  for (const h of history) {
+    let mv;
+    try { mv = replay.move(h); } catch { break; }
+    if (!mv) break;
+    if (mv.to === dest && (!piece || mv.piece === piece)) return null;
+  }
+  return whyNotLegal(fen, dest, student, piece);
 }

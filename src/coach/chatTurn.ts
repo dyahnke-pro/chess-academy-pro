@@ -462,7 +462,8 @@ export function validateChatTurn(turn: ChatTurn, board: BoardContext, memory: Co
       if (!moveIsReal(r.san, board)) {
         // The board knows WHY it refused the move — say that, not "which move?".
         const dest = r.san.match(/([a-h][1-8])(?!.*[a-h][1-8])/)?.[1];
-        const why = dest && board.fen ? whyNotLegal(board.fen, dest, student) : null;
+        const letter = /^[KQRBN]/.test(r.san) ? r.san[0].toLowerCase() as 'k' | 'q' | 'r' | 'b' | 'n' : 'p';
+        const why = dest && board.fen ? whyNotLegal(board.fen, dest, student, letter) : null;
         if (why) return { ok: false, reason: 'illegal-move', clarify: why };
         return { ok: false, reason: 'illegal-move', clarify: `${r.san} isn't a move I can find here — which move did you mean?` };
       }

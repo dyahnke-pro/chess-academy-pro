@@ -27,17 +27,26 @@ const RULE_RE: ReadonlyArray<[ChessRule, RegExp]> = [
   ['check', /\bcheck\b/i],
 ];
 
-/** A RULES question: it names a rule AND asks what the rule is or whether it
- *  applies ("what is en passant", "how does castling work", "can I castle?",
- *  "why can't I castle"). A move that merely gives check is not one. */
-const ASKS_RULE_RE = /\b(?:what(?:'s|\s+is|\s+are|\s+does)|how\s+(?:does|do|do\s+you|can\s+i|to)|explain|rules?\s+(?:of|for|on)|meaning|mean|why\s+can(?:'?t|not)|can\s+i|am\s+i\s+allowed|allowed\s+to|is\s+(?:it|this)\s+(?:a|legal))\b/i;
+/** Rules whose NAME is only ever a rule — said anywhere, in any wording, the
+ *  student is asking about the rule ("en passant?", "en passant confuses me",
+ *  "how does it work, en passant"). */
+const NAME_ONLY: ReadonlySet<ChessRule> = new Set<ChessRule>(['en-passant', 'stalemate', 'promotion', 'repetition', 'fifty-move', 'insufficient-material']);
+
+/** "Castle", "check" and "mate" are also everyday move words ("castle here?",
+ *  "is that check?"), so for them only a request for the RULE itself counts:
+ *  what it is, how it works, what it means, the rules of it. */
+const DEFINITION_ASK_RE = /\b(?:what(?:'s|\s+is|\s+are|\s+does)|how\s+(?:does|do)\b[^?]*\bwork|explain|define|definition|meaning|mean|rules?\b)/i;
 
 export function ruleAsked(ask: string): ChessRule | null {
-  if (!ASKS_RULE_RE.test(ask)) return null;
-  for (const [rule, re] of RULE_RE) if (re.test(ask)) {
-    // "check" alone is a rules question only when it is the subject ("what is check?").
-    if (rule === 'check' && !/\bwhat(?:'s|\s+is)\s+(?:a\s+)?check\b|\bhow\s+does\s+check\b|\bin\s+check\b/i.test(ask)) return null;
-    return rule;
+  const t = ask.replace(/[\u2018\u2019]/g, "'");
+  for (const [rule, re] of RULE_RE) {
+    if (!re.test(t)) continue;
+    if (NAME_ONLY.has(rule)) {
+      // "I promoted earlier — was that right?" is about a move, not the rule.
+      if (/\b(?:was|did|were)\b/i.test(t) && /\b[a-h][1-8]\b|=[QRBN]/i.test(t)) return null;
+      return rule;
+    }
+    return DEFINITION_ASK_RE.test(t) && !/\b[KQRBN]?x?[a-h][1-8]\b/.test(t) ? rule : null;
   }
   return null;
 }
@@ -63,7 +72,7 @@ function enPassantNow(chess: Chess): string | null {
 }
 
 /** Why a side may or may not castle on each wing, from the board. */
-function castlingNow(chess: Chess, side: 'w' | 'b'): string {
+export function castlingNow(chess: Chess, side: 'w' | 'b'): string {
   const fen = chess.fen();
   const rights = fen.split(' ')[2] ?? '-';
   const rank = side === 'w' ? '1' : '8';

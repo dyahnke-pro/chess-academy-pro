@@ -1254,7 +1254,8 @@ describe('assembleCandidateMoveAnswer — evaluate the NAMED move', () => {
 
   it('answers an ILLEGAL named move honestly, never fabricating an eval', () => {
     const a = assembleCandidateMoveAnswer({ studentColor: null, candidateLineUci: [], candidateSettled: null, fen: START, candidateSan: 'e5', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: 0 });
-    expect(a?.facts).toMatch(/isn't a legal move/i);
+    // …and says WHY, from the board (2026-10-09).
+    expect(a?.facts).toBe("e5 isn't legal here. None of your pawns can reach e5 from where they stand.");
     expect(a?.bestMoveSan).toBeNull();
   });
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**666 lines · 26 exports · 13 importers · 8 tests · 3 audits**
+**667 lines · 26 exports · 13 importers · 8 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -144,7 +144,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `askBackAtCatchAll` (function) — 1 call site
-- `src/services/coachApi.ts:730`
+- `src/services/coachApi.ts:731`
 
 ## Tests
 

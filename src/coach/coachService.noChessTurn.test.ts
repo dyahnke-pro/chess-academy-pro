@@ -20,20 +20,22 @@ const ask = async (q: string): Promise<string> => (await coachService.ask(
   { maxToolRoundTrips: 1 },
 )).text;
 
-it('an insult, a stray word or a name is never answered with the position', async () => {
-  for (const q of ['You suck', 'Books', 'Name a famous chess player']) {
-    const t = await ask(q);
-    expect(t, q).not.toMatch(/material|best move|pawn break/i);
-  }
-}, 300_000);
+it.each(['You suck', 'Books', 'Name a famous chess player', 'lol whatever', 'do you like pizza?', 'my cat is asleep', 'ugh'])(
+  'no board readout nobody asked for: %s', async (q) => {
+    expect(await ask(q)).not.toMatch(/material|best move|pawn break/i);
+  }, 120_000,
+);
+
+it.each(['Should I resign?', 'what now?', 'where do I go from here', 'what should I do next', 'how am I doing in this one?', 'whats happening here'])(
+  'a question about the game in front of them gets the read: %s', async (q) => {
+    expect(await ask(q)).toMatch(/material|pawn break|better|winning|up about|threat|attack/i);
+  }, 120_000,
+);
 
 it('"do you understand me" says the coach is listening', async () => {
   expect(await ask('Do you understand me')).toMatch(/^(?:I am here|Yes, I am listening)/);
 }, 120_000);
 
-it('a question about how the game stands still gets the position read', async () => {
-  expect(await ask('Should I resign?')).toMatch(/material|pawn break|better|winning/i);
-}, 120_000);
 
 it('"What is en passant?" gets the rule and what it means on this board', async () => {
   const t = await ask('What is en passant?');

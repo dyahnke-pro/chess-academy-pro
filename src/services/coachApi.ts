@@ -64,8 +64,9 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
 import { lookupMasterPlay } from './masterPlayLookup';
 import { isEndgameByMaterial } from './gamePhaseService';
 import { chatBoardAnswer } from './chatBoardRead';
+import { tagSlots } from '../coach/chatTurnCodeReader';
 import { answerRuleQuestion } from './chessRules';
-import { answerRefusedMove } from './whyNotLegal';
+import { illegalNamedMove } from './whyNotLegal';
 import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleOpponentHypotheticalAnswer, assembleTradeAnswer, assembleEndgameOutlookAnswer, boardWeaknessNow, assembleCompareMovesAnswer, assembleCaptureOnAnswer, assemblePawnStrengthAnswer, playedSacrificeVerdict, lastCaptureOf, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, explainNotationSymbol, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleEndgameRuleAnswer, endgameRuleDemoFen, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental, type PositionalTopic as PositionalTopicType, type GroundedAnswer } from './groundedAnswer';
 import { getFundamentalCounts, FUNDAMENTAL_LABEL, fundamentalDevice } from './fundamentalsCatalog';
 import type { FundamentalId } from './principleAttribution';
@@ -2147,10 +2148,6 @@ export function isBoardQuestionTurn(
  *  answer again rather than claim the student was unclear. */
 const REPEAT_ASK_RE = /\b(?:explain\s+(?:that|it)\s+again|say\s+(?:that|it)\s+again|repeat\s+(?:that|it)|come\s+again|i\s+(?:don'?t|do\s+not)\s+(?:get|understand)(?:\s+(?:it|that))?|what\s+do\s+you\s+mean)\b/i;
 /** "help", "what can you do" — the app's real capabilities. */
-/** A turn that is only a square or a move: "d5", "Nf3", "e 4". */
-const BARE_SQUARE_ASK_RE = /^\s*(?:[nbrqk]?x?[a-h]\s?[1-8][+#]?|o-o(?:-o)?)\s*[?.!]*\s*$/i;
-/** A turn asking how the game stands, with no chess words in it. */
-const POSITION_ASK_RE = /\b(?:resign|doing|winning|losing|better|worse|now|next|status|going\s+on|happening|how\s+am\s+i|am\s+i|should\s+i|what\s+(?:do|should|can)\s+i|where\s+(?:do|should)\s+i|help\s+me|stuck|lost|draw|ahead|behind)\b/i;
 const HELP_ASK_RE = /^\s*(?:help|what\s+can\s+you\s+do|what\s+do\s+you\s+do|how\s+does\s+this\s+work)\b/i;
 
 /** The answer to a turn with no chess words in it (answers swarm P7). All in
@@ -2186,9 +2183,12 @@ async function answerNoChessTurn(
     || /\b[A-Z][a-z]+/.test(ask.trim().slice(1));
   if (namesSomething) return { text: STOCK_GROUNDING_FALLBACK, lane: 'safe-default-stock' };
   if (grounding.currentFen) {
-    // A bare square or move ("D5") asks about THAT square: answer from the
-    // computed facts that touch it, or say nothing about the board.
-    if (BARE_SQUARE_ASK_RE.test(ask)) {
+    // Read by the sentence computer, never by a word list (David 2026-10-09:
+    // "root cause fixes … hold up to different wording").
+    const slots = tagSlots(ask);
+    // A sentence that names a square or a move asks about THAT: answer from
+    // the computed facts that touch it.
+    if (slots.squares.length > 0 || slots.sans.length > 0) {
       const board = await chatBoardAnswer({
         fen: grounding.currentFen,
         studentColor: grounding.studentColor ?? ((grounding.currentFen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white'),
@@ -2198,14 +2198,16 @@ async function answerNoChessTurn(
       }).catch(() => null);
       if (board) return { text: board, lane: 'board-facts' };
     }
-    // Only a question about how the game stands gets the position read
-    // ("should I resign?", "am I doing ok?", "what now?"). "You suck",
-    // "Books" or a stray word is not one — live replay 2026-10-09 answered
-    // each of those with "the best move is Rxg7+".
-    if (POSITION_ASK_RE.test(ask)) {
+    // A QUESTION ABOUT THE STUDENT'S OWN GAME ("should I resign?", "what
+    // now?", "where is next?") gets the position read. Anything else — an
+    // insult, a stray word, a question about something else — never gets a
+    // board readout it did not ask for (live replay 2026-10-09: "You suck"
+    // and "Books" were each answered "the best move is Rxg7+").
+    if (slots.question && (slots.seat === 'me' || slots.deictic)) {
       const read = await serveGroundedPositionDefault(grounding, config, ask || undefined, undefined, studentLanguage);
       if (read) return { text: read, lane: 'safe-default-position' };
     }
+    if (slots.question) return { text: 'I am not sure what you are asking. Do you want my read of the position? Ask about a move, a plan, or what they are up to.', lane: 'ask-back' };
   }
   return { text: smallTalkReply(ask), lane: 'conversational' };
 }
@@ -3831,11 +3833,13 @@ export async function getCoachChatResponse(
       if (onStream) onStream(boardVerdict);
       return boardVerdict;
     }
-    // A MOVE THE BOARD REFUSED — "it's not letting me take b5". The board
-    // knows why (pin, check, own piece, not your turn); say it.
+    // A MOVE THE SENTENCE NAMES THAT THE BOARD REFUSES — in any wording ("it
+    // won't let me take b5", "is qf3 ok?", "castle?"). The sentence computer
+    // reads the move; the board says why (pin, check, blocked, own piece).
     if (grounding.currentFen) {
-      const refused = answerRefusedMove(boardVerdictAsk, grounding.currentFen,
-        grounding.studentColor ?? (grounding.currentFen.split(' ')[1] === 'b' ? 'black' : 'white'));
+      const refused = illegalNamedMove(boardVerdictAsk, grounding.currentFen,
+        grounding.studentColor ?? (grounding.currentFen.split(' ')[1] === 'b' ? 'black' : 'white'),
+        grounding.moveHistory ?? []);
       if (refused) {
         const voiced = await voice(refused, { studentMessage: earlyUserMsg, providerConfig: config, intent: 'rules', preferRaw: true });
         const out = voiced ?? refused;

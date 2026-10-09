@@ -10,6 +10,7 @@
 // The only import: a PURE data resolver (fundamentalLessons imports nothing but a
 // type), so the "no heavy imports" contract holds — regex intent detection only.
 import { Chess } from 'chess.js';
+import { pointsAtThisBoard } from './chatTurnCodeReader';
 import { resolveTaughtFundamental } from '../data/fundamentalLessons';
 import { pureBoardAspect } from '../services/boardQuestionRouter';
 import type { CoachSurface, AskOrigin, AskSource } from './types';
@@ -1646,6 +1647,9 @@ export function isProgressQuestion(ask: string | undefined): boolean {
   // ask and served the patterns empty-state on prod (proof run qafn-msrv28zv,
   // 2026-08-13). Same opt-out isMistakesQuestion already carries.
   if (!ask || isGameMistakeQuestion(ask)) return false;
+  // POINTED AT THIS BOARD ("how am I doing in this one?", "am I doing ok
+  // here?") — the live position answers it, never the history profile.
+  if (pointsAtThisBoard(ask)) return false;
   // A LAST-GAME error ask ("what did I do wrong in my last game", "what was my
   // critical error") is about one game — the last-game-error lane owns it, not
   // the aggregate weakness profile.

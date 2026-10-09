@@ -14,6 +14,7 @@
  */
 import { MATERIAL_VALUE } from './pieceValues';
 import { computeMustDefend } from './threatOut';
+import { whyNotLegal } from './whyNotLegal';
 import { readBoardUrgency, urgencyLead, threatsAgainst } from './boardUrgency';
 import { mechanismContrast, moveMissed, pvSans } from './moveInsight';
 import { walkableLine } from './proof';
@@ -1978,7 +1979,12 @@ export function assembleCandidateMoveAnswer(opts: {
   }
   if (!candNorm) {
     return {
-      facts: `${raw} isn't a legal move in this position.`,
+      facts: (() => {
+        const dest = raw.match(/([a-h][1-8])(?=[^a-h1-8]*$)/)?.[1];
+        const letter = /^[KQRBN]/.test(raw) ? raw[0].toLowerCase() as 'k' | 'q' | 'r' | 'b' | 'n' : 'p';
+        const why = dest ? whyNotLegal(fen, dest, mover, letter) : null;
+        return why ? `${raw} isn't legal here. ${why}` : `${raw} isn't a legal move in this position.`;
+      })(),
       bestMoveSan: null,
       bestMoveFromTo: null,
       sources: ['board:chess.js'],

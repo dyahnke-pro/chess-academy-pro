@@ -59,6 +59,12 @@ export interface Slots {
   /** Both a capture and a push are named ("take or push?"). */
   takeAndPush: boolean;
   negated: boolean;
+  /** Whose piece or move the sentence is about: "my/I" → me, "their/they/he" → them. */
+  seat: 'me' | 'them' | null;
+  /** Points at the game in front of us: "here", "this", "now", "next". */
+  deictic: boolean;
+  /** The sentence asks something (an ask word, a question opener, or "?"). */
+  question: boolean;
 }
 
 const SAN_TOKEN = /\b(?:O-O(?:-O)?|[KQRBN][a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h]x[a-h][1-8](?:=[QRBN])?[+#]?|[a-h][1-8](?:=[QRBN])?[+#]?)\b/g;
@@ -68,6 +74,12 @@ export function tagSlots(raw: string): Slots {
   for (const [re, to] of SLIPS) text = text.replace(re, to);
   // "knight e 4" / "night e4" / "knight to e4" → keep the piece, join the square.
   text = text.replace(/\b([a-h])\s+([1-8])\b/gi, '$1$2');
+  // Moves typed in lower case ("qf3", "nxe5", "be2") are moves: a piece
+  // letter fused to a square can only be SAN. "bx" stays as typed — it is the
+  // b-pawn capturing as often as the bishop, and only the board can tell.
+  text = text.replace(/\b([kqrn])(x?[a-h][1-8])\b/g, (_m, p: string, rest: string) => `${p.toUpperCase()}${rest}`)
+    .replace(/\bb([a-h][1-8])\b/g, 'B$1')
+    .replace(/\bo-o(-o)?\b/gi, (m) => m.toUpperCase());
   const lower = text.toLowerCase();
 
   const ask: Ask =
@@ -93,7 +105,7 @@ export function tagSlots(raw: string): Slots {
   // A bare square is kept as a square; it becomes a pawn move only when the
   // board says a pawn can go there (or went there).
   const sans = (text.match(SAN_TOKEN) ?? []).filter((t) => !/^[a-h][1-8]$/.test(t));
-  const squares = [...lower.matchAll(/\b([a-h][1-8])\b/g)].map((m) => m[1]);
+  const squares = [...lower.matchAll(/\b[kqrbn]?x?([a-h][1-8])\b/g)].map((m) => m[1]);
   const pieces: PieceLetter[] = [];
   for (const w of lower.split(/[^a-z']+/)) {
     const p = PIECE_WORD[w];
@@ -109,8 +121,22 @@ export function tagSlots(raw: string): Slots {
     options: /\bor\b/.test(lower),
     contrast: /\b(?:better|worse|stronger|weaker) than\b|\b(?:instead of|rather than|versus|vs\.?)\b/.test(lower),
     takeAndPush: /\b(?:take|takes|taking|capture|capturing)\b/.test(lower) && /\b(?:push|pushing|advance|advancing)\b/.test(lower),
-    negated: /\b(?:not|n't|never)\b/.test(lower),
+    negated: /\b(?:not|n't|never|wont|cant|doesnt|dont|isnt)\b/.test(lower),
+    seat: /\b(?:their|theirs|they|they'?re|his|her|he|she|opponent'?s?|the other side)\b/.test(lower) ? 'them'
+      : /\b(?:my|mine|me|i|i'?m|i'?ve)\b/.test(lower) ? 'me' : null,
+    deictic: /\b(?:here|this|that|now|next|position|game|board|move)\b/.test(lower),
+    question: ask !== 'none' || /\?\s*$/.test(lower) || /^\s*(?:what|where|when|who|how|which|should|can|could|would|am|is|are|do|does)\b/.test(lower),
   };
+}
+
+/** THE SENTENCE POINTS AT THE BOARD IN FRONT OF US — "this one", "here",
+ *  "now", "at the moment". A question scoped this way is about this game, never
+ *  the student's history ("how am I doing in this one?" is not "am I
+ *  improving?"). "This week / lately" scope to time, not the board. */
+export function pointsAtThisBoard(raw: string): boolean {
+  const t = raw.toLowerCase().replace(/[’‘]/g, "'");
+  if (/\bthis\s+(?:week|month|year|season|tournament|time\s+of)\b|\b(?:lately|recently|these\s+days|over\s+time|overall|in\s+general)\b/.test(t)) return false;
+  return /\b(?:this|here|now|currently|at\s+the\s+moment|right\s+now|so\s+far)\b/.test(t);
 }
 
 // ─── SLOTS → MOVES, ON THE BOARD ───────────────────────────────────────────
@@ -223,7 +249,7 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
   if (slots.pieces.length === 1 && slots.squares.length <= 1 && slots.sans.length === 0 && slots.action === 'none' && !slots.options
     && /^\s*(?:what|how|is|are)\b/.test(lower)
     && /\b(?:doing|aiming|aim|for|about|safe|loose|good|bad|active|attack(?:ing)?|eye(?:ing)?|look(?:ing)? at)\b/.test(lower)) {
-    const seat = /\b(?:their|his|her|opponent'?s)\b/.test(lower) ? 'them' as const : /\b(?:my|mine)\b/.test(lower) ? 'me' as const : null;
+    const seat = slots.seat;
     return { kind: 'what-about-piece', referents: [{ type: 'piece', piece: slots.pieces[0], square: slots.squares[0] ?? null, seat }], seat, topic: null };
   }
 

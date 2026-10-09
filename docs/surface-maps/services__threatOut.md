@@ -49,7 +49,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `computeMustDefend` (function) — 29 call sites
 - `src/services/boardUrgency.ts:51`
 - `src/services/boardUrgency.ts:53`
-- `src/services/groundedAnswer.ts:641`
+- `src/services/groundedAnswer.ts:642`
 - `src/services/liveTacticsContext.ts:783`
 - `src/services/methodSignals.ts:38`
 - `src/services/methodSignals.ts:47`

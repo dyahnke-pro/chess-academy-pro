@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
 import { ruleAsked, answerRuleQuestion } from './chessRules';
+import { illegalNamedMove } from './whyNotLegal';
 
 const play = (s: string): string => { const c = new Chess(); for (const m of s.split(' ')) c.move(m); return c.fen(); };
 
@@ -8,7 +9,6 @@ describe('which rule a question asks', () => {
   it('reads the replay questions and their spellings', () => {
     expect(ruleAsked('What is en passant?')).toBe('en-passant');
     expect(ruleAsked('what is en pasant')).toBe('en-passant');
-    expect(ruleAsked('Why can\'t I castle?')).toBe('castling');
     expect(ruleAsked('how does castling work')).toBe('castling');
     expect(ruleAsked('what is stalemate')).toBe('stalemate');
     expect(ruleAsked('what is checkmate')).toBe('checkmate');
@@ -33,17 +33,33 @@ describe('the rule on this board', () => {
   });
   it('castling: names exactly why not, wing by wing', () => {
     const fen = play('e4 e5 Nf3 Nc6');
-    const a = answerRuleQuestion("why can't I castle?", fen, 'w');
+    const a = { facts: illegalNamedMove("why can't I castle?", fen, 'white', ['e4', 'e5', 'Nf3', 'Nc6']) };
     expect(a?.facts).toMatch(/cannot castle kingside yet — f1 is still occupied/);
     expect(a?.facts).toMatch(/cannot castle queenside yet — b1 and c1 and d1 are still occupied/);
   });
   it('castling: a moved king loses the right', () => {
     const fen = play('e4 e5 Ke2 Ke7 Ke1 Ke8');
-    expect(answerRuleQuestion('can I castle?', fen, 'w')?.facts).toMatch(/can no longer castle kingside — the king or the h-rook has already moved/);
+    expect(illegalNamedMove('can I castle?', fen, 'white')).toMatch(/can no longer castle kingside — the king or the h-rook has already moved/);
   });
   it('castling: an attacked crossing square stops it', () => {
     // White king e1, rook h1, Black rook on f8 with the f-file open.
     const fen = '4kr2/8/8/8/8/8/8/4K2R w K - 0 1';
-    expect(answerRuleQuestion('can I castle?', fen, 'w')?.facts).toMatch(/cross or land on f1, which the enemy attacks/);
+    expect(illegalNamedMove('can I castle?', fen, 'white')).toMatch(/cross or land on f1, which the enemy attacks/);
   });
+});
+
+describe('a rule is recognised whatever the wording', () => {
+  it.each([
+    ['en passant?', 'en-passant'], ['En passant', 'en-passant'], ['en passant confuses me', 'en-passant'],
+    ['how does it work, en passant', 'en-passant'], ['tell me about en pasant', 'en-passant'], ['explain en passant pls', 'en-passant'],
+    ['stalemate??', 'stalemate'], ['i dont get stalemate', 'stalemate'],
+    ['promotion', 'promotion'], ['what can a pawn promote to', 'promotion'],
+    ['threefold repetition', 'repetition'], ['50 move rule', 'fifty-move'],
+    ['how does castling work', 'castling'], ['castling rules', 'castling'], ['explain castling', 'castling'],
+    ['what does checkmate mean', 'checkmate'], ['define check', 'check'],
+  ])('%s', (q, rule) => { expect(ruleAsked(q)).toBe(rule); });
+
+  it.each(['castle here?', 'Probably just castle here right', 'is that check?', 'Qh5 is mate in 2', 'can I castle?', 'I promoted on e8, was that right?'])(
+    'a move, not the rule: %s', (q) => { expect(ruleAsked(q)).toBeNull(); },
+  );
 });
