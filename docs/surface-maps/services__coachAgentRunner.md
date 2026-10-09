@@ -21,14 +21,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `detectNarrationToggle` (function) — 5 call sites
 - `src/components/Coach/CoachChatPage.tsx:160`
-- `src/components/Coach/GameChatPanel.tsx:734`
+- `src/components/Coach/GameChatPanel.tsx:768`
 - `src/services/coachAgentRunner.test.ts:33`
 - `src/services/coachAgentRunner.test.ts:48`
 - `src/services/coachAgentRunner.test.ts:60`
 
 ### `applyNarrationToggle` (function) — 7 call sites
 - `src/components/Coach/CoachChatPage.tsx:170`
-- `src/components/Coach/GameChatPanel.tsx:736`
+- `src/components/Coach/GameChatPanel.tsx:770`
 - `src/services/coachAgentRunner.test.ts:74`
 - `src/services/coachAgentRunner.test.ts:80`
 - `src/services/coachAgentRunner.test.ts:81`
@@ -36,7 +36,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachAgentRunner.test.ts:89`
 
 ### `narrateMove` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:2287`
+- `src/components/Coach/CoachGamePage.tsx:2288`
 
 ## Tests
 

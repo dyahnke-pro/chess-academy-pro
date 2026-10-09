@@ -7,6 +7,8 @@ import { validateTacticClaims, stripUngroundedTacticSentences } from '../../serv
 import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';
 import { dispatchCoachTurn, openTurnRead } from '../../coach/dispatchCoachTurn';
+import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { useLineWalk } from '../../hooks/useLineWalk';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { extractMoveArrows } from '../../services/coachMoveExtractor';
@@ -236,6 +238,11 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     const activeProfile = useAppStore((s) => s.activeProfile);
     const navigate = useNavigate();
     const location = useLocation();
+    // A screen that hands no board walker (a drill, the global drawer) still
+    // gets the proof: the line walks on a small board in this panel. One
+    // coach — every answer's line can be played out wherever it is asked.
+    const ownLineWalk = useLineWalk(playerColor, 'chatPanel.lineWalk');
+    const walkLine = onWalkLine ?? ownLineWalk.walk;
 
     // 🔒 THE HANDS REACH THE SPINE FROM HERE (2026-09-21, David: "A. Not even a
     // question" + "this is a unified coach, so all changes get made to all
@@ -1665,7 +1672,12 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           aria-relevant="additions"
           aria-label="In-game coach chat messages"
         >
-          {isStreaming && (
+          {!onWalkLine && ownLineWalk.walkFen && (
+            <div className="w-48 mx-auto" data-testid="chat-panel-walk-board">
+              <ConsistentChessboard fen={ownLineWalk.walkFen} arrows={ownLineWalk.walkArrows} interactive={false} boardOrientation={playerColor} showLastMoveHighlight />
+            </div>
+          )}
+                    {isStreaming && (
             <div
               className="rounded-lg p-1 -m-1"
               style={{
@@ -1699,7 +1711,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                   : { opacity: 0.7 }
               }
             >
-              <ChatMessage message={msg} {...(onWalkLine ? { onWalkLine } : {})} />
+              <ChatMessage message={msg} onWalkLine={walkLine} />
             </div>
           ))}
 

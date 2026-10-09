@@ -17,6 +17,7 @@ import { MotionConfig } from 'framer-motion';
 import { GameChatPanel } from './GameChatPanel';
 import { useAppStore } from '../../stores/appStore';
 import { buildUserProfile } from '../../test/factories';
+import { walkableLine } from '../../services/proof';
 
 const mockDispatch = vi.fn();
 
@@ -92,5 +93,24 @@ describe('the global drawer derives its surface from the route', () => {
     const got = await ask('Can you teach me the Italian Game?');
     expect(got.surface).toBe('home-chat');
     expect(got.liveSurface).toBe('home-chat');
+  });
+});
+
+// ONE COACH: a screen that hands the panel no board (a drill, the global
+// drawer) still lets the student play out the line an answer proved — on the
+// panel's own small board.
+describe('a proof line walks even where the screen gives no board', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    useAppStore.setState({ activeProfile: buildUserProfile({ id: 'main', name: 'Player', aiDataConsent: 'granted' }) });
+  });
+  it('the walk button plays the line on the panel board', async () => {
+    const line = walkableLine(START, ['e4', 'e5'], 'e4');
+    mockDispatch.mockResolvedValue({ text: 'The best move is e4.', lines: [line], toolCallIds: [], dispatchedToolNames: [], provider: 'deepseek' });
+    mountDrawerAt('/');
+    await ask("what's the best move?");
+    const btn = await screen.findByTestId('message-walk-line-0');
+    act(() => { fireEvent.click(btn); });
+    await waitFor(() => expect(screen.getByTestId('chat-panel-walk-board')).toBeInTheDocument());
   });
 });

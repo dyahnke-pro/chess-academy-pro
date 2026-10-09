@@ -27,7 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `registerStrengthSetter` (function) — 3 call sites
-- `src/App.tsx:151`
+- `src/App.tsx:163`
 - `src/services/coachHands.test.ts:440`
 - `src/services/coachHands.test.ts:450`
 
@@ -59,7 +59,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `registerCoachNavigate` (function) — 12 call sites
-- `src/App.tsx:143`
+- `src/App.tsx:155`
 - `src/services/coachActuator.test.ts:20`
 - `src/services/coachActuator.test.ts:27`
 - `src/services/coachActuator.test.ts:33`
@@ -73,7 +73,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachHands.test.ts:416`
 
 ### `clearCoachNavigate` (function) — 6 call sites
-- `src/App.tsx:144`
+- `src/App.tsx:156`
 - `src/services/coachActuator.test.ts:11`
 - `src/services/coachActuator.test.ts:57`
 - `src/services/coachActuator.walkthrough.test.ts:18`
@@ -81,9 +81,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachHands.test.ts:375`
 
 ### `registerCoachHands` (function) — 35 call sites
-- `src/components/Coach/CoachGameReview.tsx:744`
-- `src/components/Coach/CoachTeachPage.tsx:2231`
-- `src/components/Coach/GameChatPanel.tsx:252`
+- `src/components/Coach/CoachGameReview.tsx:740`
+- `src/components/Coach/CoachTeachPage.tsx:2378`
+- `src/components/Coach/GameChatPanel.tsx:263`
 - `src/services/coachActuator.walkthrough.test.ts:27`
 - `src/services/coachHands.test.ts:47`
 - `src/services/coachHands.test.ts:56`
@@ -131,7 +131,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `coachNavigate` (function) — 6 call sites
-- `src/coach/coachService.ts:1037`
+- `src/coach/coachService.ts:1076`
 - `src/services/coachActuator.test.ts:15`
 - `src/services/coachActuator.test.ts:22`
 - `src/services/coachActuator.test.ts:28`
@@ -149,7 +149,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachActuator.test.ts:58`
 
 ### `canPerform` (function) — 8 call sites
-- `src/components/Board/VoiceChatMic.tsx:303`
+- `src/components/Board/VoiceChatMic.tsx:304`
 - `src/services/coachHands.test.ts:215`
 - `src/services/coachHands.test.ts:216`
 - `src/services/coachHands.test.ts:220`
@@ -159,15 +159,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachHands.test.ts:293`
 
 ### `actuate` (function) — 37 call sites
-- `src/coach/coachService.ts:1021`
-- `src/coach/coachService.ts:1023`
-- `src/coach/coachService.ts:1025`
-- `src/coach/coachService.ts:1027`
-- `src/coach/coachService.ts:1047`
-- `src/components/Board/VoiceChatMic.tsx:312`
-- `src/components/Coach/CoachGameReview.tsx:3151`
-- `src/components/Coach/CoachTeachPage.tsx:3169`
-- `src/components/Coach/GameChatPanel.tsx:660`
+- `src/coach/coachService.ts:1060`
+- `src/coach/coachService.ts:1062`
+- `src/coach/coachService.ts:1064`
+- `src/coach/coachService.ts:1066`
+- `src/coach/coachService.ts:1086`
+- `src/components/Board/VoiceChatMic.tsx:313`
+- `src/components/Coach/CoachGameReview.tsx:2786`
+- `src/components/Coach/CoachTeachPage.tsx:3668`
+- `src/components/Coach/GameChatPanel.tsx:694`
 - `src/hooks/useLiveCoach.ts:308`
 - `src/services/coachActuator.walkthrough.test.ts:28`
 - `src/services/coachActuator.walkthrough.test.ts:38`
@@ -216,10 +216,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `actionForCommand` (function) — 13 call sites
-- `src/components/Board/VoiceChatMic.tsx:297`
-- `src/components/Coach/CoachGameReview.tsx:3145`
-- `src/components/Coach/CoachTeachPage.tsx:3148`
-- `src/components/Coach/GameChatPanel.tsx:619`
+- `src/components/Board/VoiceChatMic.tsx:298`
+- `src/components/Coach/CoachGameReview.tsx:2780`
+- `src/components/Coach/CoachTeachPage.tsx:3647`
+- `src/components/Coach/GameChatPanel.tsx:653`
 - `src/services/coachHands.test.ts:37`
 - `src/services/coachHands.test.ts:251`
 - `src/services/coachHands.test.ts:256`

@@ -26,7 +26,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `smallTalkKind` (function) — 3 call sites
 - `src/coach/ask/playName.ts:87`
 - `src/coach/smallTalk.test.ts:12`
-- `src/services/coachApi.ts:2166`
+- `src/services/coachApi.ts:2170`
 
 ### `smallTalkReply` (function) — 7 call sites
 - `src/coach/smallTalk.test.ts:16`
@@ -34,8 +34,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachApi.banterContract.test.ts:14`
 - `src/services/coachApi.master-integration.test.ts:172`
 - `src/services/coachApi.master-integration.test.ts:332`
-- `src/services/coachApi.ts:2166`
-- `src/services/coachApi.ts:2212`
+- `src/services/coachApi.ts:2170`
+- `src/services/coachApi.ts:2216`
 
 ## Tests
 

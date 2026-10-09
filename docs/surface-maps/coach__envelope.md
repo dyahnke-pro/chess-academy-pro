@@ -53,7 +53,7 @@
 - `src/coach/__tests__/envelope.test.ts:434`
 - `src/coach/__tests__/envelope.test.ts:467`
 - `src/coach/__tests__/ping.integration.test.ts:124`
-- `src/coach/coachService.ts:994`
+- `src/coach/coachService.ts:1002`
 
 ### `formatAnnotationContextSubBlock` (function) — 1 call site
 - `src/services/narrationGrounding.ts:130`

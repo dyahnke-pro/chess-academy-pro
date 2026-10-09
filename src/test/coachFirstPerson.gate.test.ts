@@ -18,7 +18,7 @@ import path from 'node:path';
 import baseline from './coachFirstPerson.baseline.json';
 
 const FIRST_PERSON = /(?:^|[^A-Za-z'])(?:I|I'm|I'll|I've|I'd)(?![A-Za-z'])/;
-const ROOTS = ['src/coach', 'src/services', 'src/components', 'src/hooks'];
+const ROOTS = ['src/coach', 'src/services', 'src/components', 'src/hooks', 'src/data'];
 
 export function countFirstPersonLines(text: string): number {
   let n = 0;

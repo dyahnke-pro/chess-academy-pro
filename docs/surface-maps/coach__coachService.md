@@ -111,7 +111,7 @@
 - `src/coach/questionIntents.ts:234`
 - `src/coach/questionIntents.ts:3336`
 - `src/coach/questionIntents.ts:3401`
-- `src/components/Coach/GameChatPanel.tsx:917`
+- `src/components/Coach/GameChatPanel.tsx:951`
 - `src/services/attackAssessment.test.ts:55`
 - `src/services/endgameLaneOwnership.test.ts:24`
 

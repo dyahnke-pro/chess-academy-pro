@@ -26,7 +26,7 @@ export const ANTI_PIRC_AUSTRIAN_LESSON: LessonScript = {
       sayShort: "f4 — the big e4-d4-f4 front.",
       highlights: [H('e4', KEY), H('d4', KEY), H('f4', KEY)] }),
     b({ id: 'aus2', moves: 'e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3',
-      say: "Now bring the attackers out: Nf3 supports the centre and eyes g5 and e5, O-O tucks your king away, and Bd3 trains the bishop down the b1-h7 diagonal, straight at Black's castled king. Everything — and I mean everything — points kingside. The Pirc player has to conjure central counterplay fast, or he simply gets steamrolled.",
+      say: "Now bring the attackers out: Nf3 supports the centre and eyes g5 and e5, O-O tucks your king away, and Bd3 trains the bishop down the b1-h7 diagonal, straight at Black's castled king. Everything points kingside. The Pirc player has to conjure central counterplay fast, or they simply get steamrolled.",
       sayShort: "Nf3, Bd3 — pieces aim kingside.",
       highlights: [H('d3', KEY)] }),
     b({ id: 'aus3', moves: 'e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 Na6 O-O c5 d5',

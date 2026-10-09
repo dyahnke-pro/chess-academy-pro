@@ -291,7 +291,11 @@ question-box screens and reads both the page and the door's `chat-turn` row.
 - Play's chat opens the read per turn (as Learn does): commands are read and
   their language noted; the door claims the read when reached.
 - Proof lines walkable on Play chat, Openings Play, review, Analyse, Explain
-  and the opening chat (own small board); coach chat has no board.
+  and the opening chat (own small board); any chat panel whose screen gives
+  no board walks it on its own small board (drills, the global drawer);
+  coach chat has no board.
+- Learn's greetings and the Vienna walkthrough spoke as "I"; rewritten, and
+  the gate now covers lesson data too.
 - "What's the best move?" read in code (was 16-20 s through the model).
 - Found on the way: the trap-classifier test sampled lines removed on 10-08
   (red on main) — samples live lines now, plus an orphan check; the
@@ -303,8 +307,6 @@ question-box screens and reads both the page and the door's `chat-turn` row.
   beside the door's request steps — P8/P9 delete ledger.
 - The opening chat phrases through its scope prompt ("knight to f3 (Nf3)") —
   P5 one voice.
-- Drill screens with a chat (Guess the Move, Opening Challenge, Middlegame
-  Practice, lesson scaffold) don't walk proof lines yet.
 
 ## Acceptance
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**14 lines · 2 exports · 2 importers · 0 tests · 0 audits**
+**19 lines · 3 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/coach/dispatchCoachTurn.ts`
 - `src/services/coachApi.ts`
+- `src/services/coachNonAnswer.test.ts`
+- `src/services/coachNonAnswer.ts`
 
 ## Exports and every call site
 
@@ -23,9 +25,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `isStockFallback` (function) — 1 call site
 - `src/coach/dispatchCoachTurn.ts:444`
 
+### `COACH_OFFLINE_LINE` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ## Tests
 
-_No test file references this module. A change here is unguarded._
+- `src/services/coachNonAnswer.test.ts`
 
 ## Audits that reach it
 
