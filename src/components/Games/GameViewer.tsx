@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { Chess } from 'chess.js';
+import { isTypingTarget } from '../../utils/isTypingTarget';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { useChessGame } from '../../hooks/useChessGame';
 import { MoveTree } from '../Openings/MoveTree';
@@ -76,6 +77,7 @@ export function GameViewer({ game, onClose }: GameViewerProps): JSX.Element {
   }, [annotations]);
 
   const handleKeyDown = useCallback((e: KeyboardEvent): void => {
+    if (isTypingTarget(e.target)) return;
     if (e.key === 'ArrowRight') {
       setMoveIdx((i) => Math.min(i + 1, moves.length - 1));
     } else if (e.key === 'ArrowLeft') {

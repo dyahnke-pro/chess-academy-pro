@@ -77,6 +77,7 @@ import { SkipBack, SkipForward, Cpu, BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { tryCaptureForgetIntent } from '../../services/openingIntentCapture';
 import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
+import { isTypingTarget } from '../../utils/isTypingTarget';
 import type { LiveState } from '../../coach/types';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useAppStore } from '../../stores/appStore';
@@ -3218,6 +3219,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent): void => {
+      // Typing in the ask box: a space is a space, an arrow moves the cursor.
+      if (isTypingTarget(e.target)) return;
       if (walkUiActive) {
         if (e.key === 'ArrowLeft') {
           e.preventDefault();
