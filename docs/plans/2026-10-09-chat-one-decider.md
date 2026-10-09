@@ -282,17 +282,29 @@ question-box screens and reads both the page and the door's `chat-turn` row.
 - The coach says "I" in 277 literals across 40 files (RULEBOOK V1/V2). Gate
   `coachFirstPerson.gate.test.ts` freezes them, shrink-only; 3 cleaned.
 
-**Still open (in order):**
-- Sweep the 277 first-person literals (the baseline is the list).
-- Play's in-game commands (mute, restart, set board, play opening, narration
-  toggle) still parse before the door, so those turns skip the reading and
-  the language note — part of P7.
-- Proof lines (`answer.lines`) are walkable on My Mistakes only; Learn,
-  Play, review, Analyse and Explain drop them (P5).
-- "What's the best move?" is read by the model (~16-20 s cold) — the code
-  reader should take it (P6).
-- The opening-page chat phrases the same fact differently ("knight to f3
-  (Nf3)") under its scope prompt — one voice (P5).
+**Second pass (David: "Fix all, keep walking through"):**
+- "I" sweep done: ~200 coach lines rewritten, plus the prompts that taught it
+  (phase narration said "Speak in first person"; envelope / phrasing examples
+  spoke as "I'll respond with e5"; the shared perspective rule banned "I" in
+  one mode only). Gate widened to components + hooks: 336 -> 138, the rest
+  are the student's own words and the bans.
+- Play's chat opens the read per turn (as Learn does): commands are read and
+  their language noted; the door claims the read when reached.
+- Proof lines walkable on Play chat, Openings Play, review, Analyse, Explain
+  and the opening chat (own small board); coach chat has no board.
+- "What's the best move?" read in code (was 16-20 s through the model).
+- Found on the way: the trap-classifier test sampled lines removed on 10-08
+  (red on main) — samples live lines now, plus an orphan check; the
+  non-answer detector kept a hand copy of the offline line — reads the one
+  constant now.
+
+**Still open:**
+- Play keeps two regex command parsers (`tryRouteIntent`, `inGameChatIntent`)
+  beside the door's request steps — P8/P9 delete ledger.
+- The opening chat phrases through its scope prompt ("knight to f3 (Nf3)") —
+  P5 one voice.
+- Drill screens with a chat (Guess the Move, Opening Challenge, Middlegame
+  Practice, lesson scaffold) don't walk proof lines yet.
 
 ## Acceptance
 

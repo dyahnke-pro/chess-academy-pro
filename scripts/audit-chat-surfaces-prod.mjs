@@ -108,7 +108,8 @@ async function ask(text) {
     if (stable >= 2) break;
   }
   const rows = (await chatRows()).slice(rowsBefore);
-  return { answer: last, secs: Math.round((Date.now() - t0) / 100) / 10, row: rows[rows.length - 1] ?? null, url: await get('/js', 'return location.href') };
+  const walkButtons = (await get('/js', 'return document.querySelectorAll("[data-testid*=walk-line], [data-testid=message-walk-lines]").length')) ?? 0;
+  return { walkButtons, answer: last, secs: Math.round((Date.now() - t0) / 100) / 10, row: rows[rows.length - 1] ?? null, url: await get('/js', 'return location.href') };
 }
 
 async function reach(surface) {
@@ -147,8 +148,10 @@ for (const s of SURFACES) {
     if (!r.row) fails.push('never reached the door');
     for (const re of q.must ?? []) if (!re.test(r.answer)) fails.push(`missing ${re}`);
     if (q.lang && !q.lang.test(r.answer)) fails.push('not in the asker\'s language');
+    // The coach never talks about itself (RULEBOOK V1/V2).
+    if (/(?:^|[^A-Za-z'])(?:I|I'm|I'll|I've|I'd)(?![A-Za-z'])/.test(r.answer.replace(new RegExp(q.ask.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), ''))) fails.push('coach said "I"');
     answers.push({ id: q.id, ask: q.ask, ...r, fails });
-    console.log(`${fails.length ? '❌' : '✅'} ${s.id}/${q.id} (${r.secs}s) ${q.ask}\n   → ${r.answer.slice(0, 420)}${fails.length ? `\n   ✗ ${fails.join('; ')}` : ''}${r.row ? `\n   row: read=${r.row.parsedKind ?? '—'} (${r.row.parseSource ?? '—'}) served=${r.row.servedIntent ?? '—'} outcome=${r.row.outcome ?? '—'}` : ''}`);
+    console.log(`${fails.length ? '❌' : '✅'} ${s.id}/${q.id} (${r.secs}s) [walk-lines: ${r.walkButtons}] ${q.ask}\n   → ${r.answer.slice(0, 420)}${fails.length ? `\n   ✗ ${fails.join('; ')}` : ''}${r.row ? `\n   row: read=${r.row.parsedKind ?? '—'} (${r.row.parseSource ?? '—'}) served=${r.row.servedIntent ?? '—'} outcome=${r.row.outcome ?? '—'}` : ''}`);
   }
   results.push({ surface: s.id, reached: true, answers });
 }
