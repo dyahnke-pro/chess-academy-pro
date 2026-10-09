@@ -353,7 +353,7 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   'what-about-piece': direct('"what about my bishop?" — a named piece\'s safety and scope'),
   'is-piece-loose': direct('is a piece loose / undefended (or which pieces are)'),
   'defend-piece': direct('how do I defend / save / protect a piece of mine ("how do I defend it?")'),
-  'win-piece': direct('can I win / take / get back one of their pieces or pawns ("can I win the pawn back?")'),
+  'win-piece': direct('can I win / take / get back one of their pieces or pawns ("can I get my pawn back?")'),
   'attack-piece': direct('how can I attack / go after one of their pieces or pawns ("can I attack the b7 pawn?")'),
   'material-change': direct('did I just lose / drop / hang something ("did I just lose a pawn?")'),
   // Outside a lesson (which has its own "I don't know"), not knowing is a
