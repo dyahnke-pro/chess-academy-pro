@@ -159,7 +159,7 @@
 - `src/services/computedVoiceGrounding.test.ts:85`
 
 ### `assembleThreatAnswer` (function) — 4 call sites
-- `src/coach/chatTurnAnswers.ts:235`
+- `src/coach/chatTurnAnswers.ts:248`
 - `src/coach/handWalk1009.test.ts:320`
 - `src/services/groundedAnswer.threatTake.test.ts:8`
 - `src/services/groundedAnswer.threatTake.test.ts:15`
@@ -392,7 +392,7 @@
 - `src/services/reviewTeachingPoints.ts:101`
 
 ### `describeMoveGeometry` (function) — 20 call sites
-- `src/coach/chatTurnAnswers.ts:494`
+- `src/coach/chatTurnAnswers.ts:568`
 - `src/components/Puzzles/PuzzleBoard.tsx:242`
 - `src/components/Tactics/TacticSetupBoard.tsx:153`
 - `src/hooks/useHintSystem.ts:357`
@@ -417,7 +417,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `toObserverSeat` (function) — 4 call sites
-- `src/coach/chatTurnAnswers.ts:495`
+- `src/coach/chatTurnAnswers.ts:569`
 - `src/coach/handWalk1009.test.ts:173`
 - `src/coach/handWalk1009.test.ts:175`
 - `src/services/coachApi.ts:5672`
@@ -1072,7 +1072,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assemblePositionalAnswer` (function) — 26 call sites
-- `src/coach/dispatchCoachTurn.ts:335`
+- `src/coach/dispatchCoachTurn.ts:336`
 - `src/coach/questionWalk.sicilian1200.test.ts:69`
 - `src/services/coachApi.ts:6580`
 - `src/services/endgameRuleAnswer.test.ts:74`

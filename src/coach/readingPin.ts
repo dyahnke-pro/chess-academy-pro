@@ -120,10 +120,8 @@ export function pinGroundingToReading<T extends Partial<MasterGroundingOptions>>
   if (!kind) return g;
   const flag = pinnedFlagFor(kind);
   if (!flag) return g;
-  const out: Record<string, unknown> = { ...g };
-  for (const f of QUESTION_FLAGS) {
-    if (f !== flag) delete out[f];
-  }
+  const drop = new Set<string>(QUESTION_FLAGS.filter((f) => f !== flag));
+  const out: Record<string, unknown> = Object.fromEntries(Object.entries(g).filter(([k]) => !drop.has(k)));
   if (!DATA_FLAGS.has(flag) && !out[flag]) out[flag] = true;
   return out as T;
 }

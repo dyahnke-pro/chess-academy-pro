@@ -26,6 +26,7 @@ import { openSentence } from '../utils/openSentence';
 import { answerBoardTurn, BOARD_ANSWERED_KINDS } from './boardTurnAnswer';
 import { coachService, type CoachServiceOptions } from './coachService';
 import type { CoachAskInput, CoachAnswer, CoachSurface } from './types';
+import type { WalkableLine } from '../types';
 import { routeChatIntent } from '../services/coachSessionRouter';
 import { askSourceFor, positionalTopic } from './questionIntents';
 import { assemblePositionalAnswer } from '../services/groundedAnswer';
@@ -339,9 +340,12 @@ export async function dispatchCoachTurn(
     }
     if (turn && CHAT_KINDS[turn.kind].answerer === 'direct' && input.liveState.fen) {
       const studentWB = input.liveState.studentColor === 'black' ? 'b' : input.liveState.studentColor === 'white' ? 'w' : (input.liveState.fen.split(' ')[1] === 'b' ? 'b' : 'w');
-      const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask, input.liveState.moveHistory ?? [], input.liveState.lastCoachLine ?? null);
+      // A proof the answer carries (a capture that wins the attacker) comes
+      // back as a line the board walks while the words say it.
+      const proofOut: { lines?: WalkableLine[] } = {};
+      const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask, input.liveState.moveHistory ?? [], input.liveState.lastCoachLine ?? null, proofOut);
       if (text) {
-        return serve(text, turn.kind, 'answered');
+        return serve(text, turn.kind, 'answered', proofOut.lines?.length ? { lines: proofOut.lines } : {});
       }
     }
     // THE BOARD ANSWERS THE DECODED QUESTION — never re-worded into a lane

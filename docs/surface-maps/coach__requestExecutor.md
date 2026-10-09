@@ -21,7 +21,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `executeSteps` (function) — 9 call sites
-- `src/coach/dispatchCoachTurn.ts:321`
+- `src/coach/dispatchCoachTurn.ts:322`
 - `src/coach/requestExecutor.test.ts:15`
 - `src/coach/requestExecutor.test.ts:20`
 - `src/coach/requestExecutor.test.ts:24`

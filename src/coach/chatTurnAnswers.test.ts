@@ -23,12 +23,12 @@ describe('chat answers for the lesson\'s board questions (computed)', () => {
     expect(answerIsLoose(new Chess(LOOSE), 'c6', 'w')).toBe('Their knight on c6 is loose and attacked by the bishop on b5.');
     // No piece named: what can be WON leads (live walk B13 listed home-rank
     // rooks nothing attacked). The bishop on b5 takes the unguarded knight.
-    expect(answerIsLoose(new Chess(LOOSE), null, 'b')).toMatch(/^Hanging: your knight on c6/);
+    expect(answerIsLoose(new Chess(LOOSE), null, 'b')).toMatch(/^Hanging: your knight on c6 — Bxc6\+: they come out ahead, a knight\./);
     // "which of THEIR pieces are loose?" lists theirs, not yours.
     expect(answerIsLoose(new Chess(LOOSE), null, 'w', 'them')).toMatch(/^Hanging: their knight on c6/);
-    expect(answerIsLoose(new Chess(LOOSE), null, 'w', 'me')).toMatch(/^(Hanging: your|Nothing of yours is hanging)/);
+    expect(answerIsLoose(new Chess(LOOSE), null, 'w', 'me')).toMatch(/^(Hanging: your|Nothing of yours can be taken at a profit)/);
     // A home-rank piece nothing attacks is never offered as news.
-    expect(answerIsLoose(new Chess(), null, 'w')).toBe('Nothing of yours is hanging.');
+    expect(answerIsLoose(new Chess(), null, 'w')).toBe('Nothing of yours can be taken at a profit right now.');
   });
 
   it('counts attackers from the other side and defenders from its own', () => {
@@ -69,10 +69,14 @@ describe('who controls an empty square — both sides (live replay 2026-10-08)',
 describe('attack, both directions (WO-CHAT-01, live walk B11/B12)', () => {
   // 1.e4 e5 2.Nf3 Nc6 3.Bc4 — White's bishop on c4.
   const ITALIAN = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
-  it('"can they attack my bishop?" names their moves onto it', () => {
-    const a = answerAttack(new Chess(ITALIAN), 'c4' as never, 'w');
-    expect(a).toMatch(/^They can attack your bishop on c4: /);
-    expect(a).toMatch(/Na5|d5|b5/);
+  it('"can they attack my bishop?" names every move onto it — a costly one with its proof', () => {
+    const out: { lines?: Array<{ label: string }> } = {};
+    const a = answerAttack(new Chess(ITALIAN), 'c4' as never, 'w', out as never) ?? '';
+    expect(a).toMatch(/^They can attack your bishop on c4: .*Na5/);
+    // …d5 hits the bishop but drops the pawn: kept, with the capture that wins it.
+    // Its cost is PROVEN: the capture played out and counted by the ledger.
+    expect(a).toMatch(/d5 also hits it, but your (?:pawn on e4|bishop on c4) can take it \((?:exd5|Bxd5)\) — you come out ahead: a pawn\./);
+    expect(out.lines?.some((l) => /^d5 (?:exd5|Bxd5)$/.test(l.label))).toBe(true);
   });
   it('"what does Nc6 attack?" is read as a question about Nc6, the attacker', () => {
     const t = readTurnInCode('what does Nc6 attack?', { fen: ITALIAN, history: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'], studentColor: 'white' });

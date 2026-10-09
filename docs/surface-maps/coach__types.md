@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**970 lines · 32 exports · 938 importers · 221 tests · 39 audits**
+**970 lines · 32 exports · 939 importers · 221 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
@@ -38,6 +38,7 @@
 - `src/coach/__tests__/ping.integration.test.ts`
 - `src/coach/__tests__/streaming.test.ts`
 - `src/coach/boardTurnAnswer.ts`
+- `src/coach/chatTurnAnswers.ts`
 - `src/coach/coachService.ts`
 - `src/coach/dispatchCoachTurn.ts`
 - `src/coach/envelope.ts`

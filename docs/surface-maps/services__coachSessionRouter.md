@@ -39,7 +39,7 @@
 
 ### `routeChatIntent` (function) — 45 call sites
 - `src/coach/dispatchCoachTurn.test.ts:8`
-- `src/coach/dispatchCoachTurn.ts:404`
+- `src/coach/dispatchCoachTurn.ts:408`
 - `src/coach/questionMatrix.audit.test.ts:107`
 - `src/coach/questionMatrix.audit.test.ts:142`
 - `src/components/Insights/GameInsightsPage.tsx:191`

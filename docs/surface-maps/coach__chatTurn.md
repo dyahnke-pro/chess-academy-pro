@@ -48,11 +48,11 @@
 - `src/coach/chatTurn.test.ts:97`
 - `src/coach/chatTurn.test.ts:100`
 - `src/coach/chatTurn.test.ts:107`
-- `src/coach/dispatchCoachTurn.ts:227`
-- `src/coach/dispatchCoachTurn.ts:240`
-- `src/coach/dispatchCoachTurn.ts:299`
-- `src/coach/dispatchCoachTurn.ts:385`
-- `src/coach/dispatchCoachTurn.ts:452`
+- `src/coach/dispatchCoachTurn.ts:228`
+- `src/coach/dispatchCoachTurn.ts:241`
+- `src/coach/dispatchCoachTurn.ts:300`
+- `src/coach/dispatchCoachTurn.ts:389`
+- `src/coach/dispatchCoachTurn.ts:456`
 - `src/coach/questionRoute.test.ts:20`
 - `src/coach/questionRoute.test.ts:30`
 - `src/coach/questionRoute.test.ts:33`
@@ -137,19 +137,19 @@
 
 ### `nextConversationState` (function) — 2 call sites
 - `src/coach/chatTurn.test.ts:162`
-- `src/coach/dispatchCoachTurn.ts:151`
+- `src/coach/dispatchCoachTurn.ts:152`
 
 ### `canonicalAsk` (function) — 5 call sites
 - `src/coach/chatTurn.test.ts:66`
 - `src/coach/chatTurn.test.ts:80`
 - `src/coach/chatTurn.test.ts:83`
 - `src/coach/chatTurn.test.ts:87`
-- `src/coach/dispatchCoachTurn.ts:365`
+- `src/coach/dispatchCoachTurn.ts:369`
 
 ### `kindAgreesWithLane` (function) — 3 call sites
 - `src/coach/chatTurn.test.ts:103`
 - `src/coach/chatTurn.test.ts:104`
-- `src/coach/dispatchCoachTurn.ts:165`
+- `src/coach/dispatchCoachTurn.ts:166`
 
 ### `firingLanes` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
