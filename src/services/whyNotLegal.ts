@@ -9,7 +9,7 @@
  */
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import { tagSlots } from '../coach/chatTurnCodeReader';
-import { castlingNow } from './chessRules';
+import { castlingNow, ruleAsked } from './chessRules';
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const SQ_RE = /^[a-h][1-8]$/;
@@ -172,6 +172,10 @@ const LETTER: Record<string, PieceSymbol> = { K: 'k', Q: 'q', R: 'r', B: 'b', N:
  * when it was played earlier in the game (a question about the past).
  */
 export function illegalNamedMove(ask: string, fen: string, student: 'white' | 'black', history: readonly string[] = []): string | null {
+  // "How do I castle?" asks how the RULE works, not to make the move: the
+  // rule answer says it and then why it cannot happen on this board. Refusing
+  // here said only the board half (all-screens walk 2026-10-09).
+  if (ruleAsked(ask)) return null;
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   const slots = tagSlots(ask);

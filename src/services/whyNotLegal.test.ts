@@ -80,4 +80,8 @@ describe('a refused move is explained whatever the wording', () => {
     const line = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5'];
     expect(illegalNamedMove('can I castle?', play(line.join(' ')), 'white', line)).toBeNull();
   });
+
+  it.each(['how do I castle?', 'how does castling work?', 'what is castling?'])('a question about the rule is not a move — the rule answers it: %s', (q) => {
+    expect(illegalNamedMove(q, NO_CASTLE, 'white', CASTLE_LINE)).toBeNull();
+  });
 });

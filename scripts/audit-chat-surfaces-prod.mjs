@@ -79,7 +79,7 @@ const chatRows = async () => {
   const lines = await get('/events?n=600&grep=chat-turn&details=1');
   return (Array.isArray(lines) ? lines : []).map((l) => { const i = l.indexOf(' | {'); try { return i > 0 ? JSON.parse(l.slice(i + 3)) : null; } catch { return null; } }).filter(Boolean);
 };
-const hasInput = async () => !!(await get('/js', 'const e = document.querySelector("[data-testid=chat-text-input]"); return !!e && e.getClientRects().length > 0 && !e.disabled'));
+const hasInput = async () => !!(await get('/js', 'return [...document.querySelectorAll("[data-testid=chat-text-input]")].some((e) => e.getClientRects().length > 0 && !e.disabled)'));
 
 /** Lines on the page now that were not there before (counted, not compared). */
 const newLines = (before, now) => {

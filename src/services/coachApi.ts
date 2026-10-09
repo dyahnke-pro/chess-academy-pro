@@ -1907,9 +1907,9 @@ const IMPORT_ANALYZE_OFFER: CoachActionOffer = { type: 'import_games', id: 'conn
 export function uploadGamesReminder(topic: string, overview: { totalGames: number; analyzedGameCount: number }): string {
   if (overview.totalGames > 0) {
     const n = overview.totalGames;
-    return `You've imported ${n} game${n === 1 ? '' : 's'}, but none are analyzed yet — so I can't read ${topic} until they are. Open Games then Import, run the analysis, and I'll show you exactly what to work on.`;
+    return `You've imported ${n} game${n === 1 ? '' : 's'}, but none are analyzed yet — so ${topic} cannot be read until they are. Open Games then Import, run the analysis, and you'll see exactly what to work on.`;
   }
-  return `I can't read ${topic} yet — none of your real games are in here, and that's where I find your patterns. Import your Lichess or Chess.com games from Games then Import (just your username), and I'll break down exactly what to drill.`;
+  return `There is nothing to read ${topic} from yet — none of your real games are in here, and your patterns are found there. Import your Lichess or Chess.com games from Games then Import (just your username), and you'll get exactly what to drill.`;
 }
 
 /** THE LIVE RECORD COUNTS (Learn walk 2026-10-01: "none are analyzed yet — so

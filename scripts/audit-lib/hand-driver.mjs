@@ -132,7 +132,9 @@ const routes = {
     return state();
   },
   async type(_q, body) {
-    const input = page.locator('[data-testid="chat-text-input"]');
+    // A screen can mount more than one chat box (Play keeps a hidden one);
+    // type into the one a person can see.
+    const input = page.locator('[data-testid="chat-text-input"]:visible').first();
     await input.pressSequentially(body, { delay: 10 });
     await page.keyboard.press('Enter');
     await sleep(2500);
