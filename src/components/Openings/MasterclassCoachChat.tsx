@@ -106,7 +106,7 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
             ...(answer.actionOffer && answer.actionOffer.length > 0 ? { metadata: { actions: answer.actionOffer } } : {}),
           }]);
         } catch {
-          setMessages((prev) => [...prev, { id: `err-${Date.now()}`, role: 'assistant', content: "I couldn't reach the coach just now — try again in a moment.", timestamp: Date.now() }]);
+          setMessages((prev) => [...prev, { id: `err-${Date.now()}`, role: 'assistant', content: "The coach couldn't be reached just now — try again in a moment.", timestamp: Date.now() }]);
         } finally {
           setBusy(false);
         }

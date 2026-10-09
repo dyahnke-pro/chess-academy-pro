@@ -72,7 +72,7 @@ export function EndgameTablebaseTrainer({ fen, studentColor, title, intro, onExi
     void (async () => {
       const steps = await buildTablebaseWalk(fen, 24);
       if (cancelled) return;
-      if (steps.length === 0) { setUnreachable(true); setStatus("I can't reach the tablebase for this ending right now."); return; }
+      if (steps.length === 0) { setUnreachable(true); setStatus("The tablebase for this ending can't be reached right now."); return; }
       setWalk(steps);
     })();
     return () => { cancelled = true; };
@@ -117,7 +117,7 @@ export function EndgameTablebaseTrainer({ fen, studentColor, title, intro, onExi
     const toMove: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
     if (toMove !== studentColor) { void opponentReply(); setStatus('The tablebase moves first…'); }
     else setStatus('Your move — play the technique.');
-    say('Now you play it. I\'ll stop you if you go wrong and we\'ll fix it together.');
+    say('Now you play it. A wrong move is stopped and fixed on the spot.');
   }, [fen, studentColor, say]);
 
   // The tablebase plays the other side optimally.

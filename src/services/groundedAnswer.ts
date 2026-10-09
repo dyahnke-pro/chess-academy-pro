@@ -1713,8 +1713,8 @@ export function assembleCapabilitiesOverview(
   if (clean.length === 0) return null;
   const lines = clean.map((e) => `${e.title} — ${e.blurb.trim()}`);
   const facts =
-    `Here's what I can do with you: ${lines.join('; ')}. ` +
-    `Ask me anything — where you're going wrong, what to work on, whether a move is sound, how to play an opening or an endgame — and I'll pull it from your games and the engine.`;
+    `Here's what the coach does with you: ${lines.join('; ')}. ` +
+    `Ask anything — where you're going wrong, what to work on, whether a move is sound, how to play an opening or an endgame — and the answer comes from your games and the engine.`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['app:routes'] };
 }
 
@@ -1742,8 +1742,8 @@ export function assembleTeachingAnswer(opts: {
   // The WLPP method is how EVERY opening is taught — always true, always safe.
   const wlpp =
     'It runs through four rungs — Watch, Learn, Practice, Play. You watch the ' +
-    'line played move by move with narration, then play each move yourself as I ' +
-    'cue it, then play it again silently with a hint if you need one, then a full ' +
+    'line played move by move with narration, then play each move yourself as the voice ' +
+    'cues it, then play it again silently with a hint if you need one, then a full ' +
     'game locked to the line so you own it.';
 
   if (lesson && lesson.beats.length > 0) {
@@ -2210,7 +2210,7 @@ export function assembleOpponentHypotheticalAnswer(opts: {
   // NO ENGINE READ, NO DANGLING HEAD (question walk 2026-09-27: "If they get d5
   // in:" and nothing after it). Say what is missing instead.
   if (parts.length === 1 && !/[.!?]$/.test(parts[0])) {
-    return { facts: `I don't have an engine read on ${theirNorm} for them yet — ask me again in a moment.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+    return { facts: `There's no engine read on ${theirNorm} for them yet — ask again in a moment.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
   }
   if (opts.settled === false) parts.push("Take that line as a first read, not a final word.");
   return { facts: parts.join(' '), bestMoveSan: bestSan, bestMoveFromTo: bestFromTo, sources };
@@ -3726,8 +3726,8 @@ export function assembleHintAnswer(opts: { fen: string; bestMoveUci: string; mov
  *  never the generic refusal. */
 export function hintUnavailableReason(opts: { hasFen: boolean; hasEngineMove: boolean }): string {
   if (!opts.hasFen) return "There's no position on the board for me to hint at — start a game or set one up and ask again.";
-  if (!opts.hasEngineMove) return "I don't have an engine read on this position yet — give me a moment and ask again, or ask me for the plan and I'll compute it.";
-  return "I couldn't line the engine's move up with this board — make a move or ask again and I'll re-read it.";
+  if (!opts.hasEngineMove) return "There's no engine read on this position yet — ask again in a moment, or ask for the plan, which is computed from the board.";
+  return "The engine's move doesn't match this board — make a move or ask again to re-read it.";
 }
 
 /**
@@ -3904,7 +3904,7 @@ export function assemblePlayerGamesAnswer(ctx: LivePlayerGamesContext): Grounded
     // "how does GothamChess play this line" couldn't be answered).
     if (ctx.requestedPlayerName) {
       return {
-        facts: `I don't have any of ${ctx.requestedPlayerName}'s games in the ${ctx.openingName} in our data.`,
+        facts: `None of ${ctx.requestedPlayerName}'s games in the ${ctx.openingName} are in the data.`,
         bestMoveSan: null,
         bestMoveFromTo: null,
         sources: [`player-games:${ctx.playerId ?? 'pro'}`],
@@ -4559,7 +4559,7 @@ export function assembleTrainingRecommendation(area: TrainingArea): { facts: str
     label,
     facts:
       `The fastest way to sharpen ${label} is to play a full game against me with that as the goal. `
-      + `Play one now — I'll watch ${focusPhrase} closely, coach it as it happens, and then break down how ${label} went afterward.`,
+      + `Play one now — ${focusPhrase} gets watched closely and coached as it happens, then broken down afterward to show how ${label} went.`,
   };
 }
 
@@ -4703,7 +4703,7 @@ export function assembleOpeningProfileAnswer(opts: {
   // True next-step capability facts (no invented chess content).
   const next =
     kind === 'weakest'
-      ? ' Ask me to drill it and I\'ll set the line up on the board.'
+      ? ' Ask to drill it and the line is set up on the board.'
       : ' Ask me to teach it or drill its traps to go deeper.';
   return { facts: facts + next, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
@@ -4822,7 +4822,7 @@ export function assembleOpeningAccuracyAnswer(o: OpeningAccuracyLike): GroundedA
   // When nothing finer than the aggregate is known, still point them at drilling.
   const next = (weakVar || spot)
     ? ' Want me to drill that with you?'
-    : ' Drill it a few times and I can pinpoint the exact line and move to work on.';
+    : ' Drill it a few times to pinpoint the exact line and move to work on.';
 
   return { facts: lead + varLine + spotLine + next, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
@@ -4865,7 +4865,7 @@ export function assembleOpeningTrapsAnswer(opts: {
   // trap taxonomy (not invented). Fires whenever the student asked "how do you
   // teach these / what system"; it does NOT depend on having named traps.
   const system = opts.explainSystem
-    ? 'I teach every trap the same four-rung way — Watch, Learn, Practice, Play: you watch the trap spring with the key squares lit up, then I guide you through the punish move by move, then you play it silently, then you drill it live. Each trap is tagged too — a forced tactic, a positional mistake to punish, or a longer maneuvering idea.'
+    ? 'Every trap is taught the same four-rung way — Watch, Learn, Practice, Play: you watch the trap spring with the key squares lit up, then the voice guides you through the punish move by move, then you play it silently, then you drill it live. Each trap is tagged too — a forced tactic, a positional mistake to punish, or a longer maneuvering idea.'
     : '';
 
   // No named traps to voice. If the student asked about the SYSTEM, still answer
@@ -4875,7 +4875,7 @@ export function assembleOpeningTrapsAnswer(opts: {
   if (sides.length === 0) {
     if (!system) return null;
     return {
-      facts: system + ' Ask me for the traps in your strongest opening and I\'ll name them.',
+      facts: system + ' Ask for the traps in your strongest opening to hear them named.',
       bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
     };
   }
@@ -4902,7 +4902,7 @@ export function assembleOpeningTrapsAnswer(opts: {
   // lesson plan of all opening traps"): every trap answer ends by offering
   // the full walk — the traps stage already teaches each one WLPP-style.
   const next = firstDrillName
-    ? ` Want me to show you? Say "teach me the traps in the ${firstDrillName}" and I'll build a lesson plan that walks every one of them.`
+    ? ` Want to see them? Say "teach me the traps in the ${firstDrillName}" for a lesson plan that walks every one of them.`
     : '';
 
   const systemTail = system ? ' ' + system : '';
@@ -4937,7 +4937,7 @@ export function assembleReviewDueAnswer(s: ReviewDueLike): GroundedAnswer | null
   // All caught up — nothing due, but cards are in rotation.
   if (s.dueCount <= 0) {
     return {
-      facts: `You're all caught up — nothing due for review right now. You've got ${s.totalEnrolled} opening card${s.totalEnrolled === 1 ? '' : 's'} in rotation, and I'll resurface them as they come due.`,
+      facts: `You're all caught up — nothing due for review right now. You've got ${s.totalEnrolled} opening card${s.totalEnrolled === 1 ? '' : 's'} in rotation, and they come back as they fall due.`,
       bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
     };
   }
@@ -4952,7 +4952,7 @@ export function assembleReviewDueAnswer(s: ReviewDueLike): GroundedAnswer | null
     : '';
   const facts =
     `You've got ${s.dueCount} card${s.dueCount === 1 ? '' : 's'} due for review right now${across}.` +
-    breakdown + ` Say "review my openings" and I'll run today's reps.`;
+    breakdown + ` Say "review my openings" to run today's reps.`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
@@ -5087,7 +5087,7 @@ export function assembleWeaknessBriefingAnswer(lc: WeaknessLifecycleLike): Groun
     parts.push(`You've cleaned up ${andList(fixed)} — they used to show up and don't anymore. Nice.`);
   }
   if (parts.length === 0) return null;
-  parts.push('Say "drill it" and I\'ll build a set from your most-pressing pattern.');
+  parts.push('Say "drill it" for a set built from your most-pressing pattern.');
   return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
@@ -5100,7 +5100,7 @@ export function assembleWeaknessLifecycleAnswer(
 ): GroundedAnswer | null {
   if (!lc.sampleFloorMet) {
     return {
-      facts: `I need more of your games analyzed before I can speak to that trend — only ${lc.gamesConsidered} so far. Import a few more and I'll have a real read.`,
+      facts: `Only ${lc.gamesConsidered} of your games ${lc.gamesConsidered === 1 ? 'is' : 'are'} analyzed so far — too few to read that trend. Import a few more for a real read.`,
       bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
     };
   }
@@ -5113,21 +5113,21 @@ export function assembleWeaknessLifecycleAnswer(
   }
   if (kind === 'persistent') {
     if (lc.persistent.length === 0) {
-      return { facts: `Nothing is dragging across your whole history — your recent errors are mostly newer patterns, not old habits. Ask me what's most pressing and I'll point you at it.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+      return { facts: `Nothing is dragging across your whole history — your recent errors are mostly newer patterns, not old habits. Ask what's most pressing to see it.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
     }
     const named = lc.persistent.map((e) => {
       const arrow = e.trend === 'improving' ? ' (easing off)' : e.trend === 'worsening' ? ' (getting worse)' : '';
       return `${e.label.toLowerCase()}${arrow}`;
     });
-    return { facts: `These keep showing up across your games: ${andList(named)}. Those are the habits to break — say "drill it" and I'll build a set.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+    return { facts: `These keep showing up across your games: ${andList(named)}. Those are the habits to break — say "drill it" for a set.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
   }
   // pressing
   if (!lc.mostPressing) {
-    return { facts: `No clear standout right now — nothing recent is jumping out as your biggest leak. Ask for the full breakdown and I'll lay out the picture.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+    return { facts: `No clear standout right now — nothing recent is jumping out as your biggest leak. Ask for the full breakdown to see the whole picture.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
   }
   const mp = lc.mostPressing;
   const trend = mp.trend === 'worsening' ? ' and it\'s been getting worse lately' : mp.trend === 'improving' ? ' though it\'s easing off' : '';
-  return { facts: `Your most pressing weakness is ${mp.label.toLowerCase()} — ${mp.recentCount} recent slip${mp.recentCount === 1 ? '' : 's'}${trend}. Say "drill it" and I'll build a set from exactly those positions.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+  return { facts: `Your most pressing weakness is ${mp.label.toLowerCase()} — ${mp.recentCount} recent slip${mp.recentCount === 1 ? '' : 's'}${trend}. Say "drill it" for a set built from exactly those positions.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
 /** The most-recent game's critical error — a structural subset of
@@ -5167,7 +5167,7 @@ export function assembleLastGameMistakeAnswer(d: LastGameErrorLike): GroundedAns
   const ctx = `${gameOffsetPhrase(d.gameOffset)}${d.opponent ? ` against ${d.opponent}` : ''}${d.opening ? ` in the ${d.opening}` : ''}`;
   if (!d.analyzed) {
     return {
-      facts: `I can't pinpoint the critical error in ${ctx} yet — that game hasn't been analyzed. Analyze it and I'll show you the exact move it turned on and the move that was better.`,
+      facts: `The critical error in ${ctx} can't be pinpointed yet — that game hasn't been analyzed. Analyze it to see the exact move it turned on and the move that was better.`,
       bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
     };
   }
@@ -5186,7 +5186,7 @@ export function assembleLastGameMistakeAnswer(d: LastGameErrorLike): GroundedAns
   const more = serious > 1
     ? ` That game had ${d.errorCount.blunders} blunder${d.errorCount.blunders === 1 ? '' : 's'} and ${d.errorCount.mistakes} mistake${d.errorCount.mistakes === 1 ? '' : 's'} in all.`
     : '';
-  const facts = `The critical error in ${ctx} was ${d.worst.san} on move ${d.worst.moveNumber} — a ${d.worst.classification} in the ${phaseWord(d.worst.phase)}${drop}.${better}${more} Ask to drill your mistakes and I'll turn it into a puzzle.`;
+  const facts = `The critical error in ${ctx} was ${d.worst.san} on move ${d.worst.moveNumber} — a ${d.worst.classification} in the ${phaseWord(d.worst.phase)}${drop}.${better}${more} Ask to drill your mistakes to get it as a puzzle.`;
   return { facts, bestMoveSan: d.worst.bestMoveSan, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
@@ -5222,7 +5222,7 @@ export function assembleRecentGamesMistakeAnswer(d: RecentGamesErrorLike): Groun
     const drop = d.worst.cpLoss > 0 ? `, dropping about ${pawns(d.worst.cpLoss)} points` : '';
     worstLine = ` The worst was ${d.worst.san} on move ${d.worst.moveNumber} — a ${d.worst.classification} in the ${phaseWord(d.worst.phase)}${where}${drop}.${better}`;
   }
-  return { facts: `${tally}${worstLine} Ask to drill your mistakes and I'll queue them up.`, bestMoveSan: d.worst?.bestMoveSan ?? null, bestMoveFromTo: null, sources: ['data:your-games'] };
+  return { facts: `${tally}${worstLine} Ask to drill your mistakes to queue them up.`, bestMoveSan: d.worst?.bestMoveSan ?? null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
 /** Errors split by how the game stood when they happened. */
@@ -5355,7 +5355,7 @@ export function assembleTacticsProfileAnswer(t: TacticsProfileLike): GroundedAns
     : '';
 
   if (t.missed === 0) {
-    const lead = `In your analyzed games I don't see a missed tactical shot — and ${t.found} sharp tactical move${t.found === 1 ? '' : 's'} you did find.`;
+    const lead = `Your analyzed games show no missed tactical shot — and ${t.found} sharp tactical move${t.found === 1 ? '' : 's'} you did find.`;
     const suggest = ' Keep drilling mixed tactics — step up the difficulty to keep finding them under pressure.';
     return { facts: lead + best + breadth + brill + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
   }
@@ -5574,15 +5574,15 @@ export function assembleRepertoireGapAnswer(g: RepertoireGapLike): GroundedAnswe
     }
     if (thinHome) {
       const facts =
-        `I don't have enough games in any one opening to call a weakest line yet — your most-played so far is the ${thinHome.name} as ${thinHome.color}, ` +
-        `${thinHome.winRate}% over only ${thinHome.games} game${thinHome.games === 1 ? '' : 's'}. Play or import more games in it and I'll point at the exact hole. ` +
-        `Want me to teach that line now?`;
+        `There aren't enough games in any one opening to call a weakest line yet — your most-played so far is the ${thinHome.name} as ${thinHome.color}, ` +
+        `${thinHome.winRate}% over only ${thinHome.games} game${thinHome.games === 1 ? '' : 's'}. Play or import more games in it to find the exact hole. ` +
+        `Want to learn that line now?`;
       return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
     }
     if (!top) return null;
     const facts =
       `Your worst matchup so far is ${top.name} at ${top.winRate}% — but that's only ${top.games} game${top.games === 1 ? '' : 's'}, too few to build a repertoire decision on. ` +
-      `Play or import a few more and I'll tell you what to learn next from real numbers.`;
+      `Play or import a few more to see what to learn next from real numbers.`;
     return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
   }
 
@@ -5693,7 +5693,7 @@ export function assembleConsistencyAnswer(c: ConsistencyLike): GroundedAnswer | 
     : '';
   const suggest = worst
     ? ` If you want a steadier rating, slow down in your ${worst.bucket} games — that's where results dip.`
-    : ' Keep a regular cadence and I\'ll track your consistency over time.';
+    : ' Keep a regular cadence and your consistency is tracked over time.';
   return { facts: streak + solve + act + tcLine + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
@@ -6006,7 +6006,7 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
     // never as a judgement on the move played.
     const lineBit = bestSan ? ` The engine's line there ran ${bestSan}${why ? `: ${why.replace(/[.!?]+$/, '')}` : ''}.` : '';
     return {
-      facts: `${lead}${didClause}. I don't have an engine read on that ply yet, so I can't grade it — ask me again in a moment and I'll have the number.${lineBit}`,
+      facts: `${lead}${didClause}. There's no engine read on that ply yet, so it can't be graded — ask again in a moment for the number.${lineBit}`,
       bestMoveSan: bestSan, bestMoveFromTo: r.bestMoveUci && bestSan ? { from: r.bestMoveUci.slice(0, 2), to: r.bestMoveUci.slice(2, 4) } : null, sources: ['board:chess.js'],
     };
   }
@@ -6907,8 +6907,8 @@ export function assembleCounterRepertoireAnswer(opts: {
   if (recs.length === 1) {
     const r = recs[0];
     const facts =
-      `Against ${opts.opponentDisplayName}, based on how I teach it, I recommend ${r.name}${statClause(r.stat)}.${matchup}` +
-      ` Want to learn it? I have the full line ready for you.`;
+      `Against ${opts.opponentDisplayName}, the recommendation is ${r.name}${statClause(r.stat)}.${matchup}` +
+      ` Want to learn it? The full line is ready for you.`;
     return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:counter-repertoire'] };
   }
 
@@ -6922,13 +6922,13 @@ export function assembleCounterRepertoireAnswer(opts: {
   // stated reason. Otherwise default to the first (curated order) neutrally.
   const pick = pickCounterRecommendation(recs, profile) ?? a;
   const styleReason = profile && (aMatch !== bMatch)
-    ? ` Your own games lean ${STYLE_WORD[profile.style] ?? profile.style} (${profile.count} of your last ${profile.total} analyzed), so I'd start with ${pick.name}`
-    : ` I'd start with ${pick.name}`;
+    ? ` Your own games lean ${STYLE_WORD[profile.style] ?? profile.style} (${profile.count} of your last ${profile.total} analyzed), so start with ${pick.name}`
+    : ` Start with ${pick.name}`;
 
   const facts =
-    `I teach two answers to ${opts.opponentDisplayName}: ${a.name} (${styleWordFor(a)}) and ${b.name} (${styleWordFor(b)}).` +
+    `There are two answers to ${opts.opponentDisplayName}: ${a.name} (${styleWordFor(a)}) and ${b.name} (${styleWordFor(b)}).` +
     `${styleReason}${statClause(pick.stat)}.${matchup}` +
-    ` Want to learn it? I have the full line ready for you.`;
+    ` Want to learn it? The full line is ready for you.`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:counter-repertoire'] };
 }
 

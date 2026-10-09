@@ -2180,7 +2180,7 @@ export function CoachTeachPage(): JSX.Element {
     captureEvent('coach_free_game_seat', { surface: 'coach-teach', seat });
     if (gameRef.current.history.length > 0) return;
     if (seat === 'white') { say("You're White — your move."); return; }
-    say("You're Black — I'll open.");
+    say("You're Black — White opens.");
     void (async () => {
       const opener = await resolveCoachReplyMoveRef.current?.(liveFenRef.current);
       if (opener && gameRef.current.history.length === 0 && liveFenRef.current.split(' ')[1] === 'w' && playDictatedMove(opener)) {
@@ -2250,8 +2250,8 @@ export function CoachTeachPage(): JSX.Element {
     const coachOwnsLine = inferStudentSideFromName(openingName) !== studentSide;
     if (studentSide === 'black') {
       say(coachOwnsLine
-        ? `You're Black — I'll play the ${openingName}.`
-        : `You're Black — play the ${openingName} and I'll talk you through it. I'll open.`);
+        ? `You're Black — White plays the ${openingName}.`
+        : `You're Black — play the ${openingName}, talked through move by move. White opens.`);
       void (async () => {
         const opener = await resolveCoachReplyMoveRef.current?.(liveFenRef.current);
         if (
@@ -2271,8 +2271,8 @@ export function CoachTeachPage(): JSX.Element {
       })();
     } else {
       say(coachOwnsLine
-        ? `You're White — open, and I'll answer with the ${openingName}.`
-        : `You're White — play the ${openingName} and I'll talk you through it.`);
+        ? `You're White — open, and Black answers with the ${openingName}.`
+        : `You're White — play the ${openingName}, talked through move by move.`);
     }
   }, [playDictatedMove, walkthrough]);
 
@@ -2656,7 +2656,7 @@ export function CoachTeachPage(): JSX.Element {
       return true;
     }
     if (queue.length === 0 && motif) {
-      void coachDrillSay("Nothing to drill in that pattern right now — you've cleared what I had saved for it.");
+      void coachDrillSay("Nothing to drill in that pattern right now — you've cleared everything saved for it.");
       return true;
     }
     if (queue.length > 0) {
@@ -2774,7 +2774,7 @@ export function CoachTeachPage(): JSX.Element {
       // NO RECORD YET IS NOT "NO LESSON" (plan 2026-10-04: grey means teach).
       // A fresh student gets the method lesson, on real puzzles, instead of a
       // dead end; the weakness lesson builds itself as games come in.
-      void coachDrillSay("I don't have your games mapped yet, so let's start with how strong players read the board — it pays off in every game.");
+      void coachDrillSay("Your games aren't mapped yet, so start with how strong players read the board — it pays off in every game.");
       await startThinkingLesson();
       return;
     }
@@ -3319,8 +3319,8 @@ export function CoachTeachPage(): JSX.Element {
         case 'review-game': void navigate('/coach/review'); lines.push('Opening your games for review.'); break;
         case 'import-games':
           lines.push(st.account
-            ? `Is ${st.account} your Chess.com or Lichess username? Import those games and I'll find the patterns costing you points.`
-            : "Import your Chess.com or Lichess games and I'll find the patterns costing you points.");
+            ? `Is ${st.account} your Chess.com or Lichess username? Import those games to find the patterns costing you points.`
+            : "Import your Chess.com or Lichess games to find the patterns costing you points.");
           offer = [{ type: 'import_games', id: 'connect' }];
           break;
         default: break;
@@ -3523,7 +3523,7 @@ export function CoachTeachPage(): JSX.Element {
           if (!target.isFavorite) await toggleFavorite(target.id).catch(() => {});
           say = `${target.name} is in your favorites now.`;
         } else {
-          say = `I couldn't find "${subject}" in the openings database, so nothing was favorited.`;
+          say = `"${subject}" isn't in the openings database, so nothing was favorited.`;
         }
         setMessages((prev) => [...prev, { id: uid('fav-a'), role: 'assistant', content: say, timestamp: Date.now() }]);
         void speakComputed(say, { forced: false, intent: 'learn' });
@@ -3693,7 +3693,7 @@ export function CoachTeachPage(): JSX.Element {
             // ("…use set_board_position… play_move is reserved…") — never a
             // sentence for the student.
             const said = routed.kind === 'play_move'
-              ? `I can't play ${sanToSpeech(routed.san)} here — it isn't a legal move for me right now.`
+              ? `${sanToSpeech(routed.san)} can't be played here — it isn't a legal move for them right now.`
               : result.reason;
             setMessages((prev) => [
               ...prev,
@@ -3765,7 +3765,7 @@ export function CoachTeachPage(): JSX.Element {
         setMessages((prev) => [...prev,
           { id: uid('more-u'), role: 'user', content: text, timestamp: Date.now() },
           { id: uid('more-c'), role: 'assistant', timestamp: Date.now(),
-            content: page.length ? 'Here are the rest — pick one.' : "That's every trap I have for this opening.",
+            content: page.length ? 'Here are the rest — pick one.' : "That's every trap there is for this opening.",
             ...(page.length ? { choices: plainChips(page) } : {}) },
         ]);
         return;
@@ -3795,7 +3795,7 @@ export function CoachTeachPage(): JSX.Element {
             { id: uid('gem-n'), role: 'assistant', timestamp: Date.now(),
               content: page.length
                 ? 'Want to keep going down the list?'
-                : "That's every trap I have for this opening.",
+                : "That's every trap there is for this opening.",
               ...(page.length ? { choices: plainChips(page) } : {}) },
           ]);
           void speakComputed(taught, { forced: true, intent: 'learn' }).catch(() => undefined);
@@ -4166,7 +4166,7 @@ export function CoachTeachPage(): JSX.Element {
             setPlayerColor(newStudentColor);
             gameRef.current.setOrientation(newStudentColor);
             captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'side-swap-open', san: cmd.san });
-            appendTurn(`I'll take ${fenSide}. ${sanToSpeech(cmd.san)} — your move.`);
+            appendTurn(`The coach takes ${fenSide}. ${sanToSpeech(cmd.san)} — your move.`);
             return;
           }
         } else if (cmd.corrects && gameRef.current.history.length > 0) {
@@ -4209,11 +4209,11 @@ export function CoachTeachPage(): JSX.Element {
               playDictatedMove(undoneSan);
             }
             captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'correction-failed', san: cmd.san });
-            appendTurn(`I couldn't swap ${sanToSpeech(undoneSan)} for ${sanToSpeech(cmd.san)} — the board is back as it was.`);
+            appendTurn(`${sanToSpeech(undoneSan)} couldn't be swapped for ${sanToSpeech(cmd.san)} — the board is back as it was.`);
             return;
           }
           captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'correction-illegal', san: cmd.san });
-          appendTurn(`I can't play ${sanToSpeech(cmd.san)} there — it isn't legal in the position before my move, so I've left the board as it is.`);
+          appendTurn(`${sanToSpeech(cmd.san)} can't go there — it isn't legal in the position before their move, so the board stays as it is.`);
           return;
         } else {
           // (c) The student's turn mid-game (or a coach-side move parsed on
@@ -4221,7 +4221,7 @@ export function CoachTeachPage(): JSX.Element {
           pendingCoachMoveRef.current = cmd.san;
           pendingCoachPhraseRef.current = trimmedText;
           captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'armed-pending', san: cmd.san });
-          appendTurn(`Got it — after your move, I'll play ${sanToSpeech(cmd.san)} if it's still legal.`);
+          appendTurn(`Got it — after your move, they play ${sanToSpeech(cmd.san)} if it's still legal.`);
           return;
         }
         // Legal-parse succeeded but the board refused (shouldn't happen —
@@ -4498,8 +4498,8 @@ export function CoachTeachPage(): JSX.Element {
                   const proName = titleCase(pgReq.player);
                   const forkN = forkTree.forks.length;
                   const prose = forkN > 0
-                    ? `Here's how ${proName} plays the ${openingName}, drawn from ${forkTree.gameCount} of his real games. `
-                      + `At ${forkN === 1 ? 'one point' : `${forkN} points`} his games split — you'll pick which of his lines to follow, and I'll tell you why he chose each. `
+                    ? `Here's how ${proName} plays the ${openingName}, drawn from ${forkTree.gameCount} of their real games. `
+                      + `At ${forkN === 1 ? 'one point' : `${forkN} points`} their games split — you'll pick which of their lines to follow, and hear why they chose each. `
                       + `Tap Play or step through with the arrows.`
                     : `Here's how ${proName} plays the ${openingName}, drawn from ${forkTree.gameCount} of his real games — his main line move by move, with the reason behind each. `
                       + `Tap Play or step through with the arrows.`;
@@ -4540,7 +4540,7 @@ export function CoachTeachPage(): JSX.Element {
               const srcNote = source === 'chesscom' ? ' — pulled live from his chess.com games' : '';
               const more =
                 mountable.length > 1
-                  ? ` I found ${mountable.length} — ask again for another.`
+                  ? ` There are ${mountable.length} — ask again for another.`
                   : '';
               const prose =
                 `Here's ${top.player} ${sideWord} in the ${openingName} — ` +
@@ -4581,8 +4581,8 @@ export function CoachTeachPage(): JSX.Element {
               });
             } else if (!forkMounted) {
               const prose =
-                `I couldn't find one of ${titleCase(pgReq.player)}'s ${openingName} games on disk or in their chess.com history. ` +
-                `Want me to walk the ${openingName} itself? Just say "teach me the ${openingName}".`;
+                `None of ${titleCase(pgReq.player)}'s ${openingName} games are on disk or in their chess.com history. ` +
+                `Want to walk the ${openingName} itself? Just say "teach me the ${openingName}".`;
               setMessages((prev) => [...prev, {
                 id: `${pgTurnId}-c`,
                 role: 'assistant',
@@ -5176,7 +5176,7 @@ export function CoachTeachPage(): JSX.Element {
             }]);
             const dProse = stageHint === 'play-real'
               ? 'Name the opening you want to play and we\'ll start — "play the Vienna against me".'
-              : 'Name the opening and I\'ll set that up — like "quiz me on the Vienna". Once a lesson is running, "this position" works too.';
+              : 'Name the opening to set that up — like "quiz me on the Vienna". Once a lesson is running, "this position" works too.';
             setMessages((prev) => [...prev, {
               id: `${dTurnId}-c`, role: 'assistant', content: dProse, timestamp: Date.now(),
             }]);
@@ -5446,7 +5446,7 @@ export function CoachTeachPage(): JSX.Element {
                 setGenerationStatus(null);
                 setMessages((prev) => [...prev, {
                   id: `${mTurnId}-err`, role: 'assistant',
-                  content: `I couldn't build that matchup this time. Try again in a moment.`,
+                  content: `That matchup couldn't be built this time. Try again in a moment.`,
                   timestamp: Date.now(),
                 }]);
                 return;
@@ -5464,14 +5464,14 @@ export function CoachTeachPage(): JSX.Element {
               }
               setMessages((prev) => [...prev, {
                 id: `${mTurnId}-err`, role: 'assistant',
-                content: `I couldn't build the ${canonicalName} walkthrough this time. Try again in a moment.`,
+                content: `The ${canonicalName} walkthrough couldn't be built this time. Try again in a moment.`,
                 timestamp: Date.now(),
               }]);
             } catch {
               setGenerationStatus(null);
               setMessages((prev) => [...prev, {
                 id: `${mTurnId}-err`, role: 'assistant',
-                content: `I couldn't build that matchup this time. Try again in a moment.`,
+                content: `That matchup couldn't be built this time. Try again in a moment.`,
                 timestamp: Date.now(),
               }]);
             }
@@ -5627,8 +5627,8 @@ export function CoachTeachPage(): JSX.Element {
           // typing the next message cleared it (line ~1614), stranding the
           // "did you mean?" prompt with no chips (David 2026-07-18 report).
           const prose = topNames.length === 1
-            ? `I don't have an exact match for "${fuzzy.query}". Did you mean ${topNames[0]}? Tap it to start.`
-            : `I don't have an exact match for "${fuzzy.query}". Did you mean one of these? Tap one to start.`;
+            ? `There's no exact match for "${fuzzy.query}". Did you mean ${topNames[0]}? Tap it to start.`
+            : `There's no exact match for "${fuzzy.query}". Did you mean one of these? Tap one to start.`;
           setMessages((prev) => [...prev, {
             id: `${ambiguousTurnId}-c`,
             role: 'assistant',
@@ -6388,7 +6388,7 @@ export function CoachTeachPage(): JSX.Element {
             }
           } else {
             // Generation failed both attempts. Render an honest fallback.
-            const failAck = `I couldn't put together a clean lesson for "${requestedName}" — ${result.reason ?? 'unknown error'}. Try a more standard opening name (e.g. "Italian Game", "Sicilian Defense", "Caro-Kann Defense") or ask me a question instead.`;
+            const failAck = `A clean lesson for "${requestedName}" couldn't be built — ${result.reason ?? 'unknown error'}. Try a more standard opening name (e.g. "Italian Game", "Sicilian Defense", "Caro-Kann Defense") or ask me a question instead.`;
             setMessages((prev) => [...prev, {
               id: `${surfaceTurnId}-c2`,
               role: 'assistant',
@@ -6851,7 +6851,7 @@ export function CoachTeachPage(): JSX.Element {
           // SPEAKABLE, second person — on a gate fallback this whole string is
           // read aloud, and David heard "The student played f4. The coach
           // replied d5." spoken AT him (2026-08-07).
-          ? `You played ${text.replace(/^i\s+played\s+/i, '').replace(/\.$/, '')}; I answered ${opts.coachReplyPlayed}. ` +
+          ? `You played ${text.replace(/^i\s+played\s+/i, '').replace(/\.$/, '')}; they answered ${opts.coachReplyPlayed}. ` +
             (opts?.coachReplyFact ?? '')
           : undefined,
       moveNarrationDirectives:
@@ -7142,7 +7142,7 @@ export function CoachTeachPage(): JSX.Element {
                 }
                 return { ok: true };
               }
-              const errAck = `I couldn't build the ${lessonLabel(opening)} walkthrough this time. Try again or pick a different opening.`;
+              const errAck = `The ${lessonLabel(opening)} walkthrough couldn't be built this time. Try again or pick a different opening.`;
               setMessages((prev) => [...prev, {
                 id: `${brainTurnId}-err`,
                 role: 'assistant',
@@ -11786,7 +11786,7 @@ export function CoachTeachPage(): JSX.Element {
             entry: searchParams.get('oid') ? 'opening-detail' : 'search-cta',
           }),
         });
-        const intro = `We don't have a hand-built masterclass for the ${autoTeach} yet — so I'll teach it to you myself. Let's walk through it.`;
+        const intro = `We don't have a hand-built masterclass for the ${autoTeach} yet — so it's taught from the opening database. Let's walk through it.`;
         const turnId = freshTurnId('autoteach');
         setKickoffStatus(null);
         setMessages((prev) => [...prev, {
@@ -12101,8 +12101,8 @@ export function CoachTeachPage(): JSX.Element {
             // drill it shut (David 2026-08-26 evidence-first loop).
             if (!spokeCall && !userInteractedRef.current) {
               let planLine = isRecent
-                ? `I've been watching your recent games — ${topLabel} keeps coming up, and right now it's the pattern costing you the most. Say "drill my weaknesses" and we'll drill it shut.`
-                : `One thing to keep in the back of your mind today: ${topLabel}. That's the pattern that's been costing you the most, and I'll be watching for it.`;
+                ? `Your recent games keep showing ${topLabel}, and right now it's the pattern costing you the most. Say "drill my weaknesses" and we'll drill it shut.`
+                : `One thing to keep in the back of your mind today: ${topLabel}. That's the pattern that's been costing you the most, and it's being watched for.`;
               // Append the curriculum ARC when it sequences more than one
               // weakness (Phase 7: "close X, then Y") — the persistent plan the
               // coach carries across sessions.
@@ -12418,7 +12418,7 @@ export function CoachTeachPage(): JSX.Element {
       const startFen = walkthrough.fen || gameRef.current.fen;
       walkthrough.stop(); // release the board from the walkthrough state machine
       gameRef.current.loadFen(startFen);
-      const intro = "Let's watch it play out. I'll take both sides and call out the turning points.";
+      const intro = "Let's watch it play out — both sides, with the turning points called out.";
       setMessages((prev) => [...prev, { id: uid('cont-intro'), role: 'assistant', content: intro, timestamp: Date.now() }]);
       speechChainRef.current = speechChainRef.current.then(() => speakComputed(intro, { forced: true, intent: 'learn' })).catch(() => undefined);
       void logAppAudit({
@@ -13287,7 +13287,7 @@ export function CoachTeachPage(): JSX.Element {
                 const s = sessionStatsRef.current;
                 if (s.slips + s.questions > 0) {
                   const parts: string[] = [];
-                  if (s.questions > 0) parts.push(`I asked you ${s.questions} question${s.questions === 1 ? '' : 's'} and you found ${s.correct}`);
+                  if (s.questions > 0) parts.push(`you were asked ${s.questions} question${s.questions === 1 ? '' : 's'} and found ${s.correct}`);
                   if (s.slips > 0) parts.push(`we stopped on ${s.slips} slip${s.slips === 1 ? '' : 's'} — those are in your weakness profile now and they'll come back as drills`);
                   const closer = `Good session. ${parts.join(', and ')}.`;
                   captureEvent('session_closer_spoken', { surface: 'coach-teach', ...s });

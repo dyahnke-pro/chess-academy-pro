@@ -94,7 +94,7 @@ export function calculateKit(): StepKit {
     prompt: calculatePrompt,
     wrongTapLine: () => calculateWrongTapLine(),
     reasonFor: calculateReason,
-    intro: 'Today: calculating to the end. I will say a line out loud; you keep the pieces still and follow it in your head.',
+    intro: 'Today: calculating to the end. A line is said out loud; you keep the pieces still and follow it in your head.',
     adapt: withCalculableLine,
   };
 }

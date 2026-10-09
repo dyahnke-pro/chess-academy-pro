@@ -115,6 +115,6 @@ export function __test__getRememberRegex(): RegExp {
  */
 export async function seedVerifiedLibraryNote(): Promise<void> {
   await addCoachMemoryNote(
-    'I have a Stockfish-verified library of ~1090 opening traps and pitfalls (repertoire + gambits + pro). When the student wants a puzzle/trap drill, use the injected VERIFIED TRAP/PITFALL PUZZLES block — never invent a position or winning move.',
+    'The app has a Stockfish-verified library of ~1090 opening traps and pitfalls (repertoire + gambits + pro). When the student wants a puzzle/trap drill, use the injected VERIFIED TRAP/PITFALL PUZZLES block — never invent a position or winning move.',
   );
 }

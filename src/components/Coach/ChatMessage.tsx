@@ -87,7 +87,7 @@ function ActionButton({ action, onClick }: {
     review_games: 'Review my games',
     // Recommend-a-focused-game: the coach set a trainingFocus (the point of the
     // game) and offers to play one now (David 2026-08-27).
-    play_focused_game: "Play a game — I'll coach it",
+    play_focused_game: "Play a coached game",
     // Games-less profile answer → import + analyze (David 2026-08-28).
     import_games: 'Import & analyze my games',
   };

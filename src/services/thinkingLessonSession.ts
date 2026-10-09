@@ -252,7 +252,7 @@ export class ThinkingLessonSession {
       }
       if (!pos) {
         ranOut = true;
-        if (this.cursor === 0 && !opts.once) await this.deps.say('I could not find a clean board for this one yet — play or import a few games and it will build from them.');
+        if (this.cursor === 0 && !opts.once) await this.deps.say('There is no clean board for this one yet — play or import a few games and it will build from them.');
         break;
       }
       this.stage = stage;

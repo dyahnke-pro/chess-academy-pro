@@ -94,7 +94,7 @@ export async function coldStartGuidance(): Promise<ColdStart | null> {
       .count();
     if (imported > 0) return null;
     return {
-      line: "I don't have any of your games yet — upload and review your games and I'll find the patterns costing you points. Or ask me to teach or play a certain opening, like “teach me the Italian” or “play the Caro-Kann.”",
+      line: "None of your games are here yet — upload and review your games to find the patterns costing you points. Or ask to learn or play a certain opening, like “teach me the Italian” or “play the Caro-Kann.”",
       chips: ['Import my games', 'Teach me the Italian', 'Play the Caro-Kann'],
     };
   } catch { return null; }

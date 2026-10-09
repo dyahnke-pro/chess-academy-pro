@@ -100,7 +100,7 @@ const SCENARIO_TEMPLATES: Record<Scenario, string[]> = {
   ],
   encouragement: [
     "You're doing really well! Your understanding is growing with every game.",
-    "Keep it up! I can see real improvement in how you're thinking about positions.",
+    "Keep it up! There's real improvement in how you're thinking about positions.",
     "Great effort today. Remember, every master was once a beginner.",
   ],
   post_game_win: [
@@ -118,21 +118,21 @@ const SCENARIO_TEMPLATES: Record<Scenario, string[]> = {
   chat_greeting: [
     "Hey {playerName}! Good to see you. Ready to work on some chess today?",
     "Welcome back, {playerName}! What would you like to work on?",
-    "Hi there! I've been looking at your recent games. Want to dive in?",
+    "Hi there! Your recent games are ready to look at. Want to dive in?",
   ],
   chat_fallback: [
-    "That's an interesting question! While I'm not sure about that specifically, I can definitely help with chess. Want to look at a position or talk strategy?",
-    "I'm not quite sure what you mean, but I'm here to help with your chess! Want to practice something?",
+    "That one is outside chess. Want to look at a position or talk strategy?",
+    "That wasn't clear. Want to practice something, or ask about a position?",
   ],
   takeback_allowed: [
     "Sure, no problem! Let's go back and try again. Sometimes it helps to reconsider.",
     "Of course! Take it back. Let's think through this position together.",
   ],
   takeback_refused: [
-    "I think it's better to play on and learn from it. Review it with me after the game!",
+    "Better to play on and learn from it. Review it after the game!",
   ],
   takeback_reluctant: [
-    "Okay, I'll let you take that one back. But try to commit to your moves — it builds calculation skills!",
+    "Okay, take that one back. But try to commit to your moves — it builds calculation skills!",
   ],
 };
 

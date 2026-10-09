@@ -292,7 +292,7 @@ function NarrateGameSessionBody({
       .then((game) => {
         if (cancelled) return;
         if (!game) {
-          setError("I couldn't find that game in your history.");
+          setError("That game isn't in your history.");
           return;
         }
         setSession(buildNarrationSession(game, orientation));

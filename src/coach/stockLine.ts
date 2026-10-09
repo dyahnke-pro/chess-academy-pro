@@ -4,8 +4,8 @@
  * (`chat-turn` row `outcome: 'stock'`, WO-CHAT-01 P0) read one string.
  */
 export const STOCK_GROUNDING_FALLBACK =
-  "I can't verify that precisely from grounded data right now. " +
-  "Ask me for the best move, the plan, or what's hanging, and I'll ground the answer for you.";
+  "That can't be verified precisely from grounded data right now. " +
+  "Ask for the best move, the plan, or what's hanging for a grounded answer.";
 
 /** Is this the stock line — the turn was not answered. */
 export function isStockFallback(text: string): boolean {

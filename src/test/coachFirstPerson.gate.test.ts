@@ -3,11 +3,14 @@
  * never talks about itself).
  *
  * The all-screens walk (2026-10-09) heard "I can't read the mistakes you make
- * yet … I'll break down exactly what to drill" on every coach screen. A count
- * found ~160 string literals in coach and service code written in the coach's
- * first person. Some are prompts or a student's own words a parser matches,
- * so this is a per-file baseline that may only SHRINK: a NEW first-person line
- * fails here, and every site cleaned lowers its file's number.
+ * yet … I'll break down exactly what to drill" on every coach screen. The
+ * sweep the same day rewrote every line the coach speaks (~200) and the prompt
+ * examples that taught the model to say "I". What the baseline still counts is
+ * NOT the coach: the student's own words (question chips, "I played e4", the
+ * phrases the reader and detectors match), prompts quoting the student, and
+ * the bans themselves ('never "I / me / my"'). A per-file baseline that may
+ * only SHRINK: a NEW first-person line fails here until someone decides whose
+ * words it is.
  */
 import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
@@ -15,13 +18,13 @@ import path from 'node:path';
 import baseline from './coachFirstPerson.baseline.json';
 
 const FIRST_PERSON = /(?:^|[^A-Za-z'])(?:I|I'm|I'll|I've|I'd)(?![A-Za-z'])/;
-const ROOTS = ['src/coach', 'src/services'];
+const ROOTS = ['src/coach', 'src/services', 'src/components', 'src/hooks'];
 
 export function countFirstPersonLines(text: string): number {
   let n = 0;
   for (const l of text.split('\n')) {
     const t = l.trim();
-    if (t.startsWith('//') || t.startsWith('*') || t.startsWith('/*')) continue;
+    if (t.startsWith('//') || t.startsWith('*') || t.startsWith('/*') || t.startsWith('{/*')) continue;
     const lits = l.match(/`[^`]*`|'[^'\n]*'|"[^"\n]*"/g) ?? [];
     if (lits.some((x) => FIRST_PERSON.test(x.slice(1, -1)))) n += 1;
   }

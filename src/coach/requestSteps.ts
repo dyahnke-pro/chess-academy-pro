@@ -84,7 +84,7 @@ export function resolveSteps(steps: readonly RequestStep[]): StepsResult {
     if (!s.opening) { out.push({ ...s, openingName: null }); continue; }
     const hit = resolveOpeningEntry(s.opening);
     if (!hit) {
-      return { ok: false, reason: 'unknown-opening', clarify: `I don't know an opening called "${s.opening}" — which one did you mean?` };
+      return { ok: false, reason: 'unknown-opening', clarify: `There's no opening called "${s.opening}" — which one did you mean?` };
     }
     out.push({ ...s, openingName: hit.canonicalName });
   }

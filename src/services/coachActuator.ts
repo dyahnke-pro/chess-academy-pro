@@ -149,7 +149,7 @@ export type HandFallback =
 export const HAND_FALLBACK: Record<CoachHand, HandFallback> = {
   // A move needs a board that is already mounted: routing first would land on a
   // fresh board where the move is meaningless, which is worse than a refusal.
-  'play-move': { kind: 'none', because: 'there is no board here to move on — open a board first and I will play it' },
+  'play-move': { kind: 'none', because: 'there is no board here to move on — open a board first' },
   'take-back': { kind: 'none', because: 'there is no game here to take a move back from' },
   'set-position': { kind: 'route', to: BOARD_ROUTE },
   'reset-board': { kind: 'route', to: BOARD_ROUTE },
@@ -160,7 +160,7 @@ export const HAND_FALLBACK: Record<CoachHand, HandFallback> = {
   // board orientation, with no shared field to write. Hoisting those onto one
   // source is the next step; until it lands, this states the real reason
   // instead of pretending the hand is surface-bound by nature.
-  'set-orientation': { kind: 'none', because: 'I can only flip a board that is on screen' },
+  'set-orientation': { kind: 'none', because: 'only a board on screen can be flipped' },
   // Now a real SERVICE hand: `registerStrengthSetter` writes the one shared
   // difficulty, so this works with no board mounted. The `none` text survives
   // only for the case where the app root has not registered the setter at all.

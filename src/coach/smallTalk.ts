@@ -27,8 +27,8 @@ export function smallTalkKind(text: string): SmallTalkKind {
 
 const STEMS: Record<SmallTalkKind, readonly string[]> = {
   presence: [
-    'I am here. What would you like to know?',
-    'Yes, I am listening. Go ahead.',
+    'Ready. What would you like to know?',
+    'Listening. Go ahead.',
   ],
   thanks: ['Any time.', 'Glad it helped.', 'You are welcome.'],
   goodbye: ['See you next game.', 'Good playing. See you soon.'],
@@ -38,8 +38,8 @@ const STEMS: Record<SmallTalkKind, readonly string[]> = {
   ],
   agree: ['Good.', 'Right.', 'Then on we go.'],
   unclear: [
-    'I am not sure what you mean. Could you say it another way?',
-    'I did not catch that. Could you put it differently?',
+    'That was not clear. Could you say it another way?',
+    'That did not come through. Could you put it differently?',
   ],
 };
 

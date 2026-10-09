@@ -186,13 +186,13 @@ export function buildSlipReveal(args: {
 export function gradeReasonLead(reason: string, mode: 'chip' | 'typed' | 'hint'): string {
   if (mode === 'hint') return "No worries — let's look at it together. ";
   const r = reason.toLowerCase();
-  if (/win material|trade pieces/.test(r)) return 'I see the grab — ';
+  if (/win material|trade pieces/.test(r)) return 'Going for material — ';
   if (/attack the king/.test(r)) return 'Going for the king — ';
   if (/king safe|keep my king/.test(r)) return 'Playing it safe — ';
   if (/develop/.test(r)) return 'Natural development — ';
   if (/space|open a line/.test(r)) return 'Fair bid for space — ';
   if (/to safety|to defend/.test(r)) return 'Trying to shore it up — ';
-  return 'I hear the idea — ';
+  return 'Fair idea — ';
 }
 
 /** Prepend the reason-graded lead to a reveal, lower-casing the reveal's first

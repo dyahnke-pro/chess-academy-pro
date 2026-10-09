@@ -114,7 +114,7 @@ export function usePracticePosition(): UsePracticePositionReturn {
       };
     } catch {
       exitPractice();
-      return { type: 'wrong', message: 'I had trouble analyzing that position.' };
+      return { type: 'wrong', message: 'That position couldn\'t be analyzed.' };
     }
   }, [practicePosition, practiceAttempts, exitPractice]);
 

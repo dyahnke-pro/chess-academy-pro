@@ -794,7 +794,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           const ok = typeof res === 'boolean' ? res : res.ok;
           const ack = ok
             ? "Board's set. Your move."
-            : "I couldn't set that position — the FEN looked off.";
+            : "That position couldn't be set — the FEN looked off.";
           const ackMsg: ChatMessageType = {
             id: uid('gmsg-ack'),
             role: 'assistant',
@@ -820,7 +820,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           const ack: ChatMessageType = {
             id: uid('gmsg-ack'),
             role: 'assistant',
-            content: `Starting a fresh game — I'll play the ${inGame.openingName} against you.`,
+            content: `Starting a fresh game — they play the ${inGame.openingName} against you.`,
             timestamp: Date.now(),
           };
           setMessages([...updatedMessages, ack]);
@@ -1277,7 +1277,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           const errMsg: ChatMessageType = {
             id: uid('gmsg-err'),
             role: 'assistant',
-            content: 'Sorry — I couldn\'t reach the coach just now. Try again in a moment.',
+            content: 'The coach couldn\'t be reached just now. Try again in a moment.',
             timestamp: Date.now(),
           };
           setMessages((prev) => [...prev, errMsg]);
@@ -1556,7 +1556,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         const errMsg: ChatMessageType = {
           id: uid('gmsg-err'),
           role: 'assistant',
-          content: 'Sorry — I couldn\'t reach the coach just now. Try again in a moment.',
+          content: 'The coach couldn\'t be reached just now. Try again in a moment.',
           timestamp: Date.now(),
         };
         setMessages((prev) => [...prev, errMsg]);

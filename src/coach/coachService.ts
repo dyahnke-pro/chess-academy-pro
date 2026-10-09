@@ -156,7 +156,7 @@ function collectPlayerNames(toolName: string, args: unknown, result: unknown, in
  *  without any grounded player data (the explorer was down / returned
  *  empty). Mirrors claimValidator's stock-fallback. */
 const UNGROUNDED_PLAYER_STAT_REFUSAL =
-  "I can't pull that player's real games right now — the explorer's unavailable, so I don't have their actual move frequencies. I'm not going to guess percentages from memory. Want me to retry, or teach the opening from the master database instead?";
+  "That player's real games can't be reached right now — the explorer is unavailable, so their actual move frequencies aren't here, and guessing percentages from memory would be wrong. Try again, or learn the opening from the master database instead?";
 
 /** FAIL-LOUDLY (David 2026-06-15: "I want the llm to fail loudly if something
  *  is down… say what is not working — 'Stockfish not responding'"). When a
@@ -165,14 +165,14 @@ const UNGROUNDED_PLAYER_STAT_REFUSAL =
  *  an invented evaluation (the dead-engine "exd6 is the engine's #1"
  *  fabrication). Maps each data tool → a plain-language "what's down" clause. */
 const DATA_TOOL_DOWN_MESSAGES: Record<string, string> = {
-  stockfish_eval: "Stockfish isn't responding, so I can't give you an engine evaluation or a verified best move right now",
-  stockfish_classify_move: "Stockfish isn't responding, so I can't grade that move's accuracy right now",
-  lookup_master_play: "the master-games database is unreachable, so I can't tell you what masters actually play here",
+  stockfish_eval: "Stockfish isn't responding, so there's no engine evaluation or verified best move right now",
+  stockfish_classify_move: "Stockfish isn't responding, so that move's accuracy can't be graded right now",
+  lookup_master_play: "the master-games database is unreachable, so what masters actually play here isn't available",
   lichess_master_games: "the master-games database is unreachable right now",
   lichess_opening_lookup: "the opening database is unreachable right now",
   local_opening_book: "the opening book is unavailable right now",
-  lookup_player_games: "I couldn't reach that player's real games right now",
-  lookup_player_opening_moves: "I couldn't reach that player's opening stats right now",
+  lookup_player_games: "that player's real games couldn't be reached right now",
+  lookup_player_opening_moves: "that player's opening stats couldn't be reached right now",
 };
 
 function resolveProviderName(): ProviderName {
@@ -2288,7 +2288,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       details: JSON.stringify({ surface: input.surface, dispatchedToolNames }),
     });
     finalText =
-      '[VOICE: Let me start that lesson.] Tell me the opening you want to learn — say "walk me through it" — and I\'ll animate it move by move on the board.';
+      '[VOICE: Name the opening to start the lesson.] Say the opening you want to learn — "walk me through it" — and it plays out move by move on the board.';
   }
 
   // RUNTIME GROUNDING GATES (groundCoachReply) — DELETED (David 2026-07-09:
@@ -2320,7 +2320,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const clauses = [
       ...new Set([...failedDataTools.keys()].map((n) => DATA_TOOL_DOWN_MESSAGES[n])),
     ];
-    finalText = `⚠️ Heads up — ${clauses.join('; ')}. I won't make that up — here's my general read instead:\n\n${finalText}`.trim();
+    finalText = `⚠️ Heads up — ${clauses.join('; ')}. That part is not made up here — the general read instead:\n\n${finalText}`.trim();
     void logAppAudit({
       kind: 'claim-validator-trip',
       category: 'subsystem',

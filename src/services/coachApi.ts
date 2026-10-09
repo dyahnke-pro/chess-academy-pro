@@ -239,7 +239,7 @@ function reportCoachOffline(task: CoachTask, stage: string, error: unknown): voi
 
 // Offline fallback templates
 const OFFLINE_FALLBACKS: Record<string, string> = {
-  default: "I'm having trouble connecting right now. Keep playing — I'll be back online soon!",
+  default: "The coach can't connect right now. Keep playing — it will be back online soon.",
   hint: "Think about which pieces are undefended, and whether there's a forcing sequence available.",
   puzzle_feedback: "Good effort! Every puzzle teaches something. Try to identify the key tactical pattern here.",
 };
@@ -775,7 +775,7 @@ export async function answerAttemptComparison(
     allowedMate: rating.allowedMate,
   });
   if (attempt.withholdBest && !rating.wasBest) {
-    answer.facts = `${answer.facts} There's a stronger move here — find it, and I'll put the two side by side.`;
+    answer.facts = `${answer.facts} There's a stronger move here — find it, and the two go side by side.`;
     answer.bestMoveSan = null;
     answer.bestMoveFromTo = null;
   }
@@ -1924,7 +1924,7 @@ export async function reminderWithRecord(topic: string, overview: { totalGames: 
       .sort((a, b) => b.total - a.total)[0];
     if (top) {
       const label = `${top.label.charAt(0).toLowerCase()}${top.label.slice(1)}`;
-      return `The one that keeps coming back in your games here: ${label}, ${top.total} times. Import and analyze your Lichess or Chess.com games and I'll see the rest.`;
+      return `The one that keeps coming back in your games here: ${label}, ${top.total} times. Import and analyze your Lichess or Chess.com games to see the rest.`;
     }
   }
   return uploadGamesReminder(topic, overview);
@@ -1986,12 +1986,12 @@ export function personalGameDataQuestion(
  *  APP_ROUTES_MANIFEST.featuresAvailable), stated concisely — the coach names
  *  what it actually does, never an invented feature. */
 const CAPABILITY_HEADLINES: ReadonlyArray<{ title: string; blurb: string }> = [
-  { title: 'Spot your weaknesses', blurb: 'I read your analyzed games and tell you exactly where you go wrong — the phase, the pattern, your recurring mistakes' },
-  { title: 'Review any game', blurb: 'I walk your last game move by move and pinpoint the critical error and the better move' },
-  { title: 'Drill your mistakes', blurb: 'I turn your own blunders into puzzles and drill them until they test out' },
-  { title: 'Teach openings', blurb: 'I teach any opening move by move, then let you practice and play it against me' },
-  { title: 'Play a coached game', blurb: 'I play you at your level and coach the position as we go' },
-  { title: 'Answer the position', blurb: "I ground every answer — is a move sound, what's the plan, what's hanging, whose better — in the engine and your games" },
+  { title: 'Spot your weaknesses', blurb: 'your analyzed games show exactly where you go wrong — the phase, the pattern, your recurring mistakes' },
+  { title: 'Review any game', blurb: 'your last game, walked move by move, with the critical error and the better move' },
+  { title: 'Drill your mistakes', blurb: 'your own blunders become puzzles, drilled until they test out' },
+  { title: 'Teach openings', blurb: 'any opening taught move by move, then practiced and played against the coach' },
+  { title: 'Play a coached game', blurb: 'a game at your level, coached as it goes' },
+  { title: 'Answer the position', blurb: "every answer — is a move sound, what's the plan, what's hanging, who's better — grounded in the engine and your games" },
 ];
 
 /** Dead-end rescue (David 2026-07-17): when a coach turn is about to serve the
@@ -2038,13 +2038,13 @@ export function buildOpeningSuggestionReply(query: string): string | null {
   const choices = `[CHOICES: ${names.join(' | ')}]`;
   if (names.length === 1) {
     return (
-      `I don't have that mapped as a built lesson, but I can walk you through ` +
-      `the ${names[0]}. Want to start there?\n${choices}`
+      `That isn't a built lesson, but the ${names[0]} is ready to walk through. ` +
+      `Want to start there?\n${choices}`
     );
   }
   return (
-    `I don't have that exact opening mapped — did you mean one of these? ` +
-    `Tap one and I'll teach it.\n${choices}`
+    `That exact opening isn't mapped — did you mean one of these? ` +
+    `Tap one to learn it.\n${choices}`
   );
 }
 
@@ -2211,7 +2211,7 @@ async function answerNoChessTurn(
       const read = await serveGroundedPositionDefault(grounding, config, ask || undefined, undefined, studentLanguage);
       if (read) return { text: read, lane: 'safe-default-position' };
     }
-    if (slots.question) return { text: 'I am not sure what you are asking. Do you want my read of the position? Ask about a move, a plan, or what they are up to.', lane: 'ask-back' };
+    if (slots.question) return { text: 'That question is not clear yet. Ask about a move, a plan, what they are up to, or how the position stands.', lane: 'ask-back' };
   }
   return { text: smallTalkReply(ask), lane: 'conversational' };
 }
@@ -3362,7 +3362,7 @@ export async function voiceReviewLines(
     'every trade breathes."\n' +
     // Dry humor riding on the fact — an aside at the position, never the student, no new chess content.
     'FACT: "The knight and the rook are both attacked and cannot both be saved." → "Both the knight and the ' +
-    'rook are under the gun at once — and last I checked, you only get one move. One of them is going home."\n' +
+    'rook are under the gun at once — and you only get one move. One of them is going home."\n' +
     // Under-claimed verdict: a quiet good move is "clean", NOT "crushing".
     'FACT: "A solid developing move that keeps everything defended." → "Nothing flashy, just clean — ' +
     'everything stays defended and you keep building. That\'s perfectly good chess."\n\n' +
@@ -3968,7 +3968,7 @@ export async function getCoachChatResponse(
             // SHOW IT, not only say it: a winning material gets a board the
             // trainer plays out from the tablebase, then hands to the student.
             const demo = endgameRuleDemoFen(ruleMaterial);
-            const facts = demo ? `${ruleAnswer.facts} I'll set it up and play it out for you, then you try.` : ruleAnswer.facts;
+            const facts = demo ? `${ruleAnswer.facts} Here it is set up and played out, then you try.` : ruleAnswer.facts;
             const voiced = await voice(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
             if (voiced) {
               if (demo) lastCoachActionOffer = [{ type: 'endgame_trainer', id: `custom:${demo}` }];
@@ -4077,7 +4077,7 @@ export async function getCoachChatResponse(
             }
             // Target didn't resolve to an opening we've played OR a known
             // opponent — computed no-data line (G0), not an LLM guess.
-            const noDataFact = `I don't have any of your games against "${target}" logged yet. If that's an opening, drill it and I'll start tracking your record; if it's an opponent, we haven't played them in your imported games.`;
+            const noDataFact = `None of your games against "${target}" are logged yet. If that's an opening, drill it and your record starts tracking; if it's an opponent, they aren't in your imported games.`;
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
@@ -4116,7 +4116,7 @@ export async function getCoachChatResponse(
                 fact = `Let's sharpen your ${weakest.name} — the opening your data says needs the most work. Tap to drill it.`;
                 offer = { type: 'drill_opening', id: weakest.id };
               } else {
-                fact = "Let's work on your openings — drill one of your repertoire lines and I'll track your accuracy. Tap to open your repertoire.";
+                fact = "Drill one of your repertoire lines and your accuracy gets tracked line by line. Tap to open your repertoire.";
                 offer = { type: 'drill_opening', id: '' };
               }
             }
@@ -4198,7 +4198,7 @@ export async function getCoachChatResponse(
             if (idx < 0) {
               const named = ref.kind === 'san' ? ref.san : ref.kind === 'capture-on' ? `a capture on ${ref.square}` : ref.kind === 'castle' ? (ref.by === 'coach' ? 'my castling move' : 'your castling move') : 'that move';
               const tail = plies.slice(-6).map((p) => p.san);
-              const msg = `I can't find ${named} in this game — the last moves on the board were ${tail.join(', ')}. Name one of those and I'll grade it.`;
+              const msg = `${named} isn't in this game — the last moves on the board were ${tail.join(', ')}. Name one of those to have it graded.`;
               const voicedMiss = await voice(msg, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating', preferRaw: true });
               return voicedMiss ?? msg;
             }
@@ -4341,7 +4341,7 @@ export async function getCoachChatResponse(
               const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'strengths', preferRaw: true });
               if (voiced) return voiced;
             }
-            const noDataFact = "Import your games and I'll show you what you do well. Connect your chess.com or lichess account — once your games are in and analyzed, I'll pull out your real strengths.";
+            const noDataFact = "Import your games to see what you do well. Connect your chess.com or lichess account — once your games are in and analyzed, your real strengths show up here.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'strengths', preferRaw: true });
             if (voicedNoData) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoData; }
           } catch { /* fall through */ }
@@ -4365,7 +4365,7 @@ export async function getCoachChatResponse(
               const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'stats', preferRaw: true });
               if (voiced) return voiced;
             }
-            const noDataFact = "Import your games and I'll track your rating and win rate. Connect your chess.com or lichess account and I'll keep your record for you.";
+            const noDataFact = "Import your games to track your rating and win rate. Connect your chess.com or lichess account and your record is kept for you.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'stats', preferRaw: true });
             if (voicedNoData) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoData; }
           } catch { /* fall through */ }
@@ -4433,7 +4433,7 @@ export async function getCoachChatResponse(
               }
             }
             // No opening drilled / no weak-spot data — computed no-data line (G0).
-            const noDataFact = "You haven't drilled an opening enough yet for me to grade your accuracy line by line. Drill one of your repertoire openings a few times and I'll pinpoint the exact variation and move to work on.";
+            const noDataFact = "You haven't drilled an opening enough yet to grade your accuracy line by line. Drill one of your repertoire openings a few times to see the exact variation and move to work on.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-accuracy', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
@@ -4573,7 +4573,7 @@ export async function getCoachChatResponse(
               }
             }
             // No trap data yet — computed no-data line (G0).
-            const noDataFact = "I don't have named traps logged for your strongest openings yet. Drill an opening's Watch and Learn rungs and I'll surface its trap weapons and the lines to watch out for.";
+            const noDataFact = "No named traps are logged for your strongest openings yet. Drill an opening's Watch and Learn rungs and its trap weapons and the lines to watch out for appear here.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-traps', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
@@ -4604,7 +4604,7 @@ export async function getCoachChatResponse(
               }
             }
             // Nothing enrolled yet — computed onboarding line (G0).
-            const noDataFact = "You don't have any opening review cards yet. Finish an opening's Learn rung and I'll start scheduling spaced-repetition reps for it — then I can tell you what's due.";
+            const noDataFact = "You don't have any opening review cards yet. Finish an opening's Learn rung and its spaced-repetition reps start — then you'll see what's due.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'review-due', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
@@ -4735,7 +4735,7 @@ export async function getCoachChatResponse(
                 return voiced;
               }
             }
-            const noDataFact = "You haven't analyzed enough games yet for me to break down your mistakes. Analyze a few games and I'll show you exactly where you go wrong and what to drill.";
+            const noDataFact = "You haven't analyzed enough games yet to break down your mistakes. Analyze a few games to see exactly where you go wrong and what to drill.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'mistakes', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
@@ -4819,7 +4819,7 @@ export async function getCoachChatResponse(
                 return voiced;
               }
             }
-            const noDataFact = "You haven't analyzed enough games yet for me to profile your tactics. Analyze a few games or solve some puzzles and I'll show you which motifs you miss most.";
+            const noDataFact = "You haven't analyzed enough games yet to profile your tactics. Analyze a few games or solve some puzzles to see which motifs you miss most.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics-profile', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
@@ -4847,7 +4847,7 @@ export async function getCoachChatResponse(
                 return voiced;
               }
             }
-            const noDataFact = "You haven't analyzed enough games yet for me to break down your play by phase. Analyze a few games and I'll show you whether your opening, middlegame, or endgame needs the most work.";
+            const noDataFact = "You haven't analyzed enough games yet to break down your play by phase. Analyze a few games to see whether your opening, middlegame, or endgame needs the most work.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'phase-profile', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
@@ -4909,7 +4909,7 @@ export async function getCoachChatResponse(
               // a line (G0). This wins even when the repertoire-gap flag also
               // fired: an explicit against-ask deserves the no-prep answer,
               // not "play more games" (grob probe, 2026-07-15).
-              const noPrepFact = "I don't have a prepared recommendation against that opening yet. Ask me about the ones I do teach — the Sicilian, Caro-Kann, French, Pirc, King's Indian, London and more — or tell me what your opponent plays and I'll point you at the closest line I cover.";
+              const noPrepFact = "There's no prepared recommendation against that opening yet. Ask about the ones taught here — the Sicilian, Caro-Kann, French, Pirc, King's Indian, London and more — or say what your opponent plays to get the closest line covered.";
               const voicedNoPrep = await voice(noPrepFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'counter-repertoire', preferRaw: true });
               if (voicedNoPrep) return voicedNoPrep;
             }
@@ -4968,7 +4968,7 @@ export async function getCoachChatResponse(
                 return voiced;
               }
             }
-            const noDataFact = "Import your games and I'll spot the holes in your repertoire. Connect your chess.com or lichess account and I'll show you what you leave unprepared and what to learn next.";
+            const noDataFact = "Import your games to spot the holes in your repertoire. Connect your chess.com or lichess account to see what you leave unprepared and what to learn next.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'repertoire-gap', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
@@ -4998,7 +4998,7 @@ export async function getCoachChatResponse(
                 return voiced;
               }
             }
-            const noDataFact = "You haven't analyzed enough games yet for me to grade your accuracy. Analyze a few and I'll show you how precise your play is and where to tighten up.";
+            const noDataFact = "You haven't analyzed enough games yet to grade your accuracy. Analyze a few to see how precise your play is and where to tighten up.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'accuracy', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
@@ -5022,7 +5022,7 @@ export async function getCoachChatResponse(
                 return voiced;
               }
             }
-            const noDataFact = "Import your games and I'll track your form. Connect your chess.com or lichess account and I'll show you your streaks and where you're steadiest.";
+            const noDataFact = "Import your games to track your form. Connect your chess.com or lichess account to see your streaks and where you're steadiest.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'consistency', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
@@ -5040,7 +5040,7 @@ export async function getCoachChatResponse(
               const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'time-trouble', preferRaw: true });
               if (voiced) { lastCoachActionOffer = [{ type: 'review_games', id: 'recent' }]; return voiced; }
             }
-            const noDataFact = "You haven't played any games with clock data yet, so I can't see whether time pressure is costing you. Play a few timed games and I'll show you if your blunders cluster on a low clock.";
+            const noDataFact = "You haven't played any games with clock data yet, so there's no way to see whether time pressure is costing you. Play a few timed games to see if your blunders cluster on a low clock.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'time-trouble', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
@@ -5055,7 +5055,7 @@ export async function getCoachChatResponse(
               const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'last-game', preferRaw: true });
               if (voiced) { lastCoachActionOffer = [{ type: 'review_games', id: 'last' }]; return voiced; }
             }
-            const noDataFact = "I don't have any of your games on file yet. Import your games and I'll be able to tell you how your last one went.";
+            const noDataFact = "None of your games are on file yet. Import your games to hear how your last one went.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'last-game', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
@@ -5079,7 +5079,7 @@ export async function getCoachChatResponse(
                 return voiced;
               }
             }
-            const noDataFact = "You haven't analyzed enough games yet for me to see how you convert. Analyze a few and I'll show you whether you close out wins cleanly or let them slip.";
+            const noDataFact = "You haven't analyzed enough games yet to see how you convert. Analyze a few to see whether you close out wins cleanly or let them slip.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'converting', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
@@ -5095,7 +5095,7 @@ export async function getCoachChatResponse(
               inversion: cm ? { preferredColor: cm.preferredColor, otherColor: cm.otherColor, inversionPoints: cm.inversionPoints } : null,
             });
             if (answer) { const v = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'review_games', id: 'by-color' }]; return v; } }
-            const nd = await voice("Import your games and I'll compare your colours. Connect your chess.com or lichess account and I'll tell you which side you're stronger with.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color', preferRaw: true });
+            const nd = await voice("Import your games to compare your colours. Connect your chess.com or lichess account to see which side you're stronger with.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color', preferRaw: true });
             if (nd) return nd;
           } catch { /* fall through */ }
         }
@@ -5113,7 +5113,7 @@ export async function getCoachChatResponse(
               nemesis: ovr.lowestLostTo ? { name: ovr.lowestLostTo.name, elo: ovr.lowestLostTo.elo } : null,
             });
             if (answer) { const v = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'review_games', id: 'best' }]; return v; } }
-            const nd = await voice("Import your games and I'll pull out your records. Connect your chess.com or lichess account and I'll track your best games and fastest wins.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records', preferRaw: true });
+            const nd = await voice("Import your games to see your records. Connect your chess.com or lichess account to track your best games and fastest wins.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records', preferRaw: true });
             if (nd) return nd;
           } catch { /* fall through */ }
         }
@@ -5129,7 +5129,7 @@ export async function getCoachChatResponse(
               mistakePuzzles: { mastered: miPz.puzzleProgress.mastered, solved: miPz.puzzleProgress.solved, unsolved: miPz.puzzleProgress.unsolved },
             });
             if (answer) { const v = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'puzzle_theme', id: 'adaptive' }]; return v; } }
-            const nd = await voice("You haven't solved enough puzzles yet for me to track your puzzle rating. Solve a few and I'll show you your rating and accuracy.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats', preferRaw: true });
+            const nd = await voice("You haven't solved enough puzzles yet to track your puzzle rating. Solve a few to see your rating and accuracy.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats', preferRaw: true });
             if (nd) return nd;
           } catch { /* fall through */ }
         }
@@ -5145,7 +5145,7 @@ export async function getCoachChatResponse(
               worst: gapped ? { tacticType: gapped.tacticType, puzzleAccuracyPct: gapped.puzzleAccuracyPct as number, gameRecognitionPct: gapped.gameRecognitionPct as number, gapPoints: gapped.transferGapPoints as number } : null,
             });
             if (answer) { const v = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'transfer-gap', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'weakness_drill', id: gapped?.tacticType ? gapped.tacticType.toLowerCase() : 'all' }]; return v; } }
-            const nd = await voice("You haven't solved and played enough tactics yet for me to compare your puzzle skill to your in-game vision. Do a few more and I'll show you the gap.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'transfer-gap', preferRaw: true });
+            const nd = await voice("You haven't solved and played enough tactics yet to compare your puzzle skill to your in-game vision. Do a few more to see the gap.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'transfer-gap', preferRaw: true });
             if (nd) return nd;
           } catch { /* fall through */ }
         }
@@ -5173,7 +5173,7 @@ export async function getCoachChatResponse(
               }
               return v;
             } }
-            const nd = await voice("You haven't played or drilled enough yet for me to build your skill breakdown. Play some games and solve some puzzles, and I'll rate your opening, tactics, endgame, memory, and calculation.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'skill-radar', preferRaw: true });
+            const nd = await voice("You haven't played or drilled enough yet to build your skill breakdown. Play some games and solve some puzzles to get a rating for your opening, tactics, endgame, memory, and calculation.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'skill-radar', preferRaw: true });
             if (nd) return nd;
           } catch { /* fall through */ }
         }
@@ -5200,7 +5200,7 @@ export async function getCoachChatResponse(
             // Not enough dated history yet — voice a computed fallback instead of
             // falling through to the weakness-dump (which answers the wrong
             // question) or the ungrounded legacy path.
-            const noDataFact = "I don't have enough analyzed games across different months yet to show a trend. Play and analyze a few more over the coming weeks and I'll tell you whether you're improving.";
+            const noDataFact = "There aren't enough analyzed games across different months yet to show a trend. Play and analyze a few more over the coming weeks to see whether you're improving.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'trend', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to progress */ }
@@ -5331,7 +5331,7 @@ export async function getCoachChatResponse(
                 if (voicedSkill) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedSkill; }
               }
             }
-            const noDataFact = "Import your games and I'll analyze your weaknesses. Connect your chess.com or lichess account, or paste a game — once your games are in and analyzed, I'll show you the patterns in your play and drill them with you.";
+            const noDataFact = "Import your games to analyze your weaknesses. Connect your chess.com or lichess account, or paste a game — once your games are in and analyzed, the patterns in your play show up here, ready to drill.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
             if (voicedNoData) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoData; }
           } catch { /* fall through to legacy path */ }
@@ -5421,8 +5421,8 @@ export async function getCoachChatResponse(
             // No repertoire/game data yet — computed no-data line (G0, never the
             // "only you can tell me" punt the coach used to give).
             const noDataFact = kind === 'favorite'
-              ? "You haven't played or drilled enough openings yet for me to see a favorite. Play a few games or drill an opening and I'll track it."
-              : "You haven't drilled enough openings yet for me to rank them. Drill a few opening lines and I'll tell you your " + kind + " one.";
+              ? "You haven't played or drilled enough openings yet to show a favorite. Play a few games or drill an opening to start tracking it."
+              : "You haven't drilled enough openings yet to rank them. Drill a few opening lines to see your " + kind + " one.";
             const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-profile', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
@@ -5680,7 +5680,7 @@ export async function getCoachChatResponse(
             }
             const facts = answer?.facts
               ? `${answer.facts}${identity}`
-              : "I can't name the opening yet — play a few more moves and I'll tell you exactly which line you're in.";
+              : "The opening can't be named yet — play a few more moves and the exact line shows.";
             const voiced = await voice(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'name-opening', preferRaw: true });
             if (voiced) return voiced;
           } catch { /* fall through */ }
@@ -6207,7 +6207,7 @@ export async function getCoachChatResponse(
               const line = openingIdentityLine(hit.name, seat, 'demo');
               const facts = line
                 ? `The ${hit.name}: ${line.text}`
-                : `The ${hit.name} is in my database, but its master games don't give me a clear signature to describe — no lasting pawn sacrifice, no locked structure, nothing it reliably provokes. Say "teach me the ${hit.name}" and I'll walk the line with you.`;
+                : `The ${hit.name} is in the opening database, but its master games show no clear signature — no lasting pawn sacrifice, no locked structure, nothing it reliably provokes. Say "teach me the ${hit.name}" to walk the line.`;
               const voiced = await voice(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-identity', preferRaw: true });
               if (voiced) return voiced;
               return facts;
@@ -6228,9 +6228,9 @@ export async function getCoachChatResponse(
             // an eight-move fragment (David 2026-08-13: "It should then be
             // able to teach that opening to the middle game").
             const facts = hit
-              ? `Yes — the ${hit.name} is a real opening in my database. Say "teach me the ${hit.name}" and I'll walk it with you all the way into the middlegame.`
+              ? `Yes — the ${hit.name} is a real opening in the database. Say "teach me the ${hit.name}" to walk it all the way into the middlegame.`
               : matches.length > 0
-                ? `No — there's no opening called "${q}" in my database of 3,600+ named openings. The closest real names I have: ${matches.slice(0, 3).map((m) => m.name).join('; ')}. Name one and I'll teach it into the middlegame.`
+                ? `No — there's no opening called "${q}" among the 3,600+ named openings in the database. The closest real names: ${matches.slice(0, 3).map((m) => m.name).join('; ')}. Name one to learn it into the middlegame.`
                 : `No — there's no opening called "${q}" in my database of 3,600+ named openings, and nothing close to it either.`;
             const voicedExist = await voice(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-existence', preferRaw: true });
             if (voicedExist) return voicedExist;
@@ -6297,7 +6297,7 @@ export async function getCoachChatResponse(
                   if (voiced) { if (recent.worst) lastCoachActionOffer = [{ type: 'weakness_drill', id: `game:${recent.worst.gameId}` }]; return voiced; }
                 }
               } else {
-                const noGames = "I don't have any of your games yet. Import from chess.com or lichess, or paste a game, and I'll pinpoint exactly where each one turned.";
+                const noGames = "None of your games are here yet. Import from chess.com or lichess, or paste a game, to see exactly where each one turned.";
                 const voicedNoGames = await voice(noGames, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
                 if (voicedNoGames) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoGames; }
               }
@@ -6313,7 +6313,7 @@ export async function getCoachChatResponse(
                 }
               } else {
                 // No games at all → the honest import line, not a deflection.
-                const noGames = "I don't have any of your games yet. Import from chess.com or lichess, or paste a game, and I'll pinpoint exactly where each one turned.";
+                const noGames = "None of your games are here yet. Import from chess.com or lichess, or paste a game, to see exactly where each one turned.";
                 const voicedNoGames = await voice(noGames, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
                 if (voicedNoGames) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoGames; }
               }
@@ -6421,7 +6421,7 @@ export async function getCoachChatResponse(
         // default ("how does he play this line?" answered "The best move is
         // Nf3" — 2026-08-13 all-questions audit, run allq-mss0y9qr).
         if (grounding.playerGamesQuestion && !grounding.playerGames) {
-          const askBack = "Which player do you mean? Open a pro's opening page and I can walk you through their real games in this line.";
+          const askBack = "Which player do you mean? Open a pro's opening page to walk through their real games in this line.";
           const voicedAskBack = await voice(askBack, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'player-games', preferRaw: true });
           if (voicedAskBack) return voicedAskBack;
           return askBack;
@@ -6524,7 +6524,7 @@ export async function getCoachChatResponse(
               const voiced = await voice(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
               if (voiced) return voiced;
             } else {
-              const none = `I don't have enough of your endgames analyzed yet to pinpoint the type you struggle with. Play or import a few games that reach an endgame and I'll show you exactly which ending to drill.`;
+              const none = `Not enough of your endgames are analyzed yet to pinpoint the type you struggle with. Play or import a few games that reach an endgame to see exactly which ending to drill.`;
               const voiced = await voice(none, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
               if (voiced) return voiced;
             }
@@ -6548,7 +6548,7 @@ export async function getCoachChatResponse(
             const playable = lesson.positions.find((p) => p.fen);
             if (isEndgamePlayRequest(endAsk) && playable) {
               lastCoachActionOffer = [{ type: 'endgame_trainer', id: lesson.id }];
-              const intro = `Let's play out the ${lesson.name}. I'll walk it once, then you take over — I'll stop you if you go wrong and we'll fix it together.`;
+              const intro = `Let's play out the ${lesson.name}. It's walked once, then you take over — a wrong move is stopped and fixed on the spot.`;
               const voiced = await voice(intro, { studentMessage: endAsk, providerConfig: config, intent: 'endgame', preferRaw: true });
               if (voiced) return voiced;
               return intro;
@@ -6626,7 +6626,7 @@ export async function getCoachChatResponse(
         // (positionalTopic) and a real endgame-technique ask (handled above).
         if (grounding.conceptQuestion && !grounding.positionalTopic && !matchEndgameLesson(lastUserMessage() ?? '')) {
           const userText = lastUserMessage() ?? '';
-          const decline = 'I don’t have a specific lesson on that idea yet. I can teach you a named concept, though — try "what’s an outpost", "the bishop pair", "an isolated pawn", or "what’s a fork".';
+          const decline = 'There is no lesson on that idea yet. Named concepts are ready, though — try "what’s an outpost", "the bishop pair", "an isolated pawn", or "what’s a fork".';
           const voiced = await voice(decline, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
           if (voiced) return voiced;
           return decline;

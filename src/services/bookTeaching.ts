@@ -236,11 +236,11 @@ export function answerFromBooks(req: BookRequest, library: readonly TeachableBoo
       const at = { ...p, pageIndex: p.pageIndex + page };
       return { text: `${cite(at)}:\n\n“${at.paragraph}”\n\nThe chapter is open in the library — where its diagram is a live board, find the book's move there.`, path: readerPath(at), offer: offerFor(at) };
     }
-    return { text: `I couldn't find chapter ${req.chapter.toUpperCase()} in ${whose}.`, path: null, offer: null };
+    return { text: `There's no chapter ${req.chapter.toUpperCase()} in ${whose}.`, path: null, offer: null };
   }
   if (!req.topic) {
     const p = named.length > 0 ? openingPassage(named[0]) : null;
-    if (!p) return { text: `I couldn't find ${whose} in the library.`, path: null, offer: null };
+    if (!p) return { text: `${whose} isn't in the library.`, path: null, offer: null };
     return { text: `${cite(p)}:\n\n“${p.paragraph}”\n\nThe book is open at that page in the library — ask me about any topic in it.`, path: readerPath(p), offer: offerFor(p) };
   }
   const hit = findPassage(named, req.topic);
@@ -255,7 +255,7 @@ export function answerFromBooks(req: BookRequest, library: readonly TeachableBoo
       };
     }
   }
-  return { text: `I looked through ${whose} and found no passage on “${req.topic}”.`, path: null, offer: null };
+  return { text: `${whose} has no passage on “${req.topic}”.`, path: null, offer: null };
 }
 
 /** The coach's answer to a book request, or null when the ask is not one.

@@ -17,7 +17,7 @@
  * test until it passes" is not a fix).
  */
 
-export const STOCK = /I can't verify that precisely from grounded data/;
+export const STOCK = /I can't verify that precisely from grounded data|can't be verified precisely from grounded data/;
 const THAI = /[฀-๿]/;
 /** The coach never speaks as a player (RULEBOOK V1/V2): no I / my / me. */
 const COACH_AS_PLAYER = /\b(?:I|my|me|I'm|I've)\b|skill-level move|at your strength on purpose/;

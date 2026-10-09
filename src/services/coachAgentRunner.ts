@@ -44,8 +44,8 @@ export function applyNarrationToggle(enable: boolean): string {
   if (enable && !voiceOn) useAppStore.getState().toggleCoachVoice();
   if (!enable && voiceOn) useAppStore.getState().toggleCoachVoice();
   const ack = enable
-    ? "Got it — I'll narrate each move out loud as we play. Starting a game now."
-    : "Narration off — I'll stay quiet and let you focus.";
+    ? "Got it — each move is narrated out loud as you play. Starting a game now."
+    : "Narration off — quiet so you can focus.";
   if (enable) {
     void voiceService.speak(ack).catch((err: unknown) => {
       console.warn('[applyNarrationToggle] TTS failed:', err);

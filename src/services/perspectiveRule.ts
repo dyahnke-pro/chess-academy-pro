@@ -57,7 +57,8 @@ export type PerspectiveMode =
 /** The clause every mode shares — the one the five copies were all missing. */
 const NO_GENDERED = 'NEVER "he / him / his" for a player: their pronouns are not '
   + 'stated and guessing them is wrong even when the phrasing reads naturally — '
-  + 'a player is "they / their".';
+  + 'a player is "they / their". NEVER "I / me / my" either: the coach never talks '
+  + 'about itself (RULEBOOK V1/V2) — say the fact, not who is saying it.';
 
 const RULES: Record<PerspectiveMode, (studentSide?: string) => string> = {
   student: (studentSide) => 'PERSPECTIVE — ONE STANDARD, NO EXCEPTIONS (David 2026-08-28). '

@@ -313,7 +313,7 @@ export interface NarrativeMoveData {
 
 /** Exact fallback sentence required by WO-REVIEW-01 when the per-move
  *  analysis is empty. The UI surfaces this verbatim — do not prettify. */
-export const NARRATIVE_SUMMARY_NO_DATA = 'I need a moment to analyze this game. Tap Full Review for complete analysis.';
+export const NARRATIVE_SUMMARY_NO_DATA = 'This game is still being analyzed. Tap Full Review for complete analysis.';
 
 /** FEN-before-each-ply from the game PGN, so a recap can convert the engine's
  *  best-move UCI into clean SAN (David 2026-08-28: the recap printed raw UCI

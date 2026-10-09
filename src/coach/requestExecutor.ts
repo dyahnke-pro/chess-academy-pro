@@ -49,8 +49,8 @@ function stepOutcome(s: ResolvedStep): { path?: string; text: string; actionOffe
     case 'import-games':
       return {
         text: s.account
-          ? `Is ${s.account} your Chess.com or Lichess username? Import those games and I'll find the patterns costing you points.`
-          : "Import your Chess.com or Lichess games and I'll find the patterns costing you points.",
+          ? `Is ${s.account} your Chess.com or Lichess username? Import those games to find the patterns costing you points.`
+          : "Import your Chess.com or Lichess games to find the patterns costing you points.",
         actionOffer: [{ type: 'import_games', id: 'connect' }],
       };
     default:

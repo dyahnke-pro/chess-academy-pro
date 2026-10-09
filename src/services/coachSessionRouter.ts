@@ -271,7 +271,7 @@ export async function routeChatIntent(
         // the "Want to play..." hook (ASSISTANT_GAME_PROPOSAL_RE routes
         // the next "yes" into play-against) but qualify it.
         return {
-          ackMessage: `I don't have a guided walkthrough for "${intent.subject}", and I'm not sure it's a standard opening I recognize. If it is a real line, want to play it against me so you can learn it in-game?`,
+          ackMessage: `There's no guided walkthrough for "${intent.subject}", and it isn't a recognized standard opening. If it is a real line, want to play it against the coach and learn it in-game?`,
           intent,
         };
       }
@@ -462,7 +462,7 @@ function buildNoMatchOfferMessage(intent: CoachIntent): string {
     ? `Want to play a game from the ${subject} so you can build some experience to review later?`
     : `Want to play a quick game so we can review it together afterwards?`;
 
-  return `I don't see ${lacksWhat} in your history yet. ${offer}`;
+  return `There's no ${lacksWhat} in your history yet. ${offer}`;
 }
 
 /**
@@ -609,7 +609,7 @@ function buildProposalAckMessage(
   const bits: string[] = ['Great — starting a game.'];
   if (subject && userSide) {
     bits.push(
-      `I'll play ${userSide === 'white' ? 'Black' : 'White'}; we'll open with the ${subject}.`,
+      `The coach plays ${userSide === 'white' ? 'Black' : 'White'}, opening with the ${subject}.`,
     );
   } else if (subject) {
     bits.push(`Opening with the ${subject}.`);

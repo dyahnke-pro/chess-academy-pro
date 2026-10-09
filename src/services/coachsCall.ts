@@ -172,14 +172,14 @@ export async function computeCoachsCall(
     return {
       temperature,
       prescription: 'strength',
-      line: `The ${home} is becoming your home opening — ${depth}. I'd keep building it today.`,
+      line: `The ${home} is becoming your home opening — ${depth}. Keep building it today.`,
       chip: `Continue the ${home}`,
     };
   }
   return {
     temperature,
     prescription: 'weakness',
-    line: `Today I'd work on the pattern that's been costing you the most: ${topWeaknessLabel}.`,
+    line: `Today, work on the pattern that's been costing you the most: ${topWeaknessLabel}.`,
     chip: `Work on: ${topWeaknessLabel}`,
   };
 }

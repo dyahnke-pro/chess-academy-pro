@@ -2919,8 +2919,8 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             const yours = studentFirst.join(' then ');
             const warning = isOppMove && threatMove
               ? (yours
-                ? (descGrounded ? `Watch out — if you play ${yours}, I answer ${threatMove} and ${lowerDesc}.` : `Watch out — if you play ${yours}, I have ${threatMove}.`)
-                : (descGrounded ? `Watch out — if I play ${threatMove}, ${lowerDesc}.` : `Watch out — I might play ${threatMove} here.`))
+                ? (descGrounded ? `Watch out — if you play ${yours}, they answer ${threatMove} and ${lowerDesc}.` : `Watch out — if you play ${yours}, I have ${threatMove}.`)
+                : (descGrounded ? `Watch out — if they play ${threatMove}, ${lowerDesc}.` : `Watch out — I might play ${threatMove} here.`))
               : threatMove
                 ? (descGrounded ? `Watch out — ${threatMove} from you would let ${lowerDesc}.` : `Careful — ${threatMove} looks risky here.`)
                 : (descGrounded ? `Watch out — ${threat.pattern.description}.` : '');

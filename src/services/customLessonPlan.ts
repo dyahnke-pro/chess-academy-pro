@@ -121,13 +121,13 @@ function buildPickerLine(parts: readonly CustomLessonPart[]): string {
   const names = parts.map((p) => p.label.toLowerCase());
   if (names.length === 0) return '';
   if (names.length === 1) {
-    return `I've got your game mapped, and the pattern costing you the most right now is ${names[0]}. Want me to build you a lesson on it — teach the idea, then drill your own positions? Or just tell me what you'd like to work on.`;
+    return `Your games are mapped, and the pattern costing you the most right now is ${names[0]}. Want a lesson on it — the idea first, then your own positions to drill? Or say what you'd like to work on.`;
   }
   if (names.length === 2) {
-    return `I've mapped your games. The two patterns hurting you most are ${names[0]} and ${names[1]}. Want a lesson on one of them — or the full set? Or tell me what you'd rather work on.`;
+    return `Your games are mapped. The two patterns hurting you most are ${names[0]} and ${names[1]}. Want a lesson on one of them — or the full set? Or say what you'd rather work on.`;
   }
   const [a, b, c] = names;
-  return `I've mapped your games. Want to work on ${a}, ${b}, or ${c}? Pick one and I'll build you a lesson from your own games — teach the idea, then drill your real positions. Or just tell me what you'd like.`;
+  return `Your games are mapped. Want to work on ${a}, ${b}, or ${c}? Pick one for a lesson built from your own games — the idea first, then your real positions to drill. Or say what you'd like.`;
 }
 
 function buildPickerChips(parts: readonly CustomLessonPart[]): string[] {
@@ -229,7 +229,7 @@ export function customLessonIntro(parts: readonly CustomLessonPart[]): string {
   if (n === 1) {
     return `Right — a focused lesson on ${parts[0].label.toLowerCase()}, built from your own games. First the idea, then you'll drill your real positions.`;
   }
-  return `Alright — a lesson in ${n} parts, all from your own games. One at a time: I teach the idea, then you drill your real positions. First up: ${parts[0].label.toLowerCase()}.`;
+  return `Alright — a lesson in ${n} parts, all from your own games. One at a time: the idea first, then you drill your real positions. First up: ${parts[0].label.toLowerCase()}.`;
 }
 
 /** The spoken beat announcing a part before its teaching. Code-authored (G0). */
@@ -241,7 +241,7 @@ export function partTransition(part: CustomLessonPart, index: number, total: num
 /** The spoken beat closing a finished custom lesson. Code-authored (G0). */
 export function customLessonOutro(parts: number): string {
   const p = `${parts} pattern${parts === 1 ? '' : 's'}`;
-  return `That's your custom lesson done — ${p} worked, all from your own games. I'll bring the reps back over the next few days so they test out for good.`;
+  return `That's your custom lesson done — ${p} worked, all from your own games. The reps come back over the next few days so they test out for good.`;
 }
 
 /** Sentences per spoken line when a long passage is split. */

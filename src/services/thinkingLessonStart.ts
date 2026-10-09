@@ -576,6 +576,6 @@ export async function loadCarryOverSteps(): Promise<string[]> {
  *  is simply no fair board yet (a fresh device). */
 export async function noLessonLine(): Promise<string> {
   const gap = worstGap(await loadThinkingTransfer().catch((): StepTransfer[] => []));
-  if (gap) return `${transferGapLine(gap)} Another lesson won't fix that — play a game, and I'll ask you at the moment it matters.`;
-  return 'I could not find a clean board for a lesson yet — play or import a few games and the lessons build from them.';
+  if (gap) return `${transferGapLine(gap)} Another lesson won't fix that — play a game, and the question comes at the moment it matters.`;
+  return 'There is no clean board for a lesson yet — play or import a few games and the lessons build from them.';
 }
