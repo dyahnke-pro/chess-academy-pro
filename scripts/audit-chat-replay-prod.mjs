@@ -61,11 +61,18 @@ const newLines = (before, now) => {
 async function ask(text) {
   const before = countOf(coachLines(await messages()));
   const rowsBefore = (await chatRows()).length;
+  const urlBefore = await pageUrl();
   const t0 = Date.now();
   await get('/type', text);
   let last = null; let stable = 0; let answer = null;
   for (let i = 0; i < 90; i += 1) {
     await sleep(1000);
+    // A request that MOVED the student is answered by the move: a page with no
+    // chat has nothing more to say (R6 went to the training plan).
+    const url = await pageUrl();
+    if (url !== urlBefore && !(await get('/js', 'return !!document.querySelector("[data-testid=chat-text-input]")'))) {
+      answer = last ?? ''; break;
+    }
     const fresh = newLines(before, coachLines(await messages()));
     const cur = fresh.join('\n⏎ ');
     if (fresh.length && cur === last) stable += 1; else stable = 0;
@@ -87,13 +94,27 @@ async function setup(kind) {
     for (let i = 0; i < 30; i += 1) { await sleep(1000); s = await get('/state'); if (s.turn === 'w') break; }
   }
   const moves = (s?.moves ?? '').split(' ');
+  // A setup that did not reach its position is a FAILED setup, never a pass:
+  // a start-position answer to "why did they play {LAST}?" can dodge every
+  // banned word and read green (2026-10-09, local build: the moves never
+  // played and B7/B12 "passed").
+  if (!moves.includes('Bc4') || moves.length < 6) {
+    setupFailed = `setup did not reach the Italian (board: "${s?.moves ?? ''}")`;
+    return null;
+  }
   return moves[moves.length - 1] ?? null;
 }
+let setupFailed = null;
 
 const results = [];
 let current = null; let last = null;
 for (const c of cases) {
-  if (c.setup !== current || c.setup === 'fresh') { last = await setup(c.setup); current = c.setup; }
+  if (!c.stay && (c.setup !== current || c.setup === 'fresh' || c.setup === 'chat')) { setupFailed = null; last = await setup(c.setup); current = c.setup; }
+  if (setupFailed) {
+    results.push({ id: c.id, ask: c.ask, from: c.from, ok: false, fails: [setupFailed], secs: 0, answer: '', url: '', row: null });
+    console.log(`❌ ${c.id} SETUP FAILED — ${setupFailed}`);
+    continue;
+  }
   const q = c.ask.replace('{LAST}', last ?? 'that');
   const r = await ask(q);
   const fails = [];
@@ -103,6 +124,7 @@ for (const c of cases) {
   for (const re of c.must ?? []) if (!re.test(r.answer)) fails.push(`missing ${re}`);
   for (const re of c.mustNot ?? []) if (re.test(r.answer)) fails.push(`said ${re}`);
   if (c.urlNot && c.urlNot.test(r.url)) fails.push(`went to ${r.url}`);
+  if (c.urlMust && !c.urlMust.test(r.url)) fails.push(`stayed at ${r.url}, want ${c.urlMust}`);
   const ok = fails.length === 0;
   results.push({ id: c.id, ask: q, from: c.from, ok, fails, secs: r.secs, answer: r.answer, url: r.url, row: r.row });
   console.log(`${ok ? '✅' : '❌'} ${c.id} (${r.secs}s) ${q}\n   → ${r.answer.replace(/\n/g, ' ').slice(0, 400)}${fails.length ? `\n   ✗ ${fails.join('; ')}` : ''}${r.row ? `\n   row: read=${r.row.parsedKind} (${r.row.parseSource}) served=${r.row.servedIntent} outcome=${r.row.outcome ?? '—'}` : ''}`);

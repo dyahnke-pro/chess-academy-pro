@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**143 lines · 11 exports · 6 importers · 2 tests · 0 audits**
+**143 lines · 11 exports · 8 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,9 +15,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/chatTurn.ts`
 - `src/coach/chatTurnEval.ts`
 - `src/coach/chatTurnParser.ts`
+- `src/coach/dispatchCoachTurn.ts`
 - `src/coach/requestExecutor.test.ts`
 - `src/coach/requestExecutor.ts`
 - `src/coach/requestSteps.test.ts`
+- `src/components/Coach/CoachTeachPage.tsx`
 
 ## Exports and every call site
 
@@ -40,7 +42,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `coerceSteps` (function) — 2 call sites
-- `src/coach/chatTurnParser.ts:152`
+- `src/coach/chatTurnParser.ts:158`
 - `src/coach/requestSteps.test.ts:13`
 
 ### `resolveSteps` (function) — 3 call sites
@@ -52,11 +54,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `requestStepsPrompt` (function) — 2 call sites
-- `src/coach/chatTurnParser.ts:103`
+- `src/coach/chatTurnParser.ts:109`
 - `src/coach/requestSteps.test.ts:52`
 
 ### `readAccountName` (function) — 3 call sites
-- `src/coach/chatTurnParser.ts:169`
+- `src/coach/chatTurnParser.ts:177`
 - `src/coach/requestSteps.test.ts:58`
 - `src/coach/requestSteps.test.ts:61`
 

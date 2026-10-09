@@ -121,6 +121,19 @@ function deviceLanguageName(): string | null {
 }
 
 /** Test seam + a way to forget the observation (a fresh profile / sign-out). */
+/**
+ * THE TURN'S LANGUAGE SETS THE CONVERSATION'S (WO-CHAT-01 P2). The reader
+ * names the language of every student turn; each one it names — English
+ * included — replaces the last. `noteDetectedLanguage` could only ever ADD a
+ * non-English language, so a student who wrote in Thai and then German was
+ * answered in Thai (live walk R3: the word list also missed three words of
+ * German). A turn with no language (a move, a name) leaves it as it is.
+ */
+export function noteTurnLanguage(languageName: string | null): void {
+  if (!languageName) return;
+  detectedSessionLanguage = languageName === 'English' ? null : languageName;
+}
+
 export function resetDetectedLanguage(): void {
   detectedSessionLanguage = null;
 }

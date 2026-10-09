@@ -45,8 +45,10 @@ import { parseChatTurn, type ParseResult, type Reader } from './chatTurnParser';
 import { emitChatTurn, type ChatTurnOutcome } from './chatTurnEvents';
 import { isStockFallback } from './stockLine';
 import { detectLanguage } from '../utils/detectLanguage';
+import { noteTurnLanguage, chosenOrTypedLanguageName } from '../services/spokenLanguage';
 import { directAnswer } from './chatTurnAnswers';
 import { executeSteps } from './requestExecutor';
+import type { ResolvedStep } from './requestSteps';
 
 export interface DispatchCoachTurnOptions extends CoachServiceOptions {
   /** The prior assistant message — lets the action router catch the
@@ -112,6 +114,11 @@ export function startChatTurnRead(input: CoachAskInput): Promise<ParseResult | n
     board: boardOf(input),
     memory: conversationFor(input.liveState.surface),
     reader: readerOverride,
+  }).then((r) => {
+    // The turn's language is noted the moment it is read — before any answer,
+    // lesson or narration is phrased (WO-CHAT-01 P2).
+    noteTurnLanguage(r.language);
+    return r;
   }).catch(() => null);
 }
 
@@ -163,8 +170,13 @@ export async function settleChatTurnRead(opts: {
     askPreview: input.ask.slice(0, 80),
     outcome: opts.outcome,
     answerPreview: opts.answerText ? opts.answerText.slice(0, 160) : null,
-    askLang: detectLanguage(input.ask).code,
-    answerLang: opts.answerText ? detectLanguage(opts.answerText).code : null,
+    askLang: result?.language ?? detectLanguage(input.ask).name,
+    // The language the answer is SHOWN in: an answer already in the student's
+    // language stays as written; the app's own English is rendered in the
+    // conversation's language by the bubble and the voice.
+    answerLang: opts.answerText
+      ? (detectLanguage(opts.answerText).nonEnglish ? detectLanguage(opts.answerText).name : (chosenOrTypedLanguageName() ?? 'English'))
+      : null,
     leakedMarkup: !!opts.answerText && /\[BOARD:|\[\[/.test(opts.answerText),
     totalMs: opts.startedAt ? Date.now() - opts.startedAt : null,
   });
@@ -183,6 +195,17 @@ function describeReferent(r: Referent): string {
 export interface TurnReadHandle {
   /** The door takes the read; the shadow row is then the door's to emit. */
   claim(): Promise<ParseResult | null>;
+  /** Look at the reading WITHOUT taking it (Learn acts on a request reading
+   *  itself; anything else still reaches the door). */
+  peek(): Promise<ParseResult | null>;
+  /** The surface answered the turn from the reading: emit its row now. */
+  answered(a: { servedIntent: string; answerText: string; outcome: ChatTurnOutcome }): void;
+}
+
+/** Store what the coach offered on a surface (Learn's "Start the X
+ *  walkthrough" prompt), so "go" / "can I start now?" runs it. */
+export function setPendingOffer(surface: CoachSurface, pending: ResolvedStep[] | null): void {
+  conversations.set(surface, { ...conversationFor(surface), pending });
 }
 
 /**
@@ -207,7 +230,18 @@ export function openTurnRead(input: CoachAskInput): TurnReadHandle | null {
       outcome: 'surface',
     });
   }).catch(() => { /* telemetry never breaks a turn */ });
-  return { claim: () => { claimed = true; return read; } };
+  const startedAt = Date.now();
+  return {
+    claim: () => { claimed = true; return read; },
+    peek: () => read,
+    answered: (a) => {
+      claimed = true;
+      void settleChatTurnRead({
+        input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }),
+        servedIntent: a.servedIntent, servedParsed: true, answerText: a.answerText, outcome: a.outcome, startedAt,
+      }).catch(() => { /* telemetry never breaks a turn */ });
+    },
+  };
 }
 
 /** How long after the read lands a surface command is assumed to have
@@ -254,6 +288,18 @@ export async function dispatchCoachTurn(
     // FLAG ON: wait for the reading and, when it validated and its kind has a
     // live answerer, serve the canonical question that routes to it.
     const r = await read;
+    // EVERY ANSWER THE DOOR COMPUTES LEAVES THROUGH HERE, with its row. It
+    // is NOT translated here: the bubble (`useLocalizedContent`) and the voice
+    // (`voiceService`) already render every answer in the conversation's
+    // language, which the read noted before any answer was built
+    // (WO-CHAT-01 P2). A second translation here would be a second model call.
+    const serve = (raw: string, servedIntent: string, outcome: ChatTurnOutcome, extra: Partial<CoachAnswer> = {}): CoachAnswer => {
+      const text = openSentence(raw);
+      servedParsed = true;
+      void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent, servedParsed, answerText: text, outcome, startedAt })
+        .catch(() => { /* telemetry never breaks a turn */ });
+      return { text, toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent, ...extra };
+    };
     // A kind with no lane today answers with its own computed sentence.
     const turn = r?.validation?.ok ? r.validation.turn : null;
     readKind = turn?.kind ?? (r?.turn ? 'unclear' : null);
@@ -276,16 +322,11 @@ export async function dispatchCoachTurn(
       if (out) {
         conversations.set(surface, { ...conv, pending: out.pending });
         if (out.path && options.onNavigate) options.onNavigate(out.path);
-        servedParsed = true;
-        void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: out.servedIntent, servedParsed, answerText: out.text, outcome: 'command', startedAt })
-          .catch(() => { /* telemetry never breaks a turn */ });
         const offers = [...(out.path ? [{ type: 'navigate', id: out.path }] : []), ...(out.actionOffer ?? [])];
-        return {
-          text: openSentence(out.text), toolCallIds: [],
+        return serve(out.text, out.servedIntent, 'command', {
           dispatchedToolNames: out.path ? ['navigate_to_route'] : [],
-          provider: options.provider ?? 'deepseek', servedIntent: out.servedIntent,
           ...(offers.length ? { actionOffer: offers } : {}),
-        };
+        });
       }
     }
     const ptopic = positionalTopic(input.ask);
@@ -293,20 +334,14 @@ export async function dispatchCoachTurn(
       const sc = input.liveState.studentColor ?? (input.liveState.fen.split(' ')[1] === 'b' ? 'black' : 'white');
       const answer = (() => { try { return assemblePositionalAnswer(input.liveState.fen, sc, ptopic, input.ask); } catch { return null; } })();
       if (answer?.facts) {
-        servedParsed = true;
-        void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: `board:positional:${ptopic}`, servedParsed, answerText: answer.facts, outcome: 'answered', startedAt })
-          .catch(() => { /* telemetry never breaks a turn */ });
-        return { text: openSentence(answer.facts), toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: `board:positional:${ptopic}` };
+        return serve(answer.facts, `board:positional:${ptopic}`, 'answered');
       }
     }
     if (turn && CHAT_KINDS[turn.kind].answerer === 'direct' && input.liveState.fen) {
       const studentWB = input.liveState.studentColor === 'black' ? 'b' : input.liveState.studentColor === 'white' ? 'w' : (input.liveState.fen.split(' ')[1] === 'b' ? 'b' : 'w');
       const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask, input.liveState.moveHistory ?? [], input.liveState.lastCoachLine ?? null);
       if (text) {
-        servedParsed = true;
-        void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: turn.kind, servedParsed, answerText: text, outcome: 'answered', startedAt })
-          .catch(() => { /* telemetry never breaks a turn */ });
-        return { text: openSentence(text), toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: turn.kind };
+        return serve(text, turn.kind, 'answered');
       }
     }
     // THE BOARD ANSWERS THE DECODED QUESTION — never re-worded into a lane
@@ -316,10 +351,7 @@ export async function dispatchCoachTurn(
       const out: { endorsed?: string[] } = {};
       const text = await answerBoardTurn(turn, { fen: input.liveState.fen, history: input.liveState.moveHistory ?? [], studentColor: sc }, out).catch(() => null);
       if (text) {
-        servedParsed = true;
-        void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: `board:${turn.kind}`, servedParsed, answerText: text, outcome: 'answered', startedAt })
-          .catch(() => { /* telemetry never breaks a turn */ });
-        return { text: openSentence(text), toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: `board:${turn.kind}`, ...(out.endorsed?.length ? { endorsedSans: out.endorsed } : {}) };
+        return serve(text, `board:${turn.kind}`, 'answered', out.endorsed?.length ? { endorsedSans: out.endorsed } : {});
       }
     }
     // A FALSE PREMISE IS ANSWERED, NOT ROUTED (pass 2, 2026-10-09: "how do I
@@ -328,23 +360,24 @@ export async function dispatchCoachTurn(
     // or is the other side's, that IS the answer.
     const bad = r?.validation && !r.validation.ok ? r.validation : null;
     if (bad && FALSE_PREMISE.has(bad.reason) && bad.clarify) {
-      servedParsed = true;
-      void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: `premise:${bad.reason}`, servedParsed, answerText: bad.clarify, outcome: 'asked-back', startedAt })
-        .catch(() => { /* telemetry never breaks a turn */ });
-      return { text: openSentence(bad.clarify), toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: `premise:${bad.reason}` };
+      return serve(bad.clarify, `premise:${bad.reason}`, 'asked-back');
     }
     const canonical = turn ? canonicalAsk(turn) : null;
     if (canonical) {
       effectiveInput = { ...input, ask: canonical };
       servedParsed = true;
     }
+    // A turn written in another language carries the reader's English, so
+    // nothing downstream translates it again (WO-CHAT-01 P2).
+    if (r?.english && r.language && r.language !== 'English') effectiveInput = { ...effectiveInput, english: r.english };
     // The reading rides the turn to the catch-all (see askBackAtCatchAll).
     if (turn) effectiveInput = { ...effectiveInput, reading: { kind: turn.kind } };
     else if (r?.validation && !r.validation.ok) effectiveInput = { ...effectiveInput, reading: { kind: 'unclear', clarify: r.validation.clarify } };
   }
 
   let routedCommand = false;
-  const finish = (answer: CoachAnswer): CoachAnswer => {
+  const finish = (raw: CoachAnswer): CoachAnswer => {
+    const answer = typeof raw.text === 'string' ? { ...raw, text: openSentence(raw.text) } : raw;
     if (read) {
       void settleChatTurnRead({
         input,
@@ -357,7 +390,7 @@ export async function dispatchCoachTurn(
         startedAt,
       }).catch(() => { /* telemetry never breaks a turn */ });
     }
-    return typeof answer.text === 'string' ? { ...answer, text: openSentence(answer.text) } : answer;
+    return answer;
   };
 
   // THE READER DECIDES WHAT IS A COMMAND (2026-10-08): the action router acts
@@ -369,6 +402,7 @@ export async function dispatchCoachTurn(
   if (!options.skipActionRouter && mayAct) {
     try {
       const routed = await routeChatIntent(effectiveInput.ask, {
+        ...(effectiveInput.english ? { english: effectiveInput.english } : {}),
         currentFen: effectiveInput.liveState.fen,
         lastAssistantMessage: options.lastAssistantMessage,
       });

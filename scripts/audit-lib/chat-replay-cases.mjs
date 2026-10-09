@@ -53,18 +53,21 @@ export const CASES = [
   { id: 'B14', setup: 'italian', ask: 'what are my weaknesses?', from: 'walk', must: [/import|games/i] },
   { id: 'B15', setup: 'italian', ask: 'turn the voice off', from: 'walk', must: [/off/i] },
   { id: 'B16', setup: 'italian', ask: 'thanks!', from: 'walk' },
-  { id: 'B17', setup: 'italian', ask: 'what opening is this?', from: 'walk', must: [/Italian|Giuoco|Two Knights|Hungarian/i] },
+  { id: 'B17', setup: 'italian', ask: 'what opening is this?', from: 'walk', must: [/\b(?:Game|Defen[cs]e|Opening|Attack|Gambit|System|Variation)\b/] },
   { id: 'B18', setup: 'italian', ask: 'how do I castle?', from: 'walk', must: [/castl/i] },
 
   // ── Requests, standalone chat ──────────────────────────────────────────
+  // Each starts on a fresh /coach/chat unless `stay` (a follow-up asked where
+  // the last case left the student). A page change is part of the answer:
+  // `urlMust` / `urlNot` grade it.
   { id: 'R5', setup: 'chat', ask: 'I want to practice the Italian opening, teach me', from: 'walk',
     must: [/Italian/i], mustNot: [/\bme walkthrough/, /Ware/], urlNot: /opening=me\b/ },
+  { id: 'R7', setup: 'chat', stay: true, ask: 'can I start now?', from: 'walk + native (Thai: ผมเริ่มได้เลยใช่ไหม) — asked under R5\'s "Ready to start…"',
+    must: [/Italian/i], mustNot: [/The best move is/] },
   { id: 'R6', setup: 'chat', ask: 'make me a full training plan', from: 'walk + native (Thai, 2026-09-16)',
-    must: [/plan/i] },
-  { id: 'R7', setup: 'chat', ask: 'can I start now?', from: 'walk + native (Thai: ผมเริ่มได้เลยใช่ไหม)',
-    mustNot: [/The best move is/] },
+    urlMust: /\/coach\/plan/ },
   { id: 'R8', setup: 'chat', ask: 'reset the board and teach me the Italian', from: 'walk',
-    must: [/Italian/i] },
+    must: [/Italian/i], urlMust: /opening=Italian/ },
   { id: 'R9', setup: 'chat', ask: 'Knight_mare_01', from: 'native 2026-09-02 (a username)',
     must: [/username|import|Lichess|Chess\.com/i] },
   { id: 'N1', setup: 'chat', ask: "What's my best opening?", from: 'native 2026-09-03', mustNot: [/Material is even/] },

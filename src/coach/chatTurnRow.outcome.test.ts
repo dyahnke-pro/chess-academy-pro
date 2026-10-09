@@ -54,8 +54,8 @@ describe('the chat-turn row carries the answer', () => {
     expect(row.servedIntent).toMatch(/^board:/);
     expect(row.outcome).toBe('answered');
     expect(row.answerPreview).toBe(a.text.slice(0, 160));
-    expect(row.askLang).toBe('en');
-    expect(row.answerLang).toBe('en');
+    expect(row.askLang).toBe('English');
+    expect(row.answerLang).toBe('English');
     expect(row.leakedMarkup).toBe(false);
     expect(row.totalMs).not.toBeNull();
   }, 60_000);

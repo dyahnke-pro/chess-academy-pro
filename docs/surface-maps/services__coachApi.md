@@ -116,13 +116,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `consumeCoachLines` (function) — 4 call sites
-- `src/coach/coachService.ts:1883`
+- `src/coach/coachService.ts:1888`
 - `src/services/coachApi.pieceOptions.test.ts:42`
 - `src/services/coachApi.pieceOptions.test.ts:44`
 - `src/services/coachApi.pieceOptions.test.ts:49`
 
 ### `consumeServedIntent` (function) — 1 call site
-- `src/coach/coachService.ts:1887`
+- `src/coach/coachService.ts:1892`
 
 ### `answerAttemptComparison` (function) — 4 call sites
 - `src/services/coachApi.attemptComparison.test.ts:30`
@@ -131,10 +131,10 @@
 - `src/services/coachApi.attemptComparison.test.ts:63`
 
 ### `consumeCoachActionOffer` (function) — 1 call site
-- `src/coach/coachService.ts:1877`
+- `src/coach/coachService.ts:1882`
 
 ### `consumeCoachKeySquares` (function) — 6 call sites
-- `src/coach/coachService.ts:1892`
+- `src/coach/coachService.ts:1897`
 - `src/services/coachApi.keySquares.test.ts:10`
 - `src/services/coachApi.keySquares.test.ts:12`
 - `src/services/coachApi.keySquares.test.ts:15`
@@ -237,9 +237,9 @@
 - `src/services/groundedMoveFeedback.test.ts:45`
 
 ### `translateToEnglish` (function) — 4 call sites
-- `src/coach/coachService.ts:578`
-- `src/components/Coach/CoachTeachPage.tsx:3644`
-- `src/services/coachSessionRouter.ts:117`
+- `src/coach/coachService.ts:583`
+- `src/components/Coach/CoachTeachPage.tsx:3747`
+- `src/services/coachSessionRouter.ts:120`
 - `src/services/coachSettingsAction.ts:261`
 
 ### `readChatTurnStructured` (function) — 0 call sites
@@ -303,7 +303,7 @@
 - `src/services/openingGenerator.ts:2384`
 - `src/services/openingSectionNarrator.ts:84`
 - `src/services/speakComputed.ts:21`
-- `src/services/spokenLanguage.ts:191`
+- `src/services/spokenLanguage.ts:204`
 - `src/services/turnLanguage.test.ts:58`
 - `src/services/voiceFacts.perspective.test.ts:62`
 - `src/services/voiceFacts.perspective.test.ts:72`

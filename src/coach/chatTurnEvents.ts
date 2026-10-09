@@ -60,8 +60,8 @@ export interface ChatTurnRow {
   /** The first 160 characters of what the coach answered (null: unknown —
    *  a surface answered it outside the door). */
   answerPreview: string | null;
-  /** The student's language and the answer's (ISO-ish codes from
-   *  `detectLanguage`); a mismatch is a defect (walk R3). */
+  /** The student's language this turn and the language the answer is SHOWN
+   *  in (names: "German"); a mismatch is a defect (walk R3). */
   askLang: string;
   answerLang: string | null;
   /** Board/action markup that reached the student's text (`[BOARD:` / `[[`) —

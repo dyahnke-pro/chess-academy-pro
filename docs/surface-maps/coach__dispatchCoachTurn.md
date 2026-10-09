@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**424 lines · 14 exports · 14 importers · 9 tests · 2 audits**
+**458 lines · 15 exports · 14 importers · 9 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -76,9 +76,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/dispatchCoachTurn.test.ts:199`
 - `src/coach/requestExecutor.test.ts:53`
 
-### `conversationFor` (function) — 2 call sites
+### `conversationFor` (function) — 3 call sites
 - `src/coach/dispatchCoachTurn.test.ts:165`
 - `src/coach/requestExecutor.test.ts:88`
+- `src/components/Coach/CoachTeachPage.tsx:3289`
 
 ### `isStudentTurn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -92,11 +93,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `TurnReadHandle` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `setPendingOffer` (function) — 3 call sites
+- `src/components/Coach/CoachTeachPage.tsx:3329`
+- `src/components/Coach/CoachTeachPage.tsx:11894`
+- `src/components/Coach/CoachTeachPage.tsx:13938`
+
 ### `openTurnRead` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3322`
+- `src/components/Coach/CoachTeachPage.tsx:3395`
 
 ### `isComputedAnswer` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7367`
+- `src/components/Coach/CoachTeachPage.tsx:7469`
 
 ### `dispatchCoachTurn` (function) — 34 call sites
 - `src/coach/chatTurnRow.outcome.test.ts:39`

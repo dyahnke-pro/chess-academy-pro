@@ -274,7 +274,8 @@ import { useSettings } from '../../hooks/useSettings';
 import { getFavoriteOpenings, getOpeningById, searchOpenings } from '../../services/openingService';
 import type { OpeningRecord, OpeningVariation } from '../../types';
 import type { LiveState, TacticsLiveContext, AskOrigin } from '../../coach/types';
-import { dispatchCoachTurn, openTurnRead, isComputedAnswer, type TurnReadHandle } from '../../coach/dispatchCoachTurn';
+import { dispatchCoachTurn, openTurnRead, isComputedAnswer, conversationFor, setPendingOffer, type TurnReadHandle } from '../../coach/dispatchCoachTurn';
+import type { ResolvedStep } from '../../coach/requestSteps';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
@@ -827,6 +828,11 @@ interface TeachSubmitOpts {
    *  the walkthrough auto-paused behind it. An intent the CODE resolved
    *  must never be re-guessed from its own prose. */
   teachIntent?: boolean;
+  /** What the student's chat bubble shows when `text` is a code-resolved name
+   *  rather than their own words (a request read from a Thai sentence starts
+   *  the lesson by its DB name; the bubble keeps what they typed —
+   *  WO-CHAT-01 P1c). Absent: the bubble shows `text`. */
+  userBubble?: string;
 }
 
 
@@ -3271,6 +3277,73 @@ export function CoachTeachPage(): JSX.Element {
     offerRoadsBack();
   }, [walkthrough.phase, offerRoadsBack]);
 
+  /**
+   * RUN A REQUEST'S STEPS ON LEARN (WO-CHAT-01 P1c) — each with Learn's own
+   * control, never a sentence for the routers to parse again. Returns null
+   * (nothing done) when a step is one this runner does not own yet, so the
+   * turn reaches the routers whole rather than half-done.
+   */
+  const runLearnSteps = useCallback(async (asked: ResolvedStep[], said: string): Promise<{ intent: string; text: string } | null> => {
+    let steps = asked;
+    if (steps.length === 1 && steps[0].action === 'start-now') {
+      const pending = conversationFor('teach').pending;
+      if (!pending || pending.length === 0) return null;
+      steps = pending;
+    }
+    // A game in a NAMED opening runs through Learn's play-a-line path, which
+    // has no typed entry yet — leave the whole turn to it.
+    if (steps.some((st) => st.action === 'start-now' || (st.action === 'play-game' && st.openingName))) return null;
+    const lines: string[] = [];
+    let offer: Array<{ type: string; id: string }> | undefined;
+    let teach: string | null = null;
+    let rest: ResolvedStep[] | null = null;
+    for (let i = 0; i < steps.length; i += 1) {
+      const st = steps[i];
+      if (teach) { rest = steps.slice(i); break; }
+      switch (st.action) {
+        case 'reset-board': handleResetBoard(); lines.push('Board reset.'); break;
+        case 'take-back': {
+          const tb = handleTakeBack(1);
+          lines.push(tb.ok ? 'Took that back.' : (tb.reason ?? 'There is nothing to take back.'));
+          break;
+        }
+        case 'flip-board': {
+          const next = gameRef.current.boardOrientation === 'white' ? 'black' : 'white';
+          gameRef.current.setOrientation(next);
+          lines.push('Board flipped.');
+          break;
+        }
+        case 'play-game': takeSeat(st.side ?? 'white', (line) => lines.push(line)); break;
+        case 'teach-opening': if (st.openingName) teach = st.openingName; break;
+        case 'training-plan': void navigate('/coach/plan'); lines.push('Opening your training plan.'); break;
+        case 'review-game': void navigate('/coach/review'); lines.push('Opening your games for review.'); break;
+        case 'import-games':
+          lines.push(st.account
+            ? `Is ${st.account} your Chess.com or Lichess username? Import those games and I'll find the patterns costing you points.`
+            : "Import your Chess.com or Lichess games and I'll find the patterns costing you points.");
+          offer = [{ type: 'import_games', id: 'connect' }];
+          break;
+        default: break;
+      }
+    }
+    setPendingOffer('teach', rest);
+    const intent = `request:${steps.map((st) => st.action).join('+')}`;
+    if (teach) {
+      if (lines.length) {
+        setMessages((prev) => [...prev, { id: uid('req-c'), role: 'assistant', content: lines.join(' '), timestamp: Date.now() }]);
+      }
+      await handleSubmitRef.current?.(teach, { teachIntent: true, userBubble: said });
+      return { intent, text: [...lines, `Teaching the ${teach}.`].join(' ') };
+    }
+    if (lines.length === 0) return null;
+    const reply = lines.join(' ');
+    setMessages((prev) => [...prev,
+      { id: uid('req-u'), role: 'user', content: said, timestamp: Date.now() },
+      { id: uid('req-c'), role: 'assistant', content: reply, timestamp: Date.now(), ...(offer ? { actionOffer: offer } : {}) }]);
+    void speakComputed(reply, { forced: true, intent: 'learn' }).catch(() => undefined);
+    return { intent, text: reply };
+  }, [handleResetBoard, handleTakeBack, takeSeat, navigate]);
+
   const handleSubmit = useCallback(async (
     text: string,
     opts?: TeachSubmitOpts,
@@ -3356,6 +3429,33 @@ export function CoachTeachPage(): JSX.Element {
       // generation counter drops every line chained before this question
       // (David 2026-09-24: "stop calculations and answer question").
       trackAGenRef.current += 1;
+    }
+
+    // ── A REQUEST IS DONE FROM ITS STEPS (WO-CHAT-01 P1c) ───────────────────
+    // The reading carries what the student asked the app to DO as typed steps,
+    // each opening already resolved by code. Learn acts on them with its own
+    // controls — before any phrase router below cuts a name out of the
+    // sentence ("I want to Italian Opening, please teach me" became "did you
+    // mean the Ware Opening?"). Anything that is not a request reaches the
+    // routers and the door unchanged.
+    if (turnReadRef.current && !opts?.teachIntent && !opts?.kickoff && opts?.coachReplyPlayed === undefined) {
+      const handle = turnReadRef.current;
+      const r = await handle.peek();
+      const v = r?.validation ?? null;
+      if (v && !v.ok && v.reason === 'unknown-opening') {
+        setMessages((prev) => [...prev,
+          { id: uid('req-u'), role: 'user', content: text, timestamp: Date.now() },
+          { id: uid('req-c'), role: 'assistant', content: v.clarify, timestamp: Date.now() }]);
+        void speakComputed(v.clarify, { forced: true, intent: 'learn' }).catch(() => undefined);
+        handle.answered({ servedIntent: 'premise:unknown-opening', answerText: v.clarify, outcome: 'asked-back' });
+        return;
+      }
+      const asked = v?.ok ? v.turn.steps ?? null : null;
+      const done = asked && asked.length > 0 ? await runLearnSteps(asked, text) : null;
+      if (done) {
+        handle.answered({ servedIntent: done.intent, answerText: done.text, outcome: 'command' });
+        return;
+      }
     }
 
     // Any new user turn cancels a running narrated continuation.
@@ -3640,9 +3740,11 @@ export function CoachTeachPage(): JSX.Element {
     // Identity for English input — same string, no call — so every use below
     // is a strict no-op for an English speaker.
     const askLang = detectStudentLanguage(trimmedText);
-    const englishText = askLang.nonEnglish
-      ? await translateToEnglish(trimmedText).catch(() => trimmedText)
-      : trimmedText;
+    // The reader already translated this turn (and reads short German the word
+    // list misses); reuse it rather than pay for a second call (WO-CHAT-01 P2).
+    const readEnglish = turnReadRef.current ? await turnReadRef.current.peek().then((r) => (r?.language && r.language !== 'English' ? r.english : null)) : null;
+    const englishText = readEnglish
+      ?? (askLang.nonEnglish ? await translateToEnglish(trimmedText).catch(() => trimmedText) : trimmedText);
 
     // ── A TAPPED TRAP CHIP TEACHES ITS GEM ─────────────────────────────────
     // David 2026-08-16: "Place them in pickers into the chat … Once one gem is
@@ -5052,7 +5154,7 @@ export function CoachTeachPage(): JSX.Element {
           .trim();
         if (stageHint === 'play-real' && seatAsked && withoutSeat === '' && !walkthrough.isActive && gameRef.current.history.length === 0) {
           const seatTurn = freshTurnId('free-game-seat');
-          setMessages((prev) => [...prev, { id: `${seatTurn}-u`, role: 'user', content: text, timestamp: Date.now() }]);
+          setMessages((prev) => [...prev, { id: `${seatTurn}-u`, role: 'user', content: opts?.userBubble ?? text, timestamp: Date.now() }]);
           const sayLine = (line: string): void => {
             setMessages((prev) => [...prev, { id: freshTurnId('free-game-seat'), role: 'assistant', content: line, timestamp: Date.now() }]);
             void speakComputed(line, { forced: true, intent: 'learn' }).catch(() => undefined);
@@ -5070,7 +5172,7 @@ export function CoachTeachPage(): JSX.Element {
           } else {
             const dTurnId = freshTurnId('deictic');
             setMessages((prev) => [...prev, {
-              id: `${dTurnId}-u`, role: 'user', content: text, timestamp: Date.now(),
+              id: `${dTurnId}-u`, role: 'user', content: opts?.userBubble ?? text, timestamp: Date.now(),
             }]);
             const dProse = stageHint === 'play-real'
               ? 'Name the opening you want to play and we\'ll start — "play the Vienna against me".'
@@ -5267,7 +5369,7 @@ export function CoachTeachPage(): JSX.Element {
         if (voicedMatchup) {
           const vmTurnId = freshTurnId('voiced-matchup');
           setMessages((prev) => [...prev, {
-            id: `${vmTurnId}-u`, role: 'user', content: text, timestamp: Date.now(),
+            id: `${vmTurnId}-u`, role: 'user', content: opts?.userBubble ?? text, timestamp: Date.now(),
           }]);
           useCoachMemoryStore.getState().appendConversationMessage({
             surface: 'chat-teach', role: 'user', text,
@@ -5294,7 +5396,7 @@ export function CoachTeachPage(): JSX.Element {
         if (plan) {
           const mTurnId = freshTurnId('matchup');
           setMessages((prev) => [...prev, {
-            id: `${mTurnId}-u`, role: 'user', content: text, timestamp: Date.now(),
+            id: `${mTurnId}-u`, role: 'user', content: opts?.userBubble ?? text, timestamp: Date.now(),
           }]);
           useCoachMemoryStore.getState().appendConversationMessage({
             surface: 'chat-teach', role: 'user', text,
@@ -5447,7 +5549,7 @@ export function CoachTeachPage(): JSX.Element {
           if (voicedForFuzzy) {
             const vfTurnId = freshTurnId('voiced-fuzzy');
             setMessages((prev) => [...prev, {
-              id: `${vfTurnId}-u`, role: 'user', content: text, timestamp: Date.now(),
+              id: `${vfTurnId}-u`, role: 'user', content: opts?.userBubble ?? text, timestamp: Date.now(),
             }]);
             useCoachMemoryStore.getState().appendConversationMessage({
               surface: 'chat-teach', role: 'user', text,
@@ -5508,7 +5610,7 @@ export function CoachTeachPage(): JSX.Element {
           setMessages((prev) => [...prev, {
             id: `${ambiguousTurnId}-u`,
             role: 'user',
-            content: text,
+            content: opts?.userBubble ?? text,
             timestamp: Date.now(),
           }]);
           useCoachMemoryStore.getState().appendConversationMessage({
@@ -5837,7 +5939,7 @@ export function CoachTeachPage(): JSX.Element {
         setMessages((prev) => [...prev, {
           id: `${surfaceTurnId}-u`,
           role: 'user',
-          content: text,
+          content: opts?.userBubble ?? text,
           timestamp: Date.now(),
         }]);
         useCoachMemoryStore.getState().appendConversationMessage({
@@ -11784,8 +11886,15 @@ export function CoachTeachPage(): JSX.Element {
       // twice; the chips are grounded verticals the coach answers from
       // computed data, and tapping one SENDS it (opt-in discovery, never auto).
       const greetingRotation = Math.floor(Date.now() / 60000);
+      // The deep link names an opening; code resolves it once. The offer is
+      // stored as a step, so "yes" / "go" / "can I start now?" starts it
+      // (WO-CHAT-01 P1c — walk R7 got a best move instead).
+      const rolodexName = rolodexOpening ? (resolveOpeningEntry(rolodexOpening.trim())?.canonicalName ?? null) : null;
+      if (rolodexName) {
+        setPendingOffer('teach', [{ action: 'teach-opening', opening: rolodexName, openingName: rolodexName, side: null, account: null }]);
+      }
       const welcomeLine = rolodexOpening
-        ? `Ready to start the ${rolodexOpening.trim()} walkthrough?`
+        ? `Ready to start the ${rolodexName ?? rolodexOpening.trim()} walkthrough?`
         : pickGreeting(greetingRotation);
       setKickoffStatus(null);
       const turnId = freshTurnId('welcome');
@@ -13817,11 +13926,17 @@ export function CoachTeachPage(): JSX.Element {
               (messages.length > 1 — welcome already present). */}
           {searchParams.get('opening') !== null && messages.length === 1 && !streaming && !kickoffStatus && (() => {
             const rolodexOpening = searchParams.get('opening') as string;
-            const trimmed = rolodexOpening.trim();
+            const resolvedName = resolveOpeningEntry(rolodexOpening.trim())?.canonicalName ?? null;
+            const trimmed = resolvedName ?? rolodexOpening.trim();
             return (
               <button
                 type="button"
-                onClick={() => void handleSubmit(`Show me the ${trimmed} walkthrough.`)}
+                // A name code already resolved starts its lesson through the
+                // typed entry — never re-worded into a sentence for the
+                // routers to parse again (WO-CHAT-01).
+                onClick={() => void (resolvedName
+                  ? (setPendingOffer('teach', null), handleSubmit(resolvedName, { teachIntent: true, userBubble: `Start the ${resolvedName} walkthrough` }))
+                  : handleSubmit(`Show me the ${trimmed} walkthrough.`))}
                 className="block w-full mt-3 px-4 py-3 rounded-lg border-2 text-sm font-semibold"
                 style={{
                   borderColor: 'var(--color-accent, #06b6d4)',

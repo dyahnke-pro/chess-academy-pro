@@ -564,10 +564,15 @@ function resolvePiece(
   const pick = inDanger.length === 1 ? inDanger[0]
     : !r.seat && pool.filter((c) => c.seat === 'me').length === 1 ? pool.find((c) => c.seat === 'me') : undefined;
   if (pick) return { ok: true, ref: { type: 'piece', piece: r.piece, square: pick.square, seat: pick.seat } };
+  // Still several: with no side said, the question is about the student's
+  // OWN pieces — "should the knight take?" asked of a White student was
+  // answered "which knight — b8, g8, b1 or g1?" (live walk R3).
+  const mine = !r.seat ? pool.filter((c) => c.seat === 'me') : [];
+  const asked = mine.length > 0 ? mine : pool;
   return {
     ok: false,
     reason: 'piece-ambiguous',
-    clarify: `Which ${name} — ${pool.map((c) => `the one on ${c.square}`).join(' or ')}?`,
+    clarify: `Which ${name} — ${asked.map((c) => `the one on ${c.square}`).join(' or ')}?`,
   };
 }
 

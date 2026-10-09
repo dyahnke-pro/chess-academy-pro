@@ -58,6 +58,9 @@ export interface RoutedChatIntent {
 }
 
 export interface RouteChatIntentOptions {
+  /** The student's words in English as the door's reader translated them —
+   *  used instead of a second translation call (WO-CHAT-01 P2). */
+  english?: string;
   /**
    * Optional current board FEN to forward to explain-position. When
    * omitted, the session page defaults to the starting position. See
@@ -114,7 +117,7 @@ export async function routeChatIntent(
   // Italian" that started the right lesson and then narrated the whole live
   // board in English. `detectStudentLanguage` detects and records in one call.
   const cmdLang = detectStudentLanguage(text);
-  text = cmdLang.nonEnglish ? await translateToEnglish(text) : text;
+  text = options.english ?? (cmdLang.nonEnglish ? await translateToEnglish(text) : text);
 
   // Settings-as-actions — "turn on voice", "set narration to brief", "enable
   // hints", "disable the premium voice". The coach mutates a SAFE whitelisted

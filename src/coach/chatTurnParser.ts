@@ -50,6 +50,11 @@ export interface ParseResult {
   /** The student's words in English, as the reader translated them (null on
    *  the deterministic path, where nothing needed translating). */
   english: string | null;
+  /** The language the student wrote THIS turn in ("German"), or null when
+   *  the turn carries none (a move, a name) or was read by code. One turn's
+   *  language, never a session's guess (WO-CHAT-01 P2: a German question was
+   *  answered in Thai because the language stuck from an earlier turn). */
+  language: string | null;
   validation: ValidationResult | null;
   source: 'square-answer' | 'code' | 'llm' | 'llm-failed' | 'timeout';
   latencyMs: number;
@@ -82,6 +87,7 @@ export const CHAT_TURN_SCHEMA: Record<string, unknown> = {
     seat: { type: 'string', enum: ['me', 'them', 'none'] },
     topic: { type: 'string', description: 'an opening / player / concept name the student said, in English, else empty' },
     english: { type: 'string', description: 'the student message translated to English (unchanged if already English)' },
+    language: { type: 'string', description: 'the language the student WROTE in, in English ("German", "Thai", "English"); "unknown" when the message has no words of any language (only a move, a square, a name)' },
     steps: { type: 'array', items: REQUEST_STEP_SCHEMA, description: 'what the student asked the app to DO, in order; empty for a question' },
   },
   required: ['kind', 'referents', 'seat', 'english'],
@@ -110,7 +116,7 @@ const isRecord = (x: unknown): x is Record<string, unknown> => typeof x === 'obj
 /** Turn whatever the model returned into a ChatTurn, or null. Closed: an
  *  unknown kind becomes `unclear`, an unknown referent is dropped, nothing is
  *  invented to fill a gap. */
-export function coerceChatTurn(raw: unknown, text: string | null = null): { turn: ChatTurn; english: string | null } | null {
+export function coerceChatTurn(raw: unknown, text: string | null = null): { turn: ChatTurn; english: string | null; language: string | null } | null {
   if (!isRecord(raw)) return null;
   const kind: ChatKind = typeof raw.kind === 'string' && (ALL_CHAT_KINDS as string[]).includes(raw.kind)
     ? raw.kind as ChatKind
@@ -150,7 +156,9 @@ export function coerceChatTurn(raw: unknown, text: string | null = null): { turn
   const topic = typeof raw.topic === 'string' && raw.topic.trim() ? raw.topic.trim() : null;
   const english = typeof raw.english === 'string' && raw.english.trim() ? raw.english.trim() : null;
   const steps = coerceSteps(raw.steps);
-  return { turn: { kind, referents, seat: seatOf(raw.seat), topic, ...(steps.length ? { steps } : {}) }, english };
+  const lang = typeof raw.language === 'string' ? raw.language.trim() : '';
+  const language = lang && !/^(?:unknown|none|n\/a)$/i.test(lang) ? lang.charAt(0).toUpperCase() + lang.slice(1).toLowerCase() : null;
+  return { turn: { kind, referents, seat: seatOf(raw.seat), topic, ...(steps.length ? { steps } : {}) }, english, language };
 }
 
 /** Read one student turn. Never throws. */
@@ -162,13 +170,13 @@ export async function parseChatTurn(text: string, ctx: ParseContext): Promise<Pa
   // 1. A bare square/piece answer needs no model.
   const square = readSquareAnswer(text);
   if (square) {
-    return done({ turn: square, english: null, validation: validateChatTurn(square, ctx.board, memory), source: 'square-answer' });
+    return done({ turn: square, english: null, language: null, validation: validateChatTurn(square, ctx.board, memory), source: 'square-answer' });
   }
 
   // 1b. A message that is only a username is a request to import its games.
   const account = readAccountName(text);
   if (account) {
-    return done({ turn: account, english: null, validation: validateChatTurn(account, ctx.board, memory), source: 'code' });
+    return done({ turn: account, english: null, language: null, validation: validateChatTurn(account, ctx.board, memory), source: 'code' });
   }
 
   // 2. THE SENTENCE COMPUTER reads what it can with the board in hand — a
@@ -176,7 +184,7 @@ export async function parseChatTurn(text: string, ctx: ParseContext): Promise<Pa
   // model call (chatTurnCodeReader).
   const coded = readTurnInCode(text, ctx.board);
   if (coded) {
-    return done({ turn: coded, english: null, validation: validateChatTurn(coded, ctx.board, memory), source: 'code' });
+    return done({ turn: coded, english: null, language: null, validation: validateChatTurn(coded, ctx.board, memory), source: 'code' });
   }
 
   // 3. The model fills the form.
@@ -200,11 +208,11 @@ export async function parseChatTurn(text: string, ctx: ParseContext): Promise<Pa
     raw = null;
   }
   if (raw === null || raw === undefined) {
-    return done({ turn: null, english: null, validation: null, source: timedOut ? 'timeout' : 'llm-failed' });
+    return done({ turn: null, english: null, language: null, validation: null, source: timedOut ? 'timeout' : 'llm-failed' });
   }
   const coerced = coerceChatTurn(raw, text);
-  if (!coerced) return done({ turn: null, english: null, validation: null, source: 'llm-failed' });
+  if (!coerced) return done({ turn: null, english: null, language: null, validation: null, source: 'llm-failed' });
 
   // 4. Code checks the reading against the board.
-  return done({ turn: coerced.turn, english: coerced.english, validation: validateChatTurn(coerced.turn, ctx.board, memory), source: 'llm' });
+  return done({ turn: coerced.turn, english: coerced.english, language: coerced.language, validation: validateChatTurn(coerced.turn, ctx.board, memory), source: 'llm' });
 }

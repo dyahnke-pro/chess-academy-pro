@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1085 lines · 11 exports · 15 importers · 10 tests · 4 audits**
+**1088 lines · 11 exports · 15 importers · 10 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,7 +39,7 @@
 
 ### `routeChatIntent` (function) — 45 call sites
 - `src/coach/dispatchCoachTurn.test.ts:8`
-- `src/coach/dispatchCoachTurn.ts:371`
+- `src/coach/dispatchCoachTurn.ts:404`
 - `src/coach/questionMatrix.audit.test.ts:107`
 - `src/coach/questionMatrix.audit.test.ts:142`
 - `src/components/Insights/GameInsightsPage.tsx:191`
@@ -117,7 +117,7 @@
 ### `tryRouteIntent` (function) — 47 call sites
 - `src/components/Board/VoiceChatMic.tsx:239`
 - `src/components/Coach/CoachGameReview.tsx:2771`
-- `src/components/Coach/CoachTeachPage.tsx:3398`
+- `src/components/Coach/CoachTeachPage.tsx:3498`
 - `src/components/Coach/GameChatPanel.tsx:516`
 - `src/services/coachHands.test.ts:35`
 - `src/services/coachHands.test.ts:141`

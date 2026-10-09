@@ -933,6 +933,10 @@ export interface CoachAskInput {
    *  ask back). Set only by `dispatchCoachTurn`; consulted at the catch-all
    *  so a turn not about the board is never answered with a board read. */
   reading?: { kind: import('./chatTurn').ChatKind; clarify?: string };
+  /** The student's words in English, as the door's reader translated them —
+   *  set only for a turn written in another language, so the brain does not
+   *  pay for a second translation (WO-CHAT-01 P2). */
+  english?: string;
 }
 
 export interface CoachAnswer {

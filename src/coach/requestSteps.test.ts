@@ -61,3 +61,12 @@ describe('readAccountName — a handle is a shape, not a sentence', () => {
     expect(readAccountName(t)).toBeNull();
   });
 });
+
+describe('a piece with no side said is the student\'s own (walk R3)', () => {
+  it('"should the knight take?" at the start asks about White\'s knights only', () => {
+    const v = validateChatTurn({ kind: 'candidate-move', referents: [{ type: 'piece', piece: 'n', square: null, seat: null }], seat: null, topic: null },
+      { fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', studentColor: 'white' } as never);
+    expect(v.ok).toBe(false);
+    expect(!v.ok && v.clarify).toBe('Which knight — the one on b1 or the one on g1?');
+  });
+});

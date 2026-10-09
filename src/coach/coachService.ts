@@ -574,7 +574,12 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
   {
     const studentWords = stripInjectedBlocks(input.ask);
     const askLang = detectStudentLanguage(studentWords);
-    if (askLang.nonEnglish) {
+    // The door's reader already translated the turn; reuse it (and it reads
+    // short German the word list misses). Only a turn that did not come
+    // through the door pays for its own translation.
+    if (input.english) {
+      input = { ...input, ask: input.english };
+    } else if (askLang.nonEnglish) {
       input = { ...input, ask: await translateToEnglish(input.ask) };
     }
 
