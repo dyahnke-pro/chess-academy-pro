@@ -1338,9 +1338,9 @@ export function assemblePieceActivityAnswer(
 // narration voice rule 9 ("code templates should not be the source of
 // frequently-spoken text; write 3-5 variants and rotate").
 //
-// Every variant says exactly what the engine said. The eval is never softened,
-// never dropped, never rounded differently — only the sentence around it
-// changes. `{m}` is the magnitude in points, `{n}` the mate distance.
+// Every variant says exactly what the engine's BAND says — slight, clear,
+// winning — in words, never the number (walk 5: "about 0.5 of a point" is a
+// stat, not a reason). `{n}` is the mate distance, a concrete count.
 const BALANCED = [
   'The position is roughly balanced.',
   'Materially and positionally, this is level.',
@@ -1350,40 +1350,40 @@ const BALANCED = [
   'Dead level — this one gets decided by ideas, not by the count.',
 ];
 const SLIGHT_EDGE = [
-  "You're slightly better — about {m} of a point.",
-  "A small edge to you, about {m} of a point. Worth nursing.",
-  "You hold a shade the better of it, roughly {m} of a point.",
-  "About {m} of a point in your favour — an edge, not yet an advantage.",
+  "You're slightly better.",
+  'A small edge to you. Worth nursing.',
+  'You hold a shade the better of it.',
+  'A small edge in your favour — not yet an advantage.',
 ];
 const SLIGHT_DEFICIT = [
-  "You're slightly worse — about {m} of a point.",
-  "You're a shade worse here, around {m} of a point. Nothing fatal.",
-  "About {m} of a point against you — solvable, but do not drift.",
-  "Slightly the worse side, {m} of a point. Time to be accurate.",
+  "You're slightly worse.",
+  "You're a shade worse here. Nothing fatal.",
+  'A little against you — solvable, but do not drift.',
+  'Slightly the worse side. Time to be accurate.',
 ];
 const CLEAR_EDGE = [
-  "You're clearly better — about {m} points.",
-  "A real advantage now, about {m} points. Convert it.",
-  "About {m} points to you — this is the kind of edge that wins games.",
-  "Clearly your position, {m} points up. Keep the initiative.",
+  "You're clearly better.",
+  'A real advantage now. Convert it.',
+  'This is the kind of edge that wins games.',
+  'Clearly your position. Keep the initiative.',
 ];
 const CLEAR_DEFICIT = [
-  "You're clearly worse — about {m} points.",
-  "About {m} points against you. This needs active defence.",
-  "You are the worse side by roughly {m} points — look for counterplay.",
-  "{m} points down. Complicate before it simplifies.",
+  "You're clearly worse.",
+  'Clearly against you. This needs active defence.',
+  'You are clearly the worse side — look for counterplay.',
+  'Clearly worse. Complicate before it simplifies.',
 ];
 const WINNING = [
-  "You're winning — about {m} points up.",
-  "This is won, {m} points up. Technique from here.",
-  "About {m} points ahead — take the simplest road home.",
-  "Decisive, {m} points in hand. Trade pieces, not pawns.",
+  "You're winning.",
+  'This is won. Technique from here.',
+  'Well ahead — take the simplest road home.',
+  'Decisive. Trade pieces, not pawns.',
 ];
 const LOSING = [
-  "You're losing — about {m} points down.",
-  "About {m} points down. Only practical chances left.",
-  "{m} points against you — set problems, do not resign the position.",
-  "Objectively lost by {m} points. Make it hard.",
+  "You're losing.",
+  'Badly behind. Only practical chances left.',
+  'Objectively lost — set problems, do not resign the position.',
+  'Objectively lost. Make it hard.',
 ];
 const MATE_FOR_YOU = [
   'You have a forced mate in {n}.',
@@ -1454,9 +1454,9 @@ export function assemblePositionAssessment(opts: {
     // game never sounds like one recording (narration voice rule 9).
     const seed = Math.abs(Math.round(studentEvalCp));
     if (mag < 0.3) parts.push(pick(BALANCED, seed));
-    else if (mag < 1.0) parts.push(pick(ahead ? SLIGHT_EDGE : SLIGHT_DEFICIT, seed).replace('{m}', mag.toFixed(1)));
-    else if (mag < 2.5) parts.push(pick(ahead ? CLEAR_EDGE : CLEAR_DEFICIT, seed).replace('{m}', mag.toFixed(1)));
-    else parts.push(pick(ahead ? WINNING : LOSING, seed).replace('{m}', mag.toFixed(1)));
+    else if (mag < 1.0) parts.push(pick(ahead ? SLIGHT_EDGE : SLIGHT_DEFICIT, seed));
+    else if (mag < 2.5) parts.push(pick(ahead ? CLEAR_EDGE : CLEAR_DEFICIT, seed));
+    else parts.push(pick(ahead ? WINNING : LOSING, seed));
     // THE MATERIAL BESIDE THE EVAL (question walk 2026-09-27: "Did I get enough
     // for the pawn?" got "+0.3" and two weaknesses, never the pawn). When the
     // count and the eval point different ways, the gap between them IS the
@@ -6525,11 +6525,18 @@ export function assemblePositionalAnswer(
     // exposed pair computed independently in the deleted positionAssessor.ts;
     // the two rarely disagreed, and when they did there was no reason to
     // prefer one over the other — one computer, one answer).
+    // ONE king-safety computer: the king topic is the same question the
+    // king-lines lane answers (walk 5: this branch said "its pawn shield is
+    // compromised" after 1.e4 e5 2.Nf3 Nc6, because `exposed` is set by a
+    // king in the centre alone). The only fact added here is the one that
+    // computer does not say: the king has not castled yet and still can.
+    const base = assembleKingSafetyAnswer(fen, me, 'me');
+    if (!base) return null;
     const k = kingSafetyRead(fen, myC);
-    const castled = k?.castled ?? false;
-    const exposed = k?.exposed ?? false;
-    const detail = exposed ? ' Its pawn shield is compromised.' : '';
-    return { facts: `Your king is ${castled ? 'castled' : 'not castled'} and ${exposed ? 'looks exposed' : 'reasonably safe'}.${detail}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    const rights = fen.split(' ')[2] ?? '-';
+    const canStill = myC === 'w' ? /[KQ]/.test(rights) : /[kq]/.test(rights);
+    const tail = k?.inCenter && canStill ? ' It is still in the centre — castling soon tucks it away.' : '';
+    return { ...base, facts: `${base.facts}${tail}` };
   }
 
   if (topic === 'key-squares') {
@@ -6617,7 +6624,9 @@ export function assemblePositionalAnswer(
     if (!sw.strongest && !sw.weakest) return null;
     const best = sw.strongest ? `Your most active piece is the ${REVIEW_PIECE_NAME[sw.strongest.piece] ?? sw.strongest.piece} on ${sw.strongest.square}.` : '';
     const worst = sw.weakest ? `Your least active is the ${REVIEW_PIECE_NAME[sw.weakest.piece] ?? sw.weakest.piece} on ${sw.weakest.square} — find it a better square.` : '';
-    return { facts: [best, worst].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    // "What is my WORST piece?" leads with the worst one (walk 5).
+    const worstFirst = /\b(?:worst|weakest|least\s+active)\b/i.test(ask ?? '');
+    return { facts: (worstFirst ? [worst, best] : [best, worst]).filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   if (topic === 'pressure') {
@@ -6658,9 +6667,13 @@ export function assemblePositionalAnswer(
     const f = findOpenFiles(fen);
     const mySemi = myC === 'w' ? f.whiteSemiOpen : f.blackSemiOpen;
     if (f.open.length === 0 && mySemi.length === 0) return { facts: 'No open or half-open files for your rooks yet — a pawn break can create one.', bestMoveSan: null, bestMoveFromTo: null, sources: src };
-    const openTxt = f.open.length ? `open: ${fileList(f.open)}` : '';
-    const semiTxt = mySemi.length ? `half-open: ${fileList(mySemi)}` : '';
-    return { facts: `Rook files: ${[openTxt, semiTxt].filter(Boolean).join('; ')}. Put a rook there.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    // "The d-file is half-open for you — put a rook there" (walk 5: "Rook
+    // files: half-open: the d-file" read like a label).
+    const files = [...f.open, ...mySemi];
+    const openTxt = f.open.length ? `${fileList(f.open)} ${f.open.length > 1 ? 'are' : 'is'} open` : '';
+    const semiTxt = mySemi.length ? `${fileList(mySemi)} ${mySemi.length > 1 ? 'are' : 'is'} half-open for you` : '';
+    const body = [openTxt, semiTxt].filter(Boolean).join(', and ');
+    return { facts: `${body.charAt(0).toUpperCase()}${body.slice(1)} — put a rook ${files.length > 1 ? 'on one of them' : 'there'}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   if (topic === 'pawn-breaks') {

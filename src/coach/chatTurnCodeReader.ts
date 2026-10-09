@@ -422,6 +422,13 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
     return { kind: 'threats', referents: [], seat: mine ? 'me' : 'them', topic: null };
   }
 
+  // "How am I doing?" with a game on the board is about THIS game (walk 5:
+  // answered from the profile with "import your games").
+  if ((board.history?.length ?? 0) > 0 && /^\s*(?:so\s+)?how(?:'s|\s+is|\s+am|\s+are)\s+(?:i|it|we|this|things|my\s+game|the\s+game)\s+(?:doing|going|looking)\b/.test(lower)
+    && !/\b(?:lately|recently|overall|over\s+time|this\s+(?:week|month|year)|improv)/.test(lower)) {
+    return { kind: 'position-assessment', referents: [], seat: 'me', topic: null };
+  }
+
   // "What's the idea of this opening?" / "what is this opening about?" — the
   // opening, named, with what it is and what its key move does (walk 5: read
   // as a plan and answered about h3).

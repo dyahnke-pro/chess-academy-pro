@@ -954,12 +954,12 @@ describe('assembleEndgameAnswer — Phase 5 (voice the tablebase verdict)', () =
 describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)', () => {
   it('voices the eval from the student POV (White)', () => {
     const a = assemblePositionAssessment({ evalCp: 120, mateIn: null, studentColor: 'white' });
-    expect(a!.facts).toMatch(/You're clearly better — about 1\.2 points\./);
+    expect(a!.facts).toMatch(/You're clearly better\./);
     expect(a!.sources).toEqual(['engine:stockfish']);
   });
   it('flips perspective for Black (white-positive eval = Black worse)', () => {
     const a = assemblePositionAssessment({ evalCp: 120, mateIn: null, studentColor: 'black' });
-    expect(a!.facts).toMatch(/You're clearly worse — about 1\.2 points\./);
+    expect(a!.facts).toMatch(/You're clearly worse\./);
   });
   it('calls a balanced position balanced', () => {
     // Asserts the READ, not one exact stem. The assessment rotates between
@@ -984,7 +984,7 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     });
     // -250 white-POV, student is White: the DIRECTION and the MAGNITUDE are
     // the contract; the sentence around them rotates.
-    expect(a!.facts).toMatch(/2\.5/);
+    expect(a!.facts).not.toMatch(/\d\.\d/);
     expect(a!.facts).toMatch(/losing|down|against you|lost/i);
     expect(a!.facts).toContain('Your knight on d5 is hanging.');
     expect(a!.sources).toContain('board:chess.js');

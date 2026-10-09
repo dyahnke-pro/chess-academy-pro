@@ -27,7 +27,8 @@ import { answerBoardTurn, BOARD_ANSWERED_KINDS } from './boardTurnAnswer';
 import { coachService, type CoachServiceOptions } from './coachService';
 import type { CoachAskInput, CoachAnswer, CoachSurface } from './types';
 import { routeChatIntent } from '../services/coachSessionRouter';
-import { askSourceFor } from './questionIntents';
+import { askSourceFor, positionalTopic } from './questionIntents';
+import { assemblePositionalAnswer } from '../services/groundedAnswer';
 import {
   CHAT_KINDS,
   EMPTY_CONVERSATION,
@@ -215,6 +216,13 @@ export function isComputedAnswer(servedIntent: string | null): boolean {
  *  the other side's, or does not exist. */
 const FALSE_PREMISE: ReadonlySet<string> = new Set(['piece-not-there', 'piece-wrong-seat', 'piece-absent']);
 
+/** Readings a positional topic in the student's words may answer instead —
+ *  the general board kinds a topic sharpens, never a named-move question. */
+const POSITIONAL_READABLE: ReadonlySet<string> = new Set(['positional', 'plan', 'progress', 'position-assessment', 'piece-options', 'what-about-piece', 'is-piece-loose', 'hint', 'method']);
+/** Topics about one piece or the material count: the per-piece answer and the
+ *  material lane own these. */
+const PIECE_LEVEL_TOPICS: ReadonlySet<string> = new Set(['material', 'piece', 'maneuver']);
+
 export async function dispatchCoachTurn(
   input: CoachAskInput,
   options: DispatchCoachTurnOptions = {},
@@ -233,6 +241,24 @@ export async function dispatchCoachTurn(
     // A kind with no lane today answers with its own computed sentence.
     const turn = r?.validation?.ok ? r.validation.turn : null;
     readKind = turn?.kind ?? (r?.turn ? 'unclear' : null);
+    // A POSITIONAL TOPIC IN THE STUDENT'S OWN WORDS is answered by the
+    // positional computer with that topic (walk 5: "what is my worst piece?"
+    // and "where should my rooks go?" were re-worded to "where are the
+    // outposts?" and to a plan — the topic was thrown away). It runs before
+    // the per-piece answers: "is my king safe?" is king SAFETY, not what the
+    // king guards. Material keeps its lane (it reads a pending recapture), and
+    // a question about one piece keeps the per-piece answer.
+    const ptopic = positionalTopic(input.ask);
+    if (ptopic && !PIECE_LEVEL_TOPICS.has(ptopic) && input.liveState.fen && (turn ? POSITIONAL_READABLE.has(turn.kind) : true)) {
+      const sc = input.liveState.studentColor ?? (input.liveState.fen.split(' ')[1] === 'b' ? 'black' : 'white');
+      const answer = (() => { try { return assemblePositionalAnswer(input.liveState.fen, sc, ptopic, input.ask); } catch { return null; } })();
+      if (answer?.facts) {
+        servedParsed = true;
+        void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: `board:positional:${ptopic}`, servedParsed })
+          .catch(() => { /* telemetry never breaks a turn */ });
+        return { text: openSentence(answer.facts), toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: `board:positional:${ptopic}` };
+      }
+    }
     if (turn && CHAT_KINDS[turn.kind].answerer === 'direct' && input.liveState.fen) {
       const studentWB = input.liveState.studentColor === 'black' ? 'b' : input.liveState.studentColor === 'white' ? 'w' : (input.liveState.fen.split(' ')[1] === 'b' ? 'b' : 'w');
       const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask, input.liveState.moveHistory ?? [], input.liveState.lastCoachLine ?? null);

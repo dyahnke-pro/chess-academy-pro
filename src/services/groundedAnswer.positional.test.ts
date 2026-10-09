@@ -20,9 +20,9 @@ describe('assemblePositionalAnswer — correct deterministic data', () => {
     const a = assemblePositionalAnswer(START, 'white', 'structure');
     expect(a?.facts).toMatch(/sound|isolated|doubled/);
   });
-  it('king: castled + exposure read', () => {
+  it('king: the one king-safety read, plus the castling note in the centre', () => {
     const a = assemblePositionalAnswer(START, 'white', 'king');
-    expect(a?.facts).toMatch(/king is (?:castled|not castled)/);
+    expect(a?.facts).toMatch(/^Your king looks safe.*castling soon tucks it away\.$/);
   });
   it('key-squares: names the opponent hole as an outpost target (Sicilian d5)', () => {
     // 1.e4 c5 2.Nf3 Nc6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 e5 — ...e5 leaves d5 a hole

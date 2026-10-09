@@ -44,5 +44,5 @@ it('"What is en passant?" gets the rule and what it means on this board', async 
 }, 120_000);
 
 it('"Why can\'t I castle?" reads the student\'s own rights off the board', async () => {
-  expect(await ask("Why can't I castle?")).toMatch(/White can no longer castle kingside/);
+  expect(await ask("Why can't I castle?")).toMatch(/^You can no longer castle kingside/);
 }, 120_000);

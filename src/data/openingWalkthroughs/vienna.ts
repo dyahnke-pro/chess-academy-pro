@@ -1355,7 +1355,7 @@ export const VIENNA_GAME: WalkthroughTree = {
                                                     san: 'Bc5',
                                                     movedBy: 'black',
                                                     idea:
-                                                      "4...Bc5 — Black mirrors your Italian setup. Bishop to c5 hits f2 (the same target your bishop on c4 has on f7) and Black is set up to castle short. Very textbook. But this bishop is also doing something dangerous — it's on the long a7-g1 diagonal, and right now g1 is occupied by your knight and f2 is empty after the d3 push hasn't happened... wait, f2 IS still occupied by your pawn. Good. As long as you don't push f4 with this bishop alive on c5, you're fine. Pushing f4 here would lose to Bxg1 — Black just takes your knight. The fix: trade the bishop FIRST.",
+                                                      "4...Bc5 — Black mirrors your Italian setup. Bishop to c5 hits f2 (the same target your bishop on c4 has on f7) and Black is set up to castle short. Very textbook. But this bishop is also doing something dangerous — it's on the long a7-g1 diagonal, aimed at your knight on g1, and only your pawn on f2 stands in the way. As long as you don't push f4 with this bishop alive on c5, you're fine. Pushing f4 here would lose to Bxg1 — Black just takes your knight. The fix: trade the bishop FIRST.",
                                                     shortIdea: "Bishop on c5 threatens Bxg1 if f4 is pushed; trade bishops first.",
                                                     narration: [
                                                       {
