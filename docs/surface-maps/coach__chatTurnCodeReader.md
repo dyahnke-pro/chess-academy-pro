@@ -38,7 +38,7 @@
 - `src/coach/chatTurnCodeReader.test.ts:22`
 - `src/coach/chatTurnCodeReader.test.ts:23`
 - `src/services/coachApi.ts:2188`
-- `src/services/whyNotLegal.ts:169`
+- `src/services/whyNotLegal.ts:177`
 
 ### `pointsAtThisBoard` (function) — 1 call site
 - `src/coach/questionIntents.ts:1652`

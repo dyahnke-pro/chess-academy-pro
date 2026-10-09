@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**303 lines · 13 exports · 9 importers · 4 tests · 2 audits**
+**316 lines · 13 exports · 10 importers · 5 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/coach/coachService.askReader.integration.test.ts`
+- `src/coach/dispatchCoachTurn.boardAnswer.test.ts`
 - `src/coach/dispatchCoachTurn.test.ts`
 - `src/components/Board/VoiceChatMic.tsx`
 - `src/components/Coach/CoachAnalysePage.tsx`
@@ -38,9 +39,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `isServeParsedRouteOn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setChatTurnReaderForTests` (function) — 14 call sites
+### `setChatTurnReaderForTests` (function) — 16 call sites
 - `src/coach/coachService.askReader.integration.test.ts:31`
 - `src/coach/coachService.askReader.integration.test.ts:51`
+- `src/coach/dispatchCoachTurn.boardAnswer.test.ts:23`
+- `src/coach/dispatchCoachTurn.boardAnswer.test.ts:32`
 - `src/coach/dispatchCoachTurn.test.ts:101`
 - `src/coach/dispatchCoachTurn.test.ts:113`
 - `src/coach/dispatchCoachTurn.test.ts:120`
@@ -76,8 +79,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `openTurnRead` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:3290`
 
-### `dispatchCoachTurn` (function) — 29 call sites
+### `dispatchCoachTurn` (function) — 30 call sites
 - `src/coach/coachService.askReader.integration.test.ts:32`
+- `src/coach/dispatchCoachTurn.boardAnswer.test.ts:35`
 - `src/coach/dispatchCoachTurn.test.ts:33`
 - `src/coach/dispatchCoachTurn.test.ts:43`
 - `src/coach/dispatchCoachTurn.test.ts:52`
@@ -113,6 +117,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/coach/coachService.askReader.integration.test.ts`
+- `src/coach/dispatchCoachTurn.boardAnswer.test.ts`
 - `src/coach/dispatchCoachTurn.test.ts`
 - `src/components/Coach/GameChatPanel.surface.test.tsx`
 - `src/components/Openings/MasterclassCoachChat.boardaware.test.tsx`
