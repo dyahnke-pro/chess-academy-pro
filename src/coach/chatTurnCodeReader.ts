@@ -17,6 +17,7 @@
  */
 import { Chess, type Move, type Square } from 'chess.js';
 import type { BoardContext, ChatTurn, PieceLetter, Referent } from './chatTurn';
+import { CAPTURE_VALUE } from '../services/pieceValues';
 
 // ─── WORDS → SLOTS ─────────────────────────────────────────────────────────
 
@@ -424,8 +425,7 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
   // cheapest capturer first (pass 2: it answered with an unrelated best move).
   if ((slots.action === 'capture') && slots.sans.length === 0 && slots.pieces.length === 0 && slots.squares.length === 1 && !slots.past) {
     const caps = movesMatching(chess, { to: slots.squares[0], capture: true });
-    const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
-    const uniq = [...new Map(caps.map((m) => [m.san, m])).values()].sort((a, b) => VAL[a.piece] - VAL[b.piece]);
+    const uniq = [...new Map(caps.map((m) => [m.san, m])).values()].sort((a, b) => (CAPTURE_VALUE[a.piece] ?? 0) - (CAPTURE_VALUE[b.piece] ?? 0));
     if (uniq.length >= 2) {
       return { kind: 'compare-moves', referents: uniq.slice(0, 2).map((m): Referent => ({ type: 'move', san: m.san })), seat: 'me', topic: null };
     }

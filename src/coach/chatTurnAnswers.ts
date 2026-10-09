@@ -13,6 +13,7 @@ import { findHangingBySee, captureRead } from '../services/positionReadingServic
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { andList, orList } from '../utils/andList';
 import { computeMustDefend } from '../services/threatOut';
+import { MATERIAL_VALUE } from '../services/pieceValues';
 import { isPinnedPiece } from '../services/nextPlans';
 import { readPosition } from '../services/positionalRead';
 
@@ -346,7 +347,6 @@ export function answerAttack(chess: Chess, sq: Square | null, student: Color): s
   return `${lead ? `${lead} ` : ''}To attack ${subject}: ${ways.join('; ')}.`;
 }
 
-const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
 
 /**
  * WHAT DID I JUST LOSE — "did I just lose a pawn?" (pass 3: 3.d4?? exf3 took
@@ -366,8 +366,8 @@ export function answerMaterialChange(history: readonly string[], student: Color)
   // The move is named once, in SAN — the chat renders it in words with its
   // notation (pass 3: "(e-pawn takes on d4 (exd4))").
   const say = (m: (typeof moves)[number], whose: string): string => `${whose} ${name(m.captured ?? 'p')} on ${m.to} with ${m.san}`;
-  const lostV = lost.reduce((n, m) => n + (VALUE[m.captured ?? 'p'] ?? 0), 0);
-  const wonV = won.reduce((n, m) => n + (VALUE[m.captured ?? 'p'] ?? 0), 0);
+  const lostV = lost.reduce((n, m) => n + (MATERIAL_VALUE[m.captured ?? 'p'] ?? 0), 0);
+  const wonV = won.reduce((n, m) => n + (MATERIAL_VALUE[m.captured ?? 'p'] ?? 0), 0);
   if (lost.length && !won.length) return `Yes — they took your ${lost.map((m) => say(m, '').trim()).join(' and ')}.`;
   if (won.length && !lost.length) return `No — you took their ${won.map((m) => say(m, '').trim()).join(' and ')}.`;
   const verdict = lostV === wonV ? 'an even trade' : lostV > wonV ? 'you came out behind' : 'you came out ahead';
