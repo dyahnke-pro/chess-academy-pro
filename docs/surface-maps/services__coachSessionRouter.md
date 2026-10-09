@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1079 lines · 11 exports · 15 importers · 10 tests · 4 audits**
+**1085 lines · 11 exports · 15 importers · 10 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -37,22 +37,24 @@
 ### `RouteChatIntentOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `routeChatIntent` (function) — 43 call sites
+### `routeChatIntent` (function) — 45 call sites
 - `src/coach/dispatchCoachTurn.test.ts:8`
-- `src/coach/dispatchCoachTurn.ts:198`
-- `src/coach/questionMatrix.audit.test.ts:104`
-- `src/coach/questionMatrix.audit.test.ts:139`
+- `src/coach/dispatchCoachTurn.ts:346`
+- `src/coach/questionMatrix.audit.test.ts:107`
+- `src/coach/questionMatrix.audit.test.ts:142`
 - `src/components/Insights/GameInsightsPage.tsx:191`
-- `src/services/coachSessionRouter.i18n.test.ts:54`
-- `src/services/coachSessionRouter.i18n.test.ts:66`
-- `src/services/coachSessionRouter.i18n.test.ts:75`
-- `src/services/coachSessionRouter.test.ts:37`
-- `src/services/coachSessionRouter.test.ts:42`
-- `src/services/coachSessionRouter.test.ts:50`
-- `src/services/coachSessionRouter.test.ts:63`
+- `src/services/coachSessionRouter.i18n.test.ts:48`
+- `src/services/coachSessionRouter.i18n.test.ts:60`
+- `src/services/coachSessionRouter.i18n.test.ts:69`
+- `src/services/coachSessionRouter.test.ts:33`
+- `src/services/coachSessionRouter.test.ts:38`
+- `src/services/coachSessionRouter.test.ts:45`
+- `src/services/coachSessionRouter.test.ts:58`
+- `src/services/coachSessionRouter.test.ts:66`
 - `src/services/coachSessionRouter.test.ts:71`
-- `src/services/coachSessionRouter.test.ts:77`
-- `src/services/coachSessionRouter.test.ts:90`
+- `src/services/coachSessionRouter.test.ts:81`
+- `src/services/coachSessionRouter.test.ts:93`
+- `src/services/coachSessionRouter.test.ts:95`
 - `src/services/coachSessionRouter.test.ts:102`
 - `src/services/coachSessionRouter.test.ts:116`
 - `src/services/coachSessionRouter.test.ts:120`
@@ -115,7 +117,7 @@
 ### `tryRouteIntent` (function) — 47 call sites
 - `src/components/Board/VoiceChatMic.tsx:239`
 - `src/components/Coach/CoachGameReview.tsx:2771`
-- `src/components/Coach/CoachTeachPage.tsx:3363`
+- `src/components/Coach/CoachTeachPage.tsx:3398`
 - `src/components/Coach/GameChatPanel.tsx:516`
 - `src/services/coachHands.test.ts:35`
 - `src/services/coachHands.test.ts:141`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**201 lines · 7 exports · 4 importers · 3 tests · 1 audits**
+**211 lines · 7 exports · 5 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,6 +17,7 @@
 - `src/coach/chatTurnParser.test.ts`
 - `src/coach/dispatchCoachTurn.ts`
 - `src/coach/handWalk1009.test.ts`
+- `src/coach/requestSteps.test.ts`
 
 ## Exports and every call site
 
@@ -35,28 +36,31 @@
 ### `readerSystemPrompt` (function) — 1 call site
 - `src/coach/chatTurnParser.test.ts:39`
 
-### `coerceChatTurn` (function) — 5 call sites
+### `coerceChatTurn` (function) — 7 call sites
 - `src/coach/chatTurnParser.test.ts:17`
 - `src/coach/chatTurnParser.test.ts:23`
 - `src/coach/chatTurnParser.test.ts:28`
 - `src/coach/chatTurnParser.test.ts:29`
 - `src/coach/handWalk1009.test.ts:260`
+- `src/coach/requestSteps.test.ts:42`
+- `src/coach/requestSteps.test.ts:48`
 
 ### `parseChatTurn` (function) — 8 call sites
-- `src/coach/chatTurnEval.live.test.ts:50`
+- `src/coach/chatTurnEval.live.test.ts:51`
 - `src/coach/chatTurnParser.test.ts:48`
 - `src/coach/chatTurnParser.test.ts:56`
 - `src/coach/chatTurnParser.test.ts:66`
 - `src/coach/chatTurnParser.test.ts:72`
 - `src/coach/chatTurnParser.test.ts:78`
 - `src/coach/chatTurnParser.test.ts:84`
-- `src/coach/dispatchCoachTurn.ts:106`
+- `src/coach/dispatchCoachTurn.ts:110`
 
 ## Tests
 
 - `src/coach/chatTurnEval.live.test.ts`
 - `src/coach/chatTurnParser.test.ts`
 - `src/coach/handWalk1009.test.ts`
+- `src/coach/requestSteps.test.ts`
 
 ## Audits that reach it
 

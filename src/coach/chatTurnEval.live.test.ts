@@ -49,7 +49,8 @@ describe.skipIf(!ON)('ONE-CHAT reader on held-out phrasings (live)', () => {
         const i = next++;
         const c = CHAT_TURN_EVAL_CASES[i];
         const r = await parseChatTurn(c.text, { board: { fen: 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3' }, reader: curlReader, timeoutMs: 30_000 });
-        results[i] = { case: c, kind: r.turn?.kind ?? null };
+        const v = r.validation?.ok ? r.validation.turn : null;
+        results[i] = { case: c, kind: r.turn?.kind ?? null, steps: v?.steps?.map((x) => ({ action: x.action, openingName: x.openingName })) ?? null };
       }
     };
     await Promise.all(Array.from({ length: 6 }, worker));
@@ -57,7 +58,7 @@ describe.skipIf(!ON)('ONE-CHAT reader on held-out phrasings (live)', () => {
     mkdirSync('audit-reports', { recursive: true });
     writeFileSync(`audit-reports/chat-turn-eval-${new Date().toISOString().replace(/[:.]/g, '-')}.json`, JSON.stringify({ model: MODEL, ...score }, null, 2));
     console.log(`chat-turn eval: ${score.correct}/${score.total} = ${(score.accuracy * 100).toFixed(1)}%`);
-    for (const m of score.misses) console.log(`  MISS [${m.probe}] "${m.text}" → ${m.got ?? 'none'} (want ${m.expected.join('|')})`);
+    for (const m of score.misses) console.log(`  MISS [${m.probe}] "${m.text}" → ${m.got ?? 'none'} (want ${m.expected.join('|')})${m.steps ? ` steps: ${m.steps}` : ''}`);
     expect(score.total).toBe(CHAT_TURN_EVAL_CASES.length);
     expect(score.passes).toBe(true);
   }, 600_000);

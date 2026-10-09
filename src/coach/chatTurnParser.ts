@@ -16,6 +16,7 @@
  */
 import { readChatTurnStructured } from '../services/coachApi';
 import { readTurnInCode } from './chatTurnCodeReader';
+import { coerceSteps, readAccountName, requestStepsPrompt, REQUEST_STEP_SCHEMA } from './requestSteps';
 import {
   ALL_CHAT_KINDS,
   CHAT_KINDS,
@@ -81,6 +82,7 @@ export const CHAT_TURN_SCHEMA: Record<string, unknown> = {
     seat: { type: 'string', enum: ['me', 'them', 'none'] },
     topic: { type: 'string', description: 'an opening / player / concept name the student said, in English, else empty' },
     english: { type: 'string', description: 'the student message translated to English (unchanged if already English)' },
+    steps: { type: 'array', items: REQUEST_STEP_SCHEMA, description: 'what the student asked the app to DO, in order; empty for a question' },
   },
   required: ['kind', 'referents', 'seat', 'english'],
 };
@@ -98,6 +100,7 @@ export function readerSystemPrompt(previousKind: ChatKind | null): string {
     '"my" / "I" → seat me; "their" / "he" / "they" / "opponent" → seat them.',
     'A move the student names is ALWAYS a question about that move, never a request to play it.',
     'Translate the message to English in `english`. Keep moves in SAN.',
+    requestStepsPrompt(),
     previousKind ? `The previous turn was read as: ${previousKind}. Use it only for a follow-up like "and why?".` : '',
   ].filter(Boolean).join('\n');
 }
@@ -146,7 +149,8 @@ export function coerceChatTurn(raw: unknown, text: string | null = null): { turn
   }
   const topic = typeof raw.topic === 'string' && raw.topic.trim() ? raw.topic.trim() : null;
   const english = typeof raw.english === 'string' && raw.english.trim() ? raw.english.trim() : null;
-  return { turn: { kind, referents, seat: seatOf(raw.seat), topic }, english };
+  const steps = coerceSteps(raw.steps);
+  return { turn: { kind, referents, seat: seatOf(raw.seat), topic, ...(steps.length ? { steps } : {}) }, english };
 }
 
 /** Read one student turn. Never throws. */
@@ -159,6 +163,12 @@ export async function parseChatTurn(text: string, ctx: ParseContext): Promise<Pa
   const square = readSquareAnswer(text);
   if (square) {
     return done({ turn: square, english: null, validation: validateChatTurn(square, ctx.board, memory), source: 'square-answer' });
+  }
+
+  // 1b. A message that is only a username is a request to import its games.
+  const account = readAccountName(text);
+  if (account) {
+    return done({ turn: account, english: null, validation: validateChatTurn(account, ctx.board, memory), source: 'code' });
   }
 
   // 2. THE SENTENCE COMPUTER reads what it can with the board in hand — a

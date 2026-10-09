@@ -6,6 +6,17 @@ import type { ChatTurnEvalCase } from './chatTurnEval';
 
 export const CHAT_TURN_EVAL_CASES: readonly ChatTurnEvalCase[] = [
   // ── the board, now ──
+  // ── requests as steps (live walk 2026-10-09 + real native turns) ──
+  { text: 'teach me the Italian', expect: ['command', 'training-request'], probe: 'plain', steps: [{ action: 'teach-opening', opening: 'Italian Game' }] },
+  { text: 'I want to practice the Italian opening, teach me', expect: ['command', 'training-request'], probe: 'indirect', steps: [{ action: 'teach-opening', opening: 'Italian Game' }] },
+  { text: 'ผมอยากซ้อมเปิดเกมแบบอิตาลีสอนหน่อย', expect: ['command', 'training-request'], probe: 'language', steps: [{ action: 'teach-opening', opening: 'Italian Game' }] },
+  { text: 'reset the board and teach me the Italian', expect: ['command', 'training-request'], probe: 'plain', steps: [{ action: 'reset-board' }, { action: 'teach-opening', opening: 'Italian Game' }] },
+  { text: 'แป๊บนึงนะรีเซ็ทกระดานใหม่แล้วสอนผมเดินแบบอิตาลี', expect: ['command', 'training-request'], probe: 'language', steps: [{ action: 'reset-board' }, { action: 'teach-opening', opening: 'Italian Game' }] },
+  { text: "let's play a game, I'll be white", expect: ['command'], probe: 'plain', steps: [{ action: 'play-game' }] },
+  { text: 'make me a full training plan', expect: ['command', 'training-request'], probe: 'plain', steps: [{ action: 'training-plan' }] },
+  { text: 'Knight_mare_01', expect: ['command'], probe: 'indirect', steps: [{ action: 'import-games' }] },
+  { text: 'can I start now?', expect: ['command', 'conversational-reply'], probe: 'follow-up', steps: [{ action: 'start-now' }] },
+  { text: 'walk me through the caro kann then play it with me as black', expect: ['command', 'training-request'], probe: 'indirect', steps: [{ action: 'teach-opening', opening: 'Caro-Kann Defense' }, { action: 'play-game', opening: 'Caro-Kann Defense' }] },
   // ── rules vs the app (live walk 2026-10-09: "how do I castle?" read as app help) ──
   { text: 'how do I castle?', expect: ['concept'], probe: 'plain' },
   { text: 'how does en passant work', expect: ['concept'], probe: 'plain' },

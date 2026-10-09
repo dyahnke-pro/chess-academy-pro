@@ -33,6 +33,7 @@ import {
   pieceOptionsRef,
 } from './questionIntents';
 import { detectBoardQuestion } from './boardQuestions';
+import { resolveSteps, type RequestStep, type ResolvedStep } from './requestSteps';
 
 // ─── THE FAST PATH: today's deterministic routing, as lane ids ─────────────
 
@@ -193,6 +194,9 @@ export interface ChatTurn {
   /** A name the turn carries that is not on the board: an opening, a player,
    *  a concept ("the Sicilian", "Magnus", "a fork"). As said, in English. */
   topic: string | null;
+  /** What the student asked the app to DO, in order (WO-CHAT-01 P1). Absent
+   *  or empty on a question. */
+  steps?: RequestStep[];
 }
 
 /** A piece referent once the board has placed it. */
@@ -203,8 +207,10 @@ export type ResolvedReferent =
    *  as the student's last try) — "why Nf1?" about a move already made. */
   | { type: 'move'; san: string; played: boolean };
 
-export interface ResolvedChatTurn extends Omit<ChatTurn, 'referents'> {
+export interface ResolvedChatTurn extends Omit<ChatTurn, 'referents' | 'steps'> {
   referents: ResolvedReferent[];
+  /** Each step with its opening resolved to one DB name. */
+  steps?: ResolvedStep[];
 }
 
 // ─── THE KIND TABLE ────────────────────────────────────────────────────────
@@ -493,7 +499,15 @@ export function validateChatTurn(turn: ChatTurn, board: BoardContext, memory: Co
   if (turn.kind === 'answer' && out.length === 0) {
     return { ok: false, reason: 'empty-answer', clarify: 'Tap the squares, or tell me which ones.' };
   }
-  return { ok: true, turn: { ...turn, referents: out } };
+  // A request's openings are resolved by code through the one resolver; a
+  // name that resolves to nothing is asked back, never guessed.
+  if (turn.steps && turn.steps.length > 0) {
+    const steps = resolveSteps(turn.steps);
+    if (!steps.ok) return steps;
+    return { ok: true, turn: { ...turn, referents: out, steps: steps.steps } };
+  }
+  const { steps: _none, ...rest } = turn;
+  return { ok: true, turn: { ...rest, referents: out } };
 }
 
 function resolvePiece(

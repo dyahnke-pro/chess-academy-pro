@@ -106,7 +106,7 @@ re-run on prod → delete the old path it replaces.
   lane, legacy free lane, Learn's prose move-recovery net · `chatBoardRead`
   if `boardTurnAnswer` subsumes it (or the reverse — one, not two) · Learn's
   pre-routers once registered as readers · `routeChatIntent` phrase matching
-  once commands come from the reading · `walkthroughResolver.ts` (whole file — 0 production callers since the router moved to `resolveOpeningEntry`, 2026-10-09) · `serveParsedRoute` flag (one path,
+  once commands come from the reading · `walkthroughResolver.ts` (whole file — 0 production callers since the router moved to `resolveOpeningEntry`, 2026-10-09) · caller-side filler strips now done by the resolver itself (`openingFuzzyMatcher.ts` ~354 leading-article retry, `ask/playName.ts` `^the\s+`, 2026-10-09) · `serveParsedRoute` flag (one path,
   no switch). Gate: a test that lists every deleted export and fails if any
   returns; `coachInversion.gate.test.ts` extended so none of the free-model
   paths can be re-added.

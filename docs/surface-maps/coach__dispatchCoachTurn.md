@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**371 lines · 14 exports · 12 importers · 7 tests · 2 audits**
+**399 lines · 14 exports · 13 importers · 8 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,6 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/coachService.askReader.integration.test.ts`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
@@ -41,7 +42,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `isServeParsedRouteOn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setChatTurnReaderForTests` (function) — 20 call sites
+### `setChatTurnReaderForTests` (function) — 22 call sites
+- `src/coach/chatTurnRow.outcome.test.ts:28`
+- `src/coach/chatTurnRow.outcome.test.ts:37`
 - `src/coach/coachService.askReader.integration.test.ts:31`
 - `src/coach/coachService.askReader.integration.test.ts:51`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:23`
@@ -85,12 +88,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `openTurnRead` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3301`
+- `src/components/Coach/CoachTeachPage.tsx:3322`
 
 ### `isComputedAnswer` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7347`
+- `src/components/Coach/CoachTeachPage.tsx:7367`
 
-### `dispatchCoachTurn` (function) — 32 call sites
+### `dispatchCoachTurn` (function) — 33 call sites
+- `src/coach/chatTurnRow.outcome.test.ts:39`
 - `src/coach/coachService.askReader.integration.test.ts:32`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:35`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:25`
@@ -129,6 +133,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/coachService.askReader.integration.test.ts`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
