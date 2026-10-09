@@ -90,6 +90,26 @@ re-run on prod → delete the old path it replaces.
 - **P7 Learn onto the one door**, its routers as readers.
 - **P8 Delete** the model toolbelt, `[[ACTION]]` and banter paths for student
   turns once P1's commands cover them.
+- **P9 Delete the old system (David 2026-10-09: "old orphan or redundant
+  code removed as final step").** Not a sweep by eye — a LEDGER, each row
+  deleted only when its replacement's test is green and
+  `surface-map.mjs --changed` shows zero production callers (G8.5):
+  `canonicalAsk` + the 73 `canonical:` entries · the regex if-chain in
+  `getCoachChatResponse` (`coachApi.ts` ~4046–6617) and the lane-local
+  computers it alone used · `fastPathLane` / `LANE_FIRES` (the approximation
+  of the chain) · `chatTurnCodeReader` folded into the one reader ·
+  `positionalTopic` override in the door · `buildQuestionGrounding`'s 56
+  question flags (grounding keeps only the board/engine data) · the three
+  serial `translateToEnglish` calls · module globals `lastServedIntent`,
+  `lastCoachLines`, `lastCoachActionOffer`, `consume*` · the model toolbelt,
+  `[[ACTION]]` parser, `stripChessyStraySentences`'s `[[` protection, banter
+  lane, legacy free lane, Learn's prose move-recovery net · `chatBoardRead`
+  if `boardTurnAnswer` subsumes it (or the reverse — one, not two) · Learn's
+  pre-routers once registered as readers · `routeChatIntent` phrase matching
+  once commands come from the reading · `serveParsedRoute` flag (one path,
+  no switch). Gate: a test that lists every deleted export and fails if any
+  returns; `coachInversion.gate.test.ts` extended so none of the free-model
+  paths can be re-added.
 
 ## Pushback on this plan
 
