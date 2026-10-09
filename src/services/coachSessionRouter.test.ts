@@ -7,10 +7,8 @@ import {
   __test__extractProposedUserSide,
 } from './coachSessionRouter';
 
-// Mock the resource-lookup layer so tests don't hit Dexie.
-vi.mock('./walkthroughResolver', () => ({
-  matchOpeningForSubject: vi.fn(),
-}));
+// Mock the resource-lookup layer so tests don't hit Dexie. Opening NAMES are
+// resolved by the real bundled resolver (`resolveOpeningEntry`) — no mock.
 vi.mock('./middlegamePlanner', () => ({
   findPlanForOpening: vi.fn(),
   findPlanBySubject: vi.fn(),
@@ -19,7 +17,6 @@ vi.mock('./gameContextService', () => ({
   findLastMatchingGame: vi.fn(),
 }));
 
-import { matchOpeningForSubject } from './walkthroughResolver';
 import { findLastMatchingGame } from './gameContextService';
 import {
   findPlanForOpening,
@@ -28,7 +25,6 @@ import {
 
 describe('routeChatIntent', () => {
   beforeEach(() => {
-    vi.mocked(matchOpeningForSubject).mockReset();
     vi.mocked(findPlanForOpening).mockReset();
     vi.mocked(findPlanBySubject).mockReset();
   });
@@ -43,7 +39,6 @@ describe('routeChatIntent', () => {
     expect(routed).not.toBeNull();
     expect(routed!.path).toMatch(/^\/coach\/session\/play-against/);
     expect(routed!.path).toContain('subject=');
-    expect(matchOpeningForSubject).not.toHaveBeenCalled();
   });
 
   it('routes play-against with side and difficulty', async () => {
@@ -73,7 +68,6 @@ describe('routeChatIntent', () => {
   });
 
   it('navigates walkthrough only when opening matches', async () => {
-    vi.mocked(matchOpeningForSubject).mockResolvedValueOnce(null);
     const missing = await routeChatIntent('walk me through the Flibbertigibbet');
     // Previously returned null (silent fallback to chat). Now returns a
     // reply-only ack explaining no walkthrough is available and offering
@@ -84,16 +78,22 @@ describe('routeChatIntent', () => {
     expect(missing!.ackMessage.toLowerCase()).toContain('want to play');
     expect(missing!.ackMessage.toLowerCase()).toContain('flibbertigibbet');
 
-    vi.mocked(matchOpeningForSubject).mockResolvedValueOnce({
-      opening: { id: 'sicilian', name: 'Sicilian Defense' } as never,
-    });
     const found = await routeChatIntent('walk me through the Sicilian');
     expect(found).not.toBeNull();
     // Routes STRAIGHT to the main Learn-with-Coach surface — the legacy
     // /coach/session/walkthrough page is gone.
     expect(found!.path).toMatch(/^\/coach\/teach/);
     expect(found!.path).not.toContain('/coach/session/walkthrough');
-    expect(found!.path).toContain('opening=');
+    expect(found!.path).toContain('opening=Sicilian+Defense');
+  });
+
+  it('the URL carries the resolved name, never the words (live walk R5)', async () => {
+    // "…teach me" put the raw subject "me" in the URL; a repertoire substring
+    // search had matched it inside "Ga-me".
+    const routed = await routeChatIntent('I want to practice the Italian opening, teach me');
+    expect(routed?.path ?? '').not.toMatch(/opening=me\b/);
+    const italian = await routeChatIntent('walk me through the Italian opening');
+    expect(italian?.path).toContain('opening=Italian+Game');
   });
 
   it('"yes" after walkthrough-unavailable offer routes to play-against', async () => {
@@ -147,9 +147,9 @@ describe('routeChatIntent', () => {
   });
 
   it('never throws — router errors become null so chat keeps working', async () => {
-    vi.mocked(matchOpeningForSubject).mockRejectedValueOnce(new Error('db down'));
+    vi.mocked(findLastMatchingGame).mockRejectedValueOnce(new Error('db down'));
     await expect(
-      routeChatIntent('walk me through the London'),
+      routeChatIntent('review my last Sicilian game'),
     ).rejects.toBeInstanceOf(Error);
     // The above confirms errors propagate; callers are responsible for
     // wrapping in try/catch (see CoachChatPage.handleSend).

@@ -30,7 +30,7 @@ import type { CoachIntent } from './coachAgent';
 import type { RequestedDifficulty } from '../types';
 import { matchTrainingAidRoute } from './trainingAidRouter';
 import type { GameRecord } from '../types';
-import { matchOpeningForSubject } from './walkthroughResolver';
+import { resolveOpeningEntry } from './openingDetectionService';
 import {
   findPlanForOpening,
   findPlanBySubject,
@@ -242,7 +242,13 @@ export async function routeChatIntent(
 
     case 'walkthrough': {
       if (!intent.subject) return null;
-      const match = await matchOpeningForSubject(intent.subject);
+      // THE ONE RESOLVER (WO-CHAT-01, live walk 2026-10-09). This branch used
+      // its own repertoire substring search, which matched "me" (from "…teach
+      // me") inside "Ga-me" and then put the RAW words in the URL — the student
+      // was offered "the me walkthrough". Learn resolves names with
+      // `resolveOpeningEntry`; so does this, and the URL carries the name it
+      // resolved, never the words it was given.
+      const match = resolveOpeningEntry(intent.subject);
       if (!match) {
         // Walkthroughs only exist for openings we have annotated DB
         // content for. Rather than silently falling through to plain
@@ -271,10 +277,10 @@ export async function routeChatIntent(
       // exists; /coach/teach reads ?opening= and auto-kicks the walkthrough
       // with its own DB-narration pipeline + chat + voice + picker chips.
       const params = new URLSearchParams();
-      params.set('opening', intent.subject);
+      params.set('opening', match.canonicalName);
       return {
         path: withQuery('/coach/teach', params),
-        ackMessage: `Loading the ${match.opening.name} walkthrough…`,
+        ackMessage: `Loading the ${match.canonicalName} walkthrough…`,
         intent,
       };
     }

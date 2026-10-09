@@ -16,7 +16,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { routeChatIntent } from './coachSessionRouter';
 
-vi.mock('./walkthroughResolver', () => ({ matchOpeningForSubject: vi.fn() }));
 vi.mock('./middlegamePlanner', () => ({
   findPlanForOpening: vi.fn(() => null),
   findPlanBySubject: vi.fn(() => null),
@@ -25,7 +24,6 @@ vi.mock('./gameContextService', () => ({ findLastMatchingGame: vi.fn(async () =>
 vi.mock('./openingService', () => ({ getWeakestOpenings: vi.fn(async () => []) }));
 vi.mock('./coachApi', () => ({ translateToEnglish: vi.fn() }));
 
-import { matchOpeningForSubject } from './walkthroughResolver';
 import { translateToEnglish } from './coachApi';
 
 /** "Teach me the Italian opening." */
@@ -37,12 +35,8 @@ const VIET_ASK = 'Dạy tôi khai cuộc Ý';
 
 describe('routeChatIntent — the student does not write English', () => {
   beforeEach(() => {
-    vi.mocked(matchOpeningForSubject).mockReset();
     vi.mocked(translateToEnglish).mockReset();
     vi.mocked(translateToEnglish).mockResolvedValue('teach me the Italian Game');
-    vi.mocked(matchOpeningForSubject).mockResolvedValue({
-      opening: { id: 'italian-game', name: 'Italian Game' },
-    } as never);
   });
 
   for (const [language, ask] of [

@@ -46,16 +46,27 @@ const chatRows = async () => {
   return (Array.isArray(lines) ? lines : []).map((l) => { const i = l.indexOf(' | {'); try { return i > 0 ? JSON.parse(l.slice(i + 3)) : null; } catch { return null; } }).filter(Boolean);
 };
 
+/** Coach lines that are NEW since `before` — counted, not compared by text:
+ *  the same answer twice ("whats teh best move" after "what's the best move")
+ *  is still a new answer. */
+const countOf = (lines) => { const m = new Map(); for (const l of lines) m.set(l, (m.get(l) ?? 0) + 1); return m; };
+const newLines = (before, now) => {
+  const seen = new Map(before);
+  const out = [];
+  for (const l of now) { const n = seen.get(l) ?? 0; if (n > 0) seen.set(l, n - 1); else out.push(l); }
+  return out;
+};
+
 /** Ask, then wait for a NEW coach line that stops changing. */
 async function ask(text) {
-  const before = new Set(coachLines(await messages()));
+  const before = countOf(coachLines(await messages()));
   const rowsBefore = (await chatRows()).length;
   const t0 = Date.now();
   await get('/type', text);
   let last = null; let stable = 0; let answer = null;
   for (let i = 0; i < 90; i += 1) {
     await sleep(1000);
-    const fresh = coachLines(await messages()).filter((m) => !before.has(m));
+    const fresh = newLines(before, coachLines(await messages()));
     const cur = fresh.join('\n⏎ ');
     if (fresh.length && cur === last) stable += 1; else stable = 0;
     last = cur;

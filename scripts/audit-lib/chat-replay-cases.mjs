@@ -19,6 +19,8 @@
 
 export const STOCK = /I can't verify that precisely from grounded data/;
 const THAI = /[฀-๿]/;
+/** The coach never speaks as a player (RULEBOOK V1/V2): no I / my / me. */
+const COACH_AS_PLAYER = /\b(?:I|my|me|I'm|I've)\b|skill-level move|at your strength on purpose/;
 const GERMAN = /\b(der|die|das|dein|deine|und|ist|nicht|Springer|Zug|schlagen|Läufer|Bauer)\b/i;
 
 export const CASES = [
@@ -41,12 +43,12 @@ export const CASES = [
   { id: 'B4', setup: 'italian', ask: 'is c3 good?', from: 'walk', must: [/c3/] },
   { id: 'B5', setup: 'italian', ask: "what's my plan?", from: 'walk', mustNot: [/h3 will still be there/] },
   { id: 'B6', setup: 'italian', ask: 'what is black trying to do?', from: 'walk' },
-  { id: 'B7', setup: 'italian', ask: 'why did they play {LAST}?', from: 'walk', mustNot: [/\bmy (bishop|knight|rook|queen|pawn|king|move)\b/i] },
+  { id: 'B7', setup: 'italian', ask: 'why did they play {LAST}?', from: 'walk', mustNot: [COACH_AS_PLAYER] },
   { id: 'B8', setup: 'italian', ask: 'and why not d4?', from: 'walk', must: [/d4/] },
   { id: 'B9', setup: 'italian', ask: 'whats teh best move', from: 'walk' },
   { id: 'B10', setup: 'italian', ask: 'is my bishop on c4 good?', from: 'walk', must: [/c4/] },
   { id: 'B11', setup: 'italian', ask: 'can they attack my bishop?', from: 'walk', must: [/bishop/i], mustNot: [/^The best move is/] },
-  { id: 'B12', setup: 'italian', ask: 'what does {LAST} attack?', from: 'walk', mustNot: [/\bmy (bishop|knight|rook|queen|pawn|king|move)\b/i, /was the engine's top move/] },
+  { id: 'B12', setup: 'italian', ask: 'what does {LAST} attack?', from: 'walk', mustNot: [COACH_AS_PLAYER, /was the engine's top move/] },
   { id: 'B13', setup: 'italian', ask: 'is anything hanging?', from: 'walk', mustNot: [/rook on a1|rook on h1/] },
   { id: 'B14', setup: 'italian', ask: 'what are my weaknesses?', from: 'walk', must: [/import|games/i] },
   { id: 'B15', setup: 'italian', ask: 'turn the voice off', from: 'walk', must: [/off/i] },
