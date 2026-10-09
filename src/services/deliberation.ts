@@ -94,6 +94,8 @@ export interface Deliberation {
   /** The best move's own line, played out, when it proves a win of material
    *  or mate within the horizon — the "if X, then Y" half of the verdict. */
   bestLine?: string | null;
+  /** The move the student named, weighed (when `named` was given). */
+  named?: Candidate;
 }
 
 function uciToSan(fen: string, uci: string): string | null {
@@ -155,6 +157,13 @@ export function buildDeliberation(input: {
    *  capture back on the square they just took on is the trade finishing, so
    *  "it wins the queen on d8" after …Qxd8 is false (hand walk 2026-09-25). */
   opponentLastSan: string | null;
+  /** A move the STUDENT named ("why is Ne4 best?", "is Qf3 ok?"), weighed
+   *  beside the engine's own candidates (chat thinks like the coach,
+   *  2026-10-09). `lineUci` is the engine's line from `fenBefore` STARTING
+   *  with the named move; `evaluation`/`mate` are White's view of it, the
+   *  same convention as `topLines`. Ignored when the named move already is
+   *  one of the top lines — then that line is used. */
+  named?: { lineUci: string[]; evaluation: number; mate: number | null };
 }): Deliberation | null {
   const { fenBefore, moverColor, excludeSan } = input;
   const sign = moverColor === 'w' ? 1 : -1;
@@ -201,12 +210,41 @@ export function buildDeliberation(input: {
     });
   }
 
+  // THE NAMED MOVE joins the weighing like any candidate — same eval maths,
+  // same drop and proof computers — and is marked so the answer can speak to it.
+  let namedCandidate: Candidate | null = null;
+  const namedSan = input.named?.lineUci[0] ? uciToSan(fenBefore, input.named.lineUci[0]) : null;
+  if (input.named && namedSan) {
+    const inTop = lines.slice(0, max).find((l) => uciToSan(fenBefore, l.moves[0]) === namedSan);
+    const line = inTop ? { moves: inTop.moves, evaluation: inTop.evaluation, mate: inTop.mate } : { moves: input.named.lineUci, evaluation: input.named.evaluation, mate: input.named.mate };
+    if (namedSan === bestSan) {
+      namedCandidate = best;
+    } else {
+      const existing = alternatives.find((a) => a.san === namedSan);
+      if (existing) {
+        namedCandidate = existing;
+      } else {
+        const evalCp = moverEval(line);
+        const deltaCp = Math.max(0, bestEval - evalCp);
+        const loose = dropsAfter(fenBefore, line.moves[0], moverColor);
+        const drop = loose && deltaCp >= CLEARLY_WORSE_CP ? loose : null;
+        const proof = proofAgainstMover(fenBefore, line.moves, moverColor);
+        namedCandidate = {
+          san: namedSan, evalCp, deltaCp,
+          shortfall: drop ? 'drops-material' : deltaCp >= CLEARLY_WORSE_CP ? 'clearly-worse' : 'less-precise',
+          drops: drop ? { piece: drop.piece, square: drop.square } : undefined,
+          ...(proof ? { proof } : {}),
+        };
+      }
+    }
+  }
+
   const bestWhy = moveWhy(fenBefore, bestSan, moverColor, input.opponentLastSan);
   // Played out only when it takes more than the move itself to see (3+ plies):
   // a one-move win is already the reason.
   const played = proofForMover(fenBefore, bestLine.moves, moverColor);
   const bestLineText = played && played.plies >= 3 ? played.text : null;
-  return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy, bestLine: bestLineText };
+  return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy, bestLine: bestLineText, ...(namedCandidate ? { named: namedCandidate } : {}) };
 }
 
 
@@ -518,4 +556,45 @@ function attacking(fen: string, mover: 'w' | 'b'): boolean {
     const a = countKingAttack(new Chess(fen), mover);
     return !!a && a.attackers.size >= 2 && a.attackers.size > a.defenders.size;
   } catch { return false; }
+}
+
+/** MEANINGFUL_DELTA_CP, for the answer about a named move. */
+export const NAMED_SAME_AS_BEST_CP = MEANINGFUL_DELTA_CP;
+
+/**
+ * THE ANSWER ABOUT A MOVE THE STUDENT NAMED — the coach's own weighing, said
+ * to the student who asked. The best move with its reason, or why theirs falls
+ * short with the line that proves it, or "about as good" inside the coin-flip
+ * band. Null when the weighing has nothing to say about it.
+ */
+export function namedMoveAnswer(d: Deliberation, ask: 'why-best' | 'is-it-good'): string | null {
+  const n = d.named;
+  if (!n) return null;
+  const line = d.bestLine ? ` ${d.bestLine[0].toUpperCase()}${d.bestLine.slice(1)}.` : '';
+  const bestReason = d.bestWhy ? ` — it ${d.bestWhy}` : '';
+  if (n.san === d.best.san) {
+    const others = deliberationWeighing(d);
+    return `${n.san} is the best move here${bestReason}.${line}${others ? ` ${others}` : ''}`;
+  }
+  if (n.deltaCp < NAMED_SAME_AS_BEST_CP && n.shortfall !== 'drops-material') {
+    return `${n.san} is fine — about as good as the engine's ${d.best.san}${bestReason}.`;
+  }
+  const lead = ask === 'why-best' ? `${n.san} isn't the best move here. ` : '';
+  const subject = lead ? 'It' : n.san;
+  let why: string;
+  let namesBest = false;
+  if (n.proof || (n.shortfall === 'drops-material' && n.drops)) {
+    why = shortfallText(n);
+  } else if (n.shortfall === 'clearly-worse') {
+    why = `${subject} is clearly worse than ${d.best.san}${d.bestWhy ? `, which ${d.bestWhy}` : ''}.${d.bestWhy ? line : ''}`;
+    namesBest = true;
+  } else {
+    why = `${subject} is playable, but ${d.best.san} is more accurate${d.bestWhy ? ` — it ${d.bestWhy}` : ''}.${d.bestWhy ? line : ''}`;
+    namesBest = true;
+  }
+  // The better move is named WITH its reason, or attributed — never a bare
+  // "The move is X" (an order, not teaching).
+  const verdict = namesBest ? ''
+    : d.bestWhy ? ` The move is ${d.best.san}${bestReason}.${line}` : ` The engine prefers ${d.best.san}.${line}`;
+  return `${lead}${why}${verdict}`;
 }

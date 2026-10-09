@@ -22,6 +22,7 @@
  * `coachService` would cycle (coachService ← trainingAidRouter ← coachSessionRouter).
  * This wrapper depends on both; neither depends on it.
  */
+import { answerBoardTurn, BOARD_ANSWERED_KINDS } from './boardTurnAnswer';
 import { coachService, type CoachServiceOptions } from './coachService';
 import type { CoachAskInput, CoachAnswer, CoachSurface } from './types';
 import { routeChatIntent } from '../services/coachSessionRouter';
@@ -223,6 +224,18 @@ export async function dispatchCoachTurn(
         void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: turn.kind, servedParsed })
           .catch(() => { /* telemetry never breaks a turn */ });
         return { text, toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: turn.kind };
+      }
+    }
+    // THE BOARD ANSWERS THE DECODED QUESTION — never re-worded into a lane
+    // that drops what was read (chat thinks like the coach, 2026-10-09).
+    if (turn && BOARD_ANSWERED_KINDS.has(turn.kind) && input.liveState.fen) {
+      const sc = input.liveState.studentColor ?? (input.liveState.fen.split(' ')[1] === 'b' ? 'black' : 'white');
+      const text = await answerBoardTurn(turn, { fen: input.liveState.fen, history: input.liveState.moveHistory ?? [], studentColor: sc }).catch(() => null);
+      if (text) {
+        servedParsed = true;
+        void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: `board:${turn.kind}`, servedParsed })
+          .catch(() => { /* telemetry never breaks a turn */ });
+        return { text, toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: `board:${turn.kind}` };
       }
     }
     const canonical = turn ? canonicalAsk(turn) : null;
