@@ -8,7 +8,7 @@ import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { parseCoachIntent } from '../../services/coachAgent';
 import { favoriteOpeningTool } from '../../coach/tools/cerebrum/favoriteOpening';
 import { voiceInputService } from '../../services/voiceInputService';
-import { coachService } from '../../coach/coachService';
+import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
 import type { LiveState } from '../../coach/types';
 import { logAppAudit } from '../../services/appAuditor';
 import { voiceService } from '../../services/voiceService';
@@ -261,7 +261,7 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
           });
         })();
       } else {
-        // ── WO-BRAIN-05a — VOICE-ONLY QA ROUTES THROUGH coachService ────
+        // ── WO-BRAIN-05a — VOICE-ONLY QA ROUTES THROUGH THE ONE DOOR ────
         // No structured intent — voice-only QA. The brain handles it
         // in the BACKGROUND (no drawer, no chat panel) so a text box
         // doesn't pop up just because the user said something. The
@@ -329,15 +329,18 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
             timestamp: Date.now(),
           }),
         });
-        void coachService
-          .ask(
-            { surface: 'smart-search', ask: text, liveState },
+        // ONE COACH: the student's spoken words go through the same door as
+        // every other screen — the same reading, requests, language, proofs.
+        let streamed = false;
+        void dispatchCoachTurn(
+            { surface: 'smart-search', ask: text, origin: 'spoken', liveState },
             {
               maxToolRoundTrips: 1,
               onNavigate: (path: string) => {
                 void navigate(path);
               },
               onChunk: (chunk: string) => {
+                streamed = true;
                 speechBuffer += chunk;
                 // Flush on ANY sentence terminator (.!?\n) — no whitespace
                 // requirement. Earlier regex required `[.!?]\s` which
@@ -352,7 +355,8 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
             },
           )
           .then((answer) => {
-            const tail = speechBuffer.replace(TAG_STRIP_RE, '').trim();
+            // An answer the door computed does not stream: speak it whole.
+            const tail = (streamed ? speechBuffer : answer.text).replace(TAG_STRIP_RE, '').trim();
             if (tail) speakOrQueue(tail);
             // Persist the coach reply (post-strip) into both stores
             // mirroring the user-side appends above. Voice modality

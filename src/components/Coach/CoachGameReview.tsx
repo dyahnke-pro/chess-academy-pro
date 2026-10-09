@@ -76,7 +76,7 @@ import { computeWhyBestMoveDetail } from '../../services/whyBestMove';
 import { SkipBack, SkipForward, Cpu, BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { tryCaptureForgetIntent } from '../../services/openingIntentCapture';
-import { coachService } from '../../coach/coachService';
+import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
 import type { LiveState } from '../../coach/types';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useAppStore } from '../../stores/appStore';
@@ -3022,8 +3022,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       void reviewSay(inner);
     };
 
-    void coachService
-      .ask(
+    // ONE COACH: the student's own words go through the same door as every
+    // other screen — the same reading, requests, language and proofs.
+    void dispatchCoachTurn(
         { surface: 'review', ask: question, liveState: reviewLiveState },
         {
           // WO-COACH-TEACHING-01: review chat now also wires the

@@ -344,8 +344,8 @@
 - `src/services/voiceFactsFidelity.test.ts:65`
 
 ### `explainPuzzleMoveGrounded` (function) — 2 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:649`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:740`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:650`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:746`
 
 ### `currentAskFromContent` (function) — 4 call sites
 - `src/services/coachApi.currentAsk.test.ts:31`

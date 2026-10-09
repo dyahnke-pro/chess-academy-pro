@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2554 lines · 68 exports · 36 importers · 38 tests · 15 audits**
+**2554 lines · 68 exports · 33 importers · 38 tests · 15 audits**
 
 ## Locked rules that govern this surface
 
@@ -40,13 +40,10 @@
 - `src/components/Coach/CoachAnalysePage.tsx`
 - `src/components/Coach/CoachChatPage.test.tsx`
 - `src/components/Coach/CoachGamePage.tsx`
-- `src/components/Coach/CoachGameReview.tsx`
 - `src/components/Coach/CoachTeachPage.test.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Coach/ExplainPositionSessionView.tsx`
 - `src/components/Coach/GameChatPanel.tsx`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx`
-- `src/components/Search/SmartSearchBar.tsx`
 - `src/services/groundedAnswer.opponentHypothetical.test.ts`
 - `src/services/puzzlesFamilyFallbackNotify.test.ts`
 - `src/services/puzzlesFamilyFallbackNotify.ts`

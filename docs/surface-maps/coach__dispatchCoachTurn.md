@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**462 lines · 15 exports · 14 importers · 9 tests · 2 audits**
+**462 lines · 15 exports · 17 importers · 9 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,10 +22,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Board/VoiceChatMic.tsx`
 - `src/components/Coach/CoachAnalysePage.tsx`
 - `src/components/Coach/CoachChatPage.tsx`
+- `src/components/Coach/CoachGameReview.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Coach/ExplainPositionSessionView.tsx`
 - `src/components/Coach/GameChatPanel.tsx`
 - `src/components/Openings/MasterclassCoachChat.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx`
+- `src/components/Search/SmartSearchBar.tsx`
 
 ## Exports and every call site
 
@@ -104,7 +107,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `isComputedAnswer` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:7469`
 
-### `dispatchCoachTurn` (function) — 34 call sites
+### `dispatchCoachTurn` (function) — 37 call sites
 - `src/coach/chatTurnRow.outcome.test.ts:39`
 - `src/coach/coachService.askReader.integration.test.ts:32`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:35`
@@ -133,11 +136,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Board/VoiceChatMic.tsx:484`
 - `src/components/Coach/CoachAnalysePage.tsx:232`
 - `src/components/Coach/CoachChatPage.tsx:284`
+- `src/components/Coach/CoachGameReview.tsx:3027`
 - `src/components/Coach/ExplainPositionSessionView.tsx:236`
 - `src/components/Coach/GameChatPanel.tsx:975`
 - `src/components/Coach/GameChatPanel.tsx:1346`
 - `src/components/Coach/GameChatPanel.tsx:1555`
 - `src/components/Openings/MasterclassCoachChat.tsx:81`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:733`
+- `src/components/Search/SmartSearchBar.tsx:335`
 - `src/test/kidIsolation.gate.test.ts:131`
 
 ### `shadowReadTurn` (function) — 0 call sites

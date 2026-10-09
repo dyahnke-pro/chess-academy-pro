@@ -160,9 +160,11 @@ describe('GameChatPanel', () => {
 
     render(<GameChatPanel {...defaultProps} onBoardAnnotation={onBoardAnnotation} />);
 
+    // A board question ("what squares matter?") is answered by code now and
+    // never reaches the model, so ask one the model phrases.
     const input = screen.getByTestId('chat-text-input');
     act(() => {
-      fireEvent.change(input, { target: { value: 'What squares matter?' } });
+      fireEvent.change(input, { target: { value: 'What should I play?' } });
     });
     act(() => {
       fireEvent.click(screen.getByTestId('chat-send-btn'));

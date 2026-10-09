@@ -18,7 +18,7 @@ import { useStudentRecord } from '../../hooks/useStudentRecord';
 import type { MethodHabit } from '../../services/methodBeat';
 import { voiceService } from '../../services/voiceService';
 import { explainPuzzleMoveGrounded } from '../../services/coachApi';
-import { coachService } from '../../coach/coachService';
+import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
 import type { LiveState } from '../../coach/types';
 import { getCoachMove, resolveConfig } from '../../services/coachPlaySession';
 import { opponentStrength, studentPlayingRating } from '../../services/engineStrength';
@@ -272,6 +272,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
   const [chatInput, setChatInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
   const [chatReply, setChatReply] = useState<string>('');
+  const [chatLine, setChatLine] = useState<WalkableLine | null>(null);
 
   // The tactic type for coaching — the RECORD's tag first (P4b: the persisted
   // tag IS the weakness bucket this puzzle lives in, so the coaching must name
@@ -705,6 +706,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     if (!question || chatLoading) return;
     setChatLoading(true);
     setChatReply('');
+    setChatLine(null);
     voiceService.stop();
     try {
       // The student's question runs through the FULL grounded coach spine over
@@ -726,11 +728,15 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
       };
       let reply = '';
       try {
-        const answer = await coachService.ask(
+        // ONE COACH: the student's own words go through the same door as every
+        // other screen — the same reading, requests, language and proofs.
+        const answer = await dispatchCoachTurn(
           { surface: 'standalone-chat', ask: question, liveState },
           { maxToolRoundTrips: 1 },
         );
         reply = (answer.text ?? '').replace(/\s*\[BOARD:[^\]]*\]/g, '').trim();
+        // The proof the answer gave is walkable under the reply.
+        setChatLine(answer.lines?.[0] ?? null);
       } catch {
         reply = '';
       }
@@ -1344,6 +1350,9 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
               <p className="text-sm text-theme-text bg-theme-accent/5 border border-theme-accent/30 rounded-lg p-3 mt-1" data-testid="puzzle-chat-reply">
                 {chatReply}
               </p>
+            )}
+            {chatLine && !chatLoading && (
+              <WalkLineButton line={chatLine} onWalk={lineWalk.walk} testId="puzzle-chat-walk-line-btn" />
             )}
           </div>
 

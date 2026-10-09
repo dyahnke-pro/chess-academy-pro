@@ -352,6 +352,7 @@ const GATE_TESTS = [
   // shrinks. Pairs with the one-line-reader gate.
   'src/test/outcomeSentences.gate.test.ts',
   'src/test/oneLineReader.gate.test.ts',
+  'src/test/oneCoachDoor.gate.test.ts',
   // 🔒 BUILT-BUT-UNWIRED GATE (David 2026-09-09) — every board-awareness
   // computer must reach the typed chat Q&A, not just automatic narration.
   // A new positionReadingService computer that no chat lane consumes (and

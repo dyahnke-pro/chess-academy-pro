@@ -32,7 +32,7 @@
 
 ### `Ask` (type) — 2 call sites
 - `src/components/Coach/CoachGamePage.tsx:5428`
-- `src/components/Coach/CoachGameReview.tsx:3839`
+- `src/components/Coach/CoachGameReview.tsx:3840`
 
 ### `Action` (type) — 1 call site
 - `scripts/audit-punish-gems-loop.mjs:821`
