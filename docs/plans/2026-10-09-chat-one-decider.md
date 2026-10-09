@@ -102,6 +102,41 @@ re-run on prod → delete the old path it replaces.
 - 27 turns is a small walk → P0's replay set is the real gate; the walk only
   sets the order.
 
+## The brain question (David 2026-10-09: "chat lanes need to route through the brain. Use the same computers as the narrations.")
+
+Measured in the code:
+- The narration's one board read (`computePositionFacts` → the decider) is
+  used by chat for only `plan` and `tactics` (`boardTurnAnswer.ts`) and two
+  catch-alls (`chatBoardRead`, `coachApi.ts:2192, 6918`). The ~80 regex lanes
+  in `coachApi.ts` / `groundedAnswer.ts` call it 0 times; they call their own
+  computers. So chat and narration can disagree about the same board.
+- The LLM role today: (1) the READER on turns the code reader misses
+  (DeepSeek, 1–3.4 s live, awaited before every answer); (2) TRANSLATION in
+  (up to 3 serial calls) and out (`voiceFacts` when the student's language is
+  not English). It writes NO English chat answer: ~130 answer sites pass
+  `preferRaw`, so the computed text is spoken as is. Narration DOES use the
+  model to phrase (`warm: true` in `useLiveCoach`, `usePhaseNarration`) — so
+  chat and narration sound like two coaches. Small talk is canned code. The
+  toolbelt / `[[ACTION]]` paths are still in the code; not seen firing live.
+
+Agreed: same computers. Changed: not the same SELECTOR.
+- Narration picks "what matters most now"; chat must answer "what was asked".
+  Live proof: the plan answer opened with "a knight move first; h3 will still
+  be there" — the narration's commit-the-pawn-last habit, said seconds
+  earlier, leaking into a chat answer.
+- The brain only fixes BOARD answers (14/18 already). Requests (2/9) are not
+  board questions; no narration computer answers "teach me the Italian".
+
+So: ONE READ per position, cached and shared (same facts, same proofs — chat
+and narration can never disagree); TWO SELECTORS over it (narration:
+importance; chat: kind + referent + seat); ONE voice layer (decision 4).
+P3 becomes "every board kind answers from the one read through the question
+selector"; the regex lanes' own computers are retired as each kind moves.
+
+Decision 4 for David: should chat answers go through the same model phrasing
+as narration (one voice; ~1 s + a model call per answer), or stay raw
+computed text (fast, but a second voice)?
+
 ## Decisions for David
 
 1. Order: requests first (P1–P2), board answers second (P3–P5)? Recommended —
