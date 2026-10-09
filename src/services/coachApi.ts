@@ -986,6 +986,11 @@ export async function callDeepseekWithTool(
   toolName: string,
   toolDescription: string,
   inputSchema: Record<string, unknown>,
+  /** Sampling temperature. Omitted = the provider default (1.0), which is
+   *  right for writing and WRONG for reading: the chat reader decides what a
+   *  turn means, and at 1.0 "how do I castle?" was read as a chess rule in
+   *  one run and as app help in the next (WO-CHAT-01, 2026-10-09). */
+  temperature?: number,
 ): Promise<unknown> {
   emitCoachLlmCallAudit({ grounded: false, intent: task });
   const client = new OpenAI({
@@ -1008,6 +1013,7 @@ export async function callDeepseekWithTool(
       },
     ],
     tool_choice: { type: 'function', function: { name: toolName } },
+    ...(temperature !== undefined ? { temperature } : {}),
     // Forced tool_choice is REJECTED in DeepSeek v4 thinking-mode (400
     // "Thinking mode does not support this tool_choice"). Structured
     // extraction never benefits from CoT, so always disable it here — this
@@ -2811,6 +2817,9 @@ export async function readChatTurnStructured(opts: {
       opts.toolName,
       opts.description,
       opts.schema,
+      // A reading is a decision, not prose: the same words must read the same
+      // way every time.
+      0,
     );
   } catch { return null; }
 }

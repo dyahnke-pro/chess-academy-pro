@@ -25,6 +25,7 @@ const curlReader: Reader = (opts) => new Promise((resolve) => {
     messages: [{ role: 'system', content: opts.system }, { role: 'user', content: opts.user }],
     tools: [{ type: 'function', function: { name: opts.toolName, description: opts.description, parameters: opts.schema } }],
     tool_choice: { type: 'function', function: { name: opts.toolName } },
+    temperature: 0,
     thinking: { type: 'disabled' },
   });
   execFile('curl', ['-s', '--max-time', '30', 'https://api.deepseek.com/chat/completions',

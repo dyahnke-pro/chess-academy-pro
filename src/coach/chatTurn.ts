@@ -329,14 +329,14 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   'training-request': { gloss: 'asks to set up a kind of training', lane: 'training-request', answerer: 'live', canonical: null },
 
   // ── knowledge ──
-  concept: { gloss: 'what is a chess concept (a fork, a pin, zugzwang)', lane: 'concept', answerer: 'live',
+  concept: { gloss: 'what is a chess concept or RULE, or how a rule works (a fork, a pin, zugzwang; "how do I castle?", "how does en passant work?")', lane: 'concept', answerer: 'live',
     canonical: (t) => topicOr(t, (x) => `what's a ${x.replace(/^(?:a|an|the)\s+/i, '')}?`, null) },
   theory: { gloss: 'general how-to strategy ("how do I play against an isolated pawn")', lane: 'theory', answerer: 'live',
     canonical: (t) => topicOr(t, (x) => `how do I play against ${x}?`, null) },
   'teaching-method': { gloss: 'how the coach would teach something', lane: 'teaching-method', answerer: 'live',
     canonical: (t) => topicOr(t, (x) => `how do you teach the ${x}?`, null) },
   settings: { gloss: 'asks what a setting is set to', lane: 'settings', answerer: 'live', canonical: fixed('is voice on?') },
-  'app-help': { gloss: 'how to use the app', lane: 'app-help', answerer: 'live', canonical: fixed('what can you do?') },
+  'app-help': { gloss: 'how to use THIS APP — its pages, buttons and features, or what the coach can do (never a chess rule: "how do I castle?" is a concept)', lane: 'app-help', answerer: 'live', canonical: fixed('what can you do?') },
   'name-opening': { gloss: 'what opening is this', lane: 'name-opening', answerer: 'live', canonical: fixed('what opening is this?') },
   'opening-identity': { gloss: 'what is a named opening', lane: 'opening-identity', answerer: 'live', canonical: null },
   'opening-existence': { gloss: 'does a named opening exist', lane: 'opening-existence', answerer: 'live',

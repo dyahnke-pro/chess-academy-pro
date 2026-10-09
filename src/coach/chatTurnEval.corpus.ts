@@ -6,6 +6,12 @@ import type { ChatTurnEvalCase } from './chatTurnEval';
 
 export const CHAT_TURN_EVAL_CASES: readonly ChatTurnEvalCase[] = [
   // ── the board, now ──
+  // ── rules vs the app (live walk 2026-10-09: "how do I castle?" read as app help) ──
+  { text: 'how do I castle?', expect: ['concept'], probe: 'plain' },
+  { text: 'how does en passant work', expect: ['concept'], probe: 'plain' },
+  { text: 'how do I promote a pawn', expect: ['concept'], probe: 'indirect' },
+  { text: 'how do I turn on hints in this app', expect: ['app-help', 'command'], probe: 'plain' },
+  { text: 'what can you do for me', expect: ['app-help'], probe: 'indirect' },
   { text: 'what would you play here if you were me', expect: ['best-move', 'what-should-i-play'], probe: 'indirect' },
   { text: 'whats the strongest continuation', expect: ['best-move', 'what-should-i-play'], probe: 'plain' },
   { text: 'bset move pls', expect: ['best-move', 'what-should-i-play'], probe: 'typo' },
