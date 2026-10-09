@@ -21,6 +21,9 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000f. WO-CHAT-01 — chat Q&A: one decider (review 2026-10-09, `docs/plans/2026-10-09-chat-one-decider.md`)
+- 🟠 plan written, waits for David's go + 3 decisions (who first, latency budget, P0 instrumentation) · 🔴 reading thrown away (73/77 kinds re-worded into the regex chain) · 🔴 four readers, no decider · 🔴 parser translation unused; Learn translated asks bypass the door · 🔴 read awaited serially (1.1–2.1 s) · 🔴 toolbelt/[[ACTION]]/banter still live · 🟠 no native chat-turn data; PostHog gets summary only · 🟡 answer extras via module globals
+
 ## 000e. WO-UNITY-01 — one decider per question, Review keeps its identity (David 2026-10-07: "total unity wherever possible … step one is unification")
 - ✅ U1–U10 all landed 2026-10-07/08 (status in `docs/plans/2026-10-07-unity-step-one.md`) · 🔴 step 6: walk Learn AND Review on fresh games, every claim counted, then the ~27 non-unity errors by cause · 🟠 U10 lead order unconfirmed on a walk
 
