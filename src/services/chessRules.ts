@@ -36,7 +36,11 @@ const NAME_ONLY: ReadonlySet<ChessRule> = new Set<ChessRule>(['en-passant', 'sta
 /** "Castle", "check" and "mate" are also everyday move words ("castle here?",
  *  "is that check?"), so for them only a request for the RULE itself counts:
  *  what it is, how it works, what it means, the rules of it. */
-const DEFINITION_ASK_RE = /\b(?:what(?:'s|\s+is|\s+are|\s+does)|how\s+(?:does|do)\b[^?]*\bwork|explain|define|definition|meaning|mean|rules?\b)/i;
+// "How do I castle?" / "how to promote" ask how the rule WORKS — the same
+// question as "what is castling?" (WO-CHAT-01: it was read right as a rule
+// question and still got a book passage, because only definition wording
+// matched here).
+const DEFINITION_ASK_RE = /\b(?:what(?:'s|\s+is|\s+are|\s+does)|how\s+(?:does|do)\b[^?]*\bwork|how\s+(?:do|can|could|should|would)\s+(?:i|you|we|one)\b|how\s+to\b|explain|define|definition|meaning|mean|rules?\b)/i;
 
 export function ruleAsked(ask: string): ChessRule | null {
   const t = ask.replace(/[\u2018\u2019]/g, "'");

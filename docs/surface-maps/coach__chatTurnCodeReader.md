@@ -54,8 +54,9 @@
 ### `legalForOpponent` (function) — 1 call site
 - `src/coach/coachService.ts:1596`
 
-### `readTurnInCode` (function) — 39 call sites
+### `readTurnInCode` (function) — 40 call sites
 - `src/coach/chatTurnAnswers.test.ts:78`
+- `src/coach/chatTurnAnswers.test.ts:99`
 - `src/coach/chatTurnCodeReader.test.ts:10`
 - `src/coach/chatTurnParser.ts:185`
 - `src/coach/developNext.test.ts:24`

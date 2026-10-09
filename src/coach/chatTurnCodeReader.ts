@@ -388,7 +388,7 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
   // is the ATTACKER, the subject of the verb, not its target (live replay
   // 2026-10-09: read as "can I attack f6?" and answered "nothing of yours can
   // get at their pawn on f6"). A question about what one piece does.
-  const subjectAttack = /\bwhat\s+(?:does|is|can|will|could)\s+(?:the\s+|their\s+|my\s+|that\s+)?(?:(?:pawn|knight|bishop|rook|queen|king)\s+on\s+)?(?:[a-h][1-8]|pawn|knight|bishop|rook|queen|king|[nbrqk][a-h]?[1-8]?x?[a-h][1-8])\s+(?:attack|hit|target|eye|aim)/i;
+  const subjectAttack = /\bwhat\s+(?:does|is|can|will|could)\s+(?:the\s+|their\s+|my\s+|that\s+)?(?:(?:pawn|knight|bishop|rook|queen|king)\s+on\s+)?(?:[a-h][1-8]|pawn|knight|bishop|rook|queen|king|[nbrqk][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8])\s+(?:attack|hit|target|eye|aim)/i;
   if (subjectAttack.test(text)) {
     let sq: string | null = slots.squares[0] ?? null;
     if (!sq && slots.sans.length === 1) {

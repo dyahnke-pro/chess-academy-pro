@@ -87,3 +87,17 @@ describe('what a piece attacks, when it attacks nothing (live replay B12)', () =
     expect(answerAboutPiece(new Chess(fen), 'e5' as never, 'w')).toMatch(/It attacks nothing of yours right now; it covers d4 and f4\./);
   });
 });
+
+describe('the rule asked as "how do I…" (live replay B18)', () => {
+  it('"how do I castle?" gets the castling rule, not a passage about castling early', async () => {
+    const { answerRuleQuestion } = await import('../services/chessRules');
+    expect(answerRuleQuestion('how do I castle?', null, 'w')?.facts).toMatch(/two squares toward a rook/);
+    expect(answerRuleQuestion('how to promote a pawn', null, 'w')?.rule).toBe('promotion');
+  });
+  it('"what does exf3 attack?" is about the pawn on f3', () => {
+    const fen = 'rnbqkbnr/ppp2ppp/8/8/2B5/5p2/PPPP1PPP/RNBQK2R w KQkq - 0 4';
+    const t = readTurnInCode('what does exf3 attack?', { fen, history: ['e4', 'd5', 'Nf3', 'dxe4', 'Bc4', 'exf3'], studentColor: 'white' });
+    expect(t?.kind).toBe('what-about-piece');
+    expect(t?.referents).toEqual([{ type: 'square', square: 'f3' }]);
+  });
+});
