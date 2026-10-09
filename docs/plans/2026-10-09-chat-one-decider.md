@@ -1,109 +1,116 @@
-# Chat Q&A — one decider (review + plan, 2026-10-09)
+# Chat Q&A — one decider (plan, 2026-10-09, from the LIVE build)
 
-David: "review the build, make sure it's the right strategy, and identify first
-principle issues preventing it from working." Plan stage only — no code until go.
+David: "use the current build to see how it works. Then make a plan. You can't
+plan a build or fix from old code." This plan is built on the hand walk of
+prod `2c0fc28`: `audit-reports/hand-walk-chat-qa-2026-10-09.md`. Plan stage —
+no code until go.
 
-## Verdict
+## What the live app does
 
-The strategy is right: the model only READS a turn into a closed form, code
-answers (G0). The build never made the switch: the reading sits on top of the
-old regex router, which still decides most answers.
+| | asked | right |
+|---|---|---|
+| Board questions (Learn) | 18 | 14 |
+| Requests — what real App Store users actually type | 9 | 2 |
 
-## First-principle issues (measured, file:line)
+Real native users, 60 days (PostHog): ~20 typed turns, mostly Thai/German,
+mostly requests ("teach me the Italian", "make a plan", "reset and teach me",
+"can I start now?"). The build is tuned for board questions; the users send
+requests.
 
-1. **The reading is thrown away.** 73 of 77 kinds go through `canonicalAsk`
-   (`chatTurn.ts:632`): the decoded turn is turned back into a fixed English
-   sentence and re-routed by the ~80-branch if-chain (`coachApi.ts:4046–6617`).
-   Only 5 kinds are answered from the reading itself
-   (`BOARD_ANSWERED_KINDS`, `boardTurnAnswer.ts:33`) + 1 `direct`. The lanes
-   re-read the raw text 142 times (`lastUserMessage()`).
-2. **Four readers, no single decider.** `buildQuestionGrounding` (56 flags),
-   `chatTurnCodeReader` (514 lines), the model reader, and `positionalTopic`
-   which runs BEFORE the reading and overrides it
-   (`dispatchCoachTurn.ts` ~265). Tape (295 rows, 30d): code reader vs fast
-   path disagreed 22/25; model vs fast path 62/153.
-3. **Tuned for the wrong users.** Real native App Store users, 60 days: ~20
-   typed turns, mostly Thai/German, mostly REQUESTS ("teach me the Italian",
-   "make me a plan", "reset the board", "go ahead"). No "why is X best". The
-   246-question replay is web (incl. David's testing).
-4. **Language broken at the seams.** The reader translates (`english`) and it
-   is never used; up to three serial `translateToEnglish` calls follow
-   (router, settings, `coachService`); regex runs on raw text. In Learn a
-   translated/rewritten ask BYPASSES the door entirely
-   (`CoachTeachPage.tsx:6863`, `viaDoor = effectiveAsk === text`).
-5. **Latency is serial, not parallel.** With the flag on, every turn awaits
-   the read first (tape: 1.1–2.1 s, timeout 6 s), then translation, then
-   engine.
-6. **Free-model paths still live.** Toolbelt + `[[ACTION]]` loop
-   (`coachService.ts`), banter lane — ONE-CHAT step 6 never done. Real case
-   (pre-door build, 2026-09-16): a user asked "teach me the Italian" ~8× in
-   8 min; the model fired start_walkthrough/navigate each time, same
-   139-char reply, nothing the user could see changed.
-7. **No measurement of success.** PostHog gets only a `summary` string for
-   `coach_turn_read`; zero native rows; the 107/107 eval scores the KIND, not
-   whether the answer answered.
-8. **Answer extras through module globals** (`lastServedIntent`,
-   `lastCoachLines`, `lastCoachActionOffer`, `coachApi.ts` ~700–740), read
-   after an await — a concurrent hint/narration call can attach the wrong
-   arrows/chips.
-9. **Learn is a second chat.** `handleSubmit` is ~3,600 lines
-   (`CoachTeachPage.tsx:3274–6865`) with ~87 early returns before the door.
+## Causes (each seen live, each with its code site)
 
-## Target shape
+1. **A right reading does not reach an answer.** B11 "can they attack my
+   bishop?" and B12 "what does Bc5 attack?" were read correctly
+   (`attack-piece`) and answered by other lanes. A kind whose answerer returns
+   null falls silently to the regex chain (`dispatchCoachTurn.ts` → `canonicalAsk`
+   → `coachApi.ts:4046–6617`), which re-decides from the words. 73 of 77 kinds
+   route that way.
+2. **The kind table is one-seat, one-intent.** `attack-piece` is only "I attack
+   them"; no slot for "they attack me". A turn is one kind, so "reset the board
+   and teach me the Italian" did the first half only (R8).
+3. **Requests are decided by the phrase router, not the reading.** Opening
+   names are captured from raw words: "teach me" → opening "me" (R5), the Thai
+   request's translation "Italian Opening" → "did you mean Ware?" (R2). The
+   reader's `topic` is never used.
+4. **Conversation memory does not carry.** "can I start now?" lost the pending
+   offer (R7); "and why not d4?" lost the move (B8).
+5. **Language is not a property of the turn.** A German question was answered
+   in Thai (R3). The reader's own translation is discarded; three more
+   translate calls run serially elsewhere.
+6. **The answer layer breaks the voice rules.** First person on the opponent's
+   move ("my bishop… my move", B7/B12). No arrow on any named move (~20
+   answers). "Hanging" answered as "unguarded" (B13).
+7. **Latency.** The read is awaited before anything (1.0–3.4 s live); a fresh
+   position's engine answer takes 13–16 s.
 
-```
-words ─► READ (code reader first, model on miss; ONE ChatTurn form, english kept)
-      ─► VALIDATE on the board
-      ─► Record<ChatKind, Answerer(turn, ctx)>   ← the only decider
-      ─► answer object {text, lines, offer, servedKind}  (no globals)
-```
+Underneath 1–4 is ONE fact: there are four readers (regex grounding, the code
+reader, the model reader, the positional-topic override) plus Learn's ~87
+early returns in `handleSubmit`, and no single decider. The model reader is
+right more often than the router that overrides it.
 
-The regex is KEPT as a producer of ChatTurn (instant, free, offline) — never
-as a decider. The assemblers (`groundedAnswer.ts`) are KEPT — they are the
-computers; only the routing chain goes.
+## The fix in one line
 
-## Phases (each: build → tests → real-utterance replay → delete the old path)
+The reading decides. Every turn becomes a list of typed intents
+(`ChatTurn[]`), each answered by `Record<ChatKind, Answerer(turn, ctx)>`; the
+regex only PRODUCES readings (instant, free, offline), never routes. The
+answer computers (`groundedAnswer.ts` assemblers) are kept.
 
-- **P0 Measure first.** Forward every `chat-turn` field to PostHog; truth set
-  from REAL native utterances (all languages) + the tape, graded on "answered
-  what was asked / action actually happened", not kind; confirm which build
-  iOS users run (the door may not be on native).
-- **P1 One reader.** Code reader and model reader emit the same form;
-  `positionalTopic` becomes a field of the reading; use the reader's
-  `english`, delete the serial translations; give the model a minimal board
-  summary (side to move, piece list) so it resolves "the knight" (today
-  `piece-ambiguous` invalids).
-- **P2 One dispatch table**, migrated by REAL-USER frequency: commands /
-  lesson requests → conversational replies → plan / teach-me → board kinds.
-  Per kind: adapter takes the typed turn, `canonicalAsk` entry deleted, its
-  if-chain branch deleted. Done when the chain is gone.
-- **P3 Actions follow through.** Command kinds → `actuate`; words built from
-  the result; delete toolbelt, `[[ACTION]]`, banter for student turns
-  (ledger rows green first, per ONE-CHAT FINAL).
-- **P4 Learn onto the door.** Its routers become Learn's registered readers
-  producing ChatTurns; a translated ask no longer bypasses.
-- **P5 Extras on the answer object**, globals deleted.
+## Phases — ordered by what real users hit
+
+Each phase: build → fail-on-old tests from the walk's own turns → hand-walk
+re-run on prod → delete the old path it replaces.
+
+- **P0 Measure (small).** Forward every `chat-turn` field to PostHog (today a
+  summary string only; zero native rows). Turn this walk's 27 turns + the
+  real native utterances into a replay set graded on "answered / action done
+  / right language", not on kind.
+- **P1 Requests work.** Command and lesson kinds read their opening/topic from
+  the READING through the one opening resolver ("Italian" / "Italian Opening"
+  / Thai → Italian Game); compound turns become a list run in order (reset →
+  teach); the pending offer is a stored ChatTurn that "yes / can I start now?"
+  runs; "make me a plan" offers the Training Plan page; a bare username offers
+  the import. Fixes R2, R5–R9.
+- **P2 One language per turn.** The reader's `english` is the text every
+  later step reads; the reply language is the turn's language; the three
+  serial translate calls go. Fixes R3.
+- **P3 Every reading reaches its answerer.** Seat becomes a field, not part of
+  the kind (attack/defend/win × me/them); a kind with no answer for a case
+  says so honestly instead of falling into the chain; migrate the 73
+  `canonicalAsk` kinds to answerers that take the typed turn, one at a time,
+  deleting each regex branch as it moves. Done when the if-chain is gone.
+  Fixes B11, B12, B13 and the class.
+- **P4 Follow-ups.** The last subject (move / piece / side) rides the
+  conversation state into the next reading. Fixes B8.
+- **P5 Answer contract.** Arrows on every named move, coach never "I/my",
+  extras on the returned answer object (not module globals). Fixes B7 and the
+  arrows.
+- **P6 Latency.** The code reader answers the common turns with no model call;
+  the model read only on a miss; engine reads warmed on each new position.
+  Target: first words ≤ 2 s on a warm position.
+- **P7 Learn onto the one door**, its routers as readers.
+- **P8 Delete** the model toolbelt, `[[ACTION]]` and banter paths for student
+  turns once P1's commands cover them.
 
 ## Pushback on this plan
 
-- Deleting the chain risks the 554-phrasing matrix built over months →
-  mitigated: regex stays as a reader, one kind at a time, matrix re-run each
-  step.
-- Model read on every non-code turn costs ~1.5 s → the code reader must catch
-  the common cases; measure p90 per phase.
-- Board summary to the reader is not the model deciding chess — it reads
-  which piece was named; no eval, no moves.
+- Deleting the regex chain risks the 554-phrasing set built over months →
+  regex stays as a reader feeding the same form; one kind at a time; the set
+  is re-run each step.
+- The model reader is wrong too (R1 read as a thinking lesson) → readings
+  are validated on the board, and a low-confidence reading asks back with
+  chips instead of guessing.
+- 27 turns is a small walk → P0's replay set is the real gate; the walk only
+  sets the order.
 
 ## Decisions for David
 
-1. Optimise for real users' turns (requests, any language) first, or board
-   questions first?
-2. Latency budget per turn?
-3. P0 needs instrumentation code — OK as the first build?
+1. Order: requests first (P1–P2), board answers second (P3–P5)? Recommended —
+   that is what real users hit.
+2. Latency target: first words ≤ 2 s on a warm position?
+3. OK to start with P0 (logging + replay set)?
 
 ## Acceptance
 
-Real-utterance replay: ≥80% answered / action done, 0 stock lines, 0 actions
-the words don't describe, every language; `DEGRADE=llm` no stock line; one
-model call max per turn; full `chat-turn` fields visible in PostHog incl.
-native.
+Replay set: ≥ 90% answered / action done in the right language, 0 actions the
+words don't describe, 0 stock lines; walk re-run: the 13 ❌ turns all ✅; first
+words ≤ 2 s warm.

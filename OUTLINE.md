@@ -21,8 +21,8 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
-## 000f. WO-CHAT-01 — chat Q&A: one decider (review 2026-10-09, `docs/plans/2026-10-09-chat-one-decider.md`)
-- 🟠 plan written, waits for David's go + 3 decisions (who first, latency budget, P0 instrumentation) · 🔴 reading thrown away (73/77 kinds re-worded into the regex chain) · 🔴 four readers, no decider · 🔴 parser translation unused; Learn translated asks bypass the door · 🔴 read awaited serially (1.1–2.1 s) · 🔴 toolbelt/[[ACTION]]/banter still live · 🟠 no native chat-turn data; PostHog gets summary only · 🟡 answer extras via module globals
+## 000f. WO-CHAT-01 — chat Q&A: one decider (live walk 2026-10-09, `docs/plans/2026-10-09-chat-one-decider.md`, `audit-reports/hand-walk-chat-qa-2026-10-09.md`)
+- 🟠 plan waits for David's go + 3 decisions · live walk on prod 2c0fc28: board questions 14/18, requests 2/9 · 🔴 P1 requests (opening "me", "Italian"→Ware, compound turn half-done, pending offer lost) · 🔴 P2 language sticky across turns · 🔴 P3 right reading → wrong lane (one-seat kinds, 73 kinds re-worded into the regex chain) · 🔴 P4 follow-ups lose the subject · 🔴 P5 no arrows on named moves, coach says "my bishop" · 🟠 P6 read 1–3.4 s serial, engine 13–16 s · 🟠 P0 PostHog gets a summary only, no native rows
 
 ## 000e. WO-UNITY-01 — one decider per question, Review keeps its identity (David 2026-10-07: "total unity wherever possible … step one is unification")
 - ✅ U1–U10 all landed 2026-10-07/08 (status in `docs/plans/2026-10-07-unity-step-one.md`) · 🔴 step 6: walk Learn AND Review on fresh games, every claim counted, then the ~27 non-unity errors by cause · 🟠 U10 lead order unconfirmed on a walk
