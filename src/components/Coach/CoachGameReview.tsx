@@ -72,6 +72,7 @@ import { useReviewEngineLines } from '../../hooks/useReviewEngineLines';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { CoachBoardBar } from '../Board/CoachBoardBar';
 import { useBoardFit } from '../../hooks/useBoardFit';
+import { useLineWalk } from '../../hooks/useLineWalk';
 import { computeWhyBestMoveDetail } from '../../services/whyBestMove';
 import { SkipBack, SkipForward, Cpu, BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -2290,6 +2291,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const questionOpen = !!shotState || !!theoryState;
   /** The board gives up height so the board bar stays on screen (phones). */
   const boardFit = useBoardFit(walkPlayback.currentPly);
+  // THE ONE LINE WALKER: a line an answer proved plays out on the review
+  // board, then the board returns to the ply (one coach — the same proof
+  // every screen with a board can walk).
+  const lineWalk = useLineWalk(playerColor, 'review.lineWalk');
   const barFen = useMemo<string>(() => {
     const seg = walkPlayback.currentSegment;
     if (seg) return seg.fenAfter;
@@ -3103,6 +3108,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             prevText.trim().length > 0
               ? prevText
               : (spokenDisplayText.trim() || answer.text.replace(VOICE_MARKER_RE, '').trim()));
+          if (answer.lines && answer.lines.length > 0) {
+            const lines = answer.lines;
+            setAskMessages((prev) => prev.map((m) => (m.id === assistantId ? { ...m, lines } : m)));
+          }
         }
       })
       .catch((err: unknown) => {
@@ -3407,12 +3416,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // THE BOARD IS FREE on every ply (David 2026-09-05). Only a playout that
       // drives the board itself (show-me / sequence / theory) locks it —
       // no mid-animation drags. Everywhere else a piece moved = exploring.
-      const walkBoardInteractive = !(walkShowMeActive || theoryState?.stage === 'playback');
+      const walkBoardInteractive = !(walkShowMeActive || theoryState?.stage === 'playback' || lineWalk.walkFen);
       // During a find-the-shot the board MUST sit on the shot's own position
       // (the pre-move FEN where the better move is legal) — otherwise it shows
       // the position AFTER the played move and the answer can't be played at
       // all (David 2026-07-20: "unable to click on the square to answer").
-      const walkDisplayFen = shotState ? shotState.challenge.fen : (walkExplorationFen ?? displayFen);
+      const walkDisplayFen = lineWalk.walkFen ?? (shotState ? shotState.challenge.fen : (walkExplorationFen ?? displayFen));
       const badge = seg?.classification ?? null;
       // Authoritative nav ceiling = the full game length, not the
       // segments' trailing ply. The LLM frequently truncates segment
@@ -3612,11 +3621,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   // clean remount when entering/exiting exploration so
                   // any chess.js move history accumulated during
                   // exploration is wiped.
-                  key={`walk-board-${walkExplorationFen ? 'expl' : 'live'}-${shotState ? 'shot' : 'nshot'}${shotBoardEpoch}`}
+                  key={`walk-board-${lineWalk.walkFen ? 'line' : walkExplorationFen ? 'expl' : 'live'}-${shotState ? 'shot' : 'nshot'}${shotBoardEpoch}`}
                   initialFen={walkDisplayFen}
                   orientation={playerColor}
                   interactive={walkBoardInteractive}
-                  arrows={walkArrows}
+                  arrows={lineWalk.walkFen ? lineWalk.walkArrows : walkArrows}
                   // Eval bar parity with Learn-with-Coach: pass the
                   // segment's per-ply evaluation through so the user
                   // can see the position eval as they walk forward.
@@ -4238,6 +4247,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                         key={m.id}
                         message={m}
                         isStreaming={isAskStreaming && m.role === 'assistant' && i === askMessages.length - 1}
+                        onWalkLine={lineWalk.walk}
                       />
                     ))}
                     <div ref={askScrollEndRef} />

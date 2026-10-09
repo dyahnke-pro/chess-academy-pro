@@ -29,7 +29,9 @@ import { SENTENCE_END_RE, sanitizeCoachText, unwrapSpineError } from '../../serv
 import { logAppAudit } from '../../services/appAuditor';
 import { useAppStore } from '../../stores/appStore';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
-import type { StockfishAnalysis } from '../../types';
+import type { StockfishAnalysis, WalkableLine } from '../../types';
+import { WalkLineButton } from '../Board/WalkLineButton';
+import { useLineWalk } from '../../hooks/useLineWalk';
 import type { TacticsLiveContext } from '../../coach/types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
@@ -56,6 +58,9 @@ export function ExplainPositionSessionView({
   const [explanation, setExplanation] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [voiceMuted, setVoiceMuted] = useState<boolean>(true);
+  // The line the last answer proved, walkable on this board (one coach).
+  const [answerLine, setAnswerLine] = useState<WalkableLine | null>(null);
+  const lineWalk = useLineWalk(orientation, 'explain.lineWalk');
   const mountedRef = useRef<boolean>(true);
   // Streaming-voice dispatcher: same pattern as CoachAnalysePage.
   // First sentence speaks ~500ms after first
@@ -205,6 +210,8 @@ export function ExplainPositionSessionView({
     async (question: string) => {
       if (!analysis) return;
       setLoading(true);
+      setAnswerLine(null);
+      lineWalk.clear();
       voiceService.stop();
       tacticsRef.current = null; // reset until this ask's tactics is built
       dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE, undefined, () => targetFen, () => tacticsRef.current);
@@ -263,6 +270,7 @@ export function ExplainPositionSessionView({
       const finalText = unwrapSpineError(result.text);
       // An answer the door computed does not stream: show it whole.
       if (finalText && !response) show(finalText);
+      setAnswerLine(result.lines?.[0] ?? null);
       if (!finalText) {
         void logAppAudit({
           kind: 'llm-error',
@@ -276,7 +284,7 @@ export function ExplainPositionSessionView({
       }
       setLoading(false);
     },
-    [targetFen, analysis, activeProfile, voiceMuted, pushAccumulated],
+    [targetFen, analysis, activeProfile, voiceMuted, pushAccumulated, lineWalk],
   );
 
   const evalDisplay = analysis
@@ -331,7 +339,8 @@ export function ExplainPositionSessionView({
       header={header}
       board={
         <ConsistentChessboard
-          fen={targetFen}
+          fen={lineWalk.walkFen ?? targetFen}
+          {...(lineWalk.walkFen ? { arrows: lineWalk.walkArrows, showLastMoveHighlight: true } : {})}
           boardOrientation={orientation}
           interactive={false}
         />
@@ -357,6 +366,9 @@ export function ExplainPositionSessionView({
               >
                 {explanation}
               </p>
+            )}
+            {answerLine && !loading && (
+              <div className="mt-2"><WalkLineButton line={answerLine} onWalk={lineWalk.walk} testId="explain-walk-line-btn" /></div>
             )}
           </motion.div>
         ) : undefined

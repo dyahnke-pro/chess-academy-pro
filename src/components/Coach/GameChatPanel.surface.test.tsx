@@ -33,6 +33,7 @@ vi.mock('../../services/voiceInputService', () => ({
 }));
 vi.mock('../../coach/dispatchCoachTurn', () => ({
   dispatchCoachTurn: (...args: unknown[]): Promise<unknown> => mockDispatch(...args) as Promise<unknown>,
+  openTurnRead: (): null => null,
 }));
 
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';

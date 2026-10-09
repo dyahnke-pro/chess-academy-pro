@@ -1216,6 +1216,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
           <div className="flex-1 min-h-0 overflow-hidden">
             <GameChatPanel
               fen={game.fen}
+              onWalkLine={lineWalk.walk}
               getLiveFen={game.getFen}
               pgn={game.history.join(' ')}
               moveNumber={moveCountRef.current}

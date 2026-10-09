@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { MessageCircle, X } from 'lucide-react';
 import { ChatMessage } from '../Coach/ChatMessage';
 import { ChatInput } from '../Coach/ChatInput';
+import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { useLineWalk } from '../../hooks/useLineWalk';
 import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
 // groundCoachReply import removed — the spine grounds the answer (David 2026-07-09).
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
@@ -32,6 +34,11 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
   const scope = useMemo(() => buildCourseScope(openingId, variationName), [openingId, variationName]);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  // A line an answer proved walks on a small board in this panel — the
+  // lesson board behind it belongs to the lesson (one coach: every screen
+  // can play the proof out).
+  const walkSide: 'white' | 'black' = useCoachBoardStore.getState().studentColor ?? 'white';
+  const lineWalk = useLineWalk(walkSide, 'masterclass.lineWalk');
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [busy, setBusy] = useState(false);
 
@@ -101,6 +108,7 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
             role: 'assistant',
             content: grounded,
             timestamp: Date.now(),
+            ...(answer.lines && answer.lines.length > 0 ? { lines: answer.lines } : {}),
             // Opt-in follow-up picker the grounded answer attached (David
             // 2026-07-04) — tappable chip, never auto-launched.
             ...(answer.actionOffer && answer.actionOffer.length > 0 ? { metadata: { actions: answer.actionOffer } } : {}),
@@ -140,8 +148,13 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
         </button>
       </div>
       <div className="flex-1 min-h-0 overflow-y-auto px-3 py-2 space-y-2">
+        {lineWalk.walkFen && (
+          <div className="w-48 mx-auto" data-testid="masterclass-walk-board">
+            <ConsistentChessboard fen={lineWalk.walkFen} arrows={lineWalk.walkArrows} interactive={false} boardOrientation={walkSide} showLastMoveHighlight />
+          </div>
+        )}
         {messages.map((m) => (
-          <ChatMessage key={m.id} message={m} />
+          <ChatMessage key={m.id} message={m} onWalkLine={lineWalk.walk} />
         ))}
         {busy && <p className="text-xs text-theme-text-muted px-2">Coach is thinking…</p>}
       </div>

@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor, act } from '../../test/utils';
 import { CoachAnalysePage } from './CoachAnalysePage';
 import { useAppStore } from '../../stores/appStore';
 import { buildUserProfile } from '../../test/factories';
+import { walkableLine } from '../../services/proof';
 
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
@@ -92,5 +93,16 @@ describe('CoachAnalysePage', () => {
     await waitFor(() => expect(screen.getByTestId('coach-explanation')).toHaveTextContent('The best move is e4.'));
     expect((mockDispatch.mock.calls[0][0] as { ask: string }).ask).toBe("what's the best move here?");
     expect(screen.getByTestId('coach-explanation')).not.toHaveTextContent('[BOARD:');
+  });
+
+  // One coach: the line an answer proved is walkable on every screen with a
+  // board — Analyse dropped it.
+  it('an answer that proved a line gets a walk button', async () => {
+    const line = walkableLine('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', ['e4', 'e5'], 'e4');
+    mockDispatch.mockResolvedValue({ text: 'The best move is e4.', lines: [line] });
+    render(<CoachAnalysePage />);
+    act(() => { fireEvent.change(screen.getByTestId('chat-text-input'), { target: { value: "what's the best move here?" } }); });
+    act(() => { fireEvent.click(screen.getByTestId('chat-send-btn')); });
+    await waitFor(() => expect(screen.getByTestId('analyse-walk-line-btn')).toBeInTheDocument());
   });
 });

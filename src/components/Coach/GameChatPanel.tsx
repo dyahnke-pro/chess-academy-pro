@@ -26,7 +26,7 @@ import { logAppAudit } from '../../services/appAuditor';
 import { voiceService } from '../../services/voiceService';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
-import type { ChatMessage as ChatMessageType, BoardAnnotationCommand } from '../../types';
+import type { ChatMessage as ChatMessageType, BoardAnnotationCommand, WalkableLine } from '../../types';
 import { uid } from '../../utils/uid';
 import { registerCoachHands, actuate, actionForCommand } from '../../services/coachActuator';
 import { readSpokenSquares } from '../../services/spokenSquares';
@@ -60,6 +60,9 @@ function extractCoachChoices(raw: string): string[] | null {
 
 interface GameChatPanelProps {
   fen: string;
+  /** Walk a line an answer proved on this screen's board (the answer's
+   *  `lines`). Absent: the screen has no board to walk it on. */
+  onWalkLine?: (line: WalkableLine) => void;
   /**
    * Live FEN getter off the underlying chess.js instance. `fen` (above) is
    * a React snapshot that lags the true board by a render, so building the
@@ -200,6 +203,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
   function GameChatPanel(
     {
       fen,
+      onWalkLine,
       getLiveFen,
       playerColor,
       isGameOver,
@@ -1274,6 +1278,9 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             role: 'assistant',
             content: assistantText,
             timestamp: Date.now(),
+            // The lines the answer proved — walkable on the board (one coach:
+            // the same proof every screen with a board can play out).
+            ...(answer.lines && answer.lines.length > 0 ? { lines: answer.lines } : {}),
             metadata: {
               annotations: annotations.length > 0 ? annotations : undefined,
               // Opt-in follow-up picker the grounded answer attached
@@ -1564,6 +1571,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           role: 'assistant',
           content: drawerAssistantText,
           timestamp: Date.now(),
+          ...(answer.lines && answer.lines.length > 0 ? { lines: answer.lines } : {}),
           // Opt-in follow-up picker the grounded answer attached
           // (David 2026-07-04) — tappable chip, never auto-launched.
           ...(answer.actionOffer && answer.actionOffer.length > 0
@@ -1691,7 +1699,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                   : { opacity: 0.7 }
               }
             >
-              <ChatMessage message={msg} />
+              <ChatMessage message={msg} {...(onWalkLine ? { onWalkLine } : {})} />
             </div>
           ))}
 

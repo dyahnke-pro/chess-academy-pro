@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor, act } from '../../test/utils';
 import { ExplainPositionSessionView } from './ExplainPositionSessionView';
 import { useAppStore } from '../../stores/appStore';
 import { buildUserProfile } from '../../test/factories';
+import { walkableLine } from '../../services/proof';
 
 vi.mock('../../services/voiceService', () => ({
   voiceService: { speak: vi.fn().mockResolvedValue(undefined), speakIfFree: vi.fn().mockResolvedValue(undefined), stop: vi.fn() },
@@ -38,5 +39,16 @@ describe('ExplainPositionSessionView follow-up', () => {
     act(() => { fireEvent.click(screen.getByTestId('chat-send-btn')); });
     await waitFor(() => expect(screen.getByTestId('explain-position-text')).toHaveTextContent(/The centre is open\.\s+The best move is e4\./));
     expect((mockDispatch.mock.calls[0][0] as { ask: string }).ask).toBe("what's the best move here?");
+  });
+
+  it('an answer that proved a line gets a walk button', async () => {
+    useAppStore.setState({ activeProfile: buildUserProfile({ id: 'main', name: 'Player', aiDataConsent: 'granted' }) });
+    const line = walkableLine('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', ['e4', 'e5'], 'e4');
+    mockDispatch.mockResolvedValue({ text: 'The best move is e4.', lines: [line] });
+    render(<ExplainPositionSessionView orientation="white" onExit={() => {}} />);
+    await waitFor(() => expect(screen.getByTestId('chat-text-input')).not.toBeDisabled());
+    act(() => { fireEvent.change(screen.getByTestId('chat-text-input'), { target: { value: "what's the best move here?" } }); });
+    act(() => { fireEvent.click(screen.getByTestId('chat-send-btn')); });
+    await waitFor(() => expect(screen.getByTestId('explain-walk-line-btn')).toBeInTheDocument());
   });
 });
