@@ -144,7 +144,7 @@
 ### `assembleBoardPlanAnswer` (function) — 8 call sites
 - `src/coach/questionWalk.sicilian1200.test.ts:39`
 - `src/coach/questionWalk.sicilian1200.test.ts:104`
-- `src/coach/questionWalk.sicilian1200.test.ts:111`
+- `src/coach/questionWalk.sicilian1200.test.ts:113`
 - `src/services/boardUrgency.test.ts:35`
 - `src/services/boardUrgency.test.ts:47`
 - `src/services/groundedAnswer.test.ts:1596`
