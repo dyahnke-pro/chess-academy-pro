@@ -478,13 +478,13 @@ export function computeMoveFundamentals(
     // when it reaches the core four.
     const centralAll = eyes.filter((s) => CENTRAL_SQUARES.includes(s));
     const central = centralAll.some((s) => CORE_CENTER.includes(s)) ? centralAll : [];
-    // "leaning on e6", not "the hole on e6" — at move three Black's e-pawn is
+    // "eyeing e6", not "the hole on e6" — at move three Black's e-pawn is
     // still home, so e6 is an empty square, not yet a hole. Say what is true.
     const holes = eyes.filter((s) => standingHoles(seat).includes(s) && !nearKing.includes(s));
     const homeAfter = homeMinorCount(after, mover);
     const weight = Math.min(82, 55 + 6 * (homeAfter + 1));
     const centerTail = (central.length ? `, fighting for the center on ${andList(central)}` : '')
-      + (holes.length ? `, leaning on ${andList(holes)}` : '')
+      + (holes.length ? `, eyeing ${andList(holes)}` : '')
       + kingZoneClause(nearKing);
     // WITH TEMPO (hand walk 2026-09-24: 3.Nc3 against the Scandinavian queen on
     // d5 — "you hit the queen with the knight"; the coach said only "develop

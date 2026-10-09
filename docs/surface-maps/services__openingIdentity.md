@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**164 lines · 8 exports · 6 importers · 2 tests · 0 audits**
+**209 lines · 9 exports · 7 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnBoardTeaching.ts`
 - `src/services/openingAnnouncement.ts`
 - `src/services/openingGenerator.ts`
+- `src/services/openingIdea.test.ts`
 - `src/services/openingIdentity.test.ts`
 - `src/services/reviewOpeningTheory.ts`
 - `src/services/walkOct2a.test.ts`
@@ -25,15 +26,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `loadOpeningIdentity` (function) — 3 call sites
-- `src/services/coachApi.ts:5562`
-- `src/services/coachApi.ts:6091`
+- `src/services/coachApi.ts:5653`
+- `src/services/coachApi.ts:6195`
 - `src/services/openingGenerator.ts:2504`
 
 ### `warmOpeningIdentity` (function) — 2 call sites
 - `src/services/learnBoardTeaching.ts:677`
 - `src/services/reviewOpeningTheory.ts:246`
 
-### `setOpeningIdentity` (function) — 1 call site
+### `setOpeningIdentity` (function) — 2 call sites
+- `src/services/openingIdea.test.ts:9`
 - `src/services/openingIdentity.test.ts:9`
 
 ### `identityFor` (function) — 1 call site
@@ -46,8 +48,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.ts:81`
 
 ### `openingIdentityLine` (function) — 17 call sites
-- `src/services/coachApi.ts:5564`
-- `src/services/coachApi.ts:6093`
+- `src/services/coachApi.ts:5655`
+- `src/services/coachApi.ts:6197`
 - `src/services/learnBoardTeaching.ts:678`
 - `src/services/openingGenerator.ts:2505`
 - `src/services/openingIdentity.test.ts:18`
@@ -64,8 +66,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.ts:638`
 - `src/services/walkOct2a.test.ts:67`
 
+### `definingMoveIdea` (function) — 4 call sites
+- `src/services/coachApi.ts:5667`
+- `src/services/openingIdea.test.ts:24`
+- `src/services/openingIdea.test.ts:27`
+- `src/services/openingIdea.test.ts:32`
+
 ## Tests
 
+- `src/services/openingIdea.test.ts`
 - `src/services/openingIdentity.test.ts`
 - `src/services/walkOct2a.test.ts`
 

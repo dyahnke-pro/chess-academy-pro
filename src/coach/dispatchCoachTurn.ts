@@ -247,12 +247,13 @@ export async function dispatchCoachTurn(
     // that drops what was read (chat thinks like the coach, 2026-10-09).
     if (turn && BOARD_ANSWERED_KINDS.has(turn.kind) && input.liveState.fen) {
       const sc = input.liveState.studentColor ?? (input.liveState.fen.split(' ')[1] === 'b' ? 'black' : 'white');
-      const text = await answerBoardTurn(turn, { fen: input.liveState.fen, history: input.liveState.moveHistory ?? [], studentColor: sc }).catch(() => null);
+      const out: { endorsed?: string[] } = {};
+      const text = await answerBoardTurn(turn, { fen: input.liveState.fen, history: input.liveState.moveHistory ?? [], studentColor: sc }, out).catch(() => null);
       if (text) {
         servedParsed = true;
         void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: `board:${turn.kind}`, servedParsed })
           .catch(() => { /* telemetry never breaks a turn */ });
-        return { text: openSentence(text), toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: `board:${turn.kind}` };
+        return { text: openSentence(text), toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: `board:${turn.kind}`, ...(out.endorsed?.length ? { endorsedSans: out.endorsed } : {}) };
       }
     }
     // A FALSE PREMISE IS ANSWERED, NOT ROUTED (pass 2, 2026-10-09: "how do I

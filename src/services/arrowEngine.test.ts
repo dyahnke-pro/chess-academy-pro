@@ -282,3 +282,16 @@ describe('stripBoardMarkers', () => {
     expect(stripBoardMarkers('Hi [BOARD: arrow:e2-e4:green] there')).toBe('Hi   there');
   });
 });
+
+describe('a move a computed answer recommends is arrowed (walk 5)', () => {
+  const fen = new Chess().fen();
+  const ranked = async () => [
+    { from: 'e2', to: 'e4', rank: 1 }, { from: 'd2', to: 'd4', rank: 2 }, { from: 'g1', to: 'f3', rank: 3 },
+  ] as unknown as Awaited<ReturnType<Parameters<typeof injectCandidateArrows>[2]>>;
+  it('draws an endorsed move off the top 3, and still not an unendorsed one', async () => {
+    const plain = await injectCandidateArrows('Bring one out with Nc3, or play a3.', fen, ranked);
+    expect(plain.injected).toEqual([]);
+    const endorsed = await injectCandidateArrows('Bring one out with Nc3, or play a3.', fen, ranked, { endorsedSans: ['Nc3'] });
+    expect(endorsed.injected).toEqual([{ san: 'Nc3', color: 'yellow' }]);
+  });
+});

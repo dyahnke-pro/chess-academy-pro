@@ -320,7 +320,7 @@ export async function injectCandidateArrows(
   text: string,
   fen: string,
   analyze: MultipvAnalyzer,
-  opts?: { excludeSan?: string; spokenText?: string },
+  opts?: { excludeSan?: string; spokenText?: string; endorsedSans?: readonly string[] },
 ): Promise<{ text: string; injected: { san: string; color: ArrowColor }[] }> {
   // Strip any pre-existing markers (we re-derive every arrow) but
   // preserve newlines — only collapse the double-spaces a stripped
@@ -368,8 +368,15 @@ export async function injectCandidateArrows(
   // coach names in prose gets NO arrow — we don't point at a bad move
   // (David 2026-07-06). Filter BEFORE the cap so the drawable candidates
   // aren't crowded out by dropped ones.
+  // A move a COMPUTED answer recommends (typed, never read off the prose) is
+  // a real suggestion even off the engine's top 3 — "bring the knight out with
+  // Nc3" must point at c3 (walk 5: the recommended move had no arrow).
+  const endorsed = new Set((opts?.endorsedSans ?? []).map((s) => {
+    const a = resolveSanToArrow(s, [fen]);
+    return a ? `${a.from}-${a.to}` : '';
+  }));
   const drawable = resolved
-    .map((r) => ({ ...r, color: colorForRank(r.rank) }))
+    .map((r) => ({ ...r, color: colorForRank(r.rank) ?? (endorsed.has(`${r.from}-${r.to}`) ? 'yellow' as ArrowColor : null) }))
     .filter((r): r is typeof r & { color: ArrowColor } => r.color !== null);
   const capped = drawable.slice(0, MAX_CANDIDATE_ARROWS);
 

@@ -288,11 +288,11 @@ describe('pass 3 (1.e4 d5 2.Nf3 dxe4 3.d4 exf3)', () => {
   });
   it('says the knight was taken', async () => {
     const { answerMaterialChange } = await import('./chatTurnAnswers');
-    expect(answerMaterialChange(H, 'w')).toBe('Yes — they took your knight on f3 with exf3.');
+    expect(answerMaterialChange(H, 'w')).toBe('Yes — they took your knight on f3 with their e-pawn.');
   });
   it('a trade is said as a trade', async () => {
     const { answerMaterialChange } = await import('./chatTurnAnswers');
-    expect(answerMaterialChange('e4 d5 exd5 Qxd5'.split(' '), 'w')).toMatch(/^It was a trade: they took your pawn on d5 with Qxd5, and you took their pawn on d5 with exd5 — an even trade\.$/);
+    expect(answerMaterialChange('e4 d5 exd5 Qxd5'.split(' '), 'w')).toMatch(/^It was a trade: they took your pawn on d5 with their queen, and you took their pawn on d5 with your e-pawn — an even trade\.$/);
   });
 });
 

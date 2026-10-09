@@ -34,17 +34,17 @@ describe('the rule on this board', () => {
   it('castling: names exactly why not, wing by wing', () => {
     const fen = play('e4 e5 Nf3 Nc6');
     const a = { facts: illegalNamedMove("why can't I castle?", fen, 'white', ['e4', 'e5', 'Nf3', 'Nc6']) };
-    expect(a?.facts).toMatch(/cannot castle kingside yet — f1 is still occupied/);
-    expect(a?.facts).toMatch(/cannot castle queenside yet — b1 and c1 and d1 are still occupied/);
+    expect(a?.facts).toMatch(/cannot castle kingside yet — your bishop on f1 is still in the way/);
+    expect(a?.facts).toMatch(/cannot castle queenside yet — your knight on b1, bishop on c1 and queen on d1 are still in the way/);
   });
   it('castling: a moved king loses the right', () => {
     const fen = play('e4 e5 Ke2 Ke7 Ke1 Ke8');
-    expect(illegalNamedMove('can I castle?', fen, 'white')).toMatch(/can no longer castle kingside — the king or the h-rook has already moved/);
+    expect(illegalNamedMove('can I castle?', fen, 'white')).toMatch(/can no longer castle kingside — your king or your h-rook has already moved/);
   });
   it('castling: an attacked crossing square stops it', () => {
     // White king e1, rook h1, Black rook on f8 with the f-file open.
     const fen = '4kr2/8/8/8/8/8/8/4K2R w K - 0 1';
-    expect(illegalNamedMove('can I castle?', fen, 'white')).toMatch(/cross or land on f1, which the enemy attacks/);
+    expect(illegalNamedMove('can I castle?', fen, 'white')).toMatch(/cross or land on f1, which they attack/);
   });
 });
 

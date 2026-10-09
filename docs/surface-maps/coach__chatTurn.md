@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**689 lines · 26 exports · 16 importers · 10 tests · 3 audits**
+**690 lines · 26 exports · 16 importers · 10 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -47,10 +47,10 @@
 - `src/coach/chatTurn.test.ts:107`
 - `src/coach/dispatchCoachTurn.ts:189`
 - `src/coach/dispatchCoachTurn.ts:241`
-- `src/coach/dispatchCoachTurn.ts:253`
-- `src/coach/dispatchCoachTurn.ts:265`
-- `src/coach/dispatchCoachTurn.ts:285`
-- `src/coach/dispatchCoachTurn.ts:339`
+- `src/coach/dispatchCoachTurn.ts:254`
+- `src/coach/dispatchCoachTurn.ts:266`
+- `src/coach/dispatchCoachTurn.ts:286`
+- `src/coach/dispatchCoachTurn.ts:340`
 - `src/coach/questionRoute.test.ts:20`
 - `src/coach/questionRoute.test.ts:30`
 - `src/coach/questionRoute.test.ts:33`
@@ -139,7 +139,7 @@
 - `src/coach/chatTurn.test.ts:80`
 - `src/coach/chatTurn.test.ts:83`
 - `src/coach/chatTurn.test.ts:87`
-- `src/coach/dispatchCoachTurn.ts:269`
+- `src/coach/dispatchCoachTurn.ts:270`
 
 ### `kindAgreesWithLane` (function) — 3 call sites
 - `src/coach/chatTurn.test.ts:103`

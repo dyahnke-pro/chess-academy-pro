@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**491 lines · 7 exports · 9 importers · 4 tests · 43 audits**
+**508 lines · 7 exports · 11 importers · 6 tests · 43 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,10 +17,12 @@
 - `src/coach/chatTurnCodeReader.test.ts`
 - `src/coach/chatTurnParser.ts`
 - `src/coach/coachService.ts`
+- `src/coach/developNext.test.ts`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 - `src/coach/handWalk1009.test.ts`
 - `src/coach/questionIntents.ts`
 - `src/services/coachApi.ts`
+- `src/services/openingIdea.test.ts`
 - `src/services/whyNotLegal.ts`
 - `src/zzp3.test.ts`
 
@@ -50,9 +52,12 @@
 ### `legalForOpponent` (function) — 1 call site
 - `src/coach/coachService.ts:1590`
 
-### `readTurnInCode` (function) — 30 call sites
+### `readTurnInCode` (function) — 35 call sites
 - `src/coach/chatTurnCodeReader.test.ts:10`
 - `src/coach/chatTurnParser.ts:167`
+- `src/coach/developNext.test.ts:24`
+- `src/coach/developNext.test.ts:26`
+- `src/coach/developNext.test.ts:27`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:40`
 - `src/coach/handWalk1009.test.ts:25`
 - `src/coach/handWalk1009.test.ts:30`
@@ -80,13 +85,17 @@
 - `src/coach/handWalk1009.test.ts:332`
 - `src/coach/handWalk1009.test.ts:335`
 - `src/coach/handWalk1009.test.ts:354`
+- `src/services/openingIdea.test.ts:18`
+- `src/services/openingIdea.test.ts:20`
 - `src/zzp3.test.ts:12`
 
 ## Tests
 
 - `src/coach/chatTurnCodeReader.test.ts`
+- `src/coach/developNext.test.ts`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 - `src/coach/handWalk1009.test.ts`
+- `src/services/openingIdea.test.ts`
 - `src/zzp3.test.ts`
 
 ## Audits that reach it

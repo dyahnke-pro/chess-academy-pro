@@ -74,7 +74,7 @@ describe('a refused move is explained whatever the wording', () => {
   const CASTLE_LINE = ['e4', 'e5', 'Nf3', 'Nc6'];
   const NO_CASTLE = play(CASTLE_LINE.join(' '));
   it.each(['can I castle?', 'castle?', "why won't it let me castle", 'O-O?', 'o-o', 'Castling kingside possible?'])('castling, any wording: %s', (q) => {
-    expect(illegalNamedMove(q, NO_CASTLE, 'white', CASTLE_LINE)).toMatch(/cannot castle kingside yet — f1 is still occupied/);
+    expect(illegalNamedMove(q, NO_CASTLE, 'white', CASTLE_LINE)).toMatch(/cannot castle kingside yet — your bishop on f1 is still in the way/);
   });
   it('castling that is legal is no refusal', () => {
     const line = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5'];

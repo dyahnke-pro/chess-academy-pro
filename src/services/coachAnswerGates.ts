@@ -416,7 +416,7 @@ export async function applyCandidateArrows(
   text: string,
   fen: string | null | undefined,
   source: string,
-  opts?: { excludeSan?: string; spokenText?: string },
+  opts?: { excludeSan?: string; spokenText?: string; endorsedSans?: readonly string[] },
 ): Promise<string> {
   if (!text.trim() || !fen) return text;
   try {

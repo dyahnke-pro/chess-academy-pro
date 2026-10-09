@@ -4,11 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**482 lines · 9 exports · 27 importers · 13 tests · 2 audits**
+**482 lines · 9 exports · 22 importers · 15 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 THE THREE NARRATION TIERS — get these the right way round (David 2026-08-01, LOCKED: "Tier 2 is not baked. Tier 1 is baked. Tier 2 is note driven. Tier 3 has neither.")** (CLAUDE.md:3836) — names `gradeNarrationText`
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1309) — names `applyCandidateArrows`, `coachAnswerGates`
+- **🔒🔒 THE THREE NARRATION TIERS — get these the right way round (David 2026-08-01, LOCKED: "Tier 2 is not baked. Tier 1 is baked. Tier 2 is note driven. Tier 3 has neither.")** (CLAUDE.md:4284) — names `gradeNarrationText`
 
 ## Who calls in
 
@@ -19,18 +20,14 @@
 - `src/components/Openings/MiddlegamePractice.tsx`
 - `src/hooks/useLiveCoach.ts`
 - `src/hooks/usePhaseNarration.ts`
-- `src/hooks/usePositionNarration.ts`
 - `src/services/authoredOpeningNotes.test.ts`
 - `src/services/borrowedTeachingBoardTruth.test.ts`
 - `src/services/coachAnswerGates.test.ts`
-- `src/services/coachFeatureService.ts`
 - `src/services/coachSurfaceScorecard.report.test.ts`
 - `src/services/computedVoiceAudit.report.test.ts`
-- `src/services/curatedBeatSource.ts`
 - `src/services/deltaProbe.report.test.ts`
 - `src/services/flaggedNoteGateAudit.report.test.ts`
 - `src/services/lineScopedGate.test.ts`
-- `src/services/middlegamePlanner.ts`
 - `src/services/mistakeNarration.ts`
 - `src/services/mistakeNarrationVoice.ts`
 - `src/services/openingGenerator.ts`
@@ -38,16 +35,14 @@
 - `src/services/selectedNotes.report.test.ts`
 - `src/services/viennaNarrationExample.report.test.ts`
 - `src/services/voicePackage.ts`
-- `src/services/walkthroughLlmNarrator.ts`
 
 ## Exports and every call site
 
-### `isSpokenSentenceGrounded` (function) — 8 call sites
-- `src/components/Board/VoiceChatMic.tsx:434`
-- `src/components/Coach/CoachGamePage.tsx:2834`
-- `src/components/Coach/CoachGamePage.tsx:3583`
-- `src/hooks/usePhaseNarration.ts:361`
-- `src/hooks/usePositionNarration.ts:315`
+### `isSpokenSentenceGrounded` (function) — 7 call sites
+- `src/components/Board/VoiceChatMic.tsx:445`
+- `src/components/Coach/CoachGamePage.tsx:2908`
+- `src/components/Coach/CoachGamePage.tsx:3694`
+- `src/hooks/usePhaseNarration.ts:394`
 - `src/services/coachAnswerGates.test.ts:26`
 - `src/services/coachAnswerGates.test.ts:30`
 - `src/services/coachAnswerGates.test.ts:34`
@@ -62,74 +57,74 @@
 - `src/services/lineScopedGate.test.ts:54`
 - `src/services/lineScopedGate.test.ts:63`
 - `src/services/lineScopedGate.test.ts:68`
-- `src/services/openingGenerator.ts:816`
-- `src/services/openingGenerator.ts:818`
-- `src/services/openingGenerator.ts:820`
+- `src/services/openingGenerator.ts:830`
+- `src/services/openingGenerator.ts:832`
+- `src/services/openingGenerator.ts:834`
 
-### `gradeNarrationText` (function) — 41 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8390`
-- `src/components/Coach/CoachTeachPage.tsx:8410`
-- `src/components/Coach/CoachTeachPage.tsx:8425`
-- `src/components/Coach/CoachTeachPage.tsx:9003`
-- `src/components/Coach/CoachTeachPage.tsx:10884`
-- `src/hooks/usePhaseNarration.ts:473`
-- `src/services/authoredOpeningNotes.test.ts:256`
+### `gradeNarrationText` (function) — 44 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9719`
+- `src/components/Coach/CoachTeachPage.tsx:9721`
+- `src/components/Coach/CoachTeachPage.tsx:9727`
+- `src/components/Coach/CoachTeachPage.tsx:9749`
+- `src/components/Coach/CoachTeachPage.tsx:9771`
+- `src/components/Coach/CoachTeachPage.tsx:9786`
+- `src/components/Coach/CoachTeachPage.tsx:10213`
+- `src/hooks/usePhaseNarration.ts:508`
+- `src/services/authoredOpeningNotes.test.ts:257`
 - `src/services/borrowedTeachingBoardTruth.test.ts:63`
 - `src/services/coachAnswerGates.test.ts:107`
 - `src/services/coachAnswerGates.test.ts:117`
 - `src/services/coachAnswerGates.test.ts:123`
 - `src/services/coachAnswerGates.test.ts:129`
-- `src/services/coachFeatureService.ts:1582`
-- `src/services/coachSurfaceScorecard.report.test.ts:46`
-- `src/services/computedVoiceAudit.report.test.ts:230`
-- `src/services/curatedBeatSource.ts:376`
+- `src/services/coachSurfaceScorecard.report.test.ts:45`
+- `src/services/computedVoiceAudit.report.test.ts:224`
 - `src/services/deltaProbe.report.test.ts:154`
-- `src/services/flaggedNoteGateAudit.report.test.ts:84`
-- `src/services/flaggedNoteGateAudit.report.test.ts:110`
+- `src/services/flaggedNoteGateAudit.report.test.ts:87`
+- `src/services/flaggedNoteGateAudit.report.test.ts:113`
 - `src/services/lineScopedGate.test.ts:32`
 - `src/services/lineScopedGate.test.ts:55`
-- `src/services/middlegamePlanner.ts:367`
-- `src/services/mistakeNarration.ts:371`
+- `src/services/mistakeNarration.ts:381`
 - `src/services/mistakeNarrationVoice.ts:131`
-- `src/services/openingGenerator.ts:895`
-- `src/services/openingGenerator.ts:903`
-- `src/services/openingGenerator.ts:904`
-- `src/services/openingGenerator.ts:1095`
-- `src/services/openingGenerator.ts:1099`
-- `src/services/openingGenerator.ts:1107`
-- `src/services/openingGenerator.ts:1108`
-- `src/services/openingGenerator.ts:1114`
-- `src/services/openingGenerator.ts:1256`
-- `src/services/openingGenerator.ts:1386`
-- `src/services/openingGenerator.ts:2516`
-- `src/services/openingGenerator.ts:2882`
+- `src/services/openingGenerator.ts:909`
+- `src/services/openingGenerator.ts:917`
+- `src/services/openingGenerator.ts:918`
+- `src/services/openingGenerator.ts:1109`
+- `src/services/openingGenerator.ts:1113`
+- `src/services/openingGenerator.ts:1121`
+- `src/services/openingGenerator.ts:1122`
+- `src/services/openingGenerator.ts:1128`
+- `src/services/openingGenerator.ts:1270`
+- `src/services/openingGenerator.ts:1404`
+- `src/services/openingGenerator.ts:2284`
+- `src/services/replayFence.colle800.rewalk.test.ts:47`
+- `src/services/replayFence.colle800.rewalk.test.ts:49`
 - `src/services/selectedNotes.report.test.ts:92`
 - `src/services/selectedNotes.report.test.ts:200`
 - `src/services/viennaNarrationExample.report.test.ts:107`
-- `src/services/voicePackage.ts:267`
-- `src/services/walkthroughLlmNarrator.ts:158`
+- `src/services/voicePackage.ts:300`
+- `src/services/voicePackage.ts:302`
+- `src/services/voicePackage.ts:316`
+- `src/services/voicePackage.ts:330`
+- `src/services/voicePackage.ts:339`
 
-### `takeBorrowedProbeStats` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7713`
+### `takeBorrowedProbeStats` (function) — 5 call sites
 - `src/services/coachAnswerGates.test.ts:149`
 - `src/services/coachAnswerGates.test.ts:152`
 - `src/services/coachAnswerGates.test.ts:164`
 - `src/services/coachAnswerGates.test.ts:167`
 - `src/services/coachAnswerGates.test.ts:168`
 
-### `gradeBorrowedTeaching` (function) — 15 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7711`
-- `src/components/Coach/CoachTeachPage.tsx:7724`
+### `gradeBorrowedTeaching` (function) — 13 call sites
 - `src/services/borrowedTeachingBoardTruth.test.ts:26`
 - `src/services/borrowedTeachingBoardTruth.test.ts:64`
 - `src/services/coachAnswerGates.test.ts:150`
 - `src/services/coachAnswerGates.test.ts:158`
 - `src/services/coachAnswerGates.test.ts:165`
 - `src/services/coachAnswerGates.test.ts:166`
-- `src/services/computedVoiceAudit.report.test.ts:343`
-- `src/services/computedVoiceAudit.report.test.ts:344`
-- `src/services/computedVoiceAudit.report.test.ts:391`
-- `src/services/computedVoiceAudit.report.test.ts:393`
+- `src/services/computedVoiceAudit.report.test.ts:326`
+- `src/services/computedVoiceAudit.report.test.ts:327`
+- `src/services/computedVoiceAudit.report.test.ts:370`
+- `src/services/computedVoiceAudit.report.test.ts:372`
 - `src/services/pieceGateCost.report.test.ts:60`
 - `src/services/pieceGateCost.report.test.ts:71`
 - `src/services/pieceGateCost.report.test.ts:76`
@@ -138,23 +133,24 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `applyCandidateArrows` (function) — 5 call sites
-- `src/coach/coachService.ts:2090`
-- `src/components/Coach/CoachTeachPage.tsx:6620`
-- `src/components/Openings/MiddlegamePractice.tsx:283`
-- `src/hooks/useLiveCoach.ts:293`
-- `src/services/coachAnswerGates.test.ts:194`
+- `src/coach/coachService.ts:2297`
+- `src/components/Coach/CoachTeachPage.tsx:7426`
+- `src/components/Openings/MiddlegamePractice.tsx:282`
+- `src/hooks/useLiveCoach.ts:352`
+- `src/services/coachAnswerGates.test.ts:195`
 
 ### `appendKeySquareHighlights` (function) — 4 call sites
-- `src/coach/coachService.ts:2094`
-- `src/services/coachAnswerGates.test.ts:204`
-- `src/services/coachAnswerGates.test.ts:207`
+- `src/coach/coachService.ts:2301`
+- `src/services/coachAnswerGates.test.ts:205`
 - `src/services/coachAnswerGates.test.ts:208`
+- `src/services/coachAnswerGates.test.ts:209`
 
 ### `candidateHighlightMarkers` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:6624`
+- `src/components/Coach/CoachTeachPage.tsx:7431`
 
 ## Tests
 
+- `src/hooks/useLiveCoach.needWire.test.tsx`
 - `src/hooks/useLiveCoach.test.tsx`
 - `src/hooks/usePhaseNarration.test.ts`
 - `src/services/authoredOpeningNotes.test.ts`
@@ -166,10 +162,15 @@
 - `src/services/flaggedNoteGateAudit.report.test.ts`
 - `src/services/lineScopedGate.test.ts`
 - `src/services/pieceGateCost.report.test.ts`
+- `src/services/replayFence.colle800.rewalk.test.ts`
 - `src/services/selectedNotes.report.test.ts`
 - `src/services/viennaNarrationExample.report.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-ondemand-read-marks-prod.mjs`
 - `scripts/audit-opener-markers-smoke-prod.mjs`

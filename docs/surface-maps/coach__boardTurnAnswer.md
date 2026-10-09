@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**166 lines · 6 exports · 4 importers · 3 tests · 0 audits**
+**253 lines · 7 exports · 5 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/coach/boardTurnAnswer.test.ts`
+- `src/coach/developNext.test.ts`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts`
 - `src/coach/dispatchCoachTurn.ts`
 - `src/coach/handWalk1009.test.ts`
@@ -28,11 +29,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `BoardEngine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setBoardEngineForTests` (function) — 6 call sites
+### `setBoardEngineForTests` (function) — 10 call sites
 - `src/coach/boardTurnAnswer.test.ts:18`
 - `src/coach/boardTurnAnswer.test.ts:30`
 - `src/coach/boardTurnAnswer.test.ts:39`
 - `src/coach/boardTurnAnswer.test.ts:63`
+- `src/coach/developNext.test.ts:17`
+- `src/coach/developNext.test.ts:31`
+- `src/coach/developNext.test.ts:49`
+- `src/coach/developNext.test.ts:64`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:24`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:32`
 
@@ -46,14 +51,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/boardTurnAnswer.test.ts:72`
 - `src/coach/boardTurnAnswer.test.ts:78`
 - `src/coach/boardTurnAnswer.test.ts:82`
-- `src/coach/dispatchCoachTurn.ts:234`
+- `src/coach/dispatchCoachTurn.ts:251`
 
 ### `theirPlanAnswer` (function) — 1 call site
-- `src/coach/handWalk1009.test.ts:64`
+- `src/coach/handWalk1009.test.ts:65`
+
+### `developNextAnswer` (function) — 3 call sites
+- `src/coach/developNext.test.ts:40`
+- `src/coach/developNext.test.ts:57`
+- `src/coach/developNext.test.ts:68`
 
 ## Tests
 
 - `src/coach/boardTurnAnswer.test.ts`
+- `src/coach/developNext.test.ts`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts`
 - `src/coach/handWalk1009.test.ts`
 

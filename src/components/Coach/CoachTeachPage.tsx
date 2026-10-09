@@ -7426,6 +7426,7 @@ export function CoachTeachPage(): JSX.Element {
           : await applyCandidateArrows(arrowSourceText, fen, 'CoachTeachPage', {
             excludeSan: replyPlayed,
             spokenText: spokenForArrows || undefined,
+            ...(result.endorsedSans?.length ? { endorsedSans: result.endorsedSans } : {}),
           });
         const highlightMarkers = candidateHighlightMarkers(arrowSourceText, 'CoachTeachPage');
         const annotated = highlightMarkers.length > 0

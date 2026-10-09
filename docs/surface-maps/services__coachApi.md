@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7084 lines · 41 exports · 53 importers · 60 tests · 19 audits**
+**7097 lines · 41 exports · 53 importers · 60 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -116,13 +116,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `consumeCoachLines` (function) — 4 call sites
-- `src/coach/coachService.ts:1873`
+- `src/coach/coachService.ts:1883`
 - `src/services/coachApi.pieceOptions.test.ts:42`
 - `src/services/coachApi.pieceOptions.test.ts:44`
 - `src/services/coachApi.pieceOptions.test.ts:49`
 
 ### `consumeServedIntent` (function) — 1 call site
-- `src/coach/coachService.ts:1877`
+- `src/coach/coachService.ts:1887`
 
 ### `answerAttemptComparison` (function) — 4 call sites
 - `src/services/coachApi.attemptComparison.test.ts:30`
@@ -131,10 +131,10 @@
 - `src/services/coachApi.attemptComparison.test.ts:63`
 
 ### `consumeCoachActionOffer` (function) — 1 call site
-- `src/coach/coachService.ts:1867`
+- `src/coach/coachService.ts:1877`
 
 ### `consumeCoachKeySquares` (function) — 6 call sites
-- `src/coach/coachService.ts:1882`
+- `src/coach/coachService.ts:1892`
 - `src/services/coachApi.keySquares.test.ts:10`
 - `src/services/coachApi.keySquares.test.ts:12`
 - `src/services/coachApi.keySquares.test.ts:15`
@@ -237,8 +237,8 @@
 - `src/services/groundedMoveFeedback.test.ts:45`
 
 ### `translateToEnglish` (function) — 4 call sites
-- `src/coach/coachService.ts:577`
-- `src/components/Coach/CoachTeachPage.tsx:3599`
+- `src/coach/coachService.ts:578`
+- `src/components/Coach/CoachTeachPage.tsx:3611`
 - `src/services/coachSessionRouter.ts:117`
 - `src/services/coachSettingsAction.ts:261`
 

@@ -8,6 +8,7 @@
  * available, whether each side may castle and exactly why not, how close the
  * fifty-move count is. Everything after the definition is computed (G0).
  */
+import { andList } from '../utils/andList';
 import { Chess, type Square } from 'chess.js';
 
 export type ChessRule =
@@ -71,32 +72,48 @@ function enPassantNow(chess: Chess): string | null {
   return `On this board it is available right now: ${side}'s ${list} (${caps.map((m) => m.san).join(' / ')}).`;
 }
 
-/** Why a side may or may not castle on each wing, from the board. */
+/** Why the student may or may not castle on each wing, from the board —
+ *  said to them ("you"), never by colour (one perspective, 2026-08-28). */
 export function castlingNow(chess: Chess, side: 'w' | 'b'): string {
   const fen = chess.fen();
   const rights = fen.split(' ')[2] ?? '-';
   const rank = side === 'w' ? '1' : '8';
   const enemy = side === 'w' ? 'b' : 'w';
-  const who = side === 'w' ? 'White' : 'Black';
+  const who = 'You';
+  const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
   const wings: Array<{ name: string; flag: string; right: string; between: string[]; path: string[]; rook: string }> = [
     { name: 'kingside', flag: 'k', right: side === 'w' ? 'K' : 'k', between: ['f', 'g'], path: ['e', 'f', 'g'], rook: 'h' },
     { name: 'queenside', flag: 'q', right: side === 'w' ? 'Q' : 'q', between: ['b', 'c', 'd'], path: ['e', 'd', 'c'], rook: 'a' },
   ];
   const parts: string[] = [];
   for (const w of wings) {
-    if (!rights.includes(w.right)) { parts.push(`${who} can no longer castle ${w.name} — the king or the ${w.rook}-rook has already moved`); continue; }
+    if (!rights.includes(w.right)) { parts.push(`${who} can no longer castle ${w.name} — your king or your ${w.rook}-rook has already moved`); continue; }
     const blocked = w.between.map((f) => `${f}${rank}`).filter((s) => chess.get(s as Square));
-    if (blocked.length) { parts.push(`${who} cannot castle ${w.name} yet — ${blocked.join(' and ')} ${blocked.length > 1 ? 'are' : 'is'} still occupied`); continue; }
+    if (blocked.length) {
+      // "your knight on b1, bishop on c1 and queen on d1" — the owner once
+      // per run of the same side.
+      let last: string | null = null;
+      const named = blocked.map((sq) => {
+        const p = chess.get(sq as Square);
+        if (!p) return sq;
+        const owner = p.color === side ? 'your' : 'their';
+        const lead = owner === last ? '' : `${owner} `;
+        last = owner;
+        return `${lead}${PIECE[p.type]} on ${sq}`;
+      });
+      parts.push(`${who} cannot castle ${w.name} yet — ${andList(named)} ${blocked.length > 1 ? 'are' : 'is'} still in the way`);
+      continue;
+    }
     const attacked = w.path.map((f) => `${f}${rank}`).filter((s) => chess.isAttacked(s as Square, enemy));
     if (attacked.length) {
       parts.push(attacked[0] === `e${rank}`
-        ? `${who} cannot castle ${w.name} now — the king is in check`
-        : `${who} cannot castle ${w.name} now — the king would cross or land on ${attacked.join(' and ')}, which the enemy attacks`);
+        ? `${who} cannot castle ${w.name} now — your king is in check`
+        : `${who} cannot castle ${w.name} now — your king would cross or land on ${attacked.join(' and ')}, which they attack`);
       continue;
     }
     parts.push(`${who} can castle ${w.name}`);
   }
-  return `${parts.join('; ')}.`;
+  return `${parts.join('; ').replace(/; You /g, '; you ')}.`;
 }
 
 function promotionNow(chess: Chess): string | null {
@@ -121,7 +138,7 @@ export function answerRuleQuestion(ask: string, fen: string | null, student: 'w'
   try { chess = fen ? new Chess(fen) : null; } catch { chess = null; }
   if (chess) {
     if (rule === 'en-passant') { const n = enPassantNow(chess); if (n) lines.push(n); }
-    if (rule === 'castling') lines.push(`On this board, ${castlingNow(chess, student)}`);
+    if (rule === 'castling') lines.push(`On this board, ${castlingNow(chess, student).replace(/^You /, 'you ')}`);
     if (rule === 'promotion') { const n = promotionNow(chess); if (n) lines.push(n); }
     if (rule === 'fifty-move') { const n = fiftyNow(chess.fen()); if (n) lines.push(n); }
     if (rule === 'stalemate' && chess.isStalemate()) lines.push('This position IS stalemate — the game is drawn.');

@@ -67,7 +67,7 @@ import { chatBoardAnswer } from './chatBoardRead';
 import { tagSlots } from '../coach/chatTurnCodeReader';
 import { answerRuleQuestion } from './chessRules';
 import { illegalNamedMove } from './whyNotLegal';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleOpponentHypotheticalAnswer, assembleTradeAnswer, assembleEndgameOutlookAnswer, boardWeaknessNow, assembleCompareMovesAnswer, assembleCaptureOnAnswer, assemblePawnStrengthAnswer, playedSacrificeVerdict, lastCaptureOf, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, explainNotationSymbol, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleEndgameRuleAnswer, endgameRuleDemoFen, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental, type PositionalTopic as PositionalTopicType, type GroundedAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleOpponentHypotheticalAnswer, assembleTradeAnswer, assembleEndgameOutlookAnswer, boardWeaknessNow, assembleCompareMovesAnswer, assembleCaptureOnAnswer, assemblePawnStrengthAnswer, playedSacrificeVerdict, lastCaptureOf, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, explainNotationSymbol, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleEndgameRuleAnswer, endgameRuleDemoFen, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, toObserverSeat, type WeakFundamental, type PositionalTopic as PositionalTopicType, type GroundedAnswer } from './groundedAnswer';
 import { getFundamentalCounts, FUNDAMENTAL_LABEL, fundamentalDevice } from './fundamentalsCatalog';
 import type { FundamentalId } from './principleAttribution';
 import { matchRouteByTopic } from './navigationRouter';
@@ -5654,6 +5654,19 @@ export async function getCoachChatResponse(
               const onBoard = (grounding.moveHistory?.length ?? 0) > 0 && grounding.studentColor;
               const line = openingIdentityLine(detected.name, grounding.studentColor === 'black' ? 'b' : 'w', onBoard ? 'seat' : 'demo');
               if (line) identity = ` ${line.text}`;
+              // …and what its defining move DOES on this board.
+              if (onBoard) {
+                const { definingMoveIdea } = await import('./openingIdentity');
+                const { moveWhy } = await import('./deliberation');
+                const seat: 'w' | 'b' = grounding.studentColor === 'black' ? 'b' : 'w';
+                // The opponent's move is told from the student's seat.
+                const why = (f: string, san: string, m: 'w' | 'b', prev: string | null): string | null => {
+                  const w = moveWhy(f, san, m, prev);
+                  return w && m !== seat ? toObserverSeat(w) : w;
+                };
+                const idea = definingMoveIdea(detected.name, sans, seat, why, Chess);
+                if (idea) identity += ` ${idea}`;
+              }
             }
             const facts = answer?.facts
               ? `${answer.facts}${identity}`

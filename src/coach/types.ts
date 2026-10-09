@@ -960,4 +960,6 @@ export interface CoachAnswer {
    *  through `voiceFacts` with), or absent when no grounded lane spoke. The
    *  ONE-CHAT shadow compares the parsed reading against it. */
   servedIntent?: string;
+  /** Moves a COMPUTED answer recommends — drawn even off the engine's top 3. */
+  endorsedSans?: string[];
 }

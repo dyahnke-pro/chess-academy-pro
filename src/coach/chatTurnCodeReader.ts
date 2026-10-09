@@ -422,6 +422,23 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
     return { kind: 'threats', referents: [], seat: mine ? 'me' : 'them', topic: null };
   }
 
+  // "What's the idea of this opening?" / "what is this opening about?" — the
+  // opening, named, with what it is and what its key move does (walk 5: read
+  // as a plan and answered about h3).
+  if (/\bopening\b/.test(lower) && /\b(?:idea|ideas|point|about|purpose|goal|aim|plan)\b/.test(lower)
+    && /\b(?:this|the|my|our)\s+opening\b/.test(lower) && slots.sans.length === 0) {
+    return { kind: 'name-opening', referents: [], seat: 'me', topic: null };
+  }
+
+    // "Which piece should I develop next?" / "what should I bring out?" — the
+  // pieces still at home and the best way to bring one out (walk 4: answered
+  // with castling, no piece named).
+  if (/\b(?:develop|bring\s+out|get\s+out)\b/.test(lower) && /\b(?:which|what)\b/.test(lower)
+    && possessive !== 'them' && slots.sans.length === 0 && slots.squares.length === 0
+    && !/\b(?:have i|am i|did i|is my|how(?:'s| is) my|who)\b/.test(lower)) {
+    return { kind: 'develop-next', referents: [], seat: 'me', topic: null };
+  }
+
   // "What is black trying to do?" / "what's their plan?" — a plan, no move.
   if (slots.goal && slots.sans.length === 0 && slots.squares.length === 0 && slots.pieces.length === 0
     && /^\s*(?:what|what's|whats|where|how)\b/.test(lower)) {

@@ -161,3 +161,48 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
   if (!out.length) return null;
   return { text: out.join(' '), squares, key: `opening-identity:${hit.name}` };
 }
+
+/**
+ * THE OPENING'S IDEA, FROM ITS OWN DEFINING MOVE (walk 5: "what's the idea of
+ * this opening?" on the Italian got a plan answer about h3 — the Italian's
+ * stored identity has no aims, so nothing said what it is about). The
+ * defining move is found where it was played in this game, and the move-reason
+ * computer says what it does there ("Bc4 — f7 sits right beside their king").
+ * `why` is injected so this leaf never imports the deliberation stack.
+ */
+export function definingMoveIdea(
+  name: string,
+  sans: readonly string[],
+  student: 'w' | 'b',
+  why: (fenBefore: string, san: string, mover: 'w' | 'b', prevSan: string | null) => string | null,
+  ChessCtor: new () => { move(san: string): unknown; fen(): string },
+): string | null {
+  // The family's move first (the Italian's Bc4), then the variation's own
+  // when it is a different move (the Giuoco Piano's ...Bc5).
+  const family = name.split(':')[0].trim();
+  const out: string[] = [];
+  const said = new Set<string>();
+  for (const n of family === name.trim() ? [name] : [family, name]) {
+    const hit = identityFor(n);
+    if (!hit?.facts.defining) continue;
+    const def = hit.facts.defining.replace(/[+#]/g, '');
+    if (said.has(`${hit.facts.side}${def}`)) continue;
+    said.add(`${hit.facts.side}${def}`);
+    const c = new ChessCtor();
+    for (let i = 0; i < sans.length; i++) {
+      const mover: 'w' | 'b' = i % 2 === 0 ? 'w' : 'b';
+      const fenBefore = c.fen();
+      if (mover === hit.facts.side && sans[i].replace(/[+#]/g, '') === def) {
+        const w = why(fenBefore, sans[i], mover, i > 0 ? sans[i - 1] : null);
+        if (w) {
+          const owner = mover === student ? 'your' : 'their';
+          const lead = out.length === 0 ? `The key move is ${owner === 'your' ? 'yours' : 'theirs'}, ${sans[i]}` : `In the ${hit.name.split(/[:,]/).pop()?.trim() ?? hit.name}, ${owner} move ${sans[i]} matters too`;
+          out.push(`${lead} — it ${w.replace(/^it /, '')}.`);
+        }
+        break;
+      }
+      try { c.move(sans[i]); } catch { break; }
+    }
+  }
+  return out.length ? out.join(' ') : null;
+}

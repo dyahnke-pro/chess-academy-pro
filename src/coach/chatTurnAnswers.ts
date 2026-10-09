@@ -367,9 +367,11 @@ export function answerMaterialChange(history: readonly string[], student: Color)
   const lost = recent.filter((m) => m.captured && m.color !== student);
   const won = recent.filter((m) => m.captured && m.color === student);
   if (lost.length === 0 && won.length === 0) return 'No — nothing was taken on the last moves.';
-  // The move is named once, in SAN — the chat renders it in words with its
-  // notation (pass 3: "(e-pawn takes on d4 (exd4))").
-  const say = (m: (typeof moves)[number], whose: string): string => `${whose} ${name(m.captured ?? 'p')} on ${m.to} with ${m.san}`;
+  // The taker is named in WORDS, never SAN: the chat spells a SAN out with
+  // its square, so "on c4 with dxc4" read "on c4 with d-pawn takes on c4
+  // (dxc4)" (walk 5).
+  const taker = (m: Move): string => (m.piece === 'p' ? `${m.from[0]}-pawn` : name(m.piece));
+  const say = (m: (typeof moves)[number], whose: string): string => `${whose} ${name(m.captured ?? 'p')} on ${m.to} with ${m.color === student ? 'your' : 'their'} ${taker(m)}`;
   const lostV = lost.reduce((n, m) => n + (MATERIAL_VALUE[m.captured ?? 'p'] ?? 0), 0);
   const wonV = won.reduce((n, m) => n + (MATERIAL_VALUE[m.captured ?? 'p'] ?? 0), 0);
   if (lost.length && !won.length) return `Yes — they took your ${lost.map((m) => say(m, '').trim()).join(' and ')}.`;
