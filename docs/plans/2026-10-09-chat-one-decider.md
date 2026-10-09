@@ -181,7 +181,54 @@ Decision 5 for David: show the asked concepts to the student on My
 Weaknesses ("you keep asking about…")? Recommended yes — it is the record
 made visible, and it tells them the coach listened.
 
-## Decisions for David
+## App commands — covered (David 2026-10-09: "start this game or play this opening or make this move or settings changes")
+
+Today three systems act on a command, none reading the parse: the phrase
+router `routeChatIntent` (play_move, take_back ×1/2, reset, set position,
+navigate, orientation, save/restore position, strength up/down, quiz, drill,
+show squares), `coachSettingsAction` (voice, verbosity, arrows, difficulty,
+personality), and the MODEL's toolbelt (start_walkthrough_for_opening,
+navigate_to_route, reset_board, play_move, take_back_move, set_board_position,
+favorite_opening, save_opening_to_repertoire, set_intended_opening,
+clear_memory, record_blunder, record_hint_request, lookup_player_*,
+lichess_*, stockfish_*). The live walk: settings + "I'll be white" worked
+(router); "teach me" → opening "me", compound turn half-done, offer lost.
+
+In this build (P1 + P8) every command is a `command` ChatTurn with typed
+slots, actuated by code, with the words built from the result:
+- **start game** {seat, opening?, strength?} — always echoed + one-tap confirm
+  when a game is in progress (never silently over a live game).
+- **teach / play this opening** {opening resolved through the ONE opening
+  resolver from the reader's `topic`, any language; unresolved → the picker}.
+- **make this move** {san, validated legal on the board} — "play e4" / "I
+  played e4" is a command; "what about e4?" is NEVER one (the reader may not
+  emit a move to play on a question). The open walk flag "a dictation turn
+  produced a chat answer" is this boundary, fixed here.
+- **take back** {count}, **reset**, **set position**, **flip board**,
+  **save/restore position**, **strength up/down**, **quiz / drill / trap
+  stage**, **go to page**, **review game**, **continue middlegame**.
+- **settings** {voice on/off, verbosity, arrows, difficulty, personality,
+  stop talking} — through `applyCoachSetting`, one place.
+- **record-keeping** {favorite opening, save to repertoire, clear memory,
+  set intended opening}.
+- **compound** — a turn is a LIST of commands/questions run in order
+  ("reset and teach me the Italian").
+- **pending offer** — "yes" / "go ahead" / "can I start now?" runs the stored
+  ChatTurn.
+Code-side writes (`record_blunder`, `record_hint_request`) move out of chat
+to the blunder/hint paths. Data tools (lookup_player_*, lichess_*,
+stockfish_*) become answerers, not model tools. The capability ledger (ONE-CHAT
+FINAL §2) is the gate: every tool above has a row (→ new home → test) and the
+model toolbelt is deleted only when every row is green.
+
+## Decisions — logged 2026-10-09 (David: "Yes to all")
+1. Requests first (P1–P2), board answers second (P3–P5). ✅
+2. First words ≤ 2 s on a warm position. ✅
+3. Start with P0 (full `chat-turn` fields to PostHog + the replay set). ✅
+4. One voice: chat phrased by the same model layer as narration. ✅ non-negotiable
+5. Asked concepts shown on My Weaknesses. ✅
+
+## Decisions for David (superseded by the log above)
 
 1. Order: requests first (P1–P2), board answers second (P3–P5)? Recommended —
    that is what real users hit.
