@@ -27,7 +27,7 @@
   "src/services/coachsCall.ts": 2,
   "src/services/customLessonPlan.ts": 5,
   "src/services/discussionPractice.ts": 2,
-  "src/services/groundedAnswer.ts": 37,
+  "src/services/groundedAnswer.ts": 36,
   "src/services/moveReasonOptions.ts": 1,
   "src/services/perspectiveRule.ts": 1,
   "src/services/smartSearchService.ts": 1,

@@ -5061,7 +5061,9 @@ export interface WeaknessLifecycleLike {
 export function assembleWeaknessBriefingAnswer(lc: WeaknessLifecycleLike): GroundedAnswer | null {
   if (!lc.sampleFloorMet) {
     return {
-      facts: `I don't have enough of your games analyzed yet to read your weakness trends — I've only got ${lc.gamesConsidered} game${lc.gamesConsidered === 1 ? '' : 's'} to go on. Import and analyze a few more and I'll break down what's improving, what's sticking, and what to drill first.`,
+      facts: lc.gamesConsidered === 0
+        ? `None of your games are analyzed yet, so there are no weakness trends to read. Import and analyze a few, and you'll see what's improving, what's sticking, and what to drill first.`
+        : `Only ${lc.gamesConsidered} of your games ${lc.gamesConsidered === 1 ? 'is' : 'are'} analyzed so far — too few to read weakness trends. Import and analyze a few more, and you'll see what's improving, what's sticking, and what to drill first.`,
       bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
     };
   }
