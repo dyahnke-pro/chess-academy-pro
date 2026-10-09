@@ -211,7 +211,11 @@ cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 # build #202 archived into the closed 4.0.4 train — the preflight read only
 # the US storefront, which still reported 4.0.3. The resolver now takes the
 # highest version across storefronts; the pin carries the intent.
-PINNED_MARKETING_VERSION="4.0.5"
+# BUMP 4.0.5 -> 4.0.6 (David 2026-10-09: "Advance build and version number"):
+# 4.0.5 went LIVE 2026-10-03 (iTunes lookup), so its train is closed. 4.0.6
+# carries the chat-answers rebuild: the coach reads the question and answers
+# from the board (attack, win back, defend, what did I lose, their plan).
+PINNED_MARKETING_VERSION="4.0.6"
 # DURABLE PREFLIGHT (2026-09-09): the pinned string self-heals. resolve-marketing
 # -version.mjs reads the LIVE App Store version (public iTunes lookup, no ASC
 # keys) and, if the pin isn't already above it, bumps the patch — so a forgotten
