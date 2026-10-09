@@ -118,7 +118,10 @@ for (const c of cases) {
   const q = c.ask.replace('{LAST}', last ?? 'that');
   const r = await ask(q);
   const fails = [];
-  if (!r.answer) fails.push('no answer');
+  // A turn that MOVED the student where the case wants is answered by the
+  // move — the page it lands on has no chat to say more in (R6).
+  const movedAsWanted = !!c.urlMust && c.urlMust.test(r.url);
+  if (!r.answer && !movedAsWanted) fails.push('no answer');
   if (STOCK.test(r.answer)) fails.push('stock line');
   if (/\[BOARD:|\[\[/.test(r.answer)) fails.push('leaked markup');
   for (const re of c.must ?? []) if (!re.test(r.answer)) fails.push(`missing ${re}`);
