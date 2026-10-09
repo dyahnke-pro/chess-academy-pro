@@ -64,6 +64,10 @@ function sides(chess: Chess, sq: Square, student: Color): { owner: Color; enemy:
 
 export function answerCount(chess: Chess, sq: Square | null, student: Color, which: 'attackers' | 'defenders'): string | null {
   if (!sq) return null;
+  // AN EMPTY SQUARE HAS NO ATTACKER AND DEFENDER — IT HAS TWO SIDES (live
+  // replay 2026-10-08: "who controls e5?" named Black's three pieces and left
+  // out White's knight on f3). Count both and say who holds it.
+  if (!chess.get(sq)) return answerControl(chess, sq, student);
   const { owner, enemy } = sides(chess, sq, student);
   const by = chess.attackers(sq, which === 'attackers' ? enemy : owner).filter((s) => s !== sq);
   const subject = owned(chess, sq, student);
@@ -71,6 +75,18 @@ export function answerCount(chess: Chess, sq: Square | null, student: Color, whi
   if (by.length === 0) return `Nothing ${verb}s ${subject}.`;
   const whose = (which === 'attackers' ? enemy : owner) === student ? 'your' : 'their';
   return `${count(by.length)} ${by.length === 1 ? (which === 'attackers' ? 'attacks' : 'defends') : verb} ${subject}: ${whose} ${listOf(chess, by)}.`;
+}
+
+export function answerControl(chess: Chess, sq: Square, student: Color): string {
+  const enemy: Color = student === 'w' ? 'b' : 'w';
+  const mine = chess.attackers(sq, student);
+  const theirs = chess.attackers(sq, enemy);
+  const side = (list: Square[], whose: string): string =>
+    list.length === 0 ? `${whose === 'your' ? 'you have' : 'they have'} nothing on it` : `${whose} ${listOf(chess, list)}`;
+  const verdict = mine.length === theirs.length
+    ? (mine.length === 0 ? 'Nobody controls it yet.' : 'Control is even.')
+    : mine.length > theirs.length ? 'You control it.' : 'They control it.';
+  return `On ${sq}: ${side(mine, 'your')} against ${side(theirs, 'their')}. ${verdict}`;
 }
 
 export function answerWhyTarget(chess: Chess, sq: Square | null, student: Color): string | null {

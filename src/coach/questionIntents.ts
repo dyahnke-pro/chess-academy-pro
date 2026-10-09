@@ -3421,7 +3421,10 @@ export function buildQuestionGrounding(
     // General strategy/how-to ("how do I play against an IQP") → corpus theory
     // search. Suppressed when the concept or fundamentals lanes already own it,
     // so it's the fallback theory net, not a competitor (P-II.1).
-    theoryQuestion: isTheoryQuestion(a) && !isConceptQuestion(a) && !isFundamentalsQuestion(a) && !isFundamentalLessonQuestion(a) && !method,
+    // A question about THIS board is answered from the board, not a book
+    // passage (live replay 2026-10-08: "how do I attack the king?" got an essay
+    // on opposite-wing castling with both kings castled short).
+    theoryQuestion: isTheoryQuestion(a) && !isConceptQuestion(a) && !isFundamentalsQuestion(a) && !isFundamentalLessonQuestion(a) && !method && !(!!liveState.fen && pureBoardAspect(a) !== null),
     // Weakness LIFECYCLE / BRIEFING (Part III) — the archive-timeline read.
     // Take precedence over the generic mistakes/misconceptions/strengths lanes
     // (handled by suppressing those below).

@@ -146,7 +146,10 @@ export function extractQuestionFocus(ask: string | null | undefined): QuestionFo
   // ── SIDE / tactics / king / plan / eval ──
   if (threat) add(side === 'me' ? 'my-threats' : 'opponent-threats');
   if (hanging && pieces.length === 0) add('hanging');
-  if (kingSafety) add(side === 'opponent' ? 'king-safety-theirs' : 'king-safety-mine');
+  // ATTACKING A KING IS ABOUT THEIRS (live replay 2026-10-08: "how do I attack
+  // the king?" read the student's own king, because "I" names the student).
+  const attackKing = /\b(?:attack(?:ing)?|go\s+after|storm(?:ing)?|hunt(?:ing)?|break\s+open)\b[^.?!]{0,25}\bking\b/.test(t) && !/\bmy\s+king\b/.test(t);
+  if (kingSafety) add(side === 'opponent' || attackKing ? 'king-safety-theirs' : 'king-safety-mine');
   if (check) add('checks');
   if (planW && !breakAsk) add(side === 'opponent' ? 'opponent-plan' : 'my-plan');
   if (whyFailedW && moves.length === 0) add('why-failed');

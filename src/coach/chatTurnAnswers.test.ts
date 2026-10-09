@@ -48,3 +48,13 @@ describe('chat answers for the lesson\'s board questions (computed)', () => {
     expect(directAnswer(turn('plan', 'c6'), RUY, EMPTY_CONVERSATION, 'b')).toBeNull();
   });
 });
+
+describe('who controls an empty square — both sides (live replay 2026-10-08)', () => {
+  it('"who controls e5?" counts White\'s knight against Black\'s three', () => {
+    const c = new Chess();
+    for (const m of 'e4 e6 Nf3 h6 Bc4 Bb4 O-O Ba5 d3 d6 c3 c5 Nbd2 Nf6 Re1 Nbd7 h3 Bc7 Bb3 O-O Bc4 Nh7 Bb3 Rb8 Bc4 b6 Bb3 Bb7 Bc4 d5 Bb3 Qf6 Bc4 dxc4 Nf1 cxd3 Ng3 d2'.split(' ')) c.move(m);
+    const a = answerCount(c, 'e5', 'w', 'attackers');
+    expect(a).toMatch(/^On e5: your knight on f3 against their /);
+    expect(a).toMatch(/They control it\.$/);
+  });
+});

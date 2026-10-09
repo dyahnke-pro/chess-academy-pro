@@ -14,6 +14,7 @@
  */
 import { MATERIAL_VALUE } from './pieceValues';
 import { computeMustDefend } from './threatOut';
+import { readBoardUrgency, urgencyLead, threatsAgainst } from './boardUrgency';
 import { mechanismContrast, moveMissed, pvSans } from './moveInsight';
 import { walkableLine } from './proof';
 import { settledLeadFor, type LastMove } from './material';
@@ -245,7 +246,16 @@ function dispatchPureAspect(
     case 'my-threats': return assembleThreatAnswer(fen, ask, studentColor, 'me');
     case 'king-safety-mine':
     case 'king-lines': return assembleKingSafetyAnswer(fen, studentColor, 'me');
-    case 'king-safety-theirs': return assembleKingSafetyAnswer(fen, studentColor, 'opponent');
+    case 'king-safety-theirs': {
+      const king = assembleKingSafetyAnswer(fen, studentColor, 'opponent');
+      // "HOW do I attack the king?" on a king that is safe is answered with what
+      // to do instead — build first — never only "it's safe" (replay 2026-10-08).
+      if (king && /\b(?:attack|go\s+after|storm|hunt|break\s+open)\b/i.test(ask ?? '') && /looks safe/.test(king.facts)) {
+        const plan = assembleBoardPlanAnswer(fen, studentColor, 'me');
+        if (plan) return { ...king, facts: `${king.facts} So there is no direct attack yet — build first. ${plan.facts}` };
+      }
+      return king;
+    }
     case 'material': return assembleMaterialAnswer(fen, studentColor);
     case 'my-plan': return assembleBoardPlanAnswer(fen, studentColor, 'me');
     case 'opponent-plan': return assembleBoardPlanAnswer(fen, studentColor, 'opponent');
@@ -546,8 +556,11 @@ export function assembleBoardPlanAnswer(
   // THE THREAT COMES BEFORE THE PLAN (question run 2026-09-27: "the plan is to
   // break with a4…" with the student's queen hanging on g4). A piece of yours
   // that can be taken right now is the first move of any plan.
-  const loose = findHangingBySee(fen).filter((h) => h.color === myC).sort((a, b) => b.gain - a.gain)[0];
-  const urgent = loose ? `First, your ${REVIEW_PIECE_NAME[loose.piece]} on ${loose.square} can be taken — that comes before any plan. ` : '';
+  // …AND WHAT YOU CAN WIN COMES BEFORE BOTH (one board read, 2026-10-08: the
+  // plan warned "your queen on d1 can be taken" when White could simply take
+  // the new queen on e1). One urgency computer, shared by every board answer.
+  const lead = urgencyLead(readBoardUrgency(fen, studentColor));
+  const urgent = lead ? `${lead} ` : '';
   if (head && top.length) {
     return { facts: `${urgent}${head} Beyond that: ${top.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
@@ -781,8 +794,14 @@ export function assembleOpponentMoveAnswer(opts: {
   const threat = assembleThreatAnswer(fen, null, studentColor, 'opponent');
   const threatText = threat && !/no immediate threat|nothing forcing/i.test(threat.facts) ? threat.facts : null;
 
+  // A MOVE THAT HITS TWO PIECES OR WALKS TO PROMOTION IS NOT QUIET (live
+  // replay 2026-10-08: "…d2 — a quiet move with no immediate tactical point",
+  // the pawn attacking a rook and a bishop and one step from queening).
+  const urgency = readBoardUrgency(fen, studentColor);
+  const hits = threatsAgainst(urgency, played.to, fen);
+  if (hits && !clauses.some((c) => /attacks|threat/.test(c))) clauses.push(hits);
   const didPart = clauses.length > 0
-    ? `They played ${played.san} — it ${clauses.length > 1 ? `${clauses.slice(0, -1).join(', ')} and ${clauses[clauses.length - 1]}` : clauses[0]}.`
+    ? `They played ${played.san} — ${clauses.length > 1 ? `${clauses.slice(0, -1).join(', ')} and ${clauses[clauses.length - 1]}` : clauses[0]}.`.replace(/ — (?!it )/, ' — it ')
     : `They played ${played.san} — a quiet move with no immediate tactical point.`;
   const facts = threatText ? `${didPart} ${threatText}` : didPart;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };

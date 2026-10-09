@@ -102,7 +102,9 @@ describe('Colle run — the plan puts the hanging queen first', () => {
   it('a loose queen leads the plan answer', async () => {
     const { assembleBoardPlanAnswer } = await import('../services/groundedAnswer');
     const f = assembleBoardPlanAnswer(COLLE, 'white', 'me')?.facts ?? '';
-    expect(f).toMatch(/^First, your queen on g4 can be taken — that comes before any plan\./);
+    // The queen leads; every other piece that can be taken is named with it
+    // (one board read, 2026-10-08).
+    expect(f).toMatch(/^First, your queen on g4(?: and [^—]+)? can be taken — that comes before any plan\./);
   });
   it('NEGATIVE CONTROL: with nothing loose, no "First," line', async () => {
     const { assembleBoardPlanAnswer } = await import('../services/groundedAnswer');
