@@ -288,6 +288,8 @@ function theirOne(chess: Chess, piece: PieceLetter, enemy: 'w' | 'b'): string | 
  * the model cannot place without the board are read here: a choice between
  * two moves, and a question about one named move.
  */
+const BEST_MOVE_ASK_RE = /^(?:so\s+|ok(?:ay)?\s+)?(?:what(?:'s|s|\s+is)\s+(?:the\s+|my\s+)?(?:best|strongest|right|top)\s+(?:move|continuation|play)|best\s+move|what\s+(?:should|do|would)\s+i\s+(?:play|do))(?:\s+(?:here|now|in\s+this\s+position))?\s*[?.!]*$/;
+
 export function readTurnInCode(text: string, board: BoardContext): ChatTurn | null {
   if (!board.fen || text.length > 160) return null;
   let chess: Chess;
@@ -302,6 +304,12 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
     || /\bwhat do you mean\b|\bwhat does that mean\b|\bi don'?t (?:get|understand) (?:it|that)\b/.test(followUp))) {
     return { kind: 'explain-last', referents: [], seat: null, topic: null };
   }
+  // "What's the best move here?" / "what should I play?" / "best move?" —
+  // the commonest question there is, asked as the WHOLE message. Read in
+  // code: sent to the model it cost 16-20 s cold (all-screens walk
+  // 2026-10-09). Anything longer, past tense or about them stays with the model.
+  if (BEST_MOVE_ASK_RE.test(followUp)) return { kind: 'best-move', referents: [], seat: 'me', topic: null };
+
   const slots = tagSlots(text);
   if (slots.negated && slots.ask !== 'why') return null;
 

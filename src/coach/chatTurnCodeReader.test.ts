@@ -74,3 +74,12 @@ describe('the sentence computer — real student questions, read on the board', 
     expect(read('What is my bishop on c4 aiming at?')).toEqual({ kind: 'what-about-piece', referents: [{ type: 'piece', piece: 'b', square: 'c4', seat: 'me' }], seat: 'me', topic: null });
   });
 });
+
+describe('the best-move question is read in code (all-screens walk 2026-10-09: 16-20 s cold through the model)', () => {
+  it.each(["what's the best move here?", "What's the best move?", 'best move?', 'what should I play?', 'whats the strongest move now', 'what should i do here?'])('%s', (q) => {
+    expect(read(q)).toMatchObject({ kind: 'best-move', seat: 'me' });
+  });
+  it.each(['what was the best move?', "what's the best move for black?", 'best move in the Sicilian?', 'what should I have played?'])('%s stays with the model', (q) => {
+    expect(read(q)?.kind).not.toBe('best-move');
+  });
+});

@@ -98,8 +98,10 @@ describe('dispatchCoachTurn — the shadow read', () => {
   });
 
   it('a typed question emits ONE chat-turn row comparing the reading with today\'s lane and the served intent', async () => {
-    setChatTurnReaderForTests(async () => ({ kind: 'best-move', referents: [], seat: 'me', english: "what's my best move?" }));
-    const ans = await dispatchCoachTurn(TURN("what's my best move?"), {});
+    // A phrasing the code reader leaves to the model ("what's my best move?"
+    // is read in code since the all-screens walk).
+    setChatTurnReaderForTests(async () => ({ kind: 'best-move', referents: [], seat: 'me', english: "what's my best move here, and why?" }));
+    const ans = await dispatchCoachTurn(TURN("what's my best move here, and why?"), {});
     expect(ans.text).toBe('Brain');
     await waitForRow();
     expect(rows).toHaveLength(1);
@@ -118,7 +120,7 @@ describe('dispatchCoachTurn — the shadow read', () => {
 
   it('a disagreement is recorded as such (today\'s routing still answers)', async () => {
     setChatTurnReaderForTests(async () => ({ kind: 'compare-my-move', referents: [], seat: 'me', english: 'x' }));
-    const ans = await dispatchCoachTurn(TURN("what's my best move?"), {});
+    const ans = await dispatchCoachTurn(TURN("what's my best move here, and why?"), {});
     expect(ans.text).toBe('Brain');
     await waitForRow();
     expect(rows[0].agreed).toBe(false);
