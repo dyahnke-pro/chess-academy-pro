@@ -104,7 +104,9 @@ describe('Colle run — the plan puts the hanging queen first', () => {
     const f = assembleBoardPlanAnswer(COLLE, 'white', 'me')?.facts ?? '';
     // The queen leads; every other piece that can be taken is named with it
     // (one board read, 2026-10-08).
-    expect(f).toMatch(/^First, your queen on g4(?: and [^—]+)? can be taken — that comes before any plan\./);
+    // …and when the attacker can simply be taken, taking it IS the first move
+    // (2026-10-09): Rxe5 wins the knight that hits the queen and the bishop.
+    expect(f).toMatch(/^First, take their knight on e5 — it attacks your queen on g4 and bishop on d3\./);
   });
   it('NEGATIVE CONTROL: with nothing loose, no "First," line', async () => {
     const { assembleBoardPlanAnswer } = await import('../services/groundedAnswer');
