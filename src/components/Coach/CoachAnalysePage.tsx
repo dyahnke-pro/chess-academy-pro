@@ -153,6 +153,8 @@ export function CoachAnalysePage(): JSX.Element {
         },
       );
       const finalText = unwrapSpineError(result.text);
+      // A grounded answer does not stream: show it whole.
+      if (finalText && !explanation) setCoachExplanation(finalText);
       if (!finalText) {
         void logAppAudit({
           kind: 'llm-error',
@@ -168,7 +170,7 @@ export function CoachAnalysePage(): JSX.Element {
       }
     } catch (error) {
       console.error('Analysis error:', error);
-      setCoachExplanation('I had trouble analysing that position. Please check the FEN and try again.');
+      setCoachExplanation('That position could not be analysed. Check the FEN and try again.');
     } finally {
       setLoading(false);
     }
@@ -192,20 +194,6 @@ export function CoachAnalysePage(): JSX.Element {
     tacticsRef.current = null; // reset until this ask's tactics is built
     dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE, undefined, () => game.fen, () => tacticsRef.current);
 
-    const evalText = analysis
-      ? (analysis.isMate
-          ? `Mate in ${analysis.mateIn ?? '?'}`
-          : `${(analysis.evaluation / 100).toFixed(2)} pawns`)
-      : 'no engine eval cached';
-    const ask = [
-      `Student question: ${question}`,
-      `Position FEN: ${game.fen}`,
-      `Engine eval: ${evalText}.`,
-      `Student rating: ${activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING}.`,
-      '',
-      `Answer in 2-4 sentences. Stay grounded in the position.`,
-    ].join('\n');
-
     // Tactical context for the follow-up ask — same pattern as the
     // initial explain call above. `analysis` is the cached SF result
     // from when the user loaded this position; it powers the forward
@@ -221,6 +209,13 @@ export function CoachAnalysePage(): JSX.Element {
     );
     tacticsRef.current = followTactics; // gate the streamed voice on it
     let response = '';
+    // The answer goes under what is already shown; `base` is that text,
+    // captured once so each streamed chunk replaces the answer, not appends.
+    let base: string | null = null;
+    const show = (text: string): void => setCoachExplanation((prev) => {
+      if (base === null) base = prev;
+      return base ? `${base}\n\n${text}` : text;
+    });
     // Same shape as the analyse-position call above — thread the
     // on-board move history when present so the book-context loader
     // gets an opening to anchor against. Follow-up questions inherit
@@ -232,7 +227,9 @@ export function CoachAnalysePage(): JSX.Element {
     const result = await dispatchCoachTurn(
       {
         surface: 'standalone-chat',
-        ask,
+        // The student's own words: the board, eval and history ride on the
+        // live state, so the door reads what they asked, not an app wrapper.
+        ask: question,
         liveState: {
           surface: 'standalone-chat',
           fen: game.fen,
@@ -250,12 +247,14 @@ export function CoachAnalysePage(): JSX.Element {
         onNavigate: (path: string) => void navigate(path),
         onChunk: (chunk: string) => {
           response += chunk;
-          setCoachExplanation((prev) => prev + '\n\n' + response);
+          show(response);
           dispatcherRef.current.push(response);
         },
       },
     );
     const finalText = unwrapSpineError(result.text);
+    // An answer the door computed does not stream: show it whole.
+    if (finalText && !response) show(finalText);
     if (!finalText) {
       void logAppAudit({
         kind: 'llm-error',

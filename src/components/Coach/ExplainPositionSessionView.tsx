@@ -167,6 +167,8 @@ export function ExplainPositionSessionView({
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (cancelled.value || !mountedRef.current) return;
         const finalText = unwrapSpineError(result.text);
+        // A grounded answer does not stream: show it whole.
+        if (finalText && !streamed) setExplanation(finalText);
         if (!finalText) {
           void logAppAudit({
             kind: 'llm-error',
@@ -183,7 +185,7 @@ export function ExplainPositionSessionView({
         if (cancelled.value || !mountedRef.current) return;
         console.warn('[ExplainPositionSessionView] analysis failed:', err);
         setExplanation(
-          'I had trouble analysing that position. Try a different FEN, or open the Analysis Board.',
+          'That position could not be analysed. Try a different FEN, or open the Analysis Board.',
         );
       } finally {
         if (!cancelled.value && mountedRef.current) setLoading(false);
@@ -207,17 +209,6 @@ export function ExplainPositionSessionView({
       tacticsRef.current = null; // reset until this ask's tactics is built
       dispatcherRef.current = createStreamingDispatcher(SENTENCE_END_RE, undefined, () => targetFen, () => tacticsRef.current);
 
-      const evalText = analysis.isMate
-        ? `Mate in ${analysis.mateIn ?? '?'}`
-        : `${(analysis.evaluation / 100).toFixed(2)} pawns`;
-      const ask = [
-        `Student question: ${question}`,
-        `Position FEN: ${targetFen}`,
-        `Engine eval: ${evalText}.`,
-        `Student rating: ${activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING}.`,
-        '',
-        `Answer in 2-4 sentences. Stay grounded in the position.`,
-      ].join('\n');
 
       // Tactical context for the follow-up question.
       const askStudentColor = targetFen.split(' ')[1] === 'b' ? 'b' : 'w';
@@ -231,12 +222,21 @@ export function ExplainPositionSessionView({
       );
       tacticsRef.current = askTactics; // gate the streamed voice on it
       let response = '';
+      // The answer goes under what is already shown; `base` is that text,
+      // captured once so each streamed chunk replaces the answer, not appends.
+      let base: string | null = null;
+      const show = (text: string): void => setExplanation((prev) => {
+        if (base === null) base = prev;
+        return base ? `${base}\n\n${text}` : text;
+      });
       // Unified dispatch — the user's question gets the action router (settings,
       // navigation, drills) then the grounded brain, same as chat/teach.
       const result = await dispatchCoachTurn(
         {
           surface: 'standalone-chat',
-          ask,
+          // The student's own words: the board and eval ride on the live
+          // state, so the door reads what they asked, not an app wrapper.
+          ask: question,
           liveState: {
             surface: 'standalone-chat',
             fen: targetFen,
@@ -254,13 +254,15 @@ export function ExplainPositionSessionView({
           onChunk: (chunk: string) => {
             if (!mountedRef.current) return;
             response += chunk;
-            setExplanation((prev) => `${prev}\n\n${response}`);
+            show(response);
             pushAccumulated(response);
           },
         },
       );
       if (!mountedRef.current) return;
       const finalText = unwrapSpineError(result.text);
+      // An answer the door computed does not stream: show it whole.
+      if (finalText && !response) show(finalText);
       if (!finalText) {
         void logAppAudit({
           kind: 'llm-error',
