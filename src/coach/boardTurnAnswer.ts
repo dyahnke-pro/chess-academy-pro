@@ -24,6 +24,8 @@ import type { StockfishAnalysis } from '../types';
 import { computePositionFacts, type ClauseItem } from '../services/positionFacts';
 import { FACT_LAYER, type FactKind } from '../services/reviewFacetRank';
 import { lastMoveIfStudent, lastMoveIfOpponent } from '../services/lastMoveOfLine';
+import { computeMustDefend } from '../services/threatOut';
+import { boardPlanFacts } from '../services/boardPlanFacts';
 
 /** The kinds the board answers directly. Each is served here or falls back. */
 export const BOARD_ANSWERED_KINDS: ReadonlySet<ChatKind> = new Set<ChatKind>(['why-best-move', 'candidate-move', 'plan', 'tactics']);
@@ -103,8 +105,7 @@ const NOT_AN_ANSWER: ReadonlySet<string> = new Set(['method', 'deliberation']);
  * whose squares an earlier one already covers is the same claim and goes.
  */
 async function answerFromRead(turn: ResolvedChatTurn, board: BoardTurnInput): Promise<string | null> {
-  // Their plan reads the board from their seat — not served here yet.
-  if (turn.seat === 'them') return null;
+  if (turn.seat === 'them') return turn.kind === 'plan' ? theirPlanAnswer(board) : null;
   const engine = engineOverride ?? defaultEngine;
   const analysis = await engine.analysis(board.fen);
   if (!analysis?.topLines?.length) return null;
@@ -137,4 +138,28 @@ async function answerFromRead(turn: ResolvedChatTurn, board: BoardTurnInput): Pr
   }
   if (chosen.length === 0) return null;
   return chosen.map((c) => c.text.trim()).join(' ');
+}
+
+const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/**
+ * THEIR PLAN — "what is black trying to do?". What they hit right now (the
+ * same must-defend the narration speaks), then the levers their side of the
+ * structure offers, read by the one plan computer in their voice. Board facts
+ * only (WO-OUTCOME-01 C): who attacks what, never what a capture would net.
+ */
+export function theirPlanAnswer(board: BoardTurnInput): string | null {
+  const student: 'w' | 'b' = board.studentColor === 'white' ? 'w' : 'b';
+  const them: 'white' | 'black' = board.studentColor === 'white' ? 'black' : 'white';
+  const parts: string[] = [];
+  const md = computeMustDefend(board.fen, student);
+  for (const h of md.pieces) {
+    if (!h.attacker || !h.attackerSquare) continue;
+    parts.push(`Their ${PIECE_NAME[h.attacker]} on ${h.attackerSquare} is after your ${PIECE_NAME[h.piece]} on ${h.square}${h.defenders === 0 ? ', which nothing guards' : ''}.`);
+  }
+  const facts = boardPlanFacts(board.fen, them, 'they');
+  if (facts && facts.levers.length) {
+    parts.push(`Beyond that, they want to ${facts.levers.map((l) => l.phrase).join('; ')}.`.replace(/^Beyond that, they/, parts.length ? 'Beyond that, they' : 'They'));
+  }
+  return parts.length ? parts.join(' ') : null;
 }

@@ -78,7 +78,9 @@ describe('plan and tactics questions are answered from the one read', () => {
     expect(await answerBoardTurn(ask('tactics'), { fen: COLLE, history: [], studentColor: 'white' }))
       .toBe('Their knight on e5 attacks your queen on g4, and nothing defends it — and you can take the attacker without losing material.');
   }, 60_000);
-  it('their plan stays on its own lane for now', async () => {
-    expect(await answerBoardTurn({ ...ask('plan'), seat: 'them' } as unknown as ResolvedChatTurn, { fen: COLLE, history: [], studentColor: 'white' })).toBeNull();
+  it('their plan is read from their side: what they hit, then their levers', async () => {
+    const text = await answerBoardTurn({ ...ask('plan'), seat: 'them' } as unknown as ResolvedChatTurn, { fen: COLLE, history: [], studentColor: 'white' });
+    expect(text).toMatch(/^Their knight on e5 is after your queen/);
+    expect(text).not.toMatch(/\byour (?:knight|bishop) on [a-h][1-8] into the game/);
   });
 });

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**667 lines · 26 exports · 15 importers · 9 tests · 3 audits**
+**682 lines · 26 exports · 16 importers · 10 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,6 +26,7 @@
 - `src/coach/chatTurnParser.ts`
 - `src/coach/coachService.askReader.integration.test.ts`
 - `src/coach/dispatchCoachTurn.ts`
+- `src/coach/handWalk1009.test.ts`
 - `src/coach/questionRoute.test.ts`
 - `src/services/coachApi.ts`
 
@@ -44,11 +45,11 @@
 - `src/coach/chatTurn.test.ts:97`
 - `src/coach/chatTurn.test.ts:100`
 - `src/coach/chatTurn.test.ts:107`
-- `src/coach/dispatchCoachTurn.ts:187`
-- `src/coach/dispatchCoachTurn.ts:224`
-- `src/coach/dispatchCoachTurn.ts:236`
-- `src/coach/dispatchCoachTurn.ts:257`
-- `src/coach/dispatchCoachTurn.ts:311`
+- `src/coach/dispatchCoachTurn.ts:188`
+- `src/coach/dispatchCoachTurn.ts:225`
+- `src/coach/dispatchCoachTurn.ts:237`
+- `src/coach/dispatchCoachTurn.ts:258`
+- `src/coach/dispatchCoachTurn.ts:312`
 - `src/coach/questionRoute.test.ts:20`
 - `src/coach/questionRoute.test.ts:30`
 - `src/coach/questionRoute.test.ts:33`
@@ -104,7 +105,7 @@
 ### `ValidationResult` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `validateChatTurn` (function) — 15 call sites
+### `validateChatTurn` (function) — 16 call sites
 - `src/coach/chatTurn.test.ts:90`
 - `src/coach/chatTurn.test.ts:136`
 - `src/coach/chatTurn.test.ts:141`
@@ -120,6 +121,7 @@
 - `src/coach/chatTurnParser.ts:156`
 - `src/coach/chatTurnParser.ts:164`
 - `src/coach/chatTurnParser.ts:194`
+- `src/coach/handWalk1009.test.ts:86`
 
 ### `ConversationState` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -129,19 +131,19 @@
 
 ### `nextConversationState` (function) — 2 call sites
 - `src/coach/chatTurn.test.ts:162`
-- `src/coach/dispatchCoachTurn.ts:133`
+- `src/coach/dispatchCoachTurn.ts:134`
 
 ### `canonicalAsk` (function) — 5 call sites
 - `src/coach/chatTurn.test.ts:66`
 - `src/coach/chatTurn.test.ts:80`
 - `src/coach/chatTurn.test.ts:83`
 - `src/coach/chatTurn.test.ts:87`
-- `src/coach/dispatchCoachTurn.ts:241`
+- `src/coach/dispatchCoachTurn.ts:242`
 
 ### `kindAgreesWithLane` (function) — 3 call sites
 - `src/coach/chatTurn.test.ts:103`
 - `src/coach/chatTurn.test.ts:104`
-- `src/coach/dispatchCoachTurn.ts:147`
+- `src/coach/dispatchCoachTurn.ts:148`
 
 ### `firingLanes` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -159,6 +161,7 @@
 - `src/coach/chatTurnEval.test.ts`
 - `src/coach/chatTurnParser.test.ts`
 - `src/coach/coachService.askReader.integration.test.ts`
+- `src/coach/handWalk1009.test.ts`
 - `src/coach/questionRoute.test.ts`
 
 ## Audits that reach it

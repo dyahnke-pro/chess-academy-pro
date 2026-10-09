@@ -66,7 +66,9 @@ describe('the sentence computer — real student questions, read on the board', 
   });
   it('a question with no move in it is left to the model', () => {
     expect(read('What are my weaknesses?')).toBeNull();
-    expect(read("What's my plan?")).toBeNull();
+  });
+  it('a plan question is read as a plan, with whose side', () => {
+    expect(read("What's my plan?")).toMatchObject({ kind: 'plan', seat: 'me' });
   });
   it('"What is my bishop on c4 aiming at?" asks about that bishop', () => {
     expect(read('What is my bishop on c4 aiming at?')).toEqual({ kind: 'what-about-piece', referents: [{ type: 'piece', piece: 'b', square: 'c4', seat: 'me' }], seat: 'me', topic: null });

@@ -9,9 +9,10 @@
 import { Chess, type Color, type Square } from 'chess.js';
 import type { ConversationState, ResolvedChatTurn } from './chatTurn';
 import { findLoosePieces } from '../services/loosePieces';
-import { findHangingBySee } from '../services/positionReadingService';
+import { findHangingBySee, captureRead } from '../services/positionReadingService';
 import { PIECE_NAMES } from '../types/tacticTypes';
-import { andList } from '../utils/andList';
+import { andList, orList } from '../utils/andList';
+import { computeMustDefend } from '../services/threatOut';
 import { isPinnedPiece } from '../services/nextPlans';
 import { readPosition } from '../services/positionalRead';
 
@@ -53,9 +54,25 @@ export function answerIsLoose(chess: Chess, sq: Square | null, student: Color, s
     const p = chess.get(sq);
     if (!p) return `There is no piece on ${sq}.`;
     const loose = findLoosePieces(chess, p.color).find((l) => l.square === sq);
-    if (!loose) return `${capFirst(owned(chess, sq, student))} is guarded.`;
+    const enemy: Color = p.color === 'w' ? 'b' : 'w';
+    // WHOSE MOVE IT IS decides what "loose" means for the student (hand walk
+    // 2026-10-09: "right now it can be won" on the student's own turn — they
+    // cannot take until you have moved).
+    const yours = p.color === student;
+    const yourTurn = chess.turn() === p.color;
+    const after = yours && yourTurn ? ' It is your move, so you can still save it.' : '';
+    if (!loose) {
+      // Guarded is not safe when the exchange still loses it (a pawn hitting a
+      // guarded bishop): the safety door plays the real captures.
+      let gain: number | null = 0;
+      try { gain = captureRead(chess.fen(), sq, enemy); } catch { gain = 0; }
+      if (gain !== null && gain > 0 && chess.attackers(sq, enemy).length > 0) {
+        return `${capFirst(owned(chess, sq, student))} is guarded, but the trade still loses material: the ${listOf(chess, chess.attackers(sq, enemy))} can take it.${after}`;
+      }
+      return `${capFirst(owned(chess, sq, student))} is guarded.`;
+    }
     return loose.attacked
-      ? `${capFirst(owned(chess, sq, student))} is loose and attacked by the ${listOf(chess, loose.attackers)}.`
+      ? `${capFirst(owned(chess, sq, student))} is loose and attacked by the ${listOf(chess, loose.attackers)}.${after}`
       : `${capFirst(owned(chess, sq, student))} is loose — nothing guards it, though nothing attacks it yet.`;
   }
   // No piece named: the side the turn asked about ("their pieces"), else yours.
@@ -173,6 +190,68 @@ export function directAnswer(turn: ResolvedChatTurn, fen: string, memory: Conver
     case 'count-defenders': return answerCount(chess, sq, student, 'defenders');
     case 'why-is-it-a-target': return answerWhyTarget(chess, sq, student);
     case 'what-about-piece': return answerAboutPiece(chess, sq, student);
+    case 'defend-piece': return answerDefend(chess, sq, student);
     default: return null;
   }
+}
+
+/**
+ * HOW TO SAVE A PIECE — "how do I defend it?" (hand walk 2026-10-09: the
+ * question got the plan). Every legal move after which the piece stands safe,
+ * read by the safety door on the board after the move, grouped the way a
+ * player thinks: take the attacker, move it, guard it, block the line. No
+ * piece named and none in memory: the student's piece most in danger.
+ */
+export function answerDefend(chess: Chess, sq: Square | null, student: Color): string | null {
+  const enemy: Color = student === 'w' ? 'b' : 'w';
+  let square = sq;
+  if (!square || chess.get(square)?.color !== student) {
+    const md = computeMustDefend(chess.fen(), student);
+    square = (md.pieces[0]?.square as Square | undefined) ?? null;
+    if (!square) return 'Nothing of yours is under attack right now, so there is nothing to defend.';
+  }
+  const p = chess.get(square);
+  if (!p) return `There is no piece on ${square}.`;
+  const subject = owned(chess, square, student);
+  if (chess.turn() !== student) return `It is their move, so ${subject} has to wait — see what they play first.`;
+  let now: number | null = 0;
+  try { now = captureRead(chess.fen(), square, enemy); } catch { now = 0; }
+  if (now === 0 && chess.attackers(square, enemy).length === 0) return `${capFirst(subject)} is not attacked, so it needs no defending yet.`;
+  const attackers = new Set<string>(chess.attackers(square, enemy));
+  const take: string[] = []; const away: string[] = []; const guard: string[] = []; const block: string[] = []; const other: string[] = [];
+  for (const m of chess.moves({ verbose: true })) {
+    const after = new Chess(chess.fen());
+    after.move(m.san);
+    const at = (m.from === square ? m.to : square);
+    let gain: number | null;
+    try { gain = captureRead(after.fen(), at, enemy); } catch { gain = null; }
+    if (gain !== 0) continue;
+    // The move must not leave something else of yours hanging instead.
+    if (computeMustDefend(after.fen(), student).net > 0) continue;
+    if (m.captured && attackers.has(m.to)) take.push(m.san);
+    else if (m.from === square) away.push(m.san);
+    else if (after.attackers(square, student).length > chess.attackers(square, student).length) guard.push(m.san);
+    else if ([...attackers].some((a) => between(a as Square, square).includes(m.to))) block.push(m.san);
+    else other.push(m.san);
+  }
+  const ways: string[] = [];
+  if (take.length) ways.push(`take the attacker with ${orList(take)}`);
+  if (away.length) ways.push(`move it: ${orList(away)}`);
+  if (guard.length) ways.push(`guard it with ${orList(guard)}`);
+  if (block.length) ways.push(`block the attack with ${orList(block)}`);
+  if (other.length) ways.push(`make the capture fail with ${orList(other)}`);
+  if (ways.length === 0) return `${capFirst(subject)} cannot be saved without losing something else.`;
+  return `To save ${subject}, ${ways.length === 1 ? ways[0] : `${ways.slice(0, -1).join('; ')}; or ${ways[ways.length - 1]}`}.`;
+}
+
+/** The squares strictly between two squares on a line (empty when not on one). */
+function between(a: Square, b: Square): string[] {
+  const fa = a.charCodeAt(0); const ra = Number(a[1]);
+  const fb = b.charCodeAt(0); const rb = Number(b[1]);
+  const df = Math.sign(fb - fa); const dr = Math.sign(rb - ra);
+  const n = Math.max(Math.abs(fb - fa), Math.abs(rb - ra));
+  if (!(fa === fb || ra === rb || Math.abs(fb - fa) === Math.abs(rb - ra))) return [];
+  const out: string[] = [];
+  for (let i = 1; i < n; i += 1) out.push(`${String.fromCharCode(fa + df * i)}${ra + dr * i}`);
+  return out;
 }

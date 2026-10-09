@@ -48,14 +48,14 @@ describe('dispatchCoachTurn', () => {
 
   it('falls through to coachService.ask when no action matches', async () => {
     routeChatIntent.mockResolvedValue(null);
-    ask.mockResolvedValue({ text: 'brain answer', toolCallIds: [], dispatchedToolNames: [], provider: 'deepseek' });
+    ask.mockResolvedValue({ text: 'Brain answer', toolCallIds: [], dispatchedToolNames: [], provider: 'deepseek' });
     const ans = await dispatchCoachTurn(INPUT, {});
-    expect(ans.text).toBe('brain answer');
+    expect(ans.text).toBe('Brain answer');
     expect(ask).toHaveBeenCalledOnce();
   });
 
   it('skips the action router when skipActionRouter is set', async () => {
-    ask.mockResolvedValue({ text: 'brain', toolCallIds: [], dispatchedToolNames: [], provider: 'deepseek' });
+    ask.mockResolvedValue({ text: 'Brain', toolCallIds: [], dispatchedToolNames: [], provider: 'deepseek' });
     await dispatchCoachTurn(INPUT, { skipActionRouter: true });
     expect(routeChatIntent).not.toHaveBeenCalled();
     expect(ask).toHaveBeenCalledOnce();
@@ -63,9 +63,9 @@ describe('dispatchCoachTurn', () => {
 
   it('falls through to the brain if the router throws (never breaks a turn)', async () => {
     routeChatIntent.mockRejectedValue(new Error('boom'));
-    ask.mockResolvedValue({ text: 'brain', toolCallIds: [], dispatchedToolNames: [], provider: 'deepseek' });
+    ask.mockResolvedValue({ text: 'Brain', toolCallIds: [], dispatchedToolNames: [], provider: 'deepseek' });
     const ans = await dispatchCoachTurn(INPUT, {});
-    expect(ans.text).toBe('brain');
+    expect(ans.text).toBe('Brain');
     expect(ask).toHaveBeenCalledOnce();
   });
 });
@@ -94,13 +94,13 @@ describe('dispatchCoachTurn — the shadow read', () => {
     resetConversations();
     setServeParsedRoute(false);
     routeChatIntent.mockResolvedValue(null);
-    ask.mockResolvedValue({ text: 'brain', toolCallIds: [], dispatchedToolNames: [], provider: 'deepseek', servedIntent: 'best-move' });
+    ask.mockResolvedValue({ text: 'Brain', toolCallIds: [], dispatchedToolNames: [], provider: 'deepseek', servedIntent: 'best-move' });
   });
 
   it('a typed question emits ONE chat-turn row comparing the reading with today\'s lane and the served intent', async () => {
     setChatTurnReaderForTests(async () => ({ kind: 'best-move', referents: [], seat: 'me', english: "what's my best move?" }));
     const ans = await dispatchCoachTurn(TURN("what's my best move?"), {});
-    expect(ans.text).toBe('brain');
+    expect(ans.text).toBe('Brain');
     await waitForRow();
     expect(rows).toHaveLength(1);
     expect(rows[0]).toMatchObject({
@@ -119,7 +119,7 @@ describe('dispatchCoachTurn — the shadow read', () => {
   it('a disagreement is recorded as such (today\'s routing still answers)', async () => {
     setChatTurnReaderForTests(async () => ({ kind: 'compare-my-move', referents: [], seat: 'me', english: 'x' }));
     const ans = await dispatchCoachTurn(TURN("what's my best move?"), {});
-    expect(ans.text).toBe('brain');
+    expect(ans.text).toBe('Brain');
     await waitForRow();
     expect(rows[0].agreed).toBe(false);
   });
@@ -128,14 +128,14 @@ describe('dispatchCoachTurn — the shadow read', () => {
     setChatTurnReaderForTests(() => new Promise(() => { /* never */ }));
     const started = Date.now();
     const ans = await dispatchCoachTurn(TURN('how should I continue here then'), {});
-    expect(ans.text).toBe('brain');
+    expect(ans.text).toBe('Brain');
     expect(Date.now() - started).toBeLessThan(500);
   });
 
   it('a reader that throws is silent — the answer is served and no error escapes', async () => {
     setChatTurnReaderForTests(async () => { throw new Error('provider down'); });
     const ans = await dispatchCoachTurn(TURN('how should I continue here then'), {});
-    expect(ans.text).toBe('brain');
+    expect(ans.text).toBe('Brain');
     await waitForRow();
     expect(rows[0]).toMatchObject({ parsedKind: null, parseSource: 'llm-failed', valid: null });
   });
@@ -198,7 +198,7 @@ describe('dispatchCoachTurn — a direct kind is answered by its computed senten
     onChatTurn((r) => rows.push(r));
     resetConversations();
     routeChatIntent.mockResolvedValue(null);
-    ask.mockResolvedValue({ text: 'brain', toolCallIds: [], dispatchedToolNames: [], provider: 'deepseek', servedIntent: 'tactics' });
+    ask.mockResolvedValue({ text: 'Brain', toolCallIds: [], dispatchedToolNames: [], provider: 'deepseek', servedIntent: 'tactics' });
     setChatTurnReaderForTests(async () => ({ kind: 'count-defenders', referents: [{ type: 'square', square: 'c6' }], seat: 'them', english: 'how many defend c6' }));
   });
 
@@ -215,7 +215,7 @@ describe('dispatchCoachTurn — a direct kind is answered by its computed senten
   it('flag OFF: today\'s routing answers and the reading is only logged', async () => {
     setServeParsedRoute(false);
     const ans = await dispatchCoachTurn(TURN('how many defend c6'), {});
-    expect(ans.text).toBe('brain');
+    expect(ans.text).toBe('Brain');
     await waitForRow();
     expect(rows[0].servedParsed).toBe(false);
   });

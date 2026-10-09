@@ -15,6 +15,7 @@ import { structurePlan } from './boardPlan';
 import { findPawnBreaks, findOpenFiles, strongestWeakestPiece } from './positionReadingService';
 import { findWeakSquares } from './positionReadingService';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
+import { flipSideToMove } from './threatOut';
 import { andList, orList } from '../utils/andList';
 
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -41,19 +42,27 @@ export interface BoardPlanFacts {
 
 const STEMS = ['Alongside that, aim to ', 'On top of that, work to ', 'And the third piece of it: '];
 
-export function boardPlanFacts(fen: string, studentColor: 'white' | 'black'): BoardPlanFacts | null {
+/**
+ * `side` is whose plan; `voice` is who hears it — 'you' when it is the
+ * student's own plan, 'they' when the student asked about the opponent's
+ * ("what is black trying to do?"). The 'they' voice carries the levers only:
+ * the structure and plan sentences are written to the student.
+ */
+export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you' | 'they' = 'you'): BoardPlanFacts | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
-  const myC: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
-  const trump = structurePlan(fen, myC);
+  const myC: 'w' | 'b' = side === 'white' ? 'w' : 'b';
+  const your = voice === 'you' ? 'your' : 'their';
+  const trump = voice === 'you' ? structurePlan(fen, myC) : null;
   // Stacked plans vary the stem after the first (question walk 2026-09-27).
-  const plans = deriveNextPlans(fen, myC).map((p) => cap(p))
+  const plans = (voice === 'you' ? deriveNextPlans(fen, myC) : []).map((p) => cap(p))
     .map((p, i) => (i === 0 ? p : p.replace(/^The plan from here is to /, STEMS[(i - 1) % STEMS.length])))
     .map((p) => (/[.!?]$/.test(p.trim()) ? p.trim() : `${p.trim()}.`));
   const levers: PlanLever[] = [];
   // A pawn break to open the position (findPawnBreaks reads the side to move).
-  if (chess.turn() === myC) {
-    const breaks = findPawnBreaks(fen);
+  const asSide = chess.turn() === myC ? fen : voice === 'they' ? flipSideToMove(fen) : null;
+  if (asSide) {
+    const breaks = findPawnBreaks(asSide);
     if (breaks.length) levers.push({ kind: 'break', phrase: `break with ${orList(breaks)} to open the position`, squares: [...breaks] });
   }
   // A rook belongs on an open / half-open file.
@@ -73,7 +82,7 @@ export function boardPlanFacts(fen: string, studentColor: 'white' | 'black'): Bo
   if (home.length) {
     levers.unshift({
       kind: 'develop',
-      phrase: `bring your ${andList(home.map((h) => `${PIECE[h.type]} on ${h.square}`))} into the game, since development comes first`,
+      phrase: `bring ${your} ${andList(home.map((h) => `${PIECE[h.type]} on ${h.square}`))} into the game, since development comes first`,
       squares: home.map((h) => h.square),
     });
   }
@@ -83,7 +92,7 @@ export function boardPlanFacts(fen: string, studentColor: 'white' | 'black'): Bo
   const homeRank = myC === 'w' ? '1' : '8';
   const pastOpening = (Number.parseInt(fen.split(' ')[5] ?? '1', 10) || 1) >= 10;
   if (sw.weakest && (pastOpening || sw.weakest.square[1] !== homeRank)) {
-    levers.push({ kind: 'worst', phrase: `improve your ${PIECE[sw.weakest.piece]} on ${sw.weakest.square}`, squares: [sw.weakest.square] });
+    levers.push({ kind: 'worst', phrase: `improve ${your} ${PIECE[sw.weakest.piece]} on ${sw.weakest.square}`, squares: [sw.weakest.square] });
   }
   return { trump, plans, levers };
 }

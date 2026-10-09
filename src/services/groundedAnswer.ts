@@ -7438,7 +7438,11 @@ export function assemblePawnStrengthAnswer(opts: { fen: string; file: string; st
   }
   if (protectedBy.length > 0) parts.push(`It's protected by your pawn on ${andList(protectedBy)}.`);
   else if (passed) parts.push(`No pawn protects it, so it needs a piece behind it.`);
-  if (loseable !== null && loseable > 0) parts.push(`Careful — right now it can be won.`);
+  // It can be won only once it is their move: on yours it is a warning, not a
+  // loss (hand walk 2026-10-09: "right now it can be won" with White to move).
+  if (loseable !== null && loseable > 0) {
+    parts.push(board.turn() === me ? `Careful — if you leave it, they win it.` : `Careful — they can win it now.`);
+  }
   return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
 }
 

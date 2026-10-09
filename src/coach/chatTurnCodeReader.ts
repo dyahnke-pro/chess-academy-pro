@@ -15,7 +15,7 @@
  * the model reads it; a reading neither can make is asked back. It never
  * guesses: two legal moves that fit the words are not one move.
  */
-import { Chess, type Move } from 'chess.js';
+import { Chess, type Move, type Square } from 'chess.js';
 import type { BoardContext, ChatTurn, PieceLetter, Referent } from './chatTurn';
 
 // ─── WORDS → SLOTS ─────────────────────────────────────────────────────────
@@ -65,6 +65,12 @@ export interface Slots {
   deictic: boolean;
   /** The sentence asks something (an ask word, a question opener, or "?"). */
   question: boolean;
+  /** A side named by its COLOUR ("what is black trying to do", "White's
+   *  plan"). The board's student colour turns it into a seat. */
+  colour: 'white' | 'black' | null;
+  /** The sentence asks about a plan or intention ("trying to do", "plan",
+   *  "going for", "what does he want"). */
+  goal: boolean;
 }
 
 const SAN_TOKEN = /\b(?:O-O(?:-O)?|[KQRBN][a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h]x[a-h][1-8](?:=[QRBN])?[+#]?|[a-h][1-8](?:=[QRBN])?[+#]?)\b/g;
@@ -126,6 +132,14 @@ export function tagSlots(raw: string): Slots {
       : /\b(?:my|mine|me|i|i'?m|i'?ve)\b/.test(lower) ? 'me' : null,
     deictic: /\b(?:here|this|that|now|next|position|game|board|move)\b/.test(lower),
     question: ask !== 'none' || /\?\s*$/.test(lower) || /^\s*(?:what|where|when|who|how|which|should|can|could|would|am|is|are|do|does)\b/.test(lower),
+    // A colour is a SIDE only as an actor or an owner — "white's plan", "black
+    // is trying", "what does white want" — never "the white bishop" (a piece
+    // colour) or "white squares" (a square colour).
+    colour: (() => {
+      const m = /\b(white|black)(?:'s)?\b(?!\s+(?:squares?|bishop|pieces?|pawns?|knight|rook|queen|king|square))/.exec(lower);
+      return m ? (m[1] as 'white' | 'black') : null;
+    })(),
+    goal: /\b(?:plan|plans|planning|trying to|try to|going for|aiming for|want(?:s)? to|wants|idea|ideas|up to|after)\b/.test(lower),
   };
 }
 
@@ -190,6 +204,18 @@ function resolveOptions(chess: Chess, slots: Slots): string[] | null {
     const push = one(single.length ? single : own);
     return push ? [cap.san, push] : null;
   }
+  // "Bb5 or retreat to d3?" — one move typed, the other named by its square:
+  // the same piece going there instead, else the one move that reaches it.
+  if (slots.sans.length === 1) {
+    let first: Move | null = null;
+    try { first = new Chess(chess.fen()).move(slots.sans[0]); } catch { first = null; }
+    const other = first ? slots.squares.find((q) => q !== first?.to) : undefined;
+    if (first && other) {
+      const samePiece = movesMatching(chess, { to: other }).filter((m) => m.from === first?.from);
+      const second = one(samePiece) ?? one(preferPawn(movesMatching(chess, { to: other })));
+      return second && second !== first.san ? [first.san, second] : null;
+    }
+  }
   // "push the e or d pawn"
   if (slots.files.length >= 2) {
     const pick = (f: string): string | null => {
@@ -205,6 +231,13 @@ function resolveOptions(chess: Chess, slots: Slots): string[] | null {
   return null;
 }
 
+/** A bare square in SAN is a pawn move ("d4"): when a pawn can go there, the
+ *  pawn is the move meant, even if a knight could also land on it. */
+function preferPawn(moves: Move[]): Move[] {
+  const pawns = moves.filter((m) => m.piece === 'p');
+  return pawns.length ? pawns : moves;
+}
+
 /** The one move a sentence names, legal now, or null. */
 function resolveNamedMoveNow(chess: Chess, slots: Slots): string | null {
   if (slots.sans.length === 1) {
@@ -212,9 +245,13 @@ function resolveNamedMoveNow(chess: Chess, slots: Slots): string | null {
   }
   if (slots.action === 'castle') return one(movesMatching(chess, { castle: true }).filter((m) => m.san === 'O-O')) ?? one(movesMatching(chess, { castle: true }));
   const to = slots.squares[slots.squares.length - 1];
-  const piece = slots.pieces[0];
+  // "push d4" — a push is a pawn move.
+  const piece = slots.pieces[0] ?? (slots.action === 'push' ? 'p' : undefined);
   const capture = slots.action === 'capture' || slots.action === 'sacrifice';
-  if (to) return one(movesMatching(chess, { piece, to, capture: capture || undefined }));
+  if (to) {
+    const ms = movesMatching(chess, { piece, to, capture: capture || undefined });
+    return one(piece ? ms : preferPawn(ms));
+  }
   return null;
 }
 
@@ -262,6 +299,45 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
     return { kind: 'what-about-piece', referents: [{ type: 'piece', piece: slots.pieces[0], square: slots.squares[0] ?? null, seat }], seat, topic: null };
   }
 
+  // WHOSE SIDE, by possessive or by colour ("what is black trying to do?").
+  const studentColour = board.studentColor ?? null;
+  const possessive = /\b(?:their|his|her|opponent'?s?|they|he|she)\b/.test(lower) ? 'them' as const
+    : /\b(?:my|mine|i|i'?m)\b/.test(lower) ? 'me' as const : null;
+  const sideSeat = possessive
+    ?? (slots.colour && studentColour ? (slots.colour === studentColour ? 'me' as const : 'them' as const) : null);
+
+  // "Can they take my e4 pawn?" / "can he win my knight?" — whether a piece
+  // of yours can be taken: its safety, read on the board.
+  // The one taking is the subject in front of the verb: a pronoun or a colour.
+  const taker = /\b(they|he|she|opponent|white|black)\s+(?:just\s+|now\s+)?(?:take|capture|win|grab)\b/.exec(lower)?.[1];
+  const takerSeat = !taker ? null
+    : taker === 'white' || taker === 'black' ? (studentColour ? (taker === studentColour ? 'me' : 'them') : null)
+      : 'them';
+  if (slots.action === 'capture' && takerSeat === 'them' && /\bmy\b/.test(lower) && slots.sans.length === 0
+    && (slots.pieces.length === 1 || slots.squares.length === 1)) {
+    const sq = slots.squares[0] ?? null;
+    const piece = slots.pieces[0] ?? (sq ? chess.get(sq as Square)?.type ?? null : null);
+    if (piece) return { kind: 'is-piece-loose', referents: [{ type: 'piece', piece, square: sq, seat: 'me' }], seat: 'me', topic: null };
+  }
+
+  // "How do I defend it?" / "how can I save my bishop?" — saving one piece.
+  // King safety is a plan question, not this.
+  // The student asks what THEY do: "how do/can/should I …", "what can I do to
+  // …", "how to …". "How many defend c6?" is a count, not this.
+  if (/\b(?:how (?:do|can|should|could|would|shall) (?:i|we)|what (?:can|should|do) (?:i|we) do to|how to)\b[^?]*\b(?:defend|protect|save|guard|cover)\b/.test(lower) && possessive !== 'them'
+    && slots.sans.length === 0 && !slots.pieces.includes('k') && slots.pieces.length <= 1) {
+    const sq = slots.squares[0] ?? null;
+    const piece = slots.pieces[0] ?? (sq ? chess.get(sq as Square)?.type ?? null : null);
+    const referents: Referent[] = piece ? [{ type: 'piece', piece, square: sq, seat: 'me' }] : sq ? [{ type: 'square', square: sq }] : [];
+    return { kind: 'defend-piece', referents, seat: 'me', topic: null };
+  }
+
+  // "What is black trying to do?" / "what's their plan?" — a plan, no move.
+  if (slots.goal && slots.sans.length === 0 && slots.squares.length === 0 && slots.pieces.length === 0
+    && /^\s*(?:what|what's|whats|where|how)\b/.test(lower)) {
+    return { kind: 'plan', referents: [], seat: sideSeat, topic: null };
+  }
+
   const hasMoveWords = slots.sans.length > 0 || slots.squares.length > 0 || slots.action !== 'none';
   if (!hasMoveWords || slots.ask === 'none') return null;
 
@@ -275,8 +351,14 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
 
   const now = resolveNamedMoveNow(chess, slots);
   if (!now) {
-    // Named, but not playable now: a move already made ("why was Nf1 best?").
-    return named ? { kind: 'retrospective-move', referents: [{ type: 'move', san: named }], seat: 'me', topic: null } : null;
+    if (!named) return null;
+    // Named, not playable now, and made earlier: a move already played ("why
+    // was Nf1 best?"). Not on the tape: a move the student wants to play that
+    // cannot be played — the validator says why. Never "I can't find it in
+    // this game" for a move they are asking to make.
+    const onTape = (board.history ?? []).some((h) => h.replace(/[+#!?]/g, '') === named.replace(/[+#!?]/g, ''));
+    const prospective = /\b(?:should|shall|can|could|now|next)\b/.test(lower);
+    return { kind: onTape && !prospective ? 'retrospective-move' : 'candidate-move', referents: [{ type: 'move', san: named }], seat: 'me', topic: null };
   }
   // Every question about one move still to play — "why is Ne4 best?", "is
   // Qf3 ok?", "can I sac on h7?", "what if I push c5?" — is answered by

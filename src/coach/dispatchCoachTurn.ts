@@ -22,6 +22,7 @@
  * `coachService` would cycle (coachService ← trainingAidRouter ← coachSessionRouter).
  * This wrapper depends on both; neither depends on it.
  */
+import { openSentence } from '../utils/openSentence';
 import { answerBoardTurn, BOARD_ANSWERED_KINDS } from './boardTurnAnswer';
 import { coachService, type CoachServiceOptions } from './coachService';
 import type { CoachAskInput, CoachAnswer, CoachSurface } from './types';
@@ -223,7 +224,7 @@ export async function dispatchCoachTurn(
         servedParsed = true;
         void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: turn.kind, servedParsed })
           .catch(() => { /* telemetry never breaks a turn */ });
-        return { text, toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: turn.kind };
+        return { text: openSentence(text), toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: turn.kind };
       }
     }
     // THE BOARD ANSWERS THE DECODED QUESTION — never re-worded into a lane
@@ -235,7 +236,7 @@ export async function dispatchCoachTurn(
         servedParsed = true;
         void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: `board:${turn.kind}`, servedParsed })
           .catch(() => { /* telemetry never breaks a turn */ });
-        return { text, toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: `board:${turn.kind}` };
+        return { text: openSentence(text), toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: `board:${turn.kind}` };
       }
     }
     const canonical = turn ? canonicalAsk(turn) : null;
@@ -259,7 +260,7 @@ export async function dispatchCoachTurn(
         servedParsed,
       }).catch(() => { /* telemetry never breaks a turn */ });
     }
-    return answer;
+    return typeof answer.text === 'string' ? { ...answer, text: openSentence(answer.text) } : answer;
   };
 
   // THE READER DECIDES WHAT IS A COMMAND (2026-10-08): the action router acts

@@ -23,6 +23,7 @@
  */
 import { Chess, type Square } from 'chess.js';
 import { whyNotLegal } from '../services/whyNotLegal';
+import { captureRead } from '../services/positionReadingService';
 import {
   buildQuestionGrounding,
   compareMovesAsk,
@@ -161,6 +162,7 @@ export const NEW_KINDS = [
   'compare-my-move', 'why-is-it-a-target', 'count-attackers', 'count-defenders',
   'what-about-piece', 'is-piece-loose', 'what-did-their-move-change',
   'what-should-i-play', 'i-dont-know', 'answer', 'start-thinking-lesson', 'book-teaching',
+  'defend-piece',
 ] as const;
 export type NewKind = typeof NEW_KINDS[number];
 
@@ -350,6 +352,7 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   'count-defenders': direct('how many pieces defend a piece or square'),
   'what-about-piece': direct('"what about my bishop?" — a named piece\'s safety and scope'),
   'is-piece-loose': direct('is a piece loose / undefended (or which pieces are)'),
+  'defend-piece': direct('how do I defend / save / protect a piece of mine ("how do I defend it?")'),
   // Outside a lesson (which has its own "I don't know"), not knowing is a
   // request for help: the hint lane.
   // Answered before every lane on the student's own words (coachService →
@@ -428,7 +431,7 @@ const NEEDS_BOARD: ReadonlySet<ChatKind> = new Set<ChatKind>([
   'best-move', 'why-best-move', 'alternatives', 'candidate-move', 'compare-moves', 'plan', 'hint', 'method',
   'tactics', 'position-assessment', 'whose-turn', 'mate', 'draw', 'positional', 'piece-options',
   'compare-my-move', 'why-is-it-a-target', 'count-attackers', 'count-defenders', 'what-about-piece',
-  'is-piece-loose', 'what-did-their-move-change', 'what-should-i-play', 'answer',
+  'is-piece-loose', 'what-did-their-move-change', 'what-should-i-play', 'answer', 'defend-piece',
 ]);
 
 /**
@@ -527,6 +530,18 @@ function resolvePiece(
     const p = pool.find((c) => c.square === memory.lastPiece?.square);
     if (p) return { ok: true, ref: { type: 'piece', piece: r.piece, square: p.square, seat: p.seat } };
   }
+  // THE ONE UNDER FIRE (hand walk 2026-10-09: "where should the bishop go?"
+  // right after "your bishop on b5 is attacked" was asked back "which bishop —
+  // c8, b6, b5 or c1?"). Of several, the one the board puts in danger is the
+  // one the question is about; then, with no seat said, the student's own.
+  const inDanger = pool.filter((c) => {
+    const owner = chess.get(c.square as Square)?.color;
+    if (!owner) return false;
+    try { return (captureRead(chess.fen(), c.square as Square, owner === 'w' ? 'b' : 'w') ?? 0) > 0; } catch { return false; }
+  });
+  const pick = inDanger.length === 1 ? inDanger[0]
+    : !r.seat && pool.filter((c) => c.seat === 'me').length === 1 ? pool.find((c) => c.seat === 'me') : undefined;
+  if (pick) return { ok: true, ref: { type: 'piece', piece: r.piece, square: pick.square, seat: pick.seat } };
   return {
     ok: false,
     reason: 'piece-ambiguous',
