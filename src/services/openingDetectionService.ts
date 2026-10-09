@@ -631,6 +631,21 @@ export function findLongestPgnExtending(basePgn: string): string | null {
  *
  *  Returns null when no DB entry matches (the user is asking about
  *  something not in the openings DB; surface routing rejects). */
+/** A leading article and a trailing "opening" — words a person wraps a name
+ *  in, never part of the DB name they mean (see tier 1b). */
+const CATEGORY_WORDS = new Set(['gambit', 'defense', 'defence', 'variation', 'opening', 'game', 'attack', 'line', 'main', 'system']);
+/** A query with at least one word that is not a category or a stopword. */
+function namesSomething(q: string): boolean {
+  return normalizeNameForMatch(q).split(' ').some((t) => t.length > 1 && !CATEGORY_WORDS.has(t) && !RESOLVER_STOPWORDS.has(t));
+}
+
+function stripNameFiller(q: string): string {
+  return q.trim()
+    .replace(/^(?:the|a|an)\s+/i, '')
+    .replace(/\s+opening\s*$/i, '')
+    .trim();
+}
+
 /** The alias for a typed name, apostrophe-tolerant: the map is keyed "kings
  *  indian", and "King's Indian" missed it and fell to a tier that picked the
  *  King's Indian ATTACK for a student asking for the Defense (teach walk
@@ -743,6 +758,19 @@ export function resolveOpeningEntry(
   // 1. Exact match (case + diacritic + apostrophe + hyphen insensitive).
   const exact = entries.filter((e) => normalizeNameForMatch(e.name) === queryNorm);
   if (exact.length > 0) return emit(pick(exact));
+
+  // 1b. FILLER IS NOT EVIDENCE (WO-CHAT-01, live walk 2026-10-09). People say
+  // "the Italian" and "the Italian opening"; the DB says "Italian Game". A
+  // leading article and a trailing "opening" carry no name, yet the fuzzy
+  // tiers below matched them as words: "Italian Opening" token-matched
+  // "Italian Game: Two Knights Defense, Modern Bishop's OPENING" (and a
+  // translated Thai request taught that), "the Italian" matched nothing.
+  // A query that IS a name ("English Opening", "Bird's Opening") already
+  // returned at the exact tiers, so stripping happens only on a miss.
+  // What is left must still NAME something: "the gambit" strips to a bare
+  // category word, and a category word identifies no opening.
+  const unfilled = stripNameFiller(rawTrimmed);
+  if (unfilled && unfilled !== rawTrimmed && namesSomething(unfilled)) return resolveOpeningEntry(unfilled);
 
   // Guard against the Bug D failure mode: queries this short or this
   // common are chat noise, not opening names. Without this guard,

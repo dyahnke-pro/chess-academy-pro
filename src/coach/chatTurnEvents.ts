@@ -49,7 +49,30 @@ export interface ChatTurnRow {
   latencyMs: number;
   /** The first 80 characters of what the student said. */
   askPreview: string;
+  /** WHAT HAPPENED TO THE TURN (WO-CHAT-01 P0) — so a row says whether the
+   *  student was answered, not only how the turn was read:
+   *  `answered` a lane or computer voiced an answer · `command` the action
+   *  router acted · `asked-back` the coach asked a clarifying question or
+   *  refuted a premise · `stock` the honest stock line (nothing answered) ·
+   *  `surface` a surface's own command answered it (Learn) · `error` the turn
+   *  threw. */
+  outcome: ChatTurnOutcome;
+  /** The first 160 characters of what the coach answered (null: unknown —
+   *  a surface answered it outside the door). */
+  answerPreview: string | null;
+  /** The student's language and the answer's (ISO-ish codes from
+   *  `detectLanguage`); a mismatch is a defect (walk R3). */
+  askLang: string;
+  answerLang: string | null;
+  /** Board/action markup that reached the student's text (`[BOARD:` / `[[`) —
+   *  must never be true (native 2026-09-25: "[BOARD: highlight:e1:yellow]"). */
+  leakedMarkup: boolean;
+  /** Wall-clock from the turn reaching the door to the answer (ms); null when
+   *  a surface answered it outside the door. */
+  totalMs: number | null;
 }
+
+export type ChatTurnOutcome = 'answered' | 'command' | 'asked-back' | 'stock' | 'surface' | 'error';
 
 type Listener = (row: ChatTurnRow) => void;
 const listeners = new Set<Listener>();

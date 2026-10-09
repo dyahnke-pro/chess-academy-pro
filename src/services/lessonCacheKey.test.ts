@@ -51,12 +51,14 @@ describe('lesson cache keys on the opening, not the phrasing', () => {
   });
 
   it('bridges a phrasing the resolver cannot place, once it has been built', async () => {
-    // "the caro" resolves to nothing on its own — there is no such DB name. The
-    // alias written at cache time is what carries it to the right row on the
-    // next ask, so a wording the resolver misses still only builds once.
-    expect(canonicalCacheKey('the caro')).toBe('the caro');
-    await cacheOpening('the caro', makeTree('Caro-Kann Defence'));
-    expect(await getCachedOpening('the caro')).not.toBeNull();
+    // "that solid c6 thing" resolves to nothing on its own — no DB name is in
+    // it. The alias written at cache time is what carries it to the right row
+    // on the next ask, so a wording the resolver misses still only builds once.
+    // (This used "the caro" until 2026-10-09, when the resolver learned to drop
+    // a leading article and started placing it — WO-CHAT-01.)
+    expect(canonicalCacheKey('that solid c6 thing')).toBe('that solid c6 thing');
+    await cacheOpening('that solid c6 thing', makeTree('Caro-Kann Defence'));
+    expect(await getCachedOpening('that solid c6 thing')).not.toBeNull();
   });
 
   it('a phrasing never seen before hits the row an earlier phrasing built', async () => {

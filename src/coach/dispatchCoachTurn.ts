@@ -42,7 +42,9 @@ import {
   type Referent,
 } from './chatTurn';
 import { parseChatTurn, type ParseResult, type Reader } from './chatTurnParser';
-import { emitChatTurn } from './chatTurnEvents';
+import { emitChatTurn, type ChatTurnOutcome } from './chatTurnEvents';
+import { isStockFallback } from './stockLine';
+import { detectLanguage } from '../utils/detectLanguage';
 import { directAnswer } from './chatTurnAnswers';
 
 export interface DispatchCoachTurnOptions extends CoachServiceOptions {
@@ -126,6 +128,11 @@ export async function settleChatTurnRead(opts: {
   fastPathLane: FastPathLane;
   servedIntent: string | null;
   servedParsed: boolean;
+  /** What the coach answered (null: a surface answered outside the door). */
+  answerText?: string | null;
+  outcome: ChatTurnOutcome;
+  /** `Date.now()` when the turn reached the door. */
+  startedAt?: number;
 }): Promise<void> {
   const { input } = opts;
   const result = await opts.read;
@@ -153,6 +160,12 @@ export async function settleChatTurnRead(opts: {
     servedParsed: opts.servedParsed,
     latencyMs: result?.latencyMs ?? 0,
     askPreview: input.ask.slice(0, 80),
+    outcome: opts.outcome,
+    answerPreview: opts.answerText ? opts.answerText.slice(0, 160) : null,
+    askLang: detectLanguage(input.ask).code,
+    answerLang: opts.answerText ? detectLanguage(opts.answerText).code : null,
+    leakedMarkup: !!opts.answerText && /\[BOARD:|\[\[/.test(opts.answerText),
+    totalMs: opts.startedAt ? Date.now() - opts.startedAt : null,
   });
 }
 
@@ -190,6 +203,7 @@ export function openTurnRead(input: CoachAskInput): TurnReadHandle | null {
       fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }),
       servedIntent: null,
       servedParsed: false,
+      outcome: 'surface',
     });
   }).catch(() => { /* telemetry never breaks a turn */ });
   return { claim: () => { claimed = true; return read; } };
@@ -227,6 +241,7 @@ export async function dispatchCoachTurn(
   input: CoachAskInput,
   options: DispatchCoachTurnOptions = {},
 ): Promise<CoachAnswer> {
+  const startedAt = Date.now();
   const student = isStudentTurn(input);
   // The read starts NOW, in parallel with today's routing — no added latency.
   const read = student ? (options.turnRead?.claim() ?? startChatTurnRead(input)) : null;
@@ -254,7 +269,7 @@ export async function dispatchCoachTurn(
       const answer = (() => { try { return assemblePositionalAnswer(input.liveState.fen, sc, ptopic, input.ask); } catch { return null; } })();
       if (answer?.facts) {
         servedParsed = true;
-        void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: `board:positional:${ptopic}`, servedParsed })
+        void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: `board:positional:${ptopic}`, servedParsed, answerText: answer.facts, outcome: 'answered', startedAt })
           .catch(() => { /* telemetry never breaks a turn */ });
         return { text: openSentence(answer.facts), toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: `board:positional:${ptopic}` };
       }
@@ -264,7 +279,7 @@ export async function dispatchCoachTurn(
       const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask, input.liveState.moveHistory ?? [], input.liveState.lastCoachLine ?? null);
       if (text) {
         servedParsed = true;
-        void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: turn.kind, servedParsed })
+        void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: turn.kind, servedParsed, answerText: text, outcome: 'answered', startedAt })
           .catch(() => { /* telemetry never breaks a turn */ });
         return { text: openSentence(text), toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: turn.kind };
       }
@@ -277,7 +292,7 @@ export async function dispatchCoachTurn(
       const text = await answerBoardTurn(turn, { fen: input.liveState.fen, history: input.liveState.moveHistory ?? [], studentColor: sc }, out).catch(() => null);
       if (text) {
         servedParsed = true;
-        void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: `board:${turn.kind}`, servedParsed })
+        void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: `board:${turn.kind}`, servedParsed, answerText: text, outcome: 'answered', startedAt })
           .catch(() => { /* telemetry never breaks a turn */ });
         return { text: openSentence(text), toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: `board:${turn.kind}`, ...(out.endorsed?.length ? { endorsedSans: out.endorsed } : {}) };
       }
@@ -289,7 +304,7 @@ export async function dispatchCoachTurn(
     const bad = r?.validation && !r.validation.ok ? r.validation : null;
     if (bad && FALSE_PREMISE.has(bad.reason) && bad.clarify) {
       servedParsed = true;
-      void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: `premise:${bad.reason}`, servedParsed })
+      void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: `premise:${bad.reason}`, servedParsed, answerText: bad.clarify, outcome: 'asked-back', startedAt })
         .catch(() => { /* telemetry never breaks a turn */ });
       return { text: openSentence(bad.clarify), toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: `premise:${bad.reason}` };
     }
@@ -312,6 +327,9 @@ export async function dispatchCoachTurn(
         fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen, routedCommand }),
         servedIntent: answer.servedIntent ?? null,
         servedParsed,
+        answerText: typeof answer.text === 'string' ? answer.text : null,
+        outcome: outcomeOf(answer, routedCommand),
+        startedAt,
       }).catch(() => { /* telemetry never breaks a turn */ });
     }
     return typeof answer.text === 'string' ? { ...answer, text: openSentence(answer.text) } : answer;
@@ -351,6 +369,15 @@ export async function dispatchCoachTurn(
   return finish(await coachService.ask(effectiveInput, options));
 }
 
+/** The outcome of a turn the door answered through the brain or the router. */
+function outcomeOf(answer: CoachAnswer, routedCommand: boolean): ChatTurnOutcome {
+  if (routedCommand) return 'command';
+  const text = typeof answer.text === 'string' ? answer.text : '';
+  if (isStockFallback(text)) return 'stock';
+  if (answer.servedIntent === 'ask-back') return 'asked-back';
+  return 'answered';
+}
+
 /**
  * Put a student turn that does NOT go through this door under the same
  * measurement — Learn's handleSubmit runs its own routers before the brain
@@ -366,5 +393,6 @@ export function shadowReadTurn(input: CoachAskInput): void {
     fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }),
     servedIntent: null,
     servedParsed: false,
+    outcome: 'surface',
   }).catch(() => { /* telemetry never breaks a turn */ });
 }

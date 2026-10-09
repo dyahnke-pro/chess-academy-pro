@@ -292,7 +292,9 @@ export function buildEventProps(entry: AuditEntry): Record<string, unknown> {
   // the gate kinds so the payload-size rationale still holds everywhere else,
   // and bounded tightly — the payload is a short JSON array of terms.
   if (entry.details && (entry.kind === 'claim-validator-trip' || entry.kind === 'sanitizer-leak' || entry.kind === 'review-prep-timing' || entry.kind === 'chat-turn')) {
-    props.details = entry.details.slice(0, 500);
+    // A chat-turn row carries the answer too (WO-CHAT-01 P0) — one row per
+    // turn says what was asked, how it was read, and what was answered.
+    props.details = entry.details.slice(0, entry.kind === 'chat-turn' ? 1500 : 500);
   }
   // Feedback reply-to + rating (David 2026-08-27). The user optionally typed an
   // email asking for a reply; forwarding it durably (only on feedback events,

@@ -122,6 +122,7 @@ import { detectBoardQuestion, isAnyBoardQuestion } from '../coach/boardQuestions
 import { keySquareHighlightMarker } from './arrowEngine';
 import { topCandidateLane } from '../coach/querySignals';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
+import { STOCK_GROUNDING_FALLBACK } from '../coach/stockLine';
 import { askBackAtCatchAll, type ChatKind } from '../coach/chatTurn';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
@@ -1883,9 +1884,6 @@ function renderMasterPlayContextBlock(ctx: MasterPlayContext): string {
  *  sentence carried an ungrounded claim). Honest about uncertainty without
  *  punting the student to "the engine" — invites a question the grounded
  *  assemblers (best move / plan / tactics / master play) can actually answer. */
-const STOCK_GROUNDING_FALLBACK =
-  "I can't verify that precisely from grounded data right now. " +
-  "Ask me for the best move, the plan, or what's hanging, and I'll ground the answer for you.";
 
 /** The action chip a games-less "profile" answer offers — take the student to
  *  import + analyze their games (David 2026-08-28: "coach should tell the user

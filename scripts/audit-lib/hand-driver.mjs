@@ -186,7 +186,7 @@ const routes = {
     // Filter FIRST, then trim: a grep for a rare row must not lose it to the
     // last-400 window (oct3e walk, the recorded engine lines).
     const all = listener.getCapturedEvents()
-      .map((e) => `${e.kind} | ${e.source ?? ''} | ${(e.narrationText ?? e.summary ?? '').slice(0, 1200)}`);
+      .map((e) => `${e.kind} | ${e.source ?? ''} | ${(e.narrationText ?? e.summary ?? '').slice(0, 1200)}${q.get('details') && e.details ? ` | ${e.details}` : ''}`);
     return (re ? all.filter((l) => re.test(l)) : all.slice(-400)).slice(-n);
   },
   /** Every `learn-reason-source` row this session: the board, the move, the
