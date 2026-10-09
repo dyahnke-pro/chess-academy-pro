@@ -6,7 +6,7 @@ import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext } f
 import { validateTacticClaims, stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';
-import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
+import { dispatchCoachTurn, openTurnRead } from '../../coach/dispatchCoachTurn';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { extractMoveArrows } from '../../services/coachMoveExtractor';
@@ -454,7 +454,30 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       // every fast-path / error-stub / timeout-stub wrote only to
       // local chat state, leaving the brain with dissociative amnesia
       // for anything it routed deterministically.
+      // ONE READ PER TURN (WO-CHAT-01): the student's words are read the moment
+      // they arrive — the reading, its row and the turn's language note — even
+      // when one of this panel's own commands (play a move, restart, mute…)
+      // answers before the door. The door claims the read when the turn
+      // reaches it; a command reports itself through `recordCoachAck`.
+      const readSurface = isGameOver ? coachSurfaceForRoute(location.pathname) : 'game-chat';
+      const turnRead = openTurnRead({
+        surface: readSurface,
+        ask: text,
+        ...askOrigin,
+        liveState: {
+          surface: readSurface,
+          fen: getLiveFen?.() ?? fen,
+          studentColor: playerColor,
+          moveHistory: history,
+          currentRoute: '/coach/play',
+        },
+      });
+      let turnReadHandedToDoor = false;
       const recordCoachAck = (textContent: string): void => {
+        if (turnRead && !turnReadHandedToDoor) {
+          turnRead.answered({ servedIntent: 'surface:command', answerText: textContent, outcome: 'command' });
+          turnReadHandedToDoor = true;
+        }
         useCoachMemoryStore.getState().appendConversationMessage({
           surface: isGameOver ? 'chat-home' : 'chat-in-game',
           role: 'coach',
@@ -971,10 +994,12 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           // WO-COACH-RESILIENCE: wrap the in-game chat ask with the
           // shared withTimeout so a hung spine surfaces a graceful
           // error to the user instead of a forever-spinning indicator.
+          turnReadHandedToDoor = true;
           const askResult = await withTimeout(
             dispatchCoachTurn(
             { surface: 'game-chat', ask: text, liveState, ...askOrigin },
             {
+              ...(turnRead ? { turnRead } : {}),
               // Mid-game: run the SAME spine + the deterministic action router
               // (David 2026-07-09, live prod: "take me to tactics" / "play the
               // Caro-Kann against me" typed mid-game fell to the stock line
@@ -1342,10 +1367,12 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         const lastAssistantMessage = [...messagesRef.current]
           .reverse()
           .find((m) => m.role === 'assistant')?.content;
+        turnReadHandedToDoor = true;
         const drawerAskResult = await withTimeout(
           dispatchCoachTurn(
           { surface: drawerSurface, ask: text, liveState: drawerLiveState, ...askOrigin },
           {
+            ...(turnRead ? { turnRead } : {}),
             // Full dispatch (action router ON): settings toggles, "take me to
             // X", session starts route deterministically here — replacing the
             // hand-rolled routeChatIntent pre-pass (remove-old-wiring rule).

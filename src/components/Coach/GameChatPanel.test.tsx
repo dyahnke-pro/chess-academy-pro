@@ -7,6 +7,8 @@ import type { GameChatPanelHandle } from './GameChatPanel';
 import { useAppStore } from '../../stores/appStore';
 import { buildUserProfile } from '../../test/factories';
 import type { BoardAnnotationCommand } from '../../types';
+import { onChatTurn, resetChatTurnListeners, type ChatTurnRow } from '../../coach/chatTurnEvents';
+import { setChatTurnReaderForTests } from '../../coach/dispatchCoachTurn';
 
 const mockGetCoachChatResponse = vi.fn();
 
@@ -273,5 +275,24 @@ describe('GameChatPanel', () => {
     await waitFor(() => {
       expect(screen.getByText('Here is a hint.')).toBeInTheDocument();
     });
+  });
+
+  // ONE READ PER TURN (all-screens walk 2026-10-09): a turn one of Play's
+  // own commands answers (here, restart) is still read — its row and
+  // its language note — instead of skipping the reader entirely.
+  it('a command turn is still read: one chat-turn row, marked as a command', async () => {
+    const rows: ChatTurnRow[] = [];
+    resetChatTurnListeners();
+    onChatTurn((r) => rows.push(r));
+    setChatTurnReaderForTests(async () => null as never);
+    const onRestartGame = vi.fn();
+    render(<GameChatPanel {...defaultProps} onRestartGame={onRestartGame} />);
+    act(() => { fireEvent.change(screen.getByTestId('chat-text-input'), { target: { value: 'restart the game' } }); });
+    act(() => { fireEvent.click(screen.getByTestId('chat-send-btn')); });
+    await waitFor(() => expect(onRestartGame).toHaveBeenCalled());
+    await waitFor(() => expect(rows).toHaveLength(1));
+    expect(rows[0]).toMatchObject({ outcome: 'command', servedIntent: 'surface:command' });
+    setChatTurnReaderForTests(undefined);
+    resetChatTurnListeners();
   });
 });
