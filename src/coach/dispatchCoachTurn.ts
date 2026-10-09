@@ -264,7 +264,12 @@ export function isComputedAnswer(servedIntent: string | null): boolean {
 
 /** Readings the board refutes outright: the named piece is not there, is
  *  the other side's, or does not exist. */
-const FALSE_PREMISE: ReadonlySet<string> = new Set(['piece-not-there', 'piece-wrong-seat', 'piece-absent', 'unknown-opening']);
+/** Readings the board itself answers when they cannot stand: the piece is not
+ *  there, the opening does not exist, or there is no board at all (the
+ *  all-screens walk 2026-10-09: on the board-less chat page, "is anything
+ *  hanging?" fell through to a lane that said "nothing of yours is hanging" —
+ *  a fact about a board nobody read). */
+const FALSE_PREMISE: ReadonlySet<string> = new Set(['piece-not-there', 'piece-wrong-seat', 'piece-absent', 'unknown-opening', 'no-board']);
 
 /** Readings a positional topic in the student's words may answer instead —
  *  the general board kinds a topic sharpens, never a named-move question. */

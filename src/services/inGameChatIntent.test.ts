@@ -163,3 +163,12 @@ describe('detectInGameChatIntent', () => {
     });
   });
 });
+
+describe('a teach request is not a play request (all-screens walk 2026-10-09)', () => {
+  it.each(['teach me the caro kann', 'teach me the Sicilian', 'show me the Italian'])('%s is left for the door', (q) => {
+    expect(detectInGameChatIntent(q)?.kind).not.toBe('play-opening');
+  });
+  it('a play request still plays it', () => {
+    expect(detectInGameChatIntent('play the caro kann against me')?.kind).toBe('play-opening');
+  });
+});

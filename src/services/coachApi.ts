@@ -5327,7 +5327,7 @@ export async function getCoachChatResponse(
               const skill = resolveTaughtFundamental(lastUserMessage() ?? '');
               const lesson = skill ? assembleFundamentalLessonAnswer(skill) : null;
               if (lesson) {
-                const voicedSkill = await voice(`${lesson.facts} Once your games are in, I'll show you exactly where this has cost you.`, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'concept', preferRaw: true });
+                const voicedSkill = await voice(`${lesson.facts} Once your games are in, you'll see exactly where this has cost you.`, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'concept', preferRaw: true });
                 if (voicedSkill) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedSkill; }
               }
             }
@@ -5513,6 +5513,9 @@ export async function getCoachChatResponse(
         // chess-concepts.json (Capablanca / Lasker / …), NEVER training memory.
         // Confirm a real concept token here (the detector only checked the
         // question SHAPE); fall through when none matches.
+        // Book prose is spoken as written (preferRaw): rewording it dropped the
+        // definition — "what does a pin mean?" opened on "So a pinned piece is
+        // half a piece" (all-screens walk 2026-10-09).
         if (grounding.conceptQuestion) {
           const userText = lastUserMessage() ?? '';
           const conceptIds = detectConceptsInText(userText);
@@ -5520,7 +5523,7 @@ export async function getCoachChatResponse(
             const concept = getConcept(conceptIds[0]);
             const answer = concept ? assembleConceptAnswer(concept) : null;
             if (answer) {
-              const voiced = await voice(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept' });
+              const voiced = await voice(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
               if (voiced) return voiced;
             }
           }
@@ -5533,7 +5536,7 @@ export async function getCoachChatResponse(
           if (passage) {
             const answer = assembleTheoryAnswer({ conceptName: passage.conceptName, conceptId: passage.conceptId, passage: passage.passage });
             if (answer) {
-              const voiced = await voice(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept' });
+              const voiced = await voice(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
               if (voiced) return voiced;
             }
           }
@@ -5560,7 +5563,7 @@ export async function getCoachChatResponse(
           if (hit) {
             const answer = assembleTheoryAnswer({ conceptName: hit.conceptName, conceptId: hit.conceptId, passage: hit.passage });
             if (answer) {
-              const voiced = await voice(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept' });
+              const voiced = await voice(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
               if (voiced) return voiced;
             }
           }

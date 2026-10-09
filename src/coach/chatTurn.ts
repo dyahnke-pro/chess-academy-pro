@@ -461,7 +461,7 @@ export function validateChatTurn(turn: ChatTurn, board: BoardContext, memory: Co
   let chess: Chess | null = null;
   if (board.fen) { try { chess = new Chess(board.fen); } catch { chess = null; } }
   if (NEEDS_BOARD.has(turn.kind) && !chess) {
-    return { ok: false, reason: 'no-board', clarify: "There's no position in front of us — open a game or a lesson and ask me about it there." };
+    return { ok: false, reason: 'no-board', clarify: 'There is no board on this screen. Open a game or a lesson and ask there.' };
   }
   const student = board.studentColor ?? (chess && chess.turn() === 'b' ? 'black' : 'white');
   const out: ResolvedReferent[] = [];

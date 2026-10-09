@@ -18,7 +18,7 @@
   "src/services/classroomOpener.ts": 1,
   "src/services/coachActuator.ts": 2,
   "src/services/coachAgentRunner.ts": 2,
-  "src/services/coachApi.ts": 53,
+  "src/services/coachApi.ts": 52,
   "src/services/coachFeatureService.ts": 1,
   "src/services/coachMemoryService.ts": 1,
   "src/services/coachPrompts.ts": 9,

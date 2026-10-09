@@ -154,11 +154,12 @@ export function detectInGameChatIntent(text: string): InGameChatIntent | null {
   // French", "play the Sicilian". Reuse parseCoachIntent so we pick up
   // the same phrasings the voice mic and SmartSearchBar already cover,
   // then validate that the subject actually resolves to a book line.
+  // Only a PLAY request: "teach me the Caro-Kann" asks for the lesson, and the
+  // door's request steps open it on every screen — reading it here as "play
+  // it against me" started a game the student never asked for (all-screens
+  // walk 2026-10-09).
   const intent = parseCoachIntent(trimmed);
-  if (
-    (intent.kind === 'play-against' || intent.kind === 'walkthrough') &&
-    intent.subject
-  ) {
+  if (intent.kind === 'play-against' && intent.subject) {
     const expanded = expandAlias(intent.subject);
     const moves = getOpeningMoves(expanded);
     if (moves && moves.length > 0) {
