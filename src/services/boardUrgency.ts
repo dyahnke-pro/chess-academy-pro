@@ -12,6 +12,7 @@
  */
 import { Chess, type Square } from 'chess.js';
 import { computeMustDefend, flipSideToMove } from './threatOut';
+import { takingTheAttackerAnswers } from './positionReadingService';
 import { andList } from '../utils/andList';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -22,7 +23,9 @@ export interface BoardUrgency {
   /** Their biggest piece the student wins right now (student to move only). */
   win: { square: string; piece: string; value: number } | null;
   /** The student's pieces the opponent wins next move, biggest first. */
-  save: Array<{ square: string; piece: string; value: number }>;
+  save: Array<{ square: string; piece: string; value: number; attacker: string | null }>;
+  /** Their piece attacking the student's biggest stake, when taking it is safe and answers the threat. */
+  takeAttacker: { square: string; piece: string } | null;
   /** An opponent pawn that promotes on its next move. */
   promotion: { from: string; to: string } | null;
 }
@@ -47,8 +50,15 @@ export function readBoardUrgency(fen: string, studentColor: 'white' | 'black'): 
   // student's move (otherwise they simply move it away first).
   const theirs = myMove ? computeMustDefend(fen, them).pieces : [];
   const win = theirs[0] ? { square: theirs[0].square, piece: theirs[0].piece, value: theirs[0].value } : null;
-  const save = computeMustDefend(fen, me).pieces.map((p) => ({ square: p.square, piece: p.piece, value: p.value }));
-  return { myMove, win, save, promotion: promotingPawn(fen, them) };
+  const save = computeMustDefend(fen, me).pieces.map((p) => ({ square: p.square, piece: p.piece, value: p.value, attacker: p.attackerSquare }));
+  // THE ONE CHECK the threat answer and Learn's warning already run: when the
+  // attacker can be taken without losing material, taking it IS the answer.
+  const att = myMove ? save[0]?.attacker ?? null : null;
+  const attPiece = att ? chess.get(att as Square) : null;
+  const takeAttacker = att && attPiece && attPiece.color === them && takingTheAttackerAnswers(fen, att as Square, me)
+    ? { square: att, piece: attPiece.type }
+    : null;
+  return { myMove, win, save, promotion: promotingPawn(fen, them), takeAttacker };
 }
 
 /** The one sentence that comes before any plan, or null when nothing is urgent.
@@ -65,7 +75,12 @@ export function urgencyLead(u: BoardUrgency | null): string | null {
   }
   if (u.save.length > 0 && !winLeads) {
     const named = andList(u.save.map((p) => `${NAME[p.piece]} on ${p.square}`));
-    parts.push(`First, your ${named} can be taken — that comes before any plan.`);
+    if (u.takeAttacker) {
+      const hit = u.save.filter((p) => p.attacker === u.takeAttacker?.square).map((p) => `${NAME[p.piece]} on ${p.square}`);
+      parts.push(`First, take their ${NAME[u.takeAttacker.piece]} on ${u.takeAttacker.square} — it attacks your ${andList(hit.length ? hit : [named])}.`);
+    } else {
+      parts.push(`First, your ${named} can be taken — that comes before any plan.`);
+    }
   }
   if (u.promotion && !winLeads) {
     parts.push(`Their pawn on ${u.promotion.from} is one step from promoting on ${u.promotion.to}.`);

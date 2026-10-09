@@ -552,20 +552,27 @@ export function assembleBoardPlanAnswer(
   // Every lever the board earned — no ceiling (G4.5). They are already ordered
   // most→least decisive, so a long list reads as a ranked plan, not a dump.
   const top = levers;
-  const head = [trump, ...withMethod].filter((x): x is string => !!x).join(' ');
   // THE THREAT COMES BEFORE THE PLAN (question run 2026-09-27: "the plan is to
   // break with a4…" with the student's queen hanging on g4). A piece of yours
   // that can be taken right now is the first move of any plan.
   // …AND WHAT YOU CAN WIN COMES BEFORE BOTH (one board read, 2026-10-08: the
   // plan warned "your queen on d1 can be taken" when White could simply take
   // the new queen on e1). One urgency computer, shared by every board answer.
-  const lead = urgencyLead(readBoardUrgency(fen, studentColor));
+  const urgency = readBoardUrgency(fen, studentColor);
+  const lead = urgencyLead(urgency);
   const urgent = lead ? `${lead} ` : '';
-  if (head && top.length) {
-    return { facts: `${urgent}${head} Beyond that: ${top.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  // ONE ANSWER PER SQUARE: when the urgent step takes their piece, a plan line
+  // about that same piece ("blockade their passed pawn on d2" after "take their
+  // pawn on d2") contradicts it and goes.
+  const taken = urgency?.takeAttacker?.square ?? null;
+  const keep = (x: string): boolean => !taken || !new RegExp(`\\b${taken}\\b`).test(x);
+  const headK = [trump, ...withMethod].filter((x): x is string => !!x && keep(x)).join(' ');
+  const topK = top.filter(keep);
+  if (headK && topK.length) {
+    return { facts: `${urgent}${headK} Beyond that: ${topK.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
-  if (head) return { facts: `${urgent}${head}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
-  if (top.length) return { facts: `${urgent}${urgent ? 'Then' : 'No single trump yet —'} the plan is to ${top.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  if (headK) return { facts: `${urgent}${headK}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  if (topK.length) return { facts: `${urgent}${urgent ? 'Then' : 'No single trump yet —'} the plan is to ${topK.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   return urgent ? { facts: urgent.trim(), bestMoveSan: null, bestMoveFromTo: null, sources: src } : null;
 }
 
@@ -1507,13 +1514,25 @@ export function assemblePositionAssessment(opts: {
     } catch { /* bad fen — skip the material line */ }
   }
 
+  // WHAT CANNOT WAIT LEADS THE WHY (one board read, 2026-10-08): with …d2
+  // hitting a rook and a bishop, "blockade the passed pawn" was the advice
+  // while the pawn could simply be taken. The urgency read speaks first; the
+  // tactics package and the positional read follow it.
+  const urgent = opts.fen ? urgencyLead(readBoardUrgency(opts.fen, studentColor)) : null;
+  if (urgent) parts.push(urgent);
+
   // Add the single most relevant computed fact so the assessment names a WHY.
+  // A tactic about OTHER squares still speaks after the urgent step (a pin on
+  // g4-f3-d1 is not the d4 pawn the student must take); one about the same
+  // squares, or a hanging/threat line, would restate it.
+  const urgentSq = new Set(urgent?.match(/\b[a-h][1-8]\b/g) ?? []);
+  const separate = (d: string): boolean => !(d.match(/\b[a-h][1-8]\b/g) ?? []).some((q) => urgentSq.has(q));
   if (tactics) {
     if (tactics.boardFacts?.mateInOne) {
       parts.push(`There is checkmate in one on the board: ${tactics.boardFacts.mateInOne}.`);
-    } else if (tactics.immediate[0]?.description) {
+    } else if (tactics.immediate[0]?.description && separate(tactics.immediate[0].description)) {
       parts.push(`${seatedSentence(tactics.immediate[0].description, tactics.fen, sc)}.`);
-    } else {
+    } else if (!urgent) {
       // Verified against the package's OWN fen — unconditional, no parameter to
       // forget (see `TacticsLiveContext.fen`). This catches a claim the
       // package's own board does not bear out; STALENESS (a package about

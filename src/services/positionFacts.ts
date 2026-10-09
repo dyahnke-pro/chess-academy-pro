@@ -34,6 +34,7 @@ import { stemKeyOf, rotateStem } from '../utils/rotateStem';
 import { findPinPressure, PIN_PRESSURE_PRINCIPLE, PIN_PRESSURE_WARNING, pieceName, type PinPressure } from './pinPressure';
 import { type ImportanceVerdict, type ImportanceSignals } from './narrationImportance';
 import { judgeMoment, coachTurn, type SurfacePosture } from './coachDecider';
+import { rememberPositionFacts } from './positionFactsCache';
 import { isMateEval } from './engineConstants';
 import { boardStateAfter, inFluxAfter, mateInOneOnBoard, type BoardState } from './boardState';
 import type { QuietFact } from './factSelector';
@@ -289,6 +290,10 @@ export interface PositionFactsResult {
    *  winner, `below-bar`, or `said-already`). The observability trail: silence
    *  here is a computed verdict, and this is how you read it back. */
   quiet: QuietFact[];
+  /** EVERY clause the computers produced at this board, before the door chose —
+   *  with its squares, proof and stakes. The narration speaks `clauses`; a
+   *  question asked about this board selects from these (positionFactsCache). */
+  candidates: ClauseItem[];
   /** The spoken sentences that are STANDING facts — union these into the set
    *  the caller passes back as `alreadySaid` next ply, and each is said once
    *  per game instead of once per ply. A caller that ignores this keeps the old
@@ -1149,9 +1154,10 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   });
   const clauses = decision.spoken.flatMap((t) => { const c = clauseByText.get(t); return c ? [c] : []; });
 
-  return {
+  const result: PositionFactsResult = {
     importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, latentFork, tradeDanger, opponentIntent,
     clauses,
+    candidates: [...clauseByText.values()],
     /** Every clause the door silenced, and why — the observability trail. */
     quiet: decision.quiet,
     // What the caller should carry forward so a standing fact is said once.
@@ -1176,6 +1182,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     moveAdvice,
     heldVerdict,
   };
+  // ONE COMPUTATION, READ BY THE QUESTION THAT FOLLOWS (positionFactsCache).
+  rememberPositionFacts(fen, studentColor, input.posture, result);
+  return result;
 }
 
 /** The say-once key for one tactic INSTANCE — its type on its squares. */

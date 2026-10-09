@@ -36,3 +36,16 @@ describe('the answers lead with it', () => {
     expect(a?.facts).toMatch(/^First, you can take their queen on e1/);
   }, 60_000);
 });
+
+describe('take the attacker — one answer per square', () => {
+  it('#37: the urgent step takes the pawn on d2', () => {
+    const lead = urgencyLead(readBoardUrgency(AFTER_D2, 'white'));
+    expect(lead).toMatch(/^First, take their pawn on d2 — it attacks your rook on e1/);
+  });
+  it('#37 "what is my plan?" never also says to blockade the pawn it just took', async () => {
+    const { assembleBoardPlanAnswer } = await import('./groundedAnswer');
+    const a = assembleBoardPlanAnswer(AFTER_D2, 'white', 'me');
+    expect(a?.facts).toMatch(/^First, take their pawn on d2/);
+    expect(a?.facts).not.toMatch(/blockade/i);
+  }, 60_000);
+});

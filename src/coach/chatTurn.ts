@@ -22,6 +22,7 @@
  * routed somewhere that does not answer it.
  */
 import { Chess, type Square } from 'chess.js';
+import { whyNotLegal } from '../services/whyNotLegal';
 import {
   buildQuestionGrounding,
   compareMovesAsk,
@@ -459,6 +460,10 @@ export function validateChatTurn(turn: ChatTurn, board: BoardContext, memory: Co
     }
     if (r.type === 'move') {
       if (!moveIsReal(r.san, board)) {
+        // The board knows WHY it refused the move — say that, not "which move?".
+        const dest = r.san.match(/([a-h][1-8])(?!.*[a-h][1-8])/)?.[1];
+        const why = dest && board.fen ? whyNotLegal(board.fen, dest, student) : null;
+        if (why) return { ok: false, reason: 'illegal-move', clarify: why };
         return { ok: false, reason: 'illegal-move', clarify: `${r.san} isn't a move I can find here — which move did you mean?` };
       }
       out.push({ type: 'move', san: r.san, played: !legalNow(r.san, board) });

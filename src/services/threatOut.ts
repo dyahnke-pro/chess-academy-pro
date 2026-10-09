@@ -25,7 +25,7 @@ export interface MustDefend {
   net: number;
   /** Every mover piece hanging to the opponent's next move, SEE-verified,
    *  highest value first. */
-  pieces: Array<{ square: string; piece: string; value: number; attacker: string | null; defenders: number }>;
+  pieces: Array<{ square: string; piece: string; value: number; attacker: string | null; attackerSquare: string | null; defenders: number }>;
 }
 
 /** Flip the side-to-move (clear en-passant, which a flip invalidates). Returns
@@ -58,13 +58,13 @@ export function flipSideToMove(fen: string): string | null {
  *  that can legally take, and how many of the subject's pieces guard the
  *  square. A sentence with no engine line may say these, never what the
  *  capture nets. */
-function boardFact(probeFen: string, square: Square, subject: 'w' | 'b'): { attacker: string | null; defenders: number } {
+function boardFact(probeFen: string, square: Square, subject: 'w' | 'b'): { attacker: string | null; attackerSquare: string | null; defenders: number } {
   try {
     const b = new Chess(probeFen);
     const caps = b.moves({ verbose: true }).filter((m) => m.to === square && m.captured);
     caps.sort((x, y) => (VALUE[x.piece] ?? 0) - (VALUE[y.piece] ?? 0));
-    return { attacker: caps[0]?.piece ?? null, defenders: b.attackers(square, subject).length };
-  } catch { return { attacker: null, defenders: 0 }; }
+    return { attacker: caps[0]?.piece ?? null, attackerSquare: caps[0]?.from ?? null, defenders: b.attackers(square, subject).length };
+  } catch { return { attacker: null, attackerSquare: null, defenders: 0 }; }
 }
 
 export function computeMustDefend(fen: string, subjectColor: 'w' | 'b'): MustDefend {
