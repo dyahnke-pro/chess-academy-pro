@@ -16,7 +16,7 @@ import {
   createStreamingDispatcher,
   type StreamingDispatcher,
 } from '../../services/streamingSpeaker';
-import { SENTENCE_END_RE, unwrapSpineError } from '../../services/sanitizeCoachText';
+import { SENTENCE_END_RE, sanitizeCoachText, unwrapSpineError } from '../../services/sanitizeCoachText';
 import { logAppAudit } from '../../services/appAuditor';
 import type { StockfishAnalysis } from '../../types';
 import type { TacticsLiveContext } from '../../coach/types';
@@ -147,14 +147,14 @@ export function CoachAnalysePage(): JSX.Element {
           maxToolRoundTrips: 1,
           onChunk: (chunk: string) => {
             explanation += chunk;
-            setCoachExplanation(explanation);
+            setCoachExplanation(sanitizeCoachText(explanation));
             dispatcherRef.current.push(explanation);
           },
         },
       );
       const finalText = unwrapSpineError(result.text);
       // A grounded answer does not stream: show it whole.
-      if (finalText && !explanation) setCoachExplanation(finalText);
+      if (finalText && !explanation) setCoachExplanation(sanitizeCoachText(finalText));
       if (!finalText) {
         void logAppAudit({
           kind: 'llm-error',
@@ -214,7 +214,7 @@ export function CoachAnalysePage(): JSX.Element {
     let base: string | null = null;
     const show = (text: string): void => setCoachExplanation((prev) => {
       if (base === null) base = prev;
-      return base ? `${base}\n\n${text}` : text;
+      return base ? `${base}\n\n${sanitizeCoachText(text)}` : sanitizeCoachText(text);
     });
     // Same shape as the analyse-position call above — thread the
     // on-board move history when present so the book-context loader

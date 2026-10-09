@@ -85,11 +85,12 @@ describe('CoachAnalysePage', () => {
   // the door was handed an app wrapper ("Student question: … Answer in 2-4
   // sentences") instead of what the student typed.
   it('shows a door answer that did not stream, and asks the door in the student\'s words', async () => {
-    mockDispatch.mockResolvedValue({ text: 'The best move is e4.' });
+    mockDispatch.mockResolvedValue({ text: 'The best move is e4. [BOARD: arrow:e2-e4:green]' });
     render(<CoachAnalysePage />);
     act(() => { fireEvent.change(screen.getByTestId('chat-text-input'), { target: { value: "what's the best move here?" } }); });
     act(() => { fireEvent.click(screen.getByTestId('chat-send-btn')); });
     await waitFor(() => expect(screen.getByTestId('coach-explanation')).toHaveTextContent('The best move is e4.'));
     expect((mockDispatch.mock.calls[0][0] as { ask: string }).ask).toBe("what's the best move here?");
+    expect(screen.getByTestId('coach-explanation')).not.toHaveTextContent('[BOARD:');
   });
 });

@@ -25,7 +25,7 @@ import {
   createStreamingDispatcher,
   type StreamingDispatcher,
 } from '../../services/streamingSpeaker';
-import { SENTENCE_END_RE, unwrapSpineError } from '../../services/sanitizeCoachText';
+import { SENTENCE_END_RE, sanitizeCoachText, unwrapSpineError } from '../../services/sanitizeCoachText';
 import { logAppAudit } from '../../services/appAuditor';
 import { useAppStore } from '../../stores/appStore';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
@@ -159,7 +159,7 @@ export function ExplainPositionSessionView({
             onChunk: (chunk: string) => {
               if (cancelled.value || !mountedRef.current) return;
               streamed += chunk;
-              setExplanation(streamed);
+              setExplanation(sanitizeCoachText(streamed));
               pushAccumulated(streamed);
             },
           },
@@ -168,7 +168,7 @@ export function ExplainPositionSessionView({
         if (cancelled.value || !mountedRef.current) return;
         const finalText = unwrapSpineError(result.text);
         // A grounded answer does not stream: show it whole.
-        if (finalText && !streamed) setExplanation(finalText);
+        if (finalText && !streamed) setExplanation(sanitizeCoachText(finalText));
         if (!finalText) {
           void logAppAudit({
             kind: 'llm-error',
@@ -227,7 +227,7 @@ export function ExplainPositionSessionView({
       let base: string | null = null;
       const show = (text: string): void => setExplanation((prev) => {
         if (base === null) base = prev;
-        return base ? `${base}\n\n${text}` : text;
+        return base ? `${base}\n\n${sanitizeCoachText(text)}` : sanitizeCoachText(text);
       });
       // Unified dispatch — the user's question gets the action router (settings,
       // navigation, drills) then the grounded brain, same as chat/teach.
