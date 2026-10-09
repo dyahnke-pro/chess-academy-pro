@@ -40,4 +40,8 @@ describe('piece questions', () => {
     const t = readTurnInCode('how do I attack the king?', { fen: FEN, history: LINE, studentColor: 'white' } as never);
     expect(t?.kind).not.toBe('what-about-piece');
   });
+  it('a piece that is not there is answered as a board fact, not routed to a book passage', async () => {
+    const a = await ask('how do I defend my knight on d4?');
+    expect(a).toBe("There's no knight on d4 — which piece did you mean?");
+  }, 60_000);
 });

@@ -28,6 +28,7 @@
  */
 import { teachFromBooks } from '../services/bookTeaching';
 import { Chess } from 'chess.js';
+import { legalForOpponent } from './chatTurnCodeReader';
 import { findTradeMove, type ComparedMove } from '../services/groundedAnswer';
 import { logAppAudit } from '../services/appAuditor';
 import { tacticsAreFreshFor } from '../services/tacticsContextIdentity';
@@ -1579,7 +1580,16 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // "What if THEY play d5?" — the opponent's named move, played where it is
     // their turn and answered from the student's seat (question walk 2026-09-27).
     let opponentHypothetical: import('../services/coachApi').OpponentHypotheticalGrounding | undefined;
-    if (!compareMoves && input.liveState.fen && isOpponentHypotheticalQuestion(askForIntents)) {
+    // A move only THEY can play, asked without "I / my", is theirs too
+    // ("what does Nc6 do?" with their knight on b8 — pass 2, 2026-10-09).
+    const onlyTheirs = ((): boolean => {
+      if (!input.liveState.fen || /\b(?:i|my|me|we|our)\b/i.test(askForIntents ?? '')) return false;
+      const san = extractCandidateSan(askForIntents);
+      if (!san) return false;
+      try { if (new Chess(input.liveState.fen).move(san)) return false; } catch { /* not legal for the mover */ }
+      try { return legalForOpponent(new Chess(input.liveState.fen), san); } catch { return false; }
+    })();
+    if (!compareMoves && input.liveState.fen && (isOpponentHypotheticalQuestion(askForIntents) || onlyTheirs)) {
       const theirSan = extractCandidateSan(askForIntents);
       if (theirSan) {
         const seat: 'white' | 'black' = input.liveState.studentColor

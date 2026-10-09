@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**368 lines · 6 exports · 8 importers · 4 tests · 43 audits**
+**455 lines · 7 exports · 9 importers · 4 tests · 43 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@
 
 - `src/coach/chatTurnCodeReader.test.ts`
 - `src/coach/chatTurnParser.ts`
+- `src/coach/coachService.ts`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 - `src/coach/handWalk1009.test.ts`
 - `src/coach/questionIntents.ts`
@@ -44,23 +45,35 @@
 - `src/services/whyNotLegal.ts:177`
 
 ### `pointsAtThisBoard` (function) — 1 call site
-- `src/coach/questionIntents.ts:1652`
+- `src/coach/questionIntents.ts:1656`
 
-### `readTurnInCode` (function) — 15 call sites
+### `legalForOpponent` (function) — 1 call site
+- `src/coach/coachService.ts:1590`
+
+### `readTurnInCode` (function) — 24 call sites
 - `src/coach/chatTurnCodeReader.test.ts:10`
-- `src/coach/chatTurnParser.ts:162`
+- `src/coach/chatTurnParser.ts:167`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:40`
-- `src/coach/handWalk1009.test.ts:24`
-- `src/coach/handWalk1009.test.ts:29`
-- `src/coach/handWalk1009.test.ts:39`
-- `src/coach/handWalk1009.test.ts:53`
-- `src/coach/handWalk1009.test.ts:58`
-- `src/coach/handWalk1009.test.ts:61`
-- `src/coach/handWalk1009.test.ts:73`
-- `src/coach/handWalk1009.test.ts:115`
-- `src/coach/handWalk1009.test.ts:118`
-- `src/coach/handWalk1009.test.ts:123`
+- `src/coach/handWalk1009.test.ts:25`
+- `src/coach/handWalk1009.test.ts:30`
+- `src/coach/handWalk1009.test.ts:40`
+- `src/coach/handWalk1009.test.ts:54`
+- `src/coach/handWalk1009.test.ts:59`
+- `src/coach/handWalk1009.test.ts:62`
+- `src/coach/handWalk1009.test.ts:74`
+- `src/coach/handWalk1009.test.ts:116`
+- `src/coach/handWalk1009.test.ts:119`
 - `src/coach/handWalk1009.test.ts:124`
+- `src/coach/handWalk1009.test.ts:125`
+- `src/coach/handWalk1009.test.ts:192`
+- `src/coach/handWalk1009.test.ts:210`
+- `src/coach/handWalk1009.test.ts:231`
+- `src/coach/handWalk1009.test.ts:240`
+- `src/coach/handWalk1009.test.ts:249`
+- `src/coach/handWalk1009.test.ts:250`
+- `src/coach/handWalk1009.test.ts:270`
+- `src/coach/handWalk1009.test.ts:283`
+- `src/coach/handWalk1009.test.ts:287`
 - `src/zzp3.test.ts:12`
 
 ## Tests

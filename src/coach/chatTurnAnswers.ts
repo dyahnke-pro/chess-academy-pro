@@ -6,7 +6,7 @@
 //
 // The target is what the turn names (a piece or a square), else the piece or
 // square the conversation was last about ("and how many defend it?").
-import { Chess, type Color, type Square } from 'chess.js';
+import { Chess, type Color, type Move, type Square } from 'chess.js';
 import type { ConversationState, ResolvedChatTurn } from './chatTurn';
 import { findLoosePieces } from '../services/loosePieces';
 import { findHangingBySee, captureRead } from '../services/positionReadingService';
@@ -144,7 +144,10 @@ export function answerAboutPiece(chess: Chess, sq: Square | null, student: Color
   let moves = 0;
   try { moves = new Chess(parts.join(' ')).moves({ square: sq, verbose: true }).length; } catch { moves = 0; }
   const safety = answerIsLoose(chess, sq, student);
-  const scope = moves === 0 ? 'It has no legal move.' : `It has ${moves} legal move${moves === 1 ? '' : 's'}.`;
+  // A move count is filler ("It has 1 legal move", hand walks 2026-10-09);
+  // only a piece that cannot move at all is worth saying, and never a pawn
+  // (a blocked pawn is the structure, not news).
+  const scope = moves === 0 && p.type !== 'p' ? 'It cannot move at all.' : '';
   // WHAT THE PIECE DOES (live replay 2026-10-09: "what is my bishop on c4
   // aiming at?" got only "guarded, no legal move"): what it hits, what it
   // guards, a pin, and what the coach's positional read says about it — the
@@ -175,12 +178,12 @@ export function answerAboutPiece(chess: Chess, sq: Square | null, student: Color
       if ((o.squares ?? []).includes(sq)) lines.push(o.text);
     }
   } catch { /* the read is a bonus, never a blocker */ }
-  return [...lines, safety, scope].join(' ');
+  return [...lines, safety, scope].filter(Boolean).join(' ');
 }
 
 /** The computed answer for a direct kind; null when the turn names nothing
  *  to answer about (the caller then serves today's route). */
-export function directAnswer(turn: ResolvedChatTurn, fen: string, memory: ConversationState, student: Color, ask?: string): string | null {
+export function directAnswer(turn: ResolvedChatTurn, fen: string, memory: ConversationState, student: Color, ask?: string, history: readonly string[] = []): string | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   const sq = target(turn, memory, ask);
@@ -191,6 +194,9 @@ export function directAnswer(turn: ResolvedChatTurn, fen: string, memory: Conver
     case 'why-is-it-a-target': return answerWhyTarget(chess, sq, student);
     case 'what-about-piece': return answerAboutPiece(chess, sq, student);
     case 'defend-piece': return answerDefend(chess, sq, student);
+    case 'win-piece': return answerWin(chess, sq, student);
+    case 'attack-piece': return answerAttack(chess, sq, student);
+    case 'material-change': return answerMaterialChange(history, student);
     default: return null;
   }
 }
@@ -254,4 +260,116 @@ function between(a: Square, b: Square): string[] {
   const out: string[] = [];
   for (let i = 1; i < n; i += 1) out.push(`${String.fromCharCode(fa + df * i)}${ra + dr * i}`);
   return out;
+}
+
+/**
+ * CAN I WIN IT — "can I win the pawn back?" (pass 1, 2026-10-09: answered
+ * "nothing of theirs is loose" while e3 or e4 opened the f1 bishop onto c4).
+ * Now: the captures that win it, read by the safety door. Not now: the moves
+ * that bring a piece of yours onto it, read on the board after the move. A
+ * board fact, never a promise — they get a move to answer.
+ */
+export function answerWin(chess: Chess, sq: Square | null, student: Color): string | null {
+  if (!sq) return null;
+  const p = chess.get(sq);
+  const enemy: Color = student === 'w' ? 'b' : 'w';
+  if (!p || p.color !== enemy) return null;
+  const subject = owned(chess, sq, student);
+  if (chess.turn() !== student) return `It is their move first, so ${subject} can be protected before you can take it.`;
+  let gain: number | null = 0;
+  try { gain = captureRead(chess.fen(), sq, student); } catch { gain = null; }
+  const takes = chess.moves({ verbose: true }).filter((m) => m.to === sq && m.captured);
+  if (gain !== null && gain > 0 && takes.length) {
+    return `Yes — ${subject} can be taken now: ${orList(takes.map((m) => m.san))}.`;
+  }
+  // Not now: which of your moves bring a new attacker onto it.
+  const before = new Set<string>(chess.attackers(sq, student));
+  const setups: string[] = [];
+  const via = new Set<string>();
+  for (const m of chess.moves({ verbose: true })) {
+    if (m.to === sq) continue;
+    const after = new Chess(chess.fen());
+    after.move(m.san);
+    // Read the square as if it were your move again.
+    const asIf = after.fen().split(' ');
+    asIf[1] = student; asIf[3] = '-';
+    let b: Chess;
+    try { b = new Chess(asIf.join(' ')); } catch { continue; }
+    if (b.inCheck()) continue;
+    const added = b.attackers(sq, student).filter((a) => !before.has(a));
+    if (added.length === 0) continue;
+    let g: number | null = 0;
+    try { g = captureRead(b.fen(), sq, student); } catch { g = null; }
+    if (g === null || g <= 0) continue;
+    setups.push(m.san);
+    for (const a of added) via.add(`${name(b.get(a)?.type ?? 'p')} on ${a}`);
+  }
+  if (setups.length === 0) return `Not right now — nothing of yours can win ${subject}, and no single move sets it up.`;
+  return `Not this move — nothing of yours takes ${subject} safely yet. ${orList(setups)} brings your ${orList([...via])} onto it, and then it can be taken unless they protect it.`;
+}
+
+/**
+ * HOW TO ATTACK IT — "can I attack the b7 pawn?" (pass 2: read as the pawn
+ * move b7). The pieces of yours already on it, then every move that brings a
+ * new one onto it, grouped by the piece that arrives. Board facts only.
+ */
+export function answerAttack(chess: Chess, sq: Square | null, student: Color): string | null {
+  if (!sq) return null;
+  const p = chess.get(sq);
+  const enemy: Color = student === 'w' ? 'b' : 'w';
+  if (!p || p.color !== enemy) return null;
+  const subject = owned(chess, sq, student);
+  const already = chess.attackers(sq, student);
+  const lead = already.length ? `Your ${listOf(chess, already)} already ${already.length === 1 ? 'attacks' : 'attack'} ${subject}.` : '';
+  if (chess.turn() !== student) return lead || `It is their move first — ask again on your turn.`;
+  const before = new Set<string>(already);
+  const byPiece = new Map<string, string[]>();
+  for (const m of chess.moves({ verbose: true })) {
+    if (m.to === sq) continue;
+    const after = new Chess(chess.fen());
+    after.move(m.san);
+    const asIf = after.fen().split(' ');
+    asIf[1] = student; asIf[3] = '-';
+    let b: Chess;
+    try { b = new Chess(asIf.join(' ')); } catch { continue; }
+    const added = b.attackers(sq, student).filter((a) => !before.has(a));
+    if (added.length === 0) continue;
+    // Never offer a move that hands the arriving piece over for nothing.
+    let safe: number | null = 0;
+    try { safe = captureRead(after.fen(), m.to, enemy); } catch { safe = null; }
+    if (safe !== 0) continue;
+    const key = `${name(m.piece)} on ${m.from}`;
+    byPiece.set(key, [...(byPiece.get(key) ?? []), m.san]);
+  }
+  if (byPiece.size === 0) return lead || `Nothing of yours can get at ${subject} safely in one move.`;
+  const ways = [...byPiece.entries()].map(([who, sans]) => `${orList(sans)} brings your ${who} onto it`);
+  return `${lead ? `${lead} ` : ''}To attack ${subject}: ${ways.join('; ')}.`;
+}
+
+const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
+
+/**
+ * WHAT DID I JUST LOSE — "did I just lose a pawn?" (pass 3: 3.d4?? exf3 took
+ * the knight and the answer was about a safe d4 pawn). The captures on the
+ * last two plies, read off the game record, both directions, so a trade is
+ * said as a trade. A board fact: what was taken, by what, where.
+ */
+export function answerMaterialChange(history: readonly string[], student: Color): string | null {
+  if (history.length === 0) return null;
+  const replay = new Chess();
+  const moves: Move[] = [];
+  try { for (const san of history) moves.push(replay.move(san)); } catch { return null; }
+  const recent = moves.slice(-2);
+  const lost = recent.filter((m) => m.captured && m.color !== student);
+  const won = recent.filter((m) => m.captured && m.color === student);
+  if (lost.length === 0 && won.length === 0) return 'No — nothing was taken on the last moves.';
+  // The move is named once, in SAN — the chat renders it in words with its
+  // notation (pass 3: "(e-pawn takes on d4 (exd4))").
+  const say = (m: (typeof moves)[number], whose: string): string => `${whose} ${name(m.captured ?? 'p')} on ${m.to} with ${m.san}`;
+  const lostV = lost.reduce((n, m) => n + (VALUE[m.captured ?? 'p'] ?? 0), 0);
+  const wonV = won.reduce((n, m) => n + (VALUE[m.captured ?? 'p'] ?? 0), 0);
+  if (lost.length && !won.length) return `Yes — they took your ${lost.map((m) => say(m, '').trim()).join(' and ')}.`;
+  if (won.length && !lost.length) return `No — you took their ${won.map((m) => say(m, '').trim()).join(' and ')}.`;
+  const verdict = lostV === wonV ? 'an even trade' : lostV > wonV ? 'you came out behind' : 'you came out ahead';
+  return `It was a trade: they took your ${lost.map((m) => say(m, '').trim()).join(' and ')}, and you took their ${won.map((m) => say(m, '').trim()).join(' and ')} — ${verdict}.`;
 }

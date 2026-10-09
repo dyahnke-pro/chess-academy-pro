@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**682 lines · 26 exports · 16 importers · 10 tests · 3 audits**
+**685 lines · 26 exports · 16 importers · 10 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -38,7 +38,7 @@
 ### `FastPathLane` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `fastPathLane` (function) — 15 call sites
+### `fastPathLane` (function) — 16 call sites
 - `src/coach/ask/playName.ts:89`
 - `src/coach/chatTurn.test.ts:68`
 - `src/coach/chatTurn.test.ts:84`
@@ -46,10 +46,11 @@
 - `src/coach/chatTurn.test.ts:100`
 - `src/coach/chatTurn.test.ts:107`
 - `src/coach/dispatchCoachTurn.ts:188`
-- `src/coach/dispatchCoachTurn.ts:225`
-- `src/coach/dispatchCoachTurn.ts:237`
-- `src/coach/dispatchCoachTurn.ts:258`
-- `src/coach/dispatchCoachTurn.ts:312`
+- `src/coach/dispatchCoachTurn.ts:229`
+- `src/coach/dispatchCoachTurn.ts:241`
+- `src/coach/dispatchCoachTurn.ts:253`
+- `src/coach/dispatchCoachTurn.ts:273`
+- `src/coach/dispatchCoachTurn.ts:327`
 - `src/coach/questionRoute.test.ts:20`
 - `src/coach/questionRoute.test.ts:30`
 - `src/coach/questionRoute.test.ts:33`
@@ -97,7 +98,7 @@
 - `src/coach/chatTurn.test.ts:123`
 - `src/coach/chatTurn.test.ts:128`
 - `src/coach/chatTurn.test.ts:129`
-- `src/coach/chatTurnParser.ts:154`
+- `src/coach/chatTurnParser.ts:159`
 
 ### `BoardContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -118,10 +119,10 @@
 - `src/coach/chatTurn.test.ts:171`
 - `src/coach/chatTurn.test.ts:174`
 - `src/coach/chatTurn.test.ts:179`
-- `src/coach/chatTurnParser.ts:156`
-- `src/coach/chatTurnParser.ts:164`
-- `src/coach/chatTurnParser.ts:194`
-- `src/coach/handWalk1009.test.ts:86`
+- `src/coach/chatTurnParser.ts:161`
+- `src/coach/chatTurnParser.ts:169`
+- `src/coach/chatTurnParser.ts:199`
+- `src/coach/handWalk1009.test.ts:87`
 
 ### `ConversationState` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -138,7 +139,7 @@
 - `src/coach/chatTurn.test.ts:80`
 - `src/coach/chatTurn.test.ts:83`
 - `src/coach/chatTurn.test.ts:87`
-- `src/coach/dispatchCoachTurn.ts:242`
+- `src/coach/dispatchCoachTurn.ts:257`
 
 ### `kindAgreesWithLane` (function) — 3 call sites
 - `src/coach/chatTurn.test.ts:103`

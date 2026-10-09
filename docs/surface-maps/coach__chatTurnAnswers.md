@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**258 lines · 7 exports · 3 importers · 2 tests · 0 audits**
+**376 lines · 10 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,13 +24,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/chatTurnAnswers.test.ts:23`
 - `src/coach/chatTurnAnswers.test.ts:25`
 - `src/coach/chatTurnAnswers.test.ts:26`
-- `src/coach/handWalk1009.test.ts:78`
+- `src/coach/handWalk1009.test.ts:79`
 
 ### `answerCount` (function) — 4 call sites
 - `src/coach/chatTurnAnswers.test.ts:30`
 - `src/coach/chatTurnAnswers.test.ts:31`
 - `src/coach/chatTurnAnswers.test.ts:32`
-- `src/coach/chatTurnAnswers.test.ts:56`
+- `src/coach/chatTurnAnswers.test.ts:58`
 
 ### `answerControl` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -43,15 +43,25 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/chatTurnAnswers.test.ts:41`
 
 ### `directAnswer` (function) — 4 call sites
-- `src/coach/chatTurnAnswers.test.ts:46`
-- `src/coach/chatTurnAnswers.test.ts:47`
 - `src/coach/chatTurnAnswers.test.ts:48`
-- `src/coach/dispatchCoachTurn.ts:222`
+- `src/coach/chatTurnAnswers.test.ts:49`
+- `src/coach/chatTurnAnswers.test.ts:50`
+- `src/coach/dispatchCoachTurn.ts:226`
 
 ### `answerDefend` (function) — 3 call sites
-- `src/coach/handWalk1009.test.ts:96`
-- `src/coach/handWalk1009.test.ts:105`
-- `src/coach/handWalk1009.test.ts:109`
+- `src/coach/handWalk1009.test.ts:97`
+- `src/coach/handWalk1009.test.ts:106`
+- `src/coach/handWalk1009.test.ts:110`
+
+### `answerWin` (function) — 1 call site
+- `src/coach/handWalk1009.test.ts:198`
+
+### `answerAttack` (function) — 1 call site
+- `src/coach/handWalk1009.test.ts:237`
+
+### `answerMaterialChange` (function) — 2 call sites
+- `src/coach/handWalk1009.test.ts:291`
+- `src/coach/handWalk1009.test.ts:295`
 
 ## Tests
 

@@ -22,6 +22,7 @@ import { computeTerritory, legalSeeGainFor, seeReadsStanding } from './positionR
 import { isPinnedPiece } from './nextPlans';
 import { countKingAttack } from './kingSafety';
 import { andList, orList } from '../utils/andList';
+import { computeMustDefend } from './threatOut';
 
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
@@ -75,6 +76,11 @@ export interface Candidate {
   shortfall?: Shortfall;
   /** The piece it drops, when `shortfall === 'drops-material'`. */
   drops?: { piece: string; square: string };
+  /** A piece of the mover's the move leaves under fire — not loose, but lost
+   *  to the exchange (a pawn hit by a knight, guarded by a queen). The BOARD
+   *  fact behind "clearly worse" when no line proves more (pass 1: "Bxc4 is
+   *  clearly worse than Nf3" with no reason — …Nxd4 takes the d4 pawn). */
+  leaves?: { piece: string; square: string; attacker: string; attackerSquare: string };
   /** The candidate's own engine line cut to the point it PROVES against the
    *  mover ("Nxe5, Qd4 and Qxe5 — they win a knight"), when it proves one
    *  (WO-TEACH-02 S5). A candidate is a lesson only with its reason. */
@@ -233,11 +239,20 @@ export function buildDeliberation(input: {
         const loose = dropsAfter(fenBefore, line.moves[0], moverColor);
         const drop = loose && deltaCp >= CLEARLY_WORSE_CP ? loose : null;
         const proof = proofAgainstMover(fenBefore, line.moves, moverColor);
+        let leaves: Candidate['leaves'];
+        try {
+          const after = new Chess(fenBefore);
+          const u = line.moves[0];
+          after.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+          const md = computeMustDefend(after.fen(), moverColor).pieces.find((h) => h.attacker && h.attackerSquare);
+          if (md?.attacker && md.attackerSquare) leaves = { piece: md.piece, square: md.square, attacker: md.attacker, attackerSquare: md.attackerSquare };
+        } catch { leaves = undefined; }
         namedCandidate = {
           san: namedSan, evalCp, deltaCp,
           shortfall: drop ? 'drops-material' : deltaCp >= CLEARLY_WORSE_CP ? 'clearly-worse' : 'less-precise',
           drops: drop ? { piece: drop.piece, square: drop.square } : undefined,
           ...(proof ? { proof } : {}),
+          ...(leaves ? { leaves } : {}),
         };
       }
     }
@@ -595,7 +610,10 @@ export function namedMoveAnswer(d: Deliberation, ask: 'why-best' | 'is-it-good')
   if (n.proof || (n.shortfall === 'drops-material' && n.drops)) {
     why = shortfallText(n);
   } else if (n.shortfall === 'clearly-worse') {
-    why = `${subject} is clearly worse than ${d.best.san}${d.bestWhy ? `, which ${d.bestWhy}` : ''}.${d.bestWhy ? line : ''}`;
+    const leaves = n.leaves
+      ? ` It leaves your ${PIECE_WORD[n.leaves.piece] ?? 'piece'} on ${n.leaves.square} under fire from their ${PIECE_WORD[n.leaves.attacker] ?? 'piece'} on ${n.leaves.attackerSquare}.`
+      : '';
+    why = `${subject} is clearly worse than ${d.best.san}${d.bestWhy ? `, which ${d.bestWhy}` : ''}.${leaves}${d.bestWhy ? line : ''}`;
     namesBest = true;
   } else {
     why = `${subject} is playable, but ${d.best.san} is more accurate${d.bestWhy ? ` — it ${d.bestWhy}` : ''}.${d.bestWhy ? line : ''}`;

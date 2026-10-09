@@ -200,6 +200,14 @@ export function illegalNamedMove(ask: string, fen: string, student: 'white' | 'b
   if (fits(chess)) return null;
   // A move of THEIRS ("what if they play Bxc3") is a hypothetical, not a refusal.
   if (slots.seat === 'them') return null;
+  // A move only THEY can play, said without "I / my", is theirs as well
+  // ("what does Nc6 do?" with their knight on b8 — pass 2, 2026-10-09).
+  if (slots.seat !== 'me' && san) {
+    const parts = fen.split(' ');
+    parts[1] = parts[1] === 'w' ? 'b' : 'w';
+    parts[3] = '-';
+    try { const them = new Chess(parts.join(' ')); if (!them.inCheck() && them.move(san)) return null; } catch { /* not theirs either */ }
+  }
   // Played earlier in the game: a question about the past.
   const replay = new Chess();
   for (const h of history) {

@@ -199,6 +199,10 @@ const UNCLAIMED_GRACE_MS = 3000;
 
 // ─── THE DOOR ──────────────────────────────────────────────────────────────
 
+/** Readings the board refutes outright: the named piece is not there, is
+ *  the other side's, or does not exist. */
+const FALSE_PREMISE: ReadonlySet<string> = new Set(['piece-not-there', 'piece-wrong-seat', 'piece-absent']);
+
 export async function dispatchCoachTurn(
   input: CoachAskInput,
   options: DispatchCoachTurnOptions = {},
@@ -219,7 +223,7 @@ export async function dispatchCoachTurn(
     readKind = turn?.kind ?? (r?.turn ? 'unclear' : null);
     if (turn && CHAT_KINDS[turn.kind].answerer === 'direct' && input.liveState.fen) {
       const studentWB = input.liveState.studentColor === 'black' ? 'b' : input.liveState.studentColor === 'white' ? 'w' : (input.liveState.fen.split(' ')[1] === 'b' ? 'b' : 'w');
-      const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask);
+      const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask, input.liveState.moveHistory ?? []);
       if (text) {
         servedParsed = true;
         void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: turn.kind, servedParsed })
@@ -238,6 +242,17 @@ export async function dispatchCoachTurn(
           .catch(() => { /* telemetry never breaks a turn */ });
         return { text: openSentence(text), toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: `board:${turn.kind}` };
       }
+    }
+    // A FALSE PREMISE IS ANSWERED, NOT ROUTED (pass 2, 2026-10-09: "how do I
+    // defend my knight on c3?" with no knight there got a book passage about
+    // forks). When the board says the piece the student named is not there,
+    // or is the other side's, that IS the answer.
+    const bad = r?.validation && !r.validation.ok ? r.validation : null;
+    if (bad && FALSE_PREMISE.has(bad.reason) && bad.clarify) {
+      servedParsed = true;
+      void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: `premise:${bad.reason}`, servedParsed })
+        .catch(() => { /* telemetry never breaks a turn */ });
+      return { text: openSentence(bad.clarify), toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent: `premise:${bad.reason}` };
     }
     const canonical = turn ? canonicalAsk(turn) : null;
     if (canonical) {

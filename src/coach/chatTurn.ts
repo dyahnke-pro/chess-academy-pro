@@ -162,7 +162,7 @@ export const NEW_KINDS = [
   'compare-my-move', 'why-is-it-a-target', 'count-attackers', 'count-defenders',
   'what-about-piece', 'is-piece-loose', 'what-did-their-move-change',
   'what-should-i-play', 'i-dont-know', 'answer', 'start-thinking-lesson', 'book-teaching',
-  'defend-piece',
+  'defend-piece', 'win-piece', 'attack-piece', 'material-change',
 ] as const;
 export type NewKind = typeof NEW_KINDS[number];
 
@@ -353,6 +353,9 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   'what-about-piece': direct('"what about my bishop?" — a named piece\'s safety and scope'),
   'is-piece-loose': direct('is a piece loose / undefended (or which pieces are)'),
   'defend-piece': direct('how do I defend / save / protect a piece of mine ("how do I defend it?")'),
+  'win-piece': direct('can I win / take / get back one of their pieces or pawns ("can I win the pawn back?")'),
+  'attack-piece': direct('how can I attack / go after one of their pieces or pawns ("can I attack the b7 pawn?")'),
+  'material-change': direct('did I just lose / drop / hang something ("did I just lose a pawn?")'),
   // Outside a lesson (which has its own "I don't know"), not knowing is a
   // request for help: the hint lane.
   // Answered before every lane on the student's own words (coachService →
@@ -431,7 +434,7 @@ const NEEDS_BOARD: ReadonlySet<ChatKind> = new Set<ChatKind>([
   'best-move', 'why-best-move', 'alternatives', 'candidate-move', 'compare-moves', 'plan', 'hint', 'method',
   'tactics', 'position-assessment', 'whose-turn', 'mate', 'draw', 'positional', 'piece-options',
   'compare-my-move', 'why-is-it-a-target', 'count-attackers', 'count-defenders', 'what-about-piece',
-  'is-piece-loose', 'what-did-their-move-change', 'what-should-i-play', 'answer', 'defend-piece',
+  'is-piece-loose', 'what-did-their-move-change', 'what-should-i-play', 'answer', 'defend-piece', 'win-piece', 'attack-piece', 'material-change',
 ]);
 
 /**

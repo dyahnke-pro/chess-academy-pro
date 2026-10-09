@@ -121,6 +121,9 @@ async function state() {
 
 const routes = {
   async open() {
+    // A fresh page is a fresh game: the mirror starts over with it (a stale
+    // mirror reported the previous game's moves over a new board).
+    chess.reset();
     await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded' });
     await sleep(4000);
     const allow = page.locator('[data-testid="ai-consent-allow"]');

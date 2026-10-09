@@ -107,7 +107,7 @@ const isRecord = (x: unknown): x is Record<string, unknown> => typeof x === 'obj
 /** Turn whatever the model returned into a ChatTurn, or null. Closed: an
  *  unknown kind becomes `unclear`, an unknown referent is dropped, nothing is
  *  invented to fill a gap. */
-export function coerceChatTurn(raw: unknown): { turn: ChatTurn; english: string | null } | null {
+export function coerceChatTurn(raw: unknown, text: string | null = null): { turn: ChatTurn; english: string | null } | null {
   if (!isRecord(raw)) return null;
   const kind: ChatKind = typeof raw.kind === 'string' && (ALL_CHAT_KINDS as string[]).includes(raw.kind)
     ? raw.kind as ChatKind
@@ -123,7 +123,12 @@ export function coerceChatTurn(raw: unknown): { turn: ChatTurn; english: string 
         break;
       case 'piece': {
         const piece = typeof r.piece === 'string' ? PIECE_NAMES[r.piece.toLowerCase()] : undefined;
-        if (piece) referents.push({ type: 'piece', piece, square: square || null, seat: seatOf(r.seat), ...(r.other === true ? { other: true } : {}) });
+        // The square the student TYPED wins over a reading that dropped it
+        // (pass 2: "is my c4 pawn safe?" read as "a pawn", then refused as
+        // ambiguous). Only when the text names exactly one square.
+        const typed = [...(text ?? '').toLowerCase().matchAll(/\b([a-h][1-8])\b/g)].map((m) => m[1]);
+        const sq = square || (typed.length === 1 ? typed[0] : null);
+        if (piece) referents.push({ type: 'piece', piece, square: sq, seat: seatOf(r.seat), ...(r.other === true ? { other: true } : {}) });
         break;
       }
       case 'move':
@@ -187,7 +192,7 @@ export async function parseChatTurn(text: string, ctx: ParseContext): Promise<Pa
   if (raw === null || raw === undefined) {
     return done({ turn: null, english: null, validation: null, source: timedOut ? 'timeout' : 'llm-failed' });
   }
-  const coerced = coerceChatTurn(raw);
+  const coerced = coerceChatTurn(raw, text);
   if (!coerced) return done({ turn: null, english: null, validation: null, source: 'llm-failed' });
 
   // 4. Code checks the reading against the board.

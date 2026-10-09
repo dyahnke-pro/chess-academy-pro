@@ -37,8 +37,10 @@ describe('chat answers for the lesson\'s board questions (computed)', () => {
     expect(answerWhyTarget(new Chess(RUY), 'c6', 'b')).toMatch(/attacked 1 time and defended 2 times, so taking it does not win material yet/);
   });
 
-  it('what about a piece: its safety and how many moves it has', () => {
-    expect(answerAboutPiece(new Chess(LOOSE), 'b5', 'w')).toMatch(/Your bishop on b5 .* It has \d+ legal moves\./);
+  it('what about a piece: its safety, never a filler move count', () => {
+    const t = answerAboutPiece(new Chess(LOOSE), 'b5', 'w') ?? '';
+    expect(t).toMatch(/Your bishop on b5 /);
+    expect(t).not.toMatch(/legal move/);
   });
 
   it('"how many defend it?" uses the piece the conversation was about', () => {

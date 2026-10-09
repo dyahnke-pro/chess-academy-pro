@@ -613,7 +613,7 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
   })();
   const winPart = wins.length > 0
     ? (isOpp
-        ? `they're eyeing ${named}, and it is not defended enough — cover it${takeBack}`
+        ? `they're eyeing ${named}, which is not defended enough${takeBack || ' — cover it'}`
         : `you can win ${named}`)
     : '';
   const checkPart = inCheck ? `your king is in check` : '';
@@ -757,7 +757,11 @@ export function assembleOpponentMoveAnswer(opts: {
     clauses.push(...saved);
   }
   const geom = describeMoveGeometry(before.fen(), played.san, opponentColor);
-  if (geom) clauses.push(geom.replace(/^attacks\b/, 'attacks').replace(/\byour king\b/, 'your king'));
+  // The capture is already said; a geometry clause about the SAME square is
+  // the same fact twice (pass 1: "captured your pawn on c4 and wins the pawn
+  // on c4").
+  if (geom && played.captured && geom.includes(played.to)) { /* said */ }
+  else if (geom) clauses.push(geom.replace(/^attacks\b/, 'attacks').replace(/\byour king\b/, 'your king'));
   else {
     const quiet = quietPurposePhrase(before.fen(), played.san, opponentColor, 'observer');
     if (quiet) clauses.push(quiet);
@@ -1842,7 +1846,9 @@ export function assembleMoveEvalAnswer(opts: {
     // and nothing else). What the move does on the board, else the fact that
     // makes a quiet best move best: nothing forcing does better.
     const geo = describeMoveGeometry(fen, bestMoveSan, mover);
-    if (geo && !geo.startsWith('attacks')) parts.push(`It ${geo}.`);
+    // A move that attacks something is never "a quiet move" (pass 2: Qb3,
+    // hitting b7 and d5, was called quiet because a bare attack was skipped).
+    if (geo) parts.push(`It ${geo}.`);
     else if (!/[x+#]/.test(bestMoveSan)) parts.push("It's a quiet move — nothing forcing does better here, so the engine improves the position instead.");
   }
   if (evalText) parts.push(`${evalText.charAt(0).toUpperCase()}${evalText.slice(1)}.`);
@@ -2148,9 +2154,10 @@ export function assembleOpponentHypotheticalAnswer(opts: {
   }
   if (typeof opts.nowEvalCp === 'number' && typeof opts.afterEvalCp === 'number') {
     const swing = (opts.nowEvalCp - opts.afterEvalCp) / 100;
-    if (swing >= 1) parts.push(`That would cost you about ${swing.toFixed(1)} points — it's the move to watch for.`);
-    else if (swing >= 0.3) parts.push(`It takes about ${swing.toFixed(1)} of a point off your position.`);
-    else if (swing <= -0.3) parts.push(`It would only help you — about ${(-swing).toFixed(1)} ${-swing >= 1 ? 'points' : 'of a point'} more for you than now.`);
+    // Words, not engine decimals (pass 3: "about 0.9 of a point off").
+    if (swing >= 1) parts.push(`That would hurt you — it's the move to watch for.`);
+    else if (swing >= 0.3) parts.push(`It makes your position a little worse.`);
+    else if (swing <= -0.3) parts.push(`It would only help you.`);
     else parts.push("It doesn't change much.");
   }
   // The student's best answer and the line it starts.
@@ -7323,7 +7330,6 @@ export function assembleCompareMovesAnswer(opts: { fen: string; a: ComparedMove;
     };
   }
   const why = refutation(worse);
-  const pawns = gap >= 10000 ? null : (gap / 100).toFixed(1);
   const parts = [`${better.san} is better.`];
   // THE MECHANISM (David 2026-10-05: "Why was the knight to one square better
   // than the other when they both checked the king???") — one piece hitting
@@ -7335,9 +7341,11 @@ export function assembleCompareMovesAnswer(opts: { fen: string; a: ComparedMove;
     const missed = moveMissed(opts.fen, worse.san, worse.lineUci);
     if (missed && /checks, but the king steps/.test(missed.text)) parts.push(missed.text);
   }
+  // The line is the reason; the decimal is not (pass 3: "about 5.0 points
+  // worse" after the line already showed the queen falling).
   parts.push(why
-    ? `${worse.san}? Then ${why}${pawns ? ` — about ${pawns} points worse` : ''}.`
-    : `${worse.san} is about ${pawns ?? 'a lot'} points worse.`);
+    ? `${worse.san}? Then ${why}.`
+    : `${worse.san} is ${gap >= 250 ? 'much' : 'a little'} worse.`);
   let fromTo: { from: string; to: string } | null = null;
   try { const mv = new Chess(opts.fen).move(better.san); fromTo = { from: mv.from, to: mv.to }; } catch { /* keep null */ }
   // BOTH LINES as arrows + Walk buttons (David: "arrows only" to compare;

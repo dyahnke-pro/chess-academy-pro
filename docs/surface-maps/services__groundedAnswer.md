@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7527 lines · 163 exports · 78 importers · 53 tests · 8 audits**
+**7535 lines · 163 exports · 78 importers · 53 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -166,10 +166,11 @@
 ### `assembleMovePurposeAnswer` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `assembleOpponentMoveAnswer` (function) — 9 call sites
-- `src/coach/handWalk1009.test.ts:132`
-- `src/coach/handWalk1009.test.ts:139`
-- `src/coach/handWalk1009.test.ts:166`
+### `assembleOpponentMoveAnswer` (function) — 10 call sites
+- `src/coach/handWalk1009.test.ts:133`
+- `src/coach/handWalk1009.test.ts:140`
+- `src/coach/handWalk1009.test.ts:167`
+- `src/coach/handWalk1009.test.ts:206`
 - `src/services/boardUrgency.test.ts:29`
 - `src/services/coachApi.ts:5811`
 - `src/services/groundedAnswer.opponentMove.test.ts:13`
@@ -322,7 +323,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `findTradeMove` (function) — 3 call sites
-- `src/coach/coachService.ts:1575`
+- `src/coach/coachService.ts:1576`
 - `src/services/groundedAnswer.trade.test.ts:20`
 - `src/services/groundedAnswer.trade.test.ts:38`
 
@@ -407,8 +408,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `toObserverSeat` (function) — 2 call sites
-- `src/coach/handWalk1009.test.ts:172`
-- `src/coach/handWalk1009.test.ts:174`
+- `src/coach/handWalk1009.test.ts:173`
+- `src/coach/handWalk1009.test.ts:175`
 
 ### `describeMoveMerit` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:1191`

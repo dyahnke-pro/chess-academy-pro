@@ -9,6 +9,7 @@ import { readTurnInCode } from './chatTurnCodeReader';
 import { validateChatTurn } from './chatTurn';
 import { theirPlanAnswer } from './boardTurnAnswer';
 import { answerIsLoose } from './chatTurnAnswers';
+import { coerceChatTurn } from './chatTurnParser';
 
 const GAME = 'e4 e5 Nf3 Nc6 Bc4 Bc5 d3 h6 O-O d6 c3 Bb6 d4 Na5 Bb5+ c6 Be2 Nf6'.split(' ');
 function at(n: number): { fen: string; history: string[] } {
@@ -181,5 +182,116 @@ describe('a move that opens a sentence is capitalised in words', () => {
     expect(movesInWords('O-O is fine. c3 is the engine choice.')).toBe('Castles kingside (O-O) is fine. c3 is the engine choice.');
     expect(movesInWords('Bb5+ is the best move. Then Nxe5 wins.')).toMatch(/^Bishop to b5 with check \(Bb5\+\) is the best move\. Then knight takes on e5 \(Nxe5\) wins\.$/);
     expect(movesInWords('play Nf3 here')).toBe('play knight to f3 (Nf3) here');
+  });
+});
+
+describe('pass 1 (QGD, 1.d4 d5 2.c4 e6 3.Nc3 dxc4)', () => {
+  const H = 'd4 d5 c4 e6 Nc3 dxc4'.split(' ');
+  const b6 = () => { const c = new Chess(); for (const m of H) c.move(m); return { fen: c.fen(), history: H, studentColor: 'white' as const }; };
+  it.each(['can i win the pawn back?', 'can I get my pawn back?', 'how do I win back the pawn', 'can I win the c4 pawn?'])('%s → win-piece on c4', (q) => {
+    const t = readTurnInCode(q, b6());
+    expect(t?.kind).toBe('win-piece');
+    expect(t?.referents).toEqual([{ type: 'square', square: 'c4' }]);
+  });
+  it('the answer names the moves that open the bishop onto c4', async () => {
+    const { answerWin } = await import('./chatTurnAnswers');
+    const text = answerWin(new Chess(b6().fen), 'c4', 'w') ?? '';
+    expect(text).toMatch(/^Not this move/);
+    expect(text).toMatch(/\be3\b/);
+    expect(text).toMatch(/\be4\b/);
+    expect(text).toMatch(/bishop on f1/);
+  });
+  it('why did they take on c4: the capture is said once', async () => {
+    const { assembleOpponentMoveAnswer } = await import('../services/groundedAnswer');
+    const facts = assembleOpponentMoveAnswer({ fen: b6().fen, moveHistory: H, studentColor: 'white' })?.facts ?? '';
+    expect(facts.match(/on c4/g)?.length).toBe(1);
+  });
+  it('"can I take on e5" is still a question about that move', () => {
+    expect(readTurnInCode('can i take on c4?', b6())?.kind).toBe('candidate-move');
+  });
+});
+
+it('pass 1: "Bxc4 now?" says why it is clearly worse — the d4 pawn the c6 knight hits', async () => {
+  const { buildDeliberation, namedMoveAnswer } = await import('../services/deliberation');
+  const c = new Chess(); for (const m of 'd4 d5 c4 e6 Nc3 dxc4 e4 Nc6'.split(' ')) c.move(m);
+  const d = buildDeliberation({
+    analysis: { topLines: [{ rank: 1, evaluation: 60, moves: ['g1f3'], mate: null }] },
+    fenBefore: c.fen(), moverColor: 'w', opponentLastSan: 'Nc6',
+    named: { lineUci: ['f1c4', 'c6d4'], evaluation: -120, mate: null },
+  });
+  const text = d ? namedMoveAnswer(d, 'is-it-good') ?? '' : '';
+  expect(text).toMatch(/^Bxc4 is clearly worse than Nf3/);
+  expect(text).toMatch(/leaves your pawn on d4 under fire from their knight on c6/);
+});
+
+describe('pass 2 (1.d4 Nf6 2.c4 d5 3.Nc3 Bf5)', () => {
+  const H = 'd4 Nf6 c4 d5 Nc3 Bf5'.split(' ');
+  const b = () => { const c = new Chess(); for (const m of H) c.move(m); return { fen: c.fen(), history: H, studentColor: 'white' as const }; };
+  it.each(['can I attack the b7 pawn?', 'how do I go after their b7 pawn', 'what can I use to hit b7?'])('%s → attack-piece on b7', (q) => {
+    const t = readTurnInCode(q, b());
+    expect(t?.kind).toBe('attack-piece');
+    expect(t?.referents).toEqual([{ type: 'square', square: 'b7' }]);
+  });
+  it('the attack answer names Qb3 bringing the queen onto b7', async () => {
+    const { answerAttack } = await import('./chatTurnAnswers');
+    expect(answerAttack(new Chess(b().fen), 'b7', 'w')).toMatch(/Qb3 brings your queen on d1 onto it/);
+  });
+  it('"should I take on d5?" with two captures weighs both, the pawn first', () => {
+    const t = readTurnInCode('should I take on d5?', b());
+    expect(t?.kind).toBe('compare-moves');
+    expect(t?.referents).toEqual([{ type: 'move', san: 'cxd5' }, { type: 'move', san: 'Nxd5' }]);
+  });
+});
+
+it('pass 2: "can I win their knight" and "can they attack my b2 pawn" read the actor, not the possessive', () => {
+  const c = new Chess(); for (const m of 'd4 Nf6 c4 d5 Nc3 Bf5'.split(' ')) c.move(m);
+  const b = { fen: c.fen(), history: 'd4 Nf6 c4 d5 Nc3 Bf5'.split(' '), studentColor: 'white' as const };
+  expect(readTurnInCode('can I win their bishop?', b)?.kind).toBe('win-piece');
+  expect(readTurnInCode('can they attack my b2 pawn?', b)?.kind).not.toBe('attack-piece');
+});
+
+describe('pass 2: a safety question about a pawn', () => {
+  it('"is my c4 pawn safe?" is not a pawn-strength question', async () => {
+    const { pawnStrengthAsk } = await import('./questionIntents');
+    expect(pawnStrengthAsk('is my c4 pawn safe?')).toBeNull();
+    expect(pawnStrengthAsk('is my d4 pawn weak?')).toEqual({ file: 'd' });
+  });
+  it('a model reading that drops the square takes the one the student typed', async () => {
+    const c = coerceChatTurn({ kind: 'is-piece-loose', referents: [{ type: 'piece', piece: 'pawn', seat: 'me' }], seat: 'me' }, 'is my c4 pawn safe?');
+    expect(c?.turn.referents[0]).toMatchObject({ type: 'piece', piece: 'p', square: 'c4' });
+  });
+});
+
+describe('pass 2: a move only they can play', () => {
+  const H = 'd4 e5 c4 exd4 Nc3 Bb4'.split(' ');
+  const fenOf = () => { const c = new Chess(); for (const m of H) c.move(m); return c.fen(); };
+  it('"what does Nc6 do?" is not read as your move, and is not refused as illegal', async () => {
+    const { illegalNamedMove } = await import('../services/whyNotLegal');
+    expect(readTurnInCode('what does Nc6 do?', { fen: fenOf(), history: H, studentColor: 'white' })).toBeNull();
+    expect(illegalNamedMove('what does Nc6 do?', fenOf(), 'white', H)).toBeNull();
+  });
+  it('"can I play Nc6?" is still refused — the student said it is theirs', async () => {
+    const { illegalNamedMove } = await import('../services/whyNotLegal');
+    expect(illegalNamedMove('can I play Nc6?', fenOf(), 'white', H)).toMatch(/c6/);
+  });
+});
+
+describe('pass 3 (1.e4 d5 2.Nf3 dxe4 3.d4 exf3)', () => {
+  const H = 'e4 d5 Nf3 dxe4 d4 exf3'.split(' ');
+  const b = () => { const c = new Chess(); for (const m of H) c.move(m); return { fen: c.fen(), history: H, studentColor: 'white' as const }; };
+  it('"is Ng5 good?" is never swapped for Bg5', () => {
+    const t = readTurnInCode('is Ng5 good here?', b());
+    expect(t?.referents).not.toContainEqual({ type: 'move', san: 'Bg5' });
+  });
+  it.each(['did I just lose a pawn?', 'did I just hang something', 'have I lost a piece?'])('%s → material-change', (q) => {
+    expect(readTurnInCode(q, b())?.kind).toBe('material-change');
+  });
+  it('says the knight was taken', async () => {
+    const { answerMaterialChange } = await import('./chatTurnAnswers');
+    expect(answerMaterialChange(H, 'w')).toBe('Yes — they took your knight on f3 with exf3.');
+  });
+  it('a trade is said as a trade', async () => {
+    const { answerMaterialChange } = await import('./chatTurnAnswers');
+    expect(answerMaterialChange('e4 d5 exd5 Qxd5'.split(' '), 'w')).toMatch(/^It was a trade: they took your pawn on d5 with Qxd5, and you took their pawn on d5 with exd5 — an even trade\.$/);
   });
 });

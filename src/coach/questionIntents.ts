@@ -782,6 +782,10 @@ export function captureOnAsk(ask: string | undefined): { capturer: 'student' | '
  *  move). Returns the file; the board reads the pawn. */
 export function pawnStrengthAsk(ask: string | undefined): { file: string } | null {
   if (!ask) return null;
+  // SAFETY IS NOT STRENGTH (pass 2, 2026-10-09: "is my c4 pawn safe?" got
+  // "not structurally — it isn't isolated, doubled or backward"). Whether it
+  // can be taken is the loose-piece question, not the structure.
+  if (/\b(?:safe|ok(?:ay)?|in danger|danger|hanging|attacked|under attack|take|taken|won|lose|losing)\b/i.test(ask)) return null;
   const m = /\b(?:is|how\s+(?:strong|good|dangerous|weak)\s+is)\s+my\s+(?:passed\s+)?([a-h])[\s-]?pawn\b/i.exec(ask)
     ?? /\bmy\s+(?:passed\s+)?pawn\s+on\s+the\s+([a-h])[\s-]?file\b/i.exec(ask)
     ?? /\bmy\s+(?:passed\s+)?pawn\s+on\s+([a-h])[1-8]\b.*\b(?:strong|weak|good|dangerous|safe|passed)\b/i.exec(ask)

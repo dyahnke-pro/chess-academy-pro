@@ -242,6 +242,10 @@ function preferPawn(moves: Move[]): Move[] {
 function resolveNamedMoveNow(chess: Chess, slots: Slots): string | null {
   if (slots.sans.length === 1) {
     try { const m = new Chess(chess.fen()).move(slots.sans[0]); if (m) return m.san; } catch { /* not legal now */ }
+    // A TYPED MOVE IS NEVER SWAPPED FOR ANOTHER PIECE'S (pass 3: "is Ng5
+    // good?" with no knight able to reach g5 became Bg5). Not legal: the
+    // validator says why.
+    return null;
   }
   if (slots.action === 'castle') return one(movesMatching(chess, { castle: true }).filter((m) => m.san === 'O-O')) ?? one(movesMatching(chess, { castle: true }));
   const to = slots.squares[slots.squares.length - 1];
@@ -253,6 +257,27 @@ function resolveNamedMoveNow(chess: Chess, slots: Slots): string | null {
     return one(piece ? ms : preferPawn(ms));
   }
   return null;
+}
+
+/** `san` is legal for the side NOT to move (the board handed to them). */
+export function legalForOpponent(chess: Chess, san: string): boolean {
+  const parts = chess.fen().split(' ');
+  parts[1] = parts[1] === 'w' ? 'b' : 'w';
+  parts[3] = '-';
+  try {
+    const b = new Chess(parts.join(' '));
+    if (b.inCheck()) return false;
+    return !!b.move(san);
+  } catch { return false; }
+}
+
+/** "Their bishop" when they have two: the one nothing guards, when exactly
+ *  one is unguarded — that is the one a student asks about winning. */
+function theirOne(chess: Chess, piece: PieceLetter, enemy: 'w' | 'b'): string | null {
+  const theirs = chess.board().flat().filter((c): c is NonNullable<typeof c> => !!c && c.type === piece && c.color === enemy);
+  if (theirs.length === 1) return theirs[0].square;
+  const bare = theirs.filter((c) => chess.attackers(c.square, enemy).length === 0);
+  return bare.length === 1 ? bare[0].square : null;
 }
 
 // ─── THE READING ───────────────────────────────────────────────────────────
@@ -320,6 +345,52 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
     if (piece) return { kind: 'is-piece-loose', referents: [{ type: 'piece', piece, square: sq, seat: 'me' }], seat: 'me', topic: null };
   }
 
+  // The ACTOR decides, not the possessive: "their b7 pawn" is the target.
+  const theyAct = /\b(?:they|he|she|opponent|black|white)\s+(?:\w+\s+){0,2}(?:attack|hit|target|go after|win|get|take)\b/.test(lower)
+    && !/\b(?:i|we)\s+(?:\w+\s+){0,2}(?:attack|hit|target|go after|win|get|take)\b/.test(lower);
+
+  // "Can I win the pawn back?" / "can I win their knight on e5?" — winning
+  // one of THEIR pieces: now, or the move that sets it up. "Back" points at
+  // what they last took. "Can I take on e5?" stays a question about that move.
+  if (/\b(?:win|get|regain|pick up)\b/.test(lower) && /\b(?:can|could|how|is there)\b/.test(lower)
+    && !theyAct && slots.sans.length === 0 && !/\b(?:game|match)\b/.test(lower)) {
+    let sq: string | null = slots.squares[0] ?? null;
+    if (!sq && /\bback\b/.test(lower)) {
+      const replay = new Chess();
+      let last: string | null = null;
+      try {
+        for (const san of board.history ?? []) {
+          const m = replay.move(san);
+          if (m.captured && m.color !== (board.studentColor === 'black' ? 'b' : 'w')) last = m.to;
+        }
+      } catch { last = null; }
+      sq = last;
+    }
+    const enemy = (board.studentColor ?? (chess.turn() === 'w' ? 'white' : 'black')) === 'white' ? 'b' : 'w';
+    if (!sq && slots.pieces.length === 1) sq = theirOne(chess, slots.pieces[0], enemy);
+    if (sq && chess.get(sq as Square)?.color === enemy) {
+      return { kind: 'win-piece', referents: [{ type: 'square', square: sq }], seat: 'them', topic: null };
+    }
+  }
+
+  // "Can I attack the b7 pawn?" / "how do I go after their bishop?" — the
+  // moves that bring a piece of yours onto one of THEIRS. Not a move to that
+  // square (pass 2: "attack the b7 pawn" was read as the pawn move b7).
+  if (/\b(?:attack|hit|target|go after|pressure|put pressure on)\b/.test(lower) && /\b(?:can|how|could|should|what)\b/.test(lower)
+    && !theyAct && slots.sans.length === 0 && !slots.pieces.includes('k')) {
+    const enemy = (board.studentColor ?? (chess.turn() === 'w' ? 'white' : 'black')) === 'white' ? 'b' : 'w';
+    let sq: string | null = slots.squares.find((q) => chess.get(q as Square)?.color === enemy) ?? null;
+    if (!sq && slots.pieces.length === 1) sq = theirOne(chess, slots.pieces[0], enemy);
+    if (sq) return { kind: 'attack-piece', referents: [{ type: 'square', square: sq }], seat: 'them', topic: null };
+  }
+
+  // "Did I just lose a pawn?" / "did I hang something?" — what the last
+  // moves cost, read off the game record (pass 3: answered about a pawn that
+  // was safe while the knight had just been taken).
+  if (/\b(?:did|have|has)\s+(?:i|we|my\s+\w+)\s+(?:just\s+)?(?:lose|lost|drop|dropped|hang|hung|blunder|give away|gave away)\b/.test(lower)) {
+    return { kind: 'material-change', referents: [], seat: 'me', topic: null };
+  }
+
   // "How do I defend it?" / "how can I save my bishop?" — saving one piece.
   // King safety is a plan question, not this.
   // The student asks what THEY do: "how do/can/should I …", "what can I do to
@@ -349,6 +420,17 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
     return { kind: 'retrospective-move', referents: [{ type: 'move', san: named }], seat: 'me', topic: null };
   }
 
+  // "Should I take on d5?" when two of yours can take there: weigh both,
+  // cheapest capturer first (pass 2: it answered with an unrelated best move).
+  if ((slots.action === 'capture') && slots.sans.length === 0 && slots.pieces.length === 0 && slots.squares.length === 1 && !slots.past) {
+    const caps = movesMatching(chess, { to: slots.squares[0], capture: true });
+    const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+    const uniq = [...new Map(caps.map((m) => [m.san, m])).values()].sort((a, b) => VAL[a.piece] - VAL[b.piece]);
+    if (uniq.length >= 2) {
+      return { kind: 'compare-moves', referents: uniq.slice(0, 2).map((m): Referent => ({ type: 'move', san: m.san })), seat: 'me', topic: null };
+    }
+  }
+
   const now = resolveNamedMoveNow(chess, slots);
   if (!now) {
     if (!named) return null;
@@ -357,6 +439,11 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
     // cannot be played — the validator says why. Never "I can't find it in
     // this game" for a move they are asking to make.
     const onTape = (board.history ?? []).some((h) => h.replace(/[+#!?]/g, '') === named.replace(/[+#!?]/g, ''));
+    // ONLY THEIRS (pass 2: "what does Nc6 do?" with their knight on b8 got
+    // "none of your knights can reach c6"). A move only the other side can
+    // play, asked without "I / my", is about their move: left to the
+    // opponent-hypothetical lane, which plays it on their turn.
+    if (!onTape && possessive !== 'me' && legalForOpponent(chess, named)) return null;
     const prospective = /\b(?:should|shall|can|could|now|next)\b/.test(lower);
     return { kind: onTape && !prospective ? 'retrospective-move' : 'candidate-move', referents: [{ type: 'move', san: named }], seat: 'me', topic: null };
   }
