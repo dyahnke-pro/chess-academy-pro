@@ -21,9 +21,12 @@ import { searchUntilStable } from '../services/searchDepth';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { buildCandidateEval } from '../services/enginePlanContext';
 import type { StockfishAnalysis } from '../types';
+import { computePositionFacts, type ClauseItem } from '../services/positionFacts';
+import { FACT_LAYER, type FactKind } from '../services/reviewFacetRank';
+import { lastMoveIfStudent, lastMoveIfOpponent } from '../services/lastMoveOfLine';
 
 /** The kinds the board answers directly. Each is served here or falls back. */
-export const BOARD_ANSWERED_KINDS: ReadonlySet<ChatKind> = new Set<ChatKind>(['why-best-move', 'candidate-move']);
+export const BOARD_ANSWERED_KINDS: ReadonlySet<ChatKind> = new Set<ChatKind>(['why-best-move', 'candidate-move', 'plan', 'tactics']);
 
 export interface BoardTurnInput {
   fen: string;
@@ -33,7 +36,7 @@ export interface BoardTurnInput {
 
 /** Test seam: the engine reads this answerer uses. */
 export interface BoardEngine {
-  analysis(fen: string): Promise<Pick<StockfishAnalysis, 'topLines'> | null>;
+  analysis(fen: string): Promise<Pick<StockfishAnalysis, 'topLines' | 'evaluation' | 'isMate' | 'mateIn' | 'seldepth' | 'depth' | 'wdl'> | null>;
   candidate(fen: string, san: string): Promise<{ evalCp: number | null; mateIn: number | null; lineUci: string[] } | null>;
 }
 
@@ -52,6 +55,7 @@ export function setBoardEngineForTests(e: BoardEngine | null): void { engineOver
 /** The answer to a decoded move question, or null to fall back to the lanes. */
 export async function answerBoardTurn(turn: ResolvedChatTurn, board: BoardTurnInput): Promise<string | null> {
   if (!BOARD_ANSWERED_KINDS.has(turn.kind)) return null;
+  if (turn.kind === 'plan' || turn.kind === 'tactics') return answerFromRead(turn, board);
   const moves = turn.referents.filter((r): r is Extract<typeof r, { type: 'move' }> => r.type === 'move');
   // Phase 1: exactly one named move, playable now, on the student's turn.
   if (moves.length !== 1 || moves[0].played) return null;
@@ -83,4 +87,54 @@ export async function answerBoardTurn(turn: ResolvedChatTurn, board: BoardTurnIn
   const d = buildDeliberation({ analysis, fenBefore: board.fen, moverColor: mover, opponentLastSan, named, maxCandidates: 4 });
   if (!d) return null;
   return namedMoveAnswer(d, turn.kind === 'why-best-move' ? 'why-best' : 'is-it-good');
+}
+
+/** Facts the student must answer right now — they lead any board answer. */
+const URGENT_KINDS: ReadonlySet<string> = new Set(['must-defend', 'latent-danger', 'tactic', 'trapped', 'loose', 'threat', 'bluff']);
+/** Never part of an answer to a question: the coaching habit and the weighing
+ *  (a best-move question gets the weighing through its own path). */
+const NOT_AN_ANSWER: ReadonlySet<string> = new Set(['method', 'deliberation']);
+
+/**
+ * THE QUESTION ANSWERED FROM THE ONE READ — the coach's own board read, run
+ * in the `asked` posture so every computer speaks, then selected by what was
+ * asked: the safety layer for "any tactics?", what cannot wait and then the
+ * plan layer for "what's my plan?". Ordered by the read's own rank; a fact
+ * whose squares an earlier one already covers is the same claim and goes.
+ */
+async function answerFromRead(turn: ResolvedChatTurn, board: BoardTurnInput): Promise<string | null> {
+  // Their plan reads the board from their seat — not served here yet.
+  if (turn.seat === 'them') return null;
+  const engine = engineOverride ?? defaultEngine;
+  const analysis = await engine.analysis(board.fen);
+  if (!analysis?.topLines?.length) return null;
+  const student = board.studentColor === 'white' ? 'w' : 'b';
+  const sans = [...board.history];
+  const lm = lastMoveIfStudent(sans, board.studentColor, board.fen);
+  const om = lastMoveIfOpponent(sans, board.studentColor, board.fen);
+  let read;
+  try {
+    read = await computePositionFacts({
+      posture: 'asked', fen: board.fen,
+      moverColor: board.fen.split(' ')[1] === 'b' ? 'b' : 'w', studentColor: student,
+      analysis,
+      ...(lm ? { lastMove: lm } : {}), ...(om ? { opponentLastMove: om } : {}), history: sans,
+    });
+  } catch { return null; }
+  const layer = (c: ClauseItem): string => FACT_LAYER[c.kind as FactKind] ?? 'plan';
+  const pool = read.candidates.filter((c) => !NOT_AN_ANSWER.has(c.kind));
+  const urgent = pool.filter((c) => URGENT_KINDS.has(c.kind)).sort((a, b) => b.rank - a.rank);
+  const rest = turn.kind === 'tactics'
+    ? pool.filter((c) => layer(c) === 'safety' && !URGENT_KINDS.has(c.kind)).sort((a, b) => b.rank - a.rank)
+    : pool.filter((c) => layer(c) === 'plan').sort((a, b) => b.rank - a.rank);
+  const chosen: ClauseItem[] = [];
+  const covered = new Set<string>();
+  for (const c of [...urgent, ...rest]) {
+    const sq = c.squares ?? [];
+    if (sq.length > 0 && sq.every((q) => covered.has(q))) continue;
+    chosen.push(c);
+    for (const q of sq) covered.add(q);
+  }
+  if (chosen.length === 0) return null;
+  return chosen.map((c) => c.text.trim()).join(' ');
 }

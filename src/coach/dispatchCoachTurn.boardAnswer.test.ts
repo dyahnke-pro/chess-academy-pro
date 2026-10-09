@@ -25,7 +25,7 @@ beforeEach(() => {
     analysis: async () => ({ topLines: [
       { rank: 1, evaluation: 30, mate: null, moves: ['f1b5', 'f8b4'] },
       { rank: 2, evaluation: 25, mate: null, moves: ['d2d4', 'e5d4'] },
-    ] }),
+    ], evaluation: 0, isMate: false, mateIn: null, depth: 14, seldepth: 14 }),
     candidate: async (_f, san) => ({ evalCp: san === 'Bb5' ? 30 : -120, mateIn: null, lineUci: ['f8b4'] }),
   });
 });

@@ -22,7 +22,7 @@ import { settledLeadFor, type LastMove } from './material';
 import { countWords } from '../utils/countWords';
 import { isSacrifice } from './factStakes';
 import { seatPieceReferences } from '../utils/seatPieces';
-import { deriveNextPlans, mobilityMap } from './nextPlans';
+import { mobilityMap } from './nextPlans';
 import { Chess } from 'chess.js';
 import { proofCut } from './exchangeLedger';
 import { isRealPin } from './pinGeometry';
@@ -39,6 +39,7 @@ import {
 import type { PressureCount } from './positionReadingService';
 import { gradeMove } from './accuracyService';
 import { readPosition } from './positionalRead';
+import { boardPlanFacts } from './boardPlanFacts';
 import { structurePlan } from './boardPlan';
 import { structureSignature } from './boardStructure';
 import { boardStructure } from './structureReads';
@@ -59,7 +60,6 @@ import { FUNDAMENTAL_LESSON } from '../data/fundamentalLessons';
 import { andList, orList, fileList } from '../utils/andList';
 import { findLoosePieces, type LoosePiece } from './loosePieces';
 import { THINKING_STEPS, THINKING_STEP_ORDER, type ThinkingStep } from './thinkingSteps';
-import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { pieceIsOn } from './tacticsContextIdentity';
 import { clearsVolumeFloor } from './openingVolumeFloor';
 import { endgameConceptFor } from './conceptEngine';
@@ -442,8 +442,7 @@ export function assembleBoardPlanAnswer(
   studentColor: 'white' | 'black',
   side: 'me' | 'opponent',
 ): GroundedAnswer | null {
-  let chess: Chess;
-  try { chess = new Chess(fen); } catch { return null; }
+  try { new Chess(fen); } catch { return null; }
   const myC: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
   const src = ['board:chess.js'];
 
@@ -488,67 +487,13 @@ export function assembleBoardPlanAnswer(
   // clauses — leans/key-moment — need a live Stockfish snapshot and live only
   // in the async narration path). Order = most→least decisive: structural trump,
   // then the concrete levers (break / open file / outpost / worst piece).
-  const trump = structurePlan(fen, myC); // passed pawn / IQP — the headline
-  // THE PLANS WITH THEIR METHOD (PLAN §C 17, #64 — 2026-09-19). `deriveNextPlans`
-  // is the computer review already speaks from: every plan the structure earns,
-  // each with the concrete HOW (which squares, which pieces, which breaks). Chat
-  // used to answer with the bare levers below while this sat one import away.
-  // One computer, both surfaces; the levers remain the fallback for a board
-  // that earns no structural plan.
-  // The levers below still speak AFTER the plans: a lever is a computed fact
-  // the ranker never dropped (G4.5), and the worst-piece bar is its own lesson.
-  // Each plan is a sentence: `deriveNextPlans` returns clauses without their
-  // full stop, and joined bare they ran on ("…pins the king back The plan from
-  // here is…", question walk 2026-09-27).
-  // Stacked plans vary the stem after the first — the same rule the review
-  // narrator follows (question walk 2026-09-27: "The plan from here is to…"
-  // three times in one answer). Every plan survives; only the opener changes.
-  const STEMS = ['Alongside that, aim to ', 'On top of that, work to ', 'And the third piece of it: '];
-  const withMethod = deriveNextPlans(fen, myC).map((p) => cap(p))
-    .map((p, i) => (i === 0 ? p : p.replace(/^The plan from here is to /, STEMS[(i - 1) % STEMS.length])))
-    .map((p) => (/[.!?]$/.test(p.trim()) ? p.trim() : `${p.trim()}.`));
-  const levers: string[] = [];
-
-  // A pawn break to open the position (findPawnBreaks reads the side to move).
-  if (chess.turn() === myC) {
-    const breaks = findPawnBreaks(fen);
-    if (breaks.length) levers.push(`break with ${orList(breaks)} to open the position`);
-  }
-  // A rook belongs on an open / half-open file.
-  const files = findOpenFiles(fen);
-  const rookFiles = [...new Set([...files.open, ...(myC === 'w' ? files.whiteSemiOpen : files.blackSemiOpen)])];
-  if (rookFiles.length) levers.push(`put a rook on the ${orList(rookFiles)} file${rookFiles.length > 1 ? 's' : ''}`);
-  // An outpost — a hole in THEIR camp a knight can occupy.
-  const holes = findWeakSquares(fen);
-  const oppHoles = (myC === 'w' ? holes.black : holes.white);
-  if (oppHoles.length) levers.push(`plant a knight on ${orList(oppHoles)}`);
-  // Improve your worst-placed piece.
-  const sw = strongestWeakestPiece(fen, myC);
-  // A BAR, NOT A CAP (G4.5): name the worst piece only when it is genuinely
-  // MISPLACED. `strongestWeakestPiece` always returns a least-active piece, so
-  // on move one that is the h1 rook and the coach said "improve your rook on
-  // h1" — not false, not teaching. A piece still sitting on its home square in
-  // the opening is UNDEVELOPED, which is a different lesson with its own
-  // clause; it is misplaced only once the game has left the opening or the
-  // piece has already moved and landed badly. Silence here is the computed
-  // verdict, never a truncation.
-  // …THE CLAUSE THAT COMMENT PROMISED (walk 5, 2026-09-23). It said an
-  // undeveloped piece is "a different lesson with its own clause" — and no such
-  // clause existed. Once breaks had to land safe and undeveloped pieces stopped
-  // counting as "worst", a quiet move-7 Italian answered "what's my plan?" with
-  // nothing. In the opening the plan IS development: name the minors still home.
-  const homeMinors: string[] = [];
-  for (const row of chess.board()) for (const p of row) {
-    if (p && p.color === myC && (p.type === 'n' || p.type === 'b') && isUndevelopedInOpening(fen, myC, p.type, p.square)) {
-      homeMinors.push(`${REVIEW_PIECE_NAME[p.type]} on ${p.square}`);
-    }
-  }
-  if (homeMinors.length) levers.unshift(`bring your ${andList(homeMinors)} into the game, since development comes first`);
-  const homeRank = myC === 'w' ? '1' : '8';
-  const pastOpening = (Number.parseInt(fen.split(' ')[5] ?? '1', 10) || 1) >= 10;
-  if (sw.weakest && (pastOpening || sw.weakest.square[1] !== homeRank)) {
-    levers.push(`improve your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square}`);
-  }
+  // ONE PRODUCER (one coach, 2026-10-09): the same plan facts the coach's
+  // board read carries — `boardPlanFacts`. This answer only renders them.
+  const pf = boardPlanFacts(fen, studentColor);
+  if (!pf) return null;
+  const trump = pf.trump;
+  const withMethod = pf.plans;
+  const levers = pf.levers.map((l) => l.phrase);
 
   // Every lever the board earned — no ceiling (G4.5). They are already ordered
   // most→least decisive, so a long list reads as a ranked plan, not a dump.

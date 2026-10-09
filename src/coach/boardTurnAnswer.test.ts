@@ -20,7 +20,7 @@ beforeEach(() => {
     analysis: async () => ({ topLines: [
       { rank: 1, evaluation: 40, mate: null, moves: ['e4d5', 'f6d5', 'c3d5', 'd8d5'] },
       { rank: 2, evaluation: 20, mate: null, moves: ['f3e5', 'd5e4'] },
-    ] }),
+    ], evaluation: 0, isMate: false, mateIn: null, depth: 14, seldepth: 14 }),
     // Nd5 drops the knight: Nxd5 exd5 Qxd5.
     candidate: async (_fen, san) => san === 'Nxd5'
       ? { evalCp: -260, mateIn: null, lineUci: ['f6d5', 'e4d5', 'd8d5'] }
@@ -37,7 +37,7 @@ describe('the named move is weighed, never ignored', () => {
     const l = ['e4', 'a6'];
     const b = new Chess(); for (const m of l) b.move(m);
     setBoardEngineForTests({
-      analysis: async () => ({ topLines: [{ rank: 1, evaluation: 40, mate: null, moves: ['d2d4', 'd7d5'] }] }),
+      analysis: async () => ({ topLines: [{ rank: 1, evaluation: 40, mate: null, moves: ['d2d4', 'd7d5'] }], evaluation: 0, isMate: false, mateIn: null, depth: 14, seldepth: 14 }),
       candidate: async () => ({ evalCp: -300, mateIn: null, lineUci: ['a6b5'] }),
     });
     const a = await answerBoardTurn(turn('why-best-move', 'Bb5'), { fen: b.fen(), history: l, studentColor: 'white' });
@@ -53,5 +53,32 @@ describe('the named move is weighed, never ignored', () => {
   it('not the student\'s move, or a move already played: falls back', async () => {
     expect(await answerBoardTurn(turn('candidate-move', 'Nd5'), { ...board, studentColor: 'black' })).toBeNull();
     expect(await answerBoardTurn({ ...turn('candidate-move', 'e4'), referents: [{ type: 'move', san: 'e4', played: true }] } as unknown as ResolvedChatTurn, board)).toBeNull();
+  });
+});
+
+describe('plan and tactics questions are answered from the one read', () => {
+  const COLLE = 'r1bqrnk1/5ppp/p3p3/1p1pn1bN/3p2Q1/2PB4/PP3PPP/R1B1R1K1 w - - 0 16';
+  const ask = (kind: 'plan' | 'tactics') => ({ kind, referents: [], seat: 'me', topic: null } as unknown as ResolvedChatTurn);
+  beforeEach(() => {
+    setBoardEngineForTests({
+      analysis: async () => ({ topLines: [
+        { rank: 1, evaluation: 55, mate: null, moves: ['e1e5', 'b5b4'] },
+        { rank: 2, evaluation: -200, mate: null, moves: ['g4g3', 'e5d3'] },
+      ], evaluation: 55, isMate: false, mateIn: null, depth: 14, seldepth: 14 }),
+      candidate: async () => null,
+    });
+  });
+  it('"what\'s my plan?" — what cannot wait leads, then the plan, from the coach\'s own read', async () => {
+    const a = await answerBoardTurn(ask('plan'), { fen: COLLE, history: [], studentColor: 'white' });
+    expect(a).toMatch(/^Their knight on e5 attacks your queen on g4, and nothing defends it — and you can take the attacker without losing material\./);
+    expect(a).toMatch(/The plan is to break with a4/);
+    expect(a).toMatch(/Your knight on h5 is your problem piece/);
+  }, 60_000);
+  it('"any tactics?" — only what is forcing on the board', async () => {
+    expect(await answerBoardTurn(ask('tactics'), { fen: COLLE, history: [], studentColor: 'white' }))
+      .toBe('Their knight on e5 attacks your queen on g4, and nothing defends it — and you can take the attacker without losing material.');
+  }, 60_000);
+  it('their plan stays on its own lane for now', async () => {
+    expect(await answerBoardTurn({ ...ask('plan'), seat: 'them' } as unknown as ResolvedChatTurn, { fen: COLLE, history: [], studentColor: 'white' })).toBeNull();
   });
 });

@@ -62,8 +62,12 @@ export type { FactStakes, LaneFact, LearnLane, SpokenLine, TurnDecision, VoicePa
  *  This distinction was learned the hard way, twice in one night. Applying the
  *  live-surface gate to review cut a 46-ply walk to SIX narrated plies, and
  *  every unit test stayed green — only reading the narration caught it. A
- *  surface must declare its posture; there is no safe default. */
-export type SurfacePosture = 'walk' | 'interrupt';
+ *  surface must declare its posture; there is no safe default.
+ *  • 'asked'     — the student ASKED a question about this board (chat, one
+ *                  coach 2026-10-09). The question earned the read: it always
+ *                  speaks and the student's need never vetoes it. Chat selects
+ *                  the facts that answer the question from the full read. */
+export type SurfacePosture = 'walk' | 'interrupt' | 'asked';
 
 /** THE ONE DOOR (one coach P1, 2026-10-07). Every surface asks `coachTurn`;
  *  the request's posture picks the rule. Learn's free play is a posture of
@@ -89,7 +93,7 @@ export interface LearnTurnRequest {
   beginner?: boolean;
 }
 export type DoorRequest = MomentRequest | LearnTurnRequest;
-const DOOR_RULE: Record<DoorPosture, 'moment' | 'learn-turn'> = { walk: 'moment', interrupt: 'moment', learn: 'learn-turn' };
+const DOOR_RULE: Record<DoorPosture, 'moment' | 'learn-turn'> = { walk: 'moment', interrupt: 'moment', asked: 'moment', learn: 'learn-turn' };
 export function coachTurn(req: LearnTurnRequest): TurnDecision;
 export function coachTurn(req: MomentRequest): CoachDecision;
 export function coachTurn(req: DoorRequest): TurnDecision | CoachDecision {
@@ -254,7 +258,7 @@ export function judgeMoment(
   momentBoost: number | StudentBoost = NO_BOOST,
 ): MomentVerdict {
   const importance = computeImportance(signals, momentBoost);
-  return { importance, speaks: posture === 'walk' || importance.speak };
+  return { importance, speaks: posture !== 'interrupt' || importance.speak };
 }
 
 export interface CoachDecision {
@@ -401,7 +405,7 @@ export function decide(
   // a live hang are not lessons, they are the board — they speak on the
   // moment. The teaching / critical / swing / convert / none tiers stay
   // need-gated, which is where a familiar line SHOULD go quiet.
-  if (student.need && !student.need.speak && !SPEAKS_ON_IMPORTANCE.has(importance.tier)) {
+  if (posture !== 'asked' && student.need && !student.need.speak && !SPEAKS_ON_IMPORTANCE.has(importance.tier)) {
     return emit(posture, { ...base, speak: false, reason: 'need', teaches: false, spoken: [], ...proofLedger([], bundle), quiet: bundle.facts.map((text) => ({ text, why: 'need' as const })) }, student, false, bundle.stakes);
   }
   // 3 + 4 — WHICH FACTS. Subsumption collapses one-claim duplicates; the floor

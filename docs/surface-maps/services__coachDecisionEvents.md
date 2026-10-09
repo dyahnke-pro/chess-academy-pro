@@ -28,20 +28,20 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onCoachDecision` (function) — 5 call sites
-- `src/services/appAuditor.ts:2267`
+- `src/services/appAuditor.ts:2268`
 - `src/services/coachDecisionEmits.test.ts:32`
 - `src/services/coachDecisionEmits.test.ts:95`
 - `src/services/proofBacklog.report.test.ts:98`
 - `src/test/computedOrderWired.test.ts:26`
 
 ### `emitCoachDecision` (function) — 1 call site
-- `src/services/coachDecider.ts:323`
+- `src/services/coachDecider.ts:327`
 
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onNeedScore` (function) — 4 call sites
-- `src/services/appAuditor.ts:2219`
+- `src/services/appAuditor.ts:2220`
 - `src/services/coachDecisionEmits.test.ts:120`
 - `src/services/coachDecisionEmits.test.ts:147`
 - `src/services/positionFacts.liveFundamental.test.ts:50`
@@ -60,7 +60,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onLearnTurn` (function) — 1 call site
-- `src/services/appAuditor.ts:2293`
+- `src/services/appAuditor.ts:2294`
 
 ### `emitLearnTurn` (function) — 1 call site
 - `src/services/learnTurnDoor.ts:522`

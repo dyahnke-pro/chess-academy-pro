@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**87 lines · 5 exports · 3 importers · 2 tests · 0 audits**
+**141 lines · 5 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,20 +27,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `BoardEngine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setBoardEngineForTests` (function) — 5 call sites
+### `setBoardEngineForTests` (function) — 6 call sites
 - `src/coach/boardTurnAnswer.test.ts:18`
 - `src/coach/boardTurnAnswer.test.ts:30`
 - `src/coach/boardTurnAnswer.test.ts:39`
+- `src/coach/boardTurnAnswer.test.ts:63`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:24`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:32`
 
-### `answerBoardTurn` (function) — 7 call sites
+### `answerBoardTurn` (function) — 10 call sites
 - `src/coach/boardTurnAnswer.test.ts:34`
 - `src/coach/boardTurnAnswer.test.ts:43`
 - `src/coach/boardTurnAnswer.test.ts:48`
 - `src/coach/boardTurnAnswer.test.ts:51`
 - `src/coach/boardTurnAnswer.test.ts:54`
 - `src/coach/boardTurnAnswer.test.ts:55`
+- `src/coach/boardTurnAnswer.test.ts:72`
+- `src/coach/boardTurnAnswer.test.ts:78`
+- `src/coach/boardTurnAnswer.test.ts:82`
 - `src/coach/dispatchCoachTurn.ts:233`
 
 ## Tests

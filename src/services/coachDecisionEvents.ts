@@ -28,7 +28,7 @@
  *  `decide()`; nothing here is derived a second time. */
 export interface CoachDecisionRow {
   /** Which surface asked, and under which posture it was judged. */
-  posture: 'walk' | 'interrupt';
+  posture: 'walk' | 'interrupt' | 'asked';
   /** The moment's computed standing. */
   tier: string;
   rank: number;
