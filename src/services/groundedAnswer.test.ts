@@ -880,12 +880,17 @@ describe('assembleConceptAnswer — Phase 5 (voice the book corpus, not memory)'
         text: 'A fork is a double attack by one piece. It strikes two targets at once. The defender can save only one.',
       }],
     }));
-    expect(a!.facts).toMatch(/^Fork: A fork is a double attack/);
+    // The passage names the idea in its first sentence, so no spoken label.
+    expect(a!.facts).toMatch(/^A fork is a double attack/);
     expect(a!.facts).toContain('strikes two targets');
     // The third sentence is the one that makes a fork a fork. Clipping the
     // passage at two sentences deleted the teaching (G4.5).
     expect(a!.facts).toContain('save only one');
     expect(a!.sources).toEqual(['book:capablanca-chess-fundamentals']);
+  });
+  it('keeps the label when the passage does not name the idea first', () => {
+    const a = assembleConceptAnswer(concept({ name: 'outpost', passages: [{ bookSlug: 'b', bookTitle: 'B', author: 'A', gutenbergId: 1, chapter: null, section: null, wordCount: 8, text: 'A square no pawn can attack is a home for a knight.' }] }));
+    expect(a!.facts).toBe('Outpost: A square no pawn can attack is a home for a knight.');
   });
   it('falls back to the curated definition + concept source when no passage', () => {
     const a = assembleConceptAnswer(concept({ id: 'zwischenzug', name: 'zwischenzug', fallbackDefinition: 'An in-between move inserted before the expected recapture.' }));

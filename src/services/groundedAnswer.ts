@@ -4139,8 +4139,12 @@ export function assembleConceptAnswer(concept: ConceptEntry): GroundedAnswer | n
   }
   if (!definition || !source) return null;
 
+  // The passage is spoken as written; a "Pin: A pin nails…" label is read
+  // aloud, so it leads only when the opening sentence does not name the idea.
+  const firstSentence = definition.split(/(?<=[.!?])\s/)[0] ?? '';
+  const named = firstSentence.toLowerCase().includes(concept.name.toLowerCase());
   return {
-    facts: `${cap(concept.name)}: ${definition}`,
+    facts: named ? definition : `${cap(concept.name)}: ${definition}`,
     bestMoveSan: null,
     bestMoveFromTo: null,
     sources: [source],
