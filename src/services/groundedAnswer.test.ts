@@ -315,7 +315,7 @@ describe('assembleOpeningTrapsAnswer — grounded "traps in my strongest opening
     expect(a!.facts).toMatch(/Trap weapons you can spring: Fried Liver Attack; Legal Mate\./);
     expect(a!.facts).toMatch(/Watch out for: Blackburne Shilling Gambit\./);
     expect(a!.facts).toMatch(/Your strongest Black opening is the Caro-Kann Defense\./);
-    expect(a!.facts).toMatch(/Want me to show you\? Say "teach me the traps in the Italian Game" and I'll build a lesson plan that walks every one of them\./);
+    expect(a!.facts).toMatch(/Want to see them\? Say "teach me the traps in the Italian Game" for a lesson plan that walks every one of them\./);
     expect(a!.sources).toContain('data:your-games');
   });
   it('names EVERY verified trap weapon — no count cap (G4.5)', () => {
@@ -349,7 +349,7 @@ describe('assembleOpeningTrapsAnswer — grounded "traps in my strongest opening
     const a = assembleOpeningTrapsAnswer({ sides: [], explainSystem: true });
     expect(a).not.toBeNull();
     expect(a!.facts).toMatch(/Watch, Learn, Practice, Play/);
-    expect(a!.facts).toMatch(/Ask me for the traps in your strongest opening/);
+    expect(a!.facts).toMatch(/Ask for the traps in your strongest opening/);
     // no named traps → no "punish lines for" drill-launch line
     expect(a!.facts).not.toMatch(/punish lines for/);
   });
@@ -364,7 +364,7 @@ describe('assembleReviewDueAnswer — grounded "what\'s due for review today"', 
     expect(a).not.toBeNull();
     expect(a!.facts).toMatch(/14 cards due for review right now across 2 openings/);
     expect(a!.facts).toMatch(/Across the Caro-Kann Defense \(9\) and the Italian Game \(5\)/);
-    expect(a!.facts).toMatch(/Say "review my openings" and I'll run today's reps/);
+    expect(a!.facts).toMatch(/Say "review my openings" to run today's reps/);
     expect(a!.sources).toContain('data:your-games');
   });
   it('breaks down EVERY opening with cards due — no count cap (G4.5)', () => {
@@ -527,7 +527,7 @@ describe('assembleTacticsProfileAnswer — Wave 1 (+ drill suggestion)', () => {
     });
     expect(a!.facts).not.toMatch(/100%/);
     expect(a!.facts).not.toMatch(/lift your awareness rate/);
-    expect(a!.facts).toMatch(/don't see a missed tactical shot/);
+    expect(a!.facts).toMatch(/show no missed tactical shot/);
     expect(a!.facts).toMatch(/1722 sharp tactical moves/);
   });
 });
@@ -1315,7 +1315,7 @@ describe('assemblePlayerGamesAnswer — honest empty for a NAMED player (Bug 1)'
       playerId: 'gothamchess', requestedPlayerName: 'GothamChess',
       openingId: 'caro-kann', openingName: 'Caro-Kann', totalAvailable: 0, games: [],
     });
-    expect(a?.facts).toMatch(/don't have/i);
+    expect(a?.facts).toMatch(/None of .* are in the data/i);
     expect(a?.facts).toMatch(/GothamChess/);
     expect(a?.facts).toMatch(/Caro-Kann/);
   });
@@ -1539,7 +1539,7 @@ describe('assembleTrainingRecommendation — computed recommend-a-game prose (G0
     expect(r.label).toBe('your middlegame');
     expect(r.facts).toMatch(/play a full game/i);
     expect(r.facts).toMatch(/the middlegame/);
-    expect(r.facts).toMatch(/break down how your middlegame went/i);
+    expect(r.facts).toMatch(/show how your middlegame went/i);
   });
   it('reads a skill area naturally ("your tactics", not "the tactics")', () => {
     const r = assembleTrainingRecommendation('tactics');

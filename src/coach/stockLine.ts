@@ -11,3 +11,8 @@ export const STOCK_GROUNDING_FALLBACK =
 export function isStockFallback(text: string): boolean {
   return text.trim() === STOCK_GROUNDING_FALLBACK;
 }
+
+/** What the coach says when it cannot reach the model at all. One string, so
+ *  the non-answer detector counts the line the app actually speaks (it kept
+ *  a hand copy of the old wording, which a rewording would have blinded). */
+export const COACH_OFFLINE_LINE = "The coach can't connect right now. Keep playing — it will be back online soon.";

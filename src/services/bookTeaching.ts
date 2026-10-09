@@ -13,6 +13,8 @@
 // PURE over a minimal book shape; the real library (~1 MB of text) is loaded
 // by the caller only when a request is recognised.
 
+const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+
 export interface TeachableBook {
   id: string;
   bookTitle: string;
@@ -240,7 +242,7 @@ export function answerFromBooks(req: BookRequest, library: readonly TeachableBoo
   }
   if (!req.topic) {
     const p = named.length > 0 ? openingPassage(named[0]) : null;
-    if (!p) return { text: `${whose} isn't in the library.`, path: null, offer: null };
+    if (!p) return { text: `${cap(whose)} isn't in the library.`, path: null, offer: null };
     return { text: `${cite(p)}:\n\n“${p.paragraph}”\n\nThe book is open at that page in the library — ask me about any topic in it.`, path: readerPath(p), offer: offerFor(p) };
   }
   const hit = findPassage(named, req.topic);
@@ -255,7 +257,7 @@ export function answerFromBooks(req: BookRequest, library: readonly TeachableBoo
       };
     }
   }
-  return { text: `${whose} has no passage on “${req.topic}”.`, path: null, offer: null };
+  return { text: `No passage on “${req.topic}” in ${whose}.`, path: null, offer: null };
 }
 
 /** The coach's answer to a book request, or null when the ask is not one.

@@ -11,7 +11,7 @@ describe('buildOpeningSuggestionReply', () => {
     expect(reply).not.toBeNull();
     expect(reply).toContain('[CHOICES:');
     expect(reply).toMatch(/Panov/);
-    expect(reply).toMatch(/walk you through/i);
+    expect(reply).toMatch(/ready to walk through/i);
   });
 
   it('offers a "did you mean" picker for a misspelling with multiple candidates', () => {

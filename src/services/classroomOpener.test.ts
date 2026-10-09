@@ -80,7 +80,7 @@ describe('classroomOpener — computed opener signals (David 2026-09-13)', () =>
       const c = await coldStartGuidance();
       expect(c).not.toBeNull();
       expect(c!.line).toMatch(/upload and review/i);
-      expect(c!.line).toMatch(/teach or play/i);
+      expect(c!.line).toMatch(/learn or play/i);
       expect(c!.chips).toEqual(['Import my games', 'Teach me the Italian', 'Play the Caro-Kann']);
     });
 

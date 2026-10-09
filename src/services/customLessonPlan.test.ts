@@ -126,7 +126,7 @@ describe('buildCustomLessonPlan', () => {
   it('single hole → no full-lesson chip, just the one', () => {
     const plan = buildCustomLessonPlan(null, [w('analysis:tactic:fork', 'Forks')]);
     expect(plan.pickerChips).toEqual([lessonChipFor('Forks')]);
-    expect(plan.pickerLine).toContain('build you a lesson on it');
+    expect(plan.pickerLine).toContain('Want a lesson on it');
   });
 });
 

@@ -54,7 +54,7 @@ describe('teaching from the real library', () => {
 
   it('a topic no book takes up is an honest miss, with no page', () => {
     const a = answerFromBooks({ bookIds: [], topic: 'quantum entanglement' }, LIB);
-    expect(a.text).toBe('I looked through the books and found no passage on “quantum entanglement”.');
+    expect(a.text).toBe('No passage on “quantum entanglement” in the books.');
     expect(a.path).toBeNull();
   });
 
@@ -80,6 +80,6 @@ describe('chapters by number — the reader opens there', () => {
   it('a chapter the book does not have is said plainly', async () => {
     const { answerFromBooks } = await import('./bookTeaching');
     expect(answerFromBooks({ bookIds: ['steinitz-modern-chess-instructor'], topic: null, chapter: '40' }, LIB).text)
-      .toBe("I couldn't find chapter 40 in *The Modern Chess Instructor*.");
+      .toBe("There's no chapter 40 in *The Modern Chess Instructor*.");
   });
 });

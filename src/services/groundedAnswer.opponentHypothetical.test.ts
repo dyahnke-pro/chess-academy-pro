@@ -65,6 +65,6 @@ describe('no engine read', () => {
     const board = opponentMoveBoard(FEN, 'white');
     const f = assembleOpponentHypotheticalAnswer({ board, theirSan: 'd5', studentColor: 'white', nowEvalCp: null, afterEvalCp: null, afterMateIn: null, lineUci: [], settled: null })?.facts ?? '';
     expect(f).not.toMatch(/in:?$/);
-    expect(f).toMatch(/don't have an engine read on d5/);
+    expect(f).toMatch(/no engine read on d5/);
   });
 });

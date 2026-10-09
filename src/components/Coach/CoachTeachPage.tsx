@@ -11786,7 +11786,7 @@ export function CoachTeachPage(): JSX.Element {
             entry: searchParams.get('oid') ? 'opening-detail' : 'search-cta',
           }),
         });
-        const intro = `We don't have a hand-built masterclass for the ${autoTeach} yet — so it's taught from the opening database. Let's walk through it.`;
+        const intro = `There's no hand-built masterclass for the ${autoTeach} yet, so this one is taught from the opening database. Let's walk through it.`;
         const turnId = freshTurnId('autoteach');
         setKickoffStatus(null);
         setMessages((prev) => [...prev, {

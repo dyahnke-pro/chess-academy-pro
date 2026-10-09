@@ -72,33 +72,40 @@ describe('findTrapTilesForCanonicalLine', () => {
 });
 
 describe('getTrapLineKind classification lookup', () => {
+  // The samples are lines that EXIST. The old ones named trap lines removed
+  // as unsound (2026-10-08) — the "mistake" case passed only because an
+  // unmapped line defaults to 'mistake', which proved nothing.
   it('returns "trap" for classic forced-tactical lines', () => {
-    // Sample known true traps. If the classification file ever drops
-    // these to non-trap, this test fires.
-    expect(getTrapLineKind('pro-naroditsky-alapin', 'Nb5 Queen-Fork Trap (d5 Open)')).toBe('trap');
-    expect(getTrapLineKind('pro-gothamchess-london', 'Qb6 Walks Into Nb5')).toBe('trap');
-    expect(getTrapLineKind('pro-gothamchess-scandinavian', 'Bf5 e6 Bb4 Pin Trap')).toBe('trap');
+    expect(getTrapLineKind('pro-carlsen-sicilian', 'Siberian Trap (vs the Smith-Morra)')).toBe('trap');
+    expect(getTrapLineKind('pro-ericrosen-budapest', 'Kieninger Trap')).toBe('trap');
+    expect(getTrapLineKind('pro-ericrosen-stafford', "Légal's Mate Trap (6.Bg5??)")).toBe('trap');
   });
 
   it('returns "mistake" for gambit-accepted / tempo entries (no forced material win)', () => {
-    // A gambit accepted for a structural plus or a tempo gain on the
-    // queen is "now you're better," not a forced tactical refutation.
-    expect(getTrapLineKind('pro-gothamchess-italian', 'Fried Liver Setup')).toBe('mistake');
-    expect(getTrapLineKind('pro-naroditsky-alapin', 'Bc4-Gambit + exf7+ Break (4…d6 sub-line)')).toBe('mistake');
     expect(getTrapLineKind('pro-naroditsky-alapin', 'Nc3 Queen-Tempo (2…Nc6 Line)')).toBe('mistake');
+    expect(getTrapLineKind('pro-carlsen-1e5', 'Fishing Pole Trap')).toBe('mistake');
   });
 
   it('returns "theme" for long middlegame-plan entries', () => {
-    expect(getTrapLineKind('pro-gothamchess-milner-barry', 'cxd4 cxd4 Powerful Center')).toBe('theme');
     expect(getTrapLineKind('pro-naroditsky-caro-kann', 'The …Bg4 Pin When White Develops Nf3 Early')).toBe('theme');
+    expect(getTrapLineKind('pro-naroditsky-alapin', 'd5-Open cxd4 → Nb5 Outpost (17 games incl. Sam Shankland 2934)')).toBe('theme');
   });
 
   it('defaults unmapped entries to "mistake" (safe — no red TRAP surface)', () => {
-    // If a curator adds a new trapLine to pro-repertoires.json but
-    // forgets to classify it here, the default keeps it OUT of the
-    // picker (kind 'mistake' is filtered) rather than letting an
-    // unvetted entry become a bright-red tile.
+    // A new trapLine added before it is classified stays OUT of the picker.
     expect(getTrapLineKind('pro-future', 'Some New Trap')).toBe('mistake');
+  });
+
+  // Every classification names a trap line the data still carries — an
+  // orphan (a line removed, its classification left behind) is how the
+  // samples above went stale without anyone noticing (G8).
+  it('no classification is an orphan', async () => {
+    const reps = (await import('../data/pro-repertoires.json')).default as unknown as { openings?: Array<{ id: string; trapLines?: Array<{ name: string }>; warningLines?: Array<{ name: string }> }> };
+    const cls = (await import('../data/trap-line-classifications.json')).default as unknown as { classifications: Record<string, string> };
+    const live = new Set<string>();
+    for (const o of reps.openings ?? []) for (const t of [...(o.trapLines ?? []), ...(o.warningLines ?? [])]) live.add(`${o.id}::${t.name}`);
+    const orphans = Object.keys(cls.classifications).filter((k) => !live.has(k));
+    expect(orphans).toEqual([]);
   });
 
   it('classifies every trapLine in pro-repertoires.json — no orphans', () => {

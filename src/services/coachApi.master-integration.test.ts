@@ -191,7 +191,7 @@ describe('grounding — intent detection', () => {
     // yet, an opening-definition question stays dormant (no master-play) and
     // serves the honest line; the F3/F11 assembler grounds it properly later.
     expect(counters.lichessCalls).toBe(0); // grounding stayed dormant
-    expect(r).toContain("can't verify");
+    expect(r).toContain("can't be verified");
   });
 
   it('engages on "what should I play here?"', async () => {
@@ -252,7 +252,7 @@ describe('grounding — intent detection', () => {
     // stocking out — must not return); the honest line is served until the F3
     // books assembler grounds "what is opening X" properly.
     expect(counters.lichessCalls).toBe(0); // grounding stayed dormant
-    expect(r).toContain("can't verify");
+    expect(r).toContain("can't be verified");
   });
 
   it('engages on forceEngage even without intent match', async () => {
@@ -301,7 +301,7 @@ describe('grounding — the grounded default (no free-compose)', () => {
       { currentFen: STARTING_FEN, surface: '/coach/chat', engineBestMoveUci: 'g1f3', engineEvalCp: 30 },
     );
     expect(r).toContain('f3');                 // Nf3 — the engine's COMPUTED best move
-    expect(r).not.toContain("can't verify");
+    expect(r).not.toContain("can't be verified");
     expect(counters.llmCalls).toBe(0);         // voiceFacts raw — the LLM decides nothing
   });
 

@@ -61,7 +61,7 @@ describe('assembleRetrospectiveAnswer — the move ON THE TAPE, whose move it wa
       bestMoveUci: null, cpLoss: null, quality: null, missedMate: null, allowedMate: null,
     });
     expect(a.facts).toMatch(/Your a6 on move 3/);
-    expect(a.facts).toMatch(/don't have an engine read/);
+    expect(a.facts).toMatch(/no engine read/);
     expect(a.facts).not.toMatch(/verify that precisely/);
   });
 });
@@ -202,7 +202,7 @@ describe('walk 2026-09-23 — the routine and the unmeasured ply', () => {
       moveNumber: 4, moverColor: 'black', mover: 'student', bestMoveUci: 'e8d7', cpLoss: null, quality: null, missedMate: null, allowedMate: null,
     });
     expect(a.facts).not.toMatch(/engine's choice|engine preferred/);
-    expect(a.facts).toMatch(/don't have an engine read/);
+    expect(a.facts).toMatch(/no engine read/);
     expect(a.facts).toMatch(/engine's line there ran Kd7/);
   });
 });

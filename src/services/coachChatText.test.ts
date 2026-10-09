@@ -20,7 +20,7 @@ describe('the phrase table answers the strings the coach actually writes', () =>
     ["Sure — let's walk through the Italian Game.", 'Italian Game'],
     ["Ready — let's walk through the Ruy Lopez.", 'Ruy Lopez'],
     ["Putting together the Italian Game — this takes about a minute. The first time only; after this it'll be instant.", 'the Italian Game'],
-    ["I couldn't build the Caro-Kann walkthrough this time. Try again or pick a different opening.", 'Caro-Kann'],
+    ["The Caro-Kann walkthrough couldn't be built this time. Try again or pick a different opening.", 'Caro-Kann'],
     ['Walkthrough is paused. Tap Resume to continue, or ask another question.', ''],
     ['Hit a snag — say it again?', ''],
   ];

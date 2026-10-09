@@ -453,16 +453,16 @@ function buildNoMatchOfferMessage(intent: CoachIntent): string {
         : null;
 
   const lacksWhat = subject
-    ? `any ${subject} games`
+    ? `${subject} games`
     : sourceLabel
-      ? `any games imported from ${sourceLabel}`
-      : 'any games to review';
+      ? `games imported from ${sourceLabel}`
+      : 'games to review';
 
   const offer = subject
     ? `Want to play a game from the ${subject} so you can build some experience to review later?`
-    : `Want to play a quick game so we can review it together afterwards?`;
+    : `Want to play a quick game and review it afterwards?`;
 
-  return `There's no ${lacksWhat} in your history yet. ${offer}`;
+  return `There are no ${lacksWhat} in your history yet. ${offer}`;
 }
 
 /**

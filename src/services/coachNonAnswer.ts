@@ -11,21 +11,26 @@
 //      means the PRIOR answer didn't satisfy. This is the signal that catches
 //      the off-topic case a string-match can't.
 import { captureEvent } from './analytics';
+import { COACH_OFFLINE_LINE, STOCK_GROUNDING_FALLBACK } from '../coach/stockLine';
+
+function normalize(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+}
 
 /** Known canned strings the coach emits when it ISN'T really answering. Matched
  *  case-insensitively as substrings of the normalized answer. Keep in sync with
  *  the greeting in CoachTeachPage and OFFLINE_FALLBACKS / failure text. */
 const NON_ANSWER_MARKERS = [
-  "i'm having trouble connecting",
+  // The lines the app speaks, read from where they are defined — never a
+  // copy that drifts when the wording changes.
+  normalize(COACH_OFFLINE_LINE),
+  normalize(STOCK_GROUNDING_FALLBACK),
   'coach is unavailable right now',
   'welcome to my classroom',
   'what would you like to learn',
   "let's work on that",
 ];
 
-function normalize(s: string): string {
-  return s.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
-}
 
 /** Jaccard-ish overlap on content words (len > 2), relative to the smaller set
  *  so "what are my weaknesses" vs "what's my biggest weakness" scores high. */

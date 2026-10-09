@@ -126,7 +126,7 @@ describe('ThinkingLessonSession — step 5 end to end', () => {
     const h = harness();
     const s = new ThinkingLessonSession(targetsKit(loose), [], new Set(), h.deps);
     expect(await s.run('grey')).toEqual([]);
-    expect(h.said.join(' ')).toMatch(/could not find a clean board/);
+    expect(h.said.join(' ')).toMatch(/no clean board/);
   });
 
   it('stop ends the lesson at once', async () => {

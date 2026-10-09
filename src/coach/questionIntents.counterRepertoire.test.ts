@@ -114,7 +114,7 @@ describe('assembleCounterRepertoireAnswer', () => {
       recommendations: [ALAPIN, ROSSOLIMO],
       styleProfile: { style: 'positional', count: 9, total: 12 },
     });
-    expect(a!.facts).toMatch(/start with the Alapin/);
+    expect(a!.facts).toMatch(/so start with the Alapin/);
     expect(a!.facts).toContain('73.8%');
   });
 
@@ -128,7 +128,7 @@ describe('assembleCounterRepertoireAnswer', () => {
     expect(a!.facts).toContain('Alapin');
     expect(a!.facts).toContain('Rossolimo');
     expect(a!.facts).not.toMatch(/your own games lean/i);
-    expect(a!.facts).toMatch(/start with the Alapin/);
+    expect(a!.facts).toMatch(/Start with the Alapin/);
   });
 
   it('returns null on an empty recommendation list', () => {

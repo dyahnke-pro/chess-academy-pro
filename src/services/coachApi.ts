@@ -122,7 +122,7 @@ import { detectBoardQuestion, isAnyBoardQuestion } from '../coach/boardQuestions
 import { keySquareHighlightMarker } from './arrowEngine';
 import { topCandidateLane } from '../coach/querySignals';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
-import { STOCK_GROUNDING_FALLBACK } from '../coach/stockLine';
+import { STOCK_GROUNDING_FALLBACK, COACH_OFFLINE_LINE } from '../coach/stockLine';
 import { askBackAtCatchAll, type ChatKind } from '../coach/chatTurn';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
@@ -239,7 +239,7 @@ function reportCoachOffline(task: CoachTask, stage: string, error: unknown): voi
 
 // Offline fallback templates
 const OFFLINE_FALLBACKS: Record<string, string> = {
-  default: "The coach can't connect right now. Keep playing — it will be back online soon.",
+  default: COACH_OFFLINE_LINE,
   hint: "Think about which pieces are undefended, and whether there's a forcing sequence available.",
   puzzle_feedback: "Good effort! Every puzzle teaches something. Try to identify the key tactical pattern here.",
 };

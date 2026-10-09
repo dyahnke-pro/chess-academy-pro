@@ -33,7 +33,7 @@ it.each(['Should I resign?', 'what now?', 'where do I go from here', 'what shoul
 );
 
 it('"do you understand me" says the coach is listening', async () => {
-  expect(await ask('Do you understand me')).toMatch(/^(?:I am here|Yes, I am listening)/);
+  expect(await ask('Do you understand me')).toMatch(/^(?:Ready\. What would you like to know\?|Listening\. Go ahead\.)/);
 }, 120_000);
 
 

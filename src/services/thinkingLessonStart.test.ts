@@ -215,6 +215,6 @@ describe('noLessonLine — why there is no lesson', () => {
     const { db } = await import('../db/schema');
     await db.delete(); await db.open();
     const { noLessonLine } = await import('./thinkingLessonStart');
-    expect(await noLessonLine()).toMatch(/^I could not find a clean board/);
+    expect(await noLessonLine()).toMatch(/^There is no clean board/);
   });
 });

@@ -75,7 +75,7 @@ describe('the door does a request from its reading', () => {
   it('an opening nothing resolves is asked back', async () => {
     const a = await ask('teach me the Flibbertigibbet Attack',
       { kind: 'training-request', referents: [], seat: 'none', english: 'x', steps: [{ action: 'teach-opening', opening: 'Flibbertigibbet Attack' }] });
-    expect(a.text).toMatch(/don't know an opening called "Flibbertigibbet Attack"/);
+    expect(a.text).toMatch(/There's no opening called "Flibbertigibbet Attack"/);
   });
 
   it('R7: the offer survives to the next turn and "go" runs it', async () => {

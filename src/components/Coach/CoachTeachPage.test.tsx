@@ -311,11 +311,11 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     // The "we don't have a masterclass, I'll teach it myself" line renders in
     // the transcript AND is spoken through Polly.
     expect(
-      await screen.findByText(/don't have a hand-built masterclass for the Grob Opening/i),
+      await screen.findByText(/no hand-built masterclass for the Grob Opening/i),
     ).toBeInTheDocument();
     await waitFor(() => {
       const spoken = mockSpeakForced.mock.calls.map((c) => c[0] as string);
-      expect(spoken.some((s) => /teach it to you myself/i.test(s))).toBe(true);
+      expect(spoken.some((s) => /taught from the opening database/i.test(s))).toBe(true);
     }, { timeout: 4000 });
   });
 

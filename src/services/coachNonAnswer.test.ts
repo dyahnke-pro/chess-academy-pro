@@ -1,3 +1,4 @@
+import { COACH_OFFLINE_LINE } from '../coach/stockLine';
 import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('./analytics', () => ({ captureEvent: vi.fn() }));
@@ -20,7 +21,7 @@ describe('detectCoachNonAnswer', () => {
     const r = detectCoachNonAnswer({
       surface: 'coach-chat',
       question: 'how do I improve my endgames?',
-      answer: "I'm having trouble connecting right now. Keep playing!",
+      answer: COACH_OFFLINE_LINE,
     });
     expect(r.isNonAnswer).toBe(true);
   });

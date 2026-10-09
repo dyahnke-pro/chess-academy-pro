@@ -213,7 +213,7 @@ describe('review-game routing', () => {
     expect(routed).not.toBeNull();
     expect(routed!.path).toBeUndefined();
     expect(routed!.ackMessage.toLowerCase()).toContain('catalan');
-    expect(routed!.ackMessage.toLowerCase()).toContain("don't see");
+    expect(routed!.ackMessage.toLowerCase()).toContain('there are no');
     // Ack must end with a play-game offer so the affirmation flow
     // catches "yes" on the next turn.
     expect(routed!.ackMessage.toLowerCase()).toMatch(/want to play/);
