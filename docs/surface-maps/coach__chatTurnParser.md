@@ -53,7 +53,7 @@
 - `src/coach/chatTurnParser.test.ts:72`
 - `src/coach/chatTurnParser.test.ts:78`
 - `src/coach/chatTurnParser.test.ts:84`
-- `src/coach/dispatchCoachTurn.ts:110`
+- `src/coach/dispatchCoachTurn.ts:111`
 
 ## Tests
 

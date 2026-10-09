@@ -624,10 +624,14 @@ export interface ConversationState {
   seat: 'white' | 'black' | null;
   /** The previous reading, for "and why?" follow-ups. */
   lastTurn: ResolvedChatTurn | null;
+  /** WHAT THE COACH OFFERED AND HAS NOT DONE YET, as steps — so "go ahead" /
+   *  "can I start now?" runs it (WO-CHAT-01 P1; walk R7 answered "can I start
+   *  now?" with a best move). Only a request sets or clears it. */
+  pending: ResolvedStep[] | null;
 }
 
 export const EMPTY_CONVERSATION: ConversationState = {
-  lastPiece: null, lastSquare: null, lastMove: null, seat: null, lastTurn: null,
+  lastPiece: null, lastSquare: null, lastMove: null, seat: null, lastTurn: null, pending: null,
 };
 
 /** Fold a validated reading into the memory. Pure. */
@@ -638,7 +642,7 @@ export function nextConversationState(prev: ConversationState, turn: ResolvedCha
     else if (r.type === 'square') lastSquare = r.square;
     else if (r.type === 'move') lastMove = r.san;
   }
-  return { lastPiece, lastSquare, lastMove, seat: seat ?? prev.seat, lastTurn: turn };
+  return { lastPiece, lastSquare, lastMove, seat: seat ?? prev.seat, lastTurn: turn, pending: prev.pending };
 }
 
 /** The deterministic question a reading is SERVED as, or null when the kind

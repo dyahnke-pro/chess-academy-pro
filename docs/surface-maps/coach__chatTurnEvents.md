@@ -32,7 +32,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/appAuditor.ts:2342`
 
 ### `emitChatTurn` (function) — 1 call site
-- `src/coach/dispatchCoachTurn.ts:146`
+- `src/coach/dispatchCoachTurn.ts:147`
 
 ### `resetChatTurnListeners` (function) — 4 call sites
 - `src/coach/chatTurnRow.outcome.test.ts:25`

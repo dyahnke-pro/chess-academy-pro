@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**399 lines · 14 exports · 13 importers · 8 tests · 2 audits**
+**424 lines · 14 exports · 14 importers · 9 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,6 +18,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 - `src/coach/dispatchCoachTurn.positional.test.ts`
 - `src/coach/dispatchCoachTurn.test.ts`
+- `src/coach/requestExecutor.test.ts`
 - `src/components/Board/VoiceChatMic.tsx`
 - `src/components/Coach/CoachAnalysePage.tsx`
 - `src/components/Coach/CoachChatPage.tsx`
@@ -42,7 +43,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `isServeParsedRouteOn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setChatTurnReaderForTests` (function) — 22 call sites
+### `setChatTurnReaderForTests` (function) — 24 call sites
 - `src/coach/chatTurnRow.outcome.test.ts:28`
 - `src/coach/chatTurnRow.outcome.test.ts:37`
 - `src/coach/coachService.askReader.integration.test.ts:31`
@@ -65,15 +66,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/dispatchCoachTurn.test.ts:176`
 - `src/coach/dispatchCoachTurn.test.ts:186`
 - `src/coach/dispatchCoachTurn.test.ts:202`
+- `src/coach/requestExecutor.test.ts:56`
+- `src/coach/requestExecutor.test.ts:59`
 
-### `resetConversations` (function) — 4 call sites
+### `resetConversations` (function) — 5 call sites
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:21`
 - `src/coach/dispatchCoachTurn.positional.test.ts:21`
 - `src/coach/dispatchCoachTurn.test.ts:94`
 - `src/coach/dispatchCoachTurn.test.ts:199`
+- `src/coach/requestExecutor.test.ts:53`
 
-### `conversationFor` (function) — 1 call site
+### `conversationFor` (function) — 2 call sites
 - `src/coach/dispatchCoachTurn.test.ts:165`
+- `src/coach/requestExecutor.test.ts:88`
 
 ### `isStudentTurn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -93,7 +98,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `isComputedAnswer` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:7367`
 
-### `dispatchCoachTurn` (function) — 33 call sites
+### `dispatchCoachTurn` (function) — 34 call sites
 - `src/coach/chatTurnRow.outcome.test.ts:39`
 - `src/coach/coachService.askReader.integration.test.ts:32`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:35`
@@ -118,6 +123,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/dispatchCoachTurn.test.ts:187`
 - `src/coach/dispatchCoachTurn.test.ts:207`
 - `src/coach/dispatchCoachTurn.test.ts:217`
+- `src/coach/requestExecutor.test.ts:60`
 - `src/components/Board/VoiceChatMic.tsx:484`
 - `src/components/Coach/CoachAnalysePage.tsx:232`
 - `src/components/Coach/CoachChatPage.tsx:284`
@@ -139,6 +145,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 - `src/coach/dispatchCoachTurn.positional.test.ts`
 - `src/coach/dispatchCoachTurn.test.ts`
+- `src/coach/requestExecutor.test.ts`
 - `src/components/Coach/GameChatPanel.surface.test.tsx`
 - `src/components/Openings/MasterclassCoachChat.boardaware.test.tsx`
 

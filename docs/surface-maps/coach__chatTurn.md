@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**704 lines · 26 exports · 17 importers · 12 tests · 3 audits**
+**708 lines · 26 exports · 17 importers · 12 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,20 +39,21 @@
 ### `FastPathLane` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `fastPathLane` (function) — 17 call sites
+### `fastPathLane` (function) — 18 call sites
 - `src/coach/ask/playName.ts:89`
 - `src/coach/chatTurn.test.ts:68`
 - `src/coach/chatTurn.test.ts:84`
 - `src/coach/chatTurn.test.ts:97`
 - `src/coach/chatTurn.test.ts:100`
 - `src/coach/chatTurn.test.ts:107`
-- `src/coach/dispatchCoachTurn.ts:203`
-- `src/coach/dispatchCoachTurn.ts:272`
-- `src/coach/dispatchCoachTurn.ts:282`
-- `src/coach/dispatchCoachTurn.ts:295`
+- `src/coach/dispatchCoachTurn.ts:204`
+- `src/coach/dispatchCoachTurn.ts:280`
+- `src/coach/dispatchCoachTurn.ts:297`
 - `src/coach/dispatchCoachTurn.ts:307`
-- `src/coach/dispatchCoachTurn.ts:327`
-- `src/coach/dispatchCoachTurn.ts:393`
+- `src/coach/dispatchCoachTurn.ts:320`
+- `src/coach/dispatchCoachTurn.ts:332`
+- `src/coach/dispatchCoachTurn.ts:352`
+- `src/coach/dispatchCoachTurn.ts:418`
 - `src/coach/questionRoute.test.ts:20`
 - `src/coach/questionRoute.test.ts:30`
 - `src/coach/questionRoute.test.ts:33`
@@ -136,19 +137,19 @@
 
 ### `nextConversationState` (function) — 2 call sites
 - `src/coach/chatTurn.test.ts:162`
-- `src/coach/dispatchCoachTurn.ts:143`
+- `src/coach/dispatchCoachTurn.ts:144`
 
 ### `canonicalAsk` (function) — 5 call sites
 - `src/coach/chatTurn.test.ts:66`
 - `src/coach/chatTurn.test.ts:80`
 - `src/coach/chatTurn.test.ts:83`
 - `src/coach/chatTurn.test.ts:87`
-- `src/coach/dispatchCoachTurn.ts:311`
+- `src/coach/dispatchCoachTurn.ts:336`
 
 ### `kindAgreesWithLane` (function) — 3 call sites
 - `src/coach/chatTurn.test.ts:103`
 - `src/coach/chatTurn.test.ts:104`
-- `src/coach/dispatchCoachTurn.ts:157`
+- `src/coach/dispatchCoachTurn.ts:158`
 
 ### `firingLanes` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

@@ -46,6 +46,7 @@ import { emitChatTurn, type ChatTurnOutcome } from './chatTurnEvents';
 import { isStockFallback } from './stockLine';
 import { detectLanguage } from '../utils/detectLanguage';
 import { directAnswer } from './chatTurnAnswers';
+import { executeSteps } from './requestExecutor';
 
 export interface DispatchCoachTurnOptions extends CoachServiceOptions {
   /** The prior assistant message — lets the action router catch the
@@ -228,7 +229,7 @@ export function isComputedAnswer(servedIntent: string | null): boolean {
 
 /** Readings the board refutes outright: the named piece is not there, is
  *  the other side's, or does not exist. */
-const FALSE_PREMISE: ReadonlySet<string> = new Set(['piece-not-there', 'piece-wrong-seat', 'piece-absent']);
+const FALSE_PREMISE: ReadonlySet<string> = new Set(['piece-not-there', 'piece-wrong-seat', 'piece-absent', 'unknown-opening']);
 
 /** Readings a positional topic in the student's words may answer instead —
  *  the general board kinds a topic sharpens, never a named-move question. */
@@ -263,6 +264,30 @@ export async function dispatchCoachTurn(
     // the per-piece answers: "is my king safe?" is king SAFETY, not what the
     // king guards. Material keeps its lane (it reads a pending recapture), and
     // a question about one piece keeps the per-piece answer.
+    // A REQUEST IS DONE FROM ITS STEPS (WO-CHAT-01 P1). The reading carries
+    // what was asked as typed steps with every opening resolved by code; the
+    // app acts first and the words report what it did. Before this, the
+    // phrase router cut the opening out of the sentence by position ("…teach
+    // me" → an opening called "me").
+    if (turn?.steps && turn.steps.length > 0) {
+      const surface = input.liveState.surface;
+      const conv = conversationFor(surface);
+      const out = executeSteps(turn.steps, { hasBoard: !!input.liveState.fen, pending: conv.pending });
+      if (out) {
+        conversations.set(surface, { ...conv, pending: out.pending });
+        if (out.path && options.onNavigate) options.onNavigate(out.path);
+        servedParsed = true;
+        void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: out.servedIntent, servedParsed, answerText: out.text, outcome: 'command', startedAt })
+          .catch(() => { /* telemetry never breaks a turn */ });
+        const offers = [...(out.path ? [{ type: 'navigate', id: out.path }] : []), ...(out.actionOffer ?? [])];
+        return {
+          text: openSentence(out.text), toolCallIds: [],
+          dispatchedToolNames: out.path ? ['navigate_to_route'] : [],
+          provider: options.provider ?? 'deepseek', servedIntent: out.servedIntent,
+          ...(offers.length ? { actionOffer: offers } : {}),
+        };
+      }
+    }
     const ptopic = positionalTopic(input.ask);
     if (ptopic && !PIECE_LEVEL_TOPICS.has(ptopic) && input.liveState.fen && (turn ? POSITIONAL_READABLE.has(turn.kind) : true)) {
       const sc = input.liveState.studentColor ?? (input.liveState.fen.split(' ')[1] === 'b' ? 'black' : 'white');
