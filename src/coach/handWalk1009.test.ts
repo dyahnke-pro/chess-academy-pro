@@ -123,3 +123,63 @@ it('a count of defenders is not a defend question', () => {
   expect(readTurnInCode('how many defend c6', board(18))?.kind).not.toBe('defend-piece');
   expect(readTurnInCode('how many pieces defend my e4 pawn?', board(18))?.kind).not.toBe('defend-piece');
 });
+
+describe('why did they play that — what it saved comes first', () => {
+  it('2…Nc6 guards the e5 pawn the f3 knight was hitting', async () => {
+    const { assembleOpponentMoveAnswer } = await import('../services/groundedAnswer');
+    const h = ['e4', 'e5', 'Nf3', 'Nc6'];
+    const c = new Chess(); for (const m of h) c.move(m);
+    const a = assembleOpponentMoveAnswer({ fen: c.fen(), moveHistory: h, studentColor: 'white' });
+    expect(a?.facts).toMatch(/^They played Nc6 — it guards their pawn on e5, which your knight on f3 was attacking/);
+  });
+  it('a move that saved nothing does not claim to', async () => {
+    const { assembleOpponentMoveAnswer } = await import('../services/groundedAnswer');
+    const h = ['e4', 'e5'];
+    const c = new Chess(); for (const m of h) c.move(m);
+    expect(assembleOpponentMoveAnswer({ fen: c.fen(), moveHistory: h, studentColor: 'white' })?.facts).not.toMatch(/guards/);
+  });
+});
+
+describe('each move keeps its own reason (hand walk 2: "d4 is fine … it guards e4")', () => {
+  it('d4 beside the engine d3: the reasons are never swapped', async () => {
+    const { moveWhy, namedMoveAnswer } = await import('../services/deliberation');
+    const c = new Chess(); for (const m of 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6'.split(' ')) c.move(m);
+    const fen = c.fen();
+    const bestWhy = moveWhy(fen, 'd3', 'w', 'Nf6');
+    const namedWhy = moveWhy(fen, 'd4', 'w', 'Nf6');
+    const text = namedMoveAnswer({
+      best: { san: 'd3', evalCp: 40, deltaCp: 0 }, alternatives: [], isRealChoice: false,
+      bestWhy, bestLine: null, named: { san: 'd4', evalCp: 30, deltaCp: 10, shortfall: 'less-precise' }, namedWhy,
+    }, 'is-it-good') ?? '';
+    const d4Part = text.split('d3 is the engine')[0];
+    expect(d4Part).toMatch(/^d4 is fine/);
+    // d4 does not touch e4: no claim of guarding it in d4's sentence.
+    expect(d4Part).not.toMatch(/e4/);
+  });
+});
+
+describe('their move is explained from your seat (hand walk 2: "f2 … beside their king")', () => {
+  it('3…Bc5: f2 is beside YOUR king', async () => {
+    const { assembleOpponentMoveAnswer } = await import('../services/groundedAnswer');
+    const h = 'e4 e5 Nf3 Nc6 Bc4 Bc5'.split(' ');
+    const c = new Chess(); for (const m of h) c.move(m);
+    const facts = assembleOpponentMoveAnswer({ fen: c.fen(), moveHistory: h, studentColor: 'white' })?.facts ?? '';
+    expect(facts).not.toMatch(/f2[^.]*their king/);
+    expect(facts).toMatch(/f2[^.]*your king/);
+  });
+  it('the swap keeps the sentence grammatical', async () => {
+    const { toObserverSeat } = await import('../services/groundedAnswer');
+    expect(toObserverSeat('the pawn kicks their knight off c6, so they spend a move while you gain one'))
+      .toBe('the pawn kicks your knight off c6, so you spend a move while they gain one');
+    expect(toObserverSeat('Your king is safe')).toBe('Their king is safe');
+  });
+});
+
+describe('a move that opens a sentence is capitalised in words', () => {
+  it('O-O and Bb5+ at the start; mid-sentence untouched', async () => {
+    const { movesInWords } = await import('../utils/sanToSpeech');
+    expect(movesInWords('O-O is fine. c3 is the engine choice.')).toBe('Castles kingside (O-O) is fine. c3 is the engine choice.');
+    expect(movesInWords('Bb5+ is the best move. Then Nxe5 wins.')).toMatch(/^Bishop to b5 with check \(Bb5\+\) is the best move\. Then knight takes on e5 \(Nxe5\) wins\.$/);
+    expect(movesInWords('play Nf3 here')).toBe('play knight to f3 (Nf3) here');
+  });
+});

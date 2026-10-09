@@ -81,5 +81,11 @@ const MOVE_TOKEN = /(?<![A-Za-z0-9-])(…)?((?:[KQRBN][a-h]?[1-8]?x?[a-h][1-8]|[
  *  "rook takes on d4 (Rxd4)" — so a beginner reads the move AND learns the
  *  notation. Display only: the facts are unchanged. */
 export function movesInWords(text: string): string {
-  return text.replace(MOVE_TOKEN, (_m, dots: string | undefined, san: string) => `${sanToWords(san)} (${dots ?? ''}${san})`);
+  // A move that opens a sentence opens it with a capital ("Castles kingside
+  // (O-O) is fine", hand walk 2026-10-09 — the words replaced a capital O).
+  return text.replace(MOVE_TOKEN, (_m, dots: string | undefined, san: string, offset: number) => {
+    const words = sanToWords(san);
+    const opens = /(?:^|[.!?]\s+)["“(]?$/.test(text.slice(0, offset));
+    return `${opens ? words.charAt(0).toUpperCase() + words.slice(1) : words} (${dots ?? ''}${san})`;
+  });
 }

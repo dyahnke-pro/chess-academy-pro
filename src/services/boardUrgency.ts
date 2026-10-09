@@ -71,7 +71,7 @@ export function urgencyLead(u: BoardUrgency | null): string | null {
   const biggestSave = u.save[0]?.value ?? 0;
   const winLeads = !!u.win && u.win.value >= biggestSave;
   if (u.win && winLeads) {
-    parts.push(`First, you can take their ${NAME[u.win.piece]} on ${u.win.square} — that wins about ${u.win.value} point${u.win.value === 1 ? '' : 's'} before anything else.`);
+    parts.push(`First, you can take their ${NAME[u.win.piece]} on ${u.win.square} — that comes before anything else.`);
   }
   if (u.save.length > 0 && !winLeads) {
     const named = andList(u.save.map((p) => `${NAME[p.piece]} on ${p.square}`));

@@ -48,7 +48,7 @@ describe('the named move is weighed, never ignored', () => {
     expect(await answerBoardTurn(turn('candidate-move', 'exd5'), board)).toMatch(/^exd5 is the best move here/);
   });
   it('"is Nxe5 ok?" — inside the coin-flip band it is "about as good"', async () => {
-    expect(await answerBoardTurn(turn('candidate-move', 'Nxe5'), board)).toMatch(/^Nxe5 is fine — about as good as the engine's exd5/);
+    expect(await answerBoardTurn(turn('candidate-move', 'Nxe5'), board)).toMatch(/^Nxe5 is fine\b.*\. (?:exd5 is the engine's choice|The engine slightly prefers exd5)/);
   });
   it('not the student\'s move, or a move already played: falls back', async () => {
     expect(await answerBoardTurn(turn('candidate-move', 'Nd5'), { ...board, studentColor: 'black' })).toBeNull();

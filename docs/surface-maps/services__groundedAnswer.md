@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7481 lines · 162 exports · 78 importers · 52 tests · 8 audits**
+**7527 lines · 163 exports · 78 importers · 53 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -166,7 +166,10 @@
 ### `assembleMovePurposeAnswer` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `assembleOpponentMoveAnswer` (function) — 6 call sites
+### `assembleOpponentMoveAnswer` (function) — 9 call sites
+- `src/coach/handWalk1009.test.ts:132`
+- `src/coach/handWalk1009.test.ts:139`
+- `src/coach/handWalk1009.test.ts:166`
 - `src/services/boardUrgency.test.ts:29`
 - `src/services/coachApi.ts:5811`
 - `src/services/groundedAnswer.opponentMove.test.ts:13`
@@ -402,6 +405,10 @@
 
 ### `quietPurposePhrase` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
+
+### `toObserverSeat` (function) — 2 call sites
+- `src/coach/handWalk1009.test.ts:172`
+- `src/coach/handWalk1009.test.ts:174`
 
 ### `describeMoveMerit` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:1191`
@@ -1213,6 +1220,7 @@
 
 ## Tests
 
+- `src/coach/handWalk1009.test.ts`
 - `src/coach/pass3Questions.test.ts`
 - `src/coach/questionIntents.counterRepertoire.test.ts`
 - `src/coach/questionWalk.sicilian1200.test.ts`

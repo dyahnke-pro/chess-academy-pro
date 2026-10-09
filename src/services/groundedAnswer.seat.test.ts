@@ -12,7 +12,7 @@ const FEN = 'r1q2rk1/pp2bppp/2nppn2/8/Q2PP3/2N1BB2/PP3PPP/3R1RK1 w - - 8 13';
 describe('the eval is said to the student as you/they', () => {
   it('best move: "you\'re clearly better", never "White is"', () => {
     const a = assembleMoveEvalAnswer({ fen: FEN, bestMoveUci: 'd1c1', evalCp: 100, studentColor: 'white' });
-    expect(a?.facts).toMatch(/you're up about [0-9.]+ points — clearly better/i);
+    expect(a?.facts).toMatch(/you're clearly better/i);
     expect(a?.facts).not.toMatch(/\bwhite is\b/i);
   });
   it('candidate: the line\'s eval is seated too', () => {

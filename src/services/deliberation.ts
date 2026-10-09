@@ -96,6 +96,10 @@ export interface Deliberation {
   bestLine?: string | null;
   /** The move the student named, weighed (when `named` was given). */
   named?: Candidate;
+  /** Why the NAMED move is good, from the board — its own reason, never the
+   *  best move's (hand walk 2026-10-09: "d4 is fine … it guards e4" — that was
+   *  d3's reason, said of d4). */
+  namedWhy?: string | null;
 }
 
 function uciToSan(fen: string, uci: string): string | null {
@@ -244,7 +248,8 @@ export function buildDeliberation(input: {
   // a one-move win is already the reason.
   const played = proofForMover(fenBefore, bestLine.moves, moverColor);
   const bestLineText = played && played.plies >= 3 ? played.text : null;
-  return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy, bestLine: bestLineText, ...(namedCandidate ? { named: namedCandidate } : {}) };
+  const namedWhy = namedCandidate && namedCandidate.san !== bestSan ? moveWhy(fenBefore, namedCandidate.san, moverColor, input.opponentLastSan) : null;
+  return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy, bestLine: bestLineText, ...(namedCandidate ? { named: namedCandidate, namedWhy } : {}) };
 }
 
 
@@ -577,7 +582,11 @@ export function namedMoveAnswer(d: Deliberation, ask: 'why-best' | 'is-it-good')
     return `${n.san} is the best move here${bestReason}.${line}${others ? ` ${others}` : ''}`;
   }
   if (n.deltaCp < NAMED_SAME_AS_BEST_CP && n.shortfall !== 'drops-material') {
-    return `${n.san} is fine — about as good as the engine's ${d.best.san}${bestReason}.`;
+    // Each move carries its own reason: the student's move first, then the
+    // engine's alternative with its reason, never one reason across both.
+    const own = d.namedWhy ? ` — it ${d.namedWhy}` : '';
+    const alt = d.bestWhy ? ` ${d.best.san} is the engine's choice${bestReason}.` : ` The engine slightly prefers ${d.best.san}.`;
+    return `${n.san} is fine${own}.${alt}`;
   }
   const lead = ask === 'why-best' ? `${n.san} isn't the best move here. ` : '';
   const subject = lead ? 'It' : n.san;

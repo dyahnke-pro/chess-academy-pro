@@ -117,14 +117,16 @@ function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | u
   // whose-side off a pronoun can read it backwards.
   if (studentColor) {
     const up = who === studentColor;
-    const amount = `${up ? 'up' : 'down'} about ${mag.toFixed(1)} points`;
-    if (mag < 1.0) return `you're ${amount} — ${up ? 'slightly better' : 'slightly worse'}`;
-    if (mag < 2.5) return `you're ${amount} — ${up ? 'clearly better' : 'clearly worse'}`;
-    return `you're ${amount} — ${up ? 'winning' : 'losing'}`;
+    // WORDS, NOT ENGINE NUMBERS (hand walk 2026-10-09: "you're up about 1.9
+    // points" to a beginner). The band IS the verdict; a decimal adds nothing
+    // a student can act on.
+    if (mag < 1.0) return `you're ${up ? 'slightly better' : 'slightly worse'}`;
+    if (mag < 2.5) return `you're ${up ? 'clearly better' : 'clearly worse'}`;
+    return `you're ${up ? 'winning' : 'losing'}`;
   }
-  if (mag < 1.0) return `${seatWord(who)} slightly better (about ${mag.toFixed(1)} points)`;
-  if (mag < 2.5) return `${seatWord(who)} clearly better (about ${mag.toFixed(1)} points)`;
-  return `${seatWord(who)} winning (about ${mag.toFixed(1)} points)`;
+  if (mag < 1.0) return `${seatWord(who)} slightly better`;
+  if (mag < 2.5) return `${seatWord(who)} clearly better`;
+  return `${seatWord(who)} winning`;
 }
 
 // ── PIECE PURPOSE — "what is my bishop on c4 aiming at?" (David 2026-08-28) ────
@@ -450,7 +452,7 @@ export function assembleBoardPlanAnswer(
     // Their most concrete idea first (a threat), then their structural trump.
     const intent = opponentIntentRead(fen, myC);
     if (intent) {
-      const gain = intent.gain > 0 ? `, winning about ${intent.gain} point${intent.gain === 1 ? '' : 's'}` : '';
+      const gain = intent.gain > 0 ? `, winning ${countWords(intent.gain)}` : '';
       return {
         facts: intent.kind === 'fork'
           ? `They're angling for ${intent.san} — a fork landing on ${intent.target}. Cover it before they get there.`
@@ -567,7 +569,7 @@ export function assemblePieceSafetyAnswer(fen: string, ask: string | null | unde
     return { facts: `Your ${name} on ${sq} is hit by ${named.join(' and ')} — there's a check on the board, so whether it can be taken is read once the check is answered.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
   }
   if (g > 0) {
-    return { facts: `Your ${name} on ${sq} is in trouble — ${named.join(' and ')} ${attackers.length > 1 ? 'hit' : 'hits'} it and it drops about ${g} point${g === 1 ? '' : 's'}.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+    return { facts: `Your ${name} on ${sq} is in trouble — ${named.join(' and ')} ${attackers.length > 1 ? 'hit' : 'hits'} it and ${g >= (MATERIAL_VALUE[type] ?? 99) ? 'it falls' : `you lose ${countWords(g)}`} unless you deal with it.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
   }
   return { facts: `Your ${name} on ${sq} holds — ${named.join(' and ')} ${attackers.length > 1 ? 'eye' : 'eyes'} it, but it's defended enough that taking loses for them.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
@@ -611,8 +613,8 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
   })();
   const winPart = wins.length > 0
     ? (isOpp
-        ? `they're eyeing ${named} — about ${wins[0].g} point${wins[0].g === 1 ? '' : 's'} if you don't cover it${takeBack}`
-        : `you can win ${named} — about ${wins[0].g} point${wins[0].g === 1 ? '' : 's'}`)
+        ? `they're eyeing ${named}, and it falls if you don't cover it${takeBack}`
+        : `you can win ${named}`)
     : '';
   const checkPart = inCheck ? `your king is in check` : '';
   const facts = [checkPart, winPart].filter(Boolean).join(', and ') + '.';
@@ -736,10 +738,28 @@ export function assembleOpponentMoveAnswer(opts: {
   // What the move DID — geometry on the board, opponent as mover.
   const clauses: string[] = [];
   if (played.captured) clauses.push(`captured your ${REVIEW_PIECE_NAME[played.captured]} on ${played.to}`);
+  // WHAT IT SAVED leads (hand walk 2026-10-09: "why did they play Nc6?" never
+  // said it guards e5, which Nf3 was hitting). A piece of theirs your side
+  // could have won before the move and cannot win after it — the same
+  // must-defend read the narration speaks, run on the board before the move.
+  {
+    const opp: 'w' | 'b' = opponentColor === 'white' ? 'w' : 'b';
+    const me: 'w' | 'b' = opp === 'w' ? 'b' : 'w';
+    const saved: string[] = [];
+    for (const h of computeMustDefend(before.fen(), opp).pieces) {
+      if (h.square === played.from) continue; // the piece itself moved away — that is the move, said below
+      let gain: number | null = null;
+      try { gain = captureRead(fen, h.square as Square, me); } catch { gain = null; }
+      if (gain === 0 && after.get(h.square as Square)?.color === opp) {
+        saved.push(`guards their ${REVIEW_PIECE_NAME[h.piece]} on ${h.square}${h.attackerSquare ? `, which your ${REVIEW_PIECE_NAME[h.attacker ?? 'p']} on ${h.attackerSquare} was attacking` : ''}`);
+      }
+    }
+    clauses.push(...saved);
+  }
   const geom = describeMoveGeometry(before.fen(), played.san, opponentColor);
   if (geom) clauses.push(geom.replace(/^attacks\b/, 'attacks').replace(/\byour king\b/, 'your king'));
   else {
-    const quiet = quietPurposePhrase(before.fen(), played.san, opponentColor);
+    const quiet = quietPurposePhrase(before.fen(), played.san, opponentColor, 'observer');
     if (quiet) clauses.push(quiet);
   }
 
@@ -2537,7 +2557,7 @@ export function explainBestMoveGrounded(
       // move was better" is never empty on a quiet position. Pure board geometry
       // (G3): quietPurposePhrase returns null rather than invent.
       if (!bestClause) {
-        const q = quietPurposePhrase(fenBefore, mv.san, moverColor);
+        const q = quietPurposePhrase(fenBefore, mv.san, moverColor, 'mover');
         if (q) bestClause = `it ${q}`;
       }
       // NB: we do NOT name a bare "sacrifice" as the reason the best move is best
@@ -2882,6 +2902,32 @@ export function quietPurposePhrase(
   fenBefore: string,
   san: string,
   moverColor: 'white' | 'black',
+  // WHO HEARS IT (hand walk 2026-10-09: "why did they play Bc5?" → "f2 sits
+  // right beside their king" — f2 is beside the STUDENT's king). The phrases
+  // are written from the mover's seat; 'observer' is the student hearing about
+  // the OPPONENT's move, so every you/your flips to they/their. Required, so a
+  // new caller has to say whose move it is.
+  seat: 'mover' | 'observer',
+): string | null {
+  const text = quietPurposeFromMoverSeat(fenBefore, san, moverColor);
+  return text && seat === 'observer' ? toObserverSeat(text) : text;
+}
+
+/** Mover-seat prose read by the other side: you ↔ they, your ↔ their,
+ *  yours ↔ theirs. You and they take the same verb forms, so the sentence
+ *  stays grammatical. Only for prose this module writes from the mover's seat. */
+export function toObserverSeat(text: string): string {
+  const swap: Record<string, string> = { you: 'they', they: 'you', your: 'their', their: 'your', yours: 'theirs', theirs: 'yours', yourself: 'themselves' };
+  return text.replace(/\b(you|they|your|their|yours|theirs|yourself)\b/gi, (w) => {
+    const to = swap[w.toLowerCase()];
+    return w[0] === w[0].toUpperCase() ? to[0].toUpperCase() + to.slice(1) : to;
+  });
+}
+
+function quietPurposeFromMoverSeat(
+  fenBefore: string,
+  san: string,
+  moverColor: 'white' | 'black',
 ): string | null {
   // FUNDAMENTAL-FIRST (David 2026-09-06: "the fundamental computer needs to be
   // added to all coach surfaces… fundamental first then the rest of teaching").
@@ -3009,7 +3055,7 @@ export function describeMoveMerit(
   // shallow — for a quiet developing move the real teaching point is the
   // development + the centre. Prefer that when there is one; fall back to the
   // weak read only if there's no positional point to name.
-  return quietPurposePhrase(fenBefore, san, moverColor) ?? geo;
+  return quietPurposePhrase(fenBefore, san, moverColor, 'mover') ?? geo;
 }
 
 /**
@@ -3277,7 +3323,7 @@ export function assembleEngineReasoning(opts: {
   const firstReason =
     describeMoveGeometry(plies[0].fenBefore, plies[0].san, opts.moverColor)
     ?? describeEscape(plies[0].fenBefore, plies[0].san)
-    ?? quietPurposePhrase(plies[0].fenBefore, plies[0].san, opts.moverColor);
+    ?? quietPurposePhrase(plies[0].fenBefore, plies[0].san, opts.moverColor, 'mover');
   clauses.push(
     firstReason
       ? `The engine plays ${plies[0].san} — it ${firstReason}.`
