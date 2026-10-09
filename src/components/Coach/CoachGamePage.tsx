@@ -1,4 +1,5 @@
 import { captureEvent } from '../../services/analytics';
+import { bookContinuation } from '../../utils/legalMoveFor';
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
@@ -2385,10 +2386,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         if (intendedOpeningName) {
           try {
             const bookMoves = getOpeningMoves(intendedOpeningName);
-            if (bookMoves && game.history.length < bookMoves.length) {
-              const next = bookMoves[game.history.length];
-              const probe = new Chess(game.fen);
-              if (probe.move(next)) {
+            // Only while the game is still ON the book line, spelled as on
+            // this board (`bookContinuation`, live walk 2026-10-09).
+            const next = bookContinuation(bookMoves, game.fen);
+            if (next) {
+              {
                 brainPickSan = next;
                 emitOpponentStrength(turnStrength, 'opening-line');
                 void logAppAudit({

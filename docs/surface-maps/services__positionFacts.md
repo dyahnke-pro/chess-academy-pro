@@ -101,7 +101,7 @@
 
 ### `computePositionFacts` (function) — 88 call sites
 - `src/coach/boardTurnAnswer.ts:117`
-- `src/components/Coach/CoachTeachPage.tsx:9872`
+- `src/components/Coach/CoachTeachPage.tsx:9866`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:635`
@@ -190,10 +190,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8496`
+- `src/components/Coach/CoachTeachPage.tsx:8490`
 
 ### `convertKey` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10123`
+- `src/components/Coach/CoachTeachPage.tsx:10117`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 
 ### `afterLine` (function) — 5 call sites
@@ -204,7 +204,7 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8477`
+- `src/components/Coach/CoachTeachPage.tsx:8471`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.ts:9`

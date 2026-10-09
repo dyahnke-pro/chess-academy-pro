@@ -9,6 +9,7 @@
  * / reset_board markers parsed from its response. Same room, different
  * actions.
  */
+import { legalMoveFor, bookContinuation } from '../../utils/legalMoveFor';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { CoachBoardBar } from '../Board/CoachBoardBar';
 import { useBoardFit } from '../../hooks/useBoardFit';
@@ -2115,9 +2116,9 @@ export function CoachTeachPage(): JSX.Element {
           reason: `Refused: it's ${studentColor} to move and the student plays ${studentColor}. You may not move the student's pieces. For hypothetical demos, use [BOARD: arrow:from-to:color] arrows OR set_board_position to a separate position. play_move is reserved for YOUR moves on your own turns.`,
         });
       }
-      const probe = new Chess(liveFen);
-      const verboseMoves = probe.moves({ verbose: true });
-      const match = verboseMoves.find((m) => m.san === san);
+      // By what the move DOES, never its spelling ("Bb4+" after the check
+      // is gone is still Bb4) — see `legalMoveFor`.
+      const match = legalMoveFor(liveFen, san);
       if (!match) {
         return finish({ ok: false, reason: `chess.js rejected "${san}" from FEN ${liveFen}: Invalid move: ${san}` });
       }
@@ -2140,8 +2141,7 @@ export function CoachTeachPage(): JSX.Element {
   // validates; an illegal SAN is a no-op.
   const playDictatedMove = useCallback((san: string): boolean => {
     try {
-      const probe = new Chess(liveFenRef.current);
-      const match = probe.moves({ verbose: true }).find((m) => m.san === san);
+      const match = legalMoveFor(liveFenRef.current, san);
       if (!match) return false;
       const result = gameRef.current.makeMove(match.from, match.to, match.promotion);
       if (!result) return false;
@@ -7697,11 +7697,6 @@ export function CoachTeachPage(): JSX.Element {
         summary: `dictated reply ${dictated} no longer legal from ${fen} — falling back to book/engine`,
       });
     }
-    // Half-moves already played, derived from the FEN (= index of the NEXT
-    // move in the book line). Robust against any gameRef render lag.
-    const parts = fen.split(' ');
-    const fullmove = Number.parseInt(parts[5] ?? '1', 10) || 1;
-    const ply = (fullmove - 1) * 2 + (parts[1] === 'b' ? 1 : 0);
     // 1) Book continuation — the coach replies with the opening's next move
     //    while the student is still on the named line. Source the opening the
     //    USER chose: the loaded walkthrough line first, else the opening they
@@ -7720,10 +7715,9 @@ export function CoachTeachPage(): JSX.Element {
     if (openingName) {
       try {
         const bookMoves = getOpeningMoves(openingName);
-        if (bookMoves && ply < bookMoves.length) {
-          const probe = new Chess(fen);
-          if (probe.move(bookMoves[ply])) return bookMoves[ply];
-        }
+        // Only while the game is still ON the book line (`bookContinuation`).
+        const bookSan = bookContinuation(bookMoves, fen);
+        if (bookSan) return bookSan;
       } catch { /* fall through to engine */ }
     }
     // getAdaptiveMove / getRandomLegalMove return UCI ("e7e5"); handlePlayMove
