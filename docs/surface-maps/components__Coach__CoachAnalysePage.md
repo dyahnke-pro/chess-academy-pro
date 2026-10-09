@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**366 lines · 1 exports · 2 importers · 1 tests · 1 audits**
+**365 lines · 1 exports · 1 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,7 +12,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
-- `src/App.tsx`
 - `src/components/Coach/CoachAnalysePage.test.tsx`
 
 ## Exports and every call site

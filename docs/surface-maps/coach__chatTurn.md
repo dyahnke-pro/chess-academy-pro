@@ -50,9 +50,9 @@
 - `src/coach/chatTurn.test.ts:107`
 - `src/coach/dispatchCoachTurn.ts:228`
 - `src/coach/dispatchCoachTurn.ts:241`
-- `src/coach/dispatchCoachTurn.ts:300`
-- `src/coach/dispatchCoachTurn.ts:389`
-- `src/coach/dispatchCoachTurn.ts:456`
+- `src/coach/dispatchCoachTurn.ts:305`
+- `src/coach/dispatchCoachTurn.ts:394`
+- `src/coach/dispatchCoachTurn.ts:461`
 - `src/coach/questionRoute.test.ts:20`
 - `src/coach/questionRoute.test.ts:30`
 - `src/coach/questionRoute.test.ts:33`
@@ -144,7 +144,7 @@
 - `src/coach/chatTurn.test.ts:80`
 - `src/coach/chatTurn.test.ts:83`
 - `src/coach/chatTurn.test.ts:87`
-- `src/coach/dispatchCoachTurn.ts:369`
+- `src/coach/dispatchCoachTurn.ts:374`
 
 ### `kindAgreesWithLane` (function) — 3 call sites
 - `src/coach/chatTurn.test.ts:103`

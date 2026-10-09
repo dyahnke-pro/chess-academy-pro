@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**531 lines · 7 exports · 13 importers · 8 tests · 44 audits**
+**531 lines · 7 exports · 13 importers · 8 tests · 45 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,7 +32,7 @@
 
 ### `Ask` (type) — 2 call sites
 - `src/components/Coach/CoachGamePage.tsx:5428`
-- `src/components/Coach/CoachGameReview.tsx:3840`
+- `src/components/Coach/CoachGameReview.tsx:3843`
 
 ### `Action` (type) — 1 call site
 - `scripts/audit-punish-gems-loop.mjs:821`
@@ -46,7 +46,7 @@
 - `src/coach/chatTurnCodeReader.test.ts:22`
 - `src/coach/chatTurnCodeReader.test.ts:23`
 - `src/services/coachApi.ts:2192`
-- `src/services/whyNotLegal.ts:177`
+- `src/services/whyNotLegal.ts:181`
 
 ### `pointsAtThisBoard` (function) — 1 call site
 - `src/coach/questionIntents.ts:1656`
@@ -114,6 +114,7 @@ A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-chat-replay-prod.mjs`
+- `scripts/audit-chat-surfaces-prod.mjs`
 - `scripts/audit-coach-all-questions-prod.mjs`
 - `scripts/audit-coach-answers-questions-prod.mjs`
 - `scripts/audit-coach-board-grind.mjs`

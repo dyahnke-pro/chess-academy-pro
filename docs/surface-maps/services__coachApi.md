@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7104 lines · 41 exports · 54 importers · 60 tests · 19 audits**
+**7107 lines · 41 exports · 54 importers · 60 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,7 +19,7 @@
 - **Do NOT** (CLAUDE.md:5408) — names `coachApi`
 - **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6162) — names `voiceFacts`
 - **The standard post-deploy ritual** (CLAUDE.md:6305) — names `coachApi`, `voiceFacts`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6324) — names `coachApi`, `translateToEnglish`, `voiceFacts`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6325) — names `coachApi`, `translateToEnglish`, `voiceFacts`
 
 ## Who calls in
 
@@ -280,8 +280,8 @@
 ### `voiceFacts` (function) — 39 call sites
 - `scripts/audit-kid-static.mjs:53`
 - `scripts/audit-kid-static.mjs:64`
-- `src/components/Coach/CoachGameReview.tsx:1645`
-- `src/components/Coach/CoachGameReview.tsx:1838`
+- `src/components/Coach/CoachGameReview.tsx:1646`
+- `src/components/Coach/CoachGameReview.tsx:1839`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
 - `src/components/Puzzles/PuzzleBoard.tsx:97`
 - `src/hooks/usePhaseNarration.ts:733`

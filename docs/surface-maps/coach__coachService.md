@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2554 lines · 68 exports · 33 importers · 38 tests · 15 audits**
+**2554 lines · 68 exports · 33 importers · 39 tests · 15 audits**
 
 ## Locked rules that govern this surface
 
 - **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3246) — names `coachService`
 - **The standard post-deploy ritual** (CLAUDE.md:6306) — names `coachService`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6325) — names `coachService`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6326) — names `coachService`
 
 ## Who calls in
 
@@ -213,7 +213,7 @@
 - `src/coach/questionIntents.ts:1187`
 - `src/coach/questionIntents.ts:3406`
 - `src/coach/questionIntents.ts:3428`
-- `src/services/coachApi.ts:6546`
+- `src/services/coachApi.ts:6549`
 
 ### `isEndgameWeaknessQuestion` (re-export) — 7 call sites
 - `src/coach/questionIntents.test.ts:591`
@@ -840,6 +840,7 @@
 - `src/components/Coach/CoachGameReview.test.tsx`
 - `src/components/Coach/CoachTeachPage.drillOrientation.test.tsx`
 - `src/components/Coach/CoachTeachPage.test.tsx`
+- `src/components/Coach/ExplainPositionSessionView.test.tsx`
 - `src/components/Kid/GameChapterPage.test.tsx`
 - `src/components/Kid/JourneyChapterPage.test.tsx`
 - `src/components/Openings/PracticeMode.test.tsx`

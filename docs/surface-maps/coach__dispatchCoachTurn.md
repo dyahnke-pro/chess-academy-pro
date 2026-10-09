@@ -4,17 +4,18 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**462 lines · 15 exports · 17 importers · 9 tests · 2 audits**
+**467 lines · 15 exports · 18 importers · 12 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **The standard post-deploy ritual** (CLAUDE.md:6309) — names `dispatchCoachTurn`
 
 ## Who calls in
 
 - `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/coachService.askReader.integration.test.ts`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts`
+- `src/coach/dispatchCoachTurn.noBoard.test.ts`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 - `src/coach/dispatchCoachTurn.positional.test.ts`
 - `src/coach/dispatchCoachTurn.test.ts`
@@ -46,13 +47,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `isServeParsedRouteOn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setChatTurnReaderForTests` (function) — 24 call sites
+### `setChatTurnReaderForTests` (function) — 26 call sites
 - `src/coach/chatTurnRow.outcome.test.ts:28`
 - `src/coach/chatTurnRow.outcome.test.ts:37`
 - `src/coach/coachService.askReader.integration.test.ts:31`
 - `src/coach/coachService.askReader.integration.test.ts:51`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:23`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:32`
+- `src/coach/dispatchCoachTurn.noBoard.test.ts:16`
+- `src/coach/dispatchCoachTurn.noBoard.test.ts:19`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:20`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:23`
 - `src/coach/dispatchCoachTurn.positional.test.ts:20`
@@ -72,7 +75,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/requestExecutor.test.ts:56`
 - `src/coach/requestExecutor.test.ts:59`
 
-### `resetConversations` (function) — 5 call sites
+### `resetConversations` (function) — 6 call sites
+- `src/coach/dispatchCoachTurn.noBoard.test.ts:14`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:21`
 - `src/coach/dispatchCoachTurn.positional.test.ts:21`
 - `src/coach/dispatchCoachTurn.test.ts:94`
@@ -107,10 +111,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `isComputedAnswer` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:7469`
 
-### `dispatchCoachTurn` (function) — 37 call sites
+### `dispatchCoachTurn` (function) — 38 call sites
 - `src/coach/chatTurnRow.outcome.test.ts:39`
 - `src/coach/coachService.askReader.integration.test.ts:32`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:35`
+- `src/coach/dispatchCoachTurn.noBoard.test.ts:20`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:25`
 - `src/coach/dispatchCoachTurn.positional.test.ts:25`
 - `src/coach/dispatchCoachTurn.test.ts:33`
@@ -134,10 +139,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/dispatchCoachTurn.test.ts:217`
 - `src/coach/requestExecutor.test.ts:60`
 - `src/components/Board/VoiceChatMic.tsx:484`
-- `src/components/Coach/CoachAnalysePage.tsx:232`
+- `src/components/Coach/CoachAnalysePage.tsx:227`
 - `src/components/Coach/CoachChatPage.tsx:284`
-- `src/components/Coach/CoachGameReview.tsx:3027`
-- `src/components/Coach/ExplainPositionSessionView.tsx:236`
+- `src/components/Coach/CoachGameReview.tsx:3028`
+- `src/components/Coach/ExplainPositionSessionView.tsx:234`
 - `src/components/Coach/GameChatPanel.tsx:975`
 - `src/components/Coach/GameChatPanel.tsx:1346`
 - `src/components/Coach/GameChatPanel.tsx:1555`
@@ -154,10 +159,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/coachService.askReader.integration.test.ts`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts`
+- `src/coach/dispatchCoachTurn.noBoard.test.ts`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 - `src/coach/dispatchCoachTurn.positional.test.ts`
 - `src/coach/dispatchCoachTurn.test.ts`
 - `src/coach/requestExecutor.test.ts`
+- `src/components/Coach/CoachAnalysePage.test.tsx`
+- `src/components/Coach/ExplainPositionSessionView.test.tsx`
 - `src/components/Coach/GameChatPanel.surface.test.tsx`
 - `src/components/Openings/MasterclassCoachChat.boardaware.test.tsx`
 

@@ -109,8 +109,8 @@
 - `src/services/reviewFullData.ts:1609`
 
 ### `detectOpeningTranspositional` (function) — 5 call sites
-- `src/services/coachApi.ts:5651`
-- `src/services/coachApi.ts:6581`
+- `src/services/coachApi.ts:5654`
+- `src/services/coachApi.ts:6584`
 - `src/services/reviewGameAdapter.ts:171`
 - `src/services/reviewOpeningTheory.ts:313`
 - `src/services/reviewOpeningTheory.ts:314`
@@ -243,8 +243,8 @@
 - `src/components/Coach/CoachTeachPage.tsx:6192`
 - `src/components/Coach/CoachTeachPage.tsx:7860`
 - `src/services/coachLaneWiring.test.ts:356`
-- `src/services/inGameChatIntent.ts:163`
-- `src/services/inGameChatIntent.ts:174`
+- `src/services/inGameChatIntent.ts:164`
+- `src/services/inGameChatIntent.ts:175`
 - `src/services/openingDetectionService.test.ts:88`
 - `src/services/openingDetectionService.test.ts:98`
 - `src/services/openingDetectionService.test.ts:107`
