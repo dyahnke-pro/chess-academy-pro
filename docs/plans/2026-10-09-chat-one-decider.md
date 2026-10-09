@@ -260,3 +260,57 @@ model toolbelt is deleted only when every row is green.
 Replay set: ≥ 90% answered / action done in the right language, 0 actions the
 words don't describe, 0 stock lines; walk re-run: the 13 ❌ turns all ✅; first
 words ≤ 2 s warm.
+
+## Next-session pickup (written for the session that builds this)
+
+Start here, in this order: the FOUNDATION in CLAUDE.md → this plan → the walk
+(`audit-reports/hand-walk-chat-qa-2026-10-09.md`) → `surface-map.mjs --changed`
+on every file you touch → read the file end to end. Then build.
+
+**Order of work:** P0 → P1 → P2 → P3 → P4 → P5 → P6 → P7 → P8 → P9. All five
+decisions are logged above; do not re-ask them. One open call: confirm
+"start a game" only when a game is in progress or the side/opening was
+inferred (David has not answered — ask once, in plain words, then default to
+that).
+
+**Every phase ends the same way:** fail-on-old-code tests for the walk's ❌
+turns it fixes → the replay set re-run → a hand-walk re-run on PROD of the
+same turns (the driver below, not a bot) → the old path it replaced deleted
+with zero callers → push to `main`. Work on a branch during the phase; tell
+David what is on it; it is not done until it is on `main`.
+
+**Things this session measured so you do not re-measure them:**
+- The live build was `2c0fc28` = main; check the hash before any walk:
+  `curl -s "$URL/?cb=$(date +%s)" | grep -oE '/assets/index-[A-Za-z0-9_-]+\.js'`.
+- The hand driver: `AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY
+  AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node
+  scripts/audit-lib/hand-driver.mjs` then `/open`, `/type`, `/move?san=`,
+  `/state`, `/goto?path=/coach/chat`, `/events?grep=chat-turn`, `/js`
+  (`return [...document.querySelectorAll("[data-testid*=message]")].map(e=>e.innerText)`
+  reads the transcript on `/coach/chat`, whose `/state` lastChat is Learn-only).
+- PostHog: the session-env key (`Read_key_PostHog`) is INVALID (401). The
+  live key is Vercel env id `rtQtYdwmANfAqfUg` (`get_project_env`, decrypts).
+  `coach_turn_read` rows carry ONLY `properties.summary` — P0 forwards the
+  fields. Zero native rows exist; native users' typed turns are in
+  `coach_question_asked` with `ask_source` null (older builds) — filter
+  `properties.summary NOT ILIKE '%surface=hint%'`.
+- Real native typed turns, 60 days: ~20; Thai (one long session 2026-09-16,
+  "teach me the Italian" ×8, the model's tools fired each time), German
+  ("sollte springer schlagen"), "D5", a pasted PGN, a username, "What's my
+  best opening?", "Which phase am I weakest in?".
+- The reader misread "teach me the Italian" as `start-thinking-lesson` (R1);
+  Learn's own router answered it right. A gloss problem in `CHAT_KINDS` —
+  fix the gloss, do not add a regex.
+- "teach me" → opening "me" is the phrase router's opening capture
+  (`routeChatIntent` / the opening resolver), not the reader.
+- `audit-reports/` is gitignored; `git add -f` the walk file (precedent:
+  every hand-walk report in there is force-added).
+- The docs-lane ship-check gate failed once on a pure-docs push and passed on
+  retry with no change; the three doc gates pass locally. Not diagnosed.
+- `npx tsc --noEmit` is vacuous here; `npm run typecheck` is the real one.
+
+**Do not:** add a regex to fix a misread (fix the reader or its gloss); add a
+gate/filter where a producer is wrong; let a kind fall through to the chain
+(P3 makes that impossible — until then a null answer is a bug to fix, not a
+default to rely on); re-add any free-model path; copy narration's importance
+selector into chat (chat selects by what was asked).
