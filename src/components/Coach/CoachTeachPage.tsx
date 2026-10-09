@@ -274,7 +274,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { getFavoriteOpenings, getOpeningById, searchOpenings } from '../../services/openingService';
 import type { OpeningRecord, OpeningVariation } from '../../types';
 import type { LiveState, TacticsLiveContext, AskOrigin } from '../../coach/types';
-import { dispatchCoachTurn, openTurnRead, type TurnReadHandle } from '../../coach/dispatchCoachTurn';
+import { dispatchCoachTurn, openTurnRead, isComputedAnswer, type TurnReadHandle } from '../../coach/dispatchCoachTurn';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
@@ -1076,6 +1076,17 @@ export function CoachTeachPage(): JSX.Element {
   );
 
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
+  // The coach's last line, read by a follow-up like "stop what?" (hand walk
+  // 2026-10-09). A ref, so a turn reads the transcript as it stands.
+  const messagesRef = useRef(messages);
+  messagesRef.current = messages;
+  const lastCoachLine = (): string | undefined => {
+    for (let i = messagesRef.current.length - 1; i >= 0; i -= 1) {
+      const m = messagesRef.current[i];
+      if (m.role === 'assistant' && typeof m.content === 'string' && m.content.trim()) return m.content;
+    }
+    return undefined;
+  };
 
   // ── THE TRANSCRIPT SPEAKS THE STUDENT'S LANGUAGE ────────────────────────────
   // The coach writes 22 of its own English strings into this transcript (an
@@ -3296,6 +3307,7 @@ export function CoachTeachPage(): JSX.Element {
           fen: gameRef.current.fen,
           moveHistory: gameRef.current.history,
           studentColor: activeDrillRef.current?.drill.playerColor ?? playerColorRef.current,
+          lastCoachLine: lastCoachLine(),
           ...(activeDrillRef.current && drillAttemptRef.current
             ? { lastStudentAttempt: { ...drillAttemptRef.current, withholdBest: true } }
             : {}),
@@ -6678,6 +6690,7 @@ export function CoachTeachPage(): JSX.Element {
         ? { lastStudentAttempt: { ...drillAttemptRef.current, withholdBest: true } }
         : {}),
       userJustDid: text,
+      lastCoachLine: lastCoachLine(),
       // Tell the brain explicitly whose turn it is. Without this the
       // LLM was confusing sides — emitting `play_move {"san":"e5"}`
       // when it was Black's turn but the position needed White's
@@ -7327,7 +7340,14 @@ export function CoachTeachPage(): JSX.Element {
         // are code (explainBestMoveGrounded), so the model echoing them is
         // grounded by construction. Without this the gate stripped David's
         // TRUE "b5 forks the knight on a4 and the bishop on c4" (2026-08-06).
-        const ft = stripUngroundedTacticSentences(finalText, fedTacticsRef.current ?? tacticsForAsk, opts?.coachReplyFact);
+        // A COMPUTED ANSWER IS NOT CHECKED AGAINST THE MODEL'S LIST (walk 4:
+        // "Bxc6+ is fine — it lines up an x-ray at their rook on a8" was cut,
+        // leaving only the engine's move). The door's board and direct answers
+        // are read off the board in code; this gate exists for model prose.
+        const computedAnswer = isComputedAnswer(result.servedIntent ?? null);
+        const ft = computedAnswer
+          ? { clean: finalText, dropped: [] as string[] }
+          : stripUngroundedTacticSentences(finalText, fedTacticsRef.current ?? tacticsForAsk, opts?.coachReplyFact);
         if (ft.dropped.length > 0) {
           finalText = ft.clean;
           void logAppAudit({

@@ -31,7 +31,7 @@ afterEach(() => { setBoardEngineForTests(null); vi.restoreAllMocks(); });
 
 describe('the named move is weighed, never ignored', () => {
   it('"why is Nxd5 best?" — it is not; worse with no line, so it says so plainly', async () => {
-    expect(await answerBoardTurn(turn('why-best-move', 'Nxd5'), board)).toBe("Nxd5 isn't the best move here. It is clearly worse than exd5. It leaves your knight on d5 under fire from their knight on f6.");
+    expect(await answerBoardTurn(turn('why-best-move', 'Nxd5'), board)).toBe("Nxd5 isn't the best move here. It is clearly worse than exd5, which takes their pawn on d5. It leaves your knight on d5 under fire from their knight on f6.");
   });
   it('"why is Bb5 best?" — it hangs the bishop, and the line proves it', async () => {
     const l = ['e4', 'a6'];

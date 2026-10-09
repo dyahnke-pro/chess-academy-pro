@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7535 lines · 163 exports · 78 importers · 53 tests · 8 audits**
+**7565 lines · 164 exports · 79 importers · 53 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,6 +17,7 @@
 
 ## Who calls in
 
+- `src/coach/chatTurnAnswers.ts`
 - `src/coach/coachService.ts`
 - `src/coach/pass3Questions.test.ts`
 - `src/coach/questionIntents.counterRepertoire.test.ts`
@@ -155,9 +156,14 @@
 - `src/services/checkIsNotAGuard.test.ts:54`
 - `src/services/computedVoiceGrounding.test.ts:85`
 
-### `assembleThreatAnswer` (function) — 2 call sites
+### `assembleThreatAnswer` (function) — 4 call sites
+- `src/coach/chatTurnAnswers.ts:204`
+- `src/coach/handWalk1009.test.ts:320`
 - `src/services/groundedAnswer.threatTake.test.ts:8`
 - `src/services/groundedAnswer.threatTake.test.ts:15`
+
+### `opponentIdeas` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleKingSafetyAnswer` (function) — 2 call sites
 - `src/services/kingSafetyAnswer.test.ts:6`
@@ -383,7 +389,8 @@
 ### `captureHasCounterTactic` (function) — 1 call site
 - `src/services/reviewTeachingPoints.ts:101`
 
-### `describeMoveGeometry` (function) — 19 call sites
+### `describeMoveGeometry` (function) — 20 call sites
+- `src/coach/chatTurnAnswers.ts:420`
 - `src/components/Puzzles/PuzzleBoard.tsx:242`
 - `src/components/Tactics/TacticSetupBoard.tsx:153`
 - `src/hooks/useHintSystem.ts:357`
@@ -407,7 +414,8 @@
 ### `quietPurposePhrase` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `toObserverSeat` (function) — 2 call sites
+### `toObserverSeat` (function) — 3 call sites
+- `src/coach/chatTurnAnswers.ts:421`
 - `src/coach/handWalk1009.test.ts:173`
 - `src/coach/handWalk1009.test.ts:175`
 
@@ -1185,7 +1193,7 @@
 - `src/services/coachApi.ts:6094`
 
 ### `seatPieceReferences` (re-export) — 33 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8331`
+- `src/components/Coach/CoachTeachPage.tsx:8351`
 - `src/services/coachFeatureService.ts:4237`
 - `src/services/coachFeatureService.ts:4288`
 - `src/services/coachFeatureService.ts:5400`

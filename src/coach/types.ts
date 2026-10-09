@@ -175,6 +175,9 @@ export interface LiveState {
   }>;
   /** Free text describing what triggered this call. */
   userJustDid?: string;
+  /** The coach's last line on this surface (narration or answer) — what a
+   *  follow-up like "stop what?" points back at. */
+  lastCoachLine?: string;
   currentRoute?: string;
   /** Whose turn it is right now in the live position. The /coach/teach
    *  surface threads this through so the brain stops emitting moves

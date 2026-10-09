@@ -91,6 +91,7 @@ function boardOf(input: CoachAskInput): BoardContext {
     history: ls.moveHistory,
     studentColor: ls.studentColor,
     lastStudentAttempt: ls.lastStudentAttempt,
+    lastCoachLine: ls.lastCoachLine,
   };
 }
 
@@ -199,6 +200,17 @@ const UNCLAIMED_GRACE_MS = 3000;
 
 // ─── THE DOOR ──────────────────────────────────────────────────────────────
 
+/** Was this answer computed on the board by the door (a board answer, a
+ *  direct answer, or a refuted premise) rather than phrased by a model?
+ *  Surfaces skip their model-prose gates for these: there is nothing to
+ *  validate in a fact read off the board. */
+export function isComputedAnswer(servedIntent: string | null): boolean {
+  if (!servedIntent) return false;
+  if (servedIntent.startsWith('board:') || servedIntent.startsWith('premise:')) return true;
+  const spec = (CHAT_KINDS as Record<string, { answerer: string } | undefined>)[servedIntent];
+  return spec?.answerer === 'direct';
+}
+
 /** Readings the board refutes outright: the named piece is not there, is
  *  the other side's, or does not exist. */
 const FALSE_PREMISE: ReadonlySet<string> = new Set(['piece-not-there', 'piece-wrong-seat', 'piece-absent']);
@@ -223,7 +235,7 @@ export async function dispatchCoachTurn(
     readKind = turn?.kind ?? (r?.turn ? 'unclear' : null);
     if (turn && CHAT_KINDS[turn.kind].answerer === 'direct' && input.liveState.fen) {
       const studentWB = input.liveState.studentColor === 'black' ? 'b' : input.liveState.studentColor === 'white' ? 'w' : (input.liveState.fen.split(' ')[1] === 'b' ? 'b' : 'w');
-      const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask, input.liveState.moveHistory ?? []);
+      const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask, input.liveState.moveHistory ?? [], input.liveState.lastCoachLine ?? null);
       if (text) {
         servedParsed = true;
         void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: turn.kind, servedParsed })

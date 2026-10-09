@@ -589,10 +589,17 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
   const wins: Array<{ sq: Square; type: PieceSymbol; g: number }> = computeMustDefend(fen, victimColor).pieces
     .map((p) => ({ sq: p.square as Square, type: p.piece as PieceSymbol, g: p.value }));
   const inCheck = chess.inCheck();
+  // THEIR IDEAS, NOT ONLY THEIR CAPTURES (hand walk 2026-10-09: "what are they
+  // threatening?" missed …Bg4 pinning the f3 knight, the very idea the
+  // narration had just warned about with h3). Every move of theirs that would
+  // set up a pin or a fork, read on the board handed to them — and only where
+  // the piece is not simply lost on arrival.
+  const ideas = isOpp && !inCheck ? opponentIdeas(fen, me) : [];
+  const ideaPart = ideas.length ? ` Their ideas: ${ideas.join('; ')}.` : '';
   if (wins.length === 0 && !inCheck) {
     return {
       facts: isOpp
-        ? `Nothing forcing — they have no immediate threat; none of your pieces are hanging.`
+        ? `Nothing forcing — they have no immediate threat; none of your pieces are hanging.${ideaPart}`
         : `No immediate threat for you — nothing of theirs is hanging right now.`,
       bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
     };
@@ -617,8 +624,32 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
         : `you can win ${named}`)
     : '';
   const checkPart = inCheck ? `your king is in check` : '';
-  const facts = [checkPart, winPart].filter(Boolean).join(', and ') + '.';
+  const facts = [checkPart, winPart].filter(Boolean).join(', and ') + '.' + ideaPart;
   return { facts: facts.charAt(0).toUpperCase() + facts.slice(1), bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+}
+
+/** The opponent's next-move pins and forks against `me`, as "…Bg4 would pin
+ *  the knight on f3 to the queen on d1". Board geometry on their move. */
+export function opponentIdeas(fen: string, me: 'w' | 'b'): string[] {
+  const parts = fen.split(' ');
+  parts[1] = me === 'w' ? 'b' : 'w';
+  parts[3] = '-';
+  let theirs: Chess;
+  try { theirs = new Chess(parts.join(' ')); } catch { return []; }
+  if (theirs.inCheck()) return [];
+  const themColor: 'white' | 'black' = me === 'w' ? 'black' : 'white';
+  const out: string[] = [];
+  for (const m of theirs.moves({ verbose: true })) {
+    let geo: string | null = null;
+    try { geo = describeMoveGeometry(theirs.fen(), m.san, themColor); } catch { geo = null; }
+    if (!geo || !/^(?:pins|forks)\b/.test(geo)) continue;
+    // Lost on arrival is not an idea.
+    let lost: number | null = 0;
+    try { lost = captureRead(m.after, m.to, me); } catch { lost = null; }
+    if (lost === null || lost >= (MATERIAL_VALUE[m.piece] ?? 0)) continue;
+    out.push(`…${m.san} would ${geo.replace(/^pins/, 'pin').replace(/^forks/, 'fork')}`);
+  }
+  return out;
 }
 
 // ── KING SAFETY — "is my king safe?" ────────────────────────────────────────
@@ -5835,7 +5866,6 @@ export interface MoveRatingLike {
  *  brilliancy leads with the computed WHY (why the sacrifice/only-move is sound),
  *  which directly answers "was that brilliant, and why?". */
 export function assembleMoveRatingAnswer(r: MoveRatingLike): GroundedAnswer | null {
-  const pawns = (r.cpLoss / 100).toFixed(1);
   const better = r.betterSan ? ` The engine preferred ${r.betterSan}.` : '';
   const arrow = r.betterSan && r.betterFromTo
     ? { bestMoveSan: r.betterSan, bestMoveFromTo: r.betterFromTo }
@@ -5853,15 +5883,15 @@ export function assembleMoveRatingAnswer(r: MoveRatingLike): GroundedAnswer | nu
   } else if (r.wasBest || r.quality === 'best') {
     verdict = `${r.playedSan} was the engine's top move — you gave up nothing.`;
   } else if (r.quality === 'excellent') {
-    verdict = `${r.playedSan} is within a whisker of best — about ${pawns} points.${better}`;
+    verdict = `${r.playedSan} is within a whisker of best.${better}`;
   } else if (r.quality === 'good') {
-    verdict = `${r.playedSan} is fine; it cost only about ${pawns} points.${better}`;
+    verdict = `${r.playedSan} is fine; it gave up very little.${better}`;
   } else if (r.quality === 'inaccuracy') {
-    verdict = `${r.playedSan} is a slight inaccuracy — it let about ${pawns} points slip.${better}`;
+    verdict = `${r.playedSan} is a slight inaccuracy.${better}`;
   } else if (r.quality === 'mistake') {
-    verdict = `${r.playedSan} is a mistake: it cost about ${pawns} points.${better}`;
+    verdict = `${r.playedSan} is a mistake.${better}`;
   } else {
-    verdict = `${r.playedSan} is a blunder — it dropped about ${pawns} points.${better}`;
+    verdict = `${r.playedSan} is a blunder.${better}`;
   }
 
   return { facts: verdict, ...arrow, sources: ['engine:stockfish'] };
@@ -5981,11 +6011,11 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
   let verdict: string;
   if (r.allowedMate !== null) verdict = `walked into a forced mate in ${r.allowedMate}`;
   else if (r.missedMate !== null) verdict = `missed a forced mate in ${r.missedMate}`;
-  else if (r.quality === 'excellent') verdict = `was within a whisker of best${cost(` — about ${pawns} points`)}`;
-  else if (r.quality === 'good') verdict = `was fine${cost(`; it cost only about ${pawns} points`)}`;
-  else if (r.quality === 'inaccuracy') verdict = `was a slight inaccuracy${cost(` — it let about ${pawns} points slip`)}`;
-  else if (r.quality === 'mistake') verdict = `was a mistake${cost(`: it cost about ${pawns} points`)}`;
-  else if (r.quality === 'blunder') verdict = `was a blunder${cost(` — it dropped about ${pawns} points`)}`;
+  else if (r.quality === 'excellent') verdict = `was within a whisker of best`;
+  else if (r.quality === 'good') verdict = `was fine${cost('; it gave up very little')}`;
+  else if (r.quality === 'inaccuracy') verdict = `was a slight inaccuracy`;
+  else if (r.quality === 'mistake') verdict = `was a mistake`;
+  else if (r.quality === 'blunder') verdict = `was a blunder`;
   else verdict = `wasn't the engine's choice`;
 
   const seat = r.mover === 'coach'

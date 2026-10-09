@@ -292,6 +292,16 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
   if (!board.fen || text.length > 160) return null;
   let chess: Chess;
   try { chess = new Chess(board.fen); } catch { return null; }
+
+  // "Stop what?" / "what do you mean?" / "how so?" — a follow-up that points
+  // back at the coach's own last line (hand walk 2026-10-09: "I am not sure
+  // what you mean"). Read only when there IS a last line to point at.
+  const followUp = text.trim().toLowerCase();
+  if (board.lastCoachLine && (/^(?:[a-z']+\s+){0,2}what\s*\?*$/.test(followUp)
+    || /^(?:huh|how so|why|meaning)\s*\?*$/.test(followUp)
+    || /\bwhat do you mean\b|\bwhat does that mean\b|\bi don'?t (?:get|understand) (?:it|that)\b/.test(followUp))) {
+    return { kind: 'explain-last', referents: [], seat: null, topic: null };
+  }
   const slots = tagSlots(text);
   if (slots.negated && slots.ask !== 'why') return null;
 
@@ -404,6 +414,14 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
     return { kind: 'defend-piece', referents, seat: 'me', topic: null };
   }
 
+  // "What are they threatening?" / "any threats?" / "what's my threat?" —
+  // threats, answered by the threat computer (walk 4: routed to "why did they
+  // play d6" and skipped their ideas).
+  if (/\bthreat(?:s|en|ens|ening)?\b/.test(lower) && slots.sans.length === 0 && slots.squares.length === 0) {
+    const mine = /\b(?:my|i|do i have|can i)\b/.test(lower) && !/\b(?:they|their|he|his|opponent)\b/.test(lower);
+    return { kind: 'threats', referents: [], seat: mine ? 'me' : 'them', topic: null };
+  }
+
   // "What is black trying to do?" / "what's their plan?" — a plan, no move.
   if (slots.goal && slots.sans.length === 0 && slots.squares.length === 0 && slots.pieces.length === 0
     && /^\s*(?:what|what's|whats|where|how)\b/.test(lower)) {
@@ -419,6 +437,24 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
   const named = slots.sans.length === 1 ? slots.sans[0] : pawnSan;
   if (slots.past && named) {
     return { kind: 'retrospective-move', referents: [{ type: 'move', san: named }], seat: 'me', topic: null };
+  }
+
+  // "Should I take the knight?" — the piece named after take/capture is the
+  // one TAKEN, not the one taking (walk 4: answered with castling, Bxc6 never
+  // weighed). "Take with the knight" keeps the knight as the mover.
+  if (slots.action === 'capture' && slots.sans.length === 0 && slots.squares.length === 0 && slots.pieces.length === 1
+    && !/\bwith\s+(?:the\s+|my\s+)?(?:pawn|knight|bishop|rook|queen|king)\b/.test(lower)
+    && /\b(?:take|taking|capture|capturing|grab|grabbing|win|winning)\s+(?:the\s+|their\s+|his\s+|that\s+)?(?:pawn|knight|bishop|rook|queen)\b/.test(lower)) {
+    const victims = chess.moves({ verbose: true }).filter((m) => m.captured === slots.pieces[0]);
+    const uniq = [...new Map(victims.map((m) => [m.san, m])).values()]
+      .sort((a, b) => (CAPTURE_VALUE[a.piece] ?? 0) - (CAPTURE_VALUE[b.piece] ?? 0));
+    if (uniq.length === 1) return { kind: 'candidate-move', referents: [{ type: 'move', san: uniq[0].san }], seat: 'me', topic: null };
+    if (uniq.length >= 2) return { kind: 'compare-moves', referents: uniq.slice(0, 2).map((m): Referent => ({ type: 'move', san: m.san })), seat: 'me', topic: null };
+    // Nothing can take it now: say so, and what would set it up (walk 4:
+    // "should I take the knight?" with no knight in reach got the best move).
+    const enemy = chess.turn() === 'w' ? 'b' : 'w';
+    const sq = theirOne(chess, slots.pieces[0], enemy);
+    if (sq) return { kind: 'win-piece', referents: [{ type: 'square', square: sq }], seat: 'them', topic: null };
   }
 
   // "Should I take on d5?" when two of yours can take there: weigh both,

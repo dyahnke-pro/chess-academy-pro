@@ -710,7 +710,7 @@ describe('Wave 4 assemblers — colour / records / puzzle-stats / transfer-gap',
   });
   it('assembleMoveRatingAnswer voices a mistake with the better move + arrow', () => {
     const a = assembleMoveRatingAnswer({ playedSan: 'd3', wasBest: false, cpLoss: 250, quality: 'mistake', betterSan: 'd4', betterFromTo: { from: 'd2', to: 'd4' }, missedMate: null, allowedMate: null });
-    expect(a!.facts).toMatch(/d3 is a mistake: it cost about 2\.5 points\. The engine preferred d4\./);
+    expect(a!.facts).toMatch(/d3 is a mistake\. The engine preferred d4\./);
     expect(a!.bestMoveFromTo).toEqual({ from: 'd2', to: 'd4' });
     expect(a!.bestMoveSan).toBe('d4');
   });

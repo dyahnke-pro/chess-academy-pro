@@ -394,6 +394,14 @@ export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', oppone
     ?? threatAnswerWhy(fenBefore, san, mover)
     ?? threatMadeWhy(fenBefore, san, mover);
   if (first) return first;
+  // A CAPTURE SAYS WHAT IT TAKES (walk 4: "Bxc6+ — it lines up an x-ray at
+  // their rook on a8", the knight it takes and the check never named). An even
+  // trade is still the move's first job.
+  const took = captureLead(fenBefore, san);
+  if (took) {
+    const extras = extraJobs(fenBefore, san);
+    return extras.length ? `${took}; it also ${andList(extras)}` : took;
+  }
   // SEVERAL JOBS AT ONCE (catalogue §3; game 1, Bf4: "it develops the bishop,
   // protects the pawn and sets up a potential x-ray"): the fundamental, plus
   // the guard it adds and the x-ray it lines up.
@@ -402,6 +410,15 @@ export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', oppone
   if (strategic && extras.length > 0) return `${strategic}; it also ${andList(extras)}`;
   if (extras.length > 0) return andList(extras);
   return strategic ?? checkWhy(fenBefore, san);
+}
+
+/** "takes their knight on c6, with check" — the capture a move makes. */
+function captureLead(fen: string, san: string): string | null {
+  let m;
+  try { m = new Chess(fen).move(san); } catch { return null; }
+  if (!m?.captured) return null;
+  const check = /[+#]$/.test(m.san) ? (m.san.endsWith('#') ? ', and it is mate' : ', with check') : '';
+  return `takes their ${PIECE_WORD[m.captured] ?? 'piece'} on ${m.to}${check}`;
 }
 
 /**
@@ -601,7 +618,15 @@ export function namedMoveAnswer(d: Deliberation, ask: 'why-best' | 'is-it-good')
     // engine's alternative with its reason, never one reason across both.
     const own = d.namedWhy ? ` — it ${d.namedWhy}` : '';
     const alt = d.bestWhy ? ` ${d.best.san} is the engine's choice${bestReason}.` : ` The engine slightly prefers ${d.best.san}.`;
-    return `${n.san} is fine${own}.${alt}`;
+    // "Fine" is a verdict on the position, not only on the gap (walk 4:
+    // "castling is fine" with the b5 bishop hanging and the game lost). When
+    // the move leaves a piece under fire, say so; when the position is bad
+    // either way, say it holds up as well as the engine's move — not "fine".
+    const leaves = n.leaves
+      ? ` It leaves your ${PIECE_WORD[n.leaves.piece] ?? 'piece'} on ${n.leaves.square} under fire from their ${PIECE_WORD[n.leaves.attacker] ?? 'piece'} on ${n.leaves.attackerSquare}.`
+      : '';
+    const verdict = n.evalCp <= -200 ? 'holds up about as well as anything here' : 'is fine';
+    return `${n.san} ${verdict}${own}.${leaves}${alt}`;
   }
   const lead = ask === 'why-best' ? `${n.san} isn't the best move here. ` : '';
   const subject = lead ? 'It' : n.san;

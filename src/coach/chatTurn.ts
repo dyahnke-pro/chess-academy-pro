@@ -162,7 +162,7 @@ export const NEW_KINDS = [
   'compare-my-move', 'why-is-it-a-target', 'count-attackers', 'count-defenders',
   'what-about-piece', 'is-piece-loose', 'what-did-their-move-change',
   'what-should-i-play', 'i-dont-know', 'answer', 'start-thinking-lesson', 'book-teaching',
-  'defend-piece', 'win-piece', 'attack-piece', 'material-change',
+  'defend-piece', 'win-piece', 'attack-piece', 'material-change', 'explain-last', 'threats',
 ] as const;
 export type NewKind = typeof NEW_KINDS[number];
 
@@ -356,6 +356,8 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   'win-piece': direct('can I win / take / get back one of their pieces or pawns ("can I get my pawn back?")'),
   'attack-piece': direct('how can I attack / go after one of their pieces or pawns ("can I attack the b7 pawn?")'),
   'material-change': direct('did I just lose / drop / hang something ("did I just lose a pawn?")'),
+  'threats': direct('what are they threatening / what is my threat (the threats on the board, either side)'),
+  'explain-last': direct('a follow-up about the coach\'s own last line ("stop what?", "what do you mean?")'),
   // Outside a lesson (which has its own "I don't know"), not knowing is a
   // request for help: the hint lane.
   // Answered before every lane on the student's own words (coachService →
@@ -423,6 +425,8 @@ export interface BoardContext {
   studentColor?: 'white' | 'black';
   /** A move the student tried that is on no tape (a drill's wrong try). */
   lastStudentAttempt?: { fenBefore: string; san: string };
+  /** The coach's last line, for follow-ups that point back at it. */
+  lastCoachLine?: string;
 }
 
 export type ValidationResult =
@@ -434,7 +438,7 @@ const NEEDS_BOARD: ReadonlySet<ChatKind> = new Set<ChatKind>([
   'best-move', 'why-best-move', 'alternatives', 'candidate-move', 'compare-moves', 'plan', 'hint', 'method',
   'tactics', 'position-assessment', 'whose-turn', 'mate', 'draw', 'positional', 'piece-options',
   'compare-my-move', 'why-is-it-a-target', 'count-attackers', 'count-defenders', 'what-about-piece',
-  'is-piece-loose', 'what-did-their-move-change', 'what-should-i-play', 'answer', 'defend-piece', 'win-piece', 'attack-piece', 'material-change',
+  'is-piece-loose', 'what-did-their-move-change', 'what-should-i-play', 'answer', 'defend-piece', 'win-piece', 'attack-piece', 'material-change', 'explain-last', 'threats',
 ]);
 
 /**

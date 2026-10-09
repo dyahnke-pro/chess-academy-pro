@@ -295,3 +295,62 @@ describe('pass 3 (1.e4 d5 2.Nf3 dxe4 3.d4 exf3)', () => {
     expect(answerMaterialChange('e4 d5 exd5 Qxd5'.split(' '), 'w')).toMatch(/^It was a trade: they took your pawn on d5 with Qxd5, and you took their pawn on d5 with exd5 — an even trade\.$/);
   });
 });
+
+describe('"stop what?" reads the coach\'s own last line', () => {
+  const H = 'e4 e5 Nf3 Nc6 Bc4 Bc5 d3 h6 O-O d6 c3 Bb6'.split(' ');
+  const fen = () => { const c = new Chess(); for (const m of H) c.move(m); return c.fen(); };
+  const LINE = 'Play h3 first, to stop …Bg4.';
+  it.each(['stop what?', 'what?', 'what do you mean?', 'how so?'])('%s → explain-last', (q) => {
+    expect(readTurnInCode(q, { fen: fen(), history: H, studentColor: 'white', lastCoachLine: LINE })?.kind).toBe('explain-last');
+  });
+  it('without a last line it is not read this way', () => {
+    expect(readTurnInCode('stop what?', { fen: fen(), history: H, studentColor: 'white' })?.kind).not.toBe('explain-last');
+  });
+  it('explains h3 and what …Bg4 would do — the pin on f3', async () => {
+    const { answerExplainLast } = await import('./chatTurnAnswers');
+    const text = answerExplainLast(new Chess(fen()), LINE, 'w', H) ?? '';
+    expect(text).toMatch(/^h3 /);
+    expect(text).toMatch(/If they get …Bg4 in, it pins the knight on f3 to the queen on d1\./);
+  });
+});
+
+it('"what are they threatening?" names their next-move pin (…Bg4)', async () => {
+  const { assembleThreatAnswer } = await import('../services/groundedAnswer');
+  const c = new Chess(); for (const m of 'e4 e5 Nf3 Nc6 Bc4 Bc5 d3 h6 O-O d6 c3 Bb6'.split(' ')) c.move(m);
+  const facts = assembleThreatAnswer(c.fen(), 'what are they threatening?', 'white', 'opponent')?.facts ?? '';
+  expect(facts).toMatch(/…Bg4 would pin the knight on f3 to the queen on d1/);
+});
+
+describe('walk 4 (Ruy Lopez, 1.e4 e5 2.Nf3 Nc6 3.Bb5 d6)', () => {
+  const H = 'e4 e5 Nf3 Nc6 Bb5 d6'.split(' ');
+  const b = () => { const c = new Chess(); for (const m of H) c.move(m); return { fen: c.fen(), history: H, studentColor: 'white' as const }; };
+  it.each(['should I take the knight?', 'can I capture their knight', 'is taking the knight good?'])('%s → Bxc6', (q) => {
+    const t = readTurnInCode(q, b());
+    expect(t?.referents).toContainEqual({ type: 'move', san: 'Bxc6+' });
+  });
+  it('"take with the knight" keeps the knight as the mover', () => {
+    expect(readTurnInCode('should I take with the knight?', b())?.referents ?? []).not.toContainEqual({ type: 'move', san: 'Bxc6+' });
+  });
+  it.each(['what are they threatening?', 'any threats?', 'what is the threat here?'])('%s → threats', (q) => {
+    expect(readTurnInCode(q, b())?.kind).toBe('threats');
+  });
+});
+
+it('walk 4: "what if I castle?" with the b5 bishop hanging says so, and never "fine" in a lost position', async () => {
+  const { buildDeliberation, namedMoveAnswer } = await import('../services/deliberation');
+  const c = new Chess(); for (const m of 'e4 d5 Nf3 dxe4 Bb5+ c6'.split(' ')) c.move(m);
+  const d = buildDeliberation({
+    analysis: { topLines: [{ rank: 1, evaluation: -280, moves: ['b5c4'], mate: null }] },
+    fenBefore: c.fen(), moverColor: 'w', opponentLastSan: 'c6',
+    named: { lineUci: ['e1g1', 'c6b5'], evaluation: -300, mate: null },
+  });
+  const text = d ? namedMoveAnswer(d, 'is-it-good') ?? '' : '';
+  expect(text).not.toMatch(/is fine/);
+  expect(text).toMatch(/leaves your (?:bishop on b5|knight on f3) under fire/);
+});
+
+it('walk 4: "should I take the knight?" with no knight in reach is a win-piece question', () => {
+  const c = new Chess(); for (const m of 'e4 d5 Nf3 dxe4 Bb5+ c6'.split(' ')) c.move(m);
+  const t = readTurnInCode('should I take the knight?', { fen: c.fen(), history: [], studentColor: 'white' });
+  expect(t?.kind === 'win-piece' || t === null).toBe(true);
+});

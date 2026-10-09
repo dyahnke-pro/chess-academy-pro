@@ -29,7 +29,7 @@ describe('answerAttemptComparison', () => {
     });
     const a = await answerAttemptComparison({ fenBefore: FEN, san: 'Nc7+', withholdBest: false });
     expect(a?.facts).toMatch(/^Your Nc7\+ on move 12/);
-    expect(a?.facts).toMatch(/mistake: it cost about 1\.7 points/);
+    expect(a?.facts).toMatch(/it was a mistake\./);
     expect(a?.facts).toMatch(/The engine preferred Nd6\+/);
     expect(a?.bestMoveSan).toBe('Nd6+');
   });

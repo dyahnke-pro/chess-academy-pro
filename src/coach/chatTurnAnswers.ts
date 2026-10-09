@@ -13,6 +13,8 @@ import { findHangingBySee, captureRead } from '../services/positionReadingServic
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { andList, orList } from '../utils/andList';
 import { computeMustDefend } from '../services/threatOut';
+import { moveWhy } from '../services/deliberation';
+import { describeMoveGeometry, toObserverSeat, assembleThreatAnswer } from '../services/groundedAnswer';
 import { MATERIAL_VALUE } from '../services/pieceValues';
 import { isPinnedPiece } from '../services/nextPlans';
 import { readPosition } from '../services/positionalRead';
@@ -184,7 +186,7 @@ export function answerAboutPiece(chess: Chess, sq: Square | null, student: Color
 
 /** The computed answer for a direct kind; null when the turn names nothing
  *  to answer about (the caller then serves today's route). */
-export function directAnswer(turn: ResolvedChatTurn, fen: string, memory: ConversationState, student: Color, ask?: string, history: readonly string[] = []): string | null {
+export function directAnswer(turn: ResolvedChatTurn, fen: string, memory: ConversationState, student: Color, ask?: string, history: readonly string[] = [], lastCoachLine: string | null = null): string | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   const sq = target(turn, memory, ask);
@@ -198,6 +200,8 @@ export function directAnswer(turn: ResolvedChatTurn, fen: string, memory: Conver
     case 'win-piece': return answerWin(chess, sq, student);
     case 'attack-piece': return answerAttack(chess, sq, student);
     case 'material-change': return answerMaterialChange(history, student);
+    case 'explain-last': return answerExplainLast(chess, lastCoachLine, student, history);
+    case 'threats': return assembleThreatAnswer(fen, ask ?? null, student === 'w' ? 'white' : 'black', turn.seat === 'me' ? 'me' : 'opponent')?.facts ?? null;
     default: return null;
   }
 }
@@ -372,4 +376,49 @@ export function answerMaterialChange(history: readonly string[], student: Color)
   if (won.length && !lost.length) return `No — you took their ${won.map((m) => say(m, '').trim()).join(' and ')}.`;
   const verdict = lostV === wonV ? 'an even trade' : lostV > wonV ? 'you came out behind' : 'you came out ahead';
   return `It was a trade: they took your ${lost.map((m) => say(m, '').trim()).join(' and ')}, and you took their ${won.map((m) => say(m, '').trim()).join(' and ')} — ${verdict}.`;
+}
+
+const LINE_SAN = /(?<![A-Za-z0-9])(?:…|\.\.\.)?((?:[KQRBN][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8]|[a-h][1-8])(?:=[QRBN])?[+#]?|O-O-O|O-O)(?![A-Za-z0-9])/g;
+
+/**
+ * WHAT THE COACH MEANT — "stop what?" after "h3 first, to stop …Bg4" (hand
+ * walk 2026-10-09). The moves the coach's last line named, each explained on
+ * the board: a move of yours by what it does, a move of theirs by what it
+ * would do to you. Null when the line names no move this board can explain.
+ */
+export function answerExplainLast(chess: Chess, line: string | null, student: Color, history: readonly string[] = []): string | null {
+  if (!line) return null;
+  const fen = chess.fen();
+  const mover: 'white' | 'black' = student === 'w' ? 'white' : 'black';
+  const them: 'white' | 'black' = mover === 'white' ? 'black' : 'white';
+  const flipped = (() => {
+    const p = fen.split(' ');
+    p[1] = p[1] === 'w' ? 'b' : 'w';
+    p[3] = '-';
+    try { const c = new Chess(p.join(' ')); return c.inCheck() ? null : c.fen(); } catch { return null; }
+  })();
+  const seen = new Set<string>();
+  const parts: string[] = [];
+  const last = history.length ? history[history.length - 1] : null;
+  for (const m of line.matchAll(LINE_SAN)) {
+    const san = m[1];
+    if (seen.has(san)) continue;
+    seen.add(san);
+    // Theirs only when it is THEIR move on this board (a square that is also
+    // a legal move of yours stays yours).
+    let mine: Move | null = null;
+    try { mine = new Chess(fen).move(san); } catch { mine = null; }
+    if (mine && chess.turn() === student) {
+      const why = moveWhy(fen, mine.san, student, last);
+      if (why) parts.push(`${mine.san} ${why}.`);
+      continue;
+    }
+    if (!flipped) continue;
+    let theirs: Move | null = null;
+    try { theirs = new Chess(flipped).move(san); } catch { theirs = null; }
+    if (!theirs) continue;
+    const geo = describeMoveGeometry(flipped, theirs.san, them);
+    if (geo) parts.push(`If they get …${theirs.san} in, it ${toObserverSeat(geo)}.`);
+  }
+  return parts.length ? parts.join(' ') : null;
 }
