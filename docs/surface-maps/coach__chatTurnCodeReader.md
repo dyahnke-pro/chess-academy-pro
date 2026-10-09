@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**277 lines · 6 exports · 5 importers · 1 tests · 43 audits**
+**286 lines · 6 exports · 6 importers · 2 tests · 43 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@
 
 - `src/coach/chatTurnCodeReader.test.ts`
 - `src/coach/chatTurnParser.ts`
+- `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 - `src/coach/questionIntents.ts`
 - `src/services/coachApi.ts`
 - `src/services/whyNotLegal.ts`
@@ -43,13 +44,15 @@
 ### `pointsAtThisBoard` (function) — 1 call site
 - `src/coach/questionIntents.ts:1652`
 
-### `readTurnInCode` (function) — 2 call sites
+### `readTurnInCode` (function) — 3 call sites
 - `src/coach/chatTurnCodeReader.test.ts:10`
 - `src/coach/chatTurnParser.ts:162`
+- `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:40`
 
 ## Tests
 
 - `src/coach/chatTurnCodeReader.test.ts`
+- `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 
 ## Audits that reach it
 

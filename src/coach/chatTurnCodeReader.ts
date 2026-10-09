@@ -246,10 +246,19 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
   // "What is my bishop on c4 aiming at?" / "what about their knight?" — a
   // question about ONE piece, not a move: what it does, whether it is safe.
   const lower = text.toLowerCase();
-  if (slots.pieces.length === 1 && slots.squares.length <= 1 && slots.sans.length === 0 && slots.action === 'none' && !slots.options
+  // THE PIECE IS THE OBJECT, NOT THE SUBJECT (live replay 2026-10-09: "how do
+  // I attack the king?" was read as "what about my king?"). When the student
+  // does something TO the piece — "I attack / trap / pin / mate the king" —
+  // the question is how to do it, never a question about that piece.
+  const pieceAt = lower.search(/\b(?:pawn|knight|night|horse|bishop|rook|queen|king)s?\b/);
+  const verbAt = lower.search(/\b(?:attack|trap|pin|fork|mate|checkmate|win|beat|trade|exchange|go after|target)\b/);
+  const actsOnPiece = verbAt >= 0 && pieceAt > verbAt && /\b(?:i|we|you)\b/.test(lower.slice(0, verbAt));
+  if (!actsOnPiece && slots.pieces.length === 1 && slots.squares.length <= 1 && slots.sans.length === 0 && slots.action === 'none' && !slots.options
     && /^\s*(?:what|how|is|are)\b/.test(lower)
     && /\b(?:doing|aiming|aim|for|about|safe|loose|good|bad|active|attack(?:ing)?|eye(?:ing)?|look(?:ing)? at)\b/.test(lower)) {
-    const seat = slots.seat;
+    // WHOSE PIECE is the possessive in front of it — never who is speaking
+    // ("how do I…" is the student talking, not the student's king).
+    const seat = /\b(?:their|his|her|opponent'?s)\b/.test(lower) ? 'them' as const : /\b(?:my|mine)\b/.test(lower) ? 'me' as const : null;
     return { kind: 'what-about-piece', referents: [{ type: 'piece', piece: slots.pieces[0], square: slots.squares[0] ?? null, seat }], seat, topic: null };
   }
 

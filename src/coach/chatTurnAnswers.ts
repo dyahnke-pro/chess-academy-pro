@@ -12,13 +12,24 @@ import { findLoosePieces } from '../services/loosePieces';
 import { findHangingBySee } from '../services/positionReadingService';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { andList } from '../utils/andList';
+import { isPinnedPiece } from '../services/nextPlans';
+import { readPosition } from '../services/positionalRead';
 
 const name = (t: string): string => PIECE_NAMES[t] ?? 'piece';
 
-function target(turn: ResolvedChatTurn, memory: ConversationState): Square | null {
+function target(turn: ResolvedChatTurn, memory: ConversationState, ask?: string): Square | null {
   for (const r of turn.referents) {
     if (r.type === 'piece') return r.square as Square;
     if (r.type === 'square') return r.square as Square;
+  }
+  // THE LAST PIECE CARRIES OVER ONLY WHEN THE SENTENCE POINTS BACK ("and is
+  // it safe?", "what about that one?"). "Are any of my pieces hanging?" asks
+  // about all of them — live replay 2026-10-09 answered it about the bishop
+  // the previous question had named.
+  if (ask !== undefined) {
+    const t = ask.toLowerCase();
+    if (/\b(?:any|all|anything|everything|pieces|none)\b/.test(t)) return null;
+    if (!/\b(?:it|its|that|this|him|her|one|same)\b/.test(t)) return null;
   }
   return (memory.lastPiece?.square ?? memory.lastSquare ?? null) as Square | null;
 }
@@ -117,15 +128,45 @@ export function answerAboutPiece(chess: Chess, sq: Square | null, student: Color
   try { moves = new Chess(parts.join(' ')).moves({ square: sq, verbose: true }).length; } catch { moves = 0; }
   const safety = answerIsLoose(chess, sq, student);
   const scope = moves === 0 ? 'It has no legal move.' : `It has ${moves} legal move${moves === 1 ? '' : 's'}.`;
-  return `${safety} ${scope}`;
+  // WHAT THE PIECE DOES (live replay 2026-10-09: "what is my bishop on c4
+  // aiming at?" got only "guarded, no legal move"): what it hits, what it
+  // guards, a pin, and what the coach's positional read says about it — the
+  // same computers the narration speaks from, read for this one square.
+  const own = p.color;
+  const enemy: Color = own === 'w' ? 'b' : 'w';
+  const hits: string[] = [];
+  const guards: string[] = [];
+  for (const row of chess.board()) for (const q of row) {
+    if (!q || q.square === sq) continue;
+    // A piece "attacks" a square when it is among that square's attackers —
+    // pins and turn aside, the line is what it eyes.
+    if (!chess.attackers(q.square, own).includes(sq)) continue;
+    if (q.color === enemy && q.type !== 'k') hits.push(`${name(q.type)} on ${q.square}`);
+    if (q.color === own && q.type !== 'k') guards.push(`${name(q.type)} on ${q.square}`);
+  }
+  const enemyKing = chess.board().flat().find((q) => q && q.type === 'k' && q.color === enemy);
+  const checksKingLine = enemyKing && chess.attackers(enemyKing.square, own).includes(sq);
+  const whose = own === student ? 'their' : 'your';
+  const mine = own === student ? 'your' : 'their';
+  const lines: string[] = [];
+  if (hits.length) lines.push(`It attacks ${whose} ${andList(hits)}.`);
+  if (checksKingLine) lines.push(`It gives check.`);
+  if (guards.length) lines.push(`It guards ${mine} ${andList(guards)}.`);
+  if (p.type !== 'k' && isPinnedPiece(chess, sq, own)) lines.push(`It is pinned to ${mine} king.`);
+  try {
+    for (const o of readPosition(chess.fen(), student === 'w' ? 'white' : 'black')) {
+      if ((o.squares ?? []).includes(sq)) lines.push(o.text);
+    }
+  } catch { /* the read is a bonus, never a blocker */ }
+  return [...lines, safety, scope].join(' ');
 }
 
 /** The computed answer for a direct kind; null when the turn names nothing
  *  to answer about (the caller then serves today's route). */
-export function directAnswer(turn: ResolvedChatTurn, fen: string, memory: ConversationState, student: Color): string | null {
+export function directAnswer(turn: ResolvedChatTurn, fen: string, memory: ConversationState, student: Color, ask?: string): string | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
-  const sq = target(turn, memory);
+  const sq = target(turn, memory, ask);
   switch (turn.kind) {
     case 'is-piece-loose': return answerIsLoose(chess, sq, student, turn.seat);
     case 'count-attackers': return answerCount(chess, sq, student, 'attackers');

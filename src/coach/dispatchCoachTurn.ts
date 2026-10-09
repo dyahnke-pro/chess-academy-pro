@@ -218,7 +218,7 @@ export async function dispatchCoachTurn(
     readKind = turn?.kind ?? (r?.turn ? 'unclear' : null);
     if (turn && CHAT_KINDS[turn.kind].answerer === 'direct' && input.liveState.fen) {
       const studentWB = input.liveState.studentColor === 'black' ? 'b' : input.liveState.studentColor === 'white' ? 'w' : (input.liveState.fen.split(' ')[1] === 'b' ? 'b' : 'w');
-      const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB);
+      const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask);
       if (text) {
         servedParsed = true;
         void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent: turn.kind, servedParsed })
