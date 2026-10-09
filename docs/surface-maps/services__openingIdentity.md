@@ -69,8 +69,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `definingMoveIdea` (function) — 4 call sites
 - `src/services/coachApi.ts:5667`
 - `src/services/openingIdea.test.ts:24`
-- `src/services/openingIdea.test.ts:27`
-- `src/services/openingIdea.test.ts:32`
+- `src/services/openingIdea.test.ts:26`
+- `src/services/openingIdea.test.ts:31`
 
 ## Tests
 
