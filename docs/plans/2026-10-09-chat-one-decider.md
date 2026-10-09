@@ -133,9 +133,53 @@ importance; chat: kind + referent + seat); ONE voice layer (decision 4).
 P3 becomes "every board kind answers from the one read through the question
 selector"; the regex lanes' own computers are retired as each kind moves.
 
-Decision 4 for David: should chat answers go through the same model phrasing
-as narration (one voice; ~1 s + a model call per answer), or stay raw
-computed text (fast, but a second voice)?
+✅ DECIDED (David 2026-10-09: "Yes. Non-negotiable that one."): chat answers go
+through the SAME model phrasing as narration — one voice. The first sentence
+shows at once from the computed text; the phrased version replaces it when it
+lands (so the wait is not felt). `DEGRADE=llm` still answers in the raw register.
+
+## Ask memory (David 2026-10-09: "We also need a memory for the asks")
+
+Today: `ConversationState` (`chatTurn.ts`) is in-memory per surface — last
+piece / square / move / seat / previous reading — wiped on reload, never
+persisted, never read by the student model. Ask→answer pairs go only to the
+audit log. So the app forgets every question the moment the page closes, and
+the asks never reach the loop ("the output of every session becomes the input
+of the next").
+
+Two layers, one record:
+1. **CONVERSATION MEMORY (within a game, survives reload).** The pending offer
+   as an executable ChatTurn ("can I start now?" runs it), the last subject
+   (move / piece / side) for follow-ups, the turn's LANGUAGE, the last list
+   ("the second one"). Persisted in Dexie keyed by surface + game. Fixes R7,
+   B8, R3.
+2. **THE ASK RECORD (across games — the loop).** Every student ask stored with
+   its reading (kind, concept/topic, referents, seat), the position (FEN, ply,
+   opening id, game id — the same `WeaknessProvenance` shape the spine rows
+   carry) and whether it was answered. Joined to the student model through
+   the EXISTING concept vocabulary (`tacticVocabulary` / fundamentals) — never
+   a new mapping. "You asked about pins in three games" is evidence the heat
+   map can read; a repeated ask on a concept RAISES its urgency.
+
+Pushback, so this does not backfire:
+- An ask is NOT a failure. "What's the best move?" every ply is a hint habit
+  (already tagged `ask_source`), not a weakness in best moves. The record
+  weighs an ask weaker than a mistake (as `puzzleMisses` are half severity),
+  and only an ask about a CONCEPT (pin, plan, castling rules) joins the heat
+  map; "best move" asks join the hint count.
+- RAISE-ONLY: an ask may never make the coach quieter — not asking is absent,
+  not proven (the heat-map rule).
+- Bounded (cap per student, oldest pruned) and never shipped off-device; it
+  is the student's own record like every other store.
+
+Build site: P4 (follow-ups) uses layer 1; the record is written at the one
+door (`dispatchCoachTurn`) where every student turn already passes, so a
+surface cannot forget to record; My Weaknesses shows the asked concepts
+beside the mistake concepts (capability parity).
+
+Decision 5 for David: show the asked concepts to the student on My
+Weaknesses ("you keep asking about…")? Recommended yes — it is the record
+made visible, and it tells them the coach listened.
 
 ## Decisions for David
 
