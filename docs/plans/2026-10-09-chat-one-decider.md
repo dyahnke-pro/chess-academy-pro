@@ -255,6 +255,45 @@ model toolbelt is deleted only when every row is green.
 2. Latency target: first words ≤ 2 s on a warm position?
 3. OK to start with P0 (logging + replay set)?
 
+## One coach on every screen — the all-screens walk (2026-10-09, David: "Make sure this works on all coach surfaces. Remember, 1 UNIFIED COACH!")
+
+`scripts/audit-chat-surfaces-prod.mjs` asks the same 9 questions on all 7
+question-box screens and reads both the page and the door's `chat-turn` row.
+
+**Found and fixed on the branch:**
+- THREE screens bypassed the door with a student's own words: My Mistakes'
+  question box, post-game review's Ask box, the search-bar mic. All go
+  through `dispatchCoachTurn`; gate `oneCoachDoor.gate.test.ts` fails any new
+  direct `coachService.ask` from UI code unless named as an app-written prompt.
+- Analyse and Explain showed only STREAMED text; a door answer does not
+  stream, so it was spoken and never shown (also their first explanation).
+  They also handed the door an app wrapper ("Student question: … Answer in
+  2-4 sentences") instead of the student's words, and showed raw `[BOARD:]`.
+- Review's space shortcut (play/pause) swallowed every typed space
+  ("howdoIcastle?") — `isTypingTarget` keeps page shortcuts out of text fields.
+- No board ("is anything hanging?" on the chat page): four producers, four
+  answers, one false ("nothing of yours is hanging"). `no-board` is now
+  answered at the door, once.
+- "How do I castle?" was eaten by the illegal-move refusal (board half only);
+  a rule question now gets the rule, then the board's reason.
+- Play's own parser read "teach me the Caro-Kann" as "play it against me".
+- Concept answers were reworded and lost the definition; book prose is spoken
+  as written (`preferRaw`).
+- The coach says "I" in 277 literals across 40 files (RULEBOOK V1/V2). Gate
+  `coachFirstPerson.gate.test.ts` freezes them, shrink-only; 3 cleaned.
+
+**Still open (in order):**
+- Sweep the 277 first-person literals (the baseline is the list).
+- Play's in-game commands (mute, restart, set board, play opening, narration
+  toggle) still parse before the door, so those turns skip the reading and
+  the language note — part of P7.
+- Proof lines (`answer.lines`) are walkable on My Mistakes only; Learn,
+  Play, review, Analyse and Explain drop them (P5).
+- "What's the best move?" is read by the model (~16-20 s cold) — the code
+  reader should take it (P6).
+- The opening-page chat phrases the same fact differently ("knight to f3
+  (Nf3)") under its scope prompt — one voice (P5).
+
 ## Acceptance
 
 Replay set: ≥ 90% answered / action done in the right language, 0 actions the
