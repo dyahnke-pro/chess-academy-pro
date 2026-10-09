@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7008 lines · 41 exports · 53 importers · 59 tests · 19 audits**
+**7080 lines · 41 exports · 53 importers · 60 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -116,13 +116,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `consumeCoachLines` (function) — 4 call sites
-- `src/coach/coachService.ts:1908`
+- `src/coach/coachService.ts:1873`
 - `src/services/coachApi.pieceOptions.test.ts:42`
 - `src/services/coachApi.pieceOptions.test.ts:44`
 - `src/services/coachApi.pieceOptions.test.ts:49`
 
 ### `consumeServedIntent` (function) — 1 call site
-- `src/coach/coachService.ts:1912`
+- `src/coach/coachService.ts:1877`
 
 ### `answerAttemptComparison` (function) — 4 call sites
 - `src/services/coachApi.attemptComparison.test.ts:30`
@@ -131,10 +131,10 @@
 - `src/services/coachApi.attemptComparison.test.ts:63`
 
 ### `consumeCoachActionOffer` (function) — 1 call site
-- `src/coach/coachService.ts:1902`
+- `src/coach/coachService.ts:1867`
 
 ### `consumeCoachKeySquares` (function) — 6 call sites
-- `src/coach/coachService.ts:1917`
+- `src/coach/coachService.ts:1882`
 - `src/services/coachApi.keySquares.test.ts:10`
 - `src/services/coachApi.keySquares.test.ts:12`
 - `src/services/coachApi.keySquares.test.ts:15`
@@ -237,10 +237,10 @@
 - `src/services/groundedMoveFeedback.test.ts:45`
 
 ### `translateToEnglish` (function) — 4 call sites
-- `src/coach/coachService.ts:576`
+- `src/coach/coachService.ts:577`
 - `src/components/Coach/CoachTeachPage.tsx:3599`
 - `src/services/coachSessionRouter.ts:117`
-- `src/services/coachSettingsAction.ts:242`
+- `src/services/coachSettingsAction.ts:261`
 
 ### `readChatTurnStructured` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -384,6 +384,7 @@
 
 - `src/coach/chatTurnParser.test.ts`
 - `src/coach/dispatchCoachTurn.test.ts`
+- `src/coach/groundingParity.test.ts`
 - `src/coach/providers/deepseek.test.ts`
 - `src/coach/questionIntents.coverage.test.ts`
 - `src/coach/questionMatrix.audit.test.ts`

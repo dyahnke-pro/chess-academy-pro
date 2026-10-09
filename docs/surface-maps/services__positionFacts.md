@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1759 lines · 15 exports · 23 importers · 23 tests · 3 audits**
+**1768 lines · 15 exports · 26 importers · 24 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,8 @@
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/hooks/useLiveCoach.ts`
 - `src/hooks/usePhaseNarration.ts`
+- `src/services/chatBoardRead.test.ts`
+- `src/services/chatBoardRead.ts`
 - `src/services/claimChecker.measure.test.ts`
 - `src/services/claimKeyParity.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
@@ -34,6 +36,7 @@
 - `src/services/positionFacts.pinPressure.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
+- `src/services/positionFactsCache.ts`
 - `src/services/positionReadComposer.ts`
 - `src/services/reviewFacetRank.ts`
 - `src/services/speedRunReads.scale.test.ts`
@@ -81,9 +84,10 @@
 ### `planChangedText` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `clauseText` (function) — 11 call sites
+### `clauseText` (function) — 12 call sites
 - `src/hooks/useLiveCoach.ts:295`
 - `src/hooks/usePhaseNarration.ts:662`
+- `src/services/chatBoardRead.ts:109`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:254`
 - `src/services/positionFacts.test.ts:255`
@@ -94,13 +98,14 @@
 - `src/services/positionReadComposer.ts:154`
 - `src/services/whyBestMove.ts:141`
 
-### `computePositionFacts` (function) — 86 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9815`
+### `computePositionFacts` (function) — 87 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9872`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:635`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
+- `src/services/chatBoardRead.ts:81`
 - `src/services/claimChecker.measure.test.ts:106`
 - `src/services/computerAccuracy.audit.test.ts:112`
 - `src/services/exchangeIdeas.test.ts:220`
@@ -183,10 +188,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8439`
+- `src/components/Coach/CoachTeachPage.tsx:8496`
 
 ### `convertKey` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10066`
+- `src/components/Coach/CoachTeachPage.tsx:10123`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 
 ### `afterLine` (function) — 5 call sites
@@ -197,7 +202,7 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8420`
+- `src/components/Coach/CoachTeachPage.tsx:8477`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.ts:9`
@@ -210,6 +215,7 @@
 
 - `src/hooks/useLiveCoach.needWire.test.tsx`
 - `src/services/bluffDetector.test.ts`
+- `src/services/chatBoardRead.test.ts`
 - `src/services/claimChecker.measure.test.ts`
 - `src/services/claimKeyParity.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**122 lines · 5 exports · 2 importers · 1 tests · 0 audits**
+**138 lines · 6 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,10 +24,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/chatTurnAnswers.test.ts:25`
 - `src/coach/chatTurnAnswers.test.ts:26`
 
-### `answerCount` (function) — 3 call sites
+### `answerCount` (function) — 4 call sites
 - `src/coach/chatTurnAnswers.test.ts:30`
 - `src/coach/chatTurnAnswers.test.ts:31`
 - `src/coach/chatTurnAnswers.test.ts:32`
+- `src/coach/chatTurnAnswers.test.ts:56`
+
+### `answerControl` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `answerWhyTarget` (function) — 2 call sites
 - `src/coach/chatTurnAnswers.test.ts:36`
@@ -40,7 +44,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/chatTurnAnswers.test.ts:46`
 - `src/coach/chatTurnAnswers.test.ts:47`
 - `src/coach/chatTurnAnswers.test.ts:48`
-- `src/coach/dispatchCoachTurn.ts:165`
+- `src/coach/dispatchCoachTurn.ts:220`
 
 ## Tests
 

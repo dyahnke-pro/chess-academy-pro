@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**113 lines · 3 exports · 15 importers · 3 tests · 1 audits**
+**113 lines · 3 exports · 16 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,6 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/services/boardUrgency.ts`
 - `src/services/forkTrick.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/liveTacticsContext.ts`
@@ -33,9 +34,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `MustDefend` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `flipSideToMove` (function) — 8 call sites
+### `flipSideToMove` (function) — 10 call sites
 - `scripts/audit-lib/narrationAuditor.ts:73`
 - `scripts/audit-lib/narrationAuditor.ts:189`
+- `src/services/boardUrgency.ts:37`
+- `src/services/boardUrgency.ts:98`
 - `src/services/forkTrick.ts:138`
 - `src/services/liveTacticsContext.ts:781`
 - `src/services/threatOut.test.ts:6`
@@ -43,8 +46,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatProof.ts:25`
 - `src/services/threatProof.ts:72`
 
-### `computeMustDefend` (function) — 27 call sites
-- `src/services/groundedAnswer.ts:621`
+### `computeMustDefend` (function) — 29 call sites
+- `src/services/boardUrgency.ts:51`
+- `src/services/boardUrgency.ts:53`
+- `src/services/groundedAnswer.ts:641`
 - `src/services/liveTacticsContext.ts:783`
 - `src/services/methodSignals.ts:38`
 - `src/services/methodSignals.ts:47`
@@ -56,7 +61,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/opponentMoveReads.ts:266`
 - `src/services/opponentMoveReads.ts:267`
 - `src/services/playedMoveGrade.ts:125`
-- `src/services/positionFacts.ts:489`
+- `src/services/positionFacts.ts:494`
 - `src/services/replayFence.modern1690.test.ts:160`
 - `src/services/replayFence.modern1690.test.ts:165`
 - `src/services/reviewHinge.ts:36`
