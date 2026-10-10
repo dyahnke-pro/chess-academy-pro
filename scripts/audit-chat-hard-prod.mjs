@@ -18,7 +18,7 @@
  *   node scripts/audit-lib/hard-positions.mjs > audit-reports/.hard-positions.json
  *   AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY \
  *   AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app \
- *   node scripts/audit-chat-hard-prod.mjs [--only=positions,setup,puzzles]
+ *   node scripts/audit-chat-hard-prod.mjs [--only=positions,setup,puzzles,master,calculation]
  */
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
@@ -175,7 +175,14 @@ const TACTIC_QS = [
 async function tacticsScreen(name, route, start, reveal, box) {
   console.log(`\n══ ${name} ══`);
   await get(`/goto?path=${encodeURIComponent(route)}&ms=6000`);
-  await get(`/click?id=${start}&ms=4000`);
+  // Start taps in order: a test id, or '^prefix' for the first element whose
+  // test id starts with it (calculation: pick a skill, then Start drill). A
+  // tap whose target is absent is skipped (master level has no picker).
+  for (const s of [].concat(start)) {
+    if (s.startsWith('^')) await js(`document.querySelector('[data-testid^="${s.slice(1)}"]')?.click(); return true`);
+    else await get(`/click?id=${s}&ms=4000`);
+    await sleep(1500);
+  }
   for (let i = 0; i < 60 && !(await js(`return !!document.querySelector('[data-testid=${reveal}]')`)); i += 1) await sleep(1000);
   const fen = await js('return document.querySelector("[data-fen]")?.getAttribute("data-fen") ?? null');
   await get(`/click?id=${reveal}&ms=2000`);
@@ -197,6 +204,8 @@ async function tacticsScreen(name, route, start, reveal, box) {
 }
 if (want('setup')) await tacticsScreen('setup', '/tactics/setup', 'difficulty-3', 'setup-show-solution', { input: 'setup-chat-input', reply: 'setup-chat-reply' });
 if (want('puzzles')) await tacticsScreen('puzzles', '/tactics/adaptive', 'difficulty-hard', 'show-solution-button', { input: 'puzzle-ask-input', reply: 'puzzle-ask-reply' });
+if (want('master')) await tacticsScreen('master', '/tactics/master', ['difficulty-hard'], 'show-solution-button', { input: 'puzzle-ask-input', reply: 'puzzle-ask-reply' });
+if (want('calculation')) await tacticsScreen('calculation', '/tactics/calculation', ['^calculation-skill-', 'calculation-start-drill'], 'calculation-skip', { input: 'calc-ask-input', reply: 'calc-ask-reply' });
 
 const pass = results.filter((r) => !r.fails?.length).length;
 console.log(`\nHARD ${pass}/${results.length} clean`);

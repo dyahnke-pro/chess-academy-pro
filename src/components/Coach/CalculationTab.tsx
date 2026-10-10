@@ -21,6 +21,8 @@
  * is computed with chess.js, never assumed from a stored tag). The UI
  * verifies user input via chess.js. No runtime LLM authorship.
  */
+import { useLineWalk } from '../../hooks/useLineWalk';
+import { BoardQuestionBox } from '../Board/BoardQuestionBox';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowLeft,
@@ -312,6 +314,12 @@ function AdaptivePuzzleRunner({
 }: AdaptivePuzzleRunnerProps): JSX.Element {
   const studentSide: 'white' | 'black' =
     drill.fen.split(' ')[1] === 'w' ? 'white' : 'black';
+  // ONE COACH ON EVERY TACTICS BOARD (census 2026-10-10): the setup trainer,
+  // the puzzles and My Mistakes take a question after the solve; calculation
+  // was the one that could not. Same box, same line walk.
+  const lineWalk = useLineWalk(studentSide);
+  const clearWalk = lineWalk.clear;
+  useEffect(() => { clearWalk(); }, [drill.fen, clearWalk]);
   // Game-derived puzzles are tagged with this title by
   // adaptivePuzzleToLessonPosition; surface the origin so the student
   // knows they're calculating their own missed shot.
@@ -462,7 +470,15 @@ function AdaptivePuzzleRunner({
     </div>
   );
 
-  const board = (
+  const board = lineWalk.walkFen ? (
+    <ConsistentChessboard
+      fen={lineWalk.walkFen}
+      arrows={lineWalk.walkArrows}
+      interactive={false}
+      boardOrientation={studentSide}
+      showLastMoveHighlight
+    />
+  ) : (
     <ConsistentChessboard
       fen={playout.fen}
       boardOrientation={studentSide}
@@ -519,6 +535,16 @@ function AdaptivePuzzleRunner({
           </div>
         )}
         {!playout.isComplete && <WrongTryNote text={playout.wrongTryText} speak={false} />}
+        {playout.isComplete && (
+          <BoardQuestionBox
+            fen={drill.fen}
+            studentColor={studentSide}
+            route="/tactics/calculation"
+            onWalkLine={lineWalk.walk}
+            testIdPrefix="calc-ask"
+            placeholder="Why does it work? What if they play …?"
+          />
+        )}
         {!playout.isComplete && (
           <div className="flex items-center gap-3">
             <p className="text-[11px] text-cyan-400">
