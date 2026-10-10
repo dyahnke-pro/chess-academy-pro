@@ -631,26 +631,6 @@ export function callInaccuracyDetailed(args: {
       ? whyBetter(args.fenBefore, args.bestLineUci, args.moverColor, args.playedSan, args.priorMove)
       : null;
   const cost = Math.round(Math.max(0, args.cpLoss));
-  // "GIVES AWAY REAL MATERIAL" IS A LEDGER FACT (walk oct3g, 29…Ke7: a blunder
-  // that let a win slip and lost nothing). The engine's reply line after the
-  // move must actually net the mover a loss; otherwise the cost is advantage.
-  const givesMaterial = (() => {
-    try {
-      const r = new Chess(args.fenBefore);
-      const sans: string[] = [];
-      const played = r.move(args.playedSan);
-      if (!played) return false;
-      sans.push(played.san);
-      for (const u of args.replyLineUci) {
-        let mv;
-        try { mv = r.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; }
-        if (!mv) break;
-        sans.push(mv.san);
-      }
-      const proof = proofCut(args.fenBefore, sans, args.moverColor === 'white' ? 'w' : 'b', args.priorMove);
-      return !!proof && !proof.mate && !!proof.ledger && proof.ledger.netPawns <= -2;
-    } catch { return false; }
-  })();
 
   // THE COACH OWNS ITS OWN MISTAKES, IN THE FIRST PERSON, AND HANDS THE STUDENT
   // THE PUNISHMENT. Naming the move here is correct and is NOT the honesty
@@ -683,33 +663,35 @@ export function callInaccuracyDetailed(args: {
   // 2026-09-30) and the coach's own reply are both said of THEM — the
   // first-person "That was a blunder from me" branch is gone.
   if (args.side === 'coach') {
-    const head = quality === 'blunder'
-      ? ((args.allowedMate ?? null) !== null
-        ? `Their ${args.playedSan} is a blunder — it walks into mate.`
-        : givesMaterial
-          ? `Their ${args.playedSan} is a blunder — it gives away real material.`
-          : `Their ${args.playedSan} is a blunder — it throws away ${costWords(cost)} of advantage.`)
-      : quality === 'mistake'
-        ? `Their ${args.playedSan} is a mistake — not what the position wanted.`
-        : `Their ${args.playedSan} is a touch inaccurate.`;
-    // The plan reason is read in the MOVER's voice ("their king" = the
-    // student's); said to the student it is "your king" (walk 2026-10-01).
-    // …and a plan the move only SERVES is the idea, not the move's own work —
-    // the same `own` rule the student half speaks (clean-pass walk 3,
-    // 2026-10-04, G3 31.Nc4: "a4 was their move, to swing pieces toward your
-    // king" — a pawn push swings nothing).
-    const should = better ? (better.own
-      ? ` ${args.bestSan} was their move, to ${toStudentSeat(better.why)}.`
-      : ` ${args.bestSan} was their move — the idea is to ${toStudentSeat(better.why)}.`) : '';
+    // THEIR MISTAKE GETS THE SAME DETAIL AS YOURS (David 2026-10-10: "The
+    // opponent's moves MUST be the same level of detail as the users"): the
+    // one error computer, read in their voice and said from the student's
+    // seat — what their move lets you do, with the line on the board. Their
+    // better move follows the surface's rule, like yours.
+    const ew = errorWhy({
+      fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor,
+      bestSan: args.bestSan, bestLineUci: args.bestLineUci ?? null, replyLineUci: args.replyLineUci,
+      missedMate: args.missedMate ?? null, allowedMate: args.allowedMate ?? null, bestMate: args.bestMate ?? null,
+      quality: quality as SpokenGradeLabel, priorMove: args.priorMove,
+      replySan: args.replySan, replyKeptWin: args.replyKeptWin ?? null,
+      namesBetterMove: args.namesBetterMove,
+    });
+    const why = (args.allowedMate ?? null) !== null
+      ? 'it walks into mate'
+      : ew.consequence ? seatTheirErrorForStudent(consequenceIn(ew.consequence, 'present')) : null;
+    const costSaid = !why && costFitsGrade(quality as SpokenGradeLabel, cost) ? ` — it throws away ${costWords(cost)} of advantage` : '';
+    const head = `Their ${args.playedSan} is ${GRADE_WORD[quality as SpokenGradeLabel]}${why ? ` — ${why}` : costSaid}.${seatTheirErrorForStudent(ew.tail)}`;
+    const theirBetter = ew.better ? ` ${seatTheirErrorForStudent(ew.better).replace(/ was the move\b/, ' was their move')}` : '';
     const stillHanging = missedCaptureStillOn(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci ?? null, args.priorMove);
-    const punish = quality === 'inaccuracy'
-      ? ''
-      : stillHanging
-        ? ` Your ${stillHanging.piece} on ${stillHanging.square} is still hanging, though — see to it.`
-        : theirSlipOffer(args.moverEvalAfterCp);
-    const offers = quality !== 'inaccuracy' && !stillHanging ? { offersStudent: true as const } : {};
-    return { call: { quality, side: 'coach', cost, said: `${head}${should}${punish}`, square: better?.square ?? '', ...offers } };
+    // With no why to say, the slip is still the student's chance — pointed at,
+    // not named.
+    const punish = stillHanging
+      ? ` Your ${stillHanging.piece} on ${stillHanging.square} is still hanging, though — see to it.`
+      : !why && quality !== 'inaccuracy' ? theirSlipOffer(args.moverEvalAfterCp) : '';
+    const offers = !why && quality !== 'inaccuracy' && !stillHanging ? { offersStudent: true as const } : {};
+    return { call: { quality, side: 'coach', cost, said: `${head}${theirBetter}${punish}`, square: ew.namesBetter ? better?.square ?? '' : '', ...(ew.proof ? { proof: ew.proof } : {}), ...(ew.line ? { line: ew.line } : {}), ...offers } };
   }
+
   // THE STUDENT'S OWN MOVE, in the retroactive register the backward look uses:
   // past tense, second person, no scolding. `whatItAllowed` already says what
   // the move LET THEM DO; this is the half that was missing — what should have
@@ -1335,6 +1317,18 @@ function discoveredBy(fen: string, uci: string): string | null {
 }
 
 /** A clause read in the OPPONENT's voice, said to the student. */
+/** THEIR ERROR, SAID TO THE STUDENT: `errorWhy` speaks in the mover's voice
+ *  ("it let them take your rook"); the opponent's mover is the student's
+ *  opponent, so every pronoun flips — "it lets you take their rook", "you come
+ *  out a piece up", "and you missed it". `toStudentSeat` flips possessives
+ *  only, which left "it let them take their rook" (2026-10-10). */
+export function seatTheirErrorForStudent(text: string): string {
+  return text
+    .replace(/\byour\b/g, '@@y@@').replace(/\btheir\b/g, 'your').replace(/@@y@@/g, 'their')
+    .replace(/\bYour\b/g, '@@Y@@').replace(/\bTheir\b/g, 'Your').replace(/@@Y@@/g, 'Their')
+    .replace(/\bthem\b/g, 'you').replace(/\bthey\b/g, 'you').replace(/\bThey\b/g, 'You');
+}
+
 export function toStudentSeat(clause: string): string {
   // Every possessive flips: in the mover's voice "their" is the student's and
   // "your" is the mover's own. A placeholder keeps the swap from undoing itself.

@@ -79,7 +79,7 @@ describe('ply 83 — the coach walking into mate did not "give away material"', 
   it('the coach\'s blunder names mate when it allowed one', () => {
     const v = callInaccuracyDetailed({ namesBetterMove: true,
       fenBefore: fenAt(83), playedSan: 'Kf8', bestSan: 'Kg6', cpLoss: 0, allowedMate: 7,
-      side: 'coach', moverColor: 'black', replySan: null,
+      side: 'coach', moverColor: 'black', replySan: null, replyLineUci: [], priorMove: null,
     } as never);
     expect(v.call?.said).toMatch(/walks into mate/);
   });

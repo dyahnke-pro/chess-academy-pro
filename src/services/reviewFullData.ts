@@ -65,7 +65,7 @@ import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBish
 import { deriveNextPlanFacts } from './nextPlans';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
-import { errorWhy, priorMoveLeadingTo, toStudentSeat } from './inaccuracyCall';
+import { errorWhy, priorMoveLeadingTo, seatTheirErrorForStudent, toStudentSeat } from './inaccuracyCall';
 import { andList } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
 import { imageryFor } from './factImagery';
@@ -562,7 +562,12 @@ export function computeMoveFacets(
     };
     const reason = seat(ew?.reason ?? null);
     if (outVerdictReason) outVerdictReason.text = reason;
-    const consequence = seat(ew?.consequence ?? null);
+    // Their error said to the student flips every pronoun ("it let you take
+    // their rook"), not only the possessives `seat` flips.
+    const seatPieces = (t: string): string => (ctx.studentColorWB ? seatPieceReferences(t, fenBefore, ctx.studentColorWB) : t);
+    const consequence = ew?.consequence
+      ? (opponentMoved ? seatPieces(seatTheirErrorForStudent(ew.consequence)) : seat(ew.consequence))
+      : null;
     // THEIR SLIP IS THE STUDENT'S CHANCE (clean-win review 2026-10-02): with
     // nothing it allowed and no reason, the teaching is the student's answer
     // and its point — unless the student then MISSED it (U8).

@@ -11,7 +11,7 @@
 // "inaccuracy" in review.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { allowedReply, betterMoveReason, callInaccuracy, gambitFile } from './inaccuracyCall';
+import { allowedReply, betterMoveReason, callInaccuracy, gambitFile, seatTheirErrorForStudent } from './inaccuracyCall';
 import { classifyMove } from './moveRating';
 import { MISTAKE_CP } from './engineConstants';
 
@@ -593,5 +593,21 @@ describe('Learn free play never names the better move unasked (David 2026-10-10)
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE, cpLoss: 150, replyLineUci: ['d7d5', 'c4b3'] });
     expect(call?.said).toBe('a3 was a mistake — it let them play …d5, which attacks the bishop on c4.');
     expect(call?.proof?.line?.sans).toEqual(['d5', 'Bb3']);
+  });
+});
+
+describe('their mistake gets the same detail as yours (David 2026-10-10)', () => {
+  it('says what their move lets you do, with the line on the board, and keeps their better move unnamed in Learn', () => {
+    const call = callInaccuracy({ namesBetterMove: false, priorMove: null, replyLineUci: ['d7d5', 'c4b3'], replySan: null,
+      fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
+      cpLoss: 250, side: 'coach', moverColor: 'white',
+    });
+    expect(call?.said).toBe('Their a3 is a mistake — it lets you play …d5, which attacks the bishop on c4.');
+    expect(call?.said).not.toContain('Bg5');
+    expect(call?.proof?.line?.sans).toEqual(['d5', 'Bb3']);
+  });
+  it('every pronoun flips when their error is said to you', () => {
+    expect(seatTheirErrorForStudent('it let them take your rook on e5, and they missed it. The line: Nxe5 — they come out a piece up.'))
+      .toBe('it let you take their rook on e5, and you missed it. The line: Nxe5 — you come out a piece up.');
   });
 });

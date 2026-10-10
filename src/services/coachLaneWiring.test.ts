@@ -196,10 +196,14 @@ describe('a question lane can REACH the branch that answers it', () => {
     // The hint lane (2026-08-13) shares the same on-demand build — a hint is
     // a best-move ask that withholds the destination, so it needs the same
     // engine grounding on the six surfaces that never thread one.
-    expect(SERVICE).toMatch(/\(bestMoveQuestionEngage \|\| hintRequestEngage\) && !input\.liveState\.engineBestMoveUci/);
-    // And the two surfaces that DO thread one must not pay for a second search.
-    expect(SERVICE, 'the guard that keeps the already-grounded surfaces free')
-      .toMatch(/!input\.liveState\.engineBestMoveUci/);
+    //
+    // ONE READ PER POSITION (live walk 2026-10-08): every move question now
+    // reads the one built plan, threaded or not — `buildEnginePlan` takes the
+    // surface's cached read when it is deep enough, so the grounded surfaces
+    // still pay for no second search. The old guard that skipped the build
+    // when a move was threaded is gone on purpose: it let two lanes name two
+    // different moves on one board.
+    expect(SERVICE).toMatch(/\|\| bestMoveQuestionEngage \|\| hintRequestEngage/);
     // The handoff has to actually fall back to the plan's move, or the build
     // above is wasted work.
     //
@@ -209,7 +213,7 @@ describe('a question lane can REACH the branch that answers it', () => {
     // field is undefined, and the best-move dispatch got nothing while the plan
     // lane got the fresh search. See the dedicated case further down for the
     // prod measurement.
-    expect(SERVICE).toMatch(/engineBestMoveUci: input\.liveState\.engineBestMoveUci \?\? resolvedEnginePlan\?\.bestMoveUci/);
+    expect(SERVICE).toMatch(/engineBestMoveUci: resolvedEnginePlan\?\.bestMoveUci \?\? input\.liveState\.engineBestMoveUci/);
   });
 
   it('the piece a question narrowed to reaches the answer', () => {
@@ -429,7 +433,9 @@ describe('the couplings that make the wiring safe', () => {
     // seconds earlier. The two working lanes read the built plan; the broken
     // one read a field nothing had filled.
     const SERVICE = code(read('src/coach/coachService.ts'));
-    expect(SERVICE).toMatch(/engineBestMoveUci: input\.liveState\.engineBestMoveUci \?\? resolvedEnginePlan\?\.bestMoveUci/);
+    // The built plan leads (one read per position, 2026-10-08); the
+    // surface's threaded move is only the fallback.
+    expect(SERVICE).toMatch(/engineBestMoveUci: resolvedEnginePlan\?\.bestMoveUci \?\? input\.liveState\.engineBestMoveUci/);
     expect(SERVICE, 'the eval is back on the threaded plan')
       .toMatch(/engineEvalCp: resolvedEnginePlan\?\.evalCp/);
     expect(SERVICE, 'the best move is read from a plan the build never fills')
@@ -441,8 +447,10 @@ describe('the couplings that make the wiring safe', () => {
     // and the concept lane dispatches first — so David asked about the
     // position and was taught what a fork is. The plan lane has an answer
     // computed from the engine's line at this position; it wins.
-    const SERVICE = code(read('src/coach/coachService.ts'));
-    expect(SERVICE).toMatch(/conceptQuestion: conceptQuestionEngage && !planQuestionEngage/);
+    // The precedence is decided once, where every surface reads the question
+    // (`questionIntents`, the shared read), not per dispatch.
+    const INTENTS = code(read('src/coach/questionIntents.ts'));
+    expect(INTENTS).toMatch(/conceptQuestion: isConceptQuestion\(a\) && [^\n]*!\(\(isPlanQuestion\(a\)/);
   });
 
   it('a finished game keeps its board and OFFERS the review', () => {

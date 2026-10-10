@@ -434,7 +434,7 @@
 - `src/coach/handWalk1009.test.ts:173`
 - `src/coach/handWalk1009.test.ts:175`
 - `src/services/coachApi.ts:5711`
-- `src/services/inaccuracyCall.ts:823`
+- `src/services/inaccuracyCall.ts:825`
 
 ### `describeMoveMerit` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:1192`
@@ -1158,7 +1158,7 @@
 - `src/services/moveInsight.ts:590`
 - `src/services/moveInsight.ts:754`
 - `src/services/opponentMovePurpose.ts:64`
-- `src/services/reviewFullData.ts:834`
+- `src/services/reviewFullData.ts:839`
 - `src/services/reviewMoveBriefing.ts:238`
 - `src/services/reviewNarrationFidelity.test.ts:218`
 - `src/services/reviewNarrationFidelity.test.ts:227`
@@ -1219,7 +1219,7 @@
 - `src/services/coachApi.ts:2514`
 - `src/services/coachApi.ts:6163`
 
-### `seatPieceReferences` (re-export) — 33 call sites
+### `seatPieceReferences` (re-export) — 34 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8484`
 - `src/services/coachFeatureService.ts:4238`
 - `src/services/coachFeatureService.ts:4289`
@@ -1236,7 +1236,8 @@
 - `src/services/reviewFullData.ts:337`
 - `src/services/reviewFullData.ts:460`
 - `src/services/reviewFullData.ts:561`
-- `src/services/reviewFullData.ts:721`
+- `src/services/reviewFullData.ts:567`
+- `src/services/reviewFullData.ts:726`
 - `src/services/reviewNarrationFidelity.test.ts:85`
 - `src/services/reviewNarrationFidelity.test.ts:95`
 - `src/services/reviewNarrationFidelity.test.ts:101`
