@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**520 lines · 16 exports · 37 importers · 9 tests · 0 audits**
+**502 lines · 14 exports · 37 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -163,23 +163,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternativeCore.ts:187`
 - `src/services/threatProof.ts:52`
 
-### `proofAgainstMover` (function) — 4 call sites
+### `moverLossProof` (function) — 6 call sites
 - `src/services/criticalMoment.ts:239`
-- `src/services/exchangeLedger.horizon.test.ts:16`
-- `src/services/exchangeLedger.horizon.test.ts:21`
-- `src/services/hardWalk.mates.test.ts:45`
-
-### `moverLossProof` (function) — 3 call sites
 - `src/services/deliberation.ts:224`
 - `src/services/deliberation.ts:250`
+- `src/services/exchangeLedger.horizon.test.ts:16`
+- `src/services/exchangeLedger.horizon.test.ts:21`
 - `src/services/hardWalk.mates.test.ts:42`
 
-### `proofForMover` (function) — 2 call sites
-- `src/services/exchangeLedger.horizon.test.ts:31`
-- `src/services/exchangeLedger.horizon.test.ts:38`
-
-### `moverLineProof` (function) — 3 call sites
+### `moverLineProof` (function) — 5 call sites
 - `src/services/deliberation.ts:273`
+- `src/services/exchangeLedger.horizon.test.ts:30`
+- `src/services/exchangeLedger.horizon.test.ts:36`
 - `src/services/groundedAnswer.ts:1939`
 - `src/services/reviewFullData.ts:727`
 

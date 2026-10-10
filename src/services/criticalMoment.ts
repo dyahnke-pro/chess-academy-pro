@@ -25,7 +25,7 @@
 // wraps them.
 import { Chess } from 'chess.js';
 import { criticalityThresholds } from './criticalityScan';
-import { proofAgainstMover } from './exchangeLedger';
+import { moverLossProof } from './exchangeLedger';
 import { MATE_HORIZON_CP } from './engineConstants';
 
 /** A mate is scored flat, for BOTH sides, on purpose: three moves that all mate
@@ -236,8 +236,8 @@ export function readCriticalMoment(input: {
         const m = c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci[4] : undefined });
         if (m) (i < within ? holdingSans : discardedSans).push(m.san);
         if (m && i >= within) {
-          const proof = proofAgainstMover(input.fen, lines[i].moves ?? [], input.moverColor);
-          if (proof) discardedProofs.push({ san: m.san, text: proof });
+          const proof = moverLossProof(input.fen, lines[i].moves ?? [], input.moverColor);
+          if (proof) discardedProofs.push({ san: m.san, text: proof.short });
         }
       } catch { /* an unplayable uci names no move */ }
     }

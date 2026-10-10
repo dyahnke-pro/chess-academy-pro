@@ -344,7 +344,7 @@ export function depthClauses(args: {
     if (ny) out.push({ kind: 'not-yet', text: ny.text });
     const sans = pvSans(args.fen, [...best.pv], 6);
     // Material and mate are THE ledger's to say (`deliberation`'s played-out
-    // line, `proofForMover`): the line fact speaks only the outcomes the ledger
+    // line, `moverLineProof`): the line fact speaks only the outcomes the ledger
     // has no words for — a file opening, the king's cover, a pawn ending, an
     // investment, a pawn queening.
     const outcome = lineAchieves(args.fen, sans.slice(0, 4), args.studentColor);

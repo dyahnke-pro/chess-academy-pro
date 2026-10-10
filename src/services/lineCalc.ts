@@ -50,7 +50,7 @@ export function lineWins(
   const proof = proofCut(fen, plies.map((p) => p.san), side, prior);
   if (!proof || proof.mate || !proof.ledger || proof.ledger.netPawns < 1) return null;
   // A SPOKEN proof has the listener's horizon — the same check every heard
-  // proof makes (exchangeLedger.proofForMover): a deep engine line's tail is
+  // proof makes (exchangeLedger.moverLineProof): a deep engine line's tail is
   // never a reason anyone can follow.
   if (proof.plies > MAX_PV_DEPTH_PLIES) return null;
   // Two plies by default (a line to SHOW); a refutation may settle on the

@@ -4,7 +4,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { buildDeliberation, namedMoveAnswer, spokenLines } from './deliberation';
 import { assembleEngineReasoning, assembleKingSafetyAnswer, assembleThreatAnswer, assembleMoveEvalAnswer, mateThreatsAgainst } from './groundedAnswer';
-import { moverLossProof, proofAgainstMover } from './exchangeLedger';
+import { moverLossProof } from './exchangeLedger';
 
 // 0GomC: White mates in 4 — Nh6+ Kf8 Qf6+ Ke8 Bb5+ c6 Bxc6#. Black threatens …Qxg2#.
 const GOMC = '6k1/p1p4p/1p2n1p1/3pQ3/3P1nN1/2PB2qP/PP4P1/6K1 w - - 18 33';
@@ -42,7 +42,6 @@ describe('hard walk — mates', () => {
     const p = moverLossProof(GOMC, toUci(GOMC, ['Qxc7', 'Qxg2#']), 'w')!;
     expect(p.short).toBe("Qxc7 and Qxg2# — and it's mate");
     expect(p.line?.sans).toEqual(['Qxc7', 'Qxg2#']);
-    expect(proofAgainstMover(GOMC, toUci(GOMC, ['Qxc7', 'Qxg2#']), 'w')).toBe(p.short);
   });
 
   it('"is my king safe?" names a mate one move away', () => {

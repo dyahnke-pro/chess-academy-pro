@@ -452,14 +452,9 @@ export function describeProofResult(ledger: ExchangeLedger): string {
  *  side's seat ("Qh4 and Nxh4 — they win a queen"). Null when the line
  *  proves nothing against it (then no reason may be invented). One helper for
  *  every "why that move fails" surface (WO-TEACH-02 S5): the critical-moment
- *  reveal and the live deliberation. */
-export function proofAgainstMover(fen: string, uci: readonly string[], moverWB: 'w' | 'b'): string | null {
-  return moverLossProof(fen, uci, moverWB)?.short ?? null;
-}
-
-/** `proofAgainstMover` with the moves it names kept beside the words, so a
- *  surface that SAYS the line can also play it on the board (WO-CHAT-01:
- *  "show me" found nothing because the moves were thrown away here). */
+ *  reveal and the live deliberation. The moves are kept beside the words, so a
+ *  surface that SAYS the line can also play it (WO-CHAT-01: "show me" found
+ *  nothing when only the words were kept). */
 export function moverLossProof(fen: string, uci: readonly string[], moverWB: 'w' | 'b'): Proof | null {
   const sans: string[] = [];
   try {
@@ -488,7 +483,7 @@ export function moverLossProof(fen: string, uci: readonly string[], moverWB: 'w'
  *  Z"): the line cut to where it PROVES FOR the side that starts it — that side
  *  mates, or settles a material gain — said from the student's seat. Null when
  *  the line proves nothing, or runs past the horizon a listener can follow. */
-export function proofForMover(fen: string, uci: readonly string[], moverWB: 'w' | 'b'): { text: string; plies: number } | null {
+export function moverLineProof(fen: string, uci: readonly string[], moverWB: 'w' | 'b'): Proof | null {
   const sans: string[] = [];
   try {
     const c = new Chess(fen);
@@ -497,23 +492,10 @@ export function proofForMover(fen: string, uci: readonly string[], moverWB: 'w' 
   if (sans.length === 0) return null;
   const proof = proofCut(fen, sans, moverWB);
   if (!proof || proof.plies > MAX_PV_DEPTH_PLIES) return null;
-  const moves = andList(proof.sans.slice(0, proof.plies));
-  if (proof.mate) return proof.plies % 2 === 1 ? { text: `${moves} — and it's mate`, plies: proof.plies } : null;
+  const line = { fen, sans: proof.sans.slice(0, proof.plies) };
+  const moves = andList(line.sans);
+  const said = (text: string): Proof => ({ kind: 'line', exact: false, short: text, full: text, line });
+  if (proof.mate) return proof.plies % 2 === 1 ? said(`${moves} — and it's mate`) : null;
   if (!proof.ledger || proof.ledger.netPawns <= 0) return null;
-  return { text: `${moves} — ${describeProofResult(proof.ledger)}`, plies: proof.plies };
-}
-
-/** `proofForMover` as the one Proof shape (one-coach P3): the engine line from
- *  `fen`, cut where it PROVES a gain or mate for the side that starts it.
- *  An engine line, so `exact: false` (said short); null when it proves nothing
- *  — then the claim it would back stays unproven, never a fake proof. */
-export function moverLineProof(fen: string, uci: readonly string[], moverWB: 'w' | 'b'): Proof | null {
-  const r = proofForMover(fen, uci, moverWB);
-  if (!r) return null;
-  const sans: string[] = [];
-  try {
-    const c = new Chess(fen);
-    for (const u of uci.slice(0, r.plies)) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined }).san);
-  } catch { return null; }
-  return { kind: 'line', exact: false, short: r.text, full: r.text, line: { fen, sans } };
+  return said(`${moves} — ${describeProofResult(proof.ledger)}`);
 }
