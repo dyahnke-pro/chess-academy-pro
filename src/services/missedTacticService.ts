@@ -7,6 +7,7 @@ import { conceptForLine } from './conceptEngine';
 import { classifyPosition } from './tacticClassifier';
 import { toTacticType } from './tacticVocabulary';
 import { geometryMotif } from './tacticGeometry';
+import { BISHOP_DIRS, ROOK_DIRS, coordsToSquare, traceRay, discoveryRevealed } from './lineGeometry';
 
 /** Minimum centipawn swing to qualify as a missed tactic */
 const MIN_EVAL_SWING = 100;
@@ -20,19 +21,10 @@ const PIECE_VALUE: Record<string, number> = {
 };
 
 /** Sliding piece directions for ray tracing */
-const BISHOP_DIRS: [number, number][] = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
-const ROOK_DIRS: [number, number][] = [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function squareToCoords(sq: Square): [number, number] {
-  return [sq.charCodeAt(0) - 97, parseInt(sq[1]) - 1];
-}
 
-function coordsToSquare(file: number, rank: number): Square | null {
-  if (file < 0 || file > 7 || rank < 0 || rank > 7) return null;
-  return `${String.fromCharCode(97 + file)}${rank + 1}` as Square;
-}
 
 function pieceValue(type: PieceSymbol): number {
   return PIECE_VALUE[type] ?? 0;
@@ -42,35 +34,6 @@ function oppositeColor(color: Color): Color {
   return color === 'w' ? 'b' : 'w';
 }
 
-/**
- * Trace a ray from a square in a given direction, returning pieces found in order.
- * Continues past pieces to find up to `maxPieces` on the ray (needed for pin/skewer detection).
- */
-function traceRay(
-  chess: Chess,
-  fromSquare: Square,
-  dir: [number, number],
-  maxPieces: number = 2,
-): Array<{ square: Square; type: PieceSymbol; color: Color }> {
-  const [startFile, startRank] = squareToCoords(fromSquare);
-  const pieces: Array<{ square: Square; type: PieceSymbol; color: Color }> = [];
-  let file = startFile + dir[0];
-  let rank = startRank + dir[1];
-
-  while (file >= 0 && file <= 7 && rank >= 0 && rank <= 7) {
-    const sq = coordsToSquare(file, rank);
-    if (!sq) break;
-    const piece = chess.get(sq);
-    if (piece) {
-      pieces.push({ square: sq, type: piece.type, color: piece.color });
-      if (pieces.length >= maxPieces) break;
-    }
-    file += dir[0];
-    rank += dir[1];
-  }
-
-  return pieces;
-}
 
 /**
  * Get squares attacked by a piece at a given square.
@@ -281,39 +244,9 @@ function detectSkewer(chess: Chess, to: Square, movingColor: Color): boolean {
  * Detect discovered attack: the moving piece uncovers an attack from a friendly piece behind it.
  */
 function detectDiscoveredAttack(chess: Chess, from: Square, to: Square, movingColor: Color): boolean {
-  // Check if a friendly sliding piece on the same ray as `from` now attacks an enemy piece
-  // that was previously blocked by the piece at `from`
-  const allDirs = [...BISHOP_DIRS, ...ROOK_DIRS];
-
-  for (const dir of allDirs) {
-    // Look backwards from `from` to find a friendly sliding piece
-    const behindPieces = traceRay(chess, from, [-dir[0], -dir[1]] as [number, number]);
-    if (behindPieces.length === 0) continue;
-
-    const behind = behindPieces[0];
-    if (behind.color !== movingColor) continue;
-
-    // Check if this piece is a slider that can attack along this direction
-    const canSlide =
-      (behind.type === 'q') ||
-      (behind.type === 'b' && BISHOP_DIRS.some((d) => d[0] === dir[0] && d[1] === dir[1])) ||
-      (behind.type === 'r' && ROOK_DIRS.some((d) => d[0] === dir[0] && d[1] === dir[1]));
-
-    if (!canSlide) continue;
-
-    // Now check forward: is there an enemy piece along this ray?
-    const forwardPieces = traceRay(chess, from, dir);
-    for (const fp of forwardPieces) {
-      // Skip if this is the square we moved TO (the piece is no longer blocking)
-      if (fp.square === to) continue;
-      if (fp.color === oppositeColor(movingColor) && pieceValue(fp.type) >= 3) {
-        return true;
-      }
-      break; // Blocked by first piece found
-    }
-  }
-
-  return false;
+  // The one discovery test (lineGeometry.discoveryRevealed) — this copy once
+  // read straight through a piece that moved along its own line.
+  return discoveryRevealed(chess, from, to, movingColor) !== null;
 }
 
 /**

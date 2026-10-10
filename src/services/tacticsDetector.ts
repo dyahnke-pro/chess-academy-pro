@@ -6,6 +6,7 @@ import type { TacticPattern, HangingPiece } from '../types/tacticTypes';
 import { findHangingPieces } from './tacticClassifier';
 import { capturesWinMaterial } from './positionReadingService';
 import { isRealPin, isRealSkewer } from './pinGeometry';
+import { BISHOP_DIRS, ROOK_DIRS, squareToCoords, coordsToSquare, traceRay } from './lineGeometry';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -17,8 +18,6 @@ const PIECE_NAMES: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
 };
 
-const BISHOP_DIRS: [number, number][] = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
-const ROOK_DIRS: [number, number][] = [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
 // Highlight colors
 const HANGING_DANGER_COLOR = 'rgba(239, 68, 68, 0.6)';   // red — piece at risk
@@ -36,14 +35,7 @@ export interface TacticsDetectionResult {
 
 // ─── Geometry Helpers ───────────────────────────────────────────────────────
 
-function squareToCoords(sq: Square): [number, number] {
-  return [sq.charCodeAt(0) - 97, parseInt(sq[1]) - 1];
-}
 
-function coordsToSquare(file: number, rank: number): Square | null {
-  if (file < 0 || file > 7 || rank < 0 || rank > 7) return null;
-  return `${String.fromCharCode(97 + file)}${rank + 1}` as Square;
-}
 
 function capitalize(s: string): string {
   return openSentence(s);
@@ -83,34 +75,6 @@ function getAttackedSquares(chess: Chess, square: Square): Square[] {
   }
 }
 
-/**
- * Trace a ray from a square in a given direction, returning pieces found.
- */
-function traceRay(
-  chess: Chess,
-  fromSquare: Square,
-  dir: [number, number],
-  maxPieces: number = 2,
-): Array<{ square: Square; type: PieceSymbol; color: Color }> {
-  const [startFile, startRank] = squareToCoords(fromSquare);
-  const pieces: Array<{ square: Square; type: PieceSymbol; color: Color }> = [];
-  let file = startFile + dir[0];
-  let rank = startRank + dir[1];
-
-  while (file >= 0 && file <= 7 && rank >= 0 && rank <= 7) {
-    const sq = coordsToSquare(file, rank);
-    if (!sq) break;
-    const piece = chess.get(sq);
-    if (piece) {
-      pieces.push({ square: sq, type: piece.type, color: piece.color });
-      if (pieces.length >= maxPieces) break;
-    }
-    file += dir[0];
-    rank += dir[1];
-  }
-
-  return pieces;
-}
 
 // ─── Static Tactic Detectors ────────────────────────────────────────────────
 

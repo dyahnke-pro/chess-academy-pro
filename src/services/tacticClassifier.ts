@@ -12,6 +12,7 @@ import { isRealPin, isRealSkewer } from './pinGeometry';
 import { cpBand } from './accuracyService';
 import { findHangingBySee } from './positionReadingService';
 import { verifyForkOnBoard } from './tacticVerification';
+import { BISHOP_DIRS, ROOK_DIRS, coordsToSquare, traceRay, discoveryRevealed } from './lineGeometry';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -19,19 +20,10 @@ const PIECE_VALUE: Record<string, number> = {
   p: 1, n: 3, b: 3, r: 5, q: 9, k: 100,
 };
 
-const BISHOP_DIRS: [number, number][] = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
-const ROOK_DIRS: [number, number][] = [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
 // ─── Geometry Helpers ───────────────────────────────────────────────────────
 
-function squareToCoords(sq: Square): [number, number] {
-  return [sq.charCodeAt(0) - 97, parseInt(sq[1]) - 1];
-}
 
-function coordsToSquare(file: number, rank: number): Square | null {
-  if (file < 0 || file > 7 || rank < 0 || rank > 7) return null;
-  return `${String.fromCharCode(97 + file)}${rank + 1}` as Square;
-}
 
 function pieceValue(type: PieceSymbol): number {
   return PIECE_VALUE[type] ?? 0;
@@ -51,34 +43,6 @@ function squareLabel(sq: string): string {
 
 // ─── Board Inspection Helpers ───────────────────────────────────────────────
 
-/**
- * Trace a ray from a square in a given direction, returning pieces found.
- */
-function traceRay(
-  chess: Chess,
-  fromSquare: Square,
-  dir: [number, number],
-  maxPieces: number = 2,
-): Array<{ square: Square; type: PieceSymbol; color: Color }> {
-  const [startFile, startRank] = squareToCoords(fromSquare);
-  const pieces: Array<{ square: Square; type: PieceSymbol; color: Color }> = [];
-  let file = startFile + dir[0];
-  let rank = startRank + dir[1];
-
-  while (file >= 0 && file <= 7 && rank >= 0 && rank <= 7) {
-    const sq = coordsToSquare(file, rank);
-    if (!sq) break;
-    const piece = chess.get(sq);
-    if (piece) {
-      pieces.push({ square: sq, type: piece.type, color: piece.color });
-      if (pieces.length >= maxPieces) break;
-    }
-    file += dir[0];
-    rank += dir[1];
-  }
-
-  return pieces;
-}
 
 /**
  * Get squares attacked by a piece at a given square.
@@ -314,46 +278,14 @@ function detectDiscovery(
   toSquare: Square,
   movingColor: Color,
 ): TacticPattern | null {
-  const allDirs = [...BISHOP_DIRS, ...ROOK_DIRS];
-
-  for (const dir of allDirs) {
-    // Look backwards from the from-square to find a friendly slider
-    const behindPieces = traceRay(
-      chessAfter,
-      fromSquare,
-      [-dir[0], -dir[1]] as [number, number],
-    );
-    if (behindPieces.length === 0) continue;
-
-    const behind = behindPieces[0];
-    if (behind.color !== movingColor) continue;
-
-    const canSlide =
-      behind.type === 'q' ||
-      (behind.type === 'b' && BISHOP_DIRS.some((d) => d[0] === dir[0] && d[1] === dir[1])) ||
-      (behind.type === 'r' && ROOK_DIRS.some((d) => d[0] === dir[0] && d[1] === dir[1]));
-    if (!canSlide) continue;
-
-    // Look forward along the ray for an enemy piece
-    const forwardPieces = traceRay(chessAfter, fromSquare, dir);
-    for (const fp of forwardPieces) {
-      // The moved piece still stands ON this ray (it moved along the line, e.g.
-      // d7-d6 in front of the queen on d8): nothing was uncovered. Walk 2026-09-23
-      // heard "a discovery in two" for …d6 "revealing" the queen on the knight it
-      // still blocks — `continue` here read straight through the blocker.
-      if (fp.square === toSquare) break;
-      if (fp.color === oppositeColor(movingColor) && pieceValue(fp.type) >= 3) {
-        return {
-          type: 'discovery',
-          involvedSquares: [fromSquare, behind.square, fp.square],
-          description: `Moving from ${squareLabel(fromSquare)} to ${squareLabel(toSquare)} reveals ${pieceName(behind.type)} on ${squareLabel(behind.square)} attacking ${pieceName(fp.type)} on ${squareLabel(fp.square)}`,
-        };
-      }
-      break; // Blocked by first piece
-    }
-  }
-
-  return null;
+  // The one discovery test (lineGeometry.discoveryRevealed).
+  const d = discoveryRevealed(chessAfter, fromSquare, toSquare, movingColor);
+  if (!d) return null;
+  return {
+    type: 'discovery',
+    involvedSquares: [fromSquare, d.behind.square, d.target.square],
+    description: `Moving from ${squareLabel(fromSquare)} to ${squareLabel(toSquare)} reveals ${pieceName(d.behind.type)} on ${squareLabel(d.behind.square)} attacking ${pieceName(d.target.type)} on ${squareLabel(d.target.square)}`,
+  };
 }
 
 /**
