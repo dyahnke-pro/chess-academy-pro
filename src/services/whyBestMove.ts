@@ -107,7 +107,7 @@ export async function computeWhyBestMoveDetail(input: WhyBestMoveInput): Promise
   // 2026-10-10); `mateIn` is White's view, so it is turned to the mover's.
   const moverMate = analysis.isMate && typeof analysis.mateIn === 'number' ? analysis.mateIn * (sc === 'w' ? 1 : -1) : 0;
   if (san) {
-    const reason = moverMate > 1 ? `it starts a forced mate in ${moverMate}` : point?.trim() || groundedMoveWhy([], fen, san, studentColor);
+    const reason = moverMate > 1 ? `it starts a forced mate in ${moverMate} moves` : point?.trim() || groundedMoveWhy([], fen, san, studentColor);
     // Strip a trailing period on the reason before adding our own — the grounded
     // computers sometimes return a full sentence ("It wins the rook on e7."),
     // which produced "…on e7.." (coach audit 2026-09-11).

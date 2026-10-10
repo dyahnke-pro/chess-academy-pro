@@ -1901,7 +1901,7 @@ export function assembleMoveEvalAnswer(opts: {
   // The mate is the why; a square beside it teaches nothing. One-move mates
   // keep their own reason (the SAN already says mate).
   const startsMate = typeof opts.mateIn === 'number' && opts.mateIn > 1;
-  if (startsMate) parts.push(`It starts a forced mate in ${opts.mateIn}.`);
+  if (startsMate) parts.push(`It starts a forced mate in ${opts.mateIn} moves.`);
   else if (why) parts.push(why);
   else {
     // NAMED WITH ITS REASON (question walk 2026-09-27: "The best move is g3."

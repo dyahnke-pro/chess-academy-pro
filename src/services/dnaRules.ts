@@ -18,7 +18,10 @@ export const DNA_REFUSE: ReadonlyArray<{ re: RegExp; why: string }> = [
 /** DNA rule 7 — no move-number prefixes ("12.Nf3" is read "twelve"). A
  *  rephrase, never a drop: the move stays, the number goes. */
 export function stripMoveNumbers(text: string): string {
-  return text.replace(/(?<![\w.])\d{1,3}\s?(?:\.\.\.|…|\.)\s?(?=(?:[NBRQK][a-h1-8x]|O-O|[a-h][1-8x]))/g, (m) => (/(?:\.\.\.|…)/.test(m) ? '…' : ''));
+  // A COUNT IS NOT A MOVE NUMBER: "a forced mate in 3. Ng5, Be8…" lost its
+  // 3 here (hard walk 2026-10-10). A number after "in / of / by / than" is a
+  // count ending a sentence, never a move-number prefix.
+  return text.replace(/(?<![\w.])(?<!\b(?:in|of|by|than|about|over|under)\s)\d{1,3}\s?(?:\.\.\.|…|\.)\s?(?=(?:[NBRQK][a-h1-8x]|O-O|[a-h][1-8x]))/g, (m) => (/(?:\.\.\.|…)/.test(m) ? '…' : ''));
 }
 
 export interface DnaPassResult { text: string; refused: string[] }

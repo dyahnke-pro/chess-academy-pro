@@ -21,7 +21,7 @@ describe('hard walk — mates', () => {
       analysis: { topLines: [{ rank: 1, evaluation: 0, mate: 4, moves: toUci(GOMC, MATE) }] },
       fenBefore: GOMC, moverColor: 'w', opponentLastSan: null,
     })!;
-    expect(d.bestWhy).toBe('starts a forced mate in 4');
+    expect(d.bestWhy).toBe('starts a forced mate in 4 moves');
     expect(d.bestLineSans).toEqual(MATE);
   });
 
@@ -32,7 +32,7 @@ describe('hard walk — mates', () => {
       named: { lineUci: toUci(GOMC, MATE), evaluation: 0, mate: 4 },
     })!;
     const text = namedMoveAnswer(d, 'why-best')!;
-    expect(text).toMatch(/^Nh6\+ is the best move here — it starts a forced mate in 4\./);
+    expect(text).toMatch(/^Nh6\+ is the best move here — it starts a forced mate in 4 moves\./);
     const lines = spokenLines(d, GOMC, text);
     expect(lines).toHaveLength(1);
     expect(lines[0].plies.map((p) => p.san)).toEqual(MATE);
@@ -62,7 +62,7 @@ describe('hard walk — mates', () => {
 
   it('"calculate the main line" says the proven line and plays it', () => {
     const a = assembleMoveEvalAnswer({ fen: GOMC, bestMoveUci: toUci(GOMC, ['Nh6+'])[0], studentColor: 'white', mateIn: 4, pvSan: MATE } as Parameters<typeof assembleMoveEvalAnswer>[0])!;
-    expect(a.facts).toMatch(/^The best move is Nh6\+\. It starts a forced mate in 4\. Nh6\+, Kf8/);
+    expect(a.facts).toMatch(/^The best move is Nh6\+\. It starts a forced mate in 4 moves\. Nh6\+, Kf8/);
     expect(a.facts).toMatch(/Bxc6# — and it's mate/);
     expect(a.lines?.[0].plies.map((p) => p.san)).toEqual(MATE);
   });

@@ -283,7 +283,7 @@ export function buildDeliberation(input: {
   // four). The mate is the why; a square's geometry beside it teaches nothing.
   const mates = !!played && playedSans.length >= 3 && /and it's mate$/.test(played.short);
   const bestWhy = mates
-    ? `starts a forced mate in ${Math.ceil(playedSans.length / 2)}`
+    ? `starts a forced mate in ${Math.ceil(playedSans.length / 2)} moves`
     : moveWhy(fenBefore, bestSan, moverColor, input.opponentLastSan);
   const namedWhy = namedCandidate && namedCandidate.san !== bestSan ? moveWhy(fenBefore, namedCandidate.san, moverColor, input.opponentLastSan) : null;
   const bestReply = (() => {

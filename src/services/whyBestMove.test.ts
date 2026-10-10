@@ -56,6 +56,6 @@ describe('a mating move is best because of the mate (hard walk 2026-10-10)', () 
     const a = { bestMove: 'd8d1', evaluation: -100000, isMate: true, mateIn: -4, seldepth: 20, depth: 18, wdl: null,
       topLines: [{ rank: 1, moves: ['d8d1'], evaluation: -100000, mate: -4 }] } as unknown as Parameters<typeof computeWhyBestMove>[0]['analysis'];
     const why = await computeWhyBestMove({ fen, studentColor: 'black', analysis: a, studentNeedContext: null });
-    expect(why).toMatch(/The strongest move is Rd1\+ — it starts a forced mate in 4\./);
+    expect(why).toMatch(/The strongest move is Rd1\+ — it starts a forced mate in 4 moves\./);
   });
 });

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { dnaPass } from './dnaRules';
+import { dnaPass, stripMoveNumbers } from './dnaRules';
 
 describe('dnaPass — the code-side DNA every narration passes (David 2026-10-07)', () => {
   it('cuts the sentence of praise or interface talk, never the teaching beside it', () => {
@@ -37,5 +37,14 @@ describe('ONE CHOKEPOINT: nothing reaches speech around voiceService (gate)', ()
     const ALLOWED = new Set(['src/services/voiceService.ts', 'src/services/speechService.ts', 'src/components/Settings/VoiceSettingsPanel.tsx']);
     const offenders = walk('src').filter((p) => !ALLOWED.has(p) && /speechService\.speak\(|speechSynthesis\.speak\(/.test(readFileSync(p, 'utf8').replace(/\/\/[^\n]*/g, '')));
     expect(offenders, 'speak through voiceService so the DNA, Silent and the brief cap apply').toEqual([]);
+  });
+});
+
+describe('a count is not a move number (hard walk 2026-10-10)', () => {
+  it('keeps "mate in 3." before a SAN line', () => {
+    expect(stripMoveNumbers("There is a forced mate in 3. Ng5, Be8 and Qxg7#.")).toBe("There is a forced mate in 3. Ng5, Be8 and Qxg7#.");
+  });
+  it('still strips a real move-number prefix', () => {
+    expect(stripMoveNumbers('After 12. Nf3 the knight eyes e5.')).toBe('After Nf3 the knight eyes e5.');
   });
 });

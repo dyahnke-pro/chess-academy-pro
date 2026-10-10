@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**45 lines · 4 exports · 3 importers · 1 tests · 0 audits**
+**48 lines · 4 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,6 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/coach/coachService.ts`
 - `src/services/dnaRules.test.ts`
 - `src/services/voicePackage.ts`
 - `src/services/voiceService.ts`
@@ -21,7 +22,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `DNA_REFUSE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `stripMoveNumbers` (function) — 9 call sites
+### `stripMoveNumbers` (function) — 11 call sites
 - `scripts/convert-lichess-tsv.mjs:19`
 - `scripts/convert-lichess-tsv.mjs:45`
 - `scripts/danya-corpus/merge-corpus.mjs:36`
@@ -30,18 +31,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/danya-corpus/merge-corpus.mjs:112`
 - `src/services/dnaDoor.test.ts:10`
 - `src/services/dnaDoor.test.ts:11`
+- `src/services/dnaRules.test.ts:45`
+- `src/services/dnaRules.test.ts:48`
 - `src/services/voicePackage.ts:309`
 
 ### `DnaPassResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `dnaPass` (function) — 6 call sites
+### `dnaPass` (function) — 7 call sites
+- `src/coach/coachService.ts:2465`
 - `src/services/dnaRules.test.ts:8`
 - `src/services/dnaRules.test.ts:13`
 - `src/services/dnaRules.test.ts:16`
 - `src/services/dnaRules.test.ts:17`
 - `src/services/dnaRules.test.ts:20`
-- `src/services/voiceService.ts:1411`
+- `src/services/voiceService.ts:1423`
 
 ## Tests
 
