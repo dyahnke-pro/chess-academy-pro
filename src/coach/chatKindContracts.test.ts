@@ -73,6 +73,12 @@ const BOARDS = {
   mate4: { fen: '6k1/p1p4p/1p2n1p1/3pQ3/3P1nN1/2PB2qP/PP4P1/6K1 w - - 18 33', history: [], studentColor: 'white' },
   /** 0Fs8O: a won king-and-pawn ending, White to move (Kd3). */
   pawns: { fen: '8/8/1p4pp/p2k1p2/P2P1P1P/4K1P1/8/8 w - - 0 35', history: [], studentColor: 'white' },
+  /** 00zOQ: Black's quiet …Re8! (Bd2 Qd1+ Rg1 Qxd2) wins the bishop. */
+  quietRook: { fen: '2r3k1/p7/7p/1p4p1/6R1/3B1q1P/2P3RP/2B4K b - - 7 35', history: [], studentColor: 'black' },
+  /** 0MOZp: Black's …Bd5+ sac — cxd5 Qxd5+ Ne4 Rxh1 Kxh1 Qxe4+ wins it back with interest. */
+  bishopSac: { fen: '5n1r/3q4/ppp1b1k1/4PpN1/1PPP1Pp1/1PB1Q3/6K1/7R b - - 2 46', history: [], studentColor: 'black' },
+  /** Black to move; White threatens Re8# on the back rank. */
+  backRank: { fen: '6k1/5ppp/8/8/8/8/5PPP/4R1K1 b - - 0 1', history: [], studentColor: 'black' },
 } satisfies Record<string, Board>;
 
 interface Contract {
@@ -309,6 +315,60 @@ afterAll(() => {
 });
 
 const written = (Object.entries(CONTRACTS) as Array<[ChatKind, Contract | Owed]>).filter((e): e is [ChatKind, Contract] => !('owed' in e[1]));
+
+
+/**
+ * THE HARD TIER (David 2026-10-10: "step up the difficulty"). 2000-level
+ * questions on engine-checked positions. A `verify` reads the BOARD, not the
+ * wording: a defence must actually stop the mate, a claimed gain must be the
+ * ledger's.
+ */
+interface Hard extends Contract { id: string; verify?: (text: string, b: Board) => string | null }
+const namedBest = (text: string): string | null => /(?:best move is|The move is|strongest (?:move )?is|play) (\S+?)[.,;—\s]/.exec(text)?.[1]?.replace(/[.,]$/, '') ?? null;
+const HARD: Hard[] = [
+  { id: 'quiet move, full line', board: 'quietRook', ask: "what's the best move here? walk me through the line", reading: { kind: 'best-move' },
+    must: [/\bRe8\b/, /bishop/] },
+  { id: 'what a sacrifice gets back', board: 'bishopSac', ask: 'what do I get if I play Bd5+?', reading: { kind: 'candidate-move', referents: [{ type: 'move', san: 'Bd5+' }] },
+    must: [/Bd5\+/, /cxd5/, /ahead|win|you come out/i], mustNot: [/drops the bishop/] },
+  { id: 'defend the back rank', board: 'backRank', ask: 'what should I play here?', reading: { kind: 'what-should-i-play' },
+    must: [/.{10}/],
+    verify: (text, b) => {
+      const san = namedBest(text);
+      if (!san) return 'no move named';
+      const c = new Chess(b.fen);
+      try { c.move(san); } catch { return `named ${san}, not legal here`; }
+      return c.moves().some((m) => m.endsWith('#')) ? `${san} allows mate in one` : null;
+    } },
+  { id: 'the threat is named before the move', board: 'backRank', ask: 'what are they threatening?', reading: { kind: 'threats', seat: 'them' },
+    must: [/Re8#/] },
+  { id: 'a real gap is not "about the same"', board: 'pawns', ask: 'Kd3 or h5?', reading: { kind: 'compare-moves', referents: [{ type: 'move', san: 'Kd3' }, { type: 'move', san: 'h5' }] },
+    must: [/\bKd3\b/], mustNot: [/about the same/] },
+  { id: 'two questions in one', board: 'italian', ask: "what's the best move, and what are they threatening?", reading: { kind: 'best-move' },
+    must: [/\bb4\b/, /e4/] },
+  { id: 'a capture counted to the end', board: 'italian', ask: 'should I take on e5 with the knight?', reading: { kind: 'candidate-move', referents: [{ type: 'move', san: 'Nxe5' }] },
+    must: [/Nxe5/, /dxe5/, /behind|lose|for a knight|drops/i] },
+  { id: 'why the natural capture fails', board: 'mate4', ask: 'why not Qxc7?', reading: { kind: 'candidate-move', referents: [{ type: 'move', san: 'Qxc7' }] },
+    must: [/Qxg2#/] },
+];
+
+describe('the hard tier', () => {
+  it.each(HARD.map((h) => [h.id, h] as const))('%s', async (_id, c) => {
+    setChatTurnReaderForTests(async () => ({ referents: [], seat: null, topic: null, ...c.reading }) as never);
+    const b: Board = BOARDS[c.board as keyof typeof BOARDS];
+    const a = await dispatchCoachTurn({
+      surface: 'standalone-chat', ask: c.ask, origin: 'typed',
+      liveState: { surface: 'standalone-chat', fen: b.fen, whoseTurn: b.fen.split(' ')[1] === 'w' ? 'white' : 'black', studentColor: b.studentColor, moveHistory: b.history, currentRoute: '/coach/chat' },
+    } as never, { maxToolRoundTrips: 1 });
+    const text = (a.text ?? '').replace(/\s*\[BOARD:[^\]]*\]/g, '').trim();
+    if (missing.size) throw new Error(`engine fixture is missing ${missing.size} position(s): run node scripts/chat-contracts/gen-engine-fixture.mjs`);
+    const report = `[hard: ${c.ask}] served=${a.servedIntent ?? '—'} answer: ${text}`;
+    if (process.env.CONTRACT_LOG) console.log(report);
+    for (const re of c.must) expect(text, report).toMatch(re);
+    for (const re of [...ALWAYS_NOT, ...(c.mustNot ?? [])]) expect(text, report).not.toMatch(re);
+    const bad = c.verify?.(text, b) ?? null;
+    expect(bad, report).toBeNull();
+  }, 60_000);
+});
 
 describe('every question kind answers its contract', () => {
   it.each(written)('%s', async (kind, c) => {
