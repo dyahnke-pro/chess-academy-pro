@@ -15,6 +15,7 @@ import { walkableLine } from './proof';
 import { Chess } from 'chess.js';
 import type { StockfishAnalysis } from '../types';
 import { explainBestMoveGrounded } from './groundedAnswer';
+import { bestMoveReason } from './deliberation';
 import { computePositionFacts, clauseText } from './positionFacts';
 import { positionTeachingWhy, groundedMoveWhy } from './groundedMoveWhy';
 import type { WeaknessSignal } from './weaknessSignal';
@@ -107,7 +108,13 @@ export async function computeWhyBestMoveDetail(input: WhyBestMoveInput): Promise
   // 2026-10-10); `mateIn` is White's view, so it is turned to the mover's.
   const moverMate = analysis.isMate && typeof analysis.mateIn === 'number' ? analysis.mateIn * (sc === 'w' ? 1 : -1) : 0;
   if (san) {
-    const reason = moverMate > 1 ? `it starts a forced mate in ${moverMate} moves` : point?.trim() || groundedMoveWhy([], fen, san, studentColor);
+    // The ONE why-best computer (deliberation.bestMoveReason) — the same
+    // reason the chat and Learn's weighing give — then the geometry and the
+    // note floor, so a Why tap is never dead.
+    const own = fen.split(' ')[1] === sc
+      ? bestMoveReason(fen, san, sc, { mateIn: moverMate > 0 ? moverMate : null, opponentLastSan: history.length ? history[history.length - 1] : null })
+      : null;
+    const reason = own ? `it ${own}` : point?.trim() || groundedMoveWhy([], fen, san, studentColor);
     // Strip a trailing period on the reason before adding our own — the grounded
     // computers sometimes return a full sentence ("It wins the rook on e7."),
     // which produced "…on e7.." (coach audit 2026-09-11).

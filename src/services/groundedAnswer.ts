@@ -45,7 +45,7 @@ import { structureSignature } from './boardStructure';
 import { boardStructure } from './structureReads';
 import { materialEdgeWords } from './reviewPositionalAssessment';
 import { strategicWhyLed, strategicWhyImperative } from './moveFundamentals';
-import { threatMadeWhy } from './deliberation';
+import { bestMoveReason, threatMadeWhy } from './deliberation';
 import { liveMethodBeatFor } from './methodBeat';
 import { countKingAttack, detectKingExposure, kingExposureClause } from './kingSafety';
 import { extractQuestionFocus, PURE_BOARD_ASPECTS } from './boardQuestionRouter';
@@ -1846,6 +1846,9 @@ export function assembleMoveEvalAnswer(opts: {
    *  answer says it and hands the same moves to the board (hard walk
    *  2026-10-10: "calculate the main line" got the move and no line). */
   pvSan?: readonly string[] | null;
+  /** Their last move (SAN), so a recapture is said as taking back, never as
+   *  winning a piece (the why-best computer reads it). */
+  opponentLastSan?: string | null;
 }): GroundedAnswer | null {
   const { fen, bestMoveUci } = opts;
   if (!bestMoveUci || bestMoveUci.length < 4) return null;
@@ -1901,7 +1904,13 @@ export function assembleMoveEvalAnswer(opts: {
   // The mate is the why; a square beside it teaches nothing. One-move mates
   // keep their own reason (the SAN already says mate).
   const startsMate = typeof opts.mateIn === 'number' && opts.mateIn > 1;
-  if (startsMate) parts.push(`It starts a forced mate in ${opts.mateIn} moves.`);
+  // THE STUDENT'S OWN BEST MOVE reads the one why-best computer, so this
+  // answer, Learn's weighing and the Why button give the same reason.
+  const ownReason = theirMove ? null : bestMoveReason(fen, bestMoveSan, mover === 'white' ? 'w' : 'b', {
+    mateIn: typeof opts.mateIn === 'number' ? opts.mateIn : null,
+    opponentLastSan: opts.opponentLastSan ?? null,
+  });
+  if (ownReason) parts.push(`It ${ownReason}.`);
   else if (why) parts.push(why);
   else {
     // NAMED WITH ITS REASON (question walk 2026-09-27: "The best move is g3."
@@ -3409,8 +3418,13 @@ export function assembleEngineReasoning(opts: {
   //    prophylaxis / development / center) — the same shared leaf the "Why?"
   //    button uses — so a quiet best move gets a real idea, not a bare "the
   //    engine plays h3" (coach audit 2026-09-11, chat-why depth).
+  // The student's own move reads the ONE why-best computer first.
+  const moverMate = typeof opts.mateIn === 'number' ? opts.mateIn * (mc === 'w' ? 1 : -1) : null;
   const firstReason =
-    describeMoveGeometry(plies[0].fenBefore, plies[0].san, opts.moverColor)
+    ((opts.studentSide ?? opts.moverColor) === opts.moverColor
+      ? bestMoveReason(plies[0].fenBefore, plies[0].san, mc, { mateIn: moverMate != null && moverMate > 0 ? moverMate : null, opponentLastSan: null })
+      : null)
+    ?? describeMoveGeometry(plies[0].fenBefore, plies[0].san, opts.moverColor)
     ?? describeEscape(plies[0].fenBefore, plies[0].san)
     ?? quietPurposePhrase(plies[0].fenBefore, plies[0].san, opts.moverColor, 'mover');
   clauses.push(

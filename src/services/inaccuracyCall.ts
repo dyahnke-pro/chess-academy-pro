@@ -28,6 +28,7 @@
 // and the reason comes from replaying the engine's own line. Nothing here asks a
 // model what it thinks.
 import { andList } from '../utils/andList';
+import { bestMoveReason } from './deliberation';
 import { Chess, type Square } from 'chess.js';
 import { planFromUci, isCostClause } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
@@ -175,12 +176,10 @@ export function phraseBetterMove(f: BetterMoveFact): string {
 
 /** The reason a mating move is better: the mate itself — read off the board,
  *  never a line cut short of it. */
-export function mateReason(fenBefore: string, bestSan: string): string {
-  try {
-    const c = new Chess(fenBefore);
-    if (c.move(bestSan) && c.isCheckmate()) return 'it is mate';
-  } catch { /* fall through */ }
-  return 'it starts a forced mate';
+export function mateReason(fenBefore: string, bestSan: string, mateIn: number | null): string {
+  // The ONE why-best computer words it (deliberation.bestMoveReason).
+  const mover: 'w' | 'b' = fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
+  return `it ${bestMoveReason(fenBefore, bestSan, mover, { mateIn: mateIn && mateIn > 1 ? mateIn : 'forced', opponentLastSan: null }) ?? 'is mate'}`;
 }
 
 /** Convenience: the fact, computed and worded — or null.
@@ -196,7 +195,7 @@ export function betterMoveReason(
   priorMove: PriorMove,
   bestMates: boolean,
 ): string | null {
-  if (bestMates) return mateReason(fenBefore, bestSan);
+  if (bestMates) return mateReason(fenBefore, bestSan, null);
   const f = betterMoveFact(fenBefore, playedSan, bestSan, bestLineUci, moverColor, priorMove);
   return f ? phraseBetterMove(f) : null;
 }
@@ -746,7 +745,7 @@ export function callInaccuracyDetailed(args: {
   const reason = stopsMate
     ? 'it would stop the mate'
     : (args.bestMate ?? null) !== null
-      ? mateReason(args.fenBefore, args.bestSan)
+      ? mateReason(args.fenBefore, args.bestSan, args.bestMate ?? null)
       : args.bestLineUci ? betterMoveReason(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci, args.moverColor, args.priorMove, false) : null;
   const after = args.moverEvalAfterCp;
   // …and CLEARLY BETTER is not a mistake either (pass-2 walk 2026-09-30: his

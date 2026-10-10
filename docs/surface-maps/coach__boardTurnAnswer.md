@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**258 lines · 7 exports · 6 importers · 5 tests · 0 audits**
+**357 lines · 9 exports · 7 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,6 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/coach/boardTurnAnswer.hardWalk.test.ts`
 - `src/coach/boardTurnAnswer.test.ts`
 - `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/developNext.test.ts`
@@ -30,7 +31,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `BoardEngine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setBoardEngineForTests` (function) — 12 call sites
+### `setBoardEngineForTests` (function) — 14 call sites
+- `src/coach/boardTurnAnswer.hardWalk.test.ts:13`
+- `src/coach/boardTurnAnswer.hardWalk.test.ts:18`
 - `src/coach/boardTurnAnswer.test.ts:18`
 - `src/coach/boardTurnAnswer.test.ts:30`
 - `src/coach/boardTurnAnswer.test.ts:39`
@@ -44,7 +47,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:24`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:32`
 
-### `answerBoardTurn` (function) — 10 call sites
+### `answerBoardTurn` (function) — 14 call sites
+- `src/coach/boardTurnAnswer.hardWalk.test.ts:30`
+- `src/coach/boardTurnAnswer.hardWalk.test.ts:36`
+- `src/coach/boardTurnAnswer.hardWalk.test.ts:44`
+- `src/coach/boardTurnAnswer.hardWalk.test.ts:48`
 - `src/coach/boardTurnAnswer.test.ts:34`
 - `src/coach/boardTurnAnswer.test.ts:43`
 - `src/coach/boardTurnAnswer.test.ts:48`
@@ -64,8 +71,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/developNext.test.ts:57`
 - `src/coach/developNext.test.ts:68`
 
+### `bestDefenceAnswer` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `fasterWinAnswer` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ## Tests
 
+- `src/coach/boardTurnAnswer.hardWalk.test.ts`
 - `src/coach/boardTurnAnswer.test.ts`
 - `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/developNext.test.ts`

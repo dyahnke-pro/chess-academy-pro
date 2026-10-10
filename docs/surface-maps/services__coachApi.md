@@ -280,8 +280,8 @@
 ### `voiceFacts` (function) — 39 call sites
 - `scripts/audit-kid-static.mjs:53`
 - `scripts/audit-kid-static.mjs:64`
-- `src/components/Coach/CoachGameReview.tsx:1647`
-- `src/components/Coach/CoachGameReview.tsx:1840`
+- `src/components/Coach/CoachGameReview.tsx:1656`
+- `src/components/Coach/CoachGameReview.tsx:1849`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
 - `src/components/Puzzles/PuzzleBoard.tsx:98`
 - `src/hooks/usePhaseNarration.ts:733`

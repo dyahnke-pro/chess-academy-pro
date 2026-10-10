@@ -15,7 +15,9 @@
  */
 import { Chess, type Square } from 'chess.js';
 import type { ResolvedChatTurn, ChatKind } from './chatTurn';
-import { buildDeliberation, namedMoveAnswer, spokenLines } from '../services/deliberation';
+import { bestMoveReason, buildDeliberation, namedMoveAnswer, spokenLines } from '../services/deliberation';
+import { moverLineProof } from '../services/exchangeLedger';
+import { walkableLine } from '../services/proof';
 import { getCachedStockfish } from '../hooks/stockfishFenCache';
 import { searchUntilStable } from '../services/searchDepth';
 import { stockfishEngine } from '../services/stockfishEngine';
@@ -30,7 +32,7 @@ import { moveWhy } from '../services/deliberation';
 import { andList } from '../utils/andList';
 
 /** The kinds the board answers directly. Each is served here or falls back. */
-export const BOARD_ANSWERED_KINDS: ReadonlySet<ChatKind> = new Set<ChatKind>(['why-best-move', 'candidate-move', 'plan', 'tactics', 'develop-next']);
+export const BOARD_ANSWERED_KINDS: ReadonlySet<ChatKind> = new Set<ChatKind>(['why-best-move', 'candidate-move', 'plan', 'tactics', 'develop-next', 'best-defence', 'faster-win']);
 
 export interface BoardTurnInput {
   fen: string;
@@ -61,6 +63,8 @@ export async function answerBoardTurn(turn: ResolvedChatTurn, board: BoardTurnIn
   if (!BOARD_ANSWERED_KINDS.has(turn.kind)) return null;
   if (turn.kind === 'plan' || turn.kind === 'tactics') return answerFromRead(turn, board);
   if (turn.kind === 'develop-next') return developNextAnswer(board, out);
+  if (turn.kind === 'best-defence') return bestDefenceAnswer(turn, board, out);
+  if (turn.kind === 'faster-win') return fasterWinAnswer(board);
   const moves = turn.referents.filter((r): r is Extract<typeof r, { type: 'move' }> => r.type === 'move');
   // Phase 1: exactly one named move, playable now, on the student's turn.
   if (moves.length !== 1 || moves[0].played) return null;
@@ -254,4 +258,99 @@ export async function developNextAnswer(board: BoardTurnInput, out?: { endorsed?
   }
   const topWhy = moveWhy(board.fen, topSan, me, opponentLastSan);
   return `${lead} The best way to bring one out is ${say(best.san)}. ${topSan} is just as good${topWhy ? ` — it ${topWhy.replace(/^it /, '')}` : ''}.`;
+}
+
+
+const sanFrom = (fen: string, uci: string): string | null => {
+  try { return new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san; } catch { return null; }
+};
+const afterUci = (fen: string, uci: string): string | null => {
+  try { const c = new Chess(fen); c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }); return c.fen(); } catch { return null; }
+};
+
+/**
+ * "WHAT'S THEIR BEST DEFENCE?" (hard walk 2026-10-10: answered with the list
+ * of alternatives). Their reply to the move — the one the student named, else
+ * the best move — read off the engine's line, and where that line goes: the
+ * proof when it proves one (a mate, a gain), else the student's next move.
+ */
+export async function bestDefenceAnswer(turn: ResolvedChatTurn, board: BoardTurnInput, out?: { lines?: WalkableLine[] }): Promise<string | null> {
+  let chess: Chess;
+  try { chess = new Chess(board.fen); } catch { return null; }
+  const me: 'w' | 'b' = board.studentColor === 'white' ? 'w' : 'b';
+  if (chess.turn() !== me) return null;
+  const engine = engineOverride ?? defaultEngine;
+  const analysis = await engine.analysis(board.fen);
+  const top = analysis?.topLines?.find((l) => l.moves?.length);
+  if (!top) return null;
+  const named = turn.referents.find((r): r is Extract<typeof r, { type: 'move' }> => r.type === 'move' && !r.played);
+  let lineUci: string[] = top.moves;
+  if (named) {
+    let uci: string | null = null;
+    try { const m = new Chess(board.fen).move(named.san); uci = `${m.from}${m.to}${m.promotion ?? ''}`; } catch { uci = null; }
+    if (uci && uci !== top.moves[0]) {
+      const cand = await engine.candidate(board.fen, named.san);
+      lineUci = [uci, ...(cand?.lineUci ?? [])];
+    }
+  }
+  const moveSan = sanFrom(board.fen, lineUci[0]);
+  const afterMove = moveSan ? afterUci(board.fen, lineUci[0]) : null;
+  if (!moveSan || !afterMove) return null;
+  if (new Chess(afterMove).isCheckmate()) return `${moveSan} is mate — there is no defence.`;
+  const replySan = lineUci[1] ? sanFrom(afterMove, lineUci[1]) : null;
+  if (!replySan) return null;
+  const dot = me === 'w' ? '…' : '';
+  const proof = moverLineProof(board.fen, lineUci, me);
+  const sans = proof?.line?.sans ?? [];
+  if (proof && sans.length >= 3) {
+    const rest = sans.slice(2);
+    const w = walkableLine(board.fen, sans, sans[0]);
+    if (w && out) out.lines = [w];
+    const tail = proof.short.replace(/^.*? — /, '');
+    return `Against ${moveSan}, their best defence is ${dot}${replySan}, and it is not enough: ${andList(rest)} — ${tail}.`;
+  }
+  const afterReply = afterUci(afterMove, lineUci[1]);
+  const nextSan = afterReply && lineUci[2] ? sanFrom(afterReply, lineUci[2]) : null;
+  const sayLine = [moveSan, replySan, ...(nextSan ? [nextSan] : [])];
+  const w = walkableLine(board.fen, sayLine, moveSan);
+  if (w && out) out.lines = [w];
+  return nextSan
+    ? `Against ${moveSan}, their best defence is ${dot}${replySan}. Then the engine's next move for you is ${nextSan}.`
+    : `Against ${moveSan}, their best defence is ${dot}${replySan}.`;
+}
+
+/**
+ * "IS THERE A FASTER OR CLEANER WIN?" (hard walk 2026-10-10: answered with
+ * the alternatives list). Every engine line that still wins, compared: the
+ * shortest mate, or which moves keep the win and which give it back.
+ */
+export async function fasterWinAnswer(board: BoardTurnInput): Promise<string | null> {
+  let chess: Chess;
+  try { chess = new Chess(board.fen); } catch { return null; }
+  const me: 'w' | 'b' = board.studentColor === 'white' ? 'w' : 'b';
+  if (chess.turn() !== me) return null;
+  const engine = engineOverride ?? defaultEngine;
+  const analysis = await engine.analysis(board.fen);
+  const sign = me === 'w' ? 1 : -1;
+  const lines = (analysis?.topLines ?? []).filter((l) => l.moves?.length)
+    .map((l) => ({ san: sanFrom(board.fen, l.moves[0]), mate: l.mate != null ? l.mate * sign : null, cp: (l.evaluation ?? 0) * sign }))
+    .filter((l): l is { san: string; mate: number | null; cp: number } => !!l.san);
+  if (lines.length === 0) return null;
+  const best = lines[0];
+  const opponentLastSan = board.history.length ? board.history[board.history.length - 1] : null;
+  const reason = (san: string, mateIn: number | null): string => {
+    const r = bestMoveReason(board.fen, san, me, { mateIn, opponentLastSan });
+    return r ? ` — it ${r}` : '';
+  };
+  if (best.mate != null && best.mate > 0) {
+    const same = lines.slice(1).filter((l) => l.mate === best.mate).map((l) => l.san);
+    return same.length
+      ? `${andList([best.san, ...same])} all mate in ${best.mate} moves; nothing is faster.`
+      : `${best.san} is the fastest${reason(best.san, best.mate)}; nothing mates sooner.`;
+  }
+  const WIN = 300;
+  if (best.cp < WIN) return `There's no clear win here yet — ${best.san} is the best move${reason(best.san, null)}.`;
+  const alsoWin = lines.slice(1).filter((l) => (l.mate != null && l.mate > 0) || l.cp >= WIN).map((l) => l.san);
+  if (alsoWin.length === 0) return `${best.san} is the only move that keeps the win${reason(best.san, null)}; every other move gives it back.`;
+  return `${best.san} is the cleanest${reason(best.san, null)}. ${andList(alsoWin)} ${alsoWin.length > 1 ? 'also win' : 'also wins'}, but keep less.`;
 }

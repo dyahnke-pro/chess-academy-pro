@@ -282,9 +282,7 @@ export function buildDeliberation(input: {
   // 2026-10-10: "Nh6+ is best — it lands on the h6 outpost", then the mate in
   // four). The mate is the why; a square's geometry beside it teaches nothing.
   const mates = !!played && playedSans.length >= 3 && /and it's mate$/.test(played.short);
-  const bestWhy = mates
-    ? `starts a forced mate in ${Math.ceil(playedSans.length / 2)} moves`
-    : moveWhy(fenBefore, bestSan, moverColor, input.opponentLastSan);
+  const bestWhy = bestMoveReason(fenBefore, bestSan, moverColor, { mateIn: mates ? Math.ceil(playedSans.length / 2) : null, opponentLastSan: input.opponentLastSan });
   const namedWhy = namedCandidate && namedCandidate.san !== bestSan ? moveWhy(fenBefore, namedCandidate.san, moverColor, input.opponentLastSan) : null;
   const bestReply = (() => {
     if (!bestLine.moves[1]) return null;
@@ -419,6 +417,27 @@ export function deliberationAlternativesFacts(d: Deliberation): string {
 /** Why `san` is the move, phrased to follow "it" ("…— it wins the pawn on
  *  d5"). The ONE reason computer behind "The move is X" — shared so every lane
  *  that names a move gives the same reason. Null when nothing is computable. */
+/**
+ * WHY THE BEST MOVE IS BEST — the ONE computer every "why is this the best
+ * move" answer reads (Learn's weighing, the chat's best-move answer, the Why
+ * button, the engine walk's first move). Three copies each decided this on
+ * their own, so a rule fixed in one stayed broken in the others (hard walk
+ * 2026-10-10: "a mating move is best for the mate" took three fixes). A
+ * clause with no leading "it" ("starts a forced mate in 4 moves", "takes
+ * their knight on c6"). `mateIn` is REQUIRED (null when none) and from the
+ * MOVER's side, in moves: the caller must say whether the move mates.
+ */
+export function bestMoveReason(fenBefore: string, san: string, mover: 'w' | 'b', ctx: { mateIn: number | 'forced' | null; opponentLastSan: string | null }): string | null {
+  // A move that starts a forced mate is best for that reason; a square beside
+  // it teaches nothing. A move that mates now says so.
+  if (ctx.mateIn !== null) {
+    try { const c = new Chess(fenBefore); if (c.move(san) && c.isCheckmate()) return 'is mate'; } catch { /* not legal here */ }
+    if (ctx.mateIn === 'forced') return 'starts a forced mate';
+    if (ctx.mateIn > 1) return `starts a forced mate in ${ctx.mateIn} moves`;
+  }
+  return moveWhy(fenBefore, san, mover, ctx.opponentLastSan);
+}
+
 export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentLastSan: string | null): string | null {
   const first = materialWhy(fenBefore, san, mover, opponentLastSan)
     ?? threatAnswerWhy(fenBefore, san, mover)

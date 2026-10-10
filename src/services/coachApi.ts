@@ -2494,7 +2494,7 @@ async function serveGroundedPositionDefault(
       typeof grounding.engineMateIn === 'number'
         ? (blackToMove ? -grounding.engineMateIn : grounding.engineMateIn)
         : null;
-    const answer = assembleMoveEvalAnswer({ fen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, prevCapture: lastCaptureOf(grounding.moveHistory) });
+    const answer = assembleMoveEvalAnswer({ fen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, prevCapture: lastCaptureOf(grounding.moveHistory), opponentLastSan: grounding.moveHistory?.[grounding.moveHistory.length - 1] ?? null });
     if (computedOnly && answer?.facts?.trim()) return `${prefix}${answer.facts}`.trim();
     if (answer) {
       // DETERMINISTIC → COMPUTER, never the LLM (David 2026-09-02, chokepoint
@@ -6122,7 +6122,7 @@ export async function getCoachChatResponse(
               typeof grounding.engineMateIn === 'number'
                 ? (blackToMove ? -grounding.engineMateIn : grounding.engineMateIn)
                 : null;
-            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, askedPiece: grounding.askedPiece ?? null, prevCapture: bestFen === grounding.currentFen ? lastCaptureOf(grounding.moveHistory) : null, pvSan: bestFen === grounding.currentFen ? grounding.enginePlan?.pvSan ?? null : null });
+            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, askedPiece: grounding.askedPiece ?? null, prevCapture: bestFen === grounding.currentFen ? lastCaptureOf(grounding.moveHistory) : null, pvSan: bestFen === grounding.currentFen ? grounding.enginePlan?.pvSan ?? null : null, opponentLastSan: bestFen === grounding.currentFen ? grounding.moveHistory?.[grounding.moveHistory.length - 1] ?? null : null });
             if (answer) {
               const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
               if (voiced) {
