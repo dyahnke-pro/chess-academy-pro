@@ -82,4 +82,11 @@ describe('hard walk — mates', () => {
     expect(a.facts).toMatch(/If Rxg5, then Nb5\+/);
     expect(a.lines?.[0].plies.map((p) => p.san)).toEqual(['Kf2', 'Rxg5', 'Nb5+', 'Kd7', 'Rc7+']);
   });
+
+  it('White\'s ideas carry no Black ellipsis', () => {
+    // 09frX, Black to move: White's ideas are written Rg8, never …Rg8.
+    const a = assembleThreatAnswer('3r4/6R1/1R2Bp2/7k/4P1pN/P1r5/2n2P1P/2B3K1 b - - 0 23', null, 'black', 'opponent')!;
+    expect(a.facts).toMatch(/^They threaten Rh7# — mate\./);
+    expect(a.facts).not.toMatch(/…R/);
+  });
 });

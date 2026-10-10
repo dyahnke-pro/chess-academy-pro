@@ -653,7 +653,7 @@ export function opponentIdeas(fen: string, me: 'w' | 'b'): string[] {
     let lost: number | null = 0;
     try { lost = captureRead(m.after, m.to, me); } catch { lost = null; }
     if (lost === null || lost >= (MATERIAL_VALUE[m.piece] ?? 0)) continue;
-    out.push(`…${m.san} would ${geo.replace(/^pins/, 'pin').replace(/^forks/, 'fork')}`);
+    out.push(`${me === 'w' ? '…' : ''}${m.san} would ${geo.replace(/^pins/, 'pin').replace(/^forks/, 'fork')}`);
   }
   return out;
 }

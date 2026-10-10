@@ -160,23 +160,24 @@
 - `src/services/checkIsNotAGuard.test.ts:54`
 - `src/services/computedVoiceGrounding.test.ts:85`
 
-### `assembleThreatAnswer` (function) — 6 call sites
+### `assembleThreatAnswer` (function) — 7 call sites
 - `src/coach/chatTurnAnswers.ts:248`
 - `src/coach/dispatchCoachTurn.ts:384`
 - `src/coach/handWalk1009.test.ts:320`
 - `src/services/groundedAnswer.threatTake.test.ts:8`
 - `src/services/groundedAnswer.threatTake.test.ts:15`
-- `src/services/hardWalk.mates.test.ts:55`
+- `src/services/hardWalk.mates.test.ts:54`
+- `src/services/hardWalk.mates.test.ts:88`
 
 ### `opponentIdeas` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `mateThreatsAgainst` (function) — 2 call sites
-- `src/services/hardWalk.mates.test.ts:49`
-- `src/services/hardWalk.mates.test.ts:60`
+- `src/services/hardWalk.mates.test.ts:48`
+- `src/services/hardWalk.mates.test.ts:59`
 
 ### `assembleKingSafetyAnswer` (function) — 4 call sites
-- `src/services/hardWalk.mates.test.ts:50`
+- `src/services/hardWalk.mates.test.ts:49`
 - `src/services/kingSafetyAnswer.test.ts:6`
 - `src/services/kingSafetyAnswer.test.ts:12`
 - `src/services/kingSafetyAnswer.test.ts:16`
@@ -312,7 +313,7 @@
 - `src/services/groundedAnswer.test.ts:47`
 - `src/services/groundedAnswer.test.ts:52`
 - `src/services/groundedAnswer.test.ts:56`
-- `src/services/hardWalk.mates.test.ts:64`
+- `src/services/hardWalk.mates.test.ts:63`
 
 ### `assembleCandidateMoveAnswer` (function) — 16 call sites
 - `src/services/coachApi.ts:5980`
@@ -486,7 +487,7 @@
 - `src/services/groundedAnswer.evalSeat.test.ts:20`
 - `src/services/groundedAnswer.evalSeat.test.ts:24`
 - `src/services/groundedAnswer.evalSeat.test.ts:28`
-- `src/services/hardWalk.mates.test.ts:82`
+- `src/services/hardWalk.mates.test.ts:81`
 
 ### `MoveOrderExplanation` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
