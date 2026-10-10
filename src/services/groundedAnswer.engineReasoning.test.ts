@@ -61,7 +61,7 @@ describe('assembleEngineReasoning — decipher Stockfish\'s line', () => {
     const fen = '6k1/5ppp/8/8/8/8/8/R6K w - - 0 1';
     const a = assembleEngineReasoning({ fenBefore: fen, pvSan: ['Ra8#'], moverColor: 'white', evalCp: 10000, studentSide: 'white' });
     expect(a).not.toBeNull();
-    expect(a!.facts).toMatch(/delivers checkmate/i);
+    expect(a!.facts).toMatch(/Ra8# — it ends the game/i);
     expect(a!.facts).not.toMatch(/gives check\b/i);
   });
 

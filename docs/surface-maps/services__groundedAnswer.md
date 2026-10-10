@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7659 lines · 164 exports · 83 importers · 56 tests · 8 audits**
+**7659 lines · 164 exports · 84 importers · 56 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -41,6 +41,7 @@
 - `src/services/coachSideAwareness.test.ts`
 - `src/services/computedVoiceGrounding.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
+- `src/services/deliberation.ts`
 - `src/services/describeEscape.test.ts`
 - `src/services/discussionPractice.ts`
 - `src/services/endgameRuleAnswer.test.ts`
@@ -399,13 +400,14 @@
 ### `captureHasCounterTactic` (function) — 1 call site
 - `src/services/reviewTeachingPoints.ts:101`
 
-### `describeMoveGeometry` (function) — 20 call sites
+### `describeMoveGeometry` (function) — 21 call sites
 - `src/coach/chatTurnAnswers.ts:568`
 - `src/components/Puzzles/PuzzleBoard.tsx:243`
 - `src/components/Tactics/TacticSetupBoard.tsx:154`
 - `src/hooks/useHintSystem.ts:357`
 - `src/services/computedVoiceGrounding.test.ts:53`
 - `src/services/computedVoiceGrounding.test.ts:111`
+- `src/services/deliberation.ts:442`
 - `src/services/groundedAnswer.test.ts:1119`
 - `src/services/groundedAnswer.test.ts:1126`
 - `src/services/groundedAnswer.test.ts:1134`

@@ -179,7 +179,7 @@ export function phraseBetterMove(f: BetterMoveFact): string {
 export function mateReason(fenBefore: string, bestSan: string, mateIn: number | null): string {
   // The ONE why-best computer words it (deliberation.bestMoveReason).
   const mover: 'w' | 'b' = fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
-  return `it ${bestMoveReason(fenBefore, bestSan, mover, { mateIn: mateIn && mateIn > 1 ? mateIn : 'forced', opponentLastSan: null }) ?? 'is mate'}`;
+  return `it ${bestMoveReason(fenBefore, bestSan, mover, { mateIn: mateIn && mateIn > 1 ? mateIn : 'forced', opponentLastSan: null }) ?? 'ends the game'}`;
 }
 
 /** Convenience: the fact, computed and worded — or null.

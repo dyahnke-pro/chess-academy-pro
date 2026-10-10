@@ -24,6 +24,7 @@ import { isPinnedPiece } from './nextPlans';
 import { countKingAttack } from './kingSafety';
 import { andList, orList } from '../utils/andList';
 import { computeMustDefend } from './threatOut';
+import { describeMoveGeometry } from './groundedAnswer';
 
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
@@ -431,10 +432,15 @@ export function bestMoveReason(fenBefore: string, san: string, mover: 'w' | 'b',
   // A move that starts a forced mate is best for that reason; a square beside
   // it teaches nothing. A move that mates now says so.
   if (ctx.mateIn !== null) {
-    try { const c = new Chess(fenBefore); if (c.move(san) && c.isCheckmate()) return 'is mate'; } catch { /* not legal here */ }
+    try { const c = new Chess(fenBefore); if (c.move(san) && c.isCheckmate()) return 'ends the game'; } catch { /* not legal here */ }
     if (ctx.mateIn === 'forced') return 'starts a forced mate';
     if (ctx.mateIn > 1) return `starts a forced mate in ${ctx.mateIn} moves`;
   }
+  // THE TACTIC IT LANDS LEADS (merge 2026-10-10: Nc7+ forking king and rook was
+  // "eyes d5", a real pin was "lines up an x-ray"): a mate, fork or pin the
+  // board shows — landing-safe and winning by its own checks — is the reason.
+  const tactic = describeMoveGeometry(fenBefore, san, mover === 'w' ? 'white' : 'black');
+  if (tactic && /^(?:forks |pins )/.test(tactic)) return tactic;
   return moveWhy(fenBefore, san, mover, ctx.opponentLastSan);
 }
 

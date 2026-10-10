@@ -20,8 +20,8 @@ describe('the better move mates → the reason is the mate, on every surface', (
     const r36 = betterMoveReason('3nk2r/2R3pp/5q2/3B4/1Q6/P4N2/5PPP/6K1 w - - 9 36', 'Qb5+', 'Qe4+', ['b4e4'], 'white', null, true);
     expect(r36).toBe('it starts a forced mate');
   });
-  it('mate in one says "it is mate"', () => {
+  it('mate in one says "it ends the game" (one wording, from bestMoveReason)', () => {
     const fen = '6k1/5ppp/8/8/8/8/5PPP/R5K1 w - - 0 1';
-    expect(betterMoveReason(fen, 'h3', 'Ra8#', [], 'white', null, true)).toBe('it is mate');
+    expect(betterMoveReason(fen, 'h3', 'Ra8#', [], 'white', null, true)).toBe('it ends the game');
   });
 });

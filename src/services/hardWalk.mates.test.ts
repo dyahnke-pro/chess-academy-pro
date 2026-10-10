@@ -92,4 +92,10 @@ describe('hard walk — mates', () => {
     expect(a.facts).toMatch(/^They threaten Rh7# — mate\./);
     expect(a.facts).not.toMatch(/…R/);
   });
+
+  it('the weighing names the fork the best move lands, not a square it eyes', () => {
+    const F = 'r3k3/8/8/1N6/8/8/8/6K1 w - - 0 1';
+    const d = buildDeliberation({ analysis: { topLines: [{ rank: 1, evaluation: 500, mate: null, moves: toUci(F, ['Nc7+']) }] }, fenBefore: F, moverColor: 'w', opponentLastSan: null })!;
+    expect(d.bestWhy).toBe('forks the king on e8 and the rook on a8');
+  });
 });
