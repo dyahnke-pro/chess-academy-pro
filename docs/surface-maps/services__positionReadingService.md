@@ -189,7 +189,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/checkIsNotAGuard.test.ts:26`
 - `src/services/checkIsNotAGuard.test.ts:27`
 - `src/services/checkIsNotAGuard.test.ts:28`
-- `src/services/deliberation.ts:551`
+- `src/services/deliberation.ts:552`
 - `src/services/groundedAnswer.ts:1251`
 - `src/services/moveFundamentals.ts:904`
 
@@ -244,8 +244,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedMaterialTruth.corpus.test.ts:120`
 - `src/services/computedMaterialTruth.corpus.test.ts:145`
 - `src/services/deliberation.ts:46`
-- `src/services/deliberation.ts:540`
 - `src/services/deliberation.ts:541`
+- `src/services/deliberation.ts:542`
 - `src/services/exchangeIdeas.ts:136`
 - `src/services/exchangeLedger.ts:124`
 - `src/services/exchangeLedger.ts:354`
@@ -759,7 +759,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:200`
 
 ### `computeTerritory` (function) — 1 call site
-- `src/services/deliberation.ts:605`
+- `src/services/deliberation.ts:606`
 
 ### `findAttackTargets` (function) — 3 call sites
 - `src/services/groundedAnswer.ts:6716`

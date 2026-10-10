@@ -315,7 +315,8 @@ function shortfallText(c: Candidate): string {
   if (c.shortfall === 'trades-queens') {
     // THE TRADE IS A LINE, NOT A PROPERTY OF THE MOVE (hard walk 2026-10-10:
     // "Ne5 trades the queens" — Ne5 trades nothing; the queens come off later).
-    const rest = c.tradeSans && c.tradeSans.length > 1 ? `Then ${andList(c.tradeSans.slice(1))} — the queens come off` : `It lets the queens come off`;
+    // One ply long means the move itself took the last queen off.
+    const rest = c.tradeSans && c.tradeSans.length > 1 ? `Then ${andList(c.tradeSans.slice(1))} — the queens come off` : `${c.san} takes the last queen off`;
     return `${c.san}? ${rest} — with more space or an attack going, you want them on; every piece that comes off shrinks the edge.`;
   }
   if (c.shortfall === 'drops-material' && c.drops) {
