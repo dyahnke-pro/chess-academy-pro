@@ -82,7 +82,7 @@ import { conceptForCluster } from './weaknessConceptMap';
 import { getEndgameWeaknessProfile } from './endgameProfileService';
 import { detectBadHabits } from './badHabitDetector';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
-import { detectOpeningTranspositional } from './openingDetectionService';
+import { detectOpeningTranspositional, resolveOpeningEntry } from './openingDetectionService';
 import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpeningById } from './openingService';
 import { fuzzyMatchOpening } from './openingFuzzyMatcher';
 import { containmentCheck, containmentAudit } from './voiceContainment';
@@ -6209,7 +6209,8 @@ export async function getCoachChatResponse(
             const q = grounding.openingIdentityName;
             const norm = (x: string): string => x.toLowerCase().replace(/[^a-z0-9]/g, '');
             const matches = await searchOpenings(q).catch(() => []);
-            const hit = matches.find((m) => norm(m.name).includes(norm(q)) || norm(q).includes(norm(m.name)));
+            const canon = resolveOpeningEntry(q)?.canonicalName ?? null;
+            const hit = (canon ? matches.find((m) => m.name === canon) : undefined) ?? matches.find((m) => norm(m.name).includes(norm(q)) || norm(q).includes(norm(m.name)));
             if (hit) {
               await loadOpeningIdentity();
               const seat = grounding.studentColor === 'black' ? 'b' : 'w';
@@ -6230,7 +6231,11 @@ export async function getCoachChatResponse(
             const q = grounding.openingExistenceName;
             const matches = await searchOpenings(q).catch(() => []);
             const norm = (s: string): string => s.toLowerCase().replace(/[^a-z0-9]/g, '');
-            const hit = matches.find((m) => norm(m.name).includes(norm(q)) || norm(q).includes(norm(m.name)));
+            // THE ONE NAME RESOLVER first (alias table, teachable entries):
+            // "Fried Liver" matched "Anti-Fried Liver Defense" by word overlap
+            // (contract 2026-10-10). Word overlap only when it has no answer.
+            const canon = resolveOpeningEntry(q)?.canonicalName ?? null;
+            const hit = (canon ? { name: canon } : null) ?? matches.find((m) => norm(m.name).includes(norm(q)) || norm(q).includes(norm(m.name)));
             // The confirm is a LIVE offer: "teach me the <name>" is the exact
             // command the teach router honors, and the lesson it starts walks
             // the line to the MIDDLEGAME (the Gate-B depth standard) — never

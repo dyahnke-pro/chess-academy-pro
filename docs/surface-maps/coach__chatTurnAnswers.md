@@ -48,7 +48,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/chatTurnAnswers.test.ts:53`
 - `src/coach/chatTurnAnswers.test.ts:54`
 - `src/coach/chatTurnAnswers.test.ts:55`
-- `src/coach/dispatchCoachTurn.ts:395`
+- `src/coach/dispatchCoachTurn.ts:397`
 
 ### `answerDefend` (function) — 3 call sites
 - `src/coach/handWalk1009.test.ts:97`

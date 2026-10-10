@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**515 lines · 17 exports · 20 importers · 15 tests · 2 audits**
+**522 lines · 17 exports · 21 importers · 16 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,6 +12,7 @@
 
 ## Who calls in
 
+- `src/coach/chatKindContracts.test.ts`
 - `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/coachService.askReader.integration.test.ts`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts`
@@ -49,7 +50,9 @@
 ### `isServeParsedRouteOn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setChatTurnReaderForTests` (function) — 33 call sites
+### `setChatTurnReaderForTests` (function) — 35 call sites
+- `src/coach/chatKindContracts.test.ts:306`
+- `src/coach/chatKindContracts.test.ts:315`
 - `src/coach/chatTurnRow.outcome.test.ts:28`
 - `src/coach/chatTurnRow.outcome.test.ts:37`
 - `src/coach/coachService.askReader.integration.test.ts:31`
@@ -84,7 +87,8 @@
 - `src/components/Coach/GameChatPanel.test.tsx:287`
 - `src/components/Coach/GameChatPanel.test.tsx:295`
 
-### `resetConversations` (function) — 7 call sites
+### `resetConversations` (function) — 8 call sites
+- `src/coach/chatKindContracts.test.ts:304`
 - `src/coach/dispatchCoachTurn.noBoard.test.ts:14`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:21`
 - `src/coach/dispatchCoachTurn.positional.test.ts:21`
@@ -128,7 +132,8 @@
 ### `isComputedAnswer` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:7477`
 
-### `dispatchCoachTurn` (function) — 40 call sites
+### `dispatchCoachTurn` (function) — 41 call sites
+- `src/coach/chatKindContracts.test.ts:317`
 - `src/coach/chatTurnRow.outcome.test.ts:39`
 - `src/coach/coachService.askReader.integration.test.ts:32`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:35`
@@ -161,7 +166,7 @@
 - `src/components/Board/VoiceChatMic.tsx:484`
 - `src/components/Coach/CoachAnalysePage.tsx:238`
 - `src/components/Coach/CoachChatPage.tsx:284`
-- `src/components/Coach/CoachGameReview.tsx:3033`
+- `src/components/Coach/CoachGameReview.tsx:3040`
 - `src/components/Coach/ExplainPositionSessionView.tsx:247`
 - `src/components/Coach/GameChatPanel.tsx:1010`
 - `src/components/Coach/GameChatPanel.tsx:1388`
@@ -175,6 +180,7 @@
 
 ## Tests
 
+- `src/coach/chatKindContracts.test.ts`
 - `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/coachService.askReader.integration.test.ts`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts`

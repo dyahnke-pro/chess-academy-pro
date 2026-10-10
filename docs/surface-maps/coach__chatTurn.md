@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**747 lines · 26 exports · 19 importers · 13 tests · 3 audits**
+**747 lines · 26 exports · 20 importers · 14 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@
 - `src/coach/ask/playName.ts`
 - `src/coach/boardTurnAnswer.test.ts`
 - `src/coach/boardTurnAnswer.ts`
+- `src/coach/chatKindContracts.test.ts`
 - `src/coach/chatTurn.test.ts`
 - `src/coach/chatTurnAnswers.test.ts`
 - `src/coach/chatTurnAnswers.ts`
@@ -48,11 +49,11 @@
 - `src/coach/chatTurn.test.ts:97`
 - `src/coach/chatTurn.test.ts:100`
 - `src/coach/chatTurn.test.ts:107`
-- `src/coach/dispatchCoachTurn.ts:251`
-- `src/coach/dispatchCoachTurn.ts:264`
-- `src/coach/dispatchCoachTurn.ts:328`
-- `src/coach/dispatchCoachTurn.ts:442`
-- `src/coach/dispatchCoachTurn.ts:509`
+- `src/coach/dispatchCoachTurn.ts:253`
+- `src/coach/dispatchCoachTurn.ts:266`
+- `src/coach/dispatchCoachTurn.ts:330`
+- `src/coach/dispatchCoachTurn.ts:449`
+- `src/coach/dispatchCoachTurn.ts:516`
 - `src/coach/questionRoute.test.ts:20`
 - `src/coach/questionRoute.test.ts:30`
 - `src/coach/questionRoute.test.ts:33`
@@ -140,19 +141,19 @@
 
 ### `nextConversationState` (function) — 2 call sites
 - `src/coach/chatTurn.test.ts:162`
-- `src/coach/dispatchCoachTurn.ts:175`
+- `src/coach/dispatchCoachTurn.ts:177`
 
 ### `canonicalAsk` (function) — 5 call sites
 - `src/coach/chatTurn.test.ts:66`
 - `src/coach/chatTurn.test.ts:80`
 - `src/coach/chatTurn.test.ts:83`
 - `src/coach/chatTurn.test.ts:87`
-- `src/coach/dispatchCoachTurn.ts:421`
+- `src/coach/dispatchCoachTurn.ts:423`
 
 ### `kindAgreesWithLane` (function) — 3 call sites
 - `src/coach/chatTurn.test.ts:103`
 - `src/coach/chatTurn.test.ts:104`
-- `src/coach/dispatchCoachTurn.ts:189`
+- `src/coach/dispatchCoachTurn.ts:191`
 
 ### `firingLanes` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -163,6 +164,7 @@
 ## Tests
 
 - `src/coach/boardTurnAnswer.test.ts`
+- `src/coach/chatKindContracts.test.ts`
 - `src/coach/chatTurn.test.ts`
 - `src/coach/chatTurnAnswers.test.ts`
 - `src/coach/chatTurnCodeReader.test.ts`

@@ -242,7 +242,7 @@ const CONTRACTS: Record<ChatKind, Contract | Owed> = {
   'endgame-weakness': { board: null, ask: 'which endgames am I weakest at?', reading: { kind: 'endgame-weakness' },
     must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
   'review-due': { board: null, ask: "what's due for review?", reading: { kind: 'review-due' },
-    must: [/no (?:opening )?review cards|nothing (?:is )?due/i], mustNot: [/\d+(?:\.\d+)?%/] },
+    must: [/(?:no|don't have any) (?:opening )?review cards|nothing (?:is )?due/i], mustNot: [/\d+(?:\.\d+)?%/] },
   // ── knowledge: what the app knows without a board ──
   concept: { board: null, ask: 'what is a fork?', reading: { kind: 'concept', topic: 'fork' },
     must: [/fork/i, /two|both|more than one/i] },
@@ -251,7 +251,7 @@ const CONTRACTS: Record<ChatKind, Contract | Owed> = {
   'opening-identity': { board: null, ask: 'what is the Caro-Kann about?', reading: { kind: 'opening-identity', topic: 'Caro-Kann' },
     must: [/Caro/] },
   'opening-existence': { board: null, ask: 'is there an opening called the Fried Liver?', reading: { kind: 'opening-existence', topic: 'Fried Liver' },
-    must: [/Fried Liver/, /yes|there is|it's real|is an? /i] },
+    must: [/Fried Liver Attack/, /yes|there is|it's real|is an? /i], mustNot: [/Anti-Fried/] },
   'opening-traps': { board: null, ask: 'what traps are there in the Italian?', reading: { kind: 'opening-traps', topic: 'Italian' },
     must: [/Italian|trap/i] },
   'counter-repertoire': { board: null, ask: 'what should I play against the Sicilian?', reading: { kind: 'counter-repertoire', topic: 'Sicilian' },
