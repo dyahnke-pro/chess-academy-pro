@@ -249,7 +249,12 @@ describe('back-rank alignment after castling long', () => {
   };
 
   it('seeds the alignment when Black has castled long', () => {
-    const fact = seed('2kr1q2/ppp2ppp/8/8/8/2N5/PPP2PPP/R2QK2R w KQ - 0 12');
+    // The queen on d2 can reach the 8th rank legally and stand there. The old
+    // position (queen on d1) seeded only through Qd7+ / Qxd8+ followed by a
+    // second move while Black was in CHECK — an impossible "pass" the one
+    // null-move rule now refuses (census 2026-10-10); every legal path left
+    // the queen en prise.
+    const fact = seed('2kr1q2/ppp2ppp/8/8/8/2N5/PPPQ1PPP/R3K2R w KQ - 0 12');
     expect(fact).toContain('king on c8');
     expect(fact).toContain('queen on f8');
     expect(fact).toContain('8th rank');
@@ -273,7 +278,7 @@ describe('back-rank alignment after castling long', () => {
   });
 
   it('is not rank-dependent — the same shape off the home rank still seeds', () => {
-    expect(seed('8/ppkr1q2/8/8/8/2N5/PPP2PPP/R2QK2R w KQ - 0 12')).toContain('7th rank');
+    expect(seed('8/ppkr1q2/8/8/8/2N5/PPPQ1PPP/R3K2R w KQ - 0 12')).toContain('7th rank');
   });
 
   it('seeds the ADJACENT c8-king / d7-queen diagonal — the sharpest form', () => {

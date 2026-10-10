@@ -145,10 +145,10 @@ describe('detectTacticType — the engine\'s reality gate holds (the legacy fals
     expect(detectTacticType(fen, 'd1d5')).not.toBe('removing_the_guard');
   });
 
-  it('a piece with a DEFENDED escape square is not trapped (legacy said trapped_piece)', () => {
+  it('a piece with a DEFENDED escape square is not trapped — the legacy tail agrees now (one trapped computer)', () => {
     // Ra1 hits Ba2; b1/b3 are covered by Nd2 — but black\'s c4 pawn defends b3, so ...Bb3 holds.
     const fen = '7k/8/8/8/2p5/8/b2N4/4R1K1 w - - 0 1';
-    expect(legacyTacticGeometry(fen, 'e1a1')).toBe('trapped_piece');
+    expect(legacyTacticGeometry(fen, 'e1a1')).not.toBe('trapped_piece');
     expect(detectTacticType(fen, 'e1a1')).not.toBe('trapped_piece');
   });
 

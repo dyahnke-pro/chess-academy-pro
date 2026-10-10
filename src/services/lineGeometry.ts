@@ -10,6 +10,7 @@
  * discovery that never happened could be filed as a miss. One home now.
  */
 import type { Chess, Square, Color, PieceSymbol } from 'chess.js';
+import { CAPTURE_VALUE } from './pieceValues';
 
 export const BISHOP_DIRS: [number, number][] = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
 export const ROOK_DIRS: [number, number][] = [[-1, 0], [1, 0], [0, -1], [0, 1]];
@@ -45,7 +46,6 @@ export function traceRay(chess: Chess, fromSquare: Square, dir: [number, number]
   return pieces;
 }
 
-const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
 /**
  * THE DISCOVERY A MOVE JUST MADE: the move from `from` to `to` uncovered a
@@ -65,7 +65,7 @@ export function discoveryRevealed(chessAfter: Chess, from: Square, to: Square, m
     if (!canSlide) continue;
     const first = traceRay(chessAfter, from, dir, 1)[0];
     if (!first || first.square === to) continue;
-    if (first.color !== movingColor && VALUE[first.type] >= 3) return { behind, target: first };
+    if (first.color !== movingColor && CAPTURE_VALUE[first.type] >= 3) return { behind, target: first };
   }
   return null;
 }

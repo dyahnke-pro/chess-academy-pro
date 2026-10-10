@@ -64,7 +64,8 @@ describe('one verdict computer — a verdict without its reason is the eval bar 
     // +120 for the student. The private `verdictWord` in augmentWithProjections
     // called this band "you're clearly better"; assessPositionalEdge calls it
     // "a bit better" — so one review could say both about the same number.
-    expect(assessPositionalEdge('8/8/4k3/8/8/4K3/4P3/8 w - - 0 40', 'w', 120).verdict).toBe('a bit better');
+    // Both read the one ladder now (evalBand: +1.2 is "slightly better").
+    expect(assessPositionalEdge('8/8/4k3/8/8/4K3/4P3/8 w - - 0 40', 'w', 120).verdict).toBe('slightly better');
     expect(assessPositionalEdge('8/8/4k3/8/8/4K3/4P3/8 w - - 0 40', 'w', 200).verdict).toBe('clearly better');
   });
   it('carries a BOARD reason at the end of the Alapin line, not just the word', async () => {
