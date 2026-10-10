@@ -24,6 +24,7 @@
  * Companion docs: ANALYTICS_AUDIT.md. The build plan there maps
  * each query function to the emit sites that feed it.
  */
+import { phaseForMoveNumber } from './gamePhaseService';
 import { getAppAuditLog, type AuditEntry, type AuditKind } from './appAuditor';
 import { db } from '../db/schema';
 import { resolvePlayerColor, isEngineName } from './playerIdentity';
@@ -1405,11 +1406,6 @@ export interface CriticalMomentsStats {
   byPhase: { phase: GamePhase; total: number; found: number; accuracyPct: number }[];
 }
 
-function phaseForMoveNumber(moveNumber: number): GamePhase {
-  if (moveNumber <= 10) return 'opening';
-  if (moveNumber >= 30) return 'endgame';
-  return 'middlegame';
-}
 
 export async function criticalMomentsAccuracy(): Promise<CriticalMomentsStats> {
   const playerGames = await loadPlayerGames();

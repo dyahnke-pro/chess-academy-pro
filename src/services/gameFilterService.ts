@@ -17,6 +17,7 @@
  * That keeps the URL state compact and deterministic, and lets us
  * dedupe identical filter chips without ambiguity.
  */
+import { phaseForMoveNumber } from './gamePhaseService';
 import { db } from '../db/schema';
 import type {
   GameRecord,
@@ -87,11 +88,6 @@ function isLoss(game: GameRecord, playerColor: 'white' | 'black'): boolean {
     (playerColor === 'black' && game.result === '1-0');
 }
 
-function phaseForMoveNumber(moveNumber: number): GamePhase {
-  if (moveNumber <= 10) return 'opening';
-  if (moveNumber >= 30) return 'endgame';
-  return 'middlegame';
-}
 
 /** Apply one filter to a candidate set. Pure — no DB queries
  *  inside, just predicate evaluation. */

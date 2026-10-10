@@ -1,5 +1,6 @@
 import type { CoachGameMove, GamePhase, PhaseAccuracy } from '../types';
 import { winPercent, accuracyFromWinDelta } from './accuracyService';
+import { openingIsOver } from './openingEnd';
 
 /**
  * Piece material values. Counts every non-king piece INCLUDING pawns — the
@@ -23,7 +24,6 @@ const PIECE_VALUES: Record<string, number> = {
 export const ENDGAME_MATERIAL_THRESHOLD = 13;
 
 /** Opening cutoff — moves at or below this number are considered opening */
-const OPENING_MOVE_CUTOFF = 10;
 
 /**
  * Count total material on the board from a FEN string (excluding kings).
@@ -61,18 +61,16 @@ function fullMoveOf(at: GamePosition): number {
  * - `middlegame`: everything else
  */
 export function classifyPhase(fen: string, at: GamePosition): GamePhase {
-  if (fullMoveOf(at) <= OPENING_MOVE_CUTOFF) {
-    return 'opening';
-  }
-
   // Structural test, not a material threshold — queens off, or one side
   // reduced to a bare king and a piece. The old `countMaterial(fen) <= 13`
   // could barely ever fire because pawns count toward that total.
   if (isEndgameByMaterial(fen)) {
     return 'endgame';
   }
-
-  return 'middlegame';
+  // WHEN THE OPENING IS OVER is the one definition (openingEnd, David
+  // 2026-10-10: "we already define when the opening is done") — this used a
+  // flat 10-move cutoff of its own.
+  return openingIsOver(fen, fullMoveOf(at), 'either') ? 'middlegame' : 'opening';
 }
 
 /**
@@ -280,4 +278,17 @@ export function isEndgameByMaterial(fen: string): boolean {
   const blackPieces = blackQueens + blackRooks + blackMinors;
   if (whitePieces <= 1 || blackPieces <= 1) return true;
   return false;
+}
+
+/**
+ * A PHASE FROM A MOVE NUMBER ALONE — for stored annotations that keep no board
+ * (the stats and the game filter). It is an estimate, not the opening-end
+ * definition (`openingEnd`), which needs the board; the honest fix is to store
+ * each move's phase when the game is analysed (census 2026-10-10). Two
+ * byte-identical copies of this lived in gameFilterService and analyticsService.
+ */
+export function phaseForMoveNumber(moveNumber: number): GamePhase {
+  if (moveNumber <= 10) return 'opening';
+  if (moveNumber >= 30) return 'endgame';
+  return 'middlegame';
 }

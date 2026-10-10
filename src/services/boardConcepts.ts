@@ -16,12 +16,7 @@
 import { Chess } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { isEndgameByMaterial } from './gamePhaseService';
-import {
-  hasCastled,
-  rooksConnected,
-  countDevelopedMinors,
-  hasMajorPieceCaptured,
-} from './phaseTransitionDetector';
+import { openingIsOver, hasCastled } from './openingEnd';
 import { isMinor, isMinorAtHome } from './development';
 
 export type Phase = 'opening' | 'middlegame' | 'endgame';
@@ -63,13 +58,10 @@ function phaseOfBoard(fen: string): Phase {
   // ENDGAME first: material is the reliable signal and must outrank any
   // development rule — a queenless rook ending is an ending however it arose.
   if (isEndgameByMaterial(fen)) return 'endgame';
-  const developed = countDevelopedMinors(fen);
-  const castledAndConnected = (['white', 'black'] as const)
-    .some((c) => hasCastled(fen, c) && rooksConnected(fen, c));
-  if (castledAndConnected
-    || (developed.white >= 3 && developed.black >= 3)
-    || hasMajorPieceCaptured(fen)) return 'middlegame';
-  return 'opening';
+  // The one opening-end definition (openingEnd) — this carried three of its
+  // seven rules without their move-number conditions.
+  const fullMove = Number(fen.split(' ')[5]) || 1;
+  return openingIsOver(fen, fullMove, 'either') ? 'middlegame' : 'opening';
 }
 
 /** Files with no pawn of the given colour — where a rook belongs. */
