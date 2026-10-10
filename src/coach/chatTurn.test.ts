@@ -179,3 +179,16 @@ describe('validation against the board', () => {
     expect(validateChatTurn({ kind: 'stats', seat: 'me', topic: null, referents: [] }, {}).ok).toBe(true);
   });
 });
+
+describe('their last move on a board with no move list (hard walk 2026-10-10)', () => {
+  const GOMC = '6k1/p1p4p/1p2n1p1/3pQ3/3P1nN1/2PB2qP/PP4P1/6K1 w - - 18 33';
+  const turn = (san: string) => ({ kind: 'what-did-their-move-change', referents: [{ type: 'move', san }], seat: 'them', topic: null }) as never;
+  it('their piece standing on the square is a move they may have just played', () => {
+    expect(validateChatTurn(turn('Kg8'), { fen: GOMC, history: [], studentColor: 'white' } as never).ok).toBe(true);
+  });
+  it('a piece that is not there is still refused', () => {
+    expect(validateChatTurn(turn('Kh8'), { fen: GOMC, history: [], studentColor: 'white' } as never).ok).toBe(false);
+    // the side to move did not just move
+    expect(validateChatTurn(turn('Kg1'), { fen: GOMC, history: [], studentColor: 'white' } as never).ok).toBe(false);
+  });
+});

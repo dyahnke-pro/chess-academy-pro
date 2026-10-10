@@ -608,6 +608,20 @@ function moveIsReal(san: string, board: BoardContext): boolean {
     try { if (new Chess(board.lastStudentAttempt.fenBefore).move(san)) return true; } catch { /* no */ }
   }
   const history = board.history ?? [];
+  // NO MOVE LIST (an explain board, a puzzle): the side that just moved has
+  // that piece standing on the move's square, so it may have been their last
+  // move (hard walk 2026-10-10: "what did their last move Kg8 threaten?" was
+  // refused as illegal, and a phrase router answered with the best move).
+  if (history.length === 0 && board.fen) {
+    const dest = san.replace(/[+#?!]+$/, '').match(/([a-h][1-8])(?:=[QRBN])?$/)?.[1];
+    const letter = /^[KQRBN]/.test(san) ? san[0].toLowerCase() : 'p';
+    try {
+      const c = new Chess(board.fen);
+      const justMoved = c.turn() === 'w' ? 'b' : 'w';
+      const p = dest ? c.get(dest as Square) : null;
+      if (p && p.color === justMoved && p.type === letter && !/^O-O/.test(san)) return true;
+    } catch { /* no board to read */ }
+  }
   if (history.length > 0) {
     const c = new Chess();
     for (const played of history) {
