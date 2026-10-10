@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**253 lines · 10 exports · 5 importers · 3 tests · 1 audits**
+**257 lines · 10 exports · 5 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -58,7 +58,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildCriticalMomentQuestion` (function) — 17 call sites
-- `src/components/Coach/CoachGameReview.tsx:881`
+- `src/components/Coach/CoachGameReview.tsx:883`
 - `src/services/reviewTurningPoint.test.ts:76`
 - `src/services/reviewTurningPoint.test.ts:84`
 - `src/services/reviewTurningPoint.test.ts:90`
@@ -77,7 +77,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewTurningPoint.test.ts:202`
 
 ### `judgeCriticalMomentPick` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:1513`
+- `src/components/Coach/CoachGameReview.tsx:1523`
 - `src/services/reviewTurningPoint.test.ts:127`
 - `src/services/reviewTurningPoint.test.ts:128`
 - `src/services/reviewTurningPoint.test.ts:181`

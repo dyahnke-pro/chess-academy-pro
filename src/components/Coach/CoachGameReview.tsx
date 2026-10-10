@@ -1041,6 +1041,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // persists one line and the review pool pins MultiPV 1.
   const [criticalMoment, setCriticalMoment] = useState<CriticalMomentQuestion | null>(null);
   const [criticalCard, setCriticalCard] = useState<CriticalMomentQuestion | null>(null);
+  /** The line the last Why proved — or the critical moment's reveal said —
+   *  anchored to its ply, for the Play line button. */
+  const [reviewWhy, setReviewWhy] = useState<{ ply: number; line: WalkableLine | null } | null>(null);
+  const revealWalk = (q: CriticalMomentQuestion): WalkableLine | null => {
+    const l = q.revealLines[0];
+    return l ? walkableLine(l.fen, l.sans, l.sans[0] ?? '') : null;
+  };
   const [criticalReveal, setCriticalReveal] = useState<{ correct: boolean; text: string } | null>(null);
   /** Plies this review has already spoken the moment at — one per game. */
   const criticalDoneRef = useRef<Set<number>>(new Set());
@@ -1180,6 +1187,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         return { advanced: false, stop: 'critical-ask' };  // resumes when they answer
       }
       // credit / note — a statement. Speak it and keep walking.
+      { const w = revealWalk(criticalMoment); if (w) setReviewWhy({ ply: atPly, line: w }); }
       void reviewSay(criticalMoment.reveal, criticalMoment.found ? { prosodySpike: true } : undefined).catch(() => undefined);
       }
     }
@@ -1517,6 +1525,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     captureEvent('review_critical_moment_result', {
       correct, picked: san, ply: criticalCard.ply, count: criticalCard.count, stake: criticalCard.stake,
     });
+    { const w = revealWalk(criticalCard); if (w && questionPlyRef.current != null) setReviewWhy({ ply: questionPlyRef.current, line: w }); }
     setCriticalCard(null);
     setCriticalReveal({ correct, text });
     void recordPromptedFind({
@@ -2310,8 +2319,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     corpusNotes: false,   // review carries no corpus notes (2026-09-23)
     withhold: null,       // greyed while a question is open, below
   });
-  /** The line the last Why proved, anchored to its ply. */
-  const [reviewWhy, setReviewWhy] = useState<{ ply: number; line: WalkableLine | null } | null>(null);
   const reviewWhyBusyRef = useRef(false);
   const handleReviewWhy = useCallback(async (): Promise<void> => {
     const seg = walkPlayback.currentSegment;

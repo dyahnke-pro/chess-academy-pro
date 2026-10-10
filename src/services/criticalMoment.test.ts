@@ -252,7 +252,7 @@ describe('S5 — the reveal names why the failing candidates fail', () => {
         { rank: 2, evaluation: 600, mate: null, moves: ['d8h4', 'f3h4'] },
       ],
     });
-    expect(read?.discardedProofs).toEqual([{ san: 'Qh4', text: 'Qh4 and Nxh4 — they win a queen' }]);
+    expect(read?.discardedProofs).toEqual([{ san: 'Qh4', text: 'Qh4 and Nxh4 — they win a queen', line: { fen: expect.any(String), sans: ['Qh4', 'Nxh4'] } }]);
     const t = criticalMomentReveal(read);
     expect(t).toContain("Qh4 didn't work: Qh4 and Nxh4 — they win a queen.");
   });

@@ -709,6 +709,11 @@ export function spokenLines(d: Deliberation, fenBefore: string, text: string): W
     if (w && !out.some((o) => o.plies.map((p) => p.san).join(' ') === w.plies.map((p) => p.san).join(' '))) out.push(w);
   };
   add(d.bestLine, d.bestLineSans);
+  // The engine's reply, when that is what was said ("Their best reply is Kd6").
+  if (d.bestReply && text.includes(`Their best reply is ${d.bestReply}`)) {
+    const w = walkableLine(fenBefore, [d.best.san, d.bestReply], d.best.san);
+    if (w && !out.some((o) => o.plies.map((p) => p.san).join(' ') === w.plies.map((p) => p.san).join(' '))) out.push(w);
+  }
   for (const c of [d.named, ...d.alternatives]) if (c) add(c.proof, c.proofSans);
   return out;
 }

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7656 lines · 165 exports · 83 importers · 56 tests · 8 audits**
+**7645 lines · 164 exports · 83 importers · 56 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -166,18 +166,14 @@
 - `src/coach/handWalk1009.test.ts:320`
 - `src/services/groundedAnswer.threatTake.test.ts:8`
 - `src/services/groundedAnswer.threatTake.test.ts:15`
-- `src/services/hardWalk.mates.test.ts:54`
-- `src/services/hardWalk.mates.test.ts:88`
+- `src/services/hardWalk.mates.test.ts:55`
+- `src/services/hardWalk.mates.test.ts:91`
 
 ### `opponentIdeas` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `mateThreatsAgainst` (function) — 2 call sites
-- `src/services/hardWalk.mates.test.ts:48`
-- `src/services/hardWalk.mates.test.ts:59`
-
 ### `assembleKingSafetyAnswer` (function) — 4 call sites
-- `src/services/hardWalk.mates.test.ts:49`
+- `src/services/hardWalk.mates.test.ts:50`
 - `src/services/kingSafetyAnswer.test.ts:6`
 - `src/services/kingSafetyAnswer.test.ts:12`
 - `src/services/kingSafetyAnswer.test.ts:16`
@@ -313,7 +309,7 @@
 - `src/services/groundedAnswer.test.ts:47`
 - `src/services/groundedAnswer.test.ts:52`
 - `src/services/groundedAnswer.test.ts:56`
-- `src/services/hardWalk.mates.test.ts:63`
+- `src/services/hardWalk.mates.test.ts:64`
 
 ### `assembleCandidateMoveAnswer` (function) — 16 call sites
 - `src/services/coachApi.ts:5980`
@@ -487,7 +483,7 @@
 - `src/services/groundedAnswer.evalSeat.test.ts:20`
 - `src/services/groundedAnswer.evalSeat.test.ts:24`
 - `src/services/groundedAnswer.evalSeat.test.ts:28`
-- `src/services/hardWalk.mates.test.ts:81`
+- `src/services/hardWalk.mates.test.ts:84`
 
 ### `MoveOrderExplanation` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

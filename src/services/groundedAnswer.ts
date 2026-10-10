@@ -13,7 +13,7 @@
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
 import { MATERIAL_VALUE } from './pieceValues';
-import { computeMustDefend } from './threatOut';
+import { computeMustDefend, mateThreatsAgainst } from './threatOut';
 import { whyNotLegal } from './whyNotLegal';
 import { readBoardUrgency, urgencyLead, threatsAgainst } from './boardUrgency';
 import { mechanismContrast, moveMissed, pvSans } from './moveInsight';
@@ -600,7 +600,7 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
   // threaten?" → "the pawn on g2, which is not defended enough" with …Qxg2#
   // on the board). The same null-move read as the material threats.
   const attacker: 'w' | 'b' = victimColor === 'w' ? 'b' : 'w';
-  const mates = inCheck ? [] : mateThreatsAgainst(fen, victimColor).map((san) => `${attacker === 'b' ? '…' : ''}${san}`);
+  const mates = inCheck ? [] : mateThreatsAgainst(fen, victimColor).moves.map(({ san }) => `${attacker === 'b' ? '…' : ''}${san}`);
   const matePart = mates.length ? `${isOpp ? 'they threaten' : 'you threaten'} ${orList(mates)} — mate` : '';
   if (wins.length === 0 && !inCheck && !matePart) {
     return {
@@ -658,23 +658,6 @@ export function opponentIdeas(fen: string, me: 'w' | 'b'): string[] {
   return out;
 }
 
-/** Every move the side attacking `target`'s king could mate with if it were
- *  their move — the null-move read of a mate threat. chess.js, exact. */
-export function mateThreatsAgainst(fen: string, target: 'w' | 'b'): string[] {
-  const parts = fen.split(' ');
-  const attacker = target === 'w' ? 'b' : 'w';
-  if (parts[1] !== attacker) { parts[1] = attacker; parts[3] = '-'; }
-  let c: Chess;
-  try { c = new Chess(parts.join(' ')); } catch { return []; }
-  // A king already in check is the target's move: no null move to read.
-  const k = c.board().flat().find((x) => x && x.type === 'k' && x.color === target);
-  if (!k || c.isAttacked(k.square, attacker)) return [];
-  const out: string[] = [];
-  for (const m of c.moves({ verbose: true })) {
-    if (m.san.endsWith('#')) out.push(m.san);
-  }
-  return out;
-}
 
 // ── KING SAFETY — "is my king safe?" ────────────────────────────────────────
 export function assembleKingSafetyAnswer(fen: string, studentColor: 'white' | 'black', side: 'me' | 'opponent' | 'neutral'): GroundedAnswer | null {
@@ -686,7 +669,7 @@ export function assembleKingSafetyAnswer(fen: string, studentColor: 'white' | 'b
   // → "not under attack right now", with …Qxg2# on the board). The question is
   // what the other side could do if it were their move, not only what attacks
   // the king this instant.
-  const mates = mateThreatsAgainst(fen, target).map((san) => `${target === 'w' ? '…' : ''}${san}`);
+  const mates = mateThreatsAgainst(fen, target).moves.map(({ san }) => `${target === 'w' ? '…' : ''}${san}`);
   if (mates.length) {
     const who = whose === 'your' ? 'they threaten' : 'you threaten';
     const Whose = whose === 'your' ? 'Your' : 'Their';
@@ -1913,7 +1896,13 @@ export function assembleMoveEvalAnswer(opts: {
         ? `No ${opts.askedPiece} move is the answer here — the strongest is ${bestMoveSan}.`
         : `The best move is ${bestMoveSan}.`,
   ];
-  if (why) parts.push(why);
+  // A MOVE THAT STARTS A FORCED MATE IS BEST FOR THAT REASON (hard walk
+  // 2026-10-10: "Ng5 lands on the g5 outpost … there is a forced mate in 3").
+  // The mate is the why; a square beside it teaches nothing. One-move mates
+  // keep their own reason (the SAN already says mate).
+  const startsMate = typeof opts.mateIn === 'number' && opts.mateIn > 1;
+  if (startsMate) parts.push(`It starts a forced mate in ${opts.mateIn}.`);
+  else if (why) parts.push(why);
   else {
     // NAMED WITH ITS REASON (question walk 2026-09-27: "The best move is g3."
     // and nothing else). What the move does on the board, else the fact that
@@ -1924,7 +1913,7 @@ export function assembleMoveEvalAnswer(opts: {
     if (geo) parts.push(`It ${geo}.`);
     else if (!/[x+#]/.test(bestMoveSan)) parts.push("It's a quiet move — nothing forcing does better here, so the engine improves the position instead.");
   }
-  if (evalText) parts.push(`${evalText.charAt(0).toUpperCase()}${evalText.slice(1)}.`);
+  if (evalText && !startsMate) parts.push(`${evalText.charAt(0).toUpperCase()}${evalText.slice(1)}.`);
 
   // THE LINE, PLAYED OUT — only where it proves something (the proof rule: an
   // engine line is said when it ends in mate or a counted gain, never as a

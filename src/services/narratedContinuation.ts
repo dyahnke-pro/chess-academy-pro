@@ -46,10 +46,14 @@ export function detectPhase(fen: string, ply: number): GamePhase {
 /** A material lead, named by the pieces the BOARD shows (`boardEdgeWords`,
  *  the one board namer) — never by a point threshold, which called the
  *  exchange and a pawn "a piece" and two pawns "a pawn" (one-coach P2). */
-function describeLead(fen: string, balance: number): string {
-  const side = balance > 0 ? 'White' : 'Black';
-  const words = boardEdgeWords(fen, balance > 0 ? 'w' : 'b', Math.abs(balance));
-  return Math.abs(balance) >= 8 ? `${side} is winning — ${words} up.` : `${side} is ${words} up.`;
+function describeLead(fen: string, balance: number, student: 'w' | 'b'): string {
+  const ahead: 'w' | 'b' = balance > 0 ? 'w' : 'b';
+  // ONE PERSPECTIVE: the lesson is the student's side, so "you" / "they",
+  // never a bare colour (narration sweep 2026-10-10).
+  const side = ahead === student ? "you're" : "they're";
+  const words = boardEdgeWords(fen, ahead, Math.abs(balance));
+  const lead = Math.abs(balance) >= 8 ? `${side} winning — ${words} up.` : `${side} ${words} up.`;
+  return lead.charAt(0).toUpperCase() + lead.slice(1);
 }
 
 export interface ContinuationState {
@@ -74,6 +78,8 @@ export function continuationNarration(
   /** The move that produced `newFen` — required, so a board read mid-recapture
    *  (Nxf6+ with …Bxf6 coming) is never announced as a piece won. */
   lastMove: LastMove | null,
+  /** The student's side — the lesson's "you". */
+  student: 'w' | 'b',
 ): { text: string | null; state: ContinuationState } {
   const phase = detectPhase(newFen, ply);
   // 1) Phase transition — the single most useful thing to call out.
@@ -87,7 +93,7 @@ export function continuationNarration(
   // 2) Decisive, NEW material swing (≥ a full point of change, ≥ a pawn lead).
   const bal = settledBalance(newFen, lastMove);
   if (Math.abs(bal) >= 1 && Math.abs(bal - prev.announcedBalance) >= 2) {
-    return { text: describeLead(newFen, bal), state: { phase, announcedBalance: bal } };
+    return { text: describeLead(newFen, bal, student), state: { phase, announcedBalance: bal } };
   }
   // 3) Routine move — silence.
   return { text: null, state: { phase, announcedBalance: prev.announcedBalance } };
@@ -98,11 +104,13 @@ export function continuationResult(
   isCheckmate: boolean,
   isDraw: boolean,
   sideToMove: 'w' | 'b',
+  student: 'w' | 'b',
 ): string {
   if (isCheckmate) {
     // The side to move is the one that got mated.
-    const winner = sideToMove === 'w' ? 'Black' : 'White';
-    return `Checkmate — ${winner} wins. That's the whole game, opening to mate.`;
+    return sideToMove === student
+      ? "Checkmate — they win. That's the whole game, opening to mate."
+      : "Checkmate — you win. That's the whole game, opening to mate.";
   }
   if (isDraw) return "It's a draw — neither side could break through. That's the full game.";
   return "That's as far as we'll take it — a clear enough picture of the middlegame and endgame.";

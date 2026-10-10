@@ -119,8 +119,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/giftedMaterialIsNotWon.test.ts:30`
 - `src/services/giftedMaterialIsNotWon.test.ts:45`
 - `src/services/giftedMaterialIsNotWon.test.ts:56`
-- `src/services/groundedAnswer.ts:2644`
-- `src/services/groundedAnswer.ts:2711`
+- `src/services/groundedAnswer.ts:2633`
+- `src/services/groundedAnswer.ts:2700`
 - `src/services/inaccuracyCall.ts:294`
 - `src/services/inaccuracyCall.ts:352`
 - `src/services/inaccuracyCall.ts:664`
@@ -169,13 +169,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/deliberation.ts:255`
 - `src/services/exchangeLedger.horizon.test.ts:16`
 - `src/services/exchangeLedger.horizon.test.ts:21`
-- `src/services/hardWalk.mates.test.ts:42`
+- `src/services/hardWalk.mates.test.ts:43`
 
 ### `moverLineProof` (function) — 5 call sites
 - `src/services/deliberation.ts:278`
 - `src/services/exchangeLedger.horizon.test.ts:30`
 - `src/services/exchangeLedger.horizon.test.ts:36`
-- `src/services/groundedAnswer.ts:1939`
+- `src/services/groundedAnswer.ts:1928`
 - `src/services/reviewFullData.ts:727`
 
 ## Tests

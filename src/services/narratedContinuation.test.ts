@@ -36,20 +36,23 @@ describe('narratedContinuation helpers', () => {
     // A real middlegame board — both sides castled, rooks connected (census
     // 14: the board decides the phase, not the ply).
     const MID = 'r4rk1/pppq1ppp/2npbn2/2b1p3/2B1P3/2NPBN2/PPPQ1PPP/R4RK1 w - - 0 10';
-    const r = continuationNarration(MID, 18, s0, null);
+    const r = continuationNarration(MID, 18, s0, null, 'w');
     expect(r.text).toMatch(/middlegame/i);
     // same phase next move → silent
-    const r2 = continuationNarration(MID, 19, r.state, null);
+    const r2 = continuationNarration(MID, 19, r.state, null, 'w');
     expect(r2.text).toBeNull();
   });
 
   it('announces a decisive material swing once, then stays quiet', () => {
     const s0 = initialContinuationState(START, 20); // already middlegame
     const upAPiece = 'rnbqkb1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'; // white +3
-    const r = continuationNarration(upAPiece, 22, s0, null);
+    const r = continuationNarration(upAPiece, 22, s0, null, 'w');
     expect(r.text).toMatch(/a piece up/i); // named by the board (boardEdgeWords), not a point threshold
+    // ONE PERSPECTIVE: the student's lead is "you", never "White".
+    expect(r.text).toMatch(/^You're /);
+    expect(continuationNarration(upAPiece, 22, s0, null, 'b').text).toMatch(/^They're /);
     // same balance next move → no repeat
-    const r2 = continuationNarration(upAPiece, 23, r.state, null);
+    const r2 = continuationNarration(upAPiece, 23, r.state, null, 'w');
     expect(r2.text).toBeNull();
   });
 
@@ -59,17 +62,17 @@ describe('narratedContinuation helpers', () => {
     const c = new Chess();
     for (const m of 'd4 Nf6 c4 e6 Nc3 d5 Bg5 Be7 Nf3 O-O e3 h6 Bxf6'.split(' ')) c.move(m);
     const last = c.history({ verbose: true }).at(-1)!;
-    expect(continuationNarration(c.fen(), 26, s0, { to: last.to, captured: last.captured ?? null }).text).toBeNull();
+    expect(continuationNarration(c.fen(), 26, s0, { to: last.to, captured: last.captured ?? null }, 'w').text).toBeNull();
   });
 
   it('stays silent on a routine, level move', () => {
     const s0 = { phase: 'middlegame' as const, announcedBalance: 0 };
-    expect(continuationNarration(START, 24, s0, null).text).toBeNull();
+    expect(continuationNarration(START, 24, s0, null, 'w').text).toBeNull();
   });
 
   it('names the winner on checkmate (side to move is the mated side)', () => {
-    expect(continuationResult(true, false, 'b')).toMatch(/White wins/);
-    expect(continuationResult(true, false, 'w')).toMatch(/Black wins/);
-    expect(continuationResult(false, true, 'w')).toMatch(/draw/i);
+    expect(continuationResult(true, false, 'b', 'w')).toMatch(/you win/);
+    expect(continuationResult(true, false, 'w', 'w')).toMatch(/they win/);
+    expect(continuationResult(false, true, 'w', 'w')).toMatch(/draw/i);
   });
 });

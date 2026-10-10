@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**113 lines · 3 exports · 16 importers · 3 tests · 1 audits**
+**134 lines · 4 exports · 21 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,9 +12,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/coach/boardTurnAnswer.ts`
+- `src/coach/chatTurnAnswers.ts`
+- `src/services/boardPlanFacts.ts`
 - `src/services/boardUrgency.ts`
+- `src/services/deliberation.ts`
 - `src/services/forkTrick.ts`
 - `src/services/groundedAnswer.ts`
+- `src/services/hardWalk.mates.test.ts`
 - `src/services/liveTacticsContext.ts`
 - `src/services/methodSignals.ts`
 - `src/services/moveInsight.ts`
@@ -34,9 +39,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `MustDefend` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `flipSideToMove` (function) — 10 call sites
+### `flipSideToMove` (function) — 11 call sites
 - `scripts/audit-lib/narrationAuditor.ts:73`
 - `scripts/audit-lib/narrationAuditor.ts:189`
+- `src/services/boardPlanFacts.ts:63`
 - `src/services/boardUrgency.ts:37`
 - `src/services/boardUrgency.ts:98`
 - `src/services/forkTrick.ts:138`
@@ -46,10 +52,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatProof.ts:25`
 - `src/services/threatProof.ts:72`
 
-### `computeMustDefend` (function) — 29 call sites
+### `mateThreatsAgainst` (function) — 5 call sites
+- `src/services/groundedAnswer.ts:603`
+- `src/services/groundedAnswer.ts:672`
+- `src/services/hardWalk.mates.test.ts:49`
+- `src/services/hardWalk.mates.test.ts:60`
+- `src/services/threatProof.ts:29`
+
+### `computeMustDefend` (function) — 34 call sites
+- `src/coach/boardTurnAnswer.ts:163`
+- `src/coach/chatTurnAnswers.ts:264`
+- `src/coach/chatTurnAnswers.ts:285`
 - `src/services/boardUrgency.ts:51`
 - `src/services/boardUrgency.ts:53`
-- `src/services/groundedAnswer.ts:642`
+- `src/services/deliberation.ts:261`
+- `src/services/groundedAnswer.ts:589`
+- `src/services/groundedAnswer.ts:800`
 - `src/services/liveTacticsContext.ts:783`
 - `src/services/methodSignals.ts:38`
 - `src/services/methodSignals.ts:47`
@@ -61,7 +79,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/opponentMoveReads.ts:266`
 - `src/services/opponentMoveReads.ts:267`
 - `src/services/playedMoveGrade.ts:125`
-- `src/services/positionFacts.ts:494`
+- `src/services/positionFacts.ts:505`
 - `src/services/replayFence.modern1690.test.ts:160`
 - `src/services/replayFence.modern1690.test.ts:165`
 - `src/services/reviewHinge.ts:36`
@@ -79,6 +97,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/hardWalk.mates.test.ts`
 - `src/services/mustDefendHabit.test.ts`
 - `src/services/replayFence.modern1690.test.ts`
 - `src/services/threatOut.test.ts`

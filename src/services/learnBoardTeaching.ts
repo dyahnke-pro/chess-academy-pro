@@ -795,7 +795,11 @@ export function foundMoveTeaching(fenBefore: string, san: string, preLines: read
   const arrows: ArrowClaim[] = ml ? mateArrows(ml, student) : won ? won.arrows : [];
   // A real decision moment (only one or two moves held) answered is calculation
   // proven — importance 90, above the green bar, because the board posed it.
-  return { lane: 'foundMove', proof: (ml ? lineProof({ fen: fenBefore, sans: ml.sans }) : won ? lineProof({ fen: fenBefore, sans: won.sans }) : null) ?? NO_PROOF.description, text, squares: [to], claims: [`found-${san}`, ...(won || ml ? [`wins-line:${fenBefore.split(' ').slice(0, 2).join(' ')}`] : [])], event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows, evidence: { tag: 'calculation-depth', posedImportance: 90 } };
+  // The tempting moves that failed are said with their lines ("Qf7+ didn't
+  // work: Kxf7 — they win a queen"); with no winning line of its own, the
+  // first of those is the line the board plays.
+  const failed = readCriticalMoment({ topLines: preLines, moverColor: student, fen: fenBefore })?.discardedProofs?.[0]?.line ?? null;
+  return { lane: 'foundMove', proof: (ml ? lineProof({ fen: fenBefore, sans: ml.sans }) : won ? lineProof({ fen: fenBefore, sans: won.sans }) : failed ? lineProof(failed) : null) ?? NO_PROOF.description, text, squares: [to], claims: [`found-${san}`, ...(won || ml ? [`wins-line:${fenBefore.split(' ').slice(0, 2).join(' ')}`] : [])], event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows, evidence: { tag: 'calculation-depth', posedImportance: 90 } };
 }
 
 /** A mate line as board arrows, ply by ply, seated. */

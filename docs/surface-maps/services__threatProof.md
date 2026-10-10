@@ -20,7 +20,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `threatProof` (function) — 5 call sites
-- `src/services/positionFacts.ts:1495`
+- `src/services/positionFacts.ts:1547`
 - `src/services/reviewFullData.ts:727`
 - `src/services/threatProof.test.ts:8`
 - `src/services/threatProof.test.ts:17`

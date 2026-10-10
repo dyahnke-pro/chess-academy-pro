@@ -11,7 +11,7 @@
 // PURE: chess.js + threatOut.
 import { Chess } from 'chess.js';
 import { computeExchangeLedger, describeProofResult } from './exchangeLedger';
-import { computeMustDefend, flipSideToMove } from './threatOut';
+import { computeMustDefend, flipSideToMove, mateThreatsAgainst } from './threatOut';
 import { withProof, type Proof } from './proof';
 import { MATE_POINTS, type FactStakes } from './factStakes';
 
@@ -26,7 +26,7 @@ export function threatProof(fen: string, student: 'w' | 'b', squares: readonly s
   if (!them) return null;
   let probe: Chess;
   try { probe = new Chess(them); } catch { return null; }
-  const mate = probe.moves({ verbose: true }).find((m) => m.san.endsWith('#'));
+  const mate = mateThreatsAgainst(fen, student).moves[0];
   if (mate) {
     return {
       kind: 'line', exact: true,

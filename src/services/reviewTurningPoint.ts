@@ -175,6 +175,9 @@ export interface CriticalMomentQuestion {
   holdingSans: readonly string[];
   /** Best minus runner-up, mover-POV — the ranking key. */
   gapCp: number;
+  /** The lines the reveal says ("Qf7+ didn't work: Kxf7 — …"), so the board
+   *  can play what was just heard. */
+  revealLines: ReadonlyArray<{ fen: string; sans: readonly string[] }>;
 }
 
 /**
@@ -243,6 +246,7 @@ export function buildCriticalMomentQuestion(
     stake: read.stake,
     holdingSans: read.holdingSans,
     gapCp: read.gapCp,
+    revealLines: (read.discardedProofs ?? []).map((d) => d.line),
   };
 }
 

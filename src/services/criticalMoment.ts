@@ -82,7 +82,7 @@ export interface CriticalMomentRead {
    *  (mate, or a settled material loss) — "Nxe5 doesn't work: Nxe5, Qd4 and
    *  Qxe5 — they win a knight". The fan's PVs were read and thrown away before
    *  (WO-TEACH-02 S5); a candidate whose line proves nothing gets no reason. */
-  discardedProofs?: Array<{ san: string; text: string }>;
+  discardedProofs?: Array<{ san: string; text: string; line: { fen: string; sans: readonly string[] } }>;
 }
 
 /** Mover-POV score of a fan line, mate flattened. */
@@ -226,7 +226,7 @@ export function readCriticalMoment(input: {
 
   const holdingSans: string[] = [];
   const discardedSans: string[] = [];
-  const discardedProofs: Array<{ san: string; text: string }> = [];
+  const discardedProofs: Array<{ san: string; text: string; line: { fen: string; sans: readonly string[] } }> = [];
   if (input.fen) {
     for (let i = 0; i < lines.length; i += 1) {
       const uci = lines[i].moves?.[0];
@@ -237,7 +237,7 @@ export function readCriticalMoment(input: {
         if (m) (i < within ? holdingSans : discardedSans).push(m.san);
         if (m && i >= within) {
           const proof = moverLossProof(input.fen, lines[i].moves ?? [], input.moverColor);
-          if (proof) discardedProofs.push({ san: m.san, text: proof.short });
+          if (proof?.line) discardedProofs.push({ san: m.san, text: proof.short, line: proof.line });
         }
       } catch { /* an unplayable uci names no move */ }
     }

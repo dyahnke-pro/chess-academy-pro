@@ -12482,7 +12482,7 @@ export function CoachTeachPage(): JSX.Element {
 
         // Keystone lines (phase change, decisive material) still take
         // precedence — they carry more than the move itself does.
-        const { text: keystone, state: next } = continuationNarration(local.fen(), ply, state, { to: landed.to, captured: landed.captured ?? null });
+        const { text: keystone, state: next } = continuationNarration(local.fen(), ply, state, { to: landed.to, captured: landed.captured ?? null }, playerColorRef.current === 'white' ? 'w' : 'b');
         const phaseChanged = next.phase !== state.phase;
         state = next;
         const text = keystone ?? perMove.say;
@@ -12528,7 +12528,7 @@ export function CoachTeachPage(): JSX.Element {
       }
 
       if (!continuationRef.current) return;
-      const resultLine = continuationResult(local.isCheckmate(), local.isDraw(), local.turn());
+      const resultLine = continuationResult(local.isCheckmate(), local.isDraw(), local.turn(), playerColorRef.current === 'white' ? 'w' : 'b');
       setMessages((prev) => [...prev, { id: uid('cont-result'), role: 'assistant', content: resultLine, timestamp: Date.now() }]);
       speechChainRef.current = speechChainRef.current.then(() => speakComputed(resultLine, { forced: true, intent: 'learn' })).catch(() => undefined);
       // Teaching memory: the play-out is a delivered layer — the next

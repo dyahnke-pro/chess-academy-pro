@@ -3,7 +3,8 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { buildDeliberation, namedMoveAnswer, spokenLines } from './deliberation';
-import { assembleEngineReasoning, assembleKingSafetyAnswer, assembleThreatAnswer, assembleMoveEvalAnswer, mateThreatsAgainst } from './groundedAnswer';
+import { assembleEngineReasoning, assembleKingSafetyAnswer, assembleThreatAnswer, assembleMoveEvalAnswer } from './groundedAnswer';
+import { mateThreatsAgainst } from './threatOut';
 import { moverLossProof } from './exchangeLedger';
 
 // 0GomC: White mates in 4 — Nh6+ Kf8 Qf6+ Ke8 Bb5+ c6 Bxc6#. Black threatens …Qxg2#.
@@ -45,7 +46,7 @@ describe('hard walk — mates', () => {
   });
 
   it('"is my king safe?" names a mate one move away', () => {
-    expect(mateThreatsAgainst(GOMC, 'w')).toEqual(['Qxg2#']);
+    expect(mateThreatsAgainst(GOMC, 'w').moves.map((m) => m.san)).toEqual(['Qxg2#']);
     const a = assembleKingSafetyAnswer(GOMC, 'white', 'me')!;
     expect(a.facts).toMatch(/^Your king is not safe: they threaten …Qxg2# — mate\./);
   });
@@ -56,11 +57,12 @@ describe('hard walk — mates', () => {
   });
 
   it('a king with no mate against it gets no mate claim', () => {
-    expect(mateThreatsAgainst('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'w')).toEqual([]);
+    expect(mateThreatsAgainst('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'w').moves).toEqual([]);
   });
 
   it('"calculate the main line" says the proven line and plays it', () => {
-    const a = assembleMoveEvalAnswer({ fen: GOMC, bestMoveUci: toUci(GOMC, ['Nh6+'])[0], studentColor: 'white', pvSan: MATE } as Parameters<typeof assembleMoveEvalAnswer>[0])!;
+    const a = assembleMoveEvalAnswer({ fen: GOMC, bestMoveUci: toUci(GOMC, ['Nh6+'])[0], studentColor: 'white', mateIn: 4, pvSan: MATE } as Parameters<typeof assembleMoveEvalAnswer>[0])!;
+    expect(a.facts).toMatch(/^The best move is Nh6\+\. It starts a forced mate in 4\. Nh6\+, Kf8/);
     expect(a.facts).toMatch(/Bxc6# — and it's mate/);
     expect(a.lines?.[0].plies.map((p) => p.san)).toEqual(MATE);
   });
@@ -74,6 +76,7 @@ describe('hard walk — mates', () => {
       named: { lineUci: toUci(PAWN, pv), evaluation: 495, mate: null },
     })!;
     expect(namedMoveAnswer(d, 'why-best')).toMatch(/Their best reply is Kd6\./);
+    expect(spokenLines(d, PAWN, namedMoveAnswer(d, 'why-best')!)[0]?.plies.map((p) => p.san)).toEqual(['Kd3', 'Kd6']);
   });
 
   it('the engine walk ("If Rxg5, then Nb5+") hands the moves it said to the board', () => {

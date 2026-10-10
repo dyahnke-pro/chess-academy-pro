@@ -47,6 +47,27 @@ export function flipSideToMove(fen: string): string | null {
   }
 }
 
+/** THE ONE MATE-THREAT READ: every move the side attacking `target`'s king
+ *  could mate with if it were their move — the null-move probe, exact. `fen`
+ *  is the position the attacker moves from (handed the move when it is
+ *  `target` to play). Empty when `target` is in check (no free move to give).
+ *  Learn's and Review's threat proof and the chat's "is my king safe?" and
+ *  "what do they threaten?" read this, never a copy of it. */
+export function mateThreatsAgainst(fen: string, target: 'w' | 'b'): { fen: string; moves: Array<{ san: string; from: string; to: string }> } {
+  const attacker = target === 'w' ? 'b' : 'w';
+  let probeFen = fen;
+  try {
+    if (new Chess(fen).turn() === target) {
+      const flipped = flipSideToMove(fen);
+      if (!flipped) return { fen, moves: [] };
+      probeFen = flipped;
+    }
+    const c = new Chess(probeFen);
+    if (c.turn() !== attacker) return { fen: probeFen, moves: [] };
+    return { fen: probeFen, moves: c.moves({ verbose: true }).filter((m) => m.san.endsWith('#')).map((m) => ({ san: m.san, from: m.from, to: m.to })) };
+  } catch { return { fen, moves: [] }; }
+}
+
 /**
  * The immediate must-defend for `subjectColor` at `fen`: what the OTHER side
  * wins on its next move. Turn-aware, so it is correct whoever is to move — the
