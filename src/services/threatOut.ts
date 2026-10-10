@@ -35,16 +35,35 @@ export interface MustDefend {
 export function flipSideToMove(fen: string): string | null {
   const parts = fen.split(' ');
   if (parts.length < 4) return null;
+  // A SIDE IN CHECK CANNOT PASS (census 2026-10-10). This used to test the
+  // flipped board instead — "is the OTHER side now in check?", which a legal
+  // position never is — so a student in check got their threats read off an
+  // impossible board. The rule `moveIntent.nullMoveFen` stated is the rule.
+  try { if (new Chess(fen).inCheck()) return null; } catch { return null; }
   parts[1] = parts[1] === 'w' ? 'b' : 'w';
   parts[3] = '-';
   const flipped = parts.join(' ');
   try {
-    const c = new Chess(flipped);
-    if (c.inCheck()) return null;
+    new Chess(flipped);
     return flipped;
   } catch {
     return null;
   }
+}
+
+/**
+ * THE BOARD WITH `color` TO MOVE — unchanged when it already is, the one
+ * null move when it is not (census 2026-10-10: ten private `withTurn` copies,
+ * most with no check rule at all, built impossible boards whenever the side
+ * asked to pass was in check). Null when no such board exists.
+ */
+export function sideToMoveAs(fen: string, color: 'w' | 'b'): string | null {
+  const parts = fen.split(' ');
+  if (parts.length < 4) return null;
+  if (parts[1] === color) {
+    try { new Chess(fen); return fen; } catch { return null; }
+  }
+  return flipSideToMove(fen);
 }
 
 /** THE ONE MATE-THREAT READ: every move the side attacking `target`'s king

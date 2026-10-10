@@ -25,6 +25,7 @@
  * principleVoice.ts; persisted PVs (annotation.pv) come from the review's
  * deep dive.
  */
+import { sideToMoveAs } from './threatOut';
 import { lineWithReasons } from './lineReasons';
 import { Chess, type Color, type Square, type Move, type PieceSymbol } from 'chess.js';
 import { signedLegalSeeFor, bishopHemmedByOwnPawns, signedCaptureRead } from './positionReadingService';
@@ -235,10 +236,9 @@ function squareColor(sq: string): number { return (fileIdx(sq) + rankNum(sq)) % 
 /** A position with `color` to move regardless of whose turn it really is
  *  (null-move view). Castling/ep are preserved; ep cleared for safety. */
 function withTurn(chess: Chess, color: Color): Chess | null {
-  const parts = chess.fen().split(' ');
-  if (parts[1] === color) return new Chess(chess.fen());
-  parts[1] = color; parts[3] = '-';
-  try { return new Chess(parts.join(' ')); } catch { return null; }
+  // The one null-move rule (threatOut.sideToMoveAs, census 2026-10-10).
+  const f = sideToMoveAs(chess.fen(), color);
+  return f ? new Chess(f) : null;
 }
 function legalMovesFor(chess: Chess, color: Color): Move[] {
   const v = withTurn(chess, color);

@@ -18,6 +18,7 @@
 // never on a mating move (that has its own sentence).
 //
 // Measured on 80 of his speedrun games: 0.6 lines a game.
+import { sideToMoveAs } from './threatOut';
 import { Chess, type Square } from 'chess.js';
 import { countKingAttack, shelterSquares } from './kingSafety';
 import { CAPTURE_VALUE } from './pieceValues';
@@ -37,10 +38,9 @@ const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: '
 /** `c` with `color` to move and no en-passant square — to ask where a piece
  *  could go next. */
 function withTurn(c: Chess, color: 'w' | 'b'): Chess | null {
-  const f = c.fen().split(' ');
-  f[1] = color;
-  f[3] = '-';
-  try { return new Chess(f.join(' ')); } catch { return null; }
+  // The one null-move rule (threatOut.sideToMoveAs, census 2026-10-10).
+  const f = sideToMoveAs(c.fen(), color);
+  return f ? new Chess(f) : null;
 }
 
 /** The piece on `from` moved to `to`: does it bear on the enemy king, and

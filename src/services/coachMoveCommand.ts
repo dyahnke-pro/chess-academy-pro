@@ -14,6 +14,7 @@
 //     before the student has moved). The caller arms it as the coach's
 //     next reply.
 
+import { flipSideToMove } from './threatOut';
 import { Chess } from 'chess.js';
 import { parseSpokenMove, type ParsedSpokenMove } from './spokenMoveParser';
 
@@ -62,13 +63,6 @@ const REPORT_RE = /\b(?:i|we)\s+(?:just\s+)?(?:played|play|moved|went)\b/i;
 /** Flip the side to move so a coach-side move can be parsed while it's the
  *  student's turn. En-passant cleared (it can't survive a null move); the
  *  probe inside parseSpokenMove try/catches any position chess.js rejects. */
-function flipTurn(fen: string): string | null {
-  const parts = fen.split(' ');
-  if (parts.length < 4) return null;
-  parts[1] = parts[1] === 'w' ? 'b' : 'w';
-  parts[3] = '-';
-  return parts.join(' ');
-}
 
 /**
  * Parse a dictated coach-move command against `fen`. Returns null when the
@@ -127,7 +121,7 @@ export function parseCoachMoveCommand(
   const now = studentsTurn ? null : parseSpokenMove(phrase, fen);
   if (now) return { ...now, playableNow: true, corrects };
 
-  const flipped = flipTurn(fen);
+  const flipped = flipSideToMove(fen);
   if (flipped) {
     const later = parseSpokenMove(phrase, flipped);
     if (later) return { ...later, playableNow: false, corrects };

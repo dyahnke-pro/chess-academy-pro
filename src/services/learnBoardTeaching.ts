@@ -8,6 +8,7 @@
 // makes; the page queues them into the Learn door, which ranks them.
 //
 // Pure: the engine reads are handed in by the page.
+import { flipSideToMove } from './threatOut';
 import { CAPTURE_VALUE } from './pieceValues';
 import { lineProof, legalLineProof, squaresProof, NO_PROOF, type FactProof, type Proof } from './proof';
 import { shareAdverb } from '../utils/shareWords';
@@ -503,7 +504,9 @@ export function namedMoveArrows(text: string, fen: string, student: 'w' | 'b', p
     if (live.length === 0) continue;
     if (run.length >= 2 && live.length === run.length) {
       // A LINE: find the board its first move is played on, then walk it.
-      const starts = [fen, flipTurn(fen), ...(prevFen ? [prevFen] : [])];
+      // The other side's board only when it can exist (a side in check cannot
+      // pass — threatOut.flipSideToMove, the one null-move rule).
+      const starts = [fen, flipSideToMove(fen), ...(prevFen ? [prevFen] : [])].filter((f): f is string => !!f);
       let drawn = false;
       for (const start of starts) {
         let f = start;
@@ -521,7 +524,7 @@ export function namedMoveArrows(text: string, fen: string, student: 'w' | 'b', p
     for (const san of live) {
       if (playedHere(san)) continue;
       let placed = false;
-      for (const f of [fen, flipTurn(fen)]) {
+      for (const f of [fen, flipSideToMove(fen)].filter((x): x is string => !!x)) {
         const m = tryMove(f, san);
         if (!m) continue;
         push({ from: m.from, to: m.to, role: m.color === student ? 'play' : 'theirs', fen: f, vouchedBy: 'engine', source: 'learn.namedMove' });
@@ -534,13 +537,6 @@ export function namedMoveArrows(text: string, fen: string, student: 'w' | 'b', p
     }
   }
   return out;
-}
-function flipTurn(fen: string): string {
-  const p = fen.split(' ');
-  if (p.length < 2) return fen;
-  p[1] = p[1] === 'w' ? 'b' : 'w';
-  p[3] = '-';
-  return p.join(' ');
 }
 
 /** The student's move as a noun phrase for a warning. A capture names BOTH

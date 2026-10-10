@@ -31,6 +31,7 @@
  * shape, and inventing a geometry for them would teach the student to distrust
  * the ones that are real.
  */
+import { sideToMoveAs } from './threatOut';
 import { gambitFile } from './inaccuracyCall';
 import { proofCut } from './exchangeLedger';
 import { Chess, type Square, type Color, type Move } from 'chess.js';
@@ -75,12 +76,9 @@ function attackedFrom(board: Chess, from: Square, mover: Color): Square[] {
 /** Same position, but forced to `side` to move (en-passant cleared) — lets the
  *  swap-off ask "if I captured here" even when it is really the other side's
  *  turn. Static-exchange only; the mover's own king is safe (they just moved). */
-function withTurn(fen: string, side: Color): string {
-  const p = fen.split(' ');
-  if (p.length < 6) return fen;
-  p[1] = side;
-  p[3] = '-';
-  return p.join(' ');
+function withTurn(fen: string, side: Color): string | null {
+  // The one null-move rule (threatOut.sideToMoveAs, census 2026-10-10).
+  return sideToMoveAs(fen, side);
 }
 
 /**
@@ -361,7 +359,8 @@ export function whyItFailed(args: {
   // proven by the exchange (student forced to move so the capture can be
   // simulated), and it names the guard that makes it a bad trade.
   let studentBoard: Chess | null = null;
-  try { studentBoard = new Chess(withTurn(after.fen(), me)); } catch { studentBoard = null; }
+  const studentFen = withTurn(after.fen(), me);
+  try { studentBoard = studentFen ? new Chess(studentFen) : null; } catch { studentBoard = null; }
   const swap = guards.length > 0 && studentBoard ? seeInitiate(studentBoard, target.sq) : 0;
   // ONLY A TEMPTING SWAP IS WORTH NAMING (David 2026-09-24: "No one is going
   // to take a pawn for a queen"). Past two pawns down the capture was never a

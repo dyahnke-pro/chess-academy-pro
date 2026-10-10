@@ -1,3 +1,4 @@
+import { sideToMoveAs } from './threatOut';
 import { openSentence } from '../utils/openSentence';
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import { MATERIAL_VALUE } from './pieceValues';
@@ -275,10 +276,9 @@ function findSkewers(chess: Chess): TacticPattern[] {
 /** With `color` to move in `chess`'s position regardless of whose turn the
  *  FEN says it is. Null when the position won't re-parse (rare edge FENs). */
 function withTurn(chess: Chess, color: Color): Chess | null {
-  const parts = chess.fen().split(' ');
-  parts[1] = color;
-  parts[3] = '-'; // an en-passant square for the other side breaks parsing
-  try { return new Chess(parts.join(' ')); } catch { return null; }
+  // The one null-move rule (threatOut.sideToMoveAs, census 2026-10-10).
+  const f = sideToMoveAs(chess.fen(), color);
+  return f ? new Chess(f) : null;
 }
 
 /** MATE THREAT: `color` has mate-in-1 available right now. The strongest

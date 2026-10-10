@@ -6,6 +6,7 @@
 // squares it names, the PROOF it rests on (required, never a "stated" escape —
 // a read that cannot hand over its squares or its line is not emitted), a
 // say-once key, and what it puts at stake when it has a number.
+import { sideToMoveAs } from './threatOut';
 import { Chess, type Color, type Square } from 'chess.js';
 import type { Proof } from './proof';
 import type { FactStakes } from './factStakes';
@@ -95,11 +96,8 @@ export function piecesOf(c: Chess, color: Color, type?: string): Square[] {
 /** The same position with `color` to move (en passant cleared), or null when
  *  that side would leave the other in check. */
 export function withTurn(fen: string, color: Color): string | null {
-  const parts = fen.split(' ');
-  parts[1] = color;
-  parts[3] = '-';
-  const f = parts.join(' ');
-  return board(f) ? f : null;
+  // The one null-move rule (threatOut.sideToMoveAs, census 2026-10-10).
+  return sideToMoveAs(fen, color);
 }
 
 /** The position with the piece on `sq` removed (same side to move). */

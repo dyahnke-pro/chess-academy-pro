@@ -8,6 +8,7 @@
 // develops to the square, the bishop comes, takes on that square, and a pawn of
 // theirs takes back onto a file it already stands on (doubled pawns). Every
 // move of the line is legal from the board it starts on, or nothing is said.
+import { sideToMoveAs } from './threatOut';
 import { Chess, type Square } from 'chess.js';
 import { homeSquaresOf } from './development';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -38,17 +39,9 @@ function pawnsOnFile(c: Chess, file: string, color: 'w' | 'b'): number {
 
 /** `fen` with `color` to move, or null when that board cannot exist. */
 function withTurn(fen: string, color: 'w' | 'b'): Chess | null {
-  const parts = fen.split(' ');
-  parts[1] = color;
-  parts[3] = '-';
-  try {
-    const c = new Chess(parts.join(' '));
-    // The side NOT to move must not be in check (its king would be capturable).
-    const other: 'w' | 'b' = color === 'w' ? 'b' : 'w';
-    const king = c.board().flat().find((x) => x && x.type === 'k' && x.color === other);
-    if (king && c.attackers(king.square, color).length > 0) return null;
-    return c;
-  } catch { return null; }
+  // The one null-move rule (threatOut.sideToMoveAs, census 2026-10-10).
+  const f = sideToMoveAs(fen, color);
+  return f ? new Chess(f) : null;
 }
 
 /**

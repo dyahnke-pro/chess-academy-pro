@@ -14,6 +14,7 @@
 // move the student skipped when the pin or kick then arrived.
 // The proof is exact: the covering pawn and its capture, read off the board.
 // PURE: chess.js + the legal SEE.
+import { sideToMoveAs } from './threatOut';
 import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
@@ -38,9 +39,9 @@ const NAME = PIECE_NAMES as Readonly<Record<PieceSymbol, string>>;
 const VAL = CAPTURE_VALUE as Readonly<Record<PieceSymbol, number>>;
 
 function withTurn(fen: string, turn: Color): Chess | null {
-  const p = fen.split(' ');
-  p[1] = turn; p[3] = '-';
-  try { const c = new Chess(p.join(' ')); return c; } catch { return null; }
+  // The one null-move rule (threatOut.sideToMoveAs, census 2026-10-10).
+  const f = sideToMoveAs(fen, turn);
+  return f ? new Chess(f) : null;
 }
 
 /** The student piece their move `m` pins against the queen or king (a minor

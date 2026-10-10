@@ -20,6 +20,7 @@
 //
 // G0/G3: pure code. Nothing is invented — a token that doesn't resolve to a
 // legal move from a real position draws nothing at all.
+import { flipSideToMove } from './threatOut';
 import { Chess } from 'chess.js';
 
 /** A derived arrow plus the evidence for it, so a bake pass can be reviewed
@@ -87,13 +88,6 @@ const ALTERNATIVE_BEFORE = /\b(or|instead\s+of|rather\s+than|versus|vs\.?|not|ne
 /** Null move: same position, other side to move. Lets the prose name the
  *  OPPONENT's reply ("Black answers …d6") from a position where it isn't
  *  their turn yet. */
-function flipTurn(fen: string): string | null {
-  const parts = fen.split(' ');
-  if (parts.length < 4) return null;
-  parts[1] = parts[1] === 'w' ? 'b' : 'w';
-  parts[3] = '-';
-  return parts.join(' ');
-}
 
 function resolveOn(board: Chess, sanRaw: string): { from: string; to: string; san: string } | null {
   const bare = sanRaw.replace(/[+#]$/, '');
@@ -191,7 +185,7 @@ export function deriveNarrationArrows(
   } catch {
     return { arrows: [], rejected };
   }
-  const flippedFen = flipTurn(fen);
+  const flippedFen = flipSideToMove(fen);
   const flipped = flippedFen ? new Chess(flippedFen) : null;
 
   // A PLAN's steps chain ("h3, then Kh2, Nd2, and f4") so each resolves on the
@@ -255,7 +249,7 @@ export function deriveNarrationArrows(
     // Either way: try the side to move, then the other side via a null move,
     // since prose freely names the opponent's reply.
     const base = alternative ? original : chain;
-    const baseFlippedFen = flipTurn(base.fen());
+    const baseFlippedFen = flipSideToMove(base.fen());
     const candidates: Array<{ board: Chess; side: DerivedArrow['side'] }> = [
       { board: base, side: 'mover' },
       ...(baseFlippedFen ? [{ board: new Chess(baseFlippedFen), side: 'opponent' as const }] : []),

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { computeMustDefend, flipSideToMove } from './threatOut';
+import { computeMustDefend, flipSideToMove, sideToMoveAs } from './threatOut';
 
 describe('flipSideToMove', () => {
   it('flips the side and clears en-passant', () => {
@@ -60,5 +60,18 @@ describe('computeMustDefend — the null-move must-defend', () => {
     const md = computeMustDefend('rnbqkbnr/pppp1ppp/4p3/3Q4/8/8/PPPP1PPP/RNB1KBNR w KQkq - 0 1', 'w');
     expect(md.net).toBe(9);
     expect(md.pieces[0].square).toBe('d5');
+  });
+});
+
+describe('the one null-move rule (census 2026-10-10)', () => {
+  it('a side in check cannot pass — no flipped board', () => {
+    // White to move and in check from the queen on e2.
+    const fen = '4k3/8/8/8/8/8/4q3/4K3 w - - 0 1';
+    expect(flipSideToMove(fen)).toBeNull();
+    expect(sideToMoveAs(fen, 'b')).toBeNull();
+    expect(sideToMoveAs(fen, 'w')).toBe(fen);
+  });
+  it('a quiet side passes', () => {
+    expect(flipSideToMove('4k3/8/8/8/8/8/8/R3K3 w - - 0 1')?.split(' ')[1]).toBe('b');
   });
 });

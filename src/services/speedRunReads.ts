@@ -16,7 +16,7 @@ import { findLoosePieces } from './loosePieces';
 import { computeBoardDelta } from './boardDelta';
 import { costStakes, piecePoints, type FactStakes } from './factStakes';
 import { findPawnBreaks, findWeakPawns } from './positionReadingService';
-import { computeMustDefend } from './threatOut';
+import { computeMustDefend, flipSideToMove } from './threatOut';
 import { computePieceRoute } from './forwardTeaching';
 import { knightReach } from './moveInsight';
 import type { GamePromise } from './learnBoardTeaching';
@@ -367,7 +367,6 @@ export function rightPieceForHole(fen: string, me: 'w' | 'b'): Read | null {
 // (checked first: concessions AFTER a played move → concessionBeat, which
 // compares two moves of one side, so a forced reply is new; threats → SEE). ──
 
-const flipTurn = (fen: string): string => { const f = fen.split(' '); f[1] = f[1] === 'w' ? 'b' : 'w'; f[3] = '-'; return f.join(' '); };
 const cap = (t: string): string => t.replace(/^./, (c) => c.toUpperCase());
 /** Does any reply win something of `me` after `fenAfter` (them to move)? */
 const leavesSomething = (fenAfter: string, me: 'w' | 'b'): string | null => {
@@ -442,7 +441,8 @@ export function retreatKeepsBreak(fen: string, me: 'w' | 'b', bestSan: string | 
   const behind = `${r.move.from[0]}${Number(r.move.from[1]) + (me === 'w' ? -1 : 1)}` as Square;
   const pawn = r.board.get(behind);
   if (!pawn || pawn.type !== 'p' || pawn.color !== me) return null;
-  if (!findPawnBreaks(flipTurn(r.board.fen())).includes(r.move.from)) return null;
+  const flipped = flipSideToMove(r.board.fen());
+  if (!flipped || !findPawnBreaks(flipped).includes(r.move.from)) return null;
   return { promise: { key: `break:${r.move.from}`, piece: 'p', square: r.move.from, say: `And there's the ${behind[0]}-pawn break the retreat made room for.` }, idea: `Stepping your ${name(r.move.piece)} back clears the way for your ${behind[0]}-pawn to break — not every step back is passive.`, namesMove: true, text: `${cap(sayMoveClause(bestSan as string, fen))} is a retreat with a point — it clears ${r.move.from} so your pawn on ${behind} can break there.`, squares: [behind, r.move.from] };
 }
 

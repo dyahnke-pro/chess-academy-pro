@@ -25,6 +25,7 @@
 // It is the LOWEST-priority lane by design. It should never displace a tactic,
 // a threat, a gem or a taught note — it is what plays when none of them have
 // anything, which per the measurement is about half the game.
+import { sideToMoveAs } from './threatOut';
 import { openSentence } from '../utils/openSentence';
 import { describeStructure } from './boardStructure';
 import { homeMinorCount } from './development';
@@ -108,16 +109,8 @@ const OPPONENT_PENALTY = 5;
  *  side to move (pawn breaks) need this to answer for the other side. En
  *  passant is cleared because it belongs to the real move order. */
 function withTurn(fen: string, color: Color): string | null {
-  const parts = fen.split(' ');
-  if (parts.length < 6) return null;
-  parts[1] = color;
-  parts[3] = '-';
-  try {
-    new Chess(parts.join(' '));
-  } catch {
-    return null;
-  }
-  return parts.join(' ');
+  // The one null-move rule (threatOut.sideToMoveAs, census 2026-10-10).
+  return sideToMoveAs(fen, color);
 }
 
 /** A rook of `color` can step onto `file` in one move along its own rank —

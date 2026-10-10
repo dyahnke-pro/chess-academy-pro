@@ -13,6 +13,7 @@
 // them. That is the locked voice law ("speak when it instructs") and the
 // narration rules' "silence is acceptable" — a coach who comments on every
 // recapture teaches nothing and gets tuned out.
+import { sideToMoveAs } from './threatOut';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { captureNet } from './material';
 import { THINK_MARK } from '../utils/thinkPause';
@@ -101,10 +102,9 @@ const NAME: Record<string, string> = {
  */
 /** Rewrite side-to-move (and clear en-passant) so we can ask "what could `color`
  *  do here?" for a short plan, independent of whose turn it is. */
-function withTurn(fen: string, color: 'w' | 'b'): string {
-  const p = fen.split(' ');
-  p[1] = color; p[3] = '-';
-  return p.join(' ');
+function withTurn(fen: string, color: 'w' | 'b'): string | null {
+  // The one null-move rule (threatOut.sideToMoveAs, census 2026-10-10).
+  return sideToMoveAs(fen, color);
 }
 
 /** EXPLOITABILITY for an alignment (David 2026-08-23: "only call it out if it can
@@ -159,6 +159,7 @@ function toolCanContest(fen: string, aSq: Square, bSq: Square, me: 'w' | 'b', ty
     return null;
   };
   const start = withTurn(fen, me);
+  if (!start) return null;
   let c0: Chess;
   try { c0 = new Chess(start); } catch { return null; }
   const now = contests(c0);
@@ -171,6 +172,7 @@ function toolCanContest(fen: string, aSq: Square, bSq: Square, me: 'w' | 'b', ty
     let mid: Chess;
     try { mid = new Chess(start); mid.move({ from: m.from, to: m.to }); } catch { continue; }
     const nf = withTurn(mid.fen(), me);
+    if (!nf) continue;
     for (const mm of gen(nf)) {
       try { const c2 = new Chess(nf); c2.move({ from: mm.from, to: mm.to }); const t = contests(c2); if (t) return t; } catch { /* skip */ }
     }

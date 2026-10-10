@@ -13,6 +13,7 @@
 //
 // Pure: the four engine reads are handed in (see `IntentReads`). No engine call
 // here, no model — the caller owns the search budget.
+import { flipSideToMove } from './threatOut';
 import { ruleForPurpose } from './moveFundamentals';
 import { Chess, type Square } from 'chess.js';
 import type { AnalysisLine } from '../types';
@@ -88,18 +89,8 @@ function valueFor(l: AnalysisLine, pov: 'w' | 'b'): number {
 /** The same board with the other side to move — a pass. Null when the side to
  *  move is in check (a pass would be illegal) or the FEN is unreadable. */
 export function nullMoveFen(fen: string): string | null {
-  try {
-    const c = new Chess(fen);
-    if (c.inCheck()) return null;
-    const parts = fen.split(' ');
-    parts[1] = parts[1] === 'w' ? 'b' : 'w';
-    parts[3] = '-';
-    // The side passing is not in check, so nothing attacks its king and the
-    // flipped board is legal as it stands.
-    const flipped = parts.join(' ');
-    new Chess(flipped);
-    return flipped;
-  } catch { return null; }
+  // The one null-move rule lives in threatOut (census 2026-10-10).
+  return flipSideToMove(fen);
 }
 
 function sanOf(fen: string, uci: string): string | null {

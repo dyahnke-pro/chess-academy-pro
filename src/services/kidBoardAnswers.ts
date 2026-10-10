@@ -16,6 +16,7 @@
  * answered by the shared concept spine in kidGameCoach; this module owns the
  * three board kinds and the board line.
  */
+import { sideToMoveAs } from './threatOut';
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import type { Color, PieceSymbol, Square } from 'chess.js';
@@ -83,12 +84,9 @@ function load(fen: string): Chess | null {
  *  can go while the other side is still thinking. En passant is cleared: it is
  *  a right of the side that was to move, and it would not survive the switch. */
 function withTurn(fen: string, color: Color): Chess | null {
-  const parts = fen.split(' ');
-  if (parts.length < 4) return null;
-  if (parts[1] === color) return load(fen);
-  parts[1] = color;
-  parts[3] = '-';
-  return load(parts.join(' '));
+  // The one null-move rule (threatOut.sideToMoveAs, census 2026-10-10).
+  const f = sideToMoveAs(fen, color);
+  return f ? load(f) : null;
 }
 
 /** "your knight on f3" / "their pawn on e5". */
