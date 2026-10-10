@@ -175,10 +175,11 @@
 - `src/services/hardWalk.mates.test.ts:49`
 - `src/services/hardWalk.mates.test.ts:60`
 
-### `assembleKingSafetyAnswer` (function) — 3 call sites
+### `assembleKingSafetyAnswer` (function) — 4 call sites
 - `src/services/hardWalk.mates.test.ts:50`
 - `src/services/kingSafetyAnswer.test.ts:6`
-- `src/services/kingSafetyAnswer.test.ts:11`
+- `src/services/kingSafetyAnswer.test.ts:12`
+- `src/services/kingSafetyAnswer.test.ts:16`
 
 ### `assembleMovePurposeAnswer` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
