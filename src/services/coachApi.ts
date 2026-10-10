@@ -5821,6 +5821,7 @@ export async function getCoachChatResponse(
           if (answer) {
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'why-best-move', preferRaw: true });
             if (voiced) {
+              if (answer.lines?.length) lastCoachLines = answer.lines;
               return answer.bestMoveFromTo
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
                 : voiced;

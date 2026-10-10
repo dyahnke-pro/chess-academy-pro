@@ -3,7 +3,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { buildDeliberation, namedMoveAnswer, spokenLines } from './deliberation';
-import { assembleKingSafetyAnswer, assembleThreatAnswer, assembleMoveEvalAnswer, mateThreatsAgainst } from './groundedAnswer';
+import { assembleEngineReasoning, assembleKingSafetyAnswer, assembleThreatAnswer, assembleMoveEvalAnswer, mateThreatsAgainst } from './groundedAnswer';
 import { moverLossProof, proofAgainstMover } from './exchangeLedger';
 
 // 0GomC: White mates in 4 — Nh6+ Kf8 Qf6+ Ke8 Bb5+ c6 Bxc6#. Black threatens …Qxg2#.
@@ -75,5 +75,12 @@ describe('hard walk — mates', () => {
       named: { lineUci: toUci(PAWN, pv), evaluation: 495, mate: null },
     })!;
     expect(namedMoveAnswer(d, 'why-best')).toMatch(/Their best reply is Kd6\./);
+  });
+
+  it('the engine walk ("If Rxg5, then Nb5+") hands the moves it said to the board', () => {
+    const SETUP = '8/5r2/1p1kpP2/n2p2P1/3P4/1PN3r1/P7/2R3K1 w - - 2 31';
+    const a = assembleEngineReasoning({ fenBefore: SETUP, pvSan: ['Kf2', 'Rxg5', 'Nb5+', 'Kd7', 'Rc7+', 'Ke8'], moverColor: 'white' })!;
+    expect(a.facts).toMatch(/If Rxg5, then Nb5\+/);
+    expect(a.lines?.[0].plies.map((p) => p.san)).toEqual(['Kf2', 'Rxg5', 'Nb5+', 'Kd7', 'Rc7+']);
   });
 });

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**500 lines · 17 exports · 20 importers · 15 tests · 2 audits**
+**515 lines · 17 exports · 20 importers · 15 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -49,7 +49,7 @@
 ### `isServeParsedRouteOn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setChatTurnReaderForTests` (function) — 32 call sites
+### `setChatTurnReaderForTests` (function) — 33 call sites
 - `src/coach/chatTurnRow.outcome.test.ts:28`
 - `src/coach/chatTurnRow.outcome.test.ts:37`
 - `src/coach/coachService.askReader.integration.test.ts:31`
@@ -66,6 +66,7 @@
 - `src/coach/dispatchCoachTurn.showLine.test.ts:23`
 - `src/coach/dispatchCoachTurn.showLine.test.ts:45`
 - `src/coach/dispatchCoachTurn.showLine.test.ts:47`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:59`
 - `src/coach/dispatchCoachTurn.test.ts:103`
 - `src/coach/dispatchCoachTurn.test.ts:115`
 - `src/coach/dispatchCoachTurn.test.ts:122`
@@ -127,7 +128,7 @@
 ### `isComputedAnswer` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:7477`
 
-### `dispatchCoachTurn` (function) — 39 call sites
+### `dispatchCoachTurn` (function) — 40 call sites
 - `src/coach/chatTurnRow.outcome.test.ts:39`
 - `src/coach/coachService.askReader.integration.test.ts:32`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:35`
@@ -135,6 +136,7 @@
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:25`
 - `src/coach/dispatchCoachTurn.positional.test.ts:25`
 - `src/coach/dispatchCoachTurn.showLine.test.ts:25`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:60`
 - `src/coach/dispatchCoachTurn.test.ts:33`
 - `src/coach/dispatchCoachTurn.test.ts:43`
 - `src/coach/dispatchCoachTurn.test.ts:52`
@@ -157,10 +159,10 @@
 - `src/coach/requestExecutor.test.ts:60`
 - `src/components/Board/BoardQuestionBox.tsx:67`
 - `src/components/Board/VoiceChatMic.tsx:484`
-- `src/components/Coach/CoachAnalysePage.tsx:237`
+- `src/components/Coach/CoachAnalysePage.tsx:238`
 - `src/components/Coach/CoachChatPage.tsx:284`
 - `src/components/Coach/CoachGameReview.tsx:3033`
-- `src/components/Coach/ExplainPositionSessionView.tsx:241`
+- `src/components/Coach/ExplainPositionSessionView.tsx:247`
 - `src/components/Coach/GameChatPanel.tsx:1010`
 - `src/components/Coach/GameChatPanel.tsx:1388`
 - `src/components/Coach/GameChatPanel.tsx:1601`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**511 lines · 15 exports · 35 importers · 8 tests · 0 audits**
+**520 lines · 16 exports · 37 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,6 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/coach/chatTurnAnswers.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/criticalMoment.ts`
 - `src/services/deliberation.ts`
@@ -22,6 +23,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/gemFinder.ts`
 - `src/services/giftedMaterialIsNotWon.test.ts`
 - `src/services/groundedAnswer.ts`
+- `src/services/hardWalk.mates.test.ts`
 - `src/services/inaccuracyCall.ts`
 - `src/services/lineCalc.ts`
 - `src/services/lineProof.test.ts`
@@ -56,7 +58,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ExchangeLedger` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeExchangeLedger` (function) — 12 call sites
+### `computeExchangeLedger` (function) — 13 call sites
+- `src/coach/chatTurnAnswers.ts:392`
 - `src/services/exchangeIdeas.ts:589`
 - `src/services/exchangeLedger.test.ts:13`
 - `src/services/exchangeLedger.test.ts:51`
@@ -70,7 +73,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/gemCrushLines.ts:273`
 - `src/services/threatProof.ts:51`
 
-### `netPieceWords` (function) — 4 call sites
+### `netPieceWords` (function) — 5 call sites
+- `src/coach/chatTurnAnswers.ts:394`
 - `src/services/exchangeIdeas.ts:591`
 - `src/services/lineCalc.ts:175`
 - `src/services/reviewPositionalAssessment.ts:140`
@@ -115,8 +119,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/giftedMaterialIsNotWon.test.ts:30`
 - `src/services/giftedMaterialIsNotWon.test.ts:45`
 - `src/services/giftedMaterialIsNotWon.test.ts:56`
-- `src/services/groundedAnswer.ts:2525`
-- `src/services/groundedAnswer.ts:2592`
+- `src/services/groundedAnswer.ts:2644`
+- `src/services/groundedAnswer.ts:2711`
 - `src/services/inaccuracyCall.ts:294`
 - `src/services/inaccuracyCall.ts:352`
 - `src/services/inaccuracyCall.ts:664`
@@ -161,16 +165,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `proofAgainstMover` (function) — 4 call sites
 - `src/services/criticalMoment.ts:239`
-- `src/services/deliberation.ts:196`
 - `src/services/exchangeLedger.horizon.test.ts:16`
 - `src/services/exchangeLedger.horizon.test.ts:21`
+- `src/services/hardWalk.mates.test.ts:45`
 
-### `proofForMover` (function) — 3 call sites
-- `src/services/deliberation.ts:207`
+### `moverLossProof` (function) — 3 call sites
+- `src/services/deliberation.ts:224`
+- `src/services/deliberation.ts:250`
+- `src/services/hardWalk.mates.test.ts:42`
+
+### `proofForMover` (function) — 2 call sites
 - `src/services/exchangeLedger.horizon.test.ts:31`
 - `src/services/exchangeLedger.horizon.test.ts:38`
 
-### `moverLineProof` (function) — 1 call site
+### `moverLineProof` (function) — 3 call sites
+- `src/services/deliberation.ts:273`
+- `src/services/groundedAnswer.ts:1939`
 - `src/services/reviewFullData.ts:727`
 
 ## Tests
@@ -178,6 +188,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.horizon.test.ts`
 - `src/services/exchangeLedger.test.ts`
 - `src/services/giftedMaterialIsNotWon.test.ts`
+- `src/services/hardWalk.mates.test.ts`
 - `src/services/lineProof.test.ts`
 - `src/services/moveInsight.lineAudit.test.ts`
 - `src/services/projectedLineVoice.report.test.ts`

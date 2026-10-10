@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7107 lines · 41 exports · 54 importers · 60 tests · 19 audits**
+**7116 lines · 41 exports · 54 importers · 60 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -239,7 +239,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:584`
-- `src/components/Coach/CoachTeachPage.tsx:3747`
+- `src/components/Coach/CoachTeachPage.tsx:3755`
 - `src/services/coachSessionRouter.ts:120`
 - `src/services/coachSettingsAction.ts:261`
 
@@ -283,7 +283,7 @@
 - `src/components/Coach/CoachGameReview.tsx:1647`
 - `src/components/Coach/CoachGameReview.tsx:1840`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
-- `src/components/Puzzles/PuzzleBoard.tsx:97`
+- `src/components/Puzzles/PuzzleBoard.tsx:98`
 - `src/hooks/usePhaseNarration.ts:733`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:260`
@@ -344,8 +344,8 @@
 - `src/services/voiceFactsFidelity.test.ts:65`
 
 ### `explainPuzzleMoveGrounded` (function) — 2 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:650`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:746`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:645`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:698`
 
 ### `currentAskFromContent` (function) — 4 call sites
 - `src/services/coachApi.currentAsk.test.ts:31`

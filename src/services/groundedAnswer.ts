@@ -3434,8 +3434,10 @@ export function assembleEngineReasoning(opts: {
   //   reply that precedes it ("if <reply>, then <engine move> <geometry>").
   const maxFollow = Math.max(0, opts.maxFollowUps ?? 2);
   let narrated = 0;
+  let lastSaid = 0;
   for (let i = 1; i < plies.length && narrated < maxFollow; i += 1) {
     if (!plies[i].isMover) continue; // opponent ply — used only as setup below
+    lastSaid = i;
     const reply = plies[i - 1]; // the opponent's move immediately before
     const geo = describeMoveGeometry(plies[i].fenBefore, plies[i].san, opts.moverColor);
     if (reply && !reply.isMover) {
@@ -3470,6 +3472,12 @@ export function assembleEngineReasoning(opts: {
     bestMoveSan: first.san,
     bestMoveFromTo: fromTo,
     sources: ['board:chess.js', 'engine:stockfish'],
+    // The moves the words just walked ("Kf2 … If Rxg5, then Nb5+"), so "show
+    // me" plays exactly what was said (hard walk 2026-10-10, Setup trainer).
+    ...(lastSaid >= 2 ? (() => {
+      const w = walkableLine(opts.fenBefore, plies.slice(0, lastSaid + 1).map((p) => p.san), first.san);
+      return w ? { lines: [w] } : {};
+    })() : {}),
   };
 }
 
