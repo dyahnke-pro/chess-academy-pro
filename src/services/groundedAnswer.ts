@@ -24,7 +24,7 @@ import { isSacrifice } from './factStakes';
 import { seatPieceReferences } from '../utils/seatPieces';
 import { mobilityMap } from './nextPlans';
 import { Chess } from 'chess.js';
-import { proofCut } from './exchangeLedger';
+import { proofCut, moverLineProof } from './exchangeLedger';
 import { isRealPin } from './pinGeometry';
 import { tacticWord } from './tacticVocabulary';
 import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSITIONAL_TARGETS } from './keySquares';
@@ -596,7 +596,13 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
   // the piece is not simply lost on arrival.
   const ideas = isOpp && !inCheck ? opponentIdeas(fen, me) : [];
   const ideaPart = ideas.length ? ` Their ideas: ${ideas.join('; ')}.` : '';
-  if (wins.length === 0 && !inCheck) {
+  // A MATE ONE MOVE AWAY LEADS (hard walk 2026-10-10: "what do they
+  // threaten?" → "the pawn on g2, which is not defended enough" with …Qxg2#
+  // on the board). The same null-move read as the material threats.
+  const attacker: 'w' | 'b' = victimColor === 'w' ? 'b' : 'w';
+  const mates = inCheck ? [] : mateThreatsAgainst(fen, victimColor).map((san) => `${attacker === 'b' ? '…' : ''}${san}`);
+  const matePart = mates.length ? `${isOpp ? 'they threaten' : 'you threaten'} ${orList(mates)} — mate` : '';
+  if (wins.length === 0 && !inCheck && !matePart) {
     return {
       facts: isOpp
         ? `Nothing forcing — they have no immediate threat; none of your pieces are hanging.${ideaPart}`
@@ -624,7 +630,7 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
         : `you can win ${named}`)
     : '';
   const checkPart = inCheck ? `your king is in check` : '';
-  const facts = [checkPart, winPart].filter(Boolean).join(', and ') + '.' + ideaPart;
+  const facts = (matePart ? `${[checkPart, matePart].filter(Boolean).join(', and ')}.${winPart ? ` Beyond that, ${winPart}.` : ''}` : [checkPart, winPart].filter(Boolean).join(', and ') + '.') + ideaPart;
   return { facts: facts.charAt(0).toUpperCase() + facts.slice(1), bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
 
@@ -652,12 +658,43 @@ export function opponentIdeas(fen: string, me: 'w' | 'b'): string[] {
   return out;
 }
 
+/** Every move the side attacking `target`'s king could mate with if it were
+ *  their move — the null-move read of a mate threat. chess.js, exact. */
+export function mateThreatsAgainst(fen: string, target: 'w' | 'b'): string[] {
+  const parts = fen.split(' ');
+  const attacker = target === 'w' ? 'b' : 'w';
+  if (parts[1] !== attacker) { parts[1] = attacker; parts[3] = '-'; }
+  let c: Chess;
+  try { c = new Chess(parts.join(' ')); } catch { return []; }
+  // A king already in check is the target's move: no null move to read.
+  const k = c.board().flat().find((x) => x && x.type === 'k' && x.color === target);
+  if (!k || c.isAttacked(k.square, attacker)) return [];
+  const out: string[] = [];
+  for (const m of c.moves({ verbose: true })) {
+    if (m.san.endsWith('#')) out.push(m.san);
+  }
+  return out;
+}
+
 // ── KING SAFETY — "is my king safe?" ────────────────────────────────────────
 export function assembleKingSafetyAnswer(fen: string, studentColor: 'white' | 'black', side: 'me' | 'opponent' | 'neutral'): GroundedAnswer | null {
   const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
   const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
   const target: 'w' | 'b' = side === 'opponent' ? them : me;
   const whose = side === 'opponent' ? 'their' : 'your';
+  // A MATE ONE MOVE AWAY COMES FIRST (hard walk 2026-10-10: "is my king safe?"
+  // → "not under attack right now", with …Qxg2# on the board). The question is
+  // what the other side could do if it were their move, not only what attacks
+  // the king this instant.
+  const mates = mateThreatsAgainst(fen, target).map((san) => `${target === 'w' ? '…' : ''}${san}`);
+  if (mates.length) {
+    const who = whose === 'your' ? 'they threaten' : 'you threaten';
+    const Whose = whose === 'your' ? 'Your' : 'Their';
+    return {
+      facts: `${Whose} king is not safe: ${who} ${orList(mates)} — mate.`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
+    };
+  }
   const exposure = detectKingExposure(fen, target);
   if (!exposure) {
     // Say only what was checked (walk 2026-09-30, game 1: "no open lines" with
@@ -1821,6 +1858,11 @@ export function assembleMoveEvalAnswer(opts: {
    *  answer to "what should I play". It is to SAY that it isn't the thing they
    *  asked about, so the student can tell an answer from a non-answer. */
   askedPiece?: 'pawn' | 'knight' | 'bishop' | 'rook' | 'queen' | 'king' | null;
+  /** The engine's line from `fen` (SAN, starting with the best move). When it
+   *  PROVES a mate or a gain within the horizon a listener can follow, the
+   *  answer says it and hands the same moves to the board (hard walk
+   *  2026-10-10: "calculate the main line" got the move and no line). */
+  pvSan?: readonly string[] | null;
 }): GroundedAnswer | null {
   const { fen, bestMoveUci } = opts;
   if (!bestMoveUci || bestMoveUci.length < 4) return null;
@@ -1884,6 +1926,25 @@ export function assembleMoveEvalAnswer(opts: {
   }
   if (evalText) parts.push(`${evalText.charAt(0).toUpperCase()}${evalText.slice(1)}.`);
 
+  // THE LINE, PLAYED OUT — only where it proves something (the proof rule: an
+  // engine line is said when it ends in mate or a counted gain, never as a
+  // bare move list), and only for the student's own move.
+  let lines: GroundedAnswer['lines'];
+  if (!theirMove && opts.pvSan?.length && opts.pvSan[0] === bestMoveSan) {
+    const uci: string[] = [];
+    try {
+      const c = new Chess(fen);
+      for (const san of opts.pvSan) { const m = c.move(san); uci.push(`${m.from}${m.to}${m.promotion ?? ''}`); }
+    } catch { /* the playable prefix is what we have */ }
+    const proof = moverLineProof(fen, uci, mover === 'white' ? 'w' : 'b');
+    const sans = proof?.line?.sans ?? [];
+    if (proof && sans.length >= 3) {
+      parts.push(`${proof.short.charAt(0).toUpperCase()}${proof.short.slice(1)}.`);
+      const w = walkableLine(fen, sans, sans[0]);
+      if (w) lines = [w];
+    }
+  }
+
   const sources = ['engine:stockfish', 'board:chess.js'];
 
   return {
@@ -1891,6 +1952,7 @@ export function assembleMoveEvalAnswer(opts: {
     bestMoveSan,
     bestMoveFromTo: fromTo,
     sources,
+    ...(lines ? { lines } : {}),
   };
 }
 

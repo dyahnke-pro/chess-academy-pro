@@ -142,6 +142,7 @@ export function CoachAnalysePage(): JSX.Element {
           liveState: {
             surface: 'standalone-chat',
             fen,
+            studentColor: studentSide,
             evalCp: sfAnalysis.isMate ? undefined : sfAnalysis.evaluation,
             evalMateIn: sfAnalysis.mateIn ?? undefined,
             moveHistory: analyseHistory,
@@ -243,6 +244,7 @@ export function CoachAnalysePage(): JSX.Element {
         liveState: {
           surface: 'standalone-chat',
           fen: game.fen,
+          studentColor: studentSide,
           evalCp: analysis && !analysis.isMate ? analysis.evaluation : undefined,
           evalMateIn: analysis?.mateIn ?? undefined,
           moveHistory: followHistory,

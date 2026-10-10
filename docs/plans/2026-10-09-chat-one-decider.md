@@ -367,3 +367,26 @@ gate/filter where a producer is wrong; let a kind fall through to the chain
 (P3 makes that impossible — until then a null answer is a bug to fix, not a
 default to rely on); re-add any free-model path; copy narration's importance
 selector into chat (chat selects by what was asked).
+
+## Hard walk 2026-10-10 (`scripts/audit-chat-hard-prod.mjs`)
+
+Six engine-checked 1900+ positions (three mates in 4, a sac, a quiet rook
+move, a pawn ending), seven 2000-level questions each, then the Setup trainer
+and Puzzles. Prod b62a832: mate counts and wrong-move refutations right on
+all six. Root causes found and fixed (tests: `hardWalk.mates.test.ts`,
+`dispatchCoachTurn.showLine.test.ts`):
+- the proof computers threw the moves away after writing the words, so
+  "show me" had nothing to play → `moverLossProof` / `bestLineSans` /
+  `spokenLines` keep the moves beside the words; the mate lane and the
+  best-move lane hand theirs over too;
+- a mating move was "best" for a square ("the h6 outpost") → the mate is
+  the reason;
+- "is my king safe?" / "what do they threaten?" missed …Qxg2# (the threat
+  read counts material only) → `mateThreatsAgainst` leads both;
+- "what did their last move threaten?" on a board with no move list fell
+  through to the alternatives lane → says the move list is missing, then
+  the threats now;
+- Explain/Analyse asked without a seat → "Black is winning" to the
+  side to move;
+- "what's their best defence?" with nothing countable said nothing about
+  the reply → the engine's reply is named.

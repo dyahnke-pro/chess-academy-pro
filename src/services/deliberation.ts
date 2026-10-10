@@ -14,9 +14,10 @@
 //
 // Doc: docs/plans/2026-08-26-coach-my-weakness-focus-lens.md §4.0.
 import { Chess, type Square } from 'chess.js';
-import type { StockfishAnalysis } from '../types';
+import type { StockfishAnalysis, WalkableLine } from '../types';
+import { walkableLine } from './proof';
 import { findHangingPieces } from './tacticClassifier';
-import { proofAgainstMover, proofForMover } from './exchangeLedger';
+import { moverLossProof, moverLineProof } from './exchangeLedger';
 import { strategicWhyLed } from './moveFundamentals';
 import { computeTerritory, legalSeeGainFor, seeReadsStanding } from './positionReadingService';
 import { isPinnedPiece } from './nextPlans';
@@ -85,6 +86,9 @@ export interface Candidate {
    *  mover ("Nxe5, Qd4 and Qxe5 — they win a knight"), when it proves one
    *  (WO-TEACH-02 S5). A candidate is a lesson only with its reason. */
   proof?: string;
+  /** The moves `proof` names, from the position before the candidate — so a
+   *  surface that says the proof can also play it on the board. */
+  proofSans?: readonly string[];
 }
 
 export interface Deliberation {
@@ -100,6 +104,11 @@ export interface Deliberation {
   /** The best move's own line, played out, when it proves a win of material
    *  or mate within the horizon — the "if X, then Y" half of the verdict. */
   bestLine?: string | null;
+  /** The moves `bestLine` names, from the position before the move. */
+  bestLineSans?: readonly string[] | null;
+  /** The engine's reply to the best move (SAN), so "what's their best
+   *  defence?" is answered even when the line proves nothing countable. */
+  bestReply?: string | null;
   /** The move the student named, weighed (when `named` was given). */
   named?: Candidate;
   /** Why the NAMED move is good, from the board — its own reason, never the
@@ -212,11 +221,11 @@ export function buildDeliberation(input: {
     // trade queens here — you have a huge attack").
     const tradesQueens = !drop && deltaCp >= MEANINGFUL_DELTA_CP && (moreSpace(fenBefore, moverColor) || attacking(fenBefore, moverColor)) && queensOffWithin(fenBefore, l.moves, 5);
     const shortfall: Shortfall = drop ? 'drops-material' : tradesQueens ? 'trades-queens' : deltaCp >= CLEARLY_WORSE_CP ? 'clearly-worse' : 'less-precise';
-    const proof = proofAgainstMover(fenBefore, l.moves, moverColor);
+    const lossProof = moverLossProof(fenBefore, l.moves, moverColor);
     alternatives.push({
       san, evalCp, deltaCp, shortfall,
       drops: drop ? { piece: drop.piece, square: drop.square } : undefined,
-      ...(proof ? { proof } : {}),
+      ...(lossProof ? { proof: lossProof.short, proofSans: lossProof.line?.sans ?? [] } : {}),
     });
   }
 
@@ -238,7 +247,7 @@ export function buildDeliberation(input: {
         const deltaCp = Math.max(0, bestEval - evalCp);
         const loose = dropsAfter(fenBefore, line.moves[0], moverColor);
         const drop = loose && deltaCp >= CLEARLY_WORSE_CP ? loose : null;
-        const proof = proofAgainstMover(fenBefore, line.moves, moverColor);
+        const lossProof = moverLossProof(fenBefore, line.moves, moverColor);
         let leaves: Candidate['leaves'];
         try {
           const after = new Chess(fenBefore);
@@ -251,20 +260,32 @@ export function buildDeliberation(input: {
           san: namedSan, evalCp, deltaCp,
           shortfall: drop ? 'drops-material' : deltaCp >= CLEARLY_WORSE_CP ? 'clearly-worse' : 'less-precise',
           drops: drop ? { piece: drop.piece, square: drop.square } : undefined,
-          ...(proof ? { proof } : {}),
+          ...(lossProof ? { proof: lossProof.short, proofSans: lossProof.line?.sans ?? [] } : {}),
           ...(leaves ? { leaves } : {}),
         };
       }
     }
   }
 
-  const bestWhy = moveWhy(fenBefore, bestSan, moverColor, input.opponentLastSan);
+
   // Played out only when it takes more than the move itself to see (3+ plies):
   // a one-move win is already the reason.
-  const played = proofForMover(fenBefore, bestLine.moves, moverColor);
-  const bestLineText = played && played.plies >= 3 ? played.text : null;
+  const played = moverLineProof(fenBefore, bestLine.moves, moverColor);
+  const playedSans = played?.line?.sans ?? [];
+  const bestLineText = played && playedSans.length >= 3 ? played.short : null;
+  // A MOVE THAT STARTS A FORCED MATE IS BEST FOR THAT REASON (hard walk
+  // 2026-10-10: "Nh6+ is best — it lands on the h6 outpost", then the mate in
+  // four). The mate is the why; a square's geometry beside it teaches nothing.
+  const mates = !!played && playedSans.length >= 3 && /and it's mate$/.test(played.short);
+  const bestWhy = mates
+    ? `starts a forced mate in ${Math.ceil(playedSans.length / 2)}`
+    : moveWhy(fenBefore, bestSan, moverColor, input.opponentLastSan);
   const namedWhy = namedCandidate && namedCandidate.san !== bestSan ? moveWhy(fenBefore, namedCandidate.san, moverColor, input.opponentLastSan) : null;
-  return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy, bestLine: bestLineText, ...(namedCandidate ? { named: namedCandidate, namedWhy } : {}) };
+  const bestReply = (() => {
+    if (!bestLine.moves[1]) return null;
+    try { const c = new Chess(fenBefore); c.move({ from: bestLine.moves[0].slice(0, 2), to: bestLine.moves[0].slice(2, 4), promotion: bestLine.moves[0][4] }); return uciToSan(c.fen(), bestLine.moves[1]); } catch { return null; }
+  })();
+  return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy, bestLine: bestLineText, bestLineSans: bestLineText ? playedSans : null, bestReply, ...(namedCandidate ? { named: namedCandidate, namedWhy } : {}) };
 }
 
 
@@ -611,7 +632,11 @@ export function namedMoveAnswer(d: Deliberation, ask: 'why-best' | 'is-it-good')
   const bestReason = d.bestWhy ? ` — it ${d.bestWhy}` : '';
   if (n.san === d.best.san) {
     const others = deliberationWeighing(d);
-    return `${n.san} is the best move here${bestReason}.${line}${others ? ` ${others}` : ''}`;
+    // No countable proof: the engine's reply is still the answer to "what's
+    // their best defence?" (hard walk 2026-10-10, a pawn ending — Kd3 with
+    // nothing said about …Kd6).
+    const reply = !d.bestLine && d.bestReply ? ` Their best reply is ${d.bestReply}.` : '';
+    return `${n.san} is the best move here${bestReason}.${line}${reply}${others ? ` ${others}` : ''}`;
   }
   if (n.deltaCp < NAMED_SAME_AS_BEST_CP && n.shortfall !== 'drops-material') {
     // Each move carries its own reason: the student's move first, then the
@@ -649,4 +674,27 @@ export function namedMoveAnswer(d: Deliberation, ask: 'why-best' | 'is-it-good')
   const verdict = namesBest ? ''
     : d.bestWhy ? ` The move is ${d.best.san}${bestReason}.${line}` : ` The engine prefers ${d.best.san}.${line}`;
   return `${lead}${why}${verdict}`;
+}
+
+/**
+ * THE LINES AN ANSWER SAID, as lines the board can play (WO-CHAT-01: "show me"
+ * found nothing after the coach had just recited a mate). Only a line whose
+ * words are in `text` is returned — no marks without words — and each comes
+ * from the moves the proof computer kept, never read back out of the prose.
+ */
+export function spokenLines(d: Deliberation, fenBefore: string, text: string): WalkableLine[] {
+  const out: WalkableLine[] = [];
+  const add = (said: string | null | undefined, sans: readonly string[] | null | undefined): void => {
+    if (!said || !sans?.length) return;
+    // A rule-out says the candidate as a question and the rest after "Then"
+    // ("Qf7+? Then Kxf7 — they win a queen"), so its words are the proof
+    // without its first move.
+    const rest = said.replace(/^\S+(?:, | and )/, '');
+    if (!text.includes(said) && !(rest !== said && text.includes(rest))) return;
+    const w = walkableLine(fenBefore, sans, sans[0]);
+    if (w && !out.some((o) => o.plies.map((p) => p.san).join(' ') === w.plies.map((p) => p.san).join(' '))) out.push(w);
+  };
+  add(d.bestLine, d.bestLineSans);
+  for (const c of [d.named, ...d.alternatives]) if (c) add(c.proof, c.proofSans);
+  return out;
 }

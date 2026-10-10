@@ -95,9 +95,14 @@ export async function buildEnginePlan(
   } catch {
     return null;
   }
+  // A FORCED MATE IS PLAYED TO THE MATE (hard walk 2026-10-10: "Yes — there's
+  // a forced mate in 4." and no line, because six plies stop one short of a
+  // mate in four). The line runs to the mating move however long it is.
+  const mateMoves = analysis.isMate && analysis.mateIn ? Math.abs(analysis.mateIn) : 0;
+  const plies = Math.max(PLAN_PLIES, mateMoves * 2);
   const pvSan: string[] = [];
   for (const uci of uciSeq) {
-    if (pvSan.length >= PLAN_PLIES) break;
+    if (pvSan.length >= plies) break;
     const from = uci.slice(0, 2);
     const to = uci.slice(2, 4);
     const promotion = uci.length > 4 ? uci[4] : undefined;

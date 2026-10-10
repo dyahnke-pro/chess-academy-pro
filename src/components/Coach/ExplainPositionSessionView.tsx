@@ -35,6 +35,9 @@ import { useLineWalk } from '../../hooks/useLineWalk';
 import type { TacticsLiveContext } from '../../coach/types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
+/** The side to move in a FEN — on an analysis screen, the student's seat. */
+const sideToMove = (fen: string): 'white' | 'black' => (fen.split(' ')[1] === 'b' ? 'black' : 'white');
+
 const START_FEN =
   'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 const ANALYSIS_DEPTH = 18;
@@ -151,6 +154,9 @@ export function ExplainPositionSessionView({
             liveState: {
               surface: 'standalone-chat',
               fen: targetFen,
+              // The student studies the side to move: "you" is that side.
+              studentColor: sideToMove(targetFen),
+              whoseTurn: sideToMove(targetFen),
               evalCp: sf.isMate ? undefined : sf.evaluation,
               evalMateIn: sf.mateIn ?? undefined,
               userJustDid: 'Loaded a position into Explain',
@@ -247,6 +253,8 @@ export function ExplainPositionSessionView({
           liveState: {
             surface: 'standalone-chat',
             fen: targetFen,
+            studentColor: sideToMove(targetFen),
+            whoseTurn: sideToMove(targetFen),
             evalCp: analysis.isMate ? undefined : analysis.evaluation,
             evalMateIn: analysis.mateIn ?? undefined,
             userJustDid: `Asked: "${question.slice(0, 60)}"`,

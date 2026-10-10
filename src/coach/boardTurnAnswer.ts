@@ -15,12 +15,12 @@
  */
 import { Chess, type Square } from 'chess.js';
 import type { ResolvedChatTurn, ChatKind } from './chatTurn';
-import { buildDeliberation, namedMoveAnswer } from '../services/deliberation';
+import { buildDeliberation, namedMoveAnswer, spokenLines } from '../services/deliberation';
 import { getCachedStockfish } from '../hooks/stockfishFenCache';
 import { searchUntilStable } from '../services/searchDepth';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { buildCandidateEval } from '../services/enginePlanContext';
-import type { StockfishAnalysis } from '../types';
+import type { StockfishAnalysis, WalkableLine } from '../types';
 import { computePositionFacts, type ClauseItem } from '../services/positionFacts';
 import { FACT_LAYER, type FactKind } from '../services/reviewFacetRank';
 import { lastMoveIfStudent, lastMoveIfOpponent } from '../services/lastMoveOfLine';
@@ -57,7 +57,7 @@ let engineOverride: BoardEngine | null = null;
 export function setBoardEngineForTests(e: BoardEngine | null): void { engineOverride = e; }
 
 /** The answer to a decoded move question, or null to fall back to the lanes. */
-export async function answerBoardTurn(turn: ResolvedChatTurn, board: BoardTurnInput, out?: { endorsed?: string[] }): Promise<string | null> {
+export async function answerBoardTurn(turn: ResolvedChatTurn, board: BoardTurnInput, out?: { endorsed?: string[]; lines?: WalkableLine[] }): Promise<string | null> {
   if (!BOARD_ANSWERED_KINDS.has(turn.kind)) return null;
   if (turn.kind === 'plan' || turn.kind === 'tactics') return answerFromRead(turn, board);
   if (turn.kind === 'develop-next') return developNextAnswer(board, out);
@@ -91,7 +91,12 @@ export async function answerBoardTurn(turn: ResolvedChatTurn, board: BoardTurnIn
   const opponentLastSan = board.history.length ? board.history[board.history.length - 1] : null;
   const d = buildDeliberation({ analysis, fenBefore: board.fen, moverColor: mover, opponentLastSan, named, maxCandidates: 4 });
   if (!d) return null;
-  return namedMoveAnswer(d, turn.kind === 'why-best-move' ? 'why-best' : 'is-it-good');
+  const text = namedMoveAnswer(d, turn.kind === 'why-best-move' ? 'why-best' : 'is-it-good');
+  if (text && out) {
+    const lines = spokenLines(d, board.fen, text);
+    if (lines.length) out.lines = lines;
+  }
+  return text;
 }
 
 /** Facts the student must answer right now — they lead any board answer. */

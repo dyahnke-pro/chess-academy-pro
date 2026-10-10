@@ -53,3 +53,15 @@ describe('"show me"', () => {
     expect(shown.text).toMatch(/^Playing the line out on the board/);
   }, 60_000);
 });
+
+describe('hard walk 2026-10-10', () => {
+  it('"what did their move threaten" on a board with no move list says so, then reads the threats — never the best move', async () => {
+    setChatTurnReaderForTests(async () => ({ kind: 'what-did-their-move-change', referents: [], seat: 'them', topic: null }) as never);
+    const a = await dispatchCoachTurn({
+      surface: 'standalone-chat', ask: 'What did their last move Kg8 threaten, two moves deep?', origin: 'typed',
+      liveState: { surface: 'standalone-chat', fen: '6k1/p1p4p/1p2n1p1/3pQ3/3P1nN1/2PB2qP/PP4P1/6K1 w - - 18 33', whoseTurn: 'white', studentColor: 'white', moveHistory: [], currentRoute: '/coach/session/explain-position' },
+    } as never, { maxToolRoundTrips: 1 });
+    expect(a.text).toMatch(/^There's no move list on this board.*they threaten …Qxg2# — mate/);
+    expect(a.text).not.toMatch(/best move/i);
+  }, 60_000);
+});

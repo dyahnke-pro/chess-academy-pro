@@ -29,7 +29,7 @@ import type { CoachAskInput, CoachAnswer, CoachSurface } from './types';
 import type { WalkableLine } from '../types';
 import { routeChatIntent } from '../services/coachSessionRouter';
 import { askSourceFor, positionalTopic } from './questionIntents';
-import { assemblePositionalAnswer } from '../services/groundedAnswer';
+import { assemblePositionalAnswer, assembleThreatAnswer } from '../services/groundedAnswer';
 import {
   CHAT_KINDS,
   EMPTY_CONVERSATION,
@@ -375,6 +375,18 @@ export async function dispatchCoachTurn(
         return serve(answer.facts, `board:positional:${ptopic}`, 'answered');
       }
     }
+    // THEIR LAST MOVE ON A BOARD WITH NO MOVES (hard walk 2026-10-10: on the
+    // explain screen "what did Kg8 threaten?" was answered with the best move,
+    // because the opponent-move lane needs the move list and fell through to
+    // the alternatives). Said plainly, then what they threaten now.
+    if (turn?.kind === 'what-did-their-move-change' && input.liveState.fen && !(input.liveState.moveHistory?.length)) {
+      const sc = input.liveState.studentColor ?? (input.liveState.fen.split(' ')[1] === 'b' ? 'black' : 'white');
+      const threat = assembleThreatAnswer(input.liveState.fen, input.ask, sc, 'opponent');
+      if (threat) {
+        const now = threat.facts.charAt(0).toLowerCase() + threat.facts.slice(1);
+        return serve(`There's no move list on this board, so their last move can't be read. What they threaten right now: ${now}`, 'board:threats-no-history', 'answered');
+      }
+    }
     if (turn && CHAT_KINDS[turn.kind].answerer === 'direct' && input.liveState.fen) {
       const studentWB = input.liveState.studentColor === 'black' ? 'b' : input.liveState.studentColor === 'white' ? 'w' : (input.liveState.fen.split(' ')[1] === 'b' ? 'b' : 'w');
       // A proof the answer carries (a capture that wins the attacker) comes
@@ -389,10 +401,13 @@ export async function dispatchCoachTurn(
     // that drops what was read (chat thinks like the coach, 2026-10-09).
     if (turn && BOARD_ANSWERED_KINDS.has(turn.kind) && input.liveState.fen) {
       const sc = input.liveState.studentColor ?? (input.liveState.fen.split(' ')[1] === 'b' ? 'black' : 'white');
-      const out: { endorsed?: string[] } = {};
+      const out: { endorsed?: string[]; lines?: WalkableLine[] } = {};
       const text = await answerBoardTurn(turn, { fen: input.liveState.fen, history: input.liveState.moveHistory ?? [], studentColor: sc }, out).catch(() => null);
       if (text) {
-        return serve(text, `board:${turn.kind}`, 'answered', out.endorsed?.length ? { endorsedSans: out.endorsed } : {});
+        return serve(text, `board:${turn.kind}`, 'answered', {
+          ...(out.endorsed?.length ? { endorsedSans: out.endorsed } : {}),
+          ...(out.lines?.length ? { lines: out.lines } : {}),
+        });
       }
     }
     // A FALSE PREMISE IS ANSWERED, NOT ROUTED (pass 2, 2026-10-09: "how do I
