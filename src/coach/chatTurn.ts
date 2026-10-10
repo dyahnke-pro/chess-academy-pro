@@ -272,7 +272,7 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
     canonical: (t) => { const p = firstPiece(t); return p ? `${p.seat === 'them' ? "couldn't they move their" : 'could I move my'} ${PIECE_WORD[p.piece]}?` : null; } },
   'best-move': { gloss: 'what is the best move here', lane: 'best-move', answerer: 'live', canonical: aboutNamedMove("what's my best move?") },
   'why-best-move': { gloss: 'why is the engine\'s best move best', lane: 'why-best-move', answerer: 'live', canonical: aboutNamedMove('why is that the best move?') },
-  alternatives: { gloss: 'what other moves are worth considering', lane: 'alternatives', answerer: 'live', canonical: fixed('what else could I play here?') },
+  alternatives: { gloss: 'what other moves are worth considering', lane: 'alternatives', answerer: 'live', canonical: null },
   'candidate-move': { gloss: 'is a NAMED move good / what happens if I play it', lane: 'candidate-move', answerer: 'live',
     canonical: (t) => { const m = firstMove(t); return m ? `is ${m} good here?` : null; } },
   'compare-moves': { gloss: 'which of two named moves is better', lane: 'compare-moves', answerer: 'live',

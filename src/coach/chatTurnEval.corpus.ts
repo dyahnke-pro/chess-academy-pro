@@ -35,7 +35,7 @@ export const CHAT_TURN_EVAL_CASES: readonly ChatTurnEvalCase[] = [
   { text: 'how do they defend against that', expect: ['best-defence'], probe: 'indirect' },
   { text: 'whats there best reply', expect: ['best-defence'], probe: 'typo' },
   { text: 'is there a faster or cleaner win?', expect: ['faster-win'], probe: 'plain' },
-  { text: 'can I win quicker than that', expect: ['faster-win'], probe: 'indirect' },
+  { text: 'any quicker way to win than that', expect: ['faster-win'], probe: 'indirect' },
   { text: 'is Nf3 any good here', expect: ['candidate-move'], probe: 'referent' },
   { text: 'what happens if I go Bxh7+', expect: ['candidate-move'], probe: 'referent' },
   { text: 'would castling queenside be ok', expect: ['candidate-move'], probe: 'indirect' },
