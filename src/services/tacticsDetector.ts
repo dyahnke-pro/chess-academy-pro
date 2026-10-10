@@ -1,3 +1,4 @@
+import { trappedAt } from './trappedPiece';
 import { sideToMoveAs } from './threatOut';
 import { openSentence } from '../utils/openSentence';
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
@@ -408,80 +409,21 @@ function findBackRankWeakness(chess: Chess): TacticPattern[] {
  *  to a square that isn't attacked by a CHEAPER enemy piece. Defended-but-
  *  cornered — the class `findHangingPieces` (undefended only) cannot see. */
 function findTrappedPieces(chess: Chess): TacticPattern[] {
+  // The one trapped-piece computer (trappedPiece.trappedAt, census
+  // 2026-10-10) — attacked, no safe square, and no other move rescues it.
+  // This detector held a second copy of the same rules.
   const out: TacticPattern[] = [];
-  const board = chess.board();
-  for (const row of board) {
+  const fen = chess.fen();
+  for (const row of chess.board()) {
     for (const p of row) {
       if (!p || p.type === 'k' || p.type === 'p') continue;
-      const sq = p.square;
-      const enemy: Color = p.color === 'w' ? 'b' : 'w';
-      // Trapped means ATTACKED with nowhere to run. Two honest entries:
-      //   • attacked by a CHEAPER piece (the pawn-kicks-the-knight shape), or
-      //   • UNDEFENDED and attacked at all (P4b, 2026-09-15) — a hanging piece
-      //     that could simply step away is findHangingPieces' pattern, but a
-      //     hanging piece with NO safe square is won by force: that is the
-      //     textbook trap (Ra1 against an undefended Ba2 whose only squares are
-      //     covered). The old cheaper-only entry called that silence.
-      // A DEFENDED piece whose only attacker is pricier or equal is a trade
-      // offer, not a trap — unchanged.
-      const attackersHere = attackersOfSquare(chess, sq, enemy);
-      if (attackersHere.length === 0) continue;
-      const defendedHere = chess.attackers(sq, p.color).some((d) => d !== sq);
-      const attackedByCheaper = attackersHere.some((a) => PIECE_VALUE[a] < PIECE_VALUE[p.type]);
-      if (!attackedByCheaper && defendedHere) continue;
-      const myView = withTurn(chess, p.color);
-      if (!myView) continue;
-      // A SIDE IN CHECK IS NOT TRAPPED, IT IS BUSY (review walk 900,
-      // 2026-09-26: after …bxa2+ "their queen on d1 … has no safe square — it
-      // is trapped", while Qd2 and Qg4 were both safe). In check, no piece but
-      // the answer to the check may move, so "no legal escape" measures the
-      // check, not the cage — and the piece is lost to the tempo, a different
-      // idea that this detector does not name.
-      if (myView.inCheck()) continue;
-      const escapes = myView.moves({ square: sq, verbose: true });
-      const hasSafeSquare = escapes.some((m) => {
-        // AN ESCAPE THAT TAKES AS MUCH AS IT RISKS IS SAFE (review walk 1500,
-        // 2026-09-26: "your queen on a7 … is trapped" when Qxa4 traded queens).
-        // Landing on a defended square is a loss only when the capture there
-        // is worth less than the piece.
-        if (m.captured && PIECE_VALUE[m.captured] >= PIECE_VALUE[p.type]) return true;
-        try {
-          const after = new Chess(myView.fen());
-          after.move({ from: m.from, to: m.to, promotion: 'q' });
-          // Safe = not capturable at a profit there: no attacker CHEAPER than
-          // the runner, and either no attacker at all or the runner stands
-          // DEFENDED on arrival (an undefended runner hit by an equal piece
-          // still just hangs — that square is not an escape).
-          const attackers = attackersOfSquare(after, m.to, enemy);
-          if (attackers.some((a) => PIECE_VALUE[a] < PIECE_VALUE[p.type])) return false;
-          if (attackers.length === 0) return true;
-          return after.attackers(m.to, p.color).some((d) => d !== m.to);
-        } catch { return true; }
+      if (!trappedAt(fen, p.square)) continue;
+      out.push({
+        type: 'trapped_piece',
+        beneficiary: p.color === 'w' ? 'b' : 'w',
+        involvedSquares: [p.square],
+        description: `The ${PIECE_NAMES[p.type]} on ${p.square} is attacked and has no safe square — it is trapped`,
       });
-      // NOTHING ELSE SAVES IT EITHER (David's Learn walk 2026-09-24: after
-      // ...Bg4 the coach said "your queen on d1 … is trapped", and his move was
-      // Nge2 — the block). A piece with no square to run to is still not
-      // trapped when another move BLOCKS the attack or TAKES the attacker, so
-      // "won whoever is to move" is only true when no move at all rescues it.
-      const rescued = !hasSafeSquare && myView.moves({ verbose: true }).some((m) => {
-        if (m.from === sq) return false;
-        try {
-          const after = new Chess(myView.fen());
-          after.move({ from: m.from, to: m.to, promotion: 'q' });
-          const attackers = attackersOfSquare(after, sq, enemy);
-          if (attackers.length === 0) return true;
-          if (attackers.some((a) => PIECE_VALUE[a] < PIECE_VALUE[p.type])) return false;
-          return after.attackers(sq, p.color).some((d) => d !== sq);
-        } catch { return false; }
-      });
-      if (!hasSafeSquare && !rescued) {
-        out.push({
-          type: 'trapped_piece',
-          beneficiary: enemy,
-          involvedSquares: [sq],
-          description: `The ${PIECE_NAMES[p.type]} on ${sq} is attacked and has no safe square — it is trapped`,
-        });
-      }
     }
   }
   return out;

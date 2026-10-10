@@ -1,3 +1,4 @@
+import { trappedAt } from './trappedPiece';
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import { isRealPin, isRealSkewer } from './pinGeometry';
 import type { CoachGameMove, MissedTactic, TacticType } from '../types';
@@ -330,23 +331,12 @@ function detectOverloadedPiece(
  * Check if a specific piece is trapped (all moves go to defended squares and it's attacked).
  */
 function isPieceTrapped(chess: Chess, sq: Square, pieceColor: Color, attackerColor: Color): boolean {
-  try {
-    const fenParts = chess.fen().split(' ');
-    fenParts[1] = pieceColor;
-    fenParts[3] = '-';
-    const testChess = new Chess(fenParts.join(' '));
-
-    const moves = testChess.moves({ square: sq, verbose: true });
-    if (moves.length === 0) return false;
-
-    const allMovesBad = moves.every((m) =>
-      isDefended(chess, m.to, attackerColor),
-    );
-
-    return allMovesBad && countDefenders(chess, sq, attackerColor) > 0;
-  } catch {
-    return false;
-  }
+  // The one trapped-piece computer (trappedPiece.trappedAt, census
+  // 2026-10-10): this copy asked only whether the piece's squares were
+  // covered, never whether another move saved it.
+  const p = chess.get(sq);
+  if (!p || p.color !== pieceColor || p.color === attackerColor) return false;
+  return trappedAt(chess.fen(), sq) !== null;
 }
 
 /**

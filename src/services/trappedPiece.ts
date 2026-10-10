@@ -6,6 +6,7 @@
 import { Chess, type Color, type Square } from 'chess.js';
 import { legalSeeGainOn } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
+import { sideToMoveAs } from './threatOut';
 
 const VAL = MATERIAL_VALUE;
 
@@ -39,13 +40,13 @@ export function trappedAt(fen: string, sq: string): { attackerSquare: string } |
   const cheapAtk = attackers.find((a) => (VAL[chess.get(a)?.type ?? 'k'] ?? 99) < val);
   const defended = chess.attackers(sq as Square, side).length > 0;
   if (!cheapAtk && defended) return null;
-  const parts = chess.fen().split(' ');
-  parts[1] = side; parts[3] = '-';
-  let probe: Chess;
-  try { probe = new Chess(parts.join(' ')); } catch { return null; }
+  // The owner is handed the move by the one null-move rule (threatOut).
+  const ownerFen = sideToMoveAs(chess.fen(), side);
+  if (!ownerFen) return null;
+  const probe = new Chess(ownerFen);
   if (probe.inCheck()) return null;
   for (const m of probe.moves({ verbose: true }).filter((x) => x.from === sq)) {
-    const after = new Chess(parts.join(' '));
+    const after = new Chess(ownerFen);
     after.move(m.san);
     if (m.captured) {
       if (legalSeeGainOn(after, m.to) - (VAL[m.captured] ?? 0) < 1) return null;
@@ -58,7 +59,7 @@ export function trappedAt(fen: string, sq: string): { attackerSquare: string } |
   }
   for (const m of probe.moves({ verbose: true })) {
     if (m.from === sq) continue;
-    const after = new Chess(parts.join(' '));
+    const after = new Chess(ownerFen);
     try { after.move(m.san); } catch { continue; }
     if (!stillWinnable(after, sq, side, val)) return null;
   }

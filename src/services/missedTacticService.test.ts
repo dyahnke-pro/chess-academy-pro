@@ -205,14 +205,13 @@ describe('detectTacticType — overloaded_piece', () => {
 });
 
 describe('detectTacticType — trapped_piece', () => {
-  it('legacy geometry: called Ba2 "trapped" although Bb3 is DEFENDED by the c4 pawn (legacy tail only)', () => {
-    // Black Ba2, white Nd2 covering b1 and b3, white Re1-a1 attacking a2. The
-    // legacy detector said "trapped" — but black's own c4 pawn defends b3, so
-    // ...Bb3 Nxb3 cxb3 is an even trade and the bishop is NOT lost. The engine's
-    // trap detector checks the escape square's defence and correctly refuses;
-    // the unified classifier does not return 'trapped_piece' here.
+  it('Ba2 is NOT trapped — Bb3 is defended by the c4 pawn; the legacy tail now agrees (one trapped computer, census 2026-10-10)', () => {
+    // Black Ba2, white Nd2 covering b1 and b3, white Re1-a1 attacking a2.
+    // Black's own c4 pawn defends b3, so ...Bb3 Nxb3 cxb3 is an even trade and
+    // the bishop is NOT lost. The legacy tail used to say "trapped"; it now
+    // reads the one trapped computer, which checks the escape's defence.
     const fen = '7k/8/8/8/2p5/8/b2N4/4R1K1 w - - 0 1';
-    expect(legacyTacticGeometry(fen, 'e1a1')).toBe('trapped_piece');
+    expect(legacyTacticGeometry(fen, 'e1a1')).not.toBe('trapped_piece');
     expect(detectTacticType(fen, 'e1a1')).not.toBe('trapped_piece');
   });
 
