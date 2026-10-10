@@ -208,3 +208,36 @@ function pinnerCanTake(chess: Chess, attacker: Square, pinned: Square, behind: S
 }
 
 export type { PieceSymbol, Color };
+
+/**
+ * THE ONE TEST THAT MAKES A SKEWER A SKEWER (census 2026-10-10). Two
+ * detectors held two rules — `tacticsDetector.findSkewers` (front worth more
+ * than the attacker, a minor piece or better behind) and
+ * `tacticClassifier.detectSkewer` (also an undefended front piece, a pawn
+ * behind) — so the same move could be taught as a skewer on one surface and
+ * never caught as one on another. One rule, both directions:
+ *  - the front piece is FORCED to move: the king, or worth more than the
+ *    attacker (an undefended front piece is simply hanging, not skewered);
+ *  - the prize behind is a real piece (a minor or better) and worth less than
+ *    the front one;
+ *  - taking it wins: the piece behind is undefended once the front piece has
+ *    left the line, or worth at least the attacker;
+ *  - the front piece cannot just take an undefended attacker when it is their
+ *    move (then it is a trade offer, not a skewer).
+ */
+export function isRealSkewer(chess: Chess, attacker: Square, front: Square, behind: Square): boolean {
+  const att = chess.get(attacker);
+  const f = chess.get(front);
+  const b = chess.get(behind);
+  if (!att || !f || !b) return false;
+  if (f.color === att.color || b.color !== f.color) return false;
+  const v = (p: PieceSymbol): number => CAPTURE_VALUE[p];
+  if (!(f.type === 'k' || v(f.type) > v(att.type))) return false;
+  if (!(v(b.type) >= 3 && v(f.type) > v(b.type))) return false;
+  const backDefended = chess.attackers(behind, f.color).some((sq) => sq !== front);
+  if (backDefended && v(b.type) < v(att.type)) return false;
+  if (chess.turn() === f.color
+    && chess.attackers(attacker, f.color).includes(front)
+    && chess.attackers(attacker, att.color).length === 0) return false;
+  return true;
+}

@@ -5,7 +5,7 @@ import type { BoardHighlight } from '../types';
 import type { TacticPattern, HangingPiece } from '../types/tacticTypes';
 import { findHangingPieces } from './tacticClassifier';
 import { capturesWinMaterial } from './positionReadingService';
-import { isRealPin } from './pinGeometry';
+import { isRealPin, isRealSkewer } from './pinGeometry';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -279,28 +279,12 @@ function findSkewers(chess: Chess): TacticPattern[] {
         const first = piecesOnRay[0];
         const second = piecesOnRay[1];
 
+        // THE ONE SKEWER RULE (pinGeometry.isRealSkewer) — the classifier
+        // reads the same test, so a skewer taught is a skewer caught.
         if (
           first.color === enemyColor &&
           second.color === enemyColor &&
-          // A real skewer FORCES the front piece to move: it must be worth MORE
-          // than the attacker (otherwise it just trades or stands), and the
-          // back piece must be a real piece worth winning — never a pawn. The
-          // old check (front > back, back >= 1) fired on Bb5-attacks-Nc6-with-
-          // d7-pawn-behind (equal front, pawn "prize"), a false skewer the coach
-          // then voiced app-wide (broken-map #10). Mirrors the material
-          // validation the sibling detectors already do.
-          PIECE_VALUE[first.type] > PIECE_VALUE[piece.type] &&
-          PIECE_VALUE[first.type] > PIECE_VALUE[second.type] &&
-          PIECE_VALUE[second.type] >= 3 &&
-          // …and the front piece cannot simply TAKE an undefended attacker —
-          // then it is a trade offer, not a skewer (hand walk 2026-09-24: after
-          // 21.Rxd8 the queen on e8 just takes back on d8; his idea was the
-          // deflection, dragging the queen off e8).
-          // Only when it is THEIR move: with the attacker's side to move, the
-          // front piece is simply taken first.
-          !(chess.turn() === enemyColor
-            && chess.attackers(sq, enemyColor).includes(first.square)
-            && chess.attackers(sq, piece.color).length === 0)
+          isRealSkewer(chess, sq, first.square, second.square)
         ) {
           skewers.push({
             type: 'skewer',

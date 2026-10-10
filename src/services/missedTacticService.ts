@@ -1,5 +1,5 @@
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
-import { isRealPin } from './pinGeometry';
+import { isRealPin, isRealSkewer } from './pinGeometry';
 import type { CoachGameMove, MissedTactic, TacticType } from '../types';
 import type { TacticPatternType } from '../types/tacticTypes';
 import { capEval } from './accuracyService';
@@ -263,18 +263,12 @@ function detectSkewer(chess: Chess, to: Square, movingColor: Color): boolean {
     const first = piecesOnRay[0];
     const second = piecesOnRay[1];
 
-    // Skewer: the front enemy piece is FORCED to move — it must be worth more
-    // than the skewering piece (else it just trades or stands) AND more than the
-    // back piece, and the back piece must be a real piece worth winning, never a
-    // pawn. (2026-09-12 deep-dive #C2: this had diverged from the fixed
-    // tacticsDetector.findSkewers — `front>back, back>=1` fired on e.g. Bb5 vs a
-    // defended Nc6 with a d7 pawn behind, a false skewer. Ported to match.)
+    // THE ONE SKEWER RULE (pinGeometry.isRealSkewer) — this was a port of
+    // the detector's rule that had drifted once already (2026-09-12 #C2).
     if (
       first.color === oppositeColor(movingColor) &&
       second.color === oppositeColor(movingColor) &&
-      pieceValue(first.type) > pieceValue(piece.type) &&
-      pieceValue(first.type) > pieceValue(second.type) &&
-      pieceValue(second.type) >= 3
+      isRealSkewer(chess, to, first.square, second.square)
     ) {
       return true;
     }

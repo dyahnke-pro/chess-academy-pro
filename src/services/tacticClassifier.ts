@@ -8,7 +8,7 @@ import type {
   UpcomingTactic,
 } from '../types/tacticTypes';
 import { PIECE_NAMES } from '../types/tacticTypes';
-import { isRealPin } from './pinGeometry';
+import { isRealPin, isRealSkewer } from './pinGeometry';
 import { cpBand } from './accuracyService';
 import { findHangingBySee } from './positionReadingService';
 import { verifyForkOnBoard } from './tacticVerification';
@@ -286,27 +286,13 @@ function detectSkewer(
     const first = piecesOnRay[0];
     const second = piecesOnRay[1];
 
-    // A SKEWER FORCES THE FRONT PIECE TO MOVE and then wins the one behind
-    // (fresh-game walk 2026-09-27, 14…Rg6: "a skewer coming" for a rook facing
-    // a queen-defended knight with a pawn on g2 behind it — nothing had to
-    // move, so nothing was skewered). The front piece must be the king, worth
-    // more than the attacker, or undefended; the back piece must then be
-    // worth taking — undefended, or worth at least the attacker.
+    // THE ONE SKEWER RULE (pinGeometry.isRealSkewer), shared with the
+    // whole-board detector — two rules here once disagreed on the same move.
     const enemy = oppositeColor(movingColor);
-    const defended = (sq: Square): boolean => chessAfter.attackers(sq, enemy).length > 0;
-    const frontMustMove = first.type === 'k'
-      || pieceValue(first.type) > pieceValue(piece.type)
-      || !defended(first.square);
-    // The front piece's own defence of the back one along the ray leaves with
-    // it, so it does not count.
-    const backDefended = chessAfter.attackers(second.square, enemy).some((sq) => sq !== first.square);
-    const backWorthTaking = !backDefended || pieceValue(second.type) >= pieceValue(piece.type);
     if (
       first.color === enemy &&
       second.color === enemy &&
-      pieceValue(first.type) > pieceValue(second.type) &&
-      pieceValue(second.type) >= 1 &&
-      frontMustMove && backWorthTaking
+      isRealSkewer(chessAfter, toSquare, first.square, second.square)
     ) {
       return {
         type: 'skewer',
