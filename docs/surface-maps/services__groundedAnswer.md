@@ -434,7 +434,7 @@
 - `src/coach/handWalk1009.test.ts:173`
 - `src/coach/handWalk1009.test.ts:175`
 - `src/services/coachApi.ts:5711`
-- `src/services/inaccuracyCall.ts:825`
+- `src/services/inaccuracyCall.ts:805`
 
 ### `describeMoveMerit` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:1192`
