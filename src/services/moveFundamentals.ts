@@ -31,6 +31,7 @@ import { MATERIAL_VALUE } from './pieceValues';
 import { SPACE_RULE } from './reviewConcepts';
 import { findPinPressure } from './pinPressure';
 import { isPassedPawnAt } from './boardStructure';
+import { pawnHit } from './trappedPiece';
 
 export type MoveFundamentalId =
   | 'king-safety'
@@ -359,29 +360,28 @@ export function computeMoveFundamentals(
   //    more than the pawn and the pawn must be safe where it lands (checked
   //    above), so the piece really has to move.
   if (mv.piece === 'p') {
-    const dir = mover === 'w' ? 1 : -1;
-    const f = mv.to.charCodeAt(0);
-    const r = Number(mv.to[1]) + dir;
-    const VALUE: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
-    let hit: { sq: string; type: string } | null = null;
-    for (const df of [-1, 1]) {
-      const file = String.fromCharCode(f + df);
-      if (file < 'a' || file > 'h' || r < 1 || r > 8) continue;
-      const sq = `${file}${r}`;
-      const c = after.get(sq as Square);
-      if (!c || c.color === mover || !(c.type in VALUE)) continue;
-      if (!hit || VALUE[c.type] > VALUE[hit.type]) hit = { sq, type: c.type };
-    }
-    if (hit && hit.sq !== pile?.pinned) {
+    // KICK OR TRAP — the one trapped-piece computer decides (contract
+    // 2026-10-10: b4 trapped the knight on a5 and was taught as a tempo gain).
+    const hit = pawnHit(after.fen(), mv);
+    if (hit && hit.square !== pile?.pinned) {
       const name = PIECE_NAME[hit.type] ?? 'piece';
-      out.push({
-        id: 'tempo',
-        weight: 88,
-        led: `kicks their ${name} off ${hit.sq}, gaining time`,
-        selfContained: `the pawn kicks their ${name} off ${hit.sq}, so they spend a move while you gain one`,
-        imperative: `kick their ${name} off ${hit.sq} with a pawn and gain the time`,
-        squares: [mv.to, hit.sq],
-      });
+      out.push(hit.trapped
+        ? {
+          id: 'tempo',
+          weight: 95,
+          led: `hits their ${name} on ${hit.square}, and it has no safe square to run to`,
+          selfContained: `the pawn hits their ${name} on ${hit.square}, and the ${name} has no safe square to run to`,
+          imperative: `hit their ${name} on ${hit.square} with a pawn — it has no safe square to run to`,
+          squares: [mv.to, hit.square],
+        }
+        : {
+          id: 'tempo',
+          weight: 88,
+          led: `kicks their ${name} off ${hit.square}, gaining time`,
+          selfContained: `the pawn kicks their ${name} off ${hit.square}, so they spend a move while you gain one`,
+          imperative: `kick their ${name} off ${hit.square} with a pawn and gain the time`,
+          squares: [mv.to, hit.square],
+        });
     }
   }
 

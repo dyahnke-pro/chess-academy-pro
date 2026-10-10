@@ -75,7 +75,7 @@ describe('hard walk — mates', () => {
       fenBefore: PAWN, moverColor: 'w', opponentLastSan: null,
       named: { lineUci: toUci(PAWN, pv), evaluation: 495, mate: null },
     })!;
-    expect(namedMoveAnswer(d, 'why-best')).toMatch(/Their best reply is …Kd6\./);
+    expect(namedMoveAnswer(d, 'why-best')).toMatch(/^Kd3 is the best move here — it brings the king to d3, where it covers e4 and c4\. Their best reply is …Kd6\./);
     expect(spokenLines(d, PAWN, namedMoveAnswer(d, 'why-best')!)[0]?.plies.map((p) => p.san)).toEqual(['Kd3', 'Kd6']);
   });
 

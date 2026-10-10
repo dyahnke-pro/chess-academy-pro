@@ -488,7 +488,12 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
 
   // A move already made: judge it where it was played (validation checks it
   // is on the tape).
-  const pawnSan = slots.sans.length === 0 && slots.pieces.length === 0 && slots.squares.length === 1 ? slots.squares[0] : null;
+  // A BARE SQUARE SPOKEN OF AS A SQUARE is not a pawn move (contract
+  // 2026-10-10: "why is e4 a target?" was judged as the pawn move 1.e4). The
+  // words around it say which: a target, a weak square, a hole, attacked…
+  const squareAsNoun = slots.squares.length === 1
+    && new RegExp(`\\b${slots.squares[0]}\\b\\s+(?:(?:is|was|a|an|the|so|such|really|very)\\s+)*(?:target|weak|weakness|hole|outpost|square|key|important|strong|attacked|defended|guarded|covered|controlled|contested)\\b`).test(lower);
+  const pawnSan = slots.sans.length === 0 && slots.pieces.length === 0 && slots.squares.length === 1 && !squareAsNoun ? slots.squares[0] : null;
   const named = slots.sans.length === 1 ? slots.sans[0] : pawnSan;
   if (slots.past && named) {
     return { kind: 'retrospective-move', referents: [{ type: 'move', san: named }], seat: 'me', topic: null };

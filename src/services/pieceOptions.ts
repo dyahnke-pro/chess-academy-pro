@@ -260,7 +260,9 @@ export function renderPieceOptions(a: {
   if (a.narrowedBy === 'all') {
     // Nothing to narrow by — the piece guarded nothing and was not attacked —
     // so the question is which square was best, against what was played.
-    if (best) out.push(`${pieceName[0].toUpperCase()}${pieceName.slice(1)} wasn't guarding anything or under attack, so it comes down to the best square: ${best.san}.`);
+    // Said as what was checked: no ATTACKED piece leans on it (contract
+    // 2026-10-10: "wasn't guarding anything" for a bishop guarding three pieces).
+    if (best) out.push(`Nothing under attack leans on ${pieceName}, and it isn't attacked itself, so it comes down to the best square: ${best.san}.`);
     if (best?.refutation) out.push(`${best.san}? ${best.refutation}.`);
   } else {
     for (const o of a.options) {

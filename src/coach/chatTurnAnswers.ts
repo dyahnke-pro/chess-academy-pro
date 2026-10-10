@@ -351,7 +351,10 @@ export function answerWin(chess: Chess, sq: Square | null, student: Color): stri
     try { g = captureRead(b.fen(), sq, student); } catch { g = null; }
     if (g === null || g <= 0) continue;
     setups.push(m.san);
-    for (const a of added) via.add(`${name(b.get(a)?.type ?? 'p')} on ${a}`);
+    // The piece is named where it stands NOW — the moved one by the square it
+    // leaves (contract 2026-10-10: "b4 brings your pawn on b4" for the b2 pawn);
+    // a piece the move uncovers stays where it is.
+    for (const a of added) via.add(`${name(b.get(a)?.type ?? 'p')} on ${a === m.to ? m.from : a}`);
   }
   if (setups.length === 0) return `Not right now — nothing of yours can win ${subject}, and no single move sets it up.`;
   return `Not this move — nothing of yours takes ${subject} safely yet. ${orList(setups)} brings your ${orList([...via])} onto it, and then it can be taken unless they protect it.`;

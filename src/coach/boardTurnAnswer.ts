@@ -148,8 +148,20 @@ async function answerFromRead(turn: ResolvedChatTurn, board: BoardTurnInput): Pr
     chosen.push(c);
     for (const q of sq) covered.add(q);
   }
-  if (chosen.length === 0) return null;
-  return chosen.map((c) => c.text.trim()).join(' ');
+  // "ANY TACTICS?" NAMES THEIR SHOTS TOO (contract 2026-10-10: b4 traps the
+  // knight, and …Nxe4 took the pawn nothing guarded — unsaid, because the
+  // narration only treats a whole piece as must-defend). Asked, every target
+  // the one must-defend read finds is said, unless already named.
+  const theirs: string[] = [];
+  if (turn.kind === 'tactics') {
+    for (const h of computeMustDefend(board.fen, student).pieces) {
+      if (!h.attacker || !h.attackerSquare || covered.has(h.square)) continue;
+      theirs.push(`their ${PIECE_NAME[h.attacker]} on ${h.attackerSquare} is after your ${PIECE_NAME[h.piece]} on ${h.square}${h.defenders === 0 ? ', which nothing guards' : ''}`);
+    }
+  }
+  if (chosen.length === 0 && theirs.length === 0) return null;
+  const theirLine = theirs.length ? ` On their side, ${theirs.join('; ')}.` : '';
+  return `${chosen.map((c) => c.text.trim()).join(' ')}${theirLine}`.trim();
 }
 
 const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };

@@ -6496,7 +6496,16 @@ export async function getCoachChatResponse(
               fen: grounding.currentFen,
             });
             if (assess && (typeof grounding.engineEvalCp === 'number' || typeof grounding.engineMateIn === 'number')) {
-              const voiced = await voice(assess.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
+              // THE WAY, NOT ONLY THE VERDICT (contract 2026-10-10: "how do I
+              // win this ending?" got "You're winning" and two pawn notes, the
+              // king never named). The plan computer reads the engine's line.
+              const plan = grounding.enginePlan && grounding.enginePlan.pvSan.length > 0
+                ? assemblePlanAnswer({ fen: grounding.currentFen, pvSan: grounding.enginePlan.pvSan, evalCp: grounding.enginePlan.evalCp, mateIn: grounding.enginePlan.mateIn, studentSide: grounding.enginePlan.studentSide })
+                : null;
+              // The verdict is said once: the plan's own verdict sentence goes when
+              // the assessment already said it.
+              const planBits = plan ? plan.facts.split(/(?<=[.!?])\s+/).filter((x) => !assess.facts.includes(x)).join(' ') : '';
+              const voiced = await voice(planBits ? `${assess.facts} ${planBits}` : assess.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
               if (voiced) return voiced;
             }
           }

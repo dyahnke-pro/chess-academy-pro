@@ -130,7 +130,7 @@ describe('pieceOptions — a refutation must prove something AGAINST the option'
       options: [{ san: 'Qc1', moverCp: 40, refutation: null, line: { label: 'Qc1', startFen: FEN, plies: [] } }],
       playedSan: 'Qf3', playedCp: 30, allMoves: 6,
     });
-    expect(text).toBe("Their queen on d1 wasn't guarding anything or under attack, so it comes down to the best square: Qc1. So Qc1 was about as good as Qf3 — neither changes much.");
+    expect(text).toBe("Nothing under attack leans on their queen on d1, and it isn't attacked itself, so it comes down to the best square: Qc1. So Qc1 was about as good as Qf3 — neither changes much.");
   });
   it('narrowed options that survive are said to hold', () => {
     const text = renderPieceOptions({

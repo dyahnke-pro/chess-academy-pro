@@ -143,7 +143,7 @@ const CONTRACTS: Record<ChatKind, Contract | Owed> = {
   draw: { board: 'mate4', ask: 'is this a draw?', reading: { kind: 'draw' },
     must: [/\bno\b|not a draw|isn't a draw/i, /mate/], mustNot: [/fork in the road/] },
   endgame: { board: 'pawns', ask: 'how do I win this ending?', reading: { kind: 'endgame' },
-    must: [/king/i], mustNot: [/nothing is decided/i] },
+    must: [/king|\bK[a-h][1-8]/], mustNot: [/nothing is decided/i], once: [/You're winning/] },
   positional: { board: 'italian', ask: 'where are the weak squares?', reading: { kind: 'positional', topic: 'weak squares' },
     must: [/[a-h][1-8]/] },
   'move-rating': { board: 'italian', ask: 'was my last move good?', reading: { kind: 'move-rating' },

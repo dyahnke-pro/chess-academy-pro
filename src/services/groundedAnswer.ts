@@ -575,7 +575,9 @@ export function assemblePieceSafetyAnswer(fen: string, ask: string | null | unde
 }
 
 // ── OPPONENT / MY THREATS — "what is my opponent threatening?" ───────────────
-export function assembleThreatAnswer(fen: string, _ask: string | null | undefined, studentColor: 'white' | 'black', side: 'me' | 'opponent' | 'neutral'): GroundedAnswer | null {
+export function assembleThreatAnswer(fen: string, _ask: string | null | undefined, studentColor: 'white' | 'black', side: 'me' | 'opponent' | 'neutral',
+  /** Targets already named by the caller's own sentence — one claim, said once. */
+  opts: { except?: readonly string[] } = {}): GroundedAnswer | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
@@ -587,6 +589,7 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
   // computer Learn's warning, the live read and Review's threat lane use —
   // the null-move, pin-aware exchange read — never a second board scan.
   const wins: Array<{ sq: Square; type: PieceSymbol; g: number }> = computeMustDefend(fen, victimColor).pieces
+    .filter((p) => !(opts.except ?? []).includes(p.square))
     .map((p) => ({ sq: p.square as Square, type: p.piece as PieceSymbol, g: p.value }));
   const inCheck = chess.inCheck();
   // THEIR IDEAS, NOT ONLY THEIR CAPTURES (hand walk 2026-10-09: "what are they
@@ -818,9 +821,14 @@ export function assembleOpponentMoveAnswer(opts: {
     if (quiet) clauses.push(quiet);
   }
 
-  // What it now THREATENS against you — the standing threat in the live position.
-  const threat = assembleThreatAnswer(fen, null, studentColor, 'opponent');
+  // What it now THREATENS against you — the standing threat in the live
+  // position, minus what the move's own clause already named (contract
+  // 2026-10-10: "it attacks the pawn on e4. They're eyeing the pawn on e4" —
+  // one fact twice). A named target that is short of guards says so there.
+  const named = [...new Set(clauses.join(' ').match(/\b[a-h][1-8]\b/g) ?? [])];
+  const threat = assembleThreatAnswer(fen, null, studentColor, 'opponent', { except: named });
   const threatText = threat && !/no immediate threat|nothing forcing/i.test(threat.facts) ? threat.facts : null;
+  const shortOfGuards = computeMustDefend(fen, studentColor === 'white' ? 'w' : 'b').pieces.some((p) => named.includes(p.square));
 
   // A MOVE THAT HITS TWO PIECES OR WALKS TO PROMOTION IS NOT QUIET (live
   // replay 2026-10-08: "…d2 — a quiet move with no immediate tactical point",
@@ -831,7 +839,8 @@ export function assembleOpponentMoveAnswer(opts: {
   const didPart = clauses.length > 0
     ? `They played ${played.san} — ${clauses.length > 1 ? `${clauses.slice(0, -1).join(', ')} and ${clauses[clauses.length - 1]}` : clauses[0]}.`.replace(/ — (?!it )/, ' — it ')
     : `They played ${played.san} — a quiet move with no immediate tactical point.`;
-  const facts = threatText ? `${didPart} ${threatText}` : didPart;
+  const guardNote = shortOfGuards ? ' It is not defended enough — cover it.' : '';
+  const facts = threatText ? `${didPart}${guardNote} ${threatText}` : `${didPart}${guardNote}`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
 

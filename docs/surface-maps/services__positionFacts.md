@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1811 lines · 15 exports · 27 importers · 24 tests · 3 audits**
+**1842 lines · 15 exports · 27 importers · 24 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -97,11 +97,11 @@
 - `src/services/positionFacts.test.ts:364`
 - `src/services/positionFacts.test.ts:365`
 - `src/services/positionReadComposer.ts:154`
-- `src/services/whyBestMove.ts:141`
+- `src/services/whyBestMove.ts:151`
 
 ### `computePositionFacts` (function) — 88 call sites
-- `src/coach/boardTurnAnswer.ts:117`
-- `src/components/Coach/CoachTeachPage.tsx:9866`
+- `src/coach/boardTurnAnswer.ts:130`
+- `src/components/Coach/CoachTeachPage.tsx:10019`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:635`
@@ -177,7 +177,7 @@
 - `src/services/positionReadComposer.ts:130`
 - `src/services/speedRunReads.scale.test.ts:37`
 - `src/services/whyBestMove.needWire.test.ts:10`
-- `src/services/whyBestMove.ts:119`
+- `src/services/whyBestMove.ts:129`
 - `src/test/computedOrderWired.test.ts:32`
 - `src/test/everySurfaceSpeaks.test.ts:117`
 - `src/test/teach02Wired.test.ts:84`
@@ -190,10 +190,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8490`
+- `src/components/Coach/CoachTeachPage.tsx:8643`
 
 ### `convertKey` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10117`
+- `src/components/Coach/CoachTeachPage.tsx:10270`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 
 ### `afterLine` (function) — 5 call sites
@@ -204,7 +204,7 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8471`
+- `src/components/Coach/CoachTeachPage.tsx:8624`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.ts:9`

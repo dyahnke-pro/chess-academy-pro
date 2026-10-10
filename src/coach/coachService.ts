@@ -1466,7 +1466,13 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
         // question reads that one result, so two lanes cannot name two moves.
         || bestMoveQuestionEngage || hintRequestEngage
         // "Can I checkmate them?" is answered with the mating line itself.
-        || isMateQuestion(askForIntents))
+        || isMateQuestion(askForIntents)
+        // "WHO IS BETTER?" / "HOW DO I WIN THIS ENDING?" are about the engine's
+        // verdict (contract 2026-10-10: on a board with no eval bar they fell
+        // back to the material count — "Material is even, nothing is decided"
+        // with the engine at +3).
+        || isPositionAssessmentQuestion(askForIntents) || isEndgameQuestion(askForIntents)
+        || input.reading?.kind === 'position-assessment' || input.reading?.kind === 'endgame' || input.reading?.kind === 'draw')
       && input.liveState.fen && !input.liveState.reviewFlaggedMove) {
       const sideToMove: 'white' | 'black' = (input.liveState.fen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white';
       // THE BUDGET IS INSIDE THE SEARCH NOW, and the race is only the backstop

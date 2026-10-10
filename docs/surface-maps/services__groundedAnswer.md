@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7659 lines · 164 exports · 84 importers · 56 tests · 8 audits**
+**7668 lines · 164 exports · 84 importers · 56 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -232,7 +232,7 @@
 - `src/services/coachApi.ts:2515`
 - `src/services/coachApi.ts:2686`
 - `src/services/coachApi.ts:6491`
-- `src/services/coachApi.ts:6609`
+- `src/services/coachApi.ts:6618`
 - `src/services/groundedAnswer.sacLine.test.ts:33`
 - `src/services/groundedAnswer.sacLine.test.ts:38`
 - `src/services/groundedAnswer.seatedTactic.test.ts:14`
@@ -340,7 +340,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `findTradeMove` (function) — 3 call sites
-- `src/coach/coachService.ts:1582`
+- `src/coach/coachService.ts:1588`
 - `src/services/groundedAnswer.trade.test.ts:20`
 - `src/services/groundedAnswer.trade.test.ts:38`
 
@@ -398,16 +398,16 @@
 - `src/services/whyBestMove.ts:106`
 
 ### `captureHasCounterTactic` (function) — 1 call site
-- `src/services/reviewTeachingPoints.ts:101`
+- `src/services/reviewTeachingPoints.ts:103`
 
 ### `describeMoveGeometry` (function) — 21 call sites
-- `src/coach/chatTurnAnswers.ts:568`
+- `src/coach/chatTurnAnswers.ts:571`
 - `src/components/Puzzles/PuzzleBoard.tsx:243`
 - `src/components/Tactics/TacticSetupBoard.tsx:154`
 - `src/hooks/useHintSystem.ts:357`
 - `src/services/computedVoiceGrounding.test.ts:53`
 - `src/services/computedVoiceGrounding.test.ts:111`
-- `src/services/deliberation.ts:442`
+- `src/services/deliberation.ts:443`
 - `src/services/groundedAnswer.test.ts:1119`
 - `src/services/groundedAnswer.test.ts:1126`
 - `src/services/groundedAnswer.test.ts:1134`
@@ -423,11 +423,11 @@
 - `src/services/reviewBoardAwareness.test.ts:14`
 - `src/services/reviewBoardAwareness.test.ts:23`
 
-### `quietPurposePhrase` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `quietPurposePhrase` (function) — 1 call site
+- `src/services/deliberation.ts:449`
 
 ### `toObserverSeat` (function) — 4 call sites
-- `src/coach/chatTurnAnswers.ts:569`
+- `src/coach/chatTurnAnswers.ts:572`
 - `src/coach/handWalk1009.test.ts:173`
 - `src/coach/handWalk1009.test.ts:175`
 - `src/services/coachApi.ts:5682`
@@ -500,8 +500,9 @@
 - `src/services/groundedAnswer.test.ts:1105`
 - `src/services/groundedAnswer.test.ts:1110`
 
-### `assemblePlanAnswer` (function) — 6 call sites
+### `assemblePlanAnswer` (function) — 7 call sites
 - `src/services/coachApi.ts:6168`
+- `src/services/coachApi.ts:6503`
 - `src/services/groundedAnswer.evalSeat.test.ts:32`
 - `src/services/groundedAnswer.test.ts:830`
 - `src/services/groundedAnswer.test.ts:838`
@@ -591,14 +592,14 @@
 
 ### `assembleEndgameTechniqueAnswer` (function) — 2 call sites
 - `src/services/coachApi.ts:2288`
-- `src/services/coachApi.ts:6565`
+- `src/services/coachApi.ts:6574`
 
 ### `assembleTheoryAnswer` (function) — 5 call sites
 - `src/services/coachApi.ts:2282`
 - `src/services/coachApi.ts:4684`
 - `src/services/coachApi.ts:5544`
 - `src/services/coachApi.ts:5571`
-- `src/services/coachApi.ts:6527`
+- `src/services/coachApi.ts:6536`
 
 ### `assembleConceptAnswer` (function) — 6 call sites
 - `src/services/coachApi.ts:5531`
@@ -667,8 +668,8 @@
 - `src/services/coachApi.currentAsk.test.ts:51`
 - `src/services/coachApi.currentAsk.test.ts:56`
 - `src/services/coachApi.ts:3814`
-- `src/services/coachApi.ts:6902`
-- `src/services/coachApi.ts:7014`
+- `src/services/coachApi.ts:6911`
+- `src/services/coachApi.ts:7023`
 - `src/services/groundedAnswer.test.ts:1482`
 - `src/services/groundedAnswer.test.ts:1483`
 - `src/services/groundedAnswer.test.ts:1484`
@@ -697,8 +698,8 @@
 
 ### `explainSanNotation` (function) — 9 call sites
 - `src/services/coachApi.ts:3816`
-- `src/services/coachApi.ts:6904`
-- `src/services/coachApi.ts:7016`
+- `src/services/coachApi.ts:6913`
+- `src/services/coachApi.ts:7025`
 - `src/services/groundedAnswer.test.ts:1524`
 - `src/services/groundedAnswer.test.ts:1528`
 - `src/services/groundedAnswer.test.ts:1529`
@@ -1089,7 +1090,7 @@
 ### `assemblePositionalAnswer` (function) — 26 call sites
 - `src/coach/dispatchCoachTurn.ts:373`
 - `src/coach/questionWalk.sicilian1200.test.ts:69`
-- `src/services/coachApi.ts:6592`
+- `src/services/coachApi.ts:6601`
 - `src/services/endgameRuleAnswer.test.ts:74`
 - `src/services/endgameRuleAnswer.test.ts:79`
 - `src/services/groundedAnswer.positional.test.ts:6`
@@ -1159,7 +1160,7 @@
 - `src/services/reviewNarrationFidelity.test.ts:227`
 - `src/services/reviewNarrationFidelity.test.ts:239`
 - `src/services/reviewNarrationFidelity.test.ts:253`
-- `src/services/reviewTeachingPoints.ts:348`
+- `src/services/reviewTeachingPoints.ts:350`
 
 ### `captureThreatIsAnswerable` (function) — 2 call sites
 - `src/services/captureThreatAnswerable.test.ts:12`
@@ -1172,7 +1173,7 @@
 - `src/services/reviewNarrationFidelity.test.ts:204`
 
 ### `forkAlignmentClause` (function) — 1 call site
-- `src/services/reviewTeachingPoints.ts:393`
+- `src/services/reviewTeachingPoints.ts:395`
 
 ### `describeThreatRecognition` (function) — 4 call sites
 - `src/services/learnMoveTeaching.ts:128`

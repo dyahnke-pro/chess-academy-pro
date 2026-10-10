@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**546 lines · 7 exports · 14 importers · 9 tests · 46 audits**
+**551 lines · 7 exports · 15 importers · 10 tests · 46 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@
 
 ## Who calls in
 
+- `src/coach/boardTurnAnswer.hardWalk.test.ts`
 - `src/coach/chatTurnAnswers.test.ts`
 - `src/coach/chatTurnCodeReader.test.ts`
 - `src/coach/chatTurnParser.ts`
@@ -33,7 +34,7 @@
 
 ### `Ask` (type) — 2 call sites
 - `src/components/Coach/CoachGamePage.tsx:5428`
-- `src/components/Coach/CoachGameReview.tsx:3853`
+- `src/components/Coach/CoachGameReview.tsx:3860`
 
 ### `Action` (type) — 1 call site
 - `scripts/audit-punish-gems-loop.mjs:821`
@@ -46,16 +47,17 @@
 - `src/coach/chatTurnCodeReader.test.ts:19`
 - `src/coach/chatTurnCodeReader.test.ts:22`
 - `src/coach/chatTurnCodeReader.test.ts:23`
-- `src/services/coachApi.ts:2192`
+- `src/services/coachApi.ts:2193`
 - `src/services/whyNotLegal.ts:181`
 
 ### `pointsAtThisBoard` (function) — 1 call site
 - `src/coach/questionIntents.ts:1656`
 
 ### `legalForOpponent` (function) — 1 call site
-- `src/coach/coachService.ts:1596`
+- `src/coach/coachService.ts:1602`
 
-### `readTurnInCode` (function) — 42 call sites
+### `readTurnInCode` (function) — 43 call sites
+- `src/coach/boardTurnAnswer.hardWalk.test.ts:57`
 - `src/coach/chatTurnAnswers.test.ts:82`
 - `src/coach/chatTurnAnswers.test.ts:103`
 - `src/coach/chatTurnCodeReader.test.ts:10`
@@ -101,6 +103,7 @@
 
 ## Tests
 
+- `src/coach/boardTurnAnswer.hardWalk.test.ts`
 - `src/coach/chatTurnAnswers.test.ts`
 - `src/coach/chatTurnCodeReader.test.ts`
 - `src/coach/developNext.test.ts`

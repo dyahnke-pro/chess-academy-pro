@@ -37,6 +37,8 @@ import { inFluxAfter } from './boardState';
 import { legalSeeGainOn, bishopHemmedByOwnPawns, standsSafe } from './positionReadingService';
 import { captureHasCounterTactic, detectNewThreat, forkAlignmentClause, type DetectedThreat } from './groundedAnswer';
 import { cells, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans } from './nextPlans';
+import { trappedAt, lineTakesPiece } from './trappedPiece';
+export { lineTakesPiece };
 // Re-exported: eight callers and tests import these from here (2026-09-19 leaf move).
 export { findWorstPlacedPiece, deriveNextPlans };
 
@@ -393,23 +395,6 @@ export function buildMissedShotSignal(
   return `And the signal was there before ${shot.san} ever existed — their ${forkAlignmentClause(shot.threat)}. Two pieces inside one attacker's reach is the shape to hunt.`;
 }
 
-/** Can the opponent still WIN the `side` piece sitting on `sq` (value `val`),
- *  with the opponent to move? Pin-aware (uses legal captures, not raw
- *  attackers()): the piece is winnable when the opponent has a legal capture
- *  onto `sq` AND either a strictly CHEAPER attacker takes it (falls regardless
- *  of defence) or it is undefended. Returns false (safe) when no legal capture
- *  reaches it, or every capturer is ≥ its value and it is defended (equal trade
- *  at worst). Used by the trapped-piece rescue scan. */
-function pieceStillWinnable(afterOppToMove: Chess, sq: string, side: Color, val: number): boolean {
-  const cell = afterOppToMove.get(sq as Square);
-  if (!cell || cell.color !== side) return false; // the piece left / was captured resolving the move
-  const legalCaps = afterOppToMove.moves({ verbose: true }).filter((m) => m.to === sq && m.captured);
-  if (legalCaps.length === 0) return false; // nothing can legally take it
-  const cheaper = legalCaps.some((m) => (PIECE_VAL[afterOppToMove.get(m.from)?.type ?? 'k'] ?? 99) < val);
-  if (cheaper) return true; // a cheaper piece takes it — it falls
-  const defended = afterOppToMove.attackers(sq as Square, side).length > 0;
-  return !defended; // undefended → free; defended vs equal-or-higher → holdable
-}
 
 /** Per-square legal-move counts for every piece of `color`, from ONE moves()
  *  enumeration (one Chess build) — far cheaper than a fresh Chess per piece. */
@@ -767,24 +752,6 @@ export function describeConcessions(fenBefore: string, san: string, moverIsStude
  * null. Minors are skipped (a trapped minor is usually just "wins a piece" —
  * the tactics layer covers it; R/Q traps are the story-level events).
  */
-/** Does the engine's line take the piece standing on `square`, following it
- *  wherever it runs? "Trapped — coming off the board" is an OUTCOME, so it is
- *  what the line does (WO-OUTCOME-01), never a mobility count alone. */
-export function lineTakesPiece(fen: string, square: string, lineUci: readonly string[]): boolean {
-  let c: Chess;
-  try { c = new Chess(fen); } catch { return false; }
-  const owner = c.get(square as Square)?.color;
-  if (!owner) return false;
-  let sq = square;
-  for (const u of lineUci) {
-    let mv;
-    try { mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { return false; }
-    if (!mv) return false;
-    if (mv.color === owner && mv.from === sq) sq = mv.to;
-    else if (mv.color !== owner && mv.to === sq && mv.captured) return true;
-  }
-  return false;
-}
 
 export function findTrappedPiece(
   fen: string,
@@ -805,62 +772,15 @@ export function trappedOnBoard(
   fen: string,
   side: Color,
 ): { square: string; piece: string; attackerSquare: string; attackerPiece: string } | null {
+  // The rook or queen of `side` that is trapped — the one trapped-piece
+  // computer (`trappedPiece.trappedAt`) asked about each in turn.
   try {
     const chess = new Chess(fen);
-    const enemy: Color = side === 'w' ? 'b' : 'w';
     for (const c of cells(chess)) {
       if (c.color !== side || (c.type !== 'q' && c.type !== 'r')) continue;
-      const sq = c.square as Square;
-      const val = PIECE_VAL[c.type];
-      const attackers = chess.attackers(sq, enemy);
-      if (attackers.length === 0) continue;
-      const cheapAtk = attackers.find((a) => (PIECE_VAL[chess.get(a)?.type ?? 'k'] ?? 99) < val);
-      const defended = chess.attackers(sq, side).length > 0;
-      if (!cheapAtk && defended) continue; // holdable where it stands → not trapped
-      // Enumerate the piece's own moves — side-to-move flip so it can "move" now.
-      const parts = chess.fen().split(' ');
-      parts[1] = side; parts[3] = '-';
-      const probe = new Chess(parts.join(' '));
-      const moves = probe.moves({ verbose: true }).filter((m) => m.from === sq);
-      if (moves.length === 0) continue; // frozen ≠ trapped unless attacked-cheaper (covered below)
-      let allLose = true;
-      for (const m of moves) {
-        const after = new Chess(parts.join(' '));
-        after.move(m.san);
-        if (m.captured) {
-          // Capture-flight: unsafe when the recapture wins the exchange (pin-aware).
-          const oppNet = legalSeeGainOn(after, m.to);
-          const gain = PIECE_VAL[m.captured] ?? 0;
-          if (oppNet - gain < 1) { allLose = false; break; } // wins/even → escape
-        } else {
-          const atk = after.attackers(m.to, enemy);
-          if (atk.length === 0) { allLose = false; break; } // clean flight
-          const cheaper = atk.some((a) => (PIECE_VAL[after.get(a)?.type ?? 'k'] ?? 99) < val);
-          const def = after.attackers(m.to, side).length > 0;
-          if (!cheaper && def) { allLose = false; break; } // defended vs equal → trade escape
-        }
-      }
-      if (!allLose) continue;
-      // RESCUE SCAN (board-awareness sweep, 2026-07-22): the piece's own moves
-      // all lose, but the side may still SAVE it another way — capture the
-      // attacker (hxg5!), interpose against a slider, or add a defender. The old
-      // detector ignored every rescue that wasn't the piece moving itself, so it
-      // declared "every escape square is covered" while a pawn could just take
-      // the attacker. Scan the side's OTHER legal moves; if any leaves the piece
-      // no longer winnable by the opponent, it is NOT trapped (empty > invented).
-      let rescued = false;
-      for (const m of probe.moves({ verbose: true })) {
-        if (m.from === sq) continue; // the piece's own moves already scanned
-        const after = new Chess(parts.join(' '));
-        try { after.move(m.san); } catch { continue; }
-        if (pieceStillWinnable(after, sq, side, val)) continue;
-        rescued = true;
-        break;
-      }
-      if (rescued) continue;
-      const atkSq = cheapAtk ?? attackers[0];
-      const atkPiece = chess.get(atkSq);
-      return { square: sq, piece: PIECE_NOUN[c.type], attackerSquare: atkSq as string, attackerPiece: PIECE_NOUN[atkPiece?.type ?? 'p'] };
+      const t = trappedAt(fen, c.square);
+      if (!t) continue;
+      return { square: c.square, piece: PIECE_NOUN[c.type], attackerSquare: t.attackerSquare, attackerPiece: PIECE_NOUN[chess.get(t.attackerSquare as Square)?.type ?? 'p'] };
     }
     return null;
   } catch {

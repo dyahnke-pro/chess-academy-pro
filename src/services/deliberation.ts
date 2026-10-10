@@ -24,7 +24,7 @@ import { isPinnedPiece } from './nextPlans';
 import { countKingAttack } from './kingSafety';
 import { andList, orList } from '../utils/andList';
 import { computeMustDefend } from './threatOut';
-import { describeMoveGeometry } from './groundedAnswer';
+import { describeMoveGeometry, quietPurposePhrase } from './groundedAnswer';
 
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
@@ -442,7 +442,11 @@ export function bestMoveReason(fenBefore: string, san: string, mover: 'w' | 'b',
   // board shows — landing-safe and winning by its own checks — is the reason.
   const tactic = describeMoveGeometry(fenBefore, san, mover === 'w' ? 'white' : 'black');
   if (tactic && /^(?:forks |pins )/.test(tactic)) return tactic;
-  return moveWhy(fenBefore, san, mover, ctx.opponentLastSan);
+  // A quiet move still has its job on the board (walk 2026-10-10: "best move?"
+  // gave Kd3 "brings the king to d3, where it covers e4 and c4" and "why does
+  // Kd3 work?" gave no reason at all — two answers, two computers).
+  return moveWhy(fenBefore, san, mover, ctx.opponentLastSan)
+    ?? quietPurposePhrase(fenBefore, san, mover === 'w' ? 'white' : 'black', 'mover');
 }
 
 export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentLastSan: string | null): string | null {

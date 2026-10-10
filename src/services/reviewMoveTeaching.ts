@@ -15,6 +15,7 @@
  * tense Watch/Learn teaching voice. It states the idea the move served.
  */
 import { Chess } from 'chess.js';
+import { pawnHit } from './trappedPiece';
 import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZoneClause } from './keySquares';
 import type { Move } from 'chess.js';
 import { describeStructure } from './boardStructure';
@@ -223,21 +224,14 @@ function unpinPoint(fenBefore: string, chessAfter: Chess, mv: Move, moverIsStude
 /** A PAWN THAT KICKS a minor or major piece (Learn walk 2026-10-01: …h6
  *  against Bg5 was called "luft"; its point was the bishop). */
 function pawnKickPoint(chessAfter: Chess, mv: Move, moverIsStudent: boolean): string | null {
-  if (mv.piece !== 'p' || mv.captured) return null;
-  const dir = mv.color === 'w' ? 1 : -1;
-  const f = mv.to.charCodeAt(0);
-  const r = Number(mv.to[1]) + dir;
-  const VALUE: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
-  let hit: { sq: string; type: string } | null = null;
-  for (const df of [-1, 1]) {
-    const file = String.fromCharCode(f + df);
-    if (file < 'a' || file > 'h' || r < 1 || r > 8) continue;
-    const sq = `${file}${r}`;
-    const c = chessAfter.get(sq as Sq);
-    if (!c || c.color === mv.color || !(c.type in VALUE)) continue;
-    if (!hit || VALUE[c.type] > VALUE[hit.type]) hit = { sq, type: c.type };
-  }
-  return hit ? `Kicks ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[hit.type]} off ${hit.sq}, gaining time.` : null;
+  if (mv.captured) return null;
+  // KICK OR TRAP — the one trapped-piece computer decides.
+  const hit = pawnHit(chessAfter.fen(), mv);
+  if (!hit) return null;
+  const whose = moverIsStudent ? 'their' : 'your';
+  return hit.trapped
+    ? `Hits ${whose} ${PIECE_NOUN[hit.type]} on ${hit.square}, and it has no safe square to run to.`
+    : `Kicks ${whose} ${PIECE_NOUN[hit.type]} off ${hit.square}, gaining time.`;
 }
 
 /** A KICK PREPARED — a quiet pawn step whose NEXT step would attack an enemy

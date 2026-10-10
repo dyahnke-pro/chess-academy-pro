@@ -47,6 +47,7 @@ import { computeMustDefend, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
 import { buildDeliberation, deliberationFacts, deliberationWeighing, deliberationVerdict, type Deliberation, type HeldVerdict } from './deliberation';
 import { detectLatentFork, latentForkClause, type LatentFork } from './latentFork';
+import { lineTakesPiece, pawnHit } from './trappedPiece';
 import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause, type LatentDanger, type TradeDanger } from './latentDanger';
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
@@ -557,6 +558,23 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // `latentForkClause` for the seat-correct prose.
   const latentFork = latentForkMine ?? latentForkTheirs;
 
+  // A TRAP YOU CAN SPRING (contract 2026-10-10: b4 traps the knight on a5 and
+  // "any tactics?" never said so). The engine's best move is a pawn move that
+  // leaves a piece no safe square, and its own line takes that piece — the
+  // outcome proved, not a mobility count (WO-OUTCOME-01).
+  const trapChance = ((): { san: string; to: string; square: string; type: string } | null => {
+    if (!studentToMove) return null;
+    const line = analysis.topLines?.[0]?.moves;
+    if (!line?.length) return null;
+    try {
+      const c = new Chess(fen);
+      const mv = c.move({ from: line[0].slice(0, 2), to: line[0].slice(2, 4), promotion: line[0][4] });
+      const hit = mv ? pawnHit(c.fen(), mv) : null;
+      if (!mv || !hit?.trapped || !lineTakesPiece(fen, hit.square, line)) return null;
+      return { san: mv.san, to: mv.to, square: hit.square, type: hit.type };
+    } catch { return null; }
+  })();
+
   // §9 king-safety — a castled king with a broken shelter AND real attackers on
   // it. Both conditions, so it never fires on a harmlessly-nicked shield.
   const kingExposure = (!quietOpening && studentToMove)
@@ -1011,7 +1029,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     } catch { /* same */ }
   }
   const composedAll = applyWeaknessBoost(
-    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, fundamentalClaim, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, methodProof, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: said }), ...tradeClauses],
+    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, trapChance, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, fundamentalClaim, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, methodProof, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: said }), ...tradeClauses],
     input.studentWeaknesses ?? [],
   );
 
@@ -1388,6 +1406,7 @@ function buildClauses(a: {
   openingPhase: boolean;
   deliberation: Deliberation | null;
   latentDanger: LatentDanger | null;
+  trapChance: { san: string; to: string; square: string; type: string } | null;
   latentFork: LatentFork | null;
   /** 🔒 The student's seat — REQUIRED by `latentForkClause`, because the same
    *  fork geometry is an opportunity from one chair and a warning from the
@@ -1413,7 +1432,7 @@ function buildClauses(a: {
   /** The proof a method beat's earning fact carries (batch 2 habits). */
   methodProof?: Proof | null;
 }): ClauseItem[] {
-  const { importance, speaks, criticalRead, plyNumber, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp, kingExposure, centralKingDanger, concept } = a;
+  const { importance, speaks, criticalRead, plyNumber, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, trapChance, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp, kingExposure, centralKingDanger, concept } = a;
   // THE WHETHER-QUESTION IS THE DOOR'S. This used to be a private escape hatch
   // here — "speak anyway if a pin / king-danger / band-change was found",
   // because the importance model had no input for any of them. Those signals
@@ -1474,6 +1493,18 @@ function buildClauses(a: {
   // material, which is plainly wrong. Foresight is valuable and it is not
   // urgent. (Whether the existing 80/82 is itself too high is a real question
   // and a separate one — not to be changed as a side effect of this build.)
+  if (trapChance) {
+    const NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+    const VALUE: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
+    ranked.push({
+      // Above the trade warning (82): a piece won now outranks a pin that only
+      // opens if you choose to trade.
+      kind: 'latent-chance', rank: 84,
+      text: `${trapChance.san} traps their ${NAME[trapChance.type] ?? 'piece'} on ${trapChance.square} — it has no safe square to run to, and it falls.`,
+      squares: [trapChance.to, trapChance.square],
+      stakes: { points: VALUE[trapChance.type] ?? 3, plies: 3 },
+    });
+  }
   if (latentFork && !a.alreadySaid?.has(forkThreatKey(latentFork.square, latentFork.targets.map((t) => t.square)))) {
     ranked.push({
       // 🔒 THE SEAT DECIDES THE KIND. `latentForkClause` has always rendered the
