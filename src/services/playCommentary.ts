@@ -1028,7 +1028,7 @@ export function slipAnswerText(
   if (!point) return null;
   const body = point.replace(/\.$/, '');
   const sanLed = body.startsWith(`${answerSan} `);
-  const rest = sanLed ? body.slice(answerSan.length + 1) : `${continueSentence(body)}`;
+  const rest = sanLed ? body.slice(answerSan.length + 1) : continueSentence(body);
   if (when === 'found') return sanLed ? `You found it: ${answerSan} ${rest}.` : `You found it: ${rest}.`;
   if (when === 'now') return sanLed ? `Your answer is ${answerSan}, which ${rest}.` : `Your answer is ${answerSan}: ${rest}.`;
   if (when === 'missed') return sanLed ? `${answerSan} was the answer to their slip, which ${rest}.` : `${answerSan} was the answer to their slip: ${rest}.`;

@@ -1925,7 +1925,7 @@ export async function reminderWithRecord(topic: string, overview: { totalGames: 
       .filter((r) => r.tag !== 'other' && r.total >= 2)
       .sort((a, b) => b.total - a.total)[0];
     if (top) {
-      const label = `${continueSentence(top.label)}`;
+      const label = continueSentence(top.label);
       return `The one that keeps coming back in your games here: ${label}, ${top.total} times. Import and analyze your Lichess or Chess.com games to see the rest.`;
     }
   }

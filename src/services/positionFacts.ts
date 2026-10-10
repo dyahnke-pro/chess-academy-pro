@@ -1823,7 +1823,7 @@ function pinPressureConcept(fen: string, student: 'w' | 'b'): NonNullable<Parame
  *  queen on d2…" as if Qd2 had been played — it had not). */
 export function afterLine(line: readonly string[] | undefined, boardFen: string | undefined, fenNow: string, student: 'w' | 'b', text: string): string {
   if (!line || line.length === 0 || !boardFen || samePlacementFen(boardFen, fenNow)) return text;
-  const rest = `${continueSentence(text)}`;
+  const rest = continueSentence(text);
   // "If you play X, …" — the same comma-and-whole-sentence shape as "After …",
   // so it reads for every detector sentence ("If you play Nd4, moving the
   // knight on e5 would unveil…"); "Play X and moving…" did not.

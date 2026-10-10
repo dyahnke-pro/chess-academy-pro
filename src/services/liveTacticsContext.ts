@@ -447,7 +447,7 @@ export function spokenUpcoming(
   student: 'w' | 'b',
 ): string | null {
   if (line.length === 0 || line.length > 2) return null;
-  const desc = seatPieceReferences(`${continueSentence(description)}`.replace(/[.!]$/, ''), tacticFen, student);
+  const desc = seatPieceReferences(continueSentence(description).replace(/[.!]$/, ''), tacticFen, student);
   const first = rootFen.split(' ')[1] === student ? 'you' : 'they';
   const second = first === 'you' ? 'they' : 'you';
   return line.length === 1

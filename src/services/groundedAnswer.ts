@@ -7030,7 +7030,7 @@ function seatedSentence(description: string, fen: string, studentColorWB: 'w' | 
 }
 
 function seatedDescription(description: string, fen: string, studentColorWB: 'w' | 'b'): string {
-  const lowered = `${continueSentence(description)}`;
+  const lowered = continueSentence(description);
   return seatPieceReferences(lowered, fen, studentColorWB);
 }
 
