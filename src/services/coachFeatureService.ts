@@ -1155,7 +1155,7 @@ function buildDeterministicNarration(params: {
   // Silent when the student is worse: this clause only ever decorates a GOOD
   // move, so it states an edge or says nothing (empty > generic).
   const evalBand = verdictBand(studentEvalCp);
-  const studentEvalWord = evalBand === null || evalBand === 'a bit worse' || evalBand === 'in trouble'
+  const studentEvalWord = evalBand === null || evalBand === 'slightly worse' || evalBand === 'clearly worse' || evalBand === 'losing'
     ? null
     : evalBand === 'balanced' ? 'the position stays balanced' : `you're ${evalBand}`;
 

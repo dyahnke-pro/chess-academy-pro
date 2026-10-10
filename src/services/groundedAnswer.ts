@@ -12,6 +12,7 @@
  * Pure + side-effect-free so it's trivially testable and can't regress the
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
+import { evalBand, evalBandWords } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { MATERIAL_VALUE } from './pieceValues';
 import { computeMustDefend, mateThreatsAgainst } from './threatOut';
@@ -104,30 +105,17 @@ function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | u
     return studentColor ? `there is a forced mate in ${Math.abs(mateIn)} ${who === studentColor ? 'for you' : 'against you'}` : `there is a forced mate in ${Math.abs(mateIn)} for ${who}`;
   }
   if (typeof evalCp !== 'number') return null;
-  const pawns = evalCp / 100;
-  const who = pawns >= 0 ? mover : (mover === 'white' ? 'black' : 'white');
-  const mag = Math.abs(pawns);
-  if (mag < 0.3) return 'the position is roughly balanced';
-  // Eval voiced in POINTS, never "pawns" (David 2026-07-24: "if the eval is
-  // called out then say up by three points, not three pawns").
-  //
-  // 🔒 THE SEAT LEADS (hand walk 2026-10-04 #12). With the seat known the
-  // sentence is about the STUDENT: "you're down about 2.7 points", never
-  // "They're winning (about 2.7 points)". In a drill "they" has no clear
-  // referent (the drill's other side? the coach?), and a student reading
-  // whose-side off a pronoun can read it backwards.
-  if (studentColor) {
-    const up = who === studentColor;
-    // WORDS, NOT ENGINE NUMBERS (hand walk 2026-10-09: "you're up about 1.9
-    // points" to a beginner). The band IS the verdict; a decimal adds nothing
-    // a student can act on.
-    if (mag < 1.0) return `you're ${up ? 'slightly better' : 'slightly worse'}`;
-    if (mag < 2.5) return `you're ${up ? 'clearly better' : 'clearly worse'}`;
-    return `you're ${up ? 'winning' : 'losing'}`;
-  }
-  if (mag < 1.0) return `${seatWord(who)} slightly better`;
-  if (mag < 2.5) return `${seatWord(who)} clearly better`;
-  return `${seatWord(who)} winning`;
+  const who = evalCp >= 0 ? mover : (mover === 'white' ? 'black' : 'white');
+  // THE ONE LADDER (evalBand, census 2026-10-10) decides the band; this
+  // sentence only says it. Eval voiced in WORDS, never engine numbers (hand
+  // walk 2026-10-09: "you're up about 1.9 points" to a beginner).
+  const band = evalBand(evalCp);
+  if (band === 'level') return 'the position is roughly balanced';
+  // 🔒 THE SEAT LEADS (hand walk 2026-10-04 #12): with the seat known the
+  // sentence is about the STUDENT — "you're clearly worse", never "they're
+  // winning", whose referent a drill can leave unclear.
+  if (studentColor) return `you're ${evalBandWords(band, who === studentColor ? 'better' : 'worse')}`;
+  return `${seatWord(who)} ${evalBandWords(band, 'better')}`;
 }
 
 // ── PIECE PURPOSE — "what is my bishop on c4 aiming at?" (David 2026-08-28) ────

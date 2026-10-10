@@ -24,6 +24,7 @@
  * (the student's own finished game) with the locked perspective: the student is
  * "you", the opponent "they".
  */
+import { evalBand, evalBandWords } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { settledLeadFor, type LastMove } from './material';
 import { Chess } from 'chess.js';
@@ -90,21 +91,14 @@ function materialNet(fen: string, studentWB: 'w' | 'b', lastMove: LastMove | nul
   try { return settledLeadFor(fen, studentWB, lastMove); } catch { return 0; }
 }
 /** Signed eval band (student POV): 0 balanced, ±1 touch, ±2 clear, ±3 decisive. */
-function evalBand(studentPovCp: number): number {
-  const a = Math.abs(studentPovCp);
-  const b = a < 50 ? 0 : a < 150 ? 1 : a < 300 ? 2 : 3;
-  return studentPovCp < 0 ? -b : b;
-}
+/** The band WITH its side: +slightly and −slightly are different standings. */
+const signedBand = (cp: number): string => `${evalBand(cp)}${evalBand(cp) === 'level' ? '' : cp > 0 ? '+' : '-'}`;
+
 function evalVerdict(studentPovCp: number): string {
-  switch (evalBand(studentPovCp)) {
-    case 0: return 'roughly balanced';
-    case 1: return "you're a touch better";
-    case 2: return "you're clearly better";
-    case 3: return "you're winning";
-    case -1: return "you're a touch worse";
-    case -2: return "you're clearly worse";
-    default: return "you're in trouble";
-  }
+  // The one ladder (evalBand, census 2026-10-10); review's own words.
+  const band = evalBand(studentPovCp);
+  if (band === 'level') return 'roughly balanced';
+  return `you're ${evalBandWords(band, studentPovCp > 0 ? 'better' : 'worse')}`;
 }
 /** The board-true imbalances that EXPLAIN the eval sign — material, king safety,
  *  pawn structure — ordered by magnitude, filtered to the eval's side (David
@@ -328,7 +322,7 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
       ? (input.studentColorWB === 'w' ? input.evalBeforeWhiteCp : -input.evalBeforeWhiteCp)
       : null;
     const swing = input.studentSwingCp ?? (povBefore != null ? povAfter - povBefore : 0);
-    const bandChanged = povBefore != null && evalBand(povAfter) !== evalBand(povBefore);
+    const bandChanged = povBefore != null && signedBand(povAfter) !== signedBand(povBefore);
     if (bandChanged || Math.abs(swing) >= 40) {
       evalLead = explainEval(fenAfter, povAfter, input.studentColorWB, { to: mv.to, captured: mv.captured ?? null });
       deltaTail = deltaTailClause(swing) ?? '';

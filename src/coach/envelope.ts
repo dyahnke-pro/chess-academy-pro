@@ -17,6 +17,7 @@
  * APIs, structured outputs), add another formatter — never bypass
  * `assembleEnvelope`.
  */
+import { evalBand } from '../services/evalBand';
 import type {
   AssembledEnvelope,
   CoachAskInput,
@@ -661,12 +662,15 @@ function formatAppMapBlock(routes: RouteManifestEntry[]): string {
  *  was buried as a bare integer — the prose interpretation makes the
  *  ground truth unmissable. */
 function describeEval(cp: number): string {
+  // The one ladder (evalBand, census 2026-10-10); the winning band keeps its
+  // material sense for the model's context.
   const abs = Math.abs(cp);
   const winner = cp > 0 ? 'white' : 'black';
   const pawnsAhead = (abs / 100).toFixed(1);
-  if (abs < 50) return 'roughly equal';
-  if (abs < 150) return `${winner} has a slight edge (~${pawnsAhead} pawns)`;
-  if (abs < 300) return `${winner} has a clear advantage (~${pawnsAhead} pawns — about a minor piece)`;
+  const band = evalBand(cp);
+  if (band === 'level') return 'roughly equal';
+  if (band === 'slightly') return `${winner} is slightly better (~${pawnsAhead} pawns)`;
+  if (band === 'clearly') return `${winner} is clearly better (~${pawnsAhead} pawns — about a minor piece)`;
   if (abs < 500) return `${winner} is winning (~${pawnsAhead} pawns — about a rook)`;
   if (abs < 900) return `${winner} is winning decisively (~${pawnsAhead} pawns — about a queen)`;
   return `${winner} is completely winning (~${pawnsAhead} pawns — game-deciding material)`;

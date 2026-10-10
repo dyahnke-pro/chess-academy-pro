@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1765 lines · 12 exports · 48 importers · 35 tests · 1 audits**
+**1766 lines · 12 exports · 48 importers · 35 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6312) — names `FundamentalId`
+- **The standard post-deploy ritual** (CLAUDE.md:6313) — names `FundamentalId`
 
 ## Who calls in
 
@@ -109,7 +109,7 @@
 - `src/services/claimTruth.manual.test.ts:182`
 - `src/services/claimTruth.manual.test.ts:187`
 - `src/services/claimTruth.manual.test.ts:195`
-- `src/services/coachFeatureService.ts:958`
+- `src/services/coachFeatureService.ts:959`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:153`
 - `src/services/misconceptionClassifier.ts:244`
@@ -202,10 +202,10 @@
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
 - `src/services/autoAnalyzeGame.ts:413`
 - `src/services/autoAnalyzeGame.ts:416`
-- `src/services/coachFeatureService.ts:963`
-- `src/services/coachFeatureService.ts:965`
-- `src/services/discussionPractice.ts:354`
-- `src/services/discussionPractice.ts:362`
+- `src/services/coachFeatureService.ts:964`
+- `src/services/coachFeatureService.ts:966`
+- `src/services/discussionPractice.ts:355`
+- `src/services/discussionPractice.ts:363`
 - `src/services/liveFundamental.ts:143`
 - `src/services/liveFundamental.ts:150`
 - `src/services/principleAttribution.test.ts:46`

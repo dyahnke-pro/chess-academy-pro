@@ -15,6 +15,7 @@
  * cheaper attacker wins the exchange (David's 2026-06-27 catch: "attacked-and-
  * undefended is *sufficient*, not *necessary* — it's not an iff").
  */
+import { evalBand } from './evalBand';
 import { openSentence } from '../utils/openSentence';
 import { andList, fileList } from '../utils/andList';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
@@ -2638,10 +2639,11 @@ function evalToVerdict(
   const winnerWhite = evalCp > 0;
   const w = winnerWhite ? 'White' : 'Black';
   const tok = winnerWhite ? 'white' : 'black';
-  const a = Math.abs(evalCp);
-  if (a < 50) return { answer: 'The position is roughly equal.', tokens: ['equal', 'even', 'balanced', 'roughly'] };
-  if (a < 150) return { answer: `${w} is slightly better.`, tokens: [tok, 'slightly', 'edge', 'better'] };
-  if (a < 400) return { answer: `${w} is clearly better.`, tokens: [tok, 'better', 'clearly'] };
+  // The one ladder (evalBand, census 2026-10-10) — this read 400 for "winning".
+  const band = evalBand(evalCp);
+  if (band === 'level') return { answer: 'The position is roughly equal.', tokens: ['equal', 'even', 'balanced', 'roughly'] };
+  if (band === 'slightly') return { answer: `${w} is slightly better.`, tokens: [tok, 'slightly', 'edge', 'better'] };
+  if (band === 'clearly') return { answer: `${w} is clearly better.`, tokens: [tok, 'better', 'clearly'] };
   return { answer: `${w} is winning.`, tokens: [tok, 'winning', 'much'] };
 }
 

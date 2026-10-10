@@ -1,3 +1,4 @@
+import { evalBand, evalBandWords } from './evalBand';
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
@@ -73,11 +74,13 @@ function timeAgoText(dateStr: string): string {
 }
 
 function advantageText(evalBefore: number): string {
-  if (evalBefore > 1.5) return 'You had a strong advantage';
-  if (evalBefore > 0.5) return 'You were slightly better';
-  if (evalBefore > -0.5) return 'The position was roughly equal';
-  if (evalBefore > -1.5) return 'You were slightly worse';
-  return 'You were already in trouble';
+  // The one ladder (evalBand, census 2026-10-10), said in the past tense.
+  // evalBefore is in pawns.
+  const cp = evalBefore * 100;
+  const band = evalBand(cp);
+  if (band === 'level') return 'The position was roughly equal';
+  if (band === 'decisive') return cp > 0 ? 'You were winning' : 'You were already losing';
+  return `You were ${evalBandWords(band, cp > 0 ? 'better' : 'worse')}`;
 }
 
 /** WHERE YOU STOOD — the one sentence that says whether the game was still

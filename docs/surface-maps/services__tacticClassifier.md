@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**792 lines · 3 exports · 15 importers · 7 tests · 0 audits**
+**710 lines · 3 exports · 16 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,6 +20,7 @@
 - `src/services/missedTacticService.ts`
 - `src/services/moveReason.ts`
 - `src/services/oneHanging.test.ts`
+- `src/services/oneSkewerRule.test.ts`
 - `src/services/playedMoveGrade.ts`
 - `src/services/pvPlayback.ts`
 - `src/services/searchDepth.ts`
@@ -43,12 +44,13 @@
 - `src/services/oneHanging.test.ts:20`
 - `src/services/playedMoveGrade.ts:141`
 - `src/services/searchDepth.ts:69`
-- `src/services/tacticsDetector.ts:821`
+- `src/services/tacticsDetector.ts:721`
 - `src/test/kingIsNeverHanging.test.ts:56`
 
-### `classifyPosition` (function) — 31 call sites
+### `classifyPosition` (function) — 32 call sites
 - `src/components/Coach/CoachGamePage.tsx:3322`
-- `src/services/missedTacticService.ts:758`
+- `src/services/missedTacticService.ts:622`
+- `src/services/oneSkewerRule.test.ts:16`
 - `src/services/pvPlayback.ts:421`
 - `src/services/tacticClassifier.test.ts:32`
 - `src/services/tacticClassifier.test.ts:40`
@@ -90,6 +92,7 @@
 
 - `src/services/hangingIgnoresCheck.test.ts`
 - `src/services/oneHanging.test.ts`
+- `src/services/oneSkewerRule.test.ts`
 - `src/services/tacticClassifier.skewer.test.ts`
 - `src/services/tacticClassifier.test.ts`
 - `src/services/tacticClassifierService.fill.test.ts`

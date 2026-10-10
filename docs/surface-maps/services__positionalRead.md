@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**680 lines · 10 exports · 19 importers · 13 tests · 1 audits**
+**673 lines · 10 exports · 19 importers · 13 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -52,15 +52,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.modern1690.test.ts:135`
 
 ### `readPosition` (function) — 48 call sites
-- `src/coach/chatTurnAnswers.ts:225`
+- `src/coach/chatTurnAnswers.ts:228`
 - `src/services/boardPlan.ideaKey.test.ts:13`
-- `src/services/groundedAnswer.ts:1594`
+- `src/services/groundedAnswer.ts:1582`
 - `src/services/lookaheadPlan.ts:1131`
 - `src/services/lookaheadPlan.ts:1400`
 - `src/services/lookaheadPlan.ts:1477`
 - `src/services/narrationAdversarial.test.ts:85`
 - `src/services/narrationAdversarial.test.ts:176`
-- `src/services/positionFacts.ts:1024`
+- `src/services/positionFacts.ts:1025`
 - `src/services/positionReadComposer.ts:173`
 - `src/services/positionalRead.race.test.ts:10`
 - `src/services/positionalRead.test.ts:28`

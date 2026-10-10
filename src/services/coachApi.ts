@@ -1,4 +1,5 @@
 // All LLM API calls must go through this file only — per CLAUDE.md
+import { evalBand, evalBandWords } from './evalBand';
 import { continueSentence } from '../utils/openSentence';
 import { smallTalkKind, smallTalkReply } from '../coach/smallTalk';
 import { lastMoveFromHistory } from './material';
@@ -2734,9 +2735,14 @@ async function computeLiveBoardVerdict(
 
   // drawQ
   if (scMateIn !== null) return voice(scMateIn > 0 ? 'No — you have a forced mate, not a draw.' : 'No — this is lost, not drawn; make it as hard as you can.', 'draw');
-  if (scEvalCp !== null && scEvalCp >= 250) return voice(`No — you're clearly winning here (about ${pawns} points), not drawing.`, 'draw');
-  if (scEvalCp !== null && scEvalCp <= -250) return voice(`No — you're clearly worse (about ${pawns} points down); you'd need your opponent to slip to draw.`, 'draw');
-  if (scEvalCp !== null && Math.abs(scEvalCp) <= 60) return voice('Roughly balanced — with accurate play from both sides this could well be a draw.', 'draw');
+  // The one ladder (evalBand, census 2026-10-10) — this kept 250 and 60.
+  const drawBand = scEvalCp !== null ? evalBand(scEvalCp) : null;
+  if (scEvalCp !== null && (drawBand === 'clearly' || drawBand === 'decisive')) {
+    return scEvalCp > 0
+      ? voice(`No — you're ${evalBandWords(drawBand, 'better')} here (about ${pawns} points), not drawing.`, 'draw')
+      : voice(`No — you're ${evalBandWords(drawBand, 'worse')} (about ${pawns} points down); you'd need your opponent to slip to draw.`, 'draw');
+  }
+  if (drawBand === 'level') return voice('Roughly balanced — with accurate play from both sides this could well be a draw.', 'draw');
   return null; // unclear middlegame — let the position default speak.
 }
 

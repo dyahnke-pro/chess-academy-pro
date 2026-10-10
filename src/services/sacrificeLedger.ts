@@ -6,6 +6,7 @@
 // claim names both replies and the band each leaves, never a number.
 //
 // The engine is injected (`bestAmong`), so the read is pure and testable.
+import { evalBand } from './evalBand';
 import { Chess, type Square } from 'chess.js';
 import type { Proof } from './proof';
 import { lineProofFromUci } from './proof';
@@ -29,10 +30,11 @@ function studentPov(m: ScoredMove, student: 'w' | 'b'): number {
 
 /** Words for where a branch leaves the student, or null when it leaves them worse. */
 export function ledgerBand(cp: number): string | null {
-  if (cp >= 300) return 'winning';
-  if (cp >= 100) return 'better';
-  if (cp >= -50) return 'about level';
-  return null;
+  // The one ladder (evalBand, census 2026-10-10) — this kept 100/300.
+  const band = evalBand(cp);
+  if (band === 'level') return 'about level';
+  if (cp < 0) return null;
+  return band === 'decisive' ? 'winning' : 'better';
 }
 
 function sanOf(fen: string, uci: string): string | null {

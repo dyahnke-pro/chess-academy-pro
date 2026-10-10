@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**903 lines · 2 exports · 39 importers · 18 tests · 0 audits**
+**803 lines · 2 exports · 40 importers · 19 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,6 +27,7 @@
 - `src/services/misconceptionClassifier.ts`
 - `src/services/mistakeNarration.ts`
 - `src/services/moveInsight.ts`
+- `src/services/oneSkewerRule.test.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/pinBreak.ts`
 - `src/services/pinGeometry.test.ts`
@@ -58,10 +59,10 @@
 ### `TacticsDetectionResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `detectTactics` (function) — 106 call sites
+### `detectTactics` (function) — 107 call sites
 - `src/components/Board/BoardPageLayout.tsx:124`
 - `src/components/Tactics/PatternSchoolPage.tsx:68`
-- `src/services/boardConcepts.ts:304`
+- `src/services/boardConcepts.ts:296`
 - `src/services/coachPrompts.ts:702`
 - `src/services/coachPrompts.ts:708`
 - `src/services/computerAccuracy.audit.test.ts:117`
@@ -79,11 +80,12 @@
 - `src/services/lookaheadPlan.ts:1405`
 - `src/services/misconceptionClassifier.ts:113`
 - `src/services/misconceptionClassifier.ts:264`
-- `src/services/mistakeNarration.ts:408`
+- `src/services/mistakeNarration.ts:411`
 - `src/services/moveInsight.ts:115`
-- `src/services/moveInsight.ts:1069`
+- `src/services/moveInsight.ts:1067`
+- `src/services/oneSkewerRule.test.ts:18`
 - `src/services/openingGenerator.ts:3538`
-- `src/services/pinBreak.ts:171`
+- `src/services/pinBreak.ts:169`
 - `src/services/pinGeometry.test.ts:72`
 - `src/services/pinGeometry.test.ts:74`
 - `src/services/pinGeometry.test.ts:90`
@@ -96,7 +98,7 @@
 - `src/services/pinPressure.ts:113`
 - `src/services/pinPressure.ts:128`
 - `src/services/pinnerPinned.test.ts:6`
-- `src/services/playCommentary.ts:762`
+- `src/services/playCommentary.ts:764`
 - `src/services/pvPlayback.ts:356`
 - `src/services/pvPlayback.ts:376`
 - `src/services/relationClaimCost.report.test.ts:52`
@@ -106,8 +108,8 @@
 - `src/services/reviewCorpusNote.test.ts:61`
 - `src/services/reviewFullData.ts:708`
 - `src/services/reviewFullData.ts:778`
-- `src/services/reviewMoveBriefing.ts:76`
 - `src/services/reviewMoveBriefing.ts:77`
+- `src/services/reviewMoveBriefing.ts:78`
 - `src/services/reviewNarrationFidelity.test.ts:324`
 - `src/services/reviewOpponentCommentary.ts:73`
 - `src/services/reviewWalk1500.test.ts:23`
@@ -117,7 +119,7 @@
 - `src/services/tacticLaneVocabulary.test.ts:69`
 - `src/services/tacticVisuals.ts:43`
 - `src/services/tacticVisuals.ts:60`
-- `src/services/tacticalRead.ts:158`
+- `src/services/tacticalRead.ts:155`
 - `src/services/tacticsDetector.expansion.test.ts:10`
 - `src/services/tacticsDetector.expansion.test.ts:73`
 - `src/services/tacticsDetector.groundTruth.test.ts:48`
@@ -172,6 +174,7 @@
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/learnWalkOct3c.test.ts`
 - `src/services/liveNoteTruth.test.ts`
+- `src/services/oneSkewerRule.test.ts`
 - `src/services/pinGeometry.test.ts`
 - `src/services/pinnerPinned.test.ts`
 - `src/services/relationClaimCost.report.test.ts`

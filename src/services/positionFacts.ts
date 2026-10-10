@@ -13,6 +13,7 @@
 //  • `computeCriticality` is the sharpness SCORE (from the same analysis);
 //    `computeImportance` is the speak/rank verdict. One analysis, both reads.
 //  • Perturbation (expensive) runs ONLY when importance says the moment matters.
+import { evalBand } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan, lastMoveFromHistory } from './material';
 import { readTrade, findTradeTarget } from './tradeQuality';
@@ -347,11 +348,11 @@ export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-c
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
 const STATUS_RANK: Record<StatusBand, number> = { lost: 0, worse: 1, level: 2, better: 3, winning: 4 };
 function statusBand(studentCp: number): StatusBand {
-  if (studentCp >= 300) return 'winning';
-  if (studentCp >= 90) return 'better';
-  if (studentCp > -90) return 'level';
-  if (studentCp > -300) return 'worse';
-  return 'lost';
+  // The one ladder (evalBand, census 2026-10-10) — this kept 90/300.
+  const band = evalBand(studentCp);
+  if (band === 'level') return 'level';
+  if (band === 'decisive') return studentCp > 0 ? 'winning' : 'lost';
+  return studentCp > 0 ? 'better' : 'worse';
 }
 
 /**

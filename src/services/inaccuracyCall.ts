@@ -27,6 +27,7 @@
 // G0 throughout: severity is arithmetic, the better move comes from the engine,
 // and the reason comes from replaying the engine's own line. Nothing here asks a
 // model what it thinks.
+import { evalBand } from './evalBand';
 import { andList } from '../utils/andList';
 import { bestMoveReason } from './deliberation';
 import { Chess, type Square } from 'chess.js';
@@ -680,9 +681,11 @@ export function callInaccuracyDetailed(args: {
     // 2026-10-04, G3 12.b3: "That brings you level" from a 1.2s read; depth 18
     // put it at −0.70 — the slip took them from −2.0 back into the game).
     const studentBefore = studentAfter !== null ? studentAfter - Math.max(0, args.cpLoss) : null;
-    if (studentAfter !== null && studentAfter <= 0 && studentBefore !== null && studentBefore < -100) return ' That gives you a way back into the game — look for it.';
-    if (studentAfter !== null && studentAfter < -50) return ' That gives you a way back into the game — look for it.';
-    if (studentAfter !== null && studentAfter <= 50) return ' That brings you level — look for the move that does it.';
+    // Bands from the one ladder (evalBand, census 2026-10-10).
+    const behind = (cp: number): boolean => cp < 0 && evalBand(cp) !== 'level';
+    if (studentAfter !== null && studentAfter <= 0 && studentBefore !== null && behind(studentBefore) && evalBand(studentBefore) !== 'slightly') return ' That gives you a way back into the game — look for it.';
+    if (studentAfter !== null && behind(studentAfter)) return ' That gives you a way back into the game — look for it.';
+    if (studentAfter !== null && evalBand(studentAfter) === 'level') return ' That brings you level — look for the move that does it.';
     // A SMALL EDGE IS NOT A PRIZE, and "take" promises a capture the board may
     // not have (Learn walk 2026-10-02: "go and take it" at +0.45 with nothing
     // to take). A clear edge is something to find; a small one is to keep.

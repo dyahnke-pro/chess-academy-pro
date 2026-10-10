@@ -16,6 +16,7 @@
  * PURE assemblers (verdict, key-tactic pick, tempting pick) are exported and
  * unit-tested with hand-fed data — the engine wiring is a thin shell over them.
  */
+import { evalBand } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { preparationOf } from './speedRunReads';
 import { andList } from '../utils/andList';
@@ -110,26 +111,22 @@ export function summarizeVerdict(
     const n = mateForStudent <= 8 ? words[mateForStudent] : String(mateForStudent);
     return { kind: 'mate', mateIn: mateForStudent, studentCp, text: `a forced mate in ${n}` };
   }
-  const a = Math.abs(studentCp);
   const mat = materialLabel(material);
-  // Material framing ONLY when the eval says winning AND the board backs the
-  // count; otherwise a magnitude-only phrase that claims no material.
-  if (studentCp >= 500) {
-    if (materialDeltaPawns != null && materialDeltaPawns >= 5) {
-      return { kind: 'winning', mateIn: null, studentCp, text: 'a winning material advantage' };
-    }
-    return { kind: 'winning', mateIn: null, studentCp, text: mat ? `winning — ${mat}` : 'a winning advantage' };
+  // The one ladder (evalBand, census 2026-10-10). This kept its own
+  // 60/150/280/500 steps and called anything down to −2.8 "slightly worse".
+  const band = evalBand(studentCp);
+  if (band === 'level') return { kind: 'equal', mateIn: null, studentCp, text: 'roughly balanced' };
+  if (studentCp < 0) {
+    if (band === 'decisive') return { kind: 'equal', mateIn: null, studentCp, text: 'lost — there is no read to give here' };
+    return { kind: 'edge', mateIn: null, studentCp, text: band === 'clearly' ? 'clearly worse' : 'slightly worse' };
   }
-  if (studentCp >= 280) {
-    return { kind: 'winning', mateIn: null, studentCp, text: mat ? `a decisive edge — ${mat}` : 'a decisive advantage' };
+  if (band === 'slightly') return { kind: 'edge', mateIn: null, studentCp, text: 'a pleasant edge' };
+  if (band === 'clearly') return { kind: 'winning', mateIn: null, studentCp, text: mat ? `clearly better — ${mat}` : 'clearly better' };
+  // Winning: material framing ONLY when the board backs the count.
+  if (materialDeltaPawns != null && materialDeltaPawns >= 5) {
+    return { kind: 'winning', mateIn: null, studentCp, text: 'a winning material advantage' };
   }
-  if (studentCp >= 150) {
-    return { kind: 'winning', mateIn: null, studentCp, text: mat ? `clearly better — ${mat}` : 'clearly better' };
-  }
-  if (studentCp >= 60) return { kind: 'edge', mateIn: null, studentCp, text: 'a pleasant edge' };
-  if (a < 60) return { kind: 'equal', mateIn: null, studentCp, text: 'roughly balanced' };
-  if (studentCp <= -280) return { kind: 'equal', mateIn: null, studentCp, text: 'lost — there is no read to give here' };
-  return { kind: 'edge', mateIn: null, studentCp, text: 'slightly worse' };
+  return { kind: 'winning', mateIn: null, studentCp, text: mat ? `winning — ${mat}` : 'a winning advantage' };
 }
 
 /** The student's settled material at a line's end (points, + = ahead), with

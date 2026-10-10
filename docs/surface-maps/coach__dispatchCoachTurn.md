@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**599 lines · 17 exports · 21 importers · 16 tests · 2 audits**
+**610 lines · 17 exports · 21 importers · 16 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,23 +39,25 @@
 ### `DispatchCoachTurnOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setServeParsedRoute` (function) — 7 call sites
+### `setServeParsedRoute` (function) — 9 call sites
 - `src/coach/dispatchCoachTurn.test.ts:95`
 - `src/coach/dispatchCoachTurn.test.ts:177`
 - `src/coach/dispatchCoachTurn.test.ts:186`
 - `src/coach/dispatchCoachTurn.test.ts:194`
-- `src/coach/dispatchCoachTurn.test.ts:217`
-- `src/coach/dispatchCoachTurn.test.ts:219`
-- `src/coach/dispatchCoachTurn.test.ts:227`
+- `src/coach/dispatchCoachTurn.test.ts:206`
+- `src/coach/dispatchCoachTurn.test.ts:209`
+- `src/coach/dispatchCoachTurn.test.ts:229`
+- `src/coach/dispatchCoachTurn.test.ts:231`
+- `src/coach/dispatchCoachTurn.test.ts:239`
 
 ### `isServeParsedRouteOn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setChatTurnReaderForTests` (function) — 38 call sites
-- `src/coach/chatKindContracts.test.ts:333`
-- `src/coach/chatKindContracts.test.ts:381`
-- `src/coach/chatKindContracts.test.ts:406`
-- `src/coach/chatKindContracts.test.ts:411`
+### `setChatTurnReaderForTests` (function) — 39 call sites
+- `src/coach/chatKindContracts.test.ts:335`
+- `src/coach/chatKindContracts.test.ts:383`
+- `src/coach/chatKindContracts.test.ts:408`
+- `src/coach/chatKindContracts.test.ts:413`
 - `src/coach/chatTurnRow.outcome.test.ts:28`
 - `src/coach/chatTurnRow.outcome.test.ts:37`
 - `src/coach/coachService.askReader.integration.test.ts:31`
@@ -85,20 +87,22 @@
 - `src/coach/dispatchCoachTurn.test.ts:178`
 - `src/coach/dispatchCoachTurn.test.ts:189`
 - `src/coach/dispatchCoachTurn.test.ts:196`
-- `src/coach/dispatchCoachTurn.test.ts:213`
+- `src/coach/dispatchCoachTurn.test.ts:207`
+- `src/coach/dispatchCoachTurn.test.ts:225`
 - `src/coach/requestExecutor.test.ts:56`
 - `src/coach/requestExecutor.test.ts:59`
 - `src/components/Coach/GameChatPanel.test.tsx:287`
 - `src/components/Coach/GameChatPanel.test.tsx:295`
 
-### `resetConversations` (function) — 8 call sites
-- `src/coach/chatKindContracts.test.ts:331`
+### `resetConversations` (function) — 9 call sites
+- `src/coach/chatKindContracts.test.ts:333`
 - `src/coach/dispatchCoachTurn.noBoard.test.ts:14`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:21`
 - `src/coach/dispatchCoachTurn.positional.test.ts:21`
 - `src/coach/dispatchCoachTurn.showLine.test.ts:21`
 - `src/coach/dispatchCoachTurn.test.ts:94`
-- `src/coach/dispatchCoachTurn.test.ts:210`
+- `src/coach/dispatchCoachTurn.test.ts:204`
+- `src/coach/dispatchCoachTurn.test.ts:222`
 - `src/coach/requestExecutor.test.ts:53`
 
 ### `lastLineFor` (function) — 1 call site
@@ -136,10 +140,10 @@
 ### `isComputedAnswer` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:7477`
 
-### `dispatchCoachTurn` (function) — 44 call sites
-- `src/coach/chatKindContracts.test.ts:383`
-- `src/coach/chatKindContracts.test.ts:407`
-- `src/coach/chatKindContracts.test.ts:412`
+### `dispatchCoachTurn` (function) — 45 call sites
+- `src/coach/chatKindContracts.test.ts:385`
+- `src/coach/chatKindContracts.test.ts:409`
+- `src/coach/chatKindContracts.test.ts:414`
 - `src/coach/chatTurnRow.outcome.test.ts:39`
 - `src/coach/coachService.askReader.integration.test.ts:32`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:35`
@@ -166,8 +170,9 @@
 - `src/coach/dispatchCoachTurn.test.ts:179`
 - `src/coach/dispatchCoachTurn.test.ts:190`
 - `src/coach/dispatchCoachTurn.test.ts:197`
-- `src/coach/dispatchCoachTurn.test.ts:218`
-- `src/coach/dispatchCoachTurn.test.ts:228`
+- `src/coach/dispatchCoachTurn.test.ts:208`
+- `src/coach/dispatchCoachTurn.test.ts:230`
+- `src/coach/dispatchCoachTurn.test.ts:240`
 - `src/coach/requestExecutor.test.ts:60`
 - `src/components/Board/BoardQuestionBox.tsx:67`
 - `src/components/Board/VoiceChatMic.tsx:484`

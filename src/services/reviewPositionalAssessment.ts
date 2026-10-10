@@ -14,6 +14,7 @@
  * when it is true — never invented, never padded (David 2026-07-19: "don't
  * overstate the why, I don't want non-applicable reasons stated").
  */
+import { evalBand, evalBandWords } from './evalBand';
 import { settledLeadFor, type LastMove } from './material';
 import { andList } from '../utils/andList';
 import { goodPieceIdeaKey } from './positionReadingService';
@@ -26,7 +27,7 @@ import { netPieceWords } from './exchangeLedger';
 
 export interface PositionalAssessment {
   /** Student-perspective verdict word from the eval, or null when unclear. */
-  verdict: 'clearly better' | 'a bit better' | 'balanced' | 'a bit worse' | 'in trouble' | null;
+  verdict: 'winning' | 'clearly better' | 'slightly better' | 'balanced' | 'slightly worse' | 'clearly worse' | 'losing' | null;
   /** Ordered, board-true asset clauses (student's perspective), most-telling
    *  first; empty when nothing concrete can be named. */
   reasons: string[];
@@ -71,11 +72,11 @@ function developedCount(all: Located[], color: Color): number {
  */
 export function verdictBand(studentPovEvalCp: number | null): PositionalAssessment['verdict'] {
   if (studentPovEvalCp === null) return null;
-  if (studentPovEvalCp >= 150) return 'clearly better';
-  if (studentPovEvalCp >= 50) return 'a bit better';
-  if (studentPovEvalCp > -50) return 'balanced';
-  if (studentPovEvalCp > -150) return 'a bit worse';
-  return 'in trouble';
+  // The band is the one ladder's (evalBand, census 2026-10-10); this keeps
+  // the review's own word for level ("balanced").
+  const band = evalBand(studentPovEvalCp);
+  if (band === 'level') return 'balanced';
+  return evalBandWords(band, studentPovEvalCp > 0 ? 'better' : 'worse') as NonNullable<PositionalAssessment['verdict']>;
 }
 
 export function assessPositionalEdge(
@@ -106,7 +107,7 @@ export function assessPositionalEdge(
   // "worse". When the eval says the OPPONENT stands better, the itemised
   // reasons are THEIR assets, phrased from the student's seat ("they have the
   // bishop pair"). Balanced / unknown keeps the student's own reading.
-  const worse = verdict === 'a bit worse' || verdict === 'in trouble';
+  const worse = verdict === 'slightly worse' || verdict === 'clearly worse' || verdict === 'losing';
   const lm = lastMove ?? null;
   const assets = worse
     ? assetsFor(chess, struct, all, enemy, me, 'theirs', lm)
@@ -291,14 +292,14 @@ export function phaseVerdictLine(
   const standing = a.verdict === 'balanced' ? "it's level" : `you're ${a.verdict}`;
   const why = a.reasons.length === 0 ? '' : ` — ${andList(a.reasons)}`;
   // ONE COMPARISON, not a list: the other side of the scale, and what it
-  // weighs. Level → the two sides' trumps hold each other; a bit → theirs keeps
-  // it close; clearly / in trouble → it is not enough.
+  // weighs. Level → the two sides' trumps hold each other; slightly → theirs
+  // keeps it close; clearly or decisive → it is not enough.
   const counter = a.counter ?? [];
   const inReturn = (() => {
     if (counter.length === 0) return '';
-    const worse = a.verdict === 'a bit worse' || a.verdict === 'in trouble';
+    const worse = a.verdict === 'slightly worse' || a.verdict === 'clearly worse' || a.verdict === 'losing';
     if (a.verdict === 'balanced') return `; on the other side, ${andList(counter)} — and the two hold each other`;
-    const weight = a.verdict === 'clearly better' || a.verdict === 'in trouble' ? "and it isn't enough" : 'and it keeps it close';
+    const weight = a.verdict !== 'slightly better' && a.verdict !== 'slightly worse' ? "and it isn't enough" : 'and it keeps it close';
     return `; what ${worse ? 'you have' : 'they have'} in return: ${andList(counter)}, ${weight}`;
   })();
   // Rotated on the board — the verdict and its reasons never vary.
