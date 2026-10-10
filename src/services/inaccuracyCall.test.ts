@@ -408,8 +408,9 @@ describe('a take-back is the other half of a trade (Learn walk 2026-10-01, game 
       replyLineUci: ['d2e2', 'h7h5', 'd7b7', 'h5g4'], replySan: 'Kxe2',
       cpLoss: 110, moverEvalAfterCp: -430, side: 'student', moverColor: 'black',
     });
-    expect(call).toBeTruthy();
-    expect(call!.said).not.toMatch(/take your rook/);
+    // With no why to give, the grade is held (never bare, 2026-10-10); what it
+    // must never do is call the trade a lost rook.
+    expect(call?.said ?? '').not.toMatch(/take your rook/);
   });
 });
 

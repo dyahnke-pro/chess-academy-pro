@@ -49,6 +49,7 @@ describe('the mistake card leads with what the move allowed', () => {
       fen: '2r2rkb/1b1nqp1p/1n2p1pP/3p2P1/1p2P3/3PB1N1/1P1QBP1N/R3K2R b KQ - 3 21',
       playerMoveSan: 'Rc3', bestMoveSan: 'd4', moves: 'd5d4', allowedReplySan: 'bxc3',
     }));
-    expect(n.intro).toMatch(/^Rc3 lets them play bxc3, winning your rook on c3\./);
+    // Rook for the pawn that took it: what they net (2026-10-10).
+    expect(n.intro).toMatch(/^Rc3 lets them play bxc3, winning your rook on c3 for their pawn\./);
   });
 });

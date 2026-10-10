@@ -1,6 +1,7 @@
 import { Chess } from 'chess.js';
 import { describeMoveGeometry } from './groundedAnswer';
 import { legalSeeGain } from './positionReadingService';
+import { CAPTURE_VALUE } from './pieceValues';
 
 
 /** The concrete punishment ONE reply inflicts after `playedSan`, read by the
@@ -46,8 +47,14 @@ function materialWon(afterPlayed: string, replySan: string): string | null {
     const c = new Chess(afterPlayed);
     const mv = c.move(replySan);
     if (!mv?.captured) return null;
-    if (legalSeeGain(afterPlayed, mv.to) <= 0) return null;
-    return `winning your ${PIECE_NAME[mv.captured]} on ${mv.to}`;
+    const gain = legalSeeGain(afterPlayed, mv.to);
+    if (gain <= 0) return null;
+    // WHAT THEY NET, NOT WHAT THEY TOUCH (Learn walk 2026-10-10: Bxa5 Nxa5 is
+    // a queen for a bishop, said as "winning your queen"). When the exchange
+    // gives the capturer back, the trade is named.
+    return gain >= CAPTURE_VALUE[mv.captured]
+      ? `winning your ${PIECE_NAME[mv.captured]} on ${mv.to}`
+      : `winning your ${PIECE_NAME[mv.captured]} on ${mv.to} for their ${PIECE_NAME[mv.piece]}`;
   } catch {
     return null;
   }
