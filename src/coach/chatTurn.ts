@@ -735,12 +735,12 @@ const KNOWLEDGE_KINDS: ReadonlySet<ChatKind> = new Set<ChatKind>([
 export function askBackAtCatchAll(kind: ChatKind, clarify: string | undefined, hasBoard: boolean): string | null {
   if (kind === 'chat' || kind === 'conversational-reply' || kind === 'stop') return null;
   if (NEEDS_BOARD.has(kind) || kind === 'move-rating' || kind === 'retrospective-move' || kind === 'opponent-move' || kind === 'last-move' || kind === 'endgame' || kind === 'live-colour') {
-    return hasBoard ? null : (clarify ?? "Which position do you mean? Open it on the board and ask me again.");
+    return hasBoard ? null : (clarify ?? "Which position do you mean? Open it on the board and ask again.");
   }
   if (clarify) return clarify;
   if (RECORD_KINDS.has(kind)) return 'Do you mean your weaknesses, your openings, or your recent games?';
-  if (ACTION_KINDS.has(kind)) return "I can't do that from the chat. I can teach or play an opening, review a game, or set up a drill — which would you like?";
-  if (KNOWLEDGE_KINDS.has(kind)) return "I don't have an answer for that one yet. Ask me about a move, an opening or your games.";
-  if (kind === 'player-games' || kind === 'master-play') return "I only know the games in this app and the openings it teaches, not other players' records.";
-  return 'I am not sure what you mean. Could you say it another way?';
+  if (ACTION_KINDS.has(kind)) return "That can't be done from the chat. The chat can teach or play an opening, review a game, or set up a drill — which would you like?";
+  if (KNOWLEDGE_KINDS.has(kind)) return "There's no answer for that one yet. Ask about a move, an opening or your games.";
+  if (kind === 'player-games' || kind === 'master-play') return "Only the games in this app and the openings it teaches are known here, not other players' records.";
+  return 'Not sure what you mean — could you say it another way?';
 }

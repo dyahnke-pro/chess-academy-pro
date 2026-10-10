@@ -1,6 +1,6 @@
 {
   "src/coach/boardQuestions.ts": 2,
-  "src/coach/chatTurn.ts": 45,
+  "src/coach/chatTurn.ts": 41,
   "src/coach/chatTurnEval.corpus.ts": 22,
   "src/coach/chatTurnParser.ts": 2,
   "src/coach/envelope.ts": 19,

@@ -48,6 +48,7 @@ import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
 import { buildDeliberation, deliberationFacts, deliberationWeighing, deliberationVerdict, type Deliberation, type HeldVerdict } from './deliberation';
 import { detectLatentFork, latentForkClause, type LatentFork } from './latentFork';
 import { lineTakesPiece, pawnHit } from './trappedPiece';
+import { moverLineProof } from './exchangeLedger';
 import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause, type LatentDanger, type TradeDanger } from './latentDanger';
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
@@ -562,7 +563,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // "any tactics?" never said so). The engine's best move is a pawn move that
   // leaves a piece no safe square, and its own line takes that piece — the
   // outcome proved, not a mobility count (WO-OUTCOME-01).
-  const trapChance = ((): { san: string; to: string; square: string; type: string } | null => {
+  const trapChance = ((): { san: string; to: string; square: string; type: string; proof: string | null } | null => {
     if (!studentToMove) return null;
     const line = analysis.topLines?.[0]?.moves;
     if (!line?.length) return null;
@@ -571,7 +572,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       const mv = c.move({ from: line[0].slice(0, 2), to: line[0].slice(2, 4), promotion: line[0][4] });
       const hit = mv ? pawnHit(c.fen(), mv) : null;
       if (!mv || !hit?.trapped || !lineTakesPiece(fen, hit.square, line)) return null;
-      return { san: mv.san, to: mv.to, square: hit.square, type: hit.type };
+      return { san: mv.san, to: mv.to, square: hit.square, type: hit.type, proof: moverLineProof(fen, line, studentColor)?.short ?? null };
     } catch { return null; }
   })();
 
@@ -1406,7 +1407,7 @@ function buildClauses(a: {
   openingPhase: boolean;
   deliberation: Deliberation | null;
   latentDanger: LatentDanger | null;
-  trapChance: { san: string; to: string; square: string; type: string } | null;
+  trapChance: { san: string; to: string; square: string; type: string; proof: string | null } | null;
   latentFork: LatentFork | null;
   /** 🔒 The student's seat — REQUIRED by `latentForkClause`, because the same
    *  fork geometry is an opportunity from one chair and a warning from the
@@ -1500,7 +1501,9 @@ function buildClauses(a: {
       // Above the trade warning (82): a piece won now outranks a pin that only
       // opens if you choose to trade.
       kind: 'latent-chance', rank: 84,
-      text: `${trapChance.san} traps their ${NAME[trapChance.type] ?? 'piece'} on ${trapChance.square} — it has no safe square to run to, and it falls.`,
+      // The outcome is the ledger's, over the engine's line (outcome gate):
+      // the board fact alone when the line proves nothing countable.
+      text: `${trapChance.san} traps their ${NAME[trapChance.type] ?? 'piece'} on ${trapChance.square} — it has no safe square to run to${trapChance.proof ? `: ${trapChance.proof}` : ''}.`,
       squares: [trapChance.to, trapChance.square],
       stakes: { points: VALUE[trapChance.type] ?? 3, plies: 3 },
     });

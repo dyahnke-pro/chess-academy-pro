@@ -58,6 +58,8 @@ vi.mock('../services/stockfishEngine', () => {
 });
 
 import { dispatchCoachTurn, setChatTurnReaderForTests, resetConversations } from './dispatchCoachTurn';
+import { db } from '../db/schema';
+import { buildUserProfile } from '../test/factories';
 
 /** The boards the contracts are asked on — real positions. */
 const ITALIAN = 'e4 e5 Nf3 Nc6 Bc4 Bc5 d3 h6 O-O d6 c3 Bb6 d4 Na5 Bb5+ c6 Be2 Nf6'.split(' ');
@@ -291,7 +293,9 @@ const CONTRACTS: Record<ChatKind, Contract | Owed> = {
   'start-thinking-lesson': { owed: 'P8 batch 3' },
 };
 
-beforeEach(() => {
+beforeEach(async () => {
+  // Every device has its profile from boot; a fresh one, no games.
+  await db.profiles.put(buildUserProfile({ id: 'main' }));
   vi.spyOn(globalThis, 'fetch').mockImplementation(async () => new Response('{}', { status: 404 }));
   resetConversations();
 });
