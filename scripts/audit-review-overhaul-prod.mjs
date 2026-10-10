@@ -1255,7 +1255,10 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // reopen — a reopen wedge (#21) must not swallow them (prod 2026-10-06).
   const leaks = turningLeaks.filter(Boolean);
   await add('TURNING the-answer-is-never-said-before-the-ask', leaks.length === 0, `${turningLeaks.length} checked${leaks.length ? ` — ${leaks[0].ans} was said before asking: "${leaks[0].said.slice(0, 120)}"` : ''}`);
-  await add('TURNING at-most-three-per-game', turningQs.length <= 3, `${turningQs.length} asked${turningQs[0] ? `; e.g. "${turningQs[0]}"` : ''}`);
+  // REVIEW ASKS NO QUESTIONS (David 2026-10-10: "Remove the question from
+  // review for now"). Neither the turning-point nor the critical-moment card.
+  await add('TURNING no-question-asked', turningQs.length === 0, `${turningQs.length} asked${turningQs[0] ? `; e.g. "${turningQs[0]}"` : ''}`);
+  await add('CRIT no-question-card', !(await has(page, '[data-testid="review-critical-card"]')), 'the critical-moment card must not open');
   const whyless = turningReveals.filter((r) => !/^The move was \S+ — it /.test(r));
   await add('TURNING every-reveal-names-the-move-and-why', whyless.length === 0, `${turningReveals.length} reveals${whyless.length ? ` — ${whyless.length} without a why, e.g. "${whyless[0]}"` : turningReveals[0] ? `; e.g. "${turningReveals[0]}"` : ''}`);
   // REASON, NOT STATS (David 2026-10-06) — no line of the first walk carries a number.
@@ -1739,7 +1742,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   const planRow = listener.getCapturedEvents().filter((e) => e.kind === 'review-turning-plan').pop();
   const planAsked = Number(/asked=(\d+)/.exec(String(planRow?.summary ?? ''))?.[1] ?? NaN);
   log(`  [turning-plan] ${planRow?.summary ?? 'NO ROW'}`);
-  await add('TURNING plan-row-names-every-verdict', !!planRow && Number.isFinite(planAsked) && turningQs.length === planAsked,
+  await add('TURNING plan-row-names-every-verdict', !!planRow && Number.isFinite(planAsked) && planAsked === 0 && turningQs.length === planAsked,
     planRow ? `${planRow.summary} — heard ${turningQs.length} question(s)` : 'no review-turning-plan row — the plan was never computed');
   const voiced = listener.getCapturedEvents().filter((e) => e.kind === 'coach-narration-spoken');
   const unmuted = voiced.filter((e) => !/voice=audit-muted/.test(String(e.summary ?? '')));

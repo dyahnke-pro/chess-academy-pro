@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4507 lines · 1 exports · 2 importers · 3 tests · 6 audits**
+**4517 lines · 2 exports · 3 importers · 4 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,9 +13,13 @@
 ## Who calls in
 
 - `src/components/Coach/CoachGamePage.tsx`
+- `src/components/Coach/CoachGameReview.noQuestions.test.ts`
 - `src/components/Coach/CoachReviewSessionPage.tsx`
 
 ## Exports and every call site
+
+### `REVIEW_ASKS_QUESTIONS` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `CoachGameReview` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -23,6 +27,7 @@
 ## Tests
 
 - `src/components/Coach/CoachGameReview.cardScroll.test.ts`
+- `src/components/Coach/CoachGameReview.noQuestions.test.ts`
 - `src/components/Coach/CoachGameReview.test.tsx`
 - `src/components/Coach/CoachReviewSessionPage.nonBlocking.test.tsx`
 

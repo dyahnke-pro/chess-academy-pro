@@ -226,6 +226,15 @@ function firstPlyBoard(uci: string, candidates: ReadonlyArray<string | undefined
   return null;
 }
 
+/** REVIEW ASKS NO QUESTIONS (David 2026-10-10: "Remove the question from
+ *  review for now. I don't like that one."). Both stops are off: the
+ *  turning-point find-the-move and the critical-moment "find one" card. The
+ *  turning plan is still computed — it names the game's turn for the theme and
+ *  the end summary — and a critical moment is SAID (its reveal) instead of
+ *  asked. One switch, so turning them back on is one line.
+ *  Gate: `CoachGameReview.noQuestions.test.ts`. */
+export const REVIEW_ASKS_QUESTIONS = false;
+
 export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const {
     moves, playerColor, result,
@@ -811,10 +820,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       kind: 'review-turning-plan',
       category: 'subsystem',
       source: 'CoachGameReview.questionPlan',
-      summary: `asked=${questionPlan.size} considered=${turningTrace.length} ${turningTrace.map((t) => `${t.ply}:${t.skip ?? 'ask'}${t.before !== undefined ? `(${t.before}->${t.after})` : ''}`).join(' ')}`,
+      summary: `asked=${REVIEW_ASKS_QUESTIONS ? questionPlan.size : 0} planned=${questionPlan.size} considered=${turningTrace.length} ${turningTrace.map((t) => `${t.ply}:${t.skip ?? 'ask'}${t.before !== undefined ? `(${t.before}->${t.after})` : ''}`).join(' ')}`,
     });
   }, [questionPlan, turningTrace, walkNarration, playerColor]);
-  /** The turning point a question is open on (null otherwise). */
+  /** The turning point a question is open on (null otherwise). Never opens
+   *  while REVIEW_ASKS_QUESTIONS is off. */
   const [turningActive, setTurningActive] = useState<TurningPoint | null>(null);
   /** The reveal text a turning point produced (shown as a plain line, no buttons). */
   const [turningRevealText, setTurningRevealText] = useState<string | null>(null);
@@ -1174,12 +1184,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // and its one reason, so the critical beat is not said after it — it was
       // a second answer to the same question, read off a different search
       // (52-error walk #19: "the move was Bf5", then "Bxf3 keeps you in it").
-      if (!questionPlan.has(atPly)) {
+      if (!(REVIEW_ASKS_QUESTIONS && questionPlan.has(atPly))) {
       captureEvent('review_critical_moment', {
         ply: atPly, register: criticalMoment.register, count: criticalMoment.count,
         stake: criticalMoment.stake, gap_cp: criticalMoment.gapCp, held: criticalMoment.found,
       });
-      if (criticalMoment.register === 'ask') {
+      if (REVIEW_ASKS_QUESTIONS && criticalMoment.register === 'ask') {
         questionPlyRef.current = atPly;
         setCriticalCard(criticalMoment);
         setCriticalReveal(null);
@@ -1222,7 +1232,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // comment is worse than none, because it tells the next reader not to
       // look.
       const planned = questionPlan.get(nextPly);
-      if (seg && isStudentMistake && planned && !quizzedPliesRef.current.has(nextPly)) {
+      if (REVIEW_ASKS_QUESTIONS && seg && isStudentMistake && planned && !quizzedPliesRef.current.has(nextPly)) {
         quizzedPliesRef.current.add(nextPly);
         // ANCHOR the question's ply for the rewind offer (David 2026-07-21
         // rewind-diag): by the time the faucet/shot resolves, the user has often
