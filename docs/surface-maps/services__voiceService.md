@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3148 lines · 18 exports · 106 importers · 96 tests · 23 audits**
+**3151 lines · 18 exports · 108 importers · 99 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,7 +22,9 @@
 ## Who calls in
 
 - `src/App.tsx`
+- `src/coach/coachStopEvents.test.ts`
 - `src/components/Academy/AcademyPage.tsx`
+- `src/components/Board/BoardQuestionBox.tsx`
 - `src/components/Board/VoiceChatMic.tsx`
 - `src/components/Coach/CalculationTab.tsx`
 - `src/components/Coach/ChatInput.tsx`
@@ -172,7 +174,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolvePollyVoice` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:3661`
+- `src/components/Coach/CoachGamePage.tsx:3663`
 
 ### `resolvePollySecondaryVoice` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -283,7 +285,9 @@
 
 ## Tests
 
+- `src/coach/coachStopEvents.test.ts`
 - `src/components/Board/BoardPageLayout.test.tsx`
+- `src/components/Board/BoardQuestionBox.test.tsx`
 - `src/components/Board/VoiceChatMic.test.tsx`
 - `src/components/Coach/CoachAnalysePage.test.tsx`
 - `src/components/Coach/CoachChatPage.test.tsx`
@@ -293,6 +297,7 @@
 - `src/components/Coach/CoachTeachPage.drillOrientation.test.tsx`
 - `src/components/Coach/CoachTeachPage.test.tsx`
 - `src/components/Coach/EndgameTrainerPage.test.tsx`
+- `src/components/Coach/ExplainPositionSessionView.test.tsx`
 - `src/components/Coach/GameChatPanel.surface.test.tsx`
 - `src/components/Coach/GameChatPanel.test.tsx`
 - `src/components/Coach/RolodexRow.test.tsx`

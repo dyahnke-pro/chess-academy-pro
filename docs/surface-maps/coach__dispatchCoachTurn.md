@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**546 lines · 17 exports · 21 importers · 16 tests · 2 audits**
+**599 lines · 17 exports · 21 importers · 16 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -50,10 +50,11 @@
 ### `isServeParsedRouteOn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setChatTurnReaderForTests` (function) — 36 call sites
-- `src/coach/chatKindContracts.test.ts:315`
-- `src/coach/chatKindContracts.test.ts:363`
-- `src/coach/chatKindContracts.test.ts:382`
+### `setChatTurnReaderForTests` (function) — 37 call sites
+- `src/coach/chatKindContracts.test.ts:333`
+- `src/coach/chatKindContracts.test.ts:381`
+- `src/coach/chatKindContracts.test.ts:406`
+- `src/coach/chatKindContracts.test.ts:411`
 - `src/coach/chatTurnRow.outcome.test.ts:28`
 - `src/coach/chatTurnRow.outcome.test.ts:37`
 - `src/coach/coachService.askReader.integration.test.ts:31`
@@ -89,7 +90,7 @@
 - `src/components/Coach/GameChatPanel.test.tsx:295`
 
 ### `resetConversations` (function) — 8 call sites
-- `src/coach/chatKindContracts.test.ts:313`
+- `src/coach/chatKindContracts.test.ts:331`
 - `src/coach/dispatchCoachTurn.noBoard.test.ts:14`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:21`
 - `src/coach/dispatchCoachTurn.positional.test.ts:21`
@@ -133,9 +134,10 @@
 ### `isComputedAnswer` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:7477`
 
-### `dispatchCoachTurn` (function) — 42 call sites
-- `src/coach/chatKindContracts.test.ts:365`
-- `src/coach/chatKindContracts.test.ts:384`
+### `dispatchCoachTurn` (function) — 43 call sites
+- `src/coach/chatKindContracts.test.ts:383`
+- `src/coach/chatKindContracts.test.ts:407`
+- `src/coach/chatKindContracts.test.ts:412`
 - `src/coach/chatTurnRow.outcome.test.ts:39`
 - `src/coach/coachService.askReader.integration.test.ts:32`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:35`

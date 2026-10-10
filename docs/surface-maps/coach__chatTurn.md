@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**747 lines · 26 exports · 20 importers · 14 tests · 3 audits**
+**771 lines · 26 exports · 20 importers · 14 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -49,11 +49,11 @@
 - `src/coach/chatTurn.test.ts:97`
 - `src/coach/chatTurn.test.ts:100`
 - `src/coach/chatTurn.test.ts:107`
-- `src/coach/dispatchCoachTurn.ts:253`
-- `src/coach/dispatchCoachTurn.ts:266`
-- `src/coach/dispatchCoachTurn.ts:354`
-- `src/coach/dispatchCoachTurn.ts:473`
-- `src/coach/dispatchCoachTurn.ts:540`
+- `src/coach/dispatchCoachTurn.ts:255`
+- `src/coach/dispatchCoachTurn.ts:268`
+- `src/coach/dispatchCoachTurn.ts:356`
+- `src/coach/dispatchCoachTurn.ts:526`
+- `src/coach/dispatchCoachTurn.ts:593`
 - `src/coach/questionRoute.test.ts:20`
 - `src/coach/questionRoute.test.ts:30`
 - `src/coach/questionRoute.test.ts:33`
@@ -141,19 +141,19 @@
 
 ### `nextConversationState` (function) — 2 call sites
 - `src/coach/chatTurn.test.ts:162`
-- `src/coach/dispatchCoachTurn.ts:177`
+- `src/coach/dispatchCoachTurn.ts:179`
 
 ### `canonicalAsk` (function) — 5 call sites
 - `src/coach/chatTurn.test.ts:66`
 - `src/coach/chatTurn.test.ts:80`
 - `src/coach/chatTurn.test.ts:83`
 - `src/coach/chatTurn.test.ts:87`
-- `src/coach/dispatchCoachTurn.ts:447`
+- `src/coach/dispatchCoachTurn.ts:500`
 
 ### `kindAgreesWithLane` (function) — 3 call sites
 - `src/coach/chatTurn.test.ts:103`
 - `src/coach/chatTurn.test.ts:104`
-- `src/coach/dispatchCoachTurn.ts:191`
+- `src/coach/dispatchCoachTurn.ts:193`
 
 ### `firingLanes` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
