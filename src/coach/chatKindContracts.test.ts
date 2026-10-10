@@ -182,6 +182,85 @@ const CONTRACTS: Record<ChatKind, Contract | Owed> = {
     must: [/.{2}/], mustNot: [/best move/i] },
   command: { board: null, ask: 'turn the voice off', reading: { kind: 'command' },
     must: [/voice/i] },
+  // ── the student's own record, on a fresh device: the only true answer is
+  // that there are no games yet — any number is a false claim. ──
+  strengths: { board: null, ask: 'what am I good at?', reading: { kind: 'strengths' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  stats: { board: null, ask: 'what are my stats?', reading: { kind: 'stats' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  'opening-accuracy': { board: null, ask: 'how accurate am I in the Italian?', reading: { kind: 'opening-accuracy', topic: 'Italian' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  'weakness-lifecycle': { board: null, ask: 'which weaknesses have I fixed?', reading: { kind: 'weakness-lifecycle' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  'weakness-briefing': { board: null, ask: 'brief me on my weaknesses', reading: { kind: 'weakness-briefing' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  mistakes: { board: null, ask: 'what mistakes do I make?', reading: { kind: 'mistakes' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  'errors-by-situation': { board: null, ask: 'when do I blunder most?', reading: { kind: 'errors-by-situation' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  misconceptions: { board: null, ask: 'which thinking errors do I keep making?', reading: { kind: 'misconceptions' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  'tactics-profile': { board: null, ask: 'how good are my tactics?', reading: { kind: 'tactics-profile' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  'phase-profile': { board: null, ask: 'which phase am I weakest in?', reading: { kind: 'phase-profile' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  'repertoire-gap': { board: null, ask: 'what are the gaps in my repertoire?', reading: { kind: 'repertoire-gap' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  accuracy: { board: null, ask: "what's my accuracy?", reading: { kind: 'accuracy' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  consistency: { board: null, ask: 'how consistent am I?', reading: { kind: 'consistency' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  'time-trouble': { board: null, ask: 'do I play too fast?', reading: { kind: 'time-trouble' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  'last-game': { board: null, ask: 'how did my last game go?', reading: { kind: 'last-game' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  'last-game-mistake': { board: null, ask: 'what did I do wrong in my last game?', reading: { kind: 'last-game-mistake' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  converting: { board: null, ask: 'how well do I convert winning positions?', reading: { kind: 'converting' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  color: { board: null, ask: 'am I better as White or Black?', reading: { kind: 'color' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  records: { board: null, ask: "what's my best win?", reading: { kind: 'records' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  'record-vs': { board: null, ask: 'how do I score against the Sicilian?', reading: { kind: 'record-vs', topic: 'Sicilian' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  'puzzle-stats': { board: null, ask: "what's my puzzle rating?", reading: { kind: 'puzzle-stats' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  'transfer-gap': { board: null, ask: 'do my puzzle skills show up in my games?', reading: { kind: 'transfer-gap' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  'skill-radar': { board: null, ask: 'show me my skill radar', reading: { kind: 'skill-radar' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  trend: { board: null, ask: "what's my rating trend?", reading: { kind: 'trend' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  progress: { board: null, ask: 'am I improving?', reading: { kind: 'progress' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  'opening-profile': { board: null, ask: "what's my best opening?", reading: { kind: 'opening-profile' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  'endgame-weakness': { board: null, ask: 'which endgames am I weakest at?', reading: { kind: 'endgame-weakness' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  'review-due': { board: null, ask: "what's due for review?", reading: { kind: 'review-due' },
+    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+  // ── knowledge: what the app knows without a board ──
+  concept: { board: null, ask: 'what is a fork?', reading: { kind: 'concept', topic: 'fork' },
+    must: [/fork/i, /two|both|more than one/i] },
+  theory: { board: null, ask: 'how do I play against an isolated pawn?', reading: { kind: 'theory', topic: 'an isolated pawn' },
+    must: [/isolated/i] },
+  'opening-identity': { board: null, ask: 'what is the Caro-Kann about?', reading: { kind: 'opening-identity', topic: 'Caro-Kann' },
+    must: [/Caro/] },
+  'opening-existence': { board: null, ask: 'is there an opening called the Fried Liver?', reading: { kind: 'opening-existence', topic: 'Fried Liver' },
+    must: [/Fried Liver/, /yes|there is|it's real|is an? /i] },
+  'opening-traps': { board: null, ask: 'what traps are there in the Italian?', reading: { kind: 'opening-traps', topic: 'Italian' },
+    must: [/Italian|trap/i] },
+  'counter-repertoire': { board: null, ask: 'what should I play against the Sicilian?', reading: { kind: 'counter-repertoire', topic: 'Sicilian' },
+    must: [/Sicilian/, /Alapin|Open|Grand Prix|Rossolimo|Moscow|Smith|c3|d4|Nc3|Bb5/] },
+  'training-request': { board: null, ask: 'set up some calculation training', reading: { kind: 'training-request', topic: 'calculation' },
+    must: [/calculation/i] },
+  settings: { board: null, ask: 'is the voice on?', reading: { kind: 'settings' },
+    must: [/voice/i] },
+  'app-help': { board: null, ask: 'what can you do?', reading: { kind: 'app-help' },
+    must: [/.{40}/], mustNot: [/best move is/i] },
+  'book-teaching': { board: null, ask: 'what does Capablanca say about rook endings?', reading: { kind: 'book-teaching', topic: 'rook endings' },
+    must: [/Capablanca|rook/i] },
   // ── the rest: owed, each with its reason, until written ──
   stop: { owed: 'P8 batch 2' }, 'conversational-reply': { owed: 'P8 batch 2' },
   unclear: { owed: 'P8 batch 2' }, 
@@ -191,24 +270,24 @@ const CONTRACTS: Record<ChatKind, Contract | Owed> = {
   
   'master-play': { owed: 'P8 batch 3' }, 'player-games': { owed: 'P8 batch 3' }, 
   
-  strengths: { owed: 'P8 batch 3' }, stats: { owed: 'P8 batch 3' }, 'opening-accuracy': { owed: 'P8 batch 3' },
-  'opening-traps': { owed: 'P8 batch 3' }, 'review-due': { owed: 'P8 batch 3' }, 'weakness-lifecycle': { owed: 'P8 batch 3' },
-  'weakness-briefing': { owed: 'P8 batch 3' }, mistakes: { owed: 'P8 batch 3' }, 'errors-by-situation': { owed: 'P8 batch 3' },
-  misconceptions: { owed: 'P8 batch 3' }, 'tactics-profile': { owed: 'P8 batch 3' }, 'phase-profile': { owed: 'P8 batch 3' },
-  'counter-repertoire': { owed: 'P8 batch 3' }, 'repertoire-gap': { owed: 'P8 batch 3' }, accuracy: { owed: 'P8 batch 3' },
-  consistency: { owed: 'P8 batch 3' }, 'time-trouble': { owed: 'P8 batch 3' }, 'last-game': { owed: 'P8 batch 3' },
-  'last-game-mistake': { owed: 'P8 batch 3' }, converting: { owed: 'P8 batch 3' }, color: { owed: 'P8 batch 3' },
-  records: { owed: 'P8 batch 3' }, 'record-vs': { owed: 'P8 batch 3' }, 'puzzle-stats': { owed: 'P8 batch 3' },
-  'transfer-gap': { owed: 'P8 batch 3' }, 'skill-radar': { owed: 'P8 batch 3' }, trend: { owed: 'P8 batch 3' },
-  progress: { owed: 'P8 batch 3' }, 'opening-profile': { owed: 'P8 batch 3' }, 'endgame-weakness': { owed: 'P8 batch 3' },
-  'training-request': { owed: 'P8 batch 3' }, concept: { owed: 'P8 batch 3' }, theory: { owed: 'P8 batch 3' },
-  'teaching-method': { owed: 'P8 batch 3' }, settings: { owed: 'P8 batch 3' }, 'app-help': { owed: 'P8 batch 3' },
-  'opening-identity': { owed: 'P8 batch 3' }, 'opening-existence': { owed: 'P8 batch 3' },
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  'teaching-method': { owed: 'P8 batch 3' }, 
+  
   'compare-my-move': { owed: 'P8 batch 2' }, 
   
   
   'explain-last': { owed: 'P8 batch 2' },
-  'book-teaching': { owed: 'P8 batch 3' }, 'i-dont-know': { owed: 'P8 batch 2' }, answer: { owed: 'P8 batch 2' },
+  'i-dont-know': { owed: 'P8 batch 2' }, answer: { owed: 'P8 batch 2' },
   'start-thinking-lesson': { owed: 'P8 batch 3' },
 };
 
@@ -247,6 +326,6 @@ describe('every question kind answers its contract', () => {
 
   it('the owed list only shrinks', () => {
     const owed = Object.values(CONTRACTS).filter((c) => 'owed' in c).length;
-    expect(owed).toBeLessThanOrEqual(49);
+    expect(owed).toBeLessThanOrEqual(11);
   });
 });
