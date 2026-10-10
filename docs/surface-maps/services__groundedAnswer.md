@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7661 lines · 164 exports · 84 importers · 56 tests · 8 audits**
+**7672 lines · 164 exports · 86 importers · 57 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,6 +30,7 @@
 - `src/hooks/useHintSystem.ts`
 - `src/services/answerBoardQuestion.test.ts`
 - `src/services/attackAssessment.test.ts`
+- `src/services/bestMoveQuietLine.test.ts`
 - `src/services/bluffDetector.ts`
 - `src/services/brilliancy.ts`
 - `src/services/captureThreatAnswerable.test.ts`
@@ -78,6 +79,7 @@
 - `src/services/groundedMoveWhy.ts`
 - `src/services/guidedFindTheMove.ts`
 - `src/services/hardWalk.mates.test.ts`
+- `src/services/inaccuracyCall.ts`
 - `src/services/keySquares.test.ts`
 - `src/services/kidGameCoach.ts`
 - `src/services/kingSafetyAnswer.test.ts`
@@ -288,8 +290,9 @@
 - `src/services/groundedAnswer.teaching.test.ts:57`
 - `src/services/kidGameCoach.ts:286`
 
-### `assembleMoveEvalAnswer` (function) — 22 call sites
+### `assembleMoveEvalAnswer` (function) — 23 call sites
 - `src/coach/questionWalk.sicilian1200.test.ts:78`
+- `src/services/bestMoveQuietLine.test.ts:12`
 - `src/services/coachApi.ts:2499`
 - `src/services/coachApi.ts:6132`
 - `src/services/coachSideAwareness.test.ts:67`
@@ -426,11 +429,12 @@
 ### `quietPurposePhrase` (function) — 1 call site
 - `src/services/deliberation.ts:450`
 
-### `toObserverSeat` (function) — 4 call sites
+### `toObserverSeat` (function) — 5 call sites
 - `src/coach/chatTurnAnswers.ts:632`
 - `src/coach/handWalk1009.test.ts:173`
 - `src/coach/handWalk1009.test.ts:175`
 - `src/services/coachApi.ts:5689`
+- `src/services/inaccuracyCall.ts:885`
 
 ### `describeMoveMerit` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:1192`
@@ -1258,6 +1262,7 @@
 - `src/coach/questionWalk.sicilian1200.test.ts`
 - `src/services/answerBoardQuestion.test.ts`
 - `src/services/attackAssessment.test.ts`
+- `src/services/bestMoveQuietLine.test.ts`
 - `src/services/boardUrgency.test.ts`
 - `src/services/captureThreatAnswerable.test.ts`
 - `src/services/checkIsNotAGuard.test.ts`

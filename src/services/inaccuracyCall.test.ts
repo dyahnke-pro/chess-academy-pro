@@ -11,7 +11,7 @@
 // "inaccuracy" in review.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { betterMoveReason, callInaccuracy, gambitFile } from './inaccuracyCall';
+import { allowedReply, betterMoveReason, callInaccuracy, callInaccuracyDetailed, gambitFile } from './inaccuracyCall';
 import { classifyMove } from './moveRating';
 import { MISTAKE_CP } from './engineConstants';
 
@@ -44,9 +44,10 @@ describe('the severity bands are the review\'s, not this file\'s', () => {
   });
 
   it('treats a walked-into mate as a blunder however small the swing', () => {
-    const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
-      fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: 5,
-      allowedMate: 2, side: 'student', moverColor: 'white',
+    // 1.f3 e5 2.g4?? Qh4# — the mate is the why, and its line the proof.
+    const call = callInaccuracy({ priorMove: null, replyLineUci: ['d8h4'], replySan: null,
+      fenBefore: 'rnbqkbnr/pppp1ppp/8/4p3/8/5P2/PPPPP1PP/RNBQKBNR w KQkq - 0 2', playedSan: 'g4', bestSan: 'Nc3', cpLoss: 5,
+      allowedMate: 1, side: 'student', moverColor: 'white',
     });
     expect(call?.quality).toBe('blunder');
   });
@@ -62,24 +63,31 @@ describe('it names the better move AND what it was for', () => {
     expect(call?.said, 'named the move but never said why').toMatch(/it would .+/);
   });
 
-  it('still grades the move when the line is too short to explain — but names no move', () => {
-    // NAMED WITH ITS REASON, OR NOT NAMED (David 2026-09-24; Learn walk
-    // 2026-09-26 heard "exd5 was a mistake. e5 was the move." with no why).
-    // The grade stands; an unexplained move is an order, not teaching.
-    const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+  it('with nothing to prove it, the grade is not said (David 2026-10-10: every mistake carries its why and proof)', () => {
+    // No reply line, no better-move reason, no punishment: the old code said
+    // "a3 was a mistake — it cost more than a pawn of advantage." — a grade
+    // with a number and no why.
+    const v = callInaccuracyDetailed({ priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: 150,
       side: 'student', moverColor: 'white',
     });
-    expect(call?.said).toMatch(/^a3 was/);
-    expect(call?.said).not.toContain('Bg5');
+    expect(v.call).toBeNull();
+    expect(v.declined).toBe('no-proof');
   });
 
-  it('never a bare grade — with no reason and no punishment it says what the move cost (run B walk, Nf5)', () => {
-    const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+  it('a mistake that wins them nothing says what it ALLOWED, and the reply goes on the board', () => {
+    const call = callInaccuracy({ priorMove: null, replyLineUci: ['d7d5', 'c4b3'], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: 150,
       side: 'student', moverColor: 'white',
     });
-    expect(call?.said).toMatch(/^a3 was a mistake — it cost more than a pawn of advantage\.$/);
+    expect(call?.said).toBe('a3 was a mistake — it let them play …d5, which attacks the bishop on c4.');
+    expect(call?.said, 'named the better move with no reason').not.toContain('Bg5');
+    expect(call?.line?.uci).toEqual(['d7d5', 'c4b3']);
+  });
+
+  it('a capture they are paid back for is a trade, never the why', () => {
+    // 36…Rc8 Rxc8 Rxc8: "it let them play Rxc8, which takes your rook" is false.
+    expect(allowedReply('3r4/2R4p/p1rP2p1/2Pk1p2/NP6/7P/P5P1/6K1 b - - 2 36', 'Rc8', ['c7c8', 'd8c8'], 'black')).toBeNull();
   });
 });
 
@@ -350,11 +358,11 @@ describe('still winning after the move is said first', () => {
     expect(call?.said).not.toMatch(/mistake|blunder|Rxf8/);
   });
   it('the grade stands when the position is no longer clearly won', () => {
-    const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null, ...base, moverEvalAfterCp: 120 });
+    const call = callInaccuracy({ priorMove: null, replyLineUci: ['e7h4'], replySan: null, ...base, moverEvalAfterCp: 120 });
     expect(call?.said).toMatch(/was a (mistake|blunder)/);
   });
   it('unknown eval keeps the grade', () => {
-    expect(callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null, ...base })?.said).toMatch(/was a (mistake|blunder)/);
+    expect(callInaccuracy({ priorMove: null, replyLineUci: ['e7h4'], replySan: null, ...base })?.said).toMatch(/was a (mistake|blunder)/);
   });
 });
 
@@ -507,13 +515,13 @@ describe('a win the defender could dodge is not a reason (Learn walk 2026-10-01,
 describe('the grade and the cost never contradict (Learn walk 2026-10-01, Rc8; unity U2)', () => {
   it('a two-pawn drop graded an inaccuracy is "imprecise", and the two pawns are not said beside it', () => {
     const call = callInaccuracy({ priorMove: null,
-      replyLineUci: [], replySan: null, side: 'student', moverColor: 'black', cpLoss: 210, moverEvalAfterCp: -800,
+      replyLineUci: ['d6d7'], replySan: null, side: 'student', moverColor: 'black', cpLoss: 210, moverEvalAfterCp: -800,
       fenBefore: '3r4/2R4p/p1rP2p1/2Pk1p2/NP6/7P/P5P1/6K1 b - - 2 36', playedSan: 'Rc8', bestSan: 'Rcxd6',
     });
     expect(call?.quality).toBe('inaccuracy');
     // The grade is winning chance (−8: already lost); two pawns is a mistake's
-    // cost, so it is not said beside "imprecise" (`costFitsGrade`).
-    expect(call?.said).toBe('Rc8 was imprecise.');
+    // cost, so it is not said beside "imprecise".
+    expect(call?.said).toBe('Rc8 was imprecise — it let them play d7, which attacks the rook on c8.');
     expect(call?.said).not.toMatch(/loose|a little imprecise|pawn/);
   });
 });

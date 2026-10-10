@@ -98,15 +98,15 @@ describe('F16/F23/F31 — a grade says what the move cost, and whether they took
     expect(said).not.toMatch(/take your knight/);
     expect(said).not.toMatch(/their king/);
   });
-  it('with no reply line the grade names only the cost it can prove — the eval it gave away', async () => {
+  it('with no reply line and no reason the grade is not said — nothing proves it (David 2026-10-10)', async () => {
     const { callInaccuracyDetailed } = await import('./inaccuracyCall');
     const v = callInaccuracyDetailed({ priorMove: null,
       fenBefore: fenAt(29), playedSan: 'Qd7', bestSan: 'Rad8', bestLineUci: [],
       cpLoss: 374, side: 'student', moverColor: 'black', replyLineUci: [], replySan: null,
     });
-    // Never a bare grade (run B walk 2026-09-30); the eval drop is measured,
-    // what they could take is not, so only the first is said.
-    expect(v.call?.said).toBe('Qd7 was a blunder — it cost about a piece of advantage.');
+    // Never a bare grade, and an eval drop alone is a number, not a why.
+    expect(v.call).toBeNull();
+    expect(v.declined).toBe('no-proof');
   });
 });
 

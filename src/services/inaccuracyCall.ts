@@ -29,11 +29,12 @@
 // model what it thinks.
 import { evalBand } from './evalBand';
 import { andList } from '../utils/andList';
-import { bestMoveReason } from './deliberation';
+import { bestMoveReason, moveWhy } from './deliberation';
+import { toObserverSeat } from './groundedAnswer';
 import { Chess, type Square } from 'chess.js';
 import { planFromUci, isCostClause } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
-import { MISTAKE_CP, BLUNDER_CP, costWords, GRADE_WORD, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
+import { MISTAKE_CP, BLUNDER_CP, costWords, GRADE_WORD, type SpokenGradeLabel } from './engineConstants';
 export { costWords };
 import { MATERIAL_VALUE } from './pieceValues';
 import { lineWins, mateLine } from './lineCalc';
@@ -484,7 +485,9 @@ export type InaccuracyDecline =
   | 'under-the-floor'
   | 'no-better-move-supplied'
   | 'played-the-best-move'
-  | 'best-move-illegal-here';
+  | 'best-move-illegal-here'
+  /** A mistake with nothing to prove it: no punishment, no lost mate, no engine reply. */
+  | 'no-proof';
 
 export type InaccuracyVerdict =
   | { call: InaccuracyCall; declined?: undefined }
@@ -786,22 +789,30 @@ export function callInaccuracyDetailed(args: {
   // Guarded by WORTH_SAYING above: only the three spoken grades reach here.
   const label = quality as SpokenGradeLabel;
   const grade = GRADE_WORD[label];
-  const costSaid = costFitsGrade(label, cost);
   // "AND THEY MISSED IT" ONLY WHEN THEIR REPLY DID NOT KEEP THE WIN (walk
   // oct3a, 28.h5: "it let them win a piece for a pawn, and they missed it" —
   // they played …Rxc3, a different move that wins as well). The caller reads
   // that off the engine's own replies to the move (`replyKeptWin`).
   const missed = !!punishment?.first && args.replySan !== null
     && bare(args.replySan) !== bare(punishment.first) && args.replyKeptWin !== true;
+  // EVERY MISTAKE CARRIES ITS WHY AND ITS PROOF (David 2026-10-10: "Any time
+  // a mistake is made it MUST follow with the why/proof"). Nothing won and no
+  // mate lost: what the move ALLOWED is the why — the engine's reply to it,
+  // and what that reply does — and the reply line on the board is the proof.
+  // No engine line at all → nothing proves it, so the grade is not said.
+  const allowed = !punishment && (args.missedMate ?? null) === null
+    ? allowedReply(args.fenBefore, args.playedSan, args.replyLineUci, args.moverColor)
+    : null;
+  // The better move WITH its reason is a why too — its line is the proof.
+  if (!punishment && (args.missedMate ?? null) === null && !allowed && !should) return { call: null, declined: 'no-proof' };
   const head = punishment
     ? `${args.playedSan} was ${grade} — it let them ${punishment.why}${missed ? ', and they missed it' : ''}.`
     : (args.missedMate ?? null) !== null
       // A LOST MATE is the cost when nothing was taken (Damiano walk, 32.Rxc7).
       ? `${args.playedSan} was ${grade} — it let a forced mate slip.`
-      // NEVER A BARE GRADE (run B walk 2026-09-30: "Nf5 was a mistake." and
-      // nothing else). With no punishment and no better-move reason, the one
-      // computed fact left is what it cost.
-      : `${args.playedSan} was ${grade}${should || !costSaid ? '' : ` — it cost ${costWords(cost)}${costWords(cost) === 'a little' ? '' : ' of advantage'}`}.`;
+      : allowed
+        ? `${args.playedSan} was ${grade} — it let them play ${allowed.said}.`
+        : `${args.playedSan} was ${grade}.`;
   // THE PUNISHING LINE, PLAYED OUT (David 2026-09-30: "teach more line
   // calculations"): to where their material lands, with what it wins.
   let lineTail = '';
@@ -827,12 +838,56 @@ export function callInaccuracyDetailed(args: {
     if (ml) { mateSaid = ` ${ml.text}`; line ??= { fen: args.fenBefore, uci: args.bestLineUci.slice(0, ml.plies.length) }; }
   }
   const pattern = should && !mateSaid ? landedTacticFor(args.fenBefore, args.bestSan) : null;
+  if (allowed && !line) line = allowed.line;
+  if (should && !line && args.bestLineUci?.length) line = { fen: args.fenBefore, uci: args.bestLineUci.slice(0, 4) };
   return { call: { quality, side: 'student', cost, said: `${head}${lineTail}${mateSaid || should}`, square: better?.square ?? '', ...(punishment?.lostSquare ? { lostSquare: punishment.lostSquare } : {}), ...(should || mateSaid ? { namesBetter: args.bestSan } : {}), ...(line ? { line } : {}), ...(pattern ? { pattern } : {}) } };
 }
 
-/** What the played move let the OTHER side do: their best line after it, read
- *  by `whyBetter` (the capture it wins, else the plan's leading clause), plus
- *  that line's first move as SAN so the caller can say whether it was played. */
+/**
+ * WHAT THE MOVE ALLOWED — the why of a mistake that wins them nothing (David
+ * 2026-10-10: every mistake follows with its why and proof). The engine's
+ * reply to the played move, with what that reply does (the one why-computer,
+ * read from their seat and said from the student's), and the reply line for
+ * the board. Null when there is no engine line to prove it.
+ */
+export function allowedReply(
+  fenBefore: string, playedSan: string, replyLineUci: readonly string[], moverColor: 'white' | 'black',
+): { said: string; line: { fen: string; uci: string[] } } | null {
+  if (!replyLineUci || replyLineUci.length === 0) return null;
+  try {
+    const c = new Chess(fenBefore);
+    c.move(playedSan);
+    const fenAfter = c.fen();
+    const u = replyLineUci[0];
+    const reply = new Chess(fenAfter).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+    if (!reply) return null;
+    const them: 'w' | 'b' = moverColor === 'white' ? 'b' : 'w';
+    const noun = `${them === 'b' ? '…' : ''}${reply.san}`;
+    // A NAMED MOVE IS NOT A WHY: no clause for what the reply does → no call.
+    const why = moveWhy(fenAfter, reply.san, them, playedSan);
+    if (!why) return null;
+    // A CAPTURE THEY ARE PAID BACK FOR IS A TRADE, not "takes your rook" (probe
+    // 2026-10-10, Rc8: Rxc8 Rxc8). Said only when the mover is behind over
+    // the whole line, the played move's own capture included.
+    if (reply.captured) {
+      const sans: string[] = [playedSan];
+      const r = new Chess(fenAfter);
+      for (const uci of replyLineUci) {
+        let mv;
+        try { mv = r.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }); } catch { break; }
+        if (!mv) break;
+        sans.push(mv.san);
+      }
+      const proof = proofCut(fenBefore, sans, moverColor === 'white' ? 'w' : 'b');
+      if (!proof?.mate && !(proof?.ledger && proof.ledger.netPawns < 0)) return null;
+    }
+    return {
+      said: `${noun}, which ${toObserverSeat(why)}`,
+      line: { fen: fenAfter, uci: replyLineUci.slice(0, Math.min(replyLineUci.length, 4)) },
+    };
+  } catch { return null; }
+}
+
 /** A material cost clause ("win a piece for a pawn") is only what the move LET
  *  THEM do when the mover comes out behind over the WHOLE exchange — the played
  *  move's own capture included (clean-pass review walk 2026-10-04, G1 41.Qxe5+:
@@ -857,6 +912,9 @@ function moverLostOverLine(
   return proof.ledger.netPawns < 0;
 }
 
+/** What the played move let the OTHER side do: their best line after it, read
+ *  by `whyBetter` (the capture it wins, else the plan's leading clause), plus
+ *  that line's first move as SAN so the caller can say whether it was played. */
 export function punishmentOf(
   fenBefore: string, playedSan: string, replyLineUci: readonly string[], moverColor: 'white' | 'black',
 ): { why: string; first: string | null; lostSquare?: string } | null {

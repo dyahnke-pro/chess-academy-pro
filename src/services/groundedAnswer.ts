@@ -1938,6 +1938,17 @@ export function assembleMoveEvalAnswer(opts: {
       parts.push(`${openSentence(proof.short)}.`);
       const w = walkableLine(fen, sans, sans[0]);
       if (w) lines = [w];
+    } else if (opts.pvSan.length >= 3) {
+      // A QUIET MAIN LINE GOES ON THE BOARD, NOT INTO THE VOICE (hard walk
+      // 2026-10-10, Kd3: "calculate the main line" got no line, so "show me"
+      // and "explain that" had nothing). An engine line that proves nothing is
+      // never recited as fact (the proof rule's truth guard); it is still the
+      // line the student asked for, so the board carries it.
+      const w = walkableLine(fen, opts.pvSan, opts.pvSan[0]);
+      if (w) {
+        lines = [w];
+        parts.push("The engine's main line is on the board — play it out.");
+      }
     }
   }
 
