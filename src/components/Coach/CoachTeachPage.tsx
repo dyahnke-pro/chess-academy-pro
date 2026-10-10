@@ -10951,14 +10951,13 @@ export function CoachTeachPage(): JSX.Element {
                         setHeldMoveFen(null);
                         const heldMove = new Chess(fenBefore).move(heldNow.san);
                         const found = !!heldMove && heldMove.from === move.from && heldMove.to === move.to;
-                        if (!heldNow.shown && heldMove) {
+                        // FOUND is praise for their own move. MISSED is not said:
+                        // Learn names no move unasked (David 2026-10-10) — why
+                        // their move fell short is the error call's, and the move
+                        // waits for Show me.
+                        if (!heldNow.shown && heldMove && found) {
                           const foundText = heldVerdictText(heldNow, 'found');
-                          const missedText = heldVerdictText(heldNow, 'missed');
-                          if (found) {
-                            queueSpokenHint(fenAfterReply, foundText, 'heldMove', legalLineProof(fenBefore, [move.san], true) ?? NO_PROOF.description, [move.to], [`found-${move.san}`], fenBefore);
-                          } else if (look?.namesBetter !== heldNow.san) {
-                            queueSpokenHint(fenAfterReply, missedText, 'heldMove', legalLineProof(fenBefore, [heldNow.san]) ?? squaresProof(missedText, [heldMove.to]) ?? NO_PROOF.description, [heldMove.to], [`held-best:${heldNow.san}`], fenBefore, undefined, [{ fen: fenBefore, sans: [heldNow.san] }]);
-                          }
+                          queueSpokenHint(fenAfterReply, foundText, 'heldMove', legalLineProof(fenBefore, [move.san], true) ?? NO_PROOF.description, [move.to], [`found-${move.san}`], fenBefore);
                         }
                         captureEvent('learn_move_held_answered', { surface: 'coach-teach', found, shown: heldNow.shown });
                       }
@@ -10977,14 +10976,17 @@ export function CoachTeachPage(): JSX.Element {
                         const answer = studentBestSan ? new Chess(fenBefore).move(studentBestSan) : null;
                         const found = !!answer && answer.from === move.from && answer.to === move.to;
                         if (answer && !heldRevealedHere) {
-                          const text = slipAnswerText(fenBefore, slip.theirSan, studentBestSan ?? null, found ? 'found' : 'missed', preStudentRead.topLines?.[0]?.moves ?? null);
-                          if (text && (found || look?.namesBetter !== studentBestSan)) {
+                          const text = slipAnswerText(fenBefore, slip.theirSan, studentBestSan ?? null, 'found', preStudentRead.topLines?.[0]?.moves ?? null);
+                          // MISSED is not said: Learn names no move unasked (David
+                          // 2026-10-10). Their slip's why — what it let you do —
+                          // was already said with their move.
+                          if (text && found) {
                             // FOUND, the text IS this move's point — the same claim the
                             // move-point lane makes, so it carries that key and the
                             // ledger says it once (walk oct3b, 15…e5: "e5 prepares
                             // e4 …" twice in one breath).
                             const foundKeys = [`slip-found:${move.san}`, move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`];
-                            queueSpokenHint(fenAfterReply, text, 'slipAnswer', found ? NO_PROOF.description : legalLineProof(fenBefore, [studentBestSan as string]) ?? squaresProof(text, [answer.to]) ?? NO_PROOF.description, [answer.to], found ? foundKeys : [`slip-answer:${studentBestSan}`], fenBefore, undefined, found ? undefined : [{ fen: fenBefore, sans: [studentBestSan as string] }]);
+                            queueSpokenHint(fenAfterReply, text, 'slipAnswer', NO_PROOF.description, [answer.to], foundKeys, fenBefore);
                           }
                         }
                         captureEvent('learn_slip_answered', { surface: 'coach-teach', found });

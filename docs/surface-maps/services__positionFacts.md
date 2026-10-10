@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1849 lines · 15 exports · 27 importers · 24 tests · 3 audits**
+**1853 lines · 15 exports · 27 importers · 24 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,8 +13,8 @@
 - **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:969) — names `positionFacts`
 - **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4009) — names `ClauseKind`, `positionFacts`
 - **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4161) — names `positionFacts`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6162) — names `positionFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6270) — names `positionFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6151) — names `positionFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6259) — names `positionFacts`
 
 ## Who calls in
 
@@ -162,9 +162,9 @@
 - `src/services/positionFacts.test.ts:379`
 - `src/services/positionFacts.test.ts:387`
 - `src/services/positionFacts.test.ts:399`
-- `src/services/positionFacts.test.ts:406`
-- `src/services/positionFacts.test.ts:419`
-- `src/services/positionFacts.test.ts:432`
+- `src/services/positionFacts.test.ts:405`
+- `src/services/positionFacts.test.ts:418`
+- `src/services/positionFacts.test.ts:431`
 - `src/services/positionFacts.test.ts:444`
 - `src/services/positionFacts.test.ts:447`
 - `src/services/positionFacts.test.ts:458`

@@ -395,11 +395,10 @@ describe('the verdict and its plan echo are one fact (hand walk 2340)', () => {
   const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 3 14';
   const hole = [{ clusterId: 'analysis:phase:middlegame', bucket: 'middlegame', label: 'x', openCount: 2, severity: 50, puzzleThemes: [], total: 3 }] as never;
 
-  it('where "The move is O-O — it castles…" speaks, "The plan here: castle…" does not', async () => {
+  it('where the record earns the weighing, "The move is O-O" is held, never said unasked (2026-10-10)', async () => {
     const r = await computePositionFacts({ posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: hole });
-    const kinds = r.clauses.map((c) => c.kind);
-    expect(kinds).toContain('deliberation');
-    expect(kinds).not.toContain('fundamental');
+    expect(r.heldVerdict?.san).toBe('O-O');
+    expect(r.clauses.some((c) => / The move is /.test(` ${c.text}`))).toBe(false);
   });
 
   it('where the verdict is held back, the plan still teaches the idea', async () => {
@@ -423,7 +422,7 @@ describe('at a deciding moment the move is HELD for the student to answer (David
     expect(r.clauses.some((c) => / The move is /.test(` ${c.text}`))).toBe(false);
   });
 
-  it('a move earned by the student\'s RECORD is still named, not held', async () => {
+  it('a move earned by the student\'s RECORD is HELD too — Learn names no move unasked (David 2026-10-10: "Unify")', async () => {
     // The board is move 4 of an Italian (the FEN says 14): by the one
     // opening-end definition it is still the OPENING, so the record that earns
     // the move is the student's opening mistakes.
@@ -431,7 +430,8 @@ describe('at a deciding moment the move is HELD for the student to answer (David
     const quiet = { evaluation: 30, bestMove: 'e1g1', depth: 16, topLines: [line(1, 30, 'e1g1'), line(2, -250, 'f3e5'), line(3, 10, 'd2d3')] } as never;
     const r = await computePositionFacts({ posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis: quiet, teachingBeat: true, studentWeaknesses: hole });
     expect(r.moveAdvice?.reason).toBe('phase-record');
-    expect(r.heldVerdict).toBeNull();
+    expect(r.heldVerdict?.san).toBe('O-O');
+    expect(r.clauses.some((c) => / The move is /.test(` ${c.text}`))).toBe(false);
   });
 });
 

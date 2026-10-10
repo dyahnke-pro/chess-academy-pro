@@ -1083,7 +1083,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // ruled out loud; the move that holds is HELD and handed back to the surface,
   // which reveals it once the student has played. Only the board's own fork in
   // the road holds — a move earned by the student's record is named as before.
-  const heldVerdict: HeldVerdict | null = moveAdvice?.speak && moveAdvice.reason === 'deciding' && deliberation
+  // LEARN NAMES NO MOVE UNASKED (David 2026-10-10: "Unify"): wherever the
+  // moment earns the weighing — the board's fork in the road OR the student's
+  // own record — the bad moves are ruled out loud and the move is HELD. It is
+  // said only when they ask (Show me, Hint, a question).
+  const heldVerdict: HeldVerdict | null = moveAdvice?.speak && deliberation
     ? deliberationVerdict(deliberation)
     : null;
   const heldWeighing = heldVerdict && deliberation ? deliberationWeighing(deliberation) : '';
@@ -1107,7 +1111,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     topLines: input.analysis?.topLines ?? [],
     studentColor: studentSeat === 'white' ? 'w' : 'b',
     // "Why?" names the move anyway; elsewhere a held move stays held.
-    nameMove: !!input.namesBestMove || (!heldVerdict && !!moveAdvice?.speak),
+    nameMove: !!input.namesBestMove,
     ...(input.lastMove ? { lastStudentMove: { fenBefore: input.lastMove.fenBefore, san: input.lastMove.san } } : {}),
     ...(input.opponentLastMove ? { lastOpponentMove: input.opponentLastMove } : {}),
   }).map((d) => ({ kind: d.kind, rank: d.kind === 'not-yet' ? 90 : d.kind === 'tactic' ? 84 : d.kind === 'refuted' || d.kind === 'capture-choice' ? 80 : d.kind === 'king-read' ? 76 : d.kind === 'their-read' ? 75 : d.kind === 'stop-flaw' ? 70 : d.kind === 'line' || d.kind === 'kick' || d.kind === 'plan-race' ? 60 : d.kind === 'timing' ? 55 : d.kind === 'hole-access' ? 50 : d.kind === 'speedrun-read' ? 45 : d.kind === 'prevent-test' ? 44 : d.kind === 'attack-pattern' ? 42 : 40, text: d.text, ...(d.proof ? { proof: d.proof } : {}), ...(d.motif ? { motif: d.motif } : {}), ...(d.squares ? { squares: d.squares } : {}), ...(d.lines ? { lines: d.lines } : {}), ...(d.stakes ? { stakes: d.stakes } : {}), ...(d.claim ? { claim: d.claim } : {}), ...(d.promise ? { promise: d.promise } : {}) }));
@@ -1124,7 +1128,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       lines: input.analysis.topLines,
       studentMove: lm ? { fenBefore: lm.fenBefore, san: lm.san, costCp: lmCost, bestSan: lmBest, history: lm.historySans } : null,
       opponentMove: input.opponentLastMove ?? null,
-      nameMove: !!input.namesBestMove || (!heldVerdict && !!moveAdvice?.speak),
+      nameMove: !!input.namesBestMove,
     })) {
       if (said?.has(x.claim)) continue;
       ideaClauses.push({ kind: x.kind, rank: x.kind === 'nugget' ? 30 : 55, text: x.text, squares: x.squares, proof: x.proof, claim: x.claim, ...(x.stakes ? { stakes: x.stakes } : {}) });

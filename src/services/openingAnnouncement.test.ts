@@ -42,9 +42,9 @@ describe('openingAnnouncement — name it once, then once more where theory ends
   it('a name that is not a refinement of the spoken one stays quiet in book (a transposition)', () => {
     expect(openingAnnouncement({ name: 'French Defense' }, null, 'Sicilian Defense', 'w')).toBeNull();
   });
-  it('says WHO left the book and the usual move there', () => {
+  it('says WHO left the book — never the book move, which waits for the ask (2026-10-10)', () => {
     expect(openingAnnouncement({ name: 'Philidor Defense' }, dep(8, 'Be7', 'b', 'Nf6'), 'King\'s Pawn Game', 'w'))
-      .toBe('They left the book with the bishop to e7; the usual move there was the knight to f6. The line was the Philidor Defense.');
+      .toBe('They left the book with the bishop to e7. The line was the Philidor Defense.');
     expect(openingAnnouncement({ name: 'Philidor Defense' }, dep(7, 'Bd3', 'w', 'Nxd4'), 'King\'s Pawn Game', 'w'))
       .toMatch(/^You left the book with/);
   });

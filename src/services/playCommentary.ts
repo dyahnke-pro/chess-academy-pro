@@ -1018,7 +1018,7 @@ export function slipAnswerText(
   fenAfterSlip: string,
   theirSan: string,
   answerSan: string | null,
-  when: 'found' | 'missed' | 'review' | 'now',
+  when: 'found' | 'review' | 'now',
   /** The engine's line from `fenAfterSlip` starting with the answer, UCI, or
    *  null — what the answer wins is read off it (WO-OUTCOME-01). */
   answerLineUci: readonly string[] | null,
@@ -1033,6 +1033,5 @@ export function slipAnswerText(
   const rest = sanLed ? body.slice(answerSan.length + 1) : continueSentence(body);
   if (when === 'found') return sanLed ? `You found it: ${answerSan} ${rest}.` : `You found it: ${rest}.`;
   if (when === 'now') return sanLed ? `Your answer is ${answerSan}, which ${rest}.` : `Your answer is ${answerSan}: ${rest}.`;
-  if (when === 'missed') return sanLed ? `${answerSan} was the answer to their slip, which ${rest}.` : `${answerSan} was the answer to their slip: ${rest}.`;
   return sanLed ? `your answer was ${answerSan}, which ${rest}` : `your answer was ${answerSan}: ${rest}`;
 }

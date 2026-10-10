@@ -624,10 +624,9 @@ export function threatMadeWhy(fenBefore: string, san: string, mover: 'w' | 'b'):
  * moving; `found` — they played it; `missed` — they played something else and
  * nothing before this named the move. The reason always rides with the move.
  */
-export function heldVerdictText(v: HeldVerdict, when: 'now' | 'found' | 'missed'): string {
+export function heldVerdictText(v: HeldVerdict, when: 'now' | 'found'): string {
   const line = v.line ? ` ${openSentence(v.line)}.` : '';
   if (when === 'found') return `That was the move here — it ${v.why}.`;
-  if (when === 'missed') return `The move here was ${v.san} — it ${v.why}.${line}`;
   return `The move is ${v.san} — it ${v.why}.${line}`;
 }
 

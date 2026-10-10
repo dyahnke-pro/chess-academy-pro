@@ -94,9 +94,9 @@ export function openingAnnouncement(
     return `It's the ${tail} of the ${spokenFamily}.`;
   }
   const who = departure.mover === studentColor ? 'You' : 'They';
-  const main = departure.mainSan
-    ? `; the usual move there was ${sayMoveNoun(departure.mainSan, departure.fen)}`
-    : '';
+  // LEARN NAMES NO MOVE UNASKED (David 2026-10-10: "I do not want the better
+  // move stated in learn free play unless the user asks for it" → "Unify").
+  // The departure is the signal; the book move waits for the question.
   // THE LINE IS THE ONE ALREADY NAMED unless the move-order name sharpens it
   // (Learn walk 2026-10-01: "transposed into the King's Indian Defense" and
   // then, at the departure, "The line was the English Opening: Anglo-Indian
@@ -106,7 +106,7 @@ export function openingAnnouncement(
   const spokenIsVariation = spokenName.includes(':');
   const line = det.name.startsWith(spokenName) || !spokenIsVariation ? det.name : spokenName;
   const lineTail = line === spokenName ? '' : ` The line was the ${spoken(line)}.`;
-  return `${who} left the book with ${sayMoveNoun(departure.san, departure.fen)}${main}.${lineTail}`;
+  return `${who} left the book with ${sayMoveNoun(departure.san, departure.fen)}.${lineTail}`;
 }
 
 /** The same announcement read straight off the game's move history — the

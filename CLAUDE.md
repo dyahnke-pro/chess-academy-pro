@@ -5270,40 +5270,29 @@ should never have had. Gate: `learnSilentCapture.test.ts`.
 PLAY staying a pure playing surface. What changed is only the delivery:
 commentary, not cards.
 
-### 🔒🔒 LEARN NAMES THE MOVE — WITH ITS REASON (David 2026-09-24: "Rules can change. That was an old rule when we asked questions. We don't do that anymore.").
+### 🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify").
 
-🔴 **The "honesty contract — never hand over the answer" is DELETED for Learn**
-(it stood in the line above; removed, not annotated, per the Lake Butler rule).
-It belonged to the why-did-you-play-that card: a probe that must not leak its
-own answer. The card is gone, so on Learn's live commentary a session that
-withholds the move is enforcing a dead rule — and the 1380 hand walk did exactly
-that, stripping the hedge, the compare and "The move is X" as "leaks". What
-replaces it, stress-tested against the failure it risks (Learn turning into
-copy-the-coach):
-1. **The move is said WITH its reason, never as a bare verdict.** "The move is
-   Rxf3." alone is an order; "The move is Rxf3 — it takes the half-open f-file"
-   teaches. No computed reason → the verdict is not said
-   (`deliberation.bestWhy`, `deliberationFacts`).
-2. **Rule the bad moves OUT first, then name the good one.** The weighing
-   ("gxf3? Then Bxc3 and it falls apart") IS his thinking out loud — the part
-   worth hearing. The but-turn, the hedge and the compare all speak.
-3. **One fact once per move.** Two computers stating the same claim back to
-   back ("two good moves here…" + "two moves keep you level") is a defect: the
-   hedge carries no COUNT stem because the critical-moment read owns the count.
-Withholding stays only where a surface is literally a QUESTION the student is
-answering (a drill, a find-the-move, a gem before it is played).
-4. **The move is named WHERE IT IS EARNED, never every ply (David 2026-09-24:
-   "I don't want to hear the best move on every ply … key moments where the
-   user generally makes mistakes").** `nextMoveAdvice` decides for every lane
-   that names the student's next move (the weighing + "the move is X", the
-   but-turn, the hedge, the compare, "your strongest reply"): a DECIDING moment
-   (importance tier critical / only-move / swing / blunder / mate), or THIS
-   student's own open record — mistakes in this phase (`classifyPhase`, the
-   same classifier the spine files them under) or a hole these facts hit (the
-   need join, pre-matched). Never the rating: "beginners err in the opening" is
-   true of a population; the RECORD says it about this person. Emitted on the
-   `coach-decision` row as `moveAdvice`; asserted by `audit-concept-gameplay-prod`
-   row G-MA (the held-back case must appear over a real game).
+🔴 **This REPLACES the 2026-09-24 "LEARN NAMES THE MOVE — WITH ITS REASON"
+section, which is DELETED rather than annotated (the Lake Butler rule).** On
+Learn free play no producer names the student's move — the better move after
+a mistake, the held move at a key moment, the book move at a departure, the
+answer to their slip — unless the student ASKED (Show me, Hint, a question).
+What still speaks:
+1. **The why of every mistake** — yours and theirs at the same detail (David
+   2026-10-10), from the ONE error computer `errorWhy`: what the move allowed,
+   with the line on the board. `namesBetterMove` is REQUIRED at every call;
+   Learn, tactics and My Mistakes pass `false`. No why and no fitting cost →
+   the grade is held, never said bare.
+2. **The weighing** — the bad moves ruled out loud. The move itself is HELD
+   wherever `nextMoveAdvice` earns the weighing (the board's fork in the road
+   OR the student's own record), and said on Show me. A held move the student
+   FOUND is credited; a missed one is not named.
+3. **Their slip**: what it lets you do is said with their move; "you found it"
+   after; never the answer after a miss.
+
+**Review names the better move** (the game is over); **chat names it** (you
+asked). Gates: `learnNamesNoMoveUnasked.gate.test.ts`,
+`oneErrorComputer.gate.test.ts`.
 
 **KEPT in Learn** because none of them stop the board: in-place drills, live
 gem detection (names the opportunity, withholds the square), fork-in-the-road
