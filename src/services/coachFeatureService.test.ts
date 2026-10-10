@@ -46,7 +46,10 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
     // pawn, undefended. best = Ke2 (e1e2), a quiet move (no capture/check).
     // GROUNDED punishment: Black's cheapest attacker (the a6 pawn) takes it.
     const r = explainBestMoveGrounded('4k3/8/p7/8/8/8/8/4KB2 w - - 0 1', 'Bb5', 'e1e2', 'white', null, null);
-    expect(r).toBe('Your move let them play axb5, winning the bishop.');
+    // The board is an ending (king and bishop against king and pawn), so the
+    // best move carries its endgame reason in front — the one opening-end
+    // definition no longer calls a five-piece board "the opening" at move 1.
+    expect(r).toBe('It marches your king toward the center, where it fights in the endgame, while your move let them play axb5, winning the bishop.');
   });
 
   it('reports check when the punishing capture lands with check', () => {

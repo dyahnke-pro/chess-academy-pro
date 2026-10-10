@@ -69,7 +69,7 @@ describe('review — the four facts are facets, so they go through the door', ()
       classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
     });
     expect(at({ ...NO_TEACHING_CONTEXT, phaseTurn: 'middlegame' }).find((x) => x.startsWith('[stock]')))
-      .toMatch(/^\[stock\] .*middlegame.*: you're clearly better — you're up a piece/);
+      .toMatch(/^\[stock\] .*middlegame.*: you're winning — you're up a piece/); // +3.0 is winning on the one ladder
     expect(at(NO_TEACHING_CONTEXT).some((x) => x.startsWith('[stock]'))).toBe(false);
   });
 
@@ -134,7 +134,7 @@ describe('live — the same four facts are clauses of the composer', () => {
     const FEN = 'rnbqk2r/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 8';
     const up = { ...flat, evaluation: 300 };
     const turn = await computePositionFacts({ posture: 'interrupt', fen: FEN, moverColor: 'w', studentColor: 'w', analysis: up, phaseTurn: 'middlegame' });
-    expect(turn.clauses.find((c) => c.kind === 'stock')?.text).toMatch(/middlegame.*: you're clearly better — you're up a piece/);
+    expect(turn.clauses.find((c) => c.kind === 'stock')?.text).toMatch(/middlegame.*: you're winning — you're up a piece/);
     const not = await computePositionFacts({ posture: 'interrupt', fen: FEN, moverColor: 'w', studentColor: 'w', analysis: up });
     expect(not.clauses.some((c) => c.kind === 'stock')).toBe(false);
   });

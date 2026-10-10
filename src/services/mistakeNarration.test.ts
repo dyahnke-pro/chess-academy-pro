@@ -129,7 +129,7 @@ describe('generateMistakeNarration', () => {
       opponentName: 'Bot',
       evalBefore: 2.0,
     }));
-    expect(result.intro).toMatch(/strong advantage/i);
+    expect(result.intro).toMatch(/You were clearly better/); // +1.8–2.0 on the one ladder (evalBand)
   });
 
   it('indicates equal position when evalBefore is near zero', () => {
@@ -261,7 +261,7 @@ describe('narration voice rules', () => {
     const result = generateMistakeNarration(buildParams({
       opponentName: null, gameDate: null, openingName: null, evalBefore: 1.8,
     }));
-    expect(result.intro).toMatch(/strong advantage/i);
+    expect(result.intro).toMatch(/You were clearly better/); // +1.8–2.0 on the one ladder (evalBand)
   });
 
   it('does not leak the solution square before the attempt', () => {

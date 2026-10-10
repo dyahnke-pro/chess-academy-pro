@@ -20,7 +20,7 @@
 //                    same position disagree by a band: unexplored ground.
 //
 // Pure: chess.js only. No numbers in the spoken text (bands in words).
-import { evalBand } from './evalBand';
+import { evalBand, evalBandWords } from './evalBand';
 import { Chess, type Move, type Square } from 'chess.js';
 import { asIfToMove, signedLegalSeeFor } from './positionReadingService';
 import { matesInOne } from './opponentMoveReads';
@@ -283,13 +283,13 @@ export function exploreInvite(plies: readonly GamePly[], index: number, student:
 
 // ── HONEST MURKINESS ────────────────────────────────────────────────────────
 
-/** The band WITH its side, from the one ladder (evalBand, census 2026-10-10)
- *  — this file kept its own 80/250 thresholds. Two reads in different bands
- *  make the position unclear. */
+/** The band from the one ladder (evalBand, census 2026-10-10) — this file
+ *  kept its own 80/250 thresholds — said from the student's seat. Two reads
+ *  in different bands make the position unclear. */
 type Band = string;
 function band(cp: number): Band {
   const b = evalBand(cp);
-  return b === 'level' ? 'level' : `${b}${cp > 0 ? '+' : '-'}`;
+  return b === 'level' ? 'about level' : `${evalBandWords(b, cp > 0 ? 'better' : 'worse')} for you`;
 }
 
 /**

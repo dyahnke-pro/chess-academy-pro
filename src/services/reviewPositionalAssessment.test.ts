@@ -5,10 +5,11 @@ describe('assessPositionalEdge (David 2026-07-20 — the enumerated positional v
   it('gives a verdict word from the student-POV eval', () => {
     const start = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
     expect(assessPositionalEdge(start, 'w', 250).verdict).toBe('clearly better');
-    expect(assessPositionalEdge(start, 'w', 80).verdict).toBe('a bit better');
+    // The one ladder (evalBand, census 2026-10-10): 0.5 / 1.5 / 3.0.
+    expect(assessPositionalEdge(start, 'w', 80).verdict).toBe('slightly better');
     expect(assessPositionalEdge(start, 'w', 0).verdict).toBe('balanced');
-    expect(assessPositionalEdge(start, 'w', -80).verdict).toBe('a bit worse');
-    expect(assessPositionalEdge(start, 'w', -250).verdict).toBe('in trouble');
+    expect(assessPositionalEdge(start, 'w', -80).verdict).toBe('slightly worse');
+    expect(assessPositionalEdge(start, 'w', -250).verdict).toBe('clearly worse');
     expect(assessPositionalEdge(start, 'w', null).verdict).toBeNull();
   });
 
@@ -57,7 +58,7 @@ describe('the reasons explain the verdict — D-16 (WO-STANDARD-01, prod tape 20
 
   it("a negative verdict lists the OPPONENT's assets, from the student's seat", () => {
     const a = assessPositionalEdge(PAIR, 'b', -250);
-    expect(a.verdict).toBe('in trouble');
+    expect(a.verdict).toBe('clearly worse');
     expect(a.reasons.some((r) => /they have the bishop pair/.test(r))).toBe(true);
     for (const r of a.reasons) expect(r).not.toMatch(/^you /);
   });
@@ -74,7 +75,7 @@ describe('the reasons explain the verdict — D-16 (WO-STANDARD-01, prod tape 20
     // two pieces further developed". Negative control: at +300 it still does.
     const DEV = 'r1bqkbnr/pppppppp/8/8/8/2N2N2/PPPPPPPP/R1BQKB1R w KQkq - 0 1';
     const worse = assessPositionalEdge(DEV, 'w', -300);
-    expect(worse.verdict).toBe('in trouble');
+    expect(worse.verdict).toBe('losing');
     expect(worse.reasons.some((r) => /you're .* further developed/.test(r))).toBe(false);
     const better = assessPositionalEdge(DEV, 'w', 300);
     expect(better.reasons.some((r) => /you're two pieces further developed/.test(r))).toBe(true);

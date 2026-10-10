@@ -164,12 +164,12 @@
 - `src/services/positionFacts.test.ts:399`
 - `src/services/positionFacts.test.ts:406`
 - `src/services/positionFacts.test.ts:419`
-- `src/services/positionFacts.test.ts:429`
-- `src/services/positionFacts.test.ts:441`
+- `src/services/positionFacts.test.ts:432`
 - `src/services/positionFacts.test.ts:444`
-- `src/services/positionFacts.test.ts:455`
-- `src/services/positionFacts.test.ts:459`
-- `src/services/positionFacts.test.ts:463`
+- `src/services/positionFacts.test.ts:447`
+- `src/services/positionFacts.test.ts:458`
+- `src/services/positionFacts.test.ts:462`
+- `src/services/positionFacts.test.ts:466`
 - `src/services/positionFacts.weakness.test.ts:22`
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`

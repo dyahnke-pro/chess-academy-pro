@@ -14,14 +14,14 @@ describe('phaseVerdictLine', () => {
 
   it('speaks the band and the reasons, never the number', () => {
     const t = phaseVerdictLine(FEN, 'w', 300, 'middlegame', new Set())!;
-    expect(t).toMatch(/middlegame.*: you're clearly better — you're up a piece/);
+    expect(t).toMatch(/middlegame.*: you're winning — you're up a piece/); // The one eval ladder (evalBand, census 2026-10-10: 0.5 / 1.5 / 3.0).
     expect(phaseVerdictLine(FEN, 'w', 300, 'middlegame', new Set())).toBe(t); // same board, same words
     expect(t).not.toMatch(/\d{2,}|centipawn|points? of eval/);
   });
 
   it('from the other seat the reasons are the opponent\'s assets', () => {
     const t = phaseVerdictLine(FEN, 'b', -300, 'middlegame', new Set())!;
-    expect(t).toMatch(/you're in trouble — they're up a piece/);
+    expect(t).toMatch(/you're losing — they're up a piece/);
   });
 
   it('NEGATIVE CONTROL: a level start with nothing to name stays silent', () => {

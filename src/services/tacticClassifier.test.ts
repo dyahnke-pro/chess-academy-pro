@@ -152,11 +152,14 @@ describe('classifyPosition — pin detection', () => {
 
 describe('classifyPosition — skewer detection', () => {
   it('detects a rook skewer on queen with bishop behind', () => {
-    // White rook on a1, black queen on a5, black bishop on a8, white king on h2
-    const fen = 'b3k3/8/8/q7/8/8/7K/R7 w - - 0 1';
-    const fenAfter = playMove(fen, 'Ra4');
-    const result = classifyPosition(fen, fenAfter, 'Ra4', 0, -200);
-    // Rook on a4 attacks queen a5 (value 9), bishop a8 behind (value 3) — skewer
+    // White rook b1 → a1, defended by the king on b2; black queen a5, bishop a8.
+    // (The old position had Ra4 next to the queen with nothing guarding it —
+    // …Qxa4 just takes the rook, a trade offer, not a skewer: the one skewer
+    // rule, census 2026-10-10.)
+    const fen = 'b3k3/8/8/q7/8/8/1K6/1R6 w - - 0 1';
+    const fenAfter = playMove(fen, 'Ra1');
+    const result = classifyPosition(fen, fenAfter, 'Ra1', 0, -200);
+    // Rook on a1 attacks queen a5 (value 9), bishop a8 behind (value 3) — skewer
     expect(hasTactic(result, 'skewer')).toBe(true);
     const skewerTactic = result.tactics.find((t) => t.type === 'skewer');
     expect(skewerTactic?.description).toContain('skewer');

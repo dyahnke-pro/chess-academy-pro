@@ -31,8 +31,10 @@ describe('classifyPhase', () => {
     expect(classifyPhase(fullStartFen, { ply: 20 })).toBe('opening'); // full move 10
   });
 
-  it('classifies moves after opening with full material as middlegame', () => {
-    expect(classifyPhase(fullStartFen, { ply: 21 })).toBe('middlegame'); // full move 11
+  it('the opening ends by the one definition, not a move-10 cutoff (openingEnd)', () => {
+    // Nothing developed at move 11: none of the seven rules has fired yet.
+    expect(classifyPhase(fullStartFen, { ply: 21 })).toBe('opening');
+    // Move 15 — the safety net (rule 4).
     expect(classifyPhase(fullStartFen, { ply: 30 })).toBe('middlegame');
   });
 
@@ -41,10 +43,9 @@ describe('classifyPhase', () => {
     expect(classifyPhase(endgameFen, { ply: 60 })).toBe('endgame');
   });
 
-  it('opening takes priority over endgame-level material in early moves', () => {
-    // Even if material is low, early moves are opening
+  it('a queenless board is an ending whatever the move number (rule 3 already ended the opening)', () => {
     const lowMaterialFen = 'r3k3/8/8/8/8/8/8/R3K3 w - - 0 1';
-    expect(classifyPhase(lowMaterialFen, { ply: 1 })).toBe('opening');
+    expect(classifyPhase(lowMaterialFen, { ply: 1 })).toBe('endgame');
   });
 
   it('a FULL move number is read as one (M5: move 17 is not move 9)', () => {

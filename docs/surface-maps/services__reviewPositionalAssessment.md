@@ -31,15 +31,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `verdictBand` (function) — 3 call sites
 - `src/services/coachFeatureService.ts:1157`
-- `src/services/exchangeLedger.test.ts:98`
-- `src/services/exchangeLedger.test.ts:100`
+- `src/services/exchangeLedger.test.ts:99`
+- `src/services/exchangeLedger.test.ts:101`
 
 ### `assessPositionalEdge` (function) — 28 call sites
 - `src/services/coachFeatureService.ts:3185`
-- `src/services/exchangeLedger.test.ts:67`
 - `src/services/exchangeLedger.test.ts:68`
-- `src/services/exchangeLedger.test.ts:75`
-- `src/services/exchangeLedger.test.ts:98`
+- `src/services/exchangeLedger.test.ts:69`
+- `src/services/exchangeLedger.test.ts:76`
+- `src/services/exchangeLedger.test.ts:99`
 - `src/services/materialSites.test.ts:75`
 - `src/services/phaseVerdict.test.ts:10`
 - `src/services/planPrescriptions.test.ts:84`
@@ -47,19 +47,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewFullData.ts:851`
 - `src/services/reviewPositionalAssessment.test.ts:4`
 - `src/services/reviewPositionalAssessment.test.ts:7`
-- `src/services/reviewPositionalAssessment.test.ts:8`
 - `src/services/reviewPositionalAssessment.test.ts:9`
 - `src/services/reviewPositionalAssessment.test.ts:10`
 - `src/services/reviewPositionalAssessment.test.ts:11`
 - `src/services/reviewPositionalAssessment.test.ts:12`
-- `src/services/reviewPositionalAssessment.test.ts:18`
-- `src/services/reviewPositionalAssessment.test.ts:28`
-- `src/services/reviewPositionalAssessment.test.ts:38`
-- `src/services/reviewPositionalAssessment.test.ts:45`
-- `src/services/reviewPositionalAssessment.test.ts:59`
-- `src/services/reviewPositionalAssessment.test.ts:66`
-- `src/services/reviewPositionalAssessment.test.ts:76`
-- `src/services/reviewPositionalAssessment.test.ts:79`
+- `src/services/reviewPositionalAssessment.test.ts:13`
+- `src/services/reviewPositionalAssessment.test.ts:19`
+- `src/services/reviewPositionalAssessment.test.ts:29`
+- `src/services/reviewPositionalAssessment.test.ts:39`
+- `src/services/reviewPositionalAssessment.test.ts:46`
+- `src/services/reviewPositionalAssessment.test.ts:60`
+- `src/services/reviewPositionalAssessment.test.ts:67`
+- `src/services/reviewPositionalAssessment.test.ts:77`
+- `src/services/reviewPositionalAssessment.test.ts:80`
 - `src/services/standingRefrains.test.ts:80`
 - `src/services/standingRefrains.test.ts:110`
 - `src/services/walkOct2a.test.ts:88`
@@ -80,8 +80,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:28`
 - `src/services/positionFacts.ts:976`
 - `src/services/reviewFullData.ts:1381`
-- `src/services/reviewPositionalAssessment.test.ts:87`
-- `src/services/reviewPositionalAssessment.test.ts:92`
+- `src/services/reviewPositionalAssessment.test.ts:88`
+- `src/services/reviewPositionalAssessment.test.ts:93`
 
 ### `phaseVerdictKeys` (function) — 3 call sites
 - `src/services/learnWalkNimzo.test.ts:22`

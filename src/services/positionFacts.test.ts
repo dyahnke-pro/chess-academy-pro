@@ -424,7 +424,10 @@ describe('at a deciding moment the move is HELD for the student to answer (David
   });
 
   it('a move earned by the student\'s RECORD is still named, not held', async () => {
-    const hole = [{ clusterId: 'analysis:phase:middlegame', bucket: 'middlegame', label: 'x', openCount: 2, severity: 50, puzzleThemes: [], total: 3 }] as never;
+    // The board is move 4 of an Italian (the FEN says 14): by the one
+    // opening-end definition it is still the OPENING, so the record that earns
+    // the move is the student's opening mistakes.
+    const hole = [{ clusterId: 'analysis:phase:opening', bucket: 'opening', label: 'x', openCount: 2, severity: 50, puzzleThemes: [], total: 3 }] as never;
     const quiet = { evaluation: 30, bestMove: 'e1g1', depth: 16, topLines: [line(1, 30, 'e1g1'), line(2, -250, 'f3e5'), line(3, 10, 'd2d3')] } as never;
     const r = await computePositionFacts({ posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis: quiet, teachingBeat: true, studentWeaknesses: hole });
     expect(r.moveAdvice?.reason).toBe('phase-record');

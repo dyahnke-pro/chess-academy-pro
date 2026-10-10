@@ -66,20 +66,20 @@
 - `src/services/tacticClassifier.test.ts:123`
 - `src/services/tacticClassifier.test.ts:135`
 - `src/services/tacticClassifier.test.ts:145`
-- `src/services/tacticClassifier.test.ts:158`
-- `src/services/tacticClassifier.test.ts:175`
-- `src/services/tacticClassifier.test.ts:195`
-- `src/services/tacticClassifier.test.ts:211`
-- `src/services/tacticClassifier.test.ts:221`
-- `src/services/tacticClassifier.test.ts:235`
-- `src/services/tacticClassifier.test.ts:250`
-- `src/services/tacticClassifier.test.ts:262`
-- `src/services/tacticClassifier.test.ts:276`
-- `src/services/tacticClassifier.test.ts:282`
-- `src/services/tacticClassifier.test.ts:300`
-- `src/services/tacticClassifier.test.ts:315`
-- `src/services/tacticClassifier.test.ts:324`
-- `src/services/tacticClassifier.test.ts:335`
+- `src/services/tacticClassifier.test.ts:161`
+- `src/services/tacticClassifier.test.ts:178`
+- `src/services/tacticClassifier.test.ts:198`
+- `src/services/tacticClassifier.test.ts:214`
+- `src/services/tacticClassifier.test.ts:224`
+- `src/services/tacticClassifier.test.ts:238`
+- `src/services/tacticClassifier.test.ts:253`
+- `src/services/tacticClassifier.test.ts:265`
+- `src/services/tacticClassifier.test.ts:279`
+- `src/services/tacticClassifier.test.ts:285`
+- `src/services/tacticClassifier.test.ts:303`
+- `src/services/tacticClassifier.test.ts:318`
+- `src/services/tacticClassifier.test.ts:327`
+- `src/services/tacticClassifier.test.ts:338`
 
 ### `scanUpcomingTactics` (function) — 5 call sites
 - `src/components/Coach/CoachGamePage.tsx:2859`

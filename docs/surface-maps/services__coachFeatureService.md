@@ -85,12 +85,12 @@
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
 - `src/components/Coach/CoachGamePage.tsx:2074`
-- `src/services/coachFeatureService.test.ts:200`
-- `src/services/coachFeatureService.test.ts:215`
-- `src/services/coachFeatureService.test.ts:238`
-- `src/services/coachFeatureService.test.ts:257`
-- `src/services/coachFeatureService.test.ts:277`
-- `src/services/coachFeatureService.test.ts:289`
+- `src/services/coachFeatureService.test.ts:203`
+- `src/services/coachFeatureService.test.ts:218`
+- `src/services/coachFeatureService.test.ts:241`
+- `src/services/coachFeatureService.test.ts:260`
+- `src/services/coachFeatureService.test.ts:280`
+- `src/services/coachFeatureService.test.ts:292`
 - `src/services/gameAnalysisService.ts:2309`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
@@ -104,15 +104,15 @@
 - `src/services/recapSeat.test.ts:17`
 
 ### `recapSecondPerson` (function) — 9 call sites
-- `src/services/coachFeatureService.test.ts:876`
-- `src/services/coachFeatureService.test.ts:884`
-- `src/services/coachFeatureService.test.ts:885`
+- `src/services/coachFeatureService.test.ts:879`
+- `src/services/coachFeatureService.test.ts:887`
 - `src/services/coachFeatureService.test.ts:888`
-- `src/services/coachFeatureService.test.ts:898`
-- `src/services/coachFeatureService.test.ts:899`
-- `src/services/coachFeatureService.test.ts:900`
-- `src/services/coachFeatureService.test.ts:905`
-- `src/services/coachFeatureService.test.ts:906`
+- `src/services/coachFeatureService.test.ts:891`
+- `src/services/coachFeatureService.test.ts:901`
+- `src/services/coachFeatureService.test.ts:902`
+- `src/services/coachFeatureService.test.ts:903`
+- `src/services/coachFeatureService.test.ts:908`
+- `src/services/coachFeatureService.test.ts:909`
 
 ### `ReviewNarrationSegments` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -124,9 +124,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildProfileContext` (function) — 3 call sites
-- `src/services/coachFeatureService.test.ts:297`
-- `src/services/coachFeatureService.test.ts:309`
-- `src/services/coachFeatureService.test.ts:315`
+- `src/services/coachFeatureService.test.ts:300`
+- `src/services/coachFeatureService.test.ts:312`
+- `src/services/coachFeatureService.test.ts:318`
 
 ### `segmentNamedArrows` (function) — 3 call sites
 - `src/components/Coach/CoachGameReview.tsx:3389`
@@ -147,11 +147,11 @@
 
 ### `buildReviewCitations` (function) — 8 call sites
 - `src/components/Coach/CoachGameReview.tsx:599`
-- `src/services/coachFeatureService.test.ts:744`
-- `src/services/coachFeatureService.test.ts:752`
-- `src/services/coachFeatureService.test.ts:784`
-- `src/services/coachFeatureService.test.ts:793`
-- `src/services/coachFeatureService.test.ts:805`
+- `src/services/coachFeatureService.test.ts:747`
+- `src/services/coachFeatureService.test.ts:755`
+- `src/services/coachFeatureService.test.ts:787`
+- `src/services/coachFeatureService.test.ts:796`
+- `src/services/coachFeatureService.test.ts:808`
 - `src/services/whyItFailed.test.ts:256`
 - `src/services/whyItFailed.test.ts:294`
 
@@ -187,28 +187,28 @@
 - `src/services/coachFeatureService.recurrence.test.ts:61`
 - `src/services/coachFeatureService.recurrence.test.ts:67`
 - `src/services/coachFeatureService.recurrence.test.ts:68`
-- `src/services/coachFeatureService.test.ts:326`
-- `src/services/coachFeatureService.test.ts:342`
-- `src/services/coachFeatureService.test.ts:366`
-- `src/services/coachFeatureService.test.ts:388`
-- `src/services/coachFeatureService.test.ts:389`
-- `src/services/coachFeatureService.test.ts:396`
-- `src/services/coachFeatureService.test.ts:410`
-- `src/services/coachFeatureService.test.ts:433`
-- `src/services/coachFeatureService.test.ts:457`
-- `src/services/coachFeatureService.test.ts:478`
-- `src/services/coachFeatureService.test.ts:507`
-- `src/services/coachFeatureService.test.ts:530`
-- `src/services/coachFeatureService.test.ts:555`
-- `src/services/coachFeatureService.test.ts:566`
-- `src/services/coachFeatureService.test.ts:581`
-- `src/services/coachFeatureService.test.ts:599`
-- `src/services/coachFeatureService.test.ts:608`
-- `src/services/coachFeatureService.test.ts:654`
-- `src/services/coachFeatureService.test.ts:688`
-- `src/services/coachFeatureService.test.ts:719`
-- `src/services/coachFeatureService.test.ts:854`
-- `src/services/coachFeatureService.test.ts:914`
+- `src/services/coachFeatureService.test.ts:329`
+- `src/services/coachFeatureService.test.ts:345`
+- `src/services/coachFeatureService.test.ts:369`
+- `src/services/coachFeatureService.test.ts:391`
+- `src/services/coachFeatureService.test.ts:392`
+- `src/services/coachFeatureService.test.ts:399`
+- `src/services/coachFeatureService.test.ts:413`
+- `src/services/coachFeatureService.test.ts:436`
+- `src/services/coachFeatureService.test.ts:460`
+- `src/services/coachFeatureService.test.ts:481`
+- `src/services/coachFeatureService.test.ts:510`
+- `src/services/coachFeatureService.test.ts:533`
+- `src/services/coachFeatureService.test.ts:558`
+- `src/services/coachFeatureService.test.ts:569`
+- `src/services/coachFeatureService.test.ts:584`
+- `src/services/coachFeatureService.test.ts:602`
+- `src/services/coachFeatureService.test.ts:611`
+- `src/services/coachFeatureService.test.ts:657`
+- `src/services/coachFeatureService.test.ts:691`
+- `src/services/coachFeatureService.test.ts:722`
+- `src/services/coachFeatureService.test.ts:857`
+- `src/services/coachFeatureService.test.ts:917`
 - `src/services/coachFeatureService.trade.test.ts:18`
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
@@ -249,29 +249,29 @@
 
 ### `frameOpeningForStudent` (function) — 9 call sites
 - `src/components/Coach/CoachGameReview.tsx:4451`
-- `src/services/coachFeatureService.test.ts:814`
 - `src/services/coachFeatureService.test.ts:817`
-- `src/services/coachFeatureService.test.ts:824`
-- `src/services/coachFeatureService.test.ts:825`
-- `src/services/coachFeatureService.test.ts:826`
-- `src/services/coachFeatureService.test.ts:831`
-- `src/services/coachFeatureService.test.ts:832`
+- `src/services/coachFeatureService.test.ts:820`
+- `src/services/coachFeatureService.test.ts:827`
+- `src/services/coachFeatureService.test.ts:828`
+- `src/services/coachFeatureService.test.ts:829`
 - `src/services/coachFeatureService.test.ts:834`
+- `src/services/coachFeatureService.test.ts:835`
+- `src/services/coachFeatureService.test.ts:837`
 
 ### `narrationBoardAccurate` (function) — 13 call sites
-- `src/services/coachFeatureService.test.ts:621`
-- `src/services/coachFeatureService.test.ts:623`
-- `src/services/coachFeatureService.test.ts:625`
-- `src/services/coachFeatureService.test.ts:636`
-- `src/services/coachFeatureService.test.ts:637`
-- `src/services/coachFeatureService.test.ts:638`
+- `src/services/coachFeatureService.test.ts:624`
+- `src/services/coachFeatureService.test.ts:626`
+- `src/services/coachFeatureService.test.ts:628`
 - `src/services/coachFeatureService.test.ts:639`
 - `src/services/coachFeatureService.test.ts:640`
 - `src/services/coachFeatureService.test.ts:641`
+- `src/services/coachFeatureService.test.ts:642`
 - `src/services/coachFeatureService.test.ts:643`
-- `src/services/coachFeatureService.test.ts:645`
+- `src/services/coachFeatureService.test.ts:644`
 - `src/services/coachFeatureService.test.ts:646`
-- `src/services/coachFeatureService.test.ts:647`
+- `src/services/coachFeatureService.test.ts:648`
+- `src/services/coachFeatureService.test.ts:649`
+- `src/services/coachFeatureService.test.ts:650`
 
 ### `narrationSeatFaithful` (function) — 6 call sites
 - `src/services/reviewNarrationFidelity.test.ts:11`
@@ -305,8 +305,8 @@
 ### `pendingRecapture` (function) — 10 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8065`
 - `src/components/Coach/CoachTeachPage.tsx:8154`
-- `src/services/coachFeatureService.test.ts:929`
-- `src/services/coachFeatureService.test.ts:930`
+- `src/services/coachFeatureService.test.ts:932`
+- `src/services/coachFeatureService.test.ts:933`
 - `src/utils/justCaptured.test.ts:20`
 - `src/utils/justCaptured.test.ts:22`
 - `src/utils/justCaptured.test.ts:25`
@@ -364,11 +364,11 @@
 ### `detectBadHabits` (re-export) — 7 call sites
 - `src/services/badHabitDetector.ts:21`
 - `src/services/coachApi.ts:5282`
-- `src/services/coachFeatureService.test.ts:126`
-- `src/services/coachFeatureService.test.ts:147`
-- `src/services/coachFeatureService.test.ts:166`
-- `src/services/coachFeatureService.test.ts:176`
-- `src/services/coachFeatureService.test.ts:185`
+- `src/services/coachFeatureService.test.ts:129`
+- `src/services/coachFeatureService.test.ts:150`
+- `src/services/coachFeatureService.test.ts:169`
+- `src/services/coachFeatureService.test.ts:179`
+- `src/services/coachFeatureService.test.ts:188`
 
 ## Tests
 

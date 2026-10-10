@@ -25,8 +25,8 @@ describe('assembleEngineReasoning — decipher Stockfish\'s line', () => {
     expect(ans!.facts).toMatch(/engine plays exd5/i);
     // The walk frames the follow-up by the opponent's reply.
     expect(ans!.facts).toMatch(/If Qxd5, then Nc3/i);
-    // Ends with the eval verdict (student POV, slightly better).
-    expect(ans!.facts).toMatch(/slightly better/i);
+    // Ends with the eval verdict: +0.4 is level on the one ladder (evalBand).
+    expect(ans!.facts).toMatch(/roughly balanced/i);
     // The arrow anchors on the real from/to of the engine move.
     expect(ans!.bestMoveFromTo).toEqual({ from: 'e4', to: 'd5' });
     expect(ans!.bestMoveSan).toBe('exd5');

@@ -36,25 +36,25 @@ describe('summarizeVerdict', () => {
     // +2.8 eval but the board shows even material: never "up a piece".
     const v = summarizeVerdict(280, null, mat('4k3/8/8/8/8/8/8/4K3 w - - 0 1', 0));
     expect(v.kind).toBe('winning');
-    expect(v.text).toBe('a decisive advantage');
+    expect(v.text).toBe('clearly better'); // +2.8 is clearly on the one ladder (evalBand)
     expect(v.text).not.toMatch(/piece|pawn|exchange|rook|queen/);
   });
   it('claims material ONLY when the board backs the count', () => {
-    expect(summarizeVerdict(280, null, mat('4k3/8/8/8/8/8/8/3NK3 w - - 0 1', 3)).text).toBe('a decisive edge — up a piece');
-    expect(summarizeVerdict(280, null, mat('3bk3/8/8/8/8/8/8/R3K3 w - - 0 1', 2)).text).toBe('a decisive edge — up the exchange');
+    expect(summarizeVerdict(280, null, mat('4k3/8/8/8/8/8/8/3NK3 w - - 0 1', 3)).text).toBe('clearly better — up a piece');
+    expect(summarizeVerdict(280, null, mat('3bk3/8/8/8/8/8/8/R3K3 w - - 0 1', 2)).text).toBe('clearly better — up the exchange');
     expect(summarizeVerdict(180, null, mat('4k3/8/8/8/8/8/P7/4K3 w - - 0 1', 1)).text).toBe('clearly better — up a pawn');
     expect(summarizeVerdict(600, null, mat('4k3/8/8/8/8/8/8/R3K3 w - - 0 1', 5)).text).toBe('a winning material advantage');
   });
   it('names a piece from the BOARD, never from the point count', () => {
     // The exchange and a pawn is 3 points — not "a piece".
-    expect(summarizeVerdict(280, null, mat('3bk3/8/8/8/8/8/P7/R3K3 w - - 0 1', 3)).text).toBe('a decisive edge — up the exchange and a pawn');
+    expect(summarizeVerdict(280, null, mat('3bk3/8/8/8/8/8/P7/R3K3 w - - 0 1', 3)).text).toBe('clearly better — up the exchange and a pawn');
     // Two knights for a pawn is 5 points — not "a rook".
-    expect(summarizeVerdict(400, null, mat('4k3/7p/8/8/8/8/8/1N1NK3 w - - 0 1', 5)).text).toBe('a decisive edge — up 5 points');
+    expect(summarizeVerdict(400, null, mat('4k3/7p/8/8/8/8/8/1N1NK3 w - - 0 1', 5)).text).toBe('a winning material advantage'); // +4.0 is winning and the board backs 5 points
   });
   it('a bare eval (no line/material) never invents material', () => {
     // The eval-only path (e.g. lineOutcomeClause) frames by magnitude only.
     expect(summarizeVerdict(600, null).text).toBe('a winning advantage');
-    expect(summarizeVerdict(280, null).text).toBe('a decisive advantage');
+    expect(summarizeVerdict(280, null).text).toBe('clearly better');
     expect(summarizeVerdict(180, null).text).toBe('clearly better');
   });
 });
@@ -292,7 +292,7 @@ describe('voiceRejectsBestMove (recommendation guard)', () => {
 describe('lineOutcomeClause (review outcome)', () => {
   it('names a decisive terminus by MAGNITUDE (no material claim from a bare eval — G3)', () => {
     // Eval-only: it cannot see the board, so it must not invent "up a piece".
-    expect(lineOutcomeClause(-445, 'black')).toContain('decisive advantage');
+    expect(lineOutcomeClause(-445, 'black')).toContain('winning advantage');
     expect(lineOutcomeClause(-445, 'black')).not.toContain('piece');
     expect(lineOutcomeClause(500, 'white')).toContain('winning advantage');
     expect(lineOutcomeClause(500, 'white')).not.toContain('material advantage');
