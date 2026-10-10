@@ -68,48 +68,10 @@ function getAttackedSquares(chess: Chess, square: Square): Square[] {
  * Check if a square is defended by any piece of the given color.
  */
 function isDefended(chess: Chess, square: Square, byColor: Color): boolean {
-  try {
-    // Force it to be byColor's turn so we can check their attacks
-    const fenParts = chess.fen().split(' ');
-    fenParts[1] = byColor;
-    fenParts[3] = '-';
-    const testChess = new Chess(fenParts.join(' '));
-
-    // Check pawn defense by directly examining diagonal attack squares,
-    // since chess.js moves() only returns pawn captures when an enemy piece
-    // occupies the target — missing defense of empty/friendly-occupied squares.
-    const targetFile = square.charCodeAt(0) - 97;
-    const targetRank = parseInt(square[1], 10) - 1;
-    const pawnRankOffset = byColor === 'w' ? -1 : 1;
-    const pawnSourceRank = targetRank + pawnRankOffset;
-    for (const df of [-1, 1]) {
-      const pawnSourceFile = targetFile + df;
-      const pawnSq = coordsToSquare(pawnSourceFile, pawnSourceRank);
-      if (pawnSq) {
-        const boardRow = 7 - pawnSourceRank;
-        const piece = testChess.board()[boardRow][pawnSourceFile];
-        if (piece && piece.color === byColor && piece.type === 'p') {
-          return true;
-        }
-      }
-    }
-
-    const board = testChess.board();
-    for (let r = 0; r < 8; r++) {
-      for (let c = 0; c < 8; c++) {
-        const piece = board[r][c];
-        if (piece && piece.color === byColor && piece.type !== 'p') {
-          const sq = coordsToSquare(c, 7 - r);
-          if (!sq) continue;
-          const moves = testChess.moves({ square: sq, verbose: true });
-          if (moves.some((m) => m.to === square)) return true;
-        }
-      }
-    }
-  } catch {
-    // Fall back to false
-  }
-  return false;
+  // chess.js answers this for either side regardless of the turn, pawns
+  // included (census 2026-10-10: this rebuilt it on a flipped, possibly
+  // impossible board).
+  try { return chess.attackers(square, byColor).length > 0; } catch { return false; }
 }
 
 /**
@@ -249,21 +211,6 @@ function detectDiscoveredAttack(chess: Chess, from: Square, to: Square, movingCo
   return discoveryRevealed(chess, from, to, movingColor) !== null;
 }
 
-/**
- * Check if a square is defended using chess.js isAttacked (geometry-based,
- * works for friendly-occupied squares unlike moves()-based checks).
- */
-function isSquareDefended(chess: Chess, square: Square, byColor: Color): boolean {
-  try {
-    const fenParts = chess.fen().split(' ');
-    fenParts[1] = oppositeColor(byColor);
-    fenParts[3] = '-';
-    const testChess = new Chess(fenParts.join(' '));
-    return testChess.isAttacked(square, byColor);
-  } catch {
-    return false;
-  }
-}
 
 /**
  * Detect removing the guard: capturing a piece that was defending another valuable piece.
@@ -291,10 +238,10 @@ function detectRemovingTheGuard(
         if (pieceValue(piece.type) < 3) continue;
 
         // Was this piece defended before, and is it undefended after the capture?
-        const defendedBefore = isSquareDefended(chessBeforeMove, sq, enemyColor);
+        const defendedBefore = isDefended(chessBeforeMove, sq, enemyColor);
         if (!defendedBefore) continue;
 
-        const defendedAfter = isSquareDefended(chessAfterMove, sq, enemyColor);
+        const defendedAfter = isDefended(chessAfterMove, sq, enemyColor);
         if (!defendedAfter) {
           return true;
         }

@@ -200,6 +200,18 @@ describe('dispatchCoachTurn — the shadow read', () => {
   });
 });
 
+describe('dispatchCoachTurn — "explain that" with nothing said yet', () => {
+  beforeEach(() => { ask.mockReset(); resetConversations(); routeChatIntent.mockResolvedValue(null); });
+  it('asks back instead of falling into another lane (prod walk 2026-10-10)', async () => {
+    setServeParsedRoute(true);
+    setChatTurnReaderForTests(async () => ({ kind: 'explain-last', referents: [], seat: null, english: 'explain that' }));
+    const ans = await dispatchCoachTurn(TURN('explain that'), {});
+    setServeParsedRoute(false);
+    expect(ask).not.toHaveBeenCalled();
+    expect(ans.servedIntent).toBe('explain-last:none');
+  });
+});
+
 describe('dispatchCoachTurn — a direct kind is answered by its computed sentence', () => {
   beforeEach(() => {
     routeChatIntent.mockReset();

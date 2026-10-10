@@ -89,7 +89,7 @@ let readerOverride: Reader | undefined;
 export function setChatTurnReaderForTests(reader: Reader | undefined): void { readerOverride = reader; }
 
 /** Test helper — forget every surface's conversation. */
-export function resetConversations(): void { conversations.clear(); lastLines.clear(); }
+export function resetConversations(): void { conversations.clear(); lastLines.clear(); lastSaid.clear(); }
 
 /** The last line the coach proved on each surface — what "show me" / "play it
  *  out" plays. Held where every answer leaves the door, so no surface has to
@@ -101,9 +101,16 @@ export function lastLineFor(surface: CoachSurface): WalkableLine | null {
   return lastLines.get(surface) ?? null;
 }
 
-function rememberLine(surface: CoachSurface, answer: Pick<CoachAnswer, 'lines'>): void {
+/** What the coach last SAID on each surface — what "explain that" explains.
+ *  Held at the door for the same reason as the lines: a surface that never
+ *  passes `lastCoachLine` (the explain screen, prod walk 2026-10-10) still has
+ *  a last answer, and "explain that" fell to the concept lane without it. */
+const lastSaid = new Map<CoachSurface, string>();
+
+function rememberLine(surface: CoachSurface, answer: Pick<CoachAnswer, 'lines' | 'text'>): void {
   const line = answer.lines?.[0];
   if (line) lastLines.set(surface, line);
+  if (typeof answer.text === 'string' && answer.text.trim()) lastSaid.set(surface, answer.text);
 }
 
 /** What "show me" answers: the line, or why there is none. */
@@ -471,9 +478,13 @@ export async function dispatchCoachTurn(
       // A proof the answer carries (a capture that wins the attacker) comes
       // back as a line the board walks while the words say it.
       const proofOut: { lines?: WalkableLine[] } = {};
-      const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask, input.liveState.moveHistory ?? [], input.liveState.lastCoachLine ?? null, proofOut, lastLineFor(input.liveState.surface));
+      const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask, input.liveState.moveHistory ?? [], input.liveState.lastCoachLine ?? lastSaid.get(input.liveState.surface) ?? null, proofOut, lastLineFor(input.liveState.surface));
       if (text) {
         return serve(text, turn.kind, 'answered', proofOut.lines?.length ? { lines: proofOut.lines } : {});
+      }
+      // Nothing said yet to explain: say so, never another lane's answer.
+      if (turn.kind === 'explain-last') {
+        return serve('Ask about a move first — then "explain that" walks through it.', 'explain-last:none', 'asked-back');
       }
     }
     // THE BOARD ANSWERS THE DECODED QUESTION — never re-worded into a lane

@@ -288,15 +288,25 @@ function findMateThreats(chess: Chess): TacticPattern[] {
   const out: TacticPattern[] = [];
   const turn = chess.turn();
   for (const color of ['w', 'b'] as Color[]) {
-    const probe = withTurn(chess, color);
-    if (!probe || probe.isCheck()) continue; // in-check positions: not a quiet threat
-    const mate = probe.moves({ verbose: true }).find((m) => m.san.includes('#'));
+    let mate: ReturnType<Chess['moves']>[number] | undefined;
+    if (color === turn) {
+      // The side to move's own mate-in-1 is genuinely available now.
+      if (chess.isCheck()) continue; // in check: not a quiet threat
+      mate = chess.moves({ verbose: true }).find((m) => m.san.includes('#'));
+    } else {
+      // For the side NOT to move, a mate-in-1 is a real threat only if the
+      // side to move cannot prevent it — every reply still allows a mate
+      // (2026-09-12 deep-dive #C3, G3). Read off the replies themselves, never
+      // a passed turn: a side in check cannot pass, and the old flip built an
+      // impossible board exactly when the threat came WITH check (census
+      // 2026-10-10: Qa8+ Rc8 Qxc8#).
+      if (!mateThreatIsUnstoppable(chess)) continue;
+      const reply = chess.moves({ verbose: true })[0];
+      const after = new Chess(chess.fen());
+      try { after.move(reply); } catch { continue; }
+      mate = after.moves({ verbose: true }).find((m) => m.san.includes('#'));
+    }
     if (!mate) continue;
-    // For the side NOT to move, a mate-in-1 is only a real threat if the side to
-    // move cannot prevent it — otherwise "White has a checkmate available" is a
-    // false alarm the defender simply parries (2026-09-12 deep-dive #C3, G3).
-    // The side to move's own mate-in-1 is genuinely available now.
-    if (color !== turn && !mateThreatIsUnstoppable(chess)) continue;
     out.push({
       type: 'mate_threat',
       beneficiary: color,

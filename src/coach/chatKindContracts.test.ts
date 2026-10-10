@@ -101,6 +101,8 @@ interface Contract {
   /** Turns asked first on the same board, so a kind that only exists inside
    *  a conversation ("yes", "explain that", "I don't know") has one. */
   before?: Array<{ ask: string; reading: Contract['reading'] }>;
+  /** The surface never passes `lastCoachLine` back (the explain screen). */
+  surfaceForgets?: boolean;
 }
 /** A kind with no contract yet says why — visibly, never silently. */
 interface Owed { owed: string }
@@ -287,7 +289,7 @@ const CONTRACTS: Record<ChatKind, Contract | Owed> = {
     must: [/^.{1,40}$/], mustNot: [/not clear/i] },
   unclear: { board: 'mate4', ask: 'blorp the zibble', reading: { kind: 'unclear' },
     must: [/another way|what you mean/i], mustNot: [/Nh6/] },
-  'explain-last': { board: 'mate4', ask: 'explain that', reading: { kind: 'explain-last' },
+  'explain-last': { board: 'mate4', ask: 'explain that', reading: { kind: 'explain-last' }, surfaceForgets: true,
     before: [{ ask: "what's the best move here?", reading: { kind: 'best-move' } }],
     // Each move at the position it is played from: the checks force the king,
     // and the first move keeps the reason it was given (the mate).
@@ -406,7 +408,7 @@ describe('every question kind answers its contract', () => {
       setChatTurnReaderForTests(async () => ({ referents: [], seat: null, topic: null, ...turn.reading }) as never);
       const prior = await dispatchCoachTurn({ surface: 'standalone-chat', ask: turn.ask, origin: 'typed', liveState } as never, { maxToolRoundTrips: 1, lastAssistantMessage });
       lastAssistantMessage = prior.text;
-      liveState = { ...liveState, lastCoachLine: prior.text };
+      if (!c.surfaceForgets) liveState = { ...liveState, lastCoachLine: prior.text };
     }
     setChatTurnReaderForTests(async () => ({ referents: [], seat: null, topic: null, ...c.reading }) as never);
     const a = await dispatchCoachTurn({
