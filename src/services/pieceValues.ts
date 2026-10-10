@@ -52,3 +52,15 @@ export function materialBalance(fen: string): number {
   }
   return bal;
 }
+
+/** One side's non-king material in pawns (MATERIAL semantics). Five private
+ *  `material(chess, color)` sums were folded here (census 2026-10-10). */
+export function sideMaterial(fen: string, color: 'w' | 'b'): number {
+  let n = 0;
+  for (const ch of fen.split(' ')[0] ?? '') {
+    const v = MATERIAL_VALUE[ch.toLowerCase()];
+    if (!v) continue;
+    if ((ch === ch.toUpperCase()) === (color === 'w')) n += v;
+  }
+  return n;
+}

@@ -8,7 +8,7 @@
 // engine's own line for that move, handed in (a multi-PV line), never
 // invented. An engine line is said short (proof.ts) and drawn in full.
 import { Chess, type Square } from 'chess.js';
-import { MATERIAL_VALUE } from './pieceValues';
+import { MATERIAL_VALUE, sideMaterial } from './pieceValues';
 import { lineProofFromUci, type Proof } from './proof';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { countWords } from '../utils/countWords';
@@ -40,7 +40,7 @@ function seatCp(fen: string, l: Line): number {
 }
 
 function material(c: Chess, side: 'w' | 'b'): number {
-  return c.board().flat().reduce((s, x) => s + (x && x.color === side ? MATERIAL_VALUE[x.type] : 0), 0);
+  return sideMaterial(c.fen(), side);
 }
 
 /** The stock pattern a move looks like, read off the board. */

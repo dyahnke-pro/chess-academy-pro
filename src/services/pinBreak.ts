@@ -18,7 +18,7 @@
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { withProof, type Proof, type ProofSize } from './proof';
-import { CAPTURE_VALUE } from './pieceValues';
+import { CAPTURE_VALUE, sideMaterial } from './pieceValues';
 
 export type PinBreakHow = 'check' | 'threat' | 'discovery';
 
@@ -45,9 +45,7 @@ export interface PinBreak {
 const VALUE = CAPTURE_VALUE as Readonly<Record<PieceSymbol, number>>;
 
 function material(chess: Chess, color: Color): number {
-  let sum = 0;
-  for (const row of chess.board()) for (const c of row) if (c && c.color === color && c.type !== 'k') sum += VALUE[c.type];
-  return sum;
+  return sideMaterial(chess.fen(), color);
 }
 
 /** Pinned side's material minus the holder's. */

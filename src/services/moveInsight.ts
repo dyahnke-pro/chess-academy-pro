@@ -23,7 +23,7 @@ import { openSentence } from '../utils/openSentence';
 import { Chess, type Move, type Square } from 'chess.js';
 import { walkableLine } from './proof';
 import type { WalkableLine } from '../types';
-import { CAPTURE_VALUE } from './pieceValues';
+import { CAPTURE_VALUE, sideMaterial } from './pieceValues';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { computeMustDefend } from './threatOut';
 import { countKingAttack } from './kingSafety';
@@ -943,9 +943,7 @@ export function emptyThreat(fenBefore: string, san: string, replySan: string | u
 
 /** Material for `c` in pawns (king excluded). */
 function material(board: Chess, c: 'w' | 'b'): number {
-  let n = 0;
-  for (const row of board.board()) for (const cell of row) if (cell && cell.color === c && cell.type !== 'k') n += CAPTURE_VALUE[cell.type] ?? 0;
-  return n;
+  return sideMaterial(board.fen(), c);
 }
 
 /**

@@ -21,7 +21,7 @@ import type { TacticType } from '../types';
 import { sayMoveClause, sayMoveNoun } from './spokenMove';
 import { legalSeeGainFor } from './positionReadingService';
 import { isPinnedPiece } from './nextPlans';
-import { MATERIAL_VALUE } from './pieceValues';
+import { MATERIAL_VALUE, sideMaterial } from './pieceValues';
 import { legalLineProof, lineProofFromUci, squaresProof, type Proof } from './proof';
 import type { FactStakes } from './factStakes';
 import { andList } from '../utils/andList';
@@ -104,7 +104,7 @@ function rayFirst(c: Chess, from: string, d: Vec): { at: Square; piece: { type: 
   return null;
 }
 function material(c: Chess, color: Color): number {
-  return pieces(c).reduce((n, p) => n + (p.color === color && p.type !== 'k' ? VAL(p.type) : 0), 0);
+  return sideMaterial(c.fen(), color);
 }
 const balance = (c: Chess, me: Color): number => material(c, me) - material(c, other(me));
 

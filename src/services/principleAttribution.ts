@@ -25,6 +25,7 @@
  * principleVoice.ts; persisted PVs (annotation.pv) come from the review's
  * deep dive.
  */
+import { sideMaterial } from './pieceValues';
 import { sideToMoveAs } from './threatOut';
 import { lineWithReasons } from './lineReasons';
 import { Chess, type Color, type Square, type Move, type PieceSymbol } from 'chess.js';
@@ -207,7 +208,7 @@ function kingOnHome(chess: Chess, color: Color): boolean {
   return kingSquare(chess, color) === (color === 'w' ? 'e1' : 'e8');
 }
 function material(chess: Chess, color: Color): number {
-  return pieces(chess, color).reduce((s, p) => s + (VAL[p.type] ?? 0), 0);
+  return sideMaterial(chess.fen(), color);
 }
 function queensOff(chess: Chess): boolean { return pieces(chess, 'w', 'q').length === 0 && pieces(chess, 'b', 'q').length === 0; }
 function isEndgame(chess: Chess): boolean {
