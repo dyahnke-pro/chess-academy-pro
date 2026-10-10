@@ -24,6 +24,15 @@ import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { STOCK } from './audit-lib/chat-replay-cases.mjs';
+import { Chess } from 'chess.js';
+
+/** The mates the side NOT to move could play if it were their move — the
+ *  null-move read, so a threat or king-safety answer can be held to it. */
+function mateThreats(fen) {
+  const parts = fen.split(' ');
+  parts[1] = parts[1] === 'w' ? 'b' : 'w'; parts[3] = '-';
+  try { const c = new Chess(parts.join(' ')); if (c.inCheck()) return []; return c.moves().filter((m) => m.endsWith('#')); } catch { return []; }
+}
 
 const PORT = Number(process.env.HAND_PORT ?? 7792);
 const only = (process.argv.find((a) => a.startsWith('--only=')) ?? '').slice(7).split(',').filter(Boolean);
@@ -87,17 +96,24 @@ function questionsFor(p) {
     check: (a) => mateN
       ? (new RegExp(`mate in (?:${mateN}|${NUM[mateN]})\\b|(?:${mateN}|${NUM[mateN]})[- ]move mate`, 'i').test(a) ? null : `engine: mate in ${mateN} (${p.best.line.join(' ')})`)
       : (/\b(?:forced )?mate in \d|is a forced mate|there is a mate/i.test(a) && !/no (?:forced )?mate|not a (?:forced )?mate|isn't a (?:forced )?mate/i.test(a) ? 'claims a mate the engine does not see' : null) });
+  // THE ANSWER TO THE QUESTION ASKED must be in the reply (2026-10-10: this
+  // audit passed a best-move answer with its mate count eaten, and a
+  // best-defence question answered with the alternatives list).
+  const threats = mateThreats(p.fen);
+  const namesThreat = (a) => !threats.length || threats.some((t) => sanRe(t).test(a)) ? null : `misses their mate threat ${threats.join(' / ')}`;
   qs.push({ id: 'best', ask: 'What is the best move? Calculate the main line for me.',
-    check: (a) => sanRe(p.best.san).test(a) ? null : `engine best ${p.best.san} not named (line ${p.best.line.join(' ')})` });
-  qs.push({ id: 'threat', ask: `What did their last move ${p.lastMove} threaten, two moves deep?`, check: () => null });
+    check: (a) => !sanRe(p.best.san).test(a) ? `engine best ${p.best.san} not named (line ${p.best.line.join(' ')})`
+      : mateN && !new RegExp(`mate in ${mateN} moves`).test(a) ? `mate in ${mateN} not counted` : null });
+  qs.push({ id: 'threat', ask: `What did their last move ${p.lastMove} threaten, two moves deep?`,
+    check: (a, r) => r?.servedIntent === 'alternatives' ? 'answered with the alternatives list' : namesThreat(a) });
   if (p.wrong) {
     qs.push({ id: 'wrong', ask: `What if I play ${p.wrong.san} instead?`,
       check: (a) => (sanRe(p.wrong.refutation[0]).test(a) || /mate|loses|drops|bad|blunder|worse/i.test(a)) ? null : `engine refutes with ${p.wrong.refutation.join(' ')}` });
   }
   qs.push({ id: 'show', ask: 'show me', check: (a, r) => (/Playing the line out/.test(a) || r?.servedIntent === 'request:show-line') ? null : 'did not play the line' });
   qs.push({ id: 'why', ask: `Why does ${p.best.san} work — what's their best defence?`,
-    check: (a) => (p.best.line[1] && sanRe(p.best.line[1]).test(a)) || /defen[cs]e|reply|answer/i.test(a) ? null : `engine defence ${p.best.line[1]} not named` });
-  qs.push({ id: 'king', ask: `Is my king safe here? What are they threatening against it?`, check: () => null });
+    check: (a) => !p.best.line[1] || sanRe(p.best.line[1]).test(a) ? null : `engine defence ${p.best.line[1]} not named` });
+  qs.push({ id: 'king', ask: `Is my king safe here? What are they threatening against it?`, check: (a) => namesThreat(a) });
   return qs;
 }
 
@@ -133,9 +149,9 @@ if (want('positions')) {
 
 const TACTIC_QS = [
   { id: 'why', ask: 'Why does this work? Walk me through the calculation.' },
-  { id: 'defence', ask: "What if they don't take — what's their best defence?" },
+  { id: 'defence', ask: "What if they don't take — what's their best defence?", check: (a, r) => r?.servedIntent === 'alternatives' || !/best defence is/i.test(a) ? 'did not name their best defence' : null },
   { id: 'mate', ask: 'Is there a forced mate anywhere in this line?' },
-  { id: 'faster', ask: 'Is there a faster or cleaner win?' },
+  { id: 'faster', ask: 'Is there a faster or cleaner win?', check: (a, r) => r?.servedIntent === 'alternatives' || !/fastest|cleanest|only move that keeps|no clear win|nothing is faster/i.test(a) ? 'did not compare the wins' : null },
   { id: 'show', ask: 'show me', check: (a, r) => (/Playing the line out/.test(a) || r?.servedIntent === 'request:show-line') ? null : 'did not play the line' },
 ];
 async function tacticsScreen(name, route, start, reveal, box) {
