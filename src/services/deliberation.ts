@@ -287,7 +287,8 @@ export function buildDeliberation(input: {
   const namedWhy = namedCandidate && namedCandidate.san !== bestSan ? moveWhy(fenBefore, namedCandidate.san, moverColor, input.opponentLastSan) : null;
   const bestReply = (() => {
     if (!bestLine.moves[1]) return null;
-    try { const c = new Chess(fenBefore); c.move({ from: bestLine.moves[0].slice(0, 2), to: bestLine.moves[0].slice(2, 4), promotion: bestLine.moves[0][4] }); return uciToSan(c.fen(), bestLine.moves[1]); } catch { return null; }
+    // Written as the reply is said: Black's move carries its ellipsis.
+    try { const c = new Chess(fenBefore); c.move({ from: bestLine.moves[0].slice(0, 2), to: bestLine.moves[0].slice(2, 4), promotion: bestLine.moves[0][4] }); const r = uciToSan(c.fen(), bestLine.moves[1]); return r ? `${moverColor === 'w' ? '…' : ''}${r}` : null; } catch { return null; }
   })();
   return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy, bestLine: bestLineText, bestLineSans: bestLineText ? playedSans : null, bestReply, ...(namedCandidate ? { named: namedCandidate, namedWhy } : {}) };
 }
@@ -672,6 +673,15 @@ export function namedMoveAnswer(d: Deliberation, ask: 'why-best' | 'is-it-good')
   const bestReason = d.bestWhy ? ` — it ${d.bestWhy}` : '';
   if (n.san === d.best.san) {
     const others = deliberationWeighing(d);
+    // THE DEFENCE, NAMED (hard walk 2026-10-10: "why does Ng5 work — what's
+    // their best defence?" got the line with the defence buried in it). When
+    // the move's own line proves, their best reply is said as the defence and
+    // the rest of the line as what it cannot stop.
+    const sans = d.bestLineSans ?? [];
+    if (d.bestLine && d.bestReply && sans.length >= 3) {
+      const tail = d.bestLine.replace(/^.*? — /, '');
+      return `${n.san} is the best move here${bestReason}. Their best defence is ${d.bestReply}, and then ${andList(sans.slice(2))} — ${tail}.${others ? ` ${others}` : ''}`;
+    }
     // No countable proof: the engine's reply is still the answer to "what's
     // their best defence?" (hard walk 2026-10-10, a pawn ending — Kd3 with
     // nothing said about …Kd6).
@@ -736,8 +746,14 @@ export function spokenLines(d: Deliberation, fenBefore: string, text: string): W
   };
   add(d.bestLine, d.bestLineSans);
   // The engine's reply, when that is what was said ("Their best reply is Kd6").
+  // The proof said with its defence named ("Their best defence is …Be8, and
+  // then …") is the same line.
+  if (d.bestReply && d.bestLineSans?.length && text.includes(`Their best defence is ${d.bestReply}, and then`)) {
+    const w = walkableLine(fenBefore, d.bestLineSans, d.best.san);
+    if (w && !out.some((o) => o.plies.map((p) => p.san).join(' ') === w.plies.map((p) => p.san).join(' '))) out.push(w);
+  }
   if (d.bestReply && text.includes(`Their best reply is ${d.bestReply}`)) {
-    const w = walkableLine(fenBefore, [d.best.san, d.bestReply], d.best.san);
+    const w = walkableLine(fenBefore, [d.best.san, d.bestReply.replace(/^…/, '')], d.best.san);
     if (w && !out.some((o) => o.plies.map((p) => p.san).join(' ') === w.plies.map((p) => p.san).join(' '))) out.push(w);
   }
   for (const c of [d.named, ...d.alternatives]) if (c) add(c.proof, c.proofSans);
