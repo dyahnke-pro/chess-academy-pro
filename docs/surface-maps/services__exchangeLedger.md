@@ -165,14 +165,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `moverLossProof` (function) — 6 call sites
 - `src/services/criticalMoment.ts:239`
-- `src/services/deliberation.ts:224`
-- `src/services/deliberation.ts:250`
+- `src/services/deliberation.ts:228`
+- `src/services/deliberation.ts:255`
 - `src/services/exchangeLedger.horizon.test.ts:16`
 - `src/services/exchangeLedger.horizon.test.ts:21`
 - `src/services/hardWalk.mates.test.ts:42`
 
 ### `moverLineProof` (function) — 5 call sites
-- `src/services/deliberation.ts:273`
+- `src/services/deliberation.ts:278`
 - `src/services/exchangeLedger.horizon.test.ts:30`
 - `src/services/exchangeLedger.horizon.test.ts:36`
 - `src/services/groundedAnswer.ts:1939`

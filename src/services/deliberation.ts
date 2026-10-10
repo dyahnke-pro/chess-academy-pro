@@ -89,6 +89,9 @@ export interface Candidate {
   /** The moves `proof` names, from the position before the candidate — so a
    *  surface that says the proof can also play it on the board. */
   proofSans?: readonly string[];
+  /** The moves from the candidate to where both queens are off, for a
+   *  'trades-queens' shortfall — the trade said as the line it is. */
+  tradeSans?: readonly string[];
 }
 
 export interface Deliberation {
@@ -219,13 +222,15 @@ export function buildDeliberation(input: {
     // off — fewer pieces to attack with"). Only where the engine agrees it is worse.
     // …and the same when you are ATTACKING (game 1: "there's zero reason to
     // trade queens here — you have a huge attack").
-    const tradesQueens = !drop && deltaCp >= MEANINGFUL_DELTA_CP && (moreSpace(fenBefore, moverColor) || attacking(fenBefore, moverColor)) && queensOffWithin(fenBefore, l.moves, 5);
+    const tradeLine = !drop && deltaCp >= MEANINGFUL_DELTA_CP && (moreSpace(fenBefore, moverColor) || attacking(fenBefore, moverColor)) ? queensOffLine(fenBefore, l.moves, 5) : null;
+    const tradesQueens = !!tradeLine;
     const shortfall: Shortfall = drop ? 'drops-material' : tradesQueens ? 'trades-queens' : deltaCp >= CLEARLY_WORSE_CP ? 'clearly-worse' : 'less-precise';
     const lossProof = moverLossProof(fenBefore, l.moves, moverColor);
     alternatives.push({
       san, evalCp, deltaCp, shortfall,
       drops: drop ? { piece: drop.piece, square: drop.square } : undefined,
       ...(lossProof ? { proof: lossProof.short, proofSans: lossProof.line?.sans ?? [] } : {}),
+      ...(tradeLine && !lossProof ? { tradeSans: tradeLine } : {}),
     });
   }
 
@@ -308,7 +313,10 @@ function shortfallText(c: Candidate): string {
     return `${c.san}? ${c.proof[0].toUpperCase()}${c.proof.slice(1)}.`;
   }
   if (c.shortfall === 'trades-queens') {
-    return `${c.san}? ${c.san} trades the queens — with more space or an attack going, you want them on; every piece that comes off shrinks the edge.`;
+    // THE TRADE IS A LINE, NOT A PROPERTY OF THE MOVE (hard walk 2026-10-10:
+    // "Ne5 trades the queens" — Ne5 trades nothing; the queens come off later).
+    const rest = c.tradeSans && c.tradeSans.length > 1 ? `Then ${andList(c.tradeSans.slice(1))} — the queens come off` : `It lets the queens come off`;
+    return `${c.san}? ${rest} — with more space or an attack going, you want them on; every piece that comes off shrinks the edge.`;
   }
   if (c.shortfall === 'drops-material' && c.drops) {
     return `${c.san}? That drops the ${PNAME[c.drops.piece] ?? 'piece'} on ${c.drops.square}.`;
@@ -600,12 +608,18 @@ function moreSpace(fen: string, mover: 'w' | 'b'): boolean {
 }
 
 /** Both queens are gone within `plies` of the line. */
-function queensOffWithin(fen: string, uci: readonly string[], plies: number): boolean {
+/** The line, in SAN, up to the ply where no queen is left — null when the
+ *  queens are still on after `plies`. */
+function queensOffLine(fen: string, uci: readonly string[], plies: number): string[] | null {
   try {
     const c = new Chess(fen);
-    for (const u of uci.slice(0, plies)) c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
-    return !c.board().flat().some((x) => x && x.type === 'q');
-  } catch { return false; }
+    const sans: string[] = [];
+    for (const u of uci.slice(0, plies)) {
+      sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san);
+      if (!c.board().flat().some((x) => x && x.type === 'q')) return sans;
+    }
+    return null;
+  } catch { return null; }
 }
 
 /** The mover has more pieces bearing on the enemy king than defend it (`countKingAttack`). */
