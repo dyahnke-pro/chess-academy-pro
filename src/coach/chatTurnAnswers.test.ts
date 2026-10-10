@@ -88,7 +88,7 @@ describe('attack, both directions (WO-CHAT-01, live walk B11/B12)', () => {
 describe('what a piece attacks, when it attacks nothing (live replay B12)', () => {
   it('a pawn names the squares it covers', () => {
     const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
-    expect(answerAboutPiece(new Chess(fen), 'e5' as never, 'w')).toMatch(/It attacks nothing of yours right now; it covers d4 and f4\./);
+    expect(answerAboutPiece(new Chess(fen), 'e5' as never, 'w')).toMatch(/^Their pawn on e5 attacks nothing of yours right now; it covers d4 and f4\./);
   });
 });
 

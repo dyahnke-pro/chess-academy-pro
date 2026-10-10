@@ -184,10 +184,19 @@ describe('dispatchCoachTurn — the shadow read', () => {
 
   it('FLAG ON: a reading whose answerer is still pending is NOT served', async () => {
     setServeParsedRoute(true);
-    // `answer` (a square answer outside a lesson) has no answerer yet.
+    // An `answer` that names nothing has no answerer: the brain gets the
+    // student's own words, never a canonical rewrite.
+    setChatTurnReaderForTests(async () => ({ kind: 'answer', referents: [], seat: 'none', english: 'i think so' }));
+    await dispatchCoachTurn(TURN('i think so'), {});
+    expect(ask.mock.calls[0][0].ask).toBe('i think so');
+  });
+  it('FLAG ON: a named square outside a lesson is answered from the board (contracts 2026-10-10)', async () => {
+    setServeParsedRoute(true);
+    // It was handed to the brain and the move-rating lane graded "e5" as a move.
     setChatTurnReaderForTests(async () => ({ kind: 'answer', referents: [{ type: 'square', square: 'e5' }], seat: 'none', english: 'e5' }));
-    await dispatchCoachTurn(TURN('the pawn on e5 i think'), {});
-    expect(ask.mock.calls[0][0].ask).toBe('the pawn on e5 i think');
+    const ans = await dispatchCoachTurn(TURN('the pawn on e5 i think'), {});
+    expect(ask).not.toHaveBeenCalled();
+    expect(ans.text).toMatch(/e5/);
   });
 });
 

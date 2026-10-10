@@ -171,7 +171,10 @@ export function answerWhyTarget(chess: Chess, sq: Square | null, student: Color)
   return `${subject} is attacked ${attackers.length} time${attackers.length === 1 ? '' : 's'} and defended ${defenders.length} time${defenders.length === 1 ? '' : 's'}, so taking it does not win material yet.`;
 }
 
-export function answerAboutPiece(chess: Chess, sq: Square | null, student: Color): string | null {
+/** `leadSafety`: a bare named piece ("the pawn on e4") leads with whether it
+ *  is safe; a question about what it does ("what is it aiming at?") leads with
+ *  that. Either way the first sentence names the piece. */
+export function answerAboutPiece(chess: Chess, sq: Square | null, student: Color, leadSafety = false): string | null {
   if (!sq) return null;
   const p = chess.get(sq);
   if (!p) return `There is no piece on ${sq}.`;
@@ -228,11 +231,10 @@ export function answerAboutPiece(chess: Chess, sq: Square | null, student: Color
   } catch { /* the read is a bonus, never a blocker */ }
   // The piece is NAMED before any "it" (contracts 2026-10-10: "It attacks
   // nothing… Your pawn on e4 is loose" put the pronoun first). Its safety
-  // names it and is the urgent part, so it leads; without one, the first
-  // line names the piece itself.
-  if (safety) return [safety, ...lines, scope].filter(Boolean).join(' ');
+  // sentence names it, so when safety leads nothing else changes.
+  if (leadSafety && safety) return [safety, ...lines, scope].filter(Boolean).join(' ');
   if (lines.length) lines[0] = lines[0].replace(/^It /, `${own === student ? 'Your' : 'Their'} ${name(p.type)} on ${sq} `);
-  return [...lines, scope].filter(Boolean).join(' ');
+  return [...lines, safety, scope].filter(Boolean).join(' ');
 }
 
 /** The computed answer for a direct kind; null when the turn names nothing
@@ -247,6 +249,7 @@ export function directAnswer(turn: ResolvedChatTurn, fen: string, memory: Conver
     case 'count-defenders': return answerCount(chess, sq, student, 'defenders');
     case 'why-is-it-a-target': return answerWhyTarget(chess, sq, student);
     case 'what-about-piece': return answerAboutPiece(chess, sq, student);
+    case 'answer': return answerAboutPiece(chess, sq, student, true);
     case 'defend-piece': return answerDefend(chess, sq, student);
     case 'win-piece': return answerWin(chess, sq, student);
     case 'attack-piece': return answerAttack(chess, sq, student, out);

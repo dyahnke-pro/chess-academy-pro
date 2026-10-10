@@ -30,7 +30,7 @@ const ask = async (q: string): Promise<string> => (await dispatchCoachTurn({
 describe('piece questions', () => {
   it('"what is my bishop on c4 aiming at?" says what it hits', async () => {
     const a = await ask('What is my bishop on c4 aiming at?');
-    expect(a).toMatch(/^It attacks their pawn on f7\./);
+    expect(a).toMatch(/^Your bishop on c4 attacks their pawn on f7\./);
   }, 60_000);
   it('"are any of my pieces hanging?" scans every piece, not the last one named', async () => {
     await ask('What is my bishop on c4 aiming at?');

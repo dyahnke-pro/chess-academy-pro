@@ -443,7 +443,7 @@ export async function dispatchCoachTurn(
     // piece asks about it.
     if (turn?.kind === 'answer' && input.liveState.fen && turn.referents.some((r) => r.type === 'piece' || r.type === 'square')) {
       const studentWB = input.liveState.studentColor === 'black' ? 'b' : input.liveState.studentColor === 'white' ? 'w' : (input.liveState.fen.split(' ')[1] === 'b' ? 'b' : 'w');
-      const text = directAnswer({ ...turn, kind: 'what-about-piece' }, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask, input.liveState.moveHistory ?? []);
+      const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask, input.liveState.moveHistory ?? []);
       if (text) return serve(text, 'what-about-piece', 'answered');
     }
     const ptopic = positionalTopic(input.ask);
