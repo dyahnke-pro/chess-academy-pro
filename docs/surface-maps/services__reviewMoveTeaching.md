@@ -29,7 +29,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `quietMovePoint` (function) — 6 call sites
-- `src/services/playCommentary.ts:1000`
+- `src/services/playCommentary.ts:1001`
 - `src/services/reviewMoveTeaching.unpin.test.ts:11`
 - `src/services/reviewMoveTeaching.unpin.test.ts:15`
 - `src/services/reviewWalkOct1.test.ts:70`
@@ -37,13 +37,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/walkOct1Learn.test.ts:85`
 
 ### `buildReviewMoveTeaching` (function) — 29 call sites
-- `src/services/coachFeatureService.ts:1229`
-- `src/services/coachFeatureService.ts:3446`
-- `src/services/discussionPractice.ts:170`
+- `src/services/coachFeatureService.ts:1230`
+- `src/services/coachFeatureService.ts:3447`
+- `src/services/discussionPractice.ts:171`
 - `src/services/learnMoveTeaching.ts:44`
 - `src/services/learnMoveTeaching.ts:102`
-- `src/services/projectedLineVoice.ts:137`
-- `src/services/reviewMoveBriefing.ts:303`
+- `src/services/projectedLineVoice.ts:138`
+- `src/services/reviewMoveBriefing.ts:304`
 - `src/services/reviewMoveTeaching.test.ts:12`
 - `src/services/reviewMoveTeaching.test.ts:14`
 - `src/services/reviewMoveTeaching.test.ts:26`
@@ -68,8 +68,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalkOct1.test.ts:88`
 
 ### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3357`
-- `src/services/reviewFullData.ts:1443`
+- `src/services/coachFeatureService.ts:3358`
+- `src/services/reviewFullData.ts:1444`
 - `src/services/reviewMoveTeaching.test.ts:141`
 - `src/services/reviewMoveTeaching.test.ts:143`
 - `src/services/reviewMoveTeaching.test.ts:148`
@@ -77,7 +77,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveTeaching.test.ts:157`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3354`
+- `src/services/coachFeatureService.ts:3355`
 - `src/services/reviewMoveTeaching.test.ts:122`
 - `src/services/reviewMoveTeaching.test.ts:125`
 - `src/services/reviewMoveTeaching.test.ts:131`

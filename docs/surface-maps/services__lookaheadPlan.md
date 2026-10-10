@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1641 lines · 27 exports · 18 importers · 13 tests · 0 audits**
+**1642 lines · 27 exports · 18 importers · 13 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4308) — names `PositionRead`
+- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4429) — names `PositionRead`
 
 ## Who calls in
 
@@ -52,13 +52,13 @@
 - `src/services/replayFence.modern1690.test.ts:78`
 - `src/services/replayFence.modern1690.test.ts:80`
 
-### `tacticWord` (function) — 22 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8085`
+### `tacticWord` (function) — 26 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8383`
 - `src/services/computedVoiceAudit.report.test.ts:254`
 - `src/services/dnaLineNarrator.ts:58`
-- `src/services/groundedAnswer.ts:5253`
-- `src/services/groundedAnswer.ts:5265`
-- `src/services/groundedAnswer.ts:6025`
+- `src/services/groundedAnswer.ts:5448`
+- `src/services/groundedAnswer.ts:5460`
+- `src/services/groundedAnswer.ts:6225`
 - `src/services/pvPlayback.test.ts:291`
 - `src/services/pvPlayback.test.ts:292`
 - `src/services/pvPlayback.test.ts:293`
@@ -67,17 +67,21 @@
 - `src/services/pvPlayback.test.ts:297`
 - `src/services/pvPlayback.test.ts:299`
 - `src/services/pvPlayback.test.ts:300`
-- `src/services/pvPlayback.ts:242`
-- `src/services/pvPlayback.ts:673`
-- `src/services/pvPlayback.ts:693`
-- `src/services/pvPlayback.ts:730`
-- `src/services/pvPlayback.ts:823`
-- `src/services/reviewMoveBriefing.ts:240`
+- `src/services/pvPlayback.ts:256`
+- `src/services/pvPlayback.ts:685`
+- `src/services/pvPlayback.ts:705`
+- `src/services/pvPlayback.ts:742`
+- `src/services/pvPlayback.ts:835`
+- `src/services/reviewMoveBriefing.ts:269`
 - `src/services/tacticVocabulary.ts:95`
-- `src/services/teachingSelector.ts:347`
+- `src/services/teachingSelector.ts:367`
+- `src/services/turningPoints.ts:166`
+- `src/services/turningPoints.ts:168`
+- `src/services/turningPoints.ts:171`
+- `src/services/turningPoints.ts:186`
 
 ### `seatedTacticLine` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8096`
+- `src/components/Coach/CoachTeachPage.tsx:8394`
 - `src/services/seatedTacticLine.test.ts:8`
 - `src/services/seatedTacticLine.test.ts:13`
 - `src/services/seatedTacticLine.test.ts:19`
@@ -183,21 +187,21 @@
 - `src/services/inaccuracyCall.ts:414`
 - `src/services/inaccuracyCall.ts:421`
 - `src/services/inaccuracyCall.ts:435`
-- `src/services/inaccuracyCall.ts:932`
+- `src/services/inaccuracyCall.ts:903`
 - `src/services/learnWalkBlumenfeld.test.ts:181`
 - `src/services/learnWalkBlumenfeld.test.ts:182`
 - `src/services/learnWalkBlumenfeld.test.ts:183`
 - `src/services/learnWalkBlumenfeld.test.ts:184`
 
 ### `planFromUci` (function) — 36 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9878`
+- `src/components/Coach/CoachTeachPage.tsx:10308`
 - `src/services/claimTruth.manual.test.ts:129`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:216`
 - `src/services/concessionBeat.ts:450`
 - `src/services/inaccuracyCall.ts:301`
 - `src/services/inaccuracyCall.ts:362`
-- `src/services/inaccuracyCall.ts:930`
+- `src/services/inaccuracyCall.ts:901`
 - `src/services/kingSwingCountsPieces.test.ts:14`
 - `src/services/lookaheadPlan.test.ts:234`
 - `src/services/lookaheadPlan.test.ts:239`
@@ -220,31 +224,31 @@
 - `src/services/narrationAdversarial.test.ts:178`
 - `src/services/narrationAdversarial.test.ts:188`
 - `src/services/planArc.test.ts:27`
-- `src/services/planChooser.ts:39`
 - `src/services/planChooser.ts:40`
+- `src/services/planChooser.ts:41`
 - `src/services/routeFirstArrival.test.ts:13`
 - `src/services/routeTargetMustStand.test.ts:17`
 - `src/services/routeTargetMustStand.test.ts:27`
 - `src/services/walkOct1Learn.test.ts:69`
 
 ### `gameArcs` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:1420`
-- `src/services/learnBoardTeaching.ts:796`
+- `src/services/coachFeatureService.ts:1466`
+- `src/services/learnBoardTeaching.ts:913`
 - `src/services/walkOct1Learn.test.ts:115`
 
 ### `aimsOf` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9891`
-- `src/components/Coach/CoachTeachPage.tsx:9895`
+- `src/components/Coach/CoachTeachPage.tsx:10321`
+- `src/components/Coach/CoachTeachPage.tsx:10325`
 - `src/services/planArc.phraseFrom.test.ts:30`
 - `src/services/planArc.phraseFrom.test.ts:31`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.ts:55`
-- `src/services/planChooser.ts:50`
 - `src/services/planChooser.ts:51`
+- `src/services/planChooser.ts:52`
 
 ### `aimWalkableNow` (re-export) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9891`
-- `src/components/Coach/CoachTeachPage.tsx:9895`
+- `src/components/Coach/CoachTeachPage.tsx:10321`
+- `src/components/Coach/CoachTeachPage.tsx:10325`
 - `src/services/planArc.phraseFrom.test.ts:19`
 - `src/services/planArc.phraseFrom.test.ts:22`
 - `src/services/planArc.test.ts:204`
@@ -262,17 +266,17 @@
 - `src/services/planChoicePasserNow.test.ts:22`
 - `src/services/planChoicePasserNow.test.ts:23`
 - `src/services/planChooser.test.ts:54`
-- `src/services/planChooser.ts:49`
+- `src/services/planChooser.ts:50`
 
 ### `joinEmerges` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9907`
+- `src/components/Coach/CoachTeachPage.tsx:10337`
 - `src/services/planArc.test.ts:272`
 - `src/services/planArc.test.ts:279`
 - `src/services/planArc.ts:530`
 
 ### `stepArc` (re-export) — 25 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9891`
-- `src/components/Coach/CoachTeachPage.tsx:9895`
+- `src/components/Coach/CoachTeachPage.tsx:10321`
+- `src/components/Coach/CoachTeachPage.tsx:10325`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:97`
 - `src/services/planArc.test.ts:99`

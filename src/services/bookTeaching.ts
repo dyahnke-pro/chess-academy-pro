@@ -1,3 +1,4 @@
+import { openSentence } from '../utils/openSentence';
 // bookTeaching — the coach teaches from the library when the student asks
 // (David 2026-10-05: "Make sure coach can teach from the books if someone asks
 // it to"): "what does Lasker say about the centre?", "teach me the blockade
@@ -13,7 +14,7 @@
 // PURE over a minimal book shape; the real library (~1 MB of text) is loaded
 // by the caller only when a request is recognised.
 
-const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+const cap = (t: string): string => openSentence(t);
 
 export interface TeachableBook {
   id: string;

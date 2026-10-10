@@ -19,6 +19,7 @@
 //
 // One computer, read by every coach surface: Learn drills and hints, the
 // puzzle boards, the chat compare, and review (through compareTwoMoves).
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Move, type Square } from 'chess.js';
 import { walkableLine } from './proof';
 import type { WalkableLine } from '../types';
@@ -86,7 +87,7 @@ export interface DoubleAttack {
 }
 
 const name = (p: string): string => PIECE_NAMES[p] ?? 'piece';
-const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+const cap = (s: string): string => openSentence(s);
 const NUMBER_WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
 const num = (n: number): string => NUMBER_WORDS[n] ?? String(n);
 

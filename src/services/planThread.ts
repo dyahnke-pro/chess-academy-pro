@@ -13,6 +13,7 @@
 //   • A plan that changes WITHOUT a proven cause inside PLAN_HOLD_PLIES of the
 //     last one is the read wobbling, not the plan — held.
 // PURE: no store, no voice. The caller speaks the lines and keeps the thread.
+import { openSentence } from '../utils/openSentence';
 import type { Color } from 'chess.js';
 import { deriveNextPlanFacts, type PlanFact } from './nextPlans';
 import { planStoppedProof, planStoppedLine } from './planStopped';
@@ -42,7 +43,7 @@ export interface PlanThreadLine {
   proof: FactProof;
 }
 
-const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+const cap = (s: string): string => openSentence(s);
 
 /**
  * One opponent move. `fenBefore` is the board their move was played from,

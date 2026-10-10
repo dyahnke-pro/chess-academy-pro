@@ -11,6 +11,7 @@
  *    not just "try again." Adapts to rating and weakness profile.
  */
 
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { detectTacticType } from './missedTacticService';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
@@ -141,7 +142,7 @@ function engineConceptFor(t: TacticType): string | null {
   const pattern = toTacticPatternType(t);
   const inv = pattern ? tacticInvariant(pattern) : null;
   if (!inv) return null;
-  return inv.full.charAt(0).toUpperCase() + inv.full.slice(1);
+  return openSentence(inv.full);
 }
 
 /** Overwrite every bridged motif's `concept` with the engine's invariant, so

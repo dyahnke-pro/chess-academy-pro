@@ -23,6 +23,7 @@
  * states it verbatim: "the player having a material advantage tries to exchange
  * pieces but avoids exchanging pawns").
  */
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Square, type PieceSymbol } from 'chess.js';
 import type { ReviewConceptId } from './conceptVocabulary';
 import { totalMinorCount } from './development';
@@ -462,7 +463,7 @@ function detectSpaceAdvantage(ctx: ConceptCtx): ConceptBeat | null {
   if (advancedPawns(ctx.fenAfter, ctx.moverColor) - advancedPawns(ctx.fenAfter, enemy) < 2) return null;
   const mine = MINE(ctx.moverColor, ctx.studentColor);
   const text = mine
-    ? `That pawn push stakes out space — your pawns are cramping their pieces, leaving them less room to manoeuvre. ${SPACE_RULE[0].toUpperCase()}${SPACE_RULE.slice(1)}.`
+    ? `That pawn push stakes out space — your pawns are cramping their pieces, leaving them less room to manoeuvre. ${openSentence(SPACE_RULE)}.`
     : `Your opponent's pawns are grabbing space and cramping you. Look to challenge the chain with a break, or trade a pair to get your pieces room to breathe.`;
   return { concept: 'space-advantage', text, source: 'concept:pos-space' };
 }

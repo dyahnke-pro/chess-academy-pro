@@ -1,4 +1,5 @@
 // All LLM API calls must go through this file only — per CLAUDE.md
+import { continueSentence } from '../utils/openSentence';
 import { smallTalkKind, smallTalkReply } from '../coach/smallTalk';
 import { lastMoveFromHistory } from './material';
 import { dangerAnswerLines, planArcAnswerLines, studentMoveAnswerLines, theirMoveAnswerLines } from './learnBoardTeaching';
@@ -1924,7 +1925,7 @@ export async function reminderWithRecord(topic: string, overview: { totalGames: 
       .filter((r) => r.tag !== 'other' && r.total >= 2)
       .sort((a, b) => b.total - a.total)[0];
     if (top) {
-      const label = `${top.label.charAt(0).toLowerCase()}${top.label.slice(1)}`;
+      const label = `${continueSentence(top.label)}`;
       return `The one that keeps coming back in your games here: ${label}, ${top.total} times. Import and analyze your Lichess or Chess.com games to see the rest.`;
     }
   }

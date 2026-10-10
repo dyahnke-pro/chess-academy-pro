@@ -7,6 +7,7 @@
 //   first this" → what they keep doing wrong.
 // Every computer here is a pure board read (G0); the composer only orders and
 // joins. Lines are returned as WalkableLine so every spoken line is arrowed.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Square } from 'chess.js';
 import type { WalkableLine } from '../types';
 import { CAPTURE_VALUE } from './pieceValues';
@@ -28,7 +29,7 @@ import { readBoardAll } from './boardComputers';
 import type { TacticType } from '../types';
 import { orderReads } from './orderReads';
 
-const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+const cap = (s: string): string => openSentence(s);
 const NUM = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
 const num = (n: number): string => NUM[n] ?? String(n);
 

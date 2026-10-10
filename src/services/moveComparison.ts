@@ -24,6 +24,7 @@
 // function is injected so this is a pure, unit-testable core; production wires
 // it to stockfishEngine, tests pass a deterministic mock (G0).
 
+import { continueSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { countWords } from '../utils/countWords';
 import type { Square, Color, PieceSymbol } from 'chess.js';
@@ -188,7 +189,7 @@ export async function compareTwoMoves(
     // one square better than the other when they both checked the king???") —
     // the material is the proof; the double attack is the reason.
     const how = mechanismContrast(fen, base.sanBetter, base.sanWorse);
-    const howClause = how ? `${how.charAt(0).toLowerCase()}${how.slice(1).replace(/\.$/, '')} — ` : '';
+    const howClause = how ? `${continueSentence(how).replace(/\.$/, '')} — ` : '';
     return {
       ...base,
       delta: { kind: 'material', text: `${howClause}it comes out ${pts} better on material than ${base.sanWorse}`, proof: 'material-count' },

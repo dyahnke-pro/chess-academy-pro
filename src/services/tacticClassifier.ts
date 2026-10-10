@@ -1,3 +1,4 @@
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import type {
   TacticClassification,
@@ -786,5 +787,5 @@ function detectTacticsAtStep(
 // ─── Utility ────────────────────────────────────────────────────────────────
 
 function capitalize(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }

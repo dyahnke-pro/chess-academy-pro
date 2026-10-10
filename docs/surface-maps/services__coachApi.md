@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7130 lines · 41 exports · 54 importers · 60 tests · 19 audits**
+**7131 lines · 41 exports · 54 importers · 60 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -288,18 +288,18 @@
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:260`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:194`
-- `src/services/coachFeatureService.ts:444`
-- `src/services/coachFeatureService.ts:583`
+- `src/services/coachFeatureService.ts:195`
+- `src/services/coachFeatureService.ts:445`
 - `src/services/coachFeatureService.ts:584`
-- `src/services/coachFeatureService.ts:5290`
-- `src/services/coachFeatureService.ts:5443`
+- `src/services/coachFeatureService.ts:585`
+- `src/services/coachFeatureService.ts:5291`
+- `src/services/coachFeatureService.ts:5444`
 - `src/services/coachLaneWiring.test.ts:144`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
 - `src/services/contentGenerationService.ts:134`
 - `src/services/gameReviewService.ts:57`
-- `src/services/kidGameCoach.ts:218`
+- `src/services/kidGameCoach.ts:219`
 - `src/services/mistakeNarrationVoice.ts:109`
 - `src/services/openingGenerator.ts:2384`
 - `src/services/openingSectionNarrator.ts:84`

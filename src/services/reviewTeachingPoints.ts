@@ -31,6 +31,7 @@
  * Every clause is emitted ONLY when the board actually shows it (empty > generic >
  * invented). Squares/pieces are always real, so the narration-accuracy gate holds.
  */
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { inFluxAfter } from './boardState';
@@ -517,7 +518,7 @@ export function explainTemptingCapture(
         if (!fileHasEnemyPawn && enemyHeavyOnFile && kingNear) {
           const kingPoss = perspective === 'you' ? 'your king' : perspective === 'they' ? 'their own king' : `${moverName}'s own king`;
           const opener = perspective === 'you' ? 'their heavy piece' : 'a heavy piece';
-          return `The trade ${t.san} looks natural, but after the ${recapNoun} takes back, the ${file}-file rips open — straight at ${kingPoss}, with ${opener} already sitting on it. ${lineWhose.charAt(0).toUpperCase()}${lineWhose.slice(1)} keeps the tension instead.`;
+          return `The trade ${t.san} looks natural, but after the ${recapNoun} takes back, the ${file}-file rips open — straight at ${kingPoss}, with ${opener} already sitting on it. ${openSentence(lineWhose)} keeps the tension instead.`;
         }
       }
     }

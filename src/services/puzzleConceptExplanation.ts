@@ -26,6 +26,7 @@
  * G0). The result carries `spoken` (ready to voice/display), the lead-the-eye
  * arrow on the student's key move, and the concept name/id for sourcing.
  */
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import type { DnaLinePly } from './dnaLineNarrator';
 import { andList, countWord } from '../utils/andList';
@@ -128,7 +129,7 @@ function computedIdea(c: ComputedConcept, reveal: boolean): string | null {
   // pattern and why it works, no square given away.
   const inv = !reveal && c.source === 'tactic' ? tacticInvariant(c.id) : null;
   const text = (inv ? inv.full : c.full).trim();
-  const cap = text.charAt(0).toUpperCase() + text.slice(1);
+  const cap = openSentence(text);
   return /[.!?]$/.test(cap) ? cap : `${cap}.`;
 }
 
@@ -252,7 +253,7 @@ function materialResult(plies: readonly ReadPly[]): string | null {
 function asSentence(clause: string): string {
   const t = clause.trim();
   if (!t) return '';
-  const lead = /^[a-h][1-8x]/.test(t) ? t : t.charAt(0).toUpperCase() + t.slice(1);
+  const lead = /^[a-h][1-8x]/.test(t) ? t : openSentence(t);
   return /[.!?]$/.test(lead) ? lead : `${lead}.`;
 }
 

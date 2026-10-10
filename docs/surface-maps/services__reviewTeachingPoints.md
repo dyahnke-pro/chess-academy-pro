@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**790 lines · 22 exports · 16 importers · 6 tests · 0 audits**
+**791 lines · 22 exports · 16 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -33,7 +33,7 @@
 ## Exports and every call site
 
 ### `attackerDefenderCount` (function) — 7 call sites
-- `src/services/reviewFullData.ts:924`
+- `src/services/reviewFullData.ts:925`
 - `src/services/reviewNarrationDefects.test.ts:86`
 - `src/services/reviewNarrationDefects.test.ts:95`
 - `src/services/reviewTeachingPoints.test.ts:21`
@@ -47,29 +47,29 @@
 - `src/services/reviewTeachingPoints.test.ts:447`
 
 ### `royalDefenderTarget` (function) — 3 call sites
-- `src/services/reviewFullData.ts:926`
+- `src/services/reviewFullData.ts:927`
 - `src/services/reviewNarrationFidelity.test.ts:150`
 - `src/services/reviewTeachingPoints.test.ts:39`
 
 ### `rookOnSeventh` (function) — 2 call sites
-- `src/services/reviewFullData.ts:928`
+- `src/services/reviewFullData.ts:929`
 - `src/services/reviewTeachingPoints.test.ts:47`
 
 ### `badEnemyBishop` (function) — 5 call sites
-- `src/services/reviewFullData.ts:930`
+- `src/services/reviewFullData.ts:931`
 - `src/services/reviewTeachingPoints.test.ts:52`
 - `src/services/reviewTeachingPoints.test.ts:53`
 - `src/services/reviewTeachingPoints.test.ts:474`
 - `src/services/reviewTeachingPoints.test.ts:478`
 
 ### `worstPlacedFriendlyPiece` (function) — 4 call sites
-- `src/services/reviewFullData.ts:935`
+- `src/services/reviewFullData.ts:936`
 - `src/services/reviewNarrationDefects.test.ts:33`
 - `src/services/reviewNarrationDefects.test.ts:51`
 - `src/services/reviewTeachingPoints.test.ts:75`
 
 ### `passedPawnPush` (function) — 5 call sites
-- `src/services/reviewFullData.ts:942`
+- `src/services/reviewFullData.ts:943`
 - `src/services/reviewTeachingPoints.test.ts:57`
 - `src/services/reviewTeachingPoints.test.ts:63`
 - `src/services/reviewTeachingPoints.test.ts:66`
@@ -82,7 +82,7 @@
 - `src/services/reviewTeachingPoints.test.ts:103`
 
 ### `buildReviewDeepestLookahead` (function) — 13 call sites
-- `src/services/coachFeatureService.ts:2977`
+- `src/services/coachFeatureService.ts:2978`
 - `src/services/reviewTeachingPoints.test.ts:298`
 - `src/services/reviewTeachingPoints.test.ts:301`
 - `src/services/reviewTeachingPoints.test.ts:302`
@@ -103,7 +103,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildMissedShotSignal` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2739`
+- `src/services/coachFeatureService.ts:2740`
 - `src/services/reviewTeachingPoints.test.ts:370`
 - `src/services/reviewTeachingPoints.test.ts:383`
 - `src/services/reviewTeachingPoints.test.ts:392`
@@ -112,7 +112,7 @@
 - `src/services/reviewTeachingPoints.test.ts:406`
 
 ### `explainTemptingCapture` (function) — 11 call sites
-- `src/services/projectedLineVoice.ts:141`
+- `src/services/projectedLineVoice.ts:142`
 - `src/services/reviewOpeningTheory.ts:373`
 - `src/services/reviewOpeningTheory.ts:409`
 - `src/services/reviewTeachingPoints.test.ts:127`
@@ -125,14 +125,14 @@
 - `src/services/reviewTeachingPoints.test.ts:251`
 
 ### `describeNotableMove` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:3317`
+- `src/services/coachFeatureService.ts:3318`
 - `src/services/reviewTeachingPoints.test.ts:182`
 - `src/services/reviewTeachingPoints.test.ts:189`
 - `src/services/reviewTeachingPoints.test.ts:203`
 - `src/services/reviewTeachingPoints.test.ts:213`
 
 ### `describeSimplifyingTrade` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2996`
+- `src/services/coachFeatureService.ts:2997`
 - `src/services/plyFactsDialing.test.ts:74`
 - `src/services/plyFactsDialing.test.ts:80`
 - `src/services/plyFactsDialing.test.ts:81`
@@ -141,12 +141,12 @@
 - `src/services/plyFactsDialing.test.ts:90`
 
 ### `describeTradeConsequence` (function) — 1 call site
-- `src/services/coachFeatureService.ts:3005`
+- `src/services/coachFeatureService.ts:3006`
 
 ### `describeConcessions` (function) — 9 call sites
 - `src/services/backwardLook.ts:476`
-- `src/services/coachFeatureService.ts:2684`
-- `src/services/coachFeatureService.ts:2752`
+- `src/services/coachFeatureService.ts:2685`
+- `src/services/coachFeatureService.ts:2753`
 - `src/services/concessionInFlux.test.ts:13`
 - `src/services/concessionInFlux.test.ts:18`
 - `src/services/reviewTeachingPoints.test.ts:217`
@@ -155,11 +155,11 @@
 - `src/services/theirMoveCost.ts:142`
 
 ### `findTrappedPiece` (function) — 12 call sites
-- `src/services/coachFeatureService.ts:3330`
 - `src/services/coachFeatureService.ts:3331`
-- `src/services/moveInsight.ts:392`
-- `src/services/reviewFullData.ts:892`
-- `src/services/reviewFullData.ts:894`
+- `src/services/coachFeatureService.ts:3332`
+- `src/services/moveInsight.ts:393`
+- `src/services/reviewFullData.ts:893`
+- `src/services/reviewFullData.ts:895`
 - `src/services/reviewTeachingPoints.test.ts:259`
 - `src/services/reviewTeachingPoints.test.ts:265`
 - `src/services/reviewTeachingPoints.test.ts:276`
@@ -174,13 +174,13 @@
 - `src/services/reviewTeachingPoints.test.ts:291`
 
 ### `lineTakesPiece` (re-export) — 2 call sites
-- `src/services/positionFacts.ts:574`
-- `src/services/trappedPiece.ts:94`
+- `src/services/positionFacts.ts:576`
+- `src/services/trappedPiece.ts:95`
 
 ### `findWorstPlacedPiece` (re-export) — 11 call sites
 - `src/services/badPieceOncePerPly.test.ts:15`
-- `src/services/coachFeatureService.ts:4524`
-- `src/services/moveInsight.ts:332`
+- `src/services/coachFeatureService.ts:4525`
+- `src/services/moveInsight.ts:333`
 - `src/services/nextPlans.test.ts:10`
 - `src/services/nextPlans.test.ts:34`
 - `src/services/nextPlans.ts:81`
@@ -191,7 +191,7 @@
 - `src/services/reviewNarrationDefects.test.ts:50`
 
 ### `deriveNextPlans` (re-export) — 19 call sites
-- `src/services/boardPlanFacts.ts:58`
+- `src/services/boardPlanFacts.ts:59`
 - `src/services/learnMoveTeaching.ts:145`
 - `src/services/nextPlans.test.ts:16`
 - `src/services/nextPlans.test.ts:24`

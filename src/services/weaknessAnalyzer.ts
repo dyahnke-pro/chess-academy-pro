@@ -1,3 +1,4 @@
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { getThemeSkills } from './puzzleService';
@@ -839,7 +840,7 @@ function buildStrengthItems(
   for (const theme of strongThemes.slice(0, 3)) {
     const pct = Math.round(theme.accuracy * 100);
     items.push({
-      title: `${theme.theme.charAt(0).toUpperCase()}${theme.theme.slice(1)} Mastery`,
+      title: `${openSentence(theme.theme)} Mastery`,
       detail: `You solve ${theme.theme} puzzles at ${pct}% accuracy across ${theme.attempts} attempts. This is well above average and shows strong pattern recognition for this motif.`,
       category: 'tactics',
       metric: `${pct}% accuracy, ${theme.attempts} attempts`,

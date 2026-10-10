@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**226 lines · 7 exports · 2 importers · 1 tests · 0 audits**
+**227 lines · 7 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,9 +21,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `openingFamily` (function) — 9 call sites
-- `src/components/Debug/OpeningBlundersPage.tsx:938`
-- `src/services/coachFeatureService.ts:3046`
-- `src/services/coachFeatureService.ts:3377`
+- `src/components/Debug/OpeningBlundersPage.tsx:883`
+- `src/services/coachFeatureService.ts:3224`
+- `src/services/coachFeatureService.ts:3567`
 - `src/services/homeOpening.ts:114`
 - `src/services/homeOpening.ts:194`
 - `src/services/openingKey.test.ts:50`
@@ -35,7 +35,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `familyLabel` (function) — 7 call sites
-- `src/components/Debug/OpeningBlundersPage.tsx:939`
+- `src/components/Debug/OpeningBlundersPage.tsx:884`
 - `src/services/openingBlunderService.labels.test.ts:6`
 - `src/services/openingBlunderService.labels.test.ts:7`
 - `src/services/openingBlunderService.labels.test.ts:11`
@@ -50,7 +50,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `groupByOpeningFamily` (function) — 3 call sites
-- `src/components/Debug/OpeningBlundersPage.tsx:297`
+- `src/components/Debug/OpeningBlundersPage.tsx:234`
 - `src/services/openingBlunderService.labels.test.ts:12`
 - `src/services/openingBlunderService.labels.test.ts:23`
 

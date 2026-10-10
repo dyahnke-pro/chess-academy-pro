@@ -76,7 +76,7 @@ describe('plan and tactics questions are answered from the one read', () => {
   }, 60_000);
   it('"any tactics?" — only what is forcing on the board', async () => {
     expect(await answerBoardTurn(ask('tactics'), { fen: COLLE, history: [], studentColor: 'white' }))
-      .toBe('Their knight on e5 attacks your queen on g4, and nothing defends it — and you can take the attacker without losing material.');
+      .toBe('Their knight on e5 attacks your queen on g4, and nothing defends it — and you can take the attacker without losing material. On their side, their knight on e5 is also after your bishop on d3, which nothing guards.');
   }, 60_000);
   it('their plan is read from their side: what they hit, then their levers', async () => {
     const text = await answerBoardTurn({ ...ask('plan'), seat: 'them' } as unknown as ResolvedChatTurn, { fen: COLLE, history: [], studentColor: 'white' });

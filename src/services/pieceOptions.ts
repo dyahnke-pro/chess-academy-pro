@@ -19,6 +19,7 @@
 // One engine read per option (not a per-ply playout), so a chat answer stays
 // fast; the lines are the engine's own PV.
 
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Square, type PieceSymbol } from 'chess.js';
 import type { PvEngine } from './pvPlayback';
 import type { WalkableLine, WalkPly } from '../types';
@@ -151,7 +152,7 @@ export async function computePieceOptions(input: {
     return {
       seat: input.seat, piece: piece.type, from: input.pieceSquare, duty: [], narrowedBy: 'all',
       options: [], playedSan: null, lines: [],
-      facts: `${who[0].toUpperCase()}${who.slice(1)} had no legal move — it couldn't go anywhere.`,
+      facts: `${openSentence(who)} had no legal move — it couldn't go anywhere.`,
     };
   }
   const duty = dutiesOf(input.fen, input.pieceSquare);
@@ -253,7 +254,7 @@ export function renderPieceOptions(a: {
     }
   } else if (a.narrowedBy === 'escape') {
     out.push(a.options.length === 0
-      ? `${pieceName[0].toUpperCase()}${pieceName.slice(1)} is attacked, and every square it can reach is covered.`
+      ? `${openSentence(pieceName)} is attacked, and every square it can reach is covered.`
       : `Where can ${pieceName} go and be safe? ${andList(a.options.map((o) => o.san))}.`);
   }
   const best = a.options[0];

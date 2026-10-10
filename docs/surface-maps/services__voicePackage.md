@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**657 lines · 13 exports · 16 importers · 9 tests · 2 audits**
+**658 lines · 13 exports · 16 importers · 9 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -41,7 +41,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11367`
+- `src/components/Coach/CoachTeachPage.tsx:11571`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -53,14 +53,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildVoicePackage` (function) — 81 call sites
-- `src/components/Coach/CoachGameReview.tsx:1860`
-- `src/components/Coach/CoachGameReview.tsx:1899`
-- `src/components/Coach/CoachGameReview.tsx:1908`
-- `src/components/Coach/CoachTeachPage.tsx:7969`
+- `src/components/Coach/CoachGameReview.tsx:1871`
+- `src/components/Coach/CoachGameReview.tsx:1910`
+- `src/components/Coach/CoachGameReview.tsx:1919`
+- `src/components/Coach/CoachTeachPage.tsx:8173`
 - `src/hooks/usePhaseNarration.ts:430`
 - `src/hooks/usePhaseNarration.ts:882`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:2596`
+- `src/services/coachFeatureService.ts:2597`
 - `src/services/coachSurfaceScorecard.report.test.ts:116`
 - `src/services/coachSurfaceScorecard.report.test.ts:138`
 - `src/services/coachSurfaceScorecard.report.test.ts:149`
@@ -73,7 +73,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/laneReachability.test.ts:136`
 - `src/services/learnTurnDoor.ts:390`
 - `src/services/replayFence.najdorf1500.test.ts:50`
-- `src/services/reviewMoveBriefing.ts:408`
+- `src/services/reviewMoveBriefing.ts:409`
 - `src/services/ruleGradeFen.test.ts:9`
 - `src/services/ruleGradeFen.test.ts:12`
 - `src/services/speedRunReads.scale.test.ts:41`
@@ -136,20 +136,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:569`
 
 ### `spokenSentenceKeys` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7839`
-- `src/components/Coach/CoachTeachPage.tsx:9379`
-- `src/components/Coach/CoachTeachPage.tsx:10422`
-- `src/components/Coach/CoachTeachPage.tsx:11348`
-- `src/services/coachFeatureService.ts:2601`
-- `src/services/reviewMoveBriefing.ts:409`
+- `src/components/Coach/CoachTeachPage.tsx:8043`
+- `src/components/Coach/CoachTeachPage.tsx:9583`
+- `src/components/Coach/CoachTeachPage.tsx:10626`
+- `src/components/Coach/CoachTeachPage.tsx:11552`
+- `src/services/coachFeatureService.ts:2602`
+- `src/services/reviewMoveBriefing.ts:410`
 - `src/services/voicePackage.test.ts:415`
 - `src/services/voicePackage.test.ts:424`
 - `src/services/voicePackage.test.ts:436`
 - `src/services/voicePackage.test.ts:514`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10409`
-- `src/components/Coach/CoachTeachPage.tsx:11443`
+- `src/components/Coach/CoachTeachPage.tsx:10613`
+- `src/components/Coach/CoachTeachPage.tsx:11647`
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 1 call site
@@ -162,12 +162,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `keptLines` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11409`
+- `src/components/Coach/CoachTeachPage.tsx:11613`
 - `src/services/learnTurnDoor.test.ts:193`
 - `src/services/learnTurnDoor.test.ts:199`
 - `src/services/learnTurnDoor.test.ts:205`
 
-### `stripMoveNumbers` (re-export) — 10 call sites
+### `stripMoveNumbers` (re-export) — 12 call sites
 - `scripts/convert-lichess-tsv.mjs:19`
 - `scripts/convert-lichess-tsv.mjs:45`
 - `scripts/danya-corpus/merge-corpus.mjs:36`
@@ -176,8 +176,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/danya-corpus/merge-corpus.mjs:112`
 - `src/services/dnaDoor.test.ts:10`
 - `src/services/dnaDoor.test.ts:11`
+- `src/services/dnaRules.test.ts:45`
+- `src/services/dnaRules.test.ts:48`
 - `src/services/dnaRules.ts:20`
-- `src/services/dnaRules.ts:34`
+- `src/services/dnaRules.ts:37`
 
 ## Tests
 

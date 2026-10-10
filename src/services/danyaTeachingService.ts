@@ -15,6 +15,7 @@
 // were. Code selects which notes match the live position/opening; the model
 // phrases teaching from them and decides nothing else.
 
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import teachingsData from '../data/danya-teachings.json';
 import { computeStructureSignature, signatureMatchScore, type StructureSignature } from './structureSignature';
@@ -1722,7 +1723,7 @@ function stripAnchorRecitation(sentence: string, lineSan: string[] | undefined):
   // Nothing but the moves — the note said only where we are, which the board
   // already says. Silence is the honest result.
   if (tail.replace(/[^a-z]/gi, '').length < 12) return '';
-  return tail.charAt(0).toUpperCase() + tail.slice(1);
+  return openSentence(tail);
 }
 
 export function spokenBeatText(note: DanyaNote): string {

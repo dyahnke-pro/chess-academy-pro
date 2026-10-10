@@ -32,6 +32,7 @@
 // engine line handed in shows, and every one carries the PROOF it rests on
 // (a played line or the squares, `proof.ts`). A read that cannot prove itself
 // is not emitted. Phrasing rotates on the move number, never at random.
+import { openSentence, continueSentence } from '../utils/openSentence';
 import { Chess, type Square, type Move } from 'chess.js';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { sayMoveClause } from './spokenMove';
@@ -71,7 +72,7 @@ type Lines = ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate:
 type Color = 'w' | 'b';
 
 const name = (p: string): string => PIECE_NAMES[p] ?? 'piece';
-const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+const cap = (s: string): string => openSentence(s);
 const other = (c: Color): Color => (c === 'w' ? 'b' : 'w');
 /** PHRASING ROTATES, NEVER ROLLS: keyed on the move number. */
 const rot = (fen: string, ...forms: string[]): string => forms[Number(fen.split(' ')[5] ?? 1) % forms.length];
@@ -160,7 +161,7 @@ export function mateOrMaterial(fen: string, me: Color, lines: Lines): KingRead |
     if (division && studentMoves.length >= 2) {
       return {
         id: 'mate-division',
-        text: `There's a mate here, and it takes teamwork: ${division.charAt(0).toLowerCase()}${division.slice(1)}`,
+        text: `There's a mate here, and it takes teamwork: ${continueSentence(division)}`,
         idea: 'There is a mate here that needs several of your pieces working together — find what each one does.',
         squares: studentMoves.map((m) => m.to),
         proof, stakes, namesMove: true, claim: `kr:mate:${sans.join('')}`, lines: lineArr,

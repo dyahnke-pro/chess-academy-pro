@@ -19,6 +19,7 @@
  *
  * SILENT on a null chain — the flat ranked list stands (never a fabricated link).
  */
+import { openSentence } from '../utils/openSentence';
 import type { Color } from 'chess.js';
 import type { CausalChain, CausalNode } from './causalChain';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
@@ -54,7 +55,7 @@ function depthFor(rating: number): Depth {
 function poss(color: Color, student: Color): string { return color === student ? 'your' : 'their'; }
 function subjCap(color: Color, student: Color): string { return color === student ? 'You' : 'They'; }
 
-function cap(s: string): string { return s.charAt(0).toUpperCase() + s.slice(1); }
+function cap(s: string): string { return openSentence(s); }
 
 /** One sentence per node, in the chosen register + perspective. Returns '' for a
  *  node the register skips. `chain` carries the stance so the TACTIC node can be

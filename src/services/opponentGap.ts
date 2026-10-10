@@ -10,6 +10,7 @@
 // whether the gap is worth pointing at.
 //
 // Doc: docs/plans/2026-08-26-coach-my-weakness-focus-lens.md §4.0b.
+import { openSentence } from '../utils/openSentence';
 import type { StockfishAnalysis } from '../types';
 import type { OpponentIntent } from './opponentIntent';
 import { moveWhy } from './deliberation';
@@ -120,7 +121,7 @@ export function opponentGapClause(
   return `${led}: ${san} — it ${why}.`;
 }
 
-const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+const cap = (t: string): string => openSentence(t);
 
 /** ONE MOVE, ONE VOICE (Colle walk 2026-09-27, 26…Rxc3: "Rxc3 gives you
  *  something: Bf6 — it lands on the f6 outpost … The move is Bf6 — it lands on

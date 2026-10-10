@@ -20,6 +20,7 @@
 // its claim is not emitted. Seats: the student is "you/your", the opponent
 // "they/their"; material is said in words, never as a point total; no move
 // numbers. Phrasing rotates on the position (`stemKeyOf`), never rolled.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { legalLineProof, lineProof, squaresProof, type Proof } from './proof';
 import { legalSeeGain, legalSeeGainFor, seeSequence, asIfToMove } from './positionReadingService';
@@ -80,7 +81,7 @@ const other = (s: Side): Side => (s === 'w' ? 'b' : 'w');
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const val = (t: string | undefined): number => MATERIAL_VALUE[t ?? ''] ?? 0;
 const own = (color: Side, student: Side): string => (color === student ? 'your' : 'their');
-const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+const cap = (s: string): string => openSentence(s);
 const WORD = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
 const numWord = (n: number): string => WORD[n] ?? 'many';
 

@@ -156,7 +156,9 @@ async function answerFromRead(turn: ResolvedChatTurn, board: BoardTurnInput): Pr
   if (turn.kind === 'tactics') {
     for (const h of computeMustDefend(board.fen, student).pieces) {
       if (!h.attacker || !h.attackerSquare || covered.has(h.square)) continue;
-      theirs.push(`their ${PIECE_NAME[h.attacker]} on ${h.attackerSquare} is after your ${PIECE_NAME[h.piece]} on ${h.square}${h.defenders === 0 ? ', which nothing guards' : ''}`);
+      // The attacker already named is the same threat continued: "also".
+      const also = covered.has(h.attackerSquare) ? 'also ' : '';
+      theirs.push(`their ${PIECE_NAME[h.attacker]} on ${h.attackerSquare} is ${also}after your ${PIECE_NAME[h.piece]} on ${h.square}${h.defenders === 0 ? ', which nothing guards' : ''}`);
     }
   }
   if (chosen.length === 0 && theirs.length === 0) return null;

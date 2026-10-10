@@ -13,6 +13,7 @@
 //  • `computeCriticality` is the sharpness SCORE (from the same analysis);
 //    `computeImportance` is the speak/rank verdict. One analysis, both reads.
 //  • Perturbation (expensive) runs ONLY when importance says the moment matters.
+import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan, lastMoveFromHistory } from './material';
 import { readTrade, findTradeTarget } from './tradeQuality';
 import { conceptInstanceKey, forkThreatKey } from './conceptKey';
@@ -49,6 +50,7 @@ import { buildDeliberation, deliberationFacts, deliberationWeighing, deliberatio
 import { detectLatentFork, latentForkClause, type LatentFork } from './latentFork';
 import { lineTakesPiece, pawnHit } from './trappedPiece';
 import { moverLineProof } from './exchangeLedger';
+import { MATERIAL_VALUE } from './pieceValues';
 import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause, type LatentDanger, type TradeDanger } from './latentDanger';
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
@@ -442,7 +444,7 @@ function plyNumberForPlan(fen: string): number {
 }
 
 export function planChangedText(text: string): string {
-  return `The plan changes here: ${text.charAt(0).toLowerCase()}${text.slice(1)}`;
+  return `The plan changes here: ${continueSentence(text)}`;
 }
 
 const SAY_ONCE_KINDS: ReadonlySet<ClauseKind> = new Set<ClauseKind>(['their-habit', 'hole-access', 
@@ -1496,7 +1498,6 @@ function buildClauses(a: {
   // and a separate one — not to be changed as a side effect of this build.)
   if (trapChance) {
     const NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
-    const VALUE: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
     ranked.push({
       // Above the trade warning (82): a piece won now outranks a pin that only
       // opens if you choose to trade.
@@ -1505,7 +1506,7 @@ function buildClauses(a: {
       // the board fact alone when the line proves nothing countable.
       text: `${trapChance.san} traps their ${NAME[trapChance.type] ?? 'piece'} on ${trapChance.square} — it has no safe square to run to${trapChance.proof ? `: ${trapChance.proof}` : ''}.`,
       squares: [trapChance.to, trapChance.square],
-      stakes: { points: VALUE[trapChance.type] ?? 3, plies: 3 },
+      stakes: { points: MATERIAL_VALUE[trapChance.type] ?? 3, plies: 3 },
     });
   }
   if (latentFork && !a.alreadySaid?.has(forkThreatKey(latentFork.square, latentFork.targets.map((t) => t.square)))) {
@@ -1555,6 +1556,9 @@ function buildClauses(a: {
     // (the threat is the null-move probe's, the advantage is the eval); only the
     // framing changes, so it never invents a threat that isn't there.
     const winning = studentToMove && studentEvalCp >= 200;
+    // THE ANSWER THE BOARD ALLOWS, AS A FACT (one coach, 2026-10-09): when
+    // their attacker can simply be taken without losing material, say so.
+    const takeable = !!(studentToMove && p.attackerSquare && takingTheAttackerAnswers(a.fen, p.attackerSquare as Square, studentSeat === 'white' ? 'w' : 'b'));
     ranked.push({
       kind: 'must-defend',
       rank: 75,
@@ -1563,17 +1567,16 @@ function buildClauses(a: {
       // attacker and the missing guard — never "they win it", and never "that
       // has to be met first" (the best move sometimes ignores it).
       text: (() => {
-        // THE ANSWER THE BOARD ALLOWS, AS A FACT (one coach, 2026-10-09): when
-        // their attacker can simply be taken without losing material, say so —
-        // a board fact like the rest, never the order "take it first" (the best
-        // move sometimes ignores the threat; WO-OUTCOME-01 C).
-        const takeable = studentToMove && p.attackerSquare && takingTheAttackerAnswers(a.fen, p.attackerSquare as Square, studentSeat === 'white' ? 'w' : 'b');
+        // A board fact like the rest, never the order "take it first" (the
+        // best move sometimes ignores the threat; WO-OUTCOME-01 C).
         const hit = `${p.attacker ? `their ${PNAME[p.attacker]}${takeable ? ` on ${p.attackerSquare}` : ''}` : 'they'} ${p.attacker ? 'attacks' : 'attack'} your ${PNAME[p.piece.toLowerCase()]} on ${p.square}${p.defenders === 0 ? ', and nothing defends it' : ''}${takeable ? ' — and you can take the attacker without losing material' : ''}`;
         return winning
           ? `You're on top — watch the counterpunch: ${hit}.`
-          : `${hit.charAt(0).toUpperCase()}${hit.slice(1)}.`;
+          : `${openSentence(hit)}.`;
       })(),
-      squares: [p.square],
+      // The attacker's square is part of the claim whenever the words name it
+      // (geometry coupled at emission, never read back out of the prose).
+      squares: takeable && p.attackerSquare ? [p.square, p.attackerSquare] : [p.square],
       // The null-move probe's own net: taken on their next move.
       stakes: { points: mustDefend.net, plies: studentToMove ? 2 : 1 },
       // Its proof — the count and the capture, the same read Learn's warning
@@ -1820,7 +1823,7 @@ function pinPressureConcept(fen: string, student: 'w' | 'b'): NonNullable<Parame
  *  queen on d2…" as if Qd2 had been played — it had not). */
 export function afterLine(line: readonly string[] | undefined, boardFen: string | undefined, fenNow: string, student: 'w' | 'b', text: string): string {
   if (!line || line.length === 0 || !boardFen || samePlacementFen(boardFen, fenNow)) return text;
-  const rest = `${text.charAt(0).toLowerCase()}${text.slice(1)}`;
+  const rest = `${continueSentence(text)}`;
   // "If you play X, …" — the same comma-and-whole-sentence shape as "After …",
   // so it reads for every detector sentence ("If you play Nd4, moving the
   // knight on e5 would unveil…"); "Play X and moving…" did not.

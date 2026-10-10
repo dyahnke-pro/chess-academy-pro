@@ -17,6 +17,7 @@
 // it broke second, and the method is the closing takeaway — "and here is the
 // habit that finds it next time." Leading with the habit would preach before
 // the student has seen the evidence.
+import { openSentence } from '../utils/openSentence';
 import { isDecidingMoment } from './nextMoveAdvice';
 import type { ImportanceTier } from './narrationImportance';
 import type { Proof } from './proof';
@@ -409,7 +410,7 @@ export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: R
 }
 
 function bestIsMate(bestSan: string | null): boolean { return (bestSan ?? '').endsWith('#'); }
-function cap(x: string): string { return x.charAt(0).toUpperCase() + x.slice(1); }
+function cap(x: string): string { return openSentence(x); }
 
 function beat(habit: LiveHabit, stems: string[], ply: number): LiveMethodBeat {
   return { text: pick(stems, ply), key: liveHabitKey(habit) };

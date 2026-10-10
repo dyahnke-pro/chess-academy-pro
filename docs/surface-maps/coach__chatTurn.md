@@ -51,9 +51,9 @@
 - `src/coach/chatTurn.test.ts:107`
 - `src/coach/dispatchCoachTurn.ts:253`
 - `src/coach/dispatchCoachTurn.ts:266`
-- `src/coach/dispatchCoachTurn.ts:330`
-- `src/coach/dispatchCoachTurn.ts:449`
-- `src/coach/dispatchCoachTurn.ts:516`
+- `src/coach/dispatchCoachTurn.ts:354`
+- `src/coach/dispatchCoachTurn.ts:473`
+- `src/coach/dispatchCoachTurn.ts:540`
 - `src/coach/questionRoute.test.ts:20`
 - `src/coach/questionRoute.test.ts:30`
 - `src/coach/questionRoute.test.ts:33`
@@ -148,7 +148,7 @@
 - `src/coach/chatTurn.test.ts:80`
 - `src/coach/chatTurn.test.ts:83`
 - `src/coach/chatTurn.test.ts:87`
-- `src/coach/dispatchCoachTurn.ts:423`
+- `src/coach/dispatchCoachTurn.ts:447`
 
 ### `kindAgreesWithLane` (function) — 3 call sites
 - `src/coach/chatTurn.test.ts:103`
@@ -159,7 +159,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `askBackAtCatchAll` (function) — 1 call site
-- `src/services/coachApi.ts:733`
+- `src/services/coachApi.ts:734`
 
 ## Tests
 

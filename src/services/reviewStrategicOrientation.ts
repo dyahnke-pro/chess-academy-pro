@@ -25,6 +25,7 @@
  * REVIEW register (retrospective, the student's own game) — 2nd person for the
  * student, 3rd for the opponent.
  */
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { phaseOfFen } from './boardConcepts';
@@ -319,7 +320,7 @@ export function buildOpeningDevelopmentPlan(
   const curated = opts?.curatedIdeas;
   if (curated && curated.length > 0) {
     const pick = curated[seed % curated.length].trim().replace(/\.$/, '');
-    const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+    const cap = (s: string): string => openSentence(s);
     const stems = openingLabel
       ? [
           (i: string) => `The heart of the ${openingLabel}: ${i}.`,
@@ -629,7 +630,7 @@ export function buildMiddlegameOrientation(
   }
 
   if (parts.length === 0) return null;
-  const first = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+  const first = openSentence(parts[0]);
   const rest = parts.slice(1);
   const text = rest.length ? `${first}; ${rest.join('; ')}.` : `${first}.`;
   const arrows = planDoor(fen, studentColorWB, pairs);

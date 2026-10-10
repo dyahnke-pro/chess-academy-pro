@@ -22,7 +22,7 @@
  * `coachService` would cycle (coachService ← trainingAidRouter ← coachSessionRouter).
  * This wrapper depends on both; neither depends on it.
  */
-import { openSentence } from '../utils/openSentence';
+import { openSentence, continueSentence } from '../utils/openSentence';
 import { unwrapSpineError } from '../services/sanitizeCoachText';
 import { COACH_OFFLINE_LINE } from './stockLine';
 import { answerBoardTurn, BOARD_ANSWERED_KINDS } from './boardTurnAnswer';
@@ -30,7 +30,7 @@ import { coachService, type CoachServiceOptions } from './coachService';
 import type { CoachAskInput, CoachAnswer, CoachSurface } from './types';
 import type { WalkableLine } from '../types';
 import { routeChatIntent } from '../services/coachSessionRouter';
-import { askSourceFor, positionalTopic } from './questionIntents';
+import { askSourceFor, positionalTopic, splitMultiAsk } from './questionIntents';
 import { assemblePositionalAnswer, assembleThreatAnswer } from '../services/groundedAnswer';
 import {
   CHAT_KINDS,
@@ -309,6 +309,30 @@ export async function dispatchCoachTurn(
 ): Promise<CoachAnswer> {
   const startedAt = Date.now();
   const student = isStudentTurn(input);
+  // SEVERAL ASKS IN ONE MESSAGE — split AT THE DOOR, so each part takes the
+  // whole door: its own read, its own computer, in the order asked (hard tier
+  // 2026-10-10: the split lived behind the door in coachService.ask, so a
+  // direct answer for one part served the whole message and the other part
+  // was never heard). Only what a person typed is split.
+  const parts = student ? splitMultiAsk(input.ask) : null;
+  if (parts) {
+    const answers: CoachAnswer[] = [];
+    for (const part of parts) {
+      answers.push(await dispatchCoachTurn({ ...input, ask: part }, { ...options, turnRead: undefined }));
+    }
+    const lines = answers.flatMap((a) => a.lines ?? []);
+    const offers = answers.flatMap((a) => a.actionOffer ?? []);
+    const endorsed = answers.flatMap((a) => a.endorsedSans ?? []);
+    return {
+      ...answers[answers.length - 1],
+      text: answers.map((a) => a.text.trim()).filter(Boolean).join('\n\n'),
+      toolCallIds: answers.flatMap((a) => a.toolCallIds),
+      dispatchedToolNames: answers.flatMap((a) => a.dispatchedToolNames),
+      ...(lines.length ? { lines } : {}),
+      ...(offers.length ? { actionOffer: offers } : {}),
+      ...(endorsed.length ? { endorsedSans: endorsed } : {}),
+    };
+  }
   // The read starts NOW, in parallel with today's routing — no added latency.
   const read = student ? (options.turnRead?.claim() ?? startChatTurnRead(input)) : null;
   let servedParsed = false;
@@ -385,7 +409,7 @@ export async function dispatchCoachTurn(
       const sc = input.liveState.studentColor ?? (input.liveState.fen.split(' ')[1] === 'b' ? 'black' : 'white');
       const threat = assembleThreatAnswer(input.liveState.fen, input.ask, sc, 'opponent');
       if (threat) {
-        const now = threat.facts.charAt(0).toLowerCase() + threat.facts.slice(1);
+        const now = continueSentence(threat.facts);
         return serve(`There's no move list on this board, so their last move can't be read. What they threaten right now: ${now}`, 'board:threats-no-history', 'answered');
       }
     }

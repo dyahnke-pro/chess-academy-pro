@@ -15,6 +15,7 @@
 // The core derivation is PURE (deriveDossier); the I/O wrappers read the
 // lifecycle + curriculum and cache one row in the `meta` KV store (no new Dexie
 // store → no migration on live devices, same pattern as bookDeparturePrecompute).
+import { openSentence } from '../utils/openSentence';
 import { db } from '../db/schema';
 import { getWeaknessLifecycle, type WeaknessLifecycle, type WeaknessLifecycleEntry, type LifecycleTrend } from './weaknessLifecycle';
 import { getCoachCurriculum } from './coachCurriculumService';
@@ -234,5 +235,5 @@ export function dossierOpeningLine(
 }
 
 function cap(s: string): string {
-  return s.length ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+  return s.length ? openSentence(s) : s;
 }

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**531 lines · 4 exports · 8 importers · 6 tests · 0 audits**
+**532 lines · 4 exports · 8 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -33,7 +33,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectConcept` (function) — 37 call sites
-- `src/services/coachFeatureService.ts:4908`
+- `src/services/coachFeatureService.ts:4909`
 - `src/services/reviewConcepts.test.ts:24`
 - `src/services/reviewConcepts.test.ts:27`
 - `src/services/reviewConcepts.test.ts:35`

@@ -23,6 +23,7 @@
 // `positionFacts` already use, so count===1 and severity>='critical' can never
 // disagree. G0 throughout — the facts are the engine's; the phrasing pass only
 // wraps them.
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { criticalityThresholds } from './criticalityScan';
 import { moverLossProof } from './exchangeLedger';
@@ -350,7 +351,7 @@ export function criticalMomentReveal(read: CriticalMomentRead | null): string | 
   const stake = stakeText(read.stake, { plural: read.count !== 1, past: true });
   // Capitalised: it is a whole sentence, and every caller sets it after a full
   // stop ("You played d4. Only one move kept…").
-  const lead = count[0].toUpperCase() + count.slice(1);
+  const lead = openSentence(count);
   // THE CANDIDATES THAT FAIL, AND WHY (S5) — every discarded move whose own
   // line proves its failure. A candidate move is a lesson only with its reason.
   const fails = (read.discardedProofs ?? []).map((d) => ` ${d.san} didn't work: ${d.text}.`).join('');

@@ -6,6 +6,7 @@
 // generic "improve your pieces", per "when unsure, leave blank"). G0/G3: the
 // structure comes from chess.js geometry (describeStructure); the plan is the
 // established idea for that structure, phrased in code.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
 // `stepsToPromote` moved to planRace when the race needed the same unit — one
@@ -126,7 +127,7 @@ export function structurePlanFact(fen: string, studentColor: Color): StructurePl
     if (race?.kind === 'passer-race' && raceText) {
       return {
         id: `passer-race:${race.youQueenFirst ? 'you' : 'them'}`,
-        text: `${raceText.charAt(0).toUpperCase()}${raceText.slice(1)}.`,
+        text: `${openSentence(raceText)}.`,
       };
     }
     return { id: 'passer-mine', ideaKey: `student-passer-${mine[0]}`, text: `Your passed pawn on ${mine} is the trump here — push it and make them deal with the promotion.` };

@@ -1,3 +1,4 @@
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { classifyPhase } from './gamePhaseService';
 import { db } from '../db/schema';
@@ -675,7 +676,7 @@ async function analyzeGameWithStockfish(
       sourceMode,
       playerColor,
       promptText: tacticType
-        ? `${tacticTypeLabel(tacticType).charAt(0).toUpperCase() + tacticTypeLabel(tacticType).slice(1)} — ${PROMPT_TEXT[classification]}`
+        ? `${openSentence(tacticTypeLabel(tacticType))} — ${PROMPT_TEXT[classification]}`
         : (transformation ? transformationPrompt(transformation) : PROMPT_TEXT[classification]),
       narration,
       createdAt: now,
@@ -976,7 +977,7 @@ async function generateFromAnnotations(
       sourceMode,
       playerColor,
       promptText: tacticType
-        ? `${tacticTypeLabel(tacticType).charAt(0).toUpperCase() + tacticTypeLabel(tacticType).slice(1)} — ${PROMPT_TEXT[classification]}`
+        ? `${openSentence(tacticTypeLabel(tacticType))} — ${PROMPT_TEXT[classification]}`
         : (transformation ? transformationPrompt(transformation) : PROMPT_TEXT[classification]),
       narration,
       createdAt: now,
@@ -1279,7 +1280,7 @@ export function buildMistakePuzzleFromCapture(
     sourceGameId: input.from.gameId,
     sourceMode: input.from.source,
     playerColor,
-    promptText: `${tacticTypeLabel(tacticType).charAt(0).toUpperCase() + tacticTypeLabel(tacticType).slice(1)} — ${PROMPT_TEXT[classification]}`,
+    promptText: `${openSentence(tacticTypeLabel(tacticType))} — ${PROMPT_TEXT[classification]}`,
     narration,
     createdAt: new Date().toISOString(),
     opponentName: input.from.opponentName,

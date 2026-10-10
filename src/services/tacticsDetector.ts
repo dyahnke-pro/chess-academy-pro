@@ -1,3 +1,4 @@
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import { MATERIAL_VALUE } from './pieceValues';
 import type { BoardHighlight } from '../types';
@@ -45,7 +46,7 @@ function coordsToSquare(file: number, rank: number): Square | null {
 }
 
 function capitalize(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }
 
 /** A list a person would say out loud: "a, b and c" — never "a and b and c". */

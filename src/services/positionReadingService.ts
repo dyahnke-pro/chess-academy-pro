@@ -15,6 +15,7 @@
  * cheaper attacker wins the exchange (David's 2026-06-27 catch: "attacked-and-
  * undefended is *sufficient*, not *necessary* — it's not an iff").
  */
+import { openSentence } from '../utils/openSentence';
 import { andList, fileList } from '../utils/andList';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { SquareAnswerMode } from './squareAnswerGrader';
@@ -2386,7 +2387,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
       answerMode: 'any',
       id: 'piece', type: 'piece', bucket: 'positional',
       prompt: 'Is there a notably good or bad piece on the board? Which one?',
-      answer: `${side[0].toUpperCase()}${side.slice(1)} ${PIECE_NAME[note.piece]} on ${note.square} is a ${note.reason}.`,
+      answer: `${openSentence(side)} ${PIECE_NAME[note.piece]} on ${note.square} is a ${note.reason}.`,
       acceptTokens: [sq(note.square), PIECE_NAME[note.piece], note.quality, ...note.reason.toLowerCase().split(/\s+/).filter((w) => w.length > 3)],
       answerSquares: [note.square],
       negative: false,

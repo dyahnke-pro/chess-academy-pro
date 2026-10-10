@@ -15,6 +15,7 @@
 //
 // PURE: chess.js + the engine line handed in. No Dexie, no LLM, no randomness:
 // phrasing ROTATES on the move number, so a replay says the same thing.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import type { TacticType } from '../types';
 import { sayMoveClause, sayMoveNoun } from './spokenMove';
@@ -71,7 +72,7 @@ const VAL = (t: PieceSymbol): number => (t === 'k' ? 100 : MATERIAL_VALUE[t] ?? 
 const other = (c: Color): Color => (c === 'w' ? 'b' : 'w');
 const xy = (s: string): [number, number] => [s.charCodeAt(0) - 97, Number(s[1]) - 1];
 const sq = (f: number, r: number): Square | null => (f < 0 || f > 7 || r < 0 || r > 7 ? null : (`${String.fromCharCode(97 + f)}${r + 1}` as Square));
-const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+const cap = (s: string): string => openSentence(s);
 const slides = (t: PieceSymbol, d: Vec): boolean => t === 'q' || (t === 'b' ? d[0] !== 0 && d[1] !== 0 : t === 'r' ? d[0] === 0 || d[1] === 0 : false);
 const dirsOf = (t: PieceSymbol): Vec[] => (t === 'b' ? DIAG : t === 'r' ? ORTHO : t === 'q' ? [...DIAG, ...ORTHO] : []);
 /** PHRASING ROTATES, NEVER ROLLS: keyed on the move number. */

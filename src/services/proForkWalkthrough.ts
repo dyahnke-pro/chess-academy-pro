@@ -9,6 +9,7 @@
 //   2. describeMoveGeometry (chess.js geometry — what the move does)
 //   3. a minimal move-type descriptor (capture/check/castle/develop) as a floor
 // Frequency + move are computed; the model never decides anything here.
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { groundedMoveWhy } from './groundedMoveWhy';
 import { sanToSpeech } from '../utils/sanToSpeech';
@@ -130,7 +131,7 @@ export function proForkTreeToWalkthrough(fork: ProOpeningForkTree): WalkthroughT
   const rootChildren = buildFrom(0, START_FEN, []);
   if (rootChildren.length === 0) return null;
 
-  const proName = fork.playerId.charAt(0).toUpperCase() + fork.playerId.slice(1);
+  const proName = openSentence(fork.playerId);
   const forkN = fork.forks.length;
   const intro = `Here's how ${proName} plays the ${openingName}, from ${total} of his real games. `
     + (forkN > 0

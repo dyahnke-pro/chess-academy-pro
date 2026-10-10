@@ -193,12 +193,20 @@ export function netPieceWords(took: readonly string[], gave: readonly string[]):
  */
 export function describeExchange(ledger: ExchangeLedger | null): string | null {
   if (!ledger || !ledger.isExchange || !ledger.settled) return null;
-  const mine = nameSide(ledger.studentWon);
-  const theirs = nameSide(ledger.opponentWon);
-  if (!mine || !theirs) return null;
-  if (ledger.netPawns === 0 && mine === theirs) return null; // a plain recapture
+  if (ledger.studentWon.length === 0 || ledger.opponentWon.length === 0) return null;
+  // Like pieces that changed hands both ways cancel: a queen for a queen and a
+  // rook for a rook inside a sacrifice are not part of what it won (hard tier
+  // 2026-10-10: "a queen, a rook, a knight and a pawn for a queen, a rook and
+  // a bishop" is a knight and a pawn for the bishop).
+  const g = [...ledger.studentWon] as PieceLetter[]; const l = [...ledger.opponentWon] as PieceLetter[];
+  for (let i = g.length - 1; i >= 0; i -= 1) { const j = l.indexOf(g[i]); if (j >= 0) { g.splice(i, 1); l.splice(j, 1); } }
+  if (g.length === 0 && l.length === 0) return null; // a plain recapture
+  const mine = nameSide(g);
+  const theirs = nameSide(l);
   // No embedded dash: the caller joins, and two em-dashes in one sentence read
   // as a stutter when the terminal verdict follows.
+  if (!theirs) return `you come out ahead on material, ${mine} up`;
+  if (!mine) return `you come out behind on material, ${theirs} down`;
   if (ledger.netPawns === 0) return `that trade is even, ${mine} for ${theirs}`;
   return ledger.netPawns > 0
     ? `you come out ahead on material, ${mine} for ${theirs}`
@@ -447,6 +455,53 @@ export function describeProofResult(ledger: ExchangeLedger): string {
   return ledger.netPawns > 0 ? 'you come out ahead on material' : 'you come out behind on material';
 }
 
+/**
+ * HOW DEEP A HEARD PROOF MAY RUN. A quiet line past MAX_PV_DEPTH_PLIES proves
+ * nothing to a listener, but a FORCED line does: every move a check, a capture
+ * or the answer to a check is how a strong player calculates, and it is
+ * followable to its end (hard tier 2026-10-10: "what do I get for Bd5+?" — the
+ * bishop comes back on ply 9, Bd5+ cxd5 Qxd5+ Ne4 Rxh1 Kxh1 Qxe4+ Qxe4 fxe4,
+ * and the 7-ply cut left the sacrifice with no outcome). The horizon is the
+ * longer of the two: the quiet window, or the line's forced prefix.
+ */
+export function heardHorizon(fen: string, sans: readonly string[]): number {
+  let forced = 0;
+  try {
+    const c = new Chess(fen);
+    for (const san of sans) {
+      const inCheck = c.inCheck();
+      const m = c.move(san);
+      if (!(inCheck || m.captured || /[+#]/.test(m.san))) break;
+      forced += 1;
+    }
+  } catch { /* the playable prefix is what we have */ }
+  return Math.max(MAX_PV_DEPTH_PLIES, forced);
+}
+
+/**
+ * THE PROOF A LISTENER CAN HEAR. `proofCut` claims what the WHOLE line ends
+ * on; when that lies past the heard horizon, the line is counted only as far
+ * as a listener can follow, and what is settled there is the claim — a true
+ * lower bound, never a guess about the tail (hard tier 2026-10-10: Bd5+ wins
+ * its bishop back by ply 9 and the d4 pawn on ply 13; the answer says the
+ * first, which a student can see, instead of nothing).
+ */
+export function heardProofCut(
+  fen: string,
+  sans: readonly string[],
+  studentColorWB: 'w' | 'b',
+  prior?: { fenBefore: string; san: string } | null,
+): LineProof | null {
+  const whole = proofCut(fen, sans, studentColorWB, prior);
+  if (!whole) return null;
+  const horizon = heardHorizon(fen, whole.sans);
+  if (whole.plies <= horizon) return whole;
+  if (whole.mate) return null;
+  const near = proofCut(fen, sans.slice(0, horizon), studentColorWB, prior);
+  if (!near || near.plies > horizon || near.mate || !near.ledger?.settled) return null;
+  return near;
+}
+
 /** A line cut to the point it PROVES AGAINST the side that starts it — mate
  *  of that side, or a settled material loss for it — rendered from that
  *  side's seat ("Qh4 and Nxh4 — they win a queen"). Null when the line
@@ -462,13 +517,12 @@ export function moverLossProof(fen: string, uci: readonly string[], moverWB: 'w'
     for (const u of uci) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined }).san);
   } catch { /* the playable prefix is what we have */ }
   if (sans.length === 0) return null;
-  const proof = proofCut(fen, sans, moverWB);
+  const proof = heardProofCut(fen, sans, moverWB);
   if (!proof) return null;
   // A PROOF IS HEARD, SO IT HAS A HORIZON. "Qd2? Then e4, Ne5, Nxe5, dxe5,
   // O-O, Qf4, Ng6, Qg3, h5, Be2, h4, Qe3 and Nxe5" (hand walk 2340, 13 plies)
   // proves nothing to a listener. Past the horizon the line is not a reason,
   // and a move without a reason is not ruled out loud.
-  if (proof.plies > MAX_PV_DEPTH_PLIES) return null;
   const moves = andList(proof.sans.slice(0, proof.plies));
   // The line starts with the mover's move, so a mate of the MOVER ends on an
   // even ply; an odd-length mate is the mover mating, which explains nothing.
@@ -490,8 +544,8 @@ export function moverLineProof(fen: string, uci: readonly string[], moverWB: 'w'
     for (const u of uci) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined }).san);
   } catch { /* the playable prefix is what we have */ }
   if (sans.length === 0) return null;
-  const proof = proofCut(fen, sans, moverWB);
-  if (!proof || proof.plies > MAX_PV_DEPTH_PLIES) return null;
+  const proof = heardProofCut(fen, sans, moverWB);
+  if (!proof) return null;
   const line = { fen, sans: proof.sans.slice(0, proof.plies) };
   const moves = andList(line.sans);
   const said = (text: string): Proof => ({ kind: 'line', exact: false, short: text, full: text, line });

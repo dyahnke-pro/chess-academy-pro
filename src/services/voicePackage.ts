@@ -37,6 +37,7 @@
 //   4. What is spoken and what is logged are the same object. A package that
 //      reports something other than what the student heard is worse than no
 //      log at all.
+import { openSentence } from '../utils/openSentence';
 import type { FactProof } from './proof';
 import { Chess } from 'chess.js';
 import { gradeNarrationText } from './coachAnswerGates';
@@ -613,7 +614,7 @@ export function joinSpoken(kept: readonly VoiceFact[]): string {
     // Leave an intentional lowercase opener alone when it is a SAN token
     // ("dxe5 wins a pawn") — capitalising a move name would be wrong.
     if (/^[a-h][1-8x]/.test(trimmed) || /^[KQRBN]x?[a-h][1-8]/.test(trimmed)) return trimmed;
-    return trimmed[0].toUpperCase() + trimmed.slice(1);
+    return openSentence(trimmed);
   };
   return kept.map((f) => sentence(f.text)).join(' ');
 }

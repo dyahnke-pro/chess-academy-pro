@@ -1,3 +1,4 @@
+import { openSentence } from '../utils/openSentence';
 // structureProse — the STRUCTURE atoms, spoken as English from the student's
 // seat (David 2026-09-15, reading a real prod review transcript: "I want you
 // reading and evaluating the actual narration outputs").
@@ -85,5 +86,5 @@ export function renderStructureAtoms(atoms: string[], seat: StudentSeat): string
 
   if (!clauses.length) return '';
   const s = list(clauses);
-  return `${s.charAt(0).toUpperCase()}${s.slice(1)}.`;
+  return `${openSentence(s)}.`;
 }

@@ -14,6 +14,7 @@
 // move the student skipped when the pin or kick then arrived.
 // The proof is exact: the covering pawn and its capture, read off the board.
 // PURE: chess.js + the legal SEE.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import type { Proof } from './proof';
@@ -184,5 +185,5 @@ export function prophylaxisProof(p: Prophylaxis): Proof {
 /** The advice, with its proof. */
 export function prophylaxisLine(p: Prophylaxis): string {
   const what = `the ${p.kind} with ${p.intent.san}`;
-  return `${p.prevention.san} first — it stops ${what} before it lands. ${(() => { const f = prophylaxisProof(p).full; return `${f.charAt(0).toUpperCase()}${f.slice(1)}.`; })()}`;
+  return `${p.prevention.san} first — it stops ${what} before it lands. ${(() => { const f = prophylaxisProof(p).full; return `${openSentence(f)}.`; })()}`;
 }

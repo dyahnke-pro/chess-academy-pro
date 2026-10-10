@@ -16,6 +16,7 @@
  * PURE assemblers (verdict, key-tactic pick, tempting pick) are exported and
  * unit-tested with hand-fed data — the engine wiring is a thin shell over them.
  */
+import { openSentence, continueSentence } from '../utils/openSentence';
 import { preparationOf } from './speedRunReads';
 import { andList } from '../utils/andList';
 import { settledLineEnd } from './material';
@@ -245,7 +246,7 @@ export function namedTacticClause(plies: PvPly[]): string | null {
   const kt = pickKeyTactic(plies);
   if (!kt || kt.squares.length === 0) return null;
   const desc = kt.description.length > 0
-    ? kt.description[0].toLowerCase() + kt.description.slice(1)
+    ? continueSentence(kt.description)
     : kt.type;
   return `The point — ${desc}.`;
 }
@@ -578,12 +579,12 @@ export function uncertaintyClause(read: TacticalRead, opts: { spoken?: boolean; 
   const best = sayN(read.bestMoveSan, read.fen);
   const stems = [
     `It’s genuinely close — ${alt} is about as good as ${best}, so don’t agonise.`,
-    `${alt.charAt(0).toUpperCase()}${alt.slice(1)} is a fine alternative to ${best} here; the two are within a whisker.`,
+    `${openSentence(alt)} is a fine alternative to ${best} here; the two are within a whisker.`,
     `Nothing to lose sleep over — ${alt} does the same job as ${best}.`,
     // No COUNT stem ("there are two good moves here…"): the critical-moment
     // read already counts the moves that hold, and the two spoke back to back
     // as one fact said twice (hand walk 2026-09-24).
-    `${alt.charAt(0).toUpperCase()}${alt.slice(1)} works just as well as ${best} here.`,
+    `${openSentence(alt)} works just as well as ${best} here.`,
   ];
   return stems[Math.abs(opts.rotation ?? 0) % stems.length];
 }

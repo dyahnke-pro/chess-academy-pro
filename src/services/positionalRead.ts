@@ -25,6 +25,7 @@
 // It is the LOWEST-priority lane by design. It should never displace a tactic,
 // a threat, a gem or a taught note — it is what plays when none of them have
 // anything, which per the measurement is about half the game.
+import { openSentence } from '../utils/openSentence';
 import { describeStructure } from './boardStructure';
 import { homeMinorCount } from './development';
 import { Chess, type Color, type Square } from 'chess.js';
@@ -353,7 +354,7 @@ function observationsFor(
       squares: [breaks[0]],
       text: own
         ? `You have a pawn break on ${breaks[0]} — the pawn levers are where the play comes from.`
-        : `${you.charAt(0).toUpperCase()}${you.slice(1)} have a pawn break available on ${breaks[0]} — that is where their play comes from.`,
+        : `${openSentence(you)} have a pawn break available on ${breaks[0]} — that is where their play comes from.`,
     });
   }
 

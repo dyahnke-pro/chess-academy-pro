@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2560 lines · 68 exports · 33 importers · 39 tests · 15 audits**
+**2541 lines · 68 exports · 33 importers · 39 tests · 15 audits**
 
 ## Locked rules that govern this surface
 
@@ -129,7 +129,7 @@
 - `src/coach/questionIntents.test.ts:1203`
 - `src/coach/questionIntents.ts:377`
 - `src/coach/questionIntents.ts:3346`
-- `src/coach/questionIntents.ts:3540`
+- `src/coach/questionIntents.ts:3544`
 - `src/coach/questionIntents.whyBestMove.test.ts:48`
 - `src/components/Coach/CoachTeachPage.tsx:5299`
 
@@ -164,7 +164,7 @@
 - `src/coach/questionIntents.test.ts:871`
 - `src/coach/questionIntents.ts:892`
 - `src/coach/questionIntents.ts:3349`
-- `src/coach/questionIntents.ts:3536`
+- `src/coach/questionIntents.ts:3540`
 - `src/coach/tacticsProgressQuestion.test.ts:24`
 - `src/coach/tacticsProgressQuestion.test.ts:37`
 - `src/components/Coach/CoachTeachPage.tsx:5300`
@@ -213,7 +213,7 @@
 - `src/coach/questionIntents.ts:1187`
 - `src/coach/questionIntents.ts:3406`
 - `src/coach/questionIntents.ts:3428`
-- `src/services/coachApi.ts:6572`
+- `src/services/coachApi.ts:6573`
 
 ### `isEndgameWeaknessQuestion` (re-export) — 7 call sites
 - `src/coach/questionIntents.test.ts:591`
@@ -395,7 +395,7 @@
 - `src/coach/questionMatrix.audit.test.ts:86`
 - `src/coach/questionMatrix.audit.test.ts:127`
 - `src/coach/questionMatrix.audit.test.ts:145`
-- `src/services/kidGameCoach.ts:253`
+- `src/services/kidGameCoach.ts:254`
 - `src/zzp3.test.ts:10`
 
 ### `isStatsQuestion` (re-export) — 8 call sites
@@ -717,7 +717,7 @@
 - `src/coach/questionIntents.ts:834`
 - `src/coach/questionIntents.ts:3347`
 - `src/coach/questionIntents.ts:3393`
-- `src/coach/questionIntents.ts:3535`
+- `src/coach/questionIntents.ts:3539`
 - `src/coach/questionIntents.whyBestMove.test.ts:27`
 - `src/coach/questionIntents.whyBestMove.test.ts:40`
 - `src/coach/questionIntents.whyBestMove.test.ts:49`
@@ -804,7 +804,7 @@
 - `src/coach/questionIntents.test.ts:1401`
 - `src/coach/questionIntents.test.ts:1402`
 - `src/coach/questionIntents.ts:425`
-- `src/coach/questionIntents.ts:3534`
+- `src/coach/questionIntents.ts:3538`
 
 ### `COACH_TOOLS` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

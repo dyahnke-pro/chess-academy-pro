@@ -14,6 +14,7 @@
 // beats. G0/G3: it INVENTS nothing — the holes come from the weakness spine, the
 // teachable concept from conceptForCluster (which grounds on the public-domain
 // corpus), and every spoken string here is code-authored, never LLM prose.
+import { openSentence } from '../utils/openSentence';
 import type { MisconceptionBucket } from '../data/misconceptionTags';
 import type { CoachCurriculumRecord } from '../db/schema';
 import type { UnifiedWeakness } from './weaknessSpine';
@@ -262,7 +263,7 @@ export function lessonTeachLines(pieces: readonly string[]): string[] {
       .split(/(?<=[.!?])\s+(?=[A-Za-z0-9"'(])/)
       .map((s) => s.trim())
       .filter(Boolean)
-      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+      .map((s) => openSentence(s))
       .map((s) => (/[.!?…]$/.test(s) ? s : `${s}.`));
     for (let i = 0; i < sentences.length; i += SENTENCES_PER_LINE) {
       out.push(sentences.slice(i, i + SENTENCES_PER_LINE).join(' '));

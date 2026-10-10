@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**816 lines · 25 exports · 4 importers · 1 tests · 0 audits**
+**817 lines · 25 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -100,8 +100,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `knightReach` (function) — 4 call sites
 - `src/services/captureChoice.ts:59`
-- `src/services/moveInsight.ts:1082`
-- `src/services/moveInsight.ts:1134`
+- `src/services/moveInsight.ts:1083`
+- `src/services/moveInsight.ts:1135`
 - `src/services/speedRunReads.ts:359`
 
 ### `knightSquares` (function) — 3 call sites
@@ -122,8 +122,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:187`
 - `src/services/exchangeIdeas.test.ts:188`
 - `src/services/exchangeIdeas.test.ts:192`
-- `src/services/positionFacts.ts:1056`
-- `src/services/reviewFullData.ts:904`
+- `src/services/positionFacts.ts:1120`
+- `src/services/reviewFullData.ts:905`
 
 ## Tests
 

@@ -9,6 +9,7 @@
  * the one read. Board-true (chess.js + the position-reading computers); the
  * engine is not consulted.
  */
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { deriveNextPlans } from './nextPlans';
 import { structurePlan } from './boardPlan';
@@ -19,7 +20,7 @@ import { flipSideToMove } from './threatOut';
 import { andList, orList } from '../utils/andList';
 
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+const cap = (s: string): string => openSentence(s);
 
 export type LeverKind = 'develop' | 'break' | 'file' | 'outpost' | 'worst';
 

@@ -10,6 +10,7 @@
  * pure so every surface can call it synchronously.
  */
 
+import { openSentence } from '../utils/openSentence';
 import { materialBalance, MATERIAL_VALUE } from './pieceValues';
 import type { TacticPattern, TacticPatternType } from '../types/tacticTypes';
 import { type PositionalConceptId, asPositionalConcept } from './conceptVocabulary';
@@ -166,7 +167,7 @@ const MATCHUP_PRINCIPLE: Record<MatchupClass, Register | null> = {
 
 /** Uppercase the first letter of a sentence. */
 function cap(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }
 
 /** Named-technique concept for an ending, when a deterministic technique detector

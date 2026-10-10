@@ -25,6 +25,7 @@
  * arrow squares via chess.js. Only surfaceable (weapon-tier + narrated) gems
  * qualify.
  */
+import { openSentence } from '../utils/openSentence';
 import { settledBalance } from './material';
 import type { WalkableLine, WalkPly } from '../types';
 import { computeExchangeLedger, proofCut } from './exchangeLedger';
@@ -296,7 +297,7 @@ function sideWord(turn: 'w' | 'b'): 'white' | 'black' {
 }
 
 function cap(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }
 
 function cleanSan(san: string): string {

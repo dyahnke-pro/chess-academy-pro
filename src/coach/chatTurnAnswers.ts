@@ -6,6 +6,7 @@
 //
 // The target is what the turn names (a piece or a square), else the piece or
 // square the conversation was last about ("and how many defend it?").
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import type { ConversationState, ResolvedChatTurn } from './chatTurn';
 import { findLoosePieces } from '../services/loosePieces';
@@ -52,7 +53,7 @@ function listOf(chess: Chess, squares: readonly Square[]): string {
   return andList(squares.map((s) => `${name(chess.get(s)?.type ?? 'p')} on ${s}`));
 }
 
-const capFirst = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+const capFirst = (s: string): string => openSentence(s);
 const count = (n: number): string => ['None', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight'][n] ?? String(n);
 
 export function answerIsLoose(chess: Chess, sq: Square | null, student: Color, seat: 'me' | 'them' | null = null): string {

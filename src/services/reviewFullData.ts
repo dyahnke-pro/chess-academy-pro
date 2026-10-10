@@ -11,6 +11,7 @@
  * uncapped review speaks these verbatim (un-warmed) so no fact is compressed away
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
+import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan } from './material';
 import { settledExchange, moverLineProof } from './exchangeLedger';
 import { threatProof } from './threatProof';
@@ -457,7 +458,7 @@ export function computeMoveFacets(
   const deltaSquares = new Map<string, readonly string[]>();
   for (const clause of computeBoardDelta(fenBefore, san, deltaSquares)) {
     const seated = ctx.studentColorWB ? seatPieceReferences(clause, fenAfter, ctx.studentColorWB) : clause;
-    const f = `[delta] ${seated.charAt(0).toUpperCase()}${seated.slice(1)}.`;
+    const f = `[delta] ${openSentence(seated)}.`;
     facets.push(f);
     recSquares(f, deltaSquares.get(clause) ?? []);
   }
@@ -829,7 +830,7 @@ export function computeMoveFacets(
     const t = detectNewThreat(ctx.fenBefore, fenAfter, ctx.studentColorWB);
     if (t) {
       const threat = `you're now threatening ${t.san} — it ${t.detail}`;
-      const f = `[threat] ${threat.charAt(0).toUpperCase()}${threat.slice(1)}.`;
+      const f = `[threat] ${openSentence(threat)}.`;
       facets.push(f);
       // The proof is the geometry: the threatened move's landing square and
       // the squares it hits (marked on Why).
@@ -1065,7 +1066,7 @@ export function computeMoveFacets(
     try {
       for (const r of kingReadsForBestLine(fenBefore, studentColorWB, ctx.bestLineUci)) {
         if (!r.namesMove || r.id === 'storm-race') continue;
-        const f = `[king-read] Here, ${r.text.charAt(0).toLowerCase()}${r.text.slice(1)}`;
+        const f = `[king-read] Here, ${continueSentence(r.text)}`;
         facets.push(f);
         recSquares(f, r.squares);
         recProof(f, r.proof);
@@ -1522,11 +1523,11 @@ export function computeThroughLine(fensAfter: string[], studentColorWB: Color | 
     material: 'the through-line of this game was your material edge — once ahead, the job was to simplify and convert, and keeping it clean is the whole skill',
   };
   const p = PHRASING[theme];
-  return p ? `${p.charAt(0).toUpperCase()}${p.slice(1)}.` : null;
+  return p ? `${openSentence(p)}.` : null;
 }
 
-function cap(s: string): string { return s.charAt(0).toUpperCase() + s.slice(1); }
-function lowerFirst(s: string): string { return s.charAt(0).toLowerCase() + s.slice(1); }
+function cap(s: string): string { return openSentence(s); }
+function lowerFirst(s: string): string { return continueSentence(s); }
 
 
 // The move-quality label, spoken as English. The old template read

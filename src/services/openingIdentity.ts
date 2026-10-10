@@ -10,6 +10,7 @@
 //   famous   — real over-the-board master games that reached it
 // Fetched lazily, never on the move path (the `openingPositions` pattern).
 // A LEAF: no imports beyond the move speller.
+import { openSentence } from '../utils/openSentence';
 import { sayMoveNoun } from './spokenMove';
 import { countWords } from '../utils/countWords';
 import { shareAdverb } from '../utils/shareWords';
@@ -94,7 +95,7 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
   const who = (c: 'w' | 'b', cap = false): string => {
     if (voice === 'demo') return colour(c);
     const s = c === student ? 'you' : 'they';
-    return cap ? s[0].toUpperCase() + s.slice(1) : s;
+    return cap ? openSentence(s) : s;
   };
   // "they answer" / "White answers": a colour takes the third-person verb.
   const v = (base: string): string => (voice === 'demo' ? (base.endsWith('y') && !/[aeiou]y$/.test(base) ? `${base.slice(0, -1)}ies` : `${base}s`) : base);

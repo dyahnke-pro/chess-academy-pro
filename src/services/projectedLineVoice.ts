@@ -30,6 +30,7 @@
  * G0: every sentence is computed (chess.js, `computePlyFacts`, `proofCut`,
  * `tacticInvariant`); seat law: you / they, never we.
  */
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { plyFactsString, renderPlyFactLine, type PlyFacts } from './pvPlayback';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
@@ -97,7 +98,7 @@ export function projectedLineVoice(
     if (p.moverColor !== studentColor || !p.facts.tacticLanded) continue;
     const inv = tacticInvariant(p.facts.tacticLanded);
     if (!inv) continue;
-    const full = inv.full.charAt(0).toUpperCase() + inv.full.slice(1);
+    const full = openSentence(inv.full);
     motif = /[.!?]$/.test(full) ? full : `${full}.`;
     motifAt = i;
     break;

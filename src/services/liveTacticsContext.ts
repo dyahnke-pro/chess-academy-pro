@@ -1,3 +1,4 @@
+import { openSentence, continueSentence } from '../utils/openSentence';
 import { logAppAudit } from './appAuditor';
 import { countMaterial } from './positionReadingService';
 import { isScenicPawnPin } from './factStakes';
@@ -446,7 +447,7 @@ export function spokenUpcoming(
   student: 'w' | 'b',
 ): string | null {
   if (line.length === 0 || line.length > 2) return null;
-  const desc = seatPieceReferences(`${description.charAt(0).toLowerCase()}${description.slice(1)}`.replace(/[.!]$/, ''), tacticFen, student);
+  const desc = seatPieceReferences(`${continueSentence(description)}`.replace(/[.!]$/, ''), tacticFen, student);
   const first = rootFen.split(' ')[1] === student ? 'you' : 'they';
   const second = first === 'you' ? 'they' : 'you';
   return line.length === 1
@@ -812,5 +813,5 @@ export function openThreatLine(line: string, fen: string, student: 'w' | 'b', sq
   const stems = DANGER_OPENERS[level];
   const body = line.slice(prefix.length);
   const opener = stems[ply % stems.length];
-  return opener.endsWith('. ') ? `${opener}${body.charAt(0).toUpperCase()}${body.slice(1)}` : `${opener}${body}`;
+  return opener.endsWith('. ') ? `${opener}${openSentence(body)}` : `${opener}${body}`;
 }

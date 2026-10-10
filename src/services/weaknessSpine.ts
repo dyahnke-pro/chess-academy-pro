@@ -17,6 +17,7 @@
 // Training Plan reads the unified list; the Weaknesses page folds the
 // misconception half in via weaknessAnalyzer.analyzeMisconceptions.
 
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { getMisconceptionProfile, isMisconceptionDue, type MisconceptionAggregate } from './misconceptionService';
@@ -298,7 +299,7 @@ export function bucketForMistake(p: MistakePuzzle): { bucket: MisconceptionBucke
     const type = classifyEndgameType(p.fen);
     if (type !== 'other') {
       const label = endgameTypeInfo(type).label;
-      return { bucket: 'endgame', clusterId: `analysis:endgame-type:${type}`, label: label.charAt(0).toUpperCase() + label.slice(1), themes: [] };
+      return { bucket: 'endgame', clusterId: `analysis:endgame-type:${type}`, label: openSentence(label), themes: [] };
     }
     return { bucket: 'endgame', clusterId: 'analysis:phase:endgame', label: 'Mistakes in the endgame', themes: [] };
   }

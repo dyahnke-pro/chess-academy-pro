@@ -6,6 +6,7 @@
 // each one lands on. A board is fair only when the good moves are clearly
 // separated from the rest (nothing sits in the grey band between "as good" and
 // "worse"), there are at least two of them, and no two land on the same square.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Square } from 'chess.js';
 import type { FairKey, LessonPositionCandidate } from './thinkingPositions';
 import type { StepKit } from './thinkingLessonSession';
@@ -107,5 +108,5 @@ export function candidatesKit(): StepKit {
 }
 
 function capital(t: string): string {
-  return t ? t.charAt(0).toUpperCase() + t.slice(1) : t;
+  return t ? openSentence(t) : t;
 }

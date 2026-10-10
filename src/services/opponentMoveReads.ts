@@ -27,6 +27,7 @@
 // for the student is marked `namesMove` so the caller can hold it where the
 // move is not earned (the door's moveAdvice). Pure: chess.js + engine lines
 // handed in. No Dexie, no LLM, no randomness — stems rotate on the FEN.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Move, type Square } from 'chess.js';
 import { asIfToMove, signedLegalSeeFor } from './positionReadingService';
 import { computeMustDefend } from './threatOut';
@@ -229,7 +230,7 @@ export function ideaCondition(fen: string, student: 'w' | 'b', topLines: readonl
   return null;
 }
 
-function cap(s: string): string { return s.charAt(0).toUpperCase() + s.slice(1); }
+function cap(s: string): string { return openSentence(s); }
 
 /** The student pieces worth a fork (rook, queen, king) a knight on `sq` hits. */
 function knightTargets(c: Chess, sq: string, student: 'w' | 'b'): string[] {

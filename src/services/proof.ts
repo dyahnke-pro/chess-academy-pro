@@ -16,6 +16,7 @@
 //     squares are marked, coupled here, never scraped from the words.
 //   • WITHHOLDING: a proof that names the move a question asks for waits with
 //     the answer (the caller's surface rule decides; this type only carries it).
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Move } from 'chess.js';
 import type { SpokenLine } from './voicePackage';
 import type { WalkableLine, WalkPly } from '../types';
@@ -46,7 +47,7 @@ export function withProof(conclusion: string, proof: Proof | null, size: ProofSi
   const body = size === 'full' && proof.exact ? proof.full : proof.short;
   if (!body) return conclusion;
   const head = /[.!?]$/.test(conclusion) ? conclusion : `${conclusion}.`;
-  return `${head} ${body.charAt(0).toUpperCase()}${body.slice(1)}${/[.!?]$/.test(body) ? '' : '.'}`;
+  return `${head} ${openSentence(body)}${/[.!?]$/.test(body) ? '' : '.'}`;
 }
 
 /** THE PROOF OF A LINE THE SENTENCE ALREADY NAMES (every lane that speaks a

@@ -1,3 +1,4 @@
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { explainBestMoveGrounded, describeMoveGeometry } from './groundedAnswer';
@@ -687,7 +688,7 @@ function buildMoveNarrations(fen: string, movesUci: string): string[] {
 }
 
 function capitalizeFirst(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return openSentence(s);
 }
 
 /** Close the beat so the opponent's reply doesn't run into it. The append below

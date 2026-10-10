@@ -24,6 +24,7 @@
  * (the student's own finished game) with the locked perspective: the student is
  * "you", the opponent "they".
  */
+import { openSentence, continueSentence } from '../utils/openSentence';
 import { settledLeadFor, type LastMove } from './material';
 import { Chess } from 'chess.js';
 import { boardEdgeWords } from '../utils/countWords';
@@ -144,7 +145,7 @@ function evalWhy(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMo
 function explainEval(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMove: LastMove | null): string {
   const why = evalWhy(fen, studentPovCp, studentWB, lastMove);
   const verdict = evalVerdict(studentPovCp);
-  const V = verdict.charAt(0).toUpperCase() + verdict.slice(1);
+  const V = openSentence(verdict);
   return why.length ? `${V} — ${why.join(', ')}.` : `${V}.`;
 }
 /** The DELTA — how this move moved the eval (student POV cp swing). Null when it
@@ -352,7 +353,7 @@ function cleanSan(san: string): string {
  *  keeping its article ("The knight bears down…" → "the knight bears down…"). */
 function toClause(sentence: string): string {
   const s = sentence.trim().replace(/\.$/, '').replace(/^(It|Now)\s+/i, '');
-  const clause = s.charAt(0).toLowerCase() + s.slice(1);
+  const clause = continueSentence(s);
   // A VERB-LED sentence ("Stakes a claim in the center and opens lines") has
   // no subject of its own; after "You play e4," it read "You play e4, stakes
   // a claim…". It gets one: "it stakes a claim", joined with a dash below.

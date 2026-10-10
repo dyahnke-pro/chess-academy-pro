@@ -1,3 +1,4 @@
+import { openSentence } from '../utils/openSentence';
 import type { SrsGrade, SrsResult } from '../types';
 
 // FSRS-4.5 algorithm — Free Spaced Repetition Scheduler
@@ -188,7 +189,7 @@ export function getGradeLabel(
   repetitions: number,
 ): string {
   const result = calculateNextInterval(grade, currentInterval, easeFactor, repetitions);
-  const label = grade.charAt(0).toUpperCase() + grade.slice(1);
+  const label = openSentence(grade);
   return `${label} · ${formatInterval(result.interval)}`;
 }
 

@@ -18,6 +18,7 @@
 // EVERY claim here is arithmetic over moves the engine actually played (G0/G3).
 // Nothing is inferred about intentions: "heading for e5" means a piece of that
 // colour lands on e5 inside the line, not that the model believes it wants to.
+import { openSentence, continueSentence } from '../utils/openSentence';
 import { seatPieceReferences } from '../utils/seatPieces';
 import { countWords } from '../utils/countWords';
 import { Chess, type Square } from 'chess.js';
@@ -124,9 +125,9 @@ export function tacticWord(kind: string | null): string | null {
 export function seatedTacticLine(word: string, description: string | null | undefined, fen: string, student: 'w' | 'b'): string {
   if (!description) return `You have a ${word}.`;
   let d = description.trim().replace(/[.!]$/, '');
-  d = d.charAt(0).toLowerCase() + d.slice(1);
+  d = continueSentence(d);
   d = seatPieceReferences(d, fen, student);
-  const body = d.charAt(0).toUpperCase() + d.slice(1);
+  const body = openSentence(d);
   return new RegExp(`\\b${word}\\b`).test(d) ? `${body}.` : `You have a ${word}: ${d}.`;
 }
 

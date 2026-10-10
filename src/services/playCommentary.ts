@@ -13,6 +13,7 @@
 // them. That is the locked voice law ("speak when it instructs") and the
 // narration rules' "silence is acceptable" — a coach who comments on every
 // recapture teaches nothing and gets tuned out.
+import { openSentence, continueSentence } from '../utils/openSentence';
 import { captureNet } from './material';
 import { THINK_MARK } from '../utils/thinkPause';
 import { Chess } from 'chess.js';
@@ -551,7 +552,7 @@ export function buildRejectedTempting(args: {
       const hint: HintPackage = {
         anchor: bait
           ? `Can you take the ${NAME[tempting.captured ?? 'p'] ?? 'piece'} on ${tempting.to}? ${THINK_MARK} No — it's bait: ${tempting.san} runs into ${refutation.san}.`
-          : `Why not ${tempting.san}? ${THINK_MARK} ${why.charAt(0).toUpperCase()}${why.slice(1)}, but ${refutation.san} refutes it.`,
+          : `Why not ${tempting.san}? ${THINK_MARK} ${openSentence(why)}, but ${refutation.san} refutes it.`,
         detail: `That line gives up about ${dropPawns} points against the best move.`,
         stakes: 'Before trusting a tempting move, calculate their most forcing reply.',
       };
@@ -998,7 +999,7 @@ export function studentMovePoint(
   // and the queen eyes f2" was queued behind "what is their last move doing?"
   // and read as its answer. A verb-first point says whose move it is.
   const point = quietMovePoint(fenBefore, san);
-  return point ? `${san} ${point.charAt(0).toLowerCase()}${point.slice(1)}` : null;
+  return point ? `${san} ${continueSentence(point)}` : null;
 }
 
 /** THEIR SLIP IS YOUR CHANCE — the one wording, Learn and Review (David
@@ -1027,7 +1028,7 @@ export function slipAnswerText(
   if (!point) return null;
   const body = point.replace(/\.$/, '');
   const sanLed = body.startsWith(`${answerSan} `);
-  const rest = sanLed ? body.slice(answerSan.length + 1) : `${body.charAt(0).toLowerCase()}${body.slice(1)}`;
+  const rest = sanLed ? body.slice(answerSan.length + 1) : `${continueSentence(body)}`;
   if (when === 'found') return sanLed ? `You found it: ${answerSan} ${rest}.` : `You found it: ${rest}.`;
   if (when === 'now') return sanLed ? `Your answer is ${answerSan}, which ${rest}.` : `Your answer is ${answerSan}: ${rest}.`;
   if (when === 'missed') return sanLed ? `${answerSan} was the answer to their slip, which ${rest}.` : `${answerSan} was the answer to their slip: ${rest}.`;

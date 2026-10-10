@@ -12,6 +12,7 @@
 //     as good → accepted; only an engine-confirmed loss is called one.
 //   • hintBeat — the hint SAYS the piece, withholds the square (the honesty
 //     contract), so the arrow is no longer silent.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Square } from 'chess.js';
 import { findHangingBySee } from './positionReadingService';
 import { sayMoveClause } from './spokenMove';
@@ -147,7 +148,7 @@ export function hintBeat(fen: string, expectedSan: string): string | null {
   } catch { return null; }
 }
 
-function cap(s: string): string { return s.charAt(0).toUpperCase() + s.slice(1); }
+function cap(s: string): string { return openSentence(s); }
 function pieceValue(p: string): number { return ({ p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 } as Record<string, number>)[p] ?? 0; }
 /** Can the side to move (after `fen`) be recaptured on `sq` — i.e. is the square defended? */
 function isRecapturable(fen: string, sq: Square): boolean {

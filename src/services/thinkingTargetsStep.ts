@@ -12,6 +12,7 @@
 //   near miss = a loose or losing PAWN (pawn targets are a later lesson), which
 //               would make a tap arguable.
 // PURE: chess.js only.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import type { FairKey } from './thinkingPositions';
@@ -182,7 +183,7 @@ export function pinPressureReason(fen: string, sq: Square): string | null {
   const m = p?.moves.find((x) => x.to === sq);
   if (!p || !m) return null;
   const said = sayMoveClause(m.san, fen);
-  return `${said.charAt(0).toUpperCase()}${said.slice(1)} attacks the pinned ${name(p.pinnedPiece)} again${m.byPawn ? ' with a pawn' : ''} — it cannot step away.`;
+  return `${openSentence(said)} attacks the pinned ${name(p.pinnedPiece)} again${m.byPawn ? ' with a pawn' : ''} — it cannot step away.`;
 }
 
 export function pinPressureShowLine(fen: string, key: readonly Square[], rot: number): string {

@@ -9,8 +9,7 @@ import { andList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import { countWords } from '../utils/countWords';
 import type { ArrowClaim } from './arrowDoor';
-import { proofCut, netPieceWords } from './exchangeLedger';
-import { MAX_PV_DEPTH_PLIES } from './ratingBands';
+import { heardProofCut, netPieceWords } from './exchangeLedger';
 
 
 export interface LinePly { from: string; to: string; color: 'w' | 'b'; fen: string; san: string }
@@ -47,12 +46,11 @@ export function lineWins(
   } catch { /* the playable prefix is what we have */ }
   // WHAT THE LINE WINS is the ONE ledger rule (WO-OUTCOME-01): the settled net
   // where the line ends — never a private settle rule of this file.
-  const proof = proofCut(fen, plies.map((p) => p.san), side, prior);
+  const proof = heardProofCut(fen, plies.map((p) => p.san), side, prior);
   if (!proof || proof.mate || !proof.ledger || proof.ledger.netPawns < 1) return null;
-  // A SPOKEN proof has the listener's horizon — the same check every heard
-  // proof makes (exchangeLedger.moverLineProof): a deep engine line's tail is
-  // never a reason anyone can follow.
-  if (proof.plies > MAX_PV_DEPTH_PLIES) return null;
+  // A SPOKEN proof has the listener's horizon (heardProofCut — the same cut
+  // every heard proof makes): a deep quiet tail is never a reason anyone can
+  // follow, so the claim is what is settled where a listener can still see.
   // Two plies by default (a line to SHOW); a refutation may settle on the
   // very first capture (`minPlies: 1` — puzzleTeaching: "Kd1? Rxa1+").
   if (proof.plies < (opts.minPlies ?? 2)) return null;

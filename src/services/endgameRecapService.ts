@@ -17,6 +17,7 @@
  * template-driven with a small bank of stems that rotate per recap
  * so a 10-puzzle session doesn't sound robotic.
  */
+import { openSentence } from '../utils/openSentence';
 import type { StudentMoveRecord } from '../hooks/useEndgamePlayout';
 import { stockfishEngine } from './stockfishEngine';
 import { winPercent, accuracyFromWinDelta, bandForWinPctLost } from './accuracyService';
@@ -135,7 +136,7 @@ function buildNarration(args: {
 
   const idx = moves.indexOf(worstMove) + 1;
   const words = accuracyWords(acc);
-  const lead = `${words.charAt(0).toUpperCase()}${words.slice(1)}`;
+  const lead = openSentence(words);
   const which = ARTICLE[worstMove.classification];
   const san = worstMove.san;
   const stems = [

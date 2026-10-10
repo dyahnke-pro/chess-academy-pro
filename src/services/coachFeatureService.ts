@@ -1,3 +1,4 @@
+import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan } from './material';
 import { Chess } from 'chess.js';
 import { gameArcs, type ArcEvent } from './lookaheadPlan';
@@ -1386,11 +1387,11 @@ export function frameTeachingForOpponent(sentence: string): string {
   // student's camp; frame it as the opponent's doing, not a bare "Now".
   if (/^Now\s+/.test(s)) {
     const rest = s.slice(4);
-    return `Your opponent's move — ${rest.charAt(0).toLowerCase()}${rest.slice(1)}`;
+    return `Your opponent's move — ${continueSentence(rest)}`;
   }
   // Verb-first observation ("Stakes a claim…", "Opens the f-file…") — already
   // 3rd-person-singular, so "Your opponent " + the verb reads correctly.
-  return `Your opponent ${s.charAt(0).toLowerCase()}${s.slice(1)}`;
+  return `Your opponent ${continueSentence(s)}`;
 }
 
 export function buildReviewSegments(
@@ -2944,7 +2945,7 @@ export function buildReviewSegments(
     if (playerColor && moverColor === playerColor) {
       const threat = describeStudentThreat(fenPair.fenBefore, fenPair.fenAfter, playerColor === 'white' ? 'w' : 'b');
       if (threat) {
-        const sentence = narration ? ` And ${threat}.` : `${threat.charAt(0).toUpperCase()}${threat.slice(1)}.`;
+        const sentence = narration ? ` And ${threat}.` : `${openSentence(threat)}.`;
         narration = narration ? `${narration}${sentence}` : sentence;
         narrationSource = narrationSource ?? 'per-move';
         // Tag the claim for the ENGINE-CONFIRMATION pass (statics propose +
@@ -3004,7 +3005,7 @@ export function buildReviewSegments(
       if (!tradeIdea && !tradeIdeaSpoken) {
         const tc = describeTradeConsequence(fenPair.fenBefore, m.san, true, studentPovForTrade);
         if (tc) {
-          narration = narration ? `${narration} ${tc}.` : `${tc.charAt(0).toUpperCase()}${tc.slice(1)}.`;
+          narration = narration ? `${narration} ${tc}.` : `${openSentence(tc)}.`;
           narrationSource = narrationSource ?? 'per-move';
           tradeIdeaSpoken = true;
         }
@@ -4252,7 +4253,7 @@ async function augmentWithProjections(
       // walk 2026-10-04, G2 19…Nf2: "…better on material than Nf2. the line
       // runs Bxh4").
       const parts = [why, proof ? `the line runs ${proof}` : null].filter((x): x is string => !!x)
-        .map((x, i) => (i === 0 ? x : `${x.charAt(0).toUpperCase()}${x.slice(1)}`));
+        .map((x, i) => (i === 0 ? x : openSentence(x)));
       if (parts.length > 0) {
         s.narration = `${s.narration ?? ''} Why ${bestName} was better — ${parts.join('. ')}.`.trim();
         if (proof) attachLineArrows(s, line, 5); // the delta / better-line — David's named priority
@@ -4527,7 +4528,7 @@ async function augmentWithProjections(
       // Appended as its own sentence — capitalize the lead so the seat-stamped
       // possessive ("their"/"your") reads as a sentence start, not mid-clause.
       const text = phraseBadPiece(best.text, best.color, best.pair, studentColorWB);
-      const obs = text.charAt(0).toUpperCase() + text.slice(1);
+      const obs = openSentence(text);
       best.seg.narration = `${best.seg.narration ?? ''} ${obs}.`.trim();
     }
   }
@@ -5003,7 +5004,7 @@ const PRESCRIPTIVE = /(the plan (?:from here|is|changes)|so the plan is|here's (
  *  mid-narration with a lowercase head (the `/gi` replacement used to lowercase
  *  every sentence it opened). */
 function sub(h: string, re: RegExp, past: string): string {
-  return h.replace(re, (m) => (m[0] === m[0].toUpperCase() ? past[0].toUpperCase() + past.slice(1) : past));
+  return h.replace(re, (m) => (m[0] === m[0].toUpperCase() ? openSentence(past) : past));
 }
 /** A sentence that already says "is"/"are" in full is framed in the present —
  *  a rule or a standing state ("this is a race, and it's won by…"). Rewriting

@@ -29,11 +29,13 @@ import type { ChatKind } from './chatTurn';
 const FIX_DIR = path.join(__dirname, '__fixtures__');
 const FIXTURE: Record<string, unknown> = JSON.parse(fs.readFileSync(path.join(FIX_DIR, 'contractEngine.json'), 'utf8'));
 const missing = new Set<string>();
+/** Positions THIS test asked for and the fixture lacks — never another test's. */
+let missingHere = new Set<string>();
 const key = (fen: string): string => fen.split(' ').slice(0, 4).join(' ');
 const BY_KEY = new Map(Object.entries(FIXTURE).map(([f, a]) => [key(f), a]));
 async function analyse(fen: string): Promise<unknown> {
   const a = BY_KEY.get(key(fen));
-  if (!a) { missing.add(fen); throw new Error(`engine fixture has no ${fen}`); }
+  if (!a) { missing.add(fen); missingHere.add(fen); throw new Error(`engine fixture has no ${fen}`); }
   return a;
 }
 
@@ -304,6 +306,7 @@ const CONTRACTS: Record<ChatKind, Contract | Owed> = {
 beforeAll(async () => { await loadRepertoireData(); await loadEcoData(); }, 240_000);
 
 beforeEach(async () => {
+  missingHere = new Set<string>();
   // Every device has its profile from boot; a fresh one, no games.
   await db.profiles.put(buildUserProfile({ id: 'main' }));
   vi.spyOn(globalThis, 'fetch').mockImplementation(async () => new Response('{}', { status: 404 }));
@@ -346,7 +349,11 @@ const HARD: Hard[] = [
   { id: 'two questions in one', board: 'italian', ask: "what's the best move, and what are they threatening?", reading: { kind: 'best-move' },
     must: [/\bb4\b/, /e4/] },
   { id: 'a capture counted to the end', board: 'italian', ask: 'should I take on e5 with the knight?', reading: { kind: 'candidate-move', referents: [{ type: 'move', san: 'Nxe5' }] },
-    must: [/Nxe5/, /dxe5/, /behind|lose|for a knight|drops/i] },
+    // Engine-checked: after Nxe5 dxe5 b4! White wins the material back, so
+    // the move is clearly WORSE (+3.0 → −0.7), not a dropped knight. The
+    // answer must say worse and name the pawn that takes it — never a loss
+    // the board does not have.
+    must: [/Nxe5/, /d6|dxe5/, /worse/i], mustNot: [/drops the knight|lose[s]? (?:a|the|your) knight/i] },
   { id: 'why the natural capture fails', board: 'mate4', ask: 'why not Qxc7?', reading: { kind: 'candidate-move', referents: [{ type: 'move', san: 'Qxc7' }] },
     must: [/Qxg2#/] },
 ];
@@ -360,7 +367,7 @@ describe('the hard tier', () => {
       liveState: { surface: 'standalone-chat', fen: b.fen, whoseTurn: b.fen.split(' ')[1] === 'w' ? 'white' : 'black', studentColor: b.studentColor, moveHistory: b.history, currentRoute: '/coach/chat' },
     } as never, { maxToolRoundTrips: 1 });
     const text = (a.text ?? '').replace(/\s*\[BOARD:[^\]]*\]/g, '').trim();
-    if (missing.size) throw new Error(`engine fixture is missing ${missing.size} position(s): run node scripts/chat-contracts/gen-engine-fixture.mjs`);
+    if (missingHere.size) throw new Error(`engine fixture is missing ${missingHere.size} position(s): run node scripts/chat-contracts/gen-engine-fixture.mjs`);
     const report = `[hard: ${c.ask}] served=${a.servedIntent ?? '—'} answer: ${text}`;
     if (process.env.CONTRACT_LOG) console.log(report);
     for (const re of c.must) expect(text, report).toMatch(re);
@@ -382,7 +389,7 @@ describe('every question kind answers its contract', () => {
     } as never, { maxToolRoundTrips: 1 });
     // What the student reads: the bubble strips the arrow tags.
     const text = (a.text ?? '').replace(/\s*\[BOARD:[^\]]*\]/g, '').trim();
-    if (missing.size) throw new Error(`engine fixture is missing ${missing.size} position(s): run node scripts/chat-contracts/gen-engine-fixture.mjs`);
+    if (missingHere.size) throw new Error(`engine fixture is missing ${missingHere.size} position(s): run node scripts/chat-contracts/gen-engine-fixture.mjs`);
     const report = `[${kind}] served=${a.servedIntent ?? '—'} answer: ${text}`;
     if (process.env.CONTRACT_LOG) console.log(report);
     expect(text.trim().length, report).toBeGreaterThan(0);

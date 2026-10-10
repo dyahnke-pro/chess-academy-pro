@@ -13,6 +13,7 @@
 // invented — the deliberation is SPOKEN, not manufactured.
 //
 // Doc: docs/plans/2026-08-26-coach-my-weakness-focus-lens.md §4.0.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Square } from 'chess.js';
 import type { StockfishAnalysis, WalkableLine } from '../types';
 import { walkableLine } from './proof';
@@ -310,7 +311,7 @@ function shortfallText(c: Candidate): string {
     const esc = c.san.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const rest = c.proof.replace(new RegExp(`^${esc}(?:, | and )`), '');
     if (rest !== c.proof) return `${c.san}? Then ${rest}.`;
-    return `${c.san}? ${c.proof[0].toUpperCase()}${c.proof.slice(1)}.`;
+    return `${c.san}? ${openSentence(c.proof)}.`;
   }
   if (c.shortfall === 'trades-queens') {
     // THE TRADE IS A LINE, NOT A PROPERTY OF THE MOVE (hard walk 2026-10-10:
@@ -349,7 +350,7 @@ export function deliberationFacts(d: Deliberation): string {
   // THE VERDICT CARRIES ITS REASON, or it is not said (David 2026-09-24:
   // "The move is Rxf3" alone is an order, not teaching). The weighing still
   // stands on its own — ruling the bad moves out IS the thinking out loud.
-  const line = d.bestLine ? ` ${d.bestLine[0].toUpperCase()}${d.bestLine.slice(1)}.` : '';
+  const line = d.bestLine ? ` ${openSentence(d.bestLine)}.` : '';
   const verdict = d.bestWhy ? ` The move is ${d.best.san} — it ${d.bestWhy}.${line}` : '';
   // WEIGH THE CANDIDATES BEFORE NAMING ONE (plan P2 #4): name the moves on the
   // table first, then rule the bad ones out, then conclude. Said only when a
@@ -624,7 +625,7 @@ export function threatMadeWhy(fenBefore: string, san: string, mover: 'w' | 'b'):
  * nothing before this named the move. The reason always rides with the move.
  */
 export function heldVerdictText(v: HeldVerdict, when: 'now' | 'found' | 'missed'): string {
-  const line = v.line ? ` ${v.line[0].toUpperCase()}${v.line.slice(1)}.` : '';
+  const line = v.line ? ` ${openSentence(v.line)}.` : '';
   if (when === 'found') return `That was the move here — it ${v.why}.`;
   if (when === 'missed') return `The move here was ${v.san} — it ${v.why}.${line}`;
   return `The move is ${v.san} — it ${v.why}.${line}`;
@@ -673,7 +674,7 @@ export const NAMED_SAME_AS_BEST_CP = MEANINGFUL_DELTA_CP;
 export function namedMoveAnswer(d: Deliberation, ask: 'why-best' | 'is-it-good'): string | null {
   const n = d.named;
   if (!n) return null;
-  const line = d.bestLine ? ` ${d.bestLine[0].toUpperCase()}${d.bestLine.slice(1)}.` : '';
+  const line = d.bestLine ? ` ${openSentence(d.bestLine)}.` : '';
   const bestReason = d.bestWhy ? ` — it ${d.bestWhy}` : '';
   if (n.san === d.best.san) {
     const others = deliberationWeighing(d);

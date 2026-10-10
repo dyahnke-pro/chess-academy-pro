@@ -12,6 +12,7 @@
  * Pure + side-effect-free so it's trivially testable and can't regress the
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
+import { openSentence, continueSentence } from '../utils/openSentence';
 import { MATERIAL_VALUE } from './pieceValues';
 import { computeMustDefend, mateThreatsAgainst } from './threatOut';
 import { whyNotLegal } from './whyNotLegal';
@@ -71,7 +72,7 @@ import type { EndgameRuleMaterial } from '../coach/questionIntents';
 // here (one direction), instead of the reverse that created the cycle.
 export const REVIEW_PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 export const REVIEW_PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 99 };
-function cap(s: string): string { return s.charAt(0).toUpperCase() + s.slice(1); }
+function cap(s: string): string { return openSentence(s); }
 
 export interface GroundedAnswer {
   /** The plain-language facts the LLM must voice — and ONLY these. */
@@ -376,7 +377,7 @@ export function assembleHangingAnswer(fen: string, ask: string | null | undefine
   const parts: string[] = [];
   if (mineLoose.length > 0) parts.push(say(mineLoose, true));
   else if (scanBoth && !unread) parts.push('Nothing of yours is hanging.');
-  if (theirLoose.length > 0) parts.push(scanTheirs && !scanBoth ? `Yes — ${say(theirLoose, false).charAt(0).toLowerCase()}${say(theirLoose, false).slice(1)}` : say(theirLoose, false));
+  if (theirLoose.length > 0) parts.push(scanTheirs && !scanBoth ? `Yes — ${continueSentence(say(theirLoose, false))}` : say(theirLoose, false));
   const facts = parts.join(' ');
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
@@ -634,7 +635,7 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
     : '';
   const checkPart = inCheck ? `your king is in check` : '';
   const facts = (matePart ? `${[checkPart, matePart].filter(Boolean).join(', and ')}.${winPart ? ` Beyond that, ${winPart}.` : ''}` : [checkPart, winPart].filter(Boolean).join(', and ') + '.') + ideaPart;
-  return { facts: facts.charAt(0).toUpperCase() + facts.slice(1), bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+  return { facts: openSentence(facts), bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
 
 /** The opponent's next-move pins and forks against `me`, as "…Bg4 would pin
@@ -1931,7 +1932,7 @@ export function assembleMoveEvalAnswer(opts: {
     if (geo) parts.push(`It ${geo}.`);
     else if (!/[x+#]/.test(bestMoveSan)) parts.push("It's a quiet move — nothing forcing does better here, so the engine improves the position instead.");
   }
-  if (evalText && !startsMate) parts.push(`${evalText.charAt(0).toUpperCase()}${evalText.slice(1)}.`);
+  if (evalText && !startsMate) parts.push(`${openSentence(evalText)}.`);
 
   // THE LINE, PLAYED OUT — only where it proves something (the proof rule: an
   // engine line is said when it ends in mate or a counted gain, never as a
@@ -1946,7 +1947,7 @@ export function assembleMoveEvalAnswer(opts: {
     const proof = moverLineProof(fen, uci, mover === 'white' ? 'w' : 'b');
     const sans = proof?.line?.sans ?? [];
     if (proof && sans.length >= 3) {
-      parts.push(`${proof.short.charAt(0).toUpperCase()}${proof.short.slice(1)}.`);
+      parts.push(`${openSentence(proof.short)}.`);
       const w = walkableLine(fen, sans, sans[0]);
       if (w) lines = [w];
     }
@@ -2403,7 +2404,7 @@ export function assembleEndgameOutlookAnswer(fen: string, studentColor: 'white' 
   if (parts.length === 0) {
     return { facts: `${head} Nothing in the structure decides an endgame yet — material and pawns are balanced, so the middlegame will decide what the ending looks like.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
   }
-  return { facts: `${head} If it comes to one: ${parts[0].charAt(0).toLowerCase()}${parts[0].slice(1)}${parts.length > 1 ? ` ${parts.slice(1).join(' ')}` : ''}`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+  return { facts: `${head} If it comes to one: ${continueSentence(parts[0])}${parts.length > 1 ? ` ${parts.slice(1).join(' ')}` : ''}`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
 }
 
 /** THE WEAKNESS ON THIS BOARD, for "what's my biggest weakness?" asked over a
@@ -3027,7 +3028,7 @@ export function toObserverSeat(text: string): string {
   const swap: Record<string, string> = { you: 'they', they: 'you', your: 'their', their: 'your', yours: 'theirs', theirs: 'yours', yourself: 'themselves' };
   return text.replace(/\b(you|they|your|their|yours|theirs|yourself)\b/gi, (w) => {
     const to = swap[w.toLowerCase()];
-    return w[0] === w[0].toUpperCase() ? to[0].toUpperCase() + to.slice(1) : to;
+    return w[0] === w[0].toUpperCase() ? openSentence(to) : to;
   });
 }
 
@@ -3199,10 +3200,10 @@ export function describeSacrifice(
 }
 
 function lowerFirst(s: string): string {
-  return s ? s.charAt(0).toLowerCase() + s.slice(1) : s;
+  return s ? continueSentence(s) : s;
 }
 function upperFirst(s: string): string {
-  return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+  return s ? openSentence(s) : s;
 }
 
 export interface MovePurpose extends GroundedAnswer {
@@ -3655,7 +3656,7 @@ export function assemblePlanAnswer(opts: {
   const studentEvalCp = opts.evalCp == null ? null : (opts.studentSide === 'white' ? opts.evalCp : -opts.evalCp);
   const studentMateIn = opts.mateIn == null ? null : (opts.studentSide === 'white' ? opts.mateIn : -opts.mateIn);
   const evalText = evalPhrase(studentEvalCp, studentMateIn, opts.studentSide, opts.studentSide);
-  if (evalText) parts.push(`${evalText.charAt(0).toUpperCase()}${evalText.slice(1)}.`);
+  if (evalText) parts.push(`${openSentence(evalText)}.`);
 
   const first = moves[0];
   return {
@@ -3747,7 +3748,7 @@ export function assembleMethodAnswer(opts: {
     const body = run();
     // "Am I safe? Nothing of yours…" — a question name is answered; a label
     // name is followed by a colon ("My forcing moves: in order…").
-    steps.push(name.endsWith('?') ? `${name} ${body.charAt(0).toUpperCase()}${body.slice(1)}` : `${name}: ${body}`);
+    steps.push(name.endsWith('?') ? `${name} ${openSentence(body)}` : `${name}: ${body}`);
   }
 
   // 4 — THE HABIT this moment earns (the same computer the live briefing uses).
@@ -6078,7 +6079,7 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
   const whyRaw = r.bestMoveUci ? explainBestMoveGrounded(r.fenBefore, r.playedSan, r.bestMoveUci, r.moverColor, null, null) : null;
   const why = whyRaw ? reseatText(whyRaw) : null;
   const better = bestSan
-    ? ` The engine preferred ${bestSan}${why ? `: ${(/^[A-Z][a-z]+(?=[\s,])/.test(why) && !/^I\b/.test(why) ? why.charAt(0).toLowerCase() + why.slice(1) : why).replace(/[.!?]+$/, '')}` : ''}.`
+    ? ` The engine preferred ${bestSan}${why ? `: ${(/^[A-Z][a-z]+(?=[\s,])/.test(why) && !/^I\b/.test(why) ? continueSentence(why) : why).replace(/[.!?]+$/, '')}` : ''}.`
     : '';
 
   if (noRead) {
@@ -6164,7 +6165,7 @@ export function assembleSlipNarration(input: {
   if (betterSan && reason) {
     // "Nd5 was stronger — it takes the outpost on d5, while your move let Black
     //  play Nxe5, winning the pawn."
-    facts = `${verdict} ${betterSan} was stronger — ${reason.charAt(0).toLowerCase()}${reason.slice(1)}`;
+    facts = `${verdict} ${betterSan} was stronger — ${continueSentence(reason)}`;
   } else if (betterSan) {
     facts = `${verdict} ${betterSan} was the stronger move here.`;
   } else if (reason) {
@@ -6659,7 +6660,7 @@ export function assemblePositionalAnswer(
   }
 
   const oppC: 'w' | 'b' = myC === 'w' ? 'b' : 'w';
-  const oppCap = opp[0].toUpperCase() + opp.slice(1);
+  const oppCap = openSentence(opp);
 
   if (topic === 'space') {
     const s = computeSpace(fen);
@@ -6767,7 +6768,7 @@ export function assemblePositionalAnswer(
     const openTxt = f.open.length ? `${fileList(f.open)} ${f.open.length > 1 ? 'are' : 'is'} open` : '';
     const semiTxt = mySemi.length ? `${fileList(mySemi)} ${mySemi.length > 1 ? 'are' : 'is'} half-open for you` : '';
     const body = [openTxt, semiTxt].filter(Boolean).join(', and ');
-    return { facts: `${body.charAt(0).toUpperCase()}${body.slice(1)} — put a rook ${files.length > 1 ? 'on one of them' : 'there'}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    return { facts: `${openSentence(body)} — put a rook ${files.length > 1 ? 'on one of them' : 'there'}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   if (topic === 'pawn-breaks') {
@@ -7025,11 +7026,11 @@ export function assembleCounterRepertoireAnswer(opts: {
  *  text ("Bishop on g4 pins knight on f3…") was spoken as-is (hand walk 800). */
 function seatedSentence(description: string, fen: string, studentColorWB: 'w' | 'b'): string {
   const s = seatedDescription(description, fen, studentColorWB);
-  return `${s.charAt(0).toUpperCase()}${s.slice(1)}`;
+  return openSentence(s);
 }
 
 function seatedDescription(description: string, fen: string, studentColorWB: 'w' | 'b'): string {
-  const lowered = `${description.charAt(0).toLowerCase()}${description.slice(1)}`;
+  const lowered = `${continueSentence(description)}`;
   return seatPieceReferences(lowered, fen, studentColorWB);
 }
 

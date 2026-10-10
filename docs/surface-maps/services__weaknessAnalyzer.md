@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1239 lines · 5 exports · 10 importers · 6 tests · 0 audits**
+**1240 lines · 5 exports · 7 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,9 +14,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/components/Coach/CoachGamePage.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
-- `src/components/Stats/StatsPage.tsx`
-- `src/services/coachChatService.ts`
-- `src/services/coachContextSnapshot.ts`
 - `src/services/coachTrainingService.test.ts`
 - `src/services/coachTrainingService.ts`
 - `src/services/gameAnalysisService.test.ts`
@@ -25,26 +22,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `computeWeaknessProfile` (function) — 6 call sites
-- `src/components/Coach/CoachGamePage.tsx:2113`
-- `src/components/Stats/StatsPage.tsx:50`
+### `computeWeaknessProfile` (function) — 5 call sites
+- `src/components/Coach/CoachGamePage.tsx:2079`
 - `src/services/analyticsService.ts:462`
-- `src/services/gameAnalysisService.ts:2639`
+- `src/services/gameAnalysisService.ts:2955`
 - `src/services/weaknessAnalyzer.test.ts:526`
 - `src/services/weaknessAnalyzer.test.ts:542`
 
-### `getStoredWeaknessProfile` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11208`
-- `src/components/Stats/StatsPage.tsx:68`
-- `src/services/coachChatService.ts:188`
-- `src/services/coachContextSnapshot.ts:85`
+### `getStoredWeaknessProfile` (function) — 5 call sites
+- `src/components/Coach/CoachTeachPage.tsx:11985`
 - `src/services/coachTrainingService.ts:92`
 - `src/services/weaknessAnalyzer.test.ts:533`
 - `src/services/weaknessAnalyzer.test.ts:553`
 - `src/services/weaknessAnalyzer.test.ts:567`
 
-### `filterWeaknessesByCategory` (function) — 3 call sites
-- `src/components/Stats/StatsPage.tsx:233`
+### `filterWeaknessesByCategory` (function) — 2 call sites
 - `src/services/weaknessAnalyzer.test.ts:733`
 - `src/services/weaknessAnalyzer.test.ts:737`
 
@@ -60,8 +52,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
-- `src/components/Stats/StatsPage.test.tsx`
-- `src/services/coachContextSnapshot.test.ts`
 - `src/services/coachTrainingService.test.ts`
 - `src/services/gameAnalysisService.poolEngine.test.ts`
 - `src/services/gameAnalysisService.test.ts`

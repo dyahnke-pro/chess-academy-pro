@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**791 lines · 3 exports · 15 importers · 7 tests · 0 audits**
+**792 lines · 3 exports · 15 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -33,21 +33,21 @@
 ### `findHangingPieces` (function) — 14 call sites
 - `src/data/patternRegistry.ts:113`
 - `src/services/coachGameEngine.ts:301`
-- `src/services/deliberation.ts:123`
+- `src/services/deliberation.ts:149`
 - `src/services/hangingIgnoresCheck.test.ts:10`
 - `src/services/hangingIgnoresCheck.test.ts:11`
-- `src/services/liveTacticsContext.ts:374`
+- `src/services/liveTacticsContext.ts:375`
 - `src/services/moveReason.ts:133`
 - `src/services/oneHanging.test.ts:11`
 - `src/services/oneHanging.test.ts:16`
 - `src/services/oneHanging.test.ts:20`
 - `src/services/playedMoveGrade.ts:141`
 - `src/services/searchDepth.ts:69`
-- `src/services/tacticsDetector.ts:820`
+- `src/services/tacticsDetector.ts:821`
 - `src/test/kingIsNeverHanging.test.ts:56`
 
 ### `classifyPosition` (function) — 31 call sites
-- `src/components/Coach/CoachGamePage.tsx:3320`
+- `src/components/Coach/CoachGamePage.tsx:3322`
 - `src/services/missedTacticService.ts:758`
 - `src/services/pvPlayback.ts:421`
 - `src/services/tacticClassifier.test.ts:32`
@@ -80,8 +80,8 @@
 - `src/services/tacticClassifier.test.ts:335`
 
 ### `scanUpcomingTactics` (function) — 5 call sites
-- `src/components/Coach/CoachGamePage.tsx:2857`
-- `src/services/liveTacticsContext.ts:94`
+- `src/components/Coach/CoachGamePage.tsx:2859`
+- `src/services/liveTacticsContext.ts:95`
 - `src/services/tacticClassifier.skewer.test.ts:13`
 - `src/services/tacticClassifier.skewer.test.ts:15`
 - `src/services/tacticClassifier.skewer.test.ts:22`

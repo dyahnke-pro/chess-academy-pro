@@ -18,6 +18,7 @@
  *     the authored text is always the safety net.
  *   • No per-move praise (kid #5) — the line restates the move's EFFECT.
  */
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { voiceFacts } from './coachApi';
 import { logAppAudit } from './appAuditor';
@@ -132,7 +133,7 @@ function seatedMove(fenBefore: string, san: string, mine: boolean): string {
 }
 
 function capitalise(s: string): string {
-  return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+  return s ? openSentence(s) : s;
 }
 
 /**

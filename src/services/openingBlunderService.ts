@@ -12,6 +12,7 @@
 //
 // Used by the /tactics/opening-traps surface.
 
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import puzzlesRaw from '../data/puzzles.json';
 import openingsDb from '../data/openings-lichess.json';
@@ -118,7 +119,7 @@ export function familyLabel(family: string): string {
   return family
     .split('_')
     .filter(Boolean)
-    .map((w) => w.split('-').map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join('-'))
+    .map((w) => w.split('-').map((p) => openSentence(p)).join('-'))
     .join(' ');
 }
 

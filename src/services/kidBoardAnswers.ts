@@ -16,6 +16,7 @@
  * answered by the shared concept spine in kidGameCoach; this module owns the
  * three board kinds and the board line.
  */
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import type { Color, PieceSymbol, Square } from 'chess.js';
 import { andList, orList } from '../utils/andList';
@@ -98,7 +99,7 @@ function nameAt(chess: Chess, sq: Square, kid: Color): string {
 }
 
 function capitalise(s: string): string {
-  return s.length === 0 ? s : s[0].toUpperCase() + s.slice(1);
+  return s.length === 0 ? s : openSentence(s);
 }
 
 function allSquares(chess: Chess): Array<{ sq: Square; type: PieceSymbol; color: Color }> {

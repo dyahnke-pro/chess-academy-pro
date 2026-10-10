@@ -27,6 +27,7 @@ export function nonPawnMaterial(fen: string): number {
   return total;
 }
 
+import { openSentence } from '../utils/openSentence';
 import { materialBalance, MATERIAL_VALUE } from './pieceValues';
 import { settledBalance, type LastMove } from './material';
 import type { GamePhase } from '../types';
@@ -53,7 +54,7 @@ function describeLead(fen: string, balance: number, student: 'w' | 'b'): string 
   const side = ahead === student ? "you're" : "they're";
   const words = boardEdgeWords(fen, ahead, Math.abs(balance));
   const lead = Math.abs(balance) >= 8 ? `${side} winning — ${words} up.` : `${side} ${words} up.`;
-  return lead.charAt(0).toUpperCase() + lead.slice(1);
+  return openSentence(lead);
 }
 
 export interface ContinuationState {

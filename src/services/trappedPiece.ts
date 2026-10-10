@@ -5,8 +5,9 @@
 // static exchange, nothing that imports the coach.
 import { Chess, type Color, type Square } from 'chess.js';
 import { legalSeeGainOn } from './positionReadingService';
+import { MATERIAL_VALUE } from './pieceValues';
 
-const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+const VAL = MATERIAL_VALUE;
 
 /** After the owner's move, can the opponent still win the piece on `sq`? */
 function stillWinnable(afterOppToMove: Chess, sq: string, side: Color, val: number): boolean {

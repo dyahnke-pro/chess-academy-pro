@@ -3527,10 +3527,14 @@ export function looksLikeConversationalReply(input: string | undefined): boolean
  *  into its asks when two or more of them claim DIFFERENT board lanes, so each
  *  is answered by its own computer, in the order asked. "Show me the lines"
  *  folds into the best-move part as the line walk. Null when it is one ask. */
-export type MultiAskKey = 'best' | 'line' | 'their-plan' | 'my-plan' | 'tactic' | 'eval' | 'break' | 'candidates';
+export type MultiAskKey = 'best' | 'line' | 'their-plan' | 'my-plan' | 'threat' | 'tactic' | 'eval' | 'break' | 'candidates';
 export function multiAskKey(part: string): MultiAskKey | null {
   const t = part.toLowerCase();
   if (/\b(?:their|the\s+opponent'?s|his|her)\s+(?:best\s+)?plan\b|\bwhat\s+(?:are|is)\s+(?:they|he|she)\s+(?:up\s+to|planning|going\s+for)\b/.test(t)) return 'their-plan';
+  // Hard tier 2026-10-10: "what's the best move, and what are they
+  // threatening?" answered only the threat — the threat had no key, so the
+  // ask never split and one lane took the whole message.
+  if (isOpponentThreatQuestion(part)) return 'threat';
   if (isAlternativesQuestion(part)) return 'candidates';
   if (isWhyBestMoveQuestion(part) || /\bshow\s+me\s+(?:the\s+)?lines?\b/.test(t)) return 'line';
   if (isTacticsQuestion(part)) return 'tactic';

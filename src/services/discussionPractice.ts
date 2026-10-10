@@ -8,6 +8,7 @@
 // (or skips) -> classifyMisconception maps it to a closed-set tag -> we
 // log it to the shared bucket (gated by the learned/count-against rule).
 
+import { continueSentence } from '../utils/openSentence';
 import { Chess, type Square } from 'chess.js';
 import { detectSlip, slipSeverityLabel, type SlipInput, type SlipResult } from './slipDetector';
 import { detectTactics } from './tacticsDetector';
@@ -203,7 +204,7 @@ export function withReasonLead(reveal: string, reason: string, mode: 'chip' | 't
   const lead = gradeReasonLead(reason, mode);
   if (!reveal.trim()) return lead.trim();
   const endsSentence = /[.!?]\s*$/.test(lead);
-  const body = endsSentence ? reveal : reveal.charAt(0).toLowerCase() + reveal.slice(1);
+  const body = endsSentence ? reveal : continueSentence(reveal);
   return `${lead}${body}`;
 }
 

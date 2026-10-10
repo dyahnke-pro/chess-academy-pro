@@ -23,6 +23,7 @@
  *                      even indices; the coach auto-plays the odd ones.
  *   - `prompt`       — a concrete, code-authored challenge line.
  */
+import { openSentence } from '../utils/openSentence';
 import { positionPosed } from './moveInsight';
 import { recordCapabilityEvidence } from './capabilityEvidence';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
@@ -755,7 +756,7 @@ function spaced(t: string): string {
 }
 
 function capitalize(s: string): string {
-  return s.length ? s[0].toUpperCase() + s.slice(1) : s;
+  return s.length ? openSentence(s) : s;
 }
 
 /** Deterministic hash for reproducible tie-breaks. */

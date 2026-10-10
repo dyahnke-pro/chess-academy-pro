@@ -7,6 +7,7 @@
  * the king, the path is blocked, the square holds their own piece, or nothing
  * of theirs reaches it. Each reason is read off chess.js — nothing guessed.
  */
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import { tagSlots } from '../coach/chatTurnCodeReader';
 import { castlingNow, ruleAsked } from './chessRules';
@@ -125,7 +126,7 @@ export function whyNotLegal(fen: string, dest: string, student: 'white' | 'black
         const bp = b ? chess.get(b) : undefined;
         return b && bp ? `your ${NAME[piece]} on ${f} is blocked by ${bp.color === color ? 'your' : 'their'} ${NAME[bp.type]} on ${b}` : `your ${NAME[piece]} on ${f} cannot reach ${dest}`;
       });
-      const text = `${NAME[piece].charAt(0).toUpperCase()}${NAME[piece].slice(1)} to ${dest} is not possible: ${why.join('; ')}.`;
+      const text = `${openSentence(NAME[piece])} to ${dest} is not possible: ${why.join('; ')}.`;
       return text;
     }
   }
@@ -158,7 +159,7 @@ export function whyNotLegal(fen: string, dest: string, student: 'white' | 'black
   }
   if (reasons.length === 0) return null;
   const text = reasons.join('; and ');
-  return `${text.charAt(0).toUpperCase()}${text.slice(1)}.`;
+  return `${openSentence(text)}.`;
 }
 
 const LETTER: Record<string, PieceSymbol> = { K: 'k', Q: 'q', R: 'r', B: 'b', N: 'n' };
