@@ -22,7 +22,7 @@ import { Chess, type PieceSymbol } from 'chess.js';
 import { landedTacticFor, tacticWord } from './pvPlayback';
 import { findHangingBySee } from './positionReadingService';
 import { moveWhy } from './deliberation';
-import { betterMoveReason, punishmentOf } from './inaccuracyCall';
+import { betterMoveReason, errorWhy } from './inaccuracyCall';
 
 /** How many turning points a review asks about (David: "the biggest few"). */
 export const TURNING_POINTS_ASKED = 3;
@@ -269,8 +269,18 @@ export function selectTurningPoints(
       try { const w = moveWhy(seg.fenBefore, seg.bestMoveSan, mover, opponentLast); why = w ? `it ${w}` : null; } catch { why = null; }
     }
     // WHAT THE PLAYED MOVE ALLOWED — their own best line after it.
+    // From the ONE error computer (David 2026-10-10: "Unity!").
     let allowed: string | null = null;
-    try { allowed = seg.replyLineUci ? punishmentOf(seg.fenBefore, seg.san, seg.replyLineUci, moverColor)?.why ?? null : null; } catch { allowed = null; }
+    try {
+      const prior = prev && prev.ply === seg.ply - 1 ? { fenBefore: prev.fenBefore, san: prev.san } : null;
+      const ew = errorWhy({
+        fenBefore: seg.fenBefore, playedSan: seg.san, moverColor, bestSan: seg.bestMoveSan,
+        bestLineUci: seg.bestLineUci ?? null, replyLineUci: seg.replyLineUci ?? [],
+        missedMate: null, allowedMate: null, bestMate: null, quality: 'mistake', priorMove: prior,
+        namesBetterMove: true,
+      });
+      allowed = ew.consequence ? ew.consequence.replace(/^it let them /, '') : null;
+    } catch { allowed = null; }
     all.push({
       ply: seg.ply, fenBefore: seg.fenBefore, playedSan: seg.san,
       bestSan: seg.bestMoveSan, bestUci: seg.bestMoveUci,

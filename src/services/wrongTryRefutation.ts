@@ -1,6 +1,7 @@
 import { Chess } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
-import { punishmentOf } from './moveAllowed';
+import { consequenceIn, errorWhy } from './inaccuracyCall';
+import { openSentence } from '../utils/openSentence';
 import type { StockfishAnalysis, WalkableLine } from '../types';
 import { pvSans } from './moveInsight';
 import { lineProof, walkableLine, type Proof } from './proof';
@@ -29,7 +30,7 @@ const STILL_WINNING_CP = 250;
  * wrong move was answered with a hint toward the answer and never with why
  * the move tried fails).
  *
- * The engine picks the opponent's best reply to the try; `punishmentOf` says
+ * The engine picks the opponent's best reply to the try; `replyPunishment` says
  * what that reply does, board-checked (mate, fork, material won, pin). Null
  * when the refutation is quiet or positional — the caller keeps its hint, and
  * nothing vague is said (empty > generic).
@@ -71,9 +72,17 @@ export async function readWrongTry(
   const replyLine = pvSans(afterTry, read.topLines?.[0]?.moves ?? [read.bestMove], 4);
   const line = walkableLine(fen, [trySan, ...replyLine], trySan) ?? undefined;
   const proof = lineProof({ fen, sans: line ? line.plies.map((x) => x.san) : [trySan, reply.san] }) ?? { kind: 'line' as const, exact: false, short: `${trySan}, ${reply.san}`, full: `${trySan}, then ${reply.san}` };
-  const p = punishmentOf(fen, trySan, reply.san);
-  if (p) {
-    return { kind: 'refuted', text: `${trySan}? Then ${p.replySan}, ${p.gerund}.`, replySan: p.replySan, replyFrom: reply.from, replyTo: reply.to, line, proof };
+  // WHY THE TRY FAILS, FROM THE ONE ERROR COMPUTER (David 2026-10-10:
+  // "Tactics should tell why that move was wrong, the proof, but not say the
+  // right answer"). The better move is never named — finding it is the puzzle.
+  const ew = errorWhy({
+    fenBefore: fen, playedSan: trySan, moverColor: moverSign === 1 ? 'white' : 'black',
+    bestSan: null, bestLineUci: null, replyLineUci: read.topLines?.[0]?.moves ?? [read.bestMove],
+    missedMate: null, allowedMate: null, bestMate: null, quality: 'mistake', priorMove: null,
+    namesBetterMove: false,
+  });
+  if (ew.consequence) {
+    return { kind: 'refuted', text: `${trySan}? ${openSentence(consequenceIn(ew.consequence, 'present'))}.${ew.tail}`, replySan: reply.san, replyFrom: reply.from, replyTo: reply.to, line, proof: ew.proof ?? proof };
   }
   if (read.isMate && moverEval < 0) {
     return { kind: 'refuted', text: `${trySan}? Then ${reply.san}, and they have a forced mate.`, replySan: reply.san, replyFrom: reply.from, replyTo: reply.to, line, proof };

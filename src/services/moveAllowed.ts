@@ -2,42 +2,13 @@ import { Chess } from 'chess.js';
 import { describeMoveGeometry } from './groundedAnswer';
 import { legalSeeGain } from './positionReadingService';
 
-/**
- * WHAT YOUR MOVE ALLOWED — the one sentence a mistake card should lead with.
- *
- * Hand walk 2026-10-01 (erik, chess.com): about half the My Mistakes cards
- * opened on a fact unrelated to the mistake. Rc3 hangs the rook to bxc3, and
- * the card opened "Bishop on h8 pins pawn on b2 against rook on a1". Kh8 loses
- * to Ng6+, and the card opened "Queen on e3 pins knight on f4" — the very knight
- * that escapes with the fork. The intro read the board BEFORE the move and,
- * by design, skipped anything touching the solution, so what survived was
- * whatever was left over.
- *
- * The lesson of a mistake is what the move let the opponent do. That is not a
- * spoiler — it explains the wrong move, never the right one — and it is
- * already computed: the engine's reply after the played move (`pvAfterPlayed`)
- * on new cards, or the move the opponent actually answered with in the game.
- * `describeMoveGeometry`, read from the OPPONENT's seat on that reply, says
- * what it does with the same landing-safety checks the coach uses everywhere.
- *
- * Speaks only a concrete punishment — mate, a fork, a pin, material won. A
- * bare "attacks" or "gives check" is not proof the move was punished, so it
- * returns null and the card stays quiet on that point (empty > vague).
- */
-export function describeWhatMoveAllowed(
-  fen: string,
-  playedSan: string,
-  replySan: string | null,
-): string | null {
-  const p = punishmentOf(fen, playedSan, replySan);
-  return p ? `${playedSan} lets them play ${p.replySan}, ${p.gerund}.` : null;
-}
 
-/** The concrete punishment a reply inflicts after `playedSan` — the shared
- *  core of the mistake card ("R2b3 lets them play Qxd6, winning your pawn")
- *  and the wrong-try refutation in a puzzle ("Qe3? Then Bxg5, winning your
- *  pawn on g5"). One computer, two phrasings. */
-export function punishmentOf(
+/** The concrete punishment ONE reply inflicts after `playedSan`, read by the
+ *  exchange count on its square — the single-reply half of the one error
+ *  computer (`inaccuracyCall.errorWhy`), used when only their answer is known
+ *  (a game's reply on a My Mistakes card, a one-move engine read). Called
+ *  only from there (2026-10-10 unification). */
+export function replyPunishment(
   fen: string,
   playedSan: string,
   replySan: string | null,

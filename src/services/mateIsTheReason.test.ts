@@ -14,7 +14,7 @@ describe('a mating best move is better because it mates', () => {
     expect(mateContext({ isMate: true, mateIn: 6 }, { isMate: false, mateIn: null }, 'white', true).bestMate).toBeNull();
   });
   it('the verdict names the mate, not a king read', () => {
-    const call = callInaccuracy({
+    const call = callInaccuracy({ namesBetterMove: true,
       fenBefore: FEN, playedSan: 'Qxe4+', bestSan: 'Rc7+',
       bestLineUci: ['c8c7', 'e7f8', 'a4b4', 'f8e8', 'b4e4', 'e8f8', 'f3e5', 'g7g5', 'e5d7', 'f8g7', 'd7f6', 'g7f6'],
       cpLoss: 400, side: 'student', moverColor: 'white', moverEvalAfterCp: 600,

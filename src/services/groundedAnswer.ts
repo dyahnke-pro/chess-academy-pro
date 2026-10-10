@@ -53,7 +53,7 @@ import { countKingAttack, detectKingExposure, kingExposureClause } from './kingS
 import { extractQuestionFocus, PURE_BOARD_ASPECTS } from './boardQuestionRouter';
 import type { QuestionAspect } from '../data/boardQuestionBuckets';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
-import type { BadHabit, LessonScript, MoveAnnotation } from '../types';
+import type { BadHabit, LessonScript, MoveAnnotation, WalkableLine } from '../types';
 import type { MasterPlayResult } from './masterPlayTypes';
 import type { ConceptEntry } from './chessConceptService';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
@@ -2022,6 +2022,10 @@ export function assembleCandidateMoveAnswer(opts: {
   /** The student's seat — REQUIRED so the eval is said as "you"/"they", never a
    *  colour to the player of that colour (question walk 2026-09-27). */
   studentColor: 'white' | 'black' | null;
+  /** The ONE error computer (`errorCallFor`), bound by the caller to this
+   *  board, asked with the grade this answer computes — so "is Nf3 good?"
+   *  says why it fails the way every surface does. */
+  errorCall?: (band: 'inaccuracy' | 'mistake' | 'blunder', cpLoss: number) => { sentence: string; line: WalkableLine | null } | null;
 }): GroundedAnswer | null {
   const { fen, candidateSan } = opts;
   const hedge = opts.candidateSettled === false
@@ -2164,6 +2168,7 @@ export function assembleCandidateMoveAnswer(opts: {
   const pawns = cpLoss !== null ? (cpLoss / 100).toFixed(1) : null;
 
   let verdict: string;
+  let errorCall: { sentence: string; line: WalkableLine | null } | null = null;
   if (cpLoss === null) {
     verdict = bestSan
       ? `${candNorm} is playable, but ${bestSan} is the engine's top choice here.`
@@ -2174,7 +2179,11 @@ export function assembleCandidateMoveAnswer(opts: {
     // The ONE grader names it (accuracyService.gradeMove): the word a chat
     // answer uses is the word review and Learn use for the same cost.
     const band = gradeMove({ beforeCp: opts.bestEvalCp as number, afterCp: opts.candidateEvalCp as number, cpLoss });
-    verdict = band === null
+    // WHY IT WOULD FAIL, FROM THE ONE ERROR COMPUTER (David 2026-10-10: "Unity!").
+    errorCall = band !== null && opts.errorCall ? opts.errorCall(band, cpLoss) : null;
+    verdict = errorCall
+      ? `${candNorm} is ${errorCall.sentence}`
+      : band === null
       ? `${candNorm} is playable, just slightly worse than ${bestSan ?? 'the best move'} — about ${pawns} of a point.`
       : band === 'inaccuracy'
         ? `${candNorm} is an inaccuracy — it gives up about ${pawns} of a point versus ${bestSan ?? 'the best move'}.`
@@ -2187,12 +2196,12 @@ export function assembleCandidateMoveAnswer(opts: {
   if (geo && !geo.startsWith('attacks')) parts.push(`It ${geo}.`);
   const evalText = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover, opts.studentColor);
   if (evalText) parts.push(`After it, ${evalText}.`);
-  if (lineText) parts.push(lineText);
+  if (lineText && !errorCall) parts.push(lineText);
   // THE BETTER MOVE COMES WITH ITS REASON (2026-10-08, David: "if they ask
   // why it's best, they get the proof"). A named move that is not the best
   // used to end at "versus Na3" — the student heard the alternative and never
   // why. The same grounded reason the best-move answer gives, said once.
-  if (bestSan && cpLoss !== null && cpLoss > 30) {
+  if (bestSan && cpLoss !== null && cpLoss > 30 && !errorCall) {
     const why = explainBestMoveGrounded(fen, null, opts.bestMoveUci, mover, null, null);
     // "It wins the knight on f6." → "exf6 wins the knight on f6." — the
     // verdict already said it is better; this says why, once.
@@ -2206,6 +2215,7 @@ export function assembleCandidateMoveAnswer(opts: {
     bestMoveSan: bestSan,
     bestMoveFromTo: bestFromTo,
     sources,
+    ...(errorCall?.line ? { lines: [errorCall.line] } : {}),
   };
 }
 
@@ -5947,6 +5957,9 @@ export interface MoveRatingLike {
    *  of the brilliancy detector (which itself depends on describeSacrifice here,
    *  a would-be cycle). */
   brilliancyWhy?: string | null;
+  /** The ONE error computer's sentence and proof line (`errorCallFor`),
+   *  computed by the caller so this module needs no runtime import of it. */
+  errorCall?: { sentence: string; line: WalkableLine | null } | null;
 }
 /** assembleMoveRatingAnswer — "was that a good move?" G0. States the computed
  *  verdict, the eval swing, and the better move (with a green arrow) when the
@@ -5974,6 +5987,9 @@ export function assembleMoveRatingAnswer(r: MoveRatingLike): GroundedAnswer | nu
     verdict = `${r.playedSan} is within a whisker of best.${better}`;
   } else if (r.quality === 'good') {
     verdict = `${r.playedSan} is fine; it gave up very little.${better}`;
+  } else if (r.errorCall) {
+    // WHY IT FAILED, FROM THE ONE ERROR COMPUTER (David 2026-10-10: "Unity!").
+    verdict = `${r.playedSan} was ${r.errorCall.sentence}`;
   } else if (r.quality === 'inaccuracy') {
     verdict = `${r.playedSan} is a slight inaccuracy.${better}`;
   } else if (r.quality === 'mistake') {
@@ -5982,7 +5998,7 @@ export function assembleMoveRatingAnswer(r: MoveRatingLike): GroundedAnswer | nu
     verdict = `${r.playedSan} is a blunder.${better}`;
   }
 
-  return { facts: verdict, ...arrow, sources: ['engine:stockfish'] };
+  return { facts: verdict, ...arrow, sources: ['engine:stockfish'], ...(r.errorCall?.line && !r.brilliancyWhy ? { lines: [r.errorCall.line] } : {}) };
 }
 
 // ═══ RETROSPECTIVE MOVE — "why was Ke2 bad?", "what did you have in mind with
@@ -6007,6 +6023,9 @@ export interface RetrospectiveMoveLike {
   quality: MoveRatingLike['quality'] | null;
   missedMate: number | null;
   allowedMate: number | null;
+  /** The ONE error computer's sentence and proof line (`errorCallFor`), in
+   *  the MOVER's voice — re-seated here for a move the student did not make. */
+  errorCall?: { sentence: string; line: WalkableLine | null } | null;
 }
 
 /**
@@ -6111,6 +6130,18 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
   const seat = r.mover === 'coach'
     ? ' The opponent plays at your strength, so it will not always pick the engine\'s move.'
     : '';
+  // WHY IT FAILED, FROM THE ONE ERROR COMPUTER (David 2026-10-10: "Unity!")
+  // — what it allowed, then the better move with its reason, as every surface
+  // says it. The mate verdicts keep their own words; they are the why.
+  if (r.errorCall && r.allowedMate === null && r.missedMate === null) {
+    return {
+      facts: `${lead}${didClause}${didClause ? '. It' : ''} was ${reseatText(r.errorCall.sentence)}${seat}`,
+      bestMoveSan: bestSan,
+      bestMoveFromTo: r.bestMoveUci && bestSan ? { from: r.bestMoveUci.slice(0, 2), to: r.bestMoveUci.slice(2, 4) } : null,
+      sources: ['engine:stockfish', 'board:chess.js'],
+      ...(r.errorCall.line ? { lines: [r.errorCall.line] } : {}),
+    };
+  }
   return {
     facts: `${lead}${didClause}${didClause ? ', and it' : ''} ${verdict}.${better}${seat}`,
     bestMoveSan: bestSan,

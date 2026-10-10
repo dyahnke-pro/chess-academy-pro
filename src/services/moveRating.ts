@@ -22,6 +22,12 @@ export type MoveQuality = 'best' | 'excellent' | 'good' | 'inaccuracy' | 'mistak
 
 export interface MoveRating {
   playedSan: string;
+  /** The position the move was played from, and the engine's two lines —
+   *  the best line from it and their best reply after the move — so the one
+   *  error computer (`errorWhy`) can say why the move failed. */
+  fenBefore: string;
+  bestLineUci: string[];
+  replyLineUci: string[];
   studentColor: 'white' | 'black';
   wasBest: boolean;
   /** Student-POV centipawns given up vs best play, always >= 0. */
@@ -346,6 +352,9 @@ export async function computeMoveRatingFromFen(preFen: string, playedSan: string
 
   return {
     playedSan,
+    fenBefore: preFen,
+    bestLineUci: pre.topLines?.[0]?.moves ?? (pre.bestMove ? [pre.bestMove] : []),
+    replyLineUci: post.topLines?.[0]?.moves ?? (post.bestMove ? [post.bestMove] : []),
     studentColor,
     wasBest,
     cpLoss,

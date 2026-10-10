@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7137 lines · 41 exports · 54 importers · 60 tests · 19 audits**
+**7168 lines · 41 exports · 54 importers · 60 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -127,9 +127,9 @@
 
 ### `answerAttemptComparison` (function) — 4 call sites
 - `src/services/coachApi.attemptComparison.test.ts:30`
-- `src/services/coachApi.attemptComparison.test.ts:43`
-- `src/services/coachApi.attemptComparison.test.ts:56`
-- `src/services/coachApi.attemptComparison.test.ts:63`
+- `src/services/coachApi.attemptComparison.test.ts:45`
+- `src/services/coachApi.attemptComparison.test.ts:58`
+- `src/services/coachApi.attemptComparison.test.ts:65`
 
 ### `consumeCoachActionOffer` (function) — 1 call site
 - `src/coach/coachService.ts:1891`
@@ -280,8 +280,8 @@
 ### `voiceFacts` (function) — 39 call sites
 - `scripts/audit-kid-static.mjs:53`
 - `scripts/audit-kid-static.mjs:64`
-- `src/components/Coach/CoachGameReview.tsx:1656`
-- `src/components/Coach/CoachGameReview.tsx:1849`
+- `src/components/Coach/CoachGameReview.tsx:1666`
+- `src/components/Coach/CoachGameReview.tsx:1859`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
 - `src/components/Puzzles/PuzzleBoard.tsx:98`
 - `src/hooks/usePhaseNarration.ts:733`

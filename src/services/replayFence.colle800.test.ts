@@ -17,7 +17,7 @@ describe('ply 27 — cxd4 after …cxd4 is taking the pawn, not "winning" it', (
 
 describe('ply 31 — a quiet reply is not what the mistake "let them in with"', () => {
   it('16.Qg3 …Neg6 is not named as the break-in', () => {
-    const v = callInaccuracyDetailed({ priorMove: null,
+    const v = callInaccuracyDetailed({ namesBetterMove: true, priorMove: null,
       fenBefore: 'r1bqrnk1/5ppp/p3p3/1p1pn1bN/3p2Q1/2PB4/PP3PPP/R1B1R1K1 w - - 0 16', playedSan: 'Qg3', bestSan: 'Rxe5',
       bestLineUci: ['e1e5', 'g5f6', 'c3d4', 'g7g6', 'h5f6', 'd8f6'],
       cpLoss: 245, side: 'student', moverColor: 'white',

@@ -102,7 +102,7 @@ describe('Learn walk oct3a #18', () => {
   it('…Rxc3 is another road to the win, not a miss', () => {
     expect(replyKeptWinOf(fenAfter, 'Rxc3', lines)).toBe(true);
     expect(replyKeptWinOf(fenAfter, 'gxh5', lines)).toBe(false);
-    const v = callInaccuracyDetailed({
+    const v = callInaccuracyDetailed({ namesBetterMove: true,
       fenBefore, playedSan: 'h5', bestSan: 'Kb1', cpLoss: 290, evalBeforeMoverCp: 0, evalAfterMoverCp: -290,
       side: 'student', moverColor: 'white', replyLineUci: ['g6g5', 'f4e5', 'f7f6', 'e5f6'], replySan: 'Rxc3',
       replyKeptWin: true, priorMove: null,

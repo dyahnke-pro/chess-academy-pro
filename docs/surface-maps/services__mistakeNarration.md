@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**705 lines · 3 exports · 6 importers · 5 tests · 0 audits**
+**728 lines · 4 exports · 7 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,6 +17,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakeNarration.test.ts`
 - `src/services/mistakeNarrationVoice.ts`
 - `src/services/mistakePuzzleService.ts`
+- `src/services/moveAllowed.test.ts`
 - `src/services/reviewWalkOct1.test.ts`
 
 ## Exports and every call site
@@ -25,6 +26,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `describePositionIdea` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `whatTheMoveAllowed` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `generateMistakeNarration` (function) — 36 call sites
@@ -71,6 +75,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakeNarration.boardTruth.test.ts`
 - `src/services/mistakeNarration.test.ts`
 - `src/services/mistakeNarrationVoice.test.ts`
+- `src/services/moveAllowed.test.ts`
 - `src/services/reviewWalkOct1.test.ts`
 
 ## Audits that reach it

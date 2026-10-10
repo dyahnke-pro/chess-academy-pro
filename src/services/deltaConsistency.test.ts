@@ -131,7 +131,7 @@ describe('the coach speaks from the same point it always did', () => {
     const b = new Chess();
     for (const s of ['e4', 'e5', 'Nf3']) b.move(s);
     const fen = b.fen();
-    const call = (cp: number) => callInaccuracy({ priorMove: null, replyLineUci: ['f1b5', 'a7a6'], replySan: null,
+    const call = (cp: number) => callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: ['f1b5', 'a7a6'], replySan: null,
       fenBefore: fen, playedSan: 'Nc6', bestSan: 'Nf6', cpLoss: cp,
       side: 'student', moverColor: 'black',
     });
@@ -145,7 +145,7 @@ describe('the coach speaks from the same point it always did', () => {
     const { Chess } = await import('chess.js');
     const b = new Chess();
     for (const s of ['f3', 'e5']) b.move(s);
-    expect(callInaccuracy({ priorMove: null, replyLineUci: ['d8h4'], replySan: null,
+    expect(callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: ['d8h4'], replySan: null,
       fenBefore: b.fen(), playedSan: 'g4', bestSan: 'Nc3', cpLoss: 0,
       allowedMate: 1, side: 'student', moverColor: 'white',
     })).not.toBeNull();

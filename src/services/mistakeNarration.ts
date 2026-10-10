@@ -9,7 +9,8 @@ import { gradeNarrationText } from './coachAnswerGates';
 import type { MistakeClassification, MistakeGamePhase, MistakeNarration } from '../types';
 import { sideToMove } from './conceptEngine';
 import { stemKeyOf } from '../utils/rotateStem';
-import { describeWhatMoveAllowed, punishmentOf } from './moveAllowed';
+import { replyPunishment } from './moveAllowed';
+import { consequenceIn, errorWhy } from './inaccuracyCall';
 import { captureRead } from './positionReadingService';
 import { costWords } from './engineConstants';
 
@@ -34,7 +35,7 @@ export interface NarrationParams {
   /** REQUIRED: the opponent's reply to the played move — the engine's
    *  (`pvAfterPlayed[0]`) where known, else the move actually answered in the
    *  game, else null. The card leads with what that reply punished
-   *  (`describeWhatMoveAllowed`). Required so every producer decides. */
+   *  (`whatTheMoveAllowed`). Required so every producer decides. */
   allowedReplySan: string | null;
 }
 
@@ -499,6 +500,28 @@ function buildOutro(params: NarrationParams, idea: MoveIdea): string {
   return outroVariants.length > 0 ? pick(outroVariants, params.fen) : '';
 }
 
+/** "R2b3 lets them play Qxd6, winning your pawn on d6." — WHAT THE MOVE
+ *  ALLOWED, from the ONE error computer every surface uses (David
+ *  2026-10-10: "Unity!"). Never the better move: this card asks for it. */
+export function whatTheMoveAllowed(fen: string, playedSan: string, replySan: string | null): string | null {
+  if (!replySan) return null;
+  let replyUci: string;
+  let mover: 'white' | 'black';
+  try {
+    const c = new Chess(fen);
+    mover = c.turn() === 'w' ? 'white' : 'black';
+    c.move(playedSan);
+    const m = c.move(replySan);
+    replyUci = `${m.from}${m.to}${m.promotion ?? ''}`;
+  } catch { return null; }
+  const ew = errorWhy({
+    fenBefore: fen, playedSan, moverColor: mover, bestSan: null, bestLineUci: null,
+    replyLineUci: [replyUci], missedMate: null, allowedMate: null, bestMate: null,
+    quality: 'mistake', priorMove: null, namesBetterMove: false,
+  });
+  return ew.consequence ? `${playedSan} ${consequenceIn(ew.consequence, 'present').replace(/^it /, '')}.` : null;
+}
+
 // ─── Main Generator ─────────────────────────────────────────────────────────
 
 export function generateMistakeNarration(params: NarrationParams): MistakeNarration {
@@ -521,7 +544,7 @@ export function generateMistakeNarration(params: NarrationParams): MistakeNarrat
   // pawn on d6" — and that explains the wrong move, never the right one, so it
   // spoils nothing. With it in hand the move is not named a second time; the
   // cost and the ask close the intro.
-  const allowed = params.allowedMate ? null : describeWhatMoveAllowed(fen, playerMoveSan, params.allowedReplySan);
+  const allowed = params.allowedMate ? null : whatTheMoveAllowed(fen, playerMoveSan, params.allowedReplySan);
   const introClauses = [
     buildContextSentence(params),
     buildStandingSentence(params),
@@ -562,7 +585,7 @@ export function generateMistakeNarration(params: NarrationParams): MistakeNarrat
 /** "Qc5 keeps your pawn on d6 protected." when the played move let them win
  *  a piece on a square and the best move leaves that capture losing. */
 function keepsWhatWasDropped(fen: string, playedSan: string, replySan: string | null, bestSan: string): string | null {
-  const p = punishmentOf(fen, playedSan, replySan);
+  const p = replyPunishment(fen, playedSan, replySan);
   const target = p?.gerund.match(/^winning your (\w+) on ([a-h][1-8])$/);
   if (!target) return null;
   const [, piece, square] = target;

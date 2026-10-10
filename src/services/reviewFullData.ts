@@ -65,7 +65,7 @@ import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBish
 import { deriveNextPlanFacts } from './nextPlans';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
-import { betterMoveReason, priorMoveLeadingTo, punishmentOf, toStudentSeat } from './inaccuracyCall';
+import { errorWhy, priorMoveLeadingTo, toStudentSeat } from './inaccuracyCall';
 import { andList } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
 import { imageryFor } from './factImagery';
@@ -534,46 +534,50 @@ export function computeMoveFacets(
     // global seating pass reads the board after it, and after 16.Nxe4 "the
     // knight on e4" there was White's: "Qxe4 — it would take your knight on e4"
     // (1200 review walk 2026-09-27). A seated reference is left alone later.
-    const reason0 = bestSan && fellShort
-      ? betterMoveReason(fenBefore, san, bestSan, ctx.bestLineUci, ctx.moverColor,
-        priorMoveLeadingTo(ply >= 2 && ctx.teaching.prevFenBefore ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null, fenBefore),
-        moverGaveUpMate(ctx.preMoveEval, ctx.evaluation, ctx.moverColor))
+    // THE WHY, FROM THE ONE COMPUTER (David 2026-10-10: "Same in review and
+    // everywhere else. Unity!"). `errorWhy` decides what the move allowed,
+    // the better move's reason and the proof — the same reads Learn speaks;
+    // Review names the better move because the game is over.
+    const opponentMoved = ctx.studentColorWB !== null && (ctx.moverColor === 'white' ? 'w' : 'b') !== ctx.studentColorWB;
+    const ew = bestSan && fellShort
+      ? errorWhy({
+        fenBefore, playedSan: san, moverColor: ctx.moverColor,
+        bestSan, bestLineUci: ctx.bestLineUci, replyLineUci: costsPoints ? ctx.playedLineUci : [],
+        missedMate: null, allowedMate: null,
+        bestMate: moverGaveUpMate(ctx.preMoveEval, ctx.evaluation, ctx.moverColor) ? 'forced' : null,
+        quality: ctx.classification === 'inaccuracy' ? 'inaccuracy' : ctx.classification === 'blunder' ? 'blunder' : 'mistake',
+        priorMove: priorMoveLeadingTo(ply >= 2 && ctx.teaching.prevFenBefore ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null, fenBefore),
+        replySan: ctx.allSans[ply] ?? null,
+        namesBetterMove: true,
+      })
       : null;
     // The opponent's better move is THEIR idea, said to the student: "toward
     // their king" in the mover's voice is "toward your king" (review walk
-    // 2026-10-01, ply 18 "e5 — the idea is to swing pieces toward their king").
-    const opponentMoved = ctx.studentColorWB !== null && (ctx.moverColor === 'white' ? 'w' : 'b') !== ctx.studentColorWB;
-    const reason1 = reason0 && opponentMoved ? toStudentSeat(reason0) : reason0;
-    const reason = reason1 && ctx.studentColorWB ? seatPieceReferences(reason1, fenBefore, ctx.studentColorWB) : reason1;
+    // 2026-10-01, ply 18). Seated on the board it DESCRIBES — the one before
+    // the move (1200 review walk 2026-09-27).
+    const seat = (t: string | null): string | null => {
+      if (!t) return null;
+      const t1 = opponentMoved ? toStudentSeat(t) : t;
+      return ctx.studentColorWB ? seatPieceReferences(t1, fenBefore, ctx.studentColorWB) : t1;
+    };
+    const reason = seat(ew?.reason ?? null);
     if (outVerdictReason) outVerdictReason.text = reason;
-    // NAMED WITH ITS REASON, OR NOT NAMED (Learn's rule, 2026-09-24): with no
-    // reason computed, the teaching is what the move LET THEM DO — Learn's own
-    // reader over the line after it (review walk 2026-10-02, ply 85: "the
-    // stronger move was Rd3." and nothing else).
-    const punish = bestSan && fellShort && !reason && costsPoints
-      ? punishmentOf(fenBefore, san, ctx.playedLineUci, ctx.moverColor)
-      : null;
-    const punishWhy = punish
-      ? (opponentMoved ? toStudentSeat(punish.why) : punish.why)
-      : null;
-    // THEIR SLIP IS THE STUDENT'S CHANCE (clean-win review 2026-10-02: plies
-    // 44/54/58/60 of a won game said only "the stronger move was Qc7" — their
-    // better move, nothing the student can use). With no material cost to
-    // name, the teaching is the student's answer and its point, from the same
-    // move-point computer Learn uses.
-    // …unless the student then MISSED it: that move is the question the walk
-    // may ask, never an answer given first (the one withholding rule, U8).
-    const answer = opponentMoved && bestSan && fellShort && costsPoints && !reason && !punishWhy
+    const consequence = seat(ew?.consequence ?? null);
+    // THEIR SLIP IS THE STUDENT'S CHANCE (clean-win review 2026-10-02): with
+    // nothing it allowed and no reason, the teaching is the student's answer
+    // and its point — unless the student then MISSED it (U8).
+    const answer = opponentMoved && bestSan && fellShort && costsPoints && !reason && !consequence
       && !advantageWasMissed(ctx.allSans[ply] ?? null, ctx.replyBestSan)
       ? studentAnswer(fenAfter, san, ctx.replyBestSan, ctx.playedLineUci)
       : null;
-    const better = bestSan && fellShort
-      ? (reason ? `the stronger move was ${bestSan} — ${reason}`
-        : punishWhy ? `it let ${opponentMoved ? 'you' : 'them'} ${punishWhy}`
-          // A better move with no reason is a bare conclusion (proof rule,
-          // 52-errors #47): the board's better-move arrow and Show me carry it.
-          : answer ?? '')
-      : '';
+    // What it allowed first, then the better move with its reason — the
+    // heart of the app's order. A better move with no reason is a bare
+    // conclusion (proof rule, 52-errors #47) and is not named.
+    const better = [
+      consequence,
+      reason && ew?.bestSan ? `the stronger move was ${ew.bestSan} — ${reason}` : null,
+      !consequence && !reason ? answer : null,
+    ].filter(Boolean).join('; ');
     const tail = [whyBad, better].filter(Boolean).join('; ');
     const betterBit = tail ? ` — ${tail}` : '';
     // CARRY THE MOVER'S SUBJECT (David 2026-07-20 opera-ply-14 bug): a quiet move
@@ -589,7 +593,7 @@ export function computeMoveFacets(
     // The verdict's proof is the line its words name: the better move's own
     // line when the reason came from it, the line after the move when the
     // punishment did.
-    if (costsPoints || fellShort) recProof(qf, punishWhy ? lineProofFromUci(fenAfter, ctx.playedLineUci) : lineProofFromUci(fenBefore, ctx.bestLineUci));
+    if (costsPoints || fellShort) recProof(qf, ew?.proof ?? lineProofFromUci(fenBefore, ctx.bestLineUci));
     if (positive) {
       try {
         const pm = new Chess(fenBefore).move(san);

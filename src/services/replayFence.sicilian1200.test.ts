@@ -73,7 +73,7 @@ describe('ply 47 — 24.Nf6+ Kg7: a forced king move is not what the check "let 
   it('the grade does not say "let them in with Kg7"', async () => {
     const { callInaccuracyDetailed } = await import('./inaccuracyCall');
     const c = new Chess(); for (const m of [...GAME, 'Rd8', 'Rfe1', 'g6', 'h3', 'b6', 'Ne4', 'Rxd1', 'Rxd1', 'Nd4']) c.move(m);
-    const v = callInaccuracyDetailed({ priorMove: null,
+    const v = callInaccuracyDetailed({ namesBetterMove: true, priorMove: null,
       fenBefore: c.fen(), playedSan: 'Nf6+', bestSan: 'Qd3',
       bestLineUci: ['c2d3', 'c8e6', 'd1c1', 'e6a2', 'e4f6', 'g8g7'],
       cpLoss: 150, side: 'student', moverColor: 'white', // graded a mistake in the live walk

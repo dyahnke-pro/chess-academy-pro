@@ -10,12 +10,12 @@ const LINE = ['a3a4', 'f7f6', 'e1e3', 'f6e5', 'd6c4', 'e5e4', 'f1e2', 'e6d5', 'c
 
 describe('the opponent-side verdict keeps the idea/own split', () => {
   it('a4 does not "swing pieces" itself', () => {
-    const call = callInaccuracy({
+    const call = callInaccuracy({ namesBetterMove: true,
       fenBefore: FEN, playedSan: 'Nc4', bestSan: 'a4', bestLineUci: LINE,
       cpLoss: 140, side: 'coach', moverColor: 'white', moverEvalAfterCp: -120,
       replyLineUci: [], replySan: null, priorMove: null,
     });
-    const dictated = callInaccuracy({
+    const dictated = callInaccuracy({ namesBetterMove: true,
       fenBefore: FEN, playedSan: 'Nc4', bestSan: 'a4', bestLineUci: LINE,
       cpLoss: 140, side: 'coach', dictated: true, moverColor: 'white', moverEvalAfterCp: -120,
       replyLineUci: [], replySan: null, priorMove: null,

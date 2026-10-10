@@ -34,12 +34,15 @@ import { toObserverSeat } from './groundedAnswer';
 import { Chess, type Square } from 'chess.js';
 import { planFromUci, isCostClause } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
-import { MISTAKE_CP, BLUNDER_CP, costWords, GRADE_WORD, type SpokenGradeLabel } from './engineConstants';
+import { MISTAKE_CP, BLUNDER_CP, costWords, GRADE_WORD, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 export { costWords };
 import { MATERIAL_VALUE } from './pieceValues';
 import { lineWins, mateLine } from './lineCalc';
 import { landedTacticFor } from './pvPlayback';
 import { proofCut } from './exchangeLedger';
+import { replyPunishment } from './moveAllowed';
+import { lineProofFromUci, walkableLine, type Proof } from './proof';
+import type { WalkableLine } from '../types';
 import { signedLegalSeeFor } from './positionReadingService';
 
 export interface InaccuracyCall {
@@ -63,6 +66,8 @@ export interface InaccuracyCall {
   /** The punishing line this call SPEAKS, played from `fen` — so the board
    *  draws exactly the moves the words name, ply by ply. */
   line?: { fen: string; uci: string[] };
+  /** The proof the words name, when there is one (see `errorWhy`). */
+  proof?: Proof;
   /** The tactic the better move LANDS (`landedTacticFor`), when the call names
    *  that move — the pattern the student missed, so a caller can teach its
    *  rule once (unify-the-coach B3). Structured, never read off the prose. */
@@ -485,9 +490,7 @@ export type InaccuracyDecline =
   | 'under-the-floor'
   | 'no-better-move-supplied'
   | 'played-the-best-move'
-  | 'best-move-illegal-here'
-  /** A mistake with nothing to prove it: no punishment, no lost mate, no engine reply. */
-  | 'no-proof';
+  | 'best-move-illegal-here';
 
 export type InaccuracyVerdict =
   | { call: InaccuracyCall; declined?: undefined }
@@ -535,6 +538,10 @@ export function callInaccuracyDetailed(args: {
   replyKeptWin?: boolean | null;
   /** The move that produced `fenBefore` — see `PriorMove`. REQUIRED. */
   priorMove: PriorMove;
+  /** May the call NAME the student's better move? REQUIRED, decided by the
+   *  surface (David 2026-10-10): Review yes — the game is over; Learn free
+   *  play no — the why only, the move when they ask for it. */
+  namesBetterMove: boolean;
 }): InaccuracyVerdict {
   const bare = (s: string): string => s.replace(/[+#]$/, '');
   const wasBest = Boolean(args.bestSan) && bare(args.playedSan) === bare(args.bestSan ?? '');
@@ -616,31 +623,7 @@ export function callInaccuracyDetailed(args: {
   // Still refuses rather than guesses: no line, or a line that runs out before
   // the mate would have landed, produces no claim and the callout falls back to
   // the plan's own reason.
-  const stopsMate = ((): boolean => {
-    if (args.allowedMate === null || args.allowedMate === undefined) return false;
-    if (!args.bestLineUci || args.bestLineUci.length < 2) return false;
-    const moverChar = args.moverColor === 'white' ? 'w' : 'b';
-    try {
-      const b = new Chess(args.fenBefore);
-      for (const uci of args.bestLineUci) {
-        if (!uci || uci.length < 4) break;
-        const mv = b.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4, 5) || undefined });
-        if (!mv) return false;
-        // The mover being mated anywhere in their own best line means the mate
-        // was not the played move's fault and this claim is not ours to make.
-        if (b.isCheckmate() && b.turn() === moverChar) return false;
-      }
-      // The line has to be long enough to have carried the mate if it were
-      // coming — a two-ply PV proves nothing about a mate in six.
-      //
-      // ABSOLUTE VALUE: `allowedMate` arrives SIGNED (the engine's mate score is
-      // relative to a side, so walking into mate reads -1 as readily as 1). Used
-      // raw, a negative depth makes this comparison `length >= -2`, which is
-      // every line ever — the guard would pass vacuously on exactly the half of
-      // the cases it exists to check. Only the magnitude is a depth.
-      return args.bestLineUci.length >= Math.min(2 * Math.abs(args.allowedMate), 8);
-    } catch { return false; }
-  })();
+  const stopsMate = betterStopsMate(args.fenBefore, args.bestLineUci ?? null, args.allowedMate ?? null, args.moverColor);
 
   const better = stopsMate
     ? { why: 'stop the mate', square: '', own: true }
@@ -739,8 +722,10 @@ export function callInaccuracyDetailed(args: {
   // preference second. A blunder is still called a blunder.
   const gambit = quality === 'blunder' ? null : gambitFile(args.fenBefore, args.playedSan, args.moverColor);
   if (gambit) {
-    const said = `${args.playedSan} offers a pawn — if they take, the ${gambit}-file opens toward their king. The engine prefers ${args.bestSan}${better ? `, to ${better.why}` : ''}, so it is a practical try, not a free one.`;
-    return { call: { quality, side: 'student', cost, said, square: better?.square ?? '', namesBetter: args.bestSan } };
+    const said = args.namesBetterMove
+      ? `${args.playedSan} offers a pawn — if they take, the ${gambit}-file opens toward their king. The engine prefers ${args.bestSan}${better ? `, to ${better.why}` : ''}, so it is a practical try, not a free one.`
+      : `${args.playedSan} offers a pawn — if they take, the ${gambit}-file opens toward their king. It is a practical try, not a free one.`;
+    return { call: { quality, side: 'student', cost, said, square: args.namesBetterMove ? better?.square ?? '' : '', ...(args.namesBetterMove ? { namesBetter: args.bestSan } : {}) } };
   }
   // STILL WINNING IS SAID FIRST (hand walk 1380, move 22: "gxh5 was a
   // mistake" — it won two pieces and left White +4). When the mover is still
@@ -760,87 +745,32 @@ export function callInaccuracyDetailed(args: {
   // way. "Wins" only where the eval says so.
   if (typeof after === 'number' && after >= STILL_BETTER_CP && quality !== 'blunder' && (args.allowedMate ?? null) === null) {
     const stands = after >= BLUNDER_CP ? 'still wins' : 'keeps you clearly on top';
-    const said = reason
+    const named = reason && args.namesBetterMove;
+    const said = named
       ? `${args.playedSan} ${stands}, but ${args.bestSan} was cleaner — ${reason}.`
       : `${args.playedSan} ${stands}.`;
-    return { call: { quality, side: 'student', cost, said, square: better?.square ?? '', ...(reason ? { namesBetter: args.bestSan } : {}) } };
+    return { call: { quality, side: 'student', cost, said, square: named ? better?.square ?? '' : '', ...(named ? { namesBetter: args.bestSan } : {}) } };
   }
   if (typeof after === 'number' && after >= BLUNDER_CP && (args.allowedMate ?? null) === null) {
-    const said = reason
+    const named = reason && args.namesBetterMove;
+    const said = named
       ? `${args.playedSan} still wins, but ${args.bestSan} was cleaner — ${reason}.`
       : `${args.playedSan} still wins.`;
-    return { call: { quality, side: 'student', cost, said, square: better?.square ?? '', ...(reason ? { namesBetter: args.bestSan } : {}) } };
+    return { call: { quality, side: 'student', cost, said, square: named ? better?.square ?? '' : '', ...(named ? { namesBetter: args.bestSan } : {}) } };
   }
-  // THE GRADE CARRIES ITS COST (Blumenfeld walk F16/F23/F31): what the move
-  // let them do, read off their own best line by the same reader that says why
-  // a better move is better — and whether they actually did it.
-  const punishment = quality === 'inaccuracy' ? null : punishmentOf(args.fenBefore, args.playedSan, args.replyLineUci, args.moverColor);
-  // NAMED WITH ITS REASON, OR NOT NAMED (Learn walk, fresh Nimzo game,
-  // 2026-09-26: "exd5 was a mistake. e5 was the move." — nothing said why).
-  const should = reason ? ` ${args.bestSan} was the move — ${reason}.` : '';
-  // The grade is read off win chances, the cost in pawns: a two-pawn drop in
-  // a lost position grades as an inaccuracy. "A little" beside "about two
-  // pawns" contradicts itself (Learn walk 2026-10-01, Rc8), so the word for an
-  // inaccuracy follows the cost the sentence states.
-  // "Loose" is a board word — an undefended piece — so "Kd5 was loose" and
-  // "Nc6 was loose" (Learn walk 2026-10-02) claimed a piece hung where none
-  // did. The grade of a move is "imprecise"; the cost is advantage, not
-  // material ("gave away" read as a piece handed over).
-  // Guarded by WORTH_SAYING above: only the three spoken grades reach here.
-  const label = quality as SpokenGradeLabel;
-  const grade = GRADE_WORD[label];
-  // "AND THEY MISSED IT" ONLY WHEN THEIR REPLY DID NOT KEEP THE WIN (walk
-  // oct3a, 28.h5: "it let them win a piece for a pawn, and they missed it" —
-  // they played …Rxc3, a different move that wins as well). The caller reads
-  // that off the engine's own replies to the move (`replyKeptWin`).
-  const missed = !!punishment?.first && args.replySan !== null
-    && bare(args.replySan) !== bare(punishment.first) && args.replyKeptWin !== true;
-  // EVERY MISTAKE CARRIES ITS WHY AND ITS PROOF (David 2026-10-10: "Any time
-  // a mistake is made it MUST follow with the why/proof"). Nothing won and no
-  // mate lost: what the move ALLOWED is the why — the engine's reply to it,
-  // and what that reply does — and the reply line on the board is the proof.
-  // No engine line at all → nothing proves it, so the grade is not said.
-  const allowed = !punishment && (args.missedMate ?? null) === null
-    ? allowedReply(args.fenBefore, args.playedSan, args.replyLineUci, args.moverColor)
-    : null;
-  // The better move WITH its reason is a why too — its line is the proof.
-  if (!punishment && (args.missedMate ?? null) === null && !allowed && !should) return { call: null, declined: 'no-proof' };
-  const head = punishment
-    ? `${args.playedSan} was ${grade} — it let them ${punishment.why}${missed ? ', and they missed it' : ''}.`
-    : (args.missedMate ?? null) !== null
-      // A LOST MATE is the cost when nothing was taken (Damiano walk, 32.Rxc7).
-      ? `${args.playedSan} was ${grade} — it let a forced mate slip.`
-      : allowed
-        ? `${args.playedSan} was ${grade} — it let them play ${allowed.said}.`
-        : `${args.playedSan} was ${grade}.`;
-  // THE PUNISHING LINE, PLAYED OUT (David 2026-09-30: "teach more line
-  // calculations"): to where their material lands, with what it wins.
-  let lineTail = '';
-  let line: InaccuracyCall['line'];
-  if (punishment && args.replyLineUci.length >= 2) {
-    try {
-      const b = new Chess(args.fenBefore);
-      b.move(args.playedSan);
-      const opp = args.moverColor === 'white' ? 'b' : 'w';
-      const w = lineWins(b.fen(), args.replyLineUci, opp, undefined, { fenBefore: args.fenBefore, san: args.playedSan });
-      if (w) {
-        lineTail = ` The line: ${andList(w.sans)} — they come out ${w.what} up.`;
-        line = { fen: b.fen(), uci: args.replyLineUci.slice(0, w.plies.length) };
-      }
-    } catch { /* no line — the grade stands */ }
-  }
-  // THE MATE THAT SLIPPED, PLAYED OUT — and the quiet move it started with
-  // (Danya: "no check yet — take the escape square first"). Replaces the bare
-  // better-move reason: the line IS the reason.
-  let mateSaid = '';
-  if ((args.missedMate ?? null) !== null && !punishment && args.bestLineUci?.length) {
-    const ml = mateLine(args.fenBefore, args.bestLineUci, args.moverColor === 'white' ? 'w' : 'b', args.bestSan);
-    if (ml) { mateSaid = ` ${ml.text}`; line ??= { fen: args.fenBefore, uci: args.bestLineUci.slice(0, ml.plies.length) }; }
-  }
-  const pattern = should && !mateSaid ? landedTacticFor(args.fenBefore, args.bestSan) : null;
-  if (allowed && !line) line = allowed.line;
-  if (should && !line && args.bestLineUci?.length) line = { fen: args.fenBefore, uci: args.bestLineUci.slice(0, 4) };
-  return { call: { quality, side: 'student', cost, said: `${head}${lineTail}${mateSaid || should}`, square: better?.square ?? '', ...(punishment?.lostSquare ? { lostSquare: punishment.lostSquare } : {}), ...(should || mateSaid ? { namesBetter: args.bestSan } : {}), ...(line ? { line } : {}), ...(pattern ? { pattern } : {}) } };
+  // THE WHY AND ITS PROOF — the ONE computer every surface grades errors
+  // through (David 2026-10-10: "Any error … same in review and everywhere
+  // else. Unity!"). No why → the grade is not said.
+  const ew = errorWhy({
+    fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor,
+    bestSan: args.bestSan, bestLineUci: args.bestLineUci ?? null, replyLineUci: args.replyLineUci,
+    missedMate: args.missedMate ?? null, allowedMate: args.allowedMate ?? null, bestMate: args.bestMate ?? null,
+    quality: quality as SpokenGradeLabel, priorMove: args.priorMove,
+    replySan: args.replySan, replyKeptWin: args.replyKeptWin ?? null,
+    namesBetterMove: args.namesBetterMove,
+  });
+  const said = `${args.playedSan} was ${errorGradeSentence(ew, quality as SpokenGradeLabel, cost)}`;
+  return { call: { quality, side: 'student', cost, said, square: ew.namesBetter ? better?.square ?? '' : '', ...(ew.proof ? { proof: ew.proof } : {}), ...(ew.lostSquare ? { lostSquare: ew.lostSquare } : {}), ...(ew.namesBetter ? { namesBetter: ew.namesBetter } : {}), ...(ew.line ? { line: ew.line } : {}), ...(ew.pattern ? { pattern: ew.pattern } : {}) } };
 }
 
 /**
@@ -850,6 +780,8 @@ export function callInaccuracyDetailed(args: {
  * read from their seat and said from the student's), and the reply line for
  * the board. Null when there is no engine line to prove it.
  */
+const ALLOWED_DOES_SOMETHING = /\b(?:attacks?|attacking|checks?|x-ray|forks?|pins?|skewers?|wins?|winning|threatens?|traps?|mates?|checkmate)\b/i;
+
 export function allowedReply(
   fenBefore: string, playedSan: string, replyLineUci: readonly string[], moverColor: 'white' | 'black',
 ): { said: string; line: { fen: string; uci: string[] } } | null {
@@ -865,10 +797,16 @@ export function allowedReply(
     const noun = `${them === 'b' ? '…' : ''}${reply.san}`;
     // A NAMED MOVE IS NOT A WHY: no clause for what the reply does → no call.
     const why = moveWhy(fenAfter, reply.san, them, playedSan);
-    if (!why) return null;
+    // WHY A MOVE WAS A MISTAKE IS SOMETHING THEIR REPLY DOES TO YOU — an
+    // attack, a check, a pin, a win. "…e5, which stakes out the centre" is a
+    // description of their move, not why yours failed; empty > generic.
+    if (!why || !ALLOWED_DOES_SOMETHING.test(why)) return null;
     // A CAPTURE THEY ARE PAID BACK FOR IS A TRADE, not "takes your rook" (probe
     // 2026-10-10, Rc8: Rxc8 Rxc8). Said only when the mover is behind over
     // the whole line, the played move's own capture included.
+    // With only their reply in hand, the exchange count on the square decides
+    // (a recapture the line does not show is still a recapture).
+    if (reply.captured && replyLineUci.length < 2 && signedLegalSeeFor(fenAfter, reply.to, them) <= 0) return null;
     if (reply.captured) {
       const sans: string[] = [playedSan];
       const r = new Chess(fenAfter);
@@ -886,6 +824,209 @@ export function allowedReply(
       line: { fen: fenAfter, uci: replyLineUci.slice(0, Math.min(replyLineUci.length, 4)) },
     };
   } catch { return null; }
+}
+
+/** WHY AN ERROR WAS AN ERROR — the ONE computer every surface grades a move
+ *  through (David 2026-10-10: "Any error. Same in review and everywhere else.
+ *  Unity!"). Said in the MOVER's voice ("it let them …"); a surface speaking
+ *  to the other side seats it.
+ *
+ *  The order is the heart of the app's: what the move ALLOWED first — the
+ *  material it lets them win, the mate it let slip, else the reply it let them
+ *  play and what that reply does — then, ONLY where the surface allows it, the
+ *  better move with its reason (Review: the game is over; Learn free play and
+ *  tactics: the why only, the move when the student asks for it).
+ *
+ *  The proof is the line those words name, drawn on the board, when there is
+ *  one. The contract is light (David 2026-10-10: "Not every miss needs the
+ *  proof"): with no why at all, the grade says its cost. */
+export interface ErrorWhy {
+  /** "it let them win a piece …" / "it let a forced mate slip" / "it let them
+   *  play …d5, which …" — null when nothing it allowed can be said. */
+  consequence: string | null;
+  /** The punishing line played out (" The line: …"), or ''. */
+  tail: string;
+  /** "Bg5 was the move — it would …", or the mate line that slipped; null
+   *  when the surface withholds the move or no reason exists. */
+  better: string | null;
+  /** The better move and its bare reason ("it would …"), for a surface that
+   *  words the comparison itself (Review: "the stronger move was …"). Null
+   *  exactly when `better` is. */
+  bestSan: string | null;
+  reason: string | null;
+  /** The line the words name, as a proof — absent when nothing is shown. */
+  proof?: Proof;
+  line?: { fen: string; uci: string[] };
+  lostSquare?: string;
+  namesBetter?: string;
+  pattern?: string;
+}
+
+export function errorWhy(args: {
+  fenBefore: string;
+  playedSan: string;
+  moverColor: 'white' | 'black';
+  bestSan: string | null;
+  bestLineUci: readonly string[] | null;
+  replyLineUci: readonly string[];
+  missedMate: number | null;
+  allowedMate: number | null;
+  /** The better move starts a forced mate: its length, or 'forced' when a
+   *  surface knows only that it does (Review reads it off the evals). */
+  bestMate: number | 'forced' | null;
+  quality: SpokenGradeLabel;
+  priorMove: PriorMove;
+  replySan?: string | null;
+  replyKeptWin?: boolean | null;
+  /** REQUIRED — the surface's answer, never a default (see the doc above). */
+  namesBetterMove: boolean;
+}): ErrorWhy {
+  const bare = (x: string): string => x.replace(/[+#]$/, '');
+  const bestSan = args.bestSan && bare(args.bestSan) !== bare(args.playedSan) ? args.bestSan : null;
+  const stopsMate = bestSan ? betterStopsMate(args.fenBefore, args.bestLineUci, args.allowedMate, args.moverColor) : false;
+  const reason = !bestSan || !args.namesBetterMove ? null
+    : stopsMate
+      ? 'it would stop the mate'
+      : args.bestMate !== null
+        ? mateReason(args.fenBefore, bestSan, args.bestMate === 'forced' ? null : args.bestMate)
+        : args.bestLineUci?.length ? betterMoveReason(args.fenBefore, args.playedSan, bestSan, args.bestLineUci, args.moverColor, args.priorMove, false) : null;
+  // NAMED WITH ITS REASON, OR NOT NAMED (Learn walk, fresh Nimzo game,
+  // 2026-09-26: "exd5 was a mistake. e5 was the move." — nothing said why).
+  const should = reason && bestSan ? `${bestSan} was the move — ${reason}.` : '';
+  const punishment = args.quality === 'inaccuracy' ? null : punishmentOf(args.fenBefore, args.playedSan, args.replyLineUci, args.moverColor);
+  // "AND THEY MISSED IT" ONLY WHEN THEIR REPLY DID NOT KEEP THE WIN (walk
+  // oct3a, 28.h5).
+  const missed = !!punishment?.first && (args.replySan ?? null) !== null
+    && bare(args.replySan ?? '') !== bare(punishment.first) && args.replyKeptWin !== true;
+  // ONLY THEIR REPLY, NO LINE (a game's actual answer, a one-move engine
+  // read): what that one move wins, by the exchange count on its square, so a
+  // trade is never called a win. The line reader above needs four plies.
+  const single = !punishment && args.missedMate === null && args.replyLineUci.length > 0 && args.replyLineUci.length < 4
+    ? (() => {
+      try {
+        const c = new Chess(args.fenBefore);
+        c.move(args.playedSan);
+        const u = args.replyLineUci[0];
+        const san = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san;
+        const p = replyPunishment(args.fenBefore, args.playedSan, san);
+        return p ? { said: `${args.moverColor === 'white' ? '…' : ''}${p.replySan}, ${p.gerund}`, line: { fen: c.fen(), uci: [u] } } : null;
+      } catch { return null; }
+    })()
+    : null;
+  const allowed = !punishment && !single && args.missedMate === null
+    ? allowedReply(args.fenBefore, args.playedSan, args.replyLineUci, args.moverColor)
+    : null;
+  const consequence = punishment
+    ? `it let them ${punishment.why}${missed ? ', and they missed it' : ''}`
+    // A LOST MATE is the cost when nothing was taken (Damiano walk, 32.Rxc7).
+    : args.missedMate !== null
+      ? 'it let a forced mate slip'
+      : single ? `it let them play ${single.said}`
+        : allowed ? `it let them play ${allowed.said}` : null;
+  // THE PUNISHING LINE, PLAYED OUT (David 2026-09-30: "teach more line
+  // calculations"): to where their material lands, with what it wins.
+  let tail = '';
+  let line: ErrorWhy['line'];
+  if (punishment && args.replyLineUci.length >= 2) {
+    try {
+      const b = new Chess(args.fenBefore);
+      b.move(args.playedSan);
+      const opp = args.moverColor === 'white' ? 'b' : 'w';
+      const w = lineWins(b.fen(), args.replyLineUci, opp, undefined, { fenBefore: args.fenBefore, san: args.playedSan });
+      if (w) {
+        tail = ` The line: ${andList(w.sans)} — they come out ${w.what} up.`;
+        line = { fen: b.fen(), uci: args.replyLineUci.slice(0, w.plies.length) };
+      }
+    } catch { /* no line — the consequence stands */ }
+  }
+  // THE MATE THAT SLIPPED, PLAYED OUT — the line IS the reason. It names the
+  // better move, so only where the surface names it.
+  let mateSaid = '';
+  if (args.namesBetterMove && args.missedMate !== null && !punishment && args.bestLineUci?.length && bestSan) {
+    const ml = mateLine(args.fenBefore, args.bestLineUci, args.moverColor === 'white' ? 'w' : 'b', bestSan);
+    if (ml) { mateSaid = ml.text; line ??= { fen: args.fenBefore, uci: args.bestLineUci.slice(0, ml.plies.length) }; }
+  }
+  if (single && !line) line = single.line;
+  if (allowed && !line) line = allowed.line;
+  if (should && !line && args.bestLineUci?.length) line = { fen: args.fenBefore, uci: args.bestLineUci.slice(0, 4) };
+  const proof = line ? lineProofFromUci(line.fen, line.uci) ?? undefined : undefined;
+  const pattern = should && !mateSaid && bestSan ? landedTacticFor(args.fenBefore, bestSan) : null;
+  return {
+    consequence,
+    tail,
+    better: mateSaid || should || null,
+    bestSan: mateSaid || should ? bestSan : null,
+    reason: should ? reason : null,
+    ...(proof ? { proof } : {}),
+    ...(line ? { line } : {}),
+    ...(punishment?.lostSquare ? { lostSquare: punishment.lostSquare } : {}),
+    ...((should || mateSaid) && bestSan ? { namesBetter: bestSan } : {}),
+    ...(pattern ? { pattern } : {}),
+  };
+}
+
+/** The graded sentence after the move's name: "a mistake — it let them …. The
+ *  line: …. Bg5 was the move — …". With no why at all, the cost — never a
+ *  bare grade (run B walk, Nf5). One rendering, every surface. `would` is the
+ *  hypothetical a chat answer speaks for a move not yet played ("is Nf3
+ *  good?"): "it would let them …", "Bg5 is the move". */
+export function errorGradeSentence(ew: ErrorWhy, quality: SpokenGradeLabel, costCp: number | null, tense: 'past' | 'would' = 'past'): string {
+  const grade = GRADE_WORD[quality];
+  const costSaid = !ew.consequence && !ew.better && costCp !== null && costFitsGrade(quality, costCp)
+    ? ` — it ${tense === 'would' ? 'would cost' : 'cost'} ${costWords(costCp)} of advantage` : '';
+  const consequence = ew.consequence ? consequenceIn(ew.consequence, tense) : null;
+  const better = ew.better && tense === 'would' ? ew.better.replace(/ was the move — it would /, ' is the move — it would ') : ew.better;
+  return `${grade}${consequence ? ` — ${consequence}` : costSaid}.${ew.tail}${better ? ` ${better}` : ''}`;
+}
+
+/** `errorWhy`'s consequence in the tense a surface speaks: past (Learn,
+ *  Review — the move is played), present (a puzzle try: "it lets them …"),
+ *  or would (a chat hypothetical). */
+export function consequenceIn(consequence: string, tense: 'past' | 'present' | 'would'): string {
+  if (tense === 'past') return consequence;
+  return consequence.replace(/^it let /, tense === 'would' ? 'it would let ' : 'it lets ');
+}
+
+/** THE CHAT ANSWERS' ERROR CALL — "was that a good move?", "why was Ke2 bad?",
+ *  "is Nf3 good?" all ask the one computer and get the same sentence and the
+ *  same proof line on the board. Null when the grade is not an error. */
+export function errorCallFor(args: {
+  fenBefore: string;
+  playedSan: string;
+  moverColor: 'white' | 'black';
+  bestUci: string | null;
+  bestLineUci: readonly string[];
+  replyLineUci: readonly string[];
+  quality: MoveQuality | null;
+  missedMate: number | null;
+  allowedMate: number | null;
+  cpLoss: number | null;
+  namesBetterMove: boolean;
+  tense?: 'past' | 'would';
+}): { sentence: string; line: WalkableLine | null } | null {
+  if (args.quality !== 'inaccuracy' && args.quality !== 'mistake' && args.quality !== 'blunder') return null;
+  let bestSan: string | null = null;
+  if (args.bestUci && args.bestUci.length >= 4) {
+    try {
+      bestSan = new Chess(args.fenBefore).move({ from: args.bestUci.slice(0, 2), to: args.bestUci.slice(2, 4), promotion: args.bestUci[4] })?.san ?? null;
+    } catch { bestSan = null; }
+  }
+  const ew = errorWhy({
+    fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor,
+    bestSan, bestLineUci: args.bestLineUci.length ? args.bestLineUci : (args.bestUci ? [args.bestUci] : null),
+    replyLineUci: args.replyLineUci, missedMate: args.missedMate, allowedMate: args.allowedMate, bestMate: null,
+    quality: args.quality, priorMove: null, namesBetterMove: args.namesBetterMove,
+  });
+  let line: WalkableLine | null = null;
+  if (ew.line) {
+    const sans: string[] = [];
+    try {
+      const c = new Chess(ew.line.fen);
+      for (const u of ew.line.uci) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san);
+    } catch { /* the playable prefix */ }
+    line = sans.length ? walkableLine(ew.line.fen, sans, sans[0]) : null;
+  }
+  return { sentence: errorGradeSentence(ew, args.quality, args.cpLoss, args.tense ?? 'past'), line };
 }
 
 /** A material cost clause ("win a piece for a pawn") is only what the move LET
@@ -910,6 +1051,32 @@ function moverLostOverLine(
   const proof = proofCut(fenBefore, sans, moverColor === 'white' ? 'w' : 'b');
   if (!proof || proof.mate || !proof.ledger) return false;
   return proof.ledger.netPawns < 0;
+}
+
+/** The better move's own engine line avoids the mate the played move walked
+ *  into (see the long note in `callInaccuracyDetailed`). */
+export function betterStopsMate(
+  fenBefore: string, bestLineUci: readonly string[] | null, allowedMate: number | null, moverColor: 'white' | 'black',
+): boolean {
+  if (allowedMate === null) return false;
+  if (!bestLineUci || bestLineUci.length < 2) return false;
+  const moverChar = moverColor === 'white' ? 'w' : 'b';
+  try {
+    const b = new Chess(fenBefore);
+    for (const uci of bestLineUci) {
+      if (!uci || uci.length < 4) break;
+      const mv = b.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4, 5) || undefined });
+      if (!mv) return false;
+      // The mover being mated anywhere in their own best line means the mate
+      // was not the played move's fault and this claim is not ours to make.
+      if (b.isCheckmate() && b.turn() === moverChar) return false;
+    }
+    // The line has to be long enough to have carried the mate if it were
+    // coming — a two-ply PV proves nothing about a mate in six. ABSOLUTE
+    // VALUE: `allowedMate` arrives SIGNED, and a negative depth would pass
+    // every line vacuously.
+    return bestLineUci.length >= Math.min(2 * Math.abs(allowedMate), 8);
+  } catch { return false; }
 }
 
 /** What the played move let the OTHER side do: their best line after it, read

@@ -15,7 +15,7 @@ describe('checks first — the move order is the reason', () => {
     expect(checksFirst(fen(), 'gxh5', 'Rxf8+', BEST_LINE)).toEqual({ best: 'Rxf8+', reply: 'Kxf8', played: 'gxh5' });
   });
   it('the still-wins verdict speaks the order, not "it would land a fork"', () => {
-    const said = callInaccuracy({
+    const said = callInaccuracy({ namesBetterMove: true,
       fenBefore: fen(), playedSan: 'gxh5', bestSan: 'Rxf8+', bestLineUci: BEST_LINE,
       cpLoss: 261, moverEvalAfterCp: 418, side: 'student', moverColor: 'white',
     } as never)?.said ?? '';

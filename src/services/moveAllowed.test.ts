@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { describeWhatMoveAllowed, gameReplyAfter } from './moveAllowed';
+import { gameReplyAfter } from './moveAllowed';
+import { whatTheMoveAllowed as describeWhatMoveAllowed } from './mistakeNarration';
 
 // Real cards from the hand walk 2026-10-01 (chess.com account "erik").
 describe('describeWhatMoveAllowed — lead with what the move let them do', () => {

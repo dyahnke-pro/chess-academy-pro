@@ -25,7 +25,7 @@ describe('one reason for the better move, on every surface', () => {
   });
 
   it('Learn speaks it', () => {
-    const said = callInaccuracy({
+    const said = callInaccuracy({ namesBetterMove: true,
       fenBefore: before, playedSan: 'gxh5', bestSan: 'Rxf8+', bestLineUci: BEST_LINE,
       cpLoss: 261, moverEvalAfterCp: 418, side: 'student', moverColor: 'white',
     } as never)?.said ?? '';

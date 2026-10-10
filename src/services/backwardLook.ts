@@ -188,6 +188,9 @@ export function backwardLook(args: {
     }
     try {
       const verdict = callInaccuracyDetailed({
+        // LEARN FREE PLAY NEVER NAMES THE BETTER MOVE UNASKED (David
+        // 2026-10-10): the why of the error, and the move only when asked.
+        namesBetterMove: false,
         fenBefore: args.fenBefore,
         playedSan: args.playedSan,
         bestSan: args.bestSan,
@@ -352,6 +355,9 @@ export function backwardLook(args: {
       if (args.bestSan) {
         try {
           const call = callInaccuracy({
+        // LEARN FREE PLAY NEVER NAMES THE BETTER MOVE UNASKED (David
+        // 2026-10-10): the why of the error, and the move only when asked.
+        namesBetterMove: false,
             fenBefore: args.fenBefore,
             playedSan: args.playedSan,
             bestSan: args.bestSan,
@@ -397,6 +403,9 @@ export function backwardLook(args: {
   if (args.bestSan) {
     try {
       const call = callInaccuracy({
+        // LEARN FREE PLAY NEVER NAMES THE BETTER MOVE UNASKED (David
+        // 2026-10-10): the why of the error, and the move only when asked.
+        namesBetterMove: false,
         fenBefore: args.fenBefore,
         playedSan: args.playedSan,
         bestSan: args.bestSan,

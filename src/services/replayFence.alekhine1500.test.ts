@@ -89,7 +89,7 @@ describe('removal of the defender needs something left to win (Alekhine ply 41)'
 
 describe('a trade is not an entry (Alekhine ply 49)', () => {
   it('"it let them in with Bxf3" is not said of a bishop trade', () => {
-    const call = callInaccuracy({ priorMove: null,
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null,
       fenBefore: '1nkr3r/1pp1b1pp/2b1pp2/2P1P3/2NP4/4B2P/P3BKP1/1R2R3 w - - 2 25',
       playedSan: 'Bf3', bestSan: 'Rb4', bestLineUci: ['b1b4', 'f6e5', 'c4e5', 'c6d5'],
       cpLoss: 150, missedMate: null, allowedMate: null, moverEvalAfterCp: 50,

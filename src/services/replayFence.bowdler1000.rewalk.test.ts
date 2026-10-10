@@ -16,7 +16,7 @@ describe('ply 58 — …Rd4+ walked into a discovered check, and the grade says 
     replyLineUci: ['g4f5', 'g8h8', 'g1g6', 'f6f5', 'g6h6', 'h8g8'], replySan: 'Kf5+',
   };
   it('names the discovered check, not a bare grade', () => {
-    const said = callInaccuracyDetailed(args).call?.said ?? '';
+    const said = callInaccuracyDetailed({ ...args, namesBetterMove: true }).call?.said ?? '';
     expect(said).toMatch(/Rd4\+ was a mistake — it let them in with Kf5\+, a discovered check from the rook on g1/);
   });
 });

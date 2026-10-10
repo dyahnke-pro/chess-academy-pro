@@ -108,7 +108,7 @@ describe('no dead lanes — every lane can fire', () => {
   });
 
   it('the inaccuracy callout — coach side', () => {
-    const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: new Chess().fen(), playedSan: 'a3', bestSan: 'e4',
       bestLineUci: ['e2e4', 'e7e5', 'g1f3', 'b8c6'], cpLoss: 150,
       side: 'coach', moverColor: 'white',

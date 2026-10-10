@@ -16,7 +16,7 @@ const FEN = '1r4k1/p2b1p1p/3ppbp1/q7/4P3/P1PQ1NPP/1r3PB1/R1R3K1 b - - 2 23';
 describe('readWrongTry — what a wrong try runs into', () => {
   it('names the refutation, from the board, in the weighing register', async () => {
     const r = await readWrongTry(FEN, 'R2b3', engineSays('d3d6', 66));
-    expect(r).toEqual(expect.objectContaining({ kind: 'refuted', text: 'R2b3? Then Qxd6, winning your pawn on d6.', replyFrom: 'd3', replyTo: 'd6' }));
+    expect(r).toEqual(expect.objectContaining({ kind: 'refuted', text: 'R2b3? It lets them play Qxd6, winning your pawn on d6.', replyFrom: 'd3', replyTo: 'd6' }));
   });
 
   it('a try that still wins is never called wrong', async () => {
@@ -24,6 +24,11 @@ describe('readWrongTry — what a wrong try runs into', () => {
     const r = await readWrongTry(FEN, 'R2b3', engineSays('d3d6', -400));
     expect(r?.kind).toBe('also-good');
     expect(r?.text).toMatch(/still keeps you on top/);
+  });
+
+  it('a quiet refutation says what their reply does (David 2026-10-10: tactics say why the try failed)', async () => {
+    const r = await readWrongTry(FEN, 'R2b3', engineSays('e4e5', 66));
+    expect(r?.text).toBe('R2b3? It lets them play e5, which attacks the bishop on f6.');
   });
 
   it('silent when the refutation is quiet — no vague sentence', async () => {

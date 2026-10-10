@@ -23,20 +23,22 @@ describe('answerAttemptComparison', () => {
 
   it('names the student\'s move, its cost, and the better move WITH its reason', async () => {
     computeMoveRatingFromFen.mockResolvedValue({
-      playedSan: 'Nc7+', studentColor: 'white', wasBest: false, cpLoss: 170, quality: 'mistake',
+      playedSan: 'Nc7+', fenBefore: FEN, bestLineUci: ['b5d6', 'e7d6', 'e5d6'], replyLineUci: ['e8d8', 'c7a8'], studentColor: 'white', wasBest: false, cpLoss: 170, quality: 'mistake',
       betterSan: 'Nd6+', betterFromTo: { from: 'b5', to: 'd6' }, missedMate: null, allowedMate: null,
       brilliancy: null, brilliancyWhy: null, evalAfterMoverCp: 180,
     });
     const a = await answerAttemptComparison({ fenBefore: FEN, san: 'Nc7+', withholdBest: false });
     expect(a?.facts).toMatch(/^Your Nc7\+ on move 12/);
-    expect(a?.facts).toMatch(/it was a mistake\./);
-    expect(a?.facts).toMatch(/The engine preferred Nd6\+/);
+    // The why first, from the one error computer (David 2026-10-10), and the
+    // reply on the board as its proof.
+    expect(a?.facts).toMatch(/It was a mistake — it let them play …Kd8, which attacks the knight on c7\./);
+    expect(a?.lines?.[0]?.plies.map((p) => p.san)).toEqual(['Kd8', 'Nxa8']);
     expect(a?.bestMoveSan).toBe('Nd6+');
   });
 
   it('an unsolved drill keeps the better move WITHHELD — the cost is said, the answer is not', async () => {
     computeMoveRatingFromFen.mockResolvedValue({
-      playedSan: 'Nc7+', studentColor: 'white', wasBest: false, cpLoss: 170, quality: 'mistake',
+      playedSan: 'Nc7+', fenBefore: FEN, bestLineUci: ['b5d6', 'e7d6', 'e5d6'], replyLineUci: ['e8d8', 'c7a8'], studentColor: 'white', wasBest: false, cpLoss: 170, quality: 'mistake',
       betterSan: 'Nd6+', betterFromTo: { from: 'b5', to: 'd6' }, missedMate: null, allowedMate: null,
       brilliancy: null, brilliancyWhy: null, evalAfterMoverCp: 180,
     });
@@ -49,7 +51,7 @@ describe('answerAttemptComparison', () => {
 
   it('their move WAS the best → said so, nothing withheld or invented', async () => {
     computeMoveRatingFromFen.mockResolvedValue({
-      playedSan: 'Nd6+', studentColor: 'white', wasBest: true, cpLoss: 0, quality: 'best',
+      playedSan: 'Nd6+', fenBefore: FEN, bestLineUci: ['b5d6'], replyLineUci: [], studentColor: 'white', wasBest: true, cpLoss: 0, quality: 'best',
       betterSan: null, betterFromTo: null, missedMate: null, allowedMate: null,
       brilliancy: null, brilliancyWhy: null, evalAfterMoverCp: 350,
     });

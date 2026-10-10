@@ -81,7 +81,7 @@ describe('F17 — the tempo verdict names the kick they PLAYED', () => {
 describe('F16/F23/F31 — a grade says what the move cost, and whether they took it', () => {
   it('…Qd7 names what it let them do, and that Nf1 missed it', async () => {
     const { callInaccuracyDetailed } = await import('./inaccuracyCall');
-    const v = callInaccuracyDetailed({ priorMove: null,
+    const v = callInaccuracyDetailed({ namesBetterMove: true, priorMove: null,
       fenBefore: fenAt(29), playedSan: 'Qd7', bestSan: 'Rad8',
       bestLineUci: ['a8d8', 'd2f1', 'f6d7', 'a2a4', 'c7b8', 'f1g3'],
       cpLoss: 374, side: 'student', moverColor: 'black',
@@ -98,15 +98,14 @@ describe('F16/F23/F31 — a grade says what the move cost, and whether they took
     expect(said).not.toMatch(/take your knight/);
     expect(said).not.toMatch(/their king/);
   });
-  it('with no reply line and no reason the grade is not said — nothing proves it (David 2026-10-10)', async () => {
+  it('with no reply line and no reason the grade names only the cost it can prove — the eval it gave away', async () => {
     const { callInaccuracyDetailed } = await import('./inaccuracyCall');
-    const v = callInaccuracyDetailed({ priorMove: null,
+    const v = callInaccuracyDetailed({ namesBetterMove: true, priorMove: null,
       fenBefore: fenAt(29), playedSan: 'Qd7', bestSan: 'Rad8', bestLineUci: [],
       cpLoss: 374, side: 'student', moverColor: 'black', replyLineUci: [], replySan: null,
     });
-    // Never a bare grade, and an eval drop alone is a number, not a why.
-    expect(v.call).toBeNull();
-    expect(v.declined).toBe('no-proof');
+    // Never a bare grade (run B walk 2026-09-30); with no why the cost is said.
+    expect(v.call?.said).toBe('Qd7 was a blunder — it cost about a piece of advantage.');
   });
 });
 

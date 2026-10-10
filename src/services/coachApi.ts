@@ -96,7 +96,8 @@ import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningI
 import { matchOpponentOpening } from './counterRepertoireService';
 import { getMisconceptionProfile } from './misconceptionService';
 import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer, assembleTimeTroubleAnswer, assembleLastGameAnswer, assembleRetrospectiveAnswer, assembleMethodAnswer, assembleHintAnswer, hintUnavailableReason, assemblePiecePlanAnswer } from './groundedAnswer';
-import { computeLastMoveRating, computeMoveRatingAt, computeMoveRatingFromFen, lastPlyOf } from './moveRating';
+import { computeLastMoveRating, computeMoveRatingAt, computeMoveRatingFromFen, lastPlyOf, type MoveRating } from './moveRating';
+import { errorCallFor } from './inaccuracyCall';
 import { homeOpeningRow, rankOpeningsByVolume } from './openingVolumeFloor';
 import { getHomeOpenings } from './homeOpeningService';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
@@ -741,6 +742,18 @@ export function consumeServedIntent(): string | null {
   return i;
 }
 
+/** A rated move's error call from the ONE computer (`errorCallFor`) — the
+ *  same sentence and proof line every surface gives (David 2026-10-10). */
+function ratingErrorCall(rating: MoveRating, namesBetterMove: boolean): ReturnType<typeof errorCallFor> {
+  return errorCallFor({
+    fenBefore: rating.fenBefore, playedSan: rating.playedSan, moverColor: rating.studentColor,
+    bestUci: rating.betterFromTo ? `${rating.betterFromTo.from}${rating.betterFromTo.to}` : null,
+    bestLineUci: rating.bestLineUci, replyLineUci: rating.replyLineUci,
+    quality: rating.quality, missedMate: rating.missedMate, allowedMate: rating.allowedMate,
+    cpLoss: rating.cpLoss, namesBetterMove,
+  });
+}
+
 /**
  * "Why is that better than what I played?" when what they played was a TRY the
  * board took back (hand walk 2026-10-04 #11). The answer is the comparison:
@@ -776,6 +789,8 @@ export async function answerAttemptComparison(
     quality: rating.quality,
     missedMate: rating.missedMate,
     allowedMate: rating.allowedMate,
+    // An unsolved drill withholds the better move; the why still speaks.
+    errorCall: ratingErrorCall(rating, !attempt.withholdBest),
   });
   if (attempt.withholdBest && !rating.wasBest) {
     answer.facts = `${answer.facts} There's a stronger move here — find it, and the two go side by side.`;
@@ -4165,6 +4180,7 @@ export async function getCoachChatResponse(
             if (ref.kind === 'my-last' && attempt && grounding.currentFen
               && attempt.fenBefore.split(' ').slice(0, 2).join(' ') === grounding.currentFen.split(' ').slice(0, 2).join(' ')) {
               const answer = await answerAttemptComparison(attempt);
+              if (answer?.lines?.length) lastCoachLines = answer.lines;
               if (answer) {
                 const mustPreserve = [attempt.san, answer.bestMoveSan].filter((x): x is string => !!x);
                 const voicedAttempt = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating', preferRaw: true, mustPreserve });
@@ -4233,6 +4249,7 @@ export async function getCoachChatResponse(
             let missedMate: number | null = null;
             let allowedMate: number | null = null;
             let evalAfterMoverCp: number | null = null;
+            let errorCall: ReturnType<typeof errorCallFor> = null;
             if (stored && stored.classification) {
               // The stored read carries the CLASS, not the centipawns — the
               // verdict speaks the class and no figure (G0: never a number
@@ -4250,6 +4267,7 @@ export async function getCoachChatResponse(
                 missedMate = rating.missedMate;
                 allowedMate = rating.allowedMate;
                 evalAfterMoverCp = rating.evalAfterMoverCp;
+                errorCall = ratingErrorCall(rating, true);
               }
             }
             // "Was it a SOUND SACRIFICE?" gets the soundness verdict first.
@@ -4266,7 +4284,9 @@ export async function getCoachChatResponse(
               quality,
               missedMate,
               allowedMate,
+              errorCall,
             });
+            if (answer.lines?.length) lastCoachLines = answer.lines;
             if (sacVerdict) answer.facts = `${sacVerdict} ${answer.facts}`;
             const mustPreserve = [ply.san, answer.bestMoveSan].filter((s): s is string => !!s);
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating', preferRaw: true, mustPreserve });
@@ -4311,13 +4331,15 @@ export async function getCoachChatResponse(
           try {
             const rating = await computeLastMoveRating(grounding.moveHistory, grounding.studentColor ?? null);
             if (rating) {
-              const rated = assembleMoveRatingAnswer(rating);
+              const rated = assembleMoveRatingAnswer({ ...rating, errorCall: ratingErrorCall(rating, true) });
               // THE SAME COMPUTERS LEARN SPEAKS (David 2026-09-30): the trade,
               // the timing, the recapture, the reflex recapture, the king attack
               // — every board-level read of THIS move, appended to the grade.
               const ply = lastPlyOf(grounding.moveHistory, grounding.studentColor ?? null);
               const extra = ply === null ? [] : studentMoveAnswerLines(grounding.moveHistory, ply, rating.cpLoss, rating.wasBest ? rating.playedSan : rating.betterSan);
               const answer = rated && extra.length > 0 ? { ...rated, facts: `${rated.facts} ${extra.join(' ')}` } : rated;
+              // The proof line of the error goes on the board (David 2026-10-10).
+              if (answer?.lines?.length) lastCoachLines = answer.lines;
               if (answer) {
                 // The played move + the engine's better move are the chess
                 // content the answer hinges on — require them verbatim so a
@@ -5995,7 +6017,16 @@ export async function getCoachChatResponse(
             candidateSettled: grounding.candidateSettled ?? null,
             studentColor: grounding.studentColor ?? null,
             masterFreqPct,
+            errorCall: (band, loss) => errorCallFor({
+              fenBefore: candFen, playedSan: grounding.candidateMoveSan ?? '',
+              moverColor: blackToMove ? 'black' : 'white',
+              bestUci: candBestUci, bestLineUci: candBestUci ? [candBestUci] : [],
+              replyLineUci: grounding.candidateLineUci ?? [],
+              quality: band, missedMate: null, allowedMate: null, cpLoss: loss,
+              namesBetterMove: true, tense: 'would',
+            }),
           });
+          if (answer?.lines?.length) lastCoachLines = answer.lines;
           if (answer) {
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'candidate-move', preferRaw: true });
             if (voiced) {

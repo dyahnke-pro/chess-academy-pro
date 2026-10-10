@@ -11,7 +11,7 @@
 // "inaccuracy" in review.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { allowedReply, betterMoveReason, callInaccuracy, callInaccuracyDetailed, gambitFile } from './inaccuracyCall';
+import { allowedReply, betterMoveReason, callInaccuracy, gambitFile } from './inaccuracyCall';
 import { classifyMove } from './moveRating';
 import { MISTAKE_CP } from './engineConstants';
 
@@ -32,7 +32,7 @@ describe('the severity bands are the review\'s, not this file\'s', () => {
     // disagreeing about the name.
     for (const cpLoss of [0, 19, 20, 49, 50, 99, 100, 199, 200, 399, 400, 900]) {
       const expected = classifyMove({ wasBest: false, cpLoss, missedMate: null, allowedMate: null });
-      const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+      const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
         fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
         cpLoss, side: 'student', moverColor: 'white',
       });
@@ -45,7 +45,7 @@ describe('the severity bands are the review\'s, not this file\'s', () => {
 
   it('treats a walked-into mate as a blunder however small the swing', () => {
     // 1.f3 e5 2.g4?? Qh4# — the mate is the why, and its line the proof.
-    const call = callInaccuracy({ priorMove: null, replyLineUci: ['d8h4'], replySan: null,
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: ['d8h4'], replySan: null,
       fenBefore: 'rnbqkbnr/pppp1ppp/8/4p3/8/5P2/PPPPP1PP/RNBQKBNR w KQkq - 0 2', playedSan: 'g4', bestSan: 'Nc3', cpLoss: 5,
       allowedMate: 1, side: 'student', moverColor: 'white',
     });
@@ -55,7 +55,7 @@ describe('the severity bands are the review\'s, not this file\'s', () => {
 
 describe('it names the better move AND what it was for', () => {
   it('gives the student the move and the reason', () => {
-    const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
       cpLoss: 150, side: 'student', moverColor: 'white',
     });
@@ -63,20 +63,17 @@ describe('it names the better move AND what it was for', () => {
     expect(call?.said, 'named the move but never said why').toMatch(/it would .+/);
   });
 
-  it('with nothing to prove it, the grade is not said (David 2026-10-10: every mistake carries its why and proof)', () => {
-    // No reply line, no better-move reason, no punishment: the old code said
-    // "a3 was a mistake — it cost more than a pawn of advantage." — a grade
-    // with a number and no why.
-    const v = callInaccuracyDetailed({ priorMove: null, replyLineUci: [], replySan: null,
+  it('with no why to give, the grade says its cost — never bare (David 2026-10-10: "Not every miss needs the proof")', () => {
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: 150,
       side: 'student', moverColor: 'white',
     });
-    expect(v.call).toBeNull();
-    expect(v.declined).toBe('no-proof');
+    expect(call?.said).toBe('a3 was a mistake — it cost more than a pawn of advantage.');
+    expect(call?.proof).toBeUndefined();
   });
 
   it('a mistake that wins them nothing says what it ALLOWED, and the reply goes on the board', () => {
-    const call = callInaccuracy({ priorMove: null, replyLineUci: ['d7d5', 'c4b3'], replySan: null,
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: ['d7d5', 'c4b3'], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: 150,
       side: 'student', moverColor: 'white',
     });
@@ -93,7 +90,7 @@ describe('it names the better move AND what it was for', () => {
 
 describe('the coach owns its own mistakes', () => {
   it('says it of THEM (never "I") and hands over the punishment', () => {
-    const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
       cpLoss: 250, side: 'coach', moverColor: 'white',
     });
@@ -111,12 +108,12 @@ describe('the coach owns its own mistakes', () => {
     // no: an inaccuracy below the floor says nothing at all, so the honest test
     // of this rule is that a mistake DOES promise and the quality is what draws
     // the line.
-    const inaccurate = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+    const inaccurate = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
       cpLoss: 60, side: 'coach', moverColor: 'white',
     });
     expect(inaccurate, 'an inaccuracy under the floor is silent, not chatty').toBeNull();
-    const mistake = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+    const mistake = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
       cpLoss: 120, side: 'coach', moverColor: 'white',
     });
@@ -129,7 +126,7 @@ describe('the coach owns its own mistakes', () => {
     // The honesty contract withholds the STUDENT's move so they have something
     // to find. A move the coach has already played is visible; hiding it would
     // be coyness, not teaching.
-    const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: 250,
       side: 'coach', moverColor: 'white',
     });
@@ -139,14 +136,14 @@ describe('the coach owns its own mistakes', () => {
 
 describe('it stays silent rather than guessing', () => {
   it('says nothing when the move WAS the best move', () => {
-    expect(callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+    expect(callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'Bg5', bestSan: 'Bg5', cpLoss: 300,
       side: 'student', moverColor: 'white',
     })).toBeNull();
   });
 
   it('says nothing when the engine offered no alternative', () => {
-    expect(callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+    expect(callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: null, cpLoss: 300,
       side: 'student', moverColor: 'white',
     })).toBeNull();
@@ -155,14 +152,14 @@ describe('it stays silent rather than guessing', () => {
   it('refuses a best move that is not legal here', () => {
     // A mismatched pair from the caller must never become a phantom move in
     // the student's ear.
-    expect(callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+    expect(callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Qh8', cpLoss: 300,
       side: 'student', moverColor: 'white',
     })).toBeNull();
   });
 
   it('survives an unreadable board', () => {
-    expect(() => callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+    expect(() => callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: 'not a fen', playedSan: 'a3', bestSan: 'Bg5', cpLoss: 300,
       side: 'student', moverColor: 'white',
     })).not.toThrow();
@@ -172,7 +169,7 @@ describe('it stays silent rather than guessing', () => {
     const board = new Chess(FEN);
     for (const cp of [120, 250, 600]) {
       for (const side of ['student', 'coach'] as const) {
-        const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+        const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
           fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
           cpLoss: cp, side, moverColor: 'white',
         });
@@ -213,7 +210,7 @@ describe('the sign convention — the classic way this goes wrong', () => {
 
   it('a coach that IMPROVES its position shows a negative cost, and says nothing', () => {
     expect(coachCpLoss(0, 120, 'white')).toBeLessThan(0);
-    expect(callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+    expect(callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5',
       cpLoss: coachCpLoss(0, 120, 'white'), side: 'coach', moverColor: 'white',
     }), 'the coach apologised for a good move').toBeNull();
@@ -222,7 +219,7 @@ describe('the sign convention — the classic way this goes wrong', () => {
   it('speaks when the cost is real, whichever colour the coach is', () => {
     for (const color of ['white', 'black'] as const) {
       const cp = color === 'white' ? coachCpLoss(50, -200, 'white') : coachCpLoss(-50, 200, 'black');
-      const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+      const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
         fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: cp,
         side: 'coach', moverColor: 'white',
       });
@@ -251,7 +248,7 @@ describe('the callout gives one reason, the highest-ranked one', () => {
   // so the want-list has more than one clause to choose between.
   const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5';
 
-  const said = (): string => callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+  const said = (): string => callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
     fenBefore: FEN,
     playedSan: 'a3',
     bestSan: 'O-O',
@@ -278,7 +275,7 @@ describe('the callout gives one reason, the highest-ranked one', () => {
   });
 
   it('the coach half is held to the same bar', () => {
-    const c = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null,
+    const c = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
       fenBefore: FEN,
       playedSan: 'a3',
       bestSan: 'O-O',
@@ -299,7 +296,7 @@ describe('a coach MISS is not a giveaway (walk 6, L4)', () => {
     // Black (the coach) could take the White knight on g5 with the queen and
     // played …d6 instead; the knight is still hanging.
     const fen = 'r1bqkbnr/pppp1ppp/2n5/6N1/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 5';
-    const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'd6', bestSan: 'Qxg5', bestLineUci: ['d8g5', 'e1g1', 'g5c5', 'b2b3', 'g8f6', 'b1c3', 'f8d6', 'c3b5'], cpLoss: 400, side: 'coach', moverColor: 'black' });
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'd6', bestSan: 'Qxg5', bestLineUci: ['d8g5', 'e1g1', 'g5c5', 'b2b3', 'g8f6', 'b1c3', 'f8d6', 'c3b5'], cpLoss: 400, side: 'coach', moverColor: 'black' });
     expect(call?.said).toMatch(/knight on g5 is still hanging/);
     expect(call?.said).not.toMatch(/go and take it/);
     expect(call?.offersStudent, 'a still-hanging warning offers nothing to find').toBeUndefined();
@@ -311,13 +308,13 @@ describe('a gambit is taught from both sides (hand walk 2026-09-24)', () => {
   // b-file opens straight onto the king". The coach said "b4 was a mistake".
   const fen = '2kr1b1r/pp1npppp/2p2n2/q6b/8/2NP2PP/PPP1NPB1/R1BQ1RK1 w - - 1 10';
   it('names the file the pawn offers to open, then the engine\'s preference', () => {
-    const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'b4', bestSan: 'a3', cpLoss: 120, side: 'student', moverColor: 'white' });
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'b4', bestSan: 'a3', cpLoss: 120, side: 'student', moverColor: 'white' });
     expect(call?.said).toContain('b-file opens toward their king');
     expect(call?.said).not.toMatch(/was a mistake/);
     expect(call?.said).toContain('a3');
   });
   it('NEGATIVE CONTROL: a push nobody can take is graded as before', () => {
-    const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'a3', bestSan: 'b4', cpLoss: 120, side: 'student', moverColor: 'white' });
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'a3', bestSan: 'b4', cpLoss: 120, side: 'student', moverColor: 'white' });
     expect(call?.said ?? '').not.toContain('offers a pawn');
   });
 });
@@ -336,7 +333,7 @@ describe('a defended pawn is not a gambit (hand walk 2026-09-24)', () => {
 
 describe('the better move\'s reason is what it TAKES (hand walk 2026-09-24)', () => {
   it('25.Bxf4 missed Bxd8, which takes the queen — not "win a rook"', () => {
-    const call = callInaccuracy({
+    const call = callInaccuracy({ namesBetterMove: true,
       fenBefore: '3q1r1k/pp4pp/2p1B3/4P1BP/1b3p2/2N2R1P/PPP5/4Q1K1 w - - 0 25', playedSan: 'Bxf4', bestSan: 'Bxd8', cpLoss: 600, moverColor: 'white', side: 'student',
       bestLineUci: ['g5d8', 'f8d8', 'f3f4', 'b4c5'], replyLineUci: [], replySan: null,
     } as never);
@@ -353,22 +350,22 @@ describe('still winning after the move is said first', () => {
   it('"still wins" when the mover stays clearly winning — no grade, and no unexplained move', () => {
     // The two-ply line proves no reason, so Rxf8+ is not named (named with its
     // reason, or not named — David 2026-09-24).
-    const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null, ...base, moverEvalAfterCp: 418 });
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, ...base, moverEvalAfterCp: 418 });
     expect(call?.said).toMatch(/^gxh5 still wins/);
     expect(call?.said).not.toMatch(/mistake|blunder|Rxf8/);
   });
   it('the grade stands when the position is no longer clearly won', () => {
-    const call = callInaccuracy({ priorMove: null, replyLineUci: ['e7h4'], replySan: null, ...base, moverEvalAfterCp: 120 });
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: ['e7h4'], replySan: null, ...base, moverEvalAfterCp: 120 });
     expect(call?.said).toMatch(/was a (mistake|blunder)/);
   });
   it('unknown eval keeps the grade', () => {
-    expect(callInaccuracy({ priorMove: null, replyLineUci: ['e7h4'], replySan: null, ...base })?.said).toMatch(/was a (mistake|blunder)/);
+    expect(callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: ['e7h4'], replySan: null, ...base })?.said).toMatch(/was a (mistake|blunder)/);
   });
 });
 
 describe('let them in — only an entry the move opened', () => {
   it('Raf8 does not "let them in with Nxb6" when Nxb6 was already there (walk 2026-09-30)', () => {
-    const call = callInaccuracy({ priorMove: null,
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null,
       fenBefore: 'r6k/ppp3pp/1bnp4/3Npr1n/2B5/3PBq1P/PPPQ1PRK/6R1 b - - 1 17', playedSan: 'Raf8', bestSan: 'Nd4',
       cpLoss: 180, side: 'student', moverColor: 'black',
       replyLineUci: ['d5b6', 'a7b6', 'c4e6', 'c6e7', 'd3d4', 'e5d4'], replySan: 'Nxb6',
@@ -379,7 +376,7 @@ describe('let them in — only an entry the move opened', () => {
 
 describe('clearly better after the move is a cleaner way, not a mistake', () => {
   it('Bxc5 +3.1 → +1.9 keeps you clearly on top (pass-2 walk 2026-09-30)', () => {
-    const call = callInaccuracy({ priorMove: null,
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null,
       fenBefore: '5rk1/1qpn1pbp/prN3p1/2pP4/2P5/Q3B2P/P4PP1/3RR1K1 w - - 0 24', playedSan: 'Bxc5', bestSan: 'Bf4',
       cpLoss: 115, moverEvalAfterCp: 194, side: 'student', moverColor: 'white', replyLineUci: [], replySan: null,
     });
@@ -392,7 +389,7 @@ describe('a dictated move is said of them, never owned by the coach (David 2026-
   it('their Bb5 dropping e4 is "their mistake", not "from me"', () => {
     // Accelerated Dragon: 1.e4 c5 2.Nf3 Nc6 3.d4 cxd4 4.Nxd4 g6 5.Be3 Bg7 6.c3 Nf6 — White to move; Bb5 drops e4.
     const fen = 'r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2P1B3/PP3PPP/RN1QKB1R w KQkq - 1 7';
-    const call = callInaccuracy({ priorMove: null,
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null,
       fenBefore: fen, playedSan: 'Bb5', bestSan: 'Nd2', cpLoss: 160,
       side: 'coach', dictated: true, moverColor: 'white', replyLineUci: [], replySan: null,
     });
@@ -405,7 +402,7 @@ describe('a take-back is the other half of a trade (Learn walk 2026-10-01, game 
   it('Rxe2+ Kxe2 is never "it let them take your rook on e2"', () => {
     // Black's rook takes the rook on e2 with check; the king takes back. Rook
     // for rook — the cost is the worse ending, not a lost rook.
-    const call = callInaccuracy({ priorMove: null,
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null,
       fenBefore: '4r2k/pp1R2pp/5r2/2P5/1P4P1/7P/3KR3/8 b - - 0 34',
       playedSan: 'Rxe2+', bestSan: 'Rc8', bestLineUci: ['e8c8', 'd7b7', 'h7h5', 'g4g5'],
       replyLineUci: ['d2e2', 'h7h5', 'd7b7', 'h5g4'], replySan: 'Kxe2',
@@ -423,13 +420,13 @@ describe('a take-back is the other half of a trade (Learn walk 2026-10-01, game 
 describe('one grade on every surface (A1)', () => {
   const base = { replyLineUci: [] as string[], replySan: null, fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE, side: 'student' as const, moverColor: 'white' as const };
   it('a 300cp give-back in a won game is not called a blunder', () => {
-    const call = callInaccuracy({ priorMove: null, ...base, cpLoss: 300, moverEvalAfterCp: 900 });
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, ...base, cpLoss: 300, moverEvalAfterCp: 900 });
     const review = classifyMove({ wasBest: false, cpLoss: 300, missedMate: null, allowedMate: null, evalBefore: 1200, evalAfter: 900, isWhiteMove: true });
     expect(review).not.toBe('blunder');
     expect(call?.said ?? '').not.toMatch(/blunder/);
   });
   it('the same 300cp in a level game is still a blunder', () => {
-    const call = callInaccuracy({ priorMove: null, ...base, cpLoss: 300, moverEvalAfterCp: -300 });
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, ...base, cpLoss: 300, moverEvalAfterCp: -300 });
     expect(call?.said ?? '').toMatch(/blunder/);
   });
 });
@@ -442,13 +439,13 @@ describe('one grade on every surface (A1)', () => {
 describe('the grade carries the missed pattern (B3)', () => {
   it('a missed knight fork is carried as pattern "fork"', () => {
     const fen = 'r3k2r/ppp2ppp/8/3N4/8/8/PPP2PPP/R3K2R w KQkq - 0 1';
-    const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'a3', bestSan: 'Nxc7+',
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'a3', bestSan: 'Nxc7+',
       bestLineUci: ['d5c7', 'e8d7', 'c7a8', 'h8a8', 'a1d1', 'd7e7'], cpLoss: 400, moverEvalAfterCp: 0, side: 'student', moverColor: 'white' });
     expect(call?.pattern).toBe('fork');
   });
   it('two pawns attacking two pieces carries no pattern (walk 2026-10-01, 5…f6)', () => {
     const fen = 'r1bqkbnr/ppp2ppp/2n5/3p2B1/3PN3/5N2/PPP1PPPP/R2QKB1R b KQkq - 1 5';
-    const call = callInaccuracy({ priorMove: null, replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'Be7', bestSan: 'f6',
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'Be7', bestSan: 'f6',
       bestLineUci: ['f7f6', 'e4f6', 'g8f6', 'e2e3', 'f8e7', 'c2c3', 'e8g8', 'f1d3'], cpLoss: 300, moverEvalAfterCp: -60, side: 'student', moverColor: 'black' });
     expect(call?.said).toMatch(/win a piece/);
     expect(call?.pattern).toBeUndefined();
@@ -484,7 +481,7 @@ describe('a pawn their line takes is a lost square the caller can match (Learn w
     const c = new Chess();
     for (const s of 'd4 c5 d5 d6 c4 Nf6 Nc3 e5 e4 Be7 Nf3 Bg4 h3 Bh5 Be2 O-O Be3 Nbd7 Nd2 Bg6 O-O a6 f4 exf4 Bxf4'.split(' ')) c.move(s);
     const fenBefore = c.fen();
-    const call = callInaccuracy({ priorMove: null,
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null,
       replyLineUci: ['c4b5', 'a6b5', 'e2b5', 'd8b6'], replySan: 'b3',
       fenBefore, playedSan: 'b5', bestSan: 'Re8', cpLoss: 120, side: 'student', moverColor: 'black',
     });
@@ -495,7 +492,7 @@ describe('a pawn their line takes is a lost square the caller can match (Learn w
 
 describe('a win the defender could dodge is not a reason (Learn walk 2026-10-01, recorded live lines)', () => {
   it('h3 with d5 best: the piece falls only to a deep defender blunder, so no "to win a piece"', () => {
-    const call = callInaccuracy({ priorMove: null,
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null,
       replyLineUci: [], replySan: null, side: 'coach', dictated: true, moverColor: 'white', cpLoss: 180,
       fenBefore: 'r1bqk2r/ppppbppp/2n2n2/8/3PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 3 6', playedSan: 'h3', bestSan: 'd5',
       bestLineUci: 'd4d5 c6e5 f2f4 e5g6 e4e5 e7c5 e5f6 e8g8 f6g7 f8e8 f1e2 d8h4'.split(' '),
@@ -503,7 +500,7 @@ describe('a win the defender could dodge is not a reason (Learn walk 2026-10-01,
     expect(call?.said ?? '').not.toMatch(/win a piece/);
   });
   it('Bd5 with f5 best: the skewer needs White to walk the queen into it, so no "land a skewer"', () => {
-    const call = callInaccuracy({ priorMove: null,
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null,
       replyLineUci: [], replySan: null, side: 'student', moverColor: 'black', cpLoss: 130,
       fenBefore: 'r2q1rk1/ppp2ppp/2n5/4P3/2bPp3/2P1B2P/P3NPP1/R2QR1K1 b - - 2 14', playedSan: 'Bd5', bestSan: 'f5',
       bestLineUci: 'f7f5 e5f6 d8f6 d1b1 b7b6 b1e4 a8e8 e4g4 f6f7'.split(' '),
@@ -514,7 +511,7 @@ describe('a win the defender could dodge is not a reason (Learn walk 2026-10-01,
 
 describe('the grade and the cost never contradict (Learn walk 2026-10-01, Rc8; unity U2)', () => {
   it('a two-pawn drop graded an inaccuracy is "imprecise", and the two pawns are not said beside it', () => {
-    const call = callInaccuracy({ priorMove: null,
+    const call = callInaccuracy({ namesBetterMove: true, priorMove: null,
       replyLineUci: ['d6d7'], replySan: null, side: 'student', moverColor: 'black', cpLoss: 210, moverEvalAfterCp: -800,
       fenBefore: '3r4/2R4p/p1rP2p1/2Pk1p2/NP6/7P/P5P1/6K1 b - - 2 36', playedSan: 'Rc8', bestSan: 'Rcxd6',
     });
@@ -535,22 +532,22 @@ describe('their slip is offered as what it really is (Learn walk 2026-10-02, 6.h
   // "level" is a band edge a time-boxed read flips on (clean-pass re-walk
   // 2026-10-04, G3 12.b3: "brings you level" at a depth-18 −0.70).
   it('still a little worse after being clearly behind → a way back, not "go and take it"', () => {
-    const said = callInaccuracy({ ...base, moverEvalAfterCp: 45 })?.said ?? '';
+    const said = callInaccuracy({ namesBetterMove: true, ...base, moverEvalAfterCp: 45 })?.said ?? '';
     expect(said).toMatch(/way back into the game/);
     expect(said).not.toMatch(/go and take it/);
   });
   it('clearly worse → a way back', () => {
-    expect(callInaccuracy({ ...base, moverEvalAfterCp: 140 })?.said ?? '').toMatch(/way back into the game/);
+    expect(callInaccuracy({ namesBetterMove: true, ...base, moverEvalAfterCp: 140 })?.said ?? '').toMatch(/way back into the game/);
   });
   it('clearly better → something to find, never "take" (there may be no capture)', () => {
-    const said = callInaccuracy({ ...base, moverEvalAfterCp: -120 })?.said ?? '';
+    const said = callInaccuracy({ namesBetterMove: true, ...base, moverEvalAfterCp: -120 })?.said ?? '';
     expect(said).toMatch(/something here for you now — look for it/);
     expect(said).not.toMatch(/take it/);
   });
   it('a small edge is not a prize (Learn walk 2026-10-02: "go and take it" at +0.45)', () => {
-    const said = callInaccuracy({ ...base, moverEvalAfterCp: -45 })?.said ?? '';
+    const said = callInaccuracy({ namesBetterMove: true, ...base, moverEvalAfterCp: -45 })?.said ?? '';
     expect(said).toMatch(/brings you level/);
-    expect(callInaccuracy({ ...base, moverEvalAfterCp: -80 })?.said ?? '').toMatch(/tips the game your way/);
+    expect(callInaccuracy({ namesBetterMove: true, ...base, moverEvalAfterCp: -80 })?.said ?? '').toMatch(/tips the game your way/);
   });
 });
 
@@ -571,5 +568,30 @@ describe('the reason is this move\'s own (Learn walk 2026-10-02, board-checked)'
   it('ply 50: a queen trade is not "swing pieces toward your king"', () => {
     expect(betterMoveReason('r4rk1/7p/p4qp1/2pPQp2/NpP5/1P5P/P5P1/5RK1 w - - 1 26', 'Qf4', 'Qxf6',
       ['e5f6', 'f8f6', 'a4c5', 'a8e8', 'c5d3', 'g8f7', 'd3b4', 'e8e4', 'b4c6', 'f7e8'], 'white', null, false) ?? '').not.toMatch(/swing pieces/);
+  });
+});
+
+describe('Learn free play never names the better move unasked (David 2026-10-10)', () => {
+  // Every path that could name it: the main grade, still-winning, the gambit.
+  const cases = [
+    { name: 'mistake with a reason on the line', a: { fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE, cpLoss: 150, replyLineUci: ['d7d5', 'c4b3'] } },
+    { name: 'still winning', a: { fenBefore: '3R1rk1/pp2q1pp/2p1n3/4Pp1n/1b4P1/1BN1BR1P/PPP5/4Q1K1 w - - 1 22', playedSan: 'gxh5', bestSan: 'Rxf8+', bestLineUci: ['d8f8', 'g8f8', 'f3f8', 'e7f8'], cpLoss: 261, moverEvalAfterCp: 418, replyLineUci: [] } },
+  ];
+  for (const c of cases) {
+    it(`${c.name}: the why, never the move`, () => {
+      const base = { priorMove: null, replySan: null, side: 'student' as const, moverColor: 'white' as const };
+      const named = callInaccuracy({ ...base, ...c.a, namesBetterMove: true });
+      const learn = callInaccuracy({ ...base, ...c.a, namesBetterMove: false });
+      expect(learn?.said ?? '').not.toContain(c.a.bestSan);
+      expect(learn?.namesBetter).toBeUndefined();
+      // The same call on a surface that names it does name it (non-vacuous).
+      if (named?.namesBetter) expect(named.said).toContain(c.a.bestSan);
+    });
+  }
+  it('the mistake still carries its why and the reply on the board', () => {
+    const call = callInaccuracy({ namesBetterMove: false, priorMove: null, replySan: null, side: 'student', moverColor: 'white',
+      fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE, cpLoss: 150, replyLineUci: ['d7d5', 'c4b3'] });
+    expect(call?.said).toBe('a3 was a mistake — it let them play …d5, which attacks the bishop on c4.');
+    expect(call?.proof?.line?.sans).toEqual(['d5', 'Bb3']);
   });
 });
