@@ -20,7 +20,7 @@
  * Expectations are written from the BOARD and the ENGINE, never copied from
  * an answer.
  */
-import { describe, it, expect, beforeEach, afterEach, afterAll, vi } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach, afterEach, afterAll, vi } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 import { Chess } from 'chess.js';
@@ -60,6 +60,7 @@ vi.mock('../services/stockfishEngine', () => {
 import { dispatchCoachTurn, setChatTurnReaderForTests, resetConversations } from './dispatchCoachTurn';
 import { db } from '../db/schema';
 import { buildUserProfile } from '../test/factories';
+import { loadEcoData, loadRepertoireData } from '../services/dataLoader';
 
 /** The boards the contracts are asked on — real positions. */
 const ITALIAN = 'e4 e5 Nf3 Nc6 Bc4 Bc5 d3 h6 O-O d6 c3 Bb6 d4 Na5 Bb5+ c6 Be2 Nf6'.split(' ');
@@ -227,7 +228,7 @@ const CONTRACTS: Record<ChatKind, Contract | Owed> = {
   'record-vs': { board: null, ask: 'how do I score against the Sicilian?', reading: { kind: 'record-vs', topic: 'Sicilian' },
     must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
   'puzzle-stats': { board: null, ask: "what's my puzzle rating?", reading: { kind: 'puzzle-stats' },
-    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+    must: [/haven't solved|no puzzles/i], mustNot: [/puzzle rating is \d/, /\d+(?:\.\d+)?%/] },
   'transfer-gap': { board: null, ask: 'do my puzzle skills show up in my games?', reading: { kind: 'transfer-gap' },
     must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
   'skill-radar': { board: null, ask: 'show me my skill radar', reading: { kind: 'skill-radar' },
@@ -241,7 +242,7 @@ const CONTRACTS: Record<ChatKind, Contract | Owed> = {
   'endgame-weakness': { board: null, ask: 'which endgames am I weakest at?', reading: { kind: 'endgame-weakness' },
     must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
   'review-due': { board: null, ask: "what's due for review?", reading: { kind: 'review-due' },
-    must: [/import|upload|no games|haven't (?:played|imported)|not enough|once you|play a few|after a few|no (?:analysed|analyzed)/i], mustNot: [/\d+(?:\.\d+)?%/] },
+    must: [/no (?:opening )?review cards|nothing (?:is )?due/i], mustNot: [/\d+(?:\.\d+)?%/] },
   // ── knowledge: what the app knows without a board ──
   concept: { board: null, ask: 'what is a fork?', reading: { kind: 'concept', topic: 'fork' },
     must: [/fork/i, /two|both|more than one/i] },
@@ -292,6 +293,9 @@ const CONTRACTS: Record<ChatKind, Contract | Owed> = {
   'i-dont-know': { owed: 'P8 batch 2' }, answer: { owed: 'P8 batch 2' },
   'start-thinking-lesson': { owed: 'P8 batch 3' },
 };
+
+// The openings database every device seeds at boot (the opening kinds read it).
+beforeAll(async () => { await loadRepertoireData(); await loadEcoData(); }, 240_000);
 
 beforeEach(async () => {
   // Every device has its profile from boot; a fresh one, no games.

@@ -23,6 +23,8 @@
  * This wrapper depends on both; neither depends on it.
  */
 import { openSentence } from '../utils/openSentence';
+import { unwrapSpineError } from '../services/sanitizeCoachText';
+import { COACH_OFFLINE_LINE } from './stockLine';
 import { answerBoardTurn, BOARD_ANSWERED_KINDS } from './boardTurnAnswer';
 import { coachService, type CoachServiceOptions } from './coachService';
 import type { CoachAskInput, CoachAnswer, CoachSurface } from './types';
@@ -434,7 +436,12 @@ export async function dispatchCoachTurn(
   let routedCommand = false;
   const finish = (raw: CoachAnswer): CoachAnswer => {
     rememberLine(input.liveState.surface, raw);
-    const answer = typeof raw.text === 'string' ? { ...raw, text: openSentence(raw.text) } : raw;
+    // A PROVIDER FAILURE IS NEVER AN ANSWER (contract 2026-10-10: the student
+    // read "(Coach-brain provider error: coach-brain-deepseek-timeout)"). The
+    // provider wraps its error as text; the door is the one exit, so it is
+    // turned into the honest offline line here, before any surface shows it.
+    const said = typeof raw.text === 'string' && unwrapSpineError(raw.text.trim()) === '' && raw.text.trim() !== '' ? COACH_OFFLINE_LINE : raw.text;
+    const answer = typeof said === 'string' ? { ...raw, text: openSentence(said) } : raw;
     if (read) {
       void settleChatTurnRead({
         input,

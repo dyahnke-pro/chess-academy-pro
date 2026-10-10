@@ -6193,8 +6193,12 @@ export interface PuzzleStatsLike {
 export function assemblePuzzleStatsAnswer(p: PuzzleStatsLike): GroundedAnswer | null {
   const mp = p.mistakePuzzles;
   const mpTotal = mp ? mp.mastered + mp.solved + mp.unsolved : 0;
-  if (p.totalAttempted <= 0 && !(p.puzzleRating && p.puzzleRating > 0) && mpTotal <= 0) return null;
-  const rating = p.puzzleRating && p.puzzleRating > 0 ? `Your puzzle rating is ${Math.round(p.puzzleRating)}.` : '';
+  // A rating with no puzzle attempted is the profile's STARTING value, not a
+  // measurement (contract 2026-10-10: "Your puzzle rating is 1400" on a device
+  // that had never solved one).
+  const rated = p.totalAttempted > 0 && !!p.puzzleRating && p.puzzleRating > 0;
+  if (p.totalAttempted <= 0 && mpTotal <= 0) return null;
+  const rating = rated ? `Your puzzle rating is ${Math.round(p.puzzleRating as number)}.` : '';
   const solved = p.totalAttempted > 0 ? ` You've solved ${p.totalCorrect} of ${p.totalAttempted} (${p.overallAccuracy}%).` : '';
   const due = p.duePuzzles > 0 ? ` ${p.duePuzzles} are due to retry.` : '';
   const mistakeLine = mp && mpTotal > 0
