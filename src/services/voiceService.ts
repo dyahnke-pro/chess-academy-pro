@@ -2,6 +2,7 @@
 // Fallback chain: Amazon Polly → Web Speech API
 // Only this file may call TTS APIs.
 
+import { onCoachStop } from '../coach/coachStopEvents';
 import { WEB_ORIGIN, isNativeApp } from '../utils/webOrigin';
 import { speechService } from './speechService';
 import { getSharedAudioContext } from './audioContextManager';
@@ -765,6 +766,8 @@ class VoiceService {
         if (document.visibilityState === 'hidden') this.stop();
       });
     }
+    // "stop" / "shh" typed or said to the coach, on any surface.
+    onCoachStop(() => this.stop());
   }
   // Default Polly playback rate. Bumped from 1.0 → 1.15 because the
   // User-configurable per-profile via `prefs.voiceSpeed` in Settings.

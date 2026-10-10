@@ -66,6 +66,7 @@ import { loadEcoData, loadRepertoireData } from '../services/dataLoader';
 
 /** The boards the contracts are asked on — real positions. */
 const ITALIAN = 'e4 e5 Nf3 Nc6 Bc4 Bc5 d3 h6 O-O d6 c3 Bb6 d4 Na5 Bb5+ c6 Be2 Nf6'.split(' ');
+const CARO = 'e4 c6 d4 d5 e5 Bf5'.split(' ');
 const fenAfter = (sans: readonly string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
 interface Board { fen: string; history: string[]; studentColor: 'white' | 'black' }
 const BOARDS = {
@@ -81,6 +82,8 @@ const BOARDS = {
   bishopSac: { fen: '5n1r/3q4/ppp1b1k1/4PpN1/1PPP1Pp1/1PB1Q3/6K1/7R b - - 2 46', history: [], studentColor: 'black' },
   /** Black to move; White threatens Re8# on the back rank. */
   backRank: { fen: '6k1/5ppp/8/8/8/8/5PPP/4R1K1 b - - 0 1', history: [], studentColor: 'black' },
+  /** The Caro-Kann Advance, Black to move — a line Naroditsky's games cover. */
+  caro: { fen: fenAfter(CARO), history: CARO, studentColor: 'black' },
 } satisfies Record<string, Board>;
 
 interface Contract {
@@ -95,6 +98,9 @@ interface Contract {
   once?: RegExp[];
   /** The answer quotes the STUDENT's own questions ("Am I safe?"). */
   allowStudentVoice?: boolean;
+  /** Turns asked first on the same board, so a kind that only exists inside
+   *  a conversation ("yes", "explain that", "I don't know") has one. */
+  before?: Array<{ ask: string; reading: Contract['reading'] }>;
 }
 /** A kind with no contract yet says why — visibly, never silently. */
 interface Owed { owed: string }
@@ -272,34 +278,38 @@ const CONTRACTS: Record<ChatKind, Contract | Owed> = {
     must: [/.{40}/], mustNot: [/best move is/i] },
   'book-teaching': { board: null, ask: 'what does Capablanca say about rook endings?', reading: { kind: 'book-teaching', topic: 'rook endings' },
     must: [/Capablanca|rook/i] },
-  // ── the rest: owed, each with its reason, until written ──
-  stop: { owed: 'P8 batch 2' }, 'conversational-reply': { owed: 'P8 batch 2' },
-  unclear: { owed: 'P8 batch 2' }, 
-  
-  
-  
-  
-  'master-play': { owed: 'P8 batch 3' }, 'player-games': { owed: 'P8 batch 3' }, 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  'teaching-method': { owed: 'P8 batch 3' }, 
-  
-  'compare-my-move': { owed: 'P8 batch 2' }, 
-  
-  
-  'explain-last': { owed: 'P8 batch 2' },
-  'i-dont-know': { owed: 'P8 batch 2' }, answer: { owed: 'P8 batch 2' },
-  'start-thinking-lesson': { owed: 'P8 batch 3' },
+  // ── the conversation (asked after a turn, so the kind has one) ──
+  stop: { board: 'mate4', ask: 'stop', reading: { kind: 'stop' },
+    before: [{ ask: "what's the best move here?", reading: { kind: 'best-move' } }],
+    must: [/^Okay\.$/], mustNot: [/not clear/i] },
+  'conversational-reply': { board: 'mate4', ask: 'yes', reading: { kind: 'conversational-reply' },
+    before: [{ ask: "what's the best move here?", reading: { kind: 'best-move' } }],
+    must: [/^.{1,40}$/], mustNot: [/not clear/i] },
+  unclear: { board: 'mate4', ask: 'blorp the zibble', reading: { kind: 'unclear' },
+    must: [/another way|what you mean/i], mustNot: [/Nh6/] },
+  'explain-last': { board: 'mate4', ask: 'explain that', reading: { kind: 'explain-last' },
+    before: [{ ask: "what's the best move here?", reading: { kind: 'best-move' } }],
+    // Each move at the position it is played from: the checks force the king,
+    // and the first move keeps the reason it was given (the mate).
+    must: [/Nh6\+ starts a forced mate in 4/, /Qf6\+ is check, and …Ke8 is the only reply/, /Bxc6# is mate/],
+    mustNot: [/f-file|saves the bishop/] },
+  'i-dont-know': { board: 'mate4', ask: "I don't know", reading: { kind: 'i-dont-know' },
+    must: [/hint/i, /knight on g4/], mustNot: [/Nh6/] },
+  answer: { board: 'italian', ask: 'the pawn on e4', reading: { kind: 'answer', referents: [{ type: 'square', square: 'e4' }] },
+    before: [{ ask: 'what are they threatening?', reading: { kind: 'threats', seat: 'them' } }],
+    must: [/^Your pawn on e4/, /knight on f6/], mustNot: [/move 1|top move/] },
+  'compare-my-move': { board: 'italian', ask: 'why is Ba4 better than what I played?', reading: { kind: 'compare-my-move', referents: [{ type: 'move', san: 'Ba4' }] },
+    // Engine-checked: Be2 was the top move there, so Ba4 is not better.
+    must: [/Ba4/, /You played Be2/, /worse/] },
+  // ── knowledge and the app ──
+  'master-play': { board: 'caro', ask: 'what do masters play here?', reading: { kind: 'master-play' },
+    must: [/\bNf3\b/, /\d[\d,]* games/], mustNot: [/not other players/] },
+  'player-games': { board: 'caro', ask: 'how does Naroditsky play this?', reading: { kind: 'player-games', topic: 'Naroditsky' },
+    must: [/Naroditsky/, /\d+ reference games/], mustNot: [/Variation \d/] },
+  'teaching-method': { board: null, ask: 'how would you teach me the Sicilian?', reading: { kind: 'teaching-method', topic: 'Sicilian' },
+    must: [/Watch/, /Learn/, /Practice/, /Play/] },
+  'start-thinking-lesson': { board: null, ask: 'teach me how to think', reading: { kind: 'start-thinking-lesson' },
+    must: [/Learn how to think/], mustNot: [/can't connect/] },
 };
 
 // The openings database every device seeds at boot (the opening kinds read it).
@@ -309,7 +319,15 @@ beforeEach(async () => {
   missingHere = new Set<string>();
   // Every device has its profile from boot; a fresh one, no games.
   await db.profiles.put(buildUserProfile({ id: 'main' }));
-  vi.spyOn(globalThis, 'fetch').mockImplementation(async () => new Response('{}', { status: 404 }));
+  // The app's own data files (`public/data/…`) are served from disk, as the
+  // device fetches them; anything else (the network) is unreachable.
+  vi.spyOn(globalThis, 'fetch').mockImplementation(async (input: RequestInfo | URL) => {
+    const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
+    const pathname = (() => { try { return new URL(url, 'http://local').pathname; } catch { return ''; } })();
+    const file = path.join(process.cwd(), 'public', pathname);
+    if (pathname.startsWith('/data/') && fs.existsSync(file)) return new Response(fs.readFileSync(file), { status: 200, headers: { 'content-type': 'application/json' } });
+    return new Response('{}', { status: 404 });
+  });
   resetConversations();
 });
 afterEach(() => { setChatTurnReaderForTests(undefined); vi.restoreAllMocks(); });
@@ -379,14 +397,21 @@ describe('the hard tier', () => {
 
 describe('every question kind answers its contract', () => {
   it.each(written)('%s', async (kind, c) => {
-    setChatTurnReaderForTests(async () => ({ referents: [], seat: null, topic: null, ...c.reading }) as never);
     const b: Board | null = c.board ? BOARDS[c.board] : null;
+    let liveState: Record<string, unknown> = b
+      ? { surface: 'standalone-chat', fen: b.fen, whoseTurn: b.fen.split(' ')[1] === 'w' ? 'white' : 'black', studentColor: b.studentColor, moveHistory: b.history, currentRoute: '/coach/chat' }
+      : { surface: 'standalone-chat', currentRoute: '/coach/chat' };
+    let lastAssistantMessage: string | undefined;
+    for (const turn of c.before ?? []) {
+      setChatTurnReaderForTests(async () => ({ referents: [], seat: null, topic: null, ...turn.reading }) as never);
+      const prior = await dispatchCoachTurn({ surface: 'standalone-chat', ask: turn.ask, origin: 'typed', liveState } as never, { maxToolRoundTrips: 1, lastAssistantMessage });
+      lastAssistantMessage = prior.text;
+      liveState = { ...liveState, lastCoachLine: prior.text };
+    }
+    setChatTurnReaderForTests(async () => ({ referents: [], seat: null, topic: null, ...c.reading }) as never);
     const a = await dispatchCoachTurn({
-      surface: 'standalone-chat', ask: c.ask, origin: 'typed',
-      liveState: b
-        ? { surface: 'standalone-chat', fen: b.fen, whoseTurn: b.fen.split(' ')[1] === 'w' ? 'white' : 'black', studentColor: b.studentColor, moveHistory: b.history, currentRoute: '/coach/chat' }
-        : { surface: 'standalone-chat', currentRoute: '/coach/chat' },
-    } as never, { maxToolRoundTrips: 1 });
+      surface: 'standalone-chat', ask: c.ask, origin: 'typed', liveState,
+    } as never, { maxToolRoundTrips: 1, lastAssistantMessage });
     // What the student reads: the bubble strips the arrow tags.
     const text = (a.text ?? '').replace(/\s*\[BOARD:[^\]]*\]/g, '').trim();
     if (missingHere.size) throw new Error(`engine fixture is missing ${missingHere.size} position(s): run node scripts/chat-contracts/gen-engine-fixture.mjs`);
@@ -399,8 +424,8 @@ describe('every question kind answers its contract', () => {
     for (const re of c.once ?? []) expect(text.match(new RegExp(re.source, 'g'))?.length ?? 0, report).toBeLessThanOrEqual(1);
   }, 60_000);
 
-  it('the owed list only shrinks', () => {
+  it('no kind is owed — every kind has its contract', () => {
     const owed = Object.values(CONTRACTS).filter((c) => 'owed' in c).length;
-    expect(owed).toBeLessThanOrEqual(11);
+    expect(owed).toBe(0);
   });
 });

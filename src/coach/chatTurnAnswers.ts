@@ -14,7 +14,7 @@ import { findHangingBySee, captureRead } from '../services/positionReadingServic
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { andList, orList } from '../utils/andList';
 import { computeMustDefend } from '../services/threatOut';
-import { moveWhy } from '../services/deliberation';
+import { moveWhy, bestMoveReason } from '../services/deliberation';
 import { describeMoveGeometry, toObserverSeat, assembleThreatAnswer } from '../services/groundedAnswer';
 import { MATERIAL_VALUE } from '../services/pieceValues';
 import { isPinnedPiece } from '../services/nextPlans';
@@ -226,12 +226,18 @@ export function answerAboutPiece(chess: Chess, sq: Square | null, student: Color
       if ((o.squares ?? []).includes(sq)) lines.push(o.text);
     }
   } catch { /* the read is a bonus, never a blocker */ }
-  return [...lines, safety, scope].filter(Boolean).join(' ');
+  // The piece is NAMED before any "it" (contracts 2026-10-10: "It attacks
+  // nothing… Your pawn on e4 is loose" put the pronoun first). Its safety
+  // names it and is the urgent part, so it leads; without one, the first
+  // line names the piece itself.
+  if (safety) return [safety, ...lines, scope].filter(Boolean).join(' ');
+  if (lines.length) lines[0] = lines[0].replace(/^It /, `${own === student ? 'Your' : 'Their'} ${name(p.type)} on ${sq} `);
+  return [...lines, scope].filter(Boolean).join(' ');
 }
 
 /** The computed answer for a direct kind; null when the turn names nothing
  *  to answer about (the caller then serves today's route). */
-export function directAnswer(turn: ResolvedChatTurn, fen: string, memory: ConversationState, student: Color, ask?: string, history: readonly string[] = [], lastCoachLine: string | null = null, out?: { lines?: WalkableLine[] }): string | null {
+export function directAnswer(turn: ResolvedChatTurn, fen: string, memory: ConversationState, student: Color, ask?: string, history: readonly string[] = [], lastCoachLine: string | null = null, out?: { lines?: WalkableLine[] }, provedLine: WalkableLine | null = null): string | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   const sq = target(turn, memory, ask);
@@ -245,7 +251,7 @@ export function directAnswer(turn: ResolvedChatTurn, fen: string, memory: Conver
     case 'win-piece': return answerWin(chess, sq, student);
     case 'attack-piece': return answerAttack(chess, sq, student, out);
     case 'material-change': return answerMaterialChange(history, student);
-    case 'explain-last': return answerExplainLast(chess, lastCoachLine, student, history);
+    case 'explain-last': return (provedLine && explainProvedLine(provedLine, fen, student, history, out)) ?? answerExplainLast(chess, lastCoachLine, student, history);
     case 'threats': return assembleThreatAnswer(fen, ask ?? null, student === 'w' ? 'white' : 'black', turn.seat === 'me' ? 'me' : 'opponent')?.facts ?? null;
     default: return null;
   }
@@ -531,6 +537,56 @@ export function answerMaterialChange(history: readonly string[], student: Color)
 }
 
 const LINE_SAN = /(?<![A-Za-z0-9])(?:…|\.\.\.)?((?:[KQRBN][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8]|[a-h][1-8])(?:=[QRBN])?[+#]?|O-O-O|O-O)(?![A-Za-z0-9])/g;
+
+/**
+ * "EXPLAIN THAT" ABOUT A LINE THE COACH PROVED. Each move is explained at the
+ * position it is played from, never the board now (hard walk 2026-10-10:
+ * after "Nh6+ starts a forced mate in 4", "explain that" said "Qf6 takes the
+ * open f-file" — read off today's board, and Nh6+ lost the mate it had just
+ * been given). The first move keeps the one why-best reason; their replies
+ * are named; a mate is said where it lands. Null when the line is not from
+ * this board.
+ */
+export function explainProvedLine(line: WalkableLine, fen: string, student: Color, history: readonly string[], out?: { lines?: WalkableLine[] }): string | null {
+  const here = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+  if (line.plies.length === 0 || here(line.startFen) !== here(fen)) return null;
+  const mates = /#$/.test(line.plies[line.plies.length - 1].san);
+  const mover = new Chess(line.startFen).turn();
+  const last = history.length ? history[history.length - 1] : null;
+  const parts: string[] = [];
+  const name = (san: string, side: Color): string => `${side === 'b' ? '…' : ''}${san}`;
+  let forcedNext = false;
+  line.plies.forEach((p, i) => {
+    const side = new Chess(p.fenBefore).turn();
+    const said = name(p.san, side);
+    if (/#$/.test(p.san)) { parts.push(`${said} is mate.`); return; }
+    if (side !== student) {
+      if (!forcedNext) parts.push(`They answer ${said}.`);
+      forcedNext = false;
+      return;
+    }
+    // A CHECK INSIDE THE LINE is explained as the check and the reply it
+    // forces — the point of Qf6+ in a mating net is the king's one square,
+    // not what else the queen touches.
+    if (i > 0 && /\+$/.test(p.san)) {
+      const replies = (() => { try { return new Chess(p.fenAfter).moves(); } catch { return []; } })();
+      const reply = line.plies[i + 1];
+      if (replies.length === 1 && reply) {
+        parts.push(`${said} is check, and ${name(reply.san, side === 'w' ? 'b' : 'w')} is the only reply.`);
+        forcedNext = true;
+      } else {
+        parts.push(`${said} is check.`);
+      }
+      return;
+    }
+    const why = i === 0 && side === mover
+      ? bestMoveReason(p.fenBefore, p.san, student, { mateIn: mates ? Math.ceil(line.plies.length / 2) : null, opponentLastSan: last })
+      : moveWhy(p.fenBefore, p.san, student, i > 0 ? line.plies[i - 1].san : last);
+    parts.push(why ? `${said} ${why}.` : `Then ${said}.`);
+  });
+  if (out) out.lines = [line];
+  return parts.join(' ');
+}
 
 /**
  * WHAT THE COACH MEANT — "stop what?" after "h3 first, to stop …Bg4" (hand

@@ -413,3 +413,11 @@ kinds (`CHAT_KINDS`, 88). "Done" becomes: every kind passes its contract.
   is the honest empty answer. Seeded-record contracts follow.
 - Then the census (every claim → its producers → one computer) — held until
   David picks swarm or solo.
+
+**Status 2026-10-10:** all 88 kinds have contracts (owed = 0, pinned). Kinds
+that only exist inside a conversation run after lead-in turns (`before`), with
+`lastCoachLine` threaded as a surface sends it. The app's `public/data/` files
+are served to the test from disk, so master-play reads the real masters DB.
+A HARD tier (8 engine-checked 2000-level questions, a `verify` that reads the
+board) runs beside it. The last 11 contracts each found the kind answering
+wrong, fixed at the producer — see OUTLINE §000f.

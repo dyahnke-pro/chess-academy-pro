@@ -18,6 +18,7 @@
 import { Chess, type Move, type Square } from 'chess.js';
 import type { BoardContext, ChatTurn, PieceLetter, Referent } from './chatTurn';
 import { CAPTURE_VALUE } from '../services/pieceValues';
+import { isCompareMyMoveQuestion } from './questionIntents';
 
 // ─── WORDS → SLOTS ─────────────────────────────────────────────────────────
 
@@ -495,6 +496,12 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
     && new RegExp(`\\b${slots.squares[0]}\\b\\s+(?:(?:is|was|a|an|the|so|such|really|very)\\s+)*(?:target|weak|weakness|hole|outpost|square|key|important|strong|attacked|defended|guarded|covered|controlled|contested)\\b`).test(lower);
   const pawnSan = slots.sans.length === 0 && slots.pieces.length === 0 && slots.squares.length === 1 && !squareAsNoun ? slots.squares[0] : null;
   const named = slots.sans.length === 1 ? slots.sans[0] : pawnSan;
+  // "Why is Ba4 better than what I played?" — the past tense belongs to the
+  // OTHER side of the comparison; the named move is the alternative
+  // (contracts 2026-10-10: read as a question about Ba4 being played).
+  if (named && isCompareMyMoveQuestion(text)) {
+    return { kind: 'compare-my-move', referents: [{ type: 'move', san: named }], seat: 'me', topic: null };
+  }
   if (slots.past && named) {
     return { kind: 'retrospective-move', referents: [{ type: 'move', san: named }], seat: 'me', topic: null };
   }

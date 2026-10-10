@@ -104,6 +104,12 @@ function questionsFor(p) {
   qs.push({ id: 'best', ask: 'What is the best move? Calculate the main line for me.',
     check: (a) => !sanRe(p.best.san).test(a) ? `engine best ${p.best.san} not named (line ${p.best.line.join(' ')})`
       : mateN && !new RegExp(`mate in ${mateN} moves`).test(a) ? `mate in ${mateN} not counted` : null });
+  // "EXPLAIN THAT" right after the best move: the same move, the same reason,
+  // each move of the line from its own position (contracts 2026-10-10: it
+  // once read the line's later moves off today's board and dropped the mate).
+  qs.push({ id: 'explain', ask: 'explain that',
+    check: (a) => !sanRe(p.best.san).test(a) ? `did not explain ${p.best.san}`
+      : mateN && !/is mate\b/.test(a) ? 'the line ends in mate and the explanation never says so' : null });
   qs.push({ id: 'threat', ask: `What did their last move ${p.lastMove} threaten, two moves deep?`,
     check: (a, r) => r?.servedIntent === 'alternatives' ? 'answered with the alternatives list' : namesThreat(a) });
   if (p.wrong) {
@@ -114,6 +120,18 @@ function questionsFor(p) {
   qs.push({ id: 'why', ask: `Why does ${p.best.san} work — what's their best defence?`,
     check: (a) => !p.best.line[1] || sanRe(p.best.line[1]).test(a) ? null : `engine defence ${p.best.line[1]} not named` });
   qs.push({ id: 'king', ask: `Is my king safe here? What are they threatening against it?`, check: (a) => namesThreat(a) });
+  // WHAT A MOVE GETS: the outcome of the best line, said — a sacrifice must
+  // name what comes back (contracts 2026-10-10: "Bd5+ … their best reply is
+  // cxd5" and nothing after it).
+  qs.push({ id: 'gets', ask: `What do I get if I play ${p.best.san}?`,
+    check: (a) => !sanRe(p.best.san).test(a) ? `did not answer about ${p.best.san}`
+      : !/mate|ahead|win|come out|up|for (?:a|the|two)|level|equal|draw/i.test(a) ? 'no outcome said' : null });
+  // TWO QUESTIONS IN ONE: both parts answered (contracts 2026-10-10: only the
+  // threat was answered).
+  qs.push({ id: 'two-part', ask: "What's the best move, and what are they threatening?",
+    check: (a) => !sanRe(p.best.san).test(a) ? `best move ${p.best.san} not answered` : namesThreat(a) ?? (/threat|eyeing|after your|nothing (?:forcing|is hanging)|no immediate/i.test(a) ? null : 'their threats not answered') });
+  // "STOP" stops — a one-word acknowledgement, never "that was not clear".
+  qs.push({ id: 'stop', ask: 'stop', check: (a, r) => r?.servedIntent === 'stop' || /^Okay\.?$/.test(a.trim()) ? null : 'stop not handled' });
   return qs;
 }
 

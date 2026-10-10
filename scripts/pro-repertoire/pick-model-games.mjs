@@ -65,7 +65,9 @@ const TARGETS = [
   { id: 'spine', label: 'Main line (Advance c5)', pathSans: [...minPrefix, ...spine] },
   ...variations.slice(0, 8).map((v, i) => ({
     id: `var-${i + 1}`,
-    label: `Variation ${i + 1}: ${v.prefixToHere.join(' ')} ${v.branchSan}`,
+    // Named by its branch move — "the Nc3 line" — never a tree index the
+    // coach would read aloud ("the Variation 1: Nc3", contracts 2026-10-10).
+    label: `${v.branchSan} line`,
     pathSans: [...minPrefix, ...v.prefixToHere, v.branchSan, ...v.continuation.slice(1, 5)],
   })),
 ];

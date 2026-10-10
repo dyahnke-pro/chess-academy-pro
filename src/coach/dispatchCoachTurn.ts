@@ -22,6 +22,7 @@
  * `coachService` would cycle (coachService ← trainingAidRouter ← coachSessionRouter).
  * This wrapper depends on both; neither depends on it.
  */
+import { Chess } from 'chess.js';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { unwrapSpineError } from '../services/sanitizeCoachText';
 import { COACH_OFFLINE_LINE } from './stockLine';
@@ -51,6 +52,7 @@ import { detectLanguage } from '../utils/detectLanguage';
 import { noteTurnLanguage, chosenOrTypedLanguageName } from '../services/spokenLanguage';
 import { directAnswer } from './chatTurnAnswers';
 import { executeSteps } from './requestExecutor';
+import { emitCoachStop } from './coachStopEvents';
 import type { ResolvedStep } from './requestSteps';
 
 export interface DispatchCoachTurnOptions extends CoachServiceOptions {
@@ -358,7 +360,7 @@ export async function dispatchCoachTurn(
       return out;
     };
     // A kind with no lane today answers with its own computed sentence.
-    const turn = r?.validation?.ok ? r.validation.turn : null;
+    const turn = r?.validation?.ok ? r.validation.turn : null
     readKind = turn?.kind ?? (r?.turn ? 'unclear' : null);
     // A POSITIONAL TOPIC IN THE STUDENT'S OWN WORDS is answered by the
     // positional computer with that topic (walk 5: "what is my worst piece?"
@@ -393,6 +395,57 @@ export async function dispatchCoachTurn(
         });
       }
     }
+    // "STOP" IS AN ACTION, NOT A QUESTION (contracts 2026-10-10: it reached
+    // small talk and got "That was not clear" while the voice kept going).
+    if (turn?.kind === 'stop') {
+      emitCoachStop();
+      return serve('Okay.', 'stop', 'command');
+    }
+    // "TEACH ME HOW TO THINK" OPENS THE LESSON on every surface but Learn,
+    // which starts it in place before the door (contracts 2026-10-10: the chat
+    // fell through to the model and, offline, said it could not connect).
+    if (turn?.kind === 'start-thinking-lesson') {
+      const path = '/coach/teach?lesson=think';
+      if (options.onNavigate) options.onNavigate(path);
+      return serve('Opening "Learn how to think" — a lesson in how to read a position, step by step.', 'request:thinking-lesson', 'command',
+        { dispatchedToolNames: ['navigate_to_route'], actionOffer: [{ type: 'navigate', id: path }] });
+    }
+    // "WHY IS Ba4 BETTER THAN WHAT I PLAYED?" — the named move, weighed by the
+    // one candidate-move computer at the position the student moved from
+    // (contracts 2026-10-10: the retrospective lane graded Be2 and never said
+    // a word about Ba4). Without a named move the retrospective lane answers.
+    if (turn?.kind === 'compare-my-move' && input.liveState.fen && input.liveState.moveHistory?.length) {
+      const named = turn.referents.find((r): r is Extract<typeof r, { type: 'move' }> => r.type === 'move');
+      const history = input.liveState.moveHistory;
+      const seat = input.liveState.studentColor ?? null;
+      if (named && seat) {
+        const replay = new Chess();
+        let before: { fen: string; idx: number; san: string } | null = null;
+        for (let i = 0; i < history.length; i += 1) {
+          const fenBefore = replay.fen();
+          let mv: ReturnType<Chess['move']> | null = null;
+          try { mv = replay.move(history[i]); } catch { mv = null; }
+          if (!mv) break;
+          if ((mv.color === 'w') === (seat === 'white')) before = { fen: fenBefore, idx: i, san: mv.san };
+        }
+        const legalThere = (() => { if (!before) return null; try { return new Chess(before.fen).move(named.san); } catch { return null; } })();
+        if (before && legalThere && legalThere.san !== before.san) {
+          const out: { endorsed?: string[]; lines?: WalkableLine[] } = {};
+          const text = await answerBoardTurn({ ...turn, kind: 'candidate-move', referents: [{ type: 'move', san: legalThere.san, played: false }] },
+            { fen: before.fen, history: history.slice(0, before.idx), studentColor: seat }, out).catch(() => null);
+          if (text) return serve(`You played ${before.san} there. ${text}`, 'board:compare-my-move', 'answered', out.lines?.length ? { lines: out.lines } : {});
+        }
+      }
+    }
+    // A NAMED PIECE OR SQUARE, said as an answer with no lesson question open
+    // (contracts 2026-10-10: "the pawn on e4" was graded as the move e4). The
+    // thinking lesson takes its answers by tap before the door; here, naming a
+    // piece asks about it.
+    if (turn?.kind === 'answer' && input.liveState.fen && turn.referents.some((r) => r.type === 'piece' || r.type === 'square')) {
+      const studentWB = input.liveState.studentColor === 'black' ? 'b' : input.liveState.studentColor === 'white' ? 'w' : (input.liveState.fen.split(' ')[1] === 'b' ? 'b' : 'w');
+      const text = directAnswer({ ...turn, kind: 'what-about-piece' }, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask, input.liveState.moveHistory ?? []);
+      if (text) return serve(text, 'what-about-piece', 'answered');
+    }
     const ptopic = positionalTopic(input.ask);
     if (ptopic && !PIECE_LEVEL_TOPICS.has(ptopic) && input.liveState.fen && (turn ? POSITIONAL_READABLE.has(turn.kind) : true)) {
       const sc = input.liveState.studentColor ?? (input.liveState.fen.split(' ')[1] === 'b' ? 'black' : 'white');
@@ -418,7 +471,7 @@ export async function dispatchCoachTurn(
       // A proof the answer carries (a capture that wins the attacker) comes
       // back as a line the board walks while the words say it.
       const proofOut: { lines?: WalkableLine[] } = {};
-      const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask, input.liveState.moveHistory ?? [], input.liveState.lastCoachLine ?? null, proofOut);
+      const text = directAnswer(turn, input.liveState.fen, conversationFor(input.liveState.surface), studentWB, input.ask, input.liveState.moveHistory ?? [], input.liveState.lastCoachLine ?? null, proofOut, lastLineFor(input.liveState.surface));
       if (text) {
         return serve(text, turn.kind, 'answered', proofOut.lines?.length ? { lines: proofOut.lines } : {});
       }

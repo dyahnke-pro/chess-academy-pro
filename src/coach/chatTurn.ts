@@ -354,7 +354,9 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
 
   // ── the new kinds (dialogue + the thinking lesson) ──
   'compare-my-move': { gloss: 'why is a move better than WHAT I PLAYED (compares the student\'s own move with a better one)', lane: 'retrospective-move', answerer: 'live',
-    canonical: fixed('why is that better than what I played?') },
+    // The move the student named rides in the question (contracts 2026-10-10:
+    // "why is Ba4 better than what I played?" lost Ba4 to a fixed wording).
+    canonical: (t) => { const m = firstMoveRef(t); return m ? `why is ${m.san} better than what I played?` : 'why is that better than what I played?'; } },
   'what-did-their-move-change': { gloss: 'what did the opponent\'s last move change / threaten', lane: 'opponent-move', answerer: 'live', canonical: fixed('why did they play that?') },
   'what-should-i-play': { gloss: 'what should I play here (the move, with its reason)', lane: 'best-move', answerer: 'live', canonical: aboutNamedMove("what's my best move?") },
   'why-is-it-a-target': direct('why is a piece or square a target'),
@@ -483,7 +485,7 @@ export function validateChatTurn(turn: ChatTurn, board: BoardContext, memory: Co
       continue;
     }
     if (r.type === 'move') {
-      if (!moveIsReal(r.san, board)) {
+      if (!moveIsReal(r.san, board) && !(turn.kind === 'compare-my-move' && legalWhereStudentMoved(r.san, board))) {
         // The board knows WHY it refused the move — say that, not "which move?".
         const dest = r.san.match(/([a-h][1-8])(?!.*[a-h][1-8])/)?.[1];
         const letter = /^[KQRBN]/.test(r.san) ? r.san[0].toLowerCase() as 'k' | 'q' | 'r' | 'b' | 'n' : 'p';
@@ -604,6 +606,25 @@ function legalNow(san: string, board: BoardContext): boolean {
 /** A named move is real when it is legal now OR was played (on the tape) —
  *  "why Nf1?" names a move already made as often as one to make. Matched by
  *  coordinates at each ply, never by SAN string (Nxd4 vs Nexd4). */
+/** "Why is Ba4 better than what I played?" names an ALTERNATIVE to the
+ *  student's own last move — legal where they moved from, not on the board
+ *  now and never played (contracts 2026-10-10: refused as illegal). */
+function legalWhereStudentMoved(san: string, board: BoardContext): boolean {
+  const history = board.history ?? [];
+  if (!board.studentColor || history.length === 0) return false;
+  const c = new Chess();
+  let fenBefore: string | null = null;
+  for (const played of history) {
+    const before = c.fen();
+    let mv;
+    try { mv = c.move(played); } catch { return false; }
+    if (!mv) return false;
+    if ((mv.color === 'w') === (board.studentColor === 'white')) fenBefore = before;
+  }
+  if (!fenBefore) return false;
+  try { return !!new Chess(fenBefore).move(san); } catch { return false; }
+}
+
 function moveIsReal(san: string, board: BoardContext): boolean {
   if (board.fen) {
     try { if (new Chess(board.fen).move(san)) return true; } catch { /* not legal now */ }
@@ -741,6 +762,9 @@ export function askBackAtCatchAll(kind: ChatKind, clarify: string | undefined, h
   if (RECORD_KINDS.has(kind)) return 'Do you mean your weaknesses, your openings, or your recent games?';
   if (ACTION_KINDS.has(kind)) return "That can't be done from the chat. The chat can teach or play an opening, review a game, or set up a drill — which would you like?";
   if (KNOWLEDGE_KINDS.has(kind)) return "There's no answer for that one yet. Ask about a move, an opening or your games.";
-  if (kind === 'player-games' || kind === 'master-play') return "Only the games in this app and the openings it teaches are known here, not other players' records.";
+  // The masters database covers the opening; past it, no master game reached
+  // the position — said as that, never as "masters are unknown here".
+  if (kind === 'master-play') return 'No master games in the database reached this position — it covers the opening phase.';
+  if (kind === 'player-games') return "Only the games in this app and the openings it teaches are known here, not other players' records.";
   return 'Not sure what you mean — could you say it another way?';
 }
