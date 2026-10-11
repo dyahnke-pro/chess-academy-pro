@@ -825,19 +825,24 @@ export function kingHunt(
   try {
     const c = new Chess(fenBefore);
     c.move(playedSan);
-    const at = c.fen();
     const them = moverColor === 'white' ? 'b' : 'w';
     const checks: string[] = [];
+    // The line drawn starts at their first check: the quiet moves before it
+    // are not what the words say, and the mover's would hint a move.
+    let start: string | null = null;
     const uci: string[] = [];
     for (const u of replyLineUci.slice(0, 12)) {
+      const before = c.fen();
       const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
       if (!m) break;
-      uci.push(u);
-      if (m.color === them && c.inCheck()) checks.push(`${them === 'b' ? '…' : ''}${m.san}`);
+      const isCheck = m.color === them && c.inCheck();
+      if (isCheck && start === null) start = before;
+      if (start !== null) uci.push(u);
+      if (isCheck) checks.push(`${them === 'b' ? '…' : ''}${m.san}`);
       if (checks.length >= 3 || c.isGameOver()) break;
     }
-    if (checks.length < 2) return null;
-    return { said: andList(checks), line: { fen: at, uci } };
+    if (checks.length < 2 || start === null) return null;
+    return { said: andList(checks), line: { fen: start, uci } };
   } catch { return null; }
 }
 

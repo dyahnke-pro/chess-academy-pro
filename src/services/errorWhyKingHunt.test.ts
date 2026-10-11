@@ -18,7 +18,8 @@ describe('the why of a move that let them attack the king', () => {
     })!;
     expect(look.line).toMatch(/^Qg3\+ was a blunder — it let them go after your king: …Bb3\+, …Rc1\+ and …Qc8\+\./);
     expect(look.line).not.toMatch(/Nge2/);
-    expect(look.punishLine?.uci.length).toBeGreaterThanOrEqual(11);
+    expect(look.punishLine?.uci[0]).toBe("c2b3");
+    expect(look.punishLine?.uci).not.toContain("g3h3");
   });
   it('21.e6: the mate it allowed is drawn to the mate', () => {
     const look = backwardLook({
