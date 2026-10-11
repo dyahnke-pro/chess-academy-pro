@@ -296,7 +296,7 @@ const BEST_MOVE_ASK_RE = /^(?:so\s+|ok(?:ay)?\s+)?(?:what(?:'s|s|\s+is)\s+(?:the
 /** Every move written in the sentence, in order — SAN or a bare square (a
  *  pawn move). Move numbers and dots are dropped. */
 export function namedMoveTokens(text: string): string[] {
-  return [...text.replace(/\d+\.(?:\.\.)?|…/g, ' ').matchAll(/(?<![A-Za-z0-9])(O-O-O|O-O|[KQRBN][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8](?:=[QRBN])?|[a-h][1-8](?:=[QRBN])?)[+#]?(?![A-Za-z0-9])/g)].map((m) => m[1]);
+  return [...text.replace(/(?<![A-Za-z])\d+\.(?:\.\.)?|…/g, ' ').matchAll(/(?<![A-Za-z0-9])(O-O-O|O-O|[KQRBN][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8](?:=[QRBN])?|[a-h][1-8](?:=[QRBN])?)[+#]?(?![A-Za-z0-9])/g)].map((m) => m[1]);
 }
 const LINE_CUE_RE = /\b(?:calculate|calc|line|if|after|then|and|what happens|takes?|plays?|recapture)\b/i;
 
@@ -326,6 +326,19 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
     return { kind: 'command', referents: [], seat: null, topic: null, steps: [{ action: 'show-line', opening: null, side: null, account: null }] };
   }
 
+  // A LINE THE STUDENT NAMES — "calculate Nh5 Bg5 h6 Bh4 g5", "if Black plays
+  // c5 and I take dxc5, what then?" (hard-question walk 2026-10-11: six such
+  // questions were answered about a different move or refused as illegal).
+  // Every move written, in order, must play from this board as one line.
+  // "Why not Nb5 hitting c7? Calculate Nb5 Na6." — when the student says
+  // which line to calculate, the line is what follows that word; a square
+  // named before it is the question, not a move.
+  const calcAt = text.search(/\b(?:calculate|calc|the line|play out|show the line)\b/i);
+  const lineSans = namedMoveTokens(calcAt >= 0 ? text.slice(calcAt) : text);
+  if (lineSans.length >= 2 && LINE_CUE_RE.test(text) && playNamedLine(board.fen, lineSans)) {
+    return { kind: 'line-outcome', referents: lineSans.map((san): Referent => ({ type: 'move', san })), seat: null, topic: null };
+  }
+
   const slots = tagSlots(text);
   if (slots.negated && slots.ask !== 'why') return null;
 
@@ -338,15 +351,6 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
     }
     // "was h3 good or an unnecessary pawn move?" offers words, not two moves:
     // read on as a question about the one move it names.
-  }
-
-  // A LINE THE STUDENT NAMES — "calculate Nh5 Bg5 h6 Bh4 g5", "if Black plays
-  // c5 and I take dxc5, what then?" (hard-question walk 2026-10-11: six such
-  // questions were answered about a different move or refused as illegal).
-  // Every move written, in order, must play from this board as one line.
-  const lineSans = namedMoveTokens(text);
-  if (lineSans.length >= 2 && LINE_CUE_RE.test(text) && playNamedLine(board.fen, lineSans)) {
-    return { kind: 'line-outcome', referents: lineSans.map((san): Referent => ({ type: 'move', san })), seat: null, topic: null };
   }
 
   // "What is my bishop on c4 aiming at?" / "what about their knight?" — a
