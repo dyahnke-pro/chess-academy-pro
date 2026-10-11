@@ -10,7 +10,7 @@ import type { MistakeClassification, MistakeGamePhase, MistakeNarration } from '
 import { sideToMove } from './conceptEngine';
 import { stemKeyOf } from '../utils/rotateStem';
 import { replyPunishment } from './moveAllowed';
-import { consequenceIn, errorWhy } from './inaccuracyCall';
+import { consequenceIn, errorWhy, failedIn } from './inaccuracyCall';
 import { captureRead } from './positionReadingService';
 import { costWords } from './engineConstants';
 
@@ -519,7 +519,11 @@ export function whatTheMoveAllowed(fen: string, playedSan: string, replySan: str
     replyLineUci: [replyUci], missedMate: null, allowedMate: null, bestMate: null,
     quality: 'mistake', priorMove: null, namesBetterMove: false,
   });
-  return ew.consequence ? `${playedSan} ${consequenceIn(ew.consequence, 'present').replace(/^it /, '')}.` : null;
+  if (ew.consequence) return `${playedSan} ${consequenceIn(ew.consequence, 'present').replace(/^it /, '')}.`;
+  if (!ew.failed) return null;
+  // "Rc3 leaves your rook on c3 hanging — the pawn on b2 just takes it."
+  const now = failedIn(ew.failed);
+  return /^That /.test(now) ? now.replace(/^That /, `${playedSan} `) : `${playedSan}? ${now}`;
 }
 
 // ─── Main Generator ─────────────────────────────────────────────────────────

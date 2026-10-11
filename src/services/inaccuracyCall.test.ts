@@ -486,7 +486,8 @@ describe('a pawn their line takes is a lost square the caller can match (Learn w
       replyLineUci: ['c4b5', 'a6b5', 'e2b5', 'd8b6'], replySan: 'b3',
       fenBefore, playedSan: 'b5', bestSan: 'Re8', cpLoss: 120, side: 'student', moverColor: 'black',
     });
-    expect(call?.said ?? '').toMatch(/win a pawn/);
+    // The mechanism leads now (one error computer, 2026-10-10).
+    expect(call?.said ?? '').toMatch(/your pawn on b5/);
     expect(call?.lostSquare).toBe('b5');
   });
 });

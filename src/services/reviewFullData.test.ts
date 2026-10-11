@@ -492,7 +492,8 @@ describe('a better move with no reason is not named bare — the grade says what
       forcedRunStartPly: null, bestLineUci: [], playedLineUci: ['c8g4', 'f1c4', 'd5c4', 'g1f3'], replyBestSan: 'Bxg4',
     });
     const q = facets.find((f) => f.startsWith('[quality]')) ?? '';
-    expect(q).toMatch(/it let them take your queen on g4/);
+    // The why names the lost queen — by its mechanism since 2026-10-10.
+    expect(q).toMatch(/queen on g4/);
     expect(q).not.toMatch(/the stronger move was exd5\./);
   });
 });

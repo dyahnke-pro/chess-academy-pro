@@ -28,10 +28,9 @@
 // G0 throughout: every branch is arithmetic or chess.js geometry over an engine
 // line. Nothing here asks a model anything.
 import { Chess } from 'chess.js';
-import { findConcession, findStudentDrawback, whatItAllowed } from './concessionBeat';
-import { callInaccuracy, callInaccuracyDetailed, type InaccuracyDecline, type PriorMove } from './inaccuracyCall';
+import { findConcession, findStudentDrawback } from './concessionBeat';
+import { callInaccuracy, callInaccuracyDetailed, errorWhyFor, type InaccuracyDecline, type PriorMove } from './inaccuracyCall';
 export { priorMoveLeadingTo } from './inaccuracyCall';
-import { whyItFailed } from './whyItFailed';
 import { describeConcessions } from './reviewTeachingPoints';
 import { INACCURACY_CP, BLUNDER_CP } from './engineConstants';
 import { classifyMove } from './moveRating';
@@ -43,6 +42,8 @@ export interface BackwardLook {
   line: string;
   /** The square to mark, '' when there is nothing to point at. */
   square: string;
+  /** Every square the line names, for the key-square highlights. */
+  squares?: string[];
   /** Which package lane it rides. `mistake` is the student's callout and leads
    *  the computed lanes; `drawback` is the concession a rung below it; and
    *  everything the COACH says about its own move rides `coachMistake`, which
@@ -53,12 +54,6 @@ export interface BackwardLook {
   /** The tactic the better move would have landed (B3) — the caller teaches
    *  its rule once a game, from its own definition ledger. */
   pattern?: string;
-  /** The line WITHOUT its opening "that left your X on Y hanging" sentence,
-   *  and the square that sentence is about — set only when the line has one.
-   *  A caller that already named that loss (the live fundamental verdict)
-   *  speaks this instead, so the loss is said once and the rest — the cost,
-   *  the better move — still speaks (re-walk 1380, 24.Bg5). */
-  withoutAttempt?: { line: string; square: string };
   /** The punishing line the words play out, from `fen` (`InaccuracyCall.line`). */
   punishLine?: { fen: string; uci: string[] };
   /** The student piece the grade says was left to be taken (from
@@ -264,43 +259,9 @@ export function backwardLook(args: {
   });
   const fault = quality === 'inaccuracy' || quality === 'mistake' || quality === 'blunder';
   if (!gained && fault) {
-    let attempt: string | null = null;
-    let attemptSquare = '';
-    try {
-      // Student side only. The prose is written in the second person ("your
-      // knight"), so the coach cannot borrow it to describe its own move
-      // without saying something false about whose piece it is.
-      const f = whyItFailed({
-        fenBefore: args.fenBefore,
-        playedSan: args.playedSan,
-        studentColor: args.studentColor,
-        playedLineUci: args.replyPvUci ?? null,
-      });
-      // …and only when the move COST something. `whyItFailed` counts a static
-      // swap-off and says so itself: "the upstream caller only asks about moves
-      // already graded as errors". Asked about the King's Indian main line
-      // (…e5, hand walk 2026-09-25) it said "that left your pawn on e5
-      // hanging" — dxe5 dxe5 Qxd8 Rxd8 Nxe5 loses to …Nxe4, which the engine
-      // sees and a swap count cannot. A material loss the engine does not
-      // charge is not a loss.
-      // What the move loses is read off the engine's line inside
-      // `whyItFailed` itself (WO-OUTCOME-01) — no caller re-checks it.
-      if (f && args.cpLoss >= INACCURACY_CP) {
-        const reply = args.replySan ?? null;
-        const tookIt = reply !== null && reply.replace(/[+#]+$/, '').includes(`x${f.squares[0]}`);
-        // A reply that IS the engine line's first move is still on the line
-        // that takes it a move later (walk 900, 17…Bg1 Nxg4 — then Kxg1): not
-        // a miss.
-        const lineFirst = args.replyPvUci?.[0] ?? null;
-        let onLine = false;
-        try {
-          const m = lineFirst ? new Chess(args.fenAfter).move({ from: lineFirst.slice(0, 2), to: lineFirst.slice(2, 4), promotion: lineFirst[4] }) : null;
-          onLine = !!m && reply !== null && m.san === reply;
-        } catch { onLine = false; }
-        attempt = f.missed && reply !== null && !tookIt && !onLine ? f.missed : f.line;
-        attemptSquare = f.squares[0] ?? '';
-      }
-    } catch { /* a lane that throws must not silence the rest */ }
+    // WHY THE MOVE FAILED is the error call's — its mechanism (`whyItFailed`)
+    // now lives inside the one error computer (`errorWhy`, 2026-10-10), so
+    // this lane no longer runs it a second time.
 
     let cost: { kind: string; said: string; opening: string; square: string } | null = null;
     if (args.bestSan) {
@@ -329,7 +290,7 @@ export function backwardLook(args: {
       }
     }
 
-    if (attempt || cost) {
+    if (cost) {
       // ── AND WHAT TO PLAY INSTEAD ─────────────────────────────────────────
       //
       // 🔒 THIS BRANCH USED TO RETURN HERE, so a move with a structural read
@@ -379,14 +340,9 @@ export function backwardLook(args: {
           insteadBetter = call?.namesBetter;
         } catch { /* the alternative is a bonus; the read still stands */ }
       }
-      const line = [attempt, cost ? `${cost.said} ${cost.opening}` : '', instead ?? '']
-        .filter(Boolean).join(' ');
-      // The mark follows the same order: the square the ATTEMPT is about when
-      // there is one, because that is what the sentence opens on.
-      const rest = [cost ? `${cost.said} ${cost.opening}` : '', instead ?? ''].filter(Boolean).join(' ');
+      const line = [`${cost.said} ${cost.opening}`, instead ?? ''].filter(Boolean).join(' ');
       return {
-        line, square: attemptSquare || cost?.square || '', kind: 'drawback',
-        ...(attempt && attemptSquare ? { withoutAttempt: { line: rest, square: attemptSquare } } : {}),
+        line, square: cost.square || '', kind: 'drawback',
         // The grade's lost square rides here too, so the fundamental that names
         // the same hung piece stays quiet (run B walk 2026-09-30, Ng3: "that
         // left your knight on g3 hanging…" then "it let them take your knight
@@ -422,51 +378,33 @@ export function backwardLook(args: {
         replyKeptWin: args.replyKeptWin ?? null,
         priorMove: args.priorMove,
       });
-      if (call) return { line: call.said, square: call.square, kind: 'mistake', ...(call.pattern ? { pattern: call.pattern } : {}), ...(call.lostSquare ? { lostSquare: call.lostSquare } : {}), ...(call.namesBetter ? { namesBetter: call.namesBetter } : {}), ...(call.line ? { punishLine: call.line } : {}) };
+      if (call) return { line: call.said, square: call.square, kind: 'mistake', ...(call.pattern ? { pattern: call.pattern } : {}), ...(call.lostSquare ? { lostSquare: call.lostSquare } : {}), ...(call.namesBetter ? { namesBetter: call.namesBetter } : {}), ...(call.line ? { punishLine: call.line } : {}), ...(call.squares ? { squares: call.squares } : {}) };
     } catch { /* fall through */ }
   }
 
-  // THEN the rear-facing line. The structural read covers five nameable
-  // concessions and stays silent on everything else — measured on a real game,
-  // eight slips including a 648-centipawn blunder produced ZERO backward looks,
-  // because dropping a piece concedes no outpost. The opponent's own best line
-  // from here says what the move allowed, in moves they would really play.
-  // Only of a move the grade calls a fault (clean-pass walk SI5q0VJz, 26.Rac1:
-  // +8.0 → +6.7 heard "That let them win a piece, starting with h6").
+  // WITH NO BETTER MOVE IN HAND, the why still speaks — from the ONE error
+  // computer (`errorWhy`, 2026-10-10), which replaced a fourth "what it
+  // allowed" reader here (`whatItAllowed`). Only of a move the grade calls a
+  // fault (clean-pass walk SI5q0VJz, 26.Rac1: +8.0 → +6.7 heard "That let them
+  // win a piece, starting with h6").
   if (!fault) return null;
   try {
-    const allowed = whatItAllowed({
-      fenBefore: args.fenBefore,
-      fenAfter: args.fenAfter,
-      opponentPv: args.replyPvUci ?? [],
-      studentColor: args.studentColor,
-      cpLoss: args.cpLoss,
-      playedSan: args.playedSan,
+    const w = errorWhyFor({
+      fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.studentColor,
+      replyLineUci: args.replyPvUci ?? null, quality, replySan: args.replySan ?? null,
     });
-    // 🚨 LOG THE INPUTS, NOT JUST THE SENTENCE (David's prod game, 2026-08-16).
-    //
-    // He heard "That let them win a rook, prise open the e-file and trade off
-    // the knight" on a board where he was +1.7 and the engine's own line wins
-    // nobody a rook — I replayed his FEN at depths 10-20 to check. But the
-    // stream logged only the SENTENCE, so which board and which line produced
-    // it could not be recovered, and a false claim I cannot reproduce is a
-    // false claim I cannot fix.
-    //
-    // This beat is a pure function of (fenAfter, replyPvUci, cpLoss). Logging
-    // those three makes the next occurrence reproducible offline in one call.
-    if (allowed) {
-      // A DIAGNOSTIC, NOT A SPOKEN LINE: labelled `coach-narration-spoken` it
-      // landed in every "what did the coach say" inventory with its cpLoss and
-      // raw PV attached (hand walk 2026-09-24 read it as speech).
+    // A DIAGNOSTIC, NOT A SPOKEN LINE: the inputs that produced it, so a false
+    // claim can be replayed offline in one call (David's prod game 2026-08-16).
+    if (w) {
       void logAppAudit({
         kind: 'coach-surface-migrated',
         category: 'subsystem',
         source: 'backwardLook.drawback',
-        summary: `"${allowed.line}" · cpLoss=${args.cpLoss} · pv=${(args.replyPvUci ?? []).slice(0, 12).join(' ') || 'none'}`,
+        summary: `"${w.line}" · cpLoss=${args.cpLoss} · pv=${(args.replyPvUci ?? []).slice(0, 12).join(' ') || 'none'}`,
         fen: args.fenAfter,
       });
     }
-    return allowed ? { ...allowed, kind: 'drawback' } : null;
+    return w ? { line: w.line, square: w.squares[0] ?? '', kind: 'drawback', ...(w.squares.length ? { squares: w.squares } : {}), ...(w.proofLine ? { punishLine: w.proofLine } : {}) } : null;
   } catch { return null; }
 }
 

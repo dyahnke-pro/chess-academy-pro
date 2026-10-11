@@ -14,7 +14,7 @@
 // import-time auto-analysis. All three call captureMisconception → here.
 
 import { Chess, type Color } from 'chess.js';
-import { attributePrinciples, captureIsTrade } from './principleAttribution';
+import { attributePrinciples, captureIsTrade, isPositionalFundamental } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
 import { detectTactics } from './tacticsDetector';
 import { homeMinorCount } from './development';
@@ -80,6 +80,23 @@ const PIECE_NAMES: Record<string, string> = {
 const PIECE_VALUE: Record<string, number> = {
   p: 1, n: 3, b: 3, r: 5, q: 9, k: 100,
 };
+
+/** The mover's own pieces left attacked and undefended, most valuable first. */
+function ownHangingIn(det: ReturnType<typeof detectTactics>, moverColor: 'w' | 'b'): ReturnType<typeof detectTactics>['hangingPieces'] {
+  return det.hangingPieces
+    .filter((hp) => hp.color === moverColor && hp.piece !== 'k')
+    .sort((x, y) => (PIECE_VALUE[y.piece] ?? 0) - (PIECE_VALUE[x.piece] ?? 0));
+}
+
+/** The same, read on the board after `playedSan` — [] when the move is not legal here. */
+function ownHangingAfter(fen: string, playedSan: string): ReturnType<typeof detectTactics>['hangingPieces'] {
+  try {
+    const c = new Chess(fen);
+    const mover = c.turn();
+    if (!c.move(playedSan)) return [];
+    return ownHangingIn(detectTactics(c.fen()), mover);
+  } catch { return []; }
+}
 
 function fileOf(square: string): number {
   return square.charCodeAt(0) - 97; // 'a' → 0
@@ -252,7 +269,15 @@ function classifyMisconceptionImpl(
       evalBefore: input.evalBefore,
       evalAfterPlayed: input.evalAfterPlayed,
     }, why);
-    if (attrs.length > 0) {
+    // A POSITIONAL fundamental never outranks a PIECE the move left hanging on
+    // the board (1.e4 e5 2.Qh5 Nc6 3.Qxe5+?? was filed as "buried own bishop":
+    // with no engine line the loose-piece row could not verify, so the
+    // co-occurrence row spoke and the hung queen was never recorded).
+    // A loose PAWN keeps the ranking — "nothing hangs" there is a judgement
+    // the attributor already makes; a piece is not.
+    const hangsNow = attrs.length > 0 && isPositionalFundamental(attrs[0].id)
+      && ownHangingAfter(input.fen, input.playedSan).some((hp) => (PIECE_VALUE[hp.piece] ?? 0) >= 3);
+    if (attrs.length > 0 && !hangsNow) {
       return {
         tag: attrs[0].tag,
         fundamentalId: attrs[0].id,
@@ -265,9 +290,7 @@ function classifyMisconceptionImpl(
 
   // (a) HUNG MATERIAL — the move leaves one of your own pieces attacked and
   // undefended. The single biggest blunder class; check it first.
-  const ownHanging = det.hangingPieces
-    .filter((hp) => hp.color === moverColor && hp.piece !== 'k')
-    .sort((x, y) => (PIECE_VALUE[y.piece] ?? 0) - (PIECE_VALUE[x.piece] ?? 0));
+  const ownHanging = ownHangingIn(det, moverColor);
   if (ownHanging.length > 0) {
     const hp = ownHanging[0];
     return {

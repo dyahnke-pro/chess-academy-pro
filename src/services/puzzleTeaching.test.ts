@@ -53,8 +53,8 @@ describe('refuteWrongTry — a slow move that lets the win slip', () => {
     // After …a6, White simply defends — say the engine reads it level (+20 White).
     const r = await refuteWrongTry({ fenBefore: '4k3/8/8/8/8/8/1q6/4K2R b K - 0 1', wrongSan: 'Kd7', analyse: async () => ({ moves: ['h1h7', 'd7c6'], cpWhite: 80 }) });
     expect(r?.kind).toBe('chance-gone');
-    expect(r?.text).toBe('Kd7? Then Rh7+ — and the chance is gone.');
-    expect(r?.arrows).toHaveLength(1);
+    expect(r?.text).toBe('Kd7? It lets them play Rh7+, which checks the king on d7 — and the chance is gone.');
+    expect(r?.arrows).toHaveLength(2);
   });
   it('still winning after it: "something stronger", with no line at all', async () => {
     const r = await refuteWrongTry({ fenBefore: '4k3/8/8/8/8/8/1q6/4K2R b K - 0 1', wrongSan: 'Kd7', analyse: async () => ({ moves: ['e1f1', 'b2b1'], cpWhite: -900 }) });

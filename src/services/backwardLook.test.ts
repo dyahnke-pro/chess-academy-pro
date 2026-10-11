@@ -320,9 +320,10 @@ describe('why the move failed complements what it cost', () => {
       studentColor: 'white',
     });
     expect(out, 'the geometry lane never fired').not.toBeNull();
-    expect(out!.kind, 'it should ride the concession lane, not outrank the callout')
-      .toBe('drawback');
-    expect(out!.line).toContain('d5');
+    // The mechanism is the error call's own why now (one error computer,
+    // 2026-10-10), so it rides the callout: the grade, then why it failed.
+    expect(out!.kind).toBe('mistake');
+    expect(out!.line).toMatch(/^Bf3 was .+ d5/);
     // The mark follows the sentence — it opens on the attempt, so the mark is
     // the attempt's square.
     expect(out!.square).toBe('d5');

@@ -21,7 +21,7 @@
 import { andList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import { lineWins, mateLine, lineArrows } from './lineCalc';
-import { whyItFailed } from './whyItFailed';
+import { errorWhyFor } from './inaccuracyCall';
 import { admitArrows, type ArrowClaim } from './arrowDoor';
 import { explainDrillConcept, type PuzzleConceptExplanation } from './puzzleConceptExplanation';
 import type { BoardArrow } from '../types';
@@ -44,7 +44,8 @@ export interface WrongTryRefutation {
   text: string;
   /** The board after the wrong move — where the line is played from. */
   fenAfter: string;
-  /** Their punishing line from `fenAfter` (empty for a geometry read). */
+  /** Their punishing line from `fenAfter` (a geometry read shows the reply
+   *  its words name, when it has one). */
   uci: string[];
   /** One arrow per ply of the line, each on its own board (arrow door). */
   arrows: ArrowClaim[];
@@ -106,15 +107,30 @@ export async function refuteWrongTry(args: {
     }
   }
 
-  const geo = whyItFailed({ fenBefore: args.fenBefore, playedSan: args.wrongSan, studentColor: solver === 'w' ? 'white' : 'black', playedLineUci: line ?? null });
-  if (geo) {
-    return { kind: 'geometry', text: `${san}? ${geo.line}`, fenAfter, uci: [], arrows: [] };
-  }
+  // WHY THE TRY FAILS, from the one error computer (2026-10-10) — never the
+  // answer (finding it is the puzzle).
+  // The mechanism leads; a reply that only takes the chance away is said as
+  // that, and only then what their reply does.
+  const geo = errorWhyFor({ fenBefore: args.fenBefore, playedSan: args.wrongSan, moverColor: solver === 'w' ? 'white' : 'black', replyLineUci: line ?? null, quality: 'mistake', tense: 'present' });
+  // The words name their reply — the board shows it (David 2026-10-11:
+  // "arrows and highlights … when narrating moves and important squares").
+  // When the win slipped too, the sentence says both: what their reply does,
+  // and that the chance is gone. A mechanism (a piece left hanging) is the
+  // whole story on its own.
+  const chanceGone = cpWhite !== null && (solver === 'w' ? cpWhite : -cpWhite) < CHANCE_GONE_CP;
+  const geometry = (g: NonNullable<typeof geo>): WrongTryRefutation => {
+    const proof = g.proofLine && g.proofLine.fen === fenAfter ? g.proofLine.uci : [];
+    const text = chanceGone && !g.mechanism ? g.line.replace(/\.$/, ' — and the chance is gone.') : g.line;
+    return { kind: chanceGone && !g.mechanism ? 'chance-gone' : 'geometry', text: `${san}? ${text}`, fenAfter, uci: [...proof], arrows: lineArrows(fenAfter, proof, 'puzzleTeaching.refute') };
+  };
+  if (geo?.mechanism) return geometry(geo);
 
   // NOTHING LOST — BUT THE WIN SLIPPED (hand walk 2026-10-01: "…a6" in a fork
   // puzzle drew only the old nudge). In a puzzle a slow move fails because it
   // gives them a move: show the reply that takes the chance away. Still their
-  // move only — the answer is never named.
+  // move only — the answer is never named. A concrete reason leads it: what
+  // their reply takes or hits is the why (one teacher, 2026-10-11).
+  if (geo) return geometry(geo);
   if (line && line.length && cpWhite !== null) {
     const solverCp = solver === 'w' ? cpWhite : -cpWhite;
     if (solverCp < CHANCE_GONE_CP) {

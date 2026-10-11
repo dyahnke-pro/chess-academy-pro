@@ -1058,7 +1058,7 @@ describe('explainBestMoveGrounded — hanging is legal-capture + SEE grounded (n
     // short-circuits before the cost clause.
     const out = explainBestMoveGrounded('4k3/8/2n5/8/3P4/8/8/4K3 w - - 0 1', 'Ke2', 'd4d5', 'white', null, null);
     expect(out).toContain('Nxd4'); // a real, legal, material-winning capture
-    expect(out).toContain('winning the pawn');
+    expect(out).toContain('winning your pawn');
   });
 });
 

@@ -11013,14 +11013,7 @@ export function CoachTeachPage(): JSX.Element {
                       // over leaves nothing to re-derive and nothing to check.
                       // The recurrence clause rides between the verdict and the
                       // evidence, as in review — the loop's own sentence.
-                      // ONE FACT ONCE: when the fundamental IS the lost piece
-                      // on the look's own square, the look's "that left your
-                      // bishop on g5 hanging" restates it — the verdict stands
-                      // alone (re-walk 1380, 24.Bg5).
-                      const sameLoss = !!fundamental && !!look.withoutAttempt
-                        && (fundamental.id === 'loose-piece' || fundamental.id === 'ignored-threat')
-                        && fundamental.square === look.withoutAttempt.square;
-                      const evidence = sameLoss && look.withoutAttempt ? look.withoutAttempt.line : look.line;
+                      const evidence = look.line;
                       // …and the other way round: the grade already says "it let
                       // them take your rook on b2, and they missed it", so the
                       // fundamental's "that left your rook on b2 hanging" is the
@@ -11048,11 +11041,13 @@ export function CoachTeachPage(): JSX.Element {
                       // ("Here's how: winning positions are won by simplifying…"); the
                       // character switch "you are up material now — the job changes to
                       // trading down" is the same claim (run I, 4GIsh ply 32).
+                      // Every square the words name lights up (David 2026-10-11).
+                      const lookSquares = (look.squares ?? [look.square]).filter((q) => /^[a-h][1-8]$/.test(q));
                       const winClaim = !fundamental && /^That let them win /.test(look.line) && /^[a-h][1-8]$/.test(look.square)
                         ? [`win-${look.square}`] : fundamental?.id === 'botched-conversion' ? ['convert-method'] : [`look:${look.kind}:${move.history.length}`];
                       // THE VERDICT'S PROOF is the punishing line it names (#68).
                       queueSpokenHint(fenAfterReply, line, look.kind,
-                        (!fundamental && look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci) : fundamental?.lines?.[0] ? lineProof(fundamental.lines[0]) : null) ?? squaresProof(line, /^[a-h][1-8]$/.test(look.square) ? [look.square] : []) ?? NO_PROOF.description, /^[a-h][1-8]$/.test(look.square) ? [look.square] : [], winClaim, move.fen,
+                        (!fundamental && look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci) : fundamental?.lines?.[0] ? lineProof(fundamental.lines[0]) : null) ?? squaresProof(line, lookSquares) ?? NO_PROOF.description, lookSquares, winClaim, move.fen,
                         // The punishing line the words play out, drawn ply by ply.
                         !fundamental && look.punishLine ? lineArrowClaims(look.punishLine.fen, look.punishLine.uci, 'teach.punishLine') : undefined,
                         // The fundamental's own lines lead this sentence.

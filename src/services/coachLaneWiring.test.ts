@@ -39,7 +39,7 @@ describe('every producer we added has a live consumer', () => {
     // hook (bookkeeping) and the surface (voice) call — see the timing coupling
     // below for why the surface could not use the hook's answer.
     ['the student-side callout', BACKWARD, 'callInaccuracy('],
-    ['the rear-facing PV', BACKWARD, 'whatItAllowed('],
+    ['the rear-facing PV', BACKWARD, 'errorWhyFor('],
     ['the structural drawback', BACKWARD, 'findStudentDrawback('],
     ['the backward look, from the surface', TEACH, 'backwardLook('],
   ];
@@ -83,7 +83,9 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // (Re-walk 1380, 2026-09-25: the evidence is the look line, or the line
     // WITHOUT its opening loss when the verdict already named that loss — one
     // fact once. The verdict still leads.)
-    expect(TEACH).toMatch(/const evidence = sameLoss && look\.withoutAttempt \? look\.withoutAttempt\.line : look\.line;/);
+    // (2026-10-10: the loss is said once by the grade's own why — `lossInGrade`
+    // quiets the verdict — so the evidence is the look line, whole.)
+    expect(TEACH).toMatch(/const evidence = look\.line;/);
     // (2026-09-27: the line now closes with the move's concession, review
     // parity — the verdict still leads, the evidence still follows it.)
     // (Najdorf re-walk 2026-09-27: the verdict stands down only when the grade

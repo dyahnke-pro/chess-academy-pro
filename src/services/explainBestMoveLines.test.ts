@@ -12,14 +12,14 @@ const FEN = c.fen(); // Black to move; …Qg5 puts the queen where Nf3 hits it.
 describe('explainBestMoveGrounded reads the line when it has one', () => {
   it('says the queen falls when the line takes it', () => {
     const out = explainBestMoveGrounded(FEN, 'Qg5', 'b8c6', 'black', null, { afterPlayed: ['f3g5'], afterBest: null });
-    expect(out ?? '').toMatch(/let them play Nxg5, winning the queen/);
+    expect(out ?? '').toMatch(/left your queen on g5 hanging — the knight on f3 just takes it/);
   });
   it('says nothing about the queen when the line never takes it', () => {
     const out = explainBestMoveGrounded(FEN, 'Qg5', 'b8c6', 'black', null, { afterPlayed: ['d2d4', 'g5g2'], afterBest: null });
     expect(out ?? '').not.toMatch(/winning the queen/);
   });
-  it('with no line it falls back to the board count', () => {
+  it('with no line it reads the board\'s own answer (errorWhy boardReplyUci)', () => {
     const out = explainBestMoveGrounded(FEN, 'Qg5', 'b8c6', 'black', null, null);
-    expect(out ?? '').toMatch(/winning the queen/);
+    expect(out ?? '').toMatch(/left your queen on g5 hanging — the knight on f3 just takes it/);
   });
 });

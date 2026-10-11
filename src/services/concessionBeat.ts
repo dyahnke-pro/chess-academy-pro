@@ -24,7 +24,6 @@
 // something to excuse.
 import { Chess, type Color, type Square } from 'chess.js';
 import { findWeakPawns, findPieceQuality } from './positionReadingService';
-import { planFromUci, isCostClause } from './lookaheadPlan';
 import { isEndgameByMaterial } from './gamePhaseService';
 import { MATERIAL_VALUE as VALUE } from './pieceValues';
 
@@ -402,72 +401,3 @@ export function findStudentDrawback(args: {
   };
 }
 
-/**
- * THE REAR-FACING PV — what the move you just played lets them do.
- *
- * David 2026-08-10: "I did not hear the rear facing PV." He hadn't: across a
- * full game with eight captured slips — including one at 648 centipawns — the
- * backward look fired ZERO times. `findStudentDrawback` above is deliberately
- * narrow (five nameable structural concessions, forcing moves excluded), and
- * narrow turns out to mean "almost never" on a real board. A blunder that hands
- * over a piece concedes no outpost and abandons no defender, so it says nothing
- * — which is the worst possible moment for the backward look to be silent.
- *
- * The engine already answers this and we were throwing the answer away. The
- * analysis of the position AFTER the student moves carries the OPPONENT's best
- * line, and that line IS the consequence: what they get to do now, in moves
- * they would really play. Reading it with the same `planFromUci` the forward
- * plan uses costs no extra search — it is the read that was missing, not the
- * data. (Exactly the argument that produced the two-sided forward plan.)
- *
- * Returns null when the line is too short to describe, or when it describes
- * nothing worth a sentence. No move is ever named: the honesty contract holds
- * looking backward as much as forward.
- */
-export function whatItAllowed(args: {
-  /** The position BEFORE the student's move. With `playedSan` it tells the
-   *  plan when their line only takes back what the student just took. */
-  fenBefore: string;
-  /** The position AFTER the student's move — the opponent is to play. */
-  fenAfter: string;
-  /** The opponent's best line from there, UCI, straight off the engine. */
-  opponentPv: readonly string[];
-  studentColor: 'white' | 'black';
-  /** How much the move actually cost, centipawns. Below the bar the line
-   *  describes a normal reply rather than a consequence, and saying "that let
-   *  them…" about ordinary play teaches the student to distrust the coach. */
-  cpLoss: number;
-  /** The student's move that led to `fenAfter`, SAN. REQUIRED: a capture of
-   *  theirs that is simply taken back is a trade, and "that let them win a
-   *  pawn, starting with Bxc4" after …bxc4 is false (run I, manual check). */
-  playedSan: string | null;
-}): { line: string; square: string } | null {
-  if (args.cpLoss < 60) return null;
-  if (args.opponentPv.length < 4) return null;
-  // Their first move taking back on the square the student just captured on
-  // returns the student's own capture — the plan counts from before the trade
-  // (`planFromUci`'s last move), so it is never a win.
-  const plan = planFromUci(args.fenAfter, args.opponentPv, args.studentColor,
-    args.playedSan ? { fenBefore: args.fenBefore, san: args.playedSan } : null);
-  // `theirs` is the opponent — the side to move here, whose line this is.
-  // ONE CLAUSE, AND ONLY A COST (`isCostClause`): the price of the move is
-  // what it lost, never the opponent's whole want-list or where their pieces
-  // drift to (Blumenfeld walk F18/F32).
-  const lead = plan?.theirs.spokenClauses[0];
-  if (!lead?.text || lead.drift || !isCostClause(lead.text)) return null;
-  // NAMED WITH THE MOVE THAT DOES IT (McConnell walk 2026-09-27: a bare "That
-  // let them win a pawn." left the student to find which pawn and how).
-  let first: string | null = null;
-  try {
-    const u = args.opponentPv[0];
-    first = new Chess(args.fenAfter).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] })?.san ?? null;
-  } catch { first = null; }
-  const line = `That let them ${lead.text.trim().replace(/\.$/, '')}${first ? `, starting with ${first}` : ''}.`;
-
-  // The square to mark: where their line actually lands first, so the eye goes
-  // to the consequence rather than to the move that caused it.
-  const square = plan?.theirs.spokenClauses.flatMap((c) => c.squares)[0]
-    ?? plan?.path.find((p) => p.color !== args.studentColor)?.to
-    ?? '';
-  return { line, square };
-}

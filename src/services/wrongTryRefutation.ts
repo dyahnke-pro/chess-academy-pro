@@ -1,10 +1,9 @@
 import { Chess } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
-import { consequenceIn, errorWhy } from './inaccuracyCall';
-import { openSentence } from '../utils/openSentence';
+import { refuteWrongTry } from './puzzleTeaching';
 import type { StockfishAnalysis, WalkableLine } from '../types';
 import { pvSans } from './moveInsight';
-import { lineProof, walkableLine, type Proof } from './proof';
+import { lineProof, lineProofFromUci, walkableLine, type Proof } from './proof';
 
 /** The engine seam, so tests can hand in canned reads. */
 export interface RefutationEngine {
@@ -72,21 +71,22 @@ export async function readWrongTry(
   const replyLine = pvSans(afterTry, read.topLines?.[0]?.moves ?? [read.bestMove], 4);
   const line = walkableLine(fen, [trySan, ...replyLine], trySan) ?? undefined;
   const proof = lineProof({ fen, sans: line ? line.plies.map((x) => x.san) : [trySan, reply.san] }) ?? { kind: 'line' as const, exact: false, short: `${trySan}, ${reply.san}`, full: `${trySan}, then ${reply.san}` };
-  // WHY THE TRY FAILS, FROM THE ONE ERROR COMPUTER (David 2026-10-10:
-  // "Tactics should tell why that move was wrong, the proof, but not say the
-  // right answer"). The better move is never named — finding it is the puzzle.
-  const ew = errorWhy({
-    fenBefore: fen, playedSan: trySan, moverColor: moverSign === 1 ? 'white' : 'black',
-    bestSan: null, bestLineUci: null, replyLineUci: read.topLines?.[0]?.moves ?? [read.bestMove],
-    missedMate: null, allowedMate: null, bestMate: null, quality: 'mistake', priorMove: null,
-    namesBetterMove: false,
+  // WHY THE TRY FAILS — the ONE puzzle teacher every Tactics board speaks
+  // (`refuteWrongTry`, merged 2026-10-11: this shell and that one worded the
+  // same miss two ways on two boards). It reads the one error computer and
+  // never names the answer — finding it is the puzzle.
+  const taught = await refuteWrongTry({
+    fenBefore: fen, wrongSan: trySan,
+    analyse: () => Promise.resolve({ moves: read.topLines?.[0]?.moves ?? [read.bestMove], cpWhite: read.evaluation }),
   });
-  if (ew.consequence) {
-    return { kind: 'refuted', text: `${trySan}? ${openSentence(consequenceIn(ew.consequence, 'present'))}.${ew.tail}`, replySan: reply.san, replyFrom: reply.from, replyTo: reply.to, line, proof: ew.proof ?? proof };
-  }
-  if (read.isMate && moverEval < 0) {
+  // A forced mate the engine reports outranks a line too short to show it.
+  if (read.isMate && moverEval < 0 && taught?.kind !== 'mate') {
     return { kind: 'refuted', text: `${trySan}? Then ${reply.san}, and they have a forced mate.`, replySan: reply.san, replyFrom: reply.from, replyTo: reply.to, line, proof };
   }
+  if (!taught) return null;
+  if (taught.kind === 'not-best') return { kind: 'also-good', text: taught.text };
+  const shown = taught.uci.length ? lineProofFromUci(taught.fenAfter, taught.uci) : null;
+  return { kind: 'refuted', text: taught.text, replySan: reply.san, replyFrom: reply.from, replyTo: reply.to, line, proof: shown ?? proof };
   return null;
 }
 

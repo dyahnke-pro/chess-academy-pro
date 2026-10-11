@@ -183,15 +183,13 @@ describe('F18 / F32 — the price of a move is one cost, never a want-list', () 
     expect(isCostClause('trade off the knight')).toBe(false);
   });
   it('after …d3 Rxc5 the backward look says one cost or nothing', async () => {
-    const { whatItAllowed } = await import('./concessionBeat');
-    const said = whatItAllowed({
-      fenBefore: fenAt(55), fenAfter: fenAt(56), opponentPv: ['c2c5', 'c7c5', 'c1c5', 'd6d8', 'c5c8', 'd8c8'],
-      studentColor: 'black', cpLoss: 250, playedSan: 'd3',
+    // Ported to the one error computer (2026-10-10).
+    const { errorWhyFor } = await import('./inaccuracyCall');
+    const said = errorWhyFor({
+      fenBefore: fenAt(55), playedSan: 'd3', moverColor: 'black',
+      replyLineUci: ['c2c5', 'c7c5', 'c1c5', 'd6d8', 'c5c8', 'd8c8'], quality: 'mistake',
     });
-    if (said) {
-      expect(said.line).toMatch(/^That let them (win|take|mate|checkmate|trap|pull the pawns)/);
-      expect(said.line.split(',').length).toBeLessThanOrEqual(2);
-    }
+    if (said) expect(said.line.split(/(?<=\.) /).length, said.line).toBeLessThanOrEqual(2);
   });
 });
 

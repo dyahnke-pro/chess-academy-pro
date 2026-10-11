@@ -10,6 +10,7 @@
  * answer leads with. It reuses the shared threat computer (`computeMustDefend`,
  * pin-aware, exchange-checked) — no second board scan.
  */
+import { capturedSquare } from '../utils/capturedSquare';
 import { Chess, type Square } from 'chess.js';
 import { computeMustDefend, flipSideToMove } from './threatOut';
 import { takingTheAttackerAnswers } from './positionReadingService';
@@ -99,7 +100,7 @@ export function threatsAgainst(u: BoardUrgency | null, fromSquare: string, fen: 
   if (!probeFen) return null;
   const hits = new Chess(probeFen).moves({ square: fromSquare as Square, verbose: true })
     .filter((m) => m.captured && m.captured !== 'k')
-    .map((m) => `${NAME[m.captured as string]} on ${m.to}`);
+    .map((m) => `${NAME[m.captured as string]} on ${capturedSquare(m)}`);
   const uniq = [...new Set(hits)];
   const promotes = u.promotion?.from === fromSquare;
   if (uniq.length === 0 && !promotes) return null;

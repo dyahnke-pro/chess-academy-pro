@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { resolve, relative, join } from 'node:path';
 
 // ONE ERROR COMPUTER (David 2026-10-10: "Any error. Same in review and
 // everywhere else. Unity!"). Every surface that says why a move was an error
@@ -14,7 +14,10 @@ const SURFACES: Record<string, { file: string; door: RegExp }> = {
   'Learn free play': { file: 'services/backwardLook.ts', door: /\bcallInaccuracy(?:Detailed)?\(/ },
   'Review': { file: 'services/reviewFullData.ts', door: /\berrorWhy\(/ },
   'Chat — was that a good move / why was X bad / is X good': { file: 'services/coachApi.ts', door: /\berrorCallFor\(/ },
-  'Tactics wrong try': { file: 'services/wrongTryRefutation.ts', door: /\berrorWhy\(/ },
+  // Every Tactics board's wrong try: the puzzle board through `readWrongTry`,
+  // the others through the hook — both speak `refuteWrongTry` (merged 2026-10-11).
+  'Tactics wrong try (puzzle board)': { file: 'services/wrongTryRefutation.ts', door: /\brefuteWrongTry\(/ },
+  'Tactics wrong try': { file: 'services/puzzleTeaching.ts', door: /\berrorWhyFor\(/ },
   'My Mistakes': { file: 'services/mistakeNarration.ts', door: /\berrorWhy\(/ },
   'Review turning point': { file: 'services/turningPoints.ts', door: /\berrorWhy\(/ },
 };
@@ -26,7 +29,27 @@ const READERS: Record<string, string[]> = {
   // My Mistakes' "Qc5 keeps your pawn protected" reads which piece the error
   // dropped — the answer's line, said after the student solved it.
   replyPunishment: ['services/inaccuracyCall.ts', 'services/mistakeNarration.ts'],
+  // The mechanism reader (2026-10-10): it was a second why-computer called by
+  // Learn, Review's legacy path, the mistakes list, move commentary and the
+  // setup trainer on their own.
+  whyItFailed: ['services/inaccuracyCall.ts'],
 };
+
+/** Every production source file under src/ (tests excluded). */
+function allSources(): string[] {
+  const root = resolve(__dirname, '..');
+  const out: string[] = [];
+  const walk = (dir: string): void => {
+    for (const name of readdirSync(dir)) {
+      const full = join(dir, name);
+      if (statSync(full).isDirectory()) { walk(full); continue; }
+      if (!/\.(ts|tsx)$/.test(name) || /\.test\.tsx?$/.test(name) || /\.d\.ts$/.test(name)) continue;
+      out.push(relative(root, full).split('\\').join('/'));
+    }
+  };
+  walk(root);
+  return out;
+}
 
 describe('one error computer', () => {
   for (const [name, s] of Object.entries(SURFACES)) {
@@ -35,24 +58,22 @@ describe('one error computer', () => {
     });
   }
 
-  it('its readers are called from nowhere else', () => {
-    const files = [
-      'services/reviewFullData.ts', 'services/coachApi.ts', 'services/wrongTryRefutation.ts',
-      'services/mistakeNarration.ts', 'services/turningPoints.ts', 'services/backwardLook.ts',
-      'services/groundedAnswer.ts', 'services/coachFeatureService.ts', 'components/Coach/CoachTeachPage.tsx',
-      'components/Puzzles/PuzzleBoard.tsx', 'components/Puzzles/MistakePuzzleBoard.tsx',
-    ];
+  it('its readers are called from nowhere else (every source file)', () => {
+    const files = allSources();
+    expect(files.length, 'the source walk found nothing').toBeGreaterThan(200);
     for (const f of files) {
       const src = read(f);
       for (const [reader, allowed] of Object.entries(READERS)) {
         if (allowed.includes(f)) continue;
-        expect(src, `${f} calls ${reader} directly — go through errorWhy`).not.toMatch(new RegExp(`\\b${reader}\\(`));
+        expect(src, `${f} calls ${reader} directly — go through errorWhy`).not.toMatch(new RegExp(`(?<!function )\\b${reader}\\(`));
       }
     }
   });
 
   it('Learn free play, tactics and My Mistakes never name the better move', () => {
-    for (const f of ['services/backwardLook.ts', 'services/wrongTryRefutation.ts', 'services/mistakeNarration.ts']) {
+    // `errorWhyFor` (tactics) never names it — checked at its own body.
+    expect(read('services/inaccuracyCall.ts')).toMatch(/export function errorWhyFor\([\s\S]*?errorWhy\(\{[\s\S]*?namesBetterMove:\s*false[\s\S]*?\}\)/);
+    for (const f of ['services/backwardLook.ts', 'services/mistakeNarration.ts']) {
       const src = read(f);
       const calls = [...src.matchAll(/\b(?:errorWhy|callInaccuracy(?:Detailed)?)\(\{[\s\S]*?\}\)/g)].map((m) => m[0]);
       expect(calls.length, `${f} has no error call`).toBeGreaterThan(0);

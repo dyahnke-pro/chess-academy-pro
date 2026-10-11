@@ -13,6 +13,7 @@
 // invented — the deliberation is SPOKEN, not manufactured.
 //
 // Doc: docs/plans/2026-08-26-coach-my-weakness-focus-lens.md §4.0.
+import { capturedSquare } from '../utils/capturedSquare';
 import { openSentence } from '../utils/openSentence';
 import { Chess, type Square } from 'chess.js';
 import type { StockfishAnalysis, WalkableLine } from '../types';
@@ -46,7 +47,7 @@ function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentL
     if (opponentLastSan && new RegExp(`x${m.to}(?![1-8])`).test(opponentLastSan)) return `takes back the ${PIECE_NOUN[m.captured] ?? 'piece'}`;
     // SEE counts the recaptures: a positive net is material won, not a trade.
     if (legalSeeGainFor(fenBefore, m.to, mover) <= 0) return null;
-    return `wins the ${PIECE_NOUN[m.captured] ?? 'piece'} on ${m.to}`;
+    return `wins the ${PIECE_NOUN[m.captured] ?? 'piece'} on ${capturedSquare(m)}`;
   } catch {
     return null;
   }
@@ -479,7 +480,7 @@ function captureLead(fen: string, san: string): string | null {
   try { m = new Chess(fen).move(san); } catch { return null; }
   if (!m?.captured) return null;
   const check = /[+#]$/.test(m.san) ? (m.san.endsWith('#') ? ', and it is mate' : ', with check') : '';
-  return `takes their ${PIECE_WORD[m.captured] ?? 'piece'} on ${m.to}${check}`;
+  return `takes their ${PIECE_WORD[m.captured] ?? 'piece'} on ${capturedSquare(m)}${m.isEnPassant() ? ' en passant' : ''}${check}`;
 }
 
 /**

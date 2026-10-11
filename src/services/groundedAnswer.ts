@@ -12,6 +12,7 @@
  * Pure + side-effect-free so it's trivially testable and can't regress the
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
+import { capturedSquare } from '../utils/capturedSquare';
 import { evalBand, evalBandWords } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { MATERIAL_VALUE } from './pieceValues';
@@ -26,7 +27,7 @@ import { isSacrifice } from './factStakes';
 import { seatPieceReferences } from '../utils/seatPieces';
 import { mobilityMap } from './nextPlans';
 import { Chess } from 'chess.js';
-import { proofCut, moverLineProof } from './exchangeLedger';
+import { moverLineProof } from './exchangeLedger';
 import { isRealPin } from './pinGeometry';
 import { tacticWord } from './tacticVocabulary';
 import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSITIONAL_TARGETS } from './keySquares';
@@ -48,6 +49,7 @@ import { boardStructure } from './structureReads';
 import { materialEdgeWords } from './reviewPositionalAssessment';
 import { strategicWhyLed, strategicWhyImperative } from './moveFundamentals';
 import { bestMoveReason, threatMadeWhy } from './deliberation';
+import { errorWhy, errorWhySentence } from './inaccuracyCall';
 import { liveMethodBeatFor } from './methodBeat';
 import { countKingAttack, detectKingExposure, kingExposureClause } from './kingSafety';
 import { extractQuestionFocus, PURE_BOARD_ASPECTS } from './boardQuestionRouter';
@@ -2619,17 +2621,14 @@ export function explainBestMoveGrounded(
 ): string | null {
   if (!bestMoveUci || bestMoveUci.length < 4) return null;
   const mc: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
-  const oc: 'w' | 'b' = mc === 'w' ? 'b' : 'w';
-  /** Replay UCI from `fen` into SAN; stops at the first illegal move. */
-  const sansOf = (fen: string, uci: readonly string[]): string[] => {
-    const out: string[] = [];
-    try {
-      const b = new Chess(fen);
-      for (const u of uci) { const m = b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); if (!m) break; out.push(m.san); }
-    } catch { /* shorter proves less */ }
-    return out;
-  };
 
+  // ONE WHY-BEST, ONE WHY-IT-FAILED (2026-10-10 unification). This function
+  // decided both on its own — a third why-best reader and a fourth "what your
+  // move let them do" reader. It now reads the one of each: `bestMoveReason`
+  // for the move, `errorWhy` for the move played. Taking back is still said as
+  // taking back (it knows the previous capture; the shared reader is told the
+  // last move only as SAN).
+  let bestSan: string | null = null;
   let bestClause: string | null = null;
   try {
     const c = new Chess(fenBefore);
@@ -2637,120 +2636,31 @@ export function explainBestMoveGrounded(
     const captured = c.get(to as never);
     const mv = c.move({ from: bestMoveUci.slice(0, 2), to, promotion: bestMoveUci.length > 4 ? bestMoveUci[4] : undefined });
     if (mv) {
-      // Prefer the RICH, hand-audited geometry (fork/pin/mate/check/material) so
-      // the "why it was a mistake" narration names the concrete point of the best
-      // move — the engine-reasoning form (David 2026-07-10). EXCLUDE the bare
-      // "attacks the X" clause: this function promises recapture-safety (it must
-      // NOT claim merit on a move whose piece just hangs), and a lone attack can
-      // fire from a piece that is itself en prise. Forks/pins/mate/check/material
-      // are all forcing or material-safe. Falls back to the narrow capture/check
-      // read when no strong geometry is computable.
-      const geo = describeMoveGeometry(fenBefore, mv.san, moverColor);
+      bestSan = mv.san;
       const takesBack = captured && prevCapture && prevCapture.square === to
         && (REVIEW_PIECE_VALUE[captured.type] ?? 0) <= prevCapture.capturedValue;
-      if (takesBack && captured) {
-        bestClause = `it takes back the ${REVIEW_PIECE_NAME[captured.type]} on ${to}`;
-      } else if (geo && !geo.startsWith('attacks')) {
-        bestClause = `it ${geo}`;
-      } else if (captured && captured.color !== mc) {
-        const recapturable = c.attackers(to as never, captured.color).length > 0;
-        const movedVal = REVIEW_PIECE_VALUE[mv.piece] ?? 0;
-        const capVal = REVIEW_PIECE_VALUE[captured.type] ?? 0;
-        const lineSays = lines?.afterBest
-          ? (() => {
-            const p = proofCut(fenBefore, [mv.san, ...sansOf(c.fen(), lines.afterBest ?? [])], mc);
-            return !!p && !p.mate && !!p.ledger && p.ledger.netPawns >= 2;
-          })()
-          : null;
-        if (lineSays ?? (!recapturable || capVal > movedVal)) {
-          bestClause = `it wins the ${REVIEW_PIECE_NAME[captured.type]} on ${to}`;
-        }
+      if (takesBack && captured) bestClause = `it takes back the ${REVIEW_PIECE_NAME[captured.type]} on ${to}`;
+      else {
+        const why = bestMoveReason(fenBefore, mv.san, mc, { mateIn: null, opponentLastSan: null });
+        if (why) bestClause = `it ${why}`;
       }
-      if (!bestClause && c.inCheck()) bestClause = 'it comes with check';
-      // POSITIONAL fallback (David 2026-07-10: "tell the user WHY it's best" —
-      // on EVERY wrong move, not just forcing ones). When the best move makes no
-      // fork/pin/check/material threat, name its quiet purpose — the outpost it
-      // takes, the centre it develops toward — so a mistake's "why the engine's
-      // move was better" is never empty on a quiet position. Pure board geometry
-      // (G3): quietPurposePhrase returns null rather than invent.
-      if (!bestClause) {
-        const q = quietPurposePhrase(fenBefore, mv.san, moverColor, 'mover');
-        if (q) bestClause = `it ${q}`;
-      }
-      // NB: we do NOT name a bare "sacrifice" as the reason the best move is best
-      // here — from the best-move's inputs alone we can't show the compensation
-      // (the deflection payoff lives in the follow-up line), and "it sacrifices
-      // the rook" with no why reads as nonsense. A sound sacrifice is named only
-      // where the classification already establishes soundness — the student's
-      // own brilliant/great move (see buildDeterministicNarration). Forcing sacs
-      // (check/fork/capture) are still caught by the geometry above.
     }
   } catch { /* board fact unavailable — stay silent */ }
-
-  let costClause: string | null = null;
-  if (playedSan) {
+  let costSentence: string | null = null;
+  const plain = (x: string): string => x.replace(/[+#!?]+$/, '');
+  if (playedSan && bestSan && plain(playedSan) !== plain(bestSan)) {
     try {
-      const c = new Chess(fenBefore);
-      if (c.move(playedSan)) {
-        // A piece is only a real loss if the opponent has a LEGAL capture that
-        // wins material by static-exchange eval. `findHangingPieces` /
-        // `chess.attackers` count PINNED attackers that can't actually capture
-        // — the 2026-06-27 "your move left the pawn on e5 hanging" false
-        // positive, whose only attacker was a pinned knight (no legal capture
-        // existed). Drive off legal captures + SEE so a pin can never be read
-        // as a hang, and a defended-but-exchange-losing piece still is.
-        const legalCaps = c.moves({ verbose: true }).filter((m) => m.captured);
-        let worst: { square: Square; piece: PieceSymbol; gain: number; san: string } | null = null;
-        for (const cap of legalCaps) {
-          const to = cap.to;
-          const victim = c.get(to);
-          if (!victim || victim.color !== mc) continue; // must capture the mover's own piece
-          const gain = legalSeeGain(c.fen(), to); // material the opponent (to move) wins on that square (pin-aware)
-          if (gain > 0 && (!worst || gain > worst.gain)) {
-            worst = { square: to, piece: victim.type, gain, san: cap.san };
-          }
-        }
-        if (worst) {
-          // SEE is BLIND past its own square — it cannot see a fork landing
-          // ELSEWHERE on the reply. David 2026-07-21 (Berlin, "let White take
-          // on e5 and pick up a pawn for nothing"): taking e5 walked into a
-          // king-rook fork, so the "wins the pawn" story was FALSE even though
-          // SEE-on-e5 was positive. Simulate the capture and scan the mover's
-          // replies for a refuting counter-tactic (a safe fork on two majors,
-          // or a capture regaining at least the lost material). If one exists,
-          // the capture is NOT a clean win — say nothing rather than a wrong
-          // story (empty > invented); the eval swing + best move still speak.
-          // With the engine's line in hand, the ledger decides: the line must
-          // take that piece and settle them ahead (WO-OUTCOME-01 B).
-          const proven = lines?.afterPlayed
-            ? (() => {
-              const sans = sansOf(c.fen(), lines.afterPlayed ?? []);
-              const p = sans.length ? proofCut(c.fen(), sans, oc) : null;
-              if (!p || p.mate || !p.ledger || p.ledger.netPawns < 1) return false;
-              try {
-                const b = new Chess(c.fen());
-                for (const san of p.sans.slice(0, p.plies)) { const m = b.move(san); if (m.color === oc && m.captured && m.to === worst?.square) return true; }
-              } catch { return false; }
-              return false;
-            })()
-            : null;
-          const refuted = proven === null ? captureHasCounterTactic(c.fen(), worst.san, mc, worst.gain) : !proven;
-          if (!refuted) {
-            let givesCheck = false;
-            try { const after = new Chess(c.fen()); after.move(worst.san); givesCheck = after.inCheck(); } catch { /* keep false */ }
-            // ONE PERSPECTIVE: the opponent is "them", never a bare colour (walk 2,
-            // 2026-09-23: the coach, playing White, spoke "let White play Qxg4").
-            costClause = `your move let them play ${worst.san}, winning the ${REVIEW_PIECE_NAME[worst.piece]}${givesCheck ? ' with check' : ''}`;
-          }
-        }
-      }
-    } catch { /* board fact unavailable — stay silent */ }
+      costSentence = errorWhySentence(errorWhy({
+        fenBefore, playedSan, moverColor, bestSan, bestLineUci: lines?.afterBest ? [bestMoveUci, ...lines.afterBest] : null,
+        replyLineUci: lines?.afterPlayed ?? null, missedMate: null, allowedMate: null, bestMate: null,
+        quality: 'mistake', priorMove: null, namesBetterMove: false,
+      }));
+    } catch { costSentence = null; }
   }
 
-  if (bestClause && costClause) return `${cap(bestClause)}, while ${costClause}.`;
+  if (bestClause && costSentence) return `${cap(bestClause)}. ${costSentence}`;
   if (bestClause) return `${cap(bestClause)}.`;
-  if (costClause) return `${cap(costClause)}.`;
-  return null;
+  return costSentence;
 }
 
 /**
@@ -7194,7 +7104,7 @@ export function detectNewThreat(
           const net = legalSeeGain(c.fen(), mv.to); // mover to move — legal winning capture (pin-aware)
           if (net >= 3 && (!best || net > best.rank)
             && !captureHasCounterTactic(fen, mv.san, moverWB === 'w' ? 'b' : 'w', net)) {
-            best = { san: mv.san, detail: `wins the ${REVIEW_PIECE_NAME[played.captured]} on ${mv.to}`, kind: 'capture', from: mv.from, landing: mv.to, targets: [], targetSquares: [], guards: guardsOf(sim, mv.to), rank: net };
+            best = { san: mv.san, detail: `wins the ${REVIEW_PIECE_NAME[played.captured]} on ${capturedSquare(played)}`, kind: 'capture', from: mv.from, landing: mv.to, targets: [], targetSquares: [], guards: guardsOf(sim, mv.to), rank: net };
           }
         }
       }

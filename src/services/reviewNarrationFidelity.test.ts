@@ -170,7 +170,11 @@ describe('explainBestMoveGrounded — SEE claims verified against counter-tactic
 
   it('still names a genuinely free capture when no counter-tactic exists', async () => {
     const { explainBestMoveGrounded } = await import('./groundedAnswer');
-    const why = explainBestMoveGrounded(FEN_FREE, 'a6', 'a7a5', 'black', null, null);
+    // The better move must actually save the pawn: a loss that was already on
+    // the board and stays after the better move is not this move's doing
+    // (errorWhy causedByTheMove, 2026-10-10) — so the control compares a6
+    // with …exd4, which keeps it.
+    const why = explainBestMoveGrounded(FEN_FREE, 'a6', 'e5d4', 'black', null, null);
     expect(why ?? '').toContain('dxe5');
   });
 });

@@ -154,13 +154,10 @@ describe('the verdict on a found move (P2 #2)', () => {
 
 describe('run I manual check: a recapture is not a win, a pawn recapture is not a coin-flip', () => {
   it('"That let them win a pawn, starting with Bxc4" is not said after the student\'s own …bxc4', async () => {
-    const { whatItAllowed } = await import('./concessionBeat');
-    const args = {
-      fenAfter: 'r2qk2r/5pp1/p1bbpn2/2p4p/2pP4/1B6/PPN2PPP/R1BQ1RK1 w kq - 0 14',
-      opponentPv: ['b3c4', 'f6g4', 'h2h3', 'd6h2', 'g1h1', 'h2c7'],
-      studentColor: 'black' as const, cpLoss: 120,
-    };
-    expect(whatItAllowed({ ...args, fenBefore: 'r2qk2r/5pp1/p1bbpn2/1pp4p/2PP4/1B6/PPN2PPP/R1BQ1RK1 b kq - 0 13', playedSan: 'bxc4' })?.line ?? '').not.toMatch(/win a pawn/);
+    // Ported to the one error computer (2026-10-10) when `whatItAllowed` folded in.
+    const { errorWhyFor } = await import('./inaccuracyCall');
+    expect(errorWhyFor({ fenBefore: 'r2qk2r/5pp1/p1bbpn2/1pp4p/2PP4/1B6/PPN2PPP/R1BQ1RK1 b kq - 0 13', playedSan: 'bxc4',
+      moverColor: 'black', replyLineUci: ['b3c4', 'f6g4', 'h2h3', 'd6h2', 'g1h1', 'h2c7'], quality: 'inaccuracy' })?.line ?? '').not.toMatch(/win a pawn/);
   });
   it('Nxf3 vs gxf3 is never "does the same job"', async () => {
     const { tacticalReadFromLines, uncertaintyClause } = await import('./tacticalRead');

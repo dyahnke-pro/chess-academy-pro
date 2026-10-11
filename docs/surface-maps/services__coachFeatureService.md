@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5586 lines · 41 exports · 47 importers · 46 tests · 5 audits**
+**5587 lines · 41 exports · 47 importers · 46 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:76) — names `coachFeatureService`
 - **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3925) — names `buildReviewSegments`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4245) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6312) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6301) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -100,7 +100,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `generateNarrativeSummary` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:539`
+- `src/components/Coach/CoachGameReview.tsx:548`
 - `src/services/recapSeat.test.ts:17`
 
 ### `recapSecondPerson` (function) — 9 call sites
@@ -129,7 +129,7 @@
 - `src/services/coachFeatureService.test.ts:318`
 
 ### `segmentNamedArrows` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:3389`
+- `src/components/Coach/CoachGameReview.tsx:3399`
 - `src/services/namedMoveArrows.test.ts:54`
 - `src/services/namedMoveArrows.test.ts:58`
 
@@ -146,7 +146,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewCitations` (function) — 8 call sites
-- `src/components/Coach/CoachGameReview.tsx:599`
+- `src/components/Coach/CoachGameReview.tsx:608`
 - `src/services/coachFeatureService.test.ts:747`
 - `src/services/coachFeatureService.test.ts:755`
 - `src/services/coachFeatureService.test.ts:787`
@@ -160,7 +160,7 @@
 - `src/services/coachFeatureService.test.ts:24`
 
 ### `buildReviewSegments` (function) — 71 call sites
-- `src/components/Coach/CoachGameReview.tsx:1769`
+- `src/components/Coach/CoachGameReview.tsx:1779`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -248,7 +248,7 @@
 - `src/services/mapConcurrent.test.ts:37`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4451`
+- `src/components/Coach/CoachGameReview.tsx:4461`
 - `src/services/coachFeatureService.test.ts:817`
 - `src/services/coachFeatureService.test.ts:820`
 - `src/services/coachFeatureService.test.ts:827`
@@ -282,16 +282,16 @@
 - `src/services/reviewNarrationFidelity.test.ts:49`
 
 ### `narrationMoverFaithful` (function) — 10 call sites
-- `src/services/reviewNarrationFidelity.test.ts:260`
-- `src/services/reviewNarrationFidelity.test.ts:262`
-- `src/services/reviewNarrationFidelity.test.ts:263`
-- `src/services/reviewNarrationFidelity.test.ts:265`
-- `src/services/reviewNarrationFidelity.test.ts:268`
+- `src/services/reviewNarrationFidelity.test.ts:264`
+- `src/services/reviewNarrationFidelity.test.ts:266`
+- `src/services/reviewNarrationFidelity.test.ts:267`
 - `src/services/reviewNarrationFidelity.test.ts:269`
-- `src/services/reviewNarrationFidelity.test.ts:270`
+- `src/services/reviewNarrationFidelity.test.ts:272`
 - `src/services/reviewNarrationFidelity.test.ts:273`
 - `src/services/reviewNarrationFidelity.test.ts:274`
-- `src/services/reviewNarrationFidelity.test.ts:275`
+- `src/services/reviewNarrationFidelity.test.ts:277`
+- `src/services/reviewNarrationFidelity.test.ts:278`
+- `src/services/reviewNarrationFidelity.test.ts:279`
 
 ### `narrationNumbersFaithful` (function) — 3 call sites
 - `src/services/reviewNarrationFidelity.test.ts:57`
@@ -319,7 +319,7 @@
 - `src/services/reviewWalk1500.test.ts:17`
 
 ### `openingNameForKey` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:236`
+- `src/components/Coach/CoachGameReview.tsx:245`
 
 ### `generateReviewNarration` (function) — 15 call sites
 - `src/services/proofBacklog.report.test.ts:104`
@@ -358,12 +358,12 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:567`
+- `src/services/reviewFullData.ts:575`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites
 - `src/services/badHabitDetector.ts:21`
-- `src/services/coachApi.ts:5282`
+- `src/services/coachApi.ts:5304`
 - `src/services/coachFeatureService.test.ts:129`
 - `src/services/coachFeatureService.test.ts:150`
 - `src/services/coachFeatureService.test.ts:169`

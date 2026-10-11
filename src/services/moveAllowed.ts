@@ -1,4 +1,5 @@
 import { Chess } from 'chess.js';
+import { capturedSquare } from '../utils/capturedSquare';
 import { describeMoveGeometry } from './groundedAnswer';
 import { legalSeeGain } from './positionReadingService';
 import { CAPTURE_VALUE } from './pieceValues';
@@ -53,8 +54,8 @@ function materialWon(afterPlayed: string, replySan: string): string | null {
     // a queen for a bishop, said as "winning your queen"). When the exchange
     // gives the capturer back, the trade is named.
     return gain >= CAPTURE_VALUE[mv.captured]
-      ? `winning your ${PIECE_NAME[mv.captured]} on ${mv.to}`
-      : `winning your ${PIECE_NAME[mv.captured]} on ${mv.to} for their ${PIECE_NAME[mv.piece]}`;
+      ? `winning your ${PIECE_NAME[mv.captured]} on ${capturedSquare(mv)}`
+      : `winning your ${PIECE_NAME[mv.captured]} on ${capturedSquare(mv)} for their ${PIECE_NAME[mv.piece]}`;
   } catch {
     return null;
   }

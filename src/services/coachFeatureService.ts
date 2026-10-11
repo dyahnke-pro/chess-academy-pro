@@ -67,7 +67,7 @@ import { voiceFacts } from './coachApi';
 // `voiceFacts` — no coachService.ask / free-LLM prose, no per-move segment
 // LLM call (those are deterministic via `buildReviewSegments`).
 import { logAppAudit } from './appAuditor';
-import { whyItFailed } from './whyItFailed';
+import { errorWhyFor } from './inaccuracyCall';
 import { betterMoveReason, priorMoveLeadingTo, toStudentSeat } from './inaccuracyCall';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
 import { buildCausalChain, causalChainArrows, causalChainMistakeTags, findMissedChain, findAllowedChain } from './causalChain';
@@ -1064,11 +1064,12 @@ export function buildReviewCitations(
 
     // WHY THE PLAYED MOVE FAILED — the companion to `whyBetter` above. Pure
     // chess.js geometry, no engine, so it costs nothing and cannot invent.
-    const failed = whyItFailed({
+    const failed = errorWhyFor({
       fenBefore,
       playedSan: m.san,
-      studentColor: isWhiteMove ? 'white' : 'black',
-      playedLineUci: m.pv?.afterPlayed ?? null,
+      moverColor: isWhiteMove ? 'white' : 'black',
+      replyLineUci: m.pv?.afterPlayed ?? null,
+      quality: m.classification,
     });
 
     out.push({
@@ -2681,7 +2682,7 @@ export function buildReviewSegments(
         currentGameId, register: 'review', seenLabels: recurrenceLabelsSeen,
       });
       const pvEvidence = renderPvEvidence(fundamentals);
-      const failed = whyItFailed({ fenBefore: fenPair.fenBefore, playedSan: m.san, studentColor: moverColor, playedLineUci: m.pv?.afterPlayed ?? null });
+      const failed = errorWhyFor({ fenBefore: fenPair.fenBefore, playedSan: m.san, moverColor, replyLineUci: m.pv?.afterPlayed ?? null, quality: m.classification });
       const concession = describeConcessions(fenPair.fenBefore, m.san, true);
       // ONE cost reader: the one-search price when the review recorded it (the
       // flag line says the same number), the eval delta only as its fallback.
@@ -2714,7 +2715,7 @@ export function buildReviewSegments(
     {
       const isStudentMove = playerColor ? moverColor === playerColor : !m.isCoachMove;
       if (!fundamentalLed && narration && isStudentMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy')) {
-        const failed = whyItFailed({ fenBefore: fenPair.fenBefore, playedSan: m.san, studentColor: moverColor, playedLineUci: m.pv?.afterPlayed ?? null });
+        const failed = errorWhyFor({ fenBefore: fenPair.fenBefore, playedSan: m.san, moverColor, replyLineUci: m.pv?.afterPlayed ?? null, quality: m.classification });
         if (failed) narration = `${narration} ${failed.line}`;
       }
     }

@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1766 lines · 12 exports · 48 importers · 35 tests · 1 audits**
+**1771 lines · 13 exports · 48 importers · 35 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6313) — names `FundamentalId`
+- **The standard post-deploy ritual** (CLAUDE.md:6302) — names `FundamentalId`
 
 ## Who calls in
 
@@ -72,6 +72,9 @@
 ### `FUNDAMENTAL_TAG` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `isPositionalFundamental` (function) — 1 call site
+- `src/services/misconceptionClassifier.ts:278`
+
 ### `PrincipleEvidence` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -85,7 +88,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `captureIsTrade` (function) — 1 call site
-- `src/services/misconceptionClassifier.ts:294`
+- `src/services/misconceptionClassifier.ts:317`
 
 ### `planTargets` (function) — 2 call sites
 - `src/services/principleAttribution.section14.test.ts:141`
@@ -106,13 +109,13 @@
 - `src/services/claimTruth.manual.test.ts:22`
 - `src/services/claimTruth.manual.test.ts:116`
 - `src/services/claimTruth.manual.test.ts:124`
-- `src/services/claimTruth.manual.test.ts:182`
-- `src/services/claimTruth.manual.test.ts:187`
-- `src/services/claimTruth.manual.test.ts:195`
+- `src/services/claimTruth.manual.test.ts:179`
+- `src/services/claimTruth.manual.test.ts:184`
+- `src/services/claimTruth.manual.test.ts:192`
 - `src/services/coachFeatureService.ts:959`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:153`
-- `src/services/misconceptionClassifier.ts:244`
+- `src/services/misconceptionClassifier.ts:261`
 - `src/services/principleAttribution.pinPressure.test.ts:15`
 - `src/services/principleAttribution.pinPressure.test.ts:34`
 - `src/services/principleAttribution.pinPressure.test.ts:41`

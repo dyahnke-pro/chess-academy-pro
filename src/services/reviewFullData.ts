@@ -578,10 +578,11 @@ export function computeMoveFacets(
     // What it allowed first, then the better move with its reason — the
     // heart of the app's order. A better move with no reason is a bare
     // conclusion (proof rule, 52-errors #47) and is not named.
+    const failedSaid = ew?.failed ? (opponentMoved ? seatPieces(seatTheirErrorForStudent(ew.failed)) : seatPieces(ew.failed)) : null;
     const better = [
       consequence,
       reason && ew?.bestSan ? `the stronger move was ${ew.bestSan} — ${reason}` : null,
-      !consequence && !reason ? answer : null,
+      !consequence && !reason && !failedSaid ? answer : null,
     ].filter(Boolean).join('; ');
     const tail = [whyBad, better].filter(Boolean).join('; ');
     const betterBit = tail ? ` — ${tail}` : '';
@@ -593,12 +594,18 @@ export function computeMoveFacets(
     // A positive verdict is PRAISE, not a reason (WO-TEACH-02): it rides the
     // move's own squares and speaks only beside a teaching fact about them.
     const positive = !costsPoints && !fellShort;
-    const qf = `[${positive ? 'praise' : 'quality'}] ${subj}: ${qualityClause(ctx.classification, isStudent)}${swingBit}${betterBit}.`;
+    // The mechanism is its own sentence — "That left your knight on e5
+    // hanging — the pawn on d4 just takes it."
+    const qf = `[${positive ? 'praise' : 'quality'}] ${subj}: ${qualityClause(ctx.classification, isStudent)}${swingBit}${betterBit}.${failedSaid ? ` ${failedSaid}` : ''}`;
     facets.push(qf);
     // The verdict's proof is the line its words name: the better move's own
     // line when the reason came from it, the line after the move when the
     // punishment did.
     if (costsPoints || fellShort) recProof(qf, ew?.proof ?? lineProofFromUci(fenBefore, ctx.bestLineUci));
+    // The squares the why names — the piece left hanging and what takes it —
+    // lead the eye (David 2026-10-11: "arrows and highlights … when narrating
+    // moves and important squares").
+    if (ew && (failedSaid || consequence)) recSquares(qf, ew.failedSquares.length ? ew.failedSquares : [ew.lostSquare]);
     if (positive) {
       try {
         const pm = new Chess(fenBefore).move(san);

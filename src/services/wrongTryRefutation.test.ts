@@ -16,7 +16,7 @@ const FEN = '1r4k1/p2b1p1p/3ppbp1/q7/4P3/P1PQ1NPP/1r3PB1/R1R3K1 b - - 2 23';
 describe('readWrongTry — what a wrong try runs into', () => {
   it('names the refutation, from the board, in the weighing register', async () => {
     const r = await readWrongTry(FEN, 'R2b3', engineSays('d3d6', 66));
-    expect(r).toEqual(expect.objectContaining({ kind: 'refuted', text: 'R2b3? It lets them play Qxd6, winning your pawn on d6.', replyFrom: 'd3', replyTo: 'd6' }));
+    expect(r).toEqual(expect.objectContaining({ kind: 'refuted', text: 'R2b3? Then Qxd6 — they come out a pawn up.', replyFrom: 'd3', replyTo: 'd6' }));
   });
 
   it('a try that still wins is never called wrong', async () => {
@@ -28,13 +28,12 @@ describe('readWrongTry — what a wrong try runs into', () => {
 
   it('a quiet refutation says what their reply does (David 2026-10-10: tactics say why the try failed)', async () => {
     const r = await readWrongTry(FEN, 'R2b3', engineSays('e4e5', 66));
-    expect(r?.text).toBe('R2b3? It lets them play e5, which attacks the bishop on f6.');
+    expect(r?.text).toBe('R2b3? It lets them play e5, which attacks the bishop on f6 — and the chance is gone.');
   });
 
-  it('silent when the refutation is quiet — no vague sentence', async () => {
-    // a quiet reply that wins nothing concrete
+  it('a quiet reply that wins nothing concrete says the chance is gone (one teacher, 2026-10-11)', async () => {
     const r = await readWrongTry(FEN, 'R2b3', engineSays('g1h2', 66));
-    expect(r).toBeNull();
+    expect(r?.text).toBe('R2b3? Then Kh2 — and the chance is gone.');
   });
 
   it('a forced mate against the try is said as mate', async () => {

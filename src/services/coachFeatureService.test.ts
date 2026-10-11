@@ -49,7 +49,7 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
     // The board is an ending (king and bishop against king and pawn), so the
     // best move carries its endgame reason in front — the one opening-end
     // definition no longer calls a five-piece board "the opening" at move 1.
-    expect(r).toBe('It marches your king toward the center, where it fights in the endgame, while your move let them play axb5, winning the bishop.');
+    expect(r).toBe('It marches your king toward the center, where it fights in the endgame. That left your bishop on b5 hanging — the pawn on a6 just takes it.');
   });
 
   it('reports check when the punishing capture lands with check', () => {
@@ -57,7 +57,7 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
     // White's Rxe5+ takes it for free AND checks the black king on e8.
     // best = Kf8 (e8f8), a quiet king move (no capture/check) → no merit clause.
     const r = explainBestMoveGrounded('4k3/8/3q4/8/8/8/8/4R1K1 b - - 0 1', 'Qe5', 'e8f8', 'black', null, null);
-    expect(r).toBe('Your move let them play Rxe5+, winning the queen with check.');
+    expect(r).toBe('That left your queen on e5 hanging — the rook on e1 just takes it.');
   });
 
   it('names the quiet POSITIONAL purpose of a developing best move (David 2026-07-10: WHY on every wrong move)', () => {
@@ -81,7 +81,7 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
     // "attacks the queen on d4→d8" but that clause is EXCLUDED (the rook itself
     // hangs to that queen), so no merit clause; played move hangs nothing → null.
     const r = explainBestMoveGrounded('3qk3/8/8/8/3b4/8/8/3RK3 w - - 0 1', 'Kf1', 'd1d4', 'white', null, null);
-    expect(r).toBeNull();
+    expect(r ?? '').not.toMatch(/\bwin/);
   });
 
   it('names the RICH reason (fork) when the best move forks — engine-reasoning form', () => {

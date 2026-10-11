@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1633 lines · 9 exports · 13 importers · 15 tests · 0 audits**
+**1640 lines · 9 exports · 13 importers · 15 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,7 +29,7 @@
 ## Exports and every call site
 
 ### `prematureBreakWhy` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1140`
+- `src/services/coachFeatureService.ts:1141`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -53,7 +53,7 @@
 - `src/services/batch2Wiring.test.ts:53`
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
-- `src/services/coachFeatureService.ts:1975`
+- `src/services/coachFeatureService.ts:1976`
 - `src/services/exchangeIdeas.test.ts:207`
 - `src/services/forkTrick.test.ts:60`
 - `src/services/hangingVsUndefended.test.ts:11`
@@ -81,12 +81,12 @@
 - `src/services/reviewFullData.test.ts:452`
 - `src/services/reviewFullData.test.ts:471`
 - `src/services/reviewFullData.test.ts:487`
-- `src/services/reviewFullData.test.ts:517`
-- `src/services/reviewFullData.test.ts:538`
-- `src/services/reviewFullData.test.ts:548`
-- `src/services/reviewFullData.test.ts:563`
-- `src/services/reviewFullData.test.ts:587`
-- `src/services/reviewFullData.test.ts:610`
+- `src/services/reviewFullData.test.ts:518`
+- `src/services/reviewFullData.test.ts:539`
+- `src/services/reviewFullData.test.ts:549`
+- `src/services/reviewFullData.test.ts:564`
+- `src/services/reviewFullData.test.ts:588`
+- `src/services/reviewFullData.test.ts:611`
 - `src/services/reviewWalkCT.test.ts:49`
 - `src/services/reviewWalkCT.test.ts:69`
 - `src/services/reviewWalkCT.test.ts:86`
@@ -97,7 +97,7 @@
 - `src/test/teach02Wired.test.ts:66`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:5478`
+- `src/services/coachFeatureService.ts:5479`
 - `src/services/reviewFullData.test.ts:204`
 - `src/services/reviewFullData.test.ts:207`
 - `src/services/reviewFullData.test.ts:215`
@@ -108,11 +108,11 @@
 - `src/services/reviewNarrationFidelity.test.ts:141`
 
 ### `studentAnswer` (function) — 5 call sites
-- `src/services/reviewFullData.test.ts:503`
-- `src/services/reviewFullData.test.ts:508`
+- `src/services/reviewFullData.test.ts:504`
 - `src/services/reviewFullData.test.ts:509`
-- `src/services/slipAnswer.test.ts:19`
-- `src/services/slipAnswer.test.ts:20`
+- `src/services/reviewFullData.test.ts:510`
+- `src/services/slipAnswer.test.ts:16`
+- `src/services/slipAnswer.test.ts:17`
 
 ## Tests
 

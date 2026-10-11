@@ -132,6 +132,11 @@ const CO_OCCURRENCE: ReadonlySet<FundamentalId> = new Set<FundamentalId>([
   'no-plan',
 ]);
 
+/** A positional fundamental — one with no concrete punishing move behind it. */
+export function isPositionalFundamental(id: FundamentalId): boolean {
+  return CO_OCCURRENCE.has(id);
+}
+
 export interface PrincipleEvidence {
   /** Squares the verdict may name — every one is on the board. */
   squares: string[];

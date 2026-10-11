@@ -50,6 +50,10 @@ function presentTense(text: string): string {
     // A conditional ("Qxd4 would put the queen on d4, where …Nc6 hits it") is
     // about a board that never happened (recapture-choice lane, A2).
     /\bwould (?:put|leave|land|place|bring)\b/i,
+    // A move NOT played, said as a conditional ("the stronger move was Re8 —
+    // it would attack your rook on c8") describes the board BEFORE the move
+    // that was played, never the one this ply reads.
+    /\bit would\b/i,
   ];
   let cut = text.length;
   for (const re of markers) {
