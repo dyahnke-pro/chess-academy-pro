@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**583 lines · 8 exports · 16 importers · 11 tests · 46 audits**
+**602 lines · 8 exports · 17 importers · 12 tests · 46 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,6 +24,7 @@
 - `src/coach/dispatchCoachTurn.positional.test.ts`
 - `src/coach/dispatchCoachTurn.showLine.test.ts`
 - `src/coach/handWalk1009.test.ts`
+- `src/coach/hardQuestions.routing.test.ts`
 - `src/coach/lineOutcome.test.ts`
 - `src/coach/questionIntents.ts`
 - `src/services/coachApi.ts`
@@ -60,7 +61,7 @@
 ### `namedMoveTokens` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `readTurnInCode` (function) — 45 call sites
+### `readTurnInCode` (function) — 48 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:57`
 - `src/coach/chatTurnAnswers.test.ts:82`
 - `src/coach/chatTurnAnswers.test.ts:103`
@@ -101,6 +102,9 @@
 - `src/coach/handWalk1009.test.ts:332`
 - `src/coach/handWalk1009.test.ts:335`
 - `src/coach/handWalk1009.test.ts:354`
+- `src/coach/hardQuestions.routing.test.ts:29`
+- `src/coach/hardQuestions.routing.test.ts:36`
+- `src/coach/hardQuestions.routing.test.ts:42`
 - `src/coach/lineOutcome.test.ts:20`
 - `src/coach/lineOutcome.test.ts:38`
 - `src/services/openingIdea.test.ts:18`
@@ -117,6 +121,7 @@
 - `src/coach/dispatchCoachTurn.positional.test.ts`
 - `src/coach/dispatchCoachTurn.showLine.test.ts`
 - `src/coach/handWalk1009.test.ts`
+- `src/coach/hardQuestions.routing.test.ts`
 - `src/coach/lineOutcome.test.ts`
 - `src/services/openingIdea.test.ts`
 - `src/zzp3.test.ts`

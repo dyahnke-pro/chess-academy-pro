@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**427 lines · 10 exports · 8 importers · 8 tests · 0 audits**
+**432 lines · 10 exports · 8 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,7 +32,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `BoardEngine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setBoardEngineForTests` (function) — 18 call sites
+### `setBoardEngineForTests` (function) — 19 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:13`
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:18`
 - `src/coach/boardTurnAnswer.test.ts:18`
@@ -51,6 +51,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/dispatchCoachTurn.showLine.test.ts:104`
 - `src/coach/lineOutcome.test.ts:16`
 - `src/coach/lineOutcome.test.ts:33`
+- `src/coach/lineOutcome.test.ts:57`
 
 ### `answerBoardTurn` (function) — 15 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:30`
@@ -83,9 +84,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `fasterWinAnswer` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `lineOutcomeAnswer` (function) — 2 call sites
+### `lineOutcomeAnswer` (function) — 3 call sites
 - `src/coach/lineOutcome.test.ts:43`
 - `src/coach/lineOutcome.test.ts:50`
+- `src/coach/lineOutcome.test.ts:59`
 
 ## Tests
 

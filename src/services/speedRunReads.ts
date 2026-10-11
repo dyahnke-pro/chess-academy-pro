@@ -573,7 +573,10 @@ export function flexibleFirst(fen: string, lines: Lines): Read | null {
     const s2 = sanOf(fen, l.moves[0]);
     const p2 = s2 ? play(fen, s2) : null;
     if (!p2 || !s2 || p2.move.piece !== 'p' || p2.move.captured) continue;
-    return { promise: { key: `flex:${p2.move.to}`, piece: 'p', square: p2.move.to, say: `And now ${s2} — after the pieces, the way it should be.` }, idea: rot(fen, `Make the flexible move first — ${what} keeps your options; the pawn move can always come later, but a pawn can never go back.`, `Keep your options open — ${what} first; the pawn move will still be there, and a pawn move can't be taken back.`, `Commit the pawn last — ${what} now, the pawn later if you still want it.`), claim: 'srr:flexible-first', namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
+    // No payoff line: "And now h4 — the way it should be" praised the pawn move
+    // whenever it came, with no why and even when the engine rated it worse
+    // (re-walk 2026-10-11, 5.h4).
+    return { idea: rot(fen, `Make the flexible move first — ${what} keeps your options; the pawn move can always come later, but a pawn can never go back.`, `Keep your options open — ${what} first; the pawn move will still be there, and a pawn move can't be taken back.`, `Commit the pawn last — ${what} now, the pawn later if you still want it.`), claim: 'srr:flexible-first', namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
   }
   return null;
 }
