@@ -605,3 +605,12 @@ the real current entry chunk    200  application/javascript  unchanged
 - 🔴 RELATIVE PIECE VALUE — the coach counts fixed points (p1 n3 b3 r5 q9). It does not weigh a piece by its job on this board (good knight vs bad bishop, an active rook, "the exchange for a pawn" vs "a pawn down"). Needs its own computer, used by every material sentence.
 - 🔴 HARD-QUESTION SET AS A PERMANENT TEST — the 24 questions from the 2026-10-11 walk become a routing test, so a hard multi-part question can never silently land in the wrong lane again.
 - 🔴 NEXT (2026-10-11 re-walk, 14/20 right): flexible-first payoff fires only on the pawn it promised and only when good; chat answers BOTH halves of a two-part question; Q14 "was Bxc7 safe?" after it was played is refused as illegal (played move must read as played); Q16 "what does Rc8 threaten? show the line" replays a stale line. Then grade every computed line against the 8-point "very good" bar (true, concrete, why+line, one lead, 35–50 words, pieces not numbers, marks=words, no move unasked).
+- 🔴 REVIEW AUDIT (2026-10-11, David's phone, game chesscom-1040709576, build 0f60df0) — in this order:
+  1. Review ignores the record: all 25 plies decided on the cold-start prior (weakness/departure/capability terms 0) despite 8 evidence tags + 110 captures.
+  2. Decided-game narration about the wrong side: "their threat runs hxg3…" while you have mate in one; a battery described after Qxh2#. The mate-turn rule lives only in Learn's door — make it shared.
+  3. The game summary was dropped as overlapping speech and contradicts itself (turned at move 3 vs biggest swing at move 21).
+  4. Mistake tags often wrong: hung-material as a catch-all (castling, a 65cp h3); cpLoss=350 sentinel on missed mates; king-stuck-center on Kxd1; phase mislabels (move 5 = middlegame); ~20% unnamed. Fix, then re-tag stored games.
+  5. Review turns 445–559 chars (bar 35–50 words); the one-lead verdict rule isn't in Review.
+  6. "that was a great move" — praise with no why.
+  7. iOS engine stalls (12s ×2) with 4 sweep workers at depth 9; the sweep stopped at 36 of 50.
+- 🟠 ACCURACY GAP (same game): app 80% / no brilliant vs chess.com 93.4% + a brilliant. Compare the accuracy formula, the sweep depth (9), and the brilliant classification.
