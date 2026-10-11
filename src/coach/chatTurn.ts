@@ -371,7 +371,7 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   'threats': direct('what are they threatening / what is my threat (the threats on the board, either side)'),
   'develop-next': { gloss: 'which piece should I develop / bring out next', lane: 'best-move', answerer: 'live', canonical: fixed("what's my best move?") },
   'best-defence': { gloss: 'what is the OPPONENT\'s best defence / reply to a move ("what\'s their best defence?", "what if they don\'t take?", "how do they defend against Ng5?")', lane: 'best-move', answerer: 'live', canonical: fixed("what's my best move?") },
-  'line-outcome': { gloss: 'what happens after a LINE of two or more moves the student names, either side to move first ("calculate Nh5 Bg5 h6 Bh4 g5", "if Black plays c5 and I take dxc5, what then?", "after Rxh5 gxh5 Qxh5 who is better?") — put every named move, in order, as move referents', lane: 'none', answerer: 'live', canonical: null },
+  'line-outcome': { gloss: 'what happens after a LINE of two or more moves the student names, either side to move first ("calculate Nh5 Bg5 h6 Bh4 g5", "if Black plays c5, then dxc5, what then?", "after Rxh5 gxh5 Qxh5 who is better?") — put every named move, in order, as move referents', lane: 'none', answerer: 'live', canonical: null },
   'faster-win': { gloss: 'is there a faster, cleaner or simpler win than the best move', lane: 'alternatives', answerer: 'live', canonical: fixed('what else could I play here?') },
   'explain-last': direct('a follow-up about the coach\'s own last line ("stop what?", "what do you mean?")'),
   // Outside a lesson (which has its own "I don't know"), not knowing is a
