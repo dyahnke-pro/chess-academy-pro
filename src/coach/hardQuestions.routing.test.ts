@@ -32,6 +32,12 @@ describe('hard questions reach the right computer', () => {
     expect(validateChatTurn(t, b as never).ok).toBe(true);
   });
 
+  it('ply 2: "if I play c4 and you take" is the line c4 dxc4 — not a pawn on c4', () => {
+    const t = readTurnInCode('If I play c4 and you take, how do I win the pawn back?', at(2) as never)!;
+    expect(t.kind).toBe('line-outcome');
+    expect(t.referents.map((r) => (r as { san: string }).san)).toEqual(['c4', 'dxc4']);
+  });
+
   it('ply 20: "was g4 best, or Qh2?" compares the two where g4 was played', () => {
     const t = readTurnInCode('Was g4 best? The engine might prefer Qh2 — explain the difference.', at(20) as never)!;
     expect(t.kind).toBe('retrospective-move');

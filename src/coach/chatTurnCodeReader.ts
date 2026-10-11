@@ -333,6 +333,21 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
   // "Why not Nb5 hitting c7? Calculate Nb5 Na6." — when the student says
   // which line to calculate, the line is what follows that word; a square
   // named before it is the question, not a move.
+  // "If I play c4 and you take, how do I win the pawn back?" — a move and
+  // their capture on its square: the line is the move and that capture
+  // (hard-question re-walk 2026-10-11: read as a pawn standing on c4).
+  const offer = /\bif\s+i\s+(?:play|push|go)\s+([KQRBN]?[a-h]?[1-8]?x?[a-h][1-8])\b[^?]*?\b(?:you|they)\s+(?:take|capture)\b/i.exec(text);
+  if (offer) {
+    try {
+      const c = new Chess(board.fen);
+      const mine = c.move(offer[1]);
+      const take = mine ? c.moves({ verbose: true }).filter((m) => m.to === mine.to && m.captured)
+        .sort((a, b) => (CAPTURE_VALUE[a.piece] ?? 9) - (CAPTURE_VALUE[b.piece] ?? 9))[0] : null;
+      if (mine && take) {
+        return { kind: 'line-outcome', referents: [{ type: 'move', san: mine.san }, { type: 'move', san: take.san }], seat: null, topic: null };
+      }
+    } catch { /* not a move here */ }
+  }
   const calcAt = text.search(/\b(?:calculate|calc|the line|play out|show the line)\b/i);
   const lineSans = namedMoveTokens(calcAt >= 0 ? text.slice(calcAt) : text);
   if (lineSans.length >= 2 && LINE_CUE_RE.test(text) && playNamedLine(board.fen, lineSans)) {
