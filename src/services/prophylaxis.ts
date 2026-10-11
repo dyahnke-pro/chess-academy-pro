@@ -188,3 +188,9 @@ export function prophylaxisLine(p: Prophylaxis): string {
   const what = `the ${p.kind} with ${p.intent.san}`;
   return `${p.prevention.san} first — it stops ${what} before it lands. ${(() => { const f = prophylaxisProof(p).full; return `${openSentence(f)}.`; })()}`;
 }
+
+/** The advice with the move held: their idea, and that one move stops it. */
+export function prophylaxisIdea(p: Prophylaxis): string {
+  const verb = p.kind === 'pin' ? 'pin' : p.kind === 'fork' ? 'fork' : 'hit';
+  return `Watch ${p.intent.san} — it would ${verb} your ${NAME[p.victim.piece]} on ${p.victim.square}. One move stops it before it lands.`;
+}

@@ -2661,7 +2661,7 @@ export type RetrospectiveMoveRef =
   /** "why did you castle?" — that side's castling move, wherever it was. */
   | { kind: 'castle'; by: 'student' | 'coach' };
 
-const RETRO_VERDICT = String.raw`(?:so\s+|such\s+|really\s+|that\s+)?(?:good|bad|strong|weak|wrong|right|correct|necessary|forced|important|clever|smart|dumb|terrible|awful|great|brilliant|the\s+right\s+(?:move|call|idea)|a\s+(?:good|bad|strong|weak|great)\s+(?:move|idea|choice)|(?:a|an)\s+(?:mistake|blunder|inaccuracy|error|slip)|not\s+(?:good|best|right))`;
+const RETRO_VERDICT = String.raw`(?:so\s+|such\s+|really\s+|that\s+)?(?:good|bad|strong|weak|wrong|right|correct|necessary|forced|important|safe|sound|risky|okay|ok|best|clever|smart|dumb|terrible|awful|great|brilliant|the\s+right\s+(?:move|call|idea)|a\s+(?:good|bad|strong|weak|great)\s+(?:move|idea|choice)|(?:a|an)\s+(?:mistake|blunder|inaccuracy|error|slip)|not\s+(?:good|best|right))`;
 // A move object: SAN, a spoken piece+square, a capture on a square, castling,
 // or a pointer to a move already on the tape.
 // A NAMED move object: SAN, a spoken piece+square, a capture on a square, or

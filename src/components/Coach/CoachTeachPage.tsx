@@ -274,7 +274,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { getFavoriteOpenings, getOpeningById, searchOpenings } from '../../services/openingService';
 import type { OpeningRecord, OpeningVariation } from '../../types';
 import type { LiveState, TacticsLiveContext, AskOrigin } from '../../coach/types';
-import { dispatchCoachTurn, openTurnRead, isComputedAnswer, conversationFor, setPendingOffer, showLineAnswer, type TurnReadHandle } from '../../coach/dispatchCoachTurn';
+import { dispatchCoachTurn, openTurnRead, isComputedAnswer, conversationFor, setPendingOffer, showLineAnswer, asksBeyondShowMe, type TurnReadHandle } from '../../coach/dispatchCoachTurn';
 import type { ResolvedStep } from '../../coach/requestSteps';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
@@ -3293,6 +3293,9 @@ export function CoachTeachPage(): JSX.Element {
     // A game in a NAMED opening runs through Learn's play-a-line path, which
     // has no typed entry yet — leave the whole turn to it.
     if (steps.some((st) => st.action === 'start-now' || (st.action === 'play-game' && st.openingName))) return null;
+    // A question asked with "show me" goes to the door, which answers it and
+    // shows ITS line — never the last one (re-walk 2026-10-11, Q16).
+    if (steps.some((st) => st.action === 'show-line') && asksBeyondShowMe(said)) return null;
     const lines: string[] = [];
     let offer: Array<{ type: string; id: string }> | undefined;
     let teach: string | null = null;

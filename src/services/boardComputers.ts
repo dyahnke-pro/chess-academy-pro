@@ -19,7 +19,7 @@ import { NO_PROOF, squaresProof, type FactProof } from './proof';
 import type { FactStakes } from './factStakes';
 import type { SpokenLine } from './voicePackage';
 import { findPinBreaks, pinBreakLine, pinBreakProof } from './pinBreak';
-import { findProphylaxis, prophylaxisLine, prophylaxisProof } from './prophylaxis';
+import { findProphylaxis, prophylaxisLine, prophylaxisIdea, prophylaxisProof } from './prophylaxis';
 import { findEnablingMove, enablingMoveLine, enablingMoveProof } from './enablingMove';
 import { findTiedDefenders, newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
 import { obligationLifted, obligationLiftedLine } from './obligationLifted';
@@ -114,7 +114,9 @@ const WEAK_OWED = { not: 'owed — one-coach P3: the record keeps the proof' } a
 
 /** A structure read in the registry's one shape. */
 function structureRead(r: StructureRead): BoardRead {
-  return { text: r.text, proof: r.proof, squares: r.squares, key: r.key, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.proof.line ? { lines: [r.proof.line] } : {}) };
+  // A judgement that names the move carries its held form as the `idea`
+  // (Learn names no move unasked, David 2026-10-10).
+  return { text: r.text, proof: r.proof, squares: r.squares, key: r.key, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.proof.line ? { lines: [r.proof.line] } : {}), ...(r.heldForm ? { namesMove: true, idea: r.heldForm.text } : {}) };
 }
 const STRUCT_TACTICS = { not: 'a structural judgement is about a game\'s plan; a puzzle poses one tactic' } as const;
 const STRUCT_WEAK = { not: 'owed — the weakness record keeps tags, not the structure read; the held rows ride recordTeachingEvidence' } as const;
@@ -146,7 +148,10 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
     read: ({ fen, engineFirstMoves }) => safe(() => {
       const ph = findProphylaxis(fen);
       if (!ph || !engineFirstMoves.includes(`${ph.prevention.from}${ph.prevention.to}`)) return null;
-      return { text: prophylaxisLine(ph), proof: prophylaxisProof(ph), squares: ph.squares, key: `prophylaxis:${ph.intent.to}`, play: { from: ph.prevention.from, to: ph.prevention.to } };
+      return { text: prophylaxisLine(ph), proof: prophylaxisProof(ph), squares: ph.squares, key: `prophylaxis:${ph.intent.to}`, play: { from: ph.prevention.from, to: ph.prevention.to },
+        // Held: their idea and that one move stops it — never which move
+        // (easy walk 2026-10-11: "h3 first — it stops the pin" unasked).
+        namesMove: true, idea: prophylaxisIdea(ph) };
     }),
     surfaces: { learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },

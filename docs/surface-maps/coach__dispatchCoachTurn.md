@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**649 lines · 17 exports · 21 importers · 16 tests · 2 audits**
+**696 lines · 18 exports · 21 importers · 16 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -53,7 +53,7 @@
 ### `isServeParsedRouteOn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setChatTurnReaderForTests` (function) — 42 call sites
+### `setChatTurnReaderForTests` (function) — 43 call sites
 - `src/coach/chatKindContracts.test.ts:337`
 - `src/coach/chatKindContracts.test.ts:385`
 - `src/coach/chatKindContracts.test.ts:410`
@@ -70,14 +70,15 @@
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:23`
 - `src/coach/dispatchCoachTurn.positional.test.ts:20`
 - `src/coach/dispatchCoachTurn.positional.test.ts:23`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:20`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:23`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:45`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:47`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:59`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:72`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:76`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:96`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:21`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:24`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:46`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:48`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:60`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:73`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:77`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:97`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:125`
 - `src/coach/dispatchCoachTurn.test.ts:103`
 - `src/coach/dispatchCoachTurn.test.ts:115`
 - `src/coach/dispatchCoachTurn.test.ts:122`
@@ -102,18 +103,21 @@
 - `src/coach/dispatchCoachTurn.noBoard.test.ts:14`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:21`
 - `src/coach/dispatchCoachTurn.positional.test.ts:21`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:21`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:22`
 - `src/coach/dispatchCoachTurn.test.ts:94`
 - `src/coach/dispatchCoachTurn.test.ts:204`
 - `src/coach/dispatchCoachTurn.test.ts:222`
 - `src/coach/requestExecutor.test.ts:53`
 
 ### `lastLineFor` (function) — 2 call sites
-- `src/coach/dispatchCoachTurn.showLine.test.ts:50`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:74`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:51`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:75`
+
+### `asksBeyondShowMe` (function) — 1 call site
+- `src/components/Coach/CoachTeachPage.tsx:3298`
 
 ### `showLineAnswer` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3323`
+- `src/components/Coach/CoachTeachPage.tsx:3326`
 
 ### `conversationFor` (function) — 3 call sites
 - `src/coach/dispatchCoachTurn.test.ts:167`
@@ -133,18 +137,18 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `setPendingOffer` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3337`
-- `src/components/Coach/CoachTeachPage.tsx:11905`
-- `src/components/Coach/CoachTeachPage.tsx:13949`
+- `src/components/Coach/CoachTeachPage.tsx:3340`
+- `src/components/Coach/CoachTeachPage.tsx:11908`
+- `src/components/Coach/CoachTeachPage.tsx:13952`
 
 ### `openTurnRead` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3403`
+- `src/components/Coach/CoachTeachPage.tsx:3406`
 - `src/components/Coach/GameChatPanel.tsx:474`
 
 ### `isComputedAnswer` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7477`
+- `src/components/Coach/CoachTeachPage.tsx:7480`
 
-### `dispatchCoachTurn` (function) — 47 call sites
+### `dispatchCoachTurn` (function) — 48 call sites
 - `src/coach/chatKindContracts.test.ts:387`
 - `src/coach/chatKindContracts.test.ts:411`
 - `src/coach/chatKindContracts.test.ts:416`
@@ -154,10 +158,11 @@
 - `src/coach/dispatchCoachTurn.noBoard.test.ts:20`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:25`
 - `src/coach/dispatchCoachTurn.positional.test.ts:25`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:25`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:60`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:77`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:97`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:26`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:61`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:78`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:98`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:112`
 - `src/coach/dispatchCoachTurn.test.ts:33`
 - `src/coach/dispatchCoachTurn.test.ts:43`
 - `src/coach/dispatchCoachTurn.test.ts:52`

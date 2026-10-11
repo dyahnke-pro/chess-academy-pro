@@ -118,7 +118,7 @@ describe('re-walk 2026-10-11 — Q5, Q14, Q16', () => {
     expect(a.text).toMatch(/After …Nh5 and g4/);
   }, 60_000);
   it('Q14: a played move is never "not legal here"', async () => {
-    const a = await askAt('Was Bxc7 safe?', 28);
+    const a = await askAt('Was Bxc7 safe? What if Nxc3 first — calculate Nxc3 bxc3 Qxd5.', 28);
     expect(a.text).not.toMatch(/isn't legal/);
   }, 60_000);
   it('Q16: a question with "show the line" is answered, never an old replay', async () => {

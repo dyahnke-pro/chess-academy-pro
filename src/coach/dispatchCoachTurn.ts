@@ -122,6 +122,14 @@ const SHOW_LINE_ONLY_KINDS: ReadonlySet<string> = new Set(['command', 'chat', 'u
 /** Lanes that mean the words asked no question of their own. */
 const NO_QUESTION_LANES: ReadonlySet<FastPathLane> = new Set<FastPathLane>(['command', 'none', 'conversational-reply', 'stop']);
 
+/** Do the words still ask something once "show me" is taken out? The one
+ *  test, for the door and for Learn's own step runner (re-walk 2026-10-11,
+ *  Q16: "What does Rc8 threaten? Show the line…" replayed an old line). */
+export function asksBeyondShowMe(ask: string): boolean {
+  const rest = ask.replace(/\b(?:show me(?: the line)?|show the line|play it out|walk me through it)\b/gi, ' ');
+  return /\?|\b(?:what|why|how|which|is|are|can|does|did|was)\b/i.test(rest);
+}
+
 /** What "show me" answers: the line, or why there is none. */
 export function showLineAnswer(surface: CoachSurface): { text: string; line: WalkableLine | null } {
   const line = lastLineFor(surface);
@@ -438,10 +446,9 @@ async function dispatchCoachTurnOnce(
       // mate in one). Only a bare request plays the last line.
       // …or the words still ask something once the "show me" is taken out
       // (re-walk Q16: "What does Rc8 threaten? Show the line…" replayed an old line).
-      const rest = input.ask.replace(/\b(?:show me(?: the line)?|show the line|play it out|walk me through it)\b/gi, ' ');
       const asksToo = !SHOW_LINE_ONLY_KINDS.has(turn.kind)
         || !NO_QUESTION_LANES.has(fastPathLane(input.ask, { fen: input.liveState.fen }))
-        || /\?|\b(?:what|why|how|which|is|are|can|does|did|was)\b/i.test(rest);
+        || asksBeyondShowMe(input.ask);
       if (turn.steps.some((st) => st.action === 'show-line') && asksToo) {
         showAnswerLine = true;
       } else if (turn.steps.some((st) => st.action === 'show-line')) {

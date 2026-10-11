@@ -38,6 +38,13 @@ describe('hard questions reach the right computer', () => {
     expect(t.referents.map((r) => (r as { san: string }).san)).toEqual(['c4', 'dxc4']);
   });
 
+  it('easy walk: "What does Ba7 do?" is about their move, not the best move', () => {
+    const h = 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O Re1 a6 Bb3 Ba7'.split(' ');
+    const c = new Chess(); h.forEach((m) => c.move(m));
+    const t = readTurnInCode('What does Ba7 do?', { fen: c.fen(), history: h, studentColor: 'white' } as never)!;
+    expect(t.kind).toBe('what-did-their-move-change');
+  });
+
   it('ply 20: "was g4 best, or Qh2?" compares the two where g4 was played', () => {
     const t = readTurnInCode('Was g4 best? The engine might prefer Qh2 — explain the difference.', at(20) as never)!;
     expect(t.kind).toBe('retrospective-move');

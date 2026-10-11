@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**602 lines · 8 exports · 17 importers · 12 tests · 46 audits**
+**617 lines · 8 exports · 18 importers · 12 tests · 46 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,6 +23,7 @@
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts`
 - `src/coach/dispatchCoachTurn.positional.test.ts`
 - `src/coach/dispatchCoachTurn.showLine.test.ts`
+- `src/coach/dispatchCoachTurn.ts`
 - `src/coach/handWalk1009.test.ts`
 - `src/coach/hardQuestions.routing.test.ts`
 - `src/coach/lineOutcome.test.ts`
@@ -58,10 +59,10 @@
 ### `legalForOpponent` (function) — 1 call site
 - `src/coach/coachService.ts:1602`
 
-### `namedMoveTokens` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `namedMoveTokens` (function) — 1 call site
+- `src/coach/dispatchCoachTurn.ts:355`
 
-### `readTurnInCode` (function) — 48 call sites
+### `readTurnInCode` (function) — 49 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:57`
 - `src/coach/chatTurnAnswers.test.ts:82`
 - `src/coach/chatTurnAnswers.test.ts:103`
@@ -74,8 +75,8 @@
 - `src/coach/dispatchCoachTurn.positional.test.ts:47`
 - `src/coach/dispatchCoachTurn.positional.test.ts:48`
 - `src/coach/dispatchCoachTurn.positional.test.ts:49`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:32`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:36`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:33`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:37`
 - `src/coach/handWalk1009.test.ts:25`
 - `src/coach/handWalk1009.test.ts:30`
 - `src/coach/handWalk1009.test.ts:40`
@@ -104,7 +105,8 @@
 - `src/coach/handWalk1009.test.ts:354`
 - `src/coach/hardQuestions.routing.test.ts:29`
 - `src/coach/hardQuestions.routing.test.ts:36`
-- `src/coach/hardQuestions.routing.test.ts:42`
+- `src/coach/hardQuestions.routing.test.ts:44`
+- `src/coach/hardQuestions.routing.test.ts:49`
 - `src/coach/lineOutcome.test.ts:20`
 - `src/coach/lineOutcome.test.ts:38`
 - `src/services/openingIdea.test.ts:18`

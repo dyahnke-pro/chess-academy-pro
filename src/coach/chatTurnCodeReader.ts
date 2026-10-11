@@ -333,6 +333,21 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
   // "Why not Nb5 hitting c7? Calculate Nb5 Na6." — when the student says
   // which line to calculate, the line is what follows that word; a square
   // named before it is the question, not a move.
+  // "What does Ba7 do?" — a move ALREADY on the board (easy walk 2026-10-11:
+  // their …Ba7 was answered with the best move). Theirs → what their move
+  // changed; the student's own → that move, judged where it was played.
+  const does = /^\s*what\s+(?:does|did)\s+(?:the\s+move\s+|their\s+|my\s+)?(…?[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|O-O(?:-O)?)\s+(?:do|mean for|threaten|want|achieve)\b/i.exec(text);
+  const hist = board.history ?? [];
+  if (does && hist.length) {
+    const named = does[1].replace(/^…/, '').replace(/[+#]$/, '');
+    for (let i = hist.length - 1; i >= Math.max(0, hist.length - 2); i -= 1) {
+      if (hist[i].replace(/[+#!?]/g, '') !== named) continue;
+      const theirs = (i % 2 === 0) !== (board.studentColor === 'white');
+      return theirs
+        ? { kind: 'what-did-their-move-change', referents: [], seat: 'them', topic: null }
+        : { kind: 'retrospective-move', referents: [{ type: 'move', san: hist[i] }], seat: 'me', topic: null };
+    }
+  }
   // "If I play c4 and you take, how do I win the pawn back?" — a move and
   // their capture on its square: the line is the move and that capture
   // (hard-question re-walk 2026-10-11: read as a pawn standing on c4).
