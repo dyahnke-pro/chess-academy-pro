@@ -444,3 +444,15 @@ describe('a mate turn stays on the mate (hard-question walk 2026-10-11, 21.e6)',
     expect(d.spoke).not.toContain('register');
   });
 });
+
+describe('a verdict turn stays on the verdict (the "very good" bar, 2026-10-11)', () => {
+  it('Qg3+: the blunder and its why speak; the route aside waits', () => {
+    const F = '2r1qr1k/pp5p/8/4P3/4pN2/4P1Q1/bPP2P2/2KR2N1 w - - 2 21';
+    const d = decideTurn([
+      { lane: 'mistake', proof: NO_PROOF.stated, text: 'Qg3+ was a blunder — it let them go after your king.', fen: F, stakes: { points: 4, plies: 0 } },
+      { lane: 'planArc', proof: NO_PROOF.stated, text: "Don't park a piece on f3 — it's the first stop for your knight on g1.", fen: F, squares: ['f3', 'g1'] },
+    ]);
+    expect(d.spoke).toContain('mistake');
+    expect(d.spoke).not.toContain('planArc');
+  });
+});

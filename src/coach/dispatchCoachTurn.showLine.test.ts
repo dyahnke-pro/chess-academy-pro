@@ -1,3 +1,4 @@
+import { Chess } from 'chess.js';
 /**
  * "SHOW ME" PLAYS THE LAST PROOF (WO-CHAT-01). A student who heard a line
  * says "show me" / "play it out" and the board plays it — on every screen,
@@ -102,5 +103,27 @@ describe('hard walk 2026-10-11 — "was g4 best, or Qh2?"', () => {
     expect(a.servedIntent).toBe('board:compare-my-move');
     expect(a.text).toMatch(/^You played g4 there\./);
     setBoardEngineForTests(null);
+  }, 60_000);
+});
+
+describe('re-walk 2026-10-11 — Q5, Q14, Q16', () => {
+  const G = 'd4 d5 Bf4 Nf6 e3 g6 Nc3 Bg7 h4 O-O h5 Nxh5 Rxh5 gxh5 Qxh5 e6 Bd3 f5 g4 Nd7 gxf5 Nf6 Qh2 exf5 O-O-O Ne4 Bxc7 Qe8'.split(' ');
+  const fenAt = (n: number): string => { const c = new Chess(); for (const m of G.slice(0, n)) c.move(m); return c.fen(); };
+  const askAt = (q: string, n: number) => dispatchCoachTurn({
+    surface: 'game-chat', ask: q, origin: 'typed',
+    liveState: { surface: 'game-chat', fen: fenAt(n), whoseTurn: 'white', studentColor: 'white', moveHistory: G.slice(0, n), currentRoute: '/coach/teach' },
+  } as never, { maxToolRoundTrips: 1 });
+  it('Q5: the second half — the line — is answered too', async () => {
+    const a = await askAt('Was h4 sound? What after Nh5, can g4 kick it?', 10);
+    expect(a.text).toMatch(/After …Nh5 and g4/);
+  }, 60_000);
+  it('Q14: a played move is never "not legal here"', async () => {
+    const a = await askAt('Was Bxc7 safe?', 28);
+    expect(a.text).not.toMatch(/isn't legal/);
+  }, 60_000);
+  it('Q16: a question with "show the line" is answered, never an old replay', async () => {
+    setChatTurnReaderForTests(async () => ({ kind: 'command', referents: [], seat: null, topic: null, steps: [{ action: 'show-line', opening: null, side: null, account: null }] }) as never);
+    const a = await askAt('What does Rc8 threaten? Show the line if I ignore it with Be5.', 28);
+    expect(a.text).not.toMatch(/^Playing the line out/);
   }, 60_000);
 });

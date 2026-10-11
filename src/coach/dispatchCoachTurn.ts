@@ -26,7 +26,8 @@ import { Chess } from 'chess.js';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { unwrapSpineError } from '../services/sanitizeCoachText';
 import { COACH_OFFLINE_LINE } from './stockLine';
-import { answerBoardTurn, BOARD_ANSWERED_KINDS } from './boardTurnAnswer';
+import { answerBoardTurn, BOARD_ANSWERED_KINDS, lineOutcomeAnswer } from './boardTurnAnswer';
+import { namedMoveTokens } from './chatTurnCodeReader';
 import { coachService, type CoachServiceOptions } from './coachService';
 import type { CoachAskInput, CoachAnswer, CoachSurface } from './types';
 import type { WalkableLine } from '../types';
@@ -324,6 +325,41 @@ export async function dispatchCoachTurn(
   input: CoachAskInput,
   options: DispatchCoachTurnOptions = {},
 ): Promise<CoachAnswer> {
+  const answer = await dispatchCoachTurnOnce(input, options);
+  return withSecondPart(input, answer);
+}
+
+/**
+ * A TWO-PART QUESTION IS ANSWERED IN FULL (hard-question re-walk 2026-10-11:
+ * "Was h4 sound? What after Nh5, can g4 kick it?" was graded and the line
+ * never read). When the student also named a line of two or more moves that
+ * are not already on the board, and the answer did not play it out, the line
+ * computer adds what it comes to.
+ */
+async function withSecondPart(input: CoachAskInput, answer: CoachAnswer): Promise<CoachAnswer> {
+  const fen = input.liveState.fen;
+  const text = typeof answer.text === 'string' ? answer.text : '';
+  if (!fen || !text || /\bAfter\b/.test(text) || answer.autoWalk) return answer;
+  const parts = input.ask.split(/\?/).map((x) => x.trim()).filter(Boolean);
+  if (parts.length < 2) return answer;
+  const tape = new Set((input.liveState.moveHistory ?? []).map((h) => h.replace(/[+#!?]/g, '')));
+  for (const part of parts.slice(1)) {
+    const sans = namedMoveTokens(part).filter((t) => !tape.has(t));
+    if (sans.length < 2) continue;
+    const sc = input.liveState.studentColor ?? (fen.split(' ')[1] === 'b' ? 'black' : 'white');
+    const out: { lines?: WalkableLine[] } = {};
+    const more = await lineOutcomeAnswer({ kind: 'line-outcome', referents: sans.map((san) => ({ type: 'move' as const, san, played: false })), seat: null, topic: null },
+      { fen, history: input.liveState.moveHistory ?? [], studentColor: sc }, out).catch(() => null);
+    if (!more) continue;
+    return { ...answer, text: `${text} ${more}`, ...(!answer.lines?.length && out.lines?.length ? { lines: out.lines } : {}) };
+  }
+  return answer;
+}
+
+async function dispatchCoachTurnOnce(
+  input: CoachAskInput,
+  options: DispatchCoachTurnOptions = {},
+): Promise<CoachAnswer> {
   const startedAt = Date.now();
   const student = isStudentTurn(input);
   // SEVERAL ASKS IN ONE MESSAGE — split AT THE DOOR, so each part takes the
@@ -400,8 +436,12 @@ export async function dispatchCoachTurn(
       // answer proves is the one shown (hard walk 2026-10-11: "is there a
       // forced mate for me now? show me" replayed an old line and missed a
       // mate in one). Only a bare request plays the last line.
+      // …or the words still ask something once the "show me" is taken out
+      // (re-walk Q16: "What does Rc8 threaten? Show the line…" replayed an old line).
+      const rest = input.ask.replace(/\b(?:show me(?: the line)?|show the line|play it out|walk me through it)\b/gi, ' ');
       const asksToo = !SHOW_LINE_ONLY_KINDS.has(turn.kind)
-        || !NO_QUESTION_LANES.has(fastPathLane(input.ask, { fen: input.liveState.fen }));
+        || !NO_QUESTION_LANES.has(fastPathLane(input.ask, { fen: input.liveState.fen }))
+        || /\?|\b(?:what|why|how|which|is|are|can|does|did|was)\b/i.test(rest);
       if (turn.steps.some((st) => st.action === 'show-line') && asksToo) {
         showAnswerLine = true;
       } else if (turn.steps.some((st) => st.action === 'show-line')) {

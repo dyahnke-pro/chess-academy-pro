@@ -7,6 +7,7 @@
 // Pure: chess.js reads the pattern off the move; the refutation is the
 // engine's own line for that move, handed in (a multi-PV line), never
 // invented. An engine line is said short (proof.ts) and drawn in full.
+import { computeExchangeLedger, netPieceWords } from './exchangeLedger';
 import { Chess, type Square } from 'chess.js';
 import { MATERIAL_VALUE, sideMaterial } from './pieceValues';
 import { lineProofFromUci, type Proof } from './proof';
@@ -119,9 +120,14 @@ export function patternFails(fen: string, lines: readonly Line[], playedSan: str
     const end = (material(c, me) - material(c, them)) - startDiff;
     const lost = Math.max(-worst, -end) > 0 ? Math.min(-worst, -end) : 0;
     if ((!mated && lost < 1) || played < 2) continue;
-    const loses = mated ? 'the game to mate' : countWords(lost, { unit: true });
     const proof = lineProofFromUci(fen, plies.slice(0, played));
     if (!proof) continue;
+    // IN PIECES, NOT POINTS (David 2026-10-11): what changed hands, off the
+    // ledger of the same line — "a rook for a pawn" — a count only when no
+    // piece name is true.
+    const ledger = proof.line?.sans ? computeExchangeLedger(fen, proof.line.sans, me) : null;
+    const named = ledger?.settled ? netPieceWords(ledger.opponentWon, ledger.studentWon) : null;
+    const loses = mated ? 'the game to mate' : named ?? countWords(lost, { unit: true });
     const tgt = new Chess(fen).get(pat.target as Square);
     const tName = NAME[tgt?.type ?? 'p'];
     const cc = counter ? (them === 'b' ? `…${counter}` : counter) : null;

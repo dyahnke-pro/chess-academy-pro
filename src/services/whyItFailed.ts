@@ -31,6 +31,7 @@
  * shape, and inventing a geometry for them would teach the student to distrust
  * the ones that are real.
  */
+import { netPieceWords } from './exchangeLedger';
 import { sideToMoveAs } from './threatOut';
 import { gambitFile } from './inaccuracyCall';
 import { proofCut } from './exchangeLedger';
@@ -251,12 +252,16 @@ export function whyItFailed(args: {
     const recap = theirCaptures.get(mv.to) ?? null;
     if (recap) {
       const down = studentDown;
-      const pts = down === 1 ? '1 point' : `${down} points`;
+      // IN PIECES, NOT POINTS (David 2026-10-11): what changed hands, read off
+      // the ledger — "a rook for a pawn" — and a count only when no piece
+      // name is true.
+      const named = proof?.ledger ? netPieceWords(proof.ledger.opponentWon, proof.ledger.studentWon) : null;
+      const pts = named ?? (down === 1 ? 'a pawn' : `${down} points`);
       if (mv.captured) {
         return {
           kind: 'held-by-defender',
           squares: [mv.to, recap.sq],
-          line: `That took the ${NAME[mv.captured]} on ${mv.to}, but the ${NAME[recap.type]} on ${recap.sq} takes back and you come out ${pts} down.`,
+          line: `That took the ${NAME[mv.captured]} on ${mv.to}, but the ${NAME[recap.type]} on ${recap.sq} takes back${named ? ` — you lose ${named}` : ` and you come out ${pts} down`}.`,
         };
       }
       // "HANGING" MEANS THE PIECE GOES FOR AT MOST A PAWN (Learn walk oct3g,

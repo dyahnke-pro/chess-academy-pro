@@ -32,3 +32,13 @@ describe('the why of a move that let them attack the king', () => {
     expect(look.punishLine?.uci[0]).toBe('c8c2');
   });
 });
+
+describe('material in pieces, not points (David 2026-10-11)', () => {
+  it('Qxh6+ in puzzle 08cOZ: "you lose a rook for a pawn", never "4 points down"', async () => {
+    const { Chess } = await import('chess.js');
+    const { errorWhyFor } = await import('./inaccuracyCall');
+    const c = new Chess('4rr2/pp4pk/7p/8/P7/1q1P1NP1/3QP1K1/7R b - - 1 33'); c.move('Qe6');
+    const w = errorWhyFor({ fenBefore: c.fen(), playedSan: 'Qxh6+', moverColor: 'white', replyLineUci: ['e6h6', 'h1h6', 'h7h6'], quality: 'mistake', tense: 'present' });
+    expect(w?.line).toBe('That takes the pawn on h6, but the queen on e6 takes back — you lose a rook for a pawn.');
+  });
+});

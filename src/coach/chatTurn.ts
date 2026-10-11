@@ -274,7 +274,9 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   'why-best-move': { gloss: 'why is the engine\'s best move best', lane: 'why-best-move', answerer: 'live', canonical: aboutNamedMove('why is that the best move?') },
   alternatives: { gloss: 'what other moves are worth considering', lane: 'alternatives', answerer: 'live', canonical: null },
   'candidate-move': { gloss: 'is a NAMED move good / what happens if I play it', lane: 'candidate-move', answerer: 'live',
-    canonical: (t) => { const m = firstMove(t); return m ? `is ${m} good here?` : null; } },
+    // A move already played is judged where it was played (hard-question
+    // re-walk 2026-10-11, Q14: "was Bxc7 safe?" got "Bxc7 isn't legal here").
+    canonical: (t) => { const m = firstMoveRef(t); return m ? (m.played ? `how good was ${m.san}?` : `is ${m.san} good here?`) : null; } },
   'compare-moves': { gloss: 'which of two named moves is better', lane: 'compare-moves', answerer: 'live',
     canonical: (t) => { const ms = t.referents.filter((r) => r.type === 'move') as Array<{ san: string }>; return ms.length >= 2 ? `${ms[0].san} or ${ms[1].san}?` : null; } },
   plan: { gloss: 'what is the plan here', lane: 'plan', answerer: 'live', canonical: fixed("what's my plan here?") },

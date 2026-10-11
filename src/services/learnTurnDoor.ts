@@ -451,11 +451,18 @@ export function decideTurn(
   const mateValue = stakeValue({ points: MATE_POINTS, plies: 12 }) ?? Infinity;
   const isMateFact = (x: { fact: VoiceFact; lane: LearnLane }): boolean => stakeOf(x.lane, x.fact.text) >= mateValue;
   const mateTurn = survivors.some((x) => !subsumed.has(x) && isMateFact(x));
+  const verdict = survivors.find((x) => x.lane === 'mistake' && !subsumed.has(x)) ?? null;
   const keep: VoiceFact[] = [];
   const spoke: LearnLane[] = [];
   const held: LearnLane[] = [];
   for (const x of survivors) {
     if (mateTurn && !DANGER_LANES.has(x.lane) && !isMateFact(x)) { held.push(x.lane); continue; }
+    // A VERDICT TURN STAYS ON THE VERDICT (David 2026-10-11, the "very good"
+    // bar: 35–50 words, one lead). When the student's move is graded, the
+    // grade, its cost ('but' beats) and any danger speak; a plan, a route or a
+    // method aside worth less than the verdict waits for a calm move.
+    if (verdict && x !== verdict && !DANGER_LANES.has(x.lane) && DNA_BEAT[x.lane] !== 'but'
+      && stakeOf(x.lane, x.fact.text) < stakeOf(verdict.lane, verdict.fact.text)) { held.push(x.lane); continue; }
     // A DESCRIPTION — nothing at stake, from a lane that describes the board
     // (or an unstaked board-read riding position facts) — speaks only as
     // SUPPORT: it must touch the lead's squares AND add one of its own. "Your
