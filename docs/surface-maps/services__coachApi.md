@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7168 lines · 41 exports · 54 importers · 60 tests · 19 audits**
+**7192 lines · 41 exports · 54 importers · 60 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,10 +16,10 @@
 - **🔒🔒 `main` IS THE FREE WEB APP. IT DOES **NOT** REACH PAYING CUSTOMERS — THE APP STORE DOES (David 2026-08-15, emphatic: "Main does not reach paying customers!! That's the App Store. Lock that in tired of saying this crap.").** (CLAUDE.md:3598) — names `voiceFacts`
 - **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:3939) — names `coachApi`, `voiceFacts`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4248) — names `voiceFacts`
-- **Do NOT** (CLAUDE.md:5408) — names `coachApi`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6162) — names `voiceFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6305) — names `coachApi`, `voiceFacts`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6325) — names `coachApi`, `translateToEnglish`, `voiceFacts`
+- **Do NOT** (CLAUDE.md:5397) — names `coachApi`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6151) — names `voiceFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6294) — names `coachApi`, `voiceFacts`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6314) — names `coachApi`, `translateToEnglish`, `voiceFacts`
 
 ## Who calls in
 
@@ -292,9 +292,9 @@
 - `src/services/coachFeatureService.ts:445`
 - `src/services/coachFeatureService.ts:584`
 - `src/services/coachFeatureService.ts:585`
-- `src/services/coachFeatureService.ts:5291`
-- `src/services/coachFeatureService.ts:5444`
-- `src/services/coachLaneWiring.test.ts:144`
+- `src/services/coachFeatureService.ts:5292`
+- `src/services/coachFeatureService.ts:5445`
+- `src/services/coachLaneWiring.test.ts:146`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
 - `src/services/contentGenerationService.ts:134`
@@ -353,7 +353,7 @@
 - `src/services/coachApi.currentAsk.test.ts:51`
 - `src/services/coachApi.currentAsk.test.ts:56`
 
-### `getCoachChatResponse` (function) — 26 call sites
+### `getCoachChatResponse` (function) — 28 call sites
 - `scripts/audit-coach-master-integration.mjs:327`
 - `scripts/audit-coach-master-integration.mjs:360`
 - `scripts/audit-coach-master-integration.mjs:413`
@@ -362,6 +362,8 @@
 - `src/services/coachApi.boardVerdict.integration.test.ts:69`
 - `src/services/coachApi.boardVerdict.integration.test.ts:118`
 - `src/services/coachApi.boardVerdict.integration.test.ts:132`
+- `src/services/coachApi.boardVerdict.integration.test.ts:148`
+- `src/services/coachApi.boardVerdict.integration.test.ts:169`
 - `src/services/coachApi.master-integration.test.ts:141`
 - `src/services/coachApi.master-integration.test.ts:161`
 - `src/services/coachApi.master-integration.test.ts:179`

@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3568 lines · 110 exports · 52 importers · 43 tests · 4 audits**
+**3576 lines · 111 exports · 53 importers · 43 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6261) — names `questionIntents`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6325) — names `questionIntents`
+- **The standard post-deploy ritual** (CLAUDE.md:6250) — names `questionIntents`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6314) — names `questionIntents`
 
 ## Who calls in
 
@@ -20,6 +20,7 @@
 - `src/coach/batteryRouting.test.ts`
 - `src/coach/boardQuestions.ts`
 - `src/coach/chatTurn.ts`
+- `src/coach/chatTurnCodeReader.ts`
 - `src/coach/coachService.ts`
 - `src/coach/dispatchCoachTurn.ts`
 - `src/coach/followUp.ts`
@@ -80,8 +81,8 @@
 - `src/coach/askSource.test.ts:31`
 - `src/coach/askSource.test.ts:32`
 - `src/coach/coachService.ts:537`
-- `src/coach/dispatchCoachTurn.ts:133`
-- `src/coach/dispatchCoachTurn.ts:179`
+- `src/coach/dispatchCoachTurn.ts:150`
+- `src/coach/dispatchCoachTurn.ts:196`
 
 ### `coachSurfaceToRoute` (function) — 2 call sites
 - `src/coach/coachService.ts:1861`
@@ -261,7 +262,7 @@
 ### `compareMovesAsk` (function) — 3 call sites
 - `src/coach/chatTurn.ts:122`
 - `src/coach/coachService.ts:2478`
-- `src/services/coachApi.ts:2582`
+- `src/services/coachApi.ts:2600`
 
 ### `captureOnAsk` (function) — 2 call sites
 - `src/coach/coachService.ts:1746`
@@ -319,32 +320,35 @@
 - `src/coach/tacticsProgressQuestion.test.ts:37`
 - `src/components/Coach/CoachTeachPage.tsx:5300`
 
+### `isMatePatternNameQuestion` (function) — 1 call site
+- `src/services/trainingAidRouter.ts:128`
+
 ### `isMateQuestion` (function) — 8 call sites
 - `src/coach/batteryRouting.test.ts:102`
 - `src/coach/batteryRouting.test.ts:106`
 - `src/coach/batteryRouting.test.ts:109`
 - `src/coach/coachService.ts:1469`
-- `src/services/coachApi.ts:2588`
-- `src/services/coachApi.ts:6376`
+- `src/services/coachApi.ts:2606`
+- `src/services/coachApi.ts:6437`
 - `src/services/endgameRuleAnswer.test.ts:87`
 - `src/services/endgameRuleAnswer.test.ts:88`
 
 ### `isWhoseTurnQuestion` (function) — 4 call sites
 - `src/coach/batteryRouting.test.ts:120`
 - `src/coach/batteryRouting.test.ts:123`
-- `src/services/coachApi.ts:2588`
-- `src/services/coachApi.ts:2610`
+- `src/services/coachApi.ts:2606`
+- `src/services/coachApi.ts:2628`
 
 ### `isLiveColorQuestion` (function) — 4 call sites
 - `src/coach/batteryRouting.test.ts:128`
 - `src/coach/batteryRouting.test.ts:132`
-- `src/services/coachApi.ts:2588`
-- `src/services/coachApi.ts:2614`
+- `src/services/coachApi.ts:2606`
+- `src/services/coachApi.ts:2632`
 
 ### `isDrawQuestion` (function) — 3 call sites
 - `src/coach/batteryRouting.test.ts:137`
 - `src/coach/batteryRouting.test.ts:140`
-- `src/services/coachApi.ts:2588`
+- `src/services/coachApi.ts:2606`
 
 ### `isPositionAssessmentQuestion` (function) — 6 call sites
 - `src/coach/coachService.ts:1474`
@@ -364,7 +368,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `endgameRuleMaterial` (function) — 2 call sites
-- `src/services/coachApi.ts:3973`
+- `src/services/coachApi.ts:4018`
 - `src/services/endgameRuleAnswer.test.ts:30`
 
 ### `isEndgameQuestion` (function) — 10 call sites
@@ -383,7 +387,7 @@
 - `src/coach/questionIntents.test.ts:571`
 - `src/coach/questionIntents.test.ts:579`
 - `src/coach/questionIntents.test.ts:585`
-- `src/services/coachApi.ts:6573`
+- `src/services/coachApi.ts:6634`
 
 ### `isEndgameWeaknessQuestion` (function) — 3 call sites
 - `src/coach/questionIntents.test.ts:591`
@@ -444,7 +448,7 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:94`
 
 ### `fundamentalsTopicFromText` (function) — 6 call sites
-- `src/services/coachApi.ts:5491`
+- `src/services/coachApi.ts:5543`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:47`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:48`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:49`
@@ -484,7 +488,7 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:143`
 
 ### `famousGameFromText` (function) — 2 call sites
-- `src/services/coachApi.ts:5446`
+- `src/services/coachApi.ts:5498`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:135`
 
 ### `isProgressQuestion` (function) — 27 call sites
@@ -732,7 +736,8 @@
 - `src/coach/questionIntents.routerE.test.ts:201`
 - `src/coach/questionIntents.routerE.test.ts:203`
 
-### `isCompareMyMoveQuestion` (function) — 2 call sites
+### `isCompareMyMoveQuestion` (function) — 3 call sites
+- `src/coach/chatTurnCodeReader.ts:527`
 - `src/coach/questionIntents.compareMyMove.test.ts:25`
 - `src/coach/questionIntents.compareMyMove.test.ts:41`
 
@@ -774,7 +779,7 @@
 
 ### `isTransferGapQuestion` (function) — 2 call sites
 - `src/components/Coach/CoachTeachPage.tsx:5516`
-- `src/services/trainingAidRouter.ts:130`
+- `src/services/trainingAidRouter.ts:133`
 
 ### `isSkillRadarQuestion` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:5516`
@@ -827,7 +832,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `positionalTopic` (function) — 7 call sites
-- `src/coach/dispatchCoachTurn.ts:396`
+- `src/coach/dispatchCoachTurn.ts:493`
 - `src/coach/pass3Questions.test.ts:40`
 - `src/coach/questionIntents.allLanes.test.ts:89`
 - `src/coach/questionIntents.allLanes.test.ts:90`
@@ -872,7 +877,7 @@
 
 ### `buildQuestionGrounding` (function) — 44 call sites
 - `src/coach/chatTurn.ts:150`
-- `src/coach/chatTurn.ts:703`
+- `src/coach/chatTurn.ts:750`
 - `src/coach/coachService.ts:1310`
 - `src/coach/groundingParity.test.ts:40`
 - `src/coach/questionIntents.allLanes.test.ts:44`
@@ -933,7 +938,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `splitMultiAsk` (function) — 5 call sites
-- `src/coach/dispatchCoachTurn.ts:317`
+- `src/coach/dispatchCoachTurn.ts:334`
 - `src/coach/pass3Questions.test.ts:50`
 - `src/coach/pass3Questions.test.ts:54`
 - `src/coach/pass3Questions.test.ts:55`

@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**558 lines · 7 exports · 15 importers · 10 tests · 46 audits**
+**583 lines · 8 exports · 16 importers · 11 tests · 46 audits**
 
 ## Locked rules that govern this surface
 
 - **⏰ Standing notes** (CLAUDE.md:3188) — names `Action`
 - **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5008) — names `Action`
-- **Standard post-deploy audit ritual** (CLAUDE.md:6218) — names `Action`
+- **Standard post-deploy audit ritual** (CLAUDE.md:6207) — names `Action`
 
 ## Who calls in
 
@@ -24,6 +24,7 @@
 - `src/coach/dispatchCoachTurn.positional.test.ts`
 - `src/coach/dispatchCoachTurn.showLine.test.ts`
 - `src/coach/handWalk1009.test.ts`
+- `src/coach/lineOutcome.test.ts`
 - `src/coach/questionIntents.ts`
 - `src/services/coachApi.ts`
 - `src/services/openingIdea.test.ts`
@@ -34,7 +35,7 @@
 
 ### `Ask` (type) — 2 call sites
 - `src/components/Coach/CoachGamePage.tsx:5428`
-- `src/components/Coach/CoachGameReview.tsx:3860`
+- `src/components/Coach/CoachGameReview.tsx:3870`
 
 ### `Action` (type) — 1 call site
 - `scripts/audit-punish-gems-loop.mjs:821`
@@ -47,16 +48,19 @@
 - `src/coach/chatTurnCodeReader.test.ts:19`
 - `src/coach/chatTurnCodeReader.test.ts:22`
 - `src/coach/chatTurnCodeReader.test.ts:23`
-- `src/services/coachApi.ts:2194`
-- `src/services/whyNotLegal.ts:182`
+- `src/services/coachApi.ts:2212`
+- `src/services/whyNotLegal.ts:221`
 
 ### `pointsAtThisBoard` (function) — 1 call site
-- `src/coach/questionIntents.ts:1656`
+- `src/coach/questionIntents.ts:1664`
 
 ### `legalForOpponent` (function) — 1 call site
 - `src/coach/coachService.ts:1602`
 
-### `readTurnInCode` (function) — 43 call sites
+### `namedMoveTokens` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `readTurnInCode` (function) — 45 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:57`
 - `src/coach/chatTurnAnswers.test.ts:82`
 - `src/coach/chatTurnAnswers.test.ts:103`
@@ -97,6 +101,8 @@
 - `src/coach/handWalk1009.test.ts:332`
 - `src/coach/handWalk1009.test.ts:335`
 - `src/coach/handWalk1009.test.ts:354`
+- `src/coach/lineOutcome.test.ts:20`
+- `src/coach/lineOutcome.test.ts:38`
 - `src/services/openingIdea.test.ts:18`
 - `src/services/openingIdea.test.ts:20`
 - `src/zzp3.test.ts:12`
@@ -111,6 +117,7 @@
 - `src/coach/dispatchCoachTurn.positional.test.ts`
 - `src/coach/dispatchCoachTurn.showLine.test.ts`
 - `src/coach/handWalk1009.test.ts`
+- `src/coach/lineOutcome.test.ts`
 - `src/services/openingIdea.test.ts`
 - `src/zzp3.test.ts`
 

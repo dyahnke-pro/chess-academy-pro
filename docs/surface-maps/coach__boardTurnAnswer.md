@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**371 lines · 9 exports · 7 importers · 6 tests · 0 audits**
+**427 lines · 10 exports · 8 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,6 +19,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts`
 - `src/coach/dispatchCoachTurn.ts`
 - `src/coach/handWalk1009.test.ts`
+- `src/coach/lineOutcome.test.ts`
 
 ## Exports and every call site
 
@@ -31,7 +32,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `BoardEngine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setBoardEngineForTests` (function) — 14 call sites
+### `setBoardEngineForTests` (function) — 18 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:13`
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:18`
 - `src/coach/boardTurnAnswer.test.ts:18`
@@ -46,8 +47,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/developNext.test.ts:64`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:24`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:32`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:92`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:104`
+- `src/coach/lineOutcome.test.ts:16`
+- `src/coach/lineOutcome.test.ts:33`
 
-### `answerBoardTurn` (function) — 14 call sites
+### `answerBoardTurn` (function) — 15 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:30`
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:36`
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:44`
@@ -61,7 +66,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/boardTurnAnswer.test.ts:72`
 - `src/coach/boardTurnAnswer.test.ts:78`
 - `src/coach/boardTurnAnswer.test.ts:82`
-- `src/coach/dispatchCoachTurn.ts:431`
+- `src/coach/dispatchCoachTurn.ts:478`
+- `src/coach/dispatchCoachTurn.ts:532`
 
 ### `theirPlanAnswer` (function) — 1 call site
 - `src/coach/handWalk1009.test.ts:65`
@@ -77,6 +83,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `fasterWinAnswer` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `lineOutcomeAnswer` (function) — 2 call sites
+- `src/coach/lineOutcome.test.ts:43`
+- `src/coach/lineOutcome.test.ts:50`
+
 ## Tests
 
 - `src/coach/boardTurnAnswer.hardWalk.test.ts`
@@ -84,7 +94,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/developNext.test.ts`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts`
+- `src/coach/dispatchCoachTurn.showLine.test.ts`
 - `src/coach/handWalk1009.test.ts`
+- `src/coach/lineOutcome.test.ts`
 
 ## Audits that reach it
 
