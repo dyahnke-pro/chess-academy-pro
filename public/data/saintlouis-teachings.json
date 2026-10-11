@@ -1,10 +1,11 @@
 {
- "generatedAt": "2026-10-03T19:42:14.137Z",
- "videosDistilled": 1,
+ "generatedAt": "2026-10-11T19:13:44.148Z",
+ "videosDistilled": 2,
  "v2VideoIds": [
+  "VFepT8_tMXA",
   "zf9vaqXrYvM"
  ],
- "noteCount": 59,
+ "noteCount": 96,
  "notes": [
   {
    "id": "sl-1l5qass1i6dies",
@@ -1106,6 +1107,682 @@
     "yt:zf9vaqXrYvM"
    ],
    "t": 3830.76
+  },
+  {
+   "id": "sl-1491dqg3bya1i",
+   "lineSan": [],
+   "opening": null,
+   "phase": "opening",
+   "explains": "In this Sicilian structure, White has developed harmoniously and is preparing d4, while Black's standard antidote is to play e5, controlling the d4 square and preventing White's central break.",
+   "teaches": "Against a Sicilian setup where White aims for d4, Black should claim space with e5, using pawns and pieces to control key central squares.",
+   "plans": "Black can follow up with d6, Be6, Be7, and eventually d5 to challenge White's center.",
+   "concepts": [
+    "sicilian-defense",
+    "central-control",
+    "pawn-structure"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 2.08
+  },
+  {
+   "id": "sl-1l8q51hmbqql",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "After White plays e5, Black must decide where to route the knight. Ng4 is active, attacking e5 and creating pressure on f2, while also being ready to drop back to h6 if White plays h3.",
+   "teaches": "When a pawn advance like e5 attacks your knight, look for an active square that maintains pressure and keeps flexibility, rather than retreating passively.",
+   "plans": "Black can continue with Ng4, and if White plays h3, retreat to h6, keeping an eye on f2 and the e5 pawn.",
+   "concepts": [
+    "knight-maneuvers",
+    "piece-activity",
+    "pawn-tension"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 2.08
+  },
+  {
+   "id": "sl-5cgpuw18f9d6c",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "White's Bb5 is a subtle move that adds pressure to the position, potentially leading to exchanges that clarify the pawn structure.",
+   "teaches": "Even quiet developing moves can carry hidden threats; always assess how they affect the balance of the position and potential exchanges.",
+   "plans": "White may aim to exchange on c6 or d7, altering the pawn structure and creating imbalances.",
+   "concepts": [
+    "piece-pressure",
+    "exchange-ideas",
+    "positional-play"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 2.08
+  },
+  {
+   "id": "sl-15wb33g13w7f6",
+   "lineSan": [],
+   "opening": null,
+   "phase": "opening",
+   "explains": "In the Sicilian with Bb5, White's bishop pressures the knight on c6 and indirectly contests the e5 pawn. The move Bb5 is easy to underestimate because it creates concrete threats and sets up a standard exchange on c6.",
+   "teaches": "When a bishop pins or pressures a knight that defends a central pawn, the opponent must constantly reckon with the exchange on c6, which can alter the pawn structure and dark-square control.",
+   "plans": "White aims to trade on c6 at the right moment; if Black recaptures with the b-pawn, White will maneuver slowly, while if Black recaptures with the queen, White may strike with d4 and d5.",
+   "concepts": [
+    "sicilian",
+    "bishop-pin",
+    "pawn-structure",
+    "dark-squares"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 465.52
+  },
+  {
+   "id": "sl-1ed6l7vze14az",
+   "lineSan": [],
+   "opening": null,
+   "phase": "opening",
+   "explains": "After Bb5, Black often plays ...f6 to challenge the e5 pawn without touching the d-pawn. Playing ...e6 instead can be positionally damaging because White can trade on c6 and then set up with f4, Nf3, d3, leaving Black's light-squared bishop passive and White dominating the dark squares.",
+   "teaches": "In these Sicilian structures, ...f6 is the standard way to contest the center; moving the d-pawn too early can create a pawn island and leave the c8 bishop without a future.",
+   "plans": "Black should meet Bb5 with ...f6, while White, if Black plays ...e6, should trade on c6 and then build a clamp with f4 and d3.",
+   "concepts": [
+    "sicilian",
+    "pawn-lever",
+    "pawn-island",
+    "dark-square-control"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 465.52
+  },
+  {
+   "id": "sl-1wicrf8cyqcqs",
+   "lineSan": [],
+   "opening": null,
+   "phase": "opening",
+   "explains": "After ...f6, White should not rush to capture on f6. Instead, the correct approach is to take on c6 first, and if Black recaptures with ...bxc6, White should then play d4 to open lines and fight for the initiative.",
+   "teaches": "When facing ...f6 in this Sicilian line, the exchange on c6 should come before any pawn grab; the resulting structure gives White lasting pressure against the dark squares.",
+   "plans": "White should play Bxc6 and, after ...bxc6, follow with d4, aiming to exploit the weakened dark squares and the half-open position.",
+   "concepts": [
+    "sicilian",
+    "exchange",
+    "pawn-break",
+    "initiative"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 465.52
+  },
+  {
+   "id": "sl-1mtlyflvwnbd1",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "After the exchange on c6 and ...bxc6, White must address the knight on e5. Playing h3 is important to prevent ...Nh6 and to prepare a favorable trade. Black should not retreat with ...Nh6 but should capture on e5, after which White recaptures and then uses the rook on e5 and queen to h5 to regain the pawn.",
+   "teaches": "When a knight is entrenched on e5, it should not be left stranded; h3 secures its retreat and forces Black to make a concession. The resulting queen sortie to h5 can recover material and lead to a favorable endgame.",
+   "plans": "White plays h3, then after ...Nxe5, recaptures and follows with Qh5; after ...g6, takes on e5 and castles, reaching a position where Black struggles to achieve the ...d6 and ...e5 setup.",
+   "concepts": [
+    "knight-outpost",
+    "pawn-recovery",
+    "queen-sortie",
+    "castling"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 465.52
+  },
+  {
+   "id": "sl-1x9pgj8gqvz42",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "In the resulting position, Black's bishop on e7 is the key defensive piece holding the position together. If White can eliminate it without allowing counterplay, Black's structure becomes vulnerable.",
+   "teaches": "Identifying the opponent's critical defender is often the first step in converting a positional advantage; removing that piece can cause the whole position to collapse.",
+   "plans": "White should look for ways to trade off the bishop on e7, perhaps by maneuvering a knight or bishop to challenge it, while Black must find active counterplay to avoid slow suffocation.",
+   "concepts": [
+    "key-defender",
+    "piece-elimination",
+    "positional-squeeze"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 465.52
+  },
+  {
+   "id": "sl-grfngg3haqc",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "When the opponent has a bishop on e7 that is the sole defender holding their position together, removing it without allowing them to free themselves with ...d6 and ...e5 can leave them without counterplay.",
+   "teaches": "Identify the key defensive piece in the opponent's camp; if you can eliminate it while preventing their freeing pawn breaks, the rest often plays itself.",
+   "plans": "Look for ways to trade off or deflect the key defender, and keep the opponent's central pawn breaks under control.",
+   "concepts": [
+    "key-defender",
+    "prophylaxis",
+    "piece-elimination"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1001.12
+  },
+  {
+   "id": "sl-w82sd21y4jsq2",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "If the opponent gets a free hand to play ...d6 and ...e5, they equalize the center and free their game. Playing d4 yourself can surrender central control rather than fight for it.",
+   "teaches": "Preventing the opponent's freeing pawn breaks is often more important than grabbing space; sometimes a modest move like b3 is better than pushing d4.",
+   "plans": "Keep the central tension and watch for the right moment to challenge the opponent's center without giving them counterplay.",
+   "concepts": [
+    "central-control",
+    "pawn-breaks",
+    "prophylaxis"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1001.12
+  },
+  {
+   "id": "sl-k3b9abuwzokj",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "A knight on a4 can become a nuisance if the opponent plays a positionally careless move like ...d5, so Black should first castle and only then consider central expansion.",
+   "teaches": "Before committing to a central pawn break, ensure your king is safe and your pieces are coordinated; a premature break can leave you vulnerable to a knight sortie.",
+   "plans": "Castle first, then prepare ...d6 and ...e5 under better circumstances.",
+   "concepts": [
+    "king-safety",
+    "knight-outpost",
+    "timing"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1001.12
+  },
+  {
+   "id": "sl-nu97v1u7hyn5",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "Black errs with ...Bd3, trying to wall off the d-file and force favorable exchanges, but neglecting checkmating threats. Castling or ...Qg4 would have been better to reduce tension and address king safety.",
+   "teaches": "Always prioritize king safety and neutralizing immediate threats before pursuing positional or material gains.",
+   "plans": "After ...Bd3, White can exploit the exposed king; Black should have consolidated with ...Qg4 or castled.",
+   "concepts": [
+    "king-safety",
+    "tactical-awareness",
+    "defense",
+    "blunder"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 2230.96
+  },
+  {
+   "id": "sl-t6ngp71jnagbf",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "After ...e5 and ...Bg4, the pin on the knight can be awkward because White lacks time to reorganize with Nb1-d2. Playing Nd2 and preparing Nc4 addresses the pin and repositions the knight.",
+   "teaches": "When a pin restricts your pieces, look for ways to break it by rerouting the pinned piece to a better square, even if it takes a few moves.",
+   "plans": "Continue with Nd2 and Nc4 to challenge the pin and activate the knight.",
+   "concepts": [
+    "pin",
+    "piece-activity",
+    "knight-maneuver"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1001.12
+  },
+  {
+   "id": "sl-g4f5k3mp7nxf",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "A single timing error allowed Black to seize the initiative. Black provokes weaknesses and improves piece placement while White fails to respond actively.",
+   "teaches": "In balanced positions, small timing errors can hand the opponent the initiative; stay alert and respond to threats and provocations.",
+   "plans": "Black should continue to improve piece positions and provoke further weaknesses; White must find active counterplay.",
+   "concepts": [
+    "initiative",
+    "timing",
+    "provocation"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1001.12
+  },
+  {
+   "id": "sl-1gqg5xg90rslo",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "Black would like to play ...d5 to win, but White's knight can jump to e5, creating a strong outpost. ...Qe6 prevents Ne5 and keeps the position under control.",
+   "teaches": "Before pushing a central pawn, check whether it allows an enemy knight to land on a dominant square; a queen move can prophylactically cover that square.",
+   "plans": "After ...Qe6, Black can continue maneuvering while keeping the knight out of e5.",
+   "concepts": [
+    "prophylaxis",
+    "knight-outpost",
+    "queen-activity"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1001.12
+  },
+  {
+   "id": "sl-1mfuzy67p4thm",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "White plays a3 to prevent ...Bb4 and ...c3, which would unleash too much chaos. Black responds with ...Qd5, removing White's option of g3 and Bg2.",
+   "teaches": "Prophylactic pawn moves can be crucial to limit the opponent's piece activity and prevent disruptive threats.",
+   "plans": "White aims to stabilize the position and complete development, while Black seeks to maintain the initiative.",
+   "concepts": [
+    "prophylaxis",
+    "piece-restriction",
+    "king-safety"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 2230.96
+  },
+  {
+   "id": "sl-1iwhiw8223txw",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "White's f4 push looks like a challenge to Black's center, but it actually weakens White's position by exposing squares and creating long-term weaknesses.",
+   "teaches": "Pawn advances must be evaluated for the weaknesses they create, not just the space they gain; a pawn move can be a strategic concession.",
+   "plans": "Black should exploit the weakened squares and the exposed king position.",
+   "concepts": [
+    "pawn-weakness",
+    "overextension",
+    "king-safety"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1001.12
+  },
+  {
+   "id": "sl-7ux2vu1bihk0m",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "After f4, Black played ...Qf5, moving the queen away from the rook on f1 and offering a trade. Taking on f1 would win for Black, so White cannot capture.",
+   "teaches": "When your queen is attacked by a rook, moving it to a square where it cannot be taken and where it creates threats is ideal; always check if the opponent can capture.",
+   "plans": "Black continues with ...Qh5 and ...Qf3, maintaining pressure and coordinating with ...Nf4.",
+   "concepts": [
+    "queen-safety",
+    "tactics",
+    "piece-coordination"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1001.12
+  },
+  {
+   "id": "sl-14tui3a15ilgy0",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "When your queen is attacked by an enemy rook, moving it to a square where it is safe is a key principle. Here, the queen moved to f5, but it landed on a square attacked by another rook; however, that rook could not capture because the queen would then be lost, so the move was safe.",
+   "teaches": "Always ensure that when you move your queen away from an attacker, it does not move to a square where it can be captured for free. Consider all enemy pieces, not just the immediate attacker.",
+   "plans": "",
+   "concepts": [
+    "queen-safety",
+    "piece-coordination"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1435.12
+  },
+  {
+   "id": "sl-9w4c2o1rvq2vu",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "White's pieces are stepping on each other, leading to a loss of coordination. The knight on e3 was a result of this, and black exploited it by playing knight f4, forcing a favorable trade.",
+   "teaches": "Piece coordination is crucial; if your pieces get in each other's way, you can fall victim to tactical blows. Always strive for harmonious placement.",
+   "plans": "",
+   "concepts": [
+    "piece-coordination",
+    "tactical-awareness"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1435.12
+  },
+  {
+   "id": "sl-1pe5fag1c2xbey",
+   "lineSan": [],
+   "opening": null,
+   "phase": "endgame",
+   "explains": "In an endgame with opposite-colored bishops and rooks, the presence of rooks means the position is not automatically drawn. If one side becomes passive, they may end up playing rook against rook and bishop, where the bishop is a non-factor.",
+   "teaches": "Opposite-colored bishops do not guarantee a draw when rooks are on the board. Active play is essential to avoid ending up in a losing rook vs rook+bishop scenario.",
+   "plans": "Black should aim to keep rooks on the board and create threats, while White must stay active to avoid passivity.",
+   "concepts": [
+    "opposite-colored-bishops",
+    "rook-endgame",
+    "activity"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1435.12
+  },
+  {
+   "id": "sl-agvp1iiz1x5",
+   "lineSan": [],
+   "opening": null,
+   "phase": "endgame",
+   "explains": "Black must avoid trading rooks if they want to win, as the resulting rook and bishop vs rook endgame may be drawn. Instead, black should maneuver and provoke weaknesses.",
+   "teaches": "In endgames with a material advantage, avoid simplifying into drawn endings. Keep pieces on the board to maintain winning chances.",
+   "plans": "Black should maneuver with rooks and king, probing for weaknesses, while White should defend accurately and seek counterplay.",
+   "concepts": [
+    "rook-trade",
+    "winning-chances",
+    "maneuvering"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1435.12
+  },
+  {
+   "id": "sl-1jp1peg1gsrwrg",
+   "lineSan": [],
+   "opening": null,
+   "phase": "endgame",
+   "explains": "White's pawn push c4 was a difficult decision, as it creates a weakness but also addresses threats like rook g4 and rook a4. Black's extra pawn is doubled on the c-file, reducing its value.",
+   "teaches": "Pawn moves in the endgame must be carefully weighed: they can create weaknesses but may be necessary to counter threats. Doubled pawns are often less valuable in the endgame.",
+   "plans": "White should try to hold the position despite the pawn deficit, while Black should aim to exploit the weaknesses created by c4.",
+   "concepts": [
+    "pawn-structure",
+    "doubled-pawns",
+    "weaknesses"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1435.12
+  },
+  {
+   "id": "sl-d69h20qqj27q",
+   "lineSan": [],
+   "opening": null,
+   "phase": "opening",
+   "explains": "In the main lines after e4 e5 Nf3 Nc6, White usually avoids d4 because Black can equalize or even gain a slight edge with accurate play. Yet d4 remains a legitimate try for players who want to unbalance the game and avoid well-trodden paths.",
+   "teaches": "The Scotch Opening (d4) is a principled way to fight for the initiative, but it requires precise handling because Black can neutralize White's first-move advantage if prepared.",
+   "plans": "White aims for rapid development and open lines; Black should be ready to meet the central tension with accurate piece play.",
+   "concepts": [
+    "scotch-opening",
+    "central-tension",
+    "opening-choice"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1817.72
+  },
+  {
+   "id": "sl-1mfsxa4839dd0",
+   "lineSan": [],
+   "opening": null,
+   "phase": "opening",
+   "explains": "After …exd4 Nxd4 Qe7?!, Black's queen move is unusual. White can respond with Qe2, keeping the queen active and preparing to castle quickly. The move …h4!? is a modern idea: White wants to play Rh3 and g4, gaining space on the kingside and creating threats against the black king.",
+   "teaches": "In the Scotch, White can sometimes launch a kingside pawn storm with h4, Rh3, and g4 to exploit the absence of Black's dark-squared bishop from the kingside.",
+   "plans": "White will follow up with Rh3 and g4, while Black must decide how to meet the pawn advance without compromising the dark squares.",
+   "concepts": [
+    "kingside-attack",
+    "pawn-storm",
+    "queen-placement"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1817.72
+  },
+  {
+   "id": "sl-xpl0nr1x3tchr",
+   "lineSan": [],
+   "opening": null,
+   "phase": "opening",
+   "explains": "Black's choice of …Qe6 is a multi-purpose move: it avoids weakening the dark squares with ...g6, keeps the bishop free to develop to c5 or e7, and prepares ...Nb4 to create counterplay. The queen on e6 also eyes the e-file and supports a potential ...d5 break.",
+   "teaches": "When facing a kingside pawn storm, placing the queen on e6 can be more flexible than committing the pawn structure with ...g6, as it keeps the dark squares intact and allows the bishop to develop actively.",
+   "plans": "Black will develop the bishop to c5 or e7 and look for counterplay with ...Nb4 or ...d5, while White continues with g4 and Rh3.",
+   "concepts": [
+    "queen-activity",
+    "dark-squares",
+    "flexible-development"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1817.72
+  },
+  {
+   "id": "sl-1nc3tvm1sjgm5m",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "The move ...c5 is a key resource for Black: it challenges White's central pawn and opens the c-file. If White allows ...c5 without a fight, Black gains space and can follow up with ...Bc5 or ...Nb4. White may try to prevent this with Bc3, but Black can still push ...c5 and create a passed pawn or open lines.",
+   "teaches": "In positions with a queenside pawn majority, pushing ...c5 can be a powerful way to seize space and create entry points for the rooks and minor pieces.",
+   "plans": "Black will continue with ...c5 and ...Bc5, while White must decide whether to blockade with Bc3 or allow the pawn to advance.",
+   "concepts": [
+    "pawn-break",
+    "queenside-expansion",
+    "space-advantage"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1817.72
+  },
+  {
+   "id": "sl-1mukw651vdakyp",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "After White advances c4 and Black replies ...Nb6, White develops the bishop to f4. Black then plays ...d5, recognizing that trying to eliminate the d5 pawn is no longer feasible.",
+   "teaches": "When your opponent's pawn chain becomes difficult to undermine, it is often better to strike back in the center with a pawn break rather than continue piece maneuvers.",
+   "plans": "Black intends to maintain the tension and look for chances to free the position with ...f6 or piece exchanges.",
+   "concepts": [
+    "pawn-break",
+    "central-tension",
+    "piece-activity"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 2230.96
+  },
+  {
+   "id": "sl-1qm3kj71g7lv2b",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "White eventually cracks under the pressure and plays Re2, a passive move that allows Black to win with ...Rd3. This shows how a single inaccuracy in a tense position can be decisive.",
+   "teaches": "In sharp middlegames, patience and precise maneuvering can force the opponent into a passive move that loses material or allows a winning tactic.",
+   "plans": "Black should look for tactical opportunities like ...Rd3 to exploit White's misplaced pieces.",
+   "concepts": [
+    "tactical-opportunity",
+    "piece-activity",
+    "pressure"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 1817.72
+  },
+  {
+   "id": "sl-gtq9mg1o40k5g",
+   "lineSan": [],
+   "opening": null,
+   "phase": "opening",
+   "explains": "Black chooses an early queen sortie to e6, avoiding a loss of tempo with ...g6 and keeping the dark squares on the kingside intact. The queen on e6 also sidesteps the typical ...Ba6 maneuver because the queen would be en prise after a capture on b6.",
+   "teaches": "When selecting a setup, weigh how the queen's placement affects your ability to develop and whether it interferes with standard piece routes.",
+   "plans": "Black aims to follow with ...Bc5 or ...Be7 and later ...d6 and ...f6 to challenge White's central pawn on e5.",
+   "concepts": [
+    "queen-placement",
+    "dark-squares",
+    "tempo",
+    "piece-coordination"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 2230.96
+  },
+  {
+   "id": "sl-1opke8a1reipl2",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "Black avoids ...f6 because after the knight on d5 can capture on f6, the resulting pawn structure would leave Black with f- and h-pawns, which are less workable than g- and h-pawns.",
+   "teaches": "Before pushing a pawn to challenge a knight, consider the resulting pawn islands and whether the remaining pawns can support each other effectively.",
+   "plans": "Black should seek alternative ways to ease the position, such as piece play, rather than committing to a pawn break that worsens the structure.",
+   "concepts": [
+    "pawn-structure",
+    "pawn-islands",
+    "knight-outpost"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 2230.96
+  },
+  {
+   "id": "sl-1arj4vv174z8jf",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "Black plays ...d5, inviting White to trade and relieve the positional squeeze. White declines with Nd2, and after ...dxe4, Black has created chaos with an extra pawn and three pawns on the c-file, hoping to provoke errors.",
+   "teaches": "Creating structural imbalances and material imbalances can lead the opponent into unfamiliar territory where mistakes are more likely.",
+   "plans": "Black will try to consolidate the extra pawn and use the c-pawns to generate counterplay, while White must handle the chaos carefully.",
+   "concepts": [
+    "positional-squeeze",
+    "pawn-majority",
+    "provocation",
+    "imbalance"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 2230.96
+  },
+  {
+   "id": "sl-1gext208quhzm",
+   "lineSan": [],
+   "opening": null,
+   "phase": "opening",
+   "explains": "When the opponent's queen sits on a square where it can grab a pawn and disrupt your plans, a rook lift to the h-file can force the queen to move or be exchanged, buying time to castle.",
+   "teaches": "A rook lift to the h-file is a standard resource to challenge an active enemy queen and gain a tempo for development.",
+   "plans": "If the opponent does not address the threat, capture the queen; otherwise, use the tempo to complete castling.",
+   "concepts": [
+    "rook-lift",
+    "queen-harassment",
+    "tempo",
+    "castling"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 2684.64
+  },
+  {
+   "id": "sl-wfdtmu15abpn6",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "Even when material is balanced, a lead in development and active pieces can leave the opponent's king vulnerable and unable to coordinate defense.",
+   "teaches": "Development and piece activity often outweigh a temporary pawn deficit; prioritize getting your pieces into the attack.",
+   "plans": "Continue bringing pieces toward the enemy king, especially rooks to the seventh rank and queen to an attacking square.",
+   "concepts": [
+    "development",
+    "king-safety",
+    "initiative",
+    "piece-activity"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 2684.64
+  },
+  {
+   "id": "sl-1wu29bugpwf3s",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "A pawn on h6 can be a useful attacking tool to weaken the opponent's kingside structure, especially when the opponent has not played h6 themselves.",
+   "teaches": "Advancing the h-pawn to h6 can create weaknesses and open lines against a castled king.",
+   "plans": "Follow up with e6 to further undermine the pawn structure and open lines for the pieces.",
+   "concepts": [
+    "pawn-storm",
+    "kingside-attack",
+    "pawn-break",
+    "structural-weakness"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 2684.64
+  },
+  {
+   "id": "sl-rcrfzg1bwnyzk",
+   "lineSan": [],
+   "opening": null,
+   "phase": "endgame",
+   "explains": "In a dominant position, simplifying by capturing a key defender can leave the opponent with no active moves and a completely lost position.",
+   "teaches": "When you have a decisive advantage, look for exchanges that eliminate the opponent's last active pieces, even if it means entering an endgame.",
+   "plans": "After the exchange, use checks and piece maneuvers to force mate or win material.",
+   "concepts": [
+    "simplification",
+    "domination",
+    "zugzwang",
+    "conversion"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 2684.64
+  },
+  {
+   "id": "sl-1n8z43q1a8gx2e",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Unorthodox opening play can be effective if it leads to positions where your pieces are more active and coordinated than the opponent's.",
+   "teaches": "Do not be afraid to deviate from theoretical lines if you understand the resulting positions and can outplay your opponent.",
+   "plans": "",
+   "concepts": [
+    "opening-deviation",
+    "practical-play",
+    "creativity",
+    "positional-understanding"
+   ],
+   "sources": [
+    "yt:VFepT8_tMXA"
+   ],
+   "t": 2684.64
   }
  ]
 }
