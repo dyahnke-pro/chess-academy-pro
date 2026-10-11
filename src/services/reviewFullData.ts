@@ -596,7 +596,10 @@ export function computeMoveFacets(
     const positive = !costsPoints && !fellShort;
     // The mechanism is its own sentence — "That left your knight on e5
     // hanging — the pawn on d4 just takes it."
-    const qf = `[${positive ? 'praise' : 'quality'}] ${subj}: ${qualityClause(ctx.classification, isStudent)}${swingBit}${betterBit}.${failedSaid ? ` ${failedSaid}` : ''}`;
+    // The punishing line played out, as Learn and chat say it ("The line: …
+    // — they come out two pawns up"); review dropped it.
+    const tailSaid = consequence && ew?.tail ? (opponentMoved ? seatPieces(seatTheirErrorForStudent(ew.tail)) : seatPieces(ew.tail)) : '';
+    const qf = `[${positive ? 'praise' : 'quality'}] ${subj}: ${qualityClause(ctx.classification, isStudent)}${swingBit}${betterBit}.${failedSaid ? ` ${failedSaid}` : ''}${tailSaid}`;
     facets.push(qf);
     // The verdict's proof is the line its words name: the better move's own
     // line when the reason came from it, the line after the move when the

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1771 lines · 13 exports · 48 importers · 35 tests · 1 audits**
+**1779 lines · 13 exports · 49 importers · 36 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -46,6 +46,7 @@
 - `src/services/principleAttributionEvalPv.test.ts`
 - `src/services/principleVoice.test.ts`
 - `src/services/principleVoice.ts`
+- `src/services/principleVoiceGuarded.test.ts`
 - `src/services/replayFence.bowdler1000.test.ts`
 - `src/services/replayFence.sicilian1200.test.ts`
 - `src/services/reviewFullData.ts`
@@ -236,6 +237,7 @@
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
 - `src/services/principleVoice.test.ts`
+- `src/services/principleVoiceGuarded.test.ts`
 - `src/services/replayFence.bowdler1000.test.ts`
 - `src/services/replayFence.modern1690.test.ts`
 - `src/services/replayFence.sicilian1200.test.ts`

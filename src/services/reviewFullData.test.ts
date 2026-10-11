@@ -625,3 +625,21 @@ describe('Review reads the new computers too', () => {
     expect(at(10, null).some((x) => x.startsWith('[timing] That is the pin'))).toBe(false);
   });
 });
+
+describe('the punishing line is played out in review, as in Learn and chat (2026-10-11)', () => {
+  it('…d5 → the grade carries "The line: exd5, …Nxd5, Nxe5, …Nxe5 and Rxe5"', () => {
+    const sans = 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5'.split(' ');
+    const fens = fensAfter(sans);
+    const ply = 16;
+    const facets = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+      fenBefore: fens[ply - 2], fenAfter: fens[ply - 1], san: 'd5', ply,
+      moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
+      evaluation: 120, preMoveEval: 20, costCp: null, classification: 'mistake', bestMoveSan: 'd6',
+      prevCap: { square: null, capturedValue: 0 }, allSans: sans,
+      forcedRunStartPly: null, bestLineUci: [], playedLineUci: ['e4d5', 'f6d5', 'f3e5', 'c6e5', 'e1e5'], replyBestSan: 'exd5',
+    });
+    const q = facets.find((f) => f.startsWith('[quality]')) ?? '';
+    expect(q).toMatch(/win a pawn/);
+    expect(q).toMatch(/The line: exd5, …Nxd5, Nxe5, …Nxe5 and Rxe5 — they come out a pawn up\./);
+  });
+});

@@ -162,6 +162,12 @@ export function fundamentalHow(id: FundamentalId, facts: Record<string, string |
   if (id === 'buried-own-bishop' && facts.blockerPiece && facts.blockerPiece !== 'pawn') {
     return `Before you park a ${facts.blockerPiece} in front of your own bishop, ask which diagonal it shuts. Develop the bishop first, or put the ${facts.blockerPiece} where the bishop still sees past it.`;
   }
+  // A GUARDED piece a cheaper attacker wins is a counting lesson, not a
+  // loose-piece one: "what of mine is undefended?" would pass it (walk
+  // 2026-10-11, the f6 knight a g-pawn won).
+  if ((id === 'loose-piece' || id === 'ignored-threat') && typeof facts.guards === 'number' && facts.guards > 0) {
+    return 'End every move with a count: for each of your pieces, who attacks it, who guards it, and who would take first. A guard does not help when the attacker is cheaper than the piece.';
+  }
   return FUNDAMENTAL_HOW[id] ?? null;
 }
 
@@ -358,6 +364,14 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       return s[v % s.length];
     }
     case 'loose-piece': {
+      if (guarded(f)) {
+        const g = [
+          `Guarded is not safe: the ${f.piece} on ${f.square} has a guard, but ${kick ?? 'the cheaper attacker'} still wins it.`,
+          `That leaves the ${f.piece} on ${f.square} short of guards — ${kick ?? 'a capture'} comes out ahead.`,
+          `The ${f.piece} on ${f.square} can be won after this; ${kick ?? 'taking it'} gains material even with its guard.`,
+        ];
+        return g[v % g.length];
+      }
       const s = [
         `Loose pieces drop off: the ${f.piece} on ${f.square} is left hanging, and ${kick ?? 'the capture'} just takes it.`,
         `That leaves the ${f.piece} on ${f.square} undefended — ${kick ?? 'a capture'} wins it outright.`,
@@ -378,7 +392,9 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       }
       const s = [
         `Their threat first: the ${f.piece} on ${f.square} was already attacked, and this move doesn't deal with it — ${kick ?? 'the capture'} wins it.`,
-        `The ${f.piece} on ${f.square} was hanging before you moved, and it's still hanging after; ${kick ?? 'they take it'} next.`,
+        guarded(f)
+          ? `The ${f.piece} on ${f.square} could be won before you moved, and it still can; ${kick ?? 'they take it'} next.`
+          : `The ${f.piece} on ${f.square} was hanging before you moved, and it's still hanging after; ${kick ?? 'they take it'} next.`,
         `Answer the threat before your own plan — the ${f.piece} on ${f.square} stays en prise and ${kick ?? 'the capture'} collects.`,
       ];
       return s[v % s.length];
@@ -625,8 +641,8 @@ function shortVerdict(a: PrincipleAttribution): string {
     case 'blocked-own-retreat': return `A retreat blocked again — ${f.trap} traps the ${f.piece} on ${f.square}.`;
     case 'missed-pin-pressure': return `Another pinned piece left alone — ${f.better} piles on the ${f.piece} on ${f.square}.`;
     case 'ignored-pin-pressure': return `Your pinned ${f.piece} on ${f.square} again — ${f.pile} piles on it.`;
-    case 'loose-piece': return `Loose piece again — the ${f.piece} on ${f.square} hangs.`;
-    case 'ignored-threat': return f.line ? `Their threat again — ${f.threat} was still on, and the ${f.piece} on ${f.square} with it.` : `Their threat again — the ${f.piece} on ${f.square} was still hanging.`;
+    case 'loose-piece': return guarded(f) ? `Loose piece again — the ${f.piece} on ${f.square} can be won.` : `Loose piece again — the ${f.piece} on ${f.square} hangs.`;
+    case 'ignored-threat': return f.line ? `Their threat again — ${f.threat} was still on, and the ${f.piece} on ${f.square} with it.` : guarded(f) ? `Their threat again — the ${f.piece} on ${f.square} could still be won.` : `Their threat again — the ${f.piece} on ${f.square} was still hanging.`;
     case 'passive-when-forcing-existed': return `You missed a forcing move again: ${f.better}.`;
     case 'weakened-king-shield': return `The king's shelter loosened again — ${f.punish}.`;
     case 'created-pawn-weakness': return `Another weak pawn, on ${f.pawn}.`;
@@ -692,6 +708,11 @@ export function renderFundamentalVerdict(attrs: readonly PrincipleAttribution[],
   return parts.join(' ');
 }
 
+/** The piece the fact names has a guard (a cheaper attacker wins it anyway). */
+function guarded(f: Record<string, string | number>): boolean {
+  return typeof f.guards === 'number' && f.guards > 0;
+}
+
 /** A hung piece the reply did not take — said as a miss, in the past. */
 function missedPunish(a: PrincipleAttribution, replySan: string | null): string | null {
   if (replySan === null) return null;
@@ -709,7 +730,7 @@ function missedPunish(a: PrincipleAttribution, replySan: string | null): string 
     if (replySan.replace(/[+#]+$/, '') === line[0].replace(/[+#]+$/, '')) return null;
     return `That left your ${a.facts.piece} on ${sq} open to ${line.join(', ')} — they missed it this time.`;
   }
-  return `That left your ${a.facts.piece} on ${sq} hanging to ${cap} — they missed it this time.`;
+  return `That left your ${a.facts.piece} on ${sq} ${guarded(a.facts) ? 'open' : 'hanging'} to ${cap} — they missed it this time.`;
 }
 
 /** The engine-line corroboration, spoken as evidence after the verdict. Only

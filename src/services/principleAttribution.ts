@@ -294,6 +294,12 @@ export function captureIsTrade(
   } catch { return false; }
 }
 
+/** How many of its own pieces guard the piece on `sq`. */
+function guardCount(chess: Chess, sq: Square): number {
+  const p = chess.get(sq);
+  if (!p) return 0;
+  try { return chess.attackers(sq, p.color).length; } catch { return 0; }
+}
 function hangsBy(chess: Chess, sq: Square): number {
   const p = chess.get(sq);
   if (!p) return 0;
@@ -1032,7 +1038,9 @@ const DETECTORS: Detector[] = [
     const h = hangingAfter[0];
     if (!lineTakes(c, h.square)) return null;
     const cap = cheapestCapture(c.after, h.square, c.opp);
-    return att('loose-piece', 3, { squares: [h.square], moves: cap ? [cap.san] : [], pvMoves: pvHas(c.pvP, (s) => !!cap && s === cap.san) }, { piece: PNAME[h.type], square: h.square });
+    // GUARDED OR NOT is said, never guessed (walk 2026-10-11: "left your
+    // knight on f6 hanging to gxf6" of a guarded knight a pawn wins).
+    return att('loose-piece', 3, { squares: [h.square], moves: cap ? [cap.san] : [], pvMoves: pvHas(c.pvP, (s) => !!cap && s === cap.san) }, { piece: PNAME[h.type], square: h.square, guards: guardCount(c.after, h.square) });
   },
   // 14. Ignored threat — a piece was already en prise BEFORE the move, the move
   // did not address it, and the best move does.
@@ -1047,7 +1055,7 @@ const DETECTORS: Detector[] = [
     const t = still[0];
     if (!lineTakes(c, t.square)) return null;
     const cap = cheapestCapture(c.after, t.square, c.opp);
-    return att('ignored-threat', 3, { squares: [t.square], moves: cap ? [cap.san] : [], pvMoves: pvHas(c.pvP, (s) => !!cap && s === cap.san) }, { piece: PNAME[t.type], square: t.square });
+    return att('ignored-threat', 3, { squares: [t.square], moves: cap ? [cap.san] : [], pvMoves: pvHas(c.pvP, (s) => !!cap && s === cap.san) }, { piece: PNAME[t.type], square: t.square, guards: guardCount(c.after, t.square) });
   },
   // 15. Passive when a forcing move existed — the played move is quiet, the
   // best move is forcing and wins material / mates (board-checked on the

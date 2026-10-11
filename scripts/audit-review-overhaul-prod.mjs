@@ -1219,7 +1219,11 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   }
   const showArrived = await goTo(showPly);
   await settle();
-  const showBtn = await has(page, '[data-testid="walk-show-me-btn"]');
+  // The board bar always renders its six buttons (one bar everywhere); Show-me
+  // is DISABLED on a ply with nothing to show, and a disabled button is not a
+  // button the student can press (prod 2026-10-11: a disabled tap counted as
+  // "the one tap" and the zero starts it produced read as a product failure).
+  const showBtn = await has(page, '[data-testid="walk-show-me-btn"]:not([disabled])');
   // WHEN THE BUTTON IS MISSING, SAY WHAT WAS ON SCREEN INSTEAD (2026-09-26:
   // two runs red with "no Show-me button" and no way to tell a product gap
   // from a walk that never reached the ply or a card sitting on top of it).

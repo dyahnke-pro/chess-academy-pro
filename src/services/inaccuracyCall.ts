@@ -1018,6 +1018,19 @@ export function errorWhy(args: {
   const allowed = caused && !failed && !punishment && !single && args.missedMate === null
     ? allowedReply(args.fenBefore, args.playedSan, replyLineUci, args.moverColor)
     : null;
+  // The square their reply takes on, when the single or allowed reader names
+  // it — so a surface can tell it is the same loss a fundamental names
+  // ("That left your knight on f6 open to gxf6" + "it let them play gxf6,
+  // which wins the knight" were both said, walk 2026-10-11).
+  const replyTaken = single || allowed ? (() => {
+    try {
+      const c = new Chess(args.fenBefore);
+      c.move(args.playedSan);
+      const u = replyLineUci[0];
+      const m = u ? c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }) : null;
+      return m?.captured ? capturedSquare(m) : undefined;
+    } catch { return undefined; }
+  })() : undefined;
   // WALKING INTO MATE IS ITS OWN WHY — the mate is the cost, whatever the
   // centipawns read.
   const consequence = args.allowedMate !== null
@@ -1073,7 +1086,7 @@ export function errorWhy(args: {
     reason: should ? reason : null,
     ...(proof ? { proof } : {}),
     ...(line ? { line } : {}),
-    ...(punishment?.lostSquare ?? failedLost ? { lostSquare: punishment?.lostSquare ?? failedLost } : {}),
+    ...(punishment?.lostSquare ?? failedLost ?? replyTaken ? { lostSquare: punishment?.lostSquare ?? failedLost ?? replyTaken } : {}),
     ...((should || mateSaid) && bestSan ? { namesBetter: bestSan } : {}),
     ...(pattern ? { pattern } : {}),
   };
