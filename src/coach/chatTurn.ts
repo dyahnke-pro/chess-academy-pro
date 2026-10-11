@@ -22,7 +22,7 @@
  * routed somewhere that does not answer it.
  */
 import { Chess, type Square } from 'chess.js';
-import { whyNotLegal } from '../services/whyNotLegal';
+import { whyNotLegal, namedLinePlays } from '../services/whyNotLegal';
 import { captureRead } from '../services/positionReadingService';
 import {
   buildQuestionGrounding,
@@ -164,7 +164,7 @@ export const NEW_KINDS = [
   'what-about-piece', 'is-piece-loose', 'what-did-their-move-change',
   'what-should-i-play', 'i-dont-know', 'answer', 'start-thinking-lesson', 'book-teaching',
   'defend-piece', 'win-piece', 'attack-piece', 'material-change', 'explain-last', 'threats', 'develop-next',
-  'best-defence', 'faster-win',
+  'best-defence', 'faster-win', 'line-outcome',
 ] as const;
 export type NewKind = typeof NEW_KINDS[number];
 
@@ -371,6 +371,7 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   'threats': direct('what are they threatening / what is my threat (the threats on the board, either side)'),
   'develop-next': { gloss: 'which piece should I develop / bring out next', lane: 'best-move', answerer: 'live', canonical: fixed("what's my best move?") },
   'best-defence': { gloss: 'what is the OPPONENT\'s best defence / reply to a move ("what\'s their best defence?", "what if they don\'t take?", "how do they defend against Ng5?")', lane: 'best-move', answerer: 'live', canonical: fixed("what's my best move?") },
+  'line-outcome': { gloss: 'what happens after a LINE of two or more moves the student names, either side to move first ("calculate Nh5 Bg5 h6 Bh4 g5", "if Black plays c5 and I take dxc5, what then?", "after Rxh5 gxh5 Qxh5 who is better?") — put every named move, in order, as move referents', lane: 'none', answerer: 'live', canonical: null },
   'faster-win': { gloss: 'is there a faster, cleaner or simpler win than the best move', lane: 'alternatives', answerer: 'live', canonical: fixed('what else could I play here?') },
   'explain-last': direct('a follow-up about the coach\'s own last line ("stop what?", "what do you mean?")'),
   // Outside a lesson (which has its own "I don't know"), not knowing is a
@@ -454,7 +455,7 @@ const NEEDS_BOARD: ReadonlySet<ChatKind> = new Set<ChatKind>([
   'tactics', 'position-assessment', 'whose-turn', 'mate', 'draw', 'positional', 'piece-options',
   'compare-my-move', 'why-is-it-a-target', 'count-attackers', 'count-defenders', 'what-about-piece',
   'is-piece-loose', 'what-did-their-move-change', 'what-should-i-play', 'answer', 'defend-piece', 'win-piece', 'attack-piece', 'material-change', 'explain-last', 'threats', 'develop-next',
-  'best-defence', 'faster-win',
+  'best-defence', 'faster-win', 'line-outcome',
 ]);
 
 /**
@@ -471,6 +472,10 @@ export function validateChatTurn(turn: ChatTurn, board: BoardContext, memory: Co
   }
   const student = board.studentColor ?? (chess && chess.turn() === 'b' ? 'black' : 'white');
   const out: ResolvedReferent[] = [];
+  // The named moves, taken together: a line the board allows from either side
+  // is a hypothetical, never an illegal move of the student's.
+  const namedSans = turn.referents.flatMap((r) => (r.type === 'move' ? [r.san] : []));
+  const namedLine = !!board.fen && namedLinePlays(board.fen, namedSans, { theirsAlone: turn.seat === 'them' });
   for (const r of turn.referents) {
     if (r.type === 'square') {
       if (!SQ_RE.test(r.square)) return { ok: false, reason: 'bad-square', clarify: `I didn't catch the square — which one did you mean?` };
@@ -485,7 +490,8 @@ export function validateChatTurn(turn: ChatTurn, board: BoardContext, memory: Co
       continue;
     }
     if (r.type === 'move') {
-      if (!moveIsReal(r.san, board) && !(turn.kind === 'compare-my-move' && legalWhereStudentMoved(r.san, board))) {
+      if (!namedLine && !moveIsReal(r.san, board) && !(turn.kind === 'compare-my-move' && legalWhereStudentMoved(r.san, board))
+        && !legalWhereNamedWasPlayed(r.san, namedSans, board)) {
         // The board knows WHY it refused the move — say that, not "which move?".
         const dest = r.san.match(/([a-h][1-8])(?!.*[a-h][1-8])/)?.[1];
         const letter = /^[KQRBN]/.test(r.san) ? r.san[0].toLowerCase() as 'k' | 'q' | 'r' | 'b' | 'n' : 'p';
@@ -493,7 +499,7 @@ export function validateChatTurn(turn: ChatTurn, board: BoardContext, memory: Co
         if (why) return { ok: false, reason: 'illegal-move', clarify: why };
         return { ok: false, reason: 'illegal-move', clarify: `${r.san} isn't a move I can find here — which move did you mean?` };
       }
-      out.push({ type: 'move', san: r.san, played: !legalNow(r.san, board) });
+      out.push({ type: 'move', san: r.san, played: namedLine ? false : !legalNow(r.san, board) });
       continue;
     }
     if (r.type === 'what-i-played') {
@@ -623,6 +629,26 @@ function legalWhereStudentMoved(san: string, board: BoardContext): boolean {
   }
   if (!fenBefore) return false;
   try { return !!new Chess(fenBefore).move(san); } catch { return false; }
+}
+
+/** "Was g4 best, or Qh2?" — an alternative legal at the ply where ANOTHER
+ *  named move was played (hard-question walk 2026-10-11). Matched by
+ *  coordinates at each ply. */
+function legalWhereNamedWasPlayed(san: string, named: readonly string[], board: BoardContext): boolean {
+  const history = board.history ?? [];
+  if (named.length < 2 || history.length === 0) return false;
+  const c = new Chess();
+  for (const played of history) {
+    const before = c.fen();
+    let mv;
+    try { mv = c.move(played); } catch { return false; }
+    if (!mv) return false;
+    const playedHere = named.some((n) => n !== san && (() => {
+      try { const m = new Chess(before).move(n); return !!m && m.from === mv.from && m.to === mv.to; } catch { return false; }
+    })());
+    if (playedHere) { try { if (new Chess(before).move(san)) return true; } catch { /* not legal there */ } }
+  }
+  return false;
 }
 
 function moveIsReal(san: string, board: BoardContext): boolean {

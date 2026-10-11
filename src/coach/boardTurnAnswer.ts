@@ -30,9 +30,12 @@ import { computeMustDefend } from '../services/threatOut';
 import { boardPlanFacts } from '../services/boardPlanFacts';
 import { moveWhy } from '../services/deliberation';
 import { andList } from '../utils/andList';
+import { playNamedLine } from '../services/whyNotLegal';
+import { settledLeadFor, lastMoveOf } from '../services/material';
+import { evalPhrase } from '../services/groundedAnswer';
 
 /** The kinds the board answers directly. Each is served here or falls back. */
-export const BOARD_ANSWERED_KINDS: ReadonlySet<ChatKind> = new Set<ChatKind>(['why-best-move', 'candidate-move', 'plan', 'tactics', 'develop-next', 'best-defence', 'faster-win']);
+export const BOARD_ANSWERED_KINDS: ReadonlySet<ChatKind> = new Set<ChatKind>(['why-best-move', 'candidate-move', 'plan', 'tactics', 'develop-next', 'best-defence', 'faster-win', 'line-outcome']);
 
 export interface BoardTurnInput {
   fen: string;
@@ -65,6 +68,7 @@ export async function answerBoardTurn(turn: ResolvedChatTurn, board: BoardTurnIn
   if (turn.kind === 'develop-next') return developNextAnswer(board, out);
   if (turn.kind === 'best-defence') return bestDefenceAnswer(turn, board, out);
   if (turn.kind === 'faster-win') return fasterWinAnswer(board);
+  if (turn.kind === 'line-outcome') return lineOutcomeAnswer(turn, board, out);
   const moves = turn.referents.filter((r): r is Extract<typeof r, { type: 'move' }> => r.type === 'move');
   // Phase 1: exactly one named move, playable now, on the student's turn.
   if (moves.length !== 1 || moves[0].played) return null;
@@ -367,4 +371,56 @@ export async function fasterWinAnswer(board: BoardTurnInput): Promise<string | n
   const alsoWin = lines.slice(1).filter((l) => (l.mate != null && l.mate > 0) || l.cp >= WIN).map((l) => l.san);
   if (alsoWin.length === 0) return `${best.san} is the only move that keeps the win${reason(best.san, null)}; every other move gives it back.`;
   return `${best.san} is the cleanest${reason(best.san, null)}. ${andList(alsoWin)} ${alsoWin.length > 1 ? 'also win' : 'also wins'}, but keep less.`;
+}
+
+/** A material difference in words — the student hears pieces, not points. */
+const AMOUNT: Record<number, string> = { 1: 'a pawn', 2: 'two pawns', 3: 'a piece', 4: 'a piece and a pawn', 5: 'a rook', 6: 'a rook and a pawn', 7: 'a rook and two pawns', 8: 'a rook and a piece', 9: 'a queen' };
+const amountWords = (n: number): string => AMOUNT[n] ?? `${n} points of material`;
+
+/**
+ * "CALCULATE THIS LINE" — the line the student named, played out move by move
+ * from this board (either side may move first), then what it comes to: mate,
+ * the material it settles at, and the engine's best move at the end with who
+ * stands better (hard-question walk 2026-10-11: six line questions were
+ * answered about a different move or refused). The named moves are the
+ * student's; the board and the engine say what they do.
+ */
+export async function lineOutcomeAnswer(turn: ResolvedChatTurn, board: BoardTurnInput, out?: { lines?: WalkableLine[] }): Promise<string | null> {
+  const named = turn.referents.flatMap((r) => (r.type === 'move' ? [r.san] : []));
+  const line = playNamedLine(board.fen, named, { fromHere: true, theirsAlone: turn.seat === 'them' });
+  if (!line) return null;
+  const me: 'w' | 'b' = board.studentColor === 'white' ? 'w' : 'b';
+  const startTurn = line.startFen.split(' ')[1] as 'w' | 'b';
+  const said = line.sans.map((san, i) => ((i % 2 === 0) === (startTurn === 'w') ? san : `…${san}`));
+  const lead = `After ${andList(said)}`;
+  const end = new Chess(line.endFen);
+  if (end.isCheckmate()) {
+    const w = walkableLine(line.startFen, line.sans, line.sans[0]);
+    if (w && out) out.lines = [w];
+    const winner = end.turn() === me ? 'they' : 'you';
+    return `${lead}, it's mate — ${winner} win.`;
+  }
+  if (end.isStalemate()) return `${lead}, it's stalemate — a draw.`;
+  const before = settledLeadFor(line.startFen, me, null);
+  const after = settledLeadFor(line.endFen, me, lastMoveOf(end));
+  const delta = Math.round(after - before);
+  const material = delta === 0
+    ? 'material stays level'
+    : delta > 0 ? `you come out ${amountWords(delta)} up` : `you come out ${amountWords(-delta)} down`;
+  const engine = engineOverride ?? defaultEngine;
+  const analysis = await engine.analysis(line.endFen);
+  const top = analysis?.topLines?.find((l) => l.moves?.length);
+  const nextSan = top ? sanFrom(line.endFen, top.moves[0]) : null;
+  const sayLine = nextSan ? [...line.sans, nextSan] : line.sans;
+  const w = walkableLine(line.startFen, sayLine, line.sans[0]);
+  if (w && out) out.lines = [w];
+  if (!top || !nextSan) return `${lead}, ${material}.`;
+  const endMover: 'white' | 'black' = end.turn() === 'w' ? 'white' : 'black';
+  // The engine reads White's view; the phrase wants the side to move's.
+  const moverCp = endMover === 'white' ? top.evaluation : -(top.evaluation ?? 0);
+  const moverMate = top.mate != null ? (endMover === 'white' ? top.mate : -top.mate) : null;
+  const standing = evalPhrase(moverCp, moverMate, endMover, board.studentColor);
+  const whose = end.turn() === me ? 'your best move' : 'their best reply';
+  const next = end.turn() === me ? nextSan : `…${nextSan}`;
+  return `${lead}, ${material}. Then ${whose} is ${next}${standing ? `, and ${standing}` : ''}.`;
 }

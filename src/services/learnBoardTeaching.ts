@@ -352,7 +352,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   // records HELD on its own tag (a miss is the live slip capture's).
   try {
     const me: 'w' | 'b' = i.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
-    for (const s of studentMoveStructure({ fenBefore: i.fenBefore, san: i.san, student: me, cpLoss: i.cpLoss, bestSan: i.bestSan, bestUci: i.bestLine?.moves ?? [], reply: i.reply })) {
+    for (const s of studentMoveStructure({ fenBefore: i.fenBefore, san: i.san, student: me, cpLoss: i.cpLoss, bestSan: i.bestSan, bestUci: i.bestLine?.moves ?? [], reply: i.reply, namesBetterMove: false })) {
       out.push({
         lane: 'structureJudgement', proof: s.proof, text: s.text, squares: s.squares, claims: [s.key],
         event: { name: 'coach_structure_judgement', props: { surface: 'coach-teach', act: s.act } }, arrows: [],
@@ -648,7 +648,8 @@ export function threatAnswerTeaching(i: {
   ply: number;
 }): ThreatAnswer | null {
   const studentCp = i.whiteCp === null ? null : i.student === 'w' ? i.whiteCp : -i.whiteCp;
-  return threatAnswer({ fen: i.fen, squares: i.squares, bestUci: i.bestUci, studentCp, student: i.student, ply: i.ply, shape: i.shape });
+  // Learn names no move unasked: the answer is held (David 2026-10-10).
+  return threatAnswer({ fen: i.fen, squares: i.squares, bestUci: i.bestUci, studentCp, student: i.student, ply: i.ply, shape: i.shape, namesMove: false });
 }
 
 /** THE OPENING'S PLAN, COMPUTED FROM MASTER GAMES (WO-TEACH-GAPS P2 #0): the

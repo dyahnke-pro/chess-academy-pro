@@ -2732,5 +2732,28 @@
     "mate": null
    }
   ]
+ },
+ "5k2/p1p4p/1p2nQpN/3p4/3P1n2/2PB2qP/PP4P1/6K1 b - - 21 34": {
+  "bestMove": "f8e8",
+  "evaluation": 100000,
+  "isMate": true,
+  "mateIn": 2,
+  "depth": 18,
+  "seldepth": 5,
+  "nodesPerSecond": 0,
+  "wdl": null,
+  "topLines": [
+   {
+    "rank": 1,
+    "moves": [
+     "f8e8",
+     "d3b5",
+     "c7c6",
+     "b5c6"
+    ],
+    "evaluation": 100000,
+    "mate": 2
+   }
+  ]
  }
 }

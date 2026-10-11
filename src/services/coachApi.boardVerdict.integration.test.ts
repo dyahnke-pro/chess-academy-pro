@@ -140,3 +140,36 @@ describe('question run 2026-09-27 (Colle, White, move 15)', () => {
     expect(r).toMatch(/bishop on c8/);
   });
 });
+
+describe('a mate in one is read off the board (hard walk 2026-10-11)', () => {
+  // GothamChess–AlexOstrovskiy before 23.Qg7#: no engine mate threaded — the
+  // engine read the lane waited on — and the mate is still on the board.
+  const BEFORE_QG7 = '2r4k/pp5p/2q1P3/7N/4p3/4P1Q1/bPPr1P2/2K3N1 w - - 0 24';
+  const run = (q: string, studentColor: 'white' | 'black') => getCoachChatResponse(
+    [{ role: 'user', content: `[Ask]\n${q}` }], '', undefined, 'chat_response', 1024, undefined, undefined,
+    { currentFen: BEFORE_QG7, surface: '/coach/teach', cleanAsk: q, studentColor, engineEvalCp: 400 },
+  );
+
+  it('"is there a forced mate for me now?" names Qg7#', async () => {
+    const r = await run('is there a forced mate for me now?', 'white');
+    expect(r).toMatch(/mate in one: Qg7#/);
+    expect(r).not.toContain('LLM_WAS_CALLED');
+  });
+
+  it('a mate for the side NOT to move is never claimed for the student', async () => {
+    const r = await run('is there a forced mate for me now?', 'black');
+    expect(r).not.toMatch(/mate in one/);
+  });
+});
+
+describe('"what is the name of this mating pattern?" (hard walk 2026-10-11)', () => {
+  const MATED = '2r4k/pp4Qp/2q1P3/7N/4p3/4P3/bPPr1P2/2K3N1 b - - 1 24';
+  it('names the pattern on the mated board and says why — never a drill', async () => {
+    const q = 'What is the name of this mating pattern?';
+    const r = await getCoachChatResponse(
+      [{ role: 'user', content: `[Ask]\n${q}` }], '', undefined, 'chat_response', 1024, undefined, undefined,
+      { currentFen: MATED, surface: '/coach/teach', cleanAsk: q, studentColor: 'white' },
+    );
+    expect(r).toMatch(/^Mate: the queen on g7 checks the king on h8.*It's a Dovetail Mate\.$/);
+  });
+});

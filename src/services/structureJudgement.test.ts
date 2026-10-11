@@ -251,7 +251,7 @@ describe('planJudgement', () => {
 
 describe('structureReads — composed by when they apply', () => {
   it('the student move, their move, the board and the lines each reach their computers', () => {
-    expect(studentMoveStructure({ fenBefore: legal('6k1/pp3ppp/8/8/3PP3/8/PP4PP/2B2RK1 w - - 0 20'), san: 'Bf4', student: 'w', cpLoss: 60, bestSan: 'e5', bestUci: ['e4e5'], reply: null }).map((r) => r.act)).toContain('dont-plug-file');
+    expect(studentMoveStructure({ fenBefore: legal('6k1/pp3ppp/8/8/3PP3/8/PP4PP/2B2RK1 w - - 0 20'), san: 'Bf4', student: 'w', cpLoss: 60, bestSan: 'e5', bestUci: ['e4e5'], reply: null, namesBetterMove: true }).map((r) => r.act)).toContain('dont-plug-file');
     expect(theirMoveStructure(legal('6k1/pp3ppp/3p4/3np3/2P1P3/8/PP3PPP/6K1 w - - 0 20'), 'exd5', 'b').map((r) => r.act)).toContain('recapture-sealed-weakness');
     expect(boardStructure(legal('3q2k1/5ppp/8/3p4/4p3/2N3P1/PP3PBP/6K1 w - - 0 20'), 'w').map((r) => r.act)).toContain('key-pawn');
     expect(linesStructure(fromSans(['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'e3']), 'b', [

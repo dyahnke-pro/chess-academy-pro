@@ -12,6 +12,7 @@ import type { Color, Square } from 'chess.js';
 import { noPawnCanChallenge } from './outpost';
 import { findWeakPawns, pressureCount, capturesWinMaterial, legalSeeGainFor } from './positionReadingService';
 import { squaresProof, legalLineProof } from './proof';
+import { heldOf } from './planJudgement';
 import { costStakes } from './factStakes';
 import { andList } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -163,6 +164,7 @@ export function enPassantStructure(
   return {
     act: 'en-passant-structure', squares: [r.mv.from, ...lost], proof, key: `ep-took:${r.mv.from}`, stakes: costStakes(cpLoss) ?? undefined,
     text: `Taking en passant gave up the clamp: your pawn on ${r.mv.from} kept ${andList(lost)} shut. ${bare(bestSan)} kept it.`,
+    ...heldOf(`Taking en passant gave up the clamp: your pawn on ${r.mv.from} kept ${andList(lost)} shut.`, [r.mv.from, ...lost]),
   };
 }
 
@@ -347,5 +349,6 @@ export function formationChoice(
   return {
     act: 'formation', squares: built.squares, proof, key: `formation-choice:${built.key}`, stakes: costStakes(cpLoss) ?? undefined,
     text: `Of the pawn moves, ${bare(bestSan)} was the one: it makes a ${kind} of ${andList(built.squares)}, and ${bare(san)} builds nothing.`,
+    ...heldOf(`${bare(san)} builds nothing; another pawn move makes a ${kind}.`, [played.mv.to]),
   };
 }

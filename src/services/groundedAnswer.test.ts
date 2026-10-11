@@ -1639,3 +1639,13 @@ describe('tactics-profile answers speak the motif WORD, never the enum (WO-STAND
     expect(a.facts).not.toMatch(/_/);
   });
 });
+
+describe('notationQuestionSan — a move named in passing is not a notation question (hard walk 2026-10-11)', () => {
+  it.each([
+    "What's the main threat here? Can Black defend h7 after Bd3?",
+    'What is Black threatening? Is Qc2+ a problem for me? Calculate it.',
+  ])('"%s" → null', (q) => expect(notationQuestionSan(q)).toBeNull());
+  it.each([
+    ['what is bxe7', 'Bxe7'], ['what does c4 mean?', 'c4'], ["what's Nf3?", 'Nf3'],
+  ])('"%s" → %s', (q, san) => expect(notationQuestionSan(q)).toBe(san));
+});

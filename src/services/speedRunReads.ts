@@ -518,7 +518,7 @@ export function rejectedMoveLater(fen: string, lines: Lines): Read | null {
     // before and after the engine's moves up to the capture; nothing nameable
     // changed → the held form says nothing.
     const prep = preparationOf(fen, san, main.slice(0, at));
-    return { stakes: costStakes(seatCp(fen, lines[0]) - seatCp(fen, l)) ?? undefined, claim: `srr:rejected:${san}`, ...(prep ? { idea: `${san} doesn't work yet — ${prep}, and then it does.` } : {}), namesMove: true, text: `${san} doesn't work yet — but it does after ${first}: it comes back ${at / 2} move${at === 2 ? '' : 's'} later in the line. A rejected move is not a dead move; prepare it.` };
+    return { stakes: costStakes(seatCp(fen, lines[0]) - seatCp(fen, l)) ?? undefined, claim: `srr:rejected:${san}`, ...(prep ? { idea: `The ${san.includes('+') && !san.includes('x') ? 'check' : 'capture'} you may be eyeing doesn't work yet — ${prep}, and then it does.` } : {}), namesMove: true, text: `${san} doesn't work yet — but it does after ${first}: it comes back ${at / 2} move${at === 2 ? '' : 's'} later in the line. A rejected move is not a dead move; prepare it.` };
   }
   return null;
 }
@@ -573,7 +573,7 @@ export function flexibleFirst(fen: string, lines: Lines): Read | null {
     const s2 = sanOf(fen, l.moves[0]);
     const p2 = s2 ? play(fen, s2) : null;
     if (!p2 || !s2 || p2.move.piece !== 'p' || p2.move.captured) continue;
-    return { promise: { key: `flex:${p2.move.to}`, piece: 'p', square: p2.move.to, say: `And now ${s2} — after the pieces, the way it should be.` }, idea: rot(fen, `Make the flexible move first — ${what} keeps your options; ${s2} can always come later, but a pawn can never go back.`, `Keep your options open — ${what} first; ${s2} will still be there, and a pawn move can't be taken back.`, `Commit the pawn last — ${what} now, ${s2} later if you still want it.`), claim: 'srr:flexible-first', namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
+    return { promise: { key: `flex:${p2.move.to}`, piece: 'p', square: p2.move.to, say: `And now ${s2} — after the pieces, the way it should be.` }, idea: rot(fen, `Make the flexible move first — ${what} keeps your options; the pawn move can always come later, but a pawn can never go back.`, `Keep your options open — ${what} first; the pawn move will still be there, and a pawn move can't be taken back.`, `Commit the pawn last — ${what} now, the pawn later if you still want it.`), claim: 'srr:flexible-first', namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
   }
   return null;
 }

@@ -19,6 +19,7 @@ import { Chess, type Move, type Square } from 'chess.js';
 import type { BoardContext, ChatTurn, PieceLetter, Referent } from './chatTurn';
 import { CAPTURE_VALUE } from '../services/pieceValues';
 import { isCompareMyMoveQuestion } from './questionIntents';
+import { playNamedLine } from '../services/whyNotLegal';
 
 // ─── WORDS → SLOTS ─────────────────────────────────────────────────────────
 
@@ -292,6 +293,13 @@ function theirOne(chess: Chess, piece: PieceLetter, enemy: 'w' | 'b'): string | 
 const SHOW_LINE_RE = /^(?:ok(?:ay)?[,\s]+|yes[,\s]+|sure[,\s]+|please\s+|can you\s+|could you\s+)?(?:show\s+me(?:\s+(?:that|it|this|the\s+line|that\s+line|the\s+moves|how|on\s+the\s+board|the\s+line\s+on\s+the\s+board))?|play\s+(?:it|that|this|the\s+line|that\s+line)\s+out|play\s+out\s+(?:the|that)\s+line|walk\s+me\s+through\s+(?:it|that|this|the\s+line|that\s+line))(?:\s+please)?\s*[?.!]*$/;
 const BEST_MOVE_ASK_RE = /^(?:so\s+|ok(?:ay)?\s+)?(?:what(?:'s|s|\s+is)\s+(?:the\s+|my\s+)?(?:best|strongest|right|top)\s+(?:move|continuation|play)|best\s+move|what\s+(?:should|do|would)\s+i\s+(?:play|do))(?:\s+(?:here|now|in\s+this\s+position))?\s*[?.!]*$/;
 
+/** Every move written in the sentence, in order — SAN or a bare square (a
+ *  pawn move). Move numbers and dots are dropped. */
+export function namedMoveTokens(text: string): string[] {
+  return [...text.replace(/\d+\.(?:\.\.)?|…/g, ' ').matchAll(/(?<![A-Za-z0-9])(O-O-O|O-O|[KQRBN][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8](?:=[QRBN])?|[a-h][1-8](?:=[QRBN])?)[+#]?(?![A-Za-z0-9])/g)].map((m) => m[1]);
+}
+const LINE_CUE_RE = /\b(?:calculate|calc|line|if|after|then|and|what happens|takes?|plays?|recapture)\b/i;
+
 export function readTurnInCode(text: string, board: BoardContext): ChatTurn | null {
   if (!board.fen || text.length > 160) return null;
   let chess: Chess;
@@ -330,6 +338,15 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
     }
     // "was h3 good or an unnecessary pawn move?" offers words, not two moves:
     // read on as a question about the one move it names.
+  }
+
+  // A LINE THE STUDENT NAMES — "calculate Nh5 Bg5 h6 Bh4 g5", "if Black plays
+  // c5 and I take dxc5, what then?" (hard-question walk 2026-10-11: six such
+  // questions were answered about a different move or refused as illegal).
+  // Every move written, in order, must play from this board as one line.
+  const lineSans = namedMoveTokens(text);
+  if (lineSans.length >= 2 && LINE_CUE_RE.test(text) && playNamedLine(board.fen, lineSans)) {
+    return { kind: 'line-outcome', referents: lineSans.map((san): Referent => ({ type: 'move', san })), seat: null, topic: null };
   }
 
   // "What is my bishop on c4 aiming at?" / "what about their knight?" — a
@@ -499,6 +516,14 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
   // "Why is Ba4 better than what I played?" — the past tense belongs to the
   // OTHER side of the comparison; the named move is the alternative
   // (contracts 2026-10-10: read as a question about Ba4 being played).
+  // A MOVE OF THE GAME AND AN ALTERNATIVE, named together — "was g4 best? the
+  // engine might prefer Qh2" (hard-question walk 2026-10-11: a bare pawn move
+  // is a square to the slots, so only Qh2 survived and was graded as played).
+  const written = namedMoveTokens(text);
+  const tape = (board.history ?? []).map((h) => h.replace(/[+#!?]/g, ''));
+  if (written.length >= 2 && written.some((w) => tape.includes(w)) && written.some((w) => !tape.includes(w))) {
+    return { kind: 'retrospective-move', referents: written.map((san): Referent => ({ type: 'move', san })), seat: 'me', topic: null };
+  }
   if (named && isCompareMyMoveQuestion(text)) {
     return { kind: 'compare-my-move', referents: [{ type: 'move', san: named }], seat: 'me', topic: null };
   }

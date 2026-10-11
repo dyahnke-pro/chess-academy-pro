@@ -164,6 +164,45 @@ export function whyNotLegal(fen: string, dest: string, student: 'white' | 'black
 
 const LETTER: Record<string, PieceSymbol> = { K: 'k', Q: 'q', R: 'r', B: 'b', N: 'n' };
 
+/** A named line played out: where it starts (the other side may move first)
+ *  and the moves in clean SAN. */
+export interface PlayedNamedLine { startFen: string; sans: string[]; endFen: string }
+
+/**
+ * THE MOVES A SENTENCE NAMES, PLAYED AS A LINE — the one reader of whether
+ * named moves are a hypothetical the board allows ("if Black plays c5 and I
+ * take dxc5"). Legal in order from this board with the side to move first, or
+ * with the OTHER side first (their move, then the reply). A single move by the
+ * other side counts only when `theirsAlone` (the sentence put it in their
+ * mouth). Hard-question walk 2026-10-11: such lines were refused as illegal
+ * for the student ("Pawn to c5 is not possible").
+ */
+export function playNamedLine(fen: string, sans: readonly string[], opts: { theirsAlone?: boolean; fromHere?: boolean } = {}): PlayedNamedLine | null {
+  if (sans.length === 0) return null;
+  const tryFrom = (f: string): PlayedNamedLine | null => {
+    try {
+      const c = new Chess(f);
+      const out: string[] = [];
+      for (const san of sans) { const m = c.move(san); if (!m) return null; out.push(m.san); }
+      return { startFen: f, sans: out, endFen: c.fen() };
+    } catch { return null; }
+  };
+  if (sans.length >= 2 || opts.fromHere) {
+    const here = tryFrom(fen);
+    if (here) return here;
+  }
+  if (sans.length < 2 && !opts.theirsAlone) return null;
+  try { if (new Chess(fen).inCheck()) return null; } catch { return null; }
+  const parts = fen.split(' ');
+  parts[1] = parts[1] === 'w' ? 'b' : 'w';
+  parts[3] = '-';
+  return tryFrom(parts.join(' '));
+}
+
+export function namedLinePlays(fen: string, sans: readonly string[], opts: { theirsAlone?: boolean } = {}): boolean {
+  return playNamedLine(fen, sans, opts) !== null;
+}
+
 /**
  * A MOVE THE SENTENCE NAMES THAT THE BOARD WILL NOT ALLOW — whatever the
  * wording ("it won't let me take b5", "is qf3 ok?", "Nb5 doesn't work",
@@ -205,6 +244,15 @@ export function illegalNamedMove(ask: string, fen: string, student: 'white' | 'b
   if (fits(chess)) return null;
   // A move of THEIRS ("what if they play Bxc3") is a hypothetical, not a refusal.
   if (slots.seat === 'them') return null;
+  // A LINE the sentence names ("if Black plays c5 and I take dxc5") is a
+  // hypothetical when it is legal from here with THEM moving first — the "I"
+  // belongs to the second move, not the first (hard-question walk 2026-10-11:
+  // "Pawn to c5 is not possible" for …c5 dxc5 after 1.d4 d5 2.Bf4 Nf6).
+  if (slots.sans.length >= 2 && namedLinePlays(fen, slots.sans)) return null;
+  // The sentence names THEIR colour ("if Black plays c5 …"): their move, a
+  // hypothetical — the same as "they" (the reader keeps a bare "c5" as a
+  // square, so the line check above cannot see that move).
+  if (slots.colour && slots.colour !== student) return null;
   // A move only THEY can play, said without "I / my", is theirs as well
   // ("what does Nc6 do?" with their knight on b8 — pass 2, 2026-10-09).
   if (slots.seat !== 'me' && san) {

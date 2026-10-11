@@ -6,7 +6,7 @@ import { threatAnswer } from './threatAnswer';
 import { stripThink } from '../utils/thinkPause';
 
 const run = (fen: string, squares: string[], best: string, cp: number, shape: 'line' | 'hit' = 'line', ply = 0) =>
-  withPlainText(threatAnswer({ fen, squares, bestUci: best, studentCp: cp, student: fen.split(' ')[1] as 'w' | 'b', ply, shape }));
+  withPlainText(threatAnswer({ fen, squares, bestUci: best, studentCp: cp, student: fen.split(' ')[1] as 'w' | 'b', ply, shape, namesMove: true }));
 const withPlainText = <T extends { text: string } | null>(a: T): T => (a ? { ...a, text: stripThink(a.text) } : a);
 
 describe('threatAnswer', () => {
@@ -78,7 +78,7 @@ describe('threatAnswer', () => {
   });
 
   it('refuses a board where the student is not to move', () => {
-    expect(threatAnswer({ fen: 'r3rk2/pp1n1ppp/8/8/8/2P1BN2/PP4PP/RN2K3 b - - 3 19', squares: ['e8', 'e3', 'e1'], bestUci: 'f8g8', studentCp: 0, student: 'w', ply: 0, shape: 'line' })).toBeNull();
+    expect(threatAnswer({ fen: 'r3rk2/pp1n1ppp/8/8/8/2P1BN2/PP4PP/RN2K3 b - - 3 19', squares: ['e8', 'e3', 'e1'], bestUci: 'f8g8', studentCp: 0, student: 'w', ply: 0, shape: 'line', namesMove: true })).toBeNull();
   });
 
   it('a check elsewhere is not "guard it", even when it leaves a defender (merged walk, x-TMzSM51Cw ply 28)', () => {
@@ -91,17 +91,30 @@ describe('threatAnswer', () => {
 describe('Learn walk 2026-10-02 — "it can wait" is never a rescue', () => {
   it('ply 48: the hanging-knight warning, best Qd2 rescues the queen Rxb2 hits — not "it can wait"', () => {
     const fen = 'r4rk1/1p3ppp/8/pPb2n1P/P4PK1/2p2Q2/1q2N3/1R5R b - - 3 25';
-    const a = threatAnswer({ fen, squares: ['f5'], bestUci: 'b2d2', studentCp: 640, student: 'b', ply: 48, shape: 'hit' });
+    const a = threatAnswer({ fen, squares: ['f5'], bestUci: 'b2d2', studentCp: 640, student: 'b', ply: 48, shape: 'hit', namesMove: true });
     expect(a?.kind).not.toBe('wait');
   });
   it('ply 70: the discovery-in-waiting warning, best Nc3 rescues the knight Rxe2 hits — not "it can wait"', () => {
     const fen = '4rrk1/1p3ppp/8/pP3P1P/Pb2N1K1/4R3/4n3/7R b - - 2 36';
-    const a = threatAnswer({ fen, squares: ['e4', 'e3', 'e8'], bestUci: 'e2c3', studentCp: 530, student: 'b', ply: 70, shape: 'line' });
+    const a = threatAnswer({ fen, squares: ['e4', 'e3', 'e8'], bestUci: 'e2c3', studentCp: 530, student: 'b', ply: 70, shape: 'line', namesMove: true });
     expect(a?.kind).not.toBe('wait');
   });
   it('ply 72: a forked rook leaving with a capture is still "move it with gain" (it IS one of the forked pieces)', () => {
     const fen = '2r5/2R4p/pNrP2p1/2Pk1p2/1P6/7P/P5P1/6K1 b - - 4 37';
-    const a = threatAnswer({ fen, squares: ['c7', 'c8', 'c6'], bestUci: 'c6b6', studentCp: -800, student: 'b', ply: 72, shape: 'hit' });
+    const a = threatAnswer({ fen, squares: ['c7', 'c8', 'c6'], bestUci: 'c6b6', studentCp: -800, student: 'b', ply: 72, shape: 'hit', namesMove: true });
     expect(a?.kind).toBe('with-gain');
+  });
+});
+
+describe('Learn holds the move (hard-question walk 2026-10-11)', () => {
+  it('the held answer says the kind of move, never the move, and draws nothing', () => {
+    const fen = 'r3qrk1/ppp1bppp/4n3/4P2n/6b1/1BN1BN2/PPP3PP/3RQRK1 w - - 5 16';
+    const named = threatAnswer({ fen, squares: ['g4', 'f3', 'd1'], bestUci: 'h2h3', studentCp: 223, student: 'w', ply: 0, shape: 'line', namesMove: true })!;
+    const held = threatAnswer({ fen, squares: ['g4', 'f3', 'd1'], bestUci: 'h2h3', studentCp: 223, student: 'w', ply: 0, shape: 'line', namesMove: false })!;
+    expect(stripThink(held.text)).toMatch(/Ask the question — a pawn move hits the attacker at once\.$/);
+    expect(named.text).toContain(named.san);
+    expect(held.kind).toBe(named.kind);
+    expect(held.text).not.toContain(held.san);
+    expect(held.arrow).toBeNull();
   });
 });

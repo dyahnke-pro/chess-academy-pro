@@ -85,3 +85,14 @@ describe('a refused move is explained whatever the wording', () => {
     expect(illegalNamedMove(q, NO_CASTLE, 'white', CASTLE_LINE)).toBeNull();
   });
 });
+
+describe('a named line that starts with their move is a hypothetical (hard-question walk 2026-10-11)', () => {
+  it('"If Black plays c5 now and I take dxc5…" is not refused', () => {
+    const fen = 'rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 2 3';
+    expect(illegalNamedMove('If Black plays c5 now and I take dxc5, can I keep the extra pawn? Calculate it.', fen, 'white', ['d4', 'd5', 'Bf4', 'Nf6'])).toBeNull();
+  });
+  it('a move that is illegal for both sides is still refused', () => {
+    const fen = 'rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 2 3';
+    expect(illegalNamedMove('can I play Qh5?', fen, 'white', ['d4', 'd5', 'Bf4', 'Nf6'])).not.toBeNull();
+  });
+});

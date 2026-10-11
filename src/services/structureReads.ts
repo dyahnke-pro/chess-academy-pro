@@ -37,6 +37,10 @@ export interface StudentMoveStructureInput {
   /** Their answer to the student's move, SAN, when known (played, or the
    *  engine's best reply on review). */
   reply: string | null;
+  /** REQUIRED: may the better move be named? Review yes; Learn free play no
+   *  (David 2026-10-10) — a read that names it speaks its held form, and one
+   *  with no held form stays quiet. */
+  namesBetterMove: boolean;
 }
 
 function safe(f: () => StructureRead | null): StructureRead | null {
@@ -46,7 +50,7 @@ function safe(f: () => StructureRead | null): StructureRead | null {
 /** Everything the student's move teaches about structure, squares and plan. */
 export function studentMoveStructure(i: StudentMoveStructureInput): StructureRead[] {
   const { fenBefore, san, student, cpLoss, bestSan, bestUci, reply } = i;
-  return [
+  const reads = [
     safe(() => rightIdeaWrongPiece(fenBefore, san, bestSan, cpLoss)),
     safe(() => keepPlanChangeRoute(fenBefore, san, bestUci, cpLoss, reply)),
     safe(() => planOverOneMove(fenBefore, san, bestSan, cpLoss)),
@@ -64,6 +68,10 @@ export function studentMoveStructure(i: StudentMoveStructureInput): StructureRea
     safe(() => wedgePaysLater(fenBefore, san, student, bestUci, cpLoss)),
     safe(() => closedTacticalChance(fenBefore, san, student, bestUci, cpLoss)),
   ].filter((r): r is StructureRead => r !== null);
+  if (i.namesBetterMove) return reads;
+  // A read that names the better move carries its held form (`heldForm`);
+  // every other read never names it.
+  return reads.map((r) => (r.heldForm ? { ...r, text: r.heldForm.text, squares: r.heldForm.squares, proof: r.heldForm.proof, heldForm: undefined } : r));
 }
 
 /** What THEIR move did to the student's structure and squares. */

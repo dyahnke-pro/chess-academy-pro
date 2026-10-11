@@ -25,7 +25,9 @@ export interface ThreatAnswer {
   san: string;
   /** Question + answer, e.g. "What do you do about it? Ask the question — h3 hits the bishop at once." */
   text: string;
-  arrow: ArrowClaim;
+  /** Drawn only when the move is named — a held answer draws nothing, or the
+   *  arrow would name the move the words held back. */
+  arrow: ArrowClaim | null;
 }
 
 /** Student-POV floor for "it can wait" — the same floor as `falseAlarm`. */
@@ -71,6 +73,11 @@ export function threatAnswer(input: {
    *  attacked (hanging, forked): there is no line to leave, only a safe square
    *  to go to. */
   shape: 'line' | 'hit';
+  /** REQUIRED. Learn free play names no move unasked (David 2026-10-10): the
+   *  answer says what KIND of move meets the threat, and the move waits for
+   *  the ask (hard-question walk 2026-10-11: "It can wait — Nf3 comes first"
+   *  named the student's move unasked). */
+  namesMove: boolean;
 }): ThreatAnswer | null {
   const { fen, bestUci, studentCp, student, ply } = input;
   if (!bestUci) return null;
@@ -157,11 +164,30 @@ export function threatAnswer(input: {
     }
   }
   if (!kind) return null;
+  if (!input.namesMove) answer = heldAnswer(kind, m, input.shape, piece);
   return {
     kind,
     san: m.san,
     // Question, a pause to think, then the answer (the Danya pattern).
     text: `${STEMS[ply % STEMS.length]} ${THINK_MARK} ${answer}`,
-    arrow: { from: m.from, to: m.to, role: 'play', vouchedBy: 'engine', source: 'threatAnswer' },
+    arrow: input.namesMove ? { from: m.from, to: m.to, role: 'play', vouchedBy: 'engine', source: 'threatAnswer' } : null,
   };
+}
+
+/** The answer with the move held: what kind of move meets the threat, in the
+ *  same order as the named answer, never the move itself. */
+function heldAnswer(kind: ThreatAnswerKind, m: Move, shape: 'line' | 'hit', piece: (sq: Square) => string): string {
+  switch (kind) {
+    case 'take': return `Take it — one capture removes the ${piece(m.to)} doing it.`;
+    case 'with-gain': return m.captured
+      ? 'Move it with gain — the attacked piece has a capture of its own.'
+      : 'Move it with gain — the attacked piece can go with check.';
+    case 'step-out': return shape === 'hit'
+      ? `Move it — your ${NAME[m.piece]} has a square where they can't win it.`
+      : `Step out of it — take the ${NAME[m.piece]} off the line.`;
+    case 'kick': return 'Ask the question — a pawn move hits the attacker at once.';
+    case 'block': return 'Block it — a piece of yours can step in between.';
+    case 'guard': return 'Guard it — one move adds a defender.';
+    case 'wait': return 'It can wait — something stronger comes first.';
+  }
 }

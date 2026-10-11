@@ -65,3 +65,42 @@ describe('hard walk 2026-10-10', () => {
     expect(a.text).not.toMatch(/best move/i);
   }, 60_000);
 });
+
+describe('hard walk 2026-10-11 — a question with "show me" is answered first', () => {
+  const BEFORE_QG7 = '2r4k/pp5p/2q1P3/7N/4p3/4P1Q1/bPPr1P2/2K3N1 w - - 0 24';
+  it('"is there a forced mate for me now? show me" names Qg7# and walks it, never the old line', async () => {
+    setChatTurnReaderForTests(async () => ({ kind: 'attack-piece', referents: [{ type: 'square', square: 'c4' }], seat: 'them', topic: null }) as never);
+    await ask('can they attack my bishop on c4?');
+    expect(lastLineFor('game-chat')).not.toBeNull();
+    // The model read it as a request to show a line — the worst case.
+    setChatTurnReaderForTests(async () => ({ kind: 'command', referents: [], seat: null, topic: null, steps: [{ action: 'show-line', opening: null, side: null, account: null }] }) as never);
+    const a = await dispatchCoachTurn({
+      surface: 'game-chat', ask: 'Is there a forced mate for me now? How many moves? Show me.', origin: 'typed',
+      liveState: { surface: 'game-chat', fen: BEFORE_QG7, whoseTurn: 'white', studentColor: 'white', moveHistory: [], currentRoute: '/coach/teach' },
+    } as never, { maxToolRoundTrips: 1 });
+    expect(a.text).toMatch(/Qg7#/);
+    expect(a.text).not.toMatch(/^Playing the line out/);
+    expect(a.autoWalk?.plies.map((p) => p.san)).toEqual(['Qg7#']);
+  }, 60_000);
+});
+
+describe('hard walk 2026-10-11 — "was g4 best, or Qh2?"', () => {
+  const H = 'd4 d5 Bf4 Nf6 e3 g6 Nc3 Bg7 h4 O-O h5 Nxh5 Rxh5 gxh5 Qxh5 e6 Bd3 f5 g4 Nd7'.split(' ');
+  const NOW = 'r1bq1rk1/pppn2bp/4p3/3p1p1Q/3P1BP1/2NBP3/PPP2P2/R3K1N1 w Q - 1 11';
+  it('compares Qh2 with g4 where g4 was played — never "Qh2 isn\'t in this game"', async () => {
+    const { setBoardEngineForTests } = await import('./boardTurnAnswer');
+    setBoardEngineForTests({
+      analysis: async () => ({ topLines: [{ rank: 1, evaluation: 200, mate: null, moves: ['h5h2', 'd8f6'] }, { rank: 2, evaluation: -85, mate: null, moves: ['g2g4', 'b8d7'] }], evaluation: 200, isMate: false, mateIn: null, depth: 18, seldepth: 20, wdl: null }) as never,
+      candidate: async () => ({ evalCp: 200, mateIn: null, lineUci: ['d8f6'] }),
+    });
+    setChatTurnReaderForTests(async () => ({ kind: 'retrospective-move', referents: [{ type: 'move', san: 'g4' }, { type: 'move', san: 'Qh2' }], seat: 'me', topic: null }) as never);
+    const a = await dispatchCoachTurn({
+      surface: 'game-chat', ask: 'Was g4 best? The engine might prefer Qh2 — explain the difference.', origin: 'typed',
+      liveState: { surface: 'game-chat', fen: NOW, whoseTurn: 'white', studentColor: 'white', moveHistory: H, currentRoute: '/coach/teach' },
+    } as never, { maxToolRoundTrips: 1 });
+    expect(a.text).not.toMatch(/isn't in this game/);
+    expect(a.servedIntent).toBe('board:compare-my-move');
+    expect(a.text).toMatch(/^You played g4 there\./);
+    setBoardEngineForTests(null);
+  }, 60_000);
+});

@@ -293,3 +293,12 @@ describe('matchTrainingAidRoute — HOW-TO questions are ANSWERED, never hijacke
     expect(matchTrainingAidRoute('teach me the Najdorf masterclass')?.aid).not.toBe('master');
   });
 });
+
+describe('a question about this board\'s mate is not a drill (hard walk 2026-10-11)', () => {
+  it.each(['What is the name of this mating pattern?', 'what mate is this?', 'which mating pattern is this'])('"%s" → null', (q) => {
+    expect(matchTrainingAidRoute(q)).toBeNull();
+  });
+  it('"practice mating patterns" still drills', () => {
+    expect(matchTrainingAidRoute('practice mating patterns')).not.toBeNull();
+  });
+});

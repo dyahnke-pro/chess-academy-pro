@@ -9,7 +9,7 @@
 // the line it rests on as its proof — said short, never recited as fact (an
 // engine proof is not exact). Pure.
 import type { Color, Square } from 'chess.js';
-import { legalLineProof, type Proof } from './proof';
+import { legalLineProof, squaresProof, type Proof } from './proof';
 import { costStakes, isSacrifice } from './factStakes';
 import { andList } from '../utils/andList';
 import { CENTRAL_SQUARES } from './keySquares';
@@ -45,6 +45,7 @@ export function rightIdeaWrongPiece(fenBefore: string, san: string, bestSan: str
     act: 'right-idea-wrong-piece', squares: [r.mv.to, b.mv.from, r.mv.from], proof, key: `wrong-piece:${r.mv.to}`,
     stakes: costStakes(cpLoss) ?? undefined,
     text: `${r.mv.to} is the right square, but it is the ${b.mv.from} ${noun}'s job: ${bare(bestSan)}.${why}`,
+    ...heldOf(`${r.mv.to} is the right square, but another ${noun} should be the one to go there.${why}`, [r.mv.to, r.mv.from]),
   };
 }
 
@@ -134,6 +135,7 @@ export function planOverOneMove(fenBefore: string, san: string, bestSan: string 
     act: 'plan-over-one-move', squares: [r.mv.to, b.mv.to, gained[0]], proof, key: `one-move:${r.mv.to}`,
     stakes: costStakes(cpLoss) ?? undefined,
     text: `The ${shot} is a one-move idea; ${bare(bestSan)} is the plan: it adds control of ${andList(gained)}.`,
+    ...heldOf(`The ${shot} is a one-move idea; the plan is a quiet move that adds control of ${andList(gained)}.`, [r.mv.to, ...gained]),
   };
 }
 
@@ -320,4 +322,11 @@ export function closedTacticalChance(
     };
   }
   return null;
+}
+
+/** The held form of a read that names the better move: the words without it,
+ *  proved by the squares they name. */
+export function heldOf(text: string, squares: string[]): { heldForm?: { text: string; squares: string[]; proof: Proof } } {
+  const proof = squaresProof(text, squares);
+  return proof ? { heldForm: { text, squares, proof } } : {};
 }

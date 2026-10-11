@@ -32,7 +32,7 @@
  * aids, so "drill the Najdorf" is untouched here.
  */
 import { TACTICAL_THEMES } from './puzzleService';
-import { isTransferGapQuestion } from '../coach/questionIntents';
+import { isTransferGapQuestion, isMatePatternNameQuestion } from '../coach/questionIntents';
 
 export interface TrainingAidRoute {
   /** Relative route (starts with `/`) to navigate to. */
@@ -123,6 +123,9 @@ export function matchTrainingAidRoute(text: string): TrainingAidRoute | null {
   if (STATS_RE.test(lower)) return null;
   // HOW-TO questions go to the grounded brain, not a drill.
   if (HOWTO_RE.test(lower)) return null;
+  // A question about THIS board's mate ("what's the name of this mating
+  // pattern?") is answered on the board, never a drill (hard walk 2026-10-11).
+  if (isMatePatternNameQuestion(lower)) return null;
   // A transfer-gap ask ("do I spot tactics in games as well as puzzles?") names
   // "puzzles" but is a diagnostic QUESTION for the grounded brain, not a drill
   // request — the bare-"puzzles" branch below hijacked it into a tactics drill

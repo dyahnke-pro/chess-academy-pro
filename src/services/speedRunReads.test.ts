@@ -158,6 +158,16 @@ describe('his habits of thought, computed (each checked against the existing com
     expect(flexibleFirst(fen, [line(['g1f3'], 30), line(['d2d4'], 20)])?.text).toMatch(/flexible move first/);
     expect(flexibleFirst(fen, [line(['d2d4'], 30), line(['g1f3'], 20)])).toBeNull();
   });
+  it('a held idea never names a move (hard-question walk 2026-10-11: "c4 will still be there")', () => {
+    const fen = fenAt('e4 e5');
+    for (let i = 0; i < 3; i += 1) {
+      const r = flexibleFirst(fen.replace(/ 0 \d+$/, ` 0 ${2 + i}`), [line(['g1f3'], 30), line(['d2d4'], 20)]);
+      expect(r?.idea).toBeDefined();
+      expect(r?.idea).not.toMatch(/\bd4\b|\bNf3\b/);
+    }
+    const rej = rejectedMoveLater(fenAt('e4 d5'), [line(['b1c3', 'g8f6', 'e4d5'], 50), line(['e4d5'], -100)]);
+    if (rej?.idea) expect(rej.idea).not.toMatch(/exd5|Nc3/);
+  });
   it('the queen as the glue: the d2 queen alone holds c3 and e3', () => {
     expect(queenGlue('4k3/8/8/8/1b4n1/2N1B3/3Q4/4K3 w - - 0 1', 'w')?.text).toMatch(/queen on d2 is the glue/);
     expect(queenGlue('4k3/8/8/8/1b4n1/2N1B3/1P1Q4/4K3 w - - 0 1', 'w')).toBeNull();
@@ -187,7 +197,8 @@ describe('his habits of thought, computed (each checked against the existing com
     const ff = flexibleFirst(fenAt('e4 e5'), [line(['g1f3'], 30), line(['d2d4'], 20)]);
     expect(ff?.idea).toMatch(/a knight move/);
     expect(ff?.idea).not.toMatch(/f3/);
-    expect(ff?.idea).toMatch(/d4/);
+    // Learn names no move unasked (David 2026-10-10): the pawn move is held too.
+    expect(ff?.idea).not.toMatch(/d4/);
     const castle = flexibleFirst('r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4', [line(['e1g1'], 30), line(['d2d3'], 20)]);
     expect(castle?.idea).toMatch(/castling/);
   });

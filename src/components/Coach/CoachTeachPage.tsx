@@ -10657,7 +10657,9 @@ export function CoachTeachPage(): JSX.Element {
                       });
                       if (ans) {
                         learnMemRef.current.questionsAnswered.add(`${fenNow}|${ans.san}`);
-                        queueSpokenHint(fenNow, ans.text, 'threatAnswer', (() => { const tc = readBoard('threatCost', { line: ans.text, fen: fenNow, student: playerColor === 'white' ? 'w' : 'b', squares: asked.squares })?.proof; return (tc && isProof(tc) ? tc : null) ?? legalLineProof(fenNow, [ans.san]) ?? tc ?? NO_PROOF.withheld; })(), asked.squares, [`threat-answer:${ans.arrow.from}${ans.arrow.to}`], undefined, [ans.arrow]);
+                        // The move is held, so its proof is too — the threat's
+                        // cost still proves the question.
+                        queueSpokenHint(fenNow, ans.text, 'threatAnswer', (() => { const tc = readBoard('threatCost', { line: ans.text, fen: fenNow, student: playerColor === 'white' ? 'w' : 'b', squares: asked.squares })?.proof; return (tc && isProof(tc) ? tc : null) ?? (ans.arrow ? legalLineProof(fenNow, [ans.san]) : null) ?? tc ?? NO_PROOF.withheld; })(), asked.squares, [`threat-answer:${ans.kind}:${asked.squares.join('')}`], undefined, ans.arrow ? [ans.arrow] : undefined);
                         captureEvent('threat_answer_queued', { surface: 'coach-teach', kind: ans.kind });
                       }
                     });

@@ -925,12 +925,20 @@ export function isTacticsQuestion(ask: string | undefined): boolean {
  *  "quiet position" (endgame-live audit 2026-09-02). The caller consults the
  *  tablebase for these before the tactics all-clear; off-tablebase it falls back
  *  to the tactic scan, so a middlegame mate-combination ask is unaffected. */
+const MATE_PATTERN_NAME_RE = /\b(?:name|called)\b[\s\S]{0,25}\b(?:this|that|the)\s+(?:mating|mate|checkmate)(?:\s+pattern)?\b|\bwhat\s+(?:kind\s+of\s+)?(?:mate|checkmate|mating\s+pattern|pattern)\s+is\s+(?:this|that)\b|\bwhich\s+(?:mate|checkmate|mating\s+pattern)\s+is\s+(?:this|that)\b/i;
+export function isMatePatternNameQuestion(ask: string | undefined): boolean {
+  return !!ask && MATE_PATTERN_NAME_RE.test(ask);
+}
+
 export function isMateQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   // A mate question that NAMES ITS MATERIAL ("how many moves to mate with
   // bishop and knight") asks a rule, not about this board — localhost chat walk
   // 2026-10-01 answered it "No forced mate here".
   if (endgameRuleMaterial(ask) !== null) return false;
+  // "What is the name of this mating pattern?" asks about THIS board's mate
+  // (hard-question walk 2026-10-11: it started a mating-patterns drill).
+  if (MATE_PATTERN_NAME_RE.test(ask)) return true;
   return /\b(?:force\s+(?:a\s+)?(?:mate|checkmate)|forced\s+(?:mate|checkmate|win\s+by\s+mate)|mate\s+in\s+(?:how\s+many|\d)|how\s+(?:many\s+moves?|long)\s+(?:to|until|before)\s+(?:i\s+)?(?:force\s+)?(?:mate|checkmate)|moves?\s+to\s+(?:force\s+)?(?:mate|checkmate)|can\s+i\s+(?:force\s+)?(?:deliver\s+)?(?:mate|checkmate)|is\s+there\s+(?:a\s+)?(?:forced\s+)?(?:mate|checkmate)|mate\s+the\s+(?:lone\s+)?king|(?:fastest|quickest)\s+(?:way\s+to\s+)?(?:mate|checkmate|win)|how\s+(?:fast|quickly|soon)\s+can\s+i\s+(?:mate|win))\b/i.test(ask);
 }
 

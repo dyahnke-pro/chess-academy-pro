@@ -97,7 +97,7 @@ export interface GroundedAnswer {
 
 /** Convert a centipawn eval (side-to-move POV) into a grounded phrase. Never
  *  invents a number — rounds the real one. */
-function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | undefined, mover: 'white' | 'black', studentColor: 'white' | 'black' | null): string | null {
+export function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | undefined, mover: 'white' | 'black', studentColor: 'white' | 'black' | null): string | null {
   // ONE PERSPECTIVE: when the student's seat is known, the better side is
   // "you" or "they" — never a bare colour (Learn walk 2026-09-23: "White is
   // slightly better" to the student playing White).
@@ -4405,6 +4405,15 @@ export function notationQuestionSan(text: string | null | undefined): string | n
   // (pass-3 walk 2026-10-01). The verb before the token decides it.
   if (/\b(?:play|plays|played|playing|go|goes|take|takes|push|pushes|answer|answers|reply|replies|move|moves|try|tries)\s+$/i.test(before)) return null;
   if (/\b(?:best\s+(?:reply|response|answer|move)|who\s+(?:comes\s+out|is)\s+(?:ahead|better))\b/i.test(text)) return null;
+  // THE QUESTION IS ABOUT THE TOKEN ITSELF — "what is Bxe7", "what does c4
+  // mean". A "what's" elsewhere in the sentence and a move mentioned in passing
+  // is a board question (hard-question walk 2026-10-11: "what's the main
+  // threat? can Black defend h7?" got '"h7" is chess notation').
+  const tok = m[0].replace(/[+#]/g, (c) => `\\${c}`);
+  const q = String.raw`["'“‘]?`; const qe = String.raw`["'”’]?`;
+  const aboutToken = new RegExp(String.raw`\bwhat(?:\s+(?:does|do|is)|'?s)\s+(?:the\s+(?:move|notation|symbol)\s+)?${q}${tok}[+#]?${qe}\s*(?:(?:mean|means|stands?\s+for)\b|[?.!]|$)`, 'i').test(text)
+    || new RegExp(String.raw`${q}${tok}[+#]?${qe}\s+(?:mean|means|stands?\s+for)\b`, 'i').test(text);
+  if (!aboutToken) return null;
   return normalizeBeginnerSan(m[0]);
 }
 

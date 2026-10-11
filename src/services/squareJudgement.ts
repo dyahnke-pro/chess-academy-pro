@@ -11,6 +11,7 @@
 import type { Color, Square } from 'chess.js';
 import { isOutpost, noPawnCanChallenge, relativeRank } from './outpost';
 import { squaresProof, legalLineProof } from './proof';
+import { heldOf } from './planJudgement';
 import { costStakes } from './factStakes';
 import { andList } from '../utils/andList';
 import {
@@ -312,6 +313,7 @@ export function dontPlugFile(fenBefore: string, san: string, student: Color, cpL
   return {
     act: 'dont-plug-file', squares: [x, rook], proof, key: `plug:${f}`, stakes: costStakes(cpLoss) ?? undefined,
     text: `${bare(san)} plugs your own rook's ${f}-file; ${bare(bestSan)} keeps it open.`,
+    ...heldOf(`${bare(san)} plugs your own rook's ${f}-file.`, [x, rook]),
   };
 }
 

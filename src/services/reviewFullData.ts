@@ -1327,7 +1327,7 @@ export function computeMoveFacets(
   if (studentColorWB) {
     const reads: StructureRead[] = isStudent
       ? [
-        ...studentMoveStructure({ fenBefore, san, student: studentColorWB, cpLoss: Math.max(0, ctx.costCp ?? 0), bestSan: ctx.bestMoveSan, bestUci: ctx.bestLineUci, reply: ctx.replyBestSan }),
+        ...studentMoveStructure({ fenBefore, san, student: studentColorWB, cpLoss: Math.max(0, ctx.costCp ?? 0), bestSan: ctx.bestMoveSan, bestUci: ctx.bestLineUci, reply: ctx.replyBestSan, namesBetterMove: true }),
         ...boardStructure(fenBefore, studentColorWB),
       ]
       : theirMoveStructure(fenBefore, san, studentColorWB);

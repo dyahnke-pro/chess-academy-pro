@@ -43,16 +43,18 @@ export function inFluxAfter(fenBefore: string, san: string): string | null {
   } catch { return null; }
 }
 
-/** A mate in one for the side to move — read off the board, no engine. */
-export function mateInOneOnBoard(fen: string): boolean {
+/** The mating move for the side to move, if one mates at once — read off
+ *  the board, no engine. */
+export function mateInOneMoveOnBoard(fen: string): string | null {
   try {
     const c = new Chess(fen);
-    for (const m of c.moves({ verbose: true })) {
-      if (!m.san.endsWith('#')) continue;
-      return true;
-    }
-    return false;
-  } catch { return false; }
+    return c.moves({ verbose: true }).find((m) => m.san.endsWith('#'))?.san ?? null;
+  } catch { return null; }
+}
+
+/** A mate in one for the side to move — read off the board, no engine. */
+export function mateInOneOnBoard(fen: string): boolean {
+  return mateInOneMoveOnBoard(fen) !== null;
 }
 
 /** The board state after `san` was played from `fenBefore`. `evalWhitePov` is

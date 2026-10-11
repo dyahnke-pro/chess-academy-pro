@@ -54,6 +54,11 @@ export interface StructureRead {
   /** DUAL-USE: the student-model tag a correct choice here answers (HELD). A
    *  miss is recorded by the live slip capture, never here (no double count). */
   held?: { tag: MisconceptionTagId; posedImportance: number };
+  /** The same judgement with the better move HELD — where the move may not be
+   *  named (Learn free play, David 2026-10-10). Present on every read whose
+   *  sentence names the better move; the proof is then the squares, never the
+   *  move's line. */
+  heldForm?: { text: string; squares: string[]; proof: Proof };
 }
 
 export const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };

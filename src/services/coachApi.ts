@@ -71,6 +71,8 @@ import { answerRuleQuestion } from './chessRules';
 import { illegalNamedMove } from './whyNotLegal';
 import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleOpponentHypotheticalAnswer, assembleTradeAnswer, assembleEndgameOutlookAnswer, boardWeaknessNow, assembleCompareMovesAnswer, assembleCaptureOnAnswer, assemblePawnStrengthAnswer, playedSacrificeVerdict, lastCaptureOf, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, explainNotationSymbol, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleEndgameRuleAnswer, endgameRuleDemoFen, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, toObserverSeat, type WeakFundamental, type PositionalTopic as PositionalTopicType, type GroundedAnswer } from './groundedAnswer';
 import { walkableLine } from './proof';
+import { mateInOneMoveOnBoard } from './boardState';
+import { classifyMatePattern, explainMate } from './matePatterns';
 import { getFundamentalCounts, FUNDAMENTAL_LABEL, fundamentalDevice } from './fundamentalsCatalog';
 import type { FundamentalId } from './principleAttribution';
 import { matchRouteByTopic } from './navigationRouter';
@@ -2727,6 +2729,28 @@ async function computeLiveBoardVerdict(
   const pawns = scEvalCp === null ? '' : (Math.abs(scEvalCp) / 100).toFixed(1);
 
   if (mateQ) {
+    // A MATE IN ONE IS A BOARD FACT, read before any engine depth (hard walk
+    // 2026-10-11: with Qg7# on the board, "is there a forced mate for me?"
+    // never reached a mate answer). Every legal move, tried.
+    // The board IS mate: name the pattern and say why the king has no way out.
+    const named = (matedFen: string): string => {
+      const p = classifyMatePattern(matedFen);
+      return p ? ` It's a ${p.name}.` : '';
+    };
+    try {
+      if (new Chess(fen).isCheckmate()) {
+        const why = explainMate(fen);
+        return await voice(`${why ?? "It's checkmate."}${named(fen)}`, 'mate');
+      }
+    } catch { /* not a board */ }
+    const mateNow = (fen.split(' ')[1] === 'w') === (sc === 'white') ? mateInOneMoveOnBoard(fen) : null;
+    if (mateNow) {
+      const walk = walkableLine(fen, [mateNow], mateNow);
+      const after = (() => { try { const c = new Chess(fen); c.move(mateNow); return c.fen(); } catch { return null; } })();
+      const said = await voice(`Yes — mate in one: ${mateNow}.${after ? named(after) : ''}`, 'mate');
+      if (said && walk) lastCoachLines = [walk];
+      return said;
+    }
     if (scMateIn !== null && scMateIn > 0) {
       // The student ASKED — say the mate, not just that one exists (question
       // walk 2026-09-27: "Yes — there's a forced mate in 2." and nothing else).

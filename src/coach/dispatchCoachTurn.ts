@@ -113,6 +113,14 @@ function rememberLine(surface: CoachSurface, answer: Pick<CoachAnswer, 'lines' |
   if (typeof answer.text === 'string' && answer.text.trim()) lastSaid.set(surface, answer.text);
 }
 
+/** Kinds that carry no question of their own: with a "show me" step they
+ *  mean "play the line you just gave". Any other kind is a question, answered
+ *  first. */
+const SHOW_LINE_ONLY_KINDS: ReadonlySet<string> = new Set(['command', 'chat', 'unclear', 'conversational-reply', 'answer', 'explain-last']);
+
+/** Lanes that mean the words asked no question of their own. */
+const NO_QUESTION_LANES: ReadonlySet<FastPathLane> = new Set<FastPathLane>(['command', 'none', 'conversational-reply', 'stop']);
+
 /** What "show me" answers: the line, or why there is none. */
 export function showLineAnswer(surface: CoachSurface): { text: string; line: WalkableLine | null } {
   const line = lastLineFor(surface);
@@ -348,6 +356,8 @@ export async function dispatchCoachTurn(
   let effectiveInput = input;
   // The kind the reader placed this turn in, when it did (null: no reading).
   let readKind: string | null = null;
+  // The turn asked a question AND "show me": its answer's line walks.
+  let showAnswerLine = false;
   if (read && serveParsedRoute) {
     // FLAG ON: wait for the reading and, when it validated and its kind has a
     // live answerer, serve the canonical question that routes to it.
@@ -362,7 +372,8 @@ export async function dispatchCoachTurn(
       servedParsed = true;
       void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent, servedParsed, answerText: text, outcome, startedAt })
         .catch(() => { /* telemetry never breaks a turn */ });
-      const out: CoachAnswer = { text, toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent, ...extra };
+      const shownLine = showAnswerLine && !extra.autoWalk ? extra.lines?.[0] : undefined;
+      const out: CoachAnswer = { text, toolCallIds: [], dispatchedToolNames: [], provider: options.provider ?? 'deepseek', servedIntent, ...extra, ...(shownLine ? { autoWalk: shownLine } : {}) };
       rememberLine(input.liveState.surface, out);
       return out;
     };
@@ -385,7 +396,15 @@ export async function dispatchCoachTurn(
       const surface = input.liveState.surface;
       // "Show me" plays the line the coach last proved here — on the board,
       // not in words (the surface walks `autoWalk`).
-      if (turn.steps.some((st) => st.action === 'show-line')) {
+      // A QUESTION ASKED WITH "show me" IS ANSWERED FIRST, and the line its
+      // answer proves is the one shown (hard walk 2026-10-11: "is there a
+      // forced mate for me now? show me" replayed an old line and missed a
+      // mate in one). Only a bare request plays the last line.
+      const asksToo = !SHOW_LINE_ONLY_KINDS.has(turn.kind)
+        || !NO_QUESTION_LANES.has(fastPathLane(input.ask, { fen: input.liveState.fen }));
+      if (turn.steps.some((st) => st.action === 'show-line') && asksToo) {
+        showAnswerLine = true;
+      } else if (turn.steps.some((st) => st.action === 'show-line')) {
         const shown = showLineAnswer(surface);
         return serve(shown.text, shown.line ? 'request:show-line' : 'request:show-line:none', shown.line ? 'command' : 'asked-back',
           shown.line ? { autoWalk: shown.line, lines: [shown.line] } : {});
@@ -421,26 +440,44 @@ export async function dispatchCoachTurn(
     // one candidate-move computer at the position the student moved from
     // (contracts 2026-10-10: the retrospective lane graded Be2 and never said
     // a word about Ba4). Without a named move the retrospective lane answers.
-    if (turn?.kind === 'compare-my-move' && input.liveState.fen && input.liveState.moveHistory?.length) {
-      const named = turn.referents.find((r): r is Extract<typeof r, { type: 'move' }> => r.type === 'move');
+    // THE SAME WHEREVER THE PLAYED MOVE WAS (hard-question walk 2026-10-11:
+    // "was g4 best? the engine might prefer Qh2" graded Qh2 as a move of the
+    // game — "Qh2 isn't in this game"). A turn naming a move the student
+    // played AND an alternative is a comparison at the ply they played it.
+    const namedMoves = (turn?.referents ?? []).filter((r): r is Extract<typeof r, { type: 'move' }> => r.type === 'move');
+    const comparing = turn?.kind === 'compare-my-move'
+      || (namedMoves.length >= 2 && ['retrospective-move', 'move-rating', 'compare-moves', 'candidate-move', 'why-best-move'].includes(turn?.kind ?? ''));
+    if (turn && comparing && input.liveState.fen && input.liveState.moveHistory?.length) {
       const history = input.liveState.moveHistory;
       const seat = input.liveState.studentColor ?? null;
-      if (named && seat) {
+      if (namedMoves.length && seat) {
         const replay = new Chess();
-        let before: { fen: string; idx: number; san: string } | null = null;
+        const studentPlies: Array<{ fen: string; idx: number; san: string; from: string; to: string }> = [];
         for (let i = 0; i < history.length; i += 1) {
           const fenBefore = replay.fen();
           let mv: ReturnType<Chess['move']> | null = null;
           try { mv = replay.move(history[i]); } catch { mv = null; }
           if (!mv) break;
-          if ((mv.color === 'w') === (seat === 'white')) before = { fen: fenBefore, idx: i, san: mv.san };
+          if ((mv.color === 'w') === (seat === 'white')) studentPlies.push({ fen: fenBefore, idx: i, san: mv.san, from: mv.from, to: mv.to });
         }
-        const legalThere = (() => { if (!before) return null; try { return new Chess(before.fen).move(named.san); } catch { return null; } })();
-        if (before && legalThere && legalThere.san !== before.san) {
+        const playedAt = (san: string): typeof studentPlies[number] | null => {
+          for (let k = studentPlies.length - 1; k >= 0; k -= 1) {
+            const p = studentPlies[k];
+            try { const m = new Chess(p.fen).move(san); if (m && m.from === p.from && m.to === p.to) return p; } catch { /* not this ply */ }
+          }
+          return null;
+        };
+        const pairs = namedMoves.map((r) => ({ r, ply: playedAt(r.san) }));
+        const anchor = pairs.find((x) => x.ply)?.ply ?? (turn.kind === 'compare-my-move' ? studentPlies.at(-1) ?? null : null);
+        const alt = anchor ? namedMoves.find((r) => {
+          try { const m = new Chess(anchor.fen).move(r.san); return !!m && !(m.from === anchor.from && m.to === anchor.to); } catch { return false; }
+        }) : null;
+        const legalThere = anchor && alt ? (() => { try { return new Chess(anchor.fen).move(alt.san); } catch { return null; } })() : null;
+        if (anchor && legalThere) {
           const out: { endorsed?: string[]; lines?: WalkableLine[] } = {};
           const text = await answerBoardTurn({ ...turn, kind: 'candidate-move', referents: [{ type: 'move', san: legalThere.san, played: false }] },
-            { fen: before.fen, history: history.slice(0, before.idx), studentColor: seat }, out).catch(() => null);
-          if (text) return serve(`You played ${before.san} there. ${text}`, 'board:compare-my-move', 'answered', out.lines?.length ? { lines: out.lines } : {});
+            { fen: anchor.fen, history: history.slice(0, anchor.idx), studentColor: seat }, out).catch(() => null);
+          if (text) return serve(`You played ${anchor.san} there. ${text}`, 'board:compare-my-move', 'answered', out.lines?.length ? { lines: out.lines } : {});
         }
       }
     }
@@ -522,7 +559,9 @@ export async function dispatchCoachTurn(
   }
 
   let routedCommand = false;
-  const finish = (raw: CoachAnswer): CoachAnswer => {
+  const finish = (given: CoachAnswer): CoachAnswer => {
+    const shownLine = showAnswerLine && !given.autoWalk ? given.lines?.[0] : undefined;
+    const raw = shownLine ? { ...given, autoWalk: shownLine } : given;
     rememberLine(input.liveState.surface, raw);
     // A PROVIDER FAILURE IS NEVER AN ANSWER (contract 2026-10-10: the student
     // read "(Coach-brain provider error: coach-brain-deepseek-timeout)"). The

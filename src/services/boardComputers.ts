@@ -204,7 +204,8 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
     surfaces: { learn: LEARN, review: { not: 'owed — Review warns from the stored threat, not this proof' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   structureMove: {
-    read: (ctx) => safe(() => studentMoveStructure(ctx).map(structureRead)),
+    // Learn's reader: the better move is held (David 2026-10-10).
+    read: (ctx) => safe(() => studentMoveStructure({ ...ctx, namesBetterMove: false }).map(structureRead)),
     surfaces: { learn: { wired: 'services/learnBoardTeaching.ts' }, review: REVIEW, play: PLAY_ASK, chat: { not: 'a move judgement answers "why was my move bad"; chat reads the board judgements (structureBoard)' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK },
   },
   structureTheirMove: {
