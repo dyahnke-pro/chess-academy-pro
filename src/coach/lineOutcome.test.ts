@@ -51,3 +51,13 @@ describe('a named line', () => {
     expect(text).toBe("After Qg7#, it's mate — you win.");
   });
 });
+
+describe('the board walks only a line that starts on it (re-walk 2026-10-11)', () => {
+  it('"c5 then dxc5" on White\'s turn is said, never handed to the board', async () => {
+    setBoardEngineForTests({ analysis: async () => null, candidate: async () => null });
+    const out: { lines?: WalkableLine[] } = {};
+    const text = await lineOutcomeAnswer({ kind: 'line-outcome', referents: [{ type: 'move', san: 'c5', played: false }, { type: 'move', san: 'dxc5', played: false }], seat: null, topic: null }, board(AFTER_NF6), out);
+    expect(text).toMatch(/^After …c5 and dxc5/);
+    expect(out.lines).toBeUndefined();
+  });
+});

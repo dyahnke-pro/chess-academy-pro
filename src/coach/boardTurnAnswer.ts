@@ -391,11 +391,16 @@ export async function lineOutcomeAnswer(turn: ResolvedChatTurn, board: BoardTurn
   if (!line) return null;
   const me: 'w' | 'b' = board.studentColor === 'white' ? 'w' : 'b';
   const startTurn = line.startFen.split(' ')[1] as 'w' | 'b';
+  // THE BOARD WALKS ONLY A LINE THAT STARTS ON IT (hard-question re-walk
+  // 2026-10-11: a line opening with their move on the student's turn was
+  // handed to the board, and the student's next move was refused). A line
+  // from the other side's turn is said, not walked.
+  const fromHere = line.startFen === board.fen;
   const said = line.sans.map((san, i) => ((i % 2 === 0) === (startTurn === 'w') ? san : `…${san}`));
   const lead = `After ${andList(said)}`;
   const end = new Chess(line.endFen);
   if (end.isCheckmate()) {
-    const w = walkableLine(line.startFen, line.sans, line.sans[0]);
+    const w = fromHere ? walkableLine(line.startFen, line.sans, line.sans[0]) : null;
     if (w && out) out.lines = [w];
     const winner = end.turn() === me ? 'they' : 'you';
     return `${lead}, it's mate — ${winner} win.`;
@@ -412,7 +417,7 @@ export async function lineOutcomeAnswer(turn: ResolvedChatTurn, board: BoardTurn
   const top = analysis?.topLines?.find((l) => l.moves?.length);
   const nextSan = top ? sanFrom(line.endFen, top.moves[0]) : null;
   const sayLine = nextSan ? [...line.sans, nextSan] : line.sans;
-  const w = walkableLine(line.startFen, sayLine, line.sans[0]);
+  const w = fromHere ? walkableLine(line.startFen, sayLine, line.sans[0]) : null;
   if (w && out) out.lines = [w];
   if (!top || !nextSan) return `${lead}, ${material}.`;
   const endMover: 'white' | 'black' = end.turn() === 'w' ? 'white' : 'black';
