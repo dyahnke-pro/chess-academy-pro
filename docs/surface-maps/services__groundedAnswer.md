@@ -405,7 +405,7 @@
 - `src/services/whyBestMove.ts:106`
 
 ### `captureHasCounterTactic` (function) — 2 call sites
-- `src/services/inaccuracyCall.ts:926`
+- `src/services/inaccuracyCall.ts:960`
 - `src/services/reviewTeachingPoints.ts:104`
 
 ### `describeMoveGeometry` (function) — 21 call sites
@@ -439,7 +439,7 @@
 - `src/coach/handWalk1009.test.ts:173`
 - `src/coach/handWalk1009.test.ts:175`
 - `src/services/coachApi.ts:5735`
-- `src/services/inaccuracyCall.ts:860`
+- `src/services/inaccuracyCall.ts:891`
 
 ### `describeMoveMerit` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:1193`
