@@ -815,6 +815,32 @@ export function callInaccuracyDetailed(args: {
  */
 const ALLOWED_DOES_SOMETHING = /\b(?:attacks?|attacking|checks?|x-ray|forks?|pins?|skewers?|wins?|winning|threatens?|traps?|mates?|checkmate)\b/i;
 
+/** THEIR CHECKS IN THE ENGINE'S LINE — two or more checks on the mover's
+ *  king within the line's first twelve plies, said by their moves. A line
+ *  that wins material or mates is another reader's; this one names the hunt. */
+export function kingHunt(
+  fenBefore: string, playedSan: string, replyLineUci: readonly string[], moverColor: 'white' | 'black',
+): { said: string; line: { fen: string; uci: string[] } } | null {
+  if (replyLineUci.length < 3) return null;
+  try {
+    const c = new Chess(fenBefore);
+    c.move(playedSan);
+    const at = c.fen();
+    const them = moverColor === 'white' ? 'b' : 'w';
+    const checks: string[] = [];
+    const uci: string[] = [];
+    for (const u of replyLineUci.slice(0, 12)) {
+      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+      if (!m) break;
+      uci.push(u);
+      if (m.color === them && c.inCheck()) checks.push(`${them === 'b' ? '…' : ''}${m.san}`);
+      if (checks.length >= 3 || c.isGameOver()) break;
+    }
+    if (checks.length < 2) return null;
+    return { said: andList(checks), line: { fen: at, uci } };
+  } catch { return null; }
+}
+
 export function allowedReply(
   fenBefore: string, playedSan: string, replyLineUci: readonly string[], moverColor: 'white' | 'black',
 ): { said: string; line: { fen: string; uci: string[] } } | null {
@@ -858,7 +884,10 @@ export function allowedReply(
     }
     return {
       said: `${noun}, which ${toObserverSeat(why)}`,
-      line: { fen: fenAfter, uci: replyLineUci.slice(0, Math.min(replyLineUci.length, 4)) },
+      // THE LINE DRAWN IS THE LINE SAID — their reply and the one answer it
+      // forces (hard-question walk 2026-10-11: four plies were drawn, two
+      // more of the mover's own moves under words naming only …e5).
+      line: { fen: fenAfter, uci: replyLineUci.slice(0, 2) },
     };
   } catch { return null; }
 }
@@ -1018,6 +1047,12 @@ export function errorWhy(args: {
   const allowed = caused && !failed && !punishment && !single && args.missedMate === null
     ? allowedReply(args.fenBefore, args.playedSan, replyLineUci, args.moverColor)
     : null;
+  // A KING HUNT: no material settles, but the engine's line keeps checking
+  // the mover's king (hard-question walk 2026-10-11, 20.Qg3+: "a blunder" with
+  // no why — the punishment was …Rc1+, Kxc1, …Qc8+, …Qc2+).
+  const hunt = !failed && !punishment && !single && !allowed && args.missedMate === null && args.allowedMate === null && args.quality !== 'inaccuracy'
+    ? kingHunt(args.fenBefore, args.playedSan, replyLineUci, args.moverColor)
+    : null;
   // The square their reply takes on, when the single or allowed reader names
   // it — so a surface can tell it is the same loss a fundamental names
   // ("That left your knight on f6 open to gxf6" + "it let them play gxf6,
@@ -1041,7 +1076,8 @@ export function errorWhy(args: {
     : args.missedMate !== null
       ? 'it let a forced mate slip'
       : single ? `it let them play ${single.said}`
-        : allowed ? `it let them play ${allowed.said}` : null;
+        : allowed ? `it let them play ${allowed.said}`
+          : hunt ? `it let them go after your king: ${hunt.said}` : null;
   // THE PUNISHING LINE, PLAYED OUT (David 2026-09-30: "teach more line
   // calculations"): to where their material lands, with what it wins.
   let tail = '';
@@ -1070,6 +1106,17 @@ export function errorWhy(args: {
   }
   if (single && !line) line = single.line;
   if (allowed && !line) line = allowed.line;
+  if (hunt && !line) line = hunt.line;
+  // THE MATE THEY WERE LET INTO, DRAWN IN FULL (21.e6, the same walk): the
+  // reply line to the mate is the why's proof.
+  if (args.allowedMate !== null && !line && replyLineUci.length) {
+    try {
+      const c = new Chess(args.fenBefore); c.move(args.playedSan);
+      const at = c.fen(); const uci: string[] = [];
+      for (const u of replyLineUci) { const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); if (!m) break; uci.push(u); if (c.isCheckmate()) break; }
+      if (uci.length) line = { fen: at, uci };
+    } catch { /* no line */ }
+  }
   if (should && !line && args.bestLineUci?.length) line = { fen: args.fenBefore, uci: args.bestLineUci.slice(0, 4) };
   const proof = line ? lineProofFromUci(line.fen, line.uci) ?? undefined : undefined;
   const pattern = should && !mateSaid && bestSan ? landedTacticFor(args.fenBefore, bestSan) : null;

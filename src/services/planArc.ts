@@ -299,7 +299,11 @@ export function stepArc(
         done.add(id);
         continue; // done — the aim leaves the arc for the rest of the game
       }
-      events.push({
+      // A MOVE ONTO THE GOAL IS NOT A STEP TOWARD IT (hard-question walk
+      // 2026-10-11, 17.Be5: "a step toward the outpost on e5" with the bishop
+      // on e5 — taken there by the reply, so the arrival never read).
+      const ontoGoal = (e.aim.kind === 'outpost' || e.aim.kind === 'route') && e.aim.goal === moved.to;
+      if (!ontoGoal) events.push({
         id, kind: 'advance', seat, squares: [moved.to], step: entry.steps,
         // WHY THEY PLAYED IT, question first (David 2026-09-30): the move
         // they actually made, read as a step of the plan announced earlier.

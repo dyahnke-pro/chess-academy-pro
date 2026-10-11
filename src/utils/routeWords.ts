@@ -36,7 +36,7 @@ export function routeVia(via: readonly string[]): string {
 export function routeNoun(r: RouteSpec): string {
   const dest = r.path[r.path.length - 1];
   const base = `getting the ${r.name} to ${dest}${routeVia(routeWaypoints(r.path))}`;
-  return r.takes ? `${base}, to take the ${r.takes} there` : base;
+  return r.takes ? `${base}, ${takeClause(r.takes, 'to')}` : base;
 }
 
 /** Verb form, named by its square so two pieces of one kind never blur:
@@ -46,5 +46,13 @@ export function routeVerb(r: RouteSpec): string {
   // The line reader hands over a path already cut where it arrives; every
   // square it walks through is named (lookaheadPlan.waypointsOf).
   const base = `walk the ${r.name} on ${r.path[0]} round to ${dest}${routeVia(routeWaypoints(r.path, { cutAtFirstArrival: false }))}`;
-  return r.takes ? `${base}, and take the ${r.takes} there` : base;
+  return r.takes ? `${base}, ${takeClause(r.takes, 'and')}` : base;
+}
+
+/** "to take the pawn there", or — for a piece not there yet ("rook that
+ *  lands") — "to take their rook when it arrives" (hard-question walk
+ *  2026-10-11: "take the rook that lands there" did not parse). */
+function takeClause(takes: string, lead: 'to' | 'and'): string {
+  const arriving = takes.match(/^(\w+) that lands$/);
+  return arriving ? `${lead} take their ${arriving[1]} when it arrives` : `${lead} take the ${takes} there`;
 }

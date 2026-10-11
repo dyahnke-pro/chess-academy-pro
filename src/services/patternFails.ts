@@ -132,7 +132,7 @@ export function patternFails(fen: string, lines: readonly Line[], playedSan: str
     const text = pat.pattern === 'forking-check'
       ? rotateStem([
         `The check ${san} hitting the ${tName} on ${pat.target} looks like a fork, ${cost}.`,
-        `${san} with check and the grab on ${pat.target} is the pattern your eye goes to, ${cost}.`,
+        `${san.replace(/[+#]$/, '')} with check and the grab on ${pat.target} is the pattern your eye goes to, ${cost}.`,
       ], stemKeyOf(fen))
       : rotateStem([
         `Grabbing the ${tName} on ${pat.target} with ${san} looks free, ${cost}.`,

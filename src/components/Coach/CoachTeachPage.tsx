@@ -11053,7 +11053,9 @@ export function CoachTeachPage(): JSX.Element {
                         // The punishing line the words play out, drawn ply by ply.
                         !fundamental && look.punishLine ? lineArrowClaims(look.punishLine.fen, look.punishLine.uci, 'teach.punishLine') : undefined,
                         // The fundamental's own lines lead this sentence.
-                        fundamental?.lines);
+                        fundamental?.lines,
+                        // A mate it allowed outranks the rest of the turn.
+                        look.stakes);
                       captureEvent('coach_backward_look', {
                         surface: 'coach-teach', kind: look.kind, cp_loss: Math.round(cpLoss),
                         fundamental: fundamental?.id ?? null,

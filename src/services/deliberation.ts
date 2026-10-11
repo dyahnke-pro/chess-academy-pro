@@ -25,7 +25,7 @@ import { computeTerritory, legalSeeGainFor, seeReadsStanding } from './positionR
 import { isPinnedPiece } from './nextPlans';
 import { countKingAttack } from './kingSafety';
 import { andList, orList } from '../utils/andList';
-import { computeMustDefend } from './threatOut';
+import { computeMustDefend, mateThreatsAgainst } from './threatOut';
 import { describeMoveGeometry, quietPurposePhrase } from './groundedAnswer';
 
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
@@ -451,8 +451,24 @@ export function bestMoveReason(fenBefore: string, san: string, mover: 'w' | 'b',
     ?? quietPurposePhrase(fenBefore, san, mover === 'w' ? 'white' : 'black', 'mover');
 }
 
+/** THE MATE IT THREATENS — a mate in one the move creates, when it gives no
+ *  check (hard-question walk 2026-10-11: Nh5 was "it lands on the h5
+ *  outpost" with Qg7# threatened). Mate outranks every other reason. */
+function mateThreatWhy(fenBefore: string, san: string, mover: 'w' | 'b'): string | null {
+  try {
+    const c = new Chess(fenBefore);
+    const m = c.move(san);
+    if (!m || c.inCheck()) return null;
+    const them: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+    const before = new Set(mateThreatsAgainst(fenBefore, them).moves.map((x) => x.san));
+    const fresh = mateThreatsAgainst(c.fen(), them).moves.filter((x) => !before.has(x.san));
+    return fresh.length ? `it threatens ${fresh[0].san}, mate` : null;
+  } catch { return null; }
+}
+
 export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentLastSan: string | null): string | null {
-  const first = materialWhy(fenBefore, san, mover, opponentLastSan)
+  const first = mateThreatWhy(fenBefore, san, mover)
+    ?? materialWhy(fenBefore, san, mover, opponentLastSan)
     ?? threatAnswerWhy(fenBefore, san, mover)
     ?? threatMadeWhy(fenBefore, san, mover);
   if (first) return first;

@@ -27,6 +27,7 @@
 //
 // G0 throughout: every branch is arithmetic or chess.js geometry over an engine
 // line. Nothing here asks a model anything.
+import { MATE_POINTS, costStakes, type FactStakes } from './factStakes';
 import { Chess } from 'chess.js';
 import { findConcession, findStudentDrawback } from './concessionBeat';
 import { callInaccuracy, callInaccuracyDetailed, errorWhyFor, type InaccuracyDecline, type PriorMove } from './inaccuracyCall';
@@ -56,6 +57,10 @@ export interface BackwardLook {
   pattern?: string;
   /** The punishing line the words play out, from `fen` (`InaccuracyCall.line`). */
   punishLine?: { fen: string; uci: string[] };
+  /** What the verdict is worth to the door's order: a mate it allowed is a
+   *  mate's stakes (hard-question walk 2026-10-11: "e6 … let them force mate
+   *  in 6" was buried under a weak-pawn lecture), else the move's cost. */
+  stakes?: FactStakes;
   /** The student piece the grade says was left to be taken (from
    *  `InaccuracyCall.lostSquare`). The live fundamental verdict names the same
    *  loss as "that left your rook on b2 hanging"; one of them speaks. */
@@ -378,7 +383,10 @@ export function backwardLook(args: {
         replyKeptWin: args.replyKeptWin ?? null,
         priorMove: args.priorMove,
       });
-      if (call) return { line: call.said, square: call.square, kind: 'mistake', ...(call.pattern ? { pattern: call.pattern } : {}), ...(call.lostSquare ? { lostSquare: call.lostSquare } : {}), ...(call.namesBetter ? { namesBetter: call.namesBetter } : {}), ...(call.line ? { punishLine: call.line } : {}), ...(call.squares ? { squares: call.squares } : {}) };
+      const stakes = (args.allowedMate ?? null) !== null
+        ? { points: MATE_POINTS, plies: Math.max(0, Math.abs(args.allowedMate as number) * 2 - 1) }
+        : costStakes(args.cpLoss) ?? undefined;
+      if (call) return { ...(stakes ? { stakes } : {}), line: call.said, square: call.square, kind: 'mistake', ...(call.pattern ? { pattern: call.pattern } : {}), ...(call.lostSquare ? { lostSquare: call.lostSquare } : {}), ...(call.namesBetter ? { namesBetter: call.namesBetter } : {}), ...(call.line ? { punishLine: call.line } : {}), ...(call.squares ? { squares: call.squares } : {}) };
     } catch { /* fall through */ }
   }
 
@@ -404,7 +412,10 @@ export function backwardLook(args: {
         fen: args.fenAfter,
       });
     }
-    return w ? { line: w.line, square: w.squares[0] ?? '', kind: 'drawback', ...(w.squares.length ? { squares: w.squares } : {}), ...(w.proofLine ? { punishLine: w.proofLine } : {}) } : null;
+    // THE MOVE IS THE SUBJECT (hard-question walk 2026-10-11: "It let them
+    // play …e5" — with no grade before it, "it" pointed at nothing).
+    const said = w ? w.line.replace(/^It /, `${args.playedSan} `) : '';
+    return w ? { line: said, square: w.squares[0] ?? '', kind: 'drawback', ...(w.squares.length ? { squares: w.squares } : {}), ...(w.proofLine ? { punishLine: w.proofLine } : {}) } : null;
   } catch { return null; }
 }
 

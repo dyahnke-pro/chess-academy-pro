@@ -36,6 +36,7 @@ const noDigits = (t: string): void => {
 /** Student = you/your, opponent = they/their — never we/our/us. */
 const voice = (t: string): void => {
   expect(t).not.toMatch(/\b(we|our|us)\b/i);
+  expect(t).not.toMatch(/[+#] with check/);
   noDigits(t);
 };
 

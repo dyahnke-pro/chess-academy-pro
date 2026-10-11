@@ -28,7 +28,7 @@ import { emitLearnTurn } from './coachDecisionEvents';
 import { COMPUTER_ROLES } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
-import { stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
+import { stakeValue, STAKED_FLOOR, MATE_POINTS, type FactStakes } from './factStakes';
 import { sameClaim } from './factSelector';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
 export type { SpokenLine, DrawnLine } from './voicePackage';
@@ -444,10 +444,18 @@ export function decideTurn(
   const ownLead = top && (!priorLead || DANGER_LANES.has(top.lane) || value(top) > priorValue) ? top : null;
   const anchor = ownLead ? (ownLead.fact.squares ?? []) : (priorLead?.squares ?? []);
 
+  // A MATE TURN STAYS ON THE MATE (hard-question walk 2026-10-11, 21.e6: the
+  // allowed mate in 6 was said between a weak-pawn lecture and "the scare is
+  // empty"). A fact staked at a forced mate makes every fact that is neither
+  // danger nor itself a mate wait for a calm board.
+  const mateValue = stakeValue({ points: MATE_POINTS, plies: 12 }) ?? Infinity;
+  const isMateFact = (x: { fact: VoiceFact; lane: LearnLane }): boolean => stakeOf(x.lane, x.fact.text) >= mateValue;
+  const mateTurn = survivors.some((x) => !subsumed.has(x) && isMateFact(x));
   const keep: VoiceFact[] = [];
   const spoke: LearnLane[] = [];
   const held: LearnLane[] = [];
   for (const x of survivors) {
+    if (mateTurn && !DANGER_LANES.has(x.lane) && !isMateFact(x)) { held.push(x.lane); continue; }
     // A DESCRIPTION — nothing at stake, from a lane that describes the board
     // (or an unstaked board-read riding position facts) — speaks only as
     // SUPPORT: it must touch the lead's squares AND add one of its own. "Your

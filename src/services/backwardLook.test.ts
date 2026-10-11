@@ -94,6 +94,10 @@ describe('the register', () => {
   it('rides a lane the package knows', () => {
     expect(['mistake', 'drawback']).toContain(look.kind);
   });
+
+  it('names its move — never a bare "It let them…" (hard-question walk 2026-10-11)', () => {
+    expect(look.line).not.toMatch(/^It /);
+  });
 });
 
 describe('mate is carried in its own field, never as centipawns', () => {

@@ -99,3 +99,10 @@ describe('hard walk — mates', () => {
     expect(d.bestWhy).toBe('forks the king on e8 and the rook on a8');
   });
 });
+
+describe('hard-question walk 2026-10-11 — a move that threatens mate', () => {
+  it('Nh5 is for the mate it threatens on g7, not an outpost', async () => {
+    const { moveWhy } = await import('./deliberation');
+    expect(moveWhy('2rr3k/pp5p/2q1P3/8/4pN2/4P1Q1/bPPR1P2/2K3N1 w - - 3 23', 'Nh5', 'w', '…Rfd8')).toBe('it threatens Qg7#, mate');
+  });
+});

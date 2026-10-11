@@ -214,7 +214,7 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', .*?, undefined, undefined, undefined, undefined, pendingRegisterLines\)/);
     expect(TEACH_CODE).toMatch(/pendingRegisterLines = \[\{ fen: probe\.fen\(\), sans: \[compareRead\.bestSan\] \}/);
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.squares, c\.claim \? \[c\.claim\] : undefined, c\.gradeFen, undefined, c\.lines, c\.stakes\)/);
-    expect(TEACH_CODE).toMatch(/fundamental\?\.lines\)/);
+    expect(TEACH_CODE).toMatch(/fundamental\?\.lines[,)]/);
     expect(TEACH_CODE).toMatch(/'fundamental', NO_PROOF\.method, \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
     // Their move's purpose leads over a board description (hand walk 2026-09-30, …g6).
@@ -430,5 +430,17 @@ describe('ONE DOOR — Learn is a posture of coachTurn (one coach P1, 2026-10-07
     expect(d.unproven).toBe(1);
     // A method line has a reason not to need one — it is not counted.
     expect(d.unprovenLanes).not.toContain('fundamental');
+  });
+});
+
+describe('a mate turn stays on the mate (hard-question walk 2026-10-11, 21.e6)', () => {
+  it('the allowed mate speaks; the weak-pawn aside and the plan wait', () => {
+    const F = '2r2r1k/pp5p/2q1P3/8/4pN2/4P1Q1/bPP2P2/2KR2N1 w - - 1 22';
+    const d = decideTurn([
+      { lane: 'register', proof: NO_PROOF.stated, text: 'A structural cost: e6 is a weak pawn now.', fen: F, squares: ['e6'], stakes: { points: 1, plies: 2 } },
+      { lane: 'mistake', proof: NO_PROOF.stated, text: 'e6 was a blunder — it let them force mate in 6.', fen: F, stakes: { points: 100, plies: 11 } },
+    ]);
+    expect(d.spoke).toContain('mistake');
+    expect(d.spoke).not.toContain('register');
   });
 });

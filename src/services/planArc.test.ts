@@ -289,3 +289,17 @@ describe('the move → plan link (P3): advance events carry their step', () => {
     expect(page).toMatch(/recordHeld\('no-plan'[^\n]*planToldBoardsRef\.current\.has/);
   });
 });
+
+describe('a move onto the goal is never "a step toward" it (hard-question walk 2026-10-11)', () => {
+  it('17.Be5 taken there by …Bxe5: no "step toward the outpost on e5"', () => {
+    const aim: Aim = { id: 'outpost:e5', kind: 'outpost', squares: ['e5'], goal: 'e5', phrase: 'the outpost on e5' } as Aim;
+    const before = '2r1qrk1/pp4bp/4b3/3N1p2/4n3/4P3/PPP2P1Q/2KR1BNR w - - 4 17';
+    let st = stepArc(EMPTY_ARC, [aim], null as never, before, 'w', 'student').next;
+    st = stepArc(st, [aim], null as never, before, 'w', 'student').next;
+    // After Be5 Bxe5: the black bishop stands on e5.
+    const afterReply = '2r1qrk1/pp5p/4b3/3Nbp2/4n3/4P3/PPP2P1Q/2KR1BNR w - - 0 18';
+    const r = stepArc(st, [aim], { from: 'c7', to: 'e5', piece: 'b' } as never, afterReply, 'w', 'student');
+    expect(r.events.filter((e) => e.kind === 'advance')).toEqual([]);
+    expect(r.events.map((e) => e.text).join(' ')).not.toMatch(/step toward the outpost on e5/);
+  });
+});
