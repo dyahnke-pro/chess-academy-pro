@@ -204,6 +204,20 @@ function computeEquivalence(history: readonly string[], student: 'w' | 'b'): Ope
   if (own) return null;
   const lastMover: 'w' | 'b' = toMove === 'w' ? 'b' : 'w';
   const seen = positionsOf(history);
+  // An INSERTED move is one the game PLAYED. The undo search also finds a
+  // piece still on its home square and "undoes" it to where the named line
+  // develops it, which read "Take back Bc1 and …Nb8 and this is the Dragon"
+  // about a bishop and knight that never moved (review audit, prod 2026-10-13).
+  const landed: Record<'w' | 'b', Set<string>> = { w: new Set(), b: new Set() };
+  {
+    const g = new Chess();
+    for (const san of history) {
+      let m;
+      try { m = g.move(san); } catch { break; }
+      if (!m) break;
+      landed[m.color].add(m.to);
+    }
+  }
   let best: OpeningEquivalence | null = null;
   const cells = cellsOf(fen.split(' ')[0]);
   const undoLast = undoOne(cells, lastMover);
@@ -212,6 +226,7 @@ function computeEquivalence(history: readonly string[], student: 'w' | 'b'): Ope
   for (const a of undoLast) {
     for (const b of undoMover) {
       if (b.to === a.from || b.from === a.to || b.to === a.to || b.from === a.from) continue;
+      if (!landed[toMove].has(b.to) || !landed[lastMover].has(a.to)) continue;
       // The reference: both moves undone on this board, the same side to move.
       const ref = [...cells];
       ref[idx(a.from)] = ref[idx(a.to)]; ref[idx(a.to)] = '';
@@ -231,9 +246,13 @@ function computeEquivalence(history: readonly string[], student: 'w' | 'b'): Ope
       if (!proof) continue;
       const w = toMove === 'w' ? s1 : s2;
       const bl = toMove === 'w' ? s2 : s1;
+      // Whose moves they are, said (the SEAT contract: a line that names two
+      // moves names their owners).
+      const wOwner = student === 'w' ? 'your' : 'their';
+      const bOwner = student === 'b' ? 'your' : 'their';
       const text = rotateStem([
-        `This is the ${hit.name} with ${w} and …${bl} thrown in.`,
-        `Take back ${w} and …${bl} and this is the ${hit.name}.`,
+        `This is the ${hit.name} with ${wOwner} ${w} and ${bOwner} …${bl} thrown in.`,
+        `Take back ${wOwner} ${w} and ${bOwner} …${bl} and this is the ${hit.name}.`,
       ], stemKeyOf(fen));
       best = { kind: 'inserted', name: hit.name, text, proof, squares: [b.from, b.to, a.from, a.to], inserted: [s1, s2] };
     }

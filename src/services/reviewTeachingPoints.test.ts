@@ -478,3 +478,16 @@ describe('badEnemyBishop reads the forward rays, not a mobility count (WO-STANDA
     expect(badEnemyBishop('r3k3/3b4/p1p1p1p1/8/8/8/8/4K3 w - - 0 12', 'w')).toMatch(/bishop on d7 is a bad piece/);
   });
 });
+
+// Review audit on prod (2026-10-13): "so Qxc5 just trades your queen for a
+// knight — giving up 9 points for 3" — the pieces are named; the count is a
+// statistic where the reason already stands.
+describe('a guarded grab is named in pieces, never points', () => {
+  it('queen takes a pawn-guarded knight', async () => {
+    const { explainTemptingCapture } = await import('./reviewTeachingPoints');
+    const why = explainTemptingCapture('4k3/8/4p3/3n4/8/8/8/3QK3 w - - 0 1', 'Ke2', 'you', null);
+    expect(why).toMatch(/NOT free/);
+    expect(why).toMatch(/trades your queen for a knight/);
+    expect(why).not.toMatch(/\d\s*points?|\bpoints? for\b/);
+  });
+});

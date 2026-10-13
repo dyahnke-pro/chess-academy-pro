@@ -501,7 +501,7 @@ export function explainTemptingCapture(
     if (oppNet - victimVal >= 1 && recapNoun && recapFrom) {
       // The grab LOSES material: guarded piece, bad trade.
       const notFree = perspective === 'they' ? 'is NOT free for them' : 'is NOT free';
-      return `Notice the ${victimNoun} on ${t.to} ${notFree} — it's guarded by the ${recapNoun} on ${recapFrom}, so ${t.san} just trades ${moverPoss} ${capturerNoun} for a ${victimNoun}${PIECE_VAL[t.piece] > victimVal ? ` — giving up ${PIECE_VAL[t.piece]} points for ${victimVal}` : ''}. That's why ${lineWhose} leaves it alone.`;
+      return `Notice the ${victimNoun} on ${t.to} ${notFree} — it's guarded by the ${recapNoun} on ${recapFrom}, so ${t.san} just trades ${moverPoss} ${capturerNoun} for a ${victimNoun}. That's why ${lineWhose} leaves it alone.`;
     }
     if (oppNet - victimVal === 0 && recapNoun === 'pawn' && recapFrom) {
       // EVEN trade — but does the pawn-recapture open a file at the mover's king?

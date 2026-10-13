@@ -214,8 +214,18 @@ describe('opening equivalence (openingEquivalence)', () => {
     expect(r?.kind).toBe('inserted');
     expect(r?.name).toMatch(/^Alekhine Defense/);
     expect(r?.inserted).toEqual(['c3', 'c5']);
+    expect(r?.text).toMatch(/their c3 and your …c5/);
     expect(r?.proof.exact).toBe(true);
     voice(r!.text);
+  });
+  // Review audit on prod (2026-10-13): "Take back Bc1 and …Nb8 and this is
+  // the Dragon, Classical" — a bishop and knight still on their home squares
+  // read as moves "thrown in". An inserted move is one the game played.
+  it('never "inserts" a move the game did not play', () => {
+    const g = 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be2 Bg7 O-O'.split(' ');
+    for (let n = 4; n <= g.length; n++) {
+      expect(openingEquivalence(g.slice(0, n), 'b')?.kind ?? null, `ply ${n}`).not.toBe('inserted');
+    }
   });
   it('silent on a symmetric opening and on a board with its own name', () => {
     expect(openingEquivalence('e4 e5 Nf3 Nc6'.split(' '), 'w')).toBeNull();

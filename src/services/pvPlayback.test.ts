@@ -218,7 +218,7 @@ describe('deterministic fallback voice + batch facts', () => {
     });
     const line = (await computePvLine(MATE_FEN, { engine }))!;
     const facts = pvFactsForVoice(line);
-    expect(facts).toMatch(/^1\) The move Qxf7#/);
+    expect(facts).toMatch(/^1\) The move Qxf7 .*gives checkmate/);
     expect(facts.split('\n')).toHaveLength(1);
   });
 });
@@ -418,5 +418,19 @@ describe('a pin already on the board does not "land" when its maker slides along
   });
   it('POSITIVE CONTROL: stepping onto the line creates the pin', () => {
     expect(landed('4k3/8/8/4n3/8/8/3Q4/4K3 w - - 0 1', 'Qe2')).toBe('pin');
+  });
+});
+
+// Review audit on prod (2026-10-13): "The move Nh4+ check." was spoken
+// "knight to h4, check check" — the SAN's mark and the fact both said it.
+describe('a check is said once', () => {
+  const quiet = { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 };
+  it('check: the mark comes off the SAN, the verb carries it', async () => {
+    const { plyFactsString } = await import('./pvPlayback');
+    expect(plyFactsString({ san: 'Nh4+', facts: { ...quiet, isCheck: true } })).toBe('The move Nh4 gives check.');
+  });
+  it('mate likewise', async () => {
+    const { plyFactsString } = await import('./pvPlayback');
+    expect(plyFactsString({ san: 'Qh7#', facts: { ...quiet, isCheck: true, isMate: true } })).toBe('The move Qh7 gives checkmate.');
   });
 });

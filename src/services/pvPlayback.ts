@@ -699,8 +699,11 @@ export function plyFactsString(ply: Pick<PvPly, 'san' | 'facts'>): string | null
   const f = ply.facts;
   const parts: string[] = [];
   if (f.captured) parts.push(`captures the ${f.captured}`);
-  if (f.isMate) parts.push('checkmate');
-  else if (f.isCheck) parts.push('check');
+  // The check is said ONCE, as a verb. The SAN's own "+"/"#" is read aloud as
+  // "check" too, so "The move Nh4+ check." spoke "knight to h4, check check"
+  // (review audit, prod 2026-10-13) — the mark comes off the SAN below.
+  if (f.isMate) parts.push('gives checkmate');
+  else if (f.isCheck) parts.push('gives check');
   if (f.promotion) parts.push(`promotes to ${f.promotion}`);
   if (f.tacticLanded) parts.push(patternAim(f.tacticLanded, 'third') ?? `lands a ${tacticWord(f.tacticLanded)}`);
   if (f.outpostGained) parts.push(`outpost established on ${f.outpostGained}`);
@@ -712,7 +715,7 @@ export function plyFactsString(ply: Pick<PvPly, 'san' | 'facts'>): string | null
   // to call out how many points were gained with each capture. Sounds bad").
   if (f.materialGained >= 1) parts.push('wins material');
   if (parts.length === 0) return null;
-  return `The move ${ply.san} ${parts.join(', ')}.`;
+  return `The move ${ply.san.replace(/[+#]$/, '')} ${parts.join(', ')}.`;
 }
 
 /** The SAME per-move facts as `plyFactsString`, but as a SUBJECT-LESS clause
