@@ -81,6 +81,8 @@ export const FUNDAMENTAL_SECTION: Record<FundamentalId, FundamentalSectionId> = 
   'blocked-own-retreat': 'tactics-threats',
   'missed-pin-pressure': 'tactics-threats',
   'ignored-pin-pressure': 'tactics-threats',
+  'missed-guard-removal': 'tactics-threats',
+  'ignored-guard-removal': 'tactics-threats',
 };
 
 /**
@@ -171,6 +173,9 @@ export const FUNDAMENTAL_PILLAR: Record<FundamentalId, FundamentalPillar | null>
   // PP on the PP is a tactic read from either seat — not one of the four pillars
   'missed-pin-pressure': null,
   'ignored-pin-pressure': null,
+  // remove the guard is a tactic read from either seat — not one of the four pillars
+  'missed-guard-removal': null,
+  'ignored-guard-removal': null,
 };
 
 /** The classical pillar this fundamental belongs to, or null where it genuinely
@@ -267,6 +272,8 @@ export const FUNDAMENTAL_LABEL: Record<FundamentalId, string> = {
   'blocked-own-retreat': 'Blocking your own retreat',
   'missed-pin-pressure': 'Not piling on a pinned piece',
   'ignored-pin-pressure': 'Letting them pile on your pinned piece',
+  'missed-guard-removal': 'Not removing the guard',
+  'ignored-guard-removal': 'Leaving a piece with one guard',
 };
 
 /** The one-line coaching device for a fundamental (its tag's principle), or the

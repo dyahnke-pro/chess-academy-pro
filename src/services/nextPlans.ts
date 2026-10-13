@@ -241,12 +241,15 @@ export function deriveNextPlanFacts(
     // gate, David 2026-07-22 — never prescribe a piece that isn't there).
     const softSquares = enemy === 'w' ? 'd2 and f2' : 'd7 and f7';
     const rookCount = all.filter((c) => c.type === 'r' && c.color === studentColorWB).length;
+    // The same four steps in fewer words (Learn audit on prod, 2026-10-13: this
+    // plan alone was ~80 words of a 117-word turn, against the 35–50 bar). A
+    // rewording, never a cut — every step still speaks.
     const fileClause = rookCount >= 2
-      ? `then double both rooks onto the open ${openCentralFile}-file so they bear straight down on the king; `
+      ? `double your rooks on the open ${openCentralFile}-file, `
       : rookCount === 1
-        ? `then swing your rook onto the open ${openCentralFile}-file so it bears straight down on the king; `
+        ? `put your rook on the open ${openCentralFile}-file, `
         : '';
-    add('king-attack', `the plan from here is to attack their king stuck on ${enemyKing.square} before it ever reaches safety. Here's exactly how: first make sure your OWN king is tucked away, ${fileClause}bring every piece into the attack with tempo — a move that develops AND threatens is worth two; and hunt for a sacrifice on the soft squares ${softSquares} that rips the cover off, because once the king is bare it's checks all the way to mate`, [enemyKing.square], openCentralFile);
+    add('king-attack', `the plan from here is to attack their king on ${enemyKing.square} before it gets out. Tuck your own king away, ${fileClause}bring pieces in with tempo, and look for a sacrifice on ${softSquares} to strip its cover`, [enemyKing.square], openCentralFile);
   }
 
   // 2. Your passed pawn → push it, HOW spelled out. The king joins the escort

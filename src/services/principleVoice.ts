@@ -87,6 +87,10 @@ const FUNDAMENTAL_HOW: Record<FundamentalId, string> = {
     'The moment you pin a piece, ask what else can attack it. A pinned piece cannot step away, so a second attacker — best of all a pawn — usually wins it. Look for the pile-on before any quiet move.',
   'ignored-pin-pressure':
     'When one of your pieces is pinned, count who can attack it next. If they can add an attacker, deal with the pin first — move what stands behind it, put a piece in between, or add a defender — before they pile on.',
+  'missed-guard-removal':
+    'Of every piece you attack, ask how many guards it has. When the answer is one, attack the guard — take it, or hit it with something cheaper so it has to move — and the piece it held falls.',
+  'ignored-guard-removal':
+    'Count the guards on every piece of yours they attack. A piece held by one guard is only as safe as that guard: if they can take it or chase it, add a second defender or move the piece first.',
   'passive-when-forcing-existed':
     'Scan forcing moves first, in order: every check, every capture, every threat. Only when none of them works do you look at quiet moves — that order is what finds shots.',
   'poisoned-pawn':
@@ -196,6 +200,10 @@ const VERDICT_WITHOUT_BETTER: Partial<Record<FundamentalId, (f: Facts) => string
   'capture-toward-centre': (f) => `Taking toward the centre is the usual rule, but here the other capture was better — it opens the ${f.file}-file for your rook.`,
   'no-plan': (f) => `A move without a purpose: the board wanted you to ${f.plan}, and ${f.played} works on something else entirely.`,
   'missed-pin-pressure': (f) => `A pinned piece can't run, so attack it again: the ${f.piece} on ${f.square} was pinned to the ${f.behind} on ${f.behindSq}, and this move let it off.`,
+  'missed-guard-removal': (f) => `Remove the guard: the ${f.piece} on ${f.square} had one guard, the ${f.guard} on ${f.guardSq}, and this move let it keep its post.`,
+  'ignored-guard-removal': (f) => (Number(f.played) === 1
+    ? `Your ${f.piece} on ${f.square} had one guard, the ${f.guard} on ${f.guardSq}, and ${f.hit} ${Number(f.chase) === 1 ? 'chased it off' : 'took it'} — the ${f.piece} falls.`
+    : `Your ${f.piece} on ${f.square} has one guard, the ${f.guard} on ${f.guardSq}, and ${f.hit} ${Number(f.chase) === 1 ? 'chases it off' : 'takes it'} — the ${f.piece} falls.`),
   'ignored-pin-pressure': (f) => (Number(f.played) === 1
     ? `Your ${f.piece} on ${f.square} is pinned to the ${f.behind} on ${f.behindSq}, and they piled on with ${f.pile} — a pinned piece can't run.`
     : `Your ${f.piece} on ${f.square} is pinned to the ${f.behind} on ${f.behindSq}, and ${f.pile} piles on it — a pinned piece can't run.`),
@@ -352,6 +360,22 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
         `Put pressure on the pinned piece: your ${f.pinner} on ${f.pinnerSq} pins the ${f.piece} on ${f.square} to the ${f.behind}, and ${f.better} attacks it again — it can't run.`,
         `The ${f.piece} on ${f.square} was pinned and stuck — ${f.better} piles on and wins it, and this move lets it off.`,
         `A pinned piece can't run, so attack it again: ${f.better} hits the ${f.piece} on ${f.square}, and this move lets the chance go.`,
+      ];
+      return s[v % s.length];
+    }
+    case 'missed-guard-removal': {
+      const how = Number(f.chase) === 1 ? 'chases it off' : 'takes it';
+      const s = [
+        `Remove the guard: the ${f.piece} on ${f.square} had one guard, the ${f.guard} on ${f.guardSq} — ${f.better} ${how}, and the ${f.piece} falls.`,
+        `The ${f.piece} on ${f.square} was held by the ${f.guard} alone; ${f.better} ${how}, and this move let the chance go.`,
+      ];
+      return s[v % s.length];
+    }
+    case 'ignored-guard-removal': {
+      const how = Number(f.played) === 1 ? (Number(f.chase) === 1 ? 'chased it off' : 'took it') : (Number(f.chase) === 1 ? 'chases it off' : 'takes it');
+      const s = [
+        `Your ${f.piece} on ${f.square} had one guard, the ${f.guard} on ${f.guardSq}, and ${f.hit} ${how} — the ${f.piece} falls${f.better ? `; ${f.better} kept it safe` : ''}.`,
+        `One guard is not enough: the ${f.guard} on ${f.guardSq} held your ${f.piece} on ${f.square} alone, and ${f.hit} ${how}${f.better ? ` — after ${f.better} it would have held` : ''}.`,
       ];
       return s[v % s.length];
     }
@@ -641,6 +665,8 @@ function shortVerdict(a: PrincipleAttribution): string {
     case 'blocked-own-retreat': return `A retreat blocked again — ${f.trap} traps the ${f.piece} on ${f.square}.`;
     case 'missed-pin-pressure': return `Another pinned piece left alone — ${f.better} piles on the ${f.piece} on ${f.square}.`;
     case 'ignored-pin-pressure': return `Your pinned ${f.piece} on ${f.square} again — ${f.pile} piles on it.`;
+    case 'missed-guard-removal': return `One guard again — ${f.better} removes the ${f.guard} that holds the ${f.piece} on ${f.square}.`;
+    case 'ignored-guard-removal': return `Your ${f.piece} on ${f.square} with one guard again — ${f.hit} removes it.`;
     case 'loose-piece': return guarded(f) ? `Loose piece again — the ${f.piece} on ${f.square} can be won.` : `Loose piece again — the ${f.piece} on ${f.square} hangs.`;
     case 'ignored-threat': return f.line ? `Their threat again — ${f.threat} was still on, and the ${f.piece} on ${f.square} with it.` : guarded(f) ? `Their threat again — the ${f.piece} on ${f.square} could still be won.` : `Their threat again — the ${f.piece} on ${f.square} was still hanging.`;
     case 'passive-when-forcing-existed': return `You missed a forcing move again: ${f.better}.`;
@@ -781,6 +807,8 @@ const RECAP_NOUN: Record<FundamentalId, string> = {
   'blocked-own-retreat': 'blocked your own piece\'s retreat',
   'missed-pin-pressure': 'let a pinned piece off the hook',
   'ignored-pin-pressure': 'let them pile on your pinned piece',
+  'missed-guard-removal': 'left a single guard in place',
+  'ignored-guard-removal': 'left a piece with one guard',
 };
 
 /**

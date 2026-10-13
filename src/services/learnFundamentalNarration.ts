@@ -175,6 +175,14 @@ export function fundamentalLines(
     const after = fenAfterSan(fenBefore, playedSan);
     return after ? [{ fen: after, sans: [a.facts.pile] }] : [];
   }
+  // Remove the guard: the taking or chasing move is named, so it gets its arrow.
+  if (a.id === 'missed-guard-removal' && typeof a.facts.better === 'string' && a.facts.better) {
+    return [{ fen: fenBefore, sans: [a.facts.better] }];
+  }
+  if (a.id === 'ignored-guard-removal' && typeof a.facts.hit === 'string') {
+    const after = fenAfterSan(fenBefore, playedSan);
+    return after ? [{ fen: after, sans: [a.facts.hit] }] : [];
+  }
   if (a.id === 'calculation-depth' && full && (a.evidence.pvMoves ?? []).length > 0) {
     const after = fenAfterSan(fenBefore, playedSan);
     return after ? [{ fen: after, sans: a.evidence.pvMoves ?? [] }] : [];

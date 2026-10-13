@@ -73,17 +73,23 @@ describe('obligationLifts — the piece that no longer hangs', () => {
 
 describe('bishopOffPlan — their bishop against their own setup', () => {
   it('their bishop to d3 runs into their own pawns on c4 and e4', () => {
-    const r = voiced(bishopOffPlan(after(['e4', 'e5', 'c4', 'Nc6']), 'Bd3', 'b', []));
+    const r = voiced(bishopOffPlan(after(['e4', 'e5', 'c4', 'Nc6']), 'Bd3', 'b', [], true));
     expect(r.text).toMatch(/their own pawn/);
   });
+
+  // David 2026-10-13: "So was this an inaccuracy? Coach should say if it is."
+  it('the criticism of their move is said only with a fault grade', () => {
+    expect(bishopOffPlan(after(['e4', 'e5', 'c4', 'Nc6']), 'Bd3', 'b', [], false)).toBeNull();
+    expect(bishopOffPlan(after(['e4', 'e5', 'c4', 'Nc6']), 'Bd3', 'b', [], null)).toBeNull();
+  });
   it('one safe pawn shuts the diagonal the bishop came out for', () => {
-    const r = voiced(bishopOffPlan(after(['e4', 'd6']), 'Bc4', 'b', [line(['e7e6'], 30)]));
+    const r = voiced(bishopOffPlan(after(['e4', 'd6']), 'Bc4', 'b', [line(['e7e6'], 30)], null));
     expect(r.text).toMatch(/aims at f7/);
     expect(r.text).toMatch(/e6/);
     expect(r.namesMove).toBe(true);
   });
   it('stays silent on a knight move', () => {
-    expect(bishopOffPlan(after(['e4', 'd6']), 'Nf3', 'b', [line(['e7e6'], 30)])).toBeNull();
+    expect(bishopOffPlan(after(['e4', 'd6']), 'Nf3', 'b', [line(['e7e6'], 30)], null)).toBeNull();
   });
 });
 
@@ -125,7 +131,7 @@ describe('wedgedPawn — clear it so no pawn of theirs stays', () => {
 
 describe('readTheirMove — the one producer', () => {
   it('returns the quiet danger, and every read it returns carries a proof', () => {
-    const reads = readTheirMove({ fenBefore: 'r5k1/2q2ppp/8/8/8/R7/1B3PPP/6K1 b - - 0 1', san: 'Rd8', student: 'w', topLines: [] });
+    const reads = readTheirMove({ fenBefore: 'r5k1/2q2ppp/8/8/8/R7/1B3PPP/6K1 b - - 0 1', san: 'Rd8', student: 'w', topLines: [], theirMoveFlagged: null });
     expect(reads.map((r) => r.kind)).toContain('quiet-danger');
     for (const r of reads) expect(isProof(r.proof)).toBe(true);
   });

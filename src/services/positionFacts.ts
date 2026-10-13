@@ -34,6 +34,7 @@ import { trickSidestepped } from './forkTrick';
 import { phaseVerdictLine, phaseVerdictKeys } from './reviewPositionalAssessment';
 import { stemKeyOf, rotateStem } from '../utils/rotateStem';
 import { findPinPressure, PIN_PRESSURE_PRINCIPLE, PIN_PRESSURE_WARNING, pieceName, type PinPressure } from './pinPressure';
+import { findGuardRemovals, GUARD_REMOVAL_PRINCIPLE, GUARD_REMOVAL_WARNING, type GuardRemoval } from './guardRemoval';
 import { type ImportanceVerdict, type ImportanceSignals } from './narrationImportance';
 import { boardStructure } from './structureReads';
 import { takingTheAttackerAnswers } from './positionReadingService';
@@ -884,6 +885,15 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     if (!inFlux && (!concept || (concept.source === 'tactic' && concept.id === 'pin'))) {
       const pp = pinPressureConcept(fen, studentColor);
       if (pp) concept = pp;
+    }
+    // REMOVE THE GUARD (David 2026-10-13: "All computers MUST work both
+    // ways") — the same computer the record reads: a piece of theirs held by
+    // one guard the student can take or chase, or the student's own piece
+    // held by one guard they can. Only when no other concept led, or the lead
+    // was itself a removal; never on a board in flux.
+    if (!inFlux && (!concept || (concept.source === 'tactic' && concept.id === 'removal_of_guard'))) {
+      const gr = guardRemovalConcept(fen, studentColor);
+      if (gr) concept = gr;
     }
   } catch { concept = null; }
 
@@ -1817,6 +1827,36 @@ function pinPressureConcept(fen: string, student: 'w' | 'b'): NonNullable<Parame
     squares: [pp.pinner, pp.pinned, pp.behind],
     boardFen: fen,
     pinMove: { fen: pp.side === board.turn() ? fen : sideToMoveFlipped(fen), san: move.san },
+  };
+}
+
+/**
+ * REMOVE THE GUARD, from the seat that has it (`findGuardRemovals`, both
+ * ways). The student's chance is said WITHOUT the move — Learn names no move
+ * unasked (2026-10-10): the target, its one guard, and the method. Their
+ * chance names their move, because it is the danger, and the way out.
+ */
+function guardRemovalConcept(fen: string, student: 'w' | 'b'): NonNullable<Parameters<typeof buildClauses>[0]['concept']> | null {
+  const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  const pick = (holder: 'w' | 'b'): GuardRemoval | null => findGuardRemovals(fen, holder)[0] ?? null;
+  const key = stemKeyOf(fen.split(' ')[0]);
+  const mine = pick(student);
+  const theirs = mine ? null : pick(them);
+  const gr = mine ?? theirs;
+  if (!gr) return null;
+  const piece = pieceName(gr.targetPiece);
+  const guard = pieceName(gr.guardPiece);
+  const move = gr.moves[0];
+  const full = mine
+    ? `Their ${piece} on ${gr.target} has one guard, the ${guard} on ${gr.guard}. ${rotateStem(GUARD_REMOVAL_PRINCIPLE, key)}`
+    : `Your ${piece} on ${gr.target} has one guard, the ${guard} on ${gr.guard}, and ${move.san} ${move.kind === 'chase' ? 'chases it off' : 'takes it'}. ${rotateStem(GUARD_REMOVAL_WARNING, key)}`;
+  return {
+    id: 'removal_of_guard', source: 'tactic', full, short: full,
+    squares: [gr.target, gr.guard],
+    boardFen: fen,
+    ...(mine ? {} : { pinMove: { fen: gr.side === board.turn() ? fen : sideToMoveFlipped(fen), san: move.san } }),
   };
 }
 

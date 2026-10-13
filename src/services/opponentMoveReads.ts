@@ -323,7 +323,7 @@ function diagonalReach(c: Chess, sq: string): string[] {
  * push of yours, a move the engine rates within half a pawn of its best,
  * shuts the bishop's longest forward diagonal right in front of it.
  */
-export function bishopOffPlan(fenBefore: string, san: string, student: 'w' | 'b', topLines: readonly EngineLine[]): Read | null {
+export function bishopOffPlan(fenBefore: string, san: string, student: 'w' | 'b', topLines: readonly EngineLine[], theirMoveFlagged: boolean | null): Read | null {
   let after: Chess; let mv: Move;
   try {
     const b = new Chess(fenBefore);
@@ -344,7 +344,11 @@ export function bishopOffPlan(fenBefore: string, san: string, student: 'w' | 'b'
     if (q && q.color === them && q.type === 'p') blockers.push(t);
   }
   const reach = diagonalReach(after, mv.to).filter(forward);
-  if (blockers.length === 2 || (blockers.length === 1 && reach.length <= 2)) {
+  // A CRITICISM OF THEIR MOVE RIDES ITS GRADE (David 2026-10-13: "So was this
+  // an inaccuracy? Coach should say if it is"). "A developing move that
+  // develops nothing" about a move the engine calls fine reads as a verdict
+  // the grade contradicts — said only when their move was graded a fault.
+  if (theirMoveFlagged === true && (blockers.length === 2 || (blockers.length === 1 && reach.length <= 2))) {
     const theirs = `their bishop on ${mv.to}`;
     const text = rotateStem([
       `${cap(theirs)} runs straight into their own pawn on ${blockers[0]} — that move goes against their own setup.`,
@@ -562,13 +566,17 @@ export function readTheirMove(args: {
   student: 'w' | 'b';
   topLines: readonly EngineLine[];
   prev?: { fenBefore: string; san: string } | null;
+  /** REQUIRED: was THEIR move graded a fault (inaccuracy or worse)? null =
+   *  not graded on this surface. A read that criticizes their move speaks only
+   *  on true — a criticism without its verdict is never said. */
+  theirMoveFlagged: boolean | null;
 }): Read[] {
   const out: Read[] = [];
   const push = (r: Read | null): void => { if (r) out.push(r); };
   try {
     push(quietDanger(args.fenBefore, args.san, args.student));
     if (args.prev) push(obligationLifts(args.prev.fenBefore, args.prev.san, args.san, args.student));
-    push(bishopOffPlan(args.fenBefore, args.san, args.student, args.topLines));
+    push(bishopOffPlan(args.fenBefore, args.san, args.student, args.topLines, args.theirMoveFlagged));
     push(wronglyExpected(args.fenBefore, args.san, args.student, args.topLines));
     if (!out.some((r) => r.kind === 'wrongly-expected')) push(helpedYou(args.fenBefore, args.san, args.student, args.topLines));
     const fen = ((): string | null => { try { const c = new Chess(args.fenBefore); c.move(args.san); return c.fen(); } catch { return null; } })();

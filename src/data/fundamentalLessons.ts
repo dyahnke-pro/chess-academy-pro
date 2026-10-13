@@ -37,6 +37,8 @@ const FUNDAMENTAL_MATCH: ReadonlyArray<readonly [FundamentalId, RegExp]> = [
   ['poisoned-pawn', /\bpoison(?:ed|ous)?\s+pawn/],
   // "PP on the PP" — put pressure on the pinned piece (David 2026-10-05).
   // Before the generic pin/threat entries so the named principle wins.
+  ['missed-guard-removal', /\bremov(?:e|ing|al\s+of)\s+(?:the\s+)?(?:guard|defender)\b|\b(?:chas(?:e|ing)|tak(?:e|ing))\s+(?:away\s+)?(?:the\s+)?(?:only\s+)?(?:guard|defender)\b/],
+  ['ignored-guard-removal', /\b(?:only|one|single)\s+(?:guard|defender)\b|\bguard(?:ed)?\s+(?:only\s+)?once\b/],
   ['missed-pin-pressure', /\bpp\s+on\s+the\s+pp\b|\b(?:put(?:ting)?\s+)?pressure\s+on\s+(?:the\s+|a\s+)?pinned\s+pieces?\b|\bpressur(?:e|ing)\s+(?:the\s+|a\s+)?pinned\b|\bpil(?:e|ing)\s+on\s+(?:the\s+|a\s+)?(?:pin|pinned)\b|\battack(?:ing)?\s+(?:the\s+|a\s+)?pinned\s+pieces?\b/],
   ['ignored-pin-pressure', /\b(?:my|your)\s+pinned\s+pieces?\b|\b(?:break(?:ing)?|unpin(?:ning)?)\s+(?:the\s+|a\s+)?pin\b/],
   ['blocked-own-retreat', /\bblock(?:ing|ed)?\s+(?:(?:my|your|its|the)\s+)?(?:own\s+)?(?:piece'?s?\s+)?(?:retreat|escape|way\s+(?:home|back))\b/],
@@ -288,6 +290,16 @@ export const FUNDAMENTAL_LESSON: Record<FundamentalId, FundamentalLesson> = {
     facts:
       "When one of your pieces is pinned, it cannot run — so your opponent's best plan is to attack it again. Count who can add an attacker on their next move, especially a pawn. If they can, deal with the pin before they pile on: move the piece standing behind it, put something in between, or add a defender. Leaving a pinned piece alone and hoping is how pieces are lost.",
     sources: ['concept:tac-pin'],
+  },
+  'missed-guard-removal': {
+    facts:
+      "Remove the guard: when one of their pieces is held by a single defender, that defender is the real target. Take it, or attack it with something cheaper so it has to move — either way it stops guarding, and the piece it held falls. Before a quiet move, ask of every piece you attack: how many guards does it have, and can I take or chase the last one?",
+    sources: ['concept:tac-deflection', 'concept:tac-overloaded'],
+  },
+  'ignored-guard-removal': {
+    facts:
+      "A piece with one guard is only as safe as that guard. If they can take the guard, or hit it with a cheaper piece so it has to move, the piece it held falls. Count the guards on every piece of yours they attack; when there is only one and it can be chased, add a second defender or move the piece first.",
+    sources: ['concept:tac-deflection', 'concept:tac-overloaded'],
   },
   'no-plan': {
     facts:

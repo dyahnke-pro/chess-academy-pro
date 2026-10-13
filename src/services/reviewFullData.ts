@@ -1301,7 +1301,7 @@ export function computeMoveFacets(
       ? [{ moves: ctx.playedLineUci, evaluation: ctx.evaluation, mate: null }] : [];
     const prev = ply >= 2 && ctx.teaching.prevFenBefore && ctx.allSans[ply - 2]
       ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null;
-    for (const r of readTheirMove({ fenBefore, san, student: studentColorWB, topLines: lines, prev })) {
+    for (const r of readTheirMove({ fenBefore, san, student: studentColorWB, topLines: lines, prev, theirMoveFlagged: negativeClass })) {
       const f = `[${r.kind === 'wedged-pawn' ? 'prevent-test' : 'their-read'}] ${r.text}`;
       facets.push(f);
       recProof(f, r.proof);

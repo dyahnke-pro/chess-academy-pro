@@ -274,7 +274,8 @@ export function depthClauses(args: {
     if (toMove === args.studentColor && args.lastOpponentMove) {
       const own = ownLastMove(args.history, args.fen);
       const prev = own && args.history.length >= 2 ? { fenBefore: own.fenBefore, san: own.san } : null;
-      for (const r of readTheirMove({ fenBefore: args.lastOpponentMove.fenBefore, san: args.lastOpponentMove.san, student: args.studentColor, topLines: args.topLines, prev })) {
+      // Learn does not grade their move here: a criticism of it stays silent.
+      for (const r of readTheirMove({ fenBefore: args.lastOpponentMove.fenBefore, san: args.lastOpponentMove.san, student: args.studentColor, topLines: args.topLines, prev, theirMoveFlagged: null })) {
         if (r.namesMove && !args.nameMove) continue;
         out.push({ kind: r.kind === 'wedged-pawn' ? 'prevent-test' : 'their-read', text: r.text, proof: r.proof, squares: r.squares, ...(r.stakes ? { stakes: r.stakes } : {}), claim: r.claim });
       }

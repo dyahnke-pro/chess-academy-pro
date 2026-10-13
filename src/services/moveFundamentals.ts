@@ -30,6 +30,7 @@ import { isOutpost, noPawnCanChallenge } from './outpost';
 import { MATERIAL_VALUE } from './pieceValues';
 import { SPACE_RULE } from './reviewConcepts';
 import { findPinPressure } from './pinPressure';
+import { findGuardRemovals } from './guardRemoval';
 import { isPassedPawnAt } from './boardStructure';
 import { pawnHit } from './trappedPiece';
 
@@ -71,7 +72,12 @@ export type MoveFundamentalId =
   /** PP on the PP (David 2026-10-05): the move attacks a piece already pinned
    *  — it cannot step away, so the extra attacker wins it. The positive half
    *  of `missed-pin-pressure`; one computer (`pinPressure`) for both. */
-  | 'pile-on-pin';
+  | 'pile-on-pin'
+  /** REMOVE THE GUARD (2026-10-13): the move takes or chases the ONLY guard
+   *  of a piece of theirs, and the computer proved every answer loses a piece.
+   *  The positive half of `missed-guard-removal`; one computer
+   *  (`guardRemoval`) for both. */
+  | 'remove-guard';
 
 /** Which review facet family each fundamental RESTATES, when it does — the
  *  join that lets the door see two lanes saying one thing (review walk 2065,
@@ -101,6 +107,7 @@ export const FUNDAMENTAL_CLAIM_FAMILY: Record<MoveFundamentalId, string | null> 
   'rook-behind-pawn': null,
   'queen-off-file': null,
   'pile-on-pin': null,
+  'remove-guard': null,
 };
 
 export interface MoveFundamental {
@@ -189,6 +196,9 @@ export const MOVE_FUNDAMENTAL_TAG: Record<MoveFundamentalId, MisconceptionTagId 
   // Piling on a pinned piece is the very move whose absence files
   // `missed-pin-pressure` under missed-tactic — held evidence for that hole.
   'pile-on-pin': 'missed-tactic',
+  // Taking or chasing a lone guard is the move whose absence files
+  // `missed-guard-removal` under missed-tactic.
+  'remove-guard': 'missed-tactic',
   'rook-behind-pawn': 'passive-rook',
   // Opening the file with the queens facing hands them the trade — the break
   // came too early.
@@ -310,10 +320,39 @@ export function computeMoveFundamentals(
   // Recapture-safety: never dress a piece that HANGS on its landing square as a
   // positional gain (a rook that "eyes the center" but drops to a queen is not a
   // merit). Castling / passed-pawn pushes clear this trivially.
-  if (!landingIsSafe(after.fen(), mv.to)) return [];
+  // REMOVE THE GUARD is read BEFORE the landing check: its proof already
+  // covers every reply, including taking the piece that removes the guard
+  // (8.Nc3 in the Two Knights can be taken — and …dxc3 drops the queen).
+  let removalRead: MoveFundamental | null = null;
+  // ── REMOVE THE GUARD (2026-10-13, "All computers MUST work both ways"). The
+  //    move takes or chases the only guard of a piece of theirs, and the
+  //    computer proved every answer loses a piece (`findGuardRemovals`,
+  //    matched by COORDINATES). The proven form of `attack-defender`.
+  const removal = (() => {
+    try {
+      return findGuardRemovals(fenBefore, mover).find((r) => r.moves.some((m) => m.from === mv.from && m.to === mv.to)) ?? null;
+    } catch { return null; }
+  })();
+  if (removal) {
+    const name = PIECE_NAME[removal.targetPiece] ?? 'piece';
+    const guard = PIECE_NAME[removal.guardPiece] ?? 'piece';
+    const how = removal.moves.find((m) => m.from === mv.from && m.to === mv.to)?.kind === 'chase' ? 'chases' : 'takes';
+    removalRead = {
+      id: 'remove-guard',
+      weight: 90,
+      led: `${how} their ${guard} on ${removal.guard}, the only guard of the ${name} on ${removal.target} — the ${name} falls`,
+      selfContained: `${how} the ${guard} on ${removal.guard}, which alone held their ${name} on ${removal.target}`,
+      imperative: `remove the guard — the ${guard} on ${removal.guard} is all that holds the ${name} on ${removal.target}`,
+      squares: [mv.to, removal.guard, removal.target],
+      forcing: true,
+    };
+  }
+
+  // Recapture-safety (below) never applies to a proven removal.
+  if (!landingIsSafe(after.fen(), mv.to)) return removalRead ? [removalRead] : [];
 
   const phase = classifyPhase(fenBefore, { fullMove: Number(fenBefore.split(' ')[5]) || 1 });
-  const out: MoveFundamental[] = [];
+  const out: MoveFundamental[] = removalRead ? [removalRead] : [];
 
   // ── KING SAFETY — castling. The one move that both tucks the king away and
   //    activates a rook; in the opening/middlegame it is usually the priority.
@@ -805,7 +844,10 @@ export function computeMoveFundamentals(
   // joined by "and").
   const completes = ideas.some((f) => f.id === 'development-complete');
   const kept = out.filter((f) => !(prepared && f.id === 'center' && f.led.startsWith('supports the center')) && !(completes && f.id === 'development'));
-  kept.push(...ideas);
+  // A PROVEN removal is the better statement of "goes after the only guard":
+  // one claim about one guard, so the pressure read steps aside.
+  const removed = kept.find((f) => f.id === 'remove-guard');
+  kept.push(...ideas.filter((f) => !(removed && f.id === 'attack-defender' && f.squares[1] === removed.squares[1])));
   return kept.sort((a, b) => b.weight - a.weight);
 }
 
@@ -1190,6 +1232,7 @@ const PRINCIPLE_REASON: Record<MoveFundamental['id'], string | null> = {
   'rook-behind-pawn': null,
   'queen-off-file': null,
   'pile-on-pin': 'a pinned piece cannot step away, so a second attacker usually wins it',
+  'remove-guard': 'a piece with one guard is only as safe as that guard',
   'king-activity': null,
   promotion: null,
   'passed-pawn': null,
@@ -1227,6 +1270,7 @@ const REASON_NAMES_SIDES: Record<MoveFundamental['id'], boolean> = {
   'rook-behind-pawn': false,
   'queen-off-file': false,
   'pile-on-pin': false,
+  'remove-guard': false,
   'king-activity': false,
   promotion: false,
   'passed-pawn': false,
@@ -1291,6 +1335,7 @@ const REPEAT_TEACHES: Record<MoveFundamental['id'], boolean> = {
   'queen-off-file': true,
   // A pile-on is a consequence the opponent must answer — it teaches each time.
   'pile-on-pin': true,
+  'remove-guard': true,
   'king-activity': false,
   promotion: false,
   'passed-pawn': false,
@@ -1328,6 +1373,7 @@ const IS_OPENING_PRINCIPLE: Record<MoveFundamental['id'], boolean> = {
   // PP on the PP is a rule taught by name (the Bg5 pin and e4-e5 is an opening
   // staple), said once a game like the rest.
   'pile-on-pin': true,
+  'remove-guard': true,
 };
 
 /** The first opening principle this move follows that has not been taught

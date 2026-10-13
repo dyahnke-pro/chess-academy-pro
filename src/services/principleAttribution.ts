@@ -40,6 +40,7 @@ import { BLUNDER_CP } from './engineConstants';
 import { developedMinorCount, homeMinorCount, isMinorAtHome, minorsAtHome } from './development';
 import { proofCut } from './exchangeLedger';
 import { findPinPressure } from './pinPressure';
+import { findGuardRemovals } from './guardRemoval';
 import { pawnsOf } from './boardStructure';
 import { isEndgameByMaterial } from './gamePhaseService';
 
@@ -71,6 +72,10 @@ export const FUNDAMENTAL_IDS = [
   // pile-on that won their opponent's pinned piece, or let the opponent pile on
   // theirs.
   'missed-pin-pressure', 'ignored-pin-pressure',
+  // REMOVE THE GUARD (David 2026-10-13: "All computers MUST work both ways").
+  // One computer (`guardRemoval`), read from both seats: the student skipped
+  // taking or chasing the only guard of a piece, or let the opponent do it.
+  'missed-guard-removal', 'ignored-guard-removal',
 ] as const;
 export type FundamentalId = (typeof FUNDAMENTAL_IDS)[number];
 
@@ -115,6 +120,8 @@ export const FUNDAMENTAL_TAG: Record<FundamentalId, MisconceptionTagId> = {
   'blocked-own-retreat': 'missed-opponents-threat',
   'missed-pin-pressure': 'missed-tactic',
   'ignored-pin-pressure': 'missed-opponents-threat',
+  'missed-guard-removal': 'missed-tactic',
+  'ignored-guard-removal': 'missed-opponents-threat',
 };
 
 /** Rows whose "punishment" is a positional cost rather than a concrete move
@@ -556,6 +563,7 @@ const CALC_DEPTH_CLAIMANTS = [
   'loose-piece', 'ignored-threat', 'passive-when-forcing-existed',
   'poisoned-pawn', 'overvalued-attack', 'blocked-own-retreat',
   'missed-pin-pressure', 'ignored-pin-pressure',
+  'missed-guard-removal', 'ignored-guard-removal',
 ] as const satisfies readonly FundamentalId[];
 
 type Detector = (c: Ctx) => Omit<PrincipleAttribution, 'tag' | 'coOccurrence'> | null;
@@ -790,6 +798,60 @@ function ignoredPinPressure(c: Ctx): ReturnType<typeof att> | null {
     pile: reply.san, played: c.reply ? 1 : 0, better: c.best.san,
     piece: PNAME[hit.pinnedPiece], square: hit.pinned,
     pinner: PNAME[pinner.type], pinnerSq: hit.pinner, behind: PNAME[behind.type], behindSq: hit.behind,
+  });
+}
+
+/** MISSED GUARD REMOVAL — "remove the guard" FOR the student (2026-10-13).
+ *  A piece of theirs had one guard; the engine's best move took or chased that
+ *  guard and won it (`findGuardRemovals`, every reply verified), and the
+ *  student played something else. Proved on the board:
+ *    1. PATTERN — the best move IS one of the removal moves (coordinates);
+ *    2. PUNISHMENT — the chance goes: after their reply the same target can no
+ *       longer be won this way (when the reply is known);
+ *    3. COUNTERFACTUAL — the best line wins material (when persisted). */
+function missedGuardRemoval(c: Ctx): ReturnType<typeof att> | null {
+  const { best, last, mover } = c;
+  const chances = findGuardRemovals(c.before.fen(), mover);
+  const hit = chances.find((r) => r.moves.some((m) => m.from === best.from && m.to === best.to));
+  if (!hit) return null;
+  if (last.to === hit.target || last.to === hit.guard) return null;
+  if (chances.some((r) => r.moves.some((m) => m.from === last.from && m.to === last.to))) return null;
+  if (c.pvB?.length && !pvWinsMaterial(c.before, [best.san, ...c.pvB], mover)) return null;
+  const replySan = c.reply?.san ?? c.pvP?.[0];
+  if (replySan) {
+    const ar = applied(c.after, replySan);
+    if (ar && findGuardRemovals(ar.fen(), mover).some((r) => r.target === hit.target)) return null;
+  }
+  const how = hit.moves.find((m) => m.from === best.from && m.to === best.to)?.kind ?? 'capture';
+  return att('missed-guard-removal', 3, {
+    squares: [hit.target, hit.guard, best.to], moves: [best.san], pvMoves: pvHas(c.pvB, () => true, 2),
+  }, {
+    better: best.san, piece: PNAME[hit.targetPiece], square: hit.target,
+    guard: PNAME[hit.guardPiece], guardSq: hit.guard, chase: how === 'chase' ? 1 : 0,
+  });
+}
+
+/** IGNORED GUARD REMOVAL — "remove the guard" AGAINST the student. After the
+ *  played move one of the student's pieces has a single guard, and the
+ *  opponent's reply (played, or the engine's first) takes or chases it:
+ *    1. PATTERN — `findGuardRemovals(after, opp)` names the reply;
+ *    2. PUNISHMENT — the computer proved every answer loses a piece;
+ *    3. COUNTERFACTUAL — after the best move that target is not removable. */
+function ignoredGuardRemoval(c: Ctx): ReturnType<typeof att> | null {
+  const { opp } = c;
+  const reply = c.reply ?? (c.pvP?.[0] ? tryMove(c.after, c.pvP[0]) : null);
+  if (!reply) return null;
+  const threats = findGuardRemovals(c.after.fen(), opp);
+  const hit = threats.find((r) => r.moves.some((m) => m.from === reply.from && m.to === reply.to));
+  if (!hit) return null;
+  if (findGuardRemovals(c.afterBest.fen(), opp).some((r) => r.target === hit.target)) return null;
+  const how = hit.moves.find((m) => m.from === reply.from && m.to === reply.to)?.kind ?? 'capture';
+  return att('ignored-guard-removal', 3, {
+    squares: [hit.target, hit.guard, reply.to], moves: [reply.san], pvMoves: pvHas(c.pvP, (s) => s === reply.san, 1),
+  }, {
+    hit: reply.san, played: c.reply ? 1 : 0, better: c.best.san,
+    piece: PNAME[hit.targetPiece], square: hit.target,
+    guard: PNAME[hit.guardPiece], guardSq: hit.guard, chase: how === 'chase' ? 1 : 0,
   });
 }
 
@@ -1086,6 +1148,8 @@ const DETECTORS: Detector[] = [
   // 15b/15c. PP on the PP — the pinned piece, from both seats (see above).
   missedPinPressure,
   ignoredPinPressure,
+  missedGuardRemoval,
+  ignoredGuardRemoval,
   // 16. Weakened king shield — a shield pawn moved without need, and the
   // opponent has a sound check or a piece that can land next to the king.
   (c) => {
@@ -1701,6 +1765,9 @@ export function attributePrinciples(
   // piece they lose IS the loose piece / the threat they ignored — one story.
   if (ids.has('missed-pin-pressure')) subsumed.add('passive-when-forcing-existed');
   if (ids.has('ignored-pin-pressure')) { subsumed.add('loose-piece'); subsumed.add('ignored-threat'); }
+  // The guard removal IS the specific story of a piece they win: it says how.
+  if (ids.has('missed-guard-removal')) subsumed.add('passive-when-forcing-existed');
+  if (ids.has('ignored-guard-removal')) { subsumed.add('loose-piece'); subsumed.add('ignored-threat'); }
   // Section 14: an immediate, move-verified punishment IS the story; the
   // reasoning error behind it is the second telling. Depth needs the blow to be
   // deep, so anything that names an immediate blow subsumes it; no-plan yields
