@@ -316,7 +316,7 @@ function tacticLabel(t: TacticType): string {
     back_rank: 'back-rank tactics', deflection: 'deflections', promotion: 'promotions',
     overloaded_piece: 'overloaded pieces', trapped_piece: 'trapped pieces',
     clearance: 'clearance tactics', interference: 'interference', zwischenzug: 'in-between moves',
-    x_ray: 'x-ray tactics', removing_the_guard: 'remove-the-defender tactics',
+    x_ray: 'x-ray tactics', removing_the_guard: 'removing-the-guard tactics',
     checkmate: 'checkmates',
     tactical_sequence: 'tactical sequences',
   };

@@ -293,12 +293,12 @@ export const FUNDAMENTAL_LESSON: Record<FundamentalId, FundamentalLesson> = {
   },
   'missed-guard-removal': {
     facts:
-      "Remove the guard: when one of their pieces is held by a single defender, that defender is the real target. Take it, or attack it with something cheaper so it has to move — either way it stops guarding, and the piece it held falls. Before a quiet move, ask of every piece you attack: how many guards does it have, and can I take or chase the last one?",
+      "Removing the guard: when one of their pieces is held by a single defender, that defender is the real target. Take it, or attack it with something cheaper so it has to move — either way it stops guarding, and the piece it held falls. Before a quiet move, ask of every piece you attack: how many guards does it have, and can I take or chase the last one?",
     sources: ['concept:tac-deflection', 'concept:tac-overloaded'],
   },
   'ignored-guard-removal': {
     facts:
-      "A piece with one guard is only as safe as that guard. If they can take the guard, or hit it with a cheaper piece so it has to move, the piece it held falls. Count the guards on every piece of yours they attack; when there is only one and it can be chased, add a second defender or move the piece first.",
+      "A piece with one guard is only as safe as that guard. If they can take the guard, or hit it with a cheaper piece so it has to move, the piece it held falls. Count the guards on each of your pieces they attack; when there is only one and it can be chased, add a second defender or move the piece first.",
     sources: ['concept:tac-deflection', 'concept:tac-overloaded'],
   },
   'no-plan': {

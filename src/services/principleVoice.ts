@@ -200,7 +200,7 @@ const VERDICT_WITHOUT_BETTER: Partial<Record<FundamentalId, (f: Facts) => string
   'capture-toward-centre': (f) => `Taking toward the centre is the usual rule, but here the other capture was better — it opens the ${f.file}-file for your rook.`,
   'no-plan': (f) => `A move without a purpose: the board wanted you to ${f.plan}, and ${f.played} works on something else entirely.`,
   'missed-pin-pressure': (f) => `A pinned piece can't run, so attack it again: the ${f.piece} on ${f.square} was pinned to the ${f.behind} on ${f.behindSq}, and this move let it off.`,
-  'missed-guard-removal': (f) => `Remove the guard: the ${f.piece} on ${f.square} had one guard, the ${f.guard} on ${f.guardSq}, and this move let it keep its post.`,
+  'missed-guard-removal': (f) => `Removing the guard: the ${f.piece} on ${f.square} had one guard, the ${f.guard} on ${f.guardSq}, and this move let it keep its post.`,
   'ignored-guard-removal': (f) => (Number(f.played) === 1
     ? `Your ${f.piece} on ${f.square} had one guard, the ${f.guard} on ${f.guardSq}, and ${f.hit} ${Number(f.chase) === 1 ? 'chased it off' : 'took it'} — the ${f.piece} falls.`
     : `Your ${f.piece} on ${f.square} has one guard, the ${f.guard} on ${f.guardSq}, and ${f.hit} ${Number(f.chase) === 1 ? 'chases it off' : 'takes it'} — the ${f.piece} falls.`),
@@ -366,7 +366,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     case 'missed-guard-removal': {
       const how = Number(f.chase) === 1 ? 'chases it off' : 'takes it';
       const s = [
-        `Remove the guard: the ${f.piece} on ${f.square} had one guard, the ${f.guard} on ${f.guardSq} — ${f.better} ${how}, and the ${f.piece} falls.`,
+        `Removing the guard: the ${f.piece} on ${f.square} had one guard, the ${f.guard} on ${f.guardSq} — ${f.better} ${how}, and the ${f.piece} falls.`,
         `The ${f.piece} on ${f.square} was held by the ${f.guard} alone; ${f.better} ${how}, and this move let the chance go.`,
       ];
       return s[v % s.length];

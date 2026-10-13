@@ -249,7 +249,7 @@ export function deriveNextPlanFacts(
       : rookCount === 1
         ? `put your rook on the open ${openCentralFile}-file, `
         : '';
-    add('king-attack', `the plan from here is to attack their king on ${enemyKing.square} before it gets out. Tuck your own king away, ${fileClause}bring pieces in with tempo, and look for a sacrifice on ${softSquares} to strip its cover`, [enemyKing.square], openCentralFile);
+    add('king-attack', `the plan from here is to attack their king on ${enemyKing.square} before it gets out. Here's how: tuck your own king away, ${fileClause}bring pieces in with tempo, and look for a sacrifice on ${softSquares.replace(' and ', ' or ')} to strip its cover`, [enemyKing.square], openCentralFile);
   }
 
   // 2. Your passed pawn → push it, HOW spelled out. The king joins the escort

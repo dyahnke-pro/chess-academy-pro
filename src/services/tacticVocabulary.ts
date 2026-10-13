@@ -85,7 +85,7 @@ export const TACTIC_WORD: Record<TacticType, string> = {
   zwischenzug: 'zwischenzug',
   x_ray: 'x-ray',
   double_check: 'double check',
-  removing_the_guard: 'removal of the guard',
+  removing_the_guard: 'removing-the-guard tactic',
   checkmate: 'checkmate',
   tactical_sequence: 'combination',
 };
@@ -115,7 +115,8 @@ export const PATTERN_SPEECH: Record<TacticPatternType, { word: string; aim: stri
   discovery: { word: 'discovered attack', aim: 'unleash a discovered attack', ing: 'unleashing a discovered attack', aims: 'unleashes a discovered attack', wins: true },
   double_check: { word: 'double check', aim: 'land a double check', ing: 'landing a double check', aims: 'lands a double check', wins: true },
   back_rank: { word: 'back-rank threat', aim: 'hit the back rank', ing: 'hitting the back rank', aims: 'hits the back rank', wins: false },
-  removal_of_guard: { word: 'removal of the defender', aim: 'remove the defender', ing: 'removing the defender', aims: 'removes the defender', wins: true },
+  // "Removing the guard" is its name (David 2026-10-13: "Call it 'removing the guard'").
+  removal_of_guard: { word: 'removing-the-guard tactic', aim: 'remove the guard', ing: 'removing the guard', aims: 'removes the guard', wins: true },
   trapped_piece: { word: 'piece trap', aim: 'trap a piece', ing: 'trapping a piece', aims: 'traps a piece', wins: true },
   mate_threat: { word: 'mating threat', aim: 'set up a mating threat', ing: 'setting up a mating threat', aims: 'sets up a mating threat', wins: false },
   overload: { word: 'overloaded defender', aim: 'overload a defender', ing: 'overloading a defender', aims: 'overloads a defender', wins: true },

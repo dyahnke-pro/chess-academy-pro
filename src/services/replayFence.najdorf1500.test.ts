@@ -71,6 +71,6 @@ describe('one loss, one saying (Najdorf ply 48)', () => {
   });
   it('Learn drops the fundamental line when the grade names the same square', () => {
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    expect(src).toMatch(/fundamental\.square === look\.lostSquare/);
+    expect(src).toMatch(/(?:fundamental|fund)\.square === look\.lostSquare/);
   });
 });

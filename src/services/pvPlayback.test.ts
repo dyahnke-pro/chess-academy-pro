@@ -289,7 +289,7 @@ describe('tacticWord — no snake_case enum ever reaches the voice (David 2026-0
     // David heard "landing a mate_threat" in his own prod Traxler review — a
     // program identifier spoken aloud. Every multi-word enum must become prose.
     expect(tacticWord('mate_threat')).toBe('mating threat');
-    expect(tacticWord('removal_of_guard')).toBe('removal of the defender');
+    expect(tacticWord('removal_of_guard')).toBe('removing-the-guard tactic');
     expect(tacticWord('back_rank')).toBe('back-rank threat');
     expect(tacticWord('trapped_piece')).toBe('piece trap');
     // Clean single-word types pass through unchanged.

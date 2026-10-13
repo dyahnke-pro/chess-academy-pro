@@ -50,7 +50,7 @@ export interface GuardRemoval {
 /** The principle, in the coach's words (rotated by the caller). */
 export const GUARD_REMOVAL_PRINCIPLE = [
   'A piece with one guard is only as safe as that guard — take it or chase it, and what it guarded falls.',
-  'Remove the guard: when one piece holds another, attack the holder.',
+  'Removing the guard: when one piece holds another, attack the holder.',
 ] as const;
 
 /** …and said against the student (rotated by the caller). */

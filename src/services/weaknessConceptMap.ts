@@ -39,7 +39,7 @@ const TACTIC_CONCEPTS: Record<string, WeaknessConcept> = {
   deflection: { behavior: 'you miss deflections — driving a defender off its post', conceptQuery: 'deflection remove defender', conceptName: 'the deflection' },
   overloaded_piece: { behavior: 'you overload defenders — asking one piece to guard too much', conceptQuery: 'overloaded piece defender too many duties', conceptName: 'the overloaded defender' },
   trapped_piece: { behavior: 'you let pieces get trapped — no safe square to retreat to', conceptQuery: 'trapped piece no escape square', conceptName: 'trapped pieces' },
-  removing_the_guard: { behavior: 'you miss remove-the-defender shots', conceptQuery: 'remove the defender capture guard', conceptName: 'removing the defender' },
+  removing_the_guard: { behavior: 'you miss chances at removing the guard', conceptQuery: 'remove the defender capture guard', conceptName: 'removing the guard' },
 };
 
 // Positional-transformation clusters (analysis:transform:<motif>).

@@ -108,11 +108,11 @@ describe('deriveNextPlan — speak to FUTURE PLANS (David 2026-07-20)', () => {
     const plans = deriveNextPlans(fenAfter(opera14), 'w');
     const kingPlan = plans.find((p) => /king/i.test(p));
     expect(kingPlan).toBeDefined();
-    expect(kingPlan).toMatch(/here's exactly how/i);
+    expect(kingPlan).toMatch(/here's how/i);
     // The method: own king safe, double rooks on the open file, tempo, sac on soft squares.
-    expect(kingPlan).toMatch(/double both rooks/i);
+    expect(kingPlan).toMatch(/double your rooks/i);
     expect(kingPlan).toMatch(/tempo/i);
-    expect(kingPlan).toMatch(/sacrifice on the soft squares d7 and f7/i);
+    expect(kingPlan).toMatch(/sacrifice on d7 or f7/i);
   });
 
   it('returns MULTIPLE plans when several apply (more future plans)', () => {

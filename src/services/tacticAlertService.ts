@@ -553,7 +553,7 @@ const TACTIC_TYPE_LABEL: Record<TacticType, string> = {
   zwischenzug: 'zwischenzug',
   x_ray: 'x-ray',
   double_check: 'double check',
-  removing_the_guard: 'removal of the guard',
+  removing_the_guard: 'removing-the-guard tactic',
   checkmate: 'checkmate',
   tactical_sequence: 'tactic',
 };

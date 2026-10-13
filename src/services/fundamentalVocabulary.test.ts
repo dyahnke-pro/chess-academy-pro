@@ -70,8 +70,12 @@ describe('the fundamentals vocabularies reconcile', () => {
     // f6-knight Bg5 pins). It files under `missed-tactic`, the tag its negative
     // twin `missed-pin-pressure` files under: playing the pile-on is held
     // evidence for the very hole that skipping it records.
+    //
+    // 20 → 21 on 2026-10-13: `remove-guard` (taking or chasing the only guard
+    // of a piece). It files under `missed-tactic`, the tag its negative twin
+    // `missed-guard-removal` files under.
     const mapped = Object.keys(MOVE_FUNDAMENTAL_TAG).length;
-    expect(mapped).toBe(20);
+    expect(mapped).toBe(21);
   });
 
   it('THE STRUCTURE CROSSES THE BOUNDARY — ids reach a caller, not just prose', () => {

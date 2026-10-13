@@ -742,7 +742,7 @@ export function formatTacticsSubBlock(
     }
   }
   lines.push(
-    `    NAME the pattern in prose (fork / pin / skewer / back rank / removal of guard / overloaded / discovered attack / etc.). For depth ≥ 2, walk the line: "if you play X, opponent has Y in N." NEVER invent a tactic that isn't in this block. NEVER claim a tactic at greater depth than ${tactics.lookaheadDepth}. The student is intermediate-or-stronger if lookahead ≥ 3 — push them to calculate the full sequence.`,
+    `    NAME the pattern in prose (fork / pin / skewer / back rank / removing the guard / overloaded / discovered attack / etc.). For depth ≥ 2, walk the line: "if you play X, opponent has Y in N." NEVER invent a tactic that isn't in this block. NEVER claim a tactic at greater depth than ${tactics.lookaheadDepth}. The student is intermediate-or-stronger if lookahead ≥ 3 — push them to calculate the full sequence.`,
   );
   // THE COACH'S DNA — identify → recognize → prevent (David 2026-07-22:
   // "These three principles need to be at the heart of everything the coach

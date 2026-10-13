@@ -1,4 +1,4 @@
-// Remove the guard — one computer, both seats (David 2026-10-13: "All computers
+// Removing the guard — one computer, both seats (David 2026-10-13: "All computers
 // MUST work both ways").
 import { describe, it, expect } from 'vitest';
 import { findGuardRemovals, isGuardRemovalMove } from './guardRemoval';

@@ -8,7 +8,7 @@
  *   "…then they answer Kf1, the king trains on the knight on e2 — pressure
  *    they have to answer, Nxc3, you win the queen, the knight trains on the
  *    pawn on a2 — pressure they have to answer"
- *   "Qd8+, then Rxd8, they take the queen, landing a removal of the defender"
+ *   "Qd8+, then Rxd8, they take the queen, removing the guard"
  *
  * Four defects, one cause (a move describer cannot know which line it is in):
  *  - a motif credited to the OPPONENT's reply — the line's point is the
