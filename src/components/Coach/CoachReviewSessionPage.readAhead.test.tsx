@@ -19,6 +19,16 @@ vi.mock('./CoachGameReview', () => ({
   ),
 }));
 
+/** Wait until the page has started its read-ahead and is listening, THEN
+ *  advance. Starting resets the fake to "nothing read", so an advance that
+ *  lands before the page subscribes is wiped (ship-check 2026-10-13: the
+ *  spinner rendered first under load, the page started after the advance,
+ *  and the walk never opened). */
+async function advanceWhenListening(r: number, finish = false): Promise<void> {
+  await waitFor(() => expect(fake.listeners.size).toBeGreaterThan(0));
+  await act(async () => { fake.advanceTo(r); if (finish) fake.finish(); });
+}
+
 /** A read-ahead the test drives by hand. */
 const fake = {
   ready: -1,
@@ -99,7 +109,7 @@ describe('the review reads ahead of the walk — never the draft', () => {
     renderPage('g-swept');
     await screen.findByTestId('review-analyze-spinner');
     expect(screen.queryByTestId('mock-review')).toBeNull();
-    await act(async () => { fake.advanceTo(FIRST_GRADED_PLIES); });
+    await advanceWhenListening(FIRST_GRADED_PLIES);
     const review = await screen.findByTestId('mock-review');
     expect(gradeReviewThrough).toHaveBeenCalledWith(expect.objectContaining({ id: 'g-swept' }), FIRST_GRADED_PLIES);
     expect(review.textContent).toContain(`graded:${FIRST_GRADED_PLIES}`);
@@ -111,9 +121,9 @@ describe('the review reads ahead of the walk — never the draft', () => {
     await db.games.put(buildGameRecord({ id: 'g-more', pgn: PGN, annotations: null, fullyAnalyzed: false, isMasterGame: false }));
     renderPage('g-more');
     await screen.findByTestId('review-analyze-spinner');
-    await act(async () => { fake.advanceTo(FIRST_GRADED_PLIES); });
+    await advanceWhenListening(FIRST_GRADED_PLIES);
     const review = await screen.findByTestId('mock-review');
-    await act(async () => { fake.advanceTo(14); });
+    await advanceWhenListening(14);
     expect(gradeReviewThrough).toHaveBeenCalledTimes(1);
     await act(async () => { review.click(); });
     await waitFor(() => expect(gradeReviewThrough).toHaveBeenLastCalledWith(expect.anything(), 14));
@@ -124,9 +134,9 @@ describe('the review reads ahead of the walk — never the draft', () => {
     await db.games.put(buildGameRecord({ id: 'g-all', pgn: PGN, annotations: null, fullyAnalyzed: false, isMasterGame: false }));
     renderPage('g-all');
     await screen.findByTestId('review-analyze-spinner');
-    await act(async () => { fake.advanceTo(FIRST_GRADED_PLIES); });
+    await advanceWhenListening(FIRST_GRADED_PLIES);
     await screen.findByTestId('mock-review');
-    await act(async () => { fake.advanceTo(16); fake.finish(); });
+    await advanceWhenListening(16, true);
     await waitFor(() => expect(finishReviewReads).toHaveBeenCalledWith('g-all'));
     await waitFor(() => expect(screen.getByTestId('mock-review').textContent).toContain('graded:all'));
     expect(screen.queryByTestId('review-reading-ahead-pill')).toBeNull();
