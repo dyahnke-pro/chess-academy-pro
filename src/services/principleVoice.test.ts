@@ -186,3 +186,12 @@ describe('a missed combination names its line, never a line as the piece that ta
     expect(renderFundamentalVerdict([combo], { replySan: 'Qh3', ply: 28, seen: new Set() })).not.toMatch(/missed/);
   });
 });
+
+describe('ignored-threat with the better move held (Learn) — never "undefined" (walk 2026-10-13)', () => {
+  const hang = { id: 'ignored-threat', facts: { piece: 'bishop', square: 'g4', better: '' }, evidence: { squares: ['g4'], moves: [], pvMoves: [] } } as never;
+  it('a plain hanging piece, no line: the piece-level verdict', () => {
+    const t = renderFundamentalVerdict([hang], { replySan: null, ply: 20, seen: new Set() });
+    expect(t).not.toMatch(/undefined/);
+    expect(t).toMatch(/the bishop on g4 was already attacked/);
+  });
+});

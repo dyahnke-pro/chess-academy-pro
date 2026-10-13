@@ -23,4 +23,14 @@ describe('threatProof — the cost a threat warning claims, proven on the board'
     expect(threatProof(fen, 'w', ['e1'])).toBeNull();
     expect(provenThreatLine('Watch out — x.', fen, 'w', []).text).toBe('Watch out — x.');
   });
+
+  it('a DEFENDED piece hit by a cheaper attacker: the net, not the count (Learn walk 2026-10-13)', () => {
+    // Black knight f6 guarded by the g7 pawn and the d8 queen; White pawn on g5
+    // hits it. Black to move. Guarded twice — and still a knight for a pawn.
+    const fen = '3qk3/5ppp/5n2/6P1/8/8/8/4K3 b - - 0 1';
+    const p = threatProof(fen, 'b', ['f6']);
+    expect(p?.short).toMatch(/gxf6 — even after you take back, they come out 2 points ahead/);
+    expect(p?.short).not.toMatch(/guarded/);
+    expect(p?.full).toBe('gxf6 — even after you take back, they come out 2 points ahead — their pawn is worth less than your knight, so the guards only win back the cheaper piece');
+  });
 });
