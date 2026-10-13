@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**63 lines · 3 exports · 2 importers · 1 tests · 0 audits**
+**87 lines · 5 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,16 +17,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
+### `POSITIVE_HALF_REV` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `RulesBackfillResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gamesBehindRules` (function) — 1 call site
 - `src/services/misconceptionRulesBackfill.test.ts:29`
 
-### `reconcileMisconceptionRules` (function) — 3 call sites
+### `gamesBehindPositiveHalf` (function) — 2 call sites
+- `src/services/misconceptionRulesBackfill.test.ts:61`
+- `src/services/misconceptionRulesBackfill.test.ts:64`
+
+### `reconcileMisconceptionRules` (function) — 4 call sites
 - `src/services/dataLoader.ts:996`
 - `src/services/misconceptionRulesBackfill.test.ts:35`
 - `src/services/misconceptionRulesBackfill.test.ts:38`
+- `src/services/misconceptionRulesBackfill.test.ts:62`
 
 ## Tests
 

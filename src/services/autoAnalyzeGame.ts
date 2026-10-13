@@ -450,11 +450,13 @@ export async function autoAnalyzeGameMisconceptions(
 
   const existing = await db.misconceptionTags.where('sourceGameId').equals(gameId).toArray();
   if (existing.length === 0) {
-    // FIRST PASS over this game: the tally, and — when the student is
-    // reviewing it — the positive half through the SAME recorder loop. Live
-    // play may already have recorded that half under this game id; then it
-    // is not recorded twice.
-    const positive = opts.reviewed && !(await hasCapabilityEvidenceForGame(gameId))
+    // FIRST PASS over this game: the tally, and the positive half through the
+    // SAME recorder loop. The positive half no longer waits for a review
+    // (David 2026-10-13: "Green also needs to come from analyzed games") —
+    // the board posed the question and the student answered it in a real
+    // game; opening Review changes neither. Live play may already have
+    // recorded that half under this game id; then it is not recorded twice.
+    const positive = !(await hasCapabilityEvidenceForGame(gameId))
       ? capabilityPliesFromAnnotations(annotations, playerColor, fens, game.promptedPlies ?? [])
       : undefined;
     return autoAnalyzeBlunders(blunders, {
@@ -468,15 +470,14 @@ export async function autoAnalyzeGameMisconceptions(
   // A LATER PASS. The tally exists and is never written twice; what this pass
   // may still owe the game is exactly what the first pass could not do:
   //  • rows tagged with no best move, now that the deep dive landed one (C2);
-  //  • the count-against upgrade and the positive half, now that the student
-  //    has reviewed the game (C1).
+  //  • the count-against upgrade, now that the student has reviewed the game
+  //    (C1);
+  //  • the positive half, for a game whose first pass ran before it was
+  //    recorded on analysis (2026-10-13) — once per game, guarded inside.
   const reattributed = await reattributePending(existing, blunders, gameId);
   let countedUpgraded = 0;
-  let capabilitiesHeld = 0;
-  if (opts.reviewed) {
-    countedUpgraded = await upgradeToCounted(existing);
-    capabilitiesHeld = await recordPositiveHalf(game, playerColor, fens);
-  }
+  if (opts.reviewed) countedUpgraded = await upgradeToCounted(existing);
+  const capabilitiesHeld = await recordPositiveHalf(game, playerColor, fens);
   if (reattributed > 0 || countedUpgraded > 0) emitWeaknessModelChanged();
   return { ...empty, reattributed, countedUpgraded, capabilitiesHeld };
 }
@@ -485,7 +486,7 @@ async function hasCapabilityEvidenceForGame(gameId: string): Promise<boolean> {
   return (await db.capabilityEvidence.filter((r) => r.sourceGameId === gameId).count()) > 0;
 }
 
-/** The positive half of a reviewed game, ONCE per game, through the one
+/** The positive half of an analysed game, ONCE per game, through the one
  *  recorder loop in `autoAnalyzeBlunders` (no slips are passed, only plies). */
 async function recordPositiveHalf(game: GameRecord, playerColor: 'white' | 'black', fens: readonly string[]): Promise<number> {
   if (await hasCapabilityEvidenceForGame(game.id)) return 0;

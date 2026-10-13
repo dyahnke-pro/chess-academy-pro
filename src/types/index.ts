@@ -732,6 +732,9 @@ export interface GameRecord {
   /** Stamp of the key-minting revision that last wrote `openingId`
    *  (`openingKeyBackfill.ts`); absent on rows written before A1. */
   openingKeyRev?: string;
+  /** Stamp of the positive-half revision that last read this game for held
+   *  capabilities (`misconceptionRulesBackfill.ts`); absent before 2026-10-13. */
+  positiveHalfRev?: string;
   /** True when analyzeAllGames has completed full Stockfish per-move
    *  analysis on this game. False / undefined for freshly-imported
    *  games that only have sparse detectBlunders annotations. Every

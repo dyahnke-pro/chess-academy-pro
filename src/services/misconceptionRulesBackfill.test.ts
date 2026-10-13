@@ -45,3 +45,22 @@ describe('misconception rows follow the classifier rules', () => {
     expect(rec?.rulesRev).toBe(MISCONCEPTION_RULES_REV);
   });
 });
+
+describe('analysed games are read once for the green half (2026-10-13)', () => {
+  beforeEach(async () => {
+    await db.delete();
+    await db.open();
+  });
+  it('an analysed game behind the revision is found, read, stamped — and not read again', async () => {
+    const { gamesBehindPositiveHalf, POSITIVE_HALF_REV } = await import('./misconceptionRulesBackfill');
+    await db.games.bulkPut([
+      buildGameRecord({ id: 'a1', fullyAnalyzed: true, annotations: [{ moveNumber: 1, color: 'white', san: 'e4', evaluation: 20, bestMove: null, classification: 'good', comment: null }] }),
+      buildGameRecord({ id: 'a2', fullyAnalyzed: false, annotations: [] }),
+      buildGameRecord({ id: 'sample-x', fullyAnalyzed: true, annotations: [{ moveNumber: 1, color: 'white', san: 'e4', evaluation: 20, bestMove: null, classification: 'good', comment: null }] }),
+    ]);
+    expect(await gamesBehindPositiveHalf()).toEqual(['a1']);
+    await reconcileMisconceptionRules(IMMEDIATE_BACKFILL_SCHEDULE);
+    expect((await db.games.get('a1'))?.positiveHalfRev).toBe(POSITIVE_HALF_REV);
+    expect(await gamesBehindPositiveHalf()).toEqual([]);
+  });
+});

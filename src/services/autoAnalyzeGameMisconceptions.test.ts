@@ -210,27 +210,33 @@ describe('C1 — the one writer: a reviewed imported game writes COUNTED rows an
     expect(r.capabilitiesHeld).toBe(held.length);
   });
 
-  it('NEGATIVE CONTROL — the batch path (not reviewed) writes display-only rows and NO capability evidence', async () => {
+  it('THE BATCH PATH (not reviewed): rows stay display-only, but the GREEN half lands (2026-10-13)', async () => {
+    // David: "Green also needs to come from analyzed games." The board posed
+    // the question and the student answered it in a real game; opening Review
+    // changes neither. The TALLY still waits for the review (count-against).
     await db.games.put(importedGame('g-c1-batch'));
     const r = await autoAnalyzeGameMisconceptions('g-c1-batch', 'knight_mare_01');
     const rows = await rowsFor('g-c1-batch');
     expect(rows.length).toBeGreaterThan(0);
     expect(rows.every((x) => x.counted === false), 'a library import is not a decision about lines the student knows').toBe(true);
-    expect(await heldFor('g-c1-batch')).toEqual([]);
-    expect(r.capabilitiesHeld).toBe(0);
+    const held = await heldFor('g-c1-batch');
+    expect(held.length, 'an analysed game must record its held capabilities').toBeGreaterThan(0);
+    expect(r.capabilitiesHeld).toBe(held.length);
   });
 
-  it('THE OLD RACE, CLOSED — batch first, then the review: rows are UPGRADED to counted and the held rows land, once', async () => {
+  it('batch first, then the review: rows are UPGRADED to counted and the held rows are NOT written twice', async () => {
     await db.games.put(importedGame('g-c1-race'));
     await autoAnalyzeGameMisconceptions('g-c1-race', 'knight_mare_01');           // the batch sweep, before any review
     expect((await rowsFor('g-c1-race')).every((x) => x.counted === false)).toBe(true);
+    const heldOnce = await heldFor('g-c1-race');
+    expect(heldOnce.length).toBeGreaterThan(0);
 
     const review = await autoAnalyzeGameMisconceptions('g-c1-race', 'knight_mare_01', { reviewed: true });
     expect(review.countedUpgraded, 'the batch rows were not upgraded').toBeGreaterThan(0);
     expect(review.logged, 'a second tally must never be written').toBe(0);
+    expect(review.capabilitiesHeld).toBe(0);
     expect((await rowsFor('g-c1-race')).every((x) => x.counted !== false)).toBe(true);
-    const heldOnce = await heldFor('g-c1-race');
-    expect(heldOnce.length).toBeGreaterThan(0);
+    expect((await heldFor('g-c1-race')).length).toBe(heldOnce.length);
 
     // A second review mount owes nothing — no duplicate held rows, no re-upgrade.
     const again = await autoAnalyzeGameMisconceptions('g-c1-race', 'knight_mare_01', { reviewed: true });

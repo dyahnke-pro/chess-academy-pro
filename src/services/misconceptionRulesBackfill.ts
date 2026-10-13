@@ -6,16 +6,28 @@
 // `MISCONCEPTION_RULES_REV` are re-attributed through the game's own sweep
 // (`autoAnalyzeGameMisconceptions` → `reattributePending`), one game at a
 // time, on the boot schedule every backfill reads (`backfillSchedule`).
+//
+// The same pass reads every analysed game once for the POSITIVE half (held
+// capabilities — the heat map's green), which until 2026-10-13 was recorded
+// only when the student opened the game in Review.
 import { db } from '../db/schema';
 import { logAppAudit } from './appAuditor';
 import { MISCONCEPTION_RULES_REV } from '../data/misconceptionTags';
+import { isFixtureGame } from './fixtureGames';
 import { PRODUCTION_BACKFILL_SCHEDULE, sleep, type BackfillSchedule } from './backfillSchedule';
 
+/** Bump when analysed games must be re-read for the POSITIVE half. 2026-10-13:
+ *  green is recorded on analysis, not only on review (David: "Green also needs
+ *  to come from analyzed games"). */
+export const POSITIVE_HALF_REV = '2026-10-13-green-on-analysis';
+
 export interface RulesBackfillResult {
-  /** Games holding at least one row behind the rules revision. */
+  /** Games re-read: rows behind the rules revision, or no positive half yet. */
   games: number;
   /** Rows whose tag moved. */
   reattributed: number;
+  /** Held-capability evidence rows recorded (the green half). */
+  held: number;
 }
 
 /** The games whose stored auto-analysis rows were classified under older rules. */
@@ -26,12 +38,22 @@ export async function gamesBehindRules(): Promise<string[]> {
   return [...new Set(rows.map((r) => r.sourceGameId as string))];
 }
 
+/** Analysed games of the student's that have not been read for the positive
+ *  half under the current revision. */
+export async function gamesBehindPositiveHalf(): Promise<string[]> {
+  const games = await db.games
+    .filter((g) => !g.isMasterGame && !!g.fullyAnalyzed && (g.annotations?.length ?? 0) > 0
+      && !isFixtureGame(g) && g.positiveHalfRev !== POSITIVE_HALF_REV)
+    .toArray();
+  return games.map((g) => g.id);
+}
+
 export async function reconcileMisconceptionRules(
   schedule: BackfillSchedule = PRODUCTION_BACKFILL_SCHEDULE,
 ): Promise<RulesBackfillResult> {
-  const r: RulesBackfillResult = { games: 0, reattributed: 0 };
+  const r: RulesBackfillResult = { games: 0, reattributed: 0, held: 0 };
   if (schedule.startDelayMs > 0) await sleep(schedule.startDelayMs);
-  const games = await gamesBehindRules();
+  const games = [...new Set([...await gamesBehindRules(), ...await gamesBehindPositiveHalf()])];
   r.games = games.length;
   if (games.length === 0) return r;
   // Dynamic: autoAnalyzeGame pulls in the classifier and the engine helpers.
@@ -44,6 +66,7 @@ export async function reconcileMisconceptionRules(
     // finished game and re-reads only the rest.
     const res = await autoAnalyzeGameMisconceptions(gameId).catch(() => null);
     r.reattributed += res?.reattributed ?? 0;
+    r.held += res?.capabilitiesHeld ?? 0;
     // A row the sweep could not re-read (the game has no analysis left, or
     // the move is no longer flagged) is stamped, so it is not revisited on
     // every boot.
@@ -51,12 +74,13 @@ export async function reconcileMisconceptionRules(
       .where('sourceGameId').equals(gameId)
       .filter((row) => row.source === 'auto-analysis' && row.rulesRev !== MISCONCEPTION_RULES_REV)
       .modify({ rulesRev: MISCONCEPTION_RULES_REV });
+    await db.games.update(gameId, { positiveHalfRev: POSITIVE_HALF_REV });
   }
   void logAppAudit({
     kind: 'coach-surface-migrated',
     category: 'subsystem',
     source: 'misconceptionRulesBackfill.reconcileMisconceptionRules',
-    summary: `misconception rows re-read under ${MISCONCEPTION_RULES_REV}: ${r.games} game(s), ${r.reattributed} tag(s) moved`,
+    summary: `games re-read under ${MISCONCEPTION_RULES_REV} / ${POSITIVE_HALF_REV}: ${r.games} game(s), ${r.reattributed} tag(s) moved, ${r.held} held capability row(s)`,
   });
   return r;
 }
