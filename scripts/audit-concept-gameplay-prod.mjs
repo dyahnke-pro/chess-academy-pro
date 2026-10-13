@@ -56,6 +56,7 @@
  *   AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-concept-gameplay-prod.mjs
  */
 import { linesWithStats } from './audit-lib/spoken-stats.mjs';
+import { linesWithBuriedMate } from './audit-lib/mate-leads.mjs';
 import { chromium } from 'playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
@@ -550,6 +551,8 @@ async function main() {
     record('V1. no line is said twice word for word within a game (repetition is laborious)', repeats.length === 0, `${tape.length} lines over ${games.length} game(s), ${repeats.length} repeats${repeats.length ? ` — ${repeats[0].slice(0, 90)}` : ''}`);
     const statLines = linesWithStats(tape);
     record('V3. no statistic is spoken — a reason, never a percentage, a point count or "N of M"', statLines.length === 0, `${statLines.length} line(s)${statLines.length ? ` — ${statLines[0].slice(0, 120)}` : ''}`);
+    const buried = linesWithBuriedMate(tape);
+    record('V4. a forced mate leads its line (never behind a lesson)', buried.length === 0, `${buried.length} line(s)${buried.length ? ` — ${buried[0].slice(0, 160)}` : ''}`);
     record('V2. words per student move REPORTED (his speed runs: ~35–50)', true, `${words} words over ${studentMoves} student moves = ${Math.round(words / studentMoves)}/move; longest line ${Math.max(0, ...tape.map((t) => t.split(/\s+/).length))}w`);
     // ── G: THE DECIDING COMPUTER IS OBSERVABLE (the ASSERT half) ───────────
     // Emitting is half of the algo-audit rule; a contract on the rows is the

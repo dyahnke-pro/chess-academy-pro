@@ -32,6 +32,7 @@
  *   AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-review-overhaul-prod.mjs
  */
 import { linesWithStats } from './audit-lib/spoken-stats.mjs';
+import { linesWithBuriedMate } from './audit-lib/mate-leads.mjs';
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { sampleRenderers, playwrightRenderers } from './audit-lib/os-sample.mjs';
@@ -1297,6 +1298,8 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   {
     const statLines = linesWithStats(spoken().map((x) => x.text));
     await add('VOICE no-statistic-spoken', statLines.length === 0, `${statLines.length} line(s)${statLines.length ? ` — ${statLines[0].slice(0, 120)}` : ''}`);
+    const buried = linesWithBuriedMate(spoken().map((x) => x.text));
+    await add('VOICE forced-mate-leads-its-line', buried.length === 0, `${buried.length} line(s)${buried.length ? ` — ${buried[0].slice(0, 160)}` : ''}`);
   }
   // AUDIT_TAPE_OUT=<file>: save the first walk's narration before the reopen
   // (which can wedge on #21) — for reading the tape, not a contract.
