@@ -27,7 +27,7 @@
 //
 // G0 throughout: every branch is arithmetic or chess.js geometry over an engine
 // line. Nothing here asks a model anything.
-import { MATE_POINTS, costStakes, type FactStakes } from './factStakes';
+import { mateStakes, costStakes, type FactStakes } from './factStakes';
 import { Chess } from 'chess.js';
 import { findConcession, findStudentDrawback } from './concessionBeat';
 import { callInaccuracy, callInaccuracyDetailed, errorWhyFor, type InaccuracyDecline, type PriorMove } from './inaccuracyCall';
@@ -384,7 +384,7 @@ export function backwardLook(args: {
         priorMove: args.priorMove,
       });
       const stakes = (args.allowedMate ?? null) !== null
-        ? { points: MATE_POINTS, plies: Math.max(0, Math.abs(args.allowedMate as number) * 2 - 1) }
+        ? mateStakes('them', Math.max(0, Math.abs(args.allowedMate as number) * 2 - 1), true)
         : costStakes(args.cpLoss) ?? undefined;
       if (call) return { ...(stakes ? { stakes } : {}), line: call.said, square: call.square, kind: 'mistake', ...(call.pattern ? { pattern: call.pattern } : {}), ...(call.lostSquare ? { lostSquare: call.lostSquare } : {}), ...(call.namesBetter ? { namesBetter: call.namesBetter } : {}), ...(call.line ? { punishLine: call.line } : {}), ...(call.squares ? { squares: call.squares } : {}) };
     } catch { /* fall through */ }

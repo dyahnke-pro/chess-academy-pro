@@ -32,7 +32,7 @@ import { Chess, type Move, type Square } from 'chess.js';
 import { asIfToMove, signedLegalSeeFor } from './positionReadingService';
 import { computeMustDefend } from './threatOut';
 import { materialBalance, MATERIAL_VALUE } from './pieceValues';
-import { MATE_POINTS, forkPoints, type FactStakes } from './factStakes';
+import { mateStakes, forkPoints, type FactStakes } from './factStakes';
 import { legalLineProof, squaresProof, type Proof } from './proof';
 import { sayMoveClause, sayMoveNoun } from './spokenMove';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -158,7 +158,7 @@ export function quietDanger(fenBefore: string, san: string, student: 'w' | 'b'):
     text,
     proof: { kind: 'line', exact: true, short: `If you ignore it, ${mate.san.replace(/[+#]/g, '')} is mate`, full: `If you ignore it, ${mate.san.replace(/[+#]/g, '')} is mate`, line: { fen: probe, sans: [mate.san] }, squares: sq },
     squares: sq,
-    stakes: { points: MATE_POINTS, plies: 2 },
+    stakes: mateStakes('them', 2, false),
     namesMove: false,
     claim: `quiet-danger:${mv.to}:${mate.san}`,
   };

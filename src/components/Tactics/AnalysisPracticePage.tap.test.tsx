@@ -71,12 +71,14 @@ describe('AnalysisPracticePage — tap answers through the set grader', () => {
   it('one of two found is partial; both found is right — and no LLM is asked', async () => {
     await open();
     fireEvent.click(screen.getByTestId('sq-d5'));
-    await waitFor(() => expect(screen.getByTestId('sq-d5').getAttribute('data-lit')).toBe('yes'));
+    await waitFor(() => expect(screen.getByTestId('sq-d5').getAttribute('data-lit')).toBe('yes'), { timeout: 5000 });
     expect(screen.queryByTestId('analysis-practice-verdict')).not.toBeInTheDocument();
     fireEvent.click(screen.getByTestId('sq-a8'));
-    await waitFor(() => expect(screen.getByTestId('analysis-practice-verdict')).toHaveTextContent('Correct'));
+    await waitFor(() => expect(screen.getByTestId('analysis-practice-verdict')).toHaveTextContent('Correct'), { timeout: 5000 });
     expect(gradeSpy).not.toHaveBeenCalled();
-    expect(recordSpy).toHaveBeenCalledTimes(1);
+    // The record write is async behind the verdict — await it, never assume
+    // it landed in the same tick (failed under a 444-file run, 2026-10-13).
+    await waitFor(() => expect(recordSpy).toHaveBeenCalledTimes(1), { timeout: 5000 });
     const rec = (recordSpy.mock.calls[0] as unknown[])[0] as { origin: string; solved: boolean; questionTag: string; answer: { taps: Array<{ square: string; right: boolean }>; surface: string; wrongAttempts: number } };
     expect(rec).toMatchObject({ origin: 'reading', solved: true, questionTag: 'hung-material' });
     expect(rec.answer.taps).toEqual([{ square: 'd5', right: true }, { square: 'a8', right: true }]);

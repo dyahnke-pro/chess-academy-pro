@@ -75,11 +75,18 @@ let baseCache: { at: number; key: string; base: StudentNeedBase } | null = null;
 // THE MEMO FOLLOWS THE RECORD (review of chesscom-1040709576, 2026-10-13).
 // It was keyed on the game COUNT, and a game finishing its analysis changes
 // `gamesPlayed` without changing the count — six writers set `fullyAnalyzed`,
-// so the memo is dropped here, on the table, for every one of them.
-db.games.hook('updating', (mods) => {
-  if ('fullyAnalyzed' in mods || 'annotations' in mods || 'studentSide' in mods) invalidateStudentNeedContext();
-});
-db.games.hook('deleting', () => { invalidateStudentNeedContext(); });
+// so the memo is dropped here, on the table, for every one of them. Bound on
+// the first read (never at import): the memo only exists after a read, and a
+// module that merely imports this one must not need the games table.
+let recordHooked = false;
+function followTheRecord(): void {
+  if (recordHooked) return;
+  recordHooked = true;
+  db.games.hook('updating', (mods) => {
+    if ('fullyAnalyzed' in mods || 'annotations' in mods || 'studentSide' in mods) invalidateStudentNeedContext();
+  });
+  db.games.hook('deleting', () => { invalidateStudentNeedContext(); });
+}
 
 /** Score share for the student in a set of games (1 win, ½ draw), or null when
  *  fewer than MIN_SCORE_GAMES decided games back it. */
@@ -187,6 +194,7 @@ function legalPrefix(sans: readonly string[]): string[] {
 /** The Dexie half, memoised for TTL_MS. `null` = the read failed (the caller
  *  derives the cold student, which TEACHES). */
 export async function loadStudentNeedBase(q: BaseQuery): Promise<StudentNeedBase | null> {
+  followTheRecord();
   // The game COUNT is part of the key: a game saved seconds before the review
   // opened must be in its own record (walk 2, 2026-09-23: "your 87th Sicilian"
   // on the 88th, served from a memo built before the save landed).

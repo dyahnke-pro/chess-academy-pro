@@ -106,3 +106,17 @@ describe('a king castled long is not stuck in the centre', () => {
     expect(enemyKingStuckInCenter('r4rk1/pppq2pp/2n2pn1/8/3Pb3/5NQ1/PPP2PPP/2KR1B1R w - - 0 14', 'b')).toBe(false);
   });
 });
+
+// Review of chesscom-1040709576 (2026-10-13): "attack their king stuck on e1"
+// was said at 13…Qxd4 and died at 14.O-O, the very next move.
+describe('a king that castles on its own next move is not stuck', () => {
+  const AFTER_QXD4 = 'r3k2r/pp3ppp/2n1p3/8/1b1q4/5B2/PP1B1PPP/R2QK2R w KQkq - 0 14';
+  it('White to move with O-O legal: not stuck', async () => {
+    const { enemyKingStuckInCenter } = await import('./reviewSacrifice');
+    expect(enemyKingStuckInCenter(AFTER_QXD4, 'b')).toBe(false);
+  });
+  it('NEGATIVE CONTROL: the student on move gets a tempo first — still stuck', async () => {
+    const { enemyKingStuckInCenter } = await import('./reviewSacrifice');
+    expect(enemyKingStuckInCenter(AFTER_QXD4.replace(' w KQkq', ' b KQkq'), 'b')).toBe(true);
+  });
+});

@@ -6,6 +6,8 @@ import { deriveNextPlanFacts } from './nextPlans';
 import { newPlanThread, planThreadTurn } from './planThread';
 
 const CENTRE_KING = 'r3k2r/ppp2ppp/2n2n2/8/8/2N2N2/PPPQ1PPP/R3K2R b KQkq - 0 12';
+/** The same board with Black's king already walked to f8 — no castling left. */
+const KING_F8 = 'r4k1r/ppp2ppp/2n2n2/8/8/2N2N2/PPPQ1PPP/R3K2R b KQ - 0 12';
 const OPEN_C = 'r5k1/pp3ppp/8/3p4/8/8/PP3PPP/3R2K1 b - - 0 25';
 const after = (fen: string, san: string): string => { const c = new Chess(fen); c.move(san); return c.fen(); };
 const asWhite = (fen: string): string => fen.replace(' b ', ' w ');
@@ -13,10 +15,10 @@ const asWhite = (fen: string): string => fen.replace(' b ', ' w ');
 describe('planThread — stated once, stopped with its proof', () => {
   it('states the board\'s plan, then says HOW their move stopped it, then the new plan', () => {
     const t = newPlanThread();
-    const first = planThreadTurn(t, { ply: 22, fenBefore: CENTRE_KING, fenAfter: asWhite(CENTRE_KING), student: 'w' });
-    expect(first.map((l) => l.text)[0]).toMatch(/^The plan from here is to attack their king stuck on e8/);
-    const second = planThreadTurn(t, { ply: 24, fenBefore: CENTRE_KING, fenAfter: after(CENTRE_KING, 'O-O'), student: 'w' });
-    expect(second[0].text).toBe('They castled, so their king is out of the centre — the attack on it is off. That plan is off.');
+    const first = planThreadTurn(t, { ply: 22, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w' });
+    expect(first.map((l) => l.text)[0]).toMatch(/^The plan from here is to attack their king stuck on f8/);
+    const second = planThreadTurn(t, { ply: 24, fenBefore: KING_F8, fenAfter: after(KING_F8, 'Kg8'), student: 'w' });
+    expect(second[0].text).toBe('Their king stepped to g8, out of the open centre — the attack on it is off. That plan is off.');
     if (second[1]) expect(second[1].text).toMatch(/^The new plan is to /);
   });
 

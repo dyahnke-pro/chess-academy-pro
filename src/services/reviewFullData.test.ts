@@ -569,8 +569,8 @@ describe('the spoken cost is the one-search cost (review walk oct3b, game 2 ply 
     }).find((f) => f.startsWith('[quality]')) ?? '';
   };
   it('speaks the one-search cost when the analysis stored it', () => {
-    expect(ctxFor(56)).toMatch(/costing about half a pawn/);
-    expect(ctxFor(56)).not.toMatch(/more than a pawn/);
+    expect(ctxFor(56)).toMatch(/costing about half a point/);
+    expect(ctxFor(56)).not.toMatch(/more than a point/);
   });
   it('an annotation older than costCp still reads its eval delta — and a delta past the grade\'s band is not said (unity U2)', () => {
     // −1.70 → −3.00 is 1.3 pawns: a mistake's cost, never said beside "inaccuracy".

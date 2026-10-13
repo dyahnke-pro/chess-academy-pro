@@ -94,7 +94,7 @@ describe('F16/F23/F31 — a grade says what the move cost, and whether they took
     // The grade still says what the move COST. On the real line Bxf6 takes the
     // knight but …gxf6 takes the bishop back, so "it let them take your knight"
     // (the old fixture's first-capture read) is not what the line keeps.
-    expect(said).toMatch(/Qd7 was a blunder — it (let them |cost about)/);
+    expect(said).toMatch(/Qd7 was a blunder — it (let them |cost )/);
     expect(said).not.toMatch(/take your knight/);
     expect(said).not.toMatch(/their king/);
   });
@@ -105,7 +105,7 @@ describe('F16/F23/F31 — a grade says what the move cost, and whether they took
       cpLoss: 374, side: 'student', moverColor: 'black', replyLineUci: [], replySan: null,
     });
     // Never a bare grade (run B walk 2026-09-30); with no why the cost is said.
-    expect(v.call?.said).toBe('Qd7 was a blunder — it cost about a piece of advantage.');
+    expect(v.call?.said).toBe('Qd7 was a blunder — it cost three or four points of advantage.');
   });
 });
 

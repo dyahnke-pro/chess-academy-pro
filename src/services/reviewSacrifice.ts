@@ -126,6 +126,11 @@ export function enemyKingStuckInCenter(fen: string, moverColorWB: 'w' | 'b'): bo
   const central = kingSq !== null && !castledLong
     && ['c', 'd', 'e', 'f'].includes(kingSq[0])
     && (enemy === 'w' ? ['1', '2'].includes(kingSq[1]) : ['7', '8'].includes(kingSq[1]));
+  // A king whose side is ON MOVE and can castle right now is one move from
+  // safety, before the student moves at all (review of chesscom-1040709576,
+  // 2026-10-13: "attack their king stuck on e1" was said at 13…Qxd4 and died
+  // at 14.O-O — the plan was announced to a king that castled next).
+  if (board.turn() === enemy && board.moves().some((m) => m.startsWith('O-O'))) return false;
   let openCentral = false;
   try {
     const s = describeStructure(fen);

@@ -28,7 +28,7 @@ import { emitLearnTurn } from './coachDecisionEvents';
 import { COMPUTER_ROLES } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
-import { stakeValue, STAKED_FLOOR, MATE_POINTS, type FactStakes } from './factStakes';
+import { stakeValue, STAKED_FLOOR, mateStakes, type FactStakes } from './factStakes';
 import { sameClaim } from './factSelector';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
 export type { SpokenLine, DrawnLine } from './voicePackage';
@@ -404,11 +404,11 @@ export function decideTurn(
   //   3. then the rest in his turn grammar (the DNA beat), stakes first
   //      inside a beat, the lane table only as the tie-break for facts that
   //      carry no stakes.
-  const stakeOf = (lane: LearnLane, text: string): number => {
+  const stakesOf = (lane: LearnLane, text: string): FactStakes | undefined => {
     const f = open.find((o) => o.lane === lane && (o.text === text || o.text.includes(text)));
-    const st = f ? facts.find((x) => x.lane === lane && x.text.trim() && (x.text === f.text || fadeWhenGreen(x.lane, x.text, green ?? null) === f.text))?.stakes : undefined;
-    return stakeValue(st) ?? 0;
+    return f ? facts.find((x) => x.lane === lane && x.text.trim() && (x.text === f.text || fadeWhenGreen(x.lane, x.text, green ?? null) === f.text))?.stakes : undefined;
   };
+  const stakeOf = (lane: LearnLane, text: string): number => stakeValue(stakesOf(lane, text)) ?? 0;
   const value = (x: { fact: VoiceFact; lane: LearnLane }): number => stakeOf(x.lane, x.fact.text) || LEARN_LANES[x.lane].lead;
   // ONE CLAIM, ONE SEAT (unity U6, Learn walk #26: the d5 pawn was "a
   // discovered attack in waiting" for them AND "pinned by your rook" — one
@@ -432,9 +432,20 @@ export function decideTurn(
       if (loser === a) break;
     }
   }
+  // YOUR FORCED MATE COMES FIRST (2026-10-13). Danger leads a turn — unless
+  // the student has a forced mate on the board: they mate before any threat
+  // of theirs lands, so "they threaten Qxf2" beside "you have mate in three"
+  // teaches the wrong priority. The seat and the forcing come from the stake
+  // (`mateStakes`), never from the prose.
+  const ownForcedMate = survivors.some((x) => {
+    if (subsumed.has(x)) return false;
+    const m = stakesOf(x.lane, x.fact.text)?.mate;
+    return m?.for === 'you' && m.forced;
+  });
+  const dangerWaits = (x: { lane: LearnLane }): boolean => ownForcedMate && DANGER_LANES.has(x.lane);
   let top: { fact: VoiceFact; lane: LearnLane } | null = null;
   for (const x of survivors) {
-    if (subsumed.has(x)) continue;
+    if (subsumed.has(x) || dangerWaits(x)) continue;
     if (!top) { top = x; continue; }
     const xd = DANGER_LANES.has(x.lane); const td = DANGER_LANES.has(top.lane);
     if (xd !== td) { if (xd) top = x; continue; }
@@ -448,7 +459,7 @@ export function decideTurn(
   // allowed mate in 6 was said between a weak-pawn lecture and "the scare is
   // empty"). A fact staked at a forced mate makes every fact that is neither
   // danger nor itself a mate wait for a calm board.
-  const mateValue = stakeValue({ points: MATE_POINTS, plies: 12 }) ?? Infinity;
+  const mateValue = stakeValue(mateStakes('you', 12, true)) ?? Infinity;
   const isMateFact = (x: { fact: VoiceFact; lane: LearnLane }): boolean => stakeOf(x.lane, x.fact.text) >= mateValue;
   const mateTurn = survivors.some((x) => !subsumed.has(x) && isMateFact(x));
   const verdict = survivors.find((x) => x.lane === 'mistake' && !subsumed.has(x)) ?? null;
@@ -457,6 +468,7 @@ export function decideTurn(
   const held: LearnLane[] = [];
   for (const x of survivors) {
     if (mateTurn && !DANGER_LANES.has(x.lane) && !isMateFact(x)) { held.push(x.lane); continue; }
+    if (dangerWaits(x)) { held.push(x.lane); continue; }
     // A VERDICT TURN STAYS ON THE VERDICT (David 2026-10-11, the "very good"
     // bar: 35–50 words, one lead). When the student's move is graded, the
     // grade, its cost ('but' beats) and any danger speak; a plan, a route or a

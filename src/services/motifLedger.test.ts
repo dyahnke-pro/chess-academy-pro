@@ -2,13 +2,16 @@ import { describe, it, expect } from 'vitest';
 import { transferClause, transferMotifOf, recordMotif, withTransfer, type MotifLedger } from './motifLedger';
 
 describe('motifLedger — same idea as move N', () => {
-  it('refers back to the first move the motif was taught, for a NEW instance', () => {
+  it('refers back to the move the motif was last spoken, for a NEW instance', () => {
     const l: MotifLedger = new Map();
     recordMotif('fork', 'c7a8e8', 12, l);
-    recordMotif('fork', 'd6b7f7', 20, l);
     expect(transferClause('fork', 'd6b7f7', 20, l)).toMatch(/move 12\b/);
     expect(transferClause('fork', 'd6b7f7', 20, l)).toBe(transferClause('fork', 'd6b7f7', 20, l));
     expect(new Set([13, 14, 15, 16].map((n) => transferClause('fork', 'x', n, l))).size).toBeGreaterThan(1);
+    recordMotif('fork', 'd6b7f7', 20, l);
+    // THE TAPE (chesscom-1040709576 moves 17 and 20): the third fork names
+    // move 20, never move 12 a second time.
+    expect(transferClause('fork', 'e5c6g6', 27, l)).toMatch(/move 20\b/);
   });
   it('NEGATIVE CONTROL: a new motif, the same move, or the SAME standing instance refers to nothing', () => {
     const l: MotifLedger = new Map([['fork', { move: 12, instance: 'c7a8e8' }]]);

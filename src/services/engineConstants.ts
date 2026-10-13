@@ -198,13 +198,15 @@ export function costWords(cp: number): string {
   const p = cp / 100;
   // Each bucket straddles the depth noise either side of its edge (walk
   // 2026-10-02: 0.2 said as "about half a pawn", 0.92 as "more than a pawn").
+  // POINTS, NOT PAWNS (David 2026-10-13: "We don't use pawns, we use
+  // points"). Material counts ("two pawns up") stay literal; a COST is points.
   if (p < 0.45) return 'a little';
-  if (p < 0.75) return 'about half a pawn';
-  if (p < 1.25) return 'about a pawn';
-  if (p < 2) return 'more than a pawn';
-  if (p < 3) return 'about two pawns';
-  if (p < 5) return 'about a piece';
-  return 'more than a piece';
+  if (p < 0.75) return 'about half a point';
+  if (p < 1.25) return 'about a point';
+  if (p < 2) return 'more than a point';
+  if (p < 3) return 'about two points';
+  if (p < 5) return 'three or four points';
+  return 'five points or more';
 }
 
 /** THE ONE GRADE-AND-COST TABLE (unity U2, 52-error walk: "an inaccuracy,

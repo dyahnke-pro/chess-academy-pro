@@ -2,6 +2,7 @@ import { NO_PROOF } from './proof';
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { decideTurn, LEARN_LANES, type LearnLane } from './learnTurnDoor';
+import { mateStakes } from './factStakes';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 const TEACH = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
@@ -454,5 +455,23 @@ describe('a verdict turn stays on the verdict (the "very good" bar, 2026-10-11)'
     ]);
     expect(d.spoke).toContain('mistake');
     expect(d.spoke).not.toContain('planArc');
+  });
+});
+
+describe('your forced mate comes before their threat (2026-10-13)', () => {
+  // White to move: Qxf7 is mate. Black's knight on c6 can still go to d4.
+  const F = 'r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4';
+  const threat = { lane: 'threat' as const, proof: NO_PROOF.stated, text: 'They threaten Nd4, hitting c2.', fen: F, squares: ['c6', 'd4', 'c2'], stakes: { points: 5, plies: 2 } };
+  const mate = (forced: boolean) => ({ lane: 'kingAttack' as const, proof: NO_PROOF.stated, text: 'Qxf7 is mate — the queen takes on f7 and the king has no square.', fen: F, squares: ['h5', 'f7', 'e8'], stakes: mateStakes('you', 0, forced) });
+
+  it('a forced mate of yours holds their threat', () => {
+    const d = decideTurn([threat, mate(true)]);
+    expect(d.spoke).toContain('kingAttack');
+    expect(d.spoke).not.toContain('threat');
+  });
+
+  it('a mate you only threaten does not (they move first)', () => {
+    const d = decideTurn([threat, mate(false)]);
+    expect(d.spoke).toContain('threat');
   });
 });

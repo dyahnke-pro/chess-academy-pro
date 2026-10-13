@@ -24,7 +24,7 @@ import { evalBand, evalBandWords } from './evalBand';
 import { Chess, type Move, type Square } from 'chess.js';
 import { asIfToMove, signedLegalSeeFor } from './positionReadingService';
 import { matesInOne } from './opponentMoveReads';
-import { MATE_POINTS, type FactStakes } from './factStakes';
+import { mateStakes, type FactStakes } from './factStakes';
 import { legalLineProof, squaresProof, type Proof } from './proof';
 import { sayMoveNoun } from './spokenMove';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -110,7 +110,7 @@ export function whyItEnded(plies: readonly GamePly[], student: 'w' | 'b'): EndRe
     return {
       kind: 'why-it-ended', index,
       text: `${head}: ${who} mate with ${mate}, and nothing stops it — every move ${whose} allows mate.`,
-      proof, squares: [threat.to], stakes: { points: MATE_POINTS, plies: 1 }, claim: 'why-it-ended',
+      proof, squares: [threat.to], stakes: mateStakes(studentWon ? 'you' : 'them', 1, true), claim: 'why-it-ended',
     };
   }
   if (defences.length !== 1) return null;
@@ -278,7 +278,7 @@ export function exploreInvite(plies: readonly GamePly[], index: number, student:
       'Set this position up and try your defences yourself: every one of them runs into mate — that is how far it had gone.',
       'Worth exploring on your own board: whatever you play here, mate follows at once.',
     ], stemKeyOf(p.fenAfter));
-  return { kind: 'explore', index, text, proof, squares: [], stakes: { points: MATE_POINTS, plies: 1 }, claim: 'explore' };
+  return { kind: 'explore', index, text, proof, squares: [], stakes: mateStakes(yours ? 'you' : 'them', 1, true), claim: 'explore' };
 }
 
 // ── HONEST MURKINESS ────────────────────────────────────────────────────────

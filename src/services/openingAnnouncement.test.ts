@@ -175,7 +175,7 @@ describe('theirOpeningVerdict — a verdict on their opening choice (pass-2 walk
   };
   it('a costly departure is judged, with the usual move named', () => {
     seed();
-    expect(theirOpeningVerdict(history, 'b', 45, false)).toBe('It is a weaker choice than the knight to c3 — it costs them about half a pawn.');
+    expect(theirOpeningVerdict(history, 'b', 45, false)).toBe('It is a weaker choice than the knight to c3 — it costs them about half a point.');
     expect(theirOpeningVerdict(history, 'b', 120, false)).toMatch(/^That is a dubious choice — the knight to c3 is the move here/);
   });
   it('a fair sideline, the student\'s own move, or a real coach slip says nothing', () => {

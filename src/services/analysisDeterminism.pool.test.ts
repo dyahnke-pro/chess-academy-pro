@@ -70,7 +70,7 @@ class FakeStockfishWorker {
     if (msg.startsWith('position fen ')) { this.fen = msg.slice('position fen '.length); return; }
     if (msg.startsWith('go ')) {
       const depth = Number(/depth (\d+)/.exec(msg)?.[1] ?? 0);
-      if (dieOnDeepAt && this.fen === dieOnDeepAt && depth === 16) throw new Error('scripted: worker died on the dive');
+      if (dieOnDeepAt && this.fen === dieOnDeepAt && depth === 16) { dieOnDeepAt = null; throw new Error('scripted: worker died on the read'); }
       const idx = FENS.indexOf(this.fen);
       // Side-to-move POV on the wire; analyzePosition flips it back to White POV.
       const white = CURVE[idx] ?? 0;
@@ -127,22 +127,19 @@ describe('the pool under the audit determinism switch (PLAN #70)', () => {
     for (const s of used) expect(everySearchStartsCold(s), `warm search on the wire: ${s.join(' | ')}`).toBe(true);
   }, 30_000);
 
-  it('PARITY: with a pool worker available the review never touches the live singleton — dive, sacrifice verify AND best-move refine all run on the dedicated worker', async () => {
-    // Kill the dive's search at the flagged ply so the best-move refine has to
-    // search on its own (the dive normally hands it its result). Before this
-    // build that refine — and the sacrifice verify beside it — went to the
-    // multi-thread singleton: the engine every live ask waits on, and a search
-    // no determinism switch can make reproducible.
+  it('PARITY: a read that dies is read again on the review\'s own pool worker, never graded blind, never on the live singleton', async () => {
+    // The read-ahead's search of FENS[4] dies once. The grader used to start
+    // that move at 'good' and keep it (review of chesscom-1040709576
+    // follow-up, 2026-10-13); it is now read again before grading.
     dieOnDeepAt = FENS[4];
-    const { analyzeSingleGame, BEST_MOVE_DEPTH } = await import('./gameAnalysisService');
+    const { analyzeSingleGame } = await import('./gameAnalysisService');
     await db.games.put(buildGameRecord({ id: 'g-parity', pgn: PGN, annotations: [], fullyAnalyzed: false }));
     const anns = await analyzeSingleGame('g-parity');
     expect(anns).not.toBeNull();
     expect(anns![4].classification).toBe('blunder');
 
-    const wire = streams.flat();
-    const refine = wire.filter((m) => m === `go depth ${BEST_MOVE_DEPTH} movetime 8000`);
-    expect(refine, 'the best-move refine did not run on a pool worker').not.toHaveLength(0);
+    const reads = streams.flat().filter((m) => m === `position fen ${FENS[4]}`);
+    expect(reads.length, 'the dead read was not read again').toBeGreaterThanOrEqual(2);
     expect(singletonCalls, `the review reached the live singleton: ${JSON.stringify(singletonCalls)}`).toEqual([]);
   }, 30_000);
 });

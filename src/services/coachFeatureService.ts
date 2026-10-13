@@ -51,7 +51,7 @@ import { noteSlip } from './learnBoardTeaching';
 import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
-import { MATE_POINTS, isSacrifice, type FactStakes } from './factStakes';
+import { mateStakes, isSacrifice, type FactStakes } from './factStakes';
 import { sacrificeLedger, type BestAmong, type SacrificeLedgerRead } from './sacrificeLedger';
 import { threatPurpose } from './threatPurpose';
 import type { BestOfEngine } from './gameAnalysisService';
@@ -1336,7 +1336,7 @@ export function buildReviewSegments(
   /** Outside-passer decoys already said this review (one per passer file). */
   const seenDecoys = new Set<string>();
   /** S6 transfer: tactic motif → the move it was first SPOKEN this game. */
-  const motifFirstMove: MotifLedger = new Map();
+  const motifLastSpoken: MotifLedger = new Map();
   /** S2: opening principles SPOKEN this game — committed after the door. */
   const principlesTaught = new Set<string>();
   // The student's slips THIS game, by fundamental — "that's the second time
@@ -1911,7 +1911,7 @@ export function buildReviewSegments(
           if (ml) {
             const raw = `[tactic] ${ml.text}`;
             facets.push(raw);
-            facetStakes.set(raw, { points: MATE_POINTS, plies: 0 });
+            facetStakes.set(raw, mateStakes('you', 0, true));
             if (ml.taken.length) facetSquares.set(raw, ml.taken);
             if (!causalArrows || causalArrows.length === 0) {
               causalArrows = admitArrows(lineArrows(fenPair.fenBefore, line ?? [], 'review.mateLine'), { fen: fenPair.fenBefore, studentColor: playerColor ?? moverColor }).arrows;
@@ -2401,8 +2401,8 @@ export function buildReviewSegments(
           const tm = transferMotifOf(identity);
           if (!tm) continue;
           const { motif, instance } = tm;
-          uncappedParts[k] = withTransfer(uncappedParts[k], transferClause(motif, instance, fullMove, motifFirstMove));
-          recordMotif(motif, instance, fullMove, motifFirstMove);
+          uncappedParts[k] = withTransfer(uncappedParts[k], transferClause(motif, instance, fullMove, motifLastSpoken));
+          recordMotif(motif, instance, fullMove, motifLastSpoken);
         }
       }
       // THE GAME ENDED ON THIS MOVE (review of chesscom-1040709576, 2026-10-13:

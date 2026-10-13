@@ -109,7 +109,7 @@ describe('refutedAlternative', () => {
     const r = await refutedAlternative({ fenBefore: FEN, taughtSan: 'g6', candidates: cands, studentColor: 'black', engine });
     expect(r).not.toBeNull();
     expect(r!.concept).toBeNull();
-    expect(r!.text).toMatch(/about a pawn/);
+    expect(r!.text).toMatch(/about a point/);
     expect(r!.text).not.toMatch(/fork|pin|mate/i);
   });
 
@@ -147,7 +147,7 @@ describe('refutedAlternative', () => {
   it('a line that proves nothing is not recited (the line as proof)', () => {
     const t = renderRefutedAlternative({ alt: 'a6', games: 40, pct: 12, costCp: 150, line: null, concept: null, lineSans: [], proofResult: null }, 'Nf3', 0);
     expect(t).not.toMatch(/line runs/);
-    expect(t).toMatch(/costs you more than a pawn/);
+    expect(t).toMatch(/costs you more than a point/);
   });
 
   it('players at the student\'s level come first; masters are the fallback', async () => {
@@ -177,7 +177,7 @@ describe('refutedAlternative', () => {
     expect(texts.size).toBeGreaterThan(1);
     for (const t of texts) {
       expect(t).toMatch(/players at your level/);
-      expect(t).toMatch(/more than a pawn/);
+      expect(t).toMatch(/more than a point/);
       expect(t.replace(/[a-h][1-8]/g, '')).not.toMatch(/\d/);
       expect(t).not.toMatch(/^Most/);
     }

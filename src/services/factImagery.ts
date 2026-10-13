@@ -19,24 +19,25 @@ export type ImageryKey =
 export const IMAGERY: Record<ImageryKey, readonly string[]> = {
   'only-developed': ['', 'Their army is back in the barracks.'],
   'defender-trade': ['', 'Every attacker that leaves is one less hand on your door.'],
-  'exchange-for-attacker': ['', 'You pay a little to take away their sharpest tool.'],
-  'deny-exchange': ['', 'You take away the trade their whole setup was waiting for.'],
+  'exchange-for-attacker': [''],
+  'deny-exchange': [''],
   'abandoned-duty': ['', 'A guard that steps away leaves the gate open.'],
   'trade-choice': ['', 'An offer is not a deal until they accept it.'],
   // Cut (review of chesscom-1040709576, 2026-10-13): an image that only
   // restates its fact teaches nothing — it is description, and description
-  // is cut. An empty bank keeps the key exhaustive.
+  // is cut. An empty bank keeps the key exhaustive. What stays carries a RULE
+  // the fact does not say ("a knight on the rim is dim", "count the wood").
   'duty-parity': [''],
   'maintenance-trade': ['', 'Not a win, just paying the bill before it comes due.'],
   'prepare-recapture': ['', 'Set the table before the guests arrive.'],
-  'threat-cost': ['', 'The door is still open, but now there is a trap behind it.'],
+  'threat-cost': [''],
   'simplest-win': ['', 'Win the plain way; the fancy way only adds chances to slip.'],
   'safe-because': [''],
   'wing-for-centre': ['', 'A side street for the main road.'],
   'material-arithmetic': ['', 'Count the wood, not the names on it.'],
   'knight-squares': ['', 'A knight on the rim is dim.', 'Put a knight in the middle and it sees the whole board.'],
-  'c-pawn-block': ['', 'The knight is parked on the c-pawn\'s road.'],
-  badbishop: ['', 'A walled-in bishop bites rock.', 'That bishop is staring at its own pawns.'],
+  'c-pawn-block': [''],
+  badbishop: ['', 'A walled-in bishop bites rock.'],
 };
 
 /** The image for a fact of `key`, rotated on `stem` (a hash of the position),

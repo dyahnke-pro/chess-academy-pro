@@ -2011,6 +2011,34 @@ async function analyzeGamePositions(
     // The key-moment dive is gone (2026-10-13): a review reads EVERY position
     // at review depth first (`startReviewReads`) and grades with `readsOnly`,
     // so there is no draft curve left for a dive to correct.
+    // A READ THAT DIED IS READ AGAIN, NEVER GRADED BLIND (2026-10-13). The
+    // grader starts every move at 'good', so a position whose read-ahead
+    // search died (a dead worker, the safety budget) graded its move "good"
+    // with nothing behind it. Each unread position is read once more on this
+    // review's own worker; one that still cannot be read is logged.
+    if (opts.readsOnly) {
+      let unread = 0;
+      for (let i = skipBook; i < fens.length; i++) {
+        if (evals[i] !== null) continue;
+        try {
+          const a = await deepSearch(fens[i], REVIEW_DEEP_DEPTH);
+          evals[i] = a.evaluation;
+          deep[i] = a.evaluation;
+          depthAt[i] = a.depth;
+          if (a.bestMove) deepBest[i] = a.bestMove;
+          if (a.pv.length) pvAt[i] = a.pv;
+          if (Number.isFinite(a.depth) && a.depth > 0) toStore.push({ fen: fens[i], evaluation: a.evaluation, depth: a.depth, bestMove: a.bestMove, pv: a.pv });
+        } catch { unread += 1; }
+      }
+      if (unread > 0) {
+        void logAppAudit({
+          kind: 'review-reads-depth',
+          category: 'subsystem',
+          source: 'gameAnalysisService.analyzeGamePositions.reread',
+          summary: `${unread} position(s) could not be read at review depth; their moves are graded without a read`,
+        });
+      }
+    }
 
     for (let i = skipBook; i < fens.length; i++) {
       if (evals[i] !== null && depthAt[i] > 0) achievedDepth = Math.min(achievedDepth, depthAt[i]);

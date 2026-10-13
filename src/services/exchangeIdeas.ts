@@ -26,7 +26,7 @@ import { legalLineProof, lineProof, squaresProof, type Proof } from './proof';
 import { legalSeeGain, legalSeeGainFor, seeSequence, asIfToMove } from './positionReadingService';
 import { countKingAttack } from './kingSafety';
 import { MATERIAL_VALUE } from './pieceValues';
-import { MATE_POINTS, type FactStakes } from './factStakes';
+import { mateStakes, type FactStakes } from './factStakes';
 import { computeExchangeLedger, netPieceWords } from './exchangeLedger';
 import { inFluxAfter } from './boardState';
 import { stemKeyOf } from '../utils/rotateStem';
@@ -281,7 +281,7 @@ export function abandonedDuty(fenBefore: string, san: string, student: Side): Ex
     const backRank = them === 'w' ? '1' : '8';
     const post = retake.from[1] === backRank && retake.to[1] !== backRank ? 'leaves the back rank' : 'leaves its post';
     const text = `If they take back with the ${NAME[retake.piece]}, it ${post}, and ${mate.san.replace(/[+#]$/, '')} is mate.`;
-    return { ...idea('abandoned-duty', text, [retake.from, r.m.to, mate.to], proof, `abandoned-duty:${retake.from}${r.m.to}`), stakes: { points: MATE_POINTS, plies: 2 } };
+    return { ...idea('abandoned-duty', text, [retake.from, r.m.to, mate.to], proof, `abandoned-duty:${retake.from}${r.m.to}`), stakes: mateStakes('you', 2, false) };
   }
   // A piece the recapturer guarded that now falls.
   for (const p of pieceSquares(load(after) as Chess, them, ['n', 'b', 'r', 'q', 'p'])) {
@@ -531,7 +531,7 @@ export function simplestWin(fen: string, student: Side, lines: readonly LineIn[]
   const move = pick.sans[0];
   const text = `More than one move wins here; ${move} is the simplest — ${why}.`;
   const to = play(fen, move)?.m.to;
-  return { ...idea('simplest-win', text, to ? [to] : [], proof, `simplest-win:${fen.split(' ')[0]}`), namesMove: true, stakes: pick.mate !== null ? { points: MATE_POINTS, plies: 0 } : { points: pick.net, plies: 0 } };
+  return { ...idea('simplest-win', text, to ? [to] : [], proof, `simplest-win:${fen.split(' ')[0]}`), namesMove: true, stakes: pick.mate !== null ? mateStakes('you', 0, true) : { points: pick.net, plies: 0 } };
 }
 
 /** The student's move before the one played from `fenBefore`, replayed from

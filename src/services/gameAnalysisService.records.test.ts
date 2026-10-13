@@ -87,10 +87,12 @@ describe('generateInsightsForGame — the record half of the loop (WO-LOOP-01)',
 
   it('the review path records BEHIND the open — never in front of the student', () => {
     const src = readFileSync('src/services/gameAnalysisService.ts', 'utf8');
-    const start = src.indexOf('export async function analyzeSingleGame(');
+    // The review grades in `finishReviewReads` (2026-10-13: one grader for a
+    // single game — `analyzeSingleGame` and the review page both end there).
+    const start = src.indexOf('export async function finishReviewReads(');
     // Bound by the NEXT export, not the first `\n}\n` — that lands inside a
     // nested block and silently reads an empty body.
-    const end = src.indexOf('export function gameNeedsAnalysis', start);
+    const end = src.indexOf('\nexport ', start + 1);
     expect(end, 'the function boundary must be findable').toBeGreaterThan(start);
     const body = src.slice(start, end);
     // `analyzeSingleGame` is what the review page awaits before the walk is
@@ -106,7 +108,7 @@ describe('generateInsightsForGame — the record half of the loop (WO-LOOP-01)',
     // The review path's call carries `game.source` + the sweepOnly-gated habits
     // flag; the batch path's carries `game.id, game.source, …annotations`. Both
     // must exist — one door, two callers.
-    expect(src).toMatch(/generateInsightsForGame\(gameId, game\.source, annotations, \{ habits: !opts\?\.sweepOnly \}\)/);
+    expect(src).toMatch(/generateInsightsForGame\(gameId, game\.source, result\.annotations, \{ habits: true \}\)/);
     expect(src.match(/generateInsightsForGame\(game\.id, game\.source, /g)?.length ?? 0).toBeGreaterThanOrEqual(2);
   });
 });

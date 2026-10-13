@@ -43,7 +43,7 @@ describe('generateMistakeNarration', () => {
 
   it('intro states the cost in words, never a number', () => {
     const result = generateMistakeNarration(buildParams({ cpLoss: 250 }));
-    expect(result.intro).toContain('about two pawns');
+    expect(result.intro).toContain('about two points');
     expect(result.intro).not.toMatch(/\d\.\d/);
   });
 

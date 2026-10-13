@@ -349,7 +349,7 @@ describe('the departure judged — cost and the punishing line (Danya reviews, 2
     expect(f).toMatch(/The engine punishes f6: Nxe5, …fxe5, Qh5\+, …g6, Qxe5\+, …Qe7 and Qxh8 — you come out [^.]+ up\./);
   });
   it('a costly departure without a forced win says what it costs', async () => {
-    expect(await departure({ cpLoss: 45, replyLineUci: [] })).toContain('By the engine\'s count f6 costs about half a pawn.');
+    expect(await departure({ cpLoss: 45, replyLineUci: [] })).toContain('By the engine\'s count f6 costs about half a point.');
   });
   it('a cheap departure is called playable', async () => {
     expect(await departure({ cpLoss: 10, replyLineUci: [] })).toContain('f6 is perfectly playable — the engine barely minds');

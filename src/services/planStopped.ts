@@ -37,8 +37,10 @@ type Proof = (plan: PlanFact, m: Move, after: Chess, student: Color) => string |
 
 /** One proof per plan kind — a new kind fails to compile until it answers. */
 const PROOF: Record<PlanKind, Proof> = {
+  // No castling line: a king that can castle on its own move is never "stuck"
+  // (`enemyKingStuckInCenter`, 2026-10-13), so this plan is never live in
+  // front of a castle — announcing it there was the defect.
   'king-attack': (plan, m) => {
-    if (m.piece === 'k' && (m.san.startsWith('O-O'))) return 'They castled, so their king is out of the centre — the attack on it is off.';
     if (m.piece === 'k') return `Their king stepped to ${m.to}, out of the open centre — the attack on it is off.`;
     if (plan.file && m.piece === 'p' && m.to[0] === plan.file) return `Their pawn on ${m.to} closes the ${plan.file}-file the attack needed.`;
     return null;

@@ -37,7 +37,7 @@ import { Chess, type Square, type Move } from 'chess.js';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { sayMoveClause } from './spokenMove';
 import { legalLineProof, squaresProof, type Proof } from './proof';
-import { MATE_POINTS, piecePoints, type FactStakes } from './factStakes';
+import { mateStakes, piecePoints, type FactStakes } from './factStakes';
 import { legalSeeGainFor } from './positionReadingService';
 import { detectPlanRace, planRaceClause, planRaceProof } from './planRace';
 
@@ -146,7 +146,9 @@ export function mateOrMaterial(fen: string, me: Color, lines: Lines): KingRead |
     const division = divisionOfLabour(run.played, me);
     const proof = legalLineProof(fen, sans, true);
     if (!proof) return null;
-    const stakes: FactStakes = { points: MATE_POINTS, plies: sans.length - 1 };
+    // `me` is the student at every caller that speaks (thinkAloud on the
+    // student's turn, review's student seat).
+    const stakes: FactStakes = mateStakes('you', sans.length - 1, true);
     const lineArr = [{ fen, sans }];
     if (grab) {
       const leave = `their ${name(grab.captured as string)} on ${grab.to}`;

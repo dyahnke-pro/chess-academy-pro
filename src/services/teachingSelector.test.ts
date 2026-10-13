@@ -154,6 +154,6 @@ describe('the thesis never states a mate score as a point count', () => {
     expect(t).toMatch(/decided the game/);
   });
   it('an ordinary swing still says its size', () => {
-    expect(renderThesis({ kind: 'turned', ply: 20, label: '10.Nd5', swingPawns: 2.4, tactic: null, plan: null, chainRoot: null }, 'retrospective')).toMatch(/— it cost about two pawns/);
+    expect(renderThesis({ kind: 'turned', ply: 20, label: '10.Nd5', swingPawns: 2.4, tactic: null, plan: null, chainRoot: null }, 'retrospective')).toMatch(/— it cost about two points/);
   });
 });

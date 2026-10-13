@@ -15,12 +15,18 @@ function stop(fenBlackToMove: string, san: string, kind: string): { plan: PlanFa
 }
 
 const CENTRE_KING = 'r3k2r/ppp2ppp/2n2n2/8/8/2N2N2/PPPQ1PPP/R3K2R b KQkq - 0 12';
+/** The same board with Black's king already walked to f8 — no castling left. */
+const KING_F8 = 'r4k1r/ppp2ppp/2n2n2/8/8/2N2N2/PPPQ1PPP/R3K2R b KQ - 0 12';
 const OPEN_C = 'r5k1/pp3ppp/8/3p4/8/8/PP3PPP/3R2K1 b - - 0 25';
 const PASSER = '6k1/5ppp/8/3P1n2/8/8/5PPP/6K1 b - - 0 30';
 
 describe('planStopped — the proof, read off their move', () => {
-  it('castling takes the king out of the attack', () => {
-    expect(stop(CENTRE_KING, 'O-O', 'king-attack').proof).toBe('They castled, so their king is out of the centre — the attack on it is off.');
+  it('their king steps off the central files', () => {
+    expect(stop(KING_F8, 'Kg8', 'king-attack').proof).toBe('Their king stepped to g8, out of the open centre — the attack on it is off.');
+  });
+  it('NEGATIVE CONTROL: a king that can castle on its own move carries no king-attack plan to stop', () => {
+    expect(deriveNextPlanFacts(CENTRE_KING, 'w').some((p) => p.kind === 'king-attack')).toBe(false);
+    expect(deriveNextPlanFacts(CENTRE_KING.replace(' b ', ' w '), 'w').some((p) => p.kind === 'king-attack')).toBe(true);
   });
   it('their rook on the file first', () => {
     expect(stop(OPEN_C, 'Rc8', 'open-file').proof).toBe("They put their rook on the c-file first — it's contested now.");

@@ -19,8 +19,8 @@ const QGD = 'd4 d5 c4 e6 Nc3 Nf6 Nf3 c5 dxc5 Bxc5 Bg5 d4 Ne4';
 describe('Learn walk oct2a', () => {
   it('F1/F10: cost words survive depth noise either side of an edge', () => {
     expect(costWords(20)).toBe('a little');
-    expect(costWords(92)).toBe('about a pawn');
-    expect(costWords(110)).toBe('about a pawn');
+    expect(costWords(92)).toBe('about a point');
+    expect(costWords(110)).toBe('about a point');
   });
 
   it('F3/F4: a recapture is not "behind in material"', () => {

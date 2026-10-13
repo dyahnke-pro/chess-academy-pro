@@ -29,10 +29,23 @@ export interface FactStakes {
   points: number;
   /** Plies until it lands if nobody acts: 0 = already paid / decided now. */
   plies: number;
+  /** Set on a mate: WHOSE mate, and whether it is forced from this board. A
+   *  mate is never seat-less — the Learn door must tell "they threaten mate"
+   *  from "you have mate" (unity: one stake, two seats). Built only by
+   *  `mateStakes`, so a new mate fact cannot forget its seat. */
+  mate?: { for: 'you' | 'them'; forced: boolean };
 }
 
 /** A forced mate outweighs any material. */
 export const MATE_POINTS = 100;
+
+/** The ONE way to stake a mate. `side` is seat-relative to the student;
+ *  `forced` is true only when the line is forced from this board (an engine
+ *  mating line, every defence mated), false for a threat the other side can
+ *  still answer. */
+export function mateStakes(side: 'you' | 'them', plies: number, forced: boolean): FactStakes {
+  return { points: MATE_POINTS, plies, mate: { for: side, forced } };
+}
 /** Each ply of distance keeps 80%: a knight hanging next move (1 ply, 240)
  *  outranks a pawn in two moves, and a queen skewer three plies away (461)
  *  outranks the knight. */

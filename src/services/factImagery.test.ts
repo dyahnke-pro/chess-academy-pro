@@ -5,10 +5,14 @@ import { IMAGERY, imageryFor } from './factImagery';
 // today's bill" and "Two sentries staring at each other" restated a fact
 // already said — description, which is cut.
 describe('an image that only restates its fact never speaks', () => {
-  it('safe-because and duty-parity are silent on every rotation', () => {
+  it('the restating images are silent on every rotation', () => {
     for (let stem = 0; stem < 20; stem += 1) {
-      expect(imageryFor('safe-because', stem)).toBeNull();
-      expect(imageryFor('duty-parity', stem)).toBeNull();
+      for (const k of ['safe-because', 'duty-parity', 'threat-cost', 'deny-exchange', 'exchange-for-attacker', 'c-pawn-block'] as const) {
+        expect(imageryFor(k, stem)).toBeNull();
+      }
+      // "The door is still open, but now there is a trap behind it." rode
+      // "the threat costs them more than it wins" at 16…Nd4.
+      expect(imageryFor('badbishop', stem) ?? '').not.toMatch(/staring at its own pawns/);
     }
   });
   it('NEGATIVE CONTROL: a teaching image still rotates in', () => {

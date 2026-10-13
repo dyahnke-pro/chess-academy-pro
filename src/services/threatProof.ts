@@ -13,7 +13,7 @@ import { Chess } from 'chess.js';
 import { computeExchangeLedger, describeProofResult } from './exchangeLedger';
 import { computeMustDefend, flipSideToMove, mateThreatsAgainst } from './threatOut';
 import { withProof, type Proof } from './proof';
-import { MATE_POINTS, type FactStakes } from './factStakes';
+import { mateStakes, type FactStakes } from './factStakes';
 
 const COUNT = ['no', 'once', 'twice', 'three times', 'four times', 'five times'];
 const times = (n: number): string => COUNT[n] ?? `${n} times`;
@@ -71,7 +71,7 @@ export function provenThreatLine(line: string, fen: string, student: 'w' | 'b', 
 export function threatStakes(fen: string, student: 'w' | 'b', squares: readonly string[]): FactStakes | null {
   const them = flipSideToMove(fen);
   if (!them) return null;
-  try { if (new Chess(them).moves().some((m) => m.endsWith('#'))) return { points: MATE_POINTS, plies: 1 }; } catch { return null; }
+  try { if (new Chess(them).moves().some((m) => m.endsWith('#'))) return mateStakes('them', 1, false); } catch { return null; }
   const named = computeMustDefend(fen, student).pieces.find((p) => squares.includes(p.square));
   return named && named.value > 0 ? { points: named.value, plies: 1 } : null;
 }

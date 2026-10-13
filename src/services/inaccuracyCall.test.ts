@@ -68,7 +68,7 @@ describe('it names the better move AND what it was for', () => {
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: 150,
       side: 'student', moverColor: 'white',
     });
-    expect(call?.said).toBe('a3 was a mistake — it cost more than a pawn of advantage.');
+    expect(call?.said).toBe('a3 was a mistake — it cost more than a point of advantage.');
     expect(call?.proof).toBeUndefined();
   });
 

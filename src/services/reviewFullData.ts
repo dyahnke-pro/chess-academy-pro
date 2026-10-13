@@ -29,7 +29,7 @@ import { findMinorityAttack, findColorComplexWeakness, signedLegalSeeFor, seeSeq
 import { detectTactics } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences, detectNewThreat } from './groundedAnswer';
-import { costStakes, exchangeStakes, forkPoints, piecesOn, isScenicPawnPin, isSacrifice, MATE_POINTS, type FactStakes } from './factStakes';
+import { costStakes, exchangeStakes, forkPoints, piecesOn, isScenicPawnPin, isSacrifice, mateStakes, type FactStakes } from './factStakes';
 import { describeStructure } from './boardStructure';
 import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssessment';
 import type { RefutedAlternative } from './refutedAlternative';
@@ -868,7 +868,7 @@ export function computeMoveFacets(
       recSquares(f, [t.san.replace(/[+#]/g, '').slice(-2), ...t.targetSquares]);
       // The student's next move cashes it (their opponent moves first: 2 plies).
       recStakes(f, t.kind === 'mate'
-        ? { points: MATE_POINTS, plies: 2 }
+        ? mateStakes('you', 2, false)
         : t.kind === 'fork'
           ? { points: forkPoints(piecesOn(fenAfter, t.targetSquares)), plies: 2 }
           : { points: t.rank, plies: 2 });
@@ -1417,7 +1417,7 @@ export function computeMoveFacets(
   if (ctx.forcedRunStartPly != null && ply === ctx.forcedRunStartPly) {
     const ff = '[forced] From here it is a forced checking run to mate — every move a check, no escape.';
     facets.push(ff);
-    recStakes(ff, { points: MATE_POINTS, plies: 2 });
+    recStakes(ff, mateStakes(matingSideIsStudent(ctx.allSans, studentColorWB) ? 'you' : 'them', 2, true));
   }
 
   // ── 9. PLANS — opening development + middlegame orientation (both sides) ──

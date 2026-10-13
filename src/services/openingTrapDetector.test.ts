@@ -107,7 +107,7 @@ describe('detectTrapInPosition', () => {
     expect(text).toContain('TRAP AVAILABLE');
     expect(text).toContain('Bxf2+');
     expect(text).toContain('reach for all the time');
-    expect(text).toContain('loses about a piece');
+    expect(text).toContain('loses three or four points');
     expect(text).toContain('Kxf2');
     expect(text.replace(/Bxf2\+|Kxf2/g, '')).not.toMatch(/\d/);
   });

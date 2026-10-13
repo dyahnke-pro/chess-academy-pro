@@ -398,7 +398,7 @@ describe('coachFeatureService', () => {
       expect(blunderSeg.narration).not.toMatch(/Qh5/);
       // Should include the swing magnitude in POINTS (David 2026-07-24: eval
       // voiced as points, never pawns).
-      expect(blunderSeg.narration).toMatch(/about a piece/);
+      expect(blunderSeg.narration).toMatch(/three or four points/);
     });
 
     it('frames opponent mistakes from the student perspective', () => {
@@ -566,8 +566,11 @@ describe('coachFeatureService', () => {
     });
 
     it('teaches king-stuck-in-the-centre as a standalone keystone beat (David 2026-07-20)', () => {
-      // e-file opens, Black never castles → the attacker's cue to open fire.
-      const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'Nf6', 'O-O', 'Nxe4', 'Re1', 'Nd6', 'Nxe5', 'Nxe5', 'Rxe5+', 'Be7', 'Nc3', 'a6'];
+      // e-file opens and Black's king walks to f8, giving up castling → the
+      // attacker's cue to open fire. (2026-10-13: the old line ended on
+      // 8.Nc3 with …O-O legal on the spot — "no castling in sight" was false
+      // there, and the computer now says so.)
+      const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'Nf6', 'O-O', 'Nxe4', 'Re1', 'Nd6', 'Nxe5', 'Nxe5', 'Rxe5+', 'Be7', 'Nc3', 'Kf8', 'd4'];
       const segments = buildReviewSegments(sans.map((san, i) => move({ ply: i + 1, san })), 'white', null);
       const taught = segments.some((s) => /king.*(centre|center)/i.test(s.narration || '') && /cue|throw your pieces|attack/i.test(s.narration || ''));
       expect(taught).toBe(true);

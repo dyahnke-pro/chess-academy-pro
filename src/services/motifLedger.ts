@@ -2,7 +2,7 @@
 //
 // A strong coach links the idea on the board to the last time it appeared:
 // "same idea as move 12". The ledger records, per game, the MOVE NUMBER a
-// tactic motif was first taught AND which instance it was (its squares).
+// tactic motif was last spoken AND which instance it was (its squares).
 // Keyed on the detector's own type (never scraped from prose), recorded only
 // where the caller has decided the line is SPOKEN. A leaf: both surfaces own
 // their ledger (review per walk, Learn per game in learnMemory).
@@ -26,7 +26,7 @@ export interface MotifEntry {
 export type MotifLedger = Map<string, MotifEntry>;
 
 /** An inline phrase (", the same idea as move N") for a NEW instance of a
- *  motif first taught at an EARLIER move, else ''. Insert it before the
+ *  motif last spoken at an EARLIER move, else ''. Insert it before the
  *  sentence's closing punctuation (`withTransfer`). */
 export function transferClause(
   motif: string,
@@ -63,10 +63,14 @@ export function studentMoveAfterReply(fenAfterReply: string): number {
   return Math.max(0, full - 1);
 }
 
-/** Record the first move (and instance) a motif was taught. Later calls keep
- *  the first. */
+/** Record the move (and instance) a motif was last SPOKEN. The latest wins
+ *  (review of chesscom-1040709576, 2026-10-13: moves 17 and 20 both said
+ *  "it's the idea from move 12 again" — the link points back to the last time
+ *  the student met the idea, so a second recurrence names the first one, not
+ *  the move both share). */
 export function recordMotif(motif: string, instance: string, moveNumber: number, ledger: MotifLedger): void {
-  if (!ledger.has(motif)) ledger.set(motif, { move: moveNumber, instance });
+  const prior = ledger.get(motif);
+  if (!prior || moveNumber >= prior.move) ledger.set(motif, { move: moveNumber, instance });
 }
 
 /** The motif and instance a facet identity carries, or null when the identity
