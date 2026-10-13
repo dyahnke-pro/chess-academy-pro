@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5388 lines · 32 exports · 47 importers · 46 tests · 4 audits**
+**5318 lines · 31 exports · 47 importers · 46 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -227,10 +227,6 @@
 - `src/services/opponentBuildMoot.test.ts:19`
 - `src/services/opponentBuildMoot.test.ts:20`
 - `src/services/opponentBuildMoot.test.ts:21`
-
-### `mateDescription` (function) — 2 call sites
-- `src/services/opponentBuildMoot.test.ts:28`
-- `src/services/opponentBuildMoot.test.ts:34`
 
 ### `deliveredMateNarration` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

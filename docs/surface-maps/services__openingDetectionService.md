@@ -87,8 +87,8 @@
 - `src/components/Coach/CoachTeachPage.tsx:8693`
 - `src/components/Coach/CoachTeachPage.tsx:9905`
 - `src/hooks/usePhaseNarration.ts:461`
-- `src/services/coachFeatureService.ts:2672`
-- `src/services/coachFeatureService.ts:3095`
+- `src/services/coachFeatureService.ts:2615`
+- `src/services/coachFeatureService.ts:3038`
 - `src/services/computedVoiceAudit.report.test.ts:300`
 - `src/services/oneOpeningKey.test.ts:43`
 - `src/services/openingDetectionService.test.ts:12`
@@ -138,7 +138,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:5211`
 - `src/components/Coach/CoachTeachPage.tsx:5929`
 - `src/components/Coach/CoachTeachPage.tsx:11907`
-- `src/components/Coach/CoachTeachPage.tsx:13944`
+- `src/components/Coach/CoachTeachPage.tsx:13953`
 - `src/data/voicedWalkthroughs.test.ts:100`
 - `src/data/voicedWalkthroughs.ts:160`
 - `src/services/coachApi.ts:6274`
@@ -374,8 +374,8 @@
 
 ### `studentSideForPlay` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:5801`
-- `src/components/Coach/CoachTeachPage.tsx:13518`
-- `src/components/Coach/CoachTeachPage.tsx:13568`
+- `src/components/Coach/CoachTeachPage.tsx:13527`
+- `src/components/Coach/CoachTeachPage.tsx:13577`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:59`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:60`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:64`
