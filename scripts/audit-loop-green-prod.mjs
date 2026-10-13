@@ -249,7 +249,10 @@ async function openReview(page, gid) {
     return (await b.count()) > 0 && await b.isEnabled().catch(() => false);
   }, 300000, 1500);
   let segs = null;
-  if (ready) await until(async () => { segs = await narrationSegments(page, gid); return Array.isArray(segs) && segs.length > 0; }, 30000, 1000);
+  // The walk opens after the first stretch of reads (2026-10-13 read-ahead);
+  // the whole-game narration is cached only when every position is read, so
+  // wait for the full read, not the first stretch.
+  if (ready) await until(async () => { segs = await narrationSegments(page, gid); return Array.isArray(segs) && segs.length > 0; }, 300000, 2000);
   return { ok: ready && Array.isArray(segs), ms: Date.now() - t0, segs, reason: ready ? (segs ? '' : 'no cached narration') : 'walk never became startable' };
 }
 
