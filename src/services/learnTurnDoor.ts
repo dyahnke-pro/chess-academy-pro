@@ -544,9 +544,23 @@ export function decideTurn(
     if (isProof(src.proof)) proofOf.set(k.text, src.proof);
     else if (src.proof && src.proof.none === 'stated' && lane && !unprovenLanes.includes(lane)) unprovenLanes.push(lane);
   }
+  // THE WHY THAT WAS COMPUTED AND NOT SAID — measured, never decided here.
+  const proofUnsaid: LearnLane[] = [];
+  for (const k of keep) {
+    const p = proofOf.get(k.text); const lane = laneFor(k);
+    if (p && lane && p.short && !k.text.includes(p.short) && !proofUnsaid.includes(lane)) proofUnsaid.push(lane);
+  }
+  const heldWithProof: LearnLane[] = [];
+  const heldStaked: LearnLane[] = [];
+  for (const x of survivors) {
+    if (keep.includes(x.fact)) continue;
+    const src = open.find((o) => o.lane === x.lane && (o.text === x.fact.text || o.text.includes(x.fact.text)));
+    if (isProof(src?.proof) && !heldWithProof.includes(x.lane)) heldWithProof.push(x.lane);
+    if (stakeOf(x.lane, x.fact.text) > 0 && !heldStaked.includes(x.lane)) heldStaked.push(x.lane);
+  }
   // EMIT every decision (the algo-audit rule): a door whose decisions cannot be
   // inspected can only be judged by reading the tape.
-  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes] });
+  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked] });
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
 }
 

@@ -596,6 +596,18 @@ async function main() {
       }
       const fadedTotal = turns.filter((t) => Array.isArray(t.faded) && t.faded.length > 0).length;
       record('LD3. nothing FADES before the student has held anything (grey teaches in full)', fadeBeforeEvidence.length === 0, `${fadeBeforeEvidence.length} of ${turns.length} rows faded with no held evidence or lack the field; ${fadedTotal} faded in all, after ${heldSeen} held answer(s)`);
+      // THE WHY THAT WAS COMPUTED AND NOT SAID (David 2026-10-13: "how many of
+      // those statements are calculated, just not spoken?"). Reported, not
+      // asserted: the measurement that decides whether the door should value
+      // a reason over a bare fact.
+      {
+        const tally = (key) => { const by = {}; let n = 0; for (const t of turns) for (const l of (Array.isArray(t[key]) ? t[key] : [])) { by[l] = (by[l] ?? 0) + 1; n += 1; } return { n, by }; };
+        const spokeN = turns.reduce((a, t) => a + t.spoke.length, 0);
+        const unsaid = tally('proofUnsaid'); const heldP = tally('heldWithProof'); const heldS = tally('heldStaked');
+        const missing = turns.filter((t) => !Array.isArray(t.proofUnsaid)).length;
+        record('W. why COMPUTED but not said — REPORTED (proof unsaid on a spoken fact / held with a proof / held with a stake)', missing === 0,
+          `${spokeN} spoken facts: ${unsaid.n} carried a proof the words left out ${JSON.stringify(unsaid.by)}; held with a proof ${heldP.n} ${JSON.stringify(heldP.by)}; held with a stake ${heldS.n} ${JSON.stringify(heldS.by)}; ${missing} rows lack the field`);
+      }
       // THE PROOF LEDGER (one coach P1, 2026-10-07): Learn answers the same
       // unproven count as review. The field must be present on every row (the
       // ledger ran); the count is REPORTED — it is the P3 backlog, shrinking.

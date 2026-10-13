@@ -177,6 +177,16 @@ export interface LearnTurnRow {
    *  backlog, measured live on Learn as it is on the other surfaces. */
   unproven: number;
   unprovenLanes: string[];
+  /** THE WHY THAT WAS COMPUTED AND NOT SAID (David 2026-10-13: "how many of
+   *  those statements are calculated, just not spoken?"). Spoken lanes whose
+   *  fact carries a real Proof the spoken words do not contain — the reason
+   *  waits for the Why tap. */
+  proofUnsaid: string[];
+  /** Held lanes whose fact carried a real Proof — a computed reason the door
+   *  kept quiet. */
+  heldWithProof: string[];
+  /** Held lanes whose fact carried a stake (a computed consequence). */
+  heldStaked: string[];
 }
 
 const learnTurnListeners = new Set<(row: LearnTurnRow) => void>();
