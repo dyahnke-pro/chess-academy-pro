@@ -1302,7 +1302,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // WHY STATEMENTS ARE PREVALENT AND NUMEROUS (David 2026-10-13).
     const why = whyTally(spoken().map((x) => x.text), SANS.map((_, i) => i + 1).filter(isStudentPly).length);
     await add('VOICE why-statements-prevalent-and-numerous', why.prevalent && why.numerous,
-      `${why.withWhy}/${why.lines} lines carry a why (${Math.round(why.share * 100)}%), ${why.whySentences} why sentences = ${why.perMove.toFixed(1)} per student move${why.whyless.length ? ` — whyless e.g. "${why.whyless.slice(0, 3).join('" | "').slice(0, 260)}"` : ''}`);
+      `${why.withWhy}/${why.lines} teaching lines carry a why (${Math.round(why.share * 100)}%), ${why.whySentences} why sentences = ${why.perMove.toFixed(1)} per student move${why.whyless.length ? ` — whyless e.g. "${why.whyless.slice(0, 3).join('" | "').slice(0, 260)}"` : ''}`);
     const buried = linesWithBuriedMate(spoken().map((x) => x.text));
     await add('VOICE forced-mate-leads-its-line', buried.length === 0, `${buried.length} line(s)${buried.length ? ` — ${buried[0].slice(0, 160)}` : ''}`);
   }

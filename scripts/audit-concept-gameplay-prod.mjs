@@ -554,8 +554,8 @@ async function main() {
     record('V3. no statistic is spoken — a reason, never a percentage, a point count or "N of M"', statLines.length === 0, `${statLines.length} line(s)${statLines.length ? ` — ${statLines[0].slice(0, 120)}` : ''}`);
     // WHY STATEMENTS ARE PREVALENT AND NUMEROUS (David 2026-10-13).
     const why = whyTally(tape, studentMoves);
-    record('V5. why statements are prevalent (most lines give a reason) and numerous (≥1 per student move)', why.prevalent && why.numerous,
-      `${why.withWhy}/${why.lines} lines carry a why (${Math.round(why.share * 100)}%), ${why.whySentences} why sentences over ${studentMoves} student moves = ${why.perMove.toFixed(1)}/move${why.whyless.length ? ` — whyless e.g. "${why.whyless.slice(0, 3).join('" | "').slice(0, 260)}"` : ''}`);
+    record('V5. why statements are prevalent (90% of teaching lines give a reason) and numerous (≥1 per student move)', why.prevalent && why.numerous,
+      `${why.withWhy}/${why.lines} teaching lines carry a why (${Math.round(why.share * 100)}%), ${why.whySentences} why sentences over ${studentMoves} student moves = ${why.perMove.toFixed(1)}/move${why.whyless.length ? ` — whyless e.g. "${why.whyless.slice(0, 3).join('" | "').slice(0, 260)}"` : ''}`);
     const buried = linesWithBuriedMate(tape);
     record('V4. a forced mate leads its line (never behind a lesson)', buried.length === 0, `${buried.length} line(s)${buried.length ? ` — ${buried[0].slice(0, 160)}` : ''}`);
     record('V2. words per student move REPORTED (his speed runs: ~35–50)', true, `${words} words over ${studentMoves} student moves = ${Math.round(words / studentMoves)}/move; longest line ${Math.max(0, ...tape.map((t) => t.split(/\s+/).length))}w`);

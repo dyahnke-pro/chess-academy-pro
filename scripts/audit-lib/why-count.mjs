@@ -21,17 +21,31 @@ const WHY = new RegExp([
   String.raw`\bwhere (?:they|you) (?:hold|have)\b`, String.raw`\bunveils\b`, String.raw`\bthey win\b`, String.raw`\byou win\b`,
 ].join('|'), 'i');
 
+/** NOT TEACHING — greetings, the game's setup, whose move it is, the game
+ *  intro. These are not measured: forcing a why onto "e4 — your move" makes
+ *  filler. Opening names and book departures ARE teaching and are measured. */
+const NOT_TEACHING = [
+  /^(what are you working on|good to see you|none of your games|want to )/i,
+  /^you're (white|black) — play /i,
+  /^[a-h1-8nbrqkox+#=-]+ — your move\.?$/i,
+  /^here's your game in /i,
+];
+export function isTeachingLine(t) { return !NOT_TEACHING.some((re) => re.test(String(t).trim())); }
+
 /** Split a spoken line into sentences. */
 function sentences(t) {
   return String(t).split(/(?<=[.!?])\s+/).filter((s) => s.trim().length > 3);
 }
+
+/** The share of teaching lines that must carry a why. */
+export const WHY_SHARE_BAR = 0.9;
 
 /** Does this sentence state a reason or consequence? */
 export function isWhy(sentence) { return WHY.test(String(sentence)); }
 
 /** The why tally over a tape. `studentMoves` is the denominator for "per move". */
 export function whyTally(lines, studentMoves) {
-  const ls = lines.map(String).filter((t) => t.trim().length > 0);
+  const ls = lines.map(String).filter((t) => t.trim().length > 0 && isTeachingLine(t));
   const withWhy = ls.filter((t) => sentences(t).some(isWhy));
   const whySentences = ls.flatMap(sentences).filter(isWhy).length;
   const share = ls.length ? withWhy.length / ls.length : 0;
@@ -39,7 +53,9 @@ export function whyTally(lines, studentMoves) {
   return {
     lines: ls.length, withWhy: withWhy.length, share, whySentences, perMove,
     whyless: ls.filter((t) => !sentences(t).some(isWhy)),
-    // PREVALENT: a majority of spoken lines give a reason. NUMEROUS: at least one why per student move.
-    prevalent: share > 0.5, numerous: perMove >= 1,
+    // PREVALENT: 90% of TEACHING lines give a reason (David 2026-10-13: "a
+    // better standard is closer to 90%. Why statements are the foundational
+    // teachings of this app"). NUMEROUS: at least one why per student move.
+    prevalent: share >= WHY_SHARE_BAR, numerous: perMove >= 1,
   };
 }
