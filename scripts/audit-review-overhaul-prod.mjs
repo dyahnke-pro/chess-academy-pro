@@ -33,6 +33,7 @@
  */
 import { linesWithStats } from './audit-lib/spoken-stats.mjs';
 import { linesWithBuriedMate } from './audit-lib/mate-leads.mjs';
+import { whyTally } from './audit-lib/why-count.mjs';
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { sampleRenderers, playwrightRenderers } from './audit-lib/os-sample.mjs';
@@ -1298,6 +1299,10 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   {
     const statLines = linesWithStats(spoken().map((x) => x.text));
     await add('VOICE no-statistic-spoken', statLines.length === 0, `${statLines.length} line(s)${statLines.length ? ` — ${statLines[0].slice(0, 120)}` : ''}`);
+    // WHY STATEMENTS ARE PREVALENT AND NUMEROUS (David 2026-10-13).
+    const why = whyTally(spoken().map((x) => x.text), SANS.map((_, i) => i + 1).filter(isStudentPly).length);
+    await add('VOICE why-statements-prevalent-and-numerous', why.prevalent && why.numerous,
+      `${why.withWhy}/${why.lines} lines carry a why (${Math.round(why.share * 100)}%), ${why.whySentences} why sentences = ${why.perMove.toFixed(1)} per student move${why.whyless.length ? ` — whyless e.g. "${why.whyless.slice(0, 3).join('" | "').slice(0, 260)}"` : ''}`);
     const buried = linesWithBuriedMate(spoken().map((x) => x.text));
     await add('VOICE forced-mate-leads-its-line', buried.length === 0, `${buried.length} line(s)${buried.length ? ` — ${buried[0].slice(0, 160)}` : ''}`);
   }
