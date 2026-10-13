@@ -24,13 +24,13 @@ describe('the opponent\'s "left alone" idea is held when the student goes first 
 
 describe('the mating ply names its mate (2026-10-13)', () => {
   it('a back-rank mate is named and explained from the board', async () => {
-    const { mateDescription } = await import('./coachFeatureService');
+    const { mateDescription } = await import('./matePatterns');
     const d = mateDescription('R5k1/5ppp/8/8/8/8/8/6K1 b - - 1 1');
     expect(d).toMatch(/Back-Rank Mate/);
     expect(d).toMatch(/rook on a8 checks the king on g8/);
   });
   it('a board that is not mate says nothing', async () => {
-    const { mateDescription } = await import('./coachFeatureService');
+    const { mateDescription } = await import('./matePatterns');
     expect(mateDescription('6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1')).toBeNull();
   });
 });

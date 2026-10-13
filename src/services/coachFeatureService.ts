@@ -87,7 +87,7 @@ import { ecoOfKey, openingEntryForKey, openingFamily, openingKeyFromSans } from 
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { costWords, describeEvalCp, isMateEval, moverGaveUpMate } from './engineConstants';
 import { isContested } from './narrationImportance';
-import { classifyMatePattern, explainMate } from './matePatterns';
+import { mateDescription } from './matePatterns';
 import { isMinorAtHome } from './development';
 import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
@@ -3647,15 +3647,6 @@ export function studentOutpacesOpponentBuild(
   const studentPov = studentWB === 'w' ? evalAfterWhitePov : -evalAfterWhitePov;
   if (isMateEval(studentPov) && studentPov > 0) return true;
   return !opponentLineMates && studentPov > 0 && !isContested(evalAfterWhitePov, null);
-}
-
-/** THE MATE, NAMED: its pattern (when it has one) and why the king has no
- *  square, both read off the final board. Null when the board is not mate. */
-export function mateDescription(fenAfterMate: string): string | null {
-  const why = explainMate(fenAfterMate);
-  if (!why) return null;
-  const pattern = classifyMatePattern(fenAfterMate);
-  return pattern ? `The pattern is ${pattern.name}. ${why}` : why;
 }
 
 /** THE MATING PLY'S BEAT — one producer for every review builder. The

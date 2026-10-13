@@ -10581,7 +10581,7 @@ export function CoachTeachPage(): JSX.Element {
               const im = ip.move(reply);
               const lines: string[] = [];
               const eventLine = im
-                ? buildInstantReplyLine({ san: im.san, captured: im.captured, isCheckmate: ip.isCheckmate(), isCheck: ip.isCheck() })
+                ? buildInstantReplyLine({ san: im.san, captured: im.captured, isCheckmate: ip.isCheckmate(), isCheck: ip.isCheck(), fenAfter: ip.fen() })
                 : null;
               // DNA-only (David 2026-08-23: he likes the whyItFailed teaching
               // "…the king's holding it, that trade loses material", NOT the rote
@@ -12206,6 +12206,15 @@ export function CoachTeachPage(): JSX.Element {
       ((game.turn === 'w' && playerColor === 'white') ||
        (game.turn === 'b' && playerColor === 'black'));
     const won = game.isCheckmate && !studentLoss;
+    // THE STUDENT'S OWN MATE IS NAMED (2026-10-13, parity with Review's mating
+    // ply). Every lane stops at a finished board, and the reply line only
+    // fires when THEY mate — so the student's mating move said nothing about
+    // the mate. The same producer the play-out ends on.
+    if (won) {
+      const mateLine = continuationResult(true, false, game.turn, playerColor === 'white' ? 'w' : 'b', game.fen);
+      setMessages((prev) => [...prev, { id: uid('mate-named'), role: 'assistant', content: mateLine, timestamp: Date.now() }]);
+      void speakComputed(mateLine, { forced: true, intent: 'learn' }).catch(() => undefined);
+    }
     const playerName = activeProfile?.name ?? 'Player';
     // One owner for "what is this student's playing strength" — the same
     // resolver the opponent is configured from. The inline
@@ -12256,7 +12265,7 @@ export function CoachTeachPage(): JSX.Element {
         byMate: game.isCheckmate,
       });
     })();
-  }, [game.isGameOver, game.isCheckmate, game.turn, walkthrough.isActive, playerColor, game.history, activeProfile, navigate, walkthrough.tree?.openingName]);
+  }, [game.isGameOver, game.isCheckmate, game.turn, game.fen, walkthrough.isActive, playerColor, game.history, activeProfile, navigate, walkthrough.tree?.openingName]);
   // Keep the latest board-move handler reachable from handleSubmit's typed
   // move-report branch (declared earlier in the file — ref avoids the TDZ).
   handleStudentMoveRef.current = handleStudentMove;
@@ -12533,7 +12542,7 @@ export function CoachTeachPage(): JSX.Element {
       }
 
       if (!continuationRef.current) return;
-      const resultLine = continuationResult(local.isCheckmate(), local.isDraw(), local.turn(), playerColorRef.current === 'white' ? 'w' : 'b');
+      const resultLine = continuationResult(local.isCheckmate(), local.isDraw(), local.turn(), playerColorRef.current === 'white' ? 'w' : 'b', local.fen());
       setMessages((prev) => [...prev, { id: uid('cont-result'), role: 'assistant', content: resultLine, timestamp: Date.now() }]);
       speechChainRef.current = speechChainRef.current.then(() => speakComputed(resultLine, { forced: true, intent: 'learn' })).catch(() => undefined);
       // Teaching memory: the play-out is a delivered layer — the next

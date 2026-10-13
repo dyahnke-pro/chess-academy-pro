@@ -33,6 +33,7 @@ import { settledBalance, type LastMove } from './material';
 import type { GamePhase } from '../types';
 import { phaseOfFen } from './boardConcepts';
 import { boardEdgeWords } from '../utils/countWords';
+import { mateDescription } from './matePatterns';
 export type { GamePhase };
 
 /** The phase, read off the board — ONE definition (one-coach P2, census
@@ -106,12 +107,17 @@ export function continuationResult(
   isDraw: boolean,
   sideToMove: 'w' | 'b',
   student: 'w' | 'b',
+  /** The final board — a mate is named from it (the same producer Review's
+   *  mating ply uses). Required so no caller ends a game on a bare "mate". */
+  fen: string,
 ): string {
   if (isCheckmate) {
     // The side to move is the one that got mated.
-    return sideToMove === student
+    const head = sideToMove === student
       ? "Checkmate — they win. That's the whole game, opening to mate."
       : "Checkmate — you win. That's the whole game, opening to mate.";
+    const named = mateDescription(fen);
+    return named ? `${head} ${named}` : head;
   }
   if (isDraw) return "It's a draw — neither side could break through. That's the full game.";
   return "That's as far as we'll take it — a clear enough picture of the middlegame and endgame.";

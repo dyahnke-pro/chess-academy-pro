@@ -165,24 +165,24 @@ describe('buildInstantReplyLine', () => {
   // EVENTS get a call-out of their effect; quiet replies stay silent.
 
   it('a quiet move is SILENT — the student watched it land', () => {
-    expect(buildInstantReplyLine({ san: 'Nf3', isCheckmate: false, isCheck: false })).toBeNull();
+    expect(buildInstantReplyLine({ san: 'Nf3', isCheckmate: false, isCheck: false, fenAfter: '' })).toBeNull();
   });
 
   it('a capture calls out the EFFECT, never the SAN', () => {
-    const line = buildInstantReplyLine({ san: 'Bxc6', captured: 'n', isCheckmate: false, isCheck: false });
+    const line = buildInstantReplyLine({ san: 'Bxc6', captured: 'n', isCheckmate: false, isCheck: false, fenAfter: '' });
     expect(line).toBe('That takes your knight.');
     expect(line).not.toContain('Bxc6');
   });
 
   it('check and capture-with-check carry their own emphasis, SAN-free', () => {
-    expect(buildInstantReplyLine({ san: 'Qh5+', isCheckmate: false, isCheck: true }))
+    expect(buildInstantReplyLine({ san: 'Qh5+', isCheckmate: false, isCheck: true, fenAfter: '' }))
       .toBe('Check.');
-    expect(buildInstantReplyLine({ san: 'Qxf7+', captured: 'p', isCheckmate: false, isCheck: true }))
+    expect(buildInstantReplyLine({ san: 'Qxf7+', captured: 'p', isCheckmate: false, isCheck: true, fenAfter: '' }))
       .toBe("That takes your pawn — and it's check.");
   });
 
   it('checkmate outranks everything', () => {
-    expect(buildInstantReplyLine({ san: 'Qxf7#', captured: 'p', isCheckmate: true, isCheck: true }))
+    expect(buildInstantReplyLine({ san: 'Qxf7#', captured: 'p', isCheckmate: true, isCheck: true, fenAfter: '' }))
       .toBe('Checkmate.');
   });
 
@@ -196,8 +196,10 @@ describe('buildInstantReplyLine', () => {
       captured: m.captured,
       isCheckmate: c.isCheckmate(),
       isCheck: c.isCheck(),
+      fenAfter: c.fen(),
     });
-    expect(line).toBe('Checkmate.');
+    // The mate is named from the board, as Review names it (2026-10-13).
+    expect(line).toMatch(/^Checkmate\. .*queen on f7 checks the king on e8/);
   });
 });
 

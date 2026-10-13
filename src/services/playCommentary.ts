@@ -27,6 +27,7 @@ import { quietMovePoint } from './reviewMoveTeaching';
 import { settledExchange } from './exchangeLedger';
 import { captureRead } from './positionReadingService';
 import { seatBare } from '../utils/seatPieces';
+import { mateDescription } from './matePatterns';
 
 export type CommentaryKind =
   | 'tactic'
@@ -334,9 +335,15 @@ export function buildInstantReplyLine(m: {
   captured?: string;
   isCheckmate: boolean;
   isCheck: boolean;
+  /** The board after the reply — a mate is named from it, as Review's mating
+   *  ply names it (2026-10-13: Learn said only "Checkmate."). */
+  fenAfter: string;
 }): string | null {
   const capturedName = m.captured ? (NAME[m.captured] ?? 'piece') : null;
-  if (m.isCheckmate) return 'Checkmate.';
+  if (m.isCheckmate) {
+    const named = mateDescription(m.fenAfter);
+    return named ? `Checkmate. ${named}` : 'Checkmate.';
+  }
   if (capturedName && m.isCheck) return `That takes your ${capturedName} — and it's check.`;
   if (capturedName) return `That takes your ${capturedName}.`;
   if (m.isCheck) return 'Check.';

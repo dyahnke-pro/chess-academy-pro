@@ -415,3 +415,14 @@ export function explainMate(fen: string): string | null {
   const text = parts.join('; ');
   return `Mate: ${text}.`;
 }
+
+/** THE MATE, NAMED — its pattern (when it has one) and why the king has no
+ *  square, both read off the final board. The one producer for every surface
+ *  that ends a game on mate (Review's mating ply, Learn's play-out). Null when
+ *  the board is not mate. */
+export function mateDescription(fenAfterMate: string): string | null {
+  const why = explainMate(fenAfterMate);
+  if (!why) return null;
+  const pattern = classifyMatePattern(fenAfterMate);
+  return pattern ? `The pattern is ${pattern.name}. ${why}` : why;
+}

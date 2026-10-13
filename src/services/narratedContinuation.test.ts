@@ -71,8 +71,12 @@ describe('narratedContinuation helpers', () => {
   });
 
   it('names the winner on checkmate (side to move is the mated side)', () => {
-    expect(continuationResult(true, false, 'b', 'w')).toMatch(/you win/);
-    expect(continuationResult(true, false, 'w', 'w')).toMatch(/they win/);
-    expect(continuationResult(false, true, 'w', 'w')).toMatch(/draw/i);
+    expect(continuationResult(true, false, 'b', 'w', START)).toMatch(/you win/);
+    expect(continuationResult(true, false, 'w', 'w', START)).toMatch(/they win/);
+    expect(continuationResult(false, true, 'w', 'w', START)).toMatch(/draw/i);
+  });
+  it('a mate is named from the final board, as Review names it (2026-10-13)', () => {
+    // White rook a8 mates the king on g8 behind its pawns: Black to move.
+    expect(continuationResult(true, false, 'b', 'w', 'R5k1/5ppp/8/8/8/8/8/6K1 b - - 1 1')).toMatch(/you win.*Back-Rank Mate/);
   });
 });
