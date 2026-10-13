@@ -18,6 +18,7 @@ const WHY = new RegExp([
   String.raw`\bnothing'?s? (?:is )?defending\b`, String.raw`\bnothing (?:defends|guards)\b`, String.raw`\bundefended\b`, String.raw`\bhangs?\b`,
   String.raw`\b(?:a|the) rule\b`, String.raw`\bremember\b`,
   String.raw`\byou come out (?:ahead|behind)\b`, String.raw`\bthe price\b`, String.raw`\bthe danger\b`, String.raw`\bso while\b`,
+  String.raw`\bcan'?t be (?:taken back|undone)\b`,
   String.raw`\bwhere (?:they|you) (?:hold|have)\b`, String.raw`\bunveils\b`, String.raw`\bthey win\b`, String.raw`\byou win\b`,
 ].join('|'), 'i');
 
