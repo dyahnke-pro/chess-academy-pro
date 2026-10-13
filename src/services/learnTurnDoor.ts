@@ -30,6 +30,7 @@ import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type Vo
 
 import { stakeValue, STAKED_FLOOR, mateStakes, type FactStakes } from './factStakes';
 import { sameClaim } from './factSelector';
+import type { FacetRole } from './reviewFacetRank';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
 export type { SpokenLine, DrawnLine } from './voicePackage';
 export type { VoicePackage, VoiceFactKind } from './voicePackage';
@@ -308,6 +309,13 @@ export interface LaneFact {
   claims?: readonly string[];
   /** What rides on it (`factStakes`) — the door orders by this first. */
   stakes?: FactStakes;
+  /** TEACH OR DESCRIBE, from the ONE role table (`FACT_ROLE`) over the fact's
+   *  own kind, when the producer knows it. A lane can carry both — the
+   *  position-facts lane carries rules ("a king left in the middle gets caught
+   *  the moment the center opens") beside plain descriptions — so the fact's
+   *  role decides, and the lane is only the fallback (David 2026-10-13: "the
+   *  deciding computer needs to value why statements over others"). */
+  role?: FacetRole;
   /** ITS PROOF, OR WHY IT NEEDS NONE — REQUIRED (root cause, David
    *  2026-10-07): a producer that cannot answer this cannot speak. */
   proof: FactProof;
@@ -409,6 +417,18 @@ export function decideTurn(
     return f ? facts.find((x) => x.lane === lane && x.text.trim() && (x.text === f.text || fadeWhenGreen(x.lane, x.text, green ?? null) === f.text))?.stakes : undefined;
   };
   const stakeOf = (lane: LearnLane, text: string): number => stakeValue(stakesOf(lane, text)) ?? 0;
+  // The fact's own role (`LaneFact.role`), read the same way as its stakes.
+  const roleOf = (lane: LearnLane, text: string): FacetRole | undefined => {
+    const f = open.find((o) => o.lane === lane && (o.text === text || o.text.includes(text)));
+    return f ? facts.find((x) => x.lane === lane && x.text.trim() && (x.text === f.text || fadeWhenGreen(x.lane, x.text, green ?? null) === f.text))?.role : undefined;
+  };
+  /** A fact that TEACHES — its role says so, or (no role) its lane is not a
+   *  board description. A teaching fact is a reason, never "an aside". */
+  const teaches = (x: { fact: VoiceFact; lane: LearnLane }): boolean => {
+    const r = roleOf(x.lane, x.fact.text);
+    if (r) return r === 'teach';
+    return !(LEARN_LANES[x.lane].lead <= DESCRIPTION_LEAD || x.lane === 'positionFacts');
+  };
   const value = (x: { fact: VoiceFact; lane: LearnLane }): number => stakeOf(x.lane, x.fact.text) || LEARN_LANES[x.lane].lead;
   // ONE CLAIM, ONE SEAT (unity U6, Learn walk #26: the d5 pawn was "a
   // discovered attack in waiting" for them AND "pinned by your rook" — one
@@ -482,7 +502,7 @@ export function decideTurn(
     // board described where he explains the move (hand walks 2026-09-30).
     // Everything staked or teaching speaks, however many there are.
     const describes = x !== ownLead && stakeOf(x.lane, x.fact.text) === 0 && !(beginner && BEGINNER_ALWAYS.has(x.lane))
-      && (LEARN_LANES[x.lane].lead <= DESCRIPTION_LEAD || x.lane === 'positionFacts');
+      && !teaches(x);
     const sq = x.fact.squares ?? [];
     const restates = describes && !(sq.some((q) => anchor.includes(q)) && sq.some((q) => !anchor.includes(q)));
     // A DANGER TURN STAYS ON THE DANGER (prod tape 2026-10-06: a hanging queen
@@ -502,7 +522,11 @@ export function decideTurn(
     // (shares a square) nor must ride speaks when it is IMPORTANT: at least a
     // pawn at stake (`factStakes`, discounted by distance). Five such facts,
     // five sentences; a pile of small asides waits.
-    const important = stakeOf(x.lane, x.fact.text) >= STAKED_FLOOR + 100;
+    // A REASON IS IMPORTANT TOO (David 2026-10-13: "the deciding computer
+    // needs to value why statements over others"): a fact whose role is to
+    // teach is the why of the turn, so it is never held as a mere aside — the
+    // descriptions above give way instead.
+    const important = stakeOf(x.lane, x.fact.text) >= STAKED_FLOOR + 100 || (roleOf(x.lane, x.fact.text) === 'teach');
     const aside = !!ownLead && x !== ownLead && !DANGER_LANES.has(x.lane)
       && LEARN_LANES[x.lane].always !== true && !(beginner && BEGINNER_ALWAYS.has(x.lane))
       && !sq.some((q) => anchor.includes(q)) && !important;

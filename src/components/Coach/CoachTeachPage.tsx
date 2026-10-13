@@ -278,6 +278,7 @@ import { dispatchCoachTurn, openTurnRead, isComputedAnswer, conversationFor, set
 import type { ResolvedStep } from '../../coach/requestSteps';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
+import { FACT_ROLE, type FacetRole } from '../../services/reviewFacetRank';
 import { computePositionFacts, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
 import { gradePlayedMove, liveMoveCost, uciOfSan } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
@@ -1844,7 +1845,7 @@ export function CoachTeachPage(): JSX.Element {
     fen: string;
     /** `squares` rides along so the board can be drawn from what SURVIVED the
      *  package rather than re-derived from its prose — see `VoiceFact.squares`. */
-    lines: Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof }>;
+    lines: Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; role?: FacetRole }>;
   } | null>(null);
   /** The coach's own last move, captured for judging. See the callout below —
    *  the inputs are gathered while the engine work runs and the verdict is
@@ -9293,6 +9294,9 @@ export function CoachTeachPage(): JSX.Element {
     lines?: readonly SpokenLine[],
     /** What rides on the line (`factStakes`) — the door orders by it. */
     stakes?: FactStakes,
+    /** Teach or describe, from `FACT_ROLE` over the fact's own kind — the door
+     *  values a reason over a description (`LaneFact.role`). */
+    role?: FacetRole,
   ): void => {
     const text = line.trim();
     if (!text) return;
@@ -9322,7 +9326,7 @@ export function CoachTeachPage(): JSX.Element {
     } catch { /* unreadable FEN — the lanes' own board checks still apply */ }
     const pending = pendingVoiceRef.current?.fen === fen
       ? pendingVoiceRef.current
-      : { fen, lines: [] as Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof }> };
+      : { fen, lines: [] as Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; role?: FacetRole }> };
     // EVERY MOVE A LINE NAMES GETS ITS ARROW (G6) — the lane's own arrows
     // AND every other move the sentence names (a lane that drew its line
     // used to leave the rest of the sentence's moves bare). The board before
@@ -9338,7 +9342,7 @@ export function CoachTeachPage(): JSX.Element {
     const named = namedMoveArrows(text, gradeFen ?? fen, playerColorRef.current === 'white' ? 'w' : 'b', prevFen);
     const own = arrows ?? [];
     const drawn = [...own, ...named.filter((n) => !own.some((a) => a.from === n.from && a.to === n.to))];
-    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, claims, gradeFen, arrows: drawn, lines, stakes, proof });
+    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, claims, gradeFen, arrows: drawn, lines, stakes, proof, ...(role ? { role } : {}) });
     pendingVoiceRef.current = pending;
   }, []);
 
@@ -10127,7 +10131,7 @@ export function CoachTeachPage(): JSX.Element {
                       // Their move's purpose rides its own lane, above the
                       // board descriptions it used to lose to on offer order.
                       const lane = c.kind === 'stopped' ? 'theirPurpose' as const : 'positionFacts' as const;
-                      queueSpokenHint(probe.fen(), c.text, lane, (c.proof && isProof(c.proof) ? c.proof : null) ?? (c.lines?.[0] ? lineProof(c.lines[0]) : null) ?? squaresProof(c.text, c.squares ?? []) ?? c.proof ?? NO_PROOF.description, c.squares, c.claim ? [c.claim] : undefined, c.gradeFen, undefined, c.lines, c.stakes);
+                      queueSpokenHint(probe.fen(), c.text, lane, (c.proof && isProof(c.proof) ? c.proof : null) ?? (c.lines?.[0] ? lineProof(c.lines[0]) : null) ?? squaresProof(c.text, c.squares ?? []) ?? c.proof ?? NO_PROOF.description, c.squares, c.claim ? [c.claim] : undefined, c.gradeFen, undefined, c.lines, c.stakes, FACT_ROLE[c.kind]);
                     }
                     if (pf.importance.speak) captureEvent('position_facts_spoken', { surface: 'coach-teach', tier: pf.importance.tier, clauses: pf.clauses.length });
                   }
@@ -11531,7 +11535,7 @@ export function CoachTeachPage(): JSX.Element {
                       // when what it is doing is attacking the rook (run E walk).
                       // A live threat is the answer; the slow plan waits.
                       .filter((l) => !(l.lane === 'planArc' && /^What is their /.test(l.text) && /(?:^|\. )(?:Watch out|Careful) —/.test(instantSpokenText)))
-                      .map(({ lane, kind, text, squares, claims, gradeFen, lines, stakes, proof }) => ({ lane, kind, text, squares, claims, lines, stakes, proof, fen: gradeFen ?? pending.fen })),
+                      .map(({ lane, kind, text, squares, claims, gradeFen, lines, stakes, proof, role }) => ({ lane, kind, text, squares, claims, lines, stakes, proof, ...(role ? { role } : {}), fen: gradeFen ?? pending.fen })),
                     alreadySaid: instantSpokenText,
                     priorKeys: learnMemRef.current.spokenKeys,
                     // ONE THOUGHT PER TURN (WO-1b): the late wave leads only

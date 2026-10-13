@@ -214,7 +214,7 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
   it('Learn hands every line-speaking producer\'s lines to the queue, and draws on-screen and earlier boards apart', () => {
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', .*?, undefined, undefined, undefined, undefined, pendingRegisterLines\)/);
     expect(TEACH_CODE).toMatch(/pendingRegisterLines = \[\{ fen: probe\.fen\(\), sans: \[compareRead\.bestSan\] \}/);
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.squares, c\.claim \? \[c\.claim\] : undefined, c\.gradeFen, undefined, c\.lines, c\.stakes\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.squares, c\.claim \? \[c\.claim\] : undefined, c\.gradeFen, undefined, c\.lines, c\.stakes, FACT_ROLE\[c\.kind\]\)/);
     expect(TEACH_CODE).toMatch(/(?:fundamental|fund)\?\.lines[,)]/);
     expect(TEACH_CODE).toMatch(/'fundamental', NO_PROOF\.method, \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
@@ -473,5 +473,23 @@ describe('your forced mate comes before their threat (2026-10-13)', () => {
   it('a mate you only threaten does not (they move first)', () => {
     const d = decideTurn([threat, mate(false)]);
     expect(d.spoke).toContain('threat');
+  });
+});
+
+describe('a REASON outranks a description (David 2026-10-13: "value why statements over others")', () => {
+  const lead = { lane: 'movePoint' as LearnLane, proof: NO_PROOF.stated, text: 'Your knight on f3 attacks the pawn on e5.', fen: FEN, squares: ['f3', 'e5'], stakes: { points: 1, plies: 1 } };
+  const rule = 'Castle soon: a king left in the middle gets caught the moment the center opens.';
+  it('a position fact whose role TEACHES speaks beside the lead', () => {
+    const d = decideTurn([lead, { lane: 'positionFacts', proof: NO_PROOF.stated, text: rule, fen: FEN, squares: ['e1'], role: 'teach' }]);
+    expect(d.pkg.spoken).toContain('gets caught');
+    expect(d.held).not.toContain('positionFacts');
+  });
+  it('the same line marked DESCRIBE stays held, as a description always was', () => {
+    const d = decideTurn([lead, { lane: 'positionFacts', proof: NO_PROOF.stated, text: rule, fen: FEN, squares: ['e1'], role: 'describe' }]);
+    expect(d.pkg.spoken).not.toContain('gets caught');
+    expect(d.held).toContain('positionFacts');
+  });
+  it('the producer passes the role from the ONE table over its clause kind', () => {
+    expect(TEACH_CODE).toMatch(/c\.lines, c\.stakes, FACT_ROLE\[c\.kind\]\)/);
   });
 });
