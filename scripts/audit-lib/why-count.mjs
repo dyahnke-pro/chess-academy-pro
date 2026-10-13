@@ -25,7 +25,7 @@ const WHY = new RegExp([
  *  intro. These are not measured: forcing a why onto "e4 — your move" makes
  *  filler. Opening names and book departures ARE teaching and are measured. */
 const NOT_TEACHING = [
-  /^(what are you working on|good to see you|none of your games|want to )/i,
+  /^(what are you working on|what's it going to be|good to see you|none of your games|want to )/i,
   /^you're (white|black) — play /i,
   /^[a-h1-8nbrqkox+#=-]+ — your move\.?$/i,
   /^here's your game in /i,
