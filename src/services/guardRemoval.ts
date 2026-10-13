@@ -23,8 +23,7 @@
 // move itself must not just lose the piece that makes it. PURE: chess.js + SEE.
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
-
-const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+import { CAPTURE_VALUE as VALUE } from './pieceValues';
 
 export type GuardRemovalKind = 'capture' | 'chase';
 
