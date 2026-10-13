@@ -25,8 +25,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `conceptForCluster` (function) — 7 call sites
 - `src/services/bookDepartureWeakness.test.ts:84`
 - `src/services/bookDepartureWeakness.test.ts:88`
-- `src/services/coachApi.ts:4593`
-- `src/services/customLessonPlan.ts:111`
+- `src/services/coachApi.ts:4734`
+- `src/services/customLessonPlan.ts:112`
 - `src/services/weaknessConceptPassage.test.ts:8`
 - `src/services/weaknessConceptPassage.test.ts:19`
 - `src/services/weaknessSpine.test.ts:400`

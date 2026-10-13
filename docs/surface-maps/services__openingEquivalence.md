@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**243 lines · 5 exports · 4 importers · 1 tests · 0 audits**
+**262 lines · 5 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,16 +29,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `flipFen` (function) — 1 call site
-- `src/services/orderComputers.test.ts:224`
+- `src/services/orderComputers.test.ts:235`
 
-### `openingEquivalence` (function) — 7 call sites
-- `src/services/orderComputers.test.ts:204`
-- `src/services/orderComputers.test.ts:212`
-- `src/services/orderComputers.test.ts:220`
-- `src/services/orderComputers.test.ts:221`
+### `openingEquivalence` (function) — 8 call sites
+- `src/services/orderComputers.test.ts:205`
+- `src/services/orderComputers.test.ts:213`
+- `src/services/orderComputers.test.ts:227`
+- `src/services/orderComputers.test.ts:231`
+- `src/services/orderComputers.test.ts:232`
 - `src/services/orderReads.ts:67`
 - `src/services/orderTeaching.ts:108`
-- `src/services/reviewFullData.ts:1110`
+- `src/services/reviewFullData.ts:1142`
 
 ## Tests
 

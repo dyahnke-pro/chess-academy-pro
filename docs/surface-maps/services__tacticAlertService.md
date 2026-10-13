@@ -89,7 +89,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isCriticalThreat` (function) — 21 call sites
-- `src/components/Coach/CoachGamePage.tsx:2880`
+- `src/components/Coach/CoachGamePage.tsx:2907`
 - `src/services/computedMaterialTruth.corpus.test.ts:248`
 - `src/services/computedMaterialTruth.corpus.test.ts:257`
 - `src/services/tacticAlertService.criticalThreat.test.ts:26`
@@ -130,10 +130,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Tactics/TacticSetupBoard.tsx:486`
 - `src/components/Tactics/TacticSetupPage.tsx:219`
 - `src/hooks/useCoachTips.ts:327`
-- `src/services/learnBoardTeaching.ts:777`
-- `src/services/mistakePuzzleService.ts:679`
-- `src/services/mistakePuzzleService.ts:980`
-- `src/services/mistakePuzzleService.ts:1283`
+- `src/services/learnBoardTeaching.ts:774`
+- `src/services/mistakePuzzleService.ts:680`
+- `src/services/mistakePuzzleService.ts:981`
+- `src/services/mistakePuzzleService.ts:1266`
 - `src/services/tacticNarrationService.ts:82`
 - `src/services/tacticNarrationService.ts:133`
 - `src/services/tacticNarrationService.ts:153`

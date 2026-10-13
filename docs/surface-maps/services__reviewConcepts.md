@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**532 lines · 4 exports · 8 importers · 6 tests · 0 audits**
+**521 lines · 4 exports · 8 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,8 +32,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `SPACE_RULE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `detectConcept` (function) — 37 call sites
-- `src/services/coachFeatureService.ts:4909`
+### `detectConcept` (function) — 38 call sites
+- `src/services/coachFeatureService.ts:4640`
 - `src/services/reviewConcepts.test.ts:24`
 - `src/services/reviewConcepts.test.ts:27`
 - `src/services/reviewConcepts.test.ts:35`
@@ -42,25 +42,26 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewConcepts.test.ts:47`
 - `src/services/reviewConcepts.test.ts:61`
 - `src/services/reviewConcepts.test.ts:68`
-- `src/services/reviewConcepts.test.ts:76`
-- `src/services/reviewConcepts.test.ts:84`
-- `src/services/reviewConcepts.test.ts:96`
-- `src/services/reviewConcepts.test.ts:103`
+- `src/services/reviewConcepts.test.ts:78`
+- `src/services/reviewConcepts.test.ts:86`
+- `src/services/reviewConcepts.test.ts:98`
+- `src/services/reviewConcepts.test.ts:105`
 - `src/services/reviewConcepts.test.ts:112`
-- `src/services/reviewConcepts.test.ts:121`
+- `src/services/reviewConcepts.test.ts:119`
 - `src/services/reviewConcepts.test.ts:128`
 - `src/services/reviewConcepts.test.ts:135`
 - `src/services/reviewConcepts.test.ts:142`
-- `src/services/reviewConcepts.test.ts:150`
+- `src/services/reviewConcepts.test.ts:149`
 - `src/services/reviewConcepts.test.ts:157`
-- `src/services/reviewConcepts.test.ts:163`
+- `src/services/reviewConcepts.test.ts:164`
 - `src/services/reviewConcepts.test.ts:170`
-- `src/services/reviewConcepts.test.ts:181`
-- `src/services/reviewConcepts.test.ts:190`
-- `src/services/reviewConcepts.test.ts:199`
-- `src/services/reviewConcepts.test.ts:205`
-- `src/services/reviewConcepts.test.ts:211`
-- `src/services/reviewConcepts.test.ts:217`
+- `src/services/reviewConcepts.test.ts:177`
+- `src/services/reviewConcepts.test.ts:188`
+- `src/services/reviewConcepts.test.ts:197`
+- `src/services/reviewConcepts.test.ts:206`
+- `src/services/reviewConcepts.test.ts:212`
+- `src/services/reviewConcepts.test.ts:218`
+- `src/services/reviewConcepts.test.ts:224`
 - `src/services/reviewWalk900.test.ts:25`
 - `src/services/reviewWalkCT.test.ts:14`
 - `src/services/reviewWalkCT.test.ts:20`

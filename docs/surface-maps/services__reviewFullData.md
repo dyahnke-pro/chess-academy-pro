@@ -59,7 +59,7 @@
 - `src/services/exchangeIdeas.test.ts:207`
 - `src/services/forkTrick.test.ts:60`
 - `src/services/hangingVsUndefended.test.ts:11`
-- `src/services/orderComputers.test.ts:294`
+- `src/services/orderComputers.test.ts:304`
 - `src/services/reviewFullData.test.ts:15`
 - `src/services/reviewFullData.test.ts:19`
 - `src/services/reviewFullData.test.ts:53`
@@ -100,7 +100,7 @@
 - `src/test/teach02Wired.test.ts:66`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:5212`
+- `src/services/coachFeatureService.ts:5215`
 - `src/services/reviewFullData.test.ts:204`
 - `src/services/reviewFullData.test.ts:207`
 - `src/services/reviewFullData.test.ts:215`

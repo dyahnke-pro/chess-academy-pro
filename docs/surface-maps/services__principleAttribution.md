@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1784 lines · 13 exports · 49 importers · 36 tests · 1 audits**
+**1851 lines · 13 exports · 51 importers · 38 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -35,10 +35,12 @@
 - `src/services/fundamentalsCatalog.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/groundedAnswer.ts`
+- `src/services/learnFundamentalNamesNoMove.test.ts`
 - `src/services/learnFundamentalNarration.test.ts`
 - `src/services/learnFundamentalNarration.ts`
 - `src/services/liveFundamental.ts`
 - `src/services/misconceptionClassifier.ts`
+- `src/services/principleAttribution.guardRemoval.test.ts`
 - `src/services/principleAttribution.pinPressure.test.ts`
 - `src/services/principleAttribution.section14.test.ts`
 - `src/services/principleAttribution.test.ts`
@@ -65,7 +67,7 @@
 ## Exports and every call site
 
 ### `FUNDAMENTAL_IDS` (const) — 1 call site
-- `src/services/fundamentalsCatalog.ts:182`
+- `src/services/fundamentalsCatalog.ts:187`
 
 ### `FundamentalId` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -98,7 +100,7 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:144`
 
-### `attributePrinciples` (function) — 102 call sites
+### `attributePrinciples` (function) — 107 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/blockedOwnRetreat.test.ts:23`
 - `src/services/blockedOwnRetreat.test.ts:32`
@@ -117,6 +119,11 @@
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:153`
 - `src/services/misconceptionClassifier.ts:261`
+- `src/services/principleAttribution.guardRemoval.test.ts:17`
+- `src/services/principleAttribution.guardRemoval.test.ts:33`
+- `src/services/principleAttribution.guardRemoval.test.ts:40`
+- `src/services/principleAttribution.guardRemoval.test.ts:50`
+- `src/services/principleAttribution.guardRemoval.test.ts:63`
 - `src/services/principleAttribution.pinPressure.test.ts:15`
 - `src/services/principleAttribution.pinPressure.test.ts:34`
 - `src/services/principleAttribution.pinPressure.test.ts:41`
@@ -230,8 +237,10 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts`
 - `src/services/fundamentalsCatalog.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
+- `src/services/learnFundamentalNamesNoMove.test.ts`
 - `src/services/learnFundamentalNarration.test.ts`
 - `src/services/learnWalkBlumenfeld.test.ts`
+- `src/services/principleAttribution.guardRemoval.test.ts`
 - `src/services/principleAttribution.pinPressure.test.ts`
 - `src/services/principleAttribution.section14.test.ts`
 - `src/services/principleAttribution.test.ts`
