@@ -4247,8 +4247,11 @@ async function augmentWithProjections(
       deepSaid.add(deepKey);
       const deep = render(line, 'student');
       s.narration = deep
-        ? `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it runs ${deep}.`.trim()
-        : `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it starts with ${line.plies[0].san}.`.trim();
+        // WHOSE threat, said (review audit, prod 2026-10-13: "there's a deeper
+        // threat brewing — if they sit still, it runs Nxg4 — you win a bishop"
+        // named no owner until the last clause). The line is the student's.
+        ? `${s.narration ?? ''} And you have a deeper threat brewing — if they sit still, your line runs ${deep}.`.trim()
+        : `${s.narration ?? ''} And you have a deeper threat brewing — if they sit still, it starts with your ${line.plies[0].san}.`.trim();
       attachLineArrows(s, line, 3); // deep threat (student's)
       deepBudget -= 1;
     } catch { /* skip this ply — never block the walk on a threat probe */ }

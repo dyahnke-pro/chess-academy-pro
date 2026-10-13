@@ -14,10 +14,10 @@ describe('7.c4 hitting b5 does not "tear the centre open" at a king on e8', () =
     const beat = detectConcept({ fenBefore, fenAfter: c.fen(), san: 'c4', moverColor: 'w', evalBefore: 0, evalAfter: 0, studentColor: 'b', priorMove: null });
     expect(beat?.concept).not.toBe('open-lines-at-king');
   });
-  it('NEGATIVE CONTROL: d4 hitting e5 with the king on e8 still speaks', () => {
-    const c = after('e4 e5 Nf3 Nc6');
-    const fenBefore = c.fen(); c.move('d4');
-    const beat = detectConcept({ fenBefore, fenAfter: c.fen(), san: 'd4', moverColor: 'w', evalBefore: 0, evalAfter: 0, studentColor: 'b', priorMove: null });
+  it('NEGATIVE CONTROL: a central capture at a king that has lost castling still speaks', () => {
+    const c = new Chess('r1bqk2r/ppp2ppp/2n2n2/3p4/4P3/2N2N2/PPP2PPP/R1BQKB1R w KQ - 0 9');
+    const fenBefore = c.fen(); c.move('exd5');
+    const beat = detectConcept({ fenBefore, fenAfter: c.fen(), san: 'exd5', moverColor: 'w', evalBefore: 0, evalAfter: 0, studentColor: 'b', priorMove: null });
     expect(beat?.concept).toBe('open-lines-at-king');
   });
 });

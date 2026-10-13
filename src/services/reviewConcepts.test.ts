@@ -71,8 +71,10 @@ describe('reviewConcepts — outpost', () => {
 
 describe('reviewConcepts — open-lines-at-king', () => {
   it('fires on a central pawn capture while the enemy king is stuck in the centre', () => {
-    // White plays exd5 opening the e/d lines; Black king still on e8 (uncastled).
-    const fen = 'r1bqk1nr/ppp2ppp/2n5/3pp3/4P3/2NP4/PPP2PPP/R1BQKBNR w KQkq - 0 5';
+    // Move 9, Black has lost castling, exd5 opens the e-file at the e8 king.
+    // (2026-10-13: the old fixture was move 5 with castling still to come —
+    // "the danger of leaving the king in the middle" before it could leave.)
+    const fen = 'r1bqk2r/ppp2ppp/2n2n2/3p4/4P3/2N2N2/PPP2PPP/R1BQKB1R w KQ - 0 9';
     const beat = detectConcept(ctx(fen, 'exd5', { evalBefore: 30, evalAfter: 25, studentColor: 'w' }));
     expect(beat?.concept).toBe('open-lines-at-king');
     expect(beat?.source).toBe('concept:pos-open-file');
@@ -105,12 +107,17 @@ describe('reviewConcepts — two-bishops', () => {
 });
 
 describe('reviewConcepts — open-lines pawn-push break', () => {
-  it('fires on a central pawn PUSH break vs an uncastled king (the 4.d4 idea)', () => {
-    // White pawn on e4 pushes e5? use d4 break: white d-pawn to d4 attacking e5,
-    // black king on e8. 1.e4 e5 2.Nf3 Nc6 3.Bc4 -> then d4? Build directly:
+  it('silent on a move-4 break while castling is still to come (the 4.d4 idea is the opening, not a stuck king)', () => {
     const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4';
     const beat = detectConcept(ctx(fen, 'd4', { evalBefore: 20, evalAfter: 25, studentColor: 'w' }));
-    expect(beat?.concept).toBe('open-lines-at-king');   // d4 attacks the e5 pawn; black king on e8
+    expect(beat?.concept).not.toBe('open-lines-at-king');
+  });
+  it('silent on the Open Sicilian 3.d4 (review audit, prod 2026-10-13)', () => {
+    const c = new Chess();
+    for (const m of 'e4 c5 Nf3 d6'.split(' ')) c.move(m);
+    const fenBefore = c.fen(); c.move('d4');
+    const beat = detectConcept({ fenBefore, fenAfter: c.fen(), san: 'd4', moverColor: 'w', evalBefore: 0, evalAfter: 0, studentColor: 'b', priorMove: null });
+    expect(beat?.concept).not.toBe('open-lines-at-king');
   });
 });
 

@@ -33,6 +33,7 @@ import { isOutpost } from './outpost';
 import { settledExchange } from './exchangeLedger';
 import { legalSeeGain } from './positionReadingService';
 import { isPassedPawnAt, pawnsOf } from './boardStructure';
+import { enemyKingStuckInCenter } from './reviewSacrifice';
 
 export interface ConceptCtx {
   fenBefore: string;
@@ -165,23 +166,6 @@ function countBishops(fen: string, color: 'w' | 'b'): number {
   return n;
 }
 
-/** Enemy king still stuck in the centre (d/e files, on or near its back rank) —
- *  never castled to a wing. */
-function enemyKingCentral(fen: string, enemy: 'w' | 'b'): boolean {
-  const c = new Chess(fen);
-  for (let r = 1; r <= 8; r++) {
-    for (const f of ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']) {
-      const sq = `${f}${r}` as Square;
-      const p = c.get(sq);
-      if (p && p.type === 'k' && p.color === enemy) {
-        const centralFile = f === 'd' || f === 'e';
-        const homeRank = enemy === 'w' ? (r === 1 || r === 2) : (r === 7 || r === 8);
-        return centralFile && homeRank;
-      }
-    }
-  }
-  return false;
-}
 
 /**
  * OPEN LINES AT THE KING — the `4.d4` idea. A central PAWN break/capture that
@@ -226,7 +210,12 @@ function detectOpenLinesAtKing(ctx: ConceptCtx): ConceptBeat | null {
     }
   }
   if (!centralCapture && !breakPush) return null;
-  if (!enemyKingCentral(ctx.fenAfter, enemy)) return null;
+  // ONE stuck-king reader (`enemyKingStuckInCenter`): past the opening, a
+  // central file open, and no castle on its own next move. This concept kept a
+  // second, looser copy that ignored the move number, so 3.d4 of an Open
+  // Sicilian — every king still home, nobody able to castle — was "the danger
+  // of leaving the king in the middle" (review audit, prod 2026-10-13).
+  if (!enemyKingStuckInCenter(ctx.fenAfter, ctx.moverColor)) return null;
   const mine = MINE(ctx.moverColor, ctx.studentColor);
   const text = mine
     ? `You're cracking the centre open while their king is still stuck in it — with the files opening, every line runs straight at the uncastled king. Speed matters more than a pawn here.`
