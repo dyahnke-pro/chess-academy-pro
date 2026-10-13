@@ -43,7 +43,7 @@
 - `src/services/reviewNarrationBuild.test.ts:57`
 
 ### `prebuildReviewNarration` (function) — 1 call site
-- `src/services/gameAnalysisService.ts:3076`
+- `src/services/gameAnalysisService.ts:3104`
 
 ### `mergeReviewNarration` (function) — 1 call site
 - `src/components/Coach/CoachGameReview.tsx:692`

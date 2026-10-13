@@ -155,10 +155,10 @@
 - `src/services/gameAnalysisService.ts:401`
 - `src/services/gameAnalysisService.ts:1489`
 - `src/services/gameAnalysisService.ts:1801`
-- `src/services/gameAnalysisService.ts:2357`
-- `src/services/gameAnalysisService.ts:2427`
-- `src/services/gameAnalysisService.ts:3035`
-- `src/services/gameAnalysisService.ts:3047`
+- `src/services/gameAnalysisService.ts:2385`
+- `src/services/gameAnalysisService.ts:2455`
+- `src/services/gameAnalysisService.ts:3063`
+- `src/services/gameAnalysisService.ts:3075`
 - `src/services/reviewReadAhead.test.ts:43`
 - `src/services/tacticClassifierService.ts:271`
 - `src/services/tacticClassifierService.ts:356`
@@ -173,7 +173,7 @@
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
 - `src/components/Coach/CoachGamePage.tsx:2084`
 - `src/components/Coach/CoachGameReview.tsx:376`
-- `src/services/gameAnalysisService.ts:2313`
+- `src/services/gameAnalysisService.ts:2341`
 - `src/services/mistakePuzzleService.test.ts:107`
 - `src/services/mistakePuzzleService.test.ts:161`
 - `src/services/mistakePuzzleService.test.ts:187`

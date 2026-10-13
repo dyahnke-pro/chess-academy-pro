@@ -100,8 +100,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `knightReach` (function) — 4 call sites
 - `src/services/captureChoice.ts:59`
-- `src/services/moveInsight.ts:1083`
-- `src/services/moveInsight.ts:1135`
+- `src/services/moveInsight.ts:1081`
+- `src/services/moveInsight.ts:1133`
 - `src/services/speedRunReads.ts:359`
 
 ### `knightSquares` (function) — 3 call sites
@@ -122,8 +122,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:187`
 - `src/services/exchangeIdeas.test.ts:188`
 - `src/services/exchangeIdeas.test.ts:192`
-- `src/services/positionFacts.ts:1120`
-- `src/services/reviewFullData.ts:905`
+- `src/services/positionFacts.ts:1125`
+- `src/services/reviewFullData.ts:936`
 
 ## Tests
 
