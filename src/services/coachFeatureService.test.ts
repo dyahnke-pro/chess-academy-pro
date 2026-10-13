@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { detectBadHabits, detectBadHabitsFromGame, buildProfileContext, buildReviewSegments, buildReviewCitations, narrationBoardAccurate, frameTeachingForOpponent, recapSecondPerson } from './coachFeatureService';
+import { detectBadHabits, detectBadHabitsFromGame, buildReviewSegments, buildReviewCitations, narrationBoardAccurate, frameTeachingForOpponent, recapSecondPerson } from './coachFeatureService';
 import { explainBestMoveGrounded, describeSacrifice } from './groundedAnswer';
 import { __setLocalDbForTests, __resetLocalDbForTests } from './masterPlayLookup';
 import type { ReviewMoveInput } from './coachFeatureService';
@@ -292,37 +292,6 @@ describe('coachFeatureService', () => {
       await detectBadHabitsFromGame(moves, profile);
       const updated = await db.profiles.get('test-profile');
       expect(updated?.badHabits.length).toBeGreaterThan(0);
-    });
-  });
-
-  describe('buildProfileContext', () => {
-    it('returns valid CoachContext from profile', () => {
-      const ctx = buildProfileContext(profile);
-      expect(ctx.fen).toBeTruthy();
-      expect(ctx.playerProfile.rating).toBe(profile.currentRating);
-    });
-
-    it('includes unresolved bad habits as weaknesses', () => {
-      const profileWithHabits = buildUserProfile({
-        badHabits: [
-          buildBadHabit({ description: 'Weak at forks', isResolved: false }),
-          buildBadHabit({ description: 'Time pressure', isResolved: true }),
-        ],
-      });
-      const ctx = buildProfileContext(profileWithHabits);
-      expect(ctx.playerProfile.weaknesses).toContain('Weak at forks');
-      expect(ctx.playerProfile.weaknesses).not.toContain('Time pressure');
-    });
-
-    it('sets default values for position fields', () => {
-      const ctx = buildProfileContext(profile);
-      expect(ctx.lastMoveSan).toBeNull();
-      expect(ctx.moveNumber).toBe(0);
-      expect(ctx.pgn).toBe('');
-      expect(ctx.openingName).toBeNull();
-      expect(ctx.stockfishAnalysis).toBeNull();
-      expect(ctx.playerMove).toBeNull();
-      expect(ctx.moveClassification).toBeNull();
     });
   });
 

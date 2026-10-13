@@ -80,3 +80,62 @@ export function bookDeparture(history: readonly string[]): BookDeparture | null 
 export function warmBookPosition(fen: string, surface: string): void {
   void lookupMasterPlay(fen, { triggeredBy: 'book-departure', surface, skipLocalDb: true }).catch(() => undefined);
 }
+
+/**
+ * 🔒 HOW MANY OPENING PLIES ARE THEORY — the GRADER's book (2026-10-13).
+ *
+ * The move grader called a move "book" only when the game's exact move order
+ * matched a NAMED line, so a transposition was never book: 1.e4 c5 2.Nf3 Nc6
+ * 3.c3 — an Alapin reached by the Old Sicilian order, 3,687 master games — was
+ * graded "a mistake, costing more than a pawn" (chesscom-1040709576). Theory
+ * is what masters play, so the masters DB decides here exactly as it does for
+ * `bookDeparture`; where a position is unknown (offline, never looked up) the
+ * name DB answers, which is the old behaviour and never a false claim of book.
+ */
+export function leadingBookPlies(history: readonly string[]): number {
+  const board = new Chess();
+  const n = Math.min(history.length, MAX_SCAN_PLIES);
+  for (let i = 0; i < n; i += 1) {
+    const fen = board.fen();
+    let played;
+    try { played = board.move(history[i]); } catch { return i; }
+    const masters = masterMovesCachedSync(fen);
+    if (masters && masters.length > 0) {
+      const hit = masters.find((m) => m.san === played.san);
+      if (!hit || hit.games < MIN_BOOK_GAMES) return i;
+      continue;
+    }
+    if (!isBookLine(history.slice(0, i + 1))) return i;
+  }
+  return n;
+}
+
+/** Look up every position the game can still be in theory at, in order, and
+ *  stop at the first move masters do not play — so `leadingBookPlies` answers
+ *  from real data when the grader runs. Offline, a position stays unknown and
+ *  the name DB answers for it. */
+export async function warmBookLine(history: readonly string[], surface: string): Promise<void> {
+  const board = new Chess();
+  const n = Math.min(history.length, MAX_SCAN_PLIES);
+  for (let i = 0; i < n; i += 1) {
+    const fen = board.fen();
+    if (masterMovesCachedSync(fen) === null) {
+      await lookupMasterPlay(fen, { triggeredBy: 'book-departure', surface, skipLocalDb: true }).catch(() => undefined);
+    }
+    let played;
+    try { played = board.move(history[i]); } catch { return; }
+    const masters = masterMovesCachedSync(fen);
+    if (masters && masters.length > 0) {
+      const hit = masters.find((m) => m.san === played.san);
+      if (!hit || hit.games < MIN_BOOK_GAMES) return;
+    } else if (!isBookLine(history.slice(0, i + 1))) {
+      return;
+    }
+  }
+}
+
+/** Is every move of `history` theory? The one test every grader uses for a
+ *  book move (see `leadingBookPlies`). */
+export function isTheoryLine(history: readonly string[]): boolean {
+  return history.length > 0 && leadingBookPlies(history) >= Math.min(history.length, MAX_SCAN_PLIES) && history.length <= MAX_SCAN_PLIES;
+}

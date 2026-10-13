@@ -41,6 +41,7 @@ import { developedMinorCount, homeMinorCount, isMinorAtHome, minorsAtHome } from
 import { proofCut } from './exchangeLedger';
 import { findPinPressure } from './pinPressure';
 import { pawnsOf } from './boardStructure';
+import { isEndgameByMaterial } from './gamePhaseService';
 
 export const FUNDAMENTAL_IDS = [
   // opening
@@ -907,6 +908,10 @@ const DETECTORS: Detector[] = [
     const { last, best, mover, opp } = c;
     if (last.san.startsWith('O-O')) return null;
     if (!kingOnHome(c.before, mover)) return null;
+    // AN ENDGAME KING BELONGS IN THE CENTRE (review of chesscom-1040709576,
+    // 2026-10-13: king-stuck-center was recorded in endgames). The one phase
+    // computer decides it, as it decides the phase the row is filed under.
+    if (isEndgameByMaterial(c.before.fen())) return null;
     // THE KING WALK (WO-STANDARD-01 D-5, prod tape 2026-09-22): Ke2 off the
     // home square with castling rights still in hand throws castling away for
     // good, and the record said "buried your own bishop" because the king

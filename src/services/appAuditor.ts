@@ -385,6 +385,7 @@ export type AuditKind =
   // report has a concrete reason.
   | 'review-walk-skipped'
   | 'review-turning-plan'
+  | 'review-reads-depth'
   // Biweekly chess.com / lichess auto-import scheduler.
   | 'auto-import-completed'
   | 'auto-import-failed'
@@ -979,6 +980,7 @@ export type AuditKind =
   // the Training Plan assembles the day's reps from the bucket.
   | 'faucet-slip-detected'
   | 'misconception-captured'
+  | 'student-record-load-failed'
   // Does teaching work? Per mistake kind, the slip rate before vs after the
   // coach taught it (`teachingEffectService`).
   | 'teaching-effect'
@@ -1160,9 +1162,6 @@ export function mintTurnId(prefix: string = 't'): string {
 let currentTurnId: string | null = null;
 export function setCurrentTurnId(id: string | null): void {
   currentTurnId = id;
-}
-export function getCurrentTurnId(): string | null {
-  return currentTurnId;
 }
 /** Run a callback with a turn id auto-stamped on every audit event
  *  fired from any code reached during the callback. Restores the
@@ -1439,21 +1438,6 @@ export async function clearAuditStreamConfig(): Promise<void> {
   } catch {
     /* swallow */
   }
-}
-
-/** Synchronous read of the cached config. Used by `streamAuditEntry`
- *  on the hot audit-log path. Returns null until `loadAuditStreamConfig`
- *  has resolved at least once (same as the legacy "localStorage was
- *  empty" state — streaming is opt-in and best-effort). */
-export function getAuditStreamConfig(): AuditStreamConfig | null {
-  return cachedStreamConfig;
-}
-
-/** Whether the cache has been hydrated from Dexie at least once.
- *  Exposed for tests; production callers shouldn't need to gate on
- *  this. */
-export function isAuditStreamConfigHydrated(): boolean {
-  return streamConfigHydrated;
 }
 
 /** Pre-hydration replay queue. Audits emitted before

@@ -50,7 +50,8 @@ import { kickAfterRecapture } from './kickMap';
 import { openingEquivalence } from './openingEquivalence';
 import { refutedAltProof } from './refutedAlternativeCore';
 import { advantageWasMissed } from './reviewWithholding';
-import { costWords, isMateEval, MISTAKE_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
+import { costWords, isMateEval, mateDistanceOf, MISTAKE_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
+import { ONLY_MOVE_CP } from './criticalityScan';
 import { shareAdverb } from '../utils/shareWords';
 import { computeBoardDelta } from './boardDelta';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
@@ -312,7 +313,6 @@ export function computeMoveFacets(
   };
   const { fenBefore, fenAfter, san, ply, moverColor, playerColor, studentColorWB } = ctx;
   const isStudent = playerColor ? moverColor === playerColor : false;
-  const subj = isStudent ? 'You' : 'Your opponent';
   const moverWB: Color = moverColor === 'white' ? 'w' : 'b';
   const studentPovCp = ctx.evaluation != null && studentColorWB
     ? (studentColorWB === 'w' ? ctx.evaluation : -ctx.evaluation)
@@ -320,7 +320,7 @@ export function computeMoveFacets(
 
   // ── 1. MOVE MECHANICS + MATERIAL + STRUCTURE DELTAS (the rich PlyFacts) ──
   const mech = plyFactsForMove(fenBefore, san, ctx.prevCap);
-  if (mech) facets.push(`[move] ${subj}: ${lowerFirst(mech)}`);
+  if (mech) facets.push(`[move] ${seatMoveSubject(mech, isStudent)}`);
 
   // ── 1b. WHAT THE MOVE NOW DOES — the per-move influence delta (David
   // 2026-07-22: "Each move changes the position and provides new threats and
@@ -599,7 +599,8 @@ export function computeMoveFacets(
     // The punishing line played out, as Learn and chat say it ("The line: …
     // — they come out two pawns up"); review dropped it.
     const tailSaid = consequence && ew?.tail ? (opponentMoved ? seatPieces(seatTheirErrorForStudent(ew.tail)) : seatPieces(ew.tail)) : '';
-    const qf = `[${positive ? 'praise' : 'quality'}] ${subj}: ${qualityClause(ctx.classification, isStudent)}${swingBit}${betterBit}.${failedSaid ? ` ${failedSaid}` : ''}${tailSaid}`;
+    const praiseBit = positive ? praiseWhy(ctx.classification, ctx.preMoveEval, ctx.evaluation, ctx.moverColor) : '';
+    const qf = `[${positive ? 'praise' : 'quality'}] ${verdictSentence(ctx.classification, isStudent, san)}${swingBit}${betterBit}${praiseBit}.${failedSaid ? ` ${failedSaid}` : ''}${tailSaid}`;
     facets.push(qf);
     // The verdict's proof is the line its words name: the better move's own
     // line when the reason came from it, the line after the move when the
@@ -1555,18 +1556,52 @@ function lowerFirst(s: string): string { return continueSentence(s); }
 // transcript). The classification is still the computer's verdict; only its
 // wording changes.
 const QUALITY_CLAUSE: Record<string, string> = {
-  inaccuracy: 'that was an inaccuracy',
-  mistake: 'that was a mistake',
-  blunder: 'that was a blunder',
-  miss: 'that missed the chance',
-  great: 'that was a great move',
-  brilliant: 'that was a brilliant move',
-  best: 'that was the best move',
+  inaccuracy: 'was an inaccuracy',
+  mistake: 'was a mistake',
+  blunder: 'was a blunder',
+  miss: 'missed the chance',
+  great: 'was a great move',
+  brilliant: 'was a brilliant move',
+  best: 'was the best move',
 };
-function qualityClause(classification: string, isStudent: boolean): string {
-  const clause = QUALITY_CLAUSE[classification.toLowerCase()];
-  if (clause) return clause;
-  return `${lowerFirst(cap(classification))}${isStudent ? '' : ''}`;
+/** THE VERDICT AS A SENTENCE WITH ITS MOVER (review of chesscom-1040709576,
+ *  2026-10-13: "You: that was a mistake" / "Your opponent: that was a
+ *  mistake" read as a speaker label, not speech). The move is named with its
+ *  owner — "Your d6 was a mistake", "Their c3 was a mistake" — so whose move
+ *  it was is never guessed, in the one perspective (you / their). */
+export function verdictSentence(classification: string, isStudent: boolean, san: string): string {
+  const owner = isStudent ? 'Your' : 'Their';
+  const clause = QUALITY_CLAUSE[classification.toLowerCase()] ?? `was ${lowerFirst(cap(classification))}`;
+  return `${owner} ${san} ${clause}`;
+}
+/** PRAISE CARRIES ITS WHY (review of chesscom-1040709576, 2026-10-13: "that
+ *  was a great move." and nothing else). Each positive grade has one computed
+ *  reason, and the reason is what earned the grade: Great is a forced mate
+ *  found where there was none, or the only move (`onlyMoveGapCp` ≥
+ *  ONLY_MOVE_CP); Brilliant is a sacrifice that holds (`detectBrilliancy`).
+ *  Empty when the grade has no reason this computer can state. */
+export function praiseWhy(
+  classification: string,
+  evalBefore: number | null,
+  evalAfter: number | null,
+  mover: 'white' | 'black',
+): string {
+  const sign = mover === 'white' ? 1 : -1;
+  const mateAfter = evalAfter !== null && isMateEval(evalAfter) && evalAfter * sign > 0;
+  const mateBefore = evalBefore !== null && isMateEval(evalBefore) && evalBefore * sign > 0;
+  if (classification === 'brilliant') return ' — a sacrifice, and it holds up';
+  if (classification !== 'great') return '';
+  if (mateAfter && !mateBefore) {
+    const n = mateDistanceOf(evalAfter);
+    return n ? ` — it finds a forced mate in ${n}` : ' — it finds a forced mate';
+  }
+  return ` — the only move here: every other move costs ${costWords(ONLY_MOVE_CP)} or more`;
+}
+/** The mechanics line, owned by its mover: "The move axb5 captures …" →
+ *  "Your axb5 captures …" / "Their axb5 captures …". */
+export function seatMoveSubject(mech: string, isStudent: boolean): string {
+  const owner = isStudent ? 'Your' : 'Their';
+  return /^the move /i.test(mech) ? mech.replace(/^the move /i, `${owner} `) : cap(mech);
 }
 function pieceWord(p: string): string {
   return ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[p.toLowerCase()] ?? 'piece';

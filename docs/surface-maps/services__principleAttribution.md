@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1779 lines · 13 exports · 49 importers · 36 tests · 1 audits**
+**1784 lines · 13 exports · 49 importers · 36 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -89,7 +89,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `captureIsTrade` (function) — 1 call site
-- `src/services/misconceptionClassifier.ts:317`
+- `src/services/misconceptionClassifier.ts:323`
 
 ### `planTargets` (function) — 2 call sites
 - `src/services/principleAttribution.section14.test.ts:141`
@@ -98,7 +98,7 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:144`
 
-### `attributePrinciples` (function) — 101 call sites
+### `attributePrinciples` (function) — 102 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/blockedOwnRetreat.test.ts:23`
 - `src/services/blockedOwnRetreat.test.ts:32`
@@ -113,7 +113,7 @@
 - `src/services/claimTruth.manual.test.ts:179`
 - `src/services/claimTruth.manual.test.ts:184`
 - `src/services/claimTruth.manual.test.ts:192`
-- `src/services/coachFeatureService.ts:959`
+- `src/services/coachFeatureService.ts:825`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:153`
 - `src/services/misconceptionClassifier.ts:261`
@@ -156,7 +156,8 @@
 - `src/services/principleAttribution.test.ts:104`
 - `src/services/principleAttribution.test.ts:122`
 - `src/services/principleAttribution.test.ts:135`
-- `src/services/principleAttribution.test.ts:144`
+- `src/services/principleAttribution.test.ts:143`
+- `src/services/principleAttribution.test.ts:152`
 - `src/services/principleAttributionEndgame.test.ts:43`
 - `src/services/principleAttributionEndgame.test.ts:57`
 - `src/services/principleAttributionEvalPv.test.ts:73`
@@ -204,10 +205,10 @@
 ### `pvUciToSan` (function) — 11 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:413`
-- `src/services/autoAnalyzeGame.ts:416`
-- `src/services/coachFeatureService.ts:964`
-- `src/services/coachFeatureService.ts:966`
+- `src/services/autoAnalyzeGame.ts:414`
+- `src/services/autoAnalyzeGame.ts:417`
+- `src/services/coachFeatureService.ts:830`
+- `src/services/coachFeatureService.ts:832`
 - `src/services/discussionPractice.ts:355`
 - `src/services/discussionPractice.ts:363`
 - `src/services/liveFundamental.ts:143`

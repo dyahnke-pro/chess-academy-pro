@@ -291,16 +291,8 @@ export function isMisconceptionTagId(id: string): id is MisconceptionTagId {
   return id in TAG_BY_ID;
 }
 
-/** The enumerated list rendered into the classifier's system prompt so
- *  the LLM tags from the closed set. Plain text, no digits. */
-export function buildMisconceptionTagMenu(): string {
-  const lines = MISCONCEPTION_TAGS.map(
-    (t) => `- ${t.id} (${t.label}): ${t.coachCue}`,
-  );
-  return [
-    'MISCONCEPTION TAGS — choose the SINGLE best-fitting id from this list.',
-    'Return "none" if the move is fine. Return "other" with a short free-text',
-    'label only when a real error exists but no specific tag fits.',
-    ...lines,
-  ].join('\n');
-}
+/** THE RULES REVISION OF A CLASSIFIED ROW. Bump when the classifier's rules
+ *  change in a way stored rows must follow; rows behind it are re-attributed
+ *  by `misconceptionRulesBackfill`. 2026-10-13: hung material requires the
+ *  engine reply to take it; an endgame king walk is not "king in the centre". */
+export const MISCONCEPTION_RULES_REV = '2026-10-13-hung-is-taken';

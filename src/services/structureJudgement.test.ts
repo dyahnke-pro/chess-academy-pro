@@ -123,7 +123,7 @@ describe('squareJudgement', () => {
   it('a piece in front of its own pawn: their c3 knight means nothing backs up d4', () => {
     const fen = legal('6k1/ppp2ppp/3p4/4p3/3PP3/2N5/PPP2PPP/6K1 b - - 0 12');
     const r = voiced(pieceBlocksOwnPawn(fen, 'b'));
-    expect(r.text).toBe('Their knight on c3 sits in front of their own c2 pawn, so no pawn can ever come up to back up d4.');
+    expect(r.text).toBe('Their knight on c3 sits in front of their own c2 pawn, so while it stays there no pawn can come up to back up d4.');
     // An e3 pawn can still back it up: silent.
     expect(pieceBlocksOwnPawn(legal('6k1/ppp2ppp/3p4/4p3/3P4/2N1P3/PPP2PPP/6K1 b - - 0 12'), 'b')).toBeNull();
   });

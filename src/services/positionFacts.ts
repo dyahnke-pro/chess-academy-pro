@@ -27,7 +27,7 @@ import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRea
 import { Chess, type Square } from 'chess.js';
 import type { GamePromise } from './learnBoardTeaching';
 import { strategicWhyImperative, strategicClaims, principleLine, principleContrastLine, isForcedReply } from './moveFundamentals';
-import { isBookLine } from './openingDetectionService';
+import { isTheoryLine } from './bookDeparture';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { trickSidestepped } from './forkTrick';
@@ -110,7 +110,7 @@ export interface LastMoveInput {
   cpLoss: number | null;
   /** RAW DATA: every SAN of the game up to AND INCLUDING this move, or null
    *  when the surface has no move list. REQUIRED. The composer asks the ONE
-   *  book test (`isBookLine`) whether the move is theory — a book move is never
+   *  book test (`isTheoryLine`) whether the move is theory — a book move is never
    *  graded (`cpLoss` stays null, and the heat map must keep reading it as
    *  ungraded), yet it is by definition not a mistake, so the principle it
    *  follows may be taught. Before this, every book move was silent: 1.e4,
@@ -930,7 +930,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // S2 — otherwise the why of a clean move: in the opening the principle it
   // kept (full once, a stem after); past it, its lead fundamental as a stem.
   // `principleLine` decides which, from the board.
-  const lmBook = !!lm && lm.historySans != null && isBookLine(lm.historySans);
+  const lmBook = !!lm && lm.historySans != null && isTheoryLine(lm.historySans);
   const ruleHere = !refutedHere && studentToMove && lm && input.taughtPrinciples
     // GRADED clean only — an ungraded move is not a clean one. The 2026-09-24
     // Learn tape praised "O-O-O does what the opening asks" one line after

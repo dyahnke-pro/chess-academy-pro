@@ -19,6 +19,7 @@ import type { OpeningRecord, FlashcardRecord, ModelGame, MiddlegamePlan, ProGame
 import { reconcileTacticTypes } from './tacticTypeBackfill';
 import { openingKeyFor } from './openingKey';
 import { reconcileOpeningKeys } from './openingKeyBackfill';
+import { reconcileMisconceptionRules } from './misconceptionRulesBackfill';
 import { logAppAudit } from './appAuditor';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -987,6 +988,17 @@ async function runSeedOnce(): Promise<void> {
       category: 'subsystem',
       source: 'dataLoader.reconcileOpeningKeys',
       summary: `openingId backfill failed: ${err instanceof Error ? err.message : String(err)}`,
+    });
+  });
+
+  // Stored misconception rows → the current classifier rules. Same shape:
+  // per-row rev, idempotent, detached, audited never thrown.
+  void reconcileMisconceptionRules().catch((err: unknown) => {
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'dataLoader.reconcileMisconceptionRules',
+      summary: `misconception rules backfill failed: ${err instanceof Error ? err.message : String(err)}`,
     });
   });
 

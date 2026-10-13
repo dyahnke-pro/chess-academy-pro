@@ -249,3 +249,9 @@ export function moverGaveUpMate(
  *  dive aims at 16 and, time-budgeted on a phone, may stop short of it — any
  *  re-search past the sweep counts. */
 export const TRUSTED_LINE_DEPTH = 13;
+
+/** 🔒 THE ONE REVIEW DEPTH (2026-10-13). A review reads every position to this
+ *  depth before it grades a move (`startReviewReads`), a stored grade is trusted
+ *  only at this depth (`VERDICT_TRUST_DEPTH`), and a game graded at it opens
+ *  whole. One number, so the three can never drift apart. */
+export const REVIEW_READ_DEPTH = 16;

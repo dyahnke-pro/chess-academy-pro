@@ -238,18 +238,44 @@ function getSignatures(): TranspositionSignature[] {
 /**
  * Transposition-aware opening name. Returns the strict trie match, but REFINES
  * it to a more specific named line when the game transposed into one (every
- * defining move of a validated signature was played, any order). Every name is
+ * defining move of a validated signature was played by its side, in any order,
+ * within that side's opening moves — see `playsSignature`). Every name is
  * a real Lichess DB entry (G3) — only move order is relaxed. The signature only
  * fires when it refines a coarser exact match whose name is a prefix of the
  * signature's (so it deepens the name, never contradicts it).
  */
+/** How many moves past the named line's own length a side may take to reach
+ *  its setup and still be said to have played that opening. */
+const TRANSPOSITION_SLACK_MOVES = 2;
+
+/** Has `history` played every defining move of `sig`, by the SAME side that
+ *  plays it in the named line, within that side's opening moves?
+ *
+ *  🔒 2026-10-13 (chesscom-1040709576): this used to ask only whether each
+ *  defining SAN appeared ANYWHERE in the game, by either side, in any order.
+ *  An Old Sicilian whose White played Nc3 on move 8 and f4 on move 20 was named
+ *  "Sicilian Defense: Grand Prix Attack" in the review's intro and recap. A
+ *  transposition is the same SETUP reached in the opening, not the same moves
+ *  scattered through a middlegame. */
+function playsSignature(history: readonly string[], sig: TranspositionSignature): boolean {
+  const line = sig.dbPgn.split(/\s+/).filter(Boolean);
+  const sideMoves = (moves: readonly string[], side: 0 | 1): string[] => moves.filter((_, i) => i % 2 === side);
+  for (const m of sig.defining) {
+    const at = line.indexOf(m);
+    if (at < 0) return false;
+    const side = (at % 2) as 0 | 1;
+    const limit = sideMoves(line, side).length + TRANSPOSITION_SLACK_MOVES;
+    if (!sideMoves(history, side).slice(0, limit).includes(m)) return false;
+  }
+  return true;
+}
+
 export function detectOpeningTranspositional(moveHistory: string[]): DetectedOpening | null {
   const exact = detectOpening(moveHistory);
-  const played = new Set(moveHistory);
   let best: DetectedOpening | null = exact;
   let bestSpecificity = exact ? exact.name.length : 0;
   for (const sig of getSignatures()) {
-    if (!sig.defining.every((m) => played.has(m))) continue;
+    if (!playsSignature(moveHistory, sig)) continue;
     // Only refine a coarser match: the exact name must be a prefix of (or absent
     // vs) the signature's name, so we deepen "Sicilian: Closed" → "…: Grand Prix
     // Attack", never overwrite an unrelated specific name.
@@ -260,22 +286,6 @@ export function detectOpeningTranspositional(moveHistory: string[]): DetectedOpe
     }
   }
   return best;
-}
-
-/**
- * Check if the current move sequence is still within known opening theory.
- */
-export function isStillInOpening(moveHistory: string[]): boolean {
-  const trie = getTrie();
-  let node = trie;
-
-  for (const move of moveHistory) {
-    const child = node.children.get(move);
-    if (!child) return false;
-    node = child;
-  }
-
-  return node.children.size > 0;
 }
 
 /**

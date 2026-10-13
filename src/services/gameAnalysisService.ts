@@ -1,4 +1,4 @@
-import { applyVerdict, getVerdicts, saveVerdict, toVerdictLabel, verdictKey } from './moveVerdictStore';
+import { applyVerdict, getVerdicts, saveVerdict, toVerdictLabel, verdictKey, verdictOutranks } from './moveVerdictStore';
 import { Capacitor } from '@capacitor/core';
 import { reviewBudget, deterministicAnalysisForAudit, DETERMINISTIC_FAN_NODES, DETERMINISTIC_FAN_WATCHDOG_MS } from './analysisDeterminism';
 import { Chess } from 'chess.js';
@@ -6,7 +6,7 @@ import { db } from '../db/schema';
 import { stockfishEngine, resolveWorkerUrl, isIosSafari } from './stockfishEngine';
 import { computeWeaknessProfile } from './weaknessAnalyzer';
 import { generateMistakePuzzlesFromGame } from './mistakePuzzleService';
-import { isBookLine } from './openingDetectionService';
+import { leadingBookPlies, warmBookLine } from './bookDeparture';
 import { autoAnalyzeGameMisconceptions } from './autoAnalyzeGame';
 import { detectBadHabitsFromGame } from './coachFeatureService';
 import { classifyTacticsFromGame } from './tacticClassifierService';
@@ -173,18 +173,32 @@ export function cancelBackgroundAnalysis(): void {
 // single user-blocking game must own the CPU). While paused, the batch
 // loops finish their in-flight game, then idle between games; the flag
 // clears in analyzeSingleGame's finally.
-let _pausedForReview = false;
+//
+// 🔒 A HOLD IS COUNTED, AND IT LASTS AS LONG AS THE REVIEW IS OPEN (2026-10-13).
+// It used to be one boolean set around `analyzeSingleGame` alone, so the moment
+// that call returned the four batch workers came back while the walk, its
+// projections and its critical-moment scan were still running on the same
+// phone — two 12 s engine stalls and a review graded off starved reads
+// (chesscom-1040709576). And two holders shared one flag, so the first to
+// release freed the batch under the other. Each holder now takes its own
+// release, and the batch also checks the hold before EVERY position, not only
+// between games, so an in-flight game yields within one search.
+let _batchHolds = 0;
 
-export function pauseBatchAnalysis(): void {
-  _pausedForReview = true;
-}
-
-export function resumeBatchAnalysis(): void {
-  _pausedForReview = false;
+/** Hold the batch sweep off the engine until the returned release is called.
+ *  Idempotent per hold: calling the release twice frees one hold, once. */
+export function holdBatchAnalysis(): () => void {
+  _batchHolds += 1;
+  let released = false;
+  return () => {
+    if (released) return;
+    released = true;
+    _batchHolds = Math.max(0, _batchHolds - 1);
+  };
 }
 
 async function waitWhilePaused(): Promise<void> {
-  while (_pausedForReview && !_abortAnalysis) {
+  while (_batchHolds > 0 && !_abortAnalysis) {
     await new Promise((r) => setTimeout(r, 500));
   }
 }
@@ -195,13 +209,14 @@ async function waitWhilePaused(): Promise<void> {
 // subsystems share the same value. Local alias kept for readability.
 import {
   MATE_EVAL_THRESHOLD, mateEvalFor, mateDistanceOf, SHORT_MATE_MOVES, MATE_HORIZON_CP, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP,
-  BLUNDER_WIN_PCT, EXCELLENT_WIN_PCT,
+  REVIEW_READ_DEPTH,
 } from './engineConstants';
-import { capEval, winPctLost, bandForWinPctLost } from './accuracyService';
+import { capEval, winPctLost, bandForWinPctLost, winPercent } from './accuracyService';
+import { ONLY_MOVE_CP } from './criticalityScan';
 import type { PvEngine, MoveScorer, ScoredMove } from './pvPlayback';
 import { moveScoresOneSearch, uciOfSan } from './moveCost';
 import { detectBrilliancy, verifySacrificeDeep, SAC_VERIFY_DEPTH } from './brilliancy';
-import { lookupPositionEvals, storePositionEvals, prunePositionEvalCache, type EvalToStore } from './positionEvalCache';
+import { lookupPositionEvals, storePositionEvals, prunePositionEvalCache, evalCacheKey, type EvalToStore } from './positionEvalCache';
 
 /**
  * True when the engine's deep best-move (UCI) for `fenBefore` is the very move
@@ -320,7 +335,12 @@ export function classifyCpLoss(
   // Handle mate evals: the player's move leads to a forced mate.
   if (evalAfter !== undefined && evalAfter !== null && Math.abs(evalAfter) >= MATE_EVAL_THRESHOLD) {
     const goodForPlayer = isPlayerWhiteMove ? evalAfter > 0 : evalAfter < 0;
-    if (goodForPlayer) return isBrilliant() ? 'brilliant' : 'great';
+    // Keeping a mate that was already on the board turns nothing (G3): 24...Qf2+
+    // inside a forced mate was graded GREAT (chesscom-1040709576). Finding the
+    // mate where there was none is the turn.
+    const mateWasThere = evalBefore !== undefined && evalBefore !== null
+      && Math.abs(evalBefore) >= MATE_EVAL_THRESHOLD && (isPlayerWhiteMove ? evalBefore > 0 : evalBefore < 0);
+    if (goodForPlayer) return isBrilliant() ? 'brilliant' : mateWasThere ? 'good' : 'great';
     // Walked into forced mate that wasn't there before
     if (evalBefore !== undefined && evalBefore !== null && Math.abs(evalBefore) < MATE_EVAL_THRESHOLD) {
       return 'blunder';
@@ -358,11 +378,16 @@ export function classifyCpLoss(
 
     const band = bandForWinPctLost(lost);
     if (band) return band;
-    // Gains. A move that IMPROVES the position beyond noise is the student
-    // finding something — but chess.com only calls it BRILLIANT when it's a
-    // sacrifice; otherwise it's a great move.
-    if (lost <= -BLUNDER_WIN_PCT) return isBrilliant() ? 'brilliant' : 'great';
-    if (lost <= -EXCELLENT_WIN_PCT) return 'great';
+    // Not a fault. BRILLIANT (G2) is a sound sacrifice that is best or nearly
+    // best, from a position not already won — judged on EVERY such move. It
+    // used to be checked only when the eval ROSE, and a rise is search noise
+    // (the position before the move already holds the opponent's error), so a
+    // real sacrifice that simply held the eval could never be brilliant.
+    if (isBrilliant()) return 'brilliant';
+    // GREAT (G3) is the only good move or one that turns the game. That needs
+    // the runner-up's eval, which this function does not have, so the review
+    // grader decides it (`onlyMoveGapCp`). A rise alone is never Great: a plain
+    // recapture was graded GREAT on noise (chesscom-1040709576, 4...cxd4).
     return 'good';
   }
 
@@ -370,8 +395,7 @@ export function classifyCpLoss(
   if (cpLoss >= BLUNDER_CP) return 'blunder';
   if (cpLoss >= MISTAKE_CP) return 'mistake';
   if (cpLoss >= INACCURACY_CP) return 'inaccuracy';
-  if (cpLoss <= -150) return isBrilliant() ? 'brilliant' : 'great';
-  if (cpLoss <= -10) return 'great';
+  if (isBrilliant()) return 'brilliant';
   return 'good';
 }
 
@@ -430,6 +454,38 @@ class DedicatedWorker {
     _liveWorkers.add(this);
   }
 
+  /** ONE SEARCH AT A TIME PER WORKER (review of chesscom-1040709576,
+   *  2026-10-13). Every search listens on the worker's single message stream,
+   *  so two searches in flight on one worker read the same `info`/`bestmove`
+   *  lines: the sacrifice ledger ran its take and decline searches with
+   *  `Promise.all` and both came back with the same move ("if they take with
+   *  Nxe4 or decline with Nxe4"). Searches queue here; no caller can
+   *  interleave them. */
+  private searchChain: Promise<unknown> = Promise.resolve();
+  private serial<T>(run: () => Promise<T>): Promise<T> {
+    const next = this.searchChain.then(run, run);
+    this.searchChain = next.catch(() => undefined);
+    return next;
+  }
+
+  analyzePosition(
+    fen: string,
+    depth: number,
+    budgetMs?: number,
+  ): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] }> {
+    return this.serial(() => this.analyzePositionNow(fen, depth, budgetMs));
+  }
+
+  analyzeFan(
+    fen: string,
+    lines: number,
+    depth: number,
+    budgetMs: number,
+    searchmoves: readonly string[] | null,
+  ): Promise<Array<{ rank: number; evaluation: number; mate: number | null; bound: 'lower' | 'upper' | null; moves: string[] }>> {
+    return this.serial(() => this.analyzeFanNow(fen, lines, depth, budgetMs, searchmoves));
+  }
+
   /** Signal a genuinely new game — sends `ucinewgame` ONCE so the hash is
    *  cleared between games, never between positions of the same game. */
   newGame(): void {
@@ -442,7 +498,7 @@ class DedicatedWorker {
    *  caller lost the position. With a budget the search returns whatever depth
    *  it reached in time — and reports it, so the caller can record what it
    *  actually got instead of what it asked for. */
-  analyzePosition(
+  private analyzePositionNow(
     fen: string,
     depth: number,
     budgetMs?: number,
@@ -539,7 +595,7 @@ class DedicatedWorker {
    * before proving this", and a count built on one is a count that can be wrong
    * in either direction. The bound travels on the line so the reader decides.
    */
-  analyzeFan(
+  private analyzeFanNow(
     fen: string,
     lines: number,
     depth: number,
@@ -1143,15 +1199,14 @@ function resetAnalysisPool(): void {
   _warmPromise = null;
 }
 
-/** Per-position search budget for the REVIEW's key-moment re-search.
+/** Per-position search budget for the review's per-move deep work on a
+ *  flagged ply (the sacrifice verify, a best-move refine the read lacked).
  *
- *  8s, not 3s (David 2026-09-06: "Set it."). The review re-searches at most
- *  REVIEW_MAX_DEEP_PLIES (12) key plies at REVIEW_DEEP_DEPTH (16), and since
- *  the non-blocking open that pass runs BEHIND an already-open review, so its
- *  ceiling (12 × 8s ≈ 96s, and only when every key ply is slow) is not time
- *  the student waits for. What 3s bought was the wrong verdict: in-browser
- *  Stockfish stopped near depth 13 and graded 6...Nb6 (52cp at d14, 128cp at
- *  d16) a good move. A quiet position still stops the moment depth 16 lands. */
+ *  8s, not 3s (David 2026-09-06: "Set it."). What 3s bought was the wrong
+ *  verdict: in-browser Stockfish stopped near depth 13 and graded 6...Nb6 (52cp
+ *  at d14, 128cp at d16) a good move. A quiet position still stops the moment
+ *  its depth lands. The positions themselves are read depth-bounded by the
+ *  read-ahead (`startReviewReads`), not by this budget. */
 const REVIEW_POSITION_BUDGET_MS = 8_000;
 
 /** Per-position budget for the sweep's BEST-MOVE refinement — the only deep
@@ -1201,28 +1256,6 @@ const BATCH_POSITION_BUDGET_MS = 800;
 const BATCH_SHALLOW_DEPTH = 12;
 const BATCH_SHALLOW_BUDGET_MS = 200;
 
-/** Ceiling on how many plies ONE review re-searches deep.
- *
- *  Without it the review's cost is set by how NOISY the shallow curve is rather
- *  than by how interesting the game is: the selector deepens any swing ≥
- *  TWO_PASS_SWING_CP (50cp), and a depth-12 eval still carries a few tens of
- *  centipawns of search noise, so a swingy game can nominate thirty-odd plies
- *  and quietly put the slowness back into the review. Ranking by swing size and
- *  stopping at the cap spends the deep budget on the biggest moments first.
- *
- *  Findings are never dropped to fit: a swing that is already mistake-sized (or
- *  touches a mate score) is deepened whatever the count — the cap only rations
- *  the ambiguous small ones. 12 plies × REVIEW_POSITION_BUDGET_MS bounds a
- *  typical review at well under a minute. */
-const REVIEW_MAX_DEEP_PLIES = 24;
-/* 24, not 12 (David's Alapin, audit 2026-09-06): the fixture's 6...Nb6 pair
- * swung 51cp shallow and was NEVER re-searched in five prod runs — not for
- * want of depth or budget, but because the game's later blunders (3.6-point
- * swings) filled all six pair slots first and the cap dropped the borderline
- * pair every time. Twelve pairs holds a game's certain swings AND its
- * borderline ones. The cost is bounded (24 × REVIEW_POSITION_BUDGET_MS) and,
- * since the sweep-then-deepen open below, runs behind an open review. */
-
 /** Depth the REVIEW re-searches its key moments at.
  *
  *  `go depth N movetime B` stops at whichever limit lands first, so N is a
@@ -1244,7 +1277,7 @@ const REVIEW_MAX_DEEP_PLIES = 24;
  *  a good move. 16 = ANALYSIS_DEPTH, so a completed deep pass honestly earns
  *  the ANALYSIS_DEPTH stamp it already claims. Still below BEST_MOVE_DEPTH
  *  (18): the review is not the drill-solution search. */
-const REVIEW_DEEP_DEPTH = 16;
+const REVIEW_DEEP_DEPTH = REVIEW_READ_DEPTH;
 /** The grade of a move once the position before it is known to be a forced
  *  MATE for the mover (clean-pass review walk 2026-10-04, G1 29.Bxd5: graded
  *  an INACCURACY off a +12.49 read of the position before, while the refined
@@ -1291,78 +1324,12 @@ export async function mateKeptDeeper(
  *  indistinguishable from the noise, and flagging it fills My Mistakes and the
  *  weakness profile with moves that were fine. The sweep therefore commits only
  *  to mistake-and-worse, which is well clear of its own noise floor. Real
- *  inaccuracies are surfaced by the review, which re-searches every moment that
- *  moved the eval at all (TWO_PASS_SWING_CP) at REVIEW_DEEP_DEPTH.
+ *  inaccuracies are surfaced by the review, which reads every position at
+ *  REVIEW_DEEP_DEPTH before it grades (`startReviewReads`).
  *
  *  Lowering the sweep's depth without raising this floor would have been the
  *  quiet way to make the app FASTER and WRONGER. */
 const BATCH_GRADE_FLOOR_CP = MISTAKE_CP;
-/** Swing between adjacent SHALLOW evals that is CERTAINLY worth a deep look. */
-export const TWO_PASS_SWING_CP = INACCURACY_CP;
-/** Swing between adjacent SHALLOW evals that earns a deep re-search at all.
- *
- *  This sits BELOW the smallest verdict-changing swing on purpose. The old
- *  reasoning — "INACCURACY_CP is the smallest swing that changes a
- *  classification, so a smaller one cannot change the verdict" — is true of
- *  the DEEP eval and false of the SHALLOW one it was applied to: the sweep's
- *  own note above puts 30-50cp of search noise on a depth-10 read, so a real
- *  52cp inaccuracy routinely shows up as ~37cp shallow and was never looked at
- *  again. David's fixture (2026-09-05, Alapin 6...Nb6): native Stockfish reads
- *  it at 37cp (d10), 54 (d12), 52 (d14), 126 (d16) — the review called it GOOD
- *  because the shallow read fell under the bar and the deep pass never ran.
- *  Candidacy must clear the verdict threshold MINUS the noise, or the deep
- *  pass only ever confirms what the shallow one already knew. The cap
- *  (REVIEW_MAX_DEEP_PLIES) still bounds the cost; the ranking still spends it
- *  on the biggest swings first. */
-export const DEEP_DIVE_CANDIDATE_CP = Math.round(INACCURACY_CP / 2);
-
-/** NB this is now the REVIEW's key-moment selector (the sweep no longer runs a
- *  second pass). Because the threshold is INACCURACY_CP — the smallest swing
- *  that can change a classification — every ply the review could grade as
- *  anything other than `good` is re-searched deep. A quiet ply left shallow can
- *  only ever grade `good`, so the review's verdicts are all deep verdicts. */
-
-/**
- * Indices (into `shallow`, i.e. FEN indices) to re-search deep: BOTH ends of any
- * adjacent pair whose swing reaches TWO_PASS_SWING_CP, or that touches a mate
- * score. Both ends, so the deep grade is computed from two evals of the SAME
- * depth. Pure; exported for the gate.
- */
-export function selectCriticalPlies(
-  shallow: readonly (number | null)[],
-  from = 0,
-  /** Ply budget. Omitted = take every qualifying pair (the sweep's old
-   *  behaviour, and what the gates assert). See REVIEW_MAX_DEEP_PLIES. */
-  maxPlies?: number,
-): number[] {
-  const pairs: { i: number; swing: number; certain: boolean }[] = [];
-  for (let i = Math.max(0, from); i < shallow.length - 1; i++) {
-    const a = shallow[i];
-    const b = shallow[i + 1];
-    if (a === null || b === null) continue;
-    const swing = Math.abs(capEval(a) - capEval(b));
-    const mateish = Math.abs(a) >= MATE_EVAL_THRESHOLD || Math.abs(b) >= MATE_EVAL_THRESHOLD;
-    if (swing >= DEEP_DIVE_CANDIDATE_CP || mateish) {
-      // "Certain" = already big enough to be a finding rather than curve noise,
-      // so it is deepened even when the cap is spent.
-      pairs.push({ i, swing, certain: mateish || swing >= MISTAKE_CP });
-    }
-  }
-
-  const picked = new Set<number>();
-  const take = (p: { i: number }): void => { picked.add(p.i); picked.add(p.i + 1); };
-  if (maxPlies === undefined) {
-    pairs.forEach(take);
-  } else {
-    pairs.filter((p) => p.certain).forEach(take);
-    for (const p of pairs.filter((p) => !p.certain).sort((x, y) => y.swing - x.swing)) {
-      if (picked.size >= maxPlies) break;
-      take(p);
-    }
-  }
-  return [...picked].sort((x, y) => x - y);
-}
-
 /** How many leading positions the BULK sweep may skip evaluating: the index of
  *  the first move that leaves the opening book (= `moves.length` if the whole
  *  game is theory).
@@ -1376,10 +1343,7 @@ export function selectCriticalPlies(
  *  re-graded by the engine in the bulk sweep — it reads `book`. The REVIEW of an
  *  opened game still evaluates every ply and keeps that catch. */
 function firstNonBookPly(moves: readonly string[]): number {
-  for (let i = 0; i < moves.length; i++) {
-    if (!isBookLine(moves.slice(0, i + 1))) return i;
-  }
-  return moves.length;
+  return leadingBookPlies(moves);
 }
 
 /** Consecutive position timeouts on ONE worker that mean it's wedged/dead (a
@@ -1557,6 +1521,9 @@ export async function analyzeGameOnWorker(
     depth: number,
     budgetMs: number,
   ): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] } | null> => {
+    // A review holds the engine: yield before every position, not only
+    // between games (see holdBatchAnalysis).
+    await waitWhilePaused();
     try {
       const r = await worker.analyzePosition(fens[i], depth, budgetMs);
       consecutiveTimeouts = 0;
@@ -1631,9 +1598,9 @@ export async function analyzeGameOnWorker(
   const annotations: MoveAnnotation[] = [];
   const mistakeIndices: number[] = [];
   // BOOK-move exemption (David 2026-08-28): a theory move is never an error.
-  // Flips false the moment the played line leaves book; short-circuits the DB
-  // scan for the rest of the game.
-  let stillBook = true;
+  // One definition of theory for every grader: what masters play
+  // (`leadingBookPlies`), the name DB only where masters are unknown.
+  const bookPlies = leadingBookPlies(moves);
 
   for (let moveIdx = 0; moveIdx < moves.length; moveIdx++) {
     const isWhiteMove = moveIdx % 2 === 0;
@@ -1645,8 +1612,7 @@ export async function analyzeGameOnWorker(
 
     let classification: MoveClassification = 'good';
 
-    const moveIsBook = stillBook && isBookLine(moves.slice(0, moveIdx + 1));
-    if (!moveIsBook) stillBook = false;
+    const moveIsBook = moveIdx < bookPlies;
 
     if (evalBefore !== null && evalAfter !== null) {
       // cpLoss is clamped through capEval so a mate score (±30000) can't
@@ -1781,6 +1747,36 @@ export async function analyzeGameOnWorker(
   };
 }
 
+/** The runner-up's distance below the best move at `fen`, mover's view (cp).
+ *  Infinity never: a position with one legal move is forced, not great, so it
+ *  returns null. Remembered per position for the session. */
+const _onlyMoveGapCache = new Map<string, number | null>();
+async function onlyMoveGapCp(
+  fen: string,
+  worker: () => Promise<DedicatedWorker | null>,
+  budgetMs: number,
+): Promise<number | null> {
+  const key = evalCacheKey(fen);
+  if (_onlyMoveGapCache.has(key)) return _onlyMoveGapCache.get(key) ?? null;
+  let gap: number | null = null;
+  try {
+    const board = new Chess(fen);
+    if (board.moves().length > 1) {
+      const w = await worker();
+      if (w) {
+        const fan = await w.analyzeFan(fen, 2, REVIEW_DEEP_DEPTH, budgetMs, null);
+        if (fan.length >= 2) {
+          const sign = board.turn() === 'w' ? 1 : -1;
+          const scores = fan.map((l) => sign * capEval(l.evaluation)).sort((a, b) => b - a);
+          gap = scores[0] - scores[1];
+        }
+      }
+    }
+  } catch { gap = null; }
+  _onlyMoveGapCache.set(key, gap);
+  return gap;
+}
+
 /**
  * Fallback: analyze a single game with the singleton engine (no pool).
  */
@@ -1794,12 +1790,15 @@ async function analyzeGamePositions(
    *  David 2026-09-05: "4 games in 4 minutes — too slow"). The review path
    *  (analyzeSingleGame) leaves it undefined and keeps full depth. */
   positionBudgetMs?: number,
-  /** Review's COLD open: walk the full curve (every ply, no opening gap) but
-   *  skip the key-moment deep dive so the student is on the board in sweep
-   *  time; the dive then runs behind the open review (CoachReviewSessionPage
-   *  deepens because the stamped depth is shallow). */
-  opts: { sweepOnly?: boolean } = {},
-): Promise<{ annotations: MoveAnnotation[]; achievedDepth: number } | null> {
+  opts: {
+    /** Grade ONLY from reads already in the eval cache — the review's own
+     *  read-ahead (`startReviewReads`). No curve search and no key-moment dive
+     *  runs: a ply with no read is left ungraded rather than graded off a draft
+     *  (2026-10-13). The deep per-move work on flagged plies (the cost, the
+     *  best move, a sacrifice's verify) still runs — it is review-depth already. */
+    readsOnly?: boolean;
+  } = {},
+): Promise<{ annotations: MoveAnnotation[]; achievedDepth: number; depthAt: number[]; bookPlies: number } | null> {
   const { fens, moves } = replayPgnToFens(game.pgn);
   if (fens.length < 2) return null;
 
@@ -1885,7 +1884,9 @@ async function analyzeGamePositions(
 
   // ── CURVE PASS (cache-first). A position the sweep already scored costs
   // nothing here, which is why the review of a swept game starts near-instantly.
-  const cached = await lookupPositionEvals(fens, BATCH_SHALLOW_DEPTH);
+  // The read-ahead stores the depth each read REACHED, and the cache keeps the
+  // deepest read of a position, so under `readsOnly` every cached read counts.
+  const cached = await lookupPositionEvals(fens, opts.readsOnly ? 1 : BATCH_SHALLOW_DEPTH);
   const storedVerdicts = await getVerdicts(moves.map((m, i) => verdictKey(fens[i], m)));
   const verdictsToSave: Parameters<typeof saveVerdict>[0][] = [];
   cached.forEach((hit, i) => {
@@ -1896,12 +1897,17 @@ async function analyzeGamePositions(
     // boundary, so a re-opened review had no punishing line on any ply the
     // dive did not re-search — see PositionEvalRecord.pv).
     if (hit.pv?.length) pvAt[i] = hit.pv;
-    if (hit.depth >= REVIEW_DEEP_DEPTH) deep[i] = hit.evaluation;
+    if (hit.depth >= REVIEW_DEEP_DEPTH) {
+      deep[i] = hit.evaluation;
+      // The review-depth read carries its own best move: reuse it rather than
+      // spend a second, deeper search on every flagged ply.
+      if (hit.bestMove) deepBest[i] = hit.bestMove;
+    }
   });
   const pendingIdx: number[] = [];
   for (let i = skipBook; i < fens.length; i++) if (evals[i] === null) pendingIdx.push(i);
 
-  const pooled = pendingIdx.length === 0
+  const pooled = pendingIdx.length === 0 || opts.readsOnly
     ? { evals: [] as (number | null)[], pvs: [] as string[][], achievedDepth: BATCH_SHALLOW_DEPTH }
     : await evaluateFensPooled(pendingIdx.map((i) => fens[i]), onPosition, curveBudgetMs, BATCH_SHALLOW_DEPTH);
   if (pooled) {
@@ -2002,31 +2008,10 @@ async function analyzeGamePositions(
   };
 
   const annotations: MoveAnnotation[] = [];
-  let deepDiveComplete = false;
   try {
-    if (isReview && !opts.sweepOnly) {
-      const keyPlies = selectCriticalPlies(evals, skipBook, REVIEW_MAX_DEEP_PLIES);
-      let searched = 0;
-      for (const i of keyPlies) {
-        if (deep[i] !== null) { searched++; continue; }
-        onPosition?.(fens.length, fens.length);
-        try {
-          const a = await deepSearch(fens[i], REVIEW_DEEP_DEPTH);
-          deep[i] = a.evaluation;
-          deepBest[i] = a.bestMove || null;
-          pvAt[i] = a.pv.length ? a.pv : (a.bestMove ? [a.bestMove] : []);
-          searched++;
-          if (Number.isFinite(a.depth) && a.depth > 0) {
-            depthAt[i] = Math.max(depthAt[i], a.depth);
-            toStore.push({ fen: fens[i], evaluation: a.evaluation, depth: a.depth, bestMove: a.bestMove || null, pv: pvAt[i] });
-          }
-        } catch {
-          // Keep the curve value for this ply — a lost deep search costs
-          // precision on one move, never the review.
-        }
-      }
-      deepDiveComplete = searched === keyPlies.length;
-    }
+    // The key-moment dive is gone (2026-10-13): a review reads EVERY position
+    // at review depth first (`startReviewReads`) and grades with `readsOnly`,
+    // so there is no draft curve left for a dive to correct.
 
     for (let i = skipBook; i < fens.length; i++) {
       if (evals[i] !== null && depthAt[i] > 0) achievedDepth = Math.min(achievedDepth, depthAt[i]);
@@ -2038,7 +2023,9 @@ async function analyzeGamePositions(
     const evalAfterAt = (i: number): number | null => (bothDeep(i) ? deep[i + 1] : evals[i + 1]);
 
     // BOOK-move exemption (David 2026-08-28): theory moves are never errors.
-    let stillBook = true;
+    // Theory is what MASTERS play (`leadingBookPlies`), so a transposition into
+    // a known line is book — not only the exact move order of a named one.
+    const bookPlies = leadingBookPlies(moves);
     for (let moveIdx = 0; moveIdx < moves.length; moveIdx++) {
       const isWhiteMove = moveIdx % 2 === 0;
       const color: 'white' | 'black' = isWhiteMove ? 'white' : 'black';
@@ -2056,8 +2043,7 @@ async function analyzeGamePositions(
       // What the move cost, from ONE search (see the pricing pass below).
       let costCp: number | null = null;
 
-      const moveIsBook = stillBook && isBookLine(moves.slice(0, moveIdx + 1));
-      if (!moveIsBook) stillBook = false;
+      const moveIsBook = moveIdx < bookPlies;
 
       if (evalBefore !== null && evalAfter !== null) {
         // Clamp through capEval so a mate score can't inflate stored cpLoss
@@ -2186,11 +2172,29 @@ async function analyzeGamePositions(
         classification = 'book'; // theory move, evals unavailable — still not a mistake
       }
 
+      // GREAT (G3) — the only good move, PROVEN by the runner-up: the student
+      // played the read's best move, the game was still contested, and every
+      // other move falls off the cliff (`ONLY_MOVE_CP`, the one criticality bar).
+      // Only the review grades it: it costs one two-line search per such move,
+      // remembered per position so a regrade never pays twice.
+      if (opts.readsOnly && classification === 'good' && evalBefore !== null) {
+        const best = deepBest[moveIdx];
+        const moverWin = winPercent(isWhiteMove ? evalBefore : -evalBefore);
+        if (best && bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], best) && moverWin > 10 && moverWin < 90) {
+          const gap = await onlyMoveGapCp(fens[moveIdx], ensureDeepWorker, deepBudgetMs);
+          if (gap !== null && gap >= ONLY_MOVE_CP) classification = 'great';
+        }
+      }
+
       // ONE VERDICT PER MOVE (David 2026-10-06): a stored grade decides; its
       // best move and cost fill in where this search found none. A move nobody
       // graded yet is stored now, so the next open says the same thing.
       {
-        const sv = storedVerdicts.get(verdictKey(fens[moveIdx], moves[moveIdx]));
+        const stored = storedVerdicts.get(verdictKey(fens[moveIdx], moves[moveIdx]));
+        // A review DRAFT verdict (below VERDICT_TRUST_DEPTH) decides nothing a
+        // deeper read graded — it is replaced below instead (2026-10-13).
+        const ownDepth = Math.min(depthAt[moveIdx] || 0, depthAt[moveIdx + 1] || 0) || null;
+        const sv = stored && verdictOutranks(stored, ownDepth) ? stored : undefined;
         if (sv) {
           const next = applyVerdict(classification, sv, moveIsBook);
           // ONE READ PER POSITION (unity U4): the stored best move wins, so the
@@ -2204,7 +2208,7 @@ async function analyzeGamePositions(
             classification = next;
           }
         } else if (classification !== 'book' && evalBefore !== null && evalAfter !== null) {
-          verdictsToSave.push({ fenBefore: fens[moveIdx], san: moves[moveIdx], label: toVerdictLabel(classification), cpLoss: costCp, bestUci: bestMove, depth: depthAt[moveIdx] || null, source: 'review' });
+          verdictsToSave.push({ fenBefore: fens[moveIdx], san: moves[moveIdx], label: toVerdictLabel(classification), cpLoss: costCp, bestUci: bestMove, depth: ownDepth, source: 'review' });
         }
       }
       // Persist the engine lines at a flagged ply: the punishment after the
@@ -2244,17 +2248,13 @@ async function analyzeGamePositions(
 
   return {
     annotations,
-    // WHAT THIS RUN COMMITS TO, which is not the same as the shallowest search
-    // it ran. A completed review re-searched every moment that could change a
-    // verdict at REVIEW_DEEP_DEPTH, so it claims ANALYSIS_DEPTH and
-    // `gameNeedsAnalysis` leaves it alone — stamping the quiet plies' shallow
-    // depth instead would re-run the whole analysis on every re-open. The sweep
-    // claims only its shallow pass, which is what schedules the deep dive.
-    // A game where every position threw measured nothing, so it claims nothing —
-    // 0 reads as stale, which is exactly right.
-    achievedDepth: deepDiveComplete
-      ? ANALYSIS_DEPTH
-      : (Number.isFinite(achievedDepth) ? Math.min(achievedDepth, ANALYSIS_DEPTH) : 0),
+    // The shallowest read this run graded from. A review graded from its
+    // read-ahead claims review depth; the sweep claims only its draft, which is
+    // what makes the next open read the game properly. A game where every
+    // position threw measured nothing, so it claims nothing — 0 reads as stale.
+    achievedDepth: Number.isFinite(achievedDepth) ? Math.min(achievedDepth, ANALYSIS_DEPTH) : 0,
+    depthAt,
+    bookPlies: skipBook,
   };
 }
 
@@ -2314,11 +2314,10 @@ export async function generateInsightsForGame(
 export async function analyzeSingleGame(
   gameId: string,
   onProgress?: (phase: string) => void,
-  opts: { sweepOnly?: boolean } = {},
 ): Promise<MoveAnnotation[] | null> {
   const inFlight = _singleGameInFlight.get(gameId);
   if (inFlight) return inFlight;
-  const run = analyzeSingleGameUncoalesced(gameId, onProgress, opts);
+  const run = analyzeSingleGameUncoalesced(gameId, onProgress);
   _singleGameInFlight.set(gameId, run);
   try { return await run; } finally { _singleGameInFlight.delete(gameId); }
 }
@@ -2326,7 +2325,6 @@ export async function analyzeSingleGame(
 async function analyzeSingleGameUncoalesced(
   gameId: string,
   onProgress?: (phase: string) => void,
-  opts: { sweepOnly?: boolean } = {},
 ): Promise<MoveAnnotation[] | null> {
   const game = await db.games.get(gameId);
   if (!game) return null;
@@ -2336,67 +2334,36 @@ async function analyzeSingleGameUncoalesced(
     return game.annotations ?? null;
   }
 
-  // The review is BLOCKED on this one game — pause the bulk batch so it
-  // stops competing for the engine/CPU, and surface real per-move progress
-  // (a minutes-long spinner with no counter reads as a hang).
-  pauseBatchAnalysis();
+  // 🔒 ONE GRADER FOR A SINGLE GAME (2026-10-13). This used to grade off the
+  // sweep's draft curve and deepen only the plies that curve called swings —
+  // so a draft decided both the grades AND which moves got a real look. It now
+  // reads every position at review depth (the review's own read-ahead, run to
+  // the end) and grades from those reads only. The batch is held off the engine
+  // for the whole run (a counted hold — see holdBatchAnalysis).
+  const releaseHold = holdBatchAnalysis();
   const reviewStartedAt = Date.now();
   try {
+    const { fens } = replayPgnToFens(game.pgn);
+    const reads = startReviewReads(fens);
+    const plies = Math.max(1, fens.length - 1);
+    const unsubscribe = reads.onProgress((r) => {
+      onProgress?.(`Analyzing move ${Math.max(0, Math.min(plies, r))} of ${plies}…`);
+    });
     onProgress?.('Analyzing positions with Stockfish…');
-    const result = await analyzeGamePositions(game, (current, total) => {
-      onProgress?.(`Analyzing move ${current} of ${total}…`);
-    }, undefined, opts);
-    if (!result) return null;
-    const { annotations, achievedDepth } = result;
-
-    // Store back to DB — stamped with the depth the search REACHED, so a game
-    // analysed on a slow engine is re-deepened next time it is opened on a fast
-    // one. See the note in `analyzeGamePositions`.
-    await db.games.update(gameId, { annotations, fullyAnalyzed: true, analysisDepth: achievedDepth });
-
-    // RECORD what this analysis found (WO-LOOP-01) — the same door the batch
-    // uses; the recorders are idempotent per game.
-    //
-    // 🔒 FIRE-AND-FORGET, AND THE `await` THAT WAS HERE WAS A REAL REGRESSION
-    // (2026-09-20). This function is what `CoachReviewSessionPage` awaits before
-    // the walk becomes startable, so awaiting the sweep put mistake-puzzle
-    // generation (which can invoke Stockfish on a game with no stored best
-    // move), the misconception attribution, tactic classification and a dossier
-    // refresh IN FRONT OF THE STUDENT — twice, since the open and the deepen
-    // both land here. The comment one line up said "never blocks the review"
-    // while the code blocked it.
-    //
-    // Nothing about this game's OWN recording changes what this walk says: the
-    // recurrence clause reads PRIOR games (`recurrenceFor` excludes the current
-    // gameId), so these rows are for the NEXT game. There is no ordering
-    // requirement, only a completion one — which a detached promise satisfies.
-    void generateInsightsForGame(gameId, game.source, annotations, { habits: !opts?.sweepOnly })
-      .then((r) => logAppAudit({
-        kind: 'coach-surface-migrated',
-        category: 'subsystem',
-        source: 'gameAnalysisService.analyzeSingleGame.record',
-        summary: `recorded ${r.misconceptionsLogged} misconception(s) for ${gameId} behind the open`,
-      }))
-      .catch((err: unknown) => logAppAudit({
-        kind: 'stockfish-error',
-        category: 'subsystem',
-        source: 'gameAnalysisService.analyzeSingleGame.record',
-        summary: `insight recording failed for ${gameId}: ${err instanceof Error ? err.message : String(err)}`,
-      }));
-
-    // The OTHER half of the split (see BATCH_SHALLOW_DEPTH): the review is the
-    // surface with a person watching a progress bar, and it was the one measured
-    // at 216s before the rework. Measure it directly rather than by feel.
+    await reads.done;
+    unsubscribe();
+    const annotations = await finishReviewReads(gameId);
+    if (!annotations) return null;
+    const stamped = await db.games.get(gameId);
     void logAppAudit({
       kind: 'analysis-review-done',
       category: 'subsystem',
       source: 'gameAnalysisService.analyzeSingleGame',
-      summary: `review of ${game.white} vs ${game.black} in ${((Date.now() - reviewStartedAt) / 1000).toFixed(1)}s — ${annotations.length} moves, depth=${achievedDepth}`,
+      summary: `review of ${game.white} vs ${game.black} in ${((Date.now() - reviewStartedAt) / 1000).toFixed(1)}s — ${annotations.length} moves, depth=${stamped?.analysisDepth ?? 0}`,
     });
-
     return annotations;
   } finally {
-    resumeBatchAnalysis();
+    releaseHold();
   }
 }
 
@@ -2926,6 +2893,171 @@ export async function analyzeAllGames(
  *  dive will not invalidate. One door for every "a game just arrived" path
  *  (the import batch's newest game, a finished Play game). Coalesced with an
  *  open that starts meanwhile (`analyzeSingleGame` shares one run). */
+// ─── THE REVIEW READ-AHEAD (2026-10-13) ─────────────────────────────────────
+//
+// 🔒 A REVIEW SPEAKS A MOVE ONLY FROM A REVIEW-DEPTH READ. The walk used to be
+// built from the sweep's draft curve (200 ms a position — on the phone's asm
+// engine a few plies deep, starved further by four batch workers) and the deep
+// pass ran behind it and was "held for the next open". So the first, and often
+// only, open a student hears graded 3.c3, 6...e6, 7.Be3 and 7...Nf6 as mistakes
+// that each cost under 0.4 points (chesscom-1040709576), and the turning point
+// it named came from the same draft.
+//
+// Now the review reads every position, in walk order, to REVIEW_DEEP_DEPTH — a
+// DEPTH bound, not a clock, so one game gets one grade on every device — a few
+// moves ahead of the walk, and the walk waits at the edge rather than speak a
+// move it has not read. Each read is saved as it lands, so a re-open (or a
+// review cut short) resumes where it stopped and grades identically.
+
+/** A depth-bounded read still needs a ceiling so a wedged worker cannot stall
+ *  the walk forever. It is a safety, not a budget: a phone reaches depth 16 in
+ *  ~3-8 s, so this only ever fires on a dead worker. */
+const REVIEW_READ_SAFETY_MS = 30_000;
+
+export { REVIEW_READ_DEPTH };
+
+export interface ReviewReads {
+  /** Highest ply-position index i with positions 0..i all read (-1: none). */
+  readyThrough: () => number;
+  /** Positions in the game (plies + 1). */
+  total: number;
+  /** Read from this index next — the student jumped ahead. */
+  focus: (index: number) => void;
+  /** Called with readyThrough every time it advances. Returns an unsubscribe. */
+  onProgress: (cb: (readyThrough: number) => void) => () => void;
+  /** Settles when every position is read, or the reads were stopped. */
+  done: Promise<void>;
+  stop: () => void;
+}
+
+export function startReviewReads(fens: readonly string[]): ReviewReads {
+  const total = fens.length;
+  const read: boolean[] = fens.map(() => false);
+  const taken: boolean[] = fens.map(() => false);
+  let cursor = 0;
+  let stopped = false;
+  let ready = -1;
+  const listeners = new Set<(r: number) => void>();
+  const advance = (): void => {
+    let r = ready;
+    while (r + 1 < total && read[r + 1]) r += 1;
+    if (r === ready) return;
+    ready = r;
+    for (const cb of listeners) { try { cb(ready); } catch { /* a listener never stops the reads */ } }
+  };
+  const nextIndex = (): number => {
+    for (let i = cursor; i < total; i++) if (!read[i] && !taken[i]) return i;
+    for (let i = 0; i < cursor; i++) if (!read[i] && !taken[i]) return i;
+    return -1;
+  };
+  let finish: () => void = () => undefined;
+  const done = new Promise<void>((r) => { finish = r; });
+  void (async () => {
+    // The read itself may already exist — this game opened before, or the
+    // position is shared with another game — so the cache is asked first.
+    const cachedHits = await lookupPositionEvals(fens, REVIEW_DEEP_DEPTH);
+    cachedHits.forEach((_, i) => { read[i] = true; });
+    advance();
+    if (read.every(Boolean) || stopped) { finish(); return; }
+    let workers: DedicatedWorker[] = [];
+    try {
+      workers = await acquirePool(Math.max(1, Math.min(WORKER_POOL_SIZE, total)));
+    } catch { workers = []; }
+    const readOne = async (i: number, w: DedicatedWorker | null): Promise<void> => {
+      try {
+        const a = w
+          ? await w.analyzePosition(fens[i], REVIEW_DEEP_DEPTH, REVIEW_READ_SAFETY_MS)
+          : await (async () => {
+            const r = await stockfishEngine.analyzeWithBudget(fens[i], REVIEW_DEEP_DEPTH, REVIEW_READ_SAFETY_MS);
+            return { evaluation: r.evaluation, bestMove: r.bestMove, depth: r.depth, pv: r.topLines?.[0]?.moves ?? [] };
+          })();
+        if (Number.isFinite(a.depth) && a.depth > 0) {
+          await storePositionEvals([{ fen: fens[i], evaluation: a.evaluation, depth: a.depth, bestMove: a.bestMove || null, pv: a.pv }]);
+        }
+      } catch { /* an unread position stays ungraded; the walk never invents it */ }
+      read[i] = true;
+      advance();
+    };
+    const run = async (w: DedicatedWorker | null): Promise<void> => {
+      w?.newGame();
+      for (;;) {
+        if (stopped) return;
+        const i = nextIndex();
+        if (i < 0) return;
+        taken[i] = true;
+        await readOne(i, w);
+      }
+    };
+    try {
+      await Promise.all(workers.length > 0 ? workers.map((w) => run(w)) : [run(null)]);
+    } finally {
+      if (workers.length > 0) releasePool(workers);
+      finish();
+    }
+  })().catch(() => finish());
+  return {
+    readyThrough: () => ready,
+    total,
+    focus: (index: number) => { cursor = Math.max(0, Math.min(total - 1, index)); },
+    onProgress: (cb) => { listeners.add(cb); return () => { listeners.delete(cb); }; },
+    done,
+    stop: () => { stopped = true; },
+  };
+}
+
+/** The game cut to its first `plies` moves, headers kept (a `[FEN]` start
+ *  survives), so the review can grade the prefix its reads cover. */
+export function gamePrefix(game: GameRecord, plies: number): GameRecord {
+  try {
+    const c = new Chess();
+    c.loadPgn(game.pgn);
+    while (c.history().length > plies) c.undo();
+    return { ...game, pgn: c.pgn() };
+  } catch {
+    return game;
+  }
+}
+
+/** Grade the review's first `plies` moves from the read-ahead's reads only —
+ *  never a draft (see `startReviewReads`). Null when the game cannot replay. */
+export async function gradeReviewThrough(game: GameRecord, plies: number): Promise<MoveAnnotation[] | null> {
+  await warmBookLine(replayPgnToFens(game.pgn).moves, 'review-grade');
+  const result = await analyzeGamePositions(gamePrefix(game, plies), undefined, undefined, { readsOnly: true });
+  return result?.annotations ?? null;
+}
+
+/** The read-ahead covered the whole game: grade it once more in full, store it
+ *  as the game's analysis (one grade, read by every surface), and record what
+ *  it found for the student's record — from the trusted reads, never the
+ *  sweep's draft. */
+export async function finishReviewReads(gameId: string): Promise<MoveAnnotation[] | null> {
+  const game = await db.games.get(gameId);
+  if (!game) return null;
+  await warmBookLine(replayPgnToFens(game.pgn).moves, 'review-grade');
+  const result = await analyzeGamePositions(game, undefined, undefined, { readsOnly: true });
+  if (!result) return null;
+  await db.games.update(gameId, { annotations: result.annotations, fullyAnalyzed: true, analysisDepth: result.achievedDepth });
+  // THE DEPTH EACH POSITION REACHED, observable (2026-10-13: the phone's
+  // review graded from draft reads and nothing said how deep they were).
+  const read = result.depthAt.slice(result.bookPlies).filter((d) => d > 0);
+  const shallow = read.filter((d) => d < REVIEW_READ_DEPTH).length;
+  void logAppAudit({
+    kind: 'review-reads-depth',
+    category: 'subsystem',
+    source: 'gameAnalysisService.finishReviewReads',
+    summary: `${read.length} positions read, ${shallow} below depth ${REVIEW_READ_DEPTH}, shallowest ${read.length ? Math.min(...read) : 0}`,
+    details: JSON.stringify({ gameId, target: REVIEW_READ_DEPTH, shallow, depthAt: result.depthAt }),
+  });
+  void generateInsightsForGame(gameId, game.source, result.annotations, { habits: true })
+    .catch((err: unknown) => logAppAudit({
+      kind: 'stockfish-error',
+      category: 'subsystem',
+      source: 'gameAnalysisService.finishReviewReads',
+      summary: `insight recording failed for ${gameId}: ${err instanceof Error ? err.message : String(err)}`,
+    }));
+  return result.annotations;
+}
+
 export async function prepareReview(gameId: string, reason: string): Promise<void> {
   const fresh = await db.games.get(gameId);
   if (fresh && gameNeedsAnalysis(fresh)) await analyzeSingleGame(gameId);
@@ -3073,5 +3205,6 @@ export function runBackgroundAnalysis(): void {
 export const __testables = {
   evaluateFensPooled, drainGameQueue, POOL_SPAWN_TIMEOUT_MS, ASM_POOL_SPAWN_TIMEOUT_MS, WORKER_POOL_SIZE, resolveWorkerPoolSize,
   resetAnalysisPool, WARM_PING_TIMEOUT_MS, BATCH_SHALLOW_DEPTH, BATCH_SHALLOW_BUDGET_MS, BATCH_POSITION_BUDGET_MS,
-  REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS, BATCH_GRADE_FLOOR_CP, REVIEW_MAX_DEEP_PLIES,
+  REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS, BATCH_GRADE_FLOOR_CP,
+  batchHolds: (): number => _batchHolds,
 };

@@ -4,29 +4,28 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**147 lines · 6 exports · 4 importers · 3 tests · 0 audits**
+**173 lines · 7 exports · 3 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:952) — names `isReviewUncapped`
+- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:993) — names `isReviewUncapped`
 
 ## Who calls in
 
 - `src/components/Coach/CoachGameReview.tsx`
-- `src/components/Coach/CoachReviewSessionPage.tsx`
 - `src/services/reviewNarrationBuild.test.ts`
 - `src/services/shallowLinesNotNarrated.test.ts`
 
 ## Exports and every call site
 
 ### `isReviewUncapped` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:616`
-- `src/components/Coach/CoachGameReview.tsx:1293`
-- `src/components/Coach/CoachGameReview.tsx:1747`
-- `src/components/Coach/CoachGameReview.tsx:2517`
+- `src/components/Coach/CoachGameReview.tsx:644`
+- `src/components/Coach/CoachGameReview.tsx:1349`
+- `src/components/Coach/CoachGameReview.tsx:1677`
+- `src/components/Coach/CoachGameReview.tsx:2250`
 
 ### `reviewMoveInputsFrom` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:592`
+- `src/components/Coach/CoachGameReview.tsx:608`
 - `src/services/shallowLinesNotNarrated.test.ts:17`
 
 ### `ReviewNarrationRequest` (interface) — 0 call sites
@@ -36,16 +35,18 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getOrBuildReviewNarration` (function) — 6 call sites
-- `src/components/Coach/CoachGameReview.tsx:624`
+- `src/components/Coach/CoachGameReview.tsx:653`
 - `src/services/reviewNarrationBuild.test.ts:38`
 - `src/services/reviewNarrationBuild.test.ts:45`
 - `src/services/reviewNarrationBuild.test.ts:47`
 - `src/services/reviewNarrationBuild.test.ts:54`
 - `src/services/reviewNarrationBuild.test.ts:57`
 
-### `prebuildReviewNarration` (function) — 2 call sites
-- `src/components/Coach/CoachReviewSessionPage.tsx:157`
-- `src/services/gameAnalysisService.ts:2767`
+### `prebuildReviewNarration` (function) — 1 call site
+- `src/services/gameAnalysisService.ts:3065`
+
+### `mergeReviewNarration` (function) — 1 call site
+- `src/components/Coach/CoachGameReview.tsx:692`
 
 ## Tests
 

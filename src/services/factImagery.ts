@@ -23,12 +23,15 @@ export const IMAGERY: Record<ImageryKey, readonly string[]> = {
   'deny-exchange': ['', 'You take away the trade their whole setup was waiting for.'],
   'abandoned-duty': ['', 'A guard that steps away leaves the gate open.'],
   'trade-choice': ['', 'An offer is not a deal until they accept it.'],
-  'duty-parity': ['', 'Two sentries staring at each other — neither can walk away.'],
+  // Cut (review of chesscom-1040709576, 2026-10-13): an image that only
+  // restates its fact teaches nothing — it is description, and description
+  // is cut. An empty bank keeps the key exhaustive.
+  'duty-parity': [''],
   'maintenance-trade': ['', 'Not a win, just paying the bill before it comes due.'],
   'prepare-recapture': ['', 'Set the table before the guests arrive.'],
   'threat-cost': ['', 'The door is still open, but now there is a trap behind it.'],
   'simplest-win': ['', 'Win the plain way; the fancy way only adds chances to slip.'],
-  'safe-because': ['', 'Yesterday\'s move is paying today\'s bill.'],
+  'safe-because': [''],
   'wing-for-centre': ['', 'A side street for the main road.'],
   'material-arithmetic': ['', 'Count the wood, not the names on it.'],
   'knight-squares': ['', 'A knight on the rim is dim.', 'Put a knight in the middle and it sees the whole board.'],

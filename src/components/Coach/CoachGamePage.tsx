@@ -286,6 +286,8 @@ export const PLAY_VOLUNTEERS_COACHING: boolean = false;
 
 export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   const navigate = useNavigate();
+  /** The saved game's id once its record is written (null: not saved). */
+  const savedForReviewRef = useRef<Promise<string | null> | null>(null);
   const [searchParams] = useSearchParams();
   const reviewGameId = searchParams.get('review');
   const startMoveParam = searchParams.get('move');
@@ -1975,6 +1977,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // identically. `endReason` distinguishes a time-out for the saved tags.
   const finalizeGame = useCallback((result: 'win' | 'loss' | 'draw', endReason?: 'time' | 'resign'): void => {
     if (gameState.status !== 'playing') return;
+    savedForReviewRef.current = null;
 
     // Conversion-drill close: if this game was launched from a blown winning
     // position and the student won it, that conversion is addressed.
@@ -2069,7 +2072,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // prod 2026-07-01 during a game-analysis session).
     if (!gameState.gameId) return;
 
-    void db.games.add(gameRecord).then(() => {
+    const added = db.games.add(gameRecord);
+    // THE SAVED GAME IS REVIEWED ON THE ONE REVIEW PATH (review of
+    // chesscom-1040709576, 2026-10-13): the inline review graded from Play's
+    // depth-10 live reads, so the same game read differently here than on
+    // the review page. Once it is saved, postgame opens that page.
+    savedForReviewRef.current = added.then(() => gameRecord.id, () => null);
+    void added.then(() => {
       if (!activeProfile) return;
       void detectBadHabitsFromGame(gameState.moves, activeProfile);
       void generateMistakePuzzlesFromGame(gameRecord.id).then(() => {
@@ -2199,6 +2208,24 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       finalizeGame(result);
     }
   }, [game.isGameOver, game.isCheckmate, game.turn, gameState.status, playerColor, finalizeGame]);
+
+  // Postgame on a SAVED game opens the review page — the read-ahead grades it
+  // at review depth (see `savedForReviewRef`). An unsaved game (under the
+  // persistence floor) keeps the inline review: there is no record to load.
+  const [openingSavedReview, setOpeningSavedReview] = useState(false);
+  useEffect(() => {
+    if (gameState.status !== 'postgame') return;
+    const saved = savedForReviewRef.current;
+    if (!saved) return;
+    let live = true;
+    setOpeningSavedReview(true);
+    void saved.then((id) => {
+      if (!live) return;
+      if (id) void navigate(`/coach/review/${id}`, { replace: true });
+      else setOpeningSavedReview(false);
+    });
+    return () => { live = false; };
+  }, [gameState.status, navigate]);
 
   // Auto-transition from gameover overlay to postgame review after showing final position
   useEffect(() => {
@@ -4802,6 +4829,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   }
 
   // Post-game review — same two-column layout as gameplay
+  if (gameState.status === 'postgame' && openingSavedReview) {
+    return (
+      <div className="flex flex-1 items-center justify-center h-full" data-testid="coach-game-page">
+        <div className="text-sm opacity-70" data-testid="opening-saved-review">Opening your review…</div>
+      </div>
+    );
+  }
   if (gameState.status === 'postgame') {
     return (
       <div className="flex flex-col md:flex-row h-full overflow-hidden" data-testid="coach-game-page">

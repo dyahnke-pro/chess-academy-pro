@@ -86,6 +86,8 @@ import { departureRecordSentence, openingRecordClause } from './openingRecordBea
 import { ecoOfKey, openingEntryForKey, openingFamily, openingKeyFromSans } from './openingKey';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { costWords, describeEvalCp, isMateEval, moverGaveUpMate } from './engineConstants';
+import { isContested } from './narrationImportance';
+import { classifyMatePattern, explainMate } from './matePatterns';
 import { isMinorAtHome } from './development';
 import { buildVoicePackage, spokenSentenceKeys } from './voicePackage';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
@@ -139,47 +141,13 @@ export const PLAN_HOLD_PLIES = 4;
 
 export { detectBadHabits };
 
-export async function updateBadHabits(profile: UserProfile): Promise<BadHabit[]> {
-  const habits = await detectBadHabits(profile);
-  await db.profiles.update(profile.id, { badHabits: habits });
-  return habits;
-}
-
 // ─── Post-Game Analysis ─────────────────────────────────────────────────────
-
-export async function getPostGameAnalysis(
-  context: CoachContext,
-  onStream?: (chunk: string) => void,
-): Promise<string> {
-  return gateReport('post_game_analysis', context, onStream);
-}
 
 // ─── Daily Lesson ───────────────────────────────────────────────────────────
 
-export async function getDailyLesson(
-  context: CoachContext,
-  onStream?: (chunk: string) => void,
-): Promise<string> {
-  return gateReport('daily_lesson', context, onStream);
-}
-
 // ─── Bad Habit Report ───────────────────────────────────────────────────────
 
-export async function getBadHabitReport(
-  context: CoachContext,
-  onStream?: (chunk: string) => void,
-): Promise<string> {
-  return gateReport('bad_habit_report', context, onStream);
-}
-
 // ─── Weekly Report ──────────────────────────────────────────────────────────
-
-export async function getWeeklyReport(
-  context: CoachContext,
-  onStream?: (chunk: string) => void,
-): Promise<string> {
-  return gateReport('weekly_report', context, onStream);
-}
 
 /** These report surfaces are non-board prose about the STUDENT's own data.
  *  GROUNDED (David 2026-07-09: one LLM command): the facts — rating, the
@@ -503,89 +471,6 @@ export interface ReviewNarrationSegments {
   closing: string;
 }
 
-export async function generateReviewNarrationSegments(
-  pgn: string,
-  playerColor: string,
-  openingName: string | null,
-  result: string,
-  playerRating: number,
-  moveData?: NarrativeMoveData[],
-): Promise<ReviewNarrationSegments> {
-  // GROUNDED (David 2026-07-09: "check every spoken word path"). The intro +
-  // closing are COMPUTED from the engine analysis (moveData) and voiced — not
-  // free-LLM JSON generation (which the Q&A grounding seal now correctly
-  // intercepts, breaking the old path). The facts are the opening, the
-  // student-relative outcome, the error counts, and the flagged key moments;
-  // voiceFacts phrases them warmly. The `_pgn` is unused — moveData carries
-  // every fact the narration needs (G0: nothing is re-derived from the PGN).
-  const studentColorWB: 'White' | 'Black' = playerColor === 'white' ? 'White' : 'Black';
-  let blunders = 0;
-  let mistakes = 0;
-  let inaccuracies = 0;
-  const keyMoments: string[] = [];
-  const md = moveData ?? [];
-  const fenBefore = fenBeforeByPly(pgn);
-  for (let i = 0; i < md.length; i++) {
-    const m = md[i];
-    const moverColor: 'White' | 'Black' = m.moveNumber % 2 === 1 ? 'White' : 'Black';
-    // Only the STUDENT's own errors are the review's subject (a coach/opponent
-    // slip isn't the student's lesson). Compare against the STUDENT's color —
-    // NOT the opponent's (the old `coachColor` inversion counted the wrong
-    // side; David 2026-07-19).
-    if (m.isCoachMove || moverColor !== studentColorWB) continue;
-    if (m.classification === 'blunder') {
-      blunders += 1;
-      // Convert the engine's best-move UCI → clean SAN (never speak raw UCI).
-      const bestSan = m.bestMove ? (uciToSanAt(m.bestMove, fenBefore[i] ?? '') ?? m.bestMove) : null;
-      keyMoments.push(`move ${Math.ceil(m.moveNumber / 2)} ${m.san} (a blunder${bestSan ? `; the engine preferred ${bestSan}` : ''})`);
-    } else if (m.classification === 'mistake') {
-      mistakes += 1;
-    } else if (m.classification === 'inaccuracy') {
-      inaccuracies += 1;
-    }
-  }
-  const total = blunders + mistakes + inaccuracies;
-  const framedOpening = openingName ? frameOpeningForStudent(openingName, playerColor === 'black' ? 'black' : 'white') : null;
-  const openingClause = framedOpening
-    ? (framedOpening.owned ? `the ${framedOpening.label}` : `the game against the ${framedOpening.label}`)
-    : 'this game';
-  const outcomeClause =
-    result === '1-0' || result === '0-1'
-      ? (result === '1-0') === (playerColor === 'white')
-        ? 'The student won.'
-        : 'The student lost.'
-      : result === '1/2-1/2' || result === '½-½'
-        ? 'The game was a draw.'
-        : `The game ended ${result}.`;
-
-  const introFacts = [
-    `This is a review of ${openingClause} (student rated about ${playerRating}). ${outcomeClause}`,
-    total > 0
-      ? `The engine flagged ${total} moment(s) to look at — ${blunders} blunder(s) and ${mistakes} mistake(s).`
-      : 'The engine flagged no significant errors in this game.',
-    keyMoments.length > 0 ? `Watch especially for ${joinClauses(keyMoments)}.` : '',
-  ].filter(Boolean).join(' ');
-
-  const verdict =
-    blunders >= 2 ? 'There were several blunders to address.'
-    : blunders === 1 ? 'One blunder was the main turning point.'
-    : total <= 1 ? 'This was cleanly played.'
-    : 'A solid game with a few things to tighten up.';
-  // SMALL EDGES ACCUMULATE (batch 6): no single real mistake, yet several
-  // student moves each gave a little — read off the per-ply evals in hand.
-  const trend = gameStructureTrend(studentMoveCosts(md, studentColorWB));
-  const closingFacts = [
-    `In this game: ${blunders} blunder(s), ${mistakes} mistake(s), ${inaccuracies} inaccuracy/inaccuracies.`,
-    verdict,
-    ...(trend ? [trend.text] : []),
-    'Keep practicing and learning from each game.',
-  ].join(' ');
-
-  const intro = (await voiceFacts(introFacts, { intent: 'review-intro', preferRaw: true })) ?? introFacts;
-  const closing = (await voiceFacts(closingFacts, { intent: 'review-closing', preferRaw: true })) ?? closingFacts;
-  return { intro, closing };
-}
-
 /** The student's own moves with their engine cost, from the per-ply evals
  *  (White-POV, after each ply). A ply whose eval either side reads as a mate
  *  score is skipped — a mate number is not a centipawn cost. */
@@ -605,25 +490,6 @@ export function studentMoveCosts(md: readonly NarrativeMoveData[], studentColorW
 }
 
 // ─── Build Context from Profile ─────────────────────────────────────────────
-
-export function buildProfileContext(profile: UserProfile): CoachContext {
-  return {
-    fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-    lastMoveSan: null,
-    moveNumber: 0,
-    pgn: '',
-    openingName: null,
-    stockfishAnalysis: null,
-    playerMove: null,
-    moveClassification: null,
-    playerProfile: {
-      rating: profile.currentRating,
-      weaknesses: profile.badHabits
-        .filter((h) => !h.isResolved)
-        .map((h) => h.description),
-    },
-  };
-}
 
 // ─── Walk-the-game Review Narration (WO-REVIEW-02) ──────────────────────────
 
@@ -2593,6 +2459,11 @@ export function buildReviewSegments(
           recordMotif(motif, instance, fullMove, motifFirstMove);
         }
       }
+      // THE GAME ENDED ON THIS MOVE (review of chesscom-1040709576, 2026-10-13:
+      // the mating Qxh2# was narrated as a battery and "your plan is to advance
+      // your kingside pawn majority"). The mate is the whole beat — every other
+      // board fact describes a game that is over.
+      if (/#$/.test(m.san)) uncappedParts.splice(0, uncappedParts.length, deliveredMateNarration(fenPair.fenAfter, moverColor === playerColor));
       const doorNarration = (() => {
         if (uncappedParts.length === 0) return null;
         const pkg = buildVoicePackage(
@@ -3460,10 +3331,7 @@ export function buildReviewSegments(
     // classifyCpLoss already coerces a delivered mate to good/brilliant, so it
     // never flags; this is the only place the mate gets named on the mating ply.
     if (/#$/.test(m.san)) {
-      const studentMated = moverColor === playerColor;
-      narration = studentMated
-        ? `And there it is — checkmate. You finished the game.`
-        : `And that's checkmate — the game ends here. This is the position to sit with: trace the mating net back and find the move where it became unavoidable.`;
+      narration = deliveredMateNarration(fenPair.fenAfter, moverColor === playerColor);
       narrationSource = 'per-move';
     }
     // 🔗 THE CAUSAL CHAIN LEADS the beat when this move exploited a loose piece
@@ -3578,7 +3446,10 @@ export function defaultIntroText(params: {
   playerColor: 'white' | 'black';
   result: string;
   openingName: string | null;
-  mistakeCount: number;
+  /** Null while the review is still reading the game: the intro then says
+   *  nothing about how the game went move by move (2026-10-13 — "Clean play
+   *  throughout" was said off a part of the game read from a draft). */
+  mistakeCount: number | null;
   /** The student's record in this opening (A8), spoken after the outcome. */
   record?: string | null;
 }): string {
@@ -3605,9 +3476,11 @@ export function defaultIntroText(params: {
   const openingBit = framedIntro
     ? (framedIntro.owned ? ` in the ${framedIntro.label}` : ` against the ${framedIntro.label}`)
     : '';
-  const momentBit = params.mistakeCount > 0
-    ? ` You had ${params.mistakeCount === 1 ? 'one moment' : `${params.mistakeCount} moments`} worth a second look — here's each one.`
-    : ` Clean play throughout — here's what worked.`;
+  const momentBit = params.mistakeCount === null
+    ? ''
+    : params.mistakeCount > 0
+      ? ` You had ${params.mistakeCount === 1 ? 'one moment' : `${params.mistakeCount} moments`} worth a second look — here's each one.`
+      : ` Clean play throughout — here's what worked.`;
   const recordBit = params.record ? ` ${params.record}` : '';
   return `Here's your game${openingBit} — you had ${colorWord}${resultBit}.${recordBit}${momentBit}`;
 }
@@ -3748,24 +3621,6 @@ async function refutedAlternativesForGame(
   return new Map(out);
 }
 
-export async function mapConcurrent<T, R>(
-  items: readonly T[],
-  limit: number,
-  fn: (item: T, index: number) => Promise<R>,
-): Promise<R[]> {
-  const out: R[] = Array.from({ length: items.length });
-  let next = 0;
-  const lanes = Array.from({ length: Math.max(1, Math.min(limit, items.length)) }, async () => {
-    for (;;) {
-      const i = next++;
-      if (i >= items.length) return;
-      out[i] = await fn(items[i], i);
-    }
-  });
-  await Promise.all(lanes);
-  return out;
-}
-
 function isForcingProjection(line: PvLine): boolean {
   if (line.plies.length === 0) return false;
   if (line.plies[line.plies.length - 1].facts.isMate) return true;
@@ -3775,6 +3630,44 @@ function isForcingProjection(line: PvLine): boolean {
 
 /** Depth of each sacrifice-ledger branch search (one restricted search each). */
 const SAC_LEDGER_DEPTH = 14;
+
+/** IS THE OPPONENT'S "LEFT ALONE" IDEA MOOT? (review of chesscom-1040709576,
+ *  2026-10-13: "Watch what they're building" was spoken on a ply where the
+ *  student had a forced mate). The deep-threat probe hands the opponent a free
+ *  move; that only teaches when the student has nothing faster. A student with
+ *  a forced mate always goes first, and a student already winning on the board
+ *  (the contested gate) outruns any non-mating idea. A mate threat against a
+ *  student who is merely winning is still said — ignoring mate loses. */
+export function studentOutpacesOpponentBuild(
+  evalAfterWhitePov: number | null,
+  studentWB: 'w' | 'b',
+  opponentLineMates: boolean,
+): boolean {
+  if (evalAfterWhitePov === null) return false;
+  const studentPov = studentWB === 'w' ? evalAfterWhitePov : -evalAfterWhitePov;
+  if (isMateEval(studentPov) && studentPov > 0) return true;
+  return !opponentLineMates && studentPov > 0 && !isContested(evalAfterWhitePov, null);
+}
+
+/** THE MATE, NAMED: its pattern (when it has one) and why the king has no
+ *  square, both read off the final board. Null when the board is not mate. */
+export function mateDescription(fenAfterMate: string): string | null {
+  const why = explainMate(fenAfterMate);
+  if (!why) return null;
+  const pattern = classifyMatePattern(fenAfterMate);
+  return pattern ? `The pattern is ${pattern.name}. ${why}` : why;
+}
+
+/** THE MATING PLY'S BEAT — one producer for every review builder. The
+ *  student's own mate is named and explained; a mate against them points at
+ *  the net. `studentMated` = the student delivered it. */
+export function deliveredMateNarration(fenAfterMate: string, studentMated: boolean): string {
+  const head = studentMated
+    ? 'And there it is — checkmate. You finished the game.'
+    : "And that's checkmate — the game ends here. This is the position to sit with: trace the mating net back and find the move where it became unavoidable.";
+  const named = mateDescription(fenAfterMate);
+  return named ? `${head} ${named}` : head;
+}
 
 async function augmentWithProjections(
   segments: ReviewMoveSegment[],
@@ -4473,6 +4366,7 @@ async function augmentWithProjections(
       const decisiveJump = oppPovNow !== null && oppPovTerminal !== null
         && oppPovTerminal - oppPovNow >= 250;
       if (!matesOut && !decisiveJump) continue;
+      if (studentOutpacesOpponentBuild(s.evalAfter, studentColorWB, matesOut)) continue;
       const oppKey = line.plies.map((p) => p.san).join(' ');
       if (deepOppSaid.has(oppKey)) continue;
       deepOppSaid.add(oppKey);
@@ -4758,110 +4652,10 @@ export function narrationBoardAccurate(text: string, fen: string): boolean {
   }
 }
 
-/** SEAT fidelity for the house-voice pass, checked against the BOARD: the
- *  rephrase must not claim the wrong owner for a piece on a square. Caught
- *  twice in the 2026-07-21 scrutiny — "your queen on e6" for the opponent's
- *  queen (Opera ply 28), and both pins flipped ("your bishop on c5 … your
- *  opponent's bishop on c4", inverted; trap ply 9). The deterministic facts
- *  often carry NO possessive ("Bishop on c5 pins pawn on f2"), so the model
- *  INVENTS one — only the board can arbitrate. Every "your/their <piece> on
- *  <square>" must match the color of the piece actually standing there. */
-export function narrationSeatFaithful(
-  warmed: string,
-  fen: string,
-  studentColorWB: 'w' | 'b',
-): boolean {
-  try {
-    const board = new Chess(fen);
-    const WANT: Record<string, string> = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', pawn: 'p', king: 'k' };
-    const re = /\b(your opponent's|your|their)\s+(?:own\s+)?(knight|bishop|rook|queen|pawn|king)\s+on\s+([a-h][1-8])\b/gi;
-    let m: RegExpExecArray | null;
-    while ((m = re.exec(warmed)) !== null) {
-      const cell = board.get(m[3].toLowerCase() as Square);
-      if (!cell || cell.type !== WANT[m[2].toLowerCase()]) continue; // board-accuracy guard's job
-      const claimedYours = m[1].toLowerCase() === 'your';
-      const actuallyYours = cell.color === studentColorWB;
-      if (claimedYours !== actuallyYours) return false;
-    }
-    return true;
-  } catch {
-    return true; // never block narration on a parse error
-  }
-}
-
-/** The warm pass may not move a move from one seat to the other. The raw line
- *  names the mover ("You capture…" / "Your opponent stakes…"); a rephrase that
- *  opens an OPPONENT ply with "You <verb>" (or a STUDENT ply with "Your
- *  opponent" / "They") has reattributed the move, whatever the prompt said
- *  (audit 2026-09-06: 1.e4 by the opponent warmed to "You grab the center").
- *  Pure text — no board needed, the seat is a fact of the ply. */
-export function narrationMoverFaithful(warmed: string, moverIsStudent: boolean): boolean {
-  const head = warmed.replace(/^["'“‘\s]+/, '').slice(0, 40);
-  if (moverIsStudent) {
-    return !/^(your opponent|their (move|pawn|knight|bishop|rook|queen|king)\b|they )/i.test(head);
-  }
-  // Opponent ply: "You <action verb>" reattributes the move. Not an enumerated
-  // verb list (the model found "seize" the moment "grab" was blocked) — ANY
-  // "You <word>" is rejected except the state/modal forms that describe the
-  // student's situation rather than a move: "You're", "You've", "You had",
-  // "You need", "You can"… "Your <piece>…" (a threat read) is not "You ".
-  return !/^you\s+(?!(?:'re|'ve|'ll|'d|are|were|have|had|has|need|want|can|could|must|should|may|might|will|would|know|see|feel|get|keep|hold|sit|stand|remain|stay)\b)[a-z]/i.test(head);
-}
-
 const SPELLED_NUM: Record<string, string> = {
   zero: '0', one: '1', two: '2', three: '3', four: '4', five: '5', six: '6',
   seven: '7', eight: '8', nine: '9', ten: '10', eleven: '11', twelve: '12',
 };
-
-/** NUMBER fidelity for the house-voice pass: a fact-bearing number the warm
- *  text speaks (points of material, eval swings, attacker/defender counts)
- *  must exist in the deterministic fact — the model must not turn a 3-point
- *  knight into "two more" (scrutiny 2026-07-21; same class the voiceFacts
- *  numberFidelity net catches on the Q&A path). Meta-counts ("three pins
- *  now") are aggregation, not chess facts, and stay unguarded. */
-export function narrationNumbersFaithful(det: string, warmed: string): boolean {
-  const numRe = /\b(\d+(?:\.\d+)?|zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\b/gi;
-  const canon = (s: string): string => SPELLED_NUM[s.toLowerCase()] ?? s;
-  const detNums = new Set<string>();
-  let m: RegExpExecArray | null;
-  while ((m = numRe.exec(det)) !== null) detNums.add(canon(m[1]));
-  const FACT_CONTEXT = /point|material|eval|swing|swung|attacker|defender/i;
-  numRe.lastIndex = 0;
-  while ((m = numRe.exec(warmed)) !== null) {
-    const around = warmed.slice(Math.max(0, m.index - 30), m.index + m[0].length + 30);
-    if (FACT_CONTEXT.test(around) && !detNums.has(canon(m[1]))) return false;
-  }
-  return true;
-}
-
-/** COVERAGE fidelity for the house-voice pass (David 2026-07-22: "Does the
- *  LLM ever decide what facts it should or should not state?" — the answer
- *  must be NO). The coverAll prompt MANDATES voicing every bracketed facet;
- *  this net ENFORCES it: each facet in the deterministic bundle must leave a
- *  footprint in the warmed prose — at least one of its square / SAN anchors
- *  survives the rephrase. Rewording is fine; a DROPPED facet is not. A facet
- *  with no board anchors (a bare verdict) can't be anchor-checked and is
- *  skipped. On failure the deterministic template ships verbatim — full
- *  content always wins over polish. */
-export function narrationCoversFacets(det: string, warmed: string): boolean {
-  const facets = det.split(/(?=\[[a-z0-9-]+\])/i).map((f) => f.trim()).filter(Boolean);
-  if (facets.length <= 1 && !/^\[/.test(det)) return true; // untagged text — nothing to anchor
-  const wLower = warmed.toLowerCase();
-  for (const f of facets) {
-    const sans = f.match(/\b(?:[NBRQK][a-h]?[1-8]?x?[a-h][1-8]|O-O(?:-O)?)\b/g) ?? [];
-    const anchors = new Set<string>([
-      ...(f.match(/\b[a-h][1-8]\b/g) ?? []),
-      ...sans,
-      // A reword may keep only the SAN's destination square ("Nf3" → "lands
-      // on f3") — that footprint still proves the facet survived.
-      ...sans.map((s) => s.replace(/[+#]/g, '').slice(-2)).filter((s) => /^[a-h][1-8]$/.test(s)),
-    ]);
-    if (anchors.size === 0) continue;
-    const hit = [...anchors].some((a) => wLower.includes(a.toLowerCase()));
-    if (!hit) return false;
-  }
-  return true;
-}
 
 /**
  * STEM-VARIETY PASS (David 2026-07-24: the Naroditsky side-by-side showed our
@@ -5201,8 +4995,13 @@ export async function generateReviewNarration(params: {
   /** The game's id — lets the recurrence clause tell this game's own swept
    *  rows from a prior game's (WO-LOOP-01). */
   gameId?: string | null;
+  /** False while `moves` is only the part of the game the review has read so
+   *  far (the read-ahead, 2026-10-13). A partial build says nothing that needs
+   *  the whole game: no mistake count in the intro and no closing. */
+  complete?: boolean;
 }): Promise<ReviewNarration> {
   const { moves, playerColor, openingName, result, coachNarration, playerRating, uncapped } = params;
+  const complete = params.complete !== false;
 
   // Reconstruct FENs via chess.js so the UI can rewind cleanly.
   const fenChain = buildFenChain(moves);
@@ -5279,7 +5078,8 @@ export async function generateReviewNarration(params: {
     .catch(() => new Map<number, RefutedAlternative>());
   timings.refuted = Date.now() - refutedStart;
   const record = reviewOpeningRecord({ openingName, playerColor, studentNeed, gameId: params.gameId ?? null });
-  const groundedIntro = defaultIntroText({ playerColor, result, openingName, mistakeCount, record });
+  const introMistakes = complete ? mistakeCount : null;
+  const groundedIntro = defaultIntroText({ playerColor, result, openingName, mistakeCount: introMistakes, record });
   // SPOKEN RAW (prod audit 2026-09-24): the warm pass turned this computed
   // intro into "the facts for the four critical moments weren't included in
   // what I was given" — a model asking for facts, with the wrong count, as the
@@ -5483,7 +5283,8 @@ export async function generateReviewNarration(params: {
   const studentSegs = segments.filter((s) => s.playerColor === playerColor);
   const flaggedCount = studentSegs.filter((s) => s.classification === 'inaccuracy' || s.classification === 'mistake' || s.classification === 'blunder' || s.classification === 'miss').length;
   const recap = renderFundamentalsRecap(studentSegs.map((s) => s.fundamentals ?? []), flaggedCount);
-  const closing = recap ? (throughLine ? `${recap} ${throughLine}` : recap) : throughLine;
+  // The closing is a whole-game statement: a partial build has none.
+  const closing = !complete ? null : recap ? (throughLine ? `${recap} ${throughLine}` : recap) : throughLine;
 
   // Intro: use the phrased response if non-empty and not the ⚠️ error
   // placeholder; else the grounded default. Collected LAST — it was started
@@ -5493,7 +5294,7 @@ export async function generateReviewNarration(params: {
   timings.introWait = Date.now() - introWaitStart;
   const intro = introTrimmed && !introTrimmed.startsWith('⚠️')
     ? introTrimmed
-    : defaultIntroText({ playerColor, result, openingName, mistakeCount, record });
+    : defaultIntroText({ playerColor, result, openingName, mistakeCount: introMistakes, record });
 
   // NEED COVERAGE + THE TEACH METER (WO-TEACH-02 S0) — measured on what the
   // student will actually HEAR, after every fill pass. It used to be taken

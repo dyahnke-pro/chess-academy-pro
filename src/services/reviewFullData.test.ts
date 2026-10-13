@@ -90,7 +90,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
     // A positive verdict is [praise] now (WO-TEACH-02) — same seat contract.
     const quality = facets.find((f) => f.startsWith('[praise]'));
     expect(quality).toBeDefined();
-    expect(quality).toMatch(/Your opponent:/);
+    expect(quality).toMatch(/Their Be6 was a great move/);
     expect(quality).not.toMatch(/^\[praise\] You:/);
   });
 
@@ -103,7 +103,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
       prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
     });
     const quality = facets.find((f) => f.startsWith('[quality]'));
-    expect(quality).toMatch(/^\[quality\] You:/);
+    expect(quality).toMatch(/^\[quality\] Your Nc6 was an inaccuracy/);
   });
 
   it('does NOT grade the student\'s forced-mate move an inaccuracy (opera ply-29 bug)', () => {

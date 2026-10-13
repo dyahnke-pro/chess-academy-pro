@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { detectOpening, isStillInOpening, getOpeningMoves, getNextOpeningBookMove, findRelatedDbEntries, resolveOpeningEntry, resolveCuratedVariation, findContinuationsAtPly, findLinePickerOptions, findSiblingExtensionBranches, findShortestCanonicalPgn, _resetTrie } from './openingDetectionService';
+import { detectOpening, getOpeningMoves, getNextOpeningBookMove, findRelatedDbEntries, resolveOpeningEntry, resolveCuratedVariation, findContinuationsAtPly, findLinePickerOptions, findSiblingExtensionBranches, findShortestCanonicalPgn, _resetTrie } from './openingDetectionService';
 import openingsData from '../data/openings-lichess.json';
 
 describe('openingDetectionService', () => {
@@ -63,23 +63,6 @@ describe('openingDetectionService', () => {
       if (result) {
         expect(result.plyCount).toBeGreaterThanOrEqual(2);
       }
-    });
-  });
-
-  describe('isStillInOpening', () => {
-    it('returns true during early opening moves', () => {
-      expect(isStillInOpening(['e4'])).toBe(true);
-    });
-
-    it('returns true for known opening sequences', () => {
-      expect(isStillInOpening(['e4', 'e5'])).toBe(true);
-    });
-
-    it('returns false when out of book', () => {
-      // Very long random-ish sequence should eventually leave book
-      const result = isStillInOpening(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'b4', 'Bxb4', 'c3', 'Ba5', 'd4', 'exd4', 'O-O', 'dxc3']);
-      // This may or may not be in book — test just validates no crash
-      expect(typeof result).toBe('boolean');
     });
   });
 

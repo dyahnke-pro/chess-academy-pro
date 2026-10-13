@@ -26,8 +26,9 @@ import {
 import { classifyPhase } from './gamePhaseService';
 import { pvUciToSan } from './principleAttribution';
 import { isMateEval } from './engineConstants';
+import { capEval } from './accuracyService';
 import { isFixtureGame } from './fixtureGames';
-import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
+import { isMisconceptionTagId, MISCONCEPTION_RULES_REV, type MisconceptionTagId } from '../data/misconceptionTags';
 import { positionPosed } from './moveInsight';
 import type { GameRecord, MisconceptionTagRecord, MistakePuzzle, MoveAnnotation } from '../types';
 
@@ -365,8 +366,8 @@ export async function autoAnalyzeGameMisconceptions(
       //
       // The band midpoint survives ONLY as a fallback for annotations written
       // before `bestMoveEval` existed (`gameNeedsAnalysis` re-analyses those, so
-      // it drains) and for mate-encoded evals, where a centipawn difference is a
-      // six-figure sentinel rather than a cost.
+      // it drains). Mate scores are measured through `capEval` (see
+      // `measuredCpLoss`), never sent here.
       cpLoss: measuredCpLoss(ann) ?? (ann.classification === 'blunder' ? 350 : 175),
       gamePhase: classifyPhase(fen, { fullMove: ann.moveNumber }),
       moveNumber: ann.moveNumber,
@@ -522,9 +523,17 @@ async function reattributePending(
 ): Promise<number> {
   const changes: Array<{ id: string; from: string; to: string; fundamentalId?: string }> = [];
   for (const row of rows) {
-    if (row.attributionPending !== true) continue;
+    // Pending (no best move at capture) OR classified under older rules: a
+    // rules change reaches stored auto-analysis rows (2026-10-13).
+    const stale = row.source === 'auto-analysis' && row.rulesRev !== MISCONCEPTION_RULES_REV;
+    if (row.attributionPending !== true && !stale) continue;
     const b = blunders.find((x) => x.fen === row.fen && x.playedSan === row.playedSan);
-    if (!b?.bestSan) continue;
+    if (!b?.bestSan) {
+      // Nothing to re-read it with: a stale row is stamped so the backfill
+      // does not revisit it on every boot; a pending one waits for its move.
+      if (stale && row.attributionPending !== true) await db.misconceptionTags.update(row.id, { rulesRev: MISCONCEPTION_RULES_REV });
+      continue;
+    }
     const cls = await classifyMisconception({
       fen: b.fen,
       playedSan: b.playedSan,
@@ -543,6 +552,7 @@ async function reattributePending(
     const named = cls && cls.tag !== 'none' && isMisconceptionTagId(cls.tag);
     await db.misconceptionTags.update(row.id, {
       attributionPending: undefined,
+      rulesRev: MISCONCEPTION_RULES_REV,
       bestSan: b.bestSan,
       ...(named ? {
         tag: cls.tag,
@@ -574,18 +584,23 @@ async function reattributePending(
  *  annotation older than that field), or either side of the comparison is a
  *  mate-encoded sentinel, where subtracting produces a number in the tens of
  *  thousands that is not a cost. Callers fall back explicitly. */
-function measuredCpLoss(ann: MoveAnnotation): number | null {
+export function measuredCpLoss(ann: MoveAnnotation): number | null {
   // The one-search cost the review verdict speaks, when the analysis settled it.
   if (typeof ann.costCp === 'number') return ann.costCp;
   const after = ann.evaluation;
   const best = ann.bestMoveEval;
   if (after === null || best === null || best === undefined) return null;
-  if (isMateEval(after) || isMateEval(best)) return null;
   const moverSign = ann.color === 'white' ? 1 : -1;
   // Both are White-POV. Flipped to the mover, "best minus actual" is what the
   // move gave up; clamped at zero because a move that BEAT the shallow best-move
   // eval has cost nothing.
-  return Math.max(0, (best - after) * moverSign);
+  //
+  // A MATE score is measured too, through the accuracy formula's own cap
+  // (`capEval`, mate = 1500): returning null here sent every missed mate to the
+  // label fallback, so Qxd7+ with exf8=R# on the board was recorded as costing
+  // exactly 350 (2026-10-13). The cap keeps a six-figure sentinel out of the
+  // number while saying what the mate was worth.
+  return Math.max(0, (capEval(best) - capEval(after)) * moverSign);
 }
 
 /** Persist drillable mistakePuzzles for a game's blunders, deduped by position

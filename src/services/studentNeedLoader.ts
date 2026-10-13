@@ -72,6 +72,14 @@ export interface StudentNeedBase {
 
 type BaseQuery = Omit<StudentNeedQuery, 'sans'>;
 let baseCache: { at: number; key: string; base: StudentNeedBase } | null = null;
+// THE MEMO FOLLOWS THE RECORD (review of chesscom-1040709576, 2026-10-13).
+// It was keyed on the game COUNT, and a game finishing its analysis changes
+// `gamesPlayed` without changing the count — six writers set `fullyAnalyzed`,
+// so the memo is dropped here, on the table, for every one of them.
+db.games.hook('updating', (mods) => {
+  if ('fullyAnalyzed' in mods || 'annotations' in mods || 'studentSide' in mods) invalidateStudentNeedContext();
+});
+db.games.hook('deleting', () => { invalidateStudentNeedContext(); });
 
 /** Score share for the student in a set of games (1 win, ½ draw), or null when
  *  fewer than MIN_SCORE_GAMES decided games back it. */
@@ -229,10 +237,20 @@ export async function loadStudentNeedBase(q: BaseQuery): Promise<StudentNeedBase
     };
     baseCache = { at: Date.now(), key, base };
     return base;
-  } catch {
+  } catch (err) {
+    // A failed read makes the student COLD, and a cold student is taught as
+    // if they knew nothing — a review of chesscom-1040709576 (2026-10-13)
+    // spoke as if the record were empty with no trace of why. Say why.
+    void import('./appAuditor').then(({ logAppAudit }) => logAppAudit({
+      kind: 'student-record-load-failed',
+      category: 'subsystem',
+      source: 'studentNeedLoader.loadStudentNeedBase',
+      summary: `record read failed — the student is read as cold: ${err instanceof Error ? err.message : String(err)}`.slice(0, 300),
+    })).catch(() => undefined);
     return null;
   }
 }
+
 
 /** The LINE half — pure, cheap, and recomputed for whatever line the caller
  *  holds at fire time. A null base is the cold student (TEACH). */

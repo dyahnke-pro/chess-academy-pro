@@ -919,6 +919,34 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
         `selector thesis ${kindM ? `${kindM[1]}@${kindM[2]}` : 'none'} vs turn ${turnM?.[1] ?? '?'} — the plain line speaks instead (thesis=${thesisCount} legacy=${legacyCount})`);
     }
   }
+  // REVIEW RULES GRID (chesscom-1040709576 audit, 2026-10-13). Each row is a
+  // rule the phone tape broke, read off what the student HEARD:
+  //  - a verdict is a sentence that owns its move ("Your d6 was a mistake"),
+  //    never a speaker label ("You: that was a mistake");
+  //  - a Great/Brilliant verdict says why;
+  //  - a game that ends in mate names the mate on the mating move;
+  //  - "Watch what they're building" never follows a forced mate of the
+  //    student's own (the app says so in the eval it stored).
+  {
+    const lines = spoken().map((x) => x.text);
+    const labelled = lines.filter((t) => /(^|[.!?]\s+)(You|Your opponent): /.test(t));
+    await add('GRID verdict-owns-its-move', labelled.length === 0,
+      labelled.length ? `speaker label heard: "${labelled[0].slice(0, 100)}"` : `${lines.length} lines, no speaker label`);
+    const barePraise = lines.filter((t) => /was a (great|brilliant) move\.(\s|$)/.test(t));
+    await add('GRID praise-has-why', barePraise.length === 0,
+      barePraise.length ? `praise with no reason: "${barePraise[0].slice(0, 100)}"` : 'every Great/Brilliant carried its reason (or none was given)');
+    const lastTok = PGN.trim().split(/\s+/).filter((t) => !/^\d+\.+$/.test(t) && !/^(1-0|0-1|1\/2-1\/2|\*)$/.test(t)).pop() ?? '';
+    const endsInMate = lastTok.endsWith('#');
+    const mateHeard = lines.some((t) => /checkmate/i.test(t));
+    // Every position the review graded was read at review depth (the phone's
+    // draft-read grades are the defect this replaced). The app reports it.
+    const depthRow = events().map((e) => String(e.summary ?? '')).filter((t) => /positions read, \d+ below depth/.test(t)).pop() ?? '';
+    const dm = /(\d+) positions read, (\d+) below depth (\d+)/.exec(depthRow);
+    await add('GRID reads-at-review-depth', !!dm && Number(dm[2]) <= Math.ceil(Number(dm[1]) * 0.1),
+      dm ? depthRow : 'no review-reads-depth row — the read-ahead never finished');
+    await add('GRID mate-named', !endsInMate || !reachedEnd || mateHeard,
+      !endsInMate ? 'game did not end in mate' : !reachedEnd ? 'walk did not reach the end' : `checkmate named=${mateHeard}`);
+  }
   // NEED COVERAGE (unified-coach N2, 2026-09-15 — the retired R2's replacement):
   // read the app's own `review-need-coverage` rows off the wire. Every opening
   // ply whose computed need cleared the bar was narrated; no quiet per-move beat

@@ -290,7 +290,13 @@ function classifyMisconceptionImpl(
 
   // (a) HUNG MATERIAL — the move leaves one of your own pieces attacked and
   // undefended. The single biggest blunder class; check it first.
-  const ownHanging = ownHangingIn(det, moverColor);
+  // HUNG MEANS TAKEN (review of chesscom-1040709576, 2026-10-13: hung-material
+  // was recorded on 65–157 cp slips where nothing was lost). Attacked and
+  // undefended is not lost when the capture does not work; with the engine's
+  // reply in hand, a piece counts only if that reply takes it.
+  const reply = replyDestination(fenAfter, input.pvAfterPlayed);
+  const ownHanging = ownHangingIn(det, moverColor)
+    .filter((hp) => reply === undefined || hp.square === reply);
   if (ownHanging.length > 0) {
     const hp = ownHanging[0];
     return {
@@ -505,4 +511,15 @@ export function classifyMisconception(
   input: ClassifyMisconceptionInput,
 ): Promise<MisconceptionClassification | null> {
   return Promise.resolve(classifyMisconceptionImpl(input));
+}
+
+/** The square the opponent's engine reply captures on, `null` when the reply
+ *  captures nothing, `undefined` when there is no reply to read. */
+function replyDestination(fenAfter: string, pvAfterPlayed: readonly string[] | undefined): string | null | undefined {
+  const san = pvAfterPlayed?.[0];
+  if (!san) return undefined;
+  try {
+    const mv = new Chess(fenAfter).move(san);
+    return mv && mv.captured ? mv.to : null;
+  } catch { return undefined; }
 }

@@ -499,7 +499,6 @@ const GATE_TESTS = [
   'src/test/computedOrderWired.test.ts',
   'src/utils/lazyPage.test.tsx',
   'src/services/methodBeat.test.ts',
-  'src/services/mapConcurrent.test.ts',
   'src/services/reviewFacetRank.test.ts',
   'src/services/reviewNarrationDefects.test.ts',
   'src/services/needScore.test.ts',

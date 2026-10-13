@@ -47,11 +47,8 @@ import { db } from '../db/schema';
 import {
   analyzeGameOnWorker,
   analyzeSingleGame,
-  selectCriticalPlies,
   ANALYSIS_DEPTH,
   BEST_MOVE_DEPTH,
-  TWO_PASS_SWING_CP,
-  DEEP_DIVE_CANDIDATE_CP,
   __testables,
 } from './gameAnalysisService';
 import { MATE_EVAL_VALUE, INACCURACY_CP } from './engineConstants';
@@ -69,7 +66,8 @@ import { getVerdicts, saveVerdict, verdictKey } from './moveVerdictStore';
 //   - the sweep does not claim slips smaller than its own search noise (the
 //     honesty cost of running shallow — "faster and wronger" is not the trade);
 //   - the sweep STAMPS itself shallow, which is what schedules the deep dive;
-//   - the REVIEW deep-searches the key moments and only those;
+//   - the REVIEW reads EVERY position once at review depth and grades from
+//     those reads only — never the draft curve (2026-10-13);
 //   - a reviewed game is not re-analysed on every re-open.
 
 const PGN = '1.e4 e5 2.Nf3 Nc6 3.Bb5 a6 4.Ba4 Nf6 1-0';
@@ -122,55 +120,6 @@ describe('the pool clears the hash ONCE per game, never per position', () => {
     const fake = w as unknown as { newGame: ReturnType<typeof vi.fn> };
     expect(fake.newGame).toHaveBeenCalledTimes(1);
     expect(calls.length).toBeGreaterThan(1); // many positions, one hash clear
-  });
-});
-
-describe('selectCriticalPlies — the review\'s key-moment selector', () => {
-  it('picks BOTH ends of every pair whose swing reaches the threshold', () => {
-    expect(selectCriticalPlies(CURVE)).toEqual([4, 5]);
-  });
-
-  it('candidacy sits BELOW the verdict threshold by the shallow noise margin, so a real inaccuracy hidden in a ~37cp shallow read still gets its deep look', () => {
-    // The deep verdict is what decides the grade; the shallow read only
-    // nominates. A depth-10 eval carries 30-50cp of noise (the sweep's own
-    // note), so nominating only swings >= INACCURACY_CP let David's Alapin
-    // 6...Nb6 (37cp shallow, 52cp at depth 14) read GOOD forever.
-    expect(TWO_PASS_SWING_CP).toBe(INACCURACY_CP);
-    expect(DEEP_DIVE_CANDIDATE_CP).toBe(INACCURACY_CP / 2);
-    expect(selectCriticalPlies([0, INACCURACY_CP, 0])).toEqual([0, 1, 2]);
-    expect(selectCriticalPlies([0, 37, 0])).toEqual([0, 1, 2]);
-    expect(selectCriticalPlies([0, DEEP_DIVE_CANDIDATE_CP - 1, 0])).toEqual([]);
-  });
-
-  it('always deepens around a mate score', () => {
-    expect(selectCriticalPlies([10, MATE_EVAL_VALUE, MATE_EVAL_VALUE])).toEqual([0, 1, 2]);
-  });
-
-  it('skips pairs with a missing eval and honors the `from` offset', () => {
-    expect(selectCriticalPlies([null, 500, 500, 500], 0)).toEqual([]);
-    expect(selectCriticalPlies([0, 500, 0, 0], 1)).toEqual([1, 2]);
-  });
-
-  it('caps the review at a ply budget, spending it on the BIGGEST swings first', () => {
-    // Without a cap the review's cost is set by how noisy the curve is, not by
-    // how interesting the game is — a swingy game nominates thirty-odd plies and
-    // puts the slowness back into the review.
-    const noisy = [0, 60, 0, 70, 0, 90, 0, 65, 0, 55, 0];  // ten ~noise-sized swings
-    expect(selectCriticalPlies(noisy, 0).length).toBeGreaterThan(6);
-    const capped = selectCriticalPlies(noisy, 0, 6);
-    expect(capped.length).toBeLessThanOrEqual(6);
-    // The 90cp swing (plies 5-6) is the biggest, so it is in; the 55cp is out.
-    expect(capped).toContain(5);
-    expect(capped).toContain(6);
-    expect(capped).not.toContain(9);
-  });
-
-  it('never drops a real finding to fit the cap — only the ambiguous small ones are rationed', () => {
-    // Four mistake-sized swings with a 2-ply budget: all four are still deepened.
-    const findings = [0, 400, 0, 400, 0, 400, 0, 400, 0];
-    const capped = selectCriticalPlies(findings, 0, 2);
-    expect(capped.length).toBeGreaterThan(2);
-    expect(capped).toEqual(selectCriticalPlies(findings, 0));
   });
 });
 
@@ -235,23 +184,23 @@ describe('the SWEEP runs one shallow pass', () => {
   });
 });
 
-describe('the REVIEW deep-dives the key moments', () => {
+describe('the REVIEW reads every position at review depth', () => {
   async function reviewFixture(): Promise<void> {
     await db.games.put(buildGameRecord({ id: 'g-review', pgn: PGN, annotations: [], fullyAnalyzed: false }));
   }
 
-  it('walks the curve shallow, then re-searches ONLY the swing at REVIEW_DEEP_DEPTH', async () => {
+  it('reads every position once at REVIEW_DEEP_DEPTH and never runs the draft curve', async () => {
     await reviewFixture();
     const anns = await analyzeSingleGame('g-review');
     expect(anns).not.toBeNull();
-
-    const curve = singletonCalls.filter((c) => c.depth === BATCH_SHALLOW_DEPTH);
-    const dive = singletonCalls.filter((c) => c.depth === REVIEW_DEEP_DEPTH).map((c) => FENS.indexOf(c.fen));
-
-    expect(curve.length).toBe(FENS.length);
-    // The old review ran ALL of these deep at 5s each — 216s on David's iPhone.
-    expect(dive).toEqual(expect.arrayContaining([4, 5]));
-    expect(dive.length).toBeLessThan(FENS.length);
+    const draft = singletonCalls.filter((c) => c.depth === BATCH_SHALLOW_DEPTH);
+    const reads = singletonCalls.filter((c) => c.depth === REVIEW_DEEP_DEPTH).map((c) => FENS.indexOf(c.fen));
+    // chesscom-1040709576: a 200 ms draft curve graded the walk and decided
+    // which moves got a real look. There is no draft read in a review now.
+    expect(draft).toHaveLength(0);
+    expect([...new Set(reads)].sort((x, y) => x - y)).toEqual(FENS.map((_, i) => i));
+    // One read per position, plus the one pricing search on the flagged ply.
+    expect(reads.length).toBe(FENS.length + 1);
     expect(anns![4].classification).toBe('blunder');
   });
 
@@ -295,15 +244,8 @@ describe('the REVIEW deep-dives the key moments', () => {
     expect(INACCURACY_CP).toBeGreaterThan(10);
   });
 
-  it('bounds its own cost: the deep dive never exceeds the ply cap on ordinary swings', async () => {
-    await reviewFixture();
-    await analyzeSingleGame('g-review');
-    const dive = singletonCalls.filter((c) => c.depth === REVIEW_DEEP_DEPTH);
-    expect(dive.length).toBeLessThanOrEqual(__testables.REVIEW_MAX_DEEP_PLIES);
-  });
-
-  it('REUSES the deep dive\'s best move — no second full-budget search per flagged ply (David 2026-09-05)', async () => {
-    // The dive already searched the flagged ply's "before" position at
+  it('REUSES the review-depth read\'s best move — no second full-budget search per flagged ply (David 2026-09-05)', async () => {
+    // The read-ahead already searched the flagged ply's "before" position at
     // REVIEW_DEEP_DEPTH and got a best move. Running ANOTHER search at
     // BEST_MOVE_DEPTH for the same position bought nothing on the phone (18 is
     // unreachable there, so it always burned the whole budget) and doubled the

@@ -17,7 +17,7 @@ import { useAppStore } from '../stores/appStore';
 import { resolvePlayerColor } from './playerIdentity';
 import { adaptGameRecordExplained } from './reviewGameAdapter';
 import { resolveCoachNarration } from '../utils/coachNarration';
-import { TRUSTED_LINE_DEPTH } from './engineConstants';
+import { TRUSTED_LINE_DEPTH, REVIEW_READ_DEPTH } from './engineConstants';
 import { generateReviewNarration, type ReviewMoveInput, type ReviewNarration } from './coachFeatureService';
 import { getCachedReviewNarration, storeReviewNarration, reviewNarrationCacheKey } from './reviewNarrationCache';
 import { logAppAudit } from './appAuditor';
@@ -64,6 +64,10 @@ export interface ReviewNarrationRequest {
   playerRating: number;
   coachNarration: 'silent' | 'brief' | 'full';
   uncapped: boolean;
+  /** False while `moves` is only the part of the game the review has read so
+   *  far (the read-ahead). A partial narration is never stored: the next open
+   *  must not hear a part of the game as the whole. */
+  complete?: boolean;
 }
 
 export interface ReviewNarrationResult {
@@ -77,12 +81,13 @@ const inflight = new Map<string, Promise<ReviewNarrationResult>>();
 /** The cached narration for these inputs, else a fresh build (stored when it
  *  produced segments). Concurrent asks for the same game+key share one build. */
 export function getOrBuildReviewNarration(req: ReviewNarrationRequest): Promise<ReviewNarrationResult> {
-  const key = reviewNarrationCacheKey(req);
+  const complete = req.complete !== false;
+  const key = `${reviewNarrationCacheKey(req)}${complete ? '' : ':partial'}`;
   const slot = `${req.gameId ?? ''}|${key}`;
   const running = inflight.get(slot);
   if (running) return running;
   const build = (async (): Promise<ReviewNarrationResult> => {
-    if (req.gameId) {
+    if (req.gameId && complete) {
       const hit = await getCachedReviewNarration(req.gameId, key);
       if (hit) return { narration: hit, cacheHit: true, key };
     }
@@ -95,8 +100,9 @@ export function getOrBuildReviewNarration(req: ReviewNarrationRequest): Promise<
       coachNarration: req.coachNarration,
       uncapped: req.uncapped,
       gameId: req.gameId,
+      complete,
     });
-    if (req.gameId && narration.segments.length > 0) {
+    if (req.gameId && complete && narration.segments.length > 0) {
       await storeReviewNarration(req.gameId, key, narration);
     }
     return { narration, cacheHit: false, key };
@@ -112,6 +118,9 @@ export async function prebuildReviewNarration(gameId: string, reason: string): P
   try {
     const game = await db.games.get(gameId);
     if (!game || !Array.isArray(game.annotations) || game.annotations.length === 0) return false;
+    // Only a game graded from review-depth reads is narrated ahead of time —
+    // a build from the sweep's draft grades is a walk nobody may hear.
+    if ((game.analysisDepth ?? 0) < REVIEW_READ_DEPTH) return false;
     const profile = useAppStore.getState().activeProfile ?? (await db.profiles.toCollection().first()) ?? null;
     const playerColor = resolvePlayerColor(game, {
       profileName: profile?.name,
@@ -143,4 +152,21 @@ export async function prebuildReviewNarration(gameId: string, reason: string): P
   } catch {
     return false;
   }
+}
+
+/** A newer build of the walk, merged into the one the student is hearing: the
+ *  plies already walked keep the words they were given (and so does the intro,
+ *  once spoken), every later ply takes the newer build. A move is never
+ *  re-narrated under a student who has heard it. */
+export function mergeReviewNarration(
+  prev: ReviewNarration | null,
+  next: ReviewNarration,
+  frozenThroughPly: number,
+  introSpoken: boolean,
+): ReviewNarration {
+  if (!prev) return next;
+  const kept = prev.segments.filter((sg) => sg.ply <= frozenThroughPly);
+  const keptPlies = new Set(kept.map((sg) => sg.ply));
+  const segments = [...kept, ...next.segments.filter((sg) => !keptPlies.has(sg.ply))].sort((a, b) => a.ply - b.ply);
+  return { ...next, intro: introSpoken ? prev.intro : next.intro, segments };
 }

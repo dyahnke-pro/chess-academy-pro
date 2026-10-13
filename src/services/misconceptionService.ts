@@ -18,6 +18,7 @@ import {
   MISCONCEPTION_TAGS,
   getMisconceptionTag,
   isMisconceptionTagId,
+  MISCONCEPTION_RULES_REV,
   type MisconceptionTagDef,
 } from '../data/misconceptionTags';
 
@@ -120,6 +121,7 @@ export async function logMisconception(
     // Only ever TRUE on the record — a false would read as "attributed" to a
     // reader that checks presence, and absent already means that.
     ...(input.attributionPending ? { attributionPending: true } : {}),
+    rulesRev: MISCONCEPTION_RULES_REV,
   };
   await db.misconceptionTags.add(record);
   emitWeaknessModelChanged();
@@ -152,10 +154,6 @@ export async function logMisconception(
     source: record.source,
   });
   return record;
-}
-
-export async function getAllMisconceptions(): Promise<MisconceptionTagRecord[]> {
-  return db.misconceptionTags.toArray();
 }
 
 /** Every slip recorded for one game (the review asks its lesson question from
@@ -335,8 +333,3 @@ export async function recordTagDrillResult(tag: string, success: boolean): Promi
 // question is the drift the rot rule exists to prevent, and a dead export is
 // an invitation to wire it back. Proof of the divergence, kept as the gate:
 // `drillJoinDivergence.test.ts`.
-
-/** The closed-set tag defs, for UI rendering of the full taxonomy. */
-export function listMisconceptionTags(): readonly MisconceptionTagDef[] {
-  return MISCONCEPTION_TAGS;
-}

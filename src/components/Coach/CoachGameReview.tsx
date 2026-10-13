@@ -38,7 +38,7 @@ import { projectedLineVoice } from '../../services/projectedLineVoice';
 import { voiceFacts } from '../../services/coachApi';
 import { buildPrincipleQuiz, quizVerdictLine, type PrincipleQuiz } from '../../services/principleQuiz';
 import { findTheoryDeparture, walkBookLine, type TheoryDeparture, type BookLinePly } from '../../services/theoryDeparture';
-import { pauseBatchAnalysis, resumeBatchAnalysis, classifyCpLoss, scanCriticalMoments, recordPromptedFind } from '../../services/gameAnalysisService';
+import { holdBatchAnalysis, classifyCpLoss, scanCriticalMoments, recordPromptedFind } from '../../services/gameAnalysisService';
 import { classifyGameTheme, type GameThemeResult } from '../../services/gameThemeClassifier';
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildCriticalMomentQuestion, judgeCriticalMomentPick, type CriticalMomentQuestion } from '../../services/reviewTurningPoint';
@@ -89,7 +89,7 @@ import { logAppAudit } from '../../services/appAuditor';
 import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
 import { autoAnalyzeGameMisconceptions } from '../../services/autoAnalyzeGame';
 import { db } from '../../db/schema';
-import { getOrBuildReviewNarration, isReviewUncapped, reviewMoveInputsFrom } from '../../services/reviewNarrationBuild';
+import { getOrBuildReviewNarration, isReviewUncapped, mergeReviewNarration, reviewMoveInputsFrom } from '../../services/reviewNarrationBuild';
 import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
 import { admitArrow } from '../../services/arrowDoor';
@@ -156,15 +156,13 @@ interface CoachGameReviewProps {
    *  so hint callouts are scoped to THIS game and don't leak across
    *  reviews via the global `useCoachMemoryStore` (ship-5). */
   gameId?: string;
-  /** Fires when the student taps Start and the walk begins. The session page
-   *  uses it to FREEZE the review: a background deepen that lands after this
-   *  is held for the next open instead of rewriting the walk mid-stride. */
-  onWalkStarted?: () => void;
-  /** Fires once the walk narration build has SETTLED (built, cached, empty or
-   *  failed). The session page holds its background deepen until then, so the
-   *  deep analysis never competes with the build the student is waiting on
-   *  (walk 6, R1: both ran at once and first narration took 74s). */
-  onNarrationSettled?: () => void;
+  /** THE READ-AHEAD (2026-10-13). Plies graded so far from review-depth reads
+   *  while the rest of the game is still being read; null or absent = every
+   *  move is graded. The walk is narrated only that far, and waits at the edge
+   *  rather than speak a move nobody has read. */
+  gradedThroughPly?: number | null;
+  /** The walk is near the graded edge — grade the next stretch. */
+  onNeedMoreGraded?: () => void;
 }
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -240,7 +238,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     moves, playerColor, result,
     playerRating,
     onPlayAgain, onBackToCoach, onPracticeInChat,
-    pgn,
+    pgn, onNeedMoreGraded,
   } = props;
   const openingName: string | null = props.openingName ?? openingNameForKey(props.openingId);
   // THE STUDENT MODEL (Phase 1) — feeds the free-board exploration recap so a
@@ -248,6 +246,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // walk narration loads this itself inside generateReviewNarration.
   const weaknessSignalsRef = useWeaknessSignals();
   const initialMoveIndex = props.initialMoveIndex;
+  /** The read-ahead's graded edge (null = the whole game is graded). */
+  const gradedThroughPly = props.gradedThroughPly ?? null;
+  const gradingComplete = gradedThroughPly === null;
   // ship-4: `keyMoments`, `playerName`, `opponentRating`, `isGuidedLesson`,
   // `autoStartReview` are retained on the prop interface for
   // backwards-compat with legacy callers but no longer consumed —
@@ -336,12 +337,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // the pre-walk analysis (David 2026-07-19: the 694-game batch resumed
   // mid-walk on his phone's single asm.js engine and starved the walk's
   // own engine moments — PV prefetch, quiz build, shot probes).
-  useEffect(() => {
-    pauseBatchAnalysis();
-    return () => {
-      resumeBatchAnalysis();
-    };
-  }, []);
+  // A COUNTED hold (2026-10-13): the single-game analysis used to call
+  // `resumeBatchAnalysis()` when it finished, which cleared this session's
+  // pause too — the four batch workers came back mid-walk and stalled the
+  // engine twice for 12 s on David's phone.
+  useEffect(() => holdBatchAnalysis(), []);
 
   // A review walk in progress must survive a deploy: hold the service-worker
   // HANDOVER until unmount. While held, the newly-deployed worker stays in
@@ -475,6 +475,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // The button itself is gated on `walkNarration` being ready so the
   // transition is instant when tapped.
   const [walkStarted, setWalkStarted] = useState(false);
+  /** Mirror for async callbacks (the narration merge must know whether the
+   *  intro and the walked plies were already heard). */
+  const walkStartedRef = useRef(false);
+  useEffect(() => { walkStartedRef.current = walkStarted; }, [walkStarted]);
 
   // OPENING THEORY LECTURE (David 2026-07-20: "a solid 5 minutes explaining the
   // theory behind the opening and the variation played"). Built once per game
@@ -542,6 +546,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // Generate narrative summary on summary phase mount (for non-guided lessons)
   useEffect(() => {
     if (narrativeSummary !== null) return;
+    // A whole-game summary waits for the whole game to be graded.
+    if (!gradingComplete) return;
     const gamePgn = pgn ?? moves.map((m) => m.san).join(' ');
     setIsLoadingNarrative(true);
     setNarrativeSummary('');
@@ -591,8 +597,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     }).finally(() => {
       setIsLoadingNarrative(false);
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- narrative summary fires once on mount
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- narrative summary fires once, when the game is fully graded
+  }, [gradingComplete]);
 
   // WO-REVIEW-02 walk-the-game: fetch per-ply segments + intro when
   // the summary phase mounts (non-guided lessons only). Runs in
@@ -609,9 +615,21 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     [reviewMoveInputs, playerColor],
   );
 
+  // 🔒 THE WALK IS NARRATED AS FAR AS IT IS GRADED (the read-ahead,
+  // 2026-10-13). While the page is still reading the game, each new stretch of
+  // review-depth grades is built and MERGED in: plies already walked keep the
+  // words they were given, later plies take the newer build. Once every move is
+  // graded the final, complete build lands (and is the one cached).
+  /** Plies the current walk narration covers, and whether that build saw the
+   *  whole game. */
+  const [walkBuiltThrough, setWalkBuiltThrough] = useState(0);
+  const walkBuiltCompleteRef = useRef(false);
   useEffect(() => {
-    if (walkNarration !== null || isLoadingWalk) return;
+    if (isLoadingWalk) return;
     if (reviewMoveInputs.length === 0) return;
+    const target = gradingComplete ? reviewMoveInputs.length : Math.min(gradedThroughPly, reviewMoveInputs.length);
+    if (walkNarration !== null && (walkBuiltCompleteRef.current || (!gradingComplete && target <= walkBuiltThrough))) return;
+    if (target <= 0) return;
     setIsLoadingWalk(true);
     // Tied to the unified Settings → Coach → Coach Narration dial.
     // Silent skips the intro LLM call entirely; Brief caps it at
@@ -631,8 +649,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // door (`getOrBuildReviewNarration`) also JOINS a build already running
     // for the same game — the background deepen and the import pre-build ask
     // it with identical inputs — instead of starting a second one.
+    const buildComplete = gradingComplete;
     void getOrBuildReviewNarration({
-      gameId: cacheGameId, moves: reviewMoveInputs, playerColor, openingName, result, playerRating, coachNarration, uncapped,
+      gameId: cacheGameId, moves: reviewMoveInputs.slice(0, target), playerColor, openingName, result, playerRating, coachNarration, uncapped,
+      complete: buildComplete,
     }).then(({ narration, cacheHit, key }) => {
       if (cacheHit && narration) {
         void logAppAudit({
@@ -668,7 +688,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // graceful fallback. The walk UI requires segments to render;
       // without them, the student stays on the card with stats only.
       if (narration && narration.segments.length > 0) {
-        setWalkNarration(narration);
+        const frozen = walkStartedRef.current ? walkPlyRef.current : 0;
+        setWalkNarration((prev) => mergeReviewNarration(prev, narration, frozen, walkStartedRef.current));
+        walkBuiltCompleteRef.current = buildComplete;
+        setWalkBuiltThrough(target);
       } else {
         // Audit-driven (#26): the empty-segments fallback used to be
         // silent — paste-back audit logs showed nothing for "I tapped
@@ -699,11 +722,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         details: msg,
       });
     }).finally(() => {
-      props.onNarrationSettled?.();
       if (!walkMountedRef.current) return;
       setIsLoadingWalk(false);
     });
-  }, [reviewMoveInputs, playerColor, openingName, result, playerRating, walkNarration, isLoadingWalk]);
+  }, [reviewMoveInputs, playerColor, openingName, result, playerRating, walkNarration, isLoadingWalk, gradingComplete, gradedThroughPly, walkBuiltThrough]);
 
   // Instantiate the playback hook; drives the walk-the-game UI below.
   // totalPlies is the authoritative ceiling — nav walks every move the
@@ -860,6 +882,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // A moment already found for THIS game is kept. A game with none yet may
     // still be rescanned when the narration improves, which is purely additive.
     if (criticalScanGameRef.current === props.gameId) return;
+    // It picks ONE moment across the whole game, so it waits for the whole game
+    // to be graded — and it does not compete with the read-ahead for the engine
+    // while the walk is waiting on it (2026-10-13).
+    if (!gradingComplete) return;
     // T1 (WO-CLOSEOUT-01, 2026-09-20): scan EVERY student ply past the opening,
     // flagged or not, and let the REGISTER decide. The old filter skipped every
     // ply the question plan owned — which is every flagged ply — so `ask` and
@@ -904,7 +930,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       } catch { /* no engine, no question — the honest outcome */ }
     })();
     return () => ac.abort();
-  }, [walkNarration, playerColor, playerRating, questionPlan, props.gameId]);
+  }, [walkNarration, playerColor, playerRating, questionPlan, props.gameId, gradingComplete]);
 
   /** Plies a turning-point question has already opened on (once each, per game). */
   const quizzedPliesRef = useRef<Set<number>>(new Set());
@@ -1087,6 +1113,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   }, [props.gameId]);
 
   const handleWalkForward = useCallback((): ForwardOutcome => {
+    // THE GRADED EDGE (the read-ahead, 2026-10-13). A move is walked only once
+    // it is graded from a review-depth read AND the build that narrates it has
+    // seen the move after it (its punishment, the reply). Short of that the walk
+    // waits — it never speaks a move from a draft. Near the edge, ask for the
+    // next stretch so the wait is rare.
+    if (!gradingComplete) {
+      const speakable = Math.max(0, walkBuiltThrough - 1);
+      const nextPly = walkPlayback.currentPly + 1;
+      if (nextPly >= speakable - 2) onNeedMoreGraded?.();
+      if (nextPly > speakable) return { advanced: false, stop: 'reading-ahead' };
+    }
     // A forward tap always supersedes an in-flight spoken-line (delta) playout —
     // whether it advances the ply or opens a card. Bumping the token aborts the
     // async loop; the auto-clear effect tears its overlay down.
@@ -1268,7 +1305,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     }
     walkPlayback.goForward();
     return { advanced: true };
-  }, [faucetPhase, resetFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, criticalMoment, criticalCard, rewindOffer, questionPlan, moves, moverIsStudent, turningActive, revealTurning]);
+  }, [faucetPhase, resetFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, criticalMoment, criticalCard, rewindOffer, questionPlan, moves, moverIsStudent, turningActive, revealTurning, gradingComplete, walkBuiltThrough, onNeedMoreGraded]);
   handleWalkForwardRef.current = handleWalkForward;
   /** A user's forward tap / key: pauses auto-play (only Play restarts it),
    *  then steps through the same card ladder. */
@@ -2673,6 +2710,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   useEffect(() => {
     if (themeRef.current || !walkNarration || walkNarration.segments.length === 0) return;
+    // The theme reads the whole game's trace — never a part read so far.
+    if (!gradingComplete) return;
     themeRef.current = classifyGameTheme(walkNarration.segments, playerColor, gameTurn(questionPlan, walkNarration.segments)?.ply);
     if (themeRef.current) {
       captureEvent('review_theme_classified', {
@@ -2689,7 +2728,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         ? `theme: ${themeRef.current.theme} @ peak ply ${themeRef.current.peakPly} (conf ${themeRef.current.confidence.toFixed(2)})`
         : 'theme: none (below floor or ambiguous)',
     });
-  }, [walkNarration, playerColor, questionPlan]);
+  }, [walkNarration, playerColor, questionPlan, gradingComplete]);
 
   useEffect(() => {
     if (themeSpokenRef.current) return;
@@ -4458,6 +4497,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           accuracy={accuracy}
           classificationCounts={classificationCounts}
           phaseBreakdown={phaseBreakdown}
+          gradingComplete={gradingComplete}
           openingName={openingName ? frameOpeningForStudent(openingName, playerColor).label : openingName}
           moveCount={Math.max(1, Math.ceil(moves.length / 2))}
           moves={moves}
@@ -4480,7 +4520,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               }),
             });
             setWalkStarted(true);
-            props.onWalkStarted?.();
             // The walk plays itself from the Start tap (David 2026-09-05).
             walkPlayback.play();
           }}

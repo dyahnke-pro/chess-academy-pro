@@ -19,7 +19,8 @@ import {
   transformationPrompt,
   type TransformationResult,
 } from './positionTransformation';
-import { getOpeningNameByEco, isBookLine } from './openingDetectionService';
+import { getOpeningNameByEco } from './openingDetectionService';
+import { isTheoryLine } from './bookDeparture';
 import { isFixtureGame } from './fixtureGames';
 import { playedAtMs, type WeaknessProvenance } from './weaknessSpine';
 import { capEval } from './accuracyService';
@@ -489,7 +490,7 @@ async function analyzeGameWithStockfish(
     // but a genuine BLUNDER still surfaces even in a "named" line (2.Qh5,
     // the Wayward Queen, is in the DB yet drops ~400cp). So skip book moves
     // only below the blunder magnitude; the principled gate, not a ply cutoff.
-    if (cpLoss < BOOK_BLUNDER_CP && isBookLine(moves.slice(0, moveIdx + 1))) continue;
+    if (cpLoss < BOOK_BLUNDER_CP && isTheoryLine(moves.slice(0, moveIdx + 1))) continue;
 
     const moveNumber = Math.floor(moveIdx / 2) + 1;
     // 🔒 BAND IN EXPECTED POINTS, LIKE CHESS.COM AND LIKE REVIEW (2026-09-20).
@@ -1053,24 +1054,6 @@ export async function getMistakePuzzlesDue(
   return due.slice(0, limit);
 }
 
-export async function getMistakePuzzlesByGame(
-  gameId: string,
-): Promise<MistakePuzzle[]> {
-  return db.mistakePuzzles
-    .where('sourceGameId')
-    .equals(gameId)
-    .toArray();
-}
-
-export async function getMistakePuzzlesByClassification(
-  classification: MistakeClassification,
-): Promise<MistakePuzzle[]> {
-  return db.mistakePuzzles
-    .where('classification')
-    .equals(classification)
-    .toArray();
-}
-
 /** Position identity for capture dedup — placement+side+castling+ep (no
  *  move counters) + the played SAN. Mirrors weaknessSpine.posKey. */
 function capturePosKey(fen: string, san: string): string {
@@ -1365,15 +1348,6 @@ export async function getAllMistakePuzzles(): Promise<MistakePuzzle[]> {
   });
 
   return all;
-}
-
-export async function getMistakePuzzlesByPhase(
-  phase: MistakeGamePhase,
-): Promise<MistakePuzzle[]> {
-  return db.mistakePuzzles
-    .where('gamePhase')
-    .equals(phase)
-    .toArray();
 }
 
 // ─── Grading ────────────────────────────────────────────────────────────────

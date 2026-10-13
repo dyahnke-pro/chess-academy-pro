@@ -30,6 +30,10 @@ interface ReviewSummaryCardProps {
    *  preparing on the same screen. */
   onStartWalk?: () => void;
   walkReady?: boolean;
+  /** False while the review is still reading the game ahead of the walk: the
+   *  whole-game numbers (accuracy, phase grades, move counts) wait for the
+   *  last read rather than show a part of the game as the whole (2026-10-13). */
+  gradingComplete?: boolean;
   onPlayAgain: () => void;
   onBackToCoach: () => void;
   onNavigateToMistakes?: () => void;
@@ -49,6 +53,7 @@ export function ReviewSummaryCard({
   onStartReview,
   onStartWalk,
   walkReady = true,
+  gradingComplete = true,
   onPlayAgain,
   onBackToCoach,
   onNavigateToMistakes,
@@ -93,8 +98,14 @@ export function ReviewSummaryCard({
         </span>
       </motion.div>
 
-      {/* Hero Accuracy */}
-      <AnimatedAccuracy accuracy={playerAccuracy} />
+      {/* Hero Accuracy — only once every move is graded */}
+      {gradingComplete ? (
+        <AnimatedAccuracy accuracy={playerAccuracy} />
+      ) : (
+        <p className="text-xs" style={{ color: 'var(--color-text-muted)' }} data-testid="review-grading-pending">
+          Accuracy and move grades appear once the whole game is read.
+        </p>
+      )}
 
       {/* Eval Graph */}
       <motion.div
@@ -112,17 +123,17 @@ export function ReviewSummaryCard({
       </motion.div>
 
       {/* Phase Grades */}
-      <PhaseGrades phases={phaseBreakdown} />
+      {gradingComplete && <PhaseGrades phases={phaseBreakdown} />}
 
       {/* Classification Pills */}
-      <motion.div
+      {gradingComplete && <motion.div
         initial={{ y: 10, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.3, delay: 0.25 }}
         className="w-full"
       >
         <ClassificationPills counts={classificationCounts} />
-      </motion.div>
+      </motion.div>}
 
       {/* Opening name */}
       {openingName && (

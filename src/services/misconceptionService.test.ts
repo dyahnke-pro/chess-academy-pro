@@ -3,7 +3,6 @@ import { db } from '../db/schema';
 import {
   logMisconception,
   getMisconceptionProfile,
-  getAllMisconceptions,
   recordTagDrillResult,
   isMisconceptionDue,
 } from './misconceptionService';
@@ -29,7 +28,7 @@ describe('logMisconception', () => {
     expect(rec).not.toBeNull();
     expect(rec!.status).toBe('open');
     expect(rec!.masteryHits).toBe(0);
-    const all = await getAllMisconceptions();
+    const all = await db.misconceptionTags.toArray();
     expect(all).toHaveLength(1);
   });
 
@@ -40,7 +39,7 @@ describe('logMisconception', () => {
       fen: FEN,
     });
     expect(rec).toBeNull();
-    expect(await getAllMisconceptions()).toHaveLength(0);
+    expect(await db.misconceptionTags.toArray()).toHaveLength(0);
   });
 
   it("requires a customLabel for the 'other' catch-all", async () => {
@@ -106,7 +105,7 @@ describe('recordTagDrillResult — SRS spacing, never graduate out', () => {
     // One success spaces it into the future — due count drops to 0 today.
     await recordTagDrillResult('missed-tactic', true);
 
-    const all = await getAllMisconceptions();
+    const all = await db.misconceptionTags.toArray();
     expect(all).toHaveLength(1); // still present — nothing graduated away
     expect(all[0].status).toBe('improving');
     expect(all[0].masteryHits).toBe(1);
@@ -122,13 +121,13 @@ describe('recordTagDrillResult — SRS spacing, never graduate out', () => {
   it('the interval lengthens with each consecutive success', async () => {
     await logMisconception({ tag: 'missed-tactic', source: 'discussion-practice', fen: FEN });
     await recordTagDrillResult('missed-tactic', true);
-    const afterOne = (await getAllMisconceptions())[0];
+    const afterOne = (await db.misconceptionTags.toArray())[0];
     const gapOne = (afterOne.dueAt ?? 0) - Date.now();
 
     // Force it due again, then a second success should space it out FURTHER.
     await db.misconceptionTags.update(afterOne.id, { dueAt: Date.now() - 1 });
     await recordTagDrillResult('missed-tactic', true);
-    const afterTwo = (await getAllMisconceptions())[0];
+    const afterTwo = (await db.misconceptionTags.toArray())[0];
     const gapTwo = (afterTwo.dueAt ?? 0) - Date.now();
 
     expect(afterTwo.masteryHits).toBe(2);
@@ -139,11 +138,11 @@ describe('recordTagDrillResult — SRS spacing, never graduate out', () => {
     await logMisconception({ tag: 'missed-tactic', source: 'discussion-practice', fen: FEN });
     await recordTagDrillResult('missed-tactic', true);
     // Make it due again to drill it, then miss.
-    const rec = (await getAllMisconceptions())[0];
+    const rec = (await db.misconceptionTags.toArray())[0];
     await db.misconceptionTags.update(rec.id, { dueAt: Date.now() - 1 });
     await recordTagDrillResult('missed-tactic', false);
 
-    const all = await getAllMisconceptions();
+    const all = await db.misconceptionTags.toArray();
     expect(all[0].status).toBe('open');
     expect(all[0].masteryHits).toBe(0);
     expect(isMisconceptionDue(all[0])).toBe(true); // back in today's feed

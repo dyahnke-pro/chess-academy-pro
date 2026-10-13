@@ -86,7 +86,10 @@ export type ForwardStop =
   /** A legacy reading gate is open. Unreachable today — `setReadingGate` is
    *  only ever called with null — and kept so the guard declares itself
    *  rather than pretending to advance. */
-  | 'reading-gate';
+  | 'reading-gate'
+  /** The next move is not graded yet — the review is still reading the game
+   *  ahead of the walk (2026-10-13). Clears itself when the read lands. */
+  | 'reading-ahead';
 
 export type ForwardOutcome = { advanced: true } | { advanced: false; stop: ForwardStop };
 
@@ -95,8 +98,9 @@ export type ForwardOutcome = { advanced: true } | { advanced: false; stop: Forwa
  *
  * `pause` is the honest answer for every card the STUDENT has to act on: the
  * walk genuinely is not going anywhere until they do, so say so and let the
- * button tell the truth. `reschedule` exists for stops that clear themselves;
- * nothing uses it today, and a reason that needs it should say why here.
+ * button tell the truth. `reschedule` is for stops that clear themselves:
+ * `reading-ahead` waits for the read-ahead to grade the next move, and the walk
+ * goes on by itself the moment it does.
  */
 const AUTO_ADVANCE_ON_STOP: Record<ForwardStop, 'reschedule' | 'pause'> = {
   'quiz-open': 'pause',
@@ -104,6 +108,7 @@ const AUTO_ADVANCE_ON_STOP: Record<ForwardStop, 'reschedule' | 'pause'> = {
   'planned-question': 'pause',
   'find-the-shot': 'pause',
   'reading-gate': 'pause',
+  'reading-ahead': 'reschedule',
 };
 
 export interface UseReviewPlaybackResult {

@@ -56,22 +56,22 @@ describe('sanitizeForTTS', () => {
 
   describe('SAN moves', () => {
     it('"Nxf7" → "knight takes f7"', () => {
-      expect(sanitizeForTTS('Nxf7 is the move')).toBe('knight takes f7 is the move');
+      expect(sanitizeForTTS('Nxf7 is the move')).toBe('Knight takes f7 is the move');
     });
     it('"Bc4" → "bishop to c4"', () => {
       expect(sanitizeForTTS('play Bc4')).toBe('play bishop to c4');
     });
     it('disambiguated "Rad8" → "a-rook to d8"', () => {
-      expect(sanitizeForTTS('Rad8 centralises the rook')).toBe('a-rook to d8 centralises the rook');
+      expect(sanitizeForTTS('Rad8 centralises the rook')).toBe('A-rook to d8 centralises the rook');
     });
     it('disambiguated capture "Nbxd2" → "b-knight takes d2"', () => {
       expect(sanitizeForTTS('then Nbxd2')).toBe('then b-knight takes d2');
     });
     it('a sentence that says mate does not say it twice (F38)', () => {
-      expect(sanitizeForTTS('Rxd1# is mate.')).toBe('rook takes d1 is checkmate.');
+      expect(sanitizeForTTS('Rxd1# is mate.')).toBe('Rook takes d1 is checkmate.');
     });
     it('rank-disambiguated "R1e2" → "rook from the first rank to e2"', () => {
-      expect(sanitizeForTTS('R1e2 holds')).toBe('rook from the first rank to e2 holds');
+      expect(sanitizeForTTS('R1e2 holds')).toBe('Rook from the first rank to e2 holds');
     });
     it('natural disambiguation does not trip the sanitizer-leak detector', () => {
       // "knight b to d2" (old form) had a lone "b to" the leak detector
@@ -79,7 +79,7 @@ describe('sanitizeForTTS', () => {
       expect(detectSanitizerLeak(sanitizeForTTS('then Nbd2'))).toBe(false);
     });
     it('pawn capture "exd5" → "e-pawn takes d5"', () => {
-      expect(sanitizeForTTS('exd5 opens the center')).toBe('e-pawn takes d5 opens the center');
+      expect(sanitizeForTTS('exd5 opens the center')).toBe('E-pawn takes d5 opens the center');
     });
     it('strips move-number prefixes so Polly never reads "1." as "one"', () => {
       // White counters: "1.d4 and 2.c4" → "d4 and c4" (plain pawn pushes
@@ -241,23 +241,23 @@ describe('a multi-word directive tag is still a directive', () => {
 // important thing about the move, was the one part handed over raw.
 describe('check and mate suffixes are spoken, not punctuated', () => {
   it('expands a checking piece move (the exact line from his game)', () => {
-    expect(sanitizeForTTS('Bh7+ was a blunder.')).toBe('bishop to h7, check was a blunder.');
+    expect(sanitizeForTTS('Bh7+ was a blunder.')).toBe('Bishop to h7, check was a blunder.');
   });
 
   it('expands mate', () => {
-    expect(sanitizeForTTS('Rd8#')).toBe('rook to d8, checkmate');
+    expect(sanitizeForTTS('Rd8#')).toBe('Rook to d8, checkmate');
   });
 
   it('expands a checking capture', () => {
-    expect(sanitizeForTTS('Nxe5+')).toBe('knight takes e5, check');
+    expect(sanitizeForTTS('Nxe5+')).toBe('Knight takes e5, check');
   });
 
   it('expands a checking pawn capture', () => {
-    expect(sanitizeForTTS('exd5+')).toBe('e-pawn takes d5, check');
+    expect(sanitizeForTTS('exd5+')).toBe('E-pawn takes d5, check');
   });
 
   it('expands a checking castle', () => {
-    expect(sanitizeForTTS('O-O-O+')).toBe('castle queenside, check');
+    expect(sanitizeForTTS('O-O-O+')).toBe('Castle queenside, check');
   });
 
   it('leaves ordinary prose punctuation alone', () => {
@@ -281,5 +281,28 @@ describe('a name that starts with a piece letter stays a name (Learn walk 2026-1
   });
   it('a real piece letter after "the" still expands', () => {
     expect(sanitizeForTTS('the K is exposed')).toBe('the king is exposed');
+  });
+});
+
+describe('a move that opens a sentence opens it capitalised (2026-10-13)', () => {
+  it('capitalises an expanded move at the start and after a full stop', async () => {
+    const { sanitizeForTTS } = await import('./voiceService');
+    expect(sanitizeForTTS('Nc6 follows a rule worth keeping.')).toMatch(/^Knight to c6 follows/);
+    expect(sanitizeForTTS('Good. exd5 opens the file.')).toMatch(/Good\. E-pawn takes d5 opens/);
+  });
+  it('NEGATIVE CONTROL: a move mid-sentence stays lower case', async () => {
+    const { sanitizeForTTS } = await import('./voiceService');
+    expect(sanitizeForTTS('Then Nc6 develops.')).toMatch(/Then knight to c6 develops/);
+  });
+});
+
+describe('a bare Black-move ellipsis is not read aloud (2026-10-13)', () => {
+  it('drops the "…" before a move and keeps the move', async () => {
+    const { sanitizeForTTS } = await import('./voiceService');
+    expect(sanitizeForTTS('…Nd4 heads for their king — …Ne2+ next.')).toBe('Knight to d4 heads for their king — knight to e2, check next.');
+  });
+  it('NEGATIVE CONTROL: an ellipsis in prose stays', async () => {
+    const { sanitizeForTTS } = await import('./voiceService');
+    expect(sanitizeForTTS('Wait… then it lands.')).toBe('Wait… then it lands.');
   });
 });

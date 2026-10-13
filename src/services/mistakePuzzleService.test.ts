@@ -4,8 +4,6 @@ import {
   generateMistakePuzzlesFromGame,
   generateMistakePuzzlesForBatch,
   getMistakePuzzlesDue,
-  getMistakePuzzlesByGame,
-  getMistakePuzzlesByClassification,
   getAllMistakePuzzles,
   gradeMistakePuzzle,
   deleteMistakePuzzle,
@@ -457,33 +455,6 @@ describe('mistakePuzzleService', () => {
 
       const due = await getMistakePuzzlesDue(2);
       expect(due).toHaveLength(2);
-    });
-  });
-
-  describe('getMistakePuzzlesByGame', () => {
-    it('filters by sourceGameId', async () => {
-      await db.mistakePuzzles.bulkAdd([
-        buildMistakePuzzle({ id: 'p1', sourceGameId: 'game-A' }),
-        buildMistakePuzzle({ id: 'p2', sourceGameId: 'game-A' }),
-        buildMistakePuzzle({ id: 'p3', sourceGameId: 'game-B' }),
-      ]);
-
-      const puzzles = await getMistakePuzzlesByGame('game-A');
-      expect(puzzles).toHaveLength(2);
-      expect(puzzles.every((p) => p.sourceGameId === 'game-A')).toBe(true);
-    });
-  });
-
-  describe('getMistakePuzzlesByClassification', () => {
-    it('filters by classification', async () => {
-      await db.mistakePuzzles.bulkAdd([
-        buildMistakePuzzle({ id: 'p1', classification: 'blunder' }),
-        buildMistakePuzzle({ id: 'p2', classification: 'mistake' }),
-        buildMistakePuzzle({ id: 'p3', classification: 'blunder' }),
-      ]);
-
-      const blunders = await getMistakePuzzlesByClassification('blunder');
-      expect(blunders).toHaveLength(2);
     });
   });
 

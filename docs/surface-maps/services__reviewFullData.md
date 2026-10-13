@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1643 lines · 9 exports · 13 importers · 15 tests · 0 audits**
+**1678 lines · 12 exports · 14 importers · 16 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,6 +19,7 @@
 - `src/services/orderComputers.test.ts`
 - `src/services/prematureBreak.test.ts`
 - `src/services/reviewFullData.test.ts`
+- `src/services/reviewVerdictSentence.test.ts`
 - `src/services/reviewWalk2065.test.ts`
 - `src/services/reviewWalkCT.test.ts`
 - `src/services/slipAnswer.test.ts`
@@ -29,7 +30,7 @@
 ## Exports and every call site
 
 ### `prematureBreakWhy` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1141`
+- `src/services/coachFeatureService.ts:1007`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -53,7 +54,7 @@
 - `src/services/batch2Wiring.test.ts:53`
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
-- `src/services/coachFeatureService.ts:1976`
+- `src/services/coachFeatureService.ts:1842`
 - `src/services/exchangeIdeas.test.ts:207`
 - `src/services/forkTrick.test.ts:60`
 - `src/services/hangingVsUndefended.test.ts:11`
@@ -98,15 +99,29 @@
 - `src/test/teach02Wired.test.ts:66`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:5479`
+- `src/services/coachFeatureService.ts:5279`
 - `src/services/reviewFullData.test.ts:204`
 - `src/services/reviewFullData.test.ts:207`
 - `src/services/reviewFullData.test.ts:215`
 - `src/services/reviewFullData.test.ts:219`
 
+### `verdictSentence` (function) — 3 call sites
+- `src/services/reviewVerdictSentence.test.ts:10`
+- `src/services/reviewVerdictSentence.test.ts:11`
+- `src/services/reviewVerdictSentence.test.ts:12`
+
+### `praiseWhy` (function) — 4 call sites
+- `src/services/reviewVerdictSentence.test.ts:21`
+- `src/services/reviewVerdictSentence.test.ts:24`
+- `src/services/reviewVerdictSentence.test.ts:27`
+- `src/services/reviewVerdictSentence.test.ts:30`
+
+### `seatMoveSubject` (function) — 1 call site
+- `src/services/reviewVerdictSentence.test.ts:15`
+
 ### `describeMoveInfluence` (function) — 2 call sites
-- `src/services/reviewNarrationFidelity.test.ts:129`
-- `src/services/reviewNarrationFidelity.test.ts:141`
+- `src/services/reviewNarrationFidelity.test.ts:50`
+- `src/services/reviewNarrationFidelity.test.ts:62`
 
 ### `studentAnswer` (function) — 5 call sites
 - `src/services/reviewFullData.test.ts:504`
@@ -126,6 +141,7 @@
 - `src/services/prematureBreak.test.ts`
 - `src/services/reviewFullData.test.ts`
 - `src/services/reviewNarrationFidelity.test.ts`
+- `src/services/reviewVerdictSentence.test.ts`
 - `src/services/reviewWalk2065.test.ts`
 - `src/services/reviewWalkCT.test.ts`
 - `src/services/slipAnswer.test.ts`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3151 lines · 18 exports · 108 importers · 99 tests · 23 audits**
+**3168 lines · 18 exports · 108 importers · 99 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,8 +16,8 @@
 - **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3322) — names `voiceService`
 - **🧒 Kids section — non-negotiables** (CLAUDE.md:3499) — names `voiceService`
 - **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3808) — names `voiceService`
-- **Shared types / services** (CLAUDE.md:5448) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6291) — names `voiceService`
+- **Shared types / services** (CLAUDE.md:5437) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6280) — names `voiceService`
 
 ## Who calls in
 
@@ -174,7 +174,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolvePollyVoice` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:3663`
+- `src/components/Coach/CoachGamePage.tsx:3690`
 
 ### `resolvePollySecondaryVoice` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -228,7 +228,7 @@
 ### `normalizePieceShorthand` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `sanitizeForTTS` (function) — 50 call sites
+### `sanitizeForTTS` (function) — 55 call sites
 - `src/components/Openings/OpeningDetailPage.tsx:686`
 - `src/components/Settings/VoiceSettingsPanel.tsx:118`
 - `src/components/Settings/VoiceSettingsPanel.tsx:160`
@@ -277,6 +277,11 @@
 - `src/services/sanitizeForTTS.test.ts:274`
 - `src/services/sanitizeForTTS.test.ts:280`
 - `src/services/sanitizeForTTS.test.ts:283`
+- `src/services/sanitizeForTTS.test.ts:290`
+- `src/services/sanitizeForTTS.test.ts:291`
+- `src/services/sanitizeForTTS.test.ts:295`
+- `src/services/sanitizeForTTS.test.ts:302`
+- `src/services/sanitizeForTTS.test.ts:306`
 - `src/services/voiceService.sentenceFirst.test.ts:127`
 - `src/services/voiceService.sentenceFirst.test.ts:139`
 

@@ -1,6 +1,6 @@
 import { Chess } from 'chess.js';
 import type { MoveAnnotation, MoveClassification } from '../types';
-import { isBookLine } from './openingDetectionService';
+import { leadingBookPlies } from './bookDeparture';
 import { winPctLost, bandForWinPctLost, gradeMove } from './accuracyService';
 
 /**
@@ -116,15 +116,14 @@ export function annotationsFromEvalComments(pgn: string): MoveAnnotation[] | nul
   if (evals.some((e) => e.cp === null)) return null;
 
   const annotations: MoveAnnotation[] = [];
-  let stillBook = true;
+  const bookPlies = leadingBookPlies(moves);
   for (let i = 0; i < moves.length; i++) {
     const isWhiteMove = i % 2 === 0;
     const color: 'white' | 'black' = isWhiteMove ? 'white' : 'black';
     // evals[i] is the eval AFTER move i; the start position has no comment.
     const evalBefore = i === 0 ? 0 : (evals[i - 1].cp as number);
     const evalAfter = evals[i].cp as number;
-    const moveIsBook = stillBook && isBookLine(moves.slice(0, i + 1));
-    if (!moveIsBook) stillBook = false;
+    const moveIsBook = i < bookPlies;
 
     // 🔒 BAND IN EXPECTED POINTS, LIKE CHESS.COM (David 2026-09-20: "match
     // chess.com"). These three lines banded raw centipawns, so an IMPORTED

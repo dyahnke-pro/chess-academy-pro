@@ -137,6 +137,14 @@ describe('the king walk is the lesson, not the bishop it happened to block (WO-S
     });
     expect(out.find((a) => a.id === 'king-left-in-centre' && a.facts.walked)).toBeUndefined();
   });
+  it('an ENDGAME king walk is not "king left in the centre" (chesscom-1040709576, 2026-10-13)', () => {
+    // Queens traded on move 4 with both sides' rights in hand: Kd2 is how an
+    // endgame king goes to work.
+    const out = attributePrinciples({ replySan: null,
+      historySans: ['d4', 'e5', 'dxe5', 'd6', 'exd6', 'Qxd6', 'Qxd6', 'Bxd6', 'Kd2'], bestSan: 'Nf3', classification: 'mistake',
+    });
+    expect(out.find((a) => a.id === 'king-left-in-centre')).toBeUndefined();
+  });
 });
 
 describe('a piece hung outright is a LOOSE PIECE, never an "overvalued attack" (walks 2+3, 2026-09-23)', () => {

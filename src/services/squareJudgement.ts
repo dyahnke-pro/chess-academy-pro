@@ -138,7 +138,7 @@ export function pieceBlocksOwnPawn(fen: string, student: Color): StructureRead |
       if (!proof) continue;
       return {
         act: 'piece-blocks-own-pawn', squares: [f, w, q], proof, key: `clog:${f}>${q}`,
-        text: `Their ${PIECE_NOUN[blocker.type]} on ${f} sits in front of their own ${w} pawn, so no pawn can ever come up to back up ${q}.`,
+        text: `Their ${PIECE_NOUN[blocker.type]} on ${f} sits in front of their own ${w} pawn, so while it stays there no pawn can come up to back up ${q}.`,
       };
     }
   }

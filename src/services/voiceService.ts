@@ -465,6 +465,14 @@ function speakDisambiguation(disambig: string): string {
   return `${disambig} `;
 }
 
+/** A Black-move ellipsis with no move number in front, right before a SAN
+ *  token: "…Nd4", "...e5". */
+const BARE_BLACK_ELLIPSIS_RE = /(^|[\s(—–-])(?:\.\.\.|…)(?=[NBRQKO]|[a-h][1-8x])/g;
+
+/** A sentence that begins with an expanded move: "knight to …", "castle …",
+ *  "e-pawn takes …", "b-knight to …". */
+const SENTENCE_START_EXPANSION_RE = /(^|[.!?]\s+)((?:[a-h]-)?(?:knight|bishop|rook|queen|king|pawn)\b|castle\b|[a-h]-pawn\b)/g;
+
 /** Normalise LLM output so the spoken layer never has to read chess
  *  notation aloud. Pure function — safe to call on any string. Wraps
  *  normalizePieceShorthand with the TTS-only transforms (SAN expansion,
@@ -497,6 +505,10 @@ export function sanitizeForTTS(text: string): string {
   // move ("1.d4" → "d4", "1...d5" → "d5") for the SAN pass below. Prod
   // bug 2026-06-02: the chat brain spoke "Magnus plays 1.d4 and 2.c4".
   out = out.replace(MOVE_NUMBER_PREFIX_RE, '');
+  // …and a bare Black-move ellipsis with no number ("…Nd4 heads for their
+  // king") — the review read it aloud as a pause before the move
+  // (chesscom-1040709576, 2026-10-13).
+  out = out.replace(BARE_BLACK_ELLIPSIS_RE, '$1');
   // Castling (before piece-letter substitutions mangle the O's).
   out = out.replace(CASTLE_QUEEN_RE, 'castle queenside');
   out = out.replace(CASTLE_KING_RE, 'castle kingside');
@@ -544,6 +556,11 @@ export function sanitizeForTTS(text: string): string {
   // A sentence that already SAYS it is mate does not get the word twice
   // (Blumenfeld walk F38: "rook takes d1, checkmate is mate").
   out = out.replace(/, checkmate (is|would be|was) (?:check)?mate\b/g, ' $1 checkmate');
+  // A MOVE THAT OPENS A SENTENCE OPENS IT CAPITALISED (review of
+  // chesscom-1040709576, 2026-10-13: "knight to c6 follows a rule worth
+  // keeping"). The expansion above writes the piece name in lower case, so a
+  // move at a sentence start produced a lower-case sentence on every surface.
+  out = out.replace(SENTENCE_START_EXPANSION_RE, (_m, lead: string, word: string) => `${lead}${word[0].toUpperCase()}${word.slice(1)}`);
   // Audit-instrumentation phase-1: log every SAN→speech expansion
   // pair so Bug F-style regressions ("Nb4" → "knight to b") surface
   // the moment they happen, not after the user reports them. Only

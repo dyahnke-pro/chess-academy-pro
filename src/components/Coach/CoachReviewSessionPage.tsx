@@ -21,18 +21,23 @@ import { useNavigate, useParams, useSearchParams, useLocation } from 'react-rout
 import { Loader2 } from 'lucide-react';
 import { CoachGameReview } from './CoachGameReview';
 import { db } from '../../db/schema';
-import { gameNeedsAnalysis, analyzeSingleGame } from '../../services/gameAnalysisService';
+import { gameNeedsAnalysis, replayPgnToFens, startReviewReads, gradeReviewThrough, finishReviewReads, holdBatchAnalysis, REVIEW_READ_DEPTH, type ReviewReads } from '../../services/gameAnalysisService';
 import { ensureSampleGameSeeded } from '../../services/reviewSampleGames';
 import { useAppStore } from '../../stores/appStore';
 import { resolvePlayerColor } from '../../services/playerIdentity';
 import { logAppAudit } from '../../services/appAuditor';
 import { adaptGameRecordExplained } from '../../services/reviewGameAdapter';
-import { prebuildReviewNarration } from '../../services/reviewNarrationBuild';
 import type { GameRecord } from '../../types';
 
 // Re-exported for callers and tests that import the adapter from the page.
 export { adaptGameRecordExplained, adaptGameRecord, describeGameForStudent } from '../../services/reviewGameAdapter';
 export type { AdaptOutcome } from '../../services/reviewGameAdapter';
+
+/** How many plies the walk is graded through before it may start. The rest are
+ *  read while the student listens (the walk spends ~17 s a move; a phone reads
+ *  one in ~4 s), and the walk waits at the edge rather than speak an unread
+ *  move. */
+export const FIRST_GRADED_PLIES = 12;
 
 export function CoachReviewSessionPage(): JSX.Element {
   const navigate = useNavigate();
@@ -68,25 +73,22 @@ export function CoachReviewSessionPage(): JSX.Element {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [analyzeProgress, setAnalyzeProgress] = useState<string | null>(null);
-  /** A background deepen is running (the review is already on screen). */
-  const [deepening, setDeepening] = useState(false);
-  const walkStartedRef = useRef(false);
-  /** Resolves when the review's narration build has settled. The deepen waits
-   *  on it: one build at a time on the engine, the student's first (walk 6, R1:
-   *  the depth-16 pass and a second narration build ran beside the page's own
-   *  build, and the first narration arrived at 74s). */
-  const narrationSettledRef = useRef<{ promise: Promise<void>; resolve: () => void } | null>(null);
-  const freshSettled = (): { promise: Promise<void>; resolve: () => void } => {
-    let resolve: () => void = () => undefined;
-    const promise = new Promise<void>((r) => { resolve = r; });
-    return { promise, resolve };
-  };
-  if (narrationSettledRef.current === null) narrationSettledRef.current = freshSettled();
+  /** Plies graded so far while the read-ahead runs; null once the whole game
+   *  is graded (or it opened already graded). */
+  const [gradedThrough, setGradedThrough] = useState<number | null>(null);
+  const gradedThroughRef = useRef(-1);
+  const readsRef = useRef<ReviewReads | null>(null);
+  const regradeRef = useRef<() => void>(() => undefined);
+  /** The walk reached the graded edge: grade again as soon as a read lands. */
+  const wantMoreRef = useRef(false);
+  // The review owns the engine from the first read to the last word (a counted
+  // hold — see holdBatchAnalysis).
+  useEffect(() => holdBatchAnalysis(), []);
 
   useEffect(() => {
     let cancelled = false;
-    // A new game waits on ITS OWN narration, never the last one's.
-    narrationSettledRef.current = freshSettled();
+    gradedThroughRef.current = -1;
+    wantMoreRef.current = false;
     async function load(): Promise<void> {
       if (!gameId) {
         setLoadError('No game id in URL.');
@@ -114,98 +116,70 @@ export function CoachReviewSessionPage(): JSX.Element {
           summary: `loaded game id=${rec.id} source=${rec.source} moves=${rec.annotations?.length ?? 0}`,
           details: JSON.stringify({ gameId, source: rec.source, fullyAnalyzed: rec.fullyAnalyzed }),
         });
-        // 🔒 NEVER BLOCK ON ANALYSIS THE GAME ALREADY HAS (David 2026-09-05:
-        // "very long initial analysis … use the pre analysis from after
-        // import"). The sweep, a coach game, or a lichess import already wrote
-        // a usable eval curve; the only thing the review adds on open is the
-        // key-moment deep dive. So: annotations present → render NOW and
-        // deepen in the BACKGROUND (a small pill says so). The result lands
-        // only if the walk has not started — once the student is walking,
-        // the review is frozen and the deeper pass waits for the next open
-        // (never rewrite the walk under them). The blocking spinner survives
-        // ONLY for a game with no usable annotations at all.
-        const usable = Array.isArray(rec.annotations) && rec.annotations.length > 0
-          && rec.annotations[0].bestMoveEval !== undefined;
-        /** Key-moment deep dive BEHIND the open review: the pill says so, and
-         *  the result lands only if the walk has not started. Shared by the
-         *  swept-game open and the cold open (after its sweep). */
-        const deepenBehind = (started: GameRecord): void => {
-          setDeepening(true);
-          const settled = narrationSettledRef.current?.promise ?? Promise.resolve();
-          void settled.then(() => (cancelled ? undefined : analyzeSingleGame(started.id))).then(async () => {
-            if (cancelled) return;
-            const refreshed = await db.games.get(started.id);
-            if (cancelled || !refreshed) return;
-            // 🔒 THE DEEPEN NEVER RESETS AN OPEN REVIEW (2026-09-23). It used to
-            // remount the review whenever it landed before the walk STARTED —
-            // which is exactly while the student is watching "Preparing…". The
-            // remount threw the in-flight narration away and ran the whole prep
-            // again: measured on a real 53-ply game, first open reached Start at
-            // 126s with the prep run twice (four times under dev StrictMode).
-            // The deeper annotations are already written to the game, so the
-            // next open narrates from them — the same rule the after-start case
-            // always had.
-            void logAppAudit({
-              kind: 'coach-surface-migrated',
-              category: 'subsystem',
-              source: 'CoachReviewSessionPage.deepen',
-              summary: `deepen landed ${walkStartedRef.current ? 'after walk start' : 'before walk start'} — held for next open (game ${started.id})`,
-              details: JSON.stringify({ gameId: started.id, analysisDepth: refreshed.analysisDepth }),
-            });
-            // …and BUILD that next open now, off-screen, so it is a cache hit
-            // rather than a full prep (measured: 62s without this, 5s with).
-            void prebuildReviewNarration(started.id, 'deepen');
-          }).catch((err: unknown) => {
-            if (cancelled) return;
-            void logAppAudit({
-              kind: 'stockfish-error',
-              category: 'subsystem',
-              source: 'CoachReviewSessionPage.deepen',
-              summary: `background deepen failed: ${err instanceof Error ? err.message : String(err)}`,
-              details: JSON.stringify({ gameId: started.id }),
-            });
-          }).finally(() => {
-            if (!cancelled) setDeepening(false);
-          });
-        };
-        if (usable && gameNeedsAnalysis(rec)) {
+        // 🔒 THE REVIEW READS AHEAD OF THE WALK (2026-10-13 — see
+        // `startReviewReads`). A game already graded at review depth opens
+        // whole; any other game is read position by position at review depth,
+        // and the walk is graded only as far as those reads go. The sweep's
+        // draft curve never grades a move the student hears.
+        if (!gameNeedsAnalysis(rec) && (rec.analysisDepth ?? 0) >= REVIEW_READ_DEPTH) {
+          setGradedThrough(null);
           setGame(rec);
-          deepenBehind(rec);
-        } else if (gameNeedsAnalysis(rec)) {
-          // COLD open (no usable curve at all): the spinner covers the SWEEP
-          // only — every ply at the sweep depth, which is what the walk needs
-          // to render — then the key-moment deep dive runs behind the open
-          // review exactly like a swept game's (David 2026-09-06: the dive
-          // grew to 24 plies × 8s; that is never the student's wait).
-          setAnalyzing(true);
-          try {
-            await analyzeSingleGame(rec.id, (phase) => {
-              if (!cancelled) setAnalyzeProgress(phase);
-            }, { sweepOnly: true });
-            if (cancelled) return;
-            const refreshed = await db.games.get(rec.id);
-            if (cancelled) return;
-            setGame(refreshed ?? rec);
-            if (refreshed && gameNeedsAnalysis(refreshed)) deepenBehind(refreshed);
-          } catch (err) {
-            if (cancelled) return;
-            void logAppAudit({
-              // analyzeSingleGame is Stockfish-driven, not Lichess —
-              // mis-categorised as lichess-error on this branch. Fixed
-              // per audit item #28.
-              kind: 'stockfish-error',
-              category: 'subsystem',
-              source: 'CoachReviewSessionPage.analyze',
-              summary: `analyzeSingleGame failed: ${err instanceof Error ? err.message : String(err)}`,
-              details: JSON.stringify({ gameId }),
-            });
-            setGame(rec);
-          } finally {
-            if (!cancelled) setAnalyzing(false);
-          }
-        } else {
-          setGame(rec);
+          return;
         }
+        const { fens } = replayPgnToFens(rec.pgn);
+        const plies = Math.max(0, fens.length - 1);
+        const reads = startReviewReads(fens);
+        readsRef.current = reads;
+        const firstChunk = Math.min(plies, FIRST_GRADED_PLIES);
+        setAnalyzing(true);
+        setAnalyzeProgress(`Reading your game — move 0 of ${Math.ceil(firstChunk / 2)}…`);
+        const base = rec;
+        /** Grade everything the reads cover and hand it to the walk. One at a
+         *  time: a request that lands mid-grade runs once more after it. */
+        let grading = false;
+        let again = false;
+        const regrade = async (): Promise<void> => {
+          if (grading) { again = true; return; }
+          grading = true;
+          try {
+            do {
+              again = false;
+              const through = Math.min(plies, reads.readyThrough());
+              if (through <= gradedThroughRef.current && through < plies) continue;
+              const complete = through >= plies;
+              const annotations = complete ? await finishReviewReads(base.id) : await gradeReviewThrough(base, through);
+              if (cancelled || !annotations) return;
+              gradedThroughRef.current = through;
+              setGame({ ...base, annotations });
+              setGradedThrough(complete ? null : through);
+              setAnalyzing(false);
+              void logAppAudit({
+                kind: 'coach-surface-migrated',
+                category: 'subsystem',
+                source: 'CoachReviewSessionPage.readAhead',
+                summary: `graded ${through}/${plies} plies from review-depth reads${complete ? ' — complete' : ''}`,
+                details: JSON.stringify({ gameId: base.id, through, plies }),
+              });
+            } while (again && !cancelled);
+          } finally {
+            grading = false;
+          }
+        };
+        regradeRef.current = () => { void regrade(); };
+        reads.onProgress((r) => {
+          if (cancelled) return;
+          if (gradedThroughRef.current < 0) {
+            setAnalyzeProgress(`Reading your game — move ${Math.ceil(Math.min(r, firstChunk) / 2)} of ${Math.ceil(firstChunk / 2)}…`);
+            if (r >= firstChunk) void regrade();
+          } else if (r >= plies) {
+            void regrade();
+          } else if (wantMoreRef.current && r > gradedThroughRef.current) {
+            wantMoreRef.current = false;
+            void regrade();
+          }
+        });
+        if (reads.readyThrough() >= firstChunk) void regrade();
+        void reads.done.then(() => { if (!cancelled) void regrade(); });
       } catch (err) {
         if (cancelled) return;
         setLoadError(err instanceof Error ? err.message : String(err));
@@ -214,8 +188,19 @@ export function CoachReviewSessionPage(): JSX.Element {
     void load();
     return () => {
       cancelled = true;
+      readsRef.current?.stop();
+      readsRef.current = null;
     };
   }, [gameId]);
+
+  /** The walk is near the graded edge: grade what the reads already cover, or
+   *  as soon as the next read lands. */
+  const needMoreGraded = (): void => {
+    const reads = readsRef.current;
+    if (!reads) return;
+    if (reads.readyThrough() > gradedThroughRef.current) regradeRef.current();
+    else wantMoreRef.current = true;
+  };
 
   const playerColor = useMemo(
     // Board orientation needs a side even when the identity is unresolved;
@@ -304,13 +289,13 @@ export function CoachReviewSessionPage(): JSX.Element {
           {outcome.repairNote}
         </div>
       )}
-      {deepening && (
+      {gradedThrough !== null && (
         <div
-          data-testid="review-deepening-pill"
+          data-testid="review-reading-ahead-pill"
           className="absolute top-2 right-2 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 text-[11px] font-medium pointer-events-none"
         >
           <Loader2 size={12} className="animate-spin" />
-          Sharpening analysis…
+          Reading ahead…
         </div>
       )}
       {/* `autoStartReview` was previously passed here, forcing
@@ -338,8 +323,8 @@ export function CoachReviewSessionPage(): JSX.Element {
         // from one costliest-mistake row to another) so
         // `initialMoveIndex` re-applies on mount.
         key={`${gameId}:${initialMoveIndex}`}
-        onWalkStarted={() => { walkStartedRef.current = true; }}
-        onNarrationSettled={() => { narrationSettledRef.current?.resolve(); }}
+        gradedThroughPly={gradedThrough}
+        onNeedMoreGraded={needMoreGraded}
         // ship-5: forward gameId so `useReviewPlayback` can scope hint
         // callouts to this specific game (no cross-game leakage via
         // useCoachMemoryStore.hintRequests).

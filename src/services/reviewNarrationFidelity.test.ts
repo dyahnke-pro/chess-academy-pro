@@ -3,72 +3,9 @@
 // e6" for the OPPONENT's queen) and a fact-number drift ("two more" for a
 // 3-point knight). Board accuracy alone passes both — these guards close it.
 import { describe, it, expect } from 'vitest';
-import { narrationSeatFaithful, narrationNumbersFaithful, narrationMoverFaithful } from './coachFeatureService';
 import { royalDefenderTarget } from './reviewTeachingPoints';
 import { seatPieceReferences } from './groundedAnswer';
 import { Chess } from 'chess.js';
-
-describe('narrationSeatFaithful (board-truth possessives)', () => {
-  // Opera after 14...Qe6 — Black queen on e6, White (student) queen on b3.
-  const operaP28 = (() => {
-    const c = new Chess();
-    for (const s of ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5', 'cxb5', 'Bxb5+', 'Nbd7', 'O-O-O', 'Rd8', 'Rxd7', 'Rxd7', 'Rd1', 'Qe6']) c.move(s);
-    return c.fen();
-  })();
-
-  it('rejects the Opera ply-28 seat flip — their queen voiced as yours', () => {
-    const flipped = 'Your queen on e6 skewers your queen on b3 with the pawn on a2 behind it.';
-    expect(narrationSeatFaithful(flipped, operaP28, 'w')).toBe(false);
-  });
-
-  it('accepts the correctly-seated version of the same claim', () => {
-    const ok = 'Their queen on e6 skewers your queen on b3 with the pawn on a2 behind it.';
-    expect(narrationSeatFaithful(ok, operaP28, 'w')).toBe(true);
-  });
-
-  // Trap after 5.O-O — Black bishop on c5, White (student) bishop on c4:
-  // the warm pass invented BOTH possessives inverted (scrutiny 2026-07-21).
-  const trapP9 = (() => {
-    const c = new Chess();
-    for (const s of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3', 'd6', 'O-O']) c.move(s);
-    return c.fen();
-  })();
-
-  it('rejects invented possessives the deterministic fact never carried', () => {
-    const flipped = "Your bishop on c5 pins the f2-pawn to the king, and your opponent's bishop on c4 pins f7 to the knight.";
-    expect(narrationSeatFaithful(flipped, trapP9, 'w')).toBe(false);
-  });
-
-  it('accepts the same pins seated correctly', () => {
-    const ok = "Their bishop on c5 pins the f2-pawn to the king, and your bishop on c4 pins f7 to the knight.";
-    expect(narrationSeatFaithful(ok, trapP9, 'w')).toBe(true);
-  });
-
-  it('ignores possessive claims about empty or mismatched squares (board-accuracy guard owns those)', () => {
-    const w = 'Your rook on h5 dominates.';
-    expect(narrationSeatFaithful(w, trapP9, 'w')).toBe(true);
-  });
-});
-
-describe('narrationNumbersFaithful', () => {
-  it('rejects a material number the fact never stated', () => {
-    const det = 'cxb5 captures the knight, wins 3 points of material.';
-    const drifted = 'then cxb5 grabs the knight for two more points of material';
-    expect(narrationNumbersFaithful(det, drifted)).toBe(false);
-  });
-
-  it('accepts spelled-out versions of the same number', () => {
-    const det = 'Bxb4+ captures the queen, wins 9 points of material.';
-    const ok = 'Bxb4 takes the queen with check — nine points of material in the bag.';
-    expect(narrationNumbersFaithful(det, ok)).toBe(true);
-  });
-
-  it('leaves meta-counts like "three pins" unguarded', () => {
-    const det = 'Bishop pins d7 against the king. Bishop pins f6 against the queen. Rook pins d7 against the rook.';
-    const ok = 'Three pins now — d7 held twice, f6 nailed to the queen.';
-    expect(narrationNumbersFaithful(det, ok)).toBe(true);
-  });
-});
 
 describe('seatPieceReferences — the deterministic mine/yours package', () => {
   // Trap after 5.O-O: Black bishop c5, White bishop c4 — the detector's
@@ -100,22 +37,6 @@ describe('seatPieceReferences — the deterministic mine/yours package', () => {
   it('absorbs a leading "the" instead of doubling articles', () => {
     const seated = seatPieceReferences('the bishop on c5 eyes f2.', trapP9, 'w');
     expect(seated).toBe('their bishop on c5 eyes f2.');
-  });
-});
-
-describe('narrationCoversFacets — the LLM never chooses which facts to state (David 2026-07-22)', () => {
-  const det = "[move] You: the move Nf3 develops. [tactic] Their bishop on c5 pins your pawn on f2 against your king on g1. [does] The knight on f3 now fights for e5 and d4.";
-
-  it('rejects a warm that dropped the pin facet entirely', async () => {
-    const { narrationCoversFacets } = await import('./coachFeatureService');
-    const w = 'The knight comes to f3, fighting for e5 and d4 — natural development.';
-    expect(narrationCoversFacets(det, w)).toBe(false); // no c5/f2/g1 footprint — pin dropped
-  });
-
-  it('accepts a full reword that keeps a footprint of every facet', async () => {
-    const { narrationCoversFacets } = await import('./coachFeatureService');
-    const w = 'The knight lands on f3, staking a claim on e5 — but mind the bishop on c5: it has your f2 pawn nailed to the king on g1.';
-    expect(narrationCoversFacets(det, w)).toBe(true);
   });
 });
 
@@ -258,25 +179,6 @@ describe('opponent-threat teaching — identify, recognize, prevent (David 2026-
     const p = describeThreatPrevention(fenAfter, t!, 'd4', 'b');
     expect(p).toMatch(/hitting the bishop on c5/);
     expect(p).toMatch(/holding the whole thing together/);
-  });
-});
-
-describe('narrationMoverFaithful (the warm pass may not move a ply to the other seat)', () => {
-  it('rejects an OPPONENT ply warmed into "You grab the center" (audit 2026-09-06, 1.e4 by the opponent)', () => {
-    expect(narrationMoverFaithful('You grab the center here, and that\'s really the whole point.', false)).toBe(false);
-    expect(narrationMoverFaithful('"You plant yourself right in the center here."', false)).toBe(false);
-    // Not a verb list: the model found "seize" the moment "grab" was blocked.
-    expect(narrationMoverFaithful('You seize the center here, and that\'s what sets everything in motion.', false)).toBe(false);
-  });
-  it('accepts an opponent ply that reads the threat on YOUR piece, or a state', () => {
-    expect(narrationMoverFaithful('Your knight on d5 is sitting loose — their next move collects it.', false)).toBe(true);
-    expect(narrationMoverFaithful('Your opponent stakes a claim in the center.', false)).toBe(true);
-    expect(narrationMoverFaithful("You're a pawn down now, and they have the c-file.", false)).toBe(true);
-  });
-  it('rejects a STUDENT ply warmed into the opponent\'s seat', () => {
-    expect(narrationMoverFaithful('Your opponent takes the pawn and opens the c-file.', true)).toBe(false);
-    expect(narrationMoverFaithful('They strike in the centre with d4.', true)).toBe(false);
-    expect(narrationMoverFaithful('You take the pawn — an even trade, nothing won.', true)).toBe(true);
   });
 });
 

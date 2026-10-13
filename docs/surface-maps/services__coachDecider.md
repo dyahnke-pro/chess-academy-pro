@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**594 lines · 23 exports · 15 importers · 11 tests · 21 audits**
+**604 lines · 23 exports · 15 importers · 11 tests · 21 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,10 +30,9 @@
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4217) — names `decide`
 - **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5222) — names `decide`
 - **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5258) — names `decide`
-- **🔒🔒 LEARN NAMES THE MOVE — WITH ITS REASON (David 2026-09-24: "Rules can change. That was an old rule when we asked questions. We don't do that anymore.").** (CLAUDE.md:5297) — names `decide`
-- **🔒🔒 THE ACCURACY BAR IS 100% — every board claim true, no stopping short (David 2026-10-01: "We go until 100% accuracy. No reason to stop short. Set the new bar in memory")** (CLAUDE.md:5821) — names `decide`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6161) — names `coachDecider`
-- **The standard post-deploy ritual** (CLAUDE.md:6271) — names `coachDecider`
+- **🔒🔒 THE ACCURACY BAR IS 100% — every board claim true, no stopping short (David 2026-10-01: "We go until 100% accuracy. No reason to stop short. Set the new bar in memory")** (CLAUDE.md:5810) — names `decide`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6150) — names `coachDecider`
+- **The standard post-deploy ritual** (CLAUDE.md:6260) — names `coachDecider`
 
 ## Who calls in
 
@@ -71,15 +70,15 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `coachTurn` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7871`
-- `src/components/Coach/CoachTeachPage.tsx:8996`
-- `src/components/Coach/CoachTeachPage.tsx:11356`
+- `src/components/Coach/CoachTeachPage.tsx:8028`
+- `src/components/Coach/CoachTeachPage.tsx:9153`
+- `src/components/Coach/CoachTeachPage.tsx:11514`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
-- `src/services/coachFeatureService.ts:2422`
+- `src/services/coachFeatureService.ts:2290`
 - `src/services/learnTurnDoor.test.ts:160`
 - `src/services/learnTurnDoor.test.ts:409`
 - `src/services/learnTurnDoor.test.ts:420`
-- `src/services/positionFacts.ts:1142`
+- `src/services/positionFacts.ts:1168`
 - `src/services/puzzleMethod.ts:41`
 
 ### `StudentContext` (interface) — 0 call sites
@@ -98,7 +97,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `judgeMoment` (function) — 12 call sites
-- `src/services/positionFacts.ts:748`
+- `src/services/positionFacts.ts:770`
 - `src/test/latentForkOpensTheDoor.test.ts:47`
 - `src/test/latentForkOpensTheDoor.test.ts:51`
 - `src/test/latentForkOpensTheDoor.test.ts:55`
@@ -114,7 +113,7 @@
 ### `CoachDecision` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `decide` (function) — 71 call sites
+### `decide` (function) — 72 call sites
 - `scripts/triage-traps.mjs:36`
 - `scripts/triage-traps.mjs:48`
 - `src/components/Legal/AiConsentModal.tsx:89`
@@ -159,9 +158,10 @@
 - `src/services/coachDecider.test.ts:147`
 - `src/services/coachDecider.test.ts:191`
 - `src/services/coachDecider.test.ts:197`
-- `src/services/coachDecider.test.ts:207`
-- `src/services/coachDecider.test.ts:219`
+- `src/services/coachDecider.test.ts:203`
+- `src/services/coachDecider.test.ts:213`
 - `src/services/coachDecider.test.ts:225`
+- `src/services/coachDecider.test.ts:231`
 - `src/services/coachDecisionEmits.test.ts:47`
 - `src/services/coachDecisionEmits.test.ts:54`
 - `src/services/coachDecisionEmits.test.ts:64`
@@ -188,7 +188,7 @@
 - `src/services/teachingLayers.test.ts:105`
 
 ### `habitNeedFrom` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1724`
+- `src/services/coachFeatureService.ts:1592`
 - `src/services/habitJoin.test.ts:63`
 - `src/services/habitJoin.test.ts:66`
 - `src/services/habitJoin.test.ts:69`
@@ -198,7 +198,7 @@
 - `src/services/habitJoin.test.ts:92`
 - `src/services/habitJoin.test.ts:99`
 - `src/services/habitJoin.test.ts:100`
-- `src/services/positionFacts.ts:1014`
+- `src/services/positionFacts.ts:1036`
 
 ### `habitForCluster` (function) — 16 call sites
 - `src/services/habitJoin.test.ts:17`
@@ -219,14 +219,14 @@
 - `src/services/thinkingSteps.test.ts:40`
 
 ### `buildVoicePackage` (re-export) — 82 call sites
-- `src/components/Coach/CoachGameReview.tsx:1860`
-- `src/components/Coach/CoachGameReview.tsx:1899`
-- `src/components/Coach/CoachGameReview.tsx:1908`
-- `src/components/Coach/CoachTeachPage.tsx:8020`
+- `src/components/Coach/CoachGameReview.tsx:1918`
+- `src/components/Coach/CoachGameReview.tsx:1957`
+- `src/components/Coach/CoachGameReview.tsx:1966`
+- `src/components/Coach/CoachTeachPage.tsx:8177`
 - `src/hooks/usePhaseNarration.ts:430`
 - `src/hooks/usePhaseNarration.ts:882`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:2596`
+- `src/services/coachFeatureService.ts:2469`
 - `src/services/coachSurfaceScorecard.report.test.ts:116`
 - `src/services/coachSurfaceScorecard.report.test.ts:138`
 - `src/services/coachSurfaceScorecard.report.test.ts:149`
@@ -239,7 +239,7 @@
 - `src/services/laneReachability.test.ts:136`
 - `src/services/learnTurnDoor.ts:390`
 - `src/services/replayFence.najdorf1500.test.ts:50`
-- `src/services/reviewMoveBriefing.ts:408`
+- `src/services/reviewMoveBriefing.ts:403`
 - `src/services/ruleGradeFen.test.ts:9`
 - `src/services/ruleGradeFen.test.ts:12`
 - `src/services/speedRunReads.scale.test.ts:41`
@@ -300,54 +300,54 @@
 - `src/services/voicePackage.test.ts:560`
 - `src/services/voicePackage.test.ts:568`
 - `src/services/voicePackage.test.ts:569`
-- `src/services/voicePackage.ts:423`
+- `src/services/voicePackage.ts:424`
 
 ### `DANGER_LANES` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `describeTurnDecision` (re-export) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7878`
-- `src/components/Coach/CoachTeachPage.tsx:7885`
-- `src/components/Coach/CoachTeachPage.tsx:9090`
-- `src/components/Coach/CoachTeachPage.tsx:11389`
-- `src/components/Coach/CoachTeachPage.tsx:11494`
-- `src/services/learnTurnDoor.ts:527`
+- `src/components/Coach/CoachTeachPage.tsx:8035`
+- `src/components/Coach/CoachTeachPage.tsx:8042`
+- `src/components/Coach/CoachTeachPage.tsx:9247`
+- `src/components/Coach/CoachTeachPage.tsx:11547`
+- `src/components/Coach/CoachTeachPage.tsx:11652`
+- `src/services/learnTurnDoor.ts:542`
 
 ### `describeVoicePackage` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10460`
-- `src/components/Coach/CoachTeachPage.tsx:11494`
+- `src/components/Coach/CoachTeachPage.tsx:10617`
+- `src/components/Coach/CoachTeachPage.tsx:11652`
 - `src/services/voicePackage.test.ts:38`
-- `src/services/voicePackage.ts:595`
+- `src/services/voicePackage.ts:596`
 
 ### `keptLines` (re-export) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11460`
+- `src/components/Coach/CoachTeachPage.tsx:11618`
 - `src/services/learnTurnDoor.test.ts:193`
 - `src/services/learnTurnDoor.test.ts:199`
 - `src/services/learnTurnDoor.test.ts:205`
-- `src/services/voicePackage.ts:639`
+- `src/services/voicePackage.ts:640`
 
 ### `markableSquares` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11418`
+- `src/components/Coach/CoachTeachPage.tsx:11576`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
 - `src/services/voicePackage.test.ts:335`
 - `src/services/voicePackage.test.ts:342`
 - `src/services/voicePackage.test.ts:401`
-- `src/services/voicePackage.ts:165`
+- `src/services/voicePackage.ts:166`
 
 ### `spokenSentenceKeys` (re-export) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7890`
-- `src/components/Coach/CoachTeachPage.tsx:9430`
-- `src/components/Coach/CoachTeachPage.tsx:10473`
-- `src/components/Coach/CoachTeachPage.tsx:11399`
-- `src/services/coachFeatureService.ts:2601`
-- `src/services/reviewMoveBriefing.ts:409`
+- `src/components/Coach/CoachTeachPage.tsx:8047`
+- `src/components/Coach/CoachTeachPage.tsx:9587`
+- `src/components/Coach/CoachTeachPage.tsx:10630`
+- `src/components/Coach/CoachTeachPage.tsx:11557`
+- `src/services/coachFeatureService.ts:2474`
+- `src/services/reviewMoveBriefing.ts:404`
 - `src/services/voicePackage.test.ts:415`
 - `src/services/voicePackage.test.ts:424`
 - `src/services/voicePackage.test.ts:436`
 - `src/services/voicePackage.test.ts:514`
-- `src/services/voicePackage.ts:584`
+- `src/services/voicePackage.ts:585`
 
 ## Tests
 

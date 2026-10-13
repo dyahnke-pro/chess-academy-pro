@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { recurrenceFor, recurrenceLine, composeCallbackLine } from './misconceptionCallbacks';
-import { listMisconceptionTags } from '../services/misconceptionService';
+import { MISCONCEPTION_TAGS } from '../data/misconceptionTags';
 
 // "We've talked about this" (David 2026-07-11). Count + recency are computed
 // from the records; the line is null on a first occurrence — a coach doesn't
 // call back to something that never happened.
 
-const TAG = listMisconceptionTags().find((t) => t.id !== 'other')!.id;
+const TAG = MISCONCEPTION_TAGS.find((t) => t.id !== 'other')!.id;
 const DAY = 24 * 60 * 60 * 1000;
 const NOW = 1_800_000_000_000;
 

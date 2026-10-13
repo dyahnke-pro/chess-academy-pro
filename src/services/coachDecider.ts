@@ -461,6 +461,16 @@ export function decide(
   // both vocabularies. Only review has a move-reason line (`[does]`) to keep on
   // a ply with no teaching point.
   const support = supportedFacts(selection.spoken, bundle.squares, roleOf);
+  // 4c — A WALK NEVER GOES SILENT FOR WANT OF A TEACHING POINT (review of
+  // chesscom-1040709576, 2026-10-13). On a walk the student ASKED for every
+  // ply, so a ply of descriptions alone keeps its single most valuable one
+  // rather than closing as `unsupported` — five silent plies in one review
+  // read as the coach freezing. Interrupt surfaces keep the support rule.
+  if (posture === 'walk' && support.spoken.length === 0 && selection.spoken.length > 0) {
+    const best = [...selection.spoken].sort((x, y) => (value.get(y) ?? 0) - (value.get(x) ?? 0))[0];
+    support.spoken = [best];
+    support.quiet = support.quiet.filter((q) => q.text !== best);
+  }
   selection.spoken = support.spoken;
   selection.quiet = [...selection.quiet, ...support.quiet];
   // 5 — THE ORDER: the same values, highest first.

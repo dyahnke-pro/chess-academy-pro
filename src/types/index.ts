@@ -1662,6 +1662,9 @@ export interface MisconceptionTagRecord {
    *  sweep once the deep dive lands a best move, and this clears. Absent on a
    *  row whose classification had the full input. */
   attributionPending?: boolean;
+  /** The classifier rules revision this row's tag was computed under
+   *  (`MISCONCEPTION_RULES_REV`). Absent on rows written before revisions. */
+  rulesRev?: string;
 }
 
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**509 lines · 3 exports · 5 importers · 4 tests · 1 audits**
+**526 lines · 3 exports · 6 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/discussionPractice.test.ts`
 - `src/services/discussionPractice.ts`
 - `src/services/misconceptionClassifier.test.ts`
+- `src/services/misconceptionHungIsTaken.test.ts`
 - `src/services/section14Diagnosis.test.ts`
 
 ## Exports and every call site
@@ -26,8 +27,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `MisconceptionClassification` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `classifyMisconception` (function) — 27 call sites
-- `src/services/autoAnalyzeGame.ts:528`
+### `classifyMisconception` (function) — 30 call sites
+- `src/services/autoAnalyzeGame.ts:537`
 - `src/services/discussionPractice.ts:252`
 - `src/services/misconceptionClassifier.test.ts:11`
 - `src/services/misconceptionClassifier.test.ts:20`
@@ -53,12 +54,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionClassifier.test.ts:240`
 - `src/services/misconceptionClassifier.test.ts:252`
 - `src/services/misconceptionClassifier.test.ts:262`
+- `src/services/misconceptionHungIsTaken.test.ts:10`
+- `src/services/misconceptionHungIsTaken.test.ts:14`
+- `src/services/misconceptionHungIsTaken.test.ts:18`
 - `src/services/section14Diagnosis.test.ts:74`
 
 ## Tests
 
 - `src/services/discussionPractice.test.ts`
 - `src/services/misconceptionClassifier.test.ts`
+- `src/services/misconceptionHungIsTaken.test.ts`
 - `src/services/section14Diagnosis.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
 

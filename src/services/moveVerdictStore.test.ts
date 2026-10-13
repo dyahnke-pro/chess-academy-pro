@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { db } from '../db/schema';
-import { applyVerdict, getVerdicts, saveVerdict, toVerdictLabel, verdictKey } from './moveVerdictStore';
+import { applyVerdict, getVerdicts, saveVerdict, toVerdictLabel, verdictKey, verdictOutranks } from './moveVerdictStore';
 
 const FEN = 'r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N1BN1P/PPQ1BPP1/R4RK1 b - - 0 15';
 
@@ -17,6 +17,18 @@ describe('moveVerdictStore — one verdict per move', () => {
     const v = (await getVerdicts([verdictKey(FEN, 'Qh4')])).get(verdictKey(FEN, 'Qh4'));
     expect(v?.label).toBe('mistake');
     expect(v?.source).toBe('learn');
+  });
+
+  it('a review draft (below trust depth) is replaced by a deeper review read; a trusted one never is', async () => {
+    const key = verdictKey(FEN, 'Qh4');
+    await saveVerdict({ fenBefore: FEN, san: 'Qh4', label: 'mistake', cpLoss: 140, bestUci: null, depth: 7, source: 'review' });
+    expect(verdictOutranks({ depth: 7, source: 'review' }, 16)).toBe(false);
+    await saveVerdict({ fenBefore: FEN, san: 'Qh4', label: 'fine', cpLoss: 5, bestUci: null, depth: 16, source: 'review' });
+    expect((await getVerdicts([key])).get(key)?.label).toBe('fine');
+    await saveVerdict({ fenBefore: FEN, san: 'Qh4', label: 'blunder', cpLoss: 400, bestUci: null, depth: 20, source: 'review' });
+    expect((await getVerdicts([key])).get(key)?.label).toBe('fine');
+    expect(verdictOutranks({ depth: 16, source: 'review' }, 22)).toBe(true);
+    expect(verdictOutranks({ depth: 9, source: 'learn' }, 22)).toBe(true);
   });
 
   it('review keeps its own positive flavour; the stored verdict decides the fault', () => {
