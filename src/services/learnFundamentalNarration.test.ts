@@ -20,6 +20,7 @@ const fenBefore = (ply: number): string => { const c = new Chess(); for (const s
 // after → a flagged mover-POV loss (white-POV: −30 → +90).
 const NB6: LearnFundamentalInput = {
   currentGameId: 'live-now',
+  namesBetterMove: false,
   replySan: null,
   fenBefore: fenBefore(12),
   historySans: upTo(12),
@@ -142,6 +143,7 @@ describe('a hung piece they did not take is a miss, not free material (re-walk 1
   // 1.e4 d5 2.Bc4?? — dxc4 wins the bishop.
   const c = new Chess(); c.move('e4'); c.move('d5');
   const BC4: LearnFundamentalInput = {
+    namesBetterMove: false,
     currentGameId: 'live-now', replySan: null, fenBefore: c.fen(), historySans: ['e4', 'd5', 'Bc4'],
     playedSan: 'Bc4', bestSan: 'exd5', studentColor: 'white', costCp: null, evalBeforeWhiteCp: 30, evalAfterWhiteCp: -300,
     // The engine's line after 2.Bc4 (Stockfish 18, depth 16).
@@ -183,3 +185,4 @@ describe('fundamentalLines — the moves a verdict names travel with it (deeper 
     expect(fundamentalLines({ id: 'same-piece-twice', facts: {}, evidence: {} }, fenBefore(12), 'Nb6', true)).toEqual([]);
   });
 });
+

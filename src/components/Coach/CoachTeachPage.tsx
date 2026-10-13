@@ -10927,6 +10927,8 @@ export function CoachTeachPage(): JSX.Element {
                       // counted as a prior game (C4) — the spine reloads mid-game.
                       currentGameId: learnMemRef.current.gameId,
                       betterNamed: look?.namesBetter ?? null,
+                      // Learn free play names no move unasked (2026-10-10).
+                      namesBetterMove: false,
                       replySan: reply ?? null,
                       historySans: move.history,
                       playedSan: move.san,
@@ -11019,14 +11021,20 @@ export function CoachTeachPage(): JSX.Element {
                       // The recurrence clause rides between the verdict and the
                       // evidence, as in review — the loop's own sentence.
                       const evidence = look.line;
+                      // A MATE IT ALLOWED IS THE WHOLE STORY (Learn audit on prod,
+                      // 2026-10-13: "Rooks belong on open files … Kc6 was a
+                      // blunder — it let them force mate in 2", the mate last).
+                      // The fundamental is not why the move lost; the grade and
+                      // its mate line speak alone.
+                      const fund = look.stakes?.mate?.for === 'them' ? null : fundamental;
                       // …and the other way round: the grade already says "it let
                       // them take your rook on b2, and they missed it", so the
                       // fundamental's "that left your rook on b2 hanging" is the
                       // same claim (Najdorf re-walk ply 48). The grade speaks —
                       // it also carries the better move.
-                      const lossInGrade = !!fundamental
-                        && (fundamental.id === 'loose-piece' || fundamental.id === 'ignored-threat')
-                        && !!look.lostSquare && fundamental.square === look.lostSquare;
+                      const lossInGrade = !!fund
+                        && (fund.id === 'loose-piece' || fund.id === 'ignored-threat')
+                        && !!look.lostSquare && fund.square === look.lostSquare;
                       // WHAT THE MOVE GAVE UP (capability parity with review,
                       // 2026-09-27): the lasting damage a flagged move left —
                       // king cover thinned, a passer granted, a new isolani.
@@ -11034,10 +11042,10 @@ export function CoachTeachPage(): JSX.Element {
                       const concession = lookConcession(fenBefore, move.san, cpLoss, studentEvalAfterCp);
                       // The opening lane already announced this departure and the
                       // usual move; the fundamental keeps only its HOW.
-                      const bookSaid = fundamental?.id === 'left-book-early'
+                      const bookSaid = fund?.id === 'left-book-early'
                         && studentJustLeftBook(move.history, playerColor === 'white' ? 'w' : 'b');
-                      const line = `${fundamental
-                        ? `${lossInGrade ? '' : noteSlip(learnMemRef.current, fundamental.id)}${lossInGrade ? '' : bookSaid ? fundamental.howOnly : fundamental.verdict}${fundamental.recurrence ? ` ${fundamental.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`.trim()
+                      const line = `${fund
+                        ? `${lossInGrade ? '' : noteSlip(learnMemRef.current, fund.id)}${lossInGrade ? '' : bookSaid ? fund.howOnly : fund.verdict}${fund.recurrence ? ` ${fund.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`.trim()
                         : `${look.line}${takeDefinition(look.pattern)}`}${concession ? ` ${concession}` : ''}`;
                       // "That let them win the pawn on d4" and "they're eyeing
                       // Nxd4 — it would win your pawn on d4" are one claim (run
@@ -11048,15 +11056,15 @@ export function CoachTeachPage(): JSX.Element {
                       // trading down" is the same claim (run I, 4GIsh ply 32).
                       // Every square the words name lights up (David 2026-10-11).
                       const lookSquares = (look.squares ?? [look.square]).filter((q) => /^[a-h][1-8]$/.test(q));
-                      const winClaim = !fundamental && /^That let them win /.test(look.line) && /^[a-h][1-8]$/.test(look.square)
-                        ? [`win-${look.square}`] : fundamental?.id === 'botched-conversion' ? ['convert-method'] : [`look:${look.kind}:${move.history.length}`];
+                      const winClaim = !fund && /^That let them win /.test(look.line) && /^[a-h][1-8]$/.test(look.square)
+                        ? [`win-${look.square}`] : fund?.id === 'botched-conversion' ? ['convert-method'] : [`look:${look.kind}:${move.history.length}`];
                       // THE VERDICT'S PROOF is the punishing line it names (#68).
                       queueSpokenHint(fenAfterReply, line, look.kind,
-                        (!fundamental && look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci) : fundamental?.lines?.[0] ? lineProof(fundamental.lines[0]) : null) ?? squaresProof(line, lookSquares) ?? NO_PROOF.description, lookSquares, winClaim, move.fen,
+                        (!fund && look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci) : fund?.lines?.[0] ? lineProof(fund.lines[0]) : null) ?? squaresProof(line, lookSquares) ?? NO_PROOF.description, lookSquares, winClaim, move.fen,
                         // The punishing line the words play out, drawn ply by ply.
-                        !fundamental && look.punishLine ? lineArrowClaims(look.punishLine.fen, look.punishLine.uci, 'teach.punishLine') : undefined,
+                        !fund && look.punishLine ? lineArrowClaims(look.punishLine.fen, look.punishLine.uci, 'teach.punishLine') : undefined,
                         // The fundamental's own lines lead this sentence.
-                        fundamental?.lines,
+                        fund?.lines,
                         // A mate it allowed outranks the rest of the turn.
                         look.stakes);
                       captureEvent('coach_backward_look', {

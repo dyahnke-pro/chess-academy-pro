@@ -43,6 +43,12 @@ export interface LearnFundamentalInput extends LiveFundamentalReads {
    *  "h5 was the move — …", `BackwardLook.namesBetter`). A verdict that would
    *  name the same move leaves it out — one fact once (run I, 4GIsh ply 32). */
   betterNamed?: string | null;
+  /** May the verdict NAME the better move? REQUIRED (the one-error-computer
+   *  shape, `errorWhy.namesBetterMove`): Learn free play names no move unasked
+   *  (David 2026-10-10), so it passes false and every verdict speaks its
+   *  move-free form — "Rooks belong on open files: the d-file was open and Rd4
+   *  takes it" handed over the move on a Learn walk (prod, 2026-10-13). */
+  namesBetterMove: boolean;
   // `replySan` is inherited from `LiveFundamentalReads` — ONE field for both
   // readers: the attributor names the kick they PLAYED (F17), and this verdict
   // says "they missed it" of a loose piece they did not take (re-walk 1380,
@@ -108,7 +114,9 @@ export function learnFundamentalVerdict(
   // ("Rfe8 was the move — …"), so the verdict leaves it out — for every
   // fundamental whose stem names one, not only the conversion (Learn walk
   // 2026-10-01: "Rfe8 was the plan move. … Rfe8 was the move").
-  const attrs = input.betterNamed && verdictCanDropBetter(raw[0].id) && bare(raw[0].facts.better) === bare(input.betterNamed)
+  const dropBetter = verdictCanDropBetter(raw[0].id)
+    && (!input.namesBetterMove || (!!input.betterNamed && bare(raw[0].facts.better) === bare(input.betterNamed)));
+  const attrs = dropBetter
     ? [{ ...raw[0], facts: { ...raw[0].facts, better: '' } }, ...raw.slice(1)]
     : raw;
 
