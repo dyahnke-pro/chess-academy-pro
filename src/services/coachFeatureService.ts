@@ -75,9 +75,8 @@ import { renderCausalChain } from './causalChainVoice';
 import { matchFundamental, matchTag, type WeaknessSignal } from './weaknessSignal';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap, isMethodSentence } from './principleVoice';
-import { gameStructureTrend } from './structureReads';
 import { resolveCoachNarration } from '../utils/coachNarration';
-import type { BadHabit, CoachContext, UserProfile, CoachNarration, OpeningKey, BoardArrow } from '../types';
+import type { BadHabit, UserProfile, CoachNarration, OpeningKey, BoardArrow } from '../types';
 import { admitArrow, admitArrows, type ArrowClaim } from './arrowDoor';
 import { lineWins, lineArrows, mateLine } from './lineCalc';
 import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted } from './endgamePawnReads';
@@ -140,62 +139,6 @@ export { advantageWasMissed } from './reviewWithholding';
 export const PLAN_HOLD_PLIES = 4;
 
 export { detectBadHabits };
-
-// ─── Post-Game Analysis ─────────────────────────────────────────────────────
-
-// ─── Daily Lesson ───────────────────────────────────────────────────────────
-
-// ─── Bad Habit Report ───────────────────────────────────────────────────────
-
-// ─── Weekly Report ──────────────────────────────────────────────────────────
-
-/** These report surfaces are non-board prose about the STUDENT's own data.
- *  GROUNDED (David 2026-07-09: one LLM command): the facts — rating, the
- *  computed bad-habit list, the recent-game count — are assembled in code and
- *  voiced through the one chokepoint. The LLM reasons about nothing, so the
- *  free getCoachCommentary + the groundCoachReply bandaid are gone. */
-async function gateReport(
-  task: 'post_game_analysis' | 'daily_lesson' | 'bad_habit_report' | 'weekly_report',
-  context: CoachContext,
-  onStream?: (chunk: string) => void,
-): Promise<string> {
-  const facts = await buildReportFacts(task, context);
-  const voiced = (await voiceFacts(facts, { intent: `report:${task}`, warm: true })) ?? facts;
-  if (onStream) onStream(voiced);
-  return voiced;
-}
-
-/** Assemble the COMPUTED facts for a report — rating + the flagged bad habits
- *  (already computed by detectBadHabits), plus the recent-game count for the
- *  weekly view. Nothing here is invented; the LLM only phrases it. */
-async function buildReportFacts(
-  task: 'post_game_analysis' | 'daily_lesson' | 'bad_habit_report' | 'weekly_report',
-  context: CoachContext,
-): Promise<string> {
-  const rating = context.playerProfile.rating;
-  const weaknesses = context.playerProfile.weaknesses;
-  const focusList = weaknesses.length > 0 ? weaknesses.map((w) => `- ${w}`).join('\n') : '';
-  switch (task) {
-    case 'bad_habit_report':
-      return weaknesses.length > 0
-        ? `The student's rating is ${rating}. Their currently-flagged recurring patterns to work on:\n${focusList}`
-        : `The student's rating is ${rating}. No recurring bad habits are currently flagged.`;
-    case 'daily_lesson':
-      return weaknesses.length > 0
-        ? `The student's rating is ${rating}. Today's single focus, drawn from their flagged patterns: ${weaknesses[0]}. The lesson is to drill that one pattern.`
-        : `The student's rating is ${rating}. No specific weakness is flagged, so today's lesson is a balanced training session.`;
-    case 'weekly_report': {
-      const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-      const recent = await db.games.where('date').aboveOrEqual(weekAgo).count().catch(() => 0);
-      const head = `The student's rating is ${rating}. They played ${recent} game(s) in the last seven days.`;
-      return weaknesses.length > 0 ? `${head} Patterns still flagged to work on:\n${focusList}` : `${head} No recurring bad habits are currently flagged.`;
-    }
-    case 'post_game_analysis':
-      return weaknesses.length > 0
-        ? `The student's rating is ${rating}. Their flagged recurring patterns:\n${focusList}`
-        : `The student's rating is ${rating}. No recurring patterns are currently flagged.`;
-  }
-}
 
 // ─── Bad Habit Detection from Coach Game ────────────────────────────────────
 
@@ -4643,10 +4586,6 @@ export function narrationBoardAccurate(text: string, fen: string): boolean {
   }
 }
 
-const SPELLED_NUM: Record<string, string> = {
-  zero: '0', one: '1', two: '2', three: '3', four: '4', five: '5', six: '6',
-  seven: '7', eight: '8', nine: '9', ten: '10', eleven: '11', twelve: '12',
-};
 
 /**
  * STEM-VARIETY PASS (David 2026-07-24: the Naroditsky side-by-side showed our

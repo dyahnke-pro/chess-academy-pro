@@ -15,7 +15,6 @@ import type {
   MisconceptionSource,
 } from '../types';
 import {
-  MISCONCEPTION_TAGS,
   getMisconceptionTag,
   isMisconceptionTagId,
   MISCONCEPTION_RULES_REV,

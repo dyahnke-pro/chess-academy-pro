@@ -51,7 +51,7 @@ import {
   BEST_MOVE_DEPTH,
   __testables,
 } from './gameAnalysisService';
-import { MATE_EVAL_VALUE, INACCURACY_CP } from './engineConstants';
+import { INACCURACY_CP } from './engineConstants';
 import { buildGameRecord, buildEngineAnalysis } from '../test/factories';
 import { storePositionEvals } from './positionEvalCache';
 import { getVerdicts, saveVerdict, verdictKey } from './moveVerdictStore';
