@@ -64,3 +64,20 @@ describe('analysed games are read once for the green half (2026-10-13)', () => {
     expect(await gamesBehindPositiveHalf()).toEqual([]);
   });
 });
+
+describe('a completed pass is one read per boot (David 2026-10-13: "Every app start it analyzes games?")', () => {
+  beforeEach(async () => {
+    await db.delete();
+    await db.open();
+  });
+  it('after the pass completes, the next boot never scans games or rows', async () => {
+    await db.games.put(buildGameRecord({ id: 'g1', annotations: [] }));
+    await reconcileMisconceptionRules(IMMEDIATE_BACKFILL_SCHEDULE);
+    expect(await db.meta.get('misconception-rules-backfill')).toBeDefined();
+    // A row written by OLD code would be behind — but nothing writes behind
+    // after this build, and the done mark means the scan is not paid again.
+    await db.misconceptionTags.put(row({ id: 'late', sourceGameId: 'g1' }));
+    const next = await reconcileMisconceptionRules(IMMEDIATE_BACKFILL_SCHEDULE);
+    expect(next.games).toBe(0);
+  });
+});
