@@ -130,6 +130,13 @@ export function pieceBlocksOwnPawn(fen: string, student: Color): StructureRead |
       const q = sqAt(fileIdx(w) + df, rankNum(w) + 2 * fwd(enemy));
       if (!q || !isPawnOf(c, q, enemy)) continue;
       if (c.attackers(q, enemy).some((s) => c.get(s)?.type === 'p')) continue;
+      // A COST, OR SILENCE (David 2026-10-13: "So was this an inaccuracy?
+      // Coach should say if it is"). A pawn that cannot be backed up costs
+      // nothing until it is hit — "their knight on f3 … no pawn can come up to
+      // back up e4" was said at 3…cxd4 of an Open Sicilian, one move before
+      // Nxd4 freed f3, about a pawn nothing attacked. Said only when the
+      // student's pieces already bear on it.
+      if (c.attackers(q, student).length === 0) continue;
       // Nothing else can ever back it up: no other pawn of theirs behind it on a neighbouring file.
       const otherSupport = piecesOf(c, enemy, 'p').some((p) => p !== w && Math.abs(fileIdx(p) - fileIdx(q)) === 1
         && (enemy === 'w' ? rankNum(p) < rankNum(q) : rankNum(p) > rankNum(q)));
@@ -138,7 +145,7 @@ export function pieceBlocksOwnPawn(fen: string, student: Color): StructureRead |
       if (!proof) continue;
       return {
         act: 'piece-blocks-own-pawn', squares: [f, w, q], proof, key: `clog:${f}>${q}`,
-        text: `Their ${PIECE_NOUN[blocker.type]} on ${f} sits in front of their own ${w} pawn, so while it stays there no pawn can come up to back up ${q}.`,
+        text: `Their ${PIECE_NOUN[blocker.type]} on ${f} sits in front of their own ${w} pawn, so while it stays there no pawn can come up to back up ${q} — and you are already hitting ${q}.`,
       };
     }
   }

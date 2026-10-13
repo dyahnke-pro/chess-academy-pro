@@ -123,9 +123,18 @@ describe('squareJudgement', () => {
   it('a piece in front of its own pawn: their c3 knight means nothing backs up d4', () => {
     const fen = legal('6k1/ppp2ppp/3p4/4p3/3PP3/2N5/PPP2PPP/6K1 b - - 0 12');
     const r = voiced(pieceBlocksOwnPawn(fen, 'b'));
-    expect(r.text).toBe('Their knight on c3 sits in front of their own c2 pawn, so while it stays there no pawn can come up to back up d4.');
+    expect(r.text).toBe('Their knight on c3 sits in front of their own c2 pawn, so while it stays there no pawn can come up to back up d4 — and you are already hitting d4.');
     // An e3 pawn can still back it up: silent.
     expect(pieceBlocksOwnPawn(legal('6k1/ppp2ppp/3p4/4p3/3P4/2N1P3/PPP2PPP/6K1 b - - 0 12'), 'b')).toBeNull();
+  });
+
+  // David 2026-10-13, review of an Open Sicilian: "So was this an inaccuracy?
+  // Coach should say if it is." 2.Nf3 is the main line and nothing hits e4 at
+  // 3…cxd4 — a clog that costs nothing is not said.
+  it('a clog in front of a pawn nothing attacks is not said', () => {
+    const c = new Chess();
+    for (const m of 'e4 c5 Nf3 d6 d4 cxd4'.split(' ')) c.move(m);
+    expect(pieceBlocksOwnPawn(c.fen(), 'b')).toBeNull();
   });
 
   it('semi-outpost: d5 is a fine post until their e-pawn could one day reach e6', () => {
