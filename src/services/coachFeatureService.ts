@@ -76,7 +76,7 @@ import { matchFundamental, matchTag, type WeaknessSignal } from './weaknessSigna
 import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap, isMethodSentence } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
-import type { BadHabit, UserProfile, CoachNarration, OpeningKey, BoardArrow } from '../types';
+import type { BadHabit, UserProfile, CoachNarration, OpeningKey, BoardArrow, HeardVerdict } from '../types';
 import { admitArrow, admitArrows, type ArrowClaim } from './arrowDoor';
 import { lineWins, lineArrows, mateLine } from './lineCalc';
 import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted } from './endgamePawnReads';
@@ -576,6 +576,8 @@ export interface ReviewMoveInput {
   pv?: { afterPlayed: string[]; afterBest: string[]; /** The depth the lines were searched to (the shallower end); absent on older records. */ depth?: number };
   /** One-search move cost (MoveAnnotation.costCp) — read through `recordedMoveCost`. */
   costCp?: number;
+  /** The live grade the student heard, when the deeper read differs (MoveAnnotation.heardVerdict). */
+  heardVerdict?: HeardVerdict;
   /** The best move's eval FROM THE SAME SEARCH as `costCp` (MoveAnnotation.
    *  bestMoveEval) — the pair a cost is measured against. */
   bestMoveEval?: number;
@@ -1801,6 +1803,7 @@ export function buildReviewSegments(
         evaluation: m.evaluation ?? null,
         preMoveEval: m.preMoveEval ?? null,
         costCp: m.costCp ?? null,
+        heardVerdict: m.heardVerdict ?? null,
         classification: m.classification ?? null,
         bestMoveSan,
         bestLineUci: m.bestMove ? [m.bestMove, ...(m.pv?.afterBest ?? [])] : [],

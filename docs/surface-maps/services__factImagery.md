@@ -33,7 +33,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/factImagery.test.ts:10`
 - `src/services/factImagery.test.ts:11`
 - `src/services/factImagery.test.ts:15`
-- `src/services/reviewFullData.ts:953`
+- `src/services/reviewFullData.ts:964`
 
 ## Tests
 

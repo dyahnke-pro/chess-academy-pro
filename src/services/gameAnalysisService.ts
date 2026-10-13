@@ -1,4 +1,4 @@
-import { applyVerdict, getVerdicts, saveVerdict, toVerdictLabel, verdictKey, verdictOutranks } from './moveVerdictStore';
+import { applyVerdict, getVerdicts, saveVerdict, toVerdictLabel, verdictKey, verdictOutranks, VERDICT_TRUST_DEPTH } from './moveVerdictStore';
 import { Capacitor } from '@capacitor/core';
 import { reviewBudget, deterministicAnalysisForAudit, DETERMINISTIC_FAN_NODES, DETERMINISTIC_FAN_WATCHDOG_MS } from './analysisDeterminism';
 import { Chess } from 'chess.js';
@@ -16,7 +16,7 @@ import { readCriticalMoment, type CriticalMomentRead } from './criticalMoment';
 import { recordCapabilityEvidence } from './capabilityEvidence';
 import { getHomeOpenings } from './homeOpeningService';
 import { orderGamesForAnalysis } from './homeOpening';
-import type { GameRecord, MoveAnnotation, MoveClassification, StockfishAnalysis, UserProfile } from '../types';
+import type { GameRecord, HeardVerdict, MoveAnnotation, MoveClassification, StockfishAnalysis, UserProfile } from '../types';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -2172,6 +2172,7 @@ async function analyzeGamePositions(
         classification = 'book'; // theory move, evals unavailable — still not a mistake
       }
 
+      let heardVerdict: HeardVerdict | undefined;
       // GREAT (G3) — the only good move, PROVEN by the runner-up: the student
       // played the read's best move, the game was still contested, and every
       // other move falls off the cliff (`ONLY_MOVE_CP`, the one criticality bar).
@@ -2194,7 +2195,14 @@ async function analyzeGamePositions(
         // A review DRAFT verdict (below VERDICT_TRUST_DEPTH) decides nothing a
         // deeper read graded — it is replaced below instead (2026-10-13).
         const ownDepth = Math.min(depthAt[moveIdx] || 0, depthAt[moveIdx + 1] || 0) || null;
-        const sv = stored && verdictOutranks(stored, ownDepth) ? stored : undefined;
+        // A grade the student HEARD live (Learn) came from a short read. The
+        // review's own read at trusted depth decides, and the heard grade is
+        // kept on the move so Review says the correction out loud (David
+        // 2026-10-13: "explain, deeper reads" → "I like your suggestion").
+        const deeperDecides = !!opts.readsOnly && !!stored && stored.source !== 'review'
+          && (ownDepth ?? 0) >= VERDICT_TRUST_DEPTH;
+        if (deeperDecides && stored && toVerdictLabel(classification) !== stored.label) heardVerdict = stored.label;
+        const sv = !deeperDecides && stored && verdictOutranks(stored, ownDepth) ? stored : undefined;
         if (sv) {
           const next = applyVerdict(classification, sv, moveIsBook);
           // ONE READ PER POSITION (unity U4): the stored best move wins, so the
@@ -2225,6 +2233,7 @@ async function analyzeGamePositions(
         // Centipawns, White POV — same contract as analyzeGameOnWorker.
         evaluation: evalAfter !== null ? evalAfter : null,
         bestMove,
+        ...(heardVerdict ? { heardVerdict } : {}),
         // Deeper-depth value for refined mistakes; shallow `evalBefore`
         // otherwise. Both are cp/White-POV — same unit as `evaluation`.
         bestMoveEval: refinedBestMoveEval !== null ? refinedBestMoveEval

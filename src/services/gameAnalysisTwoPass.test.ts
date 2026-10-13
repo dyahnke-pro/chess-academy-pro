@@ -214,12 +214,18 @@ describe('the REVIEW reads every position at review depth', () => {
     expect(v?.label).toBe('blunder');
     expect(v?.source).toBe('review');
   });
-  it('a grade Learn already gave decides the review\'s — Bb5 heard as fine stays fine', async () => {
+  // DEEPER READS (David 2026-10-13: "explain, deeper reads" → "I like your
+  // suggestion"): a grade heard live came from a short read. Review's own read
+  // at trusted depth decides, and the heard grade rides the move so Review
+  // says the correction out loud. The heard grade stays stored.
+  it('a grade Learn gave live does NOT decide the review — the deeper read does, and the heard grade is kept for the correction', async () => {
     await reviewFixture();
     await saveVerdict({ fenBefore: FENS[4], san: 'Bb5', label: 'fine', cpLoss: 0, bestUci: 'f1b5', depth: 14, source: 'learn' });
     const anns = await analyzeSingleGame('g-review');
-    expect(anns![4].classification).toBe('good');
-    expect(anns![4].bestMove).toBeNull();
+    expect(anns![4].classification).toBe('blunder');
+    expect(anns![4].heardVerdict).toBe('fine');
+    const key = verdictKey(FENS[4], 'Bb5');
+    expect((await getVerdicts([key])).get(key)?.source, 'the grade the student heard stays stored').toBe('learn');
   });
 
   it('re-searches at a depth the engine can actually REACH, so a quiet position stops early', () => {

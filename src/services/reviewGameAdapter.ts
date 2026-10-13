@@ -136,6 +136,7 @@ function adaptReplayedGame(
       preMoveEval: prevEval,
       ...(annot?.pv ? { pv: annot.pv } : {}),
       ...(typeof annot?.costCp === 'number' ? { costCp: annot.costCp } : {}),
+      ...(annot?.heardVerdict ? { heardVerdict: annot.heardVerdict } : {}),
     });
     prevEval = evaluation;
   }

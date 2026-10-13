@@ -78,6 +78,7 @@ import { readTheirMove } from './opponentMoveReads';
 import { playItAnyway } from './opponentMovePurpose';
 import { knownAttack } from './attackLibrary';
 import { studentMoveStructure, theirMoveStructure, boardStructure, type StructureRead } from './structureReads';
+import type { HeardVerdict } from '../types';
 
 interface Located { type: string; color: Color; square: string; }
 
@@ -172,6 +173,9 @@ export interface MoveFactContext {
    *  on an older annotation. REQUIRED so the spoken cost is never re-derived
    *  from two separate reads when the one-search number exists. */
   costCp: number | null;
+  /** The live grade the student heard when the deeper read differs, or null.
+   *  REQUIRED so a builder decides whether a correction is owed. */
+  heardVerdict: HeardVerdict | null;
   classification: string | null;
   bestMoveSan: string | null;
   /** The engine's line FROM the best move (UCI, the best move first). REQUIRED
@@ -487,6 +491,13 @@ export function computeMoveFacets(
     && ctx.forcedRunStartPly != null
     && ctx.ply >= ctx.forcedRunStartPly
     && matingSideIsStudent(ctx.allSans, studentColorWB);
+  // THE DEEPER READ CORRECTS WHAT WAS HEARD, OUT LOUD (David 2026-10-13). A
+  // live Learn grade came from a short read; the review's depth-16 read graded
+  // the move differently. The heard grade is never swapped in silence: the
+  // correction is said, and it rides the verdict when the move is still a
+  // fault, or stands alone when the deeper read says it was fine.
+  const heardNow = ctx.heardVerdict && isStudent ? correctionAgainstHeard(ctx.heardVerdict, ctx.classification, san) : null;
+  if (heardNow && !heardNow.ridesVerdict) facets.push(`[quality] ${heardNow.text}`);
   if (ctx.classification && ctx.classification !== 'good' && ctx.classification !== 'book' && !insideStudentForcedMate) {
     // COST IS ONLY A COST ON A MOVE THAT COST SOMETHING (found 2026-09-16 by
     // reading the shipped review of David's Alapin: ply 31 spoke "that was a
@@ -600,7 +611,7 @@ export function computeMoveFacets(
     // — they come out two pawns up"); review dropped it.
     const tailSaid = consequence && ew?.tail ? (opponentMoved ? seatPieces(seatTheirErrorForStudent(ew.tail)) : seatPieces(ew.tail)) : '';
     const praiseBit = positive ? praiseWhy(ctx.classification, ctx.preMoveEval, ctx.evaluation, ctx.moverColor) : '';
-    const qf = `[${positive ? 'praise' : 'quality'}] ${verdictSentence(ctx.classification, isStudent, san)}${swingBit}${betterBit}${praiseBit}.${failedSaid ? ` ${failedSaid}` : ''}${tailSaid}`;
+    const qf = `[${positive ? 'praise' : 'quality'}] ${verdictSentence(ctx.classification, isStudent, san)}${swingBit}${betterBit}${praiseBit}.${heardNow?.ridesVerdict ? ` ${heardNow.text}` : ''}${failedSaid ? ` ${failedSaid}` : ''}${tailSaid}`;
     facets.push(qf);
     // The verdict's proof is the line its words name: the better move's own
     // line when the reason came from it, the line after the move when the
@@ -1597,6 +1608,26 @@ export function praiseWhy(
   }
   return ` — the only move here: every other move costs ${costWords(ONLY_MOVE_CP)} or more`;
 }
+const FAULT_LABELS = new Set(['inaccuracy', 'mistake', 'blunder']);
+const HEARD_WORDS: Record<HeardVerdict, string> = {
+  fine: 'fine', inaccuracy: 'an inaccuracy', mistake: 'a mistake', blunder: 'a blunder',
+};
+/** What to say when the deeper read grades a move differently from the grade
+ *  the student heard live, or null when they agree. `ridesVerdict` = the move
+ *  is still a fault, so the correction joins its verdict sentence. */
+export function correctionAgainstHeard(
+  heard: HeardVerdict,
+  classification: string | null,
+  san: string,
+): { text: string; ridesVerdict: boolean } | null {
+  const c = (classification ?? '').toLowerCase();
+  const now: HeardVerdict = FAULT_LABELS.has(c) ? (c as HeardVerdict) : 'fine';
+  if (now === heard) return null;
+  return now === 'fine'
+    ? { text: `During the game your ${san} was called ${HEARD_WORDS[heard]} — the deeper read says it was fine.`, ridesVerdict: false }
+    : { text: `During the game it was called ${HEARD_WORDS[heard]}; the deeper read says it was ${HEARD_WORDS[now]}.`, ridesVerdict: true };
+}
+
 /** The mechanics line, owned by its mover: "The move axb5 captures …" →
  *  "Your axb5 captures …" / "Their axb5 captures …". */
 export function seatMoveSubject(mech: string, isStudent: boolean): string {

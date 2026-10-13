@@ -14,7 +14,7 @@ import { Chess } from 'chess.js';
 import { groundedMoveWhy } from './groundedMoveWhy';
 import { sanToSpeech } from '../utils/sanToSpeech';
 import type { WalkthroughTree, WalkthroughTreeNode, WalkthroughTreeChild } from '../types/walkthroughTree';
-import type { ProOpeningForkTree, ProFork } from './proOpeningForks';
+import { buildProOpeningForkTree, type ProOpeningForkTree, type ProFork, type ProForkGameInput } from './proOpeningForks';
 
 const BRANCH_PLIES = 6; // how far to walk each non-majority fork branch
 
@@ -147,4 +147,15 @@ export function proForkTreeToWalkthrough(fork: ProOpeningForkTree): WalkthroughT
     studentSide: fork.studentSide,
     root: { san: null, movedBy: null, idea: '', children: rootChildren },
   };
+}
+
+/** A pro's games → their fork tree AND its walkthrough, in one call — the
+ *  surface asks for the lesson, not for the two steps that build it. Null when
+ *  the games make no tree or the tree makes no walkthrough. */
+export function proForkWalkthroughFromGames(
+  games: readonly ProForkGameInput[],
+): { tree: ProOpeningForkTree; walkthrough: WalkthroughTree } | null {
+  const tree = buildProOpeningForkTree(games);
+  const walkthrough = tree ? proForkTreeToWalkthrough(tree) : null;
+  return tree && walkthrough ? { tree, walkthrough } : null;
 }

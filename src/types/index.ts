@@ -651,7 +651,14 @@ export interface MoveAnnotation {
    *  moves scored in ONE search. Set on flagged plies by the review analysis;
    *  absent on older annotations, where readers fall back to the eval delta. */
   costCp?: number;
+  /** The grade the student HEARD live (Learn) when the review's deeper read
+   *  graded the move differently — Review says the correction out loud.
+   *  Absent when they agree or nobody graded the move live (2026-10-13). */
+  heardVerdict?: HeardVerdict;
 }
+
+/** A live verdict as the student heard it. */
+export type HeardVerdict = 'fine' | 'inaccuracy' | 'mistake' | 'blunder';
 
 export type GameSource = 'lichess' | 'chesscom' | 'master' | 'import' | 'coach';
 export type GameResult = '1-0' | '0-1' | '1/2-1/2' | '*';
@@ -1440,6 +1447,8 @@ export interface CoachGameMove {
   pv?: { afterPlayed: string[]; afterBest: string[]; /** The depth the lines were searched to (the shallower end); absent on older records. */ depth?: number };
   /** One-search move cost (see MoveAnnotation.costCp). */
   costCp?: number;
+  /** See MoveAnnotation.heardVerdict. */
+  heardVerdict?: HeardVerdict;
   expanded: boolean;
   bestMove: string | null;
   bestMoveEval: number | null;

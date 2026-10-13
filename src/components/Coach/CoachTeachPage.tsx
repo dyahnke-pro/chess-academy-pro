@@ -177,8 +177,7 @@ import {
   isWalkthroughControlPhrase,
 } from '../../services/walkthroughControlIntent';
 import { lookupPlayerGamesTool } from '../../coach/tools/cerebellum/lookupPlayerGames';
-import { buildProOpeningForkTree } from '../../services/proOpeningForks';
-import { proForkTreeToWalkthrough } from '../../services/proForkWalkthrough';
+import { proForkWalkthroughFromGames } from '../../services/proForkWalkthrough';
 import { buildSession } from '../../services/walkthroughAdapter';
 import { fetchChesscomPlayerGames } from '../../services/chesscomGamesService';
 import { OpeningPlayMode } from '../Openings/OpeningPlayMode';
@@ -4494,7 +4493,7 @@ export function CoachTeachPage(): JSX.Element {
                   const wp = wide.ok ? (wide.result as { games?: FoundPlayerGame[] } | undefined) : undefined;
                   if (wp && Array.isArray(wp.games) && wp.games.length > forkGames.length) forkGames = wp.games;
                 } catch { /* keep the 6-game set */ }
-                const forkTree = buildProOpeningForkTree(
+                const fork = proForkWalkthroughFromGames(
                   forkGames.map((g) => ({
                     pgn: g.pgn,
                     studentSide: g.studentSide,
@@ -4505,15 +4504,15 @@ export function CoachTeachPage(): JSX.Element {
                     variationLabel: openingName,
                   })),
                 );
-                const wt = forkTree ? proForkTreeToWalkthrough(forkTree) : null;
-                if (wt && forkTree) {
+                if (fork) {
+                  const { tree: forkTree, walkthrough: wt } = fork;
                   const proName = titleCase(pgReq.player);
                   const forkN = forkTree.forks.length;
                   const prose = forkN > 0
                     ? `Here's how ${proName} plays the ${openingName}, drawn from ${forkTree.gameCount} of their real games. `
                       + `At ${forkN === 1 ? 'one point' : `${forkN} points`} their games split — you'll pick which of their lines to follow, and hear why they chose each. `
                       + `Tap Play or step through with the arrows.`
-                    : `Here's how ${proName} plays the ${openingName}, drawn from ${forkTree.gameCount} of his real games — his main line move by move, with the reason behind each. `
+                    : `Here's how ${proName} plays the ${openingName}, drawn from ${forkTree.gameCount} of their real games — their main line move by move, with the reason behind each. `
                       + `Tap Play or step through with the arrows.`;
                   setMessages((prev) => [...prev, {
                     id: `${pgTurnId}-c`,

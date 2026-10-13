@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5318 lines · 31 exports · 47 importers · 46 tests · 4 audits**
+**5321 lines · 31 exports · 47 importers · 46 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -76,7 +76,7 @@
 - `src/services/coachFeatureService.test.ts:260`
 - `src/services/coachFeatureService.test.ts:280`
 - `src/services/coachFeatureService.test.ts:292`
-- `src/services/gameAnalysisService.ts:2309`
+- `src/services/gameAnalysisService.ts:2318`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -258,8 +258,8 @@
 - `src/services/coachFeatureService.test.ts:619`
 
 ### `pendingRecapture` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8069`
-- `src/components/Coach/CoachTeachPage.tsx:8158`
+- `src/components/Coach/CoachTeachPage.tsx:8068`
+- `src/components/Coach/CoachTeachPage.tsx:8157`
 - `src/services/coachFeatureService.test.ts:901`
 - `src/services/coachFeatureService.test.ts:902`
 - `src/utils/justCaptured.test.ts:20`
@@ -287,7 +287,7 @@
 - `src/services/reviewDeepThreat.test.ts:114`
 - `src/services/reviewDeepThreat.test.ts:150`
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
-- `src/services/reviewNarrationBuild.ts:94`
+- `src/services/reviewNarrationBuild.ts:95`
 - `src/services/reviewRealSweep.test.ts:187`
 - `src/services/reviewRefuted.test.ts:26`
 - `src/services/reviewRefuted.test.ts:35`
@@ -313,7 +313,7 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:575`
+- `src/services/reviewFullData.ts:586`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites

@@ -96,8 +96,8 @@
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:7929`
-- `src/components/Coach/CoachTeachPage.tsx:7935`
+- `src/components/Coach/CoachTeachPage.tsx:7928`
+- `src/components/Coach/CoachTeachPage.tsx:7934`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -155,10 +155,10 @@
 - `src/services/gameAnalysisService.ts:402`
 - `src/services/gameAnalysisService.ts:1490`
 - `src/services/gameAnalysisService.ts:1802`
-- `src/services/gameAnalysisService.ts:2346`
-- `src/services/gameAnalysisService.ts:2416`
-- `src/services/gameAnalysisService.ts:3024`
-- `src/services/gameAnalysisService.ts:3036`
+- `src/services/gameAnalysisService.ts:2355`
+- `src/services/gameAnalysisService.ts:2425`
+- `src/services/gameAnalysisService.ts:3033`
+- `src/services/gameAnalysisService.ts:3045`
 - `src/services/reviewReadAhead.test.ts:43`
 - `src/services/tacticClassifierService.ts:271`
 - `src/services/tacticClassifierService.ts:356`
@@ -173,7 +173,7 @@
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
 - `src/components/Coach/CoachGamePage.tsx:2084`
 - `src/components/Coach/CoachGameReview.tsx:376`
-- `src/services/gameAnalysisService.ts:2302`
+- `src/services/gameAnalysisService.ts:2311`
 - `src/services/mistakePuzzleService.test.ts:107`
 - `src/services/mistakePuzzleService.test.ts:161`
 - `src/services/mistakePuzzleService.test.ts:187`
@@ -252,7 +252,7 @@
 - `src/services/mistakePuzzleService.test.ts:582`
 
 ### `gradeMistakePuzzle` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2581`
+- `src/components/Coach/CoachTeachPage.tsx:2580`
 - `src/components/Puzzles/MyMistakesPage.tsx:289`
 - `src/components/Tactics/TacticCreatePage.tsx:199`
 - `src/services/conceptSchedule.test.ts:41`
@@ -271,7 +271,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `loadDrilledMotifs` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1821`
+- `src/components/Coach/CoachTeachPage.tsx:1820`
 - `src/services/conceptSchedule.test.ts:58`
 
 ### `deleteMistakePuzzle` (function) — 2 call sites
