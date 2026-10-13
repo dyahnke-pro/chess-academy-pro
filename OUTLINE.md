@@ -21,6 +21,9 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000i. WO-WHY-90 — 90% of teaching lines carry a why (David 2026-10-13)
+- ✅ the counter + bar in both walks (`why-count.mjs`, Learn V5, Review VOICE row) · 🔴 today: Learn 70% (30/43), Review 69% (24/35) · 🔴 alerts say the consequence ("…if you leave it, Bxa5 wins it") · 🔴 pins say what they win or freeze · 🔴 opening names and book departures get the tabia why (with WO-OPENING-MEMORY-01) · 🔴 a description speaks only inside a line that gives a reason
+
 ## 000h. WO-OPENING-MEMORY-01 — the coach remembers your openings (David 2026-10-13; runs ONLY after clean Review + Learn + Play prod runs and the memory checks)
 - 🟠 gate first: clean prod runs on Review, Learn and Play; memory proven (`audit-second-game-memory-prod` + `audit-loop-closes-prod` on a pair that shares a mistake) · 🔴 LEARN: an earned opening reminder from the student's own record ("the Alapin again — the last two times you left the book on move 5"), never the move (Learn names no move unasked), silent on a cold record · 🔴 PLAY: stays silent; answers book-move questions when asked ("what's the book move here?") through the door · 🔴 REVIEW: remembers opening inaccuracies per opening and variation, and suggests them — in Learn (walk / quiz that line), at the end of the review, on the dashboard (Up next), and on the teaching / flashcards tab
 

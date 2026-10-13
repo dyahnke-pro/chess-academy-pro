@@ -2349,6 +2349,19 @@ the harm here.
 
 ---
 
+## 🔒🔒 90% OF TEACHING LINES CARRY A WHY (David 2026-10-13: "a better standard is closer to 90%. Why statements are the foundational teachings of this app")
+
+Every Learn and Review walk measures it (`scripts/audit-lib/why-count.mjs`, rows
+Learn V5 / Review `VOICE why-statements-prevalent-and-numerous`): at least 90%
+of TEACHING lines give a reason or a consequence, and at least one why per
+student move. Greetings, the game's setup, "e4 — your move" and the game intro
+are not teaching and are not measured; opening names and book departures are.
+The why is COMPUTED (a consequence, a line, a stake), never a templated
+"because" bolted on to pass the count — a filler why is worse than none. A
+teaching line with no why is fixed at its producer (add the computed
+consequence) or held; a description speaks only inside a line that gives a
+reason.
+
 ## 🔒🔒 EVERY SPOKEN CONCLUSION CARRIES ITS PROOF — the proof is the thinking out loud (David 2026-10-07: "Anything that gets proven is stated out loud?" → "Yes. I have a feeling it will backfire but I think a decent starting spot.")
 
 The computers prove far more than the coach says: a pin break checked four
