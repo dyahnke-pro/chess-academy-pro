@@ -111,7 +111,7 @@ export function HeatMapPanel(): JSX.Element | null {
         getCapabilityProfile('know').catch(() => new Map()),
       ]);
       if (cancelled) return;
-      const t = heatMap(profile, weaknesses);
+      const t = heatMap(profile, slips);
       const gameDates = new Map<string, number>();
       for (const g of games) {
         const d = parseGameDate(g.date);

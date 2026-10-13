@@ -19,7 +19,10 @@
  * `progress` is honest partial credit toward green (held streak / the bar),
  * so a red tile can show it is on its way without claiming it has arrived.
  */
-import { MISCONCEPTION_TAGS, type MisconceptionTagId } from '../data/misconceptionTags';
+import { MISCONCEPTION_TAGS, isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
+import type { MisconceptionTagRecord } from '../types';
+import { isMisconceptionDue } from './misconceptionService';
+import { isFixtureDerived } from './fixtureGames';
 import {
   capabilityProven, HELD_FOR_PROVEN, PROVEN_MIN_GAMES,
   type CapabilityProfile,
@@ -41,16 +44,28 @@ export interface HeatTile {
   progress: number;
 }
 
-export interface OpenHole {
-  capabilityTag: MisconceptionTagId | null;
-  openCount: number;
-}
+/** Rows that are not a game slip: a lesson tap is the KNOW reading (its own
+ *  tile, `knowLine`), and a missed Lichess puzzle is not the student's game. */
+const NOT_A_GAME_SLIP = new Set(['lesson', 'puzzle']);
 
-export function heatMap(profile: CapabilityProfile, holes: readonly OpenHole[]): HeatTile[] {
+/**
+ * THE HEAT MAP READS EVERY SLIP (David 2026-10-13: "my heat map is not filling
+ * in. Despite having 300 games analyzed"). It used to read the ranked weakness
+ * list, whose tag rows are COUNTED rows only — and batch analysis writes every
+ * imported game's slips `counted: false` until the student reviews that game,
+ * a guard against double-counting the TALLY. The heat map is not a tally; it
+ * is the state of each skill. So a skill failed in 50 imported games read GREY
+ * ("never asked") — the one reading the Foundation says it must never be.
+ * Taking the rows themselves makes the counted-only view impossible to pass.
+ */
+export function heatMap(profile: CapabilityProfile, slips: readonly MisconceptionTagRecord[], now: number = Date.now()): HeatTile[] {
   const open = new Map<string, number>();
-  for (const h of holes) {
-    if (!h.capabilityTag || h.openCount <= 0) continue;
-    open.set(h.capabilityTag, (open.get(h.capabilityTag) ?? 0) + h.openCount);
+  for (const r of slips) {
+    if (NOT_A_GAME_SLIP.has(r.source) || isFixtureDerived(r)) continue;
+    if (!isMisconceptionTagId(r.tag) || r.tag === 'other') continue;
+    // The one definition of "open" the weakness spine uses: due today.
+    if (!isMisconceptionDue(r, now)) continue;
+    open.set(r.tag, (open.get(r.tag) ?? 0) + 1);
   }
   // `other` is the catch-all review queue, not a skill — never a tile.
   return MISCONCEPTION_TAGS

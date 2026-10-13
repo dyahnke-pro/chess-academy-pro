@@ -98,10 +98,11 @@ export async function planThinkingLesson(opts: { usernames: LessonUsernames; rat
     getThinkingLessonMemory(),
     loadThinkingTransfer(),
   ]);
+  const slips = await db.misconceptionTags.toArray().catch(() => []);
   const pending = habitPendingFrom(transfer);
   // What the student's GAMES say (the heat map Up next reads): which steps
   // they keep failing, and the boards they failed them on.
-  const tiles: HeatTile[] = heatMap(useProfile, weaknesses);
+  const tiles: HeatTile[] = heatMap(useProfile, slips);
   const candidates = withWeaknessBoards(loaded, weaknesses);
   // Only steps this student has a FAIR board for can be served (a step that
   // needs their own games has none on a fresh device).
@@ -560,11 +561,11 @@ export function carryOverKitFor(steps: readonly string[], fen: string, asked: Re
 /** Read the student's game record once per game: the steps to carry over. */
 export async function loadCarryOverSteps(): Promise<string[]> {
   try {
-    const [useProfile, weaknesses] = await Promise.all([
+    const [useProfile, slips] = await Promise.all([
       getCapabilityProfile('use').catch((): CapabilityProfile => new Map()),
-      getUnifiedWeaknessProfile().catch((): UnifiedWeakness[] => []),
+      db.misconceptionTags.toArray().catch(() => []),
     ]);
-    return carryOverSteps(heatMap(useProfile, weaknesses));
+    return carryOverSteps(heatMap(useProfile, slips));
   } catch {
     return [];
   }

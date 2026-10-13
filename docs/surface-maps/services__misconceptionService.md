@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**335 lines · 10 exports · 25 importers · 15 tests · 4 audits**
+**335 lines · 10 exports · 26 importers · 15 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,6 +27,7 @@
 - `src/services/fundamentalReachesDecider.test.ts`
 - `src/services/fundamentalsCatalog.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
+- `src/services/heatMap.ts`
 - `src/services/misconceptionDrill.test.ts`
 - `src/services/misconceptionService.test.ts`
 - `src/services/puzzleMissService.ts`
@@ -43,8 +44,9 @@
 ### `SRS_INTERVALS_MS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `isMisconceptionDue` (function) — 4 call sites
+### `isMisconceptionDue` (function) — 5 call sites
 - `src/services/bucketPipelineAudit.ts:252`
+- `src/services/heatMap.ts:67`
 - `src/services/misconceptionService.test.ts:113`
 - `src/services/misconceptionService.test.ts:148`
 - `src/services/weaknessSpine.ts:462`
@@ -111,7 +113,7 @@
 - `src/services/wrongTapTag.ts:86`
 
 ### `getMisconceptionsForGame` (function) — 1 call site
-- `src/services/thinkingLessonStart.ts:494`
+- `src/services/thinkingLessonStart.ts:495`
 
 ### `hasMisconceptionsForGame` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

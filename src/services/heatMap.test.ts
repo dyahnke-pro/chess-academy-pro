@@ -1,6 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { heatMap, newlyGreen } from './heatMap';
 import { HELD_FOR_PROVEN, PROVEN_MIN_GAMES, type CapabilityProfile, type CapabilityProfileEntry } from './capabilityEvidence';
+import type { MisconceptionTagRecord } from '../types';
+const slip = (tag: string, over: Partial<MisconceptionTagRecord> = {}): MisconceptionTagRecord => ({
+  id: `s-${Math.random()}`, tag, source: 'auto-analysis', createdAt: 1, fen: '8/8/8/8/8/8/8/8 w - - 0 1',
+  status: 'open', masteryHits: 0, dueAt: 0, sourceGameId: 'g1', ...over,
+});
+
 
 const entry = (o: Partial<CapabilityProfileEntry>): CapabilityProfileEntry => ({ held: 0, broken: 0, heldStreak: 0, streakGames: 0, ...o });
 
@@ -29,7 +35,7 @@ describe('heatMap', () => {
     const p: CapabilityProfile = new Map([
       ['missed-tactic', entry({ broken: 2, heldStreak: 0 })],
     ] as never);
-    const t = heatMap(p, [{ capabilityTag: 'hung-material' as never, openCount: 3 }]);
+    const t = heatMap(p, [slip('hung-material'), slip('hung-material'), slip('hung-material')]);
     expect(t.find((x) => x.tag === 'missed-tactic')?.state).toBe('red');
     const hung = t.find((x) => x.tag === 'hung-material');
     expect(hung?.state).toBe('red');
@@ -61,5 +67,27 @@ describe('knowLine — the lesson half of a tile', () => {
     expect(knowLine(tile('grey'), tile('red'))).toBe('In lessons: not asked yet.');
     expect(knowLine(tile('red', 2, 1), tile('red'))).toBe('In lessons: 2 right, 1 missed.');
     expect(knowLine(undefined, tile('red'))).toBeNull();
+  });
+});
+
+// David 2026-10-13: "my heat map is not filling in. Despite having 300 games
+// analyzed." Batch analysis writes an imported game's slips `counted: false`
+// until the game is reviewed; the heat map read only counted rows, so a skill
+// failed across his imports stayed GREY. The map reads every game slip.
+describe('the heat map reads every game slip, reviewed or not', () => {
+  it('uncounted batch rows from imported games turn the tile red', () => {
+    const t = heatMap(new Map(), [slip('hung-material', { counted: false }), slip('hung-material', { counted: false })]);
+    const hung = t.find((x) => x.tag === 'hung-material');
+    expect(hung?.state).toBe('red');
+    expect(hung?.openCount).toBe(2);
+  });
+  it('NEGATIVE CONTROL: a lesson tap, a puzzle miss, a demo game and a spaced-out row do not', () => {
+    const t = heatMap(new Map(), [
+      slip('hung-material', { source: 'lesson' }),
+      slip('hung-material', { source: 'puzzle' }),
+      slip('hung-material', { sourceGameId: 'sample-1' }),
+      slip('hung-material', { dueAt: Date.now() + 86_400_000 }),
+    ]);
+    expect(t.find((x) => x.tag === 'hung-material')?.state).toBe('grey');
   });
 });

@@ -95,10 +95,13 @@ export function thinkingSignalFrom(choice: StepChoice | null, tiles: readonly He
   return withGap({ state: 'grey', skill: step, step });
 }
 
-async function loadThinkingSignal(weaknesses: Parameters<typeof heatMap>[1]): Promise<ThinkingSignal | null> {
+async function loadThinkingSignal(): Promise<ThinkingSignal | null> {
   if (!THINKING_LESSON_LIVE) return null;
-  const profile = await getCapabilityProfile().catch(() => new Map());
-  const tiles = heatMap(profile, weaknesses);
+  const [profile, slips] = await Promise.all([
+    getCapabilityProfile().catch(() => new Map()),
+    db.misconceptionTags.toArray().catch(() => []),
+  ]);
+  const tiles = heatMap(profile, slips);
   const transfer = await loadThinkingTransfer();
   const gap = worstGap(transfer);
   return thinkingSignalFrom(
@@ -138,7 +141,7 @@ export async function loadUpNextInput(): Promise<UpNextInput> {
     freeOpeningOpen: freeUserOnPaywall() && hasFreeOpeningRoom(freeTier),
     coldStart: ownGames === 0 && own.length === 0,
     startSteps,
-    thinking: await loadThinkingSignal(weaknesses).catch(() => null),
+    thinking: await loadThinkingSignal().catch(() => null),
   };
 }
 

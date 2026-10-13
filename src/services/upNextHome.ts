@@ -5,7 +5,6 @@
  */
 import { db } from '../db/schema';
 import { getCapabilityProfile } from './capabilityEvidence';
-import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { heatMap } from './heatMap';
 import { weekStartKey, dayKey } from './trainingWeek';
 import { voiceService } from './voiceService';
@@ -20,12 +19,12 @@ export interface WhatGotBetter {
 }
 
 export async function loadWhatGotBetter(now: Date = new Date()): Promise<WhatGotBetter> {
-  const [profile, holes, snap] = await Promise.all([
+  const [profile, slips, snap] = await Promise.all([
     getCapabilityProfile().catch(() => new Map()),
-    getUnifiedWeaknessProfile().catch(() => []),
+    db.misconceptionTags.toArray().catch(() => []),
     db.meta.get(WEEK_SNAPSHOT_KEY).catch(() => undefined),
   ]);
-  const tiles = heatMap(profile, holes);
+  const tiles = heatMap(profile, slips);
   const greenNow = tiles.filter((t) => t.state === 'green').map((t) => t.tag);
   const week = weekStartKey(now);
   let baseline: string[] = greenNow;
