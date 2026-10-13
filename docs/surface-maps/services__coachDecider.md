@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**604 lines · 23 exports · 15 importers · 11 tests · 21 audits**
+**594 lines · 23 exports · 15 importers · 11 tests · 21 audits**
 
 ## Locked rules that govern this surface
 
@@ -113,7 +113,7 @@
 ### `CoachDecision` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `decide` (function) — 72 call sites
+### `decide` (function) — 71 call sites
 - `scripts/triage-traps.mjs:36`
 - `scripts/triage-traps.mjs:48`
 - `src/components/Legal/AiConsentModal.tsx:89`
@@ -158,10 +158,9 @@
 - `src/services/coachDecider.test.ts:147`
 - `src/services/coachDecider.test.ts:191`
 - `src/services/coachDecider.test.ts:197`
-- `src/services/coachDecider.test.ts:203`
-- `src/services/coachDecider.test.ts:213`
+- `src/services/coachDecider.test.ts:207`
+- `src/services/coachDecider.test.ts:219`
 - `src/services/coachDecider.test.ts:225`
-- `src/services/coachDecider.test.ts:231`
 - `src/services/coachDecisionEmits.test.ts:47`
 - `src/services/coachDecisionEmits.test.ts:54`
 - `src/services/coachDecisionEmits.test.ts:64`

@@ -24,7 +24,7 @@ import { missedPlanClause } from './movePlan';
 import { moveCostOneSearch, uciOfSan, type CostFan } from './moveCost';
 import { SINGLETON_SCORER } from './refutedAlternative';
 import { proofCut } from './exchangeLedger';
-import { gradeMove } from './accuracyService';
+import { gradeMove, provesOnlyMove } from './accuracyService';
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
@@ -148,8 +148,10 @@ export function gradePlayedMove(input: {
     if (!hung || lineNet === null || lineNet > -2 || !lineTakes(hung.square)) { hangAfter = 0; hung = undefined; }
   }
 
+  // ONE "ONLY MOVE" TEST — the same predicate Review's Great reads.
+  const onlyMove = lines.length >= 2 && provesOnlyMove(bestEval, moverEval(lines[1]));
   const reason = classifyMoveReason({
-    label, isBest, cpLossCp, gap12, threatNetBefore, hangAfter,
+    label, isBest, cpLossCp, gap12, onlyMove, threatNetBefore, hangAfter,
     forceNetBest: 0, capture, seeNow, refuteNet: 0,
   });
   const worthSpeaking = gradeWorthSpeaking(reason);

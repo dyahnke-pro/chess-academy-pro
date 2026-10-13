@@ -82,7 +82,7 @@
 - `src/services/misconceptionDrill.test.ts:53`
 - `src/services/misconceptionDrill.test.ts:58`
 - `src/services/misconceptionDrill.test.ts:59`
-- `src/services/misconceptionRulesBackfill.test.ts:44`
+- `src/services/misconceptionRulesBackfill.test.ts:46`
 - `src/services/misconceptionService.test.ts:20`
 - `src/services/misconceptionService.test.ts:36`
 - `src/services/misconceptionService.test.ts:46`

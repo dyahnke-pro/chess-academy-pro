@@ -188,16 +188,10 @@ describe('a row closed as unsupported files every quiet fact under that gate (B9
   const B = '[delta] Your rook on f8\'s line just opened — it now reaches f2.';
   const sq = new Map<string, readonly string[]>([[A, ['f1', 'f7', 'f8', 'f2']], [B, ['f8', 'f2', 'f1', 'f7']]]);
   it('the subsumed loser is filed unsupported, like its winner', () => {
-    const d = decide(quiet, student, { board: CALM_BOARD, proofs: new Map(), facts: [A, B], squares: sq }, 'asked');
+    const d = decide(quiet, student, { board: CALM_BOARD, proofs: new Map(), facts: [A, B], squares: sq }, 'walk');
     expect(d.speak).toBe(false);
     expect(d.reason).toBe('unsupported');
     expect(d.quiet.every((q) => q.why === 'unsupported')).toBe(true);
-  });
-  it('on a WALK the same ply keeps its best description instead of going silent (2026-10-13)', () => {
-    const d = decide(quiet, student, { board: CALM_BOARD, proofs: new Map(), facts: [A, B], squares: sq }, 'walk');
-    expect(d.speak).toBe(true);
-    expect(d.spoken).toHaveLength(1);
-    expect(d.quiet.some((q) => q.text === d.spoken[0])).toBe(false);
   });
   it('NEGATIVE CONTROL: on a row that SPEAKS, a subsumed fact keeps its own name', () => {
     const d = decide(blunder, student, bundle, 'walk');

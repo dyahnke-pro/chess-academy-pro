@@ -71,7 +71,7 @@ describe('every decision path is observable', () => {
   it('emits when every fact was an unsupported description, and names that gate', () => {
     // TEACHING POINTS FIRST (2026-09-23): a ply of descriptions with no
     // teaching point says nothing — a third silence, distinct from the two above.
-    const d = decide(loudSignals, student({ speak: true }), bundle(['[delta] one', '[delta] two']), 'asked');
+    const d = decide(loudSignals, student({ speak: true }), bundle(['[delta] one', '[delta] two']), 'walk');
     expect(d.speak).toBe(false);
     expect(rows).toHaveLength(1);
     expect(rows[0]).toMatchObject({ speak: false, reason: 'unsupported' });

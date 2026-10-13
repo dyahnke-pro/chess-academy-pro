@@ -27,16 +27,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionRulesBackfill.test.ts:29`
 
 ### `gamesBehindPositiveHalf` (function) — 2 call sites
-- `src/services/misconceptionRulesBackfill.test.ts:61`
-- `src/services/misconceptionRulesBackfill.test.ts:64`
+- `src/services/misconceptionRulesBackfill.test.ts:63`
+- `src/services/misconceptionRulesBackfill.test.ts:66`
 
 ### `reconcileMisconceptionRules` (function) — 6 call sites
 - `src/services/dataLoader.ts:996`
 - `src/services/misconceptionRulesBackfill.test.ts:35`
 - `src/services/misconceptionRulesBackfill.test.ts:38`
-- `src/services/misconceptionRulesBackfill.test.ts:62`
-- `src/services/misconceptionRulesBackfill.test.ts:75`
-- `src/services/misconceptionRulesBackfill.test.ts:80`
+- `src/services/misconceptionRulesBackfill.test.ts:64`
+- `src/services/misconceptionRulesBackfill.test.ts:79`
+- `src/services/misconceptionRulesBackfill.test.ts:84`
 
 ## Tests
 

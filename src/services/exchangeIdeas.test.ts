@@ -206,7 +206,7 @@ describe('the aggregator and the one door', () => {
     const proofs = new Map();
     const facets = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter: c.fen(), san: 'exf5', ply: 11, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
-      evaluation: 30, preMoveEval: 30, costCp: 0, classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0 },
+      evaluation: 30, preMoveEval: 30, costCp: 0, heardVerdict: null, classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0 },
       allSans: sans, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null }, undefined, undefined, undefined, undefined, undefined, proofs);
     const f = facets.find((x) => x.startsWith('[trade-idea]') && /keeps the pawn count/.test(x));
     expect(f).toBeDefined();

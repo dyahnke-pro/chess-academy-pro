@@ -295,7 +295,7 @@ describe('WIRED BOTH WAYS — every lane answers, and each surface carries the f
       seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore: before, fenAfter: after, san: 'Nf6', ply: 4,
       moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
-      evaluation: 0, preMoveEval: 0, costCp: 0, classification: 'good', bestMoveSan: 'Nf6',
+      evaluation: 0, preMoveEval: 0, costCp: 0, heardVerdict: null, classification: 'good', bestMoveSan: 'Nf6',
       prevCap: { square: null, capturedValue: 0 }, allSans: 'c4 e5 Nc3 Nf6'.split(' '),
       forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
     }, undefined, undefined, undefined, undefined, undefined, proofs);

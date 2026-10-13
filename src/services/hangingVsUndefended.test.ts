@@ -11,7 +11,7 @@ describe('"undefended" only for a defender lost', () => {
     const facets = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore: before, fenAfter: after, san: 'Kc7', ply: 74,
       moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
-      evaluation: -300, preMoveEval: -300, costCp: null, classification: 'good', bestMoveSan: null,
+      evaluation: -300, preMoveEval: -300, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0 }, allSans: [],
       forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
     });

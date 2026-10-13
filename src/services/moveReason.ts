@@ -46,6 +46,9 @@ export interface MoveReasonInputs {
   cpLossCp: number;
   /** MultiPV best-minus-second gap at the pre-move position (cp, mover POV). */
   gap12: number;
+  /** The runner-up proves this the only move (`provesOnlyMove`) — the one
+   *  test Review's Great reads. REQUIRED so the bar is never re-derived here. */
+  onlyMove: boolean;
   /** Standing must-defend material the mover faced BEFORE the move (points). */
   threatNetBefore: number;
   /** Material the mover left hanging AFTER the move (SEE net, points). */
@@ -77,7 +80,7 @@ export function classifyMoveReason(i: MoveReasonInputs): MoveReason {
   }
   if (i.label === 'inaccuracy') return i.threatNetBefore >= 3 ? 'imprecise-defence' : 'second-best';
   // good / best / book
-  if (i.isBest && i.gap12 >= 150) return 'only-move';
+  if (i.isBest && i.onlyMove) return 'only-move';
   if (i.threatNetBefore >= 3) return 'defends-threat';
   if (i.capture && i.seeNow >= 2) return 'wins-material';
   // A REAL DECISION, FOUND (WO-2 good-move verdicts, 2026-09-29): the best move

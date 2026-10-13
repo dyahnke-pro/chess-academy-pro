@@ -53,7 +53,7 @@ describe('REVIEW — the same producer on the opponent\'s ply', () => {
     const facets = computeMoveFacets({
       seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore: QUIET_BEFORE, fenAfter: quietAfter(), san: 'Rd8', ply: 2, moverColor: 'black', playerColor: 'white', studentColorWB: 'w',
-      evaluation: -900, preMoveEval: 0, costCp: null, classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0 },
+      evaluation: -900, preMoveEval: 0, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0 },
       allSans: ['a4', 'Rd8'], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
     }, undefined, undefined, undefined, undefined, undefined, proofs);
     const f = facets.find((x) => x.startsWith('[their-read]'));

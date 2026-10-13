@@ -37,7 +37,9 @@ describe('misconception rows follow the classifier rules', () => {
     expect((await db.misconceptionTags.get('stale'))?.rulesRev).toBe(MISCONCEPTION_RULES_REV);
     const second = await reconcileMisconceptionRules(IMMEDIATE_BACKFILL_SCHEDULE);
     expect(second.games).toBe(0);
-  });
+  // The backfill imports the analysis module lazily; its first cold
+  // transform takes several seconds under test (see gameAnalysisService.unload.test).
+  }, 30_000);
 
   it('a newly logged row carries the current revision', async () => {
     const { logMisconception } = await import('./misconceptionService');
@@ -54,15 +56,17 @@ describe('analysed games are read once for the green half (2026-10-13)', () => {
   it('an analysed game behind the revision is found, read, stamped — and not read again', async () => {
     const { gamesBehindPositiveHalf, POSITIVE_HALF_REV } = await import('./misconceptionRulesBackfill');
     await db.games.bulkPut([
-      buildGameRecord({ id: 'a1', fullyAnalyzed: true, annotations: [{ moveNumber: 1, color: 'white', san: 'e4', evaluation: 20, bestMove: null, classification: 'good', comment: null }] }),
+      buildGameRecord({ id: 'a1', fullyAnalyzed: true, annotations: [{ moveNumber: 1, color: 'white', san: 'e4', evaluation: 20, bestMove: null, bestMoveEval: null, classification: 'good', comment: null }] }),
       buildGameRecord({ id: 'a2', fullyAnalyzed: false, annotations: [] }),
-      buildGameRecord({ id: 'sample-x', fullyAnalyzed: true, annotations: [{ moveNumber: 1, color: 'white', san: 'e4', evaluation: 20, bestMove: null, classification: 'good', comment: null }] }),
+      buildGameRecord({ id: 'sample-x', fullyAnalyzed: true, annotations: [{ moveNumber: 1, color: 'white', san: 'e4', evaluation: 20, bestMove: null, bestMoveEval: null, classification: 'good', comment: null }] }),
     ]);
     expect(await gamesBehindPositiveHalf()).toEqual(['a1']);
     await reconcileMisconceptionRules(IMMEDIATE_BACKFILL_SCHEDULE);
     expect((await db.games.get('a1'))?.positiveHalfRev).toBe(POSITIVE_HALF_REV);
     expect(await gamesBehindPositiveHalf()).toEqual([]);
-  });
+  // The backfill imports the analysis module lazily; its first cold
+  // transform takes several seconds under test (see gameAnalysisService.unload.test).
+  }, 30_000);
 });
 
 describe('a completed pass is one read per boot (David 2026-10-13: "Every app start it analyzes games?")', () => {
@@ -79,5 +83,7 @@ describe('a completed pass is one read per boot (David 2026-10-13: "Every app st
     await db.misconceptionTags.put(row({ id: 'late', sourceGameId: 'g1' }));
     const next = await reconcileMisconceptionRules(IMMEDIATE_BACKFILL_SCHEDULE);
     expect(next.games).toBe(0);
-  });
+  // The backfill imports the analysis module lazily; its first cold
+  // transform takes several seconds under test (see gameAnalysisService.unload.test).
+  }, 30_000);
 });

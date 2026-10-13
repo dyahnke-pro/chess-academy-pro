@@ -211,8 +211,7 @@ import {
   MATE_EVAL_THRESHOLD, mateEvalFor, mateDistanceOf, SHORT_MATE_MOVES, MATE_HORIZON_CP, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP,
   REVIEW_READ_DEPTH,
 } from './engineConstants';
-import { capEval, winPctLost, bandForWinPctLost, winPercent } from './accuracyService';
-import { ONLY_MOVE_CP } from './criticalityScan';
+import { capEval, winPctLost, bandForWinPctLost, winPercent, provesOnlyMove } from './accuracyService';
 import type { PvEngine, MoveScorer, ScoredMove } from './pvPlayback';
 import { moveScoresOneSearch, uciOfSan } from './moveCost';
 import { detectBrilliancy, verifySacrificeDeep, SAC_VERIFY_DEPTH } from './brilliancy';
@@ -2180,10 +2179,13 @@ async function analyzeGamePositions(
       // remembered per position so a regrade never pays twice.
       if (opts.readsOnly && classification === 'good' && evalBefore !== null) {
         const best = deepBest[moveIdx];
-        const moverWin = winPercent(isWhiteMove ? evalBefore : -evalBefore);
+        const moverCp = isWhiteMove ? evalBefore : -evalBefore;
+        // A decided game is never an only-move decision; skip the search there.
+        const moverWin = winPercent(moverCp);
         if (best && bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], best) && moverWin > 10 && moverWin < 90) {
           const gap = await onlyMoveGapCp(fens[moveIdx], ensureDeepWorker, deepBudgetMs);
-          if (gap !== null && gap >= ONLY_MOVE_CP) classification = 'great';
+          // The one predicate Learn's "the only move that holds" reads too.
+          if (gap !== null && provesOnlyMove(moverCp, moverCp - gap)) classification = 'great';
         }
       }
 

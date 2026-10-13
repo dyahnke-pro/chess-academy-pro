@@ -10,7 +10,7 @@ import {
 } from './moveReason';
 
 const base: MoveReasonInputs = {
-  label: 'good', isBest: false, cpLossCp: 0, gap12: 0, threatNetBefore: 0,
+  label: 'good', isBest: false, cpLossCp: 0, gap12: 0, onlyMove: false, threatNetBefore: 0,
   hangAfter: 0, forceNetBest: 0, capture: false, seeNow: 0, refuteNet: 0,
 };
 
@@ -31,8 +31,13 @@ describe('classifyMoveReason — faithful to the validated offline classifier', 
     expect(classifyMoveReason({ ...base, label: 'inaccuracy', cpLossCp: 60, threatNetBefore: 3 })).toBe('imprecise-defence');
     expect(classifyMoveReason({ ...base, label: 'inaccuracy', cpLossCp: 60 })).toBe('second-best');
   });
-  it('the best move standing far ahead → only-move', () => {
-    expect(classifyMoveReason({ ...base, label: 'best', isBest: true, gap12: 200 })).toBe('only-move');
+  it('the best move the runner-up proves the only one → only-move', () => {
+    expect(classifyMoveReason({ ...base, label: 'best', isBest: true, gap12: 300, onlyMove: true })).toBe('only-move');
+  });
+  it('a big gap the shared test does not prove (decided game, or under the bar) is NOT only-move (2026-10-13)', () => {
+    // Learn said "the only move that holds" at a 150 gap; Review's Great needs
+    // the one predicate. A 200 gap is a clear best, not the only move.
+    expect(classifyMoveReason({ ...base, label: 'best', isBest: true, gap12: 200, onlyMove: false })).toBe('clear-best');
   });
   it('the best move by a clear margin → clear-best; a calm best stays plain best', () => {
     expect(classifyMoveReason({ ...base, label: 'best', isBest: true, gap12: 100 })).toBe('clear-best');

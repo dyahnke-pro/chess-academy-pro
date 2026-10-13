@@ -1,4 +1,5 @@
 import type { CoachGameMove, GameAccuracy, MoveClassificationCounts } from '../types';
+import { ONLY_MOVE_CP } from './criticalityScan';
 import { INACCURACY_WIN_PCT, MISTAKE_WIN_PCT, BLUNDER_WIN_PCT, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP, SHORT_MATE_MOVES, MATE_HORIZON_CP } from './engineConstants';
 
 /** Threshold above which Stockfish encodes checkmate. */
@@ -327,4 +328,15 @@ export function detectMisses(
   }
 
   return missCount;
+}
+
+/** THE ONE "ONLY MOVE" TEST (2026-10-13: Learn said "the only move that
+ *  holds" at a 150 gap while Review's Great needed 250 and a live game — one
+ *  claim, two bars). The best move proves it is the only one when the
+ *  runner-up falls at least `ONLY_MOVE_CP` behind AND the game is still
+ *  contested (the mover's winning chance strictly between 10% and 90%): in a
+ *  decided game a gap is search noise, not a decision. Mover-POV centipawns. */
+export function provesOnlyMove(bestMoverCp: number, secondMoverCp: number): boolean {
+  const w = winPercent(bestMoverCp);
+  return w > 10 && w < 90 && bestMoverCp - secondMoverCp >= ONLY_MOVE_CP;
 }
