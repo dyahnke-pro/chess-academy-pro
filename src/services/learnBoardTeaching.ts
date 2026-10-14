@@ -73,7 +73,7 @@ import { threatStoppedBy } from './opponentMovePurpose';
 import { trickSidestepped } from './forkTrick';
 import { gameArcs } from './lookaheadPlan';
 import { studentMoveStructure } from './structureReads';
-import type { FactStakes } from './factStakes';
+import { piecePoints, type FactStakes } from './factStakes';
 
 export interface TeachingHint {
   lane: LearnLane;
@@ -228,7 +228,22 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   // THE SAFETY HABITS (P3 method beats) — earned only by what the board did.
   {
     const bc = blunderCheck(i.fenBefore, i.san, i.reply, faultCp);
-    if (bc) out.push({ lane: 'blunderCheck', proof: NO_PROOF.method, text: bc, squares: [], claims: ['method:blunder-check'], event: { name: 'coach_blunder_check_taught', props: { surface: 'coach-teach' } }, arrows: [] });
+    if (bc) {
+      // ITS STAKE AND ITS SQUARE (Learn audit 2026-10-14: held as an aside on a
+      // verdict turn, so "e6 was a blunder — it cost three or four points"
+      // spoke without the piece it named). What they took is what rides on it.
+      let lost: { square: string; piece: string } | null = null;
+      try {
+        const c = new Chess(i.fenBefore); c.move(i.san);
+        const r = i.reply ? c.move(i.reply.replace(/^…/, '')) : null;
+        if (r?.captured) lost = { square: r.to, piece: r.captured };
+      } catch { lost = null; }
+      out.push({
+        lane: 'blunderCheck', proof: NO_PROOF.method, text: bc, squares: lost ? [lost.square] : [], claims: ['method:blunder-check'],
+        event: { name: 'coach_blunder_check_taught', props: { surface: 'coach-teach' } }, arrows: [],
+        ...(lost ? { stakes: { points: piecePoints(lost.piece), plies: 1 } } : {}),
+      });
+    }
     const ap = autopilotGuard(i.san, faultCp, i.popularTopSan ?? null);
     if (ap) out.push({ lane: 'autopilot', proof: NO_PROOF.method, text: ap, squares: [to], claims: ['method:autopilot'], event: { name: 'coach_autopilot_taught', props: { surface: 'coach-teach' } }, arrows: [] });
     // THE PAWN ENDING (Naroditsky's endgame series): the move that takes the
