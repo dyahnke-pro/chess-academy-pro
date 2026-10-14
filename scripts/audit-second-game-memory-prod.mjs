@@ -161,6 +161,18 @@ async function dismissGates(page) {
   } catch { /* not shown */ }
 }
 
+/** AN IN-PLACE DRILL IS PART OF THE GAME (2026-10-14): game two opened a
+ *  "Find their targets" step off game one's slip — the loop working — and the
+ *  harness kept clicking moves the drill read as wrong taps. Answer it the way
+ *  an honest student who does not know would, and play on. */
+async function answerDrill(page) {
+  const asking = page.locator('[data-testid="thinking-lesson"][data-asking="1"]');
+  if ((await asking.count()) === 0) return false;
+  const dk = page.locator('[data-testid="thinking-lesson-dont-know"]');
+  if ((await dk.count()) > 0) { await dk.first().click({ force: true }).catch(() => {}); await page.waitForTimeout(1500); return true; }
+  return false;
+}
+
 /** Ask for a game and play it. NO navigation — that is the whole point. */
 async function playInPlace(page, listener, label) {
   const sansStart = committed(listener).length;
@@ -226,6 +238,7 @@ async function playInPlace(page, listener, label) {
     }
     legal ??= pickStudentMove(chess.fen(), chess.history().length);
     if (!legal) break;
+    for (let k = 0; k < 6 && (await answerDrill(page)); k += 1) { /* drill answered */ }
     await page.locator(`[data-square="${legal.from}"]`).first().click({ timeout: 8000, force: true }).catch(() => {});
     await page.waitForTimeout(250);
     await page.locator(`[data-square="${legal.to}"]`).first().click({ timeout: 8000, force: true }).catch(() => {});
@@ -238,13 +251,19 @@ async function playInPlace(page, listener, label) {
     let reply = null;
     while (Date.now() < replyBy && !reply) {
       await page.waitForTimeout(2500);
+      await answerDrill(page);
       reply = await absorb(page, chess);
     }
     if (!reply) break;
   }
   const said = prose(listener).slice(proseStart);
   const events = summaries(listener).slice(evStart);
-  const byFen = saidByFen(listener, rawStart);
+  // ONLY THE BOARDS THIS GAME PLAYED (2026-10-14): the previous game's last
+  // events can land after this slice opens — game one's final Be2 and its d5
+  // line were filed under game two, a board game two never reached.
+  const played = new Set();
+  { const r = new Chess(); played.add(r.fen()); for (const m of chess.history()) { r.move(m); played.add(r.fen()); } }
+  const byFen = new Map([...saidByFen(listener, rawStart)].filter(([f]) => played.has(f)));
   console.log(`[${label}] ${chess.history().length} plies — ${chess.history().join(' ')}`);
   console.log(`[${label}] spoke ${said.length} line(s)`);
   return {
