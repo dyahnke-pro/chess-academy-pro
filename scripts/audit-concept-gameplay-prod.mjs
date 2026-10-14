@@ -811,7 +811,7 @@ async function main() {
   // count (2026-09-16) — so diagnosing a red row meant re-running a 6-minute
   // prod audit to see the lines it already had in memory. David's standing
   // order is to READ the narration; the report has to carry it.
-  const report = { generatedAt: new Date().toISOString(), baseUrl: BASE_URL, ask: ASK, surface: 'live game on /coach/teach', results, spokenLines: spokenLines(listener), spokenProse: spokenProse(listener), listenerEvents: listener.getCapturedEvents().length, listenerByKind: listener.countByKind(), streamEventsThisRun: after.events.length, coachDecisions: decisionRows(listener), pageErrors };
+  const report = { generatedAt: new Date().toISOString(), baseUrl: BASE_URL, ask: ASK, surface: 'live game on /coach/teach', results, spokenLines: spokenLines(listener), spokenProse: spokenProse(listener), listenerEvents: listener.getCapturedEvents().length, listenerByKind: listener.countByKind(), streamEventsThisRun: after.events.length, coachDecisions: decisionRows(listener), learnTurns: learnTurnRows(listener), pageErrors };
   await writeFile(`${OUT_DIR}/report.json`, JSON.stringify(report, null, 2));
   const failed = results.filter((r) => !r.pass);
   console.log(`\n${results.length - failed.length}/${results.length} green — report at ${OUT_DIR}/report.json`);
