@@ -189,6 +189,17 @@ export function findConcession(args: {
     }
   }
   if (abandoned) {
+    // WHAT THE STUDENT GETS, said with it (Learn audit 2026-10-14: "That took
+    // their last defender off g4. Nothing of theirs is watching g4 now." — so
+    // what?). The square is one a piece of yours can land on beside their
+    // king; naming the piece is the reason the square matters.
+    const sq = abandoned;
+    const lander = (() => {
+      try { return after.moves({ verbose: true }).find((m) => m.to === sq && m.piece !== 'p' && m.piece !== 'k') ?? null; } catch { return null; }
+    })();
+    const openingLine = lander
+      ? `Nothing of theirs is watching ${sq} now — your ${NAME[lander.piece] ?? 'piece'} on ${lander.from} can land there, near their king.`
+      : `Nothing of theirs is watching ${sq} now.`;
     // WHO stopped guarding it. The mover itself, or a piece whose line the
     // mover stepped into (hand walk 2026-09-24: 10.Nf3 put the knight on the
     // d1–g4 diagonal and the coach said "that took your last defender off
@@ -209,7 +220,7 @@ export function findConcession(args: {
         square: abandoned,
         blockedGuard,
         said: `That shut their ${blockedGuard.piece} on ${blockedGuard.square} off from ${abandoned}.`,
-        opening: `Nothing of theirs is watching ${abandoned} now.`,
+        opening: openingLine,
       };
     }
     // David's framing — "I do not take your attack seriously so I remove one
@@ -224,7 +235,7 @@ export function findConcession(args: {
       said: wentAcross
         ? `They don't rate your play over there, so they've taken a defender off ${abandoned} to play on the other wing.`
         : `That took their last defender off ${abandoned}.`,
-      opening: `Nothing of theirs is watching ${abandoned} now.`,
+      opening: openingLine,
     };
   }
 
