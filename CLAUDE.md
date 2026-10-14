@@ -3031,6 +3031,9 @@ session; the recipe above already excludes them, but know WHY:
      ='testflight'` already sheds it)
    - `cd0d0525-259e-4443-93ec-39d98595894f` — Yorkville, his phone or computer
    - `baabb7eb-7da2-46d9-984e-a130e43c7290` — Yorkville, his phone or computer
+   - `b014f5df…` — Detroit, a Mac running the iOS app (`distribution='appstore'`,
+     `$device_type='Desktop'`): David's own audit (confirmed 2026-10-14). It
+     reports as App Store, so the `distribution` filter does NOT shed it.
    - (web) `e97b1a19-…` Yorkville macOS = his Mac on the web app — already shed by
      `platform='native'`.
    **NOT David — a REAL USER, do not exclude:** `4589387b-…` (the heavy "Lake
@@ -3607,7 +3610,7 @@ be treated as one. Concretely, these are all WRONG and have each cost real time:
 
 - holding a finished, green change off `main` "because paying customers";
 - treating a `main` push as a release requiring extra ceremony;
-- citing the 2 paying members as a reason to be cautious about a web deploy;
+- citing paying members as a reason to be cautious about a web deploy (there are none — 2026-10-14);
 - **holding a RUNTIME change — coach brain, `voiceFacts`, live narration, the
   play/teach surfaces, Stockfish wiring — off `main` because it "reaches users."
   It does not.** A runtime change is still just the web deploy. The kind of
@@ -3626,31 +3629,25 @@ someone has to initiate: a TestFlight / App Store build, or an **OTA dispatch**
 (see the correction at the top of this section). Never by a `main` push itself,
 whatever it touches.
 
-### 🔴🔴 THE APP IS LIVE ON THE APP STORE WITH PAYING CUSTOMERS (David 2026-08-03, LOCKED: "Lock into your memory where I stand with the App Store. It's live, have 21 downloads, and 2 paying members").
+### 🔴🔴 THE APP IS LIVE ON THE APP STORE — AND HAS NO PAYING USERS TODAY (David 2026-10-14: "I have no paying users").
 
-**This is a SHIPPED, REVENUE-GENERATING product. It is NOT a beta and NOT a
-private app.** As of 2026-08-03: **live on the App Store, 21 downloads, 2 PAYING
-members.** Every session must operate with that as the baseline fact — it
-supersedes any older "beta-testing ahead of release" framing elsewhere in this
-file.
+🔴 **CORRECTED 2026-10-14. This section used to say "21 downloads, 2 PAYING
+members" (David 2026-08-03) and built a churn argument on it. That figure is
+DELETED rather than annotated (the Lake Butler rule): as of 2026-10-14 there
+are ZERO paying users.** Do not cite paying members as a reason for anything.
 
-What this changes, concretely:
+It is still a PUBLIC App Store product with real (free) users, not a private
+app, so:
 
-- **A regression is not an inconvenience — it breaks something people paid
-  for.** Two paying customers is a small number and exactly the number at which
-  churn is most damaging: losing one is losing half the paying base, and early
-  users who feel burned leave reviews that outlive the bug.
-- **Every push to `main` reaches real users.** The G1 post-deploy audit is not
-  ceremony; it is the only thing standing between a bad merge and paying
-  customers. Never claim "shipped" without it.
 - **App Store submissions are public releases**, not test builds. A rejection
   costs a review cycle (1-3 days); a bad approval ships the defect to everyone.
 - **Prefer the reversible order**: land on `main` → verify prod → TestFlight →
   only then submit to the App Store. Never submit a build whose runtime
   behavior has not been verified on prod.
-- **Revenue path is load-bearing.** RevenueCat subscriptions + the freemium
-  free-tier are how those 2 members pay. Treat anything touching billing,
-  paywall, restore, or entitlement as production-critical.
+- **The revenue path is still load-bearing** — RevenueCat subscriptions + the
+  freemium free-tier are how anyone WILL pay. Treat billing, paywall, restore
+  and entitlement as production-critical; a broken purchase flow is how the
+  count stays at zero.
 
 Distribution today: **App Store (live)** + TestFlight (internal + external beta
 groups) for pre-release builds. Currently no multi-tenancy and no auth beyond
