@@ -140,6 +140,10 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   ruleException: 'affirm', fileRace: 'affirm', trade: 'affirm', timing: 'affirm', strongChoice: 'affirm',
   falseAlarm: 'affirm', tempo: 'affirm', pushOrHold: 'affirm',
   mistake: 'but', drawback: 'but', fundamental: 'but', register: 'but', rejectedTempting: 'but', kneeJerk: 'but', bookMove: 'but',
+  // The blunder check names the piece the move lost — the verdict's reason, so
+  // it is the verdict's beat and rides a verdict turn (Learn audit 2026-10-14:
+  // "e6 was a blunder — it cost three or four points" spoke, its reason held).
+  blunderCheck: 'but',
   moveOrder: 'refute', causalChain: 'refute',
   theirPurpose: 'their', theirIntent: 'their', theirMoveCost: 'their', coachMistake: 'their', gap: 'their',
   tactic: 'point', planArc: 'point', structureJudgement: 'point', openingIdea: 'point', structure: 'point', pieceQuality: 'point',
@@ -147,7 +151,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   behavior: 'point',
   phase: 'verdict', character: 'verdict',
   threat: 'now', threatAnswer: 'now', prophylaxis: 'now', gem: 'now', trapAhead: 'now', priorityFirst: 'now', countMethod: 'now',
-  checkMethod: 'now', stalemate: 'now', blunderCheck: 'now', autopilot: 'now', keepPressing: 'now', pawnEnding: 'now',
+  checkMethod: 'now', stalemate: 'now', autopilot: 'now', keepPressing: 'now', pawnEnding: 'now',
   openingEquivalence: 'name', tradeLedger: 'affirm', notYetPlayed: 'affirm', holdResource: 'affirm', captureChoice: 'affirm',
   breakRace: 'affirm', kickMap: 'point', patternFails: 'refute',
 };

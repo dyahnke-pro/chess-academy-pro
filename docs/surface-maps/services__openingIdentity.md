@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**231 lines · 10 exports · 8 importers · 4 tests · 0 audits**
+**244 lines · 10 exports · 8 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -33,7 +33,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `warmOpeningIdentity` (function) — 3 call sites
 - `src/components/Coach/CoachTeachPage.tsx:998`
-- `src/services/learnBoardTeaching.ts:687`
+- `src/services/learnBoardTeaching.ts:688`
 - `src/services/reviewOpeningTheory.ts:246`
 
 ### `setOpeningIdentity` (function) — 4 call sites
@@ -46,7 +46,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingIdentity.test.ts:36`
 
 ### `planFor` (function) — 7 call sites
-- `src/services/learnBoardTeaching.ts:666`
+- `src/services/learnBoardTeaching.ts:667`
 - `src/services/lookaheadPlan.ts:473`
 - `src/services/lookaheadPlan.ts:1114`
 - `src/services/lookaheadPlan.ts:1115`
@@ -63,7 +63,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `openingIdentityLine` (function) — 17 call sites
 - `src/services/coachApi.ts:5725`
 - `src/services/coachApi.ts:6279`
-- `src/services/learnBoardTeaching.ts:688`
+- `src/services/learnBoardTeaching.ts:689`
 - `src/services/openingGenerator.ts:2505`
 - `src/services/openingIdentity.test.ts:18`
 - `src/services/openingIdentity.test.ts:20`

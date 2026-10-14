@@ -532,3 +532,15 @@ describe('a book departure is never said without its reason (Learn audit 2026-10
     expect(d.spoke).toContain('bookMove');
   });
 });
+
+describe('the blunder check rides with the verdict it explains (Learn audit 2026-10-14)', () => {
+  it('a verdict turn keeps the line that names what the move lost', () => {
+    const F = '2kr1b1r/ppp2ppp/2n1pn2/q2P4/6b1/2N2N1P/PPPB1PP1/R2QKB1R w KQ - 0 9';
+    const d = decideTurn([
+      { lane: 'mistake', proof: NO_PROOF.stated, text: 'e6 was a blunder — it cost three or four points of advantage.', fen: F, stakes: costStakes(350) ?? undefined },
+      { lane: 'blunderCheck', proof: NO_PROOF.method, text: 'Blunder check before you let go of a piece: run CCT for them — what checks, captures and threats do they have once it lands? Here the answer was your bishop on g4.', fen: F, squares: ['g4'], stakes: { points: 3, plies: 1 } },
+    ]);
+    expect(d.spoke).toContain('mistake');
+    expect(d.spoke).toContain('blunderCheck');
+  });
+});

@@ -89,5 +89,9 @@ describe('the habit lanes speak only of a graded fault', () => {
       cpLoss: 520, bothCp: true, bestSan: 'Qxd5', bestLine: undefined, reply: 'Bxc8', cpAfter: 690,
     });
     expect(hints.map((h) => h.lane)).toContain('blunderCheck');
+    // It carries what they took — square and stake — so a verdict turn keeps it.
+    const bc = hints.find((h) => h.lane === 'blunderCheck');
+    expect(bc?.squares).toEqual(['c8']);
+    expect(bc?.stakes).toEqual({ points: 5, plies: 1 });
   });
 });
