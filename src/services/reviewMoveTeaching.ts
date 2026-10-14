@@ -541,23 +541,21 @@ export function buildReviewMoveTeaching(
     // covers b4 in their half." said nothing about why). The square is denied
     // when landing there would lose the piece: to a pawn always, to a piece
     // when the square is unguarded or the lander is worth more.
-    const denied = advanced
-      .filter((sq) => !chess.get(sq as Sq))
-      .map((sq) => {
-        // Guarded by a SECOND enemy piece — the lander does not guard itself.
-        const guarded = chess.attackers(sq as Sq, enemyColor).length > 1;
-        const lander = chess.attackers(sq as Sq, enemyColor)
-          .map((from) => ({ from, piece: chess.get(from as Sq) }))
-          .filter((a) => a.piece && a.piece.type !== 'p' && a.piece.type !== 'k')
-          .filter((a) => mv.piece === 'p' || !guarded || (PIECE_VAL[a.piece!.type] ?? 0) > attackerVal)[0];
-        return lander ? { sq, from: lander.from, type: lander.piece!.type } : null;
-      })
-      .filter((d): d is NonNullable<typeof d> => d !== null);
-    if (denied.length) {
-      const d = denied[0];
-      return `The ${PIECE_NOUN[mv.piece]} takes ${d.sq} away from ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[d.type]} on ${d.from}.`;
+    // Nothing wanted the square → the coverage teaches nothing and the move
+    // falls through (David 2026-10-14: a description speaks only inside a
+    // line that gives a reason).
+    for (const sq of advanced) {
+      if (chess.get(sq as Sq)) continue;
+      const enemyOn = chess.attackers(sq as Sq, enemyColor);
+      // Guarded by a SECOND enemy piece — the lander does not guard itself.
+      const guarded = enemyOn.length > 1;
+      for (const from of enemyOn) {
+        const piece = chess.get(from);
+        if (!piece || piece.type === 'p' || piece.type === 'k') continue;
+        if (mv.piece !== 'p' && guarded && (PIECE_VAL[piece.type] ?? 0) <= attackerVal) continue;
+        return `The ${PIECE_NOUN[mv.piece]} takes ${sq} away from ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[piece.type]} on ${from}.`;
+      }
     }
-    return `The ${PIECE_NOUN[mv.piece]} now covers ${list(advanced)} in ${moverIsStudent ? 'their' : 'your'} half.`;
   }
   // (e) The king — its journey IS the lesson (endgame = few pieces left → the
   //     king turns into a fighting piece; else it's about getting to safety).

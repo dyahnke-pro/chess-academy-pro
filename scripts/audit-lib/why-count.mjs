@@ -23,6 +23,15 @@ const WHY = new RegExp([
   String.raw`\bgives? up (?:its|their|your) guard\b`, String.raw`\bonly (?:one|a single) \w+ (?:shields|guards|defends)\b`, String.raw`\bcan be taken\b`,
   String.raw`\byou'?re (?:losing|winning|clearly worse|clearly better|worse|better) — they'?re up\b`,
   String.raw`\bwhere (?:they|you) (?:hold|have)\b`, String.raw`\bunveils\b`, String.raw`\bthey win\b`, String.raw`\byou win\b`,
+  // EFFECT WORDINGS (David 2026-10-14: "Agreed"): a consequence counts only
+  // when it names what it acts on — "which attacks your knight on c6", not a
+  // bare "which attacks". DESCRIPTIONS_NOT_WHY in the test is the negative
+  // control that keeps this from turning into a wording reward.
+  String.raw`\b(?:which|and) (?:attacks|hits|pins|forks|traps|guards|defends|blocks|undermines|threatens) (?:your|their|the|its) \w+`,
+  String.raw`\bgives? up (?:the|your|their|its) \w+`, String.raw`\bhas no (?:escape|square|retreat|way out)\b`,
+  String.raw`\b(?:a|the) guard does not help\b`, String.raw`\btakes \w+ away from (?:your|their) \w+`,
+  String.raw`\blifts the pressure\b`, String.raw`\bis worth (?:less|more) than\b`, String.raw`\btakes (?:moves|time|tempi) to\b`,
+  String.raw`\b(?:is|are) safe now\b`, String.raw`\bthe guard that holds\b`, String.raw`\bsaves the \w+ from (?:your|their) \w+`,
 ].join('|'), 'i');
 
 /** NOT TEACHING — greetings, the game's setup, whose move it is, the game

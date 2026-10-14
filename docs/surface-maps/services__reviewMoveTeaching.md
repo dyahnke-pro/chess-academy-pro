@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**736 lines · 4 exports · 14 importers · 6 tests · 0 audits**
+**734 lines · 4 exports · 14 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -37,7 +37,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalkOct1.test.ts:76`
 - `src/services/walkOct1Learn.test.ts:85`
 
-### `buildReviewMoveTeaching` (function) — 30 call sites
+### `buildReviewMoveTeaching` (function) — 31 call sites
 - `src/services/coachFeatureService.ts:1042`
 - `src/services/coachFeatureService.ts:3265`
 - `src/services/discussionPractice.ts:171`
@@ -46,6 +46,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/projectedLineVoice.ts:142`
 - `src/services/reviewMoveBriefing.ts:298`
 - `src/services/reviewMoveTeaching.denied.test.ts:8`
+- `src/services/reviewMoveTeaching.denied.test.ts:14`
 - `src/services/reviewMoveTeaching.test.ts:12`
 - `src/services/reviewMoveTeaching.test.ts:14`
 - `src/services/reviewMoveTeaching.test.ts:26`
@@ -57,11 +58,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveTeaching.test.ts:81`
 - `src/services/reviewMoveTeaching.test.ts:92`
 - `src/services/reviewMoveTeaching.test.ts:100`
-- `src/services/reviewMoveTeaching.test.ts:108`
-- `src/services/reviewMoveTeaching.test.ts:117`
-- `src/services/reviewMoveTeaching.test.ts:165`
-- `src/services/reviewMoveTeaching.test.ts:172`
-- `src/services/reviewMoveTeaching.test.ts:193`
+- `src/services/reviewMoveTeaching.test.ts:107`
+- `src/services/reviewMoveTeaching.test.ts:116`
+- `src/services/reviewMoveTeaching.test.ts:164`
+- `src/services/reviewMoveTeaching.test.ts:171`
+- `src/services/reviewMoveTeaching.test.ts:192`
 - `src/services/reviewNarrationDefects.test.ts:15`
 - `src/services/reviewNarrationDefects.test.ts:19`
 - `src/services/reviewOpeningTheory.ts:572`
@@ -72,20 +73,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `nameEndgamePhase` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:3176`
 - `src/services/reviewFullData.ts:1483`
-- `src/services/reviewMoveTeaching.test.ts:141`
-- `src/services/reviewMoveTeaching.test.ts:143`
-- `src/services/reviewMoveTeaching.test.ts:148`
-- `src/services/reviewMoveTeaching.test.ts:153`
-- `src/services/reviewMoveTeaching.test.ts:157`
+- `src/services/reviewMoveTeaching.test.ts:140`
+- `src/services/reviewMoveTeaching.test.ts:142`
+- `src/services/reviewMoveTeaching.test.ts:147`
+- `src/services/reviewMoveTeaching.test.ts:152`
+- `src/services/reviewMoveTeaching.test.ts:156`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:3173`
-- `src/services/reviewMoveTeaching.test.ts:122`
-- `src/services/reviewMoveTeaching.test.ts:125`
-- `src/services/reviewMoveTeaching.test.ts:131`
-- `src/services/reviewMoveTeaching.test.ts:137`
-- `src/services/reviewMoveTeaching.test.ts:179`
-- `src/services/reviewMoveTeaching.test.ts:185`
+- `src/services/reviewMoveTeaching.test.ts:121`
+- `src/services/reviewMoveTeaching.test.ts:124`
+- `src/services/reviewMoveTeaching.test.ts:130`
+- `src/services/reviewMoveTeaching.test.ts:136`
+- `src/services/reviewMoveTeaching.test.ts:178`
+- `src/services/reviewMoveTeaching.test.ts:184`
 
 ## Tests
 

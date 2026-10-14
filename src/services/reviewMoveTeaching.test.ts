@@ -95,11 +95,10 @@ describe('buildReviewMoveTeaching (grounded per-move review why)', () => {
     expect(t).not.toMatch(/quiet development|comes into the game/i); // no generic tag
   });
 
-  it('teaches a quiet queen move concretely — never a generic filler tag (TEACH every move)', () => {
+  it('a quiet queen move never gets a filler tag or a bare square list — silence instead (David 2026-10-14: a description speaks only inside a reason)', () => {
     const { fen, san } = beforeLast(['e4', 'd6', 'd4', 'g6', 'f4', 'e6', 'Be3', 'b6', 'c4', 'Bg7', 'Qd2']);
     const t = buildReviewMoveTeaching(fen, san, true);
-    expect(t).toBeTruthy();
-    expect(t).not.toMatch(/quiet development|comes into the game/i);
+    expect(t ?? '').not.toMatch(/quiet development|comes into the game|in (their|your) half/i);
   });
 
   it('names the created enemy weakness — a capture that isolates a pawn is a TARGET (§1)', () => {
