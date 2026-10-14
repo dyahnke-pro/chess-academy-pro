@@ -11099,7 +11099,7 @@ export function CoachTeachPage(): JSX.Element {
                       // nor beside a mate (the mate is the whole story).
                       const slipQ = fund?.id === 'ignored-threat' || look.stakes?.mate
                         ? null
-                        : slipQuestion(fenBefore, look.lostSquare, playerColor === 'white' ? 'w' : 'b', standingRef.current.said, move.history.length);
+                        : slipQuestion(fenBefore, move.san, look.lostSquare, playerColor === 'white' ? 'w' : 'b', learnMemRef.current.spokenKeys, move.history.length);
                       const line = `${fund
                         ? `${lossInGrade ? '' : noteSlip(learnMemRef.current, fund.id)}${lossInGrade ? '' : bookSaid ? fund.howOnly : fund.verdict}${fund.recurrence ? ` ${fund.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`.trim()
                         : `${look.line}${takeDefinition(look.pattern)}`}${concession ? ` ${concession}` : ''}${slipQ ? ` ${slipQ.text}` : ''}`;

@@ -8,7 +8,7 @@ describe('blunder check (P3 method beat)', () => {
   it('fires when the reply simply takes the piece the move left hanging', () => {
     // 2…Qh4?? 3.Nxh4 — the queen simply hangs to the knight.
     const fen = at(['e4', 'e5', 'Nf3']);
-    expect(blunderCheck(fen, 'Qh4', 'Nxh4', 900)).toBe('Blunder check before you let go of a piece: what can they take now? Here the answer was your queen on h4.');
+    expect(blunderCheck(fen, 'Qh4', 'Nxh4', 900)).toBe('Blunder check before you let go of a piece: run CCT for them — what checks, captures and threats do they have once it lands? Here the answer was your queen on h4.');
   });
   it('silent on a trade, a cheap slip, or no capture', () => {
     const fen = at(['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6']);
