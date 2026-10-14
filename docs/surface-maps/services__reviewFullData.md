@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1728 lines · 13 exports · 15 importers · 17 tests · 0 audits**
+**1738 lines · 13 exports · 15 importers · 17 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -126,9 +126,10 @@
 ### `seatMoveSubject` (function) — 1 call site
 - `src/services/reviewVerdictSentence.test.ts:15`
 
-### `describeMoveInfluence` (function) — 4 call sites
+### `describeMoveInfluence` (function) — 5 call sites
 - `src/services/reviewFullData.test.ts:653`
 - `src/services/reviewFullData.test.ts:658`
+- `src/services/reviewFullData.test.ts:668`
 - `src/services/reviewNarrationFidelity.test.ts:50`
 - `src/services/reviewNarrationFidelity.test.ts:62`
 

@@ -18,6 +18,9 @@ const EFFECT_WHYS = [
   'One knight move here answers no — the next-best leaves your bishop on c3 to be taken.',
   'So Bc3 was the right square — it was the move played; the next best, Be3, costs about a point.',
   "They're eyeing knight takes a7, check — your pawn on a7 has no defender.",
+  "Watch what they're building — left alone, their idea starts with b-pawn takes c5, and it swings the game by five points or more.",
+  "You're now threatening knight to c2, check — it forks the king and rook on a1.",
+  'Their a3 costs them b3: no pawn of theirs can ever guard it again.',
   'Your pawn reached f5 first — their f5 can never come now, so f5 is yours.',
 ];
 
