@@ -19,6 +19,9 @@
  */
 import type { GameRecord } from '../types';
 
+/** The profile name a fresh install gets (`dbService`) — a placeholder, not an identity. */
+export const DEFAULT_PROFILE_NAME = 'Player';
+
 export interface PlayerIdentity {
   profileName?: string | null;
   chessComUsername?: string | null;
@@ -61,7 +64,12 @@ export function resolvePlayerColor(game: GameRecord, identity: PlayerIdentity): 
     if (isEngineName(white)) return 'black';
   }
   const candidates: string[] = [];
-  for (const c of [identity.chessComUsername, identity.lichessUsername, identity.profileName]) {
+  // The app's DEFAULT profile name ("Player", `dbService`) names nobody: as a
+  // substring it matches "chessplayer99", and the record would then take the
+  // opponent's mistakes as the student's (2026-10-14). Only a name the student
+  // set counts.
+  const profileName = identity.profileName && identity.profileName.trim().toLowerCase() !== DEFAULT_PROFILE_NAME.toLowerCase() ? identity.profileName : null;
+  for (const c of [identity.chessComUsername, identity.lichessUsername, profileName]) {
     const v = (c ?? '').trim().toLowerCase();
     if (v.length > 0) candidates.push(v);
   }

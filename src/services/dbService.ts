@@ -3,6 +3,7 @@ import { createDefaultSrsFields } from './srsEngine';
 import { DEFAULT_THEME_ID } from './themeService';
 import { OPENING_ID_ALIASES } from './openingService';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
+import { DEFAULT_PROFILE_NAME } from './playerIdentity';
 import { DEFAULT_PUZZLE_RATING } from './studentPuzzleRating';
 import type { UserProfile, PuzzleRecord, OpeningRecord, SessionRecord, FlashcardRecord } from '../types';
 
@@ -11,7 +12,7 @@ import type { UserProfile, PuzzleRecord, OpeningRecord, SessionRecord, Flashcard
 export async function getOrCreateMainProfile(): Promise<UserProfile> {
   const defaultProfile: UserProfile = {
     id: 'main',
-    name: 'Player',
+    name: DEFAULT_PROFILE_NAME,
     isKidMode: false,
     // 🔴 `currentRating` WAS 800, AND THE COMMENT JUSTIFYING IT DESCRIBED A
     // PATH THAT NO LONGER EXISTS — "until calibration runs at boot (imported
