@@ -60,6 +60,10 @@ import { countMethod } from './countMethod';
 import { splitPosition } from './splitPosition';
 import { planChoice, type PlanChoiceLine } from './planChooser';
 import { openingIdentityLine, planFor, warmOpeningIdentity } from './openingIdentity';
+// The Learn page reaches the opening facts through this module, never directly
+// (surfaceComposition): the warm-up and the opening's length in plies.
+export { warmOpeningIdentity } from './openingIdentity';
+export { OPENING_PLIES } from './principleAttribution';
 import { trapAheadAt } from './gemCrushLines';
 import { noteTrapMeeting, trapSpeaks, type TrapState } from './trapLearning';
 import { ruledOutSans, extractMentionedSanSpans } from './arrowEngine';

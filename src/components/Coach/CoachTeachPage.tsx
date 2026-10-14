@@ -16,7 +16,6 @@ import { useBoardFit } from '../../hooks/useBoardFit';
 import { characterOf, provenTacticLive, sharpGap, stepCharacter, EMPTY_CHARACTER, SHARP_GAP_CP, type CharacterState } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
-import { planFor, warmOpeningIdentity } from '../../services/openingIdentity';
 import { createLearnMemory, markOpeningFactsSpoken, type LearnMemory } from '../../services/learnMemory';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
@@ -35,11 +34,11 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from '../../services/motifLedger';
-import { buildVoicePackage, coachTurn, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
+import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, intentRule, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { OPENING_PLIES, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -208,7 +207,7 @@ import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcState,
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
-import { OPENING_PLIES, type FundamentalId } from '../../services/principleAttribution';
+import type { FundamentalId } from '../../services/principleAttribution';
 import { FUNDAMENTAL_LABEL } from '../../services/fundamentalsCatalog';
 import {
   noteFamilyFork, markWalked, unwalked, nextForkToOffer, progressAt,
@@ -279,7 +278,6 @@ import { dispatchCoachTurn, openTurnRead, isComputedAnswer, conversationFor, set
 import type { ResolvedStep } from '../../coach/requestSteps';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { FACT_ROLE, type FacetRole } from '../../services/reviewFacetRank';
 import { computePositionFacts, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
 import { gradePlayedMove, liveMoveCost, uciOfSan } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
@@ -8711,7 +8709,7 @@ export function CoachTeachPage(): JSX.Element {
       // heard "This game is the Indian Defense" twice (walk 2026-09-27).
       const queuedLabel = learnMemRef.current.queuedOpeningName ? spokenOpeningLabel(learnMemRef.current.queuedOpeningName) : null;
       const announce = det && det.name !== learnMemRef.current.queuedOpeningName && spokenOpeningLabel(det.name) !== queuedLabel
-        ? openingAnnouncementForGame(det, history, learnMemRef.current.spokenOpeningName, playerColor === 'white' ? 'w' : 'b', det ? planFor(det.name) : null, transposed)
+        ? openingAnnouncementForGame(det, history, learnMemRef.current.spokenOpeningName, playerColor === 'white' ? 'w' : 'b', transposed)
         : null;
       if (det && announce) {
         const firstResolve = learnMemRef.current.spokenOpeningName === null;

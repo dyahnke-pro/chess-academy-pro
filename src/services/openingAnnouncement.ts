@@ -16,7 +16,7 @@ import { bookDeparture, warmBookPosition, type BookDeparture } from './bookDepar
 import { sayMoveNoun } from './spokenMove';
 import { costWords, MISTAKE_CP } from './engineConstants';
 import { transposedOpening } from './openingPositions';
-import { isWaypointOpening } from './openingIdentity';
+import { isWaypointOpening, planFor } from './openingIdentity';
 import type { DetectedOpening } from '../types';
 import type { MastersPlanRead } from './mastersPlanRead';
 import { Chess } from 'chess.js';
@@ -163,10 +163,12 @@ export function openingAnnouncementForGame(
   history: readonly string[],
   spokenName: string | null,
   studentColor: 'w' | 'b',
-  plan: MastersPlanRead | null,
   transposed = false,
 ): string | null {
   const dep = bookDeparture(history);
+  // The line's master plan is read here, beside the name it belongs to — the
+  // surface never composes it (surfaceComposition).
+  const plan = det?.name ? planFor(det.name) : null;
   // A DEPARTURE IS NEWS ONLY WHEN IT JUST HAPPENED. Found late — a name the
   // detector sharpened forty moves in — it announced "You left the book with
   // the pawn to h5" at move 39 (run C walk 2026-09-30). Stale: say nothing.

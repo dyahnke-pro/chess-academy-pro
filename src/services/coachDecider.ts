@@ -49,6 +49,9 @@ import { decideTurn, type LaneFact, type LearnLane, type TurnDecision } from './
 // ONE deciding module (one coach P1).
 export { buildVoicePackage, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './learnTurnDoor';
 export type { FactStakes, LaneFact, LearnLane, SpokenLine, TurnDecision, VoicePackage, VoiceFactKind } from './learnTurnDoor';
+// A fact's role (teach / describe) — surfaces read it through this door, never reviewFacetRank directly.
+export { FACT_ROLE } from './reviewFacetRank';
+export type { FacetRole } from './reviewFacetRank';
 
 /** HOW A SURFACE LISTENS — and it is not cosmetic, it decides what silence MEANS.
  *
