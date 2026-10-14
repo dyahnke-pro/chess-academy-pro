@@ -195,7 +195,10 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   rejectedTempting: { kind: 'computed', why: 'the tempting move and its refutation', lead: 66 },
   // The book move the student left, named with the job it does on the board
   // and what their move left undone (bookMoveWhy) — the "but" of their move.
-  bookMove: { kind: 'computed', why: 'the book move the student left, with the job it does on the board', lead: 64 },
+  // RIDES WITH ITS DEPARTURE (Learn audit 2026-10-14, game 1: a threat turn
+  // held the reason and "You left the book with …" spoke bare). It is offered
+  // only on the departure ply, where the `opening` line (always) names it.
+  bookMove: { kind: 'computed', why: 'the book move the student left, with the job it does on the board', lead: 64, always: true },
   // Behind the walkability check (2026-09-29): walk 2 heard 3 false lines in 4
   // — routes read off one engine line the CURRENT board cannot walk. Learn
   // filters aims through planArc.aimWalkableNow, and a student plan the

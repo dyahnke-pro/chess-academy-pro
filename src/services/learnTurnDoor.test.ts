@@ -519,3 +519,16 @@ describe('the turn holds decide before its lead (Learn audit 2026-10-14, LD2)', 
     expect(d.lead?.lane).toBe('mistake');
   });
 });
+
+describe('a book departure is never said without its reason (Learn audit 2026-10-14, game 1)', () => {
+  const RUY = 'r2qk2r/2p1bppp/p1np1n2/1p2p3/4P1b1/1BPP1N2/PP3PPP/RNBQR1K1 w kq - 1 9';
+  it('a threat turn keeps the book move beside the departure it explains', () => {
+    const d = decideTurn([
+      { lane: 'threat', proof: NO_PROOF.stated, text: 'Watch out — their bishop on g4 pins your knight on f3 against your queen on d1.', fen: RUY, squares: ['g4', 'f3', 'd1'] },
+      { lane: 'opening', proof: NO_PROOF.name, text: 'You left the book with d3.', fen: RUY },
+      { lane: 'bookMove', proof: NO_PROOF.stated, text: 'The usual move there brings the last knight out toward d2.', fen: RUY, squares: ['b1', 'd2'], role: 'teach' },
+    ]);
+    expect(d.spoke).toContain('opening');
+    expect(d.spoke).toContain('bookMove');
+  });
+});
