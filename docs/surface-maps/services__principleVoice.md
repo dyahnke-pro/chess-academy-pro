@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**852 lines · 7 exports · 19 importers · 17 tests · 3 audits**
+**856 lines · 7 exports · 19 importers · 17 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -57,7 +57,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `FundamentalVerdictOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `renderFundamentalVerdict` (function) — 45 call sites
+### `renderFundamentalVerdict` (function) — 46 call sites
 - `src/services/blockedOwnRetreat.test.ts:32`
 - `src/services/coachFeatureService.ts:2490`
 - `src/services/forcingStemNoDecisive.test.ts:17`
@@ -94,6 +94,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleVoice.test.ts:172`
 - `src/services/principleVoice.test.ts:181`
 - `src/services/principleVoice.test.ts:186`
+- `src/services/principleVoice.test.ts:193`
 - `src/services/principleVoiceGuarded.test.ts:16`
 - `src/services/principleVoiceGuarded.test.ts:22`
 - `src/services/principleVoiceGuarded.test.ts:26`

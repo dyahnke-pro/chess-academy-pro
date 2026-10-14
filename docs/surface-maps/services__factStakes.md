@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**189 lines · 14 exports · 28 importers · 3 tests · 1 audits**
+**196 lines · 14 exports · 28 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -58,11 +58,11 @@
 - `src/services/gameEndReads.ts:281`
 - `src/services/kingAttackReads.ts:151`
 - `src/services/learnTurnDoor.test.ts:465`
-- `src/services/learnTurnDoor.ts:462`
+- `src/services/learnTurnDoor.test.ts:501`
 - `src/services/opponentMoveReads.ts:161`
 - `src/services/reviewFullData.ts:871`
 - `src/services/reviewFullData.ts:1420`
-- `src/services/threatProof.ts:74`
+- `src/services/threatProof.ts:92`
 
 ### `STAKE_DISCOUNT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -80,13 +80,12 @@
 - `src/services/speedRunReads.ts:298`
 - `src/services/speedRunReads.ts:599`
 
-### `stakeValue` (function) — 7 call sites
+### `stakeValue` (function) — 6 call sites
 - `src/services/factStakes.test.ts:50`
 - `src/services/factStakes.test.ts:51`
 - `src/services/factStakes.test.ts:52`
 - `src/services/factStakes.test.ts:55`
-- `src/services/learnTurnDoor.ts:411`
-- `src/services/learnTurnDoor.ts:462`
+- `src/services/learnTurnDoor.ts:423`
 - `src/services/reviewFacetRank.ts:495`
 
 ### `costStakes` (function) — 25 call sites
@@ -100,9 +99,9 @@
 - `src/services/planJudgement.ts:46`
 - `src/services/planJudgement.ts:90`
 - `src/services/planJudgement.ts:136`
-- `src/services/positionFacts.ts:1466`
-- `src/services/positionFacts.ts:1608`
-- `src/services/positionFacts.ts:1731`
+- `src/services/positionFacts.ts:1476`
+- `src/services/positionFacts.ts:1618`
+- `src/services/positionFacts.ts:1741`
 - `src/services/reviewFullData.ts:631`
 - `src/services/reviewFullData.ts:655`
 - `src/services/reviewFullData.ts:1221`
@@ -111,8 +110,8 @@
 - `src/services/speedRunReads.ts:471`
 - `src/services/speedRunReads.ts:521`
 - `src/services/speedRunReads.ts:662`
-- `src/services/squareJudgement.ts:314`
-- `src/services/squareJudgement.ts:410`
+- `src/services/squareJudgement.ts:321`
+- `src/services/squareJudgement.ts:417`
 - `src/services/teachingLayers.test.ts:94`
 - `src/services/teachingLayers.test.ts:97`
 
@@ -120,7 +119,7 @@
 - `src/services/factStakes.test.ts:26`
 - `src/services/factStakes.test.ts:29`
 - `src/services/factStakes.test.ts:33`
-- `src/services/positionFacts.ts:1661`
+- `src/services/positionFacts.ts:1671`
 - `src/services/reviewFullData.ts:790`
 - `src/services/reviewFullData.ts:831`
 - `src/services/reviewFullData.ts:852`
@@ -133,7 +132,7 @@
 - `src/services/factStakes.test.ts:39`
 - `src/services/opponentMoveReads.ts:203`
 - `src/services/opponentMoveReads.ts:205`
-- `src/services/positionFacts.ts:1532`
+- `src/services/positionFacts.ts:1542`
 - `src/services/reviewFullData.ts:783`
 - `src/services/reviewFullData.ts:873`
 
@@ -146,8 +145,8 @@
 - `src/services/factStakes.test.ts:44`
 - `src/services/factStakes.test.ts:45`
 - `src/services/factStakes.test.ts:46`
-- `src/services/positionFacts.ts:1483`
-- `src/services/positionFacts.ts:1494`
+- `src/services/positionFacts.ts:1493`
+- `src/services/positionFacts.ts:1504`
 
 ### `isScenicPawnPin` (function) — 5 call sites
 - `src/services/factStakes.test.ts:112`

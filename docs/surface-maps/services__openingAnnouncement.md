@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**183 lines · 10 exports · 6 importers · 5 tests · 1 audits**
+**232 lines · 11 exports · 6 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,12 +25,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `spokenOpeningLabel` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8700`
-- `src/components/Coach/CoachTeachPage.tsx:8701`
+- `src/components/Coach/CoachTeachPage.tsx:8710`
+- `src/components/Coach/CoachTeachPage.tsx:8711`
 - `src/services/openingAnnouncement.test.ts:123`
 - `src/services/openingAnnouncement.test.ts:126`
 
-### `openingAnnouncement` (function) — 19 call sites
+### `openingAnnouncement` (function) — 21 call sites
 - `src/services/computedVoiceAudit.report.test.ts:302`
 - `src/services/openingAnnouncement.test.ts:15`
 - `src/services/openingAnnouncement.test.ts:18`
@@ -48,27 +48,34 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.test.ts:52`
 - `src/services/openingAnnouncement.test.ts:57`
 - `src/services/openingAnnouncement.test.ts:58`
+- `src/services/openingAnnouncement.test.ts:206`
+- `src/services/openingAnnouncement.test.ts:212`
 - `src/services/openingPositions.test.ts:32`
 - `src/services/walkOct2a.test.ts:71`
 
+### `departureAgainstPlan` (function) — 3 call sites
+- `src/services/openingAnnouncement.test.ts:195`
+- `src/services/openingAnnouncement.test.ts:200`
+- `src/services/openingAnnouncement.test.ts:205`
+
 ### `openingAnnouncementForGame` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8702`
+- `src/components/Coach/CoachTeachPage.tsx:8712`
 - `src/services/openingAnnouncement.test.ts:140`
 - `src/services/openingAnnouncement.test.ts:141`
 
 ### `warmOpeningBook` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:997`
+- `src/components/Coach/CoachTeachPage.tsx:1001`
 
 ### `studentJustLeftBook` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11040`
-- `src/components/Coach/CoachTeachPage.tsx:11071`
+- `src/components/Coach/CoachTeachPage.tsx:11075`
+- `src/components/Coach/CoachTeachPage.tsx:11110`
 - `src/services/openingAnnouncement.test.ts:146`
 - `src/services/openingAnnouncement.test.ts:155`
 - `src/services/openingAnnouncement.test.ts:156`
 - `src/services/openingAnnouncement.test.ts:157`
 
 ### `openingNameForBoard` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8692`
+- `src/components/Coach/CoachTeachPage.tsx:8702`
 - `src/services/openingPositions.test.ts:30`
 
 ### `SIDELINE_FAIR_CP` (const) — 0 call sites
@@ -78,8 +85,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `theirOpeningVerdict` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11376`
-- `src/services/coachFeatureService.ts:2123`
+- `src/components/Coach/CoachTeachPage.tsx:11415`
+- `src/services/coachFeatureService.ts:1936`
 - `src/services/openingAnnouncement.test.ts:178`
 - `src/services/openingAnnouncement.test.ts:179`
 - `src/services/openingAnnouncement.test.ts:183`

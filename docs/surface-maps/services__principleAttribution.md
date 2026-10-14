@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1851 lines · 13 exports · 51 importers · 38 tests · 1 audits**
+**1852 lines · 14 exports · 52 importers · 38 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6302) — names `FundamentalId`
+- **The standard post-deploy ritual** (CLAUDE.md:6327) — names `FundamentalId`
 
 ## Who calls in
 
@@ -35,6 +35,7 @@
 - `src/services/fundamentalsCatalog.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/groundedAnswer.ts`
+- `src/services/learnBoardTeaching.ts`
 - `src/services/learnFundamentalNamesNoMove.test.ts`
 - `src/services/learnFundamentalNarration.test.ts`
 - `src/services/learnFundamentalNarration.ts`
@@ -88,6 +89,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ATTRIBUTION_MAX` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `OPENING_PLIES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `captureIsTrade` (function) — 1 call site
