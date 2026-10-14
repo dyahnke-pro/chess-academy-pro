@@ -17,7 +17,7 @@ describe('readTrade — a trade judged by the pieces, not the points', () => {
   it('doubled pawns are not "a good trade" for the side that is behind — both halves are said', () => {
     const r = readTrade('rn2k1nr/pp1b1ppp/1b1p1q2/1N2p3/4P3/3PBN2/PPP2PPP/R2QK2R w KQkq - 3 9', 'Bxb6', 'b', null, null);
     expect(r?.call).toBe('behind');
-    expect(r?.text).toBe('After their Bxb6, taking back doubles your pawns, but you\'re still 2 points ahead — and every trade brings your ending closer.');
+    expect(r?.text).toBe('After their Bxb6, taking back doubles your pawns, but you\'re still two pawns ahead — and every trade brings your ending closer.');
   });
   it('NEGATIVE: the Najdorf — Nxe5 after …Nxe5 won a pawn is not "good for them" — you stay a pawn up (hand walk 2026-09-27)', () => {
     // 1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 a6 6.Nf3 Nc6 7.e5 Nxe5
@@ -62,5 +62,11 @@ describe('readTrade — the count settles through the move that led here (oct3a 
   const fen = 'r1bqk2r/pppp1pp1/5n1p/4p3/1b1NP2B/2NP4/PPP1BPPP/R2QK2R b KQkq - 0 8';
   it('not "behind" once the pending recapture is counted', () => {
     expect(readTrade(fen, 'Bxc3+', 'b', 200, { to: 'd4', captured: 'n' })?.text ?? '').not.toMatch(/behind/);
+  });
+  it('a lead of a piece or more is said in words, never "3 points" (review audit 2026-10-14)', async () => {
+    const { readFileSync } = await import('node:fs');
+    const src = readFileSync('src/services/tradeQuality.ts', 'utf8');
+    expect(src).not.toMatch(/\$\{-?edge0\} points/);
+    expect(src).toMatch(/'clearly ahead on material'/);
   });
 });

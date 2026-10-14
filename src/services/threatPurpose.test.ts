@@ -29,4 +29,10 @@ describe('threatPurpose', () => {
     const fen = '3r2k1/5ppp/8/8/8/8/P2N1PPP/4R1K1 b - - 0 1';
     expect(threatPurpose(lineOf(fen, ['Rxd2', 'a3', 'Rb2']), 'w')).toBeNull();
   });
+  it('a piece that moves inside the line and is taken there is the SAME piece — silent (review audit 2026-10-14)', () => {
+    // …d5 hits the bishop on c4; it steps to b3 and the queen takes it there.
+    // The old read said "its real point is your bishop on b3" — b3 was empty.
+    const fen = '6k1/3p4/1q6/8/2B5/8/7P/7K b - - 0 1';
+    expect(threatPurpose(lineOf(fen, ['d5', 'Bb3', 'Qxb3']), 'w')).toBeNull();
+  });
 });
