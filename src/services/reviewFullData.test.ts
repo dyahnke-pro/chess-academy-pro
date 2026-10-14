@@ -643,3 +643,19 @@ describe('the punishing line is played out in review, as in Learn and chat (2026
     expect(q).toMatch(/The line: exd5, …Nxd5, Nxe5, …Nxe5 and Rxe5 — they come out a pawn up\./);
   });
 });
+
+describe('an influence line teaches only under real pressure (review audit 2026-10-14)', () => {
+  it('eyeing a defended pawn is a description; eyeing a piece worth more teaches', async () => {
+    const { describeMoveInfluence } = await import('./reviewFullData');
+    // 1.e4 c6 2.Nc3 d5: the d5 pawn eyes e4, a pawn guarded by the knight on c3.
+    const c = new Chess(); c.move('e4'); c.move('c6'); c.move('Nc3'); const before = c.fen(); c.move('d5');
+    const shape = { hitsPiece: false };
+    expect(describeMoveInfluence(before, c.fen(), 'd5', [], shape)).toMatch(/eyes the pawn on e4/);
+    expect(shape.hitsPiece).toBe(false);
+    // 4.Ng5 h6: the h6 pawn eyes the knight on g5 — worth more than the pawn.
+    const d = new Chess(); for (const m of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'd6', 'Ng5']) d.move(m); const b2 = d.fen(); d.move('h6');
+    const shape2 = { hitsPiece: false };
+    expect(describeMoveInfluence(b2, d.fen(), 'h6', [], shape2)).toMatch(/eyes the knight on g5/);
+    expect(shape2.hitsPiece).toBe(true);
+  });
+});

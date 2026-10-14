@@ -22,3 +22,19 @@ export function continueSentence(text: string): string {
   if (/^[KQRBN][a-h]?[1-8]?x?[a-h][1-8]/.test(text) || /^O-O/.test(text)) return text;
   return text.charAt(0).toLowerCase() + text.slice(1);
 }
+
+/**
+ * A move's teaching sentence has a subject. The board teacher writes some
+ * reasons verb-first ("Stakes a claim in the center…", "Forces the king to
+ * react…") so a caller can hang them on its own subject; spoken bare they are
+ * fragments (review audit 2026-10-14). This is the ONE place a stem gets one:
+ * a verb-first sentence takes `subject` ("d4 stakes a claim…"), a sentence
+ * that already has a subject is returned as is.
+ */
+const HAS_SUBJECT = /^(The|It|Its|Your|You|Their|They|That|This|These|Those|A|An|Now|Nothing|Every|Each|Both|No|Castling|There|Here|If|When|With|After|Once|Careful)\b/;
+export function withSubject(sentence: string, subject: string): string {
+  const s = sentence.trim();
+  if (!s || HAS_SUBJECT.test(s)) return s;
+  if (/^[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8]|^O-O/.test(s)) return s;
+  return `${subject} ${continueSentence(s)}`;
+}

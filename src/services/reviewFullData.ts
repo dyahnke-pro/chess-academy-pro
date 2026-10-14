@@ -1664,6 +1664,7 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
     if (!pc) return null;
     const enemyWB: Color = pc.color === 'w' ? 'b' : 'w';
     const eyes: string[] = [];
+    let pressed = false;
     for (const row of a.board()) {
       for (const cell of row) {
         if (!cell || cell.square === to) continue;
@@ -1673,7 +1674,14 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
         // is mechanics, not an idea (David 2026-07-23: cut the per-move filler);
         // a piece that must defend an ATTACKED friend surfaces via the
         // [loose]/count detectors instead.
-        if (cell.color === enemyWB && cell.type !== 'k') { eyes.push(`the ${pieceWord(cell.type)} on ${cell.square}`); squaresOut?.push(cell.square); }
+        if (cell.color === enemyWB && cell.type !== 'k') {
+          eyes.push(`the ${pieceWord(cell.type)} on ${cell.square}`); squaresOut?.push(cell.square);
+          // PRESSURE IS WHAT TEACHES (review audit 2026-10-14: "Their pawn on d4
+          // now eyes your pawn on c5." spoke alone as a teaching point). Eyeing
+          // a defended piece worth no more than the eyeing one is a description.
+          const IV: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+          if (a.attackers(cell.square, enemyWB).length === 0 || (IV[cell.type] ?? 0) > (IV[pc.type] ?? 0)) pressed = true;
+        }
       }
     }
     const fights: string[] = [];
@@ -1690,7 +1698,7 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
     if (eyes.length) bits.push(`eyes ${andList(eyes)}`);
     if (fights.length) bits.push(`fights for ${andList(fights)}`);
     if (!bits.length) return null;
-    if (shapeOut) shapeOut.hitsPiece = eyes.length > 0;
+    if (shapeOut) shapeOut.hitsPiece = pressed;
     return `The ${pieceWord(pc.type)} on ${to} now ${bits.join(', ')}.`;
   } catch {
     return null;

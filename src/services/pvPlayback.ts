@@ -15,7 +15,7 @@
  * root promise is truncated/refused (`delivers=false`): a line we can't
  * verify is a line we don't teach.
  */
-import { fileList } from '../utils/andList';
+import { andList, fileList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import { shieldLoss } from './kingSafety';
 import type { Square } from 'chess.js';
@@ -674,7 +674,7 @@ export async function computePvLine(
 /** The SAME per-move facts as `plyFactsSentence`, but as a SUBJECT-LESS clause
  *  (no "The move X" prefix) so the caller can frame the subject — "You …" for
  *  the student, "Your opponent …" for the other side (David 2026-07-20: "always
- *  narrate both sides"). Returns e.g. "captures the knight, lands a fork, wins
+ *  narrate both sides"). Returns e.g. "captures the knight, lands a fork and wins
  *  material", or null on a genuinely quiet move. Board-true (G0).
  *
  *  🔴 The example above used to end "wins 3 POINTS of material". That is the
@@ -704,7 +704,7 @@ export function plyFactsClause(fenBefore: string, san: string, prev?: PrevCaptur
     if (f.shieldLost > 0) parts.push(`strips ${f.shieldLost} pawn${f.shieldLost > 1 ? 's' : ''} from the king's cover`);
     // "wins material", never the point count (David 2026-07-24 — sounds bad).
     if (f.materialGained >= 1) parts.push('wins material');
-    return parts.length === 0 ? null : parts.join(', ');
+    return parts.length === 0 ? null : andList(parts);
   } catch {
     return null;
   }
@@ -818,6 +818,6 @@ export function plyFactsSentence(f: PlyFacts, san: string, moverIsStudent?: bool
     if (parts.length === 1 && f.isCheck && !f.isMate) {
       return `${subject} ${vb('check the king, forcing a reply and taking the initiative for a move', 'checks the king, forcing a reply and taking the initiative for a move')}.`;
     }
-    return `${subject} ${parts.join(', ')}.`;
+    return `${subject} ${andList(parts)}.`;
 }
 

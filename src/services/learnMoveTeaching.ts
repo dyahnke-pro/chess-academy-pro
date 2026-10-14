@@ -17,7 +17,10 @@
 import { Chess } from 'chess.js';
 import { explainBestMoveGrounded, detectNewThreat, describeThreatRecognition } from './groundedAnswer';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
+import { withSubject } from '../utils/openSentence';
 import { deriveNextPlans } from './reviewTeachingPoints';
+
+const subjectedWhy = (why: string | null, san: string): string | null => (why ? withSubject(why, san) : null);
 
 /**
  * When the student plays `tried` in a drill but the taught move is `expected`,
@@ -99,7 +102,7 @@ export function buildDrillBetterLine(
       san: mv.san,
       fen: chess.fen(),
       isStudent,
-      why: isStudent ? buildReviewMoveTeaching(fenBefore, mv.san, true) : null,
+      why: isStudent ? subjectedWhy(buildReviewMoveTeaching(fenBefore, mv.san, true), mv.san) : null,
     });
   }
   return steps;

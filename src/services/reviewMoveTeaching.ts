@@ -536,7 +536,26 @@ export function buildReviewMoveTeaching(
     // said of White's a4 — a pawn still in its own half whose CONTROL reaches
     // b5 (walk 5, 2026-09-23). And no slice here either, the same G4.5 cap
     // this block's own header had already banned one clause up.
-    return `The ${PIECE_NOUN[mv.piece]} now covers ${list(advanced)} in ${moverIsStudent ? 'their' : 'your'} half.`;
+    // A covered square TEACHES only when it takes the square from an enemy
+    // piece that could have used it (review audit 2026-10-14: "The pawn now
+    // covers b4 in their half." said nothing about why). The square is denied
+    // when landing there would lose the piece: to a pawn always, to a piece
+    // when the square is unguarded or the lander is worth more.
+    // Nothing wanted the square → the coverage teaches nothing and the move
+    // falls through (David 2026-10-14: a description speaks only inside a
+    // line that gives a reason).
+    for (const sq of advanced) {
+      if (chess.get(sq as Sq)) continue;
+      const enemyOn = chess.attackers(sq as Sq, enemyColor);
+      // Guarded by a SECOND enemy piece — the lander does not guard itself.
+      const guarded = enemyOn.length > 1;
+      for (const from of enemyOn) {
+        const piece = chess.get(from);
+        if (!piece || piece.type === 'p' || piece.type === 'k') continue;
+        if (mv.piece !== 'p' && guarded && (PIECE_VAL[piece.type] ?? 0) <= attackerVal) continue;
+        return `The ${PIECE_NOUN[mv.piece]} takes ${sq} away from ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[piece.type]} on ${from}.`;
+      }
+    }
   }
   // (e) The king — its journey IS the lesson (endgame = few pieces left → the
   //     king turns into a fighting piece; else it's about getting to safety).
