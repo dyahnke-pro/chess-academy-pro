@@ -66,8 +66,9 @@ vi.mock('../db/schema', () => ({ db: { profiles: { get: () => Promise.resolve({ 
 const groundedMoveFeedback = vi.fn(async (_args: unknown): Promise<string> => '');
 const echoComputedFacts = async (args: unknown): Promise<string> => (args as { extraFacts?: string }).extraFacts ?? '';
 vi.mock('../services/coachApi', () => ({ groundedMoveFeedback: (...a: unknown[]): Promise<string> => groundedMoveFeedback(a[0]) }));
+const fedTactics: { current: unknown } = { current: undefined };
 vi.mock('../services/liveTacticsContext', () => ({
-  buildFedTacticsContext: () => Promise.resolve(undefined),
+  buildFedTacticsContext: () => Promise.resolve(fedTactics.current),
   speakDeepestLookahead: () => null,
 }));
 vi.mock('../services/openingDetectionService', () => ({ detectOpening: () => null, isBookLine: () => false }));
@@ -117,12 +118,13 @@ const ANALYSIS = {
   nodesPerSecond: 1,
 };
 
-const setup = (getLiveFen?: () => string, corpusNotes = true) => renderHook(() => usePhaseNarration({
+const setup = (getLiveFen?: () => string, corpusNotes = true, tacticsOwnedByTurn = false) => renderHook(() => usePhaseNarration({
   getPgn: () => 'e4 e6 d4 d5 Nc3 Nf6',
   playerColor: 'black',
   getOpeningName: () => 'French Defense',
   getLiveFen,
   corpusNotes,
+  tacticsOwnedByTurn,
   getStanding: null,
   speakSentence: null,
 }));
@@ -318,6 +320,30 @@ describe('the COMPUTED CONCEPT speaks at a phase transition (P4c — a wire that
     }, { timeout: 4000 });
   });
 
+  it('where the turn lanes own live tactics (Learn), the phase read is handed none (second-game audit 2026-10-14)', async () => {
+    noteText = '';
+    fedTactics.current = { fen: FORK_FEN, immediate: [], hanging: [], threats: [], opportunities: [], concepts: [], lookahead: [] };
+    try {
+    const { result } = setup(() => FORK_FEN, true, true);
+    act(() => { void result.current.narrate(FORK_EVENT, 'full'); });
+    engineGate.resolve(FORK_ANALYSIS);
+    await vi.waitFor(() => expect(groundedMoveFeedback).toHaveBeenCalledTimes(1), { timeout: 4000 });
+    expect((groundedMoveFeedback.mock.calls[0][0] as { tactics?: unknown }).tactics).toBeUndefined();
+    } finally { fedTactics.current = undefined; }
+  });
+
+  it('NEGATIVE CONTROL: a surface with no tactic lane (Play) still hands its tactics over', async () => {
+    noteText = '';
+    fedTactics.current = { fen: FORK_FEN, immediate: [], hanging: [], threats: [], opportunities: [], concepts: [], lookahead: [] };
+    try {
+    const { result } = setup(() => FORK_FEN, true, false);
+    act(() => { void result.current.narrate(FORK_EVENT, 'full'); });
+    engineGate.resolve(FORK_ANALYSIS);
+    await vi.waitFor(() => expect(groundedMoveFeedback).toHaveBeenCalledTimes(1), { timeout: 4000 });
+    expect((groundedMoveFeedback.mock.calls[0][0] as { tactics?: unknown }).tactics).toBeDefined();
+    } finally { fedTactics.current = undefined; }
+  });
+
   it('a spoken concept is gate-clean (you/they perspective, never we/our)', async () => {
     noteText = '';
     groundedMoveFeedback.mockImplementationOnce(echoComputedFacts);
@@ -343,6 +369,7 @@ describe('THE ONE SELECTOR at a phase transition (unified-coach N1)', () => {
       getOpeningName: () => 'Scandinavian Defense: Lasker Variation',
       getLiveFen: () => FEN,
       corpusNotes: true,
+      tacticsOwnedByTurn: false,
       getStanding: null,
       speakSentence: null,
     }));
@@ -359,6 +386,7 @@ describe('THE ONE SELECTOR at a phase transition (unified-coach N1)', () => {
       getOpeningName: () => 'French Defense',
       getLiveFen: () => FEN,
       corpusNotes: true,
+      tacticsOwnedByTurn: false,
       getStanding: null,
       speakSentence: null,
     }));

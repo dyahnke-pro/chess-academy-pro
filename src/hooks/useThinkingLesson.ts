@@ -45,6 +45,13 @@ export interface UseThinkingLesson {
   /** Learn free play: ask a step the student keeps failing in games when the
    *  board poses it — one question per game. Resolves true when it asked. */
   carryOver: (fen: string, answered?: readonly string[]) => Promise<boolean>;
+  /** The carry-over question's state: shown beside a playing board, or being
+   *  answered on the tap board. It never holds the game (David 2026-10-14). */
+  carry: 'none' | 'asking' | 'answering';
+  /** The student chose to answer: the tap board takes over for this question. */
+  answerCarry: () => void;
+  /** A move was played instead: close the question unanswered (no evidence). */
+  skipCarry: () => boolean;
   /** A new game: the carry-over re-reads the record and may ask each step again. */
   newGame: () => void;
   /** What to say when `plan` finds no lesson (the habit gap, or no board yet). */
@@ -78,6 +85,24 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
     sessionRef.current = null;
     setView(IDLE);
   }, []);
+
+  // A CARRY-OVER QUESTION NEVER HOLDS THE BOARD (David 2026-10-14: keep the
+  // question, never stop the game). In free play the live board stays; the
+  // question waits beside it. 'asking' = shown, the board still plays;
+  // 'answering' = the student chose to answer, the tap board takes over.
+  // A move while 'asking' closes it unanswered — no evidence either way.
+  const [carry, setCarryState] = useState<'none' | 'asking' | 'answering'>('none');
+  const carryRef = useRef<'none' | 'asking' | 'answering'>('none');
+  const setCarry = useCallback((c: 'none' | 'asking' | 'answering'): void => { carryRef.current = c; setCarryState(c); }, []);
+  const answerCarry = useCallback((): void => { if (carryRef.current === 'asking') setCarry('answering'); }, [setCarry]);
+  const skipCarry = useCallback((): boolean => {
+    if (carryRef.current !== 'asking') return false;
+    sessionRef.current?.stop();
+    sessionRef.current = null;
+    setView(IDLE);
+    setCarry('none');
+    return true;
+  }, [setCarry]);
 
   // Unmount: stop the session AND drop it, so a view update still in flight
   // (a spoken line resolving, a nudge timer) finds no session and never sets
@@ -156,10 +181,12 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
     const kit = carryOverKitFor(await carryStepsRef.current, fen, carryAskedRef.current);
     if (!kit) return false;
     // Held for an answered question: the step stays available later this game.
+    setCarry('asking');
     const asked = await askOnce(kit, fen, answered);
+    setCarry('none');
     if (asked) carryAskedRef.current.add(kit.step);
     return asked;
-  }, [askOnce, newGame]);
+  }, [askOnce, newGame, setCarry]);
 
   const practiseRef = useRef<StepKit | null>(null);
   const practiseKit = useCallback((): StepKit | null => practiseRef.current, []);
@@ -168,5 +195,5 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
   const finish = useCallback((plan: PlannedLesson, source: string): Promise<string | null> =>
     finishThinkingLesson(plan, source, { stopped: stoppedRef.current }), []);
 
-  return { view, plan: planThinkingLesson, start, finish, kitFor: kitForStep, firstFairKit, motifKit, tap, choose, dontKnow, hold, askOnce, slipSteps: slipStepsForGame, carryOver, newGame, noLessonLine, practiseKit, setPractiseKit, stop };
+  return { view, carry, answerCarry, skipCarry, plan: planThinkingLesson, start, finish, kitFor: kitForStep, firstFairKit, motifKit, tap, choose, dontKnow, hold, askOnce, slipSteps: slipStepsForGame, carryOver, newGame, noLessonLine, practiseKit, setPractiseKit, stop };
 }
