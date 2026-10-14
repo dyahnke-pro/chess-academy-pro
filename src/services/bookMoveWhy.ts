@@ -220,3 +220,23 @@ export function bookMoveWhy(fen: string, mainSan: string, playedSan: string, stu
     text: `The book move is ${sayMoveNoun(mainSan, fen)}: ${job.clause} — ${sayMoveNoun(playedSan, fen)} ${job.short}.`,
   };
 }
+
+/** Every job a move does against the board BEFORE it (no rival move) — the
+ *  read the measurement scores against his explanations of the same move. */
+export function moveJobs(fen: string, san: string, student: Color): BookJobKind[] {
+  const mv = after(fen, san);
+  if (!mv) return [];
+  let before: Chess;
+  try { before = new Chess(fen); } catch { return []; }
+  const them: Color = student === 'w' ? 'b' : 'w';
+  const pass = asIfTheirMove(before, them);
+  if (!pass) return [];
+  const out: BookJobKind[] = [];
+  if (guardJob(mv.board, pass, student)) out.push('guard');
+  if (stopsJob(mv.board, pass, student)) out.push('stopsPin');
+  if (castleJob(mv.board, pass, student)) out.push('castle');
+  const home = student === 'w' ? '1' : '8';
+  if ((mv.piece === 'n' || mv.piece === 'b') && mv.from[1] === home) out.push('develop');
+  if (centerJob(mv.board, pass, student)) out.push('center');
+  return out;
+}
