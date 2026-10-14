@@ -1086,7 +1086,7 @@ export function errorWhy(args: {
       const u = replyLineUci[0];
       const m = u ? c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }) : null;
       const count = n > 0 && n <= 5 ? ` in ${n}` : '';
-      return m ? `it let them force mate${count}, starting with ${m.san}` : `it let them force mate${count}`;
+      return m ? `it let them force mate${count}, starting with ${m.color === 'b' ? '…' : ''}${m.san}` : `it let them force mate${count}`;
     } catch { return 'it let them force mate'; }
   };
   const consequence = args.allowedMate !== null

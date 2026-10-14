@@ -62,7 +62,7 @@ describe('the severity bands are the review\'s, not this file\'s', () => {
     const long = callInaccuracy({ namesBetterMove: false, priorMove: null, replyLineUci: ['b8c6'], replySan: null,
       fenBefore, playedSan: 'g4', bestSan: 'Nc3', cpLoss: 5, allowedMate: 14, side: 'student', moverColor: 'white' });
     expect(long?.said).not.toMatch(/mate in 14/);
-    expect(long?.said).toContain('starting with Nc6');
+    expect(long?.said).toContain('starting with …Nc6');
   });
 });
 
