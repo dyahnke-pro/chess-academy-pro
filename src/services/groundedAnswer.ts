@@ -97,6 +97,14 @@ export interface GroundedAnswer {
 
 /** Convert a centipawn eval (side-to-move POV) into a grounded phrase. Never
  *  invents a number — rounds the real one. */
+/** THE STUDENT'S HANGING PIECE, WITH WHY (prod Learn audit 2026-10-14: "Your
+ *  pawn on a7 is hanging." said the word and not the reason). `hanging` is
+ *  attacked, unguarded and lost on the exchange (`findHangingPieces`), so the
+ *  reason is true by construction. One wording for every surface. */
+export function ownHangingLine(pieceName: string, square: string): string {
+  return `Your ${pieceName} on ${square} is hanging — nothing guards it, so they can take it for free.`;
+}
+
 export function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | undefined, mover: 'white' | 'black', studentColor: 'white' | 'black' | null): string | null {
   // ONE PERSPECTIVE: when the student's seat is known, the better side is
   // "you" or "they" — never a bare colour (Learn walk 2026-09-23: "White is
@@ -1560,7 +1568,7 @@ export function assemblePositionAssessment(opts: {
       // another board) is refused upstream at the grounding gate, because a
       // stale package passes this check by construction.
       const myHang = tactics.hanging.find((h) => h.color === sc && pieceIsOn(tactics.fen, h.square, h.piece, h.color));
-      if (myHang) parts.push(`Your ${REVIEW_PIECE_NAME[myHang.piece] ?? myHang.piece} on ${myHang.square} is hanging.`);
+      if (myHang) parts.push(ownHangingLine(REVIEW_PIECE_NAME[myHang.piece] ?? myHang.piece, myHang.square));
       else if (tactics.threats[0]?.spoken) parts.push(`Watch out — ${tactics.threats[0].spoken}.`);
     }
   }
@@ -3805,7 +3813,7 @@ export function assembleTacticsAnswer(
   // verified against the package's own fen before it is made: a hanging entry
   // whose square does not hold that piece is not spoken (David 2026-09-19).
   for (const h of tactics.hanging.filter((p) => p.color === sc && pieceIsOn(tactics.fen, p.square, p.piece, p.color))) {
-    parts.push(`Your ${REVIEW_PIECE_NAME[h.piece] ?? h.piece} on ${h.square} is hanging.`);
+    parts.push(ownHangingLine(REVIEW_PIECE_NAME[h.piece] ?? h.piece, h.square));
   }
   // Nothing concrete yet → surface the top threat, then the top opportunity.
   // Future tactics speak their `spoken` form — the moves that build them —

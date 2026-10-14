@@ -154,7 +154,7 @@ import type {
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { TacticsLiveContext } from '../../coach/types';
 import { classifyMoveFull } from '../../services/moveRating';
-import { assembleSlipNarration } from '../../services/groundedAnswer';
+import { assembleSlipNarration, ownHangingLine } from '../../services/groundedAnswer';
 import { LocalizedCoachText } from './ChatMessage';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
@@ -3992,7 +3992,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         (h) => h.color === studentChar && h.piece.toLowerCase() !== 'k',
       );
       const ownHangingLine = ownHanging
-        ? `Your ${({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[ownHanging.piece.toLowerCase()] ?? ownHanging.piece} on ${ownHanging.square} is hanging.`
+        ? ownHangingLine(({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[ownHanging.piece.toLowerCase()] ?? ownHanging.piece, ownHanging.square)
         : null;
       // 🔒 FULL-STRENGTH BLUNDER NARRATION (David 2026-09-08, "narrations better
       // be AT FULL STRENGTH … remove that string"). State the concrete WHY — the

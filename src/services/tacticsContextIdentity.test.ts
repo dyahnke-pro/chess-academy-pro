@@ -69,7 +69,7 @@ describe('a package whose fen does not match the consumer\'s board cannot produc
 
   it('POSITIVE CONTROL — against its OWN board the claim is made: the check is real, not vacuous', () => {
     const a = assembleTacticsAnswer(stale, 'white');
-    expect(a?.facts).toContain('Your knight on b5 is hanging.');
+    expect(a?.facts).toContain('Your knight on b5 is hanging — nothing guards it, so they can take it for free.');
     const kept = stripUngroundedTacticSentences('Your knight on b5 is hanging.', stale, undefined, FEN_KNIGHT_ON_B5);
     expect(kept.staleContext).toBe(false);
     expect(kept.clean).toContain('knight on b5');
@@ -112,6 +112,6 @@ describe('a package whose fen does not match the consumer\'s board cannot produc
     // grounds that the assembler already verifies: it verifies against the
     // package's own board, on which the b5 knight is genuinely hanging.
     const a = assembleTacticsAnswer(stale, 'white');
-    expect(a?.facts).toContain('Your knight on b5 is hanging.');
+    expect(a?.facts).toContain('Your knight on b5 is hanging — nothing guards it, so they can take it for free.');
   });
 });

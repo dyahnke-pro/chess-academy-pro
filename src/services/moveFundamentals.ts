@@ -1239,8 +1239,23 @@ const PRINCIPLE_REASON: Record<MoveFundamental['id'], string | null> = {
   luft: null,
   space: SPACE_RULE,
   // From the shipped concept:pos-prophylaxis ("prevents the opponent's plan before it starts").
-  prophylaxis: 'stop what they want before you chase what you want: a square their piece never reaches is a plan it never starts',
+  prophylaxis: 'stop what they want before you chase what you want, because a square their piece never reaches is a plan it never starts',
 };
+
+/** WHY THE PLAN — the reason of the plan's leading fundamental, true on this
+ *  board, or null (prod Learn audit 2026-10-14: "The plan here: deny their
+ *  knight the b5 square." said what to do and never why). */
+export function strategicReason(
+  fenBefore: string,
+  moveSan: string,
+  moverColor: 'white' | 'black',
+): string | null {
+  if (isForcedReply(fenBefore, moveSan)) return null;
+  const lead = leadingFundamentals(fenBefore, moveSan, moverColor)[0];
+  if (!lead) return null;
+  const reason = reasonFor(lead);
+  return reason && reasonHolds(lead, fenBefore, moverColor) ? reason : null;
+}
 
 /** THE ONE PLACE a fundamental's reason is resolved: its own shape's reason,
  *  `null` when the shape carries none, else the id's general reason. Every

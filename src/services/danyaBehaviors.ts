@@ -574,7 +574,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // makes your passer stronger" were both said on one move. The passer
       // lane owns the trade advice then.
       if (studentAdv <= -2 && findPassedPawns(fen, student).length === 0) {
-        return { fact: `You're down material — don't trade; look for activity and counterplay.`, squares: [] };
+        return { fact: `You're down material — don't trade, because every trade brings the ending closer and the extra material decides there; look for activity and counterplay.`, squares: [] };
       }
       return null;
     },

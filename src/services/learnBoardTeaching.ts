@@ -731,15 +731,15 @@ export function prizeTeaching(fen: string, square: string, student: 'w' | 'b'): 
   const cheap = takers[0];
   if ((PRIZE_VALUE[cheap.piece] ?? 0) < value) {
     return {
-      text: `Their ${name} on ${square} is guarded, but your ${PRIZE_NAME[cheap.piece] ?? 'piece'} on ${cheap.from} is worth less — a guard does not save it. ${caution}`,
+      text: `Their ${name} on ${square} is guarded, but your ${PRIZE_NAME[cheap.piece] ?? 'piece'} on ${cheap.from} is worth less — a guard does not save it, so you can win it. ${caution}`,
       squares: [square, cheap.from],
     };
   }
   const hitters = [...new Set(takers.map((m) => m.from))];
   if (hitters.length > guards) {
-    return { text: `Their ${name} on ${square} is hit ${times(hitters.length)} and guarded only ${times(guards)}. ${caution}`, squares: [square, ...hitters] };
+    return { text: `Their ${name} on ${square} is hit ${times(hitters.length)} and guarded only ${times(guards)}, so you can win it. ${caution}`, squares: [square, ...hitters] };
   }
-  return { text: `Their ${name} on ${square} can be won — its guard is not enough. ${caution}`, squares: [square] };
+  return { text: `Their ${name} on ${square} is not guarded enough, so you can win it. ${caution}`, squares: [square] };
 }
 
 /** The student's own master-game break at `fen` (the one `openingPlanTeaching`

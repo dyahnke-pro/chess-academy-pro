@@ -28,4 +28,14 @@ describe('the defender-left cost needs their reply to use the square', () => {
     } as never);
     expect(won?.line ?? '').not.toMatch(/g4/);
   });
+  it('a forced mate leads, the square after it, no "worth seeing" opener (prod Learn audit 2026-10-14)', () => {
+    const mate = backwardLook({
+      fenBefore: BEFORE, fenAfter: after(), playedSan: 'Nf3', bestSan: 'Qe1',
+      bestPvUci: ['d1e1'], replyPvUci: ['d7c5', 'd1e1', 'c8g4'], cpLoss: 900, allowedMate: -4, moverEvalAfterCp: -9000, studentColor: 'white',
+    } as never);
+    const line = mate?.line ?? '';
+    expect(line).toMatch(/mate/);
+    expect(line.search(/mate/)).toBeLessThan(line.search(/g4/));
+    expect(line).not.toMatch(/Worth seeing/);
+  });
 });

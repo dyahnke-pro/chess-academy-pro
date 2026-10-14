@@ -299,3 +299,11 @@ describe('the move they are eyeing is drawn (walk 2026-09-30: arrows illustrate 
     expect(eyed?.arrows).toEqual([{ from: 'd5', to: 'c6', role: 'threat', source: 'behavior.eyeing' }]);
   });
 });
+
+describe('down material says why not to trade (prod Learn audit 2026-10-14)', () => {
+  it('the advice carries its reason', () => {
+    const hits = detectBehaviors({ fen: '4k3/8/8/8/8/8/3PPP2/R3K3 b - - 0 1', studentColor: 'black' });
+    const m = hits.find((h) => /down material/.test(h.fact));
+    expect(m?.fact).toMatch(/because every trade brings the ending closer/);
+  });
+});

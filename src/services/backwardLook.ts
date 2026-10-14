@@ -345,8 +345,17 @@ export function backwardLook(args: {
           insteadBetter = call?.namesBetter;
         } catch { /* the alternative is a bonus; the read still stands */ }
       }
-      const line = [`${cost.said} ${cost.opening}`, instead ?? ''].filter(Boolean).join(' ');
+      // A FORCED MATE LEADS (prod Learn audit 2026-10-14: "That took your
+      // last defender off d6. Worth seeing before it costs you something. Kb8
+      // was a blunder — it let them force mate in 4."). The mate is the
+      // verdict; the square it came through is its reason, said after it, and
+      // the "worth seeing" opener has nothing left to promise.
+      const allowsMate = (args.allowedMate ?? null) !== null && !!instead;
+      const line = allowsMate
+        ? [instead ?? '', cost.said].filter(Boolean).join(' ')
+        : [`${cost.said} ${cost.opening}`, instead ?? ''].filter(Boolean).join(' ');
       return {
+        ...(allowsMate ? { stakes: mateStakes('them', Math.max(0, Math.abs(args.allowedMate as number) * 2 - 1), true) } : {}),
         line, square: cost.square || '', kind: 'drawback',
         // The grade's lost square rides here too, so the fundamental that names
         // the same hung piece stays quiet (run B walk 2026-09-30, Ng3: "that
