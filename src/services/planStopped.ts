@@ -11,6 +11,7 @@
 // PURE: chess.js + the plan computer's own facts (`deriveNextPlanFacts`).
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { enemyKingStuckInCenter } from './reviewSacrifice';
+import { reachWords } from '../utils/reachWords';
 import { deriveNextPlanFacts, findWorstPlacedPiece, PIECE_NOUN, type PlanFact, type PlanKind } from './nextPlans';
 
 /** Their move, recovered from the two boards. */
@@ -120,10 +121,15 @@ const COUNT = ['', 'one', 'two', 'three', 'four', 'five'];
 export function planStoppedLine(proof: string, inARow: number, fenAfter: string, student: Color): string {
   if (inARow <= 1) return `${proof} That plan is off.`;
   if (inARow === 2) {
-    let worst: { sq: string; type: string } | null = null;
+    let worst: { sq: string; type: string; m: number } | null = null;
     try { worst = findWorstPlacedPiece(new Chess(fenAfter), student); } catch { worst = null; }
+    // THE WHY OF "WORST" IS ON THE BOARD (teaching pass 2026-10-14: the
+    // fallback named a piece and never said what was wrong with it). The
+    // finder ranks by how many squares a piece can reach; that count is the
+    // reason, said with the piece.
+    const reach = worst ? reachWords(worst.m) : '';
     const fallback = worst
-      ? `improve your worst piece — the ${PIECE_NOUN[worst.type] ?? 'piece'} on ${worst.sq} — and wait for them to give you a mistake or a weak piece to target`
+      ? `improve your worst piece — the ${PIECE_NOUN[worst.type] ?? 'piece'} on ${worst.sq} ${reach} — and wait for them to give you a mistake or a weak piece to target`
       : 'put your pieces on their best squares and wait for them to give you a mistake or a weak piece to target';
     return `${proof} That's two of your plans they've shut down in a row — good defending. When nothing direct works, ${fallback}.`;
   }

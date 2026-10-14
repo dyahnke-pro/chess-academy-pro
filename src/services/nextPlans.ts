@@ -8,6 +8,7 @@
 // review, one import away, said "the plan from here is to win their weak pawn
 // on d5. Here's how: …" (PLAN §C 17, #64). Capability parity: one computer,
 // both surfaces. Nothing here imports a surface module; keep it that way.
+import { reachWords } from '../utils/reachWords';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
@@ -328,7 +329,7 @@ export function deriveNextPlanFacts(
   if (fullmove >= 10) {
     const worst = findWorstPlacedPiece(chess, studentColorWB);
     if (worst) {
-      add('worst-piece', `the plan from here is to rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}. Here's how: don't play a single attacking move until it's fixed — spend two or three tempi walking it to a square where it actually bites, because a piece doing nothing means you're effectively playing down a piece`, [worst.sq]);
+      add('worst-piece', `the plan from here is to rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}, which ${reachWords(worst.m)}. Here's how: don't play a single attacking move until it's fixed — spend two or three tempi walking it to a square where it actually bites, because a piece doing nothing means you're effectively playing down a piece`, [worst.sq]);
     }
   }
 

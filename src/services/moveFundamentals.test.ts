@@ -379,3 +379,12 @@ describe('the plan carries its why (prod Learn audit 2026-10-14: "The plan here:
     expect(strategicReason(c.fen(), 'g3', 'white')).toBe('stop what they want before you chase what you want, because a square their piece never reaches is a plan it never starts');
   });
 });
+
+describe('castling is said as itself, never "Your castle kingside castles …" (review tape 2026-10-14)', () => {
+  it('a middlegame castle reads "Castling gets your king to safety …"', () => {
+    const fen = 'r4rk1/pp2bppp/2n1pn2/3p4/3P4/2NBPN2/PP3PPP/R3K2R w KQ - 4 30';
+    const r = principleLine(fen, 'O-O', 'white', new Set(), 0);
+    expect(r?.text ?? '').not.toMatch(/Your O-O/);
+    if (r) expect(r.text).toMatch(/^Castling gets your king to safety/);
+  });
+});

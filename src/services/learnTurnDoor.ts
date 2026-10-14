@@ -195,7 +195,10 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   rejectedTempting: { kind: 'computed', why: 'the tempting move and its refutation', lead: 66 },
   // The book move the student left, named with the job it does on the board
   // and what their move left undone (bookMoveWhy) — the "but" of their move.
-  bookMove: { kind: 'computed', why: 'the book move the student left, with the job it does on the board', lead: 64 },
+  // RIDES WITH ITS DEPARTURE (Learn audit 2026-10-14, game 1: a threat turn
+  // held the reason and "You left the book with …" spoke bare). It is offered
+  // only on the departure ply, where the `opening` line (always) names it.
+  bookMove: { kind: 'computed', why: 'the book move the student left, with the job it does on the board', lead: 64, always: true },
   // Behind the walkability check (2026-09-29): walk 2 heard 3 false lines in 4
   // — routes read off one engine line the CURRENT board cannot walk. Learn
   // filters aims through planArc.aimWalkableNow, and a student plan the
@@ -467,9 +470,28 @@ export function decideTurn(
     return m?.for === 'you' && m.forced;
   });
   const dangerWaits = (x: { lane: LearnLane }): boolean => ownForcedMate && DANGER_LANES.has(x.lane);
+  // A MATE TURN STAYS ON THE MATE (hard-question walk 2026-10-11, 21.e6: the
+  // allowed mate in 6 was said between a weak-pawn lecture and "the scare is
+  // empty"). A fact staked at a forced mate makes every fact that is neither
+  // danger nor itself a mate wait for a calm board.
+  // A forced mate, whoever's and however far — read off the stake's own flag.
+  const isMateFact = (x: { fact: VoiceFact; lane: LearnLane }): boolean => !!stakesOf(x.lane, x.fact.text)?.mate?.forced;
+  const mateTurn = survivors.some((x) => !subsumed.has(x) && isMateFact(x));
+  const verdict = survivors.find((x) => x.lane === 'mistake' && !subsumed.has(x)) ?? null;
+  // THE TURN'S HOLDS DECIDE BEFORE ITS LEAD (Learn audit 2026-10-14, LD2: a
+  // lead was picked, then held by the mate rule, and the row named a lead that
+  // never spoke). One predicate, read by the lead pick and the speak loop.
+  const turnHolds = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
+    (mateTurn && !DANGER_LANES.has(x.lane) && !isMateFact(x))
+    // A VERDICT TURN STAYS ON THE VERDICT (David 2026-10-11, the "very good"
+    // bar: 35–50 words, one lead). When the student's move is graded, the
+    // grade, its cost ('but' beats) and any danger speak; a plan, a route or a
+    // method aside worth less than the verdict waits for a calm move.
+    || (!!verdict && x !== verdict && !DANGER_LANES.has(x.lane) && DNA_BEAT[x.lane] !== 'but'
+      && stakeOf(x.lane, x.fact.text) < stakeOf(verdict.lane, verdict.fact.text));
   let top: { fact: VoiceFact; lane: LearnLane } | null = null;
   for (const x of survivors) {
-    if (subsumed.has(x) || dangerWaits(x)) continue;
+    if (subsumed.has(x) || dangerWaits(x) || turnHolds(x)) continue;
     if (!top) { top = x; continue; }
     const xd = DANGER_LANES.has(x.lane); const td = DANGER_LANES.has(top.lane);
     if (xd !== td) { if (xd) top = x; continue; }
@@ -479,26 +501,11 @@ export function decideTurn(
   const ownLead = top && (!priorLead || DANGER_LANES.has(top.lane) || value(top) > priorValue) ? top : null;
   const anchor = ownLead ? (ownLead.fact.squares ?? []) : (priorLead?.squares ?? []);
 
-  // A MATE TURN STAYS ON THE MATE (hard-question walk 2026-10-11, 21.e6: the
-  // allowed mate in 6 was said between a weak-pawn lecture and "the scare is
-  // empty"). A fact staked at a forced mate makes every fact that is neither
-  // danger nor itself a mate wait for a calm board.
-  // A forced mate, whoever's and however far — read off the stake's own flag.
-  const isMateFact = (x: { fact: VoiceFact; lane: LearnLane }): boolean => !!stakesOf(x.lane, x.fact.text)?.mate?.forced;
-  const mateTurn = survivors.some((x) => !subsumed.has(x) && isMateFact(x));
-  const verdict = survivors.find((x) => x.lane === 'mistake' && !subsumed.has(x)) ?? null;
   const keep: VoiceFact[] = [];
   const spoke: LearnLane[] = [];
   const held: LearnLane[] = [];
   for (const x of survivors) {
-    if (mateTurn && !DANGER_LANES.has(x.lane) && !isMateFact(x)) { held.push(x.lane); continue; }
-    if (dangerWaits(x)) { held.push(x.lane); continue; }
-    // A VERDICT TURN STAYS ON THE VERDICT (David 2026-10-11, the "very good"
-    // bar: 35–50 words, one lead). When the student's move is graded, the
-    // grade, its cost ('but' beats) and any danger speak; a plan, a route or a
-    // method aside worth less than the verdict waits for a calm move.
-    if (verdict && x !== verdict && !DANGER_LANES.has(x.lane) && DNA_BEAT[x.lane] !== 'but'
-      && stakeOf(x.lane, x.fact.text) < stakeOf(verdict.lane, verdict.fact.text)) { held.push(x.lane); continue; }
+    if (turnHolds(x) || dangerWaits(x)) { held.push(x.lane); continue; }
     // A DESCRIPTION — nothing at stake, from a lane that describes the board
     // (or an unstaked board-read riding position facts) — speaks only as
     // SUPPORT: it must touch the lead's squares AND add one of its own. "Your

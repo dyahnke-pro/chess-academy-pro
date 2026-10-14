@@ -135,7 +135,11 @@ export function projectedLineVoice(
     if (!base && opts.teachQuiet) {
       // Out of check the move's point is the check it answers — the king's
       // "steps toward safety" clause is the describer guessing.
-      base = inCheck ? `You answer the check with ${p.san}.` : buildReviewMoveTeaching(p.fenBefore, p.san, true);
+      // The only legal reply to a check is said to be the only one: that IS
+      // its reason (there was no choice), and the student learns to count.
+      let only = false;
+      if (inCheck) { try { only = new Chess(p.fenBefore).moves().length === 1; } catch { only = false; } }
+      base = inCheck ? (only ? `You answer the check with ${p.san} — the only legal move.` : `You answer the check with ${p.san}.`) : buildReviewMoveTeaching(p.fenBefore, p.san, true);
     }
     const parts = [base ? sentence(base) : null];
     if (i === motifAt && motif) parts.push(motif);

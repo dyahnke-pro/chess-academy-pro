@@ -38,7 +38,7 @@ import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, 
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, intentRule, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { OPENING_PLIES, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, slipQuestion, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { OPENING_PLIES, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -9631,7 +9631,20 @@ export function CoachTeachPage(): JSX.Element {
         if (grade && speakGrade) {
           // The clause is a verdict ("that meets the threat.");
           // heard on its own it names no move. Lead with the move it grades.
-          const gradeLine = goodPoint ? `${move.san}: ${grade.clause} ${goodPoint}` : `${move.san}: ${grade.clause}`;
+          // THE QUESTION RIDES THE FIRST LINE THAT NAMES THE SLIP (David
+          // 2026-10-14): this instant grade lands before the full verdict, so
+          // when it names an unanswered threat or a hung piece it carries the
+          // habit's question, under the claim the verdict's slip question reads —
+          // the habit is said once, never twice on one move.
+          const habitKey = grade.reason === 'ignored-threat' ? 'claim:method:answer-danger'
+            : grade.reason === 'hung-piece' ? 'claim:method:blunder-check' : null;
+          const habitQ = habitKey && !learnMemRef.current.spokenKeys.has(habitKey)
+            ? grade.reason === 'ignored-threat'
+              ? answerDangerQuestion(null, move.history.length)
+              : BLUNDER_CHECK_QUESTION
+            : null;
+          if (habitKey && habitQ) learnMemRef.current.spokenKeys.add(habitKey);
+          const gradeLine = `${goodPoint ? `${move.san}: ${grade.clause} ${goodPoint}` : `${move.san}: ${grade.clause}`}${habitQ ? ` ${habitQ}` : ''}`;
           // Recorded as said, so the late wave's move-point lane does not
           // repeat the reason a second later.
           for (const k of spokenSentenceKeys({ kept: [{ kind: 'computed', text: gradeLine, fen: move.fen }] })) learnMemRef.current.spokenKeys.add(k);
@@ -11099,7 +11112,7 @@ export function CoachTeachPage(): JSX.Element {
                       // nor beside a mate (the mate is the whole story).
                       const slipQ = fund?.id === 'ignored-threat' || look.stakes?.mate
                         ? null
-                        : slipQuestion(fenBefore, look.lostSquare, playerColor === 'white' ? 'w' : 'b', standingRef.current.said, move.history.length);
+                        : slipQuestion(fenBefore, move.san, look.lostSquare, playerColor === 'white' ? 'w' : 'b', learnMemRef.current.spokenKeys, move.history.length);
                       const line = `${fund
                         ? `${lossInGrade ? '' : noteSlip(learnMemRef.current, fund.id)}${lossInGrade ? '' : bookSaid ? fund.howOnly : fund.verdict}${fund.recurrence ? ` ${fund.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`.trim()
                         : `${look.line}${takeDefinition(look.pattern)}`}${concession ? ` ${concession}` : ''}${slipQ ? ` ${slipQ.text}` : ''}`;

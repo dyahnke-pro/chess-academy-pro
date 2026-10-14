@@ -2,7 +2,7 @@ import { NO_PROOF } from './proof';
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { decideTurn, LEARN_LANES, type LearnLane } from './learnTurnDoor';
-import { mateStakes } from './factStakes';
+import { costStakes, mateStakes } from './factStakes';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 const TEACH = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
@@ -504,5 +504,31 @@ describe('a forced mate leads however far away it is (Learn walk 2026-10-14)', (
     // A mate turn stays on the mate: the critical-moment line waits.
     expect(d.pkg.spoken).toBe('Bc4 was a blunder — it let them force mate in 12.');
     expect(d.held).toContain('timing');
+  });
+});
+
+describe('the turn holds decide before its lead (Learn audit 2026-10-14, LD2)', () => {
+  it('a far mate holds the board read — and the lead is the mate verdict that spoke, never the held read', () => {
+    const d = decideTurn([
+      { lane: 'checkMethod', proof: NO_PROOF.stated, text: 'Before you let go of a piece, run checks, captures and threats for them.', fen: FEN },
+      { lane: 'positionFacts', proof: NO_PROOF.stated, text: 'The centre is still closed.', fen: FEN, stakes: costStakes(300) ?? undefined },
+      { lane: 'mistake', proof: NO_PROOF.stated, text: 'Bc5 was a blunder — it let them force mate in 14.', fen: FEN, stakes: mateStakes('them', 27, true) },
+    ]);
+    expect(d.held).toContain('positionFacts');
+    expect(d.spoke).toEqual(['mistake']);
+    expect(d.lead?.lane).toBe('mistake');
+  });
+});
+
+describe('a book departure is never said without its reason (Learn audit 2026-10-14, game 1)', () => {
+  const RUY = 'r2qk2r/2p1bppp/p1np1n2/1p2p3/4P1b1/1BPP1N2/PP3PPP/RNBQR1K1 w kq - 1 9';
+  it('a threat turn keeps the book move beside the departure it explains', () => {
+    const d = decideTurn([
+      { lane: 'threat', proof: NO_PROOF.stated, text: 'Watch out — their bishop on g4 pins your knight on f3 against your queen on d1.', fen: RUY, squares: ['g4', 'f3', 'd1'] },
+      { lane: 'opening', proof: NO_PROOF.name, text: 'You left the book with d3.', fen: RUY },
+      { lane: 'bookMove', proof: NO_PROOF.stated, text: 'The usual move there brings the last knight out toward d2.', fen: RUY, squares: ['b1', 'd2'], role: 'teach' },
+    ]);
+    expect(d.spoke).toContain('opening');
+    expect(d.spoke).toContain('bookMove');
   });
 });

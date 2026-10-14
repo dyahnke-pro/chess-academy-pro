@@ -44,7 +44,8 @@ import { tradeJudgement } from './tradeJudgement';
 import { lastMoveFromSan } from './material';
 import type { PieceValue } from './pieceValueRead';
 import { kneeJerk } from './kneeJerk';
-import { autopilotGuard, blunderCheck, keepPressing } from './safetyHabits';
+import { autopilotGuard, blunderCheck, blunderCheckLine, keepPressing, BLUNDER_CHECK_QUESTION } from './safetyHabits';
+export { BLUNDER_CHECK_QUESTION };
 import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted, kingCourse } from './endgamePawnReads';
 import { readZugzwang, zugzwangSentence, type ZugzwangRead } from './zugzwang';
 import { strongChoice, warmStrongChoice } from './strongChoice';
@@ -1054,6 +1055,7 @@ export function studentMoveIsPrompted(clauseKinds: readonly string[], moveAdvice
  */
 export function slipQuestion(
   fenBefore: string,
+  playedSan: string,
   lostSquare: string | null | undefined,
   student: 'w' | 'b',
   said: Set<string>,
@@ -1065,18 +1067,36 @@ export function slipQuestion(
   const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
   const there = before.get(lostSquare as Square);
   const standing = !!there && there.color === student && legalSeeGainFor(fenBefore, lostSquare as Square, them) > 0;
-  const step = standing ? 'answer-danger' : 'is-my-move-safe';
-  const key = `slipq:${step}`;
+  // ONE SAY-ONCE KEY PER HABIT, shared with the lane that already teaches it:
+  // `claim:method:blunder-check` is what the blunder-check lane writes when it
+  // speaks, so the habit is said once a game whichever path says it first.
+  const key = standing ? 'claim:method:answer-danger' : 'claim:method:blunder-check';
   if (said.has(key)) return null;
   said.add(key);
-  const text = standing
+  if (!standing) {
+    // Named off the board AFTER the move — the piece may have just moved there.
+    let name = 'piece';
+    try {
+      const c = new Chess(fenBefore); c.move(playedSan);
+      const lost = c.get(lostSquare as Square);
+      if (lost && lost.color === student) name = ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[lost.type] ?? 'piece';
+    } catch { /* the name is a courtesy */ }
+    return { text: blunderCheckLine(name, lostSquare), key };
+  }
+  return { text: answerDangerQuestion(lostSquare, stemKey), key };
+}
+
+/** THE ONE ANSWER-THE-DANGER QUESTION — said by whichever line of the turn
+ *  names the unanswered threat first (the instant grade or the full verdict),
+ *  under one say-once claim, `method:answer-danger`. */
+export function answerDangerQuestion(square: string | null, stemKey: number): string {
+  return square
     ? rotateStem([
-      `The question that catches this: what did their last move attack? Answer it before your own idea — the piece on ${lostSquare} was already in danger.`,
-      `Ask it every move: what are they hitting? The piece on ${lostSquare} was already under attack, and that question finds it.`,
+      `The question that catches this: what did their last move attack? Answer it before your own idea — the piece on ${square} was already in danger.`,
+      `Ask it every move: what are they hitting? The piece on ${square} was already under attack, and that question finds it.`,
     ], stemKey)
     : rotateStem([
-      `The question that catches this is the blunder check: before you let go of the piece, run CCT for them — what checks, captures and threats do they have once it lands?`,
-      `Make it the last thing you do before every move: is my move safe? Run CCT for them — their checks, captures and threats after it.`,
+      'The question that catches this: what did their last move attack? Answer it before your own idea.',
+      'Ask it every move: what are they hitting? Answer that before you play your own idea.',
     ], stemKey);
-  return { text, key };
 }

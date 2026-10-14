@@ -28,7 +28,8 @@ describe('the why of a move that let them attack the king', () => {
       replyPvUci: ['c8c2', 'c1c2', 'e8a4', 'c2c1', 'f8c8', 'c1d2', 'c8d8', 'f4d5', 'd8d5', 'd2c3', 'a4c4'],
       replySan: null, cpLoss: 99812, studentColor: 'white', allowedMate: 6, moverEvalAfterCp: null,
     })!;
-    expect(look.line).toBe('e6 was a blunder — it let them force mate in 6.');
+    // A mate past five moves is named by its first move, never an unfollowable count.
+    expect(look.line).toBe('e6 was a blunder — it let them force mate, starting with …Rxc2+.');
     expect(look.punishLine?.uci[0]).toBe('c8c2');
   });
 });

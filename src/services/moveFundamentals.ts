@@ -1408,6 +1408,14 @@ function middlegameKey(f: MoveFundamental): string {
   return `mg:${f.id}:${f.led}`;
 }
 
+/** "Your Nf3 develops …" — but castling spoken as a subject reads "Your
+ *  castle kingside castles your king" (review tape 2026-10-14). Castling is
+ *  said as itself: "Castling gets your king to safety …". */
+function ledClause(san: string, lead: MoveFundamental): string {
+  if (/^O-O/.test(san)) return lead.selfContained.charAt(0).toUpperCase() + lead.selfContained.slice(1);
+  return `Your ${san} ${lead.led}`;
+}
+
 /**
  * THE PRINCIPLE A CLEAN OPENING MOVE FOLLOWS — full the first time, a short
  * stem after (the same shape the NEGATIVE side already has: a neglected
@@ -1457,9 +1465,9 @@ export function principleLine(
     const ruleKey = `mg-rule:${lead.id}`;
     const reason = reasonFor(lead);
     if (reason && !taught.has(ruleKey) && reasonHolds(lead, fenBefore, mover)) {
-      return { id: `${middlegameKey(lead)}|${ruleKey}`, text: `Your ${san} ${lead.led} — ${reason}.`, squares: lead.squares, first: true };
+      return { id: `${middlegameKey(lead)}|${ruleKey}`, text: `${ledClause(san, lead)} — ${reason}.`, squares: lead.squares, first: true };
     }
-    return { id: middlegameKey(lead), text: `Your ${san} ${lead.led}.`, squares: lead.squares, first: true };
+    return { id: middlegameKey(lead), text: `${ledClause(san, lead)}.`, squares: lead.squares, first: true };
   }
   const fresh = principleToTeach(fenBefore, san, mover, taught);
   if (fresh) return { id: fresh.id, text: principleOnceLine(san, fresh, stemKey), squares: fresh.squares, first: true };
@@ -1467,7 +1475,7 @@ export function principleLine(
     .filter((f) => IS_OPENING_PRINCIPLE[f.id])
     .sort((a, b) => b.weight - a.weight)[0];
   if (!lead || !(REPEAT_TEACHES[lead.id] || lead.forcing)) return null;
-  return { id: lead.id, text: `Your ${san} ${lead.led}.`, squares: lead.squares, first: false };
+  return { id: lead.id, text: `${ledClause(san, lead)}.`, squares: lead.squares, first: false };
 }
 
 /**

@@ -51,6 +51,19 @@ describe('the severity bands are the review\'s, not this file\'s', () => {
     });
     expect(call?.quality).toBe('blunder');
   });
+
+  it('a walked-into mate says HOW — short played out, long by its first move, no unfollowable count (Learn audit 2026-10-14)', () => {
+    const fenBefore = 'rnbqkbnr/pppp1ppp/8/4p3/8/5P2/PPPPP1PP/RNBQKBNR w KQkq - 0 2';
+    const short = callInaccuracy({ namesBetterMove: false, priorMove: null, replyLineUci: ['d8h4'], replySan: null,
+      fenBefore, playedSan: 'g4', bestSan: 'Nc3', cpLoss: 5, allowedMate: 1, side: 'student', moverColor: 'white' });
+    expect(short?.said).toContain('force mate: …Qh4#');
+    // The same board, read as a long mate whose line is not given in full:
+    // the count is past what a student can follow, so the way in is named.
+    const long = callInaccuracy({ namesBetterMove: false, priorMove: null, replyLineUci: ['b8c6'], replySan: null,
+      fenBefore, playedSan: 'g4', bestSan: 'Nc3', cpLoss: 5, allowedMate: 14, side: 'student', moverColor: 'white' });
+    expect(long?.said).not.toMatch(/mate in 14/);
+    expect(long?.said).toContain('starting with …Nc6');
+  });
 });
 
 describe('it names the better move AND what it was for', () => {

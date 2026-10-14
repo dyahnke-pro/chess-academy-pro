@@ -101,3 +101,13 @@ describe('opponentReplySentence — the one plain vocabulary for a reply', () =>
     expect(opponentReplySentence(new Chess().fen(), 'Qh5', null)).toBeNull();
   });
 });
+
+describe('the only legal answer to a check says so (teaching pass 2026-10-14)', () => {
+  it('a forced king move is said to be the only one — that is its reason', () => {
+    // The rook checks on the first rank and the bishop covers h2: Kg2 only.
+    const plies = line('r5k1/8/8/4b3/8/8/8/7K b - - 0 1', ['Ra1+', 'Kg2']);
+    expect(new Chess(plies[1].fenBefore).moves()).toEqual(['Kg2']);
+    const voice = projectedLineVoice(plies, 'white', { teachQuiet: true, explainTemptation: false });
+    expect(voice[1]).toMatch(/only legal move/);
+  });
+});
