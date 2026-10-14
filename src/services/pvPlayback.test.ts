@@ -411,3 +411,12 @@ describe('a check is said once', () => {
     expect(plyFactsSentence({ ...quiet, isCheck: true, isMate: true }, 'Qh7#')).toBe('The move Qh7 delivers checkmate.');
   });
 });
+
+describe('a ply-fact list reads as a sentence (review audit 2026-10-14: "captures the knight, wins material")', () => {
+  it('joins the last fact with "and"', async () => {
+    const { plyFactsClause } = await import('./pvPlayback');
+    // The queen takes a loose knight with check: two facts on one move.
+    const out = plyFactsClause('4k3/8/8/4n3/8/8/4Q3/4K3 w - - 0 1', 'Qxe5+');
+    expect(out).toBe('captures the knight, gives check and wins material');
+  });
+});
