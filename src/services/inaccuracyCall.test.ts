@@ -310,7 +310,7 @@ describe('a coach MISS is not a giveaway (walk 6, L4)', () => {
     // played …d6 instead; the knight is still hanging.
     const fen = 'r1bqkbnr/pppp1ppp/2n5/6N1/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 5';
     const call = callInaccuracy({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'd6', bestSan: 'Qxg5', bestLineUci: ['d8g5', 'e1g1', 'g5c5', 'b2b3', 'g8f6', 'b1c3', 'f8d6', 'c3b5'], cpLoss: 400, side: 'coach', moverColor: 'black' });
-    expect(call?.said).toMatch(/knight on g5 is still hanging/);
+    expect(call?.said).toMatch(/could have won your knight on g5, and it is still hanging/);
     expect(call?.said).not.toMatch(/go and take it/);
     expect(call?.offersStudent, 'a still-hanging warning offers nothing to find').toBeUndefined();
   });
@@ -624,5 +624,16 @@ describe('their mistake gets the same detail as yours (David 2026-10-10)', () =>
   it('every pronoun flips when their error is said to you', () => {
     expect(seatTheirErrorForStudent('it let them take your rook on e5, and they missed it. The line: Nxe5 — they come out a piece up.'))
       .toBe('it let you take their rook on e5, and you missed it. The line: Nxe5 — you come out a piece up.');
+  });
+});
+
+describe('their slip says what they let go (Learn audit 2026-10-14: "Their gxf6 is imprecise." and nothing more)', () => {
+  it('their best was winning your piece and it still hangs: that is the why, said with the grade', () => {
+    const call = callInaccuracy({ namesBetterMove: false, priorMove: null, replyLineUci: [], replySan: null,
+      fenBefore: 'rnbqkbnr/pppppppp/2Q5/8/8/8/PPPPPPPP/RNB1KBNR b KQkq - 0 1', playedSan: 'a6', bestSan: 'bxc6', bestLineUci: ['b7c6'],
+      cpLoss: 900, side: 'coach', moverColor: 'black',
+    });
+    expect(call?.said).toMatch(/^Their a6 is a \w+ — they could have won your queen on c6, and it is still hanging — see to it\./);
+    expect(call?.said.match(/still hanging/g)).toHaveLength(1);
   });
 });

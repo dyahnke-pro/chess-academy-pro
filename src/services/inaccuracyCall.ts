@@ -719,17 +719,21 @@ export function callInaccuracyDetailed(args: {
       replySan: args.replySan, replyKeptWin: args.replyKeptWin ?? null,
       namesBetterMove: args.namesBetterMove,
     });
+    const stillHanging = missedCaptureStillOn(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci ?? null, args.priorMove);
+    // WHAT THEY LET GO IS THE WHY (Learn audit 2026-10-14: "Their gxf6 is
+    // imprecise. Your queen on a5 is still hanging, though" — the grade said
+    // nothing). Their best was winning your piece, and it still hangs.
+    const letGo = stillHanging ? `they could have won your ${stillHanging.piece} on ${stillHanging.square}, and it is still hanging — see to it` : null;
     const why = (args.allowedMate ?? null) !== null
       ? 'it walks into mate'
-      : ew.consequence ? seatTheirErrorForStudent(consequenceIn(ew.consequence, 'present')) : null;
+      : ew.consequence ? seatTheirErrorForStudent(consequenceIn(ew.consequence, 'present')) : letGo;
     const failedSaid = !why && ew.failed ? ` ${seatTheirErrorForStudent(ew.failed)}` : '';
     const costSaid = !why && !failedSaid && costFitsGrade(quality as SpokenGradeLabel, cost) ? ` — it throws away ${costWords(cost)} of advantage` : '';
     const head = `Their ${args.playedSan} is ${GRADE_WORD[quality as SpokenGradeLabel]}${why ? ` — ${why}` : costSaid}.${failedSaid}${seatTheirErrorForStudent(ew.tail)}`;
     const theirBetter = ew.better ? ` ${seatTheirErrorForStudent(ew.better).replace(/ was the move\b/, ' was their move')}` : '';
-    const stillHanging = missedCaptureStillOn(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci ?? null, args.priorMove);
     // With no why to say, the slip is still the student's chance — pointed at,
     // not named.
-    const punish = stillHanging
+    const punish = stillHanging && why !== letGo
       ? ` Your ${stillHanging.piece} on ${stillHanging.square} is still hanging, though — see to it.`
       : !why && !failedSaid && quality !== 'inaccuracy' ? theirSlipOffer(args.moverEvalAfterCp) : '';
     if (!why && !failedSaid && !costSaid && !theirBetter && !punish) return { call: null, declined: 'no-why' };

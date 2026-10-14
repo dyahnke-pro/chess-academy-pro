@@ -303,3 +303,18 @@ describe('a move onto the goal is never "a step toward" it (hard-question walk 2
     expect(r.events.map((e) => e.text).join(' ')).not.toMatch(/step toward the outpost on e5/);
   });
 });
+
+describe('a route says what the piece would hit there (Learn audit 2026-10-14)', () => {
+  it('their queen walking to g6 names what it would hit from g6', async () => {
+    const { routePoint } = await import('./planArc');
+    // Black's queen on d8 heading for g5: from g5 it would hit the knight on g3.
+    const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/6N1/PPPP1PPP/R1BQKBNR b KQkq - 0 3';
+    const aim = { id: 'route:q', kind: 'route' as const, squares: ['g5'], goal: 'g5', phrase: 'getting the queen to g5', from: 'd8', route: { name: 'queen', path: ['d8', 'g5'] } };
+    expect(routePoint(aim, fen, 'b', 'opponent')).toBe(' — from g5 it would hit your knight on g3');
+  });
+  it('a route that would hit nothing adds nothing', async () => {
+    const { routePoint } = await import('./planArc');
+    const aim = { id: 'route:q', kind: 'route' as const, squares: ['f6'], goal: 'f6', phrase: 'getting the queen to f6', from: 'd8', route: { name: 'queen', path: ['d8', 'f6'] } };
+    expect(routePoint(aim, 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2', 'b', 'opponent')).toBe('');
+  });
+});

@@ -233,6 +233,43 @@ function arrived(aim: Aim, fen: string, color: 'w' | 'b', promoted: string | nul
  * `aimsNow` is the side's plan read at `fenAfter` (the board after the side's
  * own move, `moved`). `color` is that side's colour — whose pieces "arrive".
  */
+/** THE ROUTE'S POINT, from the board (Learn audit 2026-10-14: "Their plan is
+ *  taking shape: getting the queen to g7, by way of h7." — where, never why).
+ *  The piece is set on its destination and the other side's king and pieces
+ *  worth a minor or more that it would hit there are named. Empty when it
+ *  would hit nothing — the route then says only where it goes. */
+export function routePoint(aim: Aim, fen: string, color: 'w' | 'b', seat: Seat): string {
+  if (aim.kind !== 'route' || !aim.goal || aim.route?.takes) return '';
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return ''; }
+  const letter = aim.id.split(':')[1];
+  const start = [aim.from, ...aim.squares].find((sq) => {
+    const p = sq ? board.get(sq as Square) : null;
+    return !!p && p.color === color && p.type === letter;
+  });
+  if (!start) return '';
+  const goalNow = board.get(aim.goal as Square);
+  if (goalNow && start !== aim.goal) return '';
+  const piece = board.get(start as Square);
+  if (!piece) return '';
+  board.remove(start as Square);
+  board.put(piece, aim.goal as Square);
+  const them: 'w' | 'b' = color === 'w' ? 'b' : 'w';
+  const whose = seat === 'opponent' ? 'your' : 'their';
+  const hit: string[] = [];
+  for (const c of board.board().flat()) {
+    if (!c || c.color !== them) continue;
+    if (c.type !== 'k' && (CAPTURE_VALUE[c.type] ?? 0) < 3) continue;
+    let attackers: Square[] = [];
+    try { attackers = board.attackers(c.square, color); } catch { attackers = []; }
+    if (!attackers.includes(aim.goal as Square)) continue;
+    hit.push(c.type === 'k' ? `${whose} king` : `${whose} ${PIECE[c.type]} on ${c.square}`);
+  }
+  if (hit.length === 0) return '';
+  const list = hit.length === 1 ? hit[0] : `${hit.slice(0, -1).join(', ')} and ${hit[hit.length - 1]}`;
+  return ` — from ${aim.goal} it would hit ${list}`;
+}
+
 export function stepArc(
   state: ArcState,
   aimsIn: readonly Aim[],
@@ -371,7 +408,7 @@ export function stepArc(
       entry.announced = true;
       events.push({
         id: aim.id, kind: 'emerge', seat, squares: aim.squares.slice(0, 4),
-        text: EMERGE[seat][emerged++ % EMERGE[seat].length](aim.phrase),
+        text: EMERGE[seat][emerged++ % EMERGE[seat].length](`${aim.phrase}${routePoint(aim, fenAfter, color, seat)}`),
       });
     }
     next[aim.id] = entry;
