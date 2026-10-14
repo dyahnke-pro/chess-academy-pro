@@ -44,7 +44,7 @@ import {
   namedPawnStructure,
   developmentRead,
   findPieceQuality,
-  goodPieceClause, goodPieceIdeaKey,
+  goodPieceClause, goodPieceReason, goodPieceIdeaKey,
   findPassedPawns,
   findPawnBreaks,
   findOpenFiles,
@@ -220,7 +220,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         // 2026-09-24: "Your rook on f1 — rook on a semi-open file. Build around
         // it." read like a label).
         return {
-          fact: `Your ${PIECE_NAME[good.piece]} on ${good.square} ${goodPieceClause(good.kind, good.square).replace(/^it /, '')} — build your play around it.`,
+          fact: `Your ${PIECE_NAME[good.piece]} on ${good.square} ${goodPieceClause(good.kind, good.square).replace(/^it /, '')} — build your play around it${goodPieceReason(good.kind) ? `, because ${goodPieceReason(good.kind)}` : ''}.`,
           squares: [good.square],
           keys: [goodPieceIdeaKey('student', good.piece, good.kind, good.square),
             ...(good.kind === 'open-file' || good.kind === 'semi-open-file' ? [`file-${good.square[0]}`] : [])],

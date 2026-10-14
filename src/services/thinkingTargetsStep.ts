@@ -83,7 +83,7 @@ export function targetReason(fen: string, sq: Square): string | null {
   if (defenders === 0) {
     return attackers > 0
       ? `The ${name(p.type)} on ${sq} has no defender, and it is already attacked.`
-      : `The ${name(p.type)} on ${sq} has no defender — it's loose.`;
+      : `The ${name(p.type)} on ${sq} has no defender — it's loose, so it is the first piece a fork or a double attack goes after.`;
   }
   const cheapest = chess.attackers(sq, other(p.color))
     .map((s) => chess.get(s)?.type)

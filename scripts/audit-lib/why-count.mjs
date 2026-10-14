@@ -34,6 +34,12 @@ const NOT_TEACHING = [
   /^[a-h1-8nbrqkox+#=-]+ — your move\.?$/i,
   /^here's your game in /i,
   /^(ready when you are|let's get to work)\b/i,
+  // The move's own announcement and the session/drill prompts (2026-10-14):
+  // "Check." says what their move was; "Back at the board…" and "Find their
+  // targets — tap each one." ask the student to act. None is a lesson.
+  /^check(mate)?[.!]?$/i,
+  /^back at the board\b/i,
+  /^find their targets\b/i,
   // A question on its own line is the first half of a question-and-answer
   // pair ("So what is the answer?" ‖ "Move it — …"); the answer is measured.
   /^[^.!]*\?$/,
