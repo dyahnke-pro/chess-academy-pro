@@ -4319,7 +4319,10 @@ async function augmentWithProjections(
       const oppRun = render(line, 'opponent');
       let callOut = oppRun
         ? `Watch what they're building — left alone, their ${oppDeepKind} runs ${oppRun}.`
-        : `Watch what they're building — left alone, their ${oppDeepKind} starts with ${line.plies[0].san}.`;
+        // THE STAKE IS ITS WHY (review audit 2026-10-14: "their idea starts
+        // with d5." and nothing more). The line was kept BECAUSE it mates or
+        // swings the game, so that is said with it.
+        : `Watch what they're building — left alone, their ${oppDeepKind} starts with ${line.plies[0].san}${matesOut ? ', and it ends in mate' : oppPovNow !== null && oppPovTerminal !== null ? `, and it swings the game by ${costWords(oppPovTerminal - oppPovNow)}` : ''}.`;
       // Its REAL purpose — what the line wins, when that is not what their
       // first move looks aimed at (missed computers, 2026-10-08).
       const purpose = (() => { try { return threatPurpose(line, studentColorWB); } catch { return null; } })();
