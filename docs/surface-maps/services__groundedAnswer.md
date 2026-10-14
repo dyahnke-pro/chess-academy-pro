@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7630 lines · 166 exports · 88 importers · 58 tests · 8 audits**
+**7632 lines · 166 exports · 89 importers · 59 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -56,6 +56,7 @@
 - `src/services/fundamentalsCatalog.ts`
 - `src/services/gameInsightsService.ts`
 - `src/services/gameReviewService.ts`
+- `src/services/goodPieceWhyChat.test.ts`
 - `src/services/groundedAnswer.askedPiece.test.ts`
 - `src/services/groundedAnswer.betterWhy.test.ts`
 - `src/services/groundedAnswer.compare.test.ts`
@@ -1103,12 +1104,13 @@
 ### `PositionalTopic` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `assemblePositionalAnswer` (function) — 26 call sites
+### `assemblePositionalAnswer` (function) — 27 call sites
 - `src/coach/dispatchCoachTurn.ts:543`
 - `src/coach/questionWalk.sicilian1200.test.ts:69`
 - `src/services/coachApi.ts:6668`
 - `src/services/endgameRuleAnswer.test.ts:74`
 - `src/services/endgameRuleAnswer.test.ts:79`
+- `src/services/goodPieceWhyChat.test.ts:7`
 - `src/services/groundedAnswer.positional.test.ts:6`
 - `src/services/groundedAnswer.positional.test.ts:12`
 - `src/services/groundedAnswer.positional.test.ts:16`
@@ -1290,6 +1292,7 @@
 - `src/services/explainBestMoveLines.test.ts`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts`
 - `src/services/fundamentalsCatalog.test.ts`
+- `src/services/goodPieceWhyChat.test.ts`
 - `src/services/groundedAnswer.askedPiece.test.ts`
 - `src/services/groundedAnswer.betterWhy.test.ts`
 - `src/services/groundedAnswer.compare.test.ts`
