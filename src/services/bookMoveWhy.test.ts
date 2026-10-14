@@ -94,3 +94,22 @@ describe('the book-move why routes through the door on the DNA "but" beat (David
     }
   }, 30_000);
 });
+
+describe('the hand-graded falsehoods of 2026-10-14 stay fixed (each failed on the old code)', () => {
+  it('a guard the student\'s move took away is not a guard the book move adds', () => {
+    const w = bookMoveWhy('r1bq1rk1/pppnbppp/4pn2/3p2B1/2PP4/2N1PN2/PP3PPP/2RQKB1R b K - 0 10', 'c6', 'Nb8', 'b');
+    expect(w?.text ?? '').not.toMatch(/adds .* guard to your knight on f6/);
+  });
+  it('the centre squares are the book piece\'s own, not the departing knight\'s', () => {
+    const w = bookMoveWhy('rnb1k2r/pppnqppp/4p3/3pP3/3P4/2N5/PPP2PPP/R2QKBNR w KQkq - 0 10', 'f4', 'Na4', 'w');
+    expect(w?.text ?? '').not.toMatch(/covers d5 and e4/);
+  });
+  it('a pin that loses the pinner is no pin the book move stops', () => {
+    const w = bookMoveWhy('rnbq1rk1/2p1bppp/p2p1n2/1p2p3/4P3/1BP2N1P/PP1P1PP1/RNBQR1K1 w - - 0 10', 'd4', 'Ba4', 'w');
+    expect(w?.text ?? '').not.toMatch(/keeps their bishop off g4/);
+  });
+  it('a hanging pawn is never praised as a structure', () => {
+    const w = bookMoveWhy('rnbqkbnr/ppp2ppp/3p4/4p3/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 10', 'Nf3', 'c5', 'w');
+    expect(w?.text ?? '').not.toMatch(/freezes/);
+  });
+});
