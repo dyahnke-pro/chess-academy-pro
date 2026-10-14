@@ -44,7 +44,8 @@ import { tradeJudgement } from './tradeJudgement';
 import { lastMoveFromSan } from './material';
 import type { PieceValue } from './pieceValueRead';
 import { kneeJerk } from './kneeJerk';
-import { autopilotGuard, blunderCheck, blunderCheckLine, keepPressing } from './safetyHabits';
+import { autopilotGuard, blunderCheck, blunderCheckLine, keepPressing, BLUNDER_CHECK_QUESTION } from './safetyHabits';
+export { BLUNDER_CHECK_QUESTION };
 import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted, kingCourse } from './endgamePawnReads';
 import { readZugzwang, zugzwangSentence, type ZugzwangRead } from './zugzwang';
 import { strongChoice, warmStrongChoice } from './strongChoice';
@@ -1082,9 +1083,20 @@ export function slipQuestion(
     } catch { /* the name is a courtesy */ }
     return { text: blunderCheckLine(name, lostSquare), key };
   }
-  const text = rotateStem([
-    `The question that catches this: what did their last move attack? Answer it before your own idea — the piece on ${lostSquare} was already in danger.`,
-    `Ask it every move: what are they hitting? The piece on ${lostSquare} was already under attack, and that question finds it.`,
-  ], stemKey);
-  return { text, key };
+  return { text: answerDangerQuestion(lostSquare, stemKey), key };
+}
+
+/** THE ONE ANSWER-THE-DANGER QUESTION — said by whichever line of the turn
+ *  names the unanswered threat first (the instant grade or the full verdict),
+ *  under one say-once claim, `method:answer-danger`. */
+export function answerDangerQuestion(square: string | null, stemKey: number): string {
+  return square
+    ? rotateStem([
+      `The question that catches this: what did their last move attack? Answer it before your own idea — the piece on ${square} was already in danger.`,
+      `Ask it every move: what are they hitting? The piece on ${square} was already under attack, and that question finds it.`,
+    ], stemKey)
+    : rotateStem([
+      'The question that catches this: what did their last move attack? Answer it before your own idea.',
+      'Ask it every move: what are they hitting? Answer that before you play your own idea.',
+    ], stemKey);
 }

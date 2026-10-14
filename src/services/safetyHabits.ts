@@ -43,8 +43,9 @@ export function blunderCheck(fenBefore: string, san: string, reply: string | nul
  *  learns to ask themself, and name CCT). Said by this lane when they took the
  *  piece, and by the slip question when the line takes it — one wording, one
  *  say-once claim (`method:blunder-check`). */
+export const BLUNDER_CHECK_QUESTION = 'Blunder check before you let go of a piece: run CCT for them — what checks, captures and threats do they have once it lands?';
 export function blunderCheckLine(pieceName: string, square: string): string {
-  return `Blunder check before you let go of a piece: run CCT for them — what checks, captures and threats do they have once it lands? Here the answer was your ${pieceName} on ${square}.`;
+  return `${BLUNDER_CHECK_QUESTION} Here the answer was your ${pieceName} on ${square}.`;
 }
 
 export function autopilotGuard(san: string, cpLoss: number, popularTopSan: string | null): string | null {
