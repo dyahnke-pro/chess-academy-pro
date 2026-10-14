@@ -31,6 +31,8 @@ const WHY = new RegExp([
   String.raw`\bgives? up (?:the|your|their|its) \w+`, String.raw`\bhas no (?:escape|square|retreat|way out)\b`,
   String.raw`\b(?:a|the) guard does not help\b`, String.raw`\btakes \w+ away from (?:your|their) \w+`,
   String.raw`\blifts the pressure\b`, String.raw`\bis worth (?:less|more) than\b`, String.raw`\btakes (?:moves|time|tempi) to\b`,
+  String.raw`\bneeds? (?:a|an|the) [\w-]+(?: \w+)? to (?:reach|get|win|attack|break)\b`, String.raw`\b(?:is|are) stronger than\b`, String.raw`\bcan never (?:come|be (?:challenged|taken|kicked))\b`,
+  String.raw`\bmakes them (?:commit|move|decide|spend)\b`, String.raw`\bremoves? (?:a|the|their|your) (?:defender|guard)\b`, String.raw`\bleaves (?:your|their) \w+ on [a-h][1-8] to be taken\b`,
   String.raw`\b(?:is|are) safe now\b`, String.raw`\bthe guard that holds\b`, String.raw`\bsaves the \w+ from (?:your|their) \w+`,
 ].join('|'), 'i');
 
@@ -49,6 +51,7 @@ const NOT_TEACHING = [
   /^check(mate)?[.!]?$/i,
   /^back at the board\b/i,
   /^find their targets\b/i,
+  /^(find|tap) (every|each|your|the) /i,
   // A question on its own line is the first half of a question-and-answer
   // pair ("So what is the answer?" ‖ "Move it — …"); the answer is measured.
   /^[^.!]*\?$/,

@@ -753,7 +753,7 @@ export function prizeTeaching(fen: string, square: string, student: 'w' | 'b'): 
   }
   const hitters = [...new Set(takers.map((m) => m.from))];
   if (hitters.length > guards) {
-    return { text: `Their ${name} on ${square} is hit ${times(hitters.length)} and guarded only ${times(guards)}. ${caution}`, squares: [square, ...hitters] };
+    return { text: `Their ${name} on ${square} is hit ${times(hitters.length)} and guarded only ${times(guards)} — you win it in the trades. ${caution}`, squares: [square, ...hitters] };
   }
   return { text: `Their ${name} on ${square} can be won — its guard is not enough. ${caution}`, squares: [square] };
 }
