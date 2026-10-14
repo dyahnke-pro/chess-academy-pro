@@ -1798,6 +1798,12 @@ export function CoachTeachPage(): JSX.Element {
   });
   const resetPerGameMemory = useCallback((): void => {
     learnMemRef.current.newGame();
+    // The standing-fact ledger also carries the said-once DEFINITIONS, and it
+    // forgets only when it SEES the board go backwards — a new game is not
+    // observed until some lane reads the board, so game one's "a pin freezes
+    // the piece in front" kept game two's first pin bare (second-game audit
+    // 2026-10-14). A new game forgets it here, with the rest.
+    standingRef.current = createStandingFactMemory();
   }, []);
   /** T3 (2026-09-20): plies where the deciding computer kept a `key-moment`
    *  clause — the coach ANNOUNCED the critical moment before the student moved.

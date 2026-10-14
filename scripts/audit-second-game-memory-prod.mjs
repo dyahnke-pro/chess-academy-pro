@@ -58,7 +58,7 @@ const TEACHINGS = [
   // Index 0 is the opening announcement. It is NOT asserted in the per-teaching
   // loop below — it gets its own COMPUTED-vs-SPOKEN pair (D2/D3), because for
   // this one the two answers are different bugs. The regex is still used there.
-  { id: 'opening-name', ref: 'announcedOpeningName', re: /this game is now the|the line has sharpened into|you're (?:in|playing) the/i, split: true },
+  { id: 'opening-name', ref: 'announcedOpeningName', re: /this game is (?:now )?the|the line has sharpened into|you're (?:in|playing) the/i, split: true },
   { id: 'concept-invariant', ref: 'conceptTaught', re: /piece in front|two targets|valuable piece|no safe square/i },
   { id: 'threat-call', ref: 'spokenThreatLines', re: /attacked and nothing's defending|hanging|is attacked/i },
 ];
