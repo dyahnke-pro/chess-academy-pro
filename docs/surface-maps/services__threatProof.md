@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**96 lines · 3 exports · 4 importers · 1 tests · 0 audits**
+**98 lines · 3 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,21 +20,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `threatProof` (function) — 6 call sites
-- `src/services/positionFacts.ts:1599`
-- `src/services/reviewFullData.ts:759`
+- `src/services/positionFacts.ts:1600`
+- `src/services/reviewFullData.ts:767`
 - `src/services/threatProof.test.ts:8`
 - `src/services/threatProof.test.ts:17`
 - `src/services/threatProof.test.ts:23`
 - `src/services/threatProof.test.ts:31`
 
 ### `provenThreatLine` (function) — 3 call sites
-- `src/services/boardComputers.ts:224`
 - `src/services/boardComputers.ts:231`
+- `src/services/boardComputers.ts:238`
 - `src/services/threatProof.test.ts:24`
 
 ### `threatStakes` (function) — 2 call sites
-- `src/services/boardComputers.ts:225`
 - `src/services/boardComputers.ts:232`
+- `src/services/boardComputers.ts:239`
 
 ## Tests
 

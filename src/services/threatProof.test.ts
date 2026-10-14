@@ -32,6 +32,6 @@ describe('threatProof — the cost a threat warning claims, proven on the board'
     expect(p?.short).toBe('gxf6 wins your knight for their pawn, even after you take back');
     expect(p?.short).not.toMatch(/\d+ points?/);
     expect(p?.short).not.toMatch(/guarded/);
-    expect(p?.full).toBe('gxf6 wins your knight for their pawn, even after you take back — the guards only win back the cheaper piece');
+    expect(p?.full).toBe('gxf6 wins your knight for their pawn, even after you take back');
   });
 });

@@ -67,11 +67,13 @@ export function threatProof(fen: string, student: 'w' | 'b', squares: readonly s
         ? `${cap.san} wins your ${targetName} outright — you cannot take back enough`
         : `${cap.san} still wins material after you take back`)
     : null;
-  const why = cheaper ? ` — the guards only win back the cheaper piece` : '';
+  // No second "cheaper piece" clause: "wins your bishop for their pawn, even
+  // after you take back" IS the consequence, and Learn's warning already says
+  // why a guard does not help — said twice in one turn on the 2026-10-14 tape.
   return {
     kind: 'count', exact: true,
     short: result ? `${cap.san} — ${result}` : net ?? `attacked ${times(hits)}, ${guard}`,
-    full: result ? `It is attacked ${times(hits)} and ${guard}: ${cap.san} — ${result}` : net ? `${net}${why}` : `It is attacked ${times(hits)} and ${guard}`,
+    full: result ? `It is attacked ${times(hits)} and ${guard}: ${cap.san} — ${result}` : net ?? `It is attacked ${times(hits)} and ${guard}`,
     line: { fen: them, sans: [cap.san] },
     squares: [named.square, cap.from],
   };

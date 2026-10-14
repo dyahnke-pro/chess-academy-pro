@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**817 lines · 25 exports · 4 importers · 1 tests · 0 audits**
+**819 lines · 25 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -122,8 +122,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:187`
 - `src/services/exchangeIdeas.test.ts:188`
 - `src/services/exchangeIdeas.test.ts:192`
-- `src/services/positionFacts.ts:1125`
-- `src/services/reviewFullData.ts:936`
+- `src/services/positionFacts.ts:1136`
+- `src/services/reviewFullData.ts:944`
 
 ## Tests
 

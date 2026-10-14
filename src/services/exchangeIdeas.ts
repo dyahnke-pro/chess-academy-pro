@@ -480,8 +480,10 @@ export function threatCost(fenBefore: string, san: string, student: Side): Excha
   const proof = legalLineProof(after, [still.san, answer.m.san], true);
   if (!proof) return null;
   const victim = b2.c.get(answer.m.to);
-  const how = answer.gain > threat.gain ? 'more than it wins' : 'as much as it wins';
-  const text = `Now if they go ahead with ${still.san} anyway, you take their ${NAME[victim?.type ?? 'p']} on ${answer.m.to} — the threat costs them ${how}.`;
+  // Said as what the grab leaves them with (Learn audit 2026-10-14: "the
+  // threat costs them as much as it wins" was a riddle, not a reason).
+  const how = answer.gain > threat.gain ? 'the grab loses them material' : 'the grab gains them nothing';
+  const text = `Now if they go ahead with ${still.san} anyway, you take their ${NAME[victim?.type ?? 'p']} on ${answer.m.to} — ${how}.`;
   return { ...idea('threat-cost', text, [still.from, still.to, answer.m.to], proof, `threat-cost:${still.from}${still.to}`), stakes: { points: threat.gain, plies: 1 } };
 }
 

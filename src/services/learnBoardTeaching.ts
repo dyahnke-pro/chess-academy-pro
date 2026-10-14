@@ -1118,12 +1118,32 @@ export function answerDangerQuestion(square: string | null, stemKey: number): st
 
 const HIT_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
+/** A piece of yours under attack with no guard — rotated by move so the
+ *  formula is never said three times running (David 2026-10-14). Every stem
+ *  carries its reason: nothing guards it, so taking it costs them nothing. */
+export function hangingPieceLine(piece: string, sq: string, rot: number): string {
+  const name = HIT_NAME[piece] ?? 'piece';
+  const stems = [
+    `Careful — your ${name} on ${sq} is attacked and nothing's defending it.`,
+    `Careful — your ${name} on ${sq} hangs: nothing guards it, so they can take it for free.`,
+    `They are hitting your ${name} on ${sq}, and nothing guards it — it is lost unless it moves or gets a guard.`,
+  ];
+  return stems[((rot % stems.length) + stems.length) % stems.length];
+}
+
 /** A piece of yours attacked by a CHEAPER one, said with why it matters (Learn
  *  audit 2026-10-14: "Careful — their bishop on d2 hits your queen on a5."
  *  named the attack and stopped). The attacker is worth less by construction,
  *  so a guard does not save the piece: trading it for the attacker loses. */
-export function cheaperAttackerLine(by: string, bySq: string, piece: string, sq: string): string {
+export function cheaperAttackerLine(by: string, bySq: string, piece: string, sq: string, rot: number): string {
   const attacker = HIT_NAME[by] ?? 'piece';
   const target = HIT_NAME[piece] ?? 'piece';
-  return `Careful — their ${attacker} on ${bySq} hits your ${target} on ${sq}, and a guard does not help: the ${attacker} is worth less than your ${target}.`;
+  // ROTATED, not repeated (David 2026-10-14: no reason formula more than twice
+  // a game) — keyed on the caller's move number, never Math.random.
+  const stems = [
+    `Careful — their ${attacker} on ${bySq} hits your ${target} on ${sq}, and a guard does not help: the ${attacker} is worth less than your ${target}.`,
+    `Careful — their ${attacker} on ${bySq} attacks your ${target} on ${sq}. Guarding it does not save it: they win your ${target} for a ${attacker}.`,
+    `Their ${attacker} on ${bySq} is after your ${target} on ${sq} — guard or not, it would cost your ${target} for their ${attacker}.`,
+  ];
+  return stems[((rot % stems.length) + stems.length) % stems.length];
 }

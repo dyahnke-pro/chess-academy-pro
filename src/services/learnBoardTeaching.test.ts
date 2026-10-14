@@ -127,6 +127,21 @@ describe('studentMoveIsPrompted — a move the coach NAMED is never proof (2026-
 describe('an attack by a cheaper piece says why it matters (Learn audit 2026-10-14)', () => {
   it('names the attack and that a guard does not help', async () => {
     const { cheaperAttackerLine } = await import('./learnBoardTeaching');
-    expect(cheaperAttackerLine('b', 'd2', 'q', 'a5')).toBe('Careful — their bishop on d2 hits your queen on a5, and a guard does not help: the bishop is worth less than your queen.');
+    expect(cheaperAttackerLine('b', 'd2', 'q', 'a5', 0)).toBe('Careful — their bishop on d2 hits your queen on a5, and a guard does not help: the bishop is worth less than your queen.');
+  });
+  it('rotates its wording by move, so the formula is never said three times running (David 2026-10-14)', async () => {
+    const { cheaperAttackerLine } = await import('./learnBoardTeaching');
+    const said = [0, 1, 2].map((r) => cheaperAttackerLine('p', 'h3', 'b', 'g4', r));
+    expect(new Set(said).size).toBe(3);
+    for (const s of said) expect(s).toMatch(/pawn on h3/);
+  });
+});
+
+describe('a hanging piece is warned in rotated words (David 2026-10-14)', () => {
+  it('three moves, three wordings, each with its reason', async () => {
+    const { hangingPieceLine } = await import('./learnBoardTeaching');
+    const said = [0, 1, 2].map((r) => hangingPieceLine('r', 'h8', r));
+    expect(new Set(said).size).toBe(3);
+    for (const s of said) expect(s).toMatch(/rook on h8.*nothing/);
   });
 });
