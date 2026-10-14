@@ -557,3 +557,21 @@ describe('the door says whether the student\'s own move got its reason (David 20
     expect(rows.map((r) => r.ownMove)).toEqual([null, null, 'affirm']);
   });
 });
+
+describe('one lead reason per turn — a turn never runs past TURN_WORDS (David 2026-10-14)', () => {
+  it('the least-valued reasons wait when together they would bury the lead', async () => {
+    const { TURN_WORDS } = await import('./learnTurnDoor');
+    const pad = (_sq: string, n: number): string => `This idea ${Array.from({ length: n }, () => 'matters').join(' ')} here.`;
+    const d = decideTurn([
+      { lane: 'moveIntent', proof: NO_PROOF.stated, text: pad('f3', 22), fen: FEN, squares: ['f3'], stakes: costStakes(400) ?? undefined },
+      { lane: 'movePoint', proof: NO_PROOF.stated, text: pad('e5', 23), fen: FEN, squares: ['e5'], stakes: costStakes(350) ?? undefined },
+      { lane: 'structureJudgement', proof: NO_PROOF.stated, text: pad('d4', 24), fen: FEN, squares: ['d4'], stakes: costStakes(300) ?? undefined },
+      { lane: 'pieceQuality', proof: NO_PROOF.stated, text: pad('c6', 25), fen: FEN, squares: ['c6'], stakes: costStakes(250) ?? undefined },
+    ]);
+    const words = d.pkg.kept.reduce((n, f) => n + f.text.split(/\s+/).length, 0);
+    expect(d.pkg.kept.length).toBeGreaterThan(0);
+    expect(words).toBeLessThanOrEqual(TURN_WORDS);
+    expect(d.held).toContain('pieceQuality');
+    expect(d.spoke).toContain('moveIntent');
+  });
+});

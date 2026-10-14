@@ -156,6 +156,10 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   breakRace: 'affirm', kickMap: 'point', patternFails: 'refute',
 };
 
+/** A Learn turn's length (David 2026-10-14): one lead reason, not a stack of
+ *  five true ones that buries it. The audit holds the same number (V8). */
+export const TURN_WORDS = 80;
+
 export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // ── batch 1 (opening equivalence, order and timing) ──
   // The named opening this board is with moves thrown in or the colours
@@ -550,6 +554,28 @@ export function decideTurn(
       keep.push(x.fact);
       if (!spoke.includes(x.lane)) spoke.push(x.lane);
     } else if (!held.includes(x.lane)) held.push(x.lane);
+  }
+  // ONE LEAD REASON PER TURN (David 2026-10-14: "no turn past 80 words").
+  // Every fact above earned its place; when together they run past the turn's
+  // length, the ones worth least wait — their proof stays on the Why tap. The
+  // lead, danger, the must-ride lanes and the verdict's own reason ('but')
+  // never wait: they ARE the turn. Value decides who waits, never order.
+  {
+    const words = (t: string): number => t.split(/\s+/).filter(Boolean).length;
+    const fixed = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
+      x === ownLead || DANGER_LANES.has(x.lane) || LEARN_LANES[x.lane].always === true || DNA_BEAT[x.lane] === 'but';
+    const kept = survivors.filter((x) => keep.includes(x.fact));
+    let total = kept.filter(fixed).reduce((n, x) => n + words(x.fact.text), 0);
+    for (const x of kept.filter((y) => !fixed(y)).sort((a, b) => value(b) - value(a))) {
+      const w = words(x.fact.text);
+      if (total + w <= TURN_WORDS) { total += w; continue; }
+      keep.splice(keep.indexOf(x.fact), 1);
+      if (!keep.some((f) => survivors.find((y) => y.fact === f)?.lane === x.lane)) {
+        const i = spoke.indexOf(x.lane);
+        if (i >= 0) spoke.splice(i, 1);
+      }
+      if (!held.includes(x.lane)) held.push(x.lane);
+    }
   }
   const laneFor = (f: VoiceFact): LearnLane | undefined => survivors.find((x) => x.fact === f)?.lane;
   const beatOf = (f: VoiceFact): number => {
