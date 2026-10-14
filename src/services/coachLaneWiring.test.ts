@@ -90,7 +90,9 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // parity — the verdict still leads, the evidence still follows it.)
     // (Najdorf re-walk 2026-09-27: the verdict stands down only when the grade
     // already names the SAME lost square — `lossInGrade`.)
-    expect(TEACH).toMatch(/const line = `\$\{fundamental\s*\?\s*`\$\{lossInGrade \? '' : noteSlip\(learnMemRef\.current, fundamental\.id\)\}\$\{lossInGrade \? '' : bookSaid \? fundamental\.howOnly : fundamental\.verdict\}[\s\S]{0,160}?\$\{evidence\}[\s\S]{0,20}?`\.trim\(\)\s*:\s*`\$\{look\.line\}\$\{takeDefinition\(look\.pattern\)\}`\}\$\{concession \? ` \$\{concession\}` : ''\}`;/);
+    // (2026-10-13: a mate it allowed speaks alone — `fund` is null then.)
+    expect(TEACH).toMatch(/const fund = look\.stakes\?\.mate\?\.for === 'them' \? null : fundamental;/);
+    expect(TEACH).toMatch(/const line = `\$\{fund\s*\?\s*`\$\{lossInGrade \? '' : noteSlip\(learnMemRef\.current, fund\.id\)\}\$\{lossInGrade \? '' : bookSaid \? fund\.howOnly : fund\.verdict\}[\s\S]{0,160}?\$\{evidence[\s\S]{0,40}?`\.trim\(\)\s*:\s*`\$\{look\.line\}\$\{takeDefinition\(look\.pattern\)\}`\}\$\{concession \? ` \$\{concession\}` : ''\}`;/);
     // (unify-the-coach B3, 2026-10-01: the grade's missed pattern carries its
     // rule once a game, from the one definition ledger.)
     expect(TEACH).toMatch(/const concession = lookConcession\(fenBefore, move\.san, cpLoss, studentEvalAfterCp\);/);

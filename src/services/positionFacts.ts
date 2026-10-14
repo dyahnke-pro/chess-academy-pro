@@ -26,7 +26,7 @@ import type { StockfishAnalysis, TacticType } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess, type Square } from 'chess.js';
 import type { GamePromise } from './learnBoardTeaching';
-import { strategicWhyImperative, strategicClaims, principleLine, principleContrastLine, isForcedReply } from './moveFundamentals';
+import { strategicWhyImperative, strategicReason, strategicClaims, principleLine, principleContrastLine, isForcedReply } from './moveFundamentals';
 import { isTheoryLine } from './bookDeparture';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
 import { threatStoppedBy } from './opponentMovePurpose';
@@ -846,7 +846,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // A plan names where it happens — "the plan here: develop into the game"
     // (hand walk 2026-09-27, a queenless ending) points at nothing on the board.
     if (idea && /\b[a-h][1-8]\b|-file\b|castle/.test(idea)) {
-      fundamentalText = `The plan here: ${idea}.`;
+      const why = strategicReason(fen, bestSanHere, moverColor === 'w' ? 'white' : 'black');
+      fundamentalText = why ? `The plan here: ${idea} — ${why}.` : `The plan here: ${idea}.`;
       fundamentalClaim = strategicClaims(fen, bestSanHere, moverColor === 'w' ? 'white' : 'black')[0] ?? null;
     }
   }

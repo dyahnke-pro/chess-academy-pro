@@ -26,7 +26,7 @@ import { masterMovesCachedSync } from './masterPlayLookup';
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const CENTER: readonly Square[] = ['d4', 'd5', 'e4', 'e5'];
 
-export type BookJobKind = 'guard' | 'stopsPin' | 'stopsPush' | 'tempo' | 'prepares' | 'castle' | 'develop' | 'center';
+export type BookJobKind = 'rescue' | 'guard' | 'stopsPin' | 'stopsPush' | 'tempo' | 'prepares' | 'castle' | 'develop' | 'center';
 
 export interface BookMoveWhy {
   kind: BookJobKind;
@@ -240,6 +240,31 @@ function clearsRoadJob(fen: string, mainSan: string): Job | null {
   };
 }
 
+/** 0. RESCUE — the piece the book move moves was attacked and would be lost
+ *  where it stood; the book move takes it somewhere safe and the student's
+ *  move leaves it there to be taken (audit 2026-10-14: h3 hits the bishop on
+ *  g4, the book is Bh5, the student played Nc6 and the coach said nothing). */
+function rescueJob(before: Chess, mainMv: NonNullable<ReturnType<typeof after>>, played: Chess, student: Color): Omit<BookMoveWhy, 'text'> & { clause: string; short: string } | null {
+  const them: Color = student === 'w' ? 'b' : 'w';
+  const pass = asIfTheirMove(before, them);
+  if (!pass || legalSeeGainOn(pass, mainMv.from) <= 0) return null;
+  if (legalSeeGainOn(mainMv.board, mainMv.to) > 0) return null;
+  const left = played.get(mainMv.from);
+  if (!left || left.color !== student || left.type !== mainMv.piece) return null;
+  if (legalSeeGainOn(played, mainMv.from) <= 0) return null;
+  const by = before.attackers(mainMv.from, them)
+    .map((sq) => ({ sq, p: before.get(sq) }))
+    .filter((a): a is { sq: Square; p: NonNullable<ReturnType<Chess['get']>> } => !!a.p)
+    .sort((a, b) => CAPTURE_VALUE[a.p.type] - CAPTURE_VALUE[b.p.type])[0];
+  if (!by) return null;
+  return {
+    kind: 'rescue',
+    squares: [mainMv.from, by.sq, mainMv.to],
+    clause: `it takes your ${NAME[mainMv.piece]} out of reach of their ${NAME[by.p.type]} on ${by.sq}`,
+    short: `leaves it on ${mainMv.from} for them to take`,
+  };
+}
+
 /** 1. GUARD — the book move adds a defender to a piece under pressure and the
  *  student's move does not. */
 function guardJob(main: Chess, played: Chess, student: Color, mainTo: Square): Omit<BookMoveWhy, 'text'> & { clause: string; short: string } | null {
@@ -405,7 +430,8 @@ export function bookMoveWhy(fen: string, mainSan: string, playedSan: string, stu
   const developsAndCastles = develops && castlesNext
     ? { ...develops, clause: `${develops.clause} and clears the way to castle next move` }
     : null;
-  const job = castles
+  const job = rescueJob(before, mainMv, playedMv.board, student)
+    ?? castles
     ?? guardJob(mainMv.board, playedMv.board, student, mainMv.to)
     ?? stopsJob(mainMv.board, playedMv.board, student, before)
     ?? prophylaxisJob(fen, mainMv, playedMv, student)

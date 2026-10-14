@@ -9,6 +9,7 @@ import {
   strategicWhySelfContained,
   type MoveFundamental,
   principleContrastLine,
+  strategicReason,
 } from './moveFundamentals';
 
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -324,7 +325,7 @@ describe('prophylaxis carries its rule, once (B1, David 2026-10-01: "Add rule ba
   it('g3 takes f4 from the knight and says why denying a square matters', () => {
     const c = new Chess();
     for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ')) c.move(s);
-    expect(principleLine(c.fen(), 'g3', 'white', new Set(), 0)?.text).toBe('Your g3 takes the f4 square away from their knight — stop what they want before you chase what you want: a square their piece never reaches is a plan it never starts.');
+    expect(principleLine(c.fen(), 'g3', 'white', new Set(), 0)?.text).toBe('Your g3 takes the f4 square away from their knight — stop what they want before you chase what you want, because a square their piece never reaches is a plan it never starts.');
     expect(principleLine(c.fen(), 'g3', 'white', new Set(['mg-rule:prophylaxis']), 0)?.text).toBe('Your g3 takes the f4 square away from their knight.');
   });
 });
@@ -368,5 +369,13 @@ describe('principleContrastLine — the rule the best move kept, on a move that 
     expect(principleContrastLine(START, 'd4', 'e4', 'white', new Set(), 0)).toBeNull();
     expect(principleContrastLine(START, 'e4', 'e4', 'white', new Set(), 0)).toBeNull();
     expect(principleContrastLine(START, 'h4', null, 'white', new Set(), 0)).toBeNull();
+  });
+});
+
+describe('the plan carries its why (prod Learn audit 2026-10-14: "The plan here: deny their knight the b5 square.")', () => {
+  it('the leading fundamental of the plan move gives its reason', () => {
+    const c = new Chess();
+    for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ')) c.move(s);
+    expect(strategicReason(c.fen(), 'g3', 'white')).toBe('stop what they want before you chase what you want, because a square their piece never reaches is a plan it never starts');
   });
 });

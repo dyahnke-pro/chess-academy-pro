@@ -4,16 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7622 lines · 165 exports · 87 importers · 57 tests · 8 audits**
+**7630 lines · 166 exports · 88 importers · 58 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
 - **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:263) — names `describeThreatRecognition`
 - **G0. THE LLM DECIDES NOTHING — it voices facts computed in code (David 2026-06-10, LOCKED, supreme law).** (CLAUDE.md:346) — names `explainBestMoveGrounded`, `groundedAnswer`
 - **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:947) — names `groundedAnswer`
-- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3836) — names `describeThreatRecognition`
-- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3927) — names `explainBestMoveGrounded`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6151) — names `describeThreatRecognition`
+- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3849) — names `describeThreatRecognition`
+- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3940) — names `explainBestMoveGrounded`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6176) — names `describeThreatRecognition`
 
 ## Who calls in
 
@@ -21,6 +21,7 @@
 - `src/coach/chatTurnAnswers.ts`
 - `src/coach/coachService.ts`
 - `src/coach/dispatchCoachTurn.ts`
+- `src/coach/hardQuestions.routing.test.ts`
 - `src/coach/pass3Questions.test.ts`
 - `src/coach/questionIntents.counterRepertoire.test.ts`
 - `src/components/Coach/CoachGamePage.tsx`
@@ -116,8 +117,11 @@
 ### `GroundedAnswer` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `ownHangingLine` (function) — 1 call site
+- `src/services/groundedAnswer.test.ts:1656`
+
 ### `evalPhrase` (function) — 1 call site
-- `src/coach/boardTurnAnswer.ts:422`
+- `src/coach/boardTurnAnswer.ts:427`
 
 ### `parsePiecePurpose` (function) — 7 call sites
 - `src/services/piecePurpose.test.ts:17`
@@ -169,7 +173,7 @@
 
 ### `assembleThreatAnswer` (function) — 7 call sites
 - `src/coach/chatTurnAnswers.ts:258`
-- `src/coach/dispatchCoachTurn.ts:507`
+- `src/coach/dispatchCoachTurn.ts:554`
 - `src/coach/handWalk1009.test.ts:320`
 - `src/services/groundedAnswer.threatTake.test.ts:8`
 - `src/services/groundedAnswer.threatTake.test.ts:15`
@@ -388,8 +392,8 @@
 - `src/services/coachFeatureService.test.ts:69`
 - `src/services/coachFeatureService.test.ts:83`
 - `src/services/coachFeatureService.test.ts:90`
-- `src/services/coachFeatureService.ts:2695`
-- `src/services/coachFeatureService.ts:2706`
+- `src/services/coachFeatureService.ts:2512`
+- `src/services/coachFeatureService.ts:2523`
 - `src/services/coachMoveCommentary.ts:221`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/explainBestMoveLines.test.ts:14`
@@ -400,8 +404,8 @@
 - `src/services/groundedAnswer.test.ts:1059`
 - `src/services/learnMoveTeaching.ts:43`
 - `src/services/mistakeNarration.ts:677`
-- `src/services/reviewNarrationFidelity.test.ts:167`
-- `src/services/reviewNarrationFidelity.test.ts:177`
+- `src/services/reviewNarrationFidelity.test.ts:88`
+- `src/services/reviewNarrationFidelity.test.ts:98`
 - `src/services/whyBestMove.ts:106`
 
 ### `captureHasCounterTactic` (function) — 2 call sites
@@ -442,7 +446,7 @@
 - `src/services/inaccuracyCall.ts:891`
 
 ### `describeMoveMerit` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1193`
+- `src/services/coachFeatureService.ts:1004`
 - `src/services/keySquares.test.ts:81`
 - `src/services/keySquares.test.ts:90`
 - `src/services/keySquares.test.ts:94`
@@ -455,7 +459,7 @@
 - `src/services/brilliancy.ts:130`
 - `src/services/coachFeatureService.test.ts:99`
 - `src/services/coachFeatureService.test.ts:105`
-- `src/services/coachFeatureService.ts:1193`
+- `src/services/coachFeatureService.ts:1004`
 
 ### `MovePurpose` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -500,7 +504,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `explainMoveOrder` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:1057`
+- `src/services/coachFeatureService.ts:868`
 - `src/services/groundedAnswer.test.ts:1071`
 - `src/services/groundedAnswer.test.ts:1079`
 - `src/services/groundedAnswer.test.ts:1086`
@@ -669,7 +673,8 @@
 - `src/services/groundedAnswer.test.ts:789`
 - `src/services/groundedAnswer.test.ts:790`
 
-### `notationQuestionSan` (function) — 31 call sites
+### `notationQuestionSan` (function) — 32 call sites
+- `src/coach/hardQuestions.routing.test.ts:58`
 - `src/coach/pass3Questions.test.ts:20`
 - `src/coach/pass3Questions.test.ts:26`
 - `src/coach/pass3Questions.test.ts:43`
@@ -1038,8 +1043,8 @@
 - `src/services/groundedAnswer.routerE.test.ts:219`
 
 ### `assembleSlipNarration` (function) — 4 call sites
-- `src/components/Coach/CoachGamePage.tsx:3816`
-- `src/components/Coach/CoachGamePage.tsx:3978`
+- `src/components/Coach/CoachGamePage.tsx:3843`
+- `src/components/Coach/CoachGamePage.tsx:4005`
 - `src/services/groundedAnswer.test.ts:725`
 - `src/services/groundedAnswer.test.ts:740`
 
@@ -1099,7 +1104,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assemblePositionalAnswer` (function) — 26 call sites
-- `src/coach/dispatchCoachTurn.ts:496`
+- `src/coach/dispatchCoachTurn.ts:543`
 - `src/coach/questionWalk.sicilian1200.test.ts:69`
 - `src/services/coachApi.ts:6668`
 - `src/services/endgameRuleAnswer.test.ts:74`
@@ -1157,7 +1162,7 @@
 - `src/services/bluffDetector.ts:73`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/captureThreatAnswerable.test.ts:29`
-- `src/services/coachFeatureService.ts:3026`
+- `src/services/coachFeatureService.ts:2843`
 - `src/services/engineDeltaLines.ts:53`
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
@@ -1165,12 +1170,12 @@
 - `src/services/moveInsight.ts:590`
 - `src/services/moveInsight.ts:754`
 - `src/services/opponentMovePurpose.ts:64`
-- `src/services/reviewFullData.ts:849`
+- `src/services/reviewFullData.ts:861`
 - `src/services/reviewMoveBriefing.ts:238`
-- `src/services/reviewNarrationFidelity.test.ts:222`
-- `src/services/reviewNarrationFidelity.test.ts:231`
-- `src/services/reviewNarrationFidelity.test.ts:243`
-- `src/services/reviewNarrationFidelity.test.ts:257`
+- `src/services/reviewNarrationFidelity.test.ts:143`
+- `src/services/reviewNarrationFidelity.test.ts:152`
+- `src/services/reviewNarrationFidelity.test.ts:164`
+- `src/services/reviewNarrationFidelity.test.ts:178`
 - `src/services/reviewTeachingPoints.ts:351`
 
 ### `captureThreatIsAnswerable` (function) — 2 call sites
@@ -1178,24 +1183,24 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2947`
-- `src/services/reviewNarrationFidelity.test.ts:188`
-- `src/services/reviewNarrationFidelity.test.ts:200`
-- `src/services/reviewNarrationFidelity.test.ts:208`
+- `src/services/coachFeatureService.ts:2764`
+- `src/services/reviewNarrationFidelity.test.ts:109`
+- `src/services/reviewNarrationFidelity.test.ts:121`
+- `src/services/reviewNarrationFidelity.test.ts:129`
 
 ### `forkAlignmentClause` (function) — 1 call site
 - `src/services/reviewTeachingPoints.ts:396`
 
 ### `describeThreatRecognition` (function) — 4 call sites
 - `src/services/learnMoveTeaching.ts:128`
-- `src/services/reviewNarrationFidelity.test.ts:232`
-- `src/services/reviewNarrationFidelity.test.ts:244`
-- `src/services/reviewNarrationFidelity.test.ts:245`
+- `src/services/reviewNarrationFidelity.test.ts:153`
+- `src/services/reviewNarrationFidelity.test.ts:165`
+- `src/services/reviewNarrationFidelity.test.ts:166`
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:3046`
-- `src/services/reviewNarrationFidelity.test.ts:258`
+- `src/services/coachFeatureService.ts:2863`
+- `src/services/reviewNarrationFidelity.test.ts:179`
 
 ### `ComparedMove` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -1227,10 +1232,10 @@
 - `src/services/coachApi.ts:6187`
 
 ### `seatPieceReferences` (re-export) — 34 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8484`
-- `src/services/coachFeatureService.ts:4239`
-- `src/services/coachFeatureService.ts:4290`
-- `src/services/coachFeatureService.ts:5402`
+- `src/components/Coach/CoachTeachPage.tsx:8494`
+- `src/services/coachFeatureService.ts:4069`
+- `src/services/coachFeatureService.ts:4120`
+- `src/services/coachFeatureService.ts:5138`
 - `src/services/liveTacticsContext.ts:450`
 - `src/services/lookaheadPlan.ts:129`
 - `src/services/reviewBoardAwareness.test.ts:47`
@@ -1240,20 +1245,20 @@
 - `src/services/reviewBoardAwareness.test.ts:70`
 - `src/services/reviewBoardAwareness.test.ts:71`
 - `src/services/reviewBoardAwareness.test.ts:72`
-- `src/services/reviewFullData.ts:337`
-- `src/services/reviewFullData.ts:460`
-- `src/services/reviewFullData.ts:561`
-- `src/services/reviewFullData.ts:567`
-- `src/services/reviewFullData.ts:736`
-- `src/services/reviewNarrationFidelity.test.ts:85`
-- `src/services/reviewNarrationFidelity.test.ts:95`
-- `src/services/reviewNarrationFidelity.test.ts:101`
-- `src/services/reviewNarrationFidelity.test.ts:295`
-- `src/services/reviewNarrationFidelity.test.ts:302`
-- `src/services/reviewNarrationFidelity.test.ts:308`
-- `src/services/reviewNarrationFidelity.test.ts:309`
-- `src/services/reviewNarrationFidelity.test.ts:316`
-- `src/services/reviewNarrationFidelity.test.ts:330`
+- `src/services/reviewFullData.ts:341`
+- `src/services/reviewFullData.ts:464`
+- `src/services/reviewFullData.ts:572`
+- `src/services/reviewFullData.ts:578`
+- `src/services/reviewFullData.ts:748`
+- `src/services/reviewNarrationFidelity.test.ts:22`
+- `src/services/reviewNarrationFidelity.test.ts:32`
+- `src/services/reviewNarrationFidelity.test.ts:38`
+- `src/services/reviewNarrationFidelity.test.ts:197`
+- `src/services/reviewNarrationFidelity.test.ts:204`
+- `src/services/reviewNarrationFidelity.test.ts:210`
+- `src/services/reviewNarrationFidelity.test.ts:211`
+- `src/services/reviewNarrationFidelity.test.ts:218`
+- `src/services/reviewNarrationFidelity.test.ts:232`
 - `src/utils/seatPieces.test.ts:42`
 - `src/utils/seatPieces.test.ts:44`
 - `src/utils/seatPieces.test.ts:54`
@@ -1265,6 +1270,7 @@
 ## Tests
 
 - `src/coach/handWalk1009.test.ts`
+- `src/coach/hardQuestions.routing.test.ts`
 - `src/coach/pass3Questions.test.ts`
 - `src/coach/questionIntents.counterRepertoire.test.ts`
 - `src/coach/questionWalk.sicilian1200.test.ts`

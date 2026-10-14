@@ -991,7 +991,7 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     // the contract; the sentence around them rotates.
     expect(a!.facts).not.toMatch(/\d\.\d/);
     expect(a!.facts).toMatch(/losing|down|against you|lost/i);
-    expect(a!.facts).toContain('Your knight on d5 is hanging.');
+    expect(a!.facts).toContain('Your knight on d5 is hanging — they attack it and nothing guards it.');
     expect(a!.sources).toContain('board:chess.js');
   });
   it('returns null when there is nothing computed to say (no eval, no tactic)', () => {
@@ -1012,7 +1012,7 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     expect(a).not.toBeNull();
     expect(a!.facts.toLowerCase()).toContain('material'); // real read, not a bare deflect
     // and it is NOT just the hang note on its own
-    expect(a!.facts.trim()).not.toBe('Your pawn on e5 is hanging.');
+    expect(a!.facts.trim()).not.toBe('Your pawn on e5 is hanging — they attack it and nothing guards it.');
   });
 
   it('on demand, appends the positional READ (both sides) so "read the position" teaches the plan (David 2026-09-13)', () => {
@@ -1648,4 +1648,11 @@ describe('notationQuestionSan — a move named in passing is not a notation ques
   it.each([
     ['what is bxe7', 'Bxe7'], ['what does c4 mean?', 'c4'], ["what's Nf3?", 'Nf3'],
   ])('"%s" → %s', (q, san) => expect(notationQuestionSan(q)).toBe(san));
+});
+
+describe('a hanging piece says why (prod Learn audit 2026-10-14: "Your pawn on a7 is hanging.")', () => {
+  it('one wording, with the reason', async () => {
+    const { ownHangingLine } = await import('./groundedAnswer');
+    expect(ownHangingLine('pawn', 'a7')).toBe('Your pawn on a7 is hanging — they attack it and nothing guards it.');
+  });
 });

@@ -116,4 +116,12 @@ describe('the hand-graded falsehoods of 2026-10-14 stay fixed (each failed on th
     const w = bookMoveWhy('rnbqkbnr/1p1p1ppp/p3p3/2p5/2P1P3/5N2/PP1P1PPP/RNBQKB1R w KQkq - 0 10', 'Nc3', 'e5', 'w');
     expect(w?.text ?? '').not.toMatch(/stands on e4/);
   });
+  it('RESCUE: the book move saves the attacked piece the student left to be taken', () => {
+    // Scandinavian, 6.h3: the pawn hits the bishop on g4. Book is Bh5; Nc6
+    // leaves the bishop to hxg4 (prod Learn audit 2026-10-14, said nothing).
+    const fen = 'rn2kb1r/ppp1pppp/5n2/q7/3P2b1/2N2N1P/PPP2PP1/R1BQKB1R b KQkq - 0 6';
+    expect(bookMoveWhy(fen, 'Bh5', 'Nc6', 'b')?.text).toBe('The book move is the bishop to h5: it takes your bishop out of reach of their pawn on h3 — the knight to c6 leaves it on g4 for them to take.');
+    // A bishop move that also escapes is no rescue to fault.
+    expect(bookMoveWhy(fen, 'Bh5', 'Bf5', 'b')?.kind).not.toBe('rescue');
+  });
 });
