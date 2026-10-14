@@ -58,6 +58,15 @@ export interface UsePhaseNarrationArgs {
    *  free play and review — "teach me X opening" keeps them). Learn passes
    *  false; Play decides for itself. */
   corpusNotes: boolean;
+  /** Whether this surface's per-move turn lanes already own the LIVE tactics
+   *  (the pin, the fork, the hanging piece — with their rule, arrows and
+   *  proof). Required, so a new mount decides. Learn passes true: the phase
+   *  read then states the transition, the structure and the plan, never a live
+   *  tactic, so a pin is said once and with its rule (second-game audit
+   *  2026-10-14: the phase said "your queen on a5 pins their knight" bare, and
+   *  the tactic lane's copy — the one carrying "a pin freezes the piece in
+   *  front" — was dropped as its duplicate). */
+  tacticsOwnedByTurn: boolean;
   /** The page's say-once memory for THIS game, or null to keep the hook's own.
    *  Required so a surface decides: Learn passes its memory, so the balance
    *  sheet at the phase turn and the page's positional read are ONE ledger
@@ -754,7 +763,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             // tactics and the corpus note still speak. Applies to Play too — the
             // one narration Play allows stays a phase beat, never an eval dump.
             mateIn: stockfishAnalysis?.mateIn,
-            tactics: phaseTactics,
+            tactics: argsRef.current.tacticsOwnedByTurn ? undefined : phaseTactics,
             studentColor: event.playerColor,
             surface: 'phase-narration',
             extraFacts: transitionSentence,

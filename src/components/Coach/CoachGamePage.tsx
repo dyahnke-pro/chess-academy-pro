@@ -1823,6 +1823,9 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     getLiveFen: () => game.fen,
     // Play is out of scope for the 2026-09-23 corpus removal — unchanged.
     corpusNotes: true,
+    // Play has no per-move tactic lane (it volunteers nothing); its phase
+    // read, when asked, keeps the tactics.
+    tacticsOwnedByTurn: false,
     // Play keeps the hook's own ledger (it volunteers nothing, 2026-09-23).
     getStanding: null,
     // Play has no turn door; the hook speaks its own package.

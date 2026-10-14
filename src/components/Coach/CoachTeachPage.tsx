@@ -8032,6 +8032,8 @@ export function CoachTeachPage(): JSX.Element {
     corpusNotes: false,
     // ONE say-once ledger for the game: the phase turn's balance sheet and the
     // positional read below share it.
+    // The per-move lanes own live tactics here (pin + its rule, said once).
+    tacticsOwnedByTurn: true,
     getStanding: () => standingRef.current,
     // THROUGH THE DOOR (WO-1b). A phase transition is one more wave of the
     // turn: its sentences compete with the lead the turn already spoke, so
@@ -9390,6 +9392,11 @@ export function CoachTeachPage(): JSX.Element {
     // A board move DISMISSES the "Read this position" banner (clears its
     // text) — same as Play. The student answered the position by playing.
     positionNarration.cancel();
+    // …and an open carry-over question: the student chose to play on. It
+    // closes unanswered, with no evidence either way (David 2026-10-14).
+    if (thinkingLesson.skipCarry()) {
+      void logAppAudit({ kind: 'coach-surface-migrated', category: 'subsystem', source: 'CoachTeachPage.carryOverSkipped', summary: `carry-over question closed by a move (${move.san})`, fen: move.fen });
+    }
     // A board move is the student starting, same as typing: the welcome
     // greeting and its chips must not land on a game already under way (the
     // 2026-09-29 walk heard "Name any opening…" right after 1.e4).
@@ -11790,7 +11797,7 @@ export function CoachTeachPage(): JSX.Element {
         setOpponentThinking(false);
       }
     })();
-  }, [handleSubmit, discussion, walkthrough.tree?.openingName, playerColor, resolveCoachReplyMove, handlePlayMove, setOpponentThinking, activeProfile?.puzzleRating, activeProfile?.currentRating, positionNarration, runPhaseTransition]);
+  }, [handleSubmit, discussion, walkthrough.tree?.openingName, playerColor, resolveCoachReplyMove, handlePlayMove, setOpponentThinking, activeProfile?.puzzleRating, activeProfile?.currentRating, positionNarration, runPhaseTransition, thinkingLesson.skipCarry]);
 
   // ─── Guided-opening-play kickoff ─────────────────────────────────────────
   // On mount, pull the student's last 5 games + weakness profile so the
@@ -13019,7 +13026,7 @@ export function CoachTeachPage(): JSX.Element {
               // mode does not take the controlled-mode chrome (flip / undo /
               // reset / eval bar / mic), and spreading them in only
               // type-checks by accident.
-              thinkingLesson.view.active ? (
+              thinkingLesson.view.active && thinkingLesson.carry !== 'asking' ? (
                 // "Learn how to think": the lesson owns the board while it
                 // runs — a static tap board, answers are squares.
                 <ThinkingLessonBoard
@@ -13075,6 +13082,21 @@ export function CoachTeachPage(): JSX.Element {
                   annotationHighlights={coachTipsOn && highlights.length > 0 ? highlights : undefined}
                 />
               )
+            )}
+            {/* THE CARRY-OVER QUESTION WAITS BESIDE THE GAME (David 2026-10-14):
+                answer it on the board, or just play your move. */}
+            {thinkingLesson.carry === 'asking' && thinkingLesson.view.prompt && (
+              <div className="mt-2 flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-2" data-testid="carry-over-question">
+                <p className="flex-1 text-sm text-amber-200">{thinkingLesson.view.prompt}</p>
+                <button
+                  type="button"
+                  onClick={thinkingLesson.answerCarry}
+                  className="rounded-lg border border-amber-500/40 px-3 py-1 text-xs font-semibold text-amber-300"
+                  data-testid="carry-over-answer"
+                >
+                  Answer on the board
+                </button>
+              </div>
             )}
           </div>
         </div>
