@@ -340,15 +340,13 @@ export function buildInstantReplyLine(m: {
    *  ply names it (2026-10-13: Learn said only "Checkmate."). */
   fenAfter: string;
 }): string | null {
-  const capturedName = m.captured ? (NAME[m.captured] ?? 'piece') : null;
-  if (m.isCheckmate) {
-    const named = mateDescription(m.fenAfter);
-    return named ? `Checkmate. ${named}` : 'Checkmate.';
-  }
-  if (capturedName && m.isCheck) return `That takes your ${capturedName} — and it's check.`;
-  if (capturedName) return `That takes your ${capturedName}.`;
-  if (m.isCheck) return 'Check.';
-  return null;
+  // ONLY THE MATE (Learn audit 2026-10-14: "Check. Careful — their knight on
+  // f3 hits your rook on d2."). A bare "Check." or "That takes your pawn."
+  // restates the board (Narration Voice Rule 3); what the check or capture
+  // DOES is said by the threat and why lanes, so those events say nothing here.
+  if (!m.isCheckmate) return null;
+  const named = mateDescription(m.fenAfter);
+  return named ? `Checkmate. ${named}` : 'Checkmate.';
 }
 
 /**
