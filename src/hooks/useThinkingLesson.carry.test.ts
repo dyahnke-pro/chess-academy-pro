@@ -37,7 +37,7 @@ const FEN = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
 describe('the carry-over question waits beside the game', () => {
   it('a move closes it unanswered: no evidence, the board is the game again', async () => {
     record.mockClear();
-    const { result } = renderHook(() => useThinkingLesson({ say: () => {} }));
+    const { result } = renderHook(() => useThinkingLesson({ say: async () => {} }));
     let asked!: Promise<boolean>;
     act(() => { asked = result.current.carryOver(FEN); });
     await waitFor(() => expect(result.current.carry).toBe('asking'));
@@ -49,7 +49,7 @@ describe('the carry-over question waits beside the game', () => {
     expect(record).not.toHaveBeenCalled();
   });
   it('answering opens the tap board; a move then does not skip it', async () => {
-    const { result } = renderHook(() => useThinkingLesson({ say: () => {} }));
+    const { result } = renderHook(() => useThinkingLesson({ say: async () => {} }));
     act(() => { void result.current.carryOver(FEN); });
     await waitFor(() => expect(result.current.carry).toBe('asking'));
     act(() => { result.current.answerCarry(); });
