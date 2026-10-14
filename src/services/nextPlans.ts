@@ -8,6 +8,7 @@
 // review, one import away, said "the plan from here is to win their weak pawn
 // on d5. Here's how: …" (PLAN §C 17, #64). Capability parity: one computer,
 // both surfaces. Nothing here imports a surface module; keep it that way.
+import { reachWords } from '../utils/reachWords';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
@@ -68,12 +69,6 @@ export function mateInOneExists(chess: Chess): boolean {
     } catch { /* an unreadable probe proves nothing */ }
   }
   return false;
-}
-
-/** Why a piece is the worst: how many squares it can reach, said plainly
- *  (the one wording, shared by every surface that names the worst piece). */
-export function reachWords(m: number): string {
-  return m === 0 ? 'can go nowhere' : m === 1 ? 'has one square to go to' : `has only ${m} squares to go to`;
 }
 
 /**

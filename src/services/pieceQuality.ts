@@ -16,6 +16,7 @@
 // engine's verdict, not ours (G0/G3). 100% engine + chess.js; zero LLM.
 
 import { isUndevelopedInOpening } from '../utils/undeveloped';
+import { reachWords } from '../utils/reachWords';
 import { Chess } from 'chess.js';
 import type { Square, Color, PieceSymbol } from 'chess.js';
 import type { Evaluate } from './moveComparison';
@@ -251,7 +252,7 @@ export async function explainEvalByPieceQuality(
             color,
             squares: [one.sq],
             pieces: [one.type],
-            text: `the ${PIECE_WORD[one.type]} on ${one.sq} is doing nothing where it sits`,
+            text: `the ${PIECE_WORD[one.type]} on ${one.sq} ${reachWords(one.mob)}, so it is doing nothing where it sits`,
             proof: 'ablation',
             ablation: { before: beforeOwn, after: afterOwn, swingCp: swing },
           };

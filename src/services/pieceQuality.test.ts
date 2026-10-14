@@ -70,6 +70,8 @@ describe('explainEvalByPieceQuality', () => {
     expect(res!.delta!.pieces).toEqual(['n']);
     expect(res!.delta!.ablation.swingCp).toBeGreaterThanOrEqual(120);
     expect(res!.delta!.text).toContain('a8');
+    // The why of "doing nothing": its reach on the board (teaching pass 2026-10-14).
+    expect(res!.delta!.text).toMatch(/knight on a8 (can go nowhere|has one square to go to|has only \d+ squares to go to), so it is doing nothing/);
   });
 
   it('names TWO pieces (the knight AND bishop) when the pair is the story', async () => {

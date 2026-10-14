@@ -11,7 +11,8 @@
 // PURE: chess.js + the plan computer's own facts (`deriveNextPlanFacts`).
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { enemyKingStuckInCenter } from './reviewSacrifice';
-import { deriveNextPlanFacts, findWorstPlacedPiece, PIECE_NOUN, reachWords, type PlanFact, type PlanKind } from './nextPlans';
+import { reachWords } from '../utils/reachWords';
+import { deriveNextPlanFacts, findWorstPlacedPiece, PIECE_NOUN, type PlanFact, type PlanKind } from './nextPlans';
 
 /** Their move, recovered from the two boards. */
 function theirMove(fenBefore: string, fenAfter: string): Move | null {
