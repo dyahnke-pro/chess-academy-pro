@@ -25,6 +25,7 @@ import { costWords } from './engineConstants';
 import { trapAheadAt, warmGemIndexes } from './gemCrushLines';
 import { openingIdentityLine, warmOpeningIdentity } from './openingIdentity';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
+import { withSubject } from '../utils/openSentence';
 import { identifyingTokens } from './danyaTeachingService';
 import { explainTemptingCapture } from './reviewTeachingPoints';
 import repertoire from '../data/repertoire.json';
@@ -564,7 +565,7 @@ function modelGameClause(
  *  the move, then the reason) so callers append it as trailing prose, never as
  *  an "— it …" clause (buildReviewMoveTeaching sentences lead with a subject
  *  like "The knight …", which an "it" prefix would garble). */
-function moveWhy(fenBefore: string, san: string, studentColor: 'white' | 'black' | undefined): string | null {
+function moveWhy(fenBefore: string, san: string, studentColor: 'white' | 'black' | undefined, subject: string = san): string | null {
   // THE SEAT IS PER MOVE (oct3a review walk): a book line alternates movers,
   // so "their knight" is right on the student's plies only.
   const moverIsStudent = studentColor ? (fenBefore.split(' ')[1] === 'w') === (studentColor === 'white') : true;
@@ -575,7 +576,8 @@ function moveWhy(fenBefore: string, san: string, studentColor: 'white' | 'black'
   const first = raw.split(/(?<=[.!?])\s/)[0].trim();
   if (first.length < 6) return null;
   // Ensure it ends in a period so it slots cleanly as a trailing sentence.
-  return /[.!?]$/.test(first) ? first : `${first}.`;
+  const said = withSubject(first, subject);
+  return /[.!?]$/.test(said) ? said : `${said}.`;
 }
 
 function uciFor(fen: string, san: string): string | null {
@@ -664,7 +666,7 @@ export function buildTheoryLectureBeats(
   // keeps it; later identical sentences drop to silence.
   const seenWhy = new Set<string>();
   const freshWhy = (fenBefore: string, san: string): string => {
-    const w = moveWhy(fenBefore, san, studentColor);
+    const w = moveWhy(fenBefore, san, studentColor, 'It');
     if (!w) return '';
     const k = w.toLowerCase();
     if (seenWhy.has(k)) return '';
