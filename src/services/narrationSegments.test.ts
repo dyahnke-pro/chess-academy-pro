@@ -96,3 +96,10 @@ describe('speakSegments', () => {
     expect(speak).not.toHaveBeenCalled();
   });
 });
+
+describe('splitSentences keeps a tried move with its answer (Learn audit 2026-10-14)', () => {
+  it('does not split "Rd8? Then …"', async () => {
+    const { splitSentences } = await import('./narrationSegments');
+    expect(splitSentences('Rd8? Then Bxc3 — they win a knight. The plan here: the d-file.')).toEqual(['Rd8? Then Bxc3 — they win a knight.', 'The plan here: the d-file.']);
+  });
+});

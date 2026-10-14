@@ -52,3 +52,15 @@ describe('splitting narration into sentences', () => {
     expect(sentences).toEqual(['White is better (+1.4) after the recapture.', 'Push on.']);
   });
 });
+
+describe('a tried move and its answer are one sentence (Learn audit 2026-10-14)', () => {
+  it('"Rd8? Then Bxc3 — they win a knight." is never split at the question mark', async () => {
+    const { splitSpeakableSentences } = await import('./sentenceSplit');
+    expect(splitSpeakableSentences('Rd8? Then Bxc3 — they win a knight. Next.').sentences)
+      .toEqual(['Rd8? Then Bxc3 — they win a knight.', 'Next.']);
+  });
+  it('a real question still ends its sentence', async () => {
+    const { splitSpeakableSentences } = await import('./sentenceSplit');
+    expect(splitSpeakableSentences('What do they threaten? Their bishop hits c3.').sentences).toHaveLength(2);
+  });
+});

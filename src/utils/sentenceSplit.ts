@@ -29,6 +29,10 @@ function endsSentence(text: string, i: number): boolean {
   // space follows it. Real prose never ends a sentence "…X.y.", which is what
   // keeps this from swallowing a genuine break.
   if (/[a-z]/i.test(prev ?? '') && text[i - 2] === '.') return false;
+  // "Rd8? Then Bxc3 — they win a knight." is ONE thought: the question is the
+  // move tried, the "Then" its answer. Split there, the phase path spoke a
+  // bare "Rook to d8?" as its own turn (Learn audit 2026-10-14).
+  if (ch === '?' && /^\s+Then\b/.test(text.slice(i + 1))) return false;
   // End of text ends the sentence; otherwise whitespace must follow. A
   // terminator glued to the next character is an abbreviation, a decimal, or
   // punctuation inside a word — never a full stop.

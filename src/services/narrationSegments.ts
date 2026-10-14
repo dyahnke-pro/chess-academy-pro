@@ -36,7 +36,8 @@ export function splitSentences(text: string): string[] {
   const trimmed = text.trim();
   if (!trimmed) return [];
   const parts = trimmed
-    .split(/(?<=[.!?])\s+(?=[A-Z0-9"'(])/)
+    // "Rd8? Then Bxc3 — …" is one thought (`sentenceSplit`, Learn audit 2026-10-14).
+    .split(/(?<=[.!]|\?(?!\s+Then\b))\s+(?=[A-Z0-9"'(])/)
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
 
