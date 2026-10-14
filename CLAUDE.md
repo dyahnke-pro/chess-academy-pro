@@ -5288,8 +5288,20 @@ commentary, not cards.
 🔴 **This REPLACES the 2026-09-24 "LEARN NAMES THE MOVE — WITH ITS REASON"
 section, which is DELETED rather than annotated (the Lake Butler rule).** On
 Learn free play no producer names the student's move — the better move after
-a mistake, the held move at a key moment, the book move at a departure, the
-answer to their slip — unless the student ASKED (Show me, Hint, a question).
+a mistake, the held move at a key moment, the answer to their slip — unless the
+student ASKED (Show me, Hint, a question).
+
+🔄 **ONE CARVE-OUT — THEORY (David 2026-10-14: "it's ok to name the move if
+it's after it's already been played. How else do we teach the user a wrong
+move?" → "And the WHY behind the move!!").** Once the student has LEFT THE
+BOOK, the book move is named — always WITH its job on the board
+(`bookMoveWhy`: the guard it adds to a piece under pressure, the pin it stops,
+the castling it clears, the piece it develops, the centre it covers) and what
+the student's move left undone. Theory is knowledge, not a find, so withholding
+it teaches nothing; a TACTICAL miss still waits for Show me. No job on the
+board → the book move is not named. The register is his speedruns: the job,
+the tempting alternative and why it falls short, the consequence.
+
 What still speaks:
 1. **The why of every mistake** — yours and theirs at the same detail (David
    2026-10-10), from the ONE error computer `errorWhy`: what the move allowed,
