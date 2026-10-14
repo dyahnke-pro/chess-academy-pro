@@ -18,7 +18,7 @@ import { sayMoveNoun } from './spokenMove';
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const CENTER: readonly Square[] = ['d4', 'd5', 'e4', 'e5'];
 
-export type BookJobKind = 'guard' | 'stopsPin' | 'castle' | 'develop' | 'center';
+export type BookJobKind = 'guard' | 'stopsPin' | 'stopsPush' | 'prepares' | 'castle' | 'develop' | 'center';
 
 export interface BookMoveWhy {
   kind: BookJobKind;
@@ -87,14 +87,83 @@ function underPressure(board: Chess, student: Color): Array<{ square: Square; pi
     if (pin) out.push({ square: pin.pinned, piece: board.get(pin.pinned)!.type, by: c.square, pin: true });
   }
   for (const row of board.board()) for (const c of row) {
-    if (!c || c.color !== student || c.type === 'k' || c.type === 'p') continue;
+    if (!c || c.color !== student || c.type === 'k') continue;
     const by = board.attackers(c.square, them)[0];
+    // A PAWN counts only when it would fall: hit more often than guarded
+    // (sample 2026-10-14: "Nc6 defends e5" scored as no job at all).
+    if (c.type === 'p' && by && board.attackers(c.square, them).length <= board.attackers(c.square, student).length - 1) continue;
     if (by && !out.some((o) => o.square === c.square)) out.push({ square: c.square, piece: c.type, by, pin: false });
   }
   return out;
 }
 
 const times = (n: number): string => (n === 1 ? 'one' : n === 2 ? 'a second' : n === 3 ? 'a third' : 'another');
+
+
+type Job = Omit<BookMoveWhy, 'text'> & { clause: string; short: string };
+
+/** Safe for the side to move to play `san` on this board — legal, and the
+ *  piece is not simply lost on its new square. */
+function safePush(board: Chess, side: Color, from: Square, to: Square): boolean {
+  const t = asIfTheirMove(board, side);
+  if (!t) return false;
+  const m = t.moves({ verbose: true }).find((x) => x.from === from && x.to === to);
+  if (!m) return false;
+  const u = new Chess(t.fen());
+  u.move(m.san);
+  return legalSeeGainOn(u, to) <= 0;
+}
+
+/** 2b. STOPS THEIR PAWN — an advance they have after the student's move (and
+ *  had already) that hits one of the student's pieces is gone, or now loses
+ *  the pawn, after the book move ("a4, the prophylactic that stops b5"). */
+function stopsPushJob(main: Chess, played: Chess, student: Color, before: Chess): Job | null {
+  const them: Color = student === 'w' ? 'b' : 'w';
+  const p2 = asIfTheirMove(played, them);
+  if (!p2) return null;
+  for (const z of p2.moves({ verbose: true })) {
+    if (z.piece !== 'p' || z.captured) continue;
+    const t = new Chess(p2.fen());
+    t.move(z.san);
+    const hits: Square[] = [];
+    for (const row of t.board()) for (const c of row) {
+      if (c && c.color === student && c.type !== 'p' && c.type !== 'k' && t.attackers(c.square, them).includes(z.to)) hits.push(c.square);
+    }
+    if (hits.length === 0) continue;
+    if (!safePush(before, them, z.from, z.to)) continue;
+    if (safePush(main, them, z.from, z.to)) continue;
+    const victim = t.get(hits[0])!;
+    return {
+      kind: 'stopsPush',
+      squares: [z.to, hits[0]],
+      clause: `it stops their pawn coming to ${z.to}, where it would hit your ${NAME[victim.type]} on ${hits[0]}`,
+      short: `lets it come`,
+    };
+  }
+  return null;
+}
+
+/** 2c. PREPARES THE PUSH — a central pawn advance that would lose the pawn
+ *  now becomes safe after the book move ("c3, preparing d4"). */
+function preparesJob(main: Chess, played: Chess, student: Color): Job | null {
+  const forward = student === 'w' ? 1 : -1;
+  for (const row of main.board()) for (const c of row) {
+    if (!c || c.color !== student || c.type !== 'p' || !'cdef'.includes(c.square[0])) continue;
+    // THE SAME PAWN ON BOTH BOARDS — the pawn the book move itself pushed is
+    // not "prepared" (sample 2026-10-14: "e4 prepares e5").
+    const twin = played.get(c.square);
+    if (!twin || twin.color !== student || twin.type !== 'p') continue;
+    const r = Number(c.square[1]);
+    for (const n of [1, 2]) {
+      const to = `${c.square[0]}${r + forward * n}` as Square;
+      if (!CENTER.includes(to)) continue;
+      if (!safePush(main, student, c.square, to)) continue;
+      if (safePush(played, student, c.square, to)) continue;
+      return { kind: 'prepares', squares: [to], clause: `it prepares ${to}: after it, your pawn can come to ${to} and hold there`, short: `leaves ${to} a square your pawn cannot hold yet` };
+    }
+  }
+  return null;
+}
 
 /** 1. GUARD — the book move adds a defender to a piece under pressure and the
  *  student's move does not. */
@@ -109,7 +178,7 @@ function guardJob(main: Chess, played: Chess, student: Color): Omit<BookMoveWhy,
       kind: 'guard',
       squares: [p.square, p.by],
       clause: `it adds ${times(mine)} guard to your ${NAME[p.piece]} on ${p.square}, ${pressure}`,
-      short: theirs === 0 ? 'leaves it unguarded' : `leaves it guarded ${theirs === 1 ? 'once' : `${theirs} times`}`,
+      short: theirs === 0 ? 'leaves it unguarded' : `leaves it guarded ${theirs === 1 ? 'once' : theirs === 2 ? 'twice' : 'fewer times'}`,
     };
   }
   return null;
@@ -118,11 +187,12 @@ function guardJob(main: Chess, played: Chess, student: Color): Omit<BookMoveWhy,
 /** 2. STOPS A PIN / A TEMPO — a move the opponent has after the student's move
  *  (a pin on a student piece, or a cheaper piece hitting a dearer one) is
  *  illegal or loses material after the book move. */
-function stopsJob(main: Chess, played: Chess, student: Color): Omit<BookMoveWhy, 'text'> & { clause: string; short: string } | null {
+function stopsJob(main: Chess, played: Chess, student: Color, before: Chess): Omit<BookMoveWhy, 'text'> & { clause: string; short: string } | null {
   const them: Color = student === 'w' ? 'b' : 'w';
   const p2 = asIfTheirMove(played, them);
   const m2 = asIfTheirMove(main, them);
-  if (!p2 || !m2) return null;
+  const b2 = asIfTheirMove(before, them);
+  if (!p2 || !m2 || !b2) return null;
   for (const z of p2.moves({ verbose: true })) {
     if (z.captured) continue;
     const t = new Chess(p2.fen());
@@ -136,6 +206,16 @@ function stopsJob(main: Chess, played: Chess, student: Color): Omit<BookMoveWhy,
       squares = [z.to, pin.pinned];
     }
     if (!threat) continue;
+    // THE PIN WAS ALREADY COMING: it lands from the board before either move,
+    // so the book move prevents it rather than the student's move creating it
+    // (sample 2026-10-14: "a3 keeps their bishop off h3" when only the
+    // student's queen move made the pin).
+    const pre = b2.moves({ verbose: true }).find((m) => m.from === z.from && m.to === z.to);
+    if (!pre) continue;
+    const tb = new Chess(b2.fen());
+    tb.move(pre.san);
+    const preePin = pinBy(tb, z.to, student);
+    if (!preePin || preePin.pinned !== squares[1]) continue;
     // After the book move, is the same move gone or does it lose the piece?
     const legal = m2.moves({ verbose: true }).find((m) => m.from === z.from && m.to === z.to);
     let stopped = !legal;
@@ -158,7 +238,11 @@ function stopsJob(main: Chess, played: Chess, student: Color): Omit<BookMoveWhy,
 }
 
 /** 3. CASTLE — the book move clears the way to castle and the student's does not. */
-function castleJob(main: Chess, played: Chess, student: Color): Omit<BookMoveWhy, 'text'> & { clause: string; short: string } | null {
+function castleJob(main: Chess, played: Chess, student: Color, mainFrom: Square, mainPiece: PieceSymbol): Omit<BookMoveWhy, 'text'> & { clause: string; short: string } | null {
+  // ONLY A PIECE THAT STOOD IN THE WAY clears the way (sample 2026-10-14: "the
+  // pawn to d4 clears the last piece between your king and rook").
+  const rank = student === 'w' ? '1' : '8';
+  if (mainFrom[1] !== rank || mainPiece === 'k' || mainPiece === 'r') return null;
   const can = (b: Chess): { k: boolean; q: boolean } => {
     const t = asIfTheirMove(b, student);
     if (!t) return { k: false, q: false };
@@ -166,8 +250,9 @@ function castleJob(main: Chess, played: Chess, student: Color): Omit<BookMoveWhy
     return { k: ms.includes('O-O'), q: ms.includes('O-O-O') };
   };
   const a = can(main); const b = can(played);
-  if (a.k && !b.k) return { kind: 'castle', squares: [], clause: 'it clears the last piece between your king and rook, so you can castle next move', short: 'keeps your king in the middle a move longer' };
-  if (a.q && !b.q) return { kind: 'castle', squares: [], clause: 'it clears the way to castle long next move', short: 'keeps your king in the middle a move longer' };
+  const kSide = 'fg'.includes(mainFrom[0]); const qSide = 'bcd'.includes(mainFrom[0]);
+  if (kSide && a.k && !b.k) return { kind: 'castle', squares: [], clause: 'it clears the last piece between your king and rook, so you can castle next move', short: 'keeps your king in the middle a move longer' };
+  if (qSide && a.q && !b.q) return { kind: 'castle', squares: [], clause: 'it clears the way to castle long next move', short: 'keeps your king in the middle a move longer' };
   return null;
 }
 
@@ -194,7 +279,10 @@ function centerJob(main: Chess, played: Chess, student: Color): Omit<BookMoveWhy
   const a = hit(main); const b = hit(played);
   const gained = a.filter((s) => !b.includes(s));
   if (gained.length === 0 || a.length <= b.length) return null;
-  return { kind: 'center', squares: gained, clause: `it fights for the centre — it covers ${gained.join(' and ')}`, short: `leaves ${gained.join(' and ')} to them` };
+  const stands = gained.filter((x) => main.get(x)?.color === student);
+  const covers = gained.filter((x) => !stands.includes(x));
+  const parts = [stands.length ? `it stands on ${stands.join(' and ')}` : '', covers.length ? `it covers ${covers.join(' and ')}` : ''].filter(Boolean);
+  return { kind: 'center', squares: gained, clause: `it fights for the centre — ${parts.join(' and ')}`, short: `leaves ${gained.join(' and ')} to them` };
 }
 
 /**
@@ -208,10 +296,32 @@ export function bookMoveWhy(fen: string, mainSan: string, playedSan: string, stu
   const mainMv = after(fen, mainSan);
   const playedMv = after(fen, playedSan);
   if (!mainMv || !playedMv) return null;
-  const job = guardJob(mainMv.board, playedMv.board, student)
-    ?? stopsJob(mainMv.board, playedMv.board, student)
-    ?? castleJob(mainMv.board, playedMv.board, student)
-    ?? developJob(mainMv, playedMv, student)
+  // A CAPTURE'S POINT IS THE CAPTURE — what skipping it costs is the error
+  // lane's (`errorWhy`), never a side effect read as its reason (sample
+  // 2026-10-14: "the c-pawn taking on d5 keeps their bishop off h3").
+  if (/x/.test(mainSan)) return null;
+  let before: Chess;
+  try { before = new Chess(fen); } catch { return null; }
+  const castles = /^O-O/.test(mainSan) && !/^O-O/.test(playedSan)
+    ? { kind: 'castle' as const, squares: [] as Square[], clause: mainSan.startsWith('O-O-O') ? 'it takes your king out of the centre and brings your rook to the d-file' : 'it tucks your king away on the wing and brings your rook toward the centre', short: 'keeps your king in the middle a move longer' }
+    : null;
+  const castlesNext = castleJob(mainMv.board, playedMv.board, student, mainMv.from, mainMv.piece);
+  const develops = developJob(mainMv, playedMv, student);
+  // THE JOB, THEN ITS CONSEQUENCE (his register): a developing move that also
+  // clears the way to castle is said as both — "it brings your knight out and
+  // clears the way to castle next move" (vs-his-reads 2026-10-14: castle was
+  // leading where he said "develops").
+  const developsAndCastles = develops && castlesNext
+    ? { ...develops, clause: `${develops.clause} and clears the way to castle next move` }
+    : null;
+  const job = castles
+    ?? guardJob(mainMv.board, playedMv.board, student)
+    ?? stopsJob(mainMv.board, playedMv.board, student, before)
+    ?? stopsPushJob(mainMv.board, playedMv.board, student, before)
+    ?? developsAndCastles
+    ?? develops
+    ?? preparesJob(mainMv.board, playedMv.board, student)
+    ?? castlesNext
     ?? centerJob(mainMv.board, playedMv.board, student);
   if (!job) return null;
   return {
@@ -233,10 +343,12 @@ export function moveJobs(fen: string, san: string, student: Color): BookJobKind[
   if (!pass) return [];
   const out: BookJobKind[] = [];
   if (guardJob(mv.board, pass, student)) out.push('guard');
-  if (stopsJob(mv.board, pass, student)) out.push('stopsPin');
-  if (castleJob(mv.board, pass, student)) out.push('castle');
+  if (stopsJob(mv.board, pass, student, before)) out.push('stopsPin');
+  if (stopsPushJob(mv.board, pass, student, before)) out.push('stopsPush');
   const home = student === 'w' ? '1' : '8';
   if ((mv.piece === 'n' || mv.piece === 'b') && mv.from[1] === home) out.push('develop');
+  if (preparesJob(mv.board, pass, student)) out.push('prepares');
+  if (/^O-O/.test(san) || castleJob(mv.board, pass, student, mv.from, mv.piece)) out.push('castle');
   if (centerJob(mv.board, pass, student)) out.push('center');
   return out;
 }

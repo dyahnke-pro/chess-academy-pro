@@ -14,6 +14,8 @@ const RULES: Array<[His, RegExp]> = [
   ['castle', /\bcastl/i],
   ['develop', /\bdevelop/i],
   ['center', /\bcent(re|er)\b/i],
+  ['prepares', /\bprepar/i],
+  ['stopsPush', /\b(stops?|prevents?) .{0,6}[a-h][45]\b/i],
   ['break', /\bbreak\b|\bstrike[s]? (at|back)\b|\bchalleng/i],
   ['trade', /\b(trade|trades|exchange|swap)\b/i],
   ['tempo', /\btempo\b|\bkick|\bchases?\b|\bharass/i],
@@ -33,11 +35,14 @@ it.runIf(process.env.BOOK_WHY_MEASURE === '1')('our jobs vs his read of the same
     const fen = c.fen(); const mover = c.turn(); const san = n.lineSan[n.lineSan.length - 1];
     const text = `${n.explains} ${n.teaches}`;
     const his = new Set<His>(RULES.filter(([, re]) => re.test(text)).map(([k]) => k));
+    // His "stops b5" and "prevents …" are pins OR pushes — one family.
+    if (his.has('stopsPush')) his.add('stopsPin');
+    if (his.has('stopsPin')) his.add('stopsPush');
     let ours: BookJobKind[];
     try { ours = moveJobs(fen, san, mover); } catch { continue; }
     for (const h of his) hisCount[h] = (hisCount[h] ?? 0) + 1;
     if (his.size === 0) { hisNone += 1; if (others.length < 12 && Math.random() < 0.03) others.push(`${san}: ${n.explains.slice(0, 180)}`); continue; }
-    const computable = [...his].filter((h) => ['guard', 'stopsPin', 'castle', 'develop', 'center'].includes(h));
+    const computable = [...his].filter((h) => ['guard', 'stopsPin', 'stopsPush', 'prepares', 'castle', 'develop', 'center'].includes(h));
     if (computable.length === 0) { ruleOnly += 1; continue; }
     scored += 1;
     if (ours.length === 0) oursNone += 1;

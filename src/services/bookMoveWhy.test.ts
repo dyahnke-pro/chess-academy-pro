@@ -25,8 +25,9 @@ describe('bookMoveWhy — the book move named, with what it DOES on the board (D
     // White has Nf3 out and the c4 bishop; Be2/Bc4-type: after e4 e5 Nf3 Nc6, Bc4 lets O-O next.
     const fen = fenOf('e4 e5 Nf3 Nc6');
     const w = bookMoveWhy(fen, 'Bc4', 'h3', 'w');
-    expect(w?.kind).toBe('castle');
-    expect(w?.text).toBe('The book move is the bishop to c4: it clears the last piece between your king and rook, so you can castle next move — the pawn to h3 keeps your king in the middle a move longer.');
+    // The job, then its consequence (his register): it develops, and that clears the way to castle.
+    expect(w?.kind).toBe('develop');
+    expect(w?.text).toBe("The book move is the bishop to c4: it brings your bishop out and clears the way to castle next move — the pawn to h3 spends the move on a wing pawn, and a pawn move can't be taken back.");
   });
 
   it('DEVELOP: a new piece out beats moving one twice', () => {
@@ -47,5 +48,13 @@ describe('bookMoveWhy — the book move named, with what it DOES on the board (D
     const fen = fenOf('e4 e5');
     expect(bookMoveWhy(fen, 'Nf3', 'Nf3', 'w')).toBeNull();
     expect(bookMoveWhy(fen, 'Nf3', 'Zz9', 'w')).toBeNull();
+  });
+
+  it('samples 2026-10-14: a capture is never given a side-effect reason; castling is about the king; standing is not covering', () => {
+    expect(bookMoveWhy(fenOf('e4 d5'), 'exd5', 'Nc3', 'w')).toBeNull();
+    const c = bookMoveWhy(fenOf('e4 e5 Nf3 Nc6 Bc4 Bc5'), 'O-O', 'h3', 'w');
+    expect(c?.text).toBe('The book move is castling short: it tucks your king away on the wing and brings your rook toward the centre — the pawn to h3 keeps your king in the middle a move longer.');
+    const e = bookMoveWhy(new Chess().fen(), 'e4', 'a3', 'w');
+    expect(e?.text).toBe('The book move is the pawn to e4: it fights for the centre — it stands on e4 and it covers d5 — the pawn to a3 leaves d5 and e4 to them.');
   });
 });
