@@ -254,4 +254,15 @@ describe('queueing is not saying — opening facts are marked from the voice (20
     expect(src).not.toMatch(/identityQueued/);
     expect(src).not.toMatch(/structureSaid\.add\('masters-plan'\)/);
   });
+  it('the NAME carries its identity in one line, and hearing it marks both (2026-10-14)', () => {
+    const mem = createLearnMemory();
+    mem.detectedOpeningName = 'Scandinavian Defense';
+    markOpeningFactsSpoken(mem, [{ kind: 'opening', claims: ['opening-name:Scandinavian Defense', 'opening-identity:Scandinavian Defense'] }]);
+    expect(mem.spokenOpeningName).toBe('Scandinavian Defense');
+    expect(mem.identitySaid).toBe('opening-identity:Scandinavian Defense');
+    const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    expect(src).toMatch(/announceLine = `\$\{announce\} \$\{idWith\.text\}`/);
+    expect(src).toMatch(/claims: announceClaims/);
+    expect(src).toMatch(/!identityRidesName/);
+  });
 });

@@ -8218,6 +8218,9 @@ export function CoachTeachPage(): JSX.Element {
     let mateNamedThisTurn = false;
     let alertArrow: BoardArrow | null = null;
     let announceLine: string | null = null;
+    let announceClaims: string[] = [];
+    let announceSquares: readonly string[] = [];
+    let identityRidesName = false;
     let gemLine: string | null = null;
     teachingTierRef.current = 'none';
     const studentCC: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
@@ -8736,6 +8739,21 @@ export function CoachTeachPage(): JSX.Element {
         // note was reached by opening NAME, not by the board — floating. The
         // opening is still named; the floating idea clause is gone.
         announceLine = announce;
+        // THE NAME CARRIES ITS IDENTITY (2026-10-14): "This game is the
+        // Scandinavian Defense." went out alone and the identity a turn later,
+        // when the door was busy — one claim heard as two, the first with no
+        // reason. When the identity is ready it rides in the same line.
+        const idWith = learnMemRef.current.identitySaid === null && history.length <= OPENING_PLIES
+          ? openingIdentityTeaching(det.name, playerColor === 'white' ? 'w' : 'b') : null;
+        if (idWith) {
+          announceLine = `${announce} ${idWith.text}`;
+          announceClaims = [`opening-name:${det.name}`, ...idWith.claims];
+          announceSquares = idWith.squares ?? [];
+          identityRidesName = true;
+          if (idWith.event) captureEvent(idWith.event.name, idWith.event.props);
+        } else {
+          announceClaims = [`opening-name:${det.name}`];
+        }
         // GUARANTEE it is HEARD — naming the opening is R1 of the teaching arc,
         // his first move every game. The say-once ref is spent on THIS turn
         // (above), so if the instant package drops the announce because a tactic
@@ -8744,7 +8762,7 @@ export function CoachTeachPage(): JSX.Element {
         // Scandinavian that was never named). Queue it through the same reliable
         // late-package path as the plan/structure/register so a busy turn can't
         // swallow it.
-        queueSpokenHint(args.fenAfterReply, announceLine, 'opening', NO_PROOF.name, undefined, [`opening-name:${det.name}`]);
+        queueSpokenHint(args.fenAfterReply, announceLine, 'opening', NO_PROOF.name, announceSquares.length ? announceSquares : undefined, announceClaims);
         learnMemRef.current.queuedOpeningName = det.name;
         captureEvent('opening_announced', {
           surface: 'coach-teach', name: det.name, first: firstResolve, has_idea: false,
@@ -8762,7 +8780,7 @@ export function CoachTeachPage(): JSX.Element {
       const idName = learnMemRef.current.queuedOpeningName;
       // Offered every turn until the student HEARS it, and only inside the
       // opening (`markOpeningFactsSpoken` marks it from the voice).
-      if (idName && learnMemRef.current.identitySaid === null && history.length <= OPENING_PLIES) {
+      if (idName && !identityRidesName && learnMemRef.current.identitySaid === null && history.length <= OPENING_PLIES) {
         const idHint = openingIdentityTeaching(idName, playerColor === 'white' ? 'w' : 'b');
         if (idHint) {
           queueSpokenHint(args.fenAfterReply, idHint.text, idHint.lane, idHint.proof, idHint.squares, idHint.claims);
@@ -9156,7 +9174,7 @@ export function CoachTeachPage(): JSX.Element {
       ...(gemLine ? [{ lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0]) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
       ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
-      ...(announceLine ? [{ lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name }] : []),
+      ...(announceLine ? [{ lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name, claims: announceClaims, ...(announceSquares.length ? { squares: announceSquares } : {}) }] : []),
       // Rate-matched Danya behavior — board-truth. MERGED with the positional
       // read into ONE board-read lane (David 2026-09-13: "computer and observation
       // can be merged"): it now speaks as `observation`, the single home for the
