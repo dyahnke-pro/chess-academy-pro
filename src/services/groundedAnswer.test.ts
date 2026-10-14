@@ -1346,7 +1346,7 @@ describe('assembleAlternativesAnswer — grounded "why are the alternatives wors
     // d4 within 30cp → honest "essentially as good", never an invented gap.
     expect(a?.facts).toMatch(/d4 is essentially as good/i);
     // f3 at 110cp loss → concession, with the pawn magnitude.
-    expect(a?.facts).toMatch(/f3 concedes about 1\.1 points/i);
+    expect(a?.facts).toMatch(/f3 concedes about a point/i);
   });
 
   it('flips evals to mover POV for Black to move', () => {
@@ -1363,7 +1363,7 @@ describe('assembleAlternativesAnswer — grounded "why are the alternatives wors
     });
     expect(a?.facts).toMatch(/best move is c5/i);
     // mover-POV: best -30, alt -200 → 170cp loss → "concedes about 1.7 points"
-    expect(a?.facts).toMatch(/g5 concedes about 1\.7 points/i);
+    expect(a?.facts).toMatch(/g5 concedes more than a point/i);
   });
 
   it('says an alternative walks into mate when its line is mated', () => {
@@ -1654,5 +1654,16 @@ describe('a hanging piece says why (prod Learn audit 2026-10-14: "Your pawn on a
   it('one wording, with the reason', async () => {
     const { ownHangingLine } = await import('./groundedAnswer');
     expect(ownHangingLine('pawn', 'a7')).toBe('Your pawn on a7 is hanging — they attack it and nothing guards it.');
+  });
+});
+
+describe('a cost is said in words, never as a number (V3, prod Learn audit 2026-10-14)', () => {
+  it('no producer composes "about N.N points" from an engine cost', async () => {
+    const { readFileSync } = await import('node:fs');
+    for (const f of ['src/services/groundedAnswer.ts', 'src/services/playCommentary.ts']) {
+      const src = readFileSync(f, 'utf8');
+      expect(src, f).not.toMatch(/toFixed\(1\)\}?\s*(?:of a )?points?\b/);
+      expect(src, f).not.toMatch(/\$\{(?:pawns|dropPawns)\}\s*(?:of a )?points?\b/);
+    }
   });
 });
