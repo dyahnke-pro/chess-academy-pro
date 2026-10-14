@@ -18,6 +18,8 @@ import { costWords, MISTAKE_CP } from './engineConstants';
 import { transposedOpening } from './openingPositions';
 import { isWaypointOpening } from './openingIdentity';
 import type { DetectedOpening } from '../types';
+import type { MastersPlanRead } from './mastersPlanRead';
+import { Chess } from 'chess.js';
 
 export interface DetectedName {
   name: string;
@@ -56,6 +58,10 @@ export function openingAnnouncement(
   departure: BookDeparture | null,
   spokenName: string | null,
   studentColor: 'w' | 'b',
+  /** THE LINE'S MASTER PLAN (`planFor`), or null when none is known — REQUIRED,
+   *  so a departure is said with the plan it leaves behind (David 2026-10-13:
+   *  "state what the plan is and why not following that line can hurt"). */
+  plan: MastersPlanRead | null,
   /** The name was read off the POSITION after a different move order
    *  (`transposedOpening`) — a family change is then news, said as one. */
   transposed = false,
@@ -106,7 +112,47 @@ export function openingAnnouncement(
   const spokenIsVariation = spokenName.includes(':');
   const line = det.name.startsWith(spokenName) || !spokenIsVariation ? det.name : spokenName;
   const lineTail = line === spokenName ? '' : ` The line was the ${spoken(line)}.`;
-  return `${who} left the book with ${sayMoveNoun(departure.san, departure.fen)}.${lineTail}`;
+  const why = departure.mover === studentColor ? departureAgainstPlan(departure, plan, studentColor) : null;
+  return `${who} left the book with ${sayMoveNoun(departure.san, departure.fen)}.${lineTail}${why ? ` ${why}` : ''}`;
+}
+
+const PIECE_WORD: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king', p: 'pawn' };
+
+/**
+ * WHAT THE STUDENT'S DEPARTURE DOES TO THE LINE'S PLAN — read off the board,
+ * never a guess. The plan is the break master games play in this line
+ * (`mastersPlanRead`). A departing piece that lands in the break pawn's path
+ * blocks it; otherwise the plan still stands and is said, so leaving the book
+ * is never a bare fact. The book move itself is not named (Learn names no move
+ * unasked); what a costly departure allows is the verdict lane's (`errorWhy`).
+ */
+export function departureAgainstPlan(departure: BookDeparture, plan: MastersPlanRead | null, studentColor: 'w' | 'b'): string | null {
+  const brk = plan ? (studentColor === 'w' ? plan.white : plan.black) : null;
+  if (!brk) return null;
+  const say = `${studentColor === 'b' ? '…' : ''}${brk.san}`;
+  let after: Chess;
+  let to: string;
+  let piece: string;
+  try {
+    after = new Chess(departure.fen);
+    const m = after.move(departure.san);
+    to = m.to; piece = m.piece;
+  } catch { return null; }
+  // The break pawn must still be at home for the plan to be "this line's".
+  const pawn = after.get(brk.from as never);
+  if (!pawn || pawn.type !== 'p' || pawn.color !== studentColor) return null;
+  // The squares the pawn must cross to reach its break: c7→c5 is c6 and c5.
+  const file = brk.from[0];
+  const fromRank = Number(brk.from[1]);
+  const toRank = Number(brk.square[1]);
+  const step = toRank > fromRank ? 1 : -1;
+  const path: string[] = [];
+  for (let r = fromRank + step; r !== toRank + step; r += step) path.push(`${file}${r}`);
+  const inPath = piece !== 'p' && path.includes(to);
+  if (inPath) {
+    return `Your ${PIECE_WORD[piece] ?? 'piece'} on ${to} now stands in front of your ${file}-pawn, so ${say}, the break masters play in this line, cannot come while it stays there.`;
+  }
+  return `The plan is still ${say}, the break masters play in this line.`;
 }
 
 /** The same announcement read straight off the game's move history — the
@@ -117,6 +163,7 @@ export function openingAnnouncementForGame(
   history: readonly string[],
   spokenName: string | null,
   studentColor: 'w' | 'b',
+  plan: MastersPlanRead | null,
   transposed = false,
 ): string | null {
   const dep = bookDeparture(history);
@@ -124,7 +171,7 @@ export function openingAnnouncementForGame(
   // detector sharpened forty moves in — it announced "You left the book with
   // the pawn to h5" at move 39 (run C walk 2026-09-30). Stale: say nothing.
   if (spokenName !== null && dep && history.length - dep.ply > 1) return null;
-  return openingAnnouncement(det, dep, spokenName, studentColor, transposed);
+  return openingAnnouncement(det, dep, spokenName, studentColor, plan, transposed);
 }
 
 /** Warm the book read for the position now on the board — the surface calls

@@ -13,6 +13,10 @@
 // changes; `openingIdentity.test.ts` fails on a stale file.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
+// THE PLAN — the same computer the app runs (`mastersPlanRead`), run here once
+// per opening so Learn never loads the 37 MB masters file to say it — runs under
+// plain node: the module and its one import are type-strippable.
+import { mastersPlanRead } from '../src/services/mastersPlanRead.ts';
 
 const db = JSON.parse(readFileSync('src/data/openings-lichess.json', 'utf8'));
 const masters = JSON.parse(readFileSync('public/data/openings-masters-db.json', 'utf8')).positions;
@@ -142,6 +146,16 @@ for (const g of models) {
   (famous[deepest] ??= []).push({ white: g.white, black: g.black, year: g.year, event: g.event ?? null, result: g.result ?? null });
 }
 
+/** The master plan at this opening's position: each side's break and the
+ *  piece placement master games agree on (`mastersPlanRead`), shares rounded. */
+const movesAt = (fen) => masters[fen.split(' ').slice(0, 4).join(' ')] ?? null;
+const r2 = (x) => (x && typeof x.share === 'number' ? { ...x, share: Math.round(x.share * 100) / 100 } : x);
+function planAt(c) {
+  const read = mastersPlanRead(c.fen(), movesAt);
+  if (!read) return null;
+  return { games: read.games, white: r2(read.white), black: r2(read.black), whitePiece: r2(read.whitePiece), blackPiece: r2(read.blackPiece), whiteCastle: r2(read.whiteCastle), blackCastle: r2(read.blackCastle) };
+}
+
 const out = {};
 /** Names whose every line has nothing to say — kept aside so a family fact can still reach them. */
 const silent = {};
@@ -173,8 +187,11 @@ for (const e of db) {
     theoryPlies: sans.length,
     forcing: sans.length ? Math.round((100 * forcing) / sans.length) : 0,
     famous: (famous[e.name] ?? []).sort((a, b) => a.year - b.year).slice(0, 3),
+    plan: planAt(c),
   };
   const sansOf = hist.map((h) => h.san);
+  // The plan never decides which line represents a name — only the identity
+  // facts do (a plan-only line once displaced the Romanishin's real entry).
   const empty = !rec.provokes && !rec.aims.length && !rec.gambit && !rec.famous.length && rec.theoryPlies < 4;
   // The shortest line per name, empty or not — the candidates for inheriting.
   const quiet0 = silent[e.name];
@@ -225,9 +242,9 @@ for (const [name, r] of Object.entries(out)) {
   }
 }
 for (const [name, r] of Object.entries(out)) {
-  if (!r.provokes && !r.aims.length && !r.gambit && !r.famous.length && r.theoryPlies < 4) delete out[name];
+  if (!r.provokes && !r.aims.length && !r.gambit && !r.famous.length && !r.plan && r.theoryPlies < 4) delete out[name];
   else delete r.sans;
 }
 writeFileSync('public/data/opening-identity.json', JSON.stringify(out));
 const n = Object.values(out);
-console.log(`${n.length} openings · provokes ${n.filter((r) => r.provokes).length} · aims ${n.filter((r) => r.aims.length).length} · gambit ${n.filter((r) => r.gambit).length} · famous ${n.filter((r) => r.famous.length).length}`);
+console.log(`plan ${n.filter((r) => r.plan).length} · ${n.length} openings · provokes ${n.filter((r) => r.provokes).length} · aims ${n.filter((r) => r.aims.length).length} · gambit ${n.filter((r) => r.gambit).length} · famous ${n.filter((r) => r.famous.length).length}`);

@@ -12,50 +12,50 @@ const dep = (ply: number, san: string, mover: 'w' | 'b', mainSan: string | null)
 
 describe('openingAnnouncement — name it once, then once more where theory ends', () => {
   it('names the first identification', () => {
-    expect(openingAnnouncement({ name: 'Scandinavian Defense' }, null, null, 'w')).toBe('This game is the Scandinavian Defense.');
+    expect(openingAnnouncement({ name: 'Scandinavian Defense' }, null, null, 'w', null)).toBe('This game is the Scandinavian Defense.');
   });
   it('a "Main Line" refinement while still in book says nothing', () => {
-    expect(openingAnnouncement({ name: 'Scandinavian Defense: Main Line' }, null, 'Scandinavian Defense', 'w')).toBeNull();
+    expect(openingAnnouncement({ name: 'Scandinavian Defense: Main Line' }, null, 'Scandinavian Defense', 'w', null)).toBeNull();
   });
   it('a NAMED variation while still in book is named (hand walk 2340: "c3 — the Alapin")', () => {
-    expect(openingAnnouncement({ name: 'Sicilian Defense: Alapin Variation' }, null, 'Sicilian Defense', 'w'))
+    expect(openingAnnouncement({ name: 'Sicilian Defense: Alapin Variation' }, null, 'Sicilian Defense', 'w', null))
       .toBe("It's the Alapin Variation of the Sicilian Defense.");
   });
   it('a variation that shares a name with another opening is said with its family (live walk 2026-10-08)', () => {
     // 1.e4 c5 2.Nf3 e6: "It's the French Variation" was heard as the French.
-    expect(openingAnnouncement({ name: 'Sicilian Defense: French Variation' }, null, 'Sicilian Defense', 'w'))
+    expect(openingAnnouncement({ name: 'Sicilian Defense: French Variation' }, null, 'Sicilian Defense', 'w', null))
       .toBe("It's the French Variation of the Sicilian Defense.");
   });
   it('filler tails are not variations (hand walk 2026-09-25)', () => {
-    expect(openingAnnouncement({ name: 'Indian Defense: Normal Variation' }, null, 'Indian Defense', 'b')).toBeNull();
-    expect(openingAnnouncement({ name: "King's Indian Defense: Rare Defenses" }, null, "King's Indian Defense", 'b')).toBeNull();
+    expect(openingAnnouncement({ name: 'Indian Defense: Normal Variation' }, null, 'Indian Defense', 'b', null)).toBeNull();
+    expect(openingAnnouncement({ name: "King's Indian Defense: Rare Defenses" }, null, "King's Indian Defense", 'b', null)).toBeNull();
   });
   it('the first naming drops a filler tail, keeps a real one', () => {
-    expect(openingAnnouncement({ name: 'Indian Defense: Normal Variation' }, null, null, 'b')).toBe('This game is the Indian Defense.');
-    expect(openingAnnouncement({ name: 'Sicilian Defense: Alapin Variation' }, null, null, 'w')).toBe('This game is the Sicilian Defense: Alapin Variation.');
-    expect(openingAnnouncement({ name: 'Ruy Lopez: Exchange Variation, Normal Variation' }, null, null, 'b')).toBe('This game is the Ruy Lopez: Exchange Variation.');
+    expect(openingAnnouncement({ name: 'Indian Defense: Normal Variation' }, null, null, 'b', null)).toBe('This game is the Indian Defense.');
+    expect(openingAnnouncement({ name: 'Sicilian Defense: Alapin Variation' }, null, null, 'w', null)).toBe('This game is the Sicilian Defense: Alapin Variation.');
+    expect(openingAnnouncement({ name: 'Ruy Lopez: Exchange Variation, Normal Variation' }, null, null, 'b', null)).toBe('This game is the Ruy Lopez: Exchange Variation.');
   });
   it('a family that sharpens is named (hand walk 2026-09-25: Indian → King\'s Indian)', () => {
-    expect(openingAnnouncement({ name: "King's Indian Defense: Normal Variation" }, null, 'Indian Defense: Normal Variation', 'b'))
+    expect(openingAnnouncement({ name: "King's Indian Defense: Normal Variation" }, null, 'Indian Defense: Normal Variation', 'b', null))
       .toBe("It's the King's Indian Defense.");
   });
   it('a name that is not a refinement of the spoken one stays quiet in book (a transposition)', () => {
-    expect(openingAnnouncement({ name: 'French Defense' }, null, 'Sicilian Defense', 'w')).toBeNull();
+    expect(openingAnnouncement({ name: 'French Defense' }, null, 'Sicilian Defense', 'w', null)).toBeNull();
   });
   it('says WHO left the book — never the book move, which waits for the ask (2026-10-10)', () => {
-    expect(openingAnnouncement({ name: 'Philidor Defense' }, dep(8, 'Be7', 'b', 'Nf6'), 'King\'s Pawn Game', 'w'))
+    expect(openingAnnouncement({ name: 'Philidor Defense' }, dep(8, 'Be7', 'b', 'Nf6'), 'King\'s Pawn Game', 'w', null))
       .toBe('They left the book with the bishop to e7. The line was the Philidor Defense.');
-    expect(openingAnnouncement({ name: 'Philidor Defense' }, dep(7, 'Bd3', 'w', 'Nxd4'), 'King\'s Pawn Game', 'w'))
+    expect(openingAnnouncement({ name: 'Philidor Defense' }, dep(7, 'Bd3', 'w', 'Nxd4'), 'King\'s Pawn Game', 'w', null))
       .toMatch(/^You left the book with/);
   });
   it('at the departure, names the opening already announced — not the stale move-order name (Learn walk 2026-10-01)', () => {
-    const said = openingAnnouncement({ name: 'English Opening: Anglo-Indian Defense' }, dep(12, 'Bg5', 'w', 'Nc3'), "King's Indian Defense: King's Knight Variation", 'b');
+    const said = openingAnnouncement({ name: 'English Opening: Anglo-Indian Defense' }, dep(12, 'Bg5', 'w', 'Nc3'), "King's Indian Defense: King's Knight Variation", 'b', null);
     expect(said).toMatch(/^They left the book with the bishop to g5/);
     expect(said).not.toMatch(/English/);
   });
   it('never repeats a name already said', () => {
-    expect(openingAnnouncement({ name: 'Scandinavian Defense' }, dep(5, 'a3', 'w', null), 'Scandinavian Defense', 'w')).toBeNull();
-    expect(openingAnnouncement(null, null, null, 'w')).toBeNull();
+    expect(openingAnnouncement({ name: 'Scandinavian Defense' }, dep(5, 'a3', 'w', null), 'Scandinavian Defense', 'w', null)).toBeNull();
+    expect(openingAnnouncement(null, null, null, 'w', null)).toBeNull();
   });
 });
 
@@ -137,8 +137,8 @@ describe('a departure is news only when it just happened (run C walk 2026-09-30)
     const { openingAnnouncementForGame } = await import('./openingAnnouncement');
     const det = { name: 'Indian Defense: Knights Variation, East Indian' } as never;
     const long = Array.from({ length: 40 }, () => 'x');
-    expect(openingAnnouncementForGame(det, long, 'Indian Defense: Knights Variation', 'b')).toBeNull();
-    expect(openingAnnouncementForGame(det, long.slice(0, 6), 'Indian Defense: Knights Variation', 'b')).toMatch(/^You left the book with/);
+    expect(openingAnnouncementForGame(det, long, 'Indian Defense: Knights Variation', 'b', null)).toBeNull();
+    expect(openingAnnouncementForGame(det, long.slice(0, 6), 'Indian Defense: Knights Variation', 'b', null)).toMatch(/^You left the book with/);
     vi.doUnmock('./bookDeparture');
   });
 });
@@ -183,5 +183,33 @@ describe('theirOpeningVerdict — a verdict on their opening choice (pass-2 walk
     expect(theirOpeningVerdict(history, 'b', 10, false)).toBeNull();
     expect(theirOpeningVerdict(history, 'w', 45, false)).toBeNull();
     expect(theirOpeningVerdict(history, 'b', 150, true)).toBeNull();
+  });
+});
+
+describe('the departure says what it does to the line\'s plan (David 2026-10-13: "state what the plan is")', () => {
+  // French Advance after 1.e4 e6 2.d4 d5 3.e5 — the line's master break is …c5.
+  const fen = 'rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3';
+  const plan = { games: 15866, white: null, black: { san: 'c5', square: 'c5', from: 'c7', share: 0.96 }, whitePiece: null, blackPiece: null, whiteCastle: null, blackCastle: null };
+  it('a knight dropped in front of the c-pawn blocks the break — said, with why', async () => {
+    const { departureAgainstPlan } = await import('./openingAnnouncement');
+    expect(departureAgainstPlan({ ply: 6, san: 'Nc6', mover: 'b', mainSan: 'c5', fen }, plan, 'b'))
+      .toBe('Your knight on c6 now stands in front of your c-pawn, so …c5, the break masters play in this line, cannot come while it stays there.');
+  });
+  it('a departure that leaves the break alone says the plan still stands', async () => {
+    const { departureAgainstPlan } = await import('./openingAnnouncement');
+    expect(departureAgainstPlan({ ply: 6, san: 'Nh6', mover: 'b', mainSan: 'c5', fen }, plan, 'b'))
+      .toBe('The plan is still …c5, the break masters play in this line.');
+  });
+  it('the book move is never named, and no plan means no clause', async () => {
+    const { departureAgainstPlan, openingAnnouncement } = await import('./openingAnnouncement');
+    expect(departureAgainstPlan({ ply: 6, san: 'Nh6', mover: 'b', mainSan: 'c5', fen }, null, 'b')).toBeNull();
+    const t = openingAnnouncement({ name: 'French Defense: Advance Variation' }, { ply: 6, san: 'Nc6', mover: 'b', mainSan: 'c5', fen }, 'French Defense: Advance Variation, x', 'b', plan);
+    expect(t).toMatch(/^You left the book with/);
+    expect(t).toMatch(/cannot come while it stays there/);
+  });
+  it('their departure carries no plan clause (their verdict lane owns it)', async () => {
+    const { openingAnnouncement } = await import('./openingAnnouncement');
+    const t = openingAnnouncement({ name: 'French Defense: Advance Variation' }, { ply: 6, san: 'Nh6', mover: 'b', mainSan: 'c5', fen }, 'French Defense', 'w', plan);
+    expect(t).not.toMatch(/plan|break/);
   });
 });

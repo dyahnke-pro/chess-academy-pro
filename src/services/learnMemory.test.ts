@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { createLearnMemory, NEVER_FIRED, type LearnMemory } from './learnMemory';
+import { createLearnMemory, markOpeningFactsSpoken, NEVER_FIRED, type LearnMemory } from './learnMemory';
 
 const PAGE = 'src/components/Coach/CoachTeachPage.tsx';
 
@@ -158,18 +158,19 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
   });
 
   it('spokenOpeningName is written only where an `opening` fact actually survived', () => {
+    // Both packages can carry the name, so both promote it — through ONE
+    // helper fed what the package KEPT (2026-10-14), which writes only on an
+    // `opening` fact. No inline write remains on the page.
     const src = readFileSync(PAGE, 'utf8');
-    const writes = src.split('\n').filter((l) => /learnMemRef\.current\.spokenOpeningName\s*=/.test(l));
-    expect(writes.length, 'both packages can carry the name, so both promote it').toBeGreaterThanOrEqual(2);
-    for (const line of writes) {
-      const at = src.indexOf(line);
-      // The guard sits directly above the write.
-      const before = src.slice(Math.max(0, at - 400), at);
-      expect(
-        /kind === 'opening'/.test(before) || /det && det\.name/.test(before),
-        `a promotion with no proof the name was spoken: ${line.trim()}`,
-      ).toBe(true);
-    }
+    expect(src.split("\n").filter((l) => /learnMemRef\.current\.spokenOpeningName\s*=(?!=)/.test(l))).toEqual([]);
+    expect(src).toMatch(/markOpeningFactsSpoken\(learnMemRef\.current, instant\.pkg\.kept\)/);
+    expect(src).toMatch(/markOpeningFactsSpoken\(learnMemRef\.current, hintPkg\.kept\)/);
+    const mem = createLearnMemory();
+    mem.detectedOpeningName = 'Scandinavian Defense';
+    markOpeningFactsSpoken(mem, [{ kind: 'computed' }]);
+    expect(mem.spokenOpeningName).toBeNull();
+    markOpeningFactsSpoken(mem, [{ kind: 'opening' }]);
+    expect(mem.spokenOpeningName).toBe('Scandinavian Defense');
   });
 
   it('the note-primary stand-down fires on a NOTE, not on any substantive fact', () => {
@@ -235,5 +236,22 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     const declared = [...src.matchAll(/const (\w+Ref) = useRef/g)].map((m) => m[1]);
     expect(declared.length).toBeGreaterThan(30);
     expect(declared).toContain('positionalSaidRef');
+  });
+});
+
+describe('queueing is not saying — opening facts are marked from the voice (2026-10-14)', () => {
+  it('a HELD identity stays unsaid; a SPOKEN one is marked', () => {
+    const mem = createLearnMemory();
+    markOpeningFactsSpoken(mem, [{ kind: 'computed', claims: ['threat:e5'] }]);
+    expect(mem.identitySaid).toBeNull();
+    expect(mem.structureSaid.has('masters-plan')).toBe(false);
+    markOpeningFactsSpoken(mem, [{ kind: 'computed', claims: ['opening-identity:Scandinavian Defense'] }, { kind: 'computed', claims: ['break-c5'] }]);
+    expect(mem.identitySaid).toBe('opening-identity:Scandinavian Defense');
+    expect(mem.structureSaid.has('masters-plan')).toBe(true);
+  });
+  it('Learn no longer marks the identity or the plan at queue time', () => {
+    const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    expect(src).not.toMatch(/identityQueued/);
+    expect(src).not.toMatch(/structureSaid\.add\('masters-plan'\)/);
   });
 });

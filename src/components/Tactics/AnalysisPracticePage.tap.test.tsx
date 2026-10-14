@@ -83,7 +83,7 @@ describe('AnalysisPracticePage — tap answers through the set grader', () => {
     expect(rec).toMatchObject({ origin: 'reading', solved: true, questionTag: 'hung-material' });
     expect(rec.answer.taps).toEqual([{ square: 'd5', right: true }, { square: 'a8', right: true }]);
     expect(rec.answer).toMatchObject({ surface: 'analysis-practice', wrongAttempts: 0 });
-  });
+  }, 20_000); // renders the page and grades two taps: timed out at 5 s under a parallel run (2026-10-14)
 
   it('a wrong tap says "Not quite" with the tries left and does not settle', async () => {
     await open();

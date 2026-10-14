@@ -14,6 +14,7 @@ import { openSentence } from '../utils/openSentence';
 import { sayMoveNoun } from './spokenMove';
 import { countWords } from '../utils/countWords';
 import { shareAdverb } from '../utils/shareWords';
+import type { MastersPlanRead } from './mastersPlanRead';
 
 
 export interface IdentityFacts {
@@ -28,6 +29,10 @@ export interface IdentityFacts {
   theoryPlies: number;
   forcing: number;
   famous: Array<{ white: string; black: string; year: number; event: string | null }>;
+  /** THE LINE'S MASTER PLAN at its own position (`mastersPlanRead`, run by the
+   *  builder) — each side's break and placement, so Learn can say it without
+   *  loading the 37 MB masters file. Absent in a file built before 2026-10-14. */
+  plan?: MastersPlanRead | null;
 }
 type IdentityMap = Record<string, IdentityFacts>;
 
@@ -58,6 +63,22 @@ export function identityFor(name: string): { name: string; facts: IdentityFacts 
   for (;;) {
     const hit = facts[n];
     if (hit) return { name: n, facts: hit };
+    const comma = n.lastIndexOf(',');
+    if (comma > 0) { n = n.slice(0, comma).trim(); continue; }
+    const colon = n.indexOf(':');
+    if (colon > 0) { n = n.slice(0, colon).trim(); continue; }
+    return null;
+  }
+}
+
+/** The master plan for this line, else the nearest named parent's (the game is
+ *  still in that parent's line). Null when not loaded or no plan is known. */
+export function planFor(name: string): MastersPlanRead | null {
+  if (!facts) { warmOpeningIdentity(); return null; }
+  let n = name.trim();
+  for (;;) {
+    const p = facts[n]?.plan;
+    if (p) return p;
     const comma = n.lastIndexOf(',');
     if (comma > 0) { n = n.slice(0, comma).trim(); continue; }
     const colon = n.indexOf(':');

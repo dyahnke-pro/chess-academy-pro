@@ -16,7 +16,8 @@ import { useBoardFit } from '../../hooks/useBoardFit';
 import { characterOf, provenTacticLive, sharpGap, stepCharacter, EMPTY_CHARACTER, SHARP_GAP_CP, type CharacterState } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
-import { createLearnMemory, type LearnMemory } from '../../services/learnMemory';
+import { planFor } from '../../services/openingIdentity';
+import { createLearnMemory, markOpeningFactsSpoken, type LearnMemory } from '../../services/learnMemory';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -207,7 +208,7 @@ import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcState,
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
-import type { FundamentalId } from '../../services/principleAttribution';
+import { OPENING_PLIES, type FundamentalId } from '../../services/principleAttribution';
 import { FUNDAMENTAL_LABEL } from '../../services/fundamentalsCatalog';
 import {
   noteFamilyFork, markWalked, unwalked, nextForkToOffer, progressAt,
@@ -8703,7 +8704,7 @@ export function CoachTeachPage(): JSX.Element {
       // heard "This game is the Indian Defense" twice (walk 2026-09-27).
       const queuedLabel = learnMemRef.current.queuedOpeningName ? spokenOpeningLabel(learnMemRef.current.queuedOpeningName) : null;
       const announce = det && det.name !== learnMemRef.current.queuedOpeningName && spokenOpeningLabel(det.name) !== queuedLabel
-        ? openingAnnouncementForGame(det, history, learnMemRef.current.spokenOpeningName, playerColor === 'white' ? 'w' : 'b', transposed)
+        ? openingAnnouncementForGame(det, history, learnMemRef.current.spokenOpeningName, playerColor === 'white' ? 'w' : 'b', det ? planFor(det.name) : null, transposed)
         : null;
       if (det && announce) {
         const firstResolve = learnMemRef.current.spokenOpeningName === null;
@@ -8759,11 +8760,12 @@ export function CoachTeachPage(): JSX.Element {
       // WHAT THE OPENING IS — once per game, after the name has been queued
       // (the identity file loads lazily; until it has, this retries next turn).
       const idName = learnMemRef.current.queuedOpeningName;
-      if (idName && learnMemRef.current.identityQueued === null) {
+      // Offered every turn until the student HEARS it, and only inside the
+      // opening (`markOpeningFactsSpoken` marks it from the voice).
+      if (idName && learnMemRef.current.identitySaid === null && history.length <= OPENING_PLIES) {
         const idHint = openingIdentityTeaching(idName, playerColor === 'white' ? 'w' : 'b');
         if (idHint) {
           queueSpokenHint(args.fenAfterReply, idHint.text, idHint.lane, idHint.proof, idHint.squares, idHint.claims);
-          learnMemRef.current.identityQueued = idHint.claims[0] ?? idName;
           if (idHint.event) captureEvent(idHint.event.name, idHint.event.props);
         }
       }
@@ -8927,13 +8929,13 @@ export function CoachTeachPage(): JSX.Element {
     // hand-written note decides it.
     let openingIdeaLine: { text: string; squares: string[] } | null = null;
     try {
-      if (!learnMemRef.current.structureSaid.has('masters-plan') && history.length >= 6) {
-        const plan = openingPlanTeaching(args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b');
+      // Marked said from the voice (`markOpeningFactsSpoken`), never here.
+      if (!learnMemRef.current.structureSaid.has('masters-plan') && history.length >= 6 && history.length <= OPENING_PLIES) {
+        const plan = openingPlanTeaching(args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b', learnMemRef.current.detectedOpeningName);
         if (plan) {
-          learnMemRef.current.structureSaid.add('masters-plan');
           openingIdeaLine = { text: plan.text, squares: plan.squares };
-          const brk = openingBreakFor(args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b');
-          if (brk) openingBreakRef.current = { ...brk, atPly: history.length, said: false };
+          const brk = openingBreakFor(args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b', learnMemRef.current.detectedOpeningName);
+          if (brk && !openingBreakRef.current) openingBreakRef.current = { ...brk, atPly: history.length, said: false };
           if (plan.event) captureEvent(plan.event.name, plan.event.props);
         }
       }
@@ -10635,9 +10637,7 @@ export function CoachTeachPage(): JSX.Element {
                   // opening fact reached here only if it survived ranking and the
                   // novelty set, so this is the first moment it is true that the
                   // student has heard the name.
-                  if (instant.pkg.kept.some((f) => f.kind === 'opening')) {
-                    learnMemRef.current.spokenOpeningName = learnMemRef.current.detectedOpeningName;
-                  }
+                  markOpeningFactsSpoken(learnMemRef.current, instant.pkg.kept);
                   // The arrow rides only when the THREAT actually SURVIVED
                   // into the utterance — an arrow pointing at a claim the
                   // package refused is the same lie drawn instead of said.
@@ -11569,9 +11569,7 @@ export function CoachTeachPage(): JSX.Element {
                     noteSpokenProofs(hintPkg.kept);
                   // Same promotion as the instant pass — whichever package
                   // actually carried the name is the one that spent the flag.
-                  if (hintPkg.kept.some((f) => f.kind === 'opening')) {
-                    learnMemRef.current.spokenOpeningName = learnMemRef.current.detectedOpeningName;
-                  }
+                  markOpeningFactsSpoken(learnMemRef.current, hintPkg.kept);
                     // AND MARK WHAT SURVIVED. The squares came in on the facts,
                     // so the board draws the ones belonging to lanes the package
                     // KEPT — a refused claim takes its marks away with it, which

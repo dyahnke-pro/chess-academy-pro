@@ -131,9 +131,12 @@ export interface LearnMemory {
    *  spoke "This game is now the Caro-Kann Defense." on two consecutive plies
    *  (Learn walk 2026-09-23). One queue per name per game. */
   queuedOpeningName: string | null;
-  /** The opening-identity paragraph queued this game (its claim key) — what
-   *  the opening provokes/aims for is said ONCE per game, after the name. */
-  identityQueued: string | null;
+  /** The opening-identity paragraph the student has HEARD this game (its claim
+   *  key) — what the opening provokes/aims for is said ONCE per game, after the
+   *  name. Set by the voice (`markOpeningFactsSpoken`), never by the queue: a
+   *  held paragraph marked at queue time was never retried (2026-10-14, offered
+   *  twice and held twice in one game, never heard). */
+  identitySaid: string | null;
   /**
    * The opening name the student has actually HEARD. Per game: a second game of
    * the same line must be named again, because the student is being told what
@@ -275,7 +278,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     spokenOpeningName: null,
     detectedOpeningName: null,
     queuedOpeningName: null,
-    identityQueued: null,
+    identitySaid: null,
     slipsThisGame: new Map<string, number>(),
     promises: new Map<string, { key: string; piece: string; square: string; takes?: boolean; say: string; ply: number }>(),
     observe(plies: number): boolean {
@@ -315,7 +318,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       mem.spokenOpeningName = null;
       mem.detectedOpeningName = null;
       mem.queuedOpeningName = null;
-      mem.identityQueued = null;
+      mem.identitySaid = null;
       lastPlies = 0;
       // A NEW GAME IS A NEW ID. Re-minting here (rather than at a call site)
       // is what makes it impossible to record game 2's slips against game 1.
@@ -327,4 +330,18 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     },
   };
   return mem;
+}
+
+/** QUEUEING IS NOT SAYING (2026-10-14). The opening's name, its identity and its
+ *  master plan are each said once per game — marked here, from what the voice
+ *  actually CARRIED, so a fact the door held one turn is offered again. */
+export function markOpeningFactsSpoken(
+  mem: Pick<LearnMemory, 'spokenOpeningName' | 'detectedOpeningName' | 'identitySaid' | 'structureSaid'>,
+  kept: ReadonlyArray<{ kind?: string; claims?: readonly string[] }>,
+): void {
+  if (kept.some((f) => f.kind === 'opening')) mem.spokenOpeningName = mem.detectedOpeningName;
+  const claims = kept.flatMap((f) => f.claims ?? []);
+  const identity = claims.find((c) => c.startsWith('opening-identity:'));
+  if (identity) mem.identitySaid = identity;
+  if (claims.some((c) => c.startsWith('break-'))) mem.structureSaid.add('masters-plan');
 }

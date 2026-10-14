@@ -29,7 +29,7 @@ describe('the transposition reader', () => {
     expect(t).toMatch(/Queen's Gambit/);
     const { det, transposed } = openingNameForBoard(byOrder, fenOf(sans), sans.length);
     expect(transposed).toBe(true);
-    expect(openingAnnouncement(det, null, byOrder?.name ?? 'English Opening', 'w', transposed)).toMatch(/^By a different move order, the game has transposed into the Queen's Gambit/);
+    expect(openingAnnouncement(det, null, byOrder?.name ?? 'English Opening', 'w', null, transposed)).toMatch(/^By a different move order, the game has transposed into the Queen's Gambit/);
   });
 
   it('the usual move order is not a transposition (negative control)', () => {
