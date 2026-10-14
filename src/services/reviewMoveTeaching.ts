@@ -552,7 +552,7 @@ export function buildReviewMoveTeaching(
           .filter((a) => mv.piece === 'p' || !guarded || (PIECE_VAL[a.piece!.type] ?? 0) > attackerVal)[0];
         return lander ? { sq, from: lander.from, type: lander.piece!.type } : null;
       })
-      .filter((d): d is { sq: string; from: string; type: string } => d !== null);
+      .filter((d): d is NonNullable<typeof d> => d !== null);
     if (denied.length) {
       const d = denied[0];
       return `The ${PIECE_NOUN[mv.piece]} takes ${d.sq} away from ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[d.type]} on ${d.from}.`;
