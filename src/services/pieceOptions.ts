@@ -97,6 +97,17 @@ function walk(startFen: string, ucis: readonly string[], label: string): Walkabl
   return { label, startFen, plies };
 }
 
+/** A FINISHED BOARD IS READ OFF THE BOARD, NEVER OFF THE ENGINE (Learn walk
+ *  2026-10-14: "So yes — Ra1 was better than Qxc7#"). Searching a mated or
+ *  stalemated position returns no score, and mate-in-0 read as the MOVER being
+ *  mated — so the mating move scored worst. Mate after the move is the mover's
+ *  best result; stalemate and insufficient material are level. */
+function finishedPov(after: Chess): number | null {
+  if (after.isCheckmate()) return MATE_CP;
+  if (after.isDraw()) return 0;
+  return null;
+}
+
 function moverPov(whiteCp: number, isMate: boolean, mateIn: number | null, mover: Color): number {
   const cp = isMate && mateIn !== null ? (mateIn > 0 ? MATE_CP : -MATE_CP) : whiteCp;
   return mover === 'w' ? cp : -cp;
@@ -188,6 +199,8 @@ export async function computePieceOptions(input: {
         const t = new Chess(input.fen);
         try {
           playedSan = t.move({ from: job.uci.slice(0, 2), to: job.uci.slice(2, 4), promotion: job.uci[4] }).san;
+          const done = finishedPov(t);
+          if (done !== null) { playedCp = done; continue; }
           const a = await engine.analyzePosition(t.fen(), depth);
           playedCp = moverPov(a.evaluation, a.isMate, a.mateIn, mover);
         } catch { /* the verdict falls back to the options alone */ }
@@ -197,6 +210,12 @@ export async function computePieceOptions(input: {
       const t = new Chess(input.fen);
       t.move(m.san);
       const fenAfter = t.fen();
+      const done = finishedPov(t);
+      if (done !== null) {
+        const uciDone = `${m.from}${m.to}${m.promotion ?? ''}`;
+        options.push({ san: m.san, moverCp: done, refutation: null, line: walk(input.fen, [uciDone], m.san) });
+        continue;
+      }
       let a;
       try { a = await engine.analyzePosition(fenAfter, depth); } catch { continue; }
       const pv = a.topLines?.[0]?.moves ?? (a.bestMove ? [a.bestMove] : []);
@@ -275,7 +294,9 @@ export function renderPieceOptions(a: {
     }
   }
   if (best && a.playedSan && a.playedCp !== null) {
-    if (best.moverCp > a.playedCp + SAME_BAND_CP) {
+    if (a.playedCp >= MATE_CP && best.moverCp < MATE_CP) {
+      out.push(`So no — ${a.playedSan} was checkmate; nothing beats that.`);
+    } else if (best.moverCp > a.playedCp + SAME_BAND_CP) {
       out.push(`So yes — ${best.san} was better than ${a.playedSan}.`);
     } else if (best.moverCp < a.playedCp - SAME_BAND_CP) {
       out.push(`So no — moving it doesn't help; ${a.playedSan} was the better move.`);
