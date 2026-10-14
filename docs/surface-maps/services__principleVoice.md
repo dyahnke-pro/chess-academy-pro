@@ -101,7 +101,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.mcconnell1000.test.ts:21`
 - `src/services/replayFence.sicilian1200.test.ts:55`
 - `src/services/replayFence.sicilian1200.test.ts:62`
-- `src/services/reviewFullData.ts:652`
+- `src/services/reviewFullData.ts:660`
 - `src/services/tradedActiveNamesTheirPiece.test.ts:20`
 - `src/services/walkOct2a.test.ts:154`
 
