@@ -38,7 +38,7 @@ import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, 
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, intentRule, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { OPENING_PLIES, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { OPENING_PLIES, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, slipQuestion, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -11093,9 +11093,16 @@ export function CoachTeachPage(): JSX.Element {
                       // usual move; the fundamental keeps only its HOW.
                       const bookSaid = fund?.id === 'left-book-early'
                         && studentJustLeftBook(move.history, playerColor === 'white' ? 'w' : 'b');
+                      // THE QUESTION THAT CATCHES IT (David 2026-10-14: verdicts into
+                      // thinking) — the thinking-routine step this slip failed, read
+                      // off the board. Not when the threat verdict already teaches it,
+                      // nor beside a mate (the mate is the whole story).
+                      const slipQ = fund?.id === 'ignored-threat' || look.stakes?.mate
+                        ? null
+                        : slipQuestion(fenBefore, look.lostSquare, playerColor === 'white' ? 'w' : 'b', standingRef.current.said, move.history.length);
                       const line = `${fund
                         ? `${lossInGrade ? '' : noteSlip(learnMemRef.current, fund.id)}${lossInGrade ? '' : bookSaid ? fund.howOnly : fund.verdict}${fund.recurrence ? ` ${fund.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`.trim()
-                        : `${look.line}${takeDefinition(look.pattern)}`}${concession ? ` ${concession}` : ''}`;
+                        : `${look.line}${takeDefinition(look.pattern)}`}${concession ? ` ${concession}` : ''}${slipQ ? ` ${slipQ.text}` : ''}`;
                       // "That let them win the pawn on d4" and "they're eyeing
                       // Nxd4 — it would win your pawn on d4" are one claim (run
                       // C walk 2026-09-30); the shared key lets the package keep one.

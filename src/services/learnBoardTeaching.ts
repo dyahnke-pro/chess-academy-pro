@@ -1040,3 +1040,43 @@ export function payoffFor(mem: Pick<LearnMemory, 'promises'>, mv: { piece: strin
 export function studentMoveIsPrompted(clauseKinds: readonly string[], moveAdviceSpeaks: boolean): boolean {
   return moveAdviceSpeaks || clauseKinds.includes('key-moment');
 }
+
+/**
+ * THE QUESTION THAT CATCHES THIS SLIP (David 2026-10-14: "teaching is showing
+ * you how to think" — the verdict says what went wrong; this says the question
+ * that finds it next time). A slip that lost a piece failed one of two steps of
+ * the thinking routine (`THINKING_STEPS`), read off the board, never guessed:
+ *   · the piece was ALREADY losable before the move — the danger was standing
+ *     and went unanswered (`answer-danger`);
+ *   · otherwise THIS move made it losable — the blunder check
+ *     (`is-my-move-safe`).
+ * Once per step per game (`said`), so it stays a routine, not a refrain.
+ */
+export function slipQuestion(
+  fenBefore: string,
+  lostSquare: string | null | undefined,
+  student: 'w' | 'b',
+  said: Set<string>,
+  stemKey: number,
+): { text: string; key: string } | null {
+  if (!lostSquare || !/^[a-h][1-8]$/.test(lostSquare)) return null;
+  let before: Chess;
+  try { before = new Chess(fenBefore); } catch { return null; }
+  const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
+  const there = before.get(lostSquare as Square);
+  const standing = !!there && there.color === student && legalSeeGainFor(fenBefore, lostSquare as Square, them) > 0;
+  const step = standing ? 'answer-danger' : 'is-my-move-safe';
+  const key = `slipq:${step}`;
+  if (said.has(key)) return null;
+  said.add(key);
+  const text = standing
+    ? rotateStem([
+      `The question that catches this: what did their last move attack? Answer it before your own idea — the piece on ${lostSquare} was already in danger.`,
+      `Ask it every move: what are they hitting? The piece on ${lostSquare} was already under attack, and that question finds it.`,
+    ], stemKey)
+    : rotateStem([
+      `The question that catches this is the blunder check: before you let go of the piece, ask what they can take once it lands.`,
+      `Make it the last thing you do before every move: is my move safe — what can they take after it?`,
+    ], stemKey);
+  return { text, key };
+}
