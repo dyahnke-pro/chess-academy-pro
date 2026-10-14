@@ -116,7 +116,7 @@ describe('assembleGameReviewAnswer — review rooted in the engine reasoning', (
     ];
     const a = assembleGameReviewAnswer({ white: 'me', black: 'you', result: '1-0', moveCount: 3, annotations: anns });
     expect(a!.facts).toMatch(/Best play here kept it at \+0\.2 for White/);
-    expect(a!.facts).toMatch(/swung about 8\.8 points/);
+    expect(a!.facts).toMatch(/swung it by five points or more/);
   });
 
   it('names the computed turning point when several costed moments exist', () => {
@@ -127,7 +127,7 @@ describe('assembleGameReviewAnswer — review rooted in the engine reasoning', (
       { moveNumber: 18, color: 'black', san: 'Rd8', evaluation: 370, bestMove: 'f7f6', bestMoveEval: -30, classification: 'blunder', comment: null },
     ];
     const a = assembleGameReviewAnswer({ white: 'me', black: 'you', result: '1-0', moveCount: 30, annotations: anns });
-    expect(a!.facts).toMatch(/The turning point: move 18… Rd8 — the game's biggest single swing, about 4\.0 points\./);
+    expect(a!.facts).toMatch(/The turning point: move 18… Rd8 — the game's biggest single swing, three or four points\./);
   });
 
   it('adds no swing on a brilliant move or when bestMoveEval is missing (old annotations)', () => {
@@ -136,7 +136,7 @@ describe('assembleGameReviewAnswer — review rooted in the engine reasoning', (
       { moveNumber: 20, color: 'white', san: 'Qh4', evaluation: -200, bestMove: 'g2g3', bestMoveEval: null, classification: 'blunder', comment: null },
     ];
     const a = assembleGameReviewAnswer({ white: 'me', black: 'you', result: '0-1', moveCount: 30, annotations: anns });
-    expect(a!.facts).not.toMatch(/swung about/);
+    expect(a!.facts).not.toMatch(/swung it by/);
     expect(a!.facts).not.toMatch(/The turning point: move/);
   });
 });

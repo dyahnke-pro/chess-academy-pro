@@ -13,6 +13,7 @@
 // them. That is the locked voice law ("speak when it instructs") and the
 // narration rules' "silence is acceptable" — a coach who comments on every
 // recapture teaches nothing and gets tuned out.
+import { costWords } from './engineConstants';
 import { sideToMoveAs } from './threatOut';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { captureNet } from './material';
@@ -544,7 +545,6 @@ export function buildRejectedTempting(args: {
       const fenBeforeRefutation = probe.fen();
       const refutation = probe.move({ from: line.replyUci.slice(0, 2) as Square, to: line.replyUci.slice(2, 4) as Square, promotion: (line.replyUci[4] as 'q' | undefined) ?? undefined });
       if (!refutation) continue;
-      const dropPawns = ((bestEval - line.evalCp) / 100).toFixed(1);
       const why = tempting.captured !== undefined
         ? `it grabs the ${NAME[tempting.captured] ?? 'piece'} on ${tempting.to}`
         : 'it comes with check';
@@ -562,7 +562,7 @@ export function buildRejectedTempting(args: {
         anchor: bait
           ? `Can you take the ${NAME[tempting.captured ?? 'p'] ?? 'piece'} on ${tempting.to}? ${THINK_MARK} No — it's bait: ${tempting.san} runs into ${refutation.san}.`
           : `Why not ${tempting.san}? ${THINK_MARK} ${openSentence(why)}, but ${refutation.san} refutes it.`,
-        detail: `That line gives up about ${dropPawns} points against the best move.`,
+        detail: `That line gives up ${costWords(bestEval - line.evalCp)} against the best move.`,
         stakes: 'Before trusting a tempting move, calculate their most forcing reply.',
       };
       return {

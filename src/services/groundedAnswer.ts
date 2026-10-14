@@ -12,6 +12,7 @@
  * Pure + side-effect-free so it's trivially testable and can't regress the
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
+import { costWords } from './engineConstants';
 import { capturedSquare } from '../utils/capturedSquare';
 import { evalBand, evalBandWords } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
@@ -2175,7 +2176,6 @@ export function assembleCandidateMoveAnswer(opts: {
   const haveEvals =
     typeof opts.bestEvalCp === 'number' && typeof opts.candidateEvalCp === 'number';
   const cpLoss = haveEvals ? Math.max(0, (opts.bestEvalCp as number) - (opts.candidateEvalCp as number)) : null;
-  const pawns = cpLoss !== null ? (cpLoss / 100).toFixed(1) : null;
 
   let verdict: string;
   let errorCall: { sentence: string; line: WalkableLine | null } | null = null;
@@ -2194,10 +2194,10 @@ export function assembleCandidateMoveAnswer(opts: {
     verdict = errorCall
       ? `${candNorm} is ${errorCall.sentence}`
       : band === null
-      ? `${candNorm} is playable, just slightly worse than ${bestSan ?? 'the best move'} — about ${pawns} of a point.`
+      ? `${candNorm} is playable, just slightly worse than ${bestSan ?? 'the best move'} — it gives up ${costWords(cpLoss)}.`
       : band === 'inaccuracy'
-        ? `${candNorm} is an inaccuracy — it gives up about ${pawns} of a point versus ${bestSan ?? 'the best move'}.`
-        : `${candNorm} is a ${band} — it loses about ${pawns} points; ${bestSan ?? 'the engine move'} is much better.`;
+        ? `${candNorm} is an inaccuracy — it gives up ${costWords(cpLoss)} versus ${bestSan ?? 'the best move'}.`
+        : `${candNorm} is a ${band} — it loses ${costWords(cpLoss)}; ${bestSan ?? 'the engine move'} is much better.`;
   }
 
   const parts = [verdict];
@@ -2383,8 +2383,8 @@ export function assembleTradeAnswer(opts: {
     const loss = Math.max(0, opts.bestEvalCp - opts.tradeEvalCp) / 100;
     if (opts.bestSan && opts.bestSan === t.san) parts.push("It's also the engine's first choice.");
     else if (loss <= 0.3) parts.push(`It keeps you level with the best move${opts.bestSan ? `, ${opts.bestSan}` : ''} — a fine choice.`);
-    else if (loss < 1) parts.push(`It gives up about ${loss.toFixed(1)} of a point next to ${opts.bestSan ?? 'the best move'}.`);
-    else parts.push(`It costs about ${loss.toFixed(1)} points next to ${opts.bestSan ?? 'the best move'} — not now.`);
+    else if (loss < 1) parts.push(`It gives up ${costWords(loss * 100)} next to ${opts.bestSan ?? 'the best move'}.`);
+    else parts.push(`It costs ${costWords(loss * 100)} next to ${opts.bestSan ?? 'the best move'} — not now.`);
   }
   const mover = c.turn() === 'w' ? 'white' : 'black';
   const after = evalPhrase(opts.tradeEvalCp, opts.tradeMateIn, mover, opts.studentColor);
@@ -2570,16 +2570,15 @@ export function assembleAlternativesAnswer(opts: {
       if (replyClause) parts.push(`Against ${altSan}, ${replyClause}.`);
       continue;
     }
-    const pawns = (cpLoss / 100).toFixed(1);
     const altBand = gradeMove({ beforeCp: bestEvalStm as number, afterCp: altEvalStm as number, cpLoss });
     if (cpLoss <= 30) {
       closeOnes.push(altSan);
     } else if (altBand === null) {
-      parts.push(`${altSan} is playable but slightly worse — about ${pawns} of a point${replyClause ? `; ${replyClause}` : ''}.`);
+      parts.push(`${altSan} is playable but slightly worse — it gives up ${costWords(cpLoss)}${replyClause ? `; ${replyClause}` : ''}.`);
     } else if (altBand !== 'blunder') {
-      parts.push(`${altSan} concedes about ${pawns} points${replyClause ? ` — ${replyClause}` : ''}.`);
+      parts.push(`${altSan} concedes ${costWords(cpLoss)}${replyClause ? ` — ${replyClause}` : ''}.`);
     } else {
-      parts.push(`${altSan} is much worse — it gives up about ${pawns} points${replyClause ? `; ${replyClause}` : ''}.`);
+      parts.push(`${altSan} is much worse — it gives up ${costWords(cpLoss)}${replyClause ? `; ${replyClause}` : ''}.`);
     }
   }
   // Honest when the engine says several moves are fine: don't invent a gap.
@@ -6109,9 +6108,8 @@ export function assembleSlipNarration(input: {
   const { playedSan, quality, cpLoss, betterSan, betterFromTo, fenBefore, bestMoveUci, moverColor } = input;
   if (!playedSan) return null;
 
-  const pawns = (cpLoss / 100).toFixed(1);
   const verdictWord = quality === 'blunder' ? 'a blunder' : quality === 'mistake' ? 'a mistake' : 'a slight inaccuracy';
-  const swing = cpLoss >= 20 ? ` — about ${pawns} points.` : '.';
+  const swing = cpLoss >= 20 ? ` — it gives up ${costWords(cpLoss)}.` : '.';
   const verdict = `${playedSan} is ${verdictWord}${swing}`;
 
   // The deep grounded reason (sync, chess.js only): the better move's point +
@@ -6331,7 +6329,7 @@ export function assembleGameReviewAnswer(opts: {
         // paragraph as the turning-point line below, and they disagreed —
         // "swung about 4.0 pawns" immediately followed by "about 4.0 points".
         // One unit per read; the app says points everywhere else.
-        ? ` Best play here kept it at ${fmtWhiteEval(m.bestMoveEval)} — this one move swung about ${swing.toFixed(1)} point${swing >= 1.05 ? 's' : ''}.`
+        ? ` Best play here kept it at ${fmtWhiteEval(m.bestMoveEval)} — this one move swung it by ${costWords(swing * 100)}.`
         : '';
       parts.push(`- Move ${m.moveNumber}${dot} ${m.san} — ${m.classification.toUpperCase()}${evalStr ? `, ${evalStr}` : ''}${bestStr ? `; ${bestStr}` : ''}.${costStr}`);
     }
@@ -6344,7 +6342,7 @@ export function assembleGameReviewAnswer(opts: {
     if (costed.length >= 2) {
       const top = costed[0];
       const dot = top.m.color === 'black' ? '…' : '.';
-      parts.push(`The turning point: move ${top.m.moveNumber}${dot} ${top.m.san} — the game's biggest single swing, about ${top.swing.toFixed(1)} points.`);
+      parts.push(`The turning point: move ${top.m.moveNumber}${dot} ${top.m.san} — the game's biggest single swing, ${costWords(top.swing * 100)}.`);
     }
   }
 
