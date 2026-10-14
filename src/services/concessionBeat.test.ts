@@ -48,6 +48,8 @@ describe('the beat fires only on a drawback code can NAME', () => {
     expect(c, 'the knight stopped covering d4 and the beat said nothing').not.toBeNull();
     expect(c?.kind).toBe('defender-left');
     expect(c?.square).toBe('d4');
+    // What the student gets is said with it (Learn audit 2026-10-14).
+    expect(c?.opening).toBe('Nothing of theirs is watching d4 now — your knight on c6 can land there, near their king.');
     // Re-derived independently: d4 really is unguarded by White afterwards.
     const board = new Chess(fen);
     board.move('Ne1');
