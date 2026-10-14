@@ -21,6 +21,8 @@ const EFFECT_WHYS = [
   "Watch what they're building — left alone, their idea starts with b-pawn takes c5, and it swings the game by five points or more.",
   "You're now threatening knight to c2, check — it forks the king and rook on a1.",
   'Their a3 costs them b3: no pawn of theirs can ever guard it again.',
+  'Here is what you build toward: the g-file — a rook on an open file reaches their camp.',
+  'Your plan from here: pushing the passed pawn on the d-file — every push brings it closer to a queen.',
   'Your pawn reached f5 first — their f5 can never come now, so f5 is yours.',
 ];
 
