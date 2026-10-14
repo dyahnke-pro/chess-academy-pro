@@ -1125,7 +1125,7 @@ export function hangingPieceLine(piece: string, sq: string, rot: number): string
   const name = HIT_NAME[piece] ?? 'piece';
   const stems = [
     `Careful — your ${name} on ${sq} is attacked and nothing's defending it.`,
-    `Careful — your ${name} on ${sq} hangs: nothing guards it, so they can take it for free.`,
+    `Careful — your ${name} on ${sq} hangs: nothing guards it, so taking it costs them nothing.`,
     `They are hitting your ${name} on ${sq}, and nothing guards it — it is lost unless it moves or gets a guard.`,
   ];
   return stems[((rot % stems.length) + stems.length) % stems.length];
