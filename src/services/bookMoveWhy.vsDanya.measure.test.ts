@@ -42,7 +42,7 @@ it.runIf(process.env.BOOK_WHY_MEASURE === '1')('our jobs vs his read of the same
     try { ours = moveJobs(fen, san, mover); } catch { continue; }
     for (const h of his) hisCount[h] = (hisCount[h] ?? 0) + 1;
     if (his.size === 0) { hisNone += 1; if (others.length < 12 && Math.random() < 0.03) others.push(`${san}: ${n.explains.slice(0, 180)}`); continue; }
-    const computable = [...his].filter((h) => ['guard', 'stopsPin', 'stopsPush', 'prepares', 'castle', 'develop', 'center'].includes(h));
+    const computable = [...his].filter((h) => ['guard', 'stopsPin', 'stopsPush', 'prepares', 'castle', 'develop', 'center', 'tempo'].includes(h));
     if (computable.length === 0) { ruleOnly += 1; continue; }
     scored += 1;
     if (ours.length === 0) oursNone += 1;

@@ -14,11 +14,20 @@ import { Chess, type Color, type Square, type PieceSymbol } from 'chess.js';
 import { CAPTURE_VALUE } from './pieceValues';
 import { legalSeeGainOn } from './positionReadingService';
 import { sayMoveNoun } from './spokenMove';
+// ROUTED COMPUTERS (David 2026-10-14: "Any computers you can route in?"): the
+// registry's own reads, run on the board after the book move and after the
+// student's, so the reason speaks the same vocabulary the coach teaches and
+// catches with everywhere else.
+import { findProphylaxis } from './prophylaxis';
+import { kickOn } from './kickMap';
+import { findEnablingMove } from './enablingMove';
+import { studentMoveStructure } from './structureReads';
+import { masterMovesCachedSync } from './masterPlayLookup';
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const CENTER: readonly Square[] = ['d4', 'd5', 'e4', 'e5'];
 
-export type BookJobKind = 'guard' | 'stopsPin' | 'stopsPush' | 'prepares' | 'castle' | 'develop' | 'center';
+export type BookJobKind = 'guard' | 'stopsPin' | 'stopsPush' | 'tempo' | 'prepares' | 'structure' | 'castle' | 'develop' | 'center';
 
 export interface BookMoveWhy {
   kind: BookJobKind;
@@ -163,6 +172,80 @@ function preparesJob(main: Chess, played: Chess, student: Color): Job | null {
     }
   }
   return null;
+}
+
+
+/** The masters' line from `fen` starting with `firstSan`, as UCI: the book
+ *  move, then the most-played reply at each step while the book knows it. */
+function bookLineUci(fen: string, firstSan: string, plies: number): string[] {
+  const out: string[] = [];
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return out; }
+  let san: string | null = firstSan;
+  for (let i = 0; i < plies && san; i += 1) {
+    let m;
+    try { m = c.move(san); } catch { break; }
+    out.push(`${m.from}${m.to}${m.promotion ?? ''}`);
+    const next = masterMovesCachedSync(c.fen());
+    san = next && next.length ? [...next].sort((a, b) => b.games - a.games)[0].san : null;
+  }
+  return out;
+}
+
+/** 2a. PROPHYLAXIS (the `prophylaxis` computer): the book move is the quiet
+ *  move that stops their fork, pin or kick, and the student's leaves it on. */
+function prophylaxisJob(fen: string, mainMv: NonNullable<ReturnType<typeof after>>, playedMv: NonNullable<ReturnType<typeof after>>, student: Color): Job | null {
+  const ph = findProphylaxis(fen);
+  if (!ph || ph.prevention.from !== mainMv.from || ph.prevention.to !== mainMv.to) return null;
+  const them: Color = student === 'w' ? 'b' : 'w';
+  const p2 = asIfTheirMove(playedMv.board, them);
+  if (!p2 || !p2.moves({ verbose: true }).some((m) => m.from === ph.intent.from && m.to === ph.intent.to)) return null;
+  const verb = ph.kind === 'pin' ? 'pin' : ph.kind === 'fork' ? 'fork' : 'hit';
+  return {
+    kind: ph.kind === 'pin' ? 'stopsPin' : 'stopsPush',
+    squares: [ph.intent.to, ph.victim.square],
+    clause: `it covers ${ph.intent.to}, where ${sayMoveNoun(ph.intent.san, p2.fen())} would ${verb} your ${NAME[ph.victim.piece]} on ${ph.victim.square}`,
+    short: `leaves ${ph.intent.to} open for it`,
+  };
+}
+
+/** 2d. NO TEMPO HANDED OVER (the `kickMap` computer): after the student's
+ *  move a pawn push chases the piece that just moved, and after the book move
+ *  nothing chases it ("Ne2, not Nf3 — f3 invites …e4 with tempo"). */
+function tempoJob(mainMv: NonNullable<ReturnType<typeof after>>, playedMv: NonNullable<ReturnType<typeof after>>): Job | null {
+  if (playedMv.piece === 'p' || playedMv.piece === 'k') return null;
+  const k = kickOn(playedMv.board.fen(), playedMv.to);
+  if (!k) return null;
+  if (mainMv.piece !== 'p' && mainMv.piece !== 'k' && kickOn(mainMv.board.fen(), mainMv.to)) return null;
+  return {
+    kind: 'tempo',
+    squares: [playedMv.to],
+    clause: 'it leaves them no pawn push that gains a move on it',
+    short: `lets them chase your ${NAME[playedMv.piece]} with ${sayMoveNoun(k.kick, playedMv.board.fen())} and gain a move`,
+  };
+}
+
+/** 2e. CLEARS THE ROAD (the `enablingMove` computer, on the masters' line):
+ *  the book move steps off the road a long piece takes next. */
+function clearsRoadJob(fen: string, mainSan: string): Job | null {
+  const o = findEnablingMove(fen, bookLineUci(fen, mainSan, 3));
+  if (!o || o.first.san.replace(/[+#]/g, '') !== mainSan.replace(/[+#]/g, '')) return null;
+  return {
+    kind: 'prepares',
+    squares: [o.opened, o.then.from, o.then.to],
+    clause: `it clears ${o.opened}, so your ${NAME[o.then.piece]} on ${o.then.from} can come to ${o.then.to} next`,
+    short: `leaves that road shut`,
+  };
+}
+
+/** 2f. STRUCTURE (the `structureMove` computer, on the student's move): what
+ *  the student's move did to the pawns or squares, the book move named as the
+ *  better one. Engine cost unknown here, so only cost-free reads speak. */
+function structureJob(fen: string, mainSan: string, playedSan: string, student: Color): { kind: 'structure'; squares: Square[]; text: string } | null {
+  const reads = studentMoveStructure({ fenBefore: fen, san: playedSan, student, cpLoss: 0, bestSan: mainSan, bestUci: bookLineUci(fen, mainSan, 3), reply: null, namesBetterMove: true });
+  const r = reads[0];
+  if (!r) return null;
+  return { kind: 'structure', squares: r.squares.filter((x) => /^[a-h][1-8]$/.test(x)) as Square[], text: r.text };
 }
 
 /** 1. GUARD — the book move adds a defender to a piece under pressure and the
@@ -317,20 +400,26 @@ export function bookMoveWhy(fen: string, mainSan: string, playedSan: string, stu
   const job = castles
     ?? guardJob(mainMv.board, playedMv.board, student)
     ?? stopsJob(mainMv.board, playedMv.board, student, before)
+    ?? prophylaxisJob(fen, mainMv, playedMv, student)
     ?? stopsPushJob(mainMv.board, playedMv.board, student, before)
+    ?? tempoJob(mainMv, playedMv)
     ?? developsAndCastles
     ?? develops
-    ?? preparesJob(mainMv.board, playedMv.board, student)
-    ?? castlesNext
-    ?? centerJob(mainMv.board, playedMv.board, student);
-  if (!job) return null;
+    ?? clearsRoadJob(fen, mainSan)
+    ?? preparesJob(mainMv.board, playedMv.board, student);
+  if (!job) {
+    // The structure computer speaks its own sentence about the student's move.
+    const st = structureJob(fen, mainSan, playedSan, student);
+    if (st) return { kind: 'structure', squares: st.squares, text: `The book move is ${sayMoveNoun(mainSan, fen)}. ${st.text}` };
+  }
+  const late = job ?? castlesNext ?? centerJob(mainMv.board, playedMv.board, student);
+  if (!late) return null;
   return {
-    kind: job.kind,
-    squares: job.squares,
-    text: `The book move is ${sayMoveNoun(mainSan, fen)}: ${job.clause} — ${sayMoveNoun(playedSan, fen)} ${job.short}.`,
+    kind: late.kind,
+    squares: late.squares,
+    text: `The book move is ${sayMoveNoun(mainSan, fen)}: ${late.clause} — ${sayMoveNoun(playedSan, fen)} ${late.short}.`,
   };
 }
-
 /** Every job a move does against the board BEFORE it (no rival move) — the
  *  read the measurement scores against his explanations of the same move. */
 export function moveJobs(fen: string, san: string, student: Color): BookJobKind[] {
@@ -347,7 +436,9 @@ export function moveJobs(fen: string, san: string, student: Color): BookJobKind[
   if (stopsPushJob(mv.board, pass, student, before)) out.push('stopsPush');
   const home = student === 'w' ? '1' : '8';
   if ((mv.piece === 'n' || mv.piece === 'b') && mv.from[1] === home) out.push('develop');
-  if (preparesJob(mv.board, pass, student)) out.push('prepares');
+  if (preparesJob(mv.board, pass, student) || clearsRoadJob(fen, san)) out.push('prepares');
+  const ph = findProphylaxis(fen);
+  if (ph && ph.prevention.from === mv.from && ph.prevention.to === mv.to) out.push(ph.kind === 'pin' ? 'stopsPin' : 'stopsPush');
   if (/^O-O/.test(san) || castleJob(mv.board, pass, student, mv.from, mv.piece)) out.push('castle');
   if (centerJob(mv.board, pass, student)) out.push('center');
   return out;
