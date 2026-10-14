@@ -11,6 +11,9 @@ const EFFECT_WHYS = [
   'A piece that far from home takes moves to come back.',
   'Your knight to b6 saves the knight from their knight on c3.',
   'The pawn takes b6 away from their knight on d7.',
+  'The plan here: take the half-open g-file, where the rook belongs — a rook needs an open file to reach their camp.',
+  'You could take on d4 right now, but the threat is stronger than carrying it out.',
+  'Your pawn reached f5 first — their f5 can never come now, so f5 is yours.',
 ];
 
 /** NEGATIVE CONTROL: descriptions with no reason. If the counter ever counts

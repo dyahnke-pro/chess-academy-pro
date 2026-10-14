@@ -31,6 +31,7 @@ const WHY = new RegExp([
   String.raw`\bgives? up (?:the|your|their|its) \w+`, String.raw`\bhas no (?:escape|square|retreat|way out)\b`,
   String.raw`\b(?:a|the) guard does not help\b`, String.raw`\btakes \w+ away from (?:your|their) \w+`,
   String.raw`\blifts the pressure\b`, String.raw`\bis worth (?:less|more) than\b`, String.raw`\btakes (?:moves|time|tempi) to\b`,
+  String.raw`\bneeds? (?:a|an|the) [\w-]+(?: \w+)? to (?:reach|get|win|attack|break)\b`, String.raw`\b(?:is|are) stronger than\b`, String.raw`\bcan never (?:come|be (?:challenged|taken|kicked))\b`,
   String.raw`\b(?:is|are) safe now\b`, String.raw`\bthe guard that holds\b`, String.raw`\bsaves the \w+ from (?:your|their) \w+`,
 ].join('|'), 'i');
 
