@@ -24,6 +24,10 @@ describe('planStopped — the proof, read off their move', () => {
   it('their king steps off the central files', () => {
     expect(stop(KING_F8, 'Kg8', 'king-attack').proof).toBe('Their king stepped to g8, out of the open centre — the attack on it is off.');
   });
+  it('a king step that leaves it stuck in the centre stops nothing (Learn audit 2026-10-14: Kf1 "out of the open centre")', () => {
+    const KING_E8_NO_CASTLE = 'r3k2r/ppp2ppp/2n2n2/8/8/2N2N2/PPPQ1PPP/R3K2R b KQ - 0 12';
+    expect(stop(KING_E8_NO_CASTLE, 'Kf8', 'king-attack').proof).toBeNull();
+  });
   it('NEGATIVE CONTROL: a king that can castle on its own move carries no king-attack plan to stop', () => {
     expect(deriveNextPlanFacts(CENTRE_KING, 'w').some((p) => p.kind === 'king-attack')).toBe(false);
     expect(deriveNextPlanFacts(CENTRE_KING.replace(' b ', ' w '), 'w').some((p) => p.kind === 'king-attack')).toBe(true);
