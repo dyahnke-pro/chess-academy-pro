@@ -1100,3 +1100,15 @@ export function answerDangerQuestion(square: string | null, stemKey: number): st
       'Ask it every move: what are they hitting? Answer that before you play your own idea.',
     ], stemKey);
 }
+
+const HIT_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/** A piece of yours attacked by a CHEAPER one, said with why it matters (Learn
+ *  audit 2026-10-14: "Careful — their bishop on d2 hits your queen on a5."
+ *  named the attack and stopped). The attacker is worth less by construction,
+ *  so a guard does not save the piece: trading it for the attacker loses. */
+export function cheaperAttackerLine(by: string, bySq: string, piece: string, sq: string): string {
+  const attacker = HIT_NAME[by] ?? 'piece';
+  const target = HIT_NAME[piece] ?? 'piece';
+  return `Careful — their ${attacker} on ${bySq} hits your ${target} on ${sq}, and a guard does not help: the ${attacker} is worth less than your ${target}.`;
+}
