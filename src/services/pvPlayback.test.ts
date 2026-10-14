@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { computePvLine, renderPlyFactLine, pvFactsForVoice, plyFactsForMove, plyFactsClause, computePlyFacts, tacticWord, tacticWinsMaterial, pvDepthForRating, type PvEngine } from './pvPlayback';
+import { computePvLine, plyFactsForMove, plyFactsClause, computePlyFacts, tacticWord, tacticWinsMaterial, pvDepthForRating, type PvEngine } from './pvPlayback';
 import type { StockfishAnalysis } from '../types';
 
 /** Canned engine: maps fen → analysis. Unknown fen → throws (like a dead worker). */
@@ -186,40 +186,17 @@ describe('plyFactsForMove — no phantom tactics (David 2026-07-20)', () => {
   });
 });
 
-describe('deterministic fallback voice + batch facts', () => {
-  it('renderPlyFactLine speaks facts, stays silent on a quiet ply', async () => {
-    const engine = cannedEngine({
-      [MATE_FEN]: {
-        evaluation: 9999,
-        topLines: [{ rank: 1, evaluation: 9999, moves: ['h5f7'], mate: 1 }],
-      },
-    });
-    const line = (await computePvLine(MATE_FEN, { engine }))!;
-    expect(renderPlyFactLine(line.plies[0])).toMatch(/checkmate/i);
-    // A quiet ply (no capture/check/structure change) → null (silence rule).
-    const quiet = {
-      ...line.plies[0],
-      san: 'Nf3',
-      facts: {
-        captured: null, isCheck: false, isMate: false, promotion: null,
-        tacticLanded: null, materialGained: 0, newOpenFiles: [],
-        newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0,
-      },
-    };
-    expect(renderPlyFactLine(quiet)).toBeNull();
+describe('one renderer for a move in a line (review audit 2026-10-14)', () => {
+  const quiet = { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 };
+  it('names its mover and speaks in sentences — never "The move e6 outpost established on d5"', async () => {
+    const { plyFactsSentence } = await import('./pvPlayback');
+    expect(plyFactsSentence({ ...quiet, outpostGained: 'd5' }, 'e6', true)).toBe('You plant an outpost on d5.');
+    expect(plyFactsSentence({ ...quiet, isMate: true, isCheck: true }, 'Qxf7#', true)).toMatch(/checkmate/);
   });
-
-  it('pvFactsForVoice numbers one bundle per ply (split-back contract)', async () => {
-    const engine = cannedEngine({
-      [MATE_FEN]: {
-        evaluation: 9999,
-        topLines: [{ rank: 1, evaluation: 9999, moves: ['h5f7'], mate: 1 }],
-      },
-    });
-    const line = (await computePvLine(MATE_FEN, { engine }))!;
-    const facts = pvFactsForVoice(line);
-    expect(facts).toMatch(/^1\) The move Qxf7 .*gives checkmate/);
-    expect(facts.split('\n')).toHaveLength(1);
+  it('a bare capture that wins nothing says nothing, and a quiet ply is silent', async () => {
+    const { plyFactsSentence } = await import('./pvPlayback');
+    expect(plyFactsSentence({ ...quiet, captured: 'pawn' }, 'dxe5', true)).toBeNull();
+    expect(plyFactsSentence(quiet, 'Nf3', true)).toBeNull();
   });
 });
 
@@ -426,11 +403,11 @@ describe('a pin already on the board does not "land" when its maker slides along
 describe('a check is said once', () => {
   const quiet = { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 };
   it('check: the mark comes off the SAN, the verb carries it', async () => {
-    const { plyFactsString } = await import('./pvPlayback');
-    expect(plyFactsString({ san: 'Nh4+', facts: { ...quiet, isCheck: true } })).toBe('The move Nh4 gives check.');
+    const { plyFactsSentence } = await import('./pvPlayback');
+    expect(plyFactsSentence({ ...quiet, isCheck: true }, 'Nh4+')).toMatch(/^The move Nh4 checks the king/);
   });
   it('mate likewise', async () => {
-    const { plyFactsString } = await import('./pvPlayback');
-    expect(plyFactsString({ san: 'Qh7#', facts: { ...quiet, isCheck: true, isMate: true } })).toBe('The move Qh7 gives checkmate.');
+    const { plyFactsSentence } = await import('./pvPlayback');
+    expect(plyFactsSentence({ ...quiet, isCheck: true, isMate: true }, 'Qh7#')).toBe('The move Qh7 delivers checkmate.');
   });
 });

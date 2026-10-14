@@ -32,7 +32,7 @@
  */
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
-import { plyFactsString, renderPlyFactLine, type PlyFacts } from './pvPlayback';
+import { plyFactsSentence, type PlyFacts } from './pvPlayback';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 import { explainTemptingCapture } from './reviewTeachingPoints';
 import { opponentReplySentence } from './puzzleConceptExplanation';
@@ -130,7 +130,7 @@ export function projectedLineVoice(
     }
     prevStudentTo = to;
     if (p.facts.isMate) return `${p.san} — checkmate.`;
-    const facts = plyFactsString(p) ?? renderPlyFactLine(p);
+    const facts = plyFactsSentence(p.facts, p.san, true);
     let base = facts;
     if (!base && opts.teachQuiet) {
       // Out of check the move's point is the check it answers — the king's
