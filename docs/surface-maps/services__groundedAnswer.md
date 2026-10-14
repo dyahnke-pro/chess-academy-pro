@@ -117,8 +117,7 @@
 ### `GroundedAnswer` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `ownHangingLine` (function) — 2 call sites
-- `src/components/Coach/CoachGamePage.tsx:3995`
+### `ownHangingLine` (function) — 1 call site
 - `src/services/groundedAnswer.test.ts:1656`
 
 ### `evalPhrase` (function) — 1 call site
