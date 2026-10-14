@@ -112,4 +112,8 @@ describe('the hand-graded falsehoods of 2026-10-14 stay fixed (each failed on th
     const w = bookMoveWhy('rnbqkbnr/ppp2ppp/3p4/4p3/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 10', 'Nf3', 'c5', 'w');
     expect(w?.text ?? '').not.toMatch(/freezes/);
   });
+  it('only the book piece itself stands on a square', () => {
+    const w = bookMoveWhy('rnbqkbnr/1p1p1ppp/p3p3/2p5/2P1P3/5N2/PP1P1PPP/RNBQKB1R w KQkq - 0 10', 'Nc3', 'e5', 'w');
+    expect(w?.text ?? '').not.toMatch(/stands on e4/);
+  });
 });

@@ -365,7 +365,8 @@ function centerJob(main: Chess, played: Chess, student: Color, mainTo: Square): 
   const b = hit(played);
   const gained = own.filter((x) => !b.includes(x));
   if (gained.length === 0) return null;
-  const stands = gained.filter((x) => main.get(x)?.color === student);
+  // Only the book piece itself STANDS on its square; a pawn already there is covered.
+  const stands = gained.filter((x) => x === mainTo);
   const covers = gained.filter((x) => !stands.includes(x));
   const parts = [stands.length ? `it stands on ${stands.join(' and ')}` : '', covers.length ? `it covers ${covers.join(' and ')}` : ''].filter(Boolean);
   return { kind: 'center', squares: gained, clause: `it fights for the centre — ${parts.join(' and ')}`, short: `leaves ${gained.join(' and ')} to them` };
