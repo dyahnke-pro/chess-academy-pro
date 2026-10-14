@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**929 lines · 13 exports · 3 importers · 1 tests · 0 audits**
+**931 lines · 13 exports · 3 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -34,15 +34,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolveOpeningIdeas` (function) — 6 call sites
-- `src/components/Coach/CoachGameReview.tsx:2531`
-- `src/components/Coach/CoachGameReview.tsx:2536`
+- `src/components/Coach/CoachGameReview.tsx:2591`
+- `src/components/Coach/CoachGameReview.tsx:2596`
 - `src/services/reviewOpeningTheory.test.ts:81`
 - `src/services/reviewOpeningTheory.test.ts:88`
 - `src/services/reviewOpeningTheory.test.ts:94`
 - `src/services/reviewOpeningTheory.test.ts:95`
 
 ### `resolveCuratedOpeningIdeas` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:1434`
+- `src/services/coachFeatureService.ts:1247`
 - `src/services/reviewOpeningTheory.test.ts:104`
 - `src/services/reviewOpeningTheory.test.ts:105`
 - `src/services/reviewOpeningTheory.test.ts:108`
@@ -50,10 +50,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:121`
 
 ### `warmLectureSources` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:2519`
+- `src/components/Coach/CoachGameReview.tsx:2579`
 
 ### `buildOpeningTheoryLecture` (function) — 13 call sites
-- `src/components/Coach/CoachGameReview.tsx:2527`
+- `src/components/Coach/CoachGameReview.tsx:2587`
 - `src/services/reviewOpeningTheory.test.ts:35`
 - `src/services/reviewOpeningTheory.test.ts:64`
 - `src/services/reviewOpeningTheory.test.ts:75`
@@ -71,15 +71,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `enrichLectureWithEngine` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:2535`
+- `src/components/Coach/CoachGameReview.tsx:2595`
 - `src/services/reviewOpeningTheory.test.ts:279`
 
 ### `TheoryLectureBeat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildTheoryLectureBeats` (function) — 11 call sites
-- `src/components/Coach/CoachGameReview.tsx:2531`
-- `src/components/Coach/CoachGameReview.tsx:2536`
+- `src/components/Coach/CoachGameReview.tsx:2591`
+- `src/components/Coach/CoachGameReview.tsx:2596`
 - `src/services/reviewOpeningTheory.test.ts:149`
 - `src/services/reviewOpeningTheory.test.ts:166`
 - `src/services/reviewOpeningTheory.test.ts:203`
