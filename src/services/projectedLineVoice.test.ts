@@ -111,3 +111,11 @@ describe('the only legal answer to a check says so (teaching pass 2026-10-14)', 
     expect(voice[1]).toMatch(/only legal move/);
   });
 });
+
+describe('a quiet move in the line has a subject (review audit 2026-10-14: "Stakes a claim in the center…")', () => {
+  it('the verb-first teaching stem is said with the move as its subject', () => {
+    const plies = line('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', ['d4']);
+    const voice = projectedLineVoice(plies, 'white', { teachQuiet: true, explainTemptation: false });
+    expect(voice[0]).toBe('d4 stakes a claim in the center and opens lines for the pieces.');
+  });
+});

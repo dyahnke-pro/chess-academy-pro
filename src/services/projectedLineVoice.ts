@@ -30,7 +30,7 @@
  * G0: every sentence is computed (chess.js, `computePlyFacts`, `proofCut`,
  * `tacticInvariant`); seat law: you / they, never we.
  */
-import { openSentence } from '../utils/openSentence';
+import { continueSentence, openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { plyFactsSentence, type PlyFacts } from './pvPlayback';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
@@ -139,7 +139,12 @@ export function projectedLineVoice(
       // its reason (there was no choice), and the student learns to count.
       let only = false;
       if (inCheck) { try { only = new Chess(p.fenBefore).moves().length === 1; } catch { only = false; } }
-      base = inCheck ? (only ? `You answer the check with ${p.san} — the only legal move.` : `You answer the check with ${p.san}.`) : buildReviewMoveTeaching(p.fenBefore, p.san, true);
+      const taught = inCheck ? null : buildReviewMoveTeaching(p.fenBefore, p.san, true);
+      // The universal teacher's verb-first stems ("Stakes a claim in the
+      // center…") are written for a caller that supplies the subject; here
+      // the move is it ("d5 stakes a claim…", review audit 2026-10-14).
+      const subjected = taught && !/^(The|It|Its|Your|You|Their|They|That|This|A|An|Now)\b/.test(taught) ? `${p.san} ${continueSentence(taught)}` : taught;
+      base = inCheck ? (only ? `You answer the check with ${p.san} — the only legal move.` : `You answer the check with ${p.san}.`) : subjected;
     }
     const parts = [base ? sentence(base) : null];
     if (i === motifAt && motif) parts.push(motif);
