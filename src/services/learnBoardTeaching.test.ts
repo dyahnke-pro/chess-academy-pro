@@ -123,3 +123,10 @@ describe('studentMoveIsPrompted — a move the coach NAMED is never proof (2026-
     expect(studentMoveIsPrompted(['fundamental'], false)).toBe(false);
   });
 });
+
+describe('an attack by a cheaper piece says why it matters (Learn audit 2026-10-14)', () => {
+  it('names the attack and that a guard does not help', async () => {
+    const { cheaperAttackerLine } = await import('./learnBoardTeaching');
+    expect(cheaperAttackerLine('b', 'd2', 'q', 'a5')).toBe('Careful — their bishop on d2 hits your queen on a5, and a guard does not help: the bishop is worth less than your queen.');
+  });
+});
