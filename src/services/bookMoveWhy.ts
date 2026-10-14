@@ -62,7 +62,7 @@ const sq = (f: number, r: number): Square | null => (f < 0 || f > 7 || r < 0 || 
 
 /** A pin the slider on `from` makes: the first student piece on a ray, with a
  *  more valuable student piece (or the king) right behind it. */
-function pinBy(board: Chess, from: Square, student: Color): { pinned: Square; behind: Square } | null {
+function pinBy(board: Chess, from: Square, student: Color): { pinned: Square; behind: Square; pinnedType: PieceSymbol; behindType: PieceSymbol } | null {
   const p = board.get(from);
   if (!p || !STEPS[p.type]) return null;
   const f0 = from.charCodeAt(0) - 97; const r0 = Number(from[1]) - 1;
@@ -75,9 +75,10 @@ function pinBy(board: Chess, from: Square, student: Color): { pinned: Square; be
       if (!q) continue;
       if (q.color !== student) break;
       if (!first) { first = s; continue; }
-      const front = board.get(first)!;
+      const front = board.get(first);
+      if (!front) break;
       if (q.type === 'k' || CAPTURE_VALUE[q.type] > CAPTURE_VALUE[front.type]) {
-        if (front.type !== 'p' && front.type !== 'k') return { pinned: first, behind: s };
+        if (front.type !== 'p' && front.type !== 'k') return { pinned: first, behind: s, pinnedType: front.type, behindType: q.type };
       }
       break;
     }
@@ -92,7 +93,7 @@ function underPressure(board: Chess, student: Color): Array<{ square: Square; pi
   for (const row of board.board()) for (const c of row) {
     if (!c || c.color !== them) continue;
     const pin = pinBy(board, c.square, student);
-    if (pin) out.push({ square: pin.pinned, piece: board.get(pin.pinned)!.type, by: c.square, pin: true });
+    if (pin) out.push({ square: pin.pinned, piece: pin.pinnedType, by: c.square, pin: true });
   }
   for (const row of board.board()) for (const c of row) {
     if (!c || c.color !== student || c.type === 'k') continue;
@@ -141,7 +142,8 @@ function stopsPushJob(main: Chess, played: Chess, student: Color, before: Chess)
     if (!safePush(before, them, z.from, z.to)) continue;
     if (!safePush(played, them, z.from, z.to)) continue;
     if (safePush(main, them, z.from, z.to)) continue;
-    const victim = t.get(hits[0])!;
+    const victim = t.get(hits[0]);
+    if (!victim) continue;
     return {
       kind: 'stopsPush',
       squares: [z.to, hits[0]],
@@ -249,7 +251,8 @@ function guardJob(main: Chess, played: Chess, student: Color, mainTo: Square): O
     const mine = main.attackers(p.square, student).length;
     const theirs = played.get(p.square)?.color === student && played.get(p.square)?.type === p.piece ? played.attackers(p.square, student).length : -1;
     if (theirs < 0 || mine <= theirs) continue;
-    const byPiece = main.get(p.by)!;
+    const byPiece = main.get(p.by);
+    if (!byPiece) continue;
     const pressure = p.pin ? `which their ${NAME[byPiece.type]} on ${p.by} pins` : `which their ${NAME[byPiece.type]} on ${p.by} attacks`;
     return {
       kind: 'guard',
@@ -277,17 +280,18 @@ function stopsJob(main: Chess, played: Chess, student: Color, before: Chess): Om
     const pin = pinBy(t, z.to, student);
     let threat: string | null = null;
     let squares: Square[] = [];
+    let pinnedType: PieceSymbol | null = null;
     if (pin) {
-      const pinned = t.get(pin.pinned)!; const behind = t.get(pin.behind)!;
-      threat = `${z.san}, pinning your ${NAME[pinned.type]} on ${pin.pinned} to your ${NAME[behind.type]}`;
+      threat = `${z.san}, pinning your ${NAME[pin.pinnedType]} on ${pin.pinned} to your ${NAME[pin.behindType]}`;
       squares = [z.to, pin.pinned];
+      pinnedType = pin.pinnedType;
     }
-    if (!threat) continue;
+    if (!threat || !pinnedType) continue;
     // THE PIN MUST WORK AFTER THE STUDENT'S MOVE: a pinner that is simply lost
     // on its square threatens nothing, so the book move stopped nothing (hand
     // grade 2026-10-14: "d4 keeps their bishop off g4" when Bg4 lost a piece
     // either way).
-    if (legalSeeGainOn(t, z.to as Square) > 0) continue;
+    if (legalSeeGainOn(t, z.to) > 0) continue;
     // THE PIN WAS ALREADY COMING: it lands from the board before either move,
     // so the book move prevents it rather than the student's move creating it
     // (sample 2026-10-14: "a3 keeps their bishop off h3" when only the
@@ -306,13 +310,13 @@ function stopsJob(main: Chess, played: Chess, student: Color, before: Chess): Om
       t2.move(legal.san);
       // Stopped when landing there now LOSES material (…h6: Bg5 hxg5 Nxg5 is
       // a bishop for a pawn), not only when it loses the whole piece.
-      stopped = legalSeeGainOn(t2, z.to as Square) > 0;
+      stopped = legalSeeGainOn(t2, z.to) > 0;
     }
     if (!stopped) continue;
     return {
       kind: 'stopsPin',
       squares,
-      clause: `it keeps their ${NAME[z.piece]} off ${z.to}, where it would pin your ${NAME[t.get(squares[1])!.type]} on ${squares[1]}`,
+      clause: `it keeps their ${NAME[z.piece]} off ${z.to}, where it would pin your ${NAME[pinnedType]} on ${squares[1]}`,
       short: `allows ${sayMoveNoun(z.san, p2.fen())}`,
     };
   }
