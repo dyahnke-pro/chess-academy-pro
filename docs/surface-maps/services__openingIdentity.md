@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**210 lines · 9 exports · 7 importers · 3 tests · 0 audits**
+**231 lines · 10 exports · 8 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,6 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/services/learnBoardTeaching.openingPlan.test.ts`
 - `src/services/learnBoardTeaching.ts`
 - `src/services/openingAnnouncement.ts`
 - `src/services/openingGenerator.ts`
@@ -26,31 +27,43 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `loadOpeningIdentity` (function) — 3 call sites
-- `src/services/coachApi.ts:5671`
-- `src/services/coachApi.ts:6216`
+- `src/services/coachApi.ts:5723`
+- `src/services/coachApi.ts:6277`
 - `src/services/openingGenerator.ts:2504`
 
-### `warmOpeningIdentity` (function) — 2 call sites
-- `src/services/learnBoardTeaching.ts:677`
+### `warmOpeningIdentity` (function) — 3 call sites
+- `src/components/Coach/CoachTeachPage.tsx:998`
+- `src/services/learnBoardTeaching.ts:687`
 - `src/services/reviewOpeningTheory.ts:246`
 
-### `setOpeningIdentity` (function) — 2 call sites
+### `setOpeningIdentity` (function) — 4 call sites
+- `src/services/learnBoardTeaching.openingPlan.test.ts:11`
 - `src/services/openingIdea.test.ts:9`
 - `src/services/openingIdentity.test.ts:9`
+- `src/services/openingIdentity.test.ts:73`
 
 ### `identityFor` (function) — 1 call site
 - `src/services/openingIdentity.test.ts:36`
+
+### `planFor` (function) — 7 call sites
+- `src/services/learnBoardTeaching.ts:666`
+- `src/services/lookaheadPlan.ts:473`
+- `src/services/lookaheadPlan.ts:1114`
+- `src/services/lookaheadPlan.ts:1115`
+- `src/services/openingAnnouncement.ts:171`
+- `src/services/openingIdentity.test.ts:75`
+- `src/services/openingIdentity.test.ts:80`
 
 ### `IdentityLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isWaypointOpening` (function) — 1 call site
-- `src/services/openingAnnouncement.ts:81`
+- `src/services/openingAnnouncement.ts:87`
 
 ### `openingIdentityLine` (function) — 17 call sites
-- `src/services/coachApi.ts:5673`
-- `src/services/coachApi.ts:6218`
-- `src/services/learnBoardTeaching.ts:678`
+- `src/services/coachApi.ts:5725`
+- `src/services/coachApi.ts:6279`
+- `src/services/learnBoardTeaching.ts:688`
 - `src/services/openingGenerator.ts:2505`
 - `src/services/openingIdentity.test.ts:18`
 - `src/services/openingIdentity.test.ts:20`
@@ -67,13 +80,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/walkOct2a.test.ts:67`
 
 ### `definingMoveIdea` (function) — 4 call sites
-- `src/services/coachApi.ts:5685`
+- `src/services/coachApi.ts:5737`
 - `src/services/openingIdea.test.ts:24`
 - `src/services/openingIdea.test.ts:26`
 - `src/services/openingIdea.test.ts:31`
 
 ## Tests
 
+- `src/services/learnBoardTeaching.openingPlan.test.ts`
 - `src/services/openingIdea.test.ts`
 - `src/services/openingIdentity.test.ts`
 - `src/services/walkOct2a.test.ts`

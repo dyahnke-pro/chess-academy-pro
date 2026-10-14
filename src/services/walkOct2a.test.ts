@@ -68,7 +68,7 @@ describe('Learn walk oct2a', () => {
   });
 
   it('F12: the Scotch after a waypoint is named plainly, never as a transposition', () => {
-    const line = openingAnnouncement({ name: 'Scotch Game: Lolli Variation' }, null, "King's Knight Opening", 'b', true);
+    const line = openingAnnouncement({ name: 'Scotch Game: Lolli Variation' }, null, "King's Knight Opening", 'b', null, true);
     expect(line).toBe("It's the Scotch Game: Lolli Variation.");
   });
 

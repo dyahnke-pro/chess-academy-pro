@@ -1,4 +1,5 @@
 import { applyVerdict, getVerdicts, saveVerdict, toVerdictLabel, verdictKey, verdictOutranks, VERDICT_TRUST_DEPTH } from './moveVerdictStore';
+import { finishedBoardEval } from './finishedBoard';
 import { Capacitor } from '@capacitor/core';
 import { reviewBudget, deterministicAnalysisForAudit, DETERMINISTIC_FAN_NODES, DETERMINISTIC_FAN_WATCHDOG_MS } from './analysisDeterminism';
 import { Chess } from 'chess.js';
@@ -472,6 +473,9 @@ class DedicatedWorker {
     depth: number,
     budgetMs?: number,
   ): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] }> {
+    // A finished board is exact at any depth — never searched (`finishedBoard`).
+    const done = finishedBoardEval(fen);
+    if (done !== null) return Promise.resolve({ evaluation: done, bestMove: '(none)', depth, pv: [] });
     return this.serial(() => this.analyzePositionNow(fen, depth, budgetMs));
   }
 
@@ -482,6 +486,7 @@ class DedicatedWorker {
     budgetMs: number,
     searchmoves: readonly string[] | null,
   ): Promise<Array<{ rank: number; evaluation: number; mate: number | null; bound: 'lower' | 'upper' | null; moves: string[] }>> {
+    if (finishedBoardEval(fen) !== null) return Promise.resolve([]);
     return this.serial(() => this.analyzeFanNow(fen, lines, depth, budgetMs, searchmoves));
   }
 

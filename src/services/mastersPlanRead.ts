@@ -12,7 +12,7 @@
 // master move with a game count, G3), and it names nothing it cannot count.
 import { Chess } from 'chess.js';
 import type { LocalDbMove } from './masterPlayLookup';
-import { shareAdverb } from '../utils/shareWords';
+import { shareAdverb } from '../utils/shareWords.ts';
 
 export type MovesAt = (fen: string) => readonly LocalDbMove[] | null;
 

@@ -19,7 +19,11 @@ import { PRODUCTION_BACKFILL_SCHEDULE, sleep, type BackfillSchedule } from './ba
 /** Bump when analysed games must be re-read for the POSITIVE half. 2026-10-13:
  *  green is recorded on analysis, not only on review (David: "Green also needs
  *  to come from analyzed games"). */
-export const POSITIVE_HALF_REV = '2026-10-13-green-on-analysis';
+export const POSITIVE_HALF_REV = '2026-10-14-one-seat-resolver';
+// 2026-10-14: the record resolved the student's seat with a private copy that
+// matched only the game's own site's username, so pasted games and games under
+// another site's handle were read, stamped and recorded NOTHING. Bumped so each
+// analysed game is read once more through the one resolver (`playerIdentity`).
 
 /** The meta row that says the pass is complete for the current revisions. */
 const BACKFILL_DONE_KEY = 'misconception-rules-backfill';

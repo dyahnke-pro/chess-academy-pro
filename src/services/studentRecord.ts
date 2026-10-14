@@ -5,7 +5,7 @@
 // `capabilityProven`.
 
 import { loadWeaknessSignals } from './weaknessSignalLoader';
-import { getCapabilityProfile, capabilityProven, type CapabilityProfile } from './capabilityEvidence';
+import { getCapabilityProfile, type CapabilityProfile } from './capabilityEvidence';
 import type { StudentRecord } from './puzzleMethod';
 
 export type { StudentRecord } from './puzzleMethod';
@@ -20,10 +20,7 @@ export async function loadStudentRecord(): Promise<StudentRecord> {
   return { weaknesses, capabilities };
 }
 
-/** The tags the student has PROVEN, by the one bar. */
-export async function loadProvenTags(): Promise<Set<string>> {
-  const profile = await getCapabilityProfile();
-  const proven = new Set<string>();
-  for (const [tag, entry] of profile) if (capabilityProven(entry)) proven.add(tag);
-  return proven;
-}
+/** The tags the student has PROVEN, by the one bar. One reader: this used to
+ *  be a second copy of the loader's computation, and two copies of "what is
+ *  green" drift (2026-10-13). */
+export { loadProvenTags } from './weaknessSignalLoader';

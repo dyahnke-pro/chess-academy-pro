@@ -299,7 +299,7 @@ describe('computed voice audit', () => {
         let announceLine: string | null = null;
         const det = (() => { try { return detectOpening(history); } catch { return null; } })();
         // The surface's ONE rule (openingAnnouncement), not a copy of it.
-        const announced = openingAnnouncement(det, bookDeparture(history), openingName, game.student === 'white' ? 'w' : 'b');
+        const announced = openingAnnouncement(det, bookDeparture(history), openingName, game.student === 'white' ? 'w' : 'b', null);
         if (det && announced) { openingName = det.name; announceLine = announced; }
 
         // The hand-written beat no longer speaks on a live board (David

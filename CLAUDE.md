@@ -2349,6 +2349,19 @@ the harm here.
 
 ---
 
+## 🔒🔒 90% OF TEACHING LINES CARRY A WHY (David 2026-10-13: "a better standard is closer to 90%. Why statements are the foundational teachings of this app")
+
+Every Learn and Review walk measures it (`scripts/audit-lib/why-count.mjs`, rows
+Learn V5 / Review `VOICE why-statements-prevalent-and-numerous`): at least 90%
+of TEACHING lines give a reason or a consequence, and at least one why per
+student move. Greetings, the game's setup, "e4 — your move" and the game intro
+are not teaching and are not measured; opening names and book departures are.
+The why is COMPUTED (a consequence, a line, a stake), never a templated
+"because" bolted on to pass the count — a filler why is worse than none. A
+teaching line with no why is fixed at its producer (add the computed
+consequence) or held; a description speaks only inside a line that gives a
+reason.
+
 ## 🔒🔒 EVERY SPOKEN CONCLUSION CARRIES ITS PROOF — the proof is the thinking out loud (David 2026-10-07: "Anything that gets proven is stated out loud?" → "Yes. I have a feeling it will backfire but I think a decent starting spot.")
 
 The computers prove far more than the coach says: a pin break checked four
@@ -5275,8 +5288,20 @@ commentary, not cards.
 🔴 **This REPLACES the 2026-09-24 "LEARN NAMES THE MOVE — WITH ITS REASON"
 section, which is DELETED rather than annotated (the Lake Butler rule).** On
 Learn free play no producer names the student's move — the better move after
-a mistake, the held move at a key moment, the book move at a departure, the
-answer to their slip — unless the student ASKED (Show me, Hint, a question).
+a mistake, the held move at a key moment, the answer to their slip — unless the
+student ASKED (Show me, Hint, a question).
+
+🔄 **ONE CARVE-OUT — THEORY (David 2026-10-14: "it's ok to name the move if
+it's after it's already been played. How else do we teach the user a wrong
+move?" → "And the WHY behind the move!!").** Once the student has LEFT THE
+BOOK, the book move is named — always WITH its job on the board
+(`bookMoveWhy`: the guard it adds to a piece under pressure, the pin it stops,
+the castling it clears, the piece it develops, the centre it covers) and what
+the student's move left undone. Theory is knowledge, not a find, so withholding
+it teaches nothing; a TACTICAL miss still waits for Show me. No job on the
+board → the book move is not named. The register is his speedruns: the job,
+the tempting alternative and why it falls short, the consequence.
+
 What still speaks:
 1. **The why of every mistake** — yours and theirs at the same detail (David
    2026-10-10), from the ONE error computer `errorWhy`: what the move allowed,

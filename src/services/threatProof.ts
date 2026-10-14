@@ -14,6 +14,8 @@ import { computeExchangeLedger, describeProofResult } from './exchangeLedger';
 import { computeMustDefend, flipSideToMove, mateThreatsAgainst } from './threatOut';
 import { withProof, type Proof } from './proof';
 import { mateStakes, type FactStakes } from './factStakes';
+import { CAPTURE_VALUE } from './pieceValues';
+import { PIECE_NAMES } from '../types/tacticTypes';
 
 const COUNT = ['no', 'once', 'twice', 'three times', 'four times', 'five times'];
 const times = (n: number): string => COUNT[n] ?? `${n} times`;
@@ -46,14 +48,30 @@ export function threatProof(fen: string, student: 'w' | 'b', squares: readonly s
   try { hits = probe.attackers(named.square as Parameters<Chess['attackers']>[0], foe).length; } catch { return null; }
   const guard = named.defenders === 0 ? 'nothing guards it' : `it is guarded ${times(named.defenders)}`;
   // The OUTCOME comes from the ledger over the capture (a free piece is a
-  // one-move line the ledger settles); a defended piece is said by its count,
-  // the board fact, since the trade's result is not played out here.
+  // one-move line the ledger settles). A DEFENDED piece is said by what the
+  // trade nets them — the legal SEE `computeMustDefend` already played
+  // (`named.value`) — because "it is guarded twice" is no reason when a pawn
+  // takes a knight: the guards only take back a pawn (Learn walk 2026-10-13:
+  // the count went out as the why and explained nothing).
   const free = named.defenders === 0 ? computeExchangeLedger(them, [cap.san], student) : null;
   const result = free && free.settled && free.netPawns < 0 ? describeProofResult(free) : null;
+  // In PIECES, never a point count (V3: no statistic is spoken).
+  const attackerName = PIECE_NAMES[cap.piece] ?? 'piece';
+  const targetName = PIECE_NAMES[named.piece] ?? 'piece';
+  const targetValue = CAPTURE_VALUE[named.piece] ?? 0;
+  const cheaper = named.defenders > 0 && (CAPTURE_VALUE[cap.piece] ?? 0) < targetValue;
+  const net = !result && named.defenders > 0 && named.value > 0
+    ? (cheaper
+      ? `${cap.san} wins your ${targetName} for their ${attackerName}, even after you take back`
+      : named.value >= targetValue
+        ? `${cap.san} wins your ${targetName} outright — you cannot take back enough`
+        : `${cap.san} still wins material after you take back`)
+    : null;
+  const why = cheaper ? ` — the guards only win back the cheaper piece` : '';
   return {
     kind: 'count', exact: true,
-    short: result ? `${cap.san} — ${result}` : `attacked ${times(hits)}, ${guard}`,
-    full: result ? `It is attacked ${times(hits)} and ${guard}: ${cap.san} — ${result}` : `It is attacked ${times(hits)} and ${guard}`,
+    short: result ? `${cap.san} — ${result}` : net ?? `attacked ${times(hits)}, ${guard}`,
+    full: result ? `It is attacked ${times(hits)} and ${guard}: ${cap.san} — ${result}` : net ? `${net}${why}` : `It is attacked ${times(hits)} and ${guard}`,
     line: { fen: them, sans: [cap.san] },
     squares: [named.square, cap.from],
   };

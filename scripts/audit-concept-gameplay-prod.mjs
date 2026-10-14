@@ -554,8 +554,8 @@ async function main() {
     record('V3. no statistic is spoken — a reason, never a percentage, a point count or "N of M"', statLines.length === 0, `${statLines.length} line(s)${statLines.length ? ` — ${statLines[0].slice(0, 120)}` : ''}`);
     // WHY STATEMENTS ARE PREVALENT AND NUMEROUS (David 2026-10-13).
     const why = whyTally(tape, studentMoves);
-    record('V5. why statements are prevalent (most lines give a reason) and numerous (≥1 per student move)', why.prevalent && why.numerous,
-      `${why.withWhy}/${why.lines} lines carry a why (${Math.round(why.share * 100)}%), ${why.whySentences} why sentences over ${studentMoves} student moves = ${why.perMove.toFixed(1)}/move${why.whyless.length ? ` — whyless e.g. "${why.whyless.slice(0, 3).join('" | "').slice(0, 260)}"` : ''}`);
+    record('V5. why statements are prevalent (90% of teaching lines give a reason) and numerous (≥1 per student move)', why.prevalent && why.numerous,
+      `${why.withWhy}/${why.lines} teaching lines carry a why (${Math.round(why.share * 100)}%), ${why.whySentences} why sentences over ${studentMoves} student moves = ${why.perMove.toFixed(1)}/move${why.whyless.length ? ` — whyless e.g. "${why.whyless.slice(0, 3).join('" | "').slice(0, 260)}"` : ''}`);
     const buried = linesWithBuriedMate(tape);
     record('V4. a forced mate leads its line (never behind a lesson)', buried.length === 0, `${buried.length} line(s)${buried.length ? ` — ${buried[0].slice(0, 160)}` : ''}`);
     record('V2. words per student move REPORTED (his speed runs: ~35–50)', true, `${words} words over ${studentMoves} student moves = ${Math.round(words / studentMoves)}/move; longest line ${Math.max(0, ...tape.map((t) => t.split(/\s+/).length))}w`);
@@ -572,10 +572,42 @@ async function main() {
       const bad = turns.filter((t) => t.spoke.some((l) => !t.offered.includes(l)) || (t.lead !== null && !t.spoke.includes(t.lead)));
       record('LD2. every spoken lane was offered, and the lead spoke', bad.length === 0, `${bad.length} malformed of ${turns.length}`);
       // THE FADE (short phrasing when green): the audit device starts with no
-      // evidence, so nothing is green and NOTHING may fade — grey means teach.
-      // A fade here is the heat map reading green off an empty record.
-      const fadedRows = turns.filter((t) => !Array.isArray(t.faded) || t.faded.length > 0 || t.faded.some((l) => !t.offered.includes(l)));
-      record('LD3. nothing FADED on a fresh device (grey teaches in full)', fadedRows.length === 0, `${fadedRows.length} of ${turns.length} rows faded or lack the field`);
+      // evidence, so nothing is green and NOTHING may fade until the student
+      // has HELD something on this device — grey means teach. Both games share
+      // one device, so a skill proven in game 1 fading in game 2 is the loop
+      // working (2026-10-13: LD3 read every fade as a defect and flickered red
+      // on runs where game 1 proved a tag). A fade BEFORE any held evidence is
+      // the heat map reading green off an empty record — that stays a fail.
+      const fadeBeforeEvidence = [];
+      let heldSeen = 0;
+      for (const e of listener.getCapturedEvents()) {
+        if (e.kind === 'coach-surface-migrated' || e.kind === 'answer-evidence') {
+          try { const d = JSON.parse(e.details ?? ''); if (d?.outcome === 'held') heldSeen += 1; } catch { /* not evidence */ }
+          continue;
+        }
+        if (e.kind !== 'learn-turn-decision') continue;
+        try {
+          for (const row of JSON.parse(e.details ?? '')?.rows ?? []) {
+            if (!row || !Array.isArray(row.offered)) continue;
+            const bad = !Array.isArray(row.faded) || row.faded.some((l) => !row.offered.includes(l)) || (row.faded.length > 0 && heldSeen === 0);
+            if (bad) fadeBeforeEvidence.push(row);
+          }
+        } catch { /* unreadable is not a row */ }
+      }
+      const fadedTotal = turns.filter((t) => Array.isArray(t.faded) && t.faded.length > 0).length;
+      record('LD3. nothing FADES before the student has held anything (grey teaches in full)', fadeBeforeEvidence.length === 0, `${fadeBeforeEvidence.length} of ${turns.length} rows faded with no held evidence or lack the field; ${fadedTotal} faded in all, after ${heldSeen} held answer(s)`);
+      // THE WHY THAT WAS COMPUTED AND NOT SAID (David 2026-10-13: "how many of
+      // those statements are calculated, just not spoken?"). Reported, not
+      // asserted: the measurement that decides whether the door should value
+      // a reason over a bare fact.
+      {
+        const tally = (key) => { const by = {}; let n = 0; for (const t of turns) for (const l of (Array.isArray(t[key]) ? t[key] : [])) { by[l] = (by[l] ?? 0) + 1; n += 1; } return { n, by }; };
+        const spokeN = turns.reduce((a, t) => a + t.spoke.length, 0);
+        const unsaid = tally('proofUnsaid'); const heldP = tally('heldWithProof'); const heldS = tally('heldStaked');
+        const missing = turns.filter((t) => !Array.isArray(t.proofUnsaid)).length;
+        record('W. why COMPUTED but not said — REPORTED (proof unsaid on a spoken fact / held with a proof / held with a stake)', missing === 0,
+          `${spokeN} spoken facts: ${unsaid.n} carried a proof the words left out ${JSON.stringify(unsaid.by)}; held with a proof ${heldP.n} ${JSON.stringify(heldP.by)}; held with a stake ${heldS.n} ${JSON.stringify(heldS.by)}; ${missing} rows lack the field`);
+      }
       // THE PROOF LEDGER (one coach P1, 2026-10-07): Learn answers the same
       // unproven count as review. The field must be present on every row (the
       // ledger ran); the count is REPORTED — it is the P3 backlog, shrinking.
@@ -585,6 +617,9 @@ async function main() {
       const laneCount = {};
       for (const t of turns) for (const l of t.spoke) laneCount[l] = (laneCount[l] ?? 0) + 1;
       console.log('  [learn door] spoke by lane:', JSON.stringify(laneCount));
+      const tallyLanes = (key) => { const c = {}; for (const t of turns) for (const l of (t[key] ?? [])) c[l] = (c[l] ?? 0) + 1; return c; };
+      console.log('  [learn door] offered by lane:', JSON.stringify(tallyLanes('offered')));
+      console.log('  [learn door] held by lane:', JSON.stringify(tallyLanes('held')));
     }
     // LANE EVIDENCE (P4 dual-use): a lane that teaches also records. Held
     // only (a miss is recorded by the slip capture), and `prompted` is always

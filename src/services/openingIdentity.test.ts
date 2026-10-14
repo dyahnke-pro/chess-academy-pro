@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { identityFor, openingIdentityLine, setOpeningIdentity } from './openingIdentity';
+import { identityFor, openingIdentityLine, setOpeningIdentity, planFor } from './openingIdentity';
 
 const FILE = 'public/data/opening-identity.json';
 
@@ -12,7 +12,7 @@ describe('openingIdentity', () => {
     const before = readFileSync(FILE, 'utf8');
     execFileSync(process.execPath, ['scripts/build-opening-identity.mjs'], { stdio: 'ignore' });
     expect(readFileSync(FILE, 'utf8')).toBe(before);
-  }, 120_000);
+  }, 300_000); // the builder runs mastersPlanRead per opening (~45 s alone)
 
   it('Alekhine: provokes the pawn at the knight, from the student\'s seat', () => {
     const asBlack = openingIdentityLine('Alekhine Defense', 'b', 'seat');
@@ -66,5 +66,17 @@ describe('openingIdentity', () => {
   it('famous games are over-the-board masters only', () => {
     const all = Object.values(JSON.parse(readFileSync(FILE, 'utf8')) as Record<string, { famous: Array<{ event: string | null }> }>);
     for (const r of all) for (const g of r.famous) expect(g.event ?? '').not.toMatch(/chess\.com|lichess|blitz|bullet|rapid/i);
+  });
+});
+
+describe('the line keeps its master plan (2026-10-14)', () => {
+  beforeAll(() => { setOpeningIdentity(JSON.parse(readFileSync(FILE, 'utf8'))); });
+  it('the French Advance stores Black\'s …c5 break with its share', () => {
+    const p = planFor('French Defense: Advance Variation');
+    expect(p?.black?.san).toBe('c5');
+    expect(p?.black?.share).toBeGreaterThan(0.9);
+  });
+  it('a sub-line with no plan of its own reads its nearest named parent', () => {
+    expect(planFor('French Defense: Advance Variation, Some Unknown Sub-line')?.black?.san).toBe('c5');
   });
 });

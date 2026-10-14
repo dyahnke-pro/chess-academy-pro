@@ -65,6 +65,13 @@ export function piecePoints(piece: string): number {
  *  stakes contribute nothing — the caller falls back to the tie table. */
 export function stakeValue(s: FactStakes | null | undefined): number | null {
   if (!s || !(s.points > 0)) return null;
+  // A FORCED MATE DECIDES THE GAME HOWEVER FAR AWAY IT IS (Learn walk
+  // 2026-10-14: "Critical moment — only one move limits the damage. … Bd6 was
+  // a blunder — it let them force mate in 12": the mate in 12 was discounted
+  // over 23 plies to 1,059 and lost the lead to a 3-point gap). It ranks above
+  // every material stake; among mates the nearer one leads. A mate THREAT the
+  // other side can still answer keeps the distance discount.
+  if (s.mate?.forced) return STAKED_FLOOR + MATE_POINTS * 100 - Math.max(0, s.plies);
   return STAKED_FLOOR + s.points * 100 * STAKE_DISCOUNT ** Math.max(0, s.plies);
 }
 

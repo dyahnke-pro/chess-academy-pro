@@ -432,11 +432,15 @@ describe('GameChapterPage', () => {
     await act(async () => {
       fireEvent.click(screen.getByTestId('hint-button'));
     });
-    expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '3');
+    // Awaited with the same budget as every step above: under load the tier
+    // bump lands after `act` returns (rel run 2026-10-14 — passes alone).
+    await waitFor(() => {
+      expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '3');
+    }, { timeout: 10_000 });
     await waitFor(() => {
       expect(screen.getByTestId('chapter-hint-text')).toBeInTheDocument();
-    });
-  });
+    }, { timeout: 10_000 });
+  }, 20_000); // the test itself needs the room its 10s waits ask for (2026-10-14)
 
   it('correct puzzle move shows success feedback', async () => {
     renderChapterPage();

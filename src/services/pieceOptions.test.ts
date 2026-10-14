@@ -153,3 +153,40 @@ describe('pieceOptions — a piece that cannot move', () => {
     expect(a?.lines).toEqual([]);
   });
 });
+
+describe('a finished board is read off the board, never the engine (Learn walk 2026-10-14)', () => {
+  // White rook a2 guards a3 against the knight on b5; White's played move,
+  // Qd8, is back-rank mate. The engine scores a mated position as mate-in-0
+  // for the side to move — which read as the MOVER being mated, so the mate
+  // scored worst: "So yes — Ra1 was better than Qd8#".
+  const MATE_FEN = '6k1/5ppp/8/1n6/8/P7/R7/3Q2K1 w - - 0 1';
+  const engine: PvEngine = {
+    analyzePosition: (fen: string): Promise<StockfishAnalysis> => {
+      const mated = new Chess(fen).isCheckmate();
+      return Promise.resolve({
+        bestMove: '', evaluation: 0, isMate: mated, mateIn: mated ? 0 : null, depth: 12,
+        topLines: [], nodesPerSecond: 0,
+      });
+    },
+  };
+  it('the mating move is never called worse than a rook shuffle', async () => {
+    expect(new Chess(MATE_FEN).move('Qd8#')).toBeTruthy();
+    const a = await computePieceOptions({ fen: MATE_FEN, pieceSquare: 'a2', seat: 'opponent', studentColor: 'black', playedUci: 'd1d8', engine });
+    expect(a).not.toBeNull();
+    expect(a!.playedSan).toBe('Qd8#');
+    expect(a!.facts).not.toMatch(/So yes/);
+    expect(a!.facts).toMatch(/Qd8# was checkmate/);
+  });
+});
+
+describe('the best square was the move played (Learn walk 2026-10-14)', () => {
+  it('never compares a move with itself', () => {
+    const text = renderPieceOptions({
+      seat: 'opponent', piece: 'r', from: 'd1', duty: [], narrowedBy: 'all',
+      options: [{ san: 'Rd2', moverCp: 20, refutation: null, line: { label: 'Rd2', startFen: FEN, plies: [] } }],
+      playedSan: 'Rd2', playedCp: 20, allMoves: 9,
+    });
+    expect(text).not.toMatch(/Rd2 was about as good as Rd2/);
+    expect(text).toMatch(/So Rd2 was the right square/);
+  });
+});

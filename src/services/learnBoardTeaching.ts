@@ -35,8 +35,8 @@ import { falseAlarm } from './falseAlarm';
 import { theirMoveCost } from './theirMoveCost';
 import { pushOrHold } from './pushOrHold';
 import { threatAnswer, type ThreatAnswer } from './threatAnswer';
-import { mastersPlanLine, mastersPlanRead } from './mastersPlanRead';
-import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
+import { mastersPlanLine, mastersPlanRead, type MastersPlanRead } from './mastersPlanRead';
+import { mastersMovesSync } from './masterPlayLookup';
 import { tempoCount } from './tempoCount';
 import { readTiming, timingClause } from './moveTiming';
 import { checkMethod } from './checkMethod';
@@ -59,7 +59,11 @@ import type { TacticType } from '../types';
 import { countMethod } from './countMethod';
 import { splitPosition } from './splitPosition';
 import { planChoice, type PlanChoiceLine } from './planChooser';
-import { openingIdentityLine, warmOpeningIdentity } from './openingIdentity';
+import { openingIdentityLine, planFor, warmOpeningIdentity } from './openingIdentity';
+// The Learn page reaches the opening facts through this module, never directly
+// (surfaceComposition): the warm-up and the opening's length in plies.
+export { warmOpeningIdentity } from './openingIdentity';
+export { OPENING_PLIES } from './principleAttribution';
 import { trapAheadAt } from './gemCrushLines';
 import { noteTrapMeeting, trapSpeaks, type TrapState } from './trapLearning';
 import { ruledOutSans, extractMentionedSanSpans } from './arrowEngine';
@@ -652,12 +656,21 @@ export function threatAnswerTeaching(i: {
   return threatAnswer({ fen: i.fen, squares: i.squares, bestUci: i.bestUci, studentCp, student: i.student, ply: i.ply, shape: i.shape, namesMove: false });
 }
 
+/** THE PLAN LEARN READS (2026-10-14). The live walk over the masters file
+ *  when another surface already has it in memory — it reads THIS board — and
+ *  otherwise the line's own plan, computed by the same `mastersPlanRead` at
+ *  build time (`opening-identity.json`). Learn never loads the 37 MB file for
+ *  it: that parse is the memory spike a phone kills the app for, and the plan
+ *  lane was offered zero times in a Learn game while it waited on it. */
+function learnPlanRead(fen: string, openingName: string | null): MastersPlanRead | null {
+  return mastersPlanRead(fen, mastersMovesSync) ?? (openingName ? planFor(openingName) : null);
+}
+
 /** THE OPENING'S PLAN, COMPUTED FROM MASTER GAMES (WO-TEACH-GAPS P2 #0): the
  *  pawn break each side's master games go for from this board, with its share.
  *  Warms the masters file on first call; silent until it has loaded. */
-export function openingPlanTeaching(fen: string, student: 'w' | 'b'): TeachingHint | null {
-  void ensureMastersDbLoaded();
-  const plan = mastersPlanLine(mastersPlanRead(fen, mastersMovesSync), student);
+export function openingPlanTeaching(fen: string, student: 'w' | 'b', openingName: string | null): TeachingHint | null {
+  const plan = mastersPlanLine(learnPlanRead(fen, openingName), student);
   if (!plan) return null;
   return {
     lane: 'openingIdea', proof: NO_PROOF.description, text: plan.text, squares: plan.squares, claims: plan.squares.map((q) => `break-${q}`),
@@ -731,8 +744,8 @@ export function prizeTeaching(fen: string, square: string, student: 'w' | 'b'): 
 
 /** The student's own master-game break at `fen` (the one `openingPlanTeaching`
  *  names), for the opening summary later. */
-export function openingBreakFor(fen: string, student: 'w' | 'b'): { san: string; square: string } | null {
-  const read = mastersPlanRead(fen, mastersMovesSync);
+export function openingBreakFor(fen: string, student: 'w' | 'b', openingName: string | null): { san: string; square: string } | null {
+  const read = learnPlanRead(fen, openingName);
   const mine = read ? (student === 'w' ? read.white : read.black) : null;
   return mine ? { san: mine.san, square: mine.square } : null;
 }

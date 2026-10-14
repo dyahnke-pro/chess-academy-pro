@@ -28,8 +28,9 @@ import { emitLearnTurn } from './coachDecisionEvents';
 import { COMPUTER_ROLES } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
-import { stakeValue, STAKED_FLOOR, mateStakes, type FactStakes } from './factStakes';
+import { stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
 import { sameClaim } from './factSelector';
+import type { FacetRole } from './reviewFacetRank';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
 export type { SpokenLine, DrawnLine } from './voicePackage';
 export type { VoicePackage, VoiceFactKind } from './voicePackage';
@@ -56,6 +57,7 @@ export type LearnLane =
   | 'positionFacts'
   | 'priorityFirst'
   | 'rejectedTempting'
+  | 'bookMove'
   | 'planArc'
   | 'drawback'
   | 'mistake'
@@ -137,7 +139,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   foundMove: 'affirm', heldMove: 'affirm', slipAnswer: 'affirm', movePoint: 'affirm', moveIntent: 'affirm', recapture: 'affirm', kingAttack: 'affirm',
   ruleException: 'affirm', fileRace: 'affirm', trade: 'affirm', timing: 'affirm', strongChoice: 'affirm',
   falseAlarm: 'affirm', tempo: 'affirm', pushOrHold: 'affirm',
-  mistake: 'but', drawback: 'but', fundamental: 'but', register: 'but', rejectedTempting: 'but', kneeJerk: 'but',
+  mistake: 'but', drawback: 'but', fundamental: 'but', register: 'but', rejectedTempting: 'but', kneeJerk: 'but', bookMove: 'but',
   moveOrder: 'refute', causalChain: 'refute',
   theirPurpose: 'their', theirIntent: 'their', theirMoveCost: 'their', coachMistake: 'their', gap: 'their',
   tactic: 'point', planArc: 'point', structureJudgement: 'point', openingIdea: 'point', structure: 'point', pieceQuality: 'point',
@@ -191,6 +193,9 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // PROPHYLAXIS (census rank 2): the quiet move that stops their pin or kick before it lands.
   prophylaxis: { kind: 'computed', why: 'the quiet move that stops their next pin or kick before it lands', lead: 66 },
   rejectedTempting: { kind: 'computed', why: 'the tempting move and its refutation', lead: 66 },
+  // The book move the student left, named with the job it does on the board
+  // and what their move left undone (bookMoveWhy) — the "but" of their move.
+  bookMove: { kind: 'computed', why: 'the book move the student left, with the job it does on the board', lead: 64 },
   // Behind the walkability check (2026-09-29): walk 2 heard 3 false lines in 4
   // — routes read off one engine line the CURRENT board cannot walk. Learn
   // filters aims through planArc.aimWalkableNow, and a student plan the
@@ -308,6 +313,13 @@ export interface LaneFact {
   claims?: readonly string[];
   /** What rides on it (`factStakes`) — the door orders by this first. */
   stakes?: FactStakes;
+  /** TEACH OR DESCRIBE, from the ONE role table (`FACT_ROLE`) over the fact's
+   *  own kind, when the producer knows it. A lane can carry both — the
+   *  position-facts lane carries rules ("a king left in the middle gets caught
+   *  the moment the center opens") beside plain descriptions — so the fact's
+   *  role decides, and the lane is only the fallback (David 2026-10-13: "the
+   *  deciding computer needs to value why statements over others"). */
+  role?: FacetRole;
   /** ITS PROOF, OR WHY IT NEEDS NONE — REQUIRED (root cause, David
    *  2026-10-07): a producer that cannot answer this cannot speak. */
   proof: FactProof;
@@ -409,6 +421,18 @@ export function decideTurn(
     return f ? facts.find((x) => x.lane === lane && x.text.trim() && (x.text === f.text || fadeWhenGreen(x.lane, x.text, green ?? null) === f.text))?.stakes : undefined;
   };
   const stakeOf = (lane: LearnLane, text: string): number => stakeValue(stakesOf(lane, text)) ?? 0;
+  // The fact's own role (`LaneFact.role`), read the same way as its stakes.
+  const roleOf = (lane: LearnLane, text: string): FacetRole | undefined => {
+    const f = open.find((o) => o.lane === lane && (o.text === text || o.text.includes(text)));
+    return f ? facts.find((x) => x.lane === lane && x.text.trim() && (x.text === f.text || fadeWhenGreen(x.lane, x.text, green ?? null) === f.text))?.role : undefined;
+  };
+  /** A fact that TEACHES — its role says so, or (no role) its lane is not a
+   *  board description. A teaching fact is a reason, never "an aside". */
+  const teaches = (x: { fact: VoiceFact; lane: LearnLane }): boolean => {
+    const r = roleOf(x.lane, x.fact.text);
+    if (r) return r === 'teach';
+    return !(LEARN_LANES[x.lane].lead <= DESCRIPTION_LEAD || x.lane === 'positionFacts');
+  };
   const value = (x: { fact: VoiceFact; lane: LearnLane }): number => stakeOf(x.lane, x.fact.text) || LEARN_LANES[x.lane].lead;
   // ONE CLAIM, ONE SEAT (unity U6, Learn walk #26: the d5 pawn was "a
   // discovered attack in waiting" for them AND "pinned by your rook" — one
@@ -459,8 +483,8 @@ export function decideTurn(
   // allowed mate in 6 was said between a weak-pawn lecture and "the scare is
   // empty"). A fact staked at a forced mate makes every fact that is neither
   // danger nor itself a mate wait for a calm board.
-  const mateValue = stakeValue(mateStakes('you', 12, true)) ?? Infinity;
-  const isMateFact = (x: { fact: VoiceFact; lane: LearnLane }): boolean => stakeOf(x.lane, x.fact.text) >= mateValue;
+  // A forced mate, whoever's and however far — read off the stake's own flag.
+  const isMateFact = (x: { fact: VoiceFact; lane: LearnLane }): boolean => !!stakesOf(x.lane, x.fact.text)?.mate?.forced;
   const mateTurn = survivors.some((x) => !subsumed.has(x) && isMateFact(x));
   const verdict = survivors.find((x) => x.lane === 'mistake' && !subsumed.has(x)) ?? null;
   const keep: VoiceFact[] = [];
@@ -482,7 +506,7 @@ export function decideTurn(
     // board described where he explains the move (hand walks 2026-09-30).
     // Everything staked or teaching speaks, however many there are.
     const describes = x !== ownLead && stakeOf(x.lane, x.fact.text) === 0 && !(beginner && BEGINNER_ALWAYS.has(x.lane))
-      && (LEARN_LANES[x.lane].lead <= DESCRIPTION_LEAD || x.lane === 'positionFacts');
+      && !teaches(x);
     const sq = x.fact.squares ?? [];
     const restates = describes && !(sq.some((q) => anchor.includes(q)) && sq.some((q) => !anchor.includes(q)));
     // A DANGER TURN STAYS ON THE DANGER (prod tape 2026-10-06: a hanging queen
@@ -502,7 +526,11 @@ export function decideTurn(
     // (shares a square) nor must ride speaks when it is IMPORTANT: at least a
     // pawn at stake (`factStakes`, discounted by distance). Five such facts,
     // five sentences; a pile of small asides waits.
-    const important = stakeOf(x.lane, x.fact.text) >= STAKED_FLOOR + 100;
+    // A REASON IS IMPORTANT TOO (David 2026-10-13: "the deciding computer
+    // needs to value why statements over others"): a fact whose role is to
+    // teach is the why of the turn, so it is never held as a mere aside — the
+    // descriptions above give way instead.
+    const important = stakeOf(x.lane, x.fact.text) >= STAKED_FLOOR + 100 || (roleOf(x.lane, x.fact.text) === 'teach');
     const aside = !!ownLead && x !== ownLead && !DANGER_LANES.has(x.lane)
       && LEARN_LANES[x.lane].always !== true && !(beginner && BEGINNER_ALWAYS.has(x.lane))
       && !sq.some((q) => anchor.includes(q)) && !important;
@@ -517,9 +545,14 @@ export function decideTurn(
     const lane = laneFor(f);
     return lane ? BEAT_ORDER[DNA_BEAT[lane]] : BEAT_ORDER.point;
   };
+  // THE NAME FRAMES THE TURN (2026-10-14): "You left the book with Nf3" is
+  // the context the book move's why is about, so a NAME-beat fact speaks with
+  // the lead's tier and the beat order puts it first — never after the reason
+  // that explains it. Danger still comes before everything.
   const tier = (f: VoiceFact): number => {
     const lane = laneFor(f);
     if (lane && DANGER_LANES.has(lane)) return 0;
+    if (lane && DNA_BEAT[lane] === 'name') return 1;
     return ownLead && f === ownLead.fact ? 1 : 2;
   };
   const worth = (f: VoiceFact): number => { const lane = laneFor(f); return lane ? value({ fact: f, lane }) : 0; };
@@ -544,9 +577,23 @@ export function decideTurn(
     if (isProof(src.proof)) proofOf.set(k.text, src.proof);
     else if (src.proof && src.proof.none === 'stated' && lane && !unprovenLanes.includes(lane)) unprovenLanes.push(lane);
   }
+  // THE WHY THAT WAS COMPUTED AND NOT SAID — measured, never decided here.
+  const proofUnsaid: LearnLane[] = [];
+  for (const k of keep) {
+    const p = proofOf.get(k.text); const lane = laneFor(k);
+    if (p && lane && p.short && !k.text.includes(p.short) && !proofUnsaid.includes(lane)) proofUnsaid.push(lane);
+  }
+  const heldWithProof: LearnLane[] = [];
+  const heldStaked: LearnLane[] = [];
+  for (const x of survivors) {
+    if (keep.includes(x.fact)) continue;
+    const src = open.find((o) => o.lane === x.lane && (o.text === x.fact.text || o.text.includes(x.fact.text)));
+    if (isProof(src?.proof) && !heldWithProof.includes(x.lane)) heldWithProof.push(x.lane);
+    if (stakeOf(x.lane, x.fact.text) > 0 && !heldStaked.includes(x.lane)) heldStaked.push(x.lane);
+  }
   // EMIT every decision (the algo-audit rule): a door whose decisions cannot be
   // inspected can only be judged by reading the tape.
-  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes] });
+  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked] });
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
 }
 

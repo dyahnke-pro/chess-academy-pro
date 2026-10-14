@@ -207,7 +207,11 @@ const VERDICT_WITHOUT_BETTER: Partial<Record<FundamentalId, (f: Facts) => string
   'ignored-pin-pressure': (f) => (Number(f.played) === 1
     ? `Your ${f.piece} on ${f.square} is pinned to the ${f.behind} on ${f.behindSq}, and they piled on with ${f.pile} — a pinned piece can't run.`
     : `Your ${f.piece} on ${f.square} is pinned to the ${f.behind} on ${f.behindSq}, and ${f.pile} piles on it — a pinned piece can't run.`),
-  'ignored-threat': (f) => `Their threat first: ${f.threat} was already on — ${f.line}, and the ${f.piece} on ${f.square} goes — and this move doesn't stop it.`,
+  // Both shapes, as the full verdict has them (Learn walk 2026-10-13: a plain
+  // hanging piece has no `line`, and this said "undefined was already on").
+  'ignored-threat': (f) => (f.line && f.threat
+    ? `Their threat first: ${f.threat} was already on — ${f.line}, and the ${f.piece} on ${f.square} goes — and this move doesn't stop it.`
+    : `Their threat first: the ${f.piece} on ${f.square} was already attacked, and this move doesn't deal with it — they take it next.`),
 };
 
 /** Whether this fundamental's verdict can be spoken without its better move. */

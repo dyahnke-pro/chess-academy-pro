@@ -26,6 +26,8 @@ import { obligationLifted, obligationLiftedLine } from './obligationLifted';
 import { findQueenGrabTraps, queenGrabTrapLine, queenGrabTrapProof } from './queenGrabTrap';
 import { provenThreatLine, threatStakes } from './threatProof';
 import { trappedOnBoard } from './reviewTeachingPoints';
+import { bookDeparture } from './bookDeparture';
+import { bookMoveWhy } from './bookMoveWhy';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { planThreadTurn, type PlanThread } from './planThread';
 import { geometryReads, type GeometryContext } from './tacticGeometry';
@@ -75,6 +77,9 @@ export interface BoardContexts {
   obligationLifted: { fenBefore: string; fenAfter: string; student: Color };
   /** A capture that looks free and leaves the queen with no safe square. */
   queenGrabTrap: { fen: string };
+  /** The book move the student just left, with the job it does on the board
+   *  (the student's own departure, the move it happened or the reply after). */
+  bookMove: { history: readonly string[]; student: Color };
   /** The student's queen or rook attacked with no safe square. */
   trapped: { fen: string; student: Color };
   /** A threat warning, with the cost it claims proven on the board. */
@@ -180,6 +185,26 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       return { text: obligationLiftedLine(o), proof: NO_PROOF.description, squares: [o.square, o.from, o.to], key: `lifted:${o.square}` };
     }),
     surfaces: { learn: LEARN, review: { not: 'owed — Review reads the student move, not the reply that freed it' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
+  },
+  bookMove: {
+    // THEORY IS KNOWLEDGE, NOT A FIND (David 2026-10-14): once the student has
+    // left the book, the book move is named with its job on the board
+    // (`bookMoveWhy`) and what their move left undone. No job → no line.
+    read: ({ history, student }) => safe(() => {
+      const dep = bookDeparture(history);
+      if (!dep || dep.mover !== student || !dep.mainSan || history.length - dep.ply > 1) return null;
+      const w = bookMoveWhy(dep.fen, dep.mainSan, dep.san, student);
+      if (!w) return null;
+      return { text: w.text, proof: squaresProof(w.text, w.squares) ?? NO_PROOF.stated, squares: [...w.squares], key: `book-move:${dep.ply}:${dep.san}` };
+    }),
+    surfaces: {
+      learn: LEARN,
+      review: { not: 'owed — Review names the book move on its own departure line; the job read is parity owed' },
+      play: PLAY_ASK,
+      chat: CHAT_OWED,
+      tactics: { not: 'a puzzle has no book departure' },
+      weaknesses: { not: 'owed — the departure row (bookDepartureWeakness) could carry the job' },
+    },
   },
   queenGrabTrap: {
     read: ({ fen }) => safe(() => {

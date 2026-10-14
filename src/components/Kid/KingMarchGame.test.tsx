@@ -191,7 +191,7 @@ describe('KingMarchGame', () => {
     await waitFor(() => {
       expect(screen.getByText(/Level 2 of 3/)).toBeInTheDocument();
     });
-  });
+  }, 20_000); // several async levels: alone in ms, beside the full suite over 5s (2026-10-14)
 
   it('shows complete phase after all 3 levels', async () => {
     render(<KingMarchGame />);
@@ -228,7 +228,7 @@ describe('KingMarchGame', () => {
       expect(screen.getByTestId('march-complete')).toBeInTheDocument();
     });
     expect(screen.getByText('All Levels Complete!')).toBeInTheDocument();
-  });
+  }, 20_000); // several async levels: alone in ms, beside the full suite over 5s (2026-10-14)
 
   it('has restart button', async () => {
     render(<KingMarchGame />);

@@ -80,3 +80,14 @@ describe('resolveGameOutcome / opponentName', () => {
     expect(opponentName(g, 'black')).toBe('alice');
   });
 });
+
+describe('the default profile name is not an identity (2026-10-14)', () => {
+  it('"Player" never matches an opponent called chessplayer99', () => {
+    const g = buildGameRecord({ source: 'import', white: 'chessplayer99', black: 'someone', studentSide: undefined });
+    expect(resolvePlayerColor(g, { profileName: 'Player' })).toBeNull();
+  });
+  it('a name the student set still matches', () => {
+    const g = buildGameRecord({ source: 'import', white: 'Magnus', black: 'DavidY', studentSide: undefined });
+    expect(resolvePlayerColor(g, { profileName: 'DavidY' })).toBe('black');
+  });
+});

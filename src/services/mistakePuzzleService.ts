@@ -22,6 +22,8 @@ import {
 import { getOpeningNameByEco } from './openingDetectionService';
 import { isTheoryLine } from './bookDeparture';
 import { isFixtureGame } from './fixtureGames';
+import { resolvePlayerColor } from './playerIdentity';
+import { useAppStore } from '../stores/appStore';
 import { playedAtMs, type WeaknessProvenance } from './weaknessSpine';
 import { capEval } from './accuracyService';
 import { verifySacrificeDeep, SAC_VERIFY_DEPTH } from './brilliancy';
@@ -343,19 +345,21 @@ export function determinePlayerColor(
   game: GameRecord,
   username?: string,
 ): 'white' | 'black' | null {
-  // THE DECLARED SEAT FIRST (`GameRecord.studentSide`, 2026-09-19) — the field
-  // that exists so no path has to guess from names. Names are the fallback.
-  if (game.studentSide === 'white' || game.studentSide === 'black') return game.studentSide;
-  if (game.source === 'coach') {
-    if (game.white === 'Stockfish Bot') return 'black';
-    if (game.black === 'Stockfish Bot') return 'white';
-    return null;
-  }
-  if (username) {
-    if (game.white.toLowerCase() === username.toLowerCase()) return 'white';
-    if (game.black.toLowerCase() === username.toLowerCase()) return 'black';
-  }
-  return null;
+  // ONE RESOLVER (`playerIdentity`, 2026-10-14). This was a fourth private copy
+  // and the narrowest: it matched only the username for the game's own site
+  // and only the literal "Stockfish Bot", so an analysed game the student
+  // pasted in (source 'import'), or a Lichess game with only a chess.com name
+  // saved, resolved to null — and the record path (`autoAnalyzeGame`) silently
+  // left it out of the student model. The declared seat still comes first
+  // (`resolvePlayerColor` reads it), and the caller's username joins the
+  // identity so an explicit handle is never lost.
+  const profile = useAppStore.getState().activeProfile;
+  const onLichess = game.source === 'lichess';
+  return resolvePlayerColor(game, {
+    chessComUsername: (!onLichess ? username : undefined) ?? profile?.preferences.chessComUsername ?? null,
+    lichessUsername: (onLichess ? username : undefined) ?? profile?.preferences.lichessUsername ?? null,
+    profileName: profile?.name ?? null,
+  });
 }
 
 // ─── Generation ─────────────────────────────────────────────────────────────
