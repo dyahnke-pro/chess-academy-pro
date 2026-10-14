@@ -299,7 +299,7 @@ export function criticalMomentStatement(read: CriticalMomentRead | null, ply: nu
     : pick([
       `Critical moment — two moves ${s}; everything else concedes.`,
       `Two moves ${s} here. The rest give it away.`,
-      `Narrow here — two moves ${s}, and nothing else does.`,
+      `Narrow here — two moves ${s}; every other move costs more.`,
       `There are exactly two moves that ${s} — the rest concede.`,
     ], ply) + lookAt(read.holdingSans);
 }

@@ -575,3 +575,13 @@ describe('one lead reason per turn — a turn never runs past TURN_WORDS (David 
     expect(d.spoke).toContain('moveIntent');
   });
 });
+
+describe('a good move always gets its own reason (David 2026-10-14)', () => {
+  it('the move\'s point speaks even when a plan leads the turn', () => {
+    const d = decideTurn([
+      { lane: 'planArc', proof: NO_PROOF.stated, text: "Their plan is taking shape: the knight's walk to e5.", fen: FEN, squares: ['e5'] },
+      { lane: 'movePoint', proof: NO_PROOF.description, text: 'That gets your last piece into the game, so your rooks can connect.', fen: FEN, squares: [] },
+    ]);
+    expect(d.spoke).toContain('movePoint');
+  });
+});

@@ -56,6 +56,7 @@ const NOT_TEACHING = [
   /^back at the board\b/i,
   /^find their targets\b/i,
   /^(find|tap) (every|each|your|the) /i,
+  /\b(?:tap|find) (?:every|each) square it can go to\b/i,
   // A question on its own line is the first half of a question-and-answer
   // pair ("So what is the answer?" ‖ "Move it — …"); the answer is measured.
   /^[^.!]*\?$/,
