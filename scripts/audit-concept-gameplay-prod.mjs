@@ -617,6 +617,9 @@ async function main() {
       const laneCount = {};
       for (const t of turns) for (const l of t.spoke) laneCount[l] = (laneCount[l] ?? 0) + 1;
       console.log('  [learn door] spoke by lane:', JSON.stringify(laneCount));
+      const tallyLanes = (key) => { const c = {}; for (const t of turns) for (const l of (t[key] ?? [])) c[l] = (c[l] ?? 0) + 1; return c; };
+      console.log('  [learn door] offered by lane:', JSON.stringify(tallyLanes('offered')));
+      console.log('  [learn door] held by lane:', JSON.stringify(tallyLanes('held')));
     }
     // LANE EVIDENCE (P4 dual-use): a lane that teaches also records. Held
     // only (a miss is recorded by the slip capture), and `prompted` is always

@@ -69,3 +69,15 @@ describe('a loud alarm is said with full weight once a game, then plainly — ne
     expect(out).not.toMatch(/^Again/);
   });
 });
+
+describe('a check is never "not yet" (Learn walk 2026-10-13)', () => {
+  it('a queen fork WITH check wins the knight whatever the king does — a piece is at stake', () => {
+    // Black king c8 in check from the queen on h8, which also hits the knight
+    // on d4; no reply blocks or saves both. Black (the student) to move.
+    expect(dangerLevel('2k4Q/8/8/8/3n4/8/8/4K3 b - - 0 1', 'b', ['c8', 'd4'])).toBe('piece');
+  });
+  it('a check whose second target can be saved gets no level — never "not urgent"', () => {
+    // The rook on d4 interposes on d8, so nothing is lost by force.
+    expect(dangerLevel('2k4Q/8/8/8/3r4/8/8/4K3 b - - 0 1', 'b', ['c8', 'd4'])).not.toBe('not-yet');
+  });
+});

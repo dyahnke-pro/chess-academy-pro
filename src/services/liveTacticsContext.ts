@@ -1,6 +1,6 @@
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { logAppAudit } from './appAuditor';
-import { countMaterial } from './positionReadingService';
+import { countMaterial, legalSeeGain } from './positionReadingService';
 import { isScenicPawnPin } from './factStakes';
 import type { PerspectiveMode } from './perspectiveRule';
 /**
@@ -32,7 +32,7 @@ import type { PerspectiveMode } from './perspectiveRule';
  * `null` and the immediate-tactics + hanging-pieces detection still
  * runs (those only need the FEN).
  */
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import type { TacticsLiveContext } from '../coach/types';
 import type { StockfishAnalysis } from '../types';
 import {
@@ -779,6 +779,17 @@ export const DANGER_OPENERS: Record<DangerLevel, readonly string[]> = {
  *  level would describe a different piece than the warning does. */
 export function dangerLevel(fen: string, student: 'w' | 'b', squares: readonly string[]): DangerLevel | null {
   try {
+    // A CHECK IS NEVER "NOT YET" (Learn walk 2026-10-13: "Check. Not urgent
+    // yet, but see it coming — their queen on h8 forks your rook and your
+    // king"). Whatever the king does, the threat then lands, so the level is
+    // what they win by force AFTER the best reply — a fork or skewer with
+    // check is invisible to a capture count taken before the king moves.
+    const now = new Chess(fen);
+    if (now.turn() === student && now.inCheck()) {
+      const lost = forcedLossAfterCheck(now, squares);
+      if (lost === null || lost < 1) return null;
+      return lost >= 5 ? 'decisive' : lost >= 3 ? 'piece' : lost >= 2 ? 'material' : 'pawn';
+    }
     const them = flipSideToMove(fen);
     if (them && new Chess(them).moves().some((m) => m.endsWith('#'))) return 'decisive';
     const md = computeMustDefend(fen, student);
@@ -788,6 +799,29 @@ export function dangerLevel(fen: string, student: 'w' | 'b', squares: readonly s
     // bishop hit by a pawn nets two (Learn tape 2026-10-07, 6.h3).
     return named.value >= 5 ? 'decisive' : named.value >= 3 ? 'piece' : named.value >= 2 ? 'material' : 'pawn';
   } catch { return null; }
+}
+
+/** What the student loses on the warning's squares by force: every legal
+ *  reply to the check, then their best capture there (legal SEE); the least
+ *  of those is what the threat wins whatever the student does. Null when the
+ *  board cannot be read. */
+function forcedLossAfterCheck(board: Chess, squares: readonly string[]): number | null {
+  const targets = squares.filter((sq) => /^[a-h][1-8]$/.test(sq) && board.get(sq as Square)?.type !== 'k');
+  if (targets.length === 0) return null;
+  let least: number | null = null;
+  for (const reply of board.moves({ verbose: true })) {
+    const b = new Chess(board.fen());
+    try { b.move(reply.san); } catch { continue; }
+    let best = 0;
+    for (const sq of targets) {
+      const p = b.get(sq as Square);
+      if (!p || p.color === b.turn()) continue;
+      best = Math.max(best, legalSeeGain(b.fen(), sq as Square));
+    }
+    least = least === null ? best : Math.min(least, best);
+    if (least === 0) break;
+  }
+  return least;
 }
 
 /** Whether a threat line was opened at a LOUD level (a piece or the game at

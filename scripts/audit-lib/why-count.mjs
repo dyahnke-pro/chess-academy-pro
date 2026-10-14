@@ -19,6 +19,9 @@ const WHY = new RegExp([
   String.raw`\b(?:a|the) rule\b`, String.raw`\bremember\b`,
   String.raw`\byou come out (?:ahead|behind)\b`, String.raw`\bthe price\b`, String.raw`\bthe danger\b`, String.raw`\bso while\b`,
   String.raw`\bcan'?t be (?:taken back|undone)\b`,
+  String.raw`\bmatters? more than\b`, String.raw`\bwould (?:just )?be taken\b`, String.raw`\bdoesn'?t work\b`, String.raw`\b(?:often )?decides\b`,
+  String.raw`\bgives? up (?:its|their|your) guard\b`, String.raw`\bonly (?:one|a single) \w+ (?:shields|guards|defends)\b`, String.raw`\bcan be taken\b`,
+  String.raw`\byou'?re (?:losing|winning|clearly worse|clearly better|worse|better) — they'?re up\b`,
   String.raw`\bwhere (?:they|you) (?:hold|have)\b`, String.raw`\bunveils\b`, String.raw`\bthey win\b`, String.raw`\byou win\b`,
 ].join('|'), 'i');
 
@@ -30,6 +33,10 @@ const NOT_TEACHING = [
   /^you're (white|black) — play /i,
   /^[a-h1-8nbrqkox+#=-]+ — your move\.?$/i,
   /^here's your game in /i,
+  /^(ready when you are|let's get to work)\b/i,
+  // A question on its own line is the first half of a question-and-answer
+  // pair ("So what is the answer?" ‖ "Move it — …"); the answer is measured.
+  /^[^.!]*\?$/,
 ];
 export function isTeachingLine(t) { return !NOT_TEACHING.some((re) => re.test(String(t).trim())); }
 

@@ -55,14 +55,19 @@ export function threatProof(fen: string, student: 'w' | 'b', squares: readonly s
   // the count went out as the why and explained nothing).
   const free = named.defenders === 0 ? computeExchangeLedger(them, [cap.san], student) : null;
   const result = free && free.settled && free.netPawns < 0 ? describeProofResult(free) : null;
-  const pts = (n: number): string => `${n} point${n === 1 ? '' : 's'}`;
-  const cheaper = named.defenders > 0 && (CAPTURE_VALUE[cap.piece] ?? 0) < (CAPTURE_VALUE[named.piece] ?? 0);
+  // In PIECES, never a point count (V3: no statistic is spoken).
+  const attackerName = PIECE_NAMES[cap.piece] ?? 'piece';
+  const targetName = PIECE_NAMES[named.piece] ?? 'piece';
+  const targetValue = CAPTURE_VALUE[named.piece] ?? 0;
+  const cheaper = named.defenders > 0 && (CAPTURE_VALUE[cap.piece] ?? 0) < targetValue;
   const net = !result && named.defenders > 0 && named.value > 0
-    ? `${cap.san} — even after you take back, they come out ${pts(named.value)} ahead`
+    ? (cheaper
+      ? `${cap.san} wins your ${targetName} for their ${attackerName}, even after you take back`
+      : named.value >= targetValue
+        ? `${cap.san} wins your ${targetName} outright — you cannot take back enough`
+        : `${cap.san} still wins material after you take back`)
     : null;
-  const why = cheaper
-    ? ` — their ${PIECE_NAMES[cap.piece] ?? 'piece'} is worth less than your ${PIECE_NAMES[named.piece] ?? 'piece'}, so the guards only win back the cheaper piece`
-    : '';
+  const why = cheaper ? ` — the guards only win back the cheaper piece` : '';
   return {
     kind: 'count', exact: true,
     short: result ? `${cap.san} — ${result}` : net ?? `attacked ${times(hits)}, ${guard}`,

@@ -29,8 +29,9 @@ describe('threatProof — the cost a threat warning claims, proven on the board'
     // hits it. Black to move. Guarded twice — and still a knight for a pawn.
     const fen = '3qk3/5ppp/5n2/6P1/8/8/8/4K3 b - - 0 1';
     const p = threatProof(fen, 'b', ['f6']);
-    expect(p?.short).toMatch(/gxf6 — even after you take back, they come out 2 points ahead/);
+    expect(p?.short).toBe('gxf6 wins your knight for their pawn, even after you take back');
+    expect(p?.short).not.toMatch(/\d+ points?/);
     expect(p?.short).not.toMatch(/guarded/);
-    expect(p?.full).toBe('gxf6 — even after you take back, they come out 2 points ahead — their pawn is worth less than your knight, so the guards only win back the cheaper piece');
+    expect(p?.full).toBe('gxf6 wins your knight for their pawn, even after you take back — the guards only win back the cheaper piece');
   });
 });
