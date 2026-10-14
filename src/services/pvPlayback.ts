@@ -7,8 +7,7 @@
  * G0/G3 by construction: the moves are the engine's PV (validated by
  * chess.js replay), the facts are board truth (chess.js + tacticsDetector +
  * boardStructure). The LLM never picks a move and never states a fact —
- * voiceFactsBatch (coachApi) phrases these bundles; `renderPlyFactLine` is
- * the deterministic fallback voice.
+ * `plyFactsSentence` renders a ply as one sentence with its mover as subject.
  *
  * R3 (PV soundness) is enforced here: the line is seeded from the STORED
  * best move when given (consistency with the shot question), and the
@@ -670,55 +669,9 @@ export async function computePvLine(
   return { plies, rootEvalCp, terminalEvalCp, delivers, closeAlternative };
 }
 
-/**
- * Deterministic per-ply narration — the offline/LLM-failure fallback voice
- * (R1: never the primary; voiceFactsBatch phrases the bundles). States only
- * computed facts; quiet plies (no facts) return null → no line spoken.
- */
-export function renderPlyFactLine(ply: Pick<PvPly, 'san' | 'facts'>): string | null {
-  const f = ply.facts;
-  const bits: string[] = [];
-  if (f.isMate) return `${ply.san} — checkmate.`;
-  if (f.captured) bits.push(`takes the ${f.captured}`);
-  if (f.isCheck) bits.push('with check');
-  if (f.promotion) bits.push(`promoting to a ${f.promotion}`);
-  if (f.tacticLanded) bits.push(patternAim(f.tacticLanded, 'ing') ?? `landing a ${tacticWord(f.tacticLanded)}`);
-  if (f.outpostGained) bits.push(`planting an outpost on ${f.outpostGained}`);
-  if (f.newPassedPawns.length > 0) bits.push(`creating a passed pawn on ${f.newPassedPawns[0]}`);
-  if (f.passedPawnsHanded.length > 0) bits.push(`leaving the other side a passed pawn on ${f.passedPawnsHanded[0]}`);
-  if (f.newOpenFiles.length > 0) bits.push(`opening the ${f.newOpenFiles[0]}-file`);
-  if (f.shieldLost > 0) bits.push('stripping the king cover');
-  if (bits.length === 0) return null;
-  return `${ply.san}, ${bits.join(', ')}.`;
-}
 
-/** One ply's fact bundle as a compact facts string — the voiceFacts input
- *  for that ply's spoken line (per-ply calls, per-ply validation). Returns
- *  null for a quiet ply (no facts → no line — silence, not filler). */
-export function plyFactsString(ply: Pick<PvPly, 'san' | 'facts'>): string | null {
-  const f = ply.facts;
-  const parts: string[] = [];
-  if (f.captured) parts.push(`captures the ${f.captured}`);
-  // The check is said ONCE, as a verb. The SAN's own "+"/"#" is read aloud as
-  // "check" too, so "The move Nh4+ check." spoke "knight to h4, check check"
-  // (review audit, prod 2026-10-13) — the mark comes off the SAN below.
-  if (f.isMate) parts.push('gives checkmate');
-  else if (f.isCheck) parts.push('gives check');
-  if (f.promotion) parts.push(`promotes to ${f.promotion}`);
-  if (f.tacticLanded) parts.push(patternAim(f.tacticLanded, 'third') ?? `lands a ${tacticWord(f.tacticLanded)}`);
-  if (f.outpostGained) parts.push(`outpost established on ${f.outpostGained}`);
-  if (f.newPassedPawns.length > 0) parts.push(`creates a passed pawn on ${f.newPassedPawns.join(', ')}`);
-  if (f.passedPawnsHanded.length > 0) parts.push(`leaves the other side a passed pawn on ${f.passedPawnsHanded.join(', ')}`);
-  if (f.newOpenFiles.length > 0) parts.push(`opens ${fileList(f.newOpenFiles)}`);
-  if (f.shieldLost > 0) parts.push(`strips ${f.shieldLost} pawn${f.shieldLost > 1 ? 's' : ''} from the king's cover`);
-  // Say "wins material" — NEVER the point count (David 2026-07-24: "we don't need
-  // to call out how many points were gained with each capture. Sounds bad").
-  if (f.materialGained >= 1) parts.push('wins material');
-  if (parts.length === 0) return null;
-  return `The move ${ply.san.replace(/[+#]$/, '')} ${parts.join(', ')}.`;
-}
 
-/** The SAME per-move facts as `plyFactsString`, but as a SUBJECT-LESS clause
+/** The SAME per-move facts as `plyFactsSentence`, but as a SUBJECT-LESS clause
  *  (no "The move X" prefix) so the caller can frame the subject — "You …" for
  *  the student, "Your opponent …" for the other side (David 2026-07-20: "always
  *  narrate both sides"). Returns e.g. "captures the knight, lands a fork, wins
@@ -814,6 +767,19 @@ export function plyFactsForMove(fenBefore: string, san: string, prev?: PrevCaptu
       captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion,
     }, prev);
 
+    return plyFactsSentence(f, mv.san, moverIsStudent);
+  } catch {
+    return null;
+  }
+}
+
+/** ONE ply's facts as a spoken sentence with its mover as the subject — "You
+ *  plant an outpost on d5", "Your opponent captures the knight, wins
+ *  material". The ONE renderer for a move inside any line: the played-out
+ *  line used a subject-less copy ("The move e6 outpost established on d5",
+ *  review audit 2026-10-14). A bare capture with nothing gained says nothing
+ *  — the board shows it. Null when there is nothing to say. */
+export function plyFactsSentence(f: PlyFacts, san: string, moverIsStudent?: boolean): string | null {
     // Don't RESTATE a bare capture the student watched happen (Narration rule
     // #3 — the board already told that story): if the only fact is the capture
     // itself, no material won and no tactical/structural consequence, stay
@@ -827,7 +793,7 @@ export function plyFactsForMove(fenBefore: string, san: string, prev?: PrevCaptu
     // "Your opponent captures" (other side) with correct verb agreement; the
     // subjectless "The move …" only when the seat isn't known (back-compat).
     const isYou = moverIsStudent === true;
-    const subject = isYou ? 'You' : moverIsStudent === false ? 'Your opponent' : `The move ${mv.san}`;
+    const subject = isYou ? 'You' : moverIsStudent === false ? 'Your opponent' : `The move ${san.replace(/[+#]$/, '')}`;
     const vb = (base: string, third: string): string => (isYou ? base : third);
     const plural = (n: number): string => (n > 1 ? 's' : '');
     const parts: string[] = [];
@@ -853,14 +819,5 @@ export function plyFactsForMove(fenBefore: string, san: string, prev?: PrevCaptu
       return `${subject} ${vb('check the king, forcing a reply and taking the initiative for a move', 'checks the king, forcing a reply and taking the initiative for a move')}.`;
     }
     return `${subject} ${parts.join(', ')}.`;
-  } catch {
-    return null;
-  }
 }
 
-/** The whole line's facts, one numbered bundle per ply (audit/debug view). */
-export function pvFactsForVoice(line: PvLine): string {
-  return line.plies
-    .map((p, i) => `${i + 1}) ${plyFactsString(p) ?? p.san}`)
-    .join('\n');
-}
