@@ -1075,8 +1075,8 @@ export function slipQuestion(
       `Ask it every move: what are they hitting? The piece on ${lostSquare} was already under attack, and that question finds it.`,
     ], stemKey)
     : rotateStem([
-      `The question that catches this is the blunder check: before you let go of the piece, ask what they can take once it lands.`,
-      `Make it the last thing you do before every move: is my move safe — what can they take after it?`,
+      `The question that catches this is the blunder check: before you let go of the piece, run CCT for them — what checks, captures and threats do they have once it lands?`,
+      `Make it the last thing you do before every move: is my move safe? Run CCT for them — their checks, captures and threats after it.`,
     ], stemKey);
   return { text, key };
 }

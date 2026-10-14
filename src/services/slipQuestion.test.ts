@@ -8,6 +8,7 @@ describe('slipQuestion — the thinking step a lost piece failed, read off the b
     const q = slipQuestion('4k3/8/8/4p3/8/5N2/8/4K3 w - - 0 1', 'd4', 'w', new Set(), 0);
     expect(q?.key).toBe('slipq:is-my-move-safe');
     expect(q?.text).toMatch(/blunder check/);
+    expect(q?.text).toMatch(/CCT/);
   });
   it('the piece was already attacked before the move: answer the danger', () => {
     // The d5 pawn already hits the bishop on c4; any other move loses it.

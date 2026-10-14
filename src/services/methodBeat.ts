@@ -155,11 +155,11 @@ export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | nul
   const forcingBar = need['forcing-scan'] === 'open' ? FORCING_CP_WHEN_NEEDED : FORCING_CP;
   if (habitIsOwed(need, 'forcing-scan') && s.bestSan && /^[^O]*[x+#]/.test(s.bestSan) && s.cpLossCp !== null && s.cpLossCp >= forcingBar) {
     return claim('forcing-scan', pick([
-      'The move you wanted was a forcing one, so start there: list the checks and the captures before anything quiet.',
+      'The move you wanted was a forcing one, so start with CCT — checks, captures, threats — before anything quiet.',
       // Was "When something is available it is usually forcing" — a sentence
       // with no subject a student could act on (review walk 2026-10-04, G2).
-      'The move that works is usually a forcing one — run the checks and captures first, then look at quiet moves.',
-      'Habit for positions like this: every check, every capture, in order, before you consider a quiet move.',
+      'The move that works is usually a forcing one — run CCT first: every check, every capture, every threat, then the quiet moves.',
+      'Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.',
     ], plyForVariety));
   }
 
@@ -352,8 +352,8 @@ export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: R
   // the recapture is obvious and the prompt is nagging.
   if (s.bestSan && /^[^O]*[x+#]/.test(s.bestSan) && isDecidingMoment(s.tier) && owed('forcing-scan')) {
     return beat('forcing-scan', [
-      'Start with the forcing moves here — every check, every capture, before you look at anything quiet.',
-      'List the checks and the captures first. Something in this position is forcing, and quiet moves can wait.',
+      'Start with CCT here — every check, every capture, every threat — before you look at anything quiet.',
+      'Run CCT first: checks, captures, threats. Something in this position is forcing, and quiet moves can wait.',
       'Scan forcing first: checks, then captures, then the quiet moves — that order is what finds a shot when there is one.',
     ], plyForVariety);
   }
