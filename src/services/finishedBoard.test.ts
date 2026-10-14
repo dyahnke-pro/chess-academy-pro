@@ -18,6 +18,8 @@ describe('a finished board is read off the board (David 2026-10-14: "the eval do
   it('stalemate is level; a live game is not finished', () => {
     expect(finishedBoardEval(STALEMATE)).toBe(0);
     expect(finishedBoardEval('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')).toBeNull();
+    // Bare kings have moves: the engine searches them (its own tests do).
+    expect(finishedBoardEval('8/8/8/4k3/8/8/8/4K3 w - - 0 1')).toBeNull();
   });
   it('every engine door asks the board first — the singleton and the review pool', () => {
     const engine = readFileSync('src/services/stockfishEngine.ts', 'utf8');

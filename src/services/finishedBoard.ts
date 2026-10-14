@@ -9,12 +9,14 @@
 import { Chess } from 'chess.js';
 import { MATE_EVAL_VALUE } from './engineConstants';
 
-/** The White-POV eval of a finished position (centipawns; mate is the bare
+/** The White-POV eval of a position with NO MOVE to search (centipawns; mate is the bare
  *  ±MATE_EVAL_VALUE sentinel — mate-in-0), or null when the game goes on. */
 export function finishedBoardEval(fen: string): number | null {
   let c: Chess;
   try { c = new Chess(fen); } catch { return null; }
   if (c.isCheckmate()) return c.turn() === 'w' ? -MATE_EVAL_VALUE : MATE_EVAL_VALUE;
-  if (c.isDraw()) return 0;
+  // Stalemate only: a dead-drawn board with moves on it (bare kings) is still
+  // searchable, and the engine reads it level on its own.
+  if (c.isStalemate()) return 0;
   return null;
 }

@@ -142,7 +142,9 @@ function stopsJob(main: Chess, played: Chess, student: Color): Omit<BookMoveWhy,
     if (legal) {
       const t2 = new Chess(m2.fen());
       t2.move(legal.san);
-      stopped = legalSeeGainOn(t2, z.to as Square) >= CAPTURE_VALUE[z.piece];
+      // Stopped when landing there now LOSES material (…h6: Bg5 hxg5 Nxg5 is
+      // a bishop for a pawn), not only when it loses the whole piece.
+      stopped = legalSeeGainOn(t2, z.to as Square) > 0;
     }
     if (!stopped) continue;
     return {
