@@ -1665,6 +1665,7 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
     const enemyWB: Color = pc.color === 'w' ? 'b' : 'w';
     const eyes: string[] = [];
     let pressed = false;
+    let pressReason: { loose: boolean; target: string } | null = null;
     for (const row of a.board()) {
       for (const cell of row) {
         if (!cell || cell.square === to) continue;
@@ -1680,7 +1681,14 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
           // now eyes your pawn on c5." spoke alone as a teaching point). Eyeing
           // a defended piece worth no more than the eyeing one is a description.
           const IV: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-          if (a.attackers(cell.square, enemyWB).length === 0 || (IV[cell.type] ?? 0) > (IV[pc.type] ?? 0)) pressed = true;
+          const loose = a.attackers(cell.square, enemyWB).length === 0;
+          const bigger = (IV[cell.type] ?? 0) > (IV[pc.type] ?? 0);
+          if ((loose || bigger) && !pressReason) {
+            // …and the pressure says WHY it is pressure (review audit
+            // 2026-10-14: the line stated the eyeing and left the reason out).
+            pressReason = { loose, target: `the ${pieceWord(cell.type)} on ${cell.square}` };
+          }
+          if (loose || bigger) pressed = true;
         }
       }
     }
@@ -1699,7 +1707,9 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
     if (fights.length) bits.push(`fights for ${andList(fights)}`);
     if (!bits.length) return null;
     if (shapeOut) shapeOut.hitsPiece = pressed;
-    return `The ${pieceWord(pc.type)} on ${to} now ${bits.join(', ')}.`;
+    const why = !pressReason ? ''
+      : pressReason.loose ? ` — nothing guards ${pressReason.target}` : ` — ${pressReason.target} is worth more than the ${pieceWord(pc.type)}`;
+    return `The ${pieceWord(pc.type)} on ${to} now ${andList(bits)}${why}.`;
   } catch {
     return null;
   }

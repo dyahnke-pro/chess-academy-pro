@@ -659,3 +659,12 @@ describe('an influence line teaches only under real pressure (review audit 2026-
     expect(shape2.hitsPiece).toBe(true);
   });
 });
+
+describe('pressure says why it is pressure (review audit 2026-10-14)', () => {
+  it('a knight hitting a loose pawn says nothing guards it', async () => {
+    const { describeMoveInfluence } = await import('./reviewFullData');
+    const before = '4k3/8/8/2p5/8/8/8/N3K3 w - - 0 1';
+    const after = '4k3/8/8/2p5/8/1N6/8/4K3 b - - 1 1';
+    expect(describeMoveInfluence(before, after, 'Nb3')).toBe('The knight on b3 now eyes the pawn on c5 and fights for d4 — nothing guards the pawn on c5.');
+  });
+});

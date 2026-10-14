@@ -99,7 +99,7 @@ const SWITCH: Record<Character, readonly string[]> = {
     'With extra material the plan simplifies: trade pieces, keep it safe, and cash in.',
   ],
   defence: [
-    'You are down material now — the job is to make it hard: keep pieces on and look for counterplay.',
+    'You are down material now — the job is to make it hard: keep pieces on, since every trade makes their extra material count for more, and look for counterplay.',
     'Behind on material, trades help them — keep the position complicated and your pieces active.',
   ],
 };

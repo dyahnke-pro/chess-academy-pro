@@ -25,6 +25,7 @@ import type { PvEngine } from './pvPlayback';
 import type { WalkableLine, WalkPly } from '../types';
 import { proofCut, describeProofResult } from './exchangeLedger';
 import { andList } from '../utils/andList';
+import { costWords } from './engineConstants';
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const MATE_CP = 100000;
@@ -297,7 +298,13 @@ export function renderPieceOptions(a: {
     if (best.san === a.playedSan) {
       // The move played IS the best square (Learn walk 2026-10-14: "Rd2 was
       // about as good as Rd2") — compared against itself it said nothing.
-      out.push(`So ${a.playedSan} was the right square — it was the move played.`);
+      // …and WHY it was: what the next-best square costs (Learn walk
+      // 2026-10-14: "So Bc3 was the right square" gave no reason).
+      const next = a.options.find((o) => o.san !== best.san);
+      const gap = next ? best.moverCp - next.moverCp : 0;
+      out.push(next && gap >= SAME_BAND_CP && best.moverCp < MATE_CP
+        ? `So ${a.playedSan} was the right square — it was the move played; the next best, ${next.san}, costs ${costWords(gap)}.`
+        : `So ${a.playedSan} was the right square — it was the move played.`);
     } else if (a.playedCp >= MATE_CP && best.moverCp < MATE_CP) {
       out.push(`So no — ${a.playedSan} was checkmate; nothing beats that.`);
     } else if (best.moverCp > a.playedCp + SAME_BAND_CP) {
