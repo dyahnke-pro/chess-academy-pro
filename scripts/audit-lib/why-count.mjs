@@ -33,6 +33,7 @@ const WHY = new RegExp([
   String.raw`\blifts the pressure\b`, String.raw`\bis worth (?:less|more) than\b`, String.raw`\btakes (?:moves|time|tempi) to\b`,
   String.raw`\bneeds? (?:a|an|the) [\w-]+(?: \w+)? to (?:reach|get|win|attack|break)\b`, String.raw`\b(?:is|are) stronger than\b`, String.raw`\bcan never (?:come|be (?:challenged|taken|kicked))\b`,
   String.raw`\bmakes them (?:commit|move|decide|spend)\b`, String.raw`\bremoves? (?:a|the|their|your) (?:defender|guard)\b`, String.raw`\bleaves (?:your|their) \w+ on [a-h][1-8] to be taken\b`,
+  String.raw`\bcosts? (?:a little|about|more than|three or four|five) (?:half a |a |two )?points?\b`, String.raw`\bhas no (?:defender|guard)\b`,
   String.raw`\b(?:is|are) safe now\b`, String.raw`\bthe guard that holds\b`, String.raw`\bsaves the \w+ from (?:your|their) \w+`,
 ].join('|'), 'i');
 

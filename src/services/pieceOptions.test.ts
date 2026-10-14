@@ -189,4 +189,15 @@ describe('the best square was the move played (Learn walk 2026-10-14)', () => {
     expect(text).not.toMatch(/Rd2 was about as good as Rd2/);
     expect(text).toMatch(/So Rd2 was the right square/);
   });
+  it('says what the next-best square costs, so the verdict has a reason', () => {
+    const text = renderPieceOptions({
+      seat: 'student', piece: 'b', from: 'd2', duty: [], narrowedBy: 'escape',
+      options: [
+        { san: 'Bc3', moverCp: 120, refutation: null, line: { label: 'Bc3', startFen: FEN, plies: [] } },
+        { san: 'Be3', moverCp: 20, refutation: null, line: { label: 'Be3', startFen: FEN, plies: [] } },
+      ],
+      playedSan: 'Bc3', playedCp: 120, allMoves: 9,
+    });
+    expect(text).toMatch(/So Bc3 was the right square — it was the move played; the next best, Be3, costs about a point\./);
+  });
 });

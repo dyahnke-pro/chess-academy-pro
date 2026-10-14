@@ -203,7 +203,7 @@ import { moveOrderArrows } from '../../services/moveOrderArrows';
 import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead';
 
 import { scaleGap, packageForRegister } from '../../services/hintRegister';
-import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine } from '../../services/lookaheadPlan';
+import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine, pinConsequence } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
@@ -8418,6 +8418,11 @@ export function CoachTeachPage(): JSX.Element {
             // move; "have a look" withheld it — walk 1500, 21.Rab1/38.Ne3).
             ? withTransfer(t.description ? seatedTacticLine(word, t.description, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b') : `You have a ${word}: on ${t.squares.join(', ')}.`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifLastSpoken))
             : null;
+          // A pin says what it holds (Learn audit 2026-10-14).
+          if (tacticLine && t.type === 'pin') {
+            const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b');
+            if (holds) tacticLine = `${tacticLine} ${holds}`;
+          }
           if (word) { pendingMotif = { type: t.type, instance, moveNo }; tacticTailType = t.type; }
           myTacticType = word ? t.type : null;
           if (word) tacticSquares = t.squares.filter((sq) => /^[a-h][1-8]$/.test(sq));
