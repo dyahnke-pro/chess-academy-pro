@@ -57,7 +57,7 @@
  */
 import { linesWithStats } from './audit-lib/spoken-stats.mjs';
 import { linesWithBuriedMate } from './audit-lib/mate-leads.mjs';
-import { whyTally } from './audit-lib/why-count.mjs';
+import { whyTally, formulaRepeats, longLines, TURN_WORDS_MAX } from './audit-lib/why-count.mjs';
 import { chromium } from 'playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
@@ -554,8 +554,15 @@ async function main() {
     record('V3. no statistic is spoken — a reason, never a percentage, a point count or "N of M"', statLines.length === 0, `${statLines.length} line(s)${statLines.length ? ` — ${statLines[0].slice(0, 120)}` : ''}`);
     // WHY STATEMENTS ARE PREVALENT AND NUMEROUS (David 2026-10-13).
     const why = whyTally(tape, studentMoves);
-    record('V5. why statements are prevalent (90% of teaching lines give a reason) and numerous (≥1 per student move)', why.prevalent && why.numerous,
+    record('V5. why statements clear the floor (80% of teaching lines give a reason) and are numerous (≥1 per student move)', why.prevalent && why.numerous,
       `${why.withWhy}/${why.lines} teaching lines carry a why (${Math.round(why.share * 100)}%), ${why.whySentences} why sentences over ${studentMoves} student moves = ${why.perMove.toFixed(1)}/move${why.whyless.length ? ` — whyless e.g. "${why.whyless.slice(0, 3).join('" | "').slice(0, 260)}"` : ''}`);
+    // REASON VARIETY (David 2026-10-14): no reason formula said more than
+    // twice in one game — the third "nothing's defending it" is a template.
+    const formulas = games.flatMap((g) => formulaRepeats(g));
+    record('V7. no reason formula is said more than twice in a game', formulas.length === 0, `${formulas.length} formula(s)${formulas.length ? ` — ${formulas.map((f) => `${f.count}× "${f.formula.slice(0, 90)}"`).join(' | ').slice(0, 300)}` : ''}`);
+    // TURN LENGTH: one lead reason per turn, never a stack that buries it.
+    const long = longLines(tape);
+    record(`V8. no turn runs past ${TURN_WORDS_MAX} words (one lead reason per turn)`, long.length === 0, `${long.length} line(s)${long.length ? ` — longest ${Math.max(...long.map((t) => t.split(/\s+/).length))}w: "${long[0].slice(0, 140)}"` : ''}`);
     const buried = linesWithBuriedMate(tape);
     record('V4. a forced mate leads its line (never behind a lesson)', buried.length === 0, `${buried.length} line(s)${buried.length ? ` — ${buried[0].slice(0, 160)}` : ''}`);
     record('V2. words per student move REPORTED (his speed runs: ~35–50)', true, `${words} words over ${studentMoves} student moves = ${Math.round(words / studentMoves)}/move; longest line ${Math.max(0, ...tape.map((t) => t.split(/\s+/).length))}w`);
@@ -571,6 +578,17 @@ async function main() {
     if (turns.length > 0) {
       const bad = turns.filter((t) => t.spoke.some((l) => !t.offered.includes(l)) || (t.lead !== null && !t.spoke.includes(t.lead)));
       record('LD2. every spoken lane was offered, and the lead spoke', bad.length === 0, `${bad.length} malformed of ${turns.length}`);
+      // EVERY STUDENT MOVE GETS ITS OWN REASON (David 2026-10-14): the door's
+      // own row says whether a lane about the student's move spoke on the
+      // turn. 'affirm' is a reason for a GOOD move — reported on its own, the
+      // gap the 2026-10-14 read found.
+      const own = turns.filter((t) => t.ownMove === 'affirm' || t.ownMove === 'but');
+      const affirm = turns.filter((t) => t.ownMove === 'affirm').length;
+      // Per TURN the door decided (one per student move it had anything to say
+      // about, across every game the run plays).
+      const ownShare = own.length / turns.length;
+      record('V6. every student move gets its own reason (≥70% of turns; good-move reasons reported)', ownShare >= 0.7,
+        `${own.length} of ${turns.length} turns (${Math.round(ownShare * 100)}%) — ${affirm} said what the move did well, ${own.length - affirm} what it gave up`);
       // THE FADE (short phrasing when green): the audit device starts with no
       // evidence, so nothing is green and NOTHING may fade until the student
       // has HELD something on this device — grey means teach. Both games share

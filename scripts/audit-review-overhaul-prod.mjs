@@ -33,7 +33,7 @@
  */
 import { linesWithStats } from './audit-lib/spoken-stats.mjs';
 import { linesWithBuriedMate } from './audit-lib/mate-leads.mjs';
-import { whyTally } from './audit-lib/why-count.mjs';
+import { whyTally, formulaRepeats, longLines, TURN_WORDS_MAX } from './audit-lib/why-count.mjs';
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { sampleRenderers, playwrightRenderers } from './audit-lib/os-sample.mjs';
@@ -1301,8 +1301,14 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     await add('VOICE no-statistic-spoken', statLines.length === 0, `${statLines.length} line(s)${statLines.length ? ` — ${statLines[0].slice(0, 120)}` : ''}`);
     // WHY STATEMENTS ARE PREVALENT AND NUMEROUS (David 2026-10-13).
     const why = whyTally(spoken().map((x) => x.text), SANS.map((_, i) => i + 1).filter(isStudentPly).length);
-    await add('VOICE why-statements-prevalent-and-numerous', why.prevalent && why.numerous,
+    await add('VOICE why-statements-clear-the-floor-and-numerous', why.prevalent && why.numerous,
       `${why.withWhy}/${why.lines} teaching lines carry a why (${Math.round(why.share * 100)}%), ${why.whySentences} why sentences = ${why.perMove.toFixed(1)} per student move${why.whyless.length ? ` — whyless e.g. "${why.whyless.slice(0, 3).join('" | "').slice(0, 260)}"` : ''}`);
+    // REASON VARIETY and TURN LENGTH (David 2026-10-14), the same two
+    // measures Learn holds.
+    const formulas = formulaRepeats(spoken().map((x) => x.text));
+    await add('VOICE no-reason-formula-said-more-than-twice', formulas.length === 0, `${formulas.length} formula(s)${formulas.length ? ` — ${formulas.map((f) => `${f.count}× "${f.formula.slice(0, 90)}"`).join(' | ').slice(0, 300)}` : ''}`);
+    const long = longLines(spoken().map((x) => x.text));
+    await add(`VOICE no-turn-past-${TURN_WORDS_MAX}-words`, long.length === 0, `${long.length} line(s)${long.length ? ` — longest ${Math.max(...long.map((t) => t.split(/\s+/).length))}w: "${long[0].slice(0, 140)}"` : ''}`);
     const buried = linesWithBuriedMate(spoken().map((x) => x.text));
     await add('VOICE forced-mate-leads-its-line', buried.length === 0, `${buried.length} line(s)${buried.length ? ` — ${buried[0].slice(0, 160)}` : ''}`);
   }

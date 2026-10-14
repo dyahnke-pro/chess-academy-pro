@@ -544,3 +544,16 @@ describe('the blunder check rides with the verdict it explains (Learn audit 2026
     expect(d.spoke).toContain('blunderCheck');
   });
 });
+
+describe('the door says whether the student\'s own move got its reason (David 2026-10-14)', () => {
+  it('an own-move lane that spoke is emitted as its DNA beat; a board read alone is null', async () => {
+    const { onLearnTurn } = await import('./coachDecisionEvents');
+    const rows: Array<{ ownMove: string | null }> = [];
+    const off = onLearnTurn((r) => rows.push(r));
+    decideTurn([{ lane: 'pieceQuality', proof: NO_PROOF.stated, text: 'Your knight on f3 attacks the pawn on e5.', fen: FEN, squares: ['f3', 'e5'] }]);
+    decideTurn([{ lane: 'coachMistake', proof: NO_PROOF.stated, text: 'I slipped there — that knight move left f7 loose.', fen: FEN }]);
+    decideTurn([{ lane: 'movePoint', proof: NO_PROOF.stated, text: 'Your knight on f3 attacks the pawn on e5, so they must guard it.', fen: FEN, squares: ['f3', 'e5'] }]);
+    off();
+    expect(rows.map((r) => r.ownMove)).toEqual([null, null, 'affirm']);
+  });
+});

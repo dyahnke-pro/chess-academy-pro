@@ -187,6 +187,11 @@ export interface LearnTurnRow {
   heldWithProof: string[];
   /** Held lanes whose fact carried a stake (a computed consequence). */
   heldStaked: string[];
+  /** THE REASON FOR THE STUDENT'S OWN MOVE (David 2026-10-14: "every student
+   *  move gets its own reason"). The DNA beat of the own-move lane that spoke:
+   *  'affirm' (what the move did well), 'but' (what it gave up), or null when
+   *  nothing on this turn spoke about the student's move. */
+  ownMove: 'affirm' | 'but' | null;
 }
 
 const learnTurnListeners = new Set<(row: LearnTurnRow) => void>();

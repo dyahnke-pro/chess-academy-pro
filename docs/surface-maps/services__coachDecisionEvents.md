@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**204 lines · 10 exports · 8 importers · 4 tests · 1 audits**
+**209 lines · 10 exports · 8 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4072) — names `coachDecisionEvents`
-- **The standard post-deploy ritual** (CLAUDE.md:6285) — names `coachDecisionEvents`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4085) — names `coachDecisionEvents`
+- **The standard post-deploy ritual** (CLAUDE.md:6298) — names `coachDecisionEvents`
 
 ## Who calls in
 
@@ -59,15 +59,17 @@
 ### `LearnTurnRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `onLearnTurn` (function) — 1 call site
+### `onLearnTurn` (function) — 2 call sites
 - `src/services/appAuditor.ts:2278`
+- `src/services/learnTurnDoor.test.ts:552`
 
 ### `emitLearnTurn` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:596`
+- `src/services/learnTurnDoor.ts:611`
 
 ## Tests
 
 - `src/services/coachDecisionEmits.test.ts`
+- `src/services/learnTurnDoor.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/proofBacklog.report.test.ts`
 - `src/test/computedOrderWired.test.ts`
