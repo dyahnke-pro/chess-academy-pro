@@ -536,6 +536,27 @@ export function buildReviewMoveTeaching(
     // said of White's a4 — a pawn still in its own half whose CONTROL reaches
     // b5 (walk 5, 2026-09-23). And no slice here either, the same G4.5 cap
     // this block's own header had already banned one clause up.
+    // A covered square TEACHES only when it takes the square from an enemy
+    // piece that could have used it (review audit 2026-10-14: "The pawn now
+    // covers b4 in their half." said nothing about why). The square is denied
+    // when landing there would lose the piece: to a pawn always, to a piece
+    // when the square is unguarded or the lander is worth more.
+    const denied = advanced
+      .filter((sq) => !chess.get(sq as Sq))
+      .map((sq) => {
+        // Guarded by a SECOND enemy piece — the lander does not guard itself.
+        const guarded = chess.attackers(sq as Sq, enemyColor).length > 1;
+        const lander = chess.attackers(sq as Sq, enemyColor)
+          .map((from) => ({ from, piece: chess.get(from as Sq) }))
+          .filter((a) => a.piece && a.piece.type !== 'p' && a.piece.type !== 'k')
+          .filter((a) => mv.piece === 'p' || !guarded || (PIECE_VAL[a.piece!.type] ?? 0) > attackerVal)[0];
+        return lander ? { sq, from: lander.from, type: lander.piece!.type } : null;
+      })
+      .filter((d): d is { sq: string; from: string; type: string } => d !== null);
+    if (denied.length) {
+      const d = denied[0];
+      return `The ${PIECE_NOUN[mv.piece]} takes ${d.sq} away from ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[d.type]} on ${d.from}.`;
+    }
     return `The ${PIECE_NOUN[mv.piece]} now covers ${list(advanced)} in ${moverIsStudent ? 'their' : 'your'} half.`;
   }
   // (e) The king — its journey IS the lesson (endgame = few pieces left → the
