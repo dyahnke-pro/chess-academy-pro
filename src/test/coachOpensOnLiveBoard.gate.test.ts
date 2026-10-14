@@ -23,3 +23,11 @@ describe('the coach opens on the live board, never the render-stable history', (
     });
   }
 });
+
+describe('a new game forgets the said-once definitions too (second-game audit 2026-10-14)', () => {
+  it('resetPerGameMemory renews the standing-fact ledger', () => {
+    const i = src.indexOf('const resetPerGameMemory = useCallback(');
+    const b = src.slice(i, src.indexOf('}, []);', i));
+    expect(b).toMatch(/standingRef\.current = createStandingFactMemory\(\);/);
+  });
+});
