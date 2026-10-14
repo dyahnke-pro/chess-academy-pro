@@ -200,6 +200,12 @@ async function playInPlace(page, listener, label) {
   }
   if (!up) {
     console.log(`[${label}] no coach move within budget`);
+    // WHAT THE PAGE SAID INSTEAD — a silent failure is unreadable (2026-10-14).
+    const msgs = await page.locator('[data-testid^="chat-message"], [data-testid="coach-message"], [data-role="assistant"]').allInnerTexts().catch(() => []);
+    const chips = await page.locator('[data-testid^="message-choice-chip-"], [data-testid^="coach-choice-chip-"]').allInnerTexts().catch(() => []);
+    console.log(`[${label}] last messages: ${JSON.stringify(msgs.slice(-4).map((m) => m.replace(/\s+/g, ' ').slice(0, 200)))}`);
+    console.log(`[${label}] chips: ${JSON.stringify(chips.map((c) => c.replace(/\s+/g, ' ').slice(0, 60)))}`);
+    await page.screenshot({ path: `${OUT_DIR}/${label}-no-start.png` }).catch(() => {});
     return { started: false, plies: 0, said: [] };
   }
 

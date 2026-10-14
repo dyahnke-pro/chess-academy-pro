@@ -2185,9 +2185,10 @@ export function CoachTeachPage(): JSX.Element {
     if (gameRef.current.history.length > 0) return;
     if (seat === 'white') { say("You're White — your move."); return; }
     say("You're Black — White opens.");
+    const startedOn = gameRef.current.fen;
     void (async () => {
-      const opener = await resolveCoachReplyMoveRef.current?.(liveFenRef.current);
-      if (opener && gameRef.current.history.length === 0 && liveFenRef.current.split(' ')[1] === 'w' && playDictatedMove(opener)) {
+      const opener = await resolveCoachReplyMoveRef.current?.(startedOn);
+      if (opener && gameRef.current.fen === startedOn && startedOn.split(' ')[1] === 'w' && playDictatedMove(opener)) {
         captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'auto-open-black', san: opener });
         say(`${opener} — your move.`);
       }
@@ -2256,12 +2257,18 @@ export function CoachTeachPage(): JSX.Element {
       say(coachOwnsLine
         ? `You're Black — White plays the ${openingName}.`
         : `You're Black — play the ${openingName}, talked through move by move. White opens.`);
+      // THE LIVE BOARD DECIDES, never the render-stable `history` (prod audit
+      // 2026-10-14: a second game in the same mount froze at the start — the
+      // reset had happened, but `history` still held game one's moves in this
+      // tick, so the coach never opened). The coach opens only if the board is
+      // still the one this game started on.
+      const startedOn = gameRef.current.fen;
       void (async () => {
-        const opener = await resolveCoachReplyMoveRef.current?.(liveFenRef.current);
+        const opener = await resolveCoachReplyMoveRef.current?.(startedOn);
         if (
           opener
-          && gameRef.current.history.length === 0
-          && liveFenRef.current.split(' ')[1] === 'w'
+          && gameRef.current.fen === startedOn
+          && startedOn.split(' ')[1] === 'w'
           && playDictatedMove(opener)
         ) {
           say(`${opener} — your move.`);
