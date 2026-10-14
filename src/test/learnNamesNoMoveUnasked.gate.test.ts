@@ -33,8 +33,10 @@ describe('Learn names no move unasked', () => {
     expect(read('services/boardComputers.ts')).toMatch(/bookMoveWhy\(dep\.fen, dep\.mainSan, dep\.san, student\)/);
     expect(read('components/Coach/CoachTeachPage.tsx')).toMatch(/lane: 'bookMove' as const/);
     const why = read('services/bookMoveWhy.ts');
-    const templates = [...why.matchAll(/The book move is/g)];
-    expect(templates.length, 'one template, and it always carries the job clause').toBe(1);
-    expect(why).toMatch(/The book move is \$\{sayMoveNoun\(mainSan, fen\)\}: \$\{job\.clause\}/);
+    // EVERY form of the sentence carries a computed job: the book move's own
+    // clause, or (no tempo handed over) the cost of the student's move.
+    const forms = why.split('\n').filter((l) => /The book move is/.test(l));
+    expect(forms.length, 'the book move is never named without a job').toBeGreaterThan(0);
+    for (const f of forms) expect(f, f.trim()).toMatch(/\$\{late\.(clause|short)\}/);
   });
 });
