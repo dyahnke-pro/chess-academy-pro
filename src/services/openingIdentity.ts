@@ -23,7 +23,11 @@ export interface IdentityFacts {
   /** `by` is the side whose move provokes the reply; `from` names the family
    *  the fact was inherited from, when this line's own move has none (the
    *  build proves the line played the reply first). */
-  provokes: null | { reply: string; share: number; kind: 'pawn-hits' | 'invites-trade' | 'takes-offered-pawn' | 'capture'; by?: 'w' | 'b'; from?: string; piece?: string; square?: string; provoked?: boolean };
+  provokes: null | { reply: string; share: number; kind: 'pawn-hits' | 'invites-trade' | 'takes-offered-pawn' | 'capture'; by?: 'w' | 'b'; from?: string; piece?: string; square?: string; provoked?: boolean;
+    /** A trade: the piece that takes back, and the masters' next move when it
+     *  attacks that piece (a tempo they gain). Absent in a file built before
+     *  2026-10-14. */
+    backPiece?: string; hitBy?: string };
   aims: Array<{ kind: 'locked-centre' | 'isolated-d-pawn' | 'fianchetto'; side?: 'w' | 'b'; advanced?: 'w' | 'b'; squares: string[] }>;
   gambit: null | { side: 'w' | 'b'; down: number; forPlies: number };
   theoryPlies: number;
@@ -147,7 +151,16 @@ export function openingIdentityLine(name: string, student: 'w' | 'b', voice: 'se
         : `The usual answer is ${reply}, putting the question to ${target}.`);
       squares.push(p.square);
     } else if (p.kind === 'invites-trade') {
-      out.push(`${it} challenges the centre at once: ${who(other)} ${shareAdverb(p.share)} ${v('take')} on ${on}, and the pawn is taken back.`);
+      // THE TRADE'S COST IS ITS WHY (Learn audit 2026-10-14: "…and the pawn is
+      // taken back" said what, never why it matters). Computed by the builder
+      // from the masters' own lines: who takes back with what, and the move
+      // that then hits it.
+      const backName = p.backPiece && p.backPiece !== 'p' ? PIECE[p.backPiece] : null;
+      const back = backName ? `${who(by)} ${v('take')} back with the ${backName}` : 'the pawn is taken back';
+      const tempo = backName && p.hitBy
+        ? ` The ${backName} is out early, so ${who(other)} ${v('gain')} time hitting it with ${sayMoveNoun(p.hitBy, null)}.`
+        : '';
+      out.push(`${it} challenges the centre at once: ${who(other)} ${shareAdverb(p.share)} ${v('take')} on ${on}, and ${back}.${tempo}`);
       squares.push(on);
     } else if (p.kind === 'takes-offered-pawn') {
       out.push(`${it} offers a pawn, and ${who(other)} ${shareAdverb(p.share)} ${v('take')} it on ${on}.`);

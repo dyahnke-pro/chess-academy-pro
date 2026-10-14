@@ -41,7 +41,7 @@ describe('openingIdentity', () => {
   // own — so the family's fact was never spoken all game (340 lines like it).
   it('a refined variation keeps its family\'s fact, naming the family', () => {
     expect(openingIdentityLine('Scandinavian Defense: Mieses-Kotroc Variation', 'b', 'seat')?.text)
-      .toMatch(/^The Scandinavian Defense challenges the centre at once: they (almost always|usually) take on d5, and the pawn is taken back\./);
+      .toMatch(/^The Scandinavian Defense challenges the centre at once: they (almost always|usually) take on d5, and you take back with the queen\. The queen is out early, so they gain time hitting it with the knight to c3\./);
     // The Lasker Variation is defined by WHITE's h3; the inherited question is
     // still Black's d5, answered by White — the seat follows the family's move.
     expect(openingIdentityLine('Scandinavian Defense: Lasker Variation', 'w', 'seat')?.text)

@@ -47,8 +47,22 @@ function replyKind(c, reply, defMove) {
     // …and "taken back" means the MASTERS take it back: the Smith-Morra's
     // Qxd4 is legal but White plays c3, so that pawn is given, not traded.
     const top = masters[key(x)]?.[0]?.san ?? '';
-    const back = x.moves({ verbose: true }).some((m) => m.to === mv.to && m.captured && m.san === top);
-    return { kind: back ? 'invites-trade' : 'takes-offered-pawn' };
+    const backMove = x.moves({ verbose: true }).find((m) => m.to === mv.to && m.captured && m.san === top);
+    if (!backMove) return { kind: 'takes-offered-pawn' };
+    // WHAT THE TRADE COSTS (2026-10-14: "they almost always take on d5, and the
+    // pawn is taken back" said what, never why). The piece that takes back, and
+    // whether the masters' usual next move attacks it there — a tempo gained.
+    x.move(backMove.san);
+    const next = masters[key(x)]?.[0]?.san ?? null;
+    let hitBy = null;
+    if (next && backMove.piece !== 'p') {
+      const y = new Chess(x.fen());
+      try {
+        const n = y.move(next);
+        if (n && !n.captured && y.attackers(backMove.to, n.color).includes(n.to)) hitBy = n.san;
+      } catch { /* not a legal master move here: no tempo claim */ }
+    }
+    return { kind: 'invites-trade', backPiece: backMove.piece, ...(hitBy ? { hitBy } : {}) };
   }
   if (mv.captured) return { kind: 'capture', piece: mv.captured };
   if (mv.piece === 'p') {
@@ -237,7 +251,14 @@ for (const [name, r] of Object.entries(out)) {
     const takeBack = r.sans[replyAt + 1];
     const tradeOk = a.provokes.kind !== 'invites-trade' || takeBack === undefined
       || (takeBack.includes('x') && bare(takeBack).slice(-2) === bare(a.provokes.reply).slice(-2));
-    if (played && tradeOk) r.provokes = { ...a.provokes, from: p };
+    if (played && tradeOk) {
+      // The family's recapture piece and tempo are claims about ITS line: a
+      // variation that took back with another piece keeps the trade, not them.
+      const backLetter = takeBack ? (/^[NBRQK]/.test(takeBack) ? takeBack[0].toLowerCase() : 'p') : null;
+      const { backPiece, hitBy, ...rest } = a.provokes;
+      r.provokes = backPiece && backLetter === backPiece ? { ...a.provokes, from: p } : { ...rest, from: p };
+      void hitBy;
+    }
     break;
   }
 }
