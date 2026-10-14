@@ -440,7 +440,7 @@ describe('GameChapterPage', () => {
     await waitFor(() => {
       expect(screen.getByTestId('chapter-hint-text')).toBeInTheDocument();
     }, { timeout: 10_000 });
-  });
+  }, 20_000); // the test itself needs the room its 10s waits ask for (2026-10-14)
 
   it('correct puzzle move shows success feedback', async () => {
     renderChapterPage();
