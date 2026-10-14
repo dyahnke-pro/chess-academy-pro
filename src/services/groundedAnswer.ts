@@ -102,7 +102,7 @@ export interface GroundedAnswer {
  *  attacked, unguarded and lost on the exchange (`findHangingPieces`), so the
  *  reason is true by construction. One wording for every surface. */
 export function ownHangingLine(pieceName: string, square: string): string {
-  return `Your ${pieceName} on ${square} is hanging — nothing guards it, so they can take it for free.`;
+  return `Your ${pieceName} on ${square} is hanging — they attack it and nothing guards it.`;
 }
 
 export function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | undefined, mover: 'white' | 'black', studentColor: 'white' | 'black' | null): string | null {

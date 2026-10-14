@@ -7,13 +7,13 @@ import { prizeTeaching } from './learnBoardTeaching';
 describe('prizeTeaching — what can be won, and the board reason why', () => {
   it('hit twice, guarded once (21.Be8: both rooks hit e8, only the queen guards it)', () => {
     const r = prizeTeaching('2krB2r/Bpp2ppp/3q4/3p4/8/2N5/PPP1Q1P1/R5K1 b - - 4 21', 'e8', 'b');
-    expect(r?.text).toBe('Their bishop on e8 is hit twice and guarded only once, so you can win it. Before you take, check what taking it allows.');
+    expect(r?.text).toBe('Their bishop on e8 is hit twice and guarded only once. Before you take, check what taking it allows.');
     expect(r?.squares).toEqual(expect.arrayContaining(['e8', 'd8', 'h8']));
   });
 
   it('a cheaper attacker: a guard does not save it (22.Qe4: the c3 knight guards, the d5 pawn hits)', () => {
     const r = prizeTeaching('2k1r2r/Bpp2ppp/3q4/3p4/4Q3/2N5/PPP3P1/R5K1 b - - 1 22', 'e4', 'b');
-    expect(r?.text).toBe('Their queen on e4 is guarded, but your pawn on d5 is worth less — a guard does not save it, so you can win it. Before you take, check what taking it allows.');
+    expect(r?.text).toBe('Their queen on e4 is guarded, but your pawn on d5 is worth less — a guard does not save it. Before you take, check what taking it allows.');
     expect(r?.squares).toEqual(['e4', 'd5']);
   });
 
