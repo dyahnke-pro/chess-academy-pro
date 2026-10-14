@@ -92,7 +92,7 @@ const FUNDAMENTAL_HOW: Record<FundamentalId, string> = {
   'ignored-guard-removal':
     'Count the guards on every piece of yours they attack. A piece held by one guard is only as safe as that guard: if they can take it or chase it, add a second defender or move the piece first.',
   'passive-when-forcing-existed':
-    'Scan forcing moves first, in order: every check, every capture, every threat. Only when none of them works do you look at quiet moves — that order is what finds shots.',
+    'Run CCT first — checks, captures, threats, in that order. Only when none of them works do you look at quiet moves — that order is what finds shots.',
   'poisoned-pawn':
     'Before taking a free pawn, ask why they let you. Play out their reply: if it comes with tempo and you end up worse coordinated, the pawn was the bait.',
   'greedy-pawn-grab':

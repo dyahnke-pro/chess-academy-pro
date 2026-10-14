@@ -50,11 +50,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `habitIsOwed` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:2738`
-- `src/services/positionFacts.ts:1035`
+- `src/services/coachFeatureService.ts:2556`
+- `src/services/positionFacts.ts:1047`
 
 ### `methodBeatFor` (function) — 45 call sites
-- `src/services/coachDecider.ts:477`
+- `src/services/coachDecider.ts:480`
 - `src/services/methodBeat.need.test.ts:19`
 - `src/services/methodBeat.need.test.ts:23`
 - `src/services/methodBeat.need.test.ts:29`
@@ -110,7 +110,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `liveHabitKey` (function) — 9 call sites
-- `src/services/learnFundamentalNarration.ts:125`
+- `src/services/learnFundamentalNarration.ts:133`
 - `src/services/methodBeat.live.test.ts:112`
 - `src/services/methodBeat.live.test.ts:119`
 - `src/services/methodSignals.test.ts:50`
@@ -136,10 +136,10 @@
 - `src/services/methodSignals.test.ts:66`
 - `src/services/methodSignals.test.ts:67`
 - `src/services/mustDefendHabit.test.ts:15`
-- `src/services/positionFacts.ts:900`
+- `src/services/positionFacts.ts:912`
 
 ### `liveMethodBeatFor` (function) — 22 call sites
-- `src/services/groundedAnswer.ts:3758`
+- `src/services/groundedAnswer.ts:3684`
 - `src/services/methodBeat.live.test.ts:15`
 - `src/services/methodBeat.live.test.ts:19`
 - `src/services/methodBeat.live.test.ts:20`

@@ -592,7 +592,10 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     if (bounded === 0) {
       text = narration?.intro ?? null;
     } else if (bounded > lastPly) {
-      text = narration?.closing ?? null;
+      // A forward tap AT the end moves nothing, so it says nothing (review
+      // audit 2026-10-14: the closing spoken three times in a row while the
+      // walk stood on the last ply). Arriving at the end still speaks it.
+      text = fromPly === bounded ? null : narration?.closing ?? null;
     } else {
       const seg = segments.find((s) => s.ply === bounded);
       const automatic = opts.navSource === 'auto' || opts.navSource === 'goForward-auto';

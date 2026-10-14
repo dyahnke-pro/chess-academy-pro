@@ -590,7 +590,7 @@ describe('the engine line decides the take-back (review walk oct3b, g2 ply 49)',
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: -273, preMoveEval: -108, costCp: 165, heardVerdict: null, classification: 'mistake', bestMoveSan: 'Nge3',
       prevCap: { square: null, capturedValue: 0 }, allSans: SANS, forcedRunStartPly: null, playedLineUci, bestLineUci: [], replyBestSan: null,
-    }).find((f) => f.startsWith('[trade]')) ?? '';
+    }).find((f) => f.startsWith('[trade]') || f.startsWith('[delta] You take')) ?? '';
   };
   it('a costly capture the line declines to take back is said as the capture, no more', () => {
     const t = facet(['d8c7', 'f2f3', 'g4f3', 'd3f3']);

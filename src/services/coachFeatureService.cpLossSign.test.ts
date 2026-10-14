@@ -32,7 +32,7 @@ function inputs(ply12: { preMoveEval: number; evaluation: number; classification
   });
 }
 
-const FORCING_BEAT = /checks and the captures|checks and captures|every check, every capture/i;
+const FORCING_BEAT = /\bCCT\b|checks and the captures|checks and captures|every check, every capture/i;
 
 describe('review — the cost handed to the door and the method beat is SIGNED, mover-POV', () => {
   it('a move that GAINED three pawns for the student earns NO forcing-scan correction', () => {

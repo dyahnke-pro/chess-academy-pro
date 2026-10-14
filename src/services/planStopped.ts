@@ -10,6 +10,7 @@
 //
 // PURE: chess.js + the plan computer's own facts (`deriveNextPlanFacts`).
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
+import { enemyKingStuckInCenter } from './reviewSacrifice';
 import { deriveNextPlanFacts, findWorstPlacedPiece, PIECE_NOUN, type PlanFact, type PlanKind } from './nextPlans';
 
 /** Their move, recovered from the two boards. */
@@ -40,8 +41,14 @@ const PROOF: Record<PlanKind, Proof> = {
   // No castling line: a king that can castle on its own move is never "stuck"
   // (`enemyKingStuckInCenter`, 2026-10-13), so this plan is never live in
   // front of a castle — announcing it there was the defect.
-  'king-attack': (plan, m) => {
-    if (m.piece === 'k') return `Their king stepped to ${m.to}, out of the open centre — the attack on it is off.`;
+  'king-attack': (plan, m, after, student) => {
+    // THE ONE STUCK-KING READER DECIDES, never "the king moved" (Learn audit
+    // 2026-10-14: Kf1 was called "out of the open centre — the attack is off"
+    // and the next plan, reading the same board, said "attack their king on f1
+    // before it gets out"). A king step that leaves it stuck is no stop.
+    if (m.piece === 'k') {
+      return enemyKingStuckInCenter(after.fen(), student) ? null : `Their king stepped to ${m.to}, out of the open centre — the attack on it is off.`;
+    }
     if (plan.file && m.piece === 'p' && m.to[0] === plan.file) return `Their pawn on ${m.to} closes the ${plan.file}-file the attack needed.`;
     return null;
   },
