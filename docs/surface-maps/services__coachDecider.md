@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**597 lines · 24 exports · 15 importers · 11 tests · 22 audits**
+**602 lines · 24 exports · 15 importers · 11 tests · 22 audits**
 
 ## Locked rules that govern this surface
 
@@ -78,7 +78,7 @@
 - `src/services/learnTurnDoor.test.ts:161`
 - `src/services/learnTurnDoor.test.ts:410`
 - `src/services/learnTurnDoor.test.ts:421`
-- `src/services/positionFacts.ts:1178`
+- `src/services/positionFacts.ts:1179`
 - `src/services/puzzleMethod.ts:41`
 
 ### `StudentContext` (interface) — 0 call sites
@@ -113,7 +113,7 @@
 ### `CoachDecision` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `decide` (function) — 71 call sites
+### `decide` (function) — 72 call sites
 - `scripts/triage-traps.mjs:36`
 - `scripts/triage-traps.mjs:48`
 - `src/components/Legal/AiConsentModal.tsx:89`
@@ -159,8 +159,9 @@
 - `src/services/coachDecider.test.ts:191`
 - `src/services/coachDecider.test.ts:197`
 - `src/services/coachDecider.test.ts:207`
-- `src/services/coachDecider.test.ts:219`
-- `src/services/coachDecider.test.ts:225`
+- `src/services/coachDecider.test.ts:222`
+- `src/services/coachDecider.test.ts:234`
+- `src/services/coachDecider.test.ts:240`
 - `src/services/coachDecisionEmits.test.ts:47`
 - `src/services/coachDecisionEmits.test.ts:54`
 - `src/services/coachDecisionEmits.test.ts:64`
@@ -197,7 +198,7 @@
 - `src/services/habitJoin.test.ts:92`
 - `src/services/habitJoin.test.ts:99`
 - `src/services/habitJoin.test.ts:100`
-- `src/services/positionFacts.ts:1046`
+- `src/services/positionFacts.ts:1047`
 
 ### `habitForCluster` (function) — 16 call sites
 - `src/services/habitJoin.test.ts:17`

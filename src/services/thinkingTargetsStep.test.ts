@@ -117,3 +117,9 @@ describe('targetsKey — a bare king is never asked for targets', () => {
     expect(targetsKey('8/5B2/1K6/4k3/8/8/8/8 b - - 0 1', () => ['f7'] as Square[])).toBeNull();
   });
 });
+
+describe('a loose piece says why it matters (prod Learn audit 2026-10-14)', () => {
+  it('the reason rides with "loose"', () => {
+    expect(targetReason('4k3/8/8/8/8/8/8/R3K3 w - - 0 1', 'a1')).toBe("The rook on a1 has no defender — it's loose, so it is the first piece a fork or a double attack goes after.");
+  });
+});

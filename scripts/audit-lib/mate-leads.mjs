@@ -9,7 +9,12 @@ export function linesWithBuriedMate(lines) {
   return lines.filter((t) => {
     const s = String(t);
     if (!MATE.test(s)) return false;
-    const first = s.split(/(?<=[.!?])\s+/)[0] ?? '';
+    // THE MOVE'S OWN ANNOUNCEMENT IS NOT A LESSON (2026-10-14: "Check. Watch
+    // out — they have mate in one…" — "Check." says what their move was, and
+    // the mate is the first thing taught). A bare "Check." / "Checkmate." is
+    // skipped; any sentence with content before the mate still counts.
+    const sents = s.split(/(?<=[.!?])\s+/);
+    const first = sents.find((x) => !/^check(mate)?[.!]?$/i.test(x.trim())) ?? '';
     return !MATE.test(first);
   });
 }

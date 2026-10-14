@@ -6453,7 +6453,7 @@ export function assembleLastGameAnswer(g: LastGameLike | null): GroundedAnswer |
 // safety logic that nothing ever read — deleted; countMaterial/
 // centralPieceCount now live alongside the rest of this file's static reads.
 // ─────────────────────────────────────────────────────────────────────────────
-import { findPieceQuality, findWeakPawns, findWeakSquares, developmentRead, kingSafetyRead, countMaterial, centralPieceCount, findColorComplexWeakness, findMinorityAttack } from './positionReadingService';
+import { findPieceQuality, goodPieceReason, findWeakPawns, findWeakSquares, developmentRead, kingSafetyRead, countMaterial, centralPieceCount, findColorComplexWeakness, findMinorityAttack } from './positionReadingService';
 import { rotateStem } from '../utils/rotateStem';
 import { isOutpost } from './outpost';
 
@@ -6833,7 +6833,9 @@ export function assemblePositionalAnswer(
     if (here && here.color === myC && here.type === type) {
       const q = quality.find((x) => x.square === sq);
       if (q) {
-        return { facts: `${q.quality === 'good' ? 'Good' : 'Bad'} — your ${word} on ${sq}: ${q.reason}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+        // The why rides with the verdict, as in Learn (2026-10-14).
+        const why = q.quality === 'good' ? goodPieceReason(q.kind) : null;
+        return { facts: `${q.quality === 'good' ? 'Good' : 'Bad'} — your ${word} on ${sq}: ${q.reason}${why ? `, and that matters because ${why}` : ''}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
       }
       const moves = mobilityMap(board, myC).get(sq) ?? 0;
       const enemy: 'w' | 'b' = myC === 'w' ? 'b' : 'w';

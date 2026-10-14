@@ -490,7 +490,12 @@ export function decide(
     const boardQuiet = provenQuiet.filter((q) => q.why === 'in-flux' || q.why === 'beside-mate').length;
     // Every live fact already heard this game: the row closed on SAY-ONCE,
     // not for want of a teaching point (G2b, prod 2026-10-06).
-    const allSaid = selection.quiet.length > 0 && selection.quiet.every((q) => q.why === 'said-already');
+    // Judged over the LIVE facts only: a fact the board vetoed before
+    // selection (in-flux, beside-mate, proven) was never a candidate, so it
+    // cannot make a said-already row read as unsupported (prod Learn audit
+    // 2026-10-14: one fact said already, one in flux, filed "unsupported").
+    const liveQuiet = selection.quiet.slice(provenQuiet.length);
+    const allSaid = liveQuiet.length > 0 && liveQuiet.every((q) => q.why === 'said-already');
     const reason = bundle.facts.length === 0 ? 'empty'
       : live.length === 0 ? (boardQuiet === provenQuiet.length ? 'board' : 'proven')
         : allSaid ? 'said-already'

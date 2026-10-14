@@ -1200,6 +1200,22 @@ export function goodPieceClause(kind: PieceQualityKind, square: string): string 
   return said[kind];
 }
 
+/** WHY a good piece is worth building around — one reason per kind, null for
+ *  the kinds that are never praised (prod Learn audit 2026-10-14: "Your rook on
+ *  d8 owns the open d-file — build your play around it." said what and never
+ *  why). Exhaustive, so a new kind must decide its reason. */
+const GOOD_PIECE_REASON: Record<PieceQualityKind, string | null> = {
+  outpost: 'a piece no pawn can chase stays there for the whole game',
+  'open-file': 'a rook needs an open file to reach their camp',
+  'semi-open-file': 'no pawn of yours stands in its way on that file',
+  'seventh-rank': 'on the seventh it attacks their pawns where they stand',
+  'bad-bishop': null,
+  'rim-knight': null,
+};
+export function goodPieceReason(kind: PieceQualityKind): string | null {
+  return GOOD_PIECE_REASON[kind];
+}
+
 export function findWeakPawns(fen: string, color: Color): { isolated: Square[]; doubled: Square[]; backward: Square[] } {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return { isolated: [], doubled: [], backward: [] }; }
