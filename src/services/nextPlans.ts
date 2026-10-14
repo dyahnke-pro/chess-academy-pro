@@ -70,6 +70,12 @@ export function mateInOneExists(chess: Chess): boolean {
   return false;
 }
 
+/** Why a piece is the worst: how many squares it can reach, said plainly
+ *  (the one wording, shared by every surface that names the worst piece). */
+export function reachWords(m: number): string {
+  return m === 0 ? 'can go nowhere' : m === 1 ? 'has one square to go to' : `has only ${m} squares to go to`;
+}
+
 /**
  * THE ONE worst-placed-piece finder (David 2026-09-15). Two copies of this
  * selection loop existed — M12's facet and `deriveNextPlans`' rescue plan — and
@@ -328,7 +334,7 @@ export function deriveNextPlanFacts(
   if (fullmove >= 10) {
     const worst = findWorstPlacedPiece(chess, studentColorWB);
     if (worst) {
-      add('worst-piece', `the plan from here is to rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}. Here's how: don't play a single attacking move until it's fixed — spend two or three tempi walking it to a square where it actually bites, because a piece doing nothing means you're effectively playing down a piece`, [worst.sq]);
+      add('worst-piece', `the plan from here is to rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}, which ${reachWords(worst.m)}. Here's how: don't play a single attacking move until it's fixed — spend two or three tempi walking it to a square where it actually bites, because a piece doing nothing means you're effectively playing down a piece`, [worst.sq]);
     }
   }
 

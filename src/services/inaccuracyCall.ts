@@ -1073,8 +1073,24 @@ export function errorWhy(args: {
   })() : undefined;
   // WALKING INTO MATE IS ITS OWN WHY — the mate is the cost, whatever the
   // centipawns read.
+  // THE MATE SAYS HOW (Learn audit 2026-10-14: "it let them force mate in 14"
+  // — a count the student cannot check and no way in). A short mate is played
+  // out; a long one names the move it starts with, and its count only where
+  // the student can still follow it (five moves or fewer).
+  const allowedMateWords = (n: number): string => {
+    try {
+      const c = new Chess(args.fenBefore); c.move(args.playedSan);
+      const opp = args.moverColor === 'white' ? 'b' : 'w';
+      const ml = mateLine(c.fen(), replyLineUci, opp, undefined, { minPlies: 1 });
+      if (ml && ml.plies.length <= 5) return `it let them force mate: ${andList(ml.sans)}`;
+      const u = replyLineUci[0];
+      const m = u ? c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }) : null;
+      const count = n > 0 && n <= 5 ? ` in ${n}` : '';
+      return m ? `it let them force mate${count}, starting with ${m.san}` : `it let them force mate${count}`;
+    } catch { return 'it let them force mate'; }
+  };
   const consequence = args.allowedMate !== null
-    ? `it let them force mate${Math.abs(args.allowedMate) > 0 ? ` in ${Math.abs(args.allowedMate)}` : ''}`
+    ? allowedMateWords(Math.abs(args.allowedMate))
     : punishment
     ? `it let them ${punishment.why}${missed ? ', and they missed it' : ''}`
     // A LOST MATE is the cost when nothing was taken (Damiano walk, 32.Rxc7).

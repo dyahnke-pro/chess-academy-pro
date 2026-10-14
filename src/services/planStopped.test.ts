@@ -55,6 +55,12 @@ describe('the second block in a row is said like a coach', () => {
     expect(line).toMatch(/wait for them to give you a mistake or a weak piece to target\.$/);
     expect(line).not.toMatch(/\b(we|our|us)\b/i);
   });
+  it('the worst piece is named WITH why it is worst — its reach on the board', () => {
+    // White's bishop on a1 is walled in by its own b2 pawn.
+    const fen = '4k3/8/8/8/8/8/1P6/B3K3 w - - 0 1';
+    const line = planStoppedLine(proof, 2, fen, 'w');
+    expect(line).toMatch(/the bishop on a1 (can go nowhere|has one square to go to|has only \d+ squares to go to)/);
+  });
   it('three: the honest verdict', () => {
     expect(planStoppedLine(proof, 3, PASSER, 'w')).toContain('the position is holding level');
   });

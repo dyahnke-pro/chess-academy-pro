@@ -407,7 +407,7 @@ export function goodInEveryBranch(fen: string, me: 'w' | 'b', lines: Lines): Rea
   if (!loose) return null;
   // ONCE A GAME (claim): the idea is the lesson; the third instance in one game
   // was a template, not teaching (Learn tape 2026-10-06, game 2).
-  return { claim: 'srr:every-branch', stakes: costStakes(choiceGap(fen, lines)) ?? pieceStakes(pb.board.get(loose as Square)?.type ?? '', 1), idea: `Your ${name(pa.move.piece)} on ${pa.move.from} has a move that works whatever they answer — the next-best choice leaves your ${name(pb.board.get(loose as Square)?.type ?? '')} on ${loose} to be taken.`, namesMove: true, text: `${cap(sayMoveClause(a, fen))} works whatever they answer — nothing of yours can be taken after it. ${b2} leaves the piece on ${loose} to be collected.`, squares: [loose] };
+  return { claim: 'srr:every-branch', stakes: costStakes(choiceGap(fen, lines)) ?? pieceStakes(pb.board.get(loose as Square)?.type ?? '', 1), idea: `Ask it of every candidate: after it, can they take anything of yours? One ${name(pa.move.piece)} move here answers no, whatever they reply — the next-best leaves your ${name(pb.board.get(loose as Square)?.type ?? '')} on ${loose} to be taken.`, namesMove: true, text: `${cap(sayMoveClause(a, fen))} works whatever they answer — nothing of yours can be taken after it. ${b2} leaves the piece on ${loose} to be collected.`, squares: [loose] };
 }
 
 /** #31 TAKE THE STING OUT: a piece of yours can be won, and the engine neither

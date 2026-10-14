@@ -2,7 +2,7 @@ import { NO_PROOF } from './proof';
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { decideTurn, LEARN_LANES, type LearnLane } from './learnTurnDoor';
-import { mateStakes } from './factStakes';
+import { costStakes, mateStakes } from './factStakes';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 const TEACH = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
@@ -504,5 +504,18 @@ describe('a forced mate leads however far away it is (Learn walk 2026-10-14)', (
     // A mate turn stays on the mate: the critical-moment line waits.
     expect(d.pkg.spoken).toBe('Bc4 was a blunder — it let them force mate in 12.');
     expect(d.held).toContain('timing');
+  });
+});
+
+describe('the turn holds decide before its lead (Learn audit 2026-10-14, LD2)', () => {
+  it('a far mate holds the board read — and the lead is the mate verdict that spoke, never the held read', () => {
+    const d = decideTurn([
+      { lane: 'checkMethod', proof: NO_PROOF.stated, text: 'Before you let go of a piece, run checks, captures and threats for them.', fen: FEN },
+      { lane: 'positionFacts', proof: NO_PROOF.stated, text: 'The centre is still closed.', fen: FEN, stakes: costStakes(300) ?? undefined },
+      { lane: 'mistake', proof: NO_PROOF.stated, text: 'Bc5 was a blunder — it let them force mate in 14.', fen: FEN, stakes: mateStakes('them', 27, true) },
+    ]);
+    expect(d.held).toContain('positionFacts');
+    expect(d.spoke).toEqual(['mistake']);
+    expect(d.lead?.lane).toBe('mistake');
   });
 });
