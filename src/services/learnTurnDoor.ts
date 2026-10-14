@@ -28,7 +28,7 @@ import { emitLearnTurn } from './coachDecisionEvents';
 import { COMPUTER_ROLES } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
-import { stakeValue, STAKED_FLOOR, mateStakes, type FactStakes } from './factStakes';
+import { stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
 import { sameClaim } from './factSelector';
 import type { FacetRole } from './reviewFacetRank';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
@@ -479,8 +479,8 @@ export function decideTurn(
   // allowed mate in 6 was said between a weak-pawn lecture and "the scare is
   // empty"). A fact staked at a forced mate makes every fact that is neither
   // danger nor itself a mate wait for a calm board.
-  const mateValue = stakeValue(mateStakes('you', 12, true)) ?? Infinity;
-  const isMateFact = (x: { fact: VoiceFact; lane: LearnLane }): boolean => stakeOf(x.lane, x.fact.text) >= mateValue;
+  // A forced mate, whoever's and however far — read off the stake's own flag.
+  const isMateFact = (x: { fact: VoiceFact; lane: LearnLane }): boolean => !!stakesOf(x.lane, x.fact.text)?.mate?.forced;
   const mateTurn = survivors.some((x) => !subsumed.has(x) && isMateFact(x));
   const verdict = survivors.find((x) => x.lane === 'mistake' && !subsumed.has(x)) ?? null;
   const keep: VoiceFact[] = [];

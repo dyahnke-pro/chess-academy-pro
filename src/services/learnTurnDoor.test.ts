@@ -493,3 +493,16 @@ describe('a REASON outranks a description (David 2026-10-13: "value why statemen
     expect(TEACH_CODE).toMatch(/c\.lines, c\.stakes, FACT_ROLE\[c\.kind\]\)/);
   });
 });
+
+describe('a forced mate leads however far away it is (Learn walk 2026-10-14)', () => {
+  it('"Bd6 was a blunder — it let them force mate in 12" leads a critical-moment line', () => {
+    const d = decideTurn([
+      { lane: 'timing', proof: NO_PROOF.stated, text: 'Critical moment — only one move limits the damage. Slow down here.', fen: FEN, stakes: { points: 3, plies: 0 } },
+      { lane: 'mistake', proof: NO_PROOF.stated, text: 'Bc4 was a blunder — it let them force mate in 12.', fen: FEN, stakes: mateStakes('them', 23, true) },
+    ]);
+    expect(d.lead?.lane).toBe('mistake');
+    // A mate turn stays on the mate: the critical-moment line waits.
+    expect(d.pkg.spoken).toBe('Bc4 was a blunder — it let them force mate in 12.');
+    expect(d.held).toContain('timing');
+  });
+});
