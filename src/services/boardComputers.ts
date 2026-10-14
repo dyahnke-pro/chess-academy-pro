@@ -14,7 +14,7 @@
 // call site — a claim with no caller fails.
 //
 // PURE: every computer here is pure; this module adds no chess of its own.
-import type { Color } from 'chess.js';
+import { Chess, type Color } from 'chess.js';
 import { NO_PROOF, squaresProof, type FactProof } from './proof';
 import type { FactStakes } from './factStakes';
 import type { SpokenLine } from './voicePackage';
@@ -52,6 +52,11 @@ export interface BoardRead {
   play?: { from: string; to: string };
   /** Lines the proof plays out, for the Show-the-line button. */
   lines?: SpokenLine[];
+  /** The board the sentence speaks of, when it is not the surface's current
+   *  one — the book move is about the position the student just left, so it is
+   *  graded there, never on the board after the reply (prod Learn audit
+   *  2026-10-14: graded after hxg4, "your bishop on g4" read as false). */
+  fen?: string;
   /** The motif the read names, in the ONE tactic vocabulary — the weakness join. */
   motif?: TacticType;
   /** The sentence names the engine's move: spoken only where a move is earned;
@@ -195,7 +200,9 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       if (!dep || dep.mover !== student || !dep.mainSan || history.length - dep.ply > 1) return null;
       const w = bookMoveWhy(dep.fen, dep.mainSan, dep.san, student);
       if (!w) return null;
-      return { text: w.text, proof: squaresProof(w.text, w.squares) ?? NO_PROOF.stated, squares: [...w.squares], key: `book-move:${dep.ply}:${dep.san}` };
+      let spokenOn: string | undefined;
+      try { const b = new Chess(dep.fen); b.move(dep.san); spokenOn = b.fen(); } catch { spokenOn = undefined; }
+      return { text: w.text, proof: squaresProof(w.text, w.squares) ?? NO_PROOF.stated, squares: [...w.squares], key: `book-move:${dep.ply}:${dep.san}`, ...(spokenOn ? { fen: spokenOn } : {}) };
     }),
     surfaces: {
       learn: LEARN,

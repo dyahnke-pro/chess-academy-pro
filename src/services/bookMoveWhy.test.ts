@@ -95,6 +95,40 @@ describe('the book-move why routes through the door on the DNA "but" beat (David
   }, 30_000);
 });
 
+describe('the book-move line is graded on the board it speaks of (prod Learn audit 2026-10-14)', () => {
+  it('after the reply took the bishop, the line still speaks — graded on the board before the reply', async () => {
+    const { __setLocalDbForTests } = await import('./masterPlayLookup');
+    const { positionFen } = await import('./masterPlayCache');
+    const { readBoard } = await import('./boardComputers');
+    const { decideTurn } = await import('./learnTurnDoor');
+    // Scandinavian: …Nc6 where Bh5 is the book, then White takes hxg4.
+    const played = ['e4', 'd5', 'exd5', 'Qxd5', 'Nc3', 'Qa5', 'd4', 'Nf6', 'Nf3', 'Bg4', 'h3', 'Nc6'];
+    const positions: Record<string, Array<{ san: string; games: number }>> = {};
+    const c = new Chess();
+    played.forEach((san, i) => {
+      positions[positionFen(c.fen())] = i === played.length - 1 ? [{ san: 'Bh5', games: 437 }] : [{ san, games: 900 }];
+      c.move(san);
+    });
+    const spokenOn = c.fen();
+    c.move('hxg4');
+    const afterReply = c.fen();
+    __setLocalDbForTests({ positions });
+    try {
+      const read = readBoard('bookMove', { history: [...played, 'hxg4'], student: 'b' });
+      expect(read?.fen).toBe(spokenOn);
+      const turn = (fen: string) => decideTurn([
+        { lane: 'bookMove', text: read!.text, fen, squares: read!.squares, claims: [read!.key], role: 'teach', proof: read!.proof },
+        { lane: 'opening', text: 'You left the book with the knight to c6.', fen: afterReply, proof: { kind: 'name' } as never },
+      ]);
+      expect(turn(read!.fen!).spoke).toContain('bookMove');
+      // The old wiring graded it on the board after the reply, and it fell.
+      expect(turn(afterReply).spoke).not.toContain('bookMove');
+    } finally {
+      __setLocalDbForTests(null);
+    }
+  }, 30_000);
+});
+
 describe('the hand-graded falsehoods of 2026-10-14 stay fixed (each failed on the old code)', () => {
   it('a guard the student\'s move took away is not a guard the book move adds', () => {
     const w = bookMoveWhy('r1bq1rk1/pppnbppp/4pn2/3p2B1/2PP4/2N1PN2/PP3PPP/2RQKB1R b K - 0 10', 'c6', 'Nb8', 'b');

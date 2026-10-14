@@ -211,6 +211,21 @@ describe('a row closed because everything was already said names THAT gate (G2b,
   });
 });
 
+describe('a fact the board vetoed does not turn a said-already row into unsupported (prod Learn audit 2026-10-14)', () => {
+  it('one fact heard already, one standing fact in flux: the row closed on say-once', () => {
+    const said = '[tactic] Your bishop on g4 pins their bishop on e2 against their queen on d1.';
+    const flux = '[loose] Your knight on c6 has nothing guarding it.';
+    const b = {
+      board: { inFlux: 'g4', mateOnBoard: false }, proofs: new Map(), facts: [said, flux],
+      squares: new Map([[said, ['a1']], [flux, ['c6']]]), alreadySaid: new Set([said]),
+    };
+    const d = decide(blunder, student, b, 'interrupt');
+    expect(d.speak).toBe(false);
+    expect(d.reason).toBe('said-already');
+    expect(d.quiet.map((q) => q.why).sort()).toEqual(['in-flux', 'said-already']);
+  });
+});
+
 describe('the proof rides through the door (one-coach P3)', () => {
   const T = '[threat] Their knight on f4 attacks your queen on g6.';
   const SQS = new Map<string, readonly string[]>([[T, ['f4', 'g6']]]);

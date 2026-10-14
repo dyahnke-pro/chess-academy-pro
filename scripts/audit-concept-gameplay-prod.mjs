@@ -693,7 +693,12 @@ async function main() {
       // (`quietBy.importance` / `quietBy.need`), never under the floor's name.
       // The `board` gate names its two mechanisms (`in-flux`, `beside-mate` —
       // coachDecider) rather than itself: more precise, same gate.
-      const filedUnder = (d) => d.reason === 'board' ? (d.quietBy?.['in-flux'] ?? 0) + (d.quietBy?.['beside-mate'] ?? 0) + (d.quietBy?.board ?? 0) : (d.quietBy?.[d.reason] ?? 0);
+      // A fact the BOARD vetoed or the student has PROVEN was taken out before
+      // any gate (coachDecider 2a/2b) and keeps that verdict on every row; the
+      // gate that closed the row owns the rest (2026-10-14: a said-already row
+      // carrying one in-flux fact read as misfiled).
+      const preGate = (d) => (d.quietBy?.['in-flux'] ?? 0) + (d.quietBy?.['beside-mate'] ?? 0) + (d.reason === 'proven' ? 0 : (d.quietBy?.proven ?? 0));
+      const filedUnder = (d) => d.reason === 'board' ? preGate(d) + (d.quietBy?.board ?? 0) : (d.quietBy?.[d.reason] ?? 0) + preGate(d);
       const misfiled = silent.filter((d) => (d.quietCount ?? 0) > 0 && filedUnder(d) !== d.quietCount);
       record(
         'G2b. every door-closed row files its facts under the gate that closed it',
