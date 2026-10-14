@@ -15,3 +15,12 @@ describe('every through-line says whose it is', () => {
     for (const e of entries) expect(e).toMatch(/\b(you|your|they|their)\b/);
   });
 });
+
+describe('the through-line is the middlegame theme, never a second whole-game story (review audit 2026-10-14)', () => {
+  it('no PHRASING entry claims "the story of this game" or "the through-line of this game"', () => {
+    const src = readFileSync(resolve(__dirname, 'reviewFullData.ts'), 'utf8');
+    const at = src.indexOf('const PHRASING: Record<string, string> = {');
+    const body = src.slice(at, src.indexOf('};', at));
+    expect(body).not.toMatch(/story of this game|through-line of this game/);
+  });
+});

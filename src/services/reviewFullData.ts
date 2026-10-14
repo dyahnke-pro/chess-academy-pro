@@ -1505,7 +1505,10 @@ export function computeMoveFacets(
  * your isolated-pawn pressure", "the bad bishop never got into the game"). We tally
  * board-true themes across every middlegame ply and name the dominant one — the
  * through-line — as the closing. Pure board-truth (G0); null when no theme recurs
- * enough to be "the story" (empty > invented).
+ * enough to be "the story" (empty > invented). It is said as the MIDDLEGAME's
+ * theme, never "the story of this game": the thesis already names the game's
+ * story, and two whole-game stories in one closing contradicted each other
+ * (review audit 2026-10-14).
  */
 export function computeThroughLine(fensAfter: string[], studentColorWB: Color | null): string | null {
   if (!studentColorWB || fensAfter.length < 12) return null;
@@ -1552,14 +1555,14 @@ export function computeThroughLine(fensAfter: string[], studentColorWB: Color | 
   if (!theme || count < Math.ceil(sampled * 0.4)) return null;
 
   const PHRASING: Record<string, string> = {
-    iqp: "the story of this game was the isolated pawn in their camp — you built the whole middlegame around pressuring it, and that's exactly the right way to play against an isolated pawn",
-    'open-file': 'the through-line of this game was the open file — you seized it and used it as the highway into their position, and controlling the only open file is what decided it',
-    outpost: 'the story of this game was your outpost — a piece planted on a square no pawn could ever challenge, quietly dominating from the middle of the board',
-    'king-hunt': 'the through-line of this game was their king caught in the centre — once it was stuck there with the files opening, the whole game became a hunt',
-    passer: 'the story of this game was your passed pawn — a long-term trump that hung over the whole middlegame and had to be watched every move',
+    iqp: "the middlegame turned on the isolated pawn in their camp — you built it around pressuring that pawn, and that's exactly the right way to play against an isolated pawn",
+    'open-file': 'the middlegame turned on the open file — you seized it and used it as the highway into their position, and controlling the only open file is what decided it',
+    outpost: 'the middlegame turned on your outpost — a piece planted on a square no pawn could ever challenge, quietly dominating from the middle of the board',
+    'king-hunt': 'the middlegame turned on their king caught in the centre — once it was stuck there with the files opening, the whole game became a hunt',
+    passer: 'the middlegame turned on your passed pawn — a long-term trump that hung over the whole middlegame and had to be watched every move',
     // Counted for the STUDENT's pair only (myB >= 2), so it says so.
-    bishops: 'the through-line of this game was your bishop pair — your two bishops raking the board, and in an open position that pair is worth more than it looks',
-    material: 'the through-line of this game was your material edge — once ahead, the job was to simplify and convert, and keeping it clean is the whole skill',
+    bishops: 'the middlegame turned on your bishop pair — your two bishops raking the board, and in an open position that pair is worth more than it looks',
+    material: 'the middlegame turned on your material edge — once ahead, the job was to simplify and convert, and keeping it clean is the whole skill',
   };
   const p = PHRASING[theme];
   return p ? `${openSentence(p)}.` : null;
