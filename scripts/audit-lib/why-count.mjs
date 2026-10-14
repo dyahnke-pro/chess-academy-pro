@@ -35,6 +35,7 @@ const WHY = new RegExp([
   String.raw`\bmakes them (?:commit|move|decide|spend)\b`, String.raw`\bremoves? (?:a|the|their|your) (?:defender|guard)\b`, String.raw`\bleaves (?:your|their) \w+ on [a-h][1-8] to be taken\b`,
   String.raw`\bcosts? (?:a little|about|more than|three or four|five) (?:half a |a |two )?points?\b`, String.raw`\bhas no (?:defender|guard)\b`,
   String.raw`\bswings the game by\b`, String.raw`\bit (?:forks|pins|skewers)\b`, String.raw`\bcosts? (?:them|you) (?:the |a |an )?\w+`,
+  String.raw`\blet (?:them|you) in\b`, String.raw`\bis open to (?:your|their) \w+`, String.raw`\bcannot move at all\b`,
   String.raw`\b(?:is|are) safe now\b`, String.raw`\bthe guard that holds\b`, String.raw`\bsaves the \w+ from (?:your|their) \w+`,
 ].join('|'), 'i');
 

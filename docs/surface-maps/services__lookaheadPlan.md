@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1669 lines · 28 exports · 18 importers · 14 tests · 0 audits**
+**1672 lines · 28 exports · 18 importers · 14 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -85,11 +85,13 @@
 - `src/services/seatedTacticLine.test.ts:19`
 - `src/services/seatedTacticLine.test.ts:23`
 
-### `pinConsequence` (function) — 4 call sites
+### `pinConsequence` (function) — 6 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8423`
+- `src/components/Coach/CoachTeachPage.tsx:8517`
 - `src/services/pinConsequence.test.ts:8`
 - `src/services/pinConsequence.test.ts:12`
 - `src/services/pinConsequence.test.ts:15`
+- `src/services/pinConsequence.test.ts:20`
 
 ### `PLAN_HORIZON` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -197,7 +199,7 @@
 - `src/services/learnWalkBlumenfeld.test.ts:183`
 
 ### `planFromUci` (function) — 35 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10380`
+- `src/components/Coach/CoachTeachPage.tsx:10385`
 - `src/services/claimTruth.manual.test.ts:129`
 - `src/services/coachLaneWiring.test.ts:35`
 - `src/services/computedVoiceAudit.report.test.ts:216`
@@ -239,8 +241,8 @@
 - `src/services/walkOct1Learn.test.ts:115`
 
 ### `aimsOf` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10393`
-- `src/components/Coach/CoachTeachPage.tsx:10397`
+- `src/components/Coach/CoachTeachPage.tsx:10398`
+- `src/components/Coach/CoachTeachPage.tsx:10402`
 - `src/services/planArc.phraseFrom.test.ts:30`
 - `src/services/planArc.phraseFrom.test.ts:31`
 - `src/services/planArc.test.ts:29`
@@ -249,8 +251,8 @@
 - `src/services/planChooser.ts:52`
 
 ### `aimWalkableNow` (re-export) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10393`
-- `src/components/Coach/CoachTeachPage.tsx:10397`
+- `src/components/Coach/CoachTeachPage.tsx:10398`
+- `src/components/Coach/CoachTeachPage.tsx:10402`
 - `src/services/planArc.phraseFrom.test.ts:19`
 - `src/services/planArc.phraseFrom.test.ts:22`
 - `src/services/planArc.test.ts:204`
@@ -264,21 +266,21 @@
 - `src/services/planArc.test.ts:256`
 - `src/services/planArc.test.ts:261`
 - `src/services/planArc.test.ts:265`
-- `src/services/planArc.ts:445`
+- `src/services/planArc.ts:459`
 - `src/services/planChoicePasserNow.test.ts:22`
 - `src/services/planChoicePasserNow.test.ts:23`
 - `src/services/planChooser.test.ts:54`
 - `src/services/planChooser.ts:50`
 
 ### `joinEmerges` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10409`
+- `src/components/Coach/CoachTeachPage.tsx:10414`
 - `src/services/planArc.test.ts:272`
 - `src/services/planArc.test.ts:279`
-- `src/services/planArc.ts:571`
+- `src/services/planArc.ts:585`
 
-### `stepArc` (re-export) — 28 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10393`
-- `src/components/Coach/CoachTeachPage.tsx:10397`
+### `stepArc` (re-export) — 30 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10398`
+- `src/components/Coach/CoachTeachPage.tsx:10402`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:97`
 - `src/services/planArc.test.ts:99`
@@ -299,12 +301,14 @@
 - `src/services/planArc.test.ts:297`
 - `src/services/planArc.test.ts:298`
 - `src/services/planArc.test.ts:301`
+- `src/services/planArc.test.ts:326`
+- `src/services/planArc.test.ts:327`
 - `src/services/planArc.truth.test.ts:12`
 - `src/services/planArc.truth.test.ts:15`
 - `src/services/planArc.truth.test.ts:22`
 - `src/services/planArc.truth.test.ts:31`
 - `src/services/planArc.truth.test.ts:36`
-- `src/services/planArc.ts:273`
+- `src/services/planArc.ts:287`
 
 ### `EMPTY_ARC` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

@@ -65,7 +65,7 @@ describe('pieceOptions — narrow to the job, refute each, give the verdict', ()
     expect(text).toMatch(/Where can their queen on f3 go and still guard e4\? Just Qg4 and Qf5\./);
     expect(text).toMatch(/Qf5\? Then O-O and Bxf5 — you win a queen for a bishop\./);
     expect(text).not.toMatch(/Qf5\? Qf5/);
-    expect(text).toMatch(/So no — moving it doesn't help; Bf3 was the better move\./);
+    expect(text).toMatch(/So no — moving it doesn't help; Bf3 was the better move, and moving it costs more than a point\./);
   });
 
   it('NEGATIVE CONTROL: not the mover\'s piece, or no piece there → no answer', async () => {
@@ -199,5 +199,13 @@ describe('the best square was the move played (Learn walk 2026-10-14)', () => {
       playedSan: 'Bc3', playedCp: 120, allMoves: 9,
     });
     expect(text).toMatch(/So Bc3 was the right square — it was the move played; the next best, Be3, costs about a point\./);
+  });
+  it('a "moving it does not help" verdict says what moving it costs', () => {
+    const text = renderPieceOptions({
+      seat: 'opponent', piece: 'q', from: 'e2', duty: ['d3'], narrowedBy: 'duty',
+      options: [{ san: 'Qd2', moverCp: -100, refutation: null, line: { label: 'Qd2', startFen: FEN, plies: [] } }],
+      playedSan: 'a4', playedCp: 100, allMoves: 9,
+    });
+    expect(text).toMatch(/a4 was the better move, and moving it costs about two points\./);
   });
 });

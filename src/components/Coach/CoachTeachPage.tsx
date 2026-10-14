@@ -8420,7 +8420,7 @@ export function CoachTeachPage(): JSX.Element {
             : null;
           // A pin says what it holds (Learn audit 2026-10-14).
           if (tacticLine && t.type === 'pin') {
-            const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b');
+            const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b', 'student');
             if (holds) tacticLine = `${tacticLine} ${holds}`;
           }
           if (word) { pendingMotif = { type: t.type, instance, moveNo }; tacticTailType = t.type; }
@@ -8512,6 +8512,11 @@ export function CoachTeachPage(): JSX.Element {
         // pins bishop on c3 against queen on a5"); whose each piece is, is the
         // board's fact and the whole point of a warning.
         threatLine = `Watch out — ${seatPieceReferences(`${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}`, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b')}.${conceptTail(t.type)}`;
+        // A pin on you says what it holds (Learn audit 2026-10-14).
+        if (t.type === 'pin') {
+          const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b', 'opponent');
+          if (holds) threatLine = `${threatLine} ${holds}`;
+        }
         // THE DANGER LEVEL, computed (`openThreatLine`): how much it costs if ignored, said first.
         threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0), learnMemRef.current.loudAlarms.size);
         threatLine = proveThreat(threatLine);
