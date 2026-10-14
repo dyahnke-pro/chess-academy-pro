@@ -4,6 +4,20 @@ import type { StockfishAnalysis, AnalysisLine } from '../types';
 import { mateEvalFor, limitStrengthElo } from './engineConstants';
 import { stockfishCache } from './stockfishCache';
 import { logAppAudit } from './appAuditor';
+import { finishedBoardEval } from './finishedBoard';
+
+/** A finished board's analysis, read off the board (`finishedBoard`): exact,
+ *  so it reports the depth asked for, and no move to search. `mateIn` stays
+ *  null — "mate in 0" has no side, the signed evaluation carries it. */
+function finishedAnalysis(fen: string, depth: number): StockfishAnalysis | null {
+  const done = finishedBoardEval(fen);
+  if (done === null) return null;
+  return {
+    bestMove: '(none)', evaluation: done, isMate: done !== 0, mateIn: null, depth,
+    topLines: [], nodesPerSecond: 0, wdl: null, seldepth: null, nodes: null, timeMs: null, hashfull: null,
+  };
+}
+
 
 type StockfishMessageHandler = (analysis: StockfishAnalysis) => void;
 type StockfishStatus = 'idle' | 'loading' | 'ready' | 'error';
@@ -1426,6 +1440,8 @@ class StockfishEngine {
     /** Internal: the question holding the engine runs through the hold. */
     bypassQuestionHold = false,
   ): Promise<StockfishAnalysis> {
+    const finished = finishedAnalysis(fen, depth);
+    if (finished) return finished;
     // FEN cache short-circuit — if we've already analyzed this exact
     // position+depth, return the cached result without invoking the
     // worker. Per-analysis `options` (e.g. Skill Level overrides) are
@@ -1976,6 +1992,8 @@ class StockfishEngine {
     depth: number,
     budgetMs: number = 300,
   ): Promise<StockfishAnalysis> {
+    const finished = finishedAnalysis(fen, depth);
+    if (finished) return finished;
     const cached = stockfishCache.get(fen, depth);
     if (cached) {
       void logAppAudit({

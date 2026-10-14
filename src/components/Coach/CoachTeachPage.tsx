@@ -16,7 +16,7 @@ import { useBoardFit } from '../../hooks/useBoardFit';
 import { characterOf, provenTacticLive, sharpGap, stepCharacter, EMPTY_CHARACTER, SHARP_GAP_CP, type CharacterState } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
-import { planFor } from '../../services/openingIdentity';
+import { planFor, warmOpeningIdentity } from '../../services/openingIdentity';
 import { createLearnMemory, markOpeningFactsSpoken, type LearnMemory } from '../../services/learnMemory';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
@@ -994,6 +994,10 @@ export function CoachTeachPage(): JSX.Element {
   // saved on the device after that — so "you left the book" is answered from
   // real master games without the 37 MB local file. Past move 20 nobody is in
   // book, so nothing is asked.
+  // WHAT EACH OPENING IS, loaded with the page (2026-10-14): warmed only when
+  // the name was first said, it was never ready for that line — the name went
+  // out bare and the departure plan (`planFor`) was missing on the same turns.
+  useEffect(() => { warmOpeningIdentity(); }, []);
   useEffect(() => {
     const fullmove = Number.parseInt(game.fen.split(' ')[5] ?? '1', 10) || 1;
     if (fullmove <= 20) warmOpeningBook(game.fen, 'coach-teach');

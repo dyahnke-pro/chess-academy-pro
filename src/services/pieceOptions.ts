@@ -294,7 +294,11 @@ export function renderPieceOptions(a: {
     }
   }
   if (best && a.playedSan && a.playedCp !== null) {
-    if (a.playedCp >= MATE_CP && best.moverCp < MATE_CP) {
+    if (best.san === a.playedSan) {
+      // The move played IS the best square (Learn walk 2026-10-14: "Rd2 was
+      // about as good as Rd2") — compared against itself it said nothing.
+      out.push(`So ${a.playedSan} was the right square — it was the move played.`);
+    } else if (a.playedCp >= MATE_CP && best.moverCp < MATE_CP) {
       out.push(`So no — ${a.playedSan} was checkmate; nothing beats that.`);
     } else if (best.moverCp > a.playedCp + SAME_BAND_CP) {
       out.push(`So yes — ${best.san} was better than ${a.playedSan}.`);
