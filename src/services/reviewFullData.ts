@@ -444,6 +444,14 @@ export function computeMoveFacets(
         facets.push(jf);
         recSquares(jf, judged.squares);
         recProof(jf, tradeProof);
+      } else if (!what || costlyGrab) {
+        // A CAPTURE WITH NOTHING COMPUTED ABOUT IT IS A DESCRIPTION (review
+        // audit 2026-10-14: "They take on d4 — that was your pawn." spoke bare,
+        // restating the board). Filed as one, with its square, so it speaks
+        // only beside a teaching point on that square (the decider's support).
+        const df = f.replace(/^\[trade\]/, '[delta]');
+        facets.push(df);
+        recSquares(df, [tradeSq]);
       } else { facets.push(f); recProof(f, tradeProof); }
     } catch { /* no trade line */ }
   } else if (influence) { const f = `[${influenceShape.hitsPiece ? 'does' : 'delta'}] ${influence}`; facets.push(f); recSquares(f, influenceSquares); }

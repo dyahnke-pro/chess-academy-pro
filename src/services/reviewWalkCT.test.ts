@@ -87,7 +87,7 @@ describe('the trade summary is the engine line\'s exchange, never a static swap 
       fenBefore, fenAfter: c.fen(), san: 'Nxc4', ply: 43, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: -74, preMoveEval: -60, costCp: null, heardVerdict: null, classification: null, bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: line, bestLineUci: [], replyBestSan: null,
-    }).filter((f) => f.startsWith('[trade]')).join(' ');
+    }).filter((f) => f.startsWith('[trade]') || f.startsWith('[delta] You take')).join(' ');
   };
   it('Nxc4 dxc4 — a knight trade, no queen', () => {
     const f = facets(['d5c4', 'b3a3', 'c6g2', 'f4e5']);
@@ -97,6 +97,9 @@ describe('the trade summary is the engine line\'s exchange, never a static swap 
   it('no engine line — the capture only, no material claim', () => {
     const f = facets([]);
     expect(f.replace('[trade]', '')).not.toMatch(/trade|win|for their/);
-    expect(f).toMatch(/You take on c4 — that was their knight/);
+    // A capture with nothing computed is a DESCRIPTION (review audit
+    // 2026-10-14): filed [delta], so it speaks only beside a teaching point.
+    expect(f).toMatch(/^\[delta\] You take on c4 — that was their knight/);
+    expect(f).not.toMatch(/\[trade\]/);
   });
 });

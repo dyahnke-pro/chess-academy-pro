@@ -348,6 +348,19 @@ describe('useReviewPlayback', () => {
     expect(result.current.currentPly).toBeLessThanOrEqual(11);
   });
 
+  it('the closing is said once — a forward tap AT the end says nothing (review audit 2026-10-14)', async () => {
+    const narration = makeNarration({ segments: [makeSegment({ ply: 1, narration: 'Only.' })], closing: 'The through-line was the open file.' });
+    const { result } = renderHook(() => useReviewPlayback({ narration, totalPlies: 1 }));
+    await waitFor(() => expect(speakRecords.length).toBe(1)); // intro
+    act(() => { result.current.goForward(); }); // ply 1
+    act(() => { result.current.goForward(); }); // the closing
+    await waitFor(() => expect(speakRecords.some((r) => r.text === 'The through-line was the open file.')).toBe(true));
+    const said = speakRecords.filter((r) => r.text === 'The through-line was the open file.').length;
+    act(() => { result.current.goForward(); });
+    act(() => { result.current.goForward(); });
+    expect(speakRecords.filter((r) => r.text === 'The through-line was the open file.').length).toBe(said);
+  });
+
   it('silent advance (ply past segments.length) speaks nothing and does not crash', async () => {
     const narration = makeNarration({
       segments: [makeSegment({ ply: 1, narration: 'Only move narrated.' })],
