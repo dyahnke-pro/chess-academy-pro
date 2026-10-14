@@ -31,7 +31,7 @@ describe('should I trade queens — the trade lane (question walk 2026-09-27)', 
       fen: BERLIN, piece: 'q', studentColor: 'white', trade: { san: 'Qxd8+', kind: 'capture' },
       bestEvalCp: 180, tradeEvalCp: 20, tradeMateIn: null, bestSan: 'Nc3', settled: true, lastMove: null,
     })?.facts ?? '';
-    expect(f).toMatch(/costs about 1\.6 points next to Nc3 — not now/);
+    expect(f).toMatch(/costs more than a point next to Nc3 — not now/);
   });
 
   it('with no queen trade on the board it says so, never a best move instead', () => {
