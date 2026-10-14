@@ -161,24 +161,17 @@ describe('buildPriorityFirst', () => {
 describe('buildInstantReplyLine', () => {
   // David 2026-08-06: "I did not like the narrations speaking the opponents
   // move… I want important teaching moments stated after opponent moves."
-  // The instant voice never announces the move — only mate/check/capture
-  // EVENTS get a call-out of their effect; quiet replies stay silent.
+  // The instant voice never announces the move — only a MATE is called out
+  // here; checks and captures are taught by the why / threat lanes.
 
   it('a quiet move is SILENT — the student watched it land', () => {
     expect(buildInstantReplyLine({ san: 'Nf3', isCheckmate: false, isCheck: false, fenAfter: '' })).toBeNull();
   });
 
-  it('a capture calls out the EFFECT, never the SAN', () => {
-    const line = buildInstantReplyLine({ san: 'Bxc6', captured: 'n', isCheckmate: false, isCheck: false, fenAfter: '' });
-    expect(line).toBe('That takes your knight.');
-    expect(line).not.toContain('Bxc6');
-  });
-
-  it('check and capture-with-check carry their own emphasis, SAN-free', () => {
-    expect(buildInstantReplyLine({ san: 'Qh5+', isCheckmate: false, isCheck: true, fenAfter: '' }))
-      .toBe('Check.');
-    expect(buildInstantReplyLine({ san: 'Qxf7+', captured: 'p', isCheckmate: false, isCheck: true, fenAfter: '' }))
-      .toBe("That takes your pawn — and it's check.");
+  it('a bare check or capture restates the board, so it says nothing (Learn audit 2026-10-14: "Check. Careful — …")', () => {
+    expect(buildInstantReplyLine({ san: 'Bxc6', captured: 'n', isCheckmate: false, isCheck: false, fenAfter: '' })).toBeNull();
+    expect(buildInstantReplyLine({ san: 'Qh5+', isCheckmate: false, isCheck: true, fenAfter: '' })).toBeNull();
+    expect(buildInstantReplyLine({ san: 'Qxf7+', captured: 'p', isCheckmate: false, isCheck: true, fenAfter: '' })).toBeNull();
   });
 
   it('checkmate outranks everything', () => {
