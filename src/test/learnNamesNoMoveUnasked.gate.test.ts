@@ -28,7 +28,10 @@ describe('Learn names no move unasked', () => {
     const ann = read('services/openingAnnouncement.ts');
     expect(ann).not.toMatch(/the usual move there was/);
     expect(ann).not.toMatch(/The book move is/);
-    expect(ann).toMatch(/bookMoveWhy\(departure\.fen, departure\.mainSan, departure\.san, studentColor\)/);
+    expect(ann).not.toMatch(/bookMoveWhy/);
+    // ONE PRODUCER, ON ITS OWN LANE: the registry reads it, Learn speaks it.
+    expect(read('services/boardComputers.ts')).toMatch(/bookMoveWhy\(dep\.fen, dep\.mainSan, dep\.san, student\)/);
+    expect(read('components/Coach/CoachTeachPage.tsx')).toMatch(/lane: 'bookMove' as const/);
     const why = read('services/bookMoveWhy.ts');
     const templates = [...why.matchAll(/The book move is/g)];
     expect(templates.length, 'one template, and it always carries the job clause').toBe(1);

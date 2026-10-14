@@ -57,6 +57,7 @@ export type LearnLane =
   | 'positionFacts'
   | 'priorityFirst'
   | 'rejectedTempting'
+  | 'bookMove'
   | 'planArc'
   | 'drawback'
   | 'mistake'
@@ -138,7 +139,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   foundMove: 'affirm', heldMove: 'affirm', slipAnswer: 'affirm', movePoint: 'affirm', moveIntent: 'affirm', recapture: 'affirm', kingAttack: 'affirm',
   ruleException: 'affirm', fileRace: 'affirm', trade: 'affirm', timing: 'affirm', strongChoice: 'affirm',
   falseAlarm: 'affirm', tempo: 'affirm', pushOrHold: 'affirm',
-  mistake: 'but', drawback: 'but', fundamental: 'but', register: 'but', rejectedTempting: 'but', kneeJerk: 'but',
+  mistake: 'but', drawback: 'but', fundamental: 'but', register: 'but', rejectedTempting: 'but', kneeJerk: 'but', bookMove: 'but',
   moveOrder: 'refute', causalChain: 'refute',
   theirPurpose: 'their', theirIntent: 'their', theirMoveCost: 'their', coachMistake: 'their', gap: 'their',
   tactic: 'point', planArc: 'point', structureJudgement: 'point', openingIdea: 'point', structure: 'point', pieceQuality: 'point',
@@ -192,6 +193,9 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // PROPHYLAXIS (census rank 2): the quiet move that stops their pin or kick before it lands.
   prophylaxis: { kind: 'computed', why: 'the quiet move that stops their next pin or kick before it lands', lead: 66 },
   rejectedTempting: { kind: 'computed', why: 'the tempting move and its refutation', lead: 66 },
+  // The book move the student left, named with the job it does on the board
+  // and what their move left undone (bookMoveWhy) — the "but" of their move.
+  bookMove: { kind: 'computed', why: 'the book move the student left, with the job it does on the board', lead: 64 },
   // Behind the walkability check (2026-09-29): walk 2 heard 3 false lines in 4
   // — routes read off one engine line the CURRENT board cannot walk. Learn
   // filters aims through planArc.aimWalkableNow, and a student plan the
@@ -541,9 +545,14 @@ export function decideTurn(
     const lane = laneFor(f);
     return lane ? BEAT_ORDER[DNA_BEAT[lane]] : BEAT_ORDER.point;
   };
+  // THE NAME FRAMES THE TURN (2026-10-14): "You left the book with Nf3" is
+  // the context the book move's why is about, so a NAME-beat fact speaks with
+  // the lead's tier and the beat order puts it first — never after the reason
+  // that explains it. Danger still comes before everything.
   const tier = (f: VoiceFact): number => {
     const lane = laneFor(f);
     if (lane && DANGER_LANES.has(lane)) return 0;
+    if (lane && DNA_BEAT[lane] === 'name') return 1;
     return ownLead && f === ownLead.fact ? 1 : 2;
   };
   const worth = (f: VoiceFact): number => { const lane = laneFor(f); return lane ? value({ fact: f, lane }) : 0; };

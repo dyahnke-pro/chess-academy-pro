@@ -20,7 +20,6 @@ import { isWaypointOpening } from './openingIdentity';
 import type { DetectedOpening } from '../types';
 import type { MastersPlanRead } from './mastersPlanRead';
 import { Chess } from 'chess.js';
-import { bookMoveWhy } from './bookMoveWhy';
 
 export interface DetectedName {
   name: string;
@@ -110,16 +109,10 @@ export function openingAnnouncement(
   const spokenIsVariation = spokenName.includes(':');
   const line = det.name.startsWith(spokenName) || !spokenIsVariation ? det.name : spokenName;
   const lineTail = line === spokenName ? '' : ` The line was the ${spoken(line)}.`;
-  const mine = departure.mover === studentColor;
-  // THE BOOK MOVE AND ITS JOB (David 2026-10-14: "it's ok to name the move if
-  // it's after it's already been played. How else do we teach the user a wrong
-  // move?" → "And the WHY behind the move!!"). Theory is knowledge, not a find:
-  // once the student has left it, the book move is named with what it does on
-  // the board and what their move left undone (`bookMoveWhy`). A tactical miss
-  // still waits for "Show me".
-  const job = mine && departure.mainSan ? bookMoveWhy(departure.fen, departure.mainSan, departure.san, studentColor) : null;
-  const why = mine ? departureAgainstPlan(departure, plan, studentColor) : null;
-  const tail = [job?.text, why].filter((x): x is string => !!x).join(' ');
+  // The book move and its job ride their own lane (`bookMove`, the "but"
+  // beat), not this sentence: the name line names, the door orders the why.
+  const why = departure.mover === studentColor ? departureAgainstPlan(departure, plan, studentColor) : null;
+  const tail = why ?? '';
   return `${who} left the book with ${sayMoveNoun(departure.san, departure.fen)}.${lineTail}${tail ? ` ${tail}` : ''}`;
 }
 
@@ -130,8 +123,8 @@ const PIECE_WORD: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook'
  * never a guess. The plan is the break master games play in this line
  * (`mastersPlanRead`). A departing piece that lands in the break pawn's path
  * blocks it; otherwise the plan still stands and is said, so leaving the book
- * is never a bare fact. The book move and its job are `bookMoveWhy`'s; what a
- * costly departure allows is the verdict lane's (`errorWhy`).
+ * is never a bare fact. The book move and its job are the `bookMove` lane's;
+ * what a costly departure allows is the verdict lane's (`errorWhy`).
  */
 export function departureAgainstPlan(departure: BookDeparture, plan: MastersPlanRead | null, studentColor: 'w' | 'b'): string | null {
   const brk = plan ? (studentColor === 'w' ? plan.white : plan.black) : null;

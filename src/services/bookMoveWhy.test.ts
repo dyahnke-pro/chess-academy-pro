@@ -58,3 +58,39 @@ describe('bookMoveWhy — the book move named, with what it DOES on the board (D
     expect(e?.text).toBe('The book move is the pawn to e4: it fights for the centre — it stands on e4 and it covers d5 — the pawn to a3 leaves d5 and e4 to them.');
   });
 });
+
+describe('the book-move why routes through the door on the DNA "but" beat (David 2026-10-14)', () => {
+  it('the registry reads it off the student\'s own departure, and the door speaks it after the name', async () => {
+    const { __setLocalDbForTests } = await import('./masterPlayLookup');
+    const { positionFen } = await import('./masterPlayCache');
+    const { readBoard } = await import('./boardComputers');
+    const { decideTurn, DNA_BEAT } = await import('./learnTurnDoor');
+    expect(DNA_BEAT.bookMove).toBe('but');
+    // SYNTHETIC counts — what is tested is the routing, not the theory: every
+    // book ply played, then Ne2 the book move where the student plays Nf3.
+    const history = ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Bb4', 'Nf3'];
+    const positions: Record<string, Array<{ san: string; games: number }>> = {};
+    const c = new Chess();
+    history.forEach((san, i) => {
+      positions[positionFen(c.fen())] = i === history.length - 1 ? [{ san: 'Ne2', games: 400 }] : [{ san, games: 900 }];
+      c.move(san);
+    });
+    __setLocalDbForTests({ positions });
+    try {
+      const read = readBoard('bookMove', { history, student: 'w' });
+      expect(read?.text).toBe('The book move is the knight to e2: it adds a second guard to your knight on c3, which their bishop on b4 pins — the knight to f3 leaves it guarded once.');
+      // Not their departure, not the student's seat: nothing.
+      expect(readBoard('bookMove', { history, student: 'b' })).toBeNull();
+      const fen = c.fen();
+      const out = decideTurn([
+        { lane: 'bookMove', text: read!.text, fen, squares: read!.squares, claims: [read!.key], role: 'teach', proof: read!.proof },
+        { lane: 'opening', text: 'You left the book with the knight to f3.', fen, proof: { kind: 'name' } as never },
+      ]);
+      expect(out.spoke).toContain('bookMove');
+      expect(out.held).not.toContain('bookMove');
+      expect(out.pkg.spoken.indexOf('You left the book')).toBeLessThan(out.pkg.spoken.indexOf('The book move is'));
+    } finally {
+      __setLocalDbForTests(null);
+    }
+  }, 30_000);
+});
