@@ -3692,7 +3692,11 @@ async function augmentWithProjections(
     if (proof.proof) {
       const net = proof.proof.ledger?.netPawns ?? 0;
       if (!proof.proof.mate && ((forSide === 'student' && net < 0) || (forSide === 'opponent' && net > 0))) return '';
-      const moves = andList(proof.proof.sans.slice(0, proof.plies));
+      // THE VOICE SAYS THE SHAPE (proof guard 2; review audit 2026-10-15): a
+      // line past three moves is its first move and its result — the arrows
+      // walk the rest on the board.
+      const said = proof.proof.sans.slice(0, proof.plies);
+      const moves = said.length <= 3 ? andList(said) : `${said[0]} and the moves that follow`;
       return proof.proof.mate ? `${moves} — and it's mate` : `${moves} — ${describeProofResult(proof.proof.ledger as NonNullable<typeof proof.proof.ledger>)}`;
     }
     // No material point settles: the line proves nothing a sentence can hold,

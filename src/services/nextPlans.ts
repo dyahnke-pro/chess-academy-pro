@@ -240,7 +240,6 @@ export function deriveNextPlanFacts(
     // The soft squares in front of a stuck king — where a sac usually lands.
     // Rook clause scales to the rooks the student actually HAS (prescription
     // gate, David 2026-07-22 — never prescribe a piece that isn't there).
-    const softSquares = enemy === 'w' ? 'd2 and f2' : 'd7 and f7';
     const rookCount = all.filter((c) => c.type === 'r' && c.color === studentColorWB).length;
     // The same four steps in fewer words (Learn audit on prod, 2026-10-13: this
     // plan alone was ~80 words of a 117-word turn, against the 35–50 bar). A
@@ -250,7 +249,7 @@ export function deriveNextPlanFacts(
       : rookCount === 1
         ? `put your rook on the open ${openCentralFile}-file, `
         : '';
-    add('king-attack', `the plan from here is to attack their king on ${enemyKing.square} before it gets out. Here's how: tuck your own king away, ${fileClause}bring pieces in with tempo, and look for a sacrifice on ${softSquares.replace(' and ', ' or ')} to strip its cover`, [enemyKing.square], openCentralFile);
+    add('king-attack', `the plan from here is to attack their king on ${enemyKing.square} before it gets out. Here's how: get your own king safe, ${fileClause}and bring pieces in with tempo — a king caught in the centre cannot hide behind its pawns`, [enemyKing.square], openCentralFile);
   }
 
   // 2. Your passed pawn → push it, HOW spelled out. The king joins the escort
@@ -303,7 +302,7 @@ export function deriveNextPlanFacts(
           : blockader
             ? `plant your ${blockader.type === 'n' ? 'knight' : 'bishop'} on ${block}, in front of it, so it can never advance`
             : `control ${block}, the square in front of it, so it can never advance`;
-    add('weak-pawn', `the plan from here is to win their weak pawn on ${weak}. Here's how: ${blockBit ? `${blockBit}; then ` : ''}stack your heavy pieces on its file and trade off its defenders one by one — every defender it needs is a piece of theirs doing nothing else`, [weak, block]);
+    add('weak-pawn', `the plan from here is to win their weak pawn on ${weak}. Here's how: ${blockBit ? `${blockBit}; then ` : ''}stack your heavy pieces on its file and trade off its defenders — each one is a piece of theirs tied to it`, [weak, block]);
   }
 
   // 4. An open file you don't yet own with a heavy piece → seize it, HOW

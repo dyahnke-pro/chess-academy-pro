@@ -1735,8 +1735,11 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
     if (fights.length) bits.push(`${fightVerb} ${andList(fights)}`);
     if (!bits.length) return null;
     if (shapeOut) shapeOut.hitsPiece = pressed;
+    // ROTATED with the fight verb (one formula, three times in a review).
+    const turnKey = to.charCodeAt(0) + Number(to[1]) + Number(fenAfter.split(' ')[5] ?? 0);
+    const looseWords = [` — nothing guards ${pressReason?.target}`, ` — ${pressReason?.target} has no guard`, `, and ${pressReason?.target} is loose`][turnKey % 3];
     const why = !pressReason ? ''
-      : pressReason.loose ? ` — nothing guards ${pressReason.target}` : ` — ${pressReason.target} is worth more than the ${pieceWord(pc.type)}`;
+      : pressReason.loose ? looseWords : ` — ${pressReason.target} is worth more than the ${pieceWord(pc.type)}`;
     return `The ${pieceWord(pc.type)} on ${to} now ${andList(bits)}${why}.`;
   } catch {
     return null;
