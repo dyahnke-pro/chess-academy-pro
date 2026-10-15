@@ -115,6 +115,10 @@ export type LearnLane =
  *  found we over-say. */
 export const DESCRIPTION_LEAD = 40;
 
+/** The habit that catches a slip — said AFTER the verdict it explains, in the
+ *  same beat, never as the turn's opener (METHOD comes last, G4.5.15). */
+const HABIT_AFTER_VERDICT: ReadonlySet<LearnLane> = new Set<LearnLane>(['blunderCheck']);
+
 export interface LaneRule {
   /** The kind the package ranks it as. */
   kind: VoiceFactKind;
@@ -588,10 +592,15 @@ export function decideTurn(
     const lane = laneFor(f);
     if (lane && DANGER_LANES.has(lane)) return 0;
     if (lane && DNA_BEAT[lane] === 'name') return 1;
+    // A habit never opens the turn, whatever its stakes (Learn tape
+    // 2026-10-15: "Blunder check before you let go of a piece…" spoke before
+    // "Castle queenside was a mistake").
+    if (lane && HABIT_AFTER_VERDICT.has(lane)) return 2;
     return ownLead && f === ownLead.fact ? 1 : 2;
   };
+  const habitLast = (f: VoiceFact): number => { const lane = laneFor(f); return lane && HABIT_AFTER_VERDICT.has(lane) ? 1 : 0; };
   const worth = (f: VoiceFact): number => { const lane = laneFor(f); return lane ? value({ fact: f, lane }) : 0; };
-  keep.sort((a, b) => tier(a) - tier(b) || beatOf(a) - beatOf(b) || worth(b) - worth(a));
+  keep.sort((a, b) => tier(a) - tier(b) || beatOf(a) - beatOf(b) || habitLast(a) - habitLast(b) || worth(b) - worth(a));
   const pkg: VoicePackage = {
     spoken: joinSpoken(keep),
     kept: keep,

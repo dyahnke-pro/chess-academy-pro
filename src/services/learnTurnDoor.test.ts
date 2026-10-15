@@ -590,3 +590,16 @@ describe('no word cap — length never decides what speaks (David 2026-10-15)', 
     expect(d.pkg.kept.map((f) => f.text)).toContain(plan);
   });
 });
+
+describe('the habit closes the turn, the verdict opens it (Learn tape 2026-10-15)', () => {
+  it('a big-stake blunder check still speaks AFTER the mistake it explains', () => {
+    const verdict = 'Castle queenside was a mistake — it cost more than a point of advantage.';
+    const habit = 'Blunder check before you let go of a piece: run CCT for them. Here the answer was your bishop on g4.';
+    const d = decideTurn([
+      { lane: 'blunderCheck', proof: NO_PROOF.stated, text: habit, fen: FEN, squares: ['g4'], stakes: costStakes(300) ?? undefined },
+      { lane: 'mistake', proof: NO_PROOF.stated, text: verdict, fen: FEN, squares: ['e8', 'c8'], stakes: costStakes(120) ?? undefined },
+    ]);
+    expect(d.pkg.spoken.indexOf('was a mistake')).toBeGreaterThanOrEqual(0);
+    expect(d.pkg.spoken.indexOf('was a mistake')).toBeLessThan(d.pkg.spoken.indexOf('Blunder check'));
+  });
+});
