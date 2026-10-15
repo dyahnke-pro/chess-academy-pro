@@ -1206,6 +1206,32 @@ export function frameTeachingForOpponent(sentence: string): string {
   return `Your opponent ${continueSentence(s)}`;
 }
 
+/** ONE LEAD REASON PER TURN for a review ply (David 2026-10-14: "no turn past
+ *  80 words"; the 2026-10-15 prod walk said 230 words on one ply — three
+ *  fundamentals, each with its own how-to, before the verdict). `rankedParts`
+ *  are in the door's rank order. Pure, so the eviction order is testable. */
+export function fitReviewTurn(rankedParts: readonly string[]): string[] {
+  const words = (t: string): number => t.replace(/^\[[a-z-]+\]\s*/, '').split(/\s+/).filter(Boolean).length;
+  // The lead, the move's verdict, danger, a tactic, the plan (a good
+  // move's reason) and the habit (the method beat closes the turn by
+  // design) always speak.
+  const fixed = (t: string, i: number): boolean => i === 0 || /^\[(?:verdict|threat|tactic|trapped|loose|method|plan-now)\]/.test(t);
+  const keep = rankedParts.map(() => true);
+  let total = rankedParts.reduce((n, t) => n + words(t), 0);
+  // Evict in this order until the turn fits: the STACKED fundamentals
+  // first (a second and third [principle], each with its own how-to —
+  // the 230-word ply), then everything else from the lowest rank up.
+  const principles = rankedParts.map((t, i) => (/^\[principle\]/.test(t) ? i : -1)).filter((i) => i >= 0);
+  const order = [...principles.slice(1).reverse(), ...rankedParts.map((_, i) => i).reverse()];
+  for (const i of order) {
+    if (total <= REVIEW_TURN_WORDS) break;
+    if (!keep[i] || fixed(rankedParts[i], i)) continue;
+    keep[i] = false;
+    total -= words(rankedParts[i]);
+  }
+  return rankedParts.filter((_, i) => keep[i]);
+}
+
 /** A review ply's length — the same bar as Learn's turn (`TURN_WORDS`). */
 export const REVIEW_TURN_WORDS = 80;
 
@@ -2338,18 +2364,7 @@ export function buildReviewSegments(
       // with its own how-to, before the verdict). The parts are already in the
       // door's rank order; the lead and the move's verdict, danger and tactic
       // always speak, and the rest fill by rank up to the turn's length.
-      const uncappedParts = (() => {
-        const words = (t: string): number => t.replace(/^\[[a-z-]+\]\s*/, '').split(/\s+/).filter(Boolean).length;
-        const fixed = (t: string, i: number): boolean => i === 0 || /^\[(?:verdict|threat|tactic|trapped|loose)\]/.test(t);
-        let total = rankedParts.reduce((n, t, i) => n + (fixed(t, i) ? words(t) : 0), 0);
-        return rankedParts.filter((t, i) => {
-          if (fixed(t, i)) return true;
-          const w = words(t);
-          if (total + w > REVIEW_TURN_WORDS) return false;
-          total += w;
-          return true;
-        });
-      })();
+      const uncappedParts = fitReviewTurn(rankedParts);
       // 🔒 THE BOOK-MOVE RULE APPLIES HERE TOO (CLAUDE.md narration-by-need
       // standard, N2). The capped cascade has carried the need gate since N2
       // landed — but `isReviewUncapped()` is TRUE by default, so THIS is the
@@ -2397,13 +2412,15 @@ export function buildReviewSegments(
       // in `decision.spoken`. A fact the door collapsed or floored, and every
       // fact on a ply the need gate silenced, stays unsaid and may speak later.
       {
-        const spokenSet = new Set(decision.spoken);
+        // What SPOKE is what survived the turn's length too, not the door's
+        // list — an evicted fact is not said and must stay free to speak later.
+        const spokenSet = new Set(uncappedParts);
         keptRaw.forEach((raw, i) => {
           if (!spokenSet.has(kept[i])) return;
           commitByRaw.get(raw)?.();
           for (const c of refrained[i].claims) spokenRefrains.add(c);
         });
-        if (decision.spoken.some((f) => f.startsWith('[method] '))) for (const h of habitScratch) spokenHabits.add(h);
+        if (uncappedParts.some((f) => f.startsWith('[method] '))) for (const h of habitScratch) spokenHabits.add(h);
         // THE STRUCTURED COMMITS (WO-TEACH-02), for facts that SPOKE:
         //  • rule:<id>  — the principle is now taught; it will not speak again;
         //  • motif:<t>  — S6 transfer: a tactic whose motif was spoken at an
