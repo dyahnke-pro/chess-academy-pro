@@ -2042,6 +2042,12 @@ export function buildReviewSegments(
           });
         }
       }
+      // THE PLAN STANDS — the board still offers the plan the student heard,
+      // so no other plan replaces it (the guard Learn's `planThreadTurn` has
+      // always had; review tape 2026-10-15 changed the plan on consecutive
+      // turns while the passed pawn still ran).
+      const statedId = planT.stated ? `plan-fact:${planT.stated.fact.id}` : null;
+      const planStands = statedId !== null && facets.some((x) => facetIdentity.get(x) === statedId);
       for (const f of facets) {
         // A refuted alternative is said once per game (identity `refuted:<move>`).
         { const id = facetIdentity.get(f); if (id?.startsWith('refuted:') && (refutedSaid.has(id) || !claim(id))) continue; }
@@ -2074,7 +2080,11 @@ export function buildReviewSegments(
             ? gm[1].toLowerCase().replace(/\b[a-h][1-8]\b/g, '').replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim()
             : f;
           if (planGoalsSeen.has(goalKey)) continue;
+          if (planStands) continue;
           if (planStatedPly !== null && m.ply - planStatedPly < PLAN_HOLD_PLIES) continue;
+          // ONE PLAN A TURN — the facets arrive highest priority first; a
+          // second plan in the same breath contradicts the first.
+          if (!claim('plan-one')) continue;
           if (!claim(`plan:${goalKey}`)) continue;
           // A NEW goal after plans the student already heard is a CHANGE, and
           // the change is the teaching (David 2026-09-25: "If the structure

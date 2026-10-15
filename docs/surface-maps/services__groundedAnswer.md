@@ -394,8 +394,8 @@
 - `src/services/coachFeatureService.test.ts:69`
 - `src/services/coachFeatureService.test.ts:83`
 - `src/services/coachFeatureService.test.ts:90`
-- `src/services/coachFeatureService.ts:2547`
-- `src/services/coachFeatureService.ts:2558`
+- `src/services/coachFeatureService.ts:2557`
+- `src/services/coachFeatureService.ts:2568`
 - `src/services/coachMoveCommentary.ts:221`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/explainBestMoveLines.test.ts:14`
@@ -1165,7 +1165,7 @@
 - `src/services/bluffDetector.ts:73`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/captureThreatAnswerable.test.ts:29`
-- `src/services/coachFeatureService.ts:2878`
+- `src/services/coachFeatureService.ts:2888`
 - `src/services/engineDeltaLines.ts:53`
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
@@ -1186,7 +1186,7 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2799`
+- `src/services/coachFeatureService.ts:2809`
 - `src/services/reviewNarrationFidelity.test.ts:109`
 - `src/services/reviewNarrationFidelity.test.ts:121`
 - `src/services/reviewNarrationFidelity.test.ts:129`
@@ -1202,7 +1202,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:2898`
+- `src/services/coachFeatureService.ts:2908`
 - `src/services/reviewNarrationFidelity.test.ts:179`
 
 ### `ComparedMove` (interface) — 0 call sites
@@ -1236,9 +1236,9 @@
 
 ### `seatPieceReferences` (re-export) — 34 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8510`
-- `src/services/coachFeatureService.ts:4108`
-- `src/services/coachFeatureService.ts:4159`
-- `src/services/coachFeatureService.ts:5182`
+- `src/services/coachFeatureService.ts:4118`
+- `src/services/coachFeatureService.ts:4169`
+- `src/services/coachFeatureService.ts:5192`
 - `src/services/liveTacticsContext.ts:450`
 - `src/services/lookaheadPlan.ts:130`
 - `src/services/reviewBoardAwareness.test.ts:47`

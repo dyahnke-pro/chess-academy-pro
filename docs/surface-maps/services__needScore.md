@@ -77,7 +77,7 @@
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:88`
 - `src/services/coachFeatureService.trade.test.ts:18`
 - `src/services/coachFeatureService.ts:1320`
-- `src/services/coachFeatureService.ts:5041`
+- `src/services/coachFeatureService.ts:5051`
 - `src/services/fundamentalReachesDecider.test.ts:62`
 - `src/services/needCoverage.report.test.ts:93`
 - `src/services/needScore.test.ts:36`

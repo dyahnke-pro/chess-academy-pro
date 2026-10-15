@@ -167,7 +167,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/bookMoveWhy.ts:254`
 - `src/services/bookMoveWhy.ts:319`
 - `src/services/bookMoveWhy.ts:338`
-- `src/services/coachFeatureService.ts:2693`
+- `src/services/coachFeatureService.ts:2703`
 - `src/services/groundedAnswer.ts:7207`
 - `src/services/moveIntent.ts:284`
 - `src/services/moveIntent.ts:296`
