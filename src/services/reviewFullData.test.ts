@@ -630,7 +630,7 @@ describe('Review reads the new computers too', () => {
 });
 
 describe('the punishing line is played out in review, as in Learn and chat (2026-10-11)', () => {
-  it('…d5 → the grade carries "The line: exd5, …Nxd5, Nxe5, …Nxe5 and Rxe5"', () => {
+  it('…d5 → the grade carries the line\'s shape: its first move and what it wins (the board walks the rest)', () => {
     const sans = 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5'.split(' ');
     const fens = fensAfter(sans);
     const ply = 16;
@@ -643,7 +643,7 @@ describe('the punishing line is played out in review, as in Learn and chat (2026
     });
     const q = facets.find((f) => f.startsWith('[quality]')) ?? '';
     expect(q).toMatch(/win a pawn/);
-    expect(q).toMatch(/The line: exd5, …Nxd5, Nxe5, …Nxe5 and Rxe5 — they come out a pawn up\./);
+    expect(q).toMatch(/The line starts with exd5, and they come out a pawn up\./);
   });
 });
 
@@ -669,6 +669,6 @@ describe('pressure says why it is pressure (review audit 2026-10-14)', () => {
     const { describeMoveInfluence } = await import('./reviewFullData');
     const before = '4k3/8/8/2p5/8/8/8/N3K3 w - - 0 1';
     const after = '4k3/8/8/2p5/8/1N6/8/4K3 b - - 1 1';
-    expect(describeMoveInfluence(before, after, 'Nb3')).toBe('The knight on b3 now eyes the pawn on c5 and adds its weight to d4 — nothing guards the pawn on c5.');
+    expect(describeMoveInfluence(before, after, 'Nb3')).toBe('The knight on b3 now eyes the pawn on c5 and fights for d4 — nothing guards the pawn on c5.');
   });
 });

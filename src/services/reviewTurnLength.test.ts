@@ -23,3 +23,14 @@ describe('review — one lead reason per ply (David 2026-10-14)', () => {
     expect(fitReviewTurn([VERDICT, KEY])).toEqual([VERDICT, KEY]);
   });
 });
+
+describe('one plan per review ply (review audit 2026-10-15: 139 words, two plans)', () => {
+  it('the second plan may be evicted; the first stays', () => {
+    const A = '[plan-now] The plan changes here — now it\'s to get your passed pawn on a7 promoting. Here\'s how: clear the square in front of it and push it one safe square at a time — every push brings it closer to a queen.';
+    const B = '[plan-now] The plan from here is to make your knight on d4 the boss of the board. Here\'s how: keep a pawn guarding it and refuse trades that give it up — from there it presses on everything around it.';
+    const LEAD = '[trade] A piece and three pawns for a rook — you are a pawn up overall, and the extra pawns are what wins it.';
+    const out = fitReviewTurn([LEAD, A, B]);
+    expect(out).toContain(A);
+    expect(out).not.toContain(B);
+  });
+});
