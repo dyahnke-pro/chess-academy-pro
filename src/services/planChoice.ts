@@ -84,6 +84,12 @@ const WORTH: Record<PlanKind, (p: PlanFact) => string> = {
   'bishop-pair': () => 'you have two bishops and they don\'t, and bishops grow stronger as the board opens',
 };
 
+/** What makes the plan's own target worth playing for — the reason alone,
+ *  for a sentence that has already named the plan it beats. */
+export function planWorth(plan: PlanFact): string {
+  return WORTH[plan.kind](plan);
+}
+
 /** Why the first plan was chosen over the rest, said as a reason. */
 export function whyThisPlan(plans: readonly PlanFact[]): string | null {
   const top = plans[0];

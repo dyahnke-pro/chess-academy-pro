@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**110 lines · 5 exports · 3 importers · 2 tests · 0 audits**
+**116 lines · 6 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,6 +26,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoice.test.ts:30`
 - `src/services/planThread.ts:141`
 
+### `planWorth` (function) — 1 call site
+- `src/services/planThread.ts:151`
+
 ### `whyThisPlan` (function) — 4 call sites
 - `src/services/boardPlanFacts.ts:111`
 - `src/services/planChoice.test.ts:18`
@@ -35,10 +38,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `methodLine` (function) — 3 call sites
 - `src/services/boardPlanFacts.ts:113`
 - `src/services/planChoice.test.ts:32`
-- `src/services/planThread.ts:153`
+- `src/services/planThread.ts:154`
 
 ### `methodSquares` (function) — 1 call site
-- `src/services/planThread.ts:155`
+- `src/services/planThread.ts:156`
 
 ## Tests
 

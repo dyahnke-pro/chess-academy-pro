@@ -40,3 +40,19 @@ describe('a plan is a thread on review', () => {
     for (let i = 1; i < plans.length; i++) expect(plans[i].ply - plans[i - 1].ply).toBeGreaterThanOrEqual(PLAN_HOLD_PLIES);
   }, 120000);
 });
+
+describe('review finds the plan out loud (David 2026-10-15)', () => {
+  it('the first plan carries the three questions and why; no pause mark reaches the text', () => {
+    const c = new Chess();
+    const inputs = ALAPIN.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: 'good', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
+    const segs = buildReviewSegments(inputs, 'black', 'Sicilian Defense: Alapin Variation', true, 1500);
+    const all = segs.map((s) => s.narration ?? '');
+    expect(all.some((t) => t.includes('‖'))).toBe(false);
+    const first = all.find((t) => /the plan from here is/i.test(t)) ?? '';
+    expect(first).toMatch(/How do you find a plan\?/);
+    expect(first).toMatch(/Why this one first\?/);
+    const later = all.filter((t) => /The plan changes here|The new plan is/.test(t));
+    // The why may stand without its question once the question was said (say-once).
+    for (const t of later) expect(t).toMatch(/Why this one|Why it matters|so it comes before|no pawns on it|biggest target|can protect|must stand guard|for good|worst piece|count for more|grow stronger/);
+  }, 120000);
+});

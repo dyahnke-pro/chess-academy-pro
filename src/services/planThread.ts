@@ -18,7 +18,7 @@ import type { Color } from 'chess.js';
 import { deriveNextPlanFacts, type PlanFact, type PlanKind } from './nextPlans';
 import { planStoppedProof, planStoppedLine } from './planStopped';
 import { NO_PROOF, type FactProof } from './proof';
-import { methodRead, methodLine, methodSquares, whyThisPlan } from './planChoice';
+import { methodRead, methodLine, methodSquares, whyThisPlan, planWorth } from './planChoice';
 import { planStepLine } from './planStep';
 import { THINK_MARK } from '../utils/thinkPause';
 
@@ -147,7 +147,8 @@ export function planThreadTurn(
     ? read
       ? ` Why this one first? ${cap(why)}.`
       : alt
-        ? ` Why this one and not ${alt.goalIng}? ${THINK_MARK} ${cap(why)}.`
+        // The question names the plan it beats; the answer is the reason alone.
+        ? ` Why this one and not ${alt.goalIng}? ${THINK_MARK} ${cap(planWorth(top))}.`
         : ` Why it matters: ${why}.`
     : '';
   const text = read ? `${methodLine(read)} So: ${said.charAt(0).toLowerCase()}${said.slice(1)}${whyText}` : `${said}${whyText}`;

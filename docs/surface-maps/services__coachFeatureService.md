@@ -137,7 +137,7 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 79 call sites
+### `buildReviewSegments` (function) — 80 call sites
 - `src/components/Coach/CoachGameReview.tsx:1825`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
@@ -160,6 +160,7 @@
 - `src/services/coachFeatureService.oneCost.test.ts:33`
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.planChange.test.ts:36`
+- `src/services/coachFeatureService.planChange.test.ts:48`
 - `src/services/coachFeatureService.recurrence.test.ts:37`
 - `src/services/coachFeatureService.recurrence.test.ts:46`
 - `src/services/coachFeatureService.recurrence.test.ts:53`
