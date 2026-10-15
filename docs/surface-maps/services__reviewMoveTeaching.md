@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**736 lines · 4 exports · 15 importers · 6 tests · 0 audits**
+**741 lines · 4 exports · 16 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,6 +26,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewNarrationDefects.test.ts`
 - `src/services/reviewOpeningTheory.ts`
 - `src/services/reviewWalkOct1.test.ts`
+- `src/services/squareRole.test.ts`
 - `src/services/walkOct1Learn.test.ts`
 
 ## Exports and every call site
@@ -38,7 +39,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalkOct1.test.ts:76`
 - `src/services/walkOct1Learn.test.ts:85`
 
-### `buildReviewMoveTeaching` (function) — 32 call sites
+### `buildReviewMoveTeaching` (function) — 34 call sites
 - `src/services/coachFeatureService.ts:1047`
 - `src/services/coachFeatureService.ts:3287`
 - `src/services/discussionPractice.ts:171`
@@ -71,10 +72,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalkOct1.test.ts:71`
 - `src/services/reviewWalkOct1.test.ts:83`
 - `src/services/reviewWalkOct1.test.ts:88`
+- `src/services/squareRole.test.ts:29`
+- `src/services/squareRole.test.ts:41`
 
 ### `nameEndgamePhase` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:3198`
-- `src/services/reviewFullData.ts:1582`
+- `src/services/reviewFullData.ts:1583`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
 - `src/services/reviewMoveTeaching.test.ts:147`
@@ -97,6 +100,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveTeaching.unpin.test.ts`
 - `src/services/reviewNarrationDefects.test.ts`
 - `src/services/reviewWalkOct1.test.ts`
+- `src/services/squareRole.test.ts`
 - `src/services/walkOct1Learn.test.ts`
 
 ## Audits that reach it

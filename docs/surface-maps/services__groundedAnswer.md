@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7767 lines · 167 exports · 90 importers · 60 tests · 8 audits**
+**7767 lines · 167 exports · 90 importers · 61 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -528,10 +528,11 @@
 ### `PLAN_METHOD_GENERAL` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `assemblePlanMethodAnswer` (function) — 3 call sites
+### `assemblePlanMethodAnswer` (function) — 4 call sites
 - `src/coach/chatComputedQuestions.test.ts:21`
 - `src/coach/chatComputedQuestions.test.ts:24`
 - `src/services/coachApi.ts:4345`
+- `src/services/planChoice.test.ts:82`
 
 ### `assembleMethodAnswer` (function) — 6 call sites
 - `src/services/coachApi.ts:4361`
@@ -1180,7 +1181,7 @@
 - `src/services/moveInsight.ts:590`
 - `src/services/moveInsight.ts:754`
 - `src/services/opponentMovePurpose.ts:64`
-- `src/services/reviewFullData.ts:900`
+- `src/services/reviewFullData.ts:901`
 - `src/services/reviewMoveBriefing.ts:238`
 - `src/services/reviewNarrationFidelity.test.ts:143`
 - `src/services/reviewNarrationFidelity.test.ts:152`
@@ -1255,11 +1256,11 @@
 - `src/services/reviewBoardAwareness.test.ts:70`
 - `src/services/reviewBoardAwareness.test.ts:71`
 - `src/services/reviewBoardAwareness.test.ts:72`
-- `src/services/reviewFullData.ts:349`
-- `src/services/reviewFullData.ts:480`
-- `src/services/reviewFullData.ts:588`
-- `src/services/reviewFullData.ts:600`
-- `src/services/reviewFullData.ts:770`
+- `src/services/reviewFullData.ts:350`
+- `src/services/reviewFullData.ts:481`
+- `src/services/reviewFullData.ts:589`
+- `src/services/reviewFullData.ts:601`
+- `src/services/reviewFullData.ts:771`
 - `src/services/reviewNarrationFidelity.test.ts:22`
 - `src/services/reviewNarrationFidelity.test.ts:32`
 - `src/services/reviewNarrationFidelity.test.ts:38`
@@ -1332,6 +1333,7 @@
 - `src/services/materialSites.test.ts`
 - `src/services/pieceActivity.test.ts`
 - `src/services/piecePurpose.test.ts`
+- `src/services/planChoice.test.ts`
 - `src/services/recaptureNotAWin.test.ts`
 - `src/services/reviewBoardAwareness.test.ts`
 - `src/services/reviewNarrationFidelity.test.ts`
