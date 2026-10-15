@@ -23,9 +23,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `methodRead` (function) — 5 call sites
-- `src/services/boardPlanFacts.ts:113`
-- `src/services/groundedAnswer.ts:3665`
-- `src/services/groundedAnswer.ts:6833`
+- `src/services/boardPlanFacts.ts:116`
+- `src/services/groundedAnswer.ts:3670`
+- `src/services/groundedAnswer.ts:6838`
 - `src/services/planChoice.test.ts:30`
 - `src/services/planThread.ts:145`
 
@@ -33,26 +33,27 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planThread.ts:156`
 
 ### `whyThisPlan` (function) — 4 call sites
-- `src/services/boardPlanFacts.ts:117`
+- `src/services/boardPlanFacts.ts:120`
 - `src/services/planChoice.test.ts:18`
 - `src/services/planChoice.test.ts:24`
 - `src/services/planThread.ts:149`
 
 ### `methodPlan` (function) — 2 call sites
-- `src/services/boardPlanFacts.ts:114`
+- `src/services/boardPlanFacts.ts:117`
 - `src/services/planThread.ts:146`
 
 ### `methodLine` (function) — 4 call sites
-- `src/services/boardPlanFacts.ts:119`
-- `src/services/groundedAnswer.ts:3667`
+- `src/services/boardPlanFacts.ts:123`
+- `src/services/groundedAnswer.ts:3672`
 - `src/services/planChoice.test.ts:32`
 - `src/services/planThread.ts:162`
 
-### `methodSquares` (function) — 1 call site
+### `methodSquares` (function) — 2 call sites
+- `src/services/boardPlanFacts.ts:122`
 - `src/services/planThread.ts:168`
 
 ### `weaknessLine` (function) — 1 call site
-- `src/services/groundedAnswer.ts:6834`
+- `src/services/groundedAnswer.ts:6839`
 
 ## Tests
 

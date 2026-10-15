@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7767 lines · 167 exports · 90 importers · 61 tests · 8 audits**
+**7772 lines · 167 exports · 90 importers · 61 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -120,7 +120,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ownHangingLine` (function) — 1 call site
-- `src/services/groundedAnswer.test.ts:1656`
+- `src/services/groundedAnswer.test.ts:1657`
 
 ### `evalPhrase` (function) — 1 call site
 - `src/coach/boardTurnAnswer.ts:428`
@@ -384,7 +384,7 @@
 - `src/services/groundedAnswer.test.ts:1382`
 - `src/services/groundedAnswer.test.ts:1383`
 - `src/services/groundedAnswer.test.ts:1387`
-- `src/services/groundedAnswer.test.ts:1674`
+- `src/services/groundedAnswer.test.ts:1675`
 
 ### `explainBestMoveGrounded` (function) — 23 call sites
 - `src/services/coachApi.ts:3630`
@@ -716,8 +716,8 @@
 - `src/services/groundedAnswer.test.ts:1513`
 - `src/services/groundedAnswer.test.ts:1515`
 - `src/services/groundedAnswer.test.ts:1516`
-- `src/services/groundedAnswer.test.ts:1647`
-- `src/services/groundedAnswer.test.ts:1650`
+- `src/services/groundedAnswer.test.ts:1648`
+- `src/services/groundedAnswer.test.ts:1651`
 
 ### `explainNotationSymbol` (function) — 3 call sites
 - `src/services/coachApi.ts:3863`
@@ -932,7 +932,7 @@
 - `src/services/groundedAnswer.test.ts:509`
 - `src/services/groundedAnswer.test.ts:525`
 - `src/services/groundedAnswer.test.ts:1437`
-- `src/services/groundedAnswer.test.ts:1626`
+- `src/services/groundedAnswer.test.ts:1627`
 
 ### `PhaseProfileLike` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -1076,7 +1076,7 @@
 - `src/services/groundedAnswer.test.ts:757`
 - `src/services/groundedAnswer.test.ts:762`
 - `src/services/groundedAnswer.test.ts:763`
-- `src/services/groundedAnswer.test.ts:1636`
+- `src/services/groundedAnswer.test.ts:1637`
 
 ### `SkillRadarLike` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
