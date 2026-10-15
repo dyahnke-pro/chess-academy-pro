@@ -22,7 +22,7 @@ import { attributeLiveFundamental, LEARN_FUNDAMENTAL_CP_FLOOR, type LiveFundamen
 import { renderFundamentalVerdict, isMethodSentence, verdictCanDropBetter } from './principleVoice';
 import { habitForCluster } from './coachDecider';
 import { liveHabitKey, type LiveHabit } from './methodBeat';
-import { fundamentalRecurrenceLine, heldRecurrenceLine, tagRecurrenceLine } from './fundamentalRecurrence';
+import { recall, type RecallMemory } from './fundamentalRecurrence';
 import { classifyMisconceptionNow } from './misconceptionClassifier';
 import type { WeaknessSignal } from './weaknessSignal';
 
@@ -107,6 +107,9 @@ export function learnFundamentalVerdict(
    *  22.gxh5 "Before you look for your own idea, answer what their last move
    *  threatens…"). */
   said?: Set<string>,
+  /** The per-game memory ledger (`recall`) — so the fundamental's "you've done
+   *  this before" and a mistake tag's are one memory, said once a game. */
+  memory?: RecallMemory,
 ): LearnFundamental | null {
   const raw = attributeLiveFundamental(input);
   if (raw.length === 0) return null;
@@ -140,11 +143,12 @@ export function learnFundamentalVerdict(
   if (!verdict.trim()) return null;
   if (habitKey && hasHow && verdict === rendered) said?.add(habitKey);
   const recurrence = firstThisGame
-    ? fundamentalRecurrenceLine({
-      ids: [attrs[0].id],
+    ? recall({
+      matches: [{ fundamental: attrs[0].id }],
+      direction: 'failed',
       signals: studentWeaknesses,
       register: 'live',
-      seenLabels: new Set(),
+      memory: memory ?? new Set(),
       currentGameId: input.currentGameId,
     })
     : null;
@@ -200,12 +204,12 @@ function fenAfterSan(fen: string, san: string): string | null {
 
 /** THE LOOP ON A MISTAKE WITH NO FUNDAMENTAL (Learn audit 2026-10-15): the
  *  tag the record will file this slip under — the same classifier the capture
- *  runs — joined to the student's record, said once a game per weakness.
+ *  runs — recalled from the student's record through the one memory computer.
  *  "You've walked into this before — loose piece, the second game now." */
 export function learnMistakeRecurrence(
   input: Pick<LearnFundamentalInput, 'fenBefore' | 'playedSan' | 'bestSan' | 'historySans' | 'currentGameId'>,
   studentWeaknesses: readonly WeaknessSignal[],
-  seenLabels: Set<string>,
+  memory: RecallMemory,
 ): string | null {
   if (studentWeaknesses.length === 0) return null;
   const cls = classifyMisconceptionNow({
@@ -215,12 +219,12 @@ export function learnMistakeRecurrence(
     historySans: [...input.historySans],
   });
   if (!cls || cls.tag === 'other') return null;
-  return tagRecurrenceLine({ tags: [cls.tag], signals: studentWeaknesses, register: 'live', seenLabels, currentGameId: input.currentGameId });
+  return recall({ matches: [{ tag: cls.tag }], direction: 'failed', register: 'live', signals: studentWeaknesses, memory, currentGameId: input.currentGameId });
 }
 
 /** "This time you held it" for a Learn line whose evidence row records the
  *  student HOLDING a tag their record says they failed in another game. */
-export function learnHeldRecurrence(tag: string | undefined, studentWeaknesses: readonly WeaknessSignal[], currentGameId: string | null, heldSaid: Set<string>): string | null {
+export function learnHeldRecurrence(tag: string | undefined, studentWeaknesses: readonly WeaknessSignal[], currentGameId: string | null, memory: RecallMemory): string | null {
   if (!tag || studentWeaknesses.length === 0) return null;
-  return heldRecurrenceLine({ tag, signals: studentWeaknesses, currentGameId, seenLabels: heldSaid });
+  return recall({ matches: [{ tag }], direction: 'held', register: 'live', signals: studentWeaknesses, currentGameId, memory });
 }

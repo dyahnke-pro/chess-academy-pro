@@ -53,3 +53,44 @@ describe('development is a job the follow-up can name (Review audit 2026-10-15)'
     expect(intentsFromReads(moves, 'black', reads).get(34)?.text).toBe('…e5 first, so that …Bd6 can bring the bishop into the game.');
   });
 });
+
+describe('the pass reads give review "what the move stops" (2026-10-15)', () => {
+  // Naroditsky's O-O in speedrun 1PI3xfMiUE4: castling defends f2 against
+  // …Qxf2. Review stores ONE line per position, so only the top line of each
+  // read is used — the same shape the read-ahead writes.
+  it('O-O takes …Qxf2 away once the pass reads are stored, and not before', async () => {
+    const { nullMoveFen } = await import('./movePurpose');
+    const { reviewPassFens } = await import('./reviewMoveIntent');
+    const fixture = (await import('./__fixtures__/moveIntent-1PI3xfMiUE4.json')).default as Record<string, { fenBefore: string; san: string; before: { cp: number | null; mate?: number | null; pv: string[] }[]; after: { cp: number | null; mate?: number | null; pv: string[] }[]; passBefore: { cp: number | null; mate?: number | null; pv: string[] }[]; passAfter: { cp: number | null; mate?: number | null; pv: string[] }[] }>;
+    const m = fixture['13'];
+    const c = new Chess(m.fenBefore);
+    const mv = c.move(m.san);
+    const fenAfter = c.fen();
+    const moves = [{ ply: 12, san: 'e4', fenAfter: m.fenBefore }, { ply: 13, san: mv.san, fenAfter }];
+    // Stored the way the read-ahead stores it: a mate as `mateEvalFor(n)`.
+    const { mateEvalFor } = await import('./engineConstants');
+    const top = (r: { cp: number | null; mate?: number | null; pv: string[] }[]): CachedEval => ({ evaluation: r[0].mate ? mateEvalFor(r[0].mate) : (r[0].cp ?? 0), depth: 18, bestMove: r[0].pv[0], pv: r[0].pv });
+    const reads = new Map<number, CachedEval>([[1, top(m.before)], [2, top(m.after)]]);
+    const passReads = new Map<string, CachedEval>([
+      [nullMoveFen(m.fenBefore)!, top(m.passBefore)],
+      [nullMoveFen(fenAfter)!, top(m.passAfter)],
+    ]);
+    const seat = m.fenBefore.split(' ')[1] === 'w' ? 'white' : 'black';
+    const withPass = intentsFromReads(moves, seat, reads, passReads).get(13);
+    expect(withPass?.text).toMatch(/f2/);
+    expect(withPass?.squares).toContain('f2');
+    // Negative control: the same reads without the pass never claim it.
+    expect(intentsFromReads(moves, seat, reads).get(13)?.text ?? '').not.toMatch(/f2/);
+    // The read-ahead asks for exactly these two pass positions.
+    expect(reviewPassFens([m.fenBefore, fenAfter], seat)).toEqual([nullMoveFen(m.fenBefore), nullMoveFen(fenAfter)]);
+    expect(reviewPassFens([m.fenBefore, fenAfter], seat === 'white' ? 'black' : 'white')).toEqual([]);
+  });
+
+  it('a stored mate is decoded back to a mate, never read as a plain number', async () => {
+    const { mateEvalFor } = await import('./engineConstants');
+    const { lineOf } = await import('./reviewMoveIntent');
+    expect(lineOf({ evaluation: mateEvalFor(-1), depth: 18, bestMove: 'f6f2', pv: ['f6f2'] })[0].mate).toBe(-1);
+    expect(lineOf({ evaluation: mateEvalFor(3), depth: 18, bestMove: 'a1a8', pv: ['a1a8'] })[0].mate).toBe(3);
+    expect(lineOf({ evaluation: 120, depth: 18, bestMove: 'e2e4', pv: ['e2e4'] })[0]).toMatchObject({ mate: null, evaluation: 120 });
+  });
+});

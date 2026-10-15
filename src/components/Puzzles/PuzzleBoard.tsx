@@ -23,7 +23,8 @@ import { useBoardContext } from '../../hooks/useBoardContext';
 import { voiceService } from '../../services/voiceService';
 import { getWrongMoveHint } from '../../utils/puzzleHints';
 import { readWrongTry, composeWrongTryLine } from '../../services/wrongTryRefutation';
-import { puzzleMethodLine, cpFromThemes } from '../../services/puzzleMethod';
+import { puzzleMethodLine, cpFromThemes, puzzleRecallLine } from '../../services/puzzleMethod';
+import type { RecallMemory } from '../../services/fundamentalRecurrence';
 import { useStudentRecord } from '../../hooks/useStudentRecord';
 import { recordCapabilityEvidence } from '../../services/capabilityEvidence';
 import { MISTAKE_CP } from '../../services/engineConstants';
@@ -190,6 +191,8 @@ export function PuzzleBoard({
   const answeredRef = useRef(false);
   // Habits taught this session — the method beat says each one once.
   const saidHabitsRef = useRef(new Set<MethodHabit>());
+  /** The one memory ledger for this session of puzzles (`recall`). */
+  const recalledRef = useRef<RecallMemory>(new Set<string>());
   // The student's WHOLE record (holes + proven), so the method beat is decided
   // from their games and drills together, not from the puzzles alone.
   const recordRef = useStudentRecord();
@@ -437,15 +440,24 @@ export function PuzzleBoard({
   useEffect(() => {
     if (!settings.voiceEnabled || !terminal || conceptSpokenRef.current === puzzle.id) return;
     conceptSpokenRef.current = puzzle.id;
-    const line = conceptExplanation?.spoken
+    const concept = conceptExplanation?.spoken
       ?? (state === 'correct' && solveGeometry ? `That ${solveGeometry}.` : null);
+    // The student's own games, recalled: held clean or missed again.
+    const helped = hintUsedRef.current || hasMadeMistakeRef.current || showedSolutionRef.current;
+    const memory = puzzleRecallLine(
+      tacticType,
+      state !== 'correct' ? 'missed' : helped ? 'helped' : 'clean',
+      recordRef.current,
+      recalledRef.current,
+    );
+    const line = [concept, memory].filter(Boolean).join(' ');
     if (!line) return;
     const id = puzzle.id;
     void voiceComputed(line).then((say) => {
       if (puzzleIdRef.current !== id) return; // a newer puzzle owns the voice
       void voiceService.speak(say, { sentenceFirst: true });
     });
-  }, [terminal, puzzle.id, state, settings.voiceEnabled, solveGeometry, conceptExplanation]);
+  }, [terminal, puzzle.id, state, settings.voiceEnabled, solveGeometry, conceptExplanation, tacticType, recordRef]);
 
   // A question asked once the puzzle is over holds the advance: the board
   // waits on the solved position until the student taps Next, instead of

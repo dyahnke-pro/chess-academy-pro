@@ -209,13 +209,14 @@ async function waitWhilePaused(): Promise<void> {
 // MATE_EVAL_THRESHOLD is now exported from engineConstants so all
 // subsystems share the same value. Local alias kept for readability.
 import {
-  MATE_EVAL_THRESHOLD, mateEvalFor, mateDistanceOf, SHORT_MATE_MOVES, MATE_HORIZON_CP, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP,
+  MATE_EVAL_THRESHOLD, mateEvalFor, storedMate, mateDistanceOf, SHORT_MATE_MOVES, MATE_HORIZON_CP, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP,
   REVIEW_READ_DEPTH,
 } from './engineConstants';
 import { capEval, winPctLost, bandForWinPctLost, winPercent, provesOnlyMove } from './accuracyService';
 import type { PvEngine, MoveScorer, ScoredMove } from './pvPlayback';
 import { moveScoresOneSearch, uciOfSan } from './moveCost';
 import { detectBrilliancy, verifySacrificeDeep, SAC_VERIFY_DEPTH } from './brilliancy';
+import { reviewPassFens } from './reviewMoveIntent';
 import { lookupPositionEvals, storePositionEvals, prunePositionEvalCache, evalCacheKey, type EvalToStore } from './positionEvalCache';
 
 /**
@@ -1016,7 +1017,7 @@ export async function acquirePvEngines(
         // (`mateDistanceOf`), not a signed mateIn; null is honest here.
         mateIn: null,
         depth: r.depth,
-        topLines: [{ rank: 1, evaluation: r.evaluation, moves: r.pv, mate: null }],
+        topLines: [{ rank: 1, evaluation: r.evaluation, moves: r.pv, mate: storedMate(r.evaluation) }],
         nodesPerSecond: 0,
       };
     },
@@ -2388,13 +2389,13 @@ async function analyzeSingleGameUncoalesced(
   const reviewStartedAt = Date.now();
   try {
     const { fens } = replayPgnToFens(game.pgn);
-    const reads = startReviewReads(fens);
+    const reads = startReviewReads(fens, reviewPassFens(fens, game.studentSide));
     const plies = Math.max(1, fens.length - 1);
     const unsubscribe = reads.onProgress((r) => {
       onProgress?.(`Analyzing move ${Math.max(0, Math.min(plies, r))} of ${plies}…`);
     });
     onProgress?.('Analyzing positions with Stockfish…');
-    await reads.done;
+    await reads.all;
     unsubscribe();
     const annotations = await finishReviewReads(gameId);
     if (!annotations) return null;
@@ -2969,13 +2970,19 @@ export interface ReviewReads {
   focus: (index: number) => void;
   /** Called with readyThrough every time it advances. Returns an unsubscribe. */
   onProgress: (cb: (readyThrough: number) => void) => () => void;
-  /** Settles when every position is read, or the reads were stopped. */
+  /** Settles when every GAME position is read, or the reads were stopped. */
   done: Promise<void>;
+  /** Settles when the extras (the student's pass reads) are read too. */
+  all: Promise<void>;
   stop: () => void;
 }
 
-export function startReviewReads(fens: readonly string[]): ReviewReads {
-  const total = fens.length;
+/** `extra` are positions read AFTER every game position (the student's pass
+ *  reads — what a move stops, `reviewPassFens`): they never hold up the walk,
+ *  `readyThrough` or `done`, and an unread one simply gives no intent. */
+export function startReviewReads(gameFens: readonly string[], extra: readonly string[] = []): ReviewReads {
+  const total = gameFens.length;
+  const fens = [...gameFens, ...extra];
   const read: boolean[] = fens.map(() => false);
   const taken: boolean[] = fens.map(() => false);
   let cursor = 0;
@@ -2992,17 +2999,25 @@ export function startReviewReads(fens: readonly string[]): ReviewReads {
   const nextIndex = (): number => {
     for (let i = cursor; i < total; i++) if (!read[i] && !taken[i]) return i;
     for (let i = 0; i < cursor; i++) if (!read[i] && !taken[i]) return i;
+    for (let i = total; i < fens.length; i++) if (!read[i] && !taken[i]) return i;
     return -1;
   };
-  let finish: () => void = () => undefined;
-  const done = new Promise<void>((r) => { finish = r; });
+  let finished = false;
+  let resolveDone: () => void = () => undefined;
+  const done = new Promise<void>((r) => { resolveDone = r; });
+  const finish = (): void => { if (!finished) { finished = true; resolveDone(); } };
+  let resolveAll: () => void = () => undefined;
+  const all = new Promise<void>((r) => { resolveAll = r; });
+  // The game's own positions are what `done` means; the extras run on after.
+  const gameRead = (): boolean => read.slice(0, total).every(Boolean);
   void (async () => {
     // The read itself may already exist — this game opened before, or the
     // position is shared with another game — so the cache is asked first.
     const cachedHits = await lookupPositionEvals(fens, REVIEW_DEEP_DEPTH);
     cachedHits.forEach((_, i) => { read[i] = true; });
     advance();
-    if (read.every(Boolean) || stopped) { finish(); return; }
+    if (gameRead()) finish();
+    if (read.every(Boolean) || stopped) { finish(); resolveAll(); return; }
     let workers: DedicatedWorker[] = [];
     try {
       workers = await acquirePool(Math.max(1, Math.min(WORKER_POOL_SIZE, total)));
@@ -3021,6 +3036,7 @@ export function startReviewReads(fens: readonly string[]): ReviewReads {
       } catch { /* an unread position stays ungraded; the walk never invents it */ }
       read[i] = true;
       advance();
+      if (gameRead()) finish();
     };
     const run = async (w: DedicatedWorker | null): Promise<void> => {
       w?.newGame();
@@ -3037,14 +3053,16 @@ export function startReviewReads(fens: readonly string[]): ReviewReads {
     } finally {
       if (workers.length > 0) releasePool(workers);
       finish();
+      resolveAll();
     }
-  })().catch(() => finish());
+  })().catch(() => { finish(); resolveAll(); });
   return {
     readyThrough: () => ready,
     total,
     focus: (index: number) => { cursor = Math.max(0, Math.min(total - 1, index)); },
     onProgress: (cb) => { listeners.add(cb); return () => { listeners.delete(cb); }; },
     done,
+    all,
     stop: () => { stopped = true; },
   };
 }

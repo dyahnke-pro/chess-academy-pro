@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**251 lines · 12 exports · 5 importers · 2 tests · 0 audits**
+**256 lines · 12 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,7 +13,6 @@
 ## Who calls in
 
 - `src/hooks/useDiscussionPractice.ts`
-- `src/services/coachFeatureService.ts`
 - `src/services/fundamentalRecurrence.ts`
 - `src/services/misconceptionCallbacks.test.ts`
 - `src/services/weaknessCallback.test.ts`
@@ -62,9 +61,8 @@
 ### `RecurrenceRead` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `recurrenceFor` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1764`
-- `src/services/fundamentalRecurrence.ts:58`
+### `recurrenceFor` (function) — 10 call sites
+- `src/services/fundamentalRecurrence.ts:71`
 - `src/services/misconceptionCallbacks.test.ts:82`
 - `src/services/misconceptionCallbacks.test.ts:85`
 - `src/services/misconceptionCallbacks.test.ts:86`
@@ -78,9 +76,8 @@
 ### `RecurrenceRegister` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `recurrenceLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:1767`
-- `src/services/fundamentalRecurrence.ts:61`
+### `recurrenceLine` (function) — 4 call sites
+- `src/services/fundamentalRecurrence.ts:74`
 - `src/services/misconceptionCallbacks.test.ts:99`
 - `src/services/misconceptionCallbacks.test.ts:100`
 - `src/services/misconceptionCallbacks.test.ts:101`

@@ -53,6 +53,7 @@ vi.mock('../../services/gameAnalysisService', async (importOriginal) => ({
       focus: fake.focus,
       onProgress: (cb: (r: number) => void) => { fake.listeners.add(cb); return () => fake.listeners.delete(cb); },
       done,
+      all: done,
       stop: fake.stop,
     };
   },

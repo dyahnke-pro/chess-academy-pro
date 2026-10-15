@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5365 lines · 31 exports · 48 importers · 50 tests · 4 audits**
+**5356 lines · 31 exports · 48 importers · 50 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -77,7 +77,7 @@
 - `src/services/coachFeatureService.test.ts:260`
 - `src/services/coachFeatureService.test.ts:280`
 - `src/services/coachFeatureService.test.ts:292`
-- `src/services/gameAnalysisService.ts:2353`
+- `src/services/gameAnalysisService.ts:2354`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

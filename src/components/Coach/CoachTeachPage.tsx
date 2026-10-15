@@ -10923,7 +10923,7 @@ export function CoachTeachPage(): JSX.Element {
                       // (replay 2026-10-06: 6 of 239 true lines dropped on the reply's board).
                       // THE GREEN DIRECTION OUT LOUD: the student just held a question
                       // their record says they failed in another game.
-                      const heldBefore = learnHeldRecurrence(h.evidence?.tag, weaknessSignalsRef.current, learnMemRef.current.gameId, learnMemRef.current.heldSaid);
+                      const heldBefore = learnHeldRecurrence(h.evidence?.tag, weaknessSignalsRef.current, learnMemRef.current.gameId, learnMemRef.current.recalled);
                       queueSpokenHint(fenAfterReply, heldBefore ? `${h.text} ${heldBefore}` : h.text, h.lane, h.proof, h.squares, h.claims, move.fen, h.arrows, undefined, h.stakes);
                       if (h.event) captureEvent(h.event.name, h.event.props);
                       // DUAL-USE (P4): the lane that teaches it also records it.
@@ -11005,7 +11005,7 @@ export function CoachTeachPage(): JSX.Element {
                       bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
                       playedPvUci: mid.topLines?.[0]?.moves ?? [],
                       ...mateContext(preStudentRead, mid, playerColor),
-                    }, fundamentalSeenRef.current, weaknessSignalsRef.current, standingRef.current.said);
+                    }, fundamentalSeenRef.current, weaknessSignalsRef.current, standingRef.current.said, learnMemRef.current.recalled);
                     if (look || fundamental) mistakeCalledThisTurn = true;
                     // THE HELD ANSWER (David 2026-10-02): the move held back at a
                     // deciding moment is revealed now that the student has
@@ -11120,7 +11120,7 @@ export function CoachTeachPage(): JSX.Element {
                       // it under, when the student has made it in another game.
                       const mistakeRecurrence = fund ? null : learnMistakeRecurrence({
                         fenBefore, playedSan: move.san, bestSan: studentBestSan ?? null, historySans: move.history, currentGameId: learnMemRef.current.gameId,
-                      }, weaknessSignalsRef.current, learnMemRef.current.recurrenceSaid);
+                      }, weaknessSignalsRef.current, learnMemRef.current.recalled);
                       const line = `${fund
                         ? `${lossInGrade ? '' : noteSlip(learnMemRef.current, fund.id)}${lossInGrade ? '' : bookSaid ? fund.howOnly : fund.verdict}${fund.recurrence ? ` ${fund.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`.trim()
                         : `${look.line}${takeDefinition(look.pattern)}${mistakeRecurrence ? ` ${mistakeRecurrence}` : ''}`}${concession ? ` ${concession}` : ''}${slipQ ? ` ${slipQ.text}` : ''}`;

@@ -18,56 +18,60 @@
 import { matchFundamental, matchTag, type WeaknessSignal } from './weaknessSignal';
 import { recurrenceFor, recurrenceLine, type RecurrenceRegister } from './misconceptionCallbacks';
 
-export interface FundamentalRecurrenceInput {
-  /** The fundamentals attributed to THIS move, most important first. */
-  ids: readonly string[];
+/** What the move touched: a fundamental the attributor named, or a recorded
+ *  mistake tag (`misconceptionTags`) / a capability tag. */
+export type RecallMatch = { fundamental: string } | { tag: string };
+
+/** One per-game memory of what the coach has already recalled — keyed by
+ *  direction AND weakness, so "you've walked into this before" and "this time
+ *  you held it" are each said once a game per weakness, on every surface.
+ *  Mutated by `recall`. */
+export type RecallMemory = Set<string>;
+
+export interface RecallInput {
+  /** What this move touched, most important first. */
+  matches: readonly RecallMatch[];
+  /** The student repeated the slip, or held the question this time. */
+  direction: 'failed' | 'held';
+  /** Review speaks in the retrospective voice, Learn in the present tense; a
+   *  drill (a puzzle, not a game) names the games it caught them in. */
+  register: 'live' | 'review' | 'drill';
   /** The student's weakness signals (the spine, joined). */
   signals: readonly WeaknessSignal[];
   /** The game being narrated, when the caller knows it — so a row the sweep
    *  already wrote for THIS game is not counted as a prior game. Learn passes
    *  nothing: its game is live and unrecorded, so every row is prior. */
   currentGameId?: string | null;
-  register: RecurrenceRegister;
-  /** Per-game say-once ledger, keyed on the weakness LABEL — mutated. */
-  seenLabels: Set<string>;
+  memory: RecallMemory;
+  /** Only weaknesses open in at least this many records, the most recurring
+   *  first (the causal chain names only a hole the student KEEPS falling in). */
+  minOpen?: number;
   now?: number;
 }
 
 /**
- * The recurrence clause for the first attributed fundamental that the student's
- * record proves has recurred in ANOTHER game, or null. Null is the answer for a
- * fresh install, an unmatched fundamental, a fundamental whose only prior rows
- * are this same game, and a label already spoken this game.
+ * THE ONE MEMORY COMPUTER (David 2026-10-15: "Unify!"). The recurrence clause
+ * for the first match the student's record proves happened in ANOTHER game,
+ * or null. Null is the answer for a fresh install, an unmatched fundamental or
+ * tag, a weakness whose only rows are this same game, and a weakness already
+ * recalled in this direction this game.
  */
-export function fundamentalRecurrenceLine(input: FundamentalRecurrenceInput): string | null {
-  return firstRecurrence(input.ids.map((id) => matchFundamental(id, input.signals)), input);
-}
-
-/** The same clause for a MISTAKE's recorded tag (`misconceptionTags`) — the
- *  slip a verdict names with no fundamental (a loose piece, an ignored threat).
- *  Learn audit 2026-10-15: game 1 recorded both, game 2 made both again, and
- *  the coach never said so, because only a fundamental carried the line. */
-export function tagRecurrenceLine(input: Omit<FundamentalRecurrenceInput, 'ids'> & { tags: readonly string[] }): string | null {
-  return firstRecurrence(input.tags.map((t) => matchTag(t, input.signals)), input);
-}
-
-function firstRecurrence(hits: ReadonlyArray<WeaknessSignal | null>, input: Omit<FundamentalRecurrenceInput, 'ids' | 'signals'>): string | null {
+export function recall(input: RecallInput): string | null {
+  let hits = input.matches
+    .map((m) => ('fundamental' in m ? matchFundamental(m.fundamental, input.signals) : matchTag(m.tag, input.signals)))
+    .filter((h): h is WeaknessSignal => h !== null);
+  if (input.minOpen !== undefined) {
+    const min = input.minOpen;
+    hits = hits.filter((h) => h.openCount >= min).sort((a, b) => b.openCount - a.openCount);
+  }
+  const register: RecurrenceRegister = input.direction === 'held' ? 'held' : input.register;
   for (const hit of hits) {
-    if (!hit) continue;
-    if (input.seenLabels.has(hit.label)) continue;
+    const key = `${input.direction}:${hit.label}`;
+    if (input.memory.has(key)) continue;
     const read = recurrenceFor(hit, input.currentGameId);
     if (!read) continue;
-    input.seenLabels.add(hit.label);
-    return recurrenceLine(hit.label, read, input.register, input.now);
+    input.memory.add(key);
+    return recurrenceLine(hit.label, read, register, input.now);
   }
   return null;
-}
-
-/** THE GREEN DIRECTION, OUT LOUD (David 2026-10-15: "strengthen the coach's
- *  memory"): the student just HELD a question (`recordTeachingEvidence`) that
- *  their record says they failed in another game — "That one has caught you
- *  before — loose piece, against X. This time you held it." Same matcher, same
- *  prior-game rule, same once-a-game ledger as the failure line. */
-export function heldRecurrenceLine(input: { tag: string; signals: readonly WeaknessSignal[]; currentGameId?: string | null; seenLabels: Set<string>; now?: number }): string | null {
-  return firstRecurrence([matchTag(input.tag, input.signals)], { ...input, register: 'held' });
 }

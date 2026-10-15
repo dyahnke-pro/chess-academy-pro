@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**63 lines · 4 exports · 4 importers · 1 tests · 0 audits**
+**89 lines · 6 exports · 6 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,7 +13,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/components/Coach/CoachGameReview.tsx`
+- `src/components/Coach/CoachReviewSessionPage.tsx`
 - `src/services/coachFeatureService.ts`
+- `src/services/gameAnalysisService.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/reviewMoveIntent.test.ts`
 
@@ -22,20 +24,49 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `IntentMoveInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `lineOf` (const) — 16 call sites
+- `scripts/catalog-sweep/gated-skeleton-scan.mjs:28`
+- `scripts/catalog-sweep/gated-skeleton-scan.mjs:38`
+- `src/services/groundedAnswer.ts:7477`
+- `src/services/linePickerPopularity.ts:110`
+- `src/services/linePickerPopularity.ts:112`
+- `src/services/linePickerPopularity.ts:113`
+- `src/services/linePickerPopularity.ts:118`
+- `src/services/moveComparison.ts:183`
+- `src/services/moveComparison.ts:184`
+- `src/services/reviewMoveIntent.test.ts:92`
+- `src/services/reviewMoveIntent.test.ts:93`
+- `src/services/reviewMoveIntent.test.ts:94`
+- `src/services/threatPurpose.test.ts:7`
+- `src/services/threatPurpose.test.ts:25`
+- `src/services/threatPurpose.test.ts:30`
+- `src/services/threatPurpose.test.ts:36`
+
 ### `ReviewIntent` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `intentsFromReads` (function) — 3 call sites
+### `reviewPassFens` (function) — 5 call sites
+- `src/components/Coach/CoachReviewSessionPage.tsx:140`
+- `src/services/gameAnalysisService.ts:2392`
+- `src/services/reviewMoveIntent.test.ts:85`
+- `src/services/reviewMoveIntent.test.ts:86`
+- `src/services/reviewReadAhead.test.ts:77`
+
+### `intentsFromReads` (function) — 6 call sites
 - `src/services/reviewMoveIntent.test.ts:18`
 - `src/services/reviewMoveIntent.test.ts:22`
 - `src/services/reviewMoveIntent.test.ts:24`
+- `src/services/reviewMoveIntent.test.ts:53`
+- `src/services/reviewMoveIntent.test.ts:79`
+- `src/services/reviewMoveIntent.test.ts:83`
 
 ### `moveIntentsForGame` (function) — 1 call site
-- `src/services/coachFeatureService.ts:5037`
+- `src/services/coachFeatureService.ts:5045`
 
 ## Tests
 
 - `src/services/reviewMoveIntent.test.ts`
+- `src/services/reviewReadAhead.test.ts`
 
 ## Audits that reach it
 

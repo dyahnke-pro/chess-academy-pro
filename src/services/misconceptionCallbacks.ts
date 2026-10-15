@@ -230,7 +230,7 @@ export function recurrenceFor(sig: RecurrenceSource, currentGameId?: string | nu
 
 /** `held`: the student answered, on the board, a question their record says
  *  they have failed in another game — the loop's GREEN direction, out loud. */
-export type RecurrenceRegister = 'review' | 'live' | 'held';
+export type RecurrenceRegister = 'review' | 'live' | 'held' | 'drill';
 
 /** ONE composer, TWO registers (the two-register law). Every clause appears
  *  only when its source knows it: no count → no ordinal; no game → no "against". */
@@ -240,6 +240,11 @@ export function recurrenceLine(label: string, read: RecurrenceRead, register: Re
   const when = read.prior?.playedAt
     ? ` — the last one was${who} ${recencyPhrase(read.prior.playedAt, now)}`
     : (who ? ` — the last one was${who}` : '');
+  // A drill miss is not a game, so no "Nth game now": the record's games are
+  // named as where the same pattern caught them before.
+  if (register === 'drill') {
+    return `The same pattern has caught you in your games — ${label.toLowerCase()}${when}.`;
+  }
   if (register === 'held') {
     return `That one has caught you before — ${label.toLowerCase()}${when}. This time you held it.`;
   }
