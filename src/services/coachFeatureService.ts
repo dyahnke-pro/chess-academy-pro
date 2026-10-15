@@ -1212,10 +1212,11 @@ export function frameTeachingForOpponent(sentence: string): string {
  *  are in the door's rank order. Pure, so the eviction order is testable. */
 export function fitReviewTurn(rankedParts: readonly string[]): string[] {
   const words = (t: string): number => t.replace(/^\[[a-z-]+\]\s*/, '').split(/\s+/).filter(Boolean).length;
-  // The lead, the move's verdict, danger, a tactic, the plan (a good
-  // move's reason) and the habit (the method beat closes the turn by
-  // design) always speak.
-  const fixed = (t: string, i: number): boolean => i === 0 || /^\[(?:verdict|threat|tactic|trapped|loose|method|plan-now)\]/.test(t);
+  // The lead, the move's verdict ([quality] / [verdict]) and its reason
+  // ([rule] — the blunder check that names what the move lost), danger, a
+  // tactic, the plan (a good move's reason) and the habit (the method beat
+  // closes the turn by design) always speak.
+  const fixed = (t: string, i: number): boolean => i === 0 || /^\[(?:verdict|quality|rule|threat|tactic|trapped|loose|method|plan-now)\]/.test(t);
   const keep = rankedParts.map(() => true);
   let total = rankedParts.reduce((n, t) => n + words(t), 0);
   // Evict in this order until the turn fits: the STACKED fundamentals

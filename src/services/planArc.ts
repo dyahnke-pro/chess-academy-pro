@@ -154,7 +154,7 @@ const EMERGE: Record<Seat, ReadonlyArray<(p: string) => string>> = {
  *  own reason. */
 const AIM_WHY: Record<AimKind, (seat: Seat) => string> = {
   file: (seat) => ` — a rook on an open file reaches ${seat === 'student' ? 'their' : 'your'} camp`,
-  outpost: () => ' — no pawn can ever chase a piece off it',
+  outpost: () => ' — no enemy pawn can chase a piece off it',
   passer: () => ' — every push brings it closer to a queen',
   shield: () => ' — a king without its pawns in front is open to attack',
   route: () => '',
