@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**822 lines · 25 exports · 4 importers · 1 tests · 0 audits**
+**823 lines · 25 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -53,17 +53,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:69`
 
 ### `captureAbandonsDuty` (function) — 3 call sites
-- `src/services/capabilityEvidence.ts:460`
-- `src/services/exchangeIdeas.test.ts:233`
-- `src/services/exchangeIdeas.test.ts:234`
+- `src/services/capabilityEvidence.ts:461`
+- `src/services/exchangeIdeas.test.ts:240`
+- `src/services/exchangeIdeas.test.ts:241`
 
 ### `tradeChoice` (function) — 2 call sites
 - `src/services/exchangeIdeas.test.ts:73`
 - `src/services/exchangeIdeas.test.ts:76`
 
-### `dutyParity` (function) — 2 call sites
+### `dutyParity` (function) — 3 call sites
 - `src/services/exchangeIdeas.test.ts:80`
 - `src/services/exchangeIdeas.test.ts:83`
+- `src/services/exchangeIdeas.test.ts:231`
 
 ### `maintenanceTrade` (function) — 2 call sites
 - `src/services/exchangeIdeas.test.ts:88`
@@ -88,7 +89,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `safeBecause` (function) — 3 call sites
 - `src/services/exchangeIdeas.test.ts:126`
 - `src/services/exchangeIdeas.test.ts:129`
-- `src/services/exchangeIdeas.test.ts:247`
+- `src/services/exchangeIdeas.test.ts:254`
 
 ### `wingForCentre` (function) — 2 call sites
 - `src/services/exchangeIdeas.test.ts:141`
@@ -102,7 +103,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/captureChoice.ts:59`
 - `src/services/moveInsight.ts:1081`
 - `src/services/moveInsight.ts:1133`
-- `src/services/speedRunReads.ts:359`
+- `src/services/speedRunReads.ts:363`
 
 ### `knightSquares` (function) — 3 call sites
 - `src/services/exchangeIdeas.test.ts:156`
@@ -110,7 +111,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:162`
 
 ### `cPawnBlock` (function) — 4 call sites
-- `src/services/capabilityEvidence.ts:492`
+- `src/services/capabilityEvidence.ts:493`
 - `src/services/exchangeIdeas.test.ts:166`
 - `src/services/exchangeIdeas.test.ts:168`
 - `src/services/exchangeIdeas.test.ts:169`
@@ -122,8 +123,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:187`
 - `src/services/exchangeIdeas.test.ts:188`
 - `src/services/exchangeIdeas.test.ts:192`
-- `src/services/positionFacts.ts:1136`
-- `src/services/reviewFullData.ts:958`
+- `src/services/positionFacts.ts:1137`
+- `src/services/reviewFullData.ts:968`
 
 ## Tests
 

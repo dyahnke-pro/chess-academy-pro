@@ -222,8 +222,15 @@ describe('the aggregator and the one door', () => {
     const c = r.clauses.find((x) => x.kind === 'trade-idea');
     expect(c?.text).toMatch(/just as tied to attacking it/);
     expect(c && isProof(c.proof)).toBe(true);
-    expect(r.remember).toContain('duty-parity:b1b2');
+    expect(r.remember).toContain('duty-parity');
   }, 30_000);
+
+  it('duty parity is one idea a game: a new guard and target share its say-once key', async () => {
+    const { dutyParity } = await import('./exchangeIdeas');
+    // The say-once key names the idea, never the squares it sits on.
+    const a = dutyParity('6k1/5ppp/1q6/8/8/8/1P3PPP/1R4K1 w - - 0 1', 'w');
+    expect(a?.claim).toBe('duty-parity');
+  });
 });
 
 describe('diagnose: a capture that abandons its post is posed to the student model', () => {
