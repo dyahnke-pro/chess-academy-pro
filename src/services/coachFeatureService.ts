@@ -13,7 +13,7 @@ import { layerStandings } from './teachingLayers';
 import { readConversion, type ConversionStep } from './conversionMethod';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsClause, computePvLine, pvDepthForRating, type PvLine, type PvEngine } from './pvPlayback';
-import { andList, lineShape } from '../utils/andList';
+import { lineShape } from '../utils/andList';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { explainEvalByPieceQuality, lowestMinorMobility, phraseBadPiece, type PieceQualityResult } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';

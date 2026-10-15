@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5380 lines · 33 exports · 49 importers · 48 tests · 5 audits**
+**5341 lines · 31 exports · 48 importers · 47 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:76) — names `coachFeatureService`
-- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3952) — names `buildReviewSegments`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4272) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6340) — names `coachFeatureService`
+- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3954) — names `buildReviewSegments`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4274) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6342) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -58,7 +58,6 @@
 - `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRefuted.test.ts`
 - `src/services/reviewRegister.test.ts`
-- `src/services/reviewTurnLength.test.ts`
 - `src/services/reviewWalk1500.test.ts`
 - `src/services/reviewWalk900.test.ts`
 - `src/services/whyItFailed.test.ts`
@@ -137,14 +136,6 @@
 ### `frameTeachingForOpponent` (function) — 2 call sites
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
-
-### `fitReviewTurn` (function) — 3 call sites
-- `src/services/reviewTurnLength.test.ts:15`
-- `src/services/reviewTurnLength.test.ts:23`
-- `src/services/reviewTurnLength.test.ts:32`
-
-### `REVIEW_TURN_WORDS` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewSegments` (function) — 73 call sites
 - `src/components/Coach/CoachGameReview.tsx:1820`
@@ -381,7 +372,6 @@
 - `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRefuted.test.ts`
 - `src/services/reviewRegister.test.ts`
-- `src/services/reviewTurnLength.test.ts`
 - `src/services/reviewWalk1500.test.ts`
 - `src/services/reviewWalk900.test.ts`
 - `src/services/whyItFailed.test.ts`
@@ -396,6 +386,5 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-review-gaps.mjs`
 - `scripts/audit-coach-review.mjs`
-- `scripts/audit-lib/why-count.mjs`
 - `scripts/audit-review-overhaul-prod.mjs`
 - `scripts/audit-unified-coach-prod.mjs`

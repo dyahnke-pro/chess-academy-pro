@@ -18,7 +18,7 @@
  * surface can pass its own engine handle. A LEAF beside lineCalc: no Dexie,
  * no voice.
  */
-import { andList, lineShape } from '../utils/andList';
+import { lineShape } from '../utils/andList';
 import { Chess } from 'chess.js';
 import { lineWins, mateLine, lineArrows } from './lineCalc';
 import { errorWhyFor } from './inaccuracyCall';

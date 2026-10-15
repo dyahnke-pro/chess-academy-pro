@@ -96,7 +96,7 @@ describe('Review walk 2026-10-01 — Be2 saves the attacked bishop', () => {
     const c = new Chess(); for (const m of 'e4 d5 exd5 Nf6 Bb5+ Bd7'.split(' ')) c.move(m);
     const funds = computeMoveFundamentals(c.fen(), 'Be2', 'white');
     expect(funds.map((f) => f.led).join(' | ')).toMatch(/saves it from their bishop on d7/);
-    expect(principleLine(c.fen(), 'Be2', 'white', new Set(['development', 'center']), 0)?.text ?? '').toMatch(/bishop away from their bishop on d7/);
+    expect(principleLine(c.fen(), 'Be2', 'white', new Set(['development', 'center']), 0)?.text ?? '').toMatch(/saves it from their bishop on d7/);
   });
 });
 

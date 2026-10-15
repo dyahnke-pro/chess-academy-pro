@@ -80,7 +80,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `netPieceWords` (function) — 7 call sites
 - `src/coach/chatTurnAnswers.ts:407`
 - `src/services/exchangeIdeas.ts:594`
-- `src/services/lineCalc.ts:173`
+- `src/services/lineCalc.ts:177`
 - `src/services/patternFails.ts:129`
 - `src/services/reviewPositionalAssessment.ts:141`
 - `src/services/tacticGeometry.ts:529`
@@ -117,8 +117,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `proofCut` (function) — 35 call sites
-- `src/services/coachFeatureService.ts:3720`
-- `src/services/coachFeatureService.ts:3723`
+- `src/services/coachFeatureService.ts:3692`
+- `src/services/coachFeatureService.ts:3695`
 - `src/services/gemCrushLines.ts:265`
 - `src/services/gemFinder.ts:243`
 - `src/services/giftedMaterialIsNotWon.test.ts:14`
@@ -160,7 +160,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/giftedMaterialIsNotWon.test.ts:57`
 
 ### `describeProofResult` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:3692`
+- `src/services/coachFeatureService.ts:3664`
 - `src/services/lineProof.test.ts:27`
 - `src/services/pieceOptions.ts:135`
 - `src/services/refutedAlternativeCore.ts:187`
@@ -173,7 +173,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lineCalc.ts:49`
 
 ### `moverLossProof` (function) — 6 call sites
-- `src/services/criticalMoment.ts:240`
+- `src/services/criticalMoment.ts:241`
 - `src/services/deliberation.ts:231`
 - `src/services/deliberation.ts:258`
 - `src/services/exchangeLedger.horizon.test.ts:16`
@@ -188,7 +188,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:255`
 - `src/services/groundedAnswer.ts:1946`
 - `src/services/positionFacts.ts:579`
-- `src/services/reviewFullData.ts:769`
+- `src/services/reviewFullData.ts:775`
 
 ## Tests
 

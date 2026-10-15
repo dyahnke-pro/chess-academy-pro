@@ -1086,7 +1086,7 @@ export function errorWhy(args: {
       const c = new Chess(args.fenBefore); c.move(args.playedSan);
       const opp = args.moverColor === 'white' ? 'b' : 'w';
       const ml = mateLine(c.fen(), replyLineUci, opp, undefined, { minPlies: 1 });
-      if (ml && ml.plies.length <= 5) return `it let them force mate: ${lineShape(ml.sans)}`;
+      if (ml && ml.plies.length <= 3) return `it let them force mate: ${andList(ml.sans)}`;
       const u = replyLineUci[0];
       const m = u ? c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }) : null;
       const count = n > 0 && n <= 5 ? ` in ${n}` : '';

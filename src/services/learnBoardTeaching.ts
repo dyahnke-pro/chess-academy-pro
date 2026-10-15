@@ -12,7 +12,7 @@ import { flipSideToMove } from './threatOut';
 import { CAPTURE_VALUE } from './pieceValues';
 import { lineProof, legalLineProof, squaresProof, NO_PROOF, type FactProof, type Proof } from './proof';
 import { shareAdverb } from '../utils/shareWords';
-import { andList, lineShape } from '../utils/andList';
+import { lineShape } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import { Chess, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';

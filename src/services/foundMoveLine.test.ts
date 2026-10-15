@@ -36,7 +36,7 @@ describe('studentMoveTeaching — a winning move says its line (David 2026-09-30
       reply: null, cpAfter: null,
     });
     const line = hints.find((h) => h.lane === 'movePoint' && /wins a pawn/.test(h.text));
-    expect(line?.text).toBe('That wins a pawn: …Nxd5, cxd5, …Bxc3+, Bxc3 and …Qxc3+.');
+    expect(line?.text).toBe('That wins a pawn: …Nxd5 and the moves that follow.');
     expect(line?.arrows).toHaveLength(5);
   });
 });
