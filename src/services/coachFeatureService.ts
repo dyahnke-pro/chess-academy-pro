@@ -1,3 +1,4 @@
+import { capabilitiesPosed } from './capabilityEvidence';
 import { moveIntentsForGame, type ReviewIntent } from './reviewMoveIntent';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan } from './material';
@@ -49,7 +50,7 @@ import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { recurrenceFor, recurrenceLine } from './misconceptionCallbacks';
 import { noteSlip } from './learnBoardTeaching';
-import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
+import { fundamentalRecurrenceLine, heldRecurrenceLine } from './fundamentalRecurrence';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { mateStakes, isSacrifice, type FactStakes } from './factStakes';
@@ -1389,6 +1390,8 @@ export function buildReviewSegments(
   // <hole>" isn't repeated on every move that maps to the same weakness.
   const causalChainsSeen = new Set<string>();
   const recurrenceLabelsSeen = new Set<string>();
+  /** Weakness labels whose "this time you held it" was said this game. */
+  const heldLabelsSeen = new Set<string>();
   // Deepest-look-ahead shots announced (David 2026-07-26 — the review-register
   // peer of the live speakDeepestLookahead), keyed by the shot's SAN so the same
   // combination is called out once per game.
@@ -1830,6 +1833,20 @@ export function buildReviewSegments(
         facetProofs.set(raw, r.proof);
         if (r.squares.length) facetSquares.set(raw, r.squares);
         if (r.stakes) facetStakes.set(raw, r.stakes);
+      }
+      // THE LOOP'S GREEN DIRECTION (capability parity with Learn, 2026-10-15):
+      // a clean student move that answered a question the board POSED
+      // (`capabilitiesPosed`, the same computer the sweep records) which their
+      // record says they failed in another game — said once per weakness.
+      if (moverColor === playerColor && studentWeaknesses && studentWeaknesses.length > 0
+        && (m.classification === null || m.classification === 'good' || m.classification === 'great' || m.classification === 'brilliant' || m.classification === 'book')) {
+        try {
+          for (const posed of capabilitiesPosed(fenPair.fenBefore, m.san, moverColor)) {
+            if (posed.outcome === 'broken' || posed.posedImportance < 60) continue;
+            const line = heldRecurrenceLine({ tag: posed.tag, signals: studentWeaknesses, currentGameId, seenLabels: heldLabelsSeen });
+            if (line) { facets.push(`[held] ${line}`); break; }
+          }
+        } catch { /* memory is a bonus, never a blocker */ }
       }
       // THE CONVERSION METHOD (WO-LAYERS-01 step 5), on the student's move when
       // they are a piece or more up — the step the board is on, once per step

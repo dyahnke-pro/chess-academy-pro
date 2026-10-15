@@ -723,22 +723,20 @@ export function renderFundamentalVerdict(attrs: readonly PrincipleAttribution[],
     if (missed) { opts.seen.add(a.id); parts.push(missed); return; }
     const first = !opts.seen.has(a.id);
     if (!first) { parts.push(shortVerdict(a)); return; }
-    // ONE LEAD REASON PER TURN (David 2026-10-14; the 2026-10-15 reviews said
-    // three fundamentals on one ply — 223 words with three how-tos, then 140
-    // with one). The lead fundamental teaches with its habit; a second NEW one
-    // waits, unheard, so the next move that earns it leads with the full
-    // lesson instead of a crowded mention here.
-    if (hows > 0) return;
+    // Every fundamental the move broke is taught (David 2026-10-15: "No hard
+    // word count caps" — a second one used to wait unheard here). Turn length
+    // is held as an average; the ranking decides what leads.
     opts.seen.add(a.id);
     // THE DIAGNOSIS, THEN THE HOW (David 2026-09-16: "The plan plus here's
     // how!!! The how is teaching!!"). Naming the flaw is half a lesson; the
     // procedure that stops it next game is the other half. Attached on the
     // FIRST appearance only — `opts.seen` is already the say-once ledger, so a
     // fundamental that recurs gets its short stem and never the lecture twice.
-    // THE HOW'S FIRST SENTENCE IS THE PROCEDURE (David 2026-10-14: no turn
-    // past 80 words). Its later sentences refine it; the procedure itself is
-    // what the student runs next game, so it is what the turn carries.
-    const how = fundamentalHow(a.id, a.facts)?.split(/(?<=[.!?])\s+/)[0] ?? null;
+    // THE WHOLE HOW (David 2026-10-15: "No hard word count caps"). Its first
+    // sentence was kept alone for a while to fit an 80-word turn — which kept
+    // the slogan ("Their move first, always.") and cut the procedure ("answer
+    // what their last move threatens"). Turn length is an average now.
+    const how = fundamentalHow(a.id, a.facts) ?? null;
     parts.push(how ? `${fullVerdict(a, opts.ply + i)} ${HOW_STEMS[hows++ % HOW_STEMS.length]} ${how}` : fullVerdict(a, opts.ply + i));
   });
   return parts.join(' ');

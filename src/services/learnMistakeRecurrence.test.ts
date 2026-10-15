@@ -13,7 +13,7 @@ describe('a plain mistake says when it recurs — the loop out loud (Learn audit
   const signal = (gameId: string): WeaknessSignal => ({
     clusterId: cls?.tag ?? 'none', bucket: 'tactical' as never, label: 'Loose piece', openCount: 2, severity: 60,
     puzzleThemes: [], total: 2, games: [{ gameId, opponentName: 'Coach' }], capabilityTag: null,
-  } as WeaknessSignal);
+  } as unknown as WeaknessSignal);
   it('the classifier names the slip (the tag the record files it under)', () => {
     expect(cls?.tag).toBeTruthy();
   });
