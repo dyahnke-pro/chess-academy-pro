@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7651 lines · 166 exports · 89 importers · 59 tests · 8 audits**
+**7659 lines · 166 exports · 89 importers · 59 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -394,8 +394,8 @@
 - `src/services/coachFeatureService.test.ts:69`
 - `src/services/coachFeatureService.test.ts:83`
 - `src/services/coachFeatureService.test.ts:90`
-- `src/services/coachFeatureService.ts:2525`
-- `src/services/coachFeatureService.ts:2536`
+- `src/services/coachFeatureService.ts:2534`
+- `src/services/coachFeatureService.ts:2545`
 - `src/services/coachMoveCommentary.ts:221`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/explainBestMoveLines.test.ts:14`
@@ -448,7 +448,7 @@
 - `src/services/inaccuracyCall.ts:896`
 
 ### `describeMoveMerit` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1008`
+- `src/services/coachFeatureService.ts:1009`
 - `src/services/keySquares.test.ts:81`
 - `src/services/keySquares.test.ts:90`
 - `src/services/keySquares.test.ts:94`
@@ -461,7 +461,7 @@
 - `src/services/brilliancy.ts:130`
 - `src/services/coachFeatureService.test.ts:99`
 - `src/services/coachFeatureService.test.ts:105`
-- `src/services/coachFeatureService.ts:1008`
+- `src/services/coachFeatureService.ts:1009`
 
 ### `MovePurpose` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -506,7 +506,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `explainMoveOrder` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:872`
+- `src/services/coachFeatureService.ts:873`
 - `src/services/groundedAnswer.test.ts:1071`
 - `src/services/groundedAnswer.test.ts:1079`
 - `src/services/groundedAnswer.test.ts:1086`
@@ -1165,7 +1165,7 @@
 - `src/services/bluffDetector.ts:73`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/captureThreatAnswerable.test.ts:29`
-- `src/services/coachFeatureService.ts:2856`
+- `src/services/coachFeatureService.ts:2865`
 - `src/services/engineDeltaLines.ts:53`
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
@@ -1186,7 +1186,7 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2777`
+- `src/services/coachFeatureService.ts:2786`
 - `src/services/reviewNarrationFidelity.test.ts:109`
 - `src/services/reviewNarrationFidelity.test.ts:121`
 - `src/services/reviewNarrationFidelity.test.ts:129`
@@ -1202,7 +1202,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:2876`
+- `src/services/coachFeatureService.ts:2885`
 - `src/services/reviewNarrationFidelity.test.ts:179`
 
 ### `ComparedMove` (interface) — 0 call sites
@@ -1236,9 +1236,9 @@
 
 ### `seatPieceReferences` (re-export) — 34 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8512`
-- `src/services/coachFeatureService.ts:4086`
-- `src/services/coachFeatureService.ts:4137`
-- `src/services/coachFeatureService.ts:5160`
+- `src/services/coachFeatureService.ts:4095`
+- `src/services/coachFeatureService.ts:4146`
+- `src/services/coachFeatureService.ts:5169`
 - `src/services/liveTacticsContext.ts:450`
 - `src/services/lookaheadPlan.ts:131`
 - `src/services/reviewBoardAwareness.test.ts:47`

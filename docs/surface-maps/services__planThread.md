@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**133 lines · 7 exports · 4 importers · 1 tests · 0 audits**
+**163 lines · 7 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,10 +20,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `planAimKey` (function) — 4 call sites
-- `src/services/planThread.test.ts:59`
-- `src/services/planThread.test.ts:60`
-- `src/services/planThread.test.ts:61`
-- `src/services/planThread.test.ts:62`
+- `src/services/planThread.test.ts:64`
+- `src/services/planThread.test.ts:65`
+- `src/services/planThread.test.ts:66`
+- `src/services/planThread.test.ts:67`
 
 ### `PLAN_THREAD_HOLD_PLIES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -34,15 +34,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `newPlanThread` (function) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10002`
 - `src/services/boardComputers.test.ts:50`
-- `src/services/coachFeatureService.ts:1437`
+- `src/services/coachFeatureService.ts:1438`
 - `src/services/planThread.test.ts:17`
-- `src/services/planThread.test.ts:26`
-- `src/services/planThread.test.ts:35`
-- `src/services/planThread.test.ts:44`
-- `src/services/planThread.test.ts:73`
+- `src/services/planThread.test.ts:31`
+- `src/services/planThread.test.ts:40`
+- `src/services/planThread.test.ts:49`
+- `src/services/planThread.test.ts:78`
 
 ### `clonePlanThread` (function) — 1 call site
-- `src/services/coachFeatureService.ts:2020`
+- `src/services/coachFeatureService.ts:2023`
 
 ### `PlanThreadLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -50,13 +50,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `planThreadTurn` (function) — 9 call sites
 - `src/services/boardComputers.ts:295`
 - `src/services/planThread.test.ts:18`
-- `src/services/planThread.test.ts:20`
-- `src/services/planThread.test.ts:29`
-- `src/services/planThread.test.ts:36`
-- `src/services/planThread.test.ts:37`
-- `src/services/planThread.test.ts:46`
-- `src/services/planThread.test.ts:49`
-- `src/services/planThread.test.ts:77`
+- `src/services/planThread.test.ts:25`
+- `src/services/planThread.test.ts:34`
+- `src/services/planThread.test.ts:41`
+- `src/services/planThread.test.ts:42`
+- `src/services/planThread.test.ts:51`
+- `src/services/planThread.test.ts:54`
+- `src/services/planThread.test.ts:82`
 
 ## Tests
 

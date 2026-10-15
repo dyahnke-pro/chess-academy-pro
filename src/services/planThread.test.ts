@@ -16,7 +16,12 @@ describe('planThread — stated once, stopped with its proof', () => {
   it('states the board\'s plan, then says HOW their move stopped it, then the new plan', () => {
     const t = newPlanThread();
     const first = planThreadTurn(t, { ply: 22, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w' });
-    expect(first.map((l) => l.text)[0]).toMatch(/^The plan from here is to attack their king on f8 before it gets out/);
+    // The first plan of a game is FOUND out loud: the three questions, a
+    // pause, the answers, the plan, and why it beats the next plan.
+    const line = first.map((l) => l.text)[0];
+    expect(line).toMatch(/^How do you find a plan\? .* ‖ Their weakness: their king, still on f8\./);
+    expect(line).toMatch(/So: the plan from here is to attack their king on f8 before it gets out\./);
+    expect(line).toMatch(/Why this one first\? .*so it comes before seizing the open e-file\.$/);
     const second = planThreadTurn(t, { ply: 24, fenBefore: KING_F8, fenAfter: after(KING_F8, 'Kg8'), student: 'w' });
     expect(second[0].text).toBe('Their king stepped to g8, out of the open centre — the attack on it is off. That plan is off.');
     if (second[1]) expect(second[1].text).toMatch(/^The new plan is to /);

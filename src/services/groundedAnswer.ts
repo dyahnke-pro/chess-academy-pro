@@ -515,7 +515,15 @@ export function assembleBoardPlanAnswer(
   // pawn on d2") contradicts it and goes.
   const taken = urgency?.takeAttacker?.square ?? null;
   const keep = (x: string): boolean => !taken || !new RegExp(`\\b${taken}\\b`).test(x);
-  const headK = [trump, ...withMethod].filter((x): x is string => !!x && keep(x)).join(' ');
+  // HOW IT WAS FOUND, AND WHY THIS ONE (David 2026-10-15): the three
+  // questions and their answers lead, the reason the first plan comes first follows.
+  const why = pf.why && withMethod.length ? ` ${pf.ordered ? 'Why that one first?' : 'Why it matters:'} ${pf.why.charAt(0).toUpperCase()}${pf.why.slice(1)}.` : '';
+  const headPlans = [trump, ...withMethod].filter((x): x is string => !!x && keep(x)).join(' ');
+  const headK = headPlans
+    ? pf.method && withMethod.length
+      ? `${pf.method} So: ${headPlans.charAt(0).toLowerCase()}${headPlans.slice(1)}${why}`
+      : `${headPlans}${why}`
+    : '';
   const topK = top.filter(keep);
   if (headK && topK.length) {
     return { facts: `${urgent}${headK} Beyond that: ${topK.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };

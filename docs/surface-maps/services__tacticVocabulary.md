@@ -36,9 +36,9 @@
 - `src/components/Coach/CoachTeachPage.tsx:8404`
 - `src/services/computedVoiceAudit.report.test.ts:254`
 - `src/services/dnaLineNarrator.ts:58`
-- `src/services/groundedAnswer.ts:5404`
-- `src/services/groundedAnswer.ts:5416`
-- `src/services/groundedAnswer.ts:6201`
+- `src/services/groundedAnswer.ts:5412`
+- `src/services/groundedAnswer.ts:5424`
+- `src/services/groundedAnswer.ts:6209`
 - `src/services/lookaheadPlan.ts:113`
 - `src/services/pvPlayback.test.ts:268`
 - `src/services/pvPlayback.test.ts:269`

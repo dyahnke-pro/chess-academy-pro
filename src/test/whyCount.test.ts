@@ -57,3 +57,13 @@ describe('turn length is an average over TEACHING turns (David 2026-10-15)', () 
     expect(r.avg).toBeGreaterThan(100);
   });
 });
+
+describe('plan teaching tally (2026-10-15)', () => {
+  it('a plan stated without its why fails; with the method and the why it passes', async () => {
+    const { planTally } = await import('../../scripts/audit-lib/why-count.mjs');
+    expect(planTally(['The plan from here is to seize the open c-file. Here\'s how: put a rook on it.']).everyPlanHasWhy).toBe(false);
+    expect(planTally(['The plan from here is to seize the open c-file.']).methodAsked).toBe(false);
+    const ok = planTally(['How do you find a plan? Ask three things.', 'So: the plan from here is to win their weak pawn on d5. Why this one first? No pawn of theirs can protect it.']);
+    expect(ok.everyPlanHasWhy && ok.methodAsked).toBe(true);
+  });
+});

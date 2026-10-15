@@ -12,7 +12,8 @@ import { reachWords } from '../utils/reachWords';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
-import { isKnightOutpost } from './forwardTeaching';
+import { isKnightOutpost, computePieceRoute, computeSliderRoute } from './forwardTeaching';
+import { routeVia } from '../utils/routeWords';
 import { legalSeeGainFor } from './positionReadingService';
 import { enemyKingStuckInCenter } from './reviewSacrifice';
 
@@ -188,6 +189,10 @@ export interface PlanFact {
   file: string | null;
   /** One stable id per plan on this board: kind + anchor. */
   id: string;
+  /** The goal alone, to follow "the plan is to …" ("seize the open c-file"). */
+  goal: string;
+  /** The same goal as a gerund, to follow "before …" ("seizing the open c-file"). */
+  goalIng: string;
 }
 
 export function deriveNextPlanFacts(
@@ -223,8 +228,10 @@ export function deriveNextPlanFacts(
   const all = cells(chess);
   const fullmove = Number(fen.split(' ')[5] ?? '0');
   const plans: PlanFact[] = [];
-  const add = (kind: PlanKind, text: string, squares: string[], file: string | null = null): void => {
-    plans.push({ kind, text, squares, file, id: `${kind}:${squares[0] ?? file ?? ''}` });
+  // The goal and the how are coupled at emission, never read back from the
+  // sentence (planChoice says why one goal comes before another).
+  const add = (kind: PlanKind, goal: string, goalIng: string, how: string, squares: string[], file: string | null = null): void => {
+    plans.push({ kind, text: `the plan from here is to ${goal}. Here's how: ${how}`, squares, file, id: `${kind}:${squares[0] ?? file ?? ''}`, goal, goalIng });
   };
 
   // 1. Enemy king exposed in the centre → open lines and attack it, HOW spelled out.
@@ -250,7 +257,7 @@ export function deriveNextPlanFacts(
       : rookCount === 1
         ? `put your rook on the open ${openCentralFile}-file, `
         : '';
-    add('king-attack', `the plan from here is to attack their king on ${enemyKing.square} before it gets out. Here's how: tuck your own king away, ${fileClause}bring pieces in with tempo, and look for a sacrifice on ${softSquares} to strip its cover`, [enemyKing.square], openCentralFile);
+    add('king-attack', `attack their king on ${enemyKing.square} before it gets out`, `attacking their king on ${enemyKing.square}`, `tuck your own king away, ${fileClause}bring pieces in with tempo, and look for a sacrifice on ${softSquares} to strip its cover`, [enemyKing.square], openCentralFile);
   }
 
   // 2. Your passed pawn → push it, HOW spelled out. The king joins the escort
@@ -269,7 +276,7 @@ export function deriveNextPlanFacts(
     const escort = queensOn
       ? 'escort it with your pieces — the king joins once the queens come off'
       : 'escort it with your king and pieces';
-    add('passer', `the plan from here is to get your passed pawn on ${passer} promoting. Here's how: clear the square in front of it, ${escort}, and push it one safe square at a time — every push brings it closer to promotion`, [passer]);
+    add('passer', `get your passed pawn on ${passer} promoting`, `pushing your passed pawn on ${passer}`, `${passerHow(chess, passer, studentColorWB)}${escort}, and push it one safe square at a time — every push brings it closer to promotion`, [passer]);
   }
 
   // 3. An enemy weak (isolated) pawn on the c–f files → besiege it, HOW spelled
@@ -303,7 +310,7 @@ export function deriveNextPlanFacts(
           : blockader
             ? `plant your ${blockader.type === 'n' ? 'knight' : 'bishop'} on ${block}, in front of it, so it can never advance`
             : `control ${block}, the square in front of it, so it can never advance`;
-    add('weak-pawn', `the plan from here is to win their weak pawn on ${weak}. Here's how: ${blockBit ? `${blockBit}; then ` : ''}stack your heavy pieces on its file and trade off its defenders — each one is a piece of theirs tied to it`, [weak, block]);
+    add('weak-pawn', `win their weak pawn on ${weak}`, `winning their weak pawn on ${weak}`, `${blockBit ? `${blockBit}; then ` : ''}stack your heavy pieces on its file and trade off its defenders — each one is a piece of theirs tied to it${countBit(chess, weak as Square, studentColorWB)}`, [weak, block]);
   }
 
   // 4. An open file you don't yet own with a heavy piece → seize it, HOW
@@ -316,20 +323,20 @@ export function deriveNextPlanFacts(
   const freeOpenFile = struct.pawns.openFiles.find((f) => !myHeavyFiles.has(f) && !theirHeavyFiles.has(f));
   if (freeOpenFile && myRooks.length > 0) {
     const doubleBit = myRooks.length >= 2 ? 'double the second rook behind the first so nothing can challenge you, and ' : '';
-    add('open-file', `the plan from here is to seize the open ${freeOpenFile}-file. Here's how: put a rook on it right away before they contest it, ${doubleBit}aim for the seventh rank, where a rook attacks pawns from behind`, [], freeOpenFile);
+    add('open-file', `seize the open ${freeOpenFile}-file`, `seizing the open ${freeOpenFile}-file`, `${rookReachBit(chess, myRooks, freeOpenFile)}${doubleBit}aim for the seventh rank, where a rook attacks pawns from behind`, [], freeOpenFile);
   }
 
   // 5. You already hold an outpost → dominate from it, HOW spelled out.
   const myOutpost = struct.outposts.find((o) => o.color === studentColorWB);
   if (myOutpost) {
-    add('outpost', `the plan from here is to make that ${myOutpost.piece === 'n' ? 'knight' : 'bishop'} on ${myOutpost.square} the boss of the board. Here's how: keep a pawn guarding it and refuse trades that give it up — from there it presses on everything around it`, [myOutpost.square]);
+    add('outpost', `make that ${myOutpost.piece === 'n' ? 'knight' : 'bishop'} on ${myOutpost.square} the boss of the board`, `building around your ${myOutpost.piece === 'n' ? 'knight' : 'bishop'} on ${myOutpost.square}`, `${guardPawnBit(chess, myOutpost.square as Square, studentColorWB)} and refuse trades that give it up — from there it presses on everything around it`, [myOutpost.square]);
   }
 
   // 6. Your worst-placed piece (stuck) → reroute it, HOW spelled out.
   if (fullmove >= 10) {
     const worst = findWorstPlacedPiece(chess, studentColorWB);
     if (worst) {
-      add('worst-piece', `the plan from here is to rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}, which ${reachWords(worst.m)}. Here's how: walk it to a square where it bites before you attack — a piece doing nothing leaves you a piece down in the fight`, [worst.sq]);
+      add('worst-piece', `rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}, which ${reachWords(worst.m)}`, `rescuing your ${PIECE_NOUN[worst.type]} on ${worst.sq}`, `${routeBit(fen, worst.sq as Square)}before you attack — a piece doing nothing leaves you a piece down in the fight`, [worst.sq]);
     }
   }
 
@@ -361,7 +368,7 @@ export function deriveNextPlanFacts(
       : nonPawnDiff > 0 ? 'your extra material'
       : pawnDiff >= 1 ? `your extra pawn${pawnDiff > 1 ? 's' : ''}`
       : 'your material edge';
-    add('convert', `the plan from here is to convert your extra material. Here's how: trade pieces, keep the pawns, and keep it simple — every trade makes ${surplus} count for more`, []);
+    add('convert', `convert your extra material`, `converting your extra material`, `trade pieces, keep the pawns, and keep it simple — every trade makes ${surplus} count for more`, []);
   }
 
   // 8. Bishop pair → open the position for the two bishops, HOW spelled out.
@@ -379,10 +386,81 @@ export function deriveNextPlanFacts(
       : enemyN ? 'their knights'
       : enemyB === 1 ? 'their lone bishop'
       : 'anything they have left';
-    add('bishop-pair', `the plan from here is to make your bishop pair count. Here's how: trade pawns to open the board and keep both bishops — on an open board two bishops outgun ${rival}`, all.filter((c) => c.type === 'b' && c.color === studentColorWB).map((c) => c.square));
+    add('bishop-pair', `make your bishop pair count`, `opening the board for your bishops`, `trade pawns to open the board and keep both bishops — on an open board two bishops outgun ${rival}`, all.filter((c) => c.type === 'b' && c.color === studentColorWB).map((c) => c.square));
   }
 
   return plans;
+}
+
+// ── THE CONCRETE HOW (David 2026-10-15: "teach the user how to think for
+// themselves") — each plan's method computed on THIS board: the count, the
+// piece, the square, the distance. Clauses, never a move in SAN: the student
+// still finds the move.
+
+const TIMES = ['no times', 'once', 'twice', 'three times', 'four times'];
+const times = (n: number): string => TIMES[n] ?? `${n} times`;
+
+function withMover(chess: Chess, color: Color): Chess | null {
+  if (chess.turn() === color) return chess;
+  const parts = chess.fen().split(' ');
+  parts[1] = color; parts[3] = '-';
+  try { return new Chess(parts.join(' ')); } catch { return null; }
+}
+
+/** The passer's distance to queening, and the enemy piece covering its next square. */
+function passerHow(chess: Chess, passer: string, color: Color): string {
+  const rank = Number(passer[1]);
+  const left = color === 'w' ? 8 - rank : rank - 1;
+  const front = `${passer[0]}${rank + (color === 'w' ? 1 : -1)}` as Square;
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  let cover = '';
+  try {
+    const by = chess.attackers(front, enemy).map((sq) => ({ sq, p: chess.get(sq) })).filter((x) => x.p && x.p.type !== 'k');
+    if (by.length > 0) cover = `, and their ${PIECE_NOUN[by[0].p?.type ?? 'p']} on ${by[0].sq} covers ${front} — drive it off or cover ${front} yourself first`;
+  } catch { cover = ''; }
+  return `it is ${left} square${left === 1 ? '' : 's'} from queening${cover}; `;
+}
+
+/** The weak pawn counted: how often the student hits it against its guards. */
+function countBit(chess: Chess, weak: Square, color: Color): string {
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  let a = 0; let d = 0;
+  try { a = chess.attackers(weak, color).length; d = chess.attackers(weak, enemy).length; } catch { return ''; }
+  if (a === 0) return `. Count it: you don't hit it yet and they guard it ${times(d)} — bring attackers until yours outnumber the guards`;
+  return a > d
+    ? `. Count it: you hit it ${times(a)} and they guard it ${times(d)} — more attackers than guards`
+    : `. Count it: you hit it ${times(a)} and they guard it ${times(d)} — add attackers until yours outnumber the guards`;
+}
+
+/** Whether a rook of the student's reaches the file in one move. */
+function rookReachBit(chess: Chess, rooks: readonly Cell[], file: string): string {
+  const me = rooks[0]?.color;
+  const board = me ? withMover(chess, me) : null;
+  const reach = board ? board.moves({ verbose: true }).some((m) => m.piece === 'r' && m.to[0] === file && m.from[0] !== file) : false;
+  return reach
+    ? 'put a rook on it right away — one of yours gets there in a single move, so do it before they contest it; '
+    : 'clear a path for a rook before they contest it — none of yours reaches it in one move yet; ';
+}
+
+/** The pawn that guards the outpost, named. */
+function guardPawnBit(chess: Chess, sq: Square, color: Color): string {
+  const behind = Number(sq[1]) + (color === 'w' ? -1 : 1);
+  for (const df of [-1, 1]) {
+    const f = String.fromCharCode(sq.charCodeAt(0) + df);
+    if (f < 'a' || f > 'h') continue;
+    const at = `${f}${behind}` as Square;
+    const p = chess.get(at);
+    if (p && p.type === 'p' && p.color === color) return `keep your pawn on ${at} guarding it`;
+  }
+  return 'keep a pawn guarding it';
+}
+
+/** Where the worst piece wants to go, by its own route computer. */
+function routeBit(fen: string, sq: Square): string {
+  const r = computePieceRoute(fen, sq) ?? computeSliderRoute(fen, sq);
+  if (!r || r.route.length === 0) return 'walk it to a square where it bites ';
+  const via = r.route.slice(0, -1);
+  return `walk it to ${r.target}${routeVia(via)}${via.length ? ',' : ''} `;
 }
 
 export function mobilityMap(chess: Chess, color: Color): Map<string, number> {

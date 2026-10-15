@@ -19,14 +19,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `planStoppedProof` (function) — 2 call sites
 - `src/services/planStopped.test.ts:14`
-- `src/services/planThread.ts:98`
+- `src/services/planThread.ts:111`
 
 ### `planStoppedLine` (function) — 5 call sites
 - `src/services/planStopped.test.ts:50`
 - `src/services/planStopped.test.ts:53`
 - `src/services/planStopped.test.ts:61`
 - `src/services/planStopped.test.ts:65`
-- `src/services/planThread.ts:101`
+- `src/services/planThread.ts:114`
 
 ## Tests
 

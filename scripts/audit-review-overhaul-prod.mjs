@@ -34,7 +34,7 @@
 import { linesWithStats } from './audit-lib/spoken-stats.mjs';
 import { linesWithBuriedMate } from './audit-lib/mate-leads.mjs';
 import { lastGame, rememberGame, seedReads, saveReads } from './audit-lib/review-reuse.mjs';
-import { whyTally, formulaRepeats, turnLength, REVIEW_TURN_WORDS_MAX } from './audit-lib/why-count.mjs';
+import { whyTally, formulaRepeats, turnLength, REVIEW_TURN_WORDS_MAX, planTally } from './audit-lib/why-count.mjs';
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { sampleRenderers, playwrightRenderers } from './audit-lib/os-sample.mjs';
@@ -1338,6 +1338,10 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     const why = whyTally(spoken().map((x) => x.text), SANS.map((_, i) => i + 1).filter(isStudentPly).length);
     await add('VOICE why-statements-clear-the-floor-and-numerous', why.prevalent && why.numerous,
       `${why.withWhy}/${why.lines} teaching lines carry a why (${Math.round(why.share * 100)}%), ${why.whySentences} why sentences = ${why.perMove.toFixed(1)} per student move${why.whyless.length ? ` — whyless e.g. "${why.whyless.slice(0, 3).join('" | "').slice(0, 260)}"` : ''}`);
+    // PLAN TEACHING (David 2026-10-15) — the same measure Learn holds.
+    const plan = planTally(spoken().map((x) => x.text));
+    await add('VOICE every-plan-says-why-and-the-method-is-asked', plan.everyPlanHasWhy && plan.methodAsked,
+      `${plan.stated} plan statement(s), ${plan.why} why(s), method asked ${plan.method}×, ${plan.steps} step(s) credited`);
     // REASON VARIETY and TURN LENGTH (David 2026-10-14), the same two
     // measures Learn holds.
     const formulas = formulaRepeats(spoken().map((x) => x.text));

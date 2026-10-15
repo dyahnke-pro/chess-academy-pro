@@ -10002,6 +10002,18 @@ export function CoachTeachPage(): JSX.Element {
                         thread: learnMemRef.current.planThread ??= newPlanThread(),
                         ply: move.history.length + 1, fenBefore: move.fen, fenAfter: probe.fen(),
                         student: playerColor === 'white' ? 'w' : 'b',
+                        // The student's own move, credited when it was a step of the plan
+                        // — only when the replayed history lands on this very board.
+                        studentMove: (() => {
+                          try {
+                            const h = move.history;
+                            const b = new Chess();
+                            for (const san of h.slice(0, -1)) b.move(san);
+                            const fenBefore = b.fen();
+                            b.move(h[h.length - 1]);
+                            return samePosition(b.fen(), move.fen) ? { fenBefore, san: h[h.length - 1] } : null;
+                          } catch { return null; }
+                        })(),
                       });
                       for (const pl of plansNow) {
                         const line = gradeNarrationText(pl.text, probe.fen(), 'CoachTeachPage.structuralPlan')?.trim();

@@ -11,7 +11,9 @@
  */
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
-import { deriveNextPlans } from './nextPlans';
+import { deriveNextPlanFacts } from './nextPlans';
+import { methodRead, methodLine, whyThisPlan } from './planChoice';
+import { stripThink } from '../utils/thinkPause';
 import { structurePlan } from './boardPlan';
 import { findPawnBreaks, findOpenFiles, strongestWeakestPiece } from './positionReadingService';
 import { findWeakSquares } from './positionReadingService';
@@ -39,6 +41,12 @@ export interface BoardPlanFacts {
   plans: string[];
   /** The concrete levers, most to least decisive. */
   levers: PlanLever[];
+  /** Why the first plan comes first (planChoice), or null. A clause. */
+  why: string | null;
+  /** More than one plan of different kinds — the why is an order, not a lone reason. */
+  ordered: boolean;
+  /** How the plan is found — the three questions and their answers (planChoice). */
+  method: string | null;
 }
 
 const STEMS = ['Alongside that, aim to ', 'On top of that, work to ', 'And the third piece of it: '];
@@ -56,7 +64,8 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   const your = voice === 'you' ? 'your' : 'their';
   const trump = voice === 'you' ? structurePlan(fen, myC) : null;
   // Stacked plans vary the stem after the first (question walk 2026-09-27).
-  const plans = (voice === 'you' ? deriveNextPlans(fen, myC) : []).map((p) => cap(p))
+  const facts = voice === 'you' ? deriveNextPlanFacts(fen, myC) : [];
+  const plans = facts.map((p) => cap(p.text))
     .map((p, i) => (i === 0 ? p : p.replace(/^The plan from here is to /, STEMS[(i - 1) % STEMS.length])))
     .map((p) => (/[.!?]$/.test(p.trim()) ? p.trim() : `${p.trim()}.`));
   const levers: PlanLever[] = [];
@@ -95,7 +104,14 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   if (sw.weakest && (pastOpening || sw.weakest.square[1] !== homeRank)) {
     levers.push({ kind: 'worst', phrase: `improve ${your} ${PIECE[sw.weakest.piece]} on ${sw.weakest.square}`, squares: [sw.weakest.square] });
   }
-  return { trump, plans, levers };
+  // Chat was ASKED: the method is said as a question and its answers at once.
+  const read = voice === 'you' && facts.length ? methodRead(fen, myC) : null;
+  return {
+    trump, plans, levers,
+    why: whyThisPlan(facts),
+    ordered: facts.some((p) => p.kind !== facts[0]?.kind),
+    method: read ? stripThink(methodLine(read)) : null,
+  };
 }
 
 /** The levers as one sentence, for the narration's read. Null when none. */
