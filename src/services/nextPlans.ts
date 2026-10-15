@@ -316,7 +316,7 @@ export function deriveNextPlanFacts(
   const freeOpenFile = struct.pawns.openFiles.find((f) => !myHeavyFiles.has(f) && !theirHeavyFiles.has(f));
   if (freeOpenFile && myRooks.length > 0) {
     const doubleBit = myRooks.length >= 2 ? 'double the second rook behind the first so nothing can challenge you, and ' : '';
-    add('open-file', `the plan from here is to seize the open ${freeOpenFile}-file. Here's how: put a rook on it right away before they contest it, ${doubleBit}drive down to the seventh rank where a rook chews through pawns and pins the king back`, [], freeOpenFile);
+    add('open-file', `the plan from here is to seize the open ${freeOpenFile}-file. Here's how: put a rook on it right away before they contest it, ${doubleBit}aim for the seventh rank, where a rook attacks pawns from behind`, [], freeOpenFile);
   }
 
   // 5. You already hold an outpost → dominate from it, HOW spelled out.

@@ -41,7 +41,7 @@ import { methodBeatFor, type MethodSignals, type HabitNeed, type HabitStanding, 
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { habitForTag, TAG_STEP } from './thinkingSteps';
 import type { WeaknessSignal } from './weaknessSignal';
-import { emitCoachDecision } from './coachDecisionEvents';
+import { emitCoachDecision, type LearnTurnTag } from './coachDecisionEvents';
 import type { MoveAdviceVerdict } from './nextMoveAdvice';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { decideTurn, type LaneFact, type LearnLane, type TurnDecision } from './learnTurnDoor';
@@ -94,6 +94,9 @@ export interface LearnTurnRequest {
   priorLead?: { lane: LearnLane; squares: readonly string[] } | null;
   green?: ReadonlySet<string> | null;
   beginner?: boolean;
+  /** REQUIRED: which turn this is (the student move's waves, or a phase
+   *  line), so the door's row says whether a student move got its reason. */
+  turn: LearnTurnTag;
 }
 export type DoorRequest = MomentRequest | LearnTurnRequest;
 const DOOR_RULE: Record<DoorPosture, 'moment' | 'learn-turn'> = { walk: 'moment', interrupt: 'moment', asked: 'moment', learn: 'learn-turn' };
@@ -101,7 +104,7 @@ export function coachTurn(req: LearnTurnRequest): TurnDecision;
 export function coachTurn(req: MomentRequest): CoachDecision;
 export function coachTurn(req: DoorRequest): TurnDecision | CoachDecision {
   if (DOOR_RULE[req.posture] === 'learn-turn' && req.posture === 'learn') {
-    return decideTurn(req.facts, req.alreadySaid, req.priorKeys, req.priorLead, req.green, req.beginner ?? false);
+    return decideTurn(req.facts, req.alreadySaid, req.priorKeys, req.priorLead, req.green, req.beginner ?? false, req.turn);
   }
   const m = req as MomentRequest;
   return decide(m.signals, m.student, m.bundle, m.posture, m.method);

@@ -192,7 +192,14 @@ export interface LearnTurnRow {
    *  'affirm' (what the move did well), 'but' (what it gave up), or null when
    *  nothing on this turn spoke about the student's move. */
   ownMove: 'affirm' | 'but' | null;
+  /** WHICH TURN this wave belongs to: the student move it answers (`ply`,
+   *  the history length after the student's move) for its instant and late
+   *  waves, or a phase line. Null from a caller that predates it. */
+  turn: LearnTurnTag | null;
 }
+
+/** A Learn door call's place in the game (required at `coachTurn`). */
+export type LearnTurnTag = { kind: 'instant' | 'late'; ply: number } | { kind: 'phase' };
 
 const learnTurnListeners = new Set<(row: LearnTurnRow) => void>();
 
