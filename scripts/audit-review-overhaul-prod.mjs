@@ -33,7 +33,7 @@
  */
 import { linesWithStats } from './audit-lib/spoken-stats.mjs';
 import { linesWithBuriedMate } from './audit-lib/mate-leads.mjs';
-import { whyTally, formulaRepeats, longLines, TURN_WORDS_MAX } from './audit-lib/why-count.mjs';
+import { whyTally, formulaRepeats, longLines, REVIEW_TURN_WORDS_MAX } from './audit-lib/why-count.mjs';
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { sampleRenderers, playwrightRenderers } from './audit-lib/os-sample.mjs';
@@ -562,10 +562,51 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // THE TURNING-POINT CARD — answer it the way a human does: tap a candidate
     // to step the board to that moment, THEN commit. Two taps, in order.
   };
+  // EVERY PLY THE WALK SHOWS IS OBSERVED, WHEREVER THE AUDIT IS IN IT
+  // (2026-10-15). These maps used to be filled only by the recap loop, which
+  // starts AFTER the FUND probe has already stepped to ply ~12 — so a flagged
+  // ply at or before the probe was walked, narrated with its fundamental, and
+  // recapped, while FUNDLEAD and RECAP reported "the walk surfaced NONE". The
+  // red flickered run to run with whether the engine flagged an early ply.
+  // One snapshot, fed by `goTo`, the FUND probe and the recap loop alike.
+  const flaggedLeads = new Map(); // ply → { badge, lead }
+  const plyNarr = new Map();      // ply → { badge, narr } — every ply the walk showed
+  const observeWalk = async ({ narr = true } = {}) => {
+    const snap = await page.evaluate(() => {
+      const t = (sel) => { const el = document.querySelector(sel); return el ? (el.innerText || '').replace(/\s+/g, ' ').trim() : ''; };
+      const walk = t('[data-testid="coach-game-review-walk"]');
+      const m = walk.match(/Ply\s+(\d+)\s*\/\s*(\d+)/i);
+      return { read: m ? { n: Number(m[1]), total: Number(m[2]) } : null, badge: t('[data-testid="review-classification-badge"]'), banner: t('[data-testid="review-narration-banner"]') };
+    }).catch(() => ({ read: null, badge: '', banner: '' }));
+    const read = snap.read;
+    const n = read?.n ?? 0;
+    const b = snap.badge;
+    if (narr && n > 0 && !plyNarr.has(n)) {
+      const nt = snap.banner;
+      // THE BANNER IS NOT THE VOICE. On a quiet ply the coach says nothing and
+      // the banner shows the MOVE instead — a deliberate placeholder that
+      // replaced "(passes silently)" printing itself all game (David
+      // 2026-07-19). Scraping it verbatim recorded "a3" as narration, and the
+      // report then told David the coach had read a bare SAN aloud when it had
+      // been correctly silent (2026-09-16). A banner whose whole text is just
+      // the move IS silence — record it as such.
+      const sanOnly = nt && /^[NBRQK]?[a-h]?[1-8]?x?[a-h][1-8](=[NBRQ])?[+#]?$|^O-O(-O)?[+#]?$/.test(nt.trim());
+      if (nt && !sanOnly) plyNarr.set(n, { badge: b, narr: nt });
+    }
+    // A quick `goTo` step can read the badge before the banner lands, so an
+    // empty lead is refilled by the next look at the same ply.
+    if (isStudentPly(n) && n > 0 && /INACCUR|MISTAKE|BLUNDER/i.test(b) && !flaggedLeads.get(n)?.lead) {
+      const nt = plyNarr.get(n)?.narr ?? '';
+      flaggedLeads.set(n, { badge: b, lead: nt.split(/(?<=[.!?])\s+/)[0] || '' });
+    }
+    return snap;
+  };
   const goTo = async (target) => {
     for (let i = 0; i < 80; i++) {
       await resolveCards();
-      const n = (await readWalkPly(page))?.n ?? 0;
+      // Badge only: a 700ms step reads the banner before it lands (the
+      // previous ply's text, filed under this one).
+      const n = (await observeWalk({ narr: false })).read?.n ?? 0;
       if (n === target) return true;
       const sel = n < target ? '[data-testid="review-forward-btn"]' : '[data-testid="review-back-btn"]';
       await page.locator(sel).first().click({ timeout: 2000, force: true }).catch(() => undefined);
@@ -578,6 +619,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   const settle = async () => { for (let i = 0; i < 3; i++) { await page.waitForTimeout(900); await resolveCards(); } };
   const onFund = await goTo(FUND_PLY);
   await settle();
+  await observeWalk();
   const fundNarr = await txt(page, '[data-testid="review-narration-banner"]');
   const fundBadge = await txt(page, '[data-testid="review-classification-badge"]');
   // The DNA-register verdict stems (principleVoice.ts) + the cost sentence.
@@ -634,6 +676,12 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   const restarted = await until(async () => ((await readWalkPly(page))?.n ?? 0) >= pBefore + 2, 60000, 800);
   await add('EXIT back-exits-play-restarts', bannerGone && restarted, `banner gone=${bannerGone}; Play resumed advance=${restarted} (from ply ${pBefore})`);
 
+  // A flagged ply the quick steps passed before its banner landed: go back,
+  // let it settle, and read its lead before the walk resumes.
+  for (const [p, v] of [...flaggedLeads.entries()]) {
+    if (v.lead) continue;
+    if (await goTo(p)) { await settle(); await observeWalk(); }
+  }
   // ── RECAP (G.4) — play to the end; the closing aggregates ───────────────
   await page.locator('[data-testid="walk-resume-game-btn"]').first().click({ timeout: 1500, force: true }).catch(() => undefined);
   await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined);
@@ -649,8 +697,6 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // Shared detector — the same one any browser-driving audit can import.
   const watch = wedgeWatch({ unreadableLimit: 30, label: 'walk' });
   let wedgedReason = null;
-  const flaggedLeads = new Map(); // ply → { badge, lead }
-  const plyNarr = new Map();      // ply → { badge, narr } — every ply the walk showed
   // STEP BUDGET. 400 polls at 1500ms reached ply 45 of 46 and ran out — the
   // walk auto-advances on the (muted) voice promise, whose delay is proportional
   // to the beat's LENGTH, so richer narration makes the walk legitimately
@@ -692,32 +738,10 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // the …g6 sentence filed under White's Be3 (pinned pair, 2026-09-20).
     // A false red in the one row that judges board truth is the instrument
     // lying about the product; read the three together or not at all.
-    const snap = await page.evaluate(() => {
-      const t = (sel) => { const el = document.querySelector(sel); return el ? (el.innerText || '').replace(/\s+/g, ' ').trim() : ''; };
-      const walk = t('[data-testid="coach-game-review-walk"]');
-      const m = walk.match(/Ply\s+(\d+)\s*\/\s*(\d+)/i);
-      return { read: m ? { n: Number(m[1]), total: Number(m[2]) } : null, badge: t('[data-testid="review-classification-badge"]'), banner: t('[data-testid="review-narration-banner"]') };
-    }).catch(() => ({ read: null, badge: '', banner: '' }));
+    const snap = await observeWalk();
     const read = snap.read;
     const n = read?.n ?? 0;
     if (read) { unreadable = 0; lastReadPly = read.n; } else unreadable += 1;
-    const b = snap.badge;
-    if (n > 0 && !plyNarr.has(n)) {
-      const nt = snap.banner;
-      // THE BANNER IS NOT THE VOICE. On a quiet ply the coach says nothing and
-      // the banner shows the MOVE instead — a deliberate placeholder that
-      // replaced "(passes silently)" printing itself all game (David
-      // 2026-07-19). Scraping it verbatim recorded "a3" as narration, and the
-      // report then told David the coach had read a bare SAN aloud when it had
-      // been correctly silent (2026-09-16). A banner whose whole text is just
-      // the move IS silence — record it as such.
-      const sanOnly = nt && /^[NBRQK]?[a-h]?[1-8]?x?[a-h][1-8](=[NBRQ])?[+#]?$|^O-O(-O)?[+#]?$/.test(nt.trim());
-      if (nt && !sanOnly) plyNarr.set(n, { badge: b, narr: nt });
-    }
-    if (isStudentPly(n) && n > 0 && /INACCUR|MISTAKE|BLUNDER/i.test(b) && !flaggedLeads.has(n)) {
-      const nt = plyNarr.get(n)?.narr ?? '';
-      flaggedLeads.set(n, { badge: b, lead: nt.split(/(?<=[.!?])\s+/)[0] || '' });
-    }
     if (n >= total) { reachedEnd = true; break; }
     wedgedReason = watch.observe(!!read, `ply ${lastReadPly}/${total}`);
     if (wedgedReason) {
@@ -1307,8 +1331,8 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // measures Learn holds.
     const formulas = formulaRepeats(spoken().map((x) => x.text));
     await add('VOICE no-reason-formula-said-more-than-twice', formulas.length === 0, `${formulas.length} formula(s)${formulas.length ? ` — ${formulas.map((f) => `${f.count}× "${f.formula.slice(0, 90)}"`).join(' | ').slice(0, 300)}` : ''}`);
-    const long = longLines(spoken().map((x) => x.text));
-    await add(`VOICE no-turn-past-${TURN_WORDS_MAX}-words`, long.length === 0, `${long.length} line(s)${long.length ? ` — longest ${Math.max(...long.map((t) => t.split(/\s+/).length))}w: "${long[0].slice(0, 140)}"` : ''}`);
+    const long = longLines(spoken().map((x) => x.text), REVIEW_TURN_WORDS_MAX);
+    await add(`VOICE no-turn-past-${REVIEW_TURN_WORDS_MAX}-words`, long.length === 0, `${long.length} line(s)${long.length ? ` — longest ${Math.max(...long.map((t) => t.split(/\s+/).length))}w: "${long[0].slice(0, 140)}"` : ''}`);
     const buried = linesWithBuriedMate(spoken().map((x) => x.text));
     await add('VOICE forced-mate-leads-its-line', buried.length === 0, `${buried.length} line(s)${buried.length ? ` — ${buried[0].slice(0, 160)}` : ''}`);
   }
