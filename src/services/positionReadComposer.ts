@@ -128,6 +128,7 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
     if (i.analysis?.topLines?.length) {
       const lm = lastMoveIfStudent(sans, i.playerColor, i.fen);
       const pf = await computePositionFacts({
+      boardComputers: 'composer',
         // The student TAPPED "read this position". Silence would be a dead
         // button — the same reasoning that exempts this surface from the
         // verbosity gate (CLAUDE.md §G5, third sanctioned exemption).

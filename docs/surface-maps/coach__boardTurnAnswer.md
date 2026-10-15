@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**432 lines · 10 exports · 8 importers · 8 tests · 0 audits**
+**433 lines · 10 exports · 8 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -47,8 +47,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/developNext.test.ts:64`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:24`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:32`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:92`
-- `src/coach/dispatchCoachTurn.showLine.test.ts:104`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:93`
+- `src/coach/dispatchCoachTurn.showLine.test.ts:105`
 - `src/coach/lineOutcome.test.ts:16`
 - `src/coach/lineOutcome.test.ts:33`
 - `src/coach/lineOutcome.test.ts:57`
@@ -67,8 +67,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/boardTurnAnswer.test.ts:72`
 - `src/coach/boardTurnAnswer.test.ts:78`
 - `src/coach/boardTurnAnswer.test.ts:82`
-- `src/coach/dispatchCoachTurn.ts:478`
-- `src/coach/dispatchCoachTurn.ts:532`
+- `src/coach/dispatchCoachTurn.ts:525`
+- `src/coach/dispatchCoachTurn.ts:579`
 
 ### `theirPlanAnswer` (function) — 1 call site
 - `src/coach/handWalk1009.test.ts:65`
@@ -84,7 +84,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `fasterWinAnswer` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `lineOutcomeAnswer` (function) — 3 call sites
+### `lineOutcomeAnswer` (function) — 4 call sites
+- `src/coach/dispatchCoachTurn.ts:359`
 - `src/coach/lineOutcome.test.ts:43`
 - `src/coach/lineOutcome.test.ts:50`
 - `src/coach/lineOutcome.test.ts:59`

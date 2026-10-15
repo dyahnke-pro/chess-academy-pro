@@ -240,13 +240,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewTeachingPoints.ts:138`
 
 ### `signedCaptureRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11200`
-- `src/components/Coach/CoachTeachPage.tsx:11258`
+- `src/components/Coach/CoachTeachPage.tsx:11202`
+- `src/components/Coach/CoachTeachPage.tsx:11260`
 - `src/services/principleAttribution.ts:323`
 - `src/services/principleAttribution.ts:669`
 
 ### `legalSeeGainFor` (function) — 76 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10353`
+- `src/components/Coach/CoachTeachPage.tsx:10355`
 - `src/services/arrowDoor.ts:161`
 - `src/services/bluffDetector.ts:53`
 - `src/services/boardState.ts:42`
@@ -376,7 +376,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:8616`
 - `src/services/boardUrgency.ts:59`
 - `src/services/groundedAnswer.ts:627`
-- `src/services/positionFacts.ts:1578`
+- `src/services/positionFacts.ts:1619`
 - `src/services/takingTheAttacker.test.ts:17`
 - `src/services/takingTheAttacker.test.ts:22`
 - `src/services/takingTheAttacker.test.ts:26`

@@ -64,12 +64,12 @@ describe('review proves a threat to your loose piece the way Learn does (threatC
     const { isProof } = await import('./proof');
     const fenBefore = '6k1/4b3/8/2p5/8/N7/8/6K1 b - - 0 1';
     const c = new Chess(fenBefore); c.move('c4');
-    const proofs = new Map<string, unknown>();
+    const proofs = new Map<string, import('./proof').FactProof>();
     const f = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter: c.fen(), san: 'c4', ply: 2, moverColor: 'black', playerColor: 'white', studentColorWB: 'w',
       evaluation: 0, preMoveEval: 0, costCp: 0, heardVerdict: null, classification: 'good', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0 }, allSans: ['c4'], forcedRunStartPly: null,
-      playedLineUci: [], bestLineUci: [], replyBestSan: null }, undefined, undefined, undefined, undefined, undefined, proofs as never);
+      playedLineUci: [], bestLineUci: [], replyBestSan: null }, undefined, undefined, undefined, undefined, undefined, proofs);
     const loose = f.find((x) => x.startsWith('[loose]') && /knight on a3/.test(x));
     expect(loose).toBeDefined();
     expect(isProof(proofs.get(loose ?? ''))).toBe(true);

@@ -643,6 +643,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         standingRef.current.observe(fullmoveOf(event.fen));
         if (stockfishAnalysis?.topLines?.length) {
           const pf = await computePositionFacts({
+      boardComputers: 'composer',
             // Mid-game, unasked-for. The transition has to earn its sentence.
             posture: 'interrupt',
             fen: event.fen,

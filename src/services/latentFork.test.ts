@@ -149,7 +149,7 @@ describe('it reaches the LIVE composer', () => {
   it('comes OUT of computePositionFacts as a spoken clause', async () => {
     const { computePositionFacts } = await import('./positionFacts');
     const r = await computePositionFacts({
-      posture: 'walk', fen: SICILIAN, moverColor: 'w', studentColor: 'w', analysis: flat,
+      boardComputers: 'surface', posture: 'walk', fen: SICILIAN, moverColor: 'w', studentColor: 'w', analysis: flat,
     });
     expect(r.latentFork).not.toBeNull();
     expect(r.latentFork!.square).toBe('c7');

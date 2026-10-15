@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1895 lines · 15 exports · 27 importers · 24 tests · 3 audits**
+**1936 lines · 15 exports · 28 importers · 25 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -38,6 +38,7 @@
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/positionFactsCache.ts`
+- `src/services/positionFactsRegistry.test.ts`
 - `src/services/positionReadComposer.ts`
 - `src/services/reviewFacetRank.ts`
 - `src/services/speedRunReads.scale.test.ts`
@@ -86,9 +87,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 12 call sites
-- `src/hooks/useLiveCoach.ts:295`
-- `src/hooks/usePhaseNarration.ts:672`
-- `src/services/chatBoardRead.ts:109`
+- `src/hooks/useLiveCoach.ts:296`
+- `src/hooks/usePhaseNarration.ts:673`
+- `src/services/chatBoardRead.ts:110`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:254`
 - `src/services/positionFacts.test.ts:255`
@@ -96,10 +97,10 @@
 - `src/services/positionFacts.test.ts:306`
 - `src/services/positionFacts.test.ts:364`
 - `src/services/positionFacts.test.ts:365`
-- `src/services/positionReadComposer.ts:154`
-- `src/services/whyBestMove.ts:159`
+- `src/services/positionReadComposer.ts:155`
+- `src/services/whyBestMove.ts:160`
 
-### `computePositionFacts` (function) — 88 call sites
+### `computePositionFacts` (function) — 89 call sites
 - `src/coach/boardTurnAnswer.ts:134`
 - `src/components/Coach/CoachTeachPage.tsx:10108`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
@@ -174,6 +175,7 @@
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`
 - `src/services/positionFacts.weakness.test.ts:63`
+- `src/services/positionFactsRegistry.test.ts:9`
 - `src/services/positionReadComposer.ts:130`
 - `src/services/speedRunReads.scale.test.ts:37`
 - `src/services/whyBestMove.needWire.test.ts:10`
@@ -193,7 +195,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:8676`
 
 ### `convertKey` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10358`
+- `src/components/Coach/CoachTeachPage.tsx:10360`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 
 ### `afterLine` (function) — 5 call sites
@@ -234,6 +236,7 @@
 - `src/services/positionFacts.pinPressure.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
+- `src/services/positionFactsRegistry.test.ts`
 - `src/services/speedRunReads.scale.test.ts`
 - `src/services/whyBestMove.needWire.test.ts`
 - `src/test/computedOrderWired.test.ts`

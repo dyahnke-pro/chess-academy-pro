@@ -207,7 +207,7 @@
 - `src/services/oneOpeningKey.test.ts:141`
 - `src/services/oneOpeningKey.test.ts:143`
 - `src/services/positionFacts.liveFundamental.test.ts:80`
-- `src/services/positionFacts.ts:1151`
+- `src/services/positionFacts.ts:1192`
 - `src/services/teachingSelector.ts:332`
 
 ### `HELD_FOR_PROVEN` (re-export) — 0 call sites

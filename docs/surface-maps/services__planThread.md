@@ -48,7 +48,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `planThreadTurn` (function) — 9 call sites
-- `src/services/boardComputers.ts:292`
+- `src/services/boardComputers.ts:295`
 - `src/services/planThread.test.ts:18`
 - `src/services/planThread.test.ts:20`
 - `src/services/planThread.test.ts:29`

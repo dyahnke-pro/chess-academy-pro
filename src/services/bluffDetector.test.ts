@@ -34,7 +34,7 @@ describe('the bluff reaches the LIVE composer (a wire that does not fire is not 
   it('Learn hears "wins nothing — no need to react" after …Nd4', async () => {
     const { computePositionFacts } = await import('./positionFacts');
     const r = await computePositionFacts({
-      posture: 'walk', fen: after, moverColor: 'w', studentColor: 'w', analysis: flat,
+      boardComputers: 'surface', posture: 'walk', fen: after, moverColor: 'w', studentColor: 'w', analysis: flat,
       opponentLastMove: { fenBefore: before, san: 'Nd4' },
     });
     const all = [...r.clauses, ...r.quiet].map((c) => c.text).join(' | ');
@@ -43,7 +43,7 @@ describe('the bluff reaches the LIVE composer (a wire that does not fire is not 
 
   it('negative control: without the opponent move there is nothing to read', async () => {
     const { computePositionFacts } = await import('./positionFacts');
-    const r = await computePositionFacts({ posture: 'walk', fen: after, moverColor: 'w', studentColor: 'w', analysis: flat });
+    const r = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: after, moverColor: 'w', studentColor: 'w', analysis: flat });
     expect([...r.clauses, ...r.quiet].map((c) => c.text).join(' ')).not.toMatch(/looks aggressive/);
   });
 });

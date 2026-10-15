@@ -25,7 +25,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/chatBoardRead.test.ts:58`
 - `src/services/chatBoardRead.test.ts:63`
 - `src/services/chatBoardRead.test.ts:67`
-- `src/services/positionFacts.ts:1262`
+- `src/services/positionFacts.ts:1303`
 
 ### `cachedPositionFacts` (function) — 5 call sites
 - `src/services/chatBoardRead.test.ts:35`

@@ -10106,6 +10106,8 @@ export function CoachTeachPage(): JSX.Element {
                     // second search, no new engine time (C4).
                     const midReadForFacts = await midTurnRead;
                     const pf = await computePositionFacts({
+                      // Learn reads the board computers in its own lanes.
+                      boardComputers: 'surface',
                       // The student asked for this lesson — every taught position
                       // is a beat, so importance ranks it and never mutes it.
                       posture: 'walk',

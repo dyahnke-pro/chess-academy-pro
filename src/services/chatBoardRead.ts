@@ -79,6 +79,7 @@ export async function chatBoardClauses(i: ChatBoardInput): Promise<ClauseItem[] 
     const om = lastMoveIfOpponent(sans, i.studentColor, i.fen);
     try {
       const result = await computePositionFacts({
+      boardComputers: 'composer',
         posture: 'walk',
         fen: i.fen,
         moverColor: i.fen.split(' ')[1] === 'b' ? 'b' : 'w',

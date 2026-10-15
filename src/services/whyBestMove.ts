@@ -135,6 +135,7 @@ export async function computeWhyBestMoveDetail(input: WhyBestMoveInput): Promise
   //    convert clauses; keep the teaching ones.
   try {
     const pf = await computePositionFacts({
+      boardComputers: 'composer',
       // A "Why?" TAP is an explicit request, like "read this position" — the
       // student asked, so the moment is ranked, never muted. A dead Why button
       // is the failure this posture prevents.
