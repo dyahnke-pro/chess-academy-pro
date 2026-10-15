@@ -10022,7 +10022,9 @@ export function CoachTeachPage(): JSX.Element {
                       });
                       for (const pl of plansNow) {
                         const line = gradeNarrationText(pl.text, probe.fen(), 'CoachTeachPage.structuralPlan')?.trim();
-                        if (line) queueSpokenHint(probe.fen(), line, 'planArc', pl.proof, pl.squares, [pl.key, ...(pl.sharedKey ? [pl.sharedKey] : [])]);
+                        // The plan's routes, hop by hop (David 2026-10-15: "Arrows trace its route?").
+                        const routeClaims: ArrowClaim[] = (pl.routeArrows ?? []).map((a) => ({ from: a.from, to: a.to, role: 'line', fen: a.fen, source: 'learn.planRoute' }));
+                        if (line) queueSpokenHint(probe.fen(), line, 'planArc', pl.proof, pl.squares, [pl.key, ...(pl.sharedKey ? [pl.sharedKey] : [])], undefined, routeClaims.length ? routeClaims : undefined);
                       }
                     } catch { /* the plan is a bonus, never a blocker */ }
                   }

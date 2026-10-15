@@ -531,9 +531,11 @@ export function assembleBoardPlanAnswer(
   const fileCovered = (l: { phrase: string }): boolean => { const f = /^put a rook on the ([a-h]) file$/.exec(l.phrase)?.[1]; return !!f && !!pf.method?.includes(`open ${f}-file`); };
   const topK = pf.levers.filter((l) => !(pf.method && (covered(l) || (l.kind === 'file' && fileCovered(l))))).map((l) => l.phrase).filter(keep);
   if (headK && topK.length) {
-    return { facts: `${urgent}${headK} Beyond that: ${topK.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    // The method opens with the forcing scan itself (planChoice step zero), so
+    // its answer is the urgency — never said twice.
+    return { facts: `${pf.method ? '' : urgent}${headK} Beyond that: ${topK.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
-  if (headK) return { facts: `${urgent}${headK}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  if (headK) return { facts: `${pf.method ? '' : urgent}${headK}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   if (topK.length) return { facts: `${urgent}${urgent ? 'Then' : 'No single trump yet —'} the plan is to ${topK.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   return urgent ? { facts: urgent.trim(), bestMoveSan: null, bestMoveFromTo: null, sources: src } : null;
 }

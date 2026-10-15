@@ -2021,6 +2021,8 @@ export function buildReviewSegments(
       // stood (review tape 2026-10-15). Run on a copy; the copy becomes the
       // thread once one of its lines is spoken (commit after the door).
       const planTrial = clonePlanThread(planT);
+      // The plan's routes, hop by hop, drawn when its line speaks.
+      const planRouteByRaw = new Map<string, Array<{ from: string; to: string; fen: string }>>();
       if (studentColorWB && !isStudentForAttr) {
         const povCp = m.evaluation != null ? (studentColorWB === 'w' ? m.evaluation : -m.evaluation) : null;
         // Their move follows the student's: the ply before is the student's own
@@ -2033,6 +2035,7 @@ export function buildReviewSegments(
           facetIdentity.set(raw, r.key.startsWith('plan:stopped:') ? 'plan-thread:stop' : r.key.startsWith('plan:step:') ? 'plan-thread:step' : 'plan-thread:plan');
           facetProofs.set(raw, r.proof);
           if (r.squares.length) facetSquares.set(raw, r.squares);
+          if (r.routeArrows?.length) planRouteByRaw.set(raw, r.routeArrows);
         }
       }
       const newPlan = planTrial.stated && planTrial.stated.ply === m.ply ? planTrial.stated.fact : null;
@@ -2402,6 +2405,11 @@ export function buildReviewSegments(
         keptRaw.forEach((raw, i) => {
           if (!spokenSet.has(kept[i])) return;
           commitByRaw.get(raw)?.();
+          // The plan that spoke shows its routes (David 2026-10-15: "Arrows trace its route?").
+          const route = planRouteByRaw.get(raw);
+          if (route && !(causalArrows && causalArrows.length)) {
+            causalArrows = admitArrows(route.map((a): ArrowClaim => ({ from: a.from, to: a.to, role: 'line', fen: a.fen, source: 'review.planRoute' })), { fen: fenPair.fenAfter, studentColor: playerColor ?? moverColor }).arrows;
+          }
           for (const c of refrained[i].claims) spokenRefrains.add(c);
         });
         if (uncappedParts.some((f) => f.startsWith('[method] '))) for (const h of habitScratch) spokenHabits.add(h);

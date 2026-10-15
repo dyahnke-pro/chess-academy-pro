@@ -463,7 +463,15 @@ export function computeMoveFacets(
         recSquares(df, [tradeSq]);
       } else { facets.push(f); recProof(f, tradeProof); }
     } catch { /* no trade line */ }
-  } else if (influence) { const f = `[${influenceShape.hitsPiece ? 'does' : 'delta'}] ${influence}`; facets.push(f); recSquares(f, influenceSquares); }
+  } else if (influence) {
+    const f = `[${influenceShape.hitsPiece ? 'does' : 'delta'}] ${influence}`;
+    facets.push(f); recSquares(f, influenceSquares);
+    // ONE CLAIM, ONCE A GAME (review audit 2026-10-15: "…joins the fight for
+    // d5, holding back the d-pawn" three times): a square's role, said once, is
+    // the same claim when the next piece fights for it.
+    const fight = !influenceShape.hitsPiece ? /\b([a-h][1-8]), ((?:holding back|backing|keeping|a square)[^,.]*)/.exec(influence) : null;
+    if (fight) outIdentity?.set(f, `once:fight:${fight[1]}:${fight[2]}`);
+  }
 
   // ── 1c. THE FULL BOARD DELTA — every other relevant change the move caused
   // (David 2026-07-22: "the package must contain every relevant change that
