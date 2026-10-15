@@ -13,7 +13,8 @@ describe('principleVoice — deterministic DNA-register verdicts', () => {
     const text = renderFundamentalVerdict(attrs, { replySan: null, ply: 12, seen: new Set() });
     expect(text.length).toBeGreaterThan(40);
     // The proven squares/moves are in the words; nothing else is invented.
-    expect(text).toMatch(/d5/);
+    // (One lead reason per turn, 2026-10-15: only the lead fundamental speaks
+    // here; the second waits for its own turn.)
     expect(text).toMatch(/third/);
     // Student perspective: you/your, never we/our.
     expect(text).not.toMatch(/\b(we|our|us)\b/i);

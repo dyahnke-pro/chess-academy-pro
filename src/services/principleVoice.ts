@@ -723,12 +723,12 @@ export function renderFundamentalVerdict(attrs: readonly PrincipleAttribution[],
     if (missed) { opts.seen.add(a.id); parts.push(missed); return; }
     const first = !opts.seen.has(a.id);
     if (!first) { parts.push(shortVerdict(a)); return; }
-    // ONE HOW PER TURN (David 2026-10-14: "one lead reason per turn"; the
-    // 2026-10-15 review said three fundamentals with three how-tos — 223
-    // words — before the verdict). The lead fundamental teaches its habit; a
-    // second new one is NAMED and stays unheard as a lesson, so the next move
-    // that earns it gets the full lecture.
-    if (hows > 0) { parts.push(fullVerdict(a, opts.ply + i)); return; }
+    // ONE LEAD REASON PER TURN (David 2026-10-14; the 2026-10-15 reviews said
+    // three fundamentals on one ply — 223 words with three how-tos, then 140
+    // with one). The lead fundamental teaches with its habit; a second NEW one
+    // waits, unheard, so the next move that earns it leads with the full
+    // lesson instead of a crowded mention here.
+    if (hows > 0) return;
     opts.seen.add(a.id);
     // THE DIAGNOSIS, THEN THE HOW (David 2026-09-16: "The plan plus here's
     // how!!! The how is teaching!!"). Naming the flaw is half a lesson; the

@@ -50,13 +50,13 @@ describe('fundamentalHow — no diagnosis without a remedy', () => {
     expect(again).not.toContain("Here's how:");
   });
 
-  it('two NEW fundamentals on one ply: the lead teaches its habit, the second is named and keeps its lesson for later (David 2026-10-14: one lead reason per turn)', () => {
+  it('two NEW fundamentals on one ply: the lead teaches its habit, the second waits for its own turn (David 2026-10-14: one lead reason per turn)', () => {
     const seen = new Set<FundamentalId>();
     const out = renderFundamentalVerdict([attr('same-piece-twice'), attr('loose-piece')], { replySan: null, ply: 12, seen });
     expect(out).toContain(fundamentalHow('same-piece-twice') ?? '__');
     expect(out).not.toContain(fundamentalHow('loose-piece') ?? '__');
     expect(out.match(/Here's how:|The habit that fixes it:|Next time:/g) ?? []).toHaveLength(1);
-    // The second was named, not taught — its full lesson is still owed.
+    // The second was not said — its full lesson is still owed.
     expect(seen.has('loose-piece')).toBe(false);
     const later = renderFundamentalVerdict([attr('loose-piece')], { replySan: null, ply: 20, seen });
     expect(later).toContain(fundamentalHow('loose-piece') ?? '__');
