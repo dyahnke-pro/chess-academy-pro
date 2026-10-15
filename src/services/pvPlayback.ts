@@ -279,6 +279,11 @@ export interface PlyFacts {
   passedPawnsHanded: string[];
   /** Outpost newly established by the mover (square), if any. */
   outpostGained: string | null;
+  /** The outpost's piece, and whether the move LANDED it there or a pawn move
+   *  made the square safe for a piece already on it (review tape 2026-10-15:
+   *  "You plant an outpost on d5" said of e6). Absent → not known. */
+  outpostPiece?: string;
+  outpostLanded?: boolean;
   /** Defender king-shield pawns lost this ply (>0 = the defense got airier). */
   shieldLost: number;
 }
@@ -527,6 +532,7 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
     newPassedPawns,
     passedPawnsHanded,
     outpostGained: outpostAfterNew?.square ?? null,
+    ...(outpostAfterNew ? { outpostPiece: PIECE_WORD[outpostAfterNew.piece] ?? 'piece', outpostLanded: outpostAfterNew.square === toSquare } : {}),
     shieldLost,
   };
 }
@@ -671,6 +677,18 @@ export async function computePvLine(
 
 
 
+/** The outpost said as what the move did: the piece LANDED there, or a pawn
+ *  move made the square safe for a piece already standing on it. `base` picks
+ *  the verb form ("plant" after You/They, "plants" otherwise). */
+export function outpostPhrase(f: Pick<PlyFacts, 'outpostGained' | 'outpostPiece' | 'outpostLanded'>, owner: string, base: boolean): string {
+  const sq = f.outpostGained ?? '';
+  if (f.outpostPiece && f.outpostLanded === false) {
+    return `${base ? 'make' : 'makes'} ${sq} an outpost for ${owner} ${f.outpostPiece} — no enemy pawn can chase it from there`;
+  }
+  if (f.outpostPiece) return `${base ? 'plant' : 'plants'} ${owner} ${f.outpostPiece} on ${sq}, an outpost where no enemy pawn can chase it`;
+  return `${base ? 'plant' : 'plants'} an outpost on ${sq}, where no enemy pawn can chase it`;
+}
+
 /** The SAME per-move facts as `plyFactsSentence`, but as a SUBJECT-LESS clause
  *  (no "The move X" prefix) so the caller can frame the subject — "You …" for
  *  the student, "Your opponent …" for the other side (David 2026-07-20: "always
@@ -708,7 +726,7 @@ export function plyFactsClause(
     else if (f.isCheck) parts.push('gives check');
     if (f.promotion) parts.push(`promotes to a ${f.promotion}`);
     if (f.tacticLanded) parts.push(patternAim(f.tacticLanded, 'third') ?? `lands a ${tacticWord(f.tacticLanded)}`);
-    if (f.outpostGained) parts.push(`plants an outpost on ${f.outpostGained}, where no enemy pawn can chase it`);
+    if (f.outpostGained) parts.push(outpostPhrase(f, 'the', false));
     if (f.newPassedPawns.length > 0) parts.push(`creates a passed pawn on ${f.newPassedPawns.join(', ')}`);
     if (f.passedPawnsHanded.length > 0) parts.push(`leaves the other side a passed pawn on ${f.passedPawnsHanded.join(', ')}`);
     if (f.newOpenFiles.length > 0) parts.push(`opens ${fileList(f.newOpenFiles)}`);
@@ -819,7 +837,7 @@ export function plyFactsSentence(f: PlyFacts, san: string, moverIsStudent?: bool
     else if (f.isCheck) parts.push(vb('give check', 'gives check'));
     if (f.promotion) parts.push(vb(`promote to a ${f.promotion}`, `promotes to a ${f.promotion}`));
     if (f.tacticLanded) parts.push(vb(patternAim(f.tacticLanded) ?? `land a ${tacticWord(f.tacticLanded)}`, patternAim(f.tacticLanded, 'third') ?? `lands a ${tacticWord(f.tacticLanded)}`));
-    if (f.outpostGained) parts.push(vb(`plant an outpost on ${f.outpostGained}, where no enemy pawn can chase it`, `plants an outpost on ${f.outpostGained}, where no enemy pawn can chase it`));
+    if (f.outpostGained) parts.push(outpostPhrase(f, isYou ? 'your' : isThem ? 'their' : 'the', isYou || isThem));
     if (f.newPassedPawns.length > 0) parts.push(vb(`create a passed pawn on ${f.newPassedPawns[0]}`, `creates a passed pawn on ${f.newPassedPawns[0]}`));
     if (f.passedPawnsHanded.length > 0) parts.push(isYou ? `hand them a passed pawn on ${f.passedPawnsHanded[0]}` : isThem ? `hand you a passed pawn on ${f.passedPawnsHanded[0]}` : `leaves the other side a passed pawn on ${f.passedPawnsHanded[0]}`);
     if (f.newOpenFiles.length > 0) parts.push(vb(`open the ${f.newOpenFiles[0]}-file`, `opens the ${f.newOpenFiles[0]}-file`));

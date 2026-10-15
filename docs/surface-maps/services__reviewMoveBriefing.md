@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**407 lines · 8 exports · 6 importers · 2 tests · 0 audits**
+**409 lines · 8 exports · 6 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:2705) — names `buildReviewMoveBriefing`
+- **⏰ Standing notes** (CLAUDE.md:2737) — names `buildReviewMoveBriefing`
 
 ## Who calls in
 
@@ -25,7 +25,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewMoveBriefing` (function) — 15 call sites
-- `src/services/coachFeatureService.ts:1852`
+- `src/services/coachFeatureService.ts:1675`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:11`
 - `src/services/reviewMoveBriefing.test.ts:23`
@@ -68,7 +68,7 @@
 - `src/services/openingGenerator.ts:1995`
 - `src/services/openingGenerator.ts:2003`
 - `src/services/openingGenerator.ts:2579`
-- `src/services/pvPlayback.ts:224`
+- `src/services/pvPlayback.ts:223`
 - `src/services/reviewMoveBriefing.test.ts:101`
 - `src/services/reviewMoveBriefing.test.ts:130`
 - `src/services/walkthroughLlmNarrator.ts:131`

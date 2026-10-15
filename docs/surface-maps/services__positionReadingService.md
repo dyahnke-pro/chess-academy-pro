@@ -227,8 +227,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakeNarration.ts:604`
 - `src/services/opponentMovePurpose.ts:23`
 - `src/services/playCommentary.ts:992`
-- `src/services/pvPlayback.ts:442`
-- `src/services/pvPlayback.ts:491`
+- `src/services/pvPlayback.ts:447`
+- `src/services/pvPlayback.ts:496`
 - `src/services/thinkingExchangeChain.ts:115`
 - `src/services/threatAnswer.ts:110`
 

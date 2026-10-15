@@ -68,8 +68,8 @@
 - `src/services/pvPlayback.test.ts:276`
 - `src/services/pvPlayback.test.ts:277`
 - `src/services/pvPlayback.ts:255`
-- `src/services/pvPlayback.ts:710`
-- `src/services/pvPlayback.ts:821`
+- `src/services/pvPlayback.ts:728`
+- `src/services/pvPlayback.ts:839`
 - `src/services/reviewMoveBriefing.ts:263`
 - `src/services/tacticVocabulary.ts:95`
 - `src/services/teachingSelector.ts:367`

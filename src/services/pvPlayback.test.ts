@@ -426,3 +426,19 @@ describe('a ply-fact list reads as a sentence (review audit 2026-10-14: "capture
     expect(out).not.toMatch(/wins material/);
   });
 });
+
+describe('an outpost says what the move did (review tape 2026-10-15: "You plant an outpost on d5" of e6)', () => {
+  it('a pawn move that makes the square safe names the piece already there', async () => {
+    const { computePlyFacts, plyFactsSentence } = await import('./pvPlayback');
+    const c = new Chess();
+    for (const san of 'e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 Nc6 Nc3'.split(' ')) c.move(san);
+    const before = c.fen();
+    const mv = c.move('e6');
+    const f = computePlyFacts(before, c.fen(), { captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion });
+    expect(f.outpostGained).toBe('d5');
+    expect(f.outpostLanded).toBe(false);
+    const line = plyFactsSentence(f, 'e6', true) ?? '';
+    expect(line).toMatch(/make d5 an outpost for your knight/);
+    expect(line).not.toMatch(/plant/);
+  });
+});
