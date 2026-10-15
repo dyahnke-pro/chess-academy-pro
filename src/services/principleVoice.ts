@@ -737,9 +737,15 @@ export function renderFundamentalVerdict(attrs: readonly PrincipleAttribution[],
     // the slogan ("Their move first, always.") and cut the procedure ("answer
     // what their last move threatens"). Turn length is an average now.
     const how = fundamentalHow(a.id, a.facts) ?? null;
-    parts.push(how ? `${fullVerdict(a, opts.ply + i)} ${HOW_STEMS[hows++ % HOW_STEMS.length]} ${how}` : fullVerdict(a, opts.ply + i));
+    parts.push(how ? `${fullVerdict(a, opts.ply + i)} ${HOW_STEMS[hows++ % HOW_STEMS.length]} ${afterColon(how)}` : fullVerdict(a, opts.ply + i));
   });
   return parts.join(' ');
+}
+
+/** The how runs on after a stem's colon, so an ordinary first word is lower
+ *  case ("Here's how: before you move …"); a move ("Nf3 …") is left alone. */
+function afterColon(how: string): string {
+  return /^[A-Z][a-z]/.test(how) && !/^(?:[KQRBN][a-h1-8]?x?[a-h][1-8]|O-O)/.test(how) ? how.charAt(0).toLowerCase() + how.slice(1) : how;
 }
 
 /** The piece the fact names has a guard (a cheaper attacker wins it anyway). */

@@ -792,19 +792,25 @@ export function plyFactsSentence(f: PlyFacts, san: string, moverIsStudent?: bool
     // "The move X …" prefix restated the move). "You capture" (student) /
     // "Your opponent captures" (other side) with correct verb agreement; the
     // subjectless "The move …" only when the seat isn't known (back-compat).
+    // ONE PERSPECTIVE (David 2026-08-28): the opponent is "they", never "your
+    // opponent" (review tape 2026-10-15: "Your opponent captures the knight").
     const isYou = moverIsStudent === true;
-    const subject = isYou ? 'You' : moverIsStudent === false ? 'Your opponent' : `The move ${san.replace(/[+#]$/, '')}`;
-    const vb = (base: string, third: string): string => (isYou ? base : third);
+    const isThem = moverIsStudent === false;
+    const subject = isYou ? 'You' : isThem ? 'They' : `The move ${san.replace(/[+#]$/, '')}`;
+    // "You" and "They" take the base verb; only the subject-less fallback is singular.
+    const vb = (base: string, third: string): string => (isYou || isThem ? base : third);
+    // Whose piece is taken: the other side's, said from the student's seat.
+    const victim = isYou ? 'their' : isThem ? 'your' : 'the';
     const plural = (n: number): string => (n > 1 ? 's' : '');
     const parts: string[] = [];
-    if (f.captured) parts.push(vb(`capture the ${f.captured}`, `captures the ${f.captured}`));
+    if (f.captured) parts.push(vb(`take ${victim} ${f.captured}`, `captures the ${f.captured}`));
     if (f.isMate) parts.push(vb('deliver checkmate', 'delivers checkmate'));
     else if (f.isCheck) parts.push(vb('give check', 'gives check'));
     if (f.promotion) parts.push(vb(`promote to a ${f.promotion}`, `promotes to a ${f.promotion}`));
     if (f.tacticLanded) parts.push(vb(patternAim(f.tacticLanded) ?? `land a ${tacticWord(f.tacticLanded)}`, patternAim(f.tacticLanded, 'third') ?? `lands a ${tacticWord(f.tacticLanded)}`));
     if (f.outpostGained) parts.push(vb(`plant an outpost on ${f.outpostGained}, where no enemy pawn can chase it`, `plants an outpost on ${f.outpostGained}, where no enemy pawn can chase it`));
     if (f.newPassedPawns.length > 0) parts.push(vb(`create a passed pawn on ${f.newPassedPawns[0]}`, `creates a passed pawn on ${f.newPassedPawns[0]}`));
-    if (f.passedPawnsHanded.length > 0) parts.push(vb(`hand them a passed pawn on ${f.passedPawnsHanded[0]}`, isYou || moverIsStudent === false ? `hands you a passed pawn on ${f.passedPawnsHanded[0]}` : `leaves the other side a passed pawn on ${f.passedPawnsHanded[0]}`));
+    if (f.passedPawnsHanded.length > 0) parts.push(isYou ? `hand them a passed pawn on ${f.passedPawnsHanded[0]}` : isThem ? `hand you a passed pawn on ${f.passedPawnsHanded[0]}` : `leaves the other side a passed pawn on ${f.passedPawnsHanded[0]}`);
     if (f.newOpenFiles.length > 0) parts.push(vb(`open the ${f.newOpenFiles[0]}-file`, `opens the ${f.newOpenFiles[0]}-file`));
     if (f.shieldLost > 0) parts.push(vb(`strip ${f.shieldLost} pawn${plural(f.shieldLost)} from the king's cover`, `strips ${f.shieldLost} pawn${plural(f.shieldLost)} from the king's cover`));
     // "win/wins material", never the point count (David 2026-07-24 — sounds bad).

@@ -18,7 +18,10 @@ export type ImageryKey =
 
 export const IMAGERY: Record<ImageryKey, readonly string[]> = {
   'only-developed': ['', 'Their army is back in the barracks.'],
-  'defender-trade': ['', 'Every attacker that leaves is one less hand on your door.'],
+  // Cut (review tape 2026-10-15): it said the fact again — "every attacker
+  // traded is one less to meet", then "every attacker that leaves is one less
+  // hand on your door".
+  'defender-trade': [''],
   'exchange-for-attacker': [''],
   'deny-exchange': [''],
   'abandoned-duty': ['', 'A guard that steps away leaves the gate open.'],
