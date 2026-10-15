@@ -36,4 +36,9 @@ describe('principle-once line', () => {
     const line = principleOnceLine('Be6', { id: 'development', imperative: 'get the last minor piece out, then bring the rooks', reason: null } as never, 0);
     expect(line).toBe('Your Be6: get the last minor piece out, then bring the rooks.');
   });
+
+  it('with no reason, the move says what it does (Learn audit 2026-10-15)', () => {
+    const line = principleOnceLine('Bc5', { id: 'development-complete', imperative: 'get the last minor piece out, then bring the rooks', led: 'completes your development — every minor piece is out, so the rooks come next', reason: null } as never, 0);
+    expect(line).toBe('Your Bc5 completes your development — every minor piece is out, so the rooks come next.');
+  });
 });

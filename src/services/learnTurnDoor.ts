@@ -23,7 +23,6 @@
  * Slice 1 (this file): route + record, behaviour-preserving. Ordering and dedupe are still
  * `buildVoicePackage`'s. Picking ONE lead per turn is the next slice.
  */
-import { spokenWordCount } from '../utils/spokenWords';
 import { isProof, type FactProof, type Proof } from './proof';
 import { emitLearnTurn, type LearnTurnTag } from './coachDecisionEvents';
 import { COMPUTER_ROLES } from './computerRoles';
@@ -157,9 +156,6 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   breakRace: 'affirm', kickMap: 'point', patternFails: 'refute',
 };
 
-/** A Learn turn's length (David 2026-10-14): one lead reason, not a stack of
- *  five true ones that buries it. The audit holds the same number (V8). */
-export const TURN_WORDS = 80;
 
 export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // ── batch 1 (opening equivalence, order and timing) ──
@@ -566,52 +562,9 @@ export function decideTurn(
       if (!spoke.includes(x.lane)) spoke.push(x.lane);
     } else if (!held.includes(x.lane)) held.push(x.lane);
   }
-  // ONE LEAD REASON PER TURN (David 2026-10-14: "no turn past 80 words").
-  // Every fact above earned its place; when together they run past the turn's
-  // length, the ones worth least wait — their proof stays on the Why tap. The
-  // lead, danger, the must-ride lanes and the verdict's own reason ('but')
-  // never wait: they ARE the turn. Value decides who waits, never order.
-  {
-    // Counted as SPOKEN: "gxf6" is three words in the ear.
-    const words = spokenWordCount;
-    const kept = survivors.filter((x) => keep.includes(x.fact));
-    // The verdict and its ONE best reason always stay; a third and fourth
-    // reason for the same slip ('but' beats) may wait (Learn audit
-    // 2026-10-15: a 122-word turn — the blunder check, the poisoned pawn, the
-    // guard it left and the habit, all for one move).
-    const bestBut = kept.filter((x) => DNA_BEAT[x.lane] === 'but' && x.lane !== 'mistake')
-      .sort((a, b) => value(b) - value(a))[0] ?? null;
-    const fixed = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
-      x === ownLead || x === ownReason || DANGER_LANES.has(x.lane) || (LEARN_LANES[x.lane].always === true && DNA_BEAT[x.lane] !== 'but')
-      || x.lane === 'mistake' || x === bestBut;
-    let total = kept.filter(fixed).reduce((n, x) => n + words(x.fact.text), 0);
-    for (const x of kept.filter((y) => !fixed(y)).sort((a, b) => value(b) - value(a))) {
-      const w = words(x.fact.text);
-      if (total + w <= TURN_WORDS) { total += w; continue; }
-      keep.splice(keep.indexOf(x.fact), 1);
-      if (!keep.some((f) => survivors.find((y) => y.fact === f)?.lane === x.lane)) {
-        const i = spoke.indexOf(x.lane);
-        if (i >= 0) spoke.splice(i, 1);
-      }
-      if (!held.includes(x.lane)) held.push(x.lane);
-    }
-    // The must-ride facts alone can run past the turn (Learn audit
-    // 2026-10-15: a danger, the move's own reason and a plan with its
-    // how-to — 83 words). A plan event is said once, so it never waits; it
-    // keeps its GOAL and lets its how-to go, unless the plan IS the lead.
-    if (total > TURN_WORDS) {
-      for (const s of survivors) {
-        if (total <= TURN_WORDS) break;
-        if (s.lane !== 'planArc' || s === ownLead || !keep.includes(s.fact)) continue;
-        const goal = s.fact.text.split(/(?<=[.!?])\s+/)[0] ?? s.fact.text;
-        if (goal === s.fact.text) continue;
-        const trimmed: VoiceFact = { ...s.fact, text: goal };
-        total -= words(s.fact.text) - words(goal);
-        keep[keep.indexOf(s.fact)] = trimmed;
-        s.fact = trimmed;
-      }
-    }
-  }
+  // NO WORD CAP (David 2026-10-15: "No hard word count caps. Set the cap as
+  // an average, not a hard limit"). What speaks is decided above, by relevance
+  // and stakes; the audit holds the AVERAGE turn length (V8), never a limit.
   const laneFor = (f: VoiceFact): LearnLane | undefined => survivors.find((x) => x.fact === f)?.lane;
   const beatOf = (f: VoiceFact): number => {
     const lane = laneFor(f);

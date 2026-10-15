@@ -1,4 +1,3 @@
-import { spokenWordCount } from '../utils/spokenWords';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan } from './material';
 import { Chess } from 'chess.js';
@@ -14,7 +13,7 @@ import { layerStandings } from './teachingLayers';
 import { readConversion, type ConversionStep } from './conversionMethod';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsClause, computePvLine, pvDepthForRating, type PvLine, type PvEngine } from './pvPlayback';
-import { andList } from '../utils/andList';
+import { andList, lineShape } from '../utils/andList';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { explainEvalByPieceQuality, lowestMinorMobility, phraseBadPiece, type PieceQualityResult } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
@@ -1210,42 +1209,6 @@ export function frameTeachingForOpponent(sentence: string): string {
   return `Your opponent ${continueSentence(s)}`;
 }
 
-/** ONE LEAD REASON PER TURN for a review ply (David 2026-10-14: "no turn past
- *  80 words"; the 2026-10-15 prod walk said 230 words on one ply — three
- *  fundamentals, each with its own how-to, before the verdict). `rankedParts`
- *  are in the door's rank order. Pure, so the eviction order is testable. */
-export function fitReviewTurn(rankedParts: readonly string[]): string[] {
-  // Counted as SPOKEN: "gxf6" is three words in the ear.
-  const words = (t: string): number => spokenWordCount(t.replace(/^\[[a-z-]+\]\s*/, ''));
-  // The lead, the move's verdict ([quality] / [verdict]) and its reason
-  // ([rule] — the blunder check that names what the move lost), danger, a
-  // tactic, the plan (a good move's reason) and the habit (the method beat
-  // closes the turn by design) always speak.
-  const fixed = (t: string, i: number): boolean => i === 0 || /^\[(?:verdict|quality|rule|threat|tactic|trapped|loose|method|plan-now)\]/.test(t);
-  // ONE PLAN PER TURN: a plan change and a second plan read on one ply were
-  // both fixed (a 139-word ply). The first plan stays; another may be evicted.
-  const firstPlan = rankedParts.findIndex((t) => /^\[plan-now\]/.test(t));
-  const fixedAt = (t: string, i: number): boolean => fixed(t, i) && !(/^\[plan-now\]/.test(t) && i !== firstPlan);
-  const keep = rankedParts.map(() => true);
-  let total = rankedParts.reduce((n, t) => n + words(t), 0);
-  // Evict in this order until the turn fits: the STACKED fundamentals
-  // first (a second and third [principle], each with its own how-to —
-  // the 230-word ply), then everything else from the lowest rank up.
-  const principles = rankedParts.map((t, i) => (/^\[principle\]/.test(t) ? i : -1)).filter((i) => i >= 0);
-  const order = [...principles.slice(1).reverse(), ...rankedParts.map((_, i) => i).reverse()];
-  for (const i of order) {
-    if (total <= REVIEW_TURN_WORDS) break;
-    if (!keep[i] || fixedAt(rankedParts[i], i)) continue;
-    keep[i] = false;
-    total -= words(rankedParts[i]);
-  }
-  return rankedParts.filter((_, i) => keep[i]);
-}
-
-/** A review ply's length — 100 words, above Learn's 80: review is walked at
- *  the student's pace, so a verdict carries its line (David 2026-10-15). */
-export const REVIEW_TURN_WORDS = 100;
-
 export function buildReviewSegments(
   moves: ReviewMoveInput[],
   /** The student's color — when provided, their silent opening moves are
@@ -1959,7 +1922,7 @@ export function buildReviewSegments(
           }
           const won = !ml && line ? lineWins(fenPair.fenBefore, line, studentColorWB, m.san, i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null) : null;
           if (won) {
-            const raw = `[tactic] That wins ${won.what}: ${andList(won.sans)}.`;
+            const raw = `[tactic] That wins ${won.what}: ${lineShape(won.sans)}.`;
             facets.push(raw);
             facetStakes.set(raw, { points: won.net, plies: 0 });
             if (!causalArrows || causalArrows.length === 0) {
@@ -2370,12 +2333,10 @@ export function buildReviewSegments(
       }
       // The causal chain LEADS the beat when present (it's the cross-move story).
       const rankedParts = causalLead ? [causalLead, ...orderedKept] : orderedKept;
-      // ONE LEAD REASON PER TURN (David 2026-10-14: "no turn past 80 words";
-      // review audit 2026-10-15 heard a 230-word ply — three fundamentals each
-      // with its own how-to, before the verdict). The parts are already in the
-      // door's rank order; the lead and the move's verdict, danger and tactic
-      // always speak, and the rest fill by rank up to the turn's length.
-      const uncappedParts = fitReviewTurn(rankedParts);
+      // NO WORD CAP (David 2026-10-15: "No hard word count caps. Set the cap as
+      // an average, not a hard limit"). The door's ranking decides what speaks;
+      // the audit holds the AVERAGE turn length, never a per-ply limit.
+      const uncappedParts = rankedParts;
       // 🔒 THE BOOK-MOVE RULE APPLIES HERE TOO (CLAUDE.md narration-by-need
       // standard, N2). The capped cascade has carried the need gate since N2
       // landed — but `isReviewUncapped()` is TRUE by default, so THIS is the
@@ -3699,7 +3660,7 @@ async function augmentWithProjections(
       // line past three moves is its first move and its result — the arrows
       // walk the rest on the board.
       const said = proof.proof.sans.slice(0, proof.plies);
-      const moves = said.length <= 3 ? andList(said) : `${said[0]} and the moves that follow`;
+      const moves = lineShape(said);
       return proof.proof.mate ? `${moves} — and it's mate` : `${moves} — ${describeProofResult(proof.proof.ledger as NonNullable<typeof proof.proof.ledger>)}`;
     }
     // No material point settles: the line proves nothing a sentence can hold,

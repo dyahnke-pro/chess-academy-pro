@@ -38,7 +38,7 @@ const WHY = new RegExp([
   String.raw`\blet (?:them|you) in\b`, String.raw`\bis open to (?:your|their) \w+`, String.raw`\bcannot move at all\b`,
   String.raw`\breach(?:es)? (?:their|your) camp\b`, String.raw`\bcloser to (?:a queen|promotion)\b`, String.raw`\bis open to attack\b`, String.raw`\bpawn can chase a piece off\b`,
   String.raw`\bkept (?:you|it) (?:on top|level|in it|alive)\b`, String.raw`\bfighting for the cent(?:er|re)\b`, String.raw`\bcomes? out (?:ahead|behind)\b`, String.raw`\bwins material\b`, String.raw`\bno enemy pawn can chase\b`,
-  String.raw`\b(?:is|are) safe now\b`, String.raw`\bthe guard that holds\b`, String.raw`\bsaves the \w+ from (?:your|their) \w+`,
+  String.raw`\b(?:is|are) safe now\b`, String.raw`\bthe guard that holds\b`, String.raw`\bsaves (?:the \w+|it) from (?:your|their|the) \w+`,
 ].join('|'), 'i');
 
 /** NOT TEACHING — greetings, the game's setup, whose move it is, the game
@@ -103,30 +103,14 @@ export function formulaRepeats(lines, max = 2) {
   return [...n.entries()].filter(([, c]) => c > max).map(([f, c]) => ({ formula: f, count: c }));
 }
 
-/** TURN LENGTH: one lead reason per turn — a line longer than `max` words is a
- *  stack of reasons that buries the one that matters. */
+/** TURN LENGTH — an AVERAGE, never a limit (David 2026-10-15: "No hard word
+ *  count caps. Set the cap as an average, not a hard limit"). A critical move
+ *  may run long; the game as a whole may not. Counted on the spoken text the
+ *  listener captured. */
 export const TURN_WORDS_MAX = 80;
-/** Review walks a finished game at the student's own pace, so a verdict turn
- *  carries its cost, its line and its how-to: 100 words (David 2026-10-15). */
 export const REVIEW_TURN_WORDS_MAX = 100;
-export function longLines(lines, max = TURN_WORDS_MAX) {
-  return lines.map(String).filter((t) => t.split(/\s+/).length > max);
-}
-
-/** Does this sentence state a reason or consequence? */
-export function isWhy(sentence) { return WHY.test(String(sentence)); }
-
-/** The why tally over a tape. `studentMoves` is the denominator for "per move". */
-export function whyTally(lines, studentMoves) {
-  const ls = lines.map(String).filter((t) => t.trim().length > 0 && isTeachingLine(t));
-  const withWhy = ls.filter((t) => sentences(t).some(isWhy));
-  const whySentences = ls.flatMap(sentences).filter(isWhy).length;
-  const share = ls.length ? withWhy.length / ls.length : 0;
-  const perMove = studentMoves > 0 ? whySentences / studentMoves : 0;
-  return {
-    lines: ls.length, withWhy: withWhy.length, share, whySentences, perMove,
-    whyless: ls.filter((t) => !sentences(t).some(isWhy)),
-    // PREVALENT: the share FLOOR above. NUMEROUS: at least one why per student move.
-    prevalent: share >= WHY_SHARE_BAR, numerous: perMove >= 1,
-  };
+export function turnLength(lines) {
+  const counts = lines.map(String).map((t) => t.split(/\s+/).filter(Boolean).length).filter((n) => n > 0);
+  const avg = counts.length ? counts.reduce((a, b) => a + b, 0) / counts.length : 0;
+  return { turns: counts.length, avg, longest: counts.length ? Math.max(...counts) : 0 };
 }

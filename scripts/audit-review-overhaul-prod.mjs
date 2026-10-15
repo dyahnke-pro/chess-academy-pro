@@ -33,7 +33,7 @@
  */
 import { linesWithStats } from './audit-lib/spoken-stats.mjs';
 import { linesWithBuriedMate } from './audit-lib/mate-leads.mjs';
-import { whyTally, formulaRepeats, longLines, REVIEW_TURN_WORDS_MAX } from './audit-lib/why-count.mjs';
+import { whyTally, formulaRepeats, turnLength, REVIEW_TURN_WORDS_MAX } from './audit-lib/why-count.mjs';
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { sampleRenderers, playwrightRenderers } from './audit-lib/os-sample.mjs';
@@ -1331,8 +1331,8 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // measures Learn holds.
     const formulas = formulaRepeats(spoken().map((x) => x.text));
     await add('VOICE no-reason-formula-said-more-than-twice', formulas.length === 0, `${formulas.length} formula(s)${formulas.length ? ` — ${formulas.map((f) => `${f.count}× "${f.formula.slice(0, 90)}"`).join(' | ').slice(0, 300)}` : ''}`);
-    const long = longLines(spoken().map((x) => x.text), REVIEW_TURN_WORDS_MAX);
-    await add(`VOICE no-turn-past-${REVIEW_TURN_WORDS_MAX}-words`, long.length === 0, `${long.length} line(s)${long.length ? ` — longest ${Math.max(...long.map((t) => t.split(/\s+/).length))}w: "${long[0].slice(0, 140)}"` : ''}`);
+    const len = turnLength(spoken().map((x) => x.text));
+    await add(`VOICE average-turn-at-most-${REVIEW_TURN_WORDS_MAX}-words`, len.avg <= REVIEW_TURN_WORDS_MAX, `avg ${len.avg.toFixed(1)}w over ${len.turns} turns, longest ${len.longest}w (info)`);
     const buried = linesWithBuriedMate(spoken().map((x) => x.text));
     await add('VOICE forced-mate-leads-its-line', buried.length === 0, `${buried.length} line(s)${buried.length ? ` — ${buried[0].slice(0, 160)}` : ''}`);
   }

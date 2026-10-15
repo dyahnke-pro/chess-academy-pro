@@ -338,6 +338,20 @@ export function criticalMomentAsk(read: CriticalMomentRead | null, ply: number):
     ], ply);
 }
 
+/** The refutation said AFTER its candidate, so the move is named once
+ *  (Learn audit 2026-10-15: "Qxc3+ didn't work: Qxc3+ and Nxc3 — …"). A
+ *  proof's line starts with the candidate itself; the reply is what refutes it. */
+export function afterCandidate(san: string, text: string): string {
+  const bare = (x: string): string => x.replace(/^…|^\.\.\./, '');
+  const head = `${bare(san)} and `;
+  const t = bare(text);
+  if (t.startsWith(`${bare(san)} — `)) return t.slice(bare(san).length + 3);
+  if (!t.startsWith(head)) return text;
+  const rest = t.slice(head.length);
+  const follow = 'the moves that follow — ';
+  return rest.startsWith(follow) ? rest.slice(follow.length) : rest;
+}
+
 /** THE CANDIDATES THAT FAIL — the strongest one proved out loud, the rest
  *  named (each proof stays on the board). One lead reason per turn (Learn
  *  audit 2026-10-15: four refuted candidates, each with its line, ran a turn
@@ -345,7 +359,7 @@ export function criticalMomentAsk(read: CriticalMomentRead | null, ply: number):
 function failedCandidates(ds: ReadonlyArray<{ san: string; text: string }>): string {
   if (ds.length === 0) return '';
   const [first, ...rest] = ds;
-  const lead = ` ${first.san} didn't work: ${first.text}.`;
+  const lead = ` ${first.san} didn't work: ${afterCandidate(first.san, first.text)}.`;
   if (rest.length === 0) return lead;
   return `${lead} ${andList(rest.map((d) => d.san))} didn't work either.`;
 }

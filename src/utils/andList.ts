@@ -49,3 +49,14 @@ export function fileList(files: readonly string[]): string {
   if (files.length === 1) return `the ${files[0]}-file`;
   return `the ${andList(files.map((f) => `${f}-`)).replace(/-$/, '')}-files`;
 }
+
+/**
+ * A LINE AS THE VOICE SAYS IT (proof guard 2: the voice says the shape, the
+ * board shows the detail). Up to three moves are said in full; a longer line
+ * is said as its first move "and the moves that follow" — the whole line is
+ * drawn on the board and kept in the proof (Learn audit 2026-10-15: "That
+ * wins the exchange: Bc5, gxf6, Bxd4, Nxd4, Qe5+, Qe2 and Qxd4" read aloud).
+ */
+export function lineShape(sans: readonly string[]): string {
+  return sans.length <= 3 ? andList(sans) : `${sans[0]} and the moves that follow`;
+}

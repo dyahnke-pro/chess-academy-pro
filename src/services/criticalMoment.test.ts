@@ -288,3 +288,15 @@ describe('the failing candidates — the strongest proved, the rest named (Learn
     expect(out).not.toContain('Rxc3');
   });
 });
+
+describe('a failed candidate is named once (Learn audit 2026-10-15)', () => {
+  it('the refutation follows the candidate instead of repeating it', async () => {
+    const { afterCandidate } = await import('./criticalMoment');
+    expect(afterCandidate('Qxc3+', 'Qxc3+ and Nxc3 — you come out behind on material, a bishop for a queen'))
+      .toBe('Nxc3 — you come out behind on material, a bishop for a queen');
+    expect(afterCandidate('…Qxc3+', '…Qxc3+ and the moves that follow — they win your queen'))
+      .toBe('they win your queen');
+    expect(afterCandidate('Qb6', 'Qb6 — it walks into a pin')).toBe('it walks into a pin');
+    expect(afterCandidate('a6', 'Nb5 and Nc7 — they fork your rooks')).toBe('Nb5 and Nc7 — they fork your rooks');
+  });
+});
