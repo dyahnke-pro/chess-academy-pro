@@ -655,8 +655,10 @@ export function computeMoveFundamentals(
     // takes aim at the center, hitting d5 and e4 and e5" named three of Black's
     // own pawns (Blumenfeld walk F19).
     const eyes = eyesCenter(after, mv.to, mover).filter((s) => CORE_CENTER.includes(s) && after.get(s as Square)?.color !== mover);
-    if (eyes.length >= 2) { // a THRESHOLD, not a cap — two core squares is the bar
-      const hit = andList(eyes);
+    // Each square WITH its role, or the clause is not said (2026-10-15).
+    const named = eyes.length >= 2 ? namedSquares(after, eyes, mover, 'the') : null;
+    if (named) { // a THRESHOLD, not a cap — two core squares is the bar
+      const hit = named;
       out.push({
         id: 'center',
         weight: 52,

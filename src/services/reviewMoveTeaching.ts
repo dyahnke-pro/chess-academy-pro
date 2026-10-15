@@ -465,13 +465,18 @@ export function buildReviewMoveTeaching(
       const dir = mv.color === 'w' ? 1 : -1;
       const ff = mv.to.charCodeAt(0) - 97;
       const rr = Number(mv.to[1]) - 1;
-      const strikesCenter = [[ff - 1, rr + dir], [ff + 1, rr + dir]].some(
-        ([af, ar]) => af >= 0 && af <= 7 && ar >= 0 && ar <= 7
-          && CENTER.has(`${String.fromCharCode(97 + af)}${ar + 1}`),
-      );
-      return strikesCenter
-        ? sayIdea(phrases, 'pawn-flank', ['Fights for the center from the flank, striking at the central squares.', 'Hits the center from the side.', 'Leans on the center from the flank.'])
-        : 'Gains space and cramps the opponent.';
+      const struck = [[ff - 1, rr + dir], [ff + 1, rr + dir]]
+        .filter(([af, ar]) => af >= 0 && af <= 7 && ar >= 0 && ar <= 7)
+        .map(([af, ar]) => `${String.fromCharCode(97 + af)}${ar + 1}`)
+        .filter((sq) => CENTER.has(sq));
+      if (!struck.length) return 'Gains space and cramps the opponent.';
+      // WHAT IT STRIKES, said (2026-10-15: "striking at the central squares"
+      // named none of them): a pawn of theirs it hits, or the square with its role.
+      const hitPawn = struck.find((sq) => { const p = chess.get(sq as Sq); return p && p.type === 'p' && p.color !== mv.color; });
+      const whose = moverIsStudent ? 'their' : 'your';
+      if (hitPawn) return `Strikes at ${whose} pawn on ${hitPawn} from the flank — a central pawn ${moverIsStudent ? 'you can trade off or make them' : 'they can trade off or make you'} defend.`;
+      const named = namedSquares(chess, struck, mv.color, whose);
+      return named ? `Fights for the center from the flank: ${named}.` : 'Gains space on the flank.';
     }
     // LUFT — a pawn beside the CASTLED king making an escape square. Board-true:
     // the king sits on its castled back-rank square and this pawn just advanced

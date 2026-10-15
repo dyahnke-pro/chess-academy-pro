@@ -9,7 +9,7 @@ const FEN = 'r4rk1/pp1b2pp/4p3/3PPp2/7b/2NQ1N2/PPB2qP1/R6K w - - 0 26';
 describe('the edge is named by what is really extra', () => {
   it('the exchange and a pawn is not "a piece"', () => {
     const text = readConversion(FEN, 'b')?.text ?? '';
-    expect(text).not.toMatch(/a piece up/);
-    expect(text).toMatch(/the exchange and a pawn up/);
+    expect(text).not.toMatch(/up a piece/);
+    expect(text).toMatch(/up the exchange and a pawn/);
   });
 });

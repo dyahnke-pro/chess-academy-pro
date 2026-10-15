@@ -41,12 +41,36 @@ export function boardEdgeWords(fen: string, side: 'w' | 'b', edge: number): stri
   const r = diff('r');
   const minors = diff('n') + diff('b');
   const p = diff('p');
-  if (q * 9 + r * 5 + minors * 3 + p !== n || p < 0) return countWords(n);
+  if (q * 9 + r * 5 + minors * 3 + p !== n) return countWords(n);
+  // Their extra pawns make it a mix (two pieces for a pawn), named below.
+  if (p < 0) return materialMix({ q, r, m: minors, p }) ?? countWords(n);
   const tail = p === 0 ? '' : ` and ${PAWN_WORDS[p] ?? `${p} pawns`}`;
   if (q === 1 && r === 0 && minors === 0) return `a queen${tail}`;
   if (q === 0 && r === 1 && minors === 0) return `a rook${tail}`;
   if (q === 0 && r === 1 && minors === -1) return `the exchange${tail}`;
   if (q === 0 && r === 0 && minors === 1) return `a piece${tail}`;
   if (q === 0 && r === 0 && minors === 0 && p > 0) return PAWN_WORDS[p] ?? `${p} pawns`;
+  // A MIX THE BOARD SHOWS is named piece by piece (Learn audit 2026-10-15:
+  // "You're 5 points up" for a queen and a pawn against a rook and two
+  // pieces — a statistic where the board had the reason).
+  if (q * 9 + r * 5 + minors * 3 + p === n) {
+    const mix = materialMix({ q, r, m: minors, p });
+    if (mix) return mix;
+  }
   return countWords(n);
+}
+
+const UNIT: Record<'q' | 'r' | 'm' | 'p', [string, string]> = { q: ['queen', 'queens'], r: ['rook', 'rooks'], m: ['piece', 'pieces'], p: ['pawn', 'pawns'] };
+const NUM = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
+
+/** "material: a queen and a pawn for a rook and two pieces" — what each side
+ *  has that the other lacks. Reads after "up" ("you're up material: …"). */
+function materialMix(d: Record<'q' | 'r' | 'm' | 'p', number>): string | null {
+  const kinds = ['q', 'r', 'm', 'p'] as const;
+  const say = (k: typeof kinds[number], v: number): string => (v === 1 ? `a ${UNIT[k][0]}` : `${NUM[v] ?? v} ${UNIT[k][1]}`);
+  const join = (xs: string[]): string => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : xs[0]);
+  const mine = kinds.filter((k) => d[k] > 0).map((k) => say(k, d[k]));
+  const theirs = kinds.filter((k) => d[k] < 0).map((k) => say(k, -d[k]));
+  if (!mine.length) return null;
+  return theirs.length ? `material: ${join(mine)} for ${join(theirs)}` : join(mine);
 }
