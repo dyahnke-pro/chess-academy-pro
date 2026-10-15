@@ -42,3 +42,14 @@ describe('the intent reaches the review narration', () => {
     expect(desc).toBeGreaterThan(said.indexOf('clears the way to castle'));
   });
 });
+
+describe('development is a job the follow-up can name (Review audit 2026-10-15)', () => {
+  it('…e5 first, so that …Bd6 can bring the bishop into the game', () => {
+    const moves = game(['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4', 'cxd4', 'cxd4', 'Nc6', 'Nc3', 'Nb6', 'Nf3', 'd6', 'exd6', 'Qxd6', 'Be2', 'Bg4', 'Nb5', 'Qd7', 'Bf4', 'Nd5', 'Ne5', 'Bxe2', 'Qxe2', 'Nxf4', 'Nxd7', 'Nxe2', 'Nc7+', 'Kxd7', 'Nxa8', 'Nexd4', 'Rd1', 'e5']);
+    const reads = new Map<number, CachedEval>([
+      [33, { evaluation: -300, depth: 18, bestMove: 'e7e5', pv: ['e7e5', 'e1g1', 'f8d6'] }],
+      [34, { evaluation: -300, depth: 18, bestMove: 'e1g1', pv: ['e1g1', 'f8d6', 'f2f4'] }],
+    ]);
+    expect(intentsFromReads(moves, 'black', reads).get(34)?.text).toBe('…e5 first, so that …Bd6 can bring the bishop into the game.');
+  });
+});
