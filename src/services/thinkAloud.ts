@@ -225,7 +225,7 @@ export function habitReads(sans: readonly string[], opp: 'w' | 'b'): { looseMove
     if (!m.captured && !c.inCheck()) {
       const fen = c.fen();
       const left = c.board().flat().some((x) => !!x && x.color === opp && x.type !== 'k' && x.type !== 'p'
-        && legalSeeGainFor(fen, x.square as Square, me) >= 2);
+        && legalSeeGainFor(fen, x.square, me) >= 2);
       if (left) looseMoves += 1;
     }
     if (m.piece === 'p' && !m.captured) {
