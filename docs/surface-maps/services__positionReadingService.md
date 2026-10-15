@@ -167,7 +167,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/bookMoveWhy.ts:254`
 - `src/services/bookMoveWhy.ts:319`
 - `src/services/bookMoveWhy.ts:338`
-- `src/services/coachFeatureService.ts:2672`
+- `src/services/coachFeatureService.ts:2671`
 - `src/services/groundedAnswer.ts:7207`
 - `src/services/moveIntent.ts:284`
 - `src/services/moveIntent.ts:296`
@@ -528,8 +528,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:97`
 - `src/services/positionalTruth.corpus.test.ts:102`
 - `src/services/replayFence.najdorf1500.test.ts:24`
-- `src/services/reviewFullData.ts:1019`
-- `src/services/reviewFullData.ts:1023`
+- `src/services/reviewFullData.ts:1026`
+- `src/services/reviewFullData.ts:1030`
 
 ### `MinorityAttack` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -544,8 +544,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:360`
 - `src/services/positionalTruth.corpus.test.ts:110`
 - `src/services/positionalTruth.corpus.test.ts:115`
-- `src/services/reviewFullData.ts:1015`
-- `src/services/reviewFullData.ts:1017`
+- `src/services/reviewFullData.ts:1022`
+- `src/services/reviewFullData.ts:1024`
 
 ### `pieceScope` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

@@ -42,7 +42,6 @@ import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
 import { coachTurn, habitNeedFrom } from './coachDecider';
 import { advantageWasMissed } from './reviewWithholding';
-import { deriveNextPlanFacts } from './nextPlans';
 import { newPlanThread, clonePlanThread, PLAN_THREAD_HOLD_PLIES, type PlanThread } from './planThread';
 import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';

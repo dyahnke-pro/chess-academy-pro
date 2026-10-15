@@ -46,7 +46,7 @@ import { trickSidestepped } from './forkTrick';
 import { findProphylaxis, prophylaxisProof } from './prophylaxis';
 import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
 import { lineProof, lineProofFromUci, legalLineProof, squaresProof, isProof, type FactProof, type Proof } from './proof';
-import { readBoardAll } from './boardComputers';
+import { readBoardAll, type BoardRead } from './boardComputers';
 import { tradeLedger } from './tempoCount';
 import { notYetPlayed } from './notYetPlayed';
 import { heldResource } from './holdResource';
@@ -879,9 +879,16 @@ export function computeMoveFacets(
         const said = lost
           ? `${many ? 'have' : 'has'} lost ${many ? 'their' : 'its'} last defender`
           : `${many ? 'are' : 'is'} now hanging`;
-        const f = `[loose] ${desc.charAt(0).toUpperCase()}${desc.slice(1)} ${said}.`;
-        facets.push(f); recSquares(f, group.map((h) => h.square));
-        recStakes(f, exchangeStakes(fenAfter, group.map((h) => h.square)));
+        const line = `${desc.charAt(0).toUpperCase()}${desc.slice(1)} ${said}.`;
+        const sqs = group.map((h) => h.square);
+        // YOUR pieces with you to move: the threat Learn warns of, with the
+        // same proof and stakes (`threatCost`, the one registry).
+        const yours = !isStudent && !!studentColorWB && group.every((h) => h.color === studentColorWB);
+        const tc = yours && studentColorWB ? readBoardAll('threatCost', { line, fen: fenAfter, student: studentColorWB, squares: sqs })[0] ?? null : null;
+        const f = `[loose] ${tc?.text ?? line}`;
+        facets.push(f); recSquares(f, tc?.squares ?? sqs);
+        if (tc && isProof(tc.proof)) recProof(f, tc.proof);
+        recStakes(f, tc?.stakes ?? exchangeStakes(fenAfter, sqs));
       }
     }
   } catch { /* ignore */ }
@@ -1454,6 +1461,43 @@ export function computeMoveFacets(
       recSquares(f, g.squares);
       recStakes(f, g.stakes);
       outIdentity?.set(f, g.key);
+    }
+  }
+
+  // ── 7d2. THE REST OF LEARN'S BOARD COMPUTERS, through the one registry
+  // (David 2026-10-15: "Make sure no other code is missing from other coach
+  // surfaces. Everything gets unified"). Each read where Learn reads it — on
+  // their move, with the student to move; or on the student's own move — and
+  // each said once a game through the `hint:` ledger.
+  if (studentColorWB) {
+    const add = (tag: string, r: BoardRead | null): void => {
+      if (!r) return;
+      const f = `[${tag}] ${r.text}`;
+      facets.push(f);
+      recProof(f, isProof(r.proof) ? r.proof : null);
+      recSquares(f, r.squares);
+      recStakes(f, r.stakes);
+      outIdentity?.set(f, `hint:${r.key}`);
+    };
+    if (!isStudent) {
+      // Their move took an attacker off a piece you had to look after.
+      add('their-read', readBoardAll('obligationLifted', { fenBefore, fenAfter, student: studentColorWB })[0] ?? null);
+      // Your pinned piece walks out with tempo — the pin is not what it looks.
+      add('tactic', readBoardAll('pinBreakOwn', { fen: fenAfter, student: studentColorWB })[0] ?? null);
+      // Their piece you pin can walk out the same way.
+      try {
+        for (const t of detectTactics(fenAfter).tactics) {
+          if (t.type !== 'pin' || t.beneficiary !== studentColorWB || !t.involvedSquares[1]) continue;
+          add('tactic', readBoardAll('pinBreakTheirs', { fen: fenAfter, student: studentColorWB, pinned: t.involvedSquares[1] })[0] ?? null);
+        }
+      } catch { /* no tactic read, no pin break */ }
+      // A capture that looks free and leaves your queen with no way out.
+      add('tactic', readBoardAll('queenGrabTrap', { fen: fenAfter })[0] ?? null);
+    } else {
+      // The engine's line plays A first because A clears the road B needs.
+      if (ctx.bestLineUci.length >= 2) add('timing', readBoardAll('moveOrder', { fen: fenBefore, pv: ctx.bestLineUci })[0] ?? null);
+      // The book move the student just left, with its job on the board.
+      add('opening', readBoardAll('bookMove', { history: ctx.allSans.slice(0, ply), student: studentColorWB })[0] ?? null);
     }
   }
 

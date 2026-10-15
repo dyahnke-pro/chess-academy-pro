@@ -76,8 +76,8 @@
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:36`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:88`
 - `src/services/coachFeatureService.trade.test.ts:18`
-- `src/services/coachFeatureService.ts:1319`
-- `src/services/coachFeatureService.ts:5020`
+- `src/services/coachFeatureService.ts:1318`
+- `src/services/coachFeatureService.ts:5019`
 - `src/services/fundamentalReachesDecider.test.ts:62`
 - `src/services/needCoverage.report.test.ts:93`
 - `src/services/needScore.test.ts:36`
@@ -173,7 +173,7 @@
 - `src/services/coachDecisionEmits.test.ts:134`
 - `src/services/coachDecisionEmits.test.ts:142`
 - `src/services/coachDecisionEmits.test.ts:148`
-- `src/services/coachFeatureService.ts:1319`
+- `src/services/coachFeatureService.ts:1318`
 - `src/services/fundamentalReachesDecider.test.ts:140`
 - `src/services/fundamentalReachesDecider.test.ts:154`
 - `src/services/fundamentalReachesDecider.test.ts:165`

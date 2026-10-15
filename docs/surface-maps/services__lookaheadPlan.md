@@ -237,7 +237,7 @@
 - `src/services/walkOct1Learn.test.ts:69`
 
 ### `gameArcs` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:1286`
+- `src/services/coachFeatureService.ts:1285`
 - `src/services/learnBoardTeaching.ts:947`
 - `src/services/walkOct1Learn.test.ts:115`
 

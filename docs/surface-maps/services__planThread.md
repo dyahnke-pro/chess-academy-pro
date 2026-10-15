@@ -34,7 +34,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `newPlanThread` (function) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10002`
 - `src/services/boardComputers.test.ts:50`
-- `src/services/coachFeatureService.ts:1438`
+- `src/services/coachFeatureService.ts:1437`
 - `src/services/planThread.test.ts:17`
 - `src/services/planThread.test.ts:26`
 - `src/services/planThread.test.ts:35`
@@ -42,7 +42,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planThread.test.ts:73`
 
 ### `clonePlanThread` (function) — 1 call site
-- `src/services/coachFeatureService.ts:2021`
+- `src/services/coachFeatureService.ts:2020`
 
 ### `PlanThreadLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
