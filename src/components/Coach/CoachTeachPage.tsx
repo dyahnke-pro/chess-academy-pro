@@ -36,7 +36,8 @@ import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from '../../services/motifLedger';
 import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
-import { DEFAULT_INTENT, intentRule, moveIntent, nullMoveFen } from '../../services/moveIntent';
+import { intentRule, nullMoveFen } from '../../services/moveIntent';
+import { intentWithFallback } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { OPENING_PLIES, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
@@ -11324,8 +11325,7 @@ export function CoachTeachPage(): JSX.Element {
                         // follow-up in the engine's own line, and only a CONCRETE
                         // stopped threat (mate, check, material).
                         const intent = intentReads
-                          ? moveIntent(fenBefore, move.san, intentReads, 'student', { ...DEFAULT_INTENT, book: studentMoveInBook })
-                            ?? moveIntent(fenBefore, move.san, intentReads, 'student', { prepare: 'line', prevent: 'concrete', book: studentMoveInBook })
+                          ? intentWithFallback(fenBefore, move.san, intentReads, 'student', studentMoveInBook)
                           : null;
                         if (intent) {
                           // DUAL-USE (P4): an engine-proven purpose (prevents / prepares)
@@ -11419,7 +11419,7 @@ export function CoachTeachPage(): JSX.Element {
                     const passRead = passTheirs ? await stockfishEngine.analyzeWithBudget(passTheirs, COACH_TURN_DEPTH, 900).catch(() => null) : null;
                     const afterRead = await stockfishEngine.analyzeWithBudget(fenAfterReply, COACH_TURN_DEPTH, 900).catch(() => null);
                     const theirIntent = passRead?.topLines?.length && afterRead?.topLines?.length
-                      ? moveIntent(move.fen, theirSan, { before: mid.topLines, after: afterRead.topLines, passBefore: passRead.topLines, passAfter: [] }, 'opponent', DEFAULT_INTENT)
+                      ? intentWithFallback(move.fen, theirSan, { before: mid.topLines, after: afterRead.topLines, passBefore: passRead.topLines, passAfter: [] }, 'opponent')
                       : null;
                     if (theirIntent?.prepares) {
                       const theirRule = intentRule(theirIntent, fenAfterReply, playerColor, learnMemRef.current.principleTaught);

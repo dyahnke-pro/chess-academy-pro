@@ -9,18 +9,13 @@
 import { Chess } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { lookupPositionEvals, type CachedEval } from './positionEvalCache';
-import { moveIntent, type IntentOptions } from './moveIntent';
+import { intentWithFallback } from './movePurpose';
 
 export interface IntentMoveInput {
   ply: number;
   san: string;
   fenAfter: string;
 }
-
-/** Review has one stored line per position, and no read of a pass: so the
- *  follow-up is read along the engine's own line after the move, and a stopped
- *  threat is never claimed. */
-const REVIEW_INTENT: IntentOptions = { prepare: 'line', prevent: 'concrete' };
 
 const lineOf = (c: CachedEval | undefined): AnalysisLine[] => {
   const moves = c?.pv?.length ? c.pv : c?.bestMove ? [c.bestMove] : [];
@@ -47,7 +42,9 @@ export function intentsFromReads(
     const before = lineOf(reads.get(i));
     const after = lineOf(reads.get(i + 1));
     if (!before.length || !after.length) return;
-    const intent = moveIntent(fenBefore, m.san, { before, after, passBefore: [], passAfter: [] }, 'student', REVIEW_INTENT);
+    // No read of a pass is stored, so the default read can only use what the
+    // engine plays in the line; the fallback reads that line for the follow-up.
+    const intent = intentWithFallback(fenBefore, m.san, { before, after, passBefore: [], passAfter: [] }, 'student');
     if (intent) out.set(m.ply, { text: intent.text, squares: intent.squares });
   });
   return out;

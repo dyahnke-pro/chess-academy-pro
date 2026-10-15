@@ -1,4 +1,4 @@
-import { moveIntent } from '../../services/moveIntent';
+import { intentWithFallback } from '../../services/movePurpose';
 import type { ReviewIntent } from '../../services/reviewMoveIntent';
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { warmOpeningIdentity } from '../../services/openingIdentity';
@@ -1822,7 +1822,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // What the explored move was FOR — from the two reads already in hand.
       const intentByPly = new Map<number, ReviewIntent>();
       if (before?.topLines?.length && after?.topLines?.length && !/[x+#]/.test(args.san)) {
-        const it = moveIntent(args.fenBefore, args.san, { before: before.topLines, after: after.topLines, passBefore: [], passAfter: [] }, 'student', { prepare: 'line', prevent: 'concrete' });
+        const it = intentWithFallback(args.fenBefore, args.san, { before: before.topLines, after: after.topLines, passBefore: [], passAfter: [] }, 'student');
         if (it) intentByPly.set(inputs.length, { text: it.text, squares: it.squares });
       }
       const segs = buildReviewSegments(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null, new Map(), intentByPly);

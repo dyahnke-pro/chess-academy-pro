@@ -136,6 +136,18 @@ import { askBackAtCatchAll, type ChatKind } from '../coach/chatTurn';
 // the deployed app's services via page.evaluate. No-op for real users.
 // Side-effect import keeps the audit script free of source-path knowledge.
 import './masterPlayAuditBridge';
+import { movePurpose } from './movePurposeEngine';
+/** The purpose of the game's last move (`movePurpose`), from the start
+ *  position. Null when the history does not replay or the engine shows none. */
+async function lastMovePurpose(history: readonly string[], seat: 'student' | 'opponent'): Promise<string | null> {
+  try {
+    const c = new Chess();
+    for (const san of history.slice(0, -1)) c.move(san);
+    const it = await movePurpose(c.fen(), history[history.length - 1], seat);
+    return it?.text ?? null;
+  } catch { return null; }
+}
+
 
 /** Lead-the-eye suffix for an on-demand answer: paint every key square the
  *  computed read NAMED as a yellow highlight, coupled from `answer.keySquares`
@@ -5903,7 +5915,11 @@ export async function getCoachChatResponse(
             ? { rank: 1, evaluation: grounding.engineEvalCp, moves: [grounding.engineBestMoveUci], mate: null }
             : undefined;
           const theirExtra = theirPly === null ? [] : theirMoveAnswerLines(grounding.moveHistory, theirPly, sc === 'white' ? 'w' : 'b', bestHere);
-          const answer = base && theirExtra.length > 0 ? { ...base, facts: `${base.facts} ${theirExtra.join(' ')}` } : base;
+          // WHAT THEIR MOVE IS FOR — the one purpose computer Learn and the
+          // review speak (`movePurpose`), so the chat gives the same reason.
+          const theirPurpose = base ? await lastMovePurpose(grounding.moveHistory, 'opponent') : null;
+          const extra = [...(theirPurpose ? [theirPurpose] : []), ...theirExtra];
+          const answer = base && extra.length > 0 ? { ...base, facts: `${base.facts} ${extra.join(' ')}` } : base;
           if (answer) {
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opponent-move', preferRaw: true });
             if (voiced) return voiced;
@@ -5919,7 +5935,11 @@ export async function getCoachChatResponse(
           const sc: 'white' | 'black' =
             grounding.studentColor ??
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
-          const answer = assembleLastMoveAnswer({ moveHistory: [...grounding.moveHistory], studentColor: sc });
+          const base = assembleLastMoveAnswer({ moveHistory: [...grounding.moveHistory], studentColor: sc });
+          // …and what it is FOR, from the same purpose computer.
+          const lastByStudent = (grounding.moveHistory.length % 2 === 1) === (sc === 'white');
+          const purpose = base ? await lastMovePurpose(grounding.moveHistory, lastByStudent ? 'student' : 'opponent') : null;
+          const answer = base && purpose ? { ...base, facts: `${base.facts} ${purpose}` } : base;
           if (answer) {
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'last-move', preferRaw: true });
             if (voiced) return voiced;

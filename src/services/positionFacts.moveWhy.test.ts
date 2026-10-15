@@ -90,7 +90,7 @@ describe('the queen steps off the file before it opens (re-walk 1380, 11.Qe1)', 
     expect(f?.led).toMatch(/off the d-file/);
   });
   it('the Learn composer speaks it on 11.Qe1', async () => {
-    expect(await ruleAt([...PRE, 'Qe1', 'Bg4'], 20, new Set(['development', 'center', 'king-safety', 'tempo', 'open-diagonal']), false, 0)).toMatch(/d-file opens with the queens facing/);
+    expect(await ruleAt([...PRE, 'Qe1', 'Bg4'], 20, new Set(['development', 'center', 'king-safety', 'tempo', 'open-diagonal']), false, 0)).toMatch(/steps the queen off the d-file, out of line with their queen/);
   });
   it('negative control: a queen move that stays in line says nothing', () => {
     const c = new Chess(); for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6'.split(' ')) c.move(s);

@@ -12,6 +12,7 @@
  * Pure + side-effect-free so it's trivially testable and can't regress the
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
+import { purposeFromLine } from './movePurpose';
 import { costWords } from './engineConstants';
 import { capturedSquare } from '../utils/capturedSquare';
 import { evalBand, evalBandWords } from './evalBand';
@@ -1922,7 +1923,16 @@ export function assembleMoveEvalAnswer(opts: {
   if (ownReason) parts.push(`It ${ownReason}.`);
   else if (why) parts.push(why);
   else {
-    const fallback = bestMoveFallbackReason(fen, bestMoveSan, mover);
+    // WHAT IT IS FOR, from the engine's own line — the one purpose computer
+    // every surface speaks (`movePurpose`) — before the geometry floor.
+    const pvLine = (() => {
+      if (!opts.pvSan?.length || opts.pvSan[0] !== bestMoveSan) return null;
+      const moves: string[] = [];
+      try { const c = new Chess(fen); for (const x of opts.pvSan) { const m = c.move(x); moves.push(`${m.from}${m.to}${m.promotion ?? ''}`); } } catch { /* the playable prefix */ }
+      return moves.length >= 2 ? { rank: 1, evaluation: opts.evalCp ?? 0, moves, mate: null } : null;
+    })();
+    const purpose = pvLine ? purposeFromLine(fen, bestMoveSan, [pvLine], theirMove ? 'opponent' : 'student') : null;
+    const fallback = purpose?.text ?? bestMoveFallbackReason(fen, bestMoveSan, mover);
     if (fallback) parts.push(fallback);
   }
   if (evalText && !startsMate) parts.push(`${openSentence(evalText)}.`);
