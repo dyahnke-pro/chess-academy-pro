@@ -4,22 +4,26 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**477 lines · 13 exports · 25 importers · 15 tests · 2 audits**
+**478 lines · 13 exports · 31 importers · 21 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3798) — names `COLD_START_GAMES`, `familiarity`, `needScore`
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3879) — names `computeNeed`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4035) — names `familiarity`
-- **The standard post-deploy ritual** (CLAUDE.md:5983) — names `needScore`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4020) — names `COLD_START_GAMES`, `familiarity`, `needScore`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4101) — names `computeNeed`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4257) — names `familiarity`
+- **The standard post-deploy ritual** (CLAUDE.md:6341) — names `needScore`
 
 ## Who calls in
 
 - `src/hooks/useStudentNeed.ts`
+- `src/services/batch2Wiring.test.ts`
 - `src/services/capabilityGreen.measure.test.ts`
 - `src/services/capabilityRead.test.ts`
 - `src/services/coachDecisionEmits.test.ts`
+- `src/services/coachFeatureService.learnLanes.test.ts`
+- `src/services/coachFeatureService.learnParity.test.ts`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
+- `src/services/coachFeatureService.trade.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/fundamentalReachesDecider.test.ts`
 - `src/services/homeOpeningSteer.ts`
@@ -34,12 +38,14 @@
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.ts`
 - `src/services/positionReadComposer.ts`
+- `src/services/reviewLastTimeHere.test.ts`
 - `src/services/reviewNeedGate.test.ts`
 - `src/services/studentNeedLoader.test.ts`
 - `src/services/studentNeedLoader.ts`
 - `src/services/teachingSelector.ts`
 - `src/services/whyBestMove.needWire.test.ts`
 - `src/services/whyBestMove.ts`
+- `src/test/computedOrderWired.test.ts`
 
 ## Exports and every call site
 
@@ -55,16 +61,23 @@
 ### `StudentNeedContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `coldStudent` (function) — 24 call sites
+### `coldStudent` (function) — 34 call sites
+- `src/services/batch2Wiring.test.ts:73`
 - `src/services/capabilityGreen.measure.test.ts:533`
 - `src/services/capabilityRead.test.ts:35`
-- `src/services/coachDecisionEmits.test.ts:108`
-- `src/services/coachDecisionEmits.test.ts:118`
-- `src/services/coachDecisionEmits.test.ts:126`
-- `src/services/coachDecisionEmits.test.ts:132`
+- `src/services/coachDecisionEmits.test.ts:124`
+- `src/services/coachDecisionEmits.test.ts:134`
+- `src/services/coachDecisionEmits.test.ts:142`
+- `src/services/coachDecisionEmits.test.ts:148`
+- `src/services/coachFeatureService.learnLanes.test.ts:25`
+- `src/services/coachFeatureService.learnParity.test.ts:46`
+- `src/services/coachFeatureService.learnParity.test.ts:52`
+- `src/services/coachFeatureService.learnParity.test.ts:71`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:36`
-- `src/services/coachFeatureService.ts:1319`
-- `src/services/coachFeatureService.ts:4384`
+- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:88`
+- `src/services/coachFeatureService.trade.test.ts:18`
+- `src/services/coachFeatureService.ts:1320`
+- `src/services/coachFeatureService.ts:5041`
 - `src/services/fundamentalReachesDecider.test.ts:62`
 - `src/services/needCoverage.report.test.ts:93`
 - `src/services/needScore.test.ts:36`
@@ -72,14 +85,17 @@
 - `src/services/needScore.test.ts:69`
 - `src/services/needScore.test.ts:79`
 - `src/services/oneStudentRating.test.ts:84`
-- `src/services/openingGenerator.ts:2148`
+- `src/services/openingGenerator.ts:2173`
+- `src/services/reviewLastTimeHere.test.ts:25`
+- `src/services/reviewLastTimeHere.test.ts:31`
 - `src/services/reviewNeedGate.test.ts:30`
 - `src/services/reviewNeedGate.test.ts:46`
 - `src/services/reviewNeedGate.test.ts:58`
 - `src/services/reviewNeedGate.test.ts:80`
-- `src/services/studentNeedLoader.ts:230`
-- `src/services/teachingSelector.ts:267`
+- `src/services/studentNeedLoader.ts:266`
+- `src/services/teachingSelector.ts:287`
 - `src/services/whyBestMove.needWire.test.ts:21`
+- `src/test/computedOrderWired.test.ts:59`
 
 ### `NeedPlyInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -106,27 +122,27 @@
 - `scripts/catalog-sweep/gatec-reconnect.mjs:20`
 - `scripts/catalog-sweep/gatec-reconnect.mjs:44`
 - `scripts/catalog-sweep/gatec-reconnect.mjs:93`
-- `scripts/catalog-sweep/sweep-matrix.test.ts:37`
-- `scripts/catalog-sweep/sweep-matrix.test.ts:42`
-- `scripts/catalog-sweep/sweep-matrix.test.ts:43`
-- `scripts/catalog-sweep/sweep-matrix.test.ts:112`
-- `src/services/homeOpeningSteer.ts:41`
-- `src/services/homeOpeningSteer.ts:58`
-- `src/services/homeOpeningSteer.ts:72`
-- `src/services/oneOpeningKey.test.ts:124`
+- `scripts/catalog-sweep/sweep-matrix.test.ts:41`
+- `scripts/catalog-sweep/sweep-matrix.test.ts:46`
+- `scripts/catalog-sweep/sweep-matrix.test.ts:47`
+- `scripts/catalog-sweep/sweep-matrix.test.ts:116`
+- `src/services/homeOpeningSteer.ts:84`
+- `src/services/homeOpeningSteer.ts:98`
+- `src/services/homeSteerCache.ts:24`
+- `src/services/oneOpeningKey.test.ts:132`
 - `src/services/openingRecordBeat.ts:48`
 - `src/services/openingRecordBeat.ts:49`
 - `src/services/openingWalkthroughService.test.ts:32`
 - `src/services/openingWalkthroughService.test.ts:79`
-- `src/services/openingWalkthroughService.ts:59`
-- `src/services/openingWalkthroughService.ts:74`
+- `src/services/openingWalkthroughService.ts:61`
 - `src/services/openingWalkthroughService.ts:76`
-- `src/services/openingWalkthroughService.ts:90`
-- `src/services/openingWalkthroughService.ts:123`
-- `src/services/openingWalkthroughService.ts:124`
-- `src/services/openingWalkthroughService.ts:136`
-- `src/services/studentNeedLoader.ts:141`
-- `src/services/studentNeedLoader.ts:144`
+- `src/services/openingWalkthroughService.ts:78`
+- `src/services/openingWalkthroughService.ts:92`
+- `src/services/openingWalkthroughService.ts:125`
+- `src/services/openingWalkthroughService.ts:126`
+- `src/services/openingWalkthroughService.ts:138`
+- `src/services/studentNeedLoader.ts:157`
+- `src/services/studentNeedLoader.ts:160`
 
 ### `plyClaimBucket` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -153,11 +169,11 @@
 - `src/services/capabilityRead.test.ts:116`
 - `src/services/capabilityRead.test.ts:127`
 - `src/services/capabilityRead.test.ts:128`
-- `src/services/coachDecisionEmits.test.ts:108`
-- `src/services/coachDecisionEmits.test.ts:118`
-- `src/services/coachDecisionEmits.test.ts:126`
-- `src/services/coachDecisionEmits.test.ts:132`
-- `src/services/coachFeatureService.ts:1319`
+- `src/services/coachDecisionEmits.test.ts:124`
+- `src/services/coachDecisionEmits.test.ts:134`
+- `src/services/coachDecisionEmits.test.ts:142`
+- `src/services/coachDecisionEmits.test.ts:148`
+- `src/services/coachFeatureService.ts:1320`
 - `src/services/fundamentalReachesDecider.test.ts:140`
 - `src/services/fundamentalReachesDecider.test.ts:154`
 - `src/services/fundamentalReachesDecider.test.ts:165`
@@ -186,23 +202,27 @@
 - `src/services/needWeaknessWire.test.ts:118`
 - `src/services/needWeaknessWire.test.ts:131`
 - `src/services/needWeaknessWire.test.ts:135`
-- `src/services/oneOpeningKey.test.ts:117`
-- `src/services/oneOpeningKey.test.ts:128`
-- `src/services/oneOpeningKey.test.ts:133`
-- `src/services/oneOpeningKey.test.ts:135`
+- `src/services/oneOpeningKey.test.ts:125`
+- `src/services/oneOpeningKey.test.ts:136`
+- `src/services/oneOpeningKey.test.ts:141`
+- `src/services/oneOpeningKey.test.ts:143`
 - `src/services/positionFacts.liveFundamental.test.ts:80`
-- `src/services/positionFacts.ts:674`
-- `src/services/teachingSelector.ts:312`
+- `src/services/positionFacts.ts:1151`
+- `src/services/teachingSelector.ts:332`
 
 ### `HELD_FOR_PROVEN` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 
+- `src/services/batch2Wiring.test.ts`
 - `src/services/capabilityGreen.measure.test.ts`
 - `src/services/capabilityRead.test.ts`
 - `src/services/coachDecisionEmits.test.ts`
+- `src/services/coachFeatureService.learnLanes.test.ts`
+- `src/services/coachFeatureService.learnParity.test.ts`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
+- `src/services/coachFeatureService.trade.test.ts`
 - `src/services/fundamentalReachesDecider.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
@@ -211,9 +231,11 @@
 - `src/services/needWeaknessWire.test.ts`
 - `src/services/oneOpeningKey.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
+- `src/services/reviewLastTimeHere.test.ts`
 - `src/services/reviewNeedGate.test.ts`
 - `src/services/studentNeedLoader.test.ts`
 - `src/services/whyBestMove.needWire.test.ts`
+- `src/test/computedOrderWired.test.ts`
 
 ## Audits that reach it
 

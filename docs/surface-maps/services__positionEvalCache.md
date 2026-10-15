@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**146 lines · 8 exports · 3 importers · 2 tests · 0 audits**
+**147 lines · 8 exports · 6 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/gameAnalysisService.ts`
 - `src/services/gameAnalysisTwoPass.test.ts`
 - `src/services/positionEvalCache.test.ts`
+- `src/services/reviewMoveIntent.test.ts`
+- `src/services/reviewMoveIntent.ts`
+- `src/services/reviewReadAhead.test.ts`
 
 ## Exports and every call site
 
@@ -30,13 +33,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `EvalToStore` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `evalCacheKey` (function) — 2 call sites
+### `evalCacheKey` (function) — 3 call sites
+- `src/services/gameAnalysisService.ts:1764`
 - `src/services/positionEvalCache.test.ts:27`
 - `src/services/positionEvalCache.test.ts:28`
 
-### `lookupPositionEvals` (function) — 12 call sites
-- `src/services/gameAnalysisService.ts:1511`
-- `src/services/gameAnalysisService.ts:1797`
+### `lookupPositionEvals` (function) — 17 call sites
+- `src/services/gameAnalysisService.ts:1556`
+- `src/services/gameAnalysisService.ts:1894`
+- `src/services/gameAnalysisService.ts:3016`
 - `src/services/positionEvalCache.test.ts:36`
 - `src/services/positionEvalCache.test.ts:40`
 - `src/services/positionEvalCache.test.ts:46`
@@ -47,11 +52,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionEvalCache.test.ts:73`
 - `src/services/positionEvalCache.test.ts:75`
 - `src/services/positionEvalCache.test.ts:78`
+- `src/services/reviewMoveIntent.ts:82`
+- `src/services/reviewMoveIntent.ts:84`
+- `src/services/reviewReadAhead.test.ts:57`
+- `src/services/reviewReadAhead.test.ts:87`
 
-### `storePositionEvals` (function) — 17 call sites
-- `src/services/gameAnalysisService.ts:1678`
-- `src/services/gameAnalysisService.ts:2106`
-- `src/services/gameAnalysisTwoPass.test.ts:318`
+### `storePositionEvals` (function) — 20 call sites
+- `src/services/gameAnalysisService.ts:1725`
+- `src/services/gameAnalysisService.ts:2291`
+- `src/services/gameAnalysisService.ts:3034`
+- `src/services/gameAnalysisTwoPass.test.ts:285`
 - `src/services/positionEvalCache.test.ts:32`
 - `src/services/positionEvalCache.test.ts:45`
 - `src/services/positionEvalCache.test.ts:51`
@@ -66,9 +76,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionEvalCache.test.ts:77`
 - `src/services/positionEvalCache.test.ts:82`
 - `src/services/positionEvalCache.test.ts:108`
+- `src/services/reviewReadAhead.test.ts:62`
+- `src/services/reviewReadAhead.test.ts:69`
 
 ### `prunePositionEvalCache` (function) — 3 call sites
-- `src/services/gameAnalysisService.ts:2639`
+- `src/services/gameAnalysisService.ts:2898`
 - `src/services/positionEvalCache.test.ts:99`
 - `src/services/positionEvalCache.test.ts:109`
 
@@ -76,6 +88,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/gameAnalysisTwoPass.test.ts`
 - `src/services/positionEvalCache.test.ts`
+- `src/services/reviewMoveIntent.test.ts`
+- `src/services/reviewReadAhead.test.ts`
 
 ## Audits that reach it
 

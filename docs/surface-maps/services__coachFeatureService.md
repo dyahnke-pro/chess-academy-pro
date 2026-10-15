@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5356 lines · 31 exports · 48 importers · 50 tests · 4 audits**
+**5368 lines · 31 exports · 48 importers · 51 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -137,7 +137,7 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 76 call sites
+### `buildReviewSegments` (function) — 78 call sites
 - `src/components/Coach/CoachGameReview.tsx:1828`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
@@ -200,6 +200,8 @@
 - `src/services/reviewCorpusNote.test.ts:40`
 - `src/services/reviewForesight.test.ts:52`
 - `src/services/reviewHeldMemory.test.ts:16`
+- `src/services/reviewLastTimeHere.test.ts:26`
+- `src/services/reviewLastTimeHere.test.ts:31`
 - `src/services/reviewMatePly.test.ts:19`
 - `src/services/reviewMoveIntent.test.ts:37`
 - `src/services/reviewNeedGate.test.ts:30`
@@ -369,6 +371,7 @@
 - `src/services/reviewForesight.test.ts`
 - `src/services/reviewFullGameNarration.harness.test.ts`
 - `src/services/reviewHeldMemory.test.ts`
+- `src/services/reviewLastTimeHere.test.ts`
 - `src/services/reviewMatePly.test.ts`
 - `src/services/reviewMoveIntent.test.ts`
 - `src/services/reviewNarrationBuild.test.ts`

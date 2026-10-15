@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1557 lines · 25 exports · 31 importers · 17 tests · 4 audits**
+**1558 lines · 25 exports · 31 importers · 17 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6299) — names `gradeMistakePuzzle`
+- **The standard post-deploy ritual** (CLAUDE.md:6315) — names `gradeMistakePuzzle`
 
 ## Who calls in
 
@@ -97,8 +97,8 @@
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:7932`
-- `src/components/Coach/CoachTeachPage.tsx:7938`
+- `src/components/Coach/CoachTeachPage.tsx:7942`
+- `src/components/Coach/CoachTeachPage.tsx:7948`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -151,15 +151,15 @@
 
 ### `replayPgnToFens` (function) — 14 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:47`
-- `src/components/Coach/CoachReviewSessionPage.tsx:129`
+- `src/components/Coach/CoachReviewSessionPage.tsx:130`
 - `src/services/autoAnalyzeGame.ts:334`
-- `src/services/gameAnalysisService.ts:402`
-- `src/services/gameAnalysisService.ts:1494`
-- `src/services/gameAnalysisService.ts:1806`
-- `src/services/gameAnalysisService.ts:2390`
-- `src/services/gameAnalysisService.ts:2460`
-- `src/services/gameAnalysisService.ts:3068`
-- `src/services/gameAnalysisService.ts:3080`
+- `src/services/gameAnalysisService.ts:403`
+- `src/services/gameAnalysisService.ts:1495`
+- `src/services/gameAnalysisService.ts:1807`
+- `src/services/gameAnalysisService.ts:2391`
+- `src/services/gameAnalysisService.ts:2461`
+- `src/services/gameAnalysisService.ts:3086`
+- `src/services/gameAnalysisService.ts:3098`
 - `src/services/reviewReadAhead.test.ts:43`
 - `src/services/tacticClassifierService.ts:271`
 - `src/services/tacticClassifierService.ts:356`
@@ -176,9 +176,9 @@
 - `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
-- `src/components/Coach/CoachGamePage.tsx:2084`
-- `src/components/Coach/CoachGameReview.tsx:376`
-- `src/services/gameAnalysisService.ts:2346`
+- `src/components/Coach/CoachGamePage.tsx:2087`
+- `src/components/Coach/CoachGameReview.tsx:382`
+- `src/services/gameAnalysisService.ts:2347`
 - `src/services/mistakePuzzleService.test.ts:107`
 - `src/services/mistakePuzzleService.test.ts:161`
 - `src/services/mistakePuzzleService.test.ts:187`
@@ -206,7 +206,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rerenderMistakeNarration` (function) — 1 call site
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:453`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:458`
 
 ### `lineToUci` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -238,7 +238,7 @@
 
 ### `getMisconceptionDrillPuzzles` (function) — 12 call sites
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx:45`
-- `src/services/bucketPipelineAudit.ts:273`
+- `src/services/bucketPipelineAudit.ts:274`
 - `src/services/drillJoinDivergence.test.ts:49`
 - `src/services/drillJoinDivergence.test.ts:57`
 - `src/services/drillJoinDivergence.test.ts:64`
@@ -257,7 +257,7 @@
 - `src/services/mistakePuzzleService.test.ts:582`
 
 ### `gradeMistakePuzzle` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2584`
+- `src/components/Coach/CoachTeachPage.tsx:2594`
 - `src/components/Puzzles/MyMistakesPage.tsx:289`
 - `src/components/Tactics/TacticCreatePage.tsx:199`
 - `src/services/conceptSchedule.test.ts:41`
@@ -276,7 +276,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `loadDrilledMotifs` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1824`
+- `src/components/Coach/CoachTeachPage.tsx:1828`
 - `src/services/conceptSchedule.test.ts:58`
 
 ### `deleteMistakePuzzle` (function) — 2 call sites

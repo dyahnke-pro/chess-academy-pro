@@ -28,6 +28,8 @@ import { provenThreatLine, threatStakes } from './threatProof';
 import { trappedOnBoard } from './reviewTeachingPoints';
 import { bookDeparture } from './bookDeparture';
 import { bookMoveWhy } from './bookMoveWhy';
+import { lastTimeHere } from './lastTimeHere';
+import type { BookDepartureRow } from './bookDepartureWeakness';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { planThreadTurn, type PlanThread } from './planThread';
 import { geometryReads, type GeometryContext } from './tacticGeometry';
@@ -89,6 +91,8 @@ export interface BoardContexts {
   /** The book move the student just left, with the job it does on the board
    *  (the student's own departure, the move it happened or the reply after). */
   bookMove: { history: readonly string[]; student: Color };
+  /** The student's own costly departure from this position in another game. */
+  lastTimeHere: { fenBefore: string; playedSan: string; rows: readonly BookDepartureRow[]; currentGameId: string | null };
   /** The student's queen or rook attacked with no safe square. */
   trapped: { fen: string; student: Color };
   /** A threat warning, with the cost it claims proven on the board. */
@@ -215,6 +219,26 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       chat: CHAT_OWED,
       tactics: { not: 'a puzzle has no book departure' },
       weaknesses: { not: 'owed — the departure row (bookDepartureWeakness) could carry the job' },
+    },
+  },
+  lastTimeHere: {
+    // MEMORY BY POSITION (David 2026-10-15): the book-departure rows already
+    // hold every position the student left theory from, the move and its
+    // cost. Their own move, already played, is named; the book move never is.
+    read: ({ fenBefore, playedSan, rows, currentGameId }) => safe(() => {
+      const r = lastTimeHere(fenBefore, playedSan, rows, currentGameId);
+      if (!r) return null;
+      let after: string | undefined;
+      try { const b = new Chess(fenBefore); b.move(playedSan); after = b.fen(); } catch { after = undefined; }
+      return { text: r.text, proof: NO_PROOF.stated, squares: [], key: r.key, ...(after ? { fen: after } : {}) };
+    }),
+    surfaces: {
+      learn: LEARN,
+      review: { wired: 'services/coachFeatureService.ts' },
+      play: PLAY_ASK,
+      chat: CHAT_OWED,
+      tactics: { not: 'a puzzle has no book departure' },
+      weaknesses: { not: 'owed — the departure row is the weakness itself' },
     },
   },
   queenGrabTrap: {

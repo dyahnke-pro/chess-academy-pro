@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**47 lines · 5 exports · 4 importers · 2 tests · 0 audits**
+**48 lines · 5 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,17 +27,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `setOpeningPositions` (function) — 2 call sites
 - `src/services/openingPositions.test.ts:12`
-- `src/services/orderComputers.test.ts:43`
+- `src/services/orderComputers.test.ts:44`
 
 ### `openingAtPosition` (function) — 5 call sites
 - `src/services/openingEquivalence.ts:56`
 - `src/services/openingEquivalence.ts:60`
 - `src/services/openingEquivalence.ts:174`
-- `src/services/openingEquivalence.ts:220`
+- `src/services/openingEquivalence.ts:235`
 - `src/services/openingPositions.test.ts:20`
 
 ### `transposedOpening` (function) — 3 call sites
-- `src/services/openingAnnouncement.ts:148`
+- `src/services/openingAnnouncement.ts:200`
 - `src/services/openingPositions.test.ts:28`
 - `src/services/openingPositions.test.ts:37`
 

@@ -50,6 +50,7 @@ import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { noteSlip } from './learnBoardTeaching';
 import { recall, type RecallMemory } from './fundamentalRecurrence';
+import { readBoard } from './boardComputers';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { mateStakes, isSacrifice, type FactStakes } from './factStakes';
@@ -1839,6 +1840,16 @@ export function buildReviewSegments(
             if (line) { facets.push(`[held] ${line}`); break; }
           }
         } catch { /* memory is a bonus, never a blocker */ }
+      }
+      // MEMORY BY POSITION, the green half: the student left theory from this
+      // board in another game at a cost, and this game went another way. The
+      // repeat is the departure line's job ("You left book … again").
+      if (moverColor === playerColor && studentNeed?.bookDepartures.length) {
+        const here = readBoard('lastTimeHere', { fenBefore: fenPair.fenBefore, playedSan: m.san, rows: studentNeed.bookDepartures, currentGameId: currentGameId ?? null });
+        if (here && here.key.startsWith('last-here:other:') && !recalled.has(here.key)) {
+          recalled.add(here.key);
+          facets.push(`[last-here] ${here.text}`);
+        }
       }
       // THE CONVERSION METHOD (WO-LAYERS-01 step 5), on the student's move when
       // they are a piece or more up — the step the board is on, once per step
