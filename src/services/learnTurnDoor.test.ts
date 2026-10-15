@@ -585,3 +585,18 @@ describe('a good move always gets its own reason (David 2026-10-14)', () => {
     expect(d.spoke).toContain('movePoint');
   });
 });
+
+describe('a slip keeps its verdict and its best reason; extra reasons wait (Learn audit 2026-10-15)', () => {
+  it('a third reason for the same slip is held past the turn length', () => {
+    const pad = (w: string, n: number): string => `This ${Array.from({ length: n }, () => w).join(' ')} happened.`;
+    const d = decideTurn([
+      { lane: 'mistake', proof: NO_PROOF.stated, text: pad('mistake', 20), fen: FEN, stakes: costStakes(300) ?? undefined },
+      { lane: 'blunderCheck', proof: NO_PROOF.stated, text: pad('check', 25), fen: FEN, stakes: costStakes(300) ?? undefined },
+      { lane: 'fundamental', proof: NO_PROOF.stated, text: pad('rule', 26), fen: FEN, stakes: costStakes(100) ?? undefined },
+      { lane: 'drawback', proof: NO_PROOF.stated, text: pad('cost', 27), fen: FEN, stakes: costStakes(50) ?? undefined },
+    ]);
+    expect(d.spoke).toContain('mistake');
+    expect(d.spoke).toContain('blunderCheck');
+    expect(d.held).toContain('drawback');
+  });
+});

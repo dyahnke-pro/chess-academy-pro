@@ -44,3 +44,11 @@ describe('one punishing line per ply (review audit 2026-10-15)', () => {
     expect(facets).toMatch(/outVerdictReason\.playedLine = !!ew\?\.line;/);
   });
 });
+
+describe('the review line renderer says a long line as its shape (proof guard 2)', () => {
+  it('past three moves: the first move and the result', async () => {
+    const { readFileSync } = await import('node:fs');
+    const src = readFileSync('src/services/coachFeatureService.ts', 'utf8');
+    expect(src).toMatch(/const moves = said\.length <= 3 \? andList\(said\) : `\$\{said\[0\]\} and the moves that follow`;/);
+  });
+});

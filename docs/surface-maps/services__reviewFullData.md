@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1766 lines · 13 exports · 15 importers · 17 tests · 0 audits**
+**1769 lines · 13 exports · 15 importers · 17 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -100,7 +100,7 @@
 - `src/test/teach02Wired.test.ts:66`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:5264`
+- `src/services/coachFeatureService.ts:5268`
 - `src/services/reviewFullData.test.ts:204`
 - `src/services/reviewFullData.test.ts:207`
 - `src/services/reviewFullData.test.ts:215`

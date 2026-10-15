@@ -10721,7 +10721,7 @@ export function CoachTeachPage(): JSX.Element {
                       const ans = threatAnswerTeaching({
                         fen: fenNow, squares: asked.squares, shape: asked.shape,
                         bestUci: read.bestUci, whiteCp: read.whiteCp,
-                        student: playerColor === 'white' ? 'w' : 'b', ply: learnMemRef.current.questionsAnswered.size,
+                        student: playerColor === 'white' ? 'w' : 'b', ply: nextStem(learnMemRef.current, 'threat-answer'),
                       });
                       if (ans) {
                         learnMemRef.current.questionsAnswered.add(`${fenNow}|${ans.san}`);

@@ -572,9 +572,16 @@ export function decideTurn(
   // never wait: they ARE the turn. Value decides who waits, never order.
   {
     const words = (t: string): number => t.split(/\s+/).filter(Boolean).length;
-    const fixed = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
-      x === ownLead || x === ownReason || DANGER_LANES.has(x.lane) || LEARN_LANES[x.lane].always === true || DNA_BEAT[x.lane] === 'but';
     const kept = survivors.filter((x) => keep.includes(x.fact));
+    // The verdict and its ONE best reason always stay; a third and fourth
+    // reason for the same slip ('but' beats) may wait (Learn audit
+    // 2026-10-15: a 122-word turn — the blunder check, the poisoned pawn, the
+    // guard it left and the habit, all for one move).
+    const bestBut = kept.filter((x) => DNA_BEAT[x.lane] === 'but' && x.lane !== 'mistake')
+      .sort((a, b) => value(b) - value(a))[0] ?? null;
+    const fixed = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
+      x === ownLead || x === ownReason || DANGER_LANES.has(x.lane) || (LEARN_LANES[x.lane].always === true && DNA_BEAT[x.lane] !== 'but')
+      || x.lane === 'mistake' || x === bestBut;
     let total = kept.filter(fixed).reduce((n, x) => n + words(x.fact.text), 0);
     for (const x of kept.filter((y) => !fixed(y)).sort((a, b) => value(b) - value(a))) {
       const w = words(x.fact.text);
