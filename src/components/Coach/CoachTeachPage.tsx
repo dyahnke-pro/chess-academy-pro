@@ -8212,7 +8212,6 @@ export function CoachTeachPage(): JSX.Element {
      *  what was computed rather than computing something new. */
     let tacticSquares: string[] = [];
     let threatSquares: string[] = [];
-    const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
     const AV: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
     const leadEyeArrows: BoardArrow[] = [];
     let tacticLine: string | null = null;
