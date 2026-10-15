@@ -28,7 +28,7 @@ import { THINK_MARK } from '../utils/thinkPause';
 
 export interface MethodRead {
   /** Their weakness, as a phrase ("their king, still on e8", "their isolated pawn on d5"). */
-  weakness: { phrase: string; square: string } | null;
+  weakness: { phrase: string; square: string; kind: 'king' | 'isolated' | 'hole' } | null;
   /** The student's worst-placed piece. */
   worst: { phrase: string; square: string } | null;
   /** The student's pawn breaks (squares a pawn can strike). */
@@ -55,13 +55,13 @@ export function methodRead(fen: string, student: Color): MethodRead | null {
   const queensOn = chess.board().some((r) => r.some((c) => c?.type === 'q'));
   const king = chess.board().flat().find((c) => c?.type === 'k' && c.color === enemy);
   if (king && queensOn && enemyKingStuckInCenter(fen, student)) {
-    weakness = { phrase: `their king, still on ${king.square}`, square: king.square };
+    weakness = { phrase: `their king, still on ${king.square}`, square: king.square, kind: 'king' };
   } else {
     const iso = struct.pawns.isolatedPawns[enemy].find((sq) => 'cdef'.includes(sq[0])) ?? struct.pawns.isolatedPawns[enemy][0];
-    if (iso) weakness = { phrase: `their isolated pawn on ${iso}`, square: iso };
+    if (iso) weakness = { phrase: `their isolated pawn on ${iso}`, square: iso, kind: 'isolated' };
     else {
       const holes = findWeakSquares(fen)[enemy === 'w' ? 'white' : 'black'];
-      if (holes[0]) weakness = { phrase: `the hole on ${holes[0]} that no pawn of theirs can guard`, square: holes[0] };
+      if (holes[0]) weakness = { phrase: `the hole on ${holes[0]} that no pawn of theirs can guard`, square: holes[0], kind: 'hole' };
     }
   }
   const w = findWorstPlacedPiece(chess, student);
@@ -112,4 +112,16 @@ export function methodLine(read: MethodRead): string {
 /** The squares the method names, to mark on the board. */
 export function methodSquares(read: MethodRead): Square[] {
   return [read.weakness?.square, read.worst?.square, ...read.breaks].filter((s): s is string => !!s && /^[a-h][1-8]$/.test(s)) as Square[];
+}
+
+/** WHY a weakness is one — the reason, by kind, so "what is their weakness?"
+ *  is answered with what makes it a target, never a square alone. */
+const WEAKNESS_WHY: Record<NonNullable<MethodRead['weakness']>['kind'], (sq: string) => string> = {
+  king: () => 'with the centre opening, it can be attacked before it reaches safety',
+  isolated: () => 'no pawn can ever protect it, so it needs pieces to guard it — and those pieces are tied to it',
+  hole: () => 'no pawn of theirs can ever attack it, so a piece you plant there stays for good',
+};
+export function weaknessLine(read: MethodRead): string | null {
+  const w = read.weakness;
+  return w ? `Their weakness is ${w.phrase.replace(/^their /, 'the ')}: ${WEAKNESS_WHY[w.kind](w.square)}.` : null;
 }

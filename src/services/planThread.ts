@@ -103,7 +103,8 @@ export function planThreadTurn(
   // while the plan they heard still stands.
   if (t.stated && args.studentMove) {
     const step = planStepLine(t.stated.fact, args.studentMove.fenBefore, args.studentMove.san, args.student);
-    if (step) out.push({ text: step.text, squares: step.squares, claim: `plan:step:${t.stated.fact.id}:${args.ply}`, proof: NO_PROOF.stated });
+    // Its proof is the board: the squares the step landed on and the target it serves.
+    if (step) out.push({ text: step.text, squares: step.squares, claim: `plan:step:${t.stated.fact.id}:${args.ply}`, proof: { kind: 'squares', exact: true, short: step.text, full: step.text, squares: step.squares } });
   }
   // A plan that held long enough means they were not shutting plans down.
   if (t.stated && args.ply - t.stated.ply >= PLAN_THREAD_HOLD_PLIES * 2) t.stoppedInRow = 0;

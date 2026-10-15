@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**116 lines · 6 exports · 3 importers · 2 tests · 0 audits**
+**128 lines · 7 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/boardPlanFacts.ts`
+- `src/services/groundedAnswer.ts`
 - `src/services/planChoice.test.ts`
 - `src/services/planThread.ts`
 
@@ -21,27 +22,33 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `MethodRead` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `methodRead` (function) — 3 call sites
+### `methodRead` (function) — 5 call sites
 - `src/services/boardPlanFacts.ts:108`
+- `src/services/groundedAnswer.ts:3665`
+- `src/services/groundedAnswer.ts:6833`
 - `src/services/planChoice.test.ts:30`
-- `src/services/planThread.ts:141`
+- `src/services/planThread.ts:142`
 
 ### `planWorth` (function) — 1 call site
-- `src/services/planThread.ts:151`
+- `src/services/planThread.ts:152`
 
 ### `whyThisPlan` (function) — 4 call sites
 - `src/services/boardPlanFacts.ts:111`
 - `src/services/planChoice.test.ts:18`
 - `src/services/planChoice.test.ts:24`
-- `src/services/planThread.ts:144`
+- `src/services/planThread.ts:145`
 
-### `methodLine` (function) — 3 call sites
+### `methodLine` (function) — 4 call sites
 - `src/services/boardPlanFacts.ts:113`
+- `src/services/groundedAnswer.ts:3667`
 - `src/services/planChoice.test.ts:32`
-- `src/services/planThread.ts:154`
+- `src/services/planThread.ts:155`
 
 ### `methodSquares` (function) — 1 call site
-- `src/services/planThread.ts:156`
+- `src/services/planThread.ts:157`
+
+### `weaknessLine` (function) — 1 call site
+- `src/services/groundedAnswer.ts:6834`
 
 ## Tests
 

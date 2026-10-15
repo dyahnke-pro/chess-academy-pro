@@ -592,7 +592,12 @@ async function dispatchCoachTurnOnce(
     if (bad && FALSE_PREMISE.has(bad.reason) && bad.clarify) {
       return serve(bad.clarify, `premise:${bad.reason}`, 'asked-back');
     }
-    const canonical = turn ? canonicalAsk(turn) : null;
+    // THE STUDENT'S OWN WORDS WIN when they already route to the reading's
+    // lane — they carry the specifics (the piece, the square, the topic) the
+    // stand-in drops: a reading of 'positional' served "is my bishop tied
+    // down?" as "where are the outposts?" (2026-10-15).
+    const ownLaneAgrees = turn ? kindAgreesWithLane(turn.kind, fastPathLane(input.ask, { fen: input.liveState.fen })) : false;
+    const canonical = turn && !ownLaneAgrees ? canonicalAsk(turn) : null;
     if (canonical) {
       effectiveInput = { ...input, ask: canonical };
       servedParsed = true;

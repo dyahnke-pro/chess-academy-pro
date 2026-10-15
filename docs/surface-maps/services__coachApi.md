@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7212 lines · 41 exports · 54 importers · 60 tests · 19 audits**
+**7222 lines · 41 exports · 54 importers · 60 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -228,9 +228,9 @@
 - `src/components/Openings/MiddlegamePractice.tsx:267`
 - `src/hooks/useLiveCoach.needWire.test.tsx:15`
 - `src/hooks/useLiveCoach.test.tsx:13`
-- `src/hooks/useLiveCoach.ts:312`
+- `src/hooks/useLiveCoach.ts:313`
 - `src/hooks/usePhaseNarration.test.ts:68`
-- `src/hooks/usePhaseNarration.ts:755`
+- `src/hooks/usePhaseNarration.ts:757`
 - `src/services/coachMoveCommentary.ts:303`
 - `src/services/groundedComputedOnly.test.ts:25`
 - `src/services/groundedMoveFeedback.test.ts:14`
@@ -281,16 +281,16 @@
 - `scripts/audit-kid-static.mjs:53`
 - `scripts/audit-kid-static.mjs:64`
 - `src/components/Coach/CoachGameReview.tsx:1709`
-- `src/components/Coach/CoachGameReview.tsx:1908`
+- `src/components/Coach/CoachGameReview.tsx:1905`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
-- `src/components/Puzzles/PuzzleBoard.tsx:98`
-- `src/hooks/usePhaseNarration.ts:742`
+- `src/components/Puzzles/PuzzleBoard.tsx:99`
+- `src/hooks/usePhaseNarration.ts:744`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:260`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:357`
-- `src/services/coachFeatureService.ts:5052`
-- `src/services/coachFeatureService.ts:5205`
+- `src/services/coachFeatureService.ts:358`
+- `src/services/coachFeatureService.ts:5059`
+- `src/services/coachFeatureService.ts:5212`
 - `src/services/coachLaneWiring.test.ts:148`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
@@ -341,8 +341,8 @@
 - `src/services/voiceFactsFidelity.test.ts:65`
 
 ### `explainPuzzleMoveGrounded` (function) — 2 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:645`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:698`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:650`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:706`
 
 ### `currentAskFromContent` (function) — 4 call sites
 - `src/services/coachApi.currentAsk.test.ts:31`
