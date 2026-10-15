@@ -267,8 +267,8 @@ export function deriveNextPlanFacts(
   if (passer) {
     const queensOn = all.some((c) => c.type === 'q');
     const escort = queensOn
-      ? 'escort it with your pieces rather than pushing it alone into danger — the king joins the escort once the queens come off'
-      : 'escort it up with your king and pieces rather than pushing it alone into danger';
+      ? 'escort it with your pieces — the king joins once the queens come off'
+      : 'escort it with your king and pieces';
     add('passer', `the plan from here is to get your passed pawn on ${passer} promoting. Here's how: clear the square in front of it, ${escort}, and push it one safe square at a time — every push brings it closer to promotion`, [passer]);
   }
 
@@ -329,7 +329,7 @@ export function deriveNextPlanFacts(
   if (fullmove >= 10) {
     const worst = findWorstPlacedPiece(chess, studentColorWB);
     if (worst) {
-      add('worst-piece', `the plan from here is to rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}, which ${reachWords(worst.m)}. Here's how: don't play a single attacking move until it's fixed — spend two or three tempi walking it to a square where it actually bites, because a piece doing nothing means you're effectively playing down a piece`, [worst.sq]);
+      add('worst-piece', `the plan from here is to rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}, which ${reachWords(worst.m)}. Here's how: walk it to a square where it bites before you attack — a piece doing nothing leaves you a piece down in the fight`, [worst.sq]);
     }
   }
 
@@ -379,7 +379,7 @@ export function deriveNextPlanFacts(
       : enemyN ? 'their knights'
       : enemyB === 1 ? 'their lone bishop'
       : 'anything they have left';
-    add('bishop-pair', `the plan from here is to make your bishop pair count. Here's how: trade pawns to rip the position open, guard both bishops from any swap, and point them at both wings at once — in an open board two bishops rake the whole thing and simply outgun ${rival}. The pair is only an advantage while both live; you trade one at the very end, when it wins something concrete`, all.filter((c) => c.type === 'b' && c.color === studentColorWB).map((c) => c.square));
+    add('bishop-pair', `the plan from here is to make your bishop pair count. Here's how: trade pawns to open the board and keep both bishops — on an open board two bishops outgun ${rival}`, all.filter((c) => c.type === 'b' && c.color === studentColorWB).map((c) => c.square));
   }
 
   return plans;
