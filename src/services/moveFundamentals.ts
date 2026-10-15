@@ -17,6 +17,7 @@
 // pulls from without an import cycle.
 
 import { Chess } from 'chess.js';
+import { namedSquares } from './squareRole';
 import { rotateStem } from '../utils/rotateStem';
 import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZoneClause, standingHoles } from './keySquares';
 import { andList } from '../utils/andList';
@@ -522,7 +523,10 @@ export function computeMoveFundamentals(
     const holes = eyes.filter((s) => standingHoles(seat).includes(s) && !nearKing.includes(s));
     const homeAfter = homeMinorCount(after, mover);
     const weight = Math.min(82, 55 + 6 * (homeAfter + 1));
-    const centerTail = (central.length ? `, fighting for the center on ${andList(central)}` : '')
+    // Each central square is said WITH its role (squareRole), or not at all
+    // (David 2026-10-15: "Start replacing descriptions with teachings").
+    const centralNamed = central.length ? namedSquares(after, central, mover, 'the') : null;
+    const centerTail = (centralNamed ? `, fighting for the center on ${centralNamed}` : '')
       + (holes.length ? `, eyeing ${andList(holes)}` : '')
       + kingZoneClause(nearKing);
     // WITH TEMPO (hand walk 2026-09-24: 3.Nc3 against the Scandinavian queen on

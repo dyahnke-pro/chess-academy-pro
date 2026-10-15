@@ -17,6 +17,9 @@ const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: '
  *  where the line names no seat. Required, so a caller decides its seat. */
 export function squareRole(chess: Chess, sq: Square, me: Color, owner: 'their' | 'your' | 'the'): string | null {
   const them: Color = me === 'w' ? 'b' : 'w';
+  // With no seat, the other side's pieces are "the enemy": "holding back the
+  // d-pawn" cannot say whose.
+  const other = owner === 'the' ? 'the enemy' : owner;
   const file = sq[0];
   const rank = Number(sq[1]);
   // An occupied square is a piece to attack or defend — another lesson.
@@ -26,11 +29,11 @@ export function squareRole(chess: Chess, sq: Square, me: Color, owner: 'their' |
   const back = them === 'w' ? -1 : 1;
   const one = `${file}${rank + back}` as Square;
   const p1 = chess.get(one);
-  if (p1 && p1.type === 'p' && p1.color === them) return `holding back ${owner} ${file}-pawn`;
+  if (p1 && p1.type === 'p' && p1.color === them) return `holding back ${other} ${file}-pawn`;
   const two = `${file}${rank + 2 * back}` as Square;
   const p2 = chess.get(two);
   const startRank = them === 'w' ? 2 : 7;
-  if (!p1 && p2 && p2.type === 'p' && p2.color === them && Number(two[1]) === startRank) return `holding back ${owner} ${file}-pawn`;
+  if (!p1 && p2 && p2.type === 'p' && p2.color === them && Number(two[1]) === startRank) return `holding back ${other} ${file}-pawn`;
   // YOUR PAWN'S PUSH: a square your own pawn steps to next (one step, or two
   // from its start rank) — a piece covering it backs the advance.
   const fwd = me === 'w' ? -1 : 1;
@@ -57,6 +60,15 @@ export function squareRole(chess: Chess, sq: Square, me: Color, owner: 'their' |
   if (!coverable && rank >= 3 && rank <= 6) return owner === 'your' ? 'a square no pawn of yours can ever cover' : owner === 'their' ? 'a square no pawn of theirs can ever cover' : 'a square no enemy pawn can ever cover';
   // A SQUARE THEIR PIECE WANTS: one of their minor or major pieces reaches it.
   const wants = chess.attackers(sq, them).map((s) => chess.get(s)).find((p) => p && p.type !== 'p' && p.type !== 'k');
-  if (wants) return `keeping ${owner} ${NAME[wants.type]} off it`;
+  if (wants) return `keeping ${other} ${NAME[wants.type]} off it`;
   return null;
+}
+
+/** The squares that HAVE a role, each with it, joined so each item keeps its
+ *  own comma ("d4, holding back their d-pawn, and e5, …"). Null when none do:
+ *  a list of squares without reasons is not said. */
+export function namedSquares(chess: Chess, squares: readonly string[], me: Color, owner: 'their' | 'your' | 'the'): string | null {
+  const named = squares.flatMap((sq) => { const role = squareRole(chess, sq as Square, me, owner); return role ? [`${sq}, ${role}`] : []; });
+  if (!named.length) return null;
+  return named.length === 1 ? named[0] : `${named.slice(0, -1).join(', ')}, and ${named[named.length - 1]}`;
 }

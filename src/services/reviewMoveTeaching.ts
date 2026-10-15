@@ -20,7 +20,7 @@ import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZone
 import type { Move } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
-import { squareRole } from './squareRole';
+import { namedSquares } from './squareRole';
 
 // Q1 — OCCUPATION. A pawn reaching one of these has staked the centre.
 const CENTER = new Set(CORE_CENTER);
@@ -307,11 +307,8 @@ function centerFight(phrases: PhraseMemory | null, chess: Chess, color: 'w' | 'b
   // "Start replacing descriptions with teachings"). "The knight bears down on
   // d5" was the most repeated description in the app; the teaching is why d5
   // matters — their pawn's next step, a hole, a square their piece wants.
-  const owner = moverIsStudent ? 'their' : 'your';
-  const named = squares.flatMap((sq) => { const role = squareRole(chess, sq as Sq, color, owner); return role ? [`${sq}, ${role}`] : []; });
-  if (!named.length) return null;
-  // Each item carries its own comma, so the last joins with ", and".
-  const sqs = named.length === 1 ? named[0] : `${named.slice(0, -1).join(', ')}, and ${named[named.length - 1]}`;
+  const sqs = namedSquares(chess, squares, color, moverIsStudent ? 'their' : 'your');
+  if (!sqs) return null;
   return sayIdea(phrases, 'center-fight', [
     `The ${piece} bears down on ${sqs}${tail}.`,
     `The ${piece} adds its weight to ${sqs}${tail}.`,
