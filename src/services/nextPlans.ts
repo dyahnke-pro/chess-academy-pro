@@ -297,12 +297,12 @@ export function deriveNextPlanFacts(
     const blockBit = occupant && occupant.color === studentColorWB && occupant.type === 'p'
       ? `your pawn on ${block} already stops it from advancing`
       : occupant && occupant.color === studentColorWB && (occupant.type === 'n' || occupant.type === 'b')
-        ? `keep your ${occupant.type === 'n' ? 'knight' : 'bishop'} planted on ${block}, right in front of it, so it can never advance to free itself`
+        ? `keep your ${occupant.type === 'n' ? 'knight' : 'bishop'} on ${block}, in front of it, so it can never advance`
         : occupant
           ? null
           : blockader
-            ? `plant your ${blockader.type === 'n' ? 'knight' : 'bishop'} on the square right in front of it, ${block}, so it can never advance to free itself`
-            : `control the square right in front of it, ${block}, so it can never advance to free itself`;
+            ? `plant your ${blockader.type === 'n' ? 'knight' : 'bishop'} on ${block}, in front of it, so it can never advance`
+            : `control ${block}, the square in front of it, so it can never advance`;
     add('weak-pawn', `the plan from here is to win their weak pawn on ${weak}. Here's how: ${blockBit ? `${blockBit}; then ` : ''}stack your heavy pieces on its file and trade off its defenders one by one — every defender it needs is a piece of theirs doing nothing else`, [weak, block]);
   }
 

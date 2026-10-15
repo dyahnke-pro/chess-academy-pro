@@ -696,7 +696,7 @@ export function plyFactsClause(fenBefore: string, san: string, prev?: PrevCaptur
     else if (f.isCheck) parts.push('gives check');
     if (f.promotion) parts.push(`promotes to a ${f.promotion}`);
     if (f.tacticLanded) parts.push(patternAim(f.tacticLanded, 'third') ?? `lands a ${tacticWord(f.tacticLanded)}`);
-    if (f.outpostGained) parts.push(`plants an outpost on ${f.outpostGained}`);
+    if (f.outpostGained) parts.push(`plants an outpost on ${f.outpostGained}, where no enemy pawn can chase it`);
     if (f.newPassedPawns.length > 0) parts.push(`creates a passed pawn on ${f.newPassedPawns.join(', ')}`);
     if (f.passedPawnsHanded.length > 0) parts.push(`leaves the other side a passed pawn on ${f.passedPawnsHanded.join(', ')}`);
   if (f.passedPawnsHanded.length > 0) parts.push(`leaves the other side a passed pawn on ${f.passedPawnsHanded.join(', ')}`);
@@ -802,7 +802,7 @@ export function plyFactsSentence(f: PlyFacts, san: string, moverIsStudent?: bool
     else if (f.isCheck) parts.push(vb('give check', 'gives check'));
     if (f.promotion) parts.push(vb(`promote to a ${f.promotion}`, `promotes to a ${f.promotion}`));
     if (f.tacticLanded) parts.push(vb(patternAim(f.tacticLanded) ?? `land a ${tacticWord(f.tacticLanded)}`, patternAim(f.tacticLanded, 'third') ?? `lands a ${tacticWord(f.tacticLanded)}`));
-    if (f.outpostGained) parts.push(vb(`plant an outpost on ${f.outpostGained}`, `plants an outpost on ${f.outpostGained}`));
+    if (f.outpostGained) parts.push(vb(`plant an outpost on ${f.outpostGained}, where no enemy pawn can chase it`, `plants an outpost on ${f.outpostGained}, where no enemy pawn can chase it`));
     if (f.newPassedPawns.length > 0) parts.push(vb(`create a passed pawn on ${f.newPassedPawns[0]}`, `creates a passed pawn on ${f.newPassedPawns[0]}`));
     if (f.passedPawnsHanded.length > 0) parts.push(vb(`hand them a passed pawn on ${f.passedPawnsHanded[0]}`, isYou || moverIsStudent === false ? `hands you a passed pawn on ${f.passedPawnsHanded[0]}` : `leaves the other side a passed pawn on ${f.passedPawnsHanded[0]}`));
     if (f.newOpenFiles.length > 0) parts.push(vb(`open the ${f.newOpenFiles[0]}-file`, `opens the ${f.newOpenFiles[0]}-file`));
