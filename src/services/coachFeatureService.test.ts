@@ -343,7 +343,9 @@ describe('coachFeatureService', () => {
       const firstSentence = text.split(/(?<=[.!?])\s/)[0];
       expect(firstSentence).toMatch(/same knight|tempo|d5|space/i);
       // 2. The better move is stated LAST, as the resolution.
-      expect(text.lastIndexOf('e6')).toBeGreaterThan(text.indexOf('d5'));
+      // (Only the LEAD fundamental speaks since 2026-10-15 — one lead reason
+      // per turn — so the better move follows the first fundamental.)
+      expect(text.indexOf('The move was e6')).toBeGreaterThan(firstSentence.length);
       expect(text).toMatch(/The move was e6\./);
       // 3. No "we/our" anywhere (one perspective).
       expect(text).not.toMatch(/\b(we|our|us)\b/i);

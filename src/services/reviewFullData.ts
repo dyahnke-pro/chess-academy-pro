@@ -286,7 +286,7 @@ export function computeMoveFacets(
   /** The reason the verdict gave for the better move, exactly as spoken, so a
    *  later pass reading a fresher line of the SAME ply can replace it — one
    *  ply, one line (clean-pass review walk 2026-10-04, G1 15.Ba2). */
-  outVerdictReason?: { text: string | null },
+  outVerdictReason?: { text: string | null; playedLine?: boolean },
   /** THE PROOF each conclusion rests on, coupled here from the computer that
    *  found it (one-coach P3) — the door counts a conclusion that arrives
    *  without one. */
@@ -582,7 +582,13 @@ export function computeMoveFacets(
       return ctx.studentColorWB ? seatPieceReferences(t1, fenBefore, ctx.studentColorWB) : t1;
     };
     const reason = seat(ew?.reason ?? null);
-    if (outVerdictReason) outVerdictReason.text = reason;
+    if (outVerdictReason) {
+      outVerdictReason.text = reason;
+      // The verdict already walked the punishing line — no second producer
+      // may say it again (review audit 2026-10-15: "The line starts with
+      // Bxe2…" then "Here's how you take advantage: Bxe2, Qxe2, Nxf4…").
+      outVerdictReason.playedLine = !!ew?.line;
+    }
     // Their error said to the student flips every pronoun ("it let you take
     // their rook"), not only the possessives `seat` flips.
     const seatPieces = (t: string): string => (ctx.studentColorWB ? seatPieceReferences(t, fenBefore, ctx.studentColorWB) : t);

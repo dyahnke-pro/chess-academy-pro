@@ -476,6 +476,9 @@ export interface ReviewMoveSegment {
    *  better-line pass can replace it with the reason read off its own, fresher
    *  line of the same ply (one ply, one line). */
   verdictReason?: string;
+  /** The verdict already played the punishing line out — the advantage /
+   *  punishment pass must not say it a second time. */
+  verdictPlayedLine?: boolean;
   /** THE PROOFS OF WHAT THIS PLY SAID (one-coach P3) — the door's own
    *  `proofOf`, in spoken order. Why reads these first, so the student hears
    *  the proof of the claim the coach just made, the same way Learn does. */
@@ -1817,7 +1820,7 @@ export function buildReviewSegments(
       // THE PROOF each conclusion rests on, coupled the same way (one-coach P3).
       const facetProofs = new Map<string, FactProof>();
       const facetIdentity = new Map<string, string>();
-      const verdictReasonOut: { text: string | null } = { text: null };
+      const verdictReasonOut: { text: string | null; playedLine?: boolean } = { text: null };
       const facets = computeMoveFacets({
         fundamentals,
         seenFundamentals,
@@ -2489,6 +2492,7 @@ export function buildReviewSegments(
         ...(fundamentals.length ? { fundamentals } : {}),
         ...(segKeySquares.length ? { keySquares: segKeySquares } : {}),
         ...(verdictReasonOut.text ? { verdictReason: verdictReasonOut.text } : {}),
+        ...(verdictReasonOut.playedLine ? { verdictPlayedLine: true } : {}),
         ...(doorNarration && decision.proofOf.size ? { proofs: [...decision.proofOf.values()] } : {}),
       });
       try {
@@ -4070,7 +4074,7 @@ async function augmentWithProjections(
       // student actually played it; otherwise their own next move teaches it.
       const studentMissedIt = !isStudentSlip && advantageWasMissed(segments.find((x) => x.ply === s.ply + 1)?.san ?? null, line?.plies[0]?.san ?? null);
       const proof = line && line.delivers && line.plies.length >= 2 && !opensWithRecapture && !studentMissedIt ? render(line, isStudentSlip ? 'opponent' : 'student') : '';
-      if (line && proof) {
+      if (line && proof && !s.verdictPlayedLine) {
         const frame = isStudentSlip
           ? `Here's how it gets punished from here: ${proof}.`
           : `Here's how you take advantage: ${proof}.`;
