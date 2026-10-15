@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**38 lines · 3 exports · 3 importers · 1 tests · 0 audits**
+**39 lines · 3 exports · 3 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,7 +25,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/chatBoardRead.test.ts:58`
 - `src/services/chatBoardRead.test.ts:63`
 - `src/services/chatBoardRead.test.ts:67`
-- `src/services/positionFacts.ts:1186`
+- `src/services/positionFacts.ts:1303`
 
 ### `cachedPositionFacts` (function) — 5 call sites
 - `src/services/chatBoardRead.test.ts:35`

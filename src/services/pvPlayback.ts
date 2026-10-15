@@ -279,6 +279,11 @@ export interface PlyFacts {
   passedPawnsHanded: string[];
   /** Outpost newly established by the mover (square), if any. */
   outpostGained: string | null;
+  /** The outpost's piece, and whether the move LANDED it there or a pawn move
+   *  made the square safe for a piece already on it (review tape 2026-10-15:
+   *  "You plant an outpost on d5" said of e6). Absent → not known. */
+  outpostPiece?: string;
+  outpostLanded?: boolean;
   /** Defender king-shield pawns lost this ply (>0 = the defense got airier). */
   shieldLost: number;
 }
@@ -527,6 +532,7 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
     newPassedPawns,
     passedPawnsHanded,
     outpostGained: outpostAfterNew?.square ?? null,
+    ...(outpostAfterNew ? { outpostPiece: PIECE_WORD[outpostAfterNew.piece] ?? 'piece', outpostLanded: outpostAfterNew.square === toSquare } : {}),
     shieldLost,
   };
 }
@@ -671,6 +677,18 @@ export async function computePvLine(
 
 
 
+/** The outpost said as what the move did: the piece LANDED there, or a pawn
+ *  move made the square safe for a piece already standing on it. `base` picks
+ *  the verb form ("plant" after You/They, "plants" otherwise). */
+export function outpostPhrase(f: Pick<PlyFacts, 'outpostGained' | 'outpostPiece' | 'outpostLanded'>, owner: string, base: boolean): string {
+  const sq = f.outpostGained ?? '';
+  if (f.outpostPiece && f.outpostLanded === false) {
+    return `${base ? 'make' : 'makes'} ${sq} an outpost for ${owner} ${f.outpostPiece} — no enemy pawn can chase it from there`;
+  }
+  if (f.outpostPiece) return `${base ? 'plant' : 'plants'} ${owner} ${f.outpostPiece} on ${sq}, an outpost where no enemy pawn can chase it`;
+  return `${base ? 'plant' : 'plants'} an outpost on ${sq}, where no enemy pawn can chase it`;
+}
+
 /** The SAME per-move facts as `plyFactsSentence`, but as a SUBJECT-LESS clause
  *  (no "The move X" prefix) so the caller can frame the subject — "You …" for
  *  the student, "Your opponent …" for the other side (David 2026-07-20: "always
@@ -682,7 +700,14 @@ export async function computePvLine(
  *  ("we don't need to call out how many points were gained … Sounds bad") — a
  *  docstring that shows output the function cannot produce teaches the next
  *  reader a contract that does not exist. */
-export function plyFactsClause(fenBefore: string, san: string, prev?: PrevCaptureContext): string | null {
+export function plyFactsClause(
+  fenBefore: string,
+  san: string,
+  prev?: PrevCaptureContext,
+  /** Whose piece a capture takes, from the listener's seat — 'your' when the
+   *  opponent captures, 'their' when the student does. Absent → "the". */
+  victimOwner?: 'your' | 'their',
+): string | null {
   try {
     const c = new Chess(fenBefore);
     const mv = c.move(san);
@@ -691,19 +716,23 @@ export function plyFactsClause(fenBefore: string, san: string, prev?: PrevCaptur
       captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion,
     }, prev);
     const parts: string[] = [];
-    if (f.captured) parts.push(`captures the ${f.captured}`);
+    // ONE FACT, ONCE (review tape 2026-10-15: "Your opponent captures the
+    // knight and wins material"): a capture that comes out ahead IS the
+    // material won — name the piece and its square, and say "wins" instead of
+    // a second clause that restates it.
+    const wonByCapture = !!f.captured && f.materialGained >= 1;
+    if (f.captured) parts.push(`${wonByCapture ? 'wins' : 'captures'} ${victimOwner ?? 'the'} ${f.captured} on ${mv.to}`);
     if (f.isMate) parts.push('delivers checkmate');
     else if (f.isCheck) parts.push('gives check');
     if (f.promotion) parts.push(`promotes to a ${f.promotion}`);
     if (f.tacticLanded) parts.push(patternAim(f.tacticLanded, 'third') ?? `lands a ${tacticWord(f.tacticLanded)}`);
-    if (f.outpostGained) parts.push(`plants an outpost on ${f.outpostGained}, where no enemy pawn can chase it`);
+    if (f.outpostGained) parts.push(outpostPhrase(f, 'the', false));
     if (f.newPassedPawns.length > 0) parts.push(`creates a passed pawn on ${f.newPassedPawns.join(', ')}`);
     if (f.passedPawnsHanded.length > 0) parts.push(`leaves the other side a passed pawn on ${f.passedPawnsHanded.join(', ')}`);
-  if (f.passedPawnsHanded.length > 0) parts.push(`leaves the other side a passed pawn on ${f.passedPawnsHanded.join(', ')}`);
     if (f.newOpenFiles.length > 0) parts.push(`opens ${fileList(f.newOpenFiles)}`);
     if (f.shieldLost > 0) parts.push(`strips ${f.shieldLost} pawn${f.shieldLost > 1 ? 's' : ''} from the king's cover`);
     // "wins material", never the point count (David 2026-07-24 — sounds bad).
-    if (f.materialGained >= 1) parts.push('wins material');
+    if (f.materialGained >= 1 && !wonByCapture) parts.push('wins material');
     return parts.length === 0 ? null : andList(parts);
   } catch {
     return null;
@@ -792,19 +821,25 @@ export function plyFactsSentence(f: PlyFacts, san: string, moverIsStudent?: bool
     // "The move X …" prefix restated the move). "You capture" (student) /
     // "Your opponent captures" (other side) with correct verb agreement; the
     // subjectless "The move …" only when the seat isn't known (back-compat).
+    // ONE PERSPECTIVE (David 2026-08-28): the opponent is "they", never "your
+    // opponent" (review tape 2026-10-15: "Your opponent captures the knight").
     const isYou = moverIsStudent === true;
-    const subject = isYou ? 'You' : moverIsStudent === false ? 'Your opponent' : `The move ${san.replace(/[+#]$/, '')}`;
-    const vb = (base: string, third: string): string => (isYou ? base : third);
+    const isThem = moverIsStudent === false;
+    const subject = isYou ? 'You' : isThem ? 'They' : `The move ${san.replace(/[+#]$/, '')}`;
+    // "You" and "They" take the base verb; only the subject-less fallback is singular.
+    const vb = (base: string, third: string): string => (isYou || isThem ? base : third);
+    // Whose piece is taken: the other side's, said from the student's seat.
+    const victim = isYou ? 'their' : isThem ? 'your' : 'the';
     const plural = (n: number): string => (n > 1 ? 's' : '');
     const parts: string[] = [];
-    if (f.captured) parts.push(vb(`capture the ${f.captured}`, `captures the ${f.captured}`));
+    if (f.captured) parts.push(vb(`take ${victim} ${f.captured}`, `captures the ${f.captured}`));
     if (f.isMate) parts.push(vb('deliver checkmate', 'delivers checkmate'));
     else if (f.isCheck) parts.push(vb('give check', 'gives check'));
     if (f.promotion) parts.push(vb(`promote to a ${f.promotion}`, `promotes to a ${f.promotion}`));
     if (f.tacticLanded) parts.push(vb(patternAim(f.tacticLanded) ?? `land a ${tacticWord(f.tacticLanded)}`, patternAim(f.tacticLanded, 'third') ?? `lands a ${tacticWord(f.tacticLanded)}`));
-    if (f.outpostGained) parts.push(vb(`plant an outpost on ${f.outpostGained}, where no enemy pawn can chase it`, `plants an outpost on ${f.outpostGained}, where no enemy pawn can chase it`));
+    if (f.outpostGained) parts.push(outpostPhrase(f, isYou ? 'your' : isThem ? 'their' : 'the', isYou || isThem));
     if (f.newPassedPawns.length > 0) parts.push(vb(`create a passed pawn on ${f.newPassedPawns[0]}`, `creates a passed pawn on ${f.newPassedPawns[0]}`));
-    if (f.passedPawnsHanded.length > 0) parts.push(vb(`hand them a passed pawn on ${f.passedPawnsHanded[0]}`, isYou || moverIsStudent === false ? `hands you a passed pawn on ${f.passedPawnsHanded[0]}` : `leaves the other side a passed pawn on ${f.passedPawnsHanded[0]}`));
+    if (f.passedPawnsHanded.length > 0) parts.push(isYou ? `hand them a passed pawn on ${f.passedPawnsHanded[0]}` : isThem ? `hand you a passed pawn on ${f.passedPawnsHanded[0]}` : `leaves the other side a passed pawn on ${f.passedPawnsHanded[0]}`);
     if (f.newOpenFiles.length > 0) parts.push(vb(`open the ${f.newOpenFiles[0]}-file`, `opens the ${f.newOpenFiles[0]}-file`));
     if (f.shieldLost > 0) parts.push(vb(`strip ${f.shieldLost} pawn${plural(f.shieldLost)} from the king's cover`, `strips ${f.shieldLost} pawn${plural(f.shieldLost)} from the king's cover`));
     // "win/wins material", never the point count (David 2026-07-24 — sounds bad).

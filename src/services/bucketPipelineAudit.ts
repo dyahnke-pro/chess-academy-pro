@@ -35,6 +35,7 @@ import {
   type MisconceptionBucket,
 } from '../data/misconceptionTags';
 import type { MisconceptionTagRecord, MistakePuzzle } from '../types';
+import { positionOf } from '../utils/samePosition';
 
 /** The closed set of valid weakness buckets. */
 const VALID_BUCKETS: ReadonlySet<MisconceptionBucket> = new Set([
@@ -127,7 +128,7 @@ export interface BucketAuditReport {
 /** Position identity — placement+side+castling+ep (drop move counters) + the
  *  played SAN. Mirrors weaknessSpine.posKey / mistakePuzzleService.capturePosKey. */
 function posKey(fen: string, san?: string): string {
-  return `${fen.split(' ').slice(0, 4).join(' ')}|${san ?? ''}`;
+  return `${positionOf(fen)}|${san ?? ''}`;
 }
 
 /** Is the played SAN legal from the given FEN? A counted capture whose SAN is

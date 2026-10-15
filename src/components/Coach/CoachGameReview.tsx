@@ -35,7 +35,8 @@ import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { buildHoldChallenge, judgeGuidedFindAttempt, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
 import { selectTurningPoints, gameTurn, turningReveal, type TurningPoint, type TurningTrace } from '../../services/turningPoints';
-import { costWords, TRUSTED_LINE_DEPTH } from '../../services/engineConstants';
+import { costWords, isMateEval, TRUSTED_LINE_DEPTH } from '../../services/engineConstants';
+import { betterLineClosing } from '../../services/betterLineClosing';
 import { computePvLine, type PvLine } from '../../services/pvPlayback';
 import { projectedLineVoice } from '../../services/projectedLineVoice';
 import { voiceFacts } from '../../services/coachApi';
@@ -1597,7 +1598,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   /** §5: the flagged move's better-line seed, captured when the why-picker
    *  fires and consumed in resumeAfterFaucet to play the engine's PV out. */
-  const pendingBetterLineRef = useRef<{ fenBefore: string; bestUci: string; playedSan: string; bestSan: string | null } | null>(null);
   /** Cancellation token for the better-line playback loop. */
   const betterLineTokenRef = useRef(0);
 
@@ -1631,7 +1631,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // renderPlyFactLine as the deterministic fallback); the closing verdict is
   // the line's terminal eval. Nothing is invented — a quiet ply stays silent.
   const playBetterLineOut = useCallback(async (
-    seed: { fenBefore: string; bestUci: string; bestSan: string | null },
+    seed: { fenBefore: string; bestUci: string; bestSan: string | null; playedEvalCp?: number | null },
     onDone: () => void,
   ): Promise<void> => {
     const token = ++betterLineTokenRef.current;
@@ -1726,13 +1726,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
     const moverIsWhite = line.plies[0].moverColor === 'white';
     const povCp = (moverIsWhite ? 1 : -1) * (line.terminalEvalCp ?? line.rootEvalCp);
-    const closing = line.plies[line.plies.length - 1].facts.isMate
-      ? 'That line goes all the way to mate.'
-      // The terminal eval, in words — it is where the line LEAVES the mover,
-      // not a difference, so it never says "better by".
-      : povCp >= 0
-        ? `That line comes out ahead by ${costWords(povCp)}.`
-        : `That line still comes out behind, by ${costWords(-povCp)}.`;
+    const played = typeof seed.playedEvalCp === 'number' && !isMateEval(seed.playedEvalCp)
+      ? (moverIsWhite ? seed.playedEvalCp : -seed.playedEvalCp) : null;
+    // The terminal eval, in words, set against the game move (betterLineClosing).
+    const closing = betterLineClosing({ endsInMate: line.plies[line.plies.length - 1].facts.isMate, lineCp: povCp, playedCp: played });
     await speakPaced(closing);
     setWalkExplorationFen(null);
     setWalkExplorationSan(null);
@@ -2134,16 +2131,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
 
   const resumeAfterFaucet = useCallback((): void => {
     resetFaucet();
-    const better = pendingBetterLineRef.current;
-    pendingBetterLineRef.current = null;
-    // §5: play the engine's better line out first (if the flagged move had a
-    // distinct best move), THEN run the resume tail. Otherwise resume directly.
-    if (better) {
-      void playBetterLineOut(better, finishFaucetResume);
-      return;
-    }
+    // The better line plays on the student's Show me only (the 2026-09-05
+    // overhaul); the faucet's own better-line hand-off had nothing setting it.
     finishFaucetResume();
-  }, [resetFaucet, playBetterLineOut, finishFaucetResume]);
+  }, [resetFaucet, finishFaucetResume]);
 
 
   // Move sound on every walk advance — Polly + voice narration is
@@ -3544,7 +3535,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         setWalkExplorationFen(seg.fenBefore);
         setWalkExplorationSan(null);
         await playBetterLineOut(
-          { fenBefore: seg.fenBefore, bestUci: seg.bestMoveUci, bestSan: seg.bestMoveSan },
+          { fenBefore: seg.fenBefore, bestUci: seg.bestMoveUci, bestSan: seg.bestMoveSan, playedEvalCp: seg.evalAfter },
           () => {
             if (walkMountedRef.current) setWalkShowMeActive(false);
             walkExplorationPlyRef.current = null;

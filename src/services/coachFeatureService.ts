@@ -42,14 +42,13 @@ import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
 import { coachTurn, habitNeedFrom } from './coachDecider';
 import { advantageWasMissed } from './reviewWithholding';
-import { planStoppedProof, planStoppedLine } from './planStopped';
-import { deriveNextPlanFacts } from './nextPlans';
-import { newPlanThread, type PlanThread } from './planThread';
+import { newPlanThread, clonePlanThread, PLAN_THREAD_HOLD_PLIES, type PlanThread } from './planThread';
 import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { noteSlip } from './learnBoardTeaching';
 import { recall, type RecallMemory } from './fundamentalRecurrence';
+import { readBoard, readBoardAll } from './boardComputers';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { mateStakes, isSacrifice, type FactStakes } from './factStakes';
@@ -95,6 +94,7 @@ import type { FacetTag } from './reviewFacetRank';
 import type { FactProof, Proof } from './proof';
 import { newPhraseMemory } from '../utils/phraseMemory';
 import { whyItEnded, idlePiece, quietDecider, exploreInvite, murkyRead, type EndRead, type GamePly } from './gameEndReads';
+import { positionOf } from '../utils/samePosition';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -137,7 +137,7 @@ export { advantageWasMissed } from './reviewWithholding';
 
 /** How long a stated plan holds before a different goal may replace it — two
  *  full moves. Damping, not a cap: the new plan is said once it persists. */
-export const PLAN_HOLD_PLIES = 4;
+export const PLAN_HOLD_PLIES = PLAN_THREAD_HOLD_PLIES;
 
 export { detectBadHabits };
 
@@ -1431,17 +1431,6 @@ export function buildReviewSegments(
   // re-listing the whole pile every ply ("bishop pair; a7 isolated; passer…").
   let lastVerdictWord: string | null = null;
   const verdictReasonsSeen = new Set<string>();
-  // Plans dedup by GOAL, not exact wording: the full "here's how" recipe is
-  // stated ONCE per distinct goal (attack the king / seize the d-file / win the
-  // weak pawn / push the passer), never re-recited when the phrasing drifts a
-  // ply later. Square specifics are stripped from the key so "attack the king on
-  // e8" and "attack the king on e8 before it runs" collapse to one goal.
-  const planGoalsSeen = new Set<string>();
-  /** The ply the CURRENT plan was stated on (unity U5, review walk #23: "The
-   *  plan changes here" twice back to back, with different plans). A plan is
-   *  a thread, not a per-ply read: a different goal inside PLAN_HOLD_PLIES of
-   *  the last one is the read flickering, not the plan changing. */
-  let planStatedPly: number | null = null;
   /** The plan the student last HEARD, its stops in a row, and whether the last
    *  one ended because they stopped it — the same thread shape Learn keeps
    *  (`planThread`), so both surfaces remember a plan one way. */
@@ -1839,6 +1828,16 @@ export function buildReviewSegments(
           }
         } catch { /* memory is a bonus, never a blocker */ }
       }
+      // MEMORY BY POSITION, the green half: the student left theory from this
+      // board in another game at a cost, and this game went another way. The
+      // repeat is the departure line's job ("You left book … again").
+      if (moverColor === playerColor && studentNeed?.bookDepartures.length) {
+        const here = readBoard('lastTimeHere', { fenBefore: fenPair.fenBefore, playedSan: m.san, rows: studentNeed.bookDepartures, currentGameId: currentGameId ?? null });
+        if (here && here.key.startsWith('last-here:other:') && !recalled.has(here.key)) {
+          recalled.add(here.key);
+          facets.push(`[last-here] ${here.text}`);
+        }
+      }
       // THE CONVERSION METHOD (WO-LAYERS-01 step 5), on the student's move when
       // they are a piece or more up — the step the board is on, once per step
       // per game (the step only changes when the board does).
@@ -2012,24 +2011,34 @@ export function buildReviewSegments(
       const claim = (key: string): boolean => { if (claimedThisPly.has(key)) return false; claimedThisPly.add(key); return true; };
       const keep = (raw: string, commit?: () => void): void => { keptRaw.push(raw); if (commit) commitByRaw.set(raw, commit); };
       let verdictWordThisPly: string | null = null;
-      const planNowPasserFiles = new Set(facets.flatMap((x) => (/^\[plan-now\].*passed pawn on ([a-h])[1-8] promoting/i.exec(x)?.[1] ?? [])));
-      // THEY STOPPED YOUR PLAN — said with its proof, on their move (David
-      // 2026-10-07: "The prove it is the part that needs to be spoken"). A plan
-      // that held for long enough resets the run.
-      if (planT.stated && m.ply - planT.stated.ply >= PLAN_HOLD_PLIES * 2) planT.stoppedInRow = 0;
-      const stated = planT.stated;
-      if (stated && studentColorWB && !isStudentForAttr) {
-        const proof = planStoppedProof(stated.fact, fenPair.fenBefore, fenPair.fenAfter, studentColorWB);
-        if (proof && claim('plan-stopped')) {
-          const inARow = planT.stoppedInRow + 1;
-          keep(`[plan-now] ${planStoppedLine(proof, inARow, fenPair.fenAfter, studentColorWB)}`, () => {
-            planT.stoppedInRow = inARow;
-            planT.stated = null;
-            planStatedPly = null;   // a proven stop is not a flicker: the next plan may follow at once
-            planT.wasStopped = true;
-          });
+      // THE ONE PLAN THREAD — the same `planThreadTurn` Learn runs, on their
+      // move: the stop with its proof, then at most one plan, held while it
+      // stands. Review used to run its own loop over every plan the board
+      // offered, which said two plans in one turn and changed a plan that still
+      // stood (review tape 2026-10-15). Run on a copy; the copy becomes the
+      // thread once one of its lines is spoken (commit after the door).
+      const planTrial = clonePlanThread(planT);
+      if (studentColorWB && !isStudentForAttr) {
+        const povCp = m.evaluation != null ? (studentColorWB === 'w' ? m.evaluation : -m.evaluation) : null;
+        for (const r of readBoardAll('planThread', { thread: planTrial, ply: m.ply, fenBefore: fenPair.fenBefore, fenAfter: fenPair.fenAfter, student: studentColorWB, studentPovCp: povCp })) {
+          const raw = `[plan-now] ${r.text}`;
+          facets.push(raw);
+          facetIdentity.set(raw, r.key.startsWith('plan:stopped:') ? 'plan-thread:stop' : 'plan-thread:plan');
+          facetProofs.set(raw, r.proof);
+          if (r.squares.length) facetSquares.set(raw, r.squares);
         }
       }
+      const newPlan = planTrial.stated && planTrial.stated.ply === m.ply ? planTrial.stated.fact : null;
+      const planPasserFile = newPlan?.kind === 'passer' ? (newPlan.squares[0]?.[0] ?? null) : null;
+      // One claim, many lanes: a passer or conversion plan another lane already
+      // taught this game is not stated again.
+      const planLineHeld = (planPasserFile !== null && passerPlanFiles.has(planPasserFile))
+        || (newPlan?.kind === 'convert' && convertTaughtPly !== null);
+      const planNowPasserFiles = new Set(planPasserFile && !planLineHeld ? [planPasserFile] : []);
+      const adoptPlanThread = (): void => {
+        Object.assign(planT, planTrial);
+        if (planLineHeld) { planT.stated = null; planT.lastStatedPly = null; }
+      };
       for (const f of facets) {
         // A refuted alternative is said once per game (identity `refuted:<move>`).
         { const id = facetIdentity.get(f); if (id?.startsWith('refuted:') && (refutedSaid.has(id) || !claim(id))) continue; }
@@ -2055,38 +2064,19 @@ export function buildReviewSegments(
           });
           continue;
         }
-        // Plans — the full "here's how" recipe ONCE per distinct goal.
+        // Plans — the one thread's lines (above).
         if (/^\[plan-now\]/.test(f)) {
-          const gm = /the plan from here is to (.+?)(?:\.|,? here'?s)/i.exec(f);
-          const goalKey = gm
-            ? gm[1].toLowerCase().replace(/\b[a-h][1-8]\b/g, '').replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim()
-            : f;
-          if (planGoalsSeen.has(goalKey)) continue;
-          if (planStatedPly !== null && m.ply - planStatedPly < PLAN_HOLD_PLIES) continue;
-          if (!claim(`plan:${goalKey}`)) continue;
-          // A NEW goal after plans the student already heard is a CHANGE, and
-          // the change is the teaching (David 2026-09-25: "If the structure
-          // plan changes then coach should say so"). Once per ply.
-          const changed = planGoalsSeen.size > 0 && claim('plan-changed');
-          const said = planT.wasStopped
-            ? f.replace(/^\[plan-now\]\s*The plan from here is to /i, '[plan-now] The new plan is to ')
-            : !changed ? f
-            : /^\[plan-now\]\s*The plan from here is to /i.test(f)
-              ? f.replace(/^\[plan-now\]\s*The plan from here is to /i, '[plan-now] The plan changes here — now it\'s to ')
-              : f.replace(/^\[plan-now\]\s*(.)/, (_m, c: string) => `[plan-now] The plan changes here: ${c.toLowerCase()}`);
-          const passerFile = /passed pawn on ([a-h])[1-8] promoting/i.exec(f)?.[1] ?? null;
-          if (passerFile && passerPlanFiles.has(passerFile)) continue;
-          if (goalKey.startsWith('convert') && (convertTaughtPly !== null || !claim('convert'))) continue;
-          const planId = /^plan-fact:(.+)$/.exec(facetIdentity.get(f) ?? '')?.[1] ?? null;
-          keep(said, () => {
-            planGoalsSeen.add(goalKey);
-            planStatedPly = m.ply;
-            planT.wasStopped = false;
-            const fact = planId && studentColorWB ? deriveNextPlanFacts(fenPair.fenAfter, studentColorWB).find((p) => p.id === planId) : undefined;
-            planT.stated = fact ? { fact, ply: m.ply } : null;
-            if (goalKey.startsWith('convert')) convertTaughtPly ??= m.ply;
-            if (passerFile) passerPlanFiles.add(passerFile);
-          });
+          const role = facetIdentity.get(f);
+          if (role === 'plan-thread:plan') {
+            if (planLineHeld) continue;
+            keep(f, () => {
+              adoptPlanThread();
+              if (newPlan?.kind === 'convert') convertTaughtPly ??= m.ply;
+              if (planPasserFile) passerPlanFiles.add(planPasserFile);
+            });
+          } else if (role === 'plan-thread:stop') {
+            keep(f, adoptPlanThread);
+          }
           continue;
         }
         // The RACE — once, then only when the verdict FLIPS (see lastRaceVerdict).
@@ -3274,7 +3264,7 @@ export function buildReviewSegments(
       && playerColor !== undefined
       && (m.classification === null || m.classification === 'book' || m.classification === 'good' || m.classification === 'great' || m.classification === 'brilliant')
     ) {
-      const clause = plyFactsClause(fenPair.fenBefore, m.san, prevCap);
+      const clause = plyFactsClause(fenPair.fenBefore, m.san, prevCap, 'your');
       if (clause) {
         narration = `Your opponent ${clause}.`;
         narrationSource = 'opponent';
@@ -3688,7 +3678,7 @@ async function augmentWithProjections(
   // The move that led to a line's start, so a line opening with a recapture is
   // counted from before the capture it answers (`proofCut`'s `prior`).
   const priorByFen = new Map<string, { fenBefore: string; san: string }>();
-  for (const seg of segments) if (seg.fenAfter && seg.fenBefore) priorByFen.set(seg.fenAfter.split(' ').slice(0, 4).join(' '), { fenBefore: seg.fenBefore, san: seg.san });
+  for (const seg of segments) if (seg.fenAfter && seg.fenBefore) priorByFen.set(positionOf(seg.fenAfter), { fenBefore: seg.fenBefore, san: seg.san });
   // A PUNISHMENT is what the MOVE cost, so its tally counts from before the
   // move (clean-pass review walk 2026-10-04, G1 41.Qxe5+: "Here's how it gets
   // punished: Kxd7, Qxg7+, Kd6, Qxh8 and Kxd5 — you come out behind on
@@ -3705,7 +3695,7 @@ async function augmentWithProjections(
       const p = proofCut(played.fenBefore, [played.san, ...sans], studentColorWB);
       proof = p ? { ...p, plies: Math.max(1, p.plies - 1), sans: p.sans.slice(1) } : null;
     } else if (start) {
-      proof = proofCut(start, sans, studentColorWB, priorByFen.get(start.split(' ').slice(0, 4).join(' ')) ?? null);
+      proof = proofCut(start, sans, studentColorWB, priorByFen.get(positionOf(start)) ?? null);
     }
     return { plies: proof ? proof.plies : Math.min(1, line.plies.length), proof };
   };

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**111 lines · 6 exports · 4 importers · 1 tests · 0 audits**
+**133 lines · 7 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -31,20 +31,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PlanThread` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newPlanThread` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9986`
+### `newPlanThread` (function) — 8 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10002`
 - `src/services/boardComputers.test.ts:50`
-- `src/services/coachFeatureService.ts:1448`
+- `src/services/coachFeatureService.ts:1437`
 - `src/services/planThread.test.ts:17`
 - `src/services/planThread.test.ts:26`
 - `src/services/planThread.test.ts:35`
 - `src/services/planThread.test.ts:44`
+- `src/services/planThread.test.ts:73`
+
+### `clonePlanThread` (function) — 1 call site
+- `src/services/coachFeatureService.ts:2020`
 
 ### `PlanThreadLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `planThreadTurn` (function) — 8 call sites
-- `src/services/boardComputers.ts:265`
+### `planThreadTurn` (function) — 9 call sites
+- `src/services/boardComputers.ts:295`
 - `src/services/planThread.test.ts:18`
 - `src/services/planThread.test.ts:20`
 - `src/services/planThread.test.ts:29`
@@ -52,6 +56,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planThread.test.ts:37`
 - `src/services/planThread.test.ts:46`
 - `src/services/planThread.test.ts:49`
+- `src/services/planThread.test.ts:77`
 
 ## Tests
 

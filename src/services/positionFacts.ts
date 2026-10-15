@@ -57,6 +57,8 @@ import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDan
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
 import { structurePlanFact } from './boardPlan';
+import { readBoard, type BoardRead } from './boardComputers';
+import { detectTactics } from './tacticsDetector';
 import { stepPlan, EMPTY_PLAN_STATE } from './planMemory';
 import { matchClauseKind, matchTacticPattern, matchTag, boostFor, type WeaknessSignal } from './weaknessSignal';
 import { studentMomentBoost } from './studentMomentBoost';
@@ -144,6 +146,7 @@ import { depthClauses } from './thinkAloud';
 import { classifyPhase } from './gamePhaseService';
 import { looseTrigger } from './looseTrigger';
 import { exchangeIdeas } from './exchangeIdeas';
+import { positionOf } from '../utils/samePosition';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -227,6 +230,12 @@ export interface PositionFactsInput {
   opponentLastMove?: { fenBefore: string; san: string };
   /** The game's moves so far (SAN), for what the opponent keeps doing. */
   history?: readonly string[];
+  /** WHO READS THE BOARD COMPUTERS (`boardComputers.ts`) — REQUIRED, so a new
+   *  caller decides (David 2026-10-15: "Everything gets unified").
+   *  `'composer'`: this read speaks them (chat, the tapped read, Play's live
+   *  coach, phase narration). `'surface'`: the surface reads them in its own
+   *  lanes already (Learn), and two producers of one claim would say it twice. */
+  boardComputers: 'composer' | 'surface';
   /** The surface names the best move anyway ("Why?") — its line may speak. */
   namesBestMove?: boolean;
   /** WO-TEACH-02 S2 — the opening principles this game has ALREADY taught
@@ -694,7 +703,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
         try {
           const c = new Chess(lm.fenBefore);
           c.move(lm.san);
-          if (c.fen().split(' ').slice(0, 4).join(' ') === olm.fenBefore.split(' ').slice(0, 4).join(' ')) replySan = olm.san;
+          if (positionOf(c.fen()) === positionOf(olm.fenBefore)) replySan = olm.san;
         } catch { replySan = null; }
       }
       const attrs = attributeLiveFundamental({
@@ -1145,7 +1154,40 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       ideaClauses.push({ kind: x.kind, rank: x.kind === 'nugget' ? 30 : 55, text: x.text, squares: x.squares, proof: x.proof, claim: x.claim, ...(x.stakes ? { stakes: x.stakes } : {}) });
     }
   } catch { /* a read is a bonus, never a blocker */ }
-  const composed = [...composedBase, ...depth, ...ideaClauses, ...askedPlanClauses];
+  // THE BOARD COMPUTERS Learn speaks, through the one registry, for every
+  // surface that does not read them itself — the student to move, each said
+  // once through the `alreadySaid` claims. A read that names the student's
+  // move speaks it only where the move is earned (as the depth does).
+  const registryClauses: ClauseItem[] = [];
+  if (input.boardComputers === 'composer' && studentIsMoving) {
+    const push = (kind: ClauseKind, rank: number, r: BoardRead | null): void => {
+      if (!r || said?.has(r.key)) return;
+      if (r.namesMove && !input.namesBestMove) {
+        if (r.idea && !said?.has(`${r.key}:idea`)) registryClauses.push({ kind: 'speedrun-read', rank: 45, text: r.idea, claim: `${r.key}:idea` });
+        return;
+      }
+      registryClauses.push({ kind, rank, text: r.text, squares: [...r.squares], proof: r.proof, claim: r.key, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.lines ? { lines: r.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}) });
+    };
+    try {
+      push('tactic', 84, readBoard('trapped', { fen, student: studentColor }));
+      push('tactic', 82, readBoard('queenGrabTrap', { fen }));
+      push('tactic', 80, readBoard('pinBreakOwn', { fen, student: studentColor }));
+      for (const t of detectTactics(fen).tactics) {
+        if (t.type === 'pin' && t.beneficiary === studentColor && t.involvedSquares[1]) push('tactic', 80, readBoard('pinBreakTheirs', { fen, student: studentColor, pinned: t.involvedSquares[1] }));
+      }
+      const first = input.analysis.topLines.map((l) => l.moves[0]).filter((m): m is string => !!m);
+      push('timing', 55, readBoard('prophylaxis', { fen, engineFirstMoves: first }));
+      const order = readBoard('moveOrder', { fen, pv: input.analysis.topLines[0]?.moves ?? [] });
+      if (order && input.namesBestMove) push('timing', 55, order);
+      if (input.opponentLastMove) push('their-read', 75, readBoard('obligationLifted', { fenBefore: input.opponentLastMove.fenBefore, fenAfter: fen, student: studentColor }));
+      if (input.history?.length) push('rule', 40, readBoard('bookMove', { history: input.history, student: studentColor }));
+      const own = input.lastMove;
+      if (own && input.opponentLastMove) push('their-read', 60, readBoard('tiedDefender', { fenBefore: own.fenBefore, fenAfterMove: input.opponentLastMove.fenBefore, fenAfterReply: fen, student: studentColor }));
+      const rows = input.studentNeedContext?.bookDepartures ?? [];
+      if (own && rows.length) push('rule', 70, readBoard('lastTimeHere', { fenBefore: own.fenBefore, playedSan: own.san, rows, currentGameId: null }));
+    } catch { /* a read is a bonus, never a blocker */ }
+  }
+  const composed = [...composedBase, ...depth, ...ideaClauses, ...registryClauses, ...askedPlanClauses];
   const needVerdict = studentIsMoving && input.studentNeedContext
     ? computeNeed({
       ply: plyNumber,

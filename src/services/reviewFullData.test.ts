@@ -325,7 +325,7 @@ describe('D-8 (WO-STANDARD-01, 2026-09-22) — the [eval] facet needs a real shi
     const c2 = new Chess(A2); c2.move('d5');
     const f = loose(A2, c2.fen(), 'd5', 1, 'white');
     expect(f.length).toBe(1);
-    expect(f[0]).toMatch(/Newly undefended/);
+    expect(f[0]).toMatch(/lost (its|their) last defender/);
     expect(f[0]).toMatch(/knight on e5/);
   });
   it('a piece the move ATTACKS is not "newly undefended" — the attack line owns it (review walk 2026-09-27)', () => {
@@ -670,5 +670,30 @@ describe('pressure says why it is pressure (review audit 2026-10-14)', () => {
     const before = '4k3/8/8/2p5/8/8/8/N3K3 w - - 0 1';
     const after = '4k3/8/8/2p5/8/1N6/8/4K3 b - - 1 1';
     expect(describeMoveInfluence(before, after, 'Nb3')).toBe('The knight on b3 now eyes the pawn on c5 and fights for d4 — nothing guards the pawn on c5.');
+  });
+});
+
+// Review tape 2026-10-15: "Threat: Their knight on c7 forks your rook on a8 and
+// your king on e8 — the defender can't save everything." A label, and "the
+// defender" is nobody. The fork coming is a sentence naming who loses a piece.
+describe('a coming fork is a sentence that names who can save only one', () => {
+  const FEN = 'r3k2r/ppp2ppp/8/3N4/8/8/PPP2PPP/R3K2R w KQkq - 0 1';
+  const facetsFor = (studentColorWB: 'w' | 'b'): string[] => {
+    const c = new Chess(FEN); c.move('Nxc7+');
+    return computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
+      fenBefore: FEN, fenAfter: c.fen(), san: 'Nxc7+', ply: 1, moverColor: 'white',
+      playerColor: studentColorWB === 'w' ? 'white' : 'black', studentColorWB,
+      evaluation: 400, preMoveEval: 400, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: 'Nxc7+',
+      prevCap: { square: null, capturedValue: 0 }, allSans: ['Nxc7+'], forcedRunStartPly: null,
+      playedLineUci: [], bestLineUci: [], replyBestSan: null });
+  };
+  it('the student\'s own fork: they can save only one', () => {
+    const fork = facetsFor('w').find((f) => /forks/.test(f));
+    expect(fork).toMatch(/they can save only one of them\.$/);
+    expect(fork).not.toMatch(/Threat:|defender can't/);
+  });
+  it('their fork on the student: you can save only one', () => {
+    const fork = facetsFor('b').find((f) => /forks/.test(f));
+    expect(fork).toMatch(/you can save only one of them\.$/);
   });
 });

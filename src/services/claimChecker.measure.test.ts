@@ -104,7 +104,7 @@ describe.skipIf(!HAVE)('claim checker — harvest', () => {
 
           try {
             const pf = await computePositionFacts({
-              posture: 'walk', fen: probe.fen, moverColor: probe.fen.split(' ')[1] as 'w' | 'b', studentColor: sc, rating,
+              boardComputers: 'surface', posture: 'walk', fen: probe.fen, moverColor: probe.fen.split(' ')[1] as 'w' | 'b', studentColor: sc, rating,
               analysis: studentBest,
               lastMove: {
                 fenBefore: before.fen, san: before.san, cpLoss, historySans: history,

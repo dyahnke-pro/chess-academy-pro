@@ -26,10 +26,12 @@ import { computePlyFacts } from './pvPlayback';
 import { describeStructure } from './boardStructure';
 import { detectTactics } from './tacticsDetector';
 import { PATTERN_SPEECH, patternAim, patternClaimsMaterial } from './tacticVocabulary';
+export { forkConsequence } from './tacticVocabulary';
 import type { PvLine, PvPly, PrevCaptureContext } from './pvPlayback';
 import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcEvent, type ArcMove, type Seat } from './planArc';
 import { proofCut } from './exchangeLedger';
 import { routeVerb, routeWaypoints } from '../utils/routeWords';
+import { positionOf } from '../utils/samePosition';
 // The PLAN ACROSS MOVES (planArc) — the memory this reader never had. Exposed
 // from here so a surface composes one plan module, not two.
 export { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcEvent, type ArcState, type ArcMove, type Seat, type Aim } from './planArc';
@@ -1289,7 +1291,7 @@ function shapeOf(plies: readonly PvPly[], studentColor: 'white' | 'black'): Line
   const seen = new Set<string>();
   let repeats = false;
   for (const ply of horizon) {
-    const key = ply.fenAfter.split(' ').slice(0, 4).join(' ');
+    const key = positionOf(ply.fenAfter);
     if (seen.has(key)) { repeats = true; break; }
     seen.add(key);
   }

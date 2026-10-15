@@ -10,6 +10,7 @@
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { computeMustDefend } from './threatOut';
 import { PIECE_NAMES } from '../types/tacticTypes';
+import { positionOf } from '../utils/samePosition';
 
 export interface ObligationLifted {
   /** The student's piece that no longer has to be guarded. */
@@ -40,7 +41,7 @@ export function obligationLifted(fenBefore: string, fenAfter: string, student: C
   for (const m of before.moves({ verbose: true })) {
     const probe = new Chess(fenBefore);
     probe.move(m);
-    if (probe.fen().split(' ').slice(0, 4).join(' ') === fenAfter.split(' ').slice(0, 4).join(' ')) {
+    if (positionOf(probe.fen()) === positionOf(fenAfter)) {
       moved = { from: m.from, to: m.to, piece: m.piece };
       break;
     }

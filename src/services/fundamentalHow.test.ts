@@ -53,8 +53,11 @@ describe('fundamentalHow — no diagnosis without a remedy', () => {
   it('two NEW fundamentals on one ply: each is taught with its whole how (David 2026-10-15: no hard caps)', () => {
     const seen = new Set<FundamentalId>();
     const out = renderFundamentalVerdict([attr('same-piece-twice'), attr('loose-piece')], { replySan: null, ply: 12, seen });
-    expect(out).toContain(fundamentalHow('same-piece-twice') ?? '__');
-    expect(out).toContain(fundamentalHow('loose-piece') ?? '__');
+    // The how runs on after the stem's colon, so its first word is lower case.
+    const runOn = (h: string | null): string => (h ? h.charAt(0).toLowerCase() + h.slice(1) : '__');
+    expect(out).toContain(runOn(fundamentalHow('same-piece-twice')));
+    expect(out).toContain(runOn(fundamentalHow('loose-piece')));
+    expect(out).not.toMatch(/(Here's how|The habit that fixes it|Next time): [A-Z][a-z]/);
     expect(seen.has('loose-piece')).toBe(true);
   });
 

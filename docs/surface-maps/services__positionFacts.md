@@ -4,17 +4,17 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1894 lines · 15 exports · 27 importers · 24 tests · 3 audits**
+**1936 lines · 15 exports · 28 importers · 25 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:43) — names `positionFacts`
 - **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:306) — names `positionFacts`
 - **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:969) — names `positionFacts`
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4022) — names `ClauseKind`, `positionFacts`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4174) — names `positionFacts`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6176) — names `positionFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6284) — names `positionFacts`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4038) — names `ClauseKind`, `positionFacts`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4190) — names `positionFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6192) — names `positionFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6300) — names `positionFacts`
 
 ## Who calls in
 
@@ -38,6 +38,7 @@
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/positionFactsCache.ts`
+- `src/services/positionFactsRegistry.test.ts`
 - `src/services/positionReadComposer.ts`
 - `src/services/reviewFacetRank.ts`
 - `src/services/speedRunReads.scale.test.ts`
@@ -86,9 +87,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 12 call sites
-- `src/hooks/useLiveCoach.ts:295`
-- `src/hooks/usePhaseNarration.ts:662`
-- `src/services/chatBoardRead.ts:109`
+- `src/hooks/useLiveCoach.ts:296`
+- `src/hooks/usePhaseNarration.ts:673`
+- `src/services/chatBoardRead.ts:110`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:254`
 - `src/services/positionFacts.test.ts:255`
@@ -96,15 +97,15 @@
 - `src/services/positionFacts.test.ts:306`
 - `src/services/positionFacts.test.ts:364`
 - `src/services/positionFacts.test.ts:365`
-- `src/services/positionReadComposer.ts:154`
-- `src/services/whyBestMove.ts:151`
+- `src/services/positionReadComposer.ts:155`
+- `src/services/whyBestMove.ts:160`
 
-### `computePositionFacts` (function) — 88 call sites
+### `computePositionFacts` (function) — 89 call sites
 - `src/coach/boardTurnAnswer.ts:134`
-- `src/components/Coach/CoachTeachPage.tsx:10053`
+- `src/components/Coach/CoachTeachPage.tsx:10108`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
-- `src/hooks/usePhaseNarration.ts:635`
+- `src/hooks/usePhaseNarration.ts:645`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
 - `src/services/chatBoardRead.ts:81`
@@ -174,10 +175,11 @@
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`
 - `src/services/positionFacts.weakness.test.ts:63`
+- `src/services/positionFactsRegistry.test.ts:9`
 - `src/services/positionReadComposer.ts:130`
 - `src/services/speedRunReads.scale.test.ts:37`
 - `src/services/whyBestMove.needWire.test.ts:10`
-- `src/services/whyBestMove.ts:129`
+- `src/services/whyBestMove.ts:137`
 - `src/test/computedOrderWired.test.ts:32`
 - `src/test/everySurfaceSpeaks.test.ts:117`
 - `src/test/teach02Wired.test.ts:84`
@@ -190,10 +192,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8653`
+- `src/components/Coach/CoachTeachPage.tsx:8676`
 
 ### `convertKey` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10304`
+- `src/components/Coach/CoachTeachPage.tsx:10360`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 
 ### `afterLine` (function) — 5 call sites
@@ -204,7 +206,7 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8634`
+- `src/components/Coach/CoachTeachPage.tsx:8657`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.ts:9`
@@ -234,6 +236,7 @@
 - `src/services/positionFacts.pinPressure.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
+- `src/services/positionFactsRegistry.test.ts`
 - `src/services/speedRunReads.scale.test.ts`
 - `src/services/whyBestMove.needWire.test.ts`
 - `src/test/computedOrderWired.test.ts`

@@ -11,6 +11,7 @@ import { lookupMasterPlay } from './masterPlayLookup';
 import { lookupAmateurPlay } from './amateurPlayLookup';
 import { translateMasterMove, type TranslatedMove } from './explorerTranslate';
 import type { MasterPlayMove, MasterPlayResult } from './masterPlayTypes';
+import { positionOf } from '../utils/samePosition';
 
 export interface TheoryDeviation {
   /** Zero-based ply where the player left book. */
@@ -46,7 +47,7 @@ function tokenizePgn(pgn: string): string[] {
 /** Position signature (placement + side + castling + ep) — drops the
  *  move counters so two routes to the same position compare equal. */
 function posKey(fen: string): string {
-  return fen.split(' ').slice(0, 4).join(' ');
+  return positionOf(fen);
 }
 
 /** Is the played SAN one of the masters' moves? Compared by RESULTING

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**256 lines · 12 exports · 4 importers · 2 tests · 0 audits**
+**256 lines · 13 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,10 +14,14 @@
 
 - `src/hooks/useDiscussionPractice.ts`
 - `src/services/fundamentalRecurrence.ts`
+- `src/services/lastTimeHere.ts`
 - `src/services/misconceptionCallbacks.test.ts`
 - `src/services/weaknessCallback.test.ts`
 
 ## Exports and every call site
+
+### `recencyPhrase` (function) — 1 call site
+- `src/services/lastTimeHere.ts:57`
 
 ### `CallbackContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

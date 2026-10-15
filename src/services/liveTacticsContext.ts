@@ -765,7 +765,10 @@ export function formatTacticsSubBlock(
 export type DangerLevel = 'decisive' | 'piece' | 'material' | 'pawn' | 'not-yet';
 
 export const DANGER_OPENERS: Record<DangerLevel, readonly string[]> = {
-  decisive: ['This one decides the game — ', 'Drop everything — '],
+  // CONDITIONAL, like every other level (Learn tape 2026-10-15: "Drop
+  // everything — your queen on d5 is attacked" on a book move the queen simply
+  // steps away from). The level is what IGNORING it costs, so it says so.
+  decisive: ['This loses the game if you ignore it — ', 'Ignore this and the game is gone — '],
   piece: ['Danger — a whole piece is at stake. ', 'Watch out — this costs a piece if you ignore it. '],
   // A swap net of two: a piece for a pawn, or the exchange. "A pawn is at
   // stake" would be false — the student loses more than a pawn.

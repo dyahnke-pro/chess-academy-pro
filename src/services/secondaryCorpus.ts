@@ -17,6 +17,7 @@
 // model phrases teaching from them and decides nothing.
 import { Chess } from 'chess.js';
 import type { DanyaNote } from './danyaTeachingService';
+import { positionOf } from '../utils/samePosition';
 
 export interface TeachingsBundle {
   generatedAt: string;
@@ -48,7 +49,7 @@ export interface SecondaryCorpus {
  *  path-dependent, so two games at the same position disagree on them —
  *  including them would defeat the whole point. Mirrors
  *  `danyaTeachingService.normFen`. */
-const normFen = (fen: string): string => fen.split(' ').slice(0, 4).join(' ');
+const normFen = (fen: string): string => positionOf(fen);
 
 const SPELLING_VARIANTS: Array<[RegExp, string]> = [
   [/\bdefence\b/g, 'defense'],

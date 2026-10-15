@@ -105,12 +105,19 @@ export type LearnLane =
   | 'kickMap'
   | 'breakRace'
   | 'patternFails'
-  | 'structureJudgement';
+  | 'structureJudgement'
+  // ── memory: this position, from the student's own games ──
+  | 'lastTimeHere'
+  | 'sameAsLastTime';
 
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
  *  the positional read, structure, piece quality) — the tier the scoreboard
  *  found we over-say. */
 export const DESCRIPTION_LEAD = 40;
+
+/** The habit that catches a slip — said AFTER the verdict it explains, in the
+ *  same beat, never as the turn's opener (METHOD comes last, G4.5.15). */
+const HABIT_AFTER_VERDICT: ReadonlySet<LearnLane> = new Set<LearnLane>(['blunderCheck']);
 
 export interface LaneRule {
   /** The kind the package ranks it as. */
@@ -154,6 +161,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   checkMethod: 'now', stalemate: 'now', autopilot: 'now', keepPressing: 'now', pawnEnding: 'now',
   openingEquivalence: 'name', tradeLedger: 'affirm', notYetPlayed: 'affirm', holdResource: 'affirm', captureChoice: 'affirm',
   breakRace: 'affirm', kickMap: 'point', patternFails: 'refute',
+  lastTimeHere: 'affirm', sameAsLastTime: 'but',
 };
 
 
@@ -169,6 +177,12 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   kickMap: { kind: 'computed', why: 'the capture dragged their piece onto a square a pawn kicks it from, and where it can land', lead: 67 },
   breakRace: { kind: 'computed', why: 'both sides wanted one square for a pawn and yours got there first', lead: 66 },
   patternFails: { kind: 'computed', why: 'a stock shot that looks right and fails on this board, played out', lead: 72 },
+  // MEMORY (David 2026-10-15): the student left theory from THIS position in
+  // another game at a cost (`lastTimeHere`, off the book-departure rows). A
+  // different move this time is the green direction; the same move again is the
+  // hole repeating. Rare and earned, so both ride.
+  lastTimeHere: { kind: 'computed', why: 'what the student played here in another game, what it cost, and that this time went another way', lead: 69, always: true },
+  sameAsLastTime: { kind: 'computed', why: 'the same costly move the student played here in another game', lead: 78, always: true },
   gem: { kind: 'gem', why: 'a verified punish the coach just handed over', lead: 100, always: true },
   tactic: { kind: 'tactic', why: 'a tactic the detectors proved for the student', lead: 90, always: true },
   threat: { kind: 'threat', why: 'danger to the student on this board', lead: 95, always: true },
@@ -578,10 +592,15 @@ export function decideTurn(
     const lane = laneFor(f);
     if (lane && DANGER_LANES.has(lane)) return 0;
     if (lane && DNA_BEAT[lane] === 'name') return 1;
+    // A habit never opens the turn, whatever its stakes (Learn tape
+    // 2026-10-15: "Blunder check before you let go of a piece…" spoke before
+    // "Castle queenside was a mistake").
+    if (lane && HABIT_AFTER_VERDICT.has(lane)) return 2;
     return ownLead && f === ownLead.fact ? 1 : 2;
   };
+  const habitLast = (f: VoiceFact): number => { const lane = laneFor(f); return lane && HABIT_AFTER_VERDICT.has(lane) ? 1 : 0; };
   const worth = (f: VoiceFact): number => { const lane = laneFor(f); return lane ? value({ fact: f, lane }) : 0; };
-  keep.sort((a, b) => tier(a) - tier(b) || beatOf(a) - beatOf(b) || worth(b) - worth(a));
+  keep.sort((a, b) => tier(a) - tier(b) || beatOf(a) - beatOf(b) || habitLast(a) - habitLast(b) || worth(b) - worth(a));
   const pkg: VoicePackage = {
     spoken: joinSpoken(keep),
     kept: keep,

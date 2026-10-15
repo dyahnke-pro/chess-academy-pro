@@ -1615,7 +1615,7 @@ class VoiceService {
             kind: 'voice-speak-invoked',
             category: 'subsystem',
             source: 'voiceService.speakInternal.noOverlap',
-            summary: `dropped overlapping line (already speaking): "${text.slice(0, 40)}"`,
+            summary: `waiting behind the line already speaking: "${text.slice(0, 40)}"`,
             // Full text of the SUPPRESSED line — PostHog keeps it as narration_text
             // so an audit can prove what was dropped, not just that something was.
             narrationText: text,

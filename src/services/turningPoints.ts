@@ -23,6 +23,7 @@ import { landedTacticFor, tacticWord } from './pvPlayback';
 import { findHangingBySee } from './positionReadingService';
 import { moveWhy } from './deliberation';
 import { betterMoveReason, errorWhy } from './inaccuracyCall';
+import { positionOf } from '../utils/samePosition';
 
 /** How many turning points a review asks about (David: "the biggest few"). */
 export const TURNING_POINTS_ASKED = 3;
@@ -64,6 +65,9 @@ export interface TurningCause {
   /** The piece that does it: the student's for missed, theirs for walked-into,
    *  the student's hung piece for hung. */
   piece: PieceSymbol | null;
+  /** hung only: the piece WAS guarded and loses the exchange — never said to
+   *  be "left hanging" or told to "check it is still defended". */
+  guarded?: boolean;
 }
 
 /** Why each flagged student ply was or was not asked — the audit row's body. */
@@ -134,7 +138,7 @@ export function turningCause(seg: TurningSegmentLike, next: TurningSegmentLike |
   const played = moverPiece(seg.fenBefore, seg.san);
   if (!played) return null;
   // WALKED INTO: on the board the played move left, their best reply lands a tactic.
-  if (next && next.fenBefore.split(' ').slice(0, 4).join(' ') === played.fenAfter.split(' ').slice(0, 4).join(' ') && next.bestMoveSan) {
+  if (next && positionOf(next.fenBefore) === positionOf(played.fenAfter) && next.bestMoveSan) {
     const tactic = landedTacticFor(next.fenBefore, next.bestMoveSan);
     const theirs = moverPiece(next.fenBefore, next.bestMoveSan);
     if (tactic && theirs) return { id: `into:${tactic}:${theirs.piece}`, kind: 'walked-into', tactic, piece: theirs.piece };
@@ -144,7 +148,7 @@ export function turningCause(seg: TurningSegmentLike, next: TurningSegmentLike |
   const hung = findHangingBySee(played.fenAfter)
     .filter((h) => h.color === mover && h.piece !== 'p' && h.piece !== 'k')
     .sort((a, b) => b.gain - a.gain)[0];
-  if (hung) return { id: `hung:${hung.piece}`, kind: 'hung', tactic: null, piece: hung.piece };
+  if (hung) return { id: `hung:${hung.piece}`, kind: 'hung', tactic: null, piece: hung.piece, ...(hung.defended ? { guarded: true } : {}) };
   return null;
 }
 
@@ -173,9 +177,14 @@ export function causeLine(cause: TurningCause, count: number, punishmentSaid = f
     if (count <= 1) return punishmentSaid ? habit : `You walked into a ${what}. ${habit}`;
     return `Again you walked into a ${what} — that's ${countWord(count)} this game. ${habit}`;
   }
-  const habit = 'Before you let go of a piece, check it is still defended.';
-  if (count <= 1) return punishmentSaid ? habit : `That left your ${piece} hanging. ${habit}`;
-  return `Again a piece left hanging — that's ${countWord(count)} this game. ${habit}`;
+  // A GUARDED piece that loses the exchange is not "hanging", and "check it is
+  // still defended" is the wrong habit for it — it was. Count instead.
+  const habit = cause.guarded
+    ? 'Before you let go of a piece, count what attacks it against what guards it — a cheaper attacker wins it even when it is guarded.'
+    : 'Before you let go of a piece, check it is still defended.';
+  const left = cause.guarded ? `That left your ${piece} where it loses material in the exchange.` : `That left your ${piece} hanging.`;
+  if (count <= 1) return punishmentSaid ? habit : `${left} ${habit}`;
+  return `Again a piece left where it can be won — that's ${countWord(count)} this game. ${habit}`;
 }
 
 /** The question for a turning point: the piece and the goal, never the square. */
@@ -191,7 +200,9 @@ export function turningQuestion(cause: TurningCause | null): string {
   }
   if (cause?.kind === 'hung') {
     const piece = cause.piece ? PIECE_NAME[cause.piece] : 'piece';
-    return `This is where the game turned. Your ${piece} was left hanging — find the move that keeps it.`;
+    return cause.guarded
+      ? `This is where the game turned. Your ${piece} was left where it loses the exchange — find the move that keeps it.`
+      : `This is where the game turned. Your ${piece} was left hanging — find the move that keeps it.`;
   }
   return 'This is where the game turned. Find the move.';
 }

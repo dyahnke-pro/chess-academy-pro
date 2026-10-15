@@ -92,7 +92,7 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // already names the SAME lost square — `lossInGrade`.)
     // (2026-10-13: a mate it allowed speaks alone — `fund` is null then.)
     expect(TEACH).toMatch(/const fund = look\.stakes\?\.mate\?\.for === 'them' \? null : fundamental;/);
-    expect(TEACH).toMatch(/const line = `\$\{fund\s*\?\s*`\$\{lossInGrade \? '' : noteSlip\(learnMemRef\.current, fund\.id\)\}\$\{lossInGrade \? '' : bookSaid \? fund\.howOnly : fund\.verdict\}[\s\S]{0,160}?\$\{evidence[\s\S]{0,40}?`\.trim\(\)\s*:\s*`\$\{look\.line\}\$\{takeDefinition\(look\.pattern\)\}`\}\$\{concession \? ` \$\{concession\}` : ''\}`;/);
+    expect(TEACH).toMatch(/const line = `\$\{fund\s*\?\s*`\$\{lossInGrade \? '' : noteSlip\(learnMemRef\.current, fund\.id\)\}\$\{lossInGrade \? '' : bookSaid \? fund\.howOnly : fund\.verdict\}[\s\S]{0,160}?\$\{evidence[\s\S]{0,40}?`\.trim\(\)\s*:\s*`\$\{look\.line\}\$\{takeDefinition\(look\.pattern\)\}[\s\S]{0,80}?`\}\$\{concession \? ` \$\{concession\}` : ''\}[\s\S]{0,60}?`;/);
     // (unify-the-coach B3, 2026-10-01: the grade's missed pattern carries its
     // rule once a game, from the one definition ledger.)
     expect(TEACH).toMatch(/const concession = lookConcession\(fenBefore, move\.san, cpLoss, studentEvalAfterCp\);/);
@@ -262,7 +262,8 @@ describe('phase narration is judged against the board it was computed from', () 
   it('a ticking halfmove clock is not the board moving', () => {
     // Comparing whole FENs would abandon a perfectly current report — the same
     // guard shape CoachTeachPage.samePosition uses for its pending speech.
-    expect(PHASE).toMatch(/split\(' '\)\.slice\(0, 4\)/);
+    // The one position key (`positionOf`) drops the clocks.
+    expect(PHASE).toMatch(/positionOf\(a\) === positionOf\(b\)/);
   });
 });
 
@@ -337,7 +338,7 @@ describe('the couplings that make the wiring safe', () => {
     // comparison was rebuilt from scratch in nine places and the plan's MARKS
     // path used none of them, so speech and board drifted apart and a third of
     // the plans drew nothing. One owner now, imported.
-    expect(TEACH).toMatch(/import \{ samePosition \} from '\.\.\/\.\.\/utils\/samePosition'/);
+    expect(TEACH).toMatch(/import \{ samePosition(, positionOf)? \} from '\.\.\/\.\.\/utils\/samePosition'/);
     expect(read('src/utils/samePosition.ts')).toMatch(/slice\(0, 4\)\.join\(' '\)/);
     expect(TEACH).toMatch(/samePosition\(pending\.fen, fenAfterReply\)/);
   });
@@ -418,7 +419,7 @@ describe('the couplings that make the wiring safe', () => {
     // ticking is not the board moving.
     // ONE OWNER. The comparison was rebuilt from scratch in nine places and the
     // marks path used none of them; that is how the two halves drifted apart.
-    expect(TEACH).toMatch(/import \{ samePosition \} from '\.\.\/\.\.\/utils\/samePosition'/);
+    expect(TEACH).toMatch(/import \{ samePosition(, positionOf)? \} from '\.\.\/\.\.\/utils\/samePosition'/);
     expect(TEACH_CODE, 'a local copy of the comparison has grown back')
       .not.toMatch(/const samePosition = \(a: string, b: string\)/);
   });

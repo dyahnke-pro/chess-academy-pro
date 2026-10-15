@@ -40,6 +40,7 @@ import type { MisconceptionBucket } from '../data/misconceptionTags';
 import type { ClassifiedTactic, MistakePuzzle, MistakeGamePhase, OpeningWeakSpot, TacticType, GameRecord } from '../types';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { PUZZLE_MISS_SEVERITY, PUZZLE_MISS_SEVERITY_CAP, type PuzzleMissRecord } from './puzzleMissService';
+import { positionOf } from '../utils/samePosition';
 
 /** A weak spot not re-drilled within this window is "open" again. */
 const WEAKSPOT_STALE_MS = 3 * 24 * 60 * 60 * 1000;
@@ -187,7 +188,7 @@ export function latestDrillMs(values: Iterable<number | string | null | undefine
  *  (drop the half/full-move counters) plus the played SAN. Two records
  *  with the same key describe the same mistake. */
 function posKey(fen: string, san?: string): string {
-  const core = fen.split(' ').slice(0, 4).join(' ');
+  const core = positionOf(fen);
   return `${core}|${san ?? ''}`;
 }
 
@@ -948,7 +949,7 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
   const prefs = useAppStore.getState().activeProfile?.preferences;
   const names = { lichessUsername: prefs?.lichessUsername, chessComUsername: prefs?.chessComUsername };
   const conversions = detectConversionFailures(games, names)
-    .filter((c) => !addressedConv.has(c.fen.split(' ').slice(0, 4).join(' ')));
+    .filter((c) => !addressedConv.has(positionOf(c.fen)));
 
   // BOOK DEPARTURES (Phase 3) — read the precomputed, cost-gated departures from
   // the meta cache (cheap; a background refresh fires when stale). Rating scales

@@ -13,11 +13,11 @@
 - **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1231) — names `voiceService`
 - **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:1654) — names `sanitizeForTTS`
 - **Golden rules (the most important — read these every time)** (CLAUDE.md:2310) — names `voiceService`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3355) — names `voiceService`
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3532) — names `voiceService`
-- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3835) — names `voiceService`
-- **Shared types / services** (CLAUDE.md:5476) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6319) — names `voiceService`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3357) — names `voiceService`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3534) — names `voiceService`
+- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3837) — names `voiceService`
+- **Shared types / services** (CLAUDE.md:5478) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6321) — names `voiceService`
 
 ## Who calls in
 

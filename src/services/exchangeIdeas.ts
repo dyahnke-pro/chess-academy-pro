@@ -388,10 +388,11 @@ export function dutyParity(fen: string, student: Side): ExchangeIdea | null {
     const sq = [guards[0], t.sq, attackers[0]];
     const proof = squaresProof(text, sq);
     if (!proof) continue;
-    // Said once per GUARD AND WHAT IT GUARDS — the standing relation. Keyed on
-    // the attacker too, the same fact came back each time their piece slid
-    // along the file (Learn audit 2026-10-15: four times in one game).
-    return idea('duty-parity', text, sq, proof, `duty-parity:${guards[0]}${t.sq}`);
+    // Said once a GAME — the idea, not the relation. Keyed on the squares, the
+    // same lesson came back for each new guard and attacker (Learn audits
+    // 2026-10-15: four times in one game, h7 twice and g7 twice); the second
+    // time it teaches nothing the first did not.
+    return idea('duty-parity', text, sq, proof, 'duty-parity');
   }
   return null;
 }

@@ -82,7 +82,7 @@ describe('review — the four facts are facets, so they go through the door', ()
 describe('live — the same four facts are clauses of the composer', () => {
   it('stopped: the reply that took the student\'s threat off the board', async () => {
     const r = await computePositionFacts({
-      posture: 'walk', fen: S[6], moverColor: 'w', studentColor: 'w', analysis: flat,
+      boardComputers: 'surface', posture: 'walk', fen: S[6], moverColor: 'w', studentColor: 'w', analysis: flat,
       lastMove: { fenBefore: S[4], san: 'Qh5', cpLoss: 0, historySans: null, reads: null },
       opponentLastMove: { fenBefore: S[5], san: 'g6' },
     });
@@ -91,7 +91,7 @@ describe('live — the same four facts are clauses of the composer', () => {
   it('NEGATIVE: a reply that leaves the threat on stops nothing', async () => {
     const f2 = fens(['e4', 'e5', 'Bc4', 'Nc6', 'Qh5', 'a6']);
     const r = await computePositionFacts({
-      posture: 'walk', fen: f2[6], moverColor: 'w', studentColor: 'w', analysis: flat,
+      boardComputers: 'surface', posture: 'walk', fen: f2[6], moverColor: 'w', studentColor: 'w', analysis: flat,
       lastMove: { fenBefore: f2[4], san: 'Qh5', cpLoss: 0, historySans: null, reads: null },
       opponentLastMove: { fenBefore: f2[5], san: 'a6' },
     });
@@ -103,7 +103,7 @@ describe('live — the same four facts are clauses of the composer', () => {
     const f3 = fens(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3']);
     const fan = [{ evaluation: 20, mate: null, moves: ['g8f6'] }, { evaluation: 700, mate: null, moves: ['d8h4', 'f3h4'] }];
     const popular = [{ san: 'Nf6', games: 60, pct: 60 }, { san: 'Qh4', games: 40, pct: 40 }];
-    const base = { posture: 'walk' as const, fen: f3[7], moverColor: 'b' as const, studentColor: 'b' as const, analysis: flat };
+    const base = { boardComputers: 'surface' as const, posture: 'walk' as const, fen: f3[7], moverColor: 'b' as const, studentColor: 'b' as const, analysis: flat };
     const r = await computePositionFacts({ ...base, lastMove: { fenBefore: f3[5], san: 'Nf6', cpLoss: 0, historySans: null, reads: null, popular, fanBefore: fan } });
     // The claim, whichever wrapper the board draws: the share, the move, the
     // proven line and its result.
@@ -117,14 +117,14 @@ describe('live — the same four facts are clauses of the composer', () => {
 
   it('rule: the principle is taught once, and the surface is told which', async () => {
     const own = await computePositionFacts({
-      posture: 'walk', fen: fens(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'])[5], moverColor: 'b', studentColor: 'b', analysis: flat,
+      boardComputers: 'surface', posture: 'walk', fen: fens(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'])[5], moverColor: 'b', studentColor: 'b', analysis: flat,
       lastMove: { fenBefore: fens(['e4', 'e5', 'Nf3'])[3], san: 'Nc6', cpLoss: 0, historySans: null, reads: null }, taughtPrinciples: new Set(),
     });
     expect(own.clauses.find((c) => c.kind === 'rule')?.text).toMatch(/Nc6/);
     expect(own.principleSpoken).not.toBeNull();
     // NEGATIVE: a surface that does not track principles gets none.
     const untracked = await computePositionFacts({
-      posture: 'walk', fen: fens(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'])[5], moverColor: 'b', studentColor: 'b', analysis: flat,
+      boardComputers: 'surface', posture: 'walk', fen: fens(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'])[5], moverColor: 'b', studentColor: 'b', analysis: flat,
       lastMove: { fenBefore: fens(['e4', 'e5', 'Nf3'])[3], san: 'Nc6', cpLoss: 0, historySans: null, reads: null },
     });
     expect(untracked.clauses.some((c) => c.kind === 'rule')).toBe(false);
@@ -133,9 +133,9 @@ describe('live — the same four facts are clauses of the composer', () => {
   it('stock: the turn of the game takes stock; any other board does not', async () => {
     const FEN = 'rnbqk2r/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 8';
     const up = { ...flat, evaluation: 300 };
-    const turn = await computePositionFacts({ posture: 'interrupt', fen: FEN, moverColor: 'w', studentColor: 'w', analysis: up, phaseTurn: 'middlegame' });
+    const turn = await computePositionFacts({ boardComputers: 'surface', posture: 'interrupt', fen: FEN, moverColor: 'w', studentColor: 'w', analysis: up, phaseTurn: 'middlegame' });
     expect(turn.clauses.find((c) => c.kind === 'stock')?.text).toMatch(/middlegame.*: you're winning — you're up a piece/);
-    const not = await computePositionFacts({ posture: 'interrupt', fen: FEN, moverColor: 'w', studentColor: 'w', analysis: up });
+    const not = await computePositionFacts({ boardComputers: 'surface', posture: 'interrupt', fen: FEN, moverColor: 'w', studentColor: 'w', analysis: up });
     expect(not.clauses.some((c) => c.kind === 'stock')).toBe(false);
   });
 });

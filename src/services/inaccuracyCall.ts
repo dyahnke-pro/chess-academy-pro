@@ -48,6 +48,7 @@ import { sideToMoveAs } from './threatOut';
 import { lineProofFromUci, walkableLine, type Proof } from './proof';
 import type { WalkableLine } from '../types';
 import { signedLegalSeeFor, legalSeeGain } from './positionReadingService';
+import { positionOf } from '../utils/samePosition';
 
 export interface InaccuracyCall {
   /** Straight from `moveRating.classifyMove` — never re-derived here. */
@@ -267,7 +268,7 @@ export function priorMoveLeadingTo(
   try {
     const c = new Chess(candidate.fenBefore);
     if (!c.move(candidate.san)) return null;
-    const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+    const key = (f: string): string => positionOf(f);
     return key(c.fen()) === key(fen) ? { fenBefore: candidate.fenBefore, san: candidate.san } : null;
   } catch { return null; }
 }

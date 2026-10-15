@@ -13,15 +13,16 @@ import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'che
 import { enemyKingStuckInCenter } from './reviewSacrifice';
 import { reachWords } from '../utils/reachWords';
 import { deriveNextPlanFacts, findWorstPlacedPiece, PIECE_NOUN, type PlanFact, type PlanKind } from './nextPlans';
+import { positionOf } from '../utils/samePosition';
 
 /** Their move, recovered from the two boards. */
 function theirMove(fenBefore: string, fenAfter: string): Move | null {
   let c: Chess;
   try { c = new Chess(fenBefore); } catch { return null; }
-  const want = fenAfter.split(' ').slice(0, 4).join(' ');
+  const want = positionOf(fenAfter);
   for (const m of c.moves({ verbose: true })) {
     c.move(m);
-    const hit = c.fen().split(' ').slice(0, 4).join(' ') === want;
+    const hit = positionOf(c.fen()) === want;
     c.undo();
     if (hit) return m;
   }

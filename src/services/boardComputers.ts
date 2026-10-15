@@ -28,6 +28,8 @@ import { provenThreatLine, threatStakes } from './threatProof';
 import { trappedOnBoard } from './reviewTeachingPoints';
 import { bookDeparture } from './bookDeparture';
 import { bookMoveWhy } from './bookMoveWhy';
+import { lastTimeHere } from './lastTimeHere';
+import type { BookDepartureRow } from './bookDepartureWeakness';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { planThreadTurn, type PlanThread } from './planThread';
 import { geometryReads, type GeometryContext } from './tacticGeometry';
@@ -89,13 +91,15 @@ export interface BoardContexts {
   /** The book move the student just left, with the job it does on the board
    *  (the student's own departure, the move it happened or the reply after). */
   bookMove: { history: readonly string[]; student: Color };
+  /** The student's own costly departure from this position in another game. */
+  lastTimeHere: { fenBefore: string; playedSan: string; rows: readonly BookDepartureRow[]; currentGameId: string | null };
   /** The student's queen or rook attacked with no safe square. */
   trapped: { fen: string; student: Color };
   /** A threat warning, with the cost it claims proven on the board. */
   threatCost: { line: string; fen: string; student: Color; squares: readonly string[] };
   /** The student's plan, carried across moves: its stop proven off their
    *  move, then the next plan (mutates the thread held in the surface's memory). */
-  planThread: { thread: PlanThread; ply: number; fenBefore: string; fenAfter: string; student: Color };
+  planThread: { thread: PlanThread; ply: number; fenBefore: string; fenAfter: string; student: Color; studentPovCp?: number | null };
   /** The line tactics (tacticGeometry): interference, clearance, decoy and
    *  deflection, the discovery audit, their in-between move, the fork that
    *  serves a plan, the kick that fails, the counterfactual fork, the pawn
@@ -123,6 +127,9 @@ const LEARN = { wired: 'components/Coach/CoachTeachPage.tsx' } as const;
 const REVIEW = { wired: 'services/reviewFullData.ts' } as const;
 const PLAY_ASK = { not: 'Play volunteers nothing (PLAY_VOLUNTEERS_COACHING); reached on ask through the shared read — owed, one-coach P4' } as const;
 const CHAT_OWED = { not: 'owed — one-coach P4: a chat lane reads it from the registry' } as const;
+/** The live composer reads it for every surface that does not read it itself
+ *  — chat's board answers and the tapped read on Play (2026-10-15). */
+const COMPOSER = { wired: 'services/positionFacts.ts' } as const;
 const TACTICS_NA = { not: 'a puzzle position poses one tactic; this computer explains a game move' } as const;
 const WEAK_OWED = { not: 'owed — one-coach P3: the record keeps the proof' } as const;
 
@@ -147,7 +154,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       const proof = pinBreakProof(own, student);
       return { text: pinBreakLine(own, student), proof, squares: [own.pinned, own.to, own.pinner], key: `pinbreak:${own.pinned}${own.to}`, lines: proof.line ? [proof.line] : undefined };
     }),
-    surfaces: { learn: LEARN, review: { not: 'owed — Review names pins; the break is read live only' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
+    surfaces: { learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   pinBreakTheirs: {
     read: ({ fen, student, pinned }) => safe(() => {
@@ -156,7 +163,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       const proof = pinBreakProof(brk, student);
       return { text: pinBreakLine(brk, student), proof, squares: [brk.pinned, brk.to, brk.pinner], key: `pinbreak:${brk.pinned}${brk.to}`, lines: proof.line ? [proof.line] : undefined };
     }),
-    surfaces: { learn: LEARN, review: { not: 'owed — Review names pins; the break is read live only' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: { not: 'owed — a pin puzzle could say the pin is illusory' }, weaknesses: WEAK_OWED },
+    surfaces: { learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: { not: 'owed — a pin puzzle could say the pin is illusory' }, weaknesses: WEAK_OWED },
   },
   prophylaxis: {
     read: ({ fen, engineFirstMoves }) => safe(() => {
@@ -167,7 +174,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
         // (easy walk 2026-10-11: "h3 first — it stops the pin" unasked).
         namesMove: true, idea: prophylaxisIdea(ph) };
     }),
-    surfaces: { learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
+    surfaces: { learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   moveOrder: {
     read: ({ fen, pv }) => safe(() => {
@@ -175,7 +182,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       if (!o) return null;
       return { text: enablingMoveLine(o), proof: enablingMoveProof(o), squares: [o.opened, o.then.from, o.then.to], key: `order:${o.first.san}>${o.then.san}`, play: { from: o.first.from, to: o.first.to } };
     }),
-    surfaces: { learn: LEARN, review: { not: 'owed — Review could name the B the student never reached' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
+    surfaces: { learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   tiedDefender: {
     read: ({ fenBefore, fenAfterMove, fenAfterReply, student }) => safe(() => {
@@ -185,7 +192,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       if (!holds) return null;
       return { text: tiedDefenderLine(tie), proof: tiedDefenderProof(tie), squares: [tie.defender.square, tie.target.square], key: `tied:${tie.defender.square}>${tie.target.square}` };
     }),
-    surfaces: { learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
+    surfaces: { learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   obligationLifted: {
     read: ({ fenBefore, fenAfter, student }) => safe(() => {
@@ -193,7 +200,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       if (!o) return null;
       return { text: obligationLiftedLine(o), proof: NO_PROOF.description, squares: [o.square, o.from, o.to], key: `lifted:${o.square}` };
     }),
-    surfaces: { learn: LEARN, review: { not: 'owed — Review reads the student move, not the reply that freed it' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
+    surfaces: { learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   bookMove: {
     // THEORY IS KNOWLEDGE, NOT A FIND (David 2026-10-14): once the student has
@@ -210,11 +217,34 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
     }),
     surfaces: {
       learn: LEARN,
-      review: { not: 'owed — Review names the book move on its own departure line; the job read is parity owed' },
-      play: PLAY_ASK,
-      chat: CHAT_OWED,
+      review: REVIEW,
+      play: COMPOSER,
+      chat: COMPOSER,
       tactics: { not: 'a puzzle has no book departure' },
       weaknesses: { not: 'owed — the departure row (bookDepartureWeakness) could carry the job' },
+    },
+  },
+  lastTimeHere: {
+    // MEMORY BY POSITION (David 2026-10-15): the book-departure rows already
+    // hold every position the student left theory from, the move and its
+    // cost. Their own move, already played, is named; the book move never is.
+    read: ({ fenBefore, playedSan, rows, currentGameId }) => safe(() => {
+      const r = lastTimeHere(fenBefore, playedSan, rows, currentGameId);
+      if (!r) return null;
+      let after: string | undefined;
+      try { const b = new Chess(fenBefore); b.move(playedSan); after = b.fen(); } catch { after = undefined; }
+      // The proof is the move itself, from the board it was played on then.
+      const line = { fen: r.departure.fen, sans: [r.departure.san] };
+      const proof: FactProof = { kind: 'line', exact: true, short: `The move then was ${r.departure.san}`, full: `The move then was ${r.departure.san}`, line };
+      return { text: r.text, proof, squares: [], key: r.key, ...(after ? { fen: after } : {}) };
+    }),
+    surfaces: {
+      learn: LEARN,
+      review: { wired: 'services/coachFeatureService.ts' },
+      play: COMPOSER,
+      chat: COMPOSER,
+      tactics: { not: 'a puzzle has no book departure' },
+      weaknesses: { not: 'owed — the departure row is the weakness itself' },
     },
   },
   queenGrabTrap: {
@@ -224,7 +254,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       const proof = queenGrabTrapProof(t);
       return { text: queenGrabTrapLine(t), proof, squares: [t.from, t.to, t.replyFrom, t.replyTo, ...(proof.squares ?? [])], key: `grab:${t.to}` };
     }),
-    surfaces: { learn: LEARN, review: { not: 'owed — a queen grab the student made could be named in review' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
+    surfaces: { learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   trapped: {
     read: ({ fen, student }) => safe(() => {
@@ -235,14 +265,14 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       const { text, proof } = provenThreatLine(line, fen, student, squares);
       return { text, proof: proof ?? squaresProof(text, squares) ?? NO_PROOF.stated, squares: [...new Set([...squares, ...(proof?.squares ?? [])])], key: `trapped:${t.square}`, stakes: threatStakes(fen, student, squares) ?? undefined };
     }),
-    surfaces: { learn: LEARN, review: { wired: 'services/reviewTeachingPoints.ts' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
+    surfaces: { learn: LEARN, review: { wired: 'services/reviewTeachingPoints.ts' }, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   threatCost: {
     read: ({ line, fen, student, squares }) => safe(() => {
       const { text, proof } = provenThreatLine(line, fen, student, squares);
       return { text, proof: proof ?? squaresProof(text, squares) ?? NO_PROOF.stated, squares: [...new Set([...squares, ...(proof?.squares ?? [])])], key: `threat:${squares.join('')}`, stakes: threatStakes(fen, student, squares) ?? undefined };
     }),
-    surfaces: { learn: LEARN, review: { not: 'owed — Review warns from the stored threat, not this proof' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
+    surfaces: { learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   structureMove: {
     // Learn's reader: the better move is held (David 2026-10-10).
@@ -263,7 +293,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
   },
   planThread: {
     read: ({ thread, ...args }) => safe(() => planThreadTurn(thread, args).map((l) => ({ text: l.text, proof: l.proof, squares: l.squares, key: l.claim, ...(l.aim ? { sharedKey: l.aim } : {}) }))),
-    surfaces: { learn: LEARN, review: { not: 'P2 owed — Review runs its own thread loop over planStopped (coachFeatureService); collapse onto planThreadTurn' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
+    surfaces: { learn: LEARN, review: { wired: 'services/coachFeatureService.ts' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   tacticGeometry: {
     read: (ctx) => safe(() => geometryReads(ctx).map((r) => ({

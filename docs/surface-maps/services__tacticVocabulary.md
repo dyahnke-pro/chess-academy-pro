@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**203 lines · 13 exports · 9 importers · 3 tests · 3 audits**
+**210 lines · 14 exports · 11 importers · 3 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,7 +16,9 @@
 - `src/services/groundedAnswer.ts`
 - `src/services/lookaheadPlan.ts`
 - `src/services/missedTacticService.ts`
+- `src/services/puzzleMethod.ts`
 - `src/services/pvPlayback.ts`
+- `src/services/reviewFullData.ts`
 - `src/services/tacticAlertService.ts`
 - `src/services/tacticTypeUnification.test.ts`
 - `src/services/tacticVocabulary.test.ts`
@@ -30,49 +32,45 @@
 ### `TACTIC_WORD` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `tacticWord` (function) — 26 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8386`
+### `tacticWord` (function) — 24 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8404`
 - `src/services/computedVoiceAudit.report.test.ts:254`
 - `src/services/dnaLineNarrator.ts:58`
-- `src/services/groundedAnswer.ts:5376`
-- `src/services/groundedAnswer.ts:5388`
-- `src/services/groundedAnswer.ts:6174`
-- `src/services/lookaheadPlan.ts:111`
-- `src/services/pvPlayback.test.ts:291`
-- `src/services/pvPlayback.test.ts:292`
-- `src/services/pvPlayback.test.ts:293`
-- `src/services/pvPlayback.test.ts:294`
-- `src/services/pvPlayback.test.ts:296`
-- `src/services/pvPlayback.test.ts:297`
-- `src/services/pvPlayback.test.ts:299`
-- `src/services/pvPlayback.test.ts:300`
-- `src/services/pvPlayback.ts:256`
-- `src/services/pvPlayback.ts:685`
-- `src/services/pvPlayback.ts:708`
-- `src/services/pvPlayback.ts:745`
-- `src/services/pvPlayback.ts:838`
+- `src/services/groundedAnswer.ts:5404`
+- `src/services/groundedAnswer.ts:5416`
+- `src/services/groundedAnswer.ts:6201`
+- `src/services/lookaheadPlan.ts:113`
+- `src/services/pvPlayback.test.ts:268`
+- `src/services/pvPlayback.test.ts:269`
+- `src/services/pvPlayback.test.ts:270`
+- `src/services/pvPlayback.test.ts:271`
+- `src/services/pvPlayback.test.ts:273`
+- `src/services/pvPlayback.test.ts:274`
+- `src/services/pvPlayback.test.ts:276`
+- `src/services/pvPlayback.test.ts:277`
+- `src/services/pvPlayback.ts:255`
+- `src/services/pvPlayback.ts:728`
+- `src/services/pvPlayback.ts:839`
 - `src/services/reviewMoveBriefing.ts:263`
 - `src/services/teachingSelector.ts:367`
-- `src/services/turningPoints.ts:166`
-- `src/services/turningPoints.ts:168`
-- `src/services/turningPoints.ts:171`
-- `src/services/turningPoints.ts:186`
+- `src/services/turningPoints.ts:170`
+- `src/services/turningPoints.ts:172`
+- `src/services/turningPoints.ts:175`
+- `src/services/turningPoints.ts:195`
 
 ### `PATTERN_SPEECH` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `patternClaimsMaterial` (function) — 1 call site
-- `src/services/lookaheadPlan.ts:603`
+- `src/services/lookaheadPlan.ts:642`
 
 ### `patternWord` (function) — 1 call site
-- `src/services/pvPlayback.ts:257`
+- `src/services/pvPlayback.ts:256`
 
-### `patternAim` (function) — 5 call sites
-- `src/services/lookaheadPlan.ts:108`
-- `src/services/pvPlayback.ts:685`
-- `src/services/pvPlayback.ts:708`
-- `src/services/pvPlayback.ts:745`
-- `src/services/pvPlayback.ts:838`
+### `patternAim` (function) — 3 call sites
+- `src/services/lookaheadPlan.ts:110`
+- `src/services/pvPlayback.ts:728`
+- `src/services/pvPlayback.ts:839`
 
 ### `TACTIC_TO_PATTERN` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -112,8 +110,13 @@
 - `src/services/tacticVocabulary.test.ts:87`
 - `src/services/weaknessSignal.ts:254`
 
-### `weaknessClusterForTactic` (function) — 1 call site
+### `weaknessClusterForTactic` (function) — 2 call sites
+- `src/services/puzzleMethod.ts:82`
 - `src/services/tacticVocabulary.test.ts:88`
+
+### `forkConsequence` (function) — 2 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8418`
+- `src/services/reviewFullData.ts:807`
 
 ## Tests
 

@@ -437,7 +437,9 @@ export function buildReviewMoveTeaching(
       if (newOutpost) {
         // The outpost's defining property IS the "because": no enemy pawn can
         // ever challenge it (that's what the detector guarantees).
-        return `Secures an outpost on ${newOutpost.square} — no enemy pawn can ever challenge it.`;
+        // A pawn move only makes the square safe for the piece already there —
+        // name that piece (review tape 2026-10-15: "plant an outpost" of e6).
+        return `Makes ${newOutpost.square} an outpost for the ${PIECE_NOUN[newOutpost.piece] ?? 'piece'} — no enemy pawn can ever challenge it.`;
       }
       if (target) {
         // A pawn move that created a weakness without opening a file / outpost

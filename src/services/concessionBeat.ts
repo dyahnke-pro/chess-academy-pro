@@ -46,6 +46,8 @@ export interface Concession {
    *  INTO the line of the piece that did (10.Nf3 shutting the d1-queen off
    *  g4) — "took your defender off" would be false there. */
   blockedGuard?: { piece: string; square: string };
+  /** piece-offside: the piece that went astray, named in every voice. */
+  piece?: string;
 }
 
 /** How close to the coach's own king an abandoned square has to be before it
@@ -295,6 +297,7 @@ export function findConcession(args: {
       return {
         kind: 'piece-offside',
         square: moved.to,
+        piece: NAME[moved.piece] ?? 'piece',
         said: `Their ${NAME[moved.piece] ?? 'piece'} has gone all the way to ${moved.to} — it is a long way from their own king.`,
         opening: `A piece that far from home takes moves to come back.`,
       };
@@ -397,7 +400,10 @@ export function findStudentDrawback(args: {
       : `That took your last defender off ${found.square}.`,
     'pawn-weakened': `That left your pawn on ${found.square} isolated — no pawn of yours can defend it now.`,
     'file-opened': `That opened the file next to your own king.`,
-    'piece-offside': `Your piece went a long way from your king, to ${found.square}.`,
+    // Named, with what it costs (Learn tape 2026-10-15: "Your piece went a
+    // long way from your king, to c3. Worth seeing before it costs you
+    // something." named neither the piece nor the cost).
+    'piece-offside': `Your ${found.piece ?? 'piece'} went all the way to ${found.square}, a long way from your king — a piece that far out needs moves to get back.`,
     'outpost-conceded': `That handed them ${found.square} — ${found.opening.toLowerCase()}`,
   })[found.kind];
   return {
@@ -408,7 +414,7 @@ export function findStudentDrawback(args: {
     // honesty contract holds looking backward as much as forward.
     // FUTURE, deliberately: the drawback has happened, but what it will
     // cost has not. Both tenses in one beat is the point, not an oversight.
-    opening: `Worth seeing before it costs you something.`,
+    opening: found.kind === 'piece-offside' ? '' : `Worth seeing before it costs you something.`,
   };
 }
 

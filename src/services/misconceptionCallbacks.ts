@@ -20,7 +20,7 @@ function ordinal(n: number): string {
  *  asked for this in DAYS — and anything past a month collapsed to "a while
  *  back", which is exactly the vague filler rule 1 bans. Days stay days for a
  *  fortnight, then weeks, then real months. */
-function recencyPhrase(lastPriorAt: number, now: number): string {
+export function recencyPhrase(lastPriorAt: number, now: number): string {
   const days = Math.floor((now - lastPriorAt) / DAY_MS);
   if (days <= 0) return 'earlier today';
   if (days === 1) return 'yesterday';

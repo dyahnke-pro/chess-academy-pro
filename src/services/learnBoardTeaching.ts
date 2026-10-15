@@ -865,7 +865,7 @@ export function priorFromHistory(history: readonly string[], fenBefore: string):
   try {
     const c = new Chess(pre);
     if (!c.move(history[history.length - 2])) return null;
-    const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+    const key = (f: string): string => positionOf(f);
     return key(c.fen()) === key(fenBefore) ? { fenBefore: pre, san: history[history.length - 2] } : null;
   } catch { return null; }
 }
@@ -1007,6 +1007,7 @@ export function kingCourseTeaching(fen: string, student: 'w' | 'b'): TeachingHin
 // The data lives in `learnMemory` (pure memory); what counts as paying an idea
 // off is a board question, so it is answered here.
 import type { LearnMemory } from './learnMemory';
+import { positionOf } from '../utils/samePosition';
 
 /** An idea the coach voiced, with the student move that would pay it off and
  *  the line that closes the loop — computed when the idea is said (G0). */

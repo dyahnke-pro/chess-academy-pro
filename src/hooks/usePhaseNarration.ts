@@ -22,6 +22,7 @@ import { splitSpeakableSentences } from '../utils/sentenceSplit';
 import type { PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
 import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
 import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
+import { positionOf } from '../utils/samePosition';
 
 export interface UsePhaseNarrationArgs {
   /** Full PGN at narration time — fed into the grounding block. */
@@ -319,7 +320,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
        *  current report — the same guard shape `CoachTeachPage.samePosition`
        *  uses for its pending speech. */
       const samePhasePosition = (a: string, b: string): boolean =>
-        a.split(' ').slice(0, 4).join(' ') === b.split(' ').slice(0, 4).join(' ');
+        positionOf(a) === positionOf(b);
       const dispatchSentence = (sentence: string): void => {
         const trimmed = sentence.trim();
         if (!trimmed) return;
@@ -642,6 +643,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         standingRef.current.observe(fullmoveOf(event.fen));
         if (stockfishAnalysis?.topLines?.length) {
           const pf = await computePositionFacts({
+      boardComputers: 'composer',
             // Mid-game, unasked-for. The transition has to earn its sentence.
             posture: 'interrupt',
             fen: event.fen,

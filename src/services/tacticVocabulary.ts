@@ -200,3 +200,10 @@ export function weaknessClusterForPattern(pattern: TacticPatternType): string | 
 export function weaknessClusterForTactic(tactic: TacticType): string {
   return `${TACTIC_CLUSTER_PREFIX}${tactic}`;
 }
+
+/** WHAT A FORK MEANS, said the same on every surface (review tape 2026-10-15:
+ *  "the defender can't save everything" named nobody). `saver` is the side
+ *  the fork hits, from the student's seat. */
+export function forkConsequence(saver: 'you' | 'they'): string {
+  return `${saver} can save only one of them`;
+}

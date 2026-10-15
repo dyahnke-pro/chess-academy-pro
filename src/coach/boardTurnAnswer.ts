@@ -132,6 +132,7 @@ async function answerFromRead(turn: ResolvedChatTurn, board: BoardTurnInput): Pr
   let read;
   try {
     read = await computePositionFacts({
+      boardComputers: 'composer',
       posture: 'asked', fen: board.fen,
       moverColor: board.fen.split(' ')[1] === 'b' ? 'b' : 'w', studentColor: student,
       analysis,

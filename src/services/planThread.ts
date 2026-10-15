@@ -15,7 +15,7 @@
 // PURE: no store, no voice. The caller speaks the lines and keeps the thread.
 import { openSentence } from '../utils/openSentence';
 import type { Color } from 'chess.js';
-import { deriveNextPlanFacts, type PlanFact } from './nextPlans';
+import { deriveNextPlanFacts, type PlanFact, type PlanKind } from './nextPlans';
 import { planStoppedProof, planStoppedLine } from './planStopped';
 import { NO_PROOF, type FactProof } from './proof';
 
@@ -30,6 +30,12 @@ export function planAimKey(kind: string, at: string | null): string | null {
   if (kind === 'outpost') return `plan-aim:outpost:${at}`;
   return null;
 }
+
+/** The plan kinds in the order `deriveNextPlanFacts` ranks them (lower =
+ *  higher priority). A new kind fails to compile until it is placed. */
+const KIND_RANK: Record<PlanKind, number> = {
+  'king-attack': 0, passer: 1, 'weak-pawn': 2, 'open-file': 3, outpost: 4, 'worst-piece': 5, convert: 6, 'bishop-pair': 7,
+};
 
 /** How long a stated plan holds before an unexplained change may replace it. */
 export const PLAN_THREAD_HOLD_PLIES = 4;
@@ -46,6 +52,12 @@ export interface PlanThread {
 
 export function newPlanThread(): PlanThread {
   return { stated: null, stoppedInRow: 0, wasStopped: false, lastStatedPly: null, howSaid: new Set<string>() };
+}
+
+/** A copy to try a turn on: a surface that commits only what was SPOKEN
+ *  (review's door) runs the turn on the copy and adopts it when a line speaks. */
+export function clonePlanThread(t: PlanThread): PlanThread {
+  return { ...t, howSaid: new Set(t.howSaid) };
 }
 
 export interface PlanThreadLine {
@@ -72,7 +84,12 @@ const cap = (s: string): string => openSentence(s);
  */
 export function planThreadTurn(
   t: PlanThread,
-  args: { ply: number; fenBefore: string; fenAfter: string; student: Color },
+  args: {
+    ply: number; fenBefore: string; fenAfter: string; student: Color;
+    /** The engine's student-POV eval after their move, when the surface has
+     *  one — so "convert your extra material" waits for a real edge. */
+    studentPovCp?: number | null;
+  },
 ): PlanThreadLine[] {
   const out: PlanThreadLine[] = [];
   // A plan that held long enough means they were not shutting plans down.
@@ -87,10 +104,15 @@ export function planThreadTurn(
       t.wasStopped = true;
     }
   }
-  const plans = deriveNextPlanFacts(args.fenAfter, args.student);
+  const plans = deriveNextPlanFacts(args.fenAfter, args.student, { studentPovCp: args.studentPovCp ?? null });
   const top = plans[0];
   if (!top) return out;
-  if (t.stated && plans.some((p) => p.id === t.stated?.fact.id)) return out;   // the plan stands
+  // THE PLAN STANDS while the board still offers it — unless a plan of a
+  // stronger kind has appeared (a passed pawn outranks an open file: review
+  // tape 2026-10-15 held "seize the c-file" through a running a-pawn). A
+  // plan of the same or a weaker kind never replaces it (the same tape churned
+  // passer → knight outpost → bishop outpost on consecutive turns).
+  if (t.stated && plans.some((p) => p.id === t.stated?.fact.id) && KIND_RANK[top.kind] >= KIND_RANK[t.stated.fact.kind]) return out;
   if (t.lastStatedPly !== null && args.ply - t.lastStatedPly < PLAN_THREAD_HOLD_PLIES) return out;   // a wobble
   // The how-to is taught once a game per plan; a plan restated names its goal.
   const fullBody = top.text.replace(/^the plan from here is to /i, '');

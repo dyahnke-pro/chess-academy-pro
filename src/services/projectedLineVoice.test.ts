@@ -42,7 +42,7 @@ describe('projectedLineVoice — a line played out for the student', () => {
   });
 
   it('nothing is said after the line has made its point (the queen is won)', () => {
-    expect(voice[2]).toMatch(/^You capture the queen/);
+    expect(voice[2]).toMatch(/^You take their queen/);
     expect(voice[3]).toBeNull();
     expect(voice.join(' ')).not.toMatch(/trains on|pressure they have to answer|steps toward safety|marches up/);
   });

@@ -48,7 +48,9 @@ export function wrongMoveReason(fenBefore: string, wrongSan: string, expectedSan
   //    as loose = undefended, `findLoosePieces`; value-aware, pin-aware).
   const loose = findHangingBySee(after.fen()).filter((h) => h.color === mover && h.piece !== 'k').sort((a, b) => b.gain - a.gain)[0];
   if (loose) {
-    return `${cap(you)} leaves your ${PIECE_NAME[loose.piece]} on ${loose.square} hanging — they win material there. Find a move that keeps everything protected.`;
+    return loose.defended
+      ? `${cap(you)} leaves your ${PIECE_NAME[loose.piece]} on ${loose.square} where it loses the exchange — it is guarded, but they win material there anyway. Find a move that keeps everything safe.`
+      : `${cap(you)} leaves your ${PIECE_NAME[loose.piece]} on ${loose.square} hanging — they win material there. Find a move that keeps everything protected.`;
   }
   // 3. A capture that wins material outright for them (their best one-ply grab).
   const grab = after.moves({ verbose: true }).filter((m) => m.captured && m.captured !== 'k')

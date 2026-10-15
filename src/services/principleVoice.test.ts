@@ -196,3 +196,16 @@ describe('ignored-threat with the better move held (Learn) — never "undefined"
     expect(t).toMatch(/the bishop on g4 was already attacked/);
   });
 });
+
+describe('ignored-threat names its threat move once (Learn tape 2026-10-15)', () => {
+  const facts = { piece: 'pawn', square: 'f7', threat: 'Qg8+', line: 'Qg8+ Rd8 Qxf7' };
+  for (const better of ['', 'Rd8']) {
+    it(`better ${better || 'held'}: "queen to g8, check" is not said twice`, () => {
+      for (let ply = 0; ply < 4; ply++) {
+        const a = { id: 'ignored-threat', facts: { ...facts, better }, evidence: { squares: ['f7'], moves: [], pvMoves: [] } } as never;
+        const t = renderFundamentalVerdict([a], { replySan: null, ply, seen: new Set() });
+        expect(t.match(/Qg8\+/g)?.length ?? 0, t).toBe(1);
+      }
+    });
+  }
+});

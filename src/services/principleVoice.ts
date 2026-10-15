@@ -210,7 +210,9 @@ const VERDICT_WITHOUT_BETTER: Partial<Record<FundamentalId, (f: Facts) => string
   // Both shapes, as the full verdict has them (Learn walk 2026-10-13: a plain
   // hanging piece has no `line`, and this said "undefined was already on").
   'ignored-threat': (f) => (f.line && f.threat
-    ? `Their threat first: ${f.threat} was already on — ${f.line}, and the ${f.piece} on ${f.square} goes — and this move doesn't stop it.`
+    // The line opens WITH the threat move — name it once (Learn tape
+    // 2026-10-15: "queen to g8, check was already on — queen to g8, check, …").
+    ? `Their threat came first: ${f.line} was already on, and the ${f.piece} on ${f.square} goes — this move doesn't stop it.`
     : `Their threat first: the ${f.piece} on ${f.square} was already attacked, and this move doesn't deal with it — they take it next.`),
 };
 
@@ -413,7 +415,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       // rook was already attacked".
       if (f.line) {
         const t = [
-          `Their threat first: ${f.threat} was already on — ${f.line}, and the ${f.piece} on ${f.square} goes — and this move doesn't stop it${f.better ? `; ${f.better} does` : ''}.`,
+          `Their threat came first: ${f.line} was already on, and the ${f.piece} on ${f.square} goes — this move doesn't stop it${f.better ? `; ${f.better} does` : ''}.`,
           `Before your own plan, answer theirs: ${f.line} was waiting, it wins the ${f.piece} on ${f.square}, and this move leaves it on${f.better ? ` — ${f.better} takes it away` : ''}.`,
         ];
         return t[v % t.length];
@@ -737,9 +739,15 @@ export function renderFundamentalVerdict(attrs: readonly PrincipleAttribution[],
     // the slogan ("Their move first, always.") and cut the procedure ("answer
     // what their last move threatens"). Turn length is an average now.
     const how = fundamentalHow(a.id, a.facts) ?? null;
-    parts.push(how ? `${fullVerdict(a, opts.ply + i)} ${HOW_STEMS[hows++ % HOW_STEMS.length]} ${how}` : fullVerdict(a, opts.ply + i));
+    parts.push(how ? `${fullVerdict(a, opts.ply + i)} ${HOW_STEMS[hows++ % HOW_STEMS.length]} ${afterColon(how)}` : fullVerdict(a, opts.ply + i));
   });
   return parts.join(' ');
+}
+
+/** The how runs on after a stem's colon, so an ordinary first word is lower
+ *  case ("Here's how: before you move …"); a move ("Nf3 …") is left alone. */
+function afterColon(how: string): string {
+  return /^[A-Z][a-z]/.test(how) && !/^(?:[KQRBN][a-h1-8]?x?[a-h][1-8]|O-O)/.test(how) ? how.charAt(0).toLowerCase() + how.slice(1) : how;
 }
 
 /** The piece the fact names has a guard (a cheaper attacker wins it anyway). */

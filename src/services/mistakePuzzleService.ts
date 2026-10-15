@@ -40,6 +40,7 @@ import type {
   GameSource,
   MoveAnnotation,
 } from '../types';
+import { positionOf } from '../utils/samePosition';
 
 // ─── Game context helpers ──────────────────────────────────────────────────
 
@@ -109,11 +110,11 @@ const BATCH_GAME_LIMIT = 100;
 function moveIntoFen(fens: readonly string[], idx: number): { fenBefore: string; san: string } | null {
   if (idx < 1 || idx >= fens.length) return null;
   const fenBefore = fens[idx - 1];
-  const target = fens[idx].split(' ').slice(0, 4).join(' ');
+  const target = positionOf(fens[idx]);
   try {
     const c = new Chess(fenBefore);
     for (const m of c.moves({ verbose: true })) {
-      if (m.after.split(' ').slice(0, 4).join(' ') === target) return { fenBefore, san: m.san };
+      if (positionOf(m.after) === target) return { fenBefore, san: m.san };
     }
   } catch { /* unreadable board — no previous move */ }
   return null;
@@ -1061,7 +1062,7 @@ export async function getMistakePuzzlesDue(
 /** Position identity for capture dedup — placement+side+castling+ep (no
  *  move counters) + the played SAN. Mirrors weaknessSpine.posKey. */
 function capturePosKey(fen: string, san: string): string {
-  return `${fen.split(' ').slice(0, 4).join(' ')}|${san}`;
+  return `${positionOf(fen)}|${san}`;
 }
 
 export interface CapturePuzzleInput {

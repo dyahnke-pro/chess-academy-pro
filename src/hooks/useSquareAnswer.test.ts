@@ -45,3 +45,22 @@ describe('useSquareAnswer — the thin tap shell', () => {
     expect(result.current.tap('d5')).toBeNull();
   });
 });
+
+// ship-check 2026-10-15: the reset ran in an effect AFTER the render that showed
+// the new question, so a tap in between graded against the old (empty) key and
+// was ignored. A layout effect runs in exactly that window.
+describe('a tap before the reset effect still counts', () => {
+  it('grades against the new question', async () => {
+    const { renderHook, act } = await import('@testing-library/react');
+    const { useLayoutEffect } = await import('react');
+    let grade: unknown = 'unset';
+    const { rerender } = renderHook(({ k }: { k: string[] | null }) => {
+      const a = useSquareAnswer({ key: k as never, mode: 'all', questionKey: k ? 'q1' : 'none' });
+      useLayoutEffect(() => { if (k) grade = a.tap('d5' as never); }, [k]);
+      return a;
+    }, { initialProps: { k: null as string[] | null } });
+    act(() => { rerender({ k: ['d5', 'a8'] }); });
+    // Counted as FOUND on the new key — not a miss against the old empty one.
+    expect((grade as { hits: string[] } | null)?.hits).toEqual(['d5']);
+  });
+});

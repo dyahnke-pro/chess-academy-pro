@@ -5,6 +5,7 @@
 // these two facts; no surface composes that computer itself (B3, 2026-09-22).
 
 import { Chess } from 'chess.js';
+import { positionOf } from '../utils/samePosition';
 
 /** SANs out of a PGN-ish string: move numbers, dots and results stripped. */
 export function sansOfPgn(pgn: string): string[] {
@@ -42,7 +43,7 @@ export function lastMoveOfLine(sans: readonly string[]): LastMoveOfLine | null {
   }
 }
 
-const boardOf = (fen: string): string => fen.split(' ').slice(0, 4).join(' ');
+const boardOf = (fen: string): string => positionOf(fen);
 
 /**
  * The move to hand the composer as `lastMove`, or null.

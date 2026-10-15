@@ -13,13 +13,14 @@
  */
 import type { PositionFactsResult } from './positionFacts';
 import type { SurfacePosture } from './coachDecider';
+import { positionOf } from '../utils/samePosition';
 
 interface Entry { result: PositionFactsResult; posture: SurfacePosture; at: number }
 
 const MAX = 24;
 const cache = new Map<string, Entry>();
 
-const key = (fen: string, student: 'w' | 'b'): string => `${fen.split(' ').slice(0, 4).join(' ')}|${student}`;
+const key = (fen: string, student: 'w' | 'b'): string => `${positionOf(fen)}|${student}`;
 
 export function rememberPositionFacts(fen: string, student: 'w' | 'b', posture: SurfacePosture, result: PositionFactsResult): void {
   const k = key(fen, student);
