@@ -280,11 +280,14 @@ describe('[sac] is judged from the MOVER\'s seat — D-4 (WO-STANDARD-01, 2026-0
 
 describe('D-8 (WO-STANDARD-01, 2026-09-22) — the [eval] facet needs a real shift, and the [loose] facet speaks only the delta', () => {
   const evalFacetsAt = (ply: number, evaluation: number): string[] => {
-    const fens = fensAfter(SICILIAN_IQP);
-    // Bg5 (ply 17): the bishop eyes f6 — a [does] facet, so the eval shift
-    // has a concrete positional reason to attach to.
+    // Bg5 hits a knight on f6 that nothing guards — a [does] facet of real
+    // PRESSURE, so the eval shift has a concrete positional reason to attach
+    // to. (Eyeing a defended knight is a description since 2026-10-14 and
+    // gives the eval no reason.)
+    const pre = '4k3/pp6/5n2/8/8/8/PP6/2B1K3 w - - 0 1';
+    const c = new Chess(pre); c.move('Bg5');
     return computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
-      fenBefore: fens[15], fenAfter: fens[16], san: 'Bg5', ply,
+      fenBefore: pre, fenAfter: c.fen(), san: 'Bg5', ply,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation, preMoveEval: 15, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null,
@@ -650,7 +653,8 @@ describe('an influence line teaches only under real pressure (review audit 2026-
     // 1.e4 c6 2.Nc3 d5: the d5 pawn eyes e4, a pawn guarded by the knight on c3.
     const c = new Chess(); c.move('e4'); c.move('c6'); c.move('Nc3'); const before = c.fen(); c.move('d5');
     const shape = { hitsPiece: false };
-    expect(describeMoveInfluence(before, c.fen(), 'd5', [], shape)).toMatch(/eyes the pawn on e4/);
+    // Not pressure, so not said (David 2026-10-14: only pressure is named).
+    expect(describeMoveInfluence(before, c.fen(), 'd5', [], shape) ?? '').not.toMatch(/eyes the pawn on e4/);
     expect(shape.hitsPiece).toBe(false);
     // 4.Ng5 h6: the h6 pawn eyes the knight on g5 — worth more than the pawn.
     const d = new Chess(); for (const m of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'd6', 'Ng5']) d.move(m); const b2 = d.fen(); d.move('h6');

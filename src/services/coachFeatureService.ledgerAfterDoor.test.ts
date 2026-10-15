@@ -48,7 +48,7 @@ describe('review — the say-once ledgers commit after the door, for spoken fact
     expect(later).not.toContain(ALAPIN);
   });
 
-  it('BLAMES BY STATEMENT: no ledger write inside the candidate loop; the commit reads decision.spoken', () => {
+  it('BLAMES BY STATEMENT: no ledger write inside the candidate loop; the commit reads what spoke', () => {
     const src = readFileSync('src/services/coachFeatureService.ts', 'utf8');
     const loopStart = src.indexOf('const keptRaw: string[] = [];');
     const loopEnd = src.indexOf('const claimedRefrains = new Set<number>();');
@@ -68,8 +68,9 @@ describe('review — the say-once ledgers commit after the door, for spoken fact
     expect(eager).not.toMatch(/lastVerdictWord = /);
     expect(eager).not.toMatch(/lastRaceVerdict = /);
     expect(eager).not.toMatch(/kingCenterTaught = true/);
-    // The commit runs off the door's verdict, after the quiet-ply gate.
-    const commit = src.indexOf('const spokenSet = new Set(decision.spoken);');
+    // The commit runs off what actually SPOKE — the door's verdict after the
+    // turn's length (2026-10-15) — after the quiet-ply gate.
+    const commit = src.indexOf('const spokenSet = new Set(uncappedParts);');
     const quietGate = src.indexOf('if (quietOpeningPly && needHere && !needHere.speak) {');
     expect(commit).toBeGreaterThan(quietGate);
     // The method habit is claimed on a SCRATCH set and committed only if spoken.

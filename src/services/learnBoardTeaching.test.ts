@@ -145,3 +145,12 @@ describe('a hanging piece is warned in rotated words (David 2026-10-14)', () => 
     for (const s of said) expect(s).toMatch(/rook on h8.*nothing/);
   });
 });
+
+describe('every student move gets its own reason — the board teacher as fallback (David 2026-10-14)', () => {
+  it('says what a quiet developing move did, with the move as its subject', async () => {
+    const { boardTeacherPoint } = await import('./learnBoardTeaching');
+    const h = boardTeacherPoint('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', 'd5');
+    expect(h?.lane).toBe('movePoint');
+    expect(h?.text).toMatch(/^d5 /);
+  });
+});

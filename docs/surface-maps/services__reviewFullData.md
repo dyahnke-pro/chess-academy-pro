@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1751 lines · 13 exports · 15 importers · 17 tests · 0 audits**
+**1756 lines · 13 exports · 15 importers · 17 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -55,7 +55,7 @@
 - `src/services/batch2Wiring.test.ts:53`
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
-- `src/services/coachFeatureService.ts:1787`
+- `src/services/coachFeatureService.ts:1817`
 - `src/services/exchangeIdeas.test.ts:207`
 - `src/services/forkTrick.test.ts:60`
 - `src/services/hangingVsUndefended.test.ts:11`
@@ -73,23 +73,23 @@
 - `src/services/reviewFullData.test.ts:226`
 - `src/services/reviewFullData.test.ts:240`
 - `src/services/reviewFullData.test.ts:261`
-- `src/services/reviewFullData.test.ts:286`
-- `src/services/reviewFullData.test.ts:314`
-- `src/services/reviewFullData.test.ts:349`
-- `src/services/reviewFullData.test.ts:371`
-- `src/services/reviewFullData.test.ts:393`
-- `src/services/reviewFullData.test.ts:418`
-- `src/services/reviewFullData.test.ts:435`
-- `src/services/reviewFullData.test.ts:452`
-- `src/services/reviewFullData.test.ts:471`
-- `src/services/reviewFullData.test.ts:487`
-- `src/services/reviewFullData.test.ts:518`
-- `src/services/reviewFullData.test.ts:539`
-- `src/services/reviewFullData.test.ts:549`
-- `src/services/reviewFullData.test.ts:564`
-- `src/services/reviewFullData.test.ts:588`
-- `src/services/reviewFullData.test.ts:611`
-- `src/services/reviewFullData.test.ts:634`
+- `src/services/reviewFullData.test.ts:289`
+- `src/services/reviewFullData.test.ts:317`
+- `src/services/reviewFullData.test.ts:352`
+- `src/services/reviewFullData.test.ts:374`
+- `src/services/reviewFullData.test.ts:396`
+- `src/services/reviewFullData.test.ts:421`
+- `src/services/reviewFullData.test.ts:438`
+- `src/services/reviewFullData.test.ts:455`
+- `src/services/reviewFullData.test.ts:474`
+- `src/services/reviewFullData.test.ts:490`
+- `src/services/reviewFullData.test.ts:521`
+- `src/services/reviewFullData.test.ts:542`
+- `src/services/reviewFullData.test.ts:552`
+- `src/services/reviewFullData.test.ts:567`
+- `src/services/reviewFullData.test.ts:591`
+- `src/services/reviewFullData.test.ts:614`
+- `src/services/reviewFullData.test.ts:637`
 - `src/services/reviewWalkCT.test.ts:49`
 - `src/services/reviewWalkCT.test.ts:69`
 - `src/services/reviewWalkCT.test.ts:86`
@@ -100,7 +100,7 @@
 - `src/test/teach02Wired.test.ts:66`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:5218`
+- `src/services/coachFeatureService.ts:5256`
 - `src/services/reviewFullData.test.ts:204`
 - `src/services/reviewFullData.test.ts:207`
 - `src/services/reviewFullData.test.ts:215`
@@ -127,16 +127,16 @@
 - `src/services/reviewVerdictSentence.test.ts:15`
 
 ### `describeMoveInfluence` (function) — 5 call sites
-- `src/services/reviewFullData.test.ts:653`
-- `src/services/reviewFullData.test.ts:658`
-- `src/services/reviewFullData.test.ts:668`
+- `src/services/reviewFullData.test.ts:657`
+- `src/services/reviewFullData.test.ts:662`
+- `src/services/reviewFullData.test.ts:672`
 - `src/services/reviewNarrationFidelity.test.ts:50`
 - `src/services/reviewNarrationFidelity.test.ts:62`
 
 ### `studentAnswer` (function) — 5 call sites
-- `src/services/reviewFullData.test.ts:504`
-- `src/services/reviewFullData.test.ts:509`
-- `src/services/reviewFullData.test.ts:510`
+- `src/services/reviewFullData.test.ts:507`
+- `src/services/reviewFullData.test.ts:512`
+- `src/services/reviewFullData.test.ts:513`
 - `src/services/slipAnswer.test.ts:16`
 - `src/services/slipAnswer.test.ts:17`
 

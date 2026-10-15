@@ -38,7 +38,7 @@ import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, 
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, intentRule, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { OPENING_PLIES, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { OPENING_PLIES, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -8419,7 +8419,7 @@ export function CoachTeachPage(): JSX.Element {
             : null;
           // A pin says what it holds (Learn audit 2026-10-14).
           if (tacticLine && t.type === 'pin') {
-            const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b', 'student');
+            const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b', 'student', Number(args.fenAfterReply.split(' ')[5] ?? 0));
             if (holds) tacticLine = `${tacticLine} ${holds}`;
           }
           if (word) { pendingMotif = { type: t.type, instance, moveNo }; tacticTailType = t.type; }
@@ -8513,7 +8513,7 @@ export function CoachTeachPage(): JSX.Element {
         threatLine = `Watch out — ${seatPieceReferences(`${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}`, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b')}.${conceptTail(t.type)}`;
         // A pin on you says what it holds (Learn audit 2026-10-14).
         if (t.type === 'pin') {
-          const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b', 'opponent');
+          const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b', 'opponent', Number(args.fenAfterReply.split(' ')[5] ?? 0));
           if (holds) threatLine = `${threatLine} ${holds}`;
         }
         // THE DANGER LEVEL, computed (`openThreatLine`): how much it costs if ignored, said first.
@@ -11247,6 +11247,14 @@ export function CoachTeachPage(): JSX.Element {
                         // A capture's point and the trade verdict are one claim about one square.
                         queueSpokenHint(fenAfterReply, point, 'movePoint', NO_PROOF.description, [], move.san.includes('x') ? [`capture:${move.to}:${move.history.length}`] : [`point:${move.history.length}`]);
                         captureEvent('coach_move_point_named', { surface: 'coach-teach' });
+                      }
+                      // EVERY STUDENT MOVE GETS ITS OWN REASON (David 2026-10-14):
+                      // no sharper computer had one, so the board teacher says
+                      // what the move did. The door ranks it below every sharper
+                      // own-move reason, so it speaks only when they are silent.
+                      if (!gambitLine && !point) {
+                        const said = boardTeacherPoint(fenBefore, move.san);
+                        if (said) queueSpokenHint(fenAfterReply, said.text, said.lane, said.proof, said.squares, said.claims, fenBefore);
                       }
                       // WHY THIS MOVE HAD TO COME FIRST (census #1: "the key move
                       // order — you take on d4 first"). Play the student's next move

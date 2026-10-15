@@ -142,7 +142,7 @@ const PIN_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', 
  * else, moving it opens the piece behind to the pinner. Null when the squares
  * do not read as a pin on this board.
  */
-export function pinConsequence(fen: string, squares: readonly string[], student: 'w' | 'b', pinner: 'student' | 'opponent'): string | null {
+export function pinConsequence(fen: string, squares: readonly string[], student: 'w' | 'b', pinner: 'student' | 'opponent', rot: number): string | null {
   let c: Chess;
   try { c = new Chess(fen); } catch { return null; }
   const pinnerColor: 'w' | 'b' = pinner === 'student' ? student : (student === 'w' ? 'b' : 'w');
@@ -158,7 +158,14 @@ export function pinConsequence(fen: string, squares: readonly string[], student:
   const heldWhose = pinner === 'student' ? 'their' : 'your';
   const pinnerWhose = pinner === 'student' ? 'your' : 'their';
   if (behind.p?.type === 'k') return `${heldWhose === 'their' ? 'Their' : 'Your'} ${pinnedNoun} cannot move at all — the king is behind it.`;
-  return `If ${heldWhose} ${pinnedNoun} moves, ${heldWhose} ${behindNoun} on ${behind.sq} is open to ${pinnerWhose} ${PIN_NOUN[from.p?.type ?? ''] ?? 'piece'}.`;
+  const by = PIN_NOUN[from.p?.type ?? ''] ?? 'piece';
+  // ROTATED by move (David 2026-10-14: no reason formula more than twice a game).
+  const stems = [
+    `If ${heldWhose} ${pinnedNoun} moves, ${heldWhose} ${behindNoun} on ${behind.sq} is open to ${pinnerWhose} ${by}.`,
+    `The ${pinnedNoun} is stuck guarding the ${behindNoun} on ${behind.sq} — step aside and ${pinnerWhose} ${by} takes it.`,
+    `Moving the ${pinnedNoun} would hand ${pinnerWhose} ${by} the ${behindNoun} on ${behind.sq}.`,
+  ];
+  return stems[((rot % stems.length) + stems.length) % stems.length];
 }
 
 /** How close a landing square has to be to a king to count as "coming at it".

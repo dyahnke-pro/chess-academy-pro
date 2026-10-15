@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1672 lines · 28 exports · 18 importers · 14 tests · 0 audits**
+**1679 lines · 28 exports · 18 importers · 14 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -85,13 +85,14 @@
 - `src/services/seatedTacticLine.test.ts:19`
 - `src/services/seatedTacticLine.test.ts:23`
 
-### `pinConsequence` (function) — 6 call sites
+### `pinConsequence` (function) — 7 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8422`
 - `src/components/Coach/CoachTeachPage.tsx:8516`
 - `src/services/pinConsequence.test.ts:8`
 - `src/services/pinConsequence.test.ts:12`
 - `src/services/pinConsequence.test.ts:15`
 - `src/services/pinConsequence.test.ts:20`
+- `src/services/pinConsequence.test.ts:24`
 
 ### `PLAN_HORIZON` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -236,8 +237,8 @@
 - `src/services/walkOct1Learn.test.ts:69`
 
 ### `gameArcs` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:1278`
-- `src/services/learnBoardTeaching.ts:939`
+- `src/services/coachFeatureService.ts:1308`
+- `src/services/learnBoardTeaching.ts:941`
 - `src/services/walkOct1Learn.test.ts:115`
 
 ### `aimsOf` (re-export) — 8 call sites
