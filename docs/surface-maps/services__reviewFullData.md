@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1810 lines · 13 exports · 15 importers · 17 tests · 0 audits**
+**1814 lines · 13 exports · 15 importers · 17 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -51,7 +51,7 @@
 ### `EVAL_FACET_MIN_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 46 call sites
+### `computeMoveFacets` (function) — 47 call sites
 - `src/services/batch2Wiring.test.ts:53`
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
@@ -90,6 +90,7 @@
 - `src/services/reviewFullData.test.ts:591`
 - `src/services/reviewFullData.test.ts:614`
 - `src/services/reviewFullData.test.ts:637`
+- `src/services/reviewFullData.test.ts:683`
 - `src/services/reviewWalkCT.test.ts:49`
 - `src/services/reviewWalkCT.test.ts:69`
 - `src/services/reviewWalkCT.test.ts:86`

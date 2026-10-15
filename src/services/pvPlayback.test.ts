@@ -417,6 +417,12 @@ describe('a ply-fact list reads as a sentence (review audit 2026-10-14: "capture
     const { plyFactsClause } = await import('./pvPlayback');
     // The queen takes a loose knight with check: two facts on one move.
     const out = plyFactsClause('4k3/8/8/4n3/8/8/4Q3/4K3 w - - 0 1', 'Qxe5+');
-    expect(out).toBe('captures the knight, gives check and wins material');
+    expect(out).toBe('wins the knight on e5 and gives check');
+  });
+  it('a winning capture is said once, with whose piece and where (review tape 2026-10-15)', async () => {
+    const { plyFactsClause } = await import('./pvPlayback');
+    const out = plyFactsClause('4k3/8/8/4n3/8/8/4Q3/4K3 w - - 0 1', 'Qxe5+', undefined, 'your') ?? '';
+    expect(out).toMatch(/^wins your knight on e5/);
+    expect(out).not.toMatch(/wins material/);
   });
 });

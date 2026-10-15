@@ -682,7 +682,14 @@ export async function computePvLine(
  *  ("we don't need to call out how many points were gained … Sounds bad") — a
  *  docstring that shows output the function cannot produce teaches the next
  *  reader a contract that does not exist. */
-export function plyFactsClause(fenBefore: string, san: string, prev?: PrevCaptureContext): string | null {
+export function plyFactsClause(
+  fenBefore: string,
+  san: string,
+  prev?: PrevCaptureContext,
+  /** Whose piece a capture takes, from the listener's seat — 'your' when the
+   *  opponent captures, 'their' when the student does. Absent → "the". */
+  victimOwner?: 'your' | 'their',
+): string | null {
   try {
     const c = new Chess(fenBefore);
     const mv = c.move(san);
@@ -691,7 +698,12 @@ export function plyFactsClause(fenBefore: string, san: string, prev?: PrevCaptur
       captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion,
     }, prev);
     const parts: string[] = [];
-    if (f.captured) parts.push(`captures the ${f.captured}`);
+    // ONE FACT, ONCE (review tape 2026-10-15: "Your opponent captures the
+    // knight and wins material"): a capture that comes out ahead IS the
+    // material won — name the piece and its square, and say "wins" instead of
+    // a second clause that restates it.
+    const wonByCapture = !!f.captured && f.materialGained >= 1;
+    if (f.captured) parts.push(`${wonByCapture ? 'wins' : 'captures'} ${victimOwner ?? 'the'} ${f.captured} on ${mv.to}`);
     if (f.isMate) parts.push('delivers checkmate');
     else if (f.isCheck) parts.push('gives check');
     if (f.promotion) parts.push(`promotes to a ${f.promotion}`);
@@ -699,11 +711,10 @@ export function plyFactsClause(fenBefore: string, san: string, prev?: PrevCaptur
     if (f.outpostGained) parts.push(`plants an outpost on ${f.outpostGained}, where no enemy pawn can chase it`);
     if (f.newPassedPawns.length > 0) parts.push(`creates a passed pawn on ${f.newPassedPawns.join(', ')}`);
     if (f.passedPawnsHanded.length > 0) parts.push(`leaves the other side a passed pawn on ${f.passedPawnsHanded.join(', ')}`);
-  if (f.passedPawnsHanded.length > 0) parts.push(`leaves the other side a passed pawn on ${f.passedPawnsHanded.join(', ')}`);
     if (f.newOpenFiles.length > 0) parts.push(`opens ${fileList(f.newOpenFiles)}`);
     if (f.shieldLost > 0) parts.push(`strips ${f.shieldLost} pawn${f.shieldLost > 1 ? 's' : ''} from the king's cover`);
     // "wins material", never the point count (David 2026-07-24 — sounds bad).
-    if (f.materialGained >= 1) parts.push('wins material');
+    if (f.materialGained >= 1 && !wonByCapture) parts.push('wins material');
     return parts.length === 0 ? null : andList(parts);
   } catch {
     return null;

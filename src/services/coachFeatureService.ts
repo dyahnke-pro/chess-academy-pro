@@ -3286,7 +3286,7 @@ export function buildReviewSegments(
       && playerColor !== undefined
       && (m.classification === null || m.classification === 'book' || m.classification === 'good' || m.classification === 'great' || m.classification === 'brilliant')
     ) {
-      const clause = plyFactsClause(fenPair.fenBefore, m.san, prevCap);
+      const clause = plyFactsClause(fenPair.fenBefore, m.san, prevCap, 'your');
       if (clause) {
         narration = `Your opponent ${clause}.`;
         narrationSource = 'opponent';
