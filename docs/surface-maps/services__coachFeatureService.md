@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5348 lines · 31 exports · 48 importers · 48 tests · 4 audits**
+**5348 lines · 31 exports · 48 importers · 49 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -137,7 +137,7 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 74 call sites
+### `buildReviewSegments` (function) — 75 call sites
 - `src/components/Coach/CoachGameReview.tsx:1828`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
@@ -210,6 +210,7 @@
 - `src/services/reviewNeedGate.test.ts:81`
 - `src/services/reviewNeedGate.test.ts:88`
 - `src/services/reviewNeedGate.test.ts:94`
+- `src/services/reviewTheirHabit.test.ts:12`
 - `src/test/computedOrderWired.test.ts:59`
 - `src/test/everySurfaceSpeaks.test.ts:94`
 
@@ -261,8 +262,8 @@
 - `src/services/coachFeatureService.test.ts:624`
 
 ### `pendingRecapture` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8085`
-- `src/components/Coach/CoachTeachPage.tsx:8174`
+- `src/components/Coach/CoachTeachPage.tsx:8084`
+- `src/components/Coach/CoachTeachPage.tsx:8173`
 - `src/services/coachFeatureService.test.ts:906`
 - `src/services/coachFeatureService.test.ts:907`
 - `src/utils/justCaptured.test.ts:20`
@@ -317,7 +318,7 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:607`
+- `src/services/reviewFullData.ts:608`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites
@@ -374,6 +375,7 @@
 - `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRefuted.test.ts`
 - `src/services/reviewRegister.test.ts`
+- `src/services/reviewTheirHabit.test.ts`
 - `src/services/reviewWalk1500.test.ts`
 - `src/services/reviewWalk900.test.ts`
 - `src/services/whyItFailed.test.ts`

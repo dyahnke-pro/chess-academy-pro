@@ -16,6 +16,10 @@ import { Chess } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { DEFAULT_INTENT, moveIntent, type IntentReads, type MoveIntent } from './moveIntent';
 
+// The rest of the purpose vocabulary a surface needs, through the same door:
+// the null move a pass is read on, and the rule behind a prepared move.
+export { intentRule, nullMoveFen } from './moveIntent';
+
 /** The default read first; when it finds nothing, the move's follow-up in the
  *  engine's own line, and only a CONCRETE stopped threat (mate, check,
  *  material). */

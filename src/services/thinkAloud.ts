@@ -22,6 +22,7 @@ import { threatStoppedBy, playItAnyway } from './opponentMovePurpose';
 import { knownAttack } from './attackLibrary';
 import { tempoCount } from './tempoCount';
 import { homeMinorCount } from './development';
+import { legalSeeGainFor } from './positionReadingService';
 import type { FactStakes } from './factStakes';
 import type { GamePromise } from './learnBoardTeaching';
 import { speedRunReads } from './speedRunReads';
@@ -177,7 +178,7 @@ export function notYet(fen: string, best: Candidate): { text: string; capture: s
   return null;
 }
 
-export interface Habit { kind: 'tempo' | 'undeveloped'; text: string }
+export interface Habit { kind: 'tempo' | 'undeveloped' | 'loose' | 'king-pawns'; text: string }
 
 /**
  * WHAT THEY KEEP DOING (his "he keeps moving the same piece in the opening —
@@ -188,6 +189,18 @@ export interface Habit { kind: 'tempo' | 'undeveloped'; text: string }
  */
 export function opponentHabits(sans: readonly string[], opp: 'w' | 'b'): Habit[] {
   const out: Habit[] = [];
+  // THE SAME MISTAKE TWICE IS A HABIT, AND A HABIT IS A PLAN AGAINST THEM
+  // (step 5 of the teaching order: "what the opponent keeps doing wrong —
+  // closing on the habit that finds it next time"; Learn audit 2026-10-15
+  // never heard it). Both read off the moves alone, so every surface that
+  // holds the game speaks them.
+  const reads = habitReads(sans, opp);
+  if (reads.looseMoves >= 2) {
+    out.push({ kind: 'loose', text: `That's ${num(reads.looseMoves)} times now they've left a piece where you can win it — they don't check what hangs. After every move of theirs, look for what they left loose first.` });
+  }
+  if (reads.kingPawnPushes >= 2) {
+    out.push({ kind: 'king-pawns', text: `They keep pushing the pawns in front of their own king — ${num(reads.kingPawnPushes)} so far, and every push leaves a hole beside it. Aim your pieces at those squares.` });
+  }
   const t = tempoCount(sans, opp === 'w' ? 'b' : 'w');
   if (t) out.push({ kind: 'tempo', text: t.text });
   const c = new Chess();
@@ -195,6 +208,34 @@ export function opponentHabits(sans: readonly string[], opp: 'w' | 'b'): Habit[]
   const home = homeMinorCount(c, opp);
   if (Math.min(sans.length, 24) >= 16 && home >= 2) out.push({ kind: 'undeveloped', text: `They still have ${num(home)} minor pieces at home — the more they wait, the more you attack.` });
   return out;
+}
+
+/** Counted off the moves: how many of their moves left a piece of theirs
+ *  winnable by exchange (a capture in progress is a trade, not a habit), and
+ *  how many pawn pushes they made in front of their own castled king. */
+export function habitReads(sans: readonly string[], opp: 'w' | 'b'): { looseMoves: number; kingPawnPushes: number } {
+  const me: 'w' | 'b' = opp === 'w' ? 'b' : 'w';
+  let looseMoves = 0;
+  let kingPawnPushes = 0;
+  const c = new Chess();
+  for (const san of sans) {
+    let m;
+    try { m = c.move(san); } catch { break; }
+    if (m.color !== opp) continue;
+    if (!m.captured && !c.inCheck()) {
+      const fen = c.fen();
+      const left = c.board().flat().some((x) => !!x && x.color === opp && x.type !== 'k' && x.type !== 'p'
+        && legalSeeGainFor(fen, x.square as Square, me) >= 2);
+      if (left) looseMoves += 1;
+    }
+    if (m.piece === 'p' && !m.captured) {
+      const king = c.board().flat().find((x) => x?.type === 'k' && x.color === opp);
+      const homeRank = opp === 'w' ? '1' : '8';
+      const castled = !!king && king.square[1] === homeRank && 'abcgh'.includes(king.square[0]);
+      if (castled && king && Math.abs(m.from.charCodeAt(0) - king.square.charCodeAt(0)) <= 1) kingPawnPushes += 1;
+    }
+  }
+  return { looseMoves, kingPawnPushes };
 }
 
 export interface DepthClause {

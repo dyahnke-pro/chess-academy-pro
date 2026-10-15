@@ -11,6 +11,7 @@
  * uncapped review speaks these verbatim (un-warmed) so no fact is compressed away
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
+import { opponentHabits } from './thinkAloud';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan } from './material';
 import { settledExchange, moverLineProof } from './exchangeLedger';
@@ -1303,6 +1304,21 @@ export function computeMoveFacets(
     facets.push(f);
     outIdentity?.set(f, `point:${ply}`);
     recSquares(f, ctx.teaching.intent.squares);
+  }
+
+  // ── 7c''. WHAT THEY KEEP DOING — the same mistake twice, said on the move
+  // that made it a habit, with the plan against it. The one habit computer
+  // Learn reads (`opponentHabits`); said once a game per habit (identity).
+  if (!isStudent && studentColorWB) {
+    const opp: Color = studentColorWB === 'w' ? 'b' : 'w';
+    const now = opponentHabits(ctx.allSans.slice(0, ply), opp);
+    const before = new Set(opponentHabits(ctx.allSans.slice(0, ply - 1), opp).map((h) => h.kind));
+    const fresh = now.find((h) => !before.has(h.kind));
+    if (fresh) {
+      const f = `[their-habit] ${fresh.text}`;
+      facets.push(f);
+      outIdentity?.set(f, `their-habit:${fresh.kind}`);
+    }
   }
 
   // ── 7d. WHY DID THEY PLAY THAT? (S3) — on the opponent's move, the threat of

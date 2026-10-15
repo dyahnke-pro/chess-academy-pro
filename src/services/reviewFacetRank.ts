@@ -31,7 +31,7 @@ export type FacetTag =
   | 'tactic' | 'threat' | 'loose' | 'count' | 'royal' | 'trapped'
   | 'sac' | 'sac-why' | 'forced' | 'king' | 'rook7' | 'passer'
   | 'badbishop' | 'worst' | 'minority' | 'complex' | 'structure'
-  | 'verdict' | 'opening' | 'opp-dev' | 'opp-target' | 'endgame'
+  | 'verdict' | 'opening' | 'opp-dev' | 'their-habit' | 'opp-target' | 'endgame'
   | 'plan-now' | 'plan-race' | 'plan-arc' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
   | 'note' | 'method' | 'refuted' | 'bluff' | 'technique' | 'contrast' | 'timing' | 'praise'
   | 'rule' | 'stopped' | 'stock' | 'trade' | 'point' | 'their-cost'
@@ -135,6 +135,9 @@ export const FACET_RANK: Record<FacetTag, number> = {
   // Beside the purpose of their move, which says what it was FOR.
   'their-cost': 27,
   'opp-target': 26,
+  // What THEY keep doing wrong — the same mistake twice (`opponentHabits`),
+  // the plan against them. Just above their development.
+  'their-habit': 25,
   'opp-dev': 24,
   // READING THEIR MOVE (batch 2, `opponentMoveReads`) — the quiet threat, the
   // one condition their idea needs, an obligation lifted, the grab that was
@@ -270,6 +273,7 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   verdict: 'describe',
   'opp-target': 'describe',
   'opp-dev': 'describe',
+  'their-habit': 'teach',
   'plan-line': 'describe', // the long engine line — speaks only when it proves a point
   consequence: 'describe',
 };
