@@ -123,7 +123,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:188`
 - `src/services/exchangeIdeas.test.ts:192`
 - `src/services/positionFacts.ts:1136`
-- `src/services/reviewFullData.ts:944`
+- `src/services/reviewFullData.ts:946`
 
 ## Tests
 

@@ -15,6 +15,8 @@ import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan } from './material';
 import { settledExchange, moverLineProof } from './exchangeLedger';
 import { threatProof } from './threatProof';
+import { openingIdentityLine, planFor } from './openingIdentity';
+import { mastersPlanLine } from './mastersPlanRead';
 import { inFluxAfter } from './boardState';
 import { readTrade } from './tradeQuality';
 import { readTiming, timingClause } from './moveTiming';
@@ -1459,7 +1461,18 @@ export function computeMoveFacets(
     name && name.includes(':') ? name.split(',')[0].trim() : null;
   const named = variationOf(detectOpening(ctx.allSans.slice(0, ply))?.name ?? null);
   const settled = settledVariation(ctx.allSans, variationOf);
-  if (named && named === settled) facets.push(`[opening] The line so far is the ${named}.`);
+  // …WITH WHAT IT IS (review audit 2026-10-14: the bare name was the walk's
+  // most common line with no reason). The identity computer says what the
+  // opening provokes, aims for or costs, from the master database — the same
+  // paragraph Learn and the theory lecture speak; absent facts stay silent.
+  if (named && named === settled) {
+    // What it IS, else what it is FOR: the masters' plan from it (the Alapin's
+    // identity is empty — c3 provokes nothing — but its plan is d4).
+    const id = studentColorWB
+      ? openingIdentityLine(named, studentColorWB, 'seat')?.text ?? mastersPlanLine(planFor(named), studentColorWB)?.text ?? null
+      : null;
+    facets.push(`[opening] The line so far is the ${named}.${id ? ` ${id}` : ''}`);
+  }
 
   // ── 11. OPPONENT READ — what the opponent's move targets + their dev lag ──
   if (!isStudent && studentColorWB) {
