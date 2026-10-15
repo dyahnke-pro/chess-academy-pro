@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**216 lines · 11 exports · 8 importers · 5 tests · 1 audits**
+**218 lines · 11 exports · 8 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4085) — names `coachDecisionEvents`
-- **The standard post-deploy ritual** (CLAUDE.md:6298) — names `coachDecisionEvents`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4088) — names `coachDecisionEvents`
+- **The standard post-deploy ritual** (CLAUDE.md:6301) — names `coachDecisionEvents`
 
 ## Who calls in
 
@@ -67,7 +67,7 @@
 - `src/services/learnTurnDoor.test.ts:552`
 
 ### `emitLearnTurn` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:647`
+- `src/services/learnTurnDoor.ts:629`
 
 ## Tests
 
