@@ -73,10 +73,10 @@
 - `src/services/reviewMoveBriefing.ts:263`
 - `src/services/tacticVocabulary.ts:95`
 - `src/services/teachingSelector.ts:367`
-- `src/services/turningPoints.ts:167`
-- `src/services/turningPoints.ts:169`
+- `src/services/turningPoints.ts:170`
 - `src/services/turningPoints.ts:172`
-- `src/services/turningPoints.ts:187`
+- `src/services/turningPoints.ts:175`
+- `src/services/turningPoints.ts:195`
 
 ### `seatedTacticLine` (function) — 5 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8415`

@@ -146,7 +146,7 @@
 - `src/services/drillReasons.test.ts:56`
 - `src/services/drillReasons.test.ts:57`
 - `src/services/drillReasons.test.ts:61`
-- `src/services/drillReasons.ts:74`
+- `src/services/drillReasons.ts:76`
 
 ### `judgeAlternative` (re-export) — 9 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2939`
@@ -157,7 +157,7 @@
 - `src/services/drillReasons.test.ts:80`
 - `src/services/drillReasons.test.ts:83`
 - `src/services/drillReasons.test.ts:84`
-- `src/services/drillReasons.ts:123`
+- `src/services/drillReasons.ts:125`
 
 ### `wrongMoveReason` (re-export) — 6 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2982`

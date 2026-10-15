@@ -173,7 +173,7 @@
 - `src/services/computedVoiceGrounding.test.ts:85`
 
 ### `assembleThreatAnswer` (function) — 7 call sites
-- `src/coach/chatTurnAnswers.ts:258`
+- `src/coach/chatTurnAnswers.ts:259`
 - `src/coach/dispatchCoachTurn.ts:554`
 - `src/coach/handWalk1009.test.ts:320`
 - `src/services/groundedAnswer.threatTake.test.ts:8`
@@ -394,8 +394,8 @@
 - `src/services/coachFeatureService.test.ts:69`
 - `src/services/coachFeatureService.test.ts:83`
 - `src/services/coachFeatureService.test.ts:90`
-- `src/services/coachFeatureService.ts:2527`
-- `src/services/coachFeatureService.ts:2538`
+- `src/services/coachFeatureService.ts:2547`
+- `src/services/coachFeatureService.ts:2558`
 - `src/services/coachMoveCommentary.ts:221`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/explainBestMoveLines.test.ts:14`
@@ -411,12 +411,12 @@
 - `src/services/whyBestMove.ts:107`
 
 ### `captureHasCounterTactic` (function) — 2 call sites
-- `src/services/inaccuracyCall.ts:964`
+- `src/services/inaccuracyCall.ts:965`
 - `src/services/reviewTeachingPoints.ts:104`
 
 ### `describeMoveGeometry` (function) — 21 call sites
-- `src/coach/chatTurnAnswers.ts:631`
-- `src/components/Puzzles/PuzzleBoard.tsx:243`
+- `src/coach/chatTurnAnswers.ts:632`
+- `src/components/Puzzles/PuzzleBoard.tsx:246`
 - `src/components/Tactics/TacticSetupBoard.tsx:154`
 - `src/hooks/useHintSystem.ts:357`
 - `src/services/computedVoiceGrounding.test.ts:53`
@@ -441,14 +441,14 @@
 - `src/services/deliberation.ts:451`
 
 ### `toObserverSeat` (function) — 5 call sites
-- `src/coach/chatTurnAnswers.ts:632`
+- `src/coach/chatTurnAnswers.ts:633`
 - `src/coach/handWalk1009.test.ts:173`
 - `src/coach/handWalk1009.test.ts:175`
 - `src/services/coachApi.ts:5747`
-- `src/services/inaccuracyCall.ts:895`
+- `src/services/inaccuracyCall.ts:896`
 
 ### `describeMoveMerit` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1008`
+- `src/services/coachFeatureService.ts:1010`
 - `src/services/keySquares.test.ts:81`
 - `src/services/keySquares.test.ts:90`
 - `src/services/keySquares.test.ts:94`
@@ -461,7 +461,7 @@
 - `src/services/brilliancy.ts:130`
 - `src/services/coachFeatureService.test.ts:99`
 - `src/services/coachFeatureService.test.ts:105`
-- `src/services/coachFeatureService.ts:1008`
+- `src/services/coachFeatureService.ts:1010`
 
 ### `MovePurpose` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -506,7 +506,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `explainMoveOrder` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:872`
+- `src/services/coachFeatureService.ts:874`
 - `src/services/groundedAnswer.test.ts:1071`
 - `src/services/groundedAnswer.test.ts:1079`
 - `src/services/groundedAnswer.test.ts:1086`
@@ -1165,7 +1165,7 @@
 - `src/services/bluffDetector.ts:73`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/captureThreatAnswerable.test.ts:29`
-- `src/services/coachFeatureService.ts:2858`
+- `src/services/coachFeatureService.ts:2878`
 - `src/services/engineDeltaLines.ts:53`
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
@@ -1186,7 +1186,7 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2779`
+- `src/services/coachFeatureService.ts:2799`
 - `src/services/reviewNarrationFidelity.test.ts:109`
 - `src/services/reviewNarrationFidelity.test.ts:121`
 - `src/services/reviewNarrationFidelity.test.ts:129`
@@ -1202,7 +1202,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:2878`
+- `src/services/coachFeatureService.ts:2898`
 - `src/services/reviewNarrationFidelity.test.ts:179`
 
 ### `ComparedMove` (interface) — 0 call sites
@@ -1236,11 +1236,11 @@
 
 ### `seatPieceReferences` (re-export) — 34 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8510`
-- `src/services/coachFeatureService.ts:4088`
-- `src/services/coachFeatureService.ts:4139`
-- `src/services/coachFeatureService.ts:5162`
+- `src/services/coachFeatureService.ts:4108`
+- `src/services/coachFeatureService.ts:4159`
+- `src/services/coachFeatureService.ts:5182`
 - `src/services/liveTacticsContext.ts:450`
-- `src/services/lookaheadPlan.ts:129`
+- `src/services/lookaheadPlan.ts:130`
 - `src/services/reviewBoardAwareness.test.ts:47`
 - `src/services/reviewBoardAwareness.test.ts:51`
 - `src/services/reviewBoardAwareness.test.ts:55`

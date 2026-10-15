@@ -3654,7 +3654,7 @@ export function assembleMethodAnswer(opts: {
   const RUN: Partial<Record<ThinkingStep, () => string>> = {
     // Am I safe? — what of mine can be won right now (SEE).
     'am-i-safe': () => (hanging.length > 0
-      ? `${andList(hanging.map((h) => `your ${REVIEW_PIECE_NAME[h.piece]} on ${h.square}`))} ${hanging.length > 1 ? 'are' : 'is'} hanging right now — that has to be answered before anything else.`
+      ? `${andList(hanging.map((h) => `your ${REVIEW_PIECE_NAME[h.piece]} on ${h.square}${h.defended ? ' (guarded, but it loses the exchange)' : ''}`))} ${hanging.length > 1 ? 'are' : 'is'} ${hanging.every((h) => h.defended) ? 'losing material' : 'hanging'} right now — that has to be answered before anything else.`
       : `nothing of yours can be won right now, so their last move was about position, not material — ask what it prepares.`),
     // My forcing moves (only meaningful on the student's move).
     'forcing-moves': () => {

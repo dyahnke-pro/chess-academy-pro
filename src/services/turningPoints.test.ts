@@ -60,3 +60,27 @@ describe('one reason per move (unity U3, 52-error walk #20: the reveal and the v
     expect(turningReveal(tp!, false)).toContain(`The move was Nxf1 — ${verdictReason}.`);
   });
 });
+
+describe('a GUARDED piece that loses the exchange is never "left hanging" (task #8)', () => {
+  // Nd5 lands on a square the c4-pawn guards and the e6-pawn attacks: it loses
+  // the exchange (a knight for a pawn) but nothing about it is hanging.
+  const seg = {
+    ply: 1, san: 'Nd5', fenBefore: '4k3/8/4p3/8/2P5/2N5/8/4K3 w - - 0 1', classification: 'mistake',
+    evalBefore: 0, evalAfter: -200, bestMoveUci: null, bestMoveSan: null, playerColor: 'white' as const,
+  };
+  it('the cause carries guarded, and the line counts instead of saying "hanging"', async () => {
+    const { turningCause, causeLine, turningQuestion } = await import('./turningPoints');
+    const cause = turningCause(seg, null);
+    expect(cause).toMatchObject({ kind: 'hung', piece: 'n', guarded: true });
+    const line = causeLine(cause!, 1);
+    expect(line).not.toMatch(/hanging|still defended/);
+    expect(line).toMatch(/loses material in the exchange/);
+    expect(turningQuestion(cause)).not.toMatch(/hanging/);
+  });
+  it('an UNGUARDED piece is still left hanging (negative control)', async () => {
+    const { turningCause, causeLine } = await import('./turningPoints');
+    const cause = turningCause({ ...seg, fenBefore: '4k3/8/4p3/8/8/2N5/8/4K3 w - - 0 1' }, null);
+    expect(cause?.guarded).toBeUndefined();
+    expect(causeLine(cause!, 1)).toMatch(/left your knight hanging/);
+  });
+});

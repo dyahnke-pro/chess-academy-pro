@@ -372,6 +372,10 @@ export interface HangingPiece {
   color: Color;
   /** SEE material the opponent wins by capturing here (≥ 1). */
   gain: number;
+  /** Its own side guards it: it loses the EXCHANGE to a cheaper attacker, it is
+   *  not left hanging. Every sentence about it picks its word from this, never
+   *  calls a defended piece "hanging" or "undefended". */
+  defended: boolean;
 }
 
 /**
@@ -411,7 +415,7 @@ export function findHangingBySee(fen: string): HangingPiece[] {
       // scanning only the attacked ones).
       if (!chess.isAttacked(cell.square, enemy)) continue;
       const gain = legalSeeGainFor(fen, cell.square, enemy);
-      if (gain > 0) out.push({ square: cell.square, piece: cell.type, color: cell.color, gain });
+      if (gain > 0) out.push({ square: cell.square, piece: cell.type, color: cell.color, gain, defended: chess.isAttacked(cell.square, cell.color) });
     }
   }
   return out.sort((a, b) => b.gain - a.gain);
