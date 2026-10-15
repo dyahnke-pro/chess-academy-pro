@@ -209,3 +209,12 @@ describe('the best square was the move played (Learn walk 2026-10-14)', () => {
     expect(text).toMatch(/a4 was the better move, and moving it costs about two points\./);
   });
 });
+
+describe('a long refutation is said as its shape (Learn audit 2026-10-15: an 87-word answer)', () => {
+  it('more than three moves → the first move and the result, never the whole line', async () => {
+    const { refutationOf } = await import('./pieceOptions');
+    const r = refutationOf('3rk3/8/5b2/8/3q4/8/1B6/3R2K1 w - - 0 1', ['Rxd4', 'Bxd4', 'Bxd4', 'Rxd4'], 'w', 'b');
+    expect(r).toMatch(/^Then Rxd4 and the moves that follow — /);
+    expect(r).not.toMatch(/Bxd4/);
+  });
+});

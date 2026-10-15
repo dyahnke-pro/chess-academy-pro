@@ -61,6 +61,8 @@ import { countMethod } from './countMethod';
 import { splitPosition } from './splitPosition';
 import { planChoice, type PlanChoiceLine } from './planChooser';
 import { openingIdentityLine, planFor, warmOpeningIdentity } from './openingIdentity';
+import { buildReviewMoveTeaching } from './reviewMoveTeaching';
+import { withSubject } from '../utils/openSentence';
 // The Learn page reaches the opening facts through this module, never directly
 // (surfaceComposition): the warm-up and the opening's length in plies.
 export { warmOpeningIdentity } from './openingIdentity';
@@ -1117,6 +1119,22 @@ export function answerDangerQuestion(square: string | null, stemKey: number): st
 }
 
 const HIT_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/** WHAT THE STUDENT'S MOVE DID, from the board teacher (the per-move reason
+ *  Review already speaks) — Learn's fallback own-move reason when no sharper
+ *  computer (the move's point, its intent, a found move) had one (Learn audit
+ *  2026-10-15: 36 of 56 turns offered no reason for the student's move at all).
+ *  Null when the board teacher has nothing true to say. */
+export function boardTeacherPoint(fenBefore: string, san: string): TeachingHint | null {
+  const raw = buildReviewMoveTeaching(fenBefore, san, true);
+  if (!raw) return null;
+  const text = withSubject(raw, san);
+  return {
+    lane: 'movePoint', proof: NO_PROOF.description, text, squares: [], claims: [`board-teacher:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`],
+    event: { name: 'coach_move_point_named', props: { surface: 'coach-teach', source: 'board-teacher' } },
+    arrows: [],
+  };
+}
 
 /** A piece of yours under attack with no guard — rotated by move so the
  *  formula is never said three times running (David 2026-10-14). Every stem

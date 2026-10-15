@@ -303,7 +303,7 @@ export function deriveNextPlanFacts(
           : blockader
             ? `plant your ${blockader.type === 'n' ? 'knight' : 'bishop'} on the square right in front of it, ${block}, so it can never advance to free itself`
             : `control the square right in front of it, ${block}, so it can never advance to free itself`;
-    add('weak-pawn', `the plan from here is to win their weak pawn on ${weak}. Here's how: ${blockBit ? `${blockBit}; then ` : ''}stack your heavy pieces on the file to gang up on it, trade off the pieces that defend it one by one, and either win it outright or tie their whole army to babysitting it`, [weak, block]);
+    add('weak-pawn', `the plan from here is to win their weak pawn on ${weak}. Here's how: ${blockBit ? `${blockBit}; then ` : ''}stack your heavy pieces on its file and trade off its defenders one by one — every defender it needs is a piece of theirs doing nothing else`, [weak, block]);
   }
 
   // 4. An open file you don't yet own with a heavy piece → seize it, HOW

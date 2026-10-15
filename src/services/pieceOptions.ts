@@ -119,10 +119,14 @@ function moverPov(whiteCp: number, isMate: boolean, mateIn: number | null, mover
  *  run said "Qe2? Then … Rxd3 and cxd3 — you come out behind" about THEIR
  *  queen move: the line was real, but it showed the option WORKING, so reading
  *  it as a refutation said the opposite of the truth. */
-function refutationOf(fenAfter: string, pvSans: readonly string[], studentWB: 'w' | 'b', optionMover: Color): string | null {
+export function refutationOf(fenAfter: string, pvSans: readonly string[], studentWB: 'w' | 'b', optionMover: Color): string | null {
   const proof = proofCut(fenAfter, pvSans, studentWB);
   if (!proof) return null;
-  const moves = andList(pvSans.slice(0, proof.plies));
+  // THE VOICE SAYS THE SHAPE, THE BOARD SHOWS THE DETAIL (proof guard 2): an
+  // eight-move line read aloud (Learn audit 2026-10-15, an 87-word answer)
+  // buries its result. Three moves or fewer are said in full; a longer line is
+  // its first move, and the option's walkable line carries the rest.
+  const moves = proof.plies <= 3 ? andList(pvSans.slice(0, proof.plies)) : `${pvSans[0]} and the moves that follow`;
   // The line opens with the REPLY, so the replier delivers mate on an odd ply.
   if (proof.mate) return proof.plies % 2 === 1 ? `Then ${moves} — and it's mate` : null;
   if (!proof.ledger) return null;
