@@ -12,7 +12,7 @@
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { deriveNextPlanFacts } from './nextPlans';
-import { methodRead, methodLine, methodPlan, whyThisPlan } from './planChoice';
+import { methodRead, methodLine, methodPlan, methodSquares, whyThisPlan } from './planChoice';
 import { stripThink } from '../utils/thinkPause';
 import { structurePlan } from './boardPlan';
 import { findPawnBreaks, findOpenFiles, strongestWeakestPiece } from './positionReadingService';
@@ -49,6 +49,9 @@ export interface BoardPlanFacts {
    *  those answers make, with why that order (planChoice). Null when the answers
    *  make no plan or a bigger plan (a passer, a piece to convert) outranks them. */
   method: string | null;
+  /** The squares the method's plan already names — a lever on only these
+   *  squares says the same thing again. */
+  methodSquares: string[];
 }
 
 const STEMS = ['Alongside that, aim to ', 'On top of that, work to ', 'And the third piece of it: '];
@@ -116,6 +119,7 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
     trump, plans, levers,
     why: whyThisPlan(facts),
     ordered: facts.some((p) => p.kind !== facts[0]?.kind),
+    methodSquares: read && mp ? [...new Set([...methodSquares(read), ...mp.squares])] : [],
     method: read && mp ? stripThink(`${methodLine(read)} So the plan: ${mp.text}.${mp.why ? ` Why in that order? ${mp.why}.` : ''}`) : null,
   };
 }

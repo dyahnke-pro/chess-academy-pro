@@ -1617,7 +1617,8 @@ describe('the plan lane: the worst piece needs a bar, not a mention', () => {
   it('names it once the game has left the opening', () => {
     // Same idea, move 20: a piece that is still doing nothing there IS misplaced.
     const a = assembleBoardPlanAnswer('3rkb1r/pp3ppp/2n1pn2/3q3b/3P4/4BN1P/PP2BPP1/RN1Q1RK1 w k - 1 20', 'white', 'me');
-    expect(a?.facts ?? '').toMatch(/improve your/i);
+    // The plan method names the worst piece and its step (2026-10-15).
+    expect(a?.facts ?? '').toMatch(/improve your|Your worst piece: your \w+ on [a-h][1-8]/i);
   });
 });
 

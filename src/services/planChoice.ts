@@ -66,7 +66,7 @@ export function methodRead(fen: string, student: Color): MethodRead | null {
       if (holes[0]) {
         const route = knightRouteTo(chess, holes[0], student);
         const step = route
-          ? `plant your knight on ${holes[0]}${route.via.length ? `, by way of ${route.via.join(' and ')}` : ''} — once there, no pawn can ever chase it off`
+          ? `bring your knight on ${route.from} to ${holes[0]}${route.via.length ? `, by way of ${route.via.join(' and ')}` : ''} — no pawn of theirs can attack it there`
           : null;
         weakness = { phrase: `the hole on ${holes[0]} that no pawn of theirs can guard`, square: holes[0], kind: 'hole', step, to: route ? [route.from, ...route.via] : [] };
       }

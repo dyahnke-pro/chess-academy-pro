@@ -521,10 +521,15 @@ export function assembleBoardPlanAnswer(
   // separate pick and the levers it already covers (the break, the file, the
   // worst piece, the square to plant on) are not said beside it.
   const headK = pf.method
-    ? [trump && keep(trump) ? trump : null, pf.method].filter(Boolean).join(' ')
+    ? [pf.method, trump && keep(trump) ? trump : null].filter(Boolean).join(' ')
     : headPlans ? `${headPlans}${why}` : '';
-  const covered = new Set(pf.method ? ['break', 'file', 'worst', 'outpost'] : []);
-  const topK = pf.levers.filter((l) => !covered.has(l.kind)).map((l) => l.phrase).filter(keep);
+  // A lever is covered when every square it names is one the method's plan
+  // already names (by SQUARE, never by kind: the lever's worst piece and the
+  // method's can be two different pieces).
+  const covered = (l: { kind: string; squares: string[] }): boolean => l.kind !== 'file' && l.squares.length > 0 && l.squares.every((q) => pf.methodSquares.includes(q));
+  // A file lever is covered only when it names one file and the method takes that same file.
+  const fileCovered = (l: { phrase: string }): boolean => { const f = /^put a rook on the ([a-h]) file$/.exec(l.phrase)?.[1]; return !!f && !!pf.method?.includes(`open ${f}-file`); };
+  const topK = pf.levers.filter((l) => !(pf.method && (covered(l) || (l.kind === 'file' && fileCovered(l))))).map((l) => l.phrase).filter(keep);
   if (headK && topK.length) {
     return { facts: `${urgent}${headK} Beyond that: ${topK.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }

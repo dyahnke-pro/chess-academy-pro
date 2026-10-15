@@ -669,7 +669,9 @@ describe('pressure says why it is pressure (review audit 2026-10-14)', () => {
     const { describeMoveInfluence } = await import('./reviewFullData');
     const before = '4k3/8/8/2p5/8/8/8/N3K3 w - - 0 1';
     const after = '4k3/8/8/2p5/8/1N6/8/4K3 b - - 1 1';
-    expect(describeMoveInfluence(before, after, 'Nb3')).toBe('The knight on b3 now eyes the pawn on c5 and fights for d4 — nothing guards the pawn on c5.');
+    expect(describeMoveInfluence(before, after, 'Nb3')).toBe('The knight on b3 now eyes the pawn on c5 — nothing guards the pawn on c5.');
+    // d4 has no role on this board (no pawn of either side steps there, their
+    // c5-pawn covers it, nothing of theirs wants it), so it is not named (2026-10-15).
   });
 });
 

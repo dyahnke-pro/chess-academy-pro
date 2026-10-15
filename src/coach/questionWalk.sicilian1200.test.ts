@@ -37,7 +37,7 @@ describe('Q6 — every plan is its own sentence', () => {
   it('two plans never run together without a full stop', async () => {
     const { assembleBoardPlanAnswer } = await import('../services/groundedAnswer');
     const f = assembleBoardPlanAnswer('r1q2rk1/pp2bppp/2nppn2/8/Q2PP3/2N1BB2/PP3PPP/3R1RK1 w - - 8 13', 'white', 'me')?.facts ?? '';
-    expect(f).toMatch(/the plan from here/i);
+    expect(f).toMatch(/the plan from here|So the plan:/i);
     // A lower-case word followed by a capitalised "The plan" = a missing stop.
     expect(f).not.toMatch(/[a-z] The plan from here/);
   });

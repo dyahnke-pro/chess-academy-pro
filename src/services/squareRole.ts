@@ -5,6 +5,7 @@
 //   - their pawn's next step       → "holding back their d-pawn"
 //   - a hole no pawn of theirs can ever cover → "a square no pawn of theirs can ever cover"
 //   - a square their piece wants   → "keeping their knight off it"
+//   - your own pawn's next step     → "backing your d-pawn's push there"
 // No role → no clause: a square without a reason is scenery, and is not said.
 // Leaf: chess.js only.
 import type { Chess, Color, Square } from 'chess.js';
@@ -30,6 +31,16 @@ export function squareRole(chess: Chess, sq: Square, me: Color, owner: 'their' |
   const p2 = chess.get(two);
   const startRank = them === 'w' ? 2 : 7;
   if (!p1 && p2 && p2.type === 'p' && p2.color === them && Number(two[1]) === startRank) return `holding back ${owner} ${file}-pawn`;
+  // YOUR PAWN'S PUSH: a square your own pawn steps to next (one step, or two
+  // from its start rank) — a piece covering it backs the advance.
+  const fwd = me === 'w' ? -1 : 1;
+  const own1 = chess.get(`${file}${rank + fwd}` as Square);
+  const own2 = chess.get(`${file}${rank + 2 * fwd}` as Square);
+  const ownStart = me === 'w' ? 2 : 7;
+  const mine = owner === 'their' ? 'your' : owner === 'your' ? 'their' : 'the';
+  if ((own1 && own1.type === 'p' && own1.color === me) || (!own1 && own2 && own2.type === 'p' && own2.color === me && rank + 2 * fwd === ownStart)) {
+    return `backing ${mine} ${file}-pawn's push there`;
+  }
   // A HOLE: no pawn of theirs on a neighbouring file can ever reach a square that attacks it.
   let coverable = false;
   for (const df of [-1, 1]) {
