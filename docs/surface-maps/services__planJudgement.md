@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**335 lines · 9 exports · 6 importers · 3 tests · 0 audits**
+**339 lines · 9 exports · 6 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,33 +22,33 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `rightIdeaWrongPiece` (function) — 3 call sites
-- `src/services/structureJudgement.test.ts:203`
-- `src/services/structureJudgement.test.ts:205`
+- `src/services/structureJudgement.test.ts:212`
+- `src/services/structureJudgement.test.ts:214`
 - `src/services/structureReads.ts:54`
 
 ### `keepPlanChangeRoute` (function) — 3 call sites
-- `src/services/structureJudgement.test.ts:210`
-- `src/services/structureJudgement.test.ts:213`
+- `src/services/structureJudgement.test.ts:219`
+- `src/services/structureJudgement.test.ts:222`
 - `src/services/structureReads.ts:55`
 
 ### `planOverOneMove` (function) — 3 call sites
-- `src/services/structureJudgement.test.ts:218`
-- `src/services/structureJudgement.test.ts:221`
+- `src/services/structureJudgement.test.ts:227`
+- `src/services/structureJudgement.test.ts:230`
 - `src/services/structureReads.ts:56`
 
 ### `placementFutureLine` (function) — 3 call sites
-- `src/services/structureJudgement.test.ts:226`
-- `src/services/structureJudgement.test.ts:229`
+- `src/services/structureJudgement.test.ts:235`
+- `src/services/structureJudgement.test.ts:238`
 - `src/services/structureReads.ts:106`
 
 ### `smallEdges` (function) — 3 call sites
-- `src/services/structureJudgement.test.ts:233`
-- `src/services/structureJudgement.test.ts:237`
+- `src/services/structureJudgement.test.ts:242`
+- `src/services/structureJudgement.test.ts:246`
 - `src/services/structureReads.ts:112`
 
 ### `fightingLine` (function) — 3 call sites
-- `src/services/structureJudgement.test.ts:242`
-- `src/services/structureJudgement.test.ts:248`
+- `src/services/structureJudgement.test.ts:251`
+- `src/services/structureJudgement.test.ts:257`
 - `src/services/structureReads.ts:105`
 
 ### `wedgePaysLater` (function) — 4 call sites
@@ -66,7 +66,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `heldOf` (function) — 3 call sites
 - `src/services/pawnJudgement.ts:167`
 - `src/services/pawnJudgement.ts:352`
-- `src/services/squareJudgement.ts:316`
+- `src/services/squareJudgement.ts:323`
 
 ## Tests
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7772 lines · 167 exports · 90 importers · 61 tests · 8 audits**
+**7774 lines · 167 exports · 90 importers · 61 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -395,8 +395,8 @@
 - `src/services/coachFeatureService.test.ts:69`
 - `src/services/coachFeatureService.test.ts:83`
 - `src/services/coachFeatureService.test.ts:90`
-- `src/services/coachFeatureService.ts:2534`
-- `src/services/coachFeatureService.ts:2545`
+- `src/services/coachFeatureService.ts:2542`
+- `src/services/coachFeatureService.ts:2553`
 - `src/services/coachMoveCommentary.ts:221`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/explainBestMoveLines.test.ts:14`
@@ -1173,7 +1173,7 @@
 - `src/services/bluffDetector.ts:73`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/captureThreatAnswerable.test.ts:29`
-- `src/services/coachFeatureService.ts:2865`
+- `src/services/coachFeatureService.ts:2873`
 - `src/services/engineDeltaLines.ts:53`
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
@@ -1181,7 +1181,7 @@
 - `src/services/moveInsight.ts:590`
 - `src/services/moveInsight.ts:754`
 - `src/services/opponentMovePurpose.ts:64`
-- `src/services/reviewFullData.ts:901`
+- `src/services/reviewFullData.ts:909`
 - `src/services/reviewMoveBriefing.ts:238`
 - `src/services/reviewNarrationFidelity.test.ts:143`
 - `src/services/reviewNarrationFidelity.test.ts:152`
@@ -1194,7 +1194,7 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2786`
+- `src/services/coachFeatureService.ts:2794`
 - `src/services/reviewNarrationFidelity.test.ts:109`
 - `src/services/reviewNarrationFidelity.test.ts:121`
 - `src/services/reviewNarrationFidelity.test.ts:129`
@@ -1210,7 +1210,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:2885`
+- `src/services/coachFeatureService.ts:2893`
 - `src/services/reviewNarrationFidelity.test.ts:179`
 
 ### `ComparedMove` (interface) — 0 call sites
@@ -1243,10 +1243,10 @@
 - `src/services/coachApi.ts:6217`
 
 ### `seatPieceReferences` (re-export) — 34 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8512`
-- `src/services/coachFeatureService.ts:4095`
-- `src/services/coachFeatureService.ts:4146`
-- `src/services/coachFeatureService.ts:5169`
+- `src/components/Coach/CoachTeachPage.tsx:8517`
+- `src/services/coachFeatureService.ts:4103`
+- `src/services/coachFeatureService.ts:4154`
+- `src/services/coachFeatureService.ts:5177`
 - `src/services/liveTacticsContext.ts:450`
 - `src/services/lookaheadPlan.ts:131`
 - `src/services/reviewBoardAwareness.test.ts:47`
@@ -1257,10 +1257,10 @@
 - `src/services/reviewBoardAwareness.test.ts:71`
 - `src/services/reviewBoardAwareness.test.ts:72`
 - `src/services/reviewFullData.ts:350`
-- `src/services/reviewFullData.ts:481`
-- `src/services/reviewFullData.ts:589`
-- `src/services/reviewFullData.ts:601`
-- `src/services/reviewFullData.ts:771`
+- `src/services/reviewFullData.ts:489`
+- `src/services/reviewFullData.ts:597`
+- `src/services/reviewFullData.ts:609`
+- `src/services/reviewFullData.ts:779`
 - `src/services/reviewNarrationFidelity.test.ts:22`
 - `src/services/reviewNarrationFidelity.test.ts:32`
 - `src/services/reviewNarrationFidelity.test.ts:38`

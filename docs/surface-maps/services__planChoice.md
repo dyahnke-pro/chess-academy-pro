@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**206 lines · 8 exports · 4 importers · 2 tests · 0 audits**
+**282 lines · 9 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,38 +22,46 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `MethodRead` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `methodRead` (function) — 5 call sites
+### `methodRead` (function) — 7 call sites
 - `src/services/boardPlanFacts.ts:116`
-- `src/services/groundedAnswer.ts:3670`
-- `src/services/groundedAnswer.ts:6838`
+- `src/services/groundedAnswer.ts:3672`
+- `src/services/groundedAnswer.ts:6840`
 - `src/services/planChoice.test.ts:30`
-- `src/services/planThread.ts:145`
+- `src/services/planChoice.test.ts:118`
+- `src/services/planChoice.test.ts:124`
+- `src/services/planThread.ts:151`
 
-### `planWorth` (function) — 1 call site
-- `src/services/planThread.ts:156`
+### `planWorth` (function) — 2 call sites
+- `src/services/planThread.ts:162`
+- `src/services/planThread.ts:163`
 
 ### `whyThisPlan` (function) — 4 call sites
 - `src/services/boardPlanFacts.ts:120`
 - `src/services/planChoice.test.ts:18`
 - `src/services/planChoice.test.ts:24`
-- `src/services/planThread.ts:149`
+- `src/services/planThread.ts:155`
 
-### `methodPlan` (function) — 2 call sites
+### `RouteArrow` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `methodPlan` (function) — 3 call sites
 - `src/services/boardPlanFacts.ts:117`
-- `src/services/planThread.ts:146`
+- `src/services/planChoice.test.ts:120`
+- `src/services/planThread.ts:152`
 
-### `methodLine` (function) — 4 call sites
+### `methodLine` (function) — 5 call sites
 - `src/services/boardPlanFacts.ts:123`
-- `src/services/groundedAnswer.ts:3672`
+- `src/services/groundedAnswer.ts:3674`
 - `src/services/planChoice.test.ts:32`
-- `src/services/planThread.ts:162`
+- `src/services/planChoice.test.ts:125`
+- `src/services/planThread.ts:168`
 
 ### `methodSquares` (function) — 2 call sites
 - `src/services/boardPlanFacts.ts:122`
-- `src/services/planThread.ts:168`
+- `src/services/planThread.ts:175`
 
 ### `weaknessLine` (function) — 1 call site
-- `src/services/groundedAnswer.ts:6839`
+- `src/services/groundedAnswer.ts:6841`
 
 ## Tests
 
