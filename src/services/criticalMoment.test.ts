@@ -270,3 +270,21 @@ describe('a move holds when it keeps the STAKE (re-walk 1380, 2026-09-26)', () =
     expect(criticalMomentSpeaks(r)).toBe(true);
   });
 });
+
+describe('the failing candidates — the strongest proved, the rest named (Learn audit 2026-10-15)', () => {
+  it('one proof is said; the other candidates are named without their lines', async () => {
+    const { criticalMomentFound } = await import('./criticalMoment');
+    const read = {
+      resolved: true, count: 2, stake: 'on-top', gapCp: 300, holdingSans: ['Qxd2+', 'Rd1'], discardedSans: ['Qb6', 'Qc3', 'Rf1'],
+      discardedProofs: [
+        { san: 'Qb6', text: 'Qb6 and the moves that follow — you come out behind', line: { fen: '8/8/8/8/8/8/8/8 w - - 0 1', sans: ['Qb6'] } },
+        { san: 'Qc3', text: 'Qc3 and Rxc3 — you lose the queen', line: { fen: '8/8/8/8/8/8/8/8 w - - 0 1', sans: ['Qc3'] } },
+        { san: 'Rf1', text: 'Rf1 and Qxf1 — mate', line: { fen: '8/8/8/8/8/8/8/8 w - - 0 1', sans: ['Rf1'] } },
+      ],
+    } as unknown as Parameters<typeof criticalMomentFound>[0];
+    const out = criticalMomentFound(read, 'Qxd2+') ?? '';
+    expect(out).toContain("Qb6 didn't work: Qb6 and the moves that follow");
+    expect(out).toContain("Qc3 and Rf1 didn't work either.");
+    expect(out).not.toContain('Rxc3');
+  });
+});

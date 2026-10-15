@@ -37,3 +37,17 @@ describe('planThread — stated once, stopped with its proof', () => {
     expect(planThreadTurn(t, { ply: 24, fenBefore: CENTRE_KING, fenAfter: after(CENTRE_KING, 'a6'), student: 'w' })).toEqual([]);
   });
 });
+
+describe('a plan teaches its how-to once a game (Learn audit 2026-10-15)', () => {
+  it('restated after a break, the plan names its goal without the how', async () => {
+    const { newPlanThread, planThreadTurn } = await import('./planThread');
+    const t = newPlanThread();
+    const fen = asWhite(KING_F8);
+    const first = planThreadTurn(t, { ply: 20, fenBefore: fen, fenAfter: fen, student: 'w' });
+    expect(first[0]?.text).toMatch(/Here's how:/);
+    t.stated = null;
+    const again = planThreadTurn(t, { ply: 40, fenBefore: fen, fenAfter: fen, student: 'w' });
+    expect(again[0]?.text).toBeTruthy();
+    expect(again[0]?.text).not.toMatch(/Here's how:/);
+  });
+});

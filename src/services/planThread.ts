@@ -27,10 +27,13 @@ export interface PlanThread {
   stoppedInRow: number;
   wasStopped: boolean;
   lastStatedPly: number | null;
+  /** Plans whose HOW has been said this game — said again, a plan names its
+   *  goal only (Learn audit 2026-10-15: the passed-pawn how-to three times). */
+  howSaid: Set<string>;
 }
 
 export function newPlanThread(): PlanThread {
-  return { stated: null, stoppedInRow: 0, wasStopped: false, lastStatedPly: null };
+  return { stated: null, stoppedInRow: 0, wasStopped: false, lastStatedPly: null, howSaid: new Set<string>() };
 }
 
 export interface PlanThreadLine {
@@ -72,7 +75,10 @@ export function planThreadTurn(
   if (!top) return out;
   if (t.stated && plans.some((p) => p.id === t.stated?.fact.id)) return out;   // the plan stands
   if (t.lastStatedPly !== null && args.ply - t.lastStatedPly < PLAN_THREAD_HOLD_PLIES) return out;   // a wobble
-  const body = top.text.replace(/^the plan from here is to /i, '');
+  // The how-to is taught once a game per plan; a plan restated names its goal.
+  const fullBody = top.text.replace(/^the plan from here is to /i, '');
+  const body = t.howSaid.has(top.id) ? fullBody.split(/\. Here's how: /)[0] : fullBody;
+  t.howSaid.add(top.id);
   const text = t.wasStopped
     ? `The new plan is to ${body}.`
     : t.stated || t.lastStatedPly !== null

@@ -23,6 +23,7 @@
 // `positionFacts` already use, so count===1 and severity>='critical' can never
 // disagree. G0 throughout — the facts are the engine's; the phrasing pass only
 // wraps them.
+import { andList } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { criticalityThresholds } from './criticalityScan';
@@ -337,6 +338,18 @@ export function criticalMomentAsk(read: CriticalMomentRead | null, ply: number):
     ], ply);
 }
 
+/** THE CANDIDATES THAT FAIL — the strongest one proved out loud, the rest
+ *  named (each proof stays on the board). One lead reason per turn (Learn
+ *  audit 2026-10-15: four refuted candidates, each with its line, ran a turn
+ *  to 165 words). */
+function failedCandidates(ds: ReadonlyArray<{ san: string; text: string }>): string {
+  if (ds.length === 0) return '';
+  const [first, ...rest] = ds;
+  const lead = ` ${first.san} didn't work: ${first.text}.`;
+  if (rest.length === 0) return lead;
+  return `${lead} ${andList(rest.map((d) => d.san))} didn't work either.`;
+}
+
 /** The reveal, after the student has committed. Names the move(s) and the stake
  *  — the first time either is stated. */
 export function criticalMomentReveal(read: CriticalMomentRead | null): string | null {
@@ -354,7 +367,7 @@ export function criticalMomentReveal(read: CriticalMomentRead | null): string | 
   const lead = openSentence(count);
   // THE CANDIDATES THAT FAIL, AND WHY (S5) — every discarded move whose own
   // line proves its failure. A candidate move is a lesson only with its reason.
-  const fails = (read.discardedProofs ?? []).map((d) => ` ${d.san} didn't work: ${d.text}.`).join('');
+  const fails = failedCandidates(read.discardedProofs ?? []);
   if (read.count === 1 || sans.length === 1) {
     return `${lead} ${stake} here, and it was ${sans[0]}.${fails}`;
   }
@@ -379,7 +392,7 @@ export function criticalMomentHeld(read: CriticalMomentRead | null, playedSan: s
 export function criticalMomentFound(read: CriticalMomentRead | null, playedSan: string | null): string | null {
   if (!criticalMomentHeld(read, playedSan) || !read) return null;
   const stake = stakeText(read.stake as StakeId, { plural: false, past: true });
-  const fails = (read.discardedProofs ?? []).map((d) => ` ${d.san} didn't work: ${d.text}.`).join('');
+  const fails = failedCandidates(read.discardedProofs ?? []);
   return read.count === 1
     ? `${playedSan} was the only move that ${stake} here.${fails}`
     : `${playedSan} was one of just two moves that ${stake} here.${fails}`;
