@@ -513,6 +513,12 @@ export function classifyMisconception(
   return Promise.resolve(classifyMisconceptionImpl(input));
 }
 
+/** The same classification, synchronously — for a live verdict that must know
+ *  the tag the record will get before the async capture lands. */
+export function classifyMisconceptionNow(input: ClassifyMisconceptionInput): MisconceptionClassification | null {
+  return classifyMisconceptionImpl(input);
+}
+
 /** The square the opponent's engine reply captures on, `null` when the reply
  *  captures nothing, `undefined` when there is no reply to read. */
 function replyDestination(fenAfter: string, pvAfterPlayed: readonly string[] | undefined): string | null | undefined {

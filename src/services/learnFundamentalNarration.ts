@@ -22,7 +22,8 @@ import { attributeLiveFundamental, LEARN_FUNDAMENTAL_CP_FLOOR, type LiveFundamen
 import { renderFundamentalVerdict, isMethodSentence, verdictCanDropBetter } from './principleVoice';
 import { habitForCluster } from './coachDecider';
 import { liveHabitKey, type LiveHabit } from './methodBeat';
-import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
+import { fundamentalRecurrenceLine, heldRecurrenceLine, tagRecurrenceLine } from './fundamentalRecurrence';
+import { classifyMisconceptionNow } from './misconceptionClassifier';
 import type { WeaknessSignal } from './weaknessSignal';
 
 export { LEARN_FUNDAMENTAL_CP_FLOOR };
@@ -195,4 +196,31 @@ function fenAfterSan(fen: string, san: string): string | null {
     const c = new Chess(fen);
     return c.move(san) ? c.fen() : null;
   } catch { return null; }
+}
+
+/** THE LOOP ON A MISTAKE WITH NO FUNDAMENTAL (Learn audit 2026-10-15): the
+ *  tag the record will file this slip under — the same classifier the capture
+ *  runs — joined to the student's record, said once a game per weakness.
+ *  "You've walked into this before — loose piece, the second game now." */
+export function learnMistakeRecurrence(
+  input: Pick<LearnFundamentalInput, 'fenBefore' | 'playedSan' | 'bestSan' | 'historySans' | 'currentGameId'>,
+  studentWeaknesses: readonly WeaknessSignal[],
+  seenLabels: Set<string>,
+): string | null {
+  if (studentWeaknesses.length === 0) return null;
+  const cls = classifyMisconceptionNow({
+    fen: input.fenBefore,
+    playedSan: input.playedSan,
+    bestSan: input.bestSan ?? undefined,
+    historySans: [...input.historySans],
+  });
+  if (!cls || cls.tag === 'other') return null;
+  return tagRecurrenceLine({ tags: [cls.tag], signals: studentWeaknesses, register: 'live', seenLabels, currentGameId: input.currentGameId });
+}
+
+/** "This time you held it" for a Learn line whose evidence row records the
+ *  student HOLDING a tag their record says they failed in another game. */
+export function learnHeldRecurrence(tag: string | undefined, studentWeaknesses: readonly WeaknessSignal[], currentGameId: string | null, heldSaid: Set<string>): string | null {
+  if (!tag || studentWeaknesses.length === 0) return null;
+  return heldRecurrenceLine({ tag, signals: studentWeaknesses, currentGameId, seenLabels: heldSaid });
 }

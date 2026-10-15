@@ -228,7 +228,9 @@ export function recurrenceFor(sig: RecurrenceSource, currentGameId?: string | nu
   return { occurrences: sig.total !== undefined && sig.total >= 2 ? sig.total : undefined };
 }
 
-export type RecurrenceRegister = 'review' | 'live';
+/** `held`: the student answered, on the board, a question their record says
+ *  they have failed in another game — the loop's GREEN direction, out loud. */
+export type RecurrenceRegister = 'review' | 'live' | 'held';
 
 /** ONE composer, TWO registers (the two-register law). Every clause appears
  *  only when its source knows it: no count → no ordinal; no game → no "against". */
@@ -238,6 +240,9 @@ export function recurrenceLine(label: string, read: RecurrenceRead, register: Re
   const when = read.prior?.playedAt
     ? ` — the last one was${who} ${recencyPhrase(read.prior.playedAt, now)}`
     : (who ? ` — the last one was${who}` : '');
+  if (register === 'held') {
+    return `That one has caught you before — ${label.toLowerCase()}${when}. This time you held it.`;
+  }
   if (register === 'review') {
     return `This one keeps recurring in your games — ${label.toLowerCase()}${times}${when}. Worth drilling.`;
   }

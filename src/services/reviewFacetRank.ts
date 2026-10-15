@@ -31,7 +31,7 @@ export type FacetTag =
   | 'tactic' | 'threat' | 'loose' | 'count' | 'royal' | 'trapped'
   | 'sac' | 'sac-why' | 'forced' | 'king' | 'rook7' | 'passer'
   | 'badbishop' | 'worst' | 'minority' | 'complex' | 'structure'
-  | 'verdict' | 'opening' | 'opp-dev' | 'their-habit' | 'opp-target' | 'endgame'
+  | 'verdict' | 'opening' | 'opp-dev' | 'their-habit' | 'held' | 'opp-target' | 'endgame'
   | 'plan-now' | 'plan-race' | 'plan-arc' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
   | 'note' | 'method' | 'refuted' | 'bluff' | 'technique' | 'contrast' | 'timing' | 'praise'
   | 'rule' | 'stopped' | 'stock' | 'trade' | 'point' | 'their-cost'
@@ -138,6 +138,9 @@ export const FACET_RANK: Record<FacetTag, number> = {
   // What THEY keep doing wrong — the same mistake twice (`opponentHabits`),
   // the plan against them. Just above their development.
   'their-habit': 25,
+  // THE LOOP'S GREEN DIRECTION — a question their record says they failed in
+  // another game, held this time. Beside the move's standing read.
+  held: 30,
   'opp-dev': 24,
   // READING THEIR MOVE (batch 2, `opponentMoveReads`) — the quiet threat, the
   // one condition their idea needs, an obligation lifted, the grab that was
@@ -274,6 +277,7 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   'opp-target': 'describe',
   'opp-dev': 'describe',
   'their-habit': 'teach',
+  held: 'teach',
   'plan-line': 'describe', // the long engine line — speaks only when it proves a point
   consequence: 'describe',
 };
@@ -356,6 +360,7 @@ export const FACT_ROLE: Record<FactKind, FacetRole> = { ...FACET_ROLE, ...CLAUSE
  * until someone decides which layer it teaches.
  */
 export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
+  held: 'principle',
   // SAFETY — the verdict on the move and what is forcing on the board.
   quality: 'safety', praise: 'safety', move: 'safety', forced: 'safety', threat: 'safety', trade: 'safety',
   tactic: 'safety', trapped: 'safety', refuted: 'safety', bluff: 'safety', loose: 'safety', count: 'safety',
@@ -393,6 +398,8 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
  * refuses them (`proofBacklog.baseline`).
  */
 export const FACT_PROOF: Record<FactKind, 'proven' | NoProofReason> = {
+  // The record names the earlier game; the board names the question held.
+  held: 'stated',
   // CONCLUSIONS — each is something a line or a count on the board shows.
   quality: 'proven', forced: 'proven', threat: 'proven', tactic: 'proven', trapped: 'proven',
   refuted: 'proven', bluff: 'proven', loose: 'proven', sac: 'proven', 'sac-why': 'proven',

@@ -4,15 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**246 lines · 12 exports · 6 importers · 2 tests · 0 audits**
+**251 lines · 12 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5945) — names `misconceptionCallbacks`
+- **The standard post-deploy ritual** (CLAUDE.md:6342) — names `misconceptionCallbacks`
 
 ## Who calls in
 
-- `src/components/Coach/CoachGameReview.tsx`
 - `src/hooks/useDiscussionPractice.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/fundamentalRecurrence.ts`
@@ -33,9 +32,8 @@
 - `src/services/misconceptionCallbacks.test.ts:59`
 - `src/services/misconceptionCallbacks.test.ts:68`
 
-### `buildMisconceptionCallback` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:2196`
-- `src/hooks/useDiscussionPractice.ts:651`
+### `buildMisconceptionCallback` (function) — 1 call site
+- `src/hooks/useDiscussionPractice.ts:695`
 
 ### `CallbackWeakness` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -65,8 +63,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `recurrenceFor` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1534`
-- `src/services/fundamentalRecurrence.ts:47`
+- `src/services/coachFeatureService.ts:1764`
+- `src/services/fundamentalRecurrence.ts:58`
 - `src/services/misconceptionCallbacks.test.ts:82`
 - `src/services/misconceptionCallbacks.test.ts:85`
 - `src/services/misconceptionCallbacks.test.ts:86`
@@ -81,8 +79,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `recurrenceLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:1537`
-- `src/services/fundamentalRecurrence.ts:50`
+- `src/services/coachFeatureService.ts:1767`
+- `src/services/fundamentalRecurrence.ts:61`
 - `src/services/misconceptionCallbacks.test.ts:99`
 - `src/services/misconceptionCallbacks.test.ts:100`
 - `src/services/misconceptionCallbacks.test.ts:101`

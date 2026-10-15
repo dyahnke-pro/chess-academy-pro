@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**862 lines · 7 exports · 19 importers · 17 tests · 3 audits**
+**860 lines · 7 exports · 19 importers · 17 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -35,39 +35,39 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:4796`
-- `src/services/learnFundamentalNarration.ts:137`
+- `src/services/coachFeatureService.ts:4786`
+- `src/services/learnFundamentalNarration.ts:138`
 
-### `fundamentalHow` (function) — 9 call sites
+### `fundamentalHow` (function) — 10 call sites
 - `src/services/fundamentalHow.test.ts:25`
 - `src/services/fundamentalHow.test.ts:32`
 - `src/services/fundamentalHow.test.ts:41`
 - `src/services/fundamentalHow.test.ts:56`
-- `src/services/fundamentalHow.test.ts:67`
+- `src/services/fundamentalHow.test.ts:57`
+- `src/services/fundamentalHow.test.ts:62`
+- `src/services/fundamentalHow.test.ts:69`
 - `src/services/fundamentalHow.test.ts:74`
-- `src/services/fundamentalHow.test.ts:79`
-- `src/services/fundamentalHow.test.ts:80`
+- `src/services/fundamentalHow.test.ts:75`
 - `src/services/principleAttribution.section14.test.ts:190`
 
 ### `verdictCanDropBetter` (function) — 2 call sites
-- `src/services/learnFundamentalNarration.ts:117`
+- `src/services/learnFundamentalNarration.ts:118`
 - `src/services/principleVoice.test.ts:120`
 
 ### `FundamentalVerdictOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `renderFundamentalVerdict` (function) — 47 call sites
+### `renderFundamentalVerdict` (function) — 46 call sites
 - `src/services/blockedOwnRetreat.test.ts:32`
-- `src/services/coachFeatureService.ts:2536`
+- `src/services/coachFeatureService.ts:2522`
 - `src/services/forcingStemNoDecisive.test.ts:17`
 - `src/services/forcingStemNoDecisive.test.ts:22`
 - `src/services/fundLeadStems.test.ts:58`
 - `src/services/fundamentalHow.test.ts:47`
 - `src/services/fundamentalHow.test.ts:49`
 - `src/services/fundamentalHow.test.ts:55`
-- `src/services/fundamentalHow.test.ts:62`
-- `src/services/fundamentalHow.test.ts:84`
-- `src/services/learnFundamentalNarration.ts:127`
+- `src/services/fundamentalHow.test.ts:79`
+- `src/services/learnFundamentalNarration.ts:128`
 - `src/services/learnWalkBlumenfeld.test.ts:75`
 - `src/services/learnWalkOct3c.test.ts:79`
 - `src/services/misconceptionClassifier.ts:284`
@@ -101,17 +101,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.mcconnell1000.test.ts:21`
 - `src/services/replayFence.sicilian1200.test.ts:55`
 - `src/services/replayFence.sicilian1200.test.ts:62`
-- `src/services/reviewFullData.ts:668`
+- `src/services/reviewFullData.ts:674`
 - `src/services/tradedActiveNamesTheirPiece.test.ts:20`
 - `src/services/walkOct2a.test.ts:154`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2547`
+- `src/services/coachFeatureService.ts:2533`
 - `src/services/principleVoice.test.ts:39`
 - `src/services/principleVoice.test.ts:41`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:5270`
+- `src/services/coachFeatureService.ts:5262`
 - `src/services/principleVoice.test.ts:49`
 - `src/services/principleVoice.test.ts:54`
 - `src/services/principleVoice.test.ts:58`

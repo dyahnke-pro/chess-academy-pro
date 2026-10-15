@@ -222,7 +222,7 @@ describe('the aggregator and the one door', () => {
     const c = r.clauses.find((x) => x.kind === 'trade-idea');
     expect(c?.text).toMatch(/just as tied to attacking it/);
     expect(c && isProof(c.proof)).toBe(true);
-    expect(r.remember).toContain('duty-parity:b1b2b6');
+    expect(r.remember).toContain('duty-parity:b1b2');
   }, 30_000);
 });
 

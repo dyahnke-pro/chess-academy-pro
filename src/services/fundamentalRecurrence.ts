@@ -15,7 +15,7 @@
 // count and the opponent come from the student's own records or the clause is
 // not spoken at all (empty > generic > invented).
 
-import { matchFundamental, type WeaknessSignal } from './weaknessSignal';
+import { matchFundamental, matchTag, type WeaknessSignal } from './weaknessSignal';
 import { recurrenceFor, recurrenceLine, type RecurrenceRegister } from './misconceptionCallbacks';
 
 export interface FundamentalRecurrenceInput {
@@ -40,8 +40,19 @@ export interface FundamentalRecurrenceInput {
  * are this same game, and a label already spoken this game.
  */
 export function fundamentalRecurrenceLine(input: FundamentalRecurrenceInput): string | null {
-  for (const id of input.ids) {
-    const hit = matchFundamental(id, input.signals);
+  return firstRecurrence(input.ids.map((id) => matchFundamental(id, input.signals)), input);
+}
+
+/** The same clause for a MISTAKE's recorded tag (`misconceptionTags`) — the
+ *  slip a verdict names with no fundamental (a loose piece, an ignored threat).
+ *  Learn audit 2026-10-15: game 1 recorded both, game 2 made both again, and
+ *  the coach never said so, because only a fundamental carried the line. */
+export function tagRecurrenceLine(input: Omit<FundamentalRecurrenceInput, 'ids'> & { tags: readonly string[] }): string | null {
+  return firstRecurrence(input.tags.map((t) => matchTag(t, input.signals)), input);
+}
+
+function firstRecurrence(hits: ReadonlyArray<WeaknessSignal | null>, input: Omit<FundamentalRecurrenceInput, 'ids' | 'signals'>): string | null {
+  for (const hit of hits) {
     if (!hit) continue;
     if (input.seenLabels.has(hit.label)) continue;
     const read = recurrenceFor(hit, input.currentGameId);
@@ -50,4 +61,13 @@ export function fundamentalRecurrenceLine(input: FundamentalRecurrenceInput): st
     return recurrenceLine(hit.label, read, input.register, input.now);
   }
   return null;
+}
+
+/** THE GREEN DIRECTION, OUT LOUD (David 2026-10-15: "strengthen the coach's
+ *  memory"): the student just HELD a question (`recordTeachingEvidence`) that
+ *  their record says they failed in another game — "That one has caught you
+ *  before — loose piece, against X. This time you held it." Same matcher, same
+ *  prior-game rule, same once-a-game ledger as the failure line. */
+export function heldRecurrenceLine(input: { tag: string; signals: readonly WeaknessSignal[]; currentGameId?: string | null; seenLabels: Set<string>; now?: number }): string | null {
+  return firstRecurrence([matchTag(input.tag, input.signals)], { ...input, register: 'held' });
 }

@@ -206,7 +206,7 @@ import { scaleGap, packageForRegister } from '../../services/hintRegister';
 import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine, pinConsequence } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf } from '../../services/backwardLook';
-import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
+import { learnFundamentalVerdict, learnHeldRecurrence, learnMistakeRecurrence } from '../../services/learnFundamentalNarration';
 import type { FundamentalId } from '../../services/principleAttribution';
 import { FUNDAMENTAL_LABEL } from '../../services/fundamentalsCatalog';
 import {
@@ -9989,7 +9989,7 @@ export function CoachTeachPage(): JSX.Element {
                       });
                       for (const pl of plansNow) {
                         const line = gradeNarrationText(pl.text, probe.fen(), 'CoachTeachPage.structuralPlan')?.trim();
-                        if (line) queueSpokenHint(probe.fen(), line, 'planArc', pl.proof, pl.squares, [pl.key]);
+                        if (line) queueSpokenHint(probe.fen(), line, 'planArc', pl.proof, pl.squares, [pl.key, ...(pl.sharedKey ? [pl.sharedKey] : [])]);
                       }
                     } catch { /* the plan is a bonus, never a blocker */ }
                   }
@@ -10416,7 +10416,7 @@ export function CoachTeachPage(): JSX.Element {
                           for (const e of arcLines) {
                             const line = gradeNarrationText(e.text, probe.fen(), 'CoachTeachPage.planArc')?.trim();
                             if (!line) continue;
-                            queueSpokenHint(probe.fen(), line, 'planArc', NO_PROOF.description, e.squares, [`plan:${e.seat}:${e.id}:${e.kind}${e.kind === 'advance' ? `:${e.step ?? 0}` : ''}`]);
+                            queueSpokenHint(probe.fen(), line, 'planArc', NO_PROOF.description, e.squares, [`plan:${e.seat}:${e.id}:${e.kind}${e.kind === 'advance' ? `:${e.step ?? 0}` : ''}`, ...(e.seat === 'student' && e.kind === 'emerge' ? [`plan-aim:${e.id}`] : [])]);
                             if (e.seat === 'student' && e.kind === 'emerge') planToldBoardsRef.current.add(probe.fen().split(' ').slice(0, 2).join(' '));
                           }
                         } catch { /* the arc is a bonus, never a blocker */ }
@@ -10921,7 +10921,10 @@ export function CoachTeachPage(): JSX.Element {
                     })) {
                       // Graded on the board the hint describes — right after the student's move
                       // (replay 2026-10-06: 6 of 239 true lines dropped on the reply's board).
-                      queueSpokenHint(fenAfterReply, h.text, h.lane, h.proof, h.squares, h.claims, move.fen, h.arrows, undefined, h.stakes);
+                      // THE GREEN DIRECTION OUT LOUD: the student just held a question
+                      // their record says they failed in another game.
+                      const heldBefore = learnHeldRecurrence(h.evidence?.tag, weaknessSignalsRef.current, learnMemRef.current.gameId, learnMemRef.current.heldSaid);
+                      queueSpokenHint(fenAfterReply, heldBefore ? `${h.text} ${heldBefore}` : h.text, h.lane, h.proof, h.squares, h.claims, move.fen, h.arrows, undefined, h.stakes);
                       if (h.event) captureEvent(h.event.name, h.event.props);
                       // DUAL-USE (P4): the lane that teaches it also records it.
                       recordTeachingEvidence(h, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
@@ -11113,9 +11116,14 @@ export function CoachTeachPage(): JSX.Element {
                       const slipQ = fund?.id === 'ignored-threat' || look.stakes?.mate
                         ? null
                         : slipQuestion(fenBefore, move.san, look.lostSquare, playerColor === 'white' ? 'w' : 'b', learnMemRef.current.spokenKeys, move.history.length);
+                      // THE LOOP ON A PLAIN MISTAKE: the weakness the record files
+                      // it under, when the student has made it in another game.
+                      const mistakeRecurrence = fund ? null : learnMistakeRecurrence({
+                        fenBefore, playedSan: move.san, bestSan: studentBestSan ?? null, historySans: move.history, currentGameId: learnMemRef.current.gameId,
+                      }, weaknessSignalsRef.current, learnMemRef.current.recurrenceSaid);
                       const line = `${fund
                         ? `${lossInGrade ? '' : noteSlip(learnMemRef.current, fund.id)}${lossInGrade ? '' : bookSaid ? fund.howOnly : fund.verdict}${fund.recurrence ? ` ${fund.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`.trim()
-                        : `${look.line}${takeDefinition(look.pattern)}`}${concession ? ` ${concession}` : ''}${slipQ ? ` ${slipQ.text}` : ''}`;
+                        : `${look.line}${takeDefinition(look.pattern)}${mistakeRecurrence ? ` ${mistakeRecurrence}` : ''}`}${concession ? ` ${concession}` : ''}${slipQ ? ` ${slipQ.text}` : ''}`;
                       // "That let them win the pawn on d4" and "they're eyeing
                       // Nxd4 — it would win your pawn on d4" are one claim (run
                       // C walk 2026-09-30); the shared key lets the package keep one.
