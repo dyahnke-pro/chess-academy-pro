@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5346 lines · 31 exports · 48 importers · 51 tests · 4 audits**
+**5355 lines · 31 exports · 48 importers · 51 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -137,7 +137,7 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 79 call sites
+### `buildReviewSegments` (function) — 80 call sites
 - `src/components/Coach/CoachGameReview.tsx:1825`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
@@ -160,6 +160,7 @@
 - `src/services/coachFeatureService.oneCost.test.ts:33`
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.planChange.test.ts:36`
+- `src/services/coachFeatureService.planChange.test.ts:48`
 - `src/services/coachFeatureService.recurrence.test.ts:37`
 - `src/services/coachFeatureService.recurrence.test.ts:46`
 - `src/services/coachFeatureService.recurrence.test.ts:53`
@@ -322,12 +323,12 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:608`
+- `src/services/reviewFullData.ts:609`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites
 - `src/services/badHabitDetector.ts:21`
-- `src/services/coachApi.ts:5340`
+- `src/services/coachApi.ts:5350`
 - `src/services/coachFeatureService.test.ts:129`
 - `src/services/coachFeatureService.test.ts:150`
 - `src/services/coachFeatureService.test.ts:169`

@@ -176,6 +176,7 @@ export function stripQuestionFiller(ask: string | undefined): string {
 
 const PLAN_QUESTION_RE = anyOf([
   String.raw`\bplans?\b`,
+  String.raw`\bplann(?:ing|ed)\b`,
   String.raw`\bstrateg(?:y|ies|ize|ic)\b`,
   String.raw`\bnext\s+(?:few|couple|two|three|several|2|3|\d+)\s+moves?\b`,
   String.raw`\bmain\s+ideas?\b`,
@@ -1336,6 +1337,9 @@ export function isConceptQuestion(ask: string | undefined): boolean {
   // 2026-09-27: "What does their bishop on c8 do?" was answered with a book
   // passage on doubled pawns).
   if (/\b(?:knight|night|bishop|rook|queen|king|pawn)\s+on\s+[a-h][1-8]\b/i.test(ask)) return false;
+  // "What is THEIR weakness" asks about this board (the targets read), not
+  // for the word's definition.
+  if (/\b(?:their|my|his|her|the\s+opponent'?s)\s+weak(?:ness(?:es)?|est)\b/i.test(ask)) return false;
   // NOTE: the broad "what's <word>" / "how does the" shapes below DO also match
   // some self-knowledge / app-method / why-best-move asks. That over-match is
   // handled at DISPATCH now (coach audit 2026-09-11): the concept lane answers
@@ -3045,10 +3049,17 @@ export type PositionalTopic =
   | 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece'
   | 'key-squares' | 'space' | 'bishop-pair' | 'passed-pawn' | 'best-piece'
   | 'pressure' | 'targets' | 'open-files' | 'pawn-breaks' | 'structure-name'
-  | 'xray' | 'maneuver' | 'endgame-plan' | 'color-complex' | 'minority-attack';
+  | 'xray' | 'maneuver' | 'endgame-plan' | 'color-complex' | 'minority-attack'
+  // Computers with no question before 2026-10-15: a guard tied to its post,
+  // and the attackers-against-guards count on one square.
+  | 'tied' | 'count' | 'grab';
 export function positionalTopic(ask: string | undefined): PositionalTopic | null {
   if (!ask) return null;
   const a = ask.toLowerCase();
+  // COUNT — "how many times do I attack d5", "count the attackers on e4".
+  if (/\bhow\s+many\s+times\s+(?:do|am|does|is|are)\s+\w+\s+(?:attack|hit|guard|defend)\w*\b|\bhow\s+many\s+(?:attackers|defenders|guards)\b|\bcount\s+(?:the\s+)?(?:attackers|defenders|guards)\b/.test(a)) return 'count';
+  // TIED — "is my bishop tied down", "is anything overloaded", "which piece can't move because it guards".
+  if (/\btied\s+(?:down|up|to)\b|\boverload(?:ed)?\b|\bstuck\s+guarding\b|\bcan'?t\s+(?:move|leave)\s+because\b/.test(a)) return 'tied';
   if (/\bhow\s+many\s+(?:pieces|pawns)\s+do\s+i\s+have\b|\bmaterial\s+(?:count|balance|situation)\b|\bam\s+i\s+up\s+material\b|\bhow\s+much\s+material\b/.test(a)) return 'material';
   if (/\bwho\s+controls\s+the\s+(?:cent(?:er|re)|board)\b|\bdo\s+i\s+have\s+(?:more|the)\s+(?:cent(?:er|re))\b|\bis\s+the\s+cent(?:er|re)\s+mine\b/.test(a)) return 'center';
   // Development — includes the WHO/comparative phrasing (David 2026-09-10 audit:
@@ -3075,7 +3086,9 @@ export function positionalTopic(ask: string | undefined): PositionalTopic | null
   if (/\bunder\s+pressure\b|\bwhat\s+(?:am\s+i|do\s+i)\s+pressur\w*\b|\bpressur\w+\s+(?:pieces?|targets?)\b|\bwhat'?s\s+being\s+attacked\b/.test(a)) return 'pressure';
   // ATTACK TARGETS — "what should I attack / target / go after", and the
   // lesson's step 5 asked in chat: "what are my targets here?".
-  if (/\bwhat\s+(?:should|do)\s+i\s+(?:attack|target|go\s+after|aim\s+at)\b|\battack\s+targets?\b|\b(?:my|their|any)\s+targets?\b|\bweak(?:est)?\s+points?\b|\bcan\s+i\s+grab\s+a\s+(?:free\s+)?pawn\b/.test(a)) return 'targets';
+  if (/\bwhat\s+(?:should|do)\s+i\s+(?:attack|target|go\s+after|aim\s+at)\b|\battack\s+targets?\b|\b(?:my|their|any)\s+targets?\b|\bweak(?:est)?\s+points?\b|\bcan\s+i\s+grab\s+a\s+(?:free\s+)?pawn\b|\b(?:their|his|her|the\s+opponent'?s|black'?s|white'?s)\s+weak(?:ness(?:es)?)?\b/.test(a)) return 'targets';
+  // GRAB — "can I take that pawn with my queen", "is it safe to capture on e5".
+  if (/\bcan\s+i\s+(?:take|grab|capture)\b|\bis\s+it\s+safe\s+to\s+(?:take|grab|capture)\b|\bshould\s+i\s+(?:take|grab|capture)\b/.test(a)) return 'grab';
   // NAMED PAWN STRUCTURE — "what pawn structure is this".
   if (/\bwhat\s+(?:pawn\s+)?structure\s+is\s+this\b|\bpawn\s+structure\s+(?:name|called)\b|\bwhat'?s\s+the\s+structure\b/.test(a)) return 'structure-name';
   // MANEUVER — "where should my knight/rook/bishop go / reroute".
@@ -3097,7 +3110,7 @@ export function positionalTopic(ask: string | undefined): PositionalTopic | null
   // it fell to the best-MOVE lane because the regex required best/worst adjacent
   // to "piece"). worst-placed already worked via the board router's activity arm;
   // this makes "best placed" resolve to the same best-piece computer.
-  if (/\b(?:best|worst|most\s+active|least\s+active|strongest|weakest)(?:[\s-]+placed)?\s+piece\b|\bwhich\s+piece\s+is\s+(?:my\s+)?(?:best|worst|most\s+active)\b/.test(a)) return 'best-piece';
+  if (/\b(?:best|worst|most\s+active|least\s+active|strongest|weakest)(?:[\s-]+placed)?\s+piece\b|\bwhich\s+(?:piece|of\s+my\s+pieces)\s+is\s+(?:my\s+|the\s+)?(?:best|worst|most\s+active|least\s+active|weakest|strongest)\b/.test(a)) return 'best-piece';
   if (/\bis\s+my\s+king\s+(?:exposed|safe|weak|in\s+danger|under\s+attack|vulnerable)\b|\bworried\s+about\s+my\s+king\b|\bmy\s+king\s+safety\b|\bhow(?:'?s| is)\s+my\s+king\b/.test(a)) return 'king';
   if (/\bis\s+my\s+(?:bishop|knight|rook|queen|pawn|king)\s+(?:on\s+[a-h][1-8]\s+)?(?:bad|good|active|passive|misplaced|awkward|(?:well[\s-]+)?placed|happy|safe\s+there|strong|weak)\b|\bare\s+my\s+(?:bishops|knights|rooks|pieces)\s+(?:any\s+)?(?:good|bad|active|coordinated|placed|well[\s-]+placed)\b|\bare\s+my\s+pieces\s+coordinated\b|\bis\s+[a-h][1-8]\s+a\s+(?:good|key|weak|strong)\s+square\b/.test(a)) return 'piece';
   return null;
@@ -3352,7 +3365,8 @@ export function buildQuestionGrounding(
     // position eval (David 2026-07-15, live screenshot: "e4, +0.6").
     counterRepertoireQuestion: isCounterRepertoireQuestion(a) && !isStructuralConceptTarget(a),
     bestMoveQuestion: isBestMoveQuestion(a) && !isCandidateMoveQuestion(a) && !isCounterRepertoireQuestion(a) && !method && !retrospective,
-    whyBestMoveQuestion: isWhyBestMoveQuestion(a) && !retrospective,
+    // "Why that plan?" is the plan's own why — the plan lane says it.
+    whyBestMoveQuestion: isWhyBestMoveQuestion(a) && !retrospective && !/\bplans?\b/i.test(a),
     openingExistenceName: openingExistenceQuery(a) ?? undefined,
     tacticsQuestion: isTacticsQuestion(a) || threat || (!!liveState.fen && isBoardTrapQuestion(a)),
     progressQuestion: isProgressQuestion(a) && !onBoard,
@@ -3448,7 +3462,14 @@ export function buildQuestionGrounding(
     weaknessBriefingQuestion: isWeaknessBriefingQuestion(a),
     // A pure board aspect ("who controls e5?") is answered from the board,
     // never as a positional-topic essay.
-    positionalTopic: pureBoardAspect(a) !== null ? undefined : (positionalTopic(a) ?? undefined),
+    // The computed topics no board aspect answers win over a looser aspect
+    // ("how many times do I attack d5" read as a piece-purpose ask that came
+    // back empty).
+    positionalTopic: (() => {
+      const topic = positionalTopic(a);
+      if (topic === 'count' || topic === 'tied' || topic === 'grab') return topic;
+      return pureBoardAspect(a) !== null ? undefined : (topic ?? undefined);
+    })(),
   };
 }
 

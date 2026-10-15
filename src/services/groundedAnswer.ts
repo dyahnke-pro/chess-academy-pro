@@ -496,11 +496,8 @@ export function assembleBoardPlanAnswer(
   if (!pf) return null;
   const trump = pf.trump;
   const withMethod = pf.plans;
-  const levers = pf.levers.map((l) => l.phrase);
-
   // Every lever the board earned — no ceiling (G4.5). They are already ordered
   // most→least decisive, so a long list reads as a ranked plan, not a dump.
-  const top = levers;
   // THE THREAT COMES BEFORE THE PLAN (question run 2026-09-27: "the plan is to
   // break with a4…" with the student's queen hanging on g4). A piece of yours
   // that can be taken right now is the first move of any plan.
@@ -515,8 +512,24 @@ export function assembleBoardPlanAnswer(
   // pawn on d2") contradicts it and goes.
   const taken = urgency?.takeAttacker?.square ?? null;
   const keep = (x: string): boolean => !taken || !new RegExp(`\\b${taken}\\b`).test(x);
-  const headK = [trump, ...withMethod].filter((x): x is string => !!x && keep(x)).join(' ');
-  const topK = top.filter(keep);
+  // HOW IT WAS FOUND, AND WHY THIS ONE (David 2026-10-15): the three
+  // questions and their answers lead, the reason the first plan comes first follows.
+  const why = pf.why && withMethod.length ? ` ${pf.ordered ? 'Why that one first?' : 'Why it matters:'} ${pf.why.charAt(0).toUpperCase()}${pf.why.slice(1)}.` : '';
+  const headPlans = [trump, ...withMethod].filter((x): x is string => !!x && keep(x)).join(' ');
+  // THE METHOD'S ANSWERS ARE THE PLAN (David 2026-10-15: "That doesn't line
+  // up"): the method carries its own plan and order, so the plan computer's
+  // separate pick and the levers it already covers (the break, the file, the
+  // worst piece, the square to plant on) are not said beside it.
+  const headK = pf.method
+    ? [pf.method, trump && keep(trump) ? trump : null].filter(Boolean).join(' ')
+    : headPlans ? `${headPlans}${why}` : '';
+  // A lever is covered when every square it names is one the method's plan
+  // already names (by SQUARE, never by kind: the lever's worst piece and the
+  // method's can be two different pieces).
+  const covered = (l: { kind: string; squares: string[] }): boolean => l.kind !== 'file' && l.squares.length > 0 && l.squares.every((q) => pf.methodSquares.includes(q));
+  // A file lever is covered only when it names one file and the method takes that same file.
+  const fileCovered = (l: { phrase: string }): boolean => { const f = /^put a rook on the ([a-h]) file$/.exec(l.phrase)?.[1]; return !!f && !!pf.method?.includes(`open ${f}-file`); };
+  const topK = pf.levers.filter((l) => !(pf.method && (covered(l) || (l.kind === 'file' && fileCovered(l))))).map((l) => l.phrase).filter(keep);
   if (headK && topK.length) {
     return { facts: `${urgent}${headK} Beyond that: ${topK.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
@@ -1340,7 +1353,14 @@ export function assemblePieceActivityAnswer(
     : worst.scope <= 2
       ? `— it only covers ${worst.scope} square${worst.scope === 1 ? '' : 's'}, so it wants a more active post`
       : `— it covers just ${worst.scope} squares, the fewest of your pieces`;
-  const facts = `Your least active piece is the ${name} on ${worst.sq} ${tail}.`;
+  // WHERE IT WANTS TO GO, and why (David 2026-10-15: "replace descriptions
+  // with teachings") — its own route computer, not a count of squares alone.
+  const r = computePieceRoute(fen, worst.sq) ?? computeSliderRoute(fen, worst.sq);
+  const via = r ? r.route.slice(0, -1) : [];
+  const go = r && r.route.length > 0
+    ? ` It wants ${r.target}${via.length ? `, by way of ${andList(via)}` : ''} — ${r.why.replace(/\.$/, '')}.`
+    : '';
+  const facts = `Your least active piece is the ${name} on ${worst.sq} ${tail}.${go}`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
 
@@ -3637,6 +3657,22 @@ export function assemblePlanAnswer(opts: {
  * importance computer would say about the moment. That is the one place a
  * caller may assert the tier — it is the student's own request, not a bar.
  */
+/** HOW TO FIND A PLAN (David 2026-10-15: "Make sure coach can answer in chat
+ *  how to find a plan"). On a board: the three questions answered there, then
+ *  the plan and why it comes first (the plan computer's own answer). With no
+ *  board: the method itself, as a habit to carry to any position. */
+export const PLAN_METHOD_GENERAL = 'To find a plan, ask three things, in order. Where is their weakness — a pawn no pawn of theirs can protect, a hole they can never cover, a king left in the centre? Which of your pieces is worst — the one doing the least? Where is your pawn break — the pawn move that opens lines for your pieces? The plan is the one that hits the biggest target: a king before a pawn, a pawn that queens before a pawn that is merely weak. Then ask how many moves it takes, and whether they can stop it.';
+export function assemblePlanMethodAnswer(fen: string | null | undefined, studentColor: 'white' | 'black'): GroundedAnswer {
+  const general: GroundedAnswer = { facts: PLAN_METHOD_GENERAL, bestMoveSan: null, bestMoveFromTo: null, sources: ['method:plan'] };
+  if (!fen) return general;
+  const plan = assembleBoardPlanAnswer(fen, studentColor, 'me');
+  if (plan && /How do you find a plan\?/.test(plan.facts)) return plan;
+  const read = methodRead(fen, studentColor === 'white' ? 'w' : 'b');
+  if (!read) return plan ?? general;
+  const answers = stripThink(methodLine(read));
+  return { facts: `${answers} ${plan ? plan.facts : 'None of those gives a target yet, so the plan is to improve your worst piece and wait for one.'}`, bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+}
+
 export function assembleMethodAnswer(opts: {
   fen: string;
   studentColor: 'white' | 'black';
@@ -6475,12 +6511,16 @@ export function assembleLastGameAnswer(g: LastGameLike | null): GroundedAnswer |
 import { findPieceQuality, goodPieceReason, findWeakPawns, findWeakSquares, developmentRead, kingSafetyRead, countMaterial, centralPieceCount, findColorComplexWeakness, findMinorityAttack } from './positionReadingService';
 import { rotateStem } from '../utils/rotateStem';
 import { isOutpost } from './outpost';
+import { findQueenGrabTraps, queenGrabTrapLine } from './queenGrabTrap';
+import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
+import { stripThink } from '../utils/thinkPause';
+import { methodRead, methodLine, weaknessLine } from './planChoice';
+import { findTiedDefenders } from './tiedDefender';
 
-export type PositionalTopic =
-  | 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece'
-  | 'key-squares' | 'space' | 'bishop-pair' | 'passed-pawn' | 'best-piece'
-  | 'pressure' | 'targets' | 'open-files' | 'pawn-breaks' | 'structure-name'
-  | 'xray' | 'maneuver' | 'endgame-plan' | 'color-complex' | 'minority-attack';
+// ONE topic list — the router's (`questionIntents.positionalTopic`) is the
+// source; a second hand-kept copy here had to be kept in step by hand.
+export type { PositionalTopic } from '../coach/questionIntents';
+import type { PositionalTopic } from '../coach/questionIntents';
 
 const PIECE_WORD: Record<string, string> = { p: 'pawns', n: 'knights', b: 'bishops', r: 'rooks', q: 'queen', k: 'king' };
 
@@ -6565,8 +6605,8 @@ export function assemblePositionalAnswer(
     const central = centralPieceCount(fen);
     const mine = me === 'white' ? central.white : central.black;
     const theirs = me === 'white' ? central.black : central.white;
-    const verdict = mine > theirs ? `you control the center` : mine < theirs ? `${opp} controls the center` : `the center is contested`;
-    return { facts: `You have ${mine} piece${mine === 1 ? '' : 's'} bearing on the centre to ${opp}'s ${theirs} — ${verdict}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    const verdict = mine > theirs ? `you control the center` : mine < theirs ? `they control the center` : `the center is contested`;
+    return { facts: `You have ${mine} piece${mine === 1 ? '' : 's'} bearing on the centre to their ${theirs} — ${verdict}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   if (topic === 'development') {
@@ -6577,7 +6617,7 @@ export function assemblePositionalAnswer(
     const castled = d.castled ? 'and you have castled' : 'and you have not castled yet';
     // Report BOTH sides so "how many pieces has White developed?" is answered
     // whoever is asked about (David 2026-09-09), board-true from chess.js.
-    const theirs = dOpp ? ` ${opp} has developed ${dOpp.developedMinors} of ${dOpp.totalMinors}${dOpp.castled ? ' and castled' : ''}.` : '';
+    const theirs = dOpp ? ` They have developed ${dOpp.developedMinors} of ${dOpp.totalMinors}${dOpp.castled ? ' and castled' : ''}.` : '';
     return { facts: `You've developed ${d.developedMinors} of your ${d.totalMinors} minor pieces ${castled}.${theirs}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
@@ -6636,14 +6676,13 @@ export function assemblePositionalAnswer(
   }
 
   const oppC: 'w' | 'b' = myC === 'w' ? 'b' : 'w';
-  const oppCap = openSentence(opp);
 
   if (topic === 'space') {
     const s = computeSpace(fen);
     const mine = me === 'white' ? s.white : s.black;
     const theirs = me === 'white' ? s.black : s.white;
-    const verdict = mine > theirs ? 'you have the space advantage' : mine < theirs ? `${opp} has more space` : 'space is balanced';
-    return { facts: `You control ${mine} square${mine === 1 ? '' : 's'} in the contested zone to ${opp}'s ${theirs} — ${verdict}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    const verdict = mine > theirs ? 'you have the space advantage' : mine < theirs ? 'they have more space' : 'space is balanced';
+    return { facts: `You control ${mine} square${mine === 1 ? '' : 's'} in the contested zone to their ${theirs} — ${verdict}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   if (topic === 'color-complex') {
@@ -6655,7 +6694,7 @@ export function assemblePositionalAnswer(
     const mine = cc.find((c) => c.side === myC);
     const theirs = cc.find((c) => c.side === oppC);
     const yours = mine ? `Your ${mine.complex} squares are weak — ${mine.squares.join(', ')}; with no ${mine.complex}-squared bishop, no piece naturally covers them.` : '';
-    const opps = theirs ? `${oppCap}'s ${theirs.complex} squares are weak — ${theirs.squares.join(', ')}; a knight or bishop planted there can't be challenged, ${opp} having no ${theirs.complex}-squared bishop.` : '';
+    const opps = theirs ? `Their ${theirs.complex} squares are weak — ${theirs.squares.join(', ')}; a knight or bishop planted there can't be challenged, since they have no ${theirs.complex}-squared bishop.` : '';
     if (!yours && !opps) return { facts: `No colour-complex weakness right now — both sides still hold the bishop that covers those squares.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     return { facts: [opps, yours].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
@@ -6664,9 +6703,9 @@ export function assemblePositionalAnswer(
     // A pawn minority on a flank with a legal lever ready to make contact. Names
     // the concrete push + target (G3), never a vague "play on the wing".
     const ma = findMinorityAttack(fen, myC);
-    if (ma) return { facts: `You have a minority attack on the ${ma.flank}: push ${ma.leverSan} to hit the pawn on ${ma.target}, forcing a trade that leaves ${opp} a backward pawn on a half-open file to target.`, bestMoveSan: ma.leverSan, bestMoveFromTo: null, sources: src };
+    if (ma) return { facts: `You have a minority attack on the ${ma.flank}: push ${ma.leverSan} to hit the pawn on ${ma.target}, forcing a trade that leaves them a backward pawn on a half-open file to target.`, bestMoveSan: ma.leverSan, bestMoveFromTo: null, sources: src };
     const theirs = findMinorityAttack(fen, oppC);
-    if (theirs) return { facts: `${oppCap} has a minority attack on the ${theirs.flank} — ${theirs.leverSan} is coming to hit your pawn on ${theirs.target}, and the trade would leave you a weak pawn there. Prepare to defend it or break the tension first.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    if (theirs) return { facts: `They have a minority attack on the ${theirs.flank} — ${theirs.leverSan} is coming to hit your pawn on ${theirs.target}, and the trade would leave you a weak pawn there. Prepare to defend it or break the tension first.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     return { facts: `No minority attack going — no flank where one side has fewer pawns with a lever ready to strike.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
@@ -6676,7 +6715,7 @@ export function assemblePositionalAnswer(
     const facts = mineBP
       ? 'You hold the bishop pair — keep the position open so both bishops bite.'
       : theirsBP
-        ? `${oppCap} holds the bishop pair — close the position or trade one of theirs off.`
+        ? 'They hold the bishop pair — close the position or trade one of theirs off.'
         : 'Neither side has the bishop pair.';
     return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
@@ -6688,6 +6727,84 @@ export function assemblePositionalAnswer(
     const m = mineP.length ? `Your passed pawn${mineP.length > 1 ? 's' : ''} on ${mineP.join(', ')} — push and support ${mineP.length > 1 ? 'them' : 'it'}.` : '';
     const t = theirsP.length ? `Their passer${theirsP.length > 1 ? 's' : ''} on ${theirsP.join(', ')} — blockade before ${theirsP.length > 1 ? 'they run' : 'it runs'}.` : '';
     return { facts: [m, t].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  // GRAB — "can I take that pawn with my queen?": every capture the named
+  // piece (or any piece) has, counted — who takes back and with what — and the
+  // queen grab that walks into a trap. The habit is the answer's last line.
+  if (topic === 'grab') {
+    const board = ((): Chess | null => {
+      const c0 = new Chess(fen);
+      if (c0.turn() === myC) return c0;
+      const parts = fen.split(' '); parts[1] = myC; parts[3] = '-';
+      try { return new Chess(parts.join(' ')); } catch { return null; }
+    })();
+    if (!board) return null;
+    const t = (ask ?? '').toLowerCase();
+    const wantPiece = /\bqueen\b/.test(t) ? 'q' : /\brook\b/.test(t) ? 'r' : /\bbishop\b/.test(t) ? 'b' : /\bknight\b/.test(t) ? 'n' : /\bking\b/.test(t) ? 'k' : /\bpawn\s+takes\b/.test(t) ? 'p' : null;
+    const wantSq = /\b(?:on|at)\s+([a-h][1-8])\b/.exec(t)?.[1] ?? null;
+    const name = (pc: string): string => REVIEW_PIECE_NAME[pc] ?? pc;
+    const caps = board.moves({ verbose: true }).filter((m) => m.captured && (!wantPiece || m.piece === wantPiece) && (!wantSq || m.to === wantSq));
+    if (caps.length === 0) {
+      return { facts: `${wantPiece ? `Your ${name(wantPiece)} has` : 'You have'} nothing to take right now${wantSq ? ` on ${wantSq}` : ''}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    }
+    const traps = findQueenGrabTraps(board.fen());
+    const lines = caps.map((m) => {
+      // SIGNED: an even trade is not a loss (Nxd5 Nxd5 is a trade, not "you give up more").
+      const net = signedLegalSeeFor(board.fen(), m.to, myC);
+      const trap = traps.find((g) => g.san === m.san);
+      if (trap) return `${m.san} takes the ${name(m.captured ?? 'p')}, but your queen is trapped after it — ${queenGrabTrapLine(trap, 'short')}`;
+      if (net > 0) return `${m.san} wins the ${name(m.captured ?? 'p')} — they cannot win back as much.`;
+      if (net === 0) return `${m.san} is an even trade on ${m.to} — you take, they take back, and nothing is won.`;
+      const after = new Chess(board.fen()); after.move(m.san);
+      const back = after.attackers(m.to, oppC).map((sq) => after.get(sq)).filter((p): p is NonNullable<typeof p> => !!p)
+        .sort((x, y) => (REVIEW_PIECE_VALUE[x.type] ?? 0) - (REVIEW_PIECE_VALUE[y.type] ?? 0))[0];
+      return back
+        ? `${m.san} takes the ${name(m.captured ?? 'p')}, but their ${name(back.type)} takes back — you give up more than you win.`
+        : `${m.san} takes the ${name(m.captured ?? 'p')}.`;
+    });
+    return { facts: `${lines.join(' ')} Before any capture, count: who takes back, and with what.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  // TIED — a guard that cannot leave its post, on either side.
+  if (topic === 'tied') {
+    const name = (pc: string): string => REVIEW_PIECE_NAME[pc] ?? pc;
+    const theirs = findTiedDefenders(fen, myC).map((t) => `Their ${name(t.defender.piece)} on ${t.defender.square} is tied to guarding their ${name(t.target.piece)} on ${t.target.square} — if it leaves, you win the ${name(t.target.piece)}. Attack something else it must cover and it cannot answer both.`);
+    const mine = findTiedDefenders(fen, oppC).map((t) => `Your ${name(t.defender.piece)} on ${t.defender.square} is tied to guarding your ${name(t.target.piece)} on ${t.target.square} — move it and the ${name(t.target.piece)} falls, so watch for a second attack it can't also meet.`);
+    // A NAMED piece of theirs is answered first: "is my bishop tied down?".
+    const named = /\b(knight|bishop|rook|queen)\b/i.exec(ask ?? '')?.[1]?.toLowerCase();
+    const letter = named ? ({ knight: 'n', bishop: 'b', rook: 'r', queen: 'q' } as Record<string, string>)[named] : null;
+    if (letter && /\bmy\b/i.test(ask ?? '')) {
+      const myTies = findTiedDefenders(fen, oppC).filter((t) => t.defender.piece === letter);
+      if (myTies.length === 0) {
+        const c = new Chess(fen);
+        const squares = c.board().flat().filter((x): x is NonNullable<typeof x> => !!x && x.color === myC && x.type === letter).map((x) => x.square);
+        const where = squares.length ? ` on ${andList(squares)}` : '';
+        return { facts: `No — your ${named}${where} is free to move: nothing it guards falls if it leaves.${theirs.length ? ` ${theirs.join(' ')}` : ''}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+      }
+    }
+    const all = [...mine, ...theirs];
+    return { facts: all.length ? all.join(' ') : 'Nothing is tied down right now: every guarded piece has a spare defender, so any guard can leave its post.', bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+  // COUNT — attackers against guards on the square the student names.
+  if (topic === 'count') {
+    const sq = /\b([a-h][1-8])\b/.exec(ask ?? '')?.[1] as Square | undefined;
+    if (!sq) return null;
+    const c = new Chess(fen);
+    const at = c.get(sq);
+    const owner = at ? at.color : null;
+    const hitter: 'w' | 'b' = owner && owner !== myC ? myC : oppC;
+    const guard: 'w' | 'b' = hitter === myC ? oppC : myC;
+    const times = (n: number): string => ['no times', 'once', 'twice', 'three times', 'four times'][n] ?? `${n} times`;
+    const a = c.attackers(sq, hitter).length;
+    const d = c.attackers(sq, guard).length;
+    const who = hitter === myC ? 'You hit' : 'They hit';
+    const guards = guard === myC ? 'you guard' : 'they guard';
+    const what = at ? `the ${REVIEW_PIECE_NAME[at.type] ?? 'piece'} on ${sq}` : sq;
+    const rule = a > d
+      ? 'More attackers than guards — but take with the cheapest piece first, and count what each trade costs.'
+      : 'Not enough yet: a piece falls only when its attackers outnumber its guards — or when a cheaper piece hits a dearer one.';
+    return { facts: `${who} ${what} ${times(a)}, and ${guards} it ${times(d)}. ${rule}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   if (topic === 'best-piece') {
@@ -6717,17 +6834,21 @@ export function assemblePositionalAnswer(
   }
 
   if (topic === 'targets') {
+    // "What is their weakness?" leads with THE weakness and why it is one.
+    const wRead = /\bweak/i.test(ask ?? '') ? methodRead(fen, myC) : null;
+    const lead = wRead ? weaknessLine(wRead) : null;
+    if (lead) return { facts: lead, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     const targets = findAttackTargets(fen, myC);
     const turn = fen.split(' ')[1];
     const grabs = turn === myC ? findPawnGrabs(fen).filter((g) => g.safe && g.see > 0) : [];
-    const tg = targets.length ? `Aim at ${andList(targets)} — ${opp}'s weak point${targets.length > 1 ? 's' : ''}.` : '';
+    const tg = targets.length ? `Aim at ${andList(targets)} — their weak point${targets.length > 1 ? 's' : ''}.` : '';
     const gr = grabs.length ? `Free pawn${grabs.length > 1 ? 's' : ''}: ${andList(grabs.map((g) => g.capture))}.` : '';
     if (tg || gr) return { facts: [tg, gr].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
     // No concrete target yet — name what to work toward: their weak pawns, then
     // the holes to provoke, then "make one with a break". Never a bare deflect.
     const wp = findWeakPawns(fen, oppC);
     const weak = [...wp.isolated, ...wp.backward, ...wp.doubled];
-    if (weak.length) return { facts: `No loose piece to grab, but ${opp}'s ${andList(weak)} pawn${weak.length > 1 ? 's are' : ' is'} the long-term target — pile up on ${weak.length > 1 ? 'them' : 'it'}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    if (weak.length) return { facts: `No loose piece to grab, but their ${andList(weak)} pawn${weak.length > 1 ? 's are' : ' is'} the long-term target — pile up on ${weak.length > 1 ? 'them' : 'it'}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     const holes = findWeakSquares(fen);
     const oppHoles = (myC === 'w' ? holes.black : holes.white);
     if (oppHoles.length) return { facts: `Nothing hanging yet — the target is the weak square${oppHoles.length > 1 ? 's' : ''} on ${andList(oppHoles)}; occupy ${oppHoles.length > 1 ? 'them' : 'it'} and build from there.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };

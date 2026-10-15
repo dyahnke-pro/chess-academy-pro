@@ -2755,5 +2755,185 @@
     "mate": 2
    }
   ]
+ },
+ "r1bqk1nr/pp3pp1/1bpp3p/n3p3/3PP3/2P2N2/PP2BPPP/RNBQ1RK1 w kq - 1 9": {
+  "bestMove": "b2b4",
+  "evaluation": 394,
+  "isMate": false,
+  "mateIn": null,
+  "depth": 18,
+  "seldepth": 40,
+  "nodesPerSecond": 0,
+  "wdl": null,
+  "topLines": [
+   {
+    "rank": 1,
+    "moves": [
+     "b2b4",
+     "g8f6",
+     "d4e5",
+     "f6e4",
+     "b4a5",
+     "b6c5",
+     "d1c2",
+     "c5f2",
+     "f1f2",
+     "e4f2",
+     "g1f2",
+     "d6e5",
+     "f2g1",
+     "d8a5"
+    ],
+    "evaluation": 394,
+    "mate": null
+   },
+   {
+    "rank": 2,
+    "moves": [
+     "b1a3",
+     "e5d4",
+     "b2b4",
+     "d4c3",
+     "b4a5",
+     "b6c7",
+     "a3c4",
+     "g8f6",
+     "c1a3",
+     "f6e4",
+     "d1d4",
+     "d6d5",
+     "d4g7",
+     "d8f6",
+     "g7f6",
+     "e4f6",
+     "c4d6",
+     "c7d6",
+     "a3d6",
+     "b7b6"
+    ],
+    "evaluation": 300,
+    "mate": null
+   },
+   {
+    "rank": 3,
+    "moves": [
+     "d4e5",
+     "d6d5",
+     "b1d2",
+     "g8e7",
+     "b2b4",
+     "a5c4",
+     "d2c4",
+     "d5c4",
+     "f3d2",
+     "c8e6",
+     "d2c4",
+     "d8d1",
+     "f1d1",
+     "e6c4",
+     "e2c4",
+     "e7g6",
+     "e5e6",
+     "f7e6",
+     "c4e6",
+     "h8f8",
+     "e6c4"
+    ],
+    "evaluation": 266,
+    "mate": null
+   }
+  ]
+ },
+ "r1bqk2r/pp3pp1/1bpp1n1p/n3p3/3PP3/2P2N2/PP2BPPP/RNBQ1RK1 b kq - 2 10": {
+  "bestMove": "c8e6",
+  "evaluation": 143,
+  "isMate": false,
+  "mateIn": null,
+  "depth": 18,
+  "seldepth": 46,
+  "nodesPerSecond": 0,
+  "wdl": null,
+  "topLines": [
+   {
+    "rank": 1,
+    "moves": [
+     "c8e6",
+     "b1a3",
+     "f6e4",
+     "d1c2",
+     "e4g5",
+     "f3g5",
+     "h6g5",
+     "b2b4",
+     "b6c7",
+     "b4a5",
+     "d6d5",
+     "d4e5",
+     "c7e5",
+     "h2h3",
+     "d8f6",
+     "c2d1",
+     "e6h3",
+     "g2h3",
+     "h8h3",
+     "e2g4",
+     "f6h6"
+    ],
+    "evaluation": 143,
+    "mate": null
+   },
+   {
+    "rank": 2,
+    "moves": [
+     "d6d5",
+     "f3e5",
+     "e8g8",
+     "f1e1",
+     "c8e6",
+     "e4d5",
+     "c6d5",
+     "c1f4",
+     "a5c6",
+     "e2d3",
+     "c6e5",
+     "f4e5",
+     "b6c7",
+     "b1d2",
+     "c7e5",
+     "d4e5"
+    ],
+    "evaluation": 178,
+    "mate": null
+   },
+   {
+    "rank": 3,
+    "moves": [
+     "c6c5",
+     "d4d5",
+     "c5c4",
+     "f3d2",
+     "h6h5",
+     "b2b4",
+     "c4b3",
+     "a2b3",
+     "f6g4",
+     "b3b4",
+     "a5c6",
+     "d5c6",
+     "d8h4",
+     "d2f3",
+     "g4f2",
+     "f3h4",
+     "f2d1",
+     "g1h1",
+     "d1f2",
+     "f1f2",
+     "b6f2",
+     "c6b7"
+    ],
+    "evaluation": 236,
+    "mate": null
+   }
+  ]
  }
 }

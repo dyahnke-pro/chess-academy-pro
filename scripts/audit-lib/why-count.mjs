@@ -134,3 +134,21 @@ export function whyTally(lines, studentMoves) {
     prevalent: share >= WHY_SHARE_BAR, numerous: perMove >= 1,
   };
 }
+
+// ── PLAN TEACHING (David 2026-10-15: "We need to be able to tell why the
+// computer picked which plan" … "teach the user how to think for themselves").
+// Every plan stated carries why it was chosen; the method (the three
+// questions) is asked once a game. Counted across the tape: on Learn the think
+// pause splits a question from its answer into two spoken lines.
+const PLAN_STATED = /\bthe plan (?:from here is|changes here)\b|\bThe new plan is\b/i;
+const PLAN_WHY = /\bWhy this one\b|\bWhy it matters\b|\bso it comes before\b/i;
+const PLAN_METHOD = /\bHow do you find a plan\?/;
+const PLAN_STEP = /\bwas (?:a step of the plan|the plan at work)\b/;
+export function planTally(lines) {
+  const ls = lines.map(String);
+  const stated = ls.filter((t) => PLAN_STATED.test(t)).length;
+  const why = ls.filter((t) => PLAN_WHY.test(t)).length;
+  const method = ls.filter((t) => PLAN_METHOD.test(t)).length;
+  const steps = ls.filter((t) => PLAN_STEP.test(t)).length;
+  return { stated, why, method, steps, everyPlanHasWhy: why >= stated, methodAsked: stated === 0 || method >= 1 };
+}

@@ -99,7 +99,7 @@ export interface BoardContexts {
   threatCost: { line: string; fen: string; student: Color; squares: readonly string[] };
   /** The student's plan, carried across moves: its stop proven off their
    *  move, then the next plan (mutates the thread held in the surface's memory). */
-  planThread: { thread: PlanThread; ply: number; fenBefore: string; fenAfter: string; student: Color; studentPovCp?: number | null };
+  planThread: { thread: PlanThread; ply: number; fenBefore: string; fenAfter: string; student: Color; studentPovCp?: number | null; studentMove?: { fenBefore: string; san: string } | null };
   /** The line tactics (tacticGeometry): interference, clearance, decoy and
    *  deflection, the discovery audit, their in-between move, the fork that
    *  serves a plan, the kick that fails, the counterfactual fork, the pawn

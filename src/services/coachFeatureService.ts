@@ -49,6 +49,7 @@ import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { noteSlip } from './learnBoardTeaching';
 import { recall, type RecallMemory } from './fundamentalRecurrence';
 import { readBoard, readBoardAll } from './boardComputers';
+import { stripThink } from '../utils/thinkPause';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { mateStakes, isSacrifice, type FactStakes } from './factStakes';
@@ -1952,7 +1953,9 @@ export function buildReviewSegments(
         if (verdict) facets.push(`[opening] ${verdict}`);
       }
       for (const e of arcByIndex.get(i) ?? []) {
-        const raw = `[plan-arc] ${e.text}`;
+        // Review has no think pause: the question and its answer run on as one
+        // line (the arc's "‖" was reaching the review's text).
+        const raw = `[plan-arc] ${stripThink(e.text)}`;
         facets.push(raw);
         if (e.squares.length) facetSquares.set(raw, e.squares);
         if (e.seat === 'opponent') facetIncoming.add(raw);
@@ -2020,10 +2023,14 @@ export function buildReviewSegments(
       const planTrial = clonePlanThread(planT);
       if (studentColorWB && !isStudentForAttr) {
         const povCp = m.evaluation != null ? (studentColorWB === 'w' ? m.evaluation : -m.evaluation) : null;
-        for (const r of readBoardAll('planThread', { thread: planTrial, ply: m.ply, fenBefore: fenPair.fenBefore, fenAfter: fenPair.fenAfter, student: studentColorWB, studentPovCp: povCp })) {
-          const raw = `[plan-now] ${r.text}`;
+        // Their move follows the student's: the ply before is the student's own
+        // (`planStepLine` checks the side to move on that board).
+        const prevStudent = i > 0 && moves[i - 1] ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null;
+        for (const r of readBoardAll('planThread', { thread: planTrial, ply: m.ply, fenBefore: fenPair.fenBefore, fenAfter: fenPair.fenAfter, student: studentColorWB, studentPovCp: povCp, studentMove: prevStudent })) {
+          // Review has no think pause: the question and its answer run on.
+          const raw = `[plan-now] ${stripThink(r.text)}`;
           facets.push(raw);
-          facetIdentity.set(raw, r.key.startsWith('plan:stopped:') ? 'plan-thread:stop' : 'plan-thread:plan');
+          facetIdentity.set(raw, r.key.startsWith('plan:stopped:') ? 'plan-thread:stop' : r.key.startsWith('plan:step:') ? 'plan-thread:step' : 'plan-thread:plan');
           facetProofs.set(raw, r.proof);
           if (r.squares.length) facetSquares.set(raw, r.squares);
         }
@@ -2076,6 +2083,8 @@ export function buildReviewSegments(
             });
           } else if (role === 'plan-thread:stop') {
             keep(f, adoptPlanThread);
+          } else if (role === 'plan-thread:step') {
+            keep(f);
           }
           continue;
         }

@@ -18,6 +18,9 @@ import type { Color } from 'chess.js';
 import { deriveNextPlanFacts, type PlanFact, type PlanKind } from './nextPlans';
 import { planStoppedProof, planStoppedLine } from './planStopped';
 import { NO_PROOF, type FactProof } from './proof';
+import { methodRead, methodLine, methodSquares, methodPlan, whyThisPlan, planWorth } from './planChoice';
+import { planStepLine } from './planStep';
+import { THINK_MARK } from '../utils/thinkPause';
 
 /** The plan's goal in the plan arc's own id form (`aimsOf`): a passer and a
  *  file by their file, an outpost by its square, the king attack as one. Null
@@ -48,10 +51,12 @@ export interface PlanThread {
   /** Plans whose HOW has been said this game — said again, a plan names its
    *  goal only (Learn audit 2026-10-15: the passed-pawn how-to three times). */
   howSaid: Set<string>;
+  /** The three questions of the method have been asked this game. */
+  methodSaid: boolean;
 }
 
 export function newPlanThread(): PlanThread {
-  return { stated: null, stoppedInRow: 0, wasStopped: false, lastStatedPly: null, howSaid: new Set<string>() };
+  return { stated: null, stoppedInRow: 0, wasStopped: false, lastStatedPly: null, howSaid: new Set<string>(), methodSaid: false };
 }
 
 /** A copy to try a turn on: a surface that commits only what was SPOKEN
@@ -89,9 +94,18 @@ export function planThreadTurn(
     /** The engine's student-POV eval after their move, when the surface has
      *  one — so "convert your extra material" waits for a real edge. */
     studentPovCp?: number | null;
+    /** The student's move before their reply, to credit a step of the plan. */
+    studentMove?: { fenBefore: string; san: string } | null;
   },
 ): PlanThreadLine[] {
   const out: PlanThreadLine[] = [];
+  // THE STUDENT'S MOVE AS A STEP OF THE PLAN — credited before anything else,
+  // while the plan they heard still stands.
+  if (t.stated && args.studentMove) {
+    const step = planStepLine(t.stated.fact, args.studentMove.fenBefore, args.studentMove.san, args.student);
+    // Its proof is the board: the squares the step landed on and the target it serves.
+    if (step) out.push({ text: step.text, squares: step.squares, claim: `plan:step:${t.stated.fact.id}:${args.ply}`, proof: { kind: 'squares', exact: true, short: step.text, full: step.text, squares: step.squares } });
+  }
   // A plan that held long enough means they were not shutting plans down.
   if (t.stated && args.ply - t.stated.ply >= PLAN_THREAD_HOLD_PLIES * 2) t.stoppedInRow = 0;
   if (t.stated) {
@@ -117,14 +131,43 @@ export function planThreadTurn(
   // The how-to is taught once a game per plan; a plan restated names its goal.
   const fullBody = top.text.replace(/^the plan from here is to /i, '');
   const body = t.howSaid.has(top.id) ? fullBody.split(/\. Here's how: /)[0] : fullBody;
-  t.howSaid.add(top.id);
-  const text = t.wasStopped
+  const said = t.wasStopped
     ? `The new plan is to ${body}.`
     : t.stated || t.lastStatedPly !== null
       ? `The plan changes here — now it's to ${body}.`
       : `${cap(top.text)}.`;
+  // HOW IT WAS FOUND, the first time a plan is stated: the three questions,
+  // a pause to think, then the answers and the plan they lead to.
+  // The method leads only where its answers ARE the plan: a passed pawn or an
+  // extra piece to convert outranks all three questions, and saying the
+  // questions before an unrelated plan is what made them not line up.
+  const methodOwns = top.kind !== 'passer' && top.kind !== 'convert';
+  const read = !t.methodSaid && methodOwns ? methodRead(args.fenAfter, args.student) : null;
+  const mp = read ? methodPlan(read) : null;
+  // WHY THIS ONE — the reason it outranks the next plan on the board. Asked as
+  // a question when no method question already opened the line (one pause).
+  const why = whyThisPlan(plans);
+  const alt = plans.find((p) => p.kind !== top.kind);
+  const whyText = why
+    ? read
+      ? ` Why this one first? ${cap(why)}.`
+      : alt
+        // The question names the plan it beats; the answer is the reason alone.
+        ? ` Why this one and not ${alt.goalIng}? ${THINK_MARK} ${cap(planWorth(top))}.`
+        : ` Why it matters: ${why}.`
+    : '';
+  // THE ANSWERS MAKE THE PLAN (planChoice.methodPlan): the steps the three
+  // questions found, in the order a strong player plays them, and why that order.
+  const text = read && mp
+    ? `${methodLine(read)} So the plan: ${mp.text}.${mp.why ? ` Why in that order? ${mp.why}.` : ''}`
+    : `${said}${whyText}`;
+  if (read && mp) t.methodSaid = true;
+  // The how-to is marked said only when it WAS said: the method's own plan
+  // carries the steps instead, so the plan's how waits for its next statement.
+  else t.howSaid.add(top.id);
+  const squares = read && mp ? [...new Set([...methodSquares(read), ...mp.squares])] : top.squares;
   const aim = planAimKey(top.kind, top.squares[0] ?? top.file ?? null);
-  out.push({ text, squares: top.squares, claim: `plan:student:struct:${top.id}:${args.ply}`, proof: NO_PROOF.description, ...(aim ? { aim } : {}) });
+  out.push({ text, squares, claim: `plan:student:struct:${top.id}:${args.ply}`, proof: NO_PROOF.description, ...(aim ? { aim } : {}) });
   t.stated = { fact: top, ply: args.ply };
   t.lastStatedPly = args.ply;
   t.wasStopped = false;

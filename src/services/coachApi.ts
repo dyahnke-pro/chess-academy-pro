@@ -97,7 +97,7 @@ import type { OpeningRecord } from '../types';
 import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights, getTimeTroubleProfile, getLastGameResult, getLastGameErrors, getRecentGamesErrors, getPlayerStyleProfile } from './gameInsightsService';
 import { matchOpponentOpening } from './counterRepertoireService';
 import { getMisconceptionProfile } from './misconceptionService';
-import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer, assembleTimeTroubleAnswer, assembleLastGameAnswer, assembleRetrospectiveAnswer, assembleMethodAnswer, assembleHintAnswer, hintUnavailableReason, assemblePiecePlanAnswer } from './groundedAnswer';
+import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer, assembleTimeTroubleAnswer, assembleLastGameAnswer, assembleRetrospectiveAnswer, assembleMethodAnswer, assemblePlanMethodAnswer, assembleHintAnswer, hintUnavailableReason, assemblePiecePlanAnswer } from './groundedAnswer';
 import { computeLastMoveRating, computeMoveRatingAt, computeMoveRatingFromFen, lastPlyOf, type MoveRating } from './moveRating';
 import { errorCallFor } from './inaccuracyCall';
 import { homeOpeningRow, rankOpeningsByVolume } from './openingVolumeFloor';
@@ -4336,6 +4336,16 @@ export async function getCoachChatResponse(
         // board, computed; never the best move (the student asked how to find
         // it). Runs before plan / best-move / teaching-method, which each used
         // to answer a question about HOW with a WHAT.
+        // HOW TO FIND A PLAN — a method question about planning gets the plan
+        // method: the three questions answered on this board, the plan, its
+        // why (planChoice). Board or no board.
+        if (grounding.methodQuestion && /\bplan/i.test(lastUserMessage() ?? '')) {
+          const sc: 'white' | 'black' = grounding.studentColor
+            ?? ((grounding.currentFen?.split(' ')[1] === 'b') ? 'black' : 'white');
+          const answer = assemblePlanMethodAnswer(grounding.currentFen ?? null, sc);
+          const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'method', preferRaw: true });
+          return voiced ?? answer.facts;
+        }
         if (grounding.methodQuestion && grounding.currentFen) {
           try {
             const sc: 'white' | 'black' = grounding.studentColor

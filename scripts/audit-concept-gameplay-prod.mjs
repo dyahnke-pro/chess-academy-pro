@@ -57,7 +57,7 @@
  */
 import { linesWithStats } from './audit-lib/spoken-stats.mjs';
 import { linesWithBuriedMate } from './audit-lib/mate-leads.mjs';
-import { whyTally, formulaRepeats, turnLength, TURN_WORDS_MAX } from './audit-lib/why-count.mjs';
+import { whyTally, formulaRepeats, turnLength, TURN_WORDS_MAX, planTally } from './audit-lib/why-count.mjs';
 import { chromium } from 'playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
@@ -556,6 +556,12 @@ async function main() {
     const why = whyTally(tape, studentMoves);
     record('V5. why statements clear the floor (80% of teaching lines give a reason) and are numerous (≥1 per student move)', why.prevalent && why.numerous,
       `${why.withWhy}/${why.lines} teaching lines carry a why (${Math.round(why.share * 100)}%), ${why.whySentences} why sentences over ${studentMoves} student moves = ${why.perMove.toFixed(1)}/move${why.whyless.length ? ` — whyless e.g. "${why.whyless.slice(0, 3).join('" | "').slice(0, 260)}"` : ''}`);
+    // PLAN TEACHING (David 2026-10-15): every plan stated says why it was
+    // chosen over the next one; the method — their weakness, your worst piece,
+    // your pawn break — is asked once a game; steps of the plan are credited.
+    const plan = planTally(tape);
+    record('V10. every plan says why it was chosen, and the method is asked once a game', plan.everyPlanHasWhy && plan.methodAsked,
+      `${plan.stated} plan statement(s), ${plan.why} why(s), method asked ${plan.method}×, ${plan.steps} step(s) credited`);
     // REASON VARIETY (David 2026-10-14): no reason formula said more than
     // twice in one game — the third "nothing's defending it" is a template.
     const formulas = games.flatMap((g) => formulaRepeats(g));

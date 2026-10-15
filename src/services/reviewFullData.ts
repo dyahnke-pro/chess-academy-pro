@@ -26,6 +26,7 @@ import { detectBluff, bluffClause } from './bluffDetector';
 import { computeGemCrush } from './gemCrushLines';
 import { getPunishGemById } from '../data/lessons/punishGems';
 import { forkConsequence } from './tacticVocabulary';
+import { squareRole } from './squareRole';
 import { Chess, type Color, type Square } from 'chess.js';
 import { landedTacticFor, plyFactsForMove } from './pvPlayback';
 import { definitionKey, tacticInvariant } from './conceptEngine';
@@ -1796,10 +1797,17 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
         }
       }
     }
+    // A CENTRAL SQUARE IS NAMED ONLY WITH WHAT IT IS FOR (squareRole):
+    // "fights for d5" alone was scenery said on ~20 plies; "fights for d5,
+    // holding back their d-pawn" is the reason the square matters.
     const fights: string[] = [];
     for (const sq of ['d4', 'e4', 'd5', 'e5'] as const) {
       if (sq === to || a.get(sq)) continue;
-      if (a.attackers(sq, pc.color).includes(to)) { fights.push(sq); squaresOut?.push(sq); }
+      if (!a.attackers(sq, pc.color).includes(to)) continue;
+      const role = squareRole(a, sq, pc.color, 'the');
+      if (!role) continue;
+      fights.push(`${sq}, ${role}`); squaresOut?.push(sq);
+      break;
     }
     // The moved piece's own square leads the set — the same geometry the
     // opponent read (`[opp-target]`) couples, so the selector can prove the

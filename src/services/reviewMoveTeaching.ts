@@ -20,6 +20,7 @@ import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZone
 import type { Move } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
+import { squareRole } from './squareRole';
 
 // Q1 — OCCUPATION. A pawn reaching one of these has staked the centre.
 const CENTER = new Set(CORE_CENTER);
@@ -76,12 +77,6 @@ function bishopCentralTargets(chess: Chess, sq: string, mover: 'w' | 'b'): strin
     }
   }
   return out.sort();
-}
-
-function list(sqs: string[]): string {
-  if (sqs.length === 1) return sqs[0];
-  if (sqs.length === 2) return `${sqs[0]} and ${sqs[1]}`;
-  return `${sqs.slice(0, -1).join(', ')}, and ${sqs[sqs.length - 1]}`;
 }
 
 type Struct = NonNullable<ReturnType<typeof describeStructure>>;
@@ -307,14 +302,21 @@ export function quietMovePoint(fenBefore: string, san: string): string | null {
 /** THE CENTER FIGHT, said in full once a lesson — every developing move
  *  fights for the center, and hearing it on every ply was the most repeated
  *  phrase in the app (150 times over 25 lessons). */
-function centerFight(phrases: PhraseMemory | null, piece: string, squares: string, tail: string): string {
+function centerFight(phrases: PhraseMemory | null, chess: Chess, color: 'w' | 'b', moverIsStudent: boolean, piece: string, squares: string[], tail: string): string | null {
+  // A SQUARE IS NAMED WITH WHAT IT IS FOR, or not at all (David 2026-10-15:
+  // "Start replacing descriptions with teachings"). "The knight bears down on
+  // d5" was the most repeated description in the app; the teaching is why d5
+  // matters — their pawn's next step, a hole, a square their piece wants.
+  const owner = moverIsStudent ? 'their' : 'your';
+  const named = squares.flatMap((sq) => { const role = squareRole(chess, sq as Sq, color, owner); return role ? [`${sq}, ${role}`] : []; });
+  if (!named.length) return null;
+  // Each item carries its own comma, so the last joins with ", and".
+  const sqs = named.length === 1 ? named[0] : `${named.slice(0, -1).join(', ')}, and ${named[named.length - 1]}`;
   return sayIdea(phrases, 'center-fight', [
-    `The ${piece} bears down on ${squares}, fighting for the center${tail}.`,
-    `The ${piece} adds its weight to ${squares}${tail}.`,
-    `The ${piece} joins the fight for ${squares}${tail}.`,
-    `The ${piece} eyes ${squares} too${tail}.`,
-    `The ${piece} covers ${squares}${tail}.`,
-    `The ${piece} takes aim at ${squares}${tail}.`,
+    `The ${piece} bears down on ${sqs}${tail}.`,
+    `The ${piece} adds its weight to ${sqs}${tail}.`,
+    `The ${piece} joins the fight for ${sqs}${tail}.`,
+    `The ${piece} covers ${sqs}${tail}.`,
   ]);
 }
 
@@ -401,13 +403,15 @@ export function buildReviewMoveTeaching(
   const isDevelopingGloss = !minorAttacksPiece && !mv.san.includes('+');
   if (mv.piece === 'n' && isDevelopingGloss) {
     const targets = knightCentralTargets(chess, mv.to, mv.color);
-    if (targets.length) return centerFight(phrases, 'knight', list(targets), '');
+    const fight = targets.length ? centerFight(phrases, chess, mv.color, moverIsStudent, 'knight', targets, '') : null;
+    if (fight) return fight;
     // no central target → fall through to the light developing tag
   }
   if (mv.piece === 'b' && isDevelopingGloss) {
     if (FIANCHETTO.has(mv.to)) return 'The bishop takes aim along the long diagonal.';
     const targets = bishopCentralTargets(chess, mv.to, mv.color);
-    if (targets.length) return sayIdea(phrases, 'bishop-rakes', [`The bishop rakes toward ${list(targets)}.`, `The bishop aims at ${list(targets)}.`, `The bishop lines up on ${list(targets)}.`, `The bishop looks at ${list(targets)}.`]);
+    const fight = targets.length ? centerFight(phrases, chess, mv.color, moverIsStudent, 'bishop', targets, '') : null;
+    if (fight) return fight;
     // no central target → fall through to the light developing tag
   }
 
@@ -530,7 +534,8 @@ export function buildReviewMoveTeaching(
   const central = eyes.controlled.filter((s) => targets.includes(s));
   if (central.length) {
     const nearKing = kingZoneAmong(central, chess, mv.color === 'w' ? 'white' : 'black');
-    return centerFight(phrases, PIECE_NOUN[mv.piece], list(central), kingZoneClause(nearKing));
+    const fight = centerFight(phrases, chess, mv.color, moverIsStudent, PIECE_NOUN[mv.piece], central, kingZoneClause(nearKing));
+    if (fight) return fight;
   }
   const advanced = coverageTeaches ? eyes.controlled.filter((s) => (mv.color === 'w' ? Number(s[1]) >= 5 : Number(s[1]) <= 4)) : [];
   if (advanced.length) {
