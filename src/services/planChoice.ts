@@ -67,7 +67,7 @@ export function methodRead(fen: string, student: Color): MethodRead | null {
   const w = findWorstPlacedPiece(chess, student);
   const worst = w ? { phrase: `your ${PIECE_NOUN[w.type]} on ${w.sq}`, square: w.sq } : null;
   const asMe = chess.turn() === student ? fen : flipTo(fen, student);
-  const breaks = asMe ? findPawnBreaks(asMe).map((s) => String(s)) : [];
+  const breaks: string[] = asMe ? findPawnBreaks(asMe) : [];
   if (!weakness && !worst && breaks.length === 0) return null;
   return { weakness, worst, breaks };
 }

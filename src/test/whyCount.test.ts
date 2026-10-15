@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 // @ts-expect-error — plain .mjs audit helper, no types.
-import { isWhy } from '../../scripts/audit-lib/why-count.mjs';
+import { isWhy, planTally } from '../../scripts/audit-lib/why-count.mjs';
 
 const isWhyFn = isWhy as (s: string) => boolean;
 
@@ -59,8 +59,7 @@ describe('turn length is an average over TEACHING turns (David 2026-10-15)', () 
 });
 
 describe('plan teaching tally (2026-10-15)', () => {
-  it('a plan stated without its why fails; with the method and the why it passes', async () => {
-    const { planTally } = await import('../../scripts/audit-lib/why-count.mjs');
+  it('a plan stated without its why fails; with the method and the why it passes', () => {
     expect(planTally(['The plan from here is to seize the open c-file. Here\'s how: put a rook on it.']).everyPlanHasWhy).toBe(false);
     expect(planTally(['The plan from here is to seize the open c-file.']).methodAsked).toBe(false);
     const ok = planTally(['How do you find a plan? Ask three things.', 'So: the plan from here is to win their weak pawn on d5. Why this one first? No pawn of theirs can protect it.']);
