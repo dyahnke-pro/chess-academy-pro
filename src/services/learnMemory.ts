@@ -55,6 +55,11 @@ export const NEVER_FIRED = -999;
 export interface LearnMemory {
   /** Explainer lines already given this game. */
   readonly saidExplainers: Set<string>;
+  /** How many times each rotated reason formula has been said this game — the
+   *  rotation key (David 2026-10-14: no reason formula more than twice a
+   *  game). A move number collided: three alerts on moves with the same
+   *  residue got the same wording. */
+  readonly stemCounts: Map<string, number>;
   /** The last gem callout spoken — suppresses the identical callout. */
   gemSeen: string | null;
   /** The board that gem callout was computed on. */
@@ -254,6 +259,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
   const mem: LearnMemory = {
     gameId: mintGameId(),
     saidExplainers,
+    stemCounts: new Map<string, number>(),
     structureSaid,
     planThread: null,
     lastProof: null,
@@ -292,6 +298,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     },
     newGame(): void {
       mem.slipsThisGame.clear();
+      mem.stemCounts.clear();
       mem.promises.clear();
       saidExplainers.clear();
       structureSaid.clear();
@@ -344,4 +351,11 @@ export function markOpeningFactsSpoken(
   const identity = claims.find((c) => c.startsWith('opening-identity:'));
   if (identity) mem.identitySaid = identity;
   if (claims.some((c) => c.startsWith('break-'))) mem.structureSaid.add('masters-plan');
+}
+
+/** The next rotation index for a reason formula, counted per game. */
+export function nextStem(mem: Pick<LearnMemory, 'stemCounts'>, key: string): number {
+  const n = mem.stemCounts.get(key) ?? 0;
+  mem.stemCounts.set(key, n + 1);
+  return n;
 }

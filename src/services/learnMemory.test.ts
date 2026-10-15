@@ -266,3 +266,14 @@ describe('queueing is not saying — opening facts are marked from the voice (20
     expect(src).toMatch(/!identityRidesName/);
   });
 });
+
+describe('reason wordings rotate per game, not per move number (David 2026-10-14)', () => {
+  it('three alerts get three stems, and a new game starts over', async () => {
+    const { createLearnMemory, nextStem } = await import('./learnMemory');
+    const m = createLearnMemory();
+    expect([nextStem(m, 'hanging'), nextStem(m, 'hanging'), nextStem(m, 'hanging')]).toEqual([0, 1, 2]);
+    expect(nextStem(m, 'pin')).toBe(0);
+    m.newGame();
+    expect(nextStem(m, 'hanging')).toBe(0);
+  });
+});

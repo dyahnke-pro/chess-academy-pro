@@ -527,10 +527,20 @@ export function moverLossProof(fen: string, uci: readonly string[], moverWB: 'w'
   // The line starts with the mover's move, so a mate of the MOVER ends on an
   // even ply; an odd-length mate is the mover mating, which explains nothing.
   const line = { fen, sans: proof.sans.slice(0, proof.plies) };
-  const said = (text: string): Proof => ({ kind: 'line', exact: false, short: text, full: text, line });
-  if (proof.mate) return proof.plies % 2 === 0 ? said(`${moves} — and it's mate`) : null;
+  const said = (end: string): Proof => heardProof(line, moves, end);
+  if (proof.mate) return proof.plies % 2 === 0 ? said("and it's mate") : null;
   if (!proof.ledger || proof.ledger.netPawns >= 0) return null;
-  return said(`${moves} — ${describeProofResult(proof.ledger)}`);
+  return said(describeProofResult(proof.ledger));
+}
+
+/** THE VOICE SAYS THE SHAPE, THE BOARD SHOWS THE DETAIL (proof guard 2): a
+ *  line of more than three moves is spoken as its first move and its result
+ *  (`short`); the whole line stays in `full` and on the board (Learn audit
+ *  2026-10-15: four refuted king moves recited eight moves each — 132 words). */
+function heardProof(line: { fen: string; sans: readonly string[] }, moves: string, end: string): Proof {
+  const full = `${moves} — ${end}`;
+  const short = line.sans.length <= 3 ? full : `${line.sans[0]} and the moves that follow — ${end}`;
+  return { kind: 'line', exact: false, short, full, line };
 }
 
 /** THE WINNING LINE, played out (WO-TEACH-GAPS P2 #3 — his "if X, then Y, and
@@ -548,8 +558,8 @@ export function moverLineProof(fen: string, uci: readonly string[], moverWB: 'w'
   if (!proof) return null;
   const line = { fen, sans: proof.sans.slice(0, proof.plies) };
   const moves = andList(line.sans);
-  const said = (text: string): Proof => ({ kind: 'line', exact: false, short: text, full: text, line });
-  if (proof.mate) return proof.plies % 2 === 1 ? said(`${moves} — and it's mate`) : null;
+  const said = (end: string): Proof => heardProof(line, moves, end);
+  if (proof.mate) return proof.plies % 2 === 1 ? said("and it's mate") : null;
   if (!proof.ledger || proof.ledger.netPawns <= 0) return null;
-  return said(`${moves} — ${describeProofResult(proof.ledger)}`);
+  return said(describeProofResult(proof.ledger));
 }
