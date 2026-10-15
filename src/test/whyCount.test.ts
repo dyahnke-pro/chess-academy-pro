@@ -10,6 +10,7 @@ const EFFECT_WHYS = [
   'Their queen going to b2 lifts the pressure: your pawn on h7 is safe now, and this move is yours to spend.',
   'A piece that far from home takes moves to come back.',
   'Your knight to b6 saves the knight from their knight on c3.',
+  'Your bishop to e5 saves it from their knight on b5.',
   'The pawn takes b6 away from their knight on d7.',
   'The plan here: take the half-open g-file, where the rook belongs — a rook needs an open file to reach their camp.',
   'You could take on d4 right now, but the threat is stronger than carrying it out.',
@@ -44,4 +45,15 @@ const DESCRIPTIONS_NOT_WHY = [
 describe('the why-counter (David 2026-10-14: consequence wordings count when they name what they act on)', () => {
   it.each(EFFECT_WHYS)('counts %s', (s) => expect(isWhyFn(s)).toBe(true));
   it.each(DESCRIPTIONS_NOT_WHY)('does not count %s', (s) => expect(isWhyFn(s)).toBe(false));
+});
+
+describe('turn length is an average over TEACHING turns (David 2026-10-15)', () => {
+  it('filler lines never pull the average down', async () => {
+    // @ts-expect-error — plain .mjs audit helper, no types.
+    const { turnLength } = await import('../../scripts/audit-lib/why-count.mjs');
+    const long = Array.from({ length: 100 }, () => 'idea').join(' ') + ' because it attacks your knight on c6.';
+    const r = (turnLength as (l: string[]) => { turns: number; avg: number })([long, 'e4 — your move.', 'e5 — your move.', 'Nf3 — your move.']);
+    expect(r.turns).toBe(1);
+    expect(r.avg).toBeGreaterThan(100);
+  });
 });

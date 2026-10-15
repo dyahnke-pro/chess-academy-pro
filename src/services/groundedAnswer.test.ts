@@ -1667,3 +1667,15 @@ describe('a cost is said in words, never as a number (V3, prod Learn audit 2026-
     }
   });
 });
+
+describe('the alternatives answer never names the best move bare (Learn audit 2026-10-15)', () => {
+  it('a quiet best move with no tactic still says why it is best', async () => {
+    const { assembleAlternativesAnswer } = await import('./groundedAnswer');
+    const r = assembleAlternativesAnswer({
+      fen: 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3',
+      lines: [{ san: 'h3', replySan: null, evalCp: 20, mateIn: null }, { san: 'Bb5', replySan: null, evalCp: 10, mateIn: null }],
+      studentColor: 'white',
+    });
+    expect(r?.facts).toMatch(/^The best move is h3\. It's a quiet move/);
+  });
+});

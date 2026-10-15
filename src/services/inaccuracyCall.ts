@@ -29,7 +29,7 @@
 // model what it thinks.
 import { capturedSquare } from '../utils/capturedSquare';
 import { evalBand } from './evalBand';
-import { andList } from '../utils/andList';
+import { andList, lineShape } from '../utils/andList';
 import { bestMoveReason, moveWhy } from './deliberation';
 import { toObserverSeat, captureHasCounterTactic } from './groundedAnswer';
 import { Chess, type Square } from 'chess.js';
@@ -1086,7 +1086,7 @@ export function errorWhy(args: {
       const c = new Chess(args.fenBefore); c.move(args.playedSan);
       const opp = args.moverColor === 'white' ? 'b' : 'w';
       const ml = mateLine(c.fen(), replyLineUci, opp, undefined, { minPlies: 1 });
-      if (ml && ml.plies.length <= 5) return `it let them force mate: ${andList(ml.sans)}`;
+      if (ml && ml.plies.length <= 3) return `it let them force mate: ${andList(ml.sans)}`;
       const u = replyLineUci[0];
       const m = u ? c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }) : null;
       const count = n > 0 && n <= 5 ? ` in ${n}` : '';
@@ -1116,7 +1116,7 @@ export function errorWhy(args: {
       if (w) {
         // The voice says the shape; the board walks the line (proof guard 2).
         tail = w.sans.length <= 3
-          ? ` The line: ${andList(w.sans)} — they come out ${w.what} up.`
+          ? ` The line: ${lineShape(w.sans)} — they come out ${w.what} up.`
           : ` The line starts with ${w.sans[0]}, and they come out ${w.what} up.`;
         line = { fen: b.fen(), uci: replyLineUci.slice(0, w.plies.length) };
       }

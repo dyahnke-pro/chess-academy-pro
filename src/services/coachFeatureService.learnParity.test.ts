@@ -51,12 +51,12 @@ describe('review carries the two Learn teachings', () => {
     seedBook();
     const segs = buildReviewSegments(inputs(), 'white', "Damiano Defense", true, 1200, [], coldStudent(1200), 'g');
     const ply5 = segs.find((s) => s.ply === 5);
-    expect(ply5?.narration ?? '').toMatch(/That wins [^:]+: Nxe5, …fxe5, Qh5\+, …g6, Qxe5\+, …Qe7 and Qxh8\./);
+    expect(ply5?.narration ?? '').toMatch(/That wins [^:]+: Nxe5 and the moves that follow\./);
   });
 });
 
 describe('review plays a mating line out as the mate', () => {
-  it('Légal: 5.Nxe5 — "It is a forced mate: Nxe5 …Bxd1 Bxf7+ …Ke7 Nd5#."', () => {
+  it('Légal: 5.Nxe5 — "It is a forced mate in 3, starting with Nxe5."', () => {
     const sans = ['e4', 'e5', 'Nf3', 'd6', 'Bc4', 'Bg4', 'Nc3', 'g6', 'Nxe5'];
     const c = new Chess();
     const inp = sans.map((san, i) => {
@@ -69,6 +69,6 @@ describe('review plays a mating line out as the mate', () => {
       } as ReviewMoveInput;
     });
     const segs = buildReviewSegments(inp, 'white', "Philidor Defense", true, 1200, [], coldStudent(1200), 'g');
-    expect(segs.find((s) => s.ply === 9)?.narration ?? '').toContain('It is a forced mate: Nxe5, …Bxd1, Bxf7+, …Ke7 and Nd5#.');
+    expect(segs.find((s) => s.ply === 9)?.narration ?? '').toContain('It is a forced mate in 3, starting with Nxe5.');
   });
 });

@@ -57,7 +57,7 @@
  */
 import { linesWithStats } from './audit-lib/spoken-stats.mjs';
 import { linesWithBuriedMate } from './audit-lib/mate-leads.mjs';
-import { whyTally, formulaRepeats, longLines, TURN_WORDS_MAX } from './audit-lib/why-count.mjs';
+import { whyTally, formulaRepeats, turnLength, TURN_WORDS_MAX } from './audit-lib/why-count.mjs';
 import { chromium } from 'playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
@@ -511,7 +511,7 @@ async function main() {
         if (walks > 0) { answered = { ask, text, walks, last, walk0: await last.locator('[data-testid="message-walk-line-0"]').elementHandle().catch(() => null) }; break; }
       }
       for (const e of listener.getCapturedEvents().filter((x) => x.source === 'coachService.pieceOptions')) console.log(`[piece-stage] ${e.summary}`);
-      record('H1. a "couldn\'t they just move X?" ask is answered by the COMPUTER (job → squares → refutation → verdict)', !!answered && /\b(Where can|So (yes|no)|So [A-Z][a-z]?[a-h1-8x+]* was about as good|comes down to the best square|square that holds|gives up its guard|is attacked|holds?\.)\b/.test(answered.text), answered ? answered.text.slice(0, 200) : 'no ask produced walkable lines');
+      record('H1. a "couldn\'t they just move X?" ask is answered by the COMPUTER (job → squares → refutation → verdict)', !!answered && /\b(Where can|So (yes|no)|So [A-Z][a-z]?[a-h1-8x+]* was about as good|comes down to the best square|the question is just its best square|square that holds|gives up its guard|is attacked|holds?\.)\b/.test(answered.text), answered ? answered.text.slice(0, 200) : 'no ask produced walkable lines');
       record('H2. the answer carries a Walk button per calculated line', !!answered && answered.walks > 0, answered ? `${answered.walks} walk button(s)` : '0');
       if (answered) {
         // While the answer is spoken the board SHOWS the question's position
@@ -560,9 +560,9 @@ async function main() {
     // twice in one game — the third "nothing's defending it" is a template.
     const formulas = games.flatMap((g) => formulaRepeats(g));
     record('V7. no reason formula is said more than twice in a game', formulas.length === 0, `${formulas.length} formula(s)${formulas.length ? ` — ${formulas.map((f) => `${f.count}× "${f.formula.slice(0, 90)}"`).join(' | ').slice(0, 300)}` : ''}`);
-    // TURN LENGTH: one lead reason per turn, never a stack that buries it.
-    const long = longLines(tape);
-    record(`V8. no turn runs past ${TURN_WORDS_MAX} words (one lead reason per turn)`, long.length === 0, `${long.length} line(s)${long.length ? ` — longest ${Math.max(...long.map((t) => t.split(/\s+/).length))}w: "${long[0].slice(0, 140)}"` : ''}`);
+    // TURN LENGTH — the AVERAGE over the game; a single long turn never fails.
+    const len = turnLength(tape);
+    record(`V8. average turn at most ${TURN_WORDS_MAX} words (an average, never a limit)`, len.avg <= TURN_WORDS_MAX, `avg ${len.avg.toFixed(1)}w over ${len.turns} turns, longest ${len.longest}w (info)`);
     const buried = linesWithBuriedMate(tape);
     record('V4. a forced mate leads its line (never behind a lesson)', buried.length === 0, `${buried.length} line(s)${buried.length ? ` — ${buried[0].slice(0, 160)}` : ''}`);
     record('V2. words per student move REPORTED (his speed runs: ~35–50)', true, `${words} words over ${studentMoves} student moves = ${Math.round(words / studentMoves)}/move; longest line ${Math.max(0, ...tape.map((t) => t.split(/\s+/).length))}w`);

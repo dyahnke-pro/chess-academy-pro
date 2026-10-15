@@ -12,6 +12,7 @@
  * Pure + side-effect-free so it's trivially testable and can't regress the
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
+import { purposeFromLine } from './movePurpose';
 import { costWords } from './engineConstants';
 import { capturedSquare } from '../utils/capturedSquare';
 import { evalBand, evalBandWords } from './evalBand';
@@ -1922,14 +1923,17 @@ export function assembleMoveEvalAnswer(opts: {
   if (ownReason) parts.push(`It ${ownReason}.`);
   else if (why) parts.push(why);
   else {
-    // NAMED WITH ITS REASON (question walk 2026-09-27: "The best move is g3."
-    // and nothing else). What the move does on the board, else the fact that
-    // makes a quiet best move best: nothing forcing does better.
-    const geo = describeMoveGeometry(fen, bestMoveSan, mover);
-    // A move that attacks something is never "a quiet move" (pass 2: Qb3,
-    // hitting b7 and d5, was called quiet because a bare attack was skipped).
-    if (geo) parts.push(`It ${geo}.`);
-    else if (!/[x+#]/.test(bestMoveSan)) parts.push("It's a quiet move — nothing forcing does better here, so the engine improves the position instead.");
+    // WHAT IT IS FOR, from the engine's own line — the one purpose computer
+    // every surface speaks (`movePurpose`) — before the geometry floor.
+    const pvLine = (() => {
+      if (!opts.pvSan?.length || opts.pvSan[0] !== bestMoveSan) return null;
+      const moves: string[] = [];
+      try { const c = new Chess(fen); for (const x of opts.pvSan) { const m = c.move(x); moves.push(`${m.from}${m.to}${m.promotion ?? ''}`); } } catch { /* the playable prefix */ }
+      return moves.length >= 2 ? { rank: 1, evaluation: opts.evalCp ?? 0, moves, mate: null } : null;
+    })();
+    const purpose = pvLine ? purposeFromLine(fen, bestMoveSan, [pvLine], theirMove ? 'opponent' : 'student') : null;
+    const fallback = purpose?.text ?? bestMoveFallbackReason(fen, bestMoveSan, mover);
+    if (fallback) parts.push(fallback);
   }
   if (evalText && !startsMate) parts.push(`${openSentence(evalText)}.`);
 
@@ -2457,6 +2461,20 @@ export interface AlternativeLineFact {
   mateIn: number | null;
 }
 
+/** NAMED WITH ITS REASON (question walk 2026-09-27: "The best move is g3."
+ *  and nothing else). When neither why-computer has a reason: what the move
+ *  does on the board, else the fact that makes a quiet best move best —
+ *  nothing forcing does better. One fallback for every best-move answer
+ *  (Learn audit 2026-10-15: "The best move is Qd7. You're losing."). */
+function bestMoveFallbackReason(fen: string, san: string, mover: 'white' | 'black'): string | null {
+  const geo = describeMoveGeometry(fen, san, mover);
+  // A move that attacks something is never "a quiet move" (pass 2: Qb3,
+  // hitting b7 and d5, was called quiet because a bare attack was skipped).
+  if (geo) return `It ${geo}.`;
+  if (!/[x+#]/.test(san)) return "It's a quiet move — nothing forcing does better here, so the engine improves the position instead.";
+  return null;
+}
+
 /**
  * assembleAlternativesAnswer — the GROUNDED answer to "why is the best move
  * better than the alternatives / what else could I play / why are the natural
@@ -2517,7 +2535,10 @@ export function assembleAlternativesAnswer(opts: {
   // 1. The best move + the grounded WHY (fork/pin/mate/material/positional).
   const why = explainBestMoveGrounded(fen, null, bestUci, mover, null, null);
   parts.push(`The best move is ${bestSan}.`);
-  if (why) parts.push(why);
+  const moverWB = mover === 'white' ? 'w' : 'b';
+  const reason = why ?? (() => { const r = bestMoveReason(fen, bestSan, moverWB, { mateIn: null, opponentLastSan: null }); return r ? `It ${r}.` : null; })()
+    ?? bestMoveFallbackReason(fen, bestSan, mover);
+  if (reason) parts.push(reason);
 
   // 2. Each alternative, graded by its cp-gap to best, with the engine's
   //    punishing reply as the concrete consequence.

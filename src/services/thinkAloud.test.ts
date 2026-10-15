@@ -81,3 +81,19 @@ describe('several jobs at once, in the door\'s own move-why (catalogue §3; game
   });
 });
 
+
+describe('what they keep doing — the same mistake twice is named (Learn audit 2026-10-15)', () => {
+  it('a piece left where it can be won, twice', async () => {
+    const { habitReads, opponentHabits } = await import('./thinkAloud');
+    // …Ng4 hangs the knight to Qxg4, and …Nc6 leaves it there.
+    const sans = ['e4', 'Nf6', 'Nc3', 'Ng4', 'd3', 'Nc6'];
+    expect(habitReads(sans, 'b').looseMoves).toBe(2);
+    expect(opponentHabits(sans, 'b')[0]?.kind).toBe('loose');
+    expect(opponentHabits(sans.slice(0, 4), 'b').some((h) => h.kind === 'loose')).toBe(false);
+  });
+  it('pawns pushed in front of their own castled king', async () => {
+    const { habitReads } = await import('./thinkAloud');
+    const sans = ['e4', 'e5', 'Nf3', 'Nf6', 'Bc4', 'Be7', 'd3', 'O-O', 'Nc3', 'h6', 'Be3', 'g5'];
+    expect(habitReads(sans, 'b').kingPawnPushes).toBe(2);
+  });
+});

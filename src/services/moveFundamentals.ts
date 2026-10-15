@@ -954,7 +954,7 @@ function openingIdeas(
         out.push({
           id: 'keep-working',
           weight: 58,
-          led: `saves the ${name} from ${by}`,
+          led: `saves it from ${by}`,
           selfContained: `saves the ${name} from ${by}`,
           imperative: `move the ${name} away from ${by} before it is taken for nothing`,
           squares: [mv.from, mv.to, h.sq],
@@ -1312,7 +1312,7 @@ function reasonHolds(f: Pick<MoveFundamental, 'id'>, fenBefore: string, mover: '
  *  asserted without proof. */
 export function principleOnceLine(
   san: string,
-  f: Pick<MoveFundamental, 'imperative' | 'id'> & Pick<MoveFundamental, 'reason'>,
+  f: Pick<MoveFundamental, 'imperative' | 'id'> & Pick<MoveFundamental, 'reason'> & Partial<Pick<MoveFundamental, 'led'>>,
   /** Rotation key — required, stable about the moment (`stemKeyOf` of the
    *  board the move was played from). Only the wrapper rotates. */
   stemKey: number,
@@ -1320,7 +1320,11 @@ export function principleOnceLine(
   const reason = reasonFor(f);
   // Seated (prod Review audit 2026-10-02: "Be6: get the last minor piece out"
   // named no side). Both callers pass only the STUDENT's own move.
-  if (!reason) return `Your ${san}: ${f.imperative}.`;
+  // Without a reason the move says what it DOES ("Your Bc5 completes your
+  // development — every minor piece is out"), never a bare instruction pinned
+  // to its name ("Your Bc5: get the last minor piece out" — Learn audit
+  // 2026-10-15).
+  if (!reason) return f.led ? `Your ${san} ${f.led}.` : `Your ${san}: ${f.imperative}.`;
   return rotateStem([
     `${san} follows a rule worth keeping: ${f.imperative} — ${reason}.`,
     `The rule behind ${san}: ${f.imperative}, because ${reason}.`,

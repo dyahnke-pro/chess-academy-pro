@@ -469,8 +469,21 @@ export function decide(
   const support = supportedFacts(selection.spoken, bundle.squares, roleOf);
   selection.spoken = support.spoken;
   selection.quiet = [...selection.quiet, ...support.quiet];
-  // 5 — THE ORDER: the same values, highest first.
-  const spoken = [...selection.spoken].sort((x, y) => (value.get(y) ?? 0) - (value.get(x) ?? 0));
+  // 5 — THE ORDER: the same values, highest first — and SUPPORT FOLLOWS WHAT
+  // IT SUPPORTS. A description speaks only because a teaching point names its
+  // squares, so it is heard after that point, never ahead of it (Learn +
+  // Review audits 2026-10-15: "Your bishop on c4 now joins the fight for d5"
+  // led, and the move's reason — it clears the way to castle — came second).
+  const order = new Map(value);
+  for (const t of selection.spoken) {
+    if (roleOf(t) !== 'describe') continue;
+    const sqs = bundle.squares.get(t) ?? [];
+    const supported = selection.spoken
+      .filter((u) => roleOf(u) === 'teach' && (bundle.squares.get(u) ?? []).some((sq) => sqs.includes(sq)))
+      .map((u) => value.get(u) ?? 0);
+    if (supported.length) order.set(t, Math.min(value.get(t) ?? 0, Math.max(...supported) - 0.5));
+  }
+  const spoken = [...selection.spoken].sort((x, y) => (order.get(y) ?? 0) - (order.get(x) ?? 0));
   let methodSpoke = false;
   // 6 — THE METHOD, last. Ranked lowest so it CLOSES the beat: the board fact,
   // then the principle it broke, then the habit that finds it next time.

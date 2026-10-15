@@ -159,11 +159,15 @@ export function mateLine(fen: string, lineUci: readonly string[], side: 'w' | 'b
   const quiet = !first.check && !first.capture;
   const mateSan = sans[sans.length - 1].replace(/[+#]$/, '');
   const list = (xs: string[]): string => xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`;
+  // A long mate is said as its length and first move; the whole line is drawn
+  // (proof guard 2 — "a forced mate in 3, starting with Nxe5").
+  const short = sans.length <= 3;
+  const tail = short ? ` ${andList(sans)}.` : '';
   const text = quiet && taken.length
-    ? `No check yet — the quiet ${sans[0]} comes first: it takes ${list(taken)} from their king, and ${mateSan} is mate. ${andList(sans)}.`
+    ? `No check yet — the quiet ${sans[0]} comes first: it takes ${list(taken)} from their king, and ${mateSan} is mate.${tail}`
     : quiet
-      ? `No check yet — the quiet ${sans[0]} comes first, and ${mateSan} is mate. ${andList(sans)}.`
-      : `It is a forced mate: ${andList(sans)}.`;
+      ? `No check yet — the quiet ${sans[0]} comes first, and ${mateSan} is mate.${tail}`
+      : short ? `It is a forced mate: ${andList(sans)}.` : `It is a forced mate in ${Math.ceil(sans.length / 2)}, starting with ${sans[0]}.`;
   return { sans, plies, quiet, taken, text };
 }
 

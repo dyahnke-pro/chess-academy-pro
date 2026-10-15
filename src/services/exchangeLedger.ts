@@ -16,7 +16,7 @@
 // piece names — "you come out with two knights for the rook" — which is the
 // sentence that settles the ambiguity AND carries the lesson (why an engine
 // still calls that fork a mistake). Pure chess.js, no engine, no model (G0/G3).
-import { andList } from '../utils/andList';
+import { andList, lineShape } from '../utils/andList';
 import type { Proof } from './proof';
 import { Chess, type Square } from 'chess.js';
 import { legalSeeGain, legalSeeGainFor } from './positionReadingService';
@@ -539,7 +539,7 @@ export function moverLossProof(fen: string, uci: readonly string[], moverWB: 'w'
  *  2026-10-15: four refuted king moves recited eight moves each — 132 words). */
 function heardProof(line: { fen: string; sans: readonly string[] }, moves: string, end: string): Proof {
   const full = `${moves} — ${end}`;
-  const short = line.sans.length <= 3 ? full : `${line.sans[0]} and the moves that follow — ${end}`;
+  const short = line.sans.length <= 3 ? full : `${lineShape(line.sans)} — ${end}`;
   return { kind: 'line', exact: false, short, full, line };
 }
 

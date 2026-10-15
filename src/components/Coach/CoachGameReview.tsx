@@ -1,3 +1,5 @@
+import { intentWithFallback } from '../../services/movePurpose';
+import type { ReviewIntent } from '../../services/reviewMoveIntent';
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { warmOpeningIdentity } from '../../services/openingIdentity';
 import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Target, Crosshair, Play, Pause } from 'lucide-react';
@@ -1817,7 +1819,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     let text: string | null = null;
     try {
       // No engine budget on this synchronous rebuild: no refuted alternatives (S2).
-      const segs = buildReviewSegments(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null, new Map());
+      // What the explored move was FOR — from the two reads already in hand.
+      const intentByPly = new Map<number, ReviewIntent>();
+      if (before?.topLines?.length && after?.topLines?.length && !/[x+#]/.test(args.san)) {
+        const it = intentWithFallback(args.fenBefore, args.san, { before: before.topLines, after: after.topLines, passBefore: [], passAfter: [] }, 'student');
+        if (it) intentByPly.set(inputs.length, { text: it.text, squares: it.squares });
+      }
+      const segs = buildReviewSegments(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null, new Map(), intentByPly);
       text = segs[segs.length - 1]?.narration ?? null;
     } catch { text = null; }
     void logAppAudit({

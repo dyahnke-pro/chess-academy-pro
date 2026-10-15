@@ -11,6 +11,7 @@
  * uncapped review speaks these verbatim (un-warmed) so no fact is compressed away
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
+import { opponentHabits } from './thinkAloud';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan } from './material';
 import { settledExchange, moverLineProof } from './exchangeLedger';
@@ -35,6 +36,7 @@ import { costStakes, exchangeStakes, forkPoints, piecesOn, isScenicPawnPin, isSa
 import { describeStructure } from './boardStructure';
 import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssessment';
 import type { RefutedAlternative } from './refutedAlternative';
+import type { ReviewIntent } from './reviewMoveIntent';
 import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
 import { principleLine, principleContrastLine } from './moveFundamentals';
 import { threatStoppedBy } from './opponentMovePurpose';
@@ -228,10 +230,14 @@ export interface MoveTeachingContext {
   /** Opening principles already SPOKEN this game (committed after the door),
    *  so each is taught once. */
   principlesTaught: ReadonlySet<string>;
+  /** What the student's move was FOR, from the engine (`reviewMoveIntent`):
+   *  the follow-up it prepares, read along the stored line. Null when the
+   *  engine shows none, or no line was stored for the position. */
+  intent?: ReviewIntent | null;
 }
 
 export const NO_TEACHING_CONTEXT: MoveTeachingContext = {
-  refutedAlt: null, prevFenBefore: null, phaseTurn: null, principlesTaught: new Set(),
+  refutedAlt: null, prevFenBefore: null, phaseTurn: null, principlesTaught: new Set(), intent: null,
 };
 
 const PIECE_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
@@ -1273,7 +1279,9 @@ export function computeMoveFacets(
       // 2026-10-02, mg-lichess-6YRWrSqn ply 49).
       try {
         const mv = new Chess(fenBefore).move(san);
-        const point = mv && !mv.captured
+        // The engine's purpose speaks below; the board computer only when the
+        // engine showed none.
+        const point = mv && !mv.captured && !ctx.teaching.intent
           ? studentMovePoint(fenBefore, san, ply >= 2 ? ctx.allSans[ply - 2] ?? null : null, null)
           : null;
         if (point && mv) {
@@ -1283,6 +1291,33 @@ export function computeMoveFacets(
           recSquares(f, [mv.to]);
         }
       } catch { /* the point is a bonus, never a blocker */ }
+    }
+  }
+
+  // ── 7c'. WHAT THE MOVE WAS FOR, FROM THE ENGINE (Learn + Review audits
+  // 2026-10-15: a good move got "the bishop rakes toward d4 and f2" — a
+  // description — because nothing here asked the engine what it prepares).
+  // Every clean student move, great and brilliant included, so praise has its
+  // reason.
+  if (isStudent && ctx.teaching.intent && !['inaccuracy', 'mistake', 'blunder', 'miss'].includes(ctx.classification ?? '')) {
+    const f = `[point] ${ctx.teaching.intent.text}`;
+    facets.push(f);
+    outIdentity?.set(f, `point:${ply}`);
+    recSquares(f, ctx.teaching.intent.squares);
+  }
+
+  // ── 7c''. WHAT THEY KEEP DOING — the same mistake twice, said on the move
+  // that made it a habit, with the plan against it. The one habit computer
+  // Learn reads (`opponentHabits`); said once a game per habit (identity).
+  if (!isStudent && studentColorWB) {
+    const opp: Color = studentColorWB === 'w' ? 'b' : 'w';
+    const now = opponentHabits(ctx.allSans.slice(0, ply), opp);
+    const before = new Set(opponentHabits(ctx.allSans.slice(0, ply - 1), opp).map((h) => h.kind));
+    const fresh = now.find((h) => !before.has(h.kind));
+    if (fresh) {
+      const f = `[their-habit] ${fresh.text}`;
+      facets.push(f);
+      outIdentity?.set(f, `their-habit:${fresh.kind}`);
     }
   }
 

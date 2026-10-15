@@ -558,24 +558,6 @@ describe('the door says whether the student\'s own move got its reason (David 20
   });
 });
 
-describe('one lead reason per turn — a turn never runs past TURN_WORDS (David 2026-10-14)', () => {
-  it('the least-valued reasons wait when together they would bury the lead', async () => {
-    const { TURN_WORDS } = await import('./learnTurnDoor');
-    const pad = (_sq: string, n: number): string => `This idea ${Array.from({ length: n }, () => 'matters').join(' ')} here.`;
-    const d = decideTurn([
-      { lane: 'moveIntent', proof: NO_PROOF.stated, text: pad('f3', 22), fen: FEN, squares: ['f3'], stakes: costStakes(400) ?? undefined },
-      { lane: 'movePoint', proof: NO_PROOF.stated, text: pad('e5', 23), fen: FEN, squares: ['e5'], stakes: costStakes(350) ?? undefined },
-      { lane: 'structureJudgement', proof: NO_PROOF.stated, text: pad('d4', 24), fen: FEN, squares: ['d4'], stakes: costStakes(300) ?? undefined },
-      { lane: 'pieceQuality', proof: NO_PROOF.stated, text: pad('c6', 25), fen: FEN, squares: ['c6'], stakes: costStakes(250) ?? undefined },
-    ]);
-    const words = d.pkg.kept.reduce((n, f) => n + f.text.split(/\s+/).length, 0);
-    expect(d.pkg.kept.length).toBeGreaterThan(0);
-    expect(words).toBeLessThanOrEqual(TURN_WORDS);
-    expect(d.held).toContain('pieceQuality');
-    expect(d.spoke).toContain('moveIntent');
-  });
-});
-
 describe('a good move always gets its own reason (David 2026-10-14)', () => {
   it('the move\'s point speaks even when a plan leads the turn', () => {
     const d = decideTurn([
@@ -586,8 +568,8 @@ describe('a good move always gets its own reason (David 2026-10-14)', () => {
   });
 });
 
-describe('a slip keeps its verdict and its best reason; extra reasons wait (Learn audit 2026-10-15)', () => {
-  it('a third reason for the same slip is held past the turn length', () => {
+describe('no word cap — length never decides what speaks (David 2026-10-15)', () => {
+  it('every reason for a slip speaks, however long the turn runs', () => {
     const pad = (w: string, n: number): string => `This ${Array.from({ length: n }, () => w).join(' ')} happened.`;
     const d = decideTurn([
       { lane: 'mistake', proof: NO_PROOF.stated, text: pad('mistake', 20), fen: FEN, stakes: costStakes(300) ?? undefined },
@@ -595,25 +577,16 @@ describe('a slip keeps its verdict and its best reason; extra reasons wait (Lear
       { lane: 'fundamental', proof: NO_PROOF.stated, text: pad('rule', 26), fen: FEN, stakes: costStakes(100) ?? undefined },
       { lane: 'drawback', proof: NO_PROOF.stated, text: pad('cost', 27), fen: FEN, stakes: costStakes(50) ?? undefined },
     ]);
-    expect(d.spoke).toContain('mistake');
-    expect(d.spoke).toContain('blunderCheck');
-    expect(d.held).toContain('drawback');
+    expect(d.spoke).toEqual(expect.arrayContaining(['mistake', 'blunderCheck', 'fundamental', 'drawback']));
   });
-});
-
-describe('a plan that overflows the turn keeps its goal (Learn audit 2026-10-15)', () => {
-  it('danger + own reason + plan run past the turn: the plan says its goal, the how-to goes', async () => {
-    const { TURN_WORDS } = await import('./learnTurnDoor');
-    const { spokenWordCount } = await import('../utils/spokenWords');
+  it('a plan keeps its how-to beside a danger and the move\'s own reason', () => {
     const pad = (w: string, n: number): string => `This ${Array.from({ length: n }, () => w).join(' ')} happened.`;
-    const goal = 'The plan from here is to attack their king on e1 before it gets out.';
+    const plan = "The plan from here is to attack their king on e1 before it gets out. Here's how: tuck your own king away, double your rooks on the open d-file, bring pieces in with tempo, and look for a sacrifice on d2 or f2.";
     const d = decideTurn([
       { lane: 'positionFacts', proof: NO_PROOF.stated, text: pad('danger', 26), fen: FEN, squares: ['d6'], stakes: costStakes(300) ?? undefined },
       { lane: 'moveIntent', proof: NO_PROOF.stated, text: pad('reason', 18), fen: FEN, squares: ['f5'] },
-      { lane: 'planArc', proof: NO_PROOF.stated, text: `${goal} Here's how: tuck your own king away, double your rooks on the open d-file, bring pieces in with tempo, and look for a sacrifice on d2 or f2.`, fen: FEN, squares: ['e1'] },
+      { lane: 'planArc', proof: NO_PROOF.stated, text: plan, fen: FEN, squares: ['e1'] },
     ]);
-    expect(d.spoke).toContain('planArc');
-    expect(d.pkg.kept.map((f) => f.text)).toContain(goal);
-    expect(d.pkg.kept.reduce((n, f) => n + spokenWordCount(f.text), 0)).toBeLessThanOrEqual(TURN_WORDS);
+    expect(d.pkg.kept.map((f) => f.text)).toContain(plan);
   });
 });

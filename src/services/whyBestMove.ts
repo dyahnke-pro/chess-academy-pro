@@ -10,6 +10,7 @@
 //   2. computePositionFacts — the position briefing (who's winning, the plan,
 //      what must be defended, the real fork in the road) in the house register.
 // The result is spoken directly (preferRaw) — the purest G0, and instant.
+import { purposeFromLine } from './movePurpose';
 import { lastMoveFromPgn, positionAsk } from './moveInsight';
 import { walkableLine } from './proof';
 import { Chess } from 'chess.js';
@@ -114,12 +115,19 @@ export async function computeWhyBestMoveDetail(input: WhyBestMoveInput): Promise
     const own = fen.split(' ')[1] === sc
       ? bestMoveReason(fen, san, sc, { mateIn: moverMate > 0 ? moverMate : null, opponentLastSan: history.length ? history[history.length - 1] : null })
       : null;
-    const reason = own ? `it ${own}` : point?.trim() || groundedMoveWhy([], fen, san, studentColor);
-    // Strip a trailing period on the reason before adding our own — the grounded
-    // computers sometimes return a full sentence ("It wins the rook on e7."),
-    // which produced "…on e7.." (coach audit 2026-09-11).
-    const cleaned = (reason ?? '').replace(/\s*\.\s*$/, '');
-    parts.push(`The strongest move is ${san} — ${cleaned}.`);
+    // WHAT THE MOVE IS FOR, from the engine's own line — the same computer
+    // Learn and the review speak (`movePurpose`), ahead of the geometry floor.
+    const purpose = !own && !point?.trim() ? purposeFromLine(fen, san, analysis.topLines ?? [], 'student') : null;
+    if (purpose) {
+      parts.push(`The strongest move is ${san}. ${purpose.text}`);
+    } else {
+      const reason = own ? `it ${own}` : point?.trim() || groundedMoveWhy([], fen, san, studentColor);
+      // Strip a trailing period on the reason before adding our own — the grounded
+      // computers sometimes return a full sentence ("It wins the rook on e7."),
+      // which produced "…on e7.." (coach audit 2026-09-11).
+      const cleaned = (reason ?? '').replace(/\s*\.\s*$/, '');
+      parts.push(`The strongest move is ${san} — ${cleaned}.`);
+    }
   }
 
   // 2. The position briefing — the plan + what's at stake + the real fork in the

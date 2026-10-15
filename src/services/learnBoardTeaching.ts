@@ -12,7 +12,7 @@ import { flipSideToMove } from './threatOut';
 import { CAPTURE_VALUE } from './pieceValues';
 import { lineProof, legalLineProof, squaresProof, NO_PROOF, type FactProof, type Proof } from './proof';
 import { shareAdverb } from '../utils/shareWords';
-import { andList } from '../utils/andList';
+import { lineShape } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import { Chess, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
@@ -142,6 +142,9 @@ export interface StudentMoveInput {
    *  the stock shot that fails here (`patternFails`). Absent → that lane is
    *  silent. */
   topLines?: readonly AnalysisLine[];
+  /** Say-once keys already spoken this game (`learnMemory.spokenKeys`), so a
+   *  habit asked in full once is asked again as a short callback. */
+  saidClaims?: ReadonlySet<string>;
 }
 
 /** ONE VOCABULARY (plan "methodBeat — the live coach names the lesson STEP"):
@@ -197,7 +200,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
       const ml = mateLine(i.fenBefore, i.bestLine.moves, me, i.san);
       const w = ml ? null : winningLine(i.fenBefore, i.san, i.bestLine.moves, me, priorFromHistory(i.history, i.fenBefore));
       if (ml) out.push({ lane: 'movePoint', proof: lineProof({ fen: i.fenBefore, sans: ml.sans }) ?? squaresProof(ml.text, [to, ...ml.taken]) ?? NO_PROOF.stated, text: ml.text, squares: [to, ...ml.taken], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_mate_line', props: { surface: 'coach-teach', quiet: ml.quiet } }, arrows: mateArrows(ml, me) });
-      if (w) out.push({ lane: 'movePoint', proof: lineProof({ fen: i.fenBefore, sans: w.sans }) ?? squaresProof(`That wins ${w.what}`, [to]) ?? NO_PROOF.stated, text: `That wins ${w.what}: ${andList(w.sans)}.`, squares: [to], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: w.arrows });
+      if (w) out.push({ lane: 'movePoint', proof: lineProof({ fen: i.fenBefore, sans: w.sans }) ?? squaresProof(`That wins ${w.what}`, [to]) ?? NO_PROOF.stated, text: `That wins ${w.what}: ${lineShape(w.sans)}.`, squares: [to], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`], event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: w.arrows });
     }
   } catch { /* a bonus, never a blocker */ }
 
@@ -229,7 +232,8 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
 
   // THE SAFETY HABITS (P3 method beats) — earned only by what the board did.
   {
-    const bc = blunderCheck(i.fenBefore, i.san, i.reply, faultCp);
+    const again = i.saidClaims?.has('claim:method:blunder-check') ?? false;
+    const bc = blunderCheck(i.fenBefore, i.san, i.reply, faultCp, again);
     if (bc) {
       // ITS STAKE AND ITS SQUARE (Learn audit 2026-10-14: held as an aside on a
       // verdict turn, so "e6 was a blunder — it cost three or four points"
@@ -241,7 +245,9 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
         if (r?.captured) lost = { square: r.to, piece: r.captured };
       } catch { lost = null; }
       out.push({
-        lane: 'blunderCheck', proof: NO_PROOF.method, text: bc, squares: lost ? [lost.square] : [], claims: ['method:blunder-check'],
+        lane: 'blunderCheck', proof: NO_PROOF.method, text: bc, squares: lost ? [lost.square] : [],
+        // The callback carries its own move's claim: said once per blunder.
+        claims: [again ? `method:blunder-check:${i.history.length}` : 'method:blunder-check'],
         event: { name: 'coach_blunder_check_taught', props: { surface: 'coach-teach' } }, arrows: [],
         ...(lost ? { stakes: { points: piecePoints(lost.piece), plies: 1 } } : {}),
       });
@@ -819,7 +825,7 @@ export function foundMoveTeaching(fenBefore: string, san: string, preLines: read
   // wins material, the line is said to where the material lands, and drawn.
   const ml = mateLine(fenBefore, preLines[0]?.moves ?? [], student, san);
   const won = ml ? null : winningLine(fenBefore, san, preLines[0]?.moves ?? [], student, priorFromHistory(history, fenBefore));
-  const text = ml ? `${found} ${ml.text}` : won ? `${found} It wins ${won.what}: ${andList(won.sans)}.` : found;
+  const text = ml ? `${found} ${ml.text}` : won ? `${found} It wins ${won.what}: ${lineShape(won.sans)}.` : found;
   const arrows: ArrowClaim[] = ml ? mateArrows(ml, student) : won ? won.arrows : [];
   // A real decision moment (only one or two moves held) answered is calculation
   // proven — importance 90, above the green bar, because the board posed it.

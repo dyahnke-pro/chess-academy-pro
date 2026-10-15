@@ -14,7 +14,7 @@
 
 import { shareAdverb, topMoveShare } from '../utils/shareWords';
 import { describeSampleSize, scoreWords } from './explorerTranslate';
-import { andList } from '../utils/andList';
+import { andList, lineShape } from '../utils/andList';
 import { Chess } from 'chess.js';
 import type { MasterPlayResult, MasterPlayMove, MasterPlayTopGame } from './masterPlayTypes';
 import { lookupMasterPlay } from './masterPlayLookup';
@@ -720,7 +720,7 @@ export function buildTheoryLectureBeats(
     const other: 'white' | 'black' = b.moverColor === 'white' ? 'black' : 'white';
     const winner = seatOf(other);
     const verb = winner === 'you' || winner === 'they' ? 'come' : 'comes';
-    if (b.refutation) return ` The engine punishes ${b.gameSan}: ${andList(b.refutation.sans)} — ${winner} ${verb} out ${b.refutation.what} up.`;
+    if (b.refutation) return ` The engine punishes ${b.gameSan}: ${lineShape(b.refutation.sans)} — ${winner} ${verb} out ${b.refutation.what} up.`;
     if (b.playedCost >= 30) return ` By the engine's count ${b.gameSan} costs ${costWords(b.playedCost)}.`;
     return ` ${b.gameSan} is perfectly playable — the engine barely minds; it is just less common.`;
   };
@@ -740,7 +740,7 @@ export function buildTheoryLectureBeats(
       const cc = new Chess(c.fen());
       for (const san of t.punish) { const m = cc.move(san); if (!m) break; uci.push(`${m.from}${m.to}${m.promotion ?? ''}`); }
       const w = lineWins(c.fen(), uci, slip.color === 'w' ? 'b' : 'w', undefined, { fenBefore: fen, san: t.san });
-      line = w ? ` loses ${w.what}: ${andList(w.sans)}` : ` runs into ${t.punish[0]}`;
+      line = w ? ` loses ${w.what}: ${lineShape(w.sans)}` : ` runs into ${t.punish[0]}`;
     } catch { return ''; }
     return ` A trap to know here: the natural ${t.san}, which club players ${shareAdverb(t.freqPct)} choose,${line}.`;
   };

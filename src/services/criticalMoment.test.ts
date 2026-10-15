@@ -254,7 +254,7 @@ describe('S5 — the reveal names why the failing candidates fail', () => {
     });
     expect(read?.discardedProofs).toEqual([{ san: 'Qh4', text: 'Qh4 and Nxh4 — they win a queen', line: { fen: expect.any(String), sans: ['Qh4', 'Nxh4'] } }]);
     const t = criticalMomentReveal(read);
-    expect(t).toContain("Qh4 didn't work: Qh4 and Nxh4 — they win a queen.");
+    expect(t).toContain("Qh4 didn't work: Nxh4 — they win a queen.");
   });
 });
 
@@ -283,8 +283,20 @@ describe('the failing candidates — the strongest proved, the rest named (Learn
       ],
     } as unknown as Parameters<typeof criticalMomentFound>[0];
     const out = criticalMomentFound(read, 'Qxd2+') ?? '';
-    expect(out).toContain("Qb6 didn't work: Qb6 and the moves that follow");
+    expect(out).toContain("Qb6 didn't work: you come out behind");
     expect(out).toContain("Qc3 and Rf1 didn't work either.");
     expect(out).not.toContain('Rxc3');
+  });
+});
+
+describe('a failed candidate is named once (Learn audit 2026-10-15)', () => {
+  it('the refutation follows the candidate instead of repeating it', async () => {
+    const { afterCandidate } = await import('./criticalMoment');
+    expect(afterCandidate('Qxc3+', 'Qxc3+ and Nxc3 — you come out behind on material, a bishop for a queen'))
+      .toBe('Nxc3 — you come out behind on material, a bishop for a queen');
+    expect(afterCandidate('…Qxc3+', '…Qxc3+ and the moves that follow — they win your queen'))
+      .toBe('they win your queen');
+    expect(afterCandidate('Qb6', 'Qb6 — it walks into a pin')).toBe('it walks into a pin');
+    expect(afterCandidate('a6', 'Nb5 and Nc7 — they fork your rooks')).toBe('Nb5 and Nc7 — they fork your rooks');
   });
 });
