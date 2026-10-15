@@ -31,6 +31,7 @@
 import { Chess } from 'chess.js';
 import { fetchLichessExplorer } from './lichessExplorerService';
 import { withWebOrigin } from '../utils/webOrigin';
+import { positionOf } from '../utils/samePosition';
 
 const PROXY_PATH = '/api/lichess-puzzle';
 const FETCH_TIMEOUT_MS = 6_000;
@@ -61,7 +62,7 @@ function fenKey(fen: string): string {
   // Compare positions ignoring half-move clock + full-move number
   // (fields 5 & 6) — those drift between Lichess's PGN replay and
   // the puzzle FEN we ship locally.
-  return fen.split(' ').slice(0, 4).join(' ');
+  return positionOf(fen);
 }
 
 /** Replay the PGN from the start, returning the shortest prefix that

@@ -61,6 +61,7 @@ import { db } from '../db/schema';
 import type { MistakePuzzle, TacticType } from '../types';
 import { themesForTactic, bucketForMistake } from './weaknessSpine';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
+import { positionOf } from '../utils/samePosition';
 
 interface RawPuzzle {
   id: string;
@@ -388,7 +389,7 @@ function bucketOf(mp: MistakePuzzle): { key: string; label: string } {
  *  first solving move (a puzzle id is not enough — two rows can share one
  *  position). */
 export function drillKeyOf(setupFen: string, firstSan: string): string {
-  return `${setupFen.split(' ').slice(0, 4).join(' ')}|${firstSan.replace(/[+#]/g, '')}`;
+  return `${positionOf(setupFen)}|${firstSan.replace(/[+#]/g, '')}`;
 }
 
 export function mistakePuzzleToDrill(mp: MistakePuzzle): CoachDrill | null {

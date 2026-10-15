@@ -32,6 +32,7 @@ import { resolveRepRoute, type RepRoute } from './repRouting';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { getUnifiedWeaknessProfile, type UnifiedWeakness } from './weaknessSpine';
 import type { GameRecord, MiddlegamePlan } from '../types';
+import { positionOf } from '../utils/samePosition';
 
 export type HomePlanRepKind = 'analyse' | 'weakest-line' | 'departure' | 'fundamental' | 'middlegame-plan';
 
@@ -103,7 +104,7 @@ export function homePlanFor(input: HomePlanInput): HomePlanSection {
   const byBoard = new Map<string, { rows: BookDepartureRow[] }>();
   for (const r of input.departures) {
     if (!homeIds.has(r.gameId)) continue;
-    const k = r.bookFen.split(' ').slice(0, 4).join(' ');
+    const k = positionOf(r.bookFen);
     const slot = byBoard.get(k) ?? { rows: [] };
     slot.rows.push(r);
     byBoard.set(k, slot);

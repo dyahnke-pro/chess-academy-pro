@@ -18,5 +18,12 @@
  */
 export function samePosition(a: string, b: string): boolean {
   if (!a || !b) return false;
-  return a.split(' ').slice(0, 4).join(' ') === b.split(' ').slice(0, 4).join(' ');
+  return positionOf(a) === positionOf(b);
+}
+
+/** The POSITION a FEN describes: placement, side to move, castling and en
+ *  passant — the clocks dropped. The ONE key every board comparison, cache and
+ *  index uses; forty copies of this expression existed before 2026-10-15. */
+export function positionOf(fen: string): string {
+  return fen.trim().split(/\s+/).slice(0, 4).join(' ');
 }

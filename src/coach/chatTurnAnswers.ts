@@ -22,6 +22,7 @@ import { readPosition } from '../services/positionalRead';
 import { walkableLine } from '../services/proof';
 import { computeExchangeLedger, netPieceWords } from '../services/exchangeLedger';
 import type { WalkableLine } from '../types';
+import { positionOf } from '../utils/samePosition';
 
 const name = (t: string): string => PIECE_NAMES[t] ?? 'piece';
 
@@ -551,7 +552,7 @@ const LINE_SAN = /(?<![A-Za-z0-9])(?:…|\.\.\.)?((?:[KQRBN][a-h]?[1-8]?x?[a-h][
  * this board.
  */
 export function explainProvedLine(line: WalkableLine, fen: string, student: Color, history: readonly string[], out?: { lines?: WalkableLine[] }): string | null {
-  const here = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+  const here = (f: string): string => positionOf(f);
   if (line.plies.length === 0 || here(line.startFen) !== here(fen)) return null;
   const mates = /#$/.test(line.plies[line.plies.length - 1].san);
   const mover = new Chess(line.startFen).turn();

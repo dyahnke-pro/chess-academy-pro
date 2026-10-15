@@ -13,6 +13,7 @@
 import { Chess } from 'chess.js';
 import type { LocalDbMove } from './masterPlayLookup';
 import { shareAdverb } from '../utils/shareWords.ts';
+import { positionOf } from '../utils/samePosition';
 
 export type MovesAt = (fen: string) => readonly LocalDbMove[] | null;
 
@@ -62,7 +63,7 @@ export const MIN_BREAK_SHARE = 0.4;
 /** A piece placement said as "usually" needs a clear majority. */
 export const MIN_PIECE_SHARE = 0.5;
 
-const key = (fen: string): string => fen.split(' ').slice(0, 4).join(' ');
+const key = (fen: string): string => positionOf(fen);
 
 /** Is this pawn move a break — does it take a pawn, or land hitting one? */
 function isBreak(c: Chess, m: { piece: string; captured?: string; to: string; color: 'w' | 'b' }): boolean {

@@ -51,6 +51,7 @@ import { Chess } from 'chess.js';
 import { matesInOne } from './opponentMoveReads';
 import { asIfToMove } from './positionReadingService';
 import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
+import { positionOf } from '../utils/samePosition';
 
 /** How live the fundamental had to be on THIS board before answering it counts
  *  as evidence. `importance` is 0-100 and already rates the board, not the move,
@@ -338,7 +339,7 @@ export type CapabilityProfile = Map<MisconceptionTagId, CapabilityProfileEntry>;
 /** The KNOW reading's source key: the position, without the move counters, so
  *  the same board reached twice is one source. Null on an empty FEN. */
 export function positionSourceKey(fen: string): string | null {
-  const key = fen.trim().split(/\s+/).slice(0, 4).join(' ');
+  const key = positionOf(fen);
   return key.length > 0 ? key : null;
 }
 

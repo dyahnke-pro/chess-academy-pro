@@ -1,4 +1,5 @@
 import { Chess, type Move } from 'chess.js';
+import { positionOf } from './samePosition';
 
 /**
  * THE LEGAL MOVE A SAN MEANS ON THIS BOARD — by what it does, never by its
@@ -31,7 +32,7 @@ export function bookContinuation(bookMoves: readonly string[] | null | undefined
   for (const m of bookMoves.slice(0, ply)) {
     try { if (!line.move(m)) return null; } catch { return null; }
   }
-  const here = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+  const here = (f: string): string => positionOf(f);
   if (here(line.fen()) !== here(fen)) return null;
   return legalMoveFor(fen, bookMoves[ply])?.san ?? null;
 }

@@ -25,14 +25,13 @@ import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
 import type { OpeningRecord, SrsOpeningCard } from '../types';
+import { positionOf } from '../utils/samePosition';
 
 /** Normalize a FEN for use as a card-id suffix. Drops the half-move and
  *  fullmove counters at the end (positions are the same chess-wise even
  *  if the move counter differs across transpositions). */
 function normalizeFen(fen: string): string {
-  const parts = fen.split(' ');
-  // Keep board / turn / castling / ep — drop halfmove + fullmove.
-  return parts.slice(0, 4).join(' ');
+  return positionOf(fen);
 }
 
 /** Strip SAN of decorators so "Nf3+", "Nf3!", "Nf3#" all compare equal

@@ -25,6 +25,7 @@
 import { db } from '../db/schema';
 import { REVIEW_READ_DEPTH } from './engineConstants';
 import type { MoveClassification } from '../types';
+import { positionOf } from '../utils/samePosition';
 
 export type VerdictSource = 'learn' | 'play' | 'review';
 
@@ -46,7 +47,7 @@ export interface MoveVerdictRecord {
 }
 
 export function verdictKey(fenBefore: string, san: string): string {
-  const fen4 = fenBefore.trim().split(/\s+/).slice(0, 4).join(' ');
+  const fen4 = positionOf(fenBefore);
   return `${fen4}|${san.replace(/[+#!?]+$/, '')}`;
 }
 

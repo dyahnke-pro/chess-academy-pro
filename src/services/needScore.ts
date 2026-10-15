@@ -42,6 +42,7 @@ import { capabilityProven, HELD_FOR_PROVEN, type CapabilityProfile } from './cap
 import { getMisconceptionTag, type MisconceptionBucket, type MisconceptionTagId } from '../data/misconceptionTags';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { emitNeedScore } from './coachDecisionEvents';
+import { positionOf } from '../utils/samePosition';
 
 /** Below this many fully-analysed games the student has no data — the prior teaches. */
 export const COLD_START_GAMES = 5;
@@ -230,7 +231,7 @@ export function familiarity(reps: number | undefined): number {
 
 /** The first four FEN fields — board, side, castling, en passant. */
 export function fenKey(fen: string): string {
-  return fen.split(' ').slice(0, 4).join(' ');
+  return positionOf(fen);
 }
 
 /** Does this departure row belong to the line being narrated? By POSITION when

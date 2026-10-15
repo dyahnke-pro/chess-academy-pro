@@ -1,4 +1,5 @@
 import { db, type PositionEvalRecord } from '../db/schema';
+import { positionOf } from '../utils/samePosition';
 
 /**
  * Per-position Stockfish eval cache — the app's answer to chess.com's
@@ -46,7 +47,7 @@ export interface EvalToStore {
 
 /** 4-field FEN: strips the halfmove + fullmove counters. */
 export function evalCacheKey(fen: string): string {
-  return fen.trim().split(/\s+/).slice(0, 4).join(' ');
+  return positionOf(fen);
 }
 
 /**

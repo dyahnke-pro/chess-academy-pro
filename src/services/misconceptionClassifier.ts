@@ -19,6 +19,7 @@ import { renderFundamentalVerdict } from './principleVoice';
 import { detectTactics } from './tacticsDetector';
 import { homeMinorCount } from './development';
 import { centreDistance } from '../utils/centreDistance';
+import { positionOf } from '../utils/samePosition';
 
 export interface ClassifyMisconceptionInput {
   /** Position BEFORE the played move (FEN). */
@@ -501,7 +502,7 @@ function previousMoveOf(historySans: readonly string[] | undefined, fen: string)
     const c = new Chess();
     let last: ReturnType<Chess['move']> | null = null;
     for (const san of historySans.slice(0, -1)) last = c.move(san);
-    const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+    const key = (f: string): string => positionOf(f);
     if (!last || key(c.fen()) !== key(fen)) return null;
     return { to: last.to, captured: !!last.captured };
   } catch { return null; }

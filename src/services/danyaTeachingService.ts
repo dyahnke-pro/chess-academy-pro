@@ -36,6 +36,7 @@ import { applyDerivedAnchors } from './noteAnchorOverrides';
 import { noteTeachesChess } from './sourceMeta.shared.mjs';
 import { openingReachesPosition } from './openingBranches';
 import { explainPuzzleConcept } from './puzzleConceptExplanation';
+import { positionOf } from '../utils/samePosition';
 
 export interface DanyaNote {
   id: string;
@@ -339,7 +340,7 @@ export function primeFloatingTeaching(): void {
 const byFen = new Map<string, DanyaNote[]>();
 let fenIndexBuilt = false;
 
-const normFen = (fen: string): string => fen.split(' ').slice(0, 4).join(' ');
+const normFen = (fen: string): string => positionOf(fen);
 
 function ensureFenIndex(): void {
   if (fenIndexBuilt) return;

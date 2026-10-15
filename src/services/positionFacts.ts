@@ -144,6 +144,7 @@ import { depthClauses } from './thinkAloud';
 import { classifyPhase } from './gamePhaseService';
 import { looseTrigger } from './looseTrigger';
 import { exchangeIdeas } from './exchangeIdeas';
+import { positionOf } from '../utils/samePosition';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -694,7 +695,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
         try {
           const c = new Chess(lm.fenBefore);
           c.move(lm.san);
-          if (c.fen().split(' ').slice(0, 4).join(' ') === olm.fenBefore.split(' ').slice(0, 4).join(' ')) replySan = olm.san;
+          if (positionOf(c.fen()) === positionOf(olm.fenBefore)) replySan = olm.san;
         } catch { replySan = null; }
       }
       const attrs = attributeLiveFundamental({

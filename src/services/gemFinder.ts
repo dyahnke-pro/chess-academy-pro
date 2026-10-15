@@ -32,6 +32,7 @@ import type {
   WalkthroughTreeNode,
 } from '../types/walkthroughTree';
 import { proofCut } from './exchangeLedger';
+import { positionOf } from '../utils/samePosition';
 
 // 🔒 GEM QUALITY BAR — a gem is a CLEAR MATERIAL WIN, not a soft edge (David
 // 2026-09-10, emphatic: "Gems need to be clear advantages! Ideally winning a
@@ -92,7 +93,7 @@ const START_DELAY_MS = 4_000; // let the lesson settle before we touch the engin
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
 function positionKey(fen: string): string {
-  return fen.split(' ').slice(0, 4).join(' ');
+  return positionOf(fen);
 }
 function cleanSan(san: string): string {
   return san.replace(/[!?]+$/g, '');

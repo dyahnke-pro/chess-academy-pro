@@ -50,6 +50,7 @@ import type {
   WalkthroughTree,
   WalkthroughTreeNode,
 } from '../types/walkthroughTree';
+import { positionOf } from '../utils/samePosition';
 
 /** Register-neutral crush facts + arrows. Both surfaces build their voicing from
  *  this; neither invents chess. */
@@ -93,7 +94,7 @@ export interface GemCrush {
  *  halfmove clock, and that difference says nothing about whether the gem's
  *  refutation is available. */
 function positionKey(fen: string): string {
-  return fen.split(' ').slice(0, 4).join(' ');
+  return positionOf(fen);
 }
 
 /** Gems indexed by the POSITION their spine reaches, so a gem fires whenever

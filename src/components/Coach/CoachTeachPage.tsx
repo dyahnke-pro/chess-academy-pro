@@ -301,7 +301,7 @@ import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingRating } from '../../services/coachGameEngine';
 import { opponentStrength } from '../../services/engineStrength';
-import { samePosition } from '../../utils/samePosition';
+import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
 import { readBoard, readBoardAll, newPlanThread, type BoardRead } from '../../services/boardComputers';
 import { splitThink, stripThink, THINK_MARK, THINK_PAUSE_MS } from '../../utils/thinkPause';
@@ -11016,7 +11016,7 @@ export function CoachTeachPage(): JSX.Element {
                     let heldRevealedHere = false;
                     try {
                       const heldNow = learnMemRef.current.heldMove;
-                      const boardOf = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+                      const boardOf = (f: string): string => positionOf(f);
                       if (heldNow && boardOf(heldNow.fen) === boardOf(fenBefore)) {
                         heldRevealedHere = true;
                         learnMemRef.current.heldMove = null;
@@ -11042,7 +11042,7 @@ export function CoachTeachPage(): JSX.Element {
                     // Matched by COORDINATES, never SAN string (G4.5.2).
                     try {
                       const slip = learnMemRef.current.slipAnswer;
-                      const boardOf = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+                      const boardOf = (f: string): string => positionOf(f);
                       if (slip && boardOf(slip.fen) === boardOf(fenBefore)) {
                         learnMemRef.current.slipAnswer = null;
                         const answer = studentBestSan ? new Chess(fenBefore).move(studentBestSan) : null;
@@ -12456,7 +12456,7 @@ export function CoachTeachPage(): JSX.Element {
     // the button says it now, with its reason, and the reveal after the move
     // stays quiet because it has been said.
     const heldNow = learnMemRef.current.heldMove;
-    if (heldNow && heldNow.fen.split(' ').slice(0, 4).join(' ') === fen.split(' ').slice(0, 4).join(' ') && !heldNow.shown) {
+    if (heldNow && positionOf(heldNow.fen) === positionOf(fen) && !heldNow.shown) {
       heldNow.shown = true;
       // Shown is told: the move played from this board is prompted.
       announcedBoardsRef.current.add(fen.split(' ').slice(0, 2).join(' '));

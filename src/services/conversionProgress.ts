@@ -6,13 +6,14 @@
 // when the student WINS a game launched from that peak position.
 
 import { db } from '../db/schema';
+import { positionOf } from '../utils/samePosition';
 
 const META_KEY = 'addressedConversions';
 
 /** Position key = piece placement + side + castling + ep (drop move counters).
  *  Matches weaknessSpine.posKey so a drilled FEN lines up with its conversion. */
 export function conversionPosKey(fen: string): string {
-  return fen.split(' ').slice(0, 4).join(' ');
+  return positionOf(fen);
 }
 
 export async function getAddressedConversions(): Promise<Set<string>> {

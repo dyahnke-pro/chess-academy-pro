@@ -5,6 +5,7 @@
 // `scripts/build-opening-positions.mjs`, fetched lazily — never replayed at
 // runtime). G3: every name is a real DB entry; only the move order differs.
 import type { DetectedOpening } from '../types';
+import { positionOf } from '../utils/samePosition';
 
 type PositionMap = Record<string, [string, number]>;
 let positions: PositionMap | null = null;
@@ -30,7 +31,7 @@ export function setOpeningPositions(map: PositionMap | null): void { positions =
 /** The DB opening this exact position is, or null (or not loaded yet). */
 export function openingAtPosition(fen: string): { name: string; plies: number } | null {
   if (!positions) { warmOpeningPositions(); return null; }
-  const hit = positions[fen.split(' ').slice(0, 4).join(' ')];
+  const hit = positions[positionOf(fen)];
   return hit ? { name: hit[0], plies: hit[1] } : null;
 }
 

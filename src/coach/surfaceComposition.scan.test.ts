@@ -344,10 +344,17 @@ describe('surface composition — the coach/third-coach divergence, measured', (
       const src = readFileSync(join(ROOT, 'services', `${mod}.ts`), 'utf8');
       const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
       const imports = [...code.matchAll(/^import .*$/gm)].map((m) => m[0]);
-      for (const line of imports) expect(line, `${mod} imports beyond chess.js`).toMatch(/from 'chess\.js'/);
+      // chess.js, or the one position key (`positionOf`) — a leaf that imports
+      // nothing, so it can carry no judgement in (asserted below).
+      for (const line of imports) expect(line, `${mod} imports beyond chess.js`).toMatch(/from 'chess\.js'|from '\.\.\/utils\/samePosition'/);
       const judged = code.match(JUDGEMENT_WORDS);
       expect(judged?.[0] ?? null, `${mod} names "${judged?.[0]}" — a replay helper judges nothing`).toBeNull();
     }
+  });
+
+  it('the position key a replay helper may share imports nothing', () => {
+    const src = readFileSync(join(ROOT, 'utils', 'samePosition.ts'), 'utf8');
+    expect(src.match(/^import /gm)).toBeNull();
   });
 
   it('INFRA never hides a real computer', () => {

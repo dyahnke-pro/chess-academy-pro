@@ -95,6 +95,7 @@ import type { FacetTag } from './reviewFacetRank';
 import type { FactProof, Proof } from './proof';
 import { newPhraseMemory } from '../utils/phraseMemory';
 import { whyItEnded, idlePiece, quietDecider, exploreInvite, murkyRead, type EndRead, type GamePly } from './gameEndReads';
+import { positionOf } from '../utils/samePosition';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -3688,7 +3689,7 @@ async function augmentWithProjections(
   // The move that led to a line's start, so a line opening with a recapture is
   // counted from before the capture it answers (`proofCut`'s `prior`).
   const priorByFen = new Map<string, { fenBefore: string; san: string }>();
-  for (const seg of segments) if (seg.fenAfter && seg.fenBefore) priorByFen.set(seg.fenAfter.split(' ').slice(0, 4).join(' '), { fenBefore: seg.fenBefore, san: seg.san });
+  for (const seg of segments) if (seg.fenAfter && seg.fenBefore) priorByFen.set(positionOf(seg.fenAfter), { fenBefore: seg.fenBefore, san: seg.san });
   // A PUNISHMENT is what the MOVE cost, so its tally counts from before the
   // move (clean-pass review walk 2026-10-04, G1 41.Qxe5+: "Here's how it gets
   // punished: Kxd7, Qxg7+, Kd6, Qxh8 and Kxd5 — you come out behind on
@@ -3705,7 +3706,7 @@ async function augmentWithProjections(
       const p = proofCut(played.fenBefore, [played.san, ...sans], studentColorWB);
       proof = p ? { ...p, plies: Math.max(1, p.plies - 1), sans: p.sans.slice(1) } : null;
     } else if (start) {
-      proof = proofCut(start, sans, studentColorWB, priorByFen.get(start.split(' ').slice(0, 4).join(' ')) ?? null);
+      proof = proofCut(start, sans, studentColorWB, priorByFen.get(positionOf(start)) ?? null);
     }
     return { plies: proof ? proof.plies : Math.min(1, line.plies.length), proof };
   };

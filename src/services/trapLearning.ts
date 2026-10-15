@@ -19,6 +19,7 @@
 // small functions.
 import { db } from '../db/schema';
 import { isUseEvidence, recordLaneEvidence } from './capabilityEvidence';
+import { positionOf } from '../utils/samePosition';
 
 export const TRAP_TAG = 'missed-opponents-threat' as const;
 
@@ -37,7 +38,7 @@ export interface TrapMeeting {
 
 /** Board part of a FEN — the trap's identity whatever the move counters say. */
 export function trapKey(fen: string): string {
-  return fen.split(' ').slice(0, 4).join(' ');
+  return positionOf(fen);
 }
 
 /**

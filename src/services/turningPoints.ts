@@ -23,6 +23,7 @@ import { landedTacticFor, tacticWord } from './pvPlayback';
 import { findHangingBySee } from './positionReadingService';
 import { moveWhy } from './deliberation';
 import { betterMoveReason, errorWhy } from './inaccuracyCall';
+import { positionOf } from '../utils/samePosition';
 
 /** How many turning points a review asks about (David: "the biggest few"). */
 export const TURNING_POINTS_ASKED = 3;
@@ -134,7 +135,7 @@ export function turningCause(seg: TurningSegmentLike, next: TurningSegmentLike |
   const played = moverPiece(seg.fenBefore, seg.san);
   if (!played) return null;
   // WALKED INTO: on the board the played move left, their best reply lands a tactic.
-  if (next && next.fenBefore.split(' ').slice(0, 4).join(' ') === played.fenAfter.split(' ').slice(0, 4).join(' ') && next.bestMoveSan) {
+  if (next && positionOf(next.fenBefore) === positionOf(played.fenAfter) && next.bestMoveSan) {
     const tactic = landedTacticFor(next.fenBefore, next.bestMoveSan);
     const theirs = moverPiece(next.fenBefore, next.bestMoveSan);
     if (tactic && theirs) return { id: `into:${tactic}:${theirs.piece}`, kind: 'walked-into', tactic, piece: theirs.piece };
