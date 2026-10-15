@@ -722,16 +722,19 @@ export function renderFundamentalVerdict(attrs: readonly PrincipleAttribution[],
     const missed = missedPunish(a, opts.replySan);
     if (missed) { opts.seen.add(a.id); parts.push(missed); return; }
     const first = !opts.seen.has(a.id);
-    opts.seen.add(a.id);
     if (!first) { parts.push(shortVerdict(a)); return; }
+    // ONE HOW PER TURN (David 2026-10-14: "one lead reason per turn"; the
+    // 2026-10-15 review said three fundamentals with three how-tos — 223
+    // words — before the verdict). The lead fundamental teaches its habit; a
+    // second new one is NAMED and stays unheard as a lesson, so the next move
+    // that earns it gets the full lecture.
+    if (hows > 0) { parts.push(fullVerdict(a, opts.ply + i)); return; }
+    opts.seen.add(a.id);
     // THE DIAGNOSIS, THEN THE HOW (David 2026-09-16: "The plan plus here's
     // how!!! The how is teaching!!"). Naming the flaw is half a lesson; the
     // procedure that stops it next game is the other half. Attached on the
     // FIRST appearance only — `opts.seen` is already the say-once ledger, so a
     // fundamental that recurs gets its short stem and never the lecture twice.
-    // Not capped to one per ply: if two NEW fundamentals were both proved here,
-    // the board earned both and the student hears both (G4.5). They spread
-    // themselves out across the game because each can only fire once.
     const how = fundamentalHow(a.id, a.facts);
     parts.push(how ? `${fullVerdict(a, opts.ply + i)} ${HOW_STEMS[hows++ % HOW_STEMS.length]} ${how}` : fullVerdict(a, opts.ply + i));
   });

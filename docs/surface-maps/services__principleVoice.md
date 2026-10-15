@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**856 lines · 7 exports · 19 importers · 17 tests · 3 audits**
+**859 lines · 7 exports · 19 importers · 17 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -35,19 +35,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:4747`
+- `src/services/coachFeatureService.ts:4788`
 - `src/services/learnFundamentalNarration.ts:137`
 
-### `fundamentalHow` (function) — 10 call sites
+### `fundamentalHow` (function) — 11 call sites
 - `src/services/fundamentalHow.test.ts:25`
 - `src/services/fundamentalHow.test.ts:32`
 - `src/services/fundamentalHow.test.ts:41`
+- `src/services/fundamentalHow.test.ts:56`
 - `src/services/fundamentalHow.test.ts:57`
-- `src/services/fundamentalHow.test.ts:58`
-- `src/services/fundamentalHow.test.ts:64`
-- `src/services/fundamentalHow.test.ts:71`
-- `src/services/fundamentalHow.test.ts:76`
-- `src/services/fundamentalHow.test.ts:77`
+- `src/services/fundamentalHow.test.ts:62`
+- `src/services/fundamentalHow.test.ts:66`
+- `src/services/fundamentalHow.test.ts:73`
+- `src/services/fundamentalHow.test.ts:78`
+- `src/services/fundamentalHow.test.ts:79`
 - `src/services/principleAttribution.section14.test.ts:190`
 
 ### `verdictCanDropBetter` (function) — 2 call sites
@@ -57,16 +58,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `FundamentalVerdictOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `renderFundamentalVerdict` (function) — 46 call sites
+### `renderFundamentalVerdict` (function) — 47 call sites
 - `src/services/blockedOwnRetreat.test.ts:32`
-- `src/services/coachFeatureService.ts:2490`
+- `src/services/coachFeatureService.ts:2528`
 - `src/services/forcingStemNoDecisive.test.ts:17`
 - `src/services/forcingStemNoDecisive.test.ts:22`
 - `src/services/fundLeadStems.test.ts:58`
 - `src/services/fundamentalHow.test.ts:47`
 - `src/services/fundamentalHow.test.ts:49`
 - `src/services/fundamentalHow.test.ts:55`
-- `src/services/fundamentalHow.test.ts:81`
+- `src/services/fundamentalHow.test.ts:61`
+- `src/services/fundamentalHow.test.ts:83`
 - `src/services/learnFundamentalNarration.ts:127`
 - `src/services/learnWalkBlumenfeld.test.ts:75`
 - `src/services/learnWalkOct3c.test.ts:79`
@@ -101,17 +103,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.mcconnell1000.test.ts:21`
 - `src/services/replayFence.sicilian1200.test.ts:55`
 - `src/services/replayFence.sicilian1200.test.ts:62`
-- `src/services/reviewFullData.ts:660`
+- `src/services/reviewFullData.ts:662`
 - `src/services/tradedActiveNamesTheirPiece.test.ts:20`
 - `src/services/walkOct2a.test.ts:154`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2501`
+- `src/services/coachFeatureService.ts:2539`
 - `src/services/principleVoice.test.ts:38`
 - `src/services/principleVoice.test.ts:40`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:5221`
+- `src/services/coachFeatureService.ts:5262`
 - `src/services/principleVoice.test.ts:48`
 - `src/services/principleVoice.test.ts:53`
 - `src/services/principleVoice.test.ts:57`

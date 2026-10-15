@@ -24,7 +24,7 @@
  * `buildVoicePackage`'s. Picking ONE lead per turn is the next slice.
  */
 import { isProof, type FactProof, type Proof } from './proof';
-import { emitLearnTurn } from './coachDecisionEvents';
+import { emitLearnTurn, type LearnTurnTag } from './coachDecisionEvents';
 import { COMPUTER_ROLES } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
@@ -399,6 +399,9 @@ export function decideTurn(
    *  the lead (David 2026-10-02: "Explain fundamentals"). Register only — the
    *  other lanes decide exactly as for anyone else. */
   beginner = false,
+  /** Which turn this wave belongs to — emitted on the row so an audit can
+   *  join a student move's waves. */
+  turn: LearnTurnTag | null = null,
 ): TurnDecision {
   const offered: LearnLane[] = [];
   const faded: LearnLane[] = [];
@@ -641,7 +644,7 @@ export function decideTurn(
   // student's own move — never a second list.
   const ownBeats = spoke.map((l) => DNA_BEAT[l]);
   const ownMove = ownBeats.includes('but') ? 'but' : ownBeats.includes('affirm') ? 'affirm' : null;
-  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], ownMove });
+  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], ownMove, turn });
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
 }
 

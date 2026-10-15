@@ -158,7 +158,7 @@ describe('WO-1b — one lead per turn', () => {
 
 describe('WO-1b — board descriptions wait for the turn\'s one decision', () => {
   it('the instant wave carries only urgent lanes; descriptions are deferred to the late wave', () => {
-    const start = TEACH_CODE.indexOf("const instantDecision = coachTurn({ posture: 'learn', facts: [");
+    const start = TEACH_CODE.indexOf("const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1 }, facts: [");
     const end = TEACH_CODE.indexOf('priorKeys: learnMemRef.current.spokenKeys, priorLead: null', start);
     const instantCall = TEACH_CODE.slice(start, end);
     for (const lane of ['commentary', 'behavior', 'positional', 'kingSafety']) {
@@ -418,7 +418,7 @@ describe('ONE DOOR — Learn is a posture of coachTurn (one coach P1, 2026-10-07
   it('the door decides exactly what the Learn ranking decided — nothing changed on the way in', async () => {
     const { coachTurn } = await import('./coachDecider');
     for (const beginner of [false, true]) {
-      const viaDoor = coachTurn({ posture: 'learn', facts: facts(), priorLead: null, green: null, beginner });
+      const viaDoor = coachTurn({ posture: 'learn', turn: { kind: 'phase' }, facts: facts(), priorLead: null, green: null, beginner });
       const direct = decideTurn(facts(), undefined, undefined, null, null, beginner);
       expect(viaDoor).toEqual(direct);
     }

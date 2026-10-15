@@ -582,13 +582,23 @@ async function main() {
       // own row says whether a lane about the student's move spoke on the
       // turn. 'affirm' is a reason for a GOOD move — reported on its own, the
       // gap the 2026-10-14 read found.
-      const own = turns.filter((t) => t.ownMove === 'affirm' || t.ownMove === 'but');
-      const affirm = turns.filter((t) => t.ownMove === 'affirm').length;
-      // Per TURN the door decided (one per student move it had anything to say
-      // about, across every game the run plays).
-      const ownShare = own.length / turns.length;
-      record('V6. every student move gets its own reason (≥70% of turns; good-move reasons reported)', ownShare >= 0.7,
-        `${own.length} of ${turns.length} turns (${Math.round(ownShare * 100)}%) — ${affirm} said what the move did well, ${own.length - affirm} what it gave up`);
+      // One student move = its instant and late waves, joined by the ply the
+      // door's own row carries (a phase line is not a student move). A row
+      // with no tag (an older build) counts as its own move.
+      const moves = new Map();
+      for (const t of turns) {
+        if (t.turn?.kind === 'phase') continue;
+        const key = t.turn ? `p${t.turn.ply}` : `row${moves.size}`;
+        const prev = moves.get(key) ?? null;
+        const rank = (o) => (o === 'but' ? 2 : o === 'affirm' ? 1 : 0);
+        moves.set(key, rank(t.ownMove) > rank(prev) ? t.ownMove : prev);
+      }
+      const ownVals = [...moves.values()];
+      const own = ownVals.filter((o) => o === 'affirm' || o === 'but');
+      const affirm = ownVals.filter((o) => o === 'affirm').length;
+      const ownShare = ownVals.length ? own.length / ownVals.length : 0;
+      record('V6. every student move gets its own reason (≥70% of student moves; good-move reasons reported)', ownShare >= 0.7,
+        `${own.length} of ${ownVals.length} student moves (${Math.round(ownShare * 100)}%) — ${affirm} said what the move did well, ${own.length - affirm} what it gave up`);
       // THE FADE (short phrasing when green): the audit device starts with no
       // evidence, so nothing is green and NOTHING may fade until the student
       // has HELD something on this device — grey means teach. Both games share

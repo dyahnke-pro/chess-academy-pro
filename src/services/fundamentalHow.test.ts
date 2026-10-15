@@ -50,14 +50,16 @@ describe('fundamentalHow — no diagnosis without a remedy', () => {
     expect(again).not.toContain("Here's how:");
   });
 
-  it('two NEW fundamentals on one ply both teach — the board earned both (G4.5)', () => {
+  it('two NEW fundamentals on one ply: the lead teaches its habit, the second is named and keeps its lesson for later (David 2026-10-14: one lead reason per turn)', () => {
     const seen = new Set<FundamentalId>();
     const out = renderFundamentalVerdict([attr('same-piece-twice'), attr('loose-piece')], { replySan: null, ply: 12, seen });
-    // Both HOWs speak (G4.5), under different stems (walk 5, R10).
     expect(out).toContain(fundamentalHow('same-piece-twice') ?? '__');
-    expect(out).toContain(fundamentalHow('loose-piece') ?? '__');
-    expect(out.match(/Here's how:/g) ?? []).toHaveLength(1);
-    expect(out).toContain('The habit that fixes it:');
+    expect(out).not.toContain(fundamentalHow('loose-piece') ?? '__');
+    expect(out.match(/Here's how:|The habit that fixes it:|Next time:/g) ?? []).toHaveLength(1);
+    // The second was named, not taught — its full lesson is still owed.
+    expect(seen.has('loose-piece')).toBe(false);
+    const later = renderFundamentalVerdict([attr('loose-piece')], { replySan: null, ply: 20, seen });
+    expect(later).toContain(fundamentalHow('loose-piece') ?? '__');
   });
 
   it('uses the student/opponent perspective, never we/our', () => {
