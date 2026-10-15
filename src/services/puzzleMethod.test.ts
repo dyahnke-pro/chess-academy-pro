@@ -49,3 +49,36 @@ describe('cpFromThemes — the Lichess tag says how much the answer wins', () =>
     expect(cpFromThemes(['endgame'])).toBeNull();
   });
 });
+
+describe('puzzleRecallLine — the loop on a puzzle (2026-10-15)', () => {
+  const NOW_GAMES = [
+    { gameId: 'g2', opponentName: 'Carlsen, M.', playedAt: Date.now() - 86_400_000 },
+    { gameId: 'g1', opponentName: 'Svidler, P.', playedAt: Date.now() - 20 * 86_400_000 },
+  ];
+  const forks = {
+    clusterId: 'analysis:tactic:fork', capabilityTag: null, proven: false, bucket: 'tactical',
+    label: 'Forks', openCount: 2, severity: 40, puzzleThemes: ['fork'], total: 2, games: NOW_GAMES,
+  } as unknown as WeaknessSignal;
+  const record = { weaknesses: [forks], capabilities: null };
+
+  it('solved clean on a motif their games failed: held, said once', async () => {
+    const { puzzleRecallLine } = await import('./puzzleMethod');
+    const memory = new Set<string>();
+    expect(puzzleRecallLine('fork', 'clean', record, memory)).toMatch(/^That one has caught you before — forks — the last one was against Carlsen, M\. .*This time you held it\.$/);
+    expect(puzzleRecallLine('fork', 'clean', record, memory)).toBeNull();
+  });
+
+  it('missed: names the games, never "the Nth game now" (a puzzle is no game)', async () => {
+    const { puzzleRecallLine } = await import('./puzzleMethod');
+    const line = puzzleRecallLine('fork', 'missed', record, new Set());
+    expect(line).toMatch(/^The same pattern has caught you in your games — forks/);
+    expect(line).not.toMatch(/game now/);
+  });
+
+  it('helped, an unrecorded motif or a fresh record: nothing', async () => {
+    const { puzzleRecallLine } = await import('./puzzleMethod');
+    expect(puzzleRecallLine('fork', 'helped', record, new Set())).toBeNull();
+    expect(puzzleRecallLine('pin', 'clean', record, new Set())).toBeNull();
+    expect(puzzleRecallLine('fork', 'clean', { weaknesses: [], capabilities: null }, new Set())).toBeNull();
+  });
+});

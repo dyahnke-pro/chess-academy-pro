@@ -33,8 +33,9 @@ export interface RecallInput {
   matches: readonly RecallMatch[];
   /** The student repeated the slip, or held the question this time. */
   direction: 'failed' | 'held';
-  /** Review speaks in the retrospective voice, Learn in the present tense. */
-  register: 'live' | 'review';
+  /** Review speaks in the retrospective voice, Learn in the present tense; a
+   *  drill (a puzzle, not a game) names the games it caught them in. */
+  register: 'live' | 'review' | 'drill';
   /** The student's weakness signals (the spine, joined). */
   signals: readonly WeaknessSignal[];
   /** The game being narrated, when the caller knows it — so a row the sweep

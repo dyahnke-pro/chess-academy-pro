@@ -77,7 +77,7 @@
 - `src/services/coachFeatureService.test.ts:260`
 - `src/services/coachFeatureService.test.ts:280`
 - `src/services/coachFeatureService.test.ts:292`
-- `src/services/gameAnalysisService.ts:2353`
+- `src/services/gameAnalysisService.ts:2354`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
