@@ -33,6 +33,7 @@
  */
 import { linesWithStats } from './audit-lib/spoken-stats.mjs';
 import { linesWithBuriedMate } from './audit-lib/mate-leads.mjs';
+import { lastGame, rememberGame, seedReads, saveReads } from './audit-lib/review-reuse.mjs';
 import { whyTally, formulaRepeats, turnLength, REVIEW_TURN_WORDS_MAX } from './audit-lib/why-count.mjs';
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -107,6 +108,13 @@ async function resolveGame() {
         ? `AUDIT_GAME_ID=${process.env.AUDIT_SOURCE_ID} AUDIT_STUDENT=${side}`
         : `AUDIT_STUDENT=${side} AUDIT_PGN='${process.env.AUDIT_PGN}'`,
     };
+  }
+  // REUSE THE LAST GAME (David 2026-10-15: "Reuse previous games to expedite
+  // audits") — its saved engine reads are seeded below, so the first open skips
+  // the engine. AUDIT_GAME=new rotates a fresh real game as before.
+  if (!process.env.AUDIT_GAME_ID && mode !== 'new') {
+    const last = lastGame();
+    if (last?.movetext) return { ...last, how: `${last.how ?? ''} (reused — AUDIT_GAME=new rotates)`.trim() };
   }
   const byId = process.env.AUDIT_GAME_ID;
   if (byId) {
@@ -329,6 +337,9 @@ const run = async () => {
     return { profiles: profs.length };
   }, { gid: GID, pgn: PGN, g: GAME }).catch((e) => ({ error: String(e) }));
   log(`[seed] ${JSON.stringify(seed)}`);
+  // The saved engine reads for this game, when a previous run left them.
+  const reused = await seedReads(page, GAME.movetext);
+  log(`[reuse] ${JSON.stringify(reused)}`);
 
   // OPT-IN: seed a real weakness spine. A cold prod device has NO accumulated
   // holes, so `habitNeedFrom` gets an empty array and the method bars stay at
@@ -1836,6 +1847,9 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   try {
     const dir = `audit-reports/review-overhaul-${new Date().toISOString().replace(/[:.]/g, '-')}`;
     mkdirSync(dir, { recursive: true });
+    // Remember this game and its reads for the next run.
+    rememberGame({ ...GAME, how: GAME.how?.replace(/\s*\(reused.*\)$/, '') });
+    log(`[reuse] saved ${await saveReads(page, GAME.movetext).catch(() => 0)} engine reads for the next run`);
     writeFileSync(`${dir}/report.json`, JSON.stringify({ base: BASE, gid: GID, verdict: wedged ? 'CONTAMINATED (instrument wedged)' : allPass ? 'MEETS STANDARD' : 'FAILS STANDARD', wedged: wedged ?? null, results, engine: annots, engineAfterDive, spoken: all.map((x) => x.text), plies: [...plyNarr.entries()].map(([ply, v]) => ({ ply, ...v })), streamBefore, streamAfter, coachDecisions: decisions, needScores: needAgg, needCoverage: (() => { const ev = listener.getCapturedEvents().filter((e) => e.kind === 'review-need-coverage').pop(); try { return ev ? JSON.parse(ev.details ?? '{}').rows ?? null : null; } catch { return null; } })(), errors: errs }, null, 2));
     log(`report: ${dir}/report.json`);
   } catch (e) { log(`(report not written: ${String(e).slice(0, 80)})`); }
