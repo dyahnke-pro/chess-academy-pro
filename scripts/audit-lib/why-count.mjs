@@ -105,12 +105,32 @@ export function formulaRepeats(lines, max = 2) {
 
 /** TURN LENGTH — an AVERAGE, never a limit (David 2026-10-15: "No hard word
  *  count caps. Set the cap as an average, not a hard limit"). A critical move
- *  may run long; the game as a whole may not. Counted on the spoken text the
- *  listener captured. */
+ *  may run long; the game as a whole may not — a 100-word turn needs a
+ *  60-word one beside it. Counted on the spoken text the listener captured. */
 export const TURN_WORDS_MAX = 80;
 export const REVIEW_TURN_WORDS_MAX = 100;
 export function turnLength(lines) {
-  const counts = lines.map(String).map((t) => t.split(/\s+/).filter(Boolean).length).filter((n) => n > 0);
+  // TEACHING turns only — "e4 — your move", greetings and setup are 3–10
+  // words each and would drag the average down until any game passed.
+  const counts = lines.map(String).filter(isTeachingLine).map((t) => t.split(/\s+/).filter(Boolean).length).filter((n) => n > 0);
   const avg = counts.length ? counts.reduce((a, b) => a + b, 0) / counts.length : 0;
   return { turns: counts.length, avg, longest: counts.length ? Math.max(...counts) : 0 };
+}
+
+/** Does this sentence state a reason or consequence? */
+export function isWhy(sentence) { return WHY.test(String(sentence)); }
+
+/** The why tally over a tape. `studentMoves` is the denominator for "per move". */
+export function whyTally(lines, studentMoves) {
+  const ls = lines.map(String).filter((t) => t.trim().length > 0 && isTeachingLine(t));
+  const withWhy = ls.filter((t) => sentences(t).some(isWhy));
+  const whySentences = ls.flatMap(sentences).filter(isWhy).length;
+  const share = ls.length ? withWhy.length / ls.length : 0;
+  const perMove = studentMoves > 0 ? whySentences / studentMoves : 0;
+  return {
+    lines: ls.length, withWhy: withWhy.length, share, whySentences, perMove,
+    whyless: ls.filter((t) => !sentences(t).some(isWhy)),
+    // PREVALENT: the share FLOOR above. NUMEROUS: at least one why per student move.
+    prevalent: share >= WHY_SHARE_BAR, numerous: perMove >= 1,
+  };
 }
