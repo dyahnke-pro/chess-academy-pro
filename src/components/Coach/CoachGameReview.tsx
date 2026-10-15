@@ -1729,7 +1729,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const played = typeof seed.playedEvalCp === 'number' && !isMateEval(seed.playedEvalCp)
       ? (moverIsWhite ? seed.playedEvalCp : -seed.playedEvalCp) : null;
     // The terminal eval, in words, set against the game move (betterLineClosing).
-    const closing = betterLineClosing({ endsInMate: !!line.plies[line.plies.length - 1].facts.isMate, lineCp: povCp, playedCp: played });
+    const closing = betterLineClosing({ endsInMate: line.plies[line.plies.length - 1].facts.isMate, lineCp: povCp, playedCp: played });
     await speakPaced(closing);
     setWalkExplorationFen(null);
     setWalkExplorationSan(null);
