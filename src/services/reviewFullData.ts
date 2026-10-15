@@ -1722,7 +1722,10 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
     squaresOut?.unshift(to);
     const bits: string[] = [];
     if (eyes.length) bits.push(`eyes ${andList(eyes)}`);
-    if (fights.length) bits.push(`fights for ${andList(fights)}`);
+    // ROTATED, keyed on the square it lands on (stable, never Math.random) —
+    // "now fights for d5" was one formula said three times in a review.
+    const fightVerb = ['fights for', 'joins the fight for', 'adds its weight to'][(to.charCodeAt(0) + Number(to[1])) % 3];
+    if (fights.length) bits.push(`${fightVerb} ${andList(fights)}`);
     if (!bits.length) return null;
     if (shapeOut) shapeOut.hitsPiece = pressed;
     const why = !pressReason ? ''
