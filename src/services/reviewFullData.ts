@@ -800,7 +800,11 @@ export function computeMoveFacets(
           facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary); recProof(f, tacProof(tac.beneficiary, tac.involvedSquares));
           recStakes(f, { points: v.winsPoints, plies: 1 }); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
         } else if (v.status === 'threat') {
-          const f = `[tactic] Threat: ${seat(tac.description)} — the defender can't save everything.`;
+          // A sentence, never a label ("Threat: Their knight…"): the fork is
+          // coming, and the side it hits can rescue only one piece.
+          const saver = !ctx.studentColorWB || !tac.beneficiary ? 'the side it hits'
+            : tac.beneficiary === ctx.studentColorWB ? 'they' : 'you';
+          const f = `[tactic] ${seat(tac.description)} — ${saver} can save only one of them.`;
           facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary); recProof(f, tacProof(tac.beneficiary, tac.involvedSquares));
           recStakes(f, { points: v.winsPoints || forkPoints(piecesOn(fenAfter, tac.involvedSquares.slice(1))), plies: 2 }); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
         }
