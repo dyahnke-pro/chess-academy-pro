@@ -64,3 +64,30 @@ describe('a step that drops the piece is never credited', () => {
     expect(planStepLine(weak, ISO, 'Bc4', 'w')).toBeNull();
   });
 });
+
+// David 2026-10-15: "That doesn't line up lol. Should be improve the rook by
+// placing it on open file, plant the knight on the weak square and break open
+// with the pawn." The three answers ARE the plan, in that order.
+describe('the method\'s answers make the plan', () => {
+  const FEN = 'r3nrk1/pp1p1ppp/8/4P3/8/3B1N2/PP3PPP/R4RK1 b - - 0 15';
+  it('rook to the open file, knight to the hole, then the break — and why that order', async () => {
+    const { newPlanThread, planThreadTurn } = await import('./planThread');
+    const line = planThreadTurn(newPlanThread(), { ply: 30, fenBefore: FEN, fenAfter: FEN, student: 'b' })[0]?.text ?? '';
+    expect(line).toMatch(/Your worst piece: your rook on a8, with no open file yet\./);
+    expect(line).toMatch(/So the plan: put a rook on the open c-file; plant your knight on d4, by way of c7 and e6 — once there, no pawn can ever chase it off; then break open with the push to d6 or f6\./);
+    expect(line).toMatch(/Why in that order\? A break opens the position/);
+  });
+  it('chat answers "how do I find a plan" with the same plan', async () => {
+    const { assemblePlanMethodAnswer } = await import('./groundedAnswer');
+    const a = assemblePlanMethodAnswer(FEN, 'black').facts;
+    expect(a).toMatch(/So the plan: put a rook on the open c-file; plant your knight on d4/);
+    expect(a).not.toMatch(/Beyond that: plant a knight/);
+  }, 60000);
+  it('a passed pawn outranks the three questions: no method before an unrelated plan', async () => {
+    const { newPlanThread, planThreadTurn } = await import('./planThread');
+    const passer = '6k1/5ppp/8/P7/8/8/5PPP/6K1 w - - 0 30';
+    const line = planThreadTurn(newPlanThread(), { ply: 59, fenBefore: passer, fenAfter: passer, student: 'w' })[0]?.text ?? '';
+    expect(line).toMatch(/passed pawn/);
+    expect(line).not.toMatch(/How do you find a plan/);
+  });
+});

@@ -496,11 +496,8 @@ export function assembleBoardPlanAnswer(
   if (!pf) return null;
   const trump = pf.trump;
   const withMethod = pf.plans;
-  const levers = pf.levers.map((l) => l.phrase);
-
   // Every lever the board earned — no ceiling (G4.5). They are already ordered
   // most→least decisive, so a long list reads as a ranked plan, not a dump.
-  const top = levers;
   // THE THREAT COMES BEFORE THE PLAN (question run 2026-09-27: "the plan is to
   // break with a4…" with the student's queen hanging on g4). A piece of yours
   // that can be taken right now is the first move of any plan.
@@ -519,12 +516,15 @@ export function assembleBoardPlanAnswer(
   // questions and their answers lead, the reason the first plan comes first follows.
   const why = pf.why && withMethod.length ? ` ${pf.ordered ? 'Why that one first?' : 'Why it matters:'} ${pf.why.charAt(0).toUpperCase()}${pf.why.slice(1)}.` : '';
   const headPlans = [trump, ...withMethod].filter((x): x is string => !!x && keep(x)).join(' ');
-  const headK = headPlans
-    ? pf.method && withMethod.length
-      ? `${pf.method} So: ${headPlans.charAt(0).toLowerCase()}${headPlans.slice(1)}${why}`
-      : `${headPlans}${why}`
-    : '';
-  const topK = top.filter(keep);
+  // THE METHOD'S ANSWERS ARE THE PLAN (David 2026-10-15: "That doesn't line
+  // up"): the method carries its own plan and order, so the plan computer's
+  // separate pick and the levers it already covers (the break, the file, the
+  // worst piece, the square to plant on) are not said beside it.
+  const headK = pf.method
+    ? [trump && keep(trump) ? trump : null, pf.method].filter(Boolean).join(' ')
+    : headPlans ? `${headPlans}${why}` : '';
+  const covered = new Set(pf.method ? ['break', 'file', 'worst', 'outpost'] : []);
+  const topK = pf.levers.filter((l) => !covered.has(l.kind)).map((l) => l.phrase).filter(keep);
   if (headK && topK.length) {
     return { facts: `${urgent}${headK} Beyond that: ${topK.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }

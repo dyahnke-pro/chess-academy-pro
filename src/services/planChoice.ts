@@ -24,13 +24,15 @@ import { findWorstPlacedPiece, PIECE_NOUN } from './nextPlans';
 import { findPawnBreaks, findWeakSquares } from './positionReadingService';
 import { enemyKingStuckInCenter } from './reviewSacrifice';
 import { orList } from '../utils/andList';
+import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import { THINK_MARK } from '../utils/thinkPause';
 
 export interface MethodRead {
   /** Their weakness, as a phrase ("their king, still on e8", "their isolated pawn on d5"). */
-  weakness: { phrase: string; square: string; kind: 'king' | 'isolated' | 'hole' } | null;
-  /** The student's worst-placed piece. */
-  worst: { phrase: string; square: string } | null;
+  weakness: { phrase: string; square: string; kind: 'king' | 'isolated' | 'hole'; step: string | null; to: string[] } | null;
+  /** The student's worst-placed piece — and, when it has one, the step that
+   *  improves it (a rook with an open file to take, a piece with a route). */
+  worst: { phrase: string; square: string; step: string | null; to: string[] } | null;
   /** The student's pawn breaks (squares a pawn can strike). */
   breaks: string[];
 }
@@ -55,17 +57,35 @@ export function methodRead(fen: string, student: Color): MethodRead | null {
   const queensOn = chess.board().some((r) => r.some((c) => c?.type === 'q'));
   const king = chess.board().flat().find((c) => c?.type === 'k' && c.color === enemy);
   if (king && queensOn && enemyKingStuckInCenter(fen, student)) {
-    weakness = { phrase: `their king, still on ${king.square}`, square: king.square, kind: 'king' };
+    weakness = { phrase: `their king, still on ${king.square}`, square: king.square, kind: 'king', step: `attack their king on ${king.square} before it gets out`, to: [] };
   } else {
     const iso = struct.pawns.isolatedPawns[enemy].find((sq) => 'cdef'.includes(sq[0])) ?? struct.pawns.isolatedPawns[enemy][0];
-    if (iso) weakness = { phrase: `their isolated pawn on ${iso}`, square: iso, kind: 'isolated' };
+    if (iso) weakness = { phrase: `their isolated pawn on ${iso}`, square: iso, kind: 'isolated', step: `pile up on their pawn on ${iso}`, to: [] };
     else {
       const holes = findWeakSquares(fen)[enemy === 'w' ? 'white' : 'black'];
-      if (holes[0]) weakness = { phrase: `the hole on ${holes[0]} that no pawn of theirs can guard`, square: holes[0], kind: 'hole' };
+      if (holes[0]) {
+        const route = knightRouteTo(chess, holes[0], student);
+        const step = route
+          ? `plant your knight on ${holes[0]}${route.via.length ? `, by way of ${route.via.join(' and ')}` : ''} — once there, no pawn can ever chase it off`
+          : null;
+        weakness = { phrase: `the hole on ${holes[0]} that no pawn of theirs can guard`, square: holes[0], kind: 'hole', step, to: route ? [route.from, ...route.via] : [] };
+      }
     }
   }
   const w = findWorstPlacedPiece(chess, student);
-  const worst = w ? { phrase: `your ${PIECE_NOUN[w.type]} on ${w.sq}`, square: w.sq } : null;
+  let worst: MethodRead['worst'] = null;
+  if (w) {
+    const r = computePieceRoute(fen, w.sq as Square) ?? computeSliderRoute(fen, w.sq as Square);
+    worst = { phrase: `your ${PIECE_NOUN[w.type]} on ${w.sq}`, square: w.sq, step: r && r.route.length ? `walk your ${PIECE_NOUN[w.type]} to ${r.target}` : null, to: r ? [...r.route] : [] };
+  } else {
+    // A ROOK WITH NO FILE is the worst piece once a file is open (David
+    // 2026-10-15: "improve the rook by placing it on open file"): the plan
+    // computer reads that as its own plan, so the method has to name it too,
+    // or the answers and the plan disagree.
+    const file = struct.pawns.openFiles.find((f) => !chess.board().flat().some((c) => c?.color === student && (c.type === 'r' || c.type === 'q') && c.square[0] === f));
+    const rook = file ? chess.board().flat().find((c) => c?.color === student && c.type === 'r') : null;
+    if (file && rook) worst = { phrase: `your rook on ${rook.square}, with no open file yet`, square: rook.square, step: `put a rook on the open ${file}-file`, to: [`${file}${student === 'w' ? '1' : '8'}`] };
+  }
   const asMe = chess.turn() === student ? fen : flipTo(fen, student);
   const breaks: string[] = asMe ? findPawnBreaks(asMe) : [];
   if (!weakness && !worst && breaks.length === 0) return null;
@@ -98,6 +118,64 @@ export function whyThisPlan(plans: readonly PlanFact[]): string | null {
   return next
     ? `${WORTH[top.kind](top)} — so it comes before ${next.goalIng}`
     : WORTH[top.kind](top);
+}
+
+/** The shortest knight walk (≤ 3 hops) to `target`, through empty squares
+ *  their pawns do not hit. */
+function knightRouteTo(chess: Chess, target: Square, me: Color): { from: string; via: string[] } | null {
+  if (chess.get(target)) return null;
+  const them: Color = me === 'w' ? 'b' : 'w';
+  const pawnHit = (sq: string): boolean => chess.attackers(sq as Square, them).some((a) => chess.get(a)?.type === 'p');
+  if (pawnHit(target)) return null;
+  const hops = (sq: string): string[] => {
+    const f = sq.charCodeAt(0); const r = Number(sq[1]);
+    return [[1, 2], [2, 1], [-1, 2], [-2, 1], [1, -2], [2, -1], [-1, -2], [-2, -1]]
+      .map(([df, dr]) => `${String.fromCharCode(f + df)}${r + dr}`)
+      .filter((x) => /^[a-h][1-8]$/.test(x));
+  };
+  let best: { from: string; via: string[] } | null = null;
+  for (const k of chess.board().flat()) {
+    if (!k || k.type !== 'n' || k.color !== me) continue;
+    let frontier: Array<{ sq: string; path: string[] }> = [{ sq: k.square, path: [] }];
+    const seen = new Set<string>([k.square]);
+    for (let d = 0; d < 3 && frontier.length; d++) {
+      const next: typeof frontier = [];
+      for (const { sq, path } of frontier) {
+        for (const h of hops(sq)) {
+          if (h === target) { if (!best || path.length < best.via.length) best = { from: k.square, via: path }; continue; }
+          if (seen.has(h) || chess.get(h as Square) || pawnHit(h)) continue;
+          seen.add(h); next.push({ sq: h, path: [...path, h] });
+        }
+      }
+      if ((best as { from: string } | null)?.from === k.square) break;
+      frontier = next;
+    }
+  }
+  return best;
+}
+
+/** THE PLAN THE THREE ANSWERS MAKE (David 2026-10-15: "That doesn't line up
+ *  … Should be improve the rook by placing it on open file, plant the knight
+ *  on the weak square and break open with the pawn"). The method's answers ARE
+ *  the plan: improve the worst piece, aim at their weakness, then break. One
+ *  computer, so what the student is told to ask and the plan they hear can
+ *  never disagree. The ORDER is taught too: pieces first, the break last.
+ *  Null when the answers give no step to play. */
+export function methodPlan(read: MethodRead): { steps: string[]; text: string; why: string | null; squares: string[] } | null {
+  const steps: string[] = [];
+  if (read.worst?.step) steps.push(read.worst.step);
+  if (read.weakness?.step) steps.push(read.weakness.step);
+  const pieces = steps.length;
+  if (read.breaks.length) steps.push(`${pieces ? 'then ' : ''}break open with the push to ${orList(read.breaks)}`);
+  if (!steps.length) return null;
+  const text = steps.length === 1
+    ? steps[0]
+    : `${steps.slice(0, -1).join('; ')}; ${steps[steps.length - 1]}`;
+  const why = pieces && read.breaks.length
+    ? 'A break opens the position, and an open position helps the side whose pieces are already on their best squares — so the pieces go first and the break comes last'
+    : null;
+  const squares = [...(read.worst?.to ?? []), ...(read.weakness ? [read.weakness.square, ...read.weakness.to] : []), ...read.breaks];
+  return { steps, text, why, squares: [...new Set(squares)].filter((x) => /^[a-h][1-8]$/.test(x)) };
 }
 
 /** The method spoken as a question and its answer: the student thinks first. */

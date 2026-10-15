@@ -20,8 +20,10 @@ describe('planThread — stated once, stopped with its proof', () => {
     // pause, the answers, the plan, and why it beats the next plan.
     const line = first.map((l) => l.text)[0];
     expect(line).toMatch(/^How do you find a plan\? .* ‖ Their weakness: their king, still on f8\./);
-    expect(line).toMatch(/So: the plan from here is to attack their king on f8 before it gets out\./);
-    expect(line).toMatch(/Why this one first\? .*so it comes before seizing the open e-file\.$/);
+    // THE ANSWERS ARE THE PLAN (David 2026-10-15: "That doesn't line up"):
+    // the worst piece's step, then the weakness's — never an unrelated pick.
+    expect(line).toMatch(/Your worst piece: your rook on a1, with no open file yet\./);
+    expect(line).toMatch(/So the plan: put a rook on the open e-file; attack their king on f8 before it gets out\.$/);
     const second = planThreadTurn(t, { ply: 24, fenBefore: KING_F8, fenAfter: after(KING_F8, 'Kg8'), student: 'w' });
     expect(second[0].text).toBe('Their king stepped to g8, out of the open centre — the attack on it is off. That plan is off.');
     if (second[1]) expect(second[1].text).toMatch(/^The new plan is to /);
@@ -48,10 +50,15 @@ describe('a plan teaches its how-to once a game (Learn audit 2026-10-15)', () =>
     const { newPlanThread, planThreadTurn } = await import('./planThread');
     const t = newPlanThread();
     const fen = asWhite(KING_F8);
+    // The first statement is the method's own plan; the how waits for the
+    // plan's own statement, said once.
     const first = planThreadTurn(t, { ply: 20, fenBefore: fen, fenAfter: fen, student: 'w' });
-    expect(first[0]?.text).toMatch(/Here's how:/);
+    expect(first[0]?.text).toMatch(/So the plan:/);
     t.stated = null;
-    const again = planThreadTurn(t, { ply: 40, fenBefore: fen, fenAfter: fen, student: 'w' });
+    const second = planThreadTurn(t, { ply: 40, fenBefore: fen, fenAfter: fen, student: 'w' });
+    expect(second[0]?.text).toMatch(/Here's how:/);
+    t.stated = null;
+    const again = planThreadTurn(t, { ply: 60, fenBefore: fen, fenAfter: fen, student: 'w' });
     expect(again[0]?.text).toBeTruthy();
     expect(again[0]?.text).not.toMatch(/Here's how:/);
   });

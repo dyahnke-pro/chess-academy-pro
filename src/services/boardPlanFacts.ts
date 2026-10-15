@@ -12,7 +12,7 @@
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { deriveNextPlanFacts } from './nextPlans';
-import { methodRead, methodLine, whyThisPlan } from './planChoice';
+import { methodRead, methodLine, methodPlan, whyThisPlan } from './planChoice';
 import { stripThink } from '../utils/thinkPause';
 import { structurePlan } from './boardPlan';
 import { findPawnBreaks, findOpenFiles, strongestWeakestPiece } from './positionReadingService';
@@ -45,7 +45,9 @@ export interface BoardPlanFacts {
   why: string | null;
   /** More than one plan of different kinds — the why is an order, not a lone reason. */
   ordered: boolean;
-  /** How the plan is found — the three questions and their answers (planChoice). */
+  /** How the plan is found — the three questions, their answers, and the plan
+   *  those answers make, with why that order (planChoice). Null when the answers
+   *  make no plan or a bigger plan (a passer, a piece to convert) outranks them. */
   method: string | null;
 }
 
@@ -105,12 +107,16 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
     levers.push({ kind: 'worst', phrase: `improve ${your} ${PIECE[sw.weakest.piece]} on ${sw.weakest.square}`, squares: [sw.weakest.square] });
   }
   // Chat was ASKED: the method is said as a question and its answers at once.
-  const read = voice === 'you' && facts.length ? methodRead(fen, myC) : null;
+  // The answers ARE the plan (planChoice.methodPlan) — unless a passed pawn or
+  // an extra piece to convert outranks all three questions.
+  const methodOwns = facts[0] && facts[0].kind !== 'passer' && facts[0].kind !== 'convert';
+  const read = voice === 'you' && methodOwns ? methodRead(fen, myC) : null;
+  const mp = read ? methodPlan(read) : null;
   return {
     trump, plans, levers,
     why: whyThisPlan(facts),
     ordered: facts.some((p) => p.kind !== facts[0]?.kind),
-    method: read ? stripThink(methodLine(read)) : null,
+    method: read && mp ? stripThink(`${methodLine(read)} So the plan: ${mp.text}.${mp.why ? ` Why in that order? ${mp.why}.` : ''}`) : null,
   };
 }
 

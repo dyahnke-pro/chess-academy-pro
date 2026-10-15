@@ -12,9 +12,9 @@ describe('review says when the plan changes', () => {
     const c = new Chess();
     const inputs = SANS.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: 'good', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
     const segs = buildReviewSegments(inputs, 'black', "King's Indian Defense", true, 2000);
-    const plans = segs.filter((s) => /the plan (from here is|changes here)/i.test(s.narration ?? ''));
+    const plans = segs.filter((s) => /the plan (from here is|changes here)|So the plan:/i.test(s.narration ?? ''));
     expect(plans.length, 'fixture must state at least two plans').toBeGreaterThanOrEqual(2);
-    expect(plans[0].narration).toMatch(/the plan from here is to/i);
+    expect(plans[0].narration).toMatch(/the plan from here is to|So the plan:/i);
     expect(plans[0].narration).not.toMatch(/plan changes here/);
     expect(plans.slice(1).every((s) => /The plan changes here/.test(s.narration ?? ''))).toBe(true);
     // A plan is a thread (unity U5, walk #23): two plans are never stated
@@ -34,7 +34,7 @@ describe('a plan is a thread on review', () => {
     const c = new Chess();
     const inputs = ALAPIN.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: 'good', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; });
     const segs = buildReviewSegments(inputs, 'black', 'Sicilian Defense: Alapin Variation', true, 1500);
-    const PLAN = /the plan (from here is|changes here)|The new plan is/gi;
+    const PLAN = /the plan (from here is|changes here)|The new plan is|So the plan:/gi;
     for (const s of segs) expect((s.narration ?? '').match(PLAN)?.length ?? 0, s.narration ?? '').toBeLessThanOrEqual(1);
     const plans = segs.filter((s) => PLAN.test(s.narration ?? ''));
     for (let i = 1; i < plans.length; i++) expect(plans[i].ply - plans[i - 1].ply).toBeGreaterThanOrEqual(PLAN_HOLD_PLIES);
@@ -48,9 +48,9 @@ describe('review finds the plan out loud (David 2026-10-15)', () => {
     const segs = buildReviewSegments(inputs, 'black', 'Sicilian Defense: Alapin Variation', true, 1500);
     const all = segs.map((s) => s.narration ?? '');
     expect(all.some((t) => t.includes('‖'))).toBe(false);
-    const first = all.find((t) => /the plan from here is/i.test(t)) ?? '';
-    expect(first).toMatch(/How do you find a plan\?/);
-    expect(first).toMatch(/Why this one first\?/);
+    const first = all.find((t) => /How do you find a plan\?/.test(t)) ?? '';
+    // The three answers make the plan that follows them.
+    expect(first).toMatch(/So the plan: /);
     const later = all.filter((t) => /The plan changes here|The new plan is/.test(t));
     // The why may stand without its question once the question was said (say-once).
     for (const t of later) expect(t).toMatch(/Why this one|Why it matters|so it comes before|no pawns on it|biggest target|can protect|must stand guard|for good|worst piece|count for more|grow stronger/);
