@@ -35,8 +35,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:4786`
-- `src/services/learnFundamentalNarration.ts:138`
+- `src/services/coachFeatureService.ts:4777`
+- `src/services/learnFundamentalNarration.ts:141`
 
 ### `fundamentalHow` (function) — 10 call sites
 - `src/services/fundamentalHow.test.ts:25`
@@ -51,7 +51,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttribution.section14.test.ts:190`
 
 ### `verdictCanDropBetter` (function) — 2 call sites
-- `src/services/learnFundamentalNarration.ts:118`
+- `src/services/learnFundamentalNarration.ts:121`
 - `src/services/principleVoice.test.ts:120`
 
 ### `FundamentalVerdictOptions` (interface) — 0 call sites
@@ -59,7 +59,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `renderFundamentalVerdict` (function) — 46 call sites
 - `src/services/blockedOwnRetreat.test.ts:32`
-- `src/services/coachFeatureService.ts:2522`
+- `src/services/coachFeatureService.ts:2513`
 - `src/services/forcingStemNoDecisive.test.ts:17`
 - `src/services/forcingStemNoDecisive.test.ts:22`
 - `src/services/fundLeadStems.test.ts:58`
@@ -67,7 +67,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalHow.test.ts:49`
 - `src/services/fundamentalHow.test.ts:55`
 - `src/services/fundamentalHow.test.ts:79`
-- `src/services/learnFundamentalNarration.ts:128`
+- `src/services/learnFundamentalNarration.ts:131`
 - `src/services/learnWalkBlumenfeld.test.ts:75`
 - `src/services/learnWalkOct3c.test.ts:79`
 - `src/services/misconceptionClassifier.ts:284`
@@ -106,12 +106,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/walkOct2a.test.ts:154`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2533`
+- `src/services/coachFeatureService.ts:2524`
 - `src/services/principleVoice.test.ts:39`
 - `src/services/principleVoice.test.ts:41`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:5262`
+- `src/services/coachFeatureService.ts:5253`
 - `src/services/principleVoice.test.ts:49`
 - `src/services/principleVoice.test.ts:54`
 - `src/services/principleVoice.test.ts:58`

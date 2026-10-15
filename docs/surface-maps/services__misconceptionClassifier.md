@@ -62,7 +62,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/section14Diagnosis.test.ts:74`
 
 ### `classifyMisconceptionNow` (function) — 2 call sites
-- `src/services/learnFundamentalNarration.ts:211`
+- `src/services/learnFundamentalNarration.ts:215`
 - `src/services/learnMistakeRecurrence.test.ts:12`
 
 ## Tests

@@ -48,9 +48,8 @@ import { newPlanThread, type PlanThread } from './planThread';
 import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
-import { recurrenceFor, recurrenceLine } from './misconceptionCallbacks';
 import { noteSlip } from './learnBoardTeaching';
-import { fundamentalRecurrenceLine, heldRecurrenceLine } from './fundamentalRecurrence';
+import { recall, type RecallMemory } from './fundamentalRecurrence';
 import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { mateStakes, isSacrifice, type FactStakes } from './factStakes';
@@ -74,7 +73,7 @@ import { betterMoveReason, priorMoveLeadingTo, toStudentSeat } from './inaccurac
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
 import { buildCausalChain, causalChainArrows, causalChainMistakeTags, findMissedChain, findAllowedChain } from './causalChain';
 import { renderCausalChain } from './causalChainVoice';
-import { matchFundamental, matchTag, type WeaknessSignal } from './weaknessSignal';
+import { matchFundamental, type WeaknessSignal } from './weaknessSignal';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap, isMethodSentence } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
@@ -1389,9 +1388,9 @@ export function buildReviewSegments(
   // same cross-move story doesn't LEAD several beats and "this keeps recurring —
   // <hole>" isn't repeated on every move that maps to the same weakness.
   const causalChainsSeen = new Set<string>();
-  const recurrenceLabelsSeen = new Set<string>();
-  /** Weakness labels whose "this time you held it" was said this game. */
-  const heldLabelsSeen = new Set<string>();
+  /** The ONE per-game memory ledger (`recall`): what the coach has already
+   *  recalled from the student's record, each direction once per weakness. */
+  const recalled: RecallMemory = new Set<string>();
   // Deepest-look-ahead shots announced (David 2026-07-26 — the review-register
   // peer of the live speakDeepestLookahead), keyed by the shot's SAN so the same
   // combination is called out once per game.
@@ -1750,23 +1749,15 @@ export function buildReviewSegments(
           // proves recurrence). Never on a PLAYED win (that's not a leak), and
           // never invented — only when a matched, recurring weakness exists.
           if (causalLead && studentWeaknesses && studentWeaknesses.length > 0 && (chain.stance === 'missed' || chain.stance === 'allowed')) {
-            let recur: WeaknessSignal | null = null;
-            for (const tag of causalChainMistakeTags(chain, studentColorWB)) {
-              const hit = matchTag(tag, studentWeaknesses);
-              if (hit && hit.openCount >= 2 && (!recur || hit.openCount > recur.openCount)) recur = hit;
-            }
-            if (recur && !recurrenceLabelsSeen.has(recur.label)) {
-              // NAME THE GAME (David 2026-09-16: "Yes! Name the game! Date and
-              // opponent if available"). Counted in GAMES, and this game's own
-              // swept rows are never a "prior" (`recurrenceFor`, WO-LOOP-01).
-              // Each clause appears only when its source actually knows it: no
-              // "against your opponent", no invented recency.
-              const read = recurrenceFor(recur, currentGameId);
-              if (read) {
-                recurrenceLabelsSeen.add(recur.label);
-                causalLead += ` ${recurrenceLine(recur.label, read, 'review')}`;
-              }
-            }
+            // NAME THE GAME (David 2026-09-16: "Yes! Name the game! Date and
+            // opponent if available"). Counted in GAMES, and this game's own
+            // swept rows are never a "prior" (`recurrenceFor`, WO-LOOP-01).
+            const recur = recall({
+              matches: causalChainMistakeTags(chain, studentColorWB).map((tag) => ({ tag })),
+              direction: 'failed', register: 'review', signals: studentWeaknesses,
+              currentGameId, memory: recalled, minOpen: 2,
+            });
+            if (recur) causalLead += ` ${recur}`;
           }
           if (chain.stance === 'played' || chain.stance === 'allowed') {
             // Sight lines (the piece that attacks the loose target) through the
@@ -1843,7 +1834,7 @@ export function buildReviewSegments(
         try {
           for (const posed of capabilitiesPosed(fenPair.fenBefore, m.san, moverColor)) {
             if (posed.outcome === 'broken' || posed.posedImportance < 60) continue;
-            const line = heldRecurrenceLine({ tag: posed.tag, signals: studentWeaknesses, currentGameId, seenLabels: heldLabelsSeen });
+            const line = recall({ matches: [{ tag: posed.tag }], direction: 'held', register: 'review', signals: studentWeaknesses, currentGameId, memory: recalled });
             if (line) { facets.push(`[held] ${line}`); break; }
           }
         } catch { /* memory is a bonus, never a blocker */ }
@@ -1977,11 +1968,11 @@ export function buildReviewSegments(
       // about the prior game.
       // Every say-once ledger on this path is written AFTER the door, and only
       // for a fact the door let through (B4) — this one via a scratch copy.
-      const recurScratch = new Set(recurrenceLabelsSeen);
+      const recurScratch: RecallMemory = new Set(recalled);
       if (fundamentals.length > 0) {
-        const recur = fundamentalRecurrenceLine({
-          ids: fundamentals.map((f) => f.id), signals: studentWeaknesses ?? [],
-          currentGameId, register: 'review', seenLabels: recurScratch,
+        const recur = recall({
+          matches: fundamentals.map((f) => ({ fundamental: f.id })), signals: studentWeaknesses ?? [],
+          direction: 'failed', currentGameId, register: 'review', memory: recurScratch,
         });
         if (recur) {
           const i = facets.findIndex((f) => f.startsWith('[principle] '));
@@ -2177,7 +2168,7 @@ export function buildReviewSegments(
         }
         // The [principle] facet carries the recurrence label, if one was named.
         if (/^\[principle\]/.test(f)) {
-          keep(f, () => { for (const l of recurScratch) recurrenceLabelsSeen.add(l); });
+          keep(f, () => { for (const l of recurScratch) recalled.add(l); });
           continue;
         }
         keep(f);
@@ -2526,9 +2517,9 @@ export function buildReviewSegments(
       // last game named, nothing invented. `matchFundamental` had zero
       // production callers before this line; the coach could record a hole
       // and never tell the student it remembered.
-      const recurrence = fundamentalRecurrenceLine({
-        ids: fundamentals.map((f) => f.id), signals: studentWeaknesses ?? [],
-        currentGameId, register: 'review', seenLabels: recurrenceLabelsSeen,
+      const recurrence = recall({
+        matches: fundamentals.map((f) => ({ fundamental: f.id })), signals: studentWeaknesses ?? [],
+        direction: 'failed', currentGameId, register: 'review', memory: recalled,
       });
       const pvEvidence = renderPvEvidence(fundamentals);
       const failed = errorWhyFor({ fenBefore: fenPair.fenBefore, playedSan: m.san, moverColor, replyLineUci: m.pv?.afterPlayed ?? null, quality: m.classification });
