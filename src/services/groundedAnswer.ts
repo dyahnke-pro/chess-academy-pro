@@ -1946,7 +1946,7 @@ export function assembleMoveEvalAnswer(opts: {
     const proof = moverLineProof(fen, uci, mover === 'white' ? 'w' : 'b');
     const sans = proof?.line?.sans ?? [];
     if (proof && sans.length >= 3) {
-      parts.push(`${openSentence(proof.short)}.`);
+      parts.push(`${openSentence(proof.full)}.`);
       const w = walkableLine(fen, sans, sans[0]);
       if (w) lines = [w];
     } else if (opts.pvSan.length >= 3) {

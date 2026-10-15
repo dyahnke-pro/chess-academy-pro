@@ -269,7 +269,7 @@ export function deriveNextPlanFacts(
     const escort = queensOn
       ? 'escort it with your pieces rather than pushing it alone into danger — the king joins the escort once the queens come off'
       : 'escort it up with your king and pieces rather than pushing it alone into danger';
-    add('passer', `the plan from here is to get your passed pawn on ${passer} promoting. Here's how: clear the square in front of it, ${escort}, and push it one safe square at a time — every push brings it closer to a queen`, [passer]);
+    add('passer', `the plan from here is to get your passed pawn on ${passer} promoting. Here's how: clear the square in front of it, ${escort}, and push it one safe square at a time — every push brings it closer to promotion`, [passer]);
   }
 
   // 3. An enemy weak (isolated) pawn on the c–f files → besiege it, HOW spelled
