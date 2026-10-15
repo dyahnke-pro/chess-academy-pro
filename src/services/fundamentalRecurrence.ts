@@ -62,3 +62,12 @@ function firstRecurrence(hits: ReadonlyArray<WeaknessSignal | null>, input: Omit
   }
   return null;
 }
+
+/** THE GREEN DIRECTION, OUT LOUD (David 2026-10-15: "strengthen the coach's
+ *  memory"): the student just HELD a question (`recordTeachingEvidence`) that
+ *  their record says they failed in another game — "That one has caught you
+ *  before — loose piece, against X. This time you held it." Same matcher, same
+ *  prior-game rule, same once-a-game ledger as the failure line. */
+export function heldRecurrenceLine(input: { tag: string; signals: readonly WeaknessSignal[]; currentGameId?: string | null; seenLabels: Set<string>; now?: number }): string | null {
+  return firstRecurrence([matchTag(input.tag, input.signals)], { ...input, register: 'held' });
+}

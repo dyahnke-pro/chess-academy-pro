@@ -63,6 +63,8 @@ export interface LearnMemory {
   /** Weakness labels whose recurrence ("you've walked into this before") was
    *  said this game — once per weakness. */
   readonly recurrenceSaid: Set<string>;
+  /** Weakness labels whose "this time you held it" was said this game. */
+  readonly heldSaid: Set<string>;
   /** The last gem callout spoken — suppresses the identical callout. */
   gemSeen: string | null;
   /** The board that gem callout was computed on. */
@@ -264,6 +266,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     saidExplainers,
     stemCounts: new Map<string, number>(),
     recurrenceSaid: new Set<string>(),
+    heldSaid: new Set<string>(),
     structureSaid,
     planThread: null,
     lastProof: null,
@@ -304,6 +307,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       mem.slipsThisGame.clear();
       mem.stemCounts.clear();
       mem.recurrenceSaid.clear();
+      mem.heldSaid.clear();
       mem.promises.clear();
       saidExplainers.clear();
       structureSaid.clear();

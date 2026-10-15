@@ -29,3 +29,14 @@ describe('a plain mistake says when it recurs — the loop out loud (Learn audit
     expect(learnMistakeRecurrence(input, [], new Set())).toBeNull();
   });
 });
+
+describe('the green direction out loud — held this time (2026-10-15)', () => {
+  it('a question failed in another game and held now is named, once a game', async () => {
+    const { learnHeldRecurrence } = await import('./learnFundamentalNarration');
+    const sig = { clusterId: 'passive-rook', bucket: 'positional', label: 'Passive rook', openCount: 1, severity: 40, puzzleThemes: [], total: 1, games: [{ gameId: 'g1', opponentName: 'Sam' }], capabilityTag: null } as unknown as WeaknessSignal;
+    const said = new Set<string>();
+    expect(learnHeldRecurrence('passive-rook', [sig], 'g2', said)).toBe('That one has caught you before — passive rook — the last one was against Sam. This time you held it.');
+    expect(learnHeldRecurrence('passive-rook', [sig], 'g2', said)).toBeNull();
+    expect(learnHeldRecurrence('passive-rook', [sig], 'g1', new Set())).toBeNull();
+  });
+});

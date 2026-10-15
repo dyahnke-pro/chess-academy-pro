@@ -206,7 +206,7 @@ import { scaleGap, packageForRegister } from '../../services/hintRegister';
 import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine, pinConsequence } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf } from '../../services/backwardLook';
-import { learnFundamentalVerdict, learnMistakeRecurrence } from '../../services/learnFundamentalNarration';
+import { learnFundamentalVerdict, learnHeldRecurrence, learnMistakeRecurrence } from '../../services/learnFundamentalNarration';
 import type { FundamentalId } from '../../services/principleAttribution';
 import { FUNDAMENTAL_LABEL } from '../../services/fundamentalsCatalog';
 import {
@@ -10921,7 +10921,10 @@ export function CoachTeachPage(): JSX.Element {
                     })) {
                       // Graded on the board the hint describes — right after the student's move
                       // (replay 2026-10-06: 6 of 239 true lines dropped on the reply's board).
-                      queueSpokenHint(fenAfterReply, h.text, h.lane, h.proof, h.squares, h.claims, move.fen, h.arrows, undefined, h.stakes);
+                      // THE GREEN DIRECTION OUT LOUD: the student just held a question
+                      // their record says they failed in another game.
+                      const heldBefore = learnHeldRecurrence(h.evidence?.tag, weaknessSignalsRef.current, learnMemRef.current.gameId, learnMemRef.current.heldSaid);
+                      queueSpokenHint(fenAfterReply, heldBefore ? `${h.text} ${heldBefore}` : h.text, h.lane, h.proof, h.squares, h.claims, move.fen, h.arrows, undefined, h.stakes);
                       if (h.event) captureEvent(h.event.name, h.event.props);
                       // DUAL-USE (P4): the lane that teaches it also records it.
                       recordTeachingEvidence(h, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
