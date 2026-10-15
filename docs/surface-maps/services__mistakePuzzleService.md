@@ -177,7 +177,7 @@
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
 - `src/components/Coach/CoachGamePage.tsx:2087`
-- `src/components/Coach/CoachGameReview.tsx:382`
+- `src/components/Coach/CoachGameReview.tsx:383`
 - `src/services/gameAnalysisService.ts:2347`
 - `src/services/mistakePuzzleService.test.ts:107`
 - `src/services/mistakePuzzleService.test.ts:161`

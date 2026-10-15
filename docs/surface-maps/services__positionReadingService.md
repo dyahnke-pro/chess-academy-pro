@@ -155,7 +155,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:3510`
 - `src/services/groundedAnswer.ts:7142`
 - `src/services/inaccuracyCall.ts:962`
-- `src/services/liveTacticsContext.ts:819`
+- `src/services/liveTacticsContext.ts:822`
 - `src/services/moveAllowed.ts:51`
 - `src/services/moveTiming.ts:32`
 - `src/services/reviewConcepts.ts:96`
