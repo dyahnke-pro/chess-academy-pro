@@ -1,3 +1,4 @@
+import { moveIntentsForGame, type ReviewIntent } from './reviewMoveIntent';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan } from './material';
 import { Chess } from 'chess.js';
@@ -1245,6 +1246,9 @@ export function buildReviewSegments(
    *  callers pass it explicitly (the walk's builder and CoachGameReview's
    *  synchronous rebuild), so only the unit tests rely on the default. */
   refutedByPly: ReadonlyMap<number, RefutedAlternative> = new Map(),
+  /** What each clean student move was FOR, from the engine lines the review
+   *  read-ahead stored (`moveIntentsForGame`) — computed by the async caller. */
+  intentByPly: ReadonlyMap<number, ReviewIntent> = new Map(),
 ): ReviewMoveSegment[] {
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
   const curatedOpeningIdeas = resolveCuratedOpeningIdeas(openingName ?? null);
@@ -1792,6 +1796,7 @@ export function buildReviewSegments(
         seenFundamentals,
         teaching: {
           refutedAlt: refutedByPly.get(m.ply) ?? null,
+          intent: intentByPly.get(m.ply) ?? null,
           prevFenBefore: i > 0 ? fenChain[i - 1].fenBefore : null,
           phaseTurn: phaseTurnAt.get(m.ply) ?? null,
           principlesTaught,
@@ -5029,6 +5034,8 @@ export async function generateReviewNarration(params: {
   const refutedStart = Date.now();
   const refutedByPly = await refutedAlternativesForGame(moves.slice(0, usableCount), playerColor)
     .catch(() => new Map<number, RefutedAlternative>());
+  const intentByPly = await moveIntentsForGame(moves.slice(0, usableCount), playerColor)
+    .catch(() => new Map<number, ReviewIntent>());
   timings.refuted = Date.now() - refutedStart;
   const record = reviewOpeningRecord({ openingName, playerColor, studentNeed, gameId: params.gameId ?? null });
   const introMistakes = complete ? mistakeCount : null;
@@ -5048,7 +5055,7 @@ export async function generateReviewNarration(params: {
       ).then((r) => { timings.intro = Date.now() - introStart; return r ?? ''; });
 
   let phaseStart = Date.now();
-  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null, refutedByPly);
+  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null, refutedByPly, intentByPly);
   // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)
   // — Stockfish-projected teaching, uncapped-diagnostic only (bounded budget +
   // timeout so it never stalls the walk). Runs before the voice pass so the

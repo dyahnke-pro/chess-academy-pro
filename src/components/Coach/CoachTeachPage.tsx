@@ -11307,13 +11307,29 @@ export function CoachTeachPage(): JSX.Element {
                             return r ? `${r.from}${r.to}${r.promotion ?? ''}` : undefined;
                           } catch { return undefined; }
                         })();
-                        const intent = passRead?.topLines?.length ? moveIntent(fenBefore, move.san, {
+                        // THE STUDENT MOVING AGAIN (the "prepares" half): what this
+                        // side would play next if the opponent passed. It was never
+                        // read here, so "prepares" fired almost never and the move
+                        // got a description instead of its point (Learn audit
+                        // 2026-10-15: one reason from this computer in 60 turns).
+                        const againFen = nullMoveFen(move.fen);
+                        const againRead = againFen
+                          ? await stockfishEngine.analyzeWithBudget(againFen, COACH_TURN_DEPTH, 900).catch(() => null)
+                          : null;
+                        const intentReads = passRead?.topLines?.length ? {
                           before: preStudentRead.topLines ?? [],
                           after: mid.topLines ?? [],
                           passBefore: passRead.topLines,
-                          passAfter: [],
+                          passAfter: againRead?.topLines ?? [],
                           reply: replyUci,
-                        }, 'student', { ...DEFAULT_INTENT, book: studentMoveInBook }) : null;
+                        } : null;
+                        // The default read first; when it finds nothing, the move's
+                        // follow-up in the engine's own line, and only a CONCRETE
+                        // stopped threat (mate, check, material).
+                        const intent = intentReads
+                          ? moveIntent(fenBefore, move.san, intentReads, 'student', { ...DEFAULT_INTENT, book: studentMoveInBook })
+                            ?? moveIntent(fenBefore, move.san, intentReads, 'student', { prepare: 'line', prevent: 'concrete', book: studentMoveInBook })
+                          : null;
                         if (intent) {
                           // DUAL-USE (P4): an engine-proven purpose (prevents / prepares)
                           // is the no-plan question answered.
