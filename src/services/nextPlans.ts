@@ -238,6 +238,7 @@ export function deriveNextPlanFacts(
   // compensation — this used to be a second copy of the same test.
   if (enemyKing && queensOn && openCentralFile && enemyKingStuckInCenter(fen, studentColorWB)) {
     // The soft squares in front of a stuck king — where a sac usually lands.
+    const softSquares = enemy === 'w' ? 'd2 or f2' : 'd7 or f7';
     // Rook clause scales to the rooks the student actually HAS (prescription
     // gate, David 2026-07-22 — never prescribe a piece that isn't there).
     const rookCount = all.filter((c) => c.type === 'r' && c.color === studentColorWB).length;
@@ -249,7 +250,7 @@ export function deriveNextPlanFacts(
       : rookCount === 1
         ? `put your rook on the open ${openCentralFile}-file, `
         : '';
-    add('king-attack', `the plan from here is to attack their king on ${enemyKing.square} before it gets out. Here's how: get your own king safe, ${fileClause}and bring pieces in with tempo — a king caught in the centre cannot hide behind its pawns`, [enemyKing.square], openCentralFile);
+    add('king-attack', `the plan from here is to attack their king on ${enemyKing.square} before it gets out. Here's how: tuck your own king away, ${fileClause}bring pieces in with tempo, and look for a sacrifice on ${softSquares} to strip its cover`, [enemyKing.square], openCentralFile);
   }
 
   // 2. Your passed pawn → push it, HOW spelled out. The king joins the escort
