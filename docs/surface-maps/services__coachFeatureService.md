@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5365 lines · 33 exports · 49 importers · 48 tests · 4 audits**
+**5369 lines · 33 exports · 49 importers · 48 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -138,9 +138,10 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `fitReviewTurn` (function) — 2 call sites
+### `fitReviewTurn` (function) — 3 call sites
 - `src/services/reviewTurnLength.test.ts:15`
 - `src/services/reviewTurnLength.test.ts:23`
+- `src/services/reviewTurnLength.test.ts:32`
 
 ### `REVIEW_TURN_WORDS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

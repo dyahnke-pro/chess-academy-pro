@@ -269,7 +269,7 @@ export function deriveNextPlanFacts(
     const escort = queensOn
       ? 'escort it with your pieces rather than pushing it alone into danger — the king joins the escort once the queens come off'
       : 'escort it up with your king and pieces rather than pushing it alone into danger';
-    add('passer', `the plan from here is to get your passed pawn on ${passer} promoting. Here's how: clear the square in front of it so nothing blocks the road, ${escort}, and advance it one safe square at a time until they have to give up a piece to stop it — a passed pawn's whole job is to run`, [passer]);
+    add('passer', `the plan from here is to get your passed pawn on ${passer} promoting. Here's how: clear the square in front of it, ${escort}, and push it one safe square at a time — every push brings it closer to promotion`, [passer]);
   }
 
   // 3. An enemy weak (isolated) pawn on the c–f files → besiege it, HOW spelled
@@ -322,7 +322,7 @@ export function deriveNextPlanFacts(
   // 5. You already hold an outpost → dominate from it, HOW spelled out.
   const myOutpost = struct.outposts.find((o) => o.color === studentColorWB);
   if (myOutpost) {
-    add('outpost', `the plan from here is to make that ${myOutpost.piece === 'n' ? 'knight' : 'bishop'} on ${myOutpost.square} the boss of the board. Here's how: keep a pawn defending it so it stays anchored, refuse any trade that gives it up cheaply, and use it as the anchor to pile your other pieces onto the weakness behind it`, [myOutpost.square]);
+    add('outpost', `the plan from here is to make that ${myOutpost.piece === 'n' ? 'knight' : 'bishop'} on ${myOutpost.square} the boss of the board. Here's how: keep a pawn guarding it and refuse trades that give it up — from there it presses on everything around it`, [myOutpost.square]);
   }
 
   // 6. Your worst-placed piece (stuck) → reroute it, HOW spelled out.
@@ -361,7 +361,7 @@ export function deriveNextPlanFacts(
       : nonPawnDiff > 0 ? 'your extra material'
       : pawnDiff >= 1 ? `your extra pawn${pawnDiff > 1 ? 's' : ''}`
       : 'your material edge';
-    add('convert', `the plan from here is to convert your extra material. Here's how: offer a trade of pieces at every chance but keep the pawns on, steer straight for an endgame where ${surplus} ${surplus.endsWith('s') ? 'are' : 'is'} decisive, and don't get greedy or complicate — simplicity is what wins a won game`, []);
+    add('convert', `the plan from here is to convert your extra material. Here's how: trade pieces, keep the pawns, and keep it simple — every trade makes ${surplus} count for more`, []);
   }
 
   // 8. Bishop pair → open the position for the two bishops, HOW spelled out.

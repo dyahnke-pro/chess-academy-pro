@@ -16,7 +16,7 @@ import { useBoardFit } from '../../hooks/useBoardFit';
 import { characterOf, provenTacticLive, sharpGap, stepCharacter, EMPTY_CHARACTER, SHARP_GAP_CP, type CharacterState } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
-import { createLearnMemory, markOpeningFactsSpoken, type LearnMemory } from '../../services/learnMemory';
+import { createLearnMemory, markOpeningFactsSpoken, nextStem, type LearnMemory } from '../../services/learnMemory';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -8419,7 +8419,7 @@ export function CoachTeachPage(): JSX.Element {
             : null;
           // A pin says what it holds (Learn audit 2026-10-14).
           if (tacticLine && t.type === 'pin') {
-            const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b', 'student', Number(args.fenAfterReply.split(' ')[5] ?? 0));
+            const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b', 'student', nextStem(learnMemRef.current, 'pin'));
             if (holds) tacticLine = `${tacticLine} ${holds}`;
           }
           if (word) { pendingMotif = { type: t.type, instance, moveNo }; tacticTailType = t.type; }
@@ -8513,7 +8513,7 @@ export function CoachTeachPage(): JSX.Element {
         threatLine = `Watch out — ${seatPieceReferences(`${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}`, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b')}.${conceptTail(t.type)}`;
         // A pin on you says what it holds (Learn audit 2026-10-14).
         if (t.type === 'pin') {
-          const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b', 'opponent', Number(args.fenAfterReply.split(' ')[5] ?? 0));
+          const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b', 'opponent', nextStem(learnMemRef.current, 'pin'));
           if (holds) threatLine = `${threatLine} ${holds}`;
         }
         // THE DANGER LEVEL, computed (`openThreatLine`): how much it costs if ignored, said first.
@@ -8582,7 +8582,7 @@ export function CoachTeachPage(): JSX.Element {
         const worst = myHanging[0];
         threatKey = `hang:${worst.piece}${worst.square}`;
         threatSquares = [worst.square];
-        threatLine = hangingPieceLine(worst.piece, worst.square, Number(args.fenAfterReply.split(' ')[5] ?? 0));
+        threatLine = hangingPieceLine(worst.piece, worst.square, nextStem(learnMemRef.current, 'hanging'));
             threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0), learnMemRef.current.loudAlarms.size);
         const flip = args.fenAfterReply.split(' ');
         flip[1] = studentCC === 'w' ? 'b' : 'w';
@@ -8624,7 +8624,7 @@ export function CoachTeachPage(): JSX.Element {
             // board, and "it has to move" was contradicted by the answer that
             // follows ("It can wait — Bh2+ comes first", walk 2026-09-30). The
             // threat answer says what to do, from the engine.
-            threatLine = cheaperAttackerLine(hit.by, hit.bySq, hit.piece, hit.sq, Number(args.fenAfterReply.split(' ')[5] ?? 0));
+            threatLine = cheaperAttackerLine(hit.by, hit.bySq, hit.piece, hit.sq, nextStem(learnMemRef.current, 'cheaper-attacker'));
             threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0), learnMemRef.current.loudAlarms.size);
         threatLine = proveThreat(threatLine);
             alertArrow = admitArrow({ from: hit.bySq, to: hit.sq, role: 'threat', source: 'teach.hitAlert' }, { fen: args.fenAfterReply, studentColor: studentCC === 'w' ? 'white' : 'black' });

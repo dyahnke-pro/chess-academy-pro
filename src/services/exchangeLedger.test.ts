@@ -247,3 +247,13 @@ describe('a king on the last capture square ends the exchange (walk 900, …Kxg2
     expect(l?.settled).toBe(true);
   });
 });
+
+describe('a heard proof says its shape (proof guard 2; Learn audit 2026-10-15)', () => {
+  it('a line past three moves is spoken as its first move and result; the whole line is kept in full', async () => {
+    const { moverLineProof } = await import('./exchangeLedger');
+    // White to move wins a queen for a rook over four captures.
+    const p = moverLineProof('3rk3/8/5b2/8/3q4/8/1B6/3R2K1 w - - 0 1', ['d1d4', 'f6d4', 'b2d4', 'd8d4'], 'w');
+    expect(p?.short).toMatch(/^Rxd4 and the moves that follow — /);
+    expect(p?.full).toMatch(/Bxd4/);
+  });
+});

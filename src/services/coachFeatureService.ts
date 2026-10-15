@@ -1217,6 +1217,10 @@ export function fitReviewTurn(rankedParts: readonly string[]): string[] {
   // tactic, the plan (a good move's reason) and the habit (the method beat
   // closes the turn by design) always speak.
   const fixed = (t: string, i: number): boolean => i === 0 || /^\[(?:verdict|quality|rule|threat|tactic|trapped|loose|method|plan-now)\]/.test(t);
+  // ONE PLAN PER TURN: a plan change and a second plan read on one ply were
+  // both fixed (a 139-word ply). The first plan stays; another may be evicted.
+  const firstPlan = rankedParts.findIndex((t) => /^\[plan-now\]/.test(t));
+  const fixedAt = (t: string, i: number): boolean => fixed(t, i) && !(/^\[plan-now\]/.test(t) && i !== firstPlan);
   const keep = rankedParts.map(() => true);
   let total = rankedParts.reduce((n, t) => n + words(t), 0);
   // Evict in this order until the turn fits: the STACKED fundamentals
@@ -1226,7 +1230,7 @@ export function fitReviewTurn(rankedParts: readonly string[]): string[] {
   const order = [...principles.slice(1).reverse(), ...rankedParts.map((_, i) => i).reverse()];
   for (const i of order) {
     if (total <= REVIEW_TURN_WORDS) break;
-    if (!keep[i] || fixed(rankedParts[i], i)) continue;
+    if (!keep[i] || fixedAt(rankedParts[i], i)) continue;
     keep[i] = false;
     total -= words(rankedParts[i]);
   }

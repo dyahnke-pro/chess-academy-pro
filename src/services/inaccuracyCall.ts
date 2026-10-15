@@ -1114,7 +1114,10 @@ export function errorWhy(args: {
       const opp = args.moverColor === 'white' ? 'b' : 'w';
       const w = lineWins(b.fen(), replyLineUci, opp, undefined, { fenBefore: args.fenBefore, san: args.playedSan });
       if (w) {
-        tail = ` The line: ${andList(w.sans)} — they come out ${w.what} up.`;
+        // The voice says the shape; the board walks the line (proof guard 2).
+        tail = w.sans.length <= 3
+          ? ` The line: ${andList(w.sans)} — they come out ${w.what} up.`
+          : ` The line starts with ${w.sans[0]}, and they come out ${w.what} up.`;
         line = { fen: b.fen(), uci: replyLineUci.slice(0, w.plies.length) };
       }
     } catch { /* no line — the consequence stands */ }
