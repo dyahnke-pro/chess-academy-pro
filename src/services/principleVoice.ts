@@ -735,7 +735,10 @@ export function renderFundamentalVerdict(attrs: readonly PrincipleAttribution[],
     // procedure that stops it next game is the other half. Attached on the
     // FIRST appearance only — `opts.seen` is already the say-once ledger, so a
     // fundamental that recurs gets its short stem and never the lecture twice.
-    const how = fundamentalHow(a.id, a.facts);
+    // THE HOW'S FIRST SENTENCE IS THE PROCEDURE (David 2026-10-14: no turn
+    // past 80 words). Its later sentences refine it; the procedure itself is
+    // what the student runs next game, so it is what the turn carries.
+    const how = fundamentalHow(a.id, a.facts)?.split(/(?<=[.!?])\s+/)[0] ?? null;
     parts.push(how ? `${fullVerdict(a, opts.ply + i)} ${HOW_STEMS[hows++ % HOW_STEMS.length]} ${how}` : fullVerdict(a, opts.ply + i));
   });
   return parts.join(' ');

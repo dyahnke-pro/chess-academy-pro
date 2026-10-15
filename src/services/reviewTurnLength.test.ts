@@ -34,3 +34,13 @@ describe('one plan per review ply (review audit 2026-10-15: 139 words, two plans
     expect(out).not.toContain(B);
   });
 });
+
+describe('one punishing line per ply (review audit 2026-10-15)', () => {
+  it('the advantage/punishment pass yields to a verdict that already played the line', async () => {
+    const { readFileSync } = await import('node:fs');
+    const src = readFileSync('src/services/coachFeatureService.ts', 'utf8');
+    expect(src).toMatch(/if \(line && proof && !s\.verdictPlayedLine\) \{\s*const frame = isStudentSlip/);
+    const facets = readFileSync('src/services/reviewFullData.ts', 'utf8');
+    expect(facets).toMatch(/outVerdictReason\.playedLine = !!ew\?\.line;/);
+  });
+});
