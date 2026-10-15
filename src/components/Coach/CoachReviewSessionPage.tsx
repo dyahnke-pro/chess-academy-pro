@@ -25,6 +25,7 @@ import { gameNeedsAnalysis, replayPgnToFens, startReviewReads, gradeReviewThroug
 import { ensureSampleGameSeeded } from '../../services/reviewSampleGames';
 import { useAppStore } from '../../stores/appStore';
 import { resolvePlayerColor } from '../../services/playerIdentity';
+import { reviewPassFens } from '../../services/reviewMoveIntent';
 import { logAppAudit } from '../../services/appAuditor';
 import { adaptGameRecordExplained } from '../../services/reviewGameAdapter';
 import type { GameRecord } from '../../types';
@@ -128,7 +129,15 @@ export function CoachReviewSessionPage(): JSX.Element {
         }
         const { fens } = replayPgnToFens(rec.pgn);
         const plies = Math.max(0, fens.length - 1);
-        const reads = startReviewReads(fens);
+        // The student's pass reads ride behind the game's own (what each of
+        // their moves STOPS — `reviewPassFens`); an unknown seat reads none.
+        const prof = useAppStore.getState().activeProfile;
+        const seat = resolvePlayerColor(rec, {
+          profileName: prof?.name,
+          chessComUsername: prof?.preferences.chessComUsername,
+          lichessUsername: prof?.preferences.lichessUsername,
+        });
+        const reads = startReviewReads(fens, reviewPassFens(fens, seat));
         readsRef.current = reads;
         const firstChunk = Math.min(plies, FIRST_GRADED_PLIES);
         setAnalyzing(true);
@@ -138,6 +147,7 @@ export function CoachReviewSessionPage(): JSX.Element {
          *  time: a request that lands mid-grade runs once more after it. */
         let grading = false;
         let again = false;
+        let extrasRead = false;
         const regrade = async (): Promise<void> => {
           if (grading) { again = true; return; }
           grading = true;
@@ -146,7 +156,9 @@ export function CoachReviewSessionPage(): JSX.Element {
               again = false;
               const through = Math.min(plies, reads.readyThrough());
               if (through <= gradedThroughRef.current && through < plies) continue;
-              const complete = through >= plies;
+              // Complete only once the pass reads are in too: the final build
+              // is the one cached, and its "what the move stops" reads them.
+              const complete = through >= plies && extrasRead;
               const annotations = complete ? await finishReviewReads(base.id) : await gradeReviewThrough(base, through);
               if (cancelled || !annotations) return;
               gradedThroughRef.current = through;
@@ -180,6 +192,7 @@ export function CoachReviewSessionPage(): JSX.Element {
         });
         if (reads.readyThrough() >= firstChunk) void regrade();
         void reads.done.then(() => { if (!cancelled) void regrade(); });
+        void reads.all.then(() => { extrasRead = true; if (!cancelled) void regrade(); });
       } catch (err) {
         if (cancelled) return;
         setLoadError(err instanceof Error ? err.message : String(err));

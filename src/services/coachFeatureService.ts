@@ -85,7 +85,7 @@ import { theirOpeningVerdict } from './openingAnnouncement';
 import { departureRecordSentence, openingRecordClause } from './openingRecordBeat';
 import { ecoOfKey, openingEntryForKey, openingFamily, openingKeyFromSans } from './openingKey';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
-import { costWords, describeEvalCp, isMateEval, moverGaveUpMate } from './engineConstants';
+import { costWords, describeEvalCp, isMateEval, storedMate, moverGaveUpMate } from './engineConstants';
 import { isContested } from './narrationImportance';
 import { mateDescription } from './matePatterns';
 import { isMinorAtHome } from './development';
@@ -1895,7 +1895,7 @@ export function buildReviewSegments(
             ? recordedMoveCost(m, moverColor) ?? 0 : 0,
           bothCp,
           bestSan: bestMoveSan,
-          bestLine: m.bestMove ? { rank: 1, evaluation: m.preMoveEval, moves: [m.bestMove, ...(m.pv?.afterBest ?? [])], mate: null } : undefined,
+          bestLine: m.bestMove ? { rank: 1, evaluation: m.preMoveEval, moves: [m.bestMove, ...(m.pv?.afterBest ?? [])], mate: storedMate(m.preMoveEval) } : undefined,
           reply: sansForRun[m.ply] ?? null,
           cpAfter: bothCp ? m.evaluation * sign : null,
         });

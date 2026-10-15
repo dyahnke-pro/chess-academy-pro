@@ -72,6 +72,21 @@ describe('startReviewReads', () => {
     expect(calls.some((c) => c.fen === FENS[4] && c.depth === REVIEW_READ_DEPTH)).toBe(true);
   });
 
+  it('the student\'s pass reads ride BEHIND the game: read last, saved, never part of readiness', async () => {
+    const { reviewPassFens } = await import('./reviewMoveIntent');
+    const pass = reviewPassFens(FENS, 'white');
+    expect(pass.length).toBeGreaterThan(0);
+    const reads = startReviewReads(FENS, pass);
+    await reads.all;
+    const order = calls.map((c) => c.fen);
+    // every game position is read before any pass position
+    const lastGame = Math.max(...FENS.map((f) => order.indexOf(f)));
+    const firstPass = Math.min(...pass.map((f) => order.indexOf(f)));
+    expect(firstPass).toBeGreaterThan(lastGame);
+    expect(reads.readyThrough()).toBe(FENS.length - 1);
+    expect((await lookupPositionEvals(pass, REVIEW_READ_DEPTH)).size).toBe(new Set(pass).size);
+  });
+
   it('stop() ends the reads', async () => {
     const reads = startReviewReads(FENS);
     reads.stop();

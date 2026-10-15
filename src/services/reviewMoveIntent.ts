@@ -9,7 +9,8 @@
 import { Chess } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { lookupPositionEvals, type CachedEval } from './positionEvalCache';
-import { intentWithFallback } from './movePurpose';
+import { intentWithFallback, nullMoveFen } from './movePurpose';
+import { storedMate } from './engineConstants';
 
 export interface IntentMoveInput {
   ply: number;
@@ -17,19 +18,39 @@ export interface IntentMoveInput {
   fenAfter: string;
 }
 
-const lineOf = (c: CachedEval | undefined): AnalysisLine[] => {
+/** A stored read as an engine line. A mate rides inside the stored number
+ *  (`mateEvalFor`); it is decoded back to the line's `mate`, so a pass read
+ *  that is mate in one reads as a mate threat, not as a large evaluation. */
+export const lineOf = (c: CachedEval | undefined): AnalysisLine[] => {
   const moves = c?.pv?.length ? c.pv : c?.bestMove ? [c.bestMove] : [];
-  return c && moves.length ? [{ rank: 1, evaluation: c.evaluation, moves, mate: null }] : [];
+  if (!c || !moves.length) return [];
+  return [{ rank: 1, evaluation: c.evaluation, moves, mate: storedMate(c.evaluation) }];
 };
 
 export interface ReviewIntent { text: string; squares: string[] }
 
-/** Pure: the intent per student ply, from stored lines keyed by FEN index. */
+/** The pass positions the review's read-ahead adds for the student's moves
+ *  (`startReviewReads` extras): the board before each student move with the
+ *  student passing (what the move STOPS), and the board after it with the
+ *  opponent passing (what the move THREATENS next). `gameFens[0]` is the start. */
+export function reviewPassFens(gameFens: readonly string[], student: 'white' | 'black' | null | undefined): string[] {
+  if (!student) return [];
+  const wb = student === 'white' ? 'w' : 'b';
+  const out: string[] = [];
+  for (let i = 0; i + 1 < gameFens.length; i++) {
+    if (gameFens[i].split(' ')[1] !== wb) continue;
+    for (const f of [nullMoveFen(gameFens[i]), nullMoveFen(gameFens[i + 1])]) if (f) out.push(f);
+  }
+  return out;
+}
 
+/** Pure: the intent per student ply, from stored lines keyed by FEN index,
+ *  and the stored pass reads keyed by FEN (absent → no "stops"). */
 export function intentsFromReads(
   moves: readonly IntentMoveInput[],
   student: 'white' | 'black',
   reads: ReadonlyMap<number, CachedEval>,
+  passReads: ReadonlyMap<string, CachedEval> = new Map(),
 ): Map<number, ReviewIntent> {
   const out = new Map<number, ReviewIntent>();
   const start = new Chess().fen();
@@ -42,9 +63,10 @@ export function intentsFromReads(
     const before = lineOf(reads.get(i));
     const after = lineOf(reads.get(i + 1));
     if (!before.length || !after.length) return;
-    // No read of a pass is stored, so the default read can only use what the
-    // engine plays in the line; the fallback reads that line for the follow-up.
-    const intent = intentWithFallback(fenBefore, m.san, { before, after, passBefore: [], passAfter: [] }, 'student');
+    // The pass reads (`reviewPassFens`) say what the move stops and what it
+    // threatens next; without them only the engine's own line speaks.
+    const passOf = (fen: string): AnalysisLine[] => { const p = nullMoveFen(fen); return p ? lineOf(passReads.get(p)) : []; };
+    const intent = intentWithFallback(fenBefore, m.san, { before, after, passBefore: passOf(fenBefore), passAfter: passOf(m.fenAfter) }, 'student');
     if (intent) out.set(m.ply, { text: intent.text, squares: intent.squares });
   });
   return out;
@@ -58,5 +80,9 @@ export async function moveIntentsForGame(
   if (!student || moves.length === 0) return new Map();
   const fens = [new Chess().fen(), ...moves.map((m) => m.fenAfter)];
   const reads = await lookupPositionEvals(fens, 1);
-  return intentsFromReads(moves, student, reads);
+  const pass = reviewPassFens(fens, student);
+  const passHits = await lookupPositionEvals(pass, 1);
+  const passReads = new Map<string, CachedEval>();
+  passHits.forEach((v, i) => passReads.set(pass[i], v));
+  return intentsFromReads(moves, student, reads, passReads);
 }

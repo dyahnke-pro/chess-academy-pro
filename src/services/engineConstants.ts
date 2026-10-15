@@ -63,6 +63,16 @@ export function isMateEval(evaluation: number | null | undefined): boolean {
   return Math.abs(evaluation) >= MATE_EVAL_THRESHOLD;
 }
 
+/** The signed mate (White's point of view, + = White mates) a stored eval
+ *  carries, for rebuilding an engine line from it; null for a centipawn eval
+ *  or a bare sentinel with no distance. Every line rebuilt from a stored
+ *  number goes through this, so a mate is never read back as a plain score. */
+export function storedMate(evaluation: number | null | undefined): number | null {
+  if (!isMateEval(evaluation)) return null;
+  const n = mateDistanceOf(evaluation);
+  return n === null ? null : Math.sign(evaluation as number) * n;
+}
+
 /**
  * A WHITE-POV centipawn eval as SPOKEN text. A mate-encoded eval is never a
  * number — "-300.0" is `MATE_EVAL_VALUE / 100` read aloud, and a student heard

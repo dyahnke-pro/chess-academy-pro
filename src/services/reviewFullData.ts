@@ -54,7 +54,7 @@ import { kickAfterRecapture } from './kickMap';
 import { openingEquivalence } from './openingEquivalence';
 import { refutedAltProof } from './refutedAlternativeCore';
 import { advantageWasMissed } from './reviewWithholding';
-import { costWords, isMateEval, mateDistanceOf, MISTAKE_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
+import { costWords, isMateEval, storedMate, mateDistanceOf, MISTAKE_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 import { ONLY_MOVE_CP } from './criticalityScan';
 import { shareAdverb } from '../utils/shareWords';
 import { computeBoardDelta } from './boardDelta';
@@ -1349,7 +1349,7 @@ export function computeMoveFacets(
   // line after their move (your reply first) in place of a live fan.
   if (!isStudent && studentColorWB) {
     const lines = ctx.playedLineUci.length > 0 && ctx.evaluation != null
-      ? [{ moves: ctx.playedLineUci, evaluation: ctx.evaluation, mate: null }] : [];
+      ? [{ moves: ctx.playedLineUci, evaluation: ctx.evaluation, mate: storedMate(ctx.evaluation) }] : [];
     const prev = ply >= 2 && ctx.teaching.prevFenBefore && ctx.allSans[ply - 2]
       ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null;
     for (const r of readTheirMove({ fenBefore, san, student: studentColorWB, topLines: lines, prev, theirMoveFlagged: negativeClass })) {
