@@ -318,3 +318,13 @@ describe('a route says what the piece would hit there (Learn audit 2026-10-14)',
     expect(routePoint(aim, 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2', 'b', 'opponent')).toBe('');
   });
 });
+
+describe('a plan says why it is worth building (Learn audit 2026-10-14: "Here is what you build toward: the g-file.")', () => {
+  const BOARD = '4k3/8/8/8/8/8/8/4K3 w - - 0 1';
+  it('a file aim says what a rook on it reaches', () => {
+    const file: Aim = { id: 'file:g', kind: 'file', squares: ['g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8'], goal: null, phrase: 'the g-file' };
+    const a = stepArc(EMPTY_ARC, [file], null, BOARD, 'w', 'student');
+    const b = stepArc(a.next, [file], null, BOARD, 'w', 'student');
+    expect(b.events[0]?.text).toMatch(/the g-file — a rook on an open file reaches their camp\.$/);
+  });
+});

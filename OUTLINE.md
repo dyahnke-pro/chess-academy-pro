@@ -21,7 +21,8 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
-## 000i. WO-WHY-90 — 90% of teaching lines carry a why (David 2026-10-13)
+## 000i. WO-WHY — the why standard (David 2026-10-13; 90% replaced by four measures 2026-10-14)
+- ✅ 2026-10-14: four measures, not one number — share floor 80%, own reason on ≥70% of turns (`ownMove` on the door row), no reason formula >2×/game, no turn >80 words (Learn V5–V8, Review VOICE rows) · 🔴 good moves get their reason (#25) · 🔴 rotate repeated danger formulas, one lead reason per turn, rewrite muddled templates (#26)
 - ✅ the counter + bar in both walks (`why-count.mjs`, Learn V5, Review VOICE row) · ✅ 2026-10-14: the book move named with its job after a departure (`bookMoveWhy`, DNA `but` beat, graded on its own board; hand-grade 22/25 true) · ✅ whys on the plan, a hanging piece, down material, good pieces (Learn + chat), loose pieces · ✅ every engine cost said in words (`costWords`), mate leads its line · 🔴 today (2026-10-14 prod): Learn 77% (33/43), Review 48% (32/67) · 🔴 the opening-identity line has no computed why yet · 🔴 alerts say the consequence ("…if you leave it, Bxa5 wins it") · 🔴 pins say what they win or freeze · 🔴 opening names and book departures get the tabia why (with WO-OPENING-MEMORY-01) · 🔴 a description speaks only inside a line that gives a reason · ✅ 2026-10-14 (later): an allowed mate says HOW (played out when short, its first move when long, no count past five) · a passive / worst piece says why (its reach: `utils/reachWords`, one wording on review, plans and plan-stopped) · castling is said as itself, never "Your castle kingside castles…" · the only legal answer to a check says so · a book departure always carries its reason (`bookMove` rides with the `opening` line) · the door's holds decide before its lead (LD2)
 
 ## 000j. Second game in one Learn session (prod audit 2026-10-14)

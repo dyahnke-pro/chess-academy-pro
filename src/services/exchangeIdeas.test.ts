@@ -104,7 +104,7 @@ describe('defence and conversion', () => {
   it('make the threat cost them', () => {
     const fen = '6k1/5ppp/1q6/8/6b1/5N2/PPP2PPP/3Q2K1 w - - 0 1';
     const r = wellFormed(threatCost(fen, 'h3', 'w'));
-    expect(r.text).toBe('Now if they go ahead with Qxb2 anyway, you take their bishop on g4 — the threat costs them more than it wins.');
+    expect(r.text).toBe('Now if they go ahead with Qxb2 anyway, you take their bishop on g4 — the grab loses them material.');
     expect(r.proof.line?.sans).toEqual(['Qxb2', 'hxg4']);
     // b3 simply removes the target: the threat is stopped, not made to cost.
     expect(threatCost(fen, 'b3', 'w')).toBeNull();

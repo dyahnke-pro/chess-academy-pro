@@ -35,6 +35,8 @@ const WHY = new RegExp([
   String.raw`\bmakes them (?:commit|move|decide|spend)\b`, String.raw`\bremoves? (?:a|the|their|your) (?:defender|guard)\b`, String.raw`\bleaves (?:your|their) \w+ on [a-h][1-8] to be taken\b`,
   String.raw`\bcosts? (?:a little|about|more than|three or four|five) (?:half a |a |two )?points?\b`, String.raw`\bhas no (?:defender|guard)\b`,
   String.raw`\bswings the game by\b`, String.raw`\bit (?:forks|pins|skewers)\b`, String.raw`\bcosts? (?:them|you) (?:the |a |an )?\w+`,
+  String.raw`\blet (?:them|you) in\b`, String.raw`\bis open to (?:your|their) \w+`, String.raw`\bcannot move at all\b`,
+  String.raw`\breach(?:es)? (?:their|your) camp\b`, String.raw`\bcloser to a queen\b`, String.raw`\bis open to attack\b`, String.raw`\bcan ever chase\b`,
   String.raw`\b(?:is|are) safe now\b`, String.raw`\bthe guard that holds\b`, String.raw`\bsaves the \w+ from (?:your|their) \w+`,
 ].join('|'), 'i');
 
@@ -54,6 +56,7 @@ const NOT_TEACHING = [
   /^back at the board\b/i,
   /^find their targets\b/i,
   /^(find|tap) (every|each|your|the) /i,
+  /\b(?:tap|find) (?:every|each) square it can go to\b/i,
   // A question on its own line is the first half of a question-and-answer
   // pair ("So what is the answer?" ‖ "Move it — …"); the answer is measured.
   /^[^.!]*\?$/,
@@ -65,8 +68,42 @@ function sentences(t) {
   return String(t).split(/(?<=[.!?])\s+/).filter((s) => s.trim().length > 3);
 }
 
-/** The share of teaching lines that must carry a why. */
-export const WHY_SHARE_BAR = 0.9;
+/** The share of teaching lines that must carry a why — a FLOOR, a regression
+ *  alarm, not the goal (David 2026-10-14: "I like both plans" — 90% chased
+ *  wording; the measures below chase teaching). */
+export const WHY_SHARE_BAR = 0.8;
+
+/** A sentence reduced to its FORMULA: pieces, squares, moves and seats
+ *  blanked, so "your knight on d4 is attacked and nothing's defending it" and
+ *  "your rook on h8 is attacked…" read as one template. */
+function formulaOf(sentence) {
+  return String(sentence).toLowerCase()
+    .replace(/\b(?:your|their|the)\b/g, 'W')
+    .replace(/\b(?:pawn|knight|bishop|rook|queen|king|piece)s?\b/g, 'P')
+    .replace(/\b[a-h][1-8]\b/g, 'SQ')
+    .replace(/\b[a-h]-(?:pawn|file)\b/g, 'F')
+    .replace(/\b(?:one|two|three|four|five|six|seven|eight|\d+)\b/g, 'N')
+    .replace(/\s+/g, ' ').trim();
+}
+
+/** REASON VARIETY: templates said more than `max` times in one game. Only
+ *  sentences of six words or more — "Check." is not a formula. */
+export function formulaRepeats(lines, max = 2) {
+  const n = new Map();
+  for (const t of lines) for (const sen of sentences(t)) {
+    if (sen.split(/\s+/).length < 6) continue;
+    const f = formulaOf(sen);
+    n.set(f, (n.get(f) ?? 0) + 1);
+  }
+  return [...n.entries()].filter(([, c]) => c > max).map(([f, c]) => ({ formula: f, count: c }));
+}
+
+/** TURN LENGTH: one lead reason per turn — a line longer than `max` words is a
+ *  stack of reasons that buries the one that matters. */
+export const TURN_WORDS_MAX = 80;
+export function longLines(lines, max = TURN_WORDS_MAX) {
+  return lines.map(String).filter((t) => t.split(/\s+/).length > max);
+}
 
 /** Does this sentence state a reason or consequence? */
 export function isWhy(sentence) { return WHY.test(String(sentence)); }
@@ -81,9 +118,7 @@ export function whyTally(lines, studentMoves) {
   return {
     lines: ls.length, withWhy: withWhy.length, share, whySentences, perMove,
     whyless: ls.filter((t) => !sentences(t).some(isWhy)),
-    // PREVALENT: 90% of TEACHING lines give a reason (David 2026-10-13: "a
-    // better standard is closer to 90%. Why statements are the foundational
-    // teachings of this app"). NUMEROUS: at least one why per student move.
+    // PREVALENT: the share FLOOR above. NUMEROUS: at least one why per student move.
     prevalent: share >= WHY_SHARE_BAR, numerous: perMove >= 1,
   };
 }

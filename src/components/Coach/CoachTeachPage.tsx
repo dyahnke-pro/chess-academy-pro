@@ -38,7 +38,7 @@ import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, 
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { DEFAULT_INTENT, intentRule, moveIntent, nullMoveFen } from '../../services/moveIntent';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { OPENING_PLIES, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { OPENING_PLIES, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -8212,7 +8212,6 @@ export function CoachTeachPage(): JSX.Element {
      *  what was computed rather than computing something new. */
     let tacticSquares: string[] = [];
     let threatSquares: string[] = [];
-    const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
     const AV: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
     const leadEyeArrows: BoardArrow[] = [];
     let tacticLine: string | null = null;
@@ -8420,7 +8419,7 @@ export function CoachTeachPage(): JSX.Element {
             : null;
           // A pin says what it holds (Learn audit 2026-10-14).
           if (tacticLine && t.type === 'pin') {
-            const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b');
+            const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b', 'student');
             if (holds) tacticLine = `${tacticLine} ${holds}`;
           }
           if (word) { pendingMotif = { type: t.type, instance, moveNo }; tacticTailType = t.type; }
@@ -8512,6 +8511,11 @@ export function CoachTeachPage(): JSX.Element {
         // pins bishop on c3 against queen on a5"); whose each piece is, is the
         // board's fact and the whole point of a warning.
         threatLine = `Watch out — ${seatPieceReferences(`${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}`, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b')}.${conceptTail(t.type)}`;
+        // A pin on you says what it holds (Learn audit 2026-10-14).
+        if (t.type === 'pin') {
+          const holds = pinConsequence(args.fenAfterReply, t.squares, args.studentColor === 'white' ? 'w' : 'b', 'opponent');
+          if (holds) threatLine = `${threatLine} ${holds}`;
+        }
         // THE DANGER LEVEL, computed (`openThreatLine`): how much it costs if ignored, said first.
         threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0), learnMemRef.current.loudAlarms.size);
         threatLine = proveThreat(threatLine);
@@ -8578,7 +8582,7 @@ export function CoachTeachPage(): JSX.Element {
         const worst = myHanging[0];
         threatKey = `hang:${worst.piece}${worst.square}`;
         threatSquares = [worst.square];
-        threatLine = `Careful — your ${NAME[worst.piece] ?? 'piece'} on ${worst.square} is attacked and nothing's defending it.`;
+        threatLine = hangingPieceLine(worst.piece, worst.square, Number(args.fenAfterReply.split(' ')[5] ?? 0));
             threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0), learnMemRef.current.loudAlarms.size);
         const flip = args.fenAfterReply.split(' ');
         flip[1] = studentCC === 'w' ? 'b' : 'w';
@@ -8620,7 +8624,7 @@ export function CoachTeachPage(): JSX.Element {
             // board, and "it has to move" was contradicted by the answer that
             // follows ("It can wait — Bh2+ comes first", walk 2026-09-30). The
             // threat answer says what to do, from the engine.
-            threatLine = cheaperAttackerLine(hit.by, hit.bySq, hit.piece, hit.sq);
+            threatLine = cheaperAttackerLine(hit.by, hit.bySq, hit.piece, hit.sq, Number(args.fenAfterReply.split(' ')[5] ?? 0));
             threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0), learnMemRef.current.loudAlarms.size);
         threatLine = proveThreat(threatLine);
             alertArrow = admitArrow({ from: hit.bySq, to: hit.sq, role: 'threat', source: 'teach.hitAlert' }, { fen: args.fenAfterReply, studentColor: studentCC === 'w' ? 'white' : 'black' });

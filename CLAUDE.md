@@ -2349,18 +2349,34 @@ the harm here.
 
 ---
 
-## 🔒🔒 90% OF TEACHING LINES CARRY A WHY (David 2026-10-13: "a better standard is closer to 90%. Why statements are the foundational teachings of this app")
+## 🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")
 
-Every Learn and Review walk measures it (`scripts/audit-lib/why-count.mjs`, rows
-Learn V5 / Review `VOICE why-statements-prevalent-and-numerous`): at least 90%
-of TEACHING lines give a reason or a consequence, and at least one why per
-student move. Greetings, the game's setup, "e4 — your move" and the game intro
-are not teaching and are not measured; opening names and book departures are.
+🔴 This REPLACES the 2026-10-13 "90% OF TEACHING LINES CARRY A WHY" bar, which
+is DELETED rather than annotated (the Lake Butler rule). Chasing 90% widened a
+wording regex until the score measured phrasing, and a tape at 85% still never
+said why the student's GOOD moves were good. Every Learn and Review walk
+measures (`scripts/audit-lib/why-count.mjs`):
+
+1. **Share FLOOR — 80% of teaching lines give a reason or a consequence.** A
+   regression alarm, not the goal. Greetings, setup, "e4 — your move", tap
+   prompts and the game intro are not teaching and are not measured.
+2. **Every student move gets its own reason (≥70% of Learn turns).** Read off
+   the door's own `learn-turn-decision` row (`ownMove`, the DNA beat of the
+   own-move lane that spoke — `DNA_BEAT` is the one table). Good-move reasons
+   (`affirm`) are reported separately: the 2026-10-14 read found ~70% of all
+   reasons were danger, and almost none said what a good move did.
+3. **Reason variety — no reason formula more than twice a game** (pieces,
+   squares and seats blanked: the fifth "is attacked and nothing's defending
+   it" is a template).
+4. **Turn length — no turn past 80 words.** One lead reason per turn; a stack
+   of five true reasons buries the one that matters.
+
 The why is COMPUTED (a consequence, a line, a stake), never a templated
 "because" bolted on to pass the count — a filler why is worse than none. A
-teaching line with no why is fixed at its producer (add the computed
-consequence) or held; a description speaks only inside a line that gives a
-reason.
+teaching line with no why is fixed at its producer or held. The counter only
+accepts a consequence wording that names what it acts on ("which attacks your
+knight on c6", never a bare "which attacks"); `src/test/whyCount.test.ts`
+holds a negative control of pure descriptions that must never count.
 
 ## 🔒🔒 EVERY SPOKEN CONCLUSION CARRIES ITS PROOF — the proof is the thinking out loud (David 2026-10-07: "Anything that gets proven is stated out loud?" → "Yes. I have a feeling it will backfire but I think a decent starting spot.")
 

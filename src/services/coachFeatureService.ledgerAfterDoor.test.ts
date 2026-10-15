@@ -77,3 +77,23 @@ describe('review — the say-once ledgers commit after the door, for spoken fact
     expect(src).toMatch(/for \(const h of habitScratch\) spokenHabits\.add\(h\)/);
   });
 });
+
+describe('review — the opening is named with what it is (review audit 2026-10-14)', () => {
+  it('the name carries the identity computer\'s paragraph when its data is loaded', async () => {
+    const { setOpeningIdentity } = await import('./openingIdentity');
+    const real = JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')) as Record<string, never>;
+    setOpeningIdentity(real);
+    try {
+      const segs = buildReviewSegments(inputs(), 'white', 'Sicilian Defense: Alapin Variation', true, 1400, [], coldStudent(1400), 'g');
+      const said = segs.map((s) => s.narration ?? '').join(' ');
+      const i = said.indexOf(ALAPIN);
+      expect(i).toBeGreaterThanOrEqual(0);
+      // The sentence after the name is the identity, not the next fact.
+      const after = said.slice(i + ALAPIN.length, i + ALAPIN.length + 200);
+      expect(after.trim().length).toBeGreaterThan(20);
+      expect(after).toMatch(/^\s*(?:The plan in this structure|It |The main line|The usual answer|In the main line)/);
+    } finally {
+      setOpeningIdentity(null);
+    }
+  });
+});

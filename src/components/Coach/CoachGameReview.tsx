@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { warmOpeningIdentity } from '../../services/openingIdentity';
 import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Target, Crosshair, Play, Pause } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { voiceService } from '../../services/voiceService';
@@ -323,6 +324,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // guards check it and emit a cancellation audit instead of
   // applying state.
   const walkMountedRef = useRef(true);
+  // The opening's identity (what it provokes, aims for, costs) is fetched
+  // data; warm it before the walk names the opening (review audit 2026-10-14).
+  useEffect(() => { warmOpeningIdentity(); }, []);
   useEffect(() => {
     walkMountedRef.current = true;
     return () => {

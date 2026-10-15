@@ -544,3 +544,44 @@ describe('the blunder check rides with the verdict it explains (Learn audit 2026
     expect(d.spoke).toContain('blunderCheck');
   });
 });
+
+describe('the door says whether the student\'s own move got its reason (David 2026-10-14)', () => {
+  it('an own-move lane that spoke is emitted as its DNA beat; a board read alone is null', async () => {
+    const { onLearnTurn } = await import('./coachDecisionEvents');
+    const rows: Array<{ ownMove: string | null }> = [];
+    const off = onLearnTurn((r) => rows.push(r));
+    decideTurn([{ lane: 'pieceQuality', proof: NO_PROOF.stated, text: 'Your knight on f3 attacks the pawn on e5.', fen: FEN, squares: ['f3', 'e5'] }]);
+    decideTurn([{ lane: 'coachMistake', proof: NO_PROOF.stated, text: 'I slipped there — that knight move left f7 loose.', fen: FEN }]);
+    decideTurn([{ lane: 'movePoint', proof: NO_PROOF.stated, text: 'Your knight on f3 attacks the pawn on e5, so they must guard it.', fen: FEN, squares: ['f3', 'e5'] }]);
+    off();
+    expect(rows.map((r) => r.ownMove)).toEqual([null, null, 'affirm']);
+  });
+});
+
+describe('one lead reason per turn — a turn never runs past TURN_WORDS (David 2026-10-14)', () => {
+  it('the least-valued reasons wait when together they would bury the lead', async () => {
+    const { TURN_WORDS } = await import('./learnTurnDoor');
+    const pad = (_sq: string, n: number): string => `This idea ${Array.from({ length: n }, () => 'matters').join(' ')} here.`;
+    const d = decideTurn([
+      { lane: 'moveIntent', proof: NO_PROOF.stated, text: pad('f3', 22), fen: FEN, squares: ['f3'], stakes: costStakes(400) ?? undefined },
+      { lane: 'movePoint', proof: NO_PROOF.stated, text: pad('e5', 23), fen: FEN, squares: ['e5'], stakes: costStakes(350) ?? undefined },
+      { lane: 'structureJudgement', proof: NO_PROOF.stated, text: pad('d4', 24), fen: FEN, squares: ['d4'], stakes: costStakes(300) ?? undefined },
+      { lane: 'pieceQuality', proof: NO_PROOF.stated, text: pad('c6', 25), fen: FEN, squares: ['c6'], stakes: costStakes(250) ?? undefined },
+    ]);
+    const words = d.pkg.kept.reduce((n, f) => n + f.text.split(/\s+/).length, 0);
+    expect(d.pkg.kept.length).toBeGreaterThan(0);
+    expect(words).toBeLessThanOrEqual(TURN_WORDS);
+    expect(d.held).toContain('pieceQuality');
+    expect(d.spoke).toContain('moveIntent');
+  });
+});
+
+describe('a good move always gets its own reason (David 2026-10-14)', () => {
+  it('the move\'s point speaks even when a plan leads the turn', () => {
+    const d = decideTurn([
+      { lane: 'planArc', proof: NO_PROOF.stated, text: "Their plan is taking shape: the knight's walk to e5.", fen: FEN, squares: ['e5'] },
+      { lane: 'movePoint', proof: NO_PROOF.description, text: 'That gets your last piece into the game, so your rooks can connect.', fen: FEN, squares: [] },
+    ]);
+    expect(d.spoke).toContain('movePoint');
+  });
+});

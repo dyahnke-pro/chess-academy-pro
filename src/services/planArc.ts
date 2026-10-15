@@ -147,6 +147,20 @@ const EMERGE: Record<Seat, ReadonlyArray<(p: string) => string>> = {
   ],
 };
 
+/** WHY THE AIM IS WORTH BUILDING (Learn audit 2026-10-14: "Here is what you
+ *  build toward: the g-file." named a plan with no reason). One clause per aim
+ *  kind, from what the kind IS; exhaustive so a new kind must answer. A route
+ *  says its point from the board (`routePoint`); an attack on the king is its
+ *  own reason. */
+const AIM_WHY: Record<AimKind, (seat: Seat) => string> = {
+  file: (seat) => ` — a rook on an open file reaches ${seat === 'student' ? 'their' : 'your'} camp`,
+  outpost: () => ' — no pawn can ever chase a piece off it',
+  passer: () => ' — every push brings it closer to a queen',
+  shield: () => ' — a king without its pawns in front is open to attack',
+  route: () => '',
+  'king-attack': () => '',
+};
+
 /** Which aim a single move counts toward when it touches several: the most
  *  specific one (a route or an outpost is a concrete square; "the king" is a
  *  region). One move, one step. */
@@ -408,7 +422,7 @@ export function stepArc(
       entry.announced = true;
       events.push({
         id: aim.id, kind: 'emerge', seat, squares: aim.squares.slice(0, 4),
-        text: EMERGE[seat][emerged++ % EMERGE[seat].length](`${aim.phrase}${routePoint(aim, fenAfter, color, seat)}`),
+        text: EMERGE[seat][emerged++ % EMERGE[seat].length](`${aim.phrase}${routePoint(aim, fenAfter, color, seat)}${AIM_WHY[aim.kind](seat)}`),
       });
     }
     next[aim.id] = entry;

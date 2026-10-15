@@ -310,7 +310,10 @@ export function renderPieceOptions(a: {
     } else if (best.moverCp > a.playedCp + SAME_BAND_CP) {
       out.push(`So yes — ${best.san} was better than ${a.playedSan}.`);
     } else if (best.moverCp < a.playedCp - SAME_BAND_CP) {
-      out.push(`So no — moving it doesn't help; ${a.playedSan} was the better move.`);
+      // …and by how much (Learn audit 2026-10-14: the verdict had no reason).
+      out.push(best.moverCp > -MATE_CP && a.playedCp < MATE_CP
+        ? `So no — moving it doesn't help; ${a.playedSan} was the better move, and moving it costs ${costWords(a.playedCp - best.moverCp)}.`
+        : `So no — moving it doesn't help; ${a.playedSan} was the better move.`);
     } else {
       out.push(`So ${best.san} was about as good as ${a.playedSan} — neither changes much.`);
     }

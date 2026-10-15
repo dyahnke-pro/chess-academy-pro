@@ -1454,7 +1454,11 @@ export function punishmentOf(
   // line on the board before the move, them to play, winning as much, is not
   // what it let in.
   if (first && wonBefore(fenBefore, replyLineUci) >= lineNetFor(fenAfter, replyLineUci)) return null;
-  return first ? { why: `in with ${first}`, first } : null;
+  // Said as what the entry WINS, never a bare "let them in with Bxd4" (Learn
+  // audit 2026-10-14: "it let them in with bishop takes d4, and they missed
+  // it" read as nothing) — every capture that reaches here nets them material
+  // over the line (the checks above).
+  return first ? { why: `win material, starting with ${first}`, first } : null;
 }
 
 /** What the same line nets for them on the board BEFORE the student's move

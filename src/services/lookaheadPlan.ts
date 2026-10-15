@@ -142,20 +142,23 @@ const PIN_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', 
  * else, moving it opens the piece behind to the pinner. Null when the squares
  * do not read as a pin on this board.
  */
-export function pinConsequence(fen: string, squares: readonly string[], student: 'w' | 'b'): string | null {
+export function pinConsequence(fen: string, squares: readonly string[], student: 'w' | 'b', pinner: 'student' | 'opponent'): string | null {
   let c: Chess;
   try { c = new Chess(fen); } catch { return null; }
+  const pinnerColor: 'w' | 'b' = pinner === 'student' ? student : (student === 'w' ? 'b' : 'w');
   const at = squares.filter((sq) => /^[a-h][1-8]$/.test(sq)).map((sq) => ({ sq, p: c.get(sq as Square) }));
-  const pinner = at.find((x) => x.p && x.p.color === student);
-  const enemies = at.filter((x) => x.p && x.p.color !== student);
-  if (!pinner || enemies.length !== 2) return null;
+  const from = at.find((x) => x.p && x.p.color === pinnerColor);
+  const held = at.filter((x) => x.p && x.p.color !== pinnerColor);
+  if (!from || held.length !== 2) return null;
   const dist = (a: string, b: string): number => Math.max(Math.abs(a.charCodeAt(0) - b.charCodeAt(0)), Math.abs(Number(a[1]) - Number(b[1])));
-  const [pinned, behind] = [...enemies].sort((x, y) => dist(x.sq, pinner.sq) - dist(y.sq, pinner.sq));
+  const [pinned, behind] = [...held].sort((x, y) => dist(x.sq, from.sq) - dist(y.sq, from.sq));
   const pinnedNoun = PIN_NOUN[pinned.p?.type ?? ''];
   const behindNoun = PIN_NOUN[behind.p?.type ?? ''];
   if (!pinnedNoun || !behindNoun) return null;
-  if (behind.p?.type === 'k') return `Their ${pinnedNoun} cannot move at all — the king is behind it.`;
-  return `If their ${pinnedNoun} moves, the ${behindNoun} on ${behind.sq} is open to your ${PIN_NOUN[pinner.p?.type ?? ''] ?? 'piece'}.`;
+  const heldWhose = pinner === 'student' ? 'their' : 'your';
+  const pinnerWhose = pinner === 'student' ? 'your' : 'their';
+  if (behind.p?.type === 'k') return `${heldWhose === 'their' ? 'Their' : 'Your'} ${pinnedNoun} cannot move at all — the king is behind it.`;
+  return `If ${heldWhose} ${pinnedNoun} moves, ${heldWhose} ${behindNoun} on ${behind.sq} is open to ${pinnerWhose} ${PIN_NOUN[from.p?.type ?? ''] ?? 'piece'}.`;
 }
 
 /** How close a landing square has to be to a king to count as "coming at it".

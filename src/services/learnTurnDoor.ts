@@ -156,6 +156,10 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   breakRace: 'affirm', kickMap: 'point', patternFails: 'refute',
 };
 
+/** A Learn turn's length (David 2026-10-14): one lead reason, not a stack of
+ *  five true ones that buries it. The audit holds the same number (V8). */
+export const TURN_WORDS = 80;
+
 export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // ── batch 1 (opening equivalence, order and timing) ──
   // The named opening this board is with moves thrown in or the colours
@@ -501,6 +505,13 @@ export function decideTurn(
     if (xd !== td) { if (xd) top = x; continue; }
     if (value(x) > value(top)) top = x;
   }
+  // EVERY STUDENT MOVE GETS ITS OWN REASON (David 2026-10-14). The best fact
+  // about what the student's move did well ('affirm') is never an aside: on a
+  // good move it was held whenever a plan or a board read led the turn, so the
+  // coach explained danger and never what a good move was for.
+  const ownReason = survivors
+    .filter((x) => DNA_BEAT[x.lane] === 'affirm' && !subsumed.has(x) && !dangerWaits(x) && !turnHolds(x) && teaches(x))
+    .sort((a, b) => value(b) - value(a))[0] ?? null;
   const priorValue = priorLead ? LEARN_LANES[priorLead.lane].lead : -1;
   const ownLead = top && (!priorLead || DANGER_LANES.has(top.lane) || value(top) > priorValue) ? top : null;
   const anchor = ownLead ? (ownLead.fact.squares ?? []) : (priorLead?.squares ?? []);
@@ -525,7 +536,7 @@ export function decideTurn(
     // over them" — 171 words). While a threat leads, another fact speaks if it
     // touches the danger's squares, is bigger news by stake, or must ride;
     // the rest waits for a calm board. Relevance, not a count.
-    const offTopic = !!ownLead && DANGER_LANES.has(ownLead.lane) && x !== ownLead && !DANGER_LANES.has(x.lane)
+    const offTopic = !!ownLead && DANGER_LANES.has(ownLead.lane) && x !== ownLead && x !== ownReason && !DANGER_LANES.has(x.lane)
       // A must-ride lane still rides — unless it is a board IDEA (the point
       // beat: their plan, the structure), which keeps until the board calms.
       && (LEARN_LANES[x.lane].always !== true || DNA_BEAT[x.lane] === 'point') && !(beginner && BEGINNER_ALWAYS.has(x.lane))
@@ -541,7 +552,7 @@ export function decideTurn(
     // needs to value why statements over others"): a fact whose role is to
     // teach is the why of the turn, so it is never held as a mere aside — the
     // descriptions above give way instead.
-    const important = stakeOf(x.lane, x.fact.text) >= STAKED_FLOOR + 100 || (roleOf(x.lane, x.fact.text) === 'teach');
+    const important = stakeOf(x.lane, x.fact.text) >= STAKED_FLOOR + 100 || (roleOf(x.lane, x.fact.text) === 'teach') || x === ownReason;
     const aside = !!ownLead && x !== ownLead && !DANGER_LANES.has(x.lane)
       && LEARN_LANES[x.lane].always !== true && !(beginner && BEGINNER_ALWAYS.has(x.lane))
       && !sq.some((q) => anchor.includes(q)) && !important;
@@ -550,6 +561,28 @@ export function decideTurn(
       keep.push(x.fact);
       if (!spoke.includes(x.lane)) spoke.push(x.lane);
     } else if (!held.includes(x.lane)) held.push(x.lane);
+  }
+  // ONE LEAD REASON PER TURN (David 2026-10-14: "no turn past 80 words").
+  // Every fact above earned its place; when together they run past the turn's
+  // length, the ones worth least wait — their proof stays on the Why tap. The
+  // lead, danger, the must-ride lanes and the verdict's own reason ('but')
+  // never wait: they ARE the turn. Value decides who waits, never order.
+  {
+    const words = (t: string): number => t.split(/\s+/).filter(Boolean).length;
+    const fixed = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
+      x === ownLead || x === ownReason || DANGER_LANES.has(x.lane) || LEARN_LANES[x.lane].always === true || DNA_BEAT[x.lane] === 'but';
+    const kept = survivors.filter((x) => keep.includes(x.fact));
+    let total = kept.filter(fixed).reduce((n, x) => n + words(x.fact.text), 0);
+    for (const x of kept.filter((y) => !fixed(y)).sort((a, b) => value(b) - value(a))) {
+      const w = words(x.fact.text);
+      if (total + w <= TURN_WORDS) { total += w; continue; }
+      keep.splice(keep.indexOf(x.fact), 1);
+      if (!keep.some((f) => survivors.find((y) => y.fact === f)?.lane === x.lane)) {
+        const i = spoke.indexOf(x.lane);
+        if (i >= 0) spoke.splice(i, 1);
+      }
+      if (!held.includes(x.lane)) held.push(x.lane);
+    }
   }
   const laneFor = (f: VoiceFact): LearnLane | undefined => survivors.find((x) => x.fact === f)?.lane;
   const beatOf = (f: VoiceFact): number => {
@@ -604,7 +637,11 @@ export function decideTurn(
   }
   // EMIT every decision (the algo-audit rule): a door whose decisions cannot be
   // inspected can only be judged by reading the tape.
-  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked] });
+  // Read off DNA_BEAT, the one table that says which lanes talk about the
+  // student's own move — never a second list.
+  const ownBeats = spoke.map((l) => DNA_BEAT[l]);
+  const ownMove = ownBeats.includes('but') ? 'but' : ownBeats.includes('affirm') ? 'affirm' : null;
+  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], ownMove });
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
 }
 
