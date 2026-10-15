@@ -37,6 +37,7 @@ const WHY = new RegExp([
   String.raw`\bswings the game by\b`, String.raw`\bit (?:forks|pins|skewers)\b`, String.raw`\bcosts? (?:them|you) (?:the |a |an )?\w+`,
   String.raw`\blet (?:them|you) in\b`, String.raw`\bis open to (?:your|their) \w+`, String.raw`\bcannot move at all\b`,
   String.raw`\breach(?:es)? (?:their|your) camp\b`, String.raw`\bcloser to (?:a queen|promotion)\b`, String.raw`\bis open to attack\b`, String.raw`\bpawn can chase a piece off\b`,
+  String.raw`\bkept (?:you|it) (?:on top|level|in it|alive)\b`, String.raw`\bfighting for the cent(?:er|re)\b`, String.raw`\bcomes? out (?:ahead|behind)\b`, String.raw`\bwins material\b`, String.raw`\bno enemy pawn can chase\b`,
   String.raw`\b(?:is|are) safe now\b`, String.raw`\bthe guard that holds\b`, String.raw`\bsaves the \w+ from (?:your|their) \w+`,
 ].join('|'), 'i');
 
@@ -56,6 +57,10 @@ const NOT_TEACHING = [
   /^back at the board\b/i,
   /^find their targets\b/i,
   /^(find|tap) (every|each|your|the) /i,
+  // A played-out line's opponent steps announce the move, like "e4 — your
+  // move": "They answer Nf3." is the line, not a lesson.
+  /^They (?:answer|take back with) [^.]+\.$/i,
+  /^Here's the stronger line — [^.]+\.$/i,
   /\b(?:tap|find) (?:every|each) square it can go to\b/i,
   // A question on its own line is the first half of a question-and-answer
   // pair ("So what is the answer?" ‖ "Move it — …"); the answer is measured.

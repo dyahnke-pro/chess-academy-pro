@@ -35,7 +35,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:4788`
+- `src/services/coachFeatureService.ts:4792`
 - `src/services/learnFundamentalNarration.ts:137`
 
 ### `fundamentalHow` (function) — 11 call sites
@@ -53,14 +53,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `verdictCanDropBetter` (function) — 2 call sites
 - `src/services/learnFundamentalNarration.ts:117`
-- `src/services/principleVoice.test.ts:119`
+- `src/services/principleVoice.test.ts:120`
 
 ### `FundamentalVerdictOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderFundamentalVerdict` (function) — 47 call sites
 - `src/services/blockedOwnRetreat.test.ts:32`
-- `src/services/coachFeatureService.ts:2528`
+- `src/services/coachFeatureService.ts:2532`
 - `src/services/forcingStemNoDecisive.test.ts:17`
 - `src/services/forcingStemNoDecisive.test.ts:22`
 - `src/services/fundLeadStems.test.ts:58`
@@ -84,19 +84,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttributionEvalPv.test.ts:90`
 - `src/services/principleAttributionEvalPv.test.ts:99`
 - `src/services/principleVoice.test.ts:13`
-- `src/services/principleVoice.test.ts:24`
 - `src/services/principleVoice.test.ts:25`
-- `src/services/principleVoice.test.ts:31`
+- `src/services/principleVoice.test.ts:26`
 - `src/services/principleVoice.test.ts:32`
-- `src/services/principleVoice.test.ts:100`
+- `src/services/principleVoice.test.ts:33`
 - `src/services/principleVoice.test.ts:101`
-- `src/services/principleVoice.test.ts:122`
+- `src/services/principleVoice.test.ts:102`
 - `src/services/principleVoice.test.ts:123`
-- `src/services/principleVoice.test.ts:133`
-- `src/services/principleVoice.test.ts:172`
-- `src/services/principleVoice.test.ts:181`
-- `src/services/principleVoice.test.ts:186`
-- `src/services/principleVoice.test.ts:193`
+- `src/services/principleVoice.test.ts:124`
+- `src/services/principleVoice.test.ts:134`
+- `src/services/principleVoice.test.ts:173`
+- `src/services/principleVoice.test.ts:182`
+- `src/services/principleVoice.test.ts:187`
+- `src/services/principleVoice.test.ts:194`
 - `src/services/principleVoiceGuarded.test.ts:16`
 - `src/services/principleVoiceGuarded.test.ts:22`
 - `src/services/principleVoiceGuarded.test.ts:26`
@@ -108,20 +108,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/walkOct2a.test.ts:154`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2539`
-- `src/services/principleVoice.test.ts:38`
-- `src/services/principleVoice.test.ts:40`
+- `src/services/coachFeatureService.ts:2543`
+- `src/services/principleVoice.test.ts:39`
+- `src/services/principleVoice.test.ts:41`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:5262`
-- `src/services/principleVoice.test.ts:48`
-- `src/services/principleVoice.test.ts:53`
-- `src/services/principleVoice.test.ts:57`
-- `src/services/principleVoice.test.ts:70`
-- `src/services/principleVoice.test.ts:76`
-- `src/services/principleVoice.test.ts:80`
-- `src/services/principleVoice.test.ts:84`
-- `src/services/principleVoice.test.ts:89`
+- `src/services/coachFeatureService.ts:5266`
+- `src/services/principleVoice.test.ts:49`
+- `src/services/principleVoice.test.ts:54`
+- `src/services/principleVoice.test.ts:58`
+- `src/services/principleVoice.test.ts:71`
+- `src/services/principleVoice.test.ts:77`
+- `src/services/principleVoice.test.ts:81`
+- `src/services/principleVoice.test.ts:85`
+- `src/services/principleVoice.test.ts:90`
 
 ## Tests
 
