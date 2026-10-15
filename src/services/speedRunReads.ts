@@ -104,7 +104,8 @@ export function uglyButRight(fen: string, bestSan: string | null): Read | null {
   const doublesOwn = doubled(r.board) > doubled(before);
   if (!retreatHome && !doublesOwn) return null;
   const why = doublesOwn ? 'it doubles your own pawns' : `it walks your ${name(r.move.piece)} back home`;
-  return { idea: `The best move here is an ugly ${name(r.move.piece)} move — ${why} — ${rot(fen, "don't reject a move for how it looks; check it.", 'ugly is not the same as bad — calculate it before you dismiss it.', 'the move that looks wrong is sometimes the only one; look before you discard it.')}`, namesMove: true, text: `${sayMoveClause(r.move.san, fen).replace(/^./, (c) => c.toUpperCase())} looks ugly — ${why} — but it is the move. Don't reject a move for how it looks; check it.` };
+  // Two sentences, never three dashes in one (Learn tape 2026-10-15).
+  return { idea: `The best move here is an ugly ${name(r.move.piece)} move — ${why}. ${rot(fen, "Don't reject a move for how it looks; check it.", 'Ugly is not the same as bad: calculate it before you dismiss it.', 'The move that looks wrong is sometimes the only one; look before you discard it.')}`, namesMove: true, text: `${sayMoveClause(r.move.san, fen).replace(/^./, (c) => c.toUpperCase())} looks ugly — ${why} — but it is the move. Don't reject a move for how it looks; check it.` };
 }
 
 /** C8 WHICH SIDE TO CASTLE: both ways are legal and one wing's pawn cover is

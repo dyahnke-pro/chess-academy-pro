@@ -297,16 +297,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/queenGrabTrap.ts:49`
 - `src/services/ruleException.ts:46`
 - `src/services/safetyHabits.ts:49`
-- `src/services/speedRunReads.ts:155`
-- `src/services/speedRunReads.ts:166`
-- `src/services/speedRunReads.ts:169`
-- `src/services/speedRunReads.ts:183`
-- `src/services/speedRunReads.ts:197`
-- `src/services/speedRunReads.ts:300`
-- `src/services/speedRunReads.ts:382`
-- `src/services/speedRunReads.ts:429`
-- `src/services/speedRunReads.ts:432`
+- `src/services/speedRunReads.ts:156`
+- `src/services/speedRunReads.ts:167`
+- `src/services/speedRunReads.ts:170`
+- `src/services/speedRunReads.ts:184`
+- `src/services/speedRunReads.ts:198`
+- `src/services/speedRunReads.ts:301`
+- `src/services/speedRunReads.ts:383`
+- `src/services/speedRunReads.ts:430`
 - `src/services/speedRunReads.ts:433`
+- `src/services/speedRunReads.ts:434`
 - `src/services/tacticAlertService.ts:336`
 - `src/services/tacticGeometry.ts:295`
 - `src/services/tacticGeometry.ts:391`
@@ -453,9 +453,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:951`
 - `src/services/positionReadingService.test.ts:953`
 - `src/services/positionalRead.ts:343`
-- `src/services/speedRunReads.ts:318`
-- `src/services/speedRunReads.ts:393`
-- `src/services/speedRunReads.ts:449`
+- `src/services/speedRunReads.ts:319`
+- `src/services/speedRunReads.ts:394`
+- `src/services/speedRunReads.ts:450`
 
 ### `PieceQualityNote` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -668,7 +668,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:960`
 - `src/services/positionReadingService.test.ts:967`
 - `src/services/positionalRead.ts:306`
-- `src/services/speedRunReads.ts:550`
+- `src/services/speedRunReads.ts:551`
 
 ### `PressureVerdict` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
