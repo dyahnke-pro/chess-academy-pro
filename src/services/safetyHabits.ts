@@ -9,20 +9,30 @@
 // it". Earned when the move cost >= 100cp AND it is the move most players at the
 // student's level play in this position (the reflex, not an oddity).
 //
-// Both teach the HABIT; the grade beside them names the better move. Once per
-// game each (claims `method:blunder-check`, `method:autopilot`).
+// Both teach the HABIT; the grade beside them names the better move. The
+// blunder check is asked in full once a game (`method:blunder-check`) and as a
+// short callback after that; the autopilot guard once (`method:autopilot`).
 //
 // A LEAF: chess.js + the SEE helper.
 import { Chess } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 export const BLUNDER_CHECK_CP = 150;
 export const AUTOPILOT_CP = 100;
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
-export function blunderCheck(fenBefore: string, san: string, reply: string | null, cpLoss: number): string | null {
+export function blunderCheck(
+  fenBefore: string,
+  san: string,
+  reply: string | null,
+  cpLoss: number,
+  /** The full question was already said this game: say the short callback
+   *  (the habit is built by asking it again, never by silence after once). */
+  again = false,
+): string | null {
   if (!reply || cpLoss < BLUNDER_CHECK_CP) return null;
   let c: Chess;
   let mine;
@@ -30,13 +40,21 @@ export function blunderCheck(fenBefore: string, san: string, reply: string | nul
   const afterMove = c.fen();
   let r;
   try { r = c.move(reply.replace(/^…/, '')); } catch { return null; }
-  if (!r.captured || r.captured === 'k') return null;
-  // Taking back on the square the student just captured on, for no more than
-  // they took, is a TRADE (the Ruy exchange: Bxc6 dxc6), not a blunder.
-  if (mine.captured && r.to === mine.to && (MATERIAL_VALUE[r.captured] ?? 0) <= (MATERIAL_VALUE[mine.captured] ?? 0)) return null;
-  // The piece was winnable right after the student's move — not a trade.
-  if (legalSeeGainFor(afterMove, r.to, r.color) <= 0) return null;
-  return blunderCheckLine(NAME[r.captured] ?? 'piece', r.to);
+  let answer: string | null = null;
+  if (r.captured && r.captured !== 'k') {
+    // Taking back on the square the student just captured on, for no more than
+    // they took, is a TRADE (the Ruy exchange: Bxc6 dxc6), not a blunder.
+    const trade = !!mine.captured && r.to === mine.to && (MATERIAL_VALUE[r.captured] ?? 0) <= (MATERIAL_VALUE[mine.captured] ?? 0);
+    // The piece was winnable right after the student's move — not a trade.
+    if (!trade && legalSeeGainFor(afterMove, r.to, r.color) > 0) answer = `your ${NAME[r.captured] ?? 'piece'} on ${r.to}`;
+  }
+  // THE CHECK IS THE FIRST C OF CCT (Learn audit 2026-10-15: "e5 was a
+  // blunder — it let them force mate, starting with Qxa7" and no habit,
+  // because the lane only knew captures). A costly move answered by a check
+  // is the question the habit asks first.
+  if (!answer && /[+#]$/.test(r.san)) answer = `their check, ${r.color === 'b' ? '…' : ''}${r.san}`;
+  if (!answer) return null;
+  return again ? blunderCheckAgain(answer, fenBefore) : blunderCheckAnswer(answer);
 }
 
 /** THE ONE BLUNDER-CHECK SENTENCE (David 2026-10-14: a question the student
@@ -45,7 +63,18 @@ export function blunderCheck(fenBefore: string, san: string, reply: string | nul
  *  say-once claim (`method:blunder-check`). */
 export const BLUNDER_CHECK_QUESTION = 'Blunder check before you let go of a piece: run CCT for them — what checks, captures and threats do they have once it lands?';
 export function blunderCheckLine(pieceName: string, square: string): string {
-  return `${BLUNDER_CHECK_QUESTION} Here the answer was your ${pieceName} on ${square}.`;
+  return blunderCheckAnswer(`your ${pieceName} on ${square}`);
+}
+function blunderCheckAnswer(answer: string): string {
+  return `${BLUNDER_CHECK_QUESTION} Here the answer was ${answer}.`;
+}
+/** The short callback once the question has been asked this game. */
+function blunderCheckAgain(answer: string, fen: string): string {
+  return rotateStem([
+    `Blunder check again — ${answer} was the answer.`,
+    `Same question before you let go: what do they have? Here, ${answer}.`,
+    `CCT for them once more — ${answer} was there to see.`,
+  ], stemKeyOf(fen));
 }
 
 export function autopilotGuard(san: string, cpLoss: number, popularTopSan: string | null): string | null {

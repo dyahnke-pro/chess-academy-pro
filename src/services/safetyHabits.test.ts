@@ -43,3 +43,18 @@ describe('keepPressing — winning, and a slow move gave them time', () => {
     expect(keepPressing(fen, 'a3', null, 150, 400)).toBeNull();
   });
 });
+
+describe('the blunder check reads the check too, and is asked again (Learn audit 2026-10-15)', () => {
+  // Fool's mate: 2.g4?? Qh4# — the answer is a check, not a capture.
+  const FEN = 'rnbqkbnr/pppp1ppp/8/4p3/8/5P2/PPPPP1PP/RNBQKBNR w KQkq - 0 2';
+  it('a costly move answered by a check earns the habit', () => {
+    const line = blunderCheck(FEN, 'g4', 'Qh4#', 2000);
+    expect(line).toContain('run CCT for them');
+    expect(line).toContain('their check, …Qh4#');
+  });
+  it('after the first time, a short callback — never silence', () => {
+    const line = blunderCheck(FEN, 'g4', 'Qh4#', 2000, true);
+    expect(line).not.toContain('run CCT for them — what checks');
+    expect(line).toContain('…Qh4#');
+  });
+});

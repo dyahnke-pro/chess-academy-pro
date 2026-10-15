@@ -10921,6 +10921,7 @@ export function CoachTeachPage(): JSX.Element {
                       cpAfter: bothCp ? mid.evaluation * sign : null,
                       evalBefore: tradeTable,
                       popularTopSan: getCachedAmateurPlay(fenBefore)?.moves[0]?.san ?? null,
+                      saidClaims: learnMemRef.current.spokenKeys,
                     })) {
                       // Graded on the board the hint describes — right after the student's move
                       // (replay 2026-10-06: 6 of 239 true lines dropped on the reply's board).

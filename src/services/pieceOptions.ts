@@ -287,8 +287,11 @@ export function renderPieceOptions(a: {
     // so the question is which square was best, against what was played.
     // Said as what was checked: no ATTACKED piece leans on it (contract
     // 2026-10-10: "wasn't guarding anything" for a bishop guarding three pieces).
-    if (best) out.push(`Nothing under attack leans on ${pieceName}, and it isn't attacked itself, so it comes down to the best square: ${best.san}.`);
-    if (best?.refutation) out.push(`${best.san}? ${best.refutation}.`);
+    // Plain words (Learn audit 2026-10-15: "Nothing under attack leans on
+    // their rook on d1" read as noise), and the best square's line said as
+    // what follows it — never "Ra1?", which marks a bad move.
+    if (best) out.push(`${openSentence(pieceName)} guards nothing that's under attack, and nothing attacks it, so the question is just its best square: ${best.san}.`);
+    if (best?.refutation) out.push(`After ${best.san}: ${best.refutation.replace(/^Then /, '')}.`);
   } else {
     for (const o of a.options) {
       if (o.refutation) out.push(`${o.san}? ${o.refutation}.`);

@@ -142,6 +142,9 @@ export interface StudentMoveInput {
    *  the stock shot that fails here (`patternFails`). Absent → that lane is
    *  silent. */
   topLines?: readonly AnalysisLine[];
+  /** Say-once keys already spoken this game (`learnMemory.spokenKeys`), so a
+   *  habit asked in full once is asked again as a short callback. */
+  saidClaims?: ReadonlySet<string>;
 }
 
 /** ONE VOCABULARY (plan "methodBeat — the live coach names the lesson STEP"):
@@ -229,7 +232,8 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
 
   // THE SAFETY HABITS (P3 method beats) — earned only by what the board did.
   {
-    const bc = blunderCheck(i.fenBefore, i.san, i.reply, faultCp);
+    const again = i.saidClaims?.has('claim:method:blunder-check') ?? false;
+    const bc = blunderCheck(i.fenBefore, i.san, i.reply, faultCp, again);
     if (bc) {
       // ITS STAKE AND ITS SQUARE (Learn audit 2026-10-14: held as an aside on a
       // verdict turn, so "e6 was a blunder — it cost three or four points"
@@ -241,7 +245,9 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
         if (r?.captured) lost = { square: r.to, piece: r.captured };
       } catch { lost = null; }
       out.push({
-        lane: 'blunderCheck', proof: NO_PROOF.method, text: bc, squares: lost ? [lost.square] : [], claims: ['method:blunder-check'],
+        lane: 'blunderCheck', proof: NO_PROOF.method, text: bc, squares: lost ? [lost.square] : [],
+        // The callback carries its own move's claim: said once per blunder.
+        claims: [again ? `method:blunder-check:${i.history.length}` : 'method:blunder-check'],
         event: { name: 'coach_blunder_check_taught', props: { surface: 'coach-teach' } }, arrows: [],
         ...(lost ? { stakes: { points: piecePoints(lost.piece), plies: 1 } } : {}),
       });
