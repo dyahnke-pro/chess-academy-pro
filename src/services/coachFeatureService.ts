@@ -1206,6 +1206,9 @@ export function frameTeachingForOpponent(sentence: string): string {
   return `Your opponent ${continueSentence(s)}`;
 }
 
+/** A review ply's length — the same bar as Learn's turn (`TURN_WORDS`). */
+export const REVIEW_TURN_WORDS = 80;
+
 export function buildReviewSegments(
   moves: ReviewMoveInput[],
   /** The student's color — when provided, their silent opening moves are
@@ -2329,7 +2332,24 @@ export function buildReviewSegments(
         if (principle.length > 0) orderedKept = [...principle, ...orderedKept.filter((f) => !/^\[principle\]/.test(f))];
       }
       // The causal chain LEADS the beat when present (it's the cross-move story).
-      const uncappedParts = causalLead ? [causalLead, ...orderedKept] : orderedKept;
+      const rankedParts = causalLead ? [causalLead, ...orderedKept] : orderedKept;
+      // ONE LEAD REASON PER TURN (David 2026-10-14: "no turn past 80 words";
+      // review audit 2026-10-15 heard a 230-word ply — three fundamentals each
+      // with its own how-to, before the verdict). The parts are already in the
+      // door's rank order; the lead and the move's verdict, danger and tactic
+      // always speak, and the rest fill by rank up to the turn's length.
+      const uncappedParts = (() => {
+        const words = (t: string): number => t.replace(/^\[[a-z-]+\]\s*/, '').split(/\s+/).filter(Boolean).length;
+        const fixed = (t: string, i: number): boolean => i === 0 || /^\[(?:verdict|threat|tactic|trapped|loose)\]/.test(t);
+        let total = rankedParts.reduce((n, t, i) => n + (fixed(t, i) ? words(t) : 0), 0);
+        return rankedParts.filter((t, i) => {
+          if (fixed(t, i)) return true;
+          const w = words(t);
+          if (total + w > REVIEW_TURN_WORDS) return false;
+          total += w;
+          return true;
+        });
+      })();
       // 🔒 THE BOOK-MOVE RULE APPLIES HERE TOO (CLAUDE.md narration-by-need
       // standard, N2). The capped cascade has carried the need gate since N2
       // landed — but `isReviewUncapped()` is TRUE by default, so THIS is the

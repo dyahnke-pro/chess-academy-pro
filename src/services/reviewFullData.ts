@@ -1689,7 +1689,6 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
         // a piece that must defend an ATTACKED friend surfaces via the
         // [loose]/count detectors instead.
         if (cell.color === enemyWB && cell.type !== 'k') {
-          eyes.push(`the ${pieceWord(cell.type)} on ${cell.square}`); squaresOut?.push(cell.square);
           // PRESSURE IS WHAT TEACHES (review audit 2026-10-14: "Their pawn on d4
           // now eyes your pawn on c5." spoke alone as a teaching point). Eyeing
           // a defended piece worth no more than the eyeing one is a description.
@@ -1701,7 +1700,13 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
             // 2026-10-14: the line stated the eyeing and left the reason out).
             pressReason = { loose, target: `the ${pieceWord(cell.type)} on ${cell.square}` };
           }
-          if (loose || bigger) pressed = true;
+          // Only PRESSURE is named (David 2026-10-14: a description speaks only
+          // inside a reason) — "now eyes their pawn on c3" with c3 guarded was
+          // said four times in one review as a bare formula.
+          if (loose || bigger) {
+            pressed = true;
+            eyes.push(`the ${pieceWord(cell.type)} on ${cell.square}`); squaresOut?.push(cell.square);
+          }
         }
       }
     }
