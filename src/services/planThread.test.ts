@@ -3,7 +3,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { deriveNextPlanFacts } from './nextPlans';
-import { newPlanThread, planThreadTurn } from './planThread';
+import { newPlanThread, planThreadTurn, PLAN_THREAD_HOLD_PLIES } from './planThread';
 
 const CENTRE_KING = 'r3k2r/ppp2ppp/2n2n2/8/8/2N2N2/PPPQ1PPP/R3K2R b KQkq - 0 12';
 /** The same board with Black's king already walked to f8 — no castling left. */
@@ -62,5 +62,21 @@ describe('one plan, one announcement — the thread and the arc share the plan g
     expect(planAimKey('king-attack', null)).toBe('plan-aim:king-attack');
     const ids = aimsOf({ nearEnemyKing: 0, kingAttackSquares: [], shieldStripped: 0, outposts: ['d5'], opening: ['d'], passedPawns: ['a7'] } as never, 'student').map((a) => `plan-aim:${a.id}`);
     expect(ids).toEqual(expect.arrayContaining(['plan-aim:passer:a', 'plan-aim:file:d', 'plan-aim:outpost:d5']));
+  });
+});
+
+// Review tape 2026-10-15 (the Alapin, Black): a stated plan held through a
+// running passed pawn, while a plan of the SAME rank never replaced it.
+describe('a stronger plan replaces the one that stands; an equal or weaker one never does', () => {
+  const SANS = 'e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 Nc6 Nc3 Nb6 Nf3 d6 exd6 Qxd6 Be2 Bg4 Nb5 Qd7 Bf4 Nd5 Ne5 Bxe2 Qxe2 Nxf4 Nxd7 Nxe2 Nc7+ Kxd7 Nxa8 Nexd4 Rd1 e5 a3 Bc5 b4 Nxb4 axb4 Bxb4+ Kf1 Rxa8 Rb1 a5 h4 Rc8'.split(' ');
+  it('the passed pawn is stated once it runs', () => {
+    const c = new Chess(); const t = newPlanThread();
+    const said: Array<{ ply: number; text: string }> = [];
+    SANS.forEach((san, i) => {
+      const before = c.fen(); c.move(san);
+      if (i % 2 === 0) for (const l of planThreadTurn(t, { ply: i + 1, fenBefore: before, fenAfter: c.fen(), student: 'b' })) said.push({ ply: i + 1, text: l.text });
+    });
+    expect(said.some((x) => /passed pawn/.test(x.text))).toBe(true);
+    for (let i = 1; i < said.length; i++) expect(said[i].ply - said[i - 1].ply).toBeGreaterThanOrEqual(PLAN_THREAD_HOLD_PLIES);
   });
 });

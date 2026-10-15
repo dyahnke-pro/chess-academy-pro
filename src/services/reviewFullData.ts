@@ -25,6 +25,7 @@ import { contrastMoves, contrastClause } from './moveContrast';
 import { detectBluff, bluffClause } from './bluffDetector';
 import { computeGemCrush } from './gemCrushLines';
 import { getPunishGemById } from '../data/lessons/punishGems';
+import { forkConsequence } from './tacticVocabulary';
 import { Chess, type Color, type Square } from 'chess.js';
 import { landedTacticFor, plyFactsForMove } from './pvPlayback';
 import { definitionKey, tacticInvariant } from './conceptEngine';
@@ -67,7 +68,6 @@ import { detectOpening } from './openingDetectionService';
 import { planRaceClause, planRaceProof, pawnSquareTaken, pawnSquareRaceProof } from './planRace';
 import { kingReadsForBestLine } from './kingAttackReads';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
-import { deriveNextPlanFacts } from './nextPlans';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
 import { errorWhy, priorMoveLeadingTo, seatTheirErrorForStudent, toStudentSeat } from './inaccuracyCall';
@@ -802,9 +802,9 @@ export function computeMoveFacets(
         } else if (v.status === 'threat') {
           // A sentence, never a label ("Threat: Their knight…"): the fork is
           // coming, and the side it hits can rescue only one piece.
-          const saver = !ctx.studentColorWB || !tac.beneficiary ? 'the side it hits'
+          const saver = !ctx.studentColorWB || !tac.beneficiary ? null
             : tac.beneficiary === ctx.studentColorWB ? 'they' : 'you';
-          const f = `[tactic] ${seat(tac.description)} — ${saver} can save only one of them.`;
+          const f = `[tactic] ${seat(tac.description)}${saver ? ` — ${forkConsequence(saver)}` : ''}.`;
           facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary); recProof(f, tacProof(tac.beneficiary, tac.involvedSquares));
           recStakes(f, { points: v.winsPoints || forkPoints(piecesOn(fenAfter, tac.involvedSquares.slice(1))), plies: 2 }); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
         }
@@ -1024,18 +1024,9 @@ export function computeMoveFacets(
       const sqs = andList([...cc.squares]);
       if (cc.side === studentColorWB) { const f = `[complex] Your ${cc.complex} squares are weak — with no bishop of that colour, no pawn or bishop of yours can cover ${sqs}.`; facets.push(f); recSquares(f, cc.squares); break; }
     }
-    // FORWARD PLANS — what to DO from here + exactly HOW (David 2026-07-20: "add
-    // in more future plans … and exactly how to do those plans"). EVERY applicable
-    // plan, each with its method; deduped to first mention of each distinct plan
-    // (see the caller) so the agenda is stated when it becomes relevant and
-    // re-stated only when it changes.
-    for (const plan of deriveNextPlanFacts(fenAfter, studentColorWB, { studentPovCp })) {
-      const f = `[plan-now] ${cap(plan.text)}.`;
-      facets.push(f);
-      // The plan's id rides with it, so the walk can later prove what stopped
-      // it (`planStopped`) without reading the sentence back.
-      outIdentity?.set(f, `plan-fact:${plan.id}`);
-    }
+    // FORWARD PLANS are not read here: the walk runs the ONE plan thread
+    // (`planThreadTurn`, the same as Learn) on each of their moves — the stop
+    // with its proof, then one plan, held while it stands.
     // PLAN VERSUS PLAN — the RACE, in the retrospective register. `deriveNextPlans`
     // above states the student's agenda; it has never stated whose agenda arrives
     // first, which is the actual teaching when both sides are running. Silent

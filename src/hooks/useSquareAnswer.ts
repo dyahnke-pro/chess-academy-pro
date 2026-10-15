@@ -102,17 +102,31 @@ export function useSquareAnswer(opts: UseSquareAnswerOpts): UseSquareAnswer {
     }
   }, []);
 
-  useEffect(() => {
+  // Which question the state belongs to. The reset runs in an effect, AFTER
+  // the render that shows the new question — a tap landing in between was
+  // graded against the OLD key and ignored (ship-check 2026-10-15: the first
+  // tap on a fresh question lit nothing). A tap that finds the state stale
+  // resets it first, the same reset the effect makes.
+  const stateFor = useRef(`${opts.questionKey}|${keySig}`);
+  const freshFor = useCallback((): void => {
+    const want = `${optsRef.current.questionKey}|${(optsRef.current.key ?? []).join(',')}`;
+    if (stateFor.current === want) return;
+    stateFor.current = want;
     clearNudge();
     const fresh = newSquareAnswer(optsRef.current.key ?? [], optsRef.current.mode, Date.now());
     stateRef.current = fresh;
     setView(fresh);
+  }, []);
+
+  useEffect(() => {
+    freshFor();
     return clearNudge;
-  }, [opts.questionKey, keySig]);
+  }, [opts.questionKey, keySig, freshFor]);
 
   const tap = useCallback((square: Square): SquareSetGrade | null => {
     const o = optsRef.current;
     if (!o.key) return null;
+    freshFor();
     const s = stateRef.current;
     const wrongTag = s.key.includes(square) ? null : (o.tagWrongTap?.(square) ?? null);
     const r = applySquareTap(s, square, Date.now(), { maxMisses: o.maxMisses ?? MISSES_BEFORE_SHOW, wrongTag });
@@ -131,7 +145,7 @@ export function useSquareAnswer(opts: UseSquareAnswerOpts): UseSquareAnswer {
       }, o.nudgeAfterMs ?? PARTIAL_NUDGE_MS);
     }
     return r.grade;
-  }, [commit]);
+  }, [commit, freshFor]);
 
   const noteHelp = useCallback((help: AnswerHelp): void => {
     commit(applySquareHelp(stateRef.current, help));

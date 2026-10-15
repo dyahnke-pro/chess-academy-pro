@@ -48,14 +48,15 @@ describe('plyFactsForMove — dialed per-move walk narration (David 2026-07-23)'
     expect(out).not.toMatch(/The move/);
   });
 
-  it('frames the opponent with third-person agreement', () => {
-    // Same Bxc5 position but narrated as the opponent's move.
+  it('frames the opponent as "they", with plural agreement', () => {
+    // Same Bxc5 position but narrated as the opponent's move. ONE PERSPECTIVE
+    // (David 2026-08-28): the opponent is "they" — review tape 2026-10-15 heard
+    // "Your opponent captures the knight".
     const fen = at('e4 c5 Nc3 g6 f4 Bg7 Nf3 Nc6 Bb5 Nd4 O-O Nxb5 Nxb5 d6 d3 Nf6 Qe1 Bg4 Qh4 Qd7 Nc3 Bxf3 Rxf3 O-O-O e5 dxe5 fxe5 Ng4 Ne4 Bxe5 Nxc5 Bd4+ Kh1');
     const out = plyFactsForMove(fen, 'Bxc5', undefined, false);
-    expect(out).toMatch(/^Your opponent /);
-    // The 3rd-person half of the same contract — see above on the point count.
-    expect(out).toMatch(/\bwins material\b/);
-    expect(out).not.toMatch(/\bwin material\b/);
+    expect(out).toMatch(/^They /);
+    expect(out).toMatch(/\bwin material\b/);
+    expect(out).not.toMatch(/\bwins material\b/);
   });
 
   it('says "give check", never a bare "check", and keeps a REAL fork', () => {

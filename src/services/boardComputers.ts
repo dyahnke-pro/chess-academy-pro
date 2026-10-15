@@ -99,7 +99,7 @@ export interface BoardContexts {
   threatCost: { line: string; fen: string; student: Color; squares: readonly string[] };
   /** The student's plan, carried across moves: its stop proven off their
    *  move, then the next plan (mutates the thread held in the surface's memory). */
-  planThread: { thread: PlanThread; ply: number; fenBefore: string; fenAfter: string; student: Color };
+  planThread: { thread: PlanThread; ply: number; fenBefore: string; fenAfter: string; student: Color; studentPovCp?: number | null };
   /** The line tactics (tacticGeometry): interference, clearance, decoy and
    *  deflection, the discovery audit, their in-between move, the fork that
    *  serves a plan, the kick that fails, the counterfactual fork, the pawn
@@ -290,7 +290,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
   },
   planThread: {
     read: ({ thread, ...args }) => safe(() => planThreadTurn(thread, args).map((l) => ({ text: l.text, proof: l.proof, squares: l.squares, key: l.claim, ...(l.aim ? { sharedKey: l.aim } : {}) }))),
-    surfaces: { learn: LEARN, review: { not: 'P2 owed — Review runs its own thread loop over planStopped (coachFeatureService); collapse onto planThreadTurn' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
+    surfaces: { learn: LEARN, review: { wired: 'services/coachFeatureService.ts' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   tacticGeometry: {
     read: (ctx) => safe(() => geometryReads(ctx).map((r) => ({

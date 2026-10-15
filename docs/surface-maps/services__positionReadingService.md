@@ -167,7 +167,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/bookMoveWhy.ts:254`
 - `src/services/bookMoveWhy.ts:319`
 - `src/services/bookMoveWhy.ts:338`
-- `src/services/coachFeatureService.ts:2703`
+- `src/services/coachFeatureService.ts:2672`
 - `src/services/groundedAnswer.ts:7207`
 - `src/services/moveIntent.ts:284`
 - `src/services/moveIntent.ts:296`
@@ -240,13 +240,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewTeachingPoints.ts:138`
 
 ### `signedCaptureRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11198`
-- `src/components/Coach/CoachTeachPage.tsx:11256`
+- `src/components/Coach/CoachTeachPage.tsx:11200`
+- `src/components/Coach/CoachTeachPage.tsx:11258`
 - `src/services/principleAttribution.ts:323`
 - `src/services/principleAttribution.ts:669`
 
 ### `legalSeeGainFor` (function) — 76 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10351`
+- `src/components/Coach/CoachTeachPage.tsx:10353`
 - `src/services/arrowDoor.ts:161`
 - `src/services/bluffDetector.ts:53`
 - `src/services/boardState.ts:42`
@@ -347,7 +347,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `signedLegalSeeFor` (function) — 25 call sites
 - `src/components/Coach/CoachTeachPage.tsx:853`
-- `src/components/Coach/CoachTeachPage.tsx:8464`
+- `src/components/Coach/CoachTeachPage.tsx:8466`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -373,7 +373,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tradeQuality.ts:173`
 
 ### `takingTheAttackerAnswers` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8614`
+- `src/components/Coach/CoachTeachPage.tsx:8616`
 - `src/services/boardUrgency.ts:59`
 - `src/services/groundedAnswer.ts:627`
 - `src/services/positionFacts.ts:1578`
@@ -593,7 +593,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:130`
 
 ### `structureTransfer` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9989`
+- `src/components/Coach/CoachTeachPage.tsx:9991`
 - `src/services/groundedAnswer.ts:6761`
 - `src/services/positionReadingService.test.ts:989`
 - `src/services/positionReadingService.test.ts:990`
@@ -602,7 +602,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:993`
 
 ### `namedPawnStructure` (function) — 22 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9984`
+- `src/components/Coach/CoachTeachPage.tsx:9986`
 - `src/services/claimTruth.manual.test.ts:74`
 - `src/services/claimTruth.manual.test.ts:76`
 - `src/services/danyaBehaviors.ts:398`

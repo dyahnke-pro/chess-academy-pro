@@ -26,6 +26,7 @@ import { computePlyFacts } from './pvPlayback';
 import { describeStructure } from './boardStructure';
 import { detectTactics } from './tacticsDetector';
 import { PATTERN_SPEECH, patternAim, patternClaimsMaterial } from './tacticVocabulary';
+export { forkConsequence } from './tacticVocabulary';
 import type { PvLine, PvPly, PrevCaptureContext } from './pvPlayback';
 import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcEvent, type ArcMove, type Seat } from './planArc';
 import { proofCut } from './exchangeLedger';
