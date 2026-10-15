@@ -599,6 +599,24 @@ async function main() {
       const ownShare = ownVals.length ? own.length / ownVals.length : 0;
       record('V6. every student move gets its own reason (≥70% of student moves; good-move reasons reported)', ownShare >= 0.7,
         `${own.length} of ${ownVals.length} student moves (${Math.round(ownShare * 100)}%) — ${affirm} said what the move did well, ${own.length - affirm} what it gave up`);
+      // V9 — THE REASON IS THE ENGINE'S POINT, NOT A DESCRIPTION (2026-10-15).
+      // The why counter reads wording; this reads WHICH COMPUTER gave the move
+      // its reason (`ownLanes` on the door's row). Engine-backed: what the move
+      // stops or prepares, the move order, a found / held move, the trade and
+      // hold reads. The rest (movePoint's board read, piece reach) describe.
+      const ENGINE_REASON = new Set(['moveIntent', 'moveOrder', 'foundMove', 'heldMove', 'slipAnswer', 'tradeLedger', 'holdResource', 'notYetPlayed', 'breakRace']);
+      const byMove = new Map();
+      for (const t of turns) {
+        if (t.turn?.kind === 'phase' || !Array.isArray(t.ownLanes)) continue;
+        const key = t.turn ? `p${t.turn.ply}` : `row${byMove.size}`;
+        byMove.set(key, [...(byMove.get(key) ?? []), ...t.ownLanes]);
+      }
+      const reasoned = [...byMove.values()].filter((ls) => ls.length > 0);
+      const engineBacked = reasoned.filter((ls) => ls.some((l) => ENGINE_REASON.has(l))).length;
+      const engineShare = reasoned.length ? engineBacked / reasoned.length : 0;
+      const ownLaneCount = {}; for (const ls of reasoned) for (const l of ls) ownLaneCount[l] = (ownLaneCount[l] ?? 0) + 1;
+      record('V9. a third of the move reasons come from the engine (what it stops or prepares), not a description', reasoned.length > 0 && engineShare >= 1 / 3,
+        `${engineBacked} of ${reasoned.length} reasoned student moves (${Math.round(engineShare * 100)}%) engine-backed — lanes ${JSON.stringify(ownLaneCount)}`);
       // THE FADE (short phrasing when green): the audit device starts with no
       // evidence, so nothing is green and NOTHING may fade until the student
       // has HELD something on this device — grey means teach. Both games share

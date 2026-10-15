@@ -192,6 +192,8 @@ export interface LearnTurnRow {
    *  'affirm' (what the move did well), 'but' (what it gave up), or null when
    *  nothing on this turn spoke about the student's move. */
   ownMove: 'affirm' | 'but' | null;
+  /** The lanes that gave the student's move its reason (affirm / but beats). */
+  ownLanes?: string[];
   /** WHICH TURN this wave belongs to: the student move it answers (`ply`,
    *  the history length after the student's move) for its instant and late
    *  waves, or a phase line. Null from a caller that predates it. */

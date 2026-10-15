@@ -20,6 +20,7 @@ import type { AnalysisLine } from '../types';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { legalSeeGainFor, legalSeeGainOn, standsSafe } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
+import { isOnHomeSquare } from './development';
 
 export interface IntentReads {
   /** Mover to move at the board BEFORE the move (the ordinary read). */
@@ -442,6 +443,13 @@ export function whatItDoes(fenAfter: string, prepUci: string, mover: 'w' | 'b'):
   }
   targets.sort((a, b) => (MATERIAL_VALUE[b.type] ?? 0) - (MATERIAL_VALUE[a.type] ?? 0));
   if (targets.length) return { verb: `hit the ${PIECE_NAME[targets[0].type]} on ${targets[0].sq}`, castle: false };
+  // DEVELOPMENT IS A JOB (Review audit 2026-10-15: "…e5 prepares …Bd6" was
+  // dropped as reasonless 13 student moves out of 13, so a good move's point
+  // in the opening was never said). A minor piece leaving its starting square
+  // joins the game — the follow-up is what the pawn move freed.
+  if ((m.piece === 'n' || m.piece === 'b') && isOnHomeSquare(m.piece, mover, m.from)) {
+    return { verb: `bring the ${PIECE_NAME[m.piece]} into the game`, castle: false };
+  }
   if (m.piece === 'r' || m.piece === 'q') {
     const file = m.to[0];
     const cells = board.board().flat().filter((c) => c && c.type === 'p' && c.square[0] === file) as Array<{ color: 'w' | 'b' }>;

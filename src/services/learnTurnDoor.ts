@@ -622,7 +622,11 @@ export function decideTurn(
   // student's own move — never a second list.
   const ownBeats = spoke.map((l) => DNA_BEAT[l]);
   const ownMove = ownBeats.includes('but') ? 'but' : ownBeats.includes('affirm') ? 'affirm' : null;
-  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], ownMove, turn });
+  // WHICH COMPUTER gave the move its reason — so an audit can tell an
+  // engine-proven purpose from a board description (the why counter reads
+  // wording; this reads the source).
+  const ownLanes = spoke.filter((l) => DNA_BEAT[l] === 'affirm' || DNA_BEAT[l] === 'but');
+  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], ownMove, ownLanes, turn });
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
 }
 

@@ -11335,7 +11335,7 @@ export function CoachTeachPage(): JSX.Element {
                           const prepRule = intentRule(intent, fenAfterReply, playerColor, learnMemRef.current.principleTaught);
                           if (prepRule) for (const k of prepRule.keys) learnMemRef.current.principleTaught.add(k);
                           const intentText = prepRule ? `${intent.text.replace(/\.$/, '')} — ${prepRule.text}.` : intent.text;
-                          queueSpokenHint(fenAfterReply, intentText, 'moveIntent', NO_PROOF.description, intent.squares, [
+                          queueSpokenHint(fenAfterReply, intentText, 'moveIntent', squaresProof(intentText, intent.squares) ?? NO_PROOF.description, intent.squares, [
                             ...(intent.prevents ? [`stops:${intent.prevents.uci}`] : []),
                             ...(intent.prepares ? [`prepares:${intent.prepares.uci}`] : []),
                             // "Bc4 clears the way to castle" and "castling is one
