@@ -600,3 +600,20 @@ describe('a slip keeps its verdict and its best reason; extra reasons wait (Lear
     expect(d.held).toContain('drawback');
   });
 });
+
+describe('a plan that overflows the turn keeps its goal (Learn audit 2026-10-15)', () => {
+  it('danger + own reason + plan run past the turn: the plan says its goal, the how-to goes', async () => {
+    const { TURN_WORDS } = await import('./learnTurnDoor');
+    const { spokenWordCount } = await import('../utils/spokenWords');
+    const pad = (w: string, n: number): string => `This ${Array.from({ length: n }, () => w).join(' ')} happened.`;
+    const goal = 'The plan from here is to attack their king on e1 before it gets out.';
+    const d = decideTurn([
+      { lane: 'positionFacts', proof: NO_PROOF.stated, text: pad('danger', 26), fen: FEN, squares: ['d6'], stakes: costStakes(300) ?? undefined },
+      { lane: 'moveIntent', proof: NO_PROOF.stated, text: pad('reason', 18), fen: FEN, squares: ['f5'] },
+      { lane: 'planArc', proof: NO_PROOF.stated, text: `${goal} Here's how: tuck your own king away, double your rooks on the open d-file, bring pieces in with tempo, and look for a sacrifice on d2 or f2.`, fen: FEN, squares: ['e1'] },
+    ]);
+    expect(d.spoke).toContain('planArc');
+    expect(d.pkg.kept.map((f) => f.text)).toContain(goal);
+    expect(d.pkg.kept.reduce((n, f) => n + spokenWordCount(f.text), 0)).toBeLessThanOrEqual(TURN_WORDS);
+  });
+});

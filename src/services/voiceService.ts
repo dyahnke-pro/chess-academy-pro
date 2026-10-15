@@ -14,6 +14,7 @@ import { useAppStore } from '../stores/appStore';
 import { resolveCoachNarration, applyBriefVoiceCap } from '../utils/coachNarration';
 import { localizeSpokenText, spokenLanguageName } from './spokenLanguage';
 import { dnaPass } from './dnaRules';
+import { SAN_MOVE_RE, PAWN_CAPTURE_RE, CASTLE_KING_RE, CASTLE_QUEEN_RE, SAN_SUFFIX_RE } from '../utils/spokenWords';
 
 /** Shape of `window.ManagedMediaSource` on iOS Safari 17.1+. Not in
  *  lib.dom.d.ts yet, so we describe just the surface we use:
@@ -342,16 +343,8 @@ const PIECE_LETTER_NAMES: Record<string, string> = {
   P: 'pawn', N: 'knight', B: 'bishop', R: 'rook', Q: 'queen', K: 'king',
 };
 
-/** SAN-ish move pattern — captures piece + optional disambiguation
- *  (file and/or rank) + capture + destination square. Used to expand
- *  shorthand SAN like "Nxf7", "Bc4", or the disambiguated "Rad8" /
- *  "Nbd7" into plain English before TTS. The disambiguation group is
- *  spoken (David 2026-05-25: "ALL narrations say rook a to d8") so the
- *  ear knows WHICH rook/knight. Kept simple on purpose: false-positives
- *  here just produce slightly odd speech, never crashes. */
-const SAN_MOVE_RE = /\b([NBRQK])([a-h]?[1-8]?)(x?)([a-h][1-8])\b/g;
-/** Pawn-capture SAN (e.g. "exd5", "fxe6") — no piece letter. */
-const PAWN_CAPTURE_RE = /\b([a-h])x([a-h][1-8])\b/g;
+/** The SAN patterns themselves live in `utils/spokenWords` (one source for
+ *  the voice and for every turn budget that counts spoken words). */
 /** Piece letter immediately followed by a square in any bracketing —
  *  e.g. "P(f3)", "P [f3]", "P <f3>", "P →f3", "P->f3", "P—f3",
  *  "P (on f3)". Covers the "piece-and-location" shorthand that doesn't
@@ -370,17 +363,6 @@ const PIECE_LETTER_AFTER_CONTEXT_RE =
  *  like "your P on f3" get caught. */
 const ISOLATED_PIECE_LETTER_RE =
   /\b([PNBRQK])\b(?=\s+(?:on|to|at|from|of|takes|is|was|were|are|hangs|hanging|sits|sitting|stands|standing|attacks|attacking|defends|defending|moves|moved|moving|can|could|should|would|will|might|may|goes|going|covers|covering|controls|controlling|threatens|threatening|protects|protecting|supports|supporting)\b)/g;
-/** Castling shorthand → plain English. "O-O" sounds nothing like
- *  "castle kingside" when read aloud. */
-const CASTLE_KING_RE = /\bO-O\b(?!-)/g;
-/** The check / mate mark left behind after a SAN has been expanded to speech.
- *
- *  Applied to the EXPANDED string, so it matches "h7+" and "castle kingside#",
- *  never "Bh7+" — by the time it runs there are no piece letters left. Anchored
- *  on a destination square or a castle so a stray "+" in prose survives. */
-const SAN_SUFFIX_RE = /((?:castle (?:king|queen)side)|[a-h][1-8])([+#])/g;
-const CASTLE_QUEEN_RE = /\bO-O-O\b/g;
-
 /** Defense-in-depth second-layer check. Returns true if `text` still
  *  contains piece-letter shorthand that `sanitizeForTTS` should have
  *  expanded but didn't. The auditor wires this after every TTS call

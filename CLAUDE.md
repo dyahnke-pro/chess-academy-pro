@@ -2368,7 +2368,8 @@ measures (`scripts/audit-lib/why-count.mjs`):
 3. **Reason variety — no reason formula more than twice a game** (pieces,
    squares and seats blanked: the fifth "is attacked and nothing's defending
    it" is a template).
-4. **Turn length — no turn past 80 words.** One lead reason per turn; a stack
+4. **Turn length — no Learn turn past 80 words, no Review turn past 100**
+   (Review is walked at the student's pace, so a verdict carries its line). One lead reason per turn; a stack
    of five true reasons buries the one that matters.
 
 The why is COMPUTED (a consequence, a line, a stake), never a templated

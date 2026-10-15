@@ -106,6 +106,9 @@ export function formulaRepeats(lines, max = 2) {
 /** TURN LENGTH: one lead reason per turn — a line longer than `max` words is a
  *  stack of reasons that buries the one that matters. */
 export const TURN_WORDS_MAX = 80;
+/** Review walks a finished game at the student's own pace, so a verdict turn
+ *  carries its cost, its line and its how-to: 100 words (David 2026-10-15). */
+export const REVIEW_TURN_WORDS_MAX = 100;
 export function longLines(lines, max = TURN_WORDS_MAX) {
   return lines.map(String).filter((t) => t.split(/\s+/).length > max);
 }

@@ -23,6 +23,7 @@
  * Slice 1 (this file): route + record, behaviour-preserving. Ordering and dedupe are still
  * `buildVoicePackage`'s. Picking ONE lead per turn is the next slice.
  */
+import { spokenWordCount } from '../utils/spokenWords';
 import { isProof, type FactProof, type Proof } from './proof';
 import { emitLearnTurn, type LearnTurnTag } from './coachDecisionEvents';
 import { COMPUTER_ROLES } from './computerRoles';
@@ -571,7 +572,8 @@ export function decideTurn(
   // lead, danger, the must-ride lanes and the verdict's own reason ('but')
   // never wait: they ARE the turn. Value decides who waits, never order.
   {
-    const words = (t: string): number => t.split(/\s+/).filter(Boolean).length;
+    // Counted as SPOKEN: "gxf6" is three words in the ear.
+    const words = spokenWordCount;
     const kept = survivors.filter((x) => keep.includes(x.fact));
     // The verdict and its ONE best reason always stay; a third and fourth
     // reason for the same slip ('but' beats) may wait (Learn audit
@@ -592,6 +594,22 @@ export function decideTurn(
         if (i >= 0) spoke.splice(i, 1);
       }
       if (!held.includes(x.lane)) held.push(x.lane);
+    }
+    // The must-ride facts alone can run past the turn (Learn audit
+    // 2026-10-15: a danger, the move's own reason and a plan with its
+    // how-to — 83 words). A plan event is said once, so it never waits; it
+    // keeps its GOAL and lets its how-to go, unless the plan IS the lead.
+    if (total > TURN_WORDS) {
+      for (const s of survivors) {
+        if (total <= TURN_WORDS) break;
+        if (s.lane !== 'planArc' || s === ownLead || !keep.includes(s.fact)) continue;
+        const goal = s.fact.text.split(/(?<=[.!?])\s+/)[0] ?? s.fact.text;
+        if (goal === s.fact.text) continue;
+        const trimmed: VoiceFact = { ...s.fact, text: goal };
+        total -= words(s.fact.text) - words(goal);
+        keep[keep.indexOf(s.fact)] = trimmed;
+        s.fact = trimmed;
+      }
     }
   }
   const laneFor = (f: VoiceFact): LearnLane | undefined => survivors.find((x) => x.fact === f)?.lane;

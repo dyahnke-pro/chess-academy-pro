@@ -1,3 +1,4 @@
+import { spokenWordCount } from '../utils/spokenWords';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan } from './material';
 import { Chess } from 'chess.js';
@@ -1214,7 +1215,8 @@ export function frameTeachingForOpponent(sentence: string): string {
  *  fundamentals, each with its own how-to, before the verdict). `rankedParts`
  *  are in the door's rank order. Pure, so the eviction order is testable. */
 export function fitReviewTurn(rankedParts: readonly string[]): string[] {
-  const words = (t: string): number => t.replace(/^\[[a-z-]+\]\s*/, '').split(/\s+/).filter(Boolean).length;
+  // Counted as SPOKEN: "gxf6" is three words in the ear.
+  const words = (t: string): number => spokenWordCount(t.replace(/^\[[a-z-]+\]\s*/, ''));
   // The lead, the move's verdict ([quality] / [verdict]) and its reason
   // ([rule] — the blunder check that names what the move lost), danger, a
   // tactic, the plan (a good move's reason) and the habit (the method beat
@@ -1240,8 +1242,9 @@ export function fitReviewTurn(rankedParts: readonly string[]): string[] {
   return rankedParts.filter((_, i) => keep[i]);
 }
 
-/** A review ply's length — the same bar as Learn's turn (`TURN_WORDS`). */
-export const REVIEW_TURN_WORDS = 80;
+/** A review ply's length — 100 words, above Learn's 80: review is walked at
+ *  the student's pace, so a verdict carries its line (David 2026-10-15). */
+export const REVIEW_TURN_WORDS = 100;
 
 export function buildReviewSegments(
   moves: ReviewMoveInput[],
