@@ -353,7 +353,7 @@ export function backwardLook(args: {
       const allowsMate = (args.allowedMate ?? null) !== null && !!instead;
       const line = allowsMate
         ? [instead ?? '', cost.said].filter(Boolean).join(' ')
-        : [`${cost.said} ${cost.opening}`, instead ?? ''].filter(Boolean).join(' ');
+        : [cost.said, cost.opening, instead ?? ''].filter(Boolean).join(' ');
       return {
         ...(allowsMate ? { stakes: mateStakes('them', Math.max(0, Math.abs(args.allowedMate as number) * 2 - 1), true) } : {}),
         line, square: cost.square || '', kind: 'drawback',

@@ -325,7 +325,7 @@ describe('D-8 (WO-STANDARD-01, 2026-09-22) — the [eval] facet needs a real shi
     const c2 = new Chess(A2); c2.move('d5');
     const f = loose(A2, c2.fen(), 'd5', 1, 'white');
     expect(f.length).toBe(1);
-    expect(f[0]).toMatch(/Newly undefended/);
+    expect(f[0]).toMatch(/lost (its|their) last defender/);
     expect(f[0]).toMatch(/knight on e5/);
   });
   it('a piece the move ATTACKS is not "newly undefended" — the attack line owns it (review walk 2026-09-27)', () => {

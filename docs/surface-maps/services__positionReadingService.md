@@ -297,16 +297,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/queenGrabTrap.ts:49`
 - `src/services/ruleException.ts:46`
 - `src/services/safetyHabits.ts:49`
-- `src/services/speedRunReads.ts:151`
-- `src/services/speedRunReads.ts:162`
-- `src/services/speedRunReads.ts:165`
-- `src/services/speedRunReads.ts:179`
-- `src/services/speedRunReads.ts:193`
-- `src/services/speedRunReads.ts:296`
-- `src/services/speedRunReads.ts:378`
-- `src/services/speedRunReads.ts:425`
-- `src/services/speedRunReads.ts:428`
+- `src/services/speedRunReads.ts:155`
+- `src/services/speedRunReads.ts:166`
+- `src/services/speedRunReads.ts:169`
+- `src/services/speedRunReads.ts:183`
+- `src/services/speedRunReads.ts:197`
+- `src/services/speedRunReads.ts:300`
+- `src/services/speedRunReads.ts:382`
 - `src/services/speedRunReads.ts:429`
+- `src/services/speedRunReads.ts:432`
+- `src/services/speedRunReads.ts:433`
 - `src/services/tacticAlertService.ts:336`
 - `src/services/tacticGeometry.ts:295`
 - `src/services/tacticGeometry.ts:391`
@@ -453,9 +453,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:951`
 - `src/services/positionReadingService.test.ts:953`
 - `src/services/positionalRead.ts:343`
-- `src/services/speedRunReads.ts:314`
-- `src/services/speedRunReads.ts:389`
-- `src/services/speedRunReads.ts:445`
+- `src/services/speedRunReads.ts:318`
+- `src/services/speedRunReads.ts:393`
+- `src/services/speedRunReads.ts:449`
 
 ### `PieceQualityNote` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -475,9 +475,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewTeachingPoints.ts:205`
 
 ### `findPieceQuality` (function) — 29 call sites
-- `src/services/concessionBeat.ts:311`
-- `src/services/concessionBeat.ts:313`
-- `src/services/concessionBeat.ts:319`
+- `src/services/concessionBeat.ts:314`
+- `src/services/concessionBeat.ts:316`
+- `src/services/concessionBeat.ts:322`
 - `src/services/danyaBehaviors.ts:215`
 - `src/services/danyaBehaviors.ts:548`
 - `src/services/groundedAnswer.ts:6840`
@@ -528,8 +528,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:97`
 - `src/services/positionalTruth.corpus.test.ts:102`
 - `src/services/replayFence.najdorf1500.test.ts:24`
-- `src/services/reviewFullData.ts:1009`
-- `src/services/reviewFullData.ts:1013`
+- `src/services/reviewFullData.ts:1015`
+- `src/services/reviewFullData.ts:1019`
 
 ### `MinorityAttack` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -544,8 +544,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:360`
 - `src/services/positionalTruth.corpus.test.ts:110`
 - `src/services/positionalTruth.corpus.test.ts:115`
-- `src/services/reviewFullData.ts:1005`
-- `src/services/reviewFullData.ts:1007`
+- `src/services/reviewFullData.ts:1011`
+- `src/services/reviewFullData.ts:1013`
 
 ### `pieceScope` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -647,9 +647,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:6856`
 
 ### `findWeakPawns` (function) — 22 call sites
-- `src/services/concessionBeat.ts:243`
-- `src/services/concessionBeat.ts:244`
-- `src/services/concessionBeat.ts:248`
+- `src/services/concessionBeat.ts:245`
+- `src/services/concessionBeat.ts:246`
+- `src/services/concessionBeat.ts:250`
 - `src/services/danyaBehaviors.ts:404`
 - `src/services/danyaBehaviors.ts:436`
 - `src/services/groundedAnswer.ts:2442`
@@ -668,7 +668,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:960`
 - `src/services/positionReadingService.test.ts:967`
 - `src/services/positionalRead.ts:306`
-- `src/services/speedRunReads.ts:546`
+- `src/services/speedRunReads.ts:550`
 
 ### `PressureVerdict` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

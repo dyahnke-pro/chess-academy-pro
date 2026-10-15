@@ -326,3 +326,13 @@ describe('only a real outpost is "handed" (walk 700, 30…Nb6 — not the rook Q
     expect(d?.kind).not.toBe('outpost-conceded');
   });
 });
+
+describe('the student\'s piece gone offside is NAMED, with what it costs (Learn tape 2026-10-15)', () => {
+  it('"Your bishop went all the way to e6…", never "your piece … worth seeing"', () => {
+    const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5';
+    const d = findStudentDrawback({ fen, playedSan: 'Be6', bestSan: 'O-O', studentColor: 'white' });
+    expect(d?.kind).toBe('piece-offside');
+    expect(d?.said).toBe('Your bishop went all the way to e6, a long way from your king — a piece that far out needs moves to get back.');
+    expect(d?.opening).toBe('');
+  });
+});

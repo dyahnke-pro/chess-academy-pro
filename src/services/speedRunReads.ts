@@ -74,7 +74,11 @@ export function anyMoveFine(fen: string, lines: Lines): Read | null {
   if (Math.max(...cps) - Math.min(...cps) >= criticalityThresholds().notable || Math.abs(cps[0]) > 300) return null;
   const sans = lines.slice(0, 3).map((l) => sanOf(fen, l.moves[0])).filter((x): x is string => !!x);
   if (sans.length < 3) return null;
-  return { idea: rot(fen, 'No move here is a big decision — several are about equally good, so save your time for the moves that are.', 'This is not a critical moment — a few moves do the same job; bank the time for when it matters.', 'Nothing hinges on this one — pick a sensible move and keep your clock for the hard decisions.'), claim: 'srr:any-move-fine', namesMove: true, text: `Several moves are equally good here — ${sans[0]}, ${sans[1]} or ${sans[2]}. Not every move is a big decision; save your time for the ones that are.` };
+  // It speaks of the move IN FRONT of the student, and often beside the
+  // verdict on the one they just played (Learn tape 2026-10-15: "This is not a
+  // critical moment…" then "Rook takes d3 was the only move…") — so every stem
+  // says which move it means.
+  return { idea: rot(fen, 'Your next move is not a big decision — several are about equally good, so save your time for the moves that are.', 'For your next move, a few moves do the same job — not a critical moment; bank the time for when it matters.', 'Nothing hinges on your next move — pick a sensible one and keep your clock for the hard decisions.'), claim: 'srr:any-move-fine', namesMove: true, text: `Several moves are equally good for your next move — ${sans[0]}, ${sans[1]} or ${sans[2]}. Not every move is a big decision; save your time for the ones that are.` };
 }
 
 /** D2 THE UGLY MOVE THAT IS CORRECT ("the hardest move to make"): the engine's

@@ -866,10 +866,16 @@ export function computeMoveFacets(
       };
       const lostDefender = fresh.filter((h) => hadDefender(h.square, h.piece, h.color));
       const newlyHit = fresh.filter((h) => !hadDefender(h.square, h.piece, h.color));
-      for (const [group, label] of [[lostDefender, 'Newly undefended'], [newlyHit, 'Now hanging']] as const) {
+      // Spoken as sentences, never as a label (review tape 2026-10-15: "Now
+      // hanging: your rook on a8, your knight on e2." read like a UI tag).
+      for (const [group, lost] of [[lostDefender, true], [newlyHit, false]] as const) {
         if (group.length === 0) continue;
-        const desc = group.map((h) => `${pieceWord(h.piece)} on ${h.square}`).join(', ');
-        const f = `[loose] ${label}: ${seat(desc)}.`;
+        const many = group.length > 1;
+        const desc = seat(andList(group.map((h) => `${pieceWord(h.piece)} on ${h.square}`)));
+        const said = lost
+          ? `${many ? 'have' : 'has'} lost ${many ? 'their' : 'its'} last defender`
+          : `${many ? 'are' : 'is'} now hanging`;
+        const f = `[loose] ${desc.charAt(0).toUpperCase()}${desc.slice(1)} ${said}.`;
         facets.push(f); recSquares(f, group.map((h) => h.square));
         recStakes(f, exchangeStakes(fenAfter, group.map((h) => h.square)));
       }

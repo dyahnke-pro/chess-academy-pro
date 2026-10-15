@@ -230,7 +230,10 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       if (!r) return null;
       let after: string | undefined;
       try { const b = new Chess(fenBefore); b.move(playedSan); after = b.fen(); } catch { after = undefined; }
-      return { text: r.text, proof: NO_PROOF.stated, squares: [], key: r.key, ...(after ? { fen: after } : {}) };
+      // The proof is the move itself, from the board it was played on then.
+      const line = { fen: r.departure.fen, sans: [r.departure.san] };
+      const proof: FactProof = { kind: 'line', exact: true, short: `The move then was ${r.departure.san}`, full: `The move then was ${r.departure.san}`, line };
+      return { text: r.text, proof, squares: [], key: r.key, ...(after ? { fen: after } : {}) };
     }),
     surfaces: {
       learn: LEARN,

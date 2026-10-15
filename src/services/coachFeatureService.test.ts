@@ -697,7 +697,7 @@ describe('coachFeatureService', () => {
 
       // Any sentence carrying a STANDING-STATE marker must appear on at most
       // ONE ply — "drop repeats, make every one add something new".
-      const STANDING = /stuck in the centre|Newly undefended|open files?|passed pawns?|isolated pawns?|doubled pawns?|outpost/i;
+      const STANDING = /stuck in the centre|lost (?:its|their) last defender|now hanging|open files?|passed pawns?|isolated pawns?|doubled pawns?|outpost/i;
       const counts = new Map<string, number>();
       for (const seg of segments) {
         if (!seg.narration) continue;

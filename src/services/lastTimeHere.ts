@@ -26,6 +26,8 @@ export interface LastTimeHere {
   text: string;
   /** The game it happened in. */
   gameId: string;
+  /** The board and the move played from it then — the recall's proof. */
+  departure: { fen: string; san: string };
   /** Same move again, or a different one this time. */
   repeated: boolean;
   /** Say-once key: one position, one recall a game. Carries the direction
@@ -62,5 +64,5 @@ export function lastTimeHere(
     : bare(playedSan) === bare(last.mainSan)
       ? `Last time here you played ${last.departedSan} and it cost you ${cost}${when}. This time you kept to theory.`
       : `Last time here you played ${last.departedSan} and it cost you ${cost}${when}. This time you went another way.`;
-  return { text, gameId: last.gameId, repeated, key: `last-here:${repeated ? 'same' : 'other'}:${here}` };
+  return { text, gameId: last.gameId, departure: { fen: last.bookFen, san: last.departedSan }, repeated, key: `last-here:${repeated ? 'same' : 'other'}:${here}` };
 }

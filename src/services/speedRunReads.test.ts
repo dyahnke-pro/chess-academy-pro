@@ -184,6 +184,8 @@ describe('his habits of thought, computed (each checked against the existing com
   it('a move-naming read carries its idea, spoken where the move is held', () => {
     const r = anyMoveFine('r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w - - 0 8', [line(['c1g5'], 30), line(['b1c3'], 25), line(['c2c3'], 20)]);
     expect(r?.idea).toMatch(/big decision|not a critical moment|Nothing hinges/);
+    // It names WHICH move it means — it sits beside the verdict on the last one.
+    expect(r?.idea).toMatch(/next move/);
     expect(r?.idea).not.toMatch(/Bg5|Nc3|c3/);
     expect(anyMoveFine(fenAt('e4 e5'), [line(['g1f3'], 30), line(['b1c3'], 25), line(['f1c4'], 20)])).toBeNull();
   });
