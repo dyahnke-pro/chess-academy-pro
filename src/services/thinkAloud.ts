@@ -196,7 +196,7 @@ export function opponentHabits(sans: readonly string[], opp: 'w' | 'b'): Habit[]
   // holds the game speaks them.
   const reads = habitReads(sans, opp);
   if (reads.looseMoves >= 2) {
-    out.push({ kind: 'loose', text: `That's ${num(reads.looseMoves)} times now they've left a piece where you can win it — they don't check what hangs. After every move of theirs, look for what they left loose first.` });
+    out.push({ kind: 'loose', text: `That's ${num(reads.looseMoves)} times now they've left a piece loose under your attack — they don't check what their move leaves behind. After every move of theirs, look first for what they left loose.` });
   }
   if (reads.kingPawnPushes >= 2) {
     out.push({ kind: 'king-pawns', text: `They keep pushing the pawns in front of their own king — ${num(reads.kingPawnPushes)} so far, and every push leaves a hole beside it. Aim your pieces at those squares.` });

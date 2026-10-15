@@ -10,6 +10,6 @@ describe('review names what they keep doing — the same computer Learn reads (2
       return { ply: i + 1, san, isCoachMove: i % 2 === 1, classification: 'good' as const, evaluation: 30, preMoveEval: 30, bestMove: null, fenAfter: c.fen() };
     });
     const segs = buildReviewSegments(inputs, 'white', null, true, 1500, [], undefined, null);
-    expect(segs.find((s) => s.ply === 6)?.narration ?? '').toMatch(/two times now they've left a piece where you can win it/);
+    expect(segs.find((s) => s.ply === 6)?.narration ?? '').toMatch(/two times now they've left a piece loose under your attack/);
   });
 });
