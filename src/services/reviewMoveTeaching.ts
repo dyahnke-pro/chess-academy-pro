@@ -79,12 +79,6 @@ function bishopCentralTargets(chess: Chess, sq: string, mover: 'w' | 'b'): strin
   return out.sort();
 }
 
-function list(sqs: string[]): string {
-  if (sqs.length === 1) return sqs[0];
-  if (sqs.length === 2) return `${sqs[0]} and ${sqs[1]}`;
-  return `${sqs.slice(0, -1).join(', ')}, and ${sqs[sqs.length - 1]}`;
-}
-
 type Struct = NonNullable<ReturnType<typeof describeStructure>>;
 
 /**
