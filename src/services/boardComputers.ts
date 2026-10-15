@@ -46,6 +46,10 @@ export interface BoardRead {
   squares: string[];
   /** Say-once key: the same fact on a later turn is the same key. */
   key: string;
+  /** A second key the claim shares with ANOTHER computer saying the same
+   *  thing (the student's plan goal, said by the plan thread and the plan
+   *  arc) — so whichever speaks second is dropped as already said. */
+  sharedKey?: string;
   /** What the claim puts at stake, for the door's stakes-first order. */
   stakes?: FactStakes;
   /** A move the sentence asks the student to play (arrowed, engine-vouched). */
@@ -258,7 +262,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
     surfaces: { learn: LEARN, review: { not: 'Review stores one engine line per ply, not the MultiPV the fighting line compares' }, play: PLAY_ASK, chat: { not: 'chat\'s assessment has no MultiPV in hand' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK },
   },
   planThread: {
-    read: ({ thread, ...args }) => safe(() => planThreadTurn(thread, args).map((l) => ({ text: l.text, proof: l.proof, squares: l.squares, key: l.claim }))),
+    read: ({ thread, ...args }) => safe(() => planThreadTurn(thread, args).map((l) => ({ text: l.text, proof: l.proof, squares: l.squares, key: l.claim, ...(l.aim ? { sharedKey: l.aim } : {}) }))),
     surfaces: { learn: LEARN, review: { not: 'P2 owed — Review runs its own thread loop over planStopped (coachFeatureService); collapse onto planThreadTurn' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   tacticGeometry: {

@@ -19,6 +19,18 @@ import { deriveNextPlanFacts, type PlanFact } from './nextPlans';
 import { planStoppedProof, planStoppedLine } from './planStopped';
 import { NO_PROOF, type FactProof } from './proof';
 
+/** The plan's goal in the plan arc's own id form (`aimsOf`): a passer and a
+ *  file by their file, an outpost by its square, the king attack as one. Null
+ *  for a plan the arc has no aim for. */
+export function planAimKey(kind: string, at: string | null): string | null {
+  if (kind === 'king-attack') return 'plan-aim:king-attack';
+  if (!at) return null;
+  if (kind === 'passer') return `plan-aim:passer:${at[0]}`;
+  if (kind === 'open-file') return `plan-aim:file:${at[0]}`;
+  if (kind === 'outpost') return `plan-aim:outpost:${at}`;
+  return null;
+}
+
 /** How long a stated plan holds before an unexplained change may replace it. */
 export const PLAN_THREAD_HOLD_PLIES = 4;
 
@@ -41,6 +53,11 @@ export interface PlanThreadLine {
   squares: string[];
   /** Say-once key for the claim ledger. */
   claim: string;
+  /** The plan's GOAL as the plan arc names it (`plan-aim:passer:a`) — shared
+   *  with the arc so one plan is announced once (Learn audit 2026-10-15: "The
+   *  plan changes here — now it's to get your passed pawn on a7 promoting" and
+   *  "Your plan from here: pushing the passed pawn on the a-file" in one turn). */
+  aim?: string;
   /** The stop is proven off their move (exact, read from the board); a new
    *  plan is a description of the position. */
   proof: FactProof;
@@ -84,7 +101,8 @@ export function planThreadTurn(
     : t.stated || t.lastStatedPly !== null
       ? `The plan changes here — now it's to ${body}.`
       : `${cap(top.text)}.`;
-  out.push({ text, squares: top.squares, claim: `plan:student:struct:${top.id}:${args.ply}`, proof: NO_PROOF.description });
+  const aim = planAimKey(top.kind, top.squares[0] ?? top.file ?? null);
+  out.push({ text, squares: top.squares, claim: `plan:student:struct:${top.id}:${args.ply}`, proof: NO_PROOF.description, ...(aim ? { aim } : {}) });
   t.stated = { fact: top, ply: args.ply };
   t.lastStatedPly = args.ply;
   t.wasStopped = false;

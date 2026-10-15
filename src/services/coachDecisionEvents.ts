@@ -194,6 +194,8 @@ export interface LearnTurnRow {
   ownMove: 'affirm' | 'but' | null;
   /** The lanes that gave the student's move its reason (affirm / but beats). */
   ownLanes?: string[];
+  /** The move's reason carries a computed proof (a line, proven squares). */
+  ownProven?: boolean;
   /** WHICH TURN this wave belongs to: the student move it answers (`ply`,
    *  the history length after the student's move) for its instant and late
    *  waves, or a phase line. Null from a caller that predates it. */

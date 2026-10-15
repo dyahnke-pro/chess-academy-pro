@@ -626,7 +626,11 @@ export function decideTurn(
   // engine-proven purpose from a board description (the why counter reads
   // wording; this reads the source).
   const ownLanes = spoke.filter((l) => DNA_BEAT[l] === 'affirm' || DNA_BEAT[l] === 'but');
-  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], ownMove, ownLanes, turn });
+  // …and whether that reason carries a COMPUTED proof (a line, proven
+  // squares) — the lane alone cannot say: `movePoint` carries both the
+  // engine's winning line and a board description.
+  const ownProven = keep.some((f) => { const l = laneFor(f); return !!l && (DNA_BEAT[l] === 'affirm' || DNA_BEAT[l] === 'but') && proofOf.has(f.text); });
+  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], ownMove, ownLanes, ownProven, turn });
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
 }
 

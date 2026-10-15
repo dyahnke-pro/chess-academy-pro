@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**218 lines · 11 exports · 8 importers · 5 tests · 1 audits**
+**220 lines · 11 exports · 8 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -67,7 +67,7 @@
 - `src/services/learnTurnDoor.test.ts:552`
 
 ### `emitLearnTurn` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:629`
+- `src/services/learnTurnDoor.ts:633`
 
 ## Tests
 
