@@ -215,13 +215,12 @@ import {
 } from '../../services/branchExplorer';
 import { warmAmateurPlay, getCachedAmateurPlay } from '../../services/amateurPlayCache';
 
-// The speedrun's two remaining beats (2026-08-06): a refuted tempting move is
-// worth at most a couple of warnings a game; priority-first framing needs
-// room to breathe between firings or every quiet move gets a "priority".
+// Priority-first framing needs room to breathe between firings or every quiet
+// move gets a "priority". (The refuted tempting move had a cap of two a game —
+// removed 2026-10-15, G4.5: the door ranks it; say-once keys each warning.)
 // PRIORITY_FIRST_MIN_PLY_GAP is a BASE gap: `scaleGap` stretches or shrinks it
 // by the student's hint register (David 2026-08-09: "Stronger player more
 // subtle and less often hints. Weaker player much more obvious").
-const REJECTED_TEMPTING_MAX_PER_GAME = 2;
 /** Lead-the-eye colour per spoken fact kind — ONE table for both waves. */
 const COLOR_FOR: Partial<Record<VoiceFactKind, string>> = {
   threat: '#ef4444',   // coming AT the student
@@ -1775,7 +1774,6 @@ export function CoachTeachPage(): JSX.Element {
     planArcRef.current = { theirs: EMPTY_ARC, mine: EMPTY_ARC };
     characterRef.current = EMPTY_CHARACTER;
     positionalSaidRef.current.clear();
-    rejectedTemptingCountRef.current = 0;
     priorityFirstLastPlyRef.current = -999;
     lastBoardMoveRef.current = null;
     setHeldMoveFen(null);
@@ -1964,7 +1962,6 @@ export function CoachTeachPage(): JSX.Element {
   /** The words the dictated reply came from — re-read on the live board when
    *  the stored move has gone illegal (pass-3 walk 2026-10-01). */
   const pendingCoachPhraseRef = useRef<string | null>(null);
-  const rejectedTemptingCountRef = useRef(0);
   const priorityFirstLastPlyRef = useRef(-999);
   // SESSION BOOKENDS (David 2026-07-11): running tallies for the closing
   // takeaway spoken on End Lesson — questions asked/found + slips stopped on.
@@ -10275,7 +10272,7 @@ export function CoachTeachPage(): JSX.Element {
                     // worse than best, refuted by its own line's reply. Rides
                     // alongside whichever beat fired above — it warns about a
                     // DIFFERENT move, so nothing leaks.
-                    if (rejectedTemptingCountRef.current < REJECTED_TEMPTING_MAX_PER_GAME) {
+                    {
                       const rtLines = (studentBest?.topLines ?? [])
                         .slice(0, 4)
                         .filter((l) => typeof l.moves?.[0] === 'string' && typeof l.evaluation === 'number')
@@ -10288,9 +10285,8 @@ export function CoachTeachPage(): JSX.Element {
                         ? buildRejectedTempting({ fen: probe.fen(), studentColor: playerColor, lines: rtLines, baitSquare: m.to })
                         : null;
                       if (rt) {
-                        rejectedTemptingCountRef.current += 1;
                         captureEvent('rejected_tempting_offered', { surface: 'coach-teach', tempting: rt.temptingSan, refutation: rt.refutationSan });
-                        queueSpokenHint(probe.fen(), packageForRegister(rt.hint, discussion.hintDial.register), 'rejectedTempting', legalLineProof(probe.fen(), [rt.temptingSan, rt.refutationSan]) ?? squaresProof(packageForRegister(rt.hint, discussion.hintDial.register), [rt.refutation.from, rt.refutation.to]) ?? NO_PROOF.description, undefined, undefined, undefined, [{ from: rt.refutation.from, to: rt.refutation.to, role: 'line', fen: rt.refutation.fenBefore, source: 'learn.rejectedTempting' }]);
+                        queueSpokenHint(probe.fen(), packageForRegister(rt.hint, discussion.hintDial.register), 'rejectedTempting', legalLineProof(probe.fen(), [rt.temptingSan, rt.refutationSan]) ?? squaresProof(packageForRegister(rt.hint, discussion.hintDial.register), [rt.refutation.from, rt.refutation.to]) ?? NO_PROOF.description, [rt.refutation.from, rt.refutation.to], [`tempting:${rt.temptingSan}:${probe.fen().split(' ').slice(0, 2).join(' ')}`], undefined, [{ from: rt.refutation.from, to: rt.refutation.to, role: 'line', fen: rt.refutation.fenBefore, source: 'learn.rejectedTempting' }]);
                       }
                     }
 

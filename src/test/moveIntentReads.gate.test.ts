@@ -15,3 +15,11 @@ describe('Learn hands moveIntent every read it needs', () => {
     expect(src).toMatch(/\?\? moveIntent\(fenBefore, move\.san, intentReads, 'student', \{ prepare: 'line', prevent: 'concrete'/);
   });
 });
+
+describe('the tempting move that fails is never capped by a count (G4.5, 2026-10-15)', () => {
+  it('no per-game limit; each warning is said once by its own claim', () => {
+    const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    expect(src).not.toMatch(/REJECTED_TEMPTING_MAX_PER_GAME|rejectedTemptingCountRef/);
+    expect(src).toMatch(/\[`tempting:\$\{rt\.temptingSan\}:/);
+  });
+});
