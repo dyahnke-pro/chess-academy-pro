@@ -15,7 +15,8 @@ describe('the center clause needs the core four', () => {
     const c = new Chess();
     c.move('e4'); c.move('e5');
     const text = computeMoveFundamentals(c.fen(), 'Nf3', 'white').map((f) => JSON.stringify(f)).join(' ');
-    expect(text).toMatch(/center on d4 and e5/);
+    // …each square with its role (2026-10-15).
+    expect(text).toMatch(/center on d4, backing the d-pawn's push there, and e5, attacking the enemy pawn there/);
   });
 });
 

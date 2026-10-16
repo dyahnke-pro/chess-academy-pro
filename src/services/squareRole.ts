@@ -22,8 +22,11 @@ export function squareRole(chess: Chess, sq: Square, me: Color, owner: 'their' |
   const other = owner === 'the' ? 'the enemy' : owner;
   const file = sq[0];
   const rank = Number(sq[1]);
-  // An occupied square is a piece to attack or defend — another lesson.
-  if (chess.get(sq)) return null;
+  // AN ENEMY PIECE ON IT is the reason itself (ship #72: "Nf3 attacks the
+  // e5 pawn" was lost when occupied squares were dropped); your own piece on
+  // it is only guarded — no reason, not said.
+  const on = chess.get(sq);
+  if (on) return on.color === them && on.type !== 'k' ? `attacking ${owner === 'the' ? 'the enemy' : owner} ${NAME[on.type]} there` : null;
   // THEIR PAWN'S NEXT STEP: a pawn of theirs one square behind (or two, from
   // its start rank with the way clear).
   const back = them === 'w' ? -1 : 1;
