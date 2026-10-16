@@ -141,7 +141,7 @@ export function whyTally(lines, studentMoves) {
 // questions) is asked once a game. Counted across the tape: on Learn the think
 // pause splits a question from its answer into two spoken lines.
 const PLAN_STATED = /\bthe plan (?:from here is|changes here)\b|\bThe new plan is\b/i;
-const PLAN_WHY = /\bWhy this one\b|\bWhy it matters\b|\bso it comes before\b/i;
+const PLAN_WHY = /\bWhy this one\b|\bWhy it matters\b|\bso it comes before\b|\bWhy in that order\?|\bWhy that (?:target|piece)\?/i;
 const PLAN_METHOD = /\bHow do you find a plan\?/;
 const PLAN_STEP = /\bwas (?:a step of the plan|the plan at work)\b/;
 export function planTally(lines) {

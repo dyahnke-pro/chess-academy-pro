@@ -1945,6 +1945,11 @@ export function CoachTeachPage(): JSX.Element {
    *  an older turn can't speak a line about a position the student already
    *  left (and can't steal the throttle window from the current line). */
   const trackAGenRef = useRef(0);
+  // A THINK-PAUSE ANSWER NOT YET HEARD (Learn audit 2026-10-15): when the
+  // student moves during the pause, the newer turn wins — and the question
+  // ("How do you find a plan?") was left hanging with its answer, the plan
+  // itself, never said. The answer is kept here and leads the next turn.
+  const pendingAnswerRef = useRef<string | null>(null);
   /** THE STUDENT IS IN CONTROL (David 2026-09-24: "even just the question
    *  should immediately cause coach to stop"). The first keystroke of a
    *  question, a tap on the mic, or a spoken "stop" silences the coach at
@@ -10017,7 +10022,9 @@ export function CoachTeachPage(): JSX.Element {
                       });
                       for (const pl of plansNow) {
                         const line = gradeNarrationText(pl.text, probe.fen(), 'CoachTeachPage.structuralPlan')?.trim();
-                        if (line) queueSpokenHint(probe.fen(), line, 'planArc', pl.proof, pl.squares, [pl.key, ...(pl.sharedKey ? [pl.sharedKey] : [])]);
+                        // The plan's routes, hop by hop (David 2026-10-15: "Arrows trace its route?").
+                        const routeClaims: ArrowClaim[] = (pl.routeArrows ?? []).map((a) => ({ from: a.from, to: a.to, role: 'line', fen: a.fen, source: 'learn.planRoute' }));
+                        if (line) queueSpokenHint(probe.fen(), line, 'planArc', pl.proof, pl.squares, [pl.key, ...(pl.sharedKey ? [pl.sharedKey] : [])], undefined, routeClaims.length ? routeClaims : undefined);
                       }
                     } catch { /* the plan is a bonus, never a blocker */ }
                   }
@@ -10635,6 +10642,10 @@ export function CoachTeachPage(): JSX.Element {
                 if (turnAbortRefRef.current) turnAbortRefRef.current.aborted = true;
                 voiceService.stop();
                 speechChainRef.current = Promise.resolve();
+                // The answer the last turn's question never reached leads this one.
+                const owed = pendingAnswerRef.current;
+                pendingAnswerRef.current = null;
+                if (owed) speechChainRef.current = speakComputed(owed, { forced: true, intent: 'learn-live' }).catch(() => undefined);
               }
               speechChainRef.current = (speechChainRef.current ?? Promise.resolve())
                 .then(() => {
@@ -10649,10 +10660,12 @@ export function CoachTeachPage(): JSX.Element {
                   // think, then the answer shown and explained.
                   const qa = splitThink(line);
                   if (!qa) return speakComputed(line, { forced: true, intent: 'learn-live' });
+                  pendingAnswerRef.current = qa[1];
                   return speakComputed(qa[0], { forced: true, intent: 'learn-live' })
                     .then(() => new Promise<void>((res) => { setTimeout(res, THINK_PAUSE_MS); }))
                     .then(() => {
                       if (trackAGenRef.current !== myTrackAGen) return undefined;
+                      if (pendingAnswerRef.current === qa[1]) pendingAnswerRef.current = null;
                       onAnswer?.();
                       return speakComputed(qa[1], { forced: true, intent: 'learn-live' });
                     });

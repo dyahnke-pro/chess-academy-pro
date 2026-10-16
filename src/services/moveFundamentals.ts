@@ -17,6 +17,7 @@
 // pulls from without an import cycle.
 
 import { Chess } from 'chess.js';
+import { namedSquares } from './squareRole';
 import { rotateStem } from '../utils/rotateStem';
 import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZoneClause, standingHoles } from './keySquares';
 import { andList } from '../utils/andList';
@@ -522,7 +523,10 @@ export function computeMoveFundamentals(
     const holes = eyes.filter((s) => standingHoles(seat).includes(s) && !nearKing.includes(s));
     const homeAfter = homeMinorCount(after, mover);
     const weight = Math.min(82, 55 + 6 * (homeAfter + 1));
-    const centerTail = (central.length ? `, fighting for the center on ${andList(central)}` : '')
+    // Each central square is said WITH its role (squareRole), or not at all
+    // (David 2026-10-15: "Start replacing descriptions with teachings").
+    const centralNamed = central.length ? namedSquares(after, central, mover, 'the') : null;
+    const centerTail = (centralNamed ? `, fighting for the center on ${centralNamed}` : '')
       + (holes.length ? `, eyeing ${andList(holes)}` : '')
       + kingZoneClause(nearKing);
     // WITH TEMPO (hand walk 2026-09-24: 3.Nc3 against the Scandinavian queen on
@@ -651,8 +655,10 @@ export function computeMoveFundamentals(
     // takes aim at the center, hitting d5 and e4 and e5" named three of Black's
     // own pawns (Blumenfeld walk F19).
     const eyes = eyesCenter(after, mv.to, mover).filter((s) => CORE_CENTER.includes(s) && after.get(s as Square)?.color !== mover);
-    if (eyes.length >= 2) { // a THRESHOLD, not a cap — two core squares is the bar
-      const hit = andList(eyes);
+    // Each square WITH its role, or the clause is not said (2026-10-15).
+    const named = eyes.length >= 2 ? namedSquares(after, eyes, mover, 'the') : null;
+    if (named) { // a THRESHOLD, not a cap — two core squares is the bar
+      const hit = named;
       out.push({
         id: 'center',
         weight: 52,

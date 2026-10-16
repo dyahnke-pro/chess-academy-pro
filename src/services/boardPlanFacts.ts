@@ -120,7 +120,7 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
     why: whyThisPlan(facts),
     ordered: facts.some((p) => p.kind !== facts[0]?.kind),
     methodSquares: read && mp ? [...new Set([...methodSquares(read), ...mp.squares])] : [],
-    method: read && mp ? stripThink(`${methodLine(read)} So the plan: ${mp.text}.${mp.why ? ` Why in that order? ${mp.why}.` : ''}`) : null,
+    method: read && mp ? stripThink(`${methodLine(read)} So the plan: ${mp.text}.${mp.why ? ` ${mp.whyAsk} ${cap(mp.why)}.` : ''}`) : null,
   };
 }
 

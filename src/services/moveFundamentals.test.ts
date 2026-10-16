@@ -19,15 +19,17 @@ function fund(id: MoveFundamental['id'], weight: number): MoveFundamental {
 }
 
 describe('computeMoveFundamentals — development leads a quiet developing move', () => {
-  it('Nf3 from the start: development, naming the center it fights for', () => {
+  // Each square is said WITH its role (squareRole, David 2026-10-15: "Start
+  // replacing descriptions with teachings").
+  it('Nf3 from the start: development, naming the center it fights for and why', () => {
     const funds = computeMoveFundamentals(START, 'Nf3', 'white');
     expect(funds[0].id).toBe('development');
     expect(funds[0].squares).toContain('f3');
     expect(strategicWhyLed(START, 'Nf3', 'white')).toBe(
-      'develops into the game, fighting for the center on d4 and e5',
+      'develops into the game, fighting for the center on d4, backing the d-pawn\'s push there, and e5, holding back the enemy e-pawn',
     );
     expect(strategicWhySelfContained(START, 'Nf3', 'white')).toBe(
-      'develops the knight into the game, fighting for the center on d4 and e5',
+      'develops the knight into the game, fighting for the center on d4, backing the d-pawn\'s push there, and e5, holding back the enemy e-pawn',
     );
   });
 

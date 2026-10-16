@@ -29,7 +29,7 @@ describe('the method — three questions, answered on the board', () => {
   it('names their weakness, and asks before it answers', () => {
     const read = methodRead(ISO, 'w');
     expect(read?.weakness?.phrase).toBe('their isolated pawn on d5');
-    expect(methodLine(read!)).toMatch(/^How do you find a plan\? .*‖ Their weakness: their isolated pawn on d5\./);
+    expect(methodLine(read!)).toMatch(/^How do you find a plan\? .*‖ Checks, captures, threats: [^.]*\. Their weakness: their isolated pawn on d5\./);
   });
 });
 
@@ -89,5 +89,51 @@ describe('the method\'s answers make the plan', () => {
     const line = planThreadTurn(newPlanThread(), { ply: 59, fenBefore: passer, fenAfter: passer, student: 'w' })[0]?.text ?? '';
     expect(line).toMatch(/passed pawn/);
     expect(line).not.toMatch(/How do you find a plan/);
+  });
+});
+
+// David 2026-10-15: "Arrows trace its route?" — every step of the plan's
+// routes is an arrow, each a legal move on its OWN board (the piece walked).
+describe('the plan traces its routes', () => {
+  const FEN = 'r3nrk1/pp1p1ppp/8/4P3/8/3B1N2/PP3PPP/R4RK1 b - - 0 15';
+  it('rook to the file, the knight hop by hop, the break pushes', async () => {
+    const { newPlanThread, planThreadTurn } = await import('./planThread');
+    const { Chess } = await import('chess.js');
+    const l = planThreadTurn(newPlanThread(), { ply: 30, fenBefore: FEN, fenAfter: FEN, student: 'b' })[0];
+    expect(l?.arrows?.map((a) => a.from + a.to)).toEqual(['a8c8', 'e8c7', 'c7e6', 'e6d4', 'd7d6', 'f7f6']);
+    for (const a of l?.arrows ?? []) {
+      const parts = a.fen.split(' '); parts[1] = 'b';
+      expect(new Chess(parts.join(' ')).move({ from: a.from, to: a.to }), `${a.from}${a.to}`).toBeTruthy();
+    }
+  });
+});
+
+// David 2026-10-15: "Plans should also come from CCT" — the forcing scan is
+// step zero: what it finds is the plan's first step.
+describe('checks, captures, threats come first', () => {
+  it('a free piece of theirs is the first step of the plan', async () => {
+    const { methodRead, methodPlan } = await import('./planChoice');
+    // Their knight on d4 is attacked by your rook on d8 and guarded by nothing.
+    const fen = '3rnrk1/pp3ppp/8/4P3/3N4/8/PP3PPP/R4RK1 b - - 0 15';
+    const r = methodRead(fen, 'b');
+    expect(r?.cct?.answer).toMatch(/their knight on d4 is free to take/);
+    expect(methodPlan(r!)?.steps[0]).toMatch(/^take their knight on d4 first/);
+  });
+  it('a quiet board says the scan found nothing — and never claims checks it did not look for', async () => {
+    const { methodRead, methodLine } = await import('./planChoice');
+    const r = methodRead('r3nrk1/pp1p1ppp/8/4P3/8/3B1N2/PP3PPP/R4RK1 b - - 0 15', 'b')!;
+    expect(methodLine(r)).toMatch(/Checks, captures, threats: nothing of yours can be taken, and nothing of theirs is free\./);
+  });
+});
+
+describe('a why question is never asked twice in a game', () => {
+  it('the second plan beating the same alternative says "Why it matters:"', async () => {
+    const { newPlanThread, planThreadTurn } = await import('./planThread');
+    const t = newPlanThread();
+    t.methodSaid = true;
+    t.whyAsked.add('seizing the open c-file');
+    const fen = '6k1/1P3ppp/8/8/8/8/5PPP/2r3K1 w - - 0 30';
+    const line = planThreadTurn(t, { ply: 59, fenBefore: fen, fenAfter: fen, student: 'w' })[0]?.text ?? '';
+    expect(line).not.toMatch(/Why this one and not seizing the open c-file\?/);
   });
 });

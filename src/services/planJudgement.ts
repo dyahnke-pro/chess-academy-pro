@@ -8,6 +8,7 @@
 // chess.js (the same piece, the same square, the scope counted) and carries
 // the line it rests on as its proof — said short, never recited as fact (an
 // engine proof is not exact). Pure.
+import { namedSquares } from './squareRole';
 import type { Color, Square } from 'chess.js';
 import { legalLineProof, squaresProof, type Proof } from './proof';
 import { costStakes, isSacrifice } from './factStakes';
@@ -128,14 +129,17 @@ export function planOverOneMove(fenBefore: string, san: string, bestSan: string 
   if (!before) return null;
   const gained = CENTRAL_SQUARES.filter((s) => b.after.attackers(s as Square, b.mv.color).includes(b.mv.to)
     && !before.attackers(s as Square, b.mv.color).includes(b.mv.from));
-  if (gained.length === 0) return null;
+  // The plan's squares are said WITH what they are for, or the read is not
+  // made (2026-10-15: "adds control of d4 and d5" was a description).
+  const gainedNamed = namedSquares(b.after, gained, b.mv.color, 'their');
+  if (gained.length === 0 || !gainedNamed) return null;
   const proof = legalLineProof(fenBefore, [bestSan]);
   if (!proof) return null;
   return {
     act: 'plan-over-one-move', squares: [r.mv.to, b.mv.to, gained[0]], proof, key: `one-move:${r.mv.to}`,
     stakes: costStakes(cpLoss) ?? undefined,
-    text: `The ${shot} is a one-move idea; ${bare(bestSan)} is the plan: it adds control of ${andList(gained)}.`,
-    ...heldOf(`The ${shot} is a one-move idea; the plan is a quiet move that adds control of ${andList(gained)}.`, [r.mv.to, ...gained]),
+    text: `The ${shot} is a one-move idea; ${bare(bestSan)} is the plan: it covers ${gainedNamed}.`,
+    ...heldOf(`The ${shot} is a one-move idea; the plan is a quiet move that covers ${gainedNamed}.`, [r.mv.to, ...gained]),
   };
 }
 

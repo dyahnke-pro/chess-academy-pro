@@ -345,9 +345,11 @@ function phrase(
     // LEGAL, it just loses (walk 2026-09-30: said five times in one game).
     if (prevents && why) return `${played} — now ${stop} doesn't work: ${why}.`;
     if (prevents) return rotateStem([`${played} — now ${stop} doesn't work.`, `The point of ${played}: it takes ${stop} away.`], key);
-    if (does?.castle) return rotateStem([`${played} clears the way to castle.`, `${played} first, so you can castle next.`], key);
-    if (does) return rotateStem([`${played} first, so that ${prep} can ${does.verb}.`, `${played} prepares ${prep}, to ${does.verb}.`], key);
-    return rotateStem([`${played} prepares ${prep}.`, `${played} first, so that ${prep} comes next.`], key);
+    // Every stem names the seat (review audit 2026-10-15: "…e5 first, so that
+    // …Bd6 can bring the bishop into the game" said whose move to no one).
+    if (does?.castle) return rotateStem([`Your ${played} clears the way to castle.`, `You play ${played} first, so you can castle next.`], key);
+    if (does) return rotateStem([`You play ${played} first, so that ${prep} can ${does.verb}.`, `Your ${played} prepares ${prep}, to ${does.verb}.`], key);
+    return rotateStem([`Your ${played} prepares ${prep}.`, `You play ${played} first, so that ${prep} comes next.`], key);
   }
   const stop = prevents ? `your ${dot(prevents.san, opp)}` : '';
   const prep = prepares ? dot(prepares.san, mover) : '';

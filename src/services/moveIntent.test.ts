@@ -29,7 +29,7 @@ describe('moveIntent — his reasons on his game', () => {
   it('Kh1: "first the king steps to h1" so that f4 comes', () => {
     const out = run('15');
     expect(out?.prepares?.san).toBe('f4');
-    expect(out?.text).toMatch(/^Kh1 (first, so that f4|prepares f4)/);
+    expect(out?.text).toMatch(/^(You play Kh1 first, so that f4|Your Kh1 prepares f4)/);
   });
 
   it('c3: "preparing to roll the centre with d4"', () => {

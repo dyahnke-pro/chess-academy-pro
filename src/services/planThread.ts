@@ -18,7 +18,7 @@ import type { Color } from 'chess.js';
 import { deriveNextPlanFacts, type PlanFact, type PlanKind } from './nextPlans';
 import { planStoppedProof, planStoppedLine } from './planStopped';
 import { NO_PROOF, type FactProof } from './proof';
-import { methodRead, methodLine, methodSquares, methodPlan, whyThisPlan, planWorth } from './planChoice';
+import { methodRead, methodLine, methodSquares, methodPlan, whyThisPlan, planWorth, type RouteArrow } from './planChoice';
 import { planStepLine } from './planStep';
 import { THINK_MARK } from '../utils/thinkPause';
 
@@ -53,16 +53,20 @@ export interface PlanThread {
   howSaid: Set<string>;
   /** The three questions of the method have been asked this game. */
   methodSaid: boolean;
+  /** The "why this one and not X?" questions already asked — a repeat is
+   *  dropped as said, which left the next plan's reason without its question
+   *  (review audit 2026-10-15), so a repeat asks "Why it matters:" instead. */
+  whyAsked: Set<string>;
 }
 
 export function newPlanThread(): PlanThread {
-  return { stated: null, stoppedInRow: 0, wasStopped: false, lastStatedPly: null, howSaid: new Set<string>(), methodSaid: false };
+  return { stated: null, stoppedInRow: 0, wasStopped: false, lastStatedPly: null, howSaid: new Set<string>(), methodSaid: false, whyAsked: new Set<string>() };
 }
 
 /** A copy to try a turn on: a surface that commits only what was SPOKEN
  *  (review's door) runs the turn on the copy and adopts it when a line speaks. */
 export function clonePlanThread(t: PlanThread): PlanThread {
-  return { ...t, howSaid: new Set(t.howSaid) };
+  return { ...t, howSaid: new Set(t.howSaid), whyAsked: new Set(t.whyAsked) };
 }
 
 export interface PlanThreadLine {
@@ -78,6 +82,8 @@ export interface PlanThreadLine {
   /** The stop is proven off their move (exact, read from the board); a new
    *  plan is a description of the position. */
   proof: FactProof;
+  /** Each step of the plan's routes, hop by hop, on its own board (planChoice). */
+  arrows?: RouteArrow[];
 }
 
 const cap = (s: string): string => openSentence(s);
@@ -143,7 +149,7 @@ export function planThreadTurn(
   // questions before an unrelated plan is what made them not line up.
   const methodOwns = top.kind !== 'passer' && top.kind !== 'convert';
   const read = !t.methodSaid && methodOwns ? methodRead(args.fenAfter, args.student) : null;
-  const mp = read ? methodPlan(read) : null;
+  const mp = read ? methodPlan(read, args.fenAfter) : null;
   // WHY THIS ONE — the reason it outranks the next plan on the board. Asked as
   // a question when no method question already opened the line (one pause).
   const why = whyThisPlan(plans);
@@ -151,23 +157,24 @@ export function planThreadTurn(
   const whyText = why
     ? read
       ? ` Why this one first? ${cap(why)}.`
-      : alt
+      : alt && !t.whyAsked.has(alt.goalIng)
         // The question names the plan it beats; the answer is the reason alone.
         ? ` Why this one and not ${alt.goalIng}? ${THINK_MARK} ${cap(planWorth(top))}.`
-        : ` Why it matters: ${why}.`
+        : ` Why it matters: ${planWorth(top)}.`
     : '';
   // THE ANSWERS MAKE THE PLAN (planChoice.methodPlan): the steps the three
   // questions found, in the order a strong player plays them, and why that order.
   const text = read && mp
-    ? `${methodLine(read)} So the plan: ${mp.text}.${mp.why ? ` Why in that order? ${mp.why}.` : ''}`
+    ? `${methodLine(read)} So the plan: ${mp.text}.${mp.why ? ` ${mp.whyAsk} ${cap(mp.why)}.` : ''}`
     : `${said}${whyText}`;
+  if (!(read && mp) && why && !read && alt) t.whyAsked.add(alt.goalIng);
   if (read && mp) t.methodSaid = true;
   // The how-to is marked said only when it WAS said: the method's own plan
   // carries the steps instead, so the plan's how waits for its next statement.
   else t.howSaid.add(top.id);
   const squares = read && mp ? [...new Set([...methodSquares(read), ...mp.squares])] : top.squares;
   const aim = planAimKey(top.kind, top.squares[0] ?? top.file ?? null);
-  out.push({ text, squares, claim: `plan:student:struct:${top.id}:${args.ply}`, proof: NO_PROOF.description, ...(aim ? { aim } : {}) });
+  out.push({ text, squares, claim: `plan:student:struct:${top.id}:${args.ply}`, proof: NO_PROOF.description, ...(aim ? { aim } : {}), ...(read && mp?.arrows.length ? { arrows: mp.arrows } : {}) });
   t.stated = { fact: top, ply: args.ply };
   t.lastStatedPly = args.ply;
   t.wasStopped = false;

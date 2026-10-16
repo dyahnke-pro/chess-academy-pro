@@ -223,9 +223,12 @@ describe('planJudgement', () => {
   });
 
   it('the plan over the one-move shot: the check is one move, Bf4 takes e5', () => {
-    const fen = legal('4k3/pp3ppp/8/8/8/8/PP3PPP/2B1KB2 w - - 0 20');
+    // The square the plan takes is said WITH its role (2026-10-15): e5 holds
+    // back their e-pawn. Without a role the read is not made (below).
+    const fen = legal('4k3/pp2pppp/8/8/8/8/PP3PPP/2B1KB2 w - - 0 20');
     const r = voiced(planOverOneMove(fen, 'Bb5+', 'Bf4', 50));
-    expect(r.text).toBe('The check is a one-move idea; Bf4 is the plan: it adds control of e5.');
+    expect(r.text).toBe('The check is a one-move idea; Bf4 is the plan: it covers e5, holding back their e-pawn.');
+    expect(planOverOneMove(legal('4k3/pp3ppp/8/8/8/8/PP3PPP/2B1KB2 w - - 0 20'), 'Bb5+', 'Bf4', 50)).toBeNull();
     // A quiet move of the student's is no one-move shot.
     expect(planOverOneMove(fen, 'Be2', 'Bf4', 50)).toBeNull();
   });

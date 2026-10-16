@@ -105,7 +105,7 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
   let text: string;
   if (homeMinorCount(c, student) >= 2 || (!castled && theirPieces >= 3)) {
     step = 'finish-development';
-    text = `You're ${boardEdgeWords(c.fen(), student, edge)} up — before any plan, finish developing and get your king safe. Up material, the only way to lose is to get careless.`;
+    text = `You're up ${boardEdgeWords(c.fen(), student, edge)} — before any plan, finish developing and get your king safe. Up material, the only way to lose is to get careless.`;
   } else if (theirPieces === 0 && theirPawns === 0) {
     step = 'cut-off-king';
     const heavy = (['q', 'r'] as const).find((t) => c.board().some((row) => row.some((x) => x && x.color === student && x.type === t)));
@@ -120,10 +120,10 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
     text = `You're ${boardEdgeWords(c.fen(), student, edge)} up and their king is short of defenders — ${k?.attackers.size ?? 0} of your pieces on it against ${k?.defenders.size ?? 0}. Don't cash in with trades yet: the attack is the fastest win.`;
   } else if (theirPieces >= 2) {
     step = 'trade-pieces';
-    text = `You're ${boardEdgeWords(c.fen(), student, edge)} up — trade pieces, not pawns. Every piece that comes off makes your extra material count for more.`;
+    text = `You're up ${boardEdgeWords(c.fen(), student, edge)} — trade pieces, not pawns. Every piece that comes off makes your extra material count for more.`;
   } else if (!passer) {
     step = 'make-passer';
-    text = `You're ${boardEdgeWords(c.fen(), student, edge)} up with few pieces left — now make a passed pawn. The extra material wins by making a new queen, not by hunting the king.`;
+    text = `You're up ${boardEdgeWords(c.fen(), student, edge)} with few pieces left — now make a passed pawn. The extra material wins by making a new queen, not by hunting the king.`;
   } else {
     step = 'escort-passer';
     // "and pieces" only when there are pieces — a pawn ending escorts with the

@@ -54,6 +54,9 @@ export interface BoardRead {
   sharedKey?: string;
   /** What the claim puts at stake, for the door's stakes-first order. */
   stakes?: FactStakes;
+  /** A route the sentence names, one arrow per step, each on its own board
+   *  (the plan's piece walked hop by hop) — drawn as `line` arrows. */
+  routeArrows?: Array<{ from: string; to: string; fen: string }>;
   /** A move the sentence asks the student to play (arrowed, engine-vouched). */
   play?: { from: string; to: string };
   /** Lines the proof plays out, for the Show-the-line button. */
@@ -292,7 +295,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
     surfaces: { learn: LEARN, review: { not: 'Review stores one engine line per ply, not the MultiPV the fighting line compares' }, play: PLAY_ASK, chat: { not: 'chat\'s assessment has no MultiPV in hand' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK },
   },
   planThread: {
-    read: ({ thread, ...args }) => safe(() => planThreadTurn(thread, args).map((l) => ({ text: l.text, proof: l.proof, squares: l.squares, key: l.claim, ...(l.aim ? { sharedKey: l.aim } : {}) }))),
+    read: ({ thread, ...args }) => safe(() => planThreadTurn(thread, args).map((l) => ({ text: l.text, proof: l.proof, squares: l.squares, key: l.claim, ...(l.aim ? { sharedKey: l.aim } : {}), ...(l.arrows ? { routeArrows: l.arrows } : {}) }))),
     surfaces: { learn: LEARN, review: { wired: 'services/coachFeatureService.ts' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   tacticGeometry: {

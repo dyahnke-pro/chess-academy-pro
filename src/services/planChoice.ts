@@ -25,16 +25,24 @@ import { findPawnBreaks, findWeakSquares } from './positionReadingService';
 import { enemyKingStuckInCenter } from './reviewSacrifice';
 import { orList } from '../utils/andList';
 import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
+import { readBoardUrgency } from './boardUrgency';
 import { THINK_MARK } from '../utils/thinkPause';
 
 export interface MethodRead {
   /** Their weakness, as a phrase ("their king, still on e8", "their isolated pawn on d5"). */
-  weakness: { phrase: string; square: string; kind: 'king' | 'isolated' | 'hole'; step: string | null; to: string[] } | null;
+  weakness: { phrase: string; square: string; kind: 'king' | 'isolated' | 'hole'; step: string | null; to: string[]; route?: string[] } | null;
   /** The student's worst-placed piece — and, when it has one, the step that
    *  improves it (a rook with an open file to take, a piece with a route). */
-  worst: { phrase: string; square: string; step: string | null; to: string[] } | null;
+  worst: { phrase: string; square: string; step: string | null; to: string[]; route?: string[] } | null;
   /** The student's pawn breaks (squares a pawn can strike). */
   breaks: string[];
+  /** Each break as the push that makes it ([from, to]), for its arrow. */
+  breakPushes?: Array<[string, string]>;
+  /** STEP ZERO — checks, captures, threats (David 2026-10-15: "Plans should
+   *  also come from CCT"): what cannot wait, read by the one urgency computer
+   *  (`readBoardUrgency`). `answer` is what the scan found; `step` is the move
+   *  that comes before the plan, or null when nothing is forcing. */
+  cct?: { answer: string; step: string | null; squares: string[] };
 }
 
 function flipTo(fen: string, color: Color): string | null {
@@ -62,13 +70,15 @@ export function methodRead(fen: string, student: Color): MethodRead | null {
     const iso = struct.pawns.isolatedPawns[enemy].find((sq) => 'cdef'.includes(sq[0])) ?? struct.pawns.isolatedPawns[enemy][0];
     if (iso) weakness = { phrase: `their isolated pawn on ${iso}`, square: iso, kind: 'isolated', step: `pile up on their pawn on ${iso}`, to: [] };
     else {
-      const holes = findWeakSquares(fen)[enemy === 'w' ? 'white' : 'black'];
+      // A hole their piece already stands on is guarded by being occupied —
+      // the weakness is a hole still EMPTY for you to use.
+      const holes = findWeakSquares(fen)[enemy === 'w' ? 'white' : 'black'].filter((h) => !chess.get(h));
       if (holes[0]) {
         const route = knightRouteTo(chess, holes[0], student);
         const step = route
           ? `bring your knight on ${route.from} to ${holes[0]}${route.via.length ? `, by way of ${route.via.join(' and ')}` : ''} — no pawn of theirs can attack it there`
           : null;
-        weakness = { phrase: `the hole on ${holes[0]} that no pawn of theirs can guard`, square: holes[0], kind: 'hole', step, to: route ? [route.from, ...route.via] : [] };
+        weakness = { phrase: `the hole on ${holes[0]} that no pawn of theirs can guard`, square: holes[0], kind: 'hole', step, to: route ? [route.from, ...route.via] : [], ...(route ? { route: [route.from, ...route.via, holes[0]] } : {}) };
       }
     }
   }
@@ -76,20 +86,53 @@ export function methodRead(fen: string, student: Color): MethodRead | null {
   let worst: MethodRead['worst'] = null;
   if (w) {
     const r = computePieceRoute(fen, w.sq as Square) ?? computeSliderRoute(fen, w.sq as Square);
-    worst = { phrase: `your ${PIECE_NOUN[w.type]} on ${w.sq}`, square: w.sq, step: r && r.route.length ? `walk your ${PIECE_NOUN[w.type]} to ${r.target}` : null, to: r ? [...r.route] : [] };
+    worst = { phrase: `your ${PIECE_NOUN[w.type]} on ${w.sq}`, square: w.sq, step: r && r.route.length ? `walk your ${PIECE_NOUN[w.type]} to ${r.target}` : null, to: r ? [...r.route] : [], ...(r && r.route.length ? { route: [w.sq, ...r.route] } : {}) };
   } else {
     // A ROOK WITH NO FILE is the worst piece once a file is open (David
     // 2026-10-15: "improve the rook by placing it on open file"): the plan
     // computer reads that as its own plan, so the method has to name it too,
     // or the answers and the plan disagree.
     const file = struct.pawns.openFiles.find((f) => !chess.board().flat().some((c) => c?.color === student && (c.type === 'r' || c.type === 'q') && c.square[0] === f));
-    const rook = file ? chess.board().flat().find((c) => c?.color === student && c.type === 'r') : null;
-    if (file && rook) worst = { phrase: `your rook on ${rook.square}, with no open file yet`, square: rook.square, step: `put a rook on the open ${file}-file`, to: [`${file}${student === 'w' ? '1' : '8'}`] };
+    // The rook that reaches the file in one move is the one named, and its
+    // move is the arrow; none reaches → the first rook, with no arrow.
+    const asMeFen = flipTo(fen, student);
+    const reach = file && asMeFen ? new Chess(asMeFen).moves({ verbose: true }).find((m) => m.piece === 'r' && m.to[0] === file && m.from[0] !== file && !m.captured) : undefined;
+    const rook = reach ? { square: reach.from } : file ? chess.board().flat().find((c) => c?.color === student && c.type === 'r') ?? null : null;
+    if (file && rook) worst = { phrase: `your rook on ${rook.square}, with no open file yet`, square: rook.square, step: `put a rook on the open ${file}-file`, to: [reach ? reach.to : `${file}${student === 'w' ? '1' : '8'}`], ...(reach ? { route: [reach.from, reach.to] } : {}) };
   }
   const asMe = chess.turn() === student ? fen : flipTo(fen, student);
   const breaks: string[] = asMe ? findPawnBreaks(asMe) : [];
-  if (!weakness && !worst && breaks.length === 0) return null;
-  return { weakness, worst, breaks };
+  const pushes = asMe ? new Chess(asMe).moves({ verbose: true }).filter((m) => m.piece === 'p' && !m.captured && breaks.includes(m.to)) : [];
+  const breakPushes = breaks.flatMap((b): Array<[string, string]> => { const m = pushes.find((x) => x.to === b); return m ? [[m.from, m.to]] : []; });
+  const cct = cctRead(fen, student);
+  if (!weakness && !worst && breaks.length === 0 && !cct?.step) return null;
+  return { weakness, worst, breaks, breakPushes, ...(cct ? { cct } : {}) };
+}
+
+const UNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/** Checks, captures, threats — the forcing scan before any plan, answered by
+ *  the one urgency computer. The bigger stake leads, as in `urgencyLead`. Only
+ *  what the computer read is claimed: a free piece of theirs is said only on
+ *  the student's move, and checks are not claimed when none were looked for. */
+function cctRead(fen: string, student: Color): MethodRead['cct'] | null {
+  const u = readBoardUrgency(fen, student === 'w' ? 'white' : 'black');
+  if (!u) return null;
+  const biggestSave = u.save[0]?.value ?? 0;
+  if (u.win && u.win.value >= biggestSave) {
+    return { answer: `their ${UNAME[u.win.piece]} on ${u.win.square} is free to take`, step: `take their ${UNAME[u.win.piece]} on ${u.win.square} first — material on offer comes before any plan`, squares: [u.win.square] };
+  }
+  if (u.save[0]) {
+    const s0 = u.save[0];
+    if (u.takeAttacker) {
+      return { answer: `your ${UNAME[s0.piece]} on ${s0.square} is attacked`, step: `take their ${UNAME[u.takeAttacker.piece]} on ${u.takeAttacker.square}, the piece attacking your ${UNAME[s0.piece]}`, squares: [s0.square, u.takeAttacker.square] };
+    }
+    return { answer: `your ${UNAME[s0.piece]} on ${s0.square} can be taken`, step: `get your ${UNAME[s0.piece]} on ${s0.square} out of danger first`, squares: [s0.square] };
+  }
+  if (u.promotion) {
+    return { answer: `their pawn on ${u.promotion.from} is one step from promoting`, step: `stop their pawn on ${u.promotion.from} first`, squares: [u.promotion.from, u.promotion.to] };
+  }
+  return { answer: u.myMove ? 'nothing of yours can be taken, and nothing of theirs is free' : 'nothing of yours can be taken', step: null, squares: [] };
 }
 
 /** What makes each plan's target worth playing for, on its own squares. */
@@ -161,35 +204,68 @@ function knightRouteTo(chess: Chess, target: Square, me: Color): { from: string;
  *  computer, so what the student is told to ask and the plan they hear can
  *  never disagree. The ORDER is taught too: pieces first, the break last.
  *  Null when the answers give no step to play. */
-export function methodPlan(read: MethodRead): { steps: string[]; text: string; why: string | null; squares: string[] } | null {
+/** One arrow per step of a route, each on its OWN board — the piece moved
+ *  along the route so far — so the arrow door checks every hop as a legal
+ *  move from where the piece will stand (David 2026-10-15: "Arrows trace its
+ *  route?"). The opponent's replies are not invented: the board is the one
+ *  in front of the student with only this piece walked. */
+export interface RouteArrow { from: string; to: string; fen: string }
+function routeArrows(fen: string, route: readonly string[]): RouteArrow[] {
+  const out: RouteArrow[] = [];
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return out; }
+  const piece = c.get(route[0] as Square);
+  if (!piece) return out;
+  for (let i = 0; i + 1 < route.length; i++) {
+    out.push({ from: route[i], to: route[i + 1], fen: c.fen() });
+    c.remove(route[i] as Square);
+    if (c.get(route[i + 1] as Square)) break;
+    c.put(piece, route[i + 1] as Square);
+  }
+  return out;
+}
+
+export function methodPlan(read: MethodRead, fen?: string): { steps: string[]; text: string; why: string | null; whyAsk: string; squares: string[]; arrows: RouteArrow[] } | null {
   const steps: string[] = [];
+  if (read.cct?.step) steps.push(read.cct.step);
   if (read.worst?.step) steps.push(read.worst.step);
   if (read.weakness?.step) steps.push(read.weakness.step);
-  const pieces = steps.length;
+  const pieces = steps.length - (read.cct?.step ? 1 : 0);
   if (read.breaks.length) steps.push(`${pieces ? 'then ' : ''}break open with the push to ${orList(read.breaks)}`);
   if (!steps.length) return null;
   const text = steps.length === 1
     ? steps[0]
     : `${steps.slice(0, -1).join('; ')}; ${steps[steps.length - 1]}`;
+  // EVERY PLAN SAYS WHY: the order when there is one; otherwise why that
+  // target, or why that piece.
   const why = pieces && read.breaks.length
     ? 'A break opens the position, and an open position helps the side whose pieces are already on their best squares — so the pieces go first and the break comes last'
-    : null;
-  const squares = [...(read.worst?.to ?? []), ...(read.weakness ? [read.weakness.square, ...read.weakness.to] : []), ...read.breaks];
-  return { steps, text, why, squares: [...new Set(squares)].filter((x) => /^[a-h][1-8]$/.test(x)) };
+    : read.weakness?.step ? WEAKNESS_WHY[read.weakness.kind](read.weakness.square)
+      : read.worst?.step ? 'a position is only as strong as its worst piece'
+        : null;
+  const whyAsk = pieces && read.breaks.length ? 'Why in that order?' : read.weakness?.step ? 'Why that target?' : 'Why that piece?';
+  const squares = [...(read.cct?.squares ?? []), ...(read.worst?.to ?? []), ...(read.weakness ? [read.weakness.square, ...read.weakness.to] : []), ...read.breaks];
+  const arrows: RouteArrow[] = fen ? [
+    ...(read.worst?.step && read.worst.route ? routeArrows(fen, read.worst.route) : []),
+    ...(read.weakness?.step && read.weakness.route ? routeArrows(fen, read.weakness.route) : []),
+    ...(read.breakPushes ?? []).flatMap(([f, t]) => routeArrows(fen, [f, t])),
+  ] : [];
+  return { steps, text, why, whyAsk, squares: [...new Set(squares)].filter((x) => /^[a-h][1-8]$/.test(x)), arrows };
 }
 
 /** The method spoken as a question and its answer: the student thinks first. */
 export function methodLine(read: MethodRead): string {
   const parts: string[] = [];
+  if (read.cct) parts.push(`Checks, captures, threats: ${read.cct.answer}.`);
   if (read.weakness) parts.push(`Their weakness: ${read.weakness.phrase}.`);
   if (read.worst) parts.push(`Your worst piece: ${read.worst.phrase}.`);
   if (read.breaks.length) parts.push(`Your pawn break: the push to ${orList(read.breaks)}.`);
-  return `How do you find a plan? Ask three things — where is their weakness, which of your pieces is worst, where is your pawn break? ${THINK_MARK} ${parts.join(' ')}`;
+  return `How do you find a plan? First the forcing scan — checks, captures, threats. Then three things: where is their weakness, which of your pieces is worst, where is your pawn break? ${THINK_MARK} ${parts.join(' ')}`;
 }
 
 /** The squares the method names, to mark on the board. */
 export function methodSquares(read: MethodRead): Square[] {
-  return [read.weakness?.square, read.worst?.square, ...read.breaks].filter((s): s is string => !!s && /^[a-h][1-8]$/.test(s)) as Square[];
+  return [...(read.cct?.squares ?? []), read.weakness?.square, read.worst?.square, ...read.breaks].filter((s): s is string => !!s && /^[a-h][1-8]$/.test(s)) as Square[];
 }
 
 /** WHY a weakness is one — the reason, by kind, so "what is their weakness?"
