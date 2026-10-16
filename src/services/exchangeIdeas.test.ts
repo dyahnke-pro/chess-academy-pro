@@ -256,3 +256,17 @@ describe('safe only because — a material loss is settled by the ledger', () =>
     expect(r.proof.line?.sans.slice(0, 2)).toEqual(['a3', 'Qxg3']);
   });
 });
+
+// Grade walk 2026-10-16: "Two pawns for a piece — they are a pawn up overall"
+// and, a few moves on, "A rook and three pawns for three pieces — they are a
+// pawn up overall". Same balance, new mix: one claim, said once.
+describe('material arithmetic is said once per balance', () => {
+  it('two different mixes with the same verdict share one claim', async () => {
+    const { materialArithmetic } = await import('./exchangeIdeas');
+    const a = materialArithmetic('2kr1b1r/ppp2ppp/4pn2/q7/3n2P1/2N2N2/PPPBBPP1/R2Q1K1R b - - 1 10', 'Nxg4', 'b');
+    const b = materialArithmetic('2kr3r/ppp2ppp/2n5/q2p4/8/P1N2N2/1PPBBnP1/R2Q2K1 w - - 0 14', 'Kxf2', 'b');
+    expect(a?.text).toMatch(/they are a pawn up overall/);
+    expect(b?.text).toMatch(/they are a pawn up overall/);
+    expect(a?.claim).toBe(b?.claim);
+  });
+});

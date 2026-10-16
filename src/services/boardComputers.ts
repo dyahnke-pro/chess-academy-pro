@@ -57,6 +57,8 @@ export interface BoardRead {
   /** A route the sentence names, one arrow per step, each on its own board
    *  (the plan's piece walked hop by hop) — drawn as `line` arrows. */
   routeArrows?: Array<{ from: string; to: string; fen: string }>;
+  /** THEIR intended move the sentence warns about (drawn as theirs). */
+  theirs?: { from: string; to: string };
   /** A move the sentence asks the student to play (arrowed, engine-vouched). */
   play?: { from: string; to: string };
   /** Lines the proof plays out, for the Show-the-line button. */
@@ -172,7 +174,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
     read: ({ fen, engineFirstMoves }) => safe(() => {
       const ph = findProphylaxis(fen);
       if (!ph || !engineFirstMoves.includes(`${ph.prevention.from}${ph.prevention.to}`)) return null;
-      return { text: prophylaxisLine(ph), proof: prophylaxisProof(ph), squares: ph.squares, key: `prophylaxis:${ph.intent.to}`, play: { from: ph.prevention.from, to: ph.prevention.to },
+      return { text: prophylaxisLine(ph), proof: prophylaxisProof(ph), squares: ph.squares, key: `prophylaxis:${ph.intent.to}`, play: { from: ph.prevention.from, to: ph.prevention.to }, theirs: { from: ph.intent.from, to: ph.intent.to },
         // Held: their idea and that one move stops it — never which move
         // (easy walk 2026-10-11: "h3 first — it stops the pin" unasked).
         namesMove: true, idea: prophylaxisIdea(ph) };

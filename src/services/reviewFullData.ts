@@ -11,7 +11,7 @@
  * uncapped review speaks these verbatim (un-warmed) so no fact is compressed away
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
-import { opponentHabits } from './thinkAloud';
+import { opponentHabits, habitsOf } from './thinkAloud';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan } from './material';
 import { settledExchange, moverLineProof } from './exchangeLedger';
@@ -1335,6 +1335,18 @@ export function computeMoveFacets(
       const f = `[their-habit] ${fresh.text}`;
       facets.push(f);
       outIdentity?.set(f, `their-habit:${fresh.kind}`);
+    }
+  }
+  // …and the student's own, by the same computer (A-plan P4): the move that
+  // made it twice is the one to name it on.
+  if (isStudent && studentColorWB) {
+    const now = habitsOf(ctx.allSans.slice(0, ply), studentColorWB, 'your');
+    const before = new Set(habitsOf(ctx.allSans.slice(0, ply - 1), studentColorWB, 'your').map((h) => h.kind));
+    const fresh = now.find((h) => !before.has(h.kind));
+    if (fresh) {
+      const f = `[your-habit] ${fresh.text}`;
+      facets.push(f);
+      outIdentity?.set(f, `your-habit:${fresh.kind}`);
     }
   }
 

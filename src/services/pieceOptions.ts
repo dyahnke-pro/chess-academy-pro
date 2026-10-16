@@ -318,8 +318,15 @@ export function renderPieceOptions(a: {
       out.push(`So yes — ${best.san} was better than ${a.playedSan}.`);
     } else if (best.moverCp < a.playedCp - SAME_BAND_CP) {
       // …and by how much (Learn audit 2026-10-14: the verdict had no reason).
+      // THE CONSEQUENCE BESIDE THE AMOUNT (grade walk 2026-10-16: "moving it
+      // costs more than a point" gave nothing to check on the board). The move
+      // that answers it is on the option's own line; name it.
+      const reply = best.line.plies[0]?.san === best.san ? best.line.plies[1]?.san : undefined;
+      const cost = costWords(a.playedCp - best.moverCp);
       out.push(best.moverCp > -MATE_CP && a.playedCp < MATE_CP
-        ? `So no — moving it doesn't help; ${a.playedSan} was the better move, and moving it costs ${costWords(a.playedCp - best.moverCp)}.`
+        ? reply
+          ? `So no — moving it doesn't help; ${a.playedSan} was the better move: after ${best.san} the answer is ${reply}, and moving it costs ${cost}.`
+          : `So no — moving it doesn't help; ${a.playedSan} was the better move, and moving it costs ${cost}.`
         : `So no — moving it doesn't help; ${a.playedSan} was the better move.`);
     } else {
       out.push(`So ${best.san} was about as good as ${a.playedSan} — neither changes much.`);

@@ -340,7 +340,7 @@ export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-c
   // THE SPEED-RUN DEPTH (David 2026-10-05: "Should be from one place") — the
   // one producer `thinkAloud.depthClauses`, ranked by the one door like
   // every other fact.
-  | 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read'
+  | 'not-yet' | 'line' | 'their-habit' | 'your-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read'
   // THE LINE TACTICS (tacticGeometry) — the same name review's facet uses.
   | 'tactic'
   // Attack, sacrifices and kings — `kingAttackReads`, through the same producer.
@@ -458,7 +458,7 @@ export function planChangedText(text: string): string {
   return `The plan changes here: ${continueSentence(text)}`;
 }
 
-const SAY_ONCE_KINDS: ReadonlySet<ClauseKind> = new Set<ClauseKind>(['their-habit', 'hole-access', 
+const SAY_ONCE_KINDS: ReadonlySet<ClauseKind> = new Set<ClauseKind>(['their-habit', 'your-habit', 'hole-access', 
   'structure-plan', 'latent-danger', 'student-leans', 'opponent-leans',
 ]);
 

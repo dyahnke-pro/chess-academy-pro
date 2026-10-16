@@ -36,6 +36,9 @@ export type { SpokenLine, DrawnLine } from './voicePackage';
 export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
+/** Why the door held a lane on a turn. */
+export type HoldReason = 'mate-turn' | 'verdict-turn' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside';
+
 export type LearnLane =
   // ── the instant wave, spoken with the coach's reply ──
   | 'gem'
@@ -533,8 +536,13 @@ export function decideTurn(
   const keep: VoiceFact[] = [];
   const spoke: LearnLane[] = [];
   const held: LearnLane[] = [];
+  // WHY each lane was held — the door's decision made inspectable (A-plan P0:
+  // "count before you take" was held 4 of 4 and nothing said why).
+  const heldWhy: Partial<Record<LearnLane, HoldReason>> = {};
+  const hold = (lane: LearnLane, why: HoldReason): void => { if (!held.includes(lane)) held.push(lane); heldWhy[lane] ??= why; };
   for (const x of survivors) {
-    if (turnHolds(x) || dangerWaits(x)) { held.push(x.lane); continue; }
+    if (turnHolds(x)) { hold(x.lane, verdict && x !== verdict ? 'verdict-turn' : 'mate-turn'); continue; }
+    if (dangerWaits(x)) { hold(x.lane, 'danger-waits'); continue; }
     // A DESCRIPTION — nothing at stake, from a lane that describes the board
     // (or an unstaked board-read riding position facts) — speaks only as
     // SUPPORT: it must touch the lead's squares AND add one of its own. "Your
@@ -570,11 +578,11 @@ export function decideTurn(
     const aside = !!ownLead && x !== ownLead && !DANGER_LANES.has(x.lane)
       && LEARN_LANES[x.lane].always !== true && !(beginner && BEGINNER_ALWAYS.has(x.lane))
       && !sq.some((q) => anchor.includes(q)) && !important;
-    if (subsumed.has(x)) { if (!held.includes(x.lane)) held.push(x.lane); continue; }
+    if (subsumed.has(x)) { hold(x.lane, 'subsumed'); continue; }
     if (!restates && !offTopic && !aside) {
       keep.push(x.fact);
       if (!spoke.includes(x.lane)) spoke.push(x.lane);
-    } else if (!held.includes(x.lane)) held.push(x.lane);
+    } else hold(x.lane, restates ? 'restates' : offTopic ? 'off-topic' : 'aside');
   }
   // NO WORD CAP (David 2026-10-15: "No hard word count caps. Set the cap as
   // an average, not a hard limit"). What speaks is decided above, by relevance
@@ -649,7 +657,7 @@ export function decideTurn(
   // squares) — the lane alone cannot say: `movePoint` carries both the
   // engine's winning line and a board description.
   const ownProven = keep.some((f) => { const l = laneFor(f); return !!l && (DNA_BEAT[l] === 'affirm' || DNA_BEAT[l] === 'but') && proofOf.has(f.text); });
-  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], ownMove, ownLanes, ownProven, turn });
+  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, ownMove, ownLanes, ownProven, turn });
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
 }
 

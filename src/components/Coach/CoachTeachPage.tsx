@@ -10204,8 +10204,22 @@ export function CoachTeachPage(): JSX.Element {
                     // PROPHYLAXIS — the quiet move that stops their next pin or kick,
                     // named only where a move is earned and the engine agrees it is
                     // one of the best (its own top lines), never on a held move.
+                    // PREVENT, ONE MOVE EARLY (A-plan P2, 2026-10-16: the computer ran
+                    // only where the move could be named, which in Learn is almost
+                    // never — so their next pin, kick or fork was said only once it
+                    // landed). Where the move is held, THEIR IDEA speaks and is
+                    // drawn as their move; the stopping move waits for the ask.
+                    const phRead = studentBest?.topLines
+                      ? readBoard('prophylaxis', { fen: probe.fen(), engineFirstMoves: studentBest.topLines.map((l) => l.moves[0]).filter((m): m is string => !!m) })
+                      : null;
+                    if (phRead && !(moveAdviceHere?.speak && !held) && phRead.idea) {
+                      // Their target square and your piece only — the stopping
+                      // square would hand over the held move.
+                      queueSpokenHint(probe.fen(), phRead.idea, 'prophylaxis', NO_PROOF.withheld, phRead.squares.slice(0, 2), [phRead.key], undefined,
+                        phRead.theirs ? [{ from: phRead.theirs.from, to: phRead.theirs.to, role: 'theirs', source: 'learn.prophylaxisIdea' }] : undefined);
+                    }
                     if (moveAdviceHere?.speak && !held && studentBest?.topLines) {
-                      const ph = readBoard('prophylaxis', { fen: probe.fen(), engineFirstMoves: studentBest.topLines.map((l) => l.moves[0]).filter((m): m is string => !!m) });
+                      const ph = phRead;
                       if (ph?.play) {
                         queueSpokenHint(probe.fen(), ph.text, 'prophylaxis', ph.proof, ph.squares, [ph.key], undefined,
                           [{ from: ph.play.from, to: ph.play.to, role: 'play', vouchedBy: 'engine', source: 'learn.prophylaxis' }]);

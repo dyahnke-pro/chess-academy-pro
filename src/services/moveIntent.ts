@@ -226,6 +226,11 @@ export function moveIntent(
         if (i % 2 === 0) continue; // their move
         if (mv.captured || /[+#]/.test(mv.san)) continue; // forcing is not a plan
         if (u === playedUci) continue;
+        // ILLEGAL BEFORE PROVES NOTHING when an earlier move of the LINE is
+        // what cleared the way (Learn audit 2026-10-15: "Their castle kingside
+        // prepares c3" — the line's Nb5 vacated c3, not the castle). A path any
+        // move of the line cleared — theirs or ours — is not the played move's doing.
+        if (sanOf(fenBefore, u) === null && line.slice(0, i).some((x) => pathOf(u).includes(x.slice(0, 2)))) continue;
         const legalBefore = sanOf(fenBefore, u) !== null;
         const beforeValue = valueOfMove(reads.before, u, mover);
         const gainCp = !legalBefore ? PREPARE_CP : beforeValue !== null ? bestBefore - beforeValue : null;
@@ -527,6 +532,21 @@ function safeLanding(fen: string, m: { from: string; to: string; promotion?: str
  * "h3 makes g4 safe". The moved piece's own continuations are not unlocks.
  */
 /** Where the rook lands when `m` castles, else null. */
+/** The squares a move passes through and lands on (not its start). */
+function pathOf(uci: string): string[] {
+  const f0 = uci.charCodeAt(0); const r0 = Number(uci[1]);
+  const f1 = uci.charCodeAt(2); const r1 = Number(uci[3]);
+  const df = Math.sign(f1 - f0); const dr = Math.sign(r1 - r0);
+  const straight = f0 === f1 || r0 === r1 || Math.abs(f1 - f0) === Math.abs(r1 - r0);
+  if (!straight) return [uci.slice(2, 4)];
+  const out: string[] = [];
+  for (let f = f0 + df, r = r0 + dr; ; f += df, r += dr) {
+    out.push(`${String.fromCharCode(f)}${r}`);
+    if (f === f1 && r === r1) break;
+  }
+  return out;
+}
+
 function castledRookSquare(m: { color: 'w' | 'b'; isKingsideCastle: () => boolean; isQueensideCastle: () => boolean }): string | null {
   const rank = m.color === 'w' ? '1' : '8';
   if (m.isKingsideCastle()) return `f${rank}`;

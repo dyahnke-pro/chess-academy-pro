@@ -349,7 +349,8 @@ describe('the outpost rule rides only with a piece standing on the hole (Learn w
     const c = new Chess();
     for (const s of 'h4 Nc6 c3 Nf6 f3 e5 g4 d5 b4 e4 h5 exf3 exf3 Bd6 Kf2 O-O d4 a5 b5 Ne7 a4 c5 g5 Nf5 gxf6 Qxf6 f4 cxd4 c4 dxc4 Bxc4 Bc5 Kf1 Be6 Bxe6 Qxe6 Qf3 Qc4+ Kg2 Qxc1 Ne2 Ne3+ Kg3 Qb2 Nbc3 dxc3 Rab1 Nf5+ Kg4'.split(' ')) c.move(s);
     const r = principleLine(c.fen(), 'Nh6+', 'black', new Set(), 0);
-    expect(r?.text ?? '').toMatch(/eyes g4/);
+    // g4 holds THEIR KING: a check, never an outpost target (A-plan P3).
+    expect(r?.text ?? '').not.toMatch(/eyes (their king on )?g4/);
     expect(r?.text ?? '').not.toMatch(/stays there/);
   });
 });

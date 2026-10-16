@@ -472,12 +472,16 @@ export function computeMoveFundamentals(
       .map(([f, r]) => `${String.fromCharCode(f)}${r}`);
     const targets = jumps
       .filter((sq) => relRank(sq, mover) >= 5 && relRank(sq, mover) <= 6)
-      .filter((sq) => { const p = after.get(sq as Square); return !p || p.color === them; })
+      // Empty or their piece — never their KING: a knight hitting the king is
+      // a check, and the check speaks for itself (Nh6+ "eyes their king on g4").
+      .filter((sq) => { const p = after.get(sq as Square); return !p || (p.color === them && p.type !== 'k'); })
       .filter((sq) => noPawnCanChallenge(after, sq, mover))
       .filter((sq) => !(beforeBoard && beforeBoard.attackers(sq as Square, mover).includes(mv.from)));
     if (targets.length > 0) {
-      // Every hole it now hits, never the first one only (G4.5).
-      const sqs = andList(targets);
+      // Every hole it now hits, never the first one only (G4.5). A hole with
+      // their piece on it is said as the piece it hits (A-plan P3: "aim the
+      // knight at c3, a hole" left out what stood on c3).
+      const sqs = andList(targets.map((sq) => { const p = after.get(sq as Square); return p && p.color === them ? `their ${PIECE_NAME[p.type] ?? 'piece'} on ${sq}` : sq; }));
       const one = targets.length === 1;
       const what = one ? 'a square no pawn of theirs can ever cover' : 'squares no pawn of theirs can ever cover';
       out.push({
@@ -957,11 +961,24 @@ function openingIdeas(
       if (h?.p) {
         const name = PIECE_NAME[mv.piece];
         const by = h.p.type === 'p' ? `the pawn on ${h.sq}` : `their ${PIECE_NAME[h.p.type]} on ${h.sq}`;
+        // WHERE IT GOES TO WORK (A-plan, Learn audit 2026-10-16: "Your knight to
+        // e4 saves it from the pawn on f5" three times — a rescue said as a
+        // formula). A saved piece that lands hitting something says what.
+        const work = ((): string => {
+          try {
+            const parts = after.fen().split(' '); parts[1] = mover; parts[3] = '-';
+            const hit = new Chess(parts.join(' ')).moves({ square: mv.to, verbose: true })
+              .filter((m) => m.captured && m.captured !== 'k' && m.captured !== 'p')
+              .sort((a, b) => (MATERIAL_VALUE[b.captured ?? 'p'] ?? 0) - (MATERIAL_VALUE[a.captured ?? 'p'] ?? 0))[0];
+            if (!hit) return '';
+            return hit.to === h.sq ? `, and hits it back from ${mv.to}` : `, and from ${mv.to} it hits their ${PIECE_NAME[hit.captured ?? 'p']} on ${hit.to}`;
+          } catch { return ''; }
+        })();
         out.push({
           id: 'keep-working',
           weight: 58,
-          led: `saves it from ${by}`,
-          selfContained: `saves the ${name} from ${by}`,
+          led: `saves it from ${by}${work}`,
+          selfContained: `saves the ${name} from ${by}${work}`,
           imperative: `move the ${name} away from ${by} before it is taken for nothing`,
           squares: [mv.from, mv.to, h.sq],
         });

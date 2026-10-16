@@ -29,3 +29,19 @@ describe('a pawn recapture toward the middle is the take-toward-the-centre rule'
     expect(JSON.stringify(f)).not.toMatch(/grab space/);
   });
 });
+
+describe('a hole with their piece on it is said as the piece it hits (A-plan P3)', () => {
+  it('Nd5 heading at c3 names their bishop there', () => {
+    const text = computeMoveFundamentals('6k1/8/1n6/8/8/2B5/P4PPP/6K1 b - - 0 20', 'Nd5', 'black').map((f) => JSON.stringify(f)).join(' ');
+    expect(text).toMatch(/their bishop on c3, a (square|hole) no pawn of theirs can ever cover/);
+  });
+});
+
+describe('a saved piece says where it goes to work (Learn audit 2026-10-16)', () => {
+  it('Ne4 out of the pawn\'s reach names the bishop it hits', () => {
+    // Their pawn on f5 hits the knight on g4; from e5 … use a rescue by a
+    // non-pawn attacker: their bishop on d7 hits the knight on g4; Ne5 hits d7.
+    const text = computeMoveFundamentals('6k1/3b4/8/8/6N1/8/5PPP/6K1 w - - 0 30', 'Ne5', 'white').map((f) => JSON.stringify(f)).join(' ');
+    expect(text).toMatch(/saves it from their bishop on d7, and hits it back from e5/);
+  });
+});
