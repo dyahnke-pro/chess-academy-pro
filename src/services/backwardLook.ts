@@ -175,6 +175,12 @@ export function backwardLook(args: {
   // `callInaccuracy` already hands that over without naming the punishment.
   if (side === 'coach') {
     lastCoachDecline = 'no-concession-and-no-call';
+    // WHAT THE COACH'S SLIP GIVES THE STUDENT IS ITS STAKE — the same reading
+    // as the student's own verdict, from the other seat (prod Learn 2026-10-16:
+    // the coach's verdict carried none and was held as an aside 2 of 3 times).
+    const coachStakes = (args.allowedMate ?? null) !== null
+      ? mateStakes('you', Math.max(0, Math.abs(args.allowedMate as number) * 2 - 1), true)
+      : costStakes(args.cpLoss) ?? undefined;
     if (args.bestSan && !gained && !args.dictated) {
       try {
         const c = findConcession({
@@ -183,7 +189,7 @@ export function backwardLook(args: {
           bestSan: args.bestSan,
           coachColor: mover,
         });
-        if (c) return { line: `${c.said} ${c.opening}`, square: c.square, kind: 'coachMistake' };
+        if (c) return { line: `${c.said} ${c.opening}`, square: c.square, kind: 'coachMistake', ...(coachStakes ? { stakes: coachStakes } : {}) };
       } catch { /* fall through */ }
     }
     try {
@@ -216,7 +222,7 @@ export function backwardLook(args: {
       // nothing, and until now it printed "under the floor" for all five
       // reasons — see `InaccuracyVerdict`. Handing the computed reason back is
       // what makes that log a measurement instead of an assertion.
-      if (verdict.call) return { line: verdict.call.said, square: verdict.call.square, kind: 'coachMistake', ...(verdict.call.offersStudent ? { offersStudent: true as const } : {}) };
+      if (verdict.call) return { line: verdict.call.said, square: verdict.call.square, kind: 'coachMistake', ...(coachStakes ? { stakes: coachStakes } : {}), ...(verdict.call.offersStudent ? { offersStudent: true as const } : {}) };
       lastCoachDecline = verdict.declined;
       return null;
     } catch { lastCoachDecline = 'threw'; return null; }

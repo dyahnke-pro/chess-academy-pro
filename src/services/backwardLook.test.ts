@@ -292,6 +292,12 @@ describe('nothing is called against a move the engine says gained', () => {
     expect(at(400, 'student')).not.toBe('');
   });
 
+  it('the coach\'s own slip carries what it gives the student as its stake (prod Learn 2026-10-16: held as an aside)', () => {
+    const look = backwardLook({ priorMove: null, replySan: null, fenBefore: FEN, fenAfter: FEN, playedSan: 'g4', bestSan: 'O-O', cpLoss: 400, studentColor: 'white', side: 'coach' });
+    expect(look?.kind).toBe('coachMistake');
+    expect(look?.stakes).toEqual({ points: 4, plies: 0 });
+  });
+
   it('a move that broke even keeps the quiet-giveaway lane open', () => {
     // Zero cost is exactly what the structural lane exists for, so no floor may
     // apply there. Asserted through the gate rather than through an outcome:

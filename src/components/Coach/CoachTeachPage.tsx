@@ -11647,7 +11647,7 @@ export function CoachTeachPage(): JSX.Element {
                     const gemCalledIt = learnMemRef.current.gemFen !== null
                       && samePosition(learnMemRef.current.gemFen, cm.fenAfter);
                     if (look && !gemCalledIt) {
-                      queueSpokenHint(cm.fenAfter, look.line, look.kind, (look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci) : null) ?? squaresProof(look.line, /^[a-h][1-8]$/.test(look.square) ? [look.square] : []) ?? NO_PROOF.description, undefined, [`look:${look.kind}:coach:${cm.fenAfter.split(' ').slice(0, 2).join(' ')}`]);
+                      queueSpokenHint(cm.fenAfter, look.line, look.kind, (look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci) : null) ?? squaresProof(look.line, /^[a-h][1-8]$/.test(look.square) ? [look.square] : []) ?? NO_PROOF.description, undefined, [`look:${look.kind}:coach:${cm.fenAfter.split(' ').slice(0, 2).join(' ')}`], undefined, undefined, undefined, look.stakes);
                       // The coach told the student to look — remember the board
                       // so the answer is revealed once they have moved from it.
                       learnMemRef.current.slipAnswer = look.offersStudent ? { fen: cm.fenAfter, theirSan: cm.playedSan } : null;
