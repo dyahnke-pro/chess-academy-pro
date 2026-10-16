@@ -1449,6 +1449,12 @@ export function buildReviewSegments(
   const refutedSaid = new Set<string>();
   // Learn-computer hints already spoken this game (A2), by claim identity.
   const hintsSaid = new Set<string>();
+  // LOOSE PIECES, BY OWNER — spoken count this game. The first is said; the
+  // second names the PATTERN (the heart of the app: "what the opponent keeps
+  // doing wrong — closing on the habit that finds it next time"); after that a
+  // loose piece is no longer news, and the formula is not said again (review
+  // audit 2026-10-15: "…now eyes the pawn on c5 — nothing guards it" ×3).
+  const looseSaid = new Map<'your' | 'their', number>();
   // The RACE verdict last spoken. Keyed on WHO ARRIVES FIRST, not on the counts:
   // the counts change on every push, so keying on them would re-announce the race
   // each ply. A flip — you were winning the race and now you are not — IS the
@@ -2049,7 +2055,27 @@ export function buildReviewSegments(
         Object.assign(planT, planTrial);
         if (planLineHeld) { planT.stated = null; planT.lastStatedPly = null; }
       };
-      for (const f of facets) {
+      for (const f0 of facets) {
+        let f = f0;
+        {
+          const lm = /^\[(?:does|delta)\] .*?(?: — nothing guards (your|their) (\w+) on [a-h][1-8]| — (your|their) (\w+) on [a-h][1-8] has no guard|, and (your|their) (\w+) on [a-h][1-8] is loose)\.$/.exec(f0);
+          if (lm) {
+            const owner = (lm[1] ?? lm[3] ?? lm[5]) as 'your' | 'their';
+            const n = looseSaid.get(owner) ?? 0;
+            if (n >= 2) continue;
+            if (n === 1) {
+              const habit = owner === 'their'
+                ? ` — that's the second time they've left a piece with no guard: after every move of theirs, look first for what it leaves loose`
+                : ` — that's the second time you've left a piece with no guard: before every move, check what it leaves without one`;
+              f = f0.replace(/(?: — nothing guards .*| — .* has no guard|, and .* is loose)\.$/, `${habit}.`);
+              const fp = facetProofs.get(f0); if (fp) facetProofs.set(f, fp);
+              const fs = facetSquares.get(f0); if (fs) facetSquares.set(f, fs);
+              const fi = facetIdentity.get(f0); if (fi) facetIdentity.set(f, fi);
+            }
+            keep(f, () => { looseSaid.set(owner, n + 1); });
+            continue;
+          }
+        }
         // A refuted alternative is said once per game (identity `refuted:<move>`).
         { const id = facetIdentity.get(f); if (id?.startsWith('refuted:') && (refutedSaid.has(id) || !claim(id))) continue; }
         // `once:` — a batch-1 fact said once per game (the opening this board is).

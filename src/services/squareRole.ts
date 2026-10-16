@@ -43,7 +43,8 @@ export function squareRole(chess: Chess, sq: Square, me: Color, owner: 'their' |
   const own1 = chess.get(`${file}${rank + fwd}` as Square);
   const own2 = chess.get(`${file}${rank + 2 * fwd}` as Square);
   const ownStart = me === 'w' ? 2 : 7;
-  const mine = owner === 'their' ? 'your' : owner === 'your' ? 'their' : 'the';
+  // With no seat, "the d-pawn" cannot say whose: the mover's own is "its own".
+  const mine = owner === 'their' ? 'your' : owner === 'your' ? 'their' : 'its own';
   if ((own1 && own1.type === 'p' && own1.color === me) || (!own1 && own2 && own2.type === 'p' && own2.color === me && rank + 2 * fwd === ownStart)) {
     return `backing ${mine} ${file}-pawn's push there`;
   }
