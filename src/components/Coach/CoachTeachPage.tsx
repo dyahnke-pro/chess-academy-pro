@@ -303,8 +303,7 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingR
 import { opponentStrength } from '../../services/engineStrength';
 import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
-import { readBoard, readBoardAll, newPlanThread, type BoardRead } from '../../services/boardComputers';
-import { clonePlanThread, adoptPlanTrial, type PlanThread } from '../../services/planThread';
+import { readBoard, readBoardAll, newPlanThread, clonePlanThread, adoptPlanTrial, type PlanThread, type BoardRead } from '../../services/boardComputers';
 import { splitThink, stripThink, THINK_MARK, THINK_PAUSE_MS } from '../../utils/thinkPause';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
