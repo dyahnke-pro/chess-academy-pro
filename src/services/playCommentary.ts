@@ -957,6 +957,31 @@ export function studentMovePoint(
    *  an outcome, read off this line by the one ledger. No line, no claim. */
   lineUci: readonly string[] | null,
 ): string | null {
+  return studentMovePointFact(fenBefore, san, opponentLastSan, lineUci)?.text ?? null;
+}
+
+/** `studentMovePoint`, keeping what the ledger proved: the squares, the
+ *  material the settled exchange nets (its stake) and the engine line it was
+ *  read off (its proof). A quiet move's point carries none — it is a
+ *  description, and says so. */
+export interface MovePointFact {
+  text: string;
+  squares: string[];
+  stakes: { points: number; plies: number } | null;
+  line: { fen: string; sans: string[] } | null;
+}
+export function studentMovePointFact(
+  fenBefore: string,
+  san: string,
+  /** The opponent's move just before (SAN), or null at the start. REQUIRED:
+   *  a capture on the square they just captured on is a RECAPTURE — the trade
+   *  finishing, never material won (Bxc3 after …Bxc3). */
+  opponentLastSan: string | null,
+  /** The engine's line from `fenBefore`, UCI, starting with `san`, or null.
+   *  REQUIRED (WO-OUTCOME-01): "that wins the X — nothing takes it back" is
+   *  an outcome, read off this line by the one ledger. No line, no claim. */
+  lineUci: readonly string[] | null,
+): MovePointFact | null {
   let after: Chess;
   try {
     after = new Chess(fenBefore);
@@ -968,6 +993,7 @@ export function studentMovePoint(
   if (!mv) return null;
   const recapture = !!opponentLastSan && new RegExp(`x${mv.to}(?![1-8])`).test(opponentLastSan);
   let net = 0;
+  let lineSans: string[] = [];
   if (mv.captured && !recapture && lineUci && lineUci[0] === `${mv.from}${mv.to}${mv.promotion ?? ''}`) {
     const sans: string[] = [];
     const r = new Chess(fenBefore);
@@ -977,6 +1003,7 @@ export function studentMovePoint(
       if (!m) break;
       sans.push(m.san);
     }
+    lineSans = sans;
     const ledger = settledExchange(fenBefore, sans, mv.color, null);
     net = ledger ? ledger.netPawns : 0;
   }
@@ -990,14 +1017,18 @@ export function studentMovePoint(
     // and 35…Rxd6: Bxe5 took back safely — the king cannot with Re1 behind it
     // — and Bxd6 won the exchange back).
     const takeBack = captureRead(after.fen(), mv.to, mv.color === 'w' ? 'b' : 'w');
-    if (net >= takenVal && takeBack === 0) return `That wins the ${NAME[mv.captured] ?? 'piece'} on ${mv.to} — nothing takes it back safely.`;
+    const won = { squares: [mv.from, mv.to], stakes: { points: net, plies: 0 }, line: lineSans.length > 1 ? { fen: fenBefore, sans: lineSans } : null };
+    if (net >= takenVal && takeBack === 0) return { text: `That wins the ${NAME[mv.captured] ?? 'piece'} on ${mv.to} — nothing takes it back safely.`, ...won };
     const exchange = mv.captured === 'r' && (mv.piece === 'n' || mv.piece === 'b');
-    return exchange
-      ? `That wins the exchange — your ${NAME[mv.piece]} for their rook on ${mv.to}.`
-      : `That takes the ${NAME[mv.captured] ?? 'piece'} on ${mv.to}, and even after they take back you come out ahead.`;
+    return {
+      text: exchange
+        ? `That wins the exchange — your ${NAME[mv.piece]} for their rook on ${mv.to}.`
+        : `That takes the ${NAME[mv.captured] ?? 'piece'} on ${mv.to}, and even after they take back you come out ahead.`,
+      ...won,
+    };
   }
   if (gainedBishopPair(fenBefore, san)) {
-    return 'Now you have the two bishops — open the position and they get stronger.';
+    return { text: 'Now you have the two bishops — open the position and they get stronger.', squares: [], stakes: null, line: null };
   }
   // A capture's point is the capture — Raxd8 taking the queen back is not
   // "unpins your rook on e8" (hand walk 2026-09-25).
@@ -1006,7 +1037,7 @@ export function studentMovePoint(
   // and the queen eyes f2" was queued behind "what is their last move doing?"
   // and read as its answer. A verb-first point says whose move it is.
   const point = quietMovePoint(fenBefore, san);
-  return point ? `${san} ${continueSentence(point)}` : null;
+  return point ? { text: `${san} ${continueSentence(point)}`, squares: [], stakes: null, line: null } : null;
 }
 
 /** THEIR SLIP IS YOUR CHANCE — the one wording, Learn and Review (David

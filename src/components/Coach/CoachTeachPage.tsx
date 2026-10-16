@@ -39,7 +39,7 @@ import { buildPositionalRead, rookReachesFile } from '../../services/positionalR
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { OPENING_PLIES, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
-import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
+import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
 // EVERY ARROW ON THIS PAGE COMES OUT OF THE ARROW DOOR (`arrowDoor`, David
@@ -11313,7 +11313,10 @@ export function CoachTeachPage(): JSX.Element {
                         }
                       } catch { /* the verdict is a bonus, never a blocker */ }
                       if (gambitLine) queueSpokenHint(fenAfterReply, gambitLine, 'movePoint', NO_PROOF.description, [], [`gambit:${move.to}`]);
-                      const point = gambitLine ? null : studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null, preStudentRead?.topLines?.find((l) => l.moves[0] === `${move.from}${move.to}${move.promotion ?? ''}`)?.moves ?? null);
+                      // The point keeps what the ledger proved (A-plan P5): a capture that
+                      // wins carries its engine line as proof and its net as stake.
+                      const pointFact = gambitLine ? null : studentMovePointFact(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null, preStudentRead?.topLines?.find((l) => l.moves[0] === `${move.from}${move.to}${move.promotion ?? ''}`)?.moves ?? null);
+                      const point = pointFact?.text ?? null;
                       // SPOKEN ON THE BOARD AFTER THEIR REPLY, SO TRUE THERE
                       // (fresh-game walk 2026-09-27: "That wins the pawn on c4 —
                       // nothing takes it back safely" heard after Na3 hit c4).
@@ -11330,7 +11333,7 @@ export function CoachTeachPage(): JSX.Element {
                       const fileHeard = !!fileKey && (positionalSaidRef.current.has(fileKey) || standingRef.current.said.has(fileKey));
                       if (point && !nowLoose && !fileHeard) {
                         // A capture's point and the trade verdict are one claim about one square.
-                        queueSpokenHint(fenAfterReply, point, 'movePoint', NO_PROOF.description, [], [move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`, ...(fileKey ? [fileKey] : [])]);
+                        queueSpokenHint(fenAfterReply, point, 'movePoint', (pointFact?.line ? lineProof(pointFact.line) : null) ?? NO_PROOF.description, pointFact?.squares ?? [], [move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`, ...(fileKey ? [fileKey] : [])], undefined, undefined, undefined, pointFact?.stakes ?? undefined);
                         captureEvent('coach_move_point_named', { surface: 'coach-teach' });
                       }
                       // EVERY STUDENT MOVE GETS ITS OWN REASON (David 2026-10-14):
@@ -11420,8 +11423,8 @@ export function CoachTeachPage(): JSX.Element {
                           recordHeld('no-plan', 60, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length) || planToldBoardsRef.current.has(fenBefore.split(' ').slice(0, 2).join(' ')), gameId: learnMemRef.current.gameId });
                           // B1: the rule behind what the move prepares, once a game
                           // (the same ledger the principle lines use).
+                          // Its keys ride as `principle:` claims, committed once the door keeps the line.
                           const prepRule = intentRule(intent, fenAfterReply, playerColor, learnMemRef.current.principleTaught);
-                          if (prepRule) for (const k of prepRule.keys) learnMemRef.current.principleTaught.add(k);
                           const intentText = prepRule ? `${intent.text.replace(/\.$/, '')} — ${prepRule.text}.` : intent.text;
                           queueSpokenHint(fenAfterReply, intentText, 'moveIntent', squaresProof(intentText, intent.squares) ?? NO_PROOF.description, intent.squares, [
                             ...(intent.prevents ? [`stops:${intent.prevents.uci}`] : []),
@@ -11432,6 +11435,7 @@ export function CoachTeachPage(): JSX.Element {
                             // "prepares f4" and "you have a pawn break on f4" are one
                             // idea — the positional read's break key.
                             ...(intent.prepares && /^[a-h][1-8]$/.test(intent.prepares.san) ? [`break-${intent.prepares.san}`] : []),
+                            ...(prepRule?.keys ?? []).map((k) => `principle:${k}`),
                           ], undefined,
                           // The prepared move, as the move to play next.
                           intent.prepares && !intent.prepares.san.startsWith('O-O')
@@ -11510,12 +11514,20 @@ export function CoachTeachPage(): JSX.Element {
                       : null;
                     if (theirIntent?.prepares) {
                       const theirRule = intentRule(theirIntent, fenAfterReply, playerColor, learnMemRef.current.principleTaught);
-                      if (theirRule) for (const k of theirRule.keys) learnMemRef.current.principleTaught.add(k);
                       const theirText = theirRule ? `${theirIntent.text.replace(/\.$/, '')} — ${theirRule.text}.` : theirIntent.text;
-                      queueSpokenHint(fenAfterReply, theirText, 'theirIntent', NO_PROOF.description, theirIntent.squares, [
-                        `their-prepares:${theirIntent.prepares.uci}`,
+                      // WHAT IT WOULD WIN IS ITS STAKE (A-plan P2, prod Learn
+                      // 2026-10-16: held as an aside on 6 of 8 offers). The
+                      // engine's gain for their prepared move, landing one ply
+                      // after yours — computed by `intentWithFallback`, dropped
+                      // here until now. A small preparation stays below the bar.
+                      const prep = theirIntent.prepares;
+                      queueSpokenHint(fenAfterReply, theirText, 'theirIntent', squaresProof(theirText, theirIntent.squares) ?? NO_PROOF.description, theirIntent.squares, [
+                        `their-prepares:${prep.uci}`,
                         ...(theirIntent.prevents ? [`stops:${theirIntent.prevents.uci}`] : []),
-                      ], move.fen);
+                        ...(theirRule?.keys ?? []).map((k) => `principle:${k}`),
+                      ], move.fen,
+                      [{ from: prep.uci.slice(0, 2), to: prep.uci.slice(2, 4), role: 'theirs', fen: fenAfterReply, source: 'learn.theirIntent' }],
+                      undefined, prep.gainCp > 0 ? { points: prep.gainCp / 100, plies: 1 } : undefined);
                       captureEvent('coach_their_intent_named', { surface: 'coach-teach', prevents: !!theirIntent.prevents });
                     }
                   }
@@ -11749,7 +11761,11 @@ export function CoachTeachPage(): JSX.Element {
                     // Record the late package's phrases too — the per-game set is
                     // what keeps the NEXT turn from repeating any of them.
                     for (const k of spokenSentenceKeys(hintPkg)) learnMemRef.current.spokenKeys.add(k);
-                    rememberKeptClaims(hintPkg.kept, (k) => { positionalSaidRef.current.add(k); standingRef.current.remember(k); });
+                    rememberKeptClaims(hintPkg.kept, (k) => {
+                      // A principle taught with its line ("— that is why …") is taught once.
+                      if (k.startsWith('principle:')) { learnMemRef.current.principleTaught.add(k.slice('principle:'.length)); return; }
+                      positionalSaidRef.current.add(k); standingRef.current.remember(k);
+                    });
                     const pfRem = pfRememberRef.current;
                     if (pfRem && samePosition(pfRem.fen, pending.fen)) rememberKeptClauses(hintPkg.kept, pfRem.byClause, (k) => standingRef.current.remember(k));
                     noteSpokenProofs(hintPkg.kept);

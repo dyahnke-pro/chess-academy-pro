@@ -808,7 +808,10 @@ export function callInaccuracyDetailed(args: {
   // named, else the square the why is about.
   const mark = ew.namesBetter ? better?.square ?? '' : ew.failedSquares[0] ?? ew.lostSquare ?? '';
   const named = ew.failedSquares.length ? ew.failedSquares : ew.lostSquare ? [ew.lostSquare] : [];
-  return { call: { quality, side: 'student', cost, said, square: mark, ...(named.length ? { squares: named } : {}), ...(ew.proof ? { proof: ew.proof } : {}), ...(ew.lostSquare ? { lostSquare: ew.lostSquare } : {}), ...(ew.namesBetter ? { namesBetter: ew.namesBetter } : {}), ...(ew.line ? { line: ew.line } : {}), ...(ew.pattern ? { pattern: ew.pattern } : {}) } };
+  // A cost said with its line draws that line (A-plan P6).
+  const costShown = !ew.line && ew.costLine && ew.costTail && said.includes(ew.costTail.trim()) ? ew.costLine : null;
+  const costProof = costShown ? lineProofFromUci(costShown.fen, costShown.uci) : null;
+  return { call: { quality, side: 'student', cost, said, square: mark, ...(named.length ? { squares: named } : {}), ...(ew.proof ? { proof: ew.proof } : costProof ? { proof: costProof } : {}), ...(costShown ? { line: costShown } : {}), ...(ew.lostSquare ? { lostSquare: ew.lostSquare } : {}), ...(ew.namesBetter ? { namesBetter: ew.namesBetter } : {}), ...(ew.line ? { line: ew.line } : {}), ...(ew.pattern ? { pattern: ew.pattern } : {}) } };
 }
 
 /**
@@ -939,6 +942,10 @@ export interface ErrorWhy {
   /** The line the words name, as a proof — absent when nothing is shown. */
   proof?: Proof;
   line?: { fen: string; uci: string[] };
+  /** A cost with nothing else to say, proven by the engine's answer — said
+   *  after the cost on the STUDENT's own grade only (" The line: …"). */
+  costTail?: string;
+  costLine?: { fen: string; uci: string[] };
   lostSquare?: string;
   namesBetter?: string;
   pattern?: string;
@@ -1147,6 +1154,23 @@ export function errorWhy(args: {
     } catch { /* no line */ }
   }
   if (should && !line && args.bestLineUci?.length) line = { fen: args.fenBefore, uci: args.bestLineUci.slice(0, 4) };
+  // A COST WITH NOTHING ELSE TO SAY CARRIES ITS LINE (A-plan P6, prod Learn
+  // 2026-10-16: "Bishop to e7 was a mistake — it cost more than a point of
+  // advantage", and nothing to check). A positional loss has no material
+  // reader; its proof is the engine's answer. The voice says it short, the
+  // board walks it (proof guards 2 and 3).
+  // Its own fields, read only by the STUDENT's grade (`errorGradeSentence`):
+  // on their slip the reply line opens with the student's own find.
+  let costTail = '';
+  let costLine: ErrorWhy['costLine'];
+  if (!consequence && !failed && !should && !mateSaid && !tail && !line && replyLineUci.length >= 2) {
+    try {
+      const c = new Chess(args.fenBefore); c.move(args.playedSan);
+      const at = c.fen(); const sans: string[] = [];
+      for (const u of replyLineUci.slice(0, 3)) { const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); if (!m) break; sans.push(m.san); }
+      if (sans.length >= 2) { costTail = ` The line: ${lineShape(sans)}.`; costLine = { fen: at, uci: replyLineUci.slice(0, sans.length) }; }
+    } catch { /* no line — the cost stands alone */ }
+  }
   const proof = line ? lineProofFromUci(line.fen, line.uci) ?? undefined : undefined;
   const pattern = should && !mateSaid && bestSan ? landedTacticFor(args.fenBefore, bestSan) : null;
   // The piece a mechanism left to be taken is the lost square too, so a
@@ -1162,6 +1186,7 @@ export function errorWhy(args: {
     reason: should ? reason : null,
     ...(proof ? { proof } : {}),
     ...(line ? { line } : {}),
+    ...(costLine ? { costLine, costTail } : {}),
     ...(punishment?.lostSquare ?? failedLost ?? replyTaken ? { lostSquare: punishment?.lostSquare ?? failedLost ?? replyTaken } : {}),
     ...((should || mateSaid) && bestSan ? { namesBetter: bestSan } : {}),
     ...(pattern ? { pattern } : {}),
@@ -1217,7 +1242,9 @@ export function errorGradeSentence(ew: ErrorWhy, quality: SpokenGradeLabel, cost
   const consequence = ew.consequence ? consequenceIn(ew.consequence, tense) : null;
   const better = ew.better && tense === 'would' ? ew.better.replace(/ was the move — it would /, ' is the move — it would ') : ew.better;
   const failed = ew.failed ? ` ${tense === 'past' ? ew.failed : failedIn(ew.failed)}` : '';
-  return `${grade}${consequence ? ` — ${consequence}` : costSaid}.${failed}${ew.tail}${better ? ` ${better}` : ''}`;
+  // The cost carries its line only where the cost is said (proof rule).
+  const costTail = !consequence && costSaid && ew.costTail ? ew.costTail : '';
+  return `${grade}${consequence ? ` — ${consequence}` : costSaid}.${failed}${ew.tail}${costTail}${better ? ` ${better}` : ''}`;
 }
 
 /** `errorWhy`'s consequence in the tense a surface speaks: past (Learn,
@@ -1298,15 +1325,17 @@ export function errorCallFor(args: {
     quality: args.quality, priorMove: null, namesBetterMove: args.namesBetterMove,
   });
   let line: WalkableLine | null = null;
-  if (ew.line) {
+  const sentence = errorGradeSentence(ew, args.quality, args.cpLoss, args.tense ?? 'past');
+  const shown = ew.line ?? (ew.costLine && ew.costTail && sentence.includes(ew.costTail.trim()) ? ew.costLine : null);
+  if (shown) {
     const sans: string[] = [];
     try {
-      const c = new Chess(ew.line.fen);
-      for (const u of ew.line.uci) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san);
+      const c = new Chess(shown.fen);
+      for (const u of shown.uci) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san);
     } catch { /* the playable prefix */ }
-    line = sans.length ? walkableLine(ew.line.fen, sans, sans[0]) : null;
+    line = sans.length ? walkableLine(shown.fen, sans, sans[0]) : null;
   }
-  return { sentence: errorGradeSentence(ew, args.quality, args.cpLoss, args.tense ?? 'past'), line };
+  return { sentence, line };
 }
 
 /** A material cost clause ("win a piece for a pawn") is only what the move LET

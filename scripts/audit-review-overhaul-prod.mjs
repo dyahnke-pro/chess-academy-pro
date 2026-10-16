@@ -236,6 +236,12 @@ const run = async () => {
     if (m.type() !== 'error') return;
     const t = m.text();
     if (/favicon|manifest|net::ERR|Download the React|Failed to load resource.*(429|502|503)|\[Stockfish\] worker\.onerror/i.test(t)) return;
+    // The Emscripten glue eats the first `uci` on a slow first load and prints
+    // these two lines; the engine re-sends `uci` until `uciok`
+    // (stockfishEngine.ts, "received unknown command undefined"), and every
+    // engine row of this audit still has to pass. The same understood noise
+    // the full-games audit names.
+    if (/received unknown command undefined|^uci$/.test(t)) return;
     // A failed resource load names its URL in the console message's location,
     // not its text — record it, or a 500 from an unrelated endpoint reads as
     // this surface's defect (three bare "status of 500" lines, 2026-09-07).

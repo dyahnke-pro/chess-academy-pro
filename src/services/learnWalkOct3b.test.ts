@@ -21,6 +21,7 @@ describe('one point, one saying (walk oct3b, 15…e5)', () => {
     const { readFileSync } = await import('node:fs');
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(src).toMatch(/const foundKeys = \[`slip-found:\$\{move\.san\}`, move\.san\.includes\('x'\) \? `capture:\$\{move\.to\}:\$\{move\.history\.length\}` : `point:\$\{move\.history\.length\}`\]/);
-    expect(src).toMatch(/\[`point:\$\{move\.history\.length\}`\]/);
+    // The move point carries the same key (a file key may ride beside it).
+    expect(src).toMatch(/\[move\.san\.includes\('x'\) \? `capture:\$\{move\.to\}:\$\{move\.history\.length\}` : `point:\$\{move\.history\.length\}`, \.\.\.\(fileKey/);
   });
 });

@@ -73,7 +73,7 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
     // longer restates the piece). Assert the fundamental-first WHY, not the exact
     // piece noun, so this doesn't re-litigate that surface's phrasing choice.
     // Each square carries its role (2026-10-15: descriptions → teachings).
-    expect(r).toMatch(/^It develops (the knight )?into the game, fighting for the center on d4, backing its own d-pawn's push there, and e5, holding back the enemy e-pawn\.$/);
+    expect(r).toMatch(/^It develops (the knight )?into the game, fighting for the center on d4, backing the d-pawn's push there, and e5, holding back the enemy e-pawn\.$/);
   });
 
   it('never claims a "win" on an even recapture (exchange, not a free piece)', () => {

@@ -761,7 +761,7 @@ async function main() {
       const byReason = adviceRows.reduce((acc, d) => { acc[d.moveAdvice] = (acc[d.moveAdvice] ?? 0) + 1; return acc; }, {});
       record(
         'G-MA. the next move is named only where earned (not every ply)',
-        adviceRows.length === 0 || (adviceRows.every((d) => ['deciding', 'phase-record', 'motif-record', 'none'].includes(d.moveAdvice)) && (adviceRows.length < 5 || heldBack > 0)),
+        adviceRows.length === 0 || (adviceRows.every((d) => ['deciding', 'threat', 'phase-record', 'motif-record', 'none'].includes(d.moveAdvice)) && (adviceRows.length < 5 || heldBack > 0)),
         `${adviceRows.length} next-move rows — ${JSON.stringify(byReason)}`,
       );
       // POSTURE. A live game legitimately produces BOTH: the running
