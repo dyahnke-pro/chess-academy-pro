@@ -20,7 +20,7 @@ const convertOf = async (fen: string, cp: number, alreadySaid?: ReadonlySet<stri
 describe('the conversion step speaks once', () => {
   it('a rook up: the trade-pieces step speaks and is remembered by its STEP', async () => {
     const a = await convertOf(ROOK_UP, 500);
-    expect(a.clause?.text).toMatch(/a rook up — trade pieces/);
+    expect(a.clause?.text).toMatch(/up a rook — trade pieces/);
     expect(a.remember).toContain(convertKey('trade-pieces'));
   });
   it('a piece up next: the same step does not speak again', async () => {
@@ -28,6 +28,6 @@ describe('the conversion step speaks once', () => {
     const b = await convertOf(PIECE_UP, 320, new Set(a.remember));
     expect(b.clause, 'a new edge is not a new idea').toBeUndefined();
     // …and without the memory it WOULD speak (non-vacuous).
-    expect((await convertOf(PIECE_UP, 320)).clause?.text).toMatch(/a piece up — trade pieces/);
+    expect((await convertOf(PIECE_UP, 320)).clause?.text).toMatch(/up a piece — trade pieces/);
   });
 });
