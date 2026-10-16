@@ -195,7 +195,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:8681`
 
 ### `convertKey` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10379`
+- `src/components/Coach/CoachTeachPage.tsx:10393`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 
 ### `afterLine` (function) — 5 call sites
