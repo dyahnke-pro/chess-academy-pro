@@ -73,7 +73,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalkOct1.test.ts:83`
 - `src/services/reviewWalkOct1.test.ts:88`
 - `src/services/squareRole.test.ts:29`
-- `src/services/squareRole.test.ts:41`
+- `src/services/squareRole.test.ts:43`
 
 ### `nameEndgamePhase` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:3206`

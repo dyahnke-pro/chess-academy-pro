@@ -393,8 +393,8 @@
 - `src/services/coachFeatureService.test.ts:48`
 - `src/services/coachFeatureService.test.ts:59`
 - `src/services/coachFeatureService.test.ts:69`
-- `src/services/coachFeatureService.test.ts:83`
-- `src/services/coachFeatureService.test.ts:90`
+- `src/services/coachFeatureService.test.ts:84`
+- `src/services/coachFeatureService.test.ts:91`
 - `src/services/coachFeatureService.ts:2542`
 - `src/services/coachFeatureService.ts:2553`
 - `src/services/coachMoveCommentary.ts:221`
@@ -460,8 +460,8 @@
 ### `describeSacrifice` (function) — 5 call sites
 - `src/services/brilliancy.ts:76`
 - `src/services/brilliancy.ts:130`
-- `src/services/coachFeatureService.test.ts:99`
-- `src/services/coachFeatureService.test.ts:105`
+- `src/services/coachFeatureService.test.ts:100`
+- `src/services/coachFeatureService.test.ts:106`
 - `src/services/coachFeatureService.ts:1009`
 
 ### `MovePurpose` (interface) — 0 call sites

@@ -31,24 +31,25 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/structureJudgement.test.ts:222`
 - `src/services/structureReads.ts:55`
 
-### `planOverOneMove` (function) — 3 call sites
-- `src/services/structureJudgement.test.ts:227`
-- `src/services/structureJudgement.test.ts:230`
+### `planOverOneMove` (function) — 4 call sites
+- `src/services/structureJudgement.test.ts:229`
+- `src/services/structureJudgement.test.ts:231`
+- `src/services/structureJudgement.test.ts:233`
 - `src/services/structureReads.ts:56`
 
 ### `placementFutureLine` (function) — 3 call sites
-- `src/services/structureJudgement.test.ts:235`
 - `src/services/structureJudgement.test.ts:238`
+- `src/services/structureJudgement.test.ts:241`
 - `src/services/structureReads.ts:106`
 
 ### `smallEdges` (function) — 3 call sites
-- `src/services/structureJudgement.test.ts:242`
-- `src/services/structureJudgement.test.ts:246`
+- `src/services/structureJudgement.test.ts:245`
+- `src/services/structureJudgement.test.ts:249`
 - `src/services/structureReads.ts:112`
 
 ### `fightingLine` (function) — 3 call sites
-- `src/services/structureJudgement.test.ts:251`
-- `src/services/structureJudgement.test.ts:257`
+- `src/services/structureJudgement.test.ts:254`
+- `src/services/structureJudgement.test.ts:260`
 - `src/services/structureReads.ts:105`
 
 ### `wedgePaysLater` (function) — 4 call sites
