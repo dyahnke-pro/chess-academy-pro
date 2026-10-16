@@ -10,7 +10,6 @@
 import { openSentence } from '../utils/openSentence';
 import { Chess, type Square } from 'chess.js';
 import type { WalkableLine } from '../types';
-import { CAPTURE_VALUE } from './pieceValues';
 import { settledNetForLine } from './exchangeLedger';
 import { sayMoveClause } from './spokenMove';
 import { countWords } from '../utils/countWords';
@@ -29,6 +28,7 @@ import { speedRunReads } from './speedRunReads';
 import { readBoardAll } from './boardComputers';
 import type { TacticType } from '../types';
 import { orderReads } from './orderReads';
+import { inBetweenMove } from './inBetweenMove';
 
 const cap = (s: string): string => openSentence(s);
 const NUM = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
@@ -153,29 +153,15 @@ export interface Candidate { san: string; pv: readonly string[]; /** Mover's-sea
  * there later in its line.
  */
 export function notYet(fen: string, best: Candidate): { text: string; capture: string } | null {
-  let board: Chess;
-  try { board = new Chess(fen); } catch { return null; }
-  const first = (() => { try { return new Chess(fen).move(best.san); } catch { return null; } })();
-  if (!first || first.captured) return null;
-  // FORCING: a check, or a new hit on a piece worth at least the mover.
-  const after = new Chess(fen); after.move(best.san);
-  const forcing = first.san.includes('+') || after.board().flat().some((x) => {
-    if (!x || x.color === first.color || x.type === 'p' || x.type === 'k') return false;
-    try { return after.attackers(x.square, first.color).includes(first.to) && (CAPTURE_VALUE[x.type] ?? 0) >= (CAPTURE_VALUE[first.piece] ?? 0); } catch { return false; }
-  });
-  if (!forcing) return null;
-  const caps = board.moves({ verbose: true }).filter((m) => m.captured);
-  const sans = pvSans(fen, [...best.pv], 8);
-  for (let i = 2; i < sans.length; i += 2) {
-    const later = caps.find((m) => sans[i]?.replace(/[+#]/g, '').endsWith(m.to) && sans[i].includes('x'));
-    if (later) {
-      return {
-        capture: later.san,
-        text: `The capture on ${later.to} is not going anywhere. Not yet — first ${sayMoveClause(best.san, fen)}${first.san.includes('+') ? ' with check' : ''}, and take after.`,
-      };
-    }
-  }
-  return null;
+  // ONE DETECTOR (A-plan P7): the in-between move, read by `inBetweenMove`,
+  // which the tactic record reads too.
+  // `best.pv` is the engine's line in UCI, its first move the best move.
+  const ib = inBetweenMove(fen, [...best.pv]);
+  if (!ib) return null;
+  return {
+    capture: ib.capture,
+    text: `The capture on ${ib.captureSquare} is not going anywhere. Not yet — first ${sayMoveClause(best.san, fen)}${ib.check ? ' with check' : ''}, and take after.`,
+  };
 }
 
 export interface Habit { kind: 'tempo' | 'undeveloped' | 'loose' | 'king-pawns'; text: string }

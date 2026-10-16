@@ -967,7 +967,7 @@ function openingIdeas(
         const work = ((): string => {
           try {
             const parts = after.fen().split(' '); parts[1] = mover; parts[3] = '-';
-            const hit = new Chess(parts.join(' ')).moves({ square: mv.to as Square, verbose: true })
+            const hit = new Chess(parts.join(' ')).moves({ square: mv.to, verbose: true })
               .filter((m) => m.captured && m.captured !== 'k' && m.captured !== 'p')
               .sort((a, b) => (MATERIAL_VALUE[b.captured ?? 'p'] ?? 0) - (MATERIAL_VALUE[a.captured ?? 'p'] ?? 0))[0];
             if (!hit) return '';

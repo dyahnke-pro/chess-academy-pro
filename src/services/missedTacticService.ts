@@ -1,3 +1,4 @@
+import { inBetweenMove } from './inBetweenMove';
 import { trappedAt } from './trappedPiece';
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import { isRealPin, isRealSkewer } from './pinGeometry';
@@ -605,7 +606,7 @@ export const TACTIC_TYPE_AUTHORITY: Record<TacticType, TacticTypeAuthority> = {
   x_ray: 'theme-only',
   deflection: 'geometry',
   interference: 'geometry',
-  zwischenzug: 'theme-only',
+  zwischenzug: 'geometry',
   tactical_sequence: 'sentinel',
 };
 
@@ -680,6 +681,11 @@ export function detectTacticType(
     const g = geometryMotif(fen, pvUci, previous);
     if (g) return g;
   }
+
+  // 1c. THE IN-BETWEEN MOVE (A-plan P7): the best move is a forcing move
+  // played INSTEAD of a capture that is still there later in the line — the
+  // same detector Learn teaches it from ("not yet — first this").
+  if (pvUci && pvUci.length >= 3 && pvUci[0] === bestMoveUci && inBetweenMove(fen, pvUci)) return 'zwischenzug';
 
   // 2. A capture of a piece that had no defender — board-certain.
   const victim = chess.get(to);
