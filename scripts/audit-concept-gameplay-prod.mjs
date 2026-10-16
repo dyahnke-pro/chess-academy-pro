@@ -65,6 +65,10 @@ import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
 import { pickStudentMove } from './audit-lib/student-player.mjs';
+import { engineStudentMove, stopEngineStudent } from './audit-lib/engine-student.mjs';
+// AUDIT_STUDENT=engine: the student plays soundly (Stockfish, reduced skill), so
+// plan, prevention and choice teaching get a fair test (A-plan P0).
+const ENGINE_STUDENT = process.env.AUDIT_STUDENT === 'engine';
 import { Chess } from 'chess.js';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -447,7 +451,7 @@ async function askAndPlay(page, listener, ask, label) {
       if (m) legal = { from: m.from, to: m.to, san: m.san };
       else { onBook = false; console.log(`[book] ${label}: left the line at ply ${ply} (wanted ${STUDENT_LINE[ply]})`); }
     }
-    legal ??= pickStudentMove(chess.fen(), chess.history().length);
+    legal ??= ENGINE_STUDENT ? await engineStudentMove(chess.fen()) : pickStudentMove(chess.fen(), chess.history().length);
     if (!legal) break;
     await page.locator(`[data-square="${legal.from}"]`).first().click({ timeout: 8000, force: true }).catch(() => {});
     await page.waitForTimeout(250);
@@ -592,6 +596,28 @@ async function main() {
     if (turns.length > 0) {
       const bad = turns.filter((t) => t.spoke.some((l) => !t.offered.includes(l)) || (t.lead !== null && !t.spoke.includes(t.lead)));
       record('LD2. every spoken lane was offered, and the lead spoke', bad.length === 0, `${bad.length} malformed of ${turns.length}`);
+      // THE GRADE, MEASURED (A-plan P0, David 2026-10-16: "I want a full plan to
+      // get all A's"). Per lane: how often it was offered, spoke, or was held;
+      // then the teaching categories the grade is read in. REPORTED — the A bar
+      // for each category is asserted once its phase lands, never guessed.
+      const laneMix = {};
+      for (const t of turns) {
+        for (const l of t.offered) (laneMix[l] ??= { offered: 0, spoke: 0, held: 0 }).offered += 1;
+        for (const l of t.spoke) (laneMix[l] ??= { offered: 0, spoke: 0, held: 0 }).spoke += 1;
+        for (const l of t.held ?? []) (laneMix[l] ??= { offered: 0, spoke: 0, held: 0 }).held += 1;
+      }
+      const CATEGORY = {
+        recognize: ['tactic', 'threat', 'gem', 'kickMap', 'captureChoice', 'trapAhead'],
+        consequences: ['mistake', 'drawback', 'coachMistake', 'blunderCheck', 'tradeLedger'],
+        choices: ['rejectedTempting', 'heldMove', 'notYetPlayed', 'priorityFirst', 'holdResource'],
+        prevent: ['prophylaxis', 'threatAnswer', 'trapAhead'],
+        plan: ['planArc', 'structure', 'structureJudgement', 'breakRace', 'openingIdea'],
+        habits: ['patternFails', 'sameAsLastTime', 'lastTimeHere', 'behavior'],
+        credit: ['foundMove', 'heldMove', 'movePoint', 'moveIntent', 'slipAnswer'],
+      };
+      const catSpoke = Object.fromEntries(Object.entries(CATEGORY).map(([k, lanes]) => [k, turns.filter((t) => t.spoke.some((l) => lanes.includes(l))).length]));
+      const lanesSorted = Object.entries(laneMix).sort((a, b) => b[1].offered - a[1].offered).map(([l, v]) => `${l} ${v.spoke}/${v.offered}${v.held ? ` (held ${v.held})` : ''}`);
+      record('GRADE. teaching mix REPORTED — turns per category, and each lane spoke/offered', true, `${turns.length} turns — ${JSON.stringify(catSpoke)} — lanes: ${lanesSorted.join(', ')}`);
       // EVERY STUDENT MOVE GETS ITS OWN REASON (David 2026-10-14): the door's
       // own row says whether a lane about the student's move spoke on the
       // turn. 'affirm' is a reason for a GOOD move — reported on its own, the
@@ -842,6 +868,7 @@ async function main() {
     record('F3. no uncaught page errors', pageErrors.length === 0, pageErrors.slice(0, 2).join(' | '));
   } finally {
     await browser.close().catch(() => {});
+    stopEngineStudent();
     await listener.stop();
   }
 
