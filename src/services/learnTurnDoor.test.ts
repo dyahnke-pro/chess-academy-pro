@@ -214,7 +214,7 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
   it('Learn hands every line-speaking producer\'s lines to the queue, and draws on-screen and earlier boards apart', () => {
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', .*?, undefined, undefined, undefined, undefined, pendingRegisterLines\)/);
     expect(TEACH_CODE).toMatch(/pendingRegisterLines = \[\{ fen: probe\.fen\(\), sans: \[compareRead\.bestSan\] \}/);
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.squares, c\.claim \? \[c\.claim\] : undefined, c\.gradeFen, undefined, c\.lines, c\.stakes, FACT_ROLE\[c\.kind\]\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.squares, c\.claim \? \[c\.claim\] : undefined, c\.gradeFen, undefined, c\.lines, c\.stakes, FACT_ROLE\[c\.kind\], c\.kind\)/);
     expect(TEACH_CODE).toMatch(/(?:fundamental|fund)\?\.lines[,)]/);
     expect(TEACH_CODE).toMatch(/'fundamental', NO_PROOF\.method, \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
@@ -490,7 +490,7 @@ describe('a REASON outranks a description (David 2026-10-13: "value why statemen
     expect(d.held).toContain('positionFacts');
   });
   it('the producer passes the role from the ONE table over its clause kind', () => {
-    expect(TEACH_CODE).toMatch(/c\.lines, c\.stakes, FACT_ROLE\[c\.kind\]\)/);
+    expect(TEACH_CODE).toMatch(/c\.lines, c\.stakes, FACT_ROLE\[c\.kind\], c\.kind\)/);
   });
 });
 
@@ -555,6 +555,17 @@ describe('the door says whether the student\'s own move got its reason (David 20
     decideTurn([{ lane: 'movePoint', proof: NO_PROOF.stated, text: 'Your knight on f3 attacks the pawn on e5, so they must guard it.', fen: FEN, squares: ['f3', 'e5'] }]);
     off();
     expect(rows.map((r) => r.ownMove)).toEqual([null, null, 'affirm']);
+  });
+});
+
+describe('the row names WHAT spoke inside a many-fact lane (A-plan P0)', () => {
+  it('a position-facts weighing is emitted as its kind, so the grade can count choices', async () => {
+    const { onLearnTurn } = await import('./coachDecisionEvents');
+    const rows: Array<{ spokeKinds?: string[] }> = [];
+    const off = onLearnTurn((r) => rows.push(r));
+    decideTurn([{ lane: 'positionFacts', factKind: 'deliberation', role: 'teach', proof: NO_PROOF.stated, text: 'Bxf7+ looks tempting, but after Kxf7 the bishop is simply gone.', fen: FEN, squares: ['f7'] }]);
+    off();
+    expect(rows[0]?.spokeKinds).toEqual(['deliberation']);
   });
 });
 

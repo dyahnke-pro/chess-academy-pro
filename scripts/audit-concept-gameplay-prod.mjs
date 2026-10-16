@@ -616,15 +616,29 @@ async function main() {
       const CATEGORY = {
         recognize: ['tactic', 'threat', 'gem', 'kickMap', 'captureChoice', 'trapAhead'],
         consequences: ['mistake', 'drawback', 'coachMistake', 'blunderCheck', 'tradeLedger'],
-        choices: ['rejectedTempting', 'heldMove', 'notYetPlayed', 'priorityFirst', 'holdResource'],
+        choices: ['rejectedTempting', 'heldMove', 'notYetPlayed', 'priorityFirst', 'holdResource', 'countMethod'],
         prevent: ['prophylaxis', 'threatAnswer', 'trapAhead'],
         plan: ['planArc', 'structure', 'structureJudgement', 'breakRace', 'openingIdea'],
         habits: ['patternFails', 'sameAsLastTime', 'lastTimeHere', 'behavior'],
         credit: ['foundMove', 'heldMove', 'movePoint', 'moveIntent', 'slipAnswer'],
       };
-      const catSpoke = Object.fromEntries(Object.entries(CATEGORY).map(([k, lanes]) => [k, turns.filter((t) => t.spoke.some((l) => lanes.includes(l))).length]));
+      // The position-facts lane carries many computers; its row names the
+      // KIND of each fact that spoke (`spokeKinds`), read here so the weighing
+      // and the habits are counted where they actually speak.
+      const KINDS = {
+        recognize: ['tactic', 'king-read'],
+        consequences: ['line', 'trade-danger'],
+        choices: ['deliberation', 'not-yet', 'refuted'],
+        prevent: ['opponent-intent', 'stopped', 'stop-flaw'],
+        plan: ['structure-plan', 'plan-race'],
+        habits: ['their-habit', 'your-habit', 'method'],
+        credit: [],
+      };
+      const catSpoke = Object.fromEntries(Object.entries(CATEGORY).map(([k, lanes]) => [k, turns.filter((t) => t.spoke.some((l) => lanes.includes(l)) || (t.spokeKinds ?? []).some((x) => KINDS[k].includes(x))).length]));
+      const kindMix = {};
+      for (const t of turns) for (const x of t.spokeKinds ?? []) kindMix[x] = (kindMix[x] ?? 0) + 1;
       const lanesSorted = Object.entries(laneMix).sort((a, b) => b[1].offered - a[1].offered).map(([l, v]) => `${l} ${v.spoke}/${v.offered}${v.held ? ` (held ${v.held}: ${Object.entries(v.why).map(([w, n]) => `${w} ${n}`).join(' ')})` : ''}`);
-      record('GRADE. teaching mix REPORTED — turns per category, and each lane spoke/offered', true, `${turns.length} turns — ${JSON.stringify(catSpoke)} — lanes: ${lanesSorted.join(', ')}`);
+      record('GRADE. teaching mix REPORTED — turns per category, and each lane spoke/offered', true, `${turns.length} turns — ${JSON.stringify(catSpoke)} — kinds: ${JSON.stringify(kindMix)} — lanes: ${lanesSorted.join(', ')}`);
       // EVERY STUDENT MOVE GETS ITS OWN REASON (David 2026-10-14): the door's
       // own row says whether a lane about the student's move spoke on the
       // turn. 'affirm' is a reason for a GOOD move — reported on its own, the
