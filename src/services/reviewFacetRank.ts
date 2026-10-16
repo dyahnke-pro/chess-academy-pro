@@ -31,7 +31,7 @@ export type FacetTag =
   | 'tactic' | 'threat' | 'loose' | 'count' | 'royal' | 'trapped'
   | 'sac' | 'sac-why' | 'forced' | 'king' | 'rook7' | 'passer'
   | 'badbishop' | 'worst' | 'minority' | 'complex' | 'structure'
-  | 'verdict' | 'opening' | 'opp-dev' | 'their-habit' | 'held' | 'last-here' | 'opp-target' | 'endgame'
+  | 'verdict' | 'opening' | 'opp-dev' | 'their-habit' | 'your-habit' | 'held' | 'last-here' | 'opp-target' | 'endgame'
   | 'plan-now' | 'plan-race' | 'plan-arc' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
   | 'note' | 'method' | 'refuted' | 'bluff' | 'technique' | 'contrast' | 'timing' | 'praise'
   | 'rule' | 'stopped' | 'stock' | 'trade' | 'point' | 'their-cost'
@@ -138,6 +138,7 @@ export const FACET_RANK: Record<FacetTag, number> = {
   // What THEY keep doing wrong — the same mistake twice (`opponentHabits`),
   // the plan against them. Just above their development.
   'their-habit': 25,
+  'your-habit': 25,
   // THE LOOP'S GREEN DIRECTION — a question their record says they failed in
   // another game, held this time. Beside the move's standing read.
   held: 30,
@@ -278,6 +279,7 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   'opp-target': 'describe',
   'opp-dev': 'describe',
   'their-habit': 'teach',
+  'your-habit': 'teach',
   held: 'teach',
   'last-here': 'teach',
   'plan-line': 'describe', // the long engine line — speaks only when it proves a point
@@ -321,6 +323,7 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   'not-yet': 'teach',
   line: 'teach',
   'their-habit': 'teach',
+  'your-habit': 'teach',
   'stop-flaw': 'teach',
   'hole-access': 'teach',
   'speedrun-read': 'teach',
@@ -377,7 +380,7 @@ export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   principle: 'principle', technique: 'principle', king: 'principle', opening: 'principle', endgame: 'principle',
   rule: 'principle', nugget: 'principle', equivalence: 'principle',
   does: 'principle', point: 'plan', 'their-cost': 'plan', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
-  status: 'principle', 'their-habit': 'principle', 'hole-access': 'plan', 'speedrun-read': 'plan',
+  status: 'principle', 'their-habit': 'principle', 'your-habit': 'principle', 'hole-access': 'plan', 'speedrun-read': 'plan',
   // PLAN — structure, targets, the plan and the long read.
   'plan-now': 'plan', contrast: 'plan', 'capture-choice': 'plan', kick: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-arc': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',
   'prevent-test': 'plan', 'game-end': 'plan', murky: 'plan', 'attack-pattern': 'plan',
@@ -418,7 +421,7 @@ export const FACT_PROOF: Record<FactKind, 'proven' | NoProofReason> = {
   equivalence: 'proven', 'capture-choice': 'proven', kick: 'proven',
   // PRINCIPLES AND HABITS — a rule of the game, taught; the board is the example.
   principle: 'method', technique: 'method', method: 'method', rule: 'method', fundamental: 'method',
-  endgame: 'method', stock: 'method', concept: 'method', 'their-habit': 'stated',
+  endgame: 'method', stock: 'method', concept: 'method', 'their-habit': 'stated', 'your-habit': 'stated',
   // NAMES.
   opening: 'name',
   // THE PLAN AND THE STRUCTURE — a reading of the position, said as one.
@@ -466,6 +469,7 @@ const CLAUSE_TIE: Record<ClauseKind, number> = {
   'not-yet': FACET_RANK.forced,
   line: FACET_RANK['plan-line'],
   'their-habit': FACET_RANK['opp-dev'],
+  'your-habit': FACET_RANK['opp-dev'],
   'stop-flaw': FACET_RANK['opp-target'],
   'hole-access': FACET_RANK.structure,
   'speedrun-read': FACET_RANK['plan-now'],

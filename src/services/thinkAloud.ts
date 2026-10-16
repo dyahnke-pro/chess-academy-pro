@@ -188,25 +188,45 @@ export interface Habit { kind: 'tempo' | 'undeveloped' | 'loose' | 'king-pawns';
  * development count: their minors still at home deep into the opening.
  */
 export function opponentHabits(sans: readonly string[], opp: 'w' | 'b'): Habit[] {
+  return habitsOf(sans, opp, 'their');
+}
+
+/** ONE HABIT COMPUTER, BOTH SEATS (A-plan P4, 2026-10-16: the opponent in
+ *  Learn is the coach's engine and had NO habits in either audit game, while
+ *  the student left pieces loose two and five times and nothing was said).
+ *  The same counts, read for whichever side, worded from the student's seat:
+ *  "they keep…" for the opponent, "you keep…" for the student — the habit
+ *  that finds it next time is the same lesson in both directions. */
+export function habitsOf(sans: readonly string[], side: 'w' | 'b', seat: 'their' | 'your'): Habit[] {
   const out: Habit[] = [];
   // THE SAME MISTAKE TWICE IS A HABIT, AND A HABIT IS A PLAN AGAINST THEM
   // (step 5 of the teaching order: "what the opponent keeps doing wrong —
   // closing on the habit that finds it next time"; Learn audit 2026-10-15
   // never heard it). Both read off the moves alone, so every surface that
   // holds the game speaks them.
-  const reads = habitReads(sans, opp);
+  const reads = habitReads(sans, side);
   if (reads.looseMoves >= 2) {
-    out.push({ kind: 'loose', text: `That's ${num(reads.looseMoves)} times now they've left a piece loose under your attack — they don't check what their move leaves behind. After every move of theirs, look first for what they left loose.` });
+    out.push({ kind: 'loose', text: seat === 'their'
+      ? `That's ${num(reads.looseMoves)} times now they've left a piece loose under your attack — they don't check what their move leaves behind. After every move of theirs, look first for what they left loose.`
+      : `That's ${num(reads.looseMoves)} times now you've left a piece loose under their attack. Before every move, check what it leaves without a guard — that one question saves most pieces.` });
   }
   if (reads.kingPawnPushes >= 2) {
-    out.push({ kind: 'king-pawns', text: `They keep pushing the pawns in front of their own king — ${num(reads.kingPawnPushes)} so far, and every push leaves a hole beside it. Aim your pieces at those squares.` });
+    out.push({ kind: 'king-pawns', text: seat === 'their'
+      ? `They keep pushing the pawns in front of their own king — ${num(reads.kingPawnPushes)} so far, and every push leaves a hole beside it. Aim your pieces at those squares.`
+      : `You keep pushing the pawns in front of your own king — ${num(reads.kingPawnPushes)} so far, and every push leaves a hole beside it for their pieces. Leave those pawns at home unless the push wins something.` });
   }
-  const t = tempoCount(sans, opp === 'w' ? 'b' : 'w');
-  if (t) out.push({ kind: 'tempo', text: t.text });
+  if (seat === 'their') {
+    const t = tempoCount(sans, side === 'w' ? 'b' : 'w');
+    if (t) out.push({ kind: 'tempo', text: t.text });
+  }
   const c = new Chess();
   for (const s of sans.slice(0, 24)) { try { c.move(s); } catch { break; } }
-  const home = homeMinorCount(c, opp);
-  if (Math.min(sans.length, 24) >= 16 && home >= 2) out.push({ kind: 'undeveloped', text: `They still have ${num(home)} minor pieces at home — the more they wait, the more you attack.` });
+  const home = homeMinorCount(c, side);
+  if (Math.min(sans.length, 24) >= 16 && home >= 2) {
+    out.push({ kind: 'undeveloped', text: seat === 'their'
+      ? `They still have ${num(home)} minor pieces at home — the more they wait, the more you attack.`
+      : `You still have ${num(home)} minor pieces at home — bring them out before anything else; a piece at home cannot join the fight.` });
+  }
   return out;
 }
 
@@ -239,7 +259,7 @@ export function habitReads(sans: readonly string[], opp: 'w' | 'b'): { looseMove
 }
 
 export interface DepthClause {
-  kind: 'not-yet' | 'line' | 'their-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read' | 'tactic' | 'king-read'
+  kind: 'not-yet' | 'line' | 'their-habit' | 'your-habit' | 'stop-flaw' | 'hole-access' | 'speedrun-read' | 'tactic' | 'king-read'
     | 'equivalence' | 'timing' | 'refuted' | 'capture-choice' | 'plan-race' | 'kick'
     | 'their-read' | 'prevent-test' | 'attack-pattern';
   /** The motif, in the one tactic vocabulary — the weakness join. */
@@ -295,6 +315,9 @@ export function depthClauses(args: {
   try {
     const habit = opponentHabits(args.history, args.studentColor === 'w' ? 'b' : 'w')[0];
     if (habit) out.push({ kind: 'their-habit', text: habit.text });
+    // …and the student's own, read by the same computer (A-plan P4).
+    const mine = habitsOf(args.history, args.studentColor, 'your')[0];
+    if (mine) out.push({ kind: 'your-habit', text: mine.text });
     if (args.lastStudentMove) {
       const h = holeAccess(args.lastStudentMove.fenBefore, args.lastStudentMove.san);
       if (h) out.push({ kind: 'hole-access', text: h.text, squares: [h.hole, ...(h.from ? [h.from] : [])] });
