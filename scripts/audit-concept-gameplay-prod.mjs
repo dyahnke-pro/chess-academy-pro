@@ -446,6 +446,10 @@ async function askAndPlay(page, listener, ask, label) {
       carryOverCleared += (await asking.count()) === 0 ? 1 : 0;
     }
     let legal = null;
+    // The sound student follows the script only through …Bg4 (the pin the
+    // concept check needs); after that the engine plays, so the game stays
+    // contested instead of dropping the bishop to h3/hxg4 (A-plan P0).
+    if (ENGINE_STUDENT && ply > STUDENT_LINE.indexOf('Bg4')) onBook = false;
     if (onBook && ply < STUDENT_LINE.length) {
       const m = chess.moves({ verbose: true }).find((v) => v.san === STUDENT_LINE[ply]);
       if (m) legal = { from: m.from, to: m.to, san: m.san };
@@ -602,9 +606,12 @@ async function main() {
       // for each category is asserted once its phase lands, never guessed.
       const laneMix = {};
       for (const t of turns) {
-        for (const l of t.offered) (laneMix[l] ??= { offered: 0, spoke: 0, held: 0 }).offered += 1;
-        for (const l of t.spoke) (laneMix[l] ??= { offered: 0, spoke: 0, held: 0 }).spoke += 1;
-        for (const l of t.held ?? []) (laneMix[l] ??= { offered: 0, spoke: 0, held: 0 }).held += 1;
+        for (const l of t.offered) (laneMix[l] ??= { offered: 0, spoke: 0, held: 0, why: {} }).offered += 1;
+        for (const l of t.spoke) (laneMix[l] ??= { offered: 0, spoke: 0, held: 0, why: {} }).spoke += 1;
+        for (const l of t.held ?? []) {
+          const m = (laneMix[l] ??= { offered: 0, spoke: 0, held: 0, why: {} }); m.held += 1;
+          const w = t.heldWhy?.[l] ?? '?'; m.why[w] = (m.why[w] ?? 0) + 1;
+        }
       }
       const CATEGORY = {
         recognize: ['tactic', 'threat', 'gem', 'kickMap', 'captureChoice', 'trapAhead'],
@@ -616,7 +623,7 @@ async function main() {
         credit: ['foundMove', 'heldMove', 'movePoint', 'moveIntent', 'slipAnswer'],
       };
       const catSpoke = Object.fromEntries(Object.entries(CATEGORY).map(([k, lanes]) => [k, turns.filter((t) => t.spoke.some((l) => lanes.includes(l))).length]));
-      const lanesSorted = Object.entries(laneMix).sort((a, b) => b[1].offered - a[1].offered).map(([l, v]) => `${l} ${v.spoke}/${v.offered}${v.held ? ` (held ${v.held})` : ''}`);
+      const lanesSorted = Object.entries(laneMix).sort((a, b) => b[1].offered - a[1].offered).map(([l, v]) => `${l} ${v.spoke}/${v.offered}${v.held ? ` (held ${v.held}: ${Object.entries(v.why).map(([w, n]) => `${w} ${n}`).join(' ')})` : ''}`);
       record('GRADE. teaching mix REPORTED — turns per category, and each lane spoke/offered', true, `${turns.length} turns — ${JSON.stringify(catSpoke)} — lanes: ${lanesSorted.join(', ')}`);
       // EVERY STUDENT MOVE GETS ITS OWN REASON (David 2026-10-14): the door's
       // own row says whether a lane about the student's move spoke on the
