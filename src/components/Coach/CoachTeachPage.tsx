@@ -39,7 +39,7 @@ import { buildPositionalRead, rookReachesFile } from '../../services/positionalR
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { OPENING_PLIES, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
-import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
+import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
 // EVERY ARROW ON THIS PAGE COMES OUT OF THE ARROW DOOR (`arrowDoor`, David
@@ -11313,7 +11313,10 @@ export function CoachTeachPage(): JSX.Element {
                         }
                       } catch { /* the verdict is a bonus, never a blocker */ }
                       if (gambitLine) queueSpokenHint(fenAfterReply, gambitLine, 'movePoint', NO_PROOF.description, [], [`gambit:${move.to}`]);
-                      const point = gambitLine ? null : studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null, preStudentRead?.topLines?.find((l) => l.moves[0] === `${move.from}${move.to}${move.promotion ?? ''}`)?.moves ?? null);
+                      // The point keeps what the ledger proved (A-plan P5): a capture that
+                      // wins carries its engine line as proof and its net as stake.
+                      const pointFact = gambitLine ? null : studentMovePointFact(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null, preStudentRead?.topLines?.find((l) => l.moves[0] === `${move.from}${move.to}${move.promotion ?? ''}`)?.moves ?? null);
+                      const point = pointFact?.text ?? null;
                       // SPOKEN ON THE BOARD AFTER THEIR REPLY, SO TRUE THERE
                       // (fresh-game walk 2026-09-27: "That wins the pawn on c4 —
                       // nothing takes it back safely" heard after Na3 hit c4).
@@ -11330,7 +11333,7 @@ export function CoachTeachPage(): JSX.Element {
                       const fileHeard = !!fileKey && (positionalSaidRef.current.has(fileKey) || standingRef.current.said.has(fileKey));
                       if (point && !nowLoose && !fileHeard) {
                         // A capture's point and the trade verdict are one claim about one square.
-                        queueSpokenHint(fenAfterReply, point, 'movePoint', NO_PROOF.description, [], [move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`, ...(fileKey ? [fileKey] : [])]);
+                        queueSpokenHint(fenAfterReply, point, 'movePoint', (pointFact?.line ? lineProof(pointFact.line) : null) ?? NO_PROOF.description, pointFact?.squares ?? [], [move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`, ...(fileKey ? [fileKey] : [])], undefined, undefined, undefined, pointFact?.stakes ?? undefined);
                         captureEvent('coach_move_point_named', { surface: 'coach-teach' });
                       }
                       // EVERY STUDENT MOVE GETS ITS OWN REASON (David 2026-10-14):

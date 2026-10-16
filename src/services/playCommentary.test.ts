@@ -4,7 +4,7 @@
 import { packageForRegister } from './hintRegister';
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence, studentMovePoint } from './playCommentary';
+import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence, studentMovePoint, studentMovePointFact } from './playCommentary';
 
 describe('buildPlayCommentary', () => {
   // The "trade off their best piece" beat was REMOVED 2026-08-26 — the
@@ -607,6 +607,17 @@ describe('studentMovePoint — the point of a sound move, only when the board pr
   it('dxe5 — a free pawn', () => {
     // Stockfish depth 18: …Bg4 Be2 Qe4 O-O Rd8 Qe1 Nd5 Bd1 — e5 is never taken back.
     expect(studentMovePoint(after(`${LINE} Bxc3 Nge7`), 'dxe5', 'Nge7', ['d4e5', 'c8g4', 'f1e2', 'd5e4', 'e1g1', 'a8d8', 'd1e1', 'e7d5', 'e2d1'])).toBe('That wins the pawn on e5 — nothing takes it back safely.');
+  });
+  it('dxe5 keeps its proof: the engine line it was read off and the pawn it nets (A-plan P5)', () => {
+    const f = studentMovePointFact(after(`${LINE} Bxc3 Nge7`), 'dxe5', 'Nge7', ['d4e5', 'c8g4', 'f1e2', 'd5e4', 'e1g1', 'a8d8', 'd1e1', 'e7d5', 'e2d1']);
+    expect(f?.line?.sans.slice(0, 3)).toEqual(['dxe5', 'Bg4', 'Be2']);
+    expect(f?.stakes).toEqual({ points: 1, plies: 0 });
+    expect(f?.squares).toEqual(['d4', 'e5']);
+  });
+  it('a quiet move\'s point is a description and says so — no line, no stake', () => {
+    const f = studentMovePointFact(after(LINE), 'Bxc3', 'Bxc3', null);
+    expect(f?.line).toBeNull();
+    expect(f?.stakes).toBeNull();
   });
   it('no engine line — the capture claims nothing (WO-OUTCOME-01)', () => {
     expect(studentMovePoint(after(`${LINE} Bxc3 Nge7`), 'dxe5', 'Nge7', null)).toBeNull();
