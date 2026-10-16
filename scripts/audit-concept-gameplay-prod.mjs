@@ -285,6 +285,68 @@ async function absorbOneMove(page, chess) {
  * Ask the coach for a GAME, then play it. Returns what actually happened, so
  * the caller can assert on a game rather than on a mounted panel.
  */
+
+// ── H: "COULDN'T THEY JUST MOVE X?" (WO-DANYA-01 C) — run MID-GAME, while
+// the pieces are on the board (Learn audit 2026-10-15: asked at the end of a
+// finished game, every piece asked about was already gone, so H could never
+// pass). Records H1-H3 once; the end-of-run call is only a fallback.
+let pieceProbeDone = false;
+async function pieceProbe(page, listener) {
+  if (pieceProbeDone) return;
+  pieceProbeDone = true;
+    const input = page.locator('[data-testid="chat-text-input"]');
+    let answered = null;
+    for (const ask of ["couldn't they just move their queen?", "couldn't they just move their rook?", 'could I just move my knight?', "couldn't they just move their bishop?"]) {
+      const before = await page.locator('[data-testid="chat-message-assistant"]').count();
+      await input.waitFor({ state: 'visible', timeout: 20_000 }).catch(() => {});
+      // The input is disabled while the previous turn is busy — typing into
+      // it then sends nothing (the local run's "knight" ask vanished).
+      for (let t = Date.now(); Date.now() - t < 60_000 && await input.isDisabled().catch(() => false);) await page.waitForTimeout(500);
+      await input.pressSequentially(ask, { delay: 12 }).catch(() => {});
+      await page.keyboard.press('Enter');
+      const askedAt = Date.now();
+      const by = askedAt + 60_000;
+      // The transcript renders NEWEST FIRST — `.last()` is the greeting. A new
+      // bubble can land EMPTY (the streaming placeholder), so wait for text.
+      const last = page.locator('[data-testid="chat-message-assistant"]').first();
+      let text = '';
+      while (Date.now() < by) {
+        await page.waitForTimeout(500);
+        if ((await page.locator('[data-testid="chat-message-assistant"]').count()) <= before) continue;
+        text = (await last.innerText().catch(() => '')).replace(/\s+/g, ' ').trim();
+        if (text.replace(/^C\s*/, '').length > 10) break;
+      }
+      console.log(`[piece-latency] ${Date.now() - askedAt}ms`);
+      const walks = await last.locator('[data-testid^="message-walk-line-"]').count();
+      console.log(`[piece] ask="${ask}" walks=${walks} → ${text.slice(0, 260)}`);
+      // PIN the button now: `last` is a lazy "newest bubble" locator, and in a
+      // long game newer bubbles land after the answer — the click then hit a
+      // bubble with no Walk button (H3 false-failed once the game played on).
+      if (walks > 0) { answered = { ask, text, walks, last, walk0: await last.locator('[data-testid="message-walk-line-0"]').elementHandle().catch(() => null) }; break; }
+    }
+    for (const e of listener.getCapturedEvents().filter((x) => x.source === 'coachService.pieceOptions')) console.log(`[piece-stage] ${e.summary}`);
+    record('H1. a "couldn\'t they just move X?" ask is answered by the COMPUTER (job → squares → refutation → verdict)', !!answered && /\b(Where can|So (yes|no)|So [A-Z][a-z]?[a-h1-8x+]* was about as good|comes down to the best square|the question is just its best square|square that holds|gives up its guard|is attacked|holds?\.)\b/.test(answered.text), answered ? answered.text.slice(0, 200) : 'no ask produced walkable lines');
+    record('H2. the answer carries a Walk button per calculated line', !!answered && answered.walks > 0, answered ? `${answered.walks} walk button(s)` : '0');
+    if (answered) {
+      // While the answer is spoken the board SHOWS the question's position
+      // (`line-walk-active`). Baseline only once it has handed back.
+      const active = page.locator('[data-testid="line-walk-active"]');
+      for (let t = Date.now(); Date.now() - t < 45_000 && (await active.count()) > 0;) await page.waitForTimeout(500);
+      const live = await readPlacement(page);
+      if (answered.walk0) await answered.walk0.click({ force: true }).catch(() => {});
+      else await answered.last.locator('[data-testid="message-walk-line-0"]').click({ force: true }).catch(() => {});
+      let moved = false;
+      for (let t = Date.now(); Date.now() - t < 8000 && !moved;) { await page.waitForTimeout(300); moved = (await active.count()) > 0; }
+      let back = false;
+      for (let t = Date.now(); moved && Date.now() - t < 30_000 && !back;) {
+        await page.waitForTimeout(500);
+        back = (await active.count()) === 0 && samePlacement(await readPlacement(page), live);
+      }
+      record('H3. Walk plays the line on the board and returns to the game', moved && back, `moved=${moved} returned=${back}`);
+    }
+
+}
+
 async function askAndPlay(page, listener, ask, label) {
   await page.goto(`${BASE_URL}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
   await dismissGates(page);
@@ -408,6 +470,8 @@ async function askAndPlay(page, listener, ask, label) {
     }
     if (!reply) { console.log(`[stall] ${label}: no coach reply after ${moves.at(-1)} — stopping at ply ${chess.history().length}`); break; }
     moves.push(reply);
+    // Mid-game, pieces still on: the "couldn't they just move X?" probe.
+    if (label === 'canonical' && chess.history().length >= 12) await pieceProbe(page, listener);
     // Stop once the concept has been voiced — the game has done its job.
     //
     // 🔒 AND THIS EARLY EXIT IS WHY THE GAME READS "5 plies" ON A 14-PLY
@@ -473,64 +537,8 @@ async function main() {
     const e = await askAndPlay(page, listener, ASK_TYPO, 'typo');
     record('E. a misspelled play ask still starts a GAME (G7 off-canonical input)', e.started && e.plies > 0, `ask="${ASK_TYPO}" started=${e.started} plies=${e.plies}${e.walkthrough ? ` WALKTHROUGH=${e.walkthrough}` : ''} after ${e.secs}s`);
 
-    // ── H: "COULDN'T THEY JUST MOVE X?" (WO-DANYA-01 C, David 2026-09-24) ───
-    // Asked in the chat of the game just played. The answer is COMPUTED (the
-    // piece's job → the squares that keep it → each refuted by its line → a
-    // verdict), the lines come back as Walk buttons, and a walk shows the line
-    // on the board and returns to the game. Tries pieces in turn, because the
-    // one asked about may already be off the board.
-    {
-      const input = page.locator('[data-testid="chat-text-input"]');
-      let answered = null;
-      for (const ask of ["couldn't they just move their queen?", "couldn't they just move their rook?", 'could I just move my knight?', "couldn't they just move their bishop?"]) {
-        const before = await page.locator('[data-testid="chat-message-assistant"]').count();
-        await input.waitFor({ state: 'visible', timeout: 20_000 }).catch(() => {});
-        // The input is disabled while the previous turn is busy — typing into
-        // it then sends nothing (the local run's "knight" ask vanished).
-        for (let t = Date.now(); Date.now() - t < 60_000 && await input.isDisabled().catch(() => false);) await page.waitForTimeout(500);
-        await input.pressSequentially(ask, { delay: 12 }).catch(() => {});
-        await page.keyboard.press('Enter');
-        const askedAt = Date.now();
-        const by = askedAt + 60_000;
-        // The transcript renders NEWEST FIRST — `.last()` is the greeting. A new
-        // bubble can land EMPTY (the streaming placeholder), so wait for text.
-        const last = page.locator('[data-testid="chat-message-assistant"]').first();
-        let text = '';
-        while (Date.now() < by) {
-          await page.waitForTimeout(500);
-          if ((await page.locator('[data-testid="chat-message-assistant"]').count()) <= before) continue;
-          text = (await last.innerText().catch(() => '')).replace(/\s+/g, ' ').trim();
-          if (text.replace(/^C\s*/, '').length > 10) break;
-        }
-        console.log(`[piece-latency] ${Date.now() - askedAt}ms`);
-        const walks = await last.locator('[data-testid^="message-walk-line-"]').count();
-        console.log(`[piece] ask="${ask}" walks=${walks} → ${text.slice(0, 260)}`);
-        // PIN the button now: `last` is a lazy "newest bubble" locator, and in a
-        // long game newer bubbles land after the answer — the click then hit a
-        // bubble with no Walk button (H3 false-failed once the game played on).
-        if (walks > 0) { answered = { ask, text, walks, last, walk0: await last.locator('[data-testid="message-walk-line-0"]').elementHandle().catch(() => null) }; break; }
-      }
-      for (const e of listener.getCapturedEvents().filter((x) => x.source === 'coachService.pieceOptions')) console.log(`[piece-stage] ${e.summary}`);
-      record('H1. a "couldn\'t they just move X?" ask is answered by the COMPUTER (job → squares → refutation → verdict)', !!answered && /\b(Where can|So (yes|no)|So [A-Z][a-z]?[a-h1-8x+]* was about as good|comes down to the best square|the question is just its best square|square that holds|gives up its guard|is attacked|holds?\.)\b/.test(answered.text), answered ? answered.text.slice(0, 200) : 'no ask produced walkable lines');
-      record('H2. the answer carries a Walk button per calculated line', !!answered && answered.walks > 0, answered ? `${answered.walks} walk button(s)` : '0');
-      if (answered) {
-        // While the answer is spoken the board SHOWS the question's position
-        // (`line-walk-active`). Baseline only once it has handed back.
-        const active = page.locator('[data-testid="line-walk-active"]');
-        for (let t = Date.now(); Date.now() - t < 45_000 && (await active.count()) > 0;) await page.waitForTimeout(500);
-        const live = await readPlacement(page);
-        if (answered.walk0) await answered.walk0.click({ force: true }).catch(() => {});
-        else await answered.last.locator('[data-testid="message-walk-line-0"]').click({ force: true }).catch(() => {});
-        let moved = false;
-        for (let t = Date.now(); Date.now() - t < 8000 && !moved;) { await page.waitForTimeout(300); moved = (await active.count()) > 0; }
-        let back = false;
-        for (let t = Date.now(); moved && Date.now() - t < 30_000 && !back;) {
-          await page.waitForTimeout(500);
-          back = (await active.count()) === 0 && samePlacement(await readPlacement(page), live);
-        }
-        record('H3. Walk plays the line on the board and returns to the game', moved && back, `moved=${moved} returned=${back}`);
-      }
-    }
+    // H runs mid-game (pieceProbe); this is the fallback if no game reached it.
+    await pieceProbe(page, listener);
 
     // ── F: vacuity + instrument hygiene ────────────────────────────────────
     const all = spokenLines(listener);
