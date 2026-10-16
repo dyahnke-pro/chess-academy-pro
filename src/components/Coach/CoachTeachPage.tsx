@@ -304,6 +304,7 @@ import { opponentStrength } from '../../services/engineStrength';
 import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
 import { readBoard, readBoardAll, newPlanThread, type BoardRead } from '../../services/boardComputers';
+import { clonePlanThread, adoptPlanTrial, type PlanThread } from '../../services/planThread';
 import { splitThink, stripThink, THINK_MARK, THINK_PAUSE_MS } from '../../utils/thinkPause';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
@@ -1848,6 +1849,8 @@ export function CoachTeachPage(): JSX.Element {
    *  Keyed by fen because these are computed asynchronously, after the instant
    *  package has shipped, and a hint about a board the student has moved past
    *  is worse than no hint. */
+  /** The plan thread's turn, tried on a copy until the door says whether it spoke. */
+  const planTrialRef = useRef<{ fen: string; live: PlanThread; trial: PlanThread; offered: string[] } | null>(null);
   const pendingVoiceRef = useRef<{
     fen: string;
     /** `squares` rides along so the board can be drawn from what SURVIVED the
@@ -10006,8 +10009,14 @@ export function CoachTeachPage(): JSX.Element {
                     // once, its stop said with the PROOF read off their move,
                     // "good defending" when they stop two in a row.
                     try {
+                      // ON A COPY, adopted after the door from what SPOKE
+                      // (`adoptPlanTrial`): a plan held on a threat turn is
+                      // offered again instead of being marked said.
+                      const planLive = learnMemRef.current.planThread ??= newPlanThread();
+                      const planTrial = clonePlanThread(planLive);
+                      const planOffered: string[] = [];
                       const plansNow = readBoardAll('planThread', {
-                        thread: learnMemRef.current.planThread ??= newPlanThread(),
+                        thread: planTrial,
                         ply: move.history.length + 1, fenBefore: move.fen, fenAfter: probe.fen(),
                         student: playerColor === 'white' ? 'w' : 'b',
                         // The student's own move, credited when it was a step of the plan
@@ -10027,8 +10036,10 @@ export function CoachTeachPage(): JSX.Element {
                         const line = gradeNarrationText(pl.text, probe.fen(), 'CoachTeachPage.structuralPlan')?.trim();
                         // The plan's routes, hop by hop (David 2026-10-15: "Arrows trace its route?").
                         const routeClaims: ArrowClaim[] = (pl.routeArrows ?? []).map((a) => ({ from: a.from, to: a.to, role: 'line', fen: a.fen, source: 'learn.planRoute' }));
-                        if (line) queueSpokenHint(probe.fen(), line, 'planArc', pl.proof, pl.squares, [pl.key, ...(pl.sharedKey ? [pl.sharedKey] : [])], undefined, routeClaims.length ? routeClaims : undefined);
+                        if (line) { queueSpokenHint(probe.fen(), line, 'planArc', pl.proof, pl.squares, [pl.key, ...(pl.sharedKey ? [pl.sharedKey] : [])], undefined, routeClaims.length ? routeClaims : undefined); planOffered.push(pl.key); }
                       }
+                      if (plansNow.length === 0) adoptPlanTrial(planLive, planTrial, [], []);
+                      else planTrialRef.current = { fen: probe.fen(), live: planLive, trial: planTrial, offered: planOffered };
                     } catch { /* the plan is a bonus, never a blocker */ }
                   }
                 } catch { /* the read is a bonus, never a blocker */ }
@@ -11702,6 +11713,12 @@ export function CoachTeachPage(): JSX.Element {
                     beginner: isBeginnerMode(useAppStore.getState().activeProfile),
                   });
                   const hintPkg = lateDecision.pkg;
+                  // The plan thread adopts its tried turn only if a line of it spoke.
+                  const planTry = planTrialRef.current;
+                  if (planTry && samePosition(planTry.fen, pending.fen)) {
+                    adoptPlanTrial(planTry.live, planTry.trial, planTry.offered, hintPkg.kept.flatMap((f) => f.claims ?? []));
+                    planTrialRef.current = null;
+                  }
                   if (announcesTheMove(lateDecision.spoke)) announcedBoardsRef.current.add(pending.fen.split(' ').slice(0, 2).join(' '));
                   if (lateDecision.lead) turnLeadRef.current = { fen: pending.fen, lead: lateDecision.lead };
                   // A wave that held everything said nothing — but what it held

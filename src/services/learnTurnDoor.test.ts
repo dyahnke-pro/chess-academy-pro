@@ -614,3 +614,10 @@ describe('the habit closes the turn, the verdict opens it (Learn tape 2026-10-15
     expect(d.pkg.spoken.indexOf('was a mistake')).toBeLessThan(d.pkg.spoken.indexOf('Blunder check'));
   });
 });
+
+describe('Learn tries the plan thread on a copy and adopts only what spoke (A-plan P3)', () => {
+  it('the live thread is never handed to the producer, and the door\'s kept claims decide', () => {
+    expect(TEACH_CODE).toMatch(/readBoardAll\('planThread', \{\s*thread: planTrial,/);
+    expect(TEACH_CODE).toMatch(/adoptPlanTrial\(planTry\.live, planTry\.trial, planTry\.offered, hintPkg\.kept\.flatMap/);
+  });
+});
