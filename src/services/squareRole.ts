@@ -26,7 +26,8 @@ export function squareRole(chess: Chess, sq: Square, me: Color, owner: 'their' |
   // e5 pawn" was lost when occupied squares were dropped); your own piece on
   // it is only guarded — no reason, not said.
   const on = chess.get(sq);
-  if (on) return on.color === them && on.type !== 'k' ? `attacking ${owner === 'the' ? 'the enemy' : owner} ${NAME[on.type]} there` : null;
+  // With no seat, the square already says which piece: "attacking the pawn there".
+  if (on) return on.color === them && on.type !== 'k' ? `attacking ${owner === 'the' ? 'the' : owner} ${NAME[on.type]} there` : null;
   // THEIR PAWN'S NEXT STEP: a pawn of theirs one square behind (or two, from
   // its start rank with the way clear).
   const back = them === 'w' ? -1 : 1;
@@ -43,8 +44,8 @@ export function squareRole(chess: Chess, sq: Square, me: Color, owner: 'their' |
   const own1 = chess.get(`${file}${rank + fwd}` as Square);
   const own2 = chess.get(`${file}${rank + 2 * fwd}` as Square);
   const ownStart = me === 'w' ? 2 : 7;
-  // With no seat, "the d-pawn" cannot say whose: the mover's own is "its own".
-  const mine = owner === 'their' ? 'your' : owner === 'your' ? 'their' : 'its own';
+  // With no seat, the push says whose: a piece backs its own side's advance.
+  const mine = owner === 'their' ? 'your' : owner === 'your' ? 'their' : 'the';
   if ((own1 && own1.type === 'p' && own1.color === me) || (!own1 && own2 && own2.type === 'p' && own2.color === me && rank + 2 * fwd === ownStart)) {
     return `backing ${mine} ${file}-pawn's push there`;
   }

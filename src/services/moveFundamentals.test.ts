@@ -26,10 +26,10 @@ describe('computeMoveFundamentals — development leads a quiet developing move'
     expect(funds[0].id).toBe('development');
     expect(funds[0].squares).toContain('f3');
     expect(strategicWhyLed(START, 'Nf3', 'white')).toBe(
-      'develops into the game, fighting for the center on d4, backing its own d-pawn\'s push there, and e5, holding back the enemy e-pawn',
+      'develops into the game, fighting for the center on d4, backing the d-pawn\'s push there, and e5, holding back the enemy e-pawn',
     );
     expect(strategicWhySelfContained(START, 'Nf3', 'white')).toBe(
-      'develops the knight into the game, fighting for the center on d4, backing its own d-pawn\'s push there, and e5, holding back the enemy e-pawn',
+      'develops the knight into the game, fighting for the center on d4, backing the d-pawn\'s push there, and e5, holding back the enemy e-pawn',
     );
   });
 
