@@ -218,3 +218,15 @@ describe('a long refutation is said as its shape (Learn audit 2026-10-15: an 87-
     expect(r).not.toMatch(/Bxd4/);
   });
 });
+
+describe('the verdict names the answer on the option\'s own line (grade walk 2026-10-16)', () => {
+  it('"after Qd3 the answer is Nb4" rides beside the amount', () => {
+    const plies = [{ san: 'Qd3', uci: 'd1d3', fenBefore: FEN, fenAfter: FEN }, { san: 'Nb4', uci: 'c6b4', fenBefore: FEN, fenAfter: FEN }];
+    const text = renderPieceOptions({
+      seat: 'opponent', piece: 'q', from: 'd1', duty: ['d4'], narrowedBy: 'duty',
+      options: [{ san: 'Qd3', moverCp: -100, refutation: null, line: { label: 'Qd3', startFen: FEN, plies } }],
+      playedSan: 'Be2', playedCp: 50, allMoves: 9,
+    });
+    expect(text).toMatch(/Be2 was the better move: after Qd3 the answer is Nb4, and moving it costs/);
+  });
+});

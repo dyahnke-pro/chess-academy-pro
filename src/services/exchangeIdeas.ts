@@ -681,7 +681,11 @@ export function materialArithmetic(fenBefore: string, san: string, student: Side
     if (k !== 'p' && d[k] !== 0) sq.push(x.square);
   }
   const proof: Proof = { kind: 'count', exact: true, short: `A piece is worth three pawns, a rook five, a queen nine`, full: `Counting a piece as three pawns, a rook as five and a queen as nine: ${verdict}`, ...(sq.length ? { squares: sq } : {}) };
-  return idea('material-arithmetic', text, sq, proof, `material-arithmetic:${kinds.map((k) => d[k]).join(',')}`);
+  // Said once per VERDICT, not per piece count (grade walk 2026-10-16: "two
+  // pawns for a piece — they are a pawn up overall" and, two moves on, "a rook
+  // and three pawns for three pieces — they are a pawn up overall"). The
+  // balance is the lesson; a new mix with the same balance is bookkeeping.
+  return idea('material-arithmetic', text, sq, proof, `material-arithmetic:${verdict}`);
 }
 
 /** The squares a knight on `sq` touches (geometry, not legality). */
