@@ -345,6 +345,10 @@ export interface LaneFact {
    *  role decides, and the lane is only the fallback (David 2026-10-13: "the
    *  deciding computer needs to value why statements over others"). */
   role?: FacetRole;
+  /** The producing computer's own kind for this fact (a position-facts clause
+   *  kind: deliberation, your-habit, …). The lane says which producer; this
+   *  says which of its facts — emitted on the row, never used to decide. */
+  factKind?: string;
   /** ITS PROOF, OR WHY IT NEEDS NONE — REQUIRED (root cause, David
    *  2026-10-07): a producer that cannot answer this cannot speak. */
   proof: FactProof;
@@ -657,7 +661,14 @@ export function decideTurn(
   // squares) — the lane alone cannot say: `movePoint` carries both the
   // engine's winning line and a board description.
   const ownProven = keep.some((f) => { const l = laneFor(f); return !!l && (DNA_BEAT[l] === 'affirm' || DNA_BEAT[l] === 'but') && proofOf.has(f.text); });
-  if (offered.length > 0) emitLearnTurn({ offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, ownMove, ownLanes, ownProven, turn });
+  // WHAT spoke inside a many-fact lane (A-plan P0: the weighing and the habit
+  // ride the position-facts lane, so a lane count could not see them).
+  const spokeKinds = keep.flatMap((f) => {
+    const l = laneFor(f);
+    const k = facts.find((x) => x.lane === l && (x.text === f.text || x.text.includes(f.text) || f.text.includes(x.text)))?.factKind;
+    return k ? [k] : [];
+  });
+  if (offered.length > 0) emitLearnTurn({ spokeKinds, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, ownMove, ownLanes, ownProven, turn });
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
 }
 

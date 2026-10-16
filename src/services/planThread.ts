@@ -69,6 +69,21 @@ export function clonePlanThread(t: PlanThread): PlanThread {
   return { ...t, howSaid: new Set(t.howSaid), whyAsked: new Set(t.whyAsked) };
 }
 
+/** ADOPT A TRIED TURN ONLY WHAT WAS SAID (A-plan P3, prod Learn 2026-10-16:
+ *  the first plan — the one that asks the method — was offered while a threat
+ *  led the turn, the door held it, and the thread had already marked it stated,
+ *  so the method was never heard all game). A surface runs the turn on
+ *  `clonePlanThread`, offers its lines, and hands back the claims that SPOKE:
+ *  the copy becomes the thread when one of its lines spoke, or when it offered
+ *  none (its bookkeeping still holds). Lines offered and all held leave the
+ *  thread as it was, so the plan is offered again on the next calm turn.
+ *  Returns whether the trial was adopted. */
+export function adoptPlanTrial(thread: PlanThread, trial: PlanThread, offeredClaims: readonly string[], spokenClaims: readonly string[]): boolean {
+  if (offeredClaims.length > 0 && !offeredClaims.some((c) => spokenClaims.includes(c))) return false;
+  Object.assign(thread, trial);
+  return true;
+}
+
 export interface PlanThreadLine {
   text: string;
   squares: string[];

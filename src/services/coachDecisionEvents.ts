@@ -190,6 +190,9 @@ export interface LearnTurnRow {
   /** Why each held lane was held (the door's own reason: verdict-turn,
    *  mate-turn, danger-waits, subsumed, restates, off-topic, aside). */
   heldWhy: Record<string, string>;
+  /** The kinds of the facts that spoke, where the producer named one (the
+   *  position-facts clauses: deliberation, your-habit, …). */
+  spokeKinds?: string[];
   /** THE REASON FOR THE STUDENT'S OWN MOVE (David 2026-10-14: "every student
    *  move gets its own reason"). The DNA beat of the own-move lane that spoke:
    *  'affirm' (what the move did well), 'but' (what it gave up), or null when

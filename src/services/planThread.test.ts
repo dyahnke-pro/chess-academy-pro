@@ -3,7 +3,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { deriveNextPlanFacts } from './nextPlans';
-import { newPlanThread, planThreadTurn, PLAN_THREAD_HOLD_PLIES } from './planThread';
+import { newPlanThread, planThreadTurn, PLAN_THREAD_HOLD_PLIES, clonePlanThread, adoptPlanTrial } from './planThread';
 
 const CENTRE_KING = 'r3k2r/ppp2ppp/2n2n2/8/8/2N2N2/PPPQ1PPP/R3K2R b KQkq - 0 12';
 /** The same board with Black's king already walked to f8 — no castling left. */
@@ -90,5 +90,24 @@ describe('a stronger plan replaces the one that stands; an equal or weaker one n
     });
     expect(said.some((x) => /passed pawn/.test(x.text))).toBe(true);
     for (let i = 1; i < said.length; i++) expect(said[i].ply - said[i - 1].ply).toBeGreaterThanOrEqual(PLAN_THREAD_HOLD_PLIES);
+  });
+});
+
+describe('a plan HELD by the door is offered again — the thread adopts only what was said (A-plan P3)', () => {
+  it('the method-bearing first plan, held on a threat turn, comes back on the next turn', () => {
+    const t = newPlanThread();
+    const trial = clonePlanThread(t);
+    const first = planThreadTurn(trial, { ply: 22, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w' });
+    expect(first[0].text).toMatch(/^How do you find a plan\?/);
+    // The door held it: nothing of it spoke.
+    expect(adoptPlanTrial(t, trial, first.map((l) => l.claim), [])).toBe(false);
+    expect(t.methodSaid).toBe(false);
+    expect(t.stated).toBeNull();
+    // Next turn it is offered again, method and all — and this time it speaks.
+    const trial2 = clonePlanThread(t);
+    const again = planThreadTurn(trial2, { ply: 24, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w' });
+    expect(again[0].text).toMatch(/^How do you find a plan\?/);
+    expect(adoptPlanTrial(t, trial2, again.map((l) => l.claim), [again[0].claim])).toBe(true);
+    expect(t.methodSaid).toBe(true);
   });
 });

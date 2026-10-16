@@ -277,3 +277,20 @@ describe('reason wordings rotate per game, not per move number (David 2026-10-14
     expect(nextStem(m, 'hanging')).toBe(0);
   });
 });
+
+describe('Learn remembers what SPOKE, never what was offered (prod Learn 2026-10-16)', () => {
+  it('a held fact leaves no say-once key; a kept one writes its claims, a one-turn threat never', async () => {
+    const { rememberKeptClaims, rememberKeptClauses } = await import('./learnMemory');
+    const said: string[] = [];
+    rememberKeptClaims([{ claims: ['file-d', 'win-e5'] }], (k) => said.push(k));
+    expect(said).toEqual(['file-d']);
+    const byClause = [
+      { text: 'They keep moving the same piece twice.', keys: ['They keep moving the same piece twice.'] },
+      { text: 'How do you find a plan?', keys: ['method:plan'] },
+    ];
+    const kept: string[] = [];
+    // Only the habit clause spoke; the method clause was held.
+    rememberKeptClauses([{ text: 'They keep moving the same piece twice.' }], byClause, (k) => kept.push(k));
+    expect(kept).toEqual(['They keep moving the same piece twice.']);
+  });
+});

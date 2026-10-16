@@ -56,6 +56,11 @@ describe('nextMoveAdvice', () => {
       .toEqual({ speak: true, reason: 'motif-record' });
   });
 
+  it('a standing threat earns the weighing — meeting it or not is the choice (A-plan P1)', () => {
+    expect(nextMoveAdvice({ tier: 'must-defend', phase: 'middlegame', weaknesses: [], motifHole: null }))
+      .toEqual({ speak: true, reason: 'threat' });
+  });
+
   it('must-defend and teaching are not deciding tiers', () => {
     expect(isDecidingMoment('must-defend')).toBe(false);
     expect(isDecidingMoment('teaching')).toBe(false);

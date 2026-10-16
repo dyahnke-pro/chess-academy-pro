@@ -11,6 +11,7 @@
 //   1. THE BOARD — a deciding moment. The importance model already computed it
 //      (only-move, critical, swing, blunder, mate); on a flat position where
 //      several moves are equal, naming "the move" teaches nothing.
+//   1b. A STANDING THREAT (must-defend): whether to meet it is the choice.
 //   2. THE STUDENT'S OWN RECORD — raise-only. They have open mistakes in this
 //      PHASE (the spine files every mistake under the same `classifyPhase` the
 //      board is read with here), or a recorded hole this position's facts hit
@@ -26,7 +27,7 @@ import type { ImportanceTier } from './narrationImportance';
 import type { WeaknessSignal } from './weaknessSignal';
 import type { GamePhase } from '../types';
 
-export type MoveAdviceReason = 'deciding' | 'phase-record' | 'motif-record';
+export type MoveAdviceReason = 'deciding' | 'threat' | 'phase-record' | 'motif-record';
 
 export interface MoveAdviceVerdict {
   speak: boolean;
@@ -80,6 +81,12 @@ export function nextMoveAdvice(input: {
   motifHole: WeaknessSignal | null;
 }): MoveAdviceVerdict {
   if (isDecidingMoment(input.tier)) return { speak: true, reason: 'deciding' };
+  // A STANDING THREAT IS A CHOICE (A-plan P1, prod Learn 2026-10-16: 16 of 49
+  // moves stood on a threat and the weighing spoke on one). Meeting it or
+  // ignoring it is the fork in the road, and the weighing filters itself — it
+  // speaks only alternatives with a computed cost, so a threat with nothing
+  // tempting to rule out stays silent.
+  if (input.tier === 'must-defend') return { speak: true, reason: 'threat' };
   if (phaseHole(input.phase, input.weaknesses)) return { speak: true, reason: 'phase-record' };
   if (input.motifHole && isOpenHole(input.motifHole)) return { speak: true, reason: 'motif-record' };
   return { speak: false, reason: null };

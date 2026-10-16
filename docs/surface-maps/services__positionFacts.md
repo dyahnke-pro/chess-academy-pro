@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1936 lines · 15 exports · 28 importers · 25 tests · 3 audits**
+**1944 lines · 15 exports · 28 importers · 25 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -100,9 +100,9 @@
 - `src/services/positionReadComposer.ts:155`
 - `src/services/whyBestMove.ts:160`
 
-### `computePositionFacts` (function) — 89 call sites
+### `computePositionFacts` (function) — 90 call sites
 - `src/coach/boardTurnAnswer.ts:134`
-- `src/components/Coach/CoachTeachPage.tsx:10127`
+- `src/components/Coach/CoachTeachPage.tsx:10150`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:645`
@@ -122,6 +122,7 @@
 - `src/services/liveNeedWire.test.ts:31`
 - `src/services/loopCloses.test.ts:112`
 - `src/services/positionFacts.convertOnce.test.ts:16`
+- `src/services/positionFacts.convertOnce.test.ts:37`
 - `src/services/positionFacts.depth.test.ts:18`
 - `src/services/positionFacts.depth.test.ts:38`
 - `src/services/positionFacts.liveFundamental.test.ts:52`
@@ -192,11 +193,12 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8681`
+- `src/components/Coach/CoachTeachPage.tsx:8685`
 
-### `convertKey` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10393`
+### `convertKey` (function) — 3 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10417`
 - `src/services/positionFacts.convertOnce.test.ts:24`
+- `src/services/positionFacts.convertOnce.test.ts:40`
 
 ### `afterLine` (function) — 5 call sites
 - `src/services/positionFacts.afterLine.test.ts:13`
@@ -206,7 +208,7 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8662`
+- `src/components/Coach/CoachTeachPage.tsx:8666`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.ts:9`

@@ -320,7 +320,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
 };
 
 /** A fresh plan thread for a surface's memory. */
-export { newPlanThread } from './planThread';
+export { newPlanThread, clonePlanThread, adoptPlanTrial, type PlanThread } from './planThread';
 
 /** Every read, in speaking order. */
 export function readBoardAll<K extends ComputerId>(id: K, ctx: BoardContexts[K]): BoardRead[] {

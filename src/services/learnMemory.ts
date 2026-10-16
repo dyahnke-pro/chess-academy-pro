@@ -364,3 +364,25 @@ export function nextStem(mem: Pick<LearnMemory, 'stemCounts'>, key: string): num
   mem.stemCounts.set(key, n + 1);
   return n;
 }
+
+/** WRITE WHAT SPOKE, NEVER WHAT WAS OFFERED (prod Learn 2026-10-16: the door
+ *  held 19 of 21 behaviours, a habit and the plan method — and each had been
+ *  marked said when it was produced, so it never came back). After the door,
+ *  every kept fact's claims are remembered; a threat (`win-<square>`) is a
+ *  claim about one turn, never an idea said once a game. */
+export function rememberKeptClaims(kept: ReadonlyArray<{ claims?: readonly string[] }>, remember: (key: string) => void): void {
+  for (const f of kept) for (const c of f.claims ?? []) if (!/^win-[a-h][1-8]$/.test(c)) remember(c);
+}
+
+/** The position-facts say-once keys (`rememberByClause`) of the clauses a kept
+ *  fact actually voiced — matched by text, which the door may have trimmed. */
+export function rememberKeptClauses(
+  kept: ReadonlyArray<{ text: string }>,
+  byClause: ReadonlyArray<{ text: string; keys: readonly string[] }>,
+  remember: (key: string) => void,
+): void {
+  for (const c of byClause) {
+    if (!c.text || c.keys.length === 0) continue;
+    if (kept.some((f) => f.text === c.text || f.text.includes(c.text) || c.text.includes(f.text))) for (const k of c.keys) remember(k);
+  }
+}

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**183 lines · 7 exports · 4 importers · 2 tests · 0 audits**
+**198 lines · 8 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -31,8 +31,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PlanThread` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newPlanThread` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10007`
+### `newPlanThread` (function) — 13 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10025`
 - `src/services/boardComputers.test.ts:50`
 - `src/services/coachFeatureService.ts:1438`
 - `src/services/planChoice.test.ts:75`
@@ -44,15 +44,25 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planThread.test.ts:42`
 - `src/services/planThread.test.ts:51`
 - `src/services/planThread.test.ts:85`
+- `src/services/planThread.test.ts:98`
 
-### `clonePlanThread` (function) — 1 call site
-- `src/services/coachFeatureService.ts:2023`
+### `clonePlanThread` (function) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10026`
+- `src/services/coachFeatureService.ts:2029`
+- `src/services/planThread.test.ts:99`
+- `src/services/planThread.test.ts:107`
+
+### `adoptPlanTrial` (function) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10051`
+- `src/components/Coach/CoachTeachPage.tsx:11728`
+- `src/services/planThread.test.ts:103`
+- `src/services/planThread.test.ts:110`
 
 ### `PlanThreadLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `planThreadTurn` (function) — 14 call sites
-- `src/services/boardComputers.ts:298`
+### `planThreadTurn` (function) — 16 call sites
+- `src/services/boardComputers.ts:300`
 - `src/services/planChoice.test.ts:75`
 - `src/services/planChoice.test.ts:89`
 - `src/services/planChoice.test.ts:102`
@@ -66,6 +76,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planThread.test.ts:58`
 - `src/services/planThread.test.ts:61`
 - `src/services/planThread.test.ts:89`
+- `src/services/planThread.test.ts:100`
+- `src/services/planThread.test.ts:108`
 
 ## Tests
 

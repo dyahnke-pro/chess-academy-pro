@@ -179,7 +179,9 @@ describe('WO-2 — a verdict on a good move carries its reason', () => {
     expect(TEACH_CODE).toMatch(/&& !\(isRecapture && !grade\.fault\)/);
     // The bishop pair is said once a game, by whichever owner says it first.
     expect(TEACH_CODE).toMatch(/pairHeard \? allHits\.filter\(\(x\) => x\.id !== 'bishop-pair'\)/);
-    expect(TEACH_CODE).toMatch(/hit\.id === 'bishop-pair'\) standingRef\.current\.remember\('bishop-pair'\)/);
+    // …written once the door KEEPS the line (its claim), never when offered.
+    expect(TEACH_CODE).toMatch(/hit\.id === 'bishop-pair' \? \['bishop-pair'\] : \[\]/);
+    expect(TEACH_CODE).toMatch(/rememberKeptClaims\(hintPkg\.kept, \(k\) => \{ positionalSaidRef\.current\.add\(k\); standingRef\.current\.remember\(k\); \}\)/);
     // A board move counts as starting, so the welcome greeting never lands mid-game.
     expect(TEACH_CODE).toMatch(/handleStudentMove = useCallback\(\(move: MoveResult\): void => \{[\s\S]{0,600}userInteractedRef\.current = true/);
   });
@@ -214,7 +216,7 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
   it('Learn hands every line-speaking producer\'s lines to the queue, and draws on-screen and earlier boards apart', () => {
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', .*?, undefined, undefined, undefined, undefined, pendingRegisterLines\)/);
     expect(TEACH_CODE).toMatch(/pendingRegisterLines = \[\{ fen: probe\.fen\(\), sans: \[compareRead\.bestSan\] \}/);
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.squares, c\.claim \? \[c\.claim\] : undefined, c\.gradeFen, undefined, c\.lines, c\.stakes, FACT_ROLE\[c\.kind\]\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.squares, c\.claim \? \[c\.claim\] : undefined, c\.gradeFen, undefined, c\.lines, c\.stakes, FACT_ROLE\[c\.kind\], c\.kind\)/);
     expect(TEACH_CODE).toMatch(/(?:fundamental|fund)\?\.lines[,)]/);
     expect(TEACH_CODE).toMatch(/'fundamental', NO_PROOF\.method, \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
@@ -490,7 +492,7 @@ describe('a REASON outranks a description (David 2026-10-13: "value why statemen
     expect(d.held).toContain('positionFacts');
   });
   it('the producer passes the role from the ONE table over its clause kind', () => {
-    expect(TEACH_CODE).toMatch(/c\.lines, c\.stakes, FACT_ROLE\[c\.kind\]\)/);
+    expect(TEACH_CODE).toMatch(/c\.lines, c\.stakes, FACT_ROLE\[c\.kind\], c\.kind\)/);
   });
 });
 
@@ -558,6 +560,17 @@ describe('the door says whether the student\'s own move got its reason (David 20
   });
 });
 
+describe('the row names WHAT spoke inside a many-fact lane (A-plan P0)', () => {
+  it('a position-facts weighing is emitted as its kind, so the grade can count choices', async () => {
+    const { onLearnTurn } = await import('./coachDecisionEvents');
+    const rows: Array<{ spokeKinds?: string[] }> = [];
+    const off = onLearnTurn((r) => rows.push(r));
+    decideTurn([{ lane: 'positionFacts', factKind: 'deliberation', role: 'teach', proof: NO_PROOF.stated, text: 'Bxf7+ looks tempting, but after Kxf7 the bishop is simply gone.', fen: FEN, squares: ['f7'] }]);
+    off();
+    expect(rows[0]?.spokeKinds).toEqual(['deliberation']);
+  });
+});
+
 describe('a good move always gets its own reason (David 2026-10-14)', () => {
   it('the move\'s point speaks even when a plan leads the turn', () => {
     const d = decideTurn([
@@ -601,5 +614,12 @@ describe('the habit closes the turn, the verdict opens it (Learn tape 2026-10-15
     ]);
     expect(d.pkg.spoken.indexOf('was a mistake')).toBeGreaterThanOrEqual(0);
     expect(d.pkg.spoken.indexOf('was a mistake')).toBeLessThan(d.pkg.spoken.indexOf('Blunder check'));
+  });
+});
+
+describe('Learn tries the plan thread on a copy and adopts only what spoke (A-plan P3)', () => {
+  it('the live thread is never handed to the producer, and the door\'s kept claims decide', () => {
+    expect(TEACH_CODE).toMatch(/readBoardAll\('planThread', \{\s*thread: planTrial,/);
+    expect(TEACH_CODE).toMatch(/adoptPlanTrial\(planTry\.live, planTry\.trial, planTry\.offered, hintPkg\.kept\.flatMap/);
   });
 });
