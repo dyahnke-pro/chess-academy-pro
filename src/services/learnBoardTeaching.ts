@@ -735,7 +735,12 @@ const times = (n: number): string => (n === 1 ? 'once' : n === 2 ? 'twice' : `${
  * only that the guard is not enough. The move is never named: the student
  * finds it. Null when the exchange does not actually win anything.
  */
-export function prizeTeaching(fen: string, square: string, student: 'w' | 'b'): { text: string; squares: string[] } | null {
+export function prizeTeaching(fen: string, square: string, student: 'w' | 'b',
+  /** The per-game occurrence (`nextStem(mem, 'prize')`) — REQUIRED, so the
+   *  free-piece fact rotates its words instead of repeating one formula (prod
+   *  Learn 2026-10-16: said three times in one game, V7). */
+  stem: number,
+): { text: string; squares: string[] } | null {
   let board: Chess;
   try { board = new Chess(fen); } catch { return null; }
   if (board.turn() !== student) return null;
@@ -750,8 +755,17 @@ export function prizeTeaching(fen: string, square: string, student: 'w' | 'b'): 
   if (takers.length === 0) return null;
   const guards = board.attackers(square as Square, them).length;
   // The undefended sentence is the one this lane always said (kept word for word).
-  if (guards === 0) return { text: `Their ${name} on ${square} has nothing defending it — before you take, check what taking it allows.`, squares: [square] };
   const caution = 'Before you take, check what taking it allows.';
+  // The method is its OWN sentence, so the game's sentence ledger says it once
+  // and every later prize keeps only its fact.
+  if (guards === 0) {
+    const stems = [
+      `Their ${name} on ${square} has nothing defending it.`,
+      `Nothing guards their ${name} on ${square}.`,
+      `Their ${name} on ${square} is standing there unguarded.`,
+    ];
+    return { text: `${stems[stem % stems.length]} ${caution}`, squares: [square] };
+  }
   const cheap = takers[0];
   if ((PRIZE_VALUE[cheap.piece] ?? 0) < value) {
     return {

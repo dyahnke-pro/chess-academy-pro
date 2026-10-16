@@ -20,6 +20,7 @@
 // (`outpost:d5`, `file:c`, `route:n:e5`), never its wording, so a pushed pawn
 // or a knight one hop closer is the same plan, not a new one.
 import { THINK_MARK } from '../utils/thinkPause';
+import { squareRole } from './squareRole';
 import { Chess, type Square } from 'chess.js';
 // TYPE-ONLY on purpose: `lookaheadPlan` re-exports this module (the arc is the
 // plan reader's memory, and the Learn surface reaches it through the reader it
@@ -252,6 +253,32 @@ function arrived(aim: Aim, fen: string, color: 'w' | 'b', promoted: string | nul
  *  The piece is set on its destination and the other side's king and pieces
  *  worth a minor or more that it would hit there are named. Empty when it
  *  would hit nothing — the route then says only where it goes. */
+/** WHAT THE GOAL SQUARE IS FOR, when arriving hits nothing (`squareRole`):
+ *  " — on g3 it would be keeping your knight off it" … or '' when the square
+ *  has no role either. The one square-role computer, from the walker's seat. */
+function routeSquareRole(aim: Aim, fen: string, color: 'w' | 'b', seat: Seat): string {
+  if (aim.kind !== 'route' || !aim.goal || aim.route?.takes) return '';
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return ''; }
+  if (board.get(aim.goal as Square)) return '';
+  const role = squareRole(board, aim.goal as Square, color, seat === 'opponent' ? 'your' : 'their');
+  if (!role) return '';
+  return role.startsWith('a square ') ? ` — ${aim.goal} is ${role}` : ` — on ${aim.goal} it would be ${role}`;
+}
+
+/** The square a route's piece stands on NOW (its start or a square it has
+ *  already reached), or null. */
+function routeStartNow(aim: Aim, fen: string, color: 'w' | 'b'): string | null {
+  if (aim.kind !== 'route') return null;
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  const letter = aim.id.split(':')[1];
+  return [aim.from, ...aim.squares].find((sq) => {
+    const p = sq ? board.get(sq as Square) : null;
+    return !!p && p.color === color && p.type === letter;
+  }) ?? null;
+}
+
 export function routePoint(aim: Aim, fen: string, color: 'w' | 'b', seat: Seat): string {
   if (aim.kind !== 'route' || !aim.goal || aim.route?.takes) return '';
   let board: Chess;
@@ -418,11 +445,20 @@ export function stepArc(
       && !prev.aim.squares.some((sq) => read.squares.includes(sq)));
     const streak = (sameRoute ? (prev?.streak ?? 0) : 0) + 1;
     const entry: ArcEntry = { aim, streak, missing: 0, announced: prev?.announced ?? false, steps: prev?.steps ?? 0 };
-    if (!entry.announced && streak >= 2) {
+    // A PLAN IS SAID WITH ITS WHY, FROM WHERE THE PIECE STANDS (prod Learn
+    // 2026-10-16: "Here is what they are after: getting the rook to b5, by way
+    // of a1 and a5" — the rook already on a1, and nothing on b5 to hit). The
+    // route is phrased from the piece's square now (`phraseFrom`); a route that
+    // reaches nothing has no reason, and a plan without one is not announced.
+    const point = routePoint(aim, fenAfter, color, seat) || routeSquareRole(aim, fenAfter, color, seat);
+    const why = `${point}${AIM_WHY[aim.kind](seat)}`;
+    const reasonless = aim.kind === 'route' && !aim.route?.takes && why === '';
+    if (!entry.announced && streak >= 2 && !reasonless) {
       entry.announced = true;
+      const at = routeStartNow(aim, fenAfter, color);
       events.push({
         id: aim.id, kind: 'emerge', seat, squares: aim.squares.slice(0, 4),
-        text: EMERGE[seat][emerged++ % EMERGE[seat].length](`${aim.phrase}${routePoint(aim, fenAfter, color, seat)}${AIM_WHY[aim.kind](seat)}`),
+        text: EMERGE[seat][emerged++ % EMERGE[seat].length](`${at ? phraseFrom(aim, at) : aim.phrase}${why}`),
       });
     }
     next[aim.id] = entry;
