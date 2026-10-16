@@ -181,7 +181,7 @@ describe('WO-2 — a verdict on a good move carries its reason', () => {
     expect(TEACH_CODE).toMatch(/pairHeard \? allHits\.filter\(\(x\) => x\.id !== 'bishop-pair'\)/);
     // …written once the door KEEPS the line (its claim), never when offered.
     expect(TEACH_CODE).toMatch(/hit\.id === 'bishop-pair' \? \['bishop-pair'\] : \[\]/);
-    expect(TEACH_CODE).toMatch(/rememberKeptClaims\(hintPkg\.kept, \(k\) => \{ positionalSaidRef\.current\.add\(k\); standingRef\.current\.remember\(k\); \}\)/);
+    expect(TEACH_CODE).toMatch(/rememberKeptClaims\(hintPkg\.kept, \(k\) => \{[\s\S]{0,300}positionalSaidRef\.current\.add\(k\); standingRef\.current\.remember\(k\);/);
     // A board move counts as starting, so the welcome greeting never lands mid-game.
     expect(TEACH_CODE).toMatch(/handleStudentMove = useCallback\(\(move: MoveResult\): void => \{[\s\S]{0,600}userInteractedRef\.current = true/);
   });
@@ -621,5 +621,26 @@ describe('Learn tries the plan thread on a copy and adopts only what spoke (A-pl
   it('the live thread is never handed to the producer, and the door\'s kept claims decide', () => {
     expect(TEACH_CODE).toMatch(/readBoardAll\('planThread', \{\s*thread: planTrial,/);
     expect(TEACH_CODE).toMatch(/adoptPlanTrial\(planTry\.live, planTry\.trial, planTry\.offered, hintPkg\.kept\.flatMap/);
+  });
+});
+
+
+describe('their next idea speaks by what it would win (A-plan P2, prod Learn 2026-10-16)', () => {
+  const lead = { lane: 'movePoint' as const, proof: NO_PROOF.stated, text: 'That gets your last piece into the game, so your rooks can connect.', fen: FEN, squares: ['c1', 'd2'] };
+  const theirs = (points: number) => ({ lane: 'theirIntent' as const, proof: NO_PROOF.stated, text: 'Their knight on c6 is getting ready for …Nd4, to hit your knight on f3.', fen: FEN, squares: ['c6', 'd4'], stakes: { points, plies: 1 } });
+  it('a preparation that wins a pawn and more speaks beside a lead it shares no square with', () => {
+    expect(decideTurn([lead, theirs(2)]).spoke).toContain('theirIntent');
+  });
+  it('…when another computed fact leads the wave (the prod case: held as an aside 6 of 8)', () => {
+    const other = { lane: 'structureJudgement' as const, proof: NO_PROOF.stated, text: 'Your pawn on e4 is the one they can lean on now.', fen: FEN, squares: ['e4'], stakes: { points: 3, plies: 0 } };
+    expect(decideTurn([other, theirs(1.5)]).spoke).toContain('theirIntent');
+    // Unstaked, as it was emitted until now, it waited as an aside.
+    const unstaked = { ...theirs(1.5), stakes: undefined };
+    const d = decideTurn([other, unstaked]);
+    expect(d.spoke).not.toContain('theirIntent');
+  });
+  it('Learn stakes it at emission and commits its principle only when it speaks', () => {
+    expect(TEACH_CODE).toMatch(/prep\.gainCp > 0 \? \{ points: prep\.gainCp \/ 100, plies: 1 \} : undefined/);
+    expect(TEACH_CODE).not.toMatch(/for \(const k of (?:theirRule|prepRule)\.keys\) learnMemRef\.current\.principleTaught\.add/);
   });
 });
