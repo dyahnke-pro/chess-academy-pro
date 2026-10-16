@@ -16,7 +16,7 @@ import { useBoardFit } from '../../hooks/useBoardFit';
 import { characterOf, provenTacticLive, sharpGap, stepCharacter, EMPTY_CHARACTER, SHARP_GAP_CP, type CharacterState } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
-import { createLearnMemory, markOpeningFactsSpoken, nextStem, type LearnMemory } from '../../services/learnMemory';
+import { createLearnMemory, markOpeningFactsSpoken, nextStem, rememberKeptClaims, rememberKeptClauses, type LearnMemory } from '../../services/learnMemory';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -1849,6 +1849,8 @@ export function CoachTeachPage(): JSX.Element {
    *  Keyed by fen because these are computed asynchronously, after the instant
    *  package has shipped, and a hint about a board the student has moved past
    *  is worse than no hint. */
+  /** The position-facts say-once keys of this turn, written once the door keeps their clause. */
+  const pfRememberRef = useRef<{ fen: string; byClause: ReadonlyArray<{ text: string; keys: readonly string[] }> } | null>(null);
   /** The plan thread's turn, tried on a copy until the door says whether it spoke. */
   const planTrialRef = useRef<{ fen: string; live: PlanThread; trial: PlanThread; offered: string[] } | null>(null);
   const pendingVoiceRef = useRef<{
@@ -9110,11 +9112,18 @@ export function CoachTeachPage(): JSX.Element {
         const hit = behaviorSchedulerRef.current.pick(eligible);
         if (hit) {
           behaviorArrows = hit.arrows ?? [];
-          behaviorLine = hit.fact; behaviorSquares = hit.squares; behaviorClaims = hit.keys.filter((k) => /^(?:castle-now|file-[a-h]|(?:passer|break|win)-[a-h][1-8])$/.test(k));
-          if (hit.id === 'pawn-break') for (const sq of hit.squares) standingRef.current.remember(`student-break-${sq}`);
-          // A threat is a claim about THIS turn, not an idea said once a game.
-          for (const k of hit.keys) if (!k.startsWith('win-')) positionalSaidRef.current.add(k);
-          if (hit.id === 'bishop-pair') standingRef.current.remember('bishop-pair');
+          // ITS IDEA KEYS RIDE AS CLAIMS and are written to the standing ledgers
+          // only when the door keeps the line (`rememberKeptClaims`): a behaviour
+          // held on a busy turn is not marked said unheard (A-plan, prod Learn
+          // 2026-10-16: 19 of 21 held, every idea lost for the game).
+          // A threat (`win-`) is a claim about THIS turn, not an idea said once a game.
+          behaviorLine = hit.fact; behaviorSquares = hit.squares;
+          behaviorClaims = [
+            ...hit.keys.filter((k) => !k.startsWith('win-')),
+            ...hit.keys.filter((k) => /^win-[a-h][1-8]$/.test(k)),
+            ...(hit.id === 'pawn-break' ? hit.squares.map((sq) => `student-break-${sq}`) : []),
+            ...(hit.id === 'bishop-pair' ? ['bishop-pair'] : []),
+          ];
         }
       } catch { /* never a blocker */ }
       // THE POSITIONAL READ IS CHECKED EVERY (non-urgent) TURN (David 2026-09-13:
@@ -9990,13 +9999,15 @@ export function CoachTeachPage(): JSX.Element {
                     } catch { /* the gap nudge is a bonus, never a blocker */ }
                     // NAME THE STRUCTURE the moment it crystallises — his closing
                     // lesson ("catalogue the typical structures and their plans").
-                    // Reliable say-once (learnMem.structureSaid), NOT the rate-fair
+                    // Reliable say-once (the claim ledger), NOT the rate-fair
                     // behaviour scheduler that shadowed it: the family is stable, so
                     // it is announced once as it appears and then referred back to.
                     try {
                       const struct = namedPawnStructure(probe.fen(), playerColor === 'white' ? 'w' : 'b');
-                      if (struct && !learnMemRef.current.structureSaid.has(struct.name)) {
-                        learnMemRef.current.structureSaid.add(struct.name);
+                      // Said once by its CLAIM (`structure:<name>`), written to the
+                      // ledger only when the door keeps it — a structure held on a
+                      // busy turn is offered again, never marked said unheard.
+                      if (struct) {
                         let openingNow: string | null = null;
                         try { openingNow = detectOpening([...move.history, m.san])?.name ?? null; } catch { openingNow = null; }
                         const transfer = structureTransfer(struct.name, openingNow);
@@ -10111,8 +10122,7 @@ export function CoachTeachPage(): JSX.Element {
                       // One idea, one saying: an unmoved piece is the
                       // development idea another lane may already have said.
                       if (q.ideaKey && (positionalSaidRef.current.has(q.ideaKey) || standingRef.current.said.has(q.ideaKey))) continue;
-                      if (q.ideaKey) positionalSaidRef.current.add(q.ideaKey);
-                      queueSpokenHint(probe.fen(), q.text, 'pieceQuality', NO_PROOF.description, q.squares, q.squares[0] ? [`piece-quality:${q.squares[0]}`] : undefined, undefined, q.arrows);
+                      queueSpokenHint(probe.fen(), q.text, 'pieceQuality', NO_PROOF.description, q.squares, [...(q.squares[0] ? [`piece-quality:${q.squares[0]}`] : []), ...(q.ideaKey ? [q.ideaKey] : [])], undefined, q.arrows);
                       captureEvent('piece_quality_spoken', { surface: 'coach-teach', kind: q.kind });
                     }
                   }
@@ -10247,7 +10257,8 @@ export function CoachTeachPage(): JSX.Element {
                           [{ from: order.play.from, to: order.play.to, role: 'play', vouchedBy: 'engine', source: 'learn.moveOrder' }]);
                       }
                     }
-                    standingRef.current.rememberAll(pf.remember);
+                    // Its say-once keys wait for the door (`rememberKeptClauses`).
+                    pfRememberRef.current = { fen: probe.fen(), byClause: pf.rememberByClause };
                     if (pf.principleSpoken) for (const k of pf.principleSpoken.split('|')) learnMemRef.current.principleTaught.add(k);
                     // The student is to move at `probe`; their coming move is ply history+1.
                     if (studentMoveIsPrompted(pf.clauses.map((c) => c.kind), !!moveAdviceHere?.speak && !held)) announcedPliesRef.current.add(probe.history().length + 1);
@@ -10256,7 +10267,7 @@ export function CoachTeachPage(): JSX.Element {
                       // The claim joins the standing ledger too, so a behaviour
                       // stating the same fact later reads it as heard (Bowdler
                       // walk 2026-09-27: the c7 fork warned at plies 18 and 24).
-                      if (c.claim) standingRef.current.remember(c.claim);
+                      // (written by `rememberKeptClaims` once the door keeps it)
                       // THE THREAD: an idea said now is remembered with the move that pays it off.
                       if (c.promise) notePromise(learnMemRef.current, c.promise, probe.history().length);
                       // Their move's purpose rides its own lane, above the
@@ -11319,9 +11330,8 @@ export function CoachTeachPage(): JSX.Element {
                       const fileKey = /^[RQ]/.test(move.san) && !move.san.includes('x') ? `file-${move.to[0]}` : null;
                       const fileHeard = !!fileKey && (positionalSaidRef.current.has(fileKey) || standingRef.current.said.has(fileKey));
                       if (point && !nowLoose && !fileHeard) {
-                        if (fileKey) positionalSaidRef.current.add(fileKey);
                         // A capture's point and the trade verdict are one claim about one square.
-                        queueSpokenHint(fenAfterReply, point, 'movePoint', NO_PROOF.description, [], move.san.includes('x') ? [`capture:${move.to}:${move.history.length}`] : [`point:${move.history.length}`]);
+                        queueSpokenHint(fenAfterReply, point, 'movePoint', NO_PROOF.description, [], [move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`, ...(fileKey ? [fileKey] : [])]);
                         captureEvent('coach_move_point_named', { surface: 'coach-teach' });
                       }
                       // EVERY STUDENT MOVE GETS ITS OWN REASON (David 2026-10-14):
@@ -11740,6 +11750,9 @@ export function CoachTeachPage(): JSX.Element {
                     // Record the late package's phrases too — the per-game set is
                     // what keeps the NEXT turn from repeating any of them.
                     for (const k of spokenSentenceKeys(hintPkg)) learnMemRef.current.spokenKeys.add(k);
+                    rememberKeptClaims(hintPkg.kept, (k) => { positionalSaidRef.current.add(k); standingRef.current.remember(k); });
+                    const pfRem = pfRememberRef.current;
+                    if (pfRem && samePosition(pfRem.fen, pending.fen)) rememberKeptClauses(hintPkg.kept, pfRem.byClause, (k) => standingRef.current.remember(k));
                     noteSpokenProofs(hintPkg.kept);
                   // Same promotion as the instant pass — whichever package
                   // actually carried the name is the one that spent the flag.

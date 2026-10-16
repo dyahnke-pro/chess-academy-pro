@@ -318,6 +318,8 @@ export interface PositionFactsResult {
    *  per game instead of once per ply. A caller that ignores this keeps the old
    *  behaviour; nothing breaks, it just repeats. */
   remember: string[];
+  /** `remember`, per clause (its text and the keys it carries). */
+  rememberByClause: Array<{ text: string; keys: string[] }>;
   /** The id of the opening principle that SPOKE this ply (S2), or null — the
    *  surface adds it to `taughtPrinciples` so it is never taught twice. */
   principleSpoken: string | null;
@@ -1271,6 +1273,22 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   });
   const clauses = decision.spoken.flatMap((t) => { const c = clauseByText.get(t); return c ? [c] : []; });
 
+  // What to carry forward so a standing fact is said once — per clause.
+  // A method habit is keyed on the HABIT (its stems rotate), once per game.
+  const rememberFor = (c: (typeof clauses)[number]): string[] => [
+    ...(SAY_ONCE_KINDS.has(c.kind) ? [c.text] : []),
+    ...(c.kind === 'method' && methodKey ? [methodKey] : []),
+    ...(c.kind === 'trade' && c.rank === 34 && tradeTargetKey ? [tradeTargetKey] : []),
+    // A batch-5 read is said once a game, keyed on its own claim.
+    ...((c.kind === 'trade-idea' || c.kind === 'defence-idea' || c.kind === 'nugget') && c.claim ? [c.claim] : []),
+    ...(c.kind === 'structure-plan' && planKey ? [planKey, ...(planFact?.ideaKey ? [planFact.ideaKey] : [])] : []),
+    ...convertRemember([c], input.fen, studentSeat),
+    // The balance sheet's reasons, under the keys the positional read uses.
+    ...(c.kind === 'stock' ? stockKeys : []),
+    ...(c.kind === 'concept' && concept?.source === 'tactic' ? [definitionKey(concept.id), conceptInstanceKey(concept.id, concept.squares)] : []),
+    // A technique's definition is said once a game too (walk 2026-09-30).
+    ...(c.kind === 'concept' && concept?.source === 'technique' ? [definitionKey(concept.id)] : []),
+  ];
   const result: PositionFactsResult = {
     importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, latentFork, tradeDanger, opponentIntent,
     clauses,
@@ -1279,21 +1297,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     quiet: decision.quiet,
     // What the caller should carry forward so a standing fact is said once.
     // A method habit is keyed on the HABIT (its stems rotate), once per game.
-    remember: [
-      ...clauses.filter((c) => SAY_ONCE_KINDS.has(c.kind)).map((c) => c.text),
-      ...(methodKey && clauses.some((c) => c.kind === 'method') ? [methodKey] : []),
-      ...(tradeTargetKey && clauses.some((c) => c.kind === 'trade' && c.rank === 34) ? [tradeTargetKey] : []),
-      // A batch-5 read is said once a game, keyed on its own claim.
-      ...clauses.filter((c) => (c.kind === 'trade-idea' || c.kind === 'defence-idea' || c.kind === 'nugget') && c.claim).map((c) => c.claim as string),
-      ...(planKey && clauses.some((c) => c.kind === 'structure-plan') ? [planKey, ...(planFact?.ideaKey ? [planFact.ideaKey] : [])] : []),
-      ...convertRemember(clauses, input.fen, studentSeat),
-      // The balance sheet's reasons, under the keys the positional read uses.
-      ...(clauses.some((c) => c.kind === 'stock') ? stockKeys : []),
-      ...(concept?.source === 'tactic' && clauses.some((c) => c.kind === 'concept') ? [definitionKey(concept.id), conceptInstanceKey(concept.id, concept.squares)] : []),
-      // A technique's definition is said once a game too (walk 2026-09-30: the
-      // opposition defined on two consecutive moves).
-      ...(concept?.source === 'technique' && clauses.some((c) => c.kind === 'concept') ? [definitionKey(concept.id)] : []),
-    ],
+    remember: [...new Set(clauses.flatMap(rememberFor))],
+    // …the same keys, per clause, so a surface whose own door may still hold a
+    // clause marks said only what it spoke (Learn: a held habit or method was
+    // marked said unheard — prod 2026-10-16).
+    rememberByClause: clauses.map((c) => ({ text: c.text, keys: rememberFor(c) })),
     // Only a principle the door actually SPOKE is committed as taught.
     principleSpoken: ruleHere && clauses.some((c) => c.kind === 'rule') ? ruleHere.id : null,
     moveAdvice,

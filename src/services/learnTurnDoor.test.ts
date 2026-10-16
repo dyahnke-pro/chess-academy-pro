@@ -179,7 +179,9 @@ describe('WO-2 — a verdict on a good move carries its reason', () => {
     expect(TEACH_CODE).toMatch(/&& !\(isRecapture && !grade\.fault\)/);
     // The bishop pair is said once a game, by whichever owner says it first.
     expect(TEACH_CODE).toMatch(/pairHeard \? allHits\.filter\(\(x\) => x\.id !== 'bishop-pair'\)/);
-    expect(TEACH_CODE).toMatch(/hit\.id === 'bishop-pair'\) standingRef\.current\.remember\('bishop-pair'\)/);
+    // …written once the door KEEPS the line (its claim), never when offered.
+    expect(TEACH_CODE).toMatch(/hit\.id === 'bishop-pair' \? \['bishop-pair'\] : \[\]/);
+    expect(TEACH_CODE).toMatch(/rememberKeptClaims\(hintPkg\.kept, \(k\) => \{ positionalSaidRef\.current\.add\(k\); standingRef\.current\.remember\(k\); \}\)/);
     // A board move counts as starting, so the welcome greeting never lands mid-game.
     expect(TEACH_CODE).toMatch(/handleStudentMove = useCallback\(\(move: MoveResult\): void => \{[\s\S]{0,600}userInteractedRef\.current = true/);
   });

@@ -31,3 +31,13 @@ describe('the conversion step speaks once', () => {
     expect((await convertOf(PIECE_UP, 320)).clause?.text).toMatch(/up a piece — trade pieces/);
   });
 });
+
+describe('the say-once keys travel WITH their clause (A-plan: Learn commits only what spoke)', () => {
+  it('the conversion step\'s key rides on the convert clause, not on a clause the door could hold instead', async () => {
+    const r = await computePositionFacts({ posture: 'walk', fen: ROOK_UP, moverColor: 'w', studentColor: 'w', analysis: up(500) } as never);
+    const conv = r.clauses.find((c) => c.kind === 'convert');
+    const entry = r.rememberByClause.find((e) => e.text === conv?.text);
+    expect(entry?.keys).toContain(convertKey('trade-pieces'));
+    expect(new Set(r.remember)).toEqual(new Set(r.rememberByClause.flatMap((e) => e.keys)));
+  });
+});
