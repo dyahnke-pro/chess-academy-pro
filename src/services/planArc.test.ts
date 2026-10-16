@@ -172,12 +172,19 @@ describe('a route only takes shape toward ONE goal', () => {
     expect(b.events.filter((e) => e.kind === 'emerge')).toEqual([]);
   });
 
-  it('the same destination read twice still emerges (positive control)', () => {
+  it('the same destination read twice still emerges, WITH its why (positive control)', () => {
+    const a = stepArc(EMPTY_ARC, [route('d4', ['c6', 'd4'])], null, FEN, 'b', 'opponent');
+    const b = stepArc(a.next, [route('d4', ['c6', 'd4'])], null, FEN, 'b', 'opponent');
+    expect(b.events.filter((e) => e.kind === 'emerge').map((e) => e.text)).toEqual([
+      "Their plan is taking shape: the knight's walk to d4 — on d4 it would be holding back your d-pawn.",
+    ]);
+  });
+
+  it('a route with no reason on arrival is not announced (prod Learn 2026-10-16: a bare plan)', () => {
+    // e5 holds Black's own pawn: arriving there hits nothing and the square has no role.
     const a = stepArc(EMPTY_ARC, [route('e5', ['f6', 'd7', 'e5'])], null, FEN, 'b', 'opponent');
     const b = stepArc(a.next, [route('e5', ['f6', 'd7', 'e5'])], null, FEN, 'b', 'opponent');
-    expect(b.events.filter((e) => e.kind === 'emerge').map((e) => e.text)).toEqual([
-      "Their plan is taking shape: the knight's walk to e5.",
-    ]);
+    expect(b.events.filter((e) => e.kind === 'emerge')).toEqual([]);
   });
 });
 

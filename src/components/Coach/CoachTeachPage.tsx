@@ -8391,7 +8391,7 @@ export function CoachTeachPage(): JSX.Element {
           // opening onto the rook). This lane runs before the engine read, so it
           // states the fact and the question; the engine lane names the move.
           : (() => {
-            const pz = prizeTeaching(args.fenAfterReply, prize.square, studentCC);
+            const pz = prizeTeaching(args.fenAfterReply, prize.square, studentCC, nextStem(learnMemRef.current, 'prize'));
             if (pz) tacticFactProof = squaresProof(pz.text, pz.squares);
             return pz?.text ?? null;
           })();
