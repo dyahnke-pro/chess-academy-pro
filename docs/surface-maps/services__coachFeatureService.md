@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5363 lines · 31 exports · 48 importers · 51 tests · 4 audits**
+**5389 lines · 31 exports · 49 importers · 52 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,6 +39,7 @@
 - `src/services/gameThemeClassifier.ts`
 - `src/services/gradeGatesTeachingCost.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
+- `src/services/loosePattern.test.ts`
 - `src/services/namedMoveArrows.test.ts`
 - `src/services/oneCostPerMove.test.ts`
 - `src/services/oneLinePerPly.test.ts`
@@ -137,7 +138,7 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 80 call sites
+### `buildReviewSegments` (function) — 81 call sites
 - `src/components/Coach/CoachGameReview.tsx:1825`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
@@ -194,6 +195,7 @@
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
 - `src/services/loopCloses.review.integration.test.ts:89`
+- `src/services/loosePattern.test.ts:15`
 - `src/services/methodBeat.test.ts:78`
 - `src/services/oneCostPerMove.test.ts:34`
 - `src/services/oneCostPerMove.test.ts:38`
@@ -357,6 +359,7 @@
 - `src/services/gameThemeClassifier.test.ts`
 - `src/services/gradeGatesTeachingCost.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
+- `src/services/loosePattern.test.ts`
 - `src/services/methodBeat.test.ts`
 - `src/services/namedMoveArrows.test.ts`
 - `src/services/oneCostPerMove.test.ts`
