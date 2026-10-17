@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { decideTurn, LEARN_LANES, type LearnLane } from './learnTurnDoor';
 import { costStakes, mateStakes } from './factStakes';
-import { countMethodTeaching } from './learnBoardTeaching';
+import { countMethodTeaching, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA } from './learnBoardTeaching';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 const TEACH = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
@@ -670,5 +670,24 @@ describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-1
   it('Learn hands both to the door with their stake and role', () => {
     expect(TEACH_CODE).toMatch(/cnt\.claims, undefined, undefined, undefined, cnt\.stakes\)/);
     expect(TEACH_CODE).toMatch(/source: 'learn\.priorityFirst' \}\], undefined, undefined, 'teach'\)/);
+  });
+});
+
+describe('prevention closes its loop (A-plan P2, 2026-10-17)', () => {
+  const B = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+  it('a move from the named board that takes their prepared move away is the stop', () => {
+    expect(preventsNamedIdea({ uci: 'c6d4', fen: B }, B.replace(' 2 3', ' 4 9'), 'c6d4')).toBe(true);
+    expect(preventsNamedIdea({ uci: 'c6d4', fen: B }, B, 'f8c5')).toBe(false);
+    expect(preventsNamedIdea(null, B, 'c6d4')).toBe(false);
+    expect(preventsNamedIdea({ uci: 'c6d4', fen: B }, B.replace(' w ', ' b '), 'c6d4')).toBe(false);
+  });
+  it('the stop, staked at the threat, speaks beside an unrelated staked lead', () => {
+    const lead = { lane: 'structureJudgement' as const, proof: NO_PROOF.stated, text: 'Your pawn on e4 is the one they can lean on now.', fen: FEN, squares: ['e4'], stakes: { points: 3, plies: 0 } };
+    const stop = { lane: 'moveIntent' as const, proof: NO_PROOF.stated, text: `The point of c3: it takes …Nd4 away. ${STOPPED_THEIR_IDEA}`, fen: FEN, squares: ['c6', 'd4'], stakes: preventStakes({ threatCp: 150 }), factKind: 'stopped' };
+    expect(decideTurn([lead, stop]).spoke).toContain('moveIntent');
+  });
+  it('Learn remembers their prepared move and stakes + tags the stop', () => {
+    expect(TEACH_CODE).toMatch(/learnMemRef\.current\.theirPrep = \{ uci: prep\.uci, fen: fenAfterReply \}/);
+    expect(TEACH_CODE).toMatch(/preventStakes\(intent\.prevents\), undefined, intent\.prevents \? 'stopped' : undefined\)/);
   });
 });

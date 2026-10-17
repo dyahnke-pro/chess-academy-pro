@@ -75,6 +75,10 @@ export interface LearnMemory {
    *  belongs to, and whether "Show me" already said it — resolved when the
    *  student moves from that board, exactly like `gemPending`. */
   heldMove: (import('./deliberation').HeldVerdict & { fen: string; shown: boolean }) | null;
+  /** The move their quiet move PREPARES (theirIntent), and the board the
+   *  student moves from — so a move from that board that takes it away is
+   *  credited as the prevention it is (A-plan P2). */
+  theirPrep: { uci: string; fen: string } | null;
   /** The board the opponent's slip left the student, after the coach said
    *  "look for it" — and the slip itself (SAN), so a capture back on its
    *  square reads as a recapture. Resolved when the student moves from it:
@@ -282,6 +286,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     gemFen: null,
     gemPending: null,
     heldMove: null,
+    theirPrep: null,
     slipAnswer: null,
     lastReplyDictated: null,
     lastComputed: '',
@@ -324,6 +329,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       mem.gemFen = null;
       mem.gemPending = null;
       mem.heldMove = null;
+      mem.theirPrep = null;
       mem.slipAnswer = null;
       mem.lastReplyDictated = null;
       mem.lastComputed = '';

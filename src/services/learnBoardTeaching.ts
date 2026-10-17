@@ -1195,3 +1195,21 @@ export function cheaperAttackerLine(by: string, bySq: string, piece: string, sq:
   ];
   return stems[((rot % stems.length) + stems.length) % stems.length];
 }
+
+/** PREVENTION, CLOSED (A-plan P2, David 2026-10-17: prevent graded C). Their
+ *  quiet move prepared a move (`theirIntent`); the student's move from that
+ *  same board took exactly that move away. Compared on the board (placement,
+ *  turn, castling, en passant), never on the clocks. */
+export function preventsNamedIdea(prep: { uci: string; fen: string } | null, fenBefore: string, stoppedUci: string): boolean {
+  if (!prep) return false;
+  const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+  return key(prep.fen) === key(fenBefore) && prep.uci.slice(0, 4) === stoppedUci.slice(0, 4);
+}
+
+/** The tie-back said after the stop is named. */
+export const STOPPED_THEIR_IDEA = 'That was the idea behind their last move.';
+
+/** What a prevented threat was worth, landed now (it is already stopped). */
+export function preventStakes(prevents: { threatCp: number } | null | undefined): FactStakes | undefined {
+  return prevents && prevents.threatCp > 0 ? { points: prevents.threatCp / 100, plies: 0 } : undefined;
+}
