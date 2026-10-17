@@ -2408,6 +2408,10 @@ export interface EndgameProgressRecord {
   totalWrongAttempts: number;
   /** Unix ms timestamp of the last completed playout. */
   lastPlayedAt: number;
+  /** The spaced-review rung (0 = due again in a day). A clean play climbs
+   *  one, a play with mistakes falls to 0. Absent on records written before
+   *  2026-10-17: read as `timesPlayed − 1`, the ladder they were on. */
+  reviewStep?: number;
 }
 
 // ─── SRS opening trainer (Chessable MoveTrainer-style) ───────────────────────

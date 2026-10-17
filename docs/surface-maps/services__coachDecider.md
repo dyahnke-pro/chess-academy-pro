@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**638 lines · 24 exports · 15 importers · 11 tests · 22 audits**
+**638 lines · 24 exports · 15 importers · 11 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
@@ -33,7 +33,7 @@
 - **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5287) — names `decide`
 - **🔒🔒 THE ACCURACY BAR IS 100% — every board claim true, no stopping short (David 2026-10-01: "We go until 100% accuracy. No reason to stop short. Set the new bar in memory")** (CLAUDE.md:5851) — names `decide`
 - **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6191) — names `coachDecider`
-- **The standard post-deploy ritual** (CLAUDE.md:6301) — names `coachDecider`
+- **The standard post-deploy ritual** (CLAUDE.md:6301) — names `coachDecider`, `decide`
 
 ## Who calls in
 
@@ -382,6 +382,7 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-coach-tactical-awareness.mjs`
 - `scripts/audit-coach-turn-truth-prod.mjs`
 - `scripts/audit-concept-gameplay-prod.mjs`
+- `scripts/audit-endgame-review-prod.mjs`
 - `scripts/audit-learn-full-game.mjs`
 - `scripts/audit-lib/coach-question-matrix.mjs`
 - `scripts/audit-lib/coach-tab-graders.mjs`

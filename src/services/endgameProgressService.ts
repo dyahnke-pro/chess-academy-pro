@@ -16,6 +16,7 @@
  * surfaces the Dexie reads/writes; React components hold the
  * derived in-memory snapshot only as long as they're mounted.
  */
+import { emitEndgameReview } from './endgameReviewEvents';
 import { db } from '../db/schema';
 import type { EndgameProgressRecord } from '../types';
 
@@ -55,27 +56,34 @@ export async function getMasteredCount(): Promise<number> {
   return all.filter((r) => r.mastered).length;
 }
 
-// Spaced-review ladder for endgame positions (David 2026-05-25): a position
-// you've played resurfaces for review on a widening interval keyed off how
-// many times you've completed it. Derived from the existing `timesPlayed` +
-// `lastPlayedAt` fields — no schema change. A position never "graduates out";
-// it just resurfaces less often, like the misconception loop.
-const ENDGAME_REVIEW_INTERVALS_MS: readonly number[] = [
-  1 * 24 * 60 * 60 * 1000, //  played 1× → 1 day
-  3 * 24 * 60 * 60 * 1000, //  2× → 3 days
-  7 * 24 * 60 * 60 * 1000, //  3× → 1 week
-  16 * 24 * 60 * 60 * 1000, // 4× → ~2 weeks
-  35 * 24 * 60 * 60 * 1000, // 5×+ → ~5 weeks (cap)
+// Spaced-review ladder for endgame positions (David 2026-05-25; made to
+// follow the student's results 2026-10-17, "make sure the algo is attached").
+// A clean play (no wrong move) climbs a rung; a play with mistakes falls back
+// to the bottom, so what you got wrong comes back tomorrow and what you know
+// spaces out. A position never "graduates out"; it resurfaces less often.
+export const ENDGAME_REVIEW_INTERVALS_MS: readonly number[] = [
+  1 * 24 * 60 * 60 * 1000, //  rung 0 → 1 day
+  3 * 24 * 60 * 60 * 1000, //  rung 1 → 3 days
+  7 * 24 * 60 * 60 * 1000, //  rung 2 → 1 week
+  16 * 24 * 60 * 60 * 1000, // rung 3 → ~2 weeks
+  35 * 24 * 60 * 60 * 1000, // rung 4 → ~5 weeks (cap)
 ];
+const TOP_RUNG = ENDGAME_REVIEW_INTERVALS_MS.length - 1;
 
-function endgameReviewIntervalMs(timesPlayed: number): number {
-  const i = Math.min(Math.max(timesPlayed - 1, 0), ENDGAME_REVIEW_INTERVALS_MS.length - 1);
-  return ENDGAME_REVIEW_INTERVALS_MS[i];
+/** The rung a record stands on (older records: the play-count ladder). */
+export function reviewStepOf(rec: Pick<EndgameProgressRecord, 'reviewStep' | 'timesPlayed'>): number {
+  const step = rec.reviewStep ?? rec.timesPlayed - 1;
+  return Math.min(Math.max(step, 0), TOP_RUNG);
+}
+
+/** The rung after a play: up one when clean, back to the bottom otherwise. */
+export function nextReviewStep(stepBefore: number, clean: boolean): number {
+  return clean ? Math.min(stepBefore + 1, TOP_RUNG) : 0;
 }
 
 /** Is this played position due to resurface for review now? */
 function isEndgameRecordDue(rec: EndgameProgressRecord, now: number): boolean {
-  return now - rec.lastPlayedAt >= endgameReviewIntervalMs(rec.timesPlayed);
+  return now - rec.lastPlayedAt >= ENDGAME_REVIEW_INTERVALS_MS[reviewStepOf(rec)];
 }
 
 /** Endgame LESSONS with at least one position due for spaced review now,
@@ -114,6 +122,11 @@ export async function recordPlay(args: {
   const id = progressIdFor(args.lessonId, args.fen);
   const existing = await db.endgameProgress.get(id);
   const now = Date.now();
+  // THE LADDER FOLLOWS THE RESULT: clean climbs, mistakes fall to the bottom.
+  // A first play starts on the bottom rung either way.
+  const clean = args.wrongAttempts === 0 && args.firstTryPerfect;
+  const stepBefore = existing ? reviewStepOf(existing) : 0;
+  const stepAfter = existing ? nextReviewStep(stepBefore, clean) : 0;
   const record: EndgameProgressRecord = existing
     ? {
         id,
@@ -123,6 +136,7 @@ export async function recordPlay(args: {
         timesPlayed: existing.timesPlayed + 1,
         totalWrongAttempts: existing.totalWrongAttempts + args.wrongAttempts,
         lastPlayedAt: now,
+        reviewStep: stepAfter,
       }
     : {
         id,
@@ -132,8 +146,14 @@ export async function recordPlay(args: {
         timesPlayed: 1,
         totalWrongAttempts: args.wrongAttempts,
         lastPlayedAt: now,
+        reviewStep: 0,
       };
   await db.endgameProgress.put(record);
+  emitEndgameReview({
+    event: 'scheduled', lessonId: args.lessonId, clean, stepBefore, stepAfter,
+    intervalDays: Math.round(ENDGAME_REVIEW_INTERVALS_MS[stepAfter] / (24 * 60 * 60 * 1000)),
+    lessons: null, positions: null,
+  });
   return record;
 }
 

@@ -19,7 +19,7 @@
 - **Do NOT** (CLAUDE.md:5438) — names `coachApi`
 - **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6192) — names `voiceFacts`
 - **The standard post-deploy ritual** (CLAUDE.md:6335) — names `coachApi`, `voiceFacts`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6355) — names `coachApi`, `translateToEnglish`, `voiceFacts`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6356) — names `coachApi`, `translateToEnglish`, `voiceFacts`
 
 ## Who calls in
 

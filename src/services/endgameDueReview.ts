@@ -8,6 +8,7 @@
 import { getDueEndgameLessons } from './endgameProgressService';
 import { getEndgamePrinciples, getPawnEndings, getRookEndings, getDrawingPatterns } from './endgameLessonsService';
 import type { EndgameLesson } from '../types/endgameLesson';
+import { emitEndgameReview } from './endgameReviewEvents';
 
 /** The endgame tabs that hold lessons a student plays through. */
 export type EndgameLessonTabId = 'principles' | 'pawn-endings' | 'rook-endings' | 'drawing-patterns';
@@ -46,7 +47,12 @@ export async function dueEndgameReviews(): Promise<DueEndgameReview[]> {
     const where = tabForLesson(d.lessonId);
     if (where) out.push({ lessonId: d.lessonId, name: where.name, tab: where.tab, dueCount: d.dueCount });
   }
-  return out.sort((a, b) => b.dueCount - a.dueCount || a.name.localeCompare(b.name));
+  out.sort((a, b) => b.dueCount - a.dueCount || a.name.localeCompare(b.name));
+  emitEndgameReview({
+    event: 'due', lessonId: null, clean: null, stepBefore: null, stepAfter: null, intervalDays: null,
+    lessons: out.length, positions: out.reduce((n, d) => n + d.dueCount, 0),
+  });
+  return out;
 }
 
 /** The page that opens a due lesson directly. */
