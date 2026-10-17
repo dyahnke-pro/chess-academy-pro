@@ -61,7 +61,7 @@ import { countMethod } from './countMethod';
 import { splitPosition } from './splitPosition';
 import { planChoice, type PlanChoiceLine } from './planChooser';
 import { openingIdentityLine, planFor, warmOpeningIdentity } from './openingIdentity';
-import { buildReviewMoveTeaching } from './reviewMoveTeaching';
+import { buildReviewMoveTeachingFact } from './reviewMoveTeaching';
 import { withSubject } from '../utils/openSentence';
 // The Learn page reaches the opening facts through this module, never directly
 // (surfaceComposition): the warm-up and the opening's length in plies.
@@ -1147,11 +1147,14 @@ const HIT_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', 
  *  2026-10-15: 36 of 56 turns offered no reason for the student's move at all).
  *  Null when the board teacher has nothing true to say. */
 export function boardTeacherPoint(fenBefore: string, san: string): TeachingHint | null {
-  const raw = buildReviewMoveTeaching(fenBefore, san, true);
-  if (!raw) return null;
-  const text = withSubject(raw, san);
+  // The reading keeps the squares it named: a board fact about named squares
+  // is proven on the board (A-plan P5); a reading that names none stays a
+  // description, and says so.
+  const fact = buildReviewMoveTeachingFact(fenBefore, san, true);
+  if (!fact) return null;
+  const text = withSubject(fact.text, san);
   return {
-    lane: 'movePoint', proof: NO_PROOF.description, text, squares: [], claims: [`board-teacher:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`],
+    lane: 'movePoint', proof: squaresProof(text, fact.squares) ?? NO_PROOF.description, text, squares: fact.squares, claims: [`board-teacher:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`],
     event: { name: 'coach_move_point_named', props: { surface: 'coach-teach', source: 'board-teacher' } },
     arrows: [],
   };
