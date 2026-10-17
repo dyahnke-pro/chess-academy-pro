@@ -61,6 +61,9 @@ export const COVERS_SHARE = 0.6;
 const MATE_CP = 100_000;
 /** A gap this large is decisive; when forcing play cannot show it, the whole
  *  engine line is read for it. */
+/** A mate this short is the reason itself; a longer one gives way to the
+ *  concrete win the student can see. */
+export const SHORT_MATE = 3;
 export const DEEP_GAP_CP = 300;
 const squareOf = (san: string): string | null => /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(san)?.[1] ?? null;
 
@@ -93,7 +96,7 @@ const heardSans = (fen: string, uci: readonly string[]): string[] => { const san
 /** A line cut where it proves its point, worded from the student's seat ("you
  *  win a pawn" / "they win a knight"). `side` says whether it must prove FOR the
  *  mover (a win, or the mover mating) or AGAINST it (a loss, or the mover mated). */
-function seatProof(fen: string, sans: readonly string[], mover: 'w' | 'b', studentWB: 'w' | 'b', side: 'for' | 'against'): { text: string; sans: string[] } | null {
+function seatProof(fen: string, sans: readonly string[], mover: 'w' | 'b', studentWB: 'w' | 'b', side: 'for' | 'against'): { text: string; sans: string[]; end: string } | null {
   const p = heardProofCut(fen, sans, studentWB);
   if (!p) return null;
   const line = p.sans.slice(0, p.plies);
@@ -108,7 +111,20 @@ function seatProof(fen: string, sans: readonly string[], mover: 'w' | 'b', stude
     if (side === 'for' ? moverNet <= 0 : moverNet >= 0) return null;
     end = describeProofResult(p.ledger);
   }
-  return { text: `${line.length <= 3 ? andList(line) : lineShape(line)} — ${end}`, sans: line };
+  return { text: `${line.length <= 3 ? andList(line) : lineShape(line)} — ${end}`, sans: line, end };
+}
+
+const LATER_WORDS: Record<number, string> = { 1: 'a move', 2: 'two moves', 3: 'three moves', 4: 'four moves', 5: 'five moves', 6: 'six moves' };
+/** "lands three moves later with Bxg4" — where a forced line pays off, said
+ *  after the result so the move it starts from is never named twice. */
+function landsWith(line: readonly string[], mover: 'w' | 'b'): string {
+  // The mover's own last capture is where it pays off — not the recapture
+  // that follows it ("lands with Bxg4", never "…Bxg4" taking back).
+  const own = line.map((san, i) => ({ san, i })).filter((x) => x.i % 2 === 0);
+  const pay = [...own].reverse().find((x) => /x|#/.test(x.san)) ?? own[own.length - 1];
+  const at = pay?.i ?? 0;
+  const later = Math.ceil(at / 2);
+  return later === 0 ? `it is ${dot(line[0], mover)} itself` : `it lands ${LATER_WORDS[later] ?? `${later} moves`} later with ${dot(line[at], mover)}`;
 }
 
 const dot = (san: string, side: 'w' | 'b'): string => (side === 'b' ? `…${san}` : san);
@@ -156,7 +172,12 @@ export function decisiveReason(input: {
   const mateOf = (l: AnalysisLine): number | null => (l.mate == null ? null : (l.mate > 0) === (mover === 'w') ? Math.abs(l.mate) : -Math.abs(l.mate));
   const ownMate = mateOf(own);
   const nextMate = mateOf(next);
-  if (ownMate !== null && ownMate > 0 && !(nextMate !== null && nextMate > 0)) {
+  // A LONG MATE IS NOT THE REASON A STUDENT CAN SEE (escalating walk
+  // 2026-10-17: "Qxf5 starts a forced mate in 10" where Qxf5 takes a free
+  // rook). A mate leads when it is short; past that the concrete win leads and
+  // the mate is only the fallback.
+  const longMate = ownMate !== null && ownMate > SHORT_MATE;
+  if (ownMate !== null && ownMate > 0 && !longMate && !(nextMate !== null && nextMate > 0)) {
     cands.push({ source: 'material', stake: MATE_CP, text: ownMate === 1 ? `${played} is mate.` : `${played} starts a forced mate in ${ownMate}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
   } else if (nextMate !== null && nextMate < 0 && nextBestSan) {
     const n = -nextMate;
@@ -176,7 +197,7 @@ export function decisiveReason(input: {
     } else if (matStake > 0) {
       const win = matOwn > 0 ? seatProof(fenBefore, sansOf(fenBefore, own.moves), mover, studentWB, 'for') : null;
       const loss = !win && matNext < 0 ? seatProof(fenBefore, sansOf(fenBefore, next.moves), mover, studentWB, 'against') : null;
-      if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? `${win.text}.` : `${played} wins by force: ${win.text}.`, line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
+      if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? `${win.text}.` : `${played} wins by force: ${win.end} — ${landsWith(win.sans, mover)}.`, line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
       else if (loss && nextBestSan) cands.push({ source: 'material', stake: matStake, text: `The natural alternative, ${dot(nextBestSan, mover)}, fails: ${loss.text}.`, line: { fen: fenBefore, sans: loss.sans }, squares: [], alt: true });
       // No short proof, but the count is the reason: say the count, never let a
       // smaller reason stand in for it.
@@ -192,6 +213,10 @@ export function decisiveReason(input: {
       const nextFull = (settledNetForLine(fenBefore, nextSans, mover) ?? 0) * 100;
       if (ownFull - nextFull > 0 && nextFull < 0) cands.push({ source: 'material', stake: ownFull - nextFull, text: `The natural alternative, ${dot(nextBestSan, mover)}, loses material further down the line — it ends ${points(-nextFull)} down.`, line: { fen: fenBefore, sans: nextSans }, squares: [], alt: true });
     }
+  }
+
+  if (!cands.length && longMate && ownMate !== null && !(nextMate !== null && nextMate > 0)) {
+    cands.push({ source: 'material', stake: MATE_CP, text: `${played} starts a forced mate in ${ownMate}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
   }
 
   // STOPS / PREPARES — the pass read, worded by the computer that owns it.
@@ -211,7 +236,12 @@ export function decisiveReason(input: {
   // count beats a stopped move beats a prepared one. Otherwise the largest.
   const PRIORITY: Record<ReasonSource, number> = { material: 0, stops: 1, prepares: 2, description: 3 };
   cands.sort((a, b) => b.stake - a.stake);
-  const covering = cands.filter((c) => c.stake >= COVERS_SHARE * gapCp).sort((a, b) => PRIORITY[a.source] - PRIORITY[b.source]);
+  // Behind a long mate the gap is the mate's, which no count can cover: the
+  // forced win the student can see covers it, and the mate is said after.
+  const mateText = (c: { text: string }): boolean => /forced mate/.test(c.text);
+  const covering = longMate && cands.some((c) => c.source === 'material' && !mateText(c))
+    ? cands.filter((c) => c.source === 'material' && !mateText(c))
+    : cands.filter((c) => c.stake >= COVERS_SHARE * gapCp).sort((a, b) => PRIORITY[a.source] - PRIORITY[b.source]);
   const top = covering.at(0) ?? cands.at(0);
   // The board description is worded for the MOVER ("pushes your passed pawn"),
   // so it speaks only for the student's own move — never re-pronouned.
@@ -227,8 +257,10 @@ export function decisiveReason(input: {
     const src: ReasonSource | null = description ? 'description' : quiet?.source ?? null;
     return { ...base, kind: 'close', source: src, stakeCp: null, text: `There is no single reason here — ${alt}.${what ? ` ${what}` : ''}`, line: description ? null : quiet?.line ?? null, squares: description ? [] : quiet?.squares ?? [] };
   }
-  if (top && top.stake >= COVERS_SHARE * gapCp) {
-    const tail = nextBestSan && !top.alt ? ` Anything else, like ${dot(nextBestSan, mover)}, gives up ${costWords(gapCp)}.` : '';
+  if (top && (top.stake >= COVERS_SHARE * gapCp || covering.includes(top))) {
+    const tail = longMate && covering.includes(top) && !mateText(top)
+      ? ` And the engine sees a forced mate in ${ownMate} after it.`
+      : nextBestSan && !top.alt ? ` Anything else, like ${dot(nextBestSan, mover)}, gives up ${costWords(gapCp)}.` : '';
     // Their move, said as theirs ("Their …Bxf7 wins by force", never a bare
     // "…Bxf7 wins" the student must work out the owner of).
     const core = seat !== 'opponent' ? top.text

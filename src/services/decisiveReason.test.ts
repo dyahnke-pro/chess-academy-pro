@@ -102,3 +102,22 @@ describe('decisiveReason — their move is said as theirs (David 2026-10-17: com
     expect(r?.text).toMatch(/^Their …Qxa2/);
   });
 });
+
+describe('decisiveReason — escalating walk boards (2026-10-17)', () => {
+  it('Q6: a forced line is said result first and names where it lands, never the move twice', () => {
+    const fen = 'r1b2b1r/pp2k1p1/5nBp/2p1p3/1B2P1q1/8/PPP2PPP/RN1Q1RK1 w - - 0 12';
+    const r = decisiveReason({ fenBefore: fen, san: 'Bxc5+', seat: 'student', opponentLastSan: 'c5', reads: {
+      before: [{ rank: 1, evaluation: 592, mate: null, moves: 'b4c5 e7e6 g6f5 e6f7 f5g4 c8g4 d1d3 f8c5 d3c4 g4e6 c4c5'.split(' ') }, { rank: 2, evaluation: 331, mate: null, moves: 'd1g4 f6g4 b4c5 e7f6 c5f8 h8f8 g6h5 g7g6 h5g4 c8g4'.split(' ') }], after: [], passBefore: [], passAfter: [] } });
+    expect(r?.kind).toBe('the');
+    expect(r?.text).toMatch(/^Bxc5\+ wins by force: you come out ahead on material, a queen/);
+    expect(r?.text).toMatch(/lands two moves later with Bxg4\./);
+    expect(r?.text).not.toMatch(/…Bxg4/);
+  });
+  it('Q14: a long mate gives way to the free rook, and the mate is said after it', () => {
+    const fen = '2Q5/p4kp1/1p3n2/5r1p/4p3/NP5P/P1P2PP1/R2R2K1 w - - 1 28';
+    const r = decisiveReason({ fenBefore: fen, san: 'Qxf5', seat: 'student', opponentLastSan: 'Kf7', reads: {
+      before: [{ rank: 1, evaluation: 0, mate: 14, moves: 'c8f5 f7e7 a3c4 g7g6 f5g6 f6e8 g6e4 e7f6 e4e8 a7a6'.split(' ') }, { rank: 2, evaluation: 1194, mate: null, moves: 'b3b4 f7g6 c8e6 a7a5 a3c4 f5g5 d1d8 b6b5'.split(' ') }], after: [], passBefore: [], passAfter: [] } });
+    expect(r?.text).toMatch(/^Qxf5 — you win a rook\./);
+    expect(r?.text).toMatch(/forced mate in 14 after it/);
+  });
+});

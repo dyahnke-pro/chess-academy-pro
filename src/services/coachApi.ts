@@ -139,6 +139,18 @@ import './masterPlayAuditBridge';
 import { movePurpose, moveReason } from './movePurposeEngine';
 import { reasonPosed } from './decisiveReason';
 import { emitDecisiveReason } from './decisiveReasonEvents';
+/** The engine's best line as UCI from `fen`, when its first move is `bestUci`;
+ *  just that move otherwise (never a line from a different board). */
+function enginePlanUci(fen: string, pvSan: ReadonlyArray<string> | undefined, bestUci: string): string[] {
+  if (!pvSan?.length) return [bestUci];
+  const uci: string[] = [];
+  try {
+    const c = new Chess(fen);
+    for (const san of pvSan) { const m = c.move(san); uci.push(`${m.from}${m.to}${m.promotion ?? ''}`); }
+  } catch { /* the playable prefix */ }
+  return uci[0] === bestUci ? uci : [bestUci];
+}
+
 /** The purpose of the game's last move (`movePurpose`), from the start
  *  position. Null when the history does not replay or the engine shows none. */
 async function lastMovePurpose(history: readonly string[], seat: 'student' | 'opponent'): Promise<string | null> {
@@ -2786,11 +2798,22 @@ async function computeLiveBoardVerdict(
       const pv = grounding.enginePlan?.pvSan ?? [];
       const mateAt = pv.findIndex((m) => m.includes('#'));
       const mateSans = mateAt >= 0 && mateAt < scMateIn * 2 ? pv.slice(0, mateAt + 1) : null;
-      const line = mateSans ? mateSans.join(' ') : null;
       // The mate it names is a line the board can play ("show me" / the walk
       // button) — the same moves, never read back out of the words.
       const walk = mateSans && grounding.currentFen ? walkableLine(grounding.currentFen, mateSans, mateSans[0]) : null;
-      const said = await voice(line ? `Yes — there's a forced mate in ${scMateIn}: ${line}.` : `Yes — there's a forced mate in ${scMateIn}.`, 'mate');
+      // THE VOICE SAYS THE SHAPE, THE BOARD SHOWS THE DETAIL (the proof rule;
+      // escalating walk 2026-10-17: a mate in 5 was read out as fourteen bare
+      // moves). The first move, the finish and the mate's name are said; every
+      // move is on the board to play through.
+      const shape = (() => {
+        if (!mateSans || mateSans.length === 0) return null;
+        if (mateSans.length <= 3) return mateSans.join(', ');
+        const finalFen = (() => { try { const c = new Chess(grounding.currentFen ?? fen); for (const m of mateSans) c.move(m); return c.fen(); } catch { return null; } })();
+        const pattern = finalFen ? classifyMatePattern(finalFen) : null;
+        const finish = mateSans[mateSans.length - 1].replace(/#$/, '');
+        return `it starts with ${mateSans[0]} and ends with ${finish} mate${pattern ? ` — ${pattern.name}` : ''}. The whole line is on the board`;
+      })();
+      const said = await voice(shape ? `Yes — there's a forced mate in ${scMateIn}: ${shape}.` : `Yes — there's a forced mate in ${scMateIn}.`, 'mate');
       if (said && walk) lastCoachLines = [walk];
       return said;
     }
@@ -6103,9 +6126,19 @@ export async function getCoachChatResponse(
               masterFreqPct = (hit.games / masterPlayContext.current.totalGames) * 100;
             }
           }
+          // THE REASON the engine's move beats the named one — the same
+          // computer the why-best lane and Learn read.
+          const candBestSan = (() => { try { return candBestUci ? new Chess(candFen).move({ from: candBestUci.slice(0, 2), to: candBestUci.slice(2, 4), promotion: candBestUci[4] })?.san ?? null : null; } catch { return null; } })();
+          const namedNorm = (() => { try { return new Chess(candFen).move(grounding.candidateMoveSan ?? '')?.san ?? null; } catch { return null; } })();
+          const betterReason = candBestSan && namedNorm && candBestSan !== namedNorm
+            ? await moveReason(candFen, candBestSan, 'student', grounding.moveHistory?.[grounding.moveHistory.length - 1] ?? null).catch(() => null)
+            : null;
+          if (betterReason) emitDecisiveReason({ surface: 'chat', kind: betterReason.kind, source: betterReason.source, about: betterReason.about, gapCp: betterReason.gapCp, stakeCp: betterReason.stakeCp, posedTag: null, outcome: 'explained' });
+          const betterSaid = betterReason?.kind === 'the' ? betterReason.text : null;
           const answer = assembleCandidateMoveAnswer({
             fen: candFen,
             candidateSan: grounding.candidateMoveSan,
+            betterReason: betterSaid,
             bestMoveUci: candBestUci,
             bestEvalCp: stmBestEval,
             candidateEvalCp: stmCandEval,
@@ -6117,10 +6150,15 @@ export async function getCoachChatResponse(
             errorCall: (band, loss) => errorCallFor({
               fenBefore: candFen, playedSan: grounding.candidateMoveSan ?? '',
               moverColor: blackToMove ? 'black' : 'white',
-              bestUci: candBestUci, bestLineUci: candBestUci ? [candBestUci] : [],
+              // The engine's WHOLE best line from this board, so the better
+              // move's reason is what the line wins (escalating walk
+              // 2026-10-17: a one-move line gave "Bxc5+ would fork the a7
+              // pawn" where Bxc5+ goes on to win the queen).
+              bestUci: candBestUci, bestLineUci: candBestUci ? enginePlanUci(candFen, grounding.enginePlan?.pvSan, candBestUci) : [],
               replyLineUci: grounding.candidateLineUci ?? [],
               quality: band, missedMate: null, allowedMate: null, cpLoss: loss,
-              namesBetterMove: true, tense: 'would',
+              // The better move is named with its own reason below.
+              namesBetterMove: !betterSaid, tense: 'would',
             }),
           });
           if (answer?.lines?.length) lastCoachLines = answer.lines;
@@ -6257,7 +6295,17 @@ export async function getCoachChatResponse(
               typeof grounding.engineMateIn === 'number'
                 ? (blackToMove ? -grounding.engineMateIn : grounding.engineMateIn)
                 : null;
-            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, askedPiece: grounding.askedPiece ?? null, prevCapture: bestFen === grounding.currentFen ? lastCaptureOf(grounding.moveHistory) : null, pvSan: bestFen === grounding.currentFen ? grounding.enginePlan?.pvSan ?? null : null, opponentLastSan: bestFen === grounding.currentFen ? grounding.moveHistory?.[grounding.moveHistory.length - 1] ?? null : null });
+            // THE REASON for the best move — the one reason computer, from the
+            // student's seat, on the board asked about (not a master board).
+            const bestMoveSanHere = (() => { try { return new Chess(bestFen).move({ from: bestUci.slice(0, 2), to: bestUci.slice(2, 4), promotion: bestUci[4] })?.san ?? null; } catch { return null; } })();
+            const lastHere = bestFen === grounding.currentFen ? grounding.moveHistory?.[grounding.moveHistory.length - 1] ?? null : null;
+            const moverHere: 'white' | 'black' = blackToMove ? 'black' : 'white';
+            const studentToMove = !grounding.studentColor || grounding.studentColor === moverHere;
+            const bestReason = bestMoveSanHere && studentToMove && bestFen === grounding.currentFen
+              ? await moveReason(bestFen, bestMoveSanHere, 'student', lastHere).catch(() => null)
+              : null;
+            if (bestReason) emitDecisiveReason({ surface: 'chat', kind: bestReason.kind, source: bestReason.source, about: bestReason.about, gapCp: bestReason.gapCp, stakeCp: bestReason.stakeCp, posedTag: null, outcome: 'explained' });
+            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, askedPiece: grounding.askedPiece ?? null, prevCapture: bestFen === grounding.currentFen ? lastCaptureOf(grounding.moveHistory) : null, pvSan: bestFen === grounding.currentFen ? grounding.enginePlan?.pvSan ?? null : null, opponentLastSan: lastHere, theReason: bestReason?.kind === 'the' ? bestReason.text : null });
             if (answer) {
               const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
               if (voiced) {

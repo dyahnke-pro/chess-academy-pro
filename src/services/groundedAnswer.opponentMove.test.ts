@@ -51,3 +51,13 @@ describe('a move another computer found a point for is never called quiet (escal
     expect(known?.facts).toMatch(/They played Kg8/);
   });
 });
+
+describe('a capture that is taken back is a trade, not a sacrifice (escalating walk 2026-10-17, Q6)', () => {
+  it('Qxg4 (queen for queen) is never "sound — you give up 9 points"', async () => {
+    const { assembleCandidateMoveAnswer } = await import('./groundedAnswer');
+    const fen = 'r1b2b1r/pp2k1p1/5nBp/2p1p3/1B2P1q1/8/PPP2PPP/RN1Q1RK1 w - - 0 12';
+    const a = assembleCandidateMoveAnswer({ fen, candidateSan: 'Qxg4', bestMoveUci: 'b4c5', bestEvalCp: 592, candidateEvalCp: 331, candidateMateIn: null,
+      candidateLineUci: 'f6g4 b4c5 e7f6 c5f8'.split(' '), candidateSettled: true, studentColor: 'white', masterFreqPct: null });
+    expect(a?.facts).not.toMatch(/sound|give up 9|compensation/);
+  });
+});

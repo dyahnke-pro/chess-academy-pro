@@ -35,7 +35,7 @@ import { tacticWord } from './tacticVocabulary';
 import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSITIONAL_TARGETS } from './keySquares';
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
-  legalSeeGain, legalSeeGainOn, landingIsSafe, capturesWinMaterial, legalSeeGainFor, takingTheAttackerAnswers, seeReadsStanding, captureRead, signedLegalSeeFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
+  legalSeeGain, legalSeeGainOn, movesThatKeep, landingIsSafe, capturesWinMaterial, legalSeeGainFor, takingTheAttackerAnswers, seeReadsStanding, captureRead, signedLegalSeeFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
   strongestWeakestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
   namedPawnStructure, structureTransfer, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
@@ -643,14 +643,25 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
       ? ` — but you can take their ${REVIEW_PIECE_NAME[cheapest.t]} on ${cheapest.sq}, and that answers it`
       : '';
   })();
+  const keepWith = isOpp && wins.length > 0 ? keepItClause(fen, wins[0].sq, me) : '';
   const winPart = wins.length > 0
     ? (isOpp
-        ? `they're eyeing ${named}, which is not defended enough${takeBack || ' — cover it'}`
+        ? `they're eyeing ${named}, which is not defended enough${takeBack || keepWith}`
         : `you can win ${named}`)
     : '';
   const checkPart = inCheck ? `your king is in check` : '';
   const facts = (matePart ? `${[checkPart, matePart].filter(Boolean).join(', and ')}.${winPart ? ` Beyond that, ${winPart}.` : ''}` : [checkPart, winPart].filter(Boolean).join(', and ') + '.') + ideaPart;
   return { facts: openSentence(facts), bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+}
+
+/** HOW, not just "cover it" (escalating walk 2026-10-17): the moves that keep
+ *  the unit on `sq`, the most natural tier named in full and the rest counted. */
+function keepItClause(fen: string, sq: Square, me: 'w' | 'b'): string {
+  const keeps = movesThatKeep(fen, sq, me);
+  if (keeps.length === 0) return ' — and nothing keeps it all, so choose what to give up';
+  const tier = keeps.filter((k) => k.rank === keeps[0].rank).map((k) => k.san);
+  const rest = keeps.length - tier.length;
+  return ` — keep it with ${orList(tier)}${rest > 0 ? ` (${rest} other move${rest === 1 ? '' : 's'} hold it too)` : ''}`;
 }
 
 /** The opponent's next-move pins and forks against `me`, as "…Bg4 would pin
@@ -862,7 +873,8 @@ export function assembleOpponentMoveAnswer(opts: {
     : opts.pointKnown
       ? `They played ${played.san}.`
       : `They played ${played.san} — a quiet move with no immediate tactical point.`;
-  const guardNote = shortOfGuards ? ' It is not defended enough — cover it.' : '';
+  const shortSq = computeMustDefend(fen, studentColor === 'white' ? 'w' : 'b').pieces.find((p) => named.includes(p.square))?.square;
+  const guardNote = shortOfGuards && shortSq ? ` It is not defended enough${keepItClause(fen, shortSq as Square, studentColor === 'white' ? 'w' : 'b')}.` : '';
   const facts = threatText ? `${didPart}${guardNote} ${threatText}` : `${didPart}${guardNote}`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
@@ -1888,6 +1900,9 @@ export function assembleMoveEvalAnswer(opts: {
   /** Their last move (SAN), so a recapture is said as taking back, never as
    *  winning a piece (the why-best computer reads it). */
   opponentLastSan?: string | null;
+  /** THE reason for the best move (`decisiveReason`, kind 'the'), said in
+   *  place of a re-derived one. */
+  theReason?: string | null;
 }): GroundedAnswer | null {
   const { fen, bestMoveUci } = opts;
   if (!bestMoveUci || bestMoveUci.length < 4) return null;
@@ -1945,11 +1960,14 @@ export function assembleMoveEvalAnswer(opts: {
   const startsMate = typeof opts.mateIn === 'number' && opts.mateIn > 1;
   // THE STUDENT'S OWN BEST MOVE reads the one why-best computer, so this
   // answer, Learn's weighing and the Why button give the same reason.
-  const ownReason = theirMove ? null : bestMoveReason(fen, bestMoveSan, mover === 'white' ? 'w' : 'b', {
+  const ownReason = theirMove || opts.theReason ? null : bestMoveReason(fen, bestMoveSan, mover === 'white' ? 'w' : 'b', {
     mateIn: typeof opts.mateIn === 'number' ? opts.mateIn : null,
     opponentLastSan: opts.opponentLastSan ?? null,
   });
-  if (ownReason) parts.push(`It ${ownReason}.`);
+  // THE reason (the one reason computer), when one accounts for the move's
+  // edge over the rest — said as computed, never re-derived here.
+  if (opts.theReason) parts.push(opts.theReason);
+  else if (ownReason) parts.push(`It ${ownReason}.`);
   else if (why) parts.push(why);
   else {
     // WHAT IT IS FOR, from the engine's own line — the one purpose computer
@@ -1979,7 +1997,7 @@ export function assembleMoveEvalAnswer(opts: {
     const proof = moverLineProof(fen, uci, mover === 'white' ? 'w' : 'b');
     const sans = proof?.line?.sans ?? [];
     if (proof && sans.length >= 3) {
-      parts.push(`${openSentence(proof.full)}.`);
+      if (!opts.theReason) parts.push(`${openSentence(proof.full)}.`);
       const w = walkableLine(fen, sans, sans[0]);
       if (w) lines = [w];
     } else if (opts.pvSan.length >= 3) {
@@ -2017,7 +2035,12 @@ function sacrificeOffer(fen: string, candSan: string, minGain = 2): number | nul
     const mv = c.move(candSan);
     if (!mv) return null;
     const gain = legalSeeGain(c.fen(), mv.to); // opponent to move — their legal winning capture
-    return gain >= minGain ? gain : null;
+    // NET of what the move took (escalating walk 2026-10-17: Qxg4 taking a
+    // queen, Nxg4 taking one back, was called "sound — you give up 9 points").
+    // A capture recaptured is a trade, not an offer.
+    const taken = mv.captured ? ({ p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 } as const)[mv.captured] : 0;
+    const net = gain - taken;
+    return net >= minGain ? net : null;
   } catch {
     return null;
   }
@@ -2040,6 +2063,10 @@ export function assembleCandidateMoveAnswer(opts: {
   fen: string;
   /** The move the student named, in SAN (e.g. "Qf3"). */
   candidateSan: string;
+  /** THE reason the engine's move beats the rest (`decisiveReason`, from the
+   *  student's seat), when one accounts for the gap. Said in place of a
+   *  guessed "it would …" for the better move. */
+  betterReason?: string | null;
   /** Engine best move in UCI — from Stockfish PV[0]. */
   bestMoveUci: string | null;
   /** Mover-POV eval of the position (value of best play). */
@@ -2244,7 +2271,10 @@ export function assembleCandidateMoveAnswer(opts: {
   // why it's best, they get the proof"). A named move that is not the best
   // used to end at "versus Na3" — the student heard the alternative and never
   // why. The same grounded reason the best-move answer gives, said once.
-  if (bestSan && cpLoss !== null && cpLoss > 30 && !errorCall) {
+  if (bestSan && cpLoss !== null && cpLoss > 30 && opts.betterReason) {
+    // THE reason the better move is better, from the one reason computer.
+    parts.push(opts.betterReason);
+  } else if (bestSan && cpLoss !== null && cpLoss > 30 && !errorCall) {
     const why = explainBestMoveGrounded(fen, null, opts.bestMoveUci, mover, null, null);
     // "It wins the knight on f6." → "exf6 wins the knight on f6." — the
     // verdict already said it is better; this says why, once.

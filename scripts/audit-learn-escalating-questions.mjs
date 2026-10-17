@@ -24,6 +24,7 @@
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import { Chess } from 'chess.js';
+import { bestAnswerIssues } from './audit-lib/best-answer.mjs';
 
 const PORT = Number(process.env.HAND_PORT ?? 7793);
 const MOVES = Number((process.argv.find((a) => a.startsWith('--moves=')) ?? '--moves=24').slice(8));
@@ -104,9 +105,9 @@ const LADDER = [
   { q: 'What did their last move do?' },
   { q: 'Is anything of mine hanging right now?' },
   { q: 'What are they threatening?' },
-  { q: "What's the best move here?", check: 'best' },
-  { q: 'Why is that the best move?' },
+  { q: "What's the best move here?", check: 'best', then: { q: 'Why is that the best move?', check: 'why' } },
   { q: 'What happens if I play {second} instead?', check: 'second' },
+  { q: 'What should I do about their threat?', check: 'how' },
   { q: "What's the plan for both sides from here?" },
   { q: 'Is there a forced mate or a winning combination for either side?', check: 'mate' },
   { q: 'Calculate the main line six moves deep — where does it end up?' },
@@ -130,23 +131,28 @@ for (let n = 0; n < MOVES; n += 1) {
     const deep = await sf(fen, 16);
     const best = deep[0] ? sanOf(fen, deep[0].pv[0]) : null;
     const second = deep[1] ? sanOf(fen, deep[1].pv[0]) : null;
-    const q = rung.q.replace('{second}', second ?? 'a quiet move');
-    const { answer, secs } = await ask(q);
-    const issues = [];
-    if (!answer) issues.push('no answer');
-    issues.push(...pieceClaimsFalse(answer, [fen, prevFen]).map((b) => `false piece claim: ${b}`));
-    if (rung.check === 'best' && best) {
-      const okMoves = deep.filter((l) => score(deep[0]) - score(l) <= 30).map((l) => sanOf(fen, l.pv[0])).filter(Boolean);
-      if (!okMoves.some((s) => sanRe(s).test(answer))) issues.push(`best move: engine ${okMoves.join('/')} — not named`);
+    const gapCp = deep[0] && deep[1] ? Math.min(2000, score(deep[0]) - score(deep[1])) : 0;
+    // A rung and its follow-up ("why is that the best?") on the SAME board.
+    for (const r of [rung, ...(rung.then ? [rung.then] : [])]) {
+      const q = r.q.replace('{second}', second ?? 'a quiet move');
+      const { answer, secs } = await ask(q);
+      const issues = [];
+      if (!answer) issues.push('no answer');
+      issues.push(...pieceClaimsFalse(answer, [fen, prevFen]).map((b) => `false piece claim: ${b}`));
+      if (r.check === 'best' && best) {
+        const okMoves = deep.filter((l) => score(deep[0]) - score(l) <= 30).map((l) => sanOf(fen, l.pv[0])).filter(Boolean);
+        if (!okMoves.some((x) => sanRe(x).test(answer))) issues.push(`best move: engine ${okMoves.join('/')} — not named`);
+      }
+      if (r.check === 'mate') {
+        const mates = deep[0]?.mate != null;
+        const says = /\bmate\b/i.test(answer) && !/\bno (?:forced )?mate\b|not a mate|isn't a mate|no mating/i.test(answer);
+        if (mates && !says) issues.push(`engine sees mate in ${deep[0].mate} — answer does not`);
+        if (!mates && says && /forced mate|mate in \d/i.test(answer)) issues.push('claims a forced mate the engine does not see');
+      }
+      const notBest = answer ? bestAnswerIssues(r, q, answer, { second, gapCp }) : [];
+      results.push({ move: c.history().length, history: c.history().join(' '), tier: (asked % LADDER.length) + 1, round: Math.floor(asked / LADDER.length) + 1, q, answer, secs, best, issues, notBest });
+      console.log(`\n[${results.length}] tier ${(asked % LADDER.length) + 1} · move ${Math.ceil(c.history().length / 2)} · ${secs}s\n  Q: ${q}\n  A: ${answer.slice(0, 600)}${issues.length ? `\n  ✗ ${issues.join(' | ')}` : '\n  ✓ correct'}${notBest.length ? `\n  ◐ not the best answer: ${notBest.join(' | ')}` : ''}`);
     }
-    if (rung.check === 'mate') {
-      const mates = deep[0]?.mate != null;
-      const says = /\bmate\b/i.test(answer) && !/\bno (?:forced )?mate\b|not a mate|isn't a mate|no mating/i.test(answer);
-      if (mates && !says) issues.push(`engine sees mate in ${deep[0].mate} — answer does not`);
-      if (!mates && says && /forced mate|mate in \d/i.test(answer)) issues.push('claims a forced mate the engine does not see');
-    }
-    results.push({ move: c.history().length, history: c.history().join(' '), tier: (asked % LADDER.length) + 1, round: Math.floor(asked / LADDER.length) + 1, q, answer, secs, best, issues });
-    console.log(`\n[${results.length}] tier ${(asked % LADDER.length) + 1} · move ${Math.ceil(c.history().length / 2)} · ${secs}s\n  Q: ${q}\n  A: ${answer.slice(0, 600)}${issues.length ? `\n  ✗ ${issues.join(' | ')}` : '\n  ✓'}`);
     asked += 1;
   }
   // The student's move: the engine at depth 8.
@@ -161,8 +167,9 @@ for (let n = 0; n < MOVES; n += 1) {
 }
 
 const bad = results.filter((r) => r.issues.length);
-console.log(`\nESCALATING QUESTIONS: ${results.length} asked · ${results.length - bad.length} clean · ${bad.length} with issues`);
+const weak = results.filter((r) => !r.issues.length && r.notBest.length);
+console.log(`\nESCALATING QUESTIONS: ${results.length} asked · ${results.length - bad.length} correct · ${results.length - bad.length - weak.length} correct AND the best answer · ${bad.length} wrong · ${weak.length} correct but not the best`);
 fs.mkdirSync('audit-reports', { recursive: true });
 fs.writeFileSync(`audit-reports/escalating-questions-${Date.now()}.json`, JSON.stringify(results, null, 1));
 await get('/quit').catch(() => {});
-process.exit(bad.length ? 1 : 0);
+process.exit(bad.length || weak.length ? 1 : 0);

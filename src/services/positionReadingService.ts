@@ -2832,3 +2832,26 @@ export function goodPieceIdeaKey(side: string, piece: string, kind: string, squa
   const where = kind === 'open-file' || kind === 'semi-open-file' ? square[0] : square;
   return `${side}-good-${piece}-${kind}-${where}`;
 }
+
+/** HOW TO KEEP IT (escalating walk 2026-10-17: the coach said "cover it" and
+ *  never how). Every legal move for `me` (to move) after which the unit on
+ *  `sq` is safe — guarded enough, or moved somewhere it cannot be won — and
+ *  nothing else of `me` can be won either (the same legal SEE every threat
+ *  read uses). Most natural first: a guard that keeps the unit where it is,
+ *  then moving it, then captures; the queen and king last. */
+export function movesThatKeep(fen: string, sq: Square, me: Color): { san: string; rank: number }[] {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return []; }
+  if (chess.turn() !== me) return [];
+  const out: { san: string; rank: number }[] = [];
+  for (const m of chess.moves({ verbose: true })) {
+    const c = new Chess(fen);
+    c.move(m.san);
+    const after = c.fen();
+    const safe = c.board().flat().every((p) => !p || p.color !== me || p.type === 'k' || legalSeeGain(after, p.square) <= 0);
+    if (!safe) continue;
+    const rank = (m.piece === 'k' ? 8 : 0) + (m.piece === 'q' ? 2 : 0) + (m.from === sq ? 3 : 0) + (m.captured ? 1 : 0) + (m.piece === 'p' ? 0 : 1);
+    out.push({ san: m.san, rank });
+  }
+  return out.sort((a, b) => a.rank - b.rank);
+}
