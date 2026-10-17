@@ -79,6 +79,10 @@ export interface StructurePlanFact {
    *  say-once memory (fresh-game walk 2026-09-27: "their passed pawn on h2"
    *  spoken at move 18 by one, at move 21 by the other). */
   ideaKey?: string;
+  /** The squares the plan is about (the passer), coupled at emission so the
+   *  decider can see "push your d3 pawn" and "escort the d3 pawn" are one
+   *  claim (one thread per move, probe 2026-10-17). */
+  squares?: string[];
 }
 
 /** The text alone — the shape four existing callers want. */
@@ -98,10 +102,10 @@ export function structurePlanFact(fen: string, studentColor: Color): StructurePl
   if (mine) {
     const block = passerBlock(fen, mine, studentColor);
     if (block.kind === 'enemy') {
-      return { id: 'passer-blockaded-enemy', ideaKey: `student-passer-${mine[0]}`, text: `Your passed pawn on ${mine} is a trump, but their ${PIECE_NOUN[block.piece ?? 'p']} blockades it — challenge or dislodge that blockader before it can run.` };
+      return { id: 'passer-blockaded-enemy', ideaKey: `student-passer-${mine[0]}`, squares: [mine], text: `Your passed pawn on ${mine} is a trump, but their ${PIECE_NOUN[block.piece ?? 'p']} blockades it — challenge or dislodge that blockader before it can run.` };
     }
     if (block.kind === 'friendly') {
-      return { id: 'passer-blockaded-friendly', ideaKey: `student-passer-${mine[0]}`, text: `Your passed pawn on ${mine} is a trump, but your own ${PIECE_NOUN[block.piece ?? 'p']} sits in its path — clear the way before it can advance.` };
+      return { id: 'passer-blockaded-friendly', ideaKey: `student-passer-${mine[0]}`, squares: [mine], text: `Your passed pawn on ${mine} is a trump, but your own ${PIECE_NOUN[block.piece ?? 'p']} sits in its path — clear the way before it can advance.` };
     }
     // 🚨 THE ELSE-CHAIN DEFECT (found reading the code, 2026-09-17). Everything
     // below used to be unreachable whenever the student had a passer of their
@@ -130,11 +134,11 @@ export function structurePlanFact(fen: string, studentColor: Color): StructurePl
         text: `${openSentence(raceText)}.`,
       };
     }
-    return { id: 'passer-mine', ideaKey: `student-passer-${mine[0]}`, text: `Your passed pawn on ${mine} is the trump here — push it and make them deal with the promotion.` };
+    return { id: 'passer-mine', ideaKey: `student-passer-${mine[0]}`, squares: [mine], text: `Your passed pawn on ${mine} is the trump here — push it and make them deal with the promotion.` };
   }
   const theirs = mostAdvanced(s.pawns.passedPawns[opp], opp);
   if (theirs) {
-    return { id: 'passer-theirs', ideaKey: `opponent-passer-${theirs[0]}`, text: `Their passed pawn on ${theirs} is the danger — get a piece in front of it and blockade before it runs.` };
+    return { id: 'passer-theirs', ideaKey: `opponent-passer-${theirs[0]}`, squares: [theirs], text: `Their passed pawn on ${theirs} is the danger — get a piece in front of it and blockade before it runs.` };
   }
 
   // Isolated queen's/king's pawn — the classic IQP plan.

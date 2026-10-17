@@ -486,3 +486,13 @@ describe('when the structure plan changes, the coach says so (David 2026-09-25)'
     expect(third.clauses.some((c) => c.kind === 'structure-plan')).toBe(false);
   });
 });
+
+describe('one claim, one clause — the passer said once (one thread per move, 2026-10-17)', () => {
+  const flat = { evaluation: 300, bestMove: '', depth: 12, topLines: [] } as never;
+  it('the plan and the conversion both about the d3 passer speak as one', async () => {
+    const r = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: '2r3k1/3R1ppp/3Q4/8/8/3P4/5PPP/6K1 w - - 0 17', moverColor: 'w', studentColor: 'w', analysis: flat, teachingBeat: true });
+    const passer = r.clauses.filter((c) => /passed pawn on d3/.test(c.text));
+    expect(passer).toHaveLength(1);
+    expect(r.remember).toContain('student-passer-d');
+  });
+});

@@ -1055,7 +1055,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     } catch { /* same */ }
   }
   const composedAll = applyWeaknessBoost(
-    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, trapChance, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, fundamentalClaim, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, methodProof, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: said }), ...tradeClauses],
+    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, trapChance, studentSeat, tradeDanger, opponentIntent, statusText, structureText, structureSquares: planFact?.squares, structureClaim: planFact?.ideaKey, fundamentalText, fundamentalClaim, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, methodProof, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: said }), ...tradeClauses],
     input.studentWeaknesses ?? [],
   );
 
@@ -1294,6 +1294,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     ...((c.kind === 'trade-idea' || c.kind === 'defence-idea' || c.kind === 'nugget') && c.claim ? [c.claim] : []),
     ...(c.kind === 'structure-plan' && planKey ? [planKey, ...(planFact?.ideaKey ? [planFact.ideaKey] : [])] : []),
     ...convertRemember([c], input.fen, studentSeat),
+    // The passer's shared idea key, so the plan does not re-announce the pawn
+    // the conversion line already talked about.
+    ...(c.kind === 'convert' && c.claim && /-passer-[a-h]$/.test(c.claim) ? [c.claim] : []),
     // The balance sheet's reasons, under the keys the positional read uses.
     ...(c.kind === 'stock' ? stockKeys : []),
     ...(c.kind === 'concept' && concept?.source === 'tactic' ? [definitionKey(concept.id), conceptInstanceKey(concept.id, concept.squares)] : []),
@@ -1496,6 +1499,9 @@ function buildClauses(a: {
   opponentIntent: OpponentIntent | null;
   statusText: string;
   structureText: string;
+  /** The structure plan's squares and idea key (`StructurePlanFact`). */
+  structureSquares?: readonly string[];
+  structureClaim?: string;
   fundamentalText: string;
   /** The claim key the fundamental makes (`strategicClaims`), or null. */
   fundamentalClaim?: string | null;
@@ -1710,7 +1716,10 @@ function buildClauses(a: {
   // The step's own key is the claim (walk 2026-10-01: "a piece up — trade
   // pieces" and, two plies on, the character switch "up material — trade
   // down" — one idea, and the switch could not see it had been said).
-  else if (conversion) ranked.push({ kind: 'convert', rank: 36, text: conversion.text, claim: conversion.step === 'escort-passer' && conversion.passer ? `passer-${conversion.passer}` : convertKey(conversion.step) });
+  // The passer is ONE claim across the plan, the conversion and the
+  // positional read: `<seat>-passer-<file>` (the file, so a pawn that advances
+  // is the same idea), and its square, so the decider collapses the two.
+  else if (conversion) ranked.push({ kind: 'convert', rank: 36, text: conversion.text, ...(conversion.step === 'escort-passer' && conversion.passer ? { claim: `student-passer-${conversion.passer[0]}`, squares: [conversion.passer] } : { claim: convertKey(conversion.step) }) });
   else if (importance.tier === 'convert') ranked.push({ kind: 'convert', rank: 20, text: `This is technique now — convert it cleanly, no heroics.` });
   const pushConcept = (): void => {
     if (!concept || (concept.source === 'tactic' && a.alreadySaid?.has(conceptInstanceKey(concept.id, concept.squares)))) return;
@@ -1842,7 +1851,7 @@ function buildClauses(a: {
   // fundamental, never read back out of the sentence.
   if (fundamentalText) ranked.push({ kind: 'fundamental', rank: 38, text: fundamentalText, claim: a.fundamentalClaim ?? undefined });
   // The campaign's structural plan — the textbook idea the pawn structure sets.
-  if (structureText) ranked.push({ kind: 'structure-plan', rank: 35, text: structureText });
+  if (structureText) ranked.push({ kind: 'structure-plan', rank: 35, text: structureText, ...(a.structureSquares?.length ? { squares: a.structureSquares } : {}), ...(a.structureClaim ? { claim: a.structureClaim } : {}) });
   // Convert-mode — decided game, one beat.
   // THE METHOD, last (David 2026-09-16: "Calling out pins and forks isn't
   // teaching. Future moves, how to think, threat identification, that is
@@ -1853,7 +1862,18 @@ function buildClauses(a: {
   // retrospective register, so it is never generic advice on a quiet board.
   if (a.methodBeat) ranked.push({ kind: 'method', rank: 10, text: a.methodBeat, ...(a.methodProof ? { proof: a.methodProof } : {}) });
 
-  return ranked.sort((a2, b2) => b2.rank - a2.rank);
+  // ONE CLAIM, ONE CLAUSE (one thread per move): two clauses that make the same
+  // claim — the plan's "push your d3 pawn" and the conversion's "escort it" —
+  // are one idea; the higher-ranked keeps it. Keyed on the claim the computers
+  // couple at emission, never on the prose.
+  const byRank = ranked.sort((a2, b2) => b2.rank - a2.rank);
+  const claimed = new Set<string>();
+  return byRank.filter((c) => {
+    if (!c.claim) return true;
+    if (claimed.has(c.claim)) return false;
+    claimed.add(c.claim);
+    return true;
+  });
 }
 
 /**
