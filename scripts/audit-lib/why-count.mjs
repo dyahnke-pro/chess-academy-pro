@@ -57,6 +57,11 @@ const NOT_TEACHING = [
   /^back at the board\b/i,
   /^find their targets\b/i,
   /^(find|tap) (every|each|your|the) /i,
+  // The same prompt opened by its question ("Are you safe? Find each of your
+  // pieces that is in danger.") and the session menu ("Your games are mapped.
+  // … Want a lesson on one of them?") — both ask the student to act or choose.
+  /^[^.!?]*\? (?:find|tap) (?:every|each|your|the) /i,
+  /^your games are mapped\b/i,
   // A played-out line's opponent steps announce the move, like "e4 — your
   // move": "They answer Nf3." is the line, not a lesson.
   /^They (?:answer|take back with) [^.]+\.$/i,

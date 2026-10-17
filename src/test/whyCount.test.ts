@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 // @ts-expect-error — plain .mjs audit helper, no types.
-import { isWhy, planTally } from '../../scripts/audit-lib/why-count.mjs';
+import { isWhy, planTally, isTeachingLine } from '../../scripts/audit-lib/why-count.mjs';
 
 const isWhyFn = isWhy as (s: string) => boolean;
 
@@ -64,5 +64,16 @@ describe('plan teaching tally (2026-10-15)', () => {
     expect(planTally(['The plan from here is to seize the open c-file.']).methodAsked).toBe(false);
     const ok = planTally(['How do you find a plan? Ask three things.', 'So: the plan from here is to win their weak pawn on d5. Why this one first? No pawn of theirs can protect it.']);
     expect(ok.everyPlanHasWhy && ok.methodAsked).toBe(true);
+  });
+});
+
+describe('prompts and menus are not teaching lines (prod Learn 2026-10-17)', () => {
+  const isTeaching = isTeachingLine as (s: string) => boolean;
+  it('a question-led find prompt and the session menu are not measured', () => {
+    expect(isTeaching('Are you safe? Find each of your pieces that is in danger.')).toBe(false);
+    expect(isTeaching("Your games are mapped. The two patterns hurting you most are ignoring a threat and same piece twice. Want a lesson on one of them — or the full set?")).toBe(false);
+  });
+  it('NEGATIVE CONTROL: a question followed by a lesson is still teaching', () => {
+    expect(isTeaching('Why this one first? A rook on an open file reaches their camp.')).toBe(true);
   });
 });
