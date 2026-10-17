@@ -21,6 +21,8 @@ describe('boardComputers — the one registry', () => {
         const fnByComputer: Partial<Record<ComputerId, RegExp>> = {
           prophylaxis: /findProphylaxis\(/, tiedDefender: /newTiedDefender\(/, trapped: /trappedOnBoard\(/,
           structureMove: /studentMoveStructure\(/, structureTheirMove: /theirMoveStructure\(/, structureBoard: /boardStructure\(/,
+          // Learn packs the priority to the hint dial's register, so it calls the computer itself.
+          priorityFirst: /buildPriorityFirst\(/,
         };
         if (!viaRegistry && !(fnByComputer[id]?.test(code))) bad.push(`${id}/${surface}: ${ans.wired} never calls it`);
       }

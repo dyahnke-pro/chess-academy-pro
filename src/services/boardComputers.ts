@@ -36,6 +36,8 @@ import { geometryReads, type GeometryContext } from './tacticGeometry';
 import type { TacticType } from '../types';
 import { studentMoveStructure, theirMoveStructure, boardStructure, linesStructure, type StructureRead } from './structureReads';
 import { STRUCTURE_ROLE } from './structureJudgementKit';
+import { countMethod } from './countMethod';
+import { buildPriorityFirst } from './playCommentary';
 
 export type CoachSurface = 'learn' | 'review' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
@@ -104,6 +106,10 @@ export interface BoardContexts {
   lastTimeHere: { fenBefore: string; playedSan: string; rows: readonly BookDepartureRow[]; currentGameId: string | null };
   /** The student's queen or rook attacked with no safe square. */
   trapped: { fen: string; student: Color };
+  /** Count before you take: an exchange square the count decides (student to move). */
+  countMethod: { fen: string; student: Color };
+  /** The priority before the move: the engine's best move aims at a weak pawn. */
+  priorityFirst: { fen: string; student: Color; bestUci: string };
   /** A threat warning, with the cost it claims proven on the board. */
   threatCost: { line: string; fen: string; student: Color; squares: readonly string[] };
   /** The student's plan, carried across moves: its stop proven off their
@@ -232,6 +238,27 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       tactics: { not: 'a puzzle has no book departure' },
       weaknesses: { not: 'owed — the departure row (bookDepartureWeakness) could carry the job' },
     },
+  },
+  // ONE COACH (unified 2026-10-17): the count and the priority Learn teaches,
+  // read by Review and the live composer through the same registry.
+  countMethod: {
+    read: ({ fen, student }) => safe(() => {
+      const m = countMethod(fen, student);
+      if (!m) return null;
+      return { text: m.text, proof: NO_PROOF.method, squares: [m.square], key: `count-method:${m.square}`, stakes: { points: Math.abs(m.net), plies: 0 }, role: 'teach' as const };
+    }),
+    surfaces: { learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
+  },
+  priorityFirst: {
+    read: ({ fen, student, bestUci }) => safe(() => {
+      const pf = buildPriorityFirst({ fen, studentColor: student === 'w' ? 'white' : 'black', bestUci });
+      if (!pf) return null;
+      // The spoken package names the move; the idea is the priority without it
+      // (Learn names no move unasked).
+      const idea = [pf.hint.anchor, pf.hint.stakes].filter(Boolean).join(' ');
+      return { text: pf.spoken, proof: squaresProof(pf.spoken, [pf.targetSquare]) ?? NO_PROOF.method, squares: [pf.targetSquare], key: `priority:${pf.targetSquare}`, namesMove: true, idea, role: 'teach' as const, play: pf.arrow };
+    }),
+    surfaces: { learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
   lastTimeHere: {
     // MEMORY BY POSITION (David 2026-10-15): the book-departure rows already

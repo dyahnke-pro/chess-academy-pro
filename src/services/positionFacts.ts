@@ -1193,6 +1193,10 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       }
       const first = input.analysis.topLines.map((l) => l.moves[0]).filter((m): m is string => !!m);
       push('timing', 55, readBoard('prophylaxis', { fen, engineFirstMoves: first }));
+      // The count and the priority (unified with Learn, 2026-10-17).
+      push('method', 30, readBoard('countMethod', { fen, student: studentColor }));
+      const bestHere = input.analysis.topLines[0]?.moves?.[0];
+      if (bestHere) push('method', 28, readBoard('priorityFirst', { fen, student: studentColor, bestUci: bestHere }));
       const order = readBoard('moveOrder', { fen, pv: input.analysis.topLines[0]?.moves ?? [] });
       if (order && input.namesBestMove) push('timing', 55, order);
       if (input.opponentLastMove) push('their-read', 75, readBoard('obligationLifted', { fenBefore: input.opponentLastMove.fenBefore, fenAfter: fen, student: studentColor }));
