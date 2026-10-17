@@ -136,7 +136,7 @@ import { askBackAtCatchAll, type ChatKind } from '../coach/chatTurn';
 // the deployed app's services via page.evaluate. No-op for real users.
 // Side-effect import keeps the audit script free of source-path knowledge.
 import './masterPlayAuditBridge';
-import { movePurpose, moveReason } from './movePurposeEngine';
+import { askedBestMove, movePurpose, moveReason } from './movePurposeEngine';
 import { reasonPosed } from './decisiveReason';
 import { emitDecisiveReason } from './decisiveReasonEvents';
 /** The engine's best line as UCI from `fen`, when its first move is `bestUci`;
@@ -150,6 +150,10 @@ function enginePlanUci(fen: string, pvSan: ReadonlyArray<string> | undefined, be
   } catch { /* the playable prefix */ }
   return uci[0] === bestUci ? uci : [bestUci];
 }
+
+/** The move the chat last named as best, and the board it was named on — so
+ *  a follow-up "why is that the best move?" explains that same move. */
+let lastAskedBest: { fen: string; san: string } | null = null;
 
 /** The purpose of the game's last move (`movePurpose`), from the start
  *  position. Null when the history does not replay or the engine shows none. */
@@ -5901,7 +5905,10 @@ export async function getCoachChatResponse(
           // THE REASON FIRST (David 2026-10-17: "do we give A reason or THE
           // reason?"): the best move against the next-best, the stake that
           // accounts for the gap — or, honestly, that none does.
-          const reasonSan = plan?.pvSan[0] ?? (() => {
+          // "Why is THAT the best move?" explains the move just named on this
+          // board (the deeper asked read), never a different one.
+          const namedHere = lastAskedBest && fen && lastAskedBest.fen === fen ? lastAskedBest.san : null;
+          const reasonSan = namedHere ?? plan?.pvSan[0] ?? (() => {
             const u = grounding.engineBestMoveUci;
             if (!fen || !u) return null;
             try { return new Chess(fen).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined })?.san ?? null; } catch { return null; }
@@ -6279,7 +6286,15 @@ export async function getCoachChatResponse(
           // snapshot isn't present. Threading the engine move is what lets
           // OFF-BOOK positions (no master data) ground too — the gap the
           // master-only block couldn't cover.
-          let bestUci: string | null = grounding.engineBestMoveUci ?? null;
+          // ASKED ON THE LIVE BOARD, THE STUDENT TO MOVE: one deeper read picks
+          // the move and feeds its reason (the shallow live read once crowned
+          // a move the engine does not list). Falls back to the threaded read.
+          const liveMover: 'white' | 'black' | null = grounding.currentFen ? (grounding.currentFen.split(' ')[1] === 'b' ? 'black' : 'white') : null;
+          const askedHere = grounding.currentFen && (!grounding.studentColor || grounding.studentColor === liveMover)
+            ? await askedBestMove(grounding.currentFen, grounding.moveHistory?.[grounding.moveHistory.length - 1] ?? null).catch(() => null)
+            : null;
+          if (askedHere && grounding.currentFen) lastAskedBest = { fen: grounding.currentFen, san: askedHere.san };
+          let bestUci: string | null = askedHere?.uci ?? grounding.engineBestMoveUci ?? null;
           let bestFen: string | null = bestUci ? (grounding.currentFen ?? null) : null;
           if (!bestUci && masterPlayContext && masterPlayContext.current.moves.length > 0) {
             bestUci = masterPlayContext.current.moves[0].uci ?? null;
@@ -6289,13 +6304,15 @@ export async function getCoachChatResponse(
             // LiveState evals are WHITE-perspective; assembleMoveEvalAnswer
             // wants side-to-move POV. Flip the sign when Black is to move.
             const blackToMove = bestFen.split(' ')[1] === 'b';
+            const whiteEval = askedHere ? askedHere.evalCp : grounding.engineEvalCp;
+            const whiteMate = askedHere ? askedHere.mateIn : grounding.engineMateIn;
             const stmEvalCp =
-              typeof grounding.engineEvalCp === 'number'
-                ? (blackToMove ? -grounding.engineEvalCp : grounding.engineEvalCp)
+              typeof whiteEval === 'number'
+                ? (blackToMove ? -whiteEval : whiteEval)
                 : null;
             const stmMateIn =
-              typeof grounding.engineMateIn === 'number'
-                ? (blackToMove ? -grounding.engineMateIn : grounding.engineMateIn)
+              typeof whiteMate === 'number'
+                ? (blackToMove ? -whiteMate : whiteMate)
                 : null;
             // THE REASON for the best move — the one reason computer, from the
             // student's seat, on the board asked about (not a master board).
@@ -6303,11 +6320,13 @@ export async function getCoachChatResponse(
             const lastHere = bestFen === grounding.currentFen ? grounding.moveHistory?.[grounding.moveHistory.length - 1] ?? null : null;
             const moverHere: 'white' | 'black' = blackToMove ? 'black' : 'white';
             const studentToMove = !grounding.studentColor || grounding.studentColor === moverHere;
-            const bestReason = bestMoveSanHere && studentToMove && bestFen === grounding.currentFen
-              ? await moveReason(bestFen, bestMoveSanHere, 'student', lastHere).catch(() => null)
-              : null;
+            const bestReason = askedHere
+              ? askedHere.reason
+              : bestMoveSanHere && studentToMove && bestFen === grounding.currentFen
+                ? await moveReason(bestFen, bestMoveSanHere, 'student', lastHere).catch(() => null)
+                : null;
             if (bestReason) emitDecisiveReason({ surface: 'chat', kind: bestReason.kind, source: bestReason.source, about: bestReason.about, gapCp: bestReason.gapCp, stakeCp: bestReason.stakeCp, posedTag: null, outcome: 'explained' });
-            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, askedPiece: grounding.askedPiece ?? null, prevCapture: bestFen === grounding.currentFen ? lastCaptureOf(grounding.moveHistory) : null, pvSan: bestFen === grounding.currentFen ? grounding.enginePlan?.pvSan ?? null : null, opponentLastSan: lastHere, theReason: bestReason?.kind === 'the' ? bestReason.text : bestReason?.kind === 'close' && bestReason.source === 'stops' ? bestReason.core : null, closeAlt: bestReason?.kind === 'close' ? bestReason.nextBestSan : null });
+            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, askedPiece: grounding.askedPiece ?? null, prevCapture: bestFen === grounding.currentFen ? lastCaptureOf(grounding.moveHistory) : null, pvSan: askedHere ? askedHere.pvSan : bestFen === grounding.currentFen ? grounding.enginePlan?.pvSan ?? null : null, opponentLastSan: lastHere, theReason: bestReason?.kind === 'the' ? bestReason.text : bestReason?.kind === 'close' ? bestReason.core : null, closeAlt: bestReason?.kind === 'close' ? bestReason.nextBestSan : null });
             if (answer) {
               const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
               if (voiced) {
