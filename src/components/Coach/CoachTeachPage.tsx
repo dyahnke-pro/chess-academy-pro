@@ -38,7 +38,7 @@ import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, 
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { OPENING_PLIES, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { OPENING_PLIES, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching, type TeachingHint } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -8817,8 +8817,7 @@ export function CoachTeachPage(): JSX.Element {
       if (idName && !identityRidesName && learnMemRef.current.identitySaid === null && history.length <= OPENING_PLIES) {
         const idHint = openingIdentityTeaching(idName, playerColor === 'white' ? 'w' : 'b');
         if (idHint) {
-          queueSpokenHint(args.fenAfterReply, idHint.text, idHint.lane, idHint.proof, idHint.squares, idHint.claims);
-          if (idHint.event) captureEvent(idHint.event.name, idHint.event.props);
+          queueHint(args.fenAfterReply, idHint);
         }
       }
     } catch { /* announcement is a bonus, never a blocker */ }
@@ -9428,6 +9427,14 @@ export function CoachTeachPage(): JSX.Element {
     if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, claims, gradeFen, arrows: drawn, lines, stakes, proof, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}) });
     pendingVoiceRef.current = pending;
   }, []);
+  /** A COMPUTED HINT, QUEUED WHOLE — its arrows, stakes and role ride with it
+   *  and its event fires. Call sites used to pick fields one by one and dropped
+   *  the arrows on nine of them and the stakes/role on all but one (G6, G8.5:
+   *  computed and never drawn, or held as an aside for want of a role). */
+  const queueHint = useCallback((fen: string, hint: TeachingHint, gradeFen?: string): void => {
+    queueSpokenHint(fen, hint.text, hint.lane, hint.proof, hint.squares, hint.claims, gradeFen, hint.arrows, undefined, hint.stakes, hint.role);
+    if (hint.event) captureEvent(hint.event.name, hint.event.props);
+  }, [queueSpokenHint]);
 
   const handleStudentMove = useCallback((move: MoveResult): void => {
     // A board move DISMISSES the "Read this position" banner (clears its
@@ -9847,8 +9854,7 @@ export function CoachTeachPage(): JSX.Element {
                 try {
                   const cm = checkMethodTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b', studentBest?.bestMove || null);
                   if (cm) {
-                    queueSpokenHint(probe.fen(), cm.text, cm.lane, cm.proof, cm.squares, cm.claims);
-                    if (cm.event) captureEvent(cm.event.name, cm.event.props);
+                    queueHint(probe.fen(), cm);
                   }
                   // A KNOWN TRAP AHEAD (practical lore) — the same moment.
                   // WARN, OR TEST (David 2026-09-30): grey and red always warn;
@@ -9857,8 +9863,8 @@ export function CoachTeachPage(): JSX.Element {
                   const trap = trapAheadTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');
                   if (trap?.trap) {
                     trapPendingRef.current = { fen: probe.fen(), slip: trap.trap.slip, warned: trap.trap.speak, confirmed: trap.trap.confirmed, state: trap.trap.state };
-                    if (trap.trap.speak) queueSpokenHint(probe.fen(), trap.text, trap.lane, trap.proof, trap.squares, trap.claims, undefined, trap.arrows);
-                    if (trap.event) captureEvent(trap.event.name, trap.event.props);
+                    if (trap.trap.speak) queueHint(probe.fen(), trap);
+                    else if (trap.event) captureEvent(trap.event.name, trap.event.props);
                   }
                   // ZUGZWANG (endgame comb 2026-10-01) — ≤7 pieces, tablebase-exact.
                   // Never holds the turn: queued against this board when it resolves.
@@ -9868,20 +9874,17 @@ export function CoachTeachPage(): JSX.Element {
                     // ref may still trail the reply's animation by a beat).
                     const plyOf = (f: string): number => { const p = f.split(' '); return (Number(p[5] ?? 1) - 1) * 2 + (p[1] === 'b' ? 1 : 0); };
                     if (!zz || plyOf(liveFenRef.current) > plyOf(zzFen)) return;
-                    queueSpokenHint(zzFen, zz.text, zz.lane, zz.proof, zz.squares, zz.claims);
-                    if (zz.event) captureEvent(zz.event.name, zz.event.props);
+                    queueHint(zzFen, zz);
                   }).catch(() => { /* tablebase out of reach — nothing said */ });
                   // CHART A COURSE (pawn ending) — the king heads for the weak pawn.
                   const kc = kingCourseTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');
                   if (kc) {
-                    queueSpokenHint(probe.fen(), kc.text, kc.lane, kc.proof, kc.squares, kc.claims);
-                    if (kc.event) captureEvent(kc.event.name, kc.event.props);
+                    queueHint(probe.fen(), kc);
                   }
                   // COUNT BEFORE YOU TAKE (P3 how-to-calculate) — the same moment.
                   const cnt = countMethodTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');
                   if (cnt) {
-                    queueSpokenHint(probe.fen(), cnt.text, cnt.lane, cnt.proof, cnt.squares, cnt.claims, undefined, undefined, undefined, cnt.stakes);
-                    if (cnt.event) captureEvent(cnt.event.name, cnt.event.props);
+                    queueHint(probe.fen(), cnt);
                   }
                 } catch { /* a bonus, never a blocker */ }
                 // ONE tactical read per turn — the seductive-but-wrong move (the
@@ -10438,8 +10441,7 @@ export function CoachTeachPage(): JSX.Element {
                         ? planChoiceTeaching(probe.fen(), tl2.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate })), playerColor, { fenBefore: move.fen, san: m.san })
                         : null;
                       if (pcHint) {
-                        queueSpokenHint(probe.fen(), pcHint.text, pcHint.lane, pcHint.proof, pcHint.squares, pcHint.claims);
-                        if (pcHint.event) captureEvent(pcHint.event.name, pcHint.event.props);
+                        queueHint(probe.fen(), pcHint);
                       }
                     } catch { /* the chooser is a bonus, never a blocker */ }
                     // THE STRUCTURE JUDGEMENTS ON THE BOARD (batch 6), student to
@@ -11311,7 +11313,7 @@ export function CoachTeachPage(): JSX.Element {
                       try {
                         const found = foundMoveTeaching(fenBefore, move.san, preStudentRead?.topLines, playerColor === 'white' ? 'w' : 'b', move.to, move.history);
                         if (found) {
-                          queueSpokenHint(fenAfterReply, found.text, found.lane, found.proof, found.squares, found.claims, fenBefore);
+                          queueHint(fenAfterReply, found, fenBefore);
                           // DUAL-USE (P4): a found only-move is calculation proven — unless
                           // the coach had just announced the critical moment (prompted).
                           recordTeachingEvidence(found, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
@@ -11347,7 +11349,7 @@ export function CoachTeachPage(): JSX.Element {
                       // own-move reason, so it speaks only when they are silent.
                       if (!gambitLine && !point) {
                         const said = boardTeacherPoint(fenBefore, move.san);
-                        if (said) queueSpokenHint(fenAfterReply, said.text, said.lane, said.proof, said.squares, said.claims, fenBefore);
+                        if (said) queueHint(fenAfterReply, said, fenBefore);
                       }
                       // WHY THIS MOVE HAD TO COME FIRST (census #1: "the key move
                       // order — you take on d4 first"). Play the student's next move
@@ -11476,13 +11478,11 @@ export function CoachTeachPage(): JSX.Element {
                   })();
                   const cost = replySan ? theirMoveTeaching(move.fen, replySan, playerColor === 'white' ? 'w' : 'b') : null;
                   if (cost) {
-                    queueSpokenHint(fenAfterReply, cost.text, cost.lane, cost.proof, cost.squares, cost.claims, undefined, cost.arrows);
-                    if (cost.event) captureEvent(cost.event.name, cost.event.props);
+                    queueHint(fenAfterReply, cost);
                   }
                   const tempo = replySan ? tempoTeaching([...move.history, replySan], playerColor === 'white' ? 'w' : 'b') : null;
                   if (tempo) {
-                    queueSpokenHint(fenAfterReply, tempo.text, tempo.lane, tempo.proof, tempo.squares, tempo.claims);
-                    if (tempo.event) captureEvent(tempo.event.name, tempo.event.props);
+                    queueHint(fenAfterReply, tempo);
                   }
                   // WHAT THEIR MOVE DID TO YOUR STRUCTURE (batch 6): a pawn that
                   // walls your weak pawn off its file, a square your unmoved pawn
@@ -11494,13 +11494,11 @@ export function CoachTeachPage(): JSX.Element {
                   }
                   const split = splitPositionTeaching(fenAfterReply, playerColor === 'white' ? 'w' : 'b');
                   if (split) {
-                    queueSpokenHint(fenAfterReply, split.text, split.lane, split.proof, split.squares, split.claims);
-                    if (split.event) captureEvent(split.event.name, split.event.props);
+                    queueHint(fenAfterReply, split);
                   }
                   const stale = stalemateTeaching(fenAfterReply, playerColor === 'white' ? 'w' : 'b');
                   if (stale) {
-                    queueSpokenHint(fenAfterReply, stale.text, stale.lane, stale.proof, stale.squares, stale.claims);
-                    if (stale.event) captureEvent(stale.event.name, stale.event.props);
+                    queueHint(fenAfterReply, stale);
                   }
                 } catch { /* a bonus, never a blocker */ }
 

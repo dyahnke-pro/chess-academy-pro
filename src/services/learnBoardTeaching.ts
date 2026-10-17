@@ -100,6 +100,9 @@ export interface TeachingHint {
   evidence?: { tag: MisconceptionTagId; posedImportance: number };
   /** What rides on it (`factStakes`), when its computer has a number. */
   stakes?: FactStakes;
+  /** Teach or describe, when the computer knows (`LaneFact.role`): a
+   *  consequence with no material number is still a reason, never an aside. */
+  role?: 'teach' | 'describe';
 }
 
 /** The board after the student's move and their reply, or null. */
@@ -402,6 +405,9 @@ export function theirMoveTeaching(fenBefore: string, san: string, student: 'w' |
     : [];
   return {
     lane: 'theirMoveCost', proof: NO_PROOF.description, text: cost.text, squares: cost.squares, claims: [`cost-${cost.kind}-${cost.squares[0]}`],
+    // A lasting cost (a hole, a shut bishop, castling gone) is a consequence,
+    // the why of their move — never an aside (A-plan P6: held 2 of 4).
+    role: 'teach',
     event: { name: 'coach_their_move_cost_named', props: { surface: 'coach-teach', kind: cost.kind } },
     arrows,
   };

@@ -669,7 +669,10 @@ describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-1
     expect(decideTurn([staked, { ...pri, role: undefined }]).spoke).not.toContain('priorityFirst');
   });
   it('Learn hands both to the door with their stake and role', () => {
-    expect(TEACH_CODE).toMatch(/cnt\.claims, undefined, undefined, undefined, cnt\.stakes\)/);
+    expect(TEACH_CODE).toMatch(/queueHint\(probe\.fen\(\), cnt\)/);
+    // One forwarder for every computed hint — arrows, stakes and role ride.
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(fen, hint\.text, hint\.lane, hint\.proof, hint\.squares, hint\.claims, gradeFen, hint\.arrows, undefined, hint\.stakes, hint\.role\)/);
+    expect(TEACH_CODE).not.toMatch(/queueSpokenHint\([^,\n]*, (\w+)\.text, \1\.lane, \1\.proof, \1\.squares, \1\.claims\)/);
     expect(TEACH_CODE).toMatch(/source: 'learn\.priorityFirst' \}\], undefined, undefined, 'teach'\)/);
   });
 });
