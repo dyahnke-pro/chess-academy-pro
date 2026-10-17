@@ -10048,8 +10048,13 @@ export function CoachTeachPage(): JSX.Element {
                         const routeClaims: ArrowClaim[] = (pl.routeArrows ?? []).map((a) => ({ from: a.from, to: a.to, role: 'line', fen: a.fen, source: 'learn.planRoute' }));
                         if (line) { queueSpokenHint(probe.fen(), line, 'planArc', pl.proof, pl.squares, [pl.key, ...(pl.sharedKey ? [pl.sharedKey] : [])], undefined, routeClaims.length ? routeClaims : undefined); planOffered.push(pl.key); }
                       }
+                      // Nothing produced: the trial's bookkeeping holds. Produced but
+                      // every line graded away: nothing was said, so the trial is
+                      // dropped and the plan is offered again (prod Learn 2026-10-17:
+                      // adopted unsaid, the method was never asked and the next plan
+                      // came out as "the plan changes here").
                       if (plansNow.length === 0) adoptPlanTrial(planLive, planTrial, [], []);
-                      else planTrialRef.current = { fen: probe.fen(), live: planLive, trial: planTrial, offered: planOffered };
+                      else if (planOffered.length > 0) planTrialRef.current = { fen: probe.fen(), live: planLive, trial: planTrial, offered: planOffered };
                     } catch { /* the plan is a bonus, never a blocker */ }
                   }
                 } catch { /* the read is a bonus, never a blocker */ }
