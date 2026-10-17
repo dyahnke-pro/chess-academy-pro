@@ -3086,6 +3086,19 @@ TestFlight); (2) drop Cupertino (Apple review); (3) drop `audit_run_id` + Headle
 Only what survives all five is a real user. Skipping step 5 reports testing as
 usage.
 
+**🔒🔒 USAGE REPORTS ARE A CLEAN SLATE — NEW DATA ONLY, OLD DATA ONLY ON REQUEST (David 2026-10-17: "No more old data gets reported without me asking for it. I want to compare the new build to the old … I do want the option.").**
+
+When David asks how users / the app / the coach are doing, report ONLY events
+with `timestamp >= watermark` from **`docs/usage-reports.json`**. Never mix in
+earlier data, and never compare against it unless he asks ("compare to old",
+"show the old data", "vs last time").
+
+After every report: append that window to `history` (window, grade, the key
+numbers, a one-line headline), move `watermark` to the moment you reported,
+and commit + push the file to `main` in the same turn. The next ask then starts
+from a clean slate again. If the window is empty or tiny, say so — never pad it
+with old data. Close each report with one line: "Old windows on file: N — ask to compare."
+
 **🔒🔒 POSTHOG IS ALWAYS REACHABLE FROM A SESSION. NEVER TELL DAVID IT IS NOT
 (David 2026-09-20, emphatic: "you can log into posthog!! how many times do i
 have to say this!!" → "vercel has the token/key" → "lock into deep memory how

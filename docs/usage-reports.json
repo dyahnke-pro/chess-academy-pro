@@ -1,0 +1,17 @@
+{
+  "_rule": "CLAUDE.md § USAGE REPORTS ARE A CLEAN SLATE. Report ONLY events with timestamp >= watermark. After reporting, append the window to history and move the watermark to the report time. Old windows are reported only when David asks.",
+  "watermark": "2026-10-17T18:42:53Z",
+  "history": [
+    {
+      "window": ["(start)", "2026-10-17T18:42:53Z"],
+      "label": "baseline: everything before the clean slate",
+      "grade": "D+",
+      "users_all_time_iphone": 70,
+      "active_30d": 23,
+      "active_7d": 6,
+      "one_day_only_pct": 79,
+      "coach_talkers_60d": 11,
+      "headline": "beginners could not read the coach's notation (Bxe7, GXF4); the premium voice often fell back to the robotic iPhone voice; spoken wrong moves on Ruy/Bird's/tactics; best user (Lake Butler) left Sept 6"
+    }
+  ]
+}
