@@ -39,5 +39,17 @@ export async function movePurpose(fenBefore: string, san: string, seat: 'student
 /** THE reason for `san` (`decisiveReason`), reading every position it needs. */
 export async function moveReason(fenBefore: string, san: string, seat: 'student' | 'opponent', opponentLastSan: string | null): Promise<DecisiveReason | null> {
   const reads = await readIntentReads(fenBefore, san);
-  return reads ? decisiveReason({ fenBefore, san, reads, seat, opponentLastSan }) : null;
+  if (!reads) return null;
+  // The student's own record decides whether a mate is posed as a test.
+  const asksToSee = seat === 'student' ? await calculationProven() : false;
+  return decisiveReason({ fenBefore, san, reads, seat, opponentLastSan, asksToSee });
+}
+
+/** Calculation PROVEN on the student's own record (heat map green). Lazy, so
+ *  this engine module never drags the database in at load. */
+async function calculationProven(): Promise<boolean> {
+  try {
+    const { getCapabilityProfile, capabilityProven } = await import('./capabilityEvidence');
+    return capabilityProven((await getCapabilityProfile()).get('calculation-depth'));
+  } catch { return false; }
 }

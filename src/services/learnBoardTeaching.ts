@@ -1232,7 +1232,7 @@ export interface LearnReason {
   posed: { tag: MisconceptionTagId; posedImportance: number } | null;
 }
 
-export function learnMoveReason(input: { fenBefore: string; san: string; reads: IntentReads; seat: 'student' | 'opponent'; opponentLastSan: string | null }): LearnReason | null {
+export function learnMoveReason(input: { fenBefore: string; san: string; reads: IntentReads; seat: 'student' | 'opponent'; opponentLastSan: string | null; asksToSee?: boolean }): LearnReason | null {
   const reason = decisiveReason(input);
   if (!reason) return null;
   const posed = input.seat === 'student' ? reasonPosed(reason) : null;

@@ -11452,7 +11452,7 @@ export function CoachTeachPage(): JSX.Element {
                         // or prepared move carries the gap it is worth.
                         const playedUci = (() => { try { const m = new Chess(fenBefore).move(move.san); return `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; } })();
                         const learned = intentReads && playedUci && intentReads.before[0]?.moves[0] === playedUci
-                          ? learnMoveReason({ fenBefore, san: move.san, reads: intentReads, seat: 'student', opponentLastSan: move.history.length > 1 ? move.history[move.history.length - 2] : null })
+                          ? learnMoveReason({ fenBefore, san: move.san, reads: intentReads, seat: 'student', opponentLastSan: move.history.length > 1 ? move.history[move.history.length - 2] : null, asksToSee: provenTagsRef.current.get('calculation-depth') === 'short' })
                           : null;
                         const theReason = learned?.reason ?? null;
                         if (theReason?.kind === 'the' && theReason.source === 'material') {

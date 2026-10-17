@@ -136,6 +136,11 @@ export function decisiveReason(input: {
   reads: IntentReads;
   seat: 'student' | 'opponent';
   opponentLastSan: string | null;
+  /** The student's own record shows calculation PROVEN (heat map green on
+   *  `calculation-depth`): a forced mate is then posed as a visualization
+   *  test — "can you see it?" — with the line on the board, never answered in
+   *  the voice. Grey or red: the mate is stated (grey teaches). */
+  asksToSee?: boolean;
 }): DecisiveReason | null {
   const { fenBefore, san, reads, seat } = input;
   let mover: 'w' | 'b';
@@ -178,7 +183,8 @@ export function decisiveReason(input: {
   // the mate is only the fallback.
   const longMate = ownMate !== null && ownMate > SHORT_MATE;
   if (ownMate !== null && ownMate > 0 && !longMate && !(nextMate !== null && nextMate > 0)) {
-    cands.push({ source: 'material', stake: MATE_CP, text: ownMate === 1 ? `${played} is mate.` : `${played} starts a forced mate in ${ownMate}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
+    const asks = input.asksToSee && seat === 'student' && ownMate > 1;
+    cands.push({ source: 'material', stake: MATE_CP, text: ownMate === 1 ? `${played} is mate.` : asks ? `${played} starts a forced mate in ${ownMate} — can you see how it goes? The line is on the board when you want it.` : `${played} starts a forced mate in ${ownMate}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
   } else if (nextMate !== null && nextMate < 0 && nextBestSan) {
     const n = -nextMate;
     cands.push({ source: 'material', stake: MATE_CP, text: `The natural alternative, ${dot(nextBestSan, mover)}, walks into a forced mate${n > 1 ? ` in ${n}` : ''}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, next.moves).slice(0, 2 * n) }, squares: [], alt: true });
@@ -258,8 +264,11 @@ export function decisiveReason(input: {
     return { ...base, kind: 'close', source: src, stakeCp: null, text: `There is no single reason here — ${alt}.${what ? ` ${what}` : ''}`, line: description ? null : quiet?.line ?? null, squares: description ? [] : quiet?.squares ?? [] };
   }
   if (top && (top.stake >= COVERS_SHARE * gapCp || covering.includes(top))) {
+    const asksMate = longMate && covering.includes(top) && !mateText(top) && input.asksToSee && seat === 'student';
     const tail = longMate && covering.includes(top) && !mateText(top)
-      ? ` And the engine sees a forced mate in ${ownMate} after it.`
+      ? asksMate
+        ? ` And there's a forced mate in ${ownMate} after it — can you see it? The line is on the board when you want it.`
+        : ` And the engine sees a forced mate in ${ownMate} after it.`
       : nextBestSan && !top.alt ? ` Anything else, like ${dot(nextBestSan, mover)}, gives up ${costWords(gapCp)}.` : '';
     // Their move, said as theirs ("Their …Bxf7 wins by force", never a bare
     // "…Bxf7 wins" the student must work out the owner of).
@@ -267,7 +276,8 @@ export function decisiveReason(input: {
       : top.text.startsWith('…') ? `Their ${top.text}`
         : top.text.startsWith(`${san} `) ? `Their ${played}${top.text.slice(san.length)}`
           : top.text;
-    return { ...base, kind: 'the', source: top.source, stakeCp: top.stake, text: `${core}${tail}`, tail: tail.trim() || null, core, about: top.alt ? 'alternative' : 'move', line: top.line, squares: top.squares };
+    const mateLine = asksMate && ownMate !== null ? { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) } : null;
+    return { ...base, kind: 'the', source: top.source, stakeCp: top.stake, text: `${core}${tail}`, tail: tail.trim() || null, core, about: top.alt ? 'alternative' : 'move', line: mateLine && ownMate !== null && mateLine.sans.length >= 2 * ownMate - 1 ? mateLine : top.line, squares: top.squares };
   }
   // NOTHING ACCOUNTS FOR THE GAP: the engine's edge lies past what forcing play
   // shows. Say so, and give the one true thing the move does — marked as one.
