@@ -11248,7 +11248,7 @@ export function CoachTeachPage(): JSX.Element {
                       // its own; the fundamental IS the teaching here.
                       const bookSaidAlone = fundamental.id === 'left-book-early'
                         && studentJustLeftBook(move.history, playerColor === 'white' ? 'w' : 'b');
-                      queueSpokenHint(fenAfterReply, `${noteSlip(learnMemRef.current, fundamental.id)}${bookSaidAlone ? fundamental.howOnly : fundamental.verdict}`, 'fundamental', NO_PROOF.method, [], fundamental.id === 'botched-conversion' ? ['convert-method'] : undefined, move.fen, undefined, bookSaidAlone ? undefined : fundamental.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG[fundamental.id as FundamentalId] ?? undefined);
+                      queueSpokenHint(fenAfterReply, `${noteSlip(learnMemRef.current, fundamental.id)}${bookSaidAlone ? fundamental.howOnly : fundamental.verdict}`, 'fundamental', NO_PROOF.method, [], fundamental.id === 'botched-conversion' ? ['convert-method'] : undefined, move.fen, undefined, bookSaidAlone ? undefined : fundamental.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG[fundamental.id] ?? undefined);
                       captureEvent('coach_fundamental_named', {
                         surface: 'coach-teach', fundamental: fundamental.id, cp_loss: Math.round(cpLoss),
                       });

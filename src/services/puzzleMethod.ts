@@ -1,5 +1,5 @@
 import { coachTurn } from './coachDecider';
-import { fadeLevelsFrom, fadeText } from './fadeText';
+import { fadeLevelsFrom } from './fadeText';
 import { CALM_BOARD } from './boardState';
 import { NO_BOOST } from './studentMomentBoost';
 import { layerStandings } from './teachingLayers';

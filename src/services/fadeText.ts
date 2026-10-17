@@ -30,7 +30,7 @@ export function fadeLevelsFrom(caps: CapabilityProfile | null | undefined): Map<
 
 export function fadeLevelOf(levels: FadeLevels | null | undefined, tag: string | null | undefined): FadeLevel | null {
   if (!levels || !tag || levels.size === 0) return null;
-  if (levels instanceof Map) return levels.get(tag) ?? null;
+  if (levels instanceof Map) return (levels as ReadonlyMap<string, FadeLevel>).get(tag) ?? null;
   return (levels as ReadonlySet<string>).has(tag) ? 'short' : null;
 }
 
