@@ -13,6 +13,7 @@
 //  • `computeCriticality` is the sharpness SCORE (from the same analysis);
 //    `computeImportance` is the speak/rank verdict. One analysis, both reads.
 //  • Perturbation (expensive) runs ONLY when importance says the moment matters.
+import { fadeLevelsFrom, fadeText } from './fadeText';
 import { evalBand } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan, lastMoveFromHistory } from './material';
@@ -1260,8 +1261,10 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // The student's standing per teaching layer — the same record that
       // feeds the boost above, read as layers (WO-LAYERS-01).
       layers: layerStandings(input.studentWeaknesses ?? [], input.studentNeedContext?.capabilities),
+      fade: fadeLevelsFrom(input.studentNeedContext?.capabilities),
     }, bundle: {
       facts: composed.map((c) => c.text),
+      skillOf: new Map(composed.flatMap((c) => (c.skill ? [[c.text, c.skill] as const] : []))),
       proofs: new Map(composed.flatMap((c) => (c.proof ? [[c.text, c.proof] as const] : []))),
       squares: new Map(composed.flatMap((c) => (c.squares && c.squares.length ? [[c.text, c.squares] as const] : []))),
       // WHAT THEY ARE DOING TO YOU — the tie-break inside a same-claim group,
@@ -1312,7 +1315,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   ];
   const result: PositionFactsResult = {
     importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, latentFork, tradeDanger, opponentIntent,
-    clauses,
+    // Said SHORTER where the student has shown the skill (one fade rule with
+    // Learn); the say-once memory above keeps the full text's key.
+    clauses: clauses.map((c) => { const l = decision.faded.get(c.text); return l ? { ...c, text: fadeText(c.text, l) } : c; }),
     candidates: [...clauseByText.values()],
     /** Every clause the door silenced, and why — the observability trail. */
     quiet: decision.quiet,

@@ -1,4 +1,5 @@
 import { capabilitiesPosed } from './capabilityEvidence';
+import { fadeLevelsFrom, fadeText } from './fadeText';
 import { moveIntentsForGame, type ReviewIntent } from './reviewMoveIntent';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan } from './material';
@@ -1256,6 +1257,8 @@ export function buildReviewSegments(
   // WHERE THIS STUDENT STANDS PER TEACHING LAYER (WO-LAYERS-01), once per
   // review — the same record every ply of the walk is judged against.
   const layers = layerStandings(studentWeaknesses ?? [], studentNeed?.capabilities);
+  // The fade per skill, from the same record (one rule with Learn).
+  const fade = fadeLevelsFrom(studentNeed?.capabilities);
   // Package-completion once-per-game beats (David 2026-07-24: "complete the
   // package"): the simplify-when-ahead trade idea fires at most once.
   let tradeIdeaSpoken = false;
@@ -2292,6 +2295,7 @@ export function buildReviewSegments(
           // computer already produced and never manufactures one.
           momentBoost: boostByPly.get(m.ply) ?? NO_BOOST,
           layers,
+          fade,
           // 🚨 DELIBERATELY null, and this is why the field is required.
           //
           // Review DOES gate on need — narrowly, at `quietOpeningPly` below:
@@ -2378,6 +2382,8 @@ export function buildReviewSegments(
       // an average, not a hard limit"). The door's ranking decides what speaks;
       // the audit holds the AVERAGE turn length, never a per-ply limit.
       const uncappedParts = rankedParts;
+      // The door's fact keys, before any later rewrite, for the fade lookup.
+      const doorKeys = [...uncappedParts];
       // 🔒 THE BOOK-MOVE RULE APPLIES HERE TOO (CLAUDE.md narration-by-need
       // standard, N2). The capped cascade has carried the need gate since N2
       // landed — but `isReviewUncapped()` is TRUE by default, so THIS is the
@@ -2468,7 +2474,9 @@ export function buildReviewSegments(
       const doorNarration = (() => {
         if (uncappedParts.length === 0) return null;
         const pkg = buildVoicePackage(
-          uncappedParts.map((text) => ({ kind: 'computed' as const, text, fen: fenPair.fenAfter, altFen: fenPair.fenBefore })),
+          // Said SHORTER where the student has shown the skill — one fade rule
+          // with Learn (David 2026-10-17: shorten, never silence a reason).
+          uncappedParts.map((text, k) => ({ kind: 'computed' as const, text: fadeText(text, decision.faded.get(doorKeys[k] ?? '') ?? null), fen: fenPair.fenAfter, altFen: fenPair.fenBefore })),
           undefined,
           reviewSpokenKeys,
         );

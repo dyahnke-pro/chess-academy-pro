@@ -723,8 +723,12 @@ describe('the fade is gradual (2026-10-17): lighter while learning, short once p
     expect(fadeWhenGreen('trade', THREE, new Map([['hung-material', 'short' as const]]))).toBe(THREE);
   });
   it('the record decides the level: proven is short, a held streak is lighter, nothing is full', async () => {
-    const src = readFileSync('src/services/weaknessSignalLoader.ts', 'utf8');
-    expect(src).toMatch(/if \(capabilityProven\(entry\)\) out\.set\(tag, 'short'\);\s*else if \(entry\.heldStreak >= 1\) out\.set\(tag, 'lighter'\);/);
+    const { fadeLevelFor } = await import('./fadeText');
+    expect(fadeLevelFor({ held: 9, broken: 0, heldStreak: 9, streakGames: 9 })).toBe('short');
+    expect(fadeLevelFor({ held: 1, broken: 2, heldStreak: 1, streakGames: 1 })).toBe('lighter');
+    expect(fadeLevelFor({ held: 1, broken: 2, heldStreak: 0, streakGames: 0 })).toBeNull();
+    expect(fadeLevelFor(undefined)).toBeNull();
+    expect(readFileSync('src/services/weaknessSignalLoader.ts', 'utf8')).toMatch(/fadeLevelsFrom\(await getCapabilityProfile\(\)\)/);
     expect(TEACH_CODE).toMatch(/const provenTagsRef = useFadeLevels\(\);/);
   });
 });

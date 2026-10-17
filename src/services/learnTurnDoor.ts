@@ -23,6 +23,7 @@
  * Slice 1 (this file): route + record, behaviour-preserving. Ordering and dedupe are still
  * `buildVoicePackage`'s. Picking ONE lead per turn is the next slice.
  */
+import { fadeText, fadeLevelOf, type FadeLevels } from './fadeText';
 import { isProof, type FactProof, type Proof } from './proof';
 import { emitLearnTurn, type LearnTurnTag } from './coachDecisionEvents';
 import { COMPUTER_ROLES } from './computerRoles';
@@ -391,30 +392,15 @@ export interface TurnDecision {
  *  the lesson again. Not a cap (G4.5): the student's own record decides, and
  *  grey or red keeps the full teaching. Only lanes whose HELD half is wired
  *  fade — a skill the app cannot see the student answer can never be green. */
-/** GRADUAL (David 2026-09-25 "the fade … gradual, back to full on a red
- *  regression"; built 2026-10-17): a skill answered correctly since its last
- *  miss but not yet proven is `lighter` — the point and its reason, the rest
- *  of the lesson waits; a PROVEN skill is `short` — the point alone. A slip
- *  resets the streak, so the record itself returns it to full. A plain set is
- *  read as `short` for every member (the proven tags). */
-export type FadeLevel = 'lighter' | 'short';
-export type FadeLevels = ReadonlySet<string> | ReadonlyMap<string, FadeLevel>;
-function fadeLevelOf(green: FadeLevels, tag: string): FadeLevel | null {
-  if (green instanceof Map) return green.get(tag) ?? null;
-  return (green as ReadonlySet<string>).has(tag) ? 'short' : null;
-}
+/** GRADUAL and per skill — the one rule in `fadeText` (every surface). */
+export type { FadeLevel, FadeLevels } from './fadeText';
 export function fadeWhenGreen(lane: LearnLane, text: string, green: FadeLevels | null, skill?: string): string {
   if (!green || green.size === 0) return text;
   const role = COMPUTER_ROLES[lane];
   // A fact's own skill (recorded through the same tag table) fades it; else
   // the lane's tag, and only when its held half is wired.
   const tag = skill ?? (role && role.tag && role.held.state === 'wired' ? role.tag : null);
-  if (!tag) return text;
-  const level = fadeLevelOf(green, tag);
-  if (!level) return text;
-  const sentences = text.split(/(?<=[.!?])\s+(?=[A-Z"“])/);
-  const keep = level === 'short' ? 1 : 2;
-  return sentences.length > keep ? sentences.slice(0, keep).join(' ') : text;
+  return fadeText(text, fadeLevelOf(green, tag));
 }
 
 /** Lanes that always ride for a beginner: the principle, said every time. */

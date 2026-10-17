@@ -32,6 +32,7 @@
 import { boardVeto, type BoardState } from './boardState';
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
 import { selectFacts, supportedFacts, barForTier, type QuietFact } from './factSelector';
+import { fadeLevelOf, type FadeLevel, type FadeLevels } from './fadeText';
 import { factKind, factValue, FACT_ROLE, FACT_LAYER, FACT_PROOF, type FactKind, type FacetRole } from './reviewFacetRank';
 import { isProof, type FactProof, type Proof } from './proof';
 import { layerBonus, type LayerStandings } from './teachingLayers';
@@ -165,11 +166,15 @@ export interface StudentContext {
   momentBoost: StudentBoost;
   /** WHERE THIS STUDENT STANDS IN EACH TEACHING LAYER (WO-LAYERS-01) —
    *  `layerStandings(weaknesses, capabilities)`, from their own record. The
-   *  door teaches the layers bottom-up, raises a RED layer, and quiets a layer
-   *  they have PROVEN unless the stakes are big. REQUIRED for the same reason
+   *  door teaches the layers bottom-up, raises a RED layer, and in a layer
+   *  they have PROVEN shortens the teaching and quiets the descriptions
+   *  unless the stakes are big (2026-10-17). REQUIRED for the same reason
    *  `momentBoost` is: an optional student term is a lane's licence to forget
    *  the student. `ALL_GREY` is a real answer (a fresh install). */
   layers: LayerStandings;
+  /** THE FADE per skill, from the same record (`fadeLevelsFrom`). REQUIRED,
+   *  like `layers`: an empty map is a real answer (nothing proven yet). */
+  fade: FadeLevels;
 }
 
 /** Below this value a fact in a GREEN layer goes quiet — they have proven the
@@ -226,6 +231,9 @@ export interface FactBundle {
    *  counted on the row (`unproven`) — the backlog the door will refuse once
    *  it reaches zero. */
   proofs: ReadonlyMap<string, FactProof>;
+  /** The skill each fact teaches (a MisconceptionTagId), when its computer
+   *  knows it — the fade reads it per skill; absent, the fact's layer decides. */
+  skillOf?: ReadonlyMap<string, string>;
 }
 
 /** What the student should have DONE differently in their head. Optional: a
@@ -283,6 +291,10 @@ export interface CoachDecision {
   spoken: string[];
   /** Every fact that did not, and why. */
   quiet: QuietFact[];
+  /** Spoken facts said SHORTER because the student has shown the skill
+   *  (`fadeText`, one rule with Learn): the surface trims at render time, so
+   *  every map keyed by the fact's text still finds it. */
+  faded: ReadonlyMap<string, FadeLevel>;
   /** THE TEACH METER (WO-TEACH-02 S0): does a TEACHING fact speak here, or
    *  only descriptions? A spoken ply with `teaches: false` is the coach
    *  narrating a move instead of teaching one — the thing the target
@@ -387,7 +399,7 @@ export function decide(
   method?: MethodContext,
 ): CoachDecision {
   const { importance, speaks } = judgeMoment(signals, posture, student.momentBoost ?? NO_BOOST);
-  const base = { tier: importance.tier, rank: importance.rank };
+  const base = { tier: importance.tier, rank: importance.rank, faded: new Map<string, FadeLevel>() as ReadonlyMap<string, FadeLevel> };
 
   // 1 — THE MOMENT, but ONLY where silence is the default. On a 'walk' the
   // student asked for the sequence, so an unimportant moment is a QUIETER beat,
@@ -433,6 +445,7 @@ export function decide(
   // goes quiet unless the stakes are big. The method beat is exempt: whether a
   // habit is still owed is the habit's own standing, read below.
   const provenQuiet: QuietFact[] = [];
+  const faded = new Map<string, FadeLevel>();
   const live = bundle.facts.filter((t) => {
     const k = kindOf(t);
     // 2a — THE BOARD (`boardState`), before anything is weighed: a claim the
@@ -440,6 +453,12 @@ export function decide(
     const veto = boardVeto(k, bundle.board, bundle.squares.get(t));
     if (veto) { provenQuiet.push({ text: t, why: veto }); return false; }
     if (k === null || k === 'method') return true;
+    // SHORTEN, NEVER SILENCE A REASON (David 2026-10-17: "Agreed" — one rule
+    // with Learn). A teaching fact on a skill the student has shown speaks its
+    // short form; only a DESCRIPTION in a proven layer still goes quiet.
+    const level = fadeLevelOf(student.fade, bundle.skillOf?.get(t))
+      ?? (student.layers[FACT_LAYER[k]] === 'green' ? 'short' as const : null);
+    if (FACT_ROLE[k] === 'teach') { if (level) faded.set(t, level); return true; }
     if (student.layers[FACT_LAYER[k]] !== 'green') return true;
     if ((value.get(t) ?? 0) >= GREEN_QUIET_BELOW) return true;
     provenQuiet.push({ text: t, why: 'proven' });
@@ -530,7 +549,8 @@ export function decide(
     return emit(posture, { ...base, speak: false, reason, teaches: false, spoken, quiet, ...proofLedger([], bundle) }, student, false, bundle.stakes);
   }
   const teaches = spoken.some((t) => roleOf(t) === 'teach');
-  return emit(posture, { ...base, speak: true, reason: 'spoken', teaches, spoken, quiet: selection.quiet, ...proofLedger(spoken, bundle) }, student, methodSpoke, bundle.stakes);
+  const fadedSpoken = new Map([...faded].filter(([t]) => spoken.includes(t)));
+  return emit(posture, { ...base, speak: true, reason: 'spoken', teaches, spoken, quiet: selection.quiet, faded: fadedSpoken, ...proofLedger(spoken, bundle) }, student, methodSpoke, bundle.stakes);
 }
 
 /** WHICH HABITS THIS STUDENT KEEPS BREAKING, read off the weakness spine.

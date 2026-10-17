@@ -61,7 +61,7 @@ const PLAN = '[plan-now] Your plan is to push the queenside majority.';
 const LOOSE = '[loose] Your knight on c6 is loose.';
 const PRINCIPLE = '[principle] You developed a knight before the bishop.';
 const bundle = { board: CALM_BOARD, proofs: new Map(), facts: [PLAN, PRINCIPLE, LOOSE], squares: new Map<string, readonly string[]>() };
-const student = (layers = ALL_GREY) => ({ rating: 400, weaknesses: [], need: null, moveAdvice: null, momentBoost: NO_BOOST, layers });
+const student = (layers = ALL_GREY) => ({ rating: 400, weaknesses: [], need: null, moveAdvice: null, momentBoost: NO_BOOST, layers, fade: new Map() as ReadonlyMap<string, 'lighter' | 'short'> });
 
 describe('the door teaches by layer', () => {
   it('grey: the plan comes after safety and principle (the fundamental still leads — locked 2026-09-05)', () => {
@@ -80,29 +80,41 @@ describe('the door teaches by layer', () => {
     expect(red.spoken[0]).toBe(PLAN);
   });
 
-  it('a GREEN layer goes quiet on a routine instance, and says why', () => {
-    const layers = { safety: 'grey', principle: 'green', plan: 'grey' } as const;
-    const d = decide(quiet, student(layers), bundle, 'walk');
-    expect(d.spoken).not.toContain(PRINCIPLE);
-    expect(d.quiet.find((q) => q.text === PRINCIPLE)?.why).toBe('proven');
-    // Negative control: the same fact speaks when the layer is not proven.
-    expect(decide(quiet, student(), bundle, 'walk').spoken).toContain(PRINCIPLE);
+  // SHORTEN, NEVER SILENCE A REASON (David 2026-10-17: "Agreed"). A teaching
+  // fact in a proven layer speaks its short form; a DESCRIPTION still goes quiet.
+  const PRAISE = '[praise] That knight move looks natural.';
+  it('a GREEN layer shortens its teaching facts and quiets its descriptions', () => {
+    const layers = { safety: 'green', principle: 'green', plan: 'grey' } as const;
+    const d = decide(quiet, student(layers), { ...bundle, facts: [...bundle.facts, PRAISE] }, 'walk');
+    expect(d.spoken).toContain(PRINCIPLE);
+    expect(d.faded.get(PRINCIPLE)).toBe('short');
+    expect(d.spoken).not.toContain(PRAISE);
+    expect(d.quiet.find((q) => q.text === PRAISE)?.why).toBe('proven');
+    // Negative control: nothing fades when the layer is not proven.
+    expect(decide(quiet, student(), bundle, 'walk').faded.size).toBe(0);
+  });
+
+  it('a skill shown at the record fades per skill, before its layer is green', () => {
+    const fadeStudent = { ...student(), fade: new Map([['neglected-development', 'lighter' as const]]) };
+    const d = decide(quiet, fadeStudent, { ...bundle, skillOf: new Map([[PRINCIPLE, 'neglected-development']]) }, 'walk');
+    expect(d.faded.get(PRINCIPLE)).toBe('lighter');
+    expect(d.faded.has(PLAN)).toBe(false);
   });
 
   it('big stakes speak even in a proven layer — a hung queen is never outgrown', () => {
     const layers = { safety: 'green', principle: 'grey', plan: 'grey' } as const;
-    const stakes = new Map([[LOOSE, costStakes(900)!]]);
-    const d = decide(quiet, student(layers), { ...bundle, stakes }, 'walk');
-    expect(d.spoken).toContain(LOOSE);
-    const small = new Map([[LOOSE, costStakes(40)!]]);
-    const d2 = decide(quiet, student(layers), { ...bundle, stakes: small }, 'walk');
-    expect(d2.spoken).not.toContain(LOOSE);
+    const stakes = new Map([[PRAISE, costStakes(900)!]]);
+    const d = decide(quiet, student(layers), { ...bundle, facts: [PRAISE], stakes }, 'walk');
+    expect(d.quiet.find((q) => q.text === PRAISE)?.why).not.toBe('proven');
+    const small = new Map([[PRAISE, costStakes(40)!]]);
+    const d2 = decide(quiet, student(layers), { ...bundle, facts: [PRAISE], stakes: small }, 'walk');
+    expect(d2.quiet.find((q) => q.text === PRAISE)?.why).toBe('proven');
     expect(GREEN_QUIET_BELOW).toBeGreaterThan(1000);
   });
 
-  it('a ply whose every fact is in a proven layer closes as "proven"', () => {
+  it('a ply whose every fact is a description in a proven layer closes as "proven"', () => {
     const allGreen = { safety: 'green', principle: 'green', plan: 'green' } as const;
-    const d = decide(quiet, student(allGreen), bundle, 'walk');
+    const d = decide(quiet, student(allGreen), { ...bundle, facts: [PRAISE] }, 'walk');
     expect(d.speak).toBe(false);
     expect(d.reason).toBe('proven');
   });
