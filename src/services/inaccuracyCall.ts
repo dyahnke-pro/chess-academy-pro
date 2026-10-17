@@ -778,6 +778,11 @@ export function callInaccuracyDetailed(args: {
   if (typeof after === 'number' && after >= STILL_BETTER_CP && quality !== 'blunder' && (args.allowedMate ?? null) === null) {
     const stands = after >= BLUNDER_CP ? 'still wins' : 'keeps you clearly on top';
     const named = reason && args.namesBetterMove;
+    // WHERE THE SURFACE WITHHOLDS THE BETTER MOVE (Learn), the comparison is
+    // the whole reason, so the bare verdict waits (prod Learn 2026-10-17: "e4
+    // keeps you clearly on top." — nothing to learn from). A surface that names
+    // moves still says the standing in place of a wrong grade (pass-2 walk).
+    if (!args.namesBetterMove) return { call: null, declined: 'no-why' };
     const said = named
       ? `${args.playedSan} ${stands}, but ${args.bestSan} was cleaner — ${reason}.`
       : `${args.playedSan} ${stands}.`;
@@ -785,6 +790,7 @@ export function callInaccuracyDetailed(args: {
   }
   if (typeof after === 'number' && after >= BLUNDER_CP && (args.allowedMate ?? null) === null) {
     const named = reason && args.namesBetterMove;
+    if (!args.namesBetterMove) return { call: null, declined: 'no-why' };
     const said = named
       ? `${args.playedSan} still wins, but ${args.bestSan} was cleaner — ${reason}.`
       : `${args.playedSan} still wins.`;

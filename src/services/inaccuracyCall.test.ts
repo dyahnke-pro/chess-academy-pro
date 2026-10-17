@@ -11,7 +11,7 @@
 // "inaccuracy" in review.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { allowedReply, betterMoveReason, callInaccuracy, gambitFile, seatTheirErrorForStudent } from './inaccuracyCall';
+import { allowedReply, betterMoveReason, callInaccuracy, callInaccuracyDetailed, gambitFile, seatTheirErrorForStudent } from './inaccuracyCall';
 import { classifyMove } from './moveRating';
 import { MISTAKE_CP } from './engineConstants';
 
@@ -395,6 +395,14 @@ describe('clearly better after the move is a cleaner way, not a mistake', () => 
     });
     expect(call?.said ?? '').not.toMatch(/mistake/);
     expect(call?.said ?? '').toMatch(/^Bxc5 keeps you clearly on top/);
+  });
+  it('where the better move is withheld (Learn), the bare "keeps you on top" is held, never said (prod Learn 2026-10-17)', () => {
+    const v = callInaccuracyDetailed({ namesBetterMove: false, priorMove: null,
+      fenBefore: '5rk1/1qpn1pbp/prN3p1/2pP4/2P5/Q3B2P/P4PP1/3RR1K1 w - - 0 24', playedSan: 'Bxc5', bestSan: 'Bf4',
+      cpLoss: 115, moverEvalAfterCp: 194, side: 'student', moverColor: 'white', replyLineUci: [], replySan: null,
+    });
+    expect(v.call).toBeNull();
+    expect(v.declined).toBe('no-why');
   });
 });
 

@@ -159,7 +159,18 @@ export function pinConsequence(fen: string, squares: readonly string[], student:
   if (!pinnedNoun || !behindNoun) return null;
   const heldWhose = pinner === 'student' ? 'their' : 'your';
   const pinnerWhose = pinner === 'student' ? 'your' : 'their';
-  if (behind.p?.type === 'k') return `${heldWhose === 'their' ? 'Their' : 'Your'} ${pinnedNoun} cannot move at all — the king is behind it.`;
+  // THE KING PIN NAMES ITS SQUARES AND ROTATES (prod Learn 2026-10-17: one
+  // fixed sentence, so the game's sentence ledger dropped it on the second pin
+  // as already said and the warning spoke bare).
+  if (behind.p?.type === 'k') {
+    const Whose = heldWhose === 'their' ? 'Their' : 'Your';
+    const kingStems = [
+      `${Whose} ${pinnedNoun} on ${pinned.sq} cannot move at all — the king on ${behind.sq} is behind it.`,
+      `The ${pinnedNoun} on ${pinned.sq} is frozen: moving it would leave the king on ${behind.sq} in check, which is illegal.`,
+      `${Whose} ${pinnedNoun} on ${pinned.sq} is out of play while it shields the king on ${behind.sq} — it cannot move until the pin is broken.`,
+    ];
+    return kingStems[((rot % kingStems.length) + kingStems.length) % kingStems.length];
+  }
   const by = PIN_NOUN[from.p?.type ?? ''] ?? 'piece';
   // ROTATED by move (David 2026-10-14: no reason formula more than twice a game).
   const stems = [
