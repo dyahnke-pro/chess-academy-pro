@@ -21,7 +21,7 @@ describe('prizeTeaching — what can be won, and the board reason why', () => {
     // their knight on e5 alone; your d6 pawn hits it
     expect(prizeTeaching('4k3/8/3p4/4n3/8/8/8/4K3 b - - 0 1', 'e5', 'w', 0)).toBeNull(); // not the student's move
     expect(prizeTeaching('4k3/8/3p4/4N3/8/8/8/4K3 b - - 0 1', 'e5', 'b', 0)?.text)
-      .toBe('Their knight on e5 has nothing defending it. Before you take, check what taking it allows.');
+      .toBe('Their knight on e5 has nothing defending it, so taking it costs you nothing back. Before you take, check what taking it allows.');
   });
 
   it('an even swap wins nothing, so nothing is said', () => {
@@ -37,5 +37,13 @@ describe('the free-piece fact rotates its words; the method is its own sentence 
     const facts = texts.map((t) => t.replace(/ Before you take, check what taking it allows\.$/, ''));
     expect(new Set(facts).size).toBe(3);
     for (const t of texts) expect(t).toMatch(/\. Before you take, check what taking it allows\.$/);
+  });
+});
+
+describe('every free-piece stem carries its own reason (the method after it is said once a game)', () => {
+  it('each fact, with the method sentence taken off, still says why it is free', () => {
+    const fen = '4k3/8/3p4/4N3/8/8/8/4K3 b - - 0 1';
+    const facts = [0, 1, 2].map((n) => (prizeTeaching(fen, 'e5', 'b', n)?.text ?? '').replace(/ Before you take, check what taking it allows\.$/, ''));
+    for (const f of facts) expect(f).toMatch(/costs you nothing back|is not taken back|nothing recaptures/);
   });
 });
