@@ -1,3 +1,4 @@
+import { Chess } from 'chess.js';
 import canonicalOpenings from '../data/openings-lichess.json';
 import extendedOpenings from '../data/openings-lichess-extended.json';
 import repertoireData from '../data/repertoire.json';
@@ -159,11 +160,68 @@ function getTrie(): TrieNode {
   return cachedTrie;
 }
 
+/** THE TRANSPOSITION INDEX — a game that reaches a named position by another
+ *  move order is that opening: 1.e4 Nc6 2.Nf3 e5 IS 1.e4 e5 2.Nf3 Nc6, and the
+ *  move-order trie alone kept calling it the Nimzowitsch (hand walk 2340).
+ *  Keyed by each side's moves as a SET (string work only — replaying all 3,654
+ *  lines through chess.js took 5.6 s on first use); a candidate is then
+ *  confirmed on the board, so a coincidental set never names a position. On a
+ *  tie the shorter line (the standard order) names it. */
+let cachedSets: Map<string, OpeningEntry[]> | null = null;
+let maxDbPlies = 0;
+function moveSetKey(moves: readonly string[]): string {
+  const w: string[] = []; const b: string[] = [];
+  moves.forEach((m, i) => (i % 2 === 0 ? w : b).push(m));
+  return `${moves.length}|${w.sort().join(',')}|${b.sort().join(',')}`;
+}
+function getSetIndex(): Map<string, OpeningEntry[]> {
+  if (cachedSets) return cachedSets;
+  const idx = new Map<string, OpeningEntry[]>();
+  for (const e of openingsData) {
+    const moves = e.pgn.split(/\s+/).filter(Boolean);
+    maxDbPlies = Math.max(maxDbPlies, moves.length);
+    const k = moveSetKey(moves);
+    const list = idx.get(k);
+    if (list) list.push(e); else idx.set(k, [e]);
+  }
+  cachedSets = idx;
+  return idx;
+}
+function positionKey(fen: string): string { return fen.split(' ').slice(0, 4).join(' '); }
+function positionAfter(moves: readonly string[]): string | null {
+  const c = new Chess();
+  for (const m of moves) { try { if (!c.move(m)) return null; } catch { return null; } }
+  return positionKey(c.fen());
+}
+
 /**
  * Detect the opening from a list of SAN moves (e.g. from chess.js .history()).
  * Returns the longest matching opening, or null if no match found.
+ * Identified by POSITION: past the deepest exact move-order match, the deepest
+ * prefix that transposes into a named DB position wins.
  */
 export function detectOpening(moveHistory: string[]): DetectedOpening | null {
+  const byOrder = detectOpeningByOrder(moveHistory);
+  const from = byOrder ? byOrder.plyCount : 0;
+  if (moveHistory.length <= from) return byOrder;
+  const idx = getSetIndex();
+  const last = Math.min(moveHistory.length, maxDbPlies);
+  for (let p = last; p > from; p--) {
+    const prefix = moveHistory.slice(0, p);
+    const cands = idx.get(moveSetKey(prefix));
+    if (!cands) continue;
+    const here = positionAfter(prefix);
+    if (!here) continue;
+    const hit = cands
+      .filter((e) => positionAfter(e.pgn.split(/\s+/).filter(Boolean)) === here)
+      .sort((a, b) => a.pgn.length - b.pgn.length)[0];
+    if (hit) return { eco: hit.eco, name: hit.name, plyCount: p, key: openingKeyFor(hit.eco, hit.name) };
+  }
+  return byOrder;
+}
+
+/** The exact move-order match only (the trie). */
+function detectOpeningByOrder(moveHistory: string[]): DetectedOpening | null {
   const trie = getTrie();
   let node = trie;
   let lastMatch: { opening: OpeningEntry; plyCount: number } | null = null;

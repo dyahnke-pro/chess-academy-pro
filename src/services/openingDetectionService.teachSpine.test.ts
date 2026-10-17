@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { resolveTeachSpine, resolveOpeningEntry } from './openingDetectionService';
+import { resolveTeachSpine, resolveOpeningEntry, detectOpening } from './openingDetectionService';
 // Typed via `variationMiddlegameDepth.shared.d.mts` (2026-09-21) — the
 // suppression this replaces made every call an unsafe `any` call.
 import { reachesMiddlegame } from '../data/variationMiddlegameDepth.shared.mjs';
@@ -70,5 +70,16 @@ describe('resolveTeachSpine — main line reaches the middlegame (full pace)', (
       const res = resolveTeachSpine(entry.canonicalName, entry.moves, { extendToMiddlegame: true });
       expect(() => reachesMiddlegame(res.spineMoves.join(' '))).not.toThrow();
     }
+  });
+});
+
+describe('a transposition is named by the position it reaches (hand walk 2340)', () => {
+  it('1.e4 Nc6 2.Nf3 e5 is the open game, not the Nimzowitsch; Bb5 makes it a Ruy Lopez', () => {
+    expect(detectOpening(['e4', 'Nc6', 'Nf3', 'e5'])?.name).not.toMatch(/Nimzowitsch/);
+    expect(detectOpening(['e4', 'Nc6', 'Nf3', 'e5', 'Bb5'])?.name).toBe('Ruy Lopez');
+  });
+  it('the move-order match still names a game that never transposes', () => {
+    expect(detectOpening(['e4', 'Nc6', 'Nf3'])?.name).toMatch(/Nimzowitsch/);
+    expect(detectOpening(['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4'])?.name).toBe('Nimzo-Indian Defense');
   });
 });
