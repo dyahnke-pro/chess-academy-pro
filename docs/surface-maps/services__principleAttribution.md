@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1950 lines · 14 exports · 55 importers · 41 tests · 1 audits**
+**1950 lines · 14 exports · 54 importers · 40 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -66,7 +66,6 @@
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.ts`
 - `src/services/yieldHonoured.test.ts`
-- `src/services/zzorder.test.ts`
 
 ## Exports and every call site
 
@@ -107,7 +106,7 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:144`
 
-### `attributePrinciples` (function) — 117 call sites
+### `attributePrinciples` (function) — 116 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/blockedOwnRetreat.test.ts:23`
 - `src/services/blockedOwnRetreat.test.ts:32`
@@ -224,7 +223,6 @@
 - `src/services/yieldHonoured.test.ts:33`
 - `src/services/yieldHonoured.test.ts:69`
 - `src/services/yieldHonoured.test.ts:70`
-- `src/services/zzorder.test.ts:35`
 
 ### `pvUciToSan` (function) — 11 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
@@ -281,7 +279,6 @@
 - `src/services/walkOct2a.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/yieldHonoured.test.ts`
-- `src/services/zzorder.test.ts`
 
 ## Audits that reach it
 
