@@ -301,6 +301,21 @@ export const FUNDAMENTAL_LESSON: Record<FundamentalId, FundamentalLesson> = {
       "A piece with one guard is only as safe as that guard. If they can take the guard, or hit it with a cheaper piece so it has to move, the piece it held falls. Count the guards on each of your pieces they attack; when there is only one and it can be chased, add a second defender or move the piece first.",
     sources: ['concept:tac-deflection', 'concept:tac-overloaded'],
   },
+  'missed-pin-break': {
+    facts:
+      "A pin only holds if the pinned piece has no good way out. Before you accept that a piece of yours is pinned, look at every move it has: if it can leave with check, with a bigger threat, or by uncovering an attack, the pin is an illusion — and the piece that was pinning it is often left to be taken.",
+    sources: ['concept:tac-pin'],
+  },
+  'ignored-pin-break': {
+    facts:
+      "A pin you are relying on can break with tempo. Before you lean on it — leave the pinning piece where it can be taken, or build a plan on the pinned piece being stuck — check every move the pinned piece has. If one gives check or makes a bigger threat, it walks out and your pinning piece is the loose one.",
+    sources: ['concept:tac-pin'],
+  },
+  'wrong-move-order': {
+    facts:
+      "Two good moves can be played in the wrong order. When you have a pair of moves in mind, ask what each one allows if it comes first. Play the one that leaves them no strong answer; the other can follow next move. The in-between move is the same idea from the other side: the order of forcing moves decides what they can do.",
+    sources: ['concept:tac-zwischen'],
+  },
   'no-plan': {
     facts:
       "Every middlegame position asks you for something concrete — a weak pawn to besiege, an open file to take, a passed pawn to push, a badly placed piece to improve. A move of yours that serves none of those spends a turn while theirs does not. Name your target first; then your candidate moves are the ones that go toward it.",
