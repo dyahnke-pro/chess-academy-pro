@@ -2570,6 +2570,10 @@ async function serveGroundedPositionDefault(
   // its own (e.g. a pure eval-swing recovery) — voice it warmly rather than
   // dropping the interjection.
   if (prefix.trim()) {
+    // computedOnly is every exit, not two of three (item 11, 2026-10-17): the
+    // phase beat with no tactic or assessment behind it is a computed sentence,
+    // spoken as computed — no phrasing call.
+    if (computedOnly) return prefix.trim();
     const voiced = await voiceFacts(prefix.trim(), { studentMessage, providerConfig: config, targetLanguage: turnLanguage, intent: 'safe-default-moment', preferRaw: true });
     if (voiced) return voiced;
   }
