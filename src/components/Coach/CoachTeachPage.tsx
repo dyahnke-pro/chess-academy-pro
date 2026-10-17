@@ -9880,7 +9880,7 @@ export function CoachTeachPage(): JSX.Element {
                   // COUNT BEFORE YOU TAKE (P3 how-to-calculate) — the same moment.
                   const cnt = countMethodTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');
                   if (cnt) {
-                    queueSpokenHint(probe.fen(), cnt.text, cnt.lane, cnt.proof, cnt.squares, cnt.claims);
+                    queueSpokenHint(probe.fen(), cnt.text, cnt.lane, cnt.proof, cnt.squares, cnt.claims, undefined, undefined, undefined, cnt.stakes);
                     if (cnt.event) captureEvent(cnt.event.name, cnt.event.props);
                   }
                 } catch { /* a bonus, never a blocker */ }
@@ -10344,7 +10344,7 @@ export function CoachTeachPage(): JSX.Element {
                         captureEvent('priority_first_offered', { surface: 'coach-teach', target: pf.targetSquare });
                         // A held move keeps its arrow back too — the arrow IS the answer.
                         const moveHeld = learnMemRef.current.heldMove?.fen === probe.fen();
-                        queueSpokenHint(probe.fen(), packageForRegister(pf.hint, discussion.hintDial.register), 'priorityFirst', legalLineProof(probe.fen(), [`${pf.arrow.from}${pf.arrow.to}`]) ?? squaresProof(packageForRegister(pf.hint, discussion.hintDial.register), [pf.targetSquare]) ?? NO_PROOF.withheld, [pf.targetSquare], undefined, undefined, moveHeld ? undefined : [{ from: pf.arrow.from, to: pf.arrow.to, role: 'play', vouchedBy: 'engine', source: 'learn.priorityFirst' }]);
+                        queueSpokenHint(probe.fen(), packageForRegister(pf.hint, discussion.hintDial.register), 'priorityFirst', legalLineProof(probe.fen(), [`${pf.arrow.from}${pf.arrow.to}`]) ?? squaresProof(packageForRegister(pf.hint, discussion.hintDial.register), [pf.targetSquare]) ?? NO_PROOF.withheld, [pf.targetSquare], undefined, undefined, moveHeld ? undefined : [{ from: pf.arrow.from, to: pf.arrow.to, role: 'play', vouchedBy: 'engine', source: 'learn.priorityFirst' }], undefined, undefined, 'teach');
                       }
                     }
                     // THE REJECTED TEMPTING MOVE (the speedrun's warning

@@ -1,3 +1,4 @@
+import { MISCONCEPTION_TAGS } from '../data/misconceptionTags';
 import { describe, it, expect, vi } from 'vitest';
 import { computePositionFacts, clauseText, statusBandChange } from './positionFacts';
 
@@ -404,7 +405,25 @@ describe('the verdict and its plan echo are one fact (hand walk 2340)', () => {
   it('where the verdict is held back, the plan still teaches the idea', async () => {
     const r = await computePositionFacts({ boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [] });
     expect(r.clauses.map((c) => c.kind)).toEqual(expect.arrayContaining(['fundamental']));
+    expect(r.clauses.some((c) => / The move is /.test(` ${c.text}`))).toBe(false);
+  });
+
+  // GREY MEANS TEACH IT (A-plan P1, 2026-10-17): with no record at all the
+  // reasoned weighing speaks — Nxe5 is ruled out with its proof — and the move
+  // is HELD for the student to find. It used to need a record hole to speak.
+  it('a fresh record (grey) hears the weighing, the move held', async () => {
+    const r = await computePositionFacts({ boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [] });
+    const w = r.clauses.find((c) => c.kind === 'deliberation');
+    expect(w?.text).toMatch(/Nxe5/);
+    expect(w?.text).not.toMatch(/The move is/);
+    expect(r.heldVerdict?.san).toBe('O-O');
+  });
+
+  it('a record that has PROVEN every question this board asks stays quiet', async () => {
+    const proven = new Map(MISCONCEPTION_TAGS.map((t) => [t.id, { held: 9, broken: 0, heldStreak: 9, streakGames: 9 }])) as never;
+    const r = await computePositionFacts({ boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [], studentNeedContext: { rating: 1200, gamesPlayed: 20, signals: [], bookDepartures: [], capabilities: proven } });
     expect(r.clauses.some((c) => c.kind === 'deliberation')).toBe(false);
+    expect(r.heldVerdict).toBeNull();
   });
 });
 

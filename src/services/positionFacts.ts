@@ -61,7 +61,7 @@ import { readBoard, type BoardRead } from './boardComputers';
 import { detectTactics } from './tacticsDetector';
 import { stepPlan, EMPTY_PLAN_STATE } from './planMemory';
 import { matchClauseKind, matchTacticPattern, matchTag, boostFor, type WeaknessSignal } from './weaknessSignal';
-import { studentMomentBoost } from './studentMomentBoost';
+import { studentMomentBoost, isGreyDecision } from './studentMomentBoost';
 import { capabilitiesPosed, movePlayedCleanly } from './capabilityEvidence';
 import { attributeLiveFundamental, uciToSanAt, type LiveFundamentalReads } from './liveFundamental';
 
@@ -1109,11 +1109,22 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // moment earns the weighing — the board's fork in the road OR the student's
   // own record — the bad moves are ruled out loud and the move is HELD. It is
   // said only when they ask (Show me, Hint, a question).
-  const heldVerdict: HeldVerdict | null = moveAdvice?.speak && deliberation
+  // GREY MEANS TEACH IT (A-plan P1, David 2026-10-17: choices graded C — the
+  // weighing spoke on 1 of 67 turns because a fresh record never earned it).
+  // A REASONED weighing — alternatives ruled out with the line or the piece
+  // that proves it — speaks wherever the record has not proven the questions
+  // this board asks; the move itself stays HELD, so nothing is named unasked.
+  // Kept apart from `moveAdvice`, which also gates the recommendation lanes.
+  const weighingGrey = !!(studentIsMoving && deliberation && deliberationWeighing(deliberation)
+    && isGreyDecision((() => {
+      try { return capabilitiesPosed(fen, deliberation.best.san, input.studentColor === 'w' ? 'white' : 'black').map((c) => c.tag); } catch { return []; }
+    })(), input.studentNeedContext?.capabilities));
+  const weighEarned = !!moveAdvice?.speak || weighingGrey;
+  const heldVerdict: HeldVerdict | null = weighEarned && deliberation
     ? deliberationVerdict(deliberation)
     : null;
   const heldWeighing = heldVerdict && deliberation ? deliberationWeighing(deliberation) : '';
-  const adviceDropped = moveAdvice && !moveAdvice.speak
+  const adviceDropped = moveAdvice && !weighEarned
     ? composedAll.filter((c) => c.kind !== 'deliberation')
     : heldVerdict
       ? composedAll.flatMap((c) => (c.kind !== 'deliberation' ? [c] : heldWeighing ? [{ ...c, text: heldWeighing }] : []))

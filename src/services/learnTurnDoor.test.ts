@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { decideTurn, LEARN_LANES, type LearnLane } from './learnTurnDoor';
 import { costStakes, mateStakes } from './factStakes';
+import { countMethodTeaching } from './learnBoardTeaching';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 const TEACH = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
@@ -648,5 +649,26 @@ describe('their next idea speaks by what it would win (A-plan P2, prod Learn 202
 describe('a plan trial whose lines were all graded away is not adopted (prod Learn 2026-10-17)', () => {
   it('Learn adopts an empty trial only when nothing was produced', () => {
     expect(TEACH_CODE).toMatch(/if \(plansNow\.length === 0\) adoptPlanTrial\(planLive, planTrial, \[\], \[\]\);\s*else if \(planOffered\.length > 0\) planTrialRef\.current =/);
+  });
+});
+
+describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-17: choices 1 of 67 turns)', () => {
+  const lead = { lane: 'movePoint' as const, proof: NO_PROOF.stated, text: 'That gets your last piece into the game, so your rooks can connect.', fen: FEN, squares: ['c1', 'd2'] };
+  it('count-before-you-take carries the exchange net and speaks beside an unrelated lead', () => {
+    const hint = countMethodTeaching('4k3/8/2p1p3/3n4/2P1PN2/8/8/4K3 w - - 0 1', 'w');
+    const cnt = hint ? { lane: hint.lane, proof: hint.proof, text: hint.text, fen: FEN, squares: hint.squares, stakes: hint.stakes } : null;
+    expect(cnt?.stakes?.points).toBeGreaterThanOrEqual(1);
+    expect(decideTurn([lead, cnt!]).spoke).toContain('countMethod');
+  });
+  it('the priority before the move is a reason, never an aside', () => {
+    const pri = { lane: 'priorityFirst' as const, proof: NO_PROOF.stated, text: "What's the priority here? Their pawn on d5 — it's isolated.", fen: FEN, squares: ['d5'], role: 'teach' as const };
+    // A staked fact leads the turn, as on prod, where it was held 2 of 2.
+    const staked = { ...lead, stakes: { points: 3, plies: 0 } };
+    expect(decideTurn([staked, pri]).spoke).toContain('priorityFirst');
+    expect(decideTurn([staked, { ...pri, role: undefined }]).spoke).not.toContain('priorityFirst');
+  });
+  it('Learn hands both to the door with their stake and role', () => {
+    expect(TEACH_CODE).toMatch(/cnt\.claims, undefined, undefined, undefined, cnt\.stakes\)/);
+    expect(TEACH_CODE).toMatch(/source: 'learn\.priorityFirst' \}\], undefined, undefined, 'teach'\)/);
   });
 });

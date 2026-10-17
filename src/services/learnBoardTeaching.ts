@@ -476,6 +476,9 @@ export function countMethodTeaching(fen: string, student: 'w' | 'b'): TeachingHi
   if (!m) return null;
   return {
     lane: 'countMethod', proof: NO_PROOF.method, text: m.text, squares: [m.square], claims: ['count-method'],
+    // What the count decides, now: the exchange's net either way (A-plan P1 —
+    // unstaked, the door held it as an aside 4 of 4 times).
+    stakes: { points: Math.abs(m.net), plies: 0 },
     event: { name: 'coach_count_method_taught', props: { surface: 'coach-teach' } },
     arrows: [],
   };
