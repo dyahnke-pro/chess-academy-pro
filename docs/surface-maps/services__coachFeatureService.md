@@ -271,8 +271,8 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8096`
-- `src/components/Coach/CoachTeachPage.tsx:8185`
+- `src/components/Coach/CoachTeachPage.tsx:8094`
+- `src/components/Coach/CoachTeachPage.tsx:8183`
 - `src/services/coachFeatureService.test.ts:907`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/utils/justCaptured.test.ts:20`

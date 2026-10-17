@@ -37,10 +37,8 @@ import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from
 import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
-import { decisiveReason, reasonEarned, reasonPosed, REASON_WAIT_CEILING_MS } from '../../services/decisiveReason';
-import { emitDecisiveReason } from '../../services/decisiveReasonEvents';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { OPENING_PLIES, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching, type TeachingHint } from '../../services/learnBoardTeaching';
+import { OPENING_PLIES, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching, type TeachingHint } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -9801,7 +9799,8 @@ export function CoachTeachPage(): JSX.Element {
         // student has already moved again. Capped: past the ceiling the reply
         // plays and the reason follows it. A quiet move replies at once.
         const studentMoverWB: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
-        const reasonWarm = !studentMoveInBook && reasonEarned(preStudentRead?.topLines, studentMoverWB)
+        const reasonWaitMs = learnReasonWaitMs(preStudentRead?.topLines, studentMoverWB, studentMoveInBook);
+        const reasonWarm = reasonWaitMs > 0
           ? (async () => {
               await midTurnRead;
               for (const f of [nullMoveFen(fenBefore), nullMoveFen(move.fen)]) {
@@ -9812,7 +9811,7 @@ export function CoachTeachPage(): JSX.Element {
         const padDone = new Promise<void>((resolve) => {
           const elapsed = Date.now() - thinkStart;
           setTimeout(resolve, Math.max(0, minThink - elapsed));
-        }).then(() => Promise.race([reasonWarm, new Promise<void>((r) => setTimeout(r, REASON_WAIT_CEILING_MS))]));
+        }).then(() => Promise.race([reasonWarm, new Promise<void>((r) => setTimeout(r, reasonWaitMs))]));
         if (reply) {
           // GROUNDING COMPLETENESS (David 2026-06-15): compute what the
           // reply ACTUALLY did — captured piece + squares — from the BEFORE
@@ -11452,11 +11451,12 @@ export function CoachTeachPage(): JSX.Element {
                         // the next-best — a win by force is said as one; a stopped
                         // or prepared move carries the gap it is worth.
                         const playedUci = (() => { try { const m = new Chess(fenBefore).move(move.san); return `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; } })();
-                        const theReason = intentReads && playedUci && intentReads.before[0]?.moves[0] === playedUci
-                          ? decisiveReason({ fenBefore, san: move.san, reads: intentReads, seat: 'student', opponentLastSan: move.history.length > 1 ? move.history[move.history.length - 2] : null })
+                        const learned = intentReads && playedUci && intentReads.before[0]?.moves[0] === playedUci
+                          ? learnMoveReason({ fenBefore, san: move.san, reads: intentReads, seat: 'student', opponentLastSan: move.history.length > 1 ? move.history[move.history.length - 2] : null })
                           : null;
+                        const theReason = learned?.reason ?? null;
                         if (theReason?.kind === 'the' && theReason.source === 'material') {
-                          queueSpokenHint(fenAfterReply, theReason.text, 'moveIntent', (theReason.line ? lineProof(theReason.line) : null) ?? NO_PROOF.stated, theReason.squares, [`reason:${playedUci}`], fenBefore, undefined,
+                          queueSpokenHint(fenAfterReply, theReason.text, 'moveIntent', learned?.proof ?? NO_PROOF.description, theReason.squares, [`reason:${playedUci}`], fenBefore, undefined,
                             theReason.line ? [theReason.line] : undefined,
                             { points: Math.min(theReason.stakeCp ?? 0, 2000) / 100, plies: 1 }, 'teach', 'reason');
                         }
@@ -11464,10 +11464,8 @@ export function CoachTeachPage(): JSX.Element {
                         // BOTH WAYS: the reason they found is the skill they
                         // showed. Held here; a miss reaches the record through
                         // the game sweep (lane rows are held-only).
-                        if (theReason) {
-                          const posed = reasonPosed(theReason);
-                          if (posed) recordHeld(posed.tag, posed.posedImportance, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length) || planToldBoardsRef.current.has(fenBefore.split(' ').slice(0, 2).join(' ')), gameId: learnMemRef.current.gameId });
-                          emitDecisiveReason({ surface: 'learn', kind: theReason.kind, source: theReason.source, about: theReason.about, gapCp: theReason.gapCp, stakeCp: theReason.stakeCp, posedTag: posed?.tag ?? null, outcome: posed ? 'held' : 'explained' });
+                        if (learned?.posed) {
+                          recordHeld(learned.posed.tag, learned.posed.posedImportance, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length) || planToldBoardsRef.current.has(fenBefore.split(' ').slice(0, 2).join(' ')), gameId: learnMemRef.current.gameId });
                         }
                         if (intent) {
                           // DUAL-USE (P4): an engine-proven purpose (prevents / prepares)
@@ -11559,7 +11557,41 @@ export function CoachTeachPage(): JSX.Element {
                         .find((m) => { const c = new Chess(move.fen); c.move(m.san); return c.fen().split(' ')[0] === fenAfterReply.split(' ')[0]; })?.san ?? null;
                     } catch { return null; }
                   })();
-                  if (theirSan && !/[x+#]/.test(theirSan) && mid?.topLines?.length && !mid.isMate) {
+                  // THE REASON FOR THEIR MOVE (David 2026-10-17: "make sure the
+                  // computer narrations also give best reason narrations"). The
+                  // same computer the student's moves get, from their seat — only
+                  // when they played the engine's own move at a real decision,
+                  // out of book. A deliberately weaker reply is the slip lane's,
+                  // and a move outside the engine's choices is never called so
+                  // (that would tell the student the coach is holding back).
+                  const theirWB: 'w' | 'b' = playerColor === 'white' ? 'b' : 'w';
+                  const theirUci = (() => { try { if (!theirSan) return null; const m = new Chess(move.fen).move(theirSan); return `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; } })();
+                  let theirReasonSaid = false;
+                  if (theirSan && theirUci && mid?.topLines?.length && !mid.isMate
+                    && mid.topLines[0]?.moves[0] === theirUci
+                    && learnReasonDue(mid.topLines, theirWB, isTheoryLine([...move.history, theirSan]))) {
+                    const passBefore = nullMoveFen(move.fen);
+                    const passAfter = nullMoveFen(fenAfterReply);
+                    const [pb, af, pa] = await Promise.all([
+                      passBefore ? stockfishEngine.analyzeWithBudget(passBefore, COACH_TURN_DEPTH, 900).catch(() => null) : null,
+                      stockfishEngine.analyzeWithBudget(fenAfterReply, COACH_TURN_DEPTH, 900).catch(() => null),
+                      passAfter ? stockfishEngine.analyzeWithBudget(passAfter, COACH_TURN_DEPTH, 900).catch(() => null) : null,
+                    ]);
+                    const learned = af?.topLines?.length
+                      ? learnMoveReason({ fenBefore: move.fen, san: theirSan, reads: { before: mid.topLines, after: af.topLines, passBefore: pb?.topLines ?? [], passAfter: pa?.topLines ?? [] }, seat: 'opponent', opponentLastSan: move.san })
+                      : null;
+                    const r = learned?.reason;
+                    if (learned && r?.kind === 'the') {
+                      // A line from the board on screen walks; a stopped
+                      // threat's line is evidence and stays the proof only.
+                      const walk = r.line && r.line.fen === move.fen ? [r.line] : undefined;
+                      queueSpokenHint(fenAfterReply, r.text, 'theirIntent', learned.proof, r.squares, [`their-reason:${theirUci}`], move.fen, undefined,
+                        walk,
+                        r.stakeCp ? { points: Math.min(r.stakeCp, 2000) / 100, plies: 1 } : undefined, 'teach', 'reason');
+                      theirReasonSaid = true;
+                    }
+                  }
+                  if (!theirReasonSaid && theirSan && !/[x+#]/.test(theirSan) && mid?.topLines?.length && !mid.isMate) {
                     const passTheirs = nullMoveFen(move.fen);
                     const passRead = passTheirs ? await stockfishEngine.analyzeWithBudget(passTheirs, COACH_TURN_DEPTH, 900).catch(() => null) : null;
                     const afterRead = await stockfishEngine.analyzeWithBudget(fenAfterReply, COACH_TURN_DEPTH, 900).catch(() => null);

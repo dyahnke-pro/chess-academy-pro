@@ -25,7 +25,6 @@ import { findMinorityAttack,
   readingAnswerShape,
   materialRead,
   findOpenFiles,
-  computeSpace,
   pressureCount,
   pressuredTargets,
   findPassedPawns,
@@ -185,19 +184,6 @@ describe('findOpenFiles', () => {
 
   it('returns empty lists on an invalid FEN', () => {
     expect(findOpenFiles('garbage')).toEqual({ open: [], whiteSemiOpen: [], blackSemiOpen: [] });
-  });
-});
-
-describe('computeSpace', () => {
-  it('credits a side more space for pawns pushed deeper into the contestable zone', () => {
-    // White pawns on e4/d4 control squares in ranks 4-6; Black's pawns are
-    // still on their home rank and control nothing beyond rank 3-5's own side.
-    const space = computeSpace('4k3/8/8/8/3PP3/8/PPP2PPP/4K3 w - - 0 1');
-    expect(space.white).toBeGreaterThan(space.black);
-  });
-
-  it('returns zero for both sides on an invalid FEN', () => {
-    expect(computeSpace('garbage')).toEqual({ white: 0, black: 0 });
   });
 });
 
@@ -435,7 +421,7 @@ describe('buildReadingQuestions — space and open-file (2026-08-14, filled a de
     const qs = buildReadingQuestions(fen, emptyTactics());
     const space = qs.find((q) => q.type === 'space');
     expect(space).toBeDefined();
-    expect(space?.answer.toLowerCase()).toContain('you control more space');
+    expect(space?.answer.toLowerCase()).toContain('you have more space');
   });
 
   it('asks an open-file question naming a real open file for the student\'s rooks', () => {

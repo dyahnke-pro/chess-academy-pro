@@ -19,7 +19,7 @@
 // Pure: the engine reads are handed in (`IntentReads`); no engine call here.
 import { Chess } from 'chess.js';
 import type { AnalysisLine } from '../types';
-import { moveIntent, type IntentReads, THREAT_CP } from './moveIntent';
+import { moveIntent, nullMoveFen, type IntentReads, THREAT_CP } from './moveIntent';
 import { heardHorizon, heardProofCut, describeProofResult, settledNetForLine } from './exchangeLedger';
 import { andList, lineShape } from '../utils/andList';
 import { bestMoveReason } from './deliberation';
@@ -195,9 +195,17 @@ export function decisiveReason(input: {
   }
 
   // STOPS / PREPARES — the pass read, worded by the computer that owns it.
+  // Each carries its evidence as a line the board can show: the threat played
+  // as if the mover had passed, or the follow-up played as if the other side
+  // had — the move the reason names, from the board it is true on.
   const mi = moveIntent(fenBefore, san, reads, seat);
-  if (mi?.prevents && mi.prevents.threatCp >= THREAT_CP) cands.push({ source: 'stops', stake: Math.min(MATE_CP - 1, mi.prevents.threatCp), text: mi.text, line: null, squares: mi.squares, alt: false });
-  else if (mi?.prepares) cands.push({ source: 'prepares', stake: mi.prepares.gainCp, text: mi.text, line: null, squares: mi.squares, alt: false });
+  const shown = (fen: string | null, moveSan: string): DecisiveReason['line'] => {
+    if (!fen) return null;
+    try { new Chess(fen).move(moveSan); return { fen, sans: [moveSan] }; } catch { return null; }
+  };
+  const fenAfter = (() => { try { const c = new Chess(fenBefore); c.move(san); return c.fen(); } catch { return null; } })();
+  if (mi?.prevents && mi.prevents.threatCp >= THREAT_CP) cands.push({ source: 'stops', stake: Math.min(MATE_CP - 1, mi.prevents.threatCp), text: mi.text, line: shown(nullMoveFen(fenBefore), mi.prevents.san), squares: mi.squares, alt: false });
+  else if (mi?.prepares) cands.push({ source: 'prepares', stake: mi.prepares.gainCp, text: mi.text, line: fenAfter ? shown(nullMoveFen(fenAfter), mi.prepares.san) : null, squares: mi.squares, alt: false });
 
   // Among the reasons that account for the gap, the most concrete speaks: a
   // count beats a stopped move beats a prepared one. Otherwise the largest.
@@ -221,7 +229,13 @@ export function decisiveReason(input: {
   }
   if (top && top.stake >= COVERS_SHARE * gapCp) {
     const tail = nextBestSan && !top.alt ? ` Anything else, like ${dot(nextBestSan, mover)}, gives up ${costWords(gapCp)}.` : '';
-    return { ...base, kind: 'the', source: top.source, stakeCp: top.stake, text: `${top.text}${tail}`, tail: tail.trim() || null, core: top.text, about: top.alt ? 'alternative' : 'move', line: top.line, squares: top.squares };
+    // Their move, said as theirs ("Their …Bxf7 wins by force", never a bare
+    // "…Bxf7 wins" the student must work out the owner of).
+    const core = seat !== 'opponent' ? top.text
+      : top.text.startsWith('…') ? `Their ${top.text}`
+        : top.text.startsWith(`${san} `) ? `Their ${played}${top.text.slice(san.length)}`
+          : top.text;
+    return { ...base, kind: 'the', source: top.source, stakeCp: top.stake, text: `${core}${tail}`, tail: tail.trim() || null, core, about: top.alt ? 'alternative' : 'move', line: top.line, squares: top.squares };
   }
   // NOTHING ACCOUNTS FOR THE GAP: the engine's edge lies past what forcing play
   // shows. Say so, and give the one true thing the move does — marked as one.

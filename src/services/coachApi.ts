@@ -5890,7 +5890,9 @@ export async function getCoachChatResponse(
             const reason = await moveReason(fen, reasonSan, seat, history.length ? history[history.length - 1] : null);
             if (reason) {
               emitDecisiveReason({ surface: 'chat', kind: reason.kind, source: reason.source, about: reason.about, gapCp: reason.gapCp, stakeCp: reason.stakeCp, posedTag: reasonPosed(reason)?.tag ?? null, outcome: 'explained' });
-              const walk = reason.line ? walkableLine(reason.line.fen, reason.line.sans, reasonSan) : null;
+              // A walk plays from the board on screen; a stopped threat's line
+              // starts from a passed move and is evidence, not a walk.
+              const walk = reason.line && reason.line.fen === fen ? walkableLine(reason.line.fen, reason.line.sans, reasonSan) : null;
               if (walk) lastCoachLines = [walk];
               let from = '';
               try { const m = new Chess(fen).move(reasonSan); from = `${m.from}-${m.to}`; } catch { from = ''; }

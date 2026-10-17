@@ -39,7 +39,7 @@ import {
   strongestWeakestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
   namedPawnStructure, structureTransfer, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
-  bishopPair, computeSpace, findPassedPawns, findForcingCandidates, findHangingBySee, minorRouteToSquare,
+  bishopPair, computeTerritory, ownsMoreSpace, findPassedPawns, findForcingCandidates, findHangingBySee, minorRouteToSquare,
 } from './positionReadingService';
 import type { PressureCount } from './positionReadingService';
 import { gradeMove } from './accuracyService';
@@ -6687,11 +6687,14 @@ export function assemblePositionalAnswer(
   const oppC: 'w' | 'b' = myC === 'w' ? 'b' : 'w';
 
   if (topic === 'space') {
-    const s = computeSpace(fen);
-    const mine = me === 'white' ? s.white : s.black;
-    const theirs = me === 'white' ? s.black : s.white;
-    const verdict = mine > theirs ? 'you have the space advantage' : mine < theirs ? 'they have more space' : 'space is balanced';
-    return { facts: `You control ${mine} square${mine === 1 ? '' : 's'} in the contested zone to their ${theirs} — ${verdict}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    // ONE RULE for "more space" — the narration's (`ownsMoreSpace`, territory
+    // behind the pawns). The chat read the pawn-hit count and could tell the
+    // student the opposite of what the coach had just said (2026-10-17).
+    const t = computeTerritory(fen);
+    const mine = me === 'white' ? t.white : t.black;
+    const theirs = me === 'white' ? t.black : t.white;
+    const verdict = ownsMoreSpace(fen, myC) ? 'you have more space' : ownsMoreSpace(fen, oppC) ? 'they have more space' : 'space is about even';
+    return { facts: `Behind your pawns you have ${mine} square${mine === 1 ? '' : 's'} of room on the central files to their ${theirs} — ${verdict}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   if (topic === 'color-complex') {

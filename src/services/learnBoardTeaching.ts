@@ -25,6 +25,9 @@ import { recordLaneEvidence } from './capabilityEvidence';
 import { stepForMethodClaim, THINKING_STEPS } from './thinkingSteps';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import type { AnalysisLine } from '../types';
+import { decisiveReason, reasonEarned, reasonPosed, REASON_WAIT_CEILING_MS, type DecisiveReason } from './decisiveReason';
+import { emitDecisiveReason } from './decisiveReasonEvents';
+import type { IntentReads } from './moveIntent';
 import type { LearnLane } from './learnTurnDoor';
 import type { ArrowClaim } from './arrowDoor';
 import { recaptureChoice } from './recaptureChoice';
@@ -1204,3 +1207,36 @@ export function cheaperAttackerLine(by: string, bySq: string, piece: string, sq:
 
 /** One prevention rule for every surface — see `moveIntent.preventsNamedIdea`. */
 export { preventsNamedIdea, STOPPED_THEIR_IDEA, preventStakes } from './moveIntent';
+
+// ── THE REASON, IN LEARN (David 2026-10-17) ──────────────────────────────────
+// One door for both seats: the student's move and the coach's reply each get
+// the reason that accounts for their gap over the next-best, with the board
+// evidence as its proof, reported to the audit in the same breath. The page
+// asks once; it never composes the computer, the proof and the emission itself.
+
+/** Should the reply wait for the student's reason? Only at a real decision
+ *  out of book; then for at most `REASON_WAIT_CEILING_MS`. */
+export function learnReasonWaitMs(lines: readonly AnalysisLine[] | undefined, mover: 'w' | 'b', inBook: boolean): number {
+  return learnReasonDue(lines, mover, inBook) ? REASON_WAIT_CEILING_MS : 0;
+}
+
+/** Is there a reason to give for this move at all — a real decision, out of book? */
+export function learnReasonDue(lines: readonly AnalysisLine[] | undefined, mover: 'w' | 'b', inBook: boolean): boolean {
+  return !inBook && reasonEarned(lines, mover);
+}
+
+export interface LearnReason {
+  reason: DecisiveReason;
+  proof: FactProof;
+  /** The skill the student showed (their own move only). */
+  posed: { tag: MisconceptionTagId; posedImportance: number } | null;
+}
+
+export function learnMoveReason(input: { fenBefore: string; san: string; reads: IntentReads; seat: 'student' | 'opponent'; opponentLastSan: string | null }): LearnReason | null {
+  const reason = decisiveReason(input);
+  if (!reason) return null;
+  const posed = input.seat === 'student' ? reasonPosed(reason) : null;
+  emitDecisiveReason({ surface: 'learn', kind: reason.kind, source: reason.source, about: reason.about, gapCp: reason.gapCp, stakeCp: reason.stakeCp, posedTag: posed?.tag ?? null, outcome: posed ? 'held' : 'explained' });
+  const proof = (reason.line ? lineProof(reason.line) : null) ?? squaresProof(reason.text, reason.squares) ?? NO_PROOF.description;
+  return { reason, proof, posed };
+}

@@ -90,3 +90,15 @@ describe('decisiveReason — what the escalating walk caught (2026-10-17)', () =
   });
 });
 
+
+describe('decisiveReason — their move is said as theirs (David 2026-10-17: computer narrations give the best reason too)', () => {
+  // Black knight e4 takes the unguarded white queen on d2? Simpler: Black to move, queen d5 takes a loose rook a2.
+  const FEN = '4k3/8/8/3q4/8/8/R7/4K3 b - - 0 1';
+  it('a material reason for their move opens "Their …"', () => {
+    const r = decisiveReason({ fenBefore: FEN, san: 'Qxa2', seat: 'opponent', opponentLastSan: null, reads: {
+      before: [{ rank: 1, evaluation: -500, mate: null, moves: ['d5a2'] }, { rank: 2, evaluation: 0, mate: null, moves: ['e8d7'] }], after: [], passBefore: [], passAfter: [],
+    } });
+    expect(r?.kind).toBe('the');
+    expect(r?.text).toMatch(/^Their …Qxa2/);
+  });
+});

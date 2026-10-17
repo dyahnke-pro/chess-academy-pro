@@ -257,10 +257,10 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     await waitFor(() => {
       expect(screen.getByText("Teach me the Italian.")).toBeInTheDocument();
       expect(screen.getByText(/let's walk through the Italian Game/i)).toBeInTheDocument();
-      // ~7s on an idle machine; an 8s wait failed the pre-commit run under load
-      // (2026-10-07). The wait now uses the test's own budget.
-    }, { timeout: 18_000 });
-  }, 20_000); // slower under the full-file load + merged corpus; passes isolated
+      // ~7-9s on an idle machine; 24s measured in the pre-commit run with every
+      // co-located test in parallel (2026-10-17). The wait uses the test's budget.
+    }, { timeout: 40_000 });
+  }, 45_000); // slower under the full-file load + merged corpus; passes isolated
 
   it('does NOT set providerOverride at the surface (let the spine pick + fall back)', async () => {
     // Test history: this used to assert `providerOverride.name === 'anthropic'`
