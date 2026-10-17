@@ -709,3 +709,21 @@ describe('a structure judgement is a reason, never an aside (A-plan P3, prod Lea
     expect((TEACH_CODE.match(/'structureJudgement', st\.proof, st\.squares, \[st\.key\], undefined, undefined, undefined, st\.stakes, st\.role\)/g) ?? []).length).toBe(2);
   });
 });
+
+describe('the fade is gradual (2026-10-17): lighter while learning, short once proven', () => {
+  const THREE = 'That trade gives up your better minor piece. Your bishop on c4 has open diagonals. Keep the bishop that has open diagonals and trade the one blocked by its own pawns.';
+  it('a skill answered right since its last miss keeps the point and its reason', async () => {
+    const { fadeWhenGreen } = await import('./learnTurnDoor');
+    expect(fadeWhenGreen('trade', THREE, new Map([['bad-trade', 'lighter' as const]]))).toBe('That trade gives up your better minor piece. Your bishop on c4 has open diagonals.');
+  });
+  it('a proven skill keeps the point alone; an unknown skill keeps the whole lesson', async () => {
+    const { fadeWhenGreen } = await import('./learnTurnDoor');
+    expect(fadeWhenGreen('trade', THREE, new Map([['bad-trade', 'short' as const]]))).toBe('That trade gives up your better minor piece.');
+    expect(fadeWhenGreen('trade', THREE, new Map([['hung-material', 'short' as const]]))).toBe(THREE);
+  });
+  it('the record decides the level: proven is short, a held streak is lighter, nothing is full', async () => {
+    const src = readFileSync('src/services/weaknessSignalLoader.ts', 'utf8');
+    expect(src).toMatch(/if \(capabilityProven\(entry\)\) out\.set\(tag, 'short'\);\s*else if \(entry\.heldStreak >= 1\) out\.set\(tag, 'lighter'\);/);
+    expect(TEACH_CODE).toMatch(/const provenTagsRef = useFadeLevels\(\);/);
+  });
+});

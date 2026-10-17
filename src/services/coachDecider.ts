@@ -92,7 +92,7 @@ export interface LearnTurnRequest {
   alreadySaid?: string;
   priorKeys?: ReadonlySet<string>;
   priorLead?: { lane: LearnLane; squares: readonly string[] } | null;
-  green?: ReadonlySet<string> | null;
+  green?: import('./learnTurnDoor').FadeLevels | null;
   beginner?: boolean;
   /** REQUIRED: which turn this is (the student move's waves, or a phase
    *  line), so the door's row says whether a student move got its reason. */

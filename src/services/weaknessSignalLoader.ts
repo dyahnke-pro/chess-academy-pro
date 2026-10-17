@@ -83,6 +83,23 @@ export async function loadProvenTags(): Promise<Set<string>> {
   return tags;
 }
 
+/** THE FADE LEVEL per skill, from the student's own record: `short` when
+ *  proven, `lighter` when answered right since the last miss (a held streak)
+ *  but not yet proven. Absent = full teaching (grey or red). */
+export async function loadFadeLevels(): Promise<Map<string, 'lighter' | 'short'>> {
+  try {
+    const profile = await getCapabilityProfile();
+    const out = new Map<string, 'lighter' | 'short'>();
+    for (const [tag, entry] of profile) {
+      if (capabilityProven(entry)) out.set(tag, 'short');
+      else if (entry.heldStreak >= 1) out.set(tag, 'lighter');
+    }
+    return out;
+  } catch {
+    return new Map();
+  }
+}
+
 /** Drop the memo — call after the weakness model changes (new mistake captured /
  *  drill completed) so the next load reflects it. */
 export function invalidateWeaknessSignals(): void {

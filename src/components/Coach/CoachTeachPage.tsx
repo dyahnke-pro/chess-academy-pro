@@ -75,7 +75,7 @@ import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { usePhaseNarration } from '../../hooks/usePhaseNarration';
 import { useStudentNeed } from '../../hooks/useStudentNeed';
 import { DEFAULT_STUDENT_RATING, isBeginnerMode } from '../../services/ratingBands';
-import { useProvenTags, useWeaknessSignals } from '../../hooks/useWeaknessSignals';
+import { useFadeLevels, useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import {
   createPhaseTransitionState,
   detectPhaseTransition,
@@ -7970,7 +7970,7 @@ export function CoachTeachPage(): JSX.Element {
   // toward the holes this student keeps falling in. Ref-held; read at speak-time.
   const weaknessSignalsRef = useWeaknessSignals();
   // Proven skills — the Learn door fades their lanes to the short phrasing.
-  const provenTagsRef = useProvenTags();
+  const provenTagsRef = useFadeLevels();
   // …AND THE OTHER HALF OF IT (N2). Weaknesses say which holes they keep falling
   // in and RAISE what leads; need says whether this student needs teaching HERE
   // AT ALL — book departures in this opening, weakness match for what the ply

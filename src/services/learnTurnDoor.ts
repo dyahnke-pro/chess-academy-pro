@@ -387,12 +387,27 @@ export interface TurnDecision {
  *  the lesson again. Not a cap (G4.5): the student's own record decides, and
  *  grey or red keeps the full teaching. Only lanes whose HELD half is wired
  *  fade — a skill the app cannot see the student answer can never be green. */
-export function fadeWhenGreen(lane: LearnLane, text: string, green: ReadonlySet<string> | null): string {
+/** GRADUAL (David 2026-09-25 "the fade … gradual, back to full on a red
+ *  regression"; built 2026-10-17): a skill answered correctly since its last
+ *  miss but not yet proven is `lighter` — the point and its reason, the rest
+ *  of the lesson waits; a PROVEN skill is `short` — the point alone. A slip
+ *  resets the streak, so the record itself returns it to full. A plain set is
+ *  read as `short` for every member (the proven tags). */
+export type FadeLevel = 'lighter' | 'short';
+export type FadeLevels = ReadonlySet<string> | ReadonlyMap<string, FadeLevel>;
+function fadeLevelOf(green: FadeLevels, tag: string): FadeLevel | null {
+  if (green instanceof Map) return green.get(tag) ?? null;
+  return (green as ReadonlySet<string>).has(tag) ? 'short' : null;
+}
+export function fadeWhenGreen(lane: LearnLane, text: string, green: FadeLevels | null): string {
   if (!green || green.size === 0) return text;
   const role = COMPUTER_ROLES[lane];
-  if (!role || !role.tag || role.held.state !== 'wired' || !green.has(role.tag)) return text;
-  const first = text.split(/(?<=[.!?])\s+(?=[A-Z"“])/)[0];
-  return first && first.length < text.length ? first : text;
+  if (!role || !role.tag || role.held.state !== 'wired') return text;
+  const level = fadeLevelOf(green, role.tag);
+  if (!level) return text;
+  const sentences = text.split(/(?<=[.!?])\s+(?=[A-Z"“])/);
+  const keep = level === 'short' ? 1 : 2;
+  return sentences.length > keep ? sentences.slice(0, keep).join(' ') : text;
 }
 
 /** Lanes that always ride for a beginner: the principle, said every time. */
@@ -411,7 +426,7 @@ export function decideTurn(
   priorLead?: { lane: LearnLane; squares: readonly string[] } | null,
   /** The tags the student's record has PROVEN (`loadProvenTags`) — lanes on
    *  them fade to their short phrasing. Null when the record is not loaded. */
-  green?: ReadonlySet<string> | null,
+  green?: FadeLevels | null,
   /** Beginner mode (`isBeginnerMode`): the fundamental behind a slip and the
    *  beginner's rule a move breaks ride every turn instead of competing for
    *  the lead (David 2026-10-02: "Explain fundamentals"). Register only — the
