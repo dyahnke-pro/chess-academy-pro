@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1944 lines · 15 exports · 28 importers · 25 tests · 3 audits**
+**1999 lines · 15 exports · 28 importers · 25 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -71,14 +71,14 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `statusBandChange` (function) — 8 call sites
-- `src/services/positionFacts.test.ts:6`
 - `src/services/positionFacts.test.ts:7`
 - `src/services/positionFacts.test.ts:8`
 - `src/services/positionFacts.test.ts:9`
 - `src/services/positionFacts.test.ts:10`
-- `src/services/positionFacts.test.ts:13`
+- `src/services/positionFacts.test.ts:11`
 - `src/services/positionFacts.test.ts:14`
 - `src/services/positionFacts.test.ts:15`
+- `src/services/positionFacts.test.ts:16`
 
 ### `ClauseItem` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -91,18 +91,18 @@
 - `src/hooks/usePhaseNarration.ts:673`
 - `src/services/chatBoardRead.ts:110`
 - `src/services/computerAccuracy.audit.test.ts:113`
-- `src/services/positionFacts.test.ts:254`
 - `src/services/positionFacts.test.ts:255`
-- `src/services/positionFacts.test.ts:296`
-- `src/services/positionFacts.test.ts:306`
-- `src/services/positionFacts.test.ts:364`
+- `src/services/positionFacts.test.ts:256`
+- `src/services/positionFacts.test.ts:297`
+- `src/services/positionFacts.test.ts:307`
 - `src/services/positionFacts.test.ts:365`
+- `src/services/positionFacts.test.ts:366`
 - `src/services/positionReadComposer.ts:155`
 - `src/services/whyBestMove.ts:160`
 
-### `computePositionFacts` (function) — 90 call sites
+### `computePositionFacts` (function) — 93 call sites
 - `src/coach/boardTurnAnswer.ts:134`
-- `src/components/Coach/CoachTeachPage.tsx:10150`
+- `src/components/Coach/CoachTeachPage.tsx:10181`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:645`
@@ -111,7 +111,7 @@
 - `src/services/chatBoardRead.ts:81`
 - `src/services/claimChecker.measure.test.ts:106`
 - `src/services/computerAccuracy.audit.test.ts:112`
-- `src/services/exchangeIdeas.test.ts:220`
+- `src/services/exchangeIdeas.test.ts:229`
 - `src/services/forkTrick.test.ts:48`
 - `src/services/latentFork.test.ts:151`
 - `src/services/liveNeedGate.test.ts:132`
@@ -128,50 +128,53 @@
 - `src/services/positionFacts.liveFundamental.test.ts:52`
 - `src/services/positionFacts.moveWhy.test.ts:21`
 - `src/services/positionFacts.pinPressure.test.ts:17`
-- `src/services/positionFacts.test.ts:24`
-- `src/services/positionFacts.test.ts:37`
-- `src/services/positionFacts.test.ts:52`
-- `src/services/positionFacts.test.ts:64`
-- `src/services/positionFacts.test.ts:70`
-- `src/services/positionFacts.test.ts:76`
-- `src/services/positionFacts.test.ts:88`
-- `src/services/positionFacts.test.ts:94`
-- `src/services/positionFacts.test.ts:103`
-- `src/services/positionFacts.test.ts:110`
-- `src/services/positionFacts.test.ts:115`
-- `src/services/positionFacts.test.ts:120`
-- `src/services/positionFacts.test.ts:127`
-- `src/services/positionFacts.test.ts:136`
-- `src/services/positionFacts.test.ts:145`
-- `src/services/positionFacts.test.ts:154`
-- `src/services/positionFacts.test.ts:164`
-- `src/services/positionFacts.test.ts:181`
-- `src/services/positionFacts.test.ts:193`
-- `src/services/positionFacts.test.ts:203`
-- `src/services/positionFacts.test.ts:209`
-- `src/services/positionFacts.test.ts:222`
-- `src/services/positionFacts.test.ts:231`
-- `src/services/positionFacts.test.ts:234`
-- `src/services/positionFacts.test.ts:245`
-- `src/services/positionFacts.test.ts:260`
-- `src/services/positionFacts.test.ts:276`
-- `src/services/positionFacts.test.ts:292`
-- `src/services/positionFacts.test.ts:302`
-- `src/services/positionFacts.test.ts:310`
-- `src/services/positionFacts.test.ts:319`
-- `src/services/positionFacts.test.ts:342`
-- `src/services/positionFacts.test.ts:363`
-- `src/services/positionFacts.test.ts:379`
-- `src/services/positionFacts.test.ts:387`
-- `src/services/positionFacts.test.ts:399`
-- `src/services/positionFacts.test.ts:405`
-- `src/services/positionFacts.test.ts:418`
-- `src/services/positionFacts.test.ts:431`
-- `src/services/positionFacts.test.ts:444`
-- `src/services/positionFacts.test.ts:447`
-- `src/services/positionFacts.test.ts:458`
-- `src/services/positionFacts.test.ts:462`
+- `src/services/positionFacts.test.ts:25`
+- `src/services/positionFacts.test.ts:38`
+- `src/services/positionFacts.test.ts:53`
+- `src/services/positionFacts.test.ts:65`
+- `src/services/positionFacts.test.ts:71`
+- `src/services/positionFacts.test.ts:77`
+- `src/services/positionFacts.test.ts:89`
+- `src/services/positionFacts.test.ts:95`
+- `src/services/positionFacts.test.ts:104`
+- `src/services/positionFacts.test.ts:111`
+- `src/services/positionFacts.test.ts:116`
+- `src/services/positionFacts.test.ts:121`
+- `src/services/positionFacts.test.ts:128`
+- `src/services/positionFacts.test.ts:137`
+- `src/services/positionFacts.test.ts:146`
+- `src/services/positionFacts.test.ts:155`
+- `src/services/positionFacts.test.ts:165`
+- `src/services/positionFacts.test.ts:182`
+- `src/services/positionFacts.test.ts:194`
+- `src/services/positionFacts.test.ts:204`
+- `src/services/positionFacts.test.ts:210`
+- `src/services/positionFacts.test.ts:223`
+- `src/services/positionFacts.test.ts:232`
+- `src/services/positionFacts.test.ts:235`
+- `src/services/positionFacts.test.ts:246`
+- `src/services/positionFacts.test.ts:261`
+- `src/services/positionFacts.test.ts:277`
+- `src/services/positionFacts.test.ts:293`
+- `src/services/positionFacts.test.ts:303`
+- `src/services/positionFacts.test.ts:311`
+- `src/services/positionFacts.test.ts:320`
+- `src/services/positionFacts.test.ts:343`
+- `src/services/positionFacts.test.ts:364`
+- `src/services/positionFacts.test.ts:380`
+- `src/services/positionFacts.test.ts:388`
+- `src/services/positionFacts.test.ts:400`
+- `src/services/positionFacts.test.ts:406`
+- `src/services/positionFacts.test.ts:415`
+- `src/services/positionFacts.test.ts:424`
+- `src/services/positionFacts.test.ts:437`
+- `src/services/positionFacts.test.ts:450`
+- `src/services/positionFacts.test.ts:463`
 - `src/services/positionFacts.test.ts:466`
+- `src/services/positionFacts.test.ts:477`
+- `src/services/positionFacts.test.ts:481`
+- `src/services/positionFacts.test.ts:485`
+- `src/services/positionFacts.test.ts:493`
 - `src/services/positionFacts.weakness.test.ts:22`
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`
@@ -193,10 +196,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8685`
+- `src/components/Coach/CoachTeachPage.tsx:8688`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10417`
+- `src/components/Coach/CoachTeachPage.tsx:10448`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -208,7 +211,7 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8666`
+- `src/components/Coach/CoachTeachPage.tsx:8669`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.ts:9`

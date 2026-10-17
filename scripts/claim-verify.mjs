@@ -23,7 +23,11 @@ import { Chess } from 'chess.js';
 
 const arg = (k, d) => { const i = process.argv.indexOf(k); return i >= 0 ? process.argv[i + 1] : d; };
 const EXAMPLES = Number(arg('--examples', 3));
-const harvest = JSON.parse(readFileSync('audit-reports/claim-check/harvest.json', 'utf8'));
+// `--harvest <file>` reads another harvest in the same shape (the answer pass
+// writes audit-reports/claim-check/answers.json); `--out` names the verdicts.
+const HARVEST_PATH = arg('--harvest', 'audit-reports/claim-check/harvest.json');
+const OUT_PATH = arg('--out', 'audit-reports/claim-check/verdicts.json');
+const harvest = JSON.parse(readFileSync(HARVEST_PATH, 'utf8'));
 
 // Engine reads by FEN (position part), from both corpora.
 const LINES = new Map();
@@ -155,8 +159,18 @@ function verify(x) {
   const hypo = hypotheticalBoard(x, b, t);
   const claimBoards = hypo === 'skip' ? null : [hypo ?? b];
   // Piece-on-square claims: every "<piece> on <sq>" named must stand there.
+  // Each sentence is read on ITS board: "The next-best is Bd2. After Bd2, your
+  // bishop on c3 can be taken." puts the second sentence after Bd2.
+  const sentenceBoard = (idx) => {
+    const start = Math.max(t.lastIndexOf('. ', idx), t.lastIndexOf('? ', idx), t.lastIndexOf('! ', idx));
+    const sent = t.slice(start < 0 ? 0 : start + 2);
+    if (start < 0) return claimBoards?.[0] ?? b;
+    const h = hypotheticalBoard(x, b, sent);
+    return h === 'skip' ? null : h ?? claimBoards?.[0] ?? b;
+  };
   if (claimBoards) for (const m of t.matchAll(/\b(your|their|my)?\s*(king|queen|rook|bishop|knight|pawn)s? on ([a-h][1-8])\b/gi)) {
-    const cb = claimBoards[0];
+    const cb = sentenceBoard(m.index ?? 0);
+    if (!cb) continue;
     const p = at(cb, m[3]);
     if (!p || p.type !== NAME[m[2].toLowerCase()]) {
       // The backward look talks about the position BEFORE the reply; accept either board.
@@ -164,6 +178,19 @@ function verify(x) {
       const okElsewhere = alt.some((fen) => { const q = board(fen).get(m[3]); return q && q.type === NAME[m[2].toLowerCase()]; });
       if (!okElsewhere) return F(`says ${m[2]} on ${m[3]}; board has ${p ? p.type : 'nothing'}`);
     }
+  }
+
+  // THE ANSWER PASS: what the coach says back to an answer. A wrong-tap reply
+  // teaches the method and never names an answer square; a right answer is
+  // never called wrong. Board claims were checked above.
+  if (x.lane === 'answer') {
+    const key = x.key ?? [];
+    if (/-?wrong$/.test(x.kind)) {
+      const named = key.find((sq) => new RegExp(`\\b${sq}\\b`).test(t));
+      if (named) return F(`wrong-tap reply names the answer square ${named}`);
+    }
+    if (/:right$/.test(x.kind) && /\b(?:wrong|not quite|try again)\b/i.test(t)) return F('a right answer called wrong');
+    return /\b(?:king|queen|rook|bishop|knight|pawn)s? on [a-h][1-8]\b/i.test(t) || /-?wrong$/.test(x.kind) || /:right$/.test(x.kind) ? T('reply holds') : U('no board claim');
   }
 
   switch (K) {
@@ -379,6 +406,11 @@ function verify(x) {
       return U('method habit');
     }
     case 'behavior:space': {
+      // THE APP'S "MORE SPACE" IS TERRITORY (2026-10-17, `ownsMoreSpace`): the
+      // room behind a side's c–f pawns that no enemy pawn hits — counted here
+      // independently, the same definition, so the claim is held to its meaning.
+      const terr = (col) => { const en = col === 'w' ? 'b' : 'w'; let n = 0; for (const f of ['c', 'd', 'e', 'f']) { let front = 0; for (let r = 1; r <= 8; r += 1) { const p = at(b, `${f}${r}`); if (p && p.type === 'p' && p.color === col) front = Math.max(front, col === 'w' ? r : 9 - r); } for (let rel = 2; rel < front; rel += 1) { const sq = `${f}${col === 'w' ? rel : 9 - rel}`; const o = at(b, sq); if (o && o.type === 'p') continue; if (b.attackers(sq, en).some((a) => at(b, a)?.type === 'p')) continue; n += 1; } } return n; };
+      if (/^You own more space/.test(t)) return terr(me) >= terr(them) + 2 ? T(`territory ${terr(me)} vs ${terr(them)}`) : F(`territory ${terr(me)} vs ${terr(them)}`);
       const ctl = (col) => { let n = 0; for (const c of b.board().flat()) { if (!c || c.color !== col || c.type !== 'p') continue; const f = FILES.indexOf(c.square[0]); const r = Number(c.square[1]) + (col === 'w' ? 1 : -1); for (const ff of [f - 1, f + 1]) { if (ff < 0 || ff > 7) continue; if (col === 'w' ? r >= 5 : r <= 4) n += 1; } } return n; };
       // Crude pawn-space count: only a CLEAR deficit is proof of falsehood.
       if (ctl(me) > ctl(them)) return T(`pawn-held squares in their half ${ctl(me)} vs ${ctl(them)}`);
@@ -448,6 +480,25 @@ function verify(x) {
       const drop = /(\S+)\? That drops the (\w+) on ([a-h][1-8])/.exec(t);
       if (drop) { const c = board(x.probe); try { c.move(drop[1]); } catch { return F(`${drop[1]} illegal`); } return see(c.fen(), drop[3], c.turn()) >= VAL[NAME[drop[2]]] - 1 ? T('drops it') : F(`${drop[3]} not lost (SEE ${see(c.fen(), drop[3], c.turn())})`); }
       const line = /(\S+)\? Then ([^—]+) — they win (?:a |an |two )?(\w+)/.exec(t);
+      // "Then Bb6 and, two moves later, Rf7+" is the line said by its ends
+      // (`lineShape`): read the candidate's own engine line, and hold the two
+      // named moves and the result to it.
+      const elided = line && /^(\S+) and, (?:\w+) moves? later, (\S+)$/.exec(line[2].trim());
+      if (line && elided) {
+        const c0 = board(x.probe);
+        let cand; try { cand = c0.move(line[1]); } catch { return F(`${line[1]} illegal`); }
+        const pv = (LINES.get(fkey(x.probe)) ?? []).find((l) => l.pv[0] === `${cand.from}${cand.to}${cand.promotion ?? ''}`)?.pv;
+        if (!pv) return U('elided line: candidate not among the engine lines');
+        const c = board(x.probe); const m0 = material(c.fen(), them) - material(c.fen(), me);
+        const sans = []; for (const u of pv) { try { sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san); } catch { break; } }
+        const strip = (z) => z.replace(/[+#]$/, '');
+        if (strip(sans[1] ?? '') !== strip(elided[1])) return F(`elided line starts ${sans[1]}, said ${elided[1]}`);
+        const end = sans.findIndex((z, i) => i > 1 && strip(z) === strip(elided[2]));
+        if (end < 0) return F(`elided line never plays ${elided[2]}`);
+        const c2 = board(x.probe); for (const z of sans.slice(0, end + 1)) c2.move(z);
+        const gain = material(c2.fen(), them) - material(c2.fen(), me) - m0;
+        return gain >= 1 ? T(`elided line nets them ${gain}`) : F(`elided line nets them ${gain}`);
+      }
       if (line) {
         const c = board(x.probe); const m0 = material(c.fen(), them) - material(c.fen(), me);
         for (const san of [line[1], ...line[2].replace(/ and /g, ', ').split(/,\s*/)]) { try { c.move(san.trim()); } catch { return F(`line illegal at ${san}`); } }
@@ -474,7 +525,7 @@ function verify(x) {
 }
 
 const verdicts = harvest.map((x) => ({ ...x, ...(x.kind === 'ERROR' ? F(`computer threw: ${x.text}`) : verify(x)) }));
-writeFileSync('audit-reports/claim-check/verdicts.json', JSON.stringify(verdicts, null, 1));
+writeFileSync(OUT_PATH, JSON.stringify(verdicts, null, 1));
 
 const by = new Map();
 for (const v of verdicts) { const k = `${v.lane}:${v.kind}`; if (!by.has(k)) by.set(k, { T: 0, F: 0, U: 0, bad: [] }); const s = by.get(k); s[v.v[0]] += 1; if (v.v === 'FALSE') s.bad.push(v); }
@@ -485,7 +536,7 @@ for (const s of by.values()) { tt += s.T; ff += s.F; uu += s.U; }
 // behaviour and positional lanes offer CANDIDATES the page picks one of per
 // turn. Both must be true (any candidate can be picked), but the spoken lanes
 // are the closest thing to "what the student hears" this instrument can see.
-const SPOKEN = new Set(['facts', 'backward']);
+const SPOKEN = new Set(['facts', 'backward', 'answer']);
 for (const [label, pick] of [['SPOKEN lanes (facts + backward look)', (v) => SPOKEN.has(v.lane)], ['CANDIDATE lanes (behaviour + positional)', (v) => !SPOKEN.has(v.lane)]]) {
   const vs = verdicts.filter(pick); const t1 = vs.filter((v) => v.v === 'TRUE').length; const f1 = vs.filter((v) => v.v === 'FALSE').length;
   console.log(`${label}: ${vs.length} claims · accuracy ${(100 * t1 / Math.max(1, t1 + f1)).toFixed(1)}% of checked · ${(100 * (t1 + f1) / Math.max(1, vs.length)).toFixed(0)}% checkable`);

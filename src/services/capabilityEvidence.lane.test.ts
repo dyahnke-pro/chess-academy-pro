@@ -42,4 +42,14 @@ describe('recordTeachingEvidence — the lane wire', () => {
     const row = (await db.capabilityEvidence.toArray())[0];
     expect(row).toMatchObject({ tag: 'calculation-depth', outcome: 'held', origin: 'learn', prompted: false, sourceGameId: 'g1' });
   });
+
+  it('one move credits a skill once, however many lanes name it in the same tick (2026-10-17)', async () => {
+    const h: TeachingHint = { lane: 'foundMove', proof: NO_PROOF.stated, text: 'x', squares: [], claims: [], event: null, arrows: [], evidence: { tag: 'missed-tactic', posedImportance: 90 } };
+    recordTeachingEvidence(h, { fen: FEN, playedSan: 'Nd5', prompted: false, gameId: 'g9' });
+    recordTeachingEvidence({ ...h, lane: 'movePoint' }, { fen: FEN, playedSan: 'Nd5', prompted: false, gameId: 'g9' });
+    await vi.waitFor(async () => { expect(await db.capabilityEvidence.where('tag').equals('missed-tactic').count()).toBe(1); });
+    await new Promise((r) => setTimeout(r, 50));
+    expect(await db.capabilityEvidence.where('tag').equals('missed-tactic').count()).toBe(1);
+  });
 });
+

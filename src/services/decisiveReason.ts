@@ -24,6 +24,7 @@ import { heardHorizon, heardProofCut, describeProofResult, settledNetForLine } f
 import { andList, lineShape } from '../utils/andList';
 import { bestMoveReason } from './deliberation';
 import { costWords } from './engineConstants';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
 
 export type ReasonKind = 'the' | 'a' | 'close';
 export type ReasonSource = 'material' | 'stops' | 'prepares' | 'description';
@@ -132,6 +133,14 @@ export function decisiveReason(input: {
   const lines = [...reads.before].filter((l) => l.moves.length > 0).sort((a, b) => a.rank - b.rank);
   const own = lines.find((l) => l.moves[0] === uci);
   const next = lines.find((l) => l.moves[0] !== uci);
+  // NOT ONE OF THE ENGINE'S MOVES: there is no gap for a reason to account for,
+  // and the honest answer says that and names what it prefers (asked for —
+  // the chat surface; Learn reads only the move the student played as best).
+  if (!own && next) {
+    const bestSan = sansOf(fenBefore, [lines[0].moves[0]])[0];
+    if (!bestSan) return null;
+    return { kind: 'a', source: null, text: `${dot(san, mover)} isn't one of the engine's choices here — it prefers ${dot(bestSan, mover)}.`, gapCp: 0, stakeCp: null, nextBestSan: bestSan, tail: null, core: null, about: null, line: null, squares: [] };
+  }
   if (!own || !next) return null;
   const nextBestSan = sansOf(fenBefore, [next.moves[0]])[0] ?? null;
   const gapCp = Math.max(0, moverValue(own, mover) - moverValue(next, mover));
@@ -167,7 +176,7 @@ export function decisiveReason(input: {
     } else if (matStake > 0) {
       const win = matOwn > 0 ? seatProof(fenBefore, sansOf(fenBefore, own.moves), mover, studentWB, 'for') : null;
       const loss = !win && matNext < 0 ? seatProof(fenBefore, sansOf(fenBefore, next.moves), mover, studentWB, 'against') : null;
-      if (win) cands.push({ source: 'material', stake: matStake, text: `${played} wins by force: ${win.text}.`, line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
+      if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? `${win.text}.` : `${played} wins by force: ${win.text}.`, line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
       else if (loss && nextBestSan) cands.push({ source: 'material', stake: matStake, text: `The natural alternative, ${dot(nextBestSan, mover)}, fails: ${loss.text}.`, line: { fen: fenBefore, sans: loss.sans }, squares: [], alt: true });
       // No short proof, but the count is the reason: say the count, never let a
       // smaller reason stand in for it.
@@ -232,4 +241,35 @@ export function reasonEarned(lines: readonly AnalysisLine[] | undefined, mover: 
 /** How long past its own think-time a Learn reply may wait on the reason. Past
  *  it the reply plays and the reason follows the move it is about. */
 export const REASON_WAIT_CEILING_MS = 2500;
+
+// ── BOTH WAYS (David 2026-10-17: "All wiring needs to go both ways") ─────────
+// The computer that TEACHES the reason also says what the position POSED, so a
+// student who finds the decisive move is credited with that skill and one who
+// misses it is caught on it — one vocabulary in both directions. Held as a
+// Record so a new reason source fails to compile until it names its skill.
+
+/** The skill each kind of decisive reason tests. A description poses nothing:
+ *  "one thing it does" is not a question the board asked. */
+const REASON_TAG: Record<ReasonSource, { move: MisconceptionTagId; alternative: MisconceptionTagId } | null> = {
+  // A forced win or mate for the move is a tactic found; the natural move
+  // failing is a line calculated past its first move.
+  material: { move: 'missed-tactic', alternative: 'calculation-depth' },
+  stops: { move: 'missed-opponents-threat', alternative: 'missed-opponents-threat' },
+  prepares: { move: 'no-plan', alternative: 'no-plan' },
+  description: null,
+};
+
+/** How live the question was: the gap the reason accounts for, scaled to the
+ *  0-100 posed-importance the evidence store reads. */
+export function reasonImportance(gapCp: number): number {
+  return gapCp >= 300 ? 90 : gapCp >= 150 ? 75 : 60;
+}
+
+/** What THE reason posed, for the record — null for A reason or a close call. */
+export function reasonPosed(r: DecisiveReason | null): { tag: MisconceptionTagId; posedImportance: number } | null {
+  if (!r || r.kind !== 'the' || !r.source) return null;
+  const tags = REASON_TAG[r.source];
+  if (!tags) return null;
+  return { tag: r.about === 'alternative' ? tags.alternative : tags.move, posedImportance: reasonImportance(r.gapCp) };
+}
 

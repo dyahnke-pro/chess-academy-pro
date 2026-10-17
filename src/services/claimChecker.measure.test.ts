@@ -155,5 +155,7 @@ describe.skipIf(!HAVE)('claim checker — harvest', () => {
     console.log(`[harvest] ${out.length} claims`);
     for (const [k, n] of [...byKind].sort((a, b) => b[1] - a[1])) console.log(`  ${String(n).padStart(5)} ${k}`);
     expect(out.length).toBeGreaterThan(100);
-  }, 3_600_000);
+    // The 100-game run takes ~75 minutes; a timeout shorter than the run marked
+    // a finished harvest as failed (2026-10-17).
+  }, 7_200_000);
 });

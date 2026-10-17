@@ -774,6 +774,11 @@ export function assembleOpponentMoveAnswer(opts: {
   /** Full SAN history; the last entry is the move we explain. */
   moveHistory: string[] | undefined;
   studentColor: 'white' | 'black';
+  /** Another computer already found the move's point (what it stopped, what
+   *  it is for) — then the move is never called "quiet" here (escalating walk
+   *  2026-10-17: "a quiet move with no immediate tactical point" one sentence
+   *  before "it stops your Qxb7 fork"). */
+  pointKnown?: boolean;
 }): GroundedAnswer | null {
   const { fen, moveHistory, studentColor } = opts;
   if (!moveHistory || moveHistory.length === 0) return null;
@@ -854,7 +859,9 @@ export function assembleOpponentMoveAnswer(opts: {
   if (hits && !clauses.some((c) => /attacks|threat/.test(c))) clauses.push(hits);
   const didPart = clauses.length > 0
     ? `They played ${played.san} — ${clauses.length > 1 ? `${clauses.slice(0, -1).join(', ')} and ${clauses[clauses.length - 1]}` : clauses[0]}.`.replace(/ — (?!it )/, ' — it ')
-    : `They played ${played.san} — a quiet move with no immediate tactical point.`;
+    : opts.pointKnown
+      ? `They played ${played.san}.`
+      : `They played ${played.san} — a quiet move with no immediate tactical point.`;
   const guardNote = shortOfGuards ? ' It is not defended enough — cover it.' : '';
   const facts = threatText ? `${didPart}${guardNote} ${threatText}` : `${didPart}${guardNote}`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };

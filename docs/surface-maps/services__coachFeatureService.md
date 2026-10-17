@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5389 lines · 31 exports · 49 importers · 52 tests · 4 audits**
+**5397 lines · 31 exports · 50 importers · 53 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -38,6 +38,7 @@
 - `src/services/gameThemeClassifier.test.ts`
 - `src/services/gameThemeClassifier.ts`
 - `src/services/gradeGatesTeachingCost.test.ts`
+- `src/services/habitBothSeats.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/loosePattern.test.ts`
 - `src/services/namedMoveArrows.test.ts`
@@ -138,7 +139,7 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 81 call sites
+### `buildReviewSegments` (function) — 82 call sites
 - `src/components/Coach/CoachGameReview.tsx:1825`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
@@ -194,6 +195,7 @@
 - `src/services/coachFeatureService.trade.test.ts:18`
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
+- `src/services/habitBothSeats.test.ts:27`
 - `src/services/loopCloses.review.integration.test.ts:89`
 - `src/services/loosePattern.test.ts:15`
 - `src/services/methodBeat.test.ts:78`
@@ -269,8 +271,8 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8089`
-- `src/components/Coach/CoachTeachPage.tsx:8178`
+- `src/components/Coach/CoachTeachPage.tsx:8096`
+- `src/components/Coach/CoachTeachPage.tsx:8185`
 - `src/services/coachFeatureService.test.ts:907`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/utils/justCaptured.test.ts:20`
@@ -330,7 +332,7 @@
 
 ### `detectBadHabits` (re-export) — 7 call sites
 - `src/services/badHabitDetector.ts:21`
-- `src/services/coachApi.ts:5350`
+- `src/services/coachApi.ts:5366`
 - `src/services/coachFeatureService.test.ts:130`
 - `src/services/coachFeatureService.test.ts:151`
 - `src/services/coachFeatureService.test.ts:170`
@@ -358,6 +360,7 @@
 - `src/services/coachFeatureService.trade.test.ts`
 - `src/services/gameThemeClassifier.test.ts`
 - `src/services/gradeGatesTeachingCost.test.ts`
+- `src/services/habitBothSeats.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/loosePattern.test.ts`
 - `src/services/methodBeat.test.ts`

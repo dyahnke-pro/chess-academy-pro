@@ -29,7 +29,8 @@ import { Chess } from 'chess.js';
 import { criticalityThresholds } from './criticalityScan';
 import { moverLossProof } from './exchangeLedger';
 import { MATE_HORIZON_CP } from './engineConstants';
-import { decisiveReason } from './decisiveReason';
+import { decisiveReason, reasonPosed } from './decisiveReason';
+import { emitDecisiveReason } from './decisiveReasonEvents';
 import type { AnalysisLine } from '../types';
 
 /** A mate is scored flat, for BOTH sides, on purpose: three moves that all mate
@@ -268,6 +269,8 @@ export function readCriticalMoment(input: {
       reads: { before: lines.map((l) => ({ rank: l.rank, evaluation: l.evaluation, mate: l.mate ?? null, moves: [...(l.moves ?? [])] }) as AnalysisLine), after: [], passBefore: [], passAfter: [] },
     });
     if (r?.kind === 'the' && r.about === 'move' && r.source === 'material' && r.core) bestReason = { text: r.core, line: r.line };
+    // Explained only: the record reads this ply through the game sweep.
+    if (r) emitDecisiveReason({ surface: 'review', kind: r.kind, source: r.source, about: r.about, gapCp: r.gapCp, stakeCp: r.stakeCp, posedTag: reasonPosed(r)?.tag ?? null, outcome: 'explained' });
   }
 
   return {

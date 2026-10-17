@@ -35,6 +35,7 @@ type AlgoEmissionKind =
   | 'home-opening-chosen'
   | 'analysis-batch-ordered'
   | 'search-depth'
+  | 'decisive-reason'
   | 'learn-turn-decision'
   | 'lane-evidence'
   | 'review-voice-package'
@@ -112,6 +113,11 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
     script: 'scripts/audit-home-opening-prod.mjs',
     contractMarker: 'ANALYSIS ORDER home-games-first-past-the-cap',
     emittedBy: 'src/services/gameAnalysisService.ts (analyzeAllGames via pickAnalysisBatch)',
+  },
+  'decisive-reason': {
+    script: 'scripts/audit-concept-gameplay-prod.mjs',
+    contractMarker: 'DECISIVE REASON rows keep the covering rule',
+    emittedBy: 'src/services/decisiveReasonEvents.ts (Learn own move, Review critical moments, chat why-best)',
   },
   'search-depth': {
     script: 'scripts/audit-search-depth-prod.mjs',

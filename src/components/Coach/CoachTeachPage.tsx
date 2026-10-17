@@ -37,7 +37,8 @@ import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from
 import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
-import { decisiveReason, reasonEarned, REASON_WAIT_CEILING_MS } from '../../services/decisiveReason';
+import { decisiveReason, reasonEarned, reasonPosed, REASON_WAIT_CEILING_MS } from '../../services/decisiveReason';
+import { emitDecisiveReason } from '../../services/decisiveReasonEvents';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { OPENING_PLIES, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching, type TeachingHint } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
@@ -11460,6 +11461,14 @@ export function CoachTeachPage(): JSX.Element {
                             { points: Math.min(theReason.stakeCp ?? 0, 2000) / 100, plies: 1 }, 'teach', 'reason');
                         }
                         const reasonTail = theReason?.kind === 'the' && theReason.source !== 'material' ? theReason.tail : null;
+                        // BOTH WAYS: the reason they found is the skill they
+                        // showed. Held here; a miss reaches the record through
+                        // the game sweep (lane rows are held-only).
+                        if (theReason) {
+                          const posed = reasonPosed(theReason);
+                          if (posed) recordHeld(posed.tag, posed.posedImportance, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length) || planToldBoardsRef.current.has(fenBefore.split(' ').slice(0, 2).join(' ')), gameId: learnMemRef.current.gameId });
+                          emitDecisiveReason({ surface: 'learn', kind: theReason.kind, source: theReason.source, about: theReason.about, gapCp: theReason.gapCp, stakeCp: theReason.stakeCp, posedTag: posed?.tag ?? null, outcome: posed ? 'held' : 'explained' });
+                        }
                         if (intent) {
                           // DUAL-USE (P4): an engine-proven purpose (prevents / prepares)
                           // is the no-plan question answered.

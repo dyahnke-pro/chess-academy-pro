@@ -70,3 +70,23 @@ describe('decisiveReason — the seat', () => {
     expect(r?.text).toMatch(/they (win|come out)|for a/);
   });
 });
+
+describe('decisiveReason — what the escalating walk caught (2026-10-17)', () => {
+  // White queen d1, black knight d5 with nothing guarding it; White to move.
+  const FEN = '4k3/8/8/3n4/8/8/P7/3QK3 w - - 0 1';
+  const reads = (lines: Array<{ moves: string[]; evaluation: number }>): IntentReads => ({
+    before: lines.map((l, i) => ({ rank: i + 1, evaluation: l.evaluation, mate: null, moves: l.moves })), after: [], passBefore: [], passAfter: [],
+  });
+  it('a one-move win says the move once ("Qxd5 — you win a knight", never "Qxd5 wins by force: Qxd5")', () => {
+    const r = decisiveReason({ fenBefore: FEN, san: 'Qxd5', seat: 'student', opponentLastSan: null, reads: reads([{ moves: ['d1d5'], evaluation: 320 }, { moves: ['a2a3'], evaluation: 0 }]) });
+    expect(r?.kind).toBe('the');
+    expect(r?.text).toMatch(/^Qxd5 — you win a knight\./);
+    expect(r?.text).not.toMatch(/Qxd5 wins by force: Qxd5/);
+  });
+  it('a move outside the engine\'s lines says so and names what it prefers', () => {
+    const r = decisiveReason({ fenBefore: FEN, san: 'a3', seat: 'student', opponentLastSan: null, reads: reads([{ moves: ['d1d5'], evaluation: 320 }, { moves: ['e1e2'], evaluation: 300 }]) });
+    expect(r?.kind).toBe('a');
+    expect(r?.text).toBe("a3 isn't one of the engine's choices here — it prefers Qxd5.");
+  });
+});
+

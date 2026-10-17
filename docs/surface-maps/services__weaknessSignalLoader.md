@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**97 lines · 3 exports · 7 importers · 3 tests · 0 audits**
+**109 lines · 4 exports · 8 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6165) — names `weaknessSignalLoader`
+- **The standard post-deploy ritual** (CLAUDE.md:6342) — names `weaknessSignalLoader`
 
 ## Who calls in
 
@@ -18,23 +18,27 @@
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/studentNeedLoader.ts`
 - `src/services/studentRecord.ts`
+- `src/services/tacticAlertService.ts`
 - `src/services/weaknessSignalLoader.green.test.ts`
 
 ## Exports and every call site
 
-### `loadWeaknessSignals` (function) — 8 call sites
-- `src/components/Openings/OpeningPlayMode.tsx:64`
+### `loadWeaknessSignals` (function) — 9 call sites
+- `src/components/Openings/OpeningPlayMode.tsx:72`
 - `src/hooks/useWeaknessSignals.ts:22`
-- `src/services/coachFeatureService.ts:4935`
+- `src/services/coachFeatureService.ts:5078`
 - `src/services/loopCloses.review.integration.test.ts:81`
-- `src/services/puzzleService.ts:312`
-- `src/services/studentNeedLoader.ts:196`
+- `src/services/puzzleService.ts:355`
+- `src/services/studentNeedLoader.ts:212`
 - `src/services/studentRecord.ts:17`
+- `src/services/tacticAlertService.ts:606`
 - `src/services/weaknessSignalLoader.green.test.ts:39`
 
-### `loadProvenTags` (function) — 2 call sites
+### `loadProvenTags` (function) — 1 call site
 - `src/hooks/useWeaknessSignals.ts:38`
-- `src/services/studentRecord.ts:24`
+
+### `loadFadeLevels` (function) — 1 call site
+- `src/hooks/useWeaknessSignals.ts:53`
 
 ### `invalidateWeaknessSignals` (function) — 3 call sites
 - `src/services/loopCloses.review.integration.test.ts:61`
@@ -45,6 +49,7 @@
 
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/oneOpeningKey.test.ts`
+- `src/services/tacticAlertService.test.ts`
 - `src/services/weaknessSignalLoader.green.test.ts`
 
 ## Audits that reach it

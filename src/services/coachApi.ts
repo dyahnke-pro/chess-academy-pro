@@ -137,6 +137,8 @@ import { askBackAtCatchAll, type ChatKind } from '../coach/chatTurn';
 // Side-effect import keeps the audit script free of source-path knowledge.
 import './masterPlayAuditBridge';
 import { movePurpose, moveReason } from './movePurposeEngine';
+import { reasonPosed } from './decisiveReason';
+import { emitDecisiveReason } from './decisiveReasonEvents';
 /** The purpose of the game's last move (`movePurpose`), from the start
  *  position. Null when the history does not replay or the engine shows none. */
 async function lastMovePurpose(history: readonly string[], seat: 'student' | 'opponent'): Promise<string | null> {
@@ -147,9 +149,14 @@ async function lastMovePurpose(history: readonly string[], seat: 'student' | 'op
     // THE reason when the move is one the engine weighs; its purpose otherwise
     // (a move outside the engine's top lines has no gap to account for).
     const reason = await moveReason(c.fen(), san, seat, history.length > 1 ? history[history.length - 2] : null);
-    if (reason && reason.kind !== 'close') return reason.text;
+    if (reason?.kind === 'the') return reason.text;
     const it = await movePurpose(c.fen(), san, seat);
-    return it?.text ?? reason?.text ?? null;
+    // A close call adds nothing to the move's own purpose ("…e6 is about as
+    // good" on move one — escalating walk 2026-10-17); a move outside the
+    // engine's choices says so beside what it does.
+    const outside = reason?.kind === 'a' && reason.source === null ? reason.text : null;
+    if (it?.text) return outside ? `${it.text} ${outside}` : it.text;
+    return outside ?? (reason?.kind === 'a' ? reason.text : null);
   } catch { return null; }
 }
 
@@ -5882,6 +5889,7 @@ export async function getCoachChatResponse(
             const history = grounding.moveHistory ?? [];
             const reason = await moveReason(fen, reasonSan, seat, history.length ? history[history.length - 1] : null);
             if (reason) {
+              emitDecisiveReason({ surface: 'chat', kind: reason.kind, source: reason.source, about: reason.about, gapCp: reason.gapCp, stakeCp: reason.stakeCp, posedTag: reasonPosed(reason)?.tag ?? null, outcome: 'explained' });
               const walk = reason.line ? walkableLine(reason.line.fen, reason.line.sans, reasonSan) : null;
               if (walk) lastCoachLines = [walk];
               let from = '';
@@ -5944,11 +5952,6 @@ export async function getCoachChatResponse(
           const sc: 'white' | 'black' =
             grounding.studentColor ??
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
-          const base = assembleOpponentMoveAnswer({
-            fen: grounding.currentFen,
-            moveHistory: [...grounding.moveHistory],
-            studentColor: sc,
-          });
           // What their move COST them and the tempo count — the Learn computers.
           const theirPly = lastPlyOf(grounding.moveHistory, sc === 'white' ? 'black' : 'white');
           const bestHere = grounding.engineBestMoveUci && typeof grounding.engineEvalCp === 'number'
@@ -5957,8 +5960,16 @@ export async function getCoachChatResponse(
           const theirExtra = theirPly === null ? [] : theirMoveAnswerLines(grounding.moveHistory, theirPly, sc === 'white' ? 'w' : 'b', bestHere);
           // WHAT THEIR MOVE IS FOR — the one purpose computer Learn and the
           // review speak (`movePurpose`), so the chat gives the same reason.
-          const theirPurpose = base ? await lastMovePurpose(grounding.moveHistory, 'opponent') : null;
+          const theirPurpose = await lastMovePurpose(grounding.moveHistory, 'opponent');
           const extra = [...(theirPurpose ? [theirPurpose] : []), ...theirExtra];
+          // Computed AFTER the other computers, so a move they found a point
+          // for is never also called quiet.
+          const base = assembleOpponentMoveAnswer({
+            fen: grounding.currentFen,
+            moveHistory: [...grounding.moveHistory],
+            studentColor: sc,
+            pointKnown: extra.length > 0,
+          });
           const answer = base && extra.length > 0 ? { ...base, facts: `${base.facts} ${extra.join(' ')}` } : base;
           if (answer) {
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opponent-move', preferRaw: true });

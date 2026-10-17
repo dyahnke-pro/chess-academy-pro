@@ -587,7 +587,7 @@ export async function recordCapabilityEvidence(args: {
  * the question (it would not speak otherwise) and the student's move answered
  * it. Writers pass `prompted` honestly; a prompted row counts as neither.
  */
-export async function recordLaneEvidence(args: {
+type LaneEvidenceArgs = {
   tag: MisconceptionTagId;
   outcome: CapabilityOutcome;
   fen: string;
@@ -596,8 +596,29 @@ export async function recordLaneEvidence(args: {
   origin: CapabilityEvidenceRecord['origin'];
   prompted: boolean;
   sourceGameId?: string;
-}): Promise<boolean> {
+};
+/** Lane writes run one at a time, so two lanes crediting the same move in one
+ *  tick cannot both pass the duplicate check before either writes. */
+let laneWriteChain: Promise<unknown> = Promise.resolve();
+export function recordLaneEvidence(args: LaneEvidenceArgs): Promise<boolean> {
+  const run = laneWriteChain.then(() => writeLaneEvidence(args), () => writeLaneEvidence(args));
+  laneWriteChain = run;
+  return run;
+}
+async function writeLaneEvidence(args: LaneEvidenceArgs): Promise<boolean> {
+  // ONE MOVE POSES A SKILL ONCE (2026-10-17): several lanes can credit the same
+  // tag on the same move (the intent, the found move, the decisive reason), and
+  // each row would count toward green as if it were a separate proof.
+  // Read off the store itself (survives a reload), scoped to ONE game: the same
+  // position met in another game is new evidence.
   try {
+    if (args.sourceGameId) {
+      const board = args.fen.split(' ').slice(0, 4).join(' ');
+      const dup = await db.capabilityEvidence.where('[tag+outcome]').equals([args.tag, args.outcome])
+        .filter((r) => r.sourceGameId === args.sourceGameId && r.origin === args.origin && r.playedSan === args.playedSan && r.fen.split(' ').slice(0, 4).join(' ') === board)
+        .count();
+      if (dup > 0) return false;
+    }
     await db.capabilityEvidence.add({
       id: newId(), tag: args.tag, outcome: args.outcome, fen: args.fen, playedSan: args.playedSan,
       posedImportance: args.posedImportance, recordedAt: Date.now(), origin: args.origin, prompted: args.prompted,

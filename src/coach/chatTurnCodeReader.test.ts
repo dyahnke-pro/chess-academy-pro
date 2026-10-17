@@ -83,3 +83,28 @@ describe('the best-move question is read in code (all-screens walk 2026-10-09: 1
     expect(read(q)?.kind).not.toBe('best-move');
   });
 });
+
+describe('the engine\'s main line, asked for without naming a move (escalating walk 2026-10-17)', () => {
+  const board = { fen: '4k3/8/8/3n4/8/8/P7/3QK3 w - - 0 1', history: [], studentColor: 'white' as const };
+  it('reads "calculate the main line six moves deep" as the line computer, twelve plies', () => {
+    const t = readTurnInCode('Calculate the main line six moves deep — where does it end up?', board);
+    expect(t?.kind).toBe('line-outcome');
+    expect(t?.topic).toBe('main-line:12');
+  });
+  it('"how does it go from here?" is the main line too; a named line keeps its moves', () => {
+    expect(readTurnInCode('How does it go from here?', board)?.topic).toBe('main-line:10');
+    expect(readTurnInCode('What happens after Qxd5 Ke7?', board)?.topic ?? '').not.toMatch(/main-line/);
+  });
+});
+
+
+describe('"what did their last move do?" is read in code (escalating walk 2026-10-17: the model answered with the best move)', () => {
+  // 1.e4 e5 — White to move, the student is White, Black just played e5.
+  const board = { fen: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', history: ['e4', 'e5'], studentColor: 'white' as const };
+  it.each(['What did their last move do?', 'why did they play that?', 'Why did they play their last move — what is THE reason, not just a reason?', 'what did the last move do?'])('%s → their move', (q) => {
+    expect(readTurnInCode(q, board)?.kind).toBe('what-did-their-move-change');
+  });
+  it('"what did my last move do?" is the student\'s own move', () => {
+    expect(readTurnInCode('What did my last move do?', board)).toMatchObject({ kind: 'retrospective-move', referents: [{ type: 'move', san: 'e4' }] });
+  });
+});
