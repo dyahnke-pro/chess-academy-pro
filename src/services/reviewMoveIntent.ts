@@ -10,6 +10,7 @@ import { Chess } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { lookupPositionEvals, type CachedEval } from './positionEvalCache';
 import { intentWithFallback, nullMoveFen } from './movePurpose';
+import { preventsNamedIdea, STOPPED_THEIR_IDEA } from './moveIntent';
 import { storedMate } from './engineConstants';
 
 export interface IntentMoveInput {
@@ -55,9 +56,22 @@ export function intentsFromReads(
   const out = new Map<number, ReviewIntent>();
   const start = new Chess().fen();
   const studentWB = student === 'white' ? 'w' : 'b';
+  // THEIR PREPARED MOVE (unified with Learn, 2026-10-17): what each of their
+  // quiet moves prepared, so the student's next move that takes it away is
+  // credited as the prevention it is — the same rule Learn speaks.
+  let theirPrep: { uci: string; fen: string } | null = null;
   moves.forEach((m, i) => {
     const fenBefore = i > 0 ? moves[i - 1].fenAfter : start;
-    if (fenBefore.split(' ')[1] !== studentWB) return;
+    if (fenBefore.split(' ')[1] !== studentWB) {
+      theirPrep = null;
+      if (/[x+#]/.test(m.san)) return;
+      const b = lineOf(reads.get(i)); const a = lineOf(reads.get(i + 1));
+      if (!b.length || !a.length) return;
+      const pb = nullMoveFen(fenBefore);
+      const theirs = intentWithFallback(fenBefore, m.san, { before: b, after: a, passBefore: pb ? lineOf(passReads.get(pb)) : [], passAfter: [] }, 'opponent');
+      if (theirs?.prepares) theirPrep = { uci: theirs.prepares.uci, fen: m.fenAfter };
+      return;
+    }
     // A capture's point is the trade; a check's is the check.
     if (/[x+#]/.test(m.san)) return;
     const before = lineOf(reads.get(i));
@@ -67,7 +81,9 @@ export function intentsFromReads(
     // threatens next; without them only the engine's own line speaks.
     const passOf = (fen: string): AnalysisLine[] => { const p = nullMoveFen(fen); return p ? lineOf(passReads.get(p)) : []; };
     const intent = intentWithFallback(fenBefore, m.san, { before, after, passBefore: passOf(fenBefore), passAfter: passOf(m.fenAfter) }, 'student');
-    if (intent) out.set(m.ply, { text: intent.text, squares: intent.squares });
+    if (!intent) return;
+    const stopped = !!intent.prevents && preventsNamedIdea(theirPrep, fenBefore, intent.prevents.uci);
+    out.set(m.ply, { text: stopped ? `${intent.text} ${STOPPED_THEIR_IDEA}` : intent.text, squares: intent.squares });
   });
   return out;
 }

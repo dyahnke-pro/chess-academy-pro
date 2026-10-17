@@ -600,3 +600,22 @@ export function intentRule(
   return ruleForPurpose(fenWherePlayed, intent.prepares.san, mover, taught, intent.about);
 }
 
+
+/** PREVENTION, CLOSED — one rule for every surface (A-plan P2, unified
+ *  2026-10-17). Their quiet move prepared `prep.uci` on the board `prep.fen`;
+ *  the student's move from that same board took exactly that move away.
+ *  Compared on the board (placement, turn, castling, en passant), never on the
+ *  clocks. */
+export function preventsNamedIdea(prep: { uci: string; fen: string } | null, fenBefore: string, stoppedUci: string): boolean {
+  if (!prep) return false;
+  const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+  return key(prep.fen) === key(fenBefore) && prep.uci.slice(0, 4) === stoppedUci.slice(0, 4);
+}
+
+/** The tie-back said after the stop is named. */
+export const STOPPED_THEIR_IDEA = 'That was the idea behind their last move.';
+
+/** What a prevented threat was worth, landed now (it is already stopped). */
+export function preventStakes(prevents: { threatCp: number } | null | undefined): { points: number; plies: number } | undefined {
+  return prevents && prevents.threatCp > 0 ? { points: prevents.threatCp / 100, plies: 0 } : undefined;
+}
