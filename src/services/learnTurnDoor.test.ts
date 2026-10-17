@@ -644,3 +644,9 @@ describe('their next idea speaks by what it would win (A-plan P2, prod Learn 202
     expect(TEACH_CODE).not.toMatch(/for \(const k of (?:theirRule|prepRule)\.keys\) learnMemRef\.current\.principleTaught\.add/);
   });
 });
+
+describe('a plan trial whose lines were all graded away is not adopted (prod Learn 2026-10-17)', () => {
+  it('Learn adopts an empty trial only when nothing was produced', () => {
+    expect(TEACH_CODE).toMatch(/if \(plansNow\.length === 0\) adoptPlanTrial\(planLive, planTrial, \[\], \[\]\);\s*else if \(planOffered\.length > 0\) planTrialRef\.current =/);
+  });
+});
