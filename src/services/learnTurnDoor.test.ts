@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { decideTurn, LEARN_LANES, type LearnLane } from './learnTurnDoor';
 import { costStakes, mateStakes } from './factStakes';
 import { countMethodTeaching, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA } from './learnBoardTeaching';
+import { readBoardAll } from './boardComputers';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 const TEACH = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
@@ -689,5 +690,19 @@ describe('prevention closes its loop (A-plan P2, 2026-10-17)', () => {
   it('Learn remembers their prepared move and stakes + tags the stop', () => {
     expect(TEACH_CODE).toMatch(/learnMemRef\.current\.theirPrep = \{ uci: prep\.uci, fen: fenAfterReply \}/);
     expect(TEACH_CODE).toMatch(/preventStakes\(intent\.prevents\), undefined, intent\.prevents \? 'stopped' : undefined\)/);
+  });
+});
+
+describe('a structure judgement is a reason, never an aside (A-plan P3, prod Learn: held 10 of 23)', () => {
+  it('the registry carries the teaching role and Learn hands it to the door', () => {
+    const KP = '3q2k1/5ppp/8/3p4/4p3/2N3P1/PP3PBP/6K1 w - - 0 20';
+    const reads = readBoardAll('structureBoard', { fen: KP, student: 'w' });
+    const key = reads.find((r) => /key pawn/.test(r.text));
+    expect(key?.role).toBe('teach');
+    const lead = { lane: 'movePoint' as const, proof: NO_PROOF.stated, text: 'That gets your knight into the game.', fen: KP, squares: ['c3'], stakes: { points: 3, plies: 0 } };
+    const sj = { lane: 'structureJudgement' as const, proof: NO_PROOF.stated, text: key!.text, fen: KP, squares: key!.squares, role: key!.role };
+    expect(decideTurn([lead, sj]).spoke).toContain('structureJudgement');
+    expect(decideTurn([lead, { ...sj, role: undefined }]).spoke).not.toContain('structureJudgement');
+    expect((TEACH_CODE.match(/'structureJudgement', st\.proof, st\.squares, \[st\.key\], undefined, undefined, undefined, st\.stakes, st\.role\)/g) ?? []).length).toBe(2);
   });
 });

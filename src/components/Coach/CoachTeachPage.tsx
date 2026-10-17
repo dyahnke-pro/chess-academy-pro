@@ -10452,7 +10452,7 @@ export function CoachTeachPage(): JSX.Element {
                       for (const st of [
                         ...readBoardAll('structureBoard', { fen: probe.fen(), student: meS }),
                         ...readBoardAll('structureLines', { fen: probe.fen(), student: meS, lines: tl3.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate })) }),
-                      ]) queueSpokenHint(probe.fen(), st.text, 'structureJudgement', st.proof, st.squares, [st.key], undefined, undefined, undefined, st.stakes);
+                      ]) queueSpokenHint(probe.fen(), st.text, 'structureJudgement', st.proof, st.squares, [st.key], undefined, undefined, undefined, st.stakes, st.role);
                     } catch { /* the structure read is a bonus, never a blocker */ }
                     try {
                       const pv = studentBest?.topLines?.[0]?.moves;
@@ -11489,7 +11489,7 @@ export function CoachTeachPage(): JSX.Element {
                   // leaves open — through the one registry.
                   if (replySan) {
                     for (const st of readBoardAll('structureTheirMove', { fenBefore: move.fen, san: replySan, student: playerColor === 'white' ? 'w' : 'b' })) {
-                      queueSpokenHint(fenAfterReply, st.text, 'structureJudgement', st.proof, st.squares, [st.key], undefined, undefined, undefined, st.stakes);
+                      queueSpokenHint(fenAfterReply, st.text, 'structureJudgement', st.proof, st.squares, [st.key], undefined, undefined, undefined, st.stakes, st.role);
                     }
                   }
                   const split = splitPositionTeaching(fenAfterReply, playerColor === 'white' ? 'w' : 'b');

@@ -35,6 +35,7 @@ import { planThreadTurn, type PlanThread } from './planThread';
 import { geometryReads, type GeometryContext } from './tacticGeometry';
 import type { TacticType } from '../types';
 import { studentMoveStructure, theirMoveStructure, boardStructure, linesStructure, type StructureRead } from './structureReads';
+import { STRUCTURE_ROLE } from './structureJudgementKit';
 
 export type CoachSurface = 'learn' | 'review' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
@@ -74,6 +75,9 @@ export interface BoardRead {
    *  elsewhere `idea`, the habit without the answer. */
   namesMove?: boolean;
   idea?: string;
+  /** Teach or describe — the door holds a description as an aside, never a
+   *  reason (`LaneFact.role`). Set where the computer knows. */
+  role?: 'teach' | 'describe';
 }
 
 /** Each computer's own context — what it needs from the surface, no more. */
@@ -142,7 +146,7 @@ const WEAK_OWED = { not: 'owed — one-coach P3: the record keeps the proof' } a
 function structureRead(r: StructureRead): BoardRead {
   // A judgement that names the move carries its held form as the `idea`
   // (Learn names no move unasked, David 2026-10-10).
-  return { text: r.text, proof: r.proof, squares: r.squares, key: r.key, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.proof.line ? { lines: [r.proof.line] } : {}), ...(r.heldForm ? { namesMove: true, idea: r.heldForm.text } : {}) };
+  return { text: r.text, proof: r.proof, squares: r.squares, key: r.key, role: STRUCTURE_ROLE[r.act], ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.proof.line ? { lines: [r.proof.line] } : {}), ...(r.heldForm ? { namesMove: true, idea: r.heldForm.text } : {}) };
 }
 const STRUCT_TACTICS = { not: 'a structural judgement is about a game\'s plan; a puzzle poses one tactic' } as const;
 const STRUCT_WEAK = { not: 'owed — the weakness record keeps tags, not the structure read; the held rows ride recordTeachingEvidence' } as const;

@@ -41,6 +41,23 @@ export type StructureAct =
   | 'small-edges'
   | 'fighting-line';
 
+/** TEACH OR DESCRIBE, per act — every structure judgement today states its
+ *  consequence ("so that square stays a hole", "and if c5 drops, d6 goes with
+ *  it"), so every one is a reason (A-plan P3: the door held these as asides 10
+ *  of 23 times because no role reached it). A `Record`, so a new act fails to
+ *  compile until someone says whether it teaches. */
+export const STRUCTURE_ROLE: Record<StructureAct, 'teach' | 'describe'> = {
+  'second-weakness': 'teach', restriction: 'teach', 'right-idea-wrong-piece': 'teach',
+  'keep-plan-change-route': 'teach', 'plan-over-one-move': 'teach', 'placement-future-line': 'teach',
+  'recapture-sealed-weakness': 'teach', 'en-passant-structure': 'teach', 'semi-outpost': 'teach',
+  'fix-on-bishop-colour': 'teach', 'key-pawn': 'teach', formation: 'teach',
+  'break-trades-weak-pawn': 'teach', 'dont-repair': 'teach', 'piece-blocks-own-pawn': 'teach',
+  'safe-square-route': 'teach', 'masked-weakness': 'teach', 'mirrored-asymmetry': 'teach',
+  'file-entry-covered': 'teach', 'dont-plug-file': 'teach', 'unmoved-units': 'teach',
+  'mutual-restriction': 'teach', 'file-opened-for-defender': 'teach', 'small-edges': 'teach',
+  'fighting-line': 'teach',
+};
+
 export interface StructureRead {
   act: StructureAct;
   text: string;
