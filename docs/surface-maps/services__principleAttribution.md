@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1852 lines · 14 exports · 52 importers · 38 tests · 1 audits**
+**1950 lines · 14 exports · 55 importers · 41 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6327) — names `FundamentalId`
+- **The standard post-deploy ritual** (CLAUDE.md:6343) — names `FundamentalId`
 
 ## Who calls in
 
@@ -42,6 +42,8 @@
 - `src/services/liveFundamental.ts`
 - `src/services/misconceptionClassifier.ts`
 - `src/services/principleAttribution.guardRemoval.test.ts`
+- `src/services/principleAttribution.moveOrder.test.ts`
+- `src/services/principleAttribution.pinBreak.test.ts`
 - `src/services/principleAttribution.pinPressure.test.ts`
 - `src/services/principleAttribution.section14.test.ts`
 - `src/services/principleAttribution.test.ts`
@@ -64,11 +66,12 @@
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.ts`
 - `src/services/yieldHonoured.test.ts`
+- `src/services/zzorder.test.ts`
 
 ## Exports and every call site
 
 ### `FUNDAMENTAL_IDS` (const) — 1 call site
-- `src/services/fundamentalsCatalog.ts:187`
+- `src/services/fundamentalsCatalog.ts:194`
 
 ### `FundamentalId` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -77,7 +80,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isPositionalFundamental` (function) — 1 call site
-- `src/services/misconceptionClassifier.ts:278`
+- `src/services/misconceptionClassifier.ts:279`
 
 ### `PrincipleEvidence` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -95,7 +98,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `captureIsTrade` (function) — 1 call site
-- `src/services/misconceptionClassifier.ts:323`
+- `src/services/misconceptionClassifier.ts:324`
 
 ### `planTargets` (function) — 2 call sites
 - `src/services/principleAttribution.section14.test.ts:141`
@@ -104,7 +107,7 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:144`
 
-### `attributePrinciples` (function) — 107 call sites
+### `attributePrinciples` (function) — 117 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/blockedOwnRetreat.test.ts:23`
 - `src/services/blockedOwnRetreat.test.ts:32`
@@ -119,15 +122,24 @@
 - `src/services/claimTruth.manual.test.ts:179`
 - `src/services/claimTruth.manual.test.ts:184`
 - `src/services/claimTruth.manual.test.ts:192`
-- `src/services/coachFeatureService.ts:770`
+- `src/services/coachFeatureService.ts:775`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:153`
-- `src/services/misconceptionClassifier.ts:261`
+- `src/services/misconceptionClassifier.ts:262`
 - `src/services/principleAttribution.guardRemoval.test.ts:17`
 - `src/services/principleAttribution.guardRemoval.test.ts:33`
 - `src/services/principleAttribution.guardRemoval.test.ts:40`
 - `src/services/principleAttribution.guardRemoval.test.ts:50`
 - `src/services/principleAttribution.guardRemoval.test.ts:63`
+- `src/services/principleAttribution.moveOrder.test.ts:16`
+- `src/services/principleAttribution.moveOrder.test.ts:29`
+- `src/services/principleAttribution.moveOrder.test.ts:33`
+- `src/services/principleAttribution.pinBreak.test.ts:23`
+- `src/services/principleAttribution.pinBreak.test.ts:24`
+- `src/services/principleAttribution.pinBreak.test.ts:33`
+- `src/services/principleAttribution.pinBreak.test.ts:45`
+- `src/services/principleAttribution.pinBreak.test.ts:46`
+- `src/services/principleAttribution.pinBreak.test.ts:55`
 - `src/services/principleAttribution.pinPressure.test.ts:15`
 - `src/services/principleAttribution.pinPressure.test.ts:34`
 - `src/services/principleAttribution.pinPressure.test.ts:41`
@@ -180,10 +192,10 @@
 - `src/services/principleAttributionEvalPv.test.ts:146`
 - `src/services/principleAttributionEvalPv.test.ts:149`
 - `src/services/principleVoice.test.ts:9`
-- `src/services/principleVoice.test.ts:140`
-- `src/services/principleVoice.test.ts:153`
-- `src/services/principleVoice.test.ts:157`
-- `src/services/principleVoice.test.ts:161`
+- `src/services/principleVoice.test.ts:141`
+- `src/services/principleVoice.test.ts:154`
+- `src/services/principleVoice.test.ts:158`
+- `src/services/principleVoice.test.ts:162`
 - `src/services/replayFence.bowdler1000.test.ts:37`
 - `src/services/replayFence.modern1690.test.ts:32`
 - `src/services/replayFence.sicilian1200.test.ts:29`
@@ -212,14 +224,15 @@
 - `src/services/yieldHonoured.test.ts:33`
 - `src/services/yieldHonoured.test.ts:69`
 - `src/services/yieldHonoured.test.ts:70`
+- `src/services/zzorder.test.ts:35`
 
 ### `pvUciToSan` (function) — 11 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
 - `src/services/autoAnalyzeGame.ts:414`
 - `src/services/autoAnalyzeGame.ts:417`
-- `src/services/coachFeatureService.ts:775`
-- `src/services/coachFeatureService.ts:777`
+- `src/services/coachFeatureService.ts:780`
+- `src/services/coachFeatureService.ts:782`
 - `src/services/discussionPractice.ts:355`
 - `src/services/discussionPractice.ts:363`
 - `src/services/liveFundamental.ts:143`
@@ -245,6 +258,8 @@
 - `src/services/learnFundamentalNarration.test.ts`
 - `src/services/learnWalkBlumenfeld.test.ts`
 - `src/services/principleAttribution.guardRemoval.test.ts`
+- `src/services/principleAttribution.moveOrder.test.ts`
+- `src/services/principleAttribution.pinBreak.test.ts`
 - `src/services/principleAttribution.pinPressure.test.ts`
 - `src/services/principleAttribution.section14.test.ts`
 - `src/services/principleAttribution.test.ts`
@@ -266,6 +281,7 @@
 - `src/services/walkOct2a.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/yieldHonoured.test.ts`
+- `src/services/zzorder.test.ts`
 
 ## Audits that reach it
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**246 lines · 5 exports · 3 importers · 1 tests · 0 audits**
+**252 lines · 5 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/boardComputers.ts`
 - `src/services/pinBreak.test.ts`
 - `src/services/pinPressure.ts`
+- `src/services/principleAttribution.ts`
 
 ## Exports and every call site
 
@@ -24,9 +25,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PinBreak` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `findPinBreaks` (function) — 9 call sites
-- `src/services/boardComputers.ts:129`
-- `src/services/boardComputers.ts:138`
+### `findPinBreaks` (function) — 13 call sites
+- `src/services/boardComputers.ts:157`
+- `src/services/boardComputers.ts:166`
 - `src/services/pinBreak.test.ts:18`
 - `src/services/pinBreak.test.ts:22`
 - `src/services/pinBreak.test.ts:25`
@@ -34,10 +35,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinBreak.test.ts:31`
 - `src/services/pinBreak.test.ts:32`
 - `src/services/pinPressure.ts:145`
+- `src/services/principleAttribution.ts:882`
+- `src/services/principleAttribution.ts:890`
+- `src/services/principleAttribution.ts:910`
+- `src/services/principleAttribution.ts:912`
 
 ### `pinBreakLine` (function) — 8 call sites
-- `src/services/boardComputers.ts:132`
-- `src/services/boardComputers.ts:141`
+- `src/services/boardComputers.ts:160`
+- `src/services/boardComputers.ts:169`
 - `src/services/pinBreak.test.ts:33`
 - `src/services/pinBreak.test.ts:34`
 - `src/services/pinBreak.test.ts:37`
@@ -46,8 +51,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinBreak.test.ts:41`
 
 ### `pinBreakProof` (function) — 3 call sites
-- `src/services/boardComputers.ts:131`
-- `src/services/boardComputers.ts:140`
+- `src/services/boardComputers.ts:159`
+- `src/services/boardComputers.ts:168`
 - `src/services/pinBreak.test.ts:40`
 
 ## Tests
