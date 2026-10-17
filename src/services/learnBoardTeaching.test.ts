@@ -154,3 +154,18 @@ describe('every student move gets its own reason — the board teacher as fallba
     expect(h?.text).toMatch(/^d5 /);
   });
 });
+
+describe('the board teacher\'s reason keeps the squares it names (A-plan P5)', () => {
+  it('Nf3 against …d5: the squares named are its proof, marked on the board', async () => {
+    const { boardTeacherPoint } = await import('./learnBoardTeaching');
+    const h = boardTeacherPoint('rnbqkbnr/ppp1pppp/8/3p4/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 2', 'Nf3');
+    expect(h?.squares).toEqual(expect.arrayContaining(['d4', 'e5']));
+    expect(h?.proof && typeof h.proof === 'object' && 'kind' in h.proof ? h.proof.kind : null).toBe('squares');
+  });
+  it('a reading that names no square stays a description (castling)', async () => {
+    const { boardTeacherPoint } = await import('./learnBoardTeaching');
+    const h = boardTeacherPoint('r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5', 'O-O');
+    expect(h?.squares ?? []).toEqual([]);
+  });
+});
+

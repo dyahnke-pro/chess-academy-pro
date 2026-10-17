@@ -317,7 +317,22 @@ function centerFight(phrases: PhraseMemory | null, chess: Chess, color: 'w' | 'b
   ]);
 }
 
+/** A move's teaching and the squares it names (see `buildReviewMoveTeachingFact`). */
+export interface MoveTeachingFact { text: string; squares: string[] }
+
 export function buildReviewMoveTeaching(
+  fenBefore: string,
+  san: string,
+  moverIsStudent: boolean,
+  phrases: PhraseMemory | null = null,
+): string | null {
+  return buildReviewMoveTeachingFact(fenBefore, san, moverIsStudent, phrases)?.text ?? null;
+}
+
+/** `buildReviewMoveTeaching`, keeping the squares each reading named (A-plan
+ *  P5): the board-teacher's reason went out with no squares, so a computed
+ *  board fact spoke as an unproven description. */
+export function buildReviewMoveTeachingFact(
   fenBefore: string,
   san: string,
   // WHOSE side of the board is "theirs" (David 2026-09-15, from a real prod
@@ -331,7 +346,10 @@ export function buildReviewMoveTeaching(
   /** THE LESSON'S PHRASE MEMORY (the DNA template: say an idea in full once,
    *  then refer to it). Null for a one-off read. */
   phrases: PhraseMemory | null = null,
-): string | null {
+): MoveTeachingFact | null {
+  /** The sentence, and the squares it names beyond the move itself — empty
+   *  where it names none (a bare "castles" is not a board proof). */
+  const out = (text: string | null, squares: readonly string[] = []): MoveTeachingFact | null => (text ? { text, squares: [...squares] } : null);
   const chess = new Chess(fenBefore);
   let mv: Move;
   try {
@@ -345,10 +363,10 @@ export function buildReviewMoveTeaching(
 
   // Castling — the idea is king safety + rook activation, not "castles".
   if (mv.san.startsWith('O-O-O')) {
-    return sayIdea(phrases, 'castle-long', ['The king finds shelter on the queenside and the rook swings toward the open center.', 'The king goes long, and the rook comes to the center.']);
+    return out(sayIdea(phrases, 'castle-long', ['The king finds shelter on the queenside and the rook swings toward the open center.', 'The king goes long, and the rook comes to the center.']));
   }
   if (mv.san.startsWith('O-O')) {
-    return sayIdea(phrases, 'castle', ['The king is tucked safely away and the rook connects to the center.', 'The king steps out of the middle.', 'The king is castled and the rook is in play.']);
+    return out(sayIdea(phrases, 'castle', ['The king is tucked safely away and the rook connects to the center.', 'The king steps out of the middle.', 'The king is castled and the rook is in play.']));
   }
 
   // A CONCRETE THREAT LEADS over the developing gloss (David 2026-09-07: "it
@@ -384,7 +402,7 @@ export function buildReviewMoveTeaching(
   // a concrete winnable threat.
   if (!winnableTarget) {
     const unpin = unpinPoint(fenBefore, chess, mv, moverIsStudent);
-    if (unpin) return unpin;
+    if (unpin) return out(unpin);
   }
 
   // Minor-piece development — carry what the picture doesn't: the squares it
@@ -401,14 +419,14 @@ export function buildReviewMoveTeaching(
   if (mv.piece === 'n' && isDevelopingGloss) {
     const targets = knightCentralTargets(chess, mv.to, mv.color);
     const fight = targets.length ? centerFight(phrases, chess, mv.color, moverIsStudent, 'knight', targets, '') : null;
-    if (fight) return fight;
+    if (fight) return out(fight, targets);
     // no central target → fall through to the light developing tag
   }
   if (mv.piece === 'b' && isDevelopingGloss) {
-    if (FIANCHETTO.has(mv.to)) return 'The bishop takes aim along the long diagonal.';
+    if (FIANCHETTO.has(mv.to)) return out('The bishop takes aim along the long diagonal.');
     const targets = bishopCentralTargets(chess, mv.to, mv.color);
     const fight = targets.length ? centerFight(phrases, chess, mv.color, moverIsStudent, 'bishop', targets, '') : null;
-    if (fight) return fight;
+    if (fight) return out(fight, targets);
     // no central target → fall through to the light developing tag
   }
 
@@ -428,9 +446,9 @@ export function buildReviewMoveTeaching(
         (f) => !before.pawns.halfOpenFiles[moverKey].includes(f),
       );
       if (gainedHalfOpen.length) {
-        return target
+        return out(target
           ? `Opens the ${gainedHalfOpen[0]}-file for the rooks — and ${target}.`
-          : `Opens the ${gainedHalfOpen[0]}-file for the rooks.`;
+          : `Opens the ${gainedHalfOpen[0]}-file for the rooks.`);
       }
       const newOutpost = after.outposts.find(
         (o) => o.color === moverKey && !before.outposts.some((b) => b.square === o.square && b.color === o.color),
@@ -440,12 +458,12 @@ export function buildReviewMoveTeaching(
         // ever challenge it (that's what the detector guarantees).
         // A pawn move only makes the square safe for the piece already there —
         // name that piece (review tape 2026-10-15: "plant an outpost" of e6).
-        return `Makes ${newOutpost.square} an outpost for the ${PIECE_NOUN[newOutpost.piece] ?? 'piece'} — no enemy pawn can ever challenge it.`;
+        return out(`Makes ${newOutpost.square} an outpost for the ${PIECE_NOUN[newOutpost.piece] ?? 'piece'} — no enemy pawn can ever challenge it.`, [newOutpost.square]);
       }
       if (target) {
         // A pawn move that created a weakness without opening a file / outpost
         // (e.g. a capture that isolates an enemy pawn) — the target IS the point.
-        return `${mv.captured ? 'The capture means' : 'Now'} ${target}.`;
+        return out(`${mv.captured ? 'The capture means' : 'Now'} ${target}.`);
       }
     }
     // Quiet central push (not a capture) — stake the center / gain space. Not
@@ -453,7 +471,7 @@ export function buildReviewMoveTeaching(
     // and "f4, gains space and cramps the opponent" was said of a runner in a
     // pawn race (calc hand walk 2026-10-01).
     if (!mv.captured && CENTER.has(mv.to) && hasPieces(chess)) {
-      return sayIdea(phrases, 'pawn-center', ['Stakes a claim in the center and opens lines for the pieces.', 'Takes its share of the center.', 'It adds another pawn to the center.']);
+      return out(sayIdea(phrases, 'pawn-center', ['Stakes a claim in the center and opens lines for the pieces.', 'Takes its share of the center.', 'It adds another pawn to the center.']));
     }
     if (!mv.captured && BROAD_CENTER.has(mv.to) && (toRank === 4 || toRank === 5) && hasPieces(chess)) {
       // A c/f-file pawn that ATTACKS a central square is fighting for the centre
@@ -469,21 +487,21 @@ export function buildReviewMoveTeaching(
         .filter(([af, ar]) => af >= 0 && af <= 7 && ar >= 0 && ar <= 7)
         .map(([af, ar]) => `${String.fromCharCode(97 + af)}${ar + 1}`)
         .filter((sq) => CENTER.has(sq));
-      if (!struck.length) return 'Gains space and cramps the opponent.';
+      if (!struck.length) return out('Gains space and cramps the opponent.');
       // WHAT IT STRIKES, said (2026-10-15: "striking at the central squares"
       // named none of them): a pawn of theirs it hits, or the square with its role.
       const hitPawn = struck.find((sq) => { const p = chess.get(sq as Sq); return p && p.type === 'p' && p.color !== mv.color; });
       const whose = moverIsStudent ? 'their' : 'your';
-      if (hitPawn) return `Strikes at ${whose} pawn on ${hitPawn} from the flank — a central pawn ${moverIsStudent ? 'you can trade off or make them' : 'they can trade off or make you'} defend.`;
+      if (hitPawn) return out(`Strikes at ${whose} pawn on ${hitPawn} from the flank — a central pawn ${moverIsStudent ? 'you can trade off or make them' : 'they can trade off or make you'} defend.`, [hitPawn]);
       const named = namedSquares(chess, struck, mv.color, whose);
-      return named ? `Fights for the center from the flank: ${named}.` : 'Gains space on the flank.';
+      return named ? out(`Fights for the center from the flank: ${named}.`, struck) : out('Gains space on the flank.');
     }
     // LUFT — a pawn beside the CASTLED king making an escape square. Board-true:
     // the king sits on its castled back-rank square and this pawn just advanced
     // one rank on an adjacent file. That's back-rank insurance, a real teaching
     // point currently spoken as silence.
     const luft = pawnKickPoint(chess, mv, moverIsStudent) ?? luftPoint(chess, mv, phrases) ?? pawnKickNextPoint(chess, mv, moverIsStudent);
-    if (luft) return luft;
+    if (luft) return out(luft);
     // quiet pawn with no structural point → fall through to the universal teacher
   }
 
@@ -503,24 +521,24 @@ export function buildReviewMoveTeaching(
   //     "their king … check" concept clause after it read "check … with check …
   //     check forces their king" (the triple-check redundancy David flagged).
   if (mv.san.includes('+') && !mv.san.includes('#')) {
-    return 'Forces the king to react, seizing the initiative for a move.';
+    return out('Forces the king to react, seizing the initiative for a move.');
   }
   // (b) The move makes a REAL threat — attacks a WINNABLE enemy piece (hangs, or
   // wins the exchange). A defended equal/lesser piece is NOT "pressure" (the
   // 2026-09-07 fail: false "pressure" on a defended knight/pawn).
   if (winnableTarget) {
     const p = PIECE_NOUN[mv.piece]; const t = `${PIECE_NOUN[winnableTarget.type]} on ${winnableTarget.sq}`;
-    return sayIdea(phrases, 'pressure', [`The ${p} trains on the ${t} — pressure they have to answer.`, `The ${p} hits the ${t}.`, `The ${p} goes after the ${t}.`]);
+    return out(sayIdea(phrases, 'pressure', [`The ${p} trains on the ${t} — pressure they have to answer.`, `The ${p} hits the ${t}.`, `The ${p} goes after the ${t}.`]), [mv.to, winnableTarget.sq]);
   }
   // (c) A rook or queen seizing a file.
   if (mv.piece === 'r' || mv.piece === 'q') {
     const file = mv.to[0];
     const struct = describeStructure(chess.fen());
     if (struct?.pawns.openFiles.includes(file)) {
-      return `The ${PIECE_NOUN[mv.piece]} takes the open ${file}-file — a highway straight into ${moverIsStudent ? 'their' : 'your'} position.`;
+      return out(`The ${PIECE_NOUN[mv.piece]} takes the open ${file}-file — a highway straight into ${moverIsStudent ? 'their' : 'your'} position.`);
     }
     if (struct?.pawns.halfOpenFiles[mv.color].includes(file)) {
-      return `The ${PIECE_NOUN[mv.piece]} presses down the half-open ${file}-file, leaning on what's left there.`;
+      return out(`The ${PIECE_NOUN[mv.piece]} presses down the half-open ${file}-file, leaning on what's left there.`);
     }
   }
   // (d) Controls central squares, or reaches into the opponent's half.
@@ -537,7 +555,7 @@ export function buildReviewMoveTeaching(
   if (central.length) {
     const nearKing = kingZoneAmong(central, chess, mv.color === 'w' ? 'white' : 'black');
     const fight = centerFight(phrases, chess, mv.color, moverIsStudent, PIECE_NOUN[mv.piece], central, kingZoneClause(nearKing));
-    if (fight) return fight;
+    if (fight) return out(fight, central);
   }
   const advanced = coverageTeaches ? eyes.controlled.filter((s) => (mv.color === 'w' ? Number(s[1]) >= 5 : Number(s[1]) <= 4)) : [];
   if (advanced.length) {
@@ -562,7 +580,7 @@ export function buildReviewMoveTeaching(
         const piece = chess.get(from);
         if (!piece || piece.type === 'p' || piece.type === 'k') continue;
         if (mv.piece !== 'p' && guarded && (PIECE_VAL[piece.type] ?? 0) <= attackerVal) continue;
-        return `The ${PIECE_NOUN[mv.piece]} takes ${sq} away from ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[piece.type]} on ${from}.`;
+        return out(`The ${PIECE_NOUN[mv.piece]} takes ${sq} away from ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[piece.type]} on ${from}.`, [sq, from]);
       }
     }
   }
@@ -570,9 +588,9 @@ export function buildReviewMoveTeaching(
   //     king turns into a fighting piece; else it's about getting to safety).
   if (mv.piece === 'k') {
     const heavyMinor = chess.board().flat().filter((c) => c && c.type !== 'p' && c.type !== 'k').length;
-    return heavyMinor <= 6
+    return out(heavyMinor <= 6
       ? 'The king marches up — in the endgame it stops hiding and becomes a fighting piece.'
-      : 'The king steps toward safety; no place for it in the crossfire yet.';
+      : 'The king steps toward safety; no place for it in the crossfire yet.');
   }
   // (f) Last resort — name a REAL point, never a meaningless empty/own-origin
   //     square (David 2026-09-14: "Be7 covers f8 … f8 is the starting square,
@@ -581,12 +599,12 @@ export function buildReviewMoveTeaching(
   //     overstated); otherwise state the development plainly without inventing a
   //     covered square.
   const eyedEnemy = eyes.enemies.find((e) => e.type !== 'k');
-  if (eyedEnemy) return `The ${PIECE_NOUN[mv.piece]} eyes the ${PIECE_NOUN[eyedEnemy.type]} on ${eyedEnemy.sq}.`;
+  if (eyedEnemy) return out(`The ${PIECE_NOUN[mv.piece]} eyes the ${PIECE_NOUN[eyedEnemy.type]} on ${eyedEnemy.sq}.`, [mv.to, eyedEnemy.sq]);
   // "Develops" is true only of a knight or bishop leaving its home rank; said
   // of d3, Re1, Qb8 or a retreat (Nf1) it was a false claim (census group 6,
   // 2026-10-07). Anything else has nothing true left to say — silence.
   const homeRank = mv.color === 'w' ? '1' : '8';
-  if ((mv.piece === 'n' || mv.piece === 'b') && mv.from[1] === homeRank) return `The ${PIECE_NOUN[mv.piece]} develops to ${mv.to}, joining the game.`;
+  if ((mv.piece === 'n' || mv.piece === 'b') && mv.from[1] === homeRank) return out(`The ${PIECE_NOUN[mv.piece]} develops to ${mv.to}, joining the game.`);
   return null;
 }
 
