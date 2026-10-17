@@ -41,10 +41,9 @@ describe('the free-piece fact rotates its words; the method is its own sentence 
 });
 
 describe('every free-piece stem carries its own reason (the method after it is said once a game)', () => {
-  it('each fact, with the method sentence taken off, still says why it is free', async () => {
-    const { whyTally } = await import('../../scripts/audit-lib/why-count.mjs');
+  it('each fact, with the method sentence taken off, still says why it is free', () => {
     const fen = '4k3/8/3p4/4N3/8/8/8/4K3 b - - 0 1';
     const facts = [0, 1, 2].map((n) => (prizeTeaching(fen, 'e5', 'b', n)?.text ?? '').replace(/ Before you take, check what taking it allows\.$/, ''));
-    expect(whyTally(facts, 1).withWhy).toBe(3);
+    for (const f of facts) expect(f).toMatch(/costs you nothing back|is not taken back|nothing recaptures/);
   });
 });
