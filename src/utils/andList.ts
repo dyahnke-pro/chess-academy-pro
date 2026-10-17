@@ -58,5 +58,11 @@ export function fileList(files: readonly string[]): string {
  * wins the exchange: Bc5, gxf6, Bxd4, Nxd4, Qe5+, Qe2 and Qxd4" read aloud).
  */
 export function lineShape(sans: readonly string[]): string {
-  return sans.length <= 3 ? andList(sans) : `${sans[0]} and the moves that follow`;
+  if (sans.length <= 3) return andList(sans);
+  // The first move and where the line LANDS — "the moves that follow" named
+  // nothing (claim check 2026-10-17: 144 weighings said "e7? Then the moves
+  // that follow — …", a line no student can picture). Full moves, not plies.
+  const later = Math.ceil((sans.length - 1) / 2);
+  return `${sans[0]} and, ${later === 1 ? 'a move' : `${NUMBER_WORDS[later] ?? later} moves`} later, ${sans[sans.length - 1]}`;
 }
+const NUMBER_WORDS: Record<number, string> = { 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine' };

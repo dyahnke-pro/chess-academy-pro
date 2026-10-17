@@ -346,10 +346,11 @@ export function afterCandidate(san: string, text: string): string {
   const head = `${bare(san)} and `;
   const t = bare(text);
   if (t.startsWith(`${bare(san)} — `)) return t.slice(bare(san).length + 3);
+  // The long-line shape: "Qxc3+ and, three moves later, Nxd5 — …".
+  if (t.startsWith(`${bare(san)} and, `)) return t.slice(bare(san).length + 6);
   if (!t.startsWith(head)) return text;
   const rest = t.slice(head.length);
-  const follow = 'the moves that follow — ';
-  return rest.startsWith(follow) ? rest.slice(follow.length) : rest;
+  return rest;
 }
 
 /** THE CANDIDATES THAT FAIL — the strongest one proved out loud, the rest

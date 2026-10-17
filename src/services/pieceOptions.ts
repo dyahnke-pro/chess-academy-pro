@@ -24,7 +24,7 @@ import { Chess, type Color, type Square, type PieceSymbol } from 'chess.js';
 import type { PvEngine } from './pvPlayback';
 import type { WalkableLine, WalkPly } from '../types';
 import { proofCut, describeProofResult } from './exchangeLedger';
-import { andList } from '../utils/andList';
+import { andList, lineShape } from '../utils/andList';
 import { costWords } from './engineConstants';
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -126,7 +126,7 @@ export function refutationOf(fenAfter: string, pvSans: readonly string[], studen
   // eight-move line read aloud (Learn audit 2026-10-15, an 87-word answer)
   // buries its result. Three moves or fewer are said in full; a longer line is
   // its first move, and the option's walkable line carries the rest.
-  const moves = proof.plies <= 3 ? andList(pvSans.slice(0, proof.plies)) : `${pvSans[0]} and the moves that follow`;
+  const moves = lineShape(pvSans.slice(0, proof.plies));
   // The line opens with the REPLY, so the replier delivers mate on an odd ply.
   if (proof.mate) return proof.plies % 2 === 1 ? `Then ${moves} — and it's mate` : null;
   if (!proof.ledger) return null;
