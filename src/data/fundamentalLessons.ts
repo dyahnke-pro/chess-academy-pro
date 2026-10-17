@@ -303,7 +303,7 @@ export const FUNDAMENTAL_LESSON: Record<FundamentalId, FundamentalLesson> = {
   },
   'missed-pin-break': {
     facts:
-      "A pin only holds if the pinned piece has no good way out. Before you accept that a piece of yours is pinned, look at every move it has: if it can leave with check, with a bigger threat, or by uncovering an attack, the pin is an illusion — and the piece that was pinning it is often left to be taken.",
+      "A pin only holds if the pinned piece has no good way out. Before you accept that a piece of yours is pinned, look at every move it has: if it can leave with check, with a bigger threat, or by uncovering an attack, the pin is an illusion. The piece that was pinning it is often left loose, so the escape wins it.",
     sources: ['concept:tac-pin'],
   },
   'ignored-pin-break': {
