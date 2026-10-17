@@ -121,12 +121,6 @@ export function lookupHisPlaySync(fen: string): HisPlayEntry | null {
   return hit && hit.moves.length > 0 ? hit : null;
 }
 
-/** Async convenience: load-then-lookup. */
-export async function lookupHisPlay(fen: string): Promise<HisPlayEntry | null> {
-  await getHisPlayDb();
-  return lookupHisPlaySync(fen);
-}
-
 export interface HisGroundedPlan {
   /** The side whose plan this is ('w' | 'b'), = side to move at `fen`. */
   side: 'w' | 'b';

@@ -35,12 +35,6 @@ export function countWord(n: number): string {
   return COUNT_WORD[n] ?? String(n);
 }
 
-export function countedList(xs: readonly string[], nounSingular: string, nounPlural: string): string {
-  if (xs.length === 0) return '';
-  if (xs.length === 1) return `${nounSingular} ${xs[0]}`;
-  return `${countWord(xs.length)} ${nounPlural}: ${andList(xs)}`;
-}
-
 /** Files as SAID: "the c-file", "the b- and c-files", "the a-, b- and c-files".
  *  The one wording for a list of files — "the b, c-file" was read aloud as
  *  "the bishop, c-file" (walk 900). Empty → ''. */

@@ -102,16 +102,3 @@ export function describeTopMasterMove(
   const top = result.moves[0];
   return translateMasterMove(top, result.totalGames, perspective);
 }
-
-/** Up to `n` translated master moves for a position (top by game count),
- *  for a fuller "here's what masters do" breakdown. */
-export function translateTopMasterMoves(
-  result: MasterPlayResult,
-  perspective: Perspective,
-  n = 3,
-): TranslatedMove[] {
-  if (result.source === 'none') return [];
-  return result.moves
-    .slice(0, n)
-    .map((m) => translateMasterMove(m, result.totalGames, perspective));
-}

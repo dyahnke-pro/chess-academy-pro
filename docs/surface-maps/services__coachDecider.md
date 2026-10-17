@@ -71,11 +71,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `coachTurn` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8053`
-- `src/components/Coach/CoachTeachPage.tsx:9231`
-- `src/components/Coach/CoachTeachPage.tsx:11800`
+- `src/components/Coach/CoachTeachPage.tsx:8058`
+- `src/components/Coach/CoachTeachPage.tsx:9236`
+- `src/components/Coach/CoachTeachPage.tsx:11819`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
-- `src/services/coachFeatureService.ts:2283`
+- `src/services/coachFeatureService.ts:2263`
 - `src/services/learnTurnDoor.test.ts:163`
 - `src/services/learnTurnDoor.test.ts:414`
 - `src/services/learnTurnDoor.test.ts:425`
@@ -191,7 +191,7 @@
 - `src/services/teachingLayers.test.ts:117`
 
 ### `habitNeedFrom` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1545`
+- `src/services/coachFeatureService.ts:1525`
 - `src/services/habitJoin.test.ts:63`
 - `src/services/habitJoin.test.ts:66`
 - `src/services/habitJoin.test.ts:69`
@@ -225,11 +225,11 @@
 - `src/components/Coach/CoachGameReview.tsx:1927`
 - `src/components/Coach/CoachGameReview.tsx:1966`
 - `src/components/Coach/CoachGameReview.tsx:1975`
-- `src/components/Coach/CoachTeachPage.tsx:8202`
+- `src/components/Coach/CoachTeachPage.tsx:8207`
 - `src/hooks/usePhaseNarration.ts:440`
 - `src/hooks/usePhaseNarration.ts:893`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:2476`
+- `src/services/coachFeatureService.ts:2456`
 - `src/services/coachSurfaceScorecard.report.test.ts:116`
 - `src/services/coachSurfaceScorecard.report.test.ts:138`
 - `src/services/coachSurfaceScorecard.report.test.ts:149`
@@ -309,28 +309,28 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `describeTurnDecision` (re-export) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8060`
-- `src/components/Coach/CoachTeachPage.tsx:8067`
-- `src/components/Coach/CoachTeachPage.tsx:9327`
-- `src/components/Coach/CoachTeachPage.tsx:11840`
-- `src/components/Coach/CoachTeachPage.tsx:11950`
+- `src/components/Coach/CoachTeachPage.tsx:8065`
+- `src/components/Coach/CoachTeachPage.tsx:8072`
+- `src/components/Coach/CoachTeachPage.tsx:9332`
+- `src/components/Coach/CoachTeachPage.tsx:11859`
+- `src/components/Coach/CoachTeachPage.tsx:11969`
 - `src/services/learnTurnDoor.ts:684`
 
 ### `describeVoicePackage` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10789`
-- `src/components/Coach/CoachTeachPage.tsx:11950`
+- `src/components/Coach/CoachTeachPage.tsx:10794`
+- `src/components/Coach/CoachTeachPage.tsx:11969`
 - `src/services/voicePackage.test.ts:38`
 - `src/services/voicePackage.ts:596`
 
 ### `keptLines` (re-export) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11916`
+- `src/components/Coach/CoachTeachPage.tsx:11935`
 - `src/services/learnTurnDoor.test.ts:198`
 - `src/services/learnTurnDoor.test.ts:204`
 - `src/services/learnTurnDoor.test.ts:210`
 - `src/services/voicePackage.ts:640`
 
 ### `markableSquares` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11874`
+- `src/components/Coach/CoachTeachPage.tsx:11893`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -340,11 +340,11 @@
 - `src/services/voicePackage.ts:166`
 
 ### `spokenSentenceKeys` (re-export) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8072`
-- `src/components/Coach/CoachTeachPage.tsx:9701`
-- `src/components/Coach/CoachTeachPage.tsx:10802`
-- `src/components/Coach/CoachTeachPage.tsx:11850`
-- `src/services/coachFeatureService.ts:2483`
+- `src/components/Coach/CoachTeachPage.tsx:8077`
+- `src/components/Coach/CoachTeachPage.tsx:9706`
+- `src/components/Coach/CoachTeachPage.tsx:10807`
+- `src/components/Coach/CoachTeachPage.tsx:11869`
+- `src/services/coachFeatureService.ts:2463`
 - `src/services/reviewMoveBriefing.ts:406`
 - `src/services/voicePackage.test.ts:415`
 - `src/services/voicePackage.test.ts:424`

@@ -176,7 +176,6 @@ async function lastMovePurpose(history: readonly string[], seat: 'student' | 'op
   } catch { return null; }
 }
 
-
 /** Lead-the-eye suffix for an on-demand answer: paint every key square the
  *  computed read NAMED as a yellow highlight, coupled from `answer.keySquares`
  *  (the observation's OWN declared squares — never scraped from prose, G0).
@@ -702,33 +701,6 @@ async function callDeepSeekStream(
   return fullText;
 }
 
-/** Module-level scratch space for the last DeepSeek response's metadata.
- *  Audit-only; read synchronously by callers right after their await on
- *  getCoachChatResponse so the call→read pair runs in one event-loop
- *  tick (no interleaving). Captures finish_reason and reasoning_content
- *  length — the two fields the previous return-string-only contract
- *  was discarding. Lets the coachMoveCommentary path log a definitive
- *  llm-response audit instead of inferring "empty content + normal
- *  latency = ???". */
-export interface LastLlmMetadata {
-  provider: 'deepseek' | 'anthropic';
-  model: string;
-  finishReason: string | null;
-  reasoningContentLength: number;
-  promptTokens: number | null;
-  completionTokens: number | null;
-}
-
-let lastLlmMetadata: LastLlmMetadata | null = null;
-
-/** Read the metadata from the most recent LLM call. Resets to null
- *  after read so a stale value can't leak across unrelated callers. */
-export function consumeLastLlmMetadata(): LastLlmMetadata | null {
-  const m = lastLlmMetadata;
-  lastLlmMetadata = null;
-  return m;
-}
-
 /** One tappable follow-up the coach offers AFTER a grounded answer —
  *  the "want to work on this?" picker (David 2026-07-04: "Tie it into
  *  a picker once the coach answers... Don't just make it automatic").
@@ -742,7 +714,7 @@ export interface CoachActionOffer {
 }
 
 /** Module-level scratch space for the action offer the last grounded
- *  answer attached. Mirrors the `lastLlmMetadata` scratch pattern:
+ *  answer attached. A module-scoped scratch value:
  *  set synchronously inside a grounding interception block right
  *  before it returns the voiced answer, read synchronously by
  *  `coachService.ask` immediately after its await so the set→read
@@ -910,22 +882,7 @@ async function callDeepSeek(
     emitLlmTokenUsage(task, model, 'deepseek', response.usage.prompt_tokens, response.usage.completion_tokens, response.choices[0]?.finish_reason ?? null, hit, miss);
   }
   const choice = response.choices[0];
-  // DeepSeek-reasoner emits `reasoning_content` separately from
-  // `content` — the chain-of-thought is hidden from the caller but
-  // shares the `max_tokens` budget. When max_tokens is too small for
-  // both, content can be empty even though the call succeeded. We
-  // capture the length here so coachMoveCommentary's audit can name
-  // the failure mode.
-  const message = choice?.message as { content?: string | null; reasoning_content?: string | null } | undefined;
-  const reasoningContent = message?.reasoning_content;
-  lastLlmMetadata = {
-    provider: 'deepseek',
-    model,
-    finishReason: choice?.finish_reason ?? null,
-    reasoningContentLength: typeof reasoningContent === 'string' ? reasoningContent.length : 0,
-    promptTokens: response.usage?.prompt_tokens ?? null,
-    completionTokens: response.usage?.completion_tokens ?? null,
-  };
+  const message = choice?.message as { content?: string | null } | undefined;
   return message?.content ?? '';
 }
 
@@ -2125,7 +2082,6 @@ export function buildOpeningSuggestionReply(query: string): string | null {
 //   • a NON-CHESS turn (greeting, thanks, meta) → a computed small-talk reply
 //     (smallTalk.ts) — no model at all.
 // The LLM keeps ONLY phrasing; it never decides a chess fact again (G0).
-
 
 /** SAN-shaped token / explicit stat / master-play claim — the fabrication
  *  vectors we sweep from a conversational reply that strayed into chess. */

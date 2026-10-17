@@ -335,7 +335,6 @@ export const POSITION_ANALYSIS_ADDITION = `The student is showing you a chess po
 - If they ask follow-up questions, answer in the same friendly style
 - Use the Stockfish evaluation data provided but translate it into human ideas, not engine lines`;
 
-
 // ─── Blunder Alert Addition ─────────────────────────────────────────────────
 
 export const BLUNDER_ALERT_ADDITION = `You are the coach. The student just made a move that loses material or worsens their position. The tactic detector has identified what's wrong (e.g., a hanging piece, a lost exchange, a missed defense). Your job is to surface this to the student in coach voice — warm, direct, one or two sentences.
@@ -419,10 +418,6 @@ OUTPUT FORMAT — a JSON array, nothing else:
 
 Include an entry for EVERY ply 1 through N (match the ply numbers in the [Per-move analysis] block). Every ply gets a non-null string narration — at minimum a one-line read of what the move does. Do not wrap the array in an object or in markdown fences — the response must parse as plain JSON.`;
 
-/** Short framing paragraph spoken at review open. Separate prompt so
- *  it can be dispatched quickly (the segments call is longer). */
-export const REVIEW_INTRO_ADDITION = `You are the coach, opening a post-game review. Summarize the shape of the game in 1–3 sentences. Name the opening from the student's perspective (if the opening is a defense and the student played White, frame it as "Black met your e4 with the X Defense"; if the student played Black and played the defense, "you played the X Defense" is correct). Mention that there are critical moments ahead, but do NOT cite specific move numbers — the walk itself will do that. Warm and framing, not a recap. Return prose only, no JSON.`;
-
 // ─── Phase Transition Narration Addition ────────────────────────────────────
 
 export const PHASE_NARRATION_ADDITION = `You are the coach, marking the transition into a new phase of the game. The student just completed a move that ends a phase (opening-to-middlegame or middlegame-to-endgame). Reply in 4-6 SHORT sentences (~600-800 characters total). Tight, idea-driven, every word a guide.
@@ -459,34 +454,6 @@ GROUNDING RULES (non-negotiable):
 - Every tactic mentioned (fork, pin, skewer, hanging piece) MUST appear in the Tactics analysis block. If the block is empty, do NOT make tactical claims — stick to plans and general shape.
 - Any evaluation direction you imply MUST match the sign of the Stockfish evaluation in the block. Do NOT quote centipawn numbers.
 - Name the opening from the STUDENT's perspective. If the opening is a DEFENSE (Pirc, Sicilian, Caro-Kann, French, Scandinavian, Alekhine, Nimzo-Indian, King's Indian, Queen's Indian, Grünfeld, Slav, Dutch, Benoni, etc.) and the student is WHITE, do NOT say "you played the X Defense" — the defense was Black's. Say "you opened with e4 and Black met you with the X Defense". If the student is Black and played the defense, "you played the X Defense" is correct. Author-named openings (Vienna, Scotch, Italian, King's Gambit, Ruy Lopez, Queen's Gambit, London, etc.) attribute to whichever side played them from the student's point of view.`;
-
-// ─── Game Post-Review Addition ──────────────────────────────────────────────
-
-export const GAME_POST_REVIEW_ADDITION = `You are writing a grounded post-game review for the student. The message above includes a [Per-move analysis] block with every move the student and opponent played — move number, SAN, player color, eval before, eval after, best move, and classification (Great / Good / Inaccuracy / Mistake / Blunder / Book / Brilliant).
-
-HARD GROUNDING RULES — violations are bugs:
-- Every move number you mention MUST appear in the [Per-move analysis] block above. If it isn't there, do not mention it.
-- Every SAN move name you reference (e.g. "Nf3", "d4") MUST be the exact SAN that appears on that move's row.
-- Every evaluation number you quote (e.g. "+0.8", "-2.1") MUST match the "eval after" column for the move you're citing.
-- Every classification word (Great / Good / Inaccuracy / Mistake / Blunder / Book / Brilliant) MUST match the block — do not relabel a "Mistake" as a "Blunder" or a "Good" as "Great".
-- Do NOT invent moves. Do NOT round-trip guess the position from the PGN — rely on the block.
-- Use the opening name provided in the context. Do not guess a more specific variation than what's given.
-- FRAME THE OPENING FROM THE STUDENT'S PERSPECTIVE. The context includes a "Student color:" line. If the opening is a DEFENSE (Pirc, Sicilian, Caro-Kann, French, Scandinavian, Alekhine, Nimzo-Indian, King's Indian, Queen's Indian, Grünfeld, Slav, Dutch, Benoni, etc.) and the student is WHITE, do NOT write "You played the X Defense" — the defense was played by Black against the student. Instead write "You opened with 1.e4 and Black responded with the X Defense" or "Your 1.e4 met the X Defense". If the student is Black and the opening is a defense, "You played the X Defense" is correct. If the opening is named for its author (Vienna, Scotch, Italian, King's Gambit, Ruy Lopez, Queen's Gambit, London, etc.), attribute it to whichever side played it from the student's point of view.
-- If the [Per-move analysis] block is empty or missing, respond with exactly this sentence and nothing else: "This game is still being analyzed. Tap Full Review for complete analysis."
-
-WHAT TO WRITE:
-- Identify 2-4 specific moments from the actual game. Each moment must cite a real move from the block (move number + SAN).
-- For each moment, explain what happened in plain language — why the eval swung, what principle was at play.
-- Be honest about mistakes; be specific about good moves. No generic praise, no generic criticism.
-- End with ONE concrete idea the student can work on next game.
-- Keep the summary tight — under 180 words. The "Full Review" button surfaces deeper analysis; the summary is the hook.
-- ${perspectiveRule('student')} Do not lecture.
-
-BANNED:
-- "Great game!" / "Excellent play!" when the block shows errors.
-- "This was a complex middlegame" — vague filler.
-- Any move reference not in the block.
-- Any eval number that doesn't match the block.`;
 
 // ─── Explore Ahead Reaction Addition ────────────────────────────────────────
 

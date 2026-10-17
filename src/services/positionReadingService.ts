@@ -2847,6 +2847,10 @@ export function movesThatKeep(fen: string, sq: Square, me: Color): { san: string
   for (const m of chess.moves({ verbose: true })) {
     const c = new Chess(fen);
     c.move(m.san);
+    // A CHECK ONLY DELAYS (escalating walk 2026-10-17: "keep it with Bb5+"):
+    // while they answer it no capture is legal, so everything reads safe for
+    // one move. A defence must hold with the move theirs.
+    if (c.inCheck()) continue;
     const after = c.fen();
     const safe = c.board().flat().every((p) => !p || p.color !== me || p.type === 'k' || legalSeeGain(after, p.square) <= 0);
     if (!safe) continue;

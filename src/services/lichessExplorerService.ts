@@ -197,11 +197,6 @@ function setCloudEvalCache(key: string, value: LichessCloudEval | null): void {
   }
   cloudEvalCache.set(key, value);
 }
-/** Test/coordination hook — clear the cloud-eval cache (used by resetCircuit). */
-export function clearCloudEvalCache(): void {
-  cloudEvalCache.clear();
-  cloudEvalInflight.clear();
-}
 
 function isLichessRateLimited(): boolean {
   if (lichessRateLimitedUntil === null) return false;

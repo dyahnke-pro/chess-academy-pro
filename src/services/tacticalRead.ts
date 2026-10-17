@@ -800,23 +800,6 @@ export function tacticalReadFacts(read: TacticalRead, opts: { inGame?: boolean }
   return parts.join(' ');
 }
 
-/** Model-only directives for voicing a tactical read — shape, not script. Never
- *  spoken; passed to voiceFacts.directives so the phrasing stays varied. */
-export const TACTICAL_READ_DIRECTIVES =
-  'Read this like a coach talking a student through the position out loud. If a '
-  + 'tempting move is given, affirm the pull of it first, then turn against it with '
-  + 'the refutation ("you’d love to … but …"). Then give the real move and '
-  + 'why, and land the verdict last. Vary your phrasing move to move — never a '
-  + 'fixed template. Spell moves as words, no notation. Warm but rigorous; no '
-  + 'praise words, no filler. STRICT GROUNDING: state ONLY facts given above — '
-  + 'do NOT name a tactic or mate pattern (e.g. "back-rank mate", "smothered '
-  + 'mate", "fork") unless it appears in the facts, and do NOT assert where any '
-  + 'piece sits unless its square is given. When unsure, describe the move’s '
-  + 'effect, not a named pattern. The best/correct move given in the facts is '
-  + 'engine-verified and IS the answer — voice it as correct; NEVER suggest '
-  + 'avoiding it, call it an illusion or a mistake, or propose a different plan '
-  + 'instead. Only the TEMPTING move is the one to turn against.';
-
 /** True when the voiced text argues AGAINST the engine's best move — the model
  *  second-guessing the grounded recommendation (e.g. "avoid Be2", "the fork is
  *  an illusion"). The board grader catches false SQUARES, not a rejected

@@ -37,7 +37,6 @@
  */
 import { loadDataJson } from './dataFile';
 import type { TeachingsBundle } from './secondaryCorpus';
-import { loadSpokenBake } from './spokenNoteBake';
 import registry from '../data/corpora.json';
 
 /** Farmed corpora in canonical registry order. `bytes` is the approximate
@@ -192,14 +191,6 @@ export function getFarmedCorporaSync(): Array<{ key: string; data: TeachingsBund
     if (data) out.push({ key, data });
   }
   return out;
-}
-
-/** Prime the whole teaching tier (farmed corpora + the spoken bake) lazily and
- *  off the critical path. The single trigger a teaching surface calls when it
- *  first needs corpus teaching. */
-export function primeTeachingCorpora(): void {
-  primeFarmedCorporaLazily();
-  void loadSpokenBake();
 }
 
 /** Test seam — prime (or clear) the cache without fetching. */

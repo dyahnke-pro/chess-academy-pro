@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**144 lines · 4 exports · 2 importers · 1 tests · 11 audits**
+**130 lines · 3 exports · 2 importers · 1 tests · 11 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,7 +20,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `Subline` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `pgnToSans` (function) — 33 call sites
+### `pgnToSans` (function) — 36 call sites
 - `scripts/add-pro-repertoire-variations.mjs:24`
 - `scripts/add-pro-repertoire-variations.mjs:59`
 - `scripts/add-pro-repertoire-variations.mjs:94`
@@ -52,8 +52,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingSublines.test.ts:20`
 - `src/services/openingSublines.test.ts:25`
 - `src/services/openingSublines.test.ts:26`
-- `src/services/reviewCorpusSweep.test.ts:182`
-- `src/services/reviewCorpusSweep.test.ts:200`
+- `src/services/proofBacklog.report.test.ts:49`
+- `src/services/proofBacklog.report.test.ts:99`
+- `src/services/proofBacklog.report.test.ts:105`
+- `src/services/reviewCorpusSweep.test.ts:66`
+- `src/services/reviewCorpusSweep.test.ts:84`
 
 ### `buildSublines` (function) — 5 call sites
 - `scripts/build-course-sublines.mjs:95`
@@ -61,9 +64,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingSublines.test.ts:38`
 - `src/services/openingSublines.test.ts:55`
 - `src/services/openingSublines.test.ts:60`
-
-### `buildSublinesForOpening` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 

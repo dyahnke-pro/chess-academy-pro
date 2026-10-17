@@ -49,7 +49,7 @@
 - `src/coach/chatTurnCodeReader.test.ts:19`
 - `src/coach/chatTurnCodeReader.test.ts:22`
 - `src/coach/chatTurnCodeReader.test.ts:23`
-- `src/services/coachApi.ts:2248`
+- `src/services/coachApi.ts:2208`
 - `src/services/whyNotLegal.ts:221`
 
 ### `pointsAtThisBoard` (function) — 1 call site
@@ -59,7 +59,7 @@
 - `src/coach/coachService.ts:1602`
 
 ### `namedMoveTokens` (function) — 1 call site
-- `src/coach/dispatchCoachTurn.ts:355`
+- `src/coach/dispatchCoachTurn.ts:354`
 
 ### `mainLinePlies` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**121 lines · 8 exports · 3 importers · 1 tests · 0 audits**
+**99 lines · 6 exports · 3 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -41,17 +41,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachMemoryService.test.ts:97`
 - `src/services/coachMemoryService.test.ts:108`
 
-### `replaceCoachMemory` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `extractAndRememberNotes` (function) — 4 call sites
 - `src/components/Board/VoiceChatMic.tsx:519`
 - `src/services/coachMemoryService.test.ts:115`
 - `src/services/coachMemoryService.test.ts:124`
 - `src/services/coachMemoryService.test.ts:132`
-
-### `__test__getRememberRegex` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `seedVerifiedLibraryNote` (function) — 1 call site
 - `src/App.tsx:441`

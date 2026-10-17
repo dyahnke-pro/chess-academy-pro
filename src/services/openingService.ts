@@ -9,7 +9,6 @@ import { captureEvent } from './analytics';
 import { recordPositiveMoment } from './reviewPromptService';
 import openingManifests from '../data/opening-manifests.json';
 import antiOpeningsData from '../data/anti-openings.json';
-import gambitData from '../data/gambits.json';
 import { finishBite, finishBiteByKey } from './activeBite';
 import { reward } from './rewardService';
 
@@ -160,12 +159,6 @@ export async function searchOpenings(query: string): Promise<OpeningRecord[]> {
   // Sort by score (lower = better), then alphabetically
   scored.sort((a, b) => a.score - b.score || a.opening.name.localeCompare(b.opening.name));
   return scored.map((s) => s.opening);
-}
-
-/** Returns all openings (both repertoire and ECO reference), sorted by ECO code. */
-export async function getAllOpenings(): Promise<OpeningRecord[]> {
-  const all = await db.openings.toArray();
-  return all.sort((a, b) => a.eco.localeCompare(b.eco) || a.name.localeCompare(b.name));
 }
 
 /** Returns openings whose ECO code starts with the given letter (A, B, C, D, or E). */
@@ -421,20 +414,6 @@ export async function markLineDiscovered(
   }
 }
 
-/** Marks a variation as "learned" (completed the Learn run). Idempotent. */
-export async function markLineLearned(
-  id: string,
-  variationIndex: number,
-): Promise<void> {
-  const opening = await db.openings.get(id);
-  if (!opening) return;
-  const learned = opening.linesLearned ? [...opening.linesLearned] : [];
-  if (!learned.includes(variationIndex)) {
-    learned.push(variationIndex);
-    await db.openings.update(id, { linesLearned: learned });
-  }
-}
-
 /** Marks a variation as "perfected" (practiced without errors). Idempotent. */
 export async function markLinePerfected(
   id: string,
@@ -446,21 +425,6 @@ export async function markLinePerfected(
   if (!perfected.includes(variationIndex)) {
     perfected.push(variationIndex);
     await db.openings.update(id, { linesPerfected: perfected });
-  }
-}
-
-/** Marks a variation as "played" (completed a Play rep vs the coach).
- *  Idempotent. This is the rung that unlocks the line's weapons. */
-export async function markLinePlayed(
-  id: string,
-  variationIndex: number,
-): Promise<void> {
-  const opening = await db.openings.get(id);
-  if (!opening) return;
-  const played = opening.linesPlayed ? [...opening.linesPlayed] : [];
-  if (!played.includes(variationIndex)) {
-    played.push(variationIndex);
-    await db.openings.update(id, { linesPlayed: played });
   }
 }
 
@@ -682,18 +646,6 @@ export async function getMasterclassOpenings(): Promise<OpeningRecord[]> {
  *  generated order. Seeded by `loadAntiOpenings`; missing entries skipped. */
 export async function getAntiOpenings(): Promise<OpeningRecord[]> {
   const ids = (antiOpeningsData as Array<{ id: string }>).map((o) => o.id);
-  const out: OpeningRecord[] = [];
-  for (const id of ids) {
-    const o = await db.openings.get(id);
-    if (o) out.push(o);
-  }
-  return out;
-}
-
-/** The gambit courses (gambits.json) as full records. Seeded by
- *  `loadGambitData`; missing entries skipped. */
-export async function getGambitCourseOpenings(): Promise<OpeningRecord[]> {
-  const ids = (gambitData as Array<{ id: string }>).map((o) => o.id);
   const out: OpeningRecord[] = [];
   for (const id of ids) {
     const o = await db.openings.get(id);

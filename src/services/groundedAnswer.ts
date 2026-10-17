@@ -688,7 +688,6 @@ export function opponentIdeas(fen: string, me: 'w' | 'b'): string[] {
   return out;
 }
 
-
 // ── KING SAFETY — "is my king safe?" ────────────────────────────────────────
 export function assembleKingSafetyAnswer(fen: string, studentColor: 'white' | 'black', side: 'me' | 'opponent' | 'neutral'): GroundedAnswer | null {
   const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
@@ -1475,7 +1474,6 @@ const MATE_AGAINST_YOU = [
  *  duplicated idiom drifts exactly like a duplicated constant — one copy
  *  guarding against a negative seed and another not. */
 const pick = (variants: readonly string[], seed: number): string => rotateStem(variants, seed);
-
 
 export function assemblePositionAssessment(opts: {
   evalCp: number | null | undefined;
@@ -4648,10 +4646,6 @@ const TRAINING_AREA_LABEL: Record<TrainingArea, string> = {
   'king-safety': 'your king safety',
   'time-management': 'your time management',
 };
-
-export function trainingAreaLabel(area: TrainingArea): string {
-  return TRAINING_AREA_LABEL[area];
-}
 
 /** Detect the AREA a "how do I improve my X / get better at X / work on my X"
  *  question names, for the recommend-a-focused-game flow. Returns null when no

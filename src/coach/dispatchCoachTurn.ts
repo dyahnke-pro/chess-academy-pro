@@ -82,7 +82,6 @@ const conversations = new Map<CoachSurface, ConversationState>();
  *  invalid read still falls back to today's routing. */
 let serveParsedRoute = true;
 export function setServeParsedRoute(on: boolean): void { serveParsedRoute = on; }
-export function isServeParsedRouteOn(): boolean { return serveParsedRoute; }
 
 /** Test seam: the model reader the shadow uses (the coachApi chokepoint by
  *  default). */

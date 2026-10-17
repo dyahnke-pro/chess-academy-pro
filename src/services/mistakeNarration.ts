@@ -241,24 +241,6 @@ function analyzeMoveIdea(fen: string, bestMoveSan: string, gamePhase: MistakeGam
   return idea;
 }
 
-/** Build a spoiler-free explanation of the position's key idea (no move name) */
-export function describePositionIdea(fen: string, bestMoveSan: string, gamePhase: MistakeGamePhase): string {
-  const idea = analyzeMoveIdea(fen, bestMoveSan, gamePhase);
-
-  if (idea.isCastle) return 'King safety is critical here — think about tucking the king away and connecting the rooks.';
-  if (idea.isCheck && idea.isCapture) return 'There\'s a way to win material with a forcing move that also attacks the king.';
-  if (idea.isPromotion) return 'A pawn is ready to promote. Look for the path to get it across.';
-  if (idea.isCheck) return 'There\'s a check available that creates serious problems for your opponent.';
-  if (idea.isCapture) return 'Something is hanging — look for the material you can win.';
-  if (idea.developsPiece && idea.movesToCenter) return `Your ${idea.pieceMoved} wants a more active square — think about centralizing it with tempo.`;
-  if (idea.developsPiece) return `Think about which piece isn't in the game yet. Your ${idea.pieceMoved} needs a better square.`;
-  if (idea.movesToCenter) return 'The center is the key to this position — look for ways to strengthen your grip.';
-
-  if (gamePhase === 'endgame') return 'In this endgame, king activity and pawn advancement are everything.';
-  if (gamePhase === 'opening') return 'Focus on development, center control, and king safety.';
-  return 'Look for the move that creates the most problems for your opponent.';
-}
-
 // `describeMoveIdea` is DELETED (David 2026-08-04). It was the producer of
 // "<move> improves your position." — the phrase that closed David's logged
 // "That's it! king to g5. king to g5 improves your position." It restated the

@@ -16,7 +16,7 @@ import {
   getOverviewInsights,
   getOpeningInsights,
 } from './gameInsightsService';
-import type { OverviewInsights, OpeningInsights, OpeningAggregateStats } from '../types';
+import type { OverviewInsights, OpeningInsights } from '../types';
 
 export type InsightTone = 'strength' | 'weakness' | 'achievement' | 'pattern' | 'neutral';
 
@@ -181,10 +181,4 @@ function buildBrilliantsInsight(o: OverviewInsights): ShareableInsight | null {
       { label: 'Games', value: `${o.totalGames}` },
     ],
   };
-}
-
-/** Unused helper kept around for a future feature that drills into
- *  the single biggest opening gap. Exposed for testing. */
-export function __rankOpeningsForTesting(openings: OpeningAggregateStats[]): OpeningAggregateStats[] {
-  return [...openings].sort((a, b) => b.games - a.games);
 }

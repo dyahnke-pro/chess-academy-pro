@@ -33,6 +33,14 @@ export function bestAnswerIssues(rung, q, answer, ctx) {
   // One fact twice in different words: the same square called hanging again.
   const hung = [...answer.matchAll(/\b([a-h][1-8])\b[^.⏎]{0,40}\bhang|\bhanging:[^.⏎]{0,30}?\b([a-h][1-8])\b/gi)].map((m) => m[1] ?? m[2]);
   for (const sq of new Set(hung)) if (hung.filter((x) => x === sq).length > 1) out.push(`says ${sq} hangs twice`);
+  // A why about THEIR move answered with only "They played X." — no reason, no
+  // "quiet move" verdict either (run 4, Q11: "They played Kc8. Your answer is b4").
+  if (/why did they|what did their/i.test(q)) {
+    const first = answer.split(/⏎/)[0].trim();
+    if (/^They played [^.—]*\.(?:\s|$)/.test(first) && !/quiet move|stops|prepares|takes|attacks|threat|wins|defends|guards/i.test(first.replace(/^They played [^.—]*\./, ''))) out.push('their move named with no reason');
+  }
+  // A stop that never says what was stopped ("now …g6 doesn't work." and stop).
+  if (/now \S+ doesn't work\.(?!\s*(?:it|that|which|because))/i.test(answer) && !/would|was mate|covers|cover |lost on|taken on/i.test(answer)) out.push('a stop with no word on what it stopped');
   if (/plan/i.test(q)) {
     const aims = (answer.match(/\b(?:plant|put|improve|push|win|attack|trade|open|overprotect|escort|aim|stack|double|bring)\b/gi) ?? []).length;
     if (aims >= 6) out.push(`plan is a list of ${aims} aims, not one thread`);

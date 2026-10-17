@@ -121,4 +121,3 @@ export function __resetMasterPlayPersistenceForTests(): void {
 
 /** Exported for tests / future migrations. */
 export const __MASTER_PLAY_CACHE_VERSION = CACHE_VERSION;
-export const __MASTER_PLAY_MAX_PERSISTED = MAX_PERSISTED;

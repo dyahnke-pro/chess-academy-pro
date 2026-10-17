@@ -11,7 +11,6 @@
 
 import { fetchLichessExplorer } from './lichessExplorerService';
 import { positionFen } from './masterPlayCache';
-import { logAppAudit } from './appAuditor';
 import { explorerBandFor } from './ratingBands';
 
 export interface AmateurPlayEntry {
@@ -75,14 +74,4 @@ export function __clearAmateurPlayCache(): void {
 }
 export function __seedAmateurPlayCache(fen: string, entry: AmateurPlayEntry): void {
   entries.set(positionFen(fen), entry);
-}
-
-/** Audit helper — the watcher emits once per warm for observability. */
-export function emitAmateurWarmAudit(fen: string, surface: string): void {
-  void logAppAudit({
-    kind: 'master-play-prefetch',
-    category: 'subsystem',
-    source: 'amateurPlayCache.warm',
-    summary: `amateur band warm for ${positionFen(fen).slice(0, 40)}… surface=${surface}`,
-  });
 }

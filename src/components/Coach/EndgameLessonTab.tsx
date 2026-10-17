@@ -16,6 +16,8 @@
  *   - moves come from the JSON data (solution[] / bestMove)
  *   - LLM authorship is zero at runtime
  */
+import { dueEndgameReviews } from '../../services/endgameDueReview';
+import { finishBite } from '../../services/activeBite';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowLeft,
@@ -70,10 +72,14 @@ interface EndgameLessonTabProps {
   /** Short description rendered above the grid — sets context for
    *  the user before they pick a tile. */
   tabSubtitle: string;
+  /** Open this lesson straight away (a "due for review" deep link). */
+  initialLessonId?: string | null;
 }
 
-export function EndgameLessonTab({ lessons, tabLabel, tabSubtitle }: EndgameLessonTabProps): JSX.Element {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+export function EndgameLessonTab({ lessons, tabLabel, tabSubtitle, initialLessonId }: EndgameLessonTabProps): JSX.Element {
+  const [selectedId, setSelectedId] = useState<string | null>(
+    () => (initialLessonId && lessons.some((l) => l.id === initialLessonId) ? initialLessonId : null),
+  );
 
   if (selectedId === null) {
     return (
@@ -114,6 +120,8 @@ function PickerGrid({ lessons, tabLabel, tabSubtitle, onPick }: PickerGridProps)
   // Loaded once on mount; not live-updated because the picker is
   // re-mounted whenever the student returns from a lesson.
   const [masteredByLesson, setMasteredByLesson] = useState<Record<string, number>>({});
+  // Positions due again on the spaced-review ladder, per lesson.
+  const [dueByLesson, setDueByLesson] = useState<Record<string, number>>({});
   useEffect(() => {
     let cancelled = false;
     void (async () => {
@@ -122,7 +130,11 @@ function PickerGrid({ lessons, tabLabel, tabSubtitle, onPick }: PickerGridProps)
         const records: EndgameProgressRecord[] = await getLessonProgress(lesson.id);
         entries[lesson.id] = records.filter((r) => r.mastered).length;
       }
-      if (!cancelled) setMasteredByLesson(entries);
+      const due = await dueEndgameReviews().catch(() => []);
+      if (!cancelled) {
+        setMasteredByLesson(entries);
+        setDueByLesson(Object.fromEntries(due.map((d) => [d.lessonId, d.dueCount])));
+      }
     })();
     return () => {
       cancelled = true;
@@ -187,6 +199,12 @@ function PickerGrid({ lessons, tabLabel, tabSubtitle, onPick }: PickerGridProps)
                       <span className="text-green-400 font-medium">
                         {' '}
                         · {masteredCount}/{playableCount} mastered
+                      </span>
+                    )}
+                    {(dueByLesson[lesson.id] ?? 0) > 0 && (
+                      <span className="text-amber-400 font-medium" data-testid={`endgame-lesson-due-${lesson.id}`}>
+                        {' '}
+                        · {dueByLesson[lesson.id]} due for review
                       </span>
                     )}
                     {drillCount > 0 && (
@@ -629,6 +647,8 @@ function PositionRunner({
       firstTryPerfect: playout.firstTryPerfect,
       wrongAttempts: playout.wrongAttempts,
     });
+    // A played position closes today's endgame-review bite, if one is open.
+    void finishBite('endgame');
     if (playout.firstTryPerfect && !isDrill && onPlayPerfect) {
       onPlayPerfect(position.fen);
     }

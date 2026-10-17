@@ -441,9 +441,6 @@ function betterSquare(fen: string | undefined, square: string): { text: string; 
   };
 }
 
-/** Squares as chess.js types them, for the callers that mark the board. */
-export const asSquare = (s: string): Square => s as Square;
-
 /** A MINOR THAT IS ATTACKING OR PINNING AN ENEMY PIECE IS NOT "DOING THE
  *  LEAST" (hand walk 2026-09-24): the value table called the f4-bishop pinning
  *  a bishop to the queen, and the g2-bishop raking the long diagonal onto b7,

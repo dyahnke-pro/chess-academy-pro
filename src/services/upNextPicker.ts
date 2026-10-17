@@ -23,13 +23,14 @@
  */
 import type { RepCandidate } from './trainingPlanSelector';
 import { resolveRepRoute } from './repRouting';
+import { endgameReviewPath, type DueEndgameReview } from './endgameDueReview';
 
 /** Every kind of bite, ONE list. The type is derived from it, and the tables
  *  below are `Record`s over it, so a new kind fails to compile until someone
  *  answers where it finishes and how important it is (homeSuggestion). */
 export const PICK_KINDS = [
   'deep-run', 'game-slip', 'weakness', 'grown', 'opening', 'free-opening',
-  'warm-up', 'long', 'start', 'upload', 'learn', 'thinking',
+  'warm-up', 'long', 'start', 'upload', 'learn', 'thinking', 'endgame',
 ] as const;
 export type PickKind = typeof PICK_KINDS[number];
 
@@ -55,6 +56,8 @@ export const PICK_FINISH_LINE: Record<PickKind, { file: string; by: 'kind' | 'ke
   // Learn reads `?lesson=think`; the lesson's one door calls
   // `finishBite('thinking')` when the lesson ends.
   thinking: { file: 'src/services/thinkingLessonStart.ts', by: 'kind' },
+  // A due endgame lesson closes when a position of it is played through.
+  endgame: { file: 'src/components/Coach/EndgameLessonTab.tsx', by: 'kind' },
 };
 
 /** The "learn how to think" bite is live: Learn reads `?lesson=think` and
@@ -127,6 +130,8 @@ export interface UpNextInput {
   /** The tier-1 thinking habits' standing, or null when the lesson is not
    *  offered (not live yet, or no read). */
   thinking: ThinkingSignal | null;
+  /** The endgame lesson with the most positions due for spaced review, or null. */
+  endgameDue: DueEndgameReview | null;
 }
 
 /** THE START-HERE PATH (David 2026-10-02: "cater to new players. Explain
@@ -241,6 +246,18 @@ export function rankUpNext(i: UpNextInput): UpNextPick[] {
   }
   const due = i.reps.find((r) => r.kind === 'srs');
   if (due) out.push(openingPick(due));
+  // An endgame due for spaced review sits with the opening review: both are
+  // what you knew, coming back before you forget it.
+  if (i.endgameDue) {
+    const n = i.endgameDue.dueCount;
+    out.push({
+      kind: 'endgame', key: `up:endgame:${i.endgameDue.lessonId}`,
+      label: `Review: ${i.endgameDue.name}`,
+      reason: `${n === 1 ? 'A position' : `${n} positions`} from ${i.endgameDue.name} ${n === 1 ? 'is' : 'are'} due again. Play ${n === 1 ? 'it' : 'them'} before ${n === 1 ? 'it fades' : 'they fade'}.`,
+      bite: 'one lesson', path: endgameReviewPath(i.endgameDue),
+      state: { repKey: `up:endgame:${i.endgameDue.lessonId}` }, hub: 'coach',
+    });
+  }
   if (i.freeOpeningOpen) {
     out.push({
       kind: 'free-opening', key: 'up:free-opening', label: 'Claim your free opening',

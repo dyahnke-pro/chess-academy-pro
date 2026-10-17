@@ -60,23 +60,6 @@ export async function addCoachMemoryNote(note: string): Promise<void> {
   });
 }
 
-/**
- * Replace the entire memory list. Exposed for a future "clear my
- * coach's memory" settings affordance; callers normally use
- * `addCoachMemoryNote` instead.
- */
-export async function replaceCoachMemory(notes: string[]): Promise<void> {
-  const profile = await db.profiles.get('main');
-  if (!profile) return;
-  const cleaned = notes
-    .map((n) => n.trim().slice(0, MAX_NOTE_LENGTH))
-    .filter((n) => n.length > 0)
-    .slice(-MAX_NOTES);
-  await db.profiles.update('main', {
-    preferences: { ...profile.preferences, coachMemory: cleaned } as UserProfile['preferences'],
-  });
-}
-
 /** Regex matching the REMEMBER tag the coach emits in replies. */
 const REMEMBER_TAG_RE = /\[\[REMEMBER:\s*([^\]]+?)\s*\]\]/gi;
 
@@ -98,11 +81,6 @@ export function extractAndRememberNotes(text: string): string {
   }
   // Collapse whitespace left behind by removed tags.
   return cleaned.replace(/\s{2,}/g, ' ').trim();
-}
-
-/** Test hook — exposed for unit tests to bypass the regex check. */
-export function __test__getRememberRegex(): RegExp {
-  return new RegExp(REMEMBER_TAG_RE.source, 'gi');
 }
 
 /**

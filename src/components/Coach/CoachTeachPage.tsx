@@ -1935,6 +1935,11 @@ export function CoachTeachPage(): JSX.Element {
    *  or held back as a test — so their move can be recorded as its answer. */
   const trapPendingRef = useRef<{ fen: string; slip: string; warned: boolean; confirmed: boolean; state: string } | null>(null);
   const learnMemRef = useRef<LearnMemory>(createLearnMemory(() => { forgetPageRefsRef.current(); }));
+  // THE VISUALIZATION TEST, BOTH WAYS (David 2026-10-17): when the coach asks
+  // "there's a forced mate — can you see it?", the student's next move answers
+  // it. Finding the mate's next move is held calculation; a miss reaches the
+  // record through the game sweep, like every other lane.
+  const mateTestRef = useRef<{ ply: number; prior: string; san: string } | null>(null);
   
   // The threat / tactic say-once memory (last key + every spoken line) lives in
   // `learnMemRef.current` — per game, forgotten by the board-driven reset.
@@ -11450,6 +11455,17 @@ export function CoachTeachPage(): JSX.Element {
                         // engine's move, the reason that accounts for its gap over
                         // the next-best — a win by force is said as one; a stopped
                         // or prepared move carries the gap it is worth.
+                        // The answer to an earlier "can you see it?": their move
+                        // on the mate line, after the reply the line expected.
+                        const test = mateTestRef.current;
+                        if (test && test.ply === move.history.length) {
+                          mateTestRef.current = null;
+                          if (move.history[move.history.length - 2] === test.prior && move.san === test.san) {
+                            // A question without its answer is not a prompt: finding it is
+                            // proof — unless the move itself was announced.
+                            recordHeld('calculation-depth', 90, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
+                          }
+                        } else if (test && move.history.length > test.ply) mateTestRef.current = null;
                         const playedUci = (() => { try { const m = new Chess(fenBefore).move(move.san); return `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; } })();
                         const learned = intentReads && playedUci && intentReads.before[0]?.moves[0] === playedUci
                           ? learnMoveReason({ fenBefore, san: move.san, reads: intentReads, seat: 'student', opponentLastSan: move.history.length > 1 ? move.history[move.history.length - 2] : null, asksToSee: provenTagsRef.current.get('calculation-depth') === 'short' })
@@ -11459,6 +11475,9 @@ export function CoachTeachPage(): JSX.Element {
                           queueSpokenHint(fenAfterReply, theReason.text, 'moveIntent', learned?.proof ?? NO_PROOF.description, theReason.squares, [`reason:${playedUci}`], fenBefore, undefined,
                             theReason.line ? [theReason.line] : undefined,
                             { points: Math.min(theReason.stakeCp ?? 0, 2000) / 100, plies: 1 }, 'teach', 'reason');
+                        }
+                        if (theReason && /can you see/.test(theReason.text) && theReason.line && theReason.line.sans.length >= 3) {
+                          mateTestRef.current = { ply: move.history.length + 2, prior: theReason.line.sans[1], san: theReason.line.sans[2] };
                         }
                         const reasonTail = theReason?.kind === 'the' && theReason.source !== 'material' ? theReason.tail : null;
                         // BOTH WAYS: the reason they found is the skill they

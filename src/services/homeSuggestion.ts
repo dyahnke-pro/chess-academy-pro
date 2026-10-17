@@ -71,7 +71,7 @@ const LEARN_PICK: UpNextPick = {
 const TACTICS_IMPORTANCE: Record<PickKind, number> = {
   'game-slip': 85, grown: 75, weakness: 70, 'deep-run': 55, 'warm-up': 50, long: 50,
   // — not Tactics-hub kinds (ranked by their own family below) —
-  opening: 0, 'free-opening': 0, start: 0, upload: 0, learn: 0, thinking: 0,
+  opening: 0, 'free-opening': 0, start: 0, upload: 0, learn: 0, thinking: 0, endgame: 0,
 };
 
 /** The Learn family's floor: a game the coach talks the student through. */
@@ -177,11 +177,4 @@ export async function loadHomeSuggestion(): Promise<FamilyCandidate | null> {
     }),
   });
   return pick;
-}
-
-/** Test hook. */
-export function __resetHomeSuggestionForTests(): void {
-  openSeq = 0;
-  hiddenAt = null;
-  chosen = null;
 }

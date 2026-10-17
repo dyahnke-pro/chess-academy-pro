@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**256 lines · 13 exports · 5 importers · 2 tests · 0 audits**
+**230 lines · 12 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -52,9 +52,6 @@
 - `src/services/weaknessCallback.test.ts:67`
 - `src/services/weaknessCallback.test.ts:70`
 - `src/services/weaknessCallback.test.ts:79`
-
-### `recurrenceClause` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `RecurrenceGame` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

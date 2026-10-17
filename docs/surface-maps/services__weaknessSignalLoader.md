@@ -26,7 +26,7 @@
 ### `loadWeaknessSignals` (function) — 9 call sites
 - `src/components/Openings/OpeningPlayMode.tsx:72`
 - `src/hooks/useWeaknessSignals.ts:22`
-- `src/services/coachFeatureService.ts:5078`
+- `src/services/coachFeatureService.ts:5056`
 - `src/services/loopCloses.review.integration.test.ts:81`
 - `src/services/puzzleService.ts:355`
 - `src/services/studentNeedLoader.ts:212`
@@ -34,11 +34,11 @@
 - `src/services/tacticAlertService.ts:606`
 - `src/services/weaknessSignalLoader.green.test.ts:39`
 
-### `loadProvenTags` (function) — 1 call site
-- `src/hooks/useWeaknessSignals.ts:38`
+### `loadProvenTags` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `loadFadeLevels` (function) — 1 call site
-- `src/hooks/useWeaknessSignals.ts:53`
+- `src/hooks/useWeaknessSignals.ts:39`
 
 ### `invalidateWeaknessSignals` (function) — 3 call sites
 - `src/services/loopCloses.review.integration.test.ts:61`

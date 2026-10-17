@@ -207,12 +207,6 @@ function collectPuzzleIdsForName(dbName: string): string[] {
   return [...seen].sort();
 }
 
-/** Test-only — clear the cached index. Lets unit tests verify the
- *  lazy-build path and reset between runs that mock puzzleData. */
-export function _resetIndexForTest(): void {
-  TOKEN_INDEX = null;
-}
-
 // Re-export so consumers don't need a second import for the alias
 // shape when wiring the rolodex row.
 export { OPENING_TAG_ALIASES };

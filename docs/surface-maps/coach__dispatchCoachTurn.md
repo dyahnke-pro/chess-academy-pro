@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**701 lines · 18 exports · 21 importers · 16 tests · 2 audits**
+**700 lines · 17 exports · 21 importers · 16 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -50,14 +50,11 @@
 - `src/coach/dispatchCoachTurn.test.ts:231`
 - `src/coach/dispatchCoachTurn.test.ts:239`
 
-### `isServeParsedRouteOn` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `setChatTurnReaderForTests` (function) — 43 call sites
 - `src/coach/chatKindContracts.test.ts:337`
-- `src/coach/chatKindContracts.test.ts:385`
-- `src/coach/chatKindContracts.test.ts:410`
-- `src/coach/chatKindContracts.test.ts:415`
+- `src/coach/chatKindContracts.test.ts:387`
+- `src/coach/chatKindContracts.test.ts:412`
+- `src/coach/chatKindContracts.test.ts:417`
 - `src/coach/chatTurnRow.outcome.test.ts:28`
 - `src/coach/chatTurnRow.outcome.test.ts:37`
 - `src/coach/coachService.askReader.integration.test.ts:31`
@@ -114,15 +111,15 @@
 - `src/coach/dispatchCoachTurn.showLine.test.ts:75`
 
 ### `asksBeyondShowMe` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3312`
+- `src/components/Coach/CoachTeachPage.tsx:3327`
 
 ### `showLineAnswer` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3340`
+- `src/components/Coach/CoachTeachPage.tsx:3355`
 
 ### `conversationFor` (function) — 3 call sites
 - `src/coach/dispatchCoachTurn.test.ts:167`
 - `src/coach/requestExecutor.test.ts:88`
-- `src/components/Coach/CoachTeachPage.tsx:3303`
+- `src/components/Coach/CoachTeachPage.tsx:3318`
 
 ### `isStudentTurn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -137,21 +134,21 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `setPendingOffer` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3354`
-- `src/components/Coach/CoachTeachPage.tsx:12045`
-- `src/components/Coach/CoachTeachPage.tsx:14113`
+- `src/components/Coach/CoachTeachPage.tsx:3369`
+- `src/components/Coach/CoachTeachPage.tsx:12226`
+- `src/components/Coach/CoachTeachPage.tsx:14302`
 
 ### `openTurnRead` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3420`
+- `src/components/Coach/CoachTeachPage.tsx:3435`
 - `src/components/Coach/GameChatPanel.tsx:474`
 
 ### `isComputedAnswer` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7494`
+- `src/components/Coach/CoachTeachPage.tsx:7509`
 
 ### `dispatchCoachTurn` (function) — 48 call sites
-- `src/coach/chatKindContracts.test.ts:387`
-- `src/coach/chatKindContracts.test.ts:411`
-- `src/coach/chatKindContracts.test.ts:416`
+- `src/coach/chatKindContracts.test.ts:389`
+- `src/coach/chatKindContracts.test.ts:413`
+- `src/coach/chatKindContracts.test.ts:418`
 - `src/coach/chatTurnRow.outcome.test.ts:39`
 - `src/coach/coachService.askReader.integration.test.ts:32`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:35`

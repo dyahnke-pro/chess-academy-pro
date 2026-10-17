@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5397 lines · 31 exports · 50 importers · 53 tests · 4 audits**
+**5375 lines · 30 exports · 50 importers · 53 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -103,9 +103,6 @@
 - `src/services/coachFeatureService.test.ts:884`
 
 ### `ReviewNarrationSegments` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `studentMoveCosts` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `segmentNamedArrows` (function) — 3 call sites
@@ -271,8 +268,8 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8094`
-- `src/components/Coach/CoachTeachPage.tsx:8183`
+- `src/components/Coach/CoachTeachPage.tsx:8099`
+- `src/components/Coach/CoachTeachPage.tsx:8188`
 - `src/services/coachFeatureService.test.ts:907`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/utils/justCaptured.test.ts:20`
@@ -332,7 +329,7 @@
 
 ### `detectBadHabits` (re-export) — 7 call sites
 - `src/services/badHabitDetector.ts:21`
-- `src/services/coachApi.ts:5389`
+- `src/services/coachApi.ts:5349`
 - `src/services/coachFeatureService.test.ts:130`
 - `src/services/coachFeatureService.test.ts:151`
 - `src/services/coachFeatureService.test.ts:170`

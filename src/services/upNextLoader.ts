@@ -29,6 +29,7 @@ import { START_FUNDAMENTALS_KEY } from './activeBite';
 import { useAppStore } from '../stores/appStore';
 import { RING_SIZE, dayKey } from './trainingWeek';
 import { logAppAudit } from './appAuditor';
+import { dueEndgameReviews } from './endgameDueReview';
 
 export interface UpNextState {
   ring: UpNextPick[];
@@ -142,6 +143,7 @@ export async function loadUpNextInput(): Promise<UpNextInput> {
     coldStart: ownGames === 0 && own.length === 0,
     startSteps,
     thinking: await loadThinkingSignal().catch(() => null),
+    endgameDue: (await dueEndgameReviews().catch(() => []))[0] ?? null,
   };
 }
 

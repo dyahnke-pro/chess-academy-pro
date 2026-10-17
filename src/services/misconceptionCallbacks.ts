@@ -156,32 +156,6 @@ export function composeWeaknessCallback(w: CallbackWeakness, now: number = Date.
   });
 }
 
-/**
- * THE IN-FLOW RECURRENCE CLAUSE — the review walk's register, not the reveal's.
- *
- * The review already had a recurrence beat ("This one keeps recurring in your
- * games — missed forks — a good pattern to drill."). It could say a hole recurs
- * and never how OFTEN or WHERE, because the count and the game were computed
- * upstream and dropped at every layer in between (the spine threw away the
- * provenance its sources carried; `WeaknessSignal` then threw away the count).
- * Both now survive, so the beat can name them.
- *
- * Every clause is conditional on its source actually knowing the answer — an
- * unknown count simply does not appear, and an unknown opponent never becomes
- * "your opponent" (empty > generic > invented).
- */
-export function recurrenceClause(
-  label: string,
-  occurrences?: number,
-  prior?: CallbackContext,
-  now: number = Date.now(),
-): string {
-  const times = occurrences && occurrences >= 2 ? `, the ${ordinal(occurrences)} time now` : '';
-  const who = prior?.opponentName ? ` against ${prior.opponentName}` : '';
-  const when = prior?.playedAt ? ` — the last one was${who} ${recencyPhrase(prior.playedAt, now)}` : (who ? ` — the last one was${who}` : '');
-  return `This one keeps recurring in your games — ${label.toLowerCase()}${times}${when}. Worth drilling.`;
-}
-
 // ── THE RECURRENCE READ — counted in GAMES, honest about THIS game ───────────
 // WO-LOOP-01 (2026-09-20). Two defects in the way the in-flow clause counted:
 // (1) `total` counts ROWS, so two loose pieces in ONE game read as "the second
