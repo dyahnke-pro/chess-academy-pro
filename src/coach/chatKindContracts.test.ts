@@ -349,7 +349,9 @@ const written = (Object.entries(CONTRACTS) as Array<[ChatKind, Contract | Owed]>
  * ledger's.
  */
 interface Hard extends Contract { id: string; verify?: (text: string, b: Board) => string | null }
-const namedBest = (text: string): string | null => /(?:best move is|The move is|strongest (?:move )?is|play) (\S+?)[.,;—\s]/.exec(text)?.[1]?.replace(/[.,]$/, '') ?? null;
+// A close call names two moves ("f5 and g6 are about equally good here"); the
+// first is the one the answer leads with, and it must be legal like any other.
+const namedBest = (text: string): string | null => (/^(\S+?) and \S+? are about equally good/.exec(text) ?? /(?:best move is|The move is|strongest (?:move )?is|play) (\S+?)[.,;—\s]/.exec(text))?.[1]?.replace(/[.,]$/, '') ?? null;
 const HARD: Hard[] = [
   { id: 'quiet move, full line', board: 'quietRook', ask: "what's the best move here? walk me through the line", reading: { kind: 'best-move' },
     must: [/\bRe8\b/, /bishop/] },

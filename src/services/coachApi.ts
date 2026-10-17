@@ -3,7 +3,7 @@ import { evalBand, evalBandWords } from './evalBand';
 import { continueSentence } from '../utils/openSentence';
 import { smallTalkKind, smallTalkReply } from '../coach/smallTalk';
 import { lastMoveFromHistory } from './material';
-import { dangerAnswerLines, planArcAnswerLines, studentMoveAnswerLines, theirMoveAnswerLines } from './learnBoardTeaching';
+import { dangerAnswerLines, planArcAnswerLines, studentMoveAnswerLines, theirMoveAnswerLines, theirMovePoint } from './learnBoardTeaching';
 import OpenAI from 'openai';
 import { detectLanguage } from '../utils/detectLanguage';
 import { parseJsonSalvaging, isTruncatedJson } from '../utils/salvageJson';
@@ -5993,7 +5993,9 @@ export async function getCoachChatResponse(
             fen: grounding.currentFen,
             moveHistory: [...grounding.moveHistory],
             studentColor: sc,
-            pointKnown: extra.length > 0,
+            // Only a real point (its purpose, what it stopped) rules out
+            // "quiet" — "your answer is b4" says nothing about their move.
+            pointKnown: !!theirPurpose || (theirPly !== null && !!theirMovePoint(grounding.moveHistory, theirPly, sc === 'white' ? 'w' : 'b')),
           });
           const answer = base && extra.length > 0 ? { ...base, facts: `${base.facts} ${extra.join(' ')}` } : base;
           if (answer) {
@@ -6305,7 +6307,7 @@ export async function getCoachChatResponse(
               ? await moveReason(bestFen, bestMoveSanHere, 'student', lastHere).catch(() => null)
               : null;
             if (bestReason) emitDecisiveReason({ surface: 'chat', kind: bestReason.kind, source: bestReason.source, about: bestReason.about, gapCp: bestReason.gapCp, stakeCp: bestReason.stakeCp, posedTag: null, outcome: 'explained' });
-            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, askedPiece: grounding.askedPiece ?? null, prevCapture: bestFen === grounding.currentFen ? lastCaptureOf(grounding.moveHistory) : null, pvSan: bestFen === grounding.currentFen ? grounding.enginePlan?.pvSan ?? null : null, opponentLastSan: lastHere, theReason: bestReason?.kind === 'the' ? bestReason.text : null });
+            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, askedPiece: grounding.askedPiece ?? null, prevCapture: bestFen === grounding.currentFen ? lastCaptureOf(grounding.moveHistory) : null, pvSan: bestFen === grounding.currentFen ? grounding.enginePlan?.pvSan ?? null : null, opponentLastSan: lastHere, theReason: bestReason?.kind === 'the' ? bestReason.text : bestReason?.kind === 'close' && bestReason.source === 'stops' ? bestReason.core : null, closeAlt: bestReason?.kind === 'close' ? bestReason.nextBestSan : null });
             if (answer) {
               const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
               if (voiced) {

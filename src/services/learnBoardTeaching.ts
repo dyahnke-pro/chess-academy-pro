@@ -925,6 +925,20 @@ export function studentMoveAnswerLines(history: readonly string[], ply: number, 
   return out;
 }
 
+/** WHAT THEIR MOVE WAS FOR, when a board computer can say it: the threat of
+ *  yours it stopped, or the fork trick it sidestepped. The one source for
+ *  "their move has a point" — an answer that has none may call it quiet, one
+ *  that has one never does (escalating walk 2026-10-17). */
+export function theirMovePoint(history: readonly string[], ply: number, student: 'w' | 'b'): string | null {
+  const fenBefore = replayTo(history, ply);
+  if (!fenBefore || ply < 0 || ply >= history.length) return null;
+  const prev = ply >= 1 ? replayTo(history, ply - 1) : null;
+  const stop = prev ? threatStoppedBy(prev, fenBefore, history[ply], student) : null;
+  if (stop) return stop.text;
+  const mover: 'w' | 'b' = student === 'w' ? 'b' : 'w';
+  return trickSidestepped(fenBefore, history[ply], mover, 'your')?.text ?? null;
+}
+
 /** "What did their move do? Do I have to deal with it?" — what it cost them,
  *  the tempo count, and — when their move is the last on the board and the
  *  engine's best line at the current position is known — whether its threat can
@@ -941,12 +955,8 @@ export function theirMoveAnswerLines(history: readonly string[], ply: number, st
   // WHAT IT STOPPED — the threat of yours their move took away, or the fork
   // trick it sidestepped. The same static computers Learn and Review speak
   // (Play on demand, David 2026-10-02).
-  const prev = ply >= 1 ? replayTo(history, ply - 1) : null;
-  const stop = prev ? threatStoppedBy(prev, fenBefore, history[ply], student) : null;
-  const mover: 'w' | 'b' = student === 'w' ? 'b' : 'w';
-  const trick = stop ? null : trickSidestepped(fenBefore, history[ply], mover, 'your');
-  if (stop) out.push(stop.text);
-  else if (trick) out.push(trick.text);
+  const point = theirMovePoint(history, ply, student);
+  if (point) out.push(point);
   const cost = theirMoveTeaching(fenBefore, history[ply], student);
   if (cost) out.push(cost.text);
   const tempo = tempoTeaching(history.slice(0, ply + 1), student);

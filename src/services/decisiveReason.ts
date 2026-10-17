@@ -24,6 +24,7 @@ import { heardHorizon, heardProofCut, describeProofResult, settledNetForLine } f
 import { andList, lineShape } from '../utils/andList';
 import { bestMoveReason } from './deliberation';
 import { costWords } from './engineConstants';
+import { openSentence } from '../utils/openSentence';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 
 export type ReasonKind = 'the' | 'a' | 'close';
@@ -266,9 +267,17 @@ export function decisiveReason(input: {
     // Close moves differ by nothing a line proves, so what the move DOES is the
     // honest thing to say; a material count here would contradict "about as good".
     const quiet = top && top.source !== 'material' ? top : undefined;
-    const what = description ? `One thing it does: ${played} ${description}.` : quiet?.text ?? null;
-    const src: ReasonSource | null = description ? 'description' : quiet?.source ?? null;
-    return { ...base, kind: 'close', source: src, stakeCp: null, text: `There is no single reason here — ${alt}.${what ? ` ${what}` : ''}`, line: description ? null : quiet?.line ?? null, squares: description ? [] : quiet?.squares ?? [] };
+    // A STOPPED THREAT IS THE REASON EVEN WHEN SEVERAL MOVES SHARE IT (contract
+    // board 2026-10-17: f5/g6/h6 all stop Re8 mate, and the answer said "it
+    // fights for e4"). It outranks a board description; a mere preparation
+    // does not.
+    const stops = quiet?.source === 'stops' ? quiet : undefined;
+    const what = stops ? stops.text : description ? `One thing it does: ${played} ${description}.` : quiet?.text ?? null;
+    const src: ReasonSource | null = stops ? 'stops' : description ? 'description' : quiet?.source ?? null;
+    const useQuiet = !!stops || !description;
+    // A shared reason is still a reason: said first, the equal move after.
+    const closeText = stops ? `${what} ${openSentence(alt)}.` : `There is no single reason here — ${alt}.${what ? ` ${what}` : ''}`;
+    return { ...base, kind: 'close', source: src, stakeCp: null, core: what, text: closeText, line: useQuiet ? quiet?.line ?? null : null, squares: useQuiet ? quiet?.squares ?? [] : [] };
   }
   if (top && (top.stake >= COVERS_SHARE * gapCp || covering.includes(top))) {
     const asksMate = longMate && covering.includes(top) && !mateText(top) && input.asksToSee && seat === 'student';

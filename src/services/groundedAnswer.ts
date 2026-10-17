@@ -1903,6 +1903,10 @@ export function assembleMoveEvalAnswer(opts: {
   /** THE reason for the best move (`decisiveReason`, kind 'the'), said in
    *  place of a re-derived one. */
   theReason?: string | null;
+  /** A move the reason computer finds about as good (a close call): the
+   *  answer names both rather than crowning one (escalating walk 2026-10-17:
+   *  "the best move is Qd3", then "exf5 is about as good"). */
+  closeAlt?: string | null;
 }): GroundedAnswer | null {
   const { fen, bestMoveUci } = opts;
   if (!bestMoveUci || bestMoveUci.length < 4) return null;
@@ -1951,7 +1955,9 @@ export function assembleMoveEvalAnswer(opts: {
       ? `Their strongest reply is ${bestMoveSan}.`
       : wrongPiece
         ? `No ${opts.askedPiece} move is the answer here — the strongest is ${bestMoveSan}.`
-        : `The best move is ${bestMoveSan}.`,
+        : opts.closeAlt && opts.closeAlt !== bestMoveSan
+          ? `${bestMoveSan} and ${opts.closeAlt} are about equally good here.`
+          : `The best move is ${bestMoveSan}.`,
   ];
   // A MOVE THAT STARTS A FORCED MATE IS BEST FOR THAT REASON (hard walk
   // 2026-10-10: "Ng5 lands on the g5 outpost … there is a forced mate in 3").
@@ -2254,7 +2260,12 @@ export function assembleCandidateMoveAnswer(opts: {
     verdict = errorCall
       ? `${candNorm} is ${errorCall.sentence}`
       : band === null
-      ? `${candNorm} is playable, just slightly worse than ${bestSan ?? 'the best move'} — it gives up ${costWords(cpLoss)}.`
+      // No grade means the result does not change (a decided position): say
+      // that, never "slightly worse" beside a five-point gap (escalating walk
+      // 2026-10-17, Rd7 next to a mate in 4).
+      ? (opts.candidateEvalCp as number) >= 300
+        ? `${candNorm} still wins, but ${bestSan ?? 'the engine move'} is stronger.`
+        : `${candNorm} is playable, just slightly worse than ${bestSan ?? 'the best move'} — it gives up ${costWords(cpLoss)}.`
       : band === 'inaccuracy'
         ? `${candNorm} is an inaccuracy — it gives up ${costWords(cpLoss)} versus ${bestSan ?? 'the best move'}.`
         : `${candNorm} is a ${band} — it loses ${costWords(cpLoss)}; ${bestSan ?? 'the engine move'} is much better.`;
@@ -2265,7 +2276,7 @@ export function assembleCandidateMoveAnswer(opts: {
   // "attacks"), so the student hears the reason, not just the grade.
   if (geo && !geo.startsWith('attacks')) parts.push(`It ${geo}.`);
   const evalText = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover, opts.studentColor);
-  if (evalText) parts.push(`After it, ${evalText}.`);
+  if (evalText && !/ still wins, /.test(verdict)) parts.push(`After it, ${evalText}.`);
   if (lineText && !errorCall) parts.push(lineText);
   // THE BETTER MOVE COMES WITH ITS REASON (2026-10-08, David: "if they ask
   // why it's best, they get the proof"). A named move that is not the best
