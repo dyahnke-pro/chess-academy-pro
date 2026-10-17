@@ -759,10 +759,13 @@ export function prizeTeaching(fen: string, square: string, student: 'w' | 'b',
   // The method is its OWN sentence, so the game's sentence ledger says it once
   // and every later prize keeps only its fact.
   if (guards === 0) {
+    // Each stem carries its own reason: the method sentence after it is said
+    // once a game, so a later prize keeps only this one (prod Learn
+    // 2026-10-16: "Their bishop on a5 is standing there unguarded." — bare).
     const stems = [
-      `Their ${name} on ${square} has nothing defending it.`,
-      `Nothing guards their ${name} on ${square}.`,
-      `Their ${name} on ${square} is standing there unguarded.`,
+      `Their ${name} on ${square} has nothing defending it, so taking it costs you nothing back.`,
+      `Nothing guards their ${name} on ${square} — whatever takes it is not taken back.`,
+      `Their ${name} on ${square} is unguarded: win it and nothing recaptures.`,
     ];
     return { text: `${stems[stem % stems.length]} ${caution}`, squares: [square] };
   }
