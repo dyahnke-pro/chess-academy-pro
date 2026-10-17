@@ -118,7 +118,7 @@ describe('decisiveReason — escalating walk boards (2026-10-17)', () => {
     const r = decisiveReason({ fenBefore: fen, san: 'Qxf5', seat: 'student', opponentLastSan: 'Kf7', reads: {
       before: [{ rank: 1, evaluation: 0, mate: 14, moves: 'c8f5 f7e7 a3c4 g7g6 f5g6 f6e8 g6e4 e7f6 e4e8 a7a6'.split(' ') }, { rank: 2, evaluation: 1194, mate: null, moves: 'b3b4 f7g6 c8e6 a7a5 a3c4 f5g5 d1d8 b6b5'.split(' ') }], after: [], passBefore: [], passAfter: [] } });
     expect(r?.text).toMatch(/^Qxf5 — you win a rook\./);
-    expect(r?.text).toMatch(/forced mate in 14 after it/);
+    expect(r?.text).toMatch(/forced mate in 14 moves after it/);
   });
 });
 
@@ -127,11 +127,11 @@ describe('decisiveReason — a forced mate is a visualization test for a proven 
   const reads = { before: [{ rank: 1, evaluation: 0, mate: 14, moves: 'c8f5 f7e7 a3c4 g7g6 f5g6 f6e8 g6e4 e7f6 e4e8 a7a6'.split(' ') }, { rank: 2, evaluation: 1194, mate: null, moves: 'b3b4 f7g6 c8e6 a7a5 a3c4 f5g5 d1d8 b6b5'.split(' ') }], after: [], passBefore: [], passAfter: [] };
   it('proven: the mate is asked, never answered in the voice', () => {
     const r = decisiveReason({ fenBefore: fen, san: 'Qxf5', seat: 'student', opponentLastSan: 'Kf7', reads, asksToSee: true });
-    expect(r?.text).toMatch(/^Qxf5 — you win a rook\. And there's a forced mate in 14 after it — can you see it\?/);
+    expect(r?.text).toMatch(/^Qxf5 — you win a rook\. And there's a forced mate in 14 moves after it — can you see it\?/);
   });
   it('grey or red: the mate is stated (grey teaches)', () => {
     const r = decisiveReason({ fenBefore: fen, san: 'Qxf5', seat: 'student', opponentLastSan: 'Kf7', reads });
-    expect(r?.text).toMatch(/engine sees a forced mate in 14 after it\.$/);
+    expect(r?.text).toMatch(/engine sees a forced mate in 14 moves after it\.$/);
     expect(r?.text).not.toMatch(/can you see/);
   });
 });

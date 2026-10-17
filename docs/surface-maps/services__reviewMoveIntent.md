@@ -27,7 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `lineOf` (const) — 16 call sites
 - `scripts/catalog-sweep/gated-skeleton-scan.mjs:28`
 - `scripts/catalog-sweep/gated-skeleton-scan.mjs:38`
-- `src/services/groundedAnswer.ts:7610`
+- `src/services/groundedAnswer.ts:7640`
 - `src/services/linePickerPopularity.ts:110`
 - `src/services/linePickerPopularity.ts:112`
 - `src/services/linePickerPopularity.ts:113`

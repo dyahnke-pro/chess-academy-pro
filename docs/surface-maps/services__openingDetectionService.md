@@ -113,8 +113,8 @@
 - `src/services/openingPositions.test.ts:37`
 
 ### `detectOpeningTranspositional` (function) — 8 call sites
-- `src/services/coachApi.ts:5752`
-- `src/services/coachApi.ts:6742`
+- `src/services/coachApi.ts:5775`
+- `src/services/coachApi.ts:6790`
 - `src/services/openingTransposition.test.ts:9`
 - `src/services/openingTransposition.test.ts:13`
 - `src/services/openingTransposition.test.ts:17`
@@ -147,8 +147,8 @@
 - `src/components/Coach/CoachTeachPage.tsx:14274`
 - `src/data/voicedWalkthroughs.test.ts:100`
 - `src/data/voicedWalkthroughs.ts:160`
-- `src/services/coachApi.ts:6347`
-- `src/services/coachApi.ts:6372`
+- `src/services/coachApi.ts:6395`
+- `src/services/coachApi.ts:6420`
 - `src/services/coachSessionRouter.ts:254`
 - `src/services/openingDbGrounding.ts:231`
 - `src/services/openingDetectionService.teachSpine.test.ts:39`

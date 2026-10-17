@@ -61,8 +61,8 @@ export const COVERS_SHARE = 0.6;
 const MATE_CP = 100_000;
 /** A gap this large is decisive; when forcing play cannot show it, the whole
  *  engine line is read for it. */
-/** A mate this short is the reason itself; a longer one gives way to the
- *  concrete win the student can see. */
+/** A mate this short is the reason itself; a longer one is too when the
+ *  forcing line reaches it, and otherwise gives way to the concrete win. */
 export const SHORT_MATE = 3;
 export const DEEP_GAP_CP = 300;
 const squareOf = (san: string): string | null => /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(san)?.[1] ?? null;
@@ -128,6 +128,7 @@ function landsWith(line: readonly string[], mover: 'w' | 'b'): string {
 }
 
 const dot = (san: string, side: 'w' | 'b'): string => (side === 'b' ? `…${san}` : san);
+const movesWord = (n: number): string => `${n} move${n === 1 ? '' : 's'}`;
 
 export function decisiveReason(input: {
   fenBefore: string;
@@ -181,13 +182,19 @@ export function decisiveReason(input: {
   // 2026-10-17: "Qxf5 starts a forced mate in 10" where Qxf5 takes a free
   // rook). A mate leads when it is short; past that the concrete win leads and
   // the mate is only the fallback.
-  const longMate = ownMate !== null && ownMate > SHORT_MATE;
+  // Long = past the FORCING line: a mate the heard proof reaches (every move a
+  // check or capture the student can follow) is the reason however many moves
+  // it takes; one that runs past it gives way to the win the student can see.
+  const heardMate = ownMate !== null && ownMate > 0
+    ? !!heardProofCut(fenBefore, sansOf(fenBefore, own.moves), seat === 'student' ? mover : mover === 'w' ? 'b' : 'w')?.mate
+    : false;
+  const longMate = ownMate !== null && ownMate > SHORT_MATE && !heardMate;
   if (ownMate !== null && ownMate > 0 && !longMate && !(nextMate !== null && nextMate > 0)) {
     const asks = input.asksToSee && seat === 'student' && ownMate > 1;
-    cands.push({ source: 'material', stake: MATE_CP, text: ownMate === 1 ? `${played} is mate.` : asks ? `${played} starts a forced mate in ${ownMate} — can you see how it goes? The line is on the board when you want it.` : `${played} starts a forced mate in ${ownMate}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
+    cands.push({ source: 'material', stake: MATE_CP, text: ownMate === 1 ? `${played} is mate.` : asks ? `${played} starts a forced mate in ${movesWord(ownMate)} — can you see how it goes? The line is on the board when you want it.` : `${played} starts a forced mate in ${movesWord(ownMate)}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
   } else if (nextMate !== null && nextMate < 0 && nextBestSan) {
     const n = -nextMate;
-    cands.push({ source: 'material', stake: MATE_CP, text: `The natural alternative, ${dot(nextBestSan, mover)}, walks into a forced mate${n > 1 ? ` in ${n}` : ''}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, next.moves).slice(0, 2 * n) }, squares: [], alt: true });
+    cands.push({ source: 'material', stake: MATE_CP, text: `The natural alternative, ${dot(nextBestSan, mover)}, walks into a forced mate${n > 1 ? ` in ${movesWord(n)}` : ''}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, next.moves).slice(0, 2 * n) }, squares: [], alt: true });
   } else {
     // MATERIAL — the difference the two lines settle on, not either alone: a
     // pawn both lines win is not why one beats the other.
@@ -203,7 +210,7 @@ export function decisiveReason(input: {
     } else if (matStake > 0) {
       const win = matOwn > 0 ? seatProof(fenBefore, sansOf(fenBefore, own.moves), mover, studentWB, 'for') : null;
       const loss = !win && matNext < 0 ? seatProof(fenBefore, sansOf(fenBefore, next.moves), mover, studentWB, 'against') : null;
-      if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? `${win.text}.` : `${played} wins by force: ${win.end} — ${landsWith(win.sans, mover)}.`, line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
+      if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? `${win.text}.` : win.end === "and it's mate" ? `${played} starts a forced mate — ${landsWith(win.sans, mover)}.` : `${played} wins by force: ${win.end} — ${landsWith(win.sans, mover)}.`, line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
       else if (loss && nextBestSan) cands.push({ source: 'material', stake: matStake, text: `The natural alternative, ${dot(nextBestSan, mover)}, fails: ${loss.text}.`, line: { fen: fenBefore, sans: loss.sans }, squares: [], alt: true });
       // No short proof, but the count is the reason: say the count, never let a
       // smaller reason stand in for it.
@@ -222,7 +229,7 @@ export function decisiveReason(input: {
   }
 
   if (!cands.length && longMate && ownMate !== null && !(nextMate !== null && nextMate > 0)) {
-    cands.push({ source: 'material', stake: MATE_CP, text: `${played} starts a forced mate in ${ownMate}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
+    cands.push({ source: 'material', stake: MATE_CP, text: `${played} starts a forced mate in ${movesWord(ownMate)}.`, line: { fen: fenBefore, sans: sansOf(fenBefore, own.moves).slice(0, 2 * ownMate - 1) }, squares: [], alt: false });
   }
 
   // STOPS / PREPARES — the pass read, worded by the computer that owns it.
@@ -244,7 +251,7 @@ export function decisiveReason(input: {
   cands.sort((a, b) => b.stake - a.stake);
   // Behind a long mate the gap is the mate's, which no count can cover: the
   // forced win the student can see covers it, and the mate is said after.
-  const mateText = (c: { text: string }): boolean => /forced mate/.test(c.text);
+  const mateText = (c: { text: string }): boolean => /forced mate|\bis mate\./.test(c.text);
   const covering = longMate && cands.some((c) => c.source === 'material' && !mateText(c))
     ? cands.filter((c) => c.source === 'material' && !mateText(c))
     : cands.filter((c) => c.stake >= COVERS_SHARE * gapCp).sort((a, b) => PRIORITY[a.source] - PRIORITY[b.source]);
@@ -267,9 +274,11 @@ export function decisiveReason(input: {
     const asksMate = longMate && covering.includes(top) && !mateText(top) && input.asksToSee && seat === 'student';
     const tail = longMate && covering.includes(top) && !mateText(top)
       ? asksMate
-        ? ` And there's a forced mate in ${ownMate} after it — can you see it? The line is on the board when you want it.`
-        : ` And the engine sees a forced mate in ${ownMate} after it.`
-      : nextBestSan && !top.alt ? ` Anything else, like ${dot(nextBestSan, mover)}, gives up ${costWords(gapCp)}.` : '';
+        ? ` And there's a forced mate in ${movesWord(ownMate)} after it — can you see it? The line is on the board when you want it.`
+        : ` And the engine sees a forced mate in ${movesWord(ownMate)} after it.`
+      : nextBestSan && !top.alt
+        ? mateText(top) ? ` Anything else, like ${dot(nextBestSan, mover)}, lets the mate go.` : ` Anything else, like ${dot(nextBestSan, mover)}, gives up ${costWords(gapCp)}.`
+        : '';
     // Their move, said as theirs ("Their …Bxf7 wins by force", never a bare
     // "…Bxf7 wins" the student must work out the owner of).
     const core = seat !== 'opponent' ? top.text

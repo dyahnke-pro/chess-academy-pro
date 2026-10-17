@@ -2935,5 +2935,659 @@
     "mate": null
    }
   ]
+ },
+ "4r1k1/p7/7p/1p4p1/6R1/3B1q1P/2P3RP/2B4K w - - 8 36": {
+  "bestMove": "c1d2",
+  "evaluation": -331,
+  "isMate": false,
+  "mateIn": null,
+  "depth": 18,
+  "seldepth": 38,
+  "nodesPerSecond": 0,
+  "wdl": null,
+  "topLines": [
+   {
+    "rank": 1,
+    "moves": [
+     "c1d2",
+     "f3d1",
+     "g2g1",
+     "d1d2",
+     "h3h4",
+     "e8e1",
+     "g1e1",
+     "d2e1",
+     "h1g2",
+     "e1e6",
+     "g2f3",
+     "a7a5",
+     "h4g5",
+     "h6h5",
+     "g4f4",
+     "e6d5",
+     "f3e2",
+     "d5e5",
+     "e2f3",
+     "a5a4"
+    ],
+    "evaluation": -331,
+    "mate": null
+   },
+   {
+    "rank": 2,
+    "moves": [
+     "d3e4",
+     "e8e4",
+     "g4e4",
+     "f3e4",
+     "h3h4",
+     "e4h4",
+     "c1d2",
+     "b5b4",
+     "c2c4",
+     "b4b3",
+     "d2c1",
+     "h4e1",
+     "g2g1",
+     "e1e2",
+     "c4c5",
+     "e2e4",
+     "g1g2",
+     "e4e1",
+     "g2g1",
+     "e1e5"
+    ],
+    "evaluation": -519,
+    "mate": null
+   },
+   {
+    "rank": 3,
+    "moves": [
+     "g4e4",
+     "e8e4",
+     "d3e4",
+     "f3e4",
+     "h3h4",
+     "e4h4",
+     "c1d2",
+     "b5b4",
+     "c2c4",
+     "h4e4",
+     "c4c5",
+     "b4b3",
+     "d2c3",
+     "e4c4",
+     "c3b2",
+     "c4f1",
+     "g2g1",
+     "f1f3",
+     "g1g2"
+    ],
+    "evaluation": -531,
+    "mate": null
+   }
+  ]
+ },
+ "6k1/6pp/8/5p2/8/8/5PPP/4R1K1 w - - 0 2": {
+  "bestMove": "e1d1",
+  "evaluation": 628,
+  "isMate": false,
+  "mateIn": null,
+  "depth": 18,
+  "seldepth": 29,
+  "nodesPerSecond": 0,
+  "wdl": null,
+  "topLines": [
+   {
+    "rank": 1,
+    "moves": [
+     "e1d1",
+     "g8f7",
+     "g1f1",
+     "f7f6",
+     "f1e2",
+     "g7g6",
+     "d1c1",
+     "f6e5",
+     "e2e3",
+     "f5f4",
+     "e3f3",
+     "e5d4",
+     "c1d1",
+     "d4e5",
+     "h2h4",
+     "e5e6",
+     "f3f4",
+     "e6f6",
+     "d1h1",
+     "f6g7",
+     "h1c1",
+     "g7h8"
+    ],
+    "evaluation": 628,
+    "mate": null
+   },
+   {
+    "rank": 2,
+    "moves": [
+     "g1f1",
+     "g8f7",
+     "f1e2",
+     "f7f6",
+     "e2e3",
+     "f6e5",
+     "e1c1",
+     "g7g6",
+     "f2f4",
+     "e5e6",
+     "h2h3",
+     "e6d5",
+     "c1d1",
+     "d5e6"
+    ],
+    "evaluation": 627,
+    "mate": null
+   },
+   {
+    "rank": 3,
+    "moves": [
+     "e1e7",
+     "f5f4",
+     "g1f1",
+     "h7h6",
+     "e7a7",
+     "f4f3",
+     "g2f3",
+     "g8h7",
+     "f1e2",
+     "h7g6",
+     "f3f4",
+     "g6h5",
+     "e2f3",
+     "g7g5"
+    ],
+    "evaluation": 626,
+    "mate": null
+   }
+  ]
+ },
+ "r1bqk2r/pp3pp1/1bpp1n1p/n3p3/1P1PP3/2P2N2/P3BPPP/RNBQ1RK1 w kq - 0 10": {
+  "bestMove": "d4e5",
+  "evaluation": 386,
+  "isMate": false,
+  "mateIn": null,
+  "depth": 18,
+  "seldepth": 35,
+  "nodesPerSecond": 0,
+  "wdl": null,
+  "topLines": [
+   {
+    "rank": 1,
+    "moves": [
+     "d4e5",
+     "f6e4",
+     "b4a5",
+     "b6a5",
+     "d1c2",
+     "d6d5",
+     "e2d3",
+     "e8g8",
+     "c1a3",
+     "f8e8",
+     "d3e4",
+     "d5e4",
+     "c2e4",
+     "f7f6",
+     "b1d2",
+     "f6e5",
+     "a1e1",
+     "d8f6",
+     "e4c2"
+    ],
+    "evaluation": 386,
+    "mate": null
+   },
+   {
+    "rank": 2,
+    "moves": [
+     "b4a5",
+     "b6a5",
+     "d4e5",
+     "f6e4",
+     "d1c2",
+     "d6d5",
+     "c1a3",
+     "c8g4",
+     "f3d4",
+     "g4e2",
+     "c2e2",
+     "d8g5",
+     "f2f4",
+     "g5g6",
+     "f1f3",
+     "a5b6",
+     "b1d2",
+     "e4d2",
+     "e2d2",
+     "c6c5",
+     "d4b5"
+    ],
+    "evaluation": 385,
+    "mate": null
+   },
+   {
+    "rank": 3,
+    "moves": [
+     "d1c2",
+     "e5d4",
+     "c3d4",
+     "e8g8",
+     "b4a5",
+     "b6a5",
+     "e4e5",
+     "d6e5",
+     "d4e5",
+     "f8e8",
+     "b1d2",
+     "f6d5",
+     "d2c4",
+     "d5c3",
+     "e2d3",
+     "c8g4",
+     "c4a5",
+     "g4f3",
+     "c2c3",
+     "f3g2",
+     "g1g2"
+    ],
+    "evaluation": 375,
+    "mate": null
+   }
+  ]
+ },
+ "6k1/p1p4p/1p2n1p1/3pQ3/3P1nN1/2PB2qP/PP4P1/6K1 b - - 18 33": {
+  "bestMove": "g3g2",
+  "evaluation": -100000,
+  "isMate": true,
+  "mateIn": -1,
+  "depth": 18,
+  "seldepth": 38,
+  "nodesPerSecond": 0,
+  "wdl": null,
+  "topLines": [
+   {
+    "rank": 1,
+    "moves": [
+     "g3g2"
+    ],
+    "evaluation": -100000,
+    "mate": -1
+   },
+   {
+    "rank": 2,
+    "moves": [
+     "h7h5",
+     "g4f6",
+     "g8f7",
+     "d3f1",
+     "f4h3",
+     "g1h1",
+     "g3f2",
+     "h1h2",
+     "h3g5",
+     "f1e2",
+     "f2f6",
+     "e5d5",
+     "f7g7",
+     "d5d7",
+     "f6f7",
+     "d7b5",
+     "g7h8"
+    ],
+    "evaluation": -482,
+    "mate": null
+   },
+   {
+    "rank": 3,
+    "moves": [
+     "f4h3",
+     "g1h1",
+     "g3g4",
+     "g2h3",
+     "g4h3",
+     "h1g1",
+     "h3g4",
+     "g1h1",
+     "g8f7",
+     "d3a6",
+     "g4h4",
+     "h1g2",
+     "h4g5",
+     "e5g5",
+     "e6g5",
+     "g2g3",
+     "h7h6",
+     "g3f4",
+     "f7e6",
+     "c3c4"
+    ],
+    "evaluation": -428,
+    "mate": null
+   }
+  ]
+ },
+ "2r3k1/p7/7p/1p4p1/6R1/3B1q1P/2P3RP/2B4K w - - 7 35": {
+  "bestMove": "g4g3",
+  "evaluation": 234,
+  "isMate": false,
+  "mateIn": null,
+  "depth": 18,
+  "seldepth": 43,
+  "nodesPerSecond": 0,
+  "wdl": null,
+  "topLines": [
+   {
+    "rank": 1,
+    "moves": [
+     "g4g3",
+     "f3c6",
+     "h3h4",
+     "c8e8",
+     "c1d2",
+     "e8f8",
+     "h4g5",
+     "h6h5",
+     "h1g1",
+     "h5h4",
+     "g3h3",
+     "a7a5",
+     "h3h4",
+     "a5a4",
+     "g5g6",
+     "c6c5",
+     "g1h1",
+     "f8f2",
+     "h4e4"
+    ],
+    "evaluation": 234,
+    "mate": null
+   },
+   {
+    "rank": 2,
+    "moves": [
+     "c1b2",
+     "a7a5",
+     "d3e4",
+     "f3d1",
+     "g2g1",
+     "d1d2",
+     "h3h4",
+     "c8c2",
+     "e4c2",
+     "d2c2",
+     "g4g2",
+     "c2e4",
+     "h4g5",
+     "h6g5",
+     "b2c1",
+     "g5g4",
+     "g1f1",
+     "b5b4"
+    ],
+    "evaluation": 160,
+    "mate": null
+   },
+   {
+    "rank": 3,
+    "moves": [
+     "d3e4",
+     "f3f1",
+     "g2g1",
+     "f1h3",
+     "g4g3",
+     "h3e6",
+     "g3e3",
+     "c8e8",
+     "e4g2",
+     "e6d7",
+     "e3d3",
+     "d7c7",
+     "g1f1",
+     "e8d8",
+     "d3d5",
+     "d8e8",
+     "d5f5",
+     "c7c2",
+     "g2d5",
+     "g8h8",
+     "f5f2",
+     "e8e2",
+     "f2f8",
+     "h8h7"
+    ],
+    "evaluation": 118,
+    "mate": null
+   }
+  ]
+ },
+ "4r1k1/p7/7p/1p4p1/6R1/3B1q1P/2P3RP/2B4K b - - 8 36": {
+  "bestMove": "e8e1",
+  "evaluation": -100000,
+  "isMate": true,
+  "mateIn": -2,
+  "depth": 18,
+  "seldepth": 69,
+  "nodesPerSecond": 0,
+  "wdl": null,
+  "topLines": [
+   {
+    "rank": 1,
+    "moves": [
+     "e8e1",
+     "d3f1",
+     "e1f1"
+    ],
+    "evaluation": -100000,
+    "mate": -2
+   },
+   {
+    "rank": 2,
+    "moves": [
+     "a7a5",
+     "c1d2",
+     "f3d1",
+     "g2g1",
+     "d1d2",
+     "g4g2",
+     "d2b4",
+     "g2g4",
+     "b4c5",
+     "h3h4",
+     "a5a4",
+     "d3e4",
+     "a4a3",
+     "c2c4",
+     "e8e4",
+     "g4e4",
+     "c5c6",
+     "g1e1"
+    ],
+    "evaluation": -420,
+    "mate": null
+   },
+   {
+    "rank": 3,
+    "moves": [
+     "e8e6",
+     "c1d2",
+     "f3d1",
+     "g2g1",
+     "d1d2",
+     "h3h4",
+     "e6e1",
+     "g1e1",
+     "d2e1",
+     "h1g2",
+     "e1d1",
+     "g2g3",
+     "d1g1",
+     "g3f3",
+     "g1h2",
+     "h4g5",
+     "b5b4"
+    ],
+    "evaluation": -371,
+    "mate": null
+   }
+  ]
+ },
+ "6k1/5ppp/8/8/8/8/5PPP/4R1K1 w - - 0 1": {
+  "bestMove": "e1e8",
+  "evaluation": 100000,
+  "isMate": true,
+  "mateIn": 1,
+  "depth": 18,
+  "seldepth": 29,
+  "nodesPerSecond": 0,
+  "wdl": null,
+  "topLines": [
+   {
+    "rank": 1,
+    "moves": [
+     "e1e8"
+    ],
+    "evaluation": 100000,
+    "mate": 1
+   },
+   {
+    "rank": 2,
+    "moves": [
+     "g1f1",
+     "g7g5",
+     "e1b1",
+     "g5g4",
+     "b1b8",
+     "g8g7",
+     "f1e2",
+     "h7h5",
+     "e2e3",
+     "g4g3",
+     "f2g3",
+     "h5h4",
+     "g3g4",
+     "f7f6"
+    ],
+    "evaluation": 618,
+    "mate": null
+   },
+   {
+    "rank": 3,
+    "moves": [
+     "e1a1",
+     "g7g5",
+     "g1f1",
+     "g8g7",
+     "f1e2",
+     "g5g4",
+     "a1a8",
+     "g7g6",
+     "a8b8",
+     "g6g7",
+     "g2g3",
+     "h7h5",
+     "e2e3",
+     "g7g6",
+     "e3f4",
+     "f7f6"
+    ],
+    "evaluation": 607,
+    "mate": null
+   }
+  ]
+ },
+ "6k1/6pp/8/5p2/8/8/5PPP/4R1K1 b - - 0 2": {
+  "bestMove": "f5f4",
+  "evaluation": 593,
+  "isMate": false,
+  "mateIn": null,
+  "depth": 18,
+  "seldepth": 36,
+  "nodesPerSecond": 0,
+  "wdl": null,
+  "topLines": [
+   {
+    "rank": 1,
+    "moves": [
+     "f5f4",
+     "f2f3",
+     "g8f7",
+     "g1f2",
+     "f7f6",
+     "f2e2",
+     "f6g5",
+     "e2d3",
+     "g5h4",
+     "d3e4",
+     "g7g5",
+     "e1b1",
+     "h7h5",
+     "b1c1",
+     "g5g4",
+     "e4f4",
+     "g4f3",
+     "f4f3",
+     "h4g5",
+     "c1c5",
+     "g5g6",
+     "c5a5"
+    ],
+    "evaluation": 593,
+    "mate": null
+   },
+   {
+    "rank": 2,
+    "moves": [
+     "h7h5",
+     "g1f1",
+     "h5h4",
+     "f1e2",
+     "g8f7",
+     "f2f4",
+     "h4h3",
+     "g2h3",
+     "g7g5",
+     "e2f3",
+     "f7g6",
+     "f4g5",
+     "g6g5",
+     "e1e5",
+     "g5f6"
+    ],
+    "evaluation": 598,
+    "mate": null
+   },
+   {
+    "rank": 3,
+    "moves": [
+     "g7g5",
+     "g1f1",
+     "g5g4",
+     "f1e2",
+     "f5f4",
+     "f2f3",
+     "h7h5",
+     "e2d3",
+     "g8f7",
+     "d3e4",
+     "f7g6",
+     "e4f4",
+     "g4f3",
+     "f4f3",
+     "g6f5"
+    ],
+    "evaluation": 601,
+    "mate": null
+   }
+  ]
  }
 }

@@ -49,7 +49,7 @@
 - `src/coach/chatTurnCodeReader.test.ts:19`
 - `src/coach/chatTurnCodeReader.test.ts:22`
 - `src/coach/chatTurnCodeReader.test.ts:23`
-- `src/services/coachApi.ts:2236`
+- `src/services/coachApi.ts:2248`
 - `src/services/whyNotLegal.ts:221`
 
 ### `pointsAtThisBoard` (function) — 1 call site
