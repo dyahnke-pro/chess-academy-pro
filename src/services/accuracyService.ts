@@ -162,9 +162,19 @@ export function bandForWinPctLost(lost: number): LossBand | null {
  *   delta 30  →  24.7
  *   delta 50  →   8.5
  */
+/** CALIBRATED TO CHESS.COM (2026-10-17, David's own games: 80 reviewed
+ *  chess.com games, 160 game-sides, engine d14). lichess's 0.04354 decay read
+ *  every game about 4 points too generous; the fitted decay and the blend in
+ *  `calculateAccuracy` cut the average gap to chess.com's own number from 8.2
+ *  to 5.2 points (held-out half: 9.0 → 6.3). One constant for every surface. */
+export const ACCURACY_DECAY = 0.0575;
+/** The game score blends the volatility-weighted mean with the harmonic mean
+ *  (lichess's shape), weighted to the mean as the same fit found. */
+export const ACCURACY_MEAN_WEIGHT = 0.9;
+
 export function accuracyFromWinDelta(deltaPct: number): number {
   const delta = Math.max(0, deltaPct);
-  const raw = 103.1668 * Math.exp(-0.04354 * delta) - 3.1669;
+  const raw = 103.1668 * Math.exp(-ACCURACY_DECAY * delta) - 3.1669;
   return Math.max(0, Math.min(100, raw));
 }
 
@@ -219,34 +229,42 @@ function harmonicMean(values: number[]): number {
  * moveCountRef. Color is derived as `moveNumber % 2 === 1`.
  */
 export function calculateAccuracy(moves: CoachGameMove[]): GameAccuracy {
-  const whiteAccs: number[] = [];
-  const blackAccs: number[] = [];
-
-  for (const move of moves) {
-    if (move.classification === 'book') continue;
-    if (move.evaluation === null || move.preMoveEval === null) continue;
-
+  // The win-percent series (White's POV), one entry per graded move: before it,
+  // and after it. Volatility is read over a sliding window of that series, as
+  // lichess does, so a move in a sharp stretch weighs more than one in a calm one.
+  const graded = moves.filter((m) => m.classification !== 'book' && m.evaluation !== null && m.preMoveEval !== null);
+  const before = graded.map((m) => winPercent(m.preMoveEval as number));
+  const after = graded.map((m) => winPercent(m.evaluation as number));
+  const series = [...before, ...(after.length ? [after[after.length - 1]] : [])];
+  const window = Math.max(2, Math.min(8, Math.floor(graded.length / 10)));
+  const volAt = (i: number): number => {
+    const a = Math.max(0, Math.min(i, series.length - window));
+    const w = series.slice(a, a + window);
+    const mean = w.reduce((t, x) => t + x, 0) / w.length;
+    const sd = Math.sqrt(w.reduce((t, x) => t + (x - mean) ** 2, 0) / w.length);
+    return Math.max(0.5, Math.min(12, sd));
+  };
+  const sides = { white: { acc: [] as number[], w: [] as number[] }, black: { acc: [] as number[], w: [] as number[] } };
+  graded.forEach((move, i) => {
     const isWhiteMove = move.moveNumber % 2 === 1;
-
-    // Win-percent must be from the moving side's perspective. Eval
-    // is always from White's perspective, so flip for Black.
-    const winBefore = isWhiteMove
-      ? winPercent(move.preMoveEval)
-      : 100 - winPercent(move.preMoveEval);
-    const winAfter = isWhiteMove
-      ? winPercent(move.evaluation)
-      : 100 - winPercent(move.evaluation);
-
-    const moveAcc = accuracyFromWinDelta(winBefore - winAfter);
-
-    if (isWhiteMove) whiteAccs.push(moveAcc);
-    else blackAccs.push(moveAcc);
-  }
-
+    // Win-percent from the moving side's perspective.
+    const winBefore = isWhiteMove ? before[i] : 100 - before[i];
+    const winAfter = isWhiteMove ? after[i] : 100 - after[i];
+    const side = isWhiteMove ? sides.white : sides.black;
+    side.acc.push(accuracyFromWinDelta(winBefore - winAfter));
+    side.w.push(volAt(i));
+  });
+  const score = (s: { acc: number[]; w: number[] }): number => {
+    if (s.acc.length === 0) return 0;
+    const wsum = s.w.reduce((t, x) => t + x, 0);
+    const weighted = s.acc.reduce((t, a, j) => t + a * s.w[j], 0) / wsum;
+    const blended = ACCURACY_MEAN_WEIGHT * weighted + (1 - ACCURACY_MEAN_WEIGHT) * harmonicMean(s.acc);
+    return Math.round(blended * 10) / 10;
+  };
   return {
-    white: whiteAccs.length > 0 ? Math.round(harmonicMean(whiteAccs) * 10) / 10 : 0,
-    black: blackAccs.length > 0 ? Math.round(harmonicMean(blackAccs) * 10) / 10 : 0,
-    moveCount: whiteAccs.length + blackAccs.length,
+    white: score(sides.white),
+    black: score(sides.black),
+    moveCount: sides.white.acc.length + sides.black.acc.length,
   };
 }
 
