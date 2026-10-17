@@ -86,6 +86,12 @@ describe('order from what they have NOT played (notYetPlayed)', () => {
     voice(r!.text);
     expect(notYetIdea(fen, 'b', 'Nf6')?.target).toBe('e5');
   });
+  it('a read before the move never names the moved piece on its new square (claim harvest: "your bishop on f5" with no bishop there)', () => {
+    const before = 'rnbqkbnr/pp2pppp/2p5/3p4/2PP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3';
+    const r = notYetIdea(before, 'b', 'Bf5');
+    expect(r?.target).not.toBe('f5');
+    if (r) expect(new Chess(before).get(r.target as 'a1')?.color).toBe('b');
+  });
   it('silent when the move was not the engine\'s, or cost', () => {
     expect(notYetPlayed(fen, 'Nf6', 'Nc6', 0)).toBeNull();
     expect(notYetPlayed(fen, 'Nf6', 'Nf6', 60)).toBeNull();

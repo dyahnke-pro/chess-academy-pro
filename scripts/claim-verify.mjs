@@ -263,9 +263,10 @@ function verify(x) {
     case 'behavior:development': case 'positional:development': {
       const home = (col) => { const r = col === 'w' ? '1' : '8'; return ['b', 'c', 'f', 'g'].filter((f) => { const p = at(b, `${f}${r}`); return p && p.color === col && (p.type === 'n' || p.type === 'b'); }).length; };
       const m = /(\d) minor pieces? at home/.exec(t);
-      const who = /^They/.test(t) ? them : me;
+      // Whose count: "they still have N…" counts THEM even inside "You're ahead".
+      const who = /\bthey (?:still )?have \d minor/i.test(t) || /^They/.test(t) ? them : me;
       if (m && Number(m[1]) !== home(who)) return F(`says ${m[1]} at home, board ${home(who)}`);
-      if (/^They/.test(t)) return home(them) > home(me) ? T('they lag') : F(`home minors them ${home(them)} vs you ${home(me)}`);
+      if (/^They|^You're ahead/.test(t)) return home(them) > home(me) ? T('they lag') : F(`home minors them ${home(them)} vs you ${home(me)}`);
       return home(me) > home(them) ? T('behind') : F(`home minors ${home(me)} vs ${home(them)}`);
     }
     case 'backward:mistake': case 'backward:drawback': {

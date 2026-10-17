@@ -40,7 +40,7 @@ function isDeveloping(m: { piece: string; from: string; color: 'w' | 'b'; san: s
  * their minors still at home would win by developing onto a square that hits
  * it. That target is the guard the student did not need to spend a move on.
  */
-function waitingTarget(fenAfter: string, student: 'w' | 'b', devTo: string): Omit<NotYetPlayed, 'text'> | null {
+function waitingTarget(fenAfter: string, student: 'w' | 'b', devTo: string, excludeMoved = false): Omit<NotYetPlayed, 'text'> | null {
   let board: Chess;
   try { board = new Chess(fenAfter); } catch { return null; }
   const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
@@ -51,6 +51,9 @@ function waitingTarget(fenAfter: string, student: 'w' | 'b', devTo: string): Omi
   let bestVal = 0;
   for (const cell of board.board().flat()) {
     if (!cell || cell.color !== student || cell.type === 'k') continue;
+    // A read made BEFORE the move cannot name the moved piece on its new
+    // square: the student's board does not have it there yet.
+    if (excludeMoved && cell.square === devTo) continue;
     // Not hit by anything of theirs yet.
     if (board.attackers(cell.square, them).length > 0) continue;
     // The student's developing move must not be what guards it — then the
@@ -111,7 +114,7 @@ export function notYetIdea(fen: string, student: 'w' | 'b', bestSan: string | nu
   let m;
   try { m = board.move(bestSan); } catch { return null; }
   if (!isDeveloping(m) || m.captured) return null;
-  const w = waitingTarget(board.fen(), student, m.to);
+  const w = waitingTarget(board.fen(), student, m.to, true);
   if (!w) return null;
   const theirPiece = NAME[board.get(w.squares[0] as Square)?.type ?? 'n'];
   const what = NAME[board.get(w.target as Square)?.type ?? 'p'];
