@@ -43,6 +43,18 @@ describe('criticalMoment — the count IS the trigger', () => {
     expect(criticalMomentSpeaks(r)).toBe(false);
   });
 
+  it('"two moves limit the damage" is unproven when the third is a hair behind the second (claim harvest 2026-10-17)', () => {
+    const r = readCriticalMoment({ topLines: fan(-400, -460, -505), moverColor: 'w' });
+    expect(r?.stake).toBe('damage');
+    expect(r?.resolved).toBe(false);
+    expect(r?.unresolvedReason).toBe('band-edge');
+    expect(criticalMomentSpeaks(r)).toBe(false);
+    // control: a clear drop to the third still speaks
+    const c = readCriticalMoment({ topLines: fan(-400, -460, -600), moverColor: 'w' });
+    expect(c?.count).toBe(2);
+    expect(c?.resolved).toBe(true);
+  });
+
   it('three within tolerance means nothing hinges — SILENT, and honestly unresolved', () => {
     const r = readCriticalMoment({ topLines: fan(30, 10, -20), moverColor: 'w' });
     expect(r?.count).toBe(3);

@@ -1688,6 +1688,16 @@ export function computeSpace(fen: string): SpaceInfo {
   return { white: controlled.w.size, black: controlled.b.size };
 }
 
+/** "MORE SPACE", ONE RULE (claim harvest 2026-10-17: "You own more space" was
+ *  read off `computeSpace`'s pawn-hit count while the weighing read territory,
+ *  so the coach told White it owned more space with Black's pawns on e5, g6,
+ *  h5 and f3). A side owns more space when its territory leads by the margin. */
+export const MORE_SPACE_MARGIN = 2;
+export function ownsMoreSpace(fen: string, side: 'w' | 'b'): boolean {
+  const sp = computeTerritory(fen);
+  return side === 'w' ? sp.white >= sp.black + MORE_SPACE_MARGIN : sp.black >= sp.white + MORE_SPACE_MARGIN;
+}
+
 /** TERRITORY — the space a side's pawn chain has claimed behind it: squares on
  *  the c–f files, from its second rank up to its most advanced pawn on that
  *  file, that no enemy pawn attacks (the engine's own space term). Where

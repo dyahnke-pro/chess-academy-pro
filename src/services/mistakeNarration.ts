@@ -1,6 +1,7 @@
 import { evalBand, evalBandWords } from './evalBand';
 import { openSentence } from '../utils/openSentence';
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
+import { opponentReplySentence } from './puzzleConceptExplanation';
 import { detectTactics } from './tacticsDetector';
 import { explainBestMoveGrounded, describeMoveGeometry } from './groundedAnswer';
 import { strategicWhySelfContained } from './moveFundamentals';
@@ -451,8 +452,10 @@ function solutionSquares(movesUci: string): Set<string> {
  *
  *  The opponent's reply keeps a bare statement of fact — no "stay sharp!", no
  *  rhetorical question — because the student needs to know what was played. */
-function opponentReplyText(san: string): string {
-  return `Your opponent replies ${san}.`;
+function opponentReplyText(fenBefore: string, san: string, prevStudentTo: string | null): string {
+  // The ONE vocabulary for the other side's moves in a line played for the
+  // student ("They have to take back with Rxc3."), unified 2026-10-17.
+  return opponentReplySentence(fenBefore, san, prevStudentTo) ?? `They answer ${san}.`;
 }
 
 // ─── Outro Templates (position-aware) ──────────────────────────────────────
@@ -565,15 +568,13 @@ export function generateMistakeNarration(params: NarrationParams): MistakeNarrat
   const intro = introClauses.join(' ');
 
   // Per-move: the concrete point of each move, or silence.
-  const moveNarrations = buildMoveNarrations(fen, moves);
+  const beats = buildMoveNarrations(fen, moves);
   // CLOSE THE LOOP (W3): when the intro said the move dropped a piece and the
   // answer is what keeps it, the first beat says so — "Qc5 keeps your pawn on
   // d6 protected" — instead of a description of where the queen went.
   const kept = keepsWhatWasDropped(fen, playerMoveSan, params.allowedReplySan, bestMoveSan);
-  if (kept && moveNarrations.length > 0) {
-    const reply = moveNarrations[0].match(/ Your opponent replies [^.]+\.$/)?.[0] ?? '';
-    moveNarrations[0] = `${kept}${reply}`;
-  }
+  if (kept && beats.length > 0) beats[0].move = kept;
+  const moveNarrations = beats.map((b) => [b.move, b.reply].filter(Boolean).join(' '));
 
   const outro = buildOutro(params, idea);
 
@@ -633,19 +634,25 @@ function buildConceptHint(
  *
  *  The final move is allowed one closing clause, because "and that finishes it"
  *  is genuinely new information — the line is over. */
-function buildMoveNarrations(fen: string, movesUci: string): string[] {
+function buildMoveNarrations(fen: string, movesUci: string): Array<{ move: string; reply: string }> {
   const uciMoves = movesUci.trim().split(/\s+/).filter(Boolean);
   if (uciMoves.length === 0) return [];
 
-  const narrations: string[] = [];
+  // The student's beat and the opponent's reply are kept APART, so a caller that
+  // rewrites the beat keeps the reply without reading it back out of prose.
+  const narrations: Array<{ move: string; reply: string }> = [];
   const chess = new Chess(fen);
   const moverColor: 'white' | 'black' = chess.turn() === 'w' ? 'white' : 'black';
   const playerMoveCount = Math.ceil(uciMoves.length / 2);
 
+  /** The square the student's last move captured on — a take-back there is
+   *  said as one (`opponentReplySentence`). */
+  let prevStudentTo: string | null = null;
   for (let i = 0; i < uciMoves.length; i += 1) {
     const fenBefore = chess.fen();
     const san = uciToSan(fenBefore, uciMoves[i]);
     const isPlayerMove = i % 2 === 0;
+    const captures = !!chess.get(uciMoves[i].slice(2, 4) as Square);
 
     try {
       chess.move({
@@ -658,6 +665,7 @@ function buildMoveNarrations(fen: string, movesUci: string): string[] {
     }
 
     if (isPlayerMove) {
+      prevStudentTo = captures ? uciMoves[i].slice(2, 4) : null;
       const playerIdx = Math.floor(i / 2);
       // What this move DOES — the fork, the pin, the mate, the material won.
       // Grounded: both helpers read the board and return null rather than guess.
@@ -703,14 +711,11 @@ function buildMoveNarrations(fen: string, movesUci: string): string[] {
       // deleted.
       if (isFinal && chess.isCheckmate()) clauses.push('That is mate.');
       const text = clauses.filter(Boolean).join(' ');
-      narrations.push(text ? terminate(capitalizeFirst(text)) : '');
+      narrations.push({ move: text ? terminate(capitalizeFirst(text)) : '', reply: '' });
     } else if (narrations.length > 0) {
       // The opponent's reply is stated plainly and appended to the student's
       // last beat, so the two never overlap as separate spoken lines.
-      const prev = narrations[narrations.length - 1];
-      narrations[narrations.length - 1] = prev
-        ? `${prev} ${opponentReplyText(san)}`
-        : opponentReplyText(san);
+      narrations[narrations.length - 1].reply = opponentReplyText(fenBefore, san, prevStudentTo);
     }
   }
 

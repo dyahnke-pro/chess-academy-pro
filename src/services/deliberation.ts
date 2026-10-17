@@ -21,7 +21,7 @@ import { walkableLine } from './proof';
 import { findHangingPieces } from './tacticClassifier';
 import { moverLossProof, moverLineProof } from './exchangeLedger';
 import { strategicWhyLed } from './moveFundamentals';
-import { computeTerritory, legalSeeGainFor, seeReadsStanding } from './positionReadingService';
+import { ownsMoreSpace, legalSeeGainFor, seeReadsStanding } from './positionReadingService';
 import { isPinnedPiece } from './nextPlans';
 import { countKingAttack } from './kingSafety';
 import { andList, lineShape, orList } from '../utils/andList';
@@ -654,10 +654,7 @@ export function heldVerdictText(v: HeldVerdict, when: 'now' | 'found'): string {
 
 /** The mover's pawns have claimed more room behind them (`computeTerritory`). */
 function moreSpace(fen: string, mover: 'w' | 'b'): boolean {
-  try {
-    const sp = computeTerritory(fen);
-    return mover === 'w' ? sp.white >= sp.black + 2 : sp.black >= sp.white + 2;
-  } catch { return false; }
+  try { return ownsMoreSpace(fen, mover); } catch { return false; }
 }
 
 /** Both queens are gone within `plies` of the line. */

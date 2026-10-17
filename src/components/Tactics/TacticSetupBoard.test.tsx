@@ -188,4 +188,17 @@ describe('TacticSetupBoard', () => {
     await waitFor(() => expect(onComplete).toHaveBeenCalledWith(false), { timeout: 8000 });
     expect(onComplete).toHaveBeenCalledTimes(1);
   }, 10000);
+
+  it('Show Solution explains every move of the line as it lands, the setup move included (David 2026-10-17)', async () => {
+    const puzzle = buildSetupPuzzle({ solutionMoves: 'g1f3 b8c6 f3g5' });
+    const onComplete = vi.fn();
+    render(<TacticSetupBoard puzzle={puzzle} sequence={0} onComplete={onComplete} />);
+    mockSpeak.mockClear();
+    fireEvent.click(screen.getByTestId('setup-show-solution'));
+    await waitFor(() => expect(onComplete).toHaveBeenCalledWith(false), { timeout: 8000 });
+    const said = mockSpeak.mock.calls.map((c) => String(c[0]));
+    // The quiet setup move is said, not only the final blow.
+    expect(said.some((t) => /f3/.test(t))).toBe(true);
+    expect(said.some((t) => /g5/.test(t))).toBe(true);
+  }, 10000);
 });

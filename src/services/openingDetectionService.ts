@@ -220,8 +220,10 @@ export function detectOpening(moveHistory: string[]): DetectedOpening | null {
   return byOrder;
 }
 
-/** The exact move-order match only (the trie). */
-function detectOpeningByOrder(moveHistory: string[]): DetectedOpening | null {
+/** The exact move-order match only (the trie). The transposition reader needs
+ *  THIS reading — the position-aware `detectOpening` already names the board,
+ *  so it can never say the game transposed. */
+export function detectOpeningByOrder(moveHistory: string[]): DetectedOpening | null {
   const trie = getTrie();
   let node = trie;
   let lastMatch: { opening: OpeningEntry; plyCount: number } | null = null;

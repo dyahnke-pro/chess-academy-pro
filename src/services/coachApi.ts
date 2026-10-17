@@ -136,15 +136,20 @@ import { askBackAtCatchAll, type ChatKind } from '../coach/chatTurn';
 // the deployed app's services via page.evaluate. No-op for real users.
 // Side-effect import keeps the audit script free of source-path knowledge.
 import './masterPlayAuditBridge';
-import { movePurpose } from './movePurposeEngine';
+import { movePurpose, moveReason } from './movePurposeEngine';
 /** The purpose of the game's last move (`movePurpose`), from the start
  *  position. Null when the history does not replay or the engine shows none. */
 async function lastMovePurpose(history: readonly string[], seat: 'student' | 'opponent'): Promise<string | null> {
   try {
     const c = new Chess();
     for (const san of history.slice(0, -1)) c.move(san);
-    const it = await movePurpose(c.fen(), history[history.length - 1], seat);
-    return it?.text ?? null;
+    const san = history[history.length - 1];
+    // THE reason when the move is one the engine weighs; its purpose otherwise
+    // (a move outside the engine's top lines has no gap to account for).
+    const reason = await moveReason(c.fen(), san, seat, history.length > 1 ? history[history.length - 2] : null);
+    if (reason && reason.kind !== 'close') return reason.text;
+    const it = await movePurpose(c.fen(), san, seat);
+    return it?.text ?? reason?.text ?? null;
   } catch { return null; }
 }
 
@@ -5863,6 +5868,27 @@ export async function getCoachChatResponse(
           }
           const fen = grounding.currentFen ?? null;
           const plan = grounding.enginePlan;
+          // THE REASON FIRST (David 2026-10-17: "do we give A reason or THE
+          // reason?"): the best move against the next-best, the stake that
+          // accounts for the gap — or, honestly, that none does.
+          const reasonSan = plan?.pvSan[0] ?? (() => {
+            const u = grounding.engineBestMoveUci;
+            if (!fen || !u) return null;
+            try { return new Chess(fen).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined })?.san ?? null; } catch { return null; }
+          })();
+          if (fen && reasonSan) {
+            const moverWB = fen.split(' ')[1] === 'b' ? 'black' : 'white';
+            const seat = grounding.studentColor && grounding.studentColor !== moverWB ? 'opponent' : 'student';
+            const history = grounding.moveHistory ?? [];
+            const reason = await moveReason(fen, reasonSan, seat, history.length ? history[history.length - 1] : null);
+            if (reason) {
+              const walk = reason.line ? walkableLine(reason.line.fen, reason.line.sans, reasonSan) : null;
+              if (walk) lastCoachLines = [walk];
+              let from = '';
+              try { const m = new Chess(fen).move(reasonSan); from = `${m.from}-${m.to}`; } catch { from = ''; }
+              return `${reason.text}${from ? ` [BOARD: arrow:${from}:green]` : ''}`;
+            }
+          }
           let answer = null;
           if (fen && plan && plan.pvSan.length > 0) {
             const moverColor: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';

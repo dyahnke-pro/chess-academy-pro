@@ -37,6 +37,7 @@ import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from
 import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
+import { decisiveReason, reasonEarned, REASON_WAIT_CEILING_MS } from '../../services/decisiveReason';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { OPENING_PLIES, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching, type TeachingHint } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
@@ -137,6 +138,7 @@ import {
   inferStudentSideFromName,
   studentSideForPlay,
   detectOpening,
+  detectOpeningByOrder,
   type LinePickerOption,
 } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
@@ -8728,7 +8730,7 @@ export function CoachTeachPage(): JSX.Element {
 
     // ── OPENING ANNOUNCEMENT ───────────────────────────────────────────────
     try {
-      const byOrder = detectOpening(history);
+      const byOrder = detectOpeningByOrder(history);
       // THE TRANSPOSITION READER: the board may be a named opening the move
       // order never reached — name the position, and say it transposed.
       const { det, transposed } = openingNameForBoard(byOrder, args.fenAfterReply, history.length);
@@ -9790,10 +9792,26 @@ export function CoachTeachPage(): JSX.Element {
         // delays only the BOARD; the facts assembly and the LLM call run
         // UNDERNEATH it, so the beat gets the pad's head start for free.
         const minThink = 1000 + Math.floor(Math.random() * 1000); // 1000–2000ms
+        // THE REPLY WAITS FOR THE REASON (David 2026-10-17: "Delay the computer
+        // move obviously"). At a real decision moment, the reads the student's
+        // move is explained from (the board between the moves and the two pass
+        // positions) are warmed during the think-time, and the reply holds until
+        // they are in — so the reason lands with the move instead of after the
+        // student has already moved again. Capped: past the ceiling the reply
+        // plays and the reason follows it. A quiet move replies at once.
+        const studentMoverWB: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+        const reasonWarm = !studentMoveInBook && reasonEarned(preStudentRead?.topLines, studentMoverWB)
+          ? (async () => {
+              await midTurnRead;
+              for (const f of [nullMoveFen(fenBefore), nullMoveFen(move.fen)]) {
+                if (f) await stockfishEngine.analyzeWithBudget(f, COACH_TURN_DEPTH, 900).catch(() => null);
+              }
+            })()
+          : Promise.resolve();
         const padDone = new Promise<void>((resolve) => {
           const elapsed = Date.now() - thinkStart;
           setTimeout(resolve, Math.max(0, minThink - elapsed));
-        });
+        }).then(() => Promise.race([reasonWarm, new Promise<void>((r) => setTimeout(r, REASON_WAIT_CEILING_MS))]));
         if (reply) {
           // GROUNDING COMPLETENESS (David 2026-06-15): compute what the
           // reply ACTUALLY did — captured piece + squares — from the BEFORE
@@ -11428,6 +11446,20 @@ export function CoachTeachPage(): JSX.Element {
                         const intent = intentReads
                           ? intentWithFallback(fenBefore, move.san, intentReads, 'student', studentMoveInBook)
                           : null;
+                        // THE REASON (David 2026-10-17): when they played the
+                        // engine's move, the reason that accounts for its gap over
+                        // the next-best — a win by force is said as one; a stopped
+                        // or prepared move carries the gap it is worth.
+                        const playedUci = (() => { try { const m = new Chess(fenBefore).move(move.san); return `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; } })();
+                        const theReason = intentReads && playedUci && intentReads.before[0]?.moves[0] === playedUci
+                          ? decisiveReason({ fenBefore, san: move.san, reads: intentReads, seat: 'student', opponentLastSan: move.history.length > 1 ? move.history[move.history.length - 2] : null })
+                          : null;
+                        if (theReason?.kind === 'the' && theReason.source === 'material') {
+                          queueSpokenHint(fenAfterReply, theReason.text, 'moveIntent', (theReason.line ? lineProof(theReason.line) : null) ?? NO_PROOF.stated, theReason.squares, [`reason:${playedUci}`], fenBefore, undefined,
+                            theReason.line ? [theReason.line] : undefined,
+                            { points: Math.min(theReason.stakeCp ?? 0, 2000) / 100, plies: 1 }, 'teach', 'reason');
+                        }
+                        const reasonTail = theReason?.kind === 'the' && theReason.source !== 'material' ? theReason.tail : null;
                         if (intent) {
                           // DUAL-USE (P4): an engine-proven purpose (prevents / prepares)
                           // is the no-plan question answered.
@@ -11441,7 +11473,7 @@ export function CoachTeachPage(): JSX.Element {
                           // staked at what that idea was worth.
                           const stoppedPrep = !!intent.prevents && preventsNamedIdea(learnMemRef.current.theirPrep, fenBefore, intent.prevents.uci);
                           const baseText = prepRule ? `${intent.text.replace(/\.$/, '')} — ${prepRule.text}.` : intent.text;
-                          const intentText = stoppedPrep ? `${baseText} ${STOPPED_THEIR_IDEA}` : baseText;
+                          const intentText = `${stoppedPrep ? `${baseText} ${STOPPED_THEIR_IDEA}` : baseText}${reasonTail ? ` ${reasonTail}` : ''}`;
                           queueSpokenHint(fenAfterReply, intentText, 'moveIntent', squaresProof(intentText, intent.squares) ?? NO_PROOF.description, intent.squares, [
                             ...(intent.prevents ? [`stops:${intent.prevents.uci}`] : []),
                             ...(intent.prepares ? [`prepares:${intent.prepares.uci}`] : []),
@@ -13253,6 +13285,14 @@ export function CoachTeachPage(): JSX.Element {
                   annotationHighlights={coachTipsOn && highlights.length > 0 ? highlights : undefined}
                 />
               )
+            )}
+            {/* THE SILENCE SAYS WHY (David 2026-10-17): while the reply waits on
+                the reason, the board is locked — say so, so a student does not
+                read the pause as nothing to hear. */}
+            {opponentThinking && (
+              <div data-testid="coach-thinking" className="text-xs text-theme-text-muted text-center mt-1 animate-pulse">
+                Thinking…
+              </div>
             )}
             {/* THE CARRY-OVER QUESTION WAITS BESIDE THE GAME (David 2026-10-14):
                 answer it on the board, or just play your move. */}

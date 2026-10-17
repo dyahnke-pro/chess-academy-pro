@@ -131,7 +131,14 @@ function hypotheticalBoard(x, b, t) {
     for (const san of after[1].split(/,\s*/)) { try { c.move(san.trim()); } catch { return 'skip'; } }
     return c;
   }
-  if (/before you trade|the idea is to|\? (?:That|Then)|would|was the move|if they|if you/i.test(t)) return 'skip';
+  // "If you play X, your queen on f4 forks …" is about the board after X.
+  const ifPlay = /^If you play ([^,\s]+),/.exec(t);
+  if (ifPlay) {
+    const c = board(withTurn(b.fen(), sc(x)));
+    try { c.move(ifPlay[1]); } catch { return 'skip'; }
+    return c;
+  }
+  if (/taking back leaves|Don't hand it that|before you trade|the idea is to|\? (?:That|Then)|would|was the move|if they|if you/i.test(t)) return 'skip';
   return null;
 }
 
@@ -300,7 +307,12 @@ function verify(x) {
           const c2 = board(before.fen()); let took = false;
           for (const u of pv.slice(0, 6)) { let mv; try { mv = c2.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; } if (mv.color === them && mv.captured === NAME[won[1]]) { took = true; break; } }
           if (!took) return F(`says they take a ${won[1]}; engine line never does`);
-        } else if (gain < VAL[NAME[won[1]]] - 1) return F(`says they win a ${won[1]}; engine line nets ${gain}`);
+        } else {
+          // "win a rook for a piece" is the exchange: the claim is the NET.
+          const forWhat = new RegExp(`win an? ${won[1]}(?: and an? (\\w+))? for an? (\\w+)`).exec(t);
+          const claimed = forWhat ? VAL[NAME[won[1]]] + (forWhat[1] ? VAL[NAME[forWhat[1]]] ?? 0 : 0) - (VAL[NAME[forWhat[2]]] ?? (forWhat[2] === 'piece' ? 3 : 0)) : VAL[NAME[won[1]]];
+          if (gain < claimed - 1) return F(`says they win a ${won[1]}${forWhat ? ` for a ${forWhat[2]}` : ''}; engine line nets ${gain}`);
+        }
       }
       return grade || still || won ? T('grade/cost consistent') : U('no grade or cost');
     }
@@ -310,7 +322,7 @@ function verify(x) {
       const n = /only one move|exactly one move|one move (?:keeps|limits)/.test(t) ? 1 : /two moves/i.test(t) ? 2 : null; if (!n) return U('count not parsed');
       // THE STAKE decides, not a raw gap: "two moves keep the win" is true when
       // both stay winning and the third does not.
-      const stake = /the win/.test(t) ? 300 : /on top/.test(t) ? 100 : /your edge/.test(t) ? 50 : /level/.test(t) ? -99 : /in it/.test(t) ? -300 : /damage/.test(t) ? null : 'x';
+      const stake = /the win/.test(t) ? 300 : /on top/.test(t) ? 100 : /your edge/.test(t) ? 50 : /level/.test(t) ? -99 : /in it/.test(t) ? -200 : /damage/.test(t) ? null : 'x';
       if (stake === 'x') return U('stake not parsed');
       if (stake === null) { // "limit the damage": the named count are the best by a clear margin
         if (n === 1) return cps[0] - cps[1] >= 50 ? T('one clearly best') : F(`damage: line 2 within ${cps[0] - cps[1]}`);

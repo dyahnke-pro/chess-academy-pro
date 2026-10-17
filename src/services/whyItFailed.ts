@@ -323,8 +323,11 @@ export function whyItFailed(args: {
       kind: 'abandoned-defender',
       squares: [worstAbandon.sq, worstAbandon.attacker.sq],
       line: after.attackers(worstAbandon.sq, me).length === 0
-        ? `Your ${NAME[mv.piece]} was the only thing guarding the ${NAME[worstAbandon.type]} on ${worstAbandon.sq} — once it left, the ${NAME[worstAbandon.attacker.type]} on ${worstAbandon.attacker.sq} takes it.`
-        : `Your ${NAME[mv.piece]} was holding the ${NAME[worstAbandon.type]} on ${worstAbandon.sq} together — once it left, the ${NAME[worstAbandon.attacker.type]} on ${worstAbandon.attacker.sq} wins it.`,
+        // "their queen could take it FROM a5", never "the queen on a5 takes it":
+        // the line is often heard after the capture, when a5 is empty (claim
+        // harvest 2026-10-17). Whose piece, and where it struck from.
+        ? `Your ${NAME[mv.piece]} was the only thing guarding the ${NAME[worstAbandon.type]} on ${worstAbandon.sq} — once it left, their ${NAME[worstAbandon.attacker.type]} could take it from ${worstAbandon.attacker.sq}.`
+        : `Your ${NAME[mv.piece]} was holding the ${NAME[worstAbandon.type]} on ${worstAbandon.sq} together — once it left, their ${NAME[worstAbandon.attacker.type]} could win it from ${worstAbandon.attacker.sq}.`,
     };
   }
 

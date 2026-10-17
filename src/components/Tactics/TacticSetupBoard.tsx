@@ -18,6 +18,7 @@ import { tacticTypeLabel } from '../../services/tacticalProfileService';
 import { voiceService } from '../../services/voiceService';
 import { setupIntro, setupPrepPlanted, setupRevealComplete, setupIncorrect, setupHintIdea, setupHintPiece } from '../../services/tacticNarrationService';
 import { describeMoveGeometry } from '../../services/groundedAnswer';
+import { explainDrillConcept } from '../../services/puzzleConceptExplanation';
 import { recordCapabilityEvidence } from '../../services/capabilityEvidence';
 import { MISTAKE_CP } from '../../services/engineConstants';
 import type { HintLevel } from '../../types';
@@ -156,6 +157,18 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
       return null;
     }
   }, [puzzle.setupFen, line, orientation]);
+
+  // THE WHOLE LINE, EVERY MOVE (David 2026-10-17: "make sure they go deep on …
+  // the setup trainer"). The setup move and every forced reply on the way to
+  // the payoff are explained, not only the final blow — the same computed
+  // explanation every other puzzle surface speaks (`explainDrillConcept`).
+  const lineExplanation = useMemo(() => {
+    try {
+      const c = new Chess(puzzle.setupFen);
+      const sans = line.map((u) => { const p = parseUciMove(u); return c.move({ from: p.from, to: p.to, promotion: p.promotion }).san; });
+      return explainDrillConcept({ setupFen: puzzle.setupFen, solutionSan: sans, themes: [puzzle.tacticType] });
+    } catch { return null; }
+  }, [puzzle.setupFen, puzzle.tacticType, line]);
 
   const { settings } = useSettings();
   const activeProfile = useAppStore((s) => s.activeProfile);
@@ -310,9 +323,11 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
     // Speak the GROUNDED payoff geometry when we computed it ("That forks the
     // king on g8 and the rook on a8."), else the generic completion line.
     const base = setupRevealComplete(puzzle.tacticType);
-    const msg = payoffGeometry
-      ? `${base} That ${payoffGeometry}.`
-      : base;
+    const msg = lineExplanation?.spoken
+      ? `${base} ${lineExplanation.spoken}`
+      : payoffGeometry
+        ? `${base} That ${payoffGeometry}.`
+        : base;
     setMessage(msg);
     void voiceService.speak(msg);
     recordTacticOutcome({
@@ -323,7 +338,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
     });
     const counted = wrongAttemptsRef.current < MAX_WRONG_ATTEMPTS;
     endPuzzle(counted, 4000);
-  }, [puzzle.tacticType, endPuzzle, payoffGeometry]);
+  }, [puzzle.tacticType, endPuzzle, payoffGeometry, lineExplanation]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (boardState !== 'thinking' || !isPlayerTurn) return;
@@ -458,9 +473,13 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
     const step = (): void => {
       if (i >= line.length) {
         const base = setupRevealComplete(puzzle.tacticType);
-        const msg = payoffGeometry ? `${base} That ${payoffGeometry}.` : base;
+        // The moves were each explained as they landed; the idea closes it
+        // unless a move's own sentence already carried it.
+        const ex = lineExplanation;
+        const tail = ex ? (ex.idea && ex.ideaClause === null ? ex.idea : '') : payoffGeometry ? `That ${payoffGeometry}.` : '';
+        const msg = ex ? `${base} ${ex.spoken}` : tail ? `${base} ${tail}` : base;
         setMessage(msg);
-        void voiceService.speak(msg);
+        void voiceService.speak(tail ? `${base} ${tail}` : base);
         recordTacticOutcome({ tacticType: puzzle.tacticType, found: false, wasCoached: true, context: 'setup' });
         endPuzzle(false, 4500);
         return;
@@ -469,13 +488,22 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
       try { chessRef.current.move({ from: p.from, to: p.to, promotion: p.promotion }); } catch { /* keep going */ }
       setFen(chessRef.current.fen());
       setBoardKey((k) => k + 1);
+      const ex = lineExplanation;
+      const clause = ex && i >= ex.clausePlyStart ? ex.clauses[i - ex.clausePlyStart] : undefined;
       i += 1;
       setMoveIndex(i);
-      setTimeout(step, 700);
+      // Each move is said as it lands; the next waits on the voice, never a
+      // timer racing it (the 700ms pause stays only for an unexplained move).
+      if (clause) {
+        setMessage(clause);
+        void voiceService.speak(clause).catch(() => undefined).then(() => step());
+      } else {
+        setTimeout(step, 700);
+      }
     };
     setMessage('Here is the line');
     step();
-  }, [boardState, moveIndex, line, puzzle.tacticType, payoffGeometry, endPuzzle, clearWrongArrows, readStop]);
+  }, [boardState, moveIndex, line, puzzle.tacticType, payoffGeometry, lineExplanation, endPuzzle, clearWrongArrows, readStop]);
 
   const statusColor = boardState === 'solved'
     ? 'var(--color-success)'

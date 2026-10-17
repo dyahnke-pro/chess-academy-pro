@@ -246,7 +246,7 @@ export function buildCriticalMomentQuestion(
     stake: read.stake,
     holdingSans: read.holdingSans,
     gapCp: read.gapCp,
-    revealLines: (read.discardedProofs ?? []).map((d) => d.line),
+    revealLines: [...(read.bestReason?.line ? [read.bestReason.line] : []), ...(read.discardedProofs ?? []).map((d) => d.line)],
   };
 }
 

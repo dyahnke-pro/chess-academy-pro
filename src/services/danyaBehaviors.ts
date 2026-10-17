@@ -49,7 +49,7 @@ import {
   findPawnBreaks,
   findOpenFiles,
   pressuredTargets,
-  computeSpace,
+  ownsMoreSpace,
   findWeakSquares,
   bishopPair,
   bestMinorToKeep,
@@ -754,10 +754,9 @@ export const DANYA_BEHAVIORS: Behavior[] = [
     id: 'space',
     weight: 105,
     detect: ({ fen, student }) => {
-      const space = computeSpace(fen);
-      const mine = student === 'w' ? space.white : space.black;
-      const theirs = student === 'w' ? space.black : space.white;
-      if (mine >= theirs + 4) {
+      // The one "more space" rule (territory behind the pawns), so this claim
+      // and the weighing can never disagree.
+      if (ownsMoreSpace(fen, student)) {
         return { fact: `You own more space — keep them cramped, don't rush, improve every piece first.`, squares: [] };
       }
       return null;
