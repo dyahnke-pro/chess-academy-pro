@@ -391,8 +391,8 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     }
     case 'wrong-move-order': {
       const s = [
-        `Right moves, wrong order: ${f.better} first. ${f.played} straight away let them play ${f.punish}, and that wins material.`,
-        `The order mattered — ${f.better} had to come before ${f.played}, because ${f.played} at once ran into ${f.punish}.`,
+        `Right moves, wrong order: ${f.better} first. ${f.played} straight away let them start with ${f.punish}, and the line from there wins material.`,
+        `The order mattered — ${f.better} had to come before ${f.played}, because ${f.played} at once ran into ${f.punish} and a line that wins material.`,
       ];
       return s[v % s.length];
     }
