@@ -26,7 +26,7 @@ import type { StockfishAnalysis, TacticType } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess, type Square } from 'chess.js';
 import type { GamePromise } from './learnBoardTeaching';
-import { strategicWhyImperative, strategicReason, strategicClaims, principleLine, principleContrastLine, isForcedReply } from './moveFundamentals';
+import { strategicWhyImperative, strategicReason, strategicClaims, principleLine, principleContrastLine, isForcedReply, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
 import { isTheoryLine } from './bookDeparture';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
 import { threatStoppedBy } from './opponentMovePurpose';
@@ -425,6 +425,9 @@ export interface ClauseItem {
    *  whose claim was already spoken this game — checked at SPEAK time, so a
    *  lane that ran before the claim was recorded cannot repeat it. */
   claim?: string;
+  /** The skill this clause teaches (a MisconceptionTagId), so the fade can
+   *  shorten it once the student's record proves it. */
+  skill?: string;
   /** THE BOARD THIS CLAUSE DESCRIBES, when it is not the current one: the rule
    *  behind the student's LAST move speaks after their reply, and graded on
    *  the reply's board "challenge their pawn on e4" reads false once e4 has
@@ -1443,6 +1446,18 @@ function applyWeaknessBoost(clauses: ClauseItem[], signals: readonly WeaknessSig
  *  is to move, the opponent's INTENT ("they have a real decision") — so the coach
  *  explains both sides. Empty when nothing earns voice. */
 /** The say-once key for a conversion step — the step, never the text. */
+/** The skill a rule line teaches — the same table the record writes with
+ *  (`MOVE_FUNDAMENTAL_TAG`), read off the rule's own id ("develop",
+ *  "mg:outpost|mg-rule:outpost"), never off its prose. */
+function ruleSkill(id: string): string | undefined {
+  for (const part of id.split('|')) {
+    const key = part.replace(/^mg(-rule)?:/, '').split(':')[0];
+    const tag = (MOVE_FUNDAMENTAL_TAG as Record<string, string | null | undefined>)[key];
+    if (tag) return tag;
+  }
+  return undefined;
+}
+
 export function convertKey(step: string): string { return `convert:${step}`; }
 
 function convertRemember(clauses: readonly { kind: string }[], fen: string, seat: 'white' | 'black'): string[] {
@@ -1688,7 +1703,7 @@ function buildClauses(a: {
   // A rook or queen principle about a FILE claims that file — the key the
   // positional read's "owns the open d-file" writes too, so one file is one
   // saying across lanes (hand walk 2026-09-27, Rad8: said twice in one turn).
-  if (a.rule) ranked.push({ kind: 'rule', rank: 29, text: a.rule.text, squares: [...a.rule.squares], ...(a.rule.gradeFen ? { gradeFen: a.rule.gradeFen } : {}), claim: /open-file|semi-open/.test(a.rule.id) && a.rule.squares[0] ? `file-${a.rule.squares[0][0]}` : undefined });
+  if (a.rule) ranked.push({ kind: 'rule', rank: 29, text: a.rule.text, squares: [...a.rule.squares], ...(a.rule.gradeFen ? { gradeFen: a.rule.gradeFen } : {}), ...(ruleSkill(a.rule.id) ? { skill: ruleSkill(a.rule.id) } : {}), claim: /open-file|semi-open/.test(a.rule.id) && a.rule.squares[0] ? `file-${a.rule.squares[0][0]}` : undefined });
   for (const st of a.stopped) ranked.push({ kind: 'stopped', rank: 27, text: st.text, squares: [...st.squares], lines: st.lines, proof: st.lines?.[0] ? lineProof(st.lines[0]) ?? undefined : undefined });
   if (a.stock) ranked.push({ kind: 'stock', rank: 35, text: a.stock });
   // §9 delayed-castling — speaks IN the opening too (the "castle now" moment),

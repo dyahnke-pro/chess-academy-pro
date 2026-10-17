@@ -349,6 +349,10 @@ export interface LaneFact {
    *  kind: deliberation, your-habit, …). The lane says which producer; this
    *  says which of its facts — emitted on the row, never used to decide. */
   factKind?: string;
+  /** The skill this fact teaches (a MisconceptionTagId), when the producer
+   *  knows it — the fade reads it before the lane's own tag, so a lane that
+   *  teaches many skills (the rules, the fundamentals) fades per skill. */
+  skill?: string;
   /** ITS PROOF, OR WHY IT NEEDS NONE — REQUIRED (root cause, David
    *  2026-10-07): a producer that cannot answer this cannot speak. */
   proof: FactProof;
@@ -399,11 +403,14 @@ function fadeLevelOf(green: FadeLevels, tag: string): FadeLevel | null {
   if (green instanceof Map) return green.get(tag) ?? null;
   return (green as ReadonlySet<string>).has(tag) ? 'short' : null;
 }
-export function fadeWhenGreen(lane: LearnLane, text: string, green: FadeLevels | null): string {
+export function fadeWhenGreen(lane: LearnLane, text: string, green: FadeLevels | null, skill?: string): string {
   if (!green || green.size === 0) return text;
   const role = COMPUTER_ROLES[lane];
-  if (!role || !role.tag || role.held.state !== 'wired') return text;
-  const level = fadeLevelOf(green, role.tag);
+  // A fact's own skill (recorded through the same tag table) fades it; else
+  // the lane's tag, and only when its held half is wired.
+  const tag = skill ?? (role && role.tag && role.held.state === 'wired' ? role.tag : null);
+  if (!tag) return text;
+  const level = fadeLevelOf(green, tag);
   if (!level) return text;
   const sentences = text.split(/(?<=[.!?])\s+(?=[A-Z"“])/);
   const keep = level === 'short' ? 1 : 2;
@@ -442,7 +449,7 @@ export function decideTurn(
   for (const f of facts) {
     if (!f.text.trim()) continue;
     offered.push(f.lane);
-    const text = fadeWhenGreen(f.lane, f.text, green ?? null);
+    const text = fadeWhenGreen(f.lane, f.text, green ?? null, f.skill);
     if (text !== f.text && !faded.includes(f.lane)) faded.push(f.lane);
     open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims: f.claims, lines: f.lines, proof: f.proof });
   }
@@ -465,13 +472,13 @@ export function decideTurn(
   //      carry no stakes.
   const stakesOf = (lane: LearnLane, text: string): FactStakes | undefined => {
     const f = open.find((o) => o.lane === lane && (o.text === text || o.text.includes(text)));
-    return f ? facts.find((x) => x.lane === lane && x.text.trim() && (x.text === f.text || fadeWhenGreen(x.lane, x.text, green ?? null) === f.text))?.stakes : undefined;
+    return f ? facts.find((x) => x.lane === lane && x.text.trim() && (x.text === f.text || fadeWhenGreen(x.lane, x.text, green ?? null, x.skill) === f.text))?.stakes : undefined;
   };
   const stakeOf = (lane: LearnLane, text: string): number => stakeValue(stakesOf(lane, text)) ?? 0;
   // The fact's own role (`LaneFact.role`), read the same way as its stakes.
   const roleOf = (lane: LearnLane, text: string): FacetRole | undefined => {
     const f = open.find((o) => o.lane === lane && (o.text === text || o.text.includes(text)));
-    return f ? facts.find((x) => x.lane === lane && x.text.trim() && (x.text === f.text || fadeWhenGreen(x.lane, x.text, green ?? null) === f.text))?.role : undefined;
+    return f ? facts.find((x) => x.lane === lane && x.text.trim() && (x.text === f.text || fadeWhenGreen(x.lane, x.text, green ?? null, x.skill) === f.text))?.role : undefined;
   };
   /** A fact that TEACHES — its role says so, or (no role) its lane is not a
    *  board description. A teaching fact is a reason, never "an aside". */

@@ -218,9 +218,9 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
   it('Learn hands every line-speaking producer\'s lines to the queue, and draws on-screen and earlier boards apart', () => {
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', .*?, undefined, undefined, undefined, undefined, pendingRegisterLines\)/);
     expect(TEACH_CODE).toMatch(/pendingRegisterLines = \[\{ fen: probe\.fen\(\), sans: \[compareRead\.bestSan\] \}/);
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.squares, c\.claim \? \[c\.claim\] : undefined, c\.gradeFen, undefined, c\.lines, c\.stakes, FACT_ROLE\[c\.kind\], c\.kind\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.squares, c\.claim \? \[c\.claim\] : undefined, c\.gradeFen, undefined, c\.lines, c\.stakes, FACT_ROLE\[c\.kind\], c\.kind, c\.skill\)/);
     expect(TEACH_CODE).toMatch(/(?:fundamental|fund)\?\.lines[,)]/);
-    expect(TEACH_CODE).toMatch(/'fundamental', NO_PROOF\.method, \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
+    expect(TEACH_CODE).toMatch(/'fundamental', NO_PROOF\.method, \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG\[fundamental\.id as FundamentalId\] \?\? undefined\)/);
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
     // Their move's purpose leads over a board description (hand walk 2026-09-30, …g6).
     expect(TEACH_CODE).toMatch(/c\.kind === 'stopped' \? 'theirPurpose' as const/);
@@ -494,7 +494,7 @@ describe('a REASON outranks a description (David 2026-10-13: "value why statemen
     expect(d.held).toContain('positionFacts');
   });
   it('the producer passes the role from the ONE table over its clause kind', () => {
-    expect(TEACH_CODE).toMatch(/c\.lines, c\.stakes, FACT_ROLE\[c\.kind\], c\.kind\)/);
+    expect(TEACH_CODE).toMatch(/c\.lines, c\.stakes, FACT_ROLE\[c\.kind\], c\.kind, c\.skill\)/);
   });
 });
 
@@ -725,5 +725,24 @@ describe('the fade is gradual (2026-10-17): lighter while learning, short once p
     const src = readFileSync('src/services/weaknessSignalLoader.ts', 'utf8');
     expect(src).toMatch(/if \(capabilityProven\(entry\)\) out\.set\(tag, 'short'\);\s*else if \(entry\.heldStreak >= 1\) out\.set\(tag, 'lighter'\);/);
     expect(TEACH_CODE).toMatch(/const provenTagsRef = useFadeLevels\(\);/);
+  });
+});
+
+describe('rules and theory fade per skill (item 8, 2026-10-17)', () => {
+  const RULE = 'Your Nf3 develops a piece toward the centre. A piece out early is a piece working, so bring the rest out before the queen goes hunting.';
+  it('a rule line on a proven skill speaks its point alone; on an unknown skill, all of it', async () => {
+    const { fadeWhenGreen } = await import('./learnTurnDoor');
+    const levels = new Map([['neglected-development', 'short' as const]]);
+    expect(fadeWhenGreen('positionFacts', RULE, levels, 'neglected-development')).toBe('Your Nf3 develops a piece toward the centre.');
+    expect(fadeWhenGreen('positionFacts', RULE, levels, 'passive-rook')).toBe(RULE);
+    // No skill on the fact: the lane's own tag decides, and positionFacts has none.
+    expect(fadeWhenGreen('positionFacts', RULE, levels)).toBe(RULE);
+  });
+  it('the rule, the fundamental and the book move carry their skill to the door', () => {
+    const pf = readFileSync('src/services/positionFacts.ts', 'utf8');
+    expect(pf).toMatch(/\.\.\.\(ruleSkill\(a\.rule\.id\) \? \{ skill: ruleSkill\(a\.rule\.id\) \} : \{\}\)/);
+    expect(TEACH_CODE).toMatch(/FACT_ROLE\[c\.kind\], c\.kind, c\.skill\)/);
+    expect(TEACH_CODE).toMatch(/FUNDAMENTAL_TAG\[fundamental\.id as FundamentalId\] \?\? undefined\)/);
+    expect(TEACH_CODE).toMatch(/skill: FUNDAMENTAL_TAG\['left-book-early'\]/);
   });
 });
