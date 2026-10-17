@@ -91,6 +91,12 @@ const FUNDAMENTAL_HOW: Record<FundamentalId, string> = {
     'Of every piece you attack, ask how many guards it has. When the answer is one, attack the guard — take it, or hit it with something cheaper so it has to move — and the piece it held falls.',
   'ignored-guard-removal':
     'Count the guards on every piece of yours they attack. A piece held by one guard is only as safe as that guard: if they can take it or chase it, add a second defender or move the piece first.',
+  'missed-pin-break':
+    'When a piece of yours is pinned, look at every move it has before you accept the pin. If it can leave with check, a bigger threat or a discovered attack, the pin is an illusion and the pinning piece hangs.',
+  'ignored-pin-break':
+    'Before you lean on a pin, check every move the pinned piece has. If it can leave with check or a bigger threat, the pin does not hold and your pinning piece is the one left loose.',
+  'wrong-move-order':
+    'With two moves in mind, ask what each allows if it comes first. Play the one that leaves them no strong answer — the other can follow.',
   'passive-when-forcing-existed':
     'Run CCT first — checks, captures, threats, in that order. Only when none of them works do you look at quiet moves — that order is what finds shots.',
   'poisoned-pawn':
@@ -366,6 +372,27 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
         `Put pressure on the pinned piece: your ${f.pinner} on ${f.pinnerSq} pins the ${f.piece} on ${f.square} to the ${f.behind}, and ${f.better} attacks it again — it can't run.`,
         `The ${f.piece} on ${f.square} was pinned and stuck — ${f.better} piles on and wins it, and this move lets it off.`,
         `A pinned piece can't run, so attack it again: ${f.better} hits the ${f.piece} on ${f.square}, and this move lets the chance go.`,
+      ];
+      return s[v % s.length];
+    }
+    case 'missed-pin-break': {
+      const how = ({ check: 'with check', threat: 'with a bigger threat', discovery: 'with a discovered attack' } as Record<string, string>)[String(f.how)] ?? 'with tempo';
+      const s = [
+        `Your ${f.piece} on ${f.square} only looked pinned: ${f.better} leaves ${how}, and the ${f.pinner} on ${f.pinnerSq} is left to be won.`,
+        `The pin on your ${f.piece} did not hold — ${f.better} walks out ${how}, and the ${f.pinner} on ${f.pinnerSq} hangs. This move let it go.`,
+      ];
+      return s[v % s.length];
+    }
+    case 'ignored-pin-break': {
+      const how = ({ check: 'with check', threat: 'with a bigger threat', discovery: 'with a discovered attack' } as Record<string, string>)[String(f.how)] ?? 'with tempo';
+      return Number(f.played) === 1
+        ? `You leaned on the pin on their ${f.piece} on ${f.square}, but ${f.hit} walked out ${how}, and your ${f.pinner} on ${f.pinnerSq} was left to be won.`
+        : `You lean on the pin on their ${f.piece} on ${f.square}, but ${f.hit} walks out ${how}, and your ${f.pinner} on ${f.pinnerSq} is left to be won.`;
+    }
+    case 'wrong-move-order': {
+      const s = [
+        `Right moves, wrong order: ${f.better} first. ${f.played} straight away let them start with ${f.punish}, and the line from there wins material.`,
+        `The order mattered — ${f.better} had to come before ${f.played}, because ${f.played} at once ran into ${f.punish} and a line that wins material.`,
       ];
       return s[v % s.length];
     }
@@ -672,6 +699,9 @@ function shortVerdict(a: PrincipleAttribution): string {
     case 'missed-pin-pressure': return `Another pinned piece left alone — ${f.better} piles on the ${f.piece} on ${f.square}.`;
     case 'ignored-pin-pressure': return `Your pinned ${f.piece} on ${f.square} again — ${f.pile} piles on it.`;
     case 'missed-guard-removal': return `One guard again — ${f.better} removes the ${f.guard} that holds the ${f.piece} on ${f.square}.`;
+    case 'missed-pin-break': return `A pin you could walk out of again — ${f.better} leaves with tempo.`;
+    case 'ignored-pin-break': return `Leaning on a pin again — ${f.hit} walks out of it with tempo.`;
+    case 'wrong-move-order': return `The move order again — ${f.better} had to come first.`;
     case 'ignored-guard-removal': return `Your ${f.piece} on ${f.square} with one guard again — ${f.hit} removes it.`;
     case 'loose-piece': return guarded(f) ? `Loose piece again — the ${f.piece} on ${f.square} can be won.` : `Loose piece again — the ${f.piece} on ${f.square} hangs.`;
     case 'ignored-threat': return f.line ? `Their threat again — ${f.threat} was still on, and the ${f.piece} on ${f.square} with it.` : guarded(f) ? `Their threat again — the ${f.piece} on ${f.square} could still be won.` : `Their threat again — the ${f.piece} on ${f.square} was still hanging.`;
@@ -825,6 +855,9 @@ const RECAP_NOUN: Record<FundamentalId, string> = {
   'ignored-pin-pressure': 'let them pile on your pinned piece',
   'missed-guard-removal': 'left a single guard in place',
   'ignored-guard-removal': 'left a piece with one guard',
+  'missed-pin-break': 'stayed in a pin it could walk out of',
+  'ignored-pin-break': 'leaned on a pin that did not hold',
+  'wrong-move-order': 'played the right moves in the wrong order',
 };
 
 /**

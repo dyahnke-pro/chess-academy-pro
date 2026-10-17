@@ -79,16 +79,22 @@ function bestCapture(chess: Chess, side: Color, depth: number): number {
 }
 
 /** Worst case for `side` after the escape: every holder reply, then two plies
- *  of captures. Mate against `side` is −∞. Returns the reply that does it. */
-function worstAfterEscape(afterEscape: Chess, side: Color): { value: number; reply: Move | null } {
+ *  of captures. Mate against `side` is −∞. Returns the reply that does it.
+ *  `floor`: the escape is rejected as soon as one reply drops below it, so a
+ *  refuted escape stops at its refutation (the same verdict; on a crowded
+ *  board the full sweep of every rejected rook move cost seconds). */
+function worstAfterEscape(afterEscape: Chess, side: Color, floor: number): { value: number; reply: Move | null } {
   let worst = Infinity;
   let reply: Move | null = null;
-  for (const r of afterEscape.moves({ verbose: true })) {
+  // Captures first, biggest first: they are where a refutation usually is.
+  const replies = afterEscape.moves({ verbose: true })
+    .sort((a, b) => (b.captured ? VALUE[b.captured] + 1 : 0) - (a.captured ? VALUE[a.captured] + 1 : 0));
+  for (const r of replies) {
     afterEscape.move(r);
     const v = afterEscape.isCheckmate() ? -Infinity : bestCapture(afterEscape, side, 2);
     afterEscape.undo();
     if (v < worst) { worst = v; reply = r; }
-    if (worst === -Infinity) break;
+    if (worst < floor) break;
   }
   return worst === Infinity ? { value: balance(afterEscape, side), reply: null } : { value: worst, reply };
 }
@@ -181,7 +187,7 @@ export function findPinBreaks(fen: string, side?: Color): PinBreak[] {
       chess.move(m);
       const how = tempoOf(chess, m, s, behindValue, before);
       if (how) {
-        const { value: worst, reply } = worstAfterEscape(chess, s);
+        const { value: worst, reply } = worstAfterEscape(chess, s, base);
         if (worst >= base) {
           // THE PROOF (proof.ts): the escape, their best answer, what follows.
           let cap: Move | null = null;

@@ -41,6 +41,7 @@ import { developedMinorCount, homeMinorCount, isMinorAtHome, minorsAtHome } from
 import { proofCut } from './exchangeLedger';
 import { findPinPressure } from './pinPressure';
 import { findGuardRemovals } from './guardRemoval';
+import { findPinBreaks } from './pinBreak';
 import { pawnsOf } from './boardStructure';
 import { isEndgameByMaterial } from './gamePhaseService';
 
@@ -76,6 +77,15 @@ export const FUNDAMENTAL_IDS = [
   // One computer (`guardRemoval`), read from both seats: the student skipped
   // taking or chasing the only guard of a piece, or let the opponent do it.
   'missed-guard-removal', 'ignored-guard-removal',
+  // THE PIN THAT BREAKS WITH TEMPO (David 2026-10-17: "number two yes" — every
+  // new computer feeds the record). One computer (`pinBreak`), both seats: the
+  // student's pinned piece had an escape with tempo and stayed put, or the
+  // student leaned on a pin the opponent walked out of.
+  'missed-pin-break', 'ignored-pin-break',
+  // MOVE ORDER (`moveOrder`'s lesson, from the slip's side): the student
+  // played the engine's SECOND move first, and the opponent's reply wins
+  // material the right order did not allow.
+  'wrong-move-order',
 ] as const;
 export type FundamentalId = (typeof FUNDAMENTAL_IDS)[number];
 
@@ -122,6 +132,9 @@ export const FUNDAMENTAL_TAG: Record<FundamentalId, MisconceptionTagId> = {
   'ignored-pin-pressure': 'missed-opponents-threat',
   'missed-guard-removal': 'missed-tactic',
   'ignored-guard-removal': 'missed-opponents-threat',
+  'missed-pin-break': 'missed-tactic',
+  'ignored-pin-break': 'missed-opponents-threat',
+  'wrong-move-order': 'missed-opponents-threat',
 };
 
 /** Rows whose "punishment" is a positional cost rather than a concrete move
@@ -565,6 +578,7 @@ const CALC_DEPTH_CLAIMANTS = [
   'poisoned-pawn', 'overvalued-attack', 'blocked-own-retreat',
   'missed-pin-pressure', 'ignored-pin-pressure',
   'missed-guard-removal', 'ignored-guard-removal',
+  'missed-pin-break', 'ignored-pin-break', 'wrong-move-order',
 ] as const satisfies readonly FundamentalId[];
 
 type Detector = (c: Ctx) => Omit<PrincipleAttribution, 'tag' | 'coOccurrence'> | null;
@@ -854,6 +868,82 @@ function ignoredGuardRemoval(c: Ctx): ReturnType<typeof att> | null {
     piece: PNAME[hit.targetPiece], square: hit.target,
     guard: PNAME[hit.guardPiece], guardSq: hit.guard, chase: how === 'chase' ? 1 : 0,
   });
+}
+
+/** MISSED PIN BREAK — the student's own piece was pinned and could leave WITH
+ *  TEMPO (`findPinBreaks`: check, a bigger threat or a discovery, every reply
+ *  verified), winning the pinning piece; they played something else.
+ *    1. PATTERN — the engine's best move IS that escape (coordinates);
+ *    2. PUNISHMENT — the chance goes: after their reply the same pinned piece
+ *       has no such escape (when the reply is known);
+ *    3. COUNTERFACTUAL — the best line wins material (when persisted). */
+function missedPinBreak(c: Ctx): ReturnType<typeof att> | null {
+  const { best, last, mover } = c;
+  const chances = findPinBreaks(c.before.fen(), mover);
+  const hit = chances.find((b) => b.from === best.from && b.to === best.to);
+  if (!hit || !hit.pinnerHangs) return null;
+  if (chances.some((b) => b.from === last.from && b.to === last.to)) return null;
+  if (c.pvB?.length && !pvWinsMaterial(c.before, [best.san, ...c.pvB], mover)) return null;
+  const replySan = c.reply?.san ?? c.pvP?.[0];
+  if (replySan) {
+    const ar = applied(c.after, replySan);
+    if (ar && findPinBreaks(ar.fen(), mover).some((b) => b.pinned === hit.pinned)) return null;
+  }
+  return att('missed-pin-break', 3, {
+    squares: [hit.pinned, hit.pinner, best.to], moves: [best.san], pvMoves: pvHas(c.pvB, () => true, 2),
+  }, {
+    better: best.san, piece: PNAME[hit.pinnedPiece], square: hit.pinned,
+    pinner: PNAME[hit.pinnerPiece], pinnerSq: hit.pinner, how: hit.how,
+  });
+}
+
+/** IGNORED PIN BREAK — the student leaned on a pin, and the opponent's reply
+ *  walked the pinned piece out WITH TEMPO, leaving the pinner to be won.
+ *    1. PATTERN — `findPinBreaks(after, opp)` names their reply (played, or
+ *       the engine's first);
+ *    2. PUNISHMENT — the computer proved the pinning piece can be won;
+ *    3. COUNTERFACTUAL — after the best move that piece has no such escape. */
+function ignoredPinBreak(c: Ctx): ReturnType<typeof att> | null {
+  const { opp } = c;
+  const reply = c.reply ?? (c.pvP?.[0] ? tryMove(c.after, c.pvP[0]) : null);
+  if (!reply) return null;
+  const hit = findPinBreaks(c.after.fen(), opp).find((b) => b.from === reply.from && b.to === reply.to);
+  if (!hit || !hit.pinnerHangs) return null;
+  if (findPinBreaks(c.afterBest.fen(), opp).some((b) => b.pinned === hit.pinned)) return null;
+  return att('ignored-pin-break', 3, {
+    squares: [hit.pinned, hit.pinner, reply.to], moves: [reply.san], pvMoves: pvHas(c.pvP, (s) => s === reply.san, 1),
+  }, {
+    hit: reply.san, played: c.reply ? 1 : 0, better: c.best.san,
+    piece: PNAME[hit.pinnedPiece], square: hit.pinned,
+    pinner: PNAME[hit.pinnerPiece], pinnerSq: hit.pinner, how: hit.how,
+  });
+}
+
+/** WRONG MOVE ORDER — the student played the engine's SECOND move first.
+ *    1. PATTERN — the played move is the student's follow-up in the best line
+ *       (the best line's second move, by coordinates), and not the best move;
+ *    2. PUNISHMENT — the reply line after it wins material (the one ledger),
+ *       and the reply is not simply taking the piece just moved (that is a
+ *       loose piece, a different lesson); the best move is still legal after
+ *       the reply, so the two moves really do swap;
+ *    3. COUNTERFACTUAL — the best line does not lose that material. */
+function wrongMoveOrder(c: Ctx): ReturnType<typeof att> | null {
+  const { best, last, opp } = c;
+  if (!c.pvB || c.pvB.length < 2 || !c.pvP?.length) return null;
+  if (best.from === last.from && best.to === last.to) return null;
+  const afterTheirs = applied(c.afterBest, c.pvB[0]);
+  const y = afterTheirs ? tryMove(afterTheirs, c.pvB[1]) : null;
+  if (!y || y.from !== last.from || y.to !== last.to) return null;
+  const r = c.reply ?? tryMove(c.after, c.pvP[0]);
+  if (!r) return null;
+  if (r.to === last.to && r.captured) return null;
+  if (!pvWinsMaterial(c.after, c.pvP, opp)) return null;
+  if (pvWinsMaterial(c.afterBest, c.pvB, opp)) return null;
+  const ar = applied(c.after, r.san);
+  if (!ar || !tryMove(ar, best.san)) return null;
+  return att('wrong-move-order', 3, {
+    squares: [best.to, last.to, r.to], moves: [best.san], pvMoves: pvHas(c.pvP, () => true, 2),
+  }, { better: best.san, played: last.san, punish: r.san });
 }
 
 const DETECTORS: Detector[] = [
@@ -1151,6 +1241,9 @@ const DETECTORS: Detector[] = [
   ignoredPinPressure,
   missedGuardRemoval,
   ignoredGuardRemoval,
+  missedPinBreak,
+  ignoredPinBreak,
+  wrongMoveOrder,
   // 16. Weakened king shield — a shield pawn moved without need, and the
   // opponent has a sound check or a piece that can land next to the king.
   (c) => {
@@ -1769,6 +1862,11 @@ export function attributePrinciples(
   // The guard removal IS the specific story of a piece they win: it says how.
   if (ids.has('missed-guard-removal')) subsumed.add('passive-when-forcing-existed');
   if (ids.has('ignored-guard-removal')) { subsumed.add('loose-piece'); subsumed.add('ignored-threat'); }
+  // The pin break IS how the piece was won or the chance was missed — one story.
+  if (ids.has('missed-pin-break')) subsumed.add('passive-when-forcing-existed');
+  if (ids.has('ignored-pin-break')) { subsumed.add('loose-piece'); subsumed.add('ignored-threat'); }
+  // The wrong order IS why their reply wins: it names the fix, the threat only the loss.
+  if (ids.has('wrong-move-order')) { subsumed.add('loose-piece'); subsumed.add('ignored-threat'); }
   // Section 14: an immediate, move-verified punishment IS the story; the
   // reasoning error behind it is the second telling. Depth needs the blow to be
   // deep, so anything that names an immediate blow subsumes it; no-plan yields
