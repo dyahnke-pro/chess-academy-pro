@@ -197,8 +197,11 @@ export function detectTradeCreatesPin(fen: string, studentColor: 'w' | 'b'): Tra
 /** The v2 warning — a trade that opens a pin. Guide-don't-tell: names the
  *  alignment, never says "don't trade". */
 export function tradeDangerClause(d: TradeDanger): string {
+  // WHO PINS, AND ALONG WHAT (prod walk 2026-10-18: "that lines your bishop
+  // on a3 up with your queen on the file — a pin" named neither the pinning
+  // piece nor the line).
   const front = `${PNAME[d.frontPiece]} on ${d.frontSquare}`;
-  return `before you trade on ${d.tradeTo}: that lines your ${front} up with your ${PNAME[d.backPiece]} on the ${d.line} — a pin.`;
+  return `before you take on ${d.tradeTo}, look past the trade: your ${front} would stand between their ${PNAME[d.enemyPiece]} on ${d.enemySquare} and your ${PNAME[d.backPiece]} on ${d.backSquare}, all on one ${d.line} — a pin.`;
 }
 
 /** The prophylactic warning — guide-don't-tell: name the alignment and the line,

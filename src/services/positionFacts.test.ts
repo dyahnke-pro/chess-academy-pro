@@ -323,7 +323,7 @@ describe('the latent-danger prevention clause (fires through positionFacts)', ()
     expect(r.tradeDanger).not.toBeNull();
     expect(r.tradeDanger).toMatchObject({ tradeTo: 'e5', frontPiece: 'b', backPiece: 'k' });
     const clause = r.clauses.find((c) => c.kind === 'latent-danger')!;
-    expect(clause.text).toMatch(/before you trade on e5/);
+    expect(clause.text).toMatch(/before you take on e5, look past the trade: your \w+ on [a-h][1-8] would stand between their \w+ on [a-h][1-8] and your \w+ on [a-h][1-8], all on one (file|rank|diagonal) — a pin/);
   });
 });
 
