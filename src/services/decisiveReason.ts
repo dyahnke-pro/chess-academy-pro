@@ -290,6 +290,21 @@ export function decisiveReason(input: {
     const what = stops ? stops.text : description ? `One thing it does: ${played} ${description}.` : quiet?.text ?? null;
     const src: ReasonSource | null = stops ? 'stops' : description ? 'description' : quiet?.source ?? null;
     const useQuiet = !!stops || !description;
+    // TWO PLANS, ABOUT EQUAL (David 2026-10-18, the close call: "name both
+    // plans and what each commits to"). When the board teacher says what the
+    // played move does AND what the equal alternative does, and they differ,
+    // that difference is the decision a strong player weighs — said as two
+    // plans, never as "no reason". The alternative is read by the SAME
+    // computer from the same seat.
+    const altDescription = seat === 'student' && description && nextBestSan && !stops
+      ? bestMoveReason(fenBefore, nextBestSan, mover, { mateIn: null, opponentLastSan: input.opponentLastSan })
+      : null;
+    if (altDescription && description && twoPlans(description, altDescription) && nextBestSan) {
+      // `core` is the contrast alone — chat leads with its own "X and Y are
+      // about equally good", so the core must not say it twice.
+      const contrast = `${played} ${description}; ${dot(nextBestSan, mover)} ${altDescription}. The choice is which job you want done.`;
+      return { ...base, kind: 'close', source: 'description', stakeCp: null, core: contrast, text: `Two plans here, about equal: ${contrast}`, line: null, squares: [] };
+    }
     // A shared reason is still a reason: said first, the equal move after.
     const closeText = stops ? `${what} ${openSentence(alt)}.` : `There is no single reason here — ${alt}.${what ? ` ${what}` : ''}`;
     return { ...base, kind: 'close', source: src, stakeCp: null, core: what, text: closeText, line: useQuiet ? quiet?.line ?? null : null, squares: useQuiet ? quiet?.squares ?? [] : [] };
@@ -316,6 +331,17 @@ export function decisiveReason(input: {
   // shows. Say so, and give the one true thing the move does — marked as one.
   const one = top?.text ?? (description ? `One thing ${whose} ${played} does: it ${description}.` : null);
   return { ...base, kind: 'a', source: top?.source ?? (description ? 'description' : null), stakeCp: top?.stake ?? null, text: `No single reason shows in the next few moves${nextBestSan ? ` — anything else, like ${dot(nextBestSan, mover)}, gives up ${costWords(gapCp)}, for reasons further down the line` : ''}.${one ? ` ${one}` : ''}`, line: top?.line ?? null, squares: top?.squares ?? [] };
+}
+
+/** TWO DIFFERENT PLANS, not two words for one: the first action differs
+ *  ("prepares to fianchetto" against "opens the diagonal"; never "develops"
+ *  against "develops"), and neither is a tactic — a fork or a pin between two
+ *  equal moves wins nothing, so it is not a plan to choose between. */
+const TACTIC_WORDS = /\b(?:forks?|pins?|skewers?|x-ray|check|mates?|wins?)\b/i;
+export function twoPlans(a: string, b: string): boolean {
+  if (a === b || TACTIC_WORDS.test(a) || TACTIC_WORDS.test(b)) return false;
+  const verb = (t: string): string => t.trim().split(/[\s,;—-]+/)[0]?.toLowerCase() ?? '';
+  return verb(a) !== verb(b);
 }
 
 /** IS THIS A MOMENT WITH A REASON TO WAIT FOR? A real decision: the best and

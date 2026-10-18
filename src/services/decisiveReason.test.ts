@@ -156,3 +156,14 @@ describe('material is said by piece, never as a point count (Learn audit 2026-10
     expect(src).not.toMatch(/\$\{[^}]*\}\s*points? (?:down|up)\b/);
   });
 });
+
+describe('two plans, about equal — the close call (David 2026-10-18)', () => {
+  it('names both plans when the two equal moves do different jobs', async () => {
+    const { twoPlans } = await import('./decisiveReason');
+    expect(twoPlans('prepares to fianchetto the bishop to g7', 'opens the diagonal for the bishop on f8')).toBe(true);
+    // Two words for one job is not two plans.
+    expect(twoPlans('develops into the game, fighting for e5', 'develops into the game, eyeing d6')).toBe(false);
+    // A tactic between two equal moves wins nothing — never offered as a plan.
+    expect(twoPlans('forks the king on e1 and the knight on c3', 'saves it from their knight')).toBe(false);
+  });
+});

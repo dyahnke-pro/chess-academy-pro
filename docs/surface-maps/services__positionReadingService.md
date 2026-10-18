@@ -330,7 +330,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tiedDefender.ts:52`
 
 ### `asIfToMove` (function) — 20 call sites
-- `src/services/capabilityEvidence.ts:443`
+- `src/services/capabilityEvidence.ts:462`
 - `src/services/exchangeIdeas.ts:252`
 - `src/services/exchangeIdeas.ts:321`
 - `src/services/exchangeIdeas.ts:325`
