@@ -28,14 +28,14 @@ describe.skipIf(!RUN)('skill meters on a real drop', () => {
     // Coin rate: per game, how many distinct meters moved and how many events fired.
     const byGame = new Map<string, { held: SkillRows['held']; slips: SkillRows['slips'] }>();
     for (const h of rows.held) {
-      const g = String((h as unknown as { sourceGameId?: string }).sourceGameId ?? '');
+      const g = (h as unknown as { sourceGameId?: string }).sourceGameId ?? '';
       if (!g) continue;
       const b = byGame.get(g) ?? { held: [], slips: [] };
       b.held.push(h);
       byGame.set(g, b);
     }
     for (const s of rows.slips) {
-      const g = String((s as unknown as { sourceGameId?: string }).sourceGameId ?? '');
+      const g = (s as unknown as { sourceGameId?: string }).sourceGameId ?? '';
       if (!g) continue;
       const b = byGame.get(g) ?? { held: [], slips: [] };
       b.slips.push(s);
