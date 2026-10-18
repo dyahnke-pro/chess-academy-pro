@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3574) — names `BoardContext`
-- **The standard post-deploy ritual** (CLAUDE.md:6371) — names `chatTurn`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3595) — names `BoardContext`
+- **The standard post-deploy ritual** (CLAUDE.md:6392) — names `chatTurn`
 
 ## Who calls in
 

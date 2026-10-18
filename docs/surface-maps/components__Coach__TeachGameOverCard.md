@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6346) — names `TeachGameOverCard`
+- **The standard post-deploy ritual** (CLAUDE.md:6367) — names `TeachGameOverCard`
 
 ## Who calls in
 
