@@ -10,6 +10,7 @@
 //   short   — proven: the point alone.
 // A slip resets the streak, so the record itself returns a skill to full.
 import { capabilityProven, type CapabilityProfile, type CapabilityProfileEntry } from './capabilityEvidence';
+import { splitThink } from '../utils/thinkPause';
 
 export type FadeLevel = 'lighter' | 'short';
 /** Per skill; a plain set reads as `short` for every member (proven tags). */
@@ -34,9 +35,14 @@ export function fadeLevelOf(levels: FadeLevels | null | undefined, tag: string |
   return (levels as ReadonlySet<string>).has(tag) ? 'short' : null;
 }
 
-/** The line at a level: short keeps the first sentence, lighter the first two. */
+/** The line at a level: short keeps the first sentence, lighter the first two.
+ *  A QUESTION ("question ‖ answer") is never cut into a question with no
+ *  answer: a skill they have PROVEN is not asked at all — the answer's point
+ *  is said instead — and a lighter one keeps the question whole. */
 export function fadeText(text: string, level: FadeLevel | null): string {
   if (!level) return text;
+  const qa = splitThink(text);
+  if (qa) return level === 'short' ? fadeText(qa[1], 'short') : text;
   const sentences = text.split(/(?<=[.!?])\s+(?=[A-Z"“…])/);
   const keep = level === 'short' ? 1 : 2;
   return sentences.length > keep ? sentences.slice(0, keep).join(' ') : text;
