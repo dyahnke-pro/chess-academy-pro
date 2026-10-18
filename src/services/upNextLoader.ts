@@ -15,8 +15,8 @@ import { loadFreeTier, hasFreeOpeningRoom } from './freeTierService';
 import { isPaywallGateEnabled, useEntitlementStore } from '../stores/entitlementStore';
 import { solveLengthOf } from './mistakeLineGrowth';
 import {
-  rankUpNext, currentPick, START_STEPS, THINKING_LESSON_LIVE,
-  type UpNextPick, type UpNextInput, type StartStep, type ThinkingSignal,
+  rankUpNext, currentPick, sectionPick, START_STEPS, THINKING_LESSON_LIVE,
+  type UpNextPick, type PickHub, type UpNextInput, type StartStep, type ThinkingSignal,
 } from './upNextPicker';
 import { getCapabilityProfile } from './capabilityEvidence';
 import { heatMap, type HeatTile } from './heatMap';
@@ -44,7 +44,19 @@ export interface UpNextState {
   ranked: UpNextPick[];
   /** The tier-1 thinking-habit standing the ranking used (null = not offered). */
   thinking: ThinkingSignal | null;
+  /** Each hub's own next bite — the one its Up next bar starts. A Record over
+   *  the hubs that carry a bar, so a hub that holds bites cannot be left
+   *  without one (the Coach hub had none: a fresh ring could never close). */
+  section: Record<UpNextSection, UpNextPick | null>;
 }
+
+/** The hubs with an Up next bar, and which picks each one starts. */
+export type UpNextSection = 'tactics' | 'openings' | 'coach';
+const SECTION_HUBS: Record<UpNextSection, (hub: PickHub) => boolean> = {
+  tactics: (h) => h.startsWith('tactics:'),
+  openings: (h) => h === 'openings',
+  coach: (h) => h === 'coach',
+};
 
 const ringKey = (d: Date): string => `today_ring_${dayKey(d)}`;
 
@@ -224,7 +236,9 @@ async function loadUpNextFresh(now: Date): Promise<UpNextState> {
   // question); then the ring; once it is closed, whatever the record says next.
   const start = input.startSteps.length > 0 ? ranked.find((p) => p.kind === 'start' && !done.has(p.key)) : undefined;
   const current = start ?? currentPick(ring, done) ?? currentPick(ranked, done);
-  return { ring, done, current, ranked, thinking: input.thinking };
+  const section = Object.fromEntries((Object.keys(SECTION_HUBS) as UpNextSection[])
+    .map((k) => [k, sectionPick(ranked, done, SECTION_HUBS[k])])) as Record<UpNextSection, UpNextPick | null>;
+  return { ring, done, current, ranked, thinking: input.thinking, section };
 }
 
 /** Up next may have changed (a bite finished): the one signal a surface needs

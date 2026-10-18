@@ -12,7 +12,6 @@ import { scaledShadow } from '../../utils/neonColors';
 import { logAppAudit } from '../../services/appAuditor';
 import { useUpNext } from '../../hooks/useUpNext';
 import { UpNextBar } from '../Dashboard/UpNextBar';
-import { sectionPick } from '../../services/upNextPicker';
 
 // ─── Theme Category Definitions ──────────────────────────────────────────
 
@@ -132,7 +131,7 @@ export function TacticsPage(): JSX.Element {
   // 2026-10-02: hubs blink their own), and its real row pulses in place (the
   // list never reorders — muscle memory).
   const upNext = useUpNext();
-  const pick = upNext ? sectionPick(upNext.ranked, upNext.done, (h) => h.startsWith('tactics:')) : null;
+  const pick = upNext?.section.tactics ?? null;
   const pulseKey = pick ? pick.hub.slice('tactics:'.length) : null;
 
   // Hub-visit signal so the audit stream can attribute downstream

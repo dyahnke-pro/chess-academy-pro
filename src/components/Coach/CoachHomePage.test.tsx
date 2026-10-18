@@ -26,14 +26,14 @@ describe('CoachHomePage', () => {
     // so the ring stopped at 2/3.
     const thinking = { kind: 'thinking', key: 'up:thinking', label: 'Learn how to think', reason: 'r', bite: 'one lesson', path: '/coach/teach?lesson=think', hub: 'coach' };
     const tactic = { kind: 'warm-up', key: 'up:warm', label: 'Warm up', reason: 'r', bite: '2 puzzles', path: '/tactics/adaptive', hub: 'tactics:daily' };
-    upNextState.value = { ring: [], done: new Set<string>(), current: null, ranked: [tactic, thinking], thinking: null };
+    upNextState.value = { ring: [], done: new Set<string>(), current: null, ranked: [tactic, thinking], thinking: null, section: { tactics: tactic, openings: null, coach: thinking } };
     render(<CoachHomePage />);
     expect(screen.getByTestId('up-next-bar')).toHaveTextContent('Learn how to think');
   });
 
   it('shows no Up next bar when this hub has no bite', () => {
     const tactic = { kind: 'warm-up', key: 'up:warm', label: 'Warm up', reason: 'r', bite: '2 puzzles', path: '/tactics/adaptive', hub: 'tactics:daily' };
-    upNextState.value = { ring: [], done: new Set<string>(), current: null, ranked: [tactic], thinking: null };
+    upNextState.value = { ring: [], done: new Set<string>(), current: null, ranked: [tactic], thinking: null, section: { tactics: tactic, openings: null, coach: null } };
     render(<CoachHomePage />);
     expect(screen.queryByTestId('up-next-bar')).not.toBeInTheDocument();
   });

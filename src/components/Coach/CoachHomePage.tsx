@@ -9,7 +9,6 @@ import { scaledShadow } from '../../utils/neonColors';
 import { logAppAudit } from '../../services/appAuditor';
 import { useUpNext } from '../../hooks/useUpNext';
 import { UpNextBar } from '../Dashboard/UpNextBar';
-import { sectionPick } from '../../services/upNextPicker';
 import type { CSSProperties, KeyboardEvent, MouseEvent, ReactNode } from 'react';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -51,7 +50,7 @@ export function CoachHomePage(): JSX.Element {
   // Coach hub had no bar — so a fresh install's ring (Deep Run, Learn how to
   // think, Warm-up) could never close past 2/3.
   const upNext = useUpNext();
-  const pick = upNext ? sectionPick(upNext.ranked, upNext.done, (h) => h === 'coach') : null;
+  const pick = upNext?.section.coach ?? null;
 
   // "Talk to Coach" — opens the global coach drawer (a spoken conversation, on
   // this page, no navigation) and starts the mic in one tap. Same voice path as
