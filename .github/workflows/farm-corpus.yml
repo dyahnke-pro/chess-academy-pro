@@ -30,12 +30,14 @@ on:
         description: 'Max transcripts to pull this run'
         required: false
         default: '400'
-  schedule:
-    # Every 2h. The backlog is finite (~1,300 Saint Louis transcripts at 400 a
-    # run), and David wants it farming CONSTANTLY until it is done rather than
-    # trickling. A healthy run finishes in well under an hour, so a 2h cadence
-    # keeps a runner working almost continuously without ever overlapping.
-    - cron: '0 */2 * * *'
+  # SCHEDULE OFF (David 2026-10-18, cost): it failed on every scheduled run
+  # while billing runner minutes and prod traffic. Run it by hand.
+  # schedule:
+  #  # Every 2h. The backlog is finite (~1,300 Saint Louis transcripts at 400 a
+  #  # run), and David wants it farming CONSTANTLY until it is done rather than
+  #  # trickling. A healthy run finishes in well under an hour, so a 2h cadence
+  #  # keeps a runner working almost continuously without ever overlapping.
+  #  - cron: '0 */2 * * *'
 
 concurrency:
   # Never let two runs fight over the same corpus file.

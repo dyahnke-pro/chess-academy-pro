@@ -25,9 +25,11 @@ on:
         description: 'Scope to one opening id or comma list (blank = full sweep; lands on its shard, others exit clean).'
         required: false
         default: ''
-  schedule:
-    # Nightly at 07:31 UTC (~2:31am Chicago) — finishes before the workday.
-    - cron: '31 7 * * *'
+  # SCHEDULE OFF (David 2026-10-18, cost): it failed on every scheduled run
+  # while billing runner minutes and prod traffic. Run it by hand.
+  # schedule:
+  #  # Nightly at 07:31 UTC (~2:31am Chicago) — finishes before the workday.
+  #  - cron: '31 7 * * *'
 
 concurrency:
   group: loop-audit

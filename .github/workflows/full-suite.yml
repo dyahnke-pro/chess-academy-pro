@@ -9,8 +9,10 @@ name: Full test suite (nightly)
 # does: the whole suite, every night, sharded, red when anything is red.
 
 on:
-  schedule:
-    - cron: '17 7 * * *'   # 02:17 America/Chicago
+  # SCHEDULE OFF (David 2026-10-18, cost): it failed on every scheduled run
+  # while billing runner minutes and prod traffic. Run it by hand.
+  # schedule:
+  #  - cron: '17 7 * * *'   # 02:17 America/Chicago
   workflow_dispatch:
 
 concurrency:

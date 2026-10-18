@@ -17,9 +17,11 @@ on:
         description: 'Number of full games to play (default 10)'
         required: false
         default: '10'
-  schedule:
-    # Nightly at 09:17 UTC (~4:17am Chicago) — off-peak full-game sweep.
-    - cron: '17 9 * * *'
+  # SCHEDULE OFF (David 2026-10-18, cost): it failed on every scheduled run
+  # while billing runner minutes and prod traffic. Run it by hand.
+  # schedule:
+  #  # Nightly at 09:17 UTC (~4:17am Chicago) — off-peak full-game sweep.
+  #  - cron: '17 9 * * *'
 
 concurrency:
   group: full-game-audit
