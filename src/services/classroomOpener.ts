@@ -12,6 +12,11 @@
 //      weakness the opener is already leading with (relevance is the point).
 import { db } from '../db/schema';
 import { resolvePlayerColor } from './playerIdentity';
+import { getFirstRunStep } from './firstRunJourney';
+import { FIRST_RUN_OPENER, nextFirstRunNugget } from './firstRunPickers';
+
+// The first-run pickers belong to the opener: Learn reaches them through here.
+export { matchFirstRunChoice, firstRunFollowUp } from './firstRunPickers';
 import type { WeaknessCategory } from '../types';
 
 /** The student's own identity for side-resolution (same precedence the rest of
@@ -87,8 +92,28 @@ export function coldStartApplies(input: { historyLength: number; userInteracted:
   return !input.userInteracted && input.historyLength === 0;
 }
 
+const NUGGETS_KEY = 'first_run_nuggets_offered';
+
+/** The nugget picker to offer after the student's Nth move of their first
+ *  game, or null — claimed here, so each one is offered once ever. Only
+ *  during the first-run journey's first game. */
+export async function claimFirstRunNugget(studentMovesPlayed: number): Promise<string | null> {
+  try {
+    if ((await getFirstRunStep()) !== 'learn') return null;
+    const row = await db.meta.get(NUGGETS_KEY);
+    const offered: string[] = row?.value ? (JSON.parse(row.value) as string[]) : [];
+    const nugget = nextFirstRunNugget(studentMovesPlayed, offered);
+    if (!nugget) return null;
+    await db.meta.put({ key: NUGGETS_KEY, value: JSON.stringify([...offered, nugget]) });
+    return nugget;
+  } catch { return null; }
+}
+
 export async function coldStartGuidance(): Promise<ColdStart | null> {
   try {
+    // A NEW INSTALL'S FIRST VISIT (David 2026-10-18): the three ways to start,
+    // as pickers, instead of the upload prompt — they have not played yet.
+    if ((await getFirstRunStep()) === 'learn') return { ...FIRST_RUN_OPENER, chips: [...FIRST_RUN_OPENER.chips] };
     const imported = await db.games
       .filter((g) => g.source !== 'coach' && !g.isMasterGame)
       .count();

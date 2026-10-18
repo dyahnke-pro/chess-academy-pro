@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
 import { buildUserProfile, buildGameRecord } from '../test/factories';
-import { ratingTrendNote, untriedFeatureNudge, coldStartGuidance, coldStartApplies } from './classroomOpener';
+import { ratingTrendNote, untriedFeatureNudge, coldStartGuidance, coldStartApplies, claimFirstRunNugget } from './classroomOpener';
 
 // Integration: seed real games / feature stores into fake-indexeddb and verify
 // the two computed opener signals. The student is "hero" (white in every seeded
@@ -76,7 +76,15 @@ describe('classroomOpener — computed opener signals (David 2026-09-13)', () =>
   });
 
   describe('coldStartGuidance', () => {
+    it("a new install's first visit gets the three ways to start, as pickers", async () => {
+      const c = await coldStartGuidance();
+      expect(c!.line).toMatch(/watch an opening/i);
+      expect(c!.chips.slice(0, 3)).toEqual(['Watch an opening', 'Play an opening', 'Just play']);
+      expect(c!.chips.length).toBeGreaterThan(3);
+    });
+
     it('prompts upload/review + teach/play when no games are uploaded', async () => {
+      await db.meta.put({ key: 'first_run_step', value: 'done' });
       const c = await coldStartGuidance();
       expect(c).not.toBeNull();
       expect(c!.line).toMatch(/upload and review/i);
@@ -93,6 +101,17 @@ describe('classroomOpener — computed opener signals (David 2026-09-13)', () =>
     it('returns null once a real game has been uploaded', async () => {
       await db.games.put(buildGameRecord({ id: 'imp', white: 'hero', black: 'foe', source: 'chesscom', isMasterGame: false }));
       expect(await coldStartGuidance()).toBeNull();
+    });
+  });
+
+  describe('claimFirstRunNugget', () => {
+    it('offers each nugget once, on nugget moves, during the first game only', async () => {
+      expect(await claimFirstRunNugget(2)).toBeNull();
+      const first = await claimFirstRunNugget(3);
+      expect(first).not.toBeNull();
+      expect(await claimFirstRunNugget(3)).not.toBe(first);
+      await db.meta.put({ key: 'first_run_step', value: 'import' });
+      expect(await claimFirstRunNugget(6)).toBeNull();
     });
   });
 

@@ -11,8 +11,9 @@
 // stall around ply 21 (measured — `forceRestart` / `recoverStuckAnalysis` /
 // a random last-resort move, twice in a row). So the card is its own component
 // and this renders it directly.
-import { describe, it, expect, vi } from 'vitest';
-import { render as rtlRender, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render as rtlRender, screen, waitFor, fireEvent } from '@testing-library/react';
+import { db } from '../../db/schema';
 import type { ReactElement } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
@@ -23,6 +24,13 @@ import { TeachGameOverCard } from './TeachGameOverCard';
 const render = (ui: ReactElement): ReturnType<typeof rtlRender> => rtlRender(<MemoryRouter>{ui}</MemoryRouter>);
 
 describe('the finished game keeps the board', () => {
+  // A returning student: the first-run journey is done.
+  beforeEach(async () => {
+    await db.delete();
+    await db.open();
+    await db.meta.put({ key: 'first_run_step', value: 'done' });
+  });
+
   it('offers the review instead of taking it', async () => {
     // THE WHOLE BUG IN ONE ASSERTION: rendering the finished state must not
     // navigate. The old code did it from an effect, so the board was gone
@@ -43,7 +51,7 @@ describe('the finished game keeps the board', () => {
     const onReview = vi.fn();
     const onStay = vi.fn();
     render(<TeachGameOverCard result="win" byMate onReview={onReview} onStay={onStay} />);
-    await userEvent.click(screen.getByTestId('teach-stay-on-board'));
+    await userEvent.click(await screen.findByTestId('teach-stay-on-board'));
     expect(onStay).toHaveBeenCalledTimes(1);
     expect(onReview).not.toHaveBeenCalled();
   });
@@ -74,5 +82,30 @@ describe('the finished game keeps the board', () => {
     // the position they were denied.
     render(<TeachGameOverCard result="loss" byMate onReview={vi.fn()} onStay={vi.fn()} />);
     expect(screen.getByText(/final position is on the board/i)).toBeInTheDocument();
+  });
+});
+
+describe('the first game ends on Continue', () => {
+  beforeEach(async () => {
+    await db.delete();
+    await db.open();
+  });
+
+  it('Continue leads on, Review stays a choice, Stay is gone', async () => {
+    render(<TeachGameOverCard result="win" byMate onReview={vi.fn()} onStay={vi.fn()} />);
+    expect(await screen.findByTestId('first-run-continue')).toBeInTheDocument();
+    expect(screen.getByTestId('teach-review-game')).toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByTestId('teach-stay-on-board')).toBeNull());
+  });
+
+  it('a tap ends the level-up fireworks at once', async () => {
+    const { container } = render(
+      <TeachGameOverCard result="win" byMate onReview={vi.fn()} onStay={vi.fn()}
+        skills={[{ label: 'Tactics', delta: 30, level: 9, levelChange: 1 }]} />,
+    );
+    const sparks = (): number => container.querySelectorAll('[data-testid="teach-recap-levelup"] span[aria-hidden]').length;
+    expect(sparks()).toBeGreaterThan(0);
+    fireEvent.pointerDown(screen.getByTestId('teach-game-over'));
+    expect(sparks()).toBe(0);
   });
 });

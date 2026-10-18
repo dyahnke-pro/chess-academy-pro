@@ -29,7 +29,9 @@ import { ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { RollingNumber } from '../ui/RollingNumber';
 import type { LearnTally } from '../../services/learnReward';
-import { FirstRunImportOffer } from '../FirstRun/FirstRunImportOffer';
+import { useState } from 'react';
+import { FirstRunContinue } from '../FirstRun/FirstRunContinue';
+import { useFirstRunStep } from '../FirstRun/useFirstRunStep';
 
 /** One skill's net move this game (`useLearnRecordWatch`, summed). */
 export interface SkillRecapRow { label: string; delta: number; level: number; levelChange: -1 | 0 | 1 }
@@ -52,15 +54,17 @@ export interface TeachGameOverCardProps {
 }
 
 /** The skills that moved this game, gold up and red down, with fireworks for
- *  a level gained (David 2026-10-18: "Fireworks at the end leveling up"). */
-function SkillRecap({ skills }: { skills: readonly SkillRecapRow[] }): JSX.Element | null {
+ *  a level gained (David 2026-10-18: "Fireworks at the end leveling up").
+ *  Every animation on the card ends inside 10 seconds, and a tap ends it now
+ *  (David: "That cannot take longer than 10 seconds … Yes tap to skip"). */
+function SkillRecap({ skills, skipped }: { skills: readonly SkillRecapRow[]; skipped: boolean }): JSX.Element | null {
   if (skills.length === 0) return null;
   const ups = skills.filter((s) => s.levelChange === 1);
   return (
     <div className="relative space-y-1.5" data-testid="teach-recap-skills">
       {ups.length > 0 && (
         <div className="relative overflow-hidden rounded-lg border border-amber-300/60 bg-amber-400/10 px-3 py-2 text-center" data-testid="teach-recap-levelup">
-          {Array.from({ length: 14 }, (_, i) => (
+          {!skipped && Array.from({ length: 14 }, (_, i) => (
             <motion.span
               key={i}
               className="absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full bg-amber-300"
@@ -124,31 +128,40 @@ function headline(result: TeachGameResult, byMate: boolean): string {
 }
 
 export function TeachGameOverCard({ result, byMate, onReview, onStay, tally, skills }: TeachGameOverCardProps): JSX.Element {
+  const [skipped, setSkipped] = useState(false);
+  // THE FIRST GAME ENDS ON CONTINUE (David 2026-10-18): the recap is read at the
+  // student's pace, then Continue leads to bringing in their games. Review stays
+  // as the second choice. Every later game keeps Review / Stay.
+  const firstRun = useFirstRunStep() === 'learn';
   return (
-    <div className="px-3 pb-2 space-y-2" data-testid="teach-game-over">
+    <div className="px-3 pb-2 space-y-2" data-testid="teach-game-over" onPointerDown={() => setSkipped(true)}>
       <div className="text-sm font-semibold text-theme-text px-1">{headline(result, byMate)}</div>
       <div className="text-xs text-theme-text-muted px-1">
         The final position is on the board. Take a look before you move on.
       </div>
       {tally && <Medals tally={tally} />}
-      {skills && <SkillRecap skills={skills} />}
-      <FirstRunImportOffer />
+      {skills && <SkillRecap skills={skills} skipped={skipped} />}
       <div className="flex items-center gap-2">
+        {firstRun && <FirstRunContinue />}
         <button
           onClick={onReview}
-          className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[44px] transition-colors"
+          className={firstRun
+            ? 'px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-sm font-medium text-theme-text min-h-[44px] transition-colors'
+            : 'flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[44px] transition-colors'}
           data-testid="teach-review-game"
         >
-          <ChevronRight size={16} />
+          {!firstRun && <ChevronRight size={16} />}
           Review this game
         </button>
-        <button
-          onClick={onStay}
-          className="px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-sm font-medium text-theme-text min-h-[44px] transition-colors"
-          data-testid="teach-stay-on-board"
-        >
-          Stay here
-        </button>
+        {!firstRun && (
+          <button
+            onClick={onStay}
+            className="px-3 py-2.5 rounded-lg border border-theme-border bg-theme-surface hover:bg-theme-bg text-sm font-medium text-theme-text min-h-[44px] transition-colors"
+            data-testid="teach-stay-on-board"
+          >
+            Stay here
+          </button>
+        )}
       </div>
     </div>
   );

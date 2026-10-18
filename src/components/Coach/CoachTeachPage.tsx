@@ -103,7 +103,7 @@ import { gemId } from '../../data/lessons/punishGems';
 import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../../data/coachGreetings';
 import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { getUnifiedWeaknessProfile, themesForTactic } from '../../services/weaknessSpine';
-import { ratingTrendNote, untriedFeatureNudge, coldStartGuidance, coldStartApplies } from '../../services/classroomOpener';
+import { ratingTrendNote, untriedFeatureNudge, coldStartGuidance, coldStartApplies, matchFirstRunChoice, firstRunFollowUp, claimFirstRunNugget } from '../../services/classroomOpener';
 import { getActiveCoachingThread, threadCallbackFor, resetThreadCallbacks } from '../../services/coachThread';
 import { getCoachCurriculum, syncCoachCurriculum, curriculumArcLine } from '../../services/coachCurriculumService';
 import { getStudentDossier, dossierOpeningLine } from '../../services/studentDossier';
@@ -4725,6 +4725,26 @@ export function CoachTeachPage(): JSX.Element {
         setCoachChoices([]);
         startLessonGame();
         return;
+      }
+      {
+        // THE FIRST-RUN PICKERS (David 2026-10-18): "Watch an opening" / "Play
+        // an opening" ask which one, as pickers; "Just play" hands over the
+        // board. The chips that follow are requests the coach already answers.
+        const frChoice = matchFirstRunChoice(text);
+        if (frChoice) {
+          const fu = firstRunFollowUp(frChoice);
+          const frTurnId = freshTurnId('first-run');
+          setMessages((prev) => [...prev,
+            { id: `${frTurnId}-u`, role: 'user', content: text, timestamp: Date.now() },
+            { id: `${frTurnId}-c`, role: 'assistant', content: fu.line, timestamp: Date.now() },
+          ]);
+          const memory = useCoachMemoryStore.getState();
+          memory.appendConversationMessage({ surface: 'chat-teach', role: 'user', text, fen: gameRef.current.fen, trigger: null });
+          memory.appendConversationMessage({ surface: 'chat-teach', role: 'coach', text: fu.line, fen: gameRef.current.fen, trigger: null });
+          setCoachChoices(fu.chips);
+          void speakComputed(fu.line, { forced: true, intent: 'learn' }).catch(() => undefined);
+          return;
+        }
       }
       if (matchThinkingLessonRequest(text)) {
         const tlTurnId = freshTurnId('thinking-lesson');
@@ -10836,6 +10856,16 @@ export function CoachTeachPage(): JSX.Element {
                   studentColor: playerColor,
                 });
                 instantLead = instant.lead;
+                // A FIRST-RUN NUGGET (David 2026-10-18): a question the coach
+                // answers, offered as a picker on the first game — never
+                // spoken, and only when no other pickers are showing.
+                {
+                  const ownIsWhite = playerColor === 'white';
+                  const ownMoves = [...move.history, im.san].filter((_, i) => (i % 2 === 0) === ownIsWhite).length;
+                  void claimFirstRunNugget(ownMoves).then((nugget) => {
+                    if (nugget) setCoachChoices((prev) => (prev && prev.length > 0 ? prev : [nugget]));
+                  });
+                }
                 for (const d of instant.deferred) queueSpokenHint(ip.fen(), d.text, d.lane, d.proof, d.squares, d.claims, undefined, d.arrows);
                 turnLeadRef.current = instant.lead ? { fen: ip.fen(), lead: instant.lead } : null;
                 // THE PACKAGE IS THE UTTERANCE. This used to log `factLines`
@@ -12428,7 +12458,7 @@ export function CoachTeachPage(): JSX.Element {
               if (cold && coldStartApplies({ historyLength: gameRef.current.history.length, userInteracted: userInteractedRef.current })) {
                 replaceGreeting();
                 setMessages((prev) => [...prev, { id: uid('cold-start'), role: 'assistant', content: cold.line, timestamp: Date.now() }]);
-                setCoachChoices(cold.chips.slice(0, 3));
+                setCoachChoices(cold.chips);
                 speechChainRef.current = speechChainRef.current
                   .then(() => speakComputed(cold.line, { forced: true, intent: 'learn' }))
                   .catch(() => undefined);
