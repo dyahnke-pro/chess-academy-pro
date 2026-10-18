@@ -9,6 +9,8 @@
 //
 // Pure: the engine reads are handed in by the page.
 import { flipSideToMove } from './threatOut';
+import { counterThreat, counterThreatLine } from './counterThreat';
+import { playedConcept, playedConceptLine, type PlayedConcept } from './playedConcept';
 import { CAPTURE_VALUE } from './pieceValues';
 import { lineProof, legalLineProof, squaresProof, NO_PROOF, type FactProof, type Proof } from './proof';
 import { shareAdverb } from '../utils/shareWords';
@@ -415,6 +417,61 @@ export function theirMoveTeaching(fenBefore: string, san: string, student: 'w' |
     arrows,
   };
 }
+
+/** DANGER LEVELS (David 2026-10-18): a move that left an attacked piece and
+ *  hit a bigger one instead. `fenBefore` is the board the move was played
+ *  from. Their move: why the piece was left, and the line that punishes
+ *  taking it (drawn ply by ply). The student's move: the find, named. */
+export function counterThreatTeaching(fenBefore: string, san: string, student: 'w' | 'b'): TeachingHint | null {
+  const c = counterThreat(fenBefore, san);
+  if (!c) return null;
+  let mover: 'w' | 'b';
+  try { mover = new Chess(fenBefore).turn(); } catch { return null; }
+  const byStudent = mover === student;
+  const text = counterThreatLine(c, byStudent);
+  const arrows: ArrowClaim[] = [];
+  if (c.line && !byStudent) {
+    try {
+      const b = new Chess(c.line.fen);
+      for (const s of c.line.sans) {
+        const before = b.fen();
+        const m = b.move(s);
+        arrows.push({ from: m.from, to: m.to, role: 'line', fen: before, source: 'learn.dangerLevels' });
+      }
+    } catch { /* the plies replayed so far still draw */ }
+  }
+  return {
+    // The proof is the line that punishes taking the piece left.
+    lane: 'dangerLevels', proof: (c.line ? lineProof(c.line, true) : null) ?? squaresProof(text, c.squares) ?? NO_PROOF.description, text, squares: c.squares, claims: [`danger-levels:${c.left.square}>${c.hit.square}`],
+    event: { name: 'coach_danger_levels_named', props: { surface: 'coach-teach', by: byStudent ? 'student' : 'opponent' } },
+    arrows, role: 'teach',
+  };
+}
+
+/** THE CONCEPT A MOVE JUST PLAYED, either seat (David 2026-10-18). The line
+ *  is null on a concept the student has proven (`proven`, conceptRecord); the
+ *  concept itself is returned either way, so a student's own play is counted
+ *  toward proving it. `define` adds the definition the first time a game meets it. */
+export function playedConceptTeaching(
+  fenBefore: string, san: string, student: 'w' | 'b',
+  proven: ReadonlySet<string>, define: (type: string) => string,
+): { hint: TeachingHint | null; concept: PlayedConcept | null } {
+  const c = playedConcept(fenBefore, san);
+  if (!c) return { hint: null, concept: null };
+  if (proven.has(c.type)) return { hint: null, concept: c };
+  const text = `${playedConceptLine(c, student)}${define(c.type)}`;
+  const squares = c.squares.filter((s) => /^[a-h][1-8]$/.test(s));
+  return {
+    concept: c,
+    hint: {
+      lane: 'playedConcept', proof: squaresProof(text, squares) ?? NO_PROOF.description, text, squares, claims: [`played-concept:${c.type}:${squares.join('')}`],
+      event: { name: 'coach_played_concept_named', props: { surface: 'coach-teach', concept: c.type, by: c.mover === student ? 'student' : 'opponent' } },
+      arrows: [], role: 'teach',
+    },
+  };
+}
+
+export { loadProvenConcepts, recordConceptPlayed } from './conceptRecord';
 
 /** Tempo, counted (P2 #7): their reply is a piece's third move in the opening
  *  while the student has more pieces out. `history` ends with THEIR reply. */
@@ -1201,7 +1258,9 @@ export function hangingPieceLine(piece: string, sq: string, rot: number): string
 /** A piece of yours attacked by a CHEAPER one, said with why it matters (Learn
  *  audit 2026-10-14: "Careful — their bishop on d2 hits your queen on a5."
  *  named the attack and stopped). The attacker is worth less by construction,
- *  so a guard does not save the piece: trading it for the attacker loses. */
+ *  so a guard does not save the piece: trading it for the attacker loses.
+ *  The line gives the REASON only; the outcome ("Rxd1 wins your queen for their
+ *  rook") is the proof's, said once (David 2026-10-18: both said it). */
 export function cheaperAttackerLine(by: string, bySq: string, piece: string, sq: string, rot: number): string {
   const attacker = HIT_NAME[by] ?? 'piece';
   const target = HIT_NAME[piece] ?? 'piece';
@@ -1209,8 +1268,8 @@ export function cheaperAttackerLine(by: string, bySq: string, piece: string, sq:
   // a game) — keyed on the caller's move number, never Math.random.
   const stems = [
     `Careful — their ${attacker} on ${bySq} hits your ${target} on ${sq}, and a guard does not help: the ${attacker} is worth less than your ${target}.`,
-    `Careful — their ${attacker} on ${bySq} attacks your ${target} on ${sq}. Guarding it does not save it: they win your ${target} for a ${attacker}.`,
-    `Their ${attacker} on ${bySq} is after your ${target} on ${sq} — guard or not, it would cost your ${target} for their ${attacker}.`,
+    `Careful — their ${attacker} on ${bySq} attacks your ${target} on ${sq}. Guarding it does not save it: the ${attacker} is the cheaper piece.`,
+    `Their ${attacker} on ${bySq} is after your ${target} on ${sq} — a guard does not help, because the ${attacker} is the cheaper piece.`,
   ];
   return stems[((rot % stems.length) + stems.length) % stems.length];
 }

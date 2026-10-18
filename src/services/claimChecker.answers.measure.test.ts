@@ -48,7 +48,7 @@ describe.skipIf(!RUN)('ANSWER PASS — what the coach says back, on 100 real gam
       boards.push(r);
     }
     // Carry-over kits only: no engine enrichment and no adaptation, exactly
-    // the set `carryOverKitFor` may ask on a live board.
+    // the set a drill may ask on a live board.
     const kits = Object.values(STEP_KITS).map((f) => f()).filter((k): k is StepKit => !!k && !k.enrich && !k.adapt);
     const out: AnswerClaim[] = [];
     for (const b of boards) {

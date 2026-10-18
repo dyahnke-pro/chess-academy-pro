@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Square } from 'chess.js';
 import {
-  ThinkingLessonSession, IDLE_LESSON_VIEW, type LessonView, finishThinkingLesson, kitForStep, lessonInputs, refillLessonCandidates, planThinkingLesson, recordLessonAnswer, recordLessonChoice, rememberLessonBoardNow, saveLessonProgress, slipStepsForGame, firstFairKit, motifKit, type MotifBoard, carryOverKitFor, loadCarryOverSteps, noLessonLine,
+  ThinkingLessonSession, IDLE_LESSON_VIEW, type LessonView, finishThinkingLesson, kitForStep, lessonInputs, refillLessonCandidates, planThinkingLesson, recordLessonAnswer, recordLessonChoice, rememberLessonBoardNow, saveLessonProgress, slipStepsForGame, firstFairKit, motifKit, type MotifBoard, noLessonLine,
   type LessonPositionCandidate, type LessonUsernames, type PlannedLesson, type StepKit,
 } from '../services/thinkingLessonStart';
 
@@ -42,18 +42,6 @@ export interface UseThinkingLesson {
   askOnce: (kit: StepKit, fen: string, answered?: readonly string[]) => Promise<boolean>;
   /** Review: the step to ask at each slip of a game, from its recorded tags. */
   slipSteps: (gameId: string, boards: readonly { ply: number; fen: string }[]) => Promise<Map<number, string>>;
-  /** Learn free play: ask a step the student keeps failing in games when the
-   *  board poses it — one question per game. Resolves true when it asked. */
-  carryOver: (fen: string, answered?: readonly string[]) => Promise<boolean>;
-  /** The carry-over question's state: shown beside a playing board, or being
-   *  answered on the tap board. It never holds the game (David 2026-10-14). */
-  carry: 'none' | 'asking' | 'answering';
-  /** The student chose to answer: the tap board takes over for this question. */
-  answerCarry: () => void;
-  /** A move was played instead: close the question unanswered (no evidence). */
-  skipCarry: () => boolean;
-  /** A new game: the carry-over re-reads the record and may ask each step again. */
-  newGame: () => void;
   /** What to say when `plan` finds no lesson (the habit gap, or no board yet). */
   noLessonLine: () => Promise<string>;
   /** The step "Play a game on this" practises — kept here, across games,
@@ -85,24 +73,6 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
     sessionRef.current = null;
     setView(IDLE);
   }, []);
-
-  // A CARRY-OVER QUESTION NEVER HOLDS THE BOARD (David 2026-10-14: keep the
-  // question, never stop the game). In free play the live board stays; the
-  // question waits beside it. 'asking' = shown, the board still plays;
-  // 'answering' = the student chose to answer, the tap board takes over.
-  // A move while 'asking' closes it unanswered — no evidence either way.
-  const [carry, setCarryState] = useState<'none' | 'asking' | 'answering'>('none');
-  const carryRef = useRef<'none' | 'asking' | 'answering'>('none');
-  const setCarry = useCallback((c: 'none' | 'asking' | 'answering'): void => { carryRef.current = c; setCarryState(c); }, []);
-  const answerCarry = useCallback((): void => { if (carryRef.current === 'asking') setCarry('answering'); }, [setCarry]);
-  const skipCarry = useCallback((): boolean => {
-    if (carryRef.current !== 'asking') return false;
-    sessionRef.current?.stop();
-    sessionRef.current = null;
-    setView(IDLE);
-    setCarry('none');
-    return true;
-  }, [setCarry]);
 
   // Unmount: stop the session AND drop it, so a view update still in flight
   // (a spoken line resolving, a nudge timer) finds no session and never sets
@@ -159,35 +129,6 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
     return true;
   }, []);
 
-  // CARRY-OVER memory, per game: the steps read once from the game record,
-  // and the steps already asked.
-  const carryStepsRef = useRef<Promise<string[]> | null>(null);
-  const carryAskedRef = useRef<Set<string>>(new Set());
-  const newGame = useCallback((): void => { carryStepsRef.current = null; carryAskedRef.current = new Set(); }, []);
-  const carryPlyRef = useRef(0);
-  const carryOver = useCallback(async (fen: string, answered?: readonly string[]): Promise<boolean> => {
-    // A board earlier than the last one seen is a new game: forget what was asked.
-    const parts = fen.split(' ');
-    const ply = (Number(parts[5]) || 1) * 2 + (parts[1] === 'b' ? 1 : 0);
-    if (ply < carryPlyRef.current) newGame();
-    carryPlyRef.current = ply;
-    if (sessionRef.current) return false;   // a question is already open
-    // ONE carry-over question per game. Learn's mid-game cards were removed
-    // for interrupting too often (David 2026-08-05: "annoying AF"); this is an
-    // interruption budget, not a cap on teaching — the same habit is taught
-    // in full in the lesson, and the commentary keeps talking.
-    if (carryAskedRef.current.size > 0) return false;
-    carryStepsRef.current ??= loadCarryOverSteps();
-    const kit = carryOverKitFor(await carryStepsRef.current, fen, carryAskedRef.current);
-    if (!kit) return false;
-    // Held for an answered question: the step stays available later this game.
-    setCarry('asking');
-    const asked = await askOnce(kit, fen, answered);
-    setCarry('none');
-    if (asked) carryAskedRef.current.add(kit.step);
-    return asked;
-  }, [askOnce, newGame, setCarry]);
-
   const practiseRef = useRef<StepKit | null>(null);
   const practiseKit = useCallback((): StepKit | null => practiseRef.current, []);
   const setPractiseKit = useCallback((kit: StepKit | null): void => { practiseRef.current = kit; }, []);
@@ -195,5 +136,5 @@ export function useThinkingLesson(deps: UseThinkingLessonDeps): UseThinkingLesso
   const finish = useCallback((plan: PlannedLesson, source: string): Promise<string | null> =>
     finishThinkingLesson(plan, source, { stopped: stoppedRef.current }), []);
 
-  return { view, carry, answerCarry, skipCarry, plan: planThinkingLesson, start, finish, kitFor: kitForStep, firstFairKit, motifKit, tap, choose, dontKnow, hold, askOnce, slipSteps: slipStepsForGame, carryOver, newGame, noLessonLine, practiseKit, setPractiseKit, stop };
+  return { view, plan: planThinkingLesson, start, finish, kitFor: kitForStep, firstFairKit, motifKit, tap, choose, dontKnow, hold, askOnce, slipSteps: slipStepsForGame, noLessonLine, practiseKit, setPractiseKit, stop };
 }

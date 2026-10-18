@@ -12,11 +12,13 @@ const B = ['b1c3', 'f8c5', 'd2d3', 'd7d6', 'c1g5', 'h7h6', 'g5h4', 'g7g5', 'h4g3
 describe('the plan chooser (census #52)', () => {
   it('two different plans that come out level: choose the one you understand', () => {
     expect(planChoice(FEN, [{ moves: A, evaluation: 30 }, { moves: B, evaluation: 20 }], 'white', null)?.text)
-      .toMatch(/^Two plans hold here — getting the knight to f1, by way of d2, or getting the bishop to h4, by way of g5\./);
+      // The waypoints are the student's next moves, so they are held (David
+      // 2026-10-18: "by way of g4" drew Bf3-g4 before he moved).
+      .toMatch(/^Two plans hold here — getting the knight to f1, or getting the bishop to h4\./);
   });
   it('a clear gap names the stronger plan and what the other costs', () => {
     expect(planChoice(FEN, [{ moves: A, evaluation: 130 }, { moves: B, evaluation: 20 }], 'white', null)?.text)
-      .toMatch(/the stronger is getting the knight to f1, by way of d2; getting the bishop to h4, by way of g5 falls short by about a point\.$/);
+      .toMatch(/the stronger is getting the knight to f1; getting the bishop to h4 falls short by about a point\.$/);
   });
   it('silent in the grey zone, on a mate, or with one line (negative controls)', () => {
     expect(planChoice(FEN, [{ moves: A, evaluation: 80 }, { moves: B, evaluation: 20 }], 'white', null)).toBeNull();

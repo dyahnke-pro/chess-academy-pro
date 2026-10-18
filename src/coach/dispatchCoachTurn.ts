@@ -22,6 +22,7 @@
  * `coachService` would cycle (coachService ← trainingAidRouter ← coachSessionRouter).
  * This wrapper depends on both; neither depends on it.
  */
+import { noteTurnOutcome, isNotUnderstood } from './questionFlag';
 import { Chess } from 'chess.js';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { unwrapSpineError } from '../services/sanitizeCoachText';
@@ -411,7 +412,9 @@ async function dispatchCoachTurnOnce(
     // language, which the read noted before any answer was built
     // (WO-CHAT-01 P2). A second translation here would be a second model call.
     const serve = (raw: string, servedIntent: string, outcome: ChatTurnOutcome, extra: Partial<CoachAnswer> = {}): CoachAnswer => {
-      const text = openSentence(raw);
+      // A SECOND MISS IN A ROW IS FLAGGED (questionFlag) — said, and recorded.
+      const flagged = noteTurnOutcome(input.liveState.surface, input.ask, isNotUnderstood(openSentence(raw), outcome === 'stock'));
+      const text = openSentence(flagged ?? raw);
       servedParsed = true;
       void settleChatTurnRead({ input, read, fastPathLane: fastPathLane(input.ask, { fen: input.liveState.fen }), servedIntent, servedParsed, answerText: text, outcome, startedAt })
         .catch(() => { /* telemetry never breaks a turn */ });
@@ -618,7 +621,10 @@ async function dispatchCoachTurnOnce(
     // read "(Coach-brain provider error: coach-brain-deepseek-timeout)"). The
     // provider wraps its error as text; the door is the one exit, so it is
     // turned into the honest offline line here, before any surface shows it.
-    const said = typeof raw.text === 'string' && unwrapSpineError(raw.text.trim()) === '' && raw.text.trim() !== '' ? COACH_OFFLINE_LINE : raw.text;
+    const said0 = typeof raw.text === 'string' && unwrapSpineError(raw.text.trim()) === '' && raw.text.trim() !== '' ? COACH_OFFLINE_LINE : raw.text;
+    const missOutcome = outcomeOf({ ...raw, text: said0 }, routedCommand);
+    const flagged = noteTurnOutcome(input.liveState.surface, input.ask, isNotUnderstood(typeof said0 === 'string' ? said0 : '', missOutcome === 'stock'));
+    const said = flagged ?? said0;
     const answer = typeof said === 'string' ? { ...raw, text: openSentence(said) } : raw;
     if (read) {
       void settleChatTurnRead({

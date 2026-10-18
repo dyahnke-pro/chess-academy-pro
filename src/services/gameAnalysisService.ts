@@ -123,7 +123,7 @@ function resolveWorkerPoolSize(): number {
     // is the app's DELIBERATE safe iOS build (the WASM/multi builds are the ones
     // that crash-storm — see resolveWorkerUrl). e1534fc's real complaint — "2
     // asm engines grinding 831 games = hot phone" — is a BATCH-SIZE problem, and
-    // it is fixed by ANALYSIS_PACKAGE_SIZE (50 games/tap), not by removing the
+    // it is fixed by ANALYSIS_PACKAGE_SIZE (10 games/tap), not by removing the
     // one engine path that actually finishes.
     //
     // 🔒 DO NOT SUBTRACT A RESERVE FROM A NUMBER THAT IS ALREADY ONE (David
@@ -2529,13 +2529,13 @@ export async function analyzeRecentGames(
  *
  * David 2026-09-05: a full library (his was 831 games) never finished in one
  * run on the phone — it either ground for hours or got interrupted by an iOS
- * suspend before the end. We analyze in bounded PACKAGES of 50 newest-first
+ * suspend before the end. We analyze in bounded PACKAGES of 10 newest-first (David 2026-10-18: "10 at a time instead of 50")
  * and then STOP. Each analyzed game persists as it finishes and is filtered
  * out of the next `gameNeedsAnalysis` scan, so the next tap of the Analyze
- * Games button picks up the next 50 with no cursor to track. Bounded work,
+ * Games button picks up the next 10 with no cursor to track. Bounded work,
  * visible completion, user-controlled cadence.
  */
-export const ANALYSIS_PACKAGE_SIZE = 50;
+export const ANALYSIS_PACKAGE_SIZE = 10;
 
 /**
  * Batch-analyze up to ANALYSIS_PACKAGE_SIZE imported/played games that lack

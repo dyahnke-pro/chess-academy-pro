@@ -107,7 +107,7 @@ export function RewardLayer(): JSX.Element {
       if (e.label) {
         if (bannerTimer.current) clearTimeout(bannerTimer.current);
         setBanner({ text: e.label, key: Date.now(), big: size >= 3 });
-        bannerTimer.current = setTimeout(() => setBanner(null), size >= 3 ? 2200 : 1400);
+        bannerTimer.current = setTimeout(() => setBanner(null), size >= 3 ? 4200 : 3400);
       }
       if (reduced || size === 0) return;
       const cv = canvasRef.current;

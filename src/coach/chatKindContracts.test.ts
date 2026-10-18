@@ -195,6 +195,8 @@ const CONTRACTS: Record<ChatKind, Contract | Owed> = {
     must: [/\bb4\b/, /pawn on b2/], mustNot: [/pawn on b4/] },
   'attack-piece': { board: 'italian', ask: 'how can I attack their knight on a5?', reading: { kind: 'attack-piece', referents: [{ type: 'piece', piece: 'n', square: 'a5', seat: 'them' }] },
     must: [/\bb4\b/] },
+  'left-book': { board: 'italian', ask: 'how did I leave the book?', reading: { kind: 'left-book' },
+    must: [/book|theory/i] },
   'material-change': { board: 'italian', ask: 'did I just lose a pawn?', reading: { kind: 'material-change' },
     must: [/\bno\b|not|level|even|equal/i] },
   'develop-next': { board: 'italian', ask: 'which piece should I bring out next?', reading: { kind: 'develop-next' },

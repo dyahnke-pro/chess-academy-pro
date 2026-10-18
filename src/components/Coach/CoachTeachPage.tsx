@@ -26,7 +26,7 @@ import { registerCoachHands } from '../../services/coachActuator';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
 import { TeachGameOverCard, type TeachGameResult } from './TeachGameOverCard';
 import { LearnRewardBar } from './LearnRewardBar';
-import { learnRewardFor, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
+import { learnRewardFor, learnPraise, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
 import { useProvenWatcher } from '../../hooks/useProvenWatcher';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -38,7 +38,7 @@ import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, 
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { OPENING_PLIES, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching, type TeachingHint } from '../../services/learnBoardTeaching';
+import { OPENING_PLIES, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, type TeachingHint } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -54,6 +54,8 @@ function walkthroughBoardArrows(
 ): BoardArrow[] {
   return narrationArrowsThroughDoor(arrows, { fen, studentColor }, vouchedBy, 'teach.walkthrough');
 }
+/** How long a "Fixed" chip stays on the Learn board. */
+const PROVEN_CHIP_MS = 5000;
 // LessonPlayer highlight default (yellow key square).
 const WALKTHROUGH_HIGHLIGHT_PALETTE: Record<string, string> = {
   yellow: 'rgba(255,214,0,0.88)',
@@ -1790,6 +1792,9 @@ export function CoachTeachPage(): JSX.Element {
   // 2026-10-01: "add the tile to mid game for now").
   useProvenWatcher(true, (tag) => {
     setProvenTags((prev) => (prev.includes(tag) ? prev : [...prev, tag]));
+    // ON SCREEN FOR ~5s, THEN GONE (David 2026-10-18: "Maybe 5 ish seconds on
+    // screen?"). The game tally keeps the count for the recap.
+    setTimeout(() => setProvenTags((prev) => prev.filter((t) => t !== tag)), PROVEN_CHIP_MS);
     const next = { ...learnTallyRef.current, proven: learnTallyRef.current.proven + 1 };
     learnTallyRef.current = next;
     setLearnTally(next);
@@ -8001,6 +8006,10 @@ export function CoachTeachPage(): JSX.Element {
   // `standingFactMemory` — this file and usePhaseNarration each carried their
   // own copy of it under different ref names.
   const standingRef = useRef(createStandingFactMemory());
+  /** The concepts this student has PROVEN (puzzles or their own games) — read
+   *  once on mount; a concept here is not named again (conceptRecord). */
+  const provenConceptsRef = useRef<ReadonlySet<string>>(new Set());
+  useEffect(() => { void loadProvenConcepts().then((s) => { provenConceptsRef.current = s; }).catch(() => undefined); }, []);
   /** A tactic's definition, the FIRST time the game meets it — one ledger for
    *  every lane that teaches a pattern (the instant alert, the composer's
    *  concept clause, and the grade's missed pattern, B3). */
@@ -9448,11 +9457,6 @@ export function CoachTeachPage(): JSX.Element {
     // A board move DISMISSES the "Read this position" banner (clears its
     // text) — same as Play. The student answered the position by playing.
     positionNarration.cancel();
-    // …and an open carry-over question: the student chose to play on. It
-    // closes unanswered, with no evidence either way (David 2026-10-14).
-    if (thinkingLesson.skipCarry()) {
-      void logAppAudit({ kind: 'coach-surface-migrated', category: 'subsystem', source: 'CoachTeachPage.carryOverSkipped', summary: `carry-over question closed by a move (${move.san})`, fen: move.fen });
-    }
     // A board move is the student starting, same as typing: the welcome
     // greeting and its chips must not land on a game already under way (the
     // 2026-09-29 walk heard "Name any opening…" right after 1.e4).
@@ -9655,10 +9659,15 @@ export function CoachTeachPage(): JSX.Element {
         // chimes — the grade above already says what it was; `learnRewardFor`
         // only says which grades earn one. Fired before the spoken grade so
         // the chime never lands on top of the voice.
+        let praise: string | null = null;
         if (grade) {
           const earned = gemRewarded ? null : learnRewardFor({ reason: grade.reason, fault: grade.fault, isRecapture });
           if (earned) fireLearnReward({ kind: earned, square: move.to, seed: move.history.length });
           const next = tallyMove(learnTallyRef.current, earned, grade.fault);
+          // PRAISE WHEN THE BURST FIRES, THEN THE WHY (David 2026-10-18:
+          // "Praise!"). Only the burst kinds, from the one praise table the
+          // voice rules let through (dnaRules.EARNED_PRAISE).
+          praise = learnPraise(earned, next.streak, move.history.length);
           if (next !== learnTallyRef.current) {
             learnTallyRef.current = next;
             setLearnTally(next);
@@ -9700,13 +9709,21 @@ export function CoachTeachPage(): JSX.Element {
               : BLUNDER_CHECK_QUESTION
             : null;
           if (habitKey && habitQ) learnMemRef.current.spokenKeys.add(habitKey);
-          const gradeLine = `${goodPoint ? `${move.san}: ${grade.clause} ${goodPoint}` : `${move.san}: ${grade.clause}`}${habitQ ? ` ${habitQ}` : ''}`;
+          const gradeLine = `${praise ? `${praise} ` : ''}${goodPoint ? `${move.san}: ${grade.clause} ${goodPoint}` : `${move.san}: ${grade.clause}`}${habitQ ? ` ${habitQ}` : ''}`;
+          praise = null;
           // Recorded as said, so the late wave's move-point lane does not
           // repeat the reason a second later.
           for (const k of spokenSentenceKeys({ kept: [{ kind: 'computed', text: gradeLine, fen: move.fen }] })) learnMemRef.current.spokenKeys.add(k);
           setMessages((prev) => [...prev, { id: `grade-${Date.now()}`, role: 'assistant', content: gradeLine, timestamp: Date.now() }]);
           void speakComputed(gradeLine, { forced: false, intent: 'learn' });
           captureEvent('post_move_grade_spoken', { surface: 'coach-teach', reason: grade.reason, cp_loss: Math.round(grade.cpLossCp), fault: grade.fault });
+        }
+        // The grade stood down (the found-move lane says the why a beat later):
+        // the praise still lands with the burst.
+        if (praise) {
+          const line = praise;
+          setMessages((prev) => [...prev, { id: `praise-${Date.now()}`, role: 'assistant', content: line, timestamp: Date.now() }]);
+          void speakComputed(line, { forced: false, intent: 'learn' });
         }
       }
     } catch { /* the grade is a bonus, never a blocker */ }
@@ -10059,6 +10076,8 @@ export function CoachTeachPage(): JSX.Element {
                         thread: planTrial,
                         ply: move.history.length + 1, fenBefore: move.fen, fenAfter: probe.fen(),
                         student: playerColor === 'white' ? 'w' : 'b',
+                        // Before the student's move: a plan step they could play now is held.
+                        holdPlayable: true,
                         // The student's own move, credited when it was a step of the plan
                         // — only when the replayed history lands on this very board.
                         studentMove: (() => {
@@ -10639,10 +10658,6 @@ export function CoachTeachPage(): JSX.Element {
               lessonMomentPendingRef.current = false;
               const kit = lessonGameRef.current;
               if (kit && played.ok) void thinkingLesson.askOnce(kit, liveFenRef.current, answered);
-            } else if (played.ok && !lessonGameRef.current) {
-              // CARRY-OVER: a habit this student keeps failing in games, asked
-              // on their own board when it poses the question (once per game).
-              void thinkingLesson.carryOver(liveFenRef.current, answered);
             }
           };
           if (!played.ok) askTurnQuestion();
@@ -11542,6 +11557,39 @@ export function CoachTeachPage(): JSX.Element {
                   if (cost) {
                     queueHint(fenAfterReply, cost);
                   }
+                  // DANGER LEVELS, both seats (David 2026-10-18): their reply left a
+                  // piece and hit a bigger one of yours; or your move just did it to them.
+                  const counter = replySan ? counterThreatTeaching(move.fen, replySan, playerColor === 'white' ? 'w' : 'b') : null;
+                  const dangerProven = provenConceptsRef.current.has('danger_levels');
+                  if (counter && !dangerProven) queueHint(fenAfterReply, counter);
+                  const yourCounter = (() => {
+                    try {
+                      const b = new Chess();
+                      for (const san of move.history.slice(0, -1)) b.move(san);
+                      return counterThreatTeaching(b.fen(), move.san, playerColor === 'white' ? 'w' : 'b');
+                    } catch { return null; }
+                  })();
+                  // Not when their reply took the piece you left — the moment has passed.
+                  if (yourCounter && !(replySan?.includes('x') && replySan.includes(yourCounter.squares[0]))) {
+                    if (!dangerProven) queueHint(fenAfterReply, yourCounter);
+                    void recordConceptPlayed('danger_levels');
+                  }
+                  // EVERY CONCEPT, EITHER SIDE (David 2026-10-18): what their reply
+                  // and what your move just played — quiet on a concept you have
+                  // proven, and your own unprompted play counted toward proving it.
+                  const sw: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+                  if (replySan) {
+                    const theirs = playedConceptTeaching(move.fen, replySan, sw, provenConceptsRef.current, takeDefinition);
+                    if (theirs.hint) queueHint(fenAfterReply, theirs.hint);
+                  }
+                  try {
+                    const b = new Chess();
+                    for (const san of move.history.slice(0, -1)) b.move(san);
+                    const mine = playedConceptTeaching(b.fen(), move.san, sw, provenConceptsRef.current, takeDefinition);
+                    if (mine.hint) queueHint(fenAfterReply, mine.hint);
+                    const prompted = announcedBoardsRef.current.has(b.fen().split(' ').slice(0, 2).join(' '));
+                    if (mine.concept && !prompted) void recordConceptPlayed(mine.concept.type);
+                  } catch { /* a bonus, never a blocker */ }
                   const tempo = replySan ? tempoTeaching([...move.history, replySan], playerColor === 'white' ? 'w' : 'b') : null;
                   if (tempo) {
                     queueHint(fenAfterReply, tempo);
@@ -11918,9 +11966,13 @@ export function CoachTeachPage(): JSX.Element {
                       const drawn = admitArrows(answerArrows, { fen: fenAfterReply, studentColor: playerColor }).arrows;
                       if (drawn.length > 0) setArrows((prev) => uniqueArrows([...prev, ...drawn]));
                     };
+                    // THE NEW IDEA'S ARROWS REPLACE THE OLD ONES (David 2026-10-18:
+                    // "they just needed to give way to the new moves the coach
+                    // stated"). Appending left the last turn's arrows on the board
+                    // while this turn spoke of other moves, so nothing looked new.
+                    const turnArrows: BoardArrow[] = [];
                     if (owedArrows.length > 0 && liveFenRef.current === fenAfterReply) {
-                      const drawn = admitArrows(owedArrows, { fen: fenAfterReply, studentColor: playerColor }).arrows;
-                      if (drawn.length > 0) setArrows((prev) => uniqueArrows([...prev, ...drawn]));
+                      turnArrows.push(...admitArrows(owedArrows, { fen: fenAfterReply, studentColor: playerColor }).arrows);
                     }
                     // …AND DRAW THE LINES IT SPOKE (David 2026-09-29: "Make sure
                     // arrows populate when talking about multiple move lines").
@@ -11953,10 +12005,8 @@ export function CoachTeachPage(): JSX.Element {
                     const samePlacement = (x: string, y: string): boolean => x.split(' ')[0] === y.split(' ')[0];
                     const onScreen = drawnLines.filter((l) => samePlacement(l.fen, fenAfterReply));
                     const earlier = drawnLines.filter((l) => !samePlacement(l.fen, fenAfterReply));
-                    if (onScreen.length > 0 && liveFenRef.current === fenAfterReply) {
-                      const drawn = onScreen.flatMap(throughDoor);
-                      setArrows((prev) => uniqueArrows([...prev, ...drawn]));
-                    }
+                    if (onScreen.length > 0 && liveFenRef.current === fenAfterReply) turnArrows.push(...onScreen.flatMap(throughDoor));
+                    if (turnArrows.length > 0) setArrows(uniqueArrows(turnArrows));
                     if (earlier.length > 0 && liveFenRef.current === fenAfterReply) {
                       const showFen = earlier[0].fen;
                       const drawn = uniqueArrows(earlier.filter((l) => samePlacement(l.fen, showFen)).flatMap(throughDoor));
@@ -12060,7 +12110,7 @@ export function CoachTeachPage(): JSX.Element {
         setOpponentThinking(false);
       }
     })();
-  }, [handleSubmit, discussion, walkthrough.tree?.openingName, playerColor, resolveCoachReplyMove, handlePlayMove, setOpponentThinking, activeProfile?.puzzleRating, activeProfile?.currentRating, positionNarration, runPhaseTransition, thinkingLesson.skipCarry]);
+  }, [handleSubmit, discussion, walkthrough.tree?.openingName, playerColor, resolveCoachReplyMove, handlePlayMove, setOpponentThinking, activeProfile?.puzzleRating, activeProfile?.currentRating, positionNarration, runPhaseTransition]);
 
   // ─── Guided-opening-play kickoff ─────────────────────────────────────────
   // On mount, pull the student's last 5 games + weakness profile so the
@@ -13179,7 +13229,16 @@ export function CoachTeachPage(): JSX.Element {
           />
         </div>
 
-        {!walkthrough.isActive && <LearnRewardBar streak={learnTally.streak} provenTags={provenTags} />}
+        {/* THE CHIPS FLOAT OVER THE BOARD (David 2026-10-18: "These alerts are
+            shrinking the board"). A zero-height anchor: the bar never takes a
+            row of the layout, so the board keeps its size while they show. */}
+        {!walkthrough.isActive && (
+          <div className="relative z-20 h-0">
+            <div className="pointer-events-none absolute inset-x-0 top-0">
+              <LearnRewardBar streak={learnTally.streak} provenTags={provenTags} />
+            </div>
+          </div>
+        )}
 
         {/* The "Read this position" banner is GONE (David 2026-07-10: "no more
             special place for them"). The read now STREAMS into the chat panel
@@ -13289,7 +13348,7 @@ export function CoachTeachPage(): JSX.Element {
               // mode does not take the controlled-mode chrome (flip / undo /
               // reset / eval bar / mic), and spreading them in only
               // type-checks by accident.
-              thinkingLesson.view.active && thinkingLesson.carry !== 'asking' ? (
+              thinkingLesson.view.active ? (
                 // "Learn how to think": the lesson owns the board while it
                 // runs — a static tap board, answers are squares.
                 <ThinkingLessonBoard
@@ -13352,21 +13411,6 @@ export function CoachTeachPage(): JSX.Element {
             {opponentThinking && (
               <div data-testid="coach-thinking" className="text-xs text-theme-text-muted text-center mt-1 animate-pulse">
                 Thinking…
-              </div>
-            )}
-            {/* THE CARRY-OVER QUESTION WAITS BESIDE THE GAME (David 2026-10-14):
-                answer it on the board, or just play your move. */}
-            {thinkingLesson.carry === 'asking' && thinkingLesson.view.prompt && (
-              <div className="mt-2 flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-2" data-testid="carry-over-question">
-                <p className="flex-1 text-sm text-amber-200">{thinkingLesson.view.prompt}</p>
-                <button
-                  type="button"
-                  onClick={thinkingLesson.answerCarry}
-                  className="rounded-lg border border-amber-500/40 px-3 py-1 text-xs font-semibold text-amber-300"
-                  data-testid="carry-over-answer"
-                >
-                  Answer on the board
-                </button>
               </div>
             )}
           </div>

@@ -25,7 +25,7 @@ export function smallTalkKind(text: string): SmallTalkKind {
   return 'unclear';
 }
 
-const STEMS: Record<SmallTalkKind, readonly string[]> = {
+export const STEMS: Record<SmallTalkKind, readonly string[]> = {
   presence: [
     'Ready. What would you like to know?',
     'Listening. Go ahead.',

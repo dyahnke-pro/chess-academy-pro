@@ -99,11 +99,6 @@ export function heatMap(profile: CapabilityProfile, slips: readonly Misconceptio
     });
 }
 
-/** Tags green NOW that were not in `before` — the "Fixed" moments. */
-export function newlyGreen(tiles: readonly HeatTile[], before: ReadonlySet<string>): HeatTile[] {
-  return tiles.filter((t) => t.state === 'green' && !before.has(t.tag));
-}
-
 /** THE OTHER HALF OF A TILE (plan "the heat map shows both: known / used").
  *  A tile is read off the student's GAMES; this line says what the LESSONS
  *  say about the same skill, from the KNOW reading's own tile. When lessons

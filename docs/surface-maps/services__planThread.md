@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**198 lines · 8 exports · 4 importers · 2 tests · 0 audits**
+**201 lines · 8 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify").** (CLAUDE.md:5355) — names `planThread`
 
 ## Who calls in
 
@@ -32,9 +32,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `newPlanThread` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10025`
-- `src/services/boardComputers.test.ts:50`
-- `src/services/coachFeatureService.ts:1438`
+- `src/components/Coach/CoachTeachPage.tsx:10072`
+- `src/services/boardComputers.test.ts:52`
+- `src/services/coachFeatureService.ts:1421`
 - `src/services/planChoice.test.ts:75`
 - `src/services/planChoice.test.ts:89`
 - `src/services/planChoice.test.ts:102`
@@ -47,14 +47,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planThread.test.ts:98`
 
 ### `clonePlanThread` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10026`
-- `src/services/coachFeatureService.ts:2029`
+- `src/components/Coach/CoachTeachPage.tsx:10073`
+- `src/services/coachFeatureService.ts:2012`
 - `src/services/planThread.test.ts:99`
 - `src/services/planThread.test.ts:107`
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10051`
-- `src/components/Coach/CoachTeachPage.tsx:11728`
+- `src/components/Coach/CoachTeachPage.tsx:10105`
+- `src/components/Coach/CoachTeachPage.tsx:11894`
 - `src/services/planThread.test.ts:103`
 - `src/services/planThread.test.ts:110`
 
@@ -62,7 +62,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `planThreadTurn` (function) — 16 call sites
-- `src/services/boardComputers.ts:300`
+- `src/services/boardComputers.ts:331`
 - `src/services/planChoice.test.ts:75`
 - `src/services/planChoice.test.ts:89`
 - `src/services/planChoice.test.ts:102`

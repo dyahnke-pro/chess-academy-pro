@@ -15,7 +15,7 @@ const asWhite = (fen: string): string => fen.replace(' b ', ' w ');
 describe('planThread — stated once, stopped with its proof', () => {
   it('states the board\'s plan, then says HOW their move stopped it, then the new plan', () => {
     const t = newPlanThread();
-    const first = planThreadTurn(t, { ply: 22, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w' });
+    const first = planThreadTurn(t, { ply: 22, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w', holdPlayable: false });
     // The first plan of a game is FOUND out loud: the three questions, a
     // pause, the answers, the plan, and why it beats the next plan.
     const line = first.map((l) => l.text)[0];
@@ -24,7 +24,7 @@ describe('planThread — stated once, stopped with its proof', () => {
     // the worst piece's step, then the weakness's — never an unrelated pick.
     expect(line).toMatch(/Your worst piece: your rook on a1, with no open file yet\./);
     expect(line).toMatch(/So the plan: put a rook on the open e-file; attack their king on f8 before it gets out\. Why that target\? With the centre opening, it can be attacked before it reaches safety\.$/);
-    const second = planThreadTurn(t, { ply: 24, fenBefore: KING_F8, fenAfter: after(KING_F8, 'Kg8'), student: 'w' });
+    const second = planThreadTurn(t, { ply: 24, fenBefore: KING_F8, fenAfter: after(KING_F8, 'Kg8'), student: 'w', holdPlayable: false });
     expect(second[0].text).toBe('Their king stepped to g8, out of the open centre — the attack on it is off. That plan is off.');
     if (second[1]) expect(second[1].text).toMatch(/^The new plan is to /);
   });
@@ -33,15 +33,15 @@ describe('planThread — stated once, stopped with its proof', () => {
     const t = newPlanThread();
     t.stoppedInRow = 1;
     t.stated = { fact: deriveNextPlanFacts(asWhite(OPEN_C), 'w').find((p) => p.kind === 'open-file')!, ply: 40 };
-    const lines = planThreadTurn(t, { ply: 42, fenBefore: OPEN_C, fenAfter: after(OPEN_C, 'Rc8'), student: 'w' });
+    const lines = planThreadTurn(t, { ply: 42, fenBefore: OPEN_C, fenAfter: after(OPEN_C, 'Rc8'), student: 'w', holdPlayable: false });
     expect(lines[0].text).toContain("They put their rook on the c-file first — it's contested now.");
     expect(lines[0].text).toContain("That's two of your plans they've shut down in a row — good defending.");
   });
 
   it('a plan that stands is not said again; a quiet move proves nothing', () => {
     const t = newPlanThread();
-    planThreadTurn(t, { ply: 22, fenBefore: CENTRE_KING, fenAfter: asWhite(CENTRE_KING), student: 'w' });
-    expect(planThreadTurn(t, { ply: 24, fenBefore: CENTRE_KING, fenAfter: after(CENTRE_KING, 'a6'), student: 'w' })).toEqual([]);
+    planThreadTurn(t, { ply: 22, fenBefore: CENTRE_KING, fenAfter: asWhite(CENTRE_KING), student: 'w', holdPlayable: false });
+    expect(planThreadTurn(t, { ply: 24, fenBefore: CENTRE_KING, fenAfter: after(CENTRE_KING, 'a6'), student: 'w', holdPlayable: false })).toEqual([]);
   });
 });
 
@@ -52,13 +52,13 @@ describe('a plan teaches its how-to once a game (Learn audit 2026-10-15)', () =>
     const fen = asWhite(KING_F8);
     // The first statement is the method's own plan; the how waits for the
     // plan's own statement, said once.
-    const first = planThreadTurn(t, { ply: 20, fenBefore: fen, fenAfter: fen, student: 'w' });
+    const first = planThreadTurn(t, { ply: 20, fenBefore: fen, fenAfter: fen, student: 'w', holdPlayable: false });
     expect(first[0]?.text).toMatch(/So the plan:/);
     t.stated = null;
-    const second = planThreadTurn(t, { ply: 40, fenBefore: fen, fenAfter: fen, student: 'w' });
+    const second = planThreadTurn(t, { ply: 40, fenBefore: fen, fenAfter: fen, student: 'w', holdPlayable: false });
     expect(second[0]?.text).toMatch(/Here's how:/);
     t.stated = null;
-    const again = planThreadTurn(t, { ply: 60, fenBefore: fen, fenAfter: fen, student: 'w' });
+    const again = planThreadTurn(t, { ply: 60, fenBefore: fen, fenAfter: fen, student: 'w', holdPlayable: false });
     expect(again[0]?.text).toBeTruthy();
     expect(again[0]?.text).not.toMatch(/Here's how:/);
   });
@@ -86,7 +86,7 @@ describe('a stronger plan replaces the one that stands; an equal or weaker one n
     const said: Array<{ ply: number; text: string }> = [];
     SANS.forEach((san, i) => {
       const before = c.fen(); c.move(san);
-      if (i % 2 === 0) for (const l of planThreadTurn(t, { ply: i + 1, fenBefore: before, fenAfter: c.fen(), student: 'b' })) said.push({ ply: i + 1, text: l.text });
+      if (i % 2 === 0) for (const l of planThreadTurn(t, { ply: i + 1, fenBefore: before, fenAfter: c.fen(), student: 'b', holdPlayable: false })) said.push({ ply: i + 1, text: l.text });
     });
     expect(said.some((x) => /passed pawn/.test(x.text))).toBe(true);
     for (let i = 1; i < said.length; i++) expect(said[i].ply - said[i - 1].ply).toBeGreaterThanOrEqual(PLAN_THREAD_HOLD_PLIES);
@@ -97,7 +97,7 @@ describe('a plan HELD by the door is offered again — the thread adopts only wh
   it('the method-bearing first plan, held on a threat turn, comes back on the next turn', () => {
     const t = newPlanThread();
     const trial = clonePlanThread(t);
-    const first = planThreadTurn(trial, { ply: 22, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w' });
+    const first = planThreadTurn(trial, { ply: 22, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w', holdPlayable: false });
     expect(first[0].text).toMatch(/^How do you find a plan\?/);
     // The door held it: nothing of it spoke.
     expect(adoptPlanTrial(t, trial, first.map((l) => l.claim), [])).toBe(false);
@@ -105,7 +105,7 @@ describe('a plan HELD by the door is offered again — the thread adopts only wh
     expect(t.stated).toBeNull();
     // Next turn it is offered again, method and all — and this time it speaks.
     const trial2 = clonePlanThread(t);
-    const again = planThreadTurn(trial2, { ply: 24, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w' });
+    const again = planThreadTurn(trial2, { ply: 24, fenBefore: KING_F8, fenAfter: asWhite(KING_F8), student: 'w', holdPlayable: false });
     expect(again[0].text).toMatch(/^How do you find a plan\?/);
     expect(adoptPlanTrial(t, trial2, again.map((l) => l.claim), [again[0].claim])).toBe(true);
     expect(t.methodSaid).toBe(true);

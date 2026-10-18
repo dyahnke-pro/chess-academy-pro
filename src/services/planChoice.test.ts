@@ -72,7 +72,7 @@ describe('the method\'s answers make the plan', () => {
   const FEN = 'r3nrk1/pp1p1ppp/8/4P3/8/3B1N2/PP3PPP/R4RK1 b - - 0 15';
   it('rook to the open file, knight to the hole, then the break — and why that order', async () => {
     const { newPlanThread, planThreadTurn } = await import('./planThread');
-    const line = planThreadTurn(newPlanThread(), { ply: 30, fenBefore: FEN, fenAfter: FEN, student: 'b' })[0]?.text ?? '';
+    const line = planThreadTurn(newPlanThread(), { ply: 30, fenBefore: FEN, fenAfter: FEN, student: 'b', holdPlayable: false })[0]?.text ?? '';
     expect(line).toMatch(/Your worst piece: your rook on a8, with no open file yet\./);
     expect(line).toMatch(/So the plan: put a rook on the open c-file; bring your knight on e8 to d4, by way of c7 and e6 — no pawn of theirs can attack it there; then break open with the push to d6 or f6\./);
     expect(line).toMatch(/Why in that order\? A break opens the position/);
@@ -86,7 +86,7 @@ describe('the method\'s answers make the plan', () => {
   it('a passed pawn outranks the three questions: no method before an unrelated plan', async () => {
     const { newPlanThread, planThreadTurn } = await import('./planThread');
     const passer = '6k1/5ppp/8/P7/8/8/5PPP/6K1 w - - 0 30';
-    const line = planThreadTurn(newPlanThread(), { ply: 59, fenBefore: passer, fenAfter: passer, student: 'w' })[0]?.text ?? '';
+    const line = planThreadTurn(newPlanThread(), { ply: 59, fenBefore: passer, fenAfter: passer, student: 'w', holdPlayable: false })[0]?.text ?? '';
     expect(line).toMatch(/passed pawn/);
     expect(line).not.toMatch(/How do you find a plan/);
   });
@@ -99,7 +99,7 @@ describe('the plan traces its routes', () => {
   it('rook to the file, the knight hop by hop, the break pushes', async () => {
     const { newPlanThread, planThreadTurn } = await import('./planThread');
     const { Chess } = await import('chess.js');
-    const l = planThreadTurn(newPlanThread(), { ply: 30, fenBefore: FEN, fenAfter: FEN, student: 'b' })[0];
+    const l = planThreadTurn(newPlanThread(), { ply: 30, fenBefore: FEN, fenAfter: FEN, student: 'b', holdPlayable: false })[0];
     expect(l?.arrows?.map((a) => a.from + a.to)).toEqual(['a8c8', 'e8c7', 'c7e6', 'e6d4', 'd7d6', 'f7f6']);
     for (const a of l?.arrows ?? []) {
       const parts = a.fen.split(' '); parts[1] = 'b';
@@ -133,7 +133,29 @@ describe('a why question is never asked twice in a game', () => {
     t.methodSaid = true;
     t.whyAsked.add('seizing the open c-file');
     const fen = '6k1/1P3ppp/8/8/8/8/5PPP/2r3K1 w - - 0 30';
-    const line = planThreadTurn(t, { ply: 59, fenBefore: fen, fenAfter: fen, student: 'w' })[0]?.text ?? '';
+    const line = planThreadTurn(t, { ply: 59, fenBefore: fen, fenAfter: fen, student: 'w', holdPlayable: false })[0]?.text ?? '';
     expect(line).not.toMatch(/Why this one and not seizing the open c-file\?/);
+  });
+});
+
+describe('Learn holds a plan step the student could play right now (David 2026-10-18)', () => {
+  // David's Learn game after …Nbd7: the method said "Your pawn break: the push
+  // to d5" and drew d4-d5 before he moved.
+  const FEN = 'r2qkb1r/pp1n1ppp/2p2n2/4p3/3PP3/2P2B2/P1P2PPP/R1BQ1RK1 w kq - 2 10';
+  it('held: the break is "ready now", never d5, with no arrow and no mark', async () => {
+    const { methodRead, methodLine, methodPlan, methodSquares } = await import('./planChoice');
+    const r = methodRead(FEN, 'w', true);
+    expect(r?.breakHeld).toBe(true);
+    const line = methodLine(r!);
+    expect(line).toMatch(/ready to push right now/);
+    expect(line).not.toMatch(/d5/);
+    const mp = methodPlan(r!, FEN);
+    expect(mp?.text).not.toMatch(/d5/);
+    expect(mp?.arrows.some((a) => a.to === 'd5')).toBe(false);
+    expect(methodSquares(r!)).not.toContain('d5');
+  });
+  it('NEGATIVE CONTROL: Review names it (the game is over)', async () => {
+    const { methodRead, methodLine } = await import('./planChoice');
+    expect(methodLine(methodRead(FEN, 'w', false)!)).toMatch(/the push to d5/);
   });
 });

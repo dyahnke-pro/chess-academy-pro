@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**647 lines · 9 exports · 17 importers · 11 tests · 47 audits**
+**655 lines · 9 exports · 18 importers · 12 tests · 47 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:3223) — names `Action`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5037) — names `Action`
-- **Standard post-deploy audit ritual** (CLAUDE.md:6248) — names `Action`
+- **⏰ Standing notes** (CLAUDE.md:3236) — names `Action`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5050) — names `Action`
+- **Standard post-deploy audit ritual** (CLAUDE.md:6271) — names `Action`
 
 ## Who calls in
 
@@ -26,6 +26,7 @@
 - `src/coach/dispatchCoachTurn.ts`
 - `src/coach/handWalk1009.test.ts`
 - `src/coach/hardQuestions.routing.test.ts`
+- `src/coach/leftBook.test.ts`
 - `src/coach/lineOutcome.test.ts`
 - `src/coach/questionIntents.ts`
 - `src/services/coachApi.ts`
@@ -59,12 +60,12 @@
 - `src/coach/coachService.ts:1602`
 
 ### `namedMoveTokens` (function) — 1 call site
-- `src/coach/dispatchCoachTurn.ts:354`
+- `src/coach/dispatchCoachTurn.ts:355`
 
 ### `mainLinePlies` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `readTurnInCode` (function) — 53 call sites
+### `readTurnInCode` (function) — 55 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:57`
 - `src/coach/chatTurnAnswers.test.ts:82`
 - `src/coach/chatTurnAnswers.test.ts:103`
@@ -114,6 +115,8 @@
 - `src/coach/hardQuestions.routing.test.ts:36`
 - `src/coach/hardQuestions.routing.test.ts:44`
 - `src/coach/hardQuestions.routing.test.ts:49`
+- `src/coach/leftBook.test.ts:12`
+- `src/coach/leftBook.test.ts:16`
 - `src/coach/lineOutcome.test.ts:20`
 - `src/coach/lineOutcome.test.ts:38`
 - `src/services/openingIdea.test.ts:18`
@@ -130,6 +133,7 @@
 - `src/coach/dispatchCoachTurn.showLine.test.ts`
 - `src/coach/handWalk1009.test.ts`
 - `src/coach/hardQuestions.routing.test.ts`
+- `src/coach/leftBook.test.ts`
 - `src/coach/lineOutcome.test.ts`
 - `src/services/openingIdea.test.ts`
 

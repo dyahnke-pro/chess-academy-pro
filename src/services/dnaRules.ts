@@ -15,6 +15,34 @@ export const DNA_REFUSE: ReadonlyArray<{ re: RegExp; why: string }> = [
   { re: /\b(?:tap|click|press)\s+(?:the|a|on)\b|\b(?:button|menu)\b/i, why: 'dna: interface talk' },
 ];
 
+/** EARNED PRAISE (David 2026-10-18: "Praise!") — the ONE carve-out from the
+ *  praise rule: said only when a Learn burst fires (a decision, an only move,
+ *  a save, a punish), then followed by the why. The DNA lets EXACTLY these
+ *  sentences through, so no other producer can praise by accident — a new
+ *  line has to be added here, on purpose. Rotated by the ply, escalated by the
+ *  streak (never Math.random). */
+export type PraiseKind = 'decision' | 'onlyMove' | 'saved' | 'punished';
+export const EARNED_PRAISE: Readonly<Record<PraiseKind, readonly string[]>> = {
+  decision: ["That's the one.", 'There it is.', 'Exactly right.', 'Well found.'],
+  onlyMove: ['The only move — and you found it.', 'Only one move held, and you played it.'],
+  saved: ['Good defence.', 'Threat met.'],
+  punished: ['You made them pay.', 'Punished.'],
+};
+export function isPraiseKind(k: string | null | undefined): k is PraiseKind {
+  return !!k && Object.prototype.hasOwnProperty.call(EARNED_PRAISE, k);
+}
+const STREAK_WORDS = ['three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+/** "That's three in a row." — the streak's own praise, three and up. */
+export const STREAK_PRAISE: readonly string[] = STREAK_WORDS.map((w) => `That's ${w} in a row.`);
+
+export function earnedPraise(kind: PraiseKind, streak: number, rot: number): string {
+  if (streak >= 3) return STREAK_PRAISE[Math.min(streak - 3, STREAK_PRAISE.length - 1)];
+  const stems = EARNED_PRAISE[kind];
+  return stems[((rot % stems.length) + stems.length) % stems.length];
+}
+
+const PRAISE_ALLOWED = new Set<string>([...Object.values(EARNED_PRAISE).flat(), ...STREAK_PRAISE]);
+
 /** DNA rule 7 — no move-number prefixes ("12.Nf3" is read "twelve"). A
  *  rephrase, never a drop: the move stays, the number goes. */
 export function stripMoveNumbers(text: string): string {
@@ -39,7 +67,7 @@ export function dnaPass(text: string, opts: { kid?: boolean; verbatim?: boolean 
   const sentences = stripped.split(/(?<=[.!?])\s+/);
   const refused: string[] = [];
   const kept = sentences.filter((s) => {
-    const hit = DNA_REFUSE.find((r) => r.re.test(s));
+    const hit = PRAISE_ALLOWED.has(s.trim()) ? undefined : DNA_REFUSE.find((r) => r.re.test(s));
     if (hit) refused.push(hit.why);
     return !hit;
   });

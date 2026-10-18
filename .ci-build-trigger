@@ -1,21 +1,13 @@
-build requested 2026-09-03T21:40:00Z — 4.0.1, a METADATA release.
+build requested 2026-10-18T04:15:00Z — 4.0.6, a FULL native release (David: "Full native update. Get this to my users.").
 
-4.0 is READY_FOR_SALE, and Apple locks a live version's metadata, so the only
-way to correct the store listing is a new version. This one carries no feature
-work; it exists to fix what the product page says.
-
-  · PRICE. The listing has stated the OLD monthly and yearly prices since the
-    tiers changed on 2026-08-24 — roughly double what Apple actually charges.
-    Anyone reading the page before installing was quoted twice the real cost.
-    (Billing was never wrong; the paywall reads priceString from StoreKit.)
-  · SPELLING. The first line of the description read "a chess coach that
-    anylizes your games" — a misspelling of the one word the app is about, on
-    the line that is all most people read.
-  · SUBTITLE. Was EMPTY, 0/30 chars, for the life of the app. Now "Opening
-    Trainer & Game Review" — a third of the indexed search surface, and the
-    line under the app name in every search result.
-  · KEYWORDS. Rebuilt: the old field was full at 100/100 while spending ~30
-    characters on words already carried by the app NAME and the subtitle.
-
-Also ships the walkthrough auto-start, the promoted next-step button, and the
-first working store-review prompt (it had never once fired).
+Carries the 2026-10-18 Learn play-test build:
+  · earned praise with the burst, then the why
+  · danger levels, and every concept (fork, pin, skewer, discovery…) named for
+    either side — quieter once the student has proven it
+  · no move given away before the student plays (plans hold a playable step)
+  · the opponent's better move named after their move
+  · "how did I leave the book?" answered from this game
+  · a second misunderstood question is flagged for David
+  · Fixed chips once ever, floating over the board for 5s; arrows follow the
+    sentence; the drill card is out of Learn free play
+  · analysis runs 10 games per tap

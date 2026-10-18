@@ -5124,10 +5124,13 @@ robotic and tune out fast.
    replies, intermediate student moves in a long sequence). Save
    voice for the moments that change the student's understanding
    — the principle, the named pattern, the surprise.
-5. **Ban acknowledgments.** "Correct!" / "Great job!" /
-   "Excellent!" / "Well done!" — never. The position changing in
-   the student's favor IS the acknowledgment. Praise rings hollow
-   after the third puzzle.
+5. **Ban acknowledgments — except EARNED praise (David 2026-10-18:
+   "Praise!").** "Correct!" / "Great job!" / "Well done!" — never,
+   EXCEPT when a Learn burst fires (a decision, an only move, a save, a
+   punish): then the coach praises from the one table
+   `dnaRules.EARNED_PRAISE` (rotated by ply, escalated by the streak)
+   and says the WHY in the same beat. The DNA lets exactly those
+   sentences through; any other praise is still cut.
 6. **Ban first-person and meta.** "I think..." / "Let me
    show you..." / "Now we'll see..." / "Watch the forced reply"
    — never. The narrator is the position, not a tutor character.
@@ -5343,6 +5346,13 @@ What still speaks:
    FOUND is credited; a missed one is not named.
 3. **Their slip**: what it lets you do is said with their move; "you found it"
    after; never the answer after a miss.
+
+🔄 **CARVE-OUT 2 — THE OPPONENT'S BETTER MOVE (David 2026-10-18: "that is meant
+for before the move is played").** The rule protects the STUDENT's next move.
+When THEIR move was weaker, their stronger move is a moment already past and
+is named with its why (`backwardLook` coach side, `namesBetterMove: true`).
+Before the student's move, a plan step that IS a legal move right now is held
+too (`planThreadTurn` `holdPlayable`, the two-plans line's waypoints).
 
 **Review names the better move** (the game is over); **chat names it** (you
 asked). Gates: `learnNamesNoMoveUnasked.gate.test.ts`,
