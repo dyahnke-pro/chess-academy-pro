@@ -161,6 +161,13 @@ try {
   await page.locator('[data-testid="heat-map"]').waitFor({ timeout: 60000 });
   const heat = rowsOf('heat-map-shown').at(-1);
   check('B HEAT MAP fresh device is all grey — never "mastered"', heat && heat.details.red.length === 0 && heat.details.green.length === 0, heat?.summary ?? 'no row');
+  // The skill meters sit on the same page: a fresh device has no evidence, so
+  // every meter reads "not rated yet" — absent is not weak, and never a level.
+  await page.locator('[data-testid="skill-meters"]').waitFor({ timeout: 30000 }).catch(() => {});
+  const meters = rowsOf('skill-meters-shown').at(-1);
+  const meterRows = Array.isArray(meters?.details) ? meters.details : [];
+  check('B2 SKILL METERS fresh device: nine meters, none rated', meterRows.length === 9 && meterRows.every((m) => m.rated === false),
+    meters?.summary ?? 'no skill-meters-shown row');
 
   // ── C. Deep Run bite ─────────────────────────────────────────────────────
   await (await tacticsBar()).click();

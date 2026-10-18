@@ -47,7 +47,8 @@ type AlgoEmissionKind =
   | 'thinking-transfer'
   | 'coach-opponent-strength'
   | 'chat-turn'
-  | 'review-turning-plan';
+  | 'review-turning-plan'
+  | 'skill-meters-shown';
 
 interface Contract {
   /** The audit that holds the contract. */
@@ -60,6 +61,11 @@ interface Contract {
 }
 
 const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
+  'skill-meters-shown': {
+    script: 'scripts/audit-up-next-prod.mjs',
+    contractMarker: 'SKILL METERS fresh device',
+    emittedBy: 'src/components/Insights/SkillMetersStrip.tsx (loadSkillMeters → computeSkillMeters)',
+  },
   'review-turning-plan': {
     script: 'scripts/audit-review-overhaul-prod.mjs',
     contractMarker: 'TURNING plan-row-names-every-verdict',
