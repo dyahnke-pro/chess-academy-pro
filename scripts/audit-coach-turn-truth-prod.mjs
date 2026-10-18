@@ -158,7 +158,7 @@ const main = async () => {
   // Default stays Chromium, so nothing changes until a run opts in.
   const { engine, browser, contextOptions } = await launchAuditBrowser();
   console.log(`[turn-truth] engine = ${engine}${engine === 'webkit' ? ' (listener disabled — WebKit blocks loopback from https)' : ''}`);
-  const ctx = await browser.newContext(contextOptions);
+  const ctx = await browser.newContext({ serviceWorkers: 'block', ...contextOptions });
   await ctx.addInitScript(muteTtsForAudit);       // audits never spend TTS money
   await ctx.addInitScript(autoDismissCalibration);
   // Attach the listener through the legacy localStorage keys, which

@@ -10,6 +10,7 @@ import {
   mirrorAuditEvent,
   isAnalyticsEnabled,
   initAnalytics,
+  posthogHostFor,
   resolvePlatformSuperProps,
 } from './analytics';
 import type { AuditEntry } from './appAuditor';
@@ -270,5 +271,13 @@ describe('buildEventProps — lean, safe payloads', () => {
     );
     expect((props.ask_text as string).length).toBe(4000);
     expect((props.answer_text as string).length).toBe(4000);
+  });
+});
+
+describe('audit traffic never rides the Vercel PostHog proxy (2026-10-18)', () => {
+  it('an audit page goes straight to PostHog; a real user uses the proxy', () => {
+    expect(posthogHostFor(true, '/api/ph')).toBe('https://us.i.posthog.com');
+    expect(posthogHostFor(false, '/api/ph')).toBe('/api/ph');
+    expect(posthogHostFor(false, undefined)).toBe('https://us.i.posthog.com');
   });
 });

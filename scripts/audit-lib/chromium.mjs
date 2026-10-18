@@ -126,8 +126,18 @@ export function sandboxLaunchArgs() {
   return [...SANDBOX_CHROMIUM_ARGS, ...LOOPBACK_SIDECAR_ARGS, ...cdpTapArgs()];
 }
 
-export function sandboxContextOptions() {
-  return process.env.AUDIT_SANDBOX === '1' ? { ignoreHTTPSErrors: true } : {};
+/**
+ * Every audit browser BLOCKS the service worker (David 2026-10-18: the Vercel
+ * bill). A fresh browser that installs it pre-downloads the whole app — 222
+ * files per install — and every audit opens fresh browsers, so audits were
+ * the bulk of the project's edge requests while measuring nothing about the
+ * worker. Only an audit OF the service worker opts back in: `{ serviceWorkers: 'allow' }`.
+ */
+export function sandboxContextOptions(opts = {}) {
+  return {
+    serviceWorkers: opts.serviceWorkers ?? 'block',
+    ...(process.env.AUDIT_SANDBOX === '1' ? { ignoreHTTPSErrors: true } : {}),
+  };
 }
 
 const HEADED_CANDIDATES = [

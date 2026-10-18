@@ -14,7 +14,7 @@ const browser = await chromium.launch({
   executablePath: CHROMIUM_PATH,
   args: ['--window-size=1400,1000', '--window-position=200,80'],
 });
-const ctx = await browser.newContext({
+const ctx = await browser.newContext({ serviceWorkers: 'block', 
   viewport: { width: 1400, height: 1000 },
   deviceScaleFactor: 2,
 });

@@ -1,6 +1,6 @@
 import { chromium } from 'playwright';
 const browser = await chromium.launch({ headless: true, executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
-const ctx = await browser.newContext({ viewport: { width: 420, height: 900 } });
+const ctx = await browser.newContext({ serviceWorkers: 'block',  viewport: { width: 420, height: 900 } });
 const page = await ctx.newPage();
 await page.goto('http://localhost:5173/coach/play', { waitUntil: 'domcontentloaded' });
 await page.waitForTimeout(5000);

@@ -90,7 +90,7 @@ async function servedEntry(page) {
 async function main() {
   const executablePath = await resolveChromiumExecutable();
   const browser = await chromium.launch({ executablePath, args: sandboxLaunchArgs() });
-  const context = await browser.newContext(sandboxContextOptions());
+  const context = await browser.newContext(sandboxContextOptions({ serviceWorkers: 'allow' }));
   await context.addInitScript(muteTtsForAudit); // G1: audits never spend TTS money
   await context.addInitScript(autoDismissCalibration);
   // 🚨 A CLAIM RELOADS THE PAGE, WHICH ERASES THE EVIDENCE OF THE CLAIM.

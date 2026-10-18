@@ -6519,6 +6519,19 @@ script** as part of the same PR. Use existing scripts as templates:
 Add the new script to the matrix above AND to `docs/AUDIT_INDEX.md`
 the same commit.
 
+### 🔒🔒 THE VERCEL BILL — AUDITS MUST NOT PAY FOR THE APP TWICE (David 2026-10-18: "This is unacceptable", a $35.82 month)
+
+- **Observability Plus is OFF** for chess-academy-pro (it billed 16M events,
+  $6.40). PostHog is the analytics store; never re-enable it.
+- **Preview deployments are OFF** (`previewDeploymentsDisabled`): 76 of 100
+  deployments were cancelled branch previews.
+- **Audit browsers block the service worker** (`sandboxContextOptions` →
+  `serviceWorkers: 'block'`; only the worker's own audits pass `'allow'`). A
+  fresh browser that installs it pre-downloads 222 files. Gate:
+  `auditHarnessReach.test.ts`.
+- **Audit pages send PostHog direct**, never through the `/api/ph` proxy
+  (`posthogHostFor`): audits were 76k of 95k events a month.
+
 ### Deploy-pipeline gotchas (the ones we've actually hit)
 
 - **Vercel free tier caps at 100 deploys/day.** When the cap hits,

@@ -11,7 +11,7 @@ const has = async (p, sel) => { try { return (await p.locator(sel).count()) > 0;
 async function main() {
   const exe = await resolveChromiumExecutable(false);
   const browser = await chromium.launch({ headless: true, executablePath: exe });
-  const ctx = await browser.newContext({ viewport: { width: 414, height: 896 } });
+  const ctx = await browser.newContext({ serviceWorkers: 'block',  viewport: { width: 414, height: 896 } });
   await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
   const page = await ctx.newPage();

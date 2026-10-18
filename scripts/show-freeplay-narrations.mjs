@@ -187,7 +187,7 @@ const main = async () => {
   await mkdir(OUT, { recursive: true });
   const { engine, browser, contextOptions } = await launchAuditBrowser();
   console.log(`[freeplay-narr] engine=${engine} · ${BASE} · ${PLIES} plies`);
-  const ctx = await browser.newContext(contextOptions);
+  const ctx = await browser.newContext({ serviceWorkers: 'block', ...contextOptions });
   await ctx.addInitScript(muteTtsForAudit);
   await ctx.addInitScript(autoDismissCalibration);
   const page = await ctx.newPage();
