@@ -87,14 +87,23 @@ async function fetchGroundingData(fen: string): Promise<GroundingData> {
 
   if (explorerData) {
     const total = explorerData.white + explorerData.draws + explorerData.black;
-    gameStats = `Total games in database: ${total}. White wins: ${explorerData.white} (${total > 0 ? Math.round((explorerData.white / total) * 100) : 0}%), Draws: ${explorerData.draws} (${total > 0 ? Math.round((explorerData.draws / total) * 100) : 0}%), Black wins: ${explorerData.black} (${total > 0 ? Math.round((explorerData.black / total) * 100) : 0}%).`;
+    const pct = (n: number): number => (total > 0 ? Math.round((n / total) * 100) : 0);
+    gameStats = total > 0
+      ? `This position has been reached in ${total.toLocaleString('en-US')} games: White wins ${pct(explorerData.white)}%, ${pct(explorerData.draws)}% are drawn, and Black wins ${pct(explorerData.black)}%.`
+      : '';
 
-    if (explorerData.moves.length > 0) {
-      topMoves = explorerData.moves.slice(0, 5).map((m) => {
-        const moveTotal = m.white + m.draws + m.black;
-        const whiteWinPct = moveTotal > 0 ? Math.round((m.white / moveTotal) * 100) : 0;
-        return `${m.san}: ${moveTotal} games, ${whiteWinPct}% white wins, avg rating ${m.averageRating}`;
-      }).join('\n');
+    // A BAR, never a cap (G4.5): every reply played in at least 5% of the
+    // games here, however many that is — the old top-5 slice stopped at five
+    // regardless of worth.
+    const replies = explorerData.moves.filter((m) => total > 0 && (m.white + m.draws + m.black) / total >= 0.05);
+    if (replies.length > 0) {
+      const named = replies.map((m) => {
+        const n = m.white + m.draws + m.black;
+        return `${m.san} (${n.toLocaleString('en-US')} games, White scoring ${n > 0 ? Math.round(((m.white + m.draws / 2) / n) * 100) : 0}%)`;
+      });
+      topMoves = `The most-played replies here are ${named.length === 1 ? named[0] : `${named.slice(0, -1).join(', ')} and ${named[named.length - 1]}`}.`;
+    } else {
+      topMoves = '';
     }
   }
 
@@ -110,7 +119,7 @@ export async function generateSidelineExplanation(
   sidelineName: string,
   fen: string,
 ): Promise<string> {
-  const cacheKey = `${opening.id}-sideline-${sidelineName}`;
+  const cacheKey = `${opening.id}-sideline-v2-${sidelineName}`;
   const cached = await getCachedContent(cacheKey, 'sideline_explanation');
   if (cached) return cached.content;
 
@@ -124,14 +133,17 @@ export async function generateSidelineExplanation(
   const authored = (opening.variations ?? []).find(
     (v) => v.name.toLowerCase() === sidelineName.toLowerCase(),
   )?.explanation;
+  // COMPUTED PROSE SPEAKS (2026-10-18, David: narration computed-only): the
+  // explanation is assembled here as finished sentences and spoken as is —
+  // no model rewrite between the verified facts and the student.
   const facts = [
-    `Sideline in the ${opening.name}: "${sidelineName}" (moves ${sidelinePgn}).`,
+    `${sidelineName}, a sideline of the ${opening.name}: ${sidelinePgn}.`,
     authored ? authored : '',
-    grounding.gameStats ? `Database results here: ${grounding.gameStats}` : '',
-    grounding.topMoves ? `Most-played responses from this position:\n${grounding.topMoves}` : '',
-  ].filter(Boolean).join('\n');
+    grounding.gameStats,
+    grounding.topMoves === 'No explorer data available.' ? '' : grounding.topMoves,
+  ].filter(Boolean).join(' ');
 
-  const result = (await voiceFacts(facts, { intent: 'sideline-explanation', warm: true })) ?? facts;
+  const result = (await voiceFacts(facts, { intent: 'sideline-explanation', preferRaw: true })) ?? facts;
   // Cache writes must not break the user-visible explanation — if the
   // Dexie put fails (quota, schema drift) we still return the text.
   try {

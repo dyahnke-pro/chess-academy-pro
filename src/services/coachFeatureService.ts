@@ -351,18 +351,13 @@ export async function generateNarrativeSummary(
     outcome: result, playerColor, openingClause,
     blunderCount, mistakeCount, inaccuracyCount, keyMoments: keyMoments.slice(0, momentBudget), totalErrors,
   });
-  // The flagged moments' moves must survive the phrasing: the review register's
-  // "and there it is" beat kept the theatre and dropped the moves (walk
-  // 2026-09-23 tape: "Here it is. That's where this one slipped." with no Bg4,
-  // no Nc6). A reword that loses one is refused in favour of the computed text.
-  const mustPreserve = keyMoments.slice(0, momentBudget).flatMap((k) => k.match(SAN_TOKEN_RE) ?? []);
-  const voiced = (await voiceFacts(spokenFallback, { intent: `review-recap:${verbosity}`, warm: true, mustPreserve })) ?? spokenFallback;
+  // COMPUTED PROSE SPEAKS (2026-10-18): the recap is already second-person
+  // spoken prose; no model rewrite between it and the student.
+  const voiced = (await voiceFacts(spokenFallback, { intent: `review-recap:${verbosity}`, preferRaw: true })) ?? spokenFallback;
   onStream?.(voiced);
   return voiced;
 }
 
-/** A SAN token inside a computed moment ("On move 3, Bg4 was a mistake; the engine preferred Nc6"). */
-const SAN_TOKEN_RE = /\b(?:O-O(?:-O)?|[NBRQK]?[a-h]?[1-8]?x?[a-h][1-8](?:=[NBRQ])?)[+#]?/g;
 
 /** The recap in the STUDENT's register, from the same computed numbers the
  *  model is handed. Exported so the gate can prove it never says "the

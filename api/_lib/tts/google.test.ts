@@ -258,6 +258,11 @@ describe('chirp3 personality prosody', () => {
     expect(rates).toEqual([...rates].sort((a, b) => a - b));
   });
 
+  it('slows a critical moment OVER the personality base', () => {
+    expect(chirp3ProsodyFor('default', 'critical').speakingRate).toBeCloseTo(0.92, 3);
+    expect(chirp3ProsodyFor('edgy', 'critical').volumeGainDb).toBe(chirp3ProsodyFor('edgy').volumeGainDb);
+  });
+
   it('composes the #25 spike OVER the personality base, never as a new register', () => {
     expect(chirp3ProsodyFor('default', 'spike').speakingRate).toBeCloseTo(1.08, 3);
     expect(chirp3ProsodyFor('edgy', 'spike').speakingRate).toBeCloseTo(1.13, 3);

@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3563) — names `BoardContext`
-- **The standard post-deploy ritual** (CLAUDE.md:6360) — names `chatTurn`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3574) — names `BoardContext`
+- **The standard post-deploy ritual** (CLAUDE.md:6371) — names `chatTurn`
 
 ## Who calls in
 
@@ -172,7 +172,7 @@
 - `src/coach/dispatchCoachTurn.ts:601`
 
 ### `askBackAtCatchAll` (function) — 1 call site
-- `src/services/coachApi.ts:750`
+- `src/services/coachApi.ts:753`
 
 ### `NOT_UNDERSTOOD_LINE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

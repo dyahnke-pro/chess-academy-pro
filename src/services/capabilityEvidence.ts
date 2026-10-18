@@ -687,7 +687,7 @@ async function writeLaneEvidence(args: LaneEvidenceArgs): Promise<boolean> {
     });
     // Green/red can move on a lane row exactly as on any other: every reader
     // of the student model refreshes now (it did not — a lane held row waited
-    // out the 5-minute caches, and `useProvenWatcher` never saw it cross).
+    // out the 5-minute caches, and the proven watcher (`learnRecordWatch`) never saw it cross).
     emitWeaknessModelChanged();
     void logAppAudit({
       kind: 'lane-evidence',

@@ -175,7 +175,11 @@ const WARMUP_RETRY_MS = 20_000;
  */
 const isCapacitor = isNativeApp();
 
-export function getTtsUrl(text: string, voice: string, useSsml = true, style?: string, prosody?: 'spike'): string {
+/** How the line is paced: `spike` lifts the decisive payoff, `critical` slows
+ *  a moment the computer judged critical so the student hears it land. */
+export type ProsodyMode = 'spike' | 'critical';
+
+export function getTtsUrl(text: string, voice: string, useSsml = true, style?: string, prosody?: ProsodyMode): string {
   const base = isCapacitor ? VERCEL_ORIGIN : '';
   // SSML default-on so Polly gets engine-aware structure (paragraph
   // on generative voices, prosody slowdown on neural). Short clips
@@ -1199,9 +1203,9 @@ class VoiceService {
    *  responses, and any callsite where the user has explicitly opted
    *  into the voice flow. Honors the Coach Narration = "silent" gate
    *  via speakInternal — silent always wins over force. */
-  async speakForced(text: string, opts?: { prosodySpike?: boolean }): Promise<void> {
+  async speakForced(text: string, opts?: { prosodySpike?: boolean; prosodyCritical?: boolean }): Promise<void> {
     this.logSpeakInvoked('speakForced', text);
-    return this.speakInternal(sanitizeForTTS(text), true, opts?.prosodySpike ? { prosodySpike: true } : undefined);
+    return this.speakInternal(sanitizeForTTS(text), true, opts?.prosodySpike ? { prosodySpike: true } : opts?.prosodyCritical ? { prosodyCritical: true } : undefined);
   }
 
   /**
@@ -1380,7 +1384,7 @@ class VoiceService {
   private async speakInternal(
     rawText: string,
     force: boolean,
-    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean; sentenceFirst?: boolean; verbatim?: boolean },
+    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean; prosodyCritical?: boolean; sentenceFirst?: boolean; verbatim?: boolean },
   ): Promise<void> {
     this.utterancesInFlight += 1;
     try {
@@ -1393,7 +1397,7 @@ class VoiceService {
   private async speakInternalTracked(
     rawText: string,
     force: boolean,
-    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean; sentenceFirst?: boolean; verbatim?: boolean },
+    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean; prosodyCritical?: boolean; sentenceFirst?: boolean; verbatim?: boolean },
   ): Promise<void> {
     // A real stop() while this line waits (below) cancels it — see cancelEpoch.
     const epochAtEntry = this.cancelEpoch;
@@ -1895,7 +1899,7 @@ class VoiceService {
         : prefs.coachPersonality && prefs.coachPersonality !== 'default'
           ? prefs.coachPersonality
           : undefined;
-      const prosody = opts?.prosodySpike ? 'spike' as const : undefined;
+      const prosody: ProsodyMode | undefined = opts?.prosodySpike ? 'spike' : opts?.prosodyCritical ? 'critical' : undefined;
       const success = opts?.sentenceFirst
         ? await this.speakCloudChunked(text, voiceForSpeak, personalityStyle, prosody)
         : await this.speakCloud(text, voiceForSpeak, personalityStyle, prosody);
@@ -2661,12 +2665,12 @@ audio.playbackRate = this.speed;
    *  for a fetch already in flight instead of paying for a second one. */
   private prefetchInflight = new Map<string, Promise<void>>();
 
-  private cloudKey(text: string, voice: string, style?: string, prosody?: 'spike'): string {
+  private cloudKey(text: string, voice: string, style?: string, prosody?: ProsodyMode): string {
     return this.pollyKey(text, voice) + (style ? `|${style}` : '') + (prosody ? `|${prosody}` : '');
   }
 
   /** Fetch one clip into the audio cache. Shares any fetch already in flight. */
-  private fetchClipToCache(text: string, voice: string, style?: string, prosody?: 'spike'): Promise<void> {
+  private fetchClipToCache(text: string, voice: string, style?: string, prosody?: ProsodyMode): Promise<void> {
     const key = this.cloudKey(text, voice, style, prosody);
     if (this.audioCache.has(key)) return Promise.resolve();
     const running = this.prefetchInflight.get(key);
@@ -2691,7 +2695,7 @@ audio.playbackRate = this.speed;
    * Returns false only when nothing was spoken, so the caller's fallback runs
    * exactly as it does for a whole line. A stop() or newer line ends the chain.
    */
-  private async speakCloudChunked(text: string, voice: string, style?: string, prosody?: 'spike'): Promise<boolean> {
+  private async speakCloudChunked(text: string, voice: string, style?: string, prosody?: ProsodyMode): Promise<boolean> {
     const chunks = splitSpokenChunks(text);
     if (chunks.length <= 1 || this.audioCache.has(this.cloudKey(text, voice, style, prosody))) {
       return this.speakCloud(text, voice, style, prosody);
@@ -2726,7 +2730,7 @@ audio.playbackRate = this.speed;
     }
   }
 
-  private async speakCloud(text: string, voice: string, style?: string, prosody?: 'spike'): Promise<boolean> {
+  private async speakCloud(text: string, voice: string, style?: string, prosody?: ProsodyMode): Promise<boolean> {
     // No speakable content (empty string, whitespace, or pure punctuation left by
     // a sentence-split) → never build a /api/tts URL for it. Prod returns 400 on
     // empty text, which littered the console with harmless resource errors and

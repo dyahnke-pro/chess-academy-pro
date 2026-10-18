@@ -27,10 +27,9 @@ import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight,
 import { TeachGameOverCard, type TeachGameResult } from './TeachGameOverCard';
 import { LearnRewardBar } from './LearnRewardBar';
 import { SkillLevelBar, type SkillMove } from './SkillLevelBar';
-import { useSkillMeterWatcher } from '../../hooks/useSkillMeterWatcher';
 import type { SkillRecapRow } from './TeachGameOverCard';
 import { learnRewardFor, learnPraise, savedWhy, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
-import { useProvenWatcher } from '../../hooks/useProvenWatcher';
+import { useLearnRecordWatch } from '../../hooks/useLearnRecordWatch';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
@@ -1798,9 +1797,15 @@ export function CoachTeachPage(): JSX.Element {
    *  Goes through the memory so the single `onNewGame` signal fires — the
    *  board-driven path inside `observe()` reaches the same handler. */
   forgetPageRefsRef.current = forgetPageRefs;
+  const showNextSkillMove = useCallback((): void => {
+    const next = skillQueueRef.current.shift() ?? null;
+    setSkillMove(next);
+    if (next) setTimeout(() => showNextSkillMove(), PROVEN_CHIP_MS);
+  }, []);
+  useLearnRecordWatch(true, {
   // A capability turned GREEN during this game → the tile, mid-game (David
   // 2026-10-01: "add the tile to mid game for now").
-  useProvenWatcher(true, (tag) => {
+  onProven: (tag) => {
     setProvenTags((prev) => (prev.includes(tag) ? prev : [...prev, tag]));
     // ON SCREEN FOR ~5s, THEN GONE (David 2026-10-18: "Maybe 5 ish seconds on
     // screen?"). The game tally keeps the count for the recap.
@@ -1809,13 +1814,9 @@ export function CoachTeachPage(): JSX.Element {
     learnTallyRef.current = next;
     setLearnTally(next);
     fireLearnReward({ kind: 'proven', label: `Fixed: ${getMisconceptionTag(tag)?.label ?? tag}` });
-  });
-  const showNextSkillMove = useCallback((): void => {
-    const next = skillQueueRef.current.shift() ?? null;
-    setSkillMove(next);
-    if (next) setTimeout(() => showNextSkillMove(), PROVEN_CHIP_MS);
-  }, []);
-  useSkillMeterWatcher(true, (moves) => {
+  },
+  // A skill meter moved by this game's moves → the coin and bar (2026-10-18).
+  onMeters: (moves) => {
     for (const m of moves) {
       const prev = skillRecapRef.current.get(m.label);
       skillRecapRef.current.set(m.label, {
@@ -1830,6 +1831,7 @@ export function CoachTeachPage(): JSX.Element {
     const idle = skillQueueRef.current.length === 0 && skillMove === null;
     skillQueueRef.current.push(...moves);
     if (idle) showNextSkillMove();
+  },
   });
   const resetPerGameMemory = useCallback((): void => {
     skillRecapRef.current = new Map();

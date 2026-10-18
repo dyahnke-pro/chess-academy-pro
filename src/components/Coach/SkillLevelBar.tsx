@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 
-/** One meter moving, as the board saw it (`useSkillMeterWatcher`). */
+/** One meter moving, as this game's moves moved it (`learnRecordWatch`
+ *  computes it; this component only draws it). */
 export interface SkillMove {
   id: string;
   label: string;
@@ -9,7 +10,6 @@ export interface SkillMove {
   level: number;
   /** 0..1 toward the next level, after the move. */
   toNext: number;
-  /** The level changed on this move: up or down. */
   levelChange: -1 | 0 | 1;
 }
 

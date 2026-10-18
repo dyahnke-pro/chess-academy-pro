@@ -35,7 +35,7 @@ describe('narrateOpeningSection (grounded)', () => {
     expect(voiceFacts).not.toHaveBeenCalled();
   });
 
-  it('voices the bullets as facts through the one chokepoint', async () => {
+  it('speaks the bullets as computed sentences, with no model rewrite', async () => {
     vi.mocked(voiceFacts).mockResolvedValueOnce(
       '  The Fried Liver arises when Black allows Ng5, targeting f7 ...  ',
     );
@@ -50,13 +50,12 @@ describe('narrateOpeningSection (grounded)', () => {
 
     expect(result).toBe('The Fried Liver arises when Black allows Ng5, targeting f7 ...');
     expect(voiceFacts).toHaveBeenCalledTimes(1);
-    // The bullets + opening name are the FACTS passed to the chokepoint.
+    // The text is finished spoken prose — each bullet its own sentence behind
+    // one lead line — and it goes out raw (2026-10-18: narration computed-only).
     const [facts, opts] = vi.mocked(voiceFacts).mock.calls[0];
-    expect(facts).toContain('Italian Game');
-    expect(facts).toContain('Watch for Ng5 tactics');
-    expect(facts).toContain('Defend f7 carefully');
-    expect(facts).toContain('white');
-    expect(opts).toMatchObject({ warm: true });
+    expect(facts).toBe('The traps and pitfalls in the Italian Game. Watch for Ng5 tactics. Defend f7 carefully.');
+    expect(opts).toMatchObject({ preferRaw: true });
+    expect(opts).not.toHaveProperty('warm');
   });
 
   it('strips wrapping markdown code fences from the output', async () => {

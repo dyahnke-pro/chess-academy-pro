@@ -4,22 +4,22 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7290 lines · 39 exports · 55 importers · 61 tests · 19 audits**
+**7302 lines · 39 exports · 55 importers · 61 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
 - **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:276) — names `voiceFacts`
 - **G0. THE LLM DECIDES NOTHING — it voices facts computed in code (David 2026-06-10, LOCKED, supreme law).** (CLAUDE.md:355) — names `coachApi`, `getCoachChatResponse`, `voiceFacts`
 - **⏰ Standing notes** (CLAUDE.md:2740) — names `voiceFacts`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3275) — names `coachApi`, `getCoachChatResponse`, `voiceFacts`
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3530) — names `coachApi`, `getCoachChatResponse`
-- **🔒🔒 `main` IS THE FREE WEB APP. IT DOES **NOT** REACH PAYING CUSTOMERS — THE APP STORE DOES (David 2026-08-15, emphatic: "Main does not reach paying customers!! That's the App Store. Lock that in tired of saying this crap.").** (CLAUDE.md:3633) — names `voiceFacts`
-- **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:3968) — names `coachApi`, `voiceFacts`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4277) — names `voiceFacts`
-- **Do NOT** (CLAUDE.md:5438) — names `coachApi`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6192) — names `voiceFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6335) — names `coachApi`, `voiceFacts`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6356) — names `coachApi`, `translateToEnglish`, `voiceFacts`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3299) — names `coachApi`, `getCoachChatResponse`, `voiceFacts`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3554) — names `coachApi`, `getCoachChatResponse`
+- **🔒🔒 `main` IS THE FREE WEB APP. IT DOES **NOT** REACH PAYING CUSTOMERS — THE APP STORE DOES (David 2026-08-15, emphatic: "Main does not reach paying customers!! That's the App Store. Lock that in tired of saying this crap.").** (CLAUDE.md:3657) — names `voiceFacts`
+- **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:3992) — names `coachApi`, `voiceFacts`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4301) — names `voiceFacts`
+- **Do NOT** (CLAUDE.md:5472) — names `coachApi`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6226) — names `voiceFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6369) — names `coachApi`, `voiceFacts`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6392) — names `coachApi`, `translateToEnglish`, `voiceFacts`
 
 ## Who calls in
 
@@ -235,7 +235,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:584`
-- `src/components/Coach/CoachTeachPage.tsx:3787`
+- `src/components/Coach/CoachTeachPage.tsx:3827`
 - `src/services/coachSessionRouter.ts:120`
 - `src/services/coachSettingsAction.ts:261`
 
@@ -276,8 +276,8 @@
 ### `voiceFacts` (function) — 37 call sites
 - `scripts/audit-kid-static.mjs:53`
 - `scripts/audit-kid-static.mjs:64`
-- `src/components/Coach/CoachGameReview.tsx:1709`
-- `src/components/Coach/CoachGameReview.tsx:1905`
+- `src/components/Coach/CoachGameReview.tsx:1711`
+- `src/components/Coach/CoachGameReview.tsx:1907`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
 - `src/components/Puzzles/PuzzleBoard.tsx:99`
 - `src/hooks/usePhaseNarration.ts:744`
@@ -285,13 +285,13 @@
 - `src/hooks/usePositionNarration.ts:260`
 - `src/services/coachApi.computedOnly.test.ts:20`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:358`
-- `src/services/coachFeatureService.ts:5079`
-- `src/services/coachFeatureService.ts:5232`
+- `src/services/coachFeatureService.ts:356`
+- `src/services/coachFeatureService.ts:5083`
+- `src/services/coachFeatureService.ts:5238`
 - `src/services/coachLaneWiring.test.ts:148`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
-- `src/services/contentGenerationService.ts:134`
+- `src/services/contentGenerationService.ts:146`
 - `src/services/gameReviewService.ts:57`
 - `src/services/kidGameCoach.ts:219`
 - `src/services/mistakeNarrationVoice.ts:109`

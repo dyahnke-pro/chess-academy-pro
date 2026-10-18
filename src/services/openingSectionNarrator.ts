@@ -18,7 +18,7 @@ import { db } from '../db/schema';
 
 /** Cache version — bump to invalidate all cached paragraphs when the
  *  prompt / output format changes. */
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 
 export type OpeningSectionKind = 'traps' | 'warnings';
 
@@ -68,7 +68,6 @@ async function requestParagraph(
 ): Promise<string> {
   const sectionLabel =
     input.kind === 'traps' ? 'traps and pitfalls' : 'things to watch out for';
-  const colorClause = input.color ? ` The student plays the ${input.color} side.` : '';
 
   // GROUNDED (David 2026-07-09: one LLM command). The authored bullets ARE the
   // facts; voiceFacts weaves them into a cohesive paragraph and adds NOTHING —
@@ -76,12 +75,13 @@ async function requestParagraph(
   // a square/file/diagonal") is structurally impossible here, and there is
   // nothing to strip after. The number-fidelity net still blocks any added
   // stat, and the voiceFacts contract blocks any added square/piece/claim.
-  const facts = [
-    `These are the ${sectionLabel} in the ${input.openingName}.${colorClause}`,
-    ...bullets.map((b) => `- ${b}`),
-  ].join('\n');
+  // COMPUTED PROSE SPEAKS (2026-10-18, David: narration computed-only): the
+  // authored bullets are already sentences; they are spoken in order behind
+  // one lead line, with no model rewrite between them and the student.
+  const sentence = (b: string): string => (/[.!?]$/.test(b) ? b : `${b}.`);
+  const facts = [`The ${sectionLabel} in the ${input.openingName}.`, ...bullets.map(sentence)].join(' ');
 
-  const voiced = await voiceFacts(facts, { intent: `opening-section:${input.kind}`, warm: true });
+  const voiced = await voiceFacts(facts, { intent: `opening-section:${input.kind}`, preferRaw: true });
   return sanitize(voiced ?? '');
 }
 

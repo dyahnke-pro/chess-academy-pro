@@ -30,7 +30,7 @@ import { motion } from 'framer-motion';
 import { RollingNumber } from '../ui/RollingNumber';
 import type { LearnTally } from '../../services/learnReward';
 
-/** One skill's net move this game (`useSkillMeterWatcher`, summed). */
+/** One skill's net move this game (`useLearnRecordWatch`, summed). */
 export interface SkillRecapRow { label: string; delta: number; level: number; levelChange: -1 | 0 | 1 }
 
 export type TeachGameResult = 'win' | 'loss' | 'draw' | 'ended';

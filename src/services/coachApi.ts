@@ -31,6 +31,9 @@ function emitLlmTokenUsage(
   // prompt is mostly cheap, a low ratio means the cache keeps going stale.
   cacheHitTokens: number | null = null,
   cacheMissTokens: number | null = null,
+  /** Which narration asked (voiceFacts' intent), so a usage read can name
+   *  the surface that still calls the model. */
+  label: string | null = null,
 ): void {
   const cacheSuffix =
     cacheHitTokens !== null || cacheMissTokens !== null
@@ -40,7 +43,7 @@ function emitLlmTokenUsage(
     kind: 'llm-token-usage',
     category: 'subsystem',
     source: `coachApi.${provider}`,
-    summary: `task=${task} model=${model} provider=${provider} in=${promptTokens} out=${completionTokens}${cacheSuffix}`,
+    summary: `task=${task}${label ? ` intent=${label}` : ''} model=${model} provider=${provider} in=${promptTokens} out=${completionTokens}${cacheSuffix}`,
     details: JSON.stringify({
       task,
       model,
@@ -861,6 +864,7 @@ async function callDeepSeek(
   messages: OpenAI.Chat.ChatCompletionMessageParam[],
   maxTokens: number,
   task: string,
+  label: string | null = null,
 ): Promise<string> {
   emitCoachLlmCallAudit({ grounded: task === 'grounded_voice', intent: task });
   const client = new OpenAI({
@@ -879,7 +883,7 @@ async function callDeepSeek(
   if (response.usage) {
     const { hit, miss } = deepseekCacheSplit(response.usage);
     void recordApiUsage(task, model, response.usage.prompt_tokens, response.usage.completion_tokens);
-    emitLlmTokenUsage(task, model, 'deepseek', response.usage.prompt_tokens, response.usage.completion_tokens, response.choices[0]?.finish_reason ?? null, hit, miss);
+    emitLlmTokenUsage(task, model, 'deepseek', response.usage.prompt_tokens, response.usage.completion_tokens, response.choices[0]?.finish_reason ?? null, hit, miss, label);
   }
   const choice = response.choices[0];
   const message = choice?.message as { content?: string | null } | undefined;
@@ -3202,6 +3206,7 @@ export async function voiceFacts(
       [{ role: 'system', content: system }, { role: 'user', content: user }],
       voiceMaxTokens,
       'grounded_voice',
+      opts.intent ?? null,
     );
     // Leak audit fires at the primitive (callAnthropic/callDeepSeek) with
     // task='grounded_voice' → tagged grounded=true there. No emit needed here.

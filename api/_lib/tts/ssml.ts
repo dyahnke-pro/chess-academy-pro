@@ -87,6 +87,10 @@ export function buildSsmlForEngine(text: string, engine: string, style?: string,
     const baseRate = Number.parseInt(prosody.rate, 10);
     rate = `${Number.isFinite(baseRate) ? Math.min(baseRate + 8, 130) : 103}%`;
     pitch = '+6%';
+  } else if (prosodyMode === 'critical') {
+    // A moment the computer judged critical: slow it 8 points so it lands.
+    const baseRate = Number.parseInt(prosody.rate, 10);
+    rate = `${Number.isFinite(baseRate) ? Math.max(baseRate - 8, 80) : 92}%`;
   }
   const attrs = [
     `rate="${rate}"`,

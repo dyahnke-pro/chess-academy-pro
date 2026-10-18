@@ -57,6 +57,7 @@ describe('prerenderKey', () => {
     expect(await prerenderKey({ ...REQ, voiceKey: 'matthew' })).not.toBe(base);
     expect(await prerenderKey({ ...REQ, style: 'edgy' })).not.toBe(base);
     expect(await prerenderKey({ ...REQ, prosodyMode: 'spike' })).not.toBe(base);
+    expect(await prerenderKey({ ...REQ, prosodyMode: 'critical' })).not.toBe(base);
     expect(await prerenderKey({ ...REQ, ssml: false })).not.toBe(base);
   });
 

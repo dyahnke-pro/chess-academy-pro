@@ -11,7 +11,7 @@
 ## SENSE — does the loop record what happens to the student?
 
 - **22** modules record a MISS.
-- **13** record a HOLD (`capabilityEvidence`).
+- **12** record a HOLD (`capabilityEvidence`).
 - **9** read the capability profile back.
 
 Green has a reader — the heat map can lower as well as raise.
@@ -19,7 +19,7 @@ Green has a reader — the heat map can lower as well as raise.
 ## MODEL — is the student model fed the adaptive rating?
 
 - **3** files read `getPlayerRating` (the adaptive estimate).
-- **36** read `currentRating` off the store directly.
+- **37** read `currentRating` off the store directly.
 - **0** inline `?? 1200` fallbacks.
 
 The locked rule is that a surface does not PICK a rating; it reads the one

@@ -148,7 +148,11 @@ const RATE_MAX = 2.0;
  */
 export function chirp3ProsodyFor(style?: string, prosodyMode?: string): Chirp3Prosody {
   const base = CHIRP3_PROSODY_BY_STYLE[style ?? 'default'] ?? CHIRP3_PROSODY_BY_STYLE.default;
-  const rate = prosodyMode === 'spike' ? base.speakingRate + 0.08 : base.speakingRate;
+  // `spike` lifts the decisive payoff; `critical` slows a moment the computer
+  // judged critical, so the student hears it land (David 2026-10-18).
+  const rate = prosodyMode === 'spike' ? base.speakingRate + 0.08
+    : prosodyMode === 'critical' ? base.speakingRate - 0.08
+    : base.speakingRate;
   return {
     speakingRate: Math.min(RATE_MAX, Math.max(RATE_MIN, Number(rate.toFixed(3)))),
     volumeGainDb: base.volumeGainDb,

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3150 lines · 18 exports · 109 importers · 100 tests · 23 audits**
+**3154 lines · 19 exports · 109 importers · 100 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,11 +13,11 @@
 - **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1231) — names `voiceService`
 - **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:1654) — names `sanitizeForTTS`
 - **Golden rules (the most important — read these every time)** (CLAUDE.md:2310) — names `voiceService`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3357) — names `voiceService`
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3534) — names `voiceService`
-- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3837) — names `voiceService`
-- **Shared types / services** (CLAUDE.md:5478) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6321) — names `voiceService`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3381) — names `voiceService`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3558) — names `voiceService`
+- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3861) — names `voiceService`
+- **Shared types / services** (CLAUDE.md:5512) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6355) — names `voiceService`
 
 ## Who calls in
 
@@ -178,6 +178,9 @@
 - `src/components/Coach/CoachGamePage.tsx:3693`
 
 ### `resolvePollySecondaryVoice` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `ProsodyMode` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getTtsUrl` (function) — 4 call sites

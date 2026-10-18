@@ -1552,7 +1552,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       const text = `${thesis}${hinge ? ` ${hinge}` : ''}${reprise}`;
       setTurningSummary(text);
       captureEvent('review_turning_point_stated', { answer_ply: turn.ply, hinged: !!hinge });
-      void reviewSay(text).catch(() => undefined);
+      // The game's turning point is the critical moment of the review: said
+      // a touch slower so it lands (David 2026-10-18: "sound more human").
+      void reviewSay(text, { prosodyCritical: true }).catch(() => undefined);
     };
     // "What it hinged on", in the retrospective register — computed before the
     // line is said, bounded so a slow engine never holds the summary back.
