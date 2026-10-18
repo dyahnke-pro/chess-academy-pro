@@ -6,7 +6,7 @@
  */
 import { describe, it } from 'vitest';
 import { existsSync, readFileSync } from 'node:fs';
-import { metersFrom, skillDifficulty, type SkillRows } from './skillMetersLoader';
+import { metersFrom, skillDifficulty, liveSlipBreaks, type SkillRows } from './skillMetersLoader';
 import { eventsFromRecord } from './skillMeters';
 
 const PATH = process.env.SKILL_DROP_PATH ?? 'audit-reports/.fixtures/data-drop-david.json';
@@ -23,7 +23,7 @@ describe.skipIf(!RUN)('skill meters on a real drop', () => {
     for (const m of metersFrom(rows)) {
       console.log(`${m.label.padEnd(22)} ${m.rated ? `Lv${m.level} ~${Math.round(m.rating)} rd${Math.round(m.rd)}` : 'not rated'} events=${m.events}`);
     }
-    const events = eventsFromRecord(rows.held, rows.slips, skillDifficulty);
+    const events = eventsFromRecord(rows.held, rows.slips, skillDifficulty, liveSlipBreaks);
     console.log(`events=${events.length} weighted=${events.filter((e) => e.weight > 0).length}`);
     // Coin rate: per game, how many distinct meters moved and how many events fired.
     const byGame = new Map<string, { held: SkillRows['held']; slips: SkillRows['slips'] }>();
@@ -44,7 +44,7 @@ describe.skipIf(!RUN)('skill meters on a real drop', () => {
     const counts: number[] = [];
     const moved: number[] = [];
     for (const b of byGame.values()) {
-      const ev = eventsFromRecord(b.held, b.slips, skillDifficulty).filter((e) => e.weight > 0);
+      const ev = eventsFromRecord(b.held, b.slips, skillDifficulty, liveSlipBreaks).filter((e) => e.weight > 0);
       counts.push(ev.length);
       moved.push(new Set(ev.map((e) => e.meter)).size);
     }

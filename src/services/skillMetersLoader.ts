@@ -11,6 +11,8 @@ import { db } from '../db/schema';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { computeSkillMeters, eventsFromRecord, type HeldRow, type SlipRow, type SkillMeter, type SkillMeterId } from './skillMeters';
 import calibration from '../data/skill-difficulty.json';
+import { capabilityOutcomes } from './capabilityEvidence';
+import { MISTAKE_CP } from './engineConstants';
 
 interface Calibrated { D: number; S: number; n: number }
 const TABLE = (calibration as { table: Record<string, Calibrated> }).table;
@@ -46,9 +48,23 @@ export async function readSkillRows(): Promise<SkillRows> {
   };
 }
 
+/** A live slip breaks its skill only where the record's one scoring would:
+ *  the board posed that skill and the move was a real cost (an inaccuracy is
+ *  a clean answer to the record and to the calibration alike). */
+export function liveSlipBreaks(r: SlipRow): boolean {
+  if (r.grade === 'inaccuracy') return false;
+  const mover = r.fen.split(' ')[1] === 'b' ? 'black' : 'white';
+  try {
+    return capabilityOutcomes({ fenBefore: r.fen, playedSan: r.playedSan, moverColor: mover, cpLoss: MISTAKE_CP, slipTag: r.tag })
+      .some((o) => o.tag === r.tag && o.outcome === 'broken');
+  } catch {
+    return false;
+  }
+}
+
 /** The nine meters from a set of rows. */
 export function metersFrom(rows: Pick<SkillRows, 'held' | 'slips' | 'startRating'>): SkillMeter[] {
-  return computeSkillMeters(eventsFromRecord(rows.held, rows.slips, skillDifficulty), rows.startRating);
+  return computeSkillMeters(eventsFromRecord(rows.held, rows.slips, skillDifficulty, liveSlipBreaks), rows.startRating);
 }
 
 export async function loadSkillMeters(): Promise<SkillMeter[]> {

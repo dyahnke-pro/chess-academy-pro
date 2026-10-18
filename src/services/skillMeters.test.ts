@@ -54,28 +54,33 @@ describe('the record → events', () => {
   const held = (o: Partial<HeldRow>): HeldRow => ({ tag: 'hung-material', outcome: 'held', fen: 'F1 w - - 0 1', playedSan: 'Nf3', recordedAt: 1, prompted: false, origin: 'review', ...o });
   const slip = (o: Partial<SlipRow>): SlipRow => ({ tag: 'hung-material', fen: 'F1 w - - 0 1', playedSan: 'Qh5', createdAt: 1, source: 'auto-analysis', ...o });
   const flat = () => ({ difficulty: 1400, scale: 400 });
+  const breaks = () => true;
 
-  it('one position, one score: a miss on both records counts once', () => {
-    const ev = eventsFromRecord([held({ outcome: 'broken', playedSan: 'Qh5' })], [slip({})], flat);
+  it('one position, one score: a live miss on both records counts once', () => {
+    const ev = eventsFromRecord([held({ outcome: 'broken', playedSan: 'Qh5' })], [slip({ source: 'discussion-practice' })], flat, breaks);
     expect(ev).toHaveLength(1);
     expect(ev[0].score).toBe(0);
   });
 
+  it("an analysed game's slip row is not scored again — the record already scored that move", () => {
+    expect(eventsFromRecord([], [slip({ source: 'auto-analysis' }), slip({ source: 'game-review', fen: 'F3 w - - 0 1' })], flat, breaks)).toHaveLength(0);
+  });
+
+  it('a live slip counts only where the one scoring breaks that skill', () => {
+    expect(eventsFromRecord([], [slip({ source: 'discussion-practice' })], flat, () => false)).toHaveLength(0);
+  });
+
   it('a prompted answer earns nothing; a lesson tap is not a game move', () => {
-    expect(eventsFromRecord([held({ prompted: true }), held({ origin: 'lesson', fen: 'F2 w - - 0 1' })], [], flat)).toHaveLength(0);
+    expect(eventsFromRecord([held({ prompted: true }), held({ origin: 'lesson', fen: 'F2 w - - 0 1' })], [], flat, breaks)).toHaveLength(0);
   });
 
   it('a repeated right answer at the same position pays less each time', () => {
-    const ev = eventsFromRecord([held({ recordedAt: 1 }), held({ recordedAt: 2 }), held({ recordedAt: 3 })], [], flat);
+    const ev = eventsFromRecord([held({ recordedAt: 1 }), held({ recordedAt: 2 }), held({ recordedAt: 3 })], [], flat, breaks);
     expect(ev.map((e) => e.weight)).toEqual([1, FAMILIARITY_DECAY, FAMILIARITY_DECAY ** 2]);
   });
 
   it('a skill with no calibrated difficulty scores nothing', () => {
-    expect(eventsFromRecord([], [slip({})], () => null)[0].weight).toBe(0);
-  });
-
-  it('an inaccuracy is half weight', () => {
-    expect(eventsFromRecord([], [slip({ grade: 'inaccuracy' })], flat)[0].weight).toBe(0.5);
+    expect(eventsFromRecord([], [slip({ source: 'discussion-practice' })], () => null, breaks)[0].weight).toBe(0);
   });
 
   it('a skill with no evidence reads not rated', () => {

@@ -565,15 +565,12 @@ const MATE_THREAT_POSED = 95;
  * POSED was demonstrated, which is the only thing that can turn a tag GREEN —
  * and therefore the only thing that can turn it back.
  */
-export async function recordCapabilityEvidence(args: {
+/** What one move is scored on: the posing and the outcome rule, shared. */
+export interface CapabilityMoveArgs {
   fenBefore: string;
   playedSan: string;
   moverColor: 'white' | 'black';
   cpLoss: number | null;
-  origin: CapabilityEvidenceRecord['origin'];
-  /** See `CapabilityEvidenceRecord.prompted` — required, never inferred. */
-  prompted: boolean;
-  sourceGameId?: string;
   /** What the INSIGHT computer says this position posed (moveInsight —
    *  their threat, the escape square, a named pattern, the drawback the
    *  played move walked into). Both directions: held when the move was clean,
@@ -585,37 +582,57 @@ export async function recordCapabilityEvidence(args: {
   slipTag?: string | null;
   bestSan?: string;
   historySans?: readonly string[];
+}
+
+/**
+ * THE ONE SCORING OF A MOVE — which skills it answered, and how. PURE, so the
+ * record (`recordCapabilityEvidence`) and the skill-difficulty calibration
+ * score a move the same way: a meter compares the student against a population
+ * measured by THIS function, never by a copy of it (2026-10-18 — the copy posed
+ * fewer questions and broke every posed skill on a costly move, so the student
+ * held 94% where the population held 82% and Endgames read Level 29).
+ */
+export function capabilityOutcomes(args: CapabilityMoveArgs): Array<{ tag: MisconceptionTagId; outcome: CapabilityOutcome; posedImportance: number }> {
+  // ASKED, regardless of how it went — the outcome is decided once, below,
+  // so the two directions can never disagree about what the board posed.
+  const posed = capabilitiesPosed(args.fenBefore, args.playedSan, args.moverColor);
+  for (const extra of args.alsoPosed ?? []) {
+    if (!posed.some((p) => p.tag === extra.tag)) posed.push({ tag: extra.tag, posedImportance: extra.posedImportance });
+  }
+  if (posed.length === 0) return [];
+  const clean = movePlayedCleanly(args.cpLoss);
+  const outcome: CapabilityOutcome = clean ? 'held' : 'broken';
+  // 🔒 A SLIP BREAKS ONLY THE SKILL IT WAS ABOUT (2026-10-18). A costly move
+  // used to break EVERY skill the board posed on it — a tactic missed in the
+  // opening broke development, space and king safety at once — and on one
+  // real student's 80 games 94% of greens flipped back to broken. Breaking
+  // only the slip's own skill took that to 41% (`expertFade.measure`). The
+  // other skills posed on a costly move are neither held nor broken: the move
+  // was not a clean answer to them, and not a wrong one.
+  const slipTag = clean ? null : (args.slipTag !== undefined ? args.slipTag : classifiedSlipTag(args));
+  // NO SLIP TAG (a puzzle's wrong answer: no best move to classify against)
+  // means the move failed the question it was asked, and the board's posed
+  // skills ARE that question — they break, as before the rule.
+  const shown = clean || slipTag === null ? posed : posed.filter((s) => s.outcome === 'broken' || s.tag === slipTag);
+  // A posed question that carries its own answer (the knight choice) can
+  // only make the row BROKEN; held still needs a clean move overall.
+  return shown.map((s) => ({ tag: s.tag, outcome: s.outcome === 'broken' ? 'broken' : outcome, posedImportance: s.posedImportance }));
+}
+
+export async function recordCapabilityEvidence(args: CapabilityMoveArgs & {
+  origin: CapabilityEvidenceRecord['origin'];
+  /** See `CapabilityEvidenceRecord.prompted` — required, never inferred. */
+  prompted: boolean;
+  sourceGameId?: string;
 }): Promise<number> {
   try {
-    // ASKED, regardless of how it went — the outcome is decided once, below,
-    // so the two directions can never disagree about what the board posed.
-    const posed = capabilitiesPosed(args.fenBefore, args.playedSan, args.moverColor);
-    for (const extra of args.alsoPosed ?? []) {
-      if (!posed.some((p) => p.tag === extra.tag)) posed.push({ tag: extra.tag, posedImportance: extra.posedImportance });
-    }
-    if (posed.length === 0) return 0;
-    const clean = movePlayedCleanly(args.cpLoss);
-    const outcome: CapabilityOutcome = clean ? 'held' : 'broken';
-    // 🔒 A SLIP BREAKS ONLY THE SKILL IT WAS ABOUT (2026-10-18). A costly move
-    // used to break EVERY skill the board posed on it — a tactic missed in the
-    // opening broke development, space and king safety at once — and on one
-    // real student's 80 games 94% of greens flipped back to broken. Breaking
-    // only the slip's own skill took that to 41% (`expertFade.measure`). The
-    // other skills posed on a costly move are neither held nor broken: the move
-    // was not a clean answer to them, and not a wrong one.
-    const slipTag = clean ? null : (args.slipTag !== undefined ? args.slipTag : classifiedSlipTag(args));
-    // NO SLIP TAG (a puzzle's wrong answer: no best move to classify against)
-    // means the move failed the question it was asked, and the board's posed
-    // skills ARE that question — they break, as before the rule.
-    const shown = clean || slipTag === null ? posed : posed.filter((s) => s.outcome === 'broken' || s.tag === slipTag);
+    const shown = capabilityOutcomes(args);
     if (shown.length === 0) return 0;
     const now = Date.now();
     const rows: CapabilityEvidenceRecord[] = shown.map((s) => ({
       id: newId(),
       tag: s.tag,
-      // A posed question that carries its own answer (the knight choice) can
-      // only make the row BROKEN; held still needs a clean move overall.
-      outcome: s.outcome === 'broken' ? 'broken' : outcome,
+      outcome: s.outcome,
       fen: args.fenBefore,
       playedSan: args.playedSan,
       posedImportance: s.posedImportance,
@@ -631,8 +648,8 @@ export async function recordCapabilityEvidence(args: {
       kind: 'coach-surface-migrated',
       category: 'subsystem',
       source: 'capabilityEvidence.recordCapabilitiesShown',
-      summary: `${outcome} x${rows.length} [${rows.map((r) => r.tag).join(', ')}] from ${args.origin}`,
-      details: JSON.stringify({ origin: args.origin, outcome, tags: rows.map((r) => r.tag) }),
+      summary: `${rows[0].outcome} x${rows.length} [${rows.map((r) => r.tag).join(', ')}] from ${args.origin}`,
+      details: JSON.stringify({ origin: args.origin, outcome: rows[0].outcome, tags: rows.map((r) => r.tag) }),
       fen: args.fenBefore,
     });
     return rows.length;

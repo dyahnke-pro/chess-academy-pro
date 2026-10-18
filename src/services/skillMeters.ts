@@ -15,7 +15,8 @@
  *   - FAMILIARITY: a gain at a position you have already answered right pays
  *     less each time (a line played right a dozen times pays nothing); a slip
  *     there still costs in full — forgetting something you knew is signal.
- *   - SLIP WEIGHT: an inaccuracy counts half (`slipWeight`, the record's own).
+ *   - an inaccuracy is a clean answer here, exactly as the record and the
+ *     calibration score it (`movePlayedCleanly`): one rule, both sides.
  * ONE POSITION, ONE SCORE: the right-answer record and the mistake record can
  * hold the same position (measured: 158 of 438 misses in David's record), so
  * events are keyed by position + move and the mistake row wins.
@@ -166,17 +167,28 @@ export interface SlipRow { tag: string; fen: string; playedSan: string; createdA
 /** Origins that are not the student answering on their own: a lesson tap or
  *  a reading card is KNOW evidence, never a scored game move. */
 const NOT_SCORED_ORIGINS = new Set(['lesson', 'reading']);
-const NOT_A_GAME_SLIP = new Set(['lesson', 'puzzle']);
+/** Slips that are not the student's own live game move: a lesson or puzzle
+ *  tap, and the analysed game's slips — the analysis already scored that move
+ *  through the record (`capabilityOutcomes`), so counting its slip row again
+ *  would score one move twice and by a different rule. */
+const NOT_A_LIVE_SLIP = new Set(['lesson', 'puzzle', 'auto-analysis', 'game-review']);
 
 /**
- * Turn the two records into events — one per position — with difficulty from
- * the caller (the computed source lives outside this leaf). A gain at a
- * position already answered right pays FAMILIARITY_DECAY^n.
+ * Turn the record into events — one per position — with difficulty from the
+ * caller (the computed source lives outside this leaf). A gain at a position
+ * already answered right pays FAMILIARITY_DECAY^n.
+ *
+ * THE SCORING IS THE CALIBRATION'S (2026-10-18). A meter compares the student
+ * against a population scored by `capabilityOutcomes`, so the student's moves
+ * are scored by it too: the capability record IS that function's output. A
+ * live slip (this game, not yet analysed) counts only where the same function
+ * breaks that skill — `liveSlipBreaks`, injected because it lives off this leaf.
  */
 export function eventsFromRecord(
   held: readonly HeldRow[],
   slips: readonly SlipRow[],
   difficultyOf: (tag: string) => { difficulty: number; scale: number } | null,
+  liveSlipBreaks: (slip: SlipRow) => boolean,
 ): SkillEvent[] {
   // A skill the population never calibrated scores nothing (weight 0): an
   // honest "we cannot say how hard that was" beats a guessed number.
@@ -186,12 +198,12 @@ export function eventsFromRecord(
   };
   const byKey = new Map<string, SkillEvent>();
   for (const r of slips) {
-    if (NOT_A_GAME_SLIP.has(r.source)) continue;
+    if (NOT_A_LIVE_SLIP.has(r.source)) continue;
     const meter = meterOfTag(r.tag);
-    if (!meter) continue;
+    if (!meter || !liveSlipBreaks(r)) continue;
     const key = `${r.fen}|${r.playedSan}`;
     const c = d(r.tag);
-    byKey.set(key, { meter, key, score: 0, difficulty: c.difficulty, scale: c.scale, weight: c.known ? (r.grade === 'inaccuracy' ? 0.5 : 1) : 0, at: r.createdAt });
+    byKey.set(key, { meter, key, score: 0, difficulty: c.difficulty, scale: c.scale, weight: c.known ? 1 : 0, at: r.createdAt });
   }
   const timesRight = new Map<string, number>();
   for (const r of [...held].sort((a, b) => a.recordedAt - b.recordedAt)) {
