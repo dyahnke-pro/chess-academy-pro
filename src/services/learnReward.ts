@@ -16,6 +16,7 @@
 import type { MoveReason } from './moveReason';
 import type { RewardKind, RewardEvent } from './rewardEvents';
 import { reward } from './rewardService';
+import { earnedPraise, isPraiseKind } from './dnaRules';
 
 /** Learn's ONE door to the reward layer — the surface never calls the
  *  reward service directly, so what Learn may celebrate is decided here. */
@@ -90,4 +91,11 @@ export function tallyMove(t: LearnTally, kind: RewardKind | null, fault: boolean
     punished: t.punished + (kind === 'punished' ? 1 : 0),
     gems: t.gems + (kind === 'gem' ? 1 : 0),
   };
+}
+
+/** The praise a burst earns, said before the why (David 2026-10-18: "Praise!"),
+ *  from the one table the voice rules let through — or null for a kind that
+ *  speaks no praise (a gem, a fixed skill). */
+export function learnPraise(kind: RewardKind | null, streak: number, rot: number): string | null {
+  return isPraiseKind(kind) ? earnedPraise(kind, streak, rot) : null;
 }

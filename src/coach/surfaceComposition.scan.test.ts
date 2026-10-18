@@ -51,6 +51,11 @@ const INFRA = new Set([
   // NOT move any ceiling, and adding a real computer here to duck one is the
   // same cheat as raising one.
   'spokenLanguage',
+  // `provenAnnouncements` is a SAY-ONCE MEMORY (2026-10-18: "Fixed" chips
+  // re-announced every game): which green skills the student has already been
+  // told about. It computes no chess or teaching fact — the bar for green is
+  // `capabilityProven`, elsewhere — and replaced a diff each surface kept itself.
+  'provenAnnouncements',
   // Board THEMING and BILLING (2026-10-01): `boardColorService` and
   // `pieceSetService` pick colours and a piece set; `courseEntitlement` checks
   // a purchase. None of them reasons about a position — they were counted only

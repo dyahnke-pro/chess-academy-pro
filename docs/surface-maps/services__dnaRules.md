@@ -13,8 +13,8 @@
 ## Who calls in
 
 - `src/coach/coachService.ts`
-- `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/dnaRules.test.ts`
+- `src/services/learnReward.ts`
 - `src/services/voicePackage.ts`
 - `src/services/voiceService.ts`
 
@@ -30,15 +30,15 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isPraiseKind` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:9667`
+- `src/services/learnReward.ts:100`
 
 ### `STREAK_PRAISE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `earnedPraise` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9667`
 - `src/services/dnaRules.test.ts:52`
 - `src/services/dnaRules.test.ts:55`
+- `src/services/learnReward.ts:100`
 
 ### `stripMoveNumbers` (function) — 11 call sites
 - `scripts/convert-lichess-tsv.mjs:19`

@@ -26,8 +26,7 @@ import { registerCoachHands } from '../../services/coachActuator';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
 import { TeachGameOverCard, type TeachGameResult } from './TeachGameOverCard';
 import { LearnRewardBar } from './LearnRewardBar';
-import { learnRewardFor, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
-import { earnedPraise, isPraiseKind } from '../../services/dnaRules';
+import { learnRewardFor, learnPraise, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
 import { useProvenWatcher } from '../../hooks/useProvenWatcher';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -9664,7 +9663,7 @@ export function CoachTeachPage(): JSX.Element {
           // PRAISE WHEN THE BURST FIRES, THEN THE WHY (David 2026-10-18:
           // "Praise!"). Only the burst kinds, from the one praise table the
           // voice rules let through (dnaRules.EARNED_PRAISE).
-          if (isPraiseKind(earned)) praise = earnedPraise(earned, next.streak, move.history.length);
+          praise = learnPraise(earned, next.streak, move.history.length);
           if (next !== learnTallyRef.current) {
             learnTallyRef.current = next;
             setLearnTally(next);
