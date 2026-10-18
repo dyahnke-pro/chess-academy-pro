@@ -153,8 +153,21 @@ export function computeSkillMeters(events: readonly SkillEvent[], startRating: n
     const s = state.get(e.meter) ?? { rating: startRating, rd: START_RD, events: 0 };
     state.set(e.meter, scoreEvent(s, e));
   }
+  // ANCHORED TO THE STUDENT'S OWN RATING (2026-10-18). Holding a question is
+  // nearly as common at 600 as at 2200 (88% vs 96%), so a bias that touches
+  // every skill alike — the time control they play, the engine that judged
+  // their moves — moves every meter by hundreds of points (a 1414 player read
+  // Level 22–24). Such a bias is common to all nine meters, so it is removed
+  // here: the meters are re-centred on the student's measured rating, keeping
+  // only how each skill stands against their others. Precision-weighted, so a
+  // barely-tested meter barely moves the centre.
+  const tested = [...state.values()].filter((s) => s.events > 0);
+  const weightOf = (s: MeterState): number => 1 / (s.rd * s.rd);
+  const totalWeight = tested.reduce((a, s) => a + weightOf(s), 0);
+  const centre = totalWeight > 0 ? tested.reduce((a, s) => a + weightOf(s) * s.rating, 0) / totalWeight : startRating;
   return SKILL_METERS.map(({ id, label }) => {
-    const s = state.get(id) ?? { rating: startRating, rd: START_RD, events: 0 };
+    const raw = state.get(id) ?? { rating: startRating, rd: START_RD, events: 0 };
+    const s = { ...raw, rating: raw.events > 0 ? startRating + (raw.rating - centre) : startRating };
     const { level, toNext } = levelOf(s.rating);
     return { id, label, ...s, level, toNext, rated: s.rd <= RATED_RD };
   });

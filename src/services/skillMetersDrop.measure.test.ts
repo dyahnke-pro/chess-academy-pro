@@ -50,5 +50,5 @@ describe.skipIf(!RUN)('skill meters on a real drop', () => {
     }
     const med = (a: number[]): number => [...a].sort((x, y) => x - y)[Math.floor(a.length / 2)] ?? 0;
     console.log(`games=${byGame.size} coins/game median=${med(counts)} max=${Math.max(0, ...counts)} meters-moved/game median=${med(moved)}`);
-  });
+  }, 300_000);
 });

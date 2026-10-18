@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   scoreEvent, levelOf, computeSkillMeters, eventsFromRecord, meterOfTag, meterNamedIn, skillMetersAnswer,
   START_RD, RATED_RD, FAMILIARITY_DECAY, METER_OF_TAG,
-  type MeterState, type HeldRow, type SlipRow,
+  type MeterState, type HeldRow, type SlipRow, type SkillEvent,
 } from './skillMeters';
 import { MISCONCEPTION_TAGS } from '../data/misconceptionTags';
 
@@ -37,6 +37,33 @@ describe('skill meters — the gap decides the points', () => {
   it('a new skill moves fast, a settled one slowly', () => {
     const fresh: MeterState = { rating: 1400, rd: START_RD, events: 0 };
     expect(Math.abs(step(fresh, 1, 1400))).toBeGreaterThan(Math.abs(step(settled, 1, 1400)) * 3);
+  });
+});
+
+describe('anchored to the student rating', () => {
+  const ev = (meter: SkillEvent['meter'], score: 0 | 1, at: number): SkillEvent =>
+    ({ meter, key: `${meter}-${at}`, score, difficulty: 1400, weight: 1, at });
+
+  it('a bias every skill shares moves no meter off the student rating', () => {
+    // Every answered question held: unanchored, every meter would climb far
+    // above 1400; anchored, they all sit at the student's own rating.
+    const events: SkillEvent[] = [];
+    for (let i = 0; i < 40; i++) for (const m of ['tactics', 'endgames', 'development'] as const) events.push(ev(m, 1, i));
+    const m = computeSkillMeters(events, 1400).filter((x) => x.events > 0);
+    for (const x of m) expect(Math.round(x.rating)).toBe(1400);
+  });
+
+  it("a skill weaker than the student's others reads below their rating", () => {
+    const events: SkillEvent[] = [];
+    for (let i = 0; i < 40; i++) {
+      events.push(ev('endgames', 1, i));
+      events.push(ev('tactics', i % 2 === 0 ? 0 : 1, i));
+    }
+    const m = computeSkillMeters(events, 1400);
+    const end = m.find((x) => x.id === 'endgames')!;
+    const tac = m.find((x) => x.id === 'tactics')!;
+    expect(end.rating).toBeGreaterThan(1400);
+    expect(tac.rating).toBeLessThan(1400);
   });
 });
 
