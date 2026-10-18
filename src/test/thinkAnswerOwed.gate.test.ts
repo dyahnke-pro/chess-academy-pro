@@ -26,4 +26,8 @@ describe('a preempted think answer leads the next turn', () => {
     // …and before this turn's first line joins the chain.
     expect(said).toBeLessThan(src.indexOf('const qa = splitThink(line);'));
   });
+  it('the turn that asks never answers — the answer waits for the move (David 2026-10-18)', () => {
+    expect(src).not.toContain('speakComputed(qa[1]');
+    expect(src).not.toContain('THINK_PAUSE_MS');
+  });
 });

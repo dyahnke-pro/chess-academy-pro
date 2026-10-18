@@ -1,17 +1,15 @@
-// THE THINK PAUSE (David 2026-09-30: "It should answer the question on its own
-// like Danya does. A pause for the user to think, then the answer shown and
-// explained"). A computer that asks the student a question puts THINK_MARK
-// between the question and its answer. The voice speaks the question, waits
-// THINK_PAUSE_MS, then shows the answer on the board and speaks it. Anywhere
-// the text is shown or logged, the mark is stripped.
+// THE THINK PAUSE. A computer that asks the student a question puts THINK_MARK
+// between the question and its answer. The voice speaks the question now; the
+// ANSWER WAITS FOR THEIR MOVE (David 2026-10-18: "answer waits for my move" —
+// this replaces the 2026-09-30 timed pause, which spoke the answer after
+// 2.5 seconds whether they had played or not) and leads the next turn, so
+// they work it out on the board first. Anywhere the text is shown or logged,
+// the mark is stripped.
 //
 // A leaf: no imports, so a fact computer can use it.
 
 /** Private separator — never produced by chess prose. */
 export const THINK_MARK = '‖';
-
-/** How long the student gets to think before the answer. */
-export const THINK_PAUSE_MS = 2500;
 
 /** "question ‖ answer" → [question, answer]; null when there is no mark. */
 export function splitThink(text: string): [string, string] | null {

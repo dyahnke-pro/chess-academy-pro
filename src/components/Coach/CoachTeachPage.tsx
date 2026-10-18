@@ -309,7 +309,7 @@ import { opponentStrength } from '../../services/engineStrength';
 import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
 import { readBoard, readBoardAll, newPlanThread, clonePlanThread, adoptPlanTrial, type PlanThread, type BoardRead } from '../../services/boardComputers';
-import { splitThink, stripThink, THINK_MARK, THINK_PAUSE_MS } from '../../utils/thinkPause';
+import { splitThink, stripThink, THINK_MARK } from '../../utils/thinkPause';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
 import { actionForCommand, actuate } from '../../services/coachActuator';
@@ -10780,9 +10780,7 @@ export function CoachTeachPage(): JSX.Element {
             // newest line always wins (the same newest-move-wins doctrine
             // the parked-submit refire follows).
             const myTrackAGen = ++trackAGenRef.current;
-            // `onAnswer` runs when a THINK_MARK line reaches its answer — after
-            // the question and the pause — so the answer's marks appear with it.
-            const speakTrackA = (line: string, onAnswer?: () => void): void => {
+            const speakTrackA = (line: string): void => {
               if (trackAGenRef.current !== myTrackAGen) return;
               if (!trackAStarted) {
                 trackAStarted = true;
@@ -10806,19 +10804,15 @@ export function CoachTeachPage(): JSX.Element {
                   // code; they reach the voice THROUGH `voiceFacts`, in the raw
                   // register (the computed text is spoken as-is, no model call,
                   // no latency) — the same seam review speaks through.
-                  // THE THINK PAUSE (David 2026-09-30): a question, time to
-                  // think, then the answer shown and explained.
+                  // THE ANSWER WAITS FOR THEIR MOVE (David 2026-10-18: "answer
+                  // waits for my move"). The question is spoken now; its answer
+                  // is owed and leads the turn after the student plays, so they
+                  // work it out on the board first. Its marks belonged to this
+                  // board, so they are not drawn on the next one.
                   const qa = splitThink(line);
                   if (!qa) return speakComputed(line, { forced: true, intent: 'learn-live' });
                   pendingAnswerRef.current = qa[1];
-                  return speakComputed(qa[0], { forced: true, intent: 'learn-live' })
-                    .then(() => new Promise<void>((res) => { setTimeout(res, THINK_PAUSE_MS); }))
-                    .then(() => {
-                      if (trackAGenRef.current !== myTrackAGen) return undefined;
-                      if (pendingAnswerRef.current === qa[1]) pendingAnswerRef.current = null;
-                      onAnswer?.();
-                      return speakComputed(qa[1], { forced: true, intent: 'learn-live' });
-                    });
+                  return speakComputed(qa[0], { forced: true, intent: 'learn-live' });
                 })
                 .catch(() => undefined);
               instantSpokenText = instantSpokenText ? `${instantSpokenText} ${stripThink(line)}` : stripThink(line);
@@ -11984,9 +11978,7 @@ export function CoachTeachPage(): JSX.Element {
                     });
                   }
                   if (hintPkg.spoken) {
-                    // Arrows for an answered question wait for the answer.
-                    const reveal: { answer?: () => void } = {};
-                    speakTrackA(hintPkg.spoken, () => reveal.answer?.());
+                    speakTrackA(hintPkg.spoken);
                     // Record the late package's phrases too — the per-game set is
                     // what keeps the NEXT turn from repeating any of them.
                     for (const k of spokenSentenceKeys(hintPkg)) learnMemRef.current.spokenKeys.add(k);
@@ -12013,6 +12005,8 @@ export function CoachTeachPage(): JSX.Element {
                     // (a cost already paid): amber.
                     const owed: BoardHighlight[] = [];
                     for (const f of hintPkg.kept) {
+                      // A question's marks are its answer: they wait for the move.
+                      if (f.text.includes(THINK_MARK)) continue;
                       for (const sq of markableSquares({ kept: [f] })) {
                         if (!owed.some((h) => h.square === sq)) owed.push({ square: sq, color: COLOR_FOR[f.kind] ?? '#f59e0b' });
                       }
@@ -12028,19 +12022,16 @@ export function CoachTeachPage(): JSX.Element {
                     // kept fact finds its queued line by its first claim; the
                     // arrows go through the one door, on the live board.
                     const owedArrows: ArrowClaim[] = [];
-                    const answerArrows: ArrowClaim[] = [];
                     for (const f of hintPkg.kept) {
+                      // A question's arrows are its answer: they wait for the move,
+                      // and by then they belong to a board that is gone.
+                      if (f.text.includes(THINK_MARK)) continue;
                       const key = f.claims?.[0];
                       // Without a claim, by text — and a kept line may be its queued line with
                       // a sentence the ledger had already heard taken out.
                       const src = key ? pending.lines.find((l) => l.claims?.[0] === key) : pending.lines.find((l) => l.text === f.text || l.text.includes(f.text));
-                      if (src?.arrows?.length) (f.text.includes(THINK_MARK) ? answerArrows : owedArrows).push(...src.arrows);
+                      if (src?.arrows?.length) owedArrows.push(...src.arrows);
                     }
-                    reveal.answer = () => {
-                      if (answerArrows.length === 0 || liveFenRef.current !== fenAfterReply) return;
-                      const drawn = admitArrows(answerArrows, { fen: fenAfterReply, studentColor: playerColor }).arrows;
-                      if (drawn.length > 0) setArrows((prev) => uniqueArrows([...prev, ...drawn]));
-                    };
                     // THE NEW IDEA'S ARROWS REPLACE THE OLD ONES (David 2026-10-18:
                     // "they just needed to give way to the new moves the coach
                     // stated"). Appending left the last turn's arrows on the board
