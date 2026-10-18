@@ -58,7 +58,7 @@ describe.skipIf(!HAVE)('classifier coverage', () => {
           if (best === null || after === null) continue;
           const sign = mover === 'w' ? 1 : -1;
           const cpLoss = Math.max(0, (best - after) * sign);
-          if (cpLoss < 100) continue;
+          if (cpLoss < Number(process.env.MIN_CP ?? 100) || cpLoss >= Number(process.env.MAX_CP ?? 1e9)) continue;
           const bestSan = uciLineToSan(p.fen, p.lines[0].pv, 1)[0];
           let fenAfter = p.fen;
           try { const c = new Chess(p.fen); c.move(p.san); fenAfter = c.fen(); } catch { continue; }

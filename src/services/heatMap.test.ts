@@ -42,6 +42,17 @@ describe('heatMap', () => {
     expect(hung?.openCount).toBe(3);
   });
 
+  it('an inaccuracy is HALF a slip: one alone never paints a skill red, two do (2026-10-18)', () => {
+    const one = heatMap(new Map(), [slip('no-plan', { grade: 'inaccuracy' })]).find((x) => x.tag === 'no-plan');
+    expect(one?.state).toBe('grey');
+    expect(one?.openCount).toBe(1);
+    const two = heatMap(new Map(), [slip('no-plan', { grade: 'inaccuracy' }), slip('no-plan', { grade: 'inaccuracy' })]).find((x) => x.tag === 'no-plan');
+    expect(two?.state).toBe('red');
+    // A mistake (or a legacy row with no grade) is a whole slip.
+    expect(heatMap(new Map(), [slip('no-plan', { grade: 'mistake' })]).find((x) => x.tag === 'no-plan')?.state).toBe('red');
+    expect(heatMap(new Map(), [slip('no-plan')]).find((x) => x.tag === 'no-plan')?.state).toBe('red');
+  });
+
   it('held once, never broken, not yet proven, is NOT failing — grey on its way', () => {
     const p: CapabilityProfile = new Map([['missed-tactic', entry({ held: 1, heldStreak: 1, streakGames: 1 })]] as never);
     expect(heatMap(p, []).find((x) => x.tag === 'missed-tactic')?.state).toBe('grey');

@@ -55,6 +55,42 @@ describe('autoAnalyzeGameMisconceptions', () => {
     expect(rows.every((r) => r.source === 'auto-analysis')).toBe(true);
   });
 
+  it('records an INACCURACY too, graded, and makes no puzzle of it (2026-10-18)', async () => {
+    // 2.Qh5 is an early queen sortie — an inaccuracy, not a blunder.
+    const game = buildGameRecord({
+      id: 'g-inacc', source: 'coach', white: 'David', black: 'Stockfish Bot', pgn: '1. e4 e5 2. Qh5 Nc6',
+      annotations: [
+        { moveNumber: 1, color: 'white', san: 'e4', evaluation: 20, bestMove: 'e2e4', bestMoveEval: 20, classification: 'good', comment: null },
+        { moveNumber: 2, color: 'white', san: 'Qh5', evaluation: -30, bestMove: 'g1f3', bestMoveEval: 35, classification: 'inaccuracy', comment: null },
+      ],
+    });
+    await db.games.put(game);
+    await autoAnalyzeGameMisconceptions('g-inacc');
+    const rows = await db.misconceptionTags.where('sourceGameId').equals('g-inacc').toArray();
+    expect(rows.length).toBe(1);
+    expect(rows[0].grade).toBe('inaccuracy');
+    expect(rows[0].playedSan).toBe('Qh5');
+    expect(await db.mistakePuzzles.where('sourceGameId').equals('g-inacc').count()).toBe(0);
+  });
+
+  it('a game read before inaccuracies were recorded gains them on its next pass, once', async () => {
+    const game = buildGameRecord({
+      id: 'g-late', source: 'coach', white: 'David', black: 'Stockfish Bot', pgn: '1. e4 e5 2. Qh5 Nc6 3. Qxe5+ Be7',
+      annotations: [
+        { moveNumber: 2, color: 'white', san: 'Qh5', evaluation: -30, bestMove: 'g1f3', bestMoveEval: 35, classification: 'inaccuracy', comment: null },
+        ...blunderAnnotations().slice(1),
+      ],
+    });
+    await db.games.put(game);
+    // The old first pass: the blunder alone is on the record.
+    await db.misconceptionTags.put({ id: 'old', tag: 'hung-material', source: 'auto-analysis', createdAt: 1, fen: 'r1bqkbnr/pppp1ppp/2n5/4p2Q/4P3/8/PPPP1PPP/RNB1KBNR w KQkq - 2 3', playedSan: 'Qxe5+', status: 'open', masteryHits: 0, sourceGameId: 'g-late' });
+    await autoAnalyzeGameMisconceptions('g-late');
+    await autoAnalyzeGameMisconceptions('g-late');
+    const rows = await db.misconceptionTags.where('sourceGameId').equals('g-late').toArray();
+    expect(rows.filter((r) => r.playedSan === 'Qh5')).toHaveLength(1);
+    expect(rows.filter((r) => r.playedSan === 'Qxe5+')).toHaveLength(1);
+  });
+
   it('is idempotent — re-running the same game logs nothing new', async () => {
     const game = buildGameRecord({
       id: 'g-idem',
@@ -314,5 +350,19 @@ describe('C2 — an eval-comment import is re-attributed when the deep dive land
     const r = await autoAnalyzeGameMisconceptions('g-c2-full', 'knight_mare_01');
     expect(r.reattributed).toBe(0);
     expect(await rowsFor('g-c2-full')).toEqual(first);
+  });
+});
+
+describe('an inaccuracy no skill names is not logged (2026-10-18)', () => {
+  it('captureMisconception skips an unnamed inaccuracy, keeps a named one', async () => {
+    const { captureMisconception } = await import('./discussionPractice');
+    // A quiet king shuffle in a bare ending names no skill.
+    const quiet = await captureMisconception({
+      classifyInput: { fen: '8/8/4k3/8/8/4K3/8/8 w - - 0 50', playedSan: 'Kd3', bestSan: 'Ke2' },
+      source: 'auto-analysis', shouldCount: false,
+      context: { fen: '8/8/4k3/8/8/4K3/8/8 w - - 0 50', playedSan: 'Kd3', bestSan: 'Ke2', grade: 'inaccuracy' },
+    });
+    expect(quiet.classification?.tag).toBe('other');
+    expect(quiet.logged).toBe(false);
   });
 });

@@ -1642,6 +1642,11 @@ export interface MisconceptionTagRecord {
   bestSan?: string;
   /** Centipawn loss vs best, when known (from Stockfish). */
   cpLoss?: number;
+  /** The move's grade when it was recorded — the ONE grade the review and the
+   *  live coach speak. An inaccuracy is a half-weight slip (`slipWeight`):
+   *  recorded so a strong player's small leaks reach the heat map, never
+   *  enough alone to paint a skill red. Absent on legacy rows = full weight. */
+  grade?: 'inaccuracy' | 'mistake' | 'blunder';
   gamePhase?: 'opening' | 'middlegame' | 'endgame';
   moveNumber?: number;
   openingId?: string;

@@ -224,6 +224,8 @@ export interface CaptureMisconceptionArgs {
     playedSan?: string;
     bestSan?: string;
     cpLoss?: number;
+    /** The move's grade (`MisconceptionTagRecord.grade`). */
+    grade?: 'inaccuracy' | 'mistake' | 'blunder';
     gamePhase?: 'opening' | 'middlegame' | 'endgame';
     moveNumber?: number;
     openingId?: string;
@@ -260,6 +262,13 @@ export async function captureMisconception(
   if (classification.tag === 'none') {
     return { classification, coachNote, logged: false };
   }
+  // AN INACCURACY NO SKILL NAMES IS NOT LOGGED (2026-10-18): 43% of real
+  // inaccuracies (764, acc-david + acc-corpus) fall to `other`. A small leak
+  // with no named skill feeds no tile and would only bury the review queue;
+  // a named one is the signal a strong player's heat map needs.
+  if (classification.tag === 'other' && args.context.grade === 'inaccuracy') {
+    return { classification, coachNote, logged: false };
+  }
 
   // Always LOG the slip so it shows in Thinking Errors. The `counted` flag
   // carries the learned/count-against gate: an un-learned line is display-only
@@ -276,6 +285,7 @@ export async function captureMisconception(
     playedSan: args.context.playedSan,
     bestSan: args.context.bestSan,
     cpLoss: args.context.cpLoss,
+    ...(args.context.grade ? { grade: args.context.grade } : {}),
     gamePhase: args.context.gamePhase,
     moveNumber: args.context.moveNumber,
     openingId: args.context.openingId,
@@ -397,5 +407,5 @@ export async function recordMoveEvidence(args: {
   bestSan?: string;
 }): Promise<number> {
   const { bestSan, ...rest } = args;
-  return recordCapabilityEvidence({ ...rest, alsoPosed: positionPosed(args.fenBefore, { bestSan }) });
+  return recordCapabilityEvidence({ ...rest, ...(bestSan ? { bestSan } : {}), alsoPosed: positionPosed(args.fenBefore, { bestSan }) });
 }

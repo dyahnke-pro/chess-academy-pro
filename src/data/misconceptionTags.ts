@@ -295,7 +295,7 @@ export function isMisconceptionTagId(id: string): id is MisconceptionTagId {
  *  change in a way stored rows must follow; rows behind it are re-attributed
  *  by `misconceptionRulesBackfill`. 2026-10-13: hung material requires the
  *  engine reply to take it; an endgame king walk is not "king in the centre". */
-export const MISCONCEPTION_RULES_REV = '2026-10-18-walked-into-tactic';
+export const MISCONCEPTION_RULES_REV = '2026-10-18-inaccuracies';
 
 /** Bump when analysed games must be re-read for the POSITIVE half (the heat
  *  map's green). 2026-10-13: green is recorded on analysis, not only review.
@@ -303,4 +303,4 @@ export const MISCONCEPTION_RULES_REV = '2026-10-18-walked-into-tactic';
  *  that could only be failed (castle in time, the free-looking pawn, the even
  *  trade, which pawn takes, the sacrifice by the king) — each analysed game's
  *  own rows are replaced so the old games answer them too. */
-export const POSITIVE_HALF_REV = '2026-10-18-skill-questions';
+export const POSITIVE_HALF_REV = '2026-10-18-own-skill-breaks';
