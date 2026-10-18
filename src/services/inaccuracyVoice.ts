@@ -93,5 +93,3 @@ export async function loadInaccuracyVoice(): Promise<void> {
   } catch { /* keep the last tally */ }
 }
 
-/** Test seam. */
-export function __setInaccuracyRecordForTests(r: InaccuracyRecord): void { cached = r; }

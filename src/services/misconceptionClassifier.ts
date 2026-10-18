@@ -473,9 +473,9 @@ function classifyMisconceptionImpl(
   });
   if (cause) return { tag: cause.tag, coachNote: cause.coachNote, why };
 
-  // Honest fallback — a real slip we can't pin to a specific motif from the
-  // board alone. Bucket it by phase (a review-only holding pen) rather than
-  // assert a misconception we can't prove.
+  // Honest fallback — reached only when there is no best move to compare the
+  // slip against (`slipCause` names every other one). Bucket it by phase
+  // rather than assert a misconception we can't prove.
   //
   // 🔒 LOG WHAT WE COULD NOT NAME (prod, 2026-09-13). On one real user's game,
   // FOUR of EIGHT captured slips came back `tag=other bucket=uncategorized` —
