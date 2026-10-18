@@ -21,8 +21,8 @@
  */
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { put } from '@vercel/blob';
-import { isAuditTraffic } from './_lib/auditTraffic';
-import { isAllowedOrigin } from './_lib/allowedOrigin';
+import { isAuditTraffic } from './_lib/auditTraffic.js';
+import { isAllowedOrigin } from './_lib/allowedOrigin.js';
 
 export const config = { api: { bodyParser: false } };
 
