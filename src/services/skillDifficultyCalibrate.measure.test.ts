@@ -17,6 +17,14 @@ import { meterOfTag } from './skillMeters';
 const SRC = process.env.SKILL_SAMPLE ?? '/tmp/claude-0/meter/lichess/games.jsonl';
 const HAVE = existsSync(SRC) && process.env.SKILL_CALIBRATE === '1';
 const PLIES_PER_GAME = Number(process.env.PLIES_PER_GAME ?? 30);
+/** Which plies to score: the default 8..38, or SKILL_PLIES="outside" for every
+ *  ply the default skips (the opening and the endgame) — a second pass whose
+ *  shards are disjoint from the first, so the fit can sum both. */
+const OUTSIDE = process.env.SKILL_PLIES === 'outside';
+const inWindow = (ply: number): boolean => {
+  const mid = ply >= 8 && ply < 8 + PLIES_PER_GAME;
+  return OUTSIDE ? !mid : mid;
+};
 
 /** Held / asked counts per rating bucket — what the fit needs, and small
  *  enough to save per shard so a long run can never be lost. */
@@ -26,7 +34,7 @@ const BUCKET = 25;
 function fit(b: Record<string, [number, number]>): { D: number; S: number; ll: number } {
   const rows = Object.entries(b).map(([k, [h, t]]) => ({ r: Number(k) + BUCKET / 2, h, t }));
   let best = { D: 1500, S: 400, ll: -Infinity };
-  for (let S = 200; S <= 2000; S += 50) {
+  for (let S = 200; S <= 6000; S += 50) {
     for (let D = -1500; D <= 3000; D += 10) {
       let ll = 0;
       for (const o of rows) {
@@ -59,7 +67,7 @@ describe.skipIf(!HAVE || !SHARD)('skill difficulty calibration — score a shard
         let ok = true;
         try { c.move(g.sans[ply]); } catch { ok = false; }
         if (!ok) break;
-        if (ply < 8 || ply >= 8 + PLIES_PER_GAME) continue;
+        if (!inWindow(ply)) continue;
         const before = ply === 0 ? 20 : g.evals[ply - 1];
         const after = g.evals[ply];
         const loss = color === 'white' ? before - after : after - before;
@@ -69,7 +77,9 @@ describe.skipIf(!HAVE || !SHARD)('skill difficulty calibration — score a shard
           if (!meterOfTag(p.tag)) continue;
           const t = (buckets[p.tag] ??= {});
           const cell = (t[key] ??= [0, 0]);
-          if (movePlayedCleanly(loss)) cell[0]++;
+          // A question that decides its own answer (the c-pawn block) says
+          // so; everything else is judged by what the move cost.
+          if ((p.outcome ?? (movePlayedCleanly(loss) ? 'held' : 'broken')) === 'held') cell[0]++;
           cell[1]++;
         }
         scored++;
@@ -89,8 +99,10 @@ describe.skipIf(process.env.SKILL_FIT !== '1')('skill difficulty calibration —
     const all: Buckets = {};
     let scored = 0;
     let games = 0;
-    for (const f of readdirSync(OUT_DIR).filter((x) => /^shard-\d+\.json$/.test(x))) {
-      const d = JSON.parse(readFileSync(`${OUT_DIR}/${f}`, 'utf8')) as { games: number; scored: number; buckets: Buckets };
+    const dirs = (process.env.SKILL_FIT_DIRS ?? OUT_DIR).split(',');
+    const files = dirs.flatMap((dir) => (existsSync(dir) ? readdirSync(dir) : []).filter((x) => /^shard-\d+\.json$/.test(x)).map((x) => `${dir}/${x}`));
+    for (const f of files) {
+      const d = JSON.parse(readFileSync(f, 'utf8')) as { games: number; scored: number; buckets: Buckets };
       scored += d.scored;
       games += d.games;
       for (const [tag, b] of Object.entries(d.buckets)) {
@@ -105,7 +117,9 @@ describe.skipIf(process.env.SKILL_FIT !== '1')('skill difficulty calibration —
     const table: Record<string, { D: number; S: number; n: number; bands: Record<string, string> }> = {};
     for (const [tag, b] of Object.entries(all)) {
       const n = Object.values(b).reduce((a, [, t]) => a + t, 0);
-      if (n < 100) continue;
+      // Under 500 answers the curve is noise (non-monotone bands): an honest
+      // "not calibrated" scores nothing rather than a guessed difficulty.
+      if (n < 500) continue;
       const { D, S } = fit(b);
       const bands: Record<string, string> = {};
       for (let lo = 600; lo < 2600; lo += 400) {
