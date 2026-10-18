@@ -39,7 +39,7 @@ import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, 
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { OPENING_PLIES, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching, type TeachingHint } from '../../services/learnBoardTeaching';
+import { OPENING_PLIES, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, threatAnswerTeaching, type TeachingHint } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -11554,6 +11554,19 @@ export function CoachTeachPage(): JSX.Element {
                   if (cost) {
                     queueHint(fenAfterReply, cost);
                   }
+                  // DANGER LEVELS, both seats (David 2026-10-18): their reply left a
+                  // piece and hit a bigger one of yours; or your move just did it to them.
+                  const counter = replySan ? counterThreatTeaching(move.fen, replySan, playerColor === 'white' ? 'w' : 'b') : null;
+                  if (counter) queueHint(fenAfterReply, counter);
+                  const yourCounter = (() => {
+                    try {
+                      const b = new Chess();
+                      for (const san of move.history.slice(0, -1)) b.move(san);
+                      return counterThreatTeaching(b.fen(), move.san, playerColor === 'white' ? 'w' : 'b');
+                    } catch { return null; }
+                  })();
+                  // Not when their reply took the piece you left — the moment has passed.
+                  if (yourCounter && !(replySan?.includes('x') && replySan.includes(yourCounter.squares[0]))) queueHint(fenAfterReply, yourCounter);
                   const tempo = replySan ? tempoTeaching([...move.history, replySan], playerColor === 'white' ? 'w' : 'b') : null;
                   if (tempo) {
                     queueHint(fenAfterReply, tempo);

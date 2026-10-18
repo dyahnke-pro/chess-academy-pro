@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**787 lines · 25 exports · 23 importers · 17 tests · 3 audits**
+**791 lines · 25 exports · 23 importers · 17 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3550) — names `BoardContext`
-- **The standard post-deploy ritual** (CLAUDE.md:6337) — names `chatTurn`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3563) — names `BoardContext`
+- **The standard post-deploy ritual** (CLAUDE.md:6360) — names `chatTurn`
 
 ## Who calls in
 

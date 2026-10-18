@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify").** (CLAUDE.md:5355) — names `planThread`
 
 ## Who calls in
 
@@ -54,7 +54,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `adoptPlanTrial` (function) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10102`
-- `src/components/Coach/CoachTeachPage.tsx:11858`
+- `src/components/Coach/CoachTeachPage.tsx:11871`
 - `src/services/planThread.test.ts:103`
 - `src/services/planThread.test.ts:110`
 

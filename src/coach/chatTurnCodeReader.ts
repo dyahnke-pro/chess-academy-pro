@@ -508,6 +508,14 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
     if (sq) return { kind: 'attack-piece', referents: [{ type: 'square', square: sq }], seat: 'them', topic: null };
   }
 
+  // "How did I leave the book?" / "what move kept me in theory?" — THIS game's
+  // departure, read off its moves (David 2026-10-18). Past tense or "this
+  // game": "where do I leave theory" is the repertoire question.
+  if (/\b(?:left|leave|leaving|out of|off|kept|keep|stay(?:ed)?|stuck to|in|on)\s+(?:(?:me|us)\s+)?(?:(?:on|in)\s+)?(?:the\s+)?(?:book|theory)\b/.test(lower)
+    && /\b(?:did|was|were|kept|left|this game|just|which move|what move|the move that)\b/.test(lower)) {
+    return { kind: 'left-book', referents: [], seat: 'me', topic: null };
+  }
+
   // "Did I just lose a pawn?" / "did I hang something?" — what the last
   // moves cost, read off the game record (pass 3: answered about a pawn that
   // was safe while the knight had just been taken).

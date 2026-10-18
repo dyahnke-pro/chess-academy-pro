@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**637 lines · 12 exports · 3 importers · 2 tests · 0 audits**
+**666 lines · 13 exports · 4 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/chatTurnAnswers.test.ts`
 - `src/coach/dispatchCoachTurn.ts`
 - `src/coach/handWalk1009.test.ts`
+- `src/coach/leftBook.test.ts`
 
 ## Exports and every call site
 
@@ -48,8 +49,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/chatTurnAnswers.test.ts:53`
 - `src/coach/chatTurnAnswers.test.ts:54`
 - `src/coach/chatTurnAnswers.test.ts:55`
-- `src/coach/dispatchCoachTurn.ts:537`
-- `src/coach/dispatchCoachTurn.ts:565`
+- `src/coach/dispatchCoachTurn.ts:536`
+- `src/coach/dispatchCoachTurn.ts:564`
 
 ### `answerDefend` (function) — 3 call sites
 - `src/coach/handWalk1009.test.ts:97`
@@ -73,10 +74,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `answerExplainLast` (function) — 1 call site
 - `src/coach/handWalk1009.test.ts:311`
 
+### `answerLeftBook` (function) — 2 call sites
+- `src/coach/leftBook.test.ts:19`
+- `src/coach/leftBook.test.ts:20`
+
 ## Tests
 
 - `src/coach/chatTurnAnswers.test.ts`
 - `src/coach/handWalk1009.test.ts`
+- `src/coach/leftBook.test.ts`
 
 ## Audits that reach it
 

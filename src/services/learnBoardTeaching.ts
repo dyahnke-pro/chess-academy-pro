@@ -9,6 +9,7 @@
 //
 // Pure: the engine reads are handed in by the page.
 import { flipSideToMove } from './threatOut';
+import { counterThreat, counterThreatLine } from './counterThreat';
 import { CAPTURE_VALUE } from './pieceValues';
 import { lineProof, legalLineProof, squaresProof, NO_PROOF, type FactProof, type Proof } from './proof';
 import { shareAdverb } from '../utils/shareWords';
@@ -413,6 +414,36 @@ export function theirMoveTeaching(fenBefore: string, san: string, student: 'w' |
     role: 'teach',
     event: { name: 'coach_their_move_cost_named', props: { surface: 'coach-teach', kind: cost.kind } },
     arrows,
+  };
+}
+
+/** DANGER LEVELS (David 2026-10-18): a move that left an attacked piece and
+ *  hit a bigger one instead. `fenBefore` is the board the move was played
+ *  from. Their move: why the piece was left, and the line that punishes
+ *  taking it (drawn ply by ply). The student's move: the find, named. */
+export function counterThreatTeaching(fenBefore: string, san: string, student: 'w' | 'b'): TeachingHint | null {
+  const c = counterThreat(fenBefore, san);
+  if (!c) return null;
+  let mover: 'w' | 'b';
+  try { mover = new Chess(fenBefore).turn(); } catch { return null; }
+  const byStudent = mover === student;
+  const text = counterThreatLine(c, byStudent);
+  const arrows: ArrowClaim[] = [];
+  if (c.line && !byStudent) {
+    try {
+      const b = new Chess(c.line.fen);
+      for (const s of c.line.sans) {
+        const before = b.fen();
+        const m = b.move(s);
+        arrows.push({ from: m.from, to: m.to, role: 'line', fen: before, source: 'learn.dangerLevels' });
+      }
+    } catch { /* the plies replayed so far still draw */ }
+  }
+  return {
+    // The sentence states its own proof (the line it names); the arrows draw it.
+    lane: 'dangerLevels', proof: NO_PROOF.stated, text, squares: c.squares, claims: [`danger-levels:${c.left.square}>${c.hit.square}`],
+    event: { name: 'coach_danger_levels_named', props: { surface: 'coach-teach', by: byStudent ? 'student' : 'opponent' } },
+    arrows, role: 'teach',
   };
 }
 

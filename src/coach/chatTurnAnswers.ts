@@ -23,6 +23,8 @@ import { walkableLine } from '../services/proof';
 import { computeExchangeLedger, netPieceWords } from '../services/exchangeLedger';
 import type { WalkableLine } from '../types';
 import { positionOf } from '../utils/samePosition';
+import { bookDeparture } from '../services/bookDeparture';
+import { bookMoveWhy } from '../services/bookMoveWhy';
 
 const name = (t: string): string => PIECE_NAMES[t] ?? 'piece';
 
@@ -255,6 +257,7 @@ export function directAnswer(turn: ResolvedChatTurn, fen: string, memory: Conver
     case 'win-piece': return answerWin(chess, sq, student);
     case 'attack-piece': return answerAttack(chess, sq, student, out);
     case 'material-change': return answerMaterialChange(history, student);
+    case 'left-book': return answerLeftBook(history, student);
     case 'explain-last': return (provedLine && explainProvedLine(provedLine, fen, student, history, out)) ?? answerExplainLast(chess, lastCoachLine, student, history);
     case 'threats': return assembleThreatAnswer(fen, ask ?? null, student === 'w' ? 'white' : 'black', turn.seat === 'me' ? 'me' : 'opponent')?.facts ?? null;
     default: return null;
@@ -633,4 +636,30 @@ export function answerExplainLast(chess: Chess, line: string | null, student: Co
     if (geo) parts.push(`If they get …${theirs.san} in, it ${toObserverSeat(geo)}.`);
   }
   return parts.length ? parts.join(' ') : null;
+}
+
+/**
+ * WHERE THIS GAME LEFT THE BOOK (David 2026-10-18) — read off the game's own
+ * moves by the one departure computer (`bookDeparture`, masters data), with
+ * the book move's job (`bookMoveWhy`) when the student left it. Theory is
+ * knowledge once the move is played, so the book move is named.
+ */
+export function answerLeftBook(history: readonly string[], student: Color): string {
+  const dep = bookDeparture(history);
+  if (!dep) {
+    return history.length === 0
+      ? 'No moves yet — the game is still at the start.'
+      : 'As far as the masters\' games show, every move so far is book — the game has not left theory yet.';
+  }
+  const moveNo = Math.ceil(dep.ply / 2);
+  if (dep.mover !== student) {
+    return dep.mainSan
+      ? `They left the book first, with ${dep.san} on move ${moveNo} — the masters play ${dep.mainSan} there. Everything you played before it was theory.`
+      : `They left the book first, with ${dep.san} on move ${moveNo}. Everything you played before it was theory.`;
+  }
+  if (!dep.mainSan) return `You left the book with ${dep.san} on move ${moveNo}.`;
+  const why = bookMoveWhy(dep.fen, dep.mainSan, dep.san, student);
+  return why
+    ? `You left the book with ${dep.san} on move ${moveNo}. ${why.text}`
+    : `You left the book with ${dep.san} on move ${moveNo} — the masters play ${dep.mainSan} there.`;
 }

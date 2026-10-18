@@ -194,9 +194,12 @@ export function backwardLook(args: {
     }
     try {
       const verdict = callInaccuracyDetailed({
-        // LEARN FREE PLAY NEVER NAMES THE BETTER MOVE UNASKED (David
-        // 2026-10-10): the why of the error, and the move only when asked.
-        namesBetterMove: false,
+        // THEIR BETTER MOVE IS NAMED (David 2026-10-18: "I know that goes against
+        // never say the move. But that is meant for before the move is played").
+        // The rule protects the STUDENT's next move; the opponent's stronger
+        // move is a moment already past, and naming it is the lesson ("a
+        // stronger opponent plays X — your Y was loose").
+        namesBetterMove: true,
         fenBefore: args.fenBefore,
         playedSan: args.playedSan,
         bestSan: args.bestSan,

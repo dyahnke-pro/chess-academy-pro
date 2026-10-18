@@ -64,6 +64,7 @@ export const COMPUTER_ROLES: Record<LearnLane, ComputerRole> = {
   gem: { computer: 'punishGems', tag: 'missed-tactic', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'isTacticsQuestion' } },
   tactic: { computer: 'tacticsDetector', tag: 'missed-tactic', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'isTacticsQuestion' } },
   threat: { computer: 'groundedAnswer.detectNewThreat', tag: 'missed-opponents-threat', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'isOpponentMoveQuestion' } },
+  dangerLevels: { computer: 'counterThreat', tag: 'missed-opponents-threat', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'isOpponentMoveQuestion' } },
   threatAnswer: { computer: 'threatAnswer', tag: 'missed-opponents-threat', held: PRE, broken: SLIP, askable: { state: 'wired', via: 'isOpponentMoveQuestion' } },
   falseAlarm: { computer: 'falseAlarm', tag: 'missed-opponents-threat', held: { state: 'wired', via: 'recordTeachingEvidence' }, broken: SLIP, askable: { state: 'wired', via: 'theirMoveAnswerLines' } },
   mistake: { computer: 'backwardLook / inaccuracyCall', tag: null, held: { state: 'na', why: 'only speaks on a slip' }, broken: SLIP, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },

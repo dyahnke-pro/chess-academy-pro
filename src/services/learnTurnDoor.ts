@@ -46,6 +46,7 @@ export type LearnLane =
   | 'tactic'
   | 'prophylaxis'
   | 'threat'
+  | 'dangerLevels'
   | 'commentary'
   | 'behavior'
   | 'openingIdea'
@@ -161,7 +162,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   positionFacts: 'point', commentary: 'point', positional: 'point', kingSafety: 'point', splitPosition: 'point',
   behavior: 'point',
   phase: 'verdict', character: 'verdict',
-  threat: 'now', threatAnswer: 'now', prophylaxis: 'now', gem: 'now', trapAhead: 'now', priorityFirst: 'now', countMethod: 'now',
+  threat: 'now', dangerLevels: 'now', threatAnswer: 'now', prophylaxis: 'now', gem: 'now', trapAhead: 'now', priorityFirst: 'now', countMethod: 'now',
   checkMethod: 'now', stalemate: 'now', autopilot: 'now', keepPressing: 'now', pawnEnding: 'now',
   openingEquivalence: 'name', tradeLedger: 'affirm', notYetPlayed: 'affirm', holdResource: 'affirm', captureChoice: 'affirm',
   breakRace: 'affirm', kickMap: 'point', patternFails: 'refute',
@@ -190,6 +191,10 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   gem: { kind: 'gem', why: 'a verified punish the coach just handed over', lead: 100, always: true },
   tactic: { kind: 'tactic', why: 'a tactic the detectors proved for the student', lead: 90, always: true },
   threat: { kind: 'threat', why: 'danger to the student on this board', lead: 95, always: true },
+  // DANGER LEVELS (David 2026-10-18): a threat answered with a bigger one —
+  // why their piece was left, and the line that punishes taking it. It covers
+  // the threat it names, so it leads it.
+  dangerLevels: { kind: 'threat', why: 'a threat answered with a bigger one: the piece left, the bigger piece hit, and the line that punishes taking it', lead: 96, always: true },
   commentary: { kind: 'computed', why: 'the computed board read (playCommentary)', lead: 30 },
   behavior: { kind: 'observation', why: 'a Danya behaviour, rate-matched to his corpus', lead: 25 },
   // The opening's plan counted off master games (P2 #0): the break each side
@@ -361,7 +366,7 @@ export interface LaneFact {
 
 /** DANGER speaks first, whatever else is on the board (David 2026-10-05:
  *  "threat first"): an insight before "your knight is attacked" is backwards. */
-export const DANGER_LANES: ReadonlySet<LearnLane> = new Set<LearnLane>(['threat', 'threatAnswer']);
+export const DANGER_LANES: ReadonlySet<LearnLane> = new Set<LearnLane>(['threat', 'dangerLevels', 'threatAnswer']);
 
 export interface TurnDecision {
   pkg: VoicePackage;
