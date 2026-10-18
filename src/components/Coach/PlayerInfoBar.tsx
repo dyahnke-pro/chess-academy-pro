@@ -12,6 +12,10 @@ interface PlayerInfoBarProps {
   className?: string;
   /** Remaining clock time in ms. When undefined, no clock is shown (unlimited). */
   clockMs?: number;
+  /** A short live status beside the name ("Thinking…"). It lives in the bar,
+   *  never under the board: a line that comes and goes there moved the board
+   *  every move (David's phone, 2026-10-18). */
+  status?: string;
 }
 
 export function PlayerInfoBar({
@@ -23,6 +27,7 @@ export function PlayerInfoBar({
   isActive,
   className = '',
   clockMs,
+  status,
 }: PlayerInfoBarProps): JSX.Element {
   const showClock = clockMs !== undefined;
   const urgent = showClock && clockMs <= 20_000;
@@ -51,6 +56,11 @@ export function PlayerInfoBar({
         {rating !== undefined && (
           <span className="text-xs flex-shrink-0" style={{ color: 'var(--color-text-muted)' }}>
             ({rating})
+          </span>
+        )}
+        {status && (
+          <span data-testid="coach-thinking" className="text-xs animate-pulse truncate" style={{ color: 'var(--color-text-muted)' }}>
+            {status}
           </span>
         )}
       </div>

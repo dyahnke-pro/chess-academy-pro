@@ -13292,6 +13292,10 @@ export function CoachTeachPage(): JSX.Element {
             capturedPieces={isTeachPlayerWhite ? teachCaptured.black : teachCaptured.white}
             materialAdvantage={isTeachPlayerWhite ? Math.max(0, -teachMaterialAdv) : Math.max(0, teachMaterialAdv)}
             isActive={busy}
+            // THE SILENCE SAYS WHY (David 2026-10-17): while the reply waits on
+            // the reason, the board is locked — said in the coach's bar, so the
+            // board never moves for it.
+            status={opponentThinking ? 'Thinking…' : undefined}
           />
         </div>
 
@@ -13471,14 +13475,6 @@ export function CoachTeachPage(): JSX.Element {
                   annotationHighlights={coachTipsOn && highlights.length > 0 ? highlights : undefined}
                 />
               )
-            )}
-            {/* THE SILENCE SAYS WHY (David 2026-10-17): while the reply waits on
-                the reason, the board is locked — say so, so a student does not
-                read the pause as nothing to hear. */}
-            {opponentThinking && (
-              <div data-testid="coach-thinking" className="text-xs text-theme-text-muted text-center mt-1 animate-pulse">
-                Thinking…
-              </div>
             )}
           </div>
         </div>
