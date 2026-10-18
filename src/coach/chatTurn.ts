@@ -317,7 +317,7 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   'phase-profile': { gloss: 'which game phase I am weakest in', lane: 'phase-profile', answerer: 'live', canonical: fixed('which phase am I weakest in?') },
   'counter-repertoire': { gloss: 'what should I PLAY against a named opening (a recommendation, not my past results)', lane: 'counter-repertoire', answerer: 'live',
     canonical: (t) => topicOr(t, (x) => `what should I play against the ${x}?`, null) },
-  'repertoire-gap': { gloss: 'gaps in my repertoire, across my games (where I usually leave theory) — not the game on the board', lane: 'repertoire-gap', answerer: 'live', canonical: fixed('where are the gaps in my repertoire?') },
+  'repertoire-gap': { gloss: 'gaps in my repertoire, across my games (where theory usually runs out) — not the game on the board', lane: 'repertoire-gap', answerer: 'live', canonical: fixed('where are the gaps in my repertoire?') },
   accuracy: { gloss: 'my accuracy', lane: 'accuracy', answerer: 'live', canonical: fixed("what's my accuracy?") },
   consistency: { gloss: 'how consistent I am', lane: 'consistency', answerer: 'live', canonical: fixed('how consistent am I?') },
   'time-trouble': { gloss: 'do I play too fast / time trouble', lane: 'time-trouble', answerer: 'live', canonical: fixed('do I play too fast?') },
@@ -370,10 +370,10 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
   'win-piece': direct('can I win / take / get back one of their pieces or pawns ("can I get my pawn back?")'),
   'attack-piece': direct('how can I attack / go after one of their pieces or pawns ("can I attack the b7 pawn?")'),
   'material-change': direct('did I just lose / drop / hang something ("did I just lose a pawn?")'),
-  // THIS game, not the repertoire (David 2026-10-18: "How did I leave the book
-  // moves?" got "Not sure what you mean"; "What was the move that kept me on
-  // book?" got the threat).
-  'left-book': direct('where or how THIS game left the opening book / theory, or which move would have kept it in book ("how did I leave the book?", "what move kept me in theory?") — the game on the board, not the student\'s repertoire'),
+  // THIS game, not the repertoire (David's Learn chat 2026-10-18: a question
+  // about leaving the book got "Not sure what you mean", and one about the move
+  // that kept him in book got the threat).
+  'left-book': direct('where or how THIS game left the opening book / theory, or which move would have kept it in book ("how did this game leave the book?", "which move kept the game in theory?") — the game on the board, not the student\'s repertoire'),
   'threats': direct('what are they threatening / what is my threat (the threats on the board, either side)'),
   'develop-next': { gloss: 'which piece should I develop / bring out next', lane: 'best-move', answerer: 'live', canonical: fixed("what's my best move?") },
   'best-defence': { gloss: 'what is the OPPONENT\'s best defence / reply to a move ("what\'s their best defence?", "what if they don\'t take?", "how do they defend against Ng5?")', lane: 'best-move', answerer: 'live', canonical: fixed("what's my best move?") },
@@ -786,5 +786,8 @@ export function askBackAtCatchAll(kind: ChatKind, clarify: string | undefined, h
   // the position — said as that, never as "masters are unknown here".
   if (kind === 'master-play') return 'No master games in the database reached this position — it covers the opening phase.';
   if (kind === 'player-games') return "Only the games in this app and the openings it teaches are known here, not other players' records.";
-  return 'Not sure what you mean — could you say it another way?';
+  return NOT_UNDERSTOOD_LINE;
 }
+
+/** The catch-all reply when a question could not be read — a second one in a row is flagged. */
+export const NOT_UNDERSTOOD_LINE = 'Not sure what you mean — could you say it another way?';

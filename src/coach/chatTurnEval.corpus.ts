@@ -7,10 +7,10 @@ import type { ChatTurnEvalCase } from './chatTurnEval';
 export const CHAT_TURN_EVAL_CASES: readonly ChatTurnEvalCase[] = [
   // ── the board, now ──
   // ── this game's book departure (David's Learn chat 2026-10-18, typo kept) ──
-  { text: 'How did I leave the book moves?', expect: ['left-book'], probe: 'plain' },
+  { text: 'how did my game leave the book moves?', expect: ['left-book'], probe: 'plain' },
   { text: 'What was the love the kept me on book?', expect: ['left-book'], probe: 'indirect' },
   { text: 'which move kept me in theory?', expect: ['left-book'], probe: 'plain' },
-  { text: 'where did I go out of book this game?', expect: ['left-book'], probe: 'plain' },
+  { text: 'where did this game go out of book?', expect: ['left-book'], probe: 'plain' },
   // ── requests as steps (live walk 2026-10-09 + real native turns) ──
   { text: 'teach me the Italian', expect: ['command', 'training-request'], probe: 'plain', steps: [{ action: 'teach-opening', opening: 'Italian Game' }] },
   { text: 'I want to practice the Italian opening, teach me', expect: ['command', 'training-request'], probe: 'indirect', steps: [{ action: 'teach-opening', opening: 'Italian Game' }] },

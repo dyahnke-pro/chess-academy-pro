@@ -441,8 +441,8 @@ export function counterThreatTeaching(fenBefore: string, san: string, student: '
     } catch { /* the plies replayed so far still draw */ }
   }
   return {
-    // The sentence states its own proof (the line it names); the arrows draw it.
-    lane: 'dangerLevels', proof: NO_PROOF.stated, text, squares: c.squares, claims: [`danger-levels:${c.left.square}>${c.hit.square}`],
+    // The proof is the line that punishes taking the piece left.
+    lane: 'dangerLevels', proof: (c.line ? lineProof(c.line, true) : null) ?? squaresProof(text, c.squares) ?? NO_PROOF.description, text, squares: c.squares, claims: [`danger-levels:${c.left.square}>${c.hit.square}`],
     event: { name: 'coach_danger_levels_named', props: { surface: 'coach-teach', by: byStudent ? 'student' : 'opponent' } },
     arrows, role: 'teach',
   };
@@ -464,7 +464,7 @@ export function playedConceptTeaching(
   return {
     concept: c,
     hint: {
-      lane: 'playedConcept', proof: squaresProof(text, squares) ?? NO_PROOF.stated, text, squares, claims: [`played-concept:${c.type}:${squares.join('')}`],
+      lane: 'playedConcept', proof: squaresProof(text, squares) ?? NO_PROOF.description, text, squares, claims: [`played-concept:${c.type}:${squares.join('')}`],
       event: { name: 'coach_played_concept_named', props: { surface: 'coach-teach', concept: c.type, by: c.mover === student ? 'student' : 'opponent' } },
       arrows: [], role: 'teach',
     },

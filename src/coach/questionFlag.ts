@@ -8,6 +8,18 @@
 // question can be read and taught later. Any answered turn clears it. The
 // coach never says "I" (RULEBOOK V1/V2): the line is said of the coach.
 import { captureEvent } from '../services/analytics';
+import { NOT_UNDERSTOOD_LINE } from './chatTurn';
+import { STEMS } from './smallTalk';
+
+/** The replies that mean "the question was not understood" — a clarification
+ *  ("open a board first", "which position?") is an answer, not a miss. */
+const NOT_UNDERSTOOD = new Set<string>([NOT_UNDERSTOOD_LINE, ...STEMS.unclear]);
+const norm = (t: string): string => t.trim().replace(/\s+/g, ' ');
+
+/** Was this reply a "did not understand"? The stock fallback counts too. */
+export function isNotUnderstood(text: string, stock: boolean): boolean {
+  return stock || NOT_UNDERSTOOD.has(norm(text));
+}
 
 export const FLAG_LINE = "That one's flagged for David, so the coach can answer it next time.";
 

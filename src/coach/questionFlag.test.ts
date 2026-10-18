@@ -21,3 +21,12 @@ describe('a question still not understood after "say it another way" is flagged 
     expect(FLAG_LINE).not.toMatch(/\bI\b/);
   });
 });
+
+describe('only a "did not understand" counts as a miss', () => {
+  it('the catch-all line and the stock fallback are misses; a clarification is not', async () => {
+    const { isNotUnderstood } = await import('./questionFlag');
+    expect(isNotUnderstood('Not sure what you mean — could you say it another way?', false)).toBe(true);
+    expect(isNotUnderstood('anything', true)).toBe(true);
+    expect(isNotUnderstood('There is no board on this screen. Open a game and ask again.', false)).toBe(false);
+  });
+});

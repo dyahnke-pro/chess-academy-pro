@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**56 lines · 3 exports · 5 importers · 3 tests · 0 audits**
+**56 lines · 4 exports · 6 importers · 3 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/coach/ask/playName.ts`
+- `src/coach/questionFlag.ts`
 - `src/coach/smallTalk.test.ts`
 - `src/services/coachApi.banterContract.test.ts`
 - `src/services/coachApi.master-integration.test.ts`
@@ -26,7 +27,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `smallTalkKind` (function) — 3 call sites
 - `src/coach/ask/playName.ts:87`
 - `src/coach/smallTalk.test.ts:12`
-- `src/services/coachApi.ts:2170`
+- `src/services/coachApi.ts:2186`
+
+### `STEMS` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `smallTalkReply` (function) — 7 call sites
 - `src/coach/smallTalk.test.ts:16`
@@ -34,8 +38,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachApi.banterContract.test.ts:14`
 - `src/services/coachApi.master-integration.test.ts:172`
 - `src/services/coachApi.master-integration.test.ts:332`
-- `src/services/coachApi.ts:2170`
-- `src/services/coachApi.ts:2216`
+- `src/services/coachApi.ts:2186`
+- `src/services/coachApi.ts:2232`
 
 ## Tests
 
@@ -49,4 +53,5 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._
+- `scripts/audit-learn-full-game.mjs`
+- `scripts/audit-review-overhaul-prod.mjs`

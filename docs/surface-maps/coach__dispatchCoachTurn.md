@@ -51,10 +51,10 @@
 - `src/coach/dispatchCoachTurn.test.ts:239`
 
 ### `setChatTurnReaderForTests` (function) — 43 call sites
-- `src/coach/chatKindContracts.test.ts:337`
-- `src/coach/chatKindContracts.test.ts:387`
-- `src/coach/chatKindContracts.test.ts:412`
-- `src/coach/chatKindContracts.test.ts:417`
+- `src/coach/chatKindContracts.test.ts:339`
+- `src/coach/chatKindContracts.test.ts:389`
+- `src/coach/chatKindContracts.test.ts:414`
+- `src/coach/chatKindContracts.test.ts:419`
 - `src/coach/chatTurnRow.outcome.test.ts:28`
 - `src/coach/chatTurnRow.outcome.test.ts:37`
 - `src/coach/coachService.askReader.integration.test.ts:31`
@@ -96,7 +96,7 @@
 - `src/components/Coach/GameChatPanel.test.tsx:295`
 
 ### `resetConversations` (function) — 9 call sites
-- `src/coach/chatKindContracts.test.ts:335`
+- `src/coach/chatKindContracts.test.ts:337`
 - `src/coach/dispatchCoachTurn.noBoard.test.ts:14`
 - `src/coach/dispatchCoachTurn.pieceQuestions.test.ts:21`
 - `src/coach/dispatchCoachTurn.positional.test.ts:21`
@@ -146,9 +146,9 @@
 - `src/components/Coach/CoachTeachPage.tsx:7514`
 
 ### `dispatchCoachTurn` (function) — 48 call sites
-- `src/coach/chatKindContracts.test.ts:389`
-- `src/coach/chatKindContracts.test.ts:413`
-- `src/coach/chatKindContracts.test.ts:418`
+- `src/coach/chatKindContracts.test.ts:391`
+- `src/coach/chatKindContracts.test.ts:415`
+- `src/coach/chatKindContracts.test.ts:420`
 - `src/coach/chatTurnRow.outcome.test.ts:39`
 - `src/coach/coachService.askReader.integration.test.ts:32`
 - `src/coach/dispatchCoachTurn.boardAnswer.test.ts:35`
