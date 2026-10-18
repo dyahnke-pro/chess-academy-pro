@@ -76,8 +76,20 @@ export function matchRouteByTopic(text: string): { path: string; label: string }
 /** Match a navigation command to a real route, or null. Adds the navigation-
  *  verb gate on top of the topic match (so a bare "tactics" mention doesn't
  *  navigate — only "take me to tactics" / "open tactics" does). */
+/** A destination whose own name is already a command: the whole message
+ *  "import my games" is a request to go there, with no "open" in front
+ *  (2026-10-18: the opener's "Import my games" chip routed nowhere). Only an
+ *  exact whole message, so "how do I import my games?" stays a question. */
+const COMMAND_NAMES = new Set(['import games', 'import my games']);
+
 export function matchNavigationRoute(text: string): NavigationMatch | null {
-  if (!text || !NAV_INTENT_RE.test(text.toLowerCase())) return null;
+  if (!text) return null;
+  const whole = text.trim().replace(/[.!]+$/, '').toLowerCase();
+  if (COMMAND_NAMES.has(whole)) {
+    const m = matchRouteByTopic(whole);
+    if (m) return { path: m.path, ack: `Opening ${m.label}.` };
+  }
+  if (!NAV_INTENT_RE.test(text.toLowerCase())) return null;
   const m = matchRouteByTopic(text);
   return m ? { path: m.path, ack: `Opening ${m.label}.` } : null;
 }

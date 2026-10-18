@@ -100,7 +100,7 @@ import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voice
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
 import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGemChoices, parseGemChipLabel, MORE_TRAPS_CHIP } from '../../data/lessons/gemTrapMenu';
 import { gemId } from '../../data/lessons/punishGems';
-import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../../data/coachGreetings';
+import { pickGreeting, pickVisitChips, weaknessNudgeFromItem } from '../../data/coachGreetings';
 import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { getUnifiedWeaknessProfile, themesForTactic } from '../../services/weaknessSpine';
 import { ratingTrendNote, untriedFeatureNudge, coldStartGuidance, coldStartApplies, matchFirstRunChoice, firstRunFollowUp } from '../../services/classroomOpener';
@@ -12389,7 +12389,7 @@ export function CoachTeachPage(): JSX.Element {
       if (rolodexOpening) decideGreeting(true);
       else setTimeout(() => decideGreeting(true), 2500);
       if (!rolodexOpening) {
-        const generic = pickSuggestedQuestions(greetingRotation, 3);
+        const generic = pickVisitChips(greetingRotation);
         // Show the generic set immediately, then asynchronously upgrade to a
         // nudge-led set if a stored weakness profile is available (non-blocking
         // — the kickoff IIFE is synchronous). Null-guarded end to end.

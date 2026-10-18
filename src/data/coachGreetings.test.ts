@@ -4,6 +4,8 @@ import {
   SUGGESTED_QUESTIONS,
   pickGreeting,
   pickSuggestedQuestions,
+  pickVisitChips,
+  APP_FUNCTION_CHIPS,
   weaknessNudgeQuestion,
   weaknessNudgeFromItem,
 } from './coachGreetings';
@@ -87,5 +89,30 @@ describe('coachGreetings', () => {
       // Every nudge must be recognized — progress (weakness) OR record-vs (opening).
       expect(isProgressQuestion(nudge!) || isRecordVsQuestion(nudge!)).toBe(true);
     }
+  });
+});
+
+describe('the rotating function pickers', () => {
+  it('every function chip routes to something the coach does', async () => {
+    const { matchFirstRunChoice } = await import('../services/firstRunPickers');
+    const { matchThinkingLessonRequest } = await import('../services/customLessonPlan');
+    const { matchTrainingAidRoute } = await import('../services/trainingAidRouter');
+    const { matchNavigationRoute } = await import('../services/navigationRouter');
+    for (const chip of APP_FUNCTION_CHIPS) {
+      const routes = matchFirstRunChoice(chip) !== null || matchThinkingLessonRequest(chip)
+        || matchTrainingAidRoute(chip) !== null || matchNavigationRoute(chip) !== null;
+      expect(routes, chip).toBe(true);
+    }
+  }, 30_000);
+
+  it('the next visit shows the next pair, and every function comes round', () => {
+    const seen = new Set<string>();
+    for (let v = 0; v < 3; v++) {
+      const [a, b] = pickVisitChips(v);
+      expect(a).not.toBe(b);
+      seen.add(a); seen.add(b);
+    }
+    expect(seen.size).toBe(APP_FUNCTION_CHIPS.length);
+    expect(pickVisitChips(0)).toHaveLength(3);
   });
 });

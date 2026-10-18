@@ -78,3 +78,10 @@ describe('matchRouteByTopic', () => {
     expect(matchRouteByTopic('how does en passant work?')).toBeNull();
   });
 });
+
+describe('a destination named as a command', () => {
+  it('"Import my games" goes to the import screen; the question does not', () => {
+    expect(matchNavigationRoute('Import my games')?.path).toBe('/games/import');
+    expect(matchNavigationRoute('how do I import my games?')).toBeNull();
+  });
+});

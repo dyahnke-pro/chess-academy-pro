@@ -44,6 +44,28 @@ export const SUGGESTED_QUESTIONS: readonly string[] = [
   'Teach me the Italian Game',
 ];
 
+/** The app's functions, offered on the picker row so a student sees what the
+ *  coach can do — a different pair each visit (David 2026-10-18: "I want
+ *  different functions to rotate through on different visits"). Every one is
+ *  a request the coach already routes (`coachGreetings.test` holds that). */
+export const APP_FUNCTION_CHIPS: readonly string[] = [
+  'Watch an opening',
+  'Drill my weaknesses',
+  'Play an opening',
+  'Learn how to think',
+  'Train an endgame',
+  'Import my games',
+];
+
+/** The picker row for a visit: two of the app's functions, then a question —
+ *  each rotating on its own, so the pair and the question both change. */
+export function pickVisitChips(index: number): string[] {
+  const n = APP_FUNCTION_CHIPS.length;
+  // Step by two, so the next visit shows the next PAIR, not a shifted overlap.
+  const i = ((Math.trunc(index) * 2) % n + n) % n;
+  return [APP_FUNCTION_CHIPS[i], APP_FUNCTION_CHIPS[(i + 1) % n], ...pickSuggestedQuestions(index, 1)];
+}
+
 /** Pick a greeting by rotation index. */
 export function pickGreeting(index: number): string {
   const i = ((Math.trunc(index) % COACH_GREETINGS.length) + COACH_GREETINGS.length) % COACH_GREETINGS.length;
