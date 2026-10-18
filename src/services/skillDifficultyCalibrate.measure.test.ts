@@ -30,7 +30,7 @@ function fit(b: Record<string, [number, number]>): { D: number; S: number; ll: n
   const rows = Object.entries(b).map(([k, [h, t]]) => ({ r: Number(k) + BUCKET / 2, h, t }));
   let best = { D: 1500, S: 400, ll: -Infinity };
   for (let S = 200; S <= 6000; S += 50) {
-    for (let D = -1500; D <= 3000; D += 10) {
+    for (let D = -4000; D <= 3000; D += 10) {
       let ll = 0;
       for (const o of rows) {
         const p = 1 / (1 + Math.pow(10, (D - o.r) / S));
