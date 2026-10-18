@@ -15,7 +15,7 @@ beforeEach(async () => {
   resetFreeTierSyncForTest();
   server = null;
   posts.length = 0;
-  vi.stubGlobal('fetch', vi.fn(async (url: string, init?: RequestInit) => {
+  vi.stubGlobal('fetch', vi.fn(async (_url: string, init?: RequestInit) => {
     if (init?.method === 'POST') {
       const body = JSON.parse(init.body as string) as { ledger: Record<string, unknown> };
       posts.push(body);

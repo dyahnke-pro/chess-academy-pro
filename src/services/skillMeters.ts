@@ -108,7 +108,9 @@ export interface SkillMeter extends MeterState {
   rated: boolean;
 }
 
-const Q = Math.LN10 / 400;
+/** Points per tenfold change in odds — the standard rating scale. */
+const ELO_SCALE = 400;
+const Q = Math.LN10 / ELO_SCALE;
 /** Every new skill starts here; the student's overall rating centres it. */
 export const START_RD = 350;
 /** How unsure a question's difficulty is. */
@@ -127,7 +129,7 @@ const g = (rd: number): number => 1 / Math.sqrt(1 + (3 * Q * Q * rd * rd) / (Mat
  *  coin. */
 export function scoreEvent(s: MeterState, e: Pick<SkillEvent, 'score' | 'difficulty' | 'weight' | 'scale'>): MeterState {
   if (e.weight <= 0) return { ...s, events: s.events + 1 };
-  const scale = e.scale ?? 400;
+  const scale = e.scale ?? ELO_SCALE;
   const q = Math.LN10 / scale;
   const gj = g(DIFFICULTY_RD);
   const expected = 1 / (1 + Math.pow(10, (-gj * (s.rating - e.difficulty)) / scale));
@@ -172,7 +174,7 @@ export function computeSkillMeters(events: readonly SkillEvent[], startRating: n
     const t = tally.get(e.meter) ?? { held: 0, n: 0, expected: 0 };
     t.held += e.weight * e.score;
     t.n += e.weight;
-    t.expected += e.weight / (1 + Math.pow(10, (e.difficulty - startRating) / (e.scale ?? 400)));
+    t.expected += e.weight / (1 + Math.pow(10, (e.difficulty - startRating) / (e.scale ?? ELO_SCALE)));
     tally.set(e.meter, t);
   }
   const residual = new Map<SkillMeterId, { r: number; n: number }>();
@@ -186,7 +188,7 @@ export function computeSkillMeters(events: readonly SkillEvent[], startRating: n
   return SKILL_METERS.map(({ id, label }) => {
     const raw = state.get(id) ?? { rating: startRating, rd: START_RD, events: 0 };
     const res = residual.get(id);
-    const s = { ...raw, rating: res ? startRating + ((res.r - centre) * 400) / Math.LN10 : startRating };
+    const s = { ...raw, rating: res ? startRating + ((res.r - centre) * ELO_SCALE) / Math.LN10 : startRating };
     const { level, toNext } = levelOf(s.rating);
     // Rated once the student's own answers outweigh the pull toward their
     // rating — a count of answered moments, not the flat curve's confidence.
@@ -235,7 +237,7 @@ export function eventsFromRecord(
   // honest "we cannot say how hard that was" beats a guessed number.
   const d = (tag: string): { difficulty: number; scale: number; known: boolean } => {
     const c = difficultyOf(tag);
-    return c ? { ...c, known: true } : { difficulty: 0, scale: 400, known: false };
+    return c ? { ...c, known: true } : { difficulty: 0, scale: ELO_SCALE, known: false };
   };
   const byKey = new Map<string, SkillEvent>();
   for (const r of slips) {
