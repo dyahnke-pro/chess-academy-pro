@@ -30,6 +30,7 @@
 import { mateStakes, costStakes, type FactStakes } from './factStakes';
 import { Chess } from 'chess.js';
 import { findConcession, findStudentDrawback } from './concessionBeat';
+import { inaccuracySpeaks } from './inaccuracyVoice';
 import { callInaccuracy, callInaccuracyDetailed, errorWhyFor, type InaccuracyDecline, type PriorMove } from './inaccuracyCall';
 export { priorMoveLeadingTo } from './inaccuracyCall';
 import { describeConcessions } from './reviewTeachingPoints';
@@ -482,4 +483,14 @@ export function moverQuality(args: {
       ? { evalBefore: args.moverEvalAfterCp + args.cpLoss, evalAfter: args.moverEvalAfterCp, isWhiteMove: true }
       : {}),
   });
+}
+
+/** Whether the student's slip on this move is SPOKEN in Learn: a mistake or a
+ *  blunder always is; an inaccuracy only where their own record earns it
+ *  (`inaccuracyVoice` — this phase and this skill first). */
+export function slipSpoken(args: Parameters<typeof moverQuality>[0] & {
+  fenBefore: string; playedSan: string; bestSan: string | null; historySans: readonly string[];
+}): boolean {
+  if (moverQuality(args) !== 'inaccuracy') return true;
+  return inaccuracySpeaks({ fenBefore: args.fenBefore, playedSan: args.playedSan, bestSan: args.bestSan, historySans: args.historySans, ply: args.historySans.length - 1 });
 }

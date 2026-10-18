@@ -20,6 +20,8 @@
  * inaccuracy — quiet is a voice decision, never a recording one.
  */
 import type { MisconceptionTagRecord } from '../types';
+import { classifyMisconceptionNow } from './misconceptionClassifier';
+import { classifyPhase } from './gamePhaseService';
 
 export type GamePhase = 'opening' | 'middlegame' | 'endgame';
 
@@ -68,14 +70,26 @@ export function inaccuracyVerdict(rec: InaccuracyRecord, phase: GamePhase, tag: 
 }
 
 let cached: InaccuracyRecord = tallyInaccuracies([]);
+let loadedAt = 0;
+/** The record changes as games are analysed; a read older than this is redone. */
+const STALE_MS = 60_000;
 
-/** The verdict from the last record read (everything speaks until it loads). */
-export function inaccuracySpeaks(phase: GamePhase, tag: string | null): boolean {
+/** Whether the student's inaccuracy on this move is spoken — the phase and the
+ *  skill read here, so a surface asks one question. Reads the last record
+ *  (everything speaks until it has loaded) and refreshes it when stale. */
+export function inaccuracySpeaks(move: { fenBefore: string; playedSan: string; bestSan?: string | null; historySans?: readonly string[]; ply: number }): boolean {
+  if (Date.now() - loadedAt > STALE_MS) void loadInaccuracyVoice();
+  const phase = classifyPhase(move.fenBefore, { ply: move.ply });
+  const tag = classifyMisconceptionNow({
+    fen: move.fenBefore, playedSan: move.playedSan, bestSan: move.bestSan ?? undefined,
+    ...(move.historySans ? { historySans: [...move.historySans] } : {}),
+  })?.tag ?? null;
   return inaccuracyVerdict(cached, phase, tag).speaks;
 }
 
 /** Read the record and refresh the tally. Safe to call often. */
 export async function loadInaccuracyVoice(): Promise<void> {
+  loadedAt = Date.now();
   try {
     const { db } = await import('../db/schema');
     cached = tallyInaccuracies(await db.misconceptionTags.toArray());

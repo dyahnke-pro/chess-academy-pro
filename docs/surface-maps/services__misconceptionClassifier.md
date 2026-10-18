@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**551 lines · 4 exports · 15 importers · 10 tests · 1 audits**
+**551 lines · 4 exports · 14 importers · 10 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,14 +12,13 @@
 
 ## Who calls in
 
-- `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/autoAnalyzeGame.ts`
 - `src/services/capabilityEvidence.ts`
 - `src/services/classifierCoverage.measure.test.ts`
-- `src/services/coachFeatureService.ts`
 - `src/services/discussionPractice.test.ts`
 - `src/services/discussionPractice.ts`
 - `src/services/expertFade.measure.test.ts`
+- `src/services/inaccuracyVoice.ts`
 - `src/services/learnFundamentalNarration.ts`
 - `src/services/learnMistakeRecurrence.test.ts`
 - `src/services/misconceptionClassifier.test.ts`
@@ -69,12 +68,11 @@
 - `src/services/misconceptionHungIsTaken.test.ts:18`
 - `src/services/section14Diagnosis.test.ts:74`
 
-### `classifyMisconceptionNow` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11112`
+### `classifyMisconceptionNow` (function) — 9 call sites
 - `src/services/capabilityEvidence.ts:514`
 - `src/services/classifierCoverage.measure.test.ts:66`
-- `src/services/coachFeatureService.ts:1636`
 - `src/services/expertFade.measure.test.ts:102`
+- `src/services/inaccuracyVoice.ts:83`
 - `src/services/learnFundamentalNarration.ts:215`
 - `src/services/learnMistakeRecurrence.test.ts:12`
 - `src/services/principleAttribution.walkedIntoTactic.test.ts:17`

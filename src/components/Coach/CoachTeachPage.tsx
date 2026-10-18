@@ -186,8 +186,6 @@ import { fetchChesscomPlayerGames } from '../../services/chesscomGamesService';
 import { OpeningPlayMode } from '../Openings/OpeningPlayMode';
 import type { WalkthroughSession } from '../../types/walkthrough';
 import { classifyPhase } from '../../services/gamePhaseService';
-import { inaccuracySpeaks, loadInaccuracyVoice } from '../../services/inaccuracyVoice';
-import { classifyMisconceptionNow } from '../../services/misconceptionClassifier';
 import { narrateContinuationMove } from '../../services/continuationMoveNarration';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
@@ -210,7 +208,7 @@ import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead
 import { scaleGap, packageForRegister } from '../../services/hintRegister';
 import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
-import { backwardLook, moverQuality, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf } from '../../services/backwardLook';
+import { backwardLook, slipSpoken, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf } from '../../services/backwardLook';
 import { learnFundamentalVerdict, learnHeldRecurrence, learnMistakeRecurrence } from '../../services/learnFundamentalNarration';
 import { FUNDAMENTAL_TAG, type FundamentalId } from '../../services/principleAttribution';
 import { FUNDAMENTAL_LABEL } from '../../services/fundamentalsCatalog';
@@ -999,7 +997,7 @@ export function CoachTeachPage(): JSX.Element {
   // WHAT EACH OPENING IS, loaded with the page (2026-10-14): warmed only when
   // the name was first said, it was never ready for that line — the name went
   // out bare and the departure plan (`planFor`) was missing on the same turns.
-  useEffect(() => { warmOpeningIdentity(); void loadInaccuracyVoice(); }, []);
+  useEffect(() => { warmOpeningIdentity(); }, []);
   useEffect(() => {
     const fullmove = Number.parseInt(game.fen.split(' ')[5] ?? '1', 10) || 1;
     if (fullmove <= 20) warmOpeningBook(game.fen, 'coach-teach');
@@ -11102,15 +11100,12 @@ export function CoachTeachPage(): JSX.Element {
                     // first and this one stays quiet (`inaccuracyVoice`), read
                     // for this phase and this skill first. The record still
                     // keeps it; only the voice waits.
-                    const quietSlip = moverQuality({
+                    const quietSlip = !slipSpoken({
                       cpLoss,
                       moverEvalAfterCp: studentEvalAfterCp,
                       ...mateContext(preStudentRead, mid, playerColor),
-                    }) === 'inaccuracy'
-                      && !inaccuracySpeaks(
-                        classifyPhase(fenBefore, { ply: move.history.length - 1 }),
-                        classifyMisconceptionNow({ fen: fenBefore, playedSan: move.san, bestSan: studentBestSan ?? undefined, historySans: move.history })?.tag ?? null,
-                      );
+                      fenBefore, playedSan: move.san, bestSan: studentBestSan ?? null, historySans: move.history,
+                    });
                     const look = quietSlip ? null : backwardLook({
                       fenBefore,
                       fenAfter: move.fen,
