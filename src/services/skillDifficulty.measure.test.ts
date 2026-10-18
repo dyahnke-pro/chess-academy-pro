@@ -72,12 +72,17 @@ describe.skipIf(!HAVE)('skill difficulty from the population', () => {
       const pop = list.filter((o) => !o.me);
       const D = fitD(pop);
       const holdRate = (l: typeof list) => (l.length ? Math.round((100 * l.filter((o) => o.held).length) / l.length) : null);
-      return { tag, meter: meterOfTag(tag), n: pop.length, D, popHold: holdRate(pop), meN: list.length - pop.length, meHold: holdRate(list.filter((o) => o.me)) };
+      const bands: Record<string, string> = {};
+      for (const [lo, hi] of [[0, 1000], [1000, 1200], [1200, 1400], [1400, 1600], [1600, 1800], [1800, 3500]]) {
+        const b = pop.filter((o) => o.r >= lo && o.r < hi);
+        bands[`${lo}-${hi}`] = b.length >= 20 ? `${holdRate(b)}% (${b.length})` : `- (${b.length})`;
+      }
+      return { tag, meter: meterOfTag(tag), n: pop.length, D, popHold: holdRate(pop), meN: list.length - pop.length, meHold: holdRate(list.filter((o) => o.me)), bands };
     }).sort((a, b) => b.n - a.n);
     mkdirSync('audit-reports', { recursive: true });
     writeFileSync('audit-reports/skill-difficulty.json', JSON.stringify({ moves, rows }, null, 2));
     console.log(`moves ${moves}`);
-    for (const r of rows) console.log(`${r.tag.padEnd(26)} ${String(r.meter).padEnd(12)} pop n=${String(r.n).padStart(5)} hold ${r.popHold}% D=${r.D} | you n=${r.meN} hold ${r.meHold}%`);
+    for (const r of rows) console.log(`${r.tag.padEnd(26)} pop n=${String(r.n).padStart(5)} hold ${r.popHold}% | bands ${Object.entries(r.bands).map(([k, v]) => `${k}:${v}`).join(' ')}`);
     expect(moves).toBeGreaterThan(0);
-  }, 600_000);
+  }, 3_000_000);
 });
