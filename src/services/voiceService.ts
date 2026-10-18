@@ -1963,10 +1963,14 @@ class VoiceService {
         kind: 'voice-fallover',
         category: 'subsystem',
         source: 'voiceService.speakInternal',
-        summary: `cloud voice failed (${cloudReason}) → Web Speech for "${text.slice(0, 32)}"`,
+        // Say what really happened (2026-10-18). With the Web Speech tier
+        // switched off, nothing plays: the line is SKIPPED. The old summary
+        // said "→ Web Speech" either way, so a silent skip read as a robot
+        // voice nobody ever heard.
+        summary: `cloud voice failed (${cloudReason}) → ${WEB_SPEECH_FALLBACK_ENABLED ? 'Web Speech' : 'line skipped, no fallback voice'} for "${text.slice(0, 32)}"`,
         details: JSON.stringify({
           fromTier: 'cloud',
-          toTier: 'web-speech',
+          toTier: WEB_SPEECH_FALLBACK_ENABLED ? 'web-speech' : 'skipped',
           reason: cloudReason,
           cloudStatus: this.lastSpeakDiagnostic.cloudStatus ?? null,
           textLength: text.length,
