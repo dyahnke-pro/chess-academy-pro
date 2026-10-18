@@ -6388,63 +6388,81 @@ export function assembleGameReviewAnswer(opts: {
     const raw = m.color === 'white' ? m.bestMoveEval - m.evaluation : m.evaluation - m.bestMoveEval;
     return raw > 0 ? raw / 100 : null;
   };
-  const fmtWhiteEval = (cp: number): string => `${cp > 0 ? '+' : ''}${(cp / 100).toFixed(1)} for White`;
 
   const blunders = anns.filter((a) => a.classification === 'blunder');
   const mistakes = anns.filter((a) => a.classification === 'mistake');
   const inaccuracies = anns.filter((a) => a.classification === 'inaccuracy');
   const total = blunders.length + mistakes.length + inaccuracies.length;
 
-  const parts: string[] = [
-    `Game: ${opts.white} (White) vs ${opts.black} (Black). Result: ${opts.result}. About ${opts.moveCount} moves.`,
-    `Engine analysis (Stockfish), across both players: ${blunders.length} blunder(s), ${mistakes.length} mistake(s), ${inaccuracies.length} inaccuracy/inaccuracies.`,
-  ];
+  // FINISHED SPOKEN PROSE, second person when the student's seat is known
+  // (2026-10-18: narration computed-only — this text goes out with no model
+  // rewrite, so it is written the way the coach says it).
+  const sc = opts.studentColor;
+  const nameOf = (c: 'white' | 'black'): string => (c === 'white' ? opts.white : opts.black);
+  const actor = (c: 'white' | 'black'): string => (sc ? (c === sc ? 'you' : 'they') : nameOf(c));
+  const counted = (b: number, mi: number, ina: number): string => {
+    const bits = [
+      b ? `${b} ${b === 1 ? 'blunder' : 'blunders'}` : '',
+      mi ? `${mi} ${mi === 1 ? 'mistake' : 'mistakes'}` : '',
+      ina ? `${ina} ${ina === 1 ? 'inaccuracy' : 'inaccuracies'}` : '',
+    ].filter(Boolean);
+    return bits.length ? andList(bits) : 'nothing';
+  };
+  const countsFor = (c: 'white' | 'black'): string => counted(
+    blunders.filter((a) => a.color === c).length,
+    mistakes.filter((a) => a.color === c).length,
+    inaccuracies.filter((a) => a.color === c).length,
+  );
 
-  // Each critical moment is grounded: the move played, the eval AFTER it, and the
-  // engine's preferred move. No free "why" — the eval swing + the better move ARE
-  // the why.
+  const parts: string[] = [];
+  const moves = `in about ${opts.moveCount} moves`;
+  if (sc) {
+    const opp = nameOf(sc === 'white' ? 'black' : 'white');
+    const won = (opts.result === '1-0' && sc === 'white') || (opts.result === '0-1' && sc === 'black');
+    const lost = (opts.result === '1-0' && sc === 'black') || (opts.result === '0-1' && sc === 'white');
+    const seat = sc === 'white' ? 'White' : 'Black';
+    const how = won ? 'won' : lost ? 'lost' : opts.result === '1/2-1/2' ? 'drew' : 'played';
+    parts.push(`You ${how} as ${seat} against ${opp}, ${moves}.`);
+    parts.push(`The engine flagged ${countsFor(sc)} from you, and ${countsFor(sc === 'white' ? 'black' : 'white')} from them.`);
+  } else {
+    const outcome = opts.result === '1-0' ? `${opts.white} won` : opts.result === '0-1' ? `${opts.black} won` : opts.result === '1/2-1/2' ? 'it was drawn' : 'no result was recorded';
+    parts.push(`${opts.white} had White against ${opts.black}; ${outcome}, ${moves}.`);
+    parts.push(`The engine flagged ${counted(blunders.length, mistakes.length, inaccuracies.length)} across both players.`);
+  }
+
+  // Each critical moment is grounded: the move played, what it cost, and the
+  // engine's preferred move with WHY (its geometry on the board).
   const critical = anns.filter(
     (a) => a.classification === 'blunder' || a.classification === 'mistake' || a.classification === 'brilliant',
   );
-  if (critical.length > 0) {
-    parts.push('Critical moments:');
-    // EVERY critical moment (G4.5: "no ceiling on … moments in a recap"). A
-    // messy 40-move game has more than eight, and the ones past the eighth were
-    // exactly the late-game collapses the student most needed to see.
-    for (const m of critical) {
-      const dot = m.color === 'black' ? '…' : '.';
-      const evalStr = m.evaluation !== null ? `eval ${m.evaluation > 0 ? '+' : ''}${(m.evaluation / 100).toFixed(1)} for White` : '';
-      // ROOT the "why" in the engine-reasoning walk: name the engine's preferred
-      // move in SAN + what it achieves (fork/pin/wins/…), not a raw UCI.
-      const reason = engineReason(m);
-      const bestStr = reason
-        ? `the engine preferred ${reason.san}${reason.why ? `, which ${reason.why}` : ''}`
-        : m.bestMove
-          ? `the engine preferred ${m.bestMove}`
-          : '';
-      // The counterfactual anchor: what best play would have kept + the cost of
-      // the move played, in real pawns. Only on genuine errors with both evals.
-      const swing = m.classification === 'brilliant' ? null : swingPawns(m);
-      const costStr = swing !== null && swing >= 0.5 && typeof m.bestMoveEval === 'number'
-        // "points", not "pawns". These two sentences land in the SAME spoken
-        // paragraph as the turning-point line below, and they disagreed —
-        // "swung about 4.0 pawns" immediately followed by "about 4.0 points".
-        // One unit per read; the app says points everywhere else.
-        ? ` Best play here kept it at ${fmtWhiteEval(m.bestMoveEval)} — this one move swung it by ${costWords(swing * 100)}.`
-        : '';
-      parts.push(`- Move ${m.moveNumber}${dot} ${m.san} — ${m.classification.toUpperCase()}${evalStr ? `, ${evalStr}` : ''}${bestStr ? `; ${bestStr}` : ''}.${costStr}`);
+  // EVERY critical moment (G4.5: "no ceiling on … moments in a recap"). A
+  // messy 40-move game has more than eight, and the ones past the eighth were
+  // exactly the late-game collapses the student most needed to see.
+  for (const m of critical) {
+    const who = actor(m.color);
+    if (m.classification === 'brilliant') {
+      parts.push(`On move ${m.moveNumber}, ${who} found ${m.san} — a brilliant move.`);
+      continue;
     }
-    // Name THE turning point when the game had several costed moments — the
-    // biggest single swing is the story's hinge, computed, never chosen by the LLM.
-    const costed = critical
-      .map((m) => ({ m, swing: m.classification === 'brilliant' ? null : swingPawns(m) }))
-      .filter((x): x is { m: MoveAnnotation; swing: number } => x.swing !== null && x.swing >= 1.0)
-      .sort((a, b) => b.swing - a.swing);
-    if (costed.length >= 2) {
-      const top = costed[0];
-      const dot = top.m.color === 'black' ? '…' : '.';
-      parts.push(`The turning point: move ${top.m.moveNumber}${dot} ${top.m.san} — the game's biggest single swing, ${costWords(top.swing * 100)}.`);
-    }
+    const swing = swingPawns(m);
+    // "points", not "pawns" — one unit per read; the app says points everywhere.
+    const cost = swing !== null && swing >= 0.5 ? ` that cost ${costWords(swing * 100)}` : '';
+    // ROOT the "why" in the engine-reasoning walk: the preferred move in SAN +
+    // what it achieves. With no board to read, the move is not named at all —
+    // a raw UCI string is never spoken.
+    const reason = engineReason(m);
+    const better = reason ? ` ${reason.san} was better${reason.why ? `: it ${reason.why}` : ''}.` : '';
+    parts.push(`On move ${m.moveNumber}, ${who} played ${m.san}, a ${m.classification}${cost}.${better}`);
+  }
+  // Name THE turning point when the game had several costed moments — the
+  // biggest single swing is the story's hinge, computed, never chosen by the LLM.
+  const costed = critical
+    .map((m) => ({ m, swing: m.classification === 'brilliant' ? null : swingPawns(m) }))
+    .filter((x): x is { m: MoveAnnotation; swing: number } => x.swing !== null && x.swing >= 1.0)
+    .sort((a, b) => b.swing - a.swing);
+  if (costed.length >= 2) {
+    const top = costed[0];
+    parts.push(`The turning point was move ${top.m.moveNumber}, ${top.m.san} — the biggest swing of the game, ${costWords(top.swing * 100)}.`);
   }
 
   // Honest, computed calibration — never "well played" when the engine
@@ -6452,7 +6470,6 @@ export function assembleGameReviewAnswer(opts: {
   // colour is known, so an opponent's blunders can't be read as the student's
   // (board-awareness sweep, 2026-07-22). When the colour is unknown, describe
   // the GAME (both players) rather than misattribute a personal grade.
-  const sc = opts.studentColor;
   const myB = sc ? blunders.filter((a) => a.color === sc).length : blunders.length;
   const myM = sc ? mistakes.filter((a) => a.color === sc).length : mistakes.length;
   const myTotal = sc
@@ -6471,7 +6488,7 @@ export function assembleGameReviewAnswer(opts: {
       : 'A solid game with a few inaccuracies on the board.');
   parts.push(verdict);
 
-  return { facts: parts.join('\n'), bestMoveSan: null, bestMoveFromTo: null, sources: ['engine:stockfish'] };
+  return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['engine:stockfish'] };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

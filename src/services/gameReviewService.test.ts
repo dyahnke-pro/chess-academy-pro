@@ -39,7 +39,7 @@ describe('requestGameReview (grounded)', () => {
     // computed — the review must voice exactly those.
     expect(review).toContain('1 blunder');
     expect(review).toContain('Qh5');
-    expect(review).toMatch(/engine preferred Nf3/);
+    expect(review).toMatch(/On move 12, Alice played Qh5, a blunder/);
     expect(review.toLowerCase()).toContain('turning point'); // the 1-blunder verdict
   });
 

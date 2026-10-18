@@ -92,18 +92,19 @@ describe('assembleGameReviewAnswer — review rooted in the engine reasoning', (
     ];
     const a = assembleGameReviewAnswer({ white: 'me', black: 'you', result: '1-0', moveCount: 3, annotations: anns, pgn });
     expect(a).not.toBeNull();
-    expect(a!.facts).toMatch(/engine preferred g6/);
-    expect(a!.facts).toMatch(/attacks the queen on h5/);
+    expect(a!.facts).toMatch(/g6 was better: it attacks the queen on h5/);
     expect(a!.facts).not.toMatch(/g7g6/); // no raw UCI leaks
   });
 
-  it('degrades to the raw best move when no PGN is supplied', () => {
+  it('never speaks a raw UCI best move when no PGN is supplied', () => {
     const anns: MoveAnnotation[] = [
       { moveNumber: 3, color: 'black', san: 'Nf6', evaluation: 900, bestMove: 'g7g6', bestMoveEval: 20, classification: 'blunder', comment: null },
     ];
-    const a = assembleGameReviewAnswer({ white: 'me', black: 'you', result: '1-0', moveCount: 3, annotations: anns });
+    const a = assembleGameReviewAnswer({ white: 'Ann', black: 'Bo', studentColor: 'black', result: '1-0', moveCount: 3, annotations: anns });
     expect(a).not.toBeNull();
-    expect(a!.facts).toMatch(/engine preferred g7g6/); // no board to compute SAN/geometry
+    expect(a!.facts).toMatch(/^You lost as Black against Ann, in about 3 moves\. The engine flagged 1 blunder from you, and nothing from them\./);
+    expect(a!.facts).not.toMatch(/g7g6/); // no board to compute SAN — the move goes unnamed
+    expect(a!.facts).toMatch(/On move 3, you played Nf6, a blunder/);
   });
 
   // COUNTERFACTUAL material for the review register (David 2026-07-11: reviews
@@ -115,8 +116,7 @@ describe('assembleGameReviewAnswer — review rooted in the engine reasoning', (
       { moveNumber: 3, color: 'black', san: 'Nf6', evaluation: 900, bestMove: 'g7g6', bestMoveEval: 20, classification: 'blunder', comment: null },
     ];
     const a = assembleGameReviewAnswer({ white: 'me', black: 'you', result: '1-0', moveCount: 3, annotations: anns });
-    expect(a!.facts).toMatch(/Best play here kept it at \+0\.2 for White/);
-    expect(a!.facts).toMatch(/swung it by five points or more/);
+    expect(a!.facts).toMatch(/Nf6, a blunder that cost five points or more/);
   });
 
   it('names the computed turning point when several costed moments exist', () => {
@@ -127,7 +127,7 @@ describe('assembleGameReviewAnswer — review rooted in the engine reasoning', (
       { moveNumber: 18, color: 'black', san: 'Rd8', evaluation: 370, bestMove: 'f7f6', bestMoveEval: -30, classification: 'blunder', comment: null },
     ];
     const a = assembleGameReviewAnswer({ white: 'me', black: 'you', result: '1-0', moveCount: 30, annotations: anns });
-    expect(a!.facts).toMatch(/The turning point: move 18… Rd8 — the game's biggest single swing, three or four points\./);
+    expect(a!.facts).toMatch(/The turning point was move 18, Rd8 — the biggest swing of the game, three or four points\./);
   });
 
   it('adds no swing on a brilliant move or when bestMoveEval is missing (old annotations)', () => {
@@ -136,7 +136,7 @@ describe('assembleGameReviewAnswer — review rooted in the engine reasoning', (
       { moveNumber: 20, color: 'white', san: 'Qh4', evaluation: -200, bestMove: 'g2g3', bestMoveEval: null, classification: 'blunder', comment: null },
     ];
     const a = assembleGameReviewAnswer({ white: 'me', black: 'you', result: '0-1', moveCount: 30, annotations: anns });
-    expect(a!.facts).not.toMatch(/swung it by/);
-    expect(a!.facts).not.toMatch(/The turning point: move/);
+    expect(a!.facts).not.toMatch(/that cost/);
+    expect(a!.facts).not.toMatch(/The turning point was/);
   });
 });

@@ -31,7 +31,8 @@ export async function requestGameReview(
 
   // Step 2: Assemble the review FACTS from the engine annotations and voice
   // them. Nothing is free-composed — the counts, evals, and preferred moves are
-  // all the engine's; the LLM only phrases them (warmly).
+  // all the engine's, and the assembler writes them as finished second-person
+  // prose — so it goes out raw (2026-10-18: narration computed-only).
   onProgress?.('Writing the review…');
   // The STUDENT's colour so the verdict grades THEM, not the opponent's errors
   // (board-awareness sweep, 2026-07-22). Coach games resolve from the bot seat;
@@ -54,7 +55,7 @@ export async function requestGameReview(
   });
 
   const analysis = grounded
-    ? (await voiceFacts(grounded.facts, { intent: 'game-review', warm: true })) ?? grounded.facts
+    ? (await voiceFacts(grounded.facts, { intent: 'game-review', preferRaw: true })) ?? grounded.facts
     : 'No engine analysis was available for this game, so there is nothing to review yet.';
 
   if (onStream) onStream(analysis);

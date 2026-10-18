@@ -292,7 +292,7 @@
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
 - `src/services/contentGenerationService.ts:146`
-- `src/services/gameReviewService.ts:57`
+- `src/services/gameReviewService.ts:58`
 - `src/services/kidGameCoach.ts:219`
 - `src/services/mistakeNarrationVoice.ts:109`
 - `src/services/openingGenerator.ts:2348`
