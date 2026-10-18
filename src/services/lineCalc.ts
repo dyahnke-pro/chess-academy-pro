@@ -10,6 +10,7 @@ import { Chess } from 'chess.js';
 import { countWords } from '../utils/countWords';
 import type { ArrowClaim } from './arrowDoor';
 import { heardProofCut, netPieceWords } from './exchangeLedger';
+import { MATERIAL_VALUE } from './pieceValues';
 
 
 export interface LinePly { from: string; to: string; color: 'w' | 'b'; fen: string; san: string }
@@ -78,7 +79,7 @@ export function lineWins(
   const sq = (san: string): string | undefined => /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(san)?.[1];
   if (priorTook && prior && !(/x/.test(plies[0]?.san ?? '') && sq(plies[0].san) === sq(prior.san))) {
     gave = [...gave, priorTook];
-    net -= PIECE_POINTS[priorTook] ?? 0;
+    net -= MATERIAL_VALUE[priorTook] ?? 0;
     if (net < 1) return null;
   }
   return {
@@ -115,7 +116,6 @@ export interface MateLine {
   text: string;
 }
 
-const PIECE_POINTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
 /** The piece the move before the line captured, or null. */
 function priorCapture(prior: { fenBefore: string; san: string } | null): string | null {
   if (!prior || !/x/.test(prior.san)) return null;

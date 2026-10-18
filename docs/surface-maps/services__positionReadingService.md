@@ -377,7 +377,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttribution.ts:821`
 - `src/services/principleAttribution.ts:845`
 - `src/services/reviewFullData.ts:425`
-- `src/services/skillQuestions.ts:38`
+- `src/services/skillQuestions.ts:39`
 - `src/services/tradeQuality.ts:173`
 
 ### `takingTheAttackerAnswers` (function) — 8 call sites

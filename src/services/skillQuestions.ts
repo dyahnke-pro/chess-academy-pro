@@ -20,8 +20,9 @@
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { signedLegalSeeFor } from './positionReadingService';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
+import { MATERIAL_VALUE } from './pieceValues';
 
-const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+const VAL = MATERIAL_VALUE;
 
 export interface SkillQuestion { tag: MisconceptionTagId; posedImportance: number }
 
@@ -35,7 +36,7 @@ function captureNet(fen: string, m: Move): number {
   if (!m.captured) return 0;
   const c = new Chess(fen);
   c.move(m.san);
-  const back = Math.max(0, signedLegalSeeFor(c.fen(), m.to as Square, c.turn()));
+  const back = Math.max(0, signedLegalSeeFor(c.fen(), m.to, c.turn()));
   return VAL[m.captured] - back;
 }
 
@@ -86,7 +87,7 @@ export function skillQuestions(fenBefore: string): SkillQuestion[] {
 
   // The sacrifice by their king: a capture next to it that loses on the count.
   const theirKing = kingSquare(c, side === 'w' ? 'b' : 'w');
-  if (theirKing && moves.some((m) => m.captured && m.piece !== 'p' && near(m.to as Square, theirKing) && captureNet(fenBefore, m) <= -2)) {
+  if (theirKing && moves.some((m) => m.captured && m.piece !== 'p' && near(m.to, theirKing) && captureNet(fenBefore, m) <= -2)) {
     out.push({ tag: 'overvalued-attack', posedImportance: POSED_SHARP });
   }
 

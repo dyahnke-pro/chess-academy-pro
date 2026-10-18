@@ -83,7 +83,7 @@ describe('section 14 says which gate stopped it', () => {
     expect((c?.why ?? []).length).toBeGreaterThan(0);
     // Every reason names its fundamental and a concrete gate, never a bare "no".
     for (const r of c?.why ?? []) {
-      expect(r).toMatch(/^(calculation-depth|left-book-early|no-plan): .{10,}/);
+      expect(r).toMatch(/^(calculation-depth|left-book-early|no-plan|walked-into-tactic): .{10,}/);
     }
   });
 
