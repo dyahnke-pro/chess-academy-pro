@@ -12,6 +12,7 @@ const pick = (kind: UpNextPick['kind'], hub: UpNextPick['hub'], extra: Partial<U
 });
 const state = (ranked: UpNextPick[], done: string[] = [], thinking: ThinkingSignal | null = null): UpNextState => ({
   ring: ranked.slice(0, 3), done: new Set(done), current: ranked[0] ?? null, ranked, thinking,
+  section: { tactics: null, openings: null, coach: null },
 });
 const input = (ranked: UpNextPick[], o: Partial<SuggestionInput> = {}): SuggestionInput => ({
   state: state(ranked), ownGames: 5, accountLinked: true, ...o,
