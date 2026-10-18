@@ -25,6 +25,9 @@ import { recordLaneEvidence } from './capabilityEvidence';
 import { stepForMethodClaim, THINKING_STEPS } from './thinkingSteps';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import type { AnalysisLine } from '../types';
+import { decisiveReason, reasonEarned, reasonPosed, REASON_WAIT_CEILING_MS, type DecisiveReason } from './decisiveReason';
+import { emitDecisiveReason } from './decisiveReasonEvents';
+import type { IntentReads } from './moveIntent';
 import type { LearnLane } from './learnTurnDoor';
 import type { ArrowClaim } from './arrowDoor';
 import { recaptureChoice } from './recaptureChoice';
@@ -100,6 +103,9 @@ export interface TeachingHint {
   evidence?: { tag: MisconceptionTagId; posedImportance: number };
   /** What rides on it (`factStakes`), when its computer has a number. */
   stakes?: FactStakes;
+  /** Teach or describe, when the computer knows (`LaneFact.role`): a
+   *  consequence with no material number is still a reason, never an aside. */
+  role?: 'teach' | 'describe';
 }
 
 /** The board after the student's move and their reply, or null. */
@@ -402,6 +408,9 @@ export function theirMoveTeaching(fenBefore: string, san: string, student: 'w' |
     : [];
   return {
     lane: 'theirMoveCost', proof: NO_PROOF.description, text: cost.text, squares: cost.squares, claims: [`cost-${cost.kind}-${cost.squares[0]}`],
+    // A lasting cost (a hole, a shut bishop, castling gone) is a consequence,
+    // the why of their move — never an aside (A-plan P6: held 2 of 4).
+    role: 'teach',
     event: { name: 'coach_their_move_cost_named', props: { surface: 'coach-teach', kind: cost.kind } },
     arrows,
   };
@@ -476,6 +485,9 @@ export function countMethodTeaching(fen: string, student: 'w' | 'b'): TeachingHi
   if (!m) return null;
   return {
     lane: 'countMethod', proof: NO_PROOF.method, text: m.text, squares: [m.square], claims: ['count-method'],
+    // What the count decides, now: the exchange's net either way (A-plan P1 —
+    // unstaked, the door held it as an aside 4 of 4 times).
+    stakes: { points: Math.abs(m.net), plies: 0 },
     event: { name: 'coach_count_method_taught', props: { surface: 'coach-teach' } },
     arrows: [],
   };
@@ -913,6 +925,20 @@ export function studentMoveAnswerLines(history: readonly string[], ply: number, 
   return out;
 }
 
+/** WHAT THEIR MOVE WAS FOR, when a board computer can say it: the threat of
+ *  yours it stopped, or the fork trick it sidestepped. The one source for
+ *  "their move has a point" — an answer that has none may call it quiet, one
+ *  that has one never does (escalating walk 2026-10-17). */
+export function theirMovePoint(history: readonly string[], ply: number, student: 'w' | 'b'): string | null {
+  const fenBefore = replayTo(history, ply);
+  if (!fenBefore || ply < 0 || ply >= history.length) return null;
+  const prev = ply >= 1 ? replayTo(history, ply - 1) : null;
+  const stop = prev ? threatStoppedBy(prev, fenBefore, history[ply], student) : null;
+  if (stop) return stop.text;
+  const mover: 'w' | 'b' = student === 'w' ? 'b' : 'w';
+  return trickSidestepped(fenBefore, history[ply], mover, 'your')?.text ?? null;
+}
+
 /** "What did their move do? Do I have to deal with it?" — what it cost them,
  *  the tempo count, and — when their move is the last on the board and the
  *  engine's best line at the current position is known — whether its threat can
@@ -929,12 +955,8 @@ export function theirMoveAnswerLines(history: readonly string[], ply: number, st
   // WHAT IT STOPPED — the threat of yours their move took away, or the fork
   // trick it sidestepped. The same static computers Learn and Review speak
   // (Play on demand, David 2026-10-02).
-  const prev = ply >= 1 ? replayTo(history, ply - 1) : null;
-  const stop = prev ? threatStoppedBy(prev, fenBefore, history[ply], student) : null;
-  const mover: 'w' | 'b' = student === 'w' ? 'b' : 'w';
-  const trick = stop ? null : trickSidestepped(fenBefore, history[ply], mover, 'your');
-  if (stop) out.push(stop.text);
-  else if (trick) out.push(trick.text);
+  const point = theirMovePoint(history, ply, student);
+  if (point) out.push(point);
   const cost = theirMoveTeaching(fenBefore, history[ply], student);
   if (cost) out.push(cost.text);
   const tempo = tempoTeaching(history.slice(0, ply + 1), student);
@@ -1191,4 +1213,40 @@ export function cheaperAttackerLine(by: string, bySq: string, piece: string, sq:
     `Their ${attacker} on ${bySq} is after your ${target} on ${sq} — guard or not, it would cost your ${target} for their ${attacker}.`,
   ];
   return stems[((rot % stems.length) + stems.length) % stems.length];
+}
+
+/** One prevention rule for every surface — see `moveIntent.preventsNamedIdea`. */
+export { preventsNamedIdea, STOPPED_THEIR_IDEA, preventStakes } from './moveIntent';
+
+// ── THE REASON, IN LEARN (David 2026-10-17) ──────────────────────────────────
+// One door for both seats: the student's move and the coach's reply each get
+// the reason that accounts for their gap over the next-best, with the board
+// evidence as its proof, reported to the audit in the same breath. The page
+// asks once; it never composes the computer, the proof and the emission itself.
+
+/** Should the reply wait for the student's reason? Only at a real decision
+ *  out of book; then for at most `REASON_WAIT_CEILING_MS`. */
+export function learnReasonWaitMs(lines: readonly AnalysisLine[] | undefined, mover: 'w' | 'b', inBook: boolean): number {
+  return learnReasonDue(lines, mover, inBook) ? REASON_WAIT_CEILING_MS : 0;
+}
+
+/** Is there a reason to give for this move at all — a real decision, out of book? */
+export function learnReasonDue(lines: readonly AnalysisLine[] | undefined, mover: 'w' | 'b', inBook: boolean): boolean {
+  return !inBook && reasonEarned(lines, mover);
+}
+
+export interface LearnReason {
+  reason: DecisiveReason;
+  proof: FactProof;
+  /** The skill the student showed (their own move only). */
+  posed: { tag: MisconceptionTagId; posedImportance: number } | null;
+}
+
+export function learnMoveReason(input: { fenBefore: string; san: string; reads: IntentReads; seat: 'student' | 'opponent'; opponentLastSan: string | null; asksToSee?: boolean }): LearnReason | null {
+  const reason = decisiveReason(input);
+  if (!reason) return null;
+  const posed = input.seat === 'student' ? reasonPosed(reason) : null;
+  emitDecisiveReason({ surface: 'learn', kind: reason.kind, source: reason.source, about: reason.about, gapCp: reason.gapCp, stakeCp: reason.stakeCp, posedTag: posed?.tag ?? null, outcome: posed ? 'held' : 'explained' });
+  const proof = (reason.line ? lineProof(reason.line) : null) ?? squaresProof(reason.text, reason.squares) ?? NO_PROOF.description;
+  return { reason, proof, posed };
 }

@@ -284,5 +284,3 @@ export async function buildTablebaseWalk(fen: string, maxPlies = 24): Promise<En
   }
   return steps;
 }
-
-export const _endgameTbInternals = { categoryToWdl, moverWdlAfter, buildEndgameWhy, bestMovePoint };

@@ -4,15 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**686 lines · 18 exports · 8 importers · 6 tests · 0 audits**
+**562 lines · 13 exports · 9 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6143) — names `tacticClassifierService`
+- **The standard post-deploy ritual** (CLAUDE.md:6317) — names `tacticClassifierService`
 
 ## Who calls in
 
 - `src/components/Debug/OpeningBlundersPage.tsx`
+- `src/components/Debug/openingTrapChip.ts`
 - `src/components/Insights/GameInsightsPage.tsx`
 - `src/components/Puzzles/PuzzleBoard.tsx`
 - `src/services/gameAnalysisService.ts`
@@ -35,15 +36,17 @@
 ### `NON_MOTIF_THEMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `motifThemeLabels` (function) — 5 call sites
-- `src/components/Debug/OpeningBlundersPage.tsx:770`
-- `src/components/Debug/OpeningBlundersPage.tsx:980`
+### `motifThemeLabels` (function) — 7 call sites
+- `src/components/Debug/OpeningBlundersPage.tsx:712`
+- `src/components/Debug/OpeningBlundersPage.tsx:928`
+- `src/components/Debug/openingTrapChip.ts:30`
+- `src/components/Debug/openingTrapChip.ts:33`
 - `src/services/tacticClassifierService.test.ts:74`
 - `src/services/tacticClassifierService.test.ts:75`
 - `src/services/tacticClassifierService.test.ts:76`
 
 ### `focusThemeLabel` (function) — 6 call sites
-- `src/components/Puzzles/PuzzleBoard.tsx:252`
+- `src/components/Puzzles/PuzzleBoard.tsx:273`
 - `src/services/tacticClassifierService.test.ts:57`
 - `src/services/tacticClassifierService.test.ts:58`
 - `src/services/tacticClassifierService.test.ts:63`
@@ -51,16 +54,16 @@
 - `src/services/tacticClassifierService.test.ts:68`
 
 ### `getTacticTypeFromThemes` (function) — 3 call sites
-- `src/components/Puzzles/PuzzleBoard.tsx:250`
+- `src/components/Puzzles/PuzzleBoard.tsx:271`
 - `src/services/puzzleMissService.ts:57`
 - `src/services/puzzleMissService.ts:81`
 
 ### `getPrimaryThemeLabel` (function) — 2 call sites
-- `src/components/Puzzles/PuzzleBoard.tsx:253`
+- `src/components/Puzzles/PuzzleBoard.tsx:274`
 - `src/services/tacticClassifierService.test.ts:56`
 
 ### `classifyTacticsFromGame` (function) — 6 call sites
-- `src/services/gameAnalysisService.ts:2170`
+- `src/services/gameAnalysisService.ts:2352`
 - `src/services/tacticClassifierService.fill.test.ts:61`
 - `src/services/tacticClassifierService.fill.test.ts:65`
 - `src/services/tacticClassifierService.fill.test.ts:66`
@@ -78,27 +81,12 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `backfillClassifiedTactics` (function) — 6 call sites
-- `src/components/Insights/GameInsightsPage.tsx:116`
+- `src/components/Insights/GameInsightsPage.tsx:117`
 - `src/services/tacticClassifierService.fill.test.ts:38`
 - `src/services/tacticClassifierService.fill.test.ts:47`
 - `src/services/tacticClassifierService.fill.test.ts:53`
 - `src/services/tacticClassifierService.fill.test.ts:54`
 - `src/services/tacticClassifierService.fill.test.ts:98`
-
-### `getTacticMotifStats` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `getTacticsForGame` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `getClassifiedTacticCount` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `getRecentClassifiedTactics` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `getTacticsByType` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 

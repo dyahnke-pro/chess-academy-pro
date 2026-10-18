@@ -1657,41 +1657,21 @@ export function findOpenFiles(fen: string): OpenFilesInfo {
 
 export interface SpaceInfo { white: number; black: number }
 
-/** Whether `rank` sits in the classic "contestable" zone for `color` — the
- *  same band `findPieceQuality` uses for knight outposts, reused here for
- *  consistency across the codebase's structural reads. */
-function inContestedZone(rank: number, color: Color): boolean {
-  return color === 'w' ? rank >= 4 && rank <= 6 : rank >= 3 && rank <= 5;
-}
 
-/** SPACE — how many squares in the opponent's half each side's PAWNS control
- *  (the classic engine space metric: squares a pawn attacks, not squares it
- *  merely occupies). More space = more room to maneuver, less for the
- *  opponent. Pure geometry (G3) — pawn diagonal-attack squares, deduplicated. */
-export function computeSpace(fen: string): SpaceInfo {
-  let chess: Chess;
-  try { chess = new Chess(fen); } catch { return { white: 0, black: 0 }; }
-  const controlled: Record<Color, Set<string>> = { w: new Set(), b: new Set() };
-  for (const row of chess.board()) for (const cell of row) {
-    if (!cell || cell.type !== 'p') continue;
-    const file = cell.square.charCodeAt(0) - 97;
-    const rank = Number(cell.square[1]);
-    const forward = cell.color === 'w' ? 1 : -1;
-    for (const df of [-1, 1]) {
-      const f = file + df;
-      const r = rank + forward;
-      if (f < 0 || f > 7 || r < 1 || r > 8) continue;
-      if (!inContestedZone(r, cell.color)) continue;
-      controlled[cell.color].add(`${String.fromCharCode(97 + f)}${r}`);
-    }
-  }
-  return { white: controlled.w.size, black: controlled.b.size };
+/** "MORE SPACE", ONE RULE (claim harvest 2026-10-17: "You own more space" was
+ *  read off a pawn-hit count (since deleted) while the weighing read territory,
+ *  so the coach told White it owned more space with Black's pawns on e5, g6,
+ *  h5 and f3). A side owns more space when its territory leads by the margin. */
+export const MORE_SPACE_MARGIN = 2;
+export function ownsMoreSpace(fen: string, side: 'w' | 'b'): boolean {
+  const sp = computeTerritory(fen);
+  return side === 'w' ? sp.white >= sp.black + MORE_SPACE_MARGIN : sp.black >= sp.white + MORE_SPACE_MARGIN;
 }
 
 /** TERRITORY — the space a side's pawn chain has claimed behind it: squares on
  *  the c–f files, from its second rank up to its most advanced pawn on that
  *  file, that no enemy pawn attacks (the engine's own space term). Where
- *  `computeSpace` counts squares a pawn HITS in the contested band — symmetric
+ *  a pawn-hit count (the deleted `computeSpace`) counts squares a pawn HITS — symmetric
  *  for d4/e5 against d6/g6 — this counts the room BEHIND the pawns, which is
  *  what "we have more space" means (speed run, game 1). */
 export function computeTerritory(fen: string): SpaceInfo {
@@ -2511,19 +2491,22 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     });
   }
 
-  // SPACE — pawn-controlled squares in the opponent's half.
-  const space = computeSpace(fen);
-  const mySpace = me === 'w' ? space.white : space.black;
-  const theirSpace = me === 'w' ? space.black : space.white;
-  if (mySpace !== theirSpace) {
+  // SPACE — the one rule (`ownsMoreSpace`, territory behind the pawns), so the
+  // question's answer is the one the narration and the chat give.
+  const territory = computeTerritory(fen);
+  const mySpace = me === 'w' ? territory.white : territory.black;
+  const theirSpace = me === 'w' ? territory.black : territory.white;
+  const mineMore = ownsMoreSpace(fen, me);
+  const theirsMore = ownsMoreSpace(fen, me === 'w' ? 'b' : 'w');
+  if (mineMore || theirsMore) {
     out.push({
       answerMode: 'any',
       id: 'space', type: 'space', bucket: 'positional',
       prompt: 'Who has more space, and by how much?',
-      answer: mySpace > theirSpace
-        ? `You control more space — your pawns cover ${mySpace} squares in enemy territory to your opponent's ${theirSpace}.`
-        : `Your opponent controls more space — their pawns cover ${theirSpace} squares in your territory to your ${mySpace}.`,
-      acceptTokens: [mySpace > theirSpace ? 'you' : 'opponent', 'space', String(mySpace), String(theirSpace)],
+      answer: mineMore
+        ? `You have more space — ${mySpace} squares of room behind your central pawns to your opponent's ${theirSpace}.`
+        : `Your opponent has more space — ${theirSpace} squares of room behind their central pawns to your ${mySpace}.`,
+      acceptTokens: [mineMore ? 'you' : 'opponent', 'space', String(mySpace), String(theirSpace)],
       negative: false,
     });
   }
@@ -2848,4 +2831,31 @@ export function gradeReadingAnswerDeterministic(q: ReadingQuestion, userAnswer: 
 export function goodPieceIdeaKey(side: string, piece: string, kind: string, square: string): string {
   const where = kind === 'open-file' || kind === 'semi-open-file' ? square[0] : square;
   return `${side}-good-${piece}-${kind}-${where}`;
+}
+
+/** HOW TO KEEP IT (escalating walk 2026-10-17: the coach said "cover it" and
+ *  never how). Every legal move for `me` (to move) after which the unit on
+ *  `sq` is safe — guarded enough, or moved somewhere it cannot be won — and
+ *  nothing else of `me` can be won either (the same legal SEE every threat
+ *  read uses). Most natural first: a guard that keeps the unit where it is,
+ *  then moving it, then captures; the queen and king last. */
+export function movesThatKeep(fen: string, sq: Square, me: Color): { san: string; rank: number }[] {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return []; }
+  if (chess.turn() !== me) return [];
+  const out: { san: string; rank: number }[] = [];
+  for (const m of chess.moves({ verbose: true })) {
+    const c = new Chess(fen);
+    c.move(m.san);
+    // A CHECK ONLY DELAYS (escalating walk 2026-10-17: "keep it with Bb5+"):
+    // while they answer it no capture is legal, so everything reads safe for
+    // one move. A defence must hold with the move theirs.
+    if (c.inCheck()) continue;
+    const after = c.fen();
+    const safe = c.board().flat().every((p) => !p || p.color !== me || p.type === 'k' || legalSeeGain(after, p.square) <= 0);
+    if (!safe) continue;
+    const rank = (m.piece === 'k' ? 8 : 0) + (m.piece === 'q' ? 2 : 0) + (m.from === sq ? 3 : 0) + (m.captured ? 1 : 0) + (m.piece === 'p' ? 0 : 1);
+    out.push({ san: m.san, rank });
+  }
+  return out.sort((a, b) => a.rank - b.rank);
 }

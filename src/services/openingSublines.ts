@@ -127,17 +127,3 @@ export function buildSublines(variation: { name: string; pgn: string }): Subline
   }
   return sublines;
 }
-
-/** Convenience: build the sublines for every variation of an opening, keyed by
- *  variation index (parallel to `opening.variations`). */
-export function buildSublinesForOpening(
-  opening: { variations?: Array<{ name: string; pgn: string }> | null },
-): Map<number, Subline[]> {
-  const out = new Map<number, Subline[]>();
-  const variations = opening.variations ?? [];
-  variations.forEach((v, i) => {
-    const subs = buildSublines(v);
-    if (subs.length > 0) out.set(i, subs);
-  });
-  return out;
-}

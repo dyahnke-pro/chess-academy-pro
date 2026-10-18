@@ -237,7 +237,6 @@ export const anchorTeachesItsPosition = (n: DanyaNote): boolean =>
 export const isVerifiedPosition = (n: DanyaNote): boolean =>
   n.positionSource === 'high' || n.positionSource === 'medium';
 
-
 /** Index ONE note into the prefix / opening / concept maps. Extracted so the
  *  fetched floating half (below) reuses the SAME indexing rather than a second
  *  copy that would drift — the duplicated-constant rule applied to a loop. */
@@ -832,32 +831,6 @@ export function notesForOpening(openingName: string, maxNotes = Infinity): Danya
     .sort((a, b) => b.score - a.score || (b.n.lineSan.length - a.n.lineSan.length))
     .slice(0, maxNotes)
     .map((s) => s.n);
-}
-
-/** Does the primary corpus teach THIS opening specifically — not merely its
- *  family? `notesForOpening` matches a variation against its parent by design
- *  ("Caro-Kann Defense: Advance" ↔ "Caro-Kann Defense"), which is right for
- *  retrieval and wrong as a coverage test: a query for the Taimanov matches 40
- *  notes tagged plain "Sicilian Defense", none of which teach the Taimanov.
- *
- *  Specific coverage means some primary tag carries EVERY identifying token of
- *  the query, so "French Defence" is covered by "French Defense" while
- *  "Sicilian … Taimanov" is not covered by "Sicilian Defense". This gates the
- *  gap tier only; ordinary lookups keep their family matching. */
-export function primaryCoversOpening(openingName: string): boolean {
-  // The opening-name and concept tiers live in the FETCHED floating half, so
-  // ask for it here. Fire-and-forget: this call stays synchronous and simply
-  // sees the wider tier once it lands.
-  primeFloatingTeaching();
-  const qTokens = normName(openingName)
-    .split(' ')
-    .filter((t) => t.length > 2 && !GENERIC_TOKENS.has(t));
-  if (qTokens.length === 0) return byOpening.size > 0;
-  for (const key of byOpening.keys()) {
-    const kTokens = new Set(key.split(' '));
-    if (qTokens.every((t) => kTokens.has(t))) return true;
-  }
-  return false;
 }
 
 /** A plans-bearing note for the current path — the phase-transition hook
@@ -1470,7 +1443,6 @@ export function endgameNoteForLesson(args: {
   }
   return null;
 }
-
 
 export function buildDanyaTeachingBlock(args: {
   historySans?: string[];

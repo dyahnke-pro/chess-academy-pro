@@ -43,6 +43,18 @@ describe('criticalMoment — the count IS the trigger', () => {
     expect(criticalMomentSpeaks(r)).toBe(false);
   });
 
+  it('"two moves limit the damage" is unproven when the third is a hair behind the second (claim harvest 2026-10-17)', () => {
+    const r = readCriticalMoment({ topLines: fan(-400, -460, -505), moverColor: 'w' });
+    expect(r?.stake).toBe('damage');
+    expect(r?.resolved).toBe(false);
+    expect(r?.unresolvedReason).toBe('band-edge');
+    expect(criticalMomentSpeaks(r)).toBe(false);
+    // control: a clear drop to the third still speaks
+    const c = readCriticalMoment({ topLines: fan(-400, -460, -600), moverColor: 'w' });
+    expect(c?.count).toBe(2);
+    expect(c?.resolved).toBe(true);
+  });
+
   it('three within tolerance means nothing hinges — SILENT, and honestly unresolved', () => {
     const r = readCriticalMoment({ topLines: fan(30, 10, -20), moverColor: 'w' });
     expect(r?.count).toBe(3);
@@ -277,13 +289,13 @@ describe('the failing candidates — the strongest proved, the rest named (Learn
     const read = {
       resolved: true, count: 2, stake: 'on-top', gapCp: 300, holdingSans: ['Qxd2+', 'Rd1'], discardedSans: ['Qb6', 'Qc3', 'Rf1'],
       discardedProofs: [
-        { san: 'Qb6', text: 'Qb6 and the moves that follow — you come out behind', line: { fen: '8/8/8/8/8/8/8/8 w - - 0 1', sans: ['Qb6'] } },
+        { san: 'Qb6', text: 'Qb6 and, three moves later, Nxd5 — you come out behind', line: { fen: '8/8/8/8/8/8/8/8 w - - 0 1', sans: ['Qb6'] } },
         { san: 'Qc3', text: 'Qc3 and Rxc3 — you lose the queen', line: { fen: '8/8/8/8/8/8/8/8 w - - 0 1', sans: ['Qc3'] } },
         { san: 'Rf1', text: 'Rf1 and Qxf1 — mate', line: { fen: '8/8/8/8/8/8/8/8 w - - 0 1', sans: ['Rf1'] } },
       ],
     } as unknown as Parameters<typeof criticalMomentFound>[0];
     const out = criticalMomentFound(read, 'Qxd2+') ?? '';
-    expect(out).toContain("Qb6 didn't work: you come out behind");
+    expect(out).toContain("Qb6 didn't work: three moves later, Nxd5 — you come out behind");
     expect(out).toContain("Qc3 and Rf1 didn't work either.");
     expect(out).not.toContain('Rxc3');
   });
@@ -294,8 +306,8 @@ describe('a failed candidate is named once (Learn audit 2026-10-15)', () => {
     const { afterCandidate } = await import('./criticalMoment');
     expect(afterCandidate('Qxc3+', 'Qxc3+ and Nxc3 — you come out behind on material, a bishop for a queen'))
       .toBe('Nxc3 — you come out behind on material, a bishop for a queen');
-    expect(afterCandidate('…Qxc3+', '…Qxc3+ and the moves that follow — they win your queen'))
-      .toBe('they win your queen');
+    expect(afterCandidate('…Qxc3+', '…Qxc3+ and, two moves later, Rxd1 — they win your queen'))
+      .toBe('two moves later, Rxd1 — they win your queen');
     expect(afterCandidate('Qb6', 'Qb6 — it walks into a pin')).toBe('it walks into a pin');
     expect(afterCandidate('a6', 'Nb5 and Nc7 — they fork your rooks')).toBe('Nb5 and Nc7 — they fork your rooks');
   });

@@ -23,42 +23,6 @@ export interface StorageHeadroom {
   usageRatio: number;
 }
 
-/**
- * Return the current storage headroom, or null when the browser
- * doesn't expose navigator.storage.estimate. Cheap — can be called
- * per-write if desired.
- */
-export async function getStorageHeadroom(): Promise<StorageHeadroom | null> {
-  if (typeof navigator === 'undefined') return null;
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (!navigator.storage?.estimate) return null;
-  try {
-    const est = await navigator.storage.estimate();
-    const used = est.usage ?? 0;
-    const quota = est.quota ?? 0;
-    if (quota <= 0) return null;
-    return {
-      usedBytes: used,
-      quotaBytes: quota,
-      usageRatio: used / quota,
-    };
-  } catch {
-    return null;
-  }
-}
-
-/**
- * True when the origin is using more than 90% of its storage quota —
- * a good gate for large writes (bulk imports) so we can bail early
- * with a user-visible error instead of silently losing data when
- * Dexie's put() throws quota-exceeded.
- */
-export async function isStorageNearlyFull(threshold = 0.9): Promise<boolean> {
-  const headroom = await getStorageHeadroom();
-  if (!headroom) return false;
-  return headroom.usageRatio >= threshold;
-}
-
 /** Outcome of a persistent-storage request. */
 export interface PersistenceState {
   /** Browser exposes navigator.storage.persist / .persisted. */

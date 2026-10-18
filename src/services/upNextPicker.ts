@@ -23,13 +23,14 @@
  */
 import type { RepCandidate } from './trainingPlanSelector';
 import { resolveRepRoute } from './repRouting';
+import { endgameReviewPath, type DueEndgameReview } from './endgameDueReview';
 
 /** Every kind of bite, ONE list. The type is derived from it, and the tables
  *  below are `Record`s over it, so a new kind fails to compile until someone
  *  answers where it finishes and how important it is (homeSuggestion). */
 export const PICK_KINDS = [
   'deep-run', 'game-slip', 'weakness', 'grown', 'opening', 'free-opening',
-  'warm-up', 'long', 'start', 'upload', 'learn', 'thinking',
+  'warm-up', 'long', 'start', 'upload', 'learn', 'thinking', 'endgame',
 ] as const;
 export type PickKind = typeof PICK_KINDS[number];
 
@@ -55,6 +56,8 @@ export const PICK_FINISH_LINE: Record<PickKind, { file: string; by: 'kind' | 'ke
   // Learn reads `?lesson=think`; the lesson's one door calls
   // `finishBite('thinking')` when the lesson ends.
   thinking: { file: 'src/services/thinkingLessonStart.ts', by: 'kind' },
+  // A due endgame lesson closes when a position of it is played through.
+  endgame: { file: 'src/components/Coach/EndgameLessonTab.tsx', by: 'kind' },
 };
 
 /** The "learn how to think" bite is live: Learn reads `?lesson=think` and
@@ -98,6 +101,9 @@ export type PickHub = 'tactics:deep-run' | 'tactics:my mistakes' | 'tactics:dail
 
 export interface UpNextPick {
   kind: PickKind;
+  /** How much this bite matters to THIS student now — the one number the card
+   *  ranks by and Home reads (computed from the record, never a list order). */
+  importance?: number;
   /** Stable for the day; also the rep-completion key. */
   key: string;
   /** Short title ("Fix your slip vs Rainbow_Warrior"). */
@@ -109,6 +115,17 @@ export interface UpNextPick {
   path: string;
   state?: Record<string, unknown>;
   hub: PickHub;
+  /** Opening bites only: the opening it drills (joins the student's holes). */
+  openingId?: string;
+}
+
+/** An opening the student keeps leaving the book in, early and at a cost
+ *  (the spine's book-departure row: gated, recurring in 2+ games). */
+export interface OpeningHole {
+  openingId: string;
+  name: string;
+  /** Distinct games it cost them. */
+  games: number;
 }
 
 export interface UpNextInput {
@@ -127,6 +144,10 @@ export interface UpNextInput {
   /** The tier-1 thinking habits' standing, or null when the lesson is not
    *  offered (not live yet, or no read). */
   thinking: ThinkingSignal | null;
+  /** The endgame lesson with the most positions due for spaced review, or null. */
+  endgameDue: DueEndgameReview | null;
+  /** Openings the student keeps leaving the book in, worst first. */
+  openingHoles: readonly OpeningHole[];
 }
 
 /** THE START-HERE PATH (David 2026-10-02: "cater to new players. Explain
@@ -191,19 +212,76 @@ function weaknessPick(rep: RepCandidate): UpNextPick {
   };
 }
 
-function openingPick(rep: RepCandidate): UpNextPick {
+function openingPick(rep: RepCandidate, hole?: OpeningHole): UpNextPick {
   const key = `up:${rep.key}`;
   const due = rep.kind === 'srs';
   return {
     kind: 'opening', key, label: rep.label,
-    reason: due ? `${rep.label} is due for review. Play one line of it.` : `You marked ${rep.label} but have not learned it yet. One line to start.`,
+    reason: hole ? holeReason(hole) : due ? `${rep.label} is due for review. Play one line of it.` : `You marked ${rep.label} but have not learned it yet. One line to start.`,
     bite: 'one line', path: `/openings/${rep.openingId ?? ''}`, state: { repKey: key }, hub: 'openings',
+    ...(rep.openingId ? { openingId: rep.openingId } : {}),
   };
 }
 
-/** Every candidate, best first. The caller takes the first RING_SIZE as the
- *  day's ring and the first not-done one as Up next. */
+/** The hole, said as the reason: how many games leaving the book early cost. */
+function holeReason(h: OpeningHole): string {
+  return `You left the book early in ${h.games} of your ${h.name} games, and it cost you each time. Play the main line once.`;
+}
+
+function holePick(h: OpeningHole): UpNextPick {
+  const key = `up:hole:${h.openingId}`;
+  return {
+    kind: 'opening', key, label: `Stay in the book: ${h.name}`,
+    reason: holeReason(h), bite: 'one line', path: `/openings/${h.openingId}`,
+    state: { repKey: key }, hub: 'openings', openingId: h.openingId,
+  };
+}
+
+/** THE ONE IMPORTANCE (David 2026-10-17: "the top three algo'd based lessons
+ *  in the card"). Each kind's floor, and the record signal that raises it:
+ *  a slip by what it cost, a weakness by the spine's own rank, an endgame by
+ *  whether you got it wrong and how overdue it is. A Record over the kinds, so
+ *  a new kind fails to compile until someone says how much it matters. The
+ *  card is the top three of this; Home reads the same number. */
+export const PICK_IMPORTANCE: Record<PickKind, number> = {
+  start: 100, 'deep-run': 52, 'game-slip': 80, thinking: 62, weakness: 70, grown: 75,
+  opening: 45, 'free-opening': 50, endgame: 60, 'warm-up': 50, long: 49, upload: 40, learn: 60,
+};
+function importanceOf(p: UpNextPick, i: UpNextInput, weaknessRank: number): number {
+  const base = PICK_IMPORTANCE[p.kind];
+  switch (p.kind) {
+    // A first visit has no record yet: the Deep Run is the way in.
+    case 'deep-run': return i.coldStart ? 90 : base;
+    // A slip weighs what it cost, up to a pawn and more.
+    case 'game-slip': return base + Math.min(10, Math.round((i.latestGameSlip?.cpLoss ?? 0) / 100));
+    // A red habit is a hole behind lost games; grey (never proven) teaches.
+    case 'thinking': return i.thinking?.state === 'red' ? 78 : base;
+    // The spine already ranked the weaknesses: the first leads.
+    case 'weakness': return base - 2 * weaknessRank;
+    // An opening you keep leaving the book in costs games now: each game it
+    // cost raises it. A line due for review is forgetting now; a new one waits.
+    case 'opening': {
+      const hole = i.openingHoles.find((h) => h.openingId === p.openingId);
+      if (hole) return 64 + Math.min(14, 2 * hole.games);
+      return p.key.startsWith('up:srs:') ? 64 : base;
+    }
+    // What you got wrong outranks what you are spacing out; overdue adds.
+    case 'endgame': return (i.endgameDue?.missed ? 80 : base) + Math.min(8, Math.floor(i.endgameDue?.overdueDays ?? 0));
+    default: return base;
+  }
+}
+
+/** Every candidate, best first BY IMPORTANCE. The caller takes the first
+ *  RING_SIZE as the day's ring and the first not-done one as Up next. */
 export function rankUpNext(i: UpNextInput): UpNextPick[] {
+  const ranked = collectPicks(i);
+  let w = 0;
+  const scored = ranked.map((p, at) => ({ p: { ...p, importance: importanceOf(p, i, p.kind === 'weakness' ? w++ : 0) }, at }));
+  // Ties keep the order they were gathered in (a stable, readable tie-break).
+  return scored.sort((a, b) => b.p.importance - a.p.importance || a.at - b.at).map((x) => x.p);
+}
+
+function collectPicks(i: UpNextInput): UpNextPick[] {
   const out: UpNextPick[] = [];
   // A beginner's next step leads, ahead of everything: a puzzle about a pin
   // means little before they know what the center is for.
@@ -239,8 +317,25 @@ export function rankUpNext(i: UpNextInput): UpNextPick[] {
       hub: 'tactics:my mistakes',
     });
   }
+  const holeOf = (r: RepCandidate): OpeningHole | undefined => i.openingHoles.find((h) => h.openingId === r.openingId);
   const due = i.reps.find((r) => r.kind === 'srs');
-  if (due) out.push(openingPick(due));
+  if (due) out.push(openingPick(due, holeOf(due)));
+  // An opening the student keeps leaving the book in: a due or new line in it
+  // says so; otherwise the hole is its own bite.
+  const repOpenings = new Set(i.reps.filter((r) => r.kind !== 'weakness').map((r) => r.openingId));
+  for (const h of i.openingHoles) if (!repOpenings.has(h.openingId)) out.push(holePick(h));
+  // An endgame due for spaced review sits with the opening review: both are
+  // what you knew, coming back before you forget it.
+  if (i.endgameDue) {
+    const n = i.endgameDue.dueCount;
+    out.push({
+      kind: 'endgame', key: `up:endgame:${i.endgameDue.lessonId}`,
+      label: `Review: ${i.endgameDue.name}`,
+      reason: `${n === 1 ? 'A position' : `${n} positions`} from ${i.endgameDue.name} ${n === 1 ? 'is' : 'are'} due again. Play one before it fades.`,
+      bite: '1 position', path: endgameReviewPath(i.endgameDue),
+      state: { repKey: `up:endgame:${i.endgameDue.lessonId}` }, hub: 'coach',
+    });
+  }
   if (i.freeOpeningOpen) {
     out.push({
       kind: 'free-opening', key: 'up:free-opening', label: 'Claim your free opening',
@@ -250,7 +345,7 @@ export function rankUpNext(i: UpNextInput): UpNextPick[] {
   }
   for (const r of i.reps) {
     if (drillable(r) && r !== weakness) out.push(weaknessPick(r));
-    if (r.kind === 'new') out.push(openingPick(r));
+    if (r.kind === 'new') out.push(openingPick(r, holeOf(r)));
   }
   if (!i.coldStart) out.push(deepRun());
   // GREY = never proven = teach it (an unrated player gets the full lesson),

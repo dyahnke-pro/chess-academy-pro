@@ -1,3 +1,4 @@
+import { MISCONCEPTION_TAGS } from '../data/misconceptionTags';
 import { describe, it, expect, vi } from 'vitest';
 import { computePositionFacts, clauseText, statusBandChange } from './positionFacts';
 
@@ -404,7 +405,25 @@ describe('the verdict and its plan echo are one fact (hand walk 2340)', () => {
   it('where the verdict is held back, the plan still teaches the idea', async () => {
     const r = await computePositionFacts({ boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [] });
     expect(r.clauses.map((c) => c.kind)).toEqual(expect.arrayContaining(['fundamental']));
+    expect(r.clauses.some((c) => / The move is /.test(` ${c.text}`))).toBe(false);
+  });
+
+  // GREY MEANS TEACH IT (A-plan P1, 2026-10-17): with no record at all the
+  // reasoned weighing speaks — Nxe5 is ruled out with its proof — and the move
+  // is HELD for the student to find. It used to need a record hole to speak.
+  it('a fresh record (grey) hears the weighing, the move held', async () => {
+    const r = await computePositionFacts({ boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [] });
+    const w = r.clauses.find((c) => c.kind === 'deliberation');
+    expect(w?.text).toMatch(/Nxe5/);
+    expect(w?.text).not.toMatch(/The move is/);
+    expect(r.heldVerdict?.san).toBe('O-O');
+  });
+
+  it('a record that has PROVEN every question this board asks stays quiet', async () => {
+    const proven = new Map(MISCONCEPTION_TAGS.map((t) => [t.id, { held: 9, broken: 0, heldStreak: 9, streakGames: 9 }])) as never;
+    const r = await computePositionFacts({ boardComputers: 'surface', posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [], studentNeedContext: { rating: 1200, gamesPlayed: 20, signals: [], bookDepartures: [], capabilities: proven } });
     expect(r.clauses.some((c) => c.kind === 'deliberation')).toBe(false);
+    expect(r.heldVerdict).toBeNull();
   });
 });
 
@@ -465,5 +484,15 @@ describe('when the structure plan changes, the coach says so (David 2026-09-25)'
     for (const k of second.remember) said.add(k);
     const third = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: theirsOnly, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true, alreadySaid: said });
     expect(third.clauses.some((c) => c.kind === 'structure-plan')).toBe(false);
+  });
+});
+
+describe('one claim, one clause — the passer said once (one thread per move, 2026-10-17)', () => {
+  const flat = { evaluation: 300, bestMove: '', depth: 12, topLines: [] } as never;
+  it('the plan and the conversion both about the d3 passer speak as one', async () => {
+    const r = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen: '2r3k1/3R1ppp/3Q4/8/8/3P4/5PPP/6K1 w - - 0 17', moverColor: 'w', studentColor: 'w', analysis: flat, teachingBeat: true });
+    const passer = r.clauses.filter((c) => /passed pawn on d3/.test(c.text));
+    expect(passer).toHaveLength(1);
+    expect(r.remember).toContain('student-passer-d');
   });
 });

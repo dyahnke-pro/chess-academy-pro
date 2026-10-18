@@ -17,7 +17,7 @@ import {
   dontPlugFile, unmovedUnits, mutualRestriction, fileOpenedForDefender,
 } from './squareJudgement';
 import {
-  rightIdeaWrongPiece, keepPlanChangeRoute, planOverOneMove, placementFutureLine, smallEdges, fightingLine,
+  rightIdeaWrongPiece, keepPlanChangeRoute, planOverOneMove, placementFutureLine, fightingLine,
   wedgePaysLater, closedTacticalChance,
 } from './planJudgement';
 
@@ -105,9 +105,4 @@ export function linesStructure(
     safe(() => fightingLine(fen, student, lines)),
     safe(() => (lines[0] ? placementFutureLine(fen, student, lines[0].moves) : null)),
   ].filter((r): r is StructureRead => r !== null);
-}
-
-/** The trend across the student's own moves in a game. */
-export function gameStructureTrend(moves: readonly { san: string; cpLoss: number }[]): StructureRead | null {
-  return safe(() => smallEdges(moves));
 }

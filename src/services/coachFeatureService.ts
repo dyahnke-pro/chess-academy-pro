@@ -1,4 +1,5 @@
 import { capabilitiesPosed } from './capabilityEvidence';
+import { fadeLevelsFrom, fadeText } from './fadeText';
 import { moveIntentsForGame, type ReviewIntent } from './reviewMoveIntent';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan } from './material';
@@ -132,7 +133,6 @@ const REVIEW_TAG_FOR_LANE: Record<StudentMoveLane, FacetTag | null> = {
   fileRace: null,
   strongChoice: null,
 };
-
 
 export { advantageWasMissed } from './reviewWithholding';
 
@@ -416,28 +416,9 @@ export interface ReviewNarrationSegments {
   closing: string;
 }
 
-/** The student's own moves with their engine cost, from the per-ply evals
- *  (White-POV, after each ply). A ply whose eval either side reads as a mate
- *  score is skipped — a mate number is not a centipawn cost. */
-export function studentMoveCosts(md: readonly NarrativeMoveData[], studentColorWB: 'White' | 'Black'): { san: string; cpLoss: number }[] {
-  const out: { san: string; cpLoss: number }[] = [];
-  const pov = (cp: number): number => (studentColorWB === 'White' ? cp : -cp);
-  for (let i = 0; i < md.length; i++) {
-    const m = md[i];
-    const mover: 'White' | 'Black' = m.moveNumber % 2 === 1 ? 'White' : 'Black';
-    if (m.isCoachMove || mover !== studentColorWB) continue;
-    const before = i === 0 ? 0 : md[i - 1].evaluation;
-    const after = m.evaluation;
-    if (before === null || after === null || Math.abs(before) >= 1000 || Math.abs(after) >= 1000) continue;
-    out.push({ san: m.san, cpLoss: Math.max(0, pov(before) - pov(after)) });
-  }
-  return out;
-}
-
 // ─── Build Context from Profile ─────────────────────────────────────────────
 
 // ─── Walk-the-game Review Narration (WO-REVIEW-02) ──────────────────────────
-
 
 /** One move's worth of review narration material. Merged at build time
  *  from the deterministic move data (FEN / classification / best move)
@@ -1256,6 +1237,8 @@ export function buildReviewSegments(
   // WHERE THIS STUDENT STANDS PER TEACHING LAYER (WO-LAYERS-01), once per
   // review — the same record every ply of the walk is judged against.
   const layers = layerStandings(studentWeaknesses ?? [], studentNeed?.capabilities);
+  // The fade per skill, from the same record (one rule with Learn).
+  const fade = fadeLevelsFrom(studentNeed?.capabilities);
   // Package-completion once-per-game beats (David 2026-07-24: "complete the
   // package"): the simplify-when-ahead trade idea fires at most once.
   let tradeIdeaSpoken = false;
@@ -2292,6 +2275,7 @@ export function buildReviewSegments(
           // computer already produced and never manufactures one.
           momentBoost: boostByPly.get(m.ply) ?? NO_BOOST,
           layers,
+          fade,
           // 🚨 DELIBERATELY null, and this is why the field is required.
           //
           // Review DOES gate on need — narrowly, at `quietOpeningPly` below:
@@ -2378,6 +2362,8 @@ export function buildReviewSegments(
       // an average, not a hard limit"). The door's ranking decides what speaks;
       // the audit holds the AVERAGE turn length, never a per-ply limit.
       const uncappedParts = rankedParts;
+      // The door's fact keys, before any later rewrite, for the fade lookup.
+      const doorKeys = [...uncappedParts];
       // 🔒 THE BOOK-MOVE RULE APPLIES HERE TOO (CLAUDE.md narration-by-need
       // standard, N2). The capped cascade has carried the need gate since N2
       // landed — but `isReviewUncapped()` is TRUE by default, so THIS is the
@@ -2468,7 +2454,9 @@ export function buildReviewSegments(
       const doorNarration = (() => {
         if (uncappedParts.length === 0) return null;
         const pkg = buildVoicePackage(
-          uncappedParts.map((text) => ({ kind: 'computed' as const, text, fen: fenPair.fenAfter, altFen: fenPair.fenBefore })),
+          // Said SHORTER where the student has shown the skill — one fade rule
+          // with Learn (David 2026-10-17: shorten, never silence a reason).
+          uncappedParts.map((text, k) => ({ kind: 'computed' as const, text: fadeText(text, decision.faded.get(doorKeys[k] ?? '') ?? null), fen: fenPair.fenAfter, altFen: fenPair.fenBefore })),
           undefined,
           reviewSpokenKeys,
         );
@@ -4564,7 +4552,6 @@ async function groundOpeningPlanInBook(segments: ReviewMoveSegment[]): Promise<v
   }
 }
 
-
 /**
  * SEAT-FRAME an opening name for the student (David 2026-07-21, IMG_4572:
  * "Opening says Pirc Defense but I am white and played the Austrian Attack…
@@ -4654,7 +4641,6 @@ export function narrationBoardAccurate(text: string, fen: string): boolean {
     return true; // never block narration on a parse error
   }
 }
-
 
 /**
  * STEM-VARIETY PASS (David 2026-07-24: the Naroditsky side-by-side showed our

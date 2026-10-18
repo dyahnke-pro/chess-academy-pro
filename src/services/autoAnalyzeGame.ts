@@ -25,7 +25,8 @@ import {
 } from './mistakePuzzleService';
 import { classifyPhase } from './gamePhaseService';
 import { pvUciToSan } from './principleAttribution';
-import { isMateEval } from './engineConstants';
+import { isMateEval, storedMate } from './engineConstants';
+import { decisiveReason, reasonPosed } from './decisiveReason';
 import { capEval } from './accuracyService';
 import { isFixtureGame } from './fixtureGames';
 import { isMisconceptionTagId, MISCONCEPTION_RULES_REV, type MisconceptionTagId } from '../data/misconceptionTags';
@@ -269,6 +270,36 @@ function usernameForGame(game: GameRecord): string | undefined {
  * so most plies yield nothing and that is correct. `cpLoss` is Stockfish's
  * own number or null (an unmeasurable ply is never read as clean).
  */
+/** THE reason the engine's move beat the one played, read off the two lines a
+ *  flagged ply keeps (best line vs played line, each with its eval), as the
+ *  skill it posed — or null when the ply kept no lines, the student played the
+ *  best move, or no reason accounts for the gap. */
+function reasonPosedFromAnnotation(fen: string, ann: MoveAnnotation, lastSan: string | null): { tag: MisconceptionTagId; posedImportance: number } | null {
+  if (ann.bestMoveEval == null || ann.evaluation == null) return null;
+  // A mate in one keeps no continuation after the best move; it still has a line.
+  if (!ann.bestMove || !ann.pv?.afterPlayed.length || (!ann.pv.afterBest.length && storedMate(ann.bestMoveEval) === null)) return null;
+  let playedUci: string;
+  let bestSan: string;
+  try {
+    const c = new Chess(fen);
+    const m = c.move(ann.san);
+    playedUci = `${m.from}${m.to}${m.promotion ?? ''}`;
+    bestSan = new Chess(fen).move({ from: ann.bestMove.slice(0, 2), to: ann.bestMove.slice(2, 4), promotion: ann.bestMove[4] }).san;
+  } catch { return null; }
+  if (playedUci === ann.bestMove) return null;
+  const r = decisiveReason({
+    fenBefore: fen, san: bestSan, seat: 'student', opponentLastSan: lastSan,
+    reads: {
+      before: [
+        { rank: 1, evaluation: ann.bestMoveEval, mate: storedMate(ann.bestMoveEval), moves: [ann.bestMove, ...ann.pv.afterBest] },
+        { rank: 2, evaluation: ann.evaluation, mate: storedMate(ann.evaluation), moves: [playedUci, ...ann.pv.afterPlayed] },
+      ],
+      after: [], passBefore: [], passAfter: [],
+    },
+  });
+  return reasonPosed(r);
+}
+
 export function capabilityPliesFromAnnotations(
   annotations: readonly MoveAnnotation[],
   playerColor: 'white' | 'black',
@@ -285,18 +316,23 @@ export function capabilityPliesFromAnnotations(
     if (ann.classification === 'blunder' || ann.classification === 'mistake') continue;
     const fenIndex = (ann.moveNumber - 1) * 2 + (ann.color === 'black' ? 1 : 0);
     if (fenIndex < 0 || fenIndex >= fens.length) continue;
+    // THE REASON, BOTH WAYS (2026-10-17): where the deep dive kept the best
+    // line and the played line, the reason the best move was better is a
+    // question this board posed — held when they found it, broken when they
+    // did not (`recordCapabilityEvidence` decides from the cost).
+    const reasonAsked = reasonPosedFromAnnotation(fens[fenIndex], ann, fenIndex > 0 ? sanAt.get(fenIndex - 1) ?? null : null);
     out.push({
       fenBefore: fens[fenIndex],
       playedSan: ann.san,
       cpLoss: measuredCpLoss(ann),
       prompted: prompted.has(fenIndex + 1),
-      alsoPosed: positionPosed(fens[fenIndex], {
+      alsoPosed: [...(reasonAsked ? [reasonAsked] : []), ...positionPosed(fens[fenIndex], {
         bestSan: ann.bestMove ? uciToSan(fens[fenIndex], ann.bestMove) || undefined : undefined,
         ...(ann.pv?.afterBest?.length ? { bestLine: ann.pv.afterBest } : {}),
         lastMove: fenIndex > 0 && sanAt.has(fenIndex - 1)
           ? { fenBefore: fens[fenIndex - 1], san: sanAt.get(fenIndex - 1) as string }
           : undefined,
-      }),
+      })],
     });
   }
   return out;

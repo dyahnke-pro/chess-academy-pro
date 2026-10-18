@@ -5,7 +5,7 @@
 // surfaces (learn/play/openings) call this; kid surfaces NEVER do.
 
 import { useEffect, useRef } from 'react';
-import { loadProvenTags, loadWeaknessSignals } from '../services/weaknessSignalLoader';
+import { loadFadeLevels, loadWeaknessSignals } from '../services/weaknessSignalLoader';
 import { onWeaknessModelChanged } from '../services/weaknessModelEvents';
 import type { WeaknessSignal } from '../services/weaknessSignal';
 
@@ -29,13 +29,14 @@ export function useWeaknessSignals(): React.RefObject<readonly WeaknessSignal[]>
   return ref;
 }
 
-/** The student's PROVEN skills as a ref (empty until loaded — nothing fades
- *  on a cold read, which is the safe direction: grey teaches in full). */
-export function useProvenTags(): React.RefObject<ReadonlySet<string>> {
-  const ref = useRef<ReadonlySet<string>>(new Set());
+/** The per-skill fade levels (`loadFadeLevels`), refreshed when the record
+ *  changes — what the Learn door reads to shorten a lesson the student has
+ *  shown they know. */
+export function useFadeLevels(): React.RefObject<ReadonlyMap<string, 'lighter' | 'short'>> {
+  const ref = useRef<ReadonlyMap<string, 'lighter' | 'short'>>(new Map());
   useEffect(() => {
     let alive = true;
-    const load = (): void => { void loadProvenTags().then((t) => { if (alive) ref.current = t; }); };
+    const load = (): void => { void loadFadeLevels().then((t) => { if (alive) ref.current = t; }); };
     load();
     const off = onWeaknessModelChanged(load);
     return () => { alive = false; off(); };

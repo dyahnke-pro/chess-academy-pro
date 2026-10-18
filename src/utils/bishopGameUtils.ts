@@ -173,17 +173,6 @@ export function countBlackPawns(pieces: Record<string, string>): number {
 }
 
 /**
- * Get squares the bishop currently threatens (attacks).
- * Same as getBishopMoves but may be used for UI highlight separately.
- */
-export function getThreatenedSquares(
-  bishopSquare: string,
-  pieces: Record<string, string>,
-): string[] {
-  return getBishopMoves(bishopSquare, pieces);
-}
-
-/**
  * Find all squares containing a specific piece type.
  */
 export function findPieceSquares(

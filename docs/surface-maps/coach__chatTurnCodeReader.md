@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**617 lines · 8 exports · 18 importers · 12 tests · 46 audits**
+**647 lines · 9 exports · 17 importers · 11 tests · 47 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:3188) — names `Action`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5008) — names `Action`
-- **Standard post-deploy audit ritual** (CLAUDE.md:6207) — names `Action`
+- **⏰ Standing notes** (CLAUDE.md:3223) — names `Action`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5037) — names `Action`
+- **Standard post-deploy audit ritual** (CLAUDE.md:6248) — names `Action`
 
 ## Who calls in
 
@@ -31,13 +31,12 @@
 - `src/services/coachApi.ts`
 - `src/services/openingIdea.test.ts`
 - `src/services/whyNotLegal.ts`
-- `src/zzp3.test.ts`
 
 ## Exports and every call site
 
 ### `Ask` (type) — 2 call sites
-- `src/components/Coach/CoachGamePage.tsx:5428`
-- `src/components/Coach/CoachGameReview.tsx:3870`
+- `src/components/Coach/CoachGamePage.tsx:5465`
+- `src/components/Coach/CoachGameReview.tsx:3912`
 
 ### `Action` (type) — 1 call site
 - `scripts/audit-punish-gems-loop.mjs:821`
@@ -50,23 +49,31 @@
 - `src/coach/chatTurnCodeReader.test.ts:19`
 - `src/coach/chatTurnCodeReader.test.ts:22`
 - `src/coach/chatTurnCodeReader.test.ts:23`
-- `src/services/coachApi.ts:2212`
+- `src/services/coachApi.ts:2208`
 - `src/services/whyNotLegal.ts:221`
 
 ### `pointsAtThisBoard` (function) — 1 call site
-- `src/coach/questionIntents.ts:1664`
+- `src/coach/questionIntents.ts:1668`
 
 ### `legalForOpponent` (function) — 1 call site
 - `src/coach/coachService.ts:1602`
 
 ### `namedMoveTokens` (function) — 1 call site
-- `src/coach/dispatchCoachTurn.ts:355`
+- `src/coach/dispatchCoachTurn.ts:354`
 
-### `readTurnInCode` (function) — 49 call sites
+### `mainLinePlies` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `readTurnInCode` (function) — 53 call sites
 - `src/coach/boardTurnAnswer.hardWalk.test.ts:57`
 - `src/coach/chatTurnAnswers.test.ts:82`
 - `src/coach/chatTurnAnswers.test.ts:103`
 - `src/coach/chatTurnCodeReader.test.ts:10`
+- `src/coach/chatTurnCodeReader.test.ts:90`
+- `src/coach/chatTurnCodeReader.test.ts:95`
+- `src/coach/chatTurnCodeReader.test.ts:96`
+- `src/coach/chatTurnCodeReader.test.ts:105`
+- `src/coach/chatTurnCodeReader.test.ts:108`
 - `src/coach/chatTurnParser.ts:185`
 - `src/coach/developNext.test.ts:24`
 - `src/coach/developNext.test.ts:26`
@@ -111,7 +118,6 @@
 - `src/coach/lineOutcome.test.ts:38`
 - `src/services/openingIdea.test.ts:18`
 - `src/services/openingIdea.test.ts:20`
-- `src/zzp3.test.ts:12`
 
 ## Tests
 
@@ -126,7 +132,6 @@
 - `src/coach/hardQuestions.routing.test.ts`
 - `src/coach/lineOutcome.test.ts`
 - `src/services/openingIdea.test.ts`
-- `src/zzp3.test.ts`
 
 ## Audits that reach it
 
@@ -165,6 +170,7 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-learn-teach-gems-prod.mjs`
 - `scripts/audit-lib/chromium.mjs`
 - `scripts/audit-lib/coach-question-matrix.mjs`
+- `scripts/audit-lib/why-count.mjs`
 - `scripts/audit-llm-claims.mjs`
 - `scripts/audit-monkey.mjs`
 - `scripts/audit-openings-teach.mjs`

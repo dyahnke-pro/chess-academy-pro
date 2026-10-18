@@ -317,11 +317,6 @@ export function clearCoachHands(): void {
   handStack.length = 0;
 }
 
-/** The hands the currently-mounted surface published. */
-export function currentCoachHands(): CoachHands {
-  return hands_();
-}
-
 // ─── the one entry point ────────────────────────────────────────────────────
 
 /** Navigate the app to a route. Returns {ok:false} when no navigator is
@@ -411,7 +406,6 @@ function withoutSurface(hand: CoachHand): ActuationResult {
     default: return { ok: false, reason: `${hand} is unavailable here` };
   }
 }
-
 
 /**
  * PERFORM THE ACTION. The single door every hand goes through, whether the

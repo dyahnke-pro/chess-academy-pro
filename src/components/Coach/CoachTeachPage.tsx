@@ -38,7 +38,7 @@ import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, 
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { OPENING_PLIES, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, countMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching } from '../../services/learnBoardTeaching';
+import { OPENING_PLIES, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, threatAnswerTeaching, type TeachingHint } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -75,7 +75,7 @@ import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { usePhaseNarration } from '../../hooks/usePhaseNarration';
 import { useStudentNeed } from '../../hooks/useStudentNeed';
 import { DEFAULT_STUDENT_RATING, isBeginnerMode } from '../../services/ratingBands';
-import { useProvenTags, useWeaknessSignals } from '../../hooks/useWeaknessSignals';
+import { useFadeLevels, useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import {
   createPhaseTransitionState,
   detectPhaseTransition,
@@ -137,6 +137,7 @@ import {
   inferStudentSideFromName,
   studentSideForPlay,
   detectOpening,
+  detectOpeningByOrder,
   type LinePickerOption,
 } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
@@ -207,7 +208,7 @@ import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcState,
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import { backwardLook, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf } from '../../services/backwardLook';
 import { learnFundamentalVerdict, learnHeldRecurrence, learnMistakeRecurrence } from '../../services/learnFundamentalNarration';
-import type { FundamentalId } from '../../services/principleAttribution';
+import { FUNDAMENTAL_TAG, type FundamentalId } from '../../services/principleAttribution';
 import { FUNDAMENTAL_LABEL } from '../../services/fundamentalsCatalog';
 import {
   noteFamilyFork, markWalked, unwalked, nextForkToOffer, progressAt,
@@ -1856,7 +1857,7 @@ export function CoachTeachPage(): JSX.Element {
     fen: string;
     /** `squares` rides along so the board can be drawn from what SURVIVED the
      *  package rather than re-derived from its prose — see `VoiceFact.squares`. */
-    lines: Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; role?: FacetRole; factKind?: string }>;
+    lines: Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; role?: FacetRole; factKind?: string; skill?: string }>;
   } | null>(null);
   /** The coach's own last move, captured for judging. See the callout below —
    *  the inputs are gathered while the engine work runs and the verdict is
@@ -1934,6 +1935,11 @@ export function CoachTeachPage(): JSX.Element {
    *  or held back as a test — so their move can be recorded as its answer. */
   const trapPendingRef = useRef<{ fen: string; slip: string; warned: boolean; confirmed: boolean; state: string } | null>(null);
   const learnMemRef = useRef<LearnMemory>(createLearnMemory(() => { forgetPageRefsRef.current(); }));
+  // THE VISUALIZATION TEST, BOTH WAYS (David 2026-10-17): when the coach asks
+  // "there's a forced mate — can you see it?", the student's next move answers
+  // it. Finding the mate's next move is held calculation; a miss reaches the
+  // record through the game sweep, like every other lane.
+  const mateTestRef = useRef<{ ply: number; prior: string; san: string } | null>(null);
   
   // The threat / tactic say-once memory (last key + every spoken line) lives in
   // `learnMemRef.current` — per game, forgotten by the board-driven reset.
@@ -7970,7 +7976,7 @@ export function CoachTeachPage(): JSX.Element {
   // toward the holes this student keeps falling in. Ref-held; read at speak-time.
   const weaknessSignalsRef = useWeaknessSignals();
   // Proven skills — the Learn door fades their lanes to the short phrasing.
-  const provenTagsRef = useProvenTags();
+  const provenTagsRef = useFadeLevels();
   // …AND THE OTHER HALF OF IT (N2). Weaknesses say which holes they keep falling
   // in and RAISE what leads; need says whether this student needs teaching HERE
   // AT ALL — book departures in this opening, weakness match for what the ply
@@ -8728,7 +8734,7 @@ export function CoachTeachPage(): JSX.Element {
 
     // ── OPENING ANNOUNCEMENT ───────────────────────────────────────────────
     try {
-      const byOrder = detectOpening(history);
+      const byOrder = detectOpeningByOrder(history);
       // THE TRANSPOSITION READER: the board may be a named opening the move
       // order never reached — name the position, and say it transposed.
       const { det, transposed } = openingNameForBoard(byOrder, args.fenAfterReply, history.length);
@@ -8817,8 +8823,7 @@ export function CoachTeachPage(): JSX.Element {
       if (idName && !identityRidesName && learnMemRef.current.identitySaid === null && history.length <= OPENING_PLIES) {
         const idHint = openingIdentityTeaching(idName, playerColor === 'white' ? 'w' : 'b');
         if (idHint) {
-          queueSpokenHint(args.fenAfterReply, idHint.text, idHint.lane, idHint.proof, idHint.squares, idHint.claims);
-          if (idHint.event) captureEvent(idHint.event.name, idHint.event.props);
+          queueHint(args.fenAfterReply, idHint);
         }
       }
     } catch { /* announcement is a bonus, never a blocker */ }
@@ -9233,7 +9238,7 @@ export function CoachTeachPage(): JSX.Element {
       ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0]) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
       ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
       ...(lastHereRead ? [{ lane: lastHereRead.key.startsWith('last-here:same:') ? 'sameAsLastTime' as const : 'lastTimeHere' as const, text: lastHereRead.text, fen: lastHereRead.fen ?? args.fenAfterReply, claims: [lastHereRead.key], proof: lastHereRead.proof }] : []),
-      ...(bookMoveRead ? [{ lane: 'bookMove' as const, text: bookMoveRead.text, fen: bookMoveRead.fen ?? args.fenAfterReply, squares: bookMoveRead.squares, claims: [bookMoveRead.key], role: 'teach' as const, proof: bookMoveRead.proof }] : []),
+      ...(bookMoveRead ? [{ lane: 'bookMove' as const, text: bookMoveRead.text, fen: bookMoveRead.fen ?? args.fenAfterReply, squares: bookMoveRead.squares, claims: [bookMoveRead.key], role: 'teach' as const, proof: bookMoveRead.proof, skill: FUNDAMENTAL_TAG['left-book-early'] }] : []),
       ...(announceLine ? [{ lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name, claims: announceClaims, ...(announceSquares.length ? { squares: announceSquares } : {}) }] : []),
       // Rate-matched Danya behavior — board-truth. MERGED with the positional
       // read into ONE board-read lane (David 2026-09-13: "computer and observation
@@ -9380,6 +9385,8 @@ export function CoachTeachPage(): JSX.Element {
     /** The computer's own kind for this fact (a position-facts clause kind),
      *  so the door's row can say WHAT spoke inside a lane that carries many. */
     factKind?: string,
+    /** The skill the line teaches (a MisconceptionTagId) — the fade reads it. */
+    skill?: string,
   ): void => {
     const text = line.trim();
     if (!text) return;
@@ -9409,7 +9416,7 @@ export function CoachTeachPage(): JSX.Element {
     } catch { /* unreadable FEN — the lanes' own board checks still apply */ }
     const pending = pendingVoiceRef.current?.fen === fen
       ? pendingVoiceRef.current
-      : { fen, lines: [] as Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; role?: FacetRole; factKind?: string }> };
+      : { fen, lines: [] as Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; role?: FacetRole; factKind?: string; skill?: string }> };
     // EVERY MOVE A LINE NAMES GETS ITS ARROW (G6) — the lane's own arrows
     // AND every other move the sentence names (a lane that drew its line
     // used to leave the rest of the sentence's moves bare). The board before
@@ -9425,9 +9432,17 @@ export function CoachTeachPage(): JSX.Element {
     const named = namedMoveArrows(text, gradeFen ?? fen, playerColorRef.current === 'white' ? 'w' : 'b', prevFen);
     const own = arrows ?? [];
     const drawn = [...own, ...named.filter((n) => !own.some((a) => a.from === n.from && a.to === n.to))];
-    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, claims, gradeFen, arrows: drawn, lines, stakes, proof, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}) });
+    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, claims, gradeFen, arrows: drawn, lines, stakes, proof, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}) });
     pendingVoiceRef.current = pending;
   }, []);
+  /** A COMPUTED HINT, QUEUED WHOLE — its arrows, stakes and role ride with it
+   *  and its event fires. Call sites used to pick fields one by one and dropped
+   *  the arrows on nine of them and the stakes/role on all but one (G6, G8.5:
+   *  computed and never drawn, or held as an aside for want of a role). */
+  const queueHint = useCallback((fen: string, hint: TeachingHint, gradeFen?: string): void => {
+    queueSpokenHint(fen, hint.text, hint.lane, hint.proof, hint.squares, hint.claims, gradeFen, hint.arrows, undefined, hint.stakes, hint.role);
+    if (hint.event) captureEvent(hint.event.name, hint.event.props);
+  }, [queueSpokenHint]);
 
   const handleStudentMove = useCallback((move: MoveResult): void => {
     // A board move DISMISSES the "Read this position" banner (clears its
@@ -9781,10 +9796,27 @@ export function CoachTeachPage(): JSX.Element {
         // delays only the BOARD; the facts assembly and the LLM call run
         // UNDERNEATH it, so the beat gets the pad's head start for free.
         const minThink = 1000 + Math.floor(Math.random() * 1000); // 1000–2000ms
+        // THE REPLY WAITS FOR THE REASON (David 2026-10-17: "Delay the computer
+        // move obviously"). At a real decision moment, the reads the student's
+        // move is explained from (the board between the moves and the two pass
+        // positions) are warmed during the think-time, and the reply holds until
+        // they are in — so the reason lands with the move instead of after the
+        // student has already moved again. Capped: past the ceiling the reply
+        // plays and the reason follows it. A quiet move replies at once.
+        const studentMoverWB: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+        const reasonWaitMs = learnReasonWaitMs(preStudentRead?.topLines, studentMoverWB, studentMoveInBook);
+        const reasonWarm = reasonWaitMs > 0
+          ? (async () => {
+              await midTurnRead;
+              for (const f of [nullMoveFen(fenBefore), nullMoveFen(move.fen)]) {
+                if (f) await stockfishEngine.analyzeWithBudget(f, COACH_TURN_DEPTH, 900).catch(() => null);
+              }
+            })()
+          : Promise.resolve();
         const padDone = new Promise<void>((resolve) => {
           const elapsed = Date.now() - thinkStart;
           setTimeout(resolve, Math.max(0, minThink - elapsed));
-        });
+        }).then(() => Promise.race([reasonWarm, new Promise<void>((r) => setTimeout(r, reasonWaitMs))]));
         if (reply) {
           // GROUNDING COMPLETENESS (David 2026-06-15): compute what the
           // reply ACTUALLY did — captured piece + squares — from the BEFORE
@@ -9847,8 +9879,7 @@ export function CoachTeachPage(): JSX.Element {
                 try {
                   const cm = checkMethodTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b', studentBest?.bestMove || null);
                   if (cm) {
-                    queueSpokenHint(probe.fen(), cm.text, cm.lane, cm.proof, cm.squares, cm.claims);
-                    if (cm.event) captureEvent(cm.event.name, cm.event.props);
+                    queueHint(probe.fen(), cm);
                   }
                   // A KNOWN TRAP AHEAD (practical lore) — the same moment.
                   // WARN, OR TEST (David 2026-09-30): grey and red always warn;
@@ -9857,8 +9888,8 @@ export function CoachTeachPage(): JSX.Element {
                   const trap = trapAheadTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');
                   if (trap?.trap) {
                     trapPendingRef.current = { fen: probe.fen(), slip: trap.trap.slip, warned: trap.trap.speak, confirmed: trap.trap.confirmed, state: trap.trap.state };
-                    if (trap.trap.speak) queueSpokenHint(probe.fen(), trap.text, trap.lane, trap.proof, trap.squares, trap.claims, undefined, trap.arrows);
-                    if (trap.event) captureEvent(trap.event.name, trap.event.props);
+                    if (trap.trap.speak) queueHint(probe.fen(), trap);
+                    else if (trap.event) captureEvent(trap.event.name, trap.event.props);
                   }
                   // ZUGZWANG (endgame comb 2026-10-01) — ≤7 pieces, tablebase-exact.
                   // Never holds the turn: queued against this board when it resolves.
@@ -9868,20 +9899,19 @@ export function CoachTeachPage(): JSX.Element {
                     // ref may still trail the reply's animation by a beat).
                     const plyOf = (f: string): number => { const p = f.split(' '); return (Number(p[5] ?? 1) - 1) * 2 + (p[1] === 'b' ? 1 : 0); };
                     if (!zz || plyOf(liveFenRef.current) > plyOf(zzFen)) return;
-                    queueSpokenHint(zzFen, zz.text, zz.lane, zz.proof, zz.squares, zz.claims);
-                    if (zz.event) captureEvent(zz.event.name, zz.event.props);
+                    queueHint(zzFen, zz);
                   }).catch(() => { /* tablebase out of reach — nothing said */ });
                   // CHART A COURSE (pawn ending) — the king heads for the weak pawn.
                   const kc = kingCourseTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');
                   if (kc) {
-                    queueSpokenHint(probe.fen(), kc.text, kc.lane, kc.proof, kc.squares, kc.claims);
-                    if (kc.event) captureEvent(kc.event.name, kc.event.props);
+                    queueHint(probe.fen(), kc);
                   }
                   // COUNT BEFORE YOU TAKE (P3 how-to-calculate) — the same moment.
-                  const cnt = countMethodTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b');
+                  // One registry, every surface (unified 2026-10-17).
+                  const cnt = readBoard('countMethod', { fen: probe.fen(), student: playerColor === 'white' ? 'w' : 'b' });
                   if (cnt) {
-                    queueSpokenHint(probe.fen(), cnt.text, cnt.lane, cnt.proof, cnt.squares, cnt.claims);
-                    if (cnt.event) captureEvent(cnt.event.name, cnt.event.props);
+                    queueSpokenHint(probe.fen(), cnt.text, 'countMethod', cnt.proof, cnt.squares, [cnt.key], undefined, undefined, undefined, cnt.stakes, cnt.role);
+                    captureEvent('coach_count_method_taught', { surface: 'coach-teach' });
                   }
                 } catch { /* a bonus, never a blocker */ }
                 // ONE tactical read per turn — the seductive-but-wrong move (the
@@ -10277,7 +10307,7 @@ export function CoachTeachPage(): JSX.Element {
                       // Their move's purpose rides its own lane, above the
                       // board descriptions it used to lose to on offer order.
                       const lane = c.kind === 'stopped' ? 'theirPurpose' as const : 'positionFacts' as const;
-                      queueSpokenHint(probe.fen(), c.text, lane, (c.proof && isProof(c.proof) ? c.proof : null) ?? (c.lines?.[0] ? lineProof(c.lines[0]) : null) ?? squaresProof(c.text, c.squares ?? []) ?? c.proof ?? NO_PROOF.description, c.squares, c.claim ? [c.claim] : undefined, c.gradeFen, undefined, c.lines, c.stakes, FACT_ROLE[c.kind], c.kind);
+                      queueSpokenHint(probe.fen(), c.text, lane, (c.proof && isProof(c.proof) ? c.proof : null) ?? (c.lines?.[0] ? lineProof(c.lines[0]) : null) ?? squaresProof(c.text, c.squares ?? []) ?? c.proof ?? NO_PROOF.description, c.squares, c.claim ? [c.claim] : undefined, c.gradeFen, undefined, c.lines, c.stakes, FACT_ROLE[c.kind], c.kind, c.skill);
                     }
                     if (pf.importance.speak) captureEvent('position_facts_spoken', { surface: 'coach-teach', tier: pf.importance.tier, clauses: pf.clauses.length });
                   }
@@ -10344,7 +10374,7 @@ export function CoachTeachPage(): JSX.Element {
                         captureEvent('priority_first_offered', { surface: 'coach-teach', target: pf.targetSquare });
                         // A held move keeps its arrow back too — the arrow IS the answer.
                         const moveHeld = learnMemRef.current.heldMove?.fen === probe.fen();
-                        queueSpokenHint(probe.fen(), packageForRegister(pf.hint, discussion.hintDial.register), 'priorityFirst', legalLineProof(probe.fen(), [`${pf.arrow.from}${pf.arrow.to}`]) ?? squaresProof(packageForRegister(pf.hint, discussion.hintDial.register), [pf.targetSquare]) ?? NO_PROOF.withheld, [pf.targetSquare], undefined, undefined, moveHeld ? undefined : [{ from: pf.arrow.from, to: pf.arrow.to, role: 'play', vouchedBy: 'engine', source: 'learn.priorityFirst' }]);
+                        queueSpokenHint(probe.fen(), packageForRegister(pf.hint, discussion.hintDial.register), 'priorityFirst', legalLineProof(probe.fen(), [`${pf.arrow.from}${pf.arrow.to}`]) ?? squaresProof(packageForRegister(pf.hint, discussion.hintDial.register), [pf.targetSquare]) ?? NO_PROOF.withheld, [pf.targetSquare], undefined, undefined, moveHeld ? undefined : [{ from: pf.arrow.from, to: pf.arrow.to, role: 'play', vouchedBy: 'engine', source: 'learn.priorityFirst' }], undefined, undefined, 'teach');
                       }
                     }
                     // THE REJECTED TEMPTING MOVE (the speedrun's warning
@@ -10438,8 +10468,7 @@ export function CoachTeachPage(): JSX.Element {
                         ? planChoiceTeaching(probe.fen(), tl2.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate })), playerColor, { fenBefore: move.fen, san: m.san })
                         : null;
                       if (pcHint) {
-                        queueSpokenHint(probe.fen(), pcHint.text, pcHint.lane, pcHint.proof, pcHint.squares, pcHint.claims);
-                        if (pcHint.event) captureEvent(pcHint.event.name, pcHint.event.props);
+                        queueHint(probe.fen(), pcHint);
                       }
                     } catch { /* the chooser is a bonus, never a blocker */ }
                     // THE STRUCTURE JUDGEMENTS ON THE BOARD (batch 6), student to
@@ -10452,7 +10481,7 @@ export function CoachTeachPage(): JSX.Element {
                       for (const st of [
                         ...readBoardAll('structureBoard', { fen: probe.fen(), student: meS }),
                         ...readBoardAll('structureLines', { fen: probe.fen(), student: meS, lines: tl3.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate })) }),
-                      ]) queueSpokenHint(probe.fen(), st.text, 'structureJudgement', st.proof, st.squares, [st.key], undefined, undefined, undefined, st.stakes);
+                      ]) queueSpokenHint(probe.fen(), st.text, 'structureJudgement', st.proof, st.squares, [st.key], undefined, undefined, undefined, st.stakes, st.role);
                     } catch { /* the structure read is a bonus, never a blocker */ }
                     try {
                       const pv = studentBest?.topLines?.[0]?.moves;
@@ -11242,7 +11271,7 @@ export function CoachTeachPage(): JSX.Element {
                       // its own; the fundamental IS the teaching here.
                       const bookSaidAlone = fundamental.id === 'left-book-early'
                         && studentJustLeftBook(move.history, playerColor === 'white' ? 'w' : 'b');
-                      queueSpokenHint(fenAfterReply, `${noteSlip(learnMemRef.current, fundamental.id)}${bookSaidAlone ? fundamental.howOnly : fundamental.verdict}`, 'fundamental', NO_PROOF.method, [], fundamental.id === 'botched-conversion' ? ['convert-method'] : undefined, move.fen, undefined, bookSaidAlone ? undefined : fundamental.lines);
+                      queueSpokenHint(fenAfterReply, `${noteSlip(learnMemRef.current, fundamental.id)}${bookSaidAlone ? fundamental.howOnly : fundamental.verdict}`, 'fundamental', NO_PROOF.method, [], fundamental.id === 'botched-conversion' ? ['convert-method'] : undefined, move.fen, undefined, bookSaidAlone ? undefined : fundamental.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG[fundamental.id] ?? undefined);
                       captureEvent('coach_fundamental_named', {
                         surface: 'coach-teach', fundamental: fundamental.id, cp_loss: Math.round(cpLoss),
                       });
@@ -11311,7 +11340,7 @@ export function CoachTeachPage(): JSX.Element {
                       try {
                         const found = foundMoveTeaching(fenBefore, move.san, preStudentRead?.topLines, playerColor === 'white' ? 'w' : 'b', move.to, move.history);
                         if (found) {
-                          queueSpokenHint(fenAfterReply, found.text, found.lane, found.proof, found.squares, found.claims, fenBefore);
+                          queueHint(fenAfterReply, found, fenBefore);
                           // DUAL-USE (P4): a found only-move is calculation proven — unless
                           // the coach had just announced the critical moment (prompted).
                           recordTeachingEvidence(found, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
@@ -11347,7 +11376,7 @@ export function CoachTeachPage(): JSX.Element {
                       // own-move reason, so it speaks only when they are silent.
                       if (!gambitLine && !point) {
                         const said = boardTeacherPoint(fenBefore, move.san);
-                        if (said) queueSpokenHint(fenAfterReply, said.text, said.lane, said.proof, said.squares, said.claims, fenBefore);
+                        if (said) queueHint(fenAfterReply, said, fenBefore);
                       }
                       // WHY THIS MOVE HAD TO COME FIRST (census #1: "the key move
                       // order — you take on d4 first"). Play the student's next move
@@ -11422,6 +11451,41 @@ export function CoachTeachPage(): JSX.Element {
                         const intent = intentReads
                           ? intentWithFallback(fenBefore, move.san, intentReads, 'student', studentMoveInBook)
                           : null;
+                        // THE REASON (David 2026-10-17): when they played the
+                        // engine's move, the reason that accounts for its gap over
+                        // the next-best — a win by force is said as one; a stopped
+                        // or prepared move carries the gap it is worth.
+                        // The answer to an earlier "can you see it?": their move
+                        // on the mate line, after the reply the line expected.
+                        const test = mateTestRef.current;
+                        if (test && test.ply === move.history.length) {
+                          mateTestRef.current = null;
+                          if (move.history[move.history.length - 2] === test.prior && move.san === test.san) {
+                            // A question without its answer is not a prompt: finding it is
+                            // proof — unless the move itself was announced.
+                            recordHeld('calculation-depth', 90, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
+                          }
+                        } else if (test && move.history.length > test.ply) mateTestRef.current = null;
+                        const playedUci = (() => { try { const m = new Chess(fenBefore).move(move.san); return `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; } })();
+                        const learned = intentReads && playedUci && intentReads.before[0]?.moves[0] === playedUci
+                          ? learnMoveReason({ fenBefore, san: move.san, reads: intentReads, seat: 'student', opponentLastSan: move.history.length > 1 ? move.history[move.history.length - 2] : null, asksToSee: provenTagsRef.current.get('calculation-depth') === 'short' })
+                          : null;
+                        const theReason = learned?.reason ?? null;
+                        if (theReason?.kind === 'the' && theReason.source === 'material') {
+                          queueSpokenHint(fenAfterReply, theReason.text, 'moveIntent', learned?.proof ?? NO_PROOF.description, theReason.squares, [`reason:${playedUci}`], fenBefore, undefined,
+                            theReason.line ? [theReason.line] : undefined,
+                            { points: Math.min(theReason.stakeCp ?? 0, 2000) / 100, plies: 1 }, 'teach', 'reason');
+                        }
+                        if (theReason && /can you see/.test(theReason.text) && theReason.line && theReason.line.sans.length >= 3) {
+                          mateTestRef.current = { ply: move.history.length + 2, prior: theReason.line.sans[1], san: theReason.line.sans[2] };
+                        }
+                        const reasonTail = theReason?.kind === 'the' && theReason.source !== 'material' ? theReason.tail : null;
+                        // BOTH WAYS: the reason they found is the skill they
+                        // showed. Held here; a miss reaches the record through
+                        // the game sweep (lane rows are held-only).
+                        if (learned?.posed) {
+                          recordHeld(learned.posed.tag, learned.posed.posedImportance, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length) || planToldBoardsRef.current.has(fenBefore.split(' ').slice(0, 2).join(' ')), gameId: learnMemRef.current.gameId });
+                        }
                         if (intent) {
                           // DUAL-USE (P4): an engine-proven purpose (prevents / prepares)
                           // is the no-plan question answered.
@@ -11430,7 +11494,12 @@ export function CoachTeachPage(): JSX.Element {
                           // (the same ledger the principle lines use).
                           // Its keys ride as `principle:` claims, committed once the door keeps the line.
                           const prepRule = intentRule(intent, fenAfterReply, playerColor, learnMemRef.current.principleTaught);
-                          const intentText = prepRule ? `${intent.text.replace(/\.$/, '')} — ${prepRule.text}.` : intent.text;
+                          // PREVENTION, CLOSED (A-plan P2): the move took away
+                          // the very idea their last move prepared — said so, and
+                          // staked at what that idea was worth.
+                          const stoppedPrep = !!intent.prevents && preventsNamedIdea(learnMemRef.current.theirPrep, fenBefore, intent.prevents.uci);
+                          const baseText = prepRule ? `${intent.text.replace(/\.$/, '')} — ${prepRule.text}.` : intent.text;
+                          const intentText = `${stoppedPrep ? `${baseText} ${STOPPED_THEIR_IDEA}` : baseText}${reasonTail ? ` ${reasonTail}` : ''}`;
                           queueSpokenHint(fenAfterReply, intentText, 'moveIntent', squaresProof(intentText, intent.squares) ?? NO_PROOF.description, intent.squares, [
                             ...(intent.prevents ? [`stops:${intent.prevents.uci}`] : []),
                             ...(intent.prepares ? [`prepares:${intent.prepares.uci}`] : []),
@@ -11445,7 +11514,8 @@ export function CoachTeachPage(): JSX.Element {
                           // The prepared move, as the move to play next.
                           intent.prepares && !intent.prepares.san.startsWith('O-O')
                             ? [{ from: intent.prepares.uci.slice(0, 2), to: intent.prepares.uci.slice(2, 4), role: 'play', source: 'learn.moveIntent' }]
-                            : []);
+                            : [],
+                          undefined, preventStakes(intent.prevents), undefined, intent.prevents ? 'stopped' : undefined);
                           captureEvent('coach_move_intent_named', {
                             surface: 'coach-teach', prevents: !!intent.prevents, prepares: !!intent.prepares,
                           });
@@ -11470,31 +11540,27 @@ export function CoachTeachPage(): JSX.Element {
                   })();
                   const cost = replySan ? theirMoveTeaching(move.fen, replySan, playerColor === 'white' ? 'w' : 'b') : null;
                   if (cost) {
-                    queueSpokenHint(fenAfterReply, cost.text, cost.lane, cost.proof, cost.squares, cost.claims, undefined, cost.arrows);
-                    if (cost.event) captureEvent(cost.event.name, cost.event.props);
+                    queueHint(fenAfterReply, cost);
                   }
                   const tempo = replySan ? tempoTeaching([...move.history, replySan], playerColor === 'white' ? 'w' : 'b') : null;
                   if (tempo) {
-                    queueSpokenHint(fenAfterReply, tempo.text, tempo.lane, tempo.proof, tempo.squares, tempo.claims);
-                    if (tempo.event) captureEvent(tempo.event.name, tempo.event.props);
+                    queueHint(fenAfterReply, tempo);
                   }
                   // WHAT THEIR MOVE DID TO YOUR STRUCTURE (batch 6): a pawn that
                   // walls your weak pawn off its file, a square your unmoved pawn
                   // leaves open — through the one registry.
                   if (replySan) {
                     for (const st of readBoardAll('structureTheirMove', { fenBefore: move.fen, san: replySan, student: playerColor === 'white' ? 'w' : 'b' })) {
-                      queueSpokenHint(fenAfterReply, st.text, 'structureJudgement', st.proof, st.squares, [st.key], undefined, undefined, undefined, st.stakes);
+                      queueSpokenHint(fenAfterReply, st.text, 'structureJudgement', st.proof, st.squares, [st.key], undefined, undefined, undefined, st.stakes, st.role);
                     }
                   }
                   const split = splitPositionTeaching(fenAfterReply, playerColor === 'white' ? 'w' : 'b');
                   if (split) {
-                    queueSpokenHint(fenAfterReply, split.text, split.lane, split.proof, split.squares, split.claims);
-                    if (split.event) captureEvent(split.event.name, split.event.props);
+                    queueHint(fenAfterReply, split);
                   }
                   const stale = stalemateTeaching(fenAfterReply, playerColor === 'white' ? 'w' : 'b');
                   if (stale) {
-                    queueSpokenHint(fenAfterReply, stale.text, stale.lane, stale.proof, stale.squares, stale.claims);
-                    if (stale.event) captureEvent(stale.event.name, stale.event.props);
+                    queueHint(fenAfterReply, stale);
                   }
                 } catch { /* a bonus, never a blocker */ }
 
@@ -11510,7 +11576,41 @@ export function CoachTeachPage(): JSX.Element {
                         .find((m) => { const c = new Chess(move.fen); c.move(m.san); return c.fen().split(' ')[0] === fenAfterReply.split(' ')[0]; })?.san ?? null;
                     } catch { return null; }
                   })();
-                  if (theirSan && !/[x+#]/.test(theirSan) && mid?.topLines?.length && !mid.isMate) {
+                  // THE REASON FOR THEIR MOVE (David 2026-10-17: "make sure the
+                  // computer narrations also give best reason narrations"). The
+                  // same computer the student's moves get, from their seat — only
+                  // when they played the engine's own move at a real decision,
+                  // out of book. A deliberately weaker reply is the slip lane's,
+                  // and a move outside the engine's choices is never called so
+                  // (that would tell the student the coach is holding back).
+                  const theirWB: 'w' | 'b' = playerColor === 'white' ? 'b' : 'w';
+                  const theirUci = (() => { try { if (!theirSan) return null; const m = new Chess(move.fen).move(theirSan); return `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; } })();
+                  let theirReasonSaid = false;
+                  if (theirSan && theirUci && mid?.topLines?.length && !mid.isMate
+                    && mid.topLines[0]?.moves[0] === theirUci
+                    && learnReasonDue(mid.topLines, theirWB, isTheoryLine([...move.history, theirSan]))) {
+                    const passBefore = nullMoveFen(move.fen);
+                    const passAfter = nullMoveFen(fenAfterReply);
+                    const [pb, af, pa] = await Promise.all([
+                      passBefore ? stockfishEngine.analyzeWithBudget(passBefore, COACH_TURN_DEPTH, 900).catch(() => null) : null,
+                      stockfishEngine.analyzeWithBudget(fenAfterReply, COACH_TURN_DEPTH, 900).catch(() => null),
+                      passAfter ? stockfishEngine.analyzeWithBudget(passAfter, COACH_TURN_DEPTH, 900).catch(() => null) : null,
+                    ]);
+                    const learned = af?.topLines?.length
+                      ? learnMoveReason({ fenBefore: move.fen, san: theirSan, reads: { before: mid.topLines, after: af.topLines, passBefore: pb?.topLines ?? [], passAfter: pa?.topLines ?? [] }, seat: 'opponent', opponentLastSan: move.san })
+                      : null;
+                    const r = learned?.reason;
+                    if (learned && r?.kind === 'the') {
+                      // A line from the board on screen walks; a stopped
+                      // threat's line is evidence and stays the proof only.
+                      const walk = r.line && r.line.fen === move.fen ? [r.line] : undefined;
+                      queueSpokenHint(fenAfterReply, r.text, 'theirIntent', learned.proof, r.squares, [`their-reason:${theirUci}`], move.fen, undefined,
+                        walk,
+                        r.stakeCp ? { points: Math.min(r.stakeCp, 2000) / 100, plies: 1 } : undefined, 'teach', 'reason');
+                      theirReasonSaid = true;
+                    }
+                  }
+                  if (!theirReasonSaid && theirSan && !/[x+#]/.test(theirSan) && mid?.topLines?.length && !mid.isMate) {
                     const passTheirs = nullMoveFen(move.fen);
                     const passRead = passTheirs ? await stockfishEngine.analyzeWithBudget(passTheirs, COACH_TURN_DEPTH, 900).catch(() => null) : null;
                     const afterRead = await stockfishEngine.analyzeWithBudget(fenAfterReply, COACH_TURN_DEPTH, 900).catch(() => null);
@@ -11526,6 +11626,7 @@ export function CoachTeachPage(): JSX.Element {
                       // after yours — computed by `intentWithFallback`, dropped
                       // here until now. A small preparation stays below the bar.
                       const prep = theirIntent.prepares;
+                      learnMemRef.current.theirPrep = { uci: prep.uci, fen: fenAfterReply };
                       queueSpokenHint(fenAfterReply, theirText, 'theirIntent', squaresProof(theirText, theirIntent.squares) ?? NO_PROOF.description, theirIntent.squares, [
                         `their-prepares:${prep.uci}`,
                         ...(theirIntent.prevents ? [`stops:${theirIntent.prevents.uci}`] : []),
@@ -11729,7 +11830,7 @@ export function CoachTeachPage(): JSX.Element {
                       // when what it is doing is attacking the rook (run E walk).
                       // A live threat is the answer; the slow plan waits.
                       .filter((l) => !(l.lane === 'planArc' && /^What is their /.test(l.text) && /(?:^|\. )(?:Watch out|Careful) —/.test(instantSpokenText)))
-                      .map(({ lane, kind, text, squares, claims, gradeFen, lines, stakes, proof, role, factKind }) => ({ lane, kind, text, squares, claims, lines, stakes, proof, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), fen: gradeFen ?? pending.fen })),
+                      .map(({ lane, kind, text, squares, claims, gradeFen, lines, stakes, proof, role, factKind, skill }) => ({ lane, kind, text, squares, claims, lines, stakes, proof, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}), fen: gradeFen ?? pending.fen })),
                     alreadySaid: instantSpokenText,
                     priorKeys: learnMemRef.current.spokenKeys,
                     // ONE THOUGHT PER TURN (WO-1b): the late wave leads only
@@ -13244,6 +13345,14 @@ export function CoachTeachPage(): JSX.Element {
                   annotationHighlights={coachTipsOn && highlights.length > 0 ? highlights : undefined}
                 />
               )
+            )}
+            {/* THE SILENCE SAYS WHY (David 2026-10-17): while the reply waits on
+                the reason, the board is locked — say so, so a student does not
+                read the pause as nothing to hear. */}
+            {opponentThinking && (
+              <div data-testid="coach-thinking" className="text-xs text-theme-text-muted text-center mt-1 animate-pulse">
+                Thinking…
+              </div>
             )}
             {/* THE CARRY-OVER QUESTION WAITS BESIDE THE GAME (David 2026-10-14):
                 answer it on the board, or just play your move. */}

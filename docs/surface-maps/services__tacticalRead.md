@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**894 lines · 29 exports · 7 importers · 7 tests · 0 audits**
+**877 lines · 28 exports · 7 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -99,8 +99,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:136`
 
 ### `tacticalReadFromLines` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9807`
-- `src/services/claimTruth.manual.test.ts:173`
+- `src/components/Coach/CoachTeachPage.tsx:9945`
+- `src/services/claimTruth.manual.test.ts:170`
 - `src/services/danyaBehaviors.ts:535`
 - `src/services/danyaDeviceCoverage.test.ts:73`
 - `src/services/liveVoiceDefects.test.ts:44`
@@ -124,14 +124,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:641`
 
 ### `temptingTurnClause` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9822`
+- `src/components/Coach/CoachTeachPage.tsx:9960`
 - `src/services/danyaDeviceCoverage.test.ts:79`
 - `src/services/tacticalRead.test.ts:447`
 - `src/services/tacticalRead.test.ts:460`
 
 ### `uncertaintyClause` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9834`
-- `src/services/claimTruth.manual.test.ts:175`
+- `src/components/Coach/CoachTeachPage.tsx:9972`
+- `src/services/claimTruth.manual.test.ts:172`
 - `src/services/danyaDeviceCoverage.test.ts:84`
 - `src/services/liveVoiceDefects.test.ts:255`
 - `src/services/tacticalRead.test.ts:432`
@@ -156,11 +156,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:607`
 
 ### `candidateCompareRead` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9845`
+- `src/components/Coach/CoachTeachPage.tsx:9983`
 - `src/services/compareClaimsNoEdge.test.ts:12`
 
 ### `temptingFromAnalysis` (function) — 6 call sites
-- `src/services/learnWalkBlumenfeld.test.ts:203`
+- `src/services/learnWalkBlumenfeld.test.ts:200`
 - `src/services/tacticalRead.recaptureTempting.test.ts:15`
 - `src/services/tacticalRead.recaptureTempting.test.ts:22`
 - `src/services/tacticalRead.test.ts:217`
@@ -174,9 +174,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:244`
 - `src/services/tacticalRead.test.ts:256`
 - `src/services/tacticalRead.test.ts:425`
-
-### `TACTICAL_READ_DIRECTIVES` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `voiceRejectsBestMove` (function) — 7 call sites
 - `src/services/tacticalRead.test.ts:277`

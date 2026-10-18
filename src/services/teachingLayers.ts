@@ -123,7 +123,9 @@ export function leadLayer(s: LayerStandings): TeachingLayer | null {
 /** HOW MUCH A FACT'S LAYER RAISES IT, on the same scale as the tie order
  *  (0–100). Every non-green layer keeps the bottom-up order (safety before
  *  principle before plan — a plan is useless to someone who drops pieces), and
- *  a RED layer is raised on top of that. Most real students have an open hole
+ *  a RED layer is raised on top of that. (Green: its teaching facts speak
+ *  SHORTER — `fadeText` — and only its descriptions go quiet, 2026-10-17.)
+ *  Most real students have an open hole
  *  in every layer, so red must not flatten the order it sits on. Green adds
  *  nothing: it goes quiet instead (`GREEN_QUIET_BELOW` in the door). Bounded
  *  under the stakes floor, so it re-orders comparable facts and never lifts a

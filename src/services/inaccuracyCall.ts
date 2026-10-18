@@ -1267,7 +1267,7 @@ export function failedIn(sentence: string): string {
   return sentence
     .replace(/^That left /, 'That leaves ').replace(/^That took /, 'That takes ')
     .replace(/ was the only thing guarding /, ' is the only thing guarding ').replace(/ was holding /, ' is holding ')
-    .replace(/once it left/, 'once it leaves');
+    .replace(/once it left/, 'once it leaves').replace(/ could (take|win) it from /, ' can $1 it from ');
 }
 
 /** The why alone, as sentences, for a surface that words its own grade:

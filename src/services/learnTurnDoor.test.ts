@@ -3,6 +3,8 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { decideTurn, LEARN_LANES, type LearnLane } from './learnTurnDoor';
 import { costStakes, mateStakes } from './factStakes';
+import { countMethodTeaching, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA } from './learnBoardTeaching';
+import { readBoardAll } from './boardComputers';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 const TEACH = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
@@ -216,9 +218,9 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
   it('Learn hands every line-speaking producer\'s lines to the queue, and draws on-screen and earlier boards apart', () => {
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', .*?, undefined, undefined, undefined, undefined, pendingRegisterLines\)/);
     expect(TEACH_CODE).toMatch(/pendingRegisterLines = \[\{ fen: probe\.fen\(\), sans: \[compareRead\.bestSan\] \}/);
-    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.squares, c\.claim \? \[c\.claim\] : undefined, c\.gradeFen, undefined, c\.lines, c\.stakes, FACT_ROLE\[c\.kind\], c\.kind\)/);
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.squares, c\.claim \? \[c\.claim\] : undefined, c\.gradeFen, undefined, c\.lines, c\.stakes, FACT_ROLE\[c\.kind\], c\.kind, c\.skill\)/);
     expect(TEACH_CODE).toMatch(/(?:fundamental|fund)\?\.lines[,)]/);
-    expect(TEACH_CODE).toMatch(/'fundamental', NO_PROOF\.method, \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines\)/);
+    expect(TEACH_CODE).toMatch(/'fundamental', NO_PROOF\.method, \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined\)/);
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
     // Their move's purpose leads over a board description (hand walk 2026-09-30, …g6).
     expect(TEACH_CODE).toMatch(/c\.kind === 'stopped' \? 'theirPurpose' as const/);
@@ -492,7 +494,7 @@ describe('a REASON outranks a description (David 2026-10-13: "value why statemen
     expect(d.held).toContain('positionFacts');
   });
   it('the producer passes the role from the ONE table over its clause kind', () => {
-    expect(TEACH_CODE).toMatch(/c\.lines, c\.stakes, FACT_ROLE\[c\.kind\], c\.kind\)/);
+    expect(TEACH_CODE).toMatch(/c\.lines, c\.stakes, FACT_ROLE\[c\.kind\], c\.kind, c\.skill\)/);
   });
 });
 
@@ -648,5 +650,104 @@ describe('their next idea speaks by what it would win (A-plan P2, prod Learn 202
 describe('a plan trial whose lines were all graded away is not adopted (prod Learn 2026-10-17)', () => {
   it('Learn adopts an empty trial only when nothing was produced', () => {
     expect(TEACH_CODE).toMatch(/if \(plansNow\.length === 0\) adoptPlanTrial\(planLive, planTrial, \[\], \[\]\);\s*else if \(planOffered\.length > 0\) planTrialRef\.current =/);
+  });
+});
+
+describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-17: choices 1 of 67 turns)', () => {
+  const lead = { lane: 'movePoint' as const, proof: NO_PROOF.stated, text: 'That gets your last piece into the game, so your rooks can connect.', fen: FEN, squares: ['c1', 'd2'] };
+  it('count-before-you-take carries the exchange net and speaks beside an unrelated lead', () => {
+    const hint = countMethodTeaching('4k3/8/2p1p3/3n4/2P1PN2/8/8/4K3 w - - 0 1', 'w');
+    const cnt = hint ? { lane: hint.lane, proof: hint.proof, text: hint.text, fen: FEN, squares: hint.squares, stakes: hint.stakes } : null;
+    expect(cnt?.stakes?.points).toBeGreaterThanOrEqual(1);
+    expect(decideTurn([lead, cnt!]).spoke).toContain('countMethod');
+  });
+  it('the priority before the move is a reason, never an aside', () => {
+    const pri = { lane: 'priorityFirst' as const, proof: NO_PROOF.stated, text: "What's the priority here? Their pawn on d5 — it's isolated.", fen: FEN, squares: ['d5'], role: 'teach' as const };
+    // A staked fact leads the turn, as on prod, where it was held 2 of 2.
+    const staked = { ...lead, stakes: { points: 3, plies: 0 } };
+    expect(decideTurn([staked, pri]).spoke).toContain('priorityFirst');
+    expect(decideTurn([staked, { ...pri, role: undefined }]).spoke).not.toContain('priorityFirst');
+  });
+  it('Learn hands both to the door with their stake and role', () => {
+    expect(TEACH_CODE).toMatch(/readBoard\('countMethod', \{ fen: probe\.fen\(\)/);
+    expect(TEACH_CODE).toMatch(/'countMethod', cnt\.proof, cnt\.squares, \[cnt\.key\], undefined, undefined, undefined, cnt\.stakes, cnt\.role\)/);
+    // One forwarder for every computed hint — arrows, stakes and role ride.
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(fen, hint\.text, hint\.lane, hint\.proof, hint\.squares, hint\.claims, gradeFen, hint\.arrows, undefined, hint\.stakes, hint\.role\)/);
+    expect(TEACH_CODE).not.toMatch(/queueSpokenHint\([^,\n]*, (\w+)\.text, \1\.lane, \1\.proof, \1\.squares, \1\.claims\)/);
+    expect(TEACH_CODE).toMatch(/source: 'learn\.priorityFirst' \}\], undefined, undefined, 'teach'\)/);
+  });
+});
+
+describe('prevention closes its loop (A-plan P2, 2026-10-17)', () => {
+  const B = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+  it('a move from the named board that takes their prepared move away is the stop', () => {
+    expect(preventsNamedIdea({ uci: 'c6d4', fen: B }, B.replace(' 2 3', ' 4 9'), 'c6d4')).toBe(true);
+    expect(preventsNamedIdea({ uci: 'c6d4', fen: B }, B, 'f8c5')).toBe(false);
+    expect(preventsNamedIdea(null, B, 'c6d4')).toBe(false);
+    expect(preventsNamedIdea({ uci: 'c6d4', fen: B }, B.replace(' w ', ' b '), 'c6d4')).toBe(false);
+  });
+  it('the stop, staked at the threat, speaks beside an unrelated staked lead', () => {
+    const lead = { lane: 'structureJudgement' as const, proof: NO_PROOF.stated, text: 'Your pawn on e4 is the one they can lean on now.', fen: FEN, squares: ['e4'], stakes: { points: 3, plies: 0 } };
+    const stop = { lane: 'moveIntent' as const, proof: NO_PROOF.stated, text: `The point of c3: it takes …Nd4 away. ${STOPPED_THEIR_IDEA}`, fen: FEN, squares: ['c6', 'd4'], stakes: preventStakes({ threatCp: 150 }), factKind: 'stopped' };
+    expect(decideTurn([lead, stop]).spoke).toContain('moveIntent');
+  });
+  it('Learn remembers their prepared move and stakes + tags the stop', () => {
+    expect(TEACH_CODE).toMatch(/learnMemRef\.current\.theirPrep = \{ uci: prep\.uci, fen: fenAfterReply \}/);
+    expect(TEACH_CODE).toMatch(/preventStakes\(intent\.prevents\), undefined, intent\.prevents \? 'stopped' : undefined\)/);
+  });
+});
+
+describe('a structure judgement is a reason, never an aside (A-plan P3, prod Learn: held 10 of 23)', () => {
+  it('the registry carries the teaching role and Learn hands it to the door', () => {
+    const KP = '3q2k1/5ppp/8/3p4/4p3/2N3P1/PP3PBP/6K1 w - - 0 20';
+    const reads = readBoardAll('structureBoard', { fen: KP, student: 'w' });
+    const key = reads.find((r) => /key pawn/.test(r.text));
+    expect(key?.role).toBe('teach');
+    const lead = { lane: 'movePoint' as const, proof: NO_PROOF.stated, text: 'That gets your knight into the game.', fen: KP, squares: ['c3'], stakes: { points: 3, plies: 0 } };
+    const sj = { lane: 'structureJudgement' as const, proof: NO_PROOF.stated, text: key!.text, fen: KP, squares: key!.squares, role: key!.role };
+    expect(decideTurn([lead, sj]).spoke).toContain('structureJudgement');
+    expect(decideTurn([lead, { ...sj, role: undefined }]).spoke).not.toContain('structureJudgement');
+    expect((TEACH_CODE.match(/'structureJudgement', st\.proof, st\.squares, \[st\.key\], undefined, undefined, undefined, st\.stakes, st\.role\)/g) ?? []).length).toBe(2);
+  });
+});
+
+describe('the fade is gradual (2026-10-17): lighter while learning, short once proven', () => {
+  const THREE = 'That trade gives up your better minor piece. Your bishop on c4 has open diagonals. Keep the bishop that has open diagonals and trade the one blocked by its own pawns.';
+  it('a skill answered right since its last miss keeps the point and its reason', async () => {
+    const { fadeWhenGreen } = await import('./learnTurnDoor');
+    expect(fadeWhenGreen('trade', THREE, new Map([['bad-trade', 'lighter' as const]]))).toBe('That trade gives up your better minor piece. Your bishop on c4 has open diagonals.');
+  });
+  it('a proven skill keeps the point alone; an unknown skill keeps the whole lesson', async () => {
+    const { fadeWhenGreen } = await import('./learnTurnDoor');
+    expect(fadeWhenGreen('trade', THREE, new Map([['bad-trade', 'short' as const]]))).toBe('That trade gives up your better minor piece.');
+    expect(fadeWhenGreen('trade', THREE, new Map([['hung-material', 'short' as const]]))).toBe(THREE);
+  });
+  it('the record decides the level: proven is short, a held streak is lighter, nothing is full', async () => {
+    const { fadeLevelFor } = await import('./fadeText');
+    expect(fadeLevelFor({ held: 9, broken: 0, heldStreak: 9, streakGames: 9 })).toBe('short');
+    expect(fadeLevelFor({ held: 1, broken: 2, heldStreak: 1, streakGames: 1 })).toBe('lighter');
+    expect(fadeLevelFor({ held: 1, broken: 2, heldStreak: 0, streakGames: 0 })).toBeNull();
+    expect(fadeLevelFor(undefined)).toBeNull();
+    expect(readFileSync('src/services/weaknessSignalLoader.ts', 'utf8')).toMatch(/fadeLevelsFrom\(await getCapabilityProfile\(\)\)/);
+    expect(TEACH_CODE).toMatch(/const provenTagsRef = useFadeLevels\(\);/);
+  });
+});
+
+describe('rules and theory fade per skill (item 8, 2026-10-17)', () => {
+  const RULE = 'Your Nf3 develops a piece toward the centre. A piece out early is a piece working, so bring the rest out before the queen goes hunting.';
+  it('a rule line on a proven skill speaks its point alone; on an unknown skill, all of it', async () => {
+    const { fadeWhenGreen } = await import('./learnTurnDoor');
+    const levels = new Map([['neglected-development', 'short' as const]]);
+    expect(fadeWhenGreen('positionFacts', RULE, levels, 'neglected-development')).toBe('Your Nf3 develops a piece toward the centre.');
+    expect(fadeWhenGreen('positionFacts', RULE, levels, 'passive-rook')).toBe(RULE);
+    // No skill on the fact: the lane's own tag decides, and positionFacts has none.
+    expect(fadeWhenGreen('positionFacts', RULE, levels)).toBe(RULE);
+  });
+  it('the rule, the fundamental and the book move carry their skill to the door', () => {
+    const pf = readFileSync('src/services/positionFacts.ts', 'utf8');
+    expect(pf).toMatch(/\.\.\.\(ruleSkill\(a\.rule\.id\) \? \{ skill: ruleSkill\(a\.rule\.id\) \} : \{\}\)/);
+    expect(TEACH_CODE).toMatch(/FACT_ROLE\[c\.kind\], c\.kind, c\.skill\)/);
+    expect(TEACH_CODE).toMatch(/FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined\)/);
+    expect(TEACH_CODE).toMatch(/skill: FUNDAMENTAL_TAG\['left-book-early'\]/);
   });
 });

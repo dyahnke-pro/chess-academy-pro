@@ -21,10 +21,10 @@ import { walkableLine } from './proof';
 import { findHangingPieces } from './tacticClassifier';
 import { moverLossProof, moverLineProof } from './exchangeLedger';
 import { strategicWhyLed } from './moveFundamentals';
-import { computeTerritory, legalSeeGainFor, seeReadsStanding } from './positionReadingService';
+import { ownsMoreSpace, legalSeeGainFor, seeReadsStanding } from './positionReadingService';
 import { isPinnedPiece } from './nextPlans';
 import { countKingAttack } from './kingSafety';
-import { andList, orList } from '../utils/andList';
+import { andList, lineShape, orList } from '../utils/andList';
 import { computeMustDefend, mateThreatsAgainst } from './threatOut';
 import { describeMoveGeometry, quietPurposePhrase } from './groundedAnswer';
 
@@ -309,6 +309,11 @@ function shortfallText(c: Candidate): string {
     // The proof line starts with the candidate itself; asked as a question it
     // is already named, so the answer starts with the REPLY — "Qf5? Then
     // castles, and the rook on e8 falls", never "Qf5? Qf5, castles…".
+    // A long line is shaped AFTER the candidate is taken off the front, so the
+    // answer names the reply and where it lands, never "the moves that follow".
+    if (c.proofSans && c.proofSans.length > 4 && c.proofSans[0] === c.san && c.proof.includes(' — ')) {
+      return `${c.san}? Then ${lineShape(c.proofSans.slice(1))} — ${c.proof.slice(c.proof.indexOf(' — ') + 3)}.`;
+    }
     const esc = c.san.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const rest = c.proof.replace(new RegExp(`^${esc}(?:, | and )`), '');
     if (rest !== c.proof) return `${c.san}? Then ${rest}.`;
@@ -649,10 +654,7 @@ export function heldVerdictText(v: HeldVerdict, when: 'now' | 'found'): string {
 
 /** The mover's pawns have claimed more room behind them (`computeTerritory`). */
 function moreSpace(fen: string, mover: 'w' | 'b'): boolean {
-  try {
-    const sp = computeTerritory(fen);
-    return mover === 'w' ? sp.white >= sp.black + 2 : sp.black >= sp.white + 2;
-  } catch { return false; }
+  try { return ownsMoreSpace(fen, mover); } catch { return false; }
 }
 
 /** Both queens are gone within `plies` of the line. */

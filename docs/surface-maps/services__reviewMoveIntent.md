@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**89 lines · 6 exports · 6 importers · 2 tests · 0 audits**
+**105 lines · 6 exports · 6 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,16 +27,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `lineOf` (const) — 16 call sites
 - `scripts/catalog-sweep/gated-skeleton-scan.mjs:28`
 - `scripts/catalog-sweep/gated-skeleton-scan.mjs:38`
-- `src/services/groundedAnswer.ts:7477`
+- `src/services/groundedAnswer.ts:7645`
 - `src/services/linePickerPopularity.ts:110`
 - `src/services/linePickerPopularity.ts:112`
 - `src/services/linePickerPopularity.ts:113`
 - `src/services/linePickerPopularity.ts:118`
 - `src/services/moveComparison.ts:183`
 - `src/services/moveComparison.ts:184`
-- `src/services/reviewMoveIntent.test.ts:92`
-- `src/services/reviewMoveIntent.test.ts:93`
-- `src/services/reviewMoveIntent.test.ts:94`
+- `src/services/reviewMoveIntent.test.ts:96`
+- `src/services/reviewMoveIntent.test.ts:97`
+- `src/services/reviewMoveIntent.test.ts:98`
 - `src/services/threatPurpose.test.ts:7`
 - `src/services/threatPurpose.test.ts:25`
 - `src/services/threatPurpose.test.ts:30`
@@ -48,23 +48,26 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `reviewPassFens` (function) — 5 call sites
 - `src/components/Coach/CoachReviewSessionPage.tsx:140`
 - `src/services/gameAnalysisService.ts:2392`
-- `src/services/reviewMoveIntent.test.ts:85`
-- `src/services/reviewMoveIntent.test.ts:86`
+- `src/services/reviewMoveIntent.test.ts:89`
+- `src/services/reviewMoveIntent.test.ts:90`
 - `src/services/reviewReadAhead.test.ts:77`
 
-### `intentsFromReads` (function) — 6 call sites
+### `intentsFromReads` (function) — 8 call sites
+- `src/services/reviewMoveIntent.prevent.test.ts:30`
+- `src/services/reviewMoveIntent.prevent.test.ts:37`
 - `src/services/reviewMoveIntent.test.ts:18`
 - `src/services/reviewMoveIntent.test.ts:22`
 - `src/services/reviewMoveIntent.test.ts:24`
-- `src/services/reviewMoveIntent.test.ts:53`
-- `src/services/reviewMoveIntent.test.ts:79`
+- `src/services/reviewMoveIntent.test.ts:57`
 - `src/services/reviewMoveIntent.test.ts:83`
+- `src/services/reviewMoveIntent.test.ts:87`
 
 ### `moveIntentsForGame` (function) — 1 call site
-- `src/services/coachFeatureService.ts:5057`
+- `src/services/coachFeatureService.ts:5064`
 
 ## Tests
 
+- `src/services/reviewMoveIntent.prevent.test.ts`
 - `src/services/reviewMoveIntent.test.ts`
 - `src/services/reviewReadAhead.test.ts`
 

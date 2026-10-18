@@ -84,6 +84,15 @@ function isUnproven(tag: MisconceptionTagId, caps: CapabilityProfile): boolean {
   return !capabilityProven(caps.get(tag));
 }
 
+/** IS THIS DECISION GREY for the student — never asked, or asked and not yet
+ *  proven? (A-plan P1, David 2026-10-17.) "GREY MEANS TEACH IT": a question the
+ *  board asks that the record has not seen answered is taught. Nothing posed is
+ *  grey too — absent is not mastered. Only every posed tag PROVEN reads false. */
+export function isGreyDecision(posedTags: readonly MisconceptionTagId[], caps: CapabilityProfile | undefined): boolean {
+  if (!caps || posedTags.length === 0) return true;
+  return posedTags.some((t) => isUnproven(t, caps));
+}
+
 /** THE STUDENT TERM the ranker consumes. `rank` re-weights a moment that
  *  already fired; `opens` says whether this term may also OPEN a quiet one —
  *  true only for a recurring RED hole (see the header). Both travel together

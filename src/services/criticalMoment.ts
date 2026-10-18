@@ -29,6 +29,9 @@ import { Chess } from 'chess.js';
 import { criticalityThresholds } from './criticalityScan';
 import { moverLossProof } from './exchangeLedger';
 import { MATE_HORIZON_CP } from './engineConstants';
+import { decisiveReason, reasonPosed } from './decisiveReason';
+import { emitDecisiveReason } from './decisiveReasonEvents';
+import type { AnalysisLine } from '../types';
 
 /** A mate is scored flat, for BOTH sides, on purpose: three moves that all mate
  *  are three moves that all win, so nothing hinges and the coach stays silent.
@@ -85,6 +88,9 @@ export interface CriticalMomentRead {
    *  Qxe5 — they win a knight". The fan's PVs were read and thrown away before
    *  (WO-TEACH-02 S5); a candidate whose line proves nothing gets no reason. */
   discardedProofs?: Array<{ san: string; text: string; line: { fen: string; sans: readonly string[] } }>;
+  /** THE reason the best move holds, when one accounts for the gap and is about
+   *  the move itself (a mate, a win by force) — `decisiveReason` on this fan. */
+  bestReason?: { text: string; line: { fen: string; sans: readonly string[] } | null };
 }
 
 /** Mover-POV score of a fan line, mate flattened. */
@@ -169,6 +175,9 @@ export function readCriticalMoment(input: {
   /** Supply to fill `holdingSans` (the review reveal needs to name the move;
    *  Learn deliberately does not). */
   fen?: string;
+  /** Whose move this is — supply with `fen` to compute `bestReason` (worded
+   *  from the student's seat). */
+  seat?: 'student' | 'opponent';
 }): CriticalMomentRead | null {
   const raw = [...(input.topLines ?? [])];
   if (raw.length === 0) return null;
@@ -210,6 +219,12 @@ export function readCriticalMoment(input: {
   const onBandEdge = floor !== null && cps.some((cp) => cp < floor && floor - cp <= edgeWidth);
   const within = cps.filter(holds).length;
   const gapCp = cps.length >= 2 ? bestCp - cps[1] : 0;
+  // "LIMIT THE DAMAGE" HAS NO FLOOR, SO ITS EDGE IS THE LAST MOVE THAT HELD
+  // (claim harvest 2026-10-17: "two moves limit the damage; everything else
+  // concedes" with the third move 8cp behind the second, 12 of 23 false). A
+  // discarded move within the band edge of the last holding one did not
+  // concede — the count is unproven, and an unproven count is silence.
+  const damageEdge = floor === null && within >= 1 && within < cps.length && cps[within - 1] - cps[within] < BAND_EDGE_CP;
 
   // A BOUND is not a score. An upper-bounded runner-up may truly be worse than
   // reported (so counting it overstates how forgiving the position is) and a
@@ -222,7 +237,7 @@ export function readCriticalMoment(input: {
       ? 'fan-too-narrow'
       : within >= lines.length
         ? 'count-fills-fan'
-        : onBandEdge
+        : onBandEdge || damageEdge
           ? 'band-edge'
           : null;
 
@@ -245,6 +260,19 @@ export function readCriticalMoment(input: {
     }
   }
 
+  // THE REASON, from the same fan (David 2026-10-17): the student may hear
+  // why the move held, not only that it did.
+  let bestReason: CriticalMomentRead['bestReason'];
+  if (input.fen && holdingSans[0] && input.seat) {
+    const r = decisiveReason({
+      fenBefore: input.fen, san: holdingSans[0], seat: input.seat, opponentLastSan: null,
+      reads: { before: lines.map((l) => ({ rank: l.rank, evaluation: l.evaluation, mate: l.mate ?? null, moves: [...(l.moves ?? [])] }) as AnalysisLine), after: [], passBefore: [], passAfter: [] },
+    });
+    if (r?.kind === 'the' && r.about === 'move' && r.source === 'material' && r.core) bestReason = { text: r.core, line: r.line };
+    // Explained only: the record reads this ply through the game sweep.
+    if (r) emitDecisiveReason({ surface: 'review', kind: r.kind, source: r.source, about: r.about, gapCp: r.gapCp, stakeCp: r.stakeCp, posedTag: reasonPosed(r)?.tag ?? null, outcome: 'explained' });
+  }
+
   return {
     count: within,
     toleranceCp: tolerance,
@@ -256,6 +284,7 @@ export function readCriticalMoment(input: {
     holdingSans,
     discardedSans,
     discardedProofs,
+    ...(bestReason ? { bestReason } : {}),
   };
 }
 
@@ -346,10 +375,11 @@ export function afterCandidate(san: string, text: string): string {
   const head = `${bare(san)} and `;
   const t = bare(text);
   if (t.startsWith(`${bare(san)} — `)) return t.slice(bare(san).length + 3);
+  // The long-line shape: "Qxc3+ and, three moves later, Nxd5 — …".
+  if (t.startsWith(`${bare(san)} and, `)) return t.slice(bare(san).length + 6);
   if (!t.startsWith(head)) return text;
   const rest = t.slice(head.length);
-  const follow = 'the moves that follow — ';
-  return rest.startsWith(follow) ? rest.slice(follow.length) : rest;
+  return rest;
 }
 
 /** THE CANDIDATES THAT FAIL — the strongest one proved out loud, the rest
@@ -382,10 +412,12 @@ export function criticalMomentReveal(read: CriticalMomentRead | null): string | 
   // THE CANDIDATES THAT FAIL, AND WHY (S5) — every discarded move whose own
   // line proves its failure. A candidate move is a lesson only with its reason.
   const fails = failedCandidates(read.discardedProofs ?? []);
+  // THE REASON it held, when one accounts for the gap (`decisiveReason`).
+  const why = read.bestReason ? ` ${read.bestReason.text}` : '';
   if (read.count === 1 || sans.length === 1) {
-    return `${lead} ${stake} here, and it was ${sans[0]}.${fails}`;
+    return `${lead} ${stake} here, and it was ${sans[0]}.${why}${fails}`;
   }
-  return `${lead} ${stake} here — ${sans[0]} and ${sans[1]}. Everything else conceded.${fails}`;
+  return `${lead} ${stake} here — ${sans[0]} and ${sans[1]}. Everything else conceded.${why}${fails}`;
 }
 
 /** Did the student play one of the moves that held? Coordinate-free comparison
@@ -407,7 +439,9 @@ export function criticalMomentFound(read: CriticalMomentRead | null, playedSan: 
   if (!criticalMomentHeld(read, playedSan) || !read) return null;
   const stake = stakeText(read.stake as StakeId, { plural: false, past: true });
   const fails = failedCandidates(read.discardedProofs ?? []);
+  // The reason is the BEST move's: said only when that is the move they played.
+  const why = read.bestReason && read.holdingSans[0] === playedSan ? ` ${read.bestReason.text}` : '';
   return read.count === 1
-    ? `${playedSan} was the only move that ${stake} here.${fails}`
-    : `${playedSan} was one of just two moves that ${stake} here.${fails}`;
+    ? `${playedSan} was the only move that ${stake} here.${why}${fails}`
+    : `${playedSan} was one of just two moves that ${stake} here.${why}${fails}`;
 }

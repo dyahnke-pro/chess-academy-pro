@@ -76,11 +76,6 @@ export async function recordApiUsage(
   return cost;
 }
 
-export async function getMonthlySpend(): Promise<number> {
-  const profile = await db.profiles.get('main');
-  return profile?.preferences.estimatedSpend ?? 0;
-}
-
 export async function getBudgetStatus(): Promise<{
   spent: number;
   cap: number | null;

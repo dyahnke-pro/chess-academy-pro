@@ -13,7 +13,7 @@
 import { Chess } from 'chess.js';
 import type { LocalDbMove } from './masterPlayLookup';
 import { shareAdverb } from '../utils/shareWords.ts';
-import { positionOf } from '../utils/samePosition';
+import { positionOf } from '../utils/samePosition.ts';
 
 export type MovesAt = (fen: string) => readonly LocalDbMove[] | null;
 

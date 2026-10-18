@@ -83,6 +83,15 @@ describe('trades', () => {
     expect(dutyParity('6k1/5ppp/8/8/2n5/8/1P3PPP/1R4K1 w - - 0 1', 'w')).toBeNull();
   });
 
+  it('duty parity stays silent when the guard has a problem of its own (claim harvest 2026-10-17)', () => {
+    // The queen on c5 guards a5 against their queen on a3 — but it is itself
+    // attacked by that queen with nothing defending it.
+    expect(dutyParity('6rk/2p4p/5p2/p1qb1N2/4r3/Q7/PPP3PP/2KR3R b - - 3 24', 'b')).toBeNull();
+    // The queen on c5 guards c7, but it is also the only guard of the bishop
+    // on d5 — overloaded, so the guard does cost.
+    expect(dutyParity('r6k/2p4p/5p2/p1qb1N2/4r3/6Q1/PPP3PP/2KR3R b - - 1 23', 'b')).toBeNull();
+  });
+
   it('the maintenance trade keeps the pawn count', () => {
     const fen = fa('e4 e5 d4 d6 Nf3 Nc6 d5 Nce7 c4 f5');
     const r = wellFormed(maintenanceTrade(fen, 'exf5', 'w', 0));

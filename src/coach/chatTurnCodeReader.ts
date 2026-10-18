@@ -300,6 +300,16 @@ export function namedMoveTokens(text: string): string[] {
 }
 const LINE_CUE_RE = /\b(?:calculate|calc|line|if|after|then|and|what happens|takes?|plays?|recapture)\b/i;
 
+const MAIN_LINE_ASK_RE = /\b(?:the\s+)?(?:main|engine'?s?|principal)\s+(?:line|variation)\b|\bhow\s+(?:does|would|will)\s+(?:it|this|the\s+game|the\s+position)\s+(?:go|continue|play\s+out)\b|\bcalculate\b[^?]*\b(?:moves?|plies)\s+deep\b/i;
+const NUMBER_WORD: Record<string, number> = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
+/** "six moves deep" → 12 plies; "8 plies deep" → 8; unsaid → 10 plies. */
+export function mainLinePlies(text: string): number {
+  const m = /\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(moves?|plies)\s+deep\b/i.exec(text);
+  if (!m) return 10;
+  const n = /^\d+$/.test(m[1]) ? Number(m[1]) : NUMBER_WORD[m[1].toLowerCase()] ?? 5;
+  return Math.max(2, Math.min(24, /^pl/i.test(m[2]) ? n : n * 2));
+}
+
 export function readTurnInCode(text: string, board: BoardContext): ChatTurn | null {
   if (!board.fen || text.length > 160) return null;
   let chess: Chess;
@@ -348,6 +358,19 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
         : { kind: 'retrospective-move', referents: [{ type: 'move', san: hist[i] }], seat: 'me', topic: null };
     }
   }
+  // "What did their last move do?" / "why did they play that?" — the last move
+  // asked about without naming it (escalating walk 2026-10-17: sent to the
+  // model it came back as the best move). Theirs or the student's own, by the
+  // possessive.
+  const lastAsk = /^\s*(?:what\s+(?:does|did)\s+(their|my|the)\s+(?:last|previous)\s+move\s+(?:do|mean|threaten|want|achieve)|why\s+did\s+(they|i)\s+play\s+(?:that|it|their\s+last\s+move|my\s+last\s+move))\b(?![^?]*\binstead\b)/i.exec(text);
+  if (lastAsk && hist.length) {
+    const who = (lastAsk[1] ?? lastAsk[2]).toLowerCase();
+    const lastIsTheirs = (hist.length % 2 === 1) !== (board.studentColor === 'white');
+    const theirs = who === 'their' || who === 'they' || (who === 'the' && lastIsTheirs);
+    if (theirs) return { kind: 'what-did-their-move-change', referents: [], seat: 'them', topic: null };
+    const mineAt = (board.studentColor === 'white') === (hist.length % 2 === 1) ? hist.length - 1 : hist.length - 2;
+    if (mineAt >= 0) return { kind: 'retrospective-move', referents: [{ type: 'move', san: hist[mineAt] }], seat: 'me', topic: null };
+  }
   // "If I play c4 and you take, how do I win the pawn back?" — a move and
   // their capture on its square: the line is the move and that capture
   // (hard-question re-walk 2026-10-11: read as a pawn standing on c4).
@@ -362,6 +385,13 @@ export function readTurnInCode(text: string, board: BoardContext): ChatTurn | nu
         return { kind: 'line-outcome', referents: [{ type: 'move', san: mine.san }, { type: 'move', san: take.san }], seat: null, topic: null };
       }
     } catch { /* not a move here */ }
+  }
+  // THE ENGINE'S OWN LINE, ASKED FOR WITHOUT NAMING A MOVE ("calculate the
+  // main line six moves deep", "how does it go from here?" — escalating walk
+  // 2026-10-17: read as a position summary). The line computer plays the
+  // engine's main line to that depth; `topic` carries the depth in plies.
+  if (namedMoveTokens(text).length < 2 && MAIN_LINE_ASK_RE.test(text)) {
+    return { kind: 'line-outcome', referents: [], seat: null, topic: `main-line:${mainLinePlies(text)}` };
   }
   const calcAt = text.search(/\b(?:calculate|calc|the line|play out|show the line)\b/i);
   const lineSans = namedMoveTokens(calcAt >= 0 ? text.slice(calcAt) : text);

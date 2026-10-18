@@ -55,11 +55,3 @@ export async function getWeakSpotsForOpening(openingId: string): Promise<Opening
     .toArray();
   return spots.sort((a, b) => b.failCount - a.failCount);
 }
-
-/**
- * Get all weak spots across all openings, sorted by fail count descending.
- */
-export async function getAllWeakSpots(): Promise<OpeningWeakSpot[]> {
-  const spots = await db.openingWeakSpots.toArray();
-  return spots.sort((a, b) => b.failCount - a.failCount);
-}

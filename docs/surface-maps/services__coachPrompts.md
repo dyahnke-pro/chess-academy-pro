@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**837 lines · 26 exports · 7 importers · 5 tests · 1 audits**
+**804 lines · 24 exports · 7 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
 - **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1257) — names `coachPrompts`
-- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3894) — names `coachPrompts`
+- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3923) — names `coachPrompts`
 
 ## Who calls in
 
@@ -24,7 +24,7 @@
 ## Exports and every call site
 
 ### `getVerbosityInstruction` (function) — 7 call sites
-- `src/services/coachApi.ts:940`
+- `src/services/coachApi.ts:957`
 - `src/services/coachPrompts.verbosity.test.ts:23`
 - `src/services/coachPrompts.verbosity.test.ts:24`
 - `src/services/coachPrompts.verbosity.test.ts:26`
@@ -53,13 +53,7 @@
 ### `REVIEW_MOVE_SEGMENT_ADDITION` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `REVIEW_INTRO_ADDITION` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `PHASE_NARRATION_ADDITION` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `GAME_POST_REVIEW_ADDITION` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `EXPLORE_REACTION_ADDITION` (const) — 0 call sites

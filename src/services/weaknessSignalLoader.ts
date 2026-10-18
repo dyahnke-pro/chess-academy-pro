@@ -1,3 +1,4 @@
+import { fadeLevelsFrom } from './fadeText';
 // weaknessSignalLoader — the impure adapter that reads the durable weakness
 // model from Dexie and produces the precomputed WeaknessSignal[] the narration
 // selector consumes (Phase 1 of the unified coach).
@@ -81,6 +82,17 @@ export async function loadProvenTags(): Promise<Set<string>> {
   const tags = await provenTagSet();
   provenCache = { at: Date.now(), tags };
   return tags;
+}
+
+/** THE FADE LEVEL per skill, from the student's own record: `short` when
+ *  proven, `lighter` when answered right since the last miss (a held streak)
+ *  but not yet proven. Absent = full teaching (grey or red). */
+export async function loadFadeLevels(): Promise<Map<string, 'lighter' | 'short'>> {
+  try {
+    return fadeLevelsFrom(await getCapabilityProfile());
+  } catch {
+    return new Map();
+  }
 }
 
 /** Drop the memo — call after the weakness model changes (new mistake captured /

@@ -4,7 +4,7 @@ import { detectTacticType } from './missedTacticService';
 import { useAppStore } from '../stores/appStore';
 import { TACTIC_TYPE_REV } from './tacticTypeBackfill';
 import { PRODUCTION_BACKFILL_SCHEDULE, sleep, type BackfillSchedule } from './backfillSchedule';
-import type { ClassifiedTactic, TacticType, TacticMotifStats, GameRecord } from '../types';
+import type { ClassifiedTactic, TacticType, GameRecord } from '../types';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -473,130 +473,6 @@ export function backfillClassifiedTactics(opts: {
 
 /** A page-triggered fill: the page has already painted, so no boot delay. */
 const PAGE_BACKFILL_SCHEDULE: BackfillSchedule = { ...PRODUCTION_BACKFILL_SCHEDULE, startDelayMs: 0 };
-
-// ─── Stats & Queries ────────────────────────────────────────────────────────
-
-/**
- * Get tactic motif stats: for each tactic type, how many were missed in games
- * and how the user performs on related puzzles.
- */
-export async function getTacticMotifStats(): Promise<TacticMotifStats[]> {
-  const allTactics = await db.classifiedTactics.toArray();
-  const allMistakePuzzles = await db.mistakePuzzles.toArray();
-
-  // Group classified tactics by type
-  const byType = new Map<TacticType, ClassifiedTactic[]>();
-  for (const t of allTactics) {
-    const arr = byType.get(t.tacticType) ?? [];
-    arr.push(t);
-    byType.set(t.tacticType, arr);
-  }
-
-  // Map puzzle themes to tactic types (puzzles from Lichess use theme tags)
-  const puzzleThemeToTactic = LICHESS_THEME_TO_TACTIC;
-
-  // Get puzzle stats grouped by tactic type
-  const puzzleStatsByType = new Map<TacticType, { attempts: number; successes: number }>();
-  const allPuzzles = await db.puzzles.toArray();
-  for (const p of allPuzzles) {
-    if (p.attempts === 0) continue;
-    for (const theme of p.themes) {
-      const tacticType = puzzleThemeToTactic[theme];
-      if (!tacticType) continue;
-      const existing = puzzleStatsByType.get(tacticType) ?? { attempts: 0, successes: 0 };
-      existing.attempts += p.attempts;
-      existing.successes += p.successes;
-      puzzleStatsByType.set(tacticType, existing);
-    }
-  }
-
-  // Also count mistake puzzle performance for each tactic type
-  for (const mp of allMistakePuzzles) {
-    if (mp.attempts === 0) continue;
-    // Mistake puzzles don't have a tactic type yet, but we can match by sourceGameId + moveNumber
-    const matching = allTactics.find(
-      (t) => t.sourceGameId === mp.sourceGameId && t.moveIndex === mp.moveNumber,
-    );
-    if (matching) {
-      const existing = puzzleStatsByType.get(matching.tacticType) ?? { attempts: 0, successes: 0 };
-      existing.attempts += mp.attempts;
-      existing.successes += mp.successes;
-      puzzleStatsByType.set(matching.tacticType, existing);
-    }
-  }
-
-  // Build stats array
-  const stats: TacticMotifStats[] = [];
-  const allTypes: TacticType[] = [
-    'fork', 'pin', 'skewer', 'discovered_attack', 'back_rank',
-    'hanging_piece', 'promotion', 'deflection', 'overloaded_piece',
-    'trapped_piece', 'clearance', 'interference', 'zwischenzug',
-    'x_ray', 'double_check', 'removing_the_guard',
-  ];
-
-  for (const type of allTypes) {
-    const missedInGames = byType.get(type)?.length ?? 0;
-    const puzzleStats = puzzleStatsByType.get(type);
-    const puzzleAttempts = puzzleStats?.attempts ?? 0;
-    const puzzleAccuracy = puzzleAttempts > 0
-      ? Math.round(((puzzleStats?.successes ?? 0) / puzzleAttempts) * 100)
-      : 0;
-
-    // Game awareness: what % of games with this tactic type did the user NOT miss it?
-    // We only track misses, so awareness = 0 if we have misses but no data on hits
-    // For now, show inverse severity: fewer misses relative to games = higher awareness
-    const totalGamesWithTactics = allTactics.length;
-    const gameAwareness = totalGamesWithTactics > 0
-      ? Math.max(0, Math.round(100 - (missedInGames / Math.max(totalGamesWithTactics, 1)) * 100))
-      : 0;
-
-    if (missedInGames > 0 || puzzleAttempts > 0) {
-      stats.push({
-        tacticType: type,
-        missedInGames,
-        puzzleAttempts,
-        puzzleAccuracy,
-        gameAwareness,
-      });
-    }
-  }
-
-  // Sort by most missed first
-  stats.sort((a, b) => b.missedInGames - a.missedInGames);
-  return stats;
-}
-
-/**
- * Get all classified tactics for a specific game.
- */
-export async function getTacticsForGame(gameId: string): Promise<ClassifiedTactic[]> {
-  return db.classifiedTactics.where('sourceGameId').equals(gameId).toArray();
-}
-
-/**
- * Get total count of classified tactics.
- */
-export async function getClassifiedTacticCount(): Promise<number> {
-  return db.classifiedTactics.count();
-}
-
-/**
- * Get recent classified tactics across all games.
- */
-export async function getRecentClassifiedTactics(limit: number = 20): Promise<ClassifiedTactic[]> {
-  return db.classifiedTactics
-    .orderBy('createdAt')
-    .reverse()
-    .limit(limit)
-    .toArray();
-}
-
-/**
- * Get classified tactics filtered by tactic type.
- */
-export async function getTacticsByType(type: TacticType): Promise<ClassifiedTactic[]> {
-  return db.classifiedTactics.where('tacticType').equals(type).toArray();
-}
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 

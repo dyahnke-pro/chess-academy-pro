@@ -204,7 +204,6 @@ const RULES: Array<[string, Rule]> = [
       && open.some((f) => coveredByType(g, f, 'b'));
   }],
 
-
   // PAWN mate.
   ['pawn-mate', (g) => !!single(g, 'p')],
 
@@ -228,7 +227,6 @@ const RULES: Array<[string, Rule]> = [
     const other = byType(g.attackerPieces, 'b').find((x) => x.square !== b.square); if (!other) return false;
     return openFlights(g).some((f) => f.coveredBy.includes(other.square));
   }],
-
 
   // RÉTI: bishop checks protected by a rook down a file/rank; king hemmed by own men.
   ['retis-mate', (g) => {
@@ -363,9 +361,6 @@ export function classifyMatePattern(fenAfterMate: string): MatePatternResult | n
   }
   return fundamental ? finish(fundamental) : null;
 }
-
-/** Test-only: the rule order (so the known-answer harness can name misses). */
-export const _mateRuleIds = RULES.map(([id]) => id);
 
 const PIECE_WORD: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 

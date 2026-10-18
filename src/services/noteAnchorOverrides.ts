@@ -64,8 +64,5 @@ export function applyDerivedAnchors(notes: DanyaNote[]): DanyaNote[] {
 let lastMissReported = false;
 export const derivedAnchorsWentUnmatched = (): boolean => lastMissReported;
 
-/** The derived anchor for a note id, or undefined. For the gate. */
-export const derivedAnchorFor = (id: string): string[] | undefined => DERIVED[id];
-
 /** Every derived anchor, for the gate to re-verify. */
 export const allDerivedAnchors = (): Record<string, string[]> => DERIVED;

@@ -61,3 +61,27 @@ IT NEVER MAKES THINGS UP
 Every move, line and evaluation comes from a real chess engine and real games. No guesses. No invented lines. Just chess.
 
 Your coach is ready. Make your first move.
+
+---
+
+## NEXT RELEASE — candidate lines from the 2026-10-17 batch (NOT approved yet)
+
+> Same rule: a line ships only if it is true of the build submitted. These are
+> drafted from the code that landed on 2026-10-17; David approves the wording
+> at submission.
+
+### What's New (candidate)
+Your coach now teaches the choice, not just the move.
+
+• Before you move, your coach rules out the tempting moves that lose, with the line that proves it. From your very first game.
+• Stop their plan and your coach notices: "That was the idea behind their last move."
+• Teaching that grows with you. Lessons get shorter as you prove a skill, and come back in full if you slip.
+• Three new habits tracked in Weaknesses: the pin you could have broken, leaning on a pin that doesn't hold, and the right moves in the wrong order.
+• Openings are named by the position, so a game that transposes gets its real name.
+
+### How each tab works now (candidate, one line each)
+- **Learn** — you play, the coach thinks out loud: the moves that lose and why, their plan one move early, and credit when you stop it.
+- **Play** — a real game at your strength; the coach stays quiet unless you ask.
+- **Review** — the story of your game: the turning point, your missed chances, their slips, each with its line on the board.
+- **Openings** — watch, learn, practise and play each line, with its traps.
+- **Tactics / Weaknesses** — your own mistakes become puzzles, grouped by the habit behind them; "Up next" picks the one you need.

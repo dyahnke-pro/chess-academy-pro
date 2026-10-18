@@ -3,7 +3,7 @@ import { evalBand, evalBandWords } from './evalBand';
 import { continueSentence } from '../utils/openSentence';
 import { smallTalkKind, smallTalkReply } from '../coach/smallTalk';
 import { lastMoveFromHistory } from './material';
-import { dangerAnswerLines, planArcAnswerLines, studentMoveAnswerLines, theirMoveAnswerLines } from './learnBoardTeaching';
+import { dangerAnswerLines, planArcAnswerLines, studentMoveAnswerLines, theirMoveAnswerLines, theirMovePoint } from './learnBoardTeaching';
 import OpenAI from 'openai';
 import { detectLanguage } from '../utils/detectLanguage';
 import { parseJsonSalvaging, isTruncatedJson } from '../utils/salvageJson';
@@ -136,18 +136,45 @@ import { askBackAtCatchAll, type ChatKind } from '../coach/chatTurn';
 // the deployed app's services via page.evaluate. No-op for real users.
 // Side-effect import keeps the audit script free of source-path knowledge.
 import './masterPlayAuditBridge';
-import { movePurpose } from './movePurposeEngine';
+import { askedBestMove, movePurpose, moveReason } from './movePurposeEngine';
+import { reasonPosed } from './decisiveReason';
+import { emitDecisiveReason } from './decisiveReasonEvents';
+/** The engine's best line as UCI from `fen`, when its first move is `bestUci`;
+ *  just that move otherwise (never a line from a different board). */
+function enginePlanUci(fen: string, pvSan: ReadonlyArray<string> | undefined, bestUci: string): string[] {
+  if (!pvSan?.length) return [bestUci];
+  const uci: string[] = [];
+  try {
+    const c = new Chess(fen);
+    for (const san of pvSan) { const m = c.move(san); uci.push(`${m.from}${m.to}${m.promotion ?? ''}`); }
+  } catch { /* the playable prefix */ }
+  return uci[0] === bestUci ? uci : [bestUci];
+}
+
+/** The move the chat last named as best, and the board it was named on — so
+ *  a follow-up "why is that the best move?" explains that same move. */
+let lastAskedBest: { fen: string; san: string } | null = null;
+
 /** The purpose of the game's last move (`movePurpose`), from the start
  *  position. Null when the history does not replay or the engine shows none. */
 async function lastMovePurpose(history: readonly string[], seat: 'student' | 'opponent'): Promise<string | null> {
   try {
     const c = new Chess();
     for (const san of history.slice(0, -1)) c.move(san);
-    const it = await movePurpose(c.fen(), history[history.length - 1], seat);
-    return it?.text ?? null;
+    const san = history[history.length - 1];
+    // THE reason when the move is one the engine weighs; its purpose otherwise
+    // (a move outside the engine's top lines has no gap to account for).
+    const reason = await moveReason(c.fen(), san, seat, history.length > 1 ? history[history.length - 2] : null);
+    if (reason?.kind === 'the') return reason.text;
+    const it = await movePurpose(c.fen(), san, seat);
+    // A close call adds nothing to the move's own purpose ("…e6 is about as
+    // good" on move one — escalating walk 2026-10-17); a move outside the
+    // engine's choices says so beside what it does.
+    const outside = reason?.kind === 'a' && reason.source === null ? reason.text : null;
+    if (it?.text) return outside ? `${it.text} ${outside}` : it.text;
+    return outside ?? (reason?.kind === 'a' ? reason.text : null);
   } catch { return null; }
 }
-
 
 /** Lead-the-eye suffix for an on-demand answer: paint every key square the
  *  computed read NAMED as a yellow highlight, coupled from `answer.keySquares`
@@ -674,33 +701,6 @@ async function callDeepSeekStream(
   return fullText;
 }
 
-/** Module-level scratch space for the last DeepSeek response's metadata.
- *  Audit-only; read synchronously by callers right after their await on
- *  getCoachChatResponse so the call→read pair runs in one event-loop
- *  tick (no interleaving). Captures finish_reason and reasoning_content
- *  length — the two fields the previous return-string-only contract
- *  was discarding. Lets the coachMoveCommentary path log a definitive
- *  llm-response audit instead of inferring "empty content + normal
- *  latency = ???". */
-export interface LastLlmMetadata {
-  provider: 'deepseek' | 'anthropic';
-  model: string;
-  finishReason: string | null;
-  reasoningContentLength: number;
-  promptTokens: number | null;
-  completionTokens: number | null;
-}
-
-let lastLlmMetadata: LastLlmMetadata | null = null;
-
-/** Read the metadata from the most recent LLM call. Resets to null
- *  after read so a stale value can't leak across unrelated callers. */
-export function consumeLastLlmMetadata(): LastLlmMetadata | null {
-  const m = lastLlmMetadata;
-  lastLlmMetadata = null;
-  return m;
-}
-
 /** One tappable follow-up the coach offers AFTER a grounded answer —
  *  the "want to work on this?" picker (David 2026-07-04: "Tie it into
  *  a picker once the coach answers... Don't just make it automatic").
@@ -714,7 +714,7 @@ export interface CoachActionOffer {
 }
 
 /** Module-level scratch space for the action offer the last grounded
- *  answer attached. Mirrors the `lastLlmMetadata` scratch pattern:
+ *  answer attached. A module-scoped scratch value:
  *  set synchronously inside a grounding interception block right
  *  before it returns the voiced answer, read synchronously by
  *  `coachService.ask` immediately after its await so the set→read
@@ -882,22 +882,7 @@ async function callDeepSeek(
     emitLlmTokenUsage(task, model, 'deepseek', response.usage.prompt_tokens, response.usage.completion_tokens, response.choices[0]?.finish_reason ?? null, hit, miss);
   }
   const choice = response.choices[0];
-  // DeepSeek-reasoner emits `reasoning_content` separately from
-  // `content` — the chain-of-thought is hidden from the caller but
-  // shares the `max_tokens` budget. When max_tokens is too small for
-  // both, content can be empty even though the call succeeded. We
-  // capture the length here so coachMoveCommentary's audit can name
-  // the failure mode.
-  const message = choice?.message as { content?: string | null; reasoning_content?: string | null } | undefined;
-  const reasoningContent = message?.reasoning_content;
-  lastLlmMetadata = {
-    provider: 'deepseek',
-    model,
-    finishReason: choice?.finish_reason ?? null,
-    reasoningContentLength: typeof reasoningContent === 'string' ? reasoningContent.length : 0,
-    promptTokens: response.usage?.prompt_tokens ?? null,
-    completionTokens: response.usage?.completion_tokens ?? null,
-  };
+  const message = choice?.message as { content?: string | null } | undefined;
   return message?.content ?? '';
 }
 
@@ -2098,7 +2083,6 @@ export function buildOpeningSuggestionReply(query: string): string | null {
 //     (smallTalk.ts) — no model at all.
 // The LLM keeps ONLY phrasing; it never decides a chess fact again (G0).
 
-
 /** SAN-shaped token / explicit stat / master-play claim — the fabrication
  *  vectors we sweep from a conversational reply that strayed into chess. */
 const STRAY_CHESS_PATTERNS: ReadonlyArray<RegExp> = [
@@ -2570,6 +2554,10 @@ async function serveGroundedPositionDefault(
   // its own (e.g. a pure eval-swing recovery) — voice it warmly rather than
   // dropping the interjection.
   if (prefix.trim()) {
+    // computedOnly is every exit, not two of three (item 11, 2026-10-17): the
+    // phase beat with no tactic or assessment behind it is a computed sentence,
+    // spoken as computed — no phrasing call.
+    if (computedOnly) return prefix.trim();
     const voiced = await voiceFacts(prefix.trim(), { studentMessage, providerConfig: config, targetLanguage: turnLanguage, intent: 'safe-default-moment', preferRaw: true });
     if (voiced) return voiced;
   }
@@ -2770,11 +2758,22 @@ async function computeLiveBoardVerdict(
       const pv = grounding.enginePlan?.pvSan ?? [];
       const mateAt = pv.findIndex((m) => m.includes('#'));
       const mateSans = mateAt >= 0 && mateAt < scMateIn * 2 ? pv.slice(0, mateAt + 1) : null;
-      const line = mateSans ? mateSans.join(' ') : null;
       // The mate it names is a line the board can play ("show me" / the walk
       // button) — the same moves, never read back out of the words.
       const walk = mateSans && grounding.currentFen ? walkableLine(grounding.currentFen, mateSans, mateSans[0]) : null;
-      const said = await voice(line ? `Yes — there's a forced mate in ${scMateIn}: ${line}.` : `Yes — there's a forced mate in ${scMateIn}.`, 'mate');
+      // THE VOICE SAYS THE SHAPE, THE BOARD SHOWS THE DETAIL (the proof rule;
+      // escalating walk 2026-10-17: a mate in 5 was read out as fourteen bare
+      // moves). The first move, the finish and the mate's name are said; every
+      // move is on the board to play through.
+      const shape = (() => {
+        if (!mateSans || mateSans.length === 0) return null;
+        if (mateSans.length <= 3) return mateSans.join(', ');
+        const finalFen = (() => { try { const c = new Chess(grounding.currentFen ?? fen); for (const m of mateSans) c.move(m); return c.fen(); } catch { return null; } })();
+        const pattern = finalFen ? classifyMatePattern(finalFen) : null;
+        const finish = mateSans[mateSans.length - 1].replace(/#$/, '');
+        return `it starts with ${mateSans[0]} and ends with ${finish} mate${pattern ? ` — ${pattern.name}` : ''}. The whole line is on the board`;
+      })();
+      const said = await voice(shape ? `Yes — there's a forced mate in ${scMateIn}: ${shape}.` : `Yes — there's a forced mate in ${scMateIn}.`, 'mate');
       if (said && walk) lastCoachLines = [walk];
       return said;
     }
@@ -5859,6 +5858,33 @@ export async function getCoachChatResponse(
           }
           const fen = grounding.currentFen ?? null;
           const plan = grounding.enginePlan;
+          // THE REASON FIRST (David 2026-10-17: "do we give A reason or THE
+          // reason?"): the best move against the next-best, the stake that
+          // accounts for the gap — or, honestly, that none does.
+          // "Why is THAT the best move?" explains the move just named on this
+          // board (the deeper asked read), never a different one.
+          const namedHere = lastAskedBest && fen && lastAskedBest.fen === fen ? lastAskedBest.san : null;
+          const reasonSan = namedHere ?? plan?.pvSan[0] ?? (() => {
+            const u = grounding.engineBestMoveUci;
+            if (!fen || !u) return null;
+            try { return new Chess(fen).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined })?.san ?? null; } catch { return null; }
+          })();
+          if (fen && reasonSan) {
+            const moverWB = fen.split(' ')[1] === 'b' ? 'black' : 'white';
+            const seat = grounding.studentColor && grounding.studentColor !== moverWB ? 'opponent' : 'student';
+            const history = grounding.moveHistory ?? [];
+            const reason = await moveReason(fen, reasonSan, seat, history.length ? history[history.length - 1] : null);
+            if (reason) {
+              emitDecisiveReason({ surface: 'chat', kind: reason.kind, source: reason.source, about: reason.about, gapCp: reason.gapCp, stakeCp: reason.stakeCp, posedTag: reasonPosed(reason)?.tag ?? null, outcome: 'explained' });
+              // A walk plays from the board on screen; a stopped threat's line
+              // starts from a passed move and is evidence, not a walk.
+              const walk = reason.line && reason.line.fen === fen ? walkableLine(reason.line.fen, reason.line.sans, reasonSan) : null;
+              if (walk) lastCoachLines = [walk];
+              let from = '';
+              try { const m = new Chess(fen).move(reasonSan); from = `${m.from}-${m.to}`; } catch { from = ''; }
+              return `${reason.text}${from ? ` [BOARD: arrow:${from}:green]` : ''}`;
+            }
+          }
           let answer = null;
           if (fen && plan && plan.pvSan.length > 0) {
             const moverColor: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
@@ -5914,11 +5940,6 @@ export async function getCoachChatResponse(
           const sc: 'white' | 'black' =
             grounding.studentColor ??
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
-          const base = assembleOpponentMoveAnswer({
-            fen: grounding.currentFen,
-            moveHistory: [...grounding.moveHistory],
-            studentColor: sc,
-          });
           // What their move COST them and the tempo count — the Learn computers.
           const theirPly = lastPlyOf(grounding.moveHistory, sc === 'white' ? 'black' : 'white');
           const bestHere = grounding.engineBestMoveUci && typeof grounding.engineEvalCp === 'number'
@@ -5927,8 +5948,18 @@ export async function getCoachChatResponse(
           const theirExtra = theirPly === null ? [] : theirMoveAnswerLines(grounding.moveHistory, theirPly, sc === 'white' ? 'w' : 'b', bestHere);
           // WHAT THEIR MOVE IS FOR — the one purpose computer Learn and the
           // review speak (`movePurpose`), so the chat gives the same reason.
-          const theirPurpose = base ? await lastMovePurpose(grounding.moveHistory, 'opponent') : null;
+          const theirPurpose = await lastMovePurpose(grounding.moveHistory, 'opponent');
           const extra = [...(theirPurpose ? [theirPurpose] : []), ...theirExtra];
+          // Computed AFTER the other computers, so a move they found a point
+          // for is never also called quiet.
+          const base = assembleOpponentMoveAnswer({
+            fen: grounding.currentFen,
+            moveHistory: [...grounding.moveHistory],
+            studentColor: sc,
+            // Only a real point (its purpose, what it stopped) rules out
+            // "quiet" — "your answer is b4" says nothing about their move.
+            pointKnown: !!theirPurpose || (theirPly !== null && !!theirMovePoint(grounding.moveHistory, theirPly, sc === 'white' ? 'w' : 'b')),
+          });
           const answer = base && extra.length > 0 ? { ...base, facts: `${base.facts} ${extra.join(' ')}` } : base;
           if (answer) {
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opponent-move', preferRaw: true });
@@ -6060,9 +6091,19 @@ export async function getCoachChatResponse(
               masterFreqPct = (hit.games / masterPlayContext.current.totalGames) * 100;
             }
           }
+          // THE REASON the engine's move beats the named one — the same
+          // computer the why-best lane and Learn read.
+          const candBestSan = (() => { try { return candBestUci ? new Chess(candFen).move({ from: candBestUci.slice(0, 2), to: candBestUci.slice(2, 4), promotion: candBestUci[4] })?.san ?? null : null; } catch { return null; } })();
+          const namedNorm = (() => { try { return new Chess(candFen).move(grounding.candidateMoveSan ?? '')?.san ?? null; } catch { return null; } })();
+          const betterReason = candBestSan && namedNorm && candBestSan !== namedNorm
+            ? await moveReason(candFen, candBestSan, 'student', grounding.moveHistory?.[grounding.moveHistory.length - 1] ?? null).catch(() => null)
+            : null;
+          if (betterReason) emitDecisiveReason({ surface: 'chat', kind: betterReason.kind, source: betterReason.source, about: betterReason.about, gapCp: betterReason.gapCp, stakeCp: betterReason.stakeCp, posedTag: null, outcome: 'explained' });
+          const betterSaid = betterReason?.kind === 'the' ? betterReason.text : null;
           const answer = assembleCandidateMoveAnswer({
             fen: candFen,
             candidateSan: grounding.candidateMoveSan,
+            betterReason: betterSaid,
             bestMoveUci: candBestUci,
             bestEvalCp: stmBestEval,
             candidateEvalCp: stmCandEval,
@@ -6074,10 +6115,15 @@ export async function getCoachChatResponse(
             errorCall: (band, loss) => errorCallFor({
               fenBefore: candFen, playedSan: grounding.candidateMoveSan ?? '',
               moverColor: blackToMove ? 'black' : 'white',
-              bestUci: candBestUci, bestLineUci: candBestUci ? [candBestUci] : [],
+              // The engine's WHOLE best line from this board, so the better
+              // move's reason is what the line wins (escalating walk
+              // 2026-10-17: a one-move line gave "Bxc5+ would fork the a7
+              // pawn" where Bxc5+ goes on to win the queen).
+              bestUci: candBestUci, bestLineUci: candBestUci ? enginePlanUci(candFen, grounding.enginePlan?.pvSan, candBestUci) : [],
               replyLineUci: grounding.candidateLineUci ?? [],
               quality: band, missedMate: null, allowedMate: null, cpLoss: loss,
-              namesBetterMove: true, tense: 'would',
+              // The better move is named with its own reason below.
+              namesBetterMove: !betterSaid, tense: 'would',
             }),
           });
           if (answer?.lines?.length) lastCoachLines = answer.lines;
@@ -6196,7 +6242,15 @@ export async function getCoachChatResponse(
           // snapshot isn't present. Threading the engine move is what lets
           // OFF-BOOK positions (no master data) ground too — the gap the
           // master-only block couldn't cover.
-          let bestUci: string | null = grounding.engineBestMoveUci ?? null;
+          // ASKED ON THE LIVE BOARD, THE STUDENT TO MOVE: one deeper read picks
+          // the move and feeds its reason (the shallow live read once crowned
+          // a move the engine does not list). Falls back to the threaded read.
+          const liveMover: 'white' | 'black' | null = grounding.currentFen ? (grounding.currentFen.split(' ')[1] === 'b' ? 'black' : 'white') : null;
+          const askedHere = grounding.currentFen && (!grounding.studentColor || grounding.studentColor === liveMover)
+            ? await askedBestMove(grounding.currentFen, grounding.moveHistory?.[grounding.moveHistory.length - 1] ?? null).catch(() => null)
+            : null;
+          if (askedHere && grounding.currentFen) lastAskedBest = { fen: grounding.currentFen, san: askedHere.san };
+          let bestUci: string | null = askedHere?.uci ?? grounding.engineBestMoveUci ?? null;
           let bestFen: string | null = bestUci ? (grounding.currentFen ?? null) : null;
           if (!bestUci && masterPlayContext && masterPlayContext.current.moves.length > 0) {
             bestUci = masterPlayContext.current.moves[0].uci ?? null;
@@ -6206,15 +6260,29 @@ export async function getCoachChatResponse(
             // LiveState evals are WHITE-perspective; assembleMoveEvalAnswer
             // wants side-to-move POV. Flip the sign when Black is to move.
             const blackToMove = bestFen.split(' ')[1] === 'b';
+            const whiteEval = askedHere ? askedHere.evalCp : grounding.engineEvalCp;
+            const whiteMate = askedHere ? askedHere.mateIn : grounding.engineMateIn;
             const stmEvalCp =
-              typeof grounding.engineEvalCp === 'number'
-                ? (blackToMove ? -grounding.engineEvalCp : grounding.engineEvalCp)
+              typeof whiteEval === 'number'
+                ? (blackToMove ? -whiteEval : whiteEval)
                 : null;
             const stmMateIn =
-              typeof grounding.engineMateIn === 'number'
-                ? (blackToMove ? -grounding.engineMateIn : grounding.engineMateIn)
+              typeof whiteMate === 'number'
+                ? (blackToMove ? -whiteMate : whiteMate)
                 : null;
-            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, askedPiece: grounding.askedPiece ?? null, prevCapture: bestFen === grounding.currentFen ? lastCaptureOf(grounding.moveHistory) : null, pvSan: bestFen === grounding.currentFen ? grounding.enginePlan?.pvSan ?? null : null, opponentLastSan: bestFen === grounding.currentFen ? grounding.moveHistory?.[grounding.moveHistory.length - 1] ?? null : null });
+            // THE REASON for the best move — the one reason computer, from the
+            // student's seat, on the board asked about (not a master board).
+            const bestMoveSanHere = (() => { try { return new Chess(bestFen).move({ from: bestUci.slice(0, 2), to: bestUci.slice(2, 4), promotion: bestUci[4] })?.san ?? null; } catch { return null; } })();
+            const lastHere = bestFen === grounding.currentFen ? grounding.moveHistory?.[grounding.moveHistory.length - 1] ?? null : null;
+            const moverHere: 'white' | 'black' = blackToMove ? 'black' : 'white';
+            const studentToMove = !grounding.studentColor || grounding.studentColor === moverHere;
+            const bestReason = askedHere
+              ? askedHere.reason
+              : bestMoveSanHere && studentToMove && bestFen === grounding.currentFen
+                ? await moveReason(bestFen, bestMoveSanHere, 'student', lastHere).catch(() => null)
+                : null;
+            if (bestReason) emitDecisiveReason({ surface: 'chat', kind: bestReason.kind, source: bestReason.source, about: bestReason.about, gapCp: bestReason.gapCp, stakeCp: bestReason.stakeCp, posedTag: null, outcome: 'explained' });
+            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, askedPiece: grounding.askedPiece ?? null, prevCapture: bestFen === grounding.currentFen ? lastCaptureOf(grounding.moveHistory) : null, pvSan: askedHere ? askedHere.pvSan : bestFen === grounding.currentFen ? grounding.enginePlan?.pvSan ?? null : null, opponentLastSan: lastHere, theReason: bestReason?.kind === 'the' ? bestReason.text : bestReason?.kind === 'close' ? bestReason.core : null, closeAlt: bestReason?.kind === 'close' ? bestReason.nextBestSan : null });
             if (answer) {
               const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
               if (voiced) {

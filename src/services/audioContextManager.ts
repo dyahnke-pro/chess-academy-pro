@@ -12,10 +12,6 @@
 let _ctx: AudioContext | null = null;
 let _lastResumeError: string | null = null;
 
-export function getLastAudioContextError(): string | null {
-  return _lastResumeError;
-}
-
 function _tryResume(ctx: AudioContext): void {
   if (ctx.state === 'suspended') {
     // resume() rejects on iOS when the system audio session can't start

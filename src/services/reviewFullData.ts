@@ -1519,6 +1519,9 @@ export function computeMoveFacets(
       if (ctx.bestLineUci.length >= 2) add('timing', readBoardAll('moveOrder', { fen: fenBefore, pv: ctx.bestLineUci })[0] ?? null);
       // The book move the student just left, with its job on the board.
       add('opening', readBoardAll('bookMove', { history: ctx.allSans.slice(0, ply), student: studentColorWB })[0] ?? null);
+      // The count and the priority the student faced (unified with Learn).
+      add('method', readBoardAll('countMethod', { fen: fenBefore, student: studentColorWB })[0] ?? null);
+      if (ctx.bestLineUci[0]) add('method', readBoardAll('priorityFirst', { fen: fenBefore, student: studentColorWB, bestUci: ctx.bestLineUci[0] })[0] ?? null);
     }
   }
 

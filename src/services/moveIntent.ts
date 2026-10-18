@@ -57,7 +57,7 @@ export const DEFAULT_INTENT: IntentOptions = { prepare: 'unlock', prevent: 'any+
 
 export interface MoveIntent {
   /** The reply this move took away from the opponent. */
-  prevents: (IntentMove & { threatCp: number }) | null;
+  prevents: (IntentMove & { threatCp: number; /** The stopped move was mate. */ mate?: boolean }) | null;
   /** The follow-up this move made possible or clearly better. */
   prepares: (IntentMove & { gainCp: number }) | null;
   text: string;
@@ -174,9 +174,14 @@ export function moveIntent(
       // "Bg5 takes …Ne7 away" when …Ne7 was their best move). A move still
       // legal, still safe to land, and not measured worse by the engine is
       // not gone — absence from the top lines alone proves nothing.
-      const stillFine = stillLegal && safeLanding(fenAfter, uciToMove(threat))
+      // A MATE THAT NO LONGER MATES IS GONE (contract board 2026-10-17: after
+      // …h6, Re8+ is still legal and lands safely, so it read as "still fine"
+      // and the luft move never got its reason). Still legal is not still mate.
+      const wasMate = line.mate !== null && line.mate !== undefined && Math.abs(line.mate) === 1;
+      const mateGone = wasMate && !matesFrom(fenAfter, threat);
+      const stillFine = !mateGone && stillLegal && safeLanding(fenAfter, uciToMove(threat))
         && (threatNow === null || theirBestNow === null || threatNow > theirBestNow - GONE_CP);
-      if (gone && !stillFine) prevents = { uci: threat, san: threatSan, threatCp };
+      if ((gone || mateGone) && !stillFine) prevents = { uci: threat, san: threatSan, threatCp, ...(mateGone ? { mate: true } : {}) };
     }
     if (!prevents && opts.prevent === 'any+deny') prevents = denied(fenBefore, fenAfter, passFen, playedUci, mover, reads);
   }
@@ -308,7 +313,22 @@ export function moveIntent(
     ...(prepares ? [prepares.uci.slice(0, 2), prepares.uci.slice(2, 4)] : []),
   ])];
   const why = prevents ? stopReason(fenAfter, prevents.uci, mover) : null;
-  return { prevents, prepares, text: phrase(playedSan, prevents, prepares, seat, mover, fenAfter, prepares ? whatItDoes(fenAfter, prepares.uci, mover) : null, why), squares, about: seat };
+  // WHAT THE STOPPED MOVE WOULD HAVE DONE (escalating walk 2026-10-17: "Bxd7+
+  // — now …g6 doesn't work" never said …g6 was hitting the f5-knight): read
+  // on the board before the move, the mover passing.
+  const threatDid = prevents ? whatItDoes(fenBefore, prevents.uci, opp) : null;
+  return { prevents, prepares, text: phrase(playedSan, prevents, prepares, seat, mover, fenAfter, prepares ? whatItDoes(fenAfter, prepares.uci, mover) : null, why, threatDid), squares, about: seat };
+}
+
+/** Does `uci` (the side to move after a pass) still give mate from `fenAfter`? */
+function matesFrom(fenAfter: string, uci: string): boolean {
+  const pass = nullMoveFen(fenAfter);
+  if (!pass) return false;
+  try {
+    const c = new Chess(pass);
+    c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4, 5) || undefined });
+    return c.isCheckmate();
+  } catch { return false; }
 }
 
 /** A threat worth naming as "stopped": it mates, checks, or wins material by
@@ -334,6 +354,9 @@ function phrase(
   /** WHY the stopped move no longer works, counted — "you cover d5 three
    *  times to their two" (census #12, his "count it"). */
   why: string | null = null,
+  /** What the stopped move would have done (its target, said from the
+   *  student's seat), so a stop is never a bare "doesn't work". */
+  threatDid: PreparedPoint | null = null,
 ): string {
   const dot = (s: string, side: 'w' | 'b'): string => (side === 'b' ? `…${s}` : s);
   const opp: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
@@ -348,7 +371,10 @@ function phrase(
     if (prevents && prepares) return `${played} does two jobs: it stops ${stop}, and it prepares ${prep}${does ? `, to ${does.verb}` : ''}.`;
     // "doesn't work", never "isn't possible" — the stopped move is still
     // LEGAL, it just loses (walk 2026-09-30: said five times in one game).
+    const wouldDo = threatDid && !threatDid.castle ? threatDid.verb.replace(/^hit the /, 'hit your ') : null;
+    if (prevents?.mate) { const m = stop.replace(/[+#]$/, ''); return rotateStem([`${played} stops ${m}, which was mate.`, `The point of ${played}: ${m} was mate, and now it isn't.`], key); }
     if (prevents && why) return `${played} — now ${stop} doesn't work: ${why}.`;
+    if (prevents && wouldDo) return `${played} — ${stop} would ${wouldDo}, and now it doesn't work.`;
     if (prevents) return rotateStem([`${played} — now ${stop} doesn't work.`, `The point of ${played}: it takes ${stop} away.`], key);
     // Every stem names the seat (review audit 2026-10-15: "…e5 first, so that
     // …Bd6 can bring the bishop into the game" said whose move to no one).
@@ -359,6 +385,9 @@ function phrase(
   const stop = prevents ? `your ${dot(prevents.san, opp)}` : '';
   const prep = prepares ? dot(prepares.san, mover) : '';
   if (prevents && prepares) return `Their ${played} does two jobs: it stops ${stop}, and it prepares ${prep}${does ? `, to ${does.verb}` : ''}.`;
+  const theirWouldDo = threatDid && !threatDid.castle ? threatDid.verb.replace(/^hit the /, 'hit their ') : null;
+  if (prevents?.mate) return `Their ${played} stops ${stop.replace(/[+#]$/, '')}, which was mate.`;
+  if (prevents && theirWouldDo) return `Their ${played} stops ${stop}, which would ${theirWouldDo}.`;
   if (prevents) return rotateStem([`Their ${played} stops ${stop}.`, `The point of their ${played}: it takes ${stop} away.`], key);
   if (does?.castle) return rotateStem([`Their ${played} clears the way to castle.`, `They play ${played} first, so they can castle next.`], key);
   if (does) return rotateStem([`Their ${played} prepares ${prep}, to ${does.verb}.`, `They play ${played} first, so that ${prep} can ${does.verb}.`], key);
@@ -600,3 +629,22 @@ export function intentRule(
   return ruleForPurpose(fenWherePlayed, intent.prepares.san, mover, taught, intent.about);
 }
 
+
+/** PREVENTION, CLOSED — one rule for every surface (A-plan P2, unified
+ *  2026-10-17). Their quiet move prepared `prep.uci` on the board `prep.fen`;
+ *  the student's move from that same board took exactly that move away.
+ *  Compared on the board (placement, turn, castling, en passant), never on the
+ *  clocks. */
+export function preventsNamedIdea(prep: { uci: string; fen: string } | null, fenBefore: string, stoppedUci: string): boolean {
+  if (!prep) return false;
+  const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+  return key(prep.fen) === key(fenBefore) && prep.uci.slice(0, 4) === stoppedUci.slice(0, 4);
+}
+
+/** The tie-back said after the stop is named. */
+export const STOPPED_THEIR_IDEA = 'That was the idea behind their last move.';
+
+/** What a prevented threat was worth, landed now (it is already stopped). */
+export function preventStakes(prevents: { threatCp: number } | null | undefined): { points: number; plies: number } | undefined {
+  return prevents && prevents.threatCp > 0 ? { points: prevents.threatCp / 100, plies: 0 } : undefined;
+}

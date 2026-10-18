@@ -1,4 +1,5 @@
 import { coachTurn } from './coachDecider';
+import { fadeLevelsFrom } from './fadeText';
 import { CALM_BOARD } from './boardState';
 import { NO_BOOST } from './studentMomentBoost';
 import { layerStandings } from './teachingLayers';
@@ -51,6 +52,7 @@ export function puzzleMethodLine(
       moveAdvice: null,
       momentBoost: NO_BOOST,
       layers: layerStandings(record.weaknesses, record.capabilities),
+      fade: fadeLevelsFrom(record.capabilities),
     }, bundle: { facts: [], board: CALM_BOARD, squares: new Map(), proofs: new Map() }, posture: 'walk', method: { bestSan, cpLossCp: stakesCp, ignoredThreat: false, isStudentMove: true, saidHabits: said, ply: variety } });
   const beat = d.spoken.find((t) => t.startsWith('[method] '));
   return beat ? beat.slice('[method] '.length) : null;

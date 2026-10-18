@@ -64,10 +64,6 @@ export const SURFACE_CONTRACT: Record<CoachSurface, SurfaceContract> = {
  *  fails the scan gate's exhaustiveness check). */
 export const COACH_SURFACES = Object.keys(SURFACE_CONTRACT) as CoachSurface[];
 
-export function contractFor(surface: CoachSurface): SurfaceContract {
-  return SURFACE_CONTRACT[surface];
-}
-
 /** The register a surface renders the selector's thesis in. Surfaces call
  *  THIS — never `renderThesis(thesis, '<literal>')`. */
 export function registerFor(surface: CoachSurface): SurfaceRegister {

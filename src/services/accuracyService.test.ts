@@ -63,15 +63,17 @@ describe('accuracyService', () => {
     it('returns 100 when no win-percent dropped', () => {
       expect(accuracyFromWinDelta(0)).toBeCloseTo(100, 0);
     });
-    it('returns ~63 for a 10-point drop', () => {
+    // Calibrated to chess.com (2026-10-17, ACCURACY_DECAY): steeper than
+    // lichess's curve, which read David's games ~4 points too generous.
+    it('returns ~55 for a 10-point drop', () => {
       const a = accuracyFromWinDelta(10);
-      expect(a).toBeGreaterThan(58);
-      expect(a).toBeLessThan(68);
+      expect(a).toBeGreaterThan(50);
+      expect(a).toBeLessThan(60);
     });
-    it('returns ~30 for a 25-point drop', () => {
+    it('returns ~21 for a 25-point drop', () => {
       const a = accuracyFromWinDelta(25);
-      expect(a).toBeGreaterThan(25);
-      expect(a).toBeLessThan(40);
+      expect(a).toBeGreaterThan(17);
+      expect(a).toBeLessThan(26);
     });
     it('floors near 0 for >60-point drop', () => {
       expect(accuracyFromWinDelta(60)).toBeLessThan(8);
@@ -137,7 +139,8 @@ describe('accuracyService', () => {
       // winning but you slipped." Same game's cp-loss of 600 in the
       // old algo would have shown near-zero, which doesn't match
       // chess.com.
-      expect(result.white).toBeGreaterThan(20);
+      // Still a real mistake, never near zero (calibrated curve: ~18).
+      expect(result.white).toBeGreaterThan(14);
       expect(result.white).toBeLessThan(40);
     });
 
@@ -235,5 +238,18 @@ describe('accuracyService', () => {
       expect(counts.brilliant).toBe(0);
       expect(counts.blunder).toBe(0);
     });
+  });
+});
+
+describe('calibrated to chess.com (2026-10-17)', () => {
+  it('a sharp stretch weighs more than a calm one: the same slip costs more where the game swings', async () => {
+    const { calculateAccuracy } = await import('./accuracyService');
+    const mv = (moveNumber: number, preMoveEval: number, evaluation: number) => ({ moveNumber, preMoveEval, evaluation, classification: 'good' } as never);
+    const calm = calculateAccuracy([mv(1, 20, 20), mv(3, 20, 20), mv(5, 20, -180), mv(7, -180, -180), mv(9, -180, -180)]);
+    expect(calm.white).toBeGreaterThan(0);
+    expect(calm.white).toBeLessThan(100);
+    // One move, no swing: the blend equals the move's own accuracy.
+    const one = calculateAccuracy([mv(1, 0, 0)]);
+    expect(one.white).toBeCloseTo(100, 0);
   });
 });

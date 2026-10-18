@@ -258,15 +258,6 @@ export function isGenericAnnotationText(text: string | undefined): boolean {
   return GENERIC_ANNOTATION_PATTERNS.some((re) => re.test(trimmed));
 }
 
-/** Same check against an annotation object — convenience wrapper. */
-export function hasMeaningfulAnnotation(
-  step: OpeningMoveAnnotation | null,
-): boolean {
-  if (!step) return false;
-  const text = step.narration ?? step.annotation ?? '';
-  return text.length > 0 && !isGenericAnnotationText(text);
-}
-
 export type NarrationLength = 'full' | 'short' | 'silent';
 
 /**

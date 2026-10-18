@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**827 lines · 25 exports · 4 importers · 1 tests · 0 audits**
+**837 lines · 25 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -54,52 +54,54 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `captureAbandonsDuty` (function) — 3 call sites
 - `src/services/capabilityEvidence.ts:461`
-- `src/services/exchangeIdeas.test.ts:240`
-- `src/services/exchangeIdeas.test.ts:241`
+- `src/services/exchangeIdeas.test.ts:249`
+- `src/services/exchangeIdeas.test.ts:250`
 
 ### `tradeChoice` (function) — 2 call sites
 - `src/services/exchangeIdeas.test.ts:73`
 - `src/services/exchangeIdeas.test.ts:76`
 
-### `dutyParity` (function) — 3 call sites
+### `dutyParity` (function) — 5 call sites
 - `src/services/exchangeIdeas.test.ts:80`
 - `src/services/exchangeIdeas.test.ts:83`
-- `src/services/exchangeIdeas.test.ts:231`
+- `src/services/exchangeIdeas.test.ts:89`
+- `src/services/exchangeIdeas.test.ts:92`
+- `src/services/exchangeIdeas.test.ts:240`
 
 ### `maintenanceTrade` (function) — 2 call sites
-- `src/services/exchangeIdeas.test.ts:88`
-- `src/services/exchangeIdeas.test.ts:91`
+- `src/services/exchangeIdeas.test.ts:97`
+- `src/services/exchangeIdeas.test.ts:100`
 
 ### `prepareRecapture` (function) — 2 call sites
-- `src/services/exchangeIdeas.test.ts:95`
-- `src/services/exchangeIdeas.test.ts:99`
+- `src/services/exchangeIdeas.test.ts:104`
+- `src/services/exchangeIdeas.test.ts:108`
 
 ### `threatCost` (function) — 2 call sites
-- `src/services/exchangeIdeas.test.ts:106`
-- `src/services/exchangeIdeas.test.ts:110`
+- `src/services/exchangeIdeas.test.ts:115`
+- `src/services/exchangeIdeas.test.ts:119`
 
 ### `simplestWin` (function) — 2 call sites
-- `src/services/exchangeIdeas.test.ts:116`
-- `src/services/exchangeIdeas.test.ts:120`
+- `src/services/exchangeIdeas.test.ts:125`
+- `src/services/exchangeIdeas.test.ts:129`
 
 ### `previousOwnMove` (function) — 2 call sites
-- `src/services/exchangeIdeas.test.ts:134`
-- `src/services/exchangeIdeas.test.ts:135`
-
-### `safeBecause` (function) — 3 call sites
-- `src/services/exchangeIdeas.test.ts:126`
-- `src/services/exchangeIdeas.test.ts:129`
-- `src/services/exchangeIdeas.test.ts:254`
-
-### `wingForCentre` (function) — 2 call sites
-- `src/services/exchangeIdeas.test.ts:141`
+- `src/services/exchangeIdeas.test.ts:143`
 - `src/services/exchangeIdeas.test.ts:144`
 
+### `safeBecause` (function) — 3 call sites
+- `src/services/exchangeIdeas.test.ts:135`
+- `src/services/exchangeIdeas.test.ts:138`
+- `src/services/exchangeIdeas.test.ts:263`
+
+### `wingForCentre` (function) — 2 call sites
+- `src/services/exchangeIdeas.test.ts:150`
+- `src/services/exchangeIdeas.test.ts:153`
+
 ### `materialArithmetic` (function) — 4 call sites
-- `src/services/exchangeIdeas.test.ts:148`
-- `src/services/exchangeIdeas.test.ts:152`
-- `src/services/exchangeIdeas.test.ts:266`
-- `src/services/exchangeIdeas.test.ts:267`
+- `src/services/exchangeIdeas.test.ts:157`
+- `src/services/exchangeIdeas.test.ts:161`
+- `src/services/exchangeIdeas.test.ts:275`
+- `src/services/exchangeIdeas.test.ts:276`
 
 ### `knightReach` (function) — 4 call sites
 - `src/services/captureChoice.ts:59`
@@ -108,24 +110,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/speedRunReads.ts:364`
 
 ### `knightSquares` (function) — 3 call sites
-- `src/services/exchangeIdeas.test.ts:156`
-- `src/services/exchangeIdeas.test.ts:159`
-- `src/services/exchangeIdeas.test.ts:162`
+- `src/services/exchangeIdeas.test.ts:165`
+- `src/services/exchangeIdeas.test.ts:168`
+- `src/services/exchangeIdeas.test.ts:171`
 
 ### `cPawnBlock` (function) — 4 call sites
 - `src/services/capabilityEvidence.ts:493`
-- `src/services/exchangeIdeas.test.ts:166`
-- `src/services/exchangeIdeas.test.ts:168`
-- `src/services/exchangeIdeas.test.ts:169`
+- `src/services/exchangeIdeas.test.ts:175`
+- `src/services/exchangeIdeas.test.ts:177`
+- `src/services/exchangeIdeas.test.ts:178`
 
 ### `ExchangeIdeasInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `exchangeIdeas` (function) — 5 call sites
-- `src/services/exchangeIdeas.test.ts:187`
-- `src/services/exchangeIdeas.test.ts:188`
-- `src/services/exchangeIdeas.test.ts:192`
-- `src/services/positionFacts.ts:1145`
+- `src/services/exchangeIdeas.test.ts:196`
+- `src/services/exchangeIdeas.test.ts:197`
+- `src/services/exchangeIdeas.test.ts:201`
+- `src/services/positionFacts.ts:1162`
 - `src/services/reviewFullData.ts:984`
 
 ## Tests

@@ -247,6 +247,15 @@ function laneEvidenceRows(listener) {
   return rows;
 }
 
+function reasonRows(listener) {
+  const rows = [];
+  for (const e of listener.getCapturedEvents()) {
+    if (e.kind !== 'decisive-reason') continue;
+    try { rows.push(JSON.parse(e.details ?? '')); } catch { /* skip */ }
+  }
+  return rows;
+}
+
 function decisionRows(listener) {
   const rows = [];
   for (const e of listener.getCapturedEvents()) {
@@ -733,6 +742,17 @@ async function main() {
     const evidence = laneEvidenceRows(listener);
     const dishonest = evidence.filter((r) => r.outcome !== 'held' || typeof r.prompted !== 'boolean' || !Array.isArray(r.tags) || r.tags.length !== 1);
     record('LE1. LANE EVIDENCE rows are held-only and answer prompted', dishonest.length === 0, `${evidence.length} rows (${evidence.filter((r) => r.prompted).length} prompted), ${dishonest.length} malformed`);
+
+    // THE REASON COMPUTER (David 2026-10-17: "wired into the algos"). Every
+    // `the` row's stake covers the gap (the rule that makes it THE reason), a
+    // posed tag rides only on a `the` row, and Learn rows are held/explained —
+    // a miss reaches the record through the game sweep, never a lane.
+    const reasons = reasonRows(listener);
+    const badReason = reasons.filter((r) => (r.kind === 'the' && !(typeof r.stakeCp === 'number' && r.stakeCp >= 0.6 * r.gapCp))
+      || (r.kind !== 'the' && r.posedTag != null)
+      || (r.surface === 'learn' && r.outcome === 'broken'));
+    record('DR1. DECISIVE REASON rows keep the covering rule', badReason.length === 0,
+      `${reasons.length} rows (the=${reasons.filter((r) => r.kind === 'the').length} a=${reasons.filter((r) => r.kind === 'a').length} close=${reasons.filter((r) => r.kind === 'close').length}), ${badReason.length} malformed`);
 
     const decisions = decisionRows(listener);
     record(

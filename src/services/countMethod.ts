@@ -12,7 +12,7 @@ import { Chess, type Color } from 'chess.js';
 import { MATERIAL_VALUE } from './pieceValues';
 import { signedLegalSeeFor } from './positionReadingService';
 
-export interface CountMethod { text: string; square: string }
+export interface CountMethod { text: string; square: string; /** The exchange's net for the student, in points (signed SEE). */ net: number }
 
 export function countMethod(fen: string, student: Color): CountMethod | null {
   let c: Chess;
@@ -29,10 +29,10 @@ export function countMethod(fen: string, student: Color): CountMethod | null {
     if (att < 2 || def < 2) continue;
     const net = signedLegalSeeFor(fen, sq, student);
     if (att > def && net > 0) {
-      return { square: sq, text: `Count before you take on ${sq}: ${att} of your pieces hit it and ${def} of theirs defend it. More attackers than defenders, and the trades there come out in your favour.` };
+      return { square: sq, net, text: `Count before you take on ${sq}: ${att} of your pieces hit it and ${def} of theirs defend it. More attackers than defenders, and the trades there come out in your favour.` };
     }
     if (att <= def && net < 0) {
-      return { square: sq, text: `Count before you take on ${sq}: ${att} attackers against ${def} defenders. Not enough — start the trades there and you come out behind.` };
+      return { square: sq, net, text: `Count before you take on ${sq}: ${att} attackers against ${def} defenders. Not enough — start the trades there and you come out behind.` };
     }
   }
   return null;

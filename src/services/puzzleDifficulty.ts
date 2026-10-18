@@ -136,6 +136,3 @@ export function estimatePuzzleRating(fenSolverToMove: string, uci: readonly stri
   const features = difficultyFeatures(fenSolverToMove, uci, lead, mateIn);
   return { rating: ratingFromFeatures(features, lead?.source ?? null), features };
 }
-
-/** The master tier is a DIFFICULTY filter, whatever the source. */
-export const MASTER_TIER_RATING = 2400;

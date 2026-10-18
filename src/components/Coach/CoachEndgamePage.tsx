@@ -33,7 +33,7 @@ import { useClickToMove } from '../../hooks/useClickToMove';
 import { useAdaptiveEndgameSession } from '../../hooks/useAdaptiveEndgameSession';
 import { useNarration } from '../../hooks/useNarration';
 import { voiceService } from '../../services/voiceService';
-import { getMasteredCount } from '../../services/endgameProgressService';
+import { endgameRecordSummary, type DueEndgameReview } from '../../services/endgameDueReview';
 import {
   getAllPatterns,
   getPatternById,
@@ -274,15 +274,24 @@ function PatternPicker({ onPick, onBack, activeTab, onTabChange }: PickerProps):
   // Dexie aggregate; re-runs whenever the picker mounts so the
   // count reflects the student's most-recent session.
   const [masteredCount, setMasteredCount] = useState<number>(0);
+  // ENDGAME SPACED REVIEW (David 2026-10-17: "I want it wired in"). Lessons
+  // with positions due again, and the one the student opened (a deep link
+  // `?lesson=` or a tap on the row below).
+  const [searchParams] = useSearchParams();
+  const [openLesson, setOpenLesson] = useState<string | null>(() => searchParams.get('lesson'));
+  const [dueReviews, setDueReviews] = useState<DueEndgameReview[]>([]);
+  const dueByLessonMap = useMemo(() => Object.fromEntries(dueReviews.map((d) => [d.lessonId, d.dueCount])), [dueReviews]);
+  // One read of the endgame record: mastered count and what is due again.
   useEffect(() => {
     let cancelled = false;
-    void getMasteredCount().then((n) => {
-      if (!cancelled) setMasteredCount(n);
+    void endgameRecordSummary().then((r) => {
+      if (cancelled) return;
+      setMasteredCount(r.mastered);
+      setDueReviews(r.due);
     });
-    return () => {
-      cancelled = true;
-    };
-  }, [activeTab]);
+    return () => { cancelled = true; };
+  }, [activeTab, openLesson]);
+
 
   return (
     <div
@@ -329,7 +338,7 @@ function PatternPicker({ onPick, onBack, activeTab, onTabChange }: PickerProps):
           {TAB_OPTIONS.map((opt) => (
             <button
               key={opt.value}
-              onClick={() => opt.ready && onTabChange(opt.value)}
+              onClick={() => { if (!opt.ready) return; setOpenLesson(null); onTabChange(opt.value); }}
               disabled={!opt.ready}
               className={`flex-1 min-w-[68px] px-2 py-2 text-xs font-medium transition-colors border-b-2 whitespace-nowrap ${
                 activeTab === opt.value
@@ -352,6 +361,25 @@ function PatternPicker({ onPick, onBack, activeTab, onTabChange }: PickerProps):
         />
       </div>
 
+      {dueReviews.length > 0 && (
+        <div className="flex flex-col gap-2 max-w-lg mx-auto w-full" data-testid="endgame-due-reviews">
+          <div className="text-xs font-semibold text-amber-400">Due for review</div>
+          {dueReviews.map((d) => (
+            <button
+              key={d.lessonId}
+              onClick={() => { setOpenLesson(d.lessonId); onTabChange(d.tab); }}
+              className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl border-2 bg-amber-500/10 border-amber-500/30 hover:bg-amber-500/15 text-left"
+              data-testid={`endgame-due-${d.lessonId}`}
+            >
+              <span className="text-sm font-semibold text-theme-text">{d.name}</span>
+              <span className="text-[11px] text-amber-400 whitespace-nowrap">
+                {d.dueCount} position{d.dueCount === 1 ? '' : 's'} due
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+
       {activeTab === 'mating-patterns' && (
         <>
           <p className="text-sm text-center text-theme-text-muted max-w-lg mx-auto">
@@ -371,6 +399,9 @@ function PatternPicker({ onPick, onBack, activeTab, onTabChange }: PickerProps):
 
       {activeTab === 'principles' && (
         <EndgameLessonTab
+          key={`principles:${openLesson ?? ''}`}
+          initialLessonId={openLesson}
+          dueByLesson={dueByLessonMap}
           lessons={getEndgamePrinciples()}
           tabLabel="Endgame Principles"
           tabSubtitle="The seven universal rules. Master these, and every endgame decision gets simpler."
@@ -379,6 +410,9 @@ function PatternPicker({ onPick, onBack, activeTab, onTabChange }: PickerProps):
 
       {activeTab === 'pawn-endings' && (
         <EndgameLessonTab
+          key={`pawn-endings:${openLesson ?? ''}`}
+          initialLessonId={openLesson}
+          dueByLesson={dueByLessonMap}
           lessons={getPawnEndings()}
           tabLabel="Pawn Endings"
           tabSubtitle="Opposition, key squares, the rule of the square — the foundation of all endgame technique."
@@ -387,6 +421,9 @@ function PatternPicker({ onPick, onBack, activeTab, onTabChange }: PickerProps):
 
       {activeTab === 'rook-endings' && (
         <EndgameLessonTab
+          key={`rook-endings:${openLesson ?? ''}`}
+          initialLessonId={openLesson}
+          dueByLesson={dueByLessonMap}
           lessons={getRookEndings()}
           tabLabel="Rook Endings"
           tabSubtitle="Lucena, Philidor, the active rook — the most common endgames in practice."
@@ -395,6 +432,9 @@ function PatternPicker({ onPick, onBack, activeTab, onTabChange }: PickerProps):
 
       {activeTab === 'drawing-patterns' && (
         <EndgameLessonTab
+          key={`drawing-patterns:${openLesson ?? ''}`}
+          initialLessonId={openLesson}
+          dueByLesson={dueByLessonMap}
           lessons={getDrawingPatterns()}
           tabLabel="Drawing Patterns"
           tabSubtitle="The eight positions every player should recognize. Knowing these turns lost games into half-points."

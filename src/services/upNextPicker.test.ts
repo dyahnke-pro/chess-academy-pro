@@ -8,7 +8,7 @@ import type { RepCandidate } from './trainingPlanSelector';
 
 const weak: RepCandidate = { kind: 'weakness', key: 'weakness:hung-material:Hung a piece', label: 'Hung a piece or pawn', subtitle: '', tag: 'hung-material', puzzleThemes: ['hangingPiece'] };
 const srs: RepCandidate = { kind: 'srs', key: 'srs:italian-game', label: 'Italian Game', subtitle: '', openingId: 'italian-game' };
-const base: UpNextInput = { reps: [], latestGameSlip: null, grownPuzzle: null, freeOpeningOpen: false, coldStart: false, startSteps: [], thinking: null };
+const base: UpNextInput = { reps: [], latestGameSlip: null, grownPuzzle: null, freeOpeningOpen: false, coldStart: false, startSteps: [], thinking: null, endgameDue: null, openingHoles: [] };
 
 describe('upNextPicker', () => {
   it('a first visit leads with a 60-second Deep Run', () => {
@@ -107,5 +107,54 @@ describe('the thinking lesson bite (learn-how-to-think)', () => {
     }
     // The thinking bite may go live only once its lesson finishes it.
     if (THINKING_LESSON_LIVE) expect(PICK_FINISH_LINE.thinking).not.toBeNull();
+  });
+});
+
+describe('the card is the top three by ONE importance (David 2026-10-17)', () => {
+  const eg = (missed: boolean, overdueDays = 0) => ({ lessonId: 'kp-opposition', name: 'Opposition', tab: 'pawn-endings' as const, dueCount: 2, missed, overdueDays });
+
+  it('every pick carries its importance, and the list is sorted by it', () => {
+    const r = rankUpNext({ ...base, reps: [weak, srs], endgameDue: eg(false) });
+    const imps = r.map((p) => p.importance ?? -1);
+    expect(imps.every((n) => n >= 0)).toBe(true);
+    expect([...imps].sort((a, b) => b - a)).toEqual(imps);
+  });
+
+  it('an endgame you got wrong outranks a puzzle weakness; one you are spacing out does not', () => {
+    const missed = rankUpNext({ ...base, reps: [weak], endgameDue: eg(true) });
+    expect(missed.findIndex((p) => p.kind === 'endgame')).toBeLessThan(missed.findIndex((p) => p.kind === 'weakness'));
+    const spaced = rankUpNext({ ...base, reps: [weak], endgameDue: eg(false) });
+    expect(spaced.findIndex((p) => p.kind === 'weakness')).toBeLessThan(spaced.findIndex((p) => p.kind === 'endgame'));
+  });
+
+  it('a line due for review outranks a new one, and the slip still leads', () => {
+    const r = rankUpNext({ ...base, reps: [srs, weak], latestGameSlip: { puzzleId: 'p1', opponent: 'X', cpLoss: 200 }, endgameDue: eg(false) });
+    expect(r[0].kind).toBe('game-slip');
+    expect(r.slice(0, 3).map((p) => p.kind)).toContain('opening');
+  });
+});
+
+describe('an opening you keep leaving the book in (David 2026-10-18: "weighted by reoccurring opening mistakes")', () => {
+  const hole = (openingId: string, games: number) => ({ openingId, name: 'Caro-Kann Defense', games });
+
+  it('becomes its own quick bite, named by the games it cost', () => {
+    const p = rankUpNext({ ...base, openingHoles: [hole('b10-caro', 3)] }).find((x) => x.key === 'up:hole:b10-caro');
+    expect(p?.bite).toBe('one line');
+    expect(p?.reason).toBe('You left the book early in 3 of your Caro-Kann Defense games, and it cost you each time. Play the main line once.');
+  });
+
+  it('the more games it cost, the higher it ranks — past a puzzle weakness at 4 games', () => {
+    const r = (games: number): UpNextPick[] => rankUpNext({ ...base, reps: [weak], openingHoles: [hole('b10-caro', games)] });
+    const at = (rs: UpNextPick[], k: string): number => rs.findIndex((p) => p.key === k);
+    expect(at(r(2), 'up:hole:b10-caro')).toBeGreaterThan(at(r(2), 'up:weakness:hung-material:Hung a piece'));
+    expect(at(r(4), 'up:hole:b10-caro')).toBeLessThan(at(r(4), 'up:weakness:hung-material:Hung a piece'));
+  });
+
+  it('a due line in the same opening carries the hole instead of a second bite', () => {
+    const r = rankUpNext({ ...base, reps: [srs], openingHoles: [{ openingId: 'italian-game', name: 'Italian Game', games: 5 }] });
+    expect(r.filter((p) => p.openingId === 'italian-game')).toHaveLength(1);
+    const p = r.find((x) => x.openingId === 'italian-game');
+    expect(p?.reason).toContain('5 of your Italian Game games');
+    expect(p?.importance).toBe(74);
   });
 });

@@ -4,11 +4,11 @@
 // (rotating according to need) personal algo, not random!").
 import { describe, it, expect } from 'vitest';
 import { rankFamilies, chooseSuggestion, type SuggestionInput } from './homeSuggestion';
-import { PICK_KINDS, type UpNextPick, type ThinkingSignal } from './upNextPicker';
+import { PICK_IMPORTANCE, type UpNextPick, type ThinkingSignal } from './upNextPicker';
 import type { UpNextState } from './upNextLoader';
 
 const pick = (kind: UpNextPick['kind'], hub: UpNextPick['hub'], extra: Partial<UpNextPick> = {}): UpNextPick => ({
-  kind, key: `up:${kind}`, label: kind, reason: '', bite: '', path: '/', hub, ...extra,
+  kind, key: `up:${kind}`, label: kind, reason: '', bite: '', path: '/', hub, importance: PICK_IMPORTANCE[kind], ...extra,
 });
 const state = (ranked: UpNextPick[], done: string[] = [], thinking: ThinkingSignal | null = null): UpNextState => ({
   ring: ranked.slice(0, 3), done: new Set(done), current: ranked[0] ?? null, ranked, thinking,
@@ -71,19 +71,21 @@ describe('chooseSuggestion', () => {
 });
 
 describe('the thinking lesson in the Learn family (learn-how-to-think)', () => {
+  // rankUpNext scores a red habit at 78, a grey one at its floor.
   const think = pick('thinking', 'coach');
+  const red = pick('thinking', 'coach', { importance: 78 });
   const withThinking = (t: ThinkingSignal, ranked: UpNextPick[] = [think]): SuggestionInput => ({
     state: state(ranked, [], t), ownGames: 5, accountLinked: true,
   });
 
   it('a RED tier-1 habit makes the lesson the Learn family, above a puzzle weakness, below a fresh slip', () => {
     const r = rankFamilies(withThinking({ state: 'red', skill: 'Hung material', step: 'Am I safe?' }, [
-      think, pick('weakness', 'tactics:my mistakes'),
+      red, pick('weakness', 'tactics:my mistakes'),
     ]));
     expect(r[0].family).toBe('learn');
     expect(r[0].pick.kind).toBe('thinking');
     const slip = rankFamilies(withThinking({ state: 'red', skill: 'Hung material', step: 'Am I safe?' }, [
-      think, pick('game-slip', 'tactics:my mistakes'),
+      red, pick('game-slip', 'tactics:my mistakes'),
     ]));
     expect(slip[0].family).toBe('tactics');
   });
@@ -106,12 +108,14 @@ describe('the thinking lesson in the Learn family (learn-how-to-think)', () => {
     expect(r.find((c) => c.family === 'learn')!.pick.kind).toBe('learn');
   });
 
-  it('every Tactics-hub kind keeps its importance (the table is total now, values unchanged)', () => {
-    const expected: Record<string, number> = { 'game-slip': 85, grown: 75, weakness: 70, 'deep-run': 55, 'warm-up': 50, long: 50 };
-    for (const [kind, imp] of Object.entries(expected)) {
-      const r = rankFamilies(input([pick(kind as UpNextPick['kind'], 'tactics:daily')]));
-      expect(r.find((c) => c.family === 'tactics')!.importance).toBe(imp);
-    }
-    expect(PICK_KINDS).toContain('thinking');
+  it('Home reads the ONE importance the card ranks by — no table of its own', () => {
+    const r = rankFamilies(input([pick('weakness', 'tactics:my mistakes', { importance: 73 })]));
+    expect(r.find((c) => c.family === 'tactics')!.importance).toBe(73);
+  });
+
+  it('a missed endgame review is the Learn family when it outranks a coached game', () => {
+    const r = rankFamilies(input([pick('endgame', 'coach', { importance: 82 }), pick('weakness', 'tactics:my mistakes')]));
+    expect(r[0].family).toBe('learn');
+    expect(r[0].pick.kind).toBe('endgame');
   });
 });

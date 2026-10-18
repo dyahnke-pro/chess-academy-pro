@@ -384,6 +384,16 @@ export function dutyParity(fen: string, student: Side): ExchangeIdea | null {
     probe.remove(guards[0]);
     try { probe.move({ from: attackers[0], to: t.sq }); } catch { continue; }
     if (probe.attackers(t.sq as Square, student).length > 0) continue;
+    // "THE GUARD COSTS YOU NOTHING" IS FALSE WHEN THE GUARD HAS A PROBLEM OF ITS
+    // OWN (claim harvest 2026-10-17: said beside "their queen attacks your queen
+    // on c5, and nothing defends it", and beside "your queen is the glue — it
+    // alone holds c7 and d5"). Not when the guard itself can be won, and not
+    // when it is also the only guard of another attacked unit.
+    if (legalSeeGainFor(fen, guards[0], them) > 0) continue;
+    const overloaded = pieceSquares(c, student, ['p', 'n', 'b', 'r', 'q']).some((u) => u.sq !== t.sq
+      && c.attackers(u.sq as Square, them).length > 0
+      && c.attackers(u.sq as Square, student).length === 1 && c.attackers(u.sq as Square, student)[0] === guards[0]);
+    if (overloaded) continue;
     const text = `Your ${NAME[d.type]} on ${guards[0]} is tied to guarding the ${NAME[t.type]} on ${t.sq} — but their ${NAME[a.type]} on ${attackers[0]} is just as tied to attacking it, so the guard costs you nothing.`;
     const sq = [guards[0], t.sq, attackers[0]];
     const proof = squaresProof(text, sq);

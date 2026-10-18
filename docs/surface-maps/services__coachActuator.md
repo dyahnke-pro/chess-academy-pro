@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**602 lines · 25 exports · 11 importers · 4 tests · 2 audits**
+**596 lines · 24 exports · 11 importers · 4 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -81,8 +81,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachHands.test.ts:375`
 
 ### `registerCoachHands` (function) — 35 call sites
-- `src/components/Coach/CoachGameReview.tsx:740`
-- `src/components/Coach/CoachTeachPage.tsx:2378`
+- `src/components/Coach/CoachGameReview.tsx:778`
+- `src/components/Coach/CoachTeachPage.tsx:2407`
 - `src/components/Coach/GameChatPanel.tsx:263`
 - `src/services/coachActuator.walkthrough.test.ts:27`
 - `src/services/coachHands.test.ts:47`
@@ -127,9 +127,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/spokenSquares.test.ts:23`
 - `src/services/spokenSquares.test.ts:53`
 
-### `currentCoachHands` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `coachNavigate` (function) — 6 call sites
 - `src/coach/coachService.ts:1076`
 - `src/services/coachActuator.test.ts:15`
@@ -165,10 +162,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/coachService.ts:1066`
 - `src/coach/coachService.ts:1086`
 - `src/components/Board/VoiceChatMic.tsx:313`
-- `src/components/Coach/CoachGameReview.tsx:2786`
-- `src/components/Coach/CoachTeachPage.tsx:3668`
+- `src/components/Coach/CoachGameReview.tsx:2845`
+- `src/components/Coach/CoachTeachPage.tsx:3708`
 - `src/components/Coach/GameChatPanel.tsx:694`
-- `src/hooks/useLiveCoach.ts:308`
+- `src/hooks/useLiveCoach.ts:309`
 - `src/services/coachActuator.walkthrough.test.ts:28`
 - `src/services/coachActuator.walkthrough.test.ts:38`
 - `src/services/coachActuator.walkthrough.test.ts:50`
@@ -217,8 +214,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `actionForCommand` (function) — 13 call sites
 - `src/components/Board/VoiceChatMic.tsx:298`
-- `src/components/Coach/CoachGameReview.tsx:2780`
-- `src/components/Coach/CoachTeachPage.tsx:3647`
+- `src/components/Coach/CoachGameReview.tsx:2839`
+- `src/components/Coach/CoachTeachPage.tsx:3687`
 - `src/components/Coach/GameChatPanel.tsx:653`
 - `src/services/coachHands.test.ts:37`
 - `src/services/coachHands.test.ts:251`

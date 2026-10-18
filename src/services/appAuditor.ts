@@ -32,6 +32,8 @@ import { onCoachDecision, onLearnTurn, onNeedScore, type CoachDecisionRow, type 
 import { onThinkingLesson } from './thinkingLessonEvents';
 import { onThinkingTransfer } from './thinkingTransferEvents';
 import { onSearchDepth } from './searchDepthEvents';
+import { onDecisiveReason } from './decisiveReasonEvents';
+import { onEndgameReview } from './endgameReviewEvents';
 import { onOpponentMove } from './opponentMoveEvents';
 import { onChatTurn } from '../coach/chatTurnEvents';
 
@@ -279,6 +281,8 @@ export type AuditKind =
   // row per search — so an audit can hold that verdicts were voiced off
   // settled searches and that sharp positions went deeper than quiet ones.
   | 'search-depth'
+  | 'decisive-reason'
+  | 'endgame-review'
   // ONE ENGINE STRENGTH (P0b, 2026-10-04): one row per opponent move — the
   // surface, its declared purpose, the student strength, the offset and the
   // target it played at — so an audit can hold that every sparring opponent
@@ -2335,6 +2339,29 @@ onChatTurn((row) => {
 
 // One row per settled-or-not search. Searches are few (one per question, one
 // per review key moment), so each is logged as it lands.
+onDecisiveReason((row) => {
+  void logAppAudit({
+    kind: 'decisive-reason',
+    category: 'subsystem',
+    source: `decisiveReason.${row.surface}`,
+    summary: `${row.kind}${row.source ? `/${row.source}` : ''} gap=${row.gapCp}cp stake=${row.stakeCp ?? '-'} posed=${row.posedTag ?? '-'} ${row.outcome}`,
+    details: JSON.stringify(row),
+  });
+});
+
+// The endgame spaced-review ladder: each scheduling decision and each due list.
+onEndgameReview((row) => {
+  void logAppAudit({
+    kind: 'endgame-review',
+    category: 'subsystem',
+    source: `endgameReview.${row.event}`,
+    summary: row.event === 'scheduled'
+      ? `${row.lessonId} ${row.clean ? 'clean' : 'mistakes'} rung ${row.stepBefore}→${row.stepAfter} (${row.intervalDays}d)`
+      : `${row.lessons} lessons, ${row.positions} positions due`,
+    details: JSON.stringify(row),
+  });
+});
+
 onSearchDepth((row) => {
   void logAppAudit({
     kind: 'search-depth',

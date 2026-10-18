@@ -16,6 +16,7 @@
  *   - moves come from the JSON data (solution[] / bestMove)
  *   - LLM authorship is zero at runtime
  */
+import { finishBite } from '../../services/activeBite';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowLeft,
@@ -70,10 +71,17 @@ interface EndgameLessonTabProps {
   /** Short description rendered above the grid — sets context for
    *  the user before they pick a tile. */
   tabSubtitle: string;
+  /** Open this lesson straight away (a "due for review" deep link). */
+  initialLessonId?: string | null;
+  /** Positions due on the spaced-review ladder, per lesson — read once by
+   *  the endgame page (one read, the page's Due row uses the same list). */
+  dueByLesson: Readonly<Record<string, number>>;
 }
 
-export function EndgameLessonTab({ lessons, tabLabel, tabSubtitle }: EndgameLessonTabProps): JSX.Element {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+export function EndgameLessonTab({ lessons, tabLabel, tabSubtitle, initialLessonId, dueByLesson }: EndgameLessonTabProps): JSX.Element {
+  const [selectedId, setSelectedId] = useState<string | null>(
+    () => (initialLessonId && lessons.some((l) => l.id === initialLessonId) ? initialLessonId : null),
+  );
 
   if (selectedId === null) {
     return (
@@ -81,6 +89,7 @@ export function EndgameLessonTab({ lessons, tabLabel, tabSubtitle }: EndgameLess
         lessons={lessons}
         tabLabel={tabLabel}
         tabSubtitle={tabSubtitle}
+        dueByLesson={dueByLesson}
         onPick={setSelectedId}
       />
     );
@@ -107,9 +116,10 @@ interface PickerGridProps {
   tabLabel: string;
   tabSubtitle: string;
   onPick: (id: string) => void;
+  dueByLesson: Readonly<Record<string, number>>;
 }
 
-function PickerGrid({ lessons, tabLabel, tabSubtitle, onPick }: PickerGridProps): JSX.Element {
+function PickerGrid({ lessons, tabLabel, tabSubtitle, onPick, dueByLesson }: PickerGridProps): JSX.Element {
   // Persisted progress per lesson — { [lessonId]: masteredCount }.
   // Loaded once on mount; not live-updated because the picker is
   // re-mounted whenever the student returns from a lesson.
@@ -187,6 +197,12 @@ function PickerGrid({ lessons, tabLabel, tabSubtitle, onPick }: PickerGridProps)
                       <span className="text-green-400 font-medium">
                         {' '}
                         · {masteredCount}/{playableCount} mastered
+                      </span>
+                    )}
+                    {(dueByLesson[lesson.id] ?? 0) > 0 && (
+                      <span className="text-amber-400 font-medium" data-testid={`endgame-lesson-due-${lesson.id}`}>
+                        {' '}
+                        · {dueByLesson[lesson.id]} due for review
                       </span>
                     )}
                     {drillCount > 0 && (
@@ -629,6 +645,8 @@ function PositionRunner({
       firstTryPerfect: playout.firstTryPerfect,
       wrongAttempts: playout.wrongAttempts,
     });
+    // A played position closes today's endgame-review bite, if one is open.
+    void finishBite('endgame');
     if (playout.firstTryPerfect && !isDrill && onPlayPerfect) {
       onPlayPerfect(position.fen);
     }

@@ -29,7 +29,7 @@ import { lastMoveIfStudent, lastMoveIfOpponent } from '../services/lastMoveOfLin
 import { computeMustDefend } from '../services/threatOut';
 import { boardPlanFacts } from '../services/boardPlanFacts';
 import { moveWhy } from '../services/deliberation';
-import { andList } from '../utils/andList';
+import { andList, lineShape } from '../utils/andList';
 import { playNamedLine } from '../services/whyNotLegal';
 import { settledLeadFor, lastMoveOf } from '../services/material';
 import { evalPhrase } from '../services/groundedAnswer';
@@ -387,7 +387,18 @@ const amountWords = (n: number): string => AMOUNT[n] ?? `${n} points of material
  * student's; the board and the engine say what they do.
  */
 export async function lineOutcomeAnswer(turn: ResolvedChatTurn, board: BoardTurnInput, out?: { lines?: WalkableLine[] }): Promise<string | null> {
-  const named = turn.referents.flatMap((r) => (r.type === 'move' ? [r.san] : []));
+  let named = turn.referents.flatMap((r) => (r.type === 'move' ? [r.san] : []));
+  // THE ENGINE'S MAIN LINE, asked for without naming a move: its own line from
+  // this board, to the depth asked.
+  const mainLine = /^main-line:(\d+)$/.exec(turn.topic ?? '');
+  if (mainLine && named.length === 0) {
+    const a0 = await (engineOverride ?? defaultEngine).analysis(board.fen);
+    const pv = a0?.topLines?.find((l) => l.moves?.length)?.moves ?? [];
+    const sans: string[] = [];
+    try { const c = new Chess(board.fen); for (const u of pv.slice(0, Number(mainLine[1]))) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san); } catch { /* the playable prefix */ }
+    if (sans.length === 0) return null;
+    named = sans;
+  }
   const line = playNamedLine(board.fen, named, { fromHere: true, theirsAlone: turn.seat === 'them' });
   if (!line) return null;
   const me: 'w' | 'b' = board.studentColor === 'white' ? 'w' : 'b';
@@ -398,7 +409,8 @@ export async function lineOutcomeAnswer(turn: ResolvedChatTurn, board: BoardTurn
   // from the other side's turn is said, not walked.
   const fromHere = line.startFen === board.fen;
   const said = line.sans.map((san, i) => ((i % 2 === 0) === (startTurn === 'w') ? san : `…${san}`));
-  const lead = `After ${andList(said)}`;
+  // A long line is said by its shape; the board walks every move of it.
+  const lead = mainLine ? `The engine's main line runs ${said.length > 3 ? lineShape(said) : andList(said)}. After it` : `After ${andList(said)}`;
   const end = new Chess(line.endFen);
   if (end.isCheckmate()) {
     const w = fromHere ? walkableLine(line.startFen, line.sans, line.sans[0]) : null;

@@ -4,9 +4,7 @@ import type { OpeningRecord, GameRecord } from '../types';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import {
   getRepertoireOpenings,
-  getWeakestOpenings,
   getWoodpeckerDue,
-  getFavoriteOpenings,
 } from './openingService';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -47,47 +45,6 @@ function shuffle<T>(arr: T[]): T[] {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
-}
-
-export async function getOpeningsByMode(
-  mode: ChallengeMode,
-  limit: number = 15,
-): Promise<OpeningRecord[]> {
-  switch (mode) {
-    case 'due_review':
-      return (await getWoodpeckerDue(7)).slice(0, limit);
-
-    case 'random':
-      return shuffle(await getRepertoireOpenings()).slice(0, limit);
-
-    case 'favorites':
-      return (await getFavoriteOpenings()).slice(0, limit);
-
-    case 'weakest':
-      return getWeakestOpenings(limit);
-
-    case 'previously_drilled': {
-      const all = await getRepertoireOpenings();
-      return all.filter((o) => o.lastStudied !== null).slice(0, limit);
-    }
-
-    case 'traps': {
-      const all = await getRepertoireOpenings();
-      return all
-        .filter((o) => o.traps && o.traps.length > 0)
-        .slice(0, limit);
-    }
-
-    case 'warnings': {
-      const all = await getRepertoireOpenings();
-      return all
-        .filter((o) => o.warnings && o.warnings.length > 0)
-        .slice(0, limit);
-    }
-
-    default:
-      return [];
-  }
 }
 
 export async function getDueCount(): Promise<number> {

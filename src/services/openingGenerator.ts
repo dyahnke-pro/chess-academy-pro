@@ -161,7 +161,6 @@ GROUNDING RULES (this is the most important section):
 - For punish lessons: the inaccuracy + punishment can be moves NOT in the database (since traps by definition deviate from main theory), but the setupMoves leading up to the inaccuracy MUST be a prefix of a listed line. The punishment + followup should land back on or near a known line.`;
 }
 
-
 /** Defensively normalize an LLM-emitted JSON string before parse:
  *    - smart double quotes → straight double quotes (LLM occasionally
  *      uses curly " " as STRING DELIMITERS, which JSON.parse rejects)
@@ -1395,41 +1394,6 @@ export function splitSegmentBySentence(
   });
 }
 
-export function gradeNarrationBoardClaims(tree: WalkthroughTree): number {
-  const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-  let touched = 0;
-  // Uses the shared `gradeNarrationText` — the SAME board-claim primitive
-  // the spine and every other generator use (one source of truth).
-  const gate = (text: string | undefined, fen: string): string | undefined => {
-    const out = gradeNarrationText(text, fen, 'openingGenerator');
-    if (out !== text) touched += 1;
-    return out;
-  };
-  const walk = (node: WalkthroughTreeNode, fenBefore: string): void => {
-    let fenAfter = fenBefore;
-    if (node.san !== null) {
-      try {
-        const chess = new Chess(fenBefore);
-        chess.move(node.san);
-        fenAfter = chess.fen();
-      } catch {
-        return; // can't replay this branch — don't validate against a wrong FEN
-      }
-      node.idea = gate(node.idea, fenAfter) ?? node.idea;
-      if (node.shortIdea !== undefined) node.shortIdea = gate(node.shortIdea, fenAfter);
-      if (node.narration) {
-        for (const seg of node.narration) {
-          seg.text = gate(seg.text, fenAfter) ?? seg.text;
-          if (seg.shortText !== undefined) seg.shortText = gate(seg.shortText, fenAfter);
-        }
-      }
-    }
-    for (const child of node.children) walk(child.node, fenAfter);
-  };
-  walk(tree.root, START);
-  return touched;
-}
-
 export function repairForkLabels(tree: WalkthroughTree): number {
   let filled = 0;
   function walk(node: WalkthroughTreeNode): void {
@@ -2613,7 +2577,6 @@ function buildFallbackTreeFromDb(
 /** Same logic as inferStudentSide in src/data/openingWalkthroughs/index.ts
  *  but local so this module doesn't import from a sibling. */
 
-
 /** Strip a leading move-recitation sentence from an intro string.
  *
  *  Production audit (build 6393c0f): user reported the intro for
@@ -2988,7 +2951,6 @@ CRITICAL:
 - Single-select questions (multiSelect omitted or false) need EXACTLY ONE correct choice. If 2+ choices are correct, set multiSelect: true on that question.
 - Output JSON only. Validation pipeline rejects anything else.${buildStageTeachingBlock(openingName)}${buildBookSourceBlock(openingName)}${buildStagePositionBlock(openingName)}${buildLineFactsBlock(openingName)}`;
 }
-
 
 // ─── DB-narration stage generators ──────────────────────────────────
 // Mirror of the walkthrough's DB-narration inversion: code provides

@@ -23,6 +23,7 @@
  * Slice 1 (this file): route + record, behaviour-preserving. Ordering and dedupe are still
  * `buildVoicePackage`'s. Picking ONE lead per turn is the next slice.
  */
+import { fadeText, fadeLevelOf, type FadeLevels } from './fadeText';
 import { isProof, type FactProof, type Proof } from './proof';
 import { emitLearnTurn, type LearnTurnTag } from './coachDecisionEvents';
 import { COMPUTER_ROLES } from './computerRoles';
@@ -349,6 +350,10 @@ export interface LaneFact {
    *  kind: deliberation, your-habit, …). The lane says which producer; this
    *  says which of its facts — emitted on the row, never used to decide. */
   factKind?: string;
+  /** The skill this fact teaches (a MisconceptionTagId), when the producer
+   *  knows it — the fade reads it before the lane's own tag, so a lane that
+   *  teaches many skills (the rules, the fundamentals) fades per skill. */
+  skill?: string;
   /** ITS PROOF, OR WHY IT NEEDS NONE — REQUIRED (root cause, David
    *  2026-10-07): a producer that cannot answer this cannot speak. */
   proof: FactProof;
@@ -387,12 +392,15 @@ export interface TurnDecision {
  *  the lesson again. Not a cap (G4.5): the student's own record decides, and
  *  grey or red keeps the full teaching. Only lanes whose HELD half is wired
  *  fade — a skill the app cannot see the student answer can never be green. */
-export function fadeWhenGreen(lane: LearnLane, text: string, green: ReadonlySet<string> | null): string {
+/** GRADUAL and per skill — the one rule in `fadeText` (every surface). */
+export type { FadeLevel, FadeLevels } from './fadeText';
+export function fadeWhenGreen(lane: LearnLane, text: string, green: FadeLevels | null, skill?: string): string {
   if (!green || green.size === 0) return text;
   const role = COMPUTER_ROLES[lane];
-  if (!role || !role.tag || role.held.state !== 'wired' || !green.has(role.tag)) return text;
-  const first = text.split(/(?<=[.!?])\s+(?=[A-Z"“])/)[0];
-  return first && first.length < text.length ? first : text;
+  // A fact's own skill (recorded through the same tag table) fades it; else
+  // the lane's tag, and only when its held half is wired.
+  const tag = skill ?? (role && role.tag && role.held.state === 'wired' ? role.tag : null);
+  return fadeText(text, fadeLevelOf(green, tag));
 }
 
 /** Lanes that always ride for a beginner: the principle, said every time. */
@@ -411,7 +419,7 @@ export function decideTurn(
   priorLead?: { lane: LearnLane; squares: readonly string[] } | null,
   /** The tags the student's record has PROVEN (`loadProvenTags`) — lanes on
    *  them fade to their short phrasing. Null when the record is not loaded. */
-  green?: ReadonlySet<string> | null,
+  green?: FadeLevels | null,
   /** Beginner mode (`isBeginnerMode`): the fundamental behind a slip and the
    *  beginner's rule a move breaks ride every turn instead of competing for
    *  the lead (David 2026-10-02: "Explain fundamentals"). Register only — the
@@ -427,7 +435,7 @@ export function decideTurn(
   for (const f of facts) {
     if (!f.text.trim()) continue;
     offered.push(f.lane);
-    const text = fadeWhenGreen(f.lane, f.text, green ?? null);
+    const text = fadeWhenGreen(f.lane, f.text, green ?? null, f.skill);
     if (text !== f.text && !faded.includes(f.lane)) faded.push(f.lane);
     open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims: f.claims, lines: f.lines, proof: f.proof });
   }
@@ -450,13 +458,13 @@ export function decideTurn(
   //      carry no stakes.
   const stakesOf = (lane: LearnLane, text: string): FactStakes | undefined => {
     const f = open.find((o) => o.lane === lane && (o.text === text || o.text.includes(text)));
-    return f ? facts.find((x) => x.lane === lane && x.text.trim() && (x.text === f.text || fadeWhenGreen(x.lane, x.text, green ?? null) === f.text))?.stakes : undefined;
+    return f ? facts.find((x) => x.lane === lane && x.text.trim() && (x.text === f.text || fadeWhenGreen(x.lane, x.text, green ?? null, x.skill) === f.text))?.stakes : undefined;
   };
   const stakeOf = (lane: LearnLane, text: string): number => stakeValue(stakesOf(lane, text)) ?? 0;
   // The fact's own role (`LaneFact.role`), read the same way as its stakes.
   const roleOf = (lane: LearnLane, text: string): FacetRole | undefined => {
     const f = open.find((o) => o.lane === lane && (o.text === text || o.text.includes(text)));
-    return f ? facts.find((x) => x.lane === lane && x.text.trim() && (x.text === f.text || fadeWhenGreen(x.lane, x.text, green ?? null) === f.text))?.role : undefined;
+    return f ? facts.find((x) => x.lane === lane && x.text.trim() && (x.text === f.text || fadeWhenGreen(x.lane, x.text, green ?? null, x.skill) === f.text))?.role : undefined;
   };
   /** A fact that TEACHES — its role says so, or (no role) its lane is not a
    *  board description. A teaching fact is a reason, never "an aside". */

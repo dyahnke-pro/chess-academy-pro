@@ -76,7 +76,9 @@ export const COMPUTER_ROLES: Record<LearnLane, ComputerRole> = {
   timing: { computer: 'moveTiming', tag: 'mistimed-pawn-break', held: { state: 'wired', via: 'recordTeachingEvidence' }, broken: SLIP, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
   recapture: { computer: 'recaptureChoice', tag: 'capture-toward-centre', held: { state: 'wired', via: 'recordTeachingEvidence' }, broken: SLIP, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
   moveOrder: { computer: 'moveOrder', tag: 'calculation-depth', held: { state: 'wired', via: 'recordHeld' }, broken: SLIP, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
-  moveIntent: { computer: 'moveIntent', tag: 'no-plan', held: { state: 'wired', via: 'recordHeld' }, broken: SLIP, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
+  // The decisive reason rides this lane (its tag comes from `reasonPosed`): held
+  // live through recordHeld, missed through the game sweep's posed reason.
+  moveIntent: { computer: 'moveIntent + decisiveReason', tag: 'no-plan', held: { state: 'wired', via: 'recordHeld' }, broken: SLIP, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
   kingAttack: { computer: 'kingAttack', tag: null, held: { state: 'na', why: 'describes what a sound move adds; no failure tag it answers' }, broken: { state: 'na', why: 'silent on a costly move' }, askable: { state: 'wired', via: 'isAttackAssessmentQuestion' } },
   ruleException: { computer: 'ruleException', tag: null, held: { state: 'na', why: 'a rule broken correctly is not a skill with its own tag' }, broken: { state: 'na', why: 'speaks only when the exception is right' }, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
   movePoint: { computer: 'studentMovePoint', tag: null, held: { state: 'wired', via: 'recordMoveEvidence (capabilitiesPosed)' }, broken: { state: 'na', why: 'speaks on a clean move only' }, askable: { state: 'wired', via: 'isMoveRatingQuestion' } },
