@@ -281,3 +281,12 @@ describe('audit traffic never rides the Vercel PostHog proxy (2026-10-18)', () =
     expect(posthogHostFor(false, undefined)).toBe('https://us.i.posthog.com');
   });
 });
+
+describe('a spoken question is counted, never its words', () => {
+  it('mirrors the mic working, and drops the transcript', () => {
+    expect(auditKindToEvent('mic-final-dispatched')).toBe('voice_question');
+    expect(auditKindToEvent('mic-started')).toBe('mic_started');
+    const props = buildEventProps(entry({ kind: 'mic-final-dispatched', summary: 'end-of-utterance submit: "should I castle"' }));
+    expect(props).not.toHaveProperty('summary');
+  });
+});

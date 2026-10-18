@@ -179,6 +179,11 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   // unsupported platform) — the ONE voice failure kind that wasn't mirrored,
   // so dead-mic reports were invisible in analytics (David 2026-06-30).
   'mic-start-failed': 'mic_start_failed',
+  // And when it WORKS (David 2026-10-18: "this function is best with voice to
+  // voice"): a mic opened, and a spoken question sent. Count only — the
+  // summary carries the words, so it is dropped for these two below.
+  'mic-started': 'mic_started',
+  'mic-final-dispatched': 'voice_question',
   // Stockfish engine selection (David 2026-06-15: dead eval bar on iOS).
   // Mirrors WHICH variant the device resolved (multi / single / lila) and
   // any runtime fallback — so we can see that init actually ran and which
@@ -258,6 +263,9 @@ export function auditKindToEvent(kind: AuditKind): string | undefined {
   return AUDIT_EVENT_MAP[kind];
 }
 
+/** Kinds whose summary holds the student's own spoken words. */
+const WORDLESS_KINDS: ReadonlySet<string> = new Set(['mic-started', 'mic-final-dispatched']);
+
 /** Project the lean, PostHog-safe subset of an audit entry's fields.
  *  Pure — exported for tests. Keeps payloads small (no stack-trace
  *  `details` dumps) and avoids leaking large free-form blobs. */
@@ -265,7 +273,8 @@ export function buildEventProps(entry: AuditEntry): Record<string, unknown> {
   const props: Record<string, unknown> = { audit_kind: entry.kind, source: entry.source };
   if (entry.route) props.route = entry.route;
   if (entry.context) props.context = entry.context.slice(0, 200);
-  if (entry.summary) props.summary = entry.summary.slice(0, 200);
+  // A spoken question is counted, never its words.
+  if (entry.summary && !WORDLESS_KINDS.has(entry.kind)) props.summary = entry.summary.slice(0, 200);
   if (entry.buildId) props.build_id = entry.buildId;
   // Full spoken-narration text (David 2026-06-06). The summary truncates to
   // 40 chars; this carries the complete line so PostHog stores the real
