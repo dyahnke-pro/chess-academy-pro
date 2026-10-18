@@ -53,6 +53,19 @@ async function gzip(text: string): Promise<{ body: Blob; gz: boolean }> {
   } catch { return raw; }
 }
 
+/** Whether this device may send its data — the server's answer, from the
+ *  owner list (`OWNER_DEVICE_IDS`). Any failure is "no": the panel stays hidden. */
+export async function canSendMyData(): Promise<boolean> {
+  try {
+    const resp = await fetch(withWebOrigin('/api/data-drop'), {
+      method: 'GET',
+      headers: { 'x-device-id': await getDeviceId().catch(() => '') },
+    });
+    if (!resp.ok) return false;
+    return ((await resp.json()) as { owner?: boolean }).owner === true;
+  } catch { return false; }
+}
+
 export async function sendMyData(): Promise<DropResult> {
   try {
     const payload = await buildDropPayload();

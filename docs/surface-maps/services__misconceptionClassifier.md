@@ -4,22 +4,28 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**533 lines · 4 exports · 8 importers · 6 tests · 1 audits**
+**551 lines · 4 exports · 14 importers · 10 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **The standard post-deploy ritual** (CLAUDE.md:6372) — names `misconceptionClassifier`
 
 ## Who calls in
 
 - `src/services/autoAnalyzeGame.ts`
+- `src/services/capabilityEvidence.ts`
+- `src/services/classifierCoverage.measure.test.ts`
 - `src/services/discussionPractice.test.ts`
 - `src/services/discussionPractice.ts`
+- `src/services/expertFade.measure.test.ts`
+- `src/services/inaccuracyVoice.ts`
 - `src/services/learnFundamentalNarration.ts`
 - `src/services/learnMistakeRecurrence.test.ts`
 - `src/services/misconceptionClassifier.test.ts`
 - `src/services/misconceptionHungIsTaken.test.ts`
+- `src/services/principleAttribution.walkedIntoTactic.test.ts`
 - `src/services/section14Diagnosis.test.ts`
+- `src/services/slipCause.test.ts`
 
 ## Exports and every call site
 
@@ -29,9 +35,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `MisconceptionClassification` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `classifyMisconception` (function) — 30 call sites
-- `src/services/autoAnalyzeGame.ts:538`
-- `src/services/discussionPractice.ts:252`
+### `classifyMisconception` (function) — 31 call sites
+- `src/services/autoAnalyzeGame.ts:628`
+- `src/services/discussionPractice.ts:254`
 - `src/services/misconceptionClassifier.test.ts:11`
 - `src/services/misconceptionClassifier.test.ts:20`
 - `src/services/misconceptionClassifier.test.ts:38`
@@ -52,26 +58,38 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionClassifier.test.ts:201`
 - `src/services/misconceptionClassifier.test.ts:211`
 - `src/services/misconceptionClassifier.test.ts:220`
-- `src/services/misconceptionClassifier.test.ts:232`
+- `src/services/misconceptionClassifier.test.ts:228`
 - `src/services/misconceptionClassifier.test.ts:240`
-- `src/services/misconceptionClassifier.test.ts:252`
-- `src/services/misconceptionClassifier.test.ts:262`
+- `src/services/misconceptionClassifier.test.ts:248`
+- `src/services/misconceptionClassifier.test.ts:260`
+- `src/services/misconceptionClassifier.test.ts:270`
 - `src/services/misconceptionHungIsTaken.test.ts:10`
 - `src/services/misconceptionHungIsTaken.test.ts:14`
 - `src/services/misconceptionHungIsTaken.test.ts:18`
 - `src/services/section14Diagnosis.test.ts:74`
 
-### `classifyMisconceptionNow` (function) — 2 call sites
+### `classifyMisconceptionNow` (function) — 9 call sites
+- `src/services/capabilityEvidence.ts:514`
+- `src/services/classifierCoverage.measure.test.ts:66`
+- `src/services/expertFade.measure.test.ts:102`
+- `src/services/inaccuracyVoice.ts:83`
 - `src/services/learnFundamentalNarration.ts:215`
 - `src/services/learnMistakeRecurrence.test.ts:12`
+- `src/services/principleAttribution.walkedIntoTactic.test.ts:17`
+- `src/services/slipCause.test.ts:39`
+- `src/services/slipCause.test.ts:49`
 
 ## Tests
 
+- `src/services/classifierCoverage.measure.test.ts`
 - `src/services/discussionPractice.test.ts`
+- `src/services/expertFade.measure.test.ts`
 - `src/services/learnMistakeRecurrence.test.ts`
 - `src/services/misconceptionClassifier.test.ts`
 - `src/services/misconceptionHungIsTaken.test.ts`
+- `src/services/principleAttribution.walkedIntoTactic.test.ts`
 - `src/services/section14Diagnosis.test.ts`
+- `src/services/slipCause.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
 
 ## Audits that reach it

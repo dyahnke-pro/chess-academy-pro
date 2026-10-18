@@ -2,14 +2,17 @@
  * DataDropPanel — Settings → "Send my data to Claude" (David 2026-10-18).
  * One tap sends the student's own record (`dataDrop.sendMyData`) and shows the
  * code to paste into the chat. Says plainly what is sent, before the tap.
+ * Renders only on the owner's devices — the server decides (`canSendMyData`).
  */
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Send, CheckCircle, AlertTriangle, Loader2, Copy } from 'lucide-react';
-import { sendMyData } from '../../services/dataDrop';
+import { sendMyData, canSendMyData } from '../../services/dataDrop';
 
 type Status = 'idle' | 'sending' | 'sent' | 'error';
 
-export function DataDropPanel(): JSX.Element {
+export function DataDropPanel(): JSX.Element | null {
+  const [owner, setOwner] = useState(false);
+  useEffect(() => { let live = true; void canSendMyData().then((ok) => { if (live) setOwner(ok); }); return () => { live = false; }; }, []);
   const [status, setStatus] = useState<Status>('idle');
   const [code, setCode] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -34,7 +37,9 @@ export function DataDropPanel(): JSX.Element {
     try { await navigator.clipboard.writeText(code); setCopied(true); } catch { setCopied(false); }
   }, [code]);
 
+  if (!owner) return null;
   return (
+    <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
     <div className="rounded-xl p-4" style={{ background: 'var(--color-surface)' }} data-testid="data-drop-panel">
       <div className="flex items-center gap-2 mb-1">
         <Send size={16} style={{ color: 'var(--color-accent)' }} />
@@ -74,6 +79,7 @@ export function DataDropPanel(): JSX.Element {
           <AlertTriangle size={14} /> Could not send ({error}). Try again in a moment.
         </div>
       )}
+    </div>
     </div>
   );
 }

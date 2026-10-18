@@ -218,7 +218,7 @@ export function learnMistakeRecurrence(
     bestSan: input.bestSan ?? undefined,
     historySans: [...input.historySans],
   });
-  if (!cls || cls.tag === 'other') return null;
+  if (!cls || cls.tag === 'other' || cls.tag === 'none') return null;
   return recall({ matches: [{ tag: cls.tag }], direction: 'failed', register: 'live', signals: studentWeaknesses, memory, currentGameId: input.currentGameId });
 }
 

@@ -24,7 +24,7 @@ const HUMAN = { 'user-agent': 'Mozilla/5.0 (iPhone) Mobile/15E148', 'x-device-id
 const PAYLOAD = JSON.stringify({ stores: { games: [{ id: 'g1' }] } });
 
 describe('/api/data-drop', () => {
-  beforeEach(() => { put.mockClear(); vi.resetModules(); });
+  beforeEach(() => { put.mockClear(); vi.resetModules(); process.env.OWNER_DEVICE_IDS = 'abc-123, owner-2'; });
 
   it('stores ONE object per tap and returns its code', async () => {
     const { default: h } = await import('./data-drop');
@@ -50,8 +50,21 @@ describe('/api/data-drop', () => {
     await h(mkReq('POST', { ...HUMAN, origin: 'https://evil.example' }, PAYLOAD), a);
     expect(a._status).toBe(403);
     const b = mkRes();
-    await h(mkReq('GET', HUMAN, ''), b);
+    await h(mkReq('PUT', HUMAN, ''), b);
     expect(b._status).toBe(405);
     expect(put).not.toHaveBeenCalled();
+  });
+
+  it('only the owner\'s devices may send, and GET says which', async () => {
+    const { default: h } = await import('./data-drop');
+    const stranger = mkRes();
+    await h(mkReq('POST', { ...HUMAN, 'x-device-id': 'someone-else' }, PAYLOAD), stranger);
+    expect(stranger._status).toBe(403);
+    expect(put).not.toHaveBeenCalled();
+    const ask = async (id: string): Promise<unknown> => { const r = mkRes(); await h(mkReq('GET', { ...HUMAN, 'x-device-id': id }, ''), r); return r._json; };
+    expect(await ask('owner-2')).toEqual({ owner: true });
+    expect(await ask('someone-else')).toEqual({ owner: false });
+    delete process.env.OWNER_DEVICE_IDS;
+    expect(await ask('abc-123')).toEqual({ owner: false });
   });
 });

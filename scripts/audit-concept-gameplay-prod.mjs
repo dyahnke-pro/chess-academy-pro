@@ -892,6 +892,17 @@ async function main() {
         : `${staleEvents.length} stale: ${staleEvents.slice(0, 3).map((e) => String(e.summary ?? e.source ?? '')).join(' | ')}`,
     );
 
+    // ── IV: INACCURACY VOICE (David 2026-10-18) ───────────────────────────
+    // The per-phase verdict is read from the student's record on mount. On a
+    // fresh audit device the record is empty, so every phase must SPEAK (grey
+    // teaches) — a quiet phase here would mean the rule fired with no evidence.
+    const ivRows = listener.getCapturedEvents().filter((e) => e.source === 'inaccuracyVoice');
+    record(
+      'IV1. the inaccuracy-voice verdict was read on mount, and a fresh record speaks in every phase',
+      ivRows.length > 0 && ivRows.every((e) => !/quiet/.test(String(e.summary ?? ''))),
+      ivRows.length ? String(ivRows[ivRows.length - 1].summary) : 'no inaccuracyVoice row',
+    );
+
     // ── RW: THE REWARD LAYER (David 2026-10-01) ───────────────────────────
     // Only skill earns a chime. The rows are the grade + what it earned; the
     // contract is the rule itself: no fault ever earns a reward, no book move

@@ -208,7 +208,7 @@ import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead
 import { scaleGap, packageForRegister } from '../../services/hintRegister';
 import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
-import { backwardLook, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf } from '../../services/backwardLook';
+import { backwardLook, slipSpoken, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf } from '../../services/backwardLook';
 import { learnFundamentalVerdict, learnHeldRecurrence, learnMistakeRecurrence } from '../../services/learnFundamentalNarration';
 import { FUNDAMENTAL_TAG, type FundamentalId } from '../../services/principleAttribution';
 import { FUNDAMENTAL_LABEL } from '../../services/fundamentalsCatalog';
@@ -11094,7 +11094,19 @@ export function CoachTeachPage(): JSX.Element {
                     const studentEvalAfterCp = !mid.isMate
                       ? mid.evaluation * sign
                       : mid.mateIn !== null && mid.mateIn * sign > 0 ? 100_000 : null;
-                    const look = backwardLook({
+                    // AN INACCURACY SPEAKS ONLY WHERE THE RECORD EARNS IT (David
+                    // 2026-10-18): in a phase where this student's mistakes and
+                    // blunders outnumber their inaccuracies, the big errors come
+                    // first and this one stays quiet (`inaccuracyVoice`), read
+                    // for this phase and this skill first. The record still
+                    // keeps it; only the voice waits.
+                    const quietSlip = !slipSpoken({
+                      cpLoss,
+                      moverEvalAfterCp: studentEvalAfterCp,
+                      ...mateContext(preStudentRead, mid, playerColor),
+                      fenBefore, playedSan: move.san, bestSan: studentBestSan ?? null, historySans: move.history,
+                    });
+                    const look = quietSlip ? null : backwardLook({
                       fenBefore,
                       fenAfter: move.fen,
                       playedSan: move.san,
@@ -11124,7 +11136,7 @@ export function CoachTeachPage(): JSX.Element {
                     // attributor self-gates (pattern + available punishment +
                     // counterfactual), so a clean move names nothing. Absent a
                     // fundamental, the backward-look speaks alone, unchanged.
-                    const fundamental = learnFundamentalVerdict({
+                    const fundamental = quietSlip ? null : learnFundamentalVerdict({
                       fenBefore,
                       // THIS game's id, so its own live-captured rows are never
                       // counted as a prior game (C4) — the spine reloads mid-game.

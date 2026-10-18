@@ -604,7 +604,10 @@ export async function recordCapabilityEvidence(args: {
     // other skills posed on a costly move are neither held nor broken: the move
     // was not a clean answer to them, and not a wrong one.
     const slipTag = clean ? null : (args.slipTag !== undefined ? args.slipTag : classifiedSlipTag(args));
-    const shown = clean ? posed : posed.filter((s) => s.outcome === 'broken' || (!!slipTag && s.tag === slipTag));
+    // NO SLIP TAG (a puzzle's wrong answer: no best move to classify against)
+    // means the move failed the question it was asked, and the board's posed
+    // skills ARE that question — they break, as before the rule.
+    const shown = clean || slipTag === null ? posed : posed.filter((s) => s.outcome === 'broken' || s.tag === slipTag);
     if (shown.length === 0) return 0;
     const now = Date.now();
     const rows: CapabilityEvidenceRecord[] = shown.map((s) => ({

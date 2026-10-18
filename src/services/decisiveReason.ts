@@ -240,7 +240,7 @@ export function decisiveReason(input: {
       const nextSans = sansOf(fenBefore, next.moves);
       const ownFull = (settledNetForLine(fenBefore, sansOf(fenBefore, own.moves), mover) ?? 0) * 100;
       const nextFull = (settledNetForLine(fenBefore, nextSans, mover) ?? 0) * 100;
-      if (ownFull - nextFull > 0 && nextFull < 0) cands.push({ source: 'material', stake: ownFull - nextFull, text: `The natural alternative, ${dot(nextBestSan, mover)}, loses material further down the line — ${pieceWords(fenBefore, next.moves, mover, false)}.`, line: { fen: fenBefore, sans: nextSans }, squares: [], alt: true });
+      if (ownFull - nextFull > 0 && nextFull < 0) cands.push({ source: 'material', stake: ownFull - nextFull, text: (() => { const w = pieceWords(fenBefore, next.moves, mover, false); return `The natural alternative, ${dot(nextBestSan, mover)}, loses ${w === 'material' ? 'material further down the line' : `${w} further down the line`}.`; })(), line: { fen: fenBefore, sans: nextSans }, squares: [], alt: true });
     }
   }
 

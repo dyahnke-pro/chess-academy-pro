@@ -262,10 +262,9 @@ export async function captureMisconception(
   if (classification.tag === 'none') {
     return { classification, coachNote, logged: false };
   }
-  // AN INACCURACY NO SKILL NAMES IS NOT LOGGED (2026-10-18): 43% of real
-  // inaccuracies (764, acc-david + acc-corpus) fall to `other`. A small leak
-  // with no named skill feeds no tile and would only bury the review queue;
-  // a named one is the signal a strong player's heat map needs.
+  // AN INACCURACY NO SKILL NAMES IS NOT LOGGED (2026-10-18). With a best move
+  // every slip is named (`slipCause`); `other` is left only when there was no
+  // best move to compare, and a small leak with no named skill feeds no tile.
   if (classification.tag === 'other' && args.context.grade === 'inaccuracy') {
     return { classification, coachNote, logged: false };
   }

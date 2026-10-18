@@ -30,6 +30,7 @@
 import { mateStakes, costStakes, type FactStakes } from './factStakes';
 import { Chess } from 'chess.js';
 import { findConcession, findStudentDrawback } from './concessionBeat';
+import { inaccuracySpeaks } from './inaccuracyVoice';
 import { callInaccuracy, callInaccuracyDetailed, errorWhyFor, type InaccuracyDecline, type PriorMove } from './inaccuracyCall';
 export { priorMoveLeadingTo } from './inaccuracyCall';
 import { describeConcessions } from './reviewTeachingPoints';
@@ -262,15 +263,7 @@ export function backwardLook(args: {
   // SI5q0VJz: 27.Rc8 and 39.Qb8 — mate in six — each heard "your piece went a
   // long way from your king" off a raw drop between two reads at +8). The one
   // grader decides, in expected points when the eval after is known.
-  const quality = classifyMove({
-    wasBest: false,
-    cpLoss: args.cpLoss,
-    missedMate: args.missedMate ?? null,
-    allowedMate: args.allowedMate ?? null,
-    ...(typeof args.moverEvalAfterCp === 'number'
-      ? { evalBefore: args.moverEvalAfterCp + args.cpLoss, evalAfter: args.moverEvalAfterCp, isWhiteMove: true }
-      : {}),
-  });
+  const quality = moverQuality(args);
   const fault = quality === 'inaccuracy' || quality === 'mistake' || quality === 'blunder';
   if (!gained && fault) {
     // WHY THE MOVE FAILED is the error call's — its mechanism (`whyItFailed`)
@@ -471,4 +464,33 @@ export function replyKeptWinOf(
   const hit = lines.find((l) => l.moves[0] === uci);
   if (!hit) return null;
   return Math.abs(hit.evaluation - best) <= 100;
+}
+
+/** The ONE grade of the mover's move for the Learn lanes — the backward look
+ *  and the caller deciding whether a slip is spoken read the same number. */
+export function moverQuality(args: {
+  cpLoss: number;
+  missedMate?: number | null;
+  allowedMate?: number | null;
+  moverEvalAfterCp?: number | null;
+}): ReturnType<typeof classifyMove> {
+  return classifyMove({
+    wasBest: false,
+    cpLoss: args.cpLoss,
+    missedMate: args.missedMate ?? null,
+    allowedMate: args.allowedMate ?? null,
+    ...(typeof args.moverEvalAfterCp === 'number'
+      ? { evalBefore: args.moverEvalAfterCp + args.cpLoss, evalAfter: args.moverEvalAfterCp, isWhiteMove: true }
+      : {}),
+  });
+}
+
+/** Whether the student's slip on this move is SPOKEN in Learn: a mistake or a
+ *  blunder always is; an inaccuracy only where their own record earns it
+ *  (`inaccuracyVoice` — this phase and this skill first). */
+export function slipSpoken(args: Parameters<typeof moverQuality>[0] & {
+  fenBefore: string; playedSan: string; bestSan: string | null; historySans: readonly string[];
+}): boolean {
+  if (moverQuality(args) !== 'inaccuracy') return true;
+  return inaccuracySpeaks({ fenBefore: args.fenBefore, playedSan: args.playedSan, bestSan: args.bestSan, historySans: args.historySans, ply: args.historySans.length - 1 });
 }

@@ -1405,10 +1405,9 @@ function AboutTab(): JSX.Element {
         <BugReportPanel />
       </div>
 
-      {/* Send the student's own record to the developer (David 2026-10-18). */}
-      <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
-        <DataDropPanel />
-      </div>
+      {/* Send the owner's own record to Claude (David 2026-10-18) — renders
+          only on his devices; the server decides. */}
+      <DataDropPanel />
 
       <div className="pt-4 border-t space-y-2" style={{ borderColor: 'var(--color-border)' }}>
         <div className="text-sm font-medium">Diagnostics &amp; audit log</div>

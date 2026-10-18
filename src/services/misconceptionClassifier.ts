@@ -20,6 +20,7 @@ import { detectTactics } from './tacticsDetector';
 import { homeMinorCount } from './development';
 import { centreDistance } from '../utils/centreDistance';
 import { positionOf } from '../utils/samePosition';
+import { slipCause } from './slipCause';
 
 export interface ClassifyMisconceptionInput {
   /** Position BEFORE the played move (FEN). */
@@ -254,6 +255,12 @@ function classifyMisconceptionImpl(
   if (!move) {
     return { tag: 'other', customLabel: phaseLabel(phase), coachNote: '', why };
   }
+  // THE ENGINE'S OWN WOBBLE IS NOT A SLIP: when the move played IS the best
+  // move, two searches of different depth disagreed about its price — there is
+  // nothing to name and nothing to record (26 of 764 real inaccuracies).
+  if (input.bestSan && input.bestSan.replace(/[+#]/g, '') === move.san.replace(/[+#]/g, '')) {
+    return { tag: 'none', coachNote: '' };
+  }
   const fenAfter = chess.fen();
 
   // (0) THE ATTRIBUTED FUNDAMENTAL — proven on the board (pattern + available
@@ -455,9 +462,20 @@ function classifyMisconceptionImpl(
     }
   }
 
-  // Honest fallback — a real slip we can't pin to a specific motif from the
-  // board alone. Bucket it by phase (a review-only holding pen) rather than
-  // assert a misconception we can't prove.
+  // (m) THE LAST WORD — no slip is `other` (David 2026-10-18: "All mistakes
+  // can be deterministically identified. That is the standard."). Compare the
+  // two futures the engine computed and file the slip under the largest real
+  // difference (`slipCause`).
+  const cause = slipCause({
+    fen: input.fen, playedSan: input.playedSan, bestSan: input.bestSan,
+    pvAfterPlayed: input.pvAfterPlayed, pvAfterBest: input.pvAfterBest,
+    evalBefore: input.evalBefore, evalAfterPlayed: input.evalAfterPlayed, phase,
+  });
+  if (cause) return { tag: cause.tag, coachNote: cause.coachNote, why };
+
+  // Honest fallback — reached only when there is no best move to compare the
+  // slip against (`slipCause` names every other one). Bucket it by phase
+  // rather than assert a misconception we can't prove.
   //
   // 🔒 LOG WHAT WE COULD NOT NAME (prod, 2026-09-13). On one real user's game,
   // FOUR of EIGHT captured slips came back `tag=other bucket=uncategorized` —

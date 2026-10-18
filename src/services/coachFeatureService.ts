@@ -39,6 +39,7 @@ import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShi
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
 import { assessPositionalEdge, verdictBand } from './reviewPositionalAssessment';
 import { classifyPhase } from './gamePhaseService';
+import { inaccuracySpeaks, loadInaccuracyVoice } from './inaccuracyVoice';
 import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
 import { coachTurn, habitNeedFrom } from './coachDecider';
@@ -1622,7 +1623,15 @@ export function buildReviewSegments(
     } catch { /* looking back is a bonus, never a blocker */ }
   }
   for (let i = 0; i < usable; i++) {
-    const m = moves[i];
+    const m0 = moves[i];
+    // AN INACCURACY SPEAKS ONLY WHERE THE RECORD EARNS IT (David 2026-10-18):
+    // where this student's mistakes and blunders outnumber their inaccuracies
+    // (this phase and this skill first), the big errors come first — the move is narrated as an
+    // ordinary move (its reason), and the badge keeps the real grade.
+    const quietSlip = m0.classification === 'inaccuracy'
+      && (playerColor ? (m0.ply % 2 === 1 ? 'white' : 'black') === playerColor : !m0.isCoachMove)
+      && !inaccuracySpeaks({ fenBefore: fenChain[i].fenBefore, playedSan: m0.san, bestSan: betterMoveSan(m0.bestMove, m0.san, fenChain[i].fenBefore), ply: m0.ply - 1 });
+    const m = quietSlip ? { ...m0, classification: null } : m0;
     const fenPair = fenChain[i];
     const fullMove = Math.ceil(m.ply / 2);
     const moverColor: 'white' | 'black' = m.ply % 2 === 1 ? 'white' : 'black';
@@ -2387,7 +2396,7 @@ export function buildReviewSegments(
           playerColor: moverColor,
           fenBefore: fenPair.fenBefore,
           fenAfter: fenPair.fenAfter,
-          classification: m.classification,
+          classification: m0.classification,
           evalBefore: m.preMoveEval,
           evalAfter: m.evaluation,
           bestMoveSan,
@@ -2477,7 +2486,7 @@ export function buildReviewSegments(
         playerColor: moverColor,
         fenBefore: fenPair.fenBefore,
         fenAfter: fenPair.fenAfter,
-        classification: m.classification,
+        classification: m0.classification,
         evalBefore: m.preMoveEval,
         evalAfter: m.evaluation,
         bestMoveSan,
@@ -5082,6 +5091,8 @@ export async function generateReviewNarration(params: {
       ).then((r) => { timings.intro = Date.now() - introStart; return r ?? ''; });
 
   let phaseStart = Date.now();
+  // The student's own record decides which inaccuracies speak; read it first.
+  await loadInaccuracyVoice();
   const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null, refutedByPly, intentByPly);
   // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)
   // — Stockfish-projected teaching, uncapped-diagnostic only (bounded budget +
