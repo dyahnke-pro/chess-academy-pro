@@ -5,7 +5,7 @@ import type { MisconceptionAggregate } from './misconceptionService';
 function wk(tag: string, openCount: number, label = tag): MisconceptionAggregate {
   return {
     tag, def: null, label, bucket: 'tactical',
-    total: openCount, openCount, lastSeenAt: Date.now(), examples: [],
+    total: openCount, openCount, openWeight: openCount, lastSeenAt: Date.now(), examples: [],
     gameIds: [], lastDrilledAt: null,
   };
 }
