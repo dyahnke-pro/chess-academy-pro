@@ -1201,7 +1201,9 @@ export function hangingPieceLine(piece: string, sq: string, rot: number): string
 /** A piece of yours attacked by a CHEAPER one, said with why it matters (Learn
  *  audit 2026-10-14: "Careful — their bishop on d2 hits your queen on a5."
  *  named the attack and stopped). The attacker is worth less by construction,
- *  so a guard does not save the piece: trading it for the attacker loses. */
+ *  so a guard does not save the piece: trading it for the attacker loses.
+ *  The line gives the REASON only; the outcome ("Rxd1 wins your queen for their
+ *  rook") is the proof's, said once (David 2026-10-18: both said it). */
 export function cheaperAttackerLine(by: string, bySq: string, piece: string, sq: string, rot: number): string {
   const attacker = HIT_NAME[by] ?? 'piece';
   const target = HIT_NAME[piece] ?? 'piece';
@@ -1209,8 +1211,8 @@ export function cheaperAttackerLine(by: string, bySq: string, piece: string, sq:
   // a game) — keyed on the caller's move number, never Math.random.
   const stems = [
     `Careful — their ${attacker} on ${bySq} hits your ${target} on ${sq}, and a guard does not help: the ${attacker} is worth less than your ${target}.`,
-    `Careful — their ${attacker} on ${bySq} attacks your ${target} on ${sq}. Guarding it does not save it: they win your ${target} for a ${attacker}.`,
-    `Their ${attacker} on ${bySq} is after your ${target} on ${sq} — guard or not, it would cost your ${target} for their ${attacker}.`,
+    `Careful — their ${attacker} on ${bySq} attacks your ${target} on ${sq}. Guarding it does not save it: the ${attacker} is the cheaper piece.`,
+    `Their ${attacker} on ${bySq} is after your ${target} on ${sq} — a guard does not help, because the ${attacker} is the cheaper piece.`,
   ];
   return stems[((rot % stems.length) + stems.length) % stems.length];
 }

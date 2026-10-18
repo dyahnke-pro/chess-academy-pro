@@ -47,4 +47,12 @@ describe('a count is not a move number (hard walk 2026-10-10)', () => {
   it('still strips a real move-number prefix', () => {
     expect(stripMoveNumbers('After 12. Nf3 the knight eyes e5.')).toBe('After Nf3 the knight eyes e5.');
   });
+  it('earned praise passes; any other praise is still cut (David 2026-10-18)', async () => {
+    const { earnedPraise } = await import('./dnaRules');
+    const p = earnedPraise('decision', 1, 3);
+    expect(dnaPass(`${p} Nf3 guards e5.`).text).toBe(`${p} Nf3 guards e5.`);
+    expect(dnaPass('Great move! Nf3 guards e5.').refused).toEqual(['dna: praise']);
+    expect(earnedPraise('decision', 4, 0)).toBe("That's four in a row.");
+  });
 });
+

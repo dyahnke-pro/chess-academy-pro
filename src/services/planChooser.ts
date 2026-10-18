@@ -6,7 +6,8 @@
 import { costWords } from './engineConstants';
 import { Chess } from 'chess.js';
 import { planFromUci } from './lookaheadPlan';
-import { aimWalkableNow, aimsOf } from './planArc';
+import { aimWalkableNow, aimsOf, type Aim } from './planArc';
+import { routeNoun } from '../utils/routeWords';
 
 /** The first full move a plan choice may be taught on. */
 export const PLAN_CHOICE_FROM_MOVE = 10;
@@ -59,11 +60,17 @@ export function planChoice(
   // calculation, not choosing a plan.
   if (gap >= SHARP_PLAN_GAP_CP || opensForcing(fen, l0.moves[0])) return null;
   const key = `plan-choice:${a0.id}|${a1.id}`;
+  // LEARN NAMES NO MOVE UNASKED (David 2026-10-18: "getting the bishop to f5,
+  // by way of g4" drew Bf3-g4 before he moved). A route's first hop is the
+  // student's next move, so the waypoints are held; the goal square is the plan.
+  const said = (a: Aim): string => a.kind === 'route' && a.route
+    ? routeNoun({ ...a.route, path: [a.route.path[0], a.route.path[a.route.path.length - 1]] })
+    : a.phrase;
   if (gap <= 30) {
-    return { key, text: `Two plans hold here — ${a0.phrase}, or ${a1.phrase}. They come out level, so choose the one you understand and play it with purpose.` };
+    return { key, text: `Two plans hold here — ${said(a0)}, or ${said(a1)}. They come out level, so choose the one you understand and play it with purpose.` };
   }
   if (gap >= 80) {
-    return { key, text: `Of the two plans on offer, the stronger is ${a0.phrase}; ${a1.phrase} falls short by ${costWords(gap)}.` };
+    return { key, text: `Of the two plans on offer, the stronger is ${said(a0)}; ${said(a1)} falls short by ${costWords(gap)}.` };
   }
   return null;
 }

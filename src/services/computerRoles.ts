@@ -43,6 +43,12 @@ const PRE = { state: 'na', why: 'said BEFORE the move — the answer after it is
 const DESC = (what: string): RoleState => ({ state: 'na', why: `a description of the board (${what}) — no question posed to the student` });
 const SLIP: RoleState = { state: 'wired', via: 'captureMisconception' };
 
+/** Said BEFORE the student moves (a warning, an announcement): the skill it
+ *  teaches can be green from evidence recorded elsewhere, so it fades on it. */
+export function saidBeforeTheMove(role: ComputerRole | undefined): boolean {
+  return role?.held === PRE;
+}
+
 export const COMPUTER_ROLES: Record<LearnLane, ComputerRole> = {
   // ── batch 1 (opening equivalence, order and timing) — `orderTeaching` ──
   openingEquivalence: { computer: 'openingEquivalence', tag: null, held: { state: 'na', why: 'a name for the board — the opening it is with moves thrown in — no answer of the student\'s to record' }, broken: { state: 'na', why: 'naming the reference opening poses no question the student can miss' }, askable: { state: 'wired', via: 'orderReads (depthClauses)' } },

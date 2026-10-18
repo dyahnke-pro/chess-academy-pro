@@ -9,8 +9,9 @@
  * board are not finds — a chime on every best move is noise by move ten.
  *
  * Exhaustive on purpose: a new MoveReason fails to compile until someone
- * decides whether it earns a reward. The coach's VOICE still never praises
- * (Narration Voice Rule 5) — this is the machine celebrating, not the coach.
+ * decides whether it earns a reward. When one fires, the coach praises it
+ * from the one praise table (`dnaRules.EARNED_PRAISE`, David 2026-10-18:
+ * "Praise!") and says the why — the only praise the voice rules let through.
  */
 import type { MoveReason } from './moveReason';
 import type { RewardKind, RewardEvent } from './rewardEvents';

@@ -50,7 +50,7 @@ describe('boardComputers — the one registry', () => {
 
   it('the plan thread carries its proof (the stop is proven off their move)', () => {
     const thread = newPlanThread();
-    const reads = readBoardAll('planThread', { thread, ply: 20, fenBefore: after(['e4', 'e5']), fenAfter: after(['e4', 'e5', 'Nf3']), student: 'b' });
+    const reads = readBoardAll('planThread', { thread, ply: 20, fenBefore: after(['e4', 'e5']), fenAfter: after(['e4', 'e5', 'Nf3']), student: 'b', holdPlayable: false });
     for (const r of reads) expect(r.proof).toBeDefined();
   });
 });

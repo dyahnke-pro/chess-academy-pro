@@ -2017,7 +2017,7 @@ export function buildReviewSegments(
         // Their move follows the student's: the ply before is the student's own
         // (`planStepLine` checks the side to move on that board).
         const prevStudent = i > 0 && moves[i - 1] ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null;
-        for (const r of readBoardAll('planThread', { thread: planTrial, ply: m.ply, fenBefore: fenPair.fenBefore, fenAfter: fenPair.fenAfter, student: studentColorWB, studentPovCp: povCp, studentMove: prevStudent })) {
+        for (const r of readBoardAll('planThread', { thread: planTrial, ply: m.ply, fenBefore: fenPair.fenBefore, fenAfter: fenPair.fenAfter, student: studentColorWB, studentPovCp: povCp, studentMove: prevStudent, holdPlayable: false })) {
           // Review has no think pause: the question and its answer run on.
           const raw = `[plan-now] ${stripThink(r.text)}`;
           facets.push(raw);

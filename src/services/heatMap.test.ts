@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { heatMap, newlyGreen } from './heatMap';
+import { heatMap } from './heatMap';
 import { HELD_FOR_PROVEN, PROVEN_MIN_GAMES, type CapabilityProfile, type CapabilityProfileEntry } from './capabilityEvidence';
 import type { MisconceptionTagRecord } from '../types';
 const slip = (tag: string, over: Partial<MisconceptionTagRecord> = {}): MisconceptionTagRecord => ({
@@ -45,15 +45,6 @@ describe('heatMap', () => {
   it('held once, never broken, not yet proven, is NOT failing — grey on its way', () => {
     const p: CapabilityProfile = new Map([['missed-tactic', entry({ held: 1, heldStreak: 1, streakGames: 1 })]] as never);
     expect(heatMap(p, []).find((x) => x.tag === 'missed-tactic')?.state).toBe('grey');
-  });
-
-  it('newlyGreen names only the tiles that crossed', () => {
-    const p: CapabilityProfile = new Map([
-      ['hung-material', entry({ held: 9, heldStreak: 9, streakGames: 3 })],
-    ] as never);
-    const tiles = heatMap(p, []);
-    expect(newlyGreen(tiles, new Set()).map((t) => t.tag)).toEqual(['hung-material']);
-    expect(newlyGreen(tiles, new Set(['hung-material']))).toEqual([]);
   });
 });
 

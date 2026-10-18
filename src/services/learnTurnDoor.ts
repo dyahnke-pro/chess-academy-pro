@@ -26,7 +26,7 @@
 import { fadeText, fadeLevelOf, type FadeLevels } from './fadeText';
 import { isProof, type FactProof, type Proof } from './proof';
 import { emitLearnTurn, type LearnTurnTag } from './coachDecisionEvents';
-import { COMPUTER_ROLES } from './computerRoles';
+import { COMPUTER_ROLES, saidBeforeTheMove } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
 import { stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
@@ -390,16 +390,21 @@ export interface TurnDecision {
 /** THE FADE. A lane that teaches a skill the student has PROVEN (green on the
  *  heat map — `capabilityProven`) says only its first sentence: the point, not
  *  the lesson again. Not a cap (G4.5): the student's own record decides, and
- *  grey or red keeps the full teaching. Only lanes whose HELD half is wired
- *  fade — a skill the app cannot see the student answer can never be green. */
+ *  grey or red keeps the full teaching. A lane fades when it records the
+ *  answer itself or is said before the move (its skill proven elsewhere); a
+ *  line about a slip just made never fades. */
 /** GRADUAL and per skill — the one rule in `fadeText` (every surface). */
 export type { FadeLevel, FadeLevels } from './fadeText';
 export function fadeWhenGreen(lane: LearnLane, text: string, green: FadeLevels | null, skill?: string): string {
   if (!green || green.size === 0) return text;
   const role = COMPUTER_ROLES[lane];
   // A fact's own skill (recorded through the same tag table) fades it; else
-  // the lane's tag, and only when its held half is wired.
-  const tag = skill ?? (role && role.tag && role.held.state === 'wired' ? role.tag : null);
+  // the lane's tag, when the lane records answers itself OR is said before the
+  // move (David 2026-10-18: threat-spotting green, the threat warning still
+  // spoke in full — a pre-move warning records no answer, so the green proven
+  // elsewhere never reached it). A line about a slip just made never fades.
+  const fades = !!role?.tag && (role.held.state === 'wired' || saidBeforeTheMove(role));
+  const tag = skill ?? (fades ? role.tag : null);
   return fadeText(text, fadeLevelOf(green, tag));
 }
 

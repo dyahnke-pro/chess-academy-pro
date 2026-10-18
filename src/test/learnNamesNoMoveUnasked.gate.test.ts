@@ -39,4 +39,12 @@ describe('Learn names no move unasked', () => {
     expect(forms.length, 'the book move is never named without a job').toBeGreaterThan(0);
     for (const f of forms) expect(f, f.trim()).toMatch(/\$\{late\.(clause|short)\}/);
   });
+  it('a plan step or a held read never names the move it holds (David 2026-10-18)', () => {
+    // The held form of a read is what Learn speaks before the move: it may name
+    // the consequence, never the next-best move ("The next-best is Bg4").
+    const srr = read('services/speedRunReads.ts');
+    for (const m of srr.matchAll(/idea: `([^`]*)`/g)) expect(m[1], m[1]).not.toMatch(/next-best is \$\{/);
+    // Learn reads the plan thread holding a step the student could play now.
+    expect(read('components/Coach/CoachTeachPage.tsx')).toMatch(/readBoardAll\('planThread', \{[\s\S]{0,600}holdPlayable: true/);
+  });
 });

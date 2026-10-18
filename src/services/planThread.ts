@@ -117,6 +117,9 @@ export function planThreadTurn(
     studentPovCp?: number | null;
     /** The student's move before their reply, to credit a step of the plan. */
     studentMove?: { fenBefore: string; san: string } | null;
+    /** REQUIRED: Learn, before the student's move, holds a plan step that is a
+     *  legal move right now (LEARN NAMES NO MOVE UNASKED); Review names it. */
+    holdPlayable: boolean;
   },
 ): PlanThreadLine[] {
   const out: PlanThreadLine[] = [];
@@ -163,7 +166,7 @@ export function planThreadTurn(
   // extra piece to convert outranks all three questions, and saying the
   // questions before an unrelated plan is what made them not line up.
   const methodOwns = top.kind !== 'passer' && top.kind !== 'convert';
-  const read = !t.methodSaid && methodOwns ? methodRead(args.fenAfter, args.student) : null;
+  const read = !t.methodSaid && methodOwns ? methodRead(args.fenAfter, args.student, args.holdPlayable) : null;
   const mp = read ? methodPlan(read, args.fenAfter) : null;
   // WHY THIS ONE — the reason it outranks the next plan on the board. Asked as
   // a question when no method question already opened the line (one pause).

@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '../../db/schema';
 import { getCapabilityProfile, isUseEvidence } from '../../services/capabilityEvidence';
 import { getUnifiedWeaknessProfile, type UnifiedWeakness } from '../../services/weaknessSpine';
-import { heatMap, knowLine, newlyGreen, type HeatTile } from '../../services/heatMap';
+import { heatMap, knowLine, type HeatTile } from '../../services/heatMap';
+import { claimProvenAnnouncements, markProvenAnnounced } from '../../services/provenAnnouncements';
 import { reward } from '../../services/rewardService';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { REP_PUZZLE_CAP } from '../../services/repCompletion';
@@ -122,9 +123,12 @@ export function HeatMapPanel(): JSX.Element | null {
       setKnow(new Map(heatMap(knowProfile, []).map((k) => [k.tag, k])));
       setTimelines(new Map(lines.map((l) => [l.tag, l])));
       setHoles(weaknesses);
-      let before = new Set<string>();
-      try { before = new Set(JSON.parse(seen?.value ?? '[]') as string[]); } catch { /* fresh */ }
-      const crossed = seen ? newlyGreen(t, before) : [];
+      // ONCE, EVER (the one announced memory): a first visit marks every green
+      // without a burst; after that only a green never announced bursts.
+      const greens = t.filter((x) => x.state === 'green').map((x) => x.tag);
+      const freshTags = new Set(seen ? await claimProvenAnnouncements(greens) : (await markProvenAnnounced(greens), []));
+      if (cancelled) return;
+      const crossed = t.filter((x) => freshTags.has(x.tag));
       if (crossed.length > 0) {
         setFresh(new Set(crossed.map((c) => c.tag)));
         reward({ kind: 'proven', label: crossed.length === 1 ? `Fixed: ${crossed[0].label}` : `${crossed.length} skills fixed` });

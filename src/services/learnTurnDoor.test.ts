@@ -302,6 +302,12 @@ describe('the fade — short phrasing when the skill is green (David 2026-09-30)
     // blunderCheck is tagged hung-material but only speaks on a slip.
     expect(fadeWhenGreen('blunderCheck', TWO, new Set(['hung-material']))).toBe(TWO);
   });
+  it('a warning said BEFORE the move fades on its skill proven elsewhere (David 2026-10-18)', async () => {
+    const { fadeWhenGreen } = await import('./learnTurnDoor');
+    const WARN = 'This loses the game if you ignore it — their bishop on g4 hits your queen on d1. Guarding it does not save it.';
+    expect(fadeWhenGreen('threat', WARN, new Set(['missed-opponents-threat']))).toBe('This loses the game if you ignore it — their bishop on g4 hits your queen on d1.');
+    expect(fadeWhenGreen('threat', WARN, new Set())).toBe(WARN);
+  });
   it('the door records the fade on its row', () => {
     const d = decideTurn([{ lane: 'trade', proof: NO_PROOF.stated, text: TWO, fen: FEN }], undefined, undefined, null, new Set(['bad-trade']));
     expect(d.faded).toEqual(['trade']);
