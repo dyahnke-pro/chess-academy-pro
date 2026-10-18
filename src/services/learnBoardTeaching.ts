@@ -10,6 +10,7 @@
 // Pure: the engine reads are handed in by the page.
 import { flipSideToMove } from './threatOut';
 import { counterThreat, counterThreatLine } from './counterThreat';
+import { playedConcept, playedConceptLine, type PlayedConcept } from './playedConcept';
 import { CAPTURE_VALUE } from './pieceValues';
 import { lineProof, legalLineProof, squaresProof, NO_PROOF, type FactProof, type Proof } from './proof';
 import { shareAdverb } from '../utils/shareWords';
@@ -446,6 +447,31 @@ export function counterThreatTeaching(fenBefore: string, san: string, student: '
     arrows, role: 'teach',
   };
 }
+
+/** THE CONCEPT A MOVE JUST PLAYED, either seat (David 2026-10-18). The line
+ *  is null on a concept the student has proven (`proven`, conceptRecord); the
+ *  concept itself is returned either way, so a student's own play is counted
+ *  toward proving it. `define` adds the definition the first time a game meets it. */
+export function playedConceptTeaching(
+  fenBefore: string, san: string, student: 'w' | 'b',
+  proven: ReadonlySet<string>, define: (type: string) => string,
+): { hint: TeachingHint | null; concept: PlayedConcept | null } {
+  const c = playedConcept(fenBefore, san);
+  if (!c) return { hint: null, concept: null };
+  if (proven.has(c.type)) return { hint: null, concept: c };
+  const text = `${playedConceptLine(c, student)}${define(c.type)}`;
+  const squares = c.squares.filter((s) => /^[a-h][1-8]$/.test(s));
+  return {
+    concept: c,
+    hint: {
+      lane: 'playedConcept', proof: squaresProof(text, squares) ?? NO_PROOF.stated, text, squares, claims: [`played-concept:${c.type}:${squares.join('')}`],
+      event: { name: 'coach_played_concept_named', props: { surface: 'coach-teach', concept: c.type, by: c.mover === student ? 'student' : 'opponent' } },
+      arrows: [], role: 'teach',
+    },
+  };
+}
+
+export { loadProvenConcepts, recordConceptPlayed } from './conceptRecord';
 
 /** Tempo, counted (P2 #7): their reply is a piece's third move in the opening
  *  while the student has more pieces out. `history` ends with THEIR reply. */

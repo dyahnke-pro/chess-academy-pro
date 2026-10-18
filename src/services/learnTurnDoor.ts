@@ -47,6 +47,7 @@ export type LearnLane =
   | 'prophylaxis'
   | 'threat'
   | 'dangerLevels'
+  | 'playedConcept'
   | 'commentary'
   | 'behavior'
   | 'openingIdea'
@@ -158,7 +159,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   blunderCheck: 'but',
   moveOrder: 'refute', causalChain: 'refute',
   theirPurpose: 'their', theirIntent: 'their', theirMoveCost: 'their', coachMistake: 'their', gap: 'their',
-  tactic: 'point', planArc: 'point', structureJudgement: 'point', openingIdea: 'point', structure: 'point', pieceQuality: 'point',
+  tactic: 'point', playedConcept: 'point', planArc: 'point', structureJudgement: 'point', openingIdea: 'point', structure: 'point', pieceQuality: 'point',
   positionFacts: 'point', commentary: 'point', positional: 'point', kingSafety: 'point', splitPosition: 'point',
   behavior: 'point',
   phase: 'verdict', character: 'verdict',
@@ -194,6 +195,9 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // DANGER LEVELS (David 2026-10-18): a threat answered with a bigger one —
   // why their piece was left, and the line that punishes taking it. It covers
   // the threat it names, so it leads it.
+  // THE CONCEPT A MOVE JUST PLAYED, either side (David 2026-10-18) — quiet on
+  // a concept the student has proven (conceptRecord).
+  playedConcept: { kind: 'computed', why: 'the concept the move just played — a fork, a pin, a discovered attack — named for either side', lead: 78 },
   dangerLevels: { kind: 'threat', why: 'a threat answered with a bigger one: the piece left, the bigger piece hit, and the line that punishes taking it', lead: 96, always: true },
   commentary: { kind: 'computed', why: 'the computed board read (playCommentary)', lead: 30 },
   behavior: { kind: 'observation', why: 'a Danya behaviour, rate-matched to his corpus', lead: 25 },

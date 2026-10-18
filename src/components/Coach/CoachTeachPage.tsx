@@ -38,7 +38,7 @@ import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, 
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { OPENING_PLIES, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, threatAnswerTeaching, type TeachingHint } from '../../services/learnBoardTeaching';
+import { OPENING_PLIES, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, type TeachingHint } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -8006,6 +8006,10 @@ export function CoachTeachPage(): JSX.Element {
   // `standingFactMemory` — this file and usePhaseNarration each carried their
   // own copy of it under different ref names.
   const standingRef = useRef(createStandingFactMemory());
+  /** The concepts this student has PROVEN (puzzles or their own games) — read
+   *  once on mount; a concept here is not named again (conceptRecord). */
+  const provenConceptsRef = useRef<ReadonlySet<string>>(new Set());
+  useEffect(() => { void loadProvenConcepts().then((s) => { provenConceptsRef.current = s; }).catch(() => undefined); }, []);
   /** A tactic's definition, the FIRST time the game meets it — one ledger for
    *  every lane that teaches a pattern (the instant alert, the composer's
    *  concept clause, and the grade's missed pattern, B3). */
@@ -11556,7 +11560,8 @@ export function CoachTeachPage(): JSX.Element {
                   // DANGER LEVELS, both seats (David 2026-10-18): their reply left a
                   // piece and hit a bigger one of yours; or your move just did it to them.
                   const counter = replySan ? counterThreatTeaching(move.fen, replySan, playerColor === 'white' ? 'w' : 'b') : null;
-                  if (counter) queueHint(fenAfterReply, counter);
+                  const dangerProven = provenConceptsRef.current.has('danger_levels');
+                  if (counter && !dangerProven) queueHint(fenAfterReply, counter);
                   const yourCounter = (() => {
                     try {
                       const b = new Chess();
@@ -11565,7 +11570,26 @@ export function CoachTeachPage(): JSX.Element {
                     } catch { return null; }
                   })();
                   // Not when their reply took the piece you left — the moment has passed.
-                  if (yourCounter && !(replySan?.includes('x') && replySan.includes(yourCounter.squares[0]))) queueHint(fenAfterReply, yourCounter);
+                  if (yourCounter && !(replySan?.includes('x') && replySan.includes(yourCounter.squares[0]))) {
+                    if (!dangerProven) queueHint(fenAfterReply, yourCounter);
+                    void recordConceptPlayed('danger_levels');
+                  }
+                  // EVERY CONCEPT, EITHER SIDE (David 2026-10-18): what their reply
+                  // and what your move just played — quiet on a concept you have
+                  // proven, and your own unprompted play counted toward proving it.
+                  const sw: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+                  if (replySan) {
+                    const theirs = playedConceptTeaching(move.fen, replySan, sw, provenConceptsRef.current, takeDefinition);
+                    if (theirs.hint) queueHint(fenAfterReply, theirs.hint);
+                  }
+                  try {
+                    const b = new Chess();
+                    for (const san of move.history.slice(0, -1)) b.move(san);
+                    const mine = playedConceptTeaching(b.fen(), move.san, sw, provenConceptsRef.current, takeDefinition);
+                    if (mine.hint) queueHint(fenAfterReply, mine.hint);
+                    const prompted = announcedBoardsRef.current.has(b.fen().split(' ').slice(0, 2).join(' '));
+                    if (mine.concept && !prompted) void recordConceptPlayed(mine.concept.type);
+                  } catch { /* a bonus, never a blocker */ }
                   const tempo = replySan ? tempoTeaching([...move.history, replySan], playerColor === 'white' ? 'w' : 'b') : null;
                   if (tempo) {
                     queueHint(fenAfterReply, tempo);

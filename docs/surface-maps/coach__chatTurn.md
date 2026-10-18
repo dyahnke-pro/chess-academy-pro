@@ -57,13 +57,13 @@
 - `src/coach/chatTurn.test.ts:97`
 - `src/coach/chatTurn.test.ts:100`
 - `src/coach/chatTurn.test.ts:107`
-- `src/coach/dispatchCoachTurn.ts:278`
-- `src/coach/dispatchCoachTurn.ts:291`
-- `src/coach/dispatchCoachTurn.ts:416`
-- `src/coach/dispatchCoachTurn.ts:449`
-- `src/coach/dispatchCoachTurn.ts:598`
-- `src/coach/dispatchCoachTurn.ts:627`
-- `src/coach/dispatchCoachTurn.ts:694`
+- `src/coach/dispatchCoachTurn.ts:279`
+- `src/coach/dispatchCoachTurn.ts:292`
+- `src/coach/dispatchCoachTurn.ts:419`
+- `src/coach/dispatchCoachTurn.ts:452`
+- `src/coach/dispatchCoachTurn.ts:601`
+- `src/coach/dispatchCoachTurn.ts:633`
+- `src/coach/dispatchCoachTurn.ts:700`
 - `src/coach/questionRoute.test.ts:20`
 - `src/coach/questionRoute.test.ts:30`
 - `src/coach/questionRoute.test.ts:33`
@@ -155,20 +155,20 @@
 
 ### `nextConversationState` (function) — 2 call sites
 - `src/coach/chatTurn.test.ts:162`
-- `src/coach/dispatchCoachTurn.ts:202`
+- `src/coach/dispatchCoachTurn.ts:203`
 
 ### `canonicalAsk` (function) — 5 call sites
 - `src/coach/chatTurn.test.ts:66`
 - `src/coach/chatTurn.test.ts:80`
 - `src/coach/chatTurn.test.ts:83`
 - `src/coach/chatTurn.test.ts:87`
-- `src/coach/dispatchCoachTurn.ts:599`
+- `src/coach/dispatchCoachTurn.ts:602`
 
 ### `kindAgreesWithLane` (function) — 4 call sites
 - `src/coach/chatTurn.test.ts:103`
 - `src/coach/chatTurn.test.ts:104`
-- `src/coach/dispatchCoachTurn.ts:216`
-- `src/coach/dispatchCoachTurn.ts:598`
+- `src/coach/dispatchCoachTurn.ts:217`
+- `src/coach/dispatchCoachTurn.ts:601`
 
 ### `askBackAtCatchAll` (function) — 1 call site
 - `src/services/coachApi.ts:750`

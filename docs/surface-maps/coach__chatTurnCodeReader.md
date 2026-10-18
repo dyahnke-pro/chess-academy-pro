@@ -60,7 +60,7 @@
 - `src/coach/coachService.ts:1602`
 
 ### `namedMoveTokens` (function) — 1 call site
-- `src/coach/dispatchCoachTurn.ts:354`
+- `src/coach/dispatchCoachTurn.ts:355`
 
 ### `mainLinePlies` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

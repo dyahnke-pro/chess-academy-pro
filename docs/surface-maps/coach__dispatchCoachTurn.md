@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**700 lines · 17 exports · 21 importers · 16 tests · 2 audits**
+**706 lines · 17 exports · 21 importers · 16 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6339) — names `dispatchCoachTurn`
+- **The standard post-deploy ritual** (CLAUDE.md:6362) — names `dispatchCoachTurn`
 
 ## Who calls in
 
@@ -111,15 +111,15 @@
 - `src/coach/dispatchCoachTurn.showLine.test.ts:75`
 
 ### `asksBeyondShowMe` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3327`
+- `src/components/Coach/CoachTeachPage.tsx:3332`
 
 ### `showLineAnswer` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3355`
+- `src/components/Coach/CoachTeachPage.tsx:3360`
 
 ### `conversationFor` (function) — 3 call sites
 - `src/coach/dispatchCoachTurn.test.ts:167`
 - `src/coach/requestExecutor.test.ts:88`
-- `src/components/Coach/CoachTeachPage.tsx:3318`
+- `src/components/Coach/CoachTeachPage.tsx:3323`
 
 ### `isStudentTurn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -134,16 +134,16 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `setPendingOffer` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3369`
-- `src/components/Coach/CoachTeachPage.tsx:12226`
-- `src/components/Coach/CoachTeachPage.tsx:14302`
+- `src/components/Coach/CoachTeachPage.tsx:3374`
+- `src/components/Coach/CoachTeachPage.tsx:12276`
+- `src/components/Coach/CoachTeachPage.tsx:14346`
 
 ### `openTurnRead` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3435`
+- `src/components/Coach/CoachTeachPage.tsx:3440`
 - `src/components/Coach/GameChatPanel.tsx:474`
 
 ### `isComputedAnswer` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7509`
+- `src/components/Coach/CoachTeachPage.tsx:7514`
 
 ### `dispatchCoachTurn` (function) — 48 call sites
 - `src/coach/chatKindContracts.test.ts:389`
