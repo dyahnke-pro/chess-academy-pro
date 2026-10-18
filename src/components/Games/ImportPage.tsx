@@ -12,6 +12,7 @@ import type { PlatformStats, UserProfile } from '../../types';
 import { captureEvent } from '../../services/analytics';
 import { reward } from '../../services/rewardService';
 import { invalidateHomeSteer, warmHomeSteer } from '../../services/homeOpeningSteer';
+import { FirstRunOpeningNext } from '../FirstRun/FirstRunOpeningNext';
 
 type Platform = 'lichess' | 'chesscom';
 
@@ -364,6 +365,9 @@ export function ImportPage(): JSX.Element {
           </span>
         </div>
       )}
+
+      {/* First-run journey: on to the free opening, imported or not. */}
+      <FirstRunOpeningNext label={gameResult !== null ? 'Next: pick your free opening' : 'Skip for now: pick your free opening'} />
 
       {/* Stats summary */}
       {stats && (

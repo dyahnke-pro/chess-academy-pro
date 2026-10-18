@@ -12,9 +12,15 @@
 // a random last-resort move, twice in a row). So the card is its own component
 // and this renders it directly.
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render as rtlRender, screen } from '@testing-library/react';
+import type { ReactElement } from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { TeachGameOverCard } from './TeachGameOverCard';
+
+// The card can offer the first-run import, which navigates, so it lives in a
+// router like it does in the app.
+const render = (ui: ReactElement): ReturnType<typeof rtlRender> => rtlRender(<MemoryRouter>{ui}</MemoryRouter>);
 
 describe('the finished game keeps the board', () => {
   it('offers the review instead of taking it', async () => {

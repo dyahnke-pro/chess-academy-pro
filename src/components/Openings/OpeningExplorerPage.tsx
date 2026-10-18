@@ -20,6 +20,7 @@ import { useUpNext } from '../../hooks/useUpNext';
 import { UpNextBar } from '../Dashboard/UpNextBar';
 import { sectionPick } from '../../services/upNextPicker';
 import { BookOpen, Library, ChevronDown, ChevronRight, Users, Swords, Sparkles, GraduationCap, Shield } from 'lucide-react';
+import { FirstRunOpeningBanner } from '../FirstRun/FirstRunOpeningNext';
 
 type TabMode = 'masterclasses' | 'pro' | 'gambits' | 'counter' | 'all';
 
@@ -177,6 +178,7 @@ export function OpeningExplorerPage(): JSX.Element {
 
   return (
     <div className="flex flex-col flex-1 p-4 md:p-6 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 overflow-y-auto" data-testid="opening-explorer">
+      <div className="mb-3 empty:hidden"><FirstRunOpeningBanner /></div>
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
         <BookOpen size={24} className="text-theme-accent" />

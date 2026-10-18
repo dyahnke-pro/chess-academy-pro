@@ -12,6 +12,7 @@ import { warmHomeSteer } from './services/homeOpeningSteer';
 import { PRODUCTION_BACKFILL_SCHEDULE } from './services/backfillSchedule';
 import { AiConsentModal } from './components/Legal/AiConsentModal';
 import { FirstRunStrength } from './components/Legal/FirstRunStrength';
+import { FirstRunRouter } from './components/FirstRun/FirstRunRouter';
 import { useAiConsentStore } from './stores/aiConsentStore';
 import { getThemeById, applyTheme } from './services/themeService';
 import { seedDatabase } from './services/dataLoader';
@@ -759,6 +760,8 @@ export function App(): JSX.Element {
       <AiConsentModal />
       {/* The one-time strength question, after consent (David 2026-10-02). */}
       <FirstRunStrength />
+      {/* A new install lands on the board, not a menu (first-run journey). */}
+      <FirstRunRouter />
       {/* Two-step review prompt — armed by reviewPromptService after enough
           positive moments; renders only when open. Global so it can surface
           from any surface that recorded the win. */}

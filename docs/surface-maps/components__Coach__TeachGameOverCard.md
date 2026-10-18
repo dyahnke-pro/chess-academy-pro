@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**154 lines · 4 exports · 2 importers · 1 tests · 0 audits**
+**156 lines · 4 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6367) — names `TeachGameOverCard`
+- **The standard post-deploy ritual** (CLAUDE.md:6374) — names `TeachGameOverCard`
 
 ## Who calls in
 

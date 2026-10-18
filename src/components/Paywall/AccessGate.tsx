@@ -1,10 +1,11 @@
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useEntitlement } from '../../hooks/useEntitlement';
 import { useFreeTierStore } from '../../stores/freeTierStore';
 import { resolveAccess } from '../../services/accessPolicy';
 import { captureEvent } from '../../services/analytics';
 import { PaywallPage } from './PaywallPage';
+import { journeyShieldsPaywall } from '../../services/firstRunJourney';
 
 /**
  * AccessGate — the route-aware soft paywall (replaces the all-or-nothing
@@ -30,6 +31,17 @@ export function AccessGate({ children }: { children: ReactNode }): JSX.Element {
   const { isPro, gateEnabled, isResolving } = useEntitlement();
   const { row, hydrated, stampKidAccess } = useFreeTierStore();
 
+  // A new install's first day shows the product, never the price (first-run
+  // journey, David 2026-10-18). Re-read when the journey moves.
+  const [shield, setShield] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    const read = (): void => { void journeyShieldsPaywall().then((v) => { if (!cancelled) setShield(v); }); };
+    read();
+    window.addEventListener('first-run-step', read);
+    return () => { cancelled = true; window.removeEventListener('first-run-step', read); };
+  }, []);
+
   // Stamp first kid-section access to start the 7-day free window.
   const inKid = pathname === '/kid' || pathname.startsWith('/kid/');
   useEffect(() => {
@@ -43,7 +55,7 @@ export function AccessGate({ children }: { children: ReactNode }): JSX.Element {
   // path). Effect keyed on the resolved feature so it fires on real wall hits,
   // not every render. Guarded to the live-gate + non-Pro + hydrated case.
   const liveWall =
-    gateEnabled && !isPro && !isResolving && hydrated
+    gateEnabled && !isPro && !isResolving && hydrated && !shield
       ? resolveAccess({ pathname, isPro, gateEnabled, freeTier: row })
       : null;
   const walledFeature = liveWall?.decision === 'wall' ? liveWall.feature : null;
@@ -53,7 +65,7 @@ export function AccessGate({ children }: { children: ReactNode }): JSX.Element {
 
   // Don't flash the wall before we know the answer: while entitlement is
   // resolving, or the ledger hasn't hydrated, render the app.
-  if (!gateEnabled || isPro || isResolving || !hydrated) return <>{children}</>;
+  if (!gateEnabled || isPro || isResolving || !hydrated || shield) return <>{children}</>;
 
   const access = resolveAccess({ pathname, isPro, gateEnabled, freeTier: row });
   if (access.decision === 'wall') return <PaywallPage feature={access.feature} />;

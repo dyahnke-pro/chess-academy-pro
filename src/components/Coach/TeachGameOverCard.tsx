@@ -29,6 +29,7 @@ import { ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { RollingNumber } from '../ui/RollingNumber';
 import type { LearnTally } from '../../services/learnReward';
+import { FirstRunImportOffer } from '../FirstRun/FirstRunImportOffer';
 
 /** One skill's net move this game (`useLearnRecordWatch`, summed). */
 export interface SkillRecapRow { label: string; delta: number; level: number; levelChange: -1 | 0 | 1 }
@@ -131,6 +132,7 @@ export function TeachGameOverCard({ result, byMate, onReview, onStay, tally, ski
       </div>
       {tally && <Medals tally={tally} />}
       {skills && <SkillRecap skills={skills} />}
+      <FirstRunImportOffer />
       <div className="flex items-center gap-2">
         <button
           onClick={onReview}

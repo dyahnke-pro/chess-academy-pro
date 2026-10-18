@@ -207,6 +207,7 @@ import { narrateOpeningSection } from '../../services/openingSectionNarrator';
 import { useStarAnimationStore } from '../../stores/starAnimationStore';
 import { useCoachBoardStore } from '../../stores/coachBoardStore';
 import type { OpeningRecord, MiddlegamePlan, ModelGame } from '../../types';
+import { advanceFirstRun } from '../../services/firstRunJourney';
 import {
   ArrowLeft,
   BookOpen as LearnIcon,
@@ -778,6 +779,11 @@ export function OpeningDetailPage(): JSX.Element {
       }
     });
   }, [gateEnabled, isPro, freeTierHydrated, isActiveDrill, hasDrilledThisOpening, id, freeTierRow, claimFreeOpening]);
+
+  // First-run journey: starting an opening's lesson is its last step.
+  useEffect(() => {
+    if (hasDrilledThisOpening) void advanceFirstRun('done');
+  }, [hasDrilledThisOpening]);
 
   if (loading) {
     return (

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3154 lines · 19 exports · 109 importers · 100 tests · 23 audits**
+**3158 lines · 19 exports · 109 importers · 100 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,11 +13,11 @@
 - **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1231) — names `voiceService`
 - **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:1654) — names `sanitizeForTTS`
 - **Golden rules (the most important — read these every time)** (CLAUDE.md:2310) — names `voiceService`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3402) — names `voiceService`
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3579) — names `voiceService`
-- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3882) — names `voiceService`
-- **Shared types / services** (CLAUDE.md:5533) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6376) — names `voiceService`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3409) — names `voiceService`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3586) — names `voiceService`
+- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3889) — names `voiceService`
+- **Shared types / services** (CLAUDE.md:5540) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6383) — names `voiceService`
 
 ## Who calls in
 
@@ -233,7 +233,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `sanitizeForTTS` (function) — 56 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:686`
+- `src/components/Openings/OpeningDetailPage.tsx:687`
 - `src/components/Settings/VoiceSettingsPanel.tsx:118`
 - `src/components/Settings/VoiceSettingsPanel.tsx:160`
 - `src/hooks/useProseReader.ts:66`
