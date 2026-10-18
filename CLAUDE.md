@@ -2670,6 +2670,27 @@ can read the state without asking for it. (This composes with the check-for-a-
 message rule below — while you are blocked you also have the spare cycles to
 call `ReadNotifications`.)
 
+**3. NEVER GO IDLE ON PASSIVE WORK — CHECK THAT IT IS ACTUALLY WORKING (David
+2026-10-18, NONNEGOTIABLE: "I no longer want you going idle EVER during passive
+work. You MUST be checking on any bot work to make sure it's working properly").**
+The case: a skill-difficulty calibration ran as ONE silent process — no progress
+line, nothing saved until the end — for two hours, starved of CPU by parallel
+work, and was killed at the 2-hour background limit having saved nothing. Two
+hours of scoring lost because nobody looked. So, for every long job (a
+calibration, a measure test, an audit, a swarm, a push hook, an agent):
+- **Before launching:** estimate its run time on a small sample and compare it
+  to the background limit (2 h). Over half the limit → split it (shards in
+  parallel) so no single process can approach it.
+- **It must report and checkpoint:** a progress line at least every few
+  minutes, and its partial result saved to disk as it goes, so a kill loses
+  minutes, never the run.
+- **Check it on a schedule, not only when it ends:** read its progress at every
+  tool boundary and on a Monitor/check-in at most ~10 minutes apart — is it
+  advancing, is the rate what the estimate said, is it erroring, is the CPU
+  contended? A job that stops advancing is a failure NOW, not at the deadline.
+- **Never let other work silently starve it**, and never treat "waiting on a
+  job" as permission to stop checking it.
+
 **The test:** if David glanced at the terminal right now, could he tell the
 difference between "working" and "wedged"? If not, you have already broken this
 rule — fix the instrument before you wait on it.
