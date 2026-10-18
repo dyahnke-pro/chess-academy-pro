@@ -89,15 +89,24 @@ function isEndgameRecordDue(rec: EndgameProgressRecord, now: number): boolean {
 /** Endgame LESSONS with at least one position due for spaced review now,
  *  paired with the due-position count. Feeds the unified "due today"
  *  scheduler so endgame review enters the daily path like opening SRS. */
-export async function getDueEndgameLessons(): Promise<{ lessonId: string; dueCount: number }[]> {
+export async function getDueEndgameLessons(): Promise<{ lessonId: string; dueCount: number; missed: boolean; overdueDays: number }[]> {
   const now = Date.now();
   const all = await db.endgameProgress.toArray();
-  const byLesson = new Map<string, number>();
+  const byLesson = new Map<string, { dueCount: number; missed: boolean; overdueDays: number }>();
   for (const rec of all) {
     if (!isEndgameRecordDue(rec, now)) continue;
-    byLesson.set(rec.lessonId, (byLesson.get(rec.lessonId) ?? 0) + 1);
+    const step = reviewStepOf(rec);
+    const over = (now - rec.lastPlayedAt - ENDGAME_REVIEW_INTERVALS_MS[step]) / (24 * 60 * 60 * 1000);
+    const cur = byLesson.get(rec.lessonId) ?? { dueCount: 0, missed: false, overdueDays: 0 };
+    byLesson.set(rec.lessonId, {
+      dueCount: cur.dueCount + 1,
+      // Back on the bottom rung after more than one play: it fell there on a
+      // mistake (a clean play always climbs).
+      missed: cur.missed || (step === 0 && rec.timesPlayed > 1),
+      overdueDays: Math.max(cur.overdueDays, Math.max(0, over)),
+    });
   }
-  return Array.from(byLesson.entries()).map(([lessonId, dueCount]) => ({ lessonId, dueCount }));
+  return Array.from(byLesson.entries()).map(([lessonId, v]) => ({ lessonId, ...v }));
 }
 
 /** Count of distinct endgame lessons with positions due for review now. */

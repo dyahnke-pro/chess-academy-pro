@@ -16,7 +16,6 @@
  *   - moves come from the JSON data (solution[] / bestMove)
  *   - LLM authorship is zero at runtime
  */
-import { dueEndgameReviews } from '../../services/endgameDueReview';
 import { finishBite } from '../../services/activeBite';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -74,9 +73,12 @@ interface EndgameLessonTabProps {
   tabSubtitle: string;
   /** Open this lesson straight away (a "due for review" deep link). */
   initialLessonId?: string | null;
+  /** Positions due on the spaced-review ladder, per lesson — read once by
+   *  the endgame page (one read, the page's Due row uses the same list). */
+  dueByLesson: Readonly<Record<string, number>>;
 }
 
-export function EndgameLessonTab({ lessons, tabLabel, tabSubtitle, initialLessonId }: EndgameLessonTabProps): JSX.Element {
+export function EndgameLessonTab({ lessons, tabLabel, tabSubtitle, initialLessonId, dueByLesson }: EndgameLessonTabProps): JSX.Element {
   const [selectedId, setSelectedId] = useState<string | null>(
     () => (initialLessonId && lessons.some((l) => l.id === initialLessonId) ? initialLessonId : null),
   );
@@ -87,6 +89,7 @@ export function EndgameLessonTab({ lessons, tabLabel, tabSubtitle, initialLesson
         lessons={lessons}
         tabLabel={tabLabel}
         tabSubtitle={tabSubtitle}
+        dueByLesson={dueByLesson}
         onPick={setSelectedId}
       />
     );
@@ -113,15 +116,14 @@ interface PickerGridProps {
   tabLabel: string;
   tabSubtitle: string;
   onPick: (id: string) => void;
+  dueByLesson: Readonly<Record<string, number>>;
 }
 
-function PickerGrid({ lessons, tabLabel, tabSubtitle, onPick }: PickerGridProps): JSX.Element {
+function PickerGrid({ lessons, tabLabel, tabSubtitle, onPick, dueByLesson }: PickerGridProps): JSX.Element {
   // Persisted progress per lesson — { [lessonId]: masteredCount }.
   // Loaded once on mount; not live-updated because the picker is
   // re-mounted whenever the student returns from a lesson.
   const [masteredByLesson, setMasteredByLesson] = useState<Record<string, number>>({});
-  // Positions due again on the spaced-review ladder, per lesson.
-  const [dueByLesson, setDueByLesson] = useState<Record<string, number>>({});
   useEffect(() => {
     let cancelled = false;
     void (async () => {
@@ -130,11 +132,7 @@ function PickerGrid({ lessons, tabLabel, tabSubtitle, onPick }: PickerGridProps)
         const records: EndgameProgressRecord[] = await getLessonProgress(lesson.id);
         entries[lesson.id] = records.filter((r) => r.mastered).length;
       }
-      const due = await dueEndgameReviews().catch(() => []);
-      if (!cancelled) {
-        setMasteredByLesson(entries);
-        setDueByLesson(Object.fromEntries(due.map((d) => [d.lessonId, d.dueCount])));
-      }
+      if (!cancelled) setMasteredByLesson(entries);
     })();
     return () => {
       cancelled = true;

@@ -257,7 +257,7 @@
 
 ### `getUnlearnedFavoriteOpenings` (function) — 2 call sites
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:74`
-- `src/services/upNextLoader.ts:119`
+- `src/services/upNextLoader.ts:139`
 
 ## Tests
 

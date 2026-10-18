@@ -16,7 +16,7 @@ describe('endgame spaced review, wired (David 2026-10-17)', () => {
       { id: 'b', lessonId: lesson.id, fen: 'f2', timesPlayed: 1, lastPlayedAt: Date.now() - DAY / 24, mastered: false, wrongAttempts: 0 },
     ] as never);
     const due = await dueEndgameReviews();
-    expect(due).toEqual([{ lessonId: lesson.id, name: lesson.name, tab: 'pawn-endings', dueCount: 1 }]);
+    expect(due).toMatchObject([{ lessonId: lesson.id, name: lesson.name, tab: 'pawn-endings', dueCount: 1, missed: false }]);
     expect(endgameReviewPath(due[0])).toBe(`/coach/endgame?tab=pawn-endings&lesson=${encodeURIComponent(lesson.id)}`);
   });
 
@@ -27,10 +27,11 @@ describe('endgame spaced review, wired (David 2026-10-17)', () => {
   });
 
   it('Up next offers the due lesson, opening it directly', () => {
-    const base: UpNextInput = { reps: [], latestGameSlip: null, grownPuzzle: null, freeOpeningOpen: false, coldStart: false, startSteps: [], thinking: null, endgameDue: null };
-    const pick = rankUpNext({ ...base, endgameDue: { lessonId: 'opposition', name: 'Opposition', tab: 'pawn-endings', dueCount: 2 } }).find((p) => p.kind === 'endgame');
+    const base: UpNextInput = { reps: [], latestGameSlip: null, grownPuzzle: null, freeOpeningOpen: false, coldStart: false, startSteps: [], thinking: null, endgameDue: null, openingHoles: [] };
+    const pick = rankUpNext({ ...base, endgameDue: { lessonId: 'opposition', name: 'Opposition', tab: 'pawn-endings', dueCount: 2, missed: false, overdueDays: 0 } }).find((p) => p.kind === 'endgame');
     expect(pick?.label).toBe('Review: Opposition');
-    expect(pick?.reason).toBe('2 positions from Opposition are due again. Play them before they fade.');
+    expect(pick?.reason).toBe('2 positions from Opposition are due again. Play one before it fades.');
+    expect(pick?.bite).toBe('1 position');
     expect(pick?.path).toBe('/coach/endgame?tab=pawn-endings&lesson=opposition');
     expect(rankUpNext(base).some((p) => p.kind === 'endgame')).toBe(false);
   });

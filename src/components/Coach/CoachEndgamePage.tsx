@@ -33,8 +33,7 @@ import { useClickToMove } from '../../hooks/useClickToMove';
 import { useAdaptiveEndgameSession } from '../../hooks/useAdaptiveEndgameSession';
 import { useNarration } from '../../hooks/useNarration';
 import { voiceService } from '../../services/voiceService';
-import { getMasteredCount } from '../../services/endgameProgressService';
-import { dueEndgameReviews, type DueEndgameReview } from '../../services/endgameDueReview';
+import { endgameRecordSummary, type DueEndgameReview } from '../../services/endgameDueReview';
 import {
   getAllPatterns,
   getPatternById,
@@ -281,20 +280,18 @@ function PatternPicker({ onPick, onBack, activeTab, onTabChange }: PickerProps):
   const [searchParams] = useSearchParams();
   const [openLesson, setOpenLesson] = useState<string | null>(() => searchParams.get('lesson'));
   const [dueReviews, setDueReviews] = useState<DueEndgameReview[]>([]);
+  const dueByLessonMap = useMemo(() => Object.fromEntries(dueReviews.map((d) => [d.lessonId, d.dueCount])), [dueReviews]);
+  // One read of the endgame record: mastered count and what is due again.
   useEffect(() => {
     let cancelled = false;
-    void dueEndgameReviews().then((d) => { if (!cancelled) setDueReviews(d); }).catch(() => {});
+    void endgameRecordSummary().then((r) => {
+      if (cancelled) return;
+      setMasteredCount(r.mastered);
+      setDueReviews(r.due);
+    });
     return () => { cancelled = true; };
   }, [activeTab, openLesson]);
-  useEffect(() => {
-    let cancelled = false;
-    void getMasteredCount().then((n) => {
-      if (!cancelled) setMasteredCount(n);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [activeTab]);
+
 
   return (
     <div
@@ -404,6 +401,7 @@ function PatternPicker({ onPick, onBack, activeTab, onTabChange }: PickerProps):
         <EndgameLessonTab
           key={`principles:${openLesson ?? ''}`}
           initialLessonId={openLesson}
+          dueByLesson={dueByLessonMap}
           lessons={getEndgamePrinciples()}
           tabLabel="Endgame Principles"
           tabSubtitle="The seven universal rules. Master these, and every endgame decision gets simpler."
@@ -414,6 +412,7 @@ function PatternPicker({ onPick, onBack, activeTab, onTabChange }: PickerProps):
         <EndgameLessonTab
           key={`pawn-endings:${openLesson ?? ''}`}
           initialLessonId={openLesson}
+          dueByLesson={dueByLessonMap}
           lessons={getPawnEndings()}
           tabLabel="Pawn Endings"
           tabSubtitle="Opposition, key squares, the rule of the square — the foundation of all endgame technique."
@@ -424,6 +423,7 @@ function PatternPicker({ onPick, onBack, activeTab, onTabChange }: PickerProps):
         <EndgameLessonTab
           key={`rook-endings:${openLesson ?? ''}`}
           initialLessonId={openLesson}
+          dueByLesson={dueByLessonMap}
           lessons={getRookEndings()}
           tabLabel="Rook Endings"
           tabSubtitle="Lucena, Philidor, the active rook — the most common endgames in practice."
@@ -434,6 +434,7 @@ function PatternPicker({ onPick, onBack, activeTab, onTabChange }: PickerProps):
         <EndgameLessonTab
           key={`drawing-patterns:${openLesson ?? ''}`}
           initialLessonId={openLesson}
+          dueByLesson={dueByLessonMap}
           lessons={getDrawingPatterns()}
           tabLabel="Drawing Patterns"
           tabSubtitle="The eight positions every player should recognize. Knowing these turns lost games into half-points."

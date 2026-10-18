@@ -13,7 +13,6 @@
   "src/services/groundedAnswer.ts": 10,
   "src/services/liveTacticsContext.ts": 2,
   "src/services/misconceptionClassifier.ts": 2,
-  "src/services/mistakeNarration.ts": 1,
   "src/services/moveFundamentals.ts": 1,
   "src/services/moveOrder.ts": 1,
   "src/services/moveReason.ts": 1,

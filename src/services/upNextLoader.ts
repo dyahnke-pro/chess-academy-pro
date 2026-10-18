@@ -30,6 +30,10 @@ import { useAppStore } from '../stores/appStore';
 import { RING_SIZE, dayKey } from './trainingWeek';
 import { logAppAudit } from './appAuditor';
 import { dueEndgameReviews } from './endgameDueReview';
+import { BOOK_DEPARTURE_PREFIX } from './bookDepartureWeakness';
+import { asOpeningKey, openingEntryForKey } from './openingKey';
+import type { UnifiedWeakness } from './weaknessSpine';
+import type { OpeningHole } from './upNextPicker';
 
 export interface UpNextState {
   ring: UpNextPick[];
@@ -112,6 +116,22 @@ async function loadThinkingSignal(): Promise<ThinkingSignal | null> {
   );
 }
 
+/** The openings the student keeps leaving the book in, read off the spine's
+ *  book-departure rows (already gated: early for their rating, costly, in 2+
+ *  games). Most games first. */
+export function openingHolesFrom(weaknesses: readonly UnifiedWeakness[]): OpeningHole[] {
+  const prefix = `${BOOK_DEPARTURE_PREFIX}:`;
+  const out: OpeningHole[] = [];
+  for (const w of weaknesses) {
+    if (!w.tag.startsWith(prefix)) continue;
+    const key = asOpeningKey(w.tag.slice(prefix.length));
+    const name = key ? openingEntryForKey(key)?.name : null;
+    if (!key || !name) continue;
+    out.push({ openingId: key, name, games: w.gameIds.length || w.total });
+  }
+  return out.sort((a, b) => b.games - a.games);
+}
+
 export async function loadUpNextInput(): Promise<UpNextInput> {
   const [weaknesses, srsDue, newLines, mistakes, ownGames, freeTier, startSteps] = await Promise.all([
     getUnifiedWeaknessProfile().catch(() => []),
@@ -144,6 +164,7 @@ export async function loadUpNextInput(): Promise<UpNextInput> {
     startSteps,
     thinking: await loadThinkingSignal().catch(() => null),
     endgameDue: (await dueEndgameReviews().catch(() => []))[0] ?? null,
+    openingHoles: openingHolesFrom(weaknesses),
   };
 }
 
@@ -193,6 +214,8 @@ async function loadUpNextFresh(now: Date): Promise<UpNextState> {
         hasGrown: !!input.grownPuzzle,
         freeOpeningOpen: input.freeOpeningOpen,
         thinking: input.thinking?.state ?? null,
+        openingHoles: input.openingHoles.map((h) => ({ openingId: h.openingId, games: h.games })),
+        importance: ring.map((p) => p.importance ?? null),
       }),
     });
   }

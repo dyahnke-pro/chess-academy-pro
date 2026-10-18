@@ -5,7 +5,7 @@
  * lesson, its tab, how many positions — so the endgame page's "Due for
  * review" row, each lesson card and the Up next ring read ONE list.
  */
-import { getDueEndgameLessons } from './endgameProgressService';
+import { getDueEndgameLessons, getMasteredCount } from './endgameProgressService';
 import { getEndgamePrinciples, getPawnEndings, getRookEndings, getDrawingPatterns } from './endgameLessonsService';
 import type { EndgameLesson } from '../types/endgameLesson';
 import { emitEndgameReview } from './endgameReviewEvents';
@@ -28,6 +28,10 @@ export interface DueEndgameReview {
   tab: EndgameLessonTabId;
   /** Played positions of this lesson due again now. */
   dueCount: number;
+  /** One of them fell back on a mistake — it is what you got wrong. */
+  missed: boolean;
+  /** How many days past its due date the most overdue one is. */
+  overdueDays: number;
 }
 
 /** Which tab a lesson lives on, or null for an id no catalog knows. */
@@ -45,14 +49,22 @@ export async function dueEndgameReviews(): Promise<DueEndgameReview[]> {
   const out: DueEndgameReview[] = [];
   for (const d of due) {
     const where = tabForLesson(d.lessonId);
-    if (where) out.push({ lessonId: d.lessonId, name: where.name, tab: where.tab, dueCount: d.dueCount });
+    if (where) out.push({ lessonId: d.lessonId, name: where.name, tab: where.tab, dueCount: d.dueCount, missed: d.missed, overdueDays: d.overdueDays });
   }
-  out.sort((a, b) => b.dueCount - a.dueCount || a.name.localeCompare(b.name));
+  // What you got wrong first, then the most positions, then the most overdue.
+  out.sort((a, b) => Number(b.missed) - Number(a.missed) || b.dueCount - a.dueCount || b.overdueDays - a.overdueDays || a.name.localeCompare(b.name));
   emitEndgameReview({
     event: 'due', lessonId: null, clean: null, stepBefore: null, stepAfter: null, intervalDays: null,
     lessons: out.length, positions: out.reduce((n, d) => n + d.dueCount, 0),
   });
   return out;
+}
+
+/** THE ENDGAME PAGE'S ONE READ of the student's endgame record: how many
+ *  positions are mastered, and what is due again. */
+export async function endgameRecordSummary(): Promise<{ mastered: number; due: DueEndgameReview[] }> {
+  const [mastered, due] = await Promise.all([getMasteredCount().catch(() => 0), dueEndgameReviews().catch(() => [])]);
+  return { mastered, due };
 }
 
 /** The page that opens a due lesson directly. */

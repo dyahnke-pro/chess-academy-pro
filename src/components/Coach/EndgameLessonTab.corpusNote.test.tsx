@@ -79,6 +79,7 @@ describe('endgame corpus note renders on the surface', () => {
         lessons={rookLessons}
         tabLabel="Rook Endings"
         tabSubtitle=""
+        dueByLesson={{}}
       />,
     );
     fireEvent.click(screen.getByTestId('endgame-lesson-lucena-position'));

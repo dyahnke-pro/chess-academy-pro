@@ -17,6 +17,7 @@ describe('EndgameLessonTab', () => {
         lessons={getEndgamePrinciples()}
         tabLabel="Endgame Principles"
         tabSubtitle="Test subtitle"
+        dueByLesson={{}}
       />,
     );
     const principles = getEndgamePrinciples();
@@ -31,6 +32,7 @@ describe('EndgameLessonTab', () => {
         lessons={getEndgamePrinciples()}
         tabLabel="Endgame Principles"
         tabSubtitle="Master these and every endgame decision gets simpler."
+        dueByLesson={{}}
       />,
     );
     expect(screen.getByText('Endgame Principles')).toBeInTheDocument();
@@ -43,6 +45,7 @@ describe('EndgameLessonTab', () => {
         lessons={getEndgamePrinciples()}
         tabLabel="Endgame Principles"
         tabSubtitle=""
+        dueByLesson={{}}
       />,
     );
     fireEvent.click(screen.getByTestId('endgame-lesson-activate-the-king'));
@@ -63,6 +66,7 @@ describe('EndgameLessonTab', () => {
         lessons={[target]}
         tabLabel="Test"
         tabSubtitle=""
+        dueByLesson={{}}
       />,
     );
     fireEvent.click(screen.getByTestId(`endgame-lesson-${target.id}`));
@@ -80,6 +84,7 @@ describe('EndgameLessonTab', () => {
         lessons={[multi]}
         tabLabel="Test"
         tabSubtitle=""
+        dueByLesson={{}}
       />,
     );
     fireEvent.click(screen.getByTestId(`endgame-lesson-${multi.id}`));
