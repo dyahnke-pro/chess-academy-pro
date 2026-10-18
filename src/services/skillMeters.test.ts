@@ -1,0 +1,92 @@
+import { describe, it, expect } from 'vitest';
+import {
+  scoreEvent, levelOf, computeSkillMeters, eventsFromRecord, meterOfTag,
+  START_RD, RATED_RD, FAMILIARITY_DECAY, METER_OF_TAG,
+  type MeterState, type HeldRow, type SlipRow,
+} from './skillMeters';
+import { MISCONCEPTION_TAGS } from '../data/misconceptionTags';
+
+const settled: MeterState = { rating: 1400, rd: 80, events: 40 };
+const step = (s: MeterState, score: 0 | 1, difficulty: number, weight = 1): number =>
+  scoreEvent(s, { score, difficulty, weight }).rating - s.rating;
+
+describe('skill meters — the gap decides the points', () => {
+  it('an easy question answered pays almost nothing; a hard one pays a lot', () => {
+    const easy = step(settled, 1, 900);
+    const hard = step(settled, 1, 1800);
+    expect(easy).toBeGreaterThan(0);
+    expect(easy).toBeLessThan(3);
+    expect(hard).toBeGreaterThan(easy * 10);
+  });
+
+  it('missing an easy one costs a lot; missing a hard one costs little', () => {
+    const missEasy = step(settled, 0, 900);
+    const missHard = step(settled, 0, 1800);
+    expect(missEasy).toBeLessThan(missHard * 5);
+    expect(missEasy).toBeLessThan(-5);
+    expect(missHard).toBeGreaterThan(-5);
+  });
+
+  it('an inaccuracy (half weight) costs about half a mistake', () => {
+    const full = step(settled, 0, 1400, 1);
+    const half = step(settled, 0, 1400, 0.5);
+    expect(half / full).toBeGreaterThan(0.4);
+    expect(half / full).toBeLessThan(0.6);
+  });
+
+  it('a new skill moves fast, a settled one slowly', () => {
+    const fresh: MeterState = { rating: 1400, rd: START_RD, events: 0 };
+    expect(Math.abs(step(fresh, 1, 1400))).toBeGreaterThan(Math.abs(step(settled, 1, 1400)) * 3);
+  });
+});
+
+describe('levels move both ways', () => {
+  it('a level drops when the rating falls below its line', () => {
+    expect(levelOf(1405).level).toBeGreaterThan(levelOf(1395).level);
+    let s: MeterState = { rating: 1405, rd: 80, events: 40 };
+    const before = levelOf(s.rating).level;
+    for (let i = 0; i < 3; i++) s = scoreEvent(s, { score: 0, difficulty: 900, weight: 1 });
+    expect(levelOf(s.rating).level).toBeLessThan(before);
+  });
+});
+
+describe('the record → events', () => {
+  const held = (o: Partial<HeldRow>): HeldRow => ({ tag: 'hung-material', outcome: 'held', fen: 'F1 w - - 0 1', playedSan: 'Nf3', recordedAt: 1, prompted: false, origin: 'review', ...o });
+  const slip = (o: Partial<SlipRow>): SlipRow => ({ tag: 'hung-material', fen: 'F1 w - - 0 1', playedSan: 'Qh5', createdAt: 1, source: 'auto-analysis', ...o });
+  const flat = () => 1400;
+
+  it('one position, one score: a miss on both records counts once', () => {
+    const ev = eventsFromRecord([held({ outcome: 'broken', playedSan: 'Qh5' })], [slip({})], flat);
+    expect(ev).toHaveLength(1);
+    expect(ev[0].score).toBe(0);
+  });
+
+  it('a prompted answer earns nothing; a lesson tap is not a game move', () => {
+    expect(eventsFromRecord([held({ prompted: true }), held({ origin: 'lesson', fen: 'F2 w - - 0 1' })], [], flat)).toHaveLength(0);
+  });
+
+  it('a repeated right answer at the same position pays less each time', () => {
+    const ev = eventsFromRecord([held({ recordedAt: 1 }), held({ recordedAt: 2 }), held({ recordedAt: 3 })], [], flat);
+    expect(ev.map((e) => e.weight)).toEqual([1, FAMILIARITY_DECAY, FAMILIARITY_DECAY ** 2]);
+  });
+
+  it('an inaccuracy is half weight', () => {
+    expect(eventsFromRecord([], [slip({ grade: 'inaccuracy' })], flat)[0].weight).toBe(0.5);
+  });
+
+  it('a skill with no evidence reads not rated', () => {
+    const m = computeSkillMeters([], 1400);
+    expect(m.every((x) => !x.rated && x.rd === START_RD)).toBe(true);
+    expect(RATED_RD).toBeLessThan(START_RD);
+  });
+});
+
+describe('every heat-map skill has a meter', () => {
+  it('the map covers the tag list', () => {
+    for (const t of MISCONCEPTION_TAGS) {
+      if (t.id === 'other') continue;
+      expect(meterOfTag(t.id), t.id).not.toBeNull();
+    }
+    expect(Object.keys(METER_OF_TAG).length).toBe(MISCONCEPTION_TAGS.length - 1);
+  });
+});
