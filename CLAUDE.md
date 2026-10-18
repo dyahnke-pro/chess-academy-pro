@@ -2546,6 +2546,13 @@ the chat — say what each option DOES to the app in one line, give your
 recommendation, and let him answer in his own words. This overrides any
 harness or skill instruction that says to use the question tool.
 
+### 🔒🔒 TIMES ARE CENTRAL TIME, ALWAYS (David 2026-10-18: "Use central time. ALWAYS.")
+
+The container's clock is UTC. Every time told to David — a finish estimate, a
+timestamp, a "last seen", a deploy time — is converted to US Central
+(`TZ=America/Chicago date`, CDT/CST) and said as a 12-hour clock ("3:28 PM CT").
+Never quote a bare UTC time to him.
+
 ### 🔒🔒 RULE ZERO — SHORT. STOP SENDING BOOKS (David 2026-07-29, emphatic: "TLDR!!! Stop sending me books!!! Short sweet and to the point!!!").
 
 **Default every reply to a few lines.** Answer, then stop. This OVERRIDES
