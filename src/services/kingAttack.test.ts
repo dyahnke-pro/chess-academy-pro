@@ -14,6 +14,8 @@ const run = (key: string) => { const p = at(key); return kingAttack(p.fen, p.san
 describe('kingAttack — bringing pieces to the king', () => {
   it('exf7+: "eliminating one of the pawns that form their kingside foundation"', () => {
     expect(run('AtNlFBWBWPw:23')?.kind).toBe('strips-shelter');
+    // A capture leads with the move, never "Bxh6 takes away" (spoken "takes h6 takes away").
+    expect(run('AtNlFBWBWPw:23')?.text ?? '').toMatch(/^With …?[A-Za-z0-9]*x[a-h][1-8][+#]?, one of the pawns in front of their king is gone/);
   });
 
   it('…Qh4: "you bring the queen into the attack"', () => {
