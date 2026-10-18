@@ -6,7 +6,8 @@
  * three spoken options").
  *
  * PURE. Every choice is a picker the student taps; the voice names three of
- * them and nothing more. Each chip's text is a request the coach already
+ * them and nothing more. Nothing is offered DURING a game (David 2026-10-18:
+ * "NO QUESTIONS DURING THE GAME") — the pickers live before it starts. Each chip's text is a request the coach already
  * answers (the opening walkthrough, the play intent, the question lanes), so a
  * tap goes through the one door like anything the student types.
  */
@@ -53,23 +54,4 @@ export function firstRunFollowUp(choice: FirstRunChoice): FirstRunOpener {
     case 'just-play':
       return { line: 'The board is yours. Make your first move.', chips: [] };
   }
-}
-
-/** THE NUGGETS — questions the coach answers mid-game, offered as pickers
- *  during the first game so the student learns what can be asked. Each one is
- *  offered once ever, never spoken. */
-export const FIRST_RUN_NUGGETS: readonly string[] = [
-  'What are they threatening?',
-  "What's the plan here?",
-  'What is the best move here?',
-];
-
-/** The student moves after which a nugget is offered (their 3rd, 6th, 9th). */
-const NUGGET_AT_MOVE = [3, 6, 9];
-
-/** The nugget to offer now, or null: on a nugget move, the next one this
- *  install has not been offered yet. */
-export function nextFirstRunNugget(studentMovesPlayed: number, offered: readonly string[]): string | null {
-  if (!NUGGET_AT_MOVE.includes(studentMovesPlayed)) return null;
-  return FIRST_RUN_NUGGETS.find((n) => !offered.includes(n)) ?? null;
 }

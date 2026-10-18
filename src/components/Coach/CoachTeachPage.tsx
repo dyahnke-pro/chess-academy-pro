@@ -103,7 +103,7 @@ import { gemId } from '../../data/lessons/punishGems';
 import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../../data/coachGreetings';
 import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { getUnifiedWeaknessProfile, themesForTactic } from '../../services/weaknessSpine';
-import { ratingTrendNote, untriedFeatureNudge, coldStartGuidance, coldStartApplies, matchFirstRunChoice, firstRunFollowUp, claimFirstRunNugget } from '../../services/classroomOpener';
+import { ratingTrendNote, untriedFeatureNudge, coldStartGuidance, coldStartApplies, matchFirstRunChoice, firstRunFollowUp } from '../../services/classroomOpener';
 import { getActiveCoachingThread, threadCallbackFor, resetThreadCallbacks } from '../../services/coachThread';
 import { getCoachCurriculum, syncCoachCurriculum, curriculumArcLine } from '../../services/coachCurriculumService';
 import { getStudentDossier, dossierOpeningLine } from '../../services/studentDossier';
@@ -10856,16 +10856,6 @@ export function CoachTeachPage(): JSX.Element {
                   studentColor: playerColor,
                 });
                 instantLead = instant.lead;
-                // A FIRST-RUN NUGGET (David 2026-10-18): a question the coach
-                // answers, offered as a picker on the first game — never
-                // spoken, and only when no other pickers are showing.
-                {
-                  const ownIsWhite = playerColor === 'white';
-                  const ownMoves = [...move.history, im.san].filter((_, i) => (i % 2 === 0) === ownIsWhite).length;
-                  void claimFirstRunNugget(ownMoves).then((nugget) => {
-                    if (nugget) setCoachChoices((prev) => (prev && prev.length > 0 ? prev : [nugget]));
-                  });
-                }
                 for (const d of instant.deferred) queueSpokenHint(ip.fen(), d.text, d.lane, d.proof, d.squares, d.claims, undefined, d.arrows);
                 turnLeadRef.current = instant.lead ? { fen: ip.fen(), lead: instant.lead } : null;
                 // THE PACKAGE IS THE UTTERANCE. This used to log `factLines`

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  FIRST_RUN_OPENER, FIRST_RUN_OPENINGS, FIRST_RUN_NUGGETS, firstRunFollowUp, matchFirstRunChoice, nextFirstRunNugget,
+  FIRST_RUN_OPENER, FIRST_RUN_OPENINGS, firstRunFollowUp, matchFirstRunChoice,
 } from './firstRunPickers';
 import { resolveOpeningEntry } from './openingDetectionService';
 import { resolvePlayName } from '../coach/ask/playName';
@@ -30,10 +30,4 @@ describe('first-run pickers', () => {
     expect(matchFirstRunChoice('play the Italian Game')).toBeNull();
   });
 
-  it('a nugget is offered on a nugget move, once each', () => {
-    expect(nextFirstRunNugget(2, [])).toBeNull();
-    expect(nextFirstRunNugget(3, [])).toBe(FIRST_RUN_NUGGETS[0]);
-    expect(nextFirstRunNugget(6, [FIRST_RUN_NUGGETS[0]])).toBe(FIRST_RUN_NUGGETS[1]);
-    expect(nextFirstRunNugget(9, [...FIRST_RUN_NUGGETS])).toBeNull();
-  });
 });
