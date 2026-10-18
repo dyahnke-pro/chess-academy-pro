@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  scoreEvent, levelOf, computeSkillMeters, eventsFromRecord, meterOfTag,
+  scoreEvent, levelOf, computeSkillMeters, eventsFromRecord, meterOfTag, meterNamedIn, skillMetersAnswer,
   START_RD, RATED_RD, FAMILIARITY_DECAY, METER_OF_TAG,
   type MeterState, type HeldRow, type SlipRow,
 } from './skillMeters';
@@ -53,7 +53,7 @@ describe('levels move both ways', () => {
 describe('the record → events', () => {
   const held = (o: Partial<HeldRow>): HeldRow => ({ tag: 'hung-material', outcome: 'held', fen: 'F1 w - - 0 1', playedSan: 'Nf3', recordedAt: 1, prompted: false, origin: 'review', ...o });
   const slip = (o: Partial<SlipRow>): SlipRow => ({ tag: 'hung-material', fen: 'F1 w - - 0 1', playedSan: 'Qh5', createdAt: 1, source: 'auto-analysis', ...o });
-  const flat = () => 1400;
+  const flat = () => ({ difficulty: 1400, scale: 400 });
 
   it('one position, one score: a miss on both records counts once', () => {
     const ev = eventsFromRecord([held({ outcome: 'broken', playedSan: 'Qh5' })], [slip({})], flat);
@@ -68,6 +68,10 @@ describe('the record → events', () => {
   it('a repeated right answer at the same position pays less each time', () => {
     const ev = eventsFromRecord([held({ recordedAt: 1 }), held({ recordedAt: 2 }), held({ recordedAt: 3 })], [], flat);
     expect(ev.map((e) => e.weight)).toEqual([1, FAMILIARITY_DECAY, FAMILIARITY_DECAY ** 2]);
+  });
+
+  it('a skill with no calibrated difficulty scores nothing', () => {
+    expect(eventsFromRecord([], [slip({})], () => null)[0].weight).toBe(0);
   });
 
   it('an inaccuracy is half weight', () => {
@@ -88,5 +92,28 @@ describe('every heat-map skill has a meter', () => {
       expect(meterOfTag(t.id), t.id).not.toBeNull();
     }
     expect(Object.keys(METER_OF_TAG).length).toBe(MISCONCEPTION_TAGS.length - 1);
+  });
+});
+
+describe('chat reads the meters', () => {
+  it('finds the skill a question names', () => {
+    expect(meterNamedIn("what's my tactics level?")).toBe('tactics');
+    expect(meterNamedIn('how are my endgames')).toBe('endgames');
+    expect(meterNamedIn('how good is my calculation')).toBe('calculation');
+    expect(meterNamedIn('what are my levels')).toBeNull();
+  });
+
+  it('answers a named skill with its level, or says it is not rated', () => {
+    const m = computeSkillMeters([], 1400);
+    expect(skillMetersAnswer(m, 'tactics')).toMatch(/not rated yet/);
+    const rated = m.map((x) => (x.id === 'tactics' ? { ...x, rated: true, rating: 1460, level: 11, toNext: 0.6, events: 40 } : x));
+    expect(skillMetersAnswer(rated, 'tactics')).toMatch(/Tactics: Level 11, about 1460/);
+  });
+
+  it('lists the rated meters weakest first, and nothing when none is rated', () => {
+    const m = computeSkillMeters([], 1400);
+    expect(skillMetersAnswer(m, null)).toBeNull();
+    const two = m.map((x) => (x.id === 'tactics' ? { ...x, rated: true, rating: 1500, level: 12 } : x.id === 'endgames' ? { ...x, rated: true, rating: 1100, level: 8 } : x));
+    expect(skillMetersAnswer(two, null)).toMatch(/weakest first: Endgames Level 8.*Tactics Level 12.*weakest is Endgames; your strongest is Tactics/);
   });
 });

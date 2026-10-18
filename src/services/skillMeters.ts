@@ -82,6 +82,9 @@ export interface SkillEvent {
   score: 0 | 1;
   /** The question's difficulty, on the rating scale. */
   difficulty: number;
+  /** How sharply the question separates players (the fitted logistic scale;
+   *  400 = a standard rating game). A flatter skill moves the meter less. */
+  scale?: number;
   /** 0..1 — slip weight for a miss (inaccuracy ½), familiarity for a gain. */
   weight: number;
   at: number;
@@ -123,13 +126,15 @@ const g = (rd: number): number => 1 / Math.sqrt(1 + (3 * Q * Q * rd * rd) / (Mat
 /** One Glicko-1 step against the question, scaled by the event's weight.
  *  Returns the new state; the caller reads `rating - before.rating` as the
  *  coin. */
-export function scoreEvent(s: MeterState, e: Pick<SkillEvent, 'score' | 'difficulty' | 'weight'>): MeterState {
+export function scoreEvent(s: MeterState, e: Pick<SkillEvent, 'score' | 'difficulty' | 'weight' | 'scale'>): MeterState {
   if (e.weight <= 0) return { ...s, events: s.events + 1 };
+  const scale = e.scale ?? 400;
+  const q = Math.LN10 / scale;
   const gj = g(DIFFICULTY_RD);
-  const expected = 1 / (1 + Math.pow(10, (-gj * (s.rating - e.difficulty)) / 400));
-  const dInv = Q * Q * gj * gj * expected * (1 - expected) * e.weight;
+  const expected = 1 / (1 + Math.pow(10, (-gj * (s.rating - e.difficulty)) / scale));
+  const dInv = q * q * gj * gj * expected * (1 - expected) * e.weight;
   const denom = 1 / (s.rd * s.rd) + dInv;
-  const rating = s.rating + ((Q / denom) * gj * (e.score - expected) * e.weight);
+  const rating = s.rating + ((q / denom) * gj * (e.score - expected) * e.weight);
   const rd = Math.max(RD_FLOOR, Math.sqrt(1 / denom));
   return { rating, rd, events: s.events + 1 };
 }
@@ -171,15 +176,22 @@ const NOT_A_GAME_SLIP = new Set(['lesson', 'puzzle']);
 export function eventsFromRecord(
   held: readonly HeldRow[],
   slips: readonly SlipRow[],
-  difficultyOf: (row: { tag: string; fen: string; san: string; score: 0 | 1 }) => number,
+  difficultyOf: (tag: string) => { difficulty: number; scale: number } | null,
 ): SkillEvent[] {
+  // A skill the population never calibrated scores nothing (weight 0): an
+  // honest "we cannot say how hard that was" beats a guessed number.
+  const d = (tag: string): { difficulty: number; scale: number; known: boolean } => {
+    const c = difficultyOf(tag);
+    return c ? { ...c, known: true } : { difficulty: 0, scale: 400, known: false };
+  };
   const byKey = new Map<string, SkillEvent>();
   for (const r of slips) {
     if (NOT_A_GAME_SLIP.has(r.source)) continue;
     const meter = meterOfTag(r.tag);
     if (!meter) continue;
     const key = `${r.fen}|${r.playedSan}`;
-    byKey.set(key, { meter, key, score: 0, difficulty: difficultyOf({ tag: r.tag, fen: r.fen, san: r.playedSan, score: 0 }), weight: r.grade === 'inaccuracy' ? 0.5 : 1, at: r.createdAt });
+    const c = d(r.tag);
+    byKey.set(key, { meter, key, score: 0, difficulty: c.difficulty, scale: c.scale, weight: c.known ? (r.grade === 'inaccuracy' ? 0.5 : 1) : 0, at: r.createdAt });
   }
   const timesRight = new Map<string, number>();
   for (const r of [...held].sort((a, b) => a.recordedAt - b.recordedAt)) {
@@ -189,7 +201,8 @@ export function eventsFromRecord(
     const key = `${r.fen}|${r.playedSan}`;
     if (byKey.has(key)) continue;
     if (r.outcome === 'broken') {
-      byKey.set(key, { meter, key, score: 0, difficulty: difficultyOf({ tag: r.tag, fen: r.fen, san: r.playedSan, score: 0 }), weight: 1, at: r.recordedAt });
+      const c = d(r.tag);
+      byKey.set(key, { meter, key, score: 0, difficulty: c.difficulty, scale: c.scale, weight: c.known ? 1 : 0, at: r.recordedAt });
       continue;
     }
     // A hint or an announcement is not proof: no gain from a prompted answer.
@@ -197,7 +210,39 @@ export function eventsFromRecord(
     const pos = r.fen.split(' ').slice(0, 4).join(' ');
     const n = timesRight.get(pos) ?? 0;
     timesRight.set(pos, n + 1);
-    byKey.set(`${key}#${n}`, { meter, key, score: 1, difficulty: difficultyOf({ tag: r.tag, fen: r.fen, san: r.playedSan, score: 1 }), weight: Math.pow(FAMILIARITY_DECAY, n), at: r.recordedAt });
+    const c = d(r.tag);
+    byKey.set(`${key}#${n}`, { meter, key, score: 1, difficulty: c.difficulty, scale: c.scale, weight: c.known ? Math.pow(FAMILIARITY_DECAY, n) : 0, at: r.recordedAt });
   }
   return [...byKey.values()];
+}
+
+/** The meter a question names, if any ("my tactics level", "endgames"). */
+export function meterNamedIn(text: string): SkillMeterId | null {
+  const t = text.toLowerCase();
+  const words: Array<[RegExp, SkillMeterId]> = [
+    [/\bopening/, 'openings'], [/\bdevelop/, 'development'], [/\bcent(re|er)|\bspace\b/, 'centre'],
+    [/\bking\s*safety|\bking\b/, 'king-safety'], [/\bcalculat/, 'calculation'], [/\btactic/, 'tactics'],
+    [/\bthreat|\bmaterial|\bhang/, 'threats'], [/\bplan|\bstructure|\bpawn/, 'planning'], [/\bendgame|\bending/, 'endgames'],
+  ];
+  for (const [re, id] of words) if (re.test(t)) return id;
+  return null;
+}
+
+/**
+ * The chat answer about the student's levels, computed from the meters (G0:
+ * the model only phrases this). A named skill gets its own line; otherwise the
+ * rated meters weakest-first. Null when no meter is rated yet.
+ */
+export function skillMetersAnswer(meters: readonly SkillMeter[], asked: SkillMeterId | null): string | null {
+  const one = asked ? meters.find((m) => m.id === asked) : undefined;
+  if (one) {
+    return one.rated
+      ? `${one.label}: Level ${one.level}, about ${Math.round(one.rating / 10) * 10}, from ${one.events} answered moments in your games. It is ${Math.round(one.toNext * 100)}% of the way to Level ${one.level + 1}.`
+      : `${one.label} is not rated yet — the board has not tested it often enough in your games to say.`;
+  }
+  const rated = meters.filter((m) => m.rated).sort((a, b) => a.rating - b.rating);
+  if (rated.length === 0) return null;
+  const list = rated.map((m) => `${m.label} Level ${m.level} (~${Math.round(m.rating / 10) * 10})`).join(', ');
+  const unrated = meters.filter((m) => !m.rated).map((m) => m.label);
+  return `Your skill levels, weakest first: ${list}.${rated.length > 1 ? ` Your weakest is ${rated[0].label}; your strongest is ${rated[rated.length - 1].label}.` : ''}${unrated.length ? ` Not rated yet: ${unrated.join(', ')}.` : ''}`;
 }

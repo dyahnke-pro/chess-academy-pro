@@ -5234,6 +5234,13 @@ export async function getCoachChatResponse(
         // ── SKILL RADAR (Wave 4) — "what's my skill breakdown / assess my chess?"
         if (grounding.skillRadarQuestion) {
           try {
+            // THE SKILL METERS ANSWER FIRST (2026-10-18): the same nine levels the
+            // Weaknesses page and the in-game bar show, so chat never says a
+            // different number. The older radar answers only until a meter is rated.
+            const { loadSkillMeters } = await import('./skillMetersLoader');
+            const { skillMetersAnswer, meterNamedIn } = await import('./skillMeters');
+            const levels = skillMetersAnswer(await loadSkillMeters(), meterNamedIn(lastUserMessage() ?? ''));
+            if (levels) { const v = await voice(levels, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'skill-radar', preferRaw: true }); if (v) return v; }
             const profile = await db.profiles.get('main');
             const sr = profile?.skillRadar;
             const answer = sr ? assembleSkillRadarAnswer({ opening: sr.opening, tactics: sr.tactics, endgame: sr.endgame, memory: sr.memory, calculation: sr.calculation }) : null;

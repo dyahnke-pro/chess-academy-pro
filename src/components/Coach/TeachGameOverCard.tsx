@@ -26,8 +26,12 @@ import { ChevronRight } from 'lucide-react';
 /** `ended` = the student pressed End Lesson with a game in progress. The
  *  game is SAVED (result `*`, nobody lost) and the review offered exactly as
  *  after a mate — the board stays, leaving is a tap (C7, 2026-09-22). */
+import { motion } from 'framer-motion';
 import { RollingNumber } from '../ui/RollingNumber';
 import type { LearnTally } from '../../services/learnReward';
+
+/** One skill's net move this game (`useSkillMeterWatcher`, summed). */
+export interface SkillRecapRow { label: string; delta: number; level: number; levelChange: -1 | 0 | 1 }
 
 export type TeachGameResult = 'win' | 'loss' | 'draw' | 'ended';
 
@@ -42,6 +46,44 @@ export interface TeachGameOverCardProps {
   onStay: () => void;
   /** The game's reward tally — the recap medals. Absent or empty = no row. */
   tally?: LearnTally;
+  /** Each skill that moved this game. Absent or empty = no row. */
+  skills?: readonly SkillRecapRow[];
+}
+
+/** The skills that moved this game, gold up and red down, with fireworks for
+ *  a level gained (David 2026-10-18: "Fireworks at the end leveling up"). */
+function SkillRecap({ skills }: { skills: readonly SkillRecapRow[] }): JSX.Element | null {
+  if (skills.length === 0) return null;
+  const ups = skills.filter((s) => s.levelChange === 1);
+  return (
+    <div className="relative space-y-1.5" data-testid="teach-recap-skills">
+      {ups.length > 0 && (
+        <div className="relative overflow-hidden rounded-lg border border-amber-300/60 bg-amber-400/10 px-3 py-2 text-center" data-testid="teach-recap-levelup">
+          {Array.from({ length: 14 }, (_, i) => (
+            <motion.span
+              key={i}
+              className="absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full bg-amber-300"
+              initial={{ x: 0, y: 0, opacity: 1 }}
+              animate={{ x: Math.cos((i / 14) * 2 * Math.PI) * 90, y: Math.sin((i / 14) * 2 * Math.PI) * 40, opacity: 0 }}
+              transition={{ duration: 1.1, repeat: 2, ease: 'easeOut' }}
+              aria-hidden
+            />
+          ))}
+          <div className="text-sm font-black uppercase tracking-wide text-amber-200">
+            {ups.map((u) => `${u.label} Level ${u.level}`).join(' · ')}
+          </div>
+        </div>
+      )}
+      {skills.map((s) => (
+        <div key={s.label} className="flex items-center justify-between px-1 text-xs" data-testid="teach-recap-skill">
+          <span className="text-theme-text">{s.label} · Lv {s.level}</span>
+          <span className={`font-mono tabular-nums ${s.delta >= 0 ? 'text-amber-200' : 'text-rose-300'}`}>
+            {s.delta >= 0 ? '+' : '−'}{Math.max(1, Math.round(Math.abs(s.delta)))}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 /** The recap medals (David 2026-10-01): each counts up; only earned ones show. */
@@ -80,7 +122,7 @@ function headline(result: TeachGameResult, byMate: boolean): string {
   return "That's a draw.";
 }
 
-export function TeachGameOverCard({ result, byMate, onReview, onStay, tally }: TeachGameOverCardProps): JSX.Element {
+export function TeachGameOverCard({ result, byMate, onReview, onStay, tally, skills }: TeachGameOverCardProps): JSX.Element {
   return (
     <div className="px-3 pb-2 space-y-2" data-testid="teach-game-over">
       <div className="text-sm font-semibold text-theme-text px-1">{headline(result, byMate)}</div>
@@ -88,6 +130,7 @@ export function TeachGameOverCard({ result, byMate, onReview, onStay, tally }: T
         The final position is on the board. Take a look before you move on.
       </div>
       {tally && <Medals tally={tally} />}
+      {skills && <SkillRecap skills={skills} />}
       <div className="flex items-center gap-2">
         <button
           onClick={onReview}

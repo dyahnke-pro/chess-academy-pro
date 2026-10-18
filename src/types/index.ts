@@ -958,6 +958,10 @@ export interface UserPreferences {
   // Coach Gameplay Settings
   coachBlunderAlerts?: boolean;
   coachTacticAlerts?: boolean;
+  /** Skill level bars (David 2026-10-18): the coin + bar that shows a skill
+   *  meter moving mid-game, and the recap's level-up fireworks. Off only HIDES
+   *  them — the meters keep counting. Defaults to on. */
+  skillLevelBars?: boolean;
   coachPositionalTips?: boolean;
   coachMissedTacticTakeback?: boolean;
   coachReviewVoice?: boolean;

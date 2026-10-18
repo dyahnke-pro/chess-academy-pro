@@ -26,6 +26,9 @@ import { registerCoachHands } from '../../services/coachActuator';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
 import { TeachGameOverCard, type TeachGameResult } from './TeachGameOverCard';
 import { LearnRewardBar } from './LearnRewardBar';
+import { SkillLevelBar, type SkillMove } from './SkillLevelBar';
+import { useSkillMeterWatcher } from '../../hooks/useSkillMeterWatcher';
+import type { SkillRecapRow } from './TeachGameOverCard';
 import { learnRewardFor, learnPraise, savedWhy, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
 import { useProvenWatcher } from '../../hooks/useProvenWatcher';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
@@ -1765,6 +1768,13 @@ export function CoachTeachPage(): JSX.Element {
   const [learnTally, setLearnTally] = useState<LearnTally>(EMPTY_TALLY);
   const learnTallyRef = useRef<LearnTally>(EMPTY_TALLY);
   const [provenTags, setProvenTags] = useState<string[]>([]);
+  // SKILL LEVEL BARS (David 2026-10-18): one meter on screen at a time, gold
+  // up / red down, ~5s each like the chips; the game's net per skill feeds the
+  // recap. The setting hides them; the meters count either way.
+  const [skillMove, setSkillMove] = useState<SkillMove | null>(null);
+  const skillQueueRef = useRef<SkillMove[]>([]);
+  const skillRecapRef = useRef<Map<string, SkillRecapRow>>(new Map());
+  const [skillRecap, setSkillRecap] = useState<SkillRecapRow[]>([]);
   const forgetPageRefsRef = useRef<() => void>(() => undefined);
   const forgetPageRefs = useCallback((): void => {
     announcedPliesRef.current.clear();
@@ -1800,7 +1810,30 @@ export function CoachTeachPage(): JSX.Element {
     setLearnTally(next);
     fireLearnReward({ kind: 'proven', label: `Fixed: ${getMisconceptionTag(tag)?.label ?? tag}` });
   });
+  const showNextSkillMove = useCallback((): void => {
+    const next = skillQueueRef.current.shift() ?? null;
+    setSkillMove(next);
+    if (next) setTimeout(() => showNextSkillMove(), PROVEN_CHIP_MS);
+  }, []);
+  useSkillMeterWatcher(true, (moves) => {
+    for (const m of moves) {
+      const prev = skillRecapRef.current.get(m.label);
+      skillRecapRef.current.set(m.label, {
+        label: m.label,
+        delta: (prev?.delta ?? 0) + m.delta,
+        level: m.level,
+        levelChange: m.levelChange !== 0 ? m.levelChange : (prev?.levelChange ?? 0),
+      });
+    }
+    setSkillRecap([...skillRecapRef.current.values()]);
+    if (activeProfile?.preferences.skillLevelBars === false) return;
+    const idle = skillQueueRef.current.length === 0 && skillMove === null;
+    skillQueueRef.current.push(...moves);
+    if (idle) showNextSkillMove();
+  });
   const resetPerGameMemory = useCallback((): void => {
+    skillRecapRef.current = new Map();
+    setSkillRecap([]);
     learnMemRef.current.newGame();
     // The standing-fact ledger also carries the said-once DEFINITIONS, and it
     // forgets only when it SEES the board go backwards — a new game is not
@@ -13256,6 +13289,7 @@ export function CoachTeachPage(): JSX.Element {
           <div className="relative z-20 h-0">
             <div className="pointer-events-none absolute inset-x-0 top-0">
               <LearnRewardBar streak={learnTally.streak} provenTags={provenTags} />
+              <SkillLevelBar move={skillMove} />
             </div>
           </div>
         )}
@@ -13447,6 +13481,7 @@ export function CoachTeachPage(): JSX.Element {
             onReview={() => { void navigate(`/coach/review/${finishedGame.id}`); }}
             onStay={() => setFinishedGame(null)}
             tally={learnTally}
+            {...(activeProfile?.preferences.skillLevelBars === false ? {} : { skills: skillRecap })}
           />
         )}
 

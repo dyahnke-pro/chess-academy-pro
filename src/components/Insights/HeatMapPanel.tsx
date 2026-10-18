@@ -10,6 +10,8 @@ import { reward } from '../../services/rewardService';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { REP_PUZZLE_CAP } from '../../services/repCompletion';
 import { logAppAudit } from '../../services/appAuditor';
+import { SkillMetersStrip } from './SkillMetersStrip';
+import { meterOfTag, type SkillMeterId } from '../../services/skillMeters';
 import { buildSkillTimelines, currentStrength, parseGameDate, relativeDay, TIMELINE_WEEKS, type SkillTimeline } from '../../services/skillTimeline';
 
 /**
@@ -97,6 +99,8 @@ export function HeatMapPanel(): JSX.Element | null {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [now] = useState(() => Date.now());
   const [know, setKnow] = useState<Map<string, HeatTile>>(() => new Map());
+  // Tapping a skill meter narrows the heat map to the skills inside it.
+  const [meterPick, setMeterPick] = useState<SkillMeterId | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -161,13 +165,13 @@ export function HeatMapPanel(): JSX.Element | null {
       const line = timelines.get(t.tag);
       return [t.tag, line ? currentStrength(line) : null] as const;
     }));
-    return [...tiles].sort((a, b) => {
+    return [...tiles].filter((t) => !meterPick || meterOfTag(t.tag) === meterPick).sort((a, b) => {
       const sa = strength.get(a.tag) ?? null;
       const sb = strength.get(b.tag) ?? null;
       if (sa === null || sb === null) return sa === null && sb === null ? 0 : sa === null ? 1 : -1;
       return sa - sb || b.openCount - a.openCount;
     });
-  }, [tiles, timelines]);
+  }, [tiles, timelines, meterPick]);
 
   // Paint: one pixel per (skill, week) on a small canvas, newest week on top,
   // each column scaled up with smoothing so the weeks fade into each other.
@@ -243,6 +247,7 @@ export function HeatMapPanel(): JSX.Element | null {
 
   return (
     <section className="py-3 border-b" style={{ borderColor: 'var(--color-border)' }} data-testid="heat-map">
+      <div className="mb-3"><SkillMetersStrip picked={meterPick} onPick={setMeterPick} /></div>
       <h2 className="text-center text-xs font-black uppercase tracking-widest text-theme-text-muted">Your skills · last 26 weeks</h2>
       <div className="mt-1 mb-2 flex items-baseline justify-between gap-2 border-b pb-1" style={{ borderColor: 'var(--color-border)' }}>
         <span className="text-[11px] uppercase tracking-wide text-theme-text-muted">Tap a skill</span>

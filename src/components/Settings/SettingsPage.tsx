@@ -902,7 +902,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
 // ─── Coach Gameplay Section ──────────────────────────────────────────────────
 
 function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
-  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview' | 'readingChallengesInReview' | 'calcHintVoice' | 'coachBoardMarkersOn', value: boolean): Promise<void> => {
+  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview' | 'readingChallengesInReview' | 'calcHintVoice' | 'coachBoardMarkersOn' | 'skillLevelBars', value: boolean): Promise<void> => {
     const updatedPrefs = { ...profile.preferences, [key]: value };
     await db.profiles.update(profile.id, { preferences: updatedPrefs });
     setProfile({ ...profile, preferences: updatedPrefs });
@@ -953,6 +953,13 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
         checked={profile.preferences.coachBoardMarkersOn ?? true}
         onChange={(v) => void handleToggle('coachBoardMarkersOn', v)}
         testId="coach-board-markers-toggle"
+      />
+      <ToggleRow
+        label="Skill Level Bars"
+        tooltip="A small coin and level bar when one of your nine skills moves during a game (gold up, red down), and fireworks in the recap when you level up. Off hides them; your levels keep counting."
+        checked={profile.preferences.skillLevelBars ?? true}
+        onChange={(v) => void handleToggle('skillLevelBars', v)}
+        testId="skill-level-bars-toggle"
       />
       <ToggleRow
         label="Blunder Alerts"

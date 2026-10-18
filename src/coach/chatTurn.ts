@@ -330,7 +330,7 @@ export const CHAT_KINDS: Record<ChatKind, KindSpec> = {
     canonical: (t) => topicOr(t, (x) => `how do I score against the ${x}?`, null) },
   'puzzle-stats': { gloss: 'my puzzle rating / puzzle numbers', lane: 'puzzle-stats', answerer: 'live', canonical: fixed("what's my puzzle rating?") },
   'transfer-gap': { gloss: 'do my puzzle skills transfer to games', lane: 'transfer-gap', answerer: 'live', canonical: fixed('do my puzzle skills carry over to my games?') },
-  'skill-radar': { gloss: 'my skill radar', lane: 'skill-radar', answerer: 'live', canonical: fixed('show my skill radar') },
+  'skill-radar': { gloss: 'my skill radar / my skill levels / my level or rating in one skill (tactics, endgames, openings, calculation, king safety, planning…) / which skill is my weakest or strongest by level', lane: 'skill-radar', answerer: 'live', canonical: fixed('show my skill radar') },
   trend: { gloss: 'my rating trend', lane: 'trend', answerer: 'live', canonical: fixed('am I getting better?') },
   progress: { gloss: 'am I improving', lane: 'progress', answerer: 'live', canonical: fixed('how is my progress?') },
   'opening-profile': { gloss: 'my best / worst openings', lane: 'opening-profile', answerer: 'live', canonical: fixed("what's my best opening?") },

@@ -322,6 +322,9 @@ export type AuditKind =
   /** The Weaknesses heat map rendered: red / green / grey per skill and which
    *  turned green since the last visit (David 2026-10-01). */
   | 'heat-map-shown'
+  // The nine skill meters as the Weaknesses page read them (2026-10-18): each
+  // meter's rating, deviation, event count and level — the algo audit row.
+  | 'skill-meters-shown'
   /** The student opened the Up-next pick (kind + key) — David 2026-10-01. */
   | 'up-next-opened'
   /** The day's ring frozen: which bites, from which parts of the record. */
