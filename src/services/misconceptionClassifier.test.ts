@@ -121,7 +121,7 @@ describe('classifyMisconception (deterministic)', () => {
     expect(r!.tag).toBe('king-stuck-center');
   });
 
-  it('falls back to an honest phase-bucketed "other" when no motif is provable', async () => {
+  it('falls back to an honest phase-bucketed "other" only when there is no best move to compare (2026-10-18)', async () => {
     const r = await classifyMisconception({
       fen: 'r4rk1/pppq1ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPPQ1PPP/R4RK1 w - - 0 1',
       playedSan: 'a3',
@@ -216,13 +216,21 @@ describe('classifyMisconception — expanded coverage', () => {
     expect(r!.tag).toBe('passive-king-endgame');
   });
 
-  it('still falls back to other when nothing is provable (never invents a theme)', async () => {
+  it('with no best move, still falls back to other (never invents a theme)', async () => {
     const r = await classifyMisconception({
       fen: '4k3/8/8/8/8/8/4P3/4K3 w - - 0 1',
       playedSan: 'Kd2',
       gamePhase: 'middlegame',
     });
     expect(r!.tag).toBe('other');
+  });
+  it('with the best move in hand, a slip no motif names is still named (zero other, 2026-10-18)', async () => {
+    const r = await classifyMisconception({
+      fen: 'r4rk1/pppq1ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPPQ1PPP/R4RK1 w - - 0 1',
+      playedSan: 'a3', bestSan: 'Nd5',
+      gamePhase: 'middlegame',
+    });
+    expect(r!.tag).not.toBe('other');
   });
 });
 

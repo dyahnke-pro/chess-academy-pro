@@ -12,6 +12,12 @@
  *
  * Audit traffic is refused before a byte is stored, and a foreign origin is
  * refused, so neither a bot nor a third-party page can fill the store.
+ *
+ * OWNER ONLY (David 2026-10-18: "Make sure only I get that setting, I don't
+ * want all users to send you info"). The server decides, from the device id
+ * against `OWNER_DEVICE_IDS` (Vercel env): `GET` answers `{ owner }` so the
+ * Settings panel renders only on his devices, and a `POST` from any other
+ * device is refused before a byte is read. No env, no owner — closed.
  */
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { put } from '@vercel/blob';
@@ -22,6 +28,12 @@ export const config = { api: { bodyParser: false } };
 
 /** Under Vercel's 4.5 MB request cap, with room for headers. */
 export const MAX_DROP_BYTES = 4 * 1024 * 1024;
+
+/** Whether this device id is one of the owner's (empty env = nobody). */
+export function isOwnerDevice(deviceId: string, env: string | undefined = process.env.OWNER_DEVICE_IDS): boolean {
+  if (!deviceId || !env) return false;
+  return env.split(',').map((x) => x.trim()).filter(Boolean).includes(deviceId.trim());
+}
 
 async function readBody(req: VercelRequest, limit: number): Promise<Buffer | null> {
   const chunks: Buffer[] = [];
@@ -37,13 +49,16 @@ async function readBody(req: VercelRequest, limit: number): Promise<Buffer | nul
 
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'content-type, content-encoding, x-device-id, x-audit-marked');
   if (req.method === 'OPTIONS') { res.status(204).end(); return; }
+  const owner = isOwnerDevice(String(req.headers['x-device-id'] ?? ''));
+  if (req.method === 'GET') { res.status(200).json({ owner }); return; }
   if (req.method !== 'POST') { res.status(405).json({ error: 'POST only' }); return; }
   if (isAuditTraffic(req.headers)) { res.status(200).json({ stored: false, refused: 'audit' }); return; }
   const origin = String(req.headers.origin ?? '');
   if (origin && !isAllowedOrigin(origin)) { res.status(403).json({ error: 'forbidden origin' }); return; }
+  if (!owner) { res.status(403).json({ error: 'not available on this device' }); return; }
   const body = await readBody(req, MAX_DROP_BYTES);
   if (!body) { res.status(413).json({ error: 'too large' }); return; }
   if (body.length < 20) { res.status(400).json({ error: 'empty' }); return; }

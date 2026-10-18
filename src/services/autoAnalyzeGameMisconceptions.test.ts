@@ -356,11 +356,11 @@ describe('C2 — an eval-comment import is re-attributed when the deep dive land
 describe('an inaccuracy no skill names is not logged (2026-10-18)', () => {
   it('captureMisconception skips an unnamed inaccuracy, keeps a named one', async () => {
     const { captureMisconception } = await import('./discussionPractice');
-    // A quiet king shuffle in a bare ending names no skill.
+    // With no best move to compare, a quiet king shuffle names no skill.
     const quiet = await captureMisconception({
-      classifyInput: { fen: '8/8/4k3/8/8/4K3/8/8 w - - 0 50', playedSan: 'Kd3', bestSan: 'Ke2' },
+      classifyInput: { fen: '8/8/4k3/8/8/4K3/8/8 w - - 0 50', playedSan: 'Kd3' },
       source: 'auto-analysis', shouldCount: false,
-      context: { fen: '8/8/4k3/8/8/4K3/8/8 w - - 0 50', playedSan: 'Kd3', bestSan: 'Ke2', grade: 'inaccuracy' },
+      context: { fen: '8/8/4k3/8/8/4K3/8/8 w - - 0 50', playedSan: 'Kd3', grade: 'inaccuracy' },
     });
     expect(quiet.classification?.tag).toBe('other');
     expect(quiet.logged).toBe(false);

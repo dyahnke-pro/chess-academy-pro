@@ -100,6 +100,7 @@ import { admitArrow } from '../../services/arrowDoor';
 import type { BoardArrow, WalkableLine } from '../../types';
 import { registerCoachHands, actionForCommand, actuate } from '../../services/coachActuator';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
+import { loadInaccuracyVoice } from '../../services/inaccuracyVoice';
 import type { CoachGameMove, KeyMoment, ReviewState, GameAccuracy, MoveClassificationCounts, PhaseAccuracy, MissedTactic, ChatMessage as ChatMessageType, MoveClassification, StockfishAnalysis } from '../../types';
 
 /** THE REGISTER IS BACK ON, AND THE COMPUTER CUTS IT (David 2026-09-16:
@@ -329,7 +330,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const walkMountedRef = useRef(true);
   // The opening's identity (what it provokes, aims for, costs) is fetched
   // data; warm it before the walk names the opening (review audit 2026-10-14).
-  useEffect(() => { warmOpeningIdentity(); }, []);
+  useEffect(() => { warmOpeningIdentity(); void loadInaccuracyVoice(); }, []);
   useEffect(() => {
     walkMountedRef.current = true;
     return () => {

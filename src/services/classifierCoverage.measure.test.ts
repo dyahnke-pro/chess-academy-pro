@@ -40,6 +40,7 @@ describe.skipIf(!HAVE)('classifier coverage', () => {
     const whyOther = new Map<string, number>();
     const samples: Array<Record<string, unknown>> = [];
     const walked: Array<Record<string, unknown>> = [];
+    const fallback: Array<Record<string, unknown>> = [];
     let total = 0;
     for (const src of PRESENT) {
       const games = JSON.parse(readFileSync(src, 'utf8')) as Game[];
@@ -77,6 +78,7 @@ describe.skipIf(!HAVE)('classifier coverage', () => {
           const tag = cls?.tag ?? 'null';
           tags.set(tag, (tags.get(tag) ?? 0) + 1);
           if (cls?.fundamentalId === 'walked-into-tactic') walked.push({ fen: p.fen, played: p.san, best: bestSan, cpLoss, note: cls.coachNote });
+          if (cls?.why && tag !== 'other') fallback.push({ fen: p.fen, played: p.san, best: bestSan, cpLoss, tag, note: cls.coachNote, pv: next ? uciLineToSan(fenAfter, next.lines[0]?.pv ?? []).slice(0, 6).join(' ') : '' });
           if (tag === 'other' || tag === 'null') {
             for (const w of cls?.why ?? []) {
               const key = w.replace(/[a-h][1-8]|[NBRQK]?[a-h]?x?[a-h][1-8][+#]?|\d+/g, '#');
@@ -90,7 +92,7 @@ describe.skipIf(!HAVE)('classifier coverage', () => {
     const sorted = [...tags].sort((a, b) => b[1] - a[1]);
     const whys = [...whyOther].sort((a, b) => b[1] - a[1]).slice(0, 60);
     mkdirSync('audit-reports', { recursive: true });
-    writeFileSync('audit-reports/classifier-coverage.json', JSON.stringify({ total, tags: sorted, whys, samples, walked }, null, 1));
+    writeFileSync('audit-reports/classifier-coverage.json', JSON.stringify({ total, tags: sorted, whys, samples, walked, fallback }, null, 1));
     console.log('total', total, JSON.stringify(sorted));
     expect(total).toBeGreaterThan(0);
   }, 600_000);

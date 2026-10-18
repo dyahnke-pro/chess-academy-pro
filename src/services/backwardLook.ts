@@ -262,15 +262,7 @@ export function backwardLook(args: {
   // SI5q0VJz: 27.Rc8 and 39.Qb8 — mate in six — each heard "your piece went a
   // long way from your king" off a raw drop between two reads at +8). The one
   // grader decides, in expected points when the eval after is known.
-  const quality = classifyMove({
-    wasBest: false,
-    cpLoss: args.cpLoss,
-    missedMate: args.missedMate ?? null,
-    allowedMate: args.allowedMate ?? null,
-    ...(typeof args.moverEvalAfterCp === 'number'
-      ? { evalBefore: args.moverEvalAfterCp + args.cpLoss, evalAfter: args.moverEvalAfterCp, isWhiteMove: true }
-      : {}),
-  });
+  const quality = moverQuality(args);
   const fault = quality === 'inaccuracy' || quality === 'mistake' || quality === 'blunder';
   if (!gained && fault) {
     // WHY THE MOVE FAILED is the error call's — its mechanism (`whyItFailed`)
@@ -471,4 +463,23 @@ export function replyKeptWinOf(
   const hit = lines.find((l) => l.moves[0] === uci);
   if (!hit) return null;
   return Math.abs(hit.evaluation - best) <= 100;
+}
+
+/** The ONE grade of the mover's move for the Learn lanes — the backward look
+ *  and the caller deciding whether a slip is spoken read the same number. */
+export function moverQuality(args: {
+  cpLoss: number;
+  missedMate?: number | null;
+  allowedMate?: number | null;
+  moverEvalAfterCp?: number | null;
+}): ReturnType<typeof classifyMove> {
+  return classifyMove({
+    wasBest: false,
+    cpLoss: args.cpLoss,
+    missedMate: args.missedMate ?? null,
+    allowedMate: args.allowedMate ?? null,
+    ...(typeof args.moverEvalAfterCp === 'number'
+      ? { evalBefore: args.moverEvalAfterCp + args.cpLoss, evalAfter: args.moverEvalAfterCp, isWhiteMove: true }
+      : {}),
+  });
 }
