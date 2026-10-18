@@ -20,7 +20,7 @@
 // builds are the ones that crash-storm — see resolveWorkerUrl). The pool spawns
 // isolated Worker engines and does not wedge. e1534fc's real complaint — "2 asm
 // engines grinding 831 games = hot phone" — is a batch-SIZE problem, fixed by
-// ANALYSIS_PACKAGE_SIZE (50 games per tap), not by deleting the one engine path
+// ANALYSIS_PACKAGE_SIZE (10 games per tap), not by deleting the one engine path
 // that actually finishes. So: keep the pool, bound the work.
 //
 // 🚨 AND WHY A UNIT TEST RATHER THAN THE AUDIT. `audit-analysis-pool-engine-prod`
@@ -66,7 +66,7 @@ describe('analysis worker pool — engine choice per platform', () => {
     const t = poolSizeFor({ native: true, platform: 'ios', plugin: true, cores: 6 });
     // 1-2 asm.js Worker engines — the path that actually completes a batch.
     // 0 here is the e1534fc regression: it routes batch to the native singleton,
-    // which wedges on game 1 ("stuck at 1"). The 50-game package cap, not a dead
+    // which wedges on game 1 ("stuck at 1"). The package cap, not a dead
     // pool, is what keeps the phone cool.
     expect(t).toBeGreaterThan(0);
     expect(t).toBeLessThanOrEqual(4);

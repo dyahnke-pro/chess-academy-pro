@@ -15,7 +15,7 @@
 //      the card prints the same family and game count (one computation, one
 //      sentence). White = Vienna.
 //   C. ANALYSIS ORDER home-games-first-past-the-cap — tapping Analyze emits
-//      `analysis-batch-ordered` with homeCount = 52 > the 50-game package and a
+//      `analysis-batch-ordered` with homeCount = 52 > the 10-game package and a
 //      batch of 52, then the run is abandoned (the point is the ORDER).
 //   D. One-tap change: choosing the 3-game Elephant makes it the student's
 //      pick, the row says `student chose`, and it SURVIVES a reload (a
@@ -132,8 +132,8 @@ try {
     await analyze.click({ force: true });
     for (let i = 0; i < 30 && !ordered; i += 1) { await page.waitForTimeout(1000); ordered = rowsOf('analysis-batch-ordered')[0] ?? null; }
   } catch { /* fall through to the check */ }
-  check('C ANALYSIS ORDER home-games-first-past-the-cap — batch = 52 home games (> the 50 package), none of the rest',
-    ordered?.details?.homeCount === 52 && ordered?.details?.batch === 52 && ordered?.details?.packageSize === 50,
+  check('C ANALYSIS ORDER home-games-first-past-the-cap — batch = 52 home games (> the 10 package), none of the rest',
+    ordered?.details?.homeCount === 52 && ordered?.details?.batch === 52 && ordered?.details?.packageSize === 10,
     ordered ? ordered.summary : 'no analysis-batch-ordered row');
   // Abandon the Stockfish run — the ORDER was the contract, not 52 analyses.
   await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 45000 });
