@@ -7,6 +7,9 @@ import { useAppStore } from '../../stores/appStore';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
 import { logAppAudit } from '../../services/appAuditor';
+import { useUpNext } from '../../hooks/useUpNext';
+import { UpNextBar } from '../Dashboard/UpNextBar';
+import { sectionPick } from '../../services/upNextPicker';
 import type { CSSProperties, KeyboardEvent, MouseEvent, ReactNode } from 'react';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -43,6 +46,12 @@ export function CoachHomePage(): JSX.Element {
   const gS = gB / 100;
   const setCoachDrawerOpen = useAppStore((s) => s.setCoachDrawerOpen);
   const setCoachDrawerAutoListen = useAppStore((s) => s.setCoachDrawerAutoListen);
+  // THIS HUB'S UP NEXT (the 'coach' bites: "Learn how to think" and the
+  // endgame review). A bite counts only once its hub's bar starts it, and the
+  // Coach hub had no bar — so a fresh install's ring (Deep Run, Learn how to
+  // think, Warm-up) could never close past 2/3.
+  const upNext = useUpNext();
+  const pick = upNext ? sectionPick(upNext.ranked, upNext.done, (h) => h === 'coach') : null;
 
   // "Talk to Coach" — opens the global coach drawer (a spoken conversation, on
   // this page, no navigation) and starts the mic in one tap. Same voice path as
@@ -101,6 +110,12 @@ export function CoachHomePage(): JSX.Element {
       <div className="max-w-lg mx-auto w-full">
         <SmartSearchBar placeholder="Ask your coach or say what you want to do..." />
       </div>
+
+      {pick && (
+        <div className="max-w-lg mx-auto w-full">
+          <UpNextBar pick={pick} surface="coach" />
+        </div>
+      )}
 
       {/* Talk to Coach — spoken conversation without leaving the page */}
       <div className="max-w-lg mx-auto w-full">

@@ -3,6 +3,8 @@ import { render, screen, fireEvent } from '../../test/utils';
 import { CoachHomePage } from './CoachHomePage';
 
 const mockNavigate = vi.fn();
+const upNextState = vi.hoisted(() => ({ value: null as unknown }));
+vi.mock('../../hooks/useUpNext', () => ({ useUpNext: () => upNextState.value }));
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
@@ -15,6 +17,25 @@ vi.mock('react-router-dom', async () => {
 describe('CoachHomePage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    upNextState.value = null;
+  });
+
+  it("carries the Coach hub's Up next bar — a ring bite on this hub can be started (2026-10-18)", () => {
+    // A fresh install's ring is Deep Run, Learn how to think, Warm-up. The
+    // thinking bite lives on this hub; with no bar here it could never start,
+    // so the ring stopped at 2/3.
+    const thinking = { kind: 'thinking', key: 'up:thinking', label: 'Learn how to think', reason: 'r', bite: 'one lesson', path: '/coach/teach?lesson=think', hub: 'coach' };
+    const tactic = { kind: 'warm-up', key: 'up:warm', label: 'Warm up', reason: 'r', bite: '2 puzzles', path: '/tactics/adaptive', hub: 'tactics:daily' };
+    upNextState.value = { ring: [], done: new Set<string>(), current: null, ranked: [tactic, thinking], thinking: null };
+    render(<CoachHomePage />);
+    expect(screen.getByTestId('up-next-bar')).toHaveTextContent('Learn how to think');
+  });
+
+  it('shows no Up next bar when this hub has no bite', () => {
+    const tactic = { kind: 'warm-up', key: 'up:warm', label: 'Warm up', reason: 'r', bite: '2 puzzles', path: '/tactics/adaptive', hub: 'tactics:daily' };
+    upNextState.value = { ring: [], done: new Set<string>(), current: null, ranked: [tactic], thinking: null };
+    render(<CoachHomePage />);
+    expect(screen.queryByTestId('up-next-bar')).not.toBeInTheDocument();
   });
 
   it('renders coach home page container', () => {

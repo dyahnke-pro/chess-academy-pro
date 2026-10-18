@@ -190,7 +190,33 @@ try {
   check('C2 three Deep Run puzzles fill one third of the ring', /1\/3/.test(await page.locator('[data-testid="today-ring-label"]').innerText()), await page.locator('[data-testid="today-ring-label"]').innerText());
 
   // ── D. Close the ring ────────────────────────────────────────────────────
+  // The ring is the top three by importance, so a bite may live on another
+  // hub: "Learn how to think" (and an endgame review) live on the Coach hub
+  // (2026-10-18 — before its bar existed the ring stopped at 2/3). Each bite
+  // is started from ITS hub's bar, the way a student starts it.
+  const ringKinds = kinds;
+  let thinkingDone = false;
   for (let bite = 0; bite < 2; bite += 1) {
+    if (!thinkingDone && ringKinds.includes('thinking')) {
+      await page.goto(`${BASE}/coach/home`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+      await dismissModals();
+      const cbar = page.locator('[data-testid="up-next-bar"]');
+      const shown = await cbar.waitFor({ timeout: 90000 }).then(() => true).catch(() => false);
+      const ckind = shown ? await cbar.getAttribute('data-pick-kind') : null;
+      check('D0 the Coach hub bar offers the thinking bite', ckind === 'thinking', String(ckind));
+      thinkingDone = true;
+      if (ckind === 'thinking') {
+        await cbar.click();
+        const lesson = page.locator('[data-testid="thinking-lesson"]');
+        const mounted = await lesson.waitFor({ timeout: 90000 }).then(() => true).catch(() => false);
+        console.log(`[D] bite ${bite} kind=thinking mounted=${mounted}`);
+        await page.waitForTimeout(3000);
+        await page.locator('[data-testid="thinking-lesson-stop"]').click({ force: true }).catch(() => {});
+        await page.waitForTimeout(3000);
+        await watchBanners(3000);
+        continue;
+      }
+    }
     const bar = await tacticsBar();
     const kind = await bar.getAttribute('data-pick-kind');
     await bar.click();
