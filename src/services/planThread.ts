@@ -20,7 +20,7 @@ import { planStoppedProof, planStoppedLine } from './planStopped';
 import { NO_PROOF, type FactProof } from './proof';
 import { methodRead, methodLine, methodSquares, methodPlan, whyThisPlan, planWorth, type RouteArrow } from './planChoice';
 import { planStepLine } from './planStep';
-import { THINK_MARK } from '../utils/thinkPause';
+import { thinkLine } from '../utils/thinkPause';
 
 /** The plan's goal in the plan arc's own id form (`aimsOf`): a passer and a
  *  file by their file, an outpost by its square, the king attack as one. Null
@@ -177,7 +177,7 @@ export function planThreadTurn(
       ? ` Why this one first? ${cap(why)}.`
       : alt && !t.whyAsked.has(alt.goalIng)
         // The question names the plan it beats; the answer is the reason alone.
-        ? ` Why this one and not ${alt.goalIng}? ${THINK_MARK} ${cap(planWorth(top))}.`
+        ? ` ${thinkLine(`Why this one and not ${alt.goalIng}?`, `${cap(planWorth(top))}.`, { kind: 'always' })}`
         : ` Why it matters: ${planWorth(top)}.`
     : '';
   // THE ANSWERS MAKE THE PLAN (planChoice.methodPlan): the steps the three

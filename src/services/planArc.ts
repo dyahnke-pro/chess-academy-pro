@@ -19,7 +19,7 @@
 // Pure and deterministic (G0): the identity of an aim is WHAT IT IS AIMED AT
 // (`outpost:d5`, `file:c`, `route:n:e5`), never its wording, so a pushed pawn
 // or a knight one hop closer is the same plan, not a new one.
-import { THINK_MARK } from '../utils/thinkPause';
+import { thinkLine } from '../utils/thinkPause';
 import { squareRole } from './squareRole';
 import { Chess, type Square } from 'chess.js';
 // TYPE-ONLY on purpose: `lookaheadPlan` re-exports this module (the arc is the
@@ -389,7 +389,7 @@ export function stepArc(
         text: e.aim.kind === 'passer'
           ? passerStep(moved.to, color, their)
           : their
-          ? `What is their ${PIECE[moved.piece] ?? 'piece'} on ${moved.to} doing? ${THINK_MARK} It's ${entry.steps === 1 ? 'a step' : 'another step'} toward ${phraseFrom(e.aim, moved.to)}.`
+          ? thinkLine(`What is their ${PIECE[moved.piece] ?? 'piece'} on ${moved.to} doing?`, `It's ${entry.steps === 1 ? 'a step' : 'another step'} toward ${phraseFrom(e.aim, moved.to)}.`, { kind: 'always' })
           : `Your ${PIECE[moved.piece] ?? 'piece'} to ${moved.to} is ${entry.steps === 1 ? 'a step' : 'another step'} toward ${phraseFrom(e.aim, moved.to)}.`,
       });
     }

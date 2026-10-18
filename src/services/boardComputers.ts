@@ -38,6 +38,7 @@ import { studentMoveStructure, theirMoveStructure, boardStructure, linesStructur
 import { STRUCTURE_ROLE } from './structureJudgementKit';
 import { countMethod } from './countMethod';
 import { buildPriorityFirst } from './playCommentary';
+import { stripThink } from '../utils/thinkPause';
 
 export type CoachSurface = 'learn' | 'review' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
@@ -354,9 +355,15 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
 export { newPlanThread, clonePlanThread, adoptPlanTrial, type PlanThread } from './planThread';
 
 /** Every read, in speaking order. */
-export function readBoardAll<K extends ComputerId>(id: K, ctx: BoardContexts[K]): BoardRead[] {
+/** THE THINK PAUSE IS LEARN'S (a question asked now, answered after the
+ *  student's move). Every other reader gets the question and its answer as one
+ *  plain sentence — the marks were reaching Review's text raw. Learn's live
+ *  turn asks for them with `thinkPause: true`. */
+export function readBoardAll<K extends ComputerId>(id: K, ctx: BoardContexts[K], opts?: { thinkPause?: boolean }): BoardRead[] {
   const r = BOARD_COMPUTERS[id].read(ctx);
-  return r === null ? [] : Array.isArray(r) ? r : [r];
+  const reads = r === null ? [] : Array.isArray(r) ? r : [r];
+  if (opts?.thinkPause) return reads;
+  return reads.map((b) => ({ ...b, text: stripThink(b.text), ...(typeof b.idea === 'string' ? { idea: stripThink(b.idea) } : {}) }));
 }
 
 /** The one call a surface makes — the first read, or null. */

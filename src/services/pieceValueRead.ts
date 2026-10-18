@@ -29,7 +29,7 @@ import { CAPTURE_VALUE } from './pieceValues';
 import { findPieceQuality } from './positionReadingService';
 import { isOnHomeSquare } from './development';
 import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
-import { THINK_MARK } from '../utils/thinkPause';
+import { thinkLine } from '../utils/thinkPause';
 import type { ArrowClaim } from './arrowDoor';
 
 export interface PieceValue {
@@ -345,7 +345,7 @@ export function pieceQualityLines(
       out.push({
         kind: 'their-best-piece',
         squares: [best.v.square, ...(ch ? [ch.to] : [])],
-        text: `Which of their pieces is doing the most work? ${THINK_MARK} The ${NAME[best.v.piece.toLowerCase()]} on ${best.v.square}${ch ? ` — ${ch.san} challenges it` : ''}, and trading it off takes the sting out of the position.`,
+        text: thinkLine('Which of their pieces is doing the most work?', `The ${NAME[best.v.piece.toLowerCase()]} on ${best.v.square}${ch ? ` — ${ch.san} challenges it` : ''}, and trading it off takes the sting out of the position.`, { kind: 'hit', square: best.v.square }),
         arrows: ch ? [{ from: ch.from, to: ch.to, role: 'play', source: 'pieceQuality.challenge' }] : undefined,
       });
     }
@@ -389,7 +389,7 @@ export function pieceQualityLines(
           // The metric compares a piece with the others of its KIND on this
           // board, so that is all the sentence claims.
           : betterSquare(opts?.fen, worst.v.square)
-            ? `Which of your pieces is doing the least? ${THINK_MARK} Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} — ${betterSquare(opts?.fen, worst.v.square)?.text}`
+            ? thinkLine('Which of your pieces is doing the least?', `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} — ${betterSquare(opts?.fen, worst.v.square)?.text}`, { kind: 'from', square: worst.v.square })
             : `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} is doing less than a ${NAME[worst.v.piece.toLowerCase()]} should here — finding it a better square is worth more than a new plan.`,
         arrows: onHomeSquare(worst.v) ? undefined : betterSquare(opts?.fen, worst.v.square)?.arrows,
       });

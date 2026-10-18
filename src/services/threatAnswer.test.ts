@@ -114,7 +114,9 @@ describe('Learn holds the move (hard-question walk 2026-10-11)', () => {
     expect(stripThink(held.text)).toMatch(/Ask the question — a pawn move hits the attacker at once\.$/);
     expect(named.text).toContain(named.san);
     expect(held.kind).toBe(named.kind);
-    expect(held.text).not.toContain(held.san);
+    // The text carries the hidden check (the engine move, as squares, so a
+    // move that answers it is credited); what is heard never names it.
+    expect(stripThink(held.text)).not.toContain(held.san);
     expect(held.arrow).toBeNull();
   });
 });

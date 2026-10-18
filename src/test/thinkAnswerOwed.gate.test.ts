@@ -11,7 +11,7 @@ const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
 describe('a preempted think answer leads the next turn', () => {
   it('the answer is owed before the question speaks', () => {
     const q = src.indexOf('const qa = splitThink(line);');
-    const owe = src.indexOf('pendingAnswerRef.current = qa[1];', q);
+    const owe = src.indexOf('pendingAnswerRef.current = { answer: qa[1], check: thinkCheckOf(line) };', q);
     const speakQ = src.indexOf("speakComputed(qa[0]", q);
     expect(q).toBeGreaterThan(0);
     expect(owe).toBeGreaterThan(q);
@@ -20,7 +20,7 @@ describe('a preempted think answer leads the next turn', () => {
   it('a new turn says the owed answer before anything else', () => {
     const start = src.indexOf('trackAStarted = true;');
     const owed = src.indexOf('const owed = pendingAnswerRef.current;', start);
-    const said = src.indexOf('speakComputed(owed', owed);
+    const said = src.indexOf('speakComputed(credit ?? owed.answer', owed);
     expect(owed).toBeGreaterThan(start);
     expect(said).toBeGreaterThan(owed);
     // …and before this turn's first line joins the chain.
@@ -29,5 +29,11 @@ describe('a preempted think answer leads the next turn', () => {
   it('the turn that asks never answers — the answer waits for the move (David 2026-10-18)', () => {
     expect(src).not.toContain('speakComputed(qa[1]');
     expect(src).not.toContain('THINK_PAUSE_MS');
+  });
+  it('a move that already answered it hears a credit, not the answer again (David 2026-10-18)', () => {
+    const owed = src.indexOf('const owed = pendingAnswerRef.current;');
+    const credit = src.indexOf('thinkCredit(owed.check', owed);
+    expect(credit).toBeGreaterThan(owed);
+    expect(credit).toBeLessThan(src.indexOf('speakComputed(credit ?? owed.answer', owed));
   });
 });

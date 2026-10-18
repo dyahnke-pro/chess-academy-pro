@@ -41,7 +41,7 @@ import { buildPositionalRead, rookReachesFile } from '../../services/positionalR
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { OPENING_PLIES, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, type TeachingHint } from '../../services/learnBoardTeaching';
-import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
+import { buildPlayCommentary, thinkCredit, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
 // EVERY ARROW ON THIS PAGE COMES OUT OF THE ARROW DOOR (`arrowDoor`, David
@@ -309,7 +309,7 @@ import { opponentStrength } from '../../services/engineStrength';
 import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
 import { readBoard, readBoardAll, newPlanThread, clonePlanThread, adoptPlanTrial, type PlanThread, type BoardRead } from '../../services/boardComputers';
-import { splitThink, stripThink, THINK_MARK } from '../../utils/thinkPause';
+import { splitThink, stripThink, thinkCheckOf, THINK_MARK, type ThinkCheck } from '../../utils/thinkPause';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
 import { actionForCommand, actuate } from '../../services/coachActuator';
@@ -1999,7 +1999,7 @@ export function CoachTeachPage(): JSX.Element {
   // student moves during the pause, the newer turn wins — and the question
   // ("How do you find a plan?") was left hanging with its answer, the plan
   // itself, never said. The answer is kept here and leads the next turn.
-  const pendingAnswerRef = useRef<string | null>(null);
+  const pendingAnswerRef = useRef<{ answer: string; check: ThinkCheck } | null>(null);
   /** THE STUDENT IS IN CONTROL (David 2026-09-24: "even just the question
    *  should immediately cause coach to stop"). The first keystroke of a
    *  question, a tap on the mic, or a spoken "stop" silences the coach at
@@ -10153,7 +10153,7 @@ export function CoachTeachPage(): JSX.Element {
                             return samePosition(b.fen(), move.fen) ? { fenBefore, san: h[h.length - 1] } : null;
                           } catch { return null; }
                         })(),
-                      });
+                      }, { thinkPause: true });
                       for (const pl of plansNow) {
                         const line = gradeNarrationText(pl.text, probe.fen(), 'CoachTeachPage.structuralPlan')?.trim();
                         // The plan's routes, hop by hop (David 2026-10-15: "Arrows trace its route?").
@@ -10790,10 +10790,16 @@ export function CoachTeachPage(): JSX.Element {
                 if (turnAbortRefRef.current) turnAbortRefRef.current.aborted = true;
                 voiceService.stop();
                 speechChainRef.current = Promise.resolve();
-                // The answer the last turn's question never reached leads this one.
+                // The answer the last turn's question never reached leads this
+                // one — unless their move already answered it (David
+                // 2026-10-18: "Or after the move if it was wrong"): then a short
+                // credit for what the move did, never the answer again.
                 const owed = pendingAnswerRef.current;
                 pendingAnswerRef.current = null;
-                if (owed) speechChainRef.current = speakComputed(owed, { forced: true, intent: 'learn-live' }).catch(() => undefined);
+                if (owed) {
+                  const credit = thinkCredit(owed.check, { from: move.from, to: move.to, fenAfter: move.fen });
+                  speechChainRef.current = speakComputed(credit ?? owed.answer, { forced: true, intent: 'learn-live' }).catch(() => undefined);
+                }
               }
               speechChainRef.current = (speechChainRef.current ?? Promise.resolve())
                 .then(() => {
@@ -10811,7 +10817,7 @@ export function CoachTeachPage(): JSX.Element {
                   // board, so they are not drawn on the next one.
                   const qa = splitThink(line);
                   if (!qa) return speakComputed(line, { forced: true, intent: 'learn-live' });
-                  pendingAnswerRef.current = qa[1];
+                  pendingAnswerRef.current = { answer: qa[1], check: thinkCheckOf(line) };
                   return speakComputed(qa[0], { forced: true, intent: 'learn-live' });
                 })
                 .catch(() => undefined);

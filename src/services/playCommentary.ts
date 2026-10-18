@@ -17,7 +17,9 @@ import { costWords } from './engineConstants';
 import { sideToMoveAs } from './threatOut';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { captureNet } from './material';
-import { THINK_MARK } from '../utils/thinkPause';
+import { thinkLine } from '../utils/thinkPause';
+// The credit for a move that answered one of these questions travels with them.
+export { thinkCredit } from './thinkAnswered';
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
@@ -558,8 +560,8 @@ export function buildRejectedTempting(args: {
       // "Name X exactly as given. Do NOT…" — and Learn speaks it raw).
       const hint: HintPackage = {
         anchor: bait
-          ? `Can you take the ${NAME[tempting.captured ?? 'p'] ?? 'piece'} on ${tempting.to}? ${THINK_MARK} No — it's bait: ${tempting.san} runs into ${refutation.san}.`
-          : `Why not ${tempting.san}? ${THINK_MARK} ${openSentence(why)}, but ${refutation.san} refutes it.`,
+          ? thinkLine(`Can you take the ${NAME[tempting.captured ?? 'p'] ?? 'piece'} on ${tempting.to}?`, `No — it's bait: ${tempting.san} runs into ${refutation.san}.`, { kind: 'avoid', uci: [`${tempting.from}${tempting.to}`] })
+          : thinkLine(`Why not ${tempting.san}?`, `${openSentence(why)}, but ${refutation.san} refutes it.`, { kind: 'avoid', uci: [`${tempting.from}${tempting.to}`] }),
         detail: `That line gives up ${costWords(bestEval - line.evalCp)} against the best move.`,
         stakes: 'Before trusting a tempting move, calculate their most forcing reply.',
       };
@@ -630,7 +632,7 @@ export function buildPriorityFirst(args: {
     // THE SPOKEN PACKAGE — the register decides how much is handed over:
     // the priority always, the move from moderate up, the habit at obvious.
     const hint: HintPackage = {
-      anchor: `What's the priority here? ${THINK_MARK} Their pawn on ${target.square} — it's ${flaw}.`,
+      anchor: thinkLine("What's the priority here?", `Their pawn on ${target.square} — it's ${flaw}.`, { kind: 'hit', square: target.square }),
       detail: `Aim at it: ${moved.san} does.`,
       stakes: `A pawn like that cannot be defended by a pawn, so every piece aimed at ${target.square} keeps working for free.`,
     };

@@ -16,7 +16,7 @@
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import type { ArrowClaim } from './arrowDoor';
 import { captureRead, legalSeeGainFor } from './positionReadingService';
-import { THINK_MARK } from '../utils/thinkPause';
+import { thinkLine, type ThinkCheck } from '../utils/thinkPause';
 
 export type ThreatAnswerKind = 'take' | 'step-out' | 'with-gain' | 'kick' | 'block' | 'guard' | 'wait';
 
@@ -165,11 +165,19 @@ export function threatAnswer(input: {
   }
   if (!kind) return null;
   if (!input.namesMove) answer = heldAnswer(kind, m, input.shape, piece);
+  // WHAT ANSWERS IT ON THE BOARD: the engine's move, or — for a piece simply
+  // hit — any move after which none of the hit pieces can be won. A line
+  // threat (a pin, a skewer) is credited only on the engine's move: whether a
+  // pin still bites is not something a capture count settles. "It can wait"
+  // has no single right move.
+  const check: ThinkCheck = kind === 'wait'
+    ? { kind: 'always' }
+    : { kind: 'parry', best: bestUci.slice(0, 4), squares: input.shape === 'hit' ? victims : [] };
   return {
     kind,
     san: m.san,
     // Question, a pause to think, then the answer (the Danya pattern).
-    text: `${STEMS[ply % STEMS.length]} ${THINK_MARK} ${answer}`,
+    text: thinkLine(STEMS[ply % STEMS.length], answer, check),
     arrow: input.namesMove ? { from: m.from, to: m.to, role: 'play', vouchedBy: 'engine', source: 'threatAnswer' } : null,
   };
 }
