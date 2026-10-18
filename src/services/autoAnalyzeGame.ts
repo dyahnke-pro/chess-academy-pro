@@ -29,7 +29,7 @@ import { isMateEval, storedMate } from './engineConstants';
 import { decisiveReason, reasonPosed } from './decisiveReason';
 import { capEval } from './accuracyService';
 import { isFixtureGame } from './fixtureGames';
-import { isMisconceptionTagId, MISCONCEPTION_RULES_REV, type MisconceptionTagId } from '../data/misconceptionTags';
+import { isMisconceptionTagId, MISCONCEPTION_RULES_REV, POSITIVE_HALF_REV, type MisconceptionTagId } from '../data/misconceptionTags';
 import { positionPosed } from './moveInsight';
 import type { GameRecord, MisconceptionTagRecord, MistakePuzzle, MoveAnnotation } from '../types';
 
@@ -484,6 +484,14 @@ export async function autoAnalyzeGameMisconceptions(
   // delayed snapshot is fine.
   void import('./studentDossier').then((m) => m.refreshStudentDossierThrottled()).catch(() => undefined);
 
+  // A GAME READ UNDER OLDER RULES IS READ AGAIN (2026-10-18). Once-per-game
+  // meant a new question the board can pose (the skills that could only be
+  // failed) never reached a game that already had rows, so the 300 analysed
+  // games kept every one of those tiles grey. Behind the revision, this
+  // sweep's own rows for the game are replaced; live-play rows are kept.
+  if (game.positiveHalfRev !== POSITIVE_HALF_REV) {
+    await db.capabilityEvidence.filter((r) => r.sourceGameId === gameId && r.origin === 'review').delete();
+  }
   const existing = await db.misconceptionTags.where('sourceGameId').equals(gameId).toArray();
   if (existing.length === 0) {
     // FIRST PASS over this game: the tally, and the positive half through the
@@ -495,12 +503,14 @@ export async function autoAnalyzeGameMisconceptions(
     const positive = !(await hasCapabilityEvidenceForGame(gameId))
       ? capabilityPliesFromAnnotations(annotations, playerColor, fens, game.promptedPlies ?? [])
       : undefined;
-    return autoAnalyzeBlunders(blunders, {
+    const first = await autoAnalyzeBlunders(blunders, {
       openingId: game.openingId ?? undefined,
       sourceGameId: gameId,
       learned: !!opts.reviewed,
       ...(positive ? { capabilityPlies: positive, playerColor } : {}),
     });
+    await stampPositiveHalf(gameId);
+    return first;
   }
 
   // A LATER PASS. The tally exists and is never written twice; what this pass
@@ -514,8 +524,14 @@ export async function autoAnalyzeGameMisconceptions(
   let countedUpgraded = 0;
   if (opts.reviewed) countedUpgraded = await upgradeToCounted(existing);
   const capabilitiesHeld = await recordPositiveHalf(game, playerColor, fens);
+  await stampPositiveHalf(gameId);
   if (reattributed > 0 || countedUpgraded > 0) emitWeaknessModelChanged();
   return { ...empty, reattributed, countedUpgraded, capabilitiesHeld };
+}
+
+/** The game was read for the positive half under the current rules. */
+async function stampPositiveHalf(gameId: string): Promise<void> {
+  await db.games.update(gameId, { positiveHalfRev: POSITIVE_HALF_REV }).catch(() => undefined);
 }
 
 async function hasCapabilityEvidenceForGame(gameId: string): Promise<boolean> {

@@ -45,6 +45,7 @@ import { MISTAKE_CP } from './engineConstants';
 import { logAppAudit } from './appAuditor';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { leadingFundamentals, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
+import { skillQuestions } from './skillQuestions';
 import { stalemateWatch } from './stalemateWatch';
 import { captureAbandonsDuty, cPawnBlock } from './exchangeIdeas';
 import { Chess } from 'chess.js';
@@ -461,6 +462,17 @@ export function capabilitiesPosed(
     const lost = captureAbandonsDuty(fenBefore);
     const tag: MisconceptionTagId | null = lost === 'mate' ? 'missed-opponents-threat' : lost === 'material' ? 'hung-material' : null;
     if (tag && !seen.has(tag)) { seen.add(tag); out.push({ tag, posedImportance: ABANDONED_DUTY_POSED }); }
+  } catch { /* an unreadable board posed nothing */ }
+  // THE SKILLS THAT COULD ONLY BE FAILED (2026-10-18): castling in time, the
+  // free-looking pawn, the even trade, which pawn takes, the sacrifice by the
+  // king. Each had a detector for the miss and nothing that noticed the board
+  // asking, so its tile could turn red and never green.
+  try {
+    for (const q of skillQuestions(fenBefore)) {
+      if (seen.has(q.tag)) continue;
+      seen.add(q.tag);
+      out.push(q);
+    }
   } catch { /* an unreadable board posed nothing */ }
   // THE QUEEN'S KNIGHT IN A D-PAWN OPENING (missed computers, 2026-10-08):
   // the student's knight leaves b1/b8 while c3/c6 would block the c-pawn

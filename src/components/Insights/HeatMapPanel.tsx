@@ -4,6 +4,7 @@ import { db } from '../../db/schema';
 import { getCapabilityProfile, isUseEvidence } from '../../services/capabilityEvidence';
 import { getUnifiedWeaknessProfile, type UnifiedWeakness } from '../../services/weaknessSpine';
 import { heatMap, knowLine, type HeatTile } from '../../services/heatMap';
+import { mirrorHeatMap } from '../../services/heatMapMirror';
 import { claimProvenAnnouncements, markProvenAnnounced } from '../../services/provenAnnouncements';
 import { reward } from '../../services/rewardService';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
@@ -113,6 +114,7 @@ export function HeatMapPanel(): JSX.Element | null {
       ]);
       if (cancelled) return;
       const t = heatMap(profile, slips);
+      void mirrorHeatMap(t);
       const gameDates = new Map<string, number>();
       for (const g of games) {
         const d = parseGameDate(g.date);

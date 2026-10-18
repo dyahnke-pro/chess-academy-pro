@@ -86,6 +86,10 @@ export const FUNDAMENTAL_IDS = [
   // played the engine's SECOND move first, and the opponent's reply wins
   // material the right order did not allow.
   'wrong-move-order',
+  // THE MOVE THAT HANDS THEM THE BLOW (2026-10-18): their very next move is a
+  // check, capture or threat whose line wins material or mates — the live
+  // grade's "walked into a tactic", now on the record.
+  'walked-into-tactic',
 ] as const;
 export type FundamentalId = (typeof FUNDAMENTAL_IDS)[number];
 
@@ -135,6 +139,7 @@ export const FUNDAMENTAL_TAG: Record<FundamentalId, MisconceptionTagId> = {
   'missed-pin-break': 'missed-tactic',
   'ignored-pin-break': 'missed-opponents-threat',
   'wrong-move-order': 'missed-opponents-threat',
+  'walked-into-tactic': 'missed-opponents-threat',
 };
 
 /** Rows whose "punishment" is a positional cost rather than a concrete move
@@ -578,7 +583,7 @@ const CALC_DEPTH_CLAIMANTS = [
   'poisoned-pawn', 'overvalued-attack', 'blocked-own-retreat',
   'missed-pin-pressure', 'ignored-pin-pressure',
   'missed-guard-removal', 'ignored-guard-removal',
-  'missed-pin-break', 'ignored-pin-break', 'wrong-move-order',
+  'missed-pin-break', 'ignored-pin-break', 'wrong-move-order', 'walked-into-tactic',
 ] as const satisfies readonly FundamentalId[];
 
 type Detector = (c: Ctx) => Omit<PrincipleAttribution, 'tag' | 'coOccurrence'> | null;
@@ -671,6 +676,105 @@ function comboThreatIgnored(c: Ctx): ReturnType<typeof att> | null {
   return att('ignored-threat', 3, {
     squares: [v.square], moves: [shown.join(' ')], pvMoves: pvHas(c.pvP, (s) => s === line[0]),
   }, { piece: PNAME[v.type], square: v.square, threat: line[0], line: shown.join(', '), better: c.best.san });
+}
+
+/** WALKED INTO A TACTIC (2026-10-18). The move itself HANDS the opponent a
+ *  blow on their very next move — a check, a capture or a quiet move that
+ *  attacks something it can then win — and the line that follows wins material
+ *  or mates. Measured on 1,076 real mistakes: 159 of the 355 that fell to
+ *  `other` were exactly this, with `calculation-depth` standing down ("the
+ *  punishment is immediate — another fundamental owns it") and no fundamental
+ *  owning it. The live grade already says "that walked into a tactic"
+ *  (`moveReason`); this is the same claim on the RECORD, so the coach that
+ *  says it also remembers it.
+ *
+ *  Three reads, every one on the board:
+ *    1. their first move is the blow (forcing, or newly hits a piece it wins);
+ *    2. the line wins ≥2 points or mates AFTER the move, and did NOT before it
+ *       (a blow already on is `ignored-threat`);
+ *    3. after the best move the same line does not win (the move's fault). */
+/** How deep their punishing line may run and still be a tactic the move walked into. */
+const BLOW_PLIES = 10;
+function walkedIntoTactic(c: Ctx): ReturnType<typeof att> | null {
+  const line = (c.pvP ?? []).slice(0, 8);
+  if (line.length === 0) return no(c, 'walked-into-tactic', 'no line after the move');
+  const startFen = (fen: string): string => {
+    const parts = fen.split(' ');
+    if (parts[1] !== c.opp) { parts[1] = c.opp; parts[3] = '-'; }
+    return parts.join(' ');
+  };
+  let first: Move;
+  let afterFirst: Chess;
+  try {
+    afterFirst = new Chess(c.after.fen());
+    first = afterFirst.move(line[0]);
+  } catch { return no(c, 'walked-into-tactic', `their first move ${line[0]} is not legal here`); }
+  if (!first) return no(c, 'walked-into-tactic', `their first move ${line[0]} is not legal here`);
+  const newlyHit = (): { type: PieceSymbol; square: Square } | null => {
+    const hit = pieces(afterFirst, c.mover).filter((p) => p.type !== 'k' && VAL[p.type] >= 3 && hangsBy(afterFirst, p.square) >= 2 && hangsBy(c.after, p.square) < 2);
+    return hit.sort((a, b) => VAL[b.type] - VAL[a.type])[0] ?? null;
+  };
+  // A plain capture of a piece the move left en prise is a HUNG piece, said
+  // more simply by `hung-material` — not a tactic the student walked into.
+  if (first.captured && hangsBy(c.after, first.to) >= 2) return no(c, 'walked-into-tactic', `${first.san} just takes a piece left en prise — a hung piece, not a tactic`);
+  // THE SHORTEST PREFIX THAT PROVES IT. An engine line is cut at a fixed
+  // length, often mid-trade, and the full line then settles nothing; the
+  // claim is the first point where their line has won (or mated) and the
+  // count is settled — never past BLOW_PLIES, so a slow positional squeeze
+  // is not called a tactic.
+  const proves = (p: ReturnType<typeof proofCut>): boolean => !!p && (p.mate || (!!p.ledger && p.ledger.netPawns >= 2));
+  let proof: ReturnType<typeof proofCut> = proofCut(startFen(c.after.fen()), line, c.opp);
+  if (!proves(proof) || (proof && proof.plies > BLOW_PLIES)) proof = null;
+  for (let k = 1; !proof && k <= Math.min(line.length, BLOW_PLIES); k += 1) {
+    const p = proofCut(startFen(c.after.fen()), line.slice(0, k), c.opp);
+    if (proves(p)) proof = p;
+  }
+  if (!proof) return no(c, 'walked-into-tactic', `no prefix of ${line.slice(0, BLOW_PLIES).join(' ')} settles a win of 2+ points`);
+  // Quiet blows are tactics only when the win comes fast: a quiet first move
+  // whose payoff needs the whole window is a squeeze, not a shot.
+  if (!isForcing(first.san) && !newlyHit() && proof.plies > 3) return no(c, 'walked-into-tactic', `their first move ${first.san} is quiet and the win takes ${proof.plies} plies`);
+  const proven = proof.sans.slice(0, proof.plies);
+  const wonBefore = lineNetForSide(c.before.fen(), proven, c.opp);
+  if (wonBefore !== null && wonBefore.net >= 2) return no(c, 'walked-into-tactic', 'the same line already won before the move — their threat was already on');
+  if (proofCut(startFen(c.before.fen()), proven, c.opp)?.mate) return null;
+  const withBest = lineNetForSide(c.afterBest.fen(), proven, c.opp);
+  if (withBest !== null && withBest.net >= 2) return no(c, 'walked-into-tactic', 'the line wins after the best move too — not this move\'s fault');
+  if (proofCut(startFen(c.afterBest.fen()), proven, c.opp)?.mate) return null;
+  const shown = proven;
+  // WHAT THE LINE WINS, NET (the first draft named the biggest capture, and
+  // said "the queen on b3 goes" of a line that traded queens). Like pieces
+  // that changed hands both ways cancel; the victim is the most valuable
+  // piece left on their side of the ledger, named on the square it fell.
+  let v: { type: PieceSymbol; square: string } | null = null;
+  if (proof.ledger) {
+    const gained = [...proof.ledger.studentWon] as PieceSymbol[];
+    for (const lost of proof.ledger.opponentWon) {
+      const k = gained.indexOf(lost as PieceSymbol);
+      if (k >= 0) gained.splice(k, 1);
+    }
+    const top = gained.sort((a, b) => VAL[b] - VAL[a])[0];
+    if (top && VAL[top] >= 3) {
+      try {
+        const b = new Chess(startFen(c.after.fen()));
+        for (const san of shown) {
+          const m = b.move(san);
+          if (m?.captured === top && m.color === c.opp) v = { type: top, square: m.to };
+        }
+      } catch { v = null; }
+    }
+  }
+  const target = v;
+  return att('walked-into-tactic', 3, {
+    squares: target ? [target.square, first.to] : [first.to],
+    moves: [shown.join(' ')],
+    pvMoves: pvHas(c.pvP, (s) => s === line[0]),
+  }, {
+    blow: first.san,
+    line: shown.join(', '),
+    mate: proof.mate ? 1 : 0,
+    ...(target ? { piece: PNAME[target.type], square: target.square } : {}),
+    better: c.best.san,
+  });
 }
 
 /** The squares a piece of `sq` can go to that are SAFE: the opponent cannot
@@ -1215,12 +1319,21 @@ const DETECTORS: Detector[] = [
     const cap = cheapestCapture(c.after, t.square, c.opp);
     return att('ignored-threat', 3, { squares: [t.square], moves: cap ? [cap.san] : [], pvMoves: pvHas(c.pvP, (s) => !!cap && s === cap.san) }, { piece: PNAME[t.type], square: t.square, guards: guardCount(c.after, t.square) });
   },
+  // 14b. Walked into a tactic — the move hands the opponent a blow on their
+  // very next move whose line wins material or mates (see `walkedIntoTactic`).
+  (c) => walkedIntoTactic(c),
   // 15. Passive when a forcing move existed — the played move is quiet, the
   // best move is forcing and wins material / mates (board-checked on the
   // best line when present, else SEE on the capture).
   (c) => {
     const { last, best, mover } = c;
-    if (isForcing(last.san) || !isForcing(best.san)) return null;
+    if (!isForcing(best.san)) return null;
+    // A CHECK OR CAPTURE THAT WINS NOTHING IS NOT THE FORCING MOVE (2026-10-18,
+    // classifier coverage: Qc8+ played with Qxb6 — the queen — on the board
+    // went to `other`, because "the played move was forcing" closed the door).
+    // The played move counts as passive here when its own line wins nothing.
+    const playedForcing = isForcing(last.san);
+    if (playedForcing && (!c.pvP?.length || pvWinsMaterial(c.before, [last.san, ...c.pvP], mover) || last.captured && (VAL[last.captured] - Math.max(0, hangsBy(c.after, last.to))) >= 2)) return null;
     let wins = false;
     if (c.pvB && c.pvB.length) wins = pvWinsMaterial(c.afterBest, c.pvB, other(mover)) ? false : pvWinsMaterial(c.before, [best.san, ...c.pvB], mover);
     if (!wins && best.captured) {
@@ -1234,7 +1347,7 @@ const DETECTORS: Detector[] = [
     }
     if (!wins && c.afterBest.isCheckmate()) wins = true;
     if (!wins) return null;
-    return att('passive-when-forcing-existed', 3, { squares: [best.to], moves: [best.san], pvMoves: pvHas(c.pvB, () => true, 2) }, { better: best.san, gain: c.afterBest.isCheckmate() ? 'mate' : 'material' });
+    return att('passive-when-forcing-existed', 3, { squares: [best.to], moves: [best.san], pvMoves: pvHas(c.pvB, () => true, 2) }, { better: best.san, gain: c.afterBest.isCheckmate() ? 'mate' : 'material', ...(playedForcing ? { played: last.san } : {}) });
   },
   // 15b/15c. PP on the PP — the pinned piece, from both seats (see above).
   missedPinPressure,
@@ -1851,6 +1964,9 @@ export function attributePrinciples(
   if (ids.has('early-queen-sortie')) { subsumed.add('tempo-handed'); subsumed.add('neglected-development'); }
   if (ids.has('loose-piece')) subsumed.add('greedy-pawn-grab');
   if (ids.has('ignored-threat')) subsumed.add('loose-piece');
+  // A plainer statement of the same loss wins: a hanging piece or a threat
+  // that was already on says it more simply than "walked into a tactic".
+  if (ids.has('loose-piece') || ids.has('ignored-threat')) subsumed.add('walked-into-tactic');
   // The trapped grab IS the greedy grab and the hung piece; the failed attack IS
   // the piece it hung — the eval/PV finding tells the fuller story.
   if (ids.has('poisoned-pawn')) { subsumed.add('greedy-pawn-grab'); subsumed.add('loose-piece'); }

@@ -316,6 +316,11 @@ export const FUNDAMENTAL_LESSON: Record<FundamentalId, FundamentalLesson> = {
       "Two good moves can be played in the wrong order. When you have a pair of moves in mind, ask what each one allows if it comes first. Play the one that leaves them no strong answer; the other can follow next move. The in-between move is the same idea from the other side: the order of forcing moves decides what they can do.",
     sources: ['concept:tac-zwischen'],
   },
+  'walked-into-tactic': {
+    facts:
+      "Every move changes what the other side can do. Before you let go of a piece, look at the board from their side: what checks, captures and threats does your move give them? A move that unguards a square, opens a line to your king or puts two pieces where one knight or pawn can hit both hands them a tactic on the very next move. If one of their checks or captures now wins something, pick another move.",
+    sources: ['concept:tac-fork', 'concept:tac-pin', 'concept:tac-double-attack'],
+  },
   'no-plan': {
     facts:
       "Every middlegame position asks you for something concrete — a weak pawn to besiege, an open file to take, a passed pawn to push, a badly placed piece to improve. A move of yours that serves none of those spends a turn while theirs does not. Name your target first; then your candidate moves are the ones that go toward it.",

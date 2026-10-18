@@ -5,6 +5,7 @@
  */
 import { db } from '../db/schema';
 import { getCapabilityProfile } from './capabilityEvidence';
+import { mirrorHeatMap } from './heatMapMirror';
 import { heatMap } from './heatMap';
 import { weekStartKey, dayKey } from './trainingWeek';
 import { voiceService } from './voiceService';
@@ -25,6 +26,7 @@ export async function loadWhatGotBetter(now: Date = new Date()): Promise<WhatGot
     db.meta.get(WEEK_SNAPSHOT_KEY).catch(() => undefined),
   ]);
   const tiles = heatMap(profile, slips);
+  void mirrorHeatMap(tiles);
   const greenNow = tiles.filter((t) => t.state === 'green').map((t) => t.tag);
   const week = weekStartKey(now);
   let baseline: string[] = greenNow;

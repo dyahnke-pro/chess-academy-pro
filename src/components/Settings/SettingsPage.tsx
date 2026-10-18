@@ -22,6 +22,7 @@ import { Link } from 'react-router-dom';
 
 import { BoardGlowButton, BoardGlowSettings } from './BoardGlowSettings';
 import { NarrationAuditPanel } from './NarrationAuditPanel';
+import { DataDropPanel } from './DataDropPanel';
 import { AnalyticsAuditPanel } from './AnalyticsAuditPanel';
 import { BugReportPanel } from './BugReportPanel';
 import { AiConsentSetting } from './AiConsentSetting';
@@ -1402,6 +1403,11 @@ function AboutTab(): JSX.Element {
       {/* In-app bug report — the human feedback channel (David 2026-06-02). */}
       <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
         <BugReportPanel />
+      </div>
+
+      {/* Send the student's own record to the developer (David 2026-10-18). */}
+      <div className="pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
+        <DataDropPanel />
       </div>
 
       <div className="pt-4 border-t space-y-2" style={{ borderColor: 'var(--color-border)' }}>
