@@ -368,7 +368,7 @@ function phrase(
   if (seat === 'student') {
     const stop = prevents ? dot(prevents.san, opp) : '';
     const prep = prepares ? dot(prepares.san, mover) : '';
-    if (prevents && prepares) return `${played} does two jobs: it stops ${stop}, and it prepares ${prep}${does ? `, to ${does.verb}` : ''}.`;
+    if (prevents && prepares) return `${played} does two jobs: it stops ${stop}, and it prepares ${prep}${does?.develops ? `, freeing your ${does.develops.piece} on ${does.develops.from}` : does ? `, to ${does.verb}` : ''}.`;
     // "doesn't work", never "isn't possible" — the stopped move is still
     // LEGAL, it just loses (walk 2026-09-30: said five times in one game).
     const wouldDo = threatDid && !threatDid.castle ? threatDid.verb.replace(/^hit the /, 'hit your ') : null;
@@ -379,17 +379,19 @@ function phrase(
     // Every stem names the seat (review audit 2026-10-15: "…e5 first, so that
     // …Bd6 can bring the bishop into the game" said whose move to no one).
     if (does?.castle) return rotateStem([`Your ${played} clears the way to castle.`, `You play ${played} first, so you can castle next.`], key);
+    if (does?.develops) return rotateStem([`You play ${played} first, to free your ${does.develops.piece} on ${does.develops.from} for ${prep}.`, `Your ${played} frees your ${does.develops.piece} on ${does.develops.from} to come out with ${prep}.`], key);
     if (does) return rotateStem([`You play ${played} first, so that ${prep} can ${does.verb}.`, `Your ${played} prepares ${prep}, to ${does.verb}.`], key);
     return rotateStem([`Your ${played} prepares ${prep}.`, `You play ${played} first, so that ${prep} comes next.`], key);
   }
   const stop = prevents ? `your ${dot(prevents.san, opp)}` : '';
   const prep = prepares ? dot(prepares.san, mover) : '';
-  if (prevents && prepares) return `Their ${played} does two jobs: it stops ${stop}, and it prepares ${prep}${does ? `, to ${does.verb}` : ''}.`;
+  if (prevents && prepares) return `Their ${played} does two jobs: it stops ${stop}, and it prepares ${prep}${does?.develops ? `, freeing their ${does.develops.piece} on ${does.develops.from}` : does ? `, to ${does.verb}` : ''}.`;
   const theirWouldDo = threatDid && !threatDid.castle ? threatDid.verb.replace(/^hit the /, 'hit their ') : null;
   if (prevents?.mate) return `Their ${played} stops ${stop.replace(/[+#]$/, '')}, which was mate.`;
   if (prevents && theirWouldDo) return `Their ${played} stops ${stop}, which would ${theirWouldDo}.`;
   if (prevents) return rotateStem([`Their ${played} stops ${stop}.`, `The point of their ${played}: it takes ${stop} away.`], key);
   if (does?.castle) return rotateStem([`Their ${played} clears the way to castle.`, `They play ${played} first, so they can castle next.`], key);
+  if (does?.develops) return rotateStem([`They play ${played} first, to free their ${does.develops.piece} on ${does.develops.from} for ${prep}.`, `Their ${played} frees their ${does.develops.piece} on ${does.develops.from} to come out with ${prep}.`], key);
   if (does) return rotateStem([`Their ${played} prepares ${prep}, to ${does.verb}.`, `They play ${played} first, so that ${prep} can ${does.verb}.`], key);
   return rotateStem([`Their ${played} prepares ${prep}.`, `They play ${played} first, so that ${prep} comes next.`], key);
 }
@@ -441,7 +443,14 @@ export function stopReason(fenAfter: string, stoppedUci: string, mover: 'w' | 'b
   return `the ${PIECE_NAME[m.piece]} would just be taken on ${m.to}`;
 }
 
-export interface PreparedPoint { verb: string; castle: boolean }
+export interface PreparedPoint {
+  verb: string;
+  castle: boolean;
+  /** A minor piece leaving home: the pawn move FREED it. Said as "to free
+   *  your bishop on c1 for Bd2" — the verb form ("so that Bd2 can bring the
+   *  bishop into the game") named the bishop twice (prod walk 2026-10-18). */
+  develops?: { piece: string; from: string };
+}
 
 /** What the prepared move DOES once played, read off the board where the mover
  *  moves again (the opponent passes): castle; hit an enemy piece or pawn the
@@ -484,7 +493,7 @@ export function whatItDoes(fenAfter: string, prepUci: string, mover: 'w' | 'b'):
   // in the opening was never said). A minor piece leaving its starting square
   // joins the game — the follow-up is what the pawn move freed.
   if ((m.piece === 'n' || m.piece === 'b') && isOnHomeSquare(m.piece, mover, m.from)) {
-    return { verb: `bring the ${PIECE_NAME[m.piece]} into the game`, castle: false };
+    return { verb: `bring the ${PIECE_NAME[m.piece]} into the game`, castle: false, develops: { piece: PIECE_NAME[m.piece], from: m.from } };
   }
   if (m.piece === 'r' || m.piece === 'q') {
     const file = m.to[0];
@@ -648,3 +657,6 @@ export const STOPPED_THEIR_IDEA = 'That was the idea behind their last move.';
 export function preventStakes(prevents: { threatCp: number } | null | undefined): { points: number; plies: number } | undefined {
   return prevents && prevents.threatCp > 0 ? { points: prevents.threatCp / 100, plies: 0 } : undefined;
 }
+
+/** The wording alone, for tests of the stems. */
+export const phraseIntentForTest = phrase;

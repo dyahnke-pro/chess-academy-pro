@@ -580,6 +580,21 @@ describe('the row names WHAT spoke inside a many-fact lane (A-plan P0)', () => {
 });
 
 describe('a good move always gets its own reason (David 2026-10-14)', () => {
+  it('the same reason for the move is said once, not by two lanes (prod walk 2026-10-18)', () => {
+    // The exact Learn turn from prod: the strong-choice affirmation and the
+    // queen's rescue rule both explained …Qa5, and both spoke.
+    const B = 'rnb1kbnr/ppp1pppp/8/q7/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4';
+    const A = 'rnb1kbnr/ppp1pppp/8/q7/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 4';
+    const d = decideTurn([
+      { lane: 'theirIntent', proof: NO_PROOF.stated, text: 'They play d4 first, to free their bishop on c1 for Bd2.', fen: B, squares: ['d4', 'd2'] },
+      { lane: 'strongChoice', proof: NO_PROOF.description, claims: ['strong-choice:affirm'], text: "That's what strong players play here — it saves it from their knight on c3, and hits it back from a5; it also lines up an x-ray at their rook on a1.", fen: B, squares: [] },
+      { lane: 'structureJudgement', proof: NO_PROOF.stated, text: 'Your bishop on f8 looks dead, but your planned c6 and e6 open it.', fen: A, squares: ['f8'] },
+      { lane: 'positionFacts', factKind: 'rule', role: 'teach', ownMoveReason: true, proof: NO_PROOF.stated, text: 'Your Qa5 saves it from their knight on c3, and hits it back from a5.', fen: B },
+    ]);
+    const said = d.pkg.kept.map((f) => f.text).join(' ');
+    expect(said.match(/saves it from their knight on c3/g)?.length).toBe(1);
+  });
+
   it('the move\'s point speaks even when a plan leads the turn', () => {
     const d = decideTurn([
       { lane: 'planArc', proof: NO_PROOF.stated, text: "Their plan is taking shape: the knight's walk to e5.", fen: FEN, squares: ['e5'] },
