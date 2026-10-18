@@ -193,3 +193,25 @@ describe('audit scripts can reach prod from the sandbox', () => {
     expect(missing, `these use whatever binary Playwright picks: ${missing.join(', ')}`).toEqual([]);
   });
 });
+
+describe('audit browsers never install the service worker (David 2026-10-18: the Vercel bill)', () => {
+  // A fresh browser that installs the worker pre-downloads the whole app (222
+  // files). Audits open fresh browsers by the thousand, so every context
+  // either goes through sandboxContextOptions (which blocks it) or says so.
+  const files = readdirSync(SCRIPTS, { recursive: true }).map(String).filter((f) => f.endsWith('.mjs'));
+  it('every browser context blocks the service worker unless it is the worker\'s own audit', () => {
+    const offenders: string[] = [];
+    for (const f of files) {
+      const src = readFileSync(resolve(SCRIPTS, f), 'utf8');
+      if (!/\.newContext\(/.test(src)) continue;
+      if (/sandboxContextOptions|serviceWorkers:\s*'block'/.test(src)) continue;
+      offenders.push(f);
+    }
+    expect(offenders).toEqual([]);
+  });
+  it('sandboxContextOptions blocks by default and allows only on request', async () => {
+    const { sandboxContextOptions } = await import('../../scripts/audit-lib/chromium.mjs');
+    expect(sandboxContextOptions().serviceWorkers).toBe('block');
+    expect(sandboxContextOptions({ serviceWorkers: 'allow' }).serviceWorkers).toBe('allow');
+  });
+});

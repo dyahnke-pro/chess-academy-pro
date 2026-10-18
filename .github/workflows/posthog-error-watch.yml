@@ -18,8 +18,10 @@ name: PostHog error watch (cron)
 # logs "skipping" and exits cleanly (non-fatal).
 
 on:
-  schedule:
-    - cron: '*/15 * * * *'
+  # SCHEDULE OFF (David 2026-10-18, cost): it failed on every scheduled run
+  # while billing runner minutes and prod traffic. Run it by hand.
+  # schedule:
+  #  - cron: '*/15 * * * *'
   workflow_dispatch:
 
 concurrency:

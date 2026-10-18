@@ -54,7 +54,7 @@ const record = (name, pass, detail) => {
 async function main() {
   const executablePath = await resolveChromiumExecutable();
   const browser = await chromium.launch({ executablePath, args: sandboxLaunchArgs() });
-  const context = await browser.newContext(sandboxContextOptions());
+  const context = await browser.newContext(sandboxContextOptions({ serviceWorkers: 'allow' }));
   await context.addInitScript(muteTtsForAudit); // audits never spend TTS money (G1)
   await context.addInitScript(autoDismissCalibration);
   const page = await context.newPage();

@@ -56,6 +56,12 @@ const PRE_INIT_QUEUE_LIMIT = 50;
 
 const DEFAULT_POSTHOG_HOST = 'https://us.i.posthog.com';
 
+/** Where events go: real users through the first-party proxy (when set), an
+ *  audit page straight to PostHog — never through a billed Vercel hop. */
+export function posthogHostFor(auditPage: boolean, envHost: string | undefined): string {
+  return auditPage ? DEFAULT_POSTHOG_HOST : (envHost || DEFAULT_POSTHOG_HOST);
+}
+
 /**
  * Curated audit-kind → PostHog-event allowlist. ONLY these forensic
  * kinds are mirrored into PostHog; everything else stays in the audit
@@ -380,7 +386,15 @@ export function initAnalytics(opts?: { optedOut?: boolean }): void {
     return;
   }
 
-  const host = import.meta.env.VITE_POSTHOG_HOST || DEFAULT_POSTHOG_HOST;
+  // AN AUDIT TALKS TO POSTHOG DIRECTLY (David 2026-10-18: the Vercel bill).
+  // The first-party proxy exists for real Safari users whose blockers stop
+  // us.i.posthog.com; a headless audit has no blocker, and routing its tens
+  // of thousands of events through our proxy billed a Vercel request and a
+  // function call for each. Same events, same PostHog, no Vercel hop.
+  const auditPage = (() => {
+    try { return !!globalThis.localStorage?.getItem('auditRunId') || globalThis.localStorage?.getItem('auditMuteTts') === '1'; } catch { return false; }
+  })();
+  const host = posthogHostFor(auditPage, import.meta.env.VITE_POSTHOG_HOST);
   void import('posthog-js')
     .then(({ default: posthog }) => {
       posthog.init(key, {

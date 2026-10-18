@@ -14,7 +14,7 @@ import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 const URL = 'http://localhost:5173';
 const exe = await resolveChromiumExecutable();
 const browser = await chromium.launch({ executablePath: exe, headless: true, args: sandboxLaunchArgs() });
-const ctx = await browser.newContext();
+const ctx = await browser.newContext({ serviceWorkers: 'block',  serviceWorkers: 'block' });
   await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 const page = await ctx.newPage();
 const errors = [];

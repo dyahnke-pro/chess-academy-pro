@@ -17,13 +17,9 @@ name: Post-deploy Playwright audit (prod)
 # regressions (wrong bundle aliased, env vars scoped wrong, CDN stale).
 
 on:
-  push:
-    branches: [main, ci-audit]
-    # Skip pure non-runtime changes that can't regress a surface.
-    paths-ignore:
-      - '**/*.md'
-      - 'docs/**'
-      - '.github/**'
+  # PUSH TRIGGER OFF (David 2026-10-18, cost): every recent run failed while
+  # billing 8 runner shards and prod traffic on each push to main. The
+  # session runs the muted Learn + Review audits after a deploy; run this by hand.
   workflow_dispatch:
     inputs:
       scripts:

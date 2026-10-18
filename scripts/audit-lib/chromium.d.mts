@@ -9,4 +9,4 @@ export declare const SANDBOX_CHROMIUM_ARGS: readonly string[];
 export declare function sandboxLaunchArgs(): string[];
 
 /** Context options to pair with them (`ignoreHTTPSErrors`). */
-export declare function sandboxContextOptions(): Record<string, unknown>;
+export declare function sandboxContextOptions(opts?: { serviceWorkers?: 'allow' | 'block' }): Record<string, unknown>;
