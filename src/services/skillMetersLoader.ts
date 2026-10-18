@@ -49,13 +49,16 @@ export async function readSkillRows(): Promise<SkillRows> {
 }
 
 /** A live slip breaks its skill only where the record's one scoring would:
- *  the board posed that skill and the move was a real cost (an inaccuracy is
- *  a clean answer to the record and to the calibration alike). */
+ *  the board posed that skill and the move's MEASURED cost makes it a
+ *  mistake. A slip under a pawn is a clean answer to the record and to the
+ *  calibration alike (`movePlayedCleanly`), so it never counts against the
+ *  meter here either — 15 of one student's 23 live king-safety "slips" cost
+ *  under a pawn, and counting them read their King safety at 600. */
 export function liveSlipBreaks(r: SlipRow): boolean {
   if (r.grade === 'inaccuracy') return false;
   const mover = r.fen.split(' ')[1] === 'b' ? 'black' : 'white';
   try {
-    return capabilityOutcomes({ fenBefore: r.fen, playedSan: r.playedSan, moverColor: mover, cpLoss: MISTAKE_CP, slipTag: r.tag })
+    return capabilityOutcomes({ fenBefore: r.fen, playedSan: r.playedSan, moverColor: mover, cpLoss: typeof r.cpLoss === 'number' ? r.cpLoss : MISTAKE_CP, slipTag: r.tag })
       .some((o) => o.tag === r.tag && o.outcome === 'broken');
   } catch {
     return false;

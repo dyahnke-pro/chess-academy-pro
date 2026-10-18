@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   scoreEvent, levelOf, computeSkillMeters, eventsFromRecord, meterOfTag, meterNamedIn, skillMetersAnswer,
-  START_RD, RATED_RD, FAMILIARITY_DECAY, METER_OF_TAG,
+  START_RD, RATED_ANSWERS, FAMILIARITY_DECAY, METER_OF_TAG,
   type MeterState, type HeldRow, type SlipRow, type SkillEvent,
 } from './skillMeters';
 import { MISCONCEPTION_TAGS } from '../data/misconceptionTags';
@@ -113,7 +113,7 @@ describe('the record → events', () => {
   it('a skill with no evidence reads not rated', () => {
     const m = computeSkillMeters([], 1400);
     expect(m.every((x) => !x.rated && x.rd === START_RD)).toBe(true);
-    expect(RATED_RD).toBeLessThan(START_RD);
+    expect(RATED_ANSWERS).toBeGreaterThan(0);
   });
 });
 
@@ -148,4 +148,13 @@ describe('chat reads the meters', () => {
     const two = m.map((x) => (x.id === 'tactics' ? { ...x, rated: true, rating: 1500, level: 12 } : x.id === 'endgames' ? { ...x, rated: true, rating: 1100, level: 8 } : x));
     expect(skillMetersAnswer(two, null)).toMatch(/weakest first: Endgames Level 8.*Tactics Level 12.*weakest is Endgames; your strongest is Tactics/);
   });
+});
+
+describe('a live slip is scored by its measured cost', () => {
+  it('a slip under a pawn does not break the skill', async () => {
+    const { liveSlipBreaks } = await import('./skillMetersLoader');
+    const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';
+    const slip = { tag: 'hung-material', fen, playedSan: 'f6', createdAt: 1, source: 'discussion-practice' };
+    expect(liveSlipBreaks({ ...slip, cpLoss: 60 })).toBe(false);
+  }, 30_000);
 });

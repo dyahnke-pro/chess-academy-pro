@@ -115,8 +115,6 @@ export const START_RD = 350;
 const DIFFICULTY_RD = 120;
 /** Never fully settle: a level must stay able to move (it drops, too). */
 const RD_FLOOR = 60;
-/** A meter shows a level once it is this sure. */
-export const RATED_RD = 150;
 /** Each repeat of a position answered right pays this fraction of the last. */
 export const FAMILIARITY_DECAY = 0.8;
 export const LEVEL_WIDTH = 100;
@@ -153,29 +151,59 @@ export function computeSkillMeters(events: readonly SkillEvent[], startRating: n
     const s = state.get(e.meter) ?? { rating: startRating, rd: START_RD, events: 0 };
     state.set(e.meter, scoreEvent(s, e));
   }
-  // ANCHORED TO THE STUDENT'S OWN RATING (2026-10-18). Holding a question is
-  // nearly as common at 600 as at 2200 (88% vs 96%), so a bias that touches
-  // every skill alike — the time control they play, the engine that judged
-  // their moves — moves every meter by hundreds of points (a 1414 player read
-  // Level 22–24). Such a bias is common to all nine meters, so it is removed
-  // here: the meters are re-centred on the student's measured rating, keeping
-  // only how each skill stands against their others. Precision-weighted, so a
-  // barely-tested meter barely moves the centre.
-  const tested = [...state.values()].filter((s) => s.events > 0);
-  const weightOf = (s: MeterState): number => 1 / (s.rd * s.rd);
-  const totalWeight = tested.reduce((a, s) => a + weightOf(s), 0);
-  const centre = totalWeight > 0 ? tested.reduce((a, s) => a + weightOf(s) * s.rating, 0) / totalWeight : startRating;
+  // ANCHORED TO THE STUDENT'S OWN RATING, ON THE STANDARD SCALE (2026-10-18).
+  // Holding a question is nearly as common at 600 as at 2200 (88% vs 96%), so
+  // read through the population's flat curves a 2-point gap in hold rate is
+  // 1,000 rating points, and any bias that touches every skill alike — the
+  // time control they play, the engine that judged their moves — moves every
+  // meter by hundreds (a 1414 player read Level 22–24, then King safety 600).
+  // So the level is not read off those curves. For each meter: how the student
+  // holds against what the population holds on the SAME questions at their
+  // rating (log-odds), re-centred on their other skills so a shared bias
+  // cancels, and converted at the standard 400-points-per-tenfold-odds scale.
+  // A thin meter is shrunk toward their rating by pseudo-answers at the
+  // population's rate. The Glicko state above still supplies `rd` (how sure)
+  // and the coins.
+  const lnOdds = (p: number): number => Math.log(p / (1 - p));
+  const clampP = (p: number): number => Math.min(0.999, Math.max(0.001, p));
+  const tally = new Map<SkillMeterId, { held: number; n: number; expected: number }>();
+  for (const e of events) {
+    if (e.weight <= 0) continue;
+    const t = tally.get(e.meter) ?? { held: 0, n: 0, expected: 0 };
+    t.held += e.weight * e.score;
+    t.n += e.weight;
+    t.expected += e.weight / (1 + Math.pow(10, (e.difficulty - startRating) / (e.scale ?? 400)));
+    tally.set(e.meter, t);
+  }
+  const residual = new Map<SkillMeterId, { r: number; n: number }>();
+  for (const [id, t] of tally) {
+    const pPop = clampP(t.expected / t.n);
+    const pStudent = clampP((t.held + SHRINK_ANSWERS * pPop) / (t.n + SHRINK_ANSWERS));
+    residual.set(id, { r: lnOdds(pStudent) - lnOdds(pPop), n: t.n });
+  }
+  const totalN = [...residual.values()].reduce((a, x) => a + x.n, 0);
+  const centre = totalN > 0 ? [...residual.values()].reduce((a, x) => a + x.n * x.r, 0) / totalN : 0;
   return SKILL_METERS.map(({ id, label }) => {
     const raw = state.get(id) ?? { rating: startRating, rd: START_RD, events: 0 };
-    const s = { ...raw, rating: raw.events > 0 ? startRating + (raw.rating - centre) : startRating };
+    const res = residual.get(id);
+    const s = { ...raw, rating: res ? startRating + ((res.r - centre) * 400) / Math.LN10 : startRating };
     const { level, toNext } = levelOf(s.rating);
-    return { id, label, ...s, level, toNext, rated: s.rd <= RATED_RD };
+    // Rated once the student's own answers outweigh the pull toward their
+    // rating — a count of answered moments, not the flat curve's confidence.
+    return { id, label, ...s, level, toNext, rated: (res?.n ?? 0) >= RATED_ANSWERS };
   });
 }
 
+/** Answered moments a meter needs before it shows a level. */
+export const RATED_ANSWERS = 100;
+
+/** Pseudo-answers at the population's rate that pull a thin meter toward the
+ *  student's rating until their own answers outweigh them. */
+const SHRINK_ANSWERS = 20;
+
 /** The raw rows, as the heat map reads them. */
 export interface HeldRow { tag: string; outcome: 'held' | 'broken'; fen: string; playedSan: string; recordedAt: number; prompted: boolean; origin: string }
-export interface SlipRow { tag: string; fen: string; playedSan: string; createdAt: number; grade?: string; source: string }
+export interface SlipRow { tag: string; fen: string; playedSan: string; createdAt: number; grade?: string; source: string; /** What the move cost, when the capture measured it. */ cpLoss?: number | null }
 
 /** Origins that are not the student answering on their own: a lesson tap or
  *  a reading card is KNOW evidence, never a scored game move. */
