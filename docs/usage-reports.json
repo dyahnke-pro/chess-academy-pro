@@ -1,9 +1,13 @@
 {
   "_rule": "CLAUDE.md § USAGE REPORTS ARE A CLEAN SLATE. Report ONLY events with timestamp >= watermark. After reporting, append the window to history and move the watermark to the report time. Old windows are reported only when David asks.",
+  "exclude": "Every device_id in the Vercel env OWNER_DEVICE_IDS is David, never a user. Exclude them from every count (web and native) before any other filter.",
   "watermark": "2026-10-17T18:42:53Z",
   "history": [
     {
-      "window": ["(start)", "2026-10-17T18:42:53Z"],
+      "window": [
+        "(start)",
+        "2026-10-17T18:42:53Z"
+      ],
       "label": "baseline: everything before the clean slate",
       "grade": "D+",
       "users_all_time_iphone": 70,

@@ -3055,6 +3055,17 @@ session; the recipe above already excludes them, but know WHY:
      reports as App Store, so the `distribution` filter does NOT shed it.
    - (web) `e97b1a19-…` Yorkville macOS = his Mac on the web app — already shed by
      `platform='native'`.
+   - (pwa) `62b73003-ef76-4ab3-8eff-718bd8295523` — his iPhone Safari / home-screen
+     web app, Chicago (confirmed 2026-10-18). Exclude it from EVERY user count,
+     web or native.
+
+   🔒 **ONE LIST, AND IT IS THE VERCEL ENV `OWNER_DEVICE_IDS` (David 2026-10-18:
+   "I don't want to be included and I felt like I have been").** The same list
+   that unlocks "Send my data" decides who is NOT a user. Every user report —
+   new users, active users, feature usage, web or native — pulls
+   `OWNER_DEVICE_IDS` from Vercel and excludes every id on it, BEFORE any other
+   filter. When David names a new device of his, add it there (and redeploy), not
+   only here.
    **NOT David — a REAL USER, do not exclude:** `4589387b-…` (the heavy "Lake
    Butler / Naaldwijk / Jacksonville" iPhone) — feedback-confirmed real user, and
    the most engaged one. Its coach-chat volume + errors ARE real-user experience.
