@@ -20,7 +20,7 @@
 import { Chess } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { moveIntent, nullMoveFen, type IntentReads, THREAT_CP } from './moveIntent';
-import { heardHorizon, heardProofCut, describeProofResult, settledNetForLine } from './exchangeLedger';
+import { heardHorizon, heardProofCut, describeProofResult, settledNetForLine, netPieceWords } from './exchangeLedger';
 import { andList, lineShape } from '../utils/andList';
 import { bestMoveReason } from './deliberation';
 import { costWords } from './engineConstants';
@@ -91,7 +91,22 @@ function lineMaterial(fen: string, uci: readonly string[], mover: 'w' | 'b', l: 
   return (settledNetForLine(fen, heard, mover) ?? 0) * 100;
 }
 
-const points = (cp: number): string => { const n = Math.round(cp / 100); return n === 1 ? 'a point' : `${n} points`; };
+/** WHAT A LINE WINS OR LOSES, BY PIECE — never a point count (Learn audit
+ *  2026-10-18, V3: "anything else, like gxf3, leaves them 4 points down").
+ *  Read off the line's own settled ledger from `mover`'s seat; `gain` says
+ *  which side of it to name. Falls back to plain "material" — a reason, not
+ *  a statistic — when the ledger has no clean piece name. */
+function pieceWords(fen: string, uci: readonly string[], mover: 'w' | 'b', gain: boolean): string {
+  try {
+    const p = heardProofCut(fen, sansOf(fen, uci), mover);
+    const l = p?.ledger;
+    if (l) {
+      const w = gain ? netPieceWords(l.studentWon, l.opponentWon) : netPieceWords(l.opponentWon, l.studentWon);
+      if (w) return w;
+    }
+  } catch { /* fall through */ }
+  return 'material';
+}
 const heardSans = (fen: string, uci: readonly string[]): string[] => { const sans = sansOf(fen, uci); return sans.slice(0, heardHorizon(fen, sans)); };
 
 /** A line cut where it proves its point, worded from the student's seat ("you
@@ -207,7 +222,7 @@ export function decisiveReason(input: {
     const recapture = !!input.opponentLastSan && /x/.test(input.opponentLastSan) && /x/.test(san)
       && squareOf(input.opponentLastSan) === squareOf(san);
     if (recapture && matStake > 0 && nextBestSan) {
-      cands.push({ source: 'material', stake: matStake, text: `${played} takes back — anything else, like ${dot(nextBestSan, mover)}, leaves ${seat === 'student' ? 'you' : 'them'} ${points(matStake)} down.`, line: null, squares: [squareOf(san) ?? ''].filter(Boolean), alt: true });
+      cands.push({ source: 'material', stake: matStake, text: `${played} takes back — anything else, like ${dot(nextBestSan, mover)}, loses ${pieceWords(fenBefore, next.moves, mover, false)} in the line that follows.`, line: { fen: fenBefore, sans: heardSans(fenBefore, next.moves) }, squares: [squareOf(san) ?? ''].filter(Boolean), alt: true });
     } else if (matStake > 0) {
       const win = matOwn > 0 ? seatProof(fenBefore, sansOf(fenBefore, own.moves), mover, studentWB, 'for') : null;
       const loss = !win && matNext < 0 ? seatProof(fenBefore, sansOf(fenBefore, next.moves), mover, studentWB, 'against') : null;
@@ -215,8 +230,8 @@ export function decisiveReason(input: {
       else if (loss && nextBestSan) cands.push({ source: 'material', stake: matStake, text: `The natural alternative, ${dot(nextBestSan, mover)}, fails: ${loss.text}.`, line: { fen: fenBefore, sans: loss.sans }, squares: [], alt: true });
       // No short proof, but the count is the reason: say the count, never let a
       // smaller reason stand in for it.
-      else if (matOwn > 0) cands.push({ source: 'material', stake: matStake, text: `${played} comes out of the trades that follow ${points(matOwn)} up on material.`, line: { fen: fenBefore, sans: heardSans(fenBefore, own.moves) }, squares: [], alt: false });
-      else if (nextBestSan) cands.push({ source: 'material', stake: matStake, text: `The natural alternative, ${dot(nextBestSan, mover)}, comes out of the trades that follow ${points(-matNext)} down on material.`, line: { fen: fenBefore, sans: heardSans(fenBefore, next.moves) }, squares: [], alt: true });
+      else if (matOwn > 0) cands.push({ source: 'material', stake: matStake, text: `${played} comes out of the trades that follow ahead — it wins ${pieceWords(fenBefore, own.moves, mover, true)}.`, line: { fen: fenBefore, sans: heardSans(fenBefore, own.moves) }, squares: [], alt: false });
+      else if (nextBestSan) cands.push({ source: 'material', stake: matStake, text: `The natural alternative, ${dot(nextBestSan, mover)}, comes out of the trades that follow behind — it loses ${pieceWords(fenBefore, next.moves, mover, false)}.`, line: { fen: fenBefore, sans: heardSans(fenBefore, next.moves) }, squares: [], alt: true });
     }
     // PAST THE FORCING HORIZON: a big gap the heard line cannot show is read on
     // the engine's whole line — the material it ends on, said as further down
@@ -225,7 +240,7 @@ export function decisiveReason(input: {
       const nextSans = sansOf(fenBefore, next.moves);
       const ownFull = (settledNetForLine(fenBefore, sansOf(fenBefore, own.moves), mover) ?? 0) * 100;
       const nextFull = (settledNetForLine(fenBefore, nextSans, mover) ?? 0) * 100;
-      if (ownFull - nextFull > 0 && nextFull < 0) cands.push({ source: 'material', stake: ownFull - nextFull, text: `The natural alternative, ${dot(nextBestSan, mover)}, loses material further down the line — it ends ${points(-nextFull)} down.`, line: { fen: fenBefore, sans: nextSans }, squares: [], alt: true });
+      if (ownFull - nextFull > 0 && nextFull < 0) cands.push({ source: 'material', stake: ownFull - nextFull, text: `The natural alternative, ${dot(nextBestSan, mover)}, loses material further down the line — ${pieceWords(fenBefore, next.moves, mover, false)}.`, line: { fen: fenBefore, sans: nextSans }, squares: [], alt: true });
     }
   }
 

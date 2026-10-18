@@ -137,7 +137,7 @@ describe('decisiveReason — a forced mate is a visualization test for a proven 
 });
 
 describe('decisiveReason — a stop says what it stopped (2026-10-17, real engine reads)', () => {
-  const R = JSON.parse(readFileSync(new URL('./__fixtures__/decisiveReason.walk.reads.json', import.meta.url), 'utf8')) as Record<string, IntentReads>;
+  const R = JSON.parse(readFileSync('src/services/__fixtures__/decisiveReason.walk.reads.json', 'utf8')) as Record<string, IntentReads>;
   it('a luft move stops the back-rank mate, said first even in a close call', () => {
     const r = decisiveReason({ fenBefore: '6k1/5ppp/8/8/8/8/5PPP/4R1K1 b - - 0 1', san: 'h6', seat: 'student', opponentLastSan: null, reads: R.backRankH6 });
     expect(r?.kind).toBe('close');
@@ -146,5 +146,13 @@ describe('decisiveReason — a stop says what it stopped (2026-10-17, real engin
   it('a stopped move says what it would have done (never a bare "doesn\'t work")', () => {
     const r = decisiveReason({ fenBefore: 'rn1qkb1r/1p1b1ppp/p2p1n2/1Bp2N2/4P3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 8', san: 'Bxd7+', seat: 'student', opponentLastSan: 'Bd7', reads: R.q4Bxd7 });
     expect(r?.text).toMatch(/^Bxd7\+ — …g6 would hit your knight on f5, and now it doesn't work\./);
+  });
+});
+
+describe('material is said by piece, never as a point count (Learn audit 2026-10-18, V3)', () => {
+  it('no spoken template in decisiveReason counts points', () => {
+    const src = readFileSync('src/services/decisiveReason.ts', 'utf8');
+    expect(src).not.toMatch(/\bpoints\((?:-?mat|-?next|matStake|matOwn)/);
+    expect(src).not.toMatch(/\$\{[^}]*\}\s*points? (?:down|up)\b/);
   });
 });

@@ -17,6 +17,8 @@ import type { MoveReason } from './moveReason';
 import type { RewardKind, RewardEvent } from './rewardEvents';
 import { reward } from './rewardService';
 import { earnedPraise, isPraiseKind } from './dnaRules';
+import { Chess } from 'chess.js';
+import { computeMustDefend } from './threatOut';
 
 /** Learn's ONE door to the reward layer — the surface never calls the
  *  reward service directly, so what Learn may celebrate is decided here. */
@@ -98,4 +100,27 @@ export function tallyMove(t: LearnTally, kind: RewardKind | null, fault: boolean
  *  speaks no praise (a gem, a fixed skill). */
 export function learnPraise(kind: RewardKind | null, streak: number, rot: number): string | null {
   return isPraiseKind(kind) ? earnedPraise(kind, streak, rot) : null;
+}
+
+const PIECE_WORD: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+
+/** THE WHY OF A SAVE (Learn audit 2026-10-18: "Good defence." spoken alone).
+ *  Praise never goes out bare: a defence names what it saved — the piece of
+ *  the student's that was under attack before the move and is safe after it.
+ *  Null when the board does not show one, and then the praise is not said. */
+export function savedWhy(fenBefore: string, san: string, side: 'w' | 'b'): string | null {
+  try {
+    const before = computeMustDefend(fenBefore, side).pieces;
+    if (before.length === 0) return null;
+    const c = new Chess(fenBefore);
+    const m = c.move(san);
+    if (!m) return null;
+    const after = new Set(computeMustDefend(c.fen(), side).pieces.map((p) => p.square));
+    const saved = before.find((p) => p.square === m.from ? !after.has(m.to) : !after.has(p.square));
+    if (!saved) return null;
+    const name = PIECE_WORD[saved.piece.toLowerCase()] ?? 'piece';
+    return saved.square === m.from
+      ? `${san} takes your ${name} out of the attack.`
+      : `${san} keeps your ${name} on ${saved.square} safe.`;
+  } catch { return null; }
 }

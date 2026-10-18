@@ -26,7 +26,7 @@ import { registerCoachHands } from '../../services/coachActuator';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
 import { TeachGameOverCard, type TeachGameResult } from './TeachGameOverCard';
 import { LearnRewardBar } from './LearnRewardBar';
-import { learnRewardFor, learnPraise, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
+import { learnRewardFor, learnPraise, savedWhy, tallyMove, fireLearnReward, EMPTY_TALLY, type LearnTally } from '../../services/learnReward';
 import { useProvenWatcher } from '../../hooks/useProvenWatcher';
 import { getMisconceptionTag } from '../../data/misconceptionTags';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -9425,7 +9425,7 @@ export function CoachTeachPage(): JSX.Element {
     } catch { /* unreadable FEN — the lanes' own board checks still apply */ }
     const pending = pendingVoiceRef.current?.fen === fen
       ? pendingVoiceRef.current
-      : { fen, lines: [] as Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; role?: FacetRole; factKind?: string; skill?: string }> };
+      : { fen, lines: [] as Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; role?: FacetRole; factKind?: string; skill?: string; ownMoveReason?: boolean }> };
     // EVERY MOVE A LINE NAMES GETS ITS ARROW (G6) — the lane's own arrows
     // AND every other move the sentence names (a lane that drew its line
     // used to leave the rest of the sentence's moves bare). The board before
@@ -9441,7 +9441,10 @@ export function CoachTeachPage(): JSX.Element {
     const named = namedMoveArrows(text, gradeFen ?? fen, playerColorRef.current === 'white' ? 'w' : 'b', prevFen);
     const own = arrows ?? [];
     const drawn = [...own, ...named.filter((n) => !own.some((a) => a.from === n.from && a.to === n.to))];
-    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, claims, gradeFen, arrows: drawn, lines, stakes, proof, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}) });
+    if (!pending.lines.some((l) => l.text === text)) pending.lines.push({ lane, text, squares, claims, gradeFen, arrows: drawn, lines, stakes, proof, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}),
+      // A position-facts RULE is the principle the student's own last move kept
+      // — a reason for that move, so the board-teacher fallback stands down.
+      ...(factKind === 'rule' ? { ownMoveReason: true } : {}) });
     pendingVoiceRef.current = pending;
   }, []);
   /** A COMPUTED HINT, QUEUED WHOLE — its arrows, stakes and role ride with it
@@ -9718,10 +9721,15 @@ export function CoachTeachPage(): JSX.Element {
           void speakComputed(gradeLine, { forced: false, intent: 'learn' });
           captureEvent('post_move_grade_spoken', { surface: 'coach-teach', reason: grade.reason, cp_loss: Math.round(grade.cpLossCp), fault: grade.fault });
         }
-        // The grade stood down (the found-move lane says the why a beat later):
-        // the praise still lands with the burst.
-        if (praise) {
-          const line = praise;
+        // The grade stood down. Praise never goes out bare (Learn audit
+        // 2026-10-18: "Good defence." alone): it rides the found-move lane's
+        // why when that lane speaks, a save names what it saved, and otherwise
+        // the praise is not said.
+        const praiseWhy = praise && !foundSpeaks
+          ? (grade?.reason === 'defends-threat' ? savedWhy(fenBefore, move.san, playerColor === 'white' ? 'w' : 'b') : null)
+          : null;
+        if (praise && (foundSpeaks || praiseWhy)) {
+          const line = praiseWhy ? `${praise} ${praiseWhy}` : praise;
           setMessages((prev) => [...prev, { id: `praise-${Date.now()}`, role: 'assistant', content: line, timestamp: Date.now() }]);
           void speakComputed(line, { forced: false, intent: 'learn' });
         }

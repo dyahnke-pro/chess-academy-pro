@@ -66,10 +66,24 @@ export function lineWins(
       shown.push({ from: m.from, to: m.to, color: m.color, fen: before, san: m.san });
     }
   } catch { return null; }
-  const net = proof.ledger.netPawns;
+  // WHAT THE MOVE BEFORE IT TOOK COUNTS TOO (claim check 2026-10-18: "Rxc7
+  // was a blunder — …e5, Bg3 and …Qxc7 — they come out a rook up" of a line
+  // that wins a rook for the pawn Rxc7 had just taken). `proofCut` folds the
+  // prior capture in only when the line opens by taking back on its square;
+  // any other line still pays for it.
+  const took = [...proof.ledger.studentWon];
+  let gave: string[] = [...proof.ledger.opponentWon];
+  let net = proof.ledger.netPawns;
+  const priorTook = priorCapture(prior);
+  const sq = (san: string): string | undefined => /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(san)?.[1];
+  if (priorTook && prior && !(/x/.test(plies[0]?.san ?? '') && sq(plies[0].san) === sq(prior.san))) {
+    gave = [...gave, priorTook];
+    net -= PIECE_POINTS[priorTook] ?? 0;
+    if (net < 1) return null;
+  }
   return {
     net,
-    what: materialWords(proof.ledger.studentWon, proof.ledger.opponentWon, net),
+    what: materialWords(took, gave, net),
     sans: shown.map((p) => `${p.color === 'b' ? '…' : ''}${p.san}`),
     plies: shown,
   };
@@ -99,6 +113,13 @@ export interface MateLine {
   /** Squares next to their king the quiet first move takes away. */
   taken: string[];
   text: string;
+}
+
+const PIECE_POINTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
+/** The piece the move before the line captured, or null. */
+function priorCapture(prior: { fenBefore: string; san: string } | null): string | null {
+  if (!prior || !/x/.test(prior.san)) return null;
+  try { return new Chess(prior.fenBefore).move(prior.san)?.captured ?? null; } catch { return null; }
 }
 
 const FILES = 'abcdefgh';

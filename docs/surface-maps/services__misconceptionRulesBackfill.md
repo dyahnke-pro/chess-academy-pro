@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**108 lines · 5 exports · 2 importers · 1 tests · 0 audits**
+**102 lines · 5 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,9 +16,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionRulesBackfill.test.ts`
 
 ## Exports and every call site
-
-### `POSITIVE_HALF_REV` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `RulesBackfillResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -37,6 +34,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionRulesBackfill.test.ts:64`
 - `src/services/misconceptionRulesBackfill.test.ts:79`
 - `src/services/misconceptionRulesBackfill.test.ts:84`
+
+### `POSITIVE_HALF_REV` (re-export) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 
