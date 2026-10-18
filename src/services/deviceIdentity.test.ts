@@ -17,8 +17,21 @@ vi.mock('./billingService', () => ({
   getStableAnalyticsId: async (): Promise<string | null> => durableAnchor.value,
 }));
 
+/** Stand-in for the iOS Keychain (installAnchor). Null = web, no keychain. */
+const keychain = { value: null as string | null, native: false };
+vi.mock('./installAnchor', () => ({
+  readInstallAnchor: async (): Promise<string | null> => (keychain.native ? keychain.value : null),
+  writeInstallAnchor: async (id: string): Promise<boolean> => {
+    if (!keychain.native) return false;
+    keychain.value = id;
+    return true;
+  },
+}));
+
 beforeEach(async () => {
   durableAnchor.value = null;
+  keychain.value = null;
+  keychain.native = false;
   await db.delete();
   await db.open();
 });
@@ -82,6 +95,40 @@ describe('deviceIdentity — survives a storage eviction', () => {
     durableAnchor.value = 'rc-anchor-xyz';
     const identity = await resolveDeviceIdentity();
     expect(identity.device_id).toBe('rc-anchor-xyz');
+    expect(identity.device_id_source).toBe('keychain');
+  });
+});
+
+/**
+ * A delete-and-reinstall wipes the app's database AND RevenueCat's anonymous id
+ * (both live in the app container). Only the Keychain survives, so the install
+ * must come back as the SAME device — that is what keys the free-tier ledger.
+ */
+describe('deviceIdentity — survives a reinstall (Keychain anchor)', () => {
+  it('a reinstalled app comes back as the same device', async () => {
+    keychain.native = true;
+    const before = await getDeviceId();
+    expect(keychain.value).toBe(before);
+    // Reinstall: the database is gone, RevenueCat has a brand-new id.
+    await db.delete();
+    await db.open();
+    durableAnchor.value = 'rc-new-anonymous-id';
+    expect(await getDeviceId()).toBe(before);
+    expect((await resolveDeviceIdentity()).device_id).toBe(before);
+  });
+
+  it('an existing install seeds the Keychain with the id it already has', async () => {
+    const old = await getDeviceId(); // pre-anchor build: web-like, Dexie only
+    keychain.native = true; // the new build lands
+    expect(await getDeviceId()).toBe(old);
+    expect(keychain.value).toBe(old);
+  });
+
+  it('reports keychain as the source right after a reinstall', async () => {
+    keychain.native = true;
+    keychain.value = 'kc-install-123456';
+    const identity = await resolveDeviceIdentity();
+    expect(identity.device_id).toBe('kc-install-123456');
     expect(identity.device_id_source).toBe('keychain');
   });
 });

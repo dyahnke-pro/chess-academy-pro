@@ -117,6 +117,15 @@ function normalizeRow(row: FreeTierRecord): FreeTierRecord {
   };
 }
 
+/** Called after every ledger write — the server mirror (freeTierSync) listens
+ *  so the allowance survives a reinstall. A leaf hook, so this module never
+ *  imports the network layer. */
+const writeListeners = new Set<(row: FreeTierRecord) => void>();
+export function onFreeTierWritten(fn: (row: FreeTierRecord) => void): () => void {
+  writeListeners.add(fn);
+  return () => { writeListeners.delete(fn); };
+}
+
 async function patch(next: Partial<FreeTierRecord>): Promise<FreeTierRecord> {
   const cur = await loadFreeTier();
   const merged: FreeTierRecord = { ...cur, ...next, id: SINGLETON_ID, updatedAt: Date.now() };
@@ -126,7 +135,60 @@ async function patch(next: Partial<FreeTierRecord>): Promise<FreeTierRecord> {
     // Persistence hiccup — return the merged value so the runtime mirror still
     // advances; it re-persists on the next write.
   }
+  for (const fn of writeListeners) {
+    try { fn(merged); } catch { /* a listener must never break a write */ }
+  }
   return merged;
+}
+
+/** The fields the server keeps for this install (api/free-tier.ts). */
+export interface ServerLedger {
+  puzzlesSolved: number;
+  coachSpendUsd: number;
+  coachLessonsUsed: number;
+  coachChatTurnsUsed: number;
+  freeOpeningIds: string[];
+  trainingOpeningCredits: number;
+  kidFirstAccessAt: number | null;
+}
+
+/** This install's ledger as the server stores it. */
+export function toServerLedger(row: FreeTierRecord): ServerLedger {
+  return {
+    puzzlesSolved: row.puzzlesSolved,
+    coachSpendUsd: row.coachSpendUsd,
+    coachLessonsUsed: row.coachLessonsUsed,
+    coachChatTurnsUsed: row.coachChatTurnsUsed,
+    freeOpeningIds: row.freeOpeningIds ?? [],
+    trainingOpeningCredits: row.trainingOpeningCredits ?? 0,
+    kidFirstAccessAt: row.kidFirstAccessAt,
+  };
+}
+
+/**
+ * Fold the server's ledger into the local row, FORWARD ONLY: usage takes the
+ * larger value, claimed openings are a union, the kid window keeps its earliest
+ * start. A reinstalled app reads back what it already spent; nothing the
+ * server says can hand back allowance. Writes only when something changed.
+ */
+export async function mergeServerLedger(server: ServerLedger): Promise<FreeTierRecord> {
+  const cur = await loadFreeTier();
+  const ids = [...new Set([...(cur.freeOpeningIds ?? []), ...server.freeOpeningIds])];
+  const kid = [cur.kidFirstAccessAt, server.kidFirstAccessAt].filter((x): x is number => typeof x === 'number');
+  const next: Partial<FreeTierRecord> = {
+    puzzlesSolved: Math.max(cur.puzzlesSolved, server.puzzlesSolved),
+    coachSpendUsd: Math.max(cur.coachSpendUsd, server.coachSpendUsd),
+    coachLessonsUsed: Math.max(cur.coachLessonsUsed, server.coachLessonsUsed),
+    coachChatTurnsUsed: Math.max(cur.coachChatTurnsUsed, server.coachChatTurnsUsed),
+    freeOpeningIds: ids,
+    freeOpeningId: cur.freeOpeningId ?? ids[0] ?? null,
+    trainingOpeningCredits: Math.max(cur.trainingOpeningCredits ?? 0, server.trainingOpeningCredits),
+    kidFirstAccessAt: kid.length ? Math.min(...kid) : null,
+  };
+  const changed = (Object.keys(next) as Array<keyof FreeTierRecord>).some(
+    (k) => JSON.stringify(next[k]) !== JSON.stringify(cur[k]),
+  );
+  return changed ? patch(next) : cur;
 }
 
 /** Record one solved puzzle against the lifetime bucket. Returns the new row. */

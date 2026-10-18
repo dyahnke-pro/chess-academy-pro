@@ -33,6 +33,7 @@ import { AppLayout } from './components/ui/AppLayout';
 import { OtaUpdateBanner } from './components/ui/OtaUpdateBanner';
 import { ReferralPanel } from './components/Referral/ReferralPanel';
 import { ensureSyncedCredits } from './services/referralService';
+import { startFreeTierSync } from './services/freeTierSync';
 import { LoadingScreen } from './components/ui/LoadingScreen';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { BuildVersionWidget } from './components/Debug/BuildVersionWidget';
@@ -190,6 +191,8 @@ export function App(): JSX.Element {
   // free-tier ledger on boot, so a credit earned on another device (a recruit
   // qualifying) shows up here. Cheap, best-effort, no-op on web.
   useEffect(() => { void ensureSyncedCredits(); }, []);
+  // The free allowance survives a reinstall: mirrored under the Keychain id.
+  useEffect(() => { void startFreeTierSync(); }, []);
 
   // Unlock Web Speech API on first user gesture (required on iOS/WKWebView)
   useEffect(() => {

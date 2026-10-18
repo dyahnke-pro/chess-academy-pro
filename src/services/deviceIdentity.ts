@@ -70,15 +70,16 @@ async function writeMeta(key: string, value: string): Promise<void> {
 }
 
 /**
- * A Keychain-backed anchor for this install, when one exists.
+ * RevenueCat's app-user id, the older fallback anchor.
  *
- * RevenueCat persists its app-user id in the iOS KEYCHAIN, which survives both
- * WebKit storage eviction and an app reinstall — unlike Dexie/localStorage,
- * which WebKit clears wholesale from apps that aren't opened often. Lazy import
- * so this module stays free of the billing layer (and safe on web/keyless,
- * where it simply returns null).
+ * 🔴 CORRECTED 2026-10-18: this comment used to say RevenueCat keeps its id in
+ * the iOS Keychain and that it "survives an app reinstall". It does not — the
+ * SDK keeps it in the app's own preferences, which iOS deletes with the app,
+ * and billing configures only after this runs, so on a fresh install it was
+ * null anyway. It still heals a storage EVICTION on a long-lived install; the
+ * reinstall anchor is `installAnchor`, which really is in the Keychain.
  */
-async function readDurableAnchor(): Promise<string | null> {
+async function readBillingAnchor(): Promise<string | null> {
   try {
     const { getStableAnalyticsId } = await import('./billingService');
     return await getStableAnalyticsId();
@@ -87,41 +88,48 @@ async function readDurableAnchor(): Promise<string | null> {
   }
 }
 
+async function resolveId(): Promise<{ id: string; source: 'dexie' | 'keychain' | 'minted' }> {
+  const { readInstallAnchor, writeInstallAnchor } = await import('./installAnchor');
+  const [kc, existing] = await Promise.all([readInstallAnchor(), readMeta(DEVICE_ID_KEY)]);
+  let out: { id: string; source: 'dexie' | 'keychain' | 'minted' };
+  if (kc) {
+    // The Keychain outlives the app, so it is the install's identity: a
+    // reinstall comes back as the SAME device (and the same free-tier ledger).
+    out = { id: kc, source: existing === kc ? 'dexie' : 'keychain' };
+    if (existing !== kc) await writeMeta(DEVICE_ID_KEY, kc);
+  } else if (existing) {
+    // An install from before the anchor existed: seed the Keychain with the id
+    // it already has, so its analytics history and ledger carry over.
+    out = { id: existing, source: 'dexie' };
+    await writeInstallAnchor(existing);
+  } else {
+    const billing = await readBillingAnchor();
+    out = { id: billing ?? newUuid(), source: billing ? 'keychain' : 'minted' };
+    await writeMeta(DEVICE_ID_KEY, out.id);
+    await writeInstallAnchor(out.id);
+  }
+  return out;
+}
+
 /**
  * The stable device id, minted + persisted on first call.
  *
- * 🔒 EVICTION-HEALING (David 2026-07-29). The original version minted a uuid
- * into Dexie `meta` — but Dexie is EXACTLY what WebKit evicts, so on the
- * infrequently-opened devices this counter exists to measure, the id churned
- * just as badly as posthog's own anonymous id (one iPhone produced 110 of
- * them). Resolution order now:
- *
- *   1. Dexie value, if present — healthy devices never churn.
- *   2. Otherwise the Keychain-backed RevenueCat anchor — so a device whose
- *      storage WAS evicted comes back as the SAME device instead of a new one.
- *   3. Otherwise a fresh uuid (web / keyless builds, or pre-billing installs).
- *
- * Whatever we resolve is written back to Dexie so later reads are cheap.
+ * Resolution order (2026-10-18):
+ *   1. The iOS Keychain install anchor — survives a delete-and-reinstall.
+ *   2. Dexie value — an install from before the anchor; seeds the Keychain.
+ *   3. RevenueCat's id (heals a storage eviction), else a fresh uuid.
  */
 export async function getDeviceId(): Promise<string> {
-  const existing = await readMeta(DEVICE_ID_KEY);
-  if (existing) return existing;
-
-  const anchor = await readDurableAnchor();
-  const id = anchor ?? newUuid();
-  await writeMeta(DEVICE_ID_KEY, id);
-  return id;
+  return (await resolveId()).id;
 }
 
 /**
  * How this device's id was established — `dexie` (never lost), `keychain`
- * (recovered after an eviction), or `minted` (brand new / no durable anchor).
- * Reported as a super-property so we can see, in the wild, how often storage
- * is still being evicted and whether the persistence fix is holding.
+ * (recovered from a durable anchor after a reinstall or eviction), or `minted`
+ * (brand new). Reported as a super-property so reinstalls are visible.
  */
 export async function getDeviceIdSource(): Promise<'dexie' | 'keychain' | 'minted'> {
-  if (await readMeta(DEVICE_ID_KEY)) return 'dexie';
-  return (await readDurableAnchor()) ? 'keychain' : 'minted';
+  return (await resolveId()).source;
 }
 
 /** Whether THIS device is the owner's (excluded from product analytics). */
@@ -184,12 +192,11 @@ export async function resolveDistributionChannel(): Promise<string> {
 
 /** Resolve the full identity for registration as PostHog super-properties. */
 export async function resolveDeviceIdentity(): Promise<DeviceIdentity> {
-  // Source MUST be read before getDeviceId(), which writes the id back to
-  // Dexie — otherwise every boot would report 'dexie' and the eviction signal
-  // would be invisible.
-  const device_id_source = await getDeviceIdSource();
-  const [device_id, is_internal, label, distribution] = await Promise.all([
-    getDeviceId(),
+  // ONE resolution gives both the id and how it was found — read separately,
+  // the first call's write-back would make every boot report 'dexie' and hide
+  // the reinstall / eviction signal.
+  const { id: device_id, source: device_id_source } = await resolveId();
+  const [is_internal, label, distribution] = await Promise.all([
     isInternalDevice(),
     getDeviceLabel(),
     resolveDistributionChannel(),
