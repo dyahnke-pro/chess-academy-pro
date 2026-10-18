@@ -29,7 +29,7 @@ import { isMateEval, storedMate } from './engineConstants';
 import { decisiveReason, reasonPosed } from './decisiveReason';
 import { capEval } from './accuracyService';
 import { isFixtureGame } from './fixtureGames';
-import { isMisconceptionTagId, MISCONCEPTION_RULES_REV, type MisconceptionTagId } from '../data/misconceptionTags';
+import { isMisconceptionTagId, MISCONCEPTION_RULES_REV, POSITIVE_HALF_REV, type MisconceptionTagId } from '../data/misconceptionTags';
 import { positionPosed } from './moveInsight';
 import type { GameRecord, MisconceptionTagRecord, MistakePuzzle, MoveAnnotation } from '../types';
 
@@ -39,6 +39,8 @@ export interface BlunderForAnalysis {
   playedSan: string;
   bestSan?: string;
   cpLoss?: number;
+  /** The move's grade (`MisconceptionTagRecord.grade`). */
+  grade?: 'inaccuracy' | 'mistake' | 'blunder';
   gamePhase?: 'opening' | 'middlegame' | 'endgame';
   moveNumber?: number;
   /** Every SAN up to and including the played move — lets the classifier run
@@ -66,6 +68,10 @@ export interface CapabilityPly {
   /** What the insight computer says this position posed (their threat, the
    *  escape square, a named pattern) — recorded both ways with the ply. */
   alsoPosed?: Array<{ tag: MisconceptionTagId; posedImportance: number }>;
+  /** On a costly ply: the engine's move and the history, so the slip is read
+   *  for the ONE skill it breaks (`recordCapabilityEvidence`). */
+  bestSan?: string;
+  historySans?: string[];
 }
 
 export interface AutoAnalyzeOptions {
@@ -147,6 +153,7 @@ export async function autoAnalyzeBlunders(
         playedSan: b.playedSan,
         bestSan: b.bestSan,
         cpLoss: b.cpLoss,
+        ...(b.grade ? { grade: b.grade } : {}),
         gamePhase: b.gamePhase,
         moveNumber: b.moveNumber,
         openingId: opts.openingId,
@@ -194,6 +201,8 @@ export async function autoAnalyzeBlunders(
         // the game record carries those plies, and a find there is prompted.
         prompted: ply.prompted ?? false,
         alsoPosed: ply.alsoPosed,
+        ...(ply.bestSan ? { bestSan: ply.bestSan } : {}),
+        ...(ply.historySans ? { historySans: ply.historySans } : {}),
         ...(opts.sourceGameId ? { sourceGameId: opts.sourceGameId } : {}),
       });
     }
@@ -313,9 +322,22 @@ export function capabilityPliesFromAnnotations(
   for (const a of annotations) sanAt.set((a.moveNumber - 1) * 2 + (a.color === 'black' ? 1 : 0), a.san);
   for (const ann of annotations) {
     if (ann.color !== playerColor) continue;
-    if (ann.classification === 'blunder' || ann.classification === 'mistake') continue;
     const fenIndex = (ann.moveNumber - 1) * 2 + (ann.color === 'black' ? 1 : 0);
     if (fenIndex < 0 || fenIndex >= fens.length) continue;
+    // A COSTLY PLY BREAKS ITS OWN SKILL (2026-10-18). Mistakes used to be
+    // skipped here, so an imported game could prove a skill but never break
+    // it — a green that a recurring slip could not undo. Now the ply rides
+    // with its best move and history, and `recordCapabilityEvidence` breaks
+    // only the skill the slip is filed under.
+    if (ann.classification === 'blunder' || ann.classification === 'mistake') {
+      const history: string[] = [];
+      for (let k = 0; k <= fenIndex; k += 1) { const sn = sanAt.get(k); if (!sn) break; history.push(sn); }
+      const bestSan = ann.bestMove ? uciToSan(fens[fenIndex], ann.bestMove) || undefined : undefined;
+      if (bestSan && history.length === fenIndex + 1) {
+        out.push({ fenBefore: fens[fenIndex], playedSan: ann.san, cpLoss: measuredCpLoss(ann), prompted: prompted.has(fenIndex + 1), bestSan, historySans: history });
+      }
+      continue;
+    }
     // THE REASON, BOTH WAYS (2026-10-17): where the deep dive kept the best
     // line and the played line, the reason the best move was better is a
     // question this board posed — held when they found it, broken when they
@@ -377,7 +399,11 @@ export async function autoAnalyzeGameMisconceptions(
   const blunders: BlunderForAnalysis[] = [];
   for (const ann of annotations) {
     if (ann.color !== playerColor) continue;
-    if (ann.classification !== 'blunder' && ann.classification !== 'mistake') continue;
+    // EVERY GRADED SLIP, INACCURACIES TOO (David 2026-10-18: "capture all
+    // mistakes and inaccuracies"). A strong player loses to a run of small
+    // leaks; recording only the big ones left their heat map grey. An
+    // inaccuracy is a half-weight slip (`slipWeight`).
+    if (ann.classification !== 'blunder' && ann.classification !== 'mistake' && ann.classification !== 'inaccuracy') continue;
     // fens[0] = start; a move's BEFORE-position index is (moveNumber-1)*2 (+1 for black).
     const fenIndex = (ann.moveNumber - 1) * 2 + (ann.color === 'black' ? 1 : 0);
     if (fenIndex < 0 || fenIndex >= fens.length) continue;
@@ -404,7 +430,8 @@ export async function autoAnalyzeGameMisconceptions(
       // before `bestMoveEval` existed (`gameNeedsAnalysis` re-analyses those, so
       // it drains). Mate scores are measured through `capEval` (see
       // `measuredCpLoss`), never sent here.
-      cpLoss: measuredCpLoss(ann) ?? (ann.classification === 'blunder' ? 350 : 175),
+      cpLoss: measuredCpLoss(ann) ?? (ann.classification === 'blunder' ? 350 : ann.classification === 'inaccuracy' ? 70 : 175),
+      grade: ann.classification,
       gamePhase: classifyPhase(fen, { fullMove: ann.moveNumber }),
       moveNumber: ann.moveNumber,
       ...(sans.length > fenIndex ? { historySans: sans.slice(0, fenIndex + 1) } : {}),
@@ -474,7 +501,10 @@ export async function autoAnalyzeGameMisconceptions(
   // "Unknown", date = the import day. A master game resolves to null and
   // writes nothing: it is nobody's slip.
   const from = mistakeProvenanceFromGame(game, playerColor);
-  if (from) await persistMistakePuzzlesForBlunders(gameId, blunders, from);
+  // An imported library's inaccuracies are leaks to RECORD, not puzzles: a
+  // half-pawn choice has no single move to find, and a 300-game import would
+  // bury My Mistakes under them. The drill pool stays mistakes and blunders.
+  if (from) await persistMistakePuzzlesForBlunders(gameId, blunders.filter((b) => b.grade !== 'inaccuracy'), from);
 
   // The dossier "builds on each game" (P7, David 2026-09-08): a freshly analyzed
   // game changed the weakness picture, so recompute the persistent snapshot.
@@ -484,6 +514,14 @@ export async function autoAnalyzeGameMisconceptions(
   // delayed snapshot is fine.
   void import('./studentDossier').then((m) => m.refreshStudentDossierThrottled()).catch(() => undefined);
 
+  // A GAME READ UNDER OLDER RULES IS READ AGAIN (2026-10-18). Once-per-game
+  // meant a new question the board can pose (the skills that could only be
+  // failed) never reached a game that already had rows, so the 300 analysed
+  // games kept every one of those tiles grey. Behind the revision, this
+  // sweep's own rows for the game are replaced; live-play rows are kept.
+  if (game.positiveHalfRev !== POSITIVE_HALF_REV) {
+    await db.capabilityEvidence.filter((r) => r.sourceGameId === gameId && r.origin === 'review').delete();
+  }
   const existing = await db.misconceptionTags.where('sourceGameId').equals(gameId).toArray();
   if (existing.length === 0) {
     // FIRST PASS over this game: the tally, and the positive half through the
@@ -495,12 +533,14 @@ export async function autoAnalyzeGameMisconceptions(
     const positive = !(await hasCapabilityEvidenceForGame(gameId))
       ? capabilityPliesFromAnnotations(annotations, playerColor, fens, game.promptedPlies ?? [])
       : undefined;
-    return autoAnalyzeBlunders(blunders, {
+    const first = await autoAnalyzeBlunders(blunders, {
       openingId: game.openingId ?? undefined,
       sourceGameId: gameId,
       learned: !!opts.reviewed,
       ...(positive ? { capabilityPlies: positive, playerColor } : {}),
     });
+    await stampPositiveHalf(gameId);
+    return first;
   }
 
   // A LATER PASS. The tally exists and is never written twice; what this pass
@@ -511,11 +551,25 @@ export async function autoAnalyzeGameMisconceptions(
   //  • the positive half, for a game whose first pass ran before it was
   //    recorded on analysis (2026-10-13) — once per game, guarded inside.
   const reattributed = await reattributePending(existing, blunders, gameId);
+  // A SLIP THE RECORD NEVER HAD (2026-10-18): the first pass recorded only
+  // mistakes and blunders, so a game analysed before inaccuracies were
+  // recorded keeps its small leaks off the record until this pass writes
+  // them — once each, matched by the board and the move.
+  const missing = blunders.filter((b) => !existing.some((r) => r.fen === b.fen && r.playedSan === b.playedSan));
+  if (missing.length > 0) {
+    await autoAnalyzeBlunders(missing, { openingId: game.openingId ?? undefined, sourceGameId: gameId, learned: !!opts.reviewed });
+  }
   let countedUpgraded = 0;
   if (opts.reviewed) countedUpgraded = await upgradeToCounted(existing);
   const capabilitiesHeld = await recordPositiveHalf(game, playerColor, fens);
+  await stampPositiveHalf(gameId);
   if (reattributed > 0 || countedUpgraded > 0) emitWeaknessModelChanged();
   return { ...empty, reattributed, countedUpgraded, capabilitiesHeld };
+}
+
+/** The game was read for the positive half under the current rules. */
+async function stampPositiveHalf(gameId: string): Promise<void> {
+  await db.games.update(gameId, { positiveHalfRev: POSITIVE_HALF_REV }).catch(() => undefined);
 }
 
 async function hasCapabilityEvidenceForGame(gameId: string): Promise<boolean> {

@@ -86,6 +86,7 @@ export const FUNDAMENTAL_SECTION: Record<FundamentalId, FundamentalSectionId> = 
   'missed-pin-break': 'tactics-threats',
   'ignored-pin-break': 'tactics-threats',
   'wrong-move-order': 'tactics-threats',
+  'walked-into-tactic': 'tactics-threats',
 };
 
 /**
@@ -183,6 +184,7 @@ export const FUNDAMENTAL_PILLAR: Record<FundamentalId, FundamentalPillar | null>
   'missed-pin-break': null,
   'ignored-pin-break': null,
   'wrong-move-order': null,
+  'walked-into-tactic': null,
 };
 
 /** The classical pillar this fundamental belongs to, or null where it genuinely
@@ -284,6 +286,7 @@ export const FUNDAMENTAL_LABEL: Record<FundamentalId, string> = {
   'missed-pin-break': 'Staying in a pin you could break',
   'ignored-pin-break': 'Leaning on a pin that does not hold',
   'wrong-move-order': 'Right moves, wrong order',
+  'walked-into-tactic': 'Walking into a tactic',
 };
 
 /** The one-line coaching device for a fundamental (its tag's principle), or the

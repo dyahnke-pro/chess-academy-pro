@@ -86,6 +86,28 @@ function see(fen, sq, by) {
   return gains.length ? v : 0;
 }
 
+/** SEE played with LEGAL moves only (2026-10-18). The plain `see` above
+ *  counts every geometric attacker, so a recapture by a PINNED piece or into a
+ *  DOUBLE CHECK counted — 5 of the 9 "false" habit claims were the checker's
+ *  misread (…Bxe5 with Re1 pinning the bishop to the king; Nxe3+ uncovering
+ *  the rook on g6). Independent of app code: chess.js legality only. */
+function legalSee(fen, sq, by) {
+  let c; try { c = new Chess(withTurn(fen, by)); } catch { return 0; }
+  const step = (depth) => {
+    if (depth > 16) return 0;
+    const caps = c.moves({ verbose: true }).filter((m) => m.to === sq && m.captured);
+    if (!caps.length) return 0;
+    caps.sort((x, y) => (VAL[x.piece] || 100) - (VAL[y.piece] || 100));
+    const m = caps[0];
+    const won = m.captured === 'k' ? 100 : VAL[m.captured];
+    c.move(m);
+    const back = step(depth + 1);
+    c.undo();
+    return Math.max(0, won - back);
+  };
+  try { return step(0); } catch { return 0; }
+}
+
 function material(fen, col) { let s = 0; for (const row of board(fen).board()) for (const c of row) if (c && c.color === col) s += VAL[c.type]; return s; }
 function pawnsOnFile(b, file, col) { const out = []; for (let r = 1; r <= 8; r += 1) { const p = at(b, `${file}${r}`); if (p && p.type === 'p' && (!col || p.color === col)) out.push(`${file}${r}`); } return out; }
 function isPassed(b, sq, col) {
@@ -117,7 +139,10 @@ function fileClaims(x, b, text) {
   for (const m0 of found) {
     const m = [null, m0.f, m0.kind]; m.index = m0.index;
     const f = m[1].toLowerCase(); const wp = pawnsOnFile(b, f, 'w').length; const bp = pawnsOnFile(b, f, 'b').length;
-    const mine = /\btheir\b/i.test(text.slice(0, m.index)) ? oc(x) : sc(x);
+    // Whose file it is: "their" earlier in the clause names the opponent's
+    // file — except in THE PLAN, which is always the student's ("The plan
+    // here: go after their queen on a4 … and take the half-open a-file").
+    const mine = !/^The plan here/i.test(text) && /\btheir\b/i.test(text.slice(0, m.index)) ? oc(x) : sc(x);
     const myP = mine === 'w' ? wp : bp;
     if (m[2].toLowerCase() === 'open' && (wp || bp)) res.push(F(`${f}-file called open but has pawns (w${wp} b${bp})`));
     else if (m[2].toLowerCase() === 'half-open' && myP) res.push(F(`${f}-file called half-open for a side with a pawn on it`));
@@ -397,10 +422,10 @@ function verify(x) {
     }
     case 'facts:method': {
       const sq = /(?:your (\w+) on ([a-h][1-8]))/.exec(t);
-      if (sq) { const g = see(withTurn(x.probe, them), sq[2], them); const hit = attackers(b, sq[2], them).length > 0;
+      if (sq) { const g = legalSee(x.probe, sq[2], them); const hit = attackers(b, sq[2], them).length > 0;
         return (/hits your/.test(t) ? hit : g > 0) ? T('the named piece is under fire') : F(`${sq[2]} not threatened (SEE ${g})`); }
       if (/what are they threatening|their threat first/.test(t)) {
-        const threatened = b.board().flat().filter((c) => c && c.color === me && c.type !== 'k').some((c) => see(withTurn(x.probe, them), c.square, them) > 0);
+        const threatened = b.board().flat().filter((c) => c && c.color === me && c.type !== 'k').some((c) => legalSee(x.probe, c.square, them) > 0);
         return threatened ? T('a real threat stands') : F('habit prompt with no threat on the board');
       }
       return U('method habit');

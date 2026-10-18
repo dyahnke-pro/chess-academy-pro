@@ -11,6 +11,8 @@ import {
   PROVEN_MIN_IMPORTANCE,
   HEAT_MAP_REPEAT_WINDOW_MS,
   resetHeatMapReportForTests,
+  capabilitiesPosed,
+  ROUTINE_CREDIT,
 } from './capabilityEvidence';
 import { logAppAudit } from './appAuditor';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
@@ -106,13 +108,17 @@ describe('the record FIRES — a wire that does not fire is not a wire', () => {
   // describing an impossible state. The same computer answers both directions:
   // the board posed it, and they either answered it cleanly or they did not.
   it('a mistake writes a BROKEN row — the negative half of the same computer', async () => {
+    // A slip breaks ONLY the skill it is filed under (2026-10-18): the posed
+    // skill it was about is broken, every other posed skill is left alone.
+    const posed = capabilitiesPosed(AFTER_1E4_E5, 'Nf3', 'white');
+    expect(posed.length).toBeGreaterThan(0);
     const wrote = await recordCapabilityEvidence({
       fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
-      cpLoss: 400, origin: 'play', prompted: false,
+      cpLoss: 400, origin: 'play', prompted: false, slipTag: posed[0].tag,
     });
-    expect(wrote).toBeGreaterThan(0);
+    expect(wrote).toBe(1);
     const rows = await db.capabilityEvidence.toArray();
-    expect(rows.every((r) => r.outcome === 'broken')).toBe(true);
+    expect(rows.map((r) => [r.tag, r.outcome])).toEqual([[posed[0].tag, 'broken']]);
 
     const profile = await getCapabilityProfile();
     expect([...profile.values()].some((e) => e.broken > 0)).toBe(true);
@@ -141,10 +147,19 @@ describe('the record FIRES — a wire that does not fire is not a wire', () => {
     });
     await recordCapabilityEvidence({
       fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
-      cpLoss: 300, origin: 'drill', prompted: false, alsoPosed: posed,
+      cpLoss: 300, origin: 'drill', prompted: false, alsoPosed: posed, slipTag: 'tempo-handed',
     });
     const rows = (await db.capabilityEvidence.toArray()).filter((r) => r.tag === 'tempo-handed');
     expect(rows.map((r) => r.outcome).sort()).toEqual(['broken', 'held']);
+  });
+
+  it('NEGATIVE CONTROL: a costly move about ANOTHER skill breaks nothing it was not about', async () => {
+    const posed = [{ tag: 'tempo-handed' as MisconceptionTagId, posedImportance: 80 }];
+    await recordCapabilityEvidence({
+      fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
+      cpLoss: 300, origin: 'drill', prompted: false, alsoPosed: posed, slipTag: 'hung-material',
+    });
+    expect((await db.capabilityEvidence.toArray()).filter((r) => r.tag === 'tempo-handed')).toHaveLength(0);
   });
 
   it('never throws into the caller, whatever it is handed', async () => {
@@ -305,17 +320,24 @@ describe('the green bar — a hard question, answered again next game', () => {
     await row({ outcome: 'held', game: 'game-B' });
     const e = await entry();
     expect(e!.held).toBe(3);                    // all three are on the record
-    expect(e!.heldStreak).toBe(HELD_FOR_PROVEN); // only the hard ones are evidence
-    expect(capabilityProven(e)).toBe(true);      // and the easy one did not reset it
+    // A routine hold is HALF credit (2026-10-18), never a reset.
+    expect(e!.streakCredit).toBe(HELD_FOR_PROVEN + ROUTINE_CREDIT);
+    expect(capabilityProven(e)).toBe(true);
   });
 
-  it('easy holds ALONE never prove anything, however many', async () => {
-    for (let i = 0; i < 20; i++) {
-      await row({ outcome: 'held', game: `game-${i % 5}`, imp: PROVEN_MIN_IMPORTANCE - 5 });
-    }
-    const e = await entry();
-    expect(e!.held).toBe(20);
-    expect(capabilityProven(e)).toBe(false);
+  it('ROUTINE holds prove a skill at half credit — twice the answers (2026-10-18)', async () => {
+    // Development, space, rook activity, the pawn break and the plan are posed
+    // BELOW the sharp bar by construction; at zero credit they could never turn
+    // green for anyone (Carlsen: development posed 218 times in 40 games).
+    for (let i = 0; i < HELD_FOR_PROVEN * 2 - 1; i++) await row({ outcome: 'held', game: `game-${i % 2}`, imp: PROVEN_MIN_IMPORTANCE - 5 });
+    expect(capabilityProven(await entry())).toBe(false);
+    await row({ outcome: 'held', game: 'game-1', imp: PROVEN_MIN_IMPORTANCE - 5 });
+    expect(capabilityProven(await entry())).toBe(true);
+  });
+
+  it('a hold below the asking floor is still worth nothing', async () => {
+    for (let i = 0; i < 20; i++) await row({ outcome: 'held', game: `game-${i % 5}`, imp: 30 });
+    expect(capabilityProven(await entry())).toBe(false);
   });
 
   it('a break ENDS the streak — holds before it stop counting', async () => {

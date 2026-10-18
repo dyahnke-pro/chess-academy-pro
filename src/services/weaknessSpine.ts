@@ -20,7 +20,7 @@
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { getMisconceptionProfile, isMisconceptionDue, type MisconceptionAggregate } from './misconceptionService';
+import { getMisconceptionProfile, isMisconceptionDue, slipWeight, type MisconceptionAggregate } from './misconceptionService';
 import { FUNDAMENTAL_IDS, FUNDAMENTAL_TAG, type FundamentalId } from './principleAttribution';
 import { FUNDAMENTAL_LABEL } from './fundamentalsCatalog';
 import { getMisconceptionTag, isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
@@ -460,7 +460,9 @@ export function aggregateFundamentals(rows: readonly MisconceptionTagRecord[], g
   for (const [id, recs] of groups) {
     recs.sort((a, b) => b.createdAt - a.createdAt);
     const def = getMisconceptionTag(FUNDAMENTAL_TAG[id]);
-    const openCount = recs.filter((r) => isMisconceptionDue(r, now)).length;
+    const due = recs.filter((r) => isMisconceptionDue(r, now));
+    const openCount = due.length;
+    const openWeight = due.reduce((w, r) => w + slipWeight(r), 0);
     const sources: ('coach' | 'analysis')[] = [];
     if (recs.some((r) => r.counted !== false)) sources.push('coach');
     if (recs.some((r) => r.counted === false)) sources.push('analysis');
@@ -471,7 +473,7 @@ export function aggregateFundamentals(rows: readonly MisconceptionTagRecord[], g
       bucket: def?.bucket ?? 'uncategorized',
       openCount,
       total: recs.length,
-      severity: Math.min(95, openCount * 12 + recs.length * 3),
+      severity: Math.min(95, Math.round(openWeight * 12 + recs.reduce((w, r) => w + slipWeight(r), 0) * 3)),
       sources,
       // The same `Record<FundamentalId, MisconceptionTagId>` the negative half
       // files under — so a `held` row for this tag is about THIS hole.
@@ -510,7 +512,7 @@ function fromMisconception(a: MisconceptionAggregate, gameIndex?: GameProvenance
     bucket: a.def?.bucket ?? 'uncategorized',
     openCount: a.openCount,
     total: a.total,
-    severity: Math.min(95, a.openCount * 12 + a.total * 3),
+    severity: Math.min(95, Math.round(a.openWeight * 12 + a.total * 3)),
     sources: ['coach'],
     // A coach capture IS filed in the closed vocabulary; `other` is the
     // catch-all the app could not name, and green can never be about it.

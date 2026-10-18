@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**901 lines · 7 exports · 21 importers · 17 tests · 3 audits**
+**927 lines · 7 exports · 22 importers · 18 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,6 +24,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttribution.pinBreak.test.ts`
 - `src/services/principleAttribution.pinPressure.test.ts`
 - `src/services/principleAttribution.section14.test.ts`
+- `src/services/principleAttribution.walkedIntoTactic.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
 - `src/services/principleVoice.test.ts`
@@ -37,7 +38,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:4810`
+- `src/services/coachFeatureService.ts:4796`
 - `src/services/learnFundamentalNarration.ts:141`
 
 ### `fundamentalHow` (function) — 10 call sites
@@ -59,12 +60,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `FundamentalVerdictOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `renderFundamentalVerdict` (function) — 50 call sites
+### `renderFundamentalVerdict` (function) — 51 call sites
 - `src/services/blockedOwnRetreat.test.ts:32`
-- `src/services/coachFeatureService.ts:2546`
+- `src/services/coachFeatureService.ts:2534`
 - `src/services/forcingStemNoDecisive.test.ts:17`
 - `src/services/forcingStemNoDecisive.test.ts:22`
-- `src/services/fundLeadStems.test.ts:58`
+- `src/services/fundLeadStems.test.ts:59`
 - `src/services/fundamentalHow.test.ts:47`
 - `src/services/fundamentalHow.test.ts:49`
 - `src/services/fundamentalHow.test.ts:55`
@@ -82,6 +83,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttribution.pinPressure.test.ts:60`
 - `src/services/principleAttribution.section14.test.ts:193`
 - `src/services/principleAttribution.section14.test.ts:196`
+- `src/services/principleAttribution.walkedIntoTactic.test.ts:35`
 - `src/services/principleAttributionEndgame.test.ts:49`
 - `src/services/principleAttributionEvalPv.test.ts:77`
 - `src/services/principleAttributionEvalPv.test.ts:90`
@@ -112,12 +114,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/walkOct2a.test.ts:154`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2557`
+- `src/services/coachFeatureService.ts:2545`
 - `src/services/principleVoice.test.ts:39`
 - `src/services/principleVoice.test.ts:41`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:5286`
+- `src/services/coachFeatureService.ts:5272`
 - `src/services/principleVoice.test.ts:49`
 - `src/services/principleVoice.test.ts:54`
 - `src/services/principleVoice.test.ts:58`
@@ -138,6 +140,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttribution.guardRemoval.test.ts`
 - `src/services/principleAttribution.pinPressure.test.ts`
 - `src/services/principleAttribution.section14.test.ts`
+- `src/services/principleAttribution.walkedIntoTactic.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
 - `src/services/principleVoice.test.ts`

@@ -69,6 +69,8 @@ export interface LogMisconceptionInput {
   playedSan?: string;
   bestSan?: string;
   cpLoss?: number;
+  /** See `MisconceptionTagRecord.grade`. */
+  grade?: 'inaccuracy' | 'mistake' | 'blunder';
   gamePhase?: 'opening' | 'middlegame' | 'endgame';
   moveNumber?: number;
   openingId?: string;
@@ -106,6 +108,7 @@ export async function logMisconception(
     playedSan: input.playedSan,
     bestSan: input.bestSan,
     cpLoss: input.cpLoss,
+    ...(input.grade ? { grade: input.grade } : {}),
     gamePhase: input.gamePhase,
     moveNumber: input.moveNumber,
     openingId: input.openingId,
@@ -189,6 +192,9 @@ export interface MisconceptionAggregate {
    *  Spaced-out instances drop to 0 today but reappear when they come
    *  due again — a tag never permanently graduates out. */
   openCount: number;
+  /** The same open slips WEIGHTED (`slipWeight` — an inaccuracy is half), so
+   *  a run of small leaks ranks below the same number of mistakes. */
+  openWeight: number;
   lastSeenAt: number;
   /** A few representative records (most recent first), for the UI. */
   examples: MisconceptionTagRecord[];
@@ -244,7 +250,9 @@ export async function getMisconceptionProfile(
     records.sort((a, b) => b.createdAt - a.createdAt);
     const head = records[0];
     const def = getMisconceptionTag(head.tag);
-    const openCount = records.filter((r) => isMisconceptionDue(r, now)).length;
+    const due = records.filter((r) => isMisconceptionDue(r, now));
+    const openCount = due.length;
+    const openWeight = due.reduce((w, r) => w + slipWeight(r), 0);
     rows.push({
       tag: head.tag,
       def,
@@ -261,6 +269,7 @@ export async function getMisconceptionProfile(
         : (def?.bucket ?? 'uncategorized'),
       total: records.length,
       openCount,
+      openWeight,
       lastSeenAt: head.createdAt,
       examples: records.slice(0, 5),
       gameIds: [...new Set(records.map((r) => r.sourceGameId).filter((id): id is string => !!id))],
@@ -272,7 +281,7 @@ export async function getMisconceptionProfile(
   }
 
   rows.sort((a, b) => {
-    if (b.openCount !== a.openCount) return b.openCount - a.openCount;
+    if (b.openWeight !== a.openWeight) return b.openWeight - a.openWeight;
     return b.lastSeenAt - a.lastSeenAt;
   });
   return rows;
@@ -332,3 +341,11 @@ export async function recordTagDrillResult(tag: string, success: boolean): Promi
 // question is the drift the rot rule exists to prevent, and a dead export is
 // an invitation to wire it back. Proof of the divergence, kept as the gate:
 // `drillJoinDivergence.test.ts`.
+
+/** HOW MUCH ONE SLIP COUNTS (David 2026-10-18: "capture all mistakes and
+ *  inaccuracies"). An inaccuracy is recorded — a strong player loses to a run
+ *  of small leaks, never to one blunder — at half weight, so two of them on a
+ *  skill count as one mistake. Every reader that sums slips reads this. */
+export function slipWeight(r: Pick<MisconceptionTagRecord, 'grade'>): number {
+  return r.grade === 'inaccuracy' ? 0.5 : 1;
+}

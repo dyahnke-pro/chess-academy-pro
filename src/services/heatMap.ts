@@ -21,7 +21,7 @@
  */
 import { MISCONCEPTION_TAGS, isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
 import type { MisconceptionTagRecord } from '../types';
-import { isMisconceptionDue } from './misconceptionService';
+import { isMisconceptionDue, slipWeight } from './misconceptionService';
 import { isFixtureDerived } from './fixtureGames';
 import {
   capabilityProven, HELD_FOR_PROVEN, PROVEN_MIN_GAMES,
@@ -60,12 +60,16 @@ const NOT_A_GAME_SLIP = new Set(['lesson', 'puzzle']);
  */
 export function heatMap(profile: CapabilityProfile, slips: readonly MisconceptionTagRecord[], now: number = Date.now()): HeatTile[] {
   const open = new Map<string, number>();
+  // The WEIGHT of the open slips, beside their count: one inaccuracy is half a
+  // slip (`slipWeight`), so it alone never paints a skill red.
+  const weight = new Map<string, number>();
   for (const r of slips) {
     if (NOT_A_GAME_SLIP.has(r.source) || isFixtureDerived(r)) continue;
     if (!isMisconceptionTagId(r.tag) || r.tag === 'other') continue;
     // The one definition of "open" the weakness spine uses: due today.
     if (!isMisconceptionDue(r, now)) continue;
     open.set(r.tag, (open.get(r.tag) ?? 0) + 1);
+    weight.set(r.tag, (weight.get(r.tag) ?? 0) + slipWeight(r));
   }
   // `other` is the catch-all review queue, not a skill — never a tile.
   return MISCONCEPTION_TAGS
@@ -79,7 +83,7 @@ export function heatMap(profile: CapabilityProfile, slips: readonly Misconceptio
       // toward green. Red is only an open hole or a fresh break.
       const state: HeatState = green
         ? 'green'
-        : openCount > 0 || (!!e && e.broken > 0 && e.heldStreak === 0)
+        : (weight.get(tag) ?? 0) >= 1 || (!!e && e.broken > 0 && e.heldStreak === 0)
           ? 'red'
           : 'grey';
       return {
@@ -93,7 +97,7 @@ export function heatMap(profile: CapabilityProfile, slips: readonly Misconceptio
         streakGames: e?.streakGames ?? 0,
         // Both halves of the bar: the held streak AND the distinct games.
         progress: green ? 1 : Math.min(0.95,
-          (e?.heldStreak ?? 0) / HELD_FOR_PROVEN,
+          (e?.streakCredit ?? e?.heldStreak ?? 0) / HELD_FOR_PROVEN,
           (e?.streakGames ?? 0) / PROVEN_MIN_GAMES),
       };
     });

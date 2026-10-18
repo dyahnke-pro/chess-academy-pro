@@ -66,6 +66,7 @@ export type MethodHabit = 'opponent-threat' | 'forcing-scan' | 'slow-down' | 'ca
 export const FUNDAMENTAL_HABIT: Readonly<Record<string, MethodHabit>> = {
   'passive-when-forcing-existed': 'forcing-scan',
   'ignored-threat': 'opponent-threat',
+  'walked-into-tactic': 'opponent-threat',
 };
 
 /** WHERE THIS STUDENT STANDS ON A HABIT, from their own record (David

@@ -95,7 +95,7 @@ describe('E-10 — section-14 coverage on a real game, with the reason per ply',
     // sink exists to make impossible, so this is the one real contract here.
     for (const r of rows.filter((x) => x.fired.length === 0)) {
       expect(r.why.length, `ply ${r.ply} ${r.san} declined with NO reason`).toBeGreaterThan(0);
-      for (const w of r.why) expect(w).toMatch(/^(calculation-depth|left-book-early|no-plan): .{8,}/);
+      for (const w of r.why) expect(w).toMatch(/^(calculation-depth|left-book-early|no-plan|walked-into-tactic): .{8,}/);
     }
 
     const report = {

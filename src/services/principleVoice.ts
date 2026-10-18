@@ -95,6 +95,8 @@ const FUNDAMENTAL_HOW: Record<FundamentalId, string> = {
     'When a piece of yours is pinned, look at every move it has before you accept the pin. If it can leave with check, a bigger threat or a discovered attack, the pin is an illusion and the pinning piece hangs.',
   'ignored-pin-break':
     'Before you lean on a pin, check every move the pinned piece has. If it can leave with check or a bigger threat, the pin does not hold and your pinning piece is the one left loose.',
+  'walked-into-tactic':
+    'Before you let go of the piece, ask what your move lets them do: run their checks, captures and threats on the new board. If one of them wins something, the move is wrong.',
   'wrong-move-order':
     'With two moves in mind, ask what each allows if it comes first. Play the one that leaves them no strong answer — the other can follow.',
   'passive-when-forcing-existed':
@@ -191,7 +193,7 @@ const VERDICT_WITHOUT_BETTER: Partial<Record<FundamentalId, (f: Facts) => string
   'neglected-development': (f) => `Development first: ${f.homeMinors} of your pieces are still at home, and this move brought none of them out.`,
   'king-left-in-centre': (f) => `Stepping the king to ${f.walked} throws castling away for good.`,
   'early-edge-pawns': () => `An edge pawn this early does nothing for the centre.`,
-  'passive-when-forcing-existed': () => `Checks, captures, threats — there was a forcing move here, and this quiet move lets it go.`,
+  'passive-when-forcing-existed': (f) => (f.played ? `Checks, captures, threats — there was a forcing move here that wins, and ${f.played} is not it.` : `Checks, captures, threats — there was a forcing move here, and this quiet move lets it go.`),
   'wrong-trade-for-material': (f) => (f.situation === 'ahead'
     ? `You're ahead in material — trade pieces and the win gets simpler.`
     : `You're behind in material — trading pieces takes your chances with them.`),
@@ -389,6 +391,21 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
         ? `You leaned on the pin on their ${f.piece} on ${f.square}, but ${f.hit} walked out ${how}, and your ${f.pinner} on ${f.pinnerSq} was left to be won.`
         : `You lean on the pin on their ${f.piece} on ${f.square}, but ${f.hit} walks out ${how}, and your ${f.pinner} on ${f.pinnerSq} is left to be won.`;
     }
+    case 'walked-into-tactic': {
+      if (Number(f.mate) === 1) {
+        const m = [
+          `That walks into a mate: ${f.line}.`,
+          `This move opens the door to mate — ${f.line}.`,
+        ];
+        return m[v % m.length];
+      }
+      const lost = f.piece ? `the ${f.piece} on ${f.square}` : 'material';
+      const s = [
+        `That walks into a tactic: it lets them start with ${f.blow}, and ${f.line} wins ${lost}${f.better ? `. ${f.better} gave them nothing of the kind` : ''}.`,
+        `This move hands them the line ${f.line}, and ${lost} goes.`,
+      ];
+      return s[v % s.length];
+    }
     case 'wrong-move-order': {
       const s = [
         `Right moves, wrong order: ${f.better} first. ${f.played} straight away let them start with ${f.punish}, and the line from there wins material.`,
@@ -457,6 +474,13 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       return s[v % s.length];
     }
     case 'passive-when-forcing-existed': {
+      if (f.played) {
+        const t = [
+          `${f.played} forces something, but not a win — ${f.better} ${f.gain === 'mate' ? 'was mate' : 'won material by force'}.`,
+          `Of the forcing moves, ${f.better} was the one that ${f.gain === 'mate' ? 'mates' : 'wins'}; ${f.played} wins nothing.`,
+        ];
+        return t[v % t.length];
+      }
       const s = [
         `Checks, captures, threats — there was a forcing move here: ${f.better} wins by force, and this quiet move lets it go.`,
         `A forcing win was on the board — ${f.better} — and a quiet move walked past it.`,
@@ -701,6 +725,7 @@ function shortVerdict(a: PrincipleAttribution): string {
     case 'missed-guard-removal': return `One guard again — ${f.better} removes the ${f.guard} that holds the ${f.piece} on ${f.square}.`;
     case 'missed-pin-break': return `A pin you could walk out of again — ${f.better} leaves with tempo.`;
     case 'ignored-pin-break': return `Leaning on a pin again — ${f.hit} walks out of it with tempo.`;
+    case 'walked-into-tactic': return Number(f.mate) === 1 ? `Into a mating net again — ${f.blow} is on.` : `Into a tactic again — ${f.blow} is on next move.`;
     case 'wrong-move-order': return `The move order again — ${f.better} had to come first.`;
     case 'ignored-guard-removal': return `Your ${f.piece} on ${f.square} with one guard again — ${f.hit} removes it.`;
     case 'loose-piece': return guarded(f) ? `Loose piece again — the ${f.piece} on ${f.square} can be won.` : `Loose piece again — the ${f.piece} on ${f.square} hangs.`;
@@ -858,6 +883,7 @@ const RECAP_NOUN: Record<FundamentalId, string> = {
   'missed-pin-break': 'stayed in a pin it could walk out of',
   'ignored-pin-break': 'leaned on a pin that did not hold',
   'wrong-move-order': 'played the right moves in the wrong order',
+  'walked-into-tactic': 'walked into a tactic',
 };
 
 /**

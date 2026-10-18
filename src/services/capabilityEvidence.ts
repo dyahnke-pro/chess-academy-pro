@@ -45,6 +45,8 @@ import { MISTAKE_CP } from './engineConstants';
 import { logAppAudit } from './appAuditor';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { leadingFundamentals, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
+import { skillQuestions } from './skillQuestions';
+import { classifyMisconceptionNow } from './misconceptionClassifier';
 import { stalemateWatch } from './stalemateWatch';
 import { captureAbandonsDuty, cPawnBlock } from './exchangeIdeas';
 import { Chess } from 'chess.js';
@@ -246,7 +248,19 @@ export interface CapabilityProfileEntry {
    *  is not a game; the claim green makes is "did it again on a different
    *  board", which two positions evidence the way two games do. */
   streakGames: number;
+  /** THE PROOF IN CREDIT, not rows (2026-10-18): a sharp question answered is
+   *  1, a ROUTINE one (the board poses development, space, rook activity, the
+   *  pawn break and the plan below the sharp bar, by construction) is
+   *  `ROUTINE_CREDIT`. Before this, those skills could never turn green for
+   *  anyone — Carlsen, 40 games, development posed 218 times, never proven —
+   *  so the coach kept teaching a 2800 to develop his pieces. Absent on old
+   *  callers = `heldStreak`. */
+  streakCredit?: number;
 }
+
+/** What a ROUTINE question (posed, below the sharp bar) is worth toward the
+ *  proof: half — twice the clean answers, the same games bar. */
+export const ROUTINE_CREDIT = 0.5;
 
 /**
  * IS THIS CAPABILITY PROVEN — the ONE definition, read by every consumer.
@@ -276,7 +290,7 @@ export function capabilityProven(
   bar: { minStreak?: number; minGames?: number } = {},
 ): boolean {
   if (!e) return false;                                   // GREY — never asked is never proven
-  return e.heldStreak >= (bar.minStreak ?? HELD_FOR_PROVEN)
+  return (e.streakCredit ?? e.heldStreak) >= (bar.minStreak ?? HELD_FOR_PROVEN)
     && e.streakGames >= (bar.minGames ?? PROVEN_MIN_GAMES);
 }
 
@@ -320,16 +334,22 @@ export function summariseEvidence(
     if (!e) continue;
     const games = new Set<string>();
     let streak = 0;
+    let credit = 0;
     for (let i = h.length - 1; i >= 0; i--) {
       if (h[i].outcome !== 'held') break;            // a FAILURE resets the streak
       // …but an easy hold is not a failure and not evidence: skip it and keep
-      // walking, so a quiet game neither proves nor un-proves anything.
-      if ((h[i].posedImportance ?? 0) < minImportance) continue;
+      // walking, so a quiet game neither proves nor un-proves anything. A
+      // ROUTINE question (posed, below the sharp bar) counts at half.
+      const imp = h[i].posedImportance ?? 0;
+      const step = imp >= minImportance ? 1 : imp >= POSED_IMPORTANCE_MIN ? ROUTINE_CREDIT : 0;
+      if (step === 0) continue;
       streak += 1;
+      credit += step;
       const source = reading === 'know' ? positionSourceKey(h[i].fen) : h[i].sourceGameId;
       if (source) games.add(source);
     }
     e.heldStreak = streak;
+    e.streakCredit = credit;
     e.streakGames = games.size;
   }
   return profile;
@@ -462,6 +482,17 @@ export function capabilitiesPosed(
     const tag: MisconceptionTagId | null = lost === 'mate' ? 'missed-opponents-threat' : lost === 'material' ? 'hung-material' : null;
     if (tag && !seen.has(tag)) { seen.add(tag); out.push({ tag, posedImportance: ABANDONED_DUTY_POSED }); }
   } catch { /* an unreadable board posed nothing */ }
+  // THE SKILLS THAT COULD ONLY BE FAILED (2026-10-18): castling in time, the
+  // free-looking pawn, the even trade, which pawn takes, the sacrifice by the
+  // king. Each had a detector for the miss and nothing that noticed the board
+  // asking, so its tile could turn red and never green.
+  try {
+    for (const q of skillQuestions(fenBefore)) {
+      if (seen.has(q.tag)) continue;
+      seen.add(q.tag);
+      out.push(q);
+    }
+  } catch { /* an unreadable board posed nothing */ }
   // THE QUEEN'S KNIGHT IN A D-PAWN OPENING (missed computers, 2026-10-08):
   // the student's knight leaves b1/b8 while c3/c6 would block the c-pawn
   // (`cPawnBlock`'s own conditions). The answer is WHERE it went, not what it
@@ -474,6 +505,17 @@ export function capabilitiesPosed(
     } catch { /* an unreadable board posed nothing */ }
   }
   return out;
+}
+
+/** The tag a costly move is filed under, read the way the record files it. */
+function classifiedSlipTag(args: { fenBefore: string; playedSan: string; bestSan?: string; historySans?: readonly string[] }): string | null {
+  if (!args.bestSan) return null;
+  try {
+    return classifyMisconceptionNow({
+      fen: args.fenBefore, playedSan: args.playedSan, bestSan: args.bestSan,
+      ...(args.historySans ? { historySans: [...args.historySans] } : {}),
+    })?.tag ?? null;
+  } catch { return null; }
 }
 
 /** A modest question: enough to count for NEED, below the green bar alone. */
@@ -537,6 +579,12 @@ export async function recordCapabilityEvidence(args: {
    *  played move walked into). Both directions: held when the move was clean,
    *  broken when it was not — one vocabulary for teaching and diagnosis. */
   alsoPosed?: ReadonlyArray<{ tag: MisconceptionTagId; posedImportance: number }>;
+  /** WHAT A COSTLY MOVE WAS ABOUT — the slip's own classified tag, when the
+   *  caller has it (the analysis sweep). Absent, it is classified here from the
+   *  board and the best move. See `brokenOnlyOwnSkill`. */
+  slipTag?: string | null;
+  bestSan?: string;
+  historySans?: readonly string[];
 }): Promise<number> {
   try {
     // ASKED, regardless of how it went — the outcome is decided once, below,
@@ -546,8 +594,18 @@ export async function recordCapabilityEvidence(args: {
       if (!posed.some((p) => p.tag === extra.tag)) posed.push({ tag: extra.tag, posedImportance: extra.posedImportance });
     }
     if (posed.length === 0) return 0;
-    const outcome: CapabilityOutcome = movePlayedCleanly(args.cpLoss) ? 'held' : 'broken';
-    const shown = posed;
+    const clean = movePlayedCleanly(args.cpLoss);
+    const outcome: CapabilityOutcome = clean ? 'held' : 'broken';
+    // 🔒 A SLIP BREAKS ONLY THE SKILL IT WAS ABOUT (2026-10-18). A costly move
+    // used to break EVERY skill the board posed on it — a tactic missed in the
+    // opening broke development, space and king safety at once — and on one
+    // real student's 80 games 94% of greens flipped back to broken. Breaking
+    // only the slip's own skill took that to 41% (`expertFade.measure`). The
+    // other skills posed on a costly move are neither held nor broken: the move
+    // was not a clean answer to them, and not a wrong one.
+    const slipTag = clean ? null : (args.slipTag !== undefined ? args.slipTag : classifiedSlipTag(args));
+    const shown = clean ? posed : posed.filter((s) => s.outcome === 'broken' || (!!slipTag && s.tag === slipTag));
+    if (shown.length === 0) return 0;
     const now = Date.now();
     const rows: CapabilityEvidenceRecord[] = shown.map((s) => ({
       id: newId(),

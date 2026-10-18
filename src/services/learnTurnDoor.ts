@@ -359,6 +359,11 @@ export interface LaneFact {
    *  kind: deliberation, your-habit, …). The lane says which producer; this
    *  says which of its facts — emitted on the row, never used to decide. */
   factKind?: string;
+  /** THIS FACT IS A REASON FOR THE STUDENT'S OWN LAST MOVE, from a lane that
+   *  also carries other kinds (a position-facts rule: "Your Qa5 saves it from
+   *  their knight"). Set by the producer, never read off the words; the door
+   *  lets the board-teacher fallback stand down for it (one reason per move). */
+  ownMoveReason?: boolean;
   /** The skill this fact teaches (a MisconceptionTagId), when the producer
    *  knows it — the fade reads it before the lane's own tag, so a lane that
    *  teaches many skills (the rules, the fundamentals) fades per skill. */
@@ -548,6 +553,16 @@ export function decideTurn(
     if (xd !== td) { if (xd) top = x; continue; }
     if (value(x) > value(top)) top = x;
   }
+  // ONE REASON FOR ONE MOVE (Learn audit 2026-10-18, 121 words: "The queen
+  // bears down on c5, d5, e5 and f5…" AND "Your queen to a5 saves it from
+  // their knight on c3"). The board teacher is the FALLBACK own-move reason —
+  // said only when no sharper computer had one — so when another reason for
+  // the same move survives, the fallback stands down.
+  const fallbackOwn = (x: { fact: VoiceFact }): boolean => !!x.fact.claims?.some((c) => c.startsWith('board-teacher:'));
+  const ownTexts = new Set(facts.filter((f) => f.ownMoveReason).map((f) => f.text));
+  const sharperOwn = survivors.some((x) => !fallbackOwn(x) && !subsumed.has(x) && !dangerWaits(x) && !turnHolds(x)
+    && ((DNA_BEAT[x.lane] === 'affirm' && teaches(x)) || [...ownTexts].some((t) => t === x.fact.text || t.includes(x.fact.text))));
+  if (sharperOwn) for (const x of survivors) if (fallbackOwn(x)) subsumed.add(x);
   // EVERY STUDENT MOVE GETS ITS OWN REASON (David 2026-10-14). The best fact
   // about what the student's move did well ('affirm') is never an aside: on a
   // good move it was held whenever a plan or a board read led the turn, so the

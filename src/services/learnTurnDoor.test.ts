@@ -757,3 +757,21 @@ describe('rules and theory fade per skill (item 8, 2026-10-17)', () => {
     expect(TEACH_CODE).toMatch(/skill: FUNDAMENTAL_TAG\['left-book-early'\]/);
   });
 });
+
+describe('one reason for one move (Learn audit 2026-10-18)', () => {
+  const Q = 'r1b1kbnr/ppp1pppp/2n5/q7/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 3 5';
+  it('the board-teacher fallback stands down when a sharper reason for the same move speaks', () => {
+    const d = decideTurn([
+      { lane: 'positionFacts', proof: NO_PROOF.stated, text: 'Your queen to a5 saves it from their knight on c3, and hits it back from a5.', fen: Q, squares: ['a5', 'c3'], ownMoveReason: true, role: 'teach' },
+      { lane: 'movePoint', proof: NO_PROOF.description, text: 'The queen bears down on c5, backing your c-pawn\'s push there.', fen: Q, squares: ['c5'], claims: ['board-teacher:Qa5:x'], role: 'teach' },
+    ]);
+    expect(d.pkg.spoken).toContain('saves it');
+    expect(d.pkg.spoken).not.toContain('bears down');
+  });
+  it('NEGATIVE CONTROL: alone, the fallback still gives the move its reason', () => {
+    const d = decideTurn([
+      { lane: 'movePoint', proof: NO_PROOF.description, text: 'The queen bears down on c5, backing your c-pawn\'s push there.', fen: Q, squares: ['c5'], claims: ['board-teacher:Qa5:x'] },
+    ]);
+    expect(d.pkg.spoken).toContain('bears down');
+  });
+});

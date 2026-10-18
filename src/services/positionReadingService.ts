@@ -991,6 +991,16 @@ export function findFianchetto(fen: string, color: Color): Square | null {
  *  it over" attacking idea. Intent-gated: only when the lift square is empty and
  *  the enemy king is castled to a flank the lifted rook can reach. Returns the
  *  rook square + the lift square. Pure geometry (G3). */
+/** Can `color`'s piece on `from` legally go to `to` (this side to move)?
+ *  False when the board cannot have this side to move (the other king is in
+ *  check), when the piece is pinned, or when its own king is in check and the
+ *  move does not answer it. */
+function canMoveLegally(fen: string, color: Color, from: Square, to: Square): boolean {
+  const asIf = asIfToMove(fen, color);
+  if (!asIf) return false;
+  try { return new Chess(asIf).moves({ square: from, verbose: true }).some((m) => m.to === to); } catch { return false; }
+}
+
 export function findRookLift(fen: string, color: Color): { rook: Square; to: Square } | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
@@ -1011,6 +1021,10 @@ export function findRookLift(fen: string, color: Color): { rook: Square; to: Squ
     // The rank-2 square between must be empty too (rook needs to pass).
     const midSq = `${f}${color === 'w' ? 2 : 7}` as Square;
     if (chess.get(midSq)) continue;
+    // …and the rook must be FREE to make the lift (claim check 2026-10-18:
+    // "Lift the rook to f3" with a rook on d1 pinning the f1 rook to the king
+    // on g1). Legal moves decide, on the board with this side to move.
+    if (!canMoveLegally(fen, color, cell.square, liftSq)) continue;
     // …and from there it must be able to SWING: the lift rank clear all the
     // way to a file beside the king (Learn walk 2026-10-01: "Lift the rook to
     // e3 and swing it along the third rank" with White's own pawn on g3

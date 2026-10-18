@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1950 lines · 14 exports · 54 importers · 40 tests · 1 audits**
+**2066 lines · 14 exports · 55 importers · 41 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6343) — names `FundamentalId`
+- **The standard post-deploy ritual** (CLAUDE.md:6366) — names `FundamentalId`, `principleAttribution`
 
 ## Who calls in
 
@@ -47,6 +47,7 @@
 - `src/services/principleAttribution.pinPressure.test.ts`
 - `src/services/principleAttribution.section14.test.ts`
 - `src/services/principleAttribution.test.ts`
+- `src/services/principleAttribution.walkedIntoTactic.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
 - `src/services/principleVoice.test.ts`
@@ -70,7 +71,7 @@
 ## Exports and every call site
 
 ### `FUNDAMENTAL_IDS` (const) — 1 call site
-- `src/services/fundamentalsCatalog.ts:194`
+- `src/services/fundamentalsCatalog.ts:196`
 
 ### `FundamentalId` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -106,7 +107,7 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:144`
 
-### `attributePrinciples` (function) — 116 call sites
+### `attributePrinciples` (function) — 118 call sites
 - `src/services/attributionNeverBlind.test.ts:13`
 - `src/services/blockedOwnRetreat.test.ts:23`
 - `src/services/blockedOwnRetreat.test.ts:32`
@@ -121,7 +122,7 @@
 - `src/services/claimTruth.manual.test.ts:179`
 - `src/services/claimTruth.manual.test.ts:184`
 - `src/services/claimTruth.manual.test.ts:192`
-- `src/services/coachFeatureService.ts:775`
+- `src/services/coachFeatureService.ts:756`
 - `src/services/learnWalkBlumenfeld.test.ts:65`
 - `src/services/liveFundamental.ts:153`
 - `src/services/misconceptionClassifier.ts:262`
@@ -180,6 +181,8 @@
 - `src/services/principleAttribution.test.ts:135`
 - `src/services/principleAttribution.test.ts:143`
 - `src/services/principleAttribution.test.ts:152`
+- `src/services/principleAttribution.walkedIntoTactic.test.ts:29`
+- `src/services/principleAttribution.walkedIntoTactic.test.ts:42`
 - `src/services/principleAttributionEndgame.test.ts:43`
 - `src/services/principleAttributionEndgame.test.ts:57`
 - `src/services/principleAttributionEvalPv.test.ts:73`
@@ -227,12 +230,12 @@
 ### `pvUciToSan` (function) — 11 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:414`
-- `src/services/autoAnalyzeGame.ts:417`
-- `src/services/coachFeatureService.ts:780`
-- `src/services/coachFeatureService.ts:782`
-- `src/services/discussionPractice.ts:355`
-- `src/services/discussionPractice.ts:363`
+- `src/services/autoAnalyzeGame.ts:477`
+- `src/services/autoAnalyzeGame.ts:480`
+- `src/services/coachFeatureService.ts:761`
+- `src/services/coachFeatureService.ts:763`
+- `src/services/discussionPractice.ts:365`
+- `src/services/discussionPractice.ts:373`
 - `src/services/liveFundamental.ts:143`
 - `src/services/liveFundamental.ts:150`
 - `src/services/principleAttribution.test.ts:46`
@@ -261,6 +264,7 @@
 - `src/services/principleAttribution.pinPressure.test.ts`
 - `src/services/principleAttribution.section14.test.ts`
 - `src/services/principleAttribution.test.ts`
+- `src/services/principleAttribution.walkedIntoTactic.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
 - `src/services/principleVoice.test.ts`

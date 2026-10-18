@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**335 lines · 10 exports · 26 importers · 15 tests · 4 audits**
+**352 lines · 11 exports · 26 importers · 15 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6301) — names `misconceptionService`
+- **The standard post-deploy ritual** (CLAUDE.md:6365) — names `misconceptionService`
 
 ## Who calls in
 
@@ -45,11 +45,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isMisconceptionDue` (function) — 5 call sites
-- `src/services/bucketPipelineAudit.ts:252`
-- `src/services/heatMap.ts:67`
+- `src/services/bucketPipelineAudit.ts:253`
+- `src/services/heatMap.ts:70`
 - `src/services/misconceptionService.test.ts:113`
 - `src/services/misconceptionService.test.ts:148`
-- `src/services/weaknessSpine.ts:462`
+- `src/services/weaknessSpine.ts:463`
 
 ### `LogMisconceptionInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -62,7 +62,7 @@
 - `src/components/Coach/FundamentalsPage.test.tsx:141`
 - `src/services/bucketPipelineAudit.test.ts:64`
 - `src/services/bucketPipelineAudit.test.ts:92`
-- `src/services/discussionPractice.ts:270`
+- `src/services/discussionPractice.ts:279`
 - `src/services/drillJoinDivergence.test.ts:46`
 - `src/services/drillJoinDivergence.test.ts:55`
 - `src/services/drillJoinDivergence.test.ts:62`
@@ -127,9 +127,9 @@
 ### `getMisconceptionProfile` (function) — 17 call sites
 - `src/components/Insights/MisconceptionsTab.tsx:77`
 - `src/components/Insights/MisconceptionsTab.tsx:87`
-- `src/services/bucketPipelineAudit.ts:157`
-- `src/services/coachApi.ts:1942`
-- `src/services/coachApi.ts:4829`
+- `src/services/bucketPipelineAudit.ts:158`
+- `src/services/coachApi.ts:1939`
+- `src/services/coachApi.ts:4850`
 - `src/services/fixtureGames.test.tsx:113`
 - `src/services/fixtureGames.test.tsx:122`
 - `src/services/fundamentalsPipeline.realGame.test.ts:226`
@@ -141,7 +141,7 @@
 - `src/services/misconceptionService.test.ts:97`
 - `src/services/misconceptionService.test.ts:115`
 - `src/services/weaknessAnalyzer.ts:995`
-- `src/services/weaknessSpine.ts:918`
+- `src/services/weaknessSpine.ts:921`
 
 ### `recordTagDrillResult` (function) — 10 call sites
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx:293`
@@ -154,6 +154,11 @@
 - `src/services/misconceptionService.test.ts:129`
 - `src/services/misconceptionService.test.ts:139`
 - `src/services/misconceptionService.test.ts:143`
+
+### `slipWeight` (function) — 3 call sites
+- `src/services/heatMap.ts:72`
+- `src/services/weaknessSpine.ts:465`
+- `src/services/weaknessSpine.ts:476`
 
 ## Tests
 
