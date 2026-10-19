@@ -9,9 +9,12 @@ describe('seenOneMoveAttack', () => {
   it('marks only a direct one-move attack when the student has proven they see threats', () => {
     expect(seenOneMoveAttack({ threatKey: 'hang:bc4', fen: FEN, lastSan: 'Na5', targets: ['c4'], student: 'w', green: proven })).toEqual({ from: 'a5', to: 'c4' });
   });
-  it('still speaks to a grey student (no record) and a lighter one', () => {
+  it('still speaks to a grey or red student (no level on the record)', () => {
     expect(seenOneMoveAttack({ threatKey: 'hang:bc4', fen: FEN, lastSan: 'Na5', targets: ['c4'], student: 'w', green: null })).toBeNull();
-    expect(seenOneMoveAttack({ threatKey: 'hang:bc4', fen: FEN, lastSan: 'Na5', targets: ['c4'], student: 'w', green: new Map([['missed-opponents-threat', 'lighter' as const]]) })).toBeNull();
+    expect(seenOneMoveAttack({ threatKey: 'hang:bc4', fen: FEN, lastSan: 'Na5', targets: ['c4'], student: 'w', green: new Map() })).toBeNull();
+  });
+  it('marks it for a student answering these right since their last miss (David\'s record, 2026-10-19)', () => {
+    expect(seenOneMoveAttack({ threatKey: 'hang:bc4', fen: FEN, lastSan: 'Na5', targets: ['c4'], student: 'w', green: new Map([['missed-opponents-threat', 'lighter' as const]]) })).toEqual({ from: 'a5', to: 'c4' });
   });
   it('still speaks when the attacker did not just move (a hidden attack)', () => {
     expect(seenOneMoveAttack({ threatKey: 'hang:bc4', fen: FEN, lastSan: 'h6', targets: ['c4'], student: 'w', green: proven })).toBeNull();

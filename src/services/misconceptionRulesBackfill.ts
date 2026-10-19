@@ -75,6 +75,10 @@ export async function reconcileMisconceptionRules(
   for (const gameId of games) {
     if (!first) await schedule.yieldBetweenRows();
     first = false;
+    // THE STUDENT FIRST (David's phone, 2026-10-19): a live game's coach waited
+    // behind this pass and the phone heated. Each game waits until the student
+    // has been away from a live board for a while.
+    await schedule.waitForQuiet?.();
     // Each game persists its own rows as it goes — a killed app keeps every
     // finished game and re-reads only the rest.
     const res = await autoAnalyzeGameMisconceptions(gameId).catch(() => null);

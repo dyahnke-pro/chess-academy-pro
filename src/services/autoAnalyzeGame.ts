@@ -88,6 +88,18 @@ export interface AutoAnalyzeOptions {
   capabilityPlies?: readonly CapabilityPly[];
   /** Which side the student played — required to attribute the positive half. */
   playerColor?: 'white' | 'black';
+  /** When the game was PLAYED (ms). Evidence from a game is dated by the game,
+   *  never by when it was re-read: a backfill over old games stamped them
+   *  "now" and an old slip reset a current streak (David's record, 2026-10-19). */
+  playedAt?: number;
+}
+
+/** The game's own date in ms, or undefined when it cannot be read. Imported
+ *  PGN dates are "2025.03.04"; a live game's are ISO. */
+export function gamePlayedAt(game: { date?: string | null }): number | undefined {
+  if (!game.date) return undefined;
+  const t = Date.parse(game.date.replace(/\./g, '-'));
+  return Number.isFinite(t) ? t : undefined;
 }
 
 export interface AutoAnalyzeResult {
@@ -189,7 +201,7 @@ export async function autoAnalyzeBlunders(
   // computer directly (surfaceComposition.scan).
   let capabilitiesHeld = 0;
   if (opts.capabilityPlies?.length && opts.playerColor) {
-    for (const ply of opts.capabilityPlies) {
+    for (const [plyIndex, ply] of opts.capabilityPlies.entries()) {
       capabilitiesHeld += await recordCapabilityEvidence({
         fenBefore: ply.fenBefore,
         playedSan: ply.playedSan,
@@ -201,6 +213,8 @@ export async function autoAnalyzeBlunders(
         // the game record carries those plies, and a find there is prompted.
         prompted: ply.prompted ?? false,
         alsoPosed: ply.alsoPosed,
+        // In move order within the game: one ms per ply keeps a stable order.
+        ...(opts.playedAt ? { playedAt: opts.playedAt + plyIndex } : {}),
         ...(ply.bestSan ? { bestSan: ply.bestSan } : {}),
         ...(ply.historySans ? { historySans: ply.historySans } : {}),
         ...(opts.sourceGameId ? { sourceGameId: opts.sourceGameId } : {}),
@@ -537,7 +551,7 @@ export async function autoAnalyzeGameMisconceptions(
       openingId: game.openingId ?? undefined,
       sourceGameId: gameId,
       learned: !!opts.reviewed,
-      ...(positive ? { capabilityPlies: positive, playerColor } : {}),
+      ...(positive ? { capabilityPlies: positive, playerColor, playedAt: gamePlayedAt(game) } : {}),
     });
     await stampPositiveHalf(gameId);
     return first;
@@ -582,7 +596,7 @@ async function recordPositiveHalf(game: GameRecord, playerColor: 'white' | 'blac
   if (await hasCapabilityEvidenceForGame(game.id)) return 0;
   const plies = capabilityPliesFromAnnotations(game.annotations ?? [], playerColor, fens, game.promptedPlies ?? []);
   if (plies.length === 0) return 0;
-  const r = await autoAnalyzeBlunders([], { sourceGameId: game.id, learned: true, capabilityPlies: plies, playerColor });
+  const r = await autoAnalyzeBlunders([], { sourceGameId: game.id, learned: true, capabilityPlies: plies, playerColor, playedAt: gamePlayedAt(game) });
   return r.capabilitiesHeld;
 }
 

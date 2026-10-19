@@ -1259,7 +1259,7 @@ export function hangingPieceLine(piece: string, sq: string, rot: number): string
 /** A ONE-MOVE ATTACK THE STUDENT HAS PROVEN THEY SEE (David 2026-10-19:
  *  "It's narrating a one move threat to me"). The piece that just moved hits
  *  one of the student's pieces directly — no discovery, no named pattern —
- *  and their record proves threat-spotting: the board marks it and the voice
+ *  and their record shows they answer these (held since their last miss): the board marks it and the voice
  *  stays quiet (returns the arrow to mark). Grey or red still hears it; a check or a mate threat
  *  always speaks. The record decides, never a rating. */
 export function seenOneMoveAttack(a: {
@@ -1270,7 +1270,9 @@ export function seenOneMoveAttack(a: {
   student: 'w' | 'b';
   green: FadeLevels | null;
 }): { from: string; to: string } | null {
-  if (fadeLevelOf(a.green, 'missed-opponents-threat') !== 'short') return null;
+  // Answered right since the last miss (lighter) or proven (short): they see
+  // these. Red (the last answer was a miss) and grey still hear it.
+  if (fadeLevelOf(a.green, 'missed-opponents-threat') === null) return null;
   if (!/^(hang:|hit:|vs:hanging_piece:)/.test(a.threatKey)) return null;
   const land = a.lastSan?.replace(/[+#?!]+$/, '').match(/([a-h][1-8])(=[QRBN])?$/)?.[1];
   if (!land) return null;

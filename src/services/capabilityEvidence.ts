@@ -624,11 +624,14 @@ export async function recordCapabilityEvidence(args: CapabilityMoveArgs & {
   /** See `CapabilityEvidenceRecord.prompted` — required, never inferred. */
   prompted: boolean;
   sourceGameId?: string;
+  /** When the move was PLAYED, for evidence read from a past game (its date).
+   *  Omitted = now (a live move). */
+  playedAt?: number;
 }): Promise<number> {
   try {
     const shown = capabilityOutcomes(args);
     if (shown.length === 0) return 0;
-    const now = Date.now();
+    const now = args.playedAt ?? Date.now();
     const rows: CapabilityEvidenceRecord[] = shown.map((s) => ({
       id: newId(),
       tag: s.tag,

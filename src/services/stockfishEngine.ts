@@ -1,4 +1,5 @@
 import { Capacitor } from '@capacitor/core';
+import { markForegroundActivity } from './foregroundActivity';
 import { StockfishNative } from 'capacitor-stockfish-native';
 import type { StockfishAnalysis, AnalysisLine } from '../types';
 import { mateEvalFor, limitStrengthElo } from './engineConstants';
@@ -1444,6 +1445,9 @@ class StockfishEngine {
     /** Internal: the question holding the engine runs through the hold. */
     bypassQuestionHold = false,
   ): Promise<StockfishAnalysis> {
+    // The singleton works only for a surface the student is using: background
+    // backfills wait while it is busy (`foregroundActivity`).
+    markForegroundActivity();
     const finished = finishedAnalysis(fen, depth);
     if (finished) return finished;
     // FEN cache short-circuit — if we've already analyzed this exact

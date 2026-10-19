@@ -38,7 +38,11 @@ export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
 /** Why the door held a lane on a turn. */
-export type HoldReason = 'mate-turn' | 'verdict-turn' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside';
+export type HoldReason = 'mate-turn' | 'verdict-turn' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal';
+
+/** The AVERAGE a Learn turn is held to (CLAUDE.md WHY standard measure 4) —
+ *  the scale of the marginal bar, never a limit. */
+export const TURN_WORD_TARGET = 80;
 
 export type LearnLane =
   // ── the instant wave, spoken with the coach's reply ──
@@ -451,6 +455,10 @@ export function decideTurn(
   const offered: LearnLane[] = [];
   const faded: LearnLane[] = [];
   const open: Array<VoiceFact & { lane: LearnLane }> = [];
+  /** The own-move reasons AS THEY WILL BE SAID (after the fade) — the dedupe
+   *  below reads these, not the producer's text (a proven skill's rule is
+   *  shortened, and its long text never matched; Learn walk 2026-10-19). */
+  const ownOpenTexts = new Set<string>();
   for (const f of facts) {
     if (!f.text.trim()) continue;
     offered.push(f.lane);
@@ -463,6 +471,7 @@ export function decideTurn(
     // move, so the say-once ledger lets the first wave's reason stand.
     const ownReason = !!f.ownMoveReason || !!f.claims?.includes('strong-choice:affirm');
     const claims = ownReason && turn && turn.kind !== 'phase' ? [...(f.claims ?? []), `own-move-reason:${turn.ply}`] : f.claims;
+    if (f.ownMoveReason) ownOpenTexts.add(text);
     open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims, lines: f.lines, proof: f.proof });
   }
   const verified = buildVoicePackage(open.map(({ kind, text, fen, squares, claims, lines }) => ({ kind, text, fen, squares, claims, lines })), alreadySaid, priorKeys);
@@ -566,7 +575,7 @@ export function decideTurn(
   // said only when no sharper computer had one — so when another reason for
   // the same move survives, the fallback stands down.
   const fallbackOwn = (x: { fact: VoiceFact }): boolean => !!x.fact.claims?.some((c) => c.startsWith('board-teacher:'));
-  const ownTexts = new Set(facts.filter((f) => f.ownMoveReason).map((f) => f.text));
+  const ownTexts = new Set([...facts.filter((f) => f.ownMoveReason).map((f) => f.text), ...ownOpenTexts]);
   const sharperOwn = survivors.some((x) => !fallbackOwn(x) && !subsumed.has(x) && !dangerWaits(x) && !turnHolds(x)
     && ((DNA_BEAT[x.lane] === 'affirm' && teaches(x)) || [...ownTexts].some((t) => t === x.fact.text || t.includes(x.fact.text))));
   if (sharperOwn) for (const x of survivors) if (fallbackOwn(x)) subsumed.add(x);
@@ -643,9 +652,31 @@ export function decideTurn(
       if (!spoke.includes(x.lane)) spoke.push(x.lane);
     } else hold(x.lane, restates ? 'restates' : offTopic ? 'off-topic' : 'aside');
   }
-  // NO WORD CAP (David 2026-10-15: "No hard word count caps. Set the cap as
-  // an average, not a hard limit"). What speaks is decided above, by relevance
-  // and stakes; the audit holds the AVERAGE turn length (V8), never a limit.
+  // THE MARGINAL BAR — LENGTH IS DECIDED BY VALUE, NEVER BY A COUNT (David
+  // 2026-10-19: "Too many words should be controlled by the algo!!", after a
+  // real-record walk averaged 158 words a move). Every fact above cleared the
+  // relevance tests, and every "important" one spoke however much the turn had
+  // already said. Up to the 80-word average nothing changes. Past it, a further
+  // fact must carry real stakes (a pawn or more, `factStakes`) or be a reason
+  // the student's move fell short; an unstaked lesson or description waits for
+  // a calm move. The lead, danger, the move's own reason, a mate and a
+  // beginner's principle always ride. No word cap (2026-10-15): a staked fact
+  // still speaks however long the turn — the bar rises, it never stops.
+  const wordsIn = (t: string): number => t.split(/\s+/).filter(Boolean).length;
+  const rides = (x: { fact: VoiceFact; lane: LearnLane }): boolean => x === ownLead || x === ownReason
+    || DANGER_LANES.has(x.lane) || DNA_BEAT[x.lane] === 'but' || isMateFact(x) || (beginner && BEGINNER_ALWAYS.has(x.lane));
+  const laneOfKept = (f: VoiceFact): LearnLane | undefined => survivors.find((y) => y.fact === f)?.lane;
+  const kept = survivors.filter((x) => keep.includes(x.fact));
+  let words = wordsIn(alreadySaid ?? '') + kept.filter(rides).reduce((n, x) => n + wordsIn(x.fact.text), 0);
+  for (const x of kept.filter((k) => !rides(k)).sort((a, b) => value(b) - value(a))) {
+    if (words >= TURN_WORD_TARGET && stakeOf(x.lane, x.fact.text) < STAKED_FLOOR + 100) {
+      keep.splice(keep.indexOf(x.fact), 1);
+      if (!keep.some((f) => laneOfKept(f) === x.lane)) { const i = spoke.indexOf(x.lane); if (i >= 0) spoke.splice(i, 1); }
+      hold(x.lane, 'marginal');
+      continue;
+    }
+    words += wordsIn(x.fact.text);
+  }
   const laneFor = (f: VoiceFact): LearnLane | undefined => survivors.find((x) => x.fact === f)?.lane;
   const beatOf = (f: VoiceFact): number => {
     const lane = laneFor(f);

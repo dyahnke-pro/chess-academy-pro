@@ -1287,6 +1287,8 @@ export function CoachTeachPage(): JSX.Element {
   // markers from the prose; the parsed annotations get rendered on
   // the board until the next coach turn clears them.
   const [arrows, setArrows] = useState<BoardArrow[]>([]);
+  /** A one-move attack the student sees, marked for this move's turn (`seenOneMoveAttack`). */
+  const seenMarkRef = useRef<BoardArrow | null>(null);
   const [highlights, setHighlights] = useState<BoardHighlight[]>([]);
   // "Hint" button — Stockfish computes the best move for the current
   // position and we lead the eye to it with an arrow. The engine decides
@@ -1897,7 +1899,7 @@ export function CoachTeachPage(): JSX.Element {
     fen: string;
     /** `squares` rides along so the board can be drawn from what SURVIVED the
      *  package rather than re-derived from its prose — see `VoiceFact.squares`. */
-    lines: Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; role?: FacetRole; factKind?: string; skill?: string }>;
+    lines: Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; role?: FacetRole; factKind?: string; skill?: string; ownMoveReason?: boolean }>;
   } | null>(null);
   /** The coach's own last move, captured for judging. See the callout below —
    *  the inputs are gathered while the engine work runs and the verdict is
@@ -10900,6 +10902,9 @@ export function CoachTeachPage(): JSX.Element {
                     const arrow = instant.alertArrow;
                     void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, arrow])));
                   }
+                  // The mark rides this move's whole turn — the late wave's
+                  // arrows join it instead of replacing it.
+                  seenMarkRef.current = instant.markOnlyArrow;
                   if (instant.markOnlyArrow) {
                     const arrow = instant.markOnlyArrow;
                     void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, arrow])));
@@ -11960,7 +11965,7 @@ export function CoachTeachPage(): JSX.Element {
                       // when what it is doing is attacking the rook (run E walk).
                       // A live threat is the answer; the slow plan waits.
                       .filter((l) => !(l.lane === 'planArc' && /^What is their /.test(l.text) && /(?:^|\. )(?:Watch out|Careful) —/.test(instantSpokenText)))
-                      .map(({ lane, kind, text, squares, claims, gradeFen, lines, stakes, proof, role, factKind, skill }) => ({ lane, kind, text, squares, claims, lines, stakes, proof, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}), fen: gradeFen ?? pending.fen })),
+                      .map(({ lane, kind, text, squares, claims, gradeFen, lines, stakes, proof, role, factKind, skill, ownMoveReason }) => ({ lane, kind, text, squares, claims, lines, stakes, proof, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}), ...(ownMoveReason ? { ownMoveReason } : {}), fen: gradeFen ?? pending.fen })),
                     alreadySaid: instantSpokenText,
                     priorKeys: learnMemRef.current.spokenKeys,
                     // ONE THOUGHT PER TURN (WO-1b): the late wave leads only
@@ -12085,7 +12090,7 @@ export function CoachTeachPage(): JSX.Element {
                     const onScreen = drawnLines.filter((l) => samePlacement(l.fen, fenAfterReply));
                     const earlier = drawnLines.filter((l) => !samePlacement(l.fen, fenAfterReply));
                     if (onScreen.length > 0 && liveFenRef.current === fenAfterReply) turnArrows.push(...onScreen.flatMap(throughDoor));
-                    if (turnArrows.length > 0) setArrows(uniqueArrows(turnArrows));
+                    if (turnArrows.length > 0) setArrows(uniqueArrows([...(seenMarkRef.current ? [seenMarkRef.current] : []), ...turnArrows]));
                     if (earlier.length > 0 && liveFenRef.current === fenAfterReply) {
                       const showFen = earlier[0].fen;
                       const drawn = uniqueArrows(earlier.filter((l) => samePlacement(l.fen, showFen)).flatMap(throughDoor));
