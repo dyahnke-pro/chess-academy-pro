@@ -6884,7 +6884,14 @@ export function CoachTeachPage(): JSX.Element {
         : opts?.replyAnalysis && opts.replyAnalysis.fen === fen
           ? opts.replyAnalysis.analysis
           : null;
-    const studentColor = fenTurn === 'white' ? 'w' : 'b';
+    // THE SEAT, NEVER THE TURN (David 2026-10-19: "at one point computer got
+    // confused about me being white"). This was the side to move, and the
+    // no-reply path and every answer after the student's move hand this a FEN
+    // with the OPPONENT to move — so the tactics context read the student's
+    // pieces as the opponent's.
+    const seat: 'white' | 'black' = activeDrillRef.current?.drill.playerColor
+      ?? (walkthrough.isActive ? (walkthrough.tree?.studentSide ?? fenTurn) : playerColor);
+    const studentColor = seat === 'white' ? 'w' : 'b';
     // Rating proxy = puzzleRating (1200 fresh, drifts up/down with
     // adaptive puzzles). Drives lookahead depth via
     // `getTacticLookahead` — 4 plies once the student crosses 1400.
@@ -6924,7 +6931,7 @@ export function CoachTeachPage(): JSX.Element {
       // the student's ply from the coach's reply and graded whatever was
       // played last. The retrospective lane resolves "my last move" / "your
       // move" and names whose move a ply was from this.
-      studentColor: activeDrillRef.current?.drill.playerColor ?? playerColor,
+      studentColor: seat,
       // "What I played" mid-drill — the taken-back try (walk 2026-10-04 #11).
       // The drill is still a question, so the better move is withheld.
       ...(activeDrillRef.current && drillAttemptRef.current
