@@ -230,13 +230,17 @@ describe('classifyPosition — back rank detection', () => {
 
 describe('classifyPosition — removal of guard detection', () => {
   it('detects removal of guard when capturing a defender', () => {
-    // Black knight on c6 defends bishop on e5 (Nc6-e5).
-    // White rook captures knight: Rxc6 removes the guard.
-    // After Rxc6, bishop on e5 is undefended.
-    const fen = '4k3/8/2n5/4b3/8/8/8/2R1K3 w - - 0 1';
+    // Black knight on c6 defends bishop on e5; White's bishop on c3 attacks it.
+    // Rxc6 removes the guard and the bishop falls.
+    const fen = '4k3/8/R1n5/4b3/8/2B5/8/4K3 w - - 0 1';
     const fenAfter = playMove(fen, 'Rxc6');
     const result = classifyPosition(fen, fenAfter, 'Rxc6', 0, -200);
     expect(hasTactic(result, 'removal_of_guard')).toBe(true);
+  });
+  it('NEGATIVE CONTROL: a guard removed from a piece nothing attacks is no tactic (Alekhine walk 2026-10-19)', () => {
+    const fen = '4k3/8/2n5/4b3/8/8/8/2R1K3 w - - 0 1';
+    const result = classifyPosition(fen, playMove(fen, 'Rxc6'), 'Rxc6', 0, -200);
+    expect(hasTactic(result, 'removal_of_guard')).toBe(false);
   });
 });
 

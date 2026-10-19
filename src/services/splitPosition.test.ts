@@ -17,12 +17,15 @@ describe('their king committed, yours did not (Alekhine walk 2026-10-19)', () =>
   const at = (sans: string[]): string => { const c = new Chess(); for (const m of sans) c.move(m); return c.fen(); };
   const game = ['e4', 'Nf6', 'e5', 'Nd5', 'd4', 'd6', 'c4', 'Nb6', 'f4', 'dxe5', 'fxe5', 'Nc6', 'Be3', 'Bf5', 'Nc3', 'Qd7', 'Nf3', 'Bg4', 'Be2', 'O-O-O'];
   it('the move their king castles long, your queenside pawns become attackers', () => {
-    const r = kingCommitted(at(game), 'w', 'O-O-O');
+    const r = kingCommitted(at(game), 'w');
     expect(r?.text).toBe('Their king went queenside, and yours is still in the centre — so the plan changes: your pawns on a2, b2 and c4 now face it. Pushed, they pry open files toward their king.');
     expect(r?.text).not.toMatch(/\b[a-h][1-8]\b.*\b(b4|b5|c5)\b/);
   });
-  it('NEGATIVE CONTROLS: not their castling, or your king already castled', () => {
-    expect(kingCommitted(at(game), 'w', 'Qd7')).toBeNull();
-    expect(kingCommitted(at(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'O-O', 'Nf6', 'd3', 'O-O']), 'w', 'O-O')).toBeNull();
+  it('still true a move later, so a held turn does not lose it (prod walk 2026-10-19)', () => {
+    expect(kingCommitted(at([...game, 'c5', 'Nd5']), 'w')?.text).toMatch(/^Their king went queenside/);
+  });
+  it('NEGATIVE CONTROLS: their king not castled, or yours already castled', () => {
+    expect(kingCommitted(at(game.slice(0, -1)), 'w')).toBeNull();
+    expect(kingCommitted(at(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'O-O', 'Nf6', 'd3', 'O-O']), 'w')).toBeNull();
   });
 });

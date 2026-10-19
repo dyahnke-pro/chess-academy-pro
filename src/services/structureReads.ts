@@ -89,7 +89,7 @@ export function theirMoveStructure(fenBefore: string, san: string, student: Colo
 function kingCommittedRead(fenBefore: string, san: string, student: Color): StructureRead | null {
   const after = play(fenBefore, san);
   if (!after) return null;
-  const k = kingCommitted(after.after.fen(), student, after.mv.san);
+  const k = kingCommitted(after.after.fen(), student);
   if (!k) return null;
   const proof = squaresProof(k.text, k.squares);
   return proof ? { act: 'king-committed', text: k.text, squares: k.squares, proof, key: `king-committed:${k.squares[0]}` } : null;

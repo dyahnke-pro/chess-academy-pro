@@ -424,11 +424,14 @@ function detectRemovalOfGuard(
         const testAfter = new Chess(fenPartsAfter.join(' '));
         const defendedAfter = testAfter.isAttacked(sq, enemyColor);
 
-        if (!defendedAfter) {
+        // A guard removed matters only if the piece left behind is then
+        // ATTACKED (Alekhine walk 2026-10-19: "a whole piece is at stake" for a
+        // bishop nothing could reach).
+        if (!defendedAfter && chessAfter.isAttacked(sq, movingColor)) {
           return {
             type: 'removal_of_guard',
             involvedSquares: [toSquare, sq],
-            description: `Capturing ${pieceName(capturedTarget.type)} on ${squareLabel(toSquare)} removes the guard of ${pieceName(p.type)} on ${squareLabel(sq)}`,
+            description: `Capturing the ${pieceName(capturedTarget.type)} on ${squareLabel(toSquare)} removes the guard of the ${pieceName(p.type)} on ${squareLabel(sq)}`,
           };
         }
       }

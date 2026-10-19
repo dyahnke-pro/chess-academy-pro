@@ -1174,7 +1174,13 @@ export function errorWhy(args: {
       const c = new Chess(args.fenBefore); c.move(args.playedSan);
       const at = c.fen(); const sans: string[] = [];
       for (const u of replyLineUci.slice(0, 3)) { const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); if (!m) break; sans.push(m.san); }
-      if (sans.length >= 2) { costTail = ` The line: ${lineShape(sans)}.`; costLine = { fen: at, uci: replyLineUci.slice(0, sans.length) }; }
+      if (sans.length >= 2) {
+        // WHOSE MOVE IS WHOSE (Alekhine walk 2026-10-19: "The line: e6, O-O and
+        // Rd8" — three moves of two sides, said as one list). The line opens on
+        // their reply to the student's move, then alternates.
+        costTail = ` They answer ${sans[0]}, you ${sans[1].startsWith('O-O') ? 'castle' : `play ${sans[1]}`}${sans[2] ? `, and they play ${sans[2]}` : ''}.`;
+        costLine = { fen: at, uci: replyLineUci.slice(0, sans.length) };
+      }
     } catch { /* no line — the cost stands alone */ }
   }
   const proof = line ? lineProofFromUci(line.fen, line.uci) ?? undefined : undefined;

@@ -30,13 +30,15 @@ export function splitPosition(fen: string, student: Color): SplitPosition | null
  * move 11: "with Black castled queenside, giving up d5 is worth it: c5 clamps
  * down and starts your attack"). The moment their king castles while yours is
  * still in the centre, the plan changes: your pawns on that wing stop being
- * structure and become attackers. Earned by the board only: their castling
- * move, your king central, queens on, and at least one of your pawns on that
+ * structure and become attackers. A STATE, not a move: true for as long as it
+ * holds, so a turn the door spends elsewhere (a verdict) does not lose it —
+ * the claim key says it once a game (prod walk 2026-10-19: held on the castling
+ * turn behind Be2's verdict, never heard). Earned by the board only: their king
+ * castled, your king central, queens on, and at least one of your pawns on that
  * wing with an enemy pawn ahead of it on its own or a neighbouring file — the
  * contact that a push turns into an open file. Names pawns, never a move.
  */
-export function kingCommitted(fen: string, student: Color, theirSan: string): SplitPosition | null {
-  if (!theirSan.startsWith('O-O')) return null;
+export function kingCommitted(fen: string, student: Color): SplitPosition | null {
   const s = describeStructure(fen);
   if (!s || !s.material.queensOn) return null;
   const foe: Color = student === 'w' ? 'b' : 'w';
