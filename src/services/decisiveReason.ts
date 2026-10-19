@@ -217,6 +217,13 @@ export function decisiveReason(input: {
     const matOwn = lineMaterial(fenBefore, own.moves, mover, own);
     const matNext = lineMaterial(fenBefore, next.moves, mover, next);
     const matStake = matOwn - matNext;
+    // AN ALTERNATIVE "FAILS" ONLY WHEN THE ENGINE SAYS SO (Black walk
+    // 2026-10-19, move 26: "the natural alternative, …Kf8, fails … you come
+    // out ahead, winning a rook and a pawn for a bishop" — …Kf8 was 0.45 off
+    // best). A forced win is proved by its own line; a loss pinned on the
+    // OTHER move needs the eval gap to carry the material it names, or the
+    // count is a mid-line artifact of a shallow line.
+    const altTrusted = gapCp >= COVERS_SHARE * Math.min(matStake, MATE_CP / 2);
     // A RECAPTURE: the trade they started finishes here; the reason is taking
     // back, and the cost is what any other move leaves them holding.
     const recapture = !!input.opponentLastSan && /x/.test(input.opponentLastSan) && /x/.test(san)
@@ -224,17 +231,17 @@ export function decisiveReason(input: {
     // The seat leads the sentence: "Their Nxd4 takes back" was spoken "their
     // knight takes d4 takes back" (prod walk 2026-10-18) — a capture cannot
     // also be the verb.
-    if (recapture && matStake > 0 && nextBestSan) {
+    if (recapture && matStake > 0 && altTrusted && nextBestSan) {
       cands.push({ source: 'material', stake: matStake, text: `${seat === 'student' ? 'You take' : 'They take'} back with ${played} — anything else, like ${dot(nextBestSan, mover)}, loses ${pieceWords(fenBefore, next.moves, mover, false)} in the line that follows.`, line: { fen: fenBefore, sans: heardSans(fenBefore, next.moves) }, squares: [squareOf(san) ?? ''].filter(Boolean), alt: true });
     } else if (matStake > 0) {
       const win = matOwn > 0 ? seatProof(fenBefore, sansOf(fenBefore, own.moves), mover, studentWB, 'for') : null;
-      const loss = !win && matNext < 0 ? seatProof(fenBefore, sansOf(fenBefore, next.moves), mover, studentWB, 'against') : null;
+      const loss = !win && matNext < 0 && altTrusted ? seatProof(fenBefore, sansOf(fenBefore, next.moves), mover, studentWB, 'against') : null;
       if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? `${win.text}.` : win.end === "and it's mate" ? `${played} starts a forced mate — ${landsWith(win.sans, mover)}.` : `${played} wins by force: ${win.end} — ${landsWith(win.sans, mover)}.`, line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
       else if (loss && nextBestSan) cands.push({ source: 'material', stake: matStake, text: `The natural alternative, ${dot(nextBestSan, mover)}, fails: ${loss.text}.`, line: { fen: fenBefore, sans: loss.sans }, squares: [], alt: true });
       // No short proof, but the count is the reason: say the count, never let a
       // smaller reason stand in for it.
       else if (matOwn > 0) cands.push({ source: 'material', stake: matStake, text: `${played} comes out of the trades that follow ahead — it wins ${pieceWords(fenBefore, own.moves, mover, true)}.`, line: { fen: fenBefore, sans: heardSans(fenBefore, own.moves) }, squares: [], alt: false });
-      else if (nextBestSan) cands.push({ source: 'material', stake: matStake, text: `The natural alternative, ${dot(nextBestSan, mover)}, comes out of the trades that follow behind — it loses ${pieceWords(fenBefore, next.moves, mover, false)}.`, line: { fen: fenBefore, sans: heardSans(fenBefore, next.moves) }, squares: [], alt: true });
+      else if (nextBestSan && altTrusted) cands.push({ source: 'material', stake: matStake, text: `The natural alternative, ${dot(nextBestSan, mover)}, comes out of the trades that follow behind — it loses ${pieceWords(fenBefore, next.moves, mover, false)}.`, line: { fen: fenBefore, sans: heardSans(fenBefore, next.moves) }, squares: [], alt: true });
     }
     // PAST THE FORCING HORIZON: a big gap the heard line cannot show is read on
     // the engine's whole line — the material it ends on, said as further down

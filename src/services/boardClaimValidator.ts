@@ -407,7 +407,13 @@ export function validateBoardClaims(
     // the hyphen-only pattern missed it).
     const rev = /\b(?:the\s+)?([a-h][1-8])[\s-–]\s*(pawn|knight|bishop|rook|queen|king)\b/gi;
     let pm: RegExpExecArray | null;
+    // THE OBJECT OF A PAST CAPTURE NAMES WHAT WAS THERE (Black walk
+    // 2026-10-19, 22.Rxa5: "That took the pawn on a5, but the pawn on b6 takes
+    // back" was stripped on the board where the rook now stands on a5). The
+    // capture already happened, so the current board cannot judge it.
+    const pastCapture = /\b(?:took|captured|won|grabbed|snapped up|collected|traded off|gave up|lost)\s+(?:back\s+)?(?:the|their|your|a|an)?\s*$/i;
     while ((pm = fwd.exec(sentence)) !== null) {
+      if (pastCapture.test(sentence.slice(0, pm.index))) continue;
       const listSquares = [pm[3], ...(pm[4]?.match(/[a-h][1-8]/g) ?? [])];
       for (const sq of listSquares) {
         claims.push({
@@ -419,6 +425,7 @@ export function validateBoardClaims(
       }
     }
     while ((pm = rev.exec(sentence)) !== null) {
+      if (pastCapture.test(sentence.slice(0, pm.index))) continue;
       claims.push({
         type: PIECE_WORD_TO_TYPE[pm[2].toLowerCase()],
         square: pm[1].toLowerCase(),

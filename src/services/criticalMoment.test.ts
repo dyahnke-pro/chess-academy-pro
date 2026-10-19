@@ -294,7 +294,7 @@ describe('the failing candidates — the strongest proved, the rest named (Learn
         { san: 'Rf1', text: 'Rf1 and Qxf1 — mate', line: { fen: '8/8/8/8/8/8/8/8 w - - 0 1', sans: ['Rf1'] } },
       ],
     } as unknown as Parameters<typeof criticalMomentFound>[0];
-    const out = criticalMomentFound(read, 'Qxd2+') ?? '';
+    const out = criticalMomentFound(read, 'Qxd2+', null) ?? '';
     expect(out).toContain("Qb6 didn't work: three moves later, Nxd5 — you come out behind");
     expect(out).toContain("Qc3 and Rf1 didn't work either.");
     expect(out).not.toContain('Rxc3');
@@ -322,5 +322,25 @@ describe('each critical line names its board (replay 2026-10-19, 46.Kg6)', () =>
         expect(said).not.toMatch(/\bhere\b/);
       }
     }
+  });
+});
+
+describe('taking back is not a find (Black walk 2026-10-19, 14.fxg3 after …Bxg3)', () => {
+  it('the only move that holds, when it finishes their trade, earns no "only move" line', async () => {
+    const { criticalMomentFound, readCriticalMoment } = await import('./criticalMoment');
+    // White to move after …Bxg3 took the knight: fxg3 is the move that keeps it level.
+    const fen = '6k1/5ppp/8/8/8/6b1/5P1P/6K1 w - - 0 30';
+    const read = readCriticalMoment({
+      topLines: [
+        { rank: 1, evaluation: 0, mate: null, moves: ['f2g3'] },
+        { rank: 2, evaluation: -320, mate: null, moves: ['g1g2'] },
+        { rank: 3, evaluation: -330, mate: null, moves: ['h2h3'] },
+      ],
+      moverColor: 'w', fen,
+    });
+    expect(criticalMomentFound(read, 'fxg3', null)).toMatch(/only move/);
+    expect(criticalMomentFound(read, 'fxg3', 'Bxg3')).toBeNull();
+    // A capture somewhere ELSE is still a find.
+    expect(criticalMomentFound(read, 'fxg3', 'Bxe4')).toMatch(/only move/);
   });
 });

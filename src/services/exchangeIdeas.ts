@@ -716,9 +716,18 @@ export function knightReach(sq: string): string[] {
 
 /** A knight is worth its squares: a knight going to the rim (four squares or
  *  fewer, from six or more), or a student's knight coming back to the centre. */
-export function knightSquares(fenBefore: string, san: string, student: Side, costCp: number | null): ExchangeIdea | null {
+export function knightSquares(
+  fenBefore: string, san: string, student: Side, costCp: number | null,
+  /** REQUIRED: the board as it stands now. The knight is read where it IS —
+   *  never on a square it was taken on (Black walk 2026-10-19: "On e8 your
+   *  knight touches only four squares" after …Kxe8 took it). */
+  fenNow: string,
+): ExchangeIdea | null {
   const r = play(fenBefore, san);
   if (!r || r.m.piece !== 'n') return null;
+  const now = load(fenNow);
+  const still = now?.get(r.m.to);
+  if (!still || still.type !== 'n' || still.color !== r.m.color) return null;
   const from = knightReach(r.m.from).length;
   const reach = knightReach(r.m.to);
   const to = reach.length;
@@ -812,14 +821,14 @@ export function exchangeIdeas(input: ExchangeIdeasInput): ExchangeIdea[] {
     push(safe(() => threatCost(fb, san, s)));
     push(safe(() => safeBecause(fb, san, s, sm.history ? previousOwnMove(sm.history, fb) : null)));
     push(safe(() => materialArithmetic(fb, san, s)));
-    push(safe(() => knightSquares(fb, san, s, costCp)));
+    push(safe(() => knightSquares(fb, san, s, costCp, input.fen)));
     push(safe(() => cPawnBlock(fb, san, s, sm.bestSan)));
   }
   const om = input.opponentMove ?? null;
   if (om) {
     push(safe(() => defenderTrade(om.fenBefore, om.san, s)));
     push(safe(() => materialArithmetic(om.fenBefore, om.san, s)));
-    push(safe(() => knightSquares(om.fenBefore, om.san, s, null)));
+    push(safe(() => knightSquares(om.fenBefore, om.san, s, null, input.fen)));
   }
   const c = load(input.fen);
   if (c && c.turn() === s) {

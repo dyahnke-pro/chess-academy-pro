@@ -312,9 +312,18 @@ export function deriveNextPlanFacts(
             : `control ${block}, the square in front of it, so it can never advance`;
     // The pieces that win it are the ones on the board (replay 2026-10-19,
     // 42.Nb5: "stack your heavy pieces on its file" in a knight ending).
-    const heavy = chess.board().flat().some((p) => p && p.color === studentColorWB && (p.type === 'r' || p.type === 'q'));
-    const pile = heavy
-      ? 'stack your heavy pieces on its file and trade off its defenders — each one is a piece of theirs tied to it'
+    // NAME WHAT IS THERE (Black walk 2026-10-19, move 24: "stack your heavy
+    // pieces" with ONE rook and no queens): one heavy piece goes to the file,
+    // two or more stack on it.
+    const heavies = chess.board().flat().filter((p) => p && p.color === studentColorWB && (p.type === 'r' || p.type === 'q'));
+    const rooks = heavies.filter((p) => p?.type === 'r').length;
+    const heavyNoun = heavies.length === 1
+      ? `put your ${rooks === 1 ? 'rook' : 'queen'} on its file`
+      : rooks === heavies.length
+        ? 'stack your rooks on its file'
+        : rooks === 0 ? 'bring your queens to its file' : `stack your ${rooks === 1 ? 'rook' : 'rooks'} and queen on its file`;
+    const pile = heavies.length > 0
+      ? `${heavyNoun} and trade off its defenders — each one is a piece of theirs tied to it`
       : 'bring your king and pieces to it and trade off its defenders — each one is a piece of theirs tied to it';
     add('weak-pawn', `win their weak pawn on ${weak}`, `winning their weak pawn on ${weak}`, `${blockBit ? `${blockBit}; then ` : ''}${pile}${countBit(chess, weak as Square, studentColorWB)}`, [weak, block]);
   }

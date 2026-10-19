@@ -46,3 +46,13 @@ describe('no king attack without queens (review tape 2026-09-25)', () => {
     expect(plans.join(' ')).not.toMatch(/attack their king/);
   });
 });
+
+describe('the weak-pawn plan names the heavy pieces that exist (Black walk 2026-10-19, move 24)', () => {
+  it('one rook is "your rook", never "your heavy pieces"', () => {
+    const one = deriveNextPlans('r5k1/pp4pp/2n1p3/4P3/8/8/PP4PP/6K1 b - - 0 20', 'b').find((p) => /weak pawn on e5/.test(p));
+    expect(one).toMatch(/put your rook on its file/);
+    expect(one).not.toMatch(/heavy pieces/);
+    const two = deriveNextPlans('r4rk1/pp4pp/2n1p3/4P3/8/8/PP4PP/6K1 b - - 0 20', 'b').find((p) => /weak pawn on e5/.test(p));
+    expect(two).toMatch(/stack your rooks on its file/);
+  });
+});

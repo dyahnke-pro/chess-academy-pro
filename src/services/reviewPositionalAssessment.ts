@@ -274,6 +274,14 @@ function assetsFor(
  * Null when there is nothing to say: no eval, or a level position with no
  * asset on either side worth naming.
  */
+/** The say-once key of the balance sheet itself — one per phase per game.
+ *  The reasons carry their own keys, but a reason with no key (or none at
+ *  all heard yet) let the same sheet speak twice in one turn (Black walk
+ *  2026-10-19, 36.Rxa1: "Taking stock as the endgame begins" back to back). */
+export function phaseStockKey(phase: 'middlegame' | 'endgame'): string {
+  return `phase-stock:${phase}`;
+}
+
 export function phaseVerdictLine(
   fen: string,
   studentColorWB: Color,
@@ -285,6 +293,7 @@ export function phaseVerdictLine(
   /** The move that produced `fen`, when known (settled material). */
   lastMove?: LastMove | null,
 ): string | null {
+  if (heard.has(phaseStockKey(phase))) return null;
   const a = freshAssessment(fen, studentColorWB, studentPovEvalCp, heard, lastMove ?? null);
   // WHO'S BETTER *AND WHY*: a verdict with no reason is a description, not a
   // lesson (a prod review said "you were a bit worse" and nothing else).

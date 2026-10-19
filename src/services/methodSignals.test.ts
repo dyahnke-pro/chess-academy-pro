@@ -22,6 +22,14 @@ describe('naturalDefenceFails — "the pawn defends, but look again"', () => {
   });
 });
 
+describe('naturalDefenceFails — taking the attacker is the answer (Black walk 2026-10-19, …Qxh4 gxh4)', () => {
+  it('never says "the defence fails" when the attacker can simply be taken', () => {
+    // Their queen on h4 hits your loose g3-pawn; gxh4 takes the queen.
+    const fen = '6k1/5ppp/8/8/7q/6P1/8/6K1 w - - 0 20';
+    expect(naturalDefenceFails(fen, 'w', [line(['g3h4'], 900), line(['g1g2', 'h4g4'], 0)])).toBeNull();
+  });
+});
+
 describe('forcingLine — calculate on your turn', () => {
   const FEN = '3r2k1/3q1ppp/8/8/8/8/3R1PPP/3Q2K1 w - - 0 1';
   it('three captures from the first move', () => {

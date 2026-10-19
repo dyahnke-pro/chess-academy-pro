@@ -149,3 +149,15 @@ describe('stripDisprovenSentences', () => {
   });
 });
 
+
+describe('the object of a past capture is not a present claim (Black walk 2026-10-19, 22.Rxa5)', () => {
+  it('keeps "That took the pawn on a5, but the pawn on b6 takes back" on the board after Rxa5', async () => {
+    const { stripDisprovenSentences } = await import('./boardClaimValidator');
+    const t = 'That took the pawn on a5, but the pawn on b6 takes back — you lose a rook for a pawn.';
+    expect(stripDisprovenSentences(t, '6k1/5ppp/1p6/R7/8/8/5PPP/6K1 b - - 0 22').dropped).toHaveLength(0);
+    // …and still strips it once the b6 pawn has gone: the present claim is checked.
+    expect(stripDisprovenSentences(t, '6k1/5ppp/8/p7/8/8/5PPP/6K1 w - - 0 23').dropped).toHaveLength(1);
+    // A present-tense claim about a5 is still adjudicated.
+    expect(stripDisprovenSentences('The pawn on a5 is weak.', '6k1/5ppp/1p6/R7/8/8/5PPP/6K1 b - - 0 22').dropped).toHaveLength(1);
+  });
+});
