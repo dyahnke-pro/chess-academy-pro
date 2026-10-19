@@ -36,6 +36,19 @@ export class PrefetchDroppedError extends Error {
   }
 }
 
+/** A pending analysis set aside because a newer request took the engine.
+ *  The worker is ALIVE — it was told to stop, not killed — so this is never a
+ *  reason to restart it (Learn trace 2026-10-19: every question cancelled the
+ *  coach's running read, and the budget path took the cancel for a dead
+ *  worker and cold-restarted a healthy engine, ~10s and a hot phone each time).
+ *  The message is kept: callers match it. */
+export class AnalysisInterruptedError extends Error {
+  constructor() {
+    super('Analysis interrupted by new request');
+    this.name = 'AnalysisInterruptedError';
+  }
+}
+
 /** Is `uci`'s from-square occupied by a piece of the side to move in `fen`?
  *
  *  🔒 A READ NEVER TAKES ANOTHER POSITION'S LINES. The worker is one engine
@@ -1615,7 +1628,7 @@ class StockfishEngine {
         this.pending = null;
         if (oldPending.hardTimeout) clearTimeout(oldPending.hardTimeout);
         this.send('stop');
-        oldPending.reject(new Error('Analysis interrupted by new request'));
+        oldPending.reject(new AnalysisInterruptedError());
       }
 
       const blackToMove = fen.split(' ')[1] === 'b';
@@ -2053,8 +2066,9 @@ class StockfishEngine {
     try {
       return await runOnce();
     } catch (err) {
-      // A deliberate prefetch drop is not a failure — don't retry it.
-      if (err instanceof PrefetchDroppedError) throw err;
+      // A deliberate prefetch drop is not a failure — don't retry it. Nor is
+      // an interrupt: a newer request took a LIVE engine.
+      if (err instanceof PrefetchDroppedError || err instanceof AnalysisInterruptedError) throw err;
       if (this.restartGen !== genAtStart) return await runOnce();
       // Worker died (the grace timer just reset it). Retry ONCE on a FRESH
       // worker — the asm engine analyzes any position fine when alive (David

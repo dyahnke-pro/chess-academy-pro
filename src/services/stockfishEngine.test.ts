@@ -182,6 +182,11 @@ async function getEngine(): Promise<{
   return { stockfishEngine: mod.stockfishEngine };
 }
 
+async function getEngineModule(): Promise<typeof import('./stockfishEngine')> {
+  vi.resetModules();
+  return import('./stockfishEngine');
+}
+
 // ---------------------------------------------------------------------------
 // Helper: complete init handshake
 // ---------------------------------------------------------------------------
@@ -725,6 +730,15 @@ describe('StockfishEngine', () => {
       // engine the call before had just respawned).
       expect(restarts.mock.calls.filter((c) => c[0] === 'analyzeWithBudget retry-on-death').length).toBeLessThanOrEqual(1);
       vi.useRealTimers();
+    });
+
+    it('an interrupted budget call is not a dead engine: no restart (Learn trace, 2026-10-19)', async () => {
+      const { stockfishEngine, AnalysisInterruptedError } = await getEngineModule();
+      await initEngine(stockfishEngine);
+      const restarts = vi.spyOn(stockfishEngine, 'forceRestart');
+      vi.spyOn(stockfishEngine, 'analyzePosition').mockRejectedValueOnce(new AnalysisInterruptedError());
+      await expect(stockfishEngine.analyzeWithBudget('8/8/8/8/8/8/8/K6k w - - 0 1', 12, 300)).rejects.toThrow('Analysis interrupted by new request');
+      expect(restarts).not.toHaveBeenCalled();
     });
 
     it('respawns a fresh worker after a stuck analysis is recovered', async () => {
