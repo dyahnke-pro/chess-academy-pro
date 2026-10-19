@@ -24,7 +24,7 @@
 // something to excuse.
 import { Chess, type Color, type Square } from 'chess.js';
 import { findWeakPawns, findPieceQuality } from './positionReadingService';
-import { isEndgameByMaterial } from './gamePhaseService';
+import { isEndgameByMaterial, queensOff } from './gamePhaseService';
 import { MATERIAL_VALUE as VALUE } from './pieceValues';
 
 export type DrawbackKind =
@@ -280,7 +280,7 @@ export function findConcession(args: {
   // Not in an ENDGAME: with the queens off there is no king to shield, and a
   // rook on the seventh is the goal, not a piece gone astray (walk 2065,
   // 33.Rh7 "your piece went a long way from your king, to h7").
-  if (moved.piece !== 'p' && moved.piece !== 'k' && !isEndgameByMaterial(args.fen)) {
+  if (moved.piece !== 'p' && moved.piece !== 'k' && !isEndgameByMaterial(args.fen) && !queensOff(args.fen)) {
     const wentTo = ranksFromHome(moved.to, me);
     const altTo = alt.history({ verbose: true })[0];
     const altRank = altTo ? ranksFromHome(altTo.to, me) : wentTo;

@@ -43,7 +43,7 @@ import { findPinPressure } from './pinPressure';
 import { findGuardRemovals } from './guardRemoval';
 import { findPinBreaks } from './pinBreak';
 import { pawnsOf } from './boardStructure';
-import { isEndgameByMaterial } from './gamePhaseService';
+import { isEndgameByMaterial, queensOff } from './gamePhaseService';
 
 export const FUNDAMENTAL_IDS = [
   // opening
@@ -242,10 +242,8 @@ function kingOnHome(chess: Chess, color: Color): boolean {
 function material(chess: Chess, color: Color): number {
   return sideMaterial(chess.fen(), color);
 }
-function queensOff(chess: Chess): boolean { return pieces(chess, 'w', 'q').length === 0 && pieces(chess, 'b', 'q').length === 0; }
 function isEndgame(chess: Chess): boolean {
-  const nonPawn = (c: Color) => pieces(chess, c).filter((p) => p.type !== 'p' && p.type !== 'k').reduce((s, p) => s + VAL[p.type], 0);
-  return queensOff(chess) || (nonPawn('w') + nonPawn('b')) <= 14;
+  return isEndgameByMaterial(chess.fen());
 }
 /** True when `mover` has just moved into the opposition: the kings face off
  *  with one square between (same file, rank, or diagonal) and it is the OPPONENT
@@ -1168,7 +1166,8 @@ const DETECTORS: Detector[] = [
     // AN ENDGAME KING BELONGS IN THE CENTRE (review of chesscom-1040709576,
     // 2026-10-13: king-stuck-center was recorded in endgames). The one phase
     // computer decides it, as it decides the phase the row is filed under.
-    if (isEndgameByMaterial(c.before.fen())) return null;
+    // With the queens off a king in the middle is no target, ending or not.
+    if (queensOff(c.before.fen()) || isEndgameByMaterial(c.before.fen())) return null;
     // THE KING WALK (WO-STANDARD-01 D-5, prod tape 2026-09-22): Ke2 off the
     // home square with castling rights still in hand throws castling away for
     // good, and the record said "buried your own bishop" because the king

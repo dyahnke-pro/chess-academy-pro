@@ -8,13 +8,12 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { play, piecesOf, type StructureRead } from './structureJudgementKit';
 import { squaresProof } from './proof';
 import { legalSeeGainFor } from './positionReadingService';
-import { MATERIAL_VALUE, materialBalance } from './pieceValues';
+import { materialBalance } from './pieceValues';
 import { andList } from '../utils/andList';
+import { isEndgameByMaterial } from './gamePhaseService';
 
 /** A move the engine counts as sound: anything costlier is a mistake to grade, not a plan to name. */
 const SOUND_CP = 50;
-/** Piece material (no pawns, no king) at or under a rook and two minors: an ending. */
-const ENDING_PIECES = 11;
 
 const rankOf = (sq: string): number => Number(sq[1]);
 const relRank = (sq: string, side: Color): number => (side === 'w' ? rankOf(sq) : 9 - rankOf(sq));
@@ -44,8 +43,6 @@ export function rooksOnSeventh(fenBefore: string, san: string, student: Color, c
 const CENTRE = ['d4', 'd5', 'e4', 'e5'];
 const toCentre = (sq: string): number => Math.min(...CENTRE.map((c) =>
   Math.max(Math.abs(c.charCodeAt(0) - sq.charCodeAt(0)), Math.abs(rankOf(c) - rankOf(sq)))));
-const pieceMaterial = (c: Chess, side: Color): number => c.board().flat().reduce((n, p) =>
-  n + (p && p.color === side && p.type !== 'p' && p.type !== 'k' ? MATERIAL_VALUE[p.type] ?? 0 : 0), 0);
 
 /** The king walks toward the centre once the queens are off and the game is an ending. */
 export function kingToCentre(fenBefore: string, san: string, student: Color, cpLoss: number): StructureRead | null {
@@ -53,8 +50,7 @@ export function kingToCentre(fenBefore: string, san: string, student: Color, cpL
   const before = boardOf(fenBefore);
   const r = play(fenBefore, san);
   if (!before || !r || r.mv.piece !== 'k' || r.mv.color !== student || r.mv.captured || r.mv.san.startsWith('O-')) return null;
-  if (r.after.board().flat().some((p) => p?.type === 'q')) return null;
-  if (pieceMaterial(r.after, 'w') > ENDING_PIECES || pieceMaterial(r.after, 'b') > ENDING_PIECES) return null;
+  if (!isEndgameByMaterial(r.after.fen())) return null;
   if (toCentre(r.mv.to) >= toCentre(r.mv.from)) return null;
   // Out of a check, stepping toward the middle is a plan only when the king
   // had another way out (Alekhine 53.Ke2: Ke1 also met …Rf6+).

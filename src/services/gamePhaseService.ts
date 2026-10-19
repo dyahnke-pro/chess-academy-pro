@@ -241,43 +241,34 @@ export function isPhaseFocus(area: string | null | undefined): area is GamePhase
  *  `countMaterial` is left alone deliberately: its tests pin 78 for the start
  *  position, so "all material including pawns" is its intended contract. The
  *  threshold was the mistake, not the count.
- *  Fires when:
- *    - queens are off (any rook count), OR
- *    - either side is reduced to bare king or king + ≤ 1 minor (the
- *      "lopsided endgame" — even with the winning side still holding
- *      a queen, this is structurally an endgame: the losing side's
- *      coaching priority is king activity, not middlegame planning).
- *
- *  Audit cycle 8 surfaced the lopsided gap: kQ6/8/p7/P7/4PB2/1p6/
- *  1PP2PPP/R3K2R was sitting on "phase=middlegame" for moves on end,
- *  even though black had only king + 2 pawns. The original spec
- *  required queens off; the lopsided clause closes that hole. */
+ *  The ONE ending test (rules below). The lopsided clause stays: kQ6/8/p7/P7/
+ *  4PB2/1p6/1PP2PPP/R3K2R (black down to king + pawns) is an ending. */
+/** No queens on the board: the king is no longer a target, whether or not it is an ending yet. */
+export function queensOff(fen: string): boolean {
+  return !/[qQ]/.test(fen.split(' ')[0] ?? '');
+}
+
+/** Per-side piece material (no pawns, no king) under which a queenless game is an ending: two rooks and a minor. */
+export const ENDGAME_SIDE_CAP = 13;
+
 export function isEndgameByMaterial(fen: string): boolean {
   const board = fen.split(' ')[0] ?? '';
-  let whiteQueens = 0;
-  let blackQueens = 0;
-  let whiteRooks = 0;
-  let blackRooks = 0;
-  let whiteMinors = 0;
-  let blackMinors = 0;
+  const V: Record<string, number> = { q: 9, r: 5, b: 3, n: 3 };
+  let white = 0; let black = 0; let whitePieces = 0; let blackPieces = 0; let queens = 0;
   for (const ch of board) {
-    if (ch === 'Q') whiteQueens++;
-    else if (ch === 'q') blackQueens++;
-    else if (ch === 'R') whiteRooks++;
-    else if (ch === 'r') blackRooks++;
-    else if (ch === 'B' || ch === 'N') whiteMinors++;
-    else if (ch === 'b' || ch === 'n') blackMinors++;
+    const v = V[ch.toLowerCase()];
+    if (!v) continue;
+    if (ch.toLowerCase() === 'q') queens += 1;
+    if (ch === ch.toUpperCase()) { white += v; whitePieces += 1; } else { black += v; blackPieces += 1; }
   }
-  const queensOff = whiteQueens === 0 && blackQueens === 0;
-  if (queensOff && whiteRooks <= 1 && blackRooks <= 1) return true;
-  if (queensOff) return true;
-  // Lopsided clause: one side is reduced to king + ≤ 1 piece (where
-  // a "piece" is a queen, rook, or minor — pawns alone don't count
-  // as material for this purpose).
-  const whitePieces = whiteQueens + whiteRooks + whiteMinors;
-  const blackPieces = blackQueens + blackRooks + blackMinors;
-  if (whitePieces <= 1 || blackPieces <= 1) return true;
-  return false;
+  // ONE ENDING (David 2026-10-19: move-12 and move-17 positions with four rooks
+  // and minors on were filed and narrated as "endgame" because queens-off alone
+  // counted). An ending = few pieces left: queens off with at most two rooks and
+  // a minor a side, or a bare queen / rook-and-minor a side, or one side down to
+  // king and one piece.
+  if (queens === 0 && white <= ENDGAME_SIDE_CAP && black <= ENDGAME_SIDE_CAP) return true;
+  if (white <= 9 && black <= 9) return true;
+  return whitePieces <= 1 || blackPieces <= 1;
 }
 
 /**
