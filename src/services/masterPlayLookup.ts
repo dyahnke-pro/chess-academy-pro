@@ -203,6 +203,17 @@ export function mastersMovesSync(fen: string): LocalDbMove[] | null {
   return hit && hit.moves.length > 0 ? hit.moves : null;
 }
 
+/** In book here, from what is ALREADY IN MEMORY: true / false, or null when
+ *  nothing is loaded yet to say. A caller that stays quiet out of book must
+ *  treat null as "don't know" — the replay of 2026-10-19 heard "commit the
+ *  pawn last — a knight move now" after 1.e4 c5, because a cold cache read
+ *  as "out of book". */
+export function inBookCachedSync(fen: string, minGames: number): boolean | null {
+  const known = masterMovesCachedSync(fen);
+  if (known) return known.some((m) => m.games >= minGames);
+  return localDbCache ? false : null;
+}
+
 /** The masters moves at a position from whatever is ALREADY IN MEMORY — the
  *  lookup cache (live answers, saved answers) first, then the local file if
  *  some other surface loaded it. Never fetches. `null` = unknown here (not yet

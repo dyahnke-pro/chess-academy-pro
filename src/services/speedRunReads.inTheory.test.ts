@@ -10,8 +10,12 @@ const LINES = [
 
 describe('the move-order habit defers to theory (Learn walk 2026-10-19)', () => {
   it('says "flexible move first" off book', () => {
-    const r = speedRunReads({ fen: FEN, me: 'b', lines: LINES as never });
+    const r = speedRunReads({ fen: FEN, me: 'b', lines: LINES as never, inTheory: false });
     expect(r.some((x) => x.claim === 'srr:flexible-first')).toBe(true);
+  });
+  it('stays quiet when nothing is loaded to say whether this is book (replay 2026-10-19, 1.e4 c5)', () => {
+    const r = speedRunReads({ fen: FEN, me: 'b', lines: LINES as never, inTheory: null });
+    expect(r.some((x) => x.claim === 'srr:flexible-first')).toBe(false);
   });
   it('stays quiet while masters play this position (theory sets the order)', () => {
     const r = speedRunReads({ fen: FEN, me: 'b', lines: LINES as never, inTheory: true });

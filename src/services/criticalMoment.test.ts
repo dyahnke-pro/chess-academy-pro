@@ -312,3 +312,15 @@ describe('a failed candidate is named once (Learn audit 2026-10-15)', () => {
     expect(afterCandidate('a6', 'Nb5 and Nc7 — they fork your rooks')).toBe('Nb5 and Nc7 — they fork your rooks');
   });
 });
+
+describe('each critical line names its board (replay 2026-10-19, 46.Kg6)', () => {
+  it('the forward read says "now"/"this move", the verdict on the played move never says "here"', () => {
+    for (let ply = 0; ply < 8; ply++) {
+      for (const lines of [fan(600, 100, -200), fan(600, 550, -200)]) {
+        const said = criticalMomentStatement(readCriticalMoment({ topLines: lines, moverColor: 'w' }), ply) ?? '';
+        expect(said).toMatch(/\b(now|this move)\b/i);
+        expect(said).not.toMatch(/\bhere\b/);
+      }
+    }
+  });
+});

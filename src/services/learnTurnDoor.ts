@@ -415,6 +415,12 @@ export interface LaneFact {
  *  "threat first"): an insight before "your knight is attacked" is backwards. */
 export const DANGER_LANES: ReadonlySet<LearnLane> = new Set<LearnLane>(['threat', 'dangerLevels', 'threatAnswer']);
 
+/** The lead of one wave of a turn, handed to the next wave. `mateTurn` says a
+ *  forced mate spoke in it: the turn stays on the mate across BOTH waves (the
+ *  replay of 2026-10-19, 48.d6: "There's a forced mate here — mate in 2" in
+ *  the instant wave, then a passed-pawn plan lecture in the late one). */
+export interface TurnLead { lane: LearnLane; squares: readonly string[]; mateTurn?: true }
+
 export interface TurnDecision {
   pkg: VoicePackage;
   /** Lanes offered this turn, in the order they were offered. */
@@ -422,7 +428,7 @@ export interface TurnDecision {
   /** Lanes whose fact reached the voice. */
   spoke: LearnLane[];
   /** The lane that led, or null when nothing spoke (WO-1b). */
-  lead: { lane: LearnLane; squares: readonly string[] } | null;
+  lead: TurnLead | null;
   /** Board-true facts the lead pick kept quiet — not a cap: a lower-ranked
    *  claim that shares nothing with the lead is a second thought, and one
    *  thought per turn is the rule. Recorded so the audit can see what the
@@ -473,7 +479,7 @@ export function decideTurn(
   /** The lead an EARLIER wave of this same turn already spoke. This wave may
    *  only lead if it outranks it; otherwise it speaks support and safety only,
    *  so a turn stays one thought across its two waves. */
-  priorLead?: { lane: LearnLane; squares: readonly string[] } | null,
+  priorLead?: TurnLead | null,
   /** The tags the student's record has PROVEN (`loadProvenTags`) — lanes on
    *  them fade to their short phrasing. Null when the record is not loaded. */
   green?: FadeLevels | null,
@@ -584,7 +590,7 @@ export function decideTurn(
   // danger nor itself a mate wait for a calm board.
   // A forced mate, whoever's and however far — read off the stake's own flag.
   const isMateFact = (x: { fact: VoiceFact; lane: LearnLane }): boolean => !!stakesOf(x.lane, x.fact.text)?.mate?.forced;
-  const mateTurn = survivors.some((x) => !subsumed.has(x) && isMateFact(x));
+  const mateTurn = !!priorLead?.mateTurn || survivors.some((x) => !subsumed.has(x) && isMateFact(x));
   const verdict = survivors.find((x) => x.lane === 'mistake' && !subsumed.has(x)) ?? null;
   // THE TURN'S HOLDS DECIDE BEFORE ITS LEAD (Learn audit 2026-10-14, LD2: a
   // lead was picked, then held by the mate rule, and the row named a lead that
@@ -751,7 +757,9 @@ export function decideTurn(
       ...survivors.filter((x) => !keep.includes(x.fact)).map((x) => ({ fact: x.fact, reason: 'a description that adds nothing to the lead' })),
     ],
   };
-  const lead = ownLead ? { lane: ownLead.lane, squares: ownLead.fact.squares ?? [] } : null;
+  const lead: TurnLead | null = ownLead
+    ? { lane: ownLead.lane, squares: ownLead.fact.squares ?? [], ...(mateTurn ? { mateTurn: true as const } : {}) }
+    : null;
   // THE PROOF LEDGER over what spoke — the proof travels with the fact from
   // its producer (`LaneFact.proof`), never re-derived.
   const proofOf = new Map<string, Proof>();

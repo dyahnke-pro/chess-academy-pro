@@ -1824,7 +1824,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // What the explored move was FOR — from the two reads already in hand.
       const intentByPly = new Map<number, ReviewIntent>();
       if (before?.topLines?.length && after?.topLines?.length && !/[x+#]/.test(args.san)) {
-        const it = intentWithFallback(args.fenBefore, args.san, { before: before.topLines, after: after.topLines, passBefore: [], passAfter: [] }, 'student');
+        const it = intentWithFallback(args.fenBefore, args.san, { before: before.topLines, after: after.topLines, passBefore: [], passAfter: [] }, 'student', false, true);
         if (it) intentByPly.set(inputs.length, { text: it.text, squares: it.squares });
       }
       const segs = buildReviewSegments(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null, new Map(), intentByPly);

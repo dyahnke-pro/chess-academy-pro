@@ -145,7 +145,7 @@ describe('the verdict on a found move (P2 #2)', () => {
       moverColor: 'w', fen,
     });
     const line = criticalMomentFound(read, 'Qxf7#');
-    expect(line).toMatch(/^Qxf7# was the only move that kept the win here\./);
+    expect(line).toMatch(/^Qxf7# was the only move that kept the win\./);
     expect(line ?? '').not.toMatch(/great|nice|excellent|well done|correct/i);
     // Not found → nothing.
     expect(criticalMomentFound(read, 'Qe2')).toBeNull();

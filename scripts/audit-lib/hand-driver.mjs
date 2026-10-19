@@ -173,15 +173,20 @@ const routes = {
     const played = await routes.move(q);
     if (played.error) return played;
     const lines = [...played.spoken];
+    // WHEN EACH MARK WENT UP against when each line was heard (David
+    // 2026-10-19: marks "need to light up AS THEY ARE MENTIONED").
+    const timeline = [];
+    const mark = (s) => { const k = s.arrows.join(' '); if (s.spoken.length || timeline.at(-1)?.arrows !== k) timeline.push({ ms: Date.now() - t0, arrows: k, heard: s.spoken.map((l) => l.slice(0, 60)) }); };
     let replyMs = null;
     for (let t = Date.now(); Date.now() - t < 120_000; await sleep(400)) {
       const s = await state();
-      lines.push(...s.spoken);
+      lines.push(...s.spoken); mark(s);
       if (chess.history().length >= plies + 2) { replyMs = Date.now() - t0; break; }
     }
     // The voice settles: no new line for 4s (at most 60s more).
-    for (let quiet = Date.now(), t = Date.now(); Date.now() - t < 60_000 && Date.now() - quiet < 4000; await sleep(500)) {
+    for (let quiet = Date.now(), t = Date.now(); Date.now() - t < 60_000 && Date.now() - quiet < 4000; await sleep(300)) {
       const s = await state();
+      mark(s);
       if (s.spoken.length) { lines.push(...s.spoken); quiet = Date.now(); }
     }
     const boardPx = await page.evaluate(() => {
@@ -189,7 +194,7 @@ const routes = {
       return a ? Math.round(a.width * 8) : null;
     }).catch(() => null);
     const words = lines.reduce((n, l) => n + l.split(/\s+/).filter(Boolean).length, 0);
-    const row = { move: q.get('san'), reply: chess.history()[plies + 1] ?? null, replyMs, boardPx, words, lines };
+    const row = { move: q.get('san'), reply: chess.history()[plies + 1] ?? null, replyMs, boardPx, words, lines, timeline };
     trends.push(row);
     return { ...row, moves: chess.history().join(' ') };
   },

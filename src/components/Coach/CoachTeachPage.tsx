@@ -11637,7 +11637,7 @@ export function CoachTeachPage(): JSX.Element {
                         // follow-up in the engine's own line, and only a CONCRETE
                         // stopped threat (mate, check, material).
                         const intent = intentReads
-                          ? intentWithFallback(fenBefore, move.san, intentReads, 'student', studentMoveInBook)
+                          ? intentWithFallback(fenBefore, move.san, intentReads, 'student', studentMoveInBook, false)
                           : null;
                         // THE REASON (David 2026-10-17): when they played the
                         // engine's move, the reason that accounts for its gap over
@@ -11836,7 +11836,7 @@ export function CoachTeachPage(): JSX.Element {
                     const passRead = passTheirs ? await stockfishEngine.analyzeWithBudget(passTheirs, COACH_TURN_DEPTH, 900).catch(() => null) : null;
                     const afterRead = await stockfishEngine.analyzeWithBudget(fenAfterReply, COACH_TURN_DEPTH, 900).catch(() => null);
                     const theirIntent = passRead?.topLines?.length && afterRead?.topLines?.length
-                      ? intentWithFallback(move.fen, theirSan, { before: mid.topLines, after: afterRead.topLines, passBefore: passRead.topLines, passAfter: [] }, 'opponent')
+                      ? intentWithFallback(move.fen, theirSan, { before: mid.topLines, after: afterRead.topLines, passBefore: passRead.topLines, passAfter: [] }, 'opponent', false, true)
                       : null;
                     if (theirIntent?.prepares) {
                       const theirRule = intentRule(theirIntent, fenAfterReply, playerColor, learnMemRef.current.principleTaught);

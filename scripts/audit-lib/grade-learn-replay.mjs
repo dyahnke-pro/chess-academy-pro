@@ -36,16 +36,20 @@ let buf = ''; const waiters = [];
 sf.stdout.on('data', (d) => { buf += d; let i; while ((i = buf.indexOf('\n')) >= 0) { const l = buf.slice(0, i); buf = buf.slice(i + 1); for (const w of [...waiters]) w(l); } });
 const send = (s) => sf.stdin.write(`${s}\n`);
 send('uci'); send('setoption name Threads value 2'); send('isready');
+send('setoption name MultiPV value 2');
 async function evalFen(fen) {
   return new Promise((res) => {
-    let score = null; let mate = null; let pv = [];
+    const byPv = {};
     const on = (l) => {
       if (l.startsWith('info') && l.includes(' pv ')) {
-        const m = / score (cp|mate) (-?\d+)/.exec(l);
-        if (m) { if (m[1] === 'cp') { score = Number(m[2]); mate = null; } else { mate = Number(m[2]); score = null; } }
-        pv = l.split(' pv ')[1].trim().split(' ');
+        const m = / multipv (\d+) .*score (cp|mate) (-?\d+)/.exec(l);
+        if (m) byPv[m[1]] = { score: m[2] === 'cp' ? Number(m[3]) : null, mate: m[2] === 'mate' ? Number(m[3]) : null, pv: l.split(' pv ')[1].trim().split(' ') };
       }
-      if (l.startsWith('bestmove')) { waiters.splice(waiters.indexOf(on), 1); res({ score, mate, pv, best: l.split(' ')[1] }); }
+      if (l.startsWith('bestmove')) {
+        waiters.splice(waiters.indexOf(on), 1);
+        const a = byPv['1'] ?? { score: null, mate: null, pv: [] };
+        res({ ...a, best: l.split(' ')[1], second: byPv['2'] ?? null });
+      }
     };
     waiters.push(on);
     send(`position fen ${fen}`); send(`go depth ${DEPTH}`);
@@ -78,9 +82,23 @@ function checkClaims(text, boards) {
   return out;
 }
 const SAN_RE = /\b(?:O-O(?:-O)?|[KQRBN][a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?|[a-h]x[a-h][1-8](?:=[QRBN])?|[a-h][1-8](?:=[QRBN])?)[+#]?/g;
+// A named LINE ("Nhf6+, exf6 and Nxf6+") is legal move by move: a move counts
+// as playable when it follows the moves named before it in the same sentence.
+function lineLegal(sentence, boards) {
+  const sans = (sentence.match(SAN_RE) ?? []).map((r) => r.replace(/[+#]$/, '')).filter((x) => !/^[a-h][1-8]$/.test(x));
+  const ok = new Set();
+  for (const f of boards) {
+    for (let start = 0; start < sans.length; start++) {
+      try { const c = new Chess(f); for (let k = start; k < sans.length; k++) { c.move(sans[k]); ok.add(sans[k]); } } catch { /* the line stops here */ }
+    }
+  }
+  return ok;
+}
 function checkSans(text, boards) {
   const bad = [];
+  const inLines = new Set(text.split(/(?<=[.!?])\s+/).flatMap((sen) => [...lineLegal(sen, boards)]));
   for (const raw of text.match(SAN_RE) ?? []) {
+    if (inLines.has(raw.replace(/[+#]$/, ''))) continue;
     const san = raw.replace(/[+#]$/, '');
     if (/^[a-h][1-8]$/.test(san)) continue; // a bare square is usually a square, not a pawn move
     const legalSomewhere = boards.some((f) => { try { const c = new Chess(f); c.move(san); return true; } catch { /* next */ }
@@ -124,7 +142,12 @@ for (const t of rep.turns) {
   if (replyGift >= 300 && Math.abs(sa) < 600 && !/hang|win|free|take|loose|undefended|punish|slip/i.test(text)) flags.push(`MISSED OPPORTUNITY: their ${t.reply} gave ${replyGift}cp and no line pointed at it`);
   if (er.mate != null && studentCp(whiteCp(afterReply, er)) > 0 && Math.abs(er.mate) <= 5 && !/mate/i.test(text)) flags.push(`MISSED MATE: forced mate in ${Math.abs(er.mate)} for the student, never named`);
   if (er.mate != null && studentCp(whiteCp(afterReply, er)) < 0 && Math.abs(er.mate) <= 5 && !/mate/i.test(text)) flags.push(`MISSED DANGER: they have mate in ${Math.abs(er.mate)}, never named`);
-  if (Math.abs(sb) >= 600 && lost < 150 && /only move|critical|the one move/i.test(text)) flags.push('DECIDED GAME: drama in a decided position');
+  // "The only move" is checked against the engine's second line at the board
+  // the student moved on: true when the second best falls a band below.
+  if (/only move|the one move/i.test(text)) {
+    const s2 = eb.second ? studentCp(whiteCp(before, eb.second)) : null;
+    if (s2 !== null && sb - s2 < 150) flags.push(`FALSE ONLY-MOVE: second best ${eb.second ? uciToSan(before, eb.second.pv[0]) : '?'} is ${s2} vs ${sb}`);
+  }
   report.push({ move: t.move, reply: t.reply, eval: { before: sb, after: sa, afterReply: sr }, lost, replyGift, best: bestSan, words: w, dupes, replyMs: t.replyMs, lines, flags });
   console.log(`\n${t.move} → ${t.reply ?? '-'}  [${sb}→${sa}→${sr}] lost=${lost} best=${bestSan} ${w}w ${t.replyMs ?? '?'}ms`);
   for (const l of lines) console.log(`   • ${l}`);

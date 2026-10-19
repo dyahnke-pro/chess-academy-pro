@@ -28,10 +28,15 @@ export function intentWithFallback(
   san: string,
   reads: IntentReads,
   seat: 'student' | 'opponent',
-  book = false,
+  book: boolean,
+  /** REQUIRED: Learn, before the student's next move, says what the move
+   *  prepares by its piece, never by the move (LEARN NAMES NO MOVE UNASKED);
+   *  review, chat and the Why button name it. */
+  namesPreparedMove: boolean,
 ): MoveIntent | null {
-  return moveIntent(fenBefore, san, reads, seat, { ...DEFAULT_INTENT, book })
-    ?? moveIntent(fenBefore, san, reads, seat, { prepare: 'line', prevent: 'concrete', book });
+  const holdPrepared = !namesPreparedMove;
+  return moveIntent(fenBefore, san, reads, seat, { ...DEFAULT_INTENT, book, holdPrepared })
+    ?? moveIntent(fenBefore, san, reads, seat, { prepare: 'line', prevent: 'concrete', book, holdPrepared });
 }
 
 const uciOf = (fen: string, san: string): string | null => {
@@ -51,5 +56,5 @@ export function purposeFromLine(
   const own = uci ? lines.find((l) => l.moves?.[0] === uci) : undefined;
   if (!own || (own.moves?.length ?? 0) < 2) return null;
   const after: AnalysisLine[] = [{ ...own, rank: 1, moves: own.moves.slice(1) }];
-  return intentWithFallback(fenBefore, san, { before: lines, after, passBefore: [], passAfter: [] }, seat);
+  return intentWithFallback(fenBefore, san, { before: lines, after, passBefore: [], passAfter: [] }, seat, false, true);
 }

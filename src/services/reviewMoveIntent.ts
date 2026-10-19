@@ -68,7 +68,7 @@ export function intentsFromReads(
       const b = lineOf(reads.get(i)); const a = lineOf(reads.get(i + 1));
       if (!b.length || !a.length) return;
       const pb = nullMoveFen(fenBefore);
-      const theirs = intentWithFallback(fenBefore, m.san, { before: b, after: a, passBefore: pb ? lineOf(passReads.get(pb)) : [], passAfter: [] }, 'opponent');
+      const theirs = intentWithFallback(fenBefore, m.san, { before: b, after: a, passBefore: pb ? lineOf(passReads.get(pb)) : [], passAfter: [] }, 'opponent', false, true);
       if (theirs?.prepares) theirPrep = { uci: theirs.prepares.uci, fen: m.fenAfter };
       return;
     }
@@ -80,7 +80,7 @@ export function intentsFromReads(
     // The pass reads (`reviewPassFens`) say what the move stops and what it
     // threatens next; without them only the engine's own line speaks.
     const passOf = (fen: string): AnalysisLine[] => { const p = nullMoveFen(fen); return p ? lineOf(passReads.get(p)) : []; };
-    const intent = intentWithFallback(fenBefore, m.san, { before, after, passBefore: passOf(fenBefore), passAfter: passOf(m.fenAfter) }, 'student');
+    const intent = intentWithFallback(fenBefore, m.san, { before, after, passBefore: passOf(fenBefore), passAfter: passOf(m.fenAfter) }, 'student', false, true);
     if (!intent) return;
     const stopped = !!intent.prevents && preventsNamedIdea(theirPrep, fenBefore, intent.prevents.uci);
     out.set(m.ply, { text: stopped ? `${intent.text} ${STOPPED_THEIR_IDEA}` : intent.text, squares: intent.squares });

@@ -321,16 +321,16 @@ export function criticalMomentStatement(read: CriticalMomentRead | null, ply: nu
   const s = stakeText(read.stake, { plural: !one });
   return one
     ? pick([
-      `Critical moment — only one move ${s}. Slow down here.`,
-      `This is the fork in the road: one move ${s}. Take the extra minute.`,
-      `Slow down — exactly one move ${s} from this position.`,
-      `One move ${s} here, and only one. Worth thinking it through.`,
+      `Critical moment now — only one move ${s}. Slow down.`,
+      `This move is the fork in the road: one move ${s}. Take the extra minute.`,
+      `Slow down — on this move, exactly one move ${s}.`,
+      `Your move now: one move ${s}, and only one. Worth thinking it through.`,
     ], ply)
     : pick([
-      `Critical moment — two moves ${s}; everything else concedes.`,
-      `Two moves ${s} here. The rest give it away.`,
-      `Narrow here — two moves ${s}; every other move costs more.`,
-      `There are exactly two moves that ${s} — the rest concede.`,
+      `Critical moment now — two moves ${s}; everything else concedes.`,
+      `On this move, two moves ${s}. The rest give it away.`,
+      `Narrow on this move — two moves ${s}; every other move costs more.`,
+      `Your move now: exactly two moves ${s} — the rest concede.`,
     ], ply) + lookAt(read.holdingSans);
 }
 
@@ -442,6 +442,6 @@ export function criticalMomentFound(read: CriticalMomentRead | null, playedSan: 
   // The reason is the BEST move's: said only when that is the move they played.
   const why = read.bestReason && read.holdingSans[0] === playedSan ? ` ${read.bestReason.text}` : '';
   return read.count === 1
-    ? `${playedSan} was the only move that ${stake} here.${why}${fails}`
-    : `${playedSan} was one of just two moves that ${stake} here.${why}${fails}`;
+    ? `${playedSan} was the only move that ${stake}.${why}${fails}`
+    : `${playedSan} was one of just two moves that ${stake}.${why}${fails}`;
 }

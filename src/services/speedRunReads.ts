@@ -617,7 +617,9 @@ export function speedRunReads(args: {
   /** Masters play this position with real mass: theory sets the move order
    *  here, so the move-order habit (flexible first) does not argue with it
    *  (Learn walk 2026-10-19: "commit the pawn last" in the Scandinavian). */
-  inTheory?: boolean;
+  /** REQUIRED: in book here — null when unknown, and then the out-of-book
+   *  habits stay quiet. */
+  inTheory: boolean | null;
 }): Read[] {
   const bestSan = sanOf(args.fen, args.lines[0]?.moves?.[0]);
   // RELEVANCE (David 2026-10-06: "make sure all narrations are relevant"): with
@@ -644,7 +646,7 @@ export function speedRunReads(args: {
     rejectedMoveLater(args.fen, args.lines),
     bestCasePlan(args.fen, args.lines),
     retreatKeepsBreak(args.fen, args.me, bestSan),
-    args.inTheory ? null : flexibleFirst(args.fen, args.lines),
+    args.inTheory !== false ? null : flexibleFirst(args.fen, args.lines),
     threatStronger(args.fen, args.me, args.lines),
     secureFirst(args.fen, args.me, args.lines),
     heldByTactic(args.fen, args.me),

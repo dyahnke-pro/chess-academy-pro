@@ -52,7 +52,7 @@ for (let i = 0; i < sans.length; i += 1) {
   const reply = sans[i + 1];
   if (reply) await call('/type', `play ${reply}`);
   const t = await call(`/turn?san=${encodeURIComponent(sans[i])}`);
-  turns.push({ move: `${moveNo}${seat === 'white' ? '.' : '...'}${sans[i]}`, reply: reply ?? null, replyMs: t.replyMs ?? null, words: t.words ?? null, lines: t.lines ?? t.spoken ?? [], error: t.error ?? null });
+  turns.push({ move: `${moveNo}${seat === 'white' ? '.' : '...'}${sans[i]}`, reply: reply ?? null, replyMs: t.replyMs ?? null, words: t.words ?? null, lines: t.lines ?? t.spoken ?? [], timeline: t.timeline ?? [], error: t.error ?? null });
   const last = turns[turns.length - 1];
   console.log(`\n${last.move}${reply ? ` → ${reply}` : ''}  (${last.replyMs ?? '?'}ms, ${last.words ?? '?'} words)`);
   for (const l of last.lines) console.log(`   • ${l}`);

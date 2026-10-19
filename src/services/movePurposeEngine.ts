@@ -33,7 +33,7 @@ async function readIntentReads(fenBefore: string, san: string, beforeRead?: read
  *  failure — a surface that asked gets the rest of its answer. */
 export async function movePurpose(fenBefore: string, san: string, seat: 'student' | 'opponent'): Promise<MoveIntent | null> {
   const reads = await readIntentReads(fenBefore, san);
-  return reads ? intentWithFallback(fenBefore, san, reads, seat) : null;
+  return reads ? intentWithFallback(fenBefore, san, reads, seat, false, true) : null;
 }
 
 /** THE reason for `san` (`decisiveReason`), reading every position it needs. */

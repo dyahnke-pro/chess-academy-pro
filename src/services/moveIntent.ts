@@ -52,6 +52,12 @@ export interface IntentOptions {
   /** The move is still in opening book: speak only a real stopped threat or a
    *  prepared move with its reason (never silence for being in book). */
   book?: boolean;
+  /** Learn, before the student's next move: what the student's move PREPARES
+   *  is said by its piece and job, never by the move (LEARN NAMES NO MOVE
+   *  UNASKED — replay 2026-10-19: "You play d4 first, to free your knight on
+   *  b1 for Nd2" named the move they had not played yet). Set only through
+   *  `intentWithFallback`, where it is required. */
+  holdPrepared?: boolean;
 }
 export const DEFAULT_INTENT: IntentOptions = { prepare: 'unlock', prevent: 'any+deny' };
 
@@ -324,14 +330,15 @@ export function moveIntent(
   const squares = [...new Set([
     playedUci.slice(2, 4),
     ...(prevents ? [prevents.uci.slice(0, 2), prevents.uci.slice(2, 4)] : []),
-    ...(prepares ? [prepares.uci.slice(0, 2), prepares.uci.slice(2, 4)] : []),
+    // A held prepared move marks the piece it frees, never where it goes.
+    ...(prepares ? (opts.holdPrepared && seat === 'student' ? [prepares.uci.slice(0, 2)] : [prepares.uci.slice(0, 2), prepares.uci.slice(2, 4)]) : []),
   ])];
   const why = prevents ? stopReason(fenAfter, prevents.uci, mover) : null;
   // WHAT THE STOPPED MOVE WOULD HAVE DONE (escalating walk 2026-10-17: "Bxd7+
   // — now …g6 doesn't work" never said …g6 was hitting the f5-knight): read
   // on the board before the move, the mover passing.
   const threatDid = prevents ? whatItDoes(fenBefore, prevents.uci, opp) : null;
-  return { prevents, prepares, text: phrase(playedSan, prevents, prepares, seat, mover, fenAfter, prepares ? whatItDoes(fenAfter, prepares.uci, mover) : null, why, threatDid), squares, about: seat };
+  return { prevents, prepares, text: phrase(playedSan, prevents, prepares, seat, mover, fenAfter, prepares ? whatItDoes(fenAfter, prepares.uci, mover) : null, why, threatDid, !!opts.holdPrepared), squares, about: seat };
 }
 
 /** Does `uci` (the side to move after a pass) still give mate from `fenAfter`? */
@@ -355,6 +362,13 @@ function concreteThreat(passFen: string, uci: string, san: string, line: Analysi
   try { return legalSeeGainOn(new Chess(passFen), uci.slice(2, 4) as Parameters<typeof legalSeeGainOn>[1]) >= 1; } catch { return false; }
 }
 
+const PREP_PIECE: Record<string, string> = { K: 'king', Q: 'queen', R: 'rook', B: 'bishop', N: 'knight' };
+/** A held prepared move, by its piece: "your knight", "a pawn push". */
+function preparedPieceWords(san: string): string {
+  const piece = PREP_PIECE[san[0]];
+  return piece ? `your ${piece}` : 'a pawn push';
+}
+
 function phrase(
   san: string,
   prevents: MoveIntent['prevents'],
@@ -371,6 +385,8 @@ function phrase(
   /** What the stopped move would have done (its target, said from the
    *  student's seat), so a stop is never a bare "doesn't work". */
   threatDid: PreparedPoint | null = null,
+  /** The student's prepared move is said by its piece, not named. */
+  holdPrepared = false,
 ): string {
   const dot = (s: string, side: 'w' | 'b'): string => (side === 'b' ? `…${s}` : s);
   const opp: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
@@ -381,7 +397,9 @@ function phrase(
   if (does && /^hit the /.test(does.verb)) does = { ...does, verb: does.verb.replace(/^hit the /, seat === 'student' ? 'hit their ' : 'hit your ') };
   if (seat === 'student') {
     const stop = prevents ? dot(prevents.san, opp) : '';
-    const prep = prepares ? dot(prepares.san, mover) : '';
+    const held = holdPrepared && !!prepares && !prepares.san.startsWith('O-O');
+    const prep = !prepares ? '' : held ? preparedPieceWords(prepares.san) : dot(prepares.san, mover);
+    if (prevents && prepares && held) return `${played} does two jobs: it stops ${stop}, and ${does?.develops ? `it frees your ${does.develops.piece} on ${does.develops.from}` : does ? `it gets ${prep} ready to ${does.verb}` : `it gets ${prep} ready`}.`;
     if (prevents && prepares) return `${played} does two jobs: it stops ${stop}, and it prepares ${prep}${does?.develops ? `, freeing your ${does.develops.piece} on ${does.develops.from}` : does ? `, to ${does.verb}` : ''}.`;
     // "doesn't work", never "isn't possible" — the stopped move is still
     // LEGAL, it just loses (walk 2026-09-30: said five times in one game).
@@ -393,8 +411,11 @@ function phrase(
     // Every stem names the seat (review audit 2026-10-15: "…e5 first, so that
     // …Bd6 can bring the bishop into the game" said whose move to no one).
     if (does?.castle) return rotateStem([`Your ${played} clears the way to castle.`, `You play ${played} first, so you can castle next.`], key);
+    if (does?.develops && held) return rotateStem([`You play ${played} first, to free your ${does.develops.piece} on ${does.develops.from}.`, `Your ${played} frees your ${does.develops.piece} on ${does.develops.from} to come out.`], key);
     if (does?.develops) return rotateStem([`You play ${played} first, to free your ${does.develops.piece} on ${does.develops.from} for ${prep}.`, `Your ${played} frees your ${does.develops.piece} on ${does.develops.from} to come out with ${prep}.`], key);
+    if (does && held) return rotateStem([`You play ${played} first, so that ${prep} can ${does.verb}.`, `Your ${played} gets ${prep} ready to ${does.verb}.`], key);
     if (does) return rotateStem([`You play ${played} first, so that ${prep} can ${does.verb}.`, `Your ${played} prepares ${prep}, to ${does.verb}.`], key);
+    if (held) return `Your ${played} gets ${prep} ready.`;
     return rotateStem([`Your ${played} prepares ${prep}.`, `You play ${played} first, so that ${prep} comes next.`], key);
   }
   const stop = prevents ? `your ${dot(prevents.san, opp)}` : '';

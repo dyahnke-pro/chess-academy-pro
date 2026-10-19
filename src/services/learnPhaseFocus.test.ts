@@ -50,3 +50,16 @@ describe('a tactic alert is heard (David 2026-10-19: "i also never heard a tacti
     expect(code).toMatch(/markTacticSaid = \(\) => \{\s*learnMemRef\.current\.lastTacticKey = saidKey/);
   });
 });
+
+describe('a mate turn stays on the mate across both waves (replay 2026-10-19, 48.d6)', () => {
+  const FEN = '8/8/3P1k2/6R1/p7/1P6/5K2/8 b - - 0 48';
+  it('the late wave holds a plan when the instant wave spoke a forced mate', async () => {
+    const { mateStakes } = await import('./factStakes');
+    const instant = decideTurn([{ lane: 'tactic', proof: NO_PROOF.stated, text: "There's a forced mate here — mate in 2.", fen: FEN, squares: ['d8'], stakes: mateStakes('you', 3, true) }]);
+    expect(instant.lead?.mateTurn).toBe(true);
+    const plan = { lane: 'planArc' as const, proof: NO_PROOF.stated, text: "The plan changes here — now it's to get your passed pawn on d6 promoting.", fen: FEN, squares: ['d6', 'd8'] };
+    const late = decideTurn([plan], instant.pkg.spoken, undefined, instant.lead);
+    expect(late.spoke).not.toContain('planArc');
+    expect(decideTurn([plan], '', undefined, { lane: 'tactic', squares: ['d8'] }).spoke).toContain('planArc');
+  });
+});
