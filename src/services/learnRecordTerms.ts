@@ -30,10 +30,12 @@ import { Chess, type Square } from 'chess.js';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { MisconceptionTagRecord } from '../types';
 import type { TacticPatternType } from '../types/tacticTypes';
+import type { TacticType } from '../types';
+import { PATTERN_TO_TACTIC, weaknessClusterForTactic } from './tacticVocabulary';
 import type { CapabilityProfile } from './capabilityEvidence';
 import { heatMap, type HeatState, type HeatTile } from './heatMap';
 import { studentMomentBoost } from './studentMomentBoost';
-import { matchTag, type WeaknessSignal } from './weaknessSignal';
+import { boostFor, matchTag, type WeaknessSignal } from './weaknessSignal';
 import { detectTactics } from './tacticsDetector';
 import { detectLatentDanger } from './latentDanger';
 
@@ -109,6 +111,8 @@ export type VisibilityRule =
   | 'unreadable'
   /** The threat is a mate — a pattern, never "plain sight". */
   | 'mate-pattern'
+  /** A trapped piece: every exit has to be counted, not one hit seen. */
+  | 'trapped'
   /** No piece attacks the target yet: a quiet move that threatens later. */
   | 'not-on-board-yet'
   /** The attacker is not the piece that just moved: its line was opened. */
@@ -148,6 +152,9 @@ export interface ThreatSighting {
   targets: readonly string[];
   /** The threat is a mate. */
   mate?: boolean;
+  /** What the producer computed it as (`threatInputFor` fills it). A hint the
+   *  board can only make MORE hidden, never simple. */
+  pattern?: ThreatPattern;
 }
 
 export interface VisibilityTerm {
@@ -165,7 +172,9 @@ function kingSteps(a: string, b: string): number {
  *  board cannot read (bad FEN, illegal move) is HIDDEN: an unreadable threat
  *  is never one the student can be trusted to see. */
 export function threatVisibility(t: ThreatSighting): VisibilityTerm {
-  if (t.mate) return hidden('mate-pattern');
+  if (t.mate || t.pattern === 'mate_threat' || t.pattern === 'back_rank') return hidden('mate-pattern');
+  if (t.pattern === 'trapped_piece') return hidden('trapped');
+  if (t.pattern && t.pattern !== 'fork' && GEOMETRY_PATTERNS.has(t.pattern as TacticPatternType)) return hidden('line-geometry');
   let after: Chess;
   let movedTo: string;
   try {
@@ -228,4 +237,129 @@ export interface VoiceTerm {
 
 export function threatVoice(state: HeatState, visibility: ThreatVisibility): VoiceTerm {
   return { voice: THREAT_VOICE[state][visibility], decidedBy: state === 'green' ? 'visibility' : 'record' };
+}
+
+// ─── 4. Each threat reads its OWN skill ─────────────────────────────────────
+
+/** Every kind of threat a Learn producer can raise: the tactic detector's
+ *  patterns plus the three plain-board producers. */
+export type ThreatPattern = TacticPatternType | 'hanging' | 'cheaper-hit' | 'king-pawn';
+
+export interface ThreatSkill {
+  /** The heat-map skill that says whether the student SEES incoming threats.
+   *  It is the only heat tag about the opponent's threats today. */
+  tag: MisconceptionTagId;
+  /** The motif's own record (`analysis:tactic:<motif>` in the weakness
+   *  spine), or null when the threat has no motif. Raise-only: an open hole
+   *  on the motif keeps the threat loud even when the general skill is green. */
+  motif: TacticType | null;
+}
+
+/** A `Record` over the whole union: a new tactic type fails to compile until
+ *  someone says which skill it reads. Motifs come from `PATTERN_TO_TACTIC`,
+ *  the one bridge between the two tactic vocabularies. */
+export const THREAT_SKILL: Record<ThreatPattern, ThreatSkill> = {
+  fork: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.fork },
+  pin: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.pin },
+  skewer: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.skewer },
+  discovery: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.discovery },
+  double_check: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.double_check },
+  back_rank: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.back_rank },
+  removal_of_guard: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.removal_of_guard },
+  trapped_piece: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.trapped_piece },
+  mate_threat: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.mate_threat },
+  overload: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.overload },
+  battery: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.battery },
+  none: { tag: 'missed-opponents-threat', motif: PATTERN_TO_TACTIC.none },
+  hanging: { tag: 'missed-opponents-threat', motif: 'hanging_piece' },
+  'cheaper-hit': { tag: 'missed-opponents-threat', motif: null },
+  'king-pawn': { tag: 'missed-opponents-threat', motif: null },
+};
+
+export function skillForThreat(pattern: ThreatPattern): ThreatSkill {
+  return THREAT_SKILL[pattern];
+}
+
+/** The record term for THIS threat: the threat-seeing skill, raised (never
+ *  lowered) by an open hole on the threat's own motif. A fork goes quiet only
+ *  when the student sees threats AND has no open fork hole. */
+export function recordTermForThreat(pattern: ThreatPattern, record: StudentRecord): RecordTerm {
+  const skill = THREAT_SKILL[pattern];
+  const base = recordTermFor(skill.tag, record);
+  if (!skill.motif) return base;
+  const hole = matchTag(weaknessClusterForTactic(skill.motif), record.signals);
+  const holeBoost = hole ? boostFor(hole) : 0;
+  if (holeBoost <= 0) return base;
+  return {
+    state: 'red',
+    raise: Math.max(base.raise, holeBoost),
+    reason: `red: open ${skill.motif} hole (${hole?.openCount ?? 0} open) over ${base.reason}`,
+  };
+}
+
+// ─── 5. One adapter per producer ────────────────────────────────────────────
+
+/** What each Learn threat producer already holds (CoachTeachPage's threat
+ *  block, `buildTacticsLiveContext`, `trappedOnBoard`). */
+export type ThreatProducer =
+  /** `cheaperHit()`: a piece attacked by a cheaper one. */
+  | { kind: 'cheaper-hit'; hit: { sq: string; bySq: string } }
+  /** `tctx.hanging[0]`: a piece left en prise. */
+  | { kind: 'hanging'; square: string }
+  /** `tctx.immediate` entry with side 'opponent' (squares[0] = the attacker). */
+  | { kind: 'tactic'; tactic: { type: string; squares: readonly string[] } }
+  /** `tctx.threats` entry: a tactic that lands later in the line. */
+  | { kind: 'soon'; threat: { type: string; description: string } }
+  /** `trappedOnBoard`: a piece with no safe square. */
+  | { kind: 'trapped'; trapped: { square: string; attackerSquare: string } }
+  /** `kingPawnThreat()`: a pawn beside the king the opponent can win. */
+  | { kind: 'king-pawn'; pawnSquare: string };
+
+export interface ThreatInput {
+  sighting: ThreatSighting;
+  pattern: ThreatPattern;
+}
+
+function asPattern(type: string): ThreatPattern {
+  return (type in THREAT_SKILL ? type : 'none') as ThreatPattern;
+}
+
+/** The opponent piece hitting `square` after their move: the piece that just
+ *  moved when it is one of them (that is the plain-sight reading), else the
+ *  cheapest. Null when nothing hits it. */
+function attackerOf(fenBefore: string, opponentSan: string, square: string): string | null {
+  try {
+    const c = new Chess(fenBefore);
+    const m = c.move(opponentSan);
+    const hitters = c.attackers(square as Square, m.color);
+    if (hitters.includes(m.to)) return m.to;
+    return [...hitters].sort((a, b) => VALUE[c.get(a)?.type ?? 'k'] - VALUE[c.get(b)?.type ?? 'k'])[0] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** One call per producer: turn what it already computed into the sighting
+ *  `threatVisibility` reads and the pattern `recordTermForThreat` reads. */
+export function threatInputFor(p: ThreatProducer, move: { fenBefore: string; opponentSan: string }): ThreatInput {
+  const base = { fenBefore: move.fenBefore, opponentSan: move.opponentSan };
+  switch (p.kind) {
+    case 'cheaper-hit':
+      return { pattern: 'cheaper-hit', sighting: { ...base, attacker: p.hit.bySq, targets: [p.hit.sq], pattern: 'cheaper-hit' } };
+    case 'hanging':
+      return { pattern: 'hanging', sighting: { ...base, attacker: attackerOf(move.fenBefore, move.opponentSan, p.square), targets: [p.square], pattern: 'hanging' } };
+    case 'tactic': {
+      const pattern = asPattern(p.tactic.type);
+      const [attacker = null, ...targets] = p.tactic.squares;
+      return { pattern, sighting: { ...base, attacker, targets, pattern } };
+    }
+    case 'soon': {
+      const pattern = asPattern(p.threat.type);
+      return { pattern, sighting: { ...base, attacker: null, targets: [], pattern } };
+    }
+    case 'trapped':
+      return { pattern: 'trapped_piece', sighting: { ...base, attacker: p.trapped.attackerSquare, targets: [p.trapped.square], pattern: 'trapped_piece' } };
+    case 'king-pawn':
+      return { pattern: 'king-pawn', sighting: { ...base, attacker: attackerOf(move.fenBefore, move.opponentSan, p.pawnSquare), targets: [p.pawnSquare], pattern: 'king-pawn' } };
+  }
 }

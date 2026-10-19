@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Chess } from 'chess.js';
+import { Chess, Chess as ChessJs } from 'chess.js';
 import fixture from './__fixtures__/davidRecord.recordTerms.json';
 import type { MisconceptionTagRecord } from '../types';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
@@ -8,6 +8,7 @@ import { GREY_BOOST } from './studentMomentBoost';
 import type { WeaknessSignal } from './weaknessSignal';
 import {
   buildStudentRecord, EMPTY_RECORD, recordTermFor, threatVisibility, threatVoice, THREAT_VOICE,
+  recordTermForThreat, skillForThreat, threatInputFor, THREAT_SKILL,
   type ThreatSighting,
 } from './learnRecordTerms';
 
@@ -127,5 +128,94 @@ describe('the voice — David\'s table on his record', () => {
   });
   it('red and grey never go quiet', () => {
     for (const s of ['red', 'grey'] as const) for (const v of ['simple', 'hidden'] as const) expect(THREAT_VOICE[s][v]).toBe('full');
+  });
+});
+
+// ─── The lead's three answers (2026-10-19) ──────────────────────────────────
+
+const fenAfterMoves = (sans: string[]): string => { const c = new ChessJs(); for (const s of sans) c.move(s); return c.fen(); };
+/** The fork trick, 5…d5: the pawn that just moved hits the bishop on c4 and
+ *  the knight on e4 — a direct double hit, in plain sight. */
+const FORK_TRICK = { fenBefore: fenAfterMoves(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'Nc3', 'Nxe4', 'Nxe4']), opponentSan: 'd5' };
+const forkHole: WeaknessSignal = {
+  clusterId: 'analysis:tactic:fork', bucket: 'tactical', label: 'Missed forks',
+  openCount: 3, severity: 40, puzzleThemes: [], total: 9, capabilityTag: null, proven: false,
+};
+
+describe('each threat reads its own skill', () => {
+  it('every pattern names a heat tag; forks carry the fork motif', () => {
+    expect(skillForThreat('fork')).toEqual({ tag: 'missed-opponents-threat', motif: 'fork' });
+    expect(skillForThreat('hanging').motif).toBe('hanging_piece');
+    expect(Object.keys(THREAT_SKILL).length).toBeGreaterThan(12);
+  });
+  it('a fork for green David with no open fork hole stays green', () => {
+    expect(recordTermForThreat('fork', david).state).toBe('green');
+  });
+  it('an open fork hole keeps the fork loud though threat-seeing is green', () => {
+    const term = recordTermForThreat('fork', { ...david, signals: [forkHole] });
+    expect(term.state).toBe('red');
+    expect(term.raise).toBeGreaterThan(0);
+  });
+  it('the direct double hit is SIMPLE geometry — the record decides, not the shape', () => {
+    const after = new ChessJs(FORK_TRICK.fenBefore);
+    after.move(FORK_TRICK.opponentSan);
+    expect(after.attackers('c4', 'b')).toContain('d5');
+    expect(after.attackers('e4', 'b')).toContain('d5');
+    const input = threatInputFor({ kind: 'tactic', tactic: { type: 'fork', squares: ['d5', 'c4', 'e4'] } }, FORK_TRICK);
+    expect(threatVisibility(input.sighting).visibility).toBe('simple');
+    const voice = (r: typeof david): string => threatVoice(recordTermForThreat(input.pattern, r).state, threatVisibility(input.sighting).visibility).voice;
+    expect(voice(david)).toBe('quiet');
+    expect(voice({ ...david, signals: [forkHole] })).toBe('full');
+  });
+});
+
+describe('threatInputFor — one call per producer', () => {
+  const SCANDI = { fenBefore: fenAfterMoves(['e4', 'd5', 'exd5', 'Qxd5']), opponentSan: 'Nc3' };
+  it('cheaper-hit: Nc3 hitting the queen on d5 is simple', () => {
+    const i = threatInputFor({ kind: 'cheaper-hit', hit: { sq: 'd5', bySq: 'c3' } }, SCANDI);
+    expect(i.pattern).toBe('cheaper-hit');
+    expect(threatVisibility(i.sighting)).toEqual({ visibility: 'simple', rule: 'direct-hit' });
+  });
+  it('hanging: the attacker is found on the board (the piece that just moved)', () => {
+    const i = threatInputFor({ kind: 'hanging', square: 'h1' }, SIMPLE);
+    expect(i.sighting.attacker).toBe('f3');
+    expect(threatVisibility(i.sighting).visibility).toBe('simple');
+  });
+  it('soon: no attacker yet reads hidden', () => {
+    const i = threatInputFor({ kind: 'soon', threat: { type: 'fork', description: '' } }, SIMPLE);
+    expect(i.pattern).toBe('fork');
+    expect(threatVisibility(i.sighting)).toEqual({ visibility: 'hidden', rule: 'not-on-board-yet' });
+  });
+  it('trapped: always hidden', () => {
+    const i = threatInputFor({ kind: 'trapped', trapped: { square: 'h1', attackerSquare: 'f3' } }, SIMPLE);
+    expect(i.pattern).toBe('trapped_piece');
+    expect(threatVisibility(i.sighting)).toEqual({ visibility: 'hidden', rule: 'trapped' });
+  });
+  it('tactic: a pin from the detector reads hidden', () => {
+    const i = threatInputFor({ kind: 'tactic', tactic: { type: 'pin', squares: ['g4', 'f3', 'd1'] } }, PIN);
+    expect(threatVisibility(i.sighting).visibility).toBe('hidden');
+  });
+  it('king-pawn: Ng5 hitting f7 beside the king', () => {
+    const KP = { fenBefore: fenAfterMoves(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6']), opponentSan: 'Ng5' };
+    const i = threatInputFor({ kind: 'king-pawn', pawnSquare: 'f7' }, KP);
+    expect(i.sighting.attacker).toBe('g5');
+    // The knight that just moved hits a pawn guarded once, attacked twice.
+    expect(threatVisibility(i.sighting)).toEqual({ visibility: 'simple', rule: 'direct-hit' });
+  });
+});
+
+describe('the record is not the UI — a quiet threat he walks into turns green red', () => {
+  it('one broken row after his streak flips missed-opponents-threat to red', () => {
+    const last = Math.max(...evidence.map((e) => e.recordedAt));
+    const broken = { ...evidence[0], id: 'walked-in', tag: 'missed-opponents-threat', outcome: 'broken', origin: 'learn', prompted: false, posedImportance: 90, sourceGameId: 'new-game', recordedAt: last + 1 } as CapabilityEvidenceRecord;
+    const after = buildStudentRecord(summariseEvidence([...evidence, broken]), slips, [], now);
+    expect(recordTermFor('missed-opponents-threat', david).state).toBe('green');
+    expect(recordTermFor('missed-opponents-threat', after).state).toBe('red');
+    expect(recordTermFor('missed-opponents-threat', after).raise).toBeGreaterThan(0);
+  });
+  it('a quiet threat he meets (held, unprompted) keeps it green', () => {
+    const last = Math.max(...evidence.map((e) => e.recordedAt));
+    const held = { ...evidence[0], id: 'met', tag: 'missed-opponents-threat', outcome: 'held', origin: 'learn', prompted: false, posedImportance: 90, sourceGameId: 'new-game', recordedAt: last + 1 } as CapabilityEvidenceRecord;
+    expect(recordTermFor('missed-opponents-threat', buildStudentRecord(summariseEvidence([...evidence, held]), slips, [], now)).state).toBe('green');
   });
 });
