@@ -23,9 +23,13 @@ export function askThenAnswer(question: string, answer: string): string {
 /** "question ‖ answer ‖ more" → [what is said now, what waits for the move];
  *  null when there is no mark. Segments alternate: outside the marks is said
  *  now, inside them is owed. */
+/** A segment with no words — the "." a sentence-closer adds after a closing
+ *  mark (replay 2026-10-19: "…seizing the open c-file? ."). */
+const hasWords = (p: string): boolean => /[\p{L}\p{N}]/u.test(p);
+
 export function splitThink(text: string): [string, string] | null {
   if (!text.includes(THINK_MARK)) return null;
-  const parts = text.split(THINK_MARK).map((p) => p.trim());
+  const parts = text.split(THINK_MARK).map((p) => (hasWords(p) ? p.trim() : ''));
   const now = parts.filter((_, k) => k % 2 === 0).filter(Boolean).join(' ');
   const owed = parts.filter((_, k) => k % 2 === 1).filter(Boolean).join(' ');
   return now && owed ? [now, owed] : null;
@@ -33,5 +37,5 @@ export function splitThink(text: string): [string, string] | null {
 
 /** The text as it is shown or logged — the mark removed. */
 export function stripThink(text: string): string {
-  return text.split(THINK_MARK).map((s) => s.trim()).filter(Boolean).join(' ');
+  return text.split(THINK_MARK).map((s) => s.trim()).filter(hasWords).join(' ');
 }

@@ -12,6 +12,12 @@ export function conceptInstanceKey(id: string, squares: readonly string[]): stri
   // on e2 and e4 form a battery … on e6"). Which back square the stack uses is
   // not a new idea; the pressure on e6 is the idea. Target is the last square.
   if (/battery/i.test(id) && squares.length > 0) return `concept:battery:${squares[squares.length - 1]}`;
+  // A DISCOVERY IN WAITING IS ITS BLOCKER AND ITS SLIDER (replay 2026-10-19,
+  // moves 27–30: "their king on f8 is hiding behind your knight on f6", then
+  // on f7, then "your knight on f6 is a discovered attack in waiting" — one
+  // idea, three keys, because the king stepped along the same file). Squares
+  // are [blocker, slider, target], the detector's order; the target can move.
+  if (/discover/i.test(id) && squares.length >= 2) return `concept:discovery:${squares[0]}${squares[1]}`;
   return `concept:${id}:${[...squares].sort().join('')}`;
 }
 

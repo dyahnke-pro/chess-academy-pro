@@ -111,3 +111,16 @@ describe('a plan HELD by the door is offered again — the thread adopts only wh
     expect(t.methodSaid).toBe(true);
   });
 });
+
+describe('the opening has no structural plan (David 2026-10-19: "the plan in the opening is to develop and castle")', () => {
+  it('move 4 of the Smith-Morra: no "worst piece is your rook on a1"', async () => {
+    const { Chess } = await import('chess.js');
+    const { newPlanThread, planThreadTurn } = await import('./planThread');
+    const c = new Chess();
+    for (const m of ['e4', 'c5', 'd4', 'cxd4', 'c3', 'dxc3', 'Nxc3']) c.move(m);
+    const fenBefore = c.fen();
+    c.move('d6');
+    const lines = planThreadTurn(newPlanThread(), { ply: 8, fenBefore, fenAfter: c.fen(), student: 'w', holdPlayable: true });
+    expect(lines.map((l) => l.text).join(' ')).not.toMatch(/plan|worst piece/i);
+  });
+});

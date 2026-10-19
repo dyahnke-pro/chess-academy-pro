@@ -40,6 +40,7 @@ import { legalLineProof, squaresProof, type Proof } from './proof';
 import { mateStakes, piecePoints, type FactStakes } from './factStakes';
 import { legalSeeGainFor } from './positionReadingService';
 import { detectPlanRace, planRaceClause, planRaceProof } from './planRace';
+import { conceptInstanceKey } from './conceptKey';
 
 export type KingReadId =
   | 'mate-over-material' | 'material-not-mate' | 'mate-division'
@@ -646,7 +647,7 @@ export function ownPieceShelter(fen: string, me: Color): KingRead | null {
       return {
         id: 'own-piece-shelter',
         text: `Their king on ${k} is hiding behind your own ${name(blocker.type)} on ${blocker.sq} — it's on your ${name(p.type)}'s ${lineWord}. Move the ${name(blocker.type)} off the line and it's check.`,
-        squares: [sq, blocker.sq, k], proof, namesMove: false, claim: `kr:shelter:${sq}${blocker.sq}${k}`,
+        squares: [sq, blocker.sq, k], proof, namesMove: false, claim: conceptInstanceKey('discovery', [blocker.sq, sq, k]),
       };
     }
   }

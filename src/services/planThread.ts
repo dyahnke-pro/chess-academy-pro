@@ -21,6 +21,7 @@ import { NO_PROOF, type FactProof } from './proof';
 import { methodRead, methodLine, methodSquares, methodPlan, whyThisPlan, planWorth, type RouteArrow } from './planChoice';
 import { planStepLine } from './planStep';
 import { askThenAnswer } from '../utils/thinkPause';
+import { classifyPhase } from './gamePhaseService';
 
 /** The plan's goal in the plan arc's own id form (`aimsOf`): a passer and a
  *  file by their file, an outpost by its square, the king attack as one. Null
@@ -142,6 +143,14 @@ export function planThreadTurn(
       t.wasStopped = true;
     }
   }
+  // THE OPENING'S PLAN IS DEVELOPMENT (David 2026-10-19: "the plan in the
+  // opening … is to develop all of your pieces in one move and castle the
+  // king. the plan in the middle game is to target a weakness"). Before the
+  // opening is over (`classifyPhase`, the one definition) the structural
+  // plan, the worst piece and the three questions wait: "your worst piece is
+  // your rook on a1" on move 4 is true of every opening. The opening lanes
+  // carry develop / castle / the centre and the opening's own idea.
+  if (classifyPhase(args.fenAfter, { ply: args.ply }) === 'opening') return out;
   const plans = deriveNextPlanFacts(args.fenAfter, args.student, { studentPovCp: args.studentPovCp ?? null });
   const top = plans[0];
   if (!top) return out;

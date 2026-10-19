@@ -426,7 +426,13 @@ function countBit(chess: Chess, weak: Square, color: Color): string {
   const enemy: Color = color === 'w' ? 'b' : 'w';
   let a = 0; let d = 0;
   try { a = chess.attackers(weak, color).length; d = chess.attackers(weak, enemy).length; } catch { return ''; }
-  if (a === 0) return `. Count it: you don't hit it yet and they guard it ${times(d)} — bring attackers until yours outnumber the guards`;
+  // "they guard it no times" (replay 2026-10-19, 17.hxg3): an unguarded pawn
+  // is said as unguarded.
+  const guards = d === 0 ? 'nothing of theirs guards it' : `they guard it ${times(d)}`;
+  if (a === 0) return d === 0
+    ? `. Count it: nothing of theirs guards it — the first attacker you bring wins it`
+    : `. Count it: you don't hit it yet and ${guards} — bring attackers until yours outnumber the guards`;
+  if (d === 0) return `. Count it: you hit it ${times(a)} and ${guards}`;
   return a > d
     ? `. Count it: you hit it ${times(a)} and they guard it ${times(d)} — more attackers than guards`
     : `. Count it: you hit it ${times(a)} and they guard it ${times(d)} — add attackers until yours outnumber the guards`;

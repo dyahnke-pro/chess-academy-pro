@@ -19,3 +19,11 @@ describe('thinkPause', () => {
     expect(stripThink(turn)).toBe('How do you meet it? Step out of it — take the queen off the line. Nxc6 was one of just two moves that kept the win here.');
   });
 });
+
+describe('a sentence-closer after the closing mark adds no segment (replay 2026-10-19)', () => {
+  it('"Q ‖ A ‖." speaks the question alone and owes the answer', () => {
+    const t = `${askThenAnswer('Why this one and not seizing the open c-file?', 'No pawn of theirs can protect it.')}.`;
+    expect(splitThink(t)).toEqual(['Why this one and not seizing the open c-file?', 'No pawn of theirs can protect it.']);
+    expect(stripThink(t)).toBe('Why this one and not seizing the open c-file? No pawn of theirs can protect it.');
+  });
+});
