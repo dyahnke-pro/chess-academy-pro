@@ -18,8 +18,6 @@ export interface LineWalk {
   clear: () => void;
   /** Every ply's arrow, through the arrow door, coloured by whose move it is. */
   arrowsOf: (line: WalkableLine) => BoardArrow[];
-  /** Low-level: show a position + arrows for a while (Learn's hint register). */
-  hold: (fen: string, arrows: BoardArrow[], holdMs: number) => void;
   /** Low-level token, for a caller that drives its own timed sequence. */
   tokenRef: React.RefObject<number>;
   setWalkFen: (fen: string | null) => void;
@@ -65,14 +63,5 @@ export function useLineWalk(studentColor: 'white' | 'black', source = 'lineWalk'
     })();
   }, [arrowsOf]);
 
-  const hold = useCallback((fen: string, arrows: BoardArrow[], holdMs: number): void => {
-    const token = ++tokenRef.current;
-    setWalkFen(fen);
-    setWalkArrows(arrows);
-    window.setTimeout(() => {
-      if (tokenRef.current === token) { setWalkFen(null); setWalkArrows([]); }
-    }, holdMs);
-  }, []);
-
-  return { walkFen, walkArrows, walk, clear, arrowsOf, hold, tokenRef, setWalkFen, setWalkArrows };
+  return { walkFen, walkArrows, walk, clear, arrowsOf, tokenRef, setWalkFen, setWalkArrows };
 }

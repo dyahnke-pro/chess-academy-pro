@@ -7700,7 +7700,15 @@ export function CoachTeachPage(): JSX.Element {
         // position, so resolving them against the live board would arrow the
         // wrong squares. The lines replace the prose-arrow pass for this turn.
         const calcLines = result.lines && result.lines.length > 0 ? result.lines : null;
-        if (calcLines) {
+        // NEVER TAKE THE BOARD MID-GAME (David 2026-10-19: "the chess board froze
+        // preventing me from making a move … never freeze for the user"). The
+        // walk below swaps the live board for a static one until it finishes,
+        // so in a live game the line is drawn on the live board instead, and
+        // only when it is about the position on it.
+        const gameLive = gameRef.current.history.length > 0 && !gameRef.current.isGameOver;
+        if (calcLines && gameLive) {
+          if (liveFenRef.current === fen) setArrows(lineArrowsOf(calcLines[0]));
+        } else if (calcLines) {
           const token = ++lineWalkTokenRef.current;
           const said = spokenDisplayText.trim() || displayText;
           const sentences = said.split(/(?<=[.!?])\s+/);
@@ -12108,7 +12116,7 @@ export function CoachTeachPage(): JSX.Element {
                     // while this turn spoke of other moves, so nothing looked new.
                     const turnArrows: BoardArrow[] = [];
                     if (owedArrows.length > 0 && liveFenRef.current === fenAfterReply) {
-                      turnArrows.push(...admitArrows(owedArrows, { fen: fenAfterReply, studentColor: playerColor }).arrows);
+                      turnArrows.push(...admitArrows(owedArrows, { fen: fenAfterReply, studentColor: playerColor, holdStudentMoves: true }).arrows);
                     }
                     // …AND DRAW THE LINES IT SPOKE (David 2026-09-29: "Make sure
                     // arrows populate when talking about multiple move lines").
@@ -12134,20 +12142,17 @@ export function CoachTeachPage(): JSX.Element {
                           c.move({ from: a.from, to: a.to, promotion: 'q' });
                         }
                       } catch { /* the plies replayed so far still draw */ }
-                      return admitArrows(claims, { fen: l.fen, studentColor: playerColor }).arrows;
+                      return admitArrows(claims, { fen: l.fen, studentColor: playerColor, holdStudentMoves: true }).arrows;
                     };
                     // By PLACEMENT: a threat is drawn on its board with the
                     // other side to move, and it is still the same picture.
                     const samePlacement = (x: string, y: string): boolean => x.split(' ')[0] === y.split(' ')[0];
+                    // A line from an EARLIER board is spoken, never shown: showing it
+                    // took the board away on the student's turn for the length of
+                    // the sentence (David 2026-10-19: "never freeze for the user").
                     const onScreen = drawnLines.filter((l) => samePlacement(l.fen, fenAfterReply));
-                    const earlier = drawnLines.filter((l) => !samePlacement(l.fen, fenAfterReply));
                     if (onScreen.length > 0 && liveFenRef.current === fenAfterReply) turnArrows.push(...onScreen.flatMap(throughDoor));
                     if (turnArrows.length > 0) setArrows(uniqueArrows([...(seenMarkRef.current ? [seenMarkRef.current] : []), ...turnArrows]));
-                    if (earlier.length > 0 && liveFenRef.current === fenAfterReply) {
-                      const showFen = earlier[0].fen;
-                      const drawn = uniqueArrows(earlier.filter((l) => samePlacement(l.fen, showFen)).flatMap(throughDoor));
-                      lineWalk.hold(showFen, drawn, Math.max(hintPkg.spoken.length * 55, 2500) + 1500);
-                    }
                     void logAppAudit({
                       kind: 'coach-narration-spoken',
                       category: 'narration',

@@ -153,3 +153,18 @@ describe('arrowDoor — vision geometry (ported from arrowGrounding)', () => {
     expect(refusalFor({ from: 'f1', to: 'c4', role: 'vision', source: 't' }, open)).toBeNull();
   });
 });
+
+describe('Learn names no move unasked — arrows too (David 2026-10-19)', () => {
+  const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+  it('an unasked arrow that plays the student\'s piece from the live board is refused', () => {
+    const r = admitArrows([{ from: 'g1', to: 'f3', role: 'play', vouchedBy: 'engine', source: 't' }, { from: 'g1', to: 'f3', role: 'line', source: 't' }], { fen, studentColor: 'white', holdStudentMoves: true });
+    expect(r.arrows).toHaveLength(0);
+    expect(r.refused.every((x) => x.reason === 'unasked')).toBe(true);
+  });
+  it('their move and a line on another board still draw; an asked hint draws', () => {
+    const theirs = admitArrows([{ from: 'g8', to: 'f6', role: 'theirs', source: 't' }], { fen, studentColor: 'white', holdStudentMoves: true });
+    expect(theirs.arrows).toHaveLength(1);
+    const asked = admitArrows([{ from: 'g1', to: 'f3', role: 'play', vouchedBy: 'engine', source: 't' }], { fen, studentColor: 'white' });
+    expect(asked.arrows).toHaveLength(1);
+  });
+});

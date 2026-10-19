@@ -64,9 +64,14 @@ export interface ArrowDoorContext {
   /** The board the student is looking at. */
   fen: string;
   studentColor: 'white' | 'black';
+  /** The student has NOT asked for a move (Learn's own narration, their turn):
+   *  no arrow may play one of their pieces from the board in front of them —
+   *  an arrow is a move named, and Learn names no move unasked (David
+   *  2026-10-19: "arrows pointing to moves that I should play"). */
+  holdStudentMoves?: boolean;
 }
 
-export type ArrowRefusal = 'moved-away' | 'not-played' | 'bad-square' | 'no-piece' | 'wrong-side' | 'illegal' | 'unsafe' | 'wins-nothing' | 'no-sight' | 'duplicate' | 'bad-fen';
+export type ArrowRefusal = 'unasked' | 'moved-away' | 'not-played' | 'bad-square' | 'no-piece' | 'wrong-side' | 'illegal' | 'unsafe' | 'wins-nothing' | 'no-sight' | 'duplicate' | 'bad-fen';
 
 export interface ArrowDoorResult {
   arrows: BoardArrow[];
@@ -139,6 +144,7 @@ export function refusalFor(claim: ArrowClaim, ctx: ArrowDoorContext): ArrowRefus
   if (role === 'vision') return sees(base, from, to) ? null : 'no-sight';
 
   const student: 'w' | 'b' = ctx.studentColor === 'white' ? 'w' : 'b';
+  if (ctx.holdStudentMoves && piece.color === student && (role === 'play' || role === 'line') && fen.split(' ')[0] === ctx.fen.split(' ')[0]) return 'unasked';
   if (role === 'play' && piece.color !== student) return 'wrong-side';
   if ((role === 'threat' || role === 'theirs') && piece.color === student) return 'wrong-side';
 
