@@ -279,3 +279,14 @@ describe('material arithmetic is said once per balance', () => {
     expect(a?.claim).toBe(b?.claim);
   });
 });
+
+describe('safeBecause — the move must cause the loss (prod walk 2026-10-19)', () => {
+  it('Be7 is not "fine only because the queen left c7": Nxc7 was there anyway', () => {
+    const c = new Chess();
+    for (const m of 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 c6 Bc4 Bf5 Ne5 e6 Nxc6 Nxc6 Bd2 Qc7 Bg5 O-O-O Nb5 Qb8 c3'.split(' ')) c.move(m);
+    const now = c.fen();
+    const prev = previousOwnMove(c.history(), now);
+    expect(safeBecause(now, 'Be7', 'b', prev)).toBeNull();
+  });
+});
+

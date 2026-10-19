@@ -536,7 +536,10 @@ export function kickFails(ctx: GeometryContext): GeometryRead | null {
   if (!proof) return null;
   return {
     act: 'kick-fails', text, namesMove: true,
-    idea: 'Before you post a piece, check the pawn kick against it — here the kick fails.',
+    // Held, it still says WHOSE piece and what to find (prod walk 2026-10-19:
+    // after a sentence about their bishop, "check the pawn kick against it"
+    // read as being about their bishop).
+    idea: `One of your pieces has a post here that their pawn can't kick it off — the kick costs them ${net}. Before you post a piece, always check that kick.`,
     squares: [mv.to, shown.kick.to, shown.punish.to], proof, motif: null, claim: `geo:kick-fails:${mv.to}`,
   };
 }

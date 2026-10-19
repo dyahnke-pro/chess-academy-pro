@@ -169,7 +169,7 @@ describe('run I manual check: a recapture is not a win, a pawn recapture is not 
     ];
     const read = tacticalReadFromLines(fen, lines as never, 'white');
     expect(read?.closeAlternative ?? null).toBeNull();
-    for (let r = 0; r < 4; r++) expect(read ? uncertaintyClause(read, { rotation: r }) : null).toBeNull();
+    for (let r = 0; r < 4; r++) expect(read ? uncertaintyClause(read, { rotation: r, namesMoves: true }) : null).toBeNull();
   });
 });
 

@@ -143,7 +143,7 @@ function firstSuccess(attempts: readonly Promise<string>[]): Promise<string> {
   return new Promise((resolve, reject) => {
     let failed = 0;
     for (const a of attempts) {
-      a.then(resolve, (e: unknown) => { failed += 1; if (failed === attempts.length) reject(e); });
+      a.then(resolve, (e: unknown) => { failed += 1; if (failed === attempts.length) reject(e instanceof Error ? e : new Error(String(e))); });
     }
   });
 }
