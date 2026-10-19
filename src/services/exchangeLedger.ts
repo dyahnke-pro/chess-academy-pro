@@ -16,7 +16,7 @@
 // piece names — "you come out with two knights for the rook" — which is the
 // sentence that settles the ambiguity AND carries the lesson (why an engine
 // still calls that fork a mistake). Pure chess.js, no engine, no model (G0/G3).
-import { andList, lineShape } from '../utils/andList';
+import { lineShape, seatedLine } from '../utils/andList';
 import type { Proof } from './proof';
 import { Chess, type Square } from 'chess.js';
 import { legalSeeGain, legalSeeGainFor } from './positionReadingService';
@@ -526,11 +526,10 @@ export function moverLossProof(fen: string, uci: readonly string[], moverWB: 'w'
   // O-O, Qf4, Ng6, Qg3, h5, Be2, h4, Qe3 and Nxe5" (hand walk 2340, 13 plies)
   // proves nothing to a listener. Past the horizon the line is not a reason,
   // and a move without a reason is not ruled out loud.
-  const moves = andList(proof.sans.slice(0, proof.plies));
   // The line starts with the mover's move, so a mate of the MOVER ends on an
   // even ply; an odd-length mate is the mover mating, which explains nothing.
   const line = { fen, sans: proof.sans.slice(0, proof.plies) };
-  const said = (end: string): Proof => heardProof(line, moves, end);
+  const said = (end: string): Proof => heardProof(line, end);
   if (proof.mate) return proof.plies % 2 === 0 ? said("and it's mate") : null;
   if (!proof.ledger || proof.ledger.netPawns >= 0) return null;
   return said(describeProofResult(proof.ledger));
@@ -540,9 +539,11 @@ export function moverLossProof(fen: string, uci: readonly string[], moverWB: 'w'
  *  line of more than three moves is spoken as its first move and its result
  *  (`short`); the whole line stays in `full` and on the board (Learn audit
  *  2026-10-15: four refuted king moves recited eight moves each — 132 words). */
-function heardProof(line: { fen: string; sans: readonly string[] }, moves: string, end: string): Proof {
-  const full = `${moves} — ${end}`;
-  const short = line.sans.length <= 3 ? full : `${lineShape(line.sans)} — ${end}`;
+/** Said from the MOVER's seat, like its result: the line's first move is
+ *  "you" (OS-8 gap 7 — "Nxe5, Qd4 and Qxe5" named no side). */
+function heardProof(line: { fen: string; sans: readonly string[] }, end: string): Proof {
+  const full = `${seatedLine(line.sans, 'you')} — ${end}`;
+  const short = line.sans.length <= 3 ? full : `${lineShape(line.sans, 'you')} — ${end}`;
   return { kind: 'line', exact: false, short, full, line };
 }
 
@@ -560,8 +561,7 @@ export function moverLineProof(fen: string, uci: readonly string[], moverWB: 'w'
   const proof = heardProofCut(fen, sans, moverWB);
   if (!proof) return null;
   const line = { fen, sans: proof.sans.slice(0, proof.plies) };
-  const moves = andList(line.sans);
-  const said = (end: string): Proof => heardProof(line, moves, end);
+  const said = (end: string): Proof => heardProof(line, end);
   if (proof.mate) return proof.plies % 2 === 1 ? said("and it's mate") : null;
   if (!proof.ledger || proof.ledger.netPawns <= 0) return null;
   return said(describeProofResult(proof.ledger));

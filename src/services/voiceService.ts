@@ -536,7 +536,7 @@ export function sanitizeForTTS(text: string): string {
   // Run AFTER both expansions so it sees "h7+" / "castle kingside+" rather than
   // "Bh7+", and anchored on a square or a castle so ordinary prose punctuation
   // is untouched. Comma before the word: TTS gives it the beat a check deserves.
-  out = out.replace(SAN_SUFFIX_RE, (_m, move: string, mark: string, next: string | undefined) => spokenMark(move, mark, next));
+  out = out.replace(SAN_SUFFIX_RE, (_m, move: string, mark: string, rest: string | undefined) => spokenMark(move, mark, rest));
   // A sentence that already SAYS it is mate does not get the word twice
   // (Blumenfeld walk F38: "rook takes d1, checkmate is mate").
   out = out.replace(/, checkmate (is|would be|was) (?:check)?mate\b/g, ' $1 checkmate');

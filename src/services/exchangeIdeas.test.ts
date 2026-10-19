@@ -188,6 +188,12 @@ describe('the image matches the fact the read proved (Smith-Morra replay 2026-10
       studentMove: { fenBefore: fa('e4 c5 d4 cxd4 c3 dxc3'), san: 'Nxc3', costCp: 0, bestSan: null, history: null } });
     for (const r of said) expect(r.text).not.toMatch(/rim/);
   });
+  it('b7 reaches four squares but is not the rim: no rim image', () => {
+    const fb = fa('e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 b6 O-O Nd6 Nc3');
+    const x = knightSquares(fb, 'Nb7', 'w', null);
+    expect(x).not.toBeNull();
+    expect(x?.imagery ?? null).not.toBe('knight-rim');
+  });
   it('a knight going to the rim keeps the rim image', () => {
     const x = wellFormed(knightSquares(fa('e4 e5 Nf3 Nc6 Bb5'), 'Na5', 'w', null));
     expect(x.imagery).toBe('knight-rim');

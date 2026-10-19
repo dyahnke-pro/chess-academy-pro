@@ -251,8 +251,11 @@ export function positionOpened(lastMove: { fenBefore: string; san: string } | un
       // "Forcing moves now" names what to look at — counted (52-errors #44),
       // and never said when there are none.
       const forcing = (() => { try { return new Chess(after.board.fen()).moves({ verbose: true }); } catch { return []; } })();
-      const checks = forcing.filter((m) => /[+#]$/.test(m.san)).length;
-      const takes = forcing.filter((m) => m.captured && !/[+#]$/.test(m.san)).length;
+      // A promotion is ONE move to look at, not four (bxa8=Q/R/B/N): counted
+      // by where the piece goes.
+      const distinct = (ms: typeof forcing): number => new Set(ms.map((m) => `${m.from}${m.to}`)).size;
+      const checks = distinct(forcing.filter((m) => /[+#]$/.test(m.san)));
+      const takes = distinct(forcing.filter((m) => m.captured && !/[+#]$/.test(m.san)));
       if (checks + takes === 0) return null;
       // Counts are words, both of them (Smith-Morra replay 2026-10-19: "one
       // check and 2 captures" mixed the two styles in one sentence).

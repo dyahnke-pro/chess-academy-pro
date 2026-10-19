@@ -24,7 +24,7 @@ import { strategicWhyLed } from './moveFundamentals';
 import { ownsMoreSpace, legalSeeGainFor, seeReadsStanding } from './positionReadingService';
 import { isPinnedPiece } from './nextPlans';
 import { countKingAttack } from './kingSafety';
-import { andList, lineShape, orList } from '../utils/andList';
+import { andList, lineShape, orList, seatedLine } from '../utils/andList';
 import { computeMustDefend, mateThreatsAgainst } from './threatOut';
 import { describeMoveGeometry, quietPurposePhrase } from './groundedAnswer';
 
@@ -312,10 +312,13 @@ function shortfallText(c: Candidate): string {
     // A long line is shaped AFTER the candidate is taken off the front, so the
     // answer names the reply and where it lands, never "the moves that follow".
     if (c.proofSans && c.proofSans.length > 4 && c.proofSans[0] === c.san && c.proof.includes(' — ')) {
-      return `${c.san}? Then ${lineShape(c.proofSans.slice(1))} — ${c.proof.slice(c.proof.indexOf(' — ') + 3)}.`;
+      // The reply opens what is left, so it is said as theirs (OS-8 gap 7).
+      return `${c.san}? Then ${lineShape(c.proofSans.slice(1), 'they')} — ${c.proof.slice(c.proof.indexOf(' — ') + 3)}.`;
     }
     const esc = c.san.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const rest = c.proof.replace(new RegExp(`^${esc}(?:, | and )`), '');
+    // The proof says each move with its mover ("you play Qf5, they castle
+    // kingside and …"); the candidate's own clause is what comes off.
+    const rest = c.proof.replace(new RegExp(`^you play ${esc}(?:, | and )`), '');
     if (rest !== c.proof) return `${c.san}? Then ${rest}.`;
     return `${c.san}? ${openSentence(c.proof)}.`;
   }
@@ -323,7 +326,7 @@ function shortfallText(c: Candidate): string {
     // THE TRADE IS A LINE, NOT A PROPERTY OF THE MOVE (hard walk 2026-10-10:
     // "Ne5 trades the queens" — Ne5 trades nothing; the queens come off later).
     // One ply long means the move itself took the last queen off.
-    const rest = c.tradeSans && c.tradeSans.length > 1 ? `Then ${andList(c.tradeSans.slice(1))} — the queens come off` : `${c.san} takes the last queen off`;
+    const rest = c.tradeSans && c.tradeSans.length > 1 ? `Then ${seatedLine(c.tradeSans.slice(1), 'they')} — the queens come off` : `${c.san} takes the last queen off`;
     return `${c.san}? ${rest} — with more space or an attack going, you want them on; every piece that comes off shrinks the edge.`;
   }
   if (c.shortfall === 'drops-material' && c.drops) {
@@ -706,7 +709,7 @@ export function namedMoveAnswer(d: Deliberation, ask: 'why-best' | 'is-it-good')
     const sans = d.bestLineSans ?? [];
     if (d.bestLine && d.bestReply && sans.length >= 3) {
       const tail = d.bestLine.replace(/^.*? — /, '');
-      return `${n.san} is the best move here${bestReason}. Their best defence is ${d.bestReply}, and then ${andList(sans.slice(2))} — ${tail}.${others ? ` ${others}` : ''}`;
+      return `${n.san} is the best move here${bestReason}. Their best defence is ${d.bestReply}, and then ${seatedLine(sans.slice(2), 'you')} — ${tail}.${others ? ` ${others}` : ''}`;
     }
     // No countable proof: the engine's reply is still the answer to "what's
     // their best defence?" (hard walk 2026-10-10, a pawn ending — Kd3 with

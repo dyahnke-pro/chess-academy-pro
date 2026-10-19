@@ -25,6 +25,7 @@
 // Same computed fact, three distances.
 import { isNearBest } from './slipDetector';
 import { coreRatingTier } from './ratingBands';
+import { askThenAnswer } from '../utils/thinkPause';
 
 export type HintRegister = 'obvious' | 'moderate' | 'subtle';
 
@@ -144,6 +145,13 @@ export function hintIsDue(register: HintRegister, ply: number, lastHintPly: numb
  *   obvious  anchor + detail + stakes  "…and nothing of yours is watching it."
  */
 export interface HintPackage {
+  /** A QUESTION asked first, when the package is a question and its answer.
+   *  Everything below it — the anchor and every tier the register adds — is
+   *  the answer, and waits for the student's move as ONE closed span
+   *  (`askThenAnswer`). An anchor that carried its own unclosed think mark
+   *  held every later sentence of the turn to the next move (Smith-Morra
+   *  replay 2026-10-19, OS-8 gap 3). */
+  ask?: string;
   /** The fact itself. Spoken at EVERY register, so it has to stand alone —
    *  true, complete, and not misleading without the tiers below it. */
   anchor: string;
@@ -168,7 +176,7 @@ export function packageForRegister(pkg: HintPackage, register: HintRegister): st
   if (register !== 'subtle' && pkg.detail) parts.push(pkg.detail);
   if (register === 'obvious' && pkg.stakes) parts.push(pkg.stakes);
   if (pkg.withhold) parts.push(pkg.withhold);
-  return parts.join(' ');
+  return pkg.ask ? askThenAnswer(pkg.ask, parts.join(' ')) : parts.join(' ');
 }
 
 /**

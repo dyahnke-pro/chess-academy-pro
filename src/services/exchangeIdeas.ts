@@ -728,7 +728,10 @@ export function knightSquares(fenBefore: string, san: string, student: Side, cos
   const to = reach.length;
   const mover = own(r.m.color, student);
   let text: string | null = null;
-  let image: ImageryKey = 'knight-rim';
+  // The rim image only on the rim: b7 reaches four squares too, and is not
+  // on the edge (review of the Smith-Morra fixes, 2026-10-19).
+  const onRim = /^[ah]|[18]$/.test(r.m.to);
+  let image: ImageryKey | undefined = onRim ? 'knight-rim' : undefined;
   if (to <= 4 && from >= 6) {
     // The student's own rim move is taught only when it cost something —
     // never as criticism of a good move.
@@ -742,7 +745,7 @@ export function knightSquares(fenBefore: string, san: string, student: Side, cos
   text = `${text} A knight is worth the squares it reaches.`;
   const proof = squaresProof(text, [r.m.to, ...reach]);
   if (!proof) return null;
-  return idea('knight-squares', text, [r.m.to, ...reach], proof, `knight-squares:${r.m.to}`, image);
+  return idea('knight-squares', text, [r.m.to, ...reach], proof, `knight-squares:${r.m.to}`, image ?? null);
 }
 
 /** Don't block the c-pawn in a d-pawn opening: the student's queen's knight
@@ -772,8 +775,8 @@ export function cPawnBlock(fenBefore: string, san: string, student: Side, bestSa
   return idea('c-pawn-block', text, sq, proof, 'c-pawn-block');
 }
 
-function idea(id: ExchangeIdeaId, text: string, squares: string[], proof: Proof, claim: string, imagery?: ImageryKey): ExchangeIdea {
-  return { id, kind: IDEA_KIND[id], text, squares: [...new Set(squares)], proof, claim, imagery: imagery ?? (id === 'knight-squares' ? null : id) };
+function idea(id: ExchangeIdeaId, text: string, squares: string[], proof: Proof, claim: string, imagery?: ImageryKey | null): ExchangeIdea {
+  return { id, kind: IDEA_KIND[id], text, squares: [...new Set(squares)], proof, claim, imagery: imagery !== undefined ? imagery : (id === 'knight-squares' ? null : id) };
 }
 
 // ── THE AGGREGATOR — every surface asks this one function ─────────────────

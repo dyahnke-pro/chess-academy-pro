@@ -21,7 +21,7 @@ import { Chess } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { moveIntent, nullMoveFen, type IntentReads, THREAT_CP } from './moveIntent';
 import { heardHorizon, heardProofCut, describeProofResult, settledNetForLine, netPieceWords } from './exchangeLedger';
-import { andList, lineShape } from '../utils/andList';
+import { lineSeatAt, lineShape } from '../utils/andList';
 import { bestMoveReason } from './deliberation';
 import { costWords } from './engineConstants';
 import { openSentence } from '../utils/openSentence';
@@ -127,7 +127,8 @@ function seatProof(fen: string, sans: readonly string[], mover: 'w' | 'b', stude
     if (side === 'for' ? moverNet <= 0 : moverNet >= 0) return null;
     end = describeProofResult(p.ledger);
   }
-  return { text: `${line.length <= 3 ? andList(line) : lineShape(line)} — ${end}`, sans: line, end };
+  // Each move with its mover (OS-8 gap 7): the line starts with the side to move on `fen`.
+  return { text: `${lineShape(line, lineSeatAt(fen, studentWB))} — ${end}`, sans: line, end };
 }
 
 const LATER_WORDS: Record<number, string> = { 1: 'a move', 2: 'two moves', 3: 'three moves', 4: 'four moves', 5: 'five moves', 6: 'six moves' };
@@ -229,7 +230,7 @@ export function decisiveReason(input: {
     } else if (matStake > 0) {
       const win = matOwn > 0 ? seatProof(fenBefore, sansOf(fenBefore, own.moves), mover, studentWB, 'for') : null;
       const loss = !win && matNext < 0 ? seatProof(fenBefore, sansOf(fenBefore, next.moves), mover, studentWB, 'against') : null;
-      if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? `${win.text}.` : win.end === "and it's mate" ? `${played} starts a forced mate — ${landsWith(win.sans, mover)}.` : `${played} wins by force: ${win.end} — ${landsWith(win.sans, mover)}.`, line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
+      if (win) cands.push({ source: 'material', stake: matStake, text: win.sans.length <= 1 ? `${openSentence(win.text)}.` : win.end === "and it's mate" ? `${played} starts a forced mate — ${landsWith(win.sans, mover)}.` : `${played} wins by force: ${win.end} — ${landsWith(win.sans, mover)}.`, line: { fen: fenBefore, sans: win.sans }, squares: [], alt: false });
       else if (loss && nextBestSan) cands.push({ source: 'material', stake: matStake, text: `The natural alternative, ${dot(nextBestSan, mover)}, fails: ${loss.text}.`, line: { fen: fenBefore, sans: loss.sans }, squares: [], alt: true });
       // No short proof, but the count is the reason: say the count, never let a
       // smaller reason stand in for it.

@@ -259,6 +259,15 @@ describe('check and mate suffixes are spoken, not punctuated', () => {
     expect(sanitizeForTTS('Ng5+ — the king must move.')).toBe('Knight to g5, check — the king must move.');
   });
 
+  it('a clause that already says check is not told twice', () => {
+    expect(sanitizeForTTS('then jump Nd6+ with check — a dominant outpost')).toBe('then jump knight to d6 with check — a dominant outpost');
+    expect(sanitizeForTTS('…Qh4+ checks and strips the king.')).toBe('Queen to h4 checks and strips the king.');
+  });
+
+  it('a move list keeps its beat after a check', () => {
+    expect(sanitizeForTTS('Bxf7+ Ke7 Nd5# — the Sea-Cadet Mate.')).toBe('Bishop takes f7, check, king to e7 knight to d5, checkmate — the Sea-Cadet Mate.');
+  });
+
   it('expands a checking capture', () => {
     expect(sanitizeForTTS('Nxe5+')).toBe('Knight takes e5, check');
   });

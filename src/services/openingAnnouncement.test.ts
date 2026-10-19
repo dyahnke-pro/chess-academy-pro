@@ -34,6 +34,14 @@ describe('openingAnnouncement — name it once, then once more where theory ends
     expect(openingAnnouncement({ name: 'Sicilian Defense: Smith-Morra Gambit Accepted, Danish Variation' }, null, 'Sicilian Defense: Smith-Morra Gambit Accepted', 'w', null))
       .toBe("It's the Danish Variation of the Sicilian Defense.");
   });
+  it('a family that grows is said whole, with its own family (review 2026-10-19)', () => {
+    expect(openingAnnouncement({ name: "Queen's Gambit Accepted" }, null, "Queen's Gambit", 'w', null)).toBe("It's the Queen's Gambit Accepted.");
+    expect(openingAnnouncement({ name: "King's Gambit Declined: Petrov's Defense" }, null, "King's Gambit", 'w', null)).toBe("It's the King's Gambit Declined: Petrov's Defense.");
+  });
+  it('a filler part leading the tail does not hide the real variation after it', () => {
+    expect(openingAnnouncement({ name: "King's Indian Defense: Normal Variation, Deferred Fianchetto" }, null, "King's Indian Defense", 'b', null))
+      .toBe("It's the Deferred Fianchetto of the King's Indian Defense.");
+  });
   it('filler tails are not variations (hand walk 2026-09-25)', () => {
     expect(openingAnnouncement({ name: 'Indian Defense: Normal Variation' }, null, 'Indian Defense', 'b', null)).toBeNull();
     expect(openingAnnouncement({ name: "King's Indian Defense: Rare Defenses" }, null, "King's Indian Defense", 'b', null)).toBeNull();

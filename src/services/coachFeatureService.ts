@@ -16,7 +16,7 @@ import { layerStandings } from './teachingLayers';
 import { readConversion, type ConversionStep } from './conversionMethod';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsClause, computePvLine, pvDepthForRating, type PvLine, type PvEngine } from './pvPlayback';
-import { countWord, lineShape } from '../utils/andList';
+import { countWord, lineSeatAt, lineShape } from '../utils/andList';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { explainEvalByPieceQuality, lowestMinorMobility, phraseBadPiece, type PieceQualityResult } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
@@ -1928,7 +1928,7 @@ export function buildReviewSegments(
           }
           const won = !ml && line ? lineWins(fenPair.fenBefore, line, studentColorWB, m.san, i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null) : null;
           if (won) {
-            const raw = `[tactic] That wins ${won.what}: ${lineShape(won.sans)}.`;
+            const raw = `[tactic] That wins ${won.what}: ${lineShape(won.sans, lineSeatAt(fenPair.fenBefore, studentColorWB))}.`;
             facets.push(raw);
             facetStakes.set(raw, { points: won.net, plies: 0 });
             if (!causalArrows || causalArrows.length === 0) {
@@ -3698,7 +3698,8 @@ async function augmentWithProjections(
       // line past three moves is its first move and its result — the arrows
       // walk the rest on the board.
       const said = proof.proof.sans.slice(0, proof.plies);
-      const moves = lineShape(said);
+      // Each move with its mover (OS-8 gap 7).
+      const moves = lineShape(said, lineSeatAt(line.plies[0].fenBefore, studentColorWB));
       return proof.proof.mate ? `${moves} — and it's mate` : `${moves} — ${describeProofResult(proof.proof.ledger as NonNullable<typeof proof.proof.ledger>)}`;
     }
     // No material point settles: the line proves nothing a sentence can hold,
@@ -4135,7 +4136,7 @@ async function augmentWithProjections(
       // Each part is its own sentence, so each starts with a capital (review
       // walk 2026-10-04, G2 19…Nf2: "…better on material than Nf2. the line
       // runs Bxh4").
-      const parts = [why, proof ? `the line runs ${proof}` : null].filter((x): x is string => !!x)
+      const parts = [why, proof ? `the line goes: ${proof}` : null].filter((x): x is string => !!x)
         .map((x, i) => (i === 0 ? x : openSentence(x)));
       if (parts.length > 0) {
         s.narration = `${s.narration ?? ''} Why ${bestName} was better — ${parts.join('. ')}.`.trim();
@@ -4209,7 +4210,7 @@ async function augmentWithProjections(
       // has real follow-up teaching (2+ further plies).
       if (line.plies.length >= 3 && s.narration) {
         const tail = render({ ...line, plies: line.plies.slice(1) }, 'either');
-        if (tail) s.narration = `${s.narration} The engine confirms it — and if they try to run, it continues ${tail}.`;
+        if (tail) s.narration = `${s.narration} The engine confirms it — and if they try to run, it continues: ${tail}.`;
         attachLineArrows(s, line, 3); // confirmed threat continuation
       }
     } else if (s.narration) {
@@ -4302,7 +4303,7 @@ async function augmentWithProjections(
         // WHOSE threat, said (review audit, prod 2026-10-13: "there's a deeper
         // threat brewing — if they sit still, it runs Nxg4 — you win a bishop"
         // named no owner until the last clause). The line is the student's.
-        ? `${s.narration ?? ''} And you have a deeper threat brewing — if they sit still, your line runs ${deep}.`.trim()
+        ? `${s.narration ?? ''} And you have a deeper threat brewing — if they sit still, your line goes: ${deep}.`.trim()
         : `${s.narration ?? ''} And you have a deeper threat brewing — if they sit still, it starts with your ${line.plies[0].san}.`.trim();
       attachLineArrows(s, line, 3); // deep threat (student's)
       deepBudget -= 1;
@@ -4370,7 +4371,7 @@ async function augmentWithProjections(
       // the teaching (what they want) — named by its first move, not recited.
       const oppRun = render(line, 'opponent');
       let callOut = oppRun
-        ? `Watch what they're building — left alone, their ${oppDeepKind} runs ${oppRun}.`
+        ? `Watch what they're building — left alone, their ${oppDeepKind} goes: ${oppRun}.`
         // THE STAKE IS ITS WHY (review audit 2026-10-14: "their idea starts
         // with d5." and nothing more). The line was kept BECAUSE it mates or
         // swings the game, so that is said with it.
