@@ -32,13 +32,14 @@ import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type Vo
 import { stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
 import { sameClaim } from './factSelector';
 import type { FacetRole } from './reviewFacetRank';
+import { isEndgameByMaterial } from './gamePhaseService';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
 export type { SpokenLine, DrawnLine } from './voicePackage';
 export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
 /** Why the door held a lane on a turn. */
-export type HoldReason = 'mate-turn' | 'verdict-turn' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts';
+export type HoldReason = 'mate-turn' | 'verdict-turn' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase';
 
 /** The AVERAGE a Learn turn is held to (CLAUDE.md WHY standard measure 4) —
  *  the scale of the marginal bar, never a limit. */
@@ -174,6 +175,39 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   lastTimeHere: 'affirm', sameAsLastTime: 'but',
 };
 
+
+/** WHERE A LANE BELONGS IN THE GAME (David 2026-10-19: "the computed
+ *  narrations are not focused on providing specific narrations in that phase
+ *  of the game"). In an ending (`isEndgameByMaterial`, the one definition) the
+ *  why of a move is kings, passers, rooks and technique — so a lane about the
+ *  opening, castling, a middlegame structure or an attack on a sheltered king
+ *  has nothing to say there, and the door holds it. Every lane answers; a new
+ *  lane fails to compile until it does.
+ *  - `any`: true in every phase;
+ *  - `not-ending`: opening and middlegame only. */
+export type LanePhase = 'any' | 'not-ending';
+export const LANE_PHASE: Record<LearnLane, LanePhase> = {
+  gem: 'any', tactic: 'any', prophylaxis: 'any', threat: 'any', dangerLevels: 'any', playedConcept: 'any',
+  commentary: 'not-ending', behavior: 'not-ending', positional: 'not-ending',
+  openingIdea: 'not-ending', openingIdentity: 'not-ending', openingEquivalence: 'not-ending', trapAhead: 'not-ending',
+  opening: 'not-ending', bookMove: 'not-ending', lastTimeHere: 'not-ending', sameAsLastTime: 'not-ending',
+  tempo: 'not-ending', notYetPlayed: 'not-ending', holdResource: 'not-ending',
+  structure: 'not-ending', kingSafety: 'not-ending', kingAttack: 'not-ending', splitPosition: 'not-ending',
+  pieceQuality: 'any', register: 'any', gap: 'any', positionFacts: 'any', priorityFirst: 'any', rejectedTempting: 'any',
+  planArc: 'any', drawback: 'any', mistake: 'any', coachMistake: 'any', fundamental: 'any', movePoint: 'any',
+  foundMove: 'any', heldMove: 'any', slipAnswer: 'any', moveIntent: 'any', moveOrder: 'any', theirMoveCost: 'any',
+  recapture: 'any', ruleException: 'any', falseAlarm: 'any', threatAnswer: 'any', pushOrHold: 'any', causalChain: 'any',
+  phase: 'any', character: 'any', theirPurpose: 'any', theirIntent: 'any', fileRace: 'any', stalemate: 'any',
+  countMethod: 'any', timing: 'any', checkMethod: 'any', trade: 'any', kneeJerk: 'any', blunderCheck: 'any',
+  autopilot: 'any', keepPressing: 'any', pawnEnding: 'any', strongChoice: 'any', tradeLedger: 'any',
+  captureChoice: 'any', kickMap: 'any', breakRace: 'any', patternFails: 'any', structureJudgement: 'any',
+};
+
+/** Is this lane's fact out of place on this board? */
+export function laneOutOfPhase(lane: LearnLane, fen: string): boolean {
+  if (LANE_PHASE[lane] === 'any') return false;
+  try { return isEndgameByMaterial(fen); } catch { return false; }
+}
 
 export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // ── batch 1 (opening equivalence, order and timing) ──
@@ -459,9 +493,11 @@ export function decideTurn(
    *  below reads these, not the producer's text (a proven skill's rule is
    *  shortened, and its long text never matched; Learn walk 2026-10-19). */
   const ownOpenTexts = new Set<string>();
+  const phaseHeld: LearnLane[] = [];
   for (const f of facts) {
     if (!f.text.trim()) continue;
     offered.push(f.lane);
+    if (laneOutOfPhase(f.lane, f.fen)) { if (!phaseHeld.includes(f.lane)) phaseHeld.push(f.lane); continue; }
     const text = fadeWhenGreen(f.lane, f.text, green ?? null, f.skill);
     if (text !== f.text && !faded.includes(f.lane)) faded.push(f.lane);
     // ONE REASON PER MOVE ACROSS BOTH WAVES (Learn tape 2026-10-19: "That's
@@ -608,6 +644,7 @@ export function decideTurn(
   // "count before you take" was held 4 of 4 and nothing said why).
   const heldWhy: Partial<Record<LearnLane, HoldReason>> = {};
   const hold = (lane: LearnLane, why: HoldReason): void => { if (!held.includes(lane)) held.push(lane); heldWhy[lane] ??= why; };
+  for (const l of phaseHeld) hold(l, 'out-of-phase');
   // "NOTHING HINGES ON YOUR NEXT MOVE" NEVER SITS BESIDE A STAKE (Alekhine
   // walk 2026-10-19: "Watch c2 — a knight forks there in 2…" then "Nothing
   // hinges on your next move"). Both were true — every top move met the fork —

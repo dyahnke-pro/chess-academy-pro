@@ -21,8 +21,8 @@ describe('mastersPlanRead — the break master games go for', () => {
     const r = mastersPlanRead(fenOf('e4 e6 d4 d5 e5'), at);
     expect(r?.black?.san).toBe('c5');
     expect(r!.black!.share).toBeCloseTo(0.9, 2);
-    expect(mastersPlanLine(r, 'b')?.text).toBe('The plan in this structure: your break is …c5 — masters from here almost always play it.');
-    expect(mastersPlanLine(r, 'w')?.text).toBe('The plan in this structure: their break is …c5.');
+    expect(mastersPlanLine(r, 'b', null)?.text).toBe('The plan in this structure: your break is …c5 — masters from here almost always play it.');
+    expect(mastersPlanLine(r, 'w', null)?.text).toBe('The plan in this structure: their break is …c5.');
   });
 
   it('taking the pawn that just arrived answers their break — it is not a break (walk 2026-09-30)', () => {
@@ -78,10 +78,21 @@ describe('a plan read off another board keeps only what lies ahead (Alekhine wal
     expect(r?.black).toBeNull();
     expect(r?.white?.san).toBe('c4');
     expect(r?.blackPiece?.san).toBe('Nc6');
-    expect(mastersPlanLine(r, 'w')?.text ?? '').not.toMatch(/d6/);
+    expect(mastersPlanLine(r, 'w', null)?.text ?? '').not.toMatch(/d6/);
   });
   it('NEGATIVE CONTROL: before the break it still speaks', () => {
     const c = new Chess(); for (const m of ['e4', 'Nf6', 'e5', 'Nd5', 'd4']) c.move(m);
     expect(planStillAhead(plan, c.fen())?.black?.san).toBe('d6');
+  });
+});
+
+describe('a live board holds the student plan step that is their next move (David replay 2026-10-19, move 3)', () => {
+  // 1.e4 c5 2.d4 cxd4 3.c3 dxc3 — White to move, Bc4 legal: "your bishop on f1
+  // usually goes to c4 (Bc4)" named his next move.
+  const fen = 'rnbqkbnr/pp1ppppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4';
+  const read = { white: null, black: null, whitePiece: { piece: 'b', from: 'f1', to: 'c4', san: 'Bc4', weight: 1 }, blackPiece: null } as unknown as MastersPlanRead;
+  it('held on the live board, named in review', () => {
+    expect(mastersPlanLine(read, 'w', fen)).toBeNull();
+    expect(mastersPlanLine(read, 'w', null)?.text).toMatch(/c4/);
   });
 });

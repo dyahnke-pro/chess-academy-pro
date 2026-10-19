@@ -109,6 +109,12 @@ export function phraseFrom(aim: Aim, at: string): string {
   return routeNoun({ ...aim.route, path: [at, ...aim.squares.slice(i + 1)] });
 }
 
+/** A student's route by its goal only — start and goal, the waypoints held. */
+export function studentRoutePhrase(aim: Aim, at: string | null): string {
+  if (aim.kind !== 'route' || !aim.route || !aim.goal) return aim.phrase;
+  return routeNoun({ ...aim.route, path: [at ?? aim.route.path[0], aim.goal] });
+}
+
 interface ArcEntry {
   aim: Aim;
   /** Reads in a row this aim has been present. */
@@ -390,7 +396,7 @@ export function stepArc(
           ? passerStep(moved.to, color, their)
           : their
           ? `What is their ${PIECE[moved.piece] ?? 'piece'} on ${moved.to} doing? ${THINK_MARK} It's ${entry.steps === 1 ? 'a step' : 'another step'} toward ${phraseFrom(e.aim, moved.to)}.`
-          : `Your ${PIECE[moved.piece] ?? 'piece'} to ${moved.to} is ${entry.steps === 1 ? 'a step' : 'another step'} toward ${phraseFrom(e.aim, moved.to)}.`,
+          : `Your ${PIECE[moved.piece] ?? 'piece'} to ${moved.to} is ${entry.steps === 1 ? 'a step' : 'another step'} toward ${studentRoutePhrase(e.aim, moved.to)}.`,
       });
     }
     // Present now — or just advanced by the move (a step toward an aim is not
@@ -456,9 +462,16 @@ export function stepArc(
     if (!entry.announced && streak >= 2 && !reasonless) {
       entry.announced = true;
       const at = routeStartNow(aim, fenAfter, color);
+      // THE STUDENT'S ROUTE IS SAID BY ITS GOAL, NEVER ITS WAYPOINTS (David's
+      // Smith-Morra replay 2026-10-19, move 26: "getting the knight to g4, by
+      // way of f6" — the first hop was his next move, Nxf6+). LEARN NAMES NO
+      // MOVE UNASKED: the waypoints and their marks are held; the goal is the
+      // plan. Their route is said in full — it is their move, not his.
+      const held = seat === 'student' && aim.kind === 'route';
+      const phrase = held ? studentRoutePhrase(aim, at) : at ? phraseFrom(aim, at) : aim.phrase;
       events.push({
-        id: aim.id, kind: 'emerge', seat, squares: aim.squares.slice(0, 4),
-        text: EMERGE[seat][emerged++ % EMERGE[seat].length](`${at ? phraseFrom(aim, at) : aim.phrase}${why}`),
+        id: aim.id, kind: 'emerge', seat, squares: held && aim.goal ? [aim.goal] : aim.squares.slice(0, 4),
+        text: EMERGE[seat][emerged++ % EMERGE[seat].length](`${phrase}${why}`),
       });
     }
     next[aim.id] = entry;

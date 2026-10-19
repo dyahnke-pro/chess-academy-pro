@@ -93,7 +93,17 @@ export async function loadFixtureIntoIDB(page, fixturePath = DEFAULT_FIXTURE_PAT
           counts[s] = Array.isArray(rows) ? rows.length : 0;
           if (Array.isArray(rows)) {
             const store = tx.objectStore(s);
-            for (const r of rows) store.put(r);
+            // A profile carries its DEVICE's live-stream settings (David's
+            // real secret). Loaded as-is, the page streams with that secret
+            // and the audit's own listener rejects every event — the walk
+            // then reads "0 words" on turns the coach spoke (2026-10-19).
+            // The record is the student's; the stream belongs to this run.
+            for (const r of rows) {
+              if (s === 'profiles' && r && r.preferences) {
+                r.preferences = { ...r.preferences, auditStreamUrl: null, auditStreamSecret: null };
+              }
+              store.put(r);
+            }
           }
         }
         tx.oncomplete = () => {

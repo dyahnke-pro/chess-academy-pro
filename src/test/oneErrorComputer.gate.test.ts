@@ -77,7 +77,13 @@ describe('one error computer', () => {
       const src = read(f);
       const calls = [...src.matchAll(/\b(?:errorWhy|callInaccuracy(?:Detailed)?)\(\{[\s\S]*?\}\)/g)].map((m) => m[0]);
       expect(calls.length, `${f} has no error call`).toBeGreaterThan(0);
-      for (const c of calls) expect(c, `${f}: an error call that may name the better move`).toMatch(/namesBetterMove:\s*false/);
+      // CARVE-OUT 2 (David 2026-10-18): THEIR better move is a moment already
+      // past and is named; the rule protects the STUDENT's next move. Only a
+      // call on the opponent's side may pass true.
+      for (const c of calls) {
+        if (/side:\s*'coach'/.test(c)) continue;
+        expect(c, `${f}: an error call that may name the better move`).toMatch(/namesBetterMove:\s*false/);
+      }
     }
   });
 

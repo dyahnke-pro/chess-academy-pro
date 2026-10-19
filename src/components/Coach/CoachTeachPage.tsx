@@ -39,6 +39,7 @@ import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../typ
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from '../../services/motifLedger';
 import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
+import { mateStakes, exchangeStakes, forkPoints, piecesOn } from '../../services/factStakes';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
@@ -1936,7 +1937,7 @@ export function CoachTeachPage(): JSX.Element {
    *  pass flags it here (keyed by the FEN it read) so the instant package can call
    *  the mating NET at mate-in-N — not wait for the board to reach mate-in-1
    *  (David 2026-08-23). Cleared when there is no student mate. */
-  const pendingEngineMateRef = useRef<{ fen: string; movesToMate: number; firstUci: string | null } | null>(null);
+  const pendingEngineMateRef = useRef<{ fen: string; movesToMate: number } | null>(null);
   // The engine's read of the board after the coach's reply — the answer to a
   // threat the instant wave named waits on it (threatAnswer).
   const studentBestReadRef = useRef<{ fen: string; bestUci: string | null; whiteCp: number | null; analysis: StockfishAnalysis } | null>(null);
@@ -1999,13 +2000,6 @@ export function CoachTeachPage(): JSX.Element {
   // The threat / tactic say-once memory (last key + every spoken line) lives in
   // `learnMemRef.current` — per game, forgotten by the board-driven reset.
   // Migrated 2026-09-19 after the second-game audit caught the hand refs.
-  // Which teaching tier taught the ply just narrated — read by the turnFacts
-  // audit so a run reports its tier MIX instead of having it grepped out of the
-  // transcript afterwards. `position` is a note authored AT this board;
-  // `structure`/`concept` are borrowed by idea; `baked` is reviewed opening
-  // prose. Three rounds of hand-grepping went into answering "are the notes
-  // firing" and the answer was always in the app — it just never said it.
-  const teachingTierRef = useRef<string>('none');
   /** Track A generation — bumped per coach reply so a chain link created in
    *  an older turn can't speak a line about a position the student already
    *  left (and can't steal the throttle window from the current line). */
@@ -8278,7 +8272,6 @@ export function CoachTeachPage(): JSX.Element {
     markOnlyArrow: BoardArrow | null;
     /** The threat that SPOKE this wave, for its answer in the late wave. */
     threatAsked: { squares: string[]; shape: 'line' | 'hit' } | null;
-    leadEyeArrows: BoardArrow[];
     /** Lead-the-eye for the lanes that SPOKE — each kept fact's squares.
      *  Computed from what survived into `pkg.spoken`, so a mark can never
      *  outlive its claim. */
@@ -8303,7 +8296,7 @@ export function CoachTeachPage(): JSX.Element {
       const over = new Chess(args.fenAfterReply);
       if (over.isGameOver()) {
         return {
-          pkg: buildVoicePackage([]), lanes: '', lead: null, deferred: [], alertArrow: null, markOnlyArrow: null, threatAsked: null, leadEyeArrows: [],
+          pkg: buildVoicePackage([]), lanes: '', lead: null, deferred: [], alertArrow: null, markOnlyArrow: null, threatAsked: null,
           keptHighlights: [],
         };
       }
@@ -8324,8 +8317,15 @@ export function CoachTeachPage(): JSX.Element {
     let tacticSquares: string[] = [];
     let threatSquares: string[] = [];
     const AV: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
-    const leadEyeArrows: BoardArrow[] = [];
     let tacticLine: string | null = null;
+    /** What the tactic wins (`factStakes`) — a tactic the detectors proved is
+     *  never an unstaked aside the word bar can drop (David 2026-10-19: "i
+     *  also never heard a tactic alert"). */
+    let tacticStakes: FactStakes | undefined;
+    /** Marks the tactic as said — run only once the door SPOKE it. Marking it
+     *  before the door held it lost the alert for good (a threat or a verdict
+     *  on the same move held it, and the repeat guard then silenced it). */
+    let markTacticSaid: (() => void) | null = null;
     /** The proof's line, drawn move by move when the tactic line says it. */
     let tacticLines: SpokenLine[] | undefined;
     /** The claim the tactic line makes — keys the speak-time ledger. */
@@ -8351,7 +8351,6 @@ export function CoachTeachPage(): JSX.Element {
     let announceSquares: readonly string[] = [];
     let identityRidesName = false;
     let gemLine: string | null = null;
-    teachingTierRef.current = 'none';
     const studentCC: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
     const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
     const history = args.historyAfterReply;
@@ -8458,26 +8457,15 @@ export function CoachTeachPage(): JSX.Element {
       const forcedMateN = engineMateN ?? (tctx.boardFacts?.mateInOne ? 1 : null);
       if (forcedMateN) {
         tacticKey = `mate:${forcedMateN}`;
-        // THE MATE IS NAMED (David 2026-09-24: Learn names the move). "There's
-        // a mate in one here." withheld it and nothing else named it (walk
-        // 1500, 53.Ke2). The first move is the engine's (or the board's own
-        // mate-in-one); no move in hand → the count alone.
-        const engineFirst = engineMateN && pendingEngineMateRef.current?.firstUci
-          ? (() => { try { const u = pendingEngineMateRef.current.firstUci; return new Chess(args.fenAfterReply).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san; } catch { return null; } })()
-          : null;
-        const firstSan = engineFirst ?? tctx.boardFacts?.mateInOne ?? null;
+        // THE MATE IS ANNOUNCED, ITS MOVE IS NOT (David 2026-10-10: "I do not
+        // want the better move stated in learn free play unless the user asks
+        // for it"). This used to say "Qh7 is mate" under the 2026-09-24 rule
+        // that rule replaced. The count is said only when it is short — past
+        // five a live read finds A mate, not the fastest (walk 2026-10-01).
         tacticLine = forcedMateN === 1
-          ? (firstSan ? `${firstSan} is mate.` : "There's a mate in one here.")
-          // THE COUNT ONLY WHEN IT IS SHORT (Learn walk 2026-10-01: "mate in
-          // 18" where the shortest was 5 — a live read at low depth finds a
-          // mate, not the fastest one). Past five the number is not proven.
-          : forcedMateN > 5
-            ? (firstSan ? `There's a forced mate here, starting with ${firstSan}.` : `There's a forced mate here.`)
-            : (firstSan ? `There's a forced mate here — mate in ${forcedMateN}, starting with ${firstSan}.` : `There's a forced mate here — mate in ${forcedMateN}.`);
-        // The mate's first move IS its proof — exact when it mates at once.
-        // Without a move the line says only that a mate is there: the answer
-        // is the student's to find.
-        tacticFactProof = (firstSan ? legalLineProof(args.fenAfterReply, [firstSan], forcedMateN === 1) : null) ?? NO_PROOF.withheld;
+          ? "There's a mate in one here."
+          : forcedMateN > 5 ? "There's a forced mate here." : `There's a forced mate here — mate in ${forcedMateN}.`;
+        tacticFactProof = NO_PROOF.withheld;
       } else if (theirHanging.length > 0) {
         const prize = theirHanging[0];
         tacticKey = `win:${prize.piece}${prize.square}`;
@@ -8783,18 +8771,28 @@ export function CoachTeachPage(): JSX.Element {
         tacticSquares = [];
         tacticLine = null;
       } else if (tacticLine) {
-        learnMemRef.current.lastTacticKey = tacticKey;
-        learnMemRef.current.spokenTacticLines.add(tacticLine);
-        if (pendingMotif) recordMotif(pendingMotif.type, pendingMotif.instance, pendingMotif.moveNo, learnMemRef.current.motifLastSpoken);
+        const saidLine = tacticLine; const saidKey = tacticKey; const motif = pendingMotif;
         // …and the composer's concept clause reads the same instance key, so
         // "you have a back-rank threat: the king on g8 has no escape square"
         // is not followed by "their king on g8 has no escape square" in the
         // late package (1200 walk 2026-09-27, ply 37).
-        if (myTacticType && tacticSquares.length > 0) {
-          tacticClaim = conceptInstanceKey(myTacticType, tacticSquares);
-          standingRef.current.remember(tacticClaim);
-        }
-        captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: tacticKey });
+        if (myTacticType && tacticSquares.length > 0) tacticClaim = conceptInstanceKey(myTacticType, tacticSquares);
+        const claimSaid = tacticClaim;
+        // WHAT IT WINS: a forced mate, else the most an exchange on its squares
+        // wins from their pieces, else a fork's second target.
+        const foe: 'w' | 'b' = studentCC === 'w' ? 'b' : 'w';
+        const mateN = /^mate:(\d+)$/.exec(tacticKey);
+        tacticStakes = mateN ? mateStakes('you', Number(mateN[1]) * 2 - 1, true)
+          : exchangeStakes(args.fenAfterReply, tacticSquares, foe)
+          ?? (myTacticType === 'fork' && forkPoints(piecesOn(args.fenAfterReply, tacticSquares)) > 0
+            ? { points: forkPoints(piecesOn(args.fenAfterReply, tacticSquares)), plies: 1 } : undefined);
+        markTacticSaid = () => {
+          learnMemRef.current.lastTacticKey = saidKey;
+          learnMemRef.current.spokenTacticLines.add(saidLine);
+          if (motif) recordMotif(motif.type, motif.instance, motif.moveNo, learnMemRef.current.motifLastSpoken);
+          if (claimSaid) standingRef.current.remember(claimSaid);
+          captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: saidKey });
+        };
       }
       // ONE DEFINITION PER MOVE, ON THE LEAD (Blumenfeld walk, move 24: "Watch
       // out — their queen forks … Remember — a fork … You have a removal of the
@@ -9362,7 +9360,7 @@ export function CoachTeachPage(): JSX.Element {
     })();
     const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1 }, facts: [
       ...(gemLine ? [{ lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
-      ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0]) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
+      ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0]) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
       ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
       ...(lastHereRead ? [{ lane: lastHereRead.key.startsWith('last-here:same:') ? 'sameAsLastTime' as const : 'lastTimeHere' as const, text: lastHereRead.text, fen: lastHereRead.fen ?? args.fenAfterReply, claims: [lastHereRead.key], proof: lastHereRead.proof }] : []),
       ...(bookMoveRead ? [{ lane: 'bookMove' as const, text: bookMoveRead.text, fen: bookMoveRead.fen ?? args.fenAfterReply, squares: bookMoveRead.squares, claims: [bookMoveRead.key], role: 'teach' as const, proof: bookMoveRead.proof, skill: FUNDAMENTAL_TAG['left-book-early'] }] : []),
@@ -9404,6 +9402,7 @@ export function CoachTeachPage(): JSX.Element {
     // fact. NO COUNT CAP (David 2026-09-13) still holds — repetition is caught
     // by the in-turn twin gate and the per-game novelty set.
     const pkg = instantDecision.pkg;
+    if (instantDecision.spoke.includes('tactic')) markTacticSaid?.();
     if (announcesTheMove(instantDecision.spoke)) announcedBoardsRef.current.add(args.fenAfterReply.split(' ').slice(0, 2).join(' '));
 
     // ── LEAD THE EYE ON THE COMPUTED LANES ─────────────────────────────────
@@ -9464,7 +9463,6 @@ export function CoachTeachPage(): JSX.Element {
       threatAsked: threatLine
         ? { squares: [...threatSquares], shape: threatShape }
         : null,
-      leadEyeArrows,
       keptHighlights,
     };
   }, [activeProfile?.puzzleRating, activeProfile?.currentRating, playerColor]);
@@ -10282,7 +10280,7 @@ export function CoachTeachPage(): JSX.Element {
                 if (studentBest?.isMate && typeof studentBest.mateIn === 'number' && studentBest.mateIn !== 0) {
                   const studentMates = playerColor === 'white' ? studentBest.mateIn > 0 : studentBest.mateIn < 0;
                   pendingEngineMateRef.current = studentMates
-                    ? { fen: probe.fen(), movesToMate: Math.abs(studentBest.mateIn), firstUci: studentBest.bestMove || null }
+                    ? { fen: probe.fen(), movesToMate: Math.abs(studentBest.mateIn) }
                     : null;
                 } else {
                   pendingEngineMateRef.current = null;
@@ -10763,21 +10761,6 @@ export function CoachTeachPage(): JSX.Element {
                   // list; the instant pass already speaks the gem. Removed
                   // 2026-09-29, G8.5.)
                 }
-                // WHICH TIER TAUGHT THIS PLY. What the turn SPOKE is on the
-                // door's own rows (`describeTurnDecision` on the instant and
-                // late packages); this row keeps only the teaching tier. The
-                // `beats` list it used to carry counted computation nobody heard
-                // (G8.5, 2026-09-29).
-                void logAppAudit({
-                  // Not narration — nothing here is spoken, so it must not ride
-                  // the narration kind that every listener reads as speech.
-                  kind: 'coach-opening-teaching-active',
-                  category: 'subsystem',
-                  source: 'CoachTeachPage.turnFacts',
-                  summary: `teaching tier: ${teachingTierRef.current ?? 'none'}`,
-                  details: JSON.stringify({ teaching: teachingTierRef.current }),
-                  fen: probe.fen(),
-                });
               }
             } catch {
               /* probe is best-effort; absence just means no extra fact */
@@ -11020,11 +11003,6 @@ export function CoachTeachPage(): JSX.Element {
                   if (instant.pkg.kept.some((f) => f.kind === 'note')) {
                     noteTaughtThisTurn = true;
                   }
-                }
-                if (instant.leadEyeArrows.length > 0) {
-                  const leadEye = instant.leadEyeArrows;
-                  chainArrowsRef.current = [...chainArrowsRef.current, ...leadEye];
-                  void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, ...leadEye])));
                 }
                 // THE KEPT FACTS' MARKS ride the same `padDone` gate as every
                 // other mark on this turn, so they land with the voice, and the

@@ -152,7 +152,10 @@ function cctRead(fen: string, student: Color): MethodRead['cct'] | null {
 /** What makes each plan's target worth playing for, on its own squares. */
 const WORTH: Record<PlanKind, (p: PlanFact) => string> = {
   'king-attack': (p) => `their king on ${p.squares[0]} is still in the centre, and a king you can reach is the biggest target on the board`,
-  passer: (p) => `nothing of theirs can stop your pawn on ${p.squares[0]} with a pawn, so a piece of theirs must stand guard against it`,
+  // A PASSER IS NAMED BY ITS FILE (David's Smith-Morra replay 2026-10-19,
+  // move 49: "nothing of theirs can stop your pawn on d6" spoken after he had
+  // pushed it to d7). The reason stays true however far it walks.
+  passer: (p) => `nothing of theirs can stop your ${p.squares[0]?.[0] ?? ''}-pawn with a pawn, so a piece of theirs must stand guard against it`,
   'weak-pawn': (p) => `no pawn of theirs can protect their pawn on ${p.squares[0]}, so every piece that guards it is a piece doing nothing else`,
   'open-file': (p) => `the ${p.file}-file has no pawns on it — a road into their camp, and the first rook there owns it`,
   outpost: (p) => `no pawn of theirs can chase your piece off ${p.squares[0]}, so it stays there for good`,

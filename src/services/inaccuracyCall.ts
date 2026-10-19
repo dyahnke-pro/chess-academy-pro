@@ -725,12 +725,18 @@ export function callInaccuracyDetailed(args: {
     // imprecise. Your queen on a5 is still hanging, though" — the grade said
     // nothing). Their best was winning your piece, and it still hangs.
     const letGo = stillHanging ? `they could have won your ${stillHanging.piece} on ${stillHanging.square}, and it is still hanging — see to it` : null;
-    const why = (args.allowedMate ?? null) !== null
-      ? 'it walks into mate'
-      : ew.consequence ? seatTheirErrorForStudent(consequenceIn(ew.consequence, 'present')) : letGo;
-    const failedSaid = !why && ew.failed ? ` ${seatTheirErrorForStudent(ew.failed)}` : '';
+    // THE PUNISHMENT IS THE STUDENT'S NEXT MOVE, SO IT WAITS (David's
+    // Smith-Morra replay 2026-10-19, move 25: "Their Kg8 is a mistake … Nhf6+
+    // comes with check … After Nhf6+, exf6, Nxf6+, your knight forks …" — his
+    // next three moves, before he played one). On this branch the punisher is
+    // always the student: what their slip LETS YOU DO is pointed at, never
+    // played out — the line is the answer to a question he has not asked
+    // (LEARN NAMES NO MOVE UNASKED). Their missed capture (`letGo`) is THEIR
+    // move, and their better move is a moment already past; both still speak.
+    const why = (args.allowedMate ?? null) !== null ? 'it walks into mate' : letGo;
+    const failedSaid = '';
     const costSaid = !why && !failedSaid && costFitsGrade(quality as SpokenGradeLabel, cost) ? ` — it throws away ${costWords(cost)} of advantage` : '';
-    const head = `Their ${args.playedSan} is ${GRADE_WORD[quality as SpokenGradeLabel]}${why ? ` — ${why}` : costSaid}.${failedSaid}${seatTheirErrorForStudent(ew.tail)}`;
+    const head = `Their ${args.playedSan} is ${GRADE_WORD[quality as SpokenGradeLabel]}${why ? ` — ${why}` : costSaid}.${failedSaid}`;
     const theirBetter = ew.better ? ` ${seatTheirErrorForStudent(ew.better).replace(/ was the move\b/, ' was their move')}` : '';
     // With no why to say, the slip is still the student's chance — pointed at,
     // not named.
@@ -739,7 +745,7 @@ export function callInaccuracyDetailed(args: {
       : !why && !failedSaid && quality !== 'inaccuracy' ? theirSlipOffer(args.moverEvalAfterCp) : '';
     if (!why && !failedSaid && !costSaid && !theirBetter && !punish) return { call: null, declined: 'no-why' };
     const offers = !why && !failedSaid && quality !== 'inaccuracy' && !stillHanging ? { offersStudent: true as const } : {};
-    return { call: { quality, side: 'coach', cost, said: `${head}${theirBetter}${punish}`, square: ew.namesBetter ? better?.square ?? '' : '', ...(ew.proof ? { proof: ew.proof } : {}), ...(ew.line ? { line: ew.line } : {}), ...offers } };
+    return { call: { quality, side: 'coach', cost, said: `${head}${theirBetter}${punish}`, square: ew.namesBetter ? better?.square ?? '' : '', ...offers } };
   }
 
   // THE STUDENT'S OWN MOVE, in the retroactive register the backward look uses:

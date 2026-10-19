@@ -22,7 +22,7 @@ describe('a master placement names the piece where it stands now', () => {
       [`${BASE} Nd6 Bxc6 dxc6`]: [['dxe5', 1000]],
       [`${BASE} Nd6 Bxc6 dxc6 dxe5`]: [['Nf5', 1000]],
     });
-    const line = mastersPlanLine(mastersPlanRead(fenOf(BASE), at), 'b')?.text ?? '';
+    const line = mastersPlanLine(mastersPlanRead(fenOf(BASE), at), 'b', null)?.text ?? '';
     expect(line).not.toMatch(/knight on d6/);
   });
 });

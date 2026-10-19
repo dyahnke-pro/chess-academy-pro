@@ -159,3 +159,12 @@ describe('Learn holds a plan step the student could play right now (David 2026-1
     expect(methodLine(methodRead(FEN, 'w', false)!)).toMatch(/the push to d5/);
   });
 });
+
+describe('a passer is named by its file (David replay 2026-10-19, move 49)', () => {
+  it('stays true after the pawn walks', async () => {
+    const { planWorth } = await import('./planChoice');
+    const w = planWorth({ kind: 'passer', squares: ['d6'] } as unknown as Parameters<typeof planWorth>[0]);
+    expect(w).toMatch(/your d-pawn/);
+    expect(w).not.toMatch(/d6/);
+  });
+});

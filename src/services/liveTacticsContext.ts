@@ -591,6 +591,17 @@ export function speakDeepestLookahead(
     const ownedProse = owned.length === 1 ? owned[0] : `${owned[0]}, then ${owned.slice(1).join(', ')}`;
     return `Look a couple of moves ahead — you've got a ${pattern} coming, ${pick.depthAhead} deep: ${ownedProse}.${holeTag}`;
   }
+  // THE WARNING HOLDS THE STUDENT'S MOVES TOO (David's Smith-Morra replay
+  // 2026-10-19, move 8: "Look ahead — if you play the knight to d5 … then your
+  // rook to e1, their bishop to g4: a pin in 4" named two of his moves while
+  // the flag said none may be named). Only their plies are said: what is
+  // coming, never which of his moves walks into it.
+  if (studentOpens && !namesStudentMoves) {
+    const theirPlies = spoken.filter((_, i) => i % 2 === 1).map((m) => (/^the /.test(m) ? `their ${m.slice(4)}` : m));
+    if (!theirPlies.length) return null;
+    const theirProse = theirPlies.length === 1 ? theirPlies[0] : `${theirPlies.slice(0, -1).join(', ')} and then ${theirPlies[theirPlies.length - 1]}`;
+    return `Look ahead — a ${pattern} is ${pick.depthAhead} moves away: ${theirProse}. Spot it before it lands.${holeTag}`;
+  }
   if (studentOpens && spoken.length >= 2) {
     // Every ply after the first names its owner too — "they have the knight to
     // a5, then the pawn to c5" read the student's own c5 as theirs (hand walk

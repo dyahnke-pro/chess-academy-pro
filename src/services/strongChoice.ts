@@ -20,10 +20,6 @@ export function strongChoice(fenBefore: string, playedSan: string): { text: stri
   if (!best) return null;
   const bare = (s: string): string => s.replace(/[+#!?]+$/, '');
   const same = bare(best.san) === bare(playedSan);
-  // The student's own move, when strong players play it too, is said FIRST —
-  // "the choice is Bb5" after a sound Nc3 read as a correction (walk
-  // 2026-09-30, game 2).
-  const mine = entry.moves.find((m) => bare(m.san) === bare(playedSan));
   // THE REASON, NOT JUST THE STATISTIC (David 2026-10-06: "statistics where a
   // reason should be" — a database talking, not a coach). The move-why
   // computer says what the strong move DOES.
@@ -34,10 +30,11 @@ export function strongChoice(fenBefore: string, playedSan: string): { text: stri
   // of 1012 strong games go this way": a coach gives the reason; a database
   // gives the count). No reason computed → the line is not said.
   if (!why) return null;
-  const text = same
-    ? `That's what strong players play here — it ${why}.`
-    : mine && mine.games >= Math.max(HIS_PLAN_MIN_GAMES, best.games * 0.1)
-      ? `${playedSan} is a strong player's move here too, but ${best.san} scores better — it ${why}.`
-      : `Strong players play ${best.san} here — it ${why}.`;
-  return { text, san: best.san, same };
+  // AFFIRM ONLY (David 2026-10-19, his Smith-Morra replay: "Strong players
+  // play Nf3 here" after his book move 2.d4 — heard as the move to play next).
+  // Naming a DIFFERENT move is the better move unasked (LEARN NAMES NO MOVE
+  // UNASKED); a book departure names the book move through `bookMove`, with
+  // its job. So this computer speaks only to confirm the student's own move.
+  if (!same) return null;
+  return { text: `That's what strong players play here — it ${why}.`, san: best.san, same };
 }

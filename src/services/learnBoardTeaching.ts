@@ -764,7 +764,7 @@ function learnPlanRead(fen: string, openingName: string | null): MastersPlanRead
  *  pawn break each side's master games go for from this board, with its share.
  *  Warms the masters file on first call; silent until it has loaded. */
 export function openingPlanTeaching(fen: string, student: 'w' | 'b', openingName: string | null): TeachingHint | null {
-  const plan = mastersPlanLine(learnPlanRead(fen, openingName), student);
+  const plan = mastersPlanLine(learnPlanRead(fen, openingName), student, fen);
   if (!plan) return null;
   return {
     lane: 'openingIdea', proof: NO_PROOF.description, text: plan.text, squares: plan.squares, claims: plan.squares.map((q) => `break-${q}`),

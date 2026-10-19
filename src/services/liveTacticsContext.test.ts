@@ -324,6 +324,19 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
     expect(speakDeepestLookahead(ctx, 'student', 'b', true)).toMatch(/they're lining up/);
   });
 
+  it('with namesStudentMoves false the warning says only THEIR moves (David replay 2026-10-19, move 8)', () => {
+    // "Look ahead — if you play the knight to d5 … then your rook to e1, their
+    // bishop to g4: a pin in 4" named two of his moves unasked.
+    const ctx = ctxWith(
+      [],
+      [{ spoken: null, type: 'skewer', description: 's', depthAhead: 3, line: ['Re1', 'Qd7', 'Rxe8'] }],
+    );
+    const say = speakDeepestLookahead(ctx, 'student', 'w', false)!;
+    expect(say).not.toMatch(/rook to e1|rook taking on e8|if you play/);
+    expect(say).toMatch(/their queen to d7/);
+    expect(say.toLowerCase()).toContain('skewer');
+  });
+
   it('stays inside "a couple of moves" — a tactic 5 or 9 plies out is not spoken live', () => {
     expect(speakDeepestLookahead(ctxWith([{ spoken: null, type: 'skewer', description: 's', depthAhead: 5, line: ['bxc3', 'Ke7', 'h3', 'Be6', 'Bc2'] }], []), 'student', 'w', true)).toBeNull();
     const ctx = ctxWith(

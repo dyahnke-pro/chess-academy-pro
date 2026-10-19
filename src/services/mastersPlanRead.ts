@@ -205,12 +205,31 @@ export function planStillAhead(read: MastersPlanRead | null, fen: string): Maste
 
 /** The sentence, from the student's seat. Null when neither side has a break
  *  master games agree on. */
-export function mastersPlanLine(read: MastersPlanRead | null, student: 'w' | 'b'): { text: string; squares: string[]; arrows: Array<{ from: string; to: string }> } | null {
+export function mastersPlanLine(
+  read: MastersPlanRead | null,
+  student: 'w' | 'b',
+  /** REQUIRED — the board a live surface speaks on, or null where the move may
+   *  be named (review: the game is over). On a live board a step of the
+   *  student's that is LEGAL right now is their next move, so it is held
+   *  (David's Smith-Morra replay 2026-10-19, move 3: "your bishop on f1 usually
+   *  goes to c4 (Bc4)" with Bc4 legal — LEARN NAMES NO MOVE UNASKED). */
+  holdPlayableOn: string | null,
+): { text: string; squares: string[]; arrows: Array<{ from: string; to: string }> } | null {
   if (!read) return null;
+  const playable = (step: { from: string; square?: string; to?: string } | null | undefined): boolean => {
+    if (!step || !holdPlayableOn) return false;
+    try {
+      const c = new Chess(holdPlayableOn);
+      if (c.turn() !== student) return false;
+      return c.moves({ verbose: true }).some((m) => m.from === step.from && m.to === (step.to ?? step.square));
+    } catch { return false; }
+  };
   const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
-  const mine = student === 'w' ? read.white : read.black;
+  const mineRaw = student === 'w' ? read.white : read.black;
+  const mine = playable(mineRaw) ? null : mineRaw;
   const theirs = student === 'w' ? read.black : read.white;
-  const myPiece = student === 'w' ? read.whitePiece : read.blackPiece;
+  const myPieceRaw = student === 'w' ? read.whitePiece : read.blackPiece;
+  const myPiece = playable(myPieceRaw) ? null : myPieceRaw;
   const myCastle = student === 'w' ? read.whiteCastle : read.blackCastle;
   const dot = (san: string, side: 'w' | 'b'): string => `${side === 'b' ? '…' : ''}${san}`;
   const NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };

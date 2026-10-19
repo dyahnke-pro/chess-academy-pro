@@ -620,14 +620,14 @@ describe('Learn free play never names the better move unasked (David 2026-10-10)
 });
 
 describe('their mistake gets the same detail as yours (David 2026-10-10)', () => {
-  it('says what their move lets you do, with the line on the board, and keeps their better move unnamed in Learn', () => {
+  it('points at what their move lets you do and never names your move (David replay 2026-10-19: the punishment is your next move)', () => {
     const call = callInaccuracy({ namesBetterMove: false, priorMove: null, replyLineUci: ['d7d5', 'c4b3'], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
       cpLoss: 250, side: 'coach', moverColor: 'white',
     });
-    expect(call?.said).toBe('Their a3 is a mistake — it lets you play …d5, which attacks the bishop on c4.');
-    expect(call?.said).not.toContain('Bg5');
-    expect(call?.proof?.line?.sans).toEqual(['d5', 'Bb3']);
+    expect(call?.said).toMatch(/^Their a3 is a mistake/);
+    expect(call?.said).not.toMatch(/d5|Bg5/);
+    expect(call?.proof?.line).toBeUndefined();
   });
   it('every pronoun flips when their error is said to you', () => {
     expect(seatTheirErrorForStudent('it let them take your rook on e5, and they missed it. The line: Nxe5 — they come out a piece up.'))
