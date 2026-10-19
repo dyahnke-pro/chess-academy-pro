@@ -83,7 +83,7 @@ export function defendsBoth(fenBefore: string, san: string, student: Color, cpLo
   const fen = r.after.fen();
   if (loose.some((s) => r.after.get(s)?.color !== student || legalSeeGainFor(fen, s, other(student)) > 0)) return null;
   const guardsBoth = loose.every((s) => r.after.attackers(s, student).includes(r.mv.to));
-  const how = guardsBoth ? `your ${NAME[r.mv.piece]} on ${r.mv.to} now guards them together` : `after it neither can be taken for free`;
+  const how = guardsBoth ? `your ${NAME[r.mv.piece]} on ${r.mv.to} now guards them together` : `after it neither is loose`;
   const text = `One move covers both: your ${describe(before, loose)} were both loose, and ${how}. When two things are hit, look for the square that defends them at once before you move either.`;
   return withProof('defends-both', text, [...loose, r.mv.to], `defends-both:${[...loose].sort().join(',')}`);
 }
@@ -248,7 +248,7 @@ export function mateThreatWinsMore(fenBefore: string, san: string, student: Colo
   if (!r || r.mv.color !== student || r.mv.san.includes('+')) return null;
   const blow = secondBlow(r.after, student);
   if (!blow) return null;
-  const tail = blow.trap ? 'whatever stops it leaves their queen with nowhere to go' : 'whatever stops it drops a piece';
+  const tail = blow.trap ? 'whatever stops it leaves their queen with nowhere to go' : 'whatever stops it leaves a piece of theirs loose';
   const text = `${r.mv.san} threatens mate on ${blow.mateSq} — and ${tail}. One threat doing two jobs: don't hunt only the mate or only the material, line them up.`;
   return withProof('mate-threat-wins-more', text, [r.mv.to, blow.mateSq], `mate-threat-wins-more:${blow.mateSq}`);
 }
@@ -262,7 +262,7 @@ export function mateThreatCostsYou(fenBefore: string, san: string, student: Colo
   if (!r || r.mv.color === student || r.mv.san.includes('+')) return null;
   const blow = secondBlow(r.after, other(student));
   if (!blow) return null;
-  const tail = blow.trap ? 'every defence leaves your queen short of squares' : 'every defence drops a piece';
+  const tail = blow.trap ? 'every defence leaves your queen short of squares' : 'every defence leaves a piece of yours loose';
   const text = `${r.mv.san} threatens mate on ${blow.mateSq}, and ${tail} — stop the mate first, then pick the defence that gives up the least.`;
   return withProof('mate-threat-costs-you', text, [r.mv.to, blow.mateSq], `mate-threat-costs-you:${blow.mateSq}`);
 }
