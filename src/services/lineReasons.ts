@@ -24,12 +24,15 @@ export function lineWithReasons(fen: string, sans: readonly string[], victim: Co
   for (const san of sans) {
     let m;
     try { m = c.move(san); } catch { out.push(san); break; }
-    if (m.color === victim) { out.push(m.san); continue; }
+    // WHOSE MOVE IS WHOSE (Alekhine walk 2026-10-19: "after e6, O-O, Rd8,
+    // Ng5" — two sides' moves said as one list).
+    if (m.color === victim) { out.push(m.san.startsWith('O-O') ? 'you castle' : `you play ${m.san}`); continue; }
     const hits = c.board().flat()
       .filter((p): p is NonNullable<typeof p> => !!p && p.color === victim && p.type !== 'k' && p.type !== 'p')
       .filter((p) => c.attackers(p.square, m.color).includes(m.to))
       .sort((a, b) => (MATERIAL_VALUE[b.type] ?? 0) - (MATERIAL_VALUE[a.type] ?? 0));
-    out.push(hits.length ? `${m.san} hitting your ${NAME[hits[0].type]}` : m.san);
+    const theirs = m.san.startsWith('O-O') ? 'they castle' : `they play ${m.san}`;
+    out.push(hits.length ? `${theirs}, hitting your ${NAME[hits[0].type]}` : theirs);
   }
   return out.join(', ');
 }
