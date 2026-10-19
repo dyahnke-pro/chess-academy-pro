@@ -295,6 +295,22 @@ describe('the analysis pool is warmed at launch and kept alive', () => {
     expect(spawnedUrls).toHaveLength(__testables.WORKER_POOL_SIZE);
   }, 30_000);
 
+  it('a PHONE warms nothing at launch — the pool spawns only when a run needs it (2026-10-18)', async () => {
+    vi.doMock('./stockfishEngine', () => ({ ...ENGINE_MOCK(), isIosSafari: () => true }));
+    const { warmAnalysisPoolAtLaunch } = await import('./gameAnalysisService');
+    expect(await warmAnalysisPoolAtLaunch()).toBe(0);
+    expect(spawnedUrls).toHaveLength(0);
+  }, 30_000);
+
+  it('desktop still warms at launch when games wait for analysis', async () => {
+    vi.doMock('./stockfishEngine', ENGINE_MOCK);
+    const mod = await import('./gameAnalysisService');
+    const { db } = await import('../db/schema');
+    await db.games.put({ id: 'g-launch', pgn: '1. e4 e5', white: 'a', black: 'b', result: '1-0', date: '2026.10.18', source: 'chesscom', isMasterGame: false } as never);
+    const n = await mod.warmAnalysisPoolAtLaunch();
+    expect(n).toBe(mod.__testables.WORKER_POOL_SIZE);
+  }, 30_000);
+
   it('keeps the workers alive after a run so the next one is instant (no terminate, no respawn)', async () => {
     vi.doMock('./stockfishEngine', ENGINE_MOCK);
     const { __testables } = await import('./gameAnalysisService');

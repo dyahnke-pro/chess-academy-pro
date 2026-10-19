@@ -73,6 +73,15 @@ const PHONE_ASSUMED_CORES = 6;
  *  add?" — four.) */
 const PHONE_POOL_CAP = 4;
 
+/** A phone: the native app, or mobile-web iOS (Safari never reports native). */
+function onPhone(): boolean {
+  let isNative = false;
+  try { isNative = Capacitor.isNativePlatform(); } catch { /* web */ }
+  let isMobileWeb = false;
+  try { isMobileWeb = isIosSafari(); } catch { /* partial mock without the export */ }
+  return isNative || isMobileWeb;
+}
+
 function resolveWorkerPoolSize(): number {
   const reportedCores = typeof navigator !== 'undefined' && navigator.hardwareConcurrency > 0
     ? navigator.hardwareConcurrency
@@ -866,6 +875,19 @@ let _warmPromise: Promise<void> | null = null;
 
 function resolvedVariantName(): string {
   try { return resolveWorkerUrl().variant; } catch { return 'unknown'; }
+}
+
+/**
+ * THE LAUNCH WARM-UP — desktop only (David's phone, 2026-10-18: "Phone hot app
+ * slow"). On a phone the pool is four asm.js engines at ~45s of full CPU each to
+ * compile, and the launch gate ("some game still needs analysis") is always true
+ * for a real library — so every launch spent minutes of four engines on work
+ * nobody asked for while the student played in Learn. The pool still spawns on
+ * demand the moment a run needs it; a phone pays the compile then, once.
+ */
+export async function warmAnalysisPoolAtLaunch(): Promise<number> {
+  if (onPhone()) return 0;
+  return (await countGamesNeedingAnalysis()) > 0 ? warmAnalysisPool() : 0;
 }
 
 /**

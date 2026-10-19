@@ -469,8 +469,10 @@ export function App(): JSX.Element {
             .catch(() => undefined);
         }, 2500);
 
-        // Warm the BATCH-analysis worker pool too (David 2026-09-05: "get those
-        // parallel computers warming up at app launch"). On a phone the pool is
+        // Warm the BATCH-analysis worker pool too — DESKTOP ONLY since
+        // 2026-10-18 (David's phone: "Phone hot app slow"; see
+        // warmAnalysisPoolAtLaunch). The 2026-09-05 rationale below holds for
+        // desktop only: on a phone the pool is
         // asm.js and each worker cold-compiles ~45s — paid here, off the
         // critical path, instead of in front of the first Analyze tap or review.
         // Only when the library has games (a fresh install spawns nothing); the
@@ -483,7 +485,7 @@ export function App(): JSX.Element {
         // call, so asking is free.
         setTimeout(() => {
           void import('./services/gameAnalysisService')
-            .then(async (m) => (await m.countGamesNeedingAnalysis() > 0 ? m.warmAnalysisPool() : 0))
+            .then((m) => m.warmAnalysisPoolAtLaunch())
             .catch(() => undefined);
         }, 8000);
 
