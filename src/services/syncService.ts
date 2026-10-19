@@ -1,4 +1,5 @@
 import { db } from '../db/schema';
+import { DEVICE_LOCAL_META_KEYS } from './misconceptionRulesBackfill';
 import { asOpeningKey } from './openingKey';
 import { exportUserData } from './dbService';
 import { decryptApiKey } from './cryptoService';
@@ -226,6 +227,10 @@ export async function importUserData(json: string): Promise<void> {
     // writers serialize before persist. Cast accordingly so the Dexie
     // type-check passes (prior `value: unknown` cast was too loose and
     // broke every Vercel deploy after commit 719809cf).
-    await db.meta.bulkPut(data.meta as Array<{ key: string; value: string }>);
+    // A pass THIS device ran is not a pass the importing device ran: its
+    // "done" markers vouch for a skill record that stays on the device that
+    // built it (David's laptop, 2026-10-19: meters blank over 938 games).
+    const local = new Set(DEVICE_LOCAL_META_KEYS);
+    await db.meta.bulkPut((data.meta as Array<{ key: string; value: string }>).filter((m) => !local.has(m.key)));
   }
 }

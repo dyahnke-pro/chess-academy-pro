@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { loadSkillMeters, type SkillMeter, type SkillMeterId } from '../../services/skillMetersLoader';
 import { logAppAudit } from '../../services/appAuditor';
+import { onRebuildProgress, rebuildProgress, type RebuildProgress } from '../../services/misconceptionRulesBackfill';
 
 /**
  * The nine skill meters — the front of the Weaknesses page (David 2026-10-18:
@@ -11,6 +12,14 @@ import { logAppAudit } from '../../services/appAuditor';
  */
 export function SkillMetersStrip({ picked, onPick }: { picked: SkillMeterId | null; onPick: (id: SkillMeterId | null) => void }): JSX.Element | null {
   const [meters, setMeters] = useState<SkillMeter[] | null>(null);
+  // The record rebuilding from the student's games (a restored device): say
+  // so, instead of "not rated yet" over hundreds of analysed games.
+  const [rebuild, setRebuild] = useState<RebuildProgress | null>(rebuildProgress());
+  const [reload, setReload] = useState(0);
+  useEffect(() => onRebuildProgress((p) => {
+    setRebuild(p);
+    if (!p || p.done % 50 === 0) setReload((n) => n + 1);
+  }), []);
   useEffect(() => {
     let cancelled = false;
     void loadSkillMeters().then((m) => {
@@ -25,9 +34,15 @@ export function SkillMetersStrip({ picked, onPick }: { picked: SkillMeterId | nu
       });
     }).catch(() => setMeters([]));
     return () => { cancelled = true; };
-  }, []);
+  }, [reload]);
   if (!meters || meters.length === 0) return null;
   return (
+    <div className="flex flex-col gap-1.5">
+    {rebuild && (
+      <p className="text-xs text-theme-text-muted" data-testid="skill-record-rebuilding">
+        Rebuilding your skill record from your games — {rebuild.done} of {rebuild.total}
+      </p>
+    )}
     <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-3" data-testid="skill-meters">
       {meters.map((m) => (
         <button
@@ -40,7 +55,7 @@ export function SkillMetersStrip({ picked, onPick }: { picked: SkillMeterId | nu
           <div className="flex items-center justify-between text-xs">
             <span className="font-semibold text-theme-text">{m.label}</span>
             <span className="font-mono tabular-nums text-theme-text-muted">
-              {m.rated ? `Lv ${m.level} · ~${Math.round(m.rating / 10) * 10}` : 'not rated yet'}
+              {m.rated ? `Lv ${m.level} · ~${Math.round(m.rating / 10) * 10}` : rebuild ? 'rebuilding…' : 'not rated yet'}
             </span>
           </div>
           <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-white/10">
@@ -48,6 +63,7 @@ export function SkillMetersStrip({ picked, onPick }: { picked: SkillMeterId | nu
           </div>
         </button>
       ))}
+    </div>
     </div>
   );
 }

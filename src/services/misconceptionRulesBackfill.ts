@@ -21,6 +21,8 @@ import { POSITIVE_HALF_REV } from '../data/misconceptionTags';
 
 /** The meta row that says the pass is complete for the current revisions. */
 const BACKFILL_DONE_KEY = 'misconception-rules-backfill';
+const BACKFILL_DONE_KEY_EXPORT = BACKFILL_DONE_KEY;
+const RECORD_HEAL_KEY = 'skill-record-heal-v1';
 const BACKFILL_REVS = `${MISCONCEPTION_RULES_REV}|${POSITIVE_HALF_REV}`;
 
 export interface RulesBackfillResult {
@@ -43,11 +45,55 @@ export async function gamesBehindRules(): Promise<string[]> {
 /** Analysed games of the student's that have not been read for the positive
  *  half under the current revision. */
 export async function gamesBehindPositiveHalf(): Promise<string[]> {
+  // THIS DEVICE'S RECORD decides, not a stamp (David's laptop, 2026-10-19:
+  // 938 analysed games and five meters "not rated yet"). A game restored from
+  // another device arrives stamped as read, but the record that read made
+  // stayed on that device — so a game with no record row here is behind
+  // whatever its stamp says.
+  const recorded = await gamesWithRecord();
   const games = await db.games
     .filter((g) => !g.isMasterGame && !!g.fullyAnalyzed && (g.annotations?.length ?? 0) > 0
-      && !isFixtureGame(g) && g.positiveHalfRev !== POSITIVE_HALF_REV)
+      && !isFixtureGame(g) && (g.positiveHalfRev !== POSITIVE_HALF_REV || !recorded.has(g.id)))
     .toArray();
   return games.map((g) => g.id);
+}
+
+/** Games this device's skill record holds rows for. */
+async function gamesWithRecord(): Promise<Set<string>> {
+  const ids = await readOnThisDevice();
+  await db.capabilityEvidence.each((r) => { if (r.sourceGameId) ids.add(r.sourceGameId); });
+  return ids;
+}
+
+/** Games this device's pass has read (some answer no question, so they leave
+ *  no record row to prove it). Device-local: never imported. */
+const READ_HERE_KEY = 'skill-record-games-read';
+async function readOnThisDevice(): Promise<Set<string>> {
+  const row = await db.meta.get(READ_HERE_KEY).catch(() => undefined);
+  try { return new Set(row ? (JSON.parse(row.value) as string[]) : []); } catch { return new Set(); }
+}
+async function rememberRead(ids: Set<string>): Promise<void> {
+  await db.meta.put({ key: READ_HERE_KEY, value: JSON.stringify([...ids]) });
+}
+
+/** Device-local markers of a pass this device ran. They vouch for a record
+ *  that never leaves the device, so a backup or sync must never carry them
+ *  (`syncService.importUserData` drops them). */
+export const DEVICE_LOCAL_META_KEYS: readonly string[] = [BACKFILL_DONE_KEY_EXPORT, RECORD_HEAL_KEY, 'misconceptions_backfill_v2', 'skill-record-games-read'];
+
+/** The rebuild's progress, for the page that would otherwise read "not rated
+ *  yet" while it runs. Null when no rebuild is running. */
+export interface RebuildProgress { done: number; total: number }
+let progress: RebuildProgress | null = null;
+const listeners = new Set<(p: RebuildProgress | null) => void>();
+function setProgress(p: RebuildProgress | null): void {
+  progress = p;
+  for (const l of listeners) l(p);
+}
+export function rebuildProgress(): RebuildProgress | null { return progress; }
+export function onRebuildProgress(l: (p: RebuildProgress | null) => void): () => void {
+  listeners.add(l);
+  return () => { listeners.delete(l); };
 }
 
 export async function reconcileMisconceptionRules(
@@ -61,7 +107,11 @@ export async function reconcileMisconceptionRules(
   // until a revision is bumped. Finding the stragglers loads every game and
   // every slip row; that is paid once per revision, never per boot.
   const done = await db.meta.get(BACKFILL_DONE_KEY).catch(() => undefined);
-  if (done?.value === BACKFILL_REVS) return r;
+  // HEAL ONCE: a device that restored a backup before the import dropped this
+  // marker holds it without the record behind it. One check per device.
+  const healed = await db.meta.get(RECORD_HEAL_KEY).catch(() => undefined);
+  if (done?.value === BACKFILL_REVS && healed) return r;
+  if (!healed) await db.meta.put({ key: RECORD_HEAL_KEY, value: 'checked' });
   if (schedule.startDelayMs > 0) await sleep(schedule.startDelayMs);
   const games = [...new Set([...await gamesBehindRules(), ...await gamesBehindPositiveHalf()])];
   r.games = games.length;
@@ -72,7 +122,11 @@ export async function reconcileMisconceptionRules(
   // Dynamic: autoAnalyzeGame pulls in the classifier and the engine helpers.
   const { autoAnalyzeGameMisconceptions } = await import('./autoAnalyzeGame');
   let first = true;
+  let n = 0;
+  const readHere = await readOnThisDevice();
+  setProgress({ done: 0, total: games.length });
   for (const gameId of games) {
+    setProgress({ done: n++, total: games.length });
     if (!first) await schedule.yieldBetweenRows();
     first = false;
     // THE STUDENT FIRST (David's phone, 2026-10-19): a live game's coach waited
@@ -92,8 +146,12 @@ export async function reconcileMisconceptionRules(
       .filter((row) => row.source === 'auto-analysis' && row.rulesRev !== MISCONCEPTION_RULES_REV)
       .modify({ rulesRev: MISCONCEPTION_RULES_REV });
     await db.games.update(gameId, { positiveHalfRev: POSITIVE_HALF_REV });
+    readHere.add(gameId);
+    if (n % 25 === 0) await rememberRead(readHere);
   }
+  await rememberRead(readHere);
   // Every game was visited and stamped: the pass is done for these revisions.
+  setProgress(null);
   await db.meta.put({ key: BACKFILL_DONE_KEY, value: BACKFILL_REVS });
   void logAppAudit({
     kind: 'coach-surface-migrated',

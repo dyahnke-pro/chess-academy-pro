@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**106 lines · 5 exports · 2 importers · 1 tests · 0 audits**
+**164 lines · 9 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,8 +12,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/components/Insights/SkillMetersStrip.tsx`
 - `src/services/dataLoader.ts`
 - `src/services/misconceptionRulesBackfill.test.ts`
+- `src/services/syncService.ts`
 
 ## Exports and every call site
 
@@ -23,17 +25,34 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `gamesBehindRules` (function) — 1 call site
 - `src/services/misconceptionRulesBackfill.test.ts:29`
 
-### `gamesBehindPositiveHalf` (function) — 2 call sites
+### `gamesBehindPositiveHalf` (function) — 3 call sites
 - `src/services/misconceptionRulesBackfill.test.ts:63`
 - `src/services/misconceptionRulesBackfill.test.ts:66`
+- `src/services/misconceptionRulesBackfill.test.ts:102`
 
-### `reconcileMisconceptionRules` (function) — 6 call sites
+### `DEVICE_LOCAL_META_KEYS` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `RebuildProgress` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `rebuildProgress` (function) — 2 call sites
+- `src/components/Insights/SkillMetersStrip.tsx:17`
+- `src/services/misconceptionRulesBackfill.test.ts:134`
+
+### `onRebuildProgress` (function) — 2 call sites
+- `src/components/Insights/SkillMetersStrip.tsx:19`
+- `src/services/misconceptionRulesBackfill.test.ts:130`
+
+### `reconcileMisconceptionRules` (function) — 8 call sites
 - `src/services/dataLoader.ts:1000`
 - `src/services/misconceptionRulesBackfill.test.ts:35`
 - `src/services/misconceptionRulesBackfill.test.ts:38`
 - `src/services/misconceptionRulesBackfill.test.ts:64`
 - `src/services/misconceptionRulesBackfill.test.ts:79`
 - `src/services/misconceptionRulesBackfill.test.ts:84`
+- `src/services/misconceptionRulesBackfill.test.ts:110`
+- `src/services/misconceptionRulesBackfill.test.ts:131`
 
 ### `POSITIVE_HALF_REV` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
