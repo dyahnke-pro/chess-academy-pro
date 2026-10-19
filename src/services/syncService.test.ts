@@ -316,5 +316,13 @@ describe('syncService', () => {
       };
       expect(restoredCoach.activeOpeningCardId.white).toBe('italian');
     });
+
+    it('a restore never takes over the backup device\'s identity', async () => {
+      await db.meta.put({ key: 'analytics_device_id', value: 'phone-id' });
+      const exported = await exportUserData();
+      await db.meta.put({ key: 'analytics_device_id', value: 'laptop-id' });
+      await importUserData(exported);
+      expect((await db.meta.get('analytics_device_id'))?.value).toBe('laptop-id');
+    });
   });
 });

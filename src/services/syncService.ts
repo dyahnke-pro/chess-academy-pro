@@ -3,6 +3,7 @@ import { DEVICE_LOCAL_META_KEYS } from './misconceptionRulesBackfill';
 import { asOpeningKey } from './openingKey';
 import type { CapabilityEvidenceRecord } from './capabilityEvidence';
 import { exportUserData } from './dbService';
+import { DEVICE_ID_KEY } from './deviceIdentity';
 import { decryptApiKey } from './cryptoService';
 import type {
   UserProfile,
@@ -242,7 +243,9 @@ export async function importUserData(json: string): Promise<void> {
     // A pass THIS device ran is not a pass the importing device ran: its
     // "done" markers vouch for a skill record that stays on the device that
     // built it (David's laptop, 2026-10-19: meters blank over 938 games).
-    const local = new Set(DEVICE_LOCAL_META_KEYS);
+    // The device's own id is identity, not data: importing it made a restored
+    // laptop BECOME the backup's device (David 2026-10-19: Send my data hid).
+    const local = new Set([...DEVICE_LOCAL_META_KEYS, DEVICE_ID_KEY]);
     await db.meta.bulkPut((data.meta as Array<{ key: string; value: string }>).filter((m) => !local.has(m.key)));
   }
 }

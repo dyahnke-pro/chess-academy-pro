@@ -21,7 +21,7 @@
  */
 import { db } from '../db/schema';
 
-const DEVICE_ID_KEY = 'analytics_device_id';
+export const DEVICE_ID_KEY = 'analytics_device_id';
 const INTERNAL_KEY = 'analytics_device_internal';
 const LABEL_KEY = 'analytics_device_label';
 
