@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
+import { db } from '../db/schema';
+import { remember, recallData } from '../services/studentMemory';
 
 // Heavy deps mocked so the hook's DECISION logic (rating gate, good-vs-slip
 // routing, response logging) is tested in isolation — no engine, no audio, no
@@ -402,5 +404,46 @@ describe('evaluatePlayerMove moves the opponent\'s live strength', () => {
       });
     });
     expect(updateLiveStrength).not.toHaveBeenCalled();
+  });
+});
+
+describe('useDiscussionPractice — ONE hint dial across surfaces and sessions (persistent memory)', () => {
+  beforeEach(async () => { db.close(); await db.delete(); await db.open(); });
+
+  it('a surface starts from the dial the last surface left, not the rating', async () => {
+    await remember('hint-dial', 'student', { register: 'subtle', recent: [true, true, true] });
+    const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'learn' }));
+    await waitFor(() => expect(result.current.hintDial.register).toBe('subtle'));
+  });
+
+  it('a Play move moves the remembered dial (computed, not dropped)', async () => {
+    setEvals(100, -300);
+    const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
+    await act(async () => {
+      await result.current.evaluatePlayerMove({
+        prompted: false,
+        fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
+        playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening', studentRating: 1500,
+      });
+    });
+    await waitFor(async () => expect((await recallData('hint-dial', 'student'))?.recent).toEqual([false]));
+  });
+});
+
+describe('useDiscussionPractice — the measured strength carries into the next game (persistent memory)', () => {
+  beforeEach(async () => { db.close(); await db.delete(); await db.open(); });
+
+  it('a new game starts at the strength the board last measured, not the profile seed', async () => {
+    await remember('live-strength', 'student', { rating: 1900, evidence: 4 });
+    const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
+    await waitFor(async () => { await recallData('live-strength', 'student'); });
+    await new Promise((r) => setTimeout(r, 20));
+    expect(result.current.liveRating('g-new', 1200)).toBe(1900);
+  });
+
+  it('with nothing measured, the seed stands', async () => {
+    const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
+    await new Promise((r) => setTimeout(r, 20));
+    expect(result.current.liveRating('g-new', 1200)).toBe(1200);
   });
 });
