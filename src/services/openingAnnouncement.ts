@@ -89,7 +89,15 @@ export function openingAnnouncement(
       if (newFamily === spokenFamily || !newFamily.includes(spokenFamily)) return null;
       return `It's the ${newFamily}.`;
     }
-    const tail = det.name.slice(spokenName.length).replace(/^[\s:,]+/, '').trim();
+    // THE TAIL STARTS AT A NAME BOUNDARY (":" or ","), never mid-component:
+    // "Smith-Morra Gambit" → "Smith-Morra Gambit Accepted" sliced to the bare
+    // word "Accepted" — "It's the Accepted of the Sicilian Defense"
+    // (Smith-Morra replay 2026-10-19). When the spoken name's last part was
+    // itself extended, the whole variation is said again.
+    const rest = det.name.slice(spokenName.length);
+    const tail = /^\s*[:,]/.test(rest)
+      ? rest.replace(/^[\s:,]+/, '').trim()
+      : spoken(det.name).slice(newFamily.length).replace(/^[\s:,]+/, '').trim();
     // "Main Line" names nothing the student can look up — the family is enough.
     // (nor do the DB's filler labels — "Normal Variation", "Rare Defenses",
     // hand walk 2026-09-25).

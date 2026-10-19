@@ -151,6 +151,13 @@ describe('buildPriorityFirst', () => {
     expect(packageForRegister(pf2!.hint, 'moderate')).toContain('Nc3');
   });
 
+  it('a doubled pawn a neighbour can still guard is no priority (Smith-Morra replay 2026-10-19)', () => {
+    // 1.e4 c5 2.d4 cxd4: d7 and d4 share a file, but …e5 guards d4 — it was
+    // called "doubled — its file is a weakness".
+    const fen = 'rnbqkbnr/pp1ppppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3';
+    expect(buildPriorityFirst({ fen, studentColor: 'white', bestUci: 'g1f3' })).toBeNull();
+  });
+
   it('a healthy pawn target means no priority beat', () => {
     // Black's d5 has a c6 neighbour — connected, not weak. Same knight jump.
     const fen = '6k1/pp3ppp/2p5/3p4/8/8/PP1N1PPP/1N4K1 w - - 0 20';

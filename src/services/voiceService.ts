@@ -14,7 +14,7 @@ import { useAppStore } from '../stores/appStore';
 import { resolveCoachNarration, applyBriefVoiceCap } from '../utils/coachNarration';
 import { localizeSpokenText, spokenLanguageName } from './spokenLanguage';
 import { dnaPass } from './dnaRules';
-import { SAN_MOVE_RE, PAWN_CAPTURE_RE, CASTLE_KING_RE, CASTLE_QUEEN_RE, SAN_SUFFIX_RE } from '../utils/spokenWords';
+import { SAN_MOVE_RE, PAWN_CAPTURE_RE, CASTLE_KING_RE, CASTLE_QUEEN_RE, SAN_SUFFIX_RE, spokenMark } from '../utils/spokenWords';
 
 /** Shape of `window.ManagedMediaSource` on iOS Safari 17.1+. Not in
  *  lib.dom.d.ts yet, so we describe just the surface we use:
@@ -536,9 +536,7 @@ export function sanitizeForTTS(text: string): string {
   // Run AFTER both expansions so it sees "h7+" / "castle kingside+" rather than
   // "Bh7+", and anchored on a square or a castle so ordinary prose punctuation
   // is untouched. Comma before the word: TTS gives it the beat a check deserves.
-  out = out.replace(SAN_SUFFIX_RE, (_m, move: string, mark: string) => (
-    `${move}${mark === '#' ? ', checkmate' : ', check'}`
-  ));
+  out = out.replace(SAN_SUFFIX_RE, (_m, move: string, mark: string, next: string | undefined) => spokenMark(move, mark, next));
   // A sentence that already SAYS it is mate does not get the word twice
   // (Blumenfeld walk F38: "rook takes d1, checkmate is mate").
   out = out.replace(/, checkmate (is|would be|was) (?:check)?mate\b/g, ' $1 checkmate');

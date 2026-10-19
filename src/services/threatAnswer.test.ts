@@ -20,12 +20,12 @@ describe('threatAnswer', () => {
   it('moving the piece behind the pin is "step out of it" (…Bb4 pins Nc3 to Qe1; Qh4)', () => {
     const a = run('r3qrk1/pp3ppp/2p1n3/4P2n/1b4b1/1BN1BN2/PPP3PP/3RQRK1 w - - 2 18', ['b4', 'c3', 'e1'], 'e1h4', 330);
     expect(a?.kind).toBe('step-out');
-    expect(a?.text).toContain('Qh4 takes the queen off the line');
+    expect(a?.text).toContain('Qh4 takes your queen on e1 out of it');
   });
 
   it('the king leaving the file is named as the king (…Rae8 pins Be3 to Ke1; Kd2)', () => {
     const a = run('r3rk2/pp1n1ppp/8/8/8/2P1BN2/PP4PP/RN2K3 w - - 3 19', ['e8', 'e3', 'e1'], 'e1d2', 225);
-    expect(a?.text).toContain('Kd2 takes the king off the line');
+    expect(a?.text).toContain('Kd2 takes your king out of it');
   });
 
   it('a second guard is "guard it" (rooks stacked on the e-file against Be3; Nc4)', () => {
@@ -103,6 +103,25 @@ describe('Learn walk 2026-10-02 — "it can wait" is never a rescue', () => {
     const fen = '2r5/2R4p/pNrP2p1/2Pk1p2/1P6/7P/P5P1/6K1 b - - 4 37';
     const a = threatAnswer({ fen, squares: ['c7', 'c8', 'c6'], bestUci: 'c6b6', studentCp: -800, student: 'b', ply: 72, shape: 'hit', namesMove: true });
     expect(a?.kind).toBe('with-gain');
+  });
+});
+
+describe('a line threat is answered only when it is on the board (Smith-Morra replay 2026-10-19)', () => {
+  // 1.e4 c5 2.d4 cxd4 3.c3 dxc3 4.Nxc3 d6: "No rush yet — if you play e5 and
+  // they answer dxe5, … reveals their queen on d8 attacking your queen on d1"
+  // was answered "Step out of it — take the queen off the line" — a line the
+  // d6 pawn shuts, and can only open after a move of the student's.
+  const smithMorra = 'rnbqkbnr/pp2pppp/3p4/8/4P3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5';
+  it('a hypothetical discovery gets no answer', () => {
+    for (const namesMove of [true, false]) {
+      expect(threatAnswer({ fen: smithMorra, squares: ['d6', 'd8', 'd1'], bestUci: 'd1b3', studentCp: 80, student: 'w', ply: 0, shape: 'line', namesMove })).toBeNull();
+    }
+  });
+  it('a discovery they can play next move is answered, and the answer names the piece', () => {
+    const fen = '3qk3/8/8/3n4/8/8/8/3QK3 w - - 0 1';
+    const held = threatAnswer({ fen, squares: ['d8', 'd1'], bestUci: 'd1b3', studentCp: 0, student: 'w', ply: 0, shape: 'line', namesMove: false });
+    expect(held?.kind).toBe('step-out');
+    expect(stripThink(held?.text ?? '')).toMatch(/Step off the line — your queen on d1 has a square out of it\.$/);
   });
 });
 

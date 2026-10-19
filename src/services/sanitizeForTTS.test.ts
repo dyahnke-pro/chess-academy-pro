@@ -241,11 +241,22 @@ describe('a multi-word directive tag is still a directive', () => {
 // important thing about the move, was the one part handed over raw.
 describe('check and mate suffixes are spoken, not punctuated', () => {
   it('expands a checking piece move (the exact line from his game)', () => {
-    expect(sanitizeForTTS('Bh7+ was a blunder.')).toBe('Bishop to h7, check was a blunder.');
+    expect(sanitizeForTTS('Bh7+ was a blunder.')).toBe('Bishop to h7 with check was a blunder.');
   });
 
   it('expands mate', () => {
     expect(sanitizeForTTS('Rd8#')).toBe('Rook to d8, checkmate');
+  });
+
+  it('a mid-clause check is said "with check", never a comma that splits the sentence (Smith-Morra replay 2026-10-19)', () => {
+    expect(sanitizeForTTS('Your Ng5+ eyes e6.')).toBe('Your knight to g5 with check eyes e6.');
+    expect(sanitizeForTTS('Your Qxf7# ends it.')).toBe('Your queen takes f7 with checkmate ends it.');
+  });
+
+  it('a check that closes a clause keeps its own beat', () => {
+    expect(sanitizeForTTS('Play Ng5+.')).toBe('Play knight to g5, check.');
+    expect(sanitizeForTTS('Ng5+ and Nxe6 wins.')).toBe('Knight to g5, check and knight takes e6 wins.');
+    expect(sanitizeForTTS('Ng5+ — the king must move.')).toBe('Knight to g5, check — the king must move.');
   });
 
   it('expands a checking capture', () => {

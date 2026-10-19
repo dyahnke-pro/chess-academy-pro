@@ -602,11 +602,17 @@ export function buildPriorityFirst(args: {
   const all = pieces(chess);
   const theirPawns = all.filter((p) => p.type === 'p' && p.color === them);
   const theirFiles = new Set(theirPawns.map((p) => fileOf(p.square)));
+  // A WEAK PAWN HERE IS ONE NO PAWN OF THEIRS CAN EVER GUARD — the claim the
+  // package makes ("a pawn like that cannot be defended by a pawn"). Being
+  // doubled is not that: after 2.d4 cxd4 the d4 pawn sits on the d7 pawn's
+  // file and …e5 still guards it, yet it was called "doubled — its file is a
+  // weakness" (Smith-Morra replay 2026-10-19). A pawn beside it that can still
+  // step up — on a neighbouring file, behind it — can defend it.
+  const behind = (r: number, target: number): boolean => (them === 'w' ? r < target : r > target);
   const weakPawns = theirPawns.filter((p) => {
     const f = fileOf(p.square);
-    const isolated = !theirFiles.has(f - 1) && !theirFiles.has(f + 1);
-    const doubled = theirPawns.filter((q) => fileOf(q.square) === f).length >= 2;
-    return isolated || doubled;
+    const r = Number(p.square[1]);
+    return !theirPawns.some((q) => Math.abs(fileOf(q.square) - f) === 1 && behind(Number(q.square[1]), r));
   });
   if (weakPawns.length === 0) return null;
   try {
@@ -623,7 +629,7 @@ export function buildPriorityFirst(args: {
     if (!target) return null;
     const flaw = !theirFiles.has(fileOf(target.square) - 1) && !theirFiles.has(fileOf(target.square) + 1)
       ? 'isolated — no pawn beside it can defend it'
-      : 'doubled — its file is a weakness';
+      : 'on its own — the pawns beside it are level with it or past it, and a pawn never steps back to guard';
     // The detail tier deliberately does NOT name the attacking piece: naming
     // it is naming the move on most boards, and the withhold below would then
     // be contradicting the package it ships with.

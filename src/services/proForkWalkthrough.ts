@@ -13,6 +13,7 @@ import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { groundedMoveWhy } from './groundedMoveWhy';
 import { sanToSpeech } from '../utils/sanToSpeech';
+import { countWord } from '../utils/andList';
 import type { WalkthroughTree, WalkthroughTreeNode, WalkthroughTreeChild } from '../types/walkthroughTree';
 import { buildProOpeningForkTree, type ProOpeningForkTree, type ProFork, type ProForkGameInput } from './proOpeningForks';
 
@@ -135,7 +136,7 @@ export function proForkTreeToWalkthrough(fork: ProOpeningForkTree): WalkthroughT
   const forkN = fork.forks.length;
   const intro = `Here's how ${proName} plays the ${openingName}, from ${total} of his real games. `
     + (forkN > 0
-      ? `He doesn't always take the same road — at ${forkN === 1 ? 'one point' : `${forkN} points`} his games split, and you'll pick which line to follow.`
+      ? `He doesn't always take the same road — at ${countWord(forkN)} point${forkN === 1 ? '' : 's'} his games split, and you'll pick which line to follow.`
       : `The main line, move by move.`);
 
   return {

@@ -16,7 +16,7 @@ import { layerStandings } from './teachingLayers';
 import { readConversion, type ConversionStep } from './conversionMethod';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsClause, computePvLine, pvDepthForRating, type PvLine, type PvEngine } from './pvPlayback';
-import { lineShape } from '../utils/andList';
+import { countWord, lineShape } from '../utils/andList';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { explainEvalByPieceQuality, lowestMinorMobility, phraseBadPiece, type PieceQualityResult } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
@@ -3473,7 +3473,7 @@ export function defaultIntroText(params: {
   const momentBit = params.mistakeCount === null
     ? ''
     : params.mistakeCount > 0
-      ? ` You had ${params.mistakeCount === 1 ? 'one moment' : `${params.mistakeCount} moments`} worth a second look — here's each one.`
+      ? ` You had ${countWord(params.mistakeCount)} moment${params.mistakeCount === 1 ? '' : 's'} worth a second look — here's each one.`
       : ` Clean play throughout — here's what worked.`;
   const recordBit = params.record ? ` ${params.record}` : '';
   return `Here's your game${openingBit} — you had ${colorWord}${resultBit}.${recordBit}${momentBit}`;
