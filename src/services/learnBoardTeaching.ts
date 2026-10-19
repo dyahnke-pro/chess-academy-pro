@@ -17,6 +17,8 @@ import { shareAdverb } from '../utils/shareWords';
 import { lineShape } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import { Chess, type Square } from 'chess.js';
+import { dangerLevel } from './liveTacticsContext';
+import { fadeLevelOf, type FadeLevels } from './fadeText';
 import { legalSeeGainFor } from './positionReadingService';
 import { moverFault } from './accuracyService';
 import { lineWins, lineArrows, mateLine, type MateLine } from './lineCalc';
@@ -1253,6 +1255,34 @@ export function hangingPieceLine(piece: string, sq: string, rot: number): string
     `They are hitting your ${name} on ${sq}, and nothing guards it — it is lost unless it moves or gets a guard.`,
   ];
   return stems[((rot % stems.length) + stems.length) % stems.length];
+}
+
+/** A ONE-MOVE ATTACK THE STUDENT HAS PROVEN THEY SEE (David 2026-10-19:
+ *  "It's narrating a one move threat to me"). The piece that just moved hits
+ *  one of the student's pieces directly — no discovery, no named pattern —
+ *  and their record proves threat-spotting: the board marks it and the voice
+ *  stays quiet (returns the arrow to mark). Grey or red still hears it; a check or a game-losing threat
+ *  always speaks. The record decides, never a rating. */
+export function seenOneMoveAttack(a: {
+  threatKey: string;
+  fen: string;
+  lastSan: string | undefined;
+  targets: readonly string[];
+  student: 'w' | 'b';
+  green: FadeLevels | null;
+}): { from: string; to: string } | null {
+  if (fadeLevelOf(a.green, 'missed-opponents-threat') !== 'short') return null;
+  if (!/^(hang:|hit:|vs:hanging_piece:)/.test(a.threatKey)) return null;
+  const land = a.lastSan?.replace(/[+#?!]+$/, '').match(/([a-h][1-8])(=[QRBN])?$/)?.[1];
+  if (!land) return null;
+  try {
+    const b = new Chess(a.fen);
+    if (b.inCheck()) return null;
+    const foe = a.student === 'w' ? 'b' : 'w';
+    const mine = a.targets.filter((sq) => /^[a-h][1-8]$/.test(sq) && b.get(sq as Square)?.color === a.student);
+    if (mine.length === 0 || !mine.every((sq) => b.attackers(sq as Square, foe).includes(land as Square))) return null;
+    return dangerLevel(a.fen, a.student, mine) === 'decisive' ? null : { from: land, to: mine[0] };
+  } catch { return null; }
 }
 
 /** A piece of yours attacked by a CHEAPER one, said with why it matters (Learn

@@ -40,7 +40,7 @@ import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, 
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { OPENING_PLIES, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, type TeachingHint } from '../../services/learnBoardTeaching';
+import { OPENING_PLIES, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, seenOneMoveAttack, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, type TeachingHint } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -8241,6 +8241,7 @@ export function CoachTeachPage(): JSX.Element {
     /** Board descriptions for the late wave's one decision. */
     deferred: Array<{ lane: LearnLane; text: string; proof: FactProof; squares?: readonly string[]; claims?: string[]; arrows?: ArrowClaim[] }>;
     alertArrow: BoardArrow | null;
+    markOnlyArrow: BoardArrow | null;
     /** The threat that SPOKE this wave, for its answer in the late wave. */
     threatAsked: { squares: string[]; shape: 'line' | 'hit' } | null;
     leadEyeArrows: BoardArrow[];
@@ -8268,7 +8269,7 @@ export function CoachTeachPage(): JSX.Element {
       const over = new Chess(args.fenAfterReply);
       if (over.isGameOver()) {
         return {
-          pkg: buildVoicePackage([]), lanes: '', lead: null, deferred: [], alertArrow: null, threatAsked: null, leadEyeArrows: [],
+          pkg: buildVoicePackage([]), lanes: '', lead: null, deferred: [], alertArrow: null, markOnlyArrow: null, threatAsked: null, leadEyeArrows: [],
           keptHighlights: [],
         };
       }
@@ -8309,6 +8310,8 @@ export function CoachTeachPage(): JSX.Element {
      *  not announce it a second time in other words. */
     let mateNamedThisTurn = false;
     let alertArrow: BoardArrow | null = null;
+    /** A threat the student has proven they see: drawn, not said. */
+    let markOnlyArrow: BoardArrow | null = null;
     let announceLine: string | null = null;
     let announceClaims: string[] = [];
     let announceSquares: readonly string[] = [];
@@ -8763,7 +8766,12 @@ export function CoachTeachPage(): JSX.Element {
         learnMemRef.current.spokenThreatLines.add(threatKey);
         if (isLoudAlarm(threatLine)) learnMemRef.current.loudAlarms.add(threatKey);
         if (mustHere) standingRef.current.remember(mustHere);
-        captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: threatKey });
+        // A one-move attack the student has PROVEN they see is marked, not said.
+        const seen = seenOneMoveAttack({ threatKey, fen: args.fenAfterReply, lastSan: args.historyAfterReply[args.historyAfterReply.length - 1], targets: threatSquares, student: studentCC, green: provenTagsRef.current });
+        if (seen) {
+          markOnlyArrow = admitArrow({ from: seen.from, to: seen.to, role: 'threat', source: 'teach.seenAttack' }, { fen: args.fenAfterReply, studentColor: studentCC === 'w' ? 'white' : 'black' });
+          threatLine = null; alertArrow = null; threatSquares = [];
+        } else captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: threatKey });
       }
       // A threat that was only a REPEAT must not hide a fresh danger to the king
       // (fresh-game walk 2026-09-27, 14.Qxh5: the f7 pin was said last move,
@@ -9397,6 +9405,7 @@ export function CoachTeachPage(): JSX.Element {
       lead: instantDecision.lead,
       deferred,
       alertArrow,
+      markOnlyArrow,
       threatAsked: threatLine
         ? { squares: [...threatSquares], shape: threatShape }
         : null,
@@ -10889,6 +10898,10 @@ export function CoachTeachPage(): JSX.Element {
                   // that takes the student's hanging piece).
                   if (instant.alertArrow && instant.pkg.kept.some((f) => f.kind === 'threat')) {
                     const arrow = instant.alertArrow;
+                    void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, arrow])));
+                  }
+                  if (instant.markOnlyArrow) {
+                    const arrow = instant.markOnlyArrow;
                     void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, arrow])));
                   }
                   // THE THREAT'S ANSWER (census T4, David 2026-09-30: "describing
