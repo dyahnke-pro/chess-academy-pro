@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**194 lines · 4 exports · 2 importers · 1 tests · 0 audits**
+**194 lines · 4 exports · 2 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,7 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `threatAnswer` (function) — 8 call sites
-- `src/services/learnBoardTeaching.ts:652`
+- `src/services/learnBoardTeaching.ts:749`
 - `src/services/threatAnswer.test.ts:9`
 - `src/services/threatAnswer.test.ts:81`
 - `src/services/threatAnswer.test.ts:94`
@@ -46,4 +46,4 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._
+- `scripts/audit-concept-gameplay-prod.mjs`
