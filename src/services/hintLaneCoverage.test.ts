@@ -23,7 +23,9 @@ const HINT_LANES: Array<{ name: string; near: string; proof: RegExp }> = [
   {
     name: 'priority-first',
     near: 'priority_first_offered',
-    proof: /packageForRegister\(pf\.hint, discussion\.hintDial\.register\)/,
+    // Learn holds the move, so the dial gets the hint without its detail
+    // (learnNamesNoMoveUnasked, prod walk 2026-10-19) — still the register.
+    proof: /packageForRegister\(\{ \.\.\.pf\.hint, detail: undefined \}, discussion\.hintDial\.register\)/,
   },
   {
     name: 'rejected-tempting',
