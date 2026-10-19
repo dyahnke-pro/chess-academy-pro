@@ -152,3 +152,18 @@ describe('moveIntent — a piece saved is not a plan', () => {
     expect(out?.prepares ?? null).toBeNull();
   });
 });
+
+describe('a retreat home is not a prepared plan (prod walk 2026-10-19)', () => {
+  it('…c6 opens a5-d8, but "so that …Qd8" is not its point', () => {
+    // 1.e4 d5 2.exd5 Qxd5 3.Nc3 Qa5 4.d4 Nf6 5.Nf3 — Black to play …c6.
+    const fenBefore = 'rnb1kb1r/ppp1pppp/5n2/q7/3P4/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 3 5';
+    const L = (pv: string[], cp: number): AnalysisLine => ({ rank: 1, evaluation: cp, moves: pv, mate: null });
+    const out = moveIntent(fenBefore, 'c6', {
+      before: [L(['c7c6'], 40)], passBefore: [L(['f1c4'], 60)],
+      after: [L(['f1c4', 'a5d8', 'e1g1'], 40)], passAfter: [L(['c8f5'], 30)],
+    }, 'student', { prepare: 'line', prevent: 'any+deny' });
+    expect(out?.prepares?.san ?? null).not.toBe('Qd8');
+    expect(out?.text ?? '').not.toMatch(/Qd8/);
+  });
+});
+

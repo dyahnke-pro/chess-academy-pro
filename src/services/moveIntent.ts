@@ -268,6 +268,15 @@ export function moveIntent(
       if (own.includes(prepares.uci.slice(0, 2))) prepares = null;
     } catch { /* keep */ }
   }
+  // A RETREAT TO THE BACK RANK IS NOT WHAT A MOVE PREPARES (prod walk on
+  // David's record, 2026-10-19: "You play …c6 first, so that …Qd8 can take the
+  // half-open d-file"). …c6 did open the a5–d8 diagonal, so the retreat was
+  // illegal before and the test above counts it — but a piece going home is
+  // the engine regrouping, never the point the student is taught for …c6.
+  if (prepares && !/^[a-h]/.test(prepares.san) && !prepares.san.startsWith('O-O')) {
+    const home = mover === 'w' ? '1' : '8';
+    if (prepares.uci[3] === home && prepares.uci[1] !== home) prepares = null;
+  }
   // IN BOOK THE SAME TEACHING, HELD TO ITS SUBSTANCE (David 2026-09-29: "He
   // is not quiet during book moves"). He speaks every move of the opening,
   // so book is never a reason for silence — but "e4 stops …d5 and prepares
