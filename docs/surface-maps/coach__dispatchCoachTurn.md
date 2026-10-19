@@ -4,14 +4,15 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**706 lines · 17 exports · 21 importers · 16 tests · 2 audits**
+**730 lines · 19 exports · 22 importers · 17 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6362) — names `dispatchCoachTurn`
+- **The standard post-deploy ritual** (CLAUDE.md:6426) — names `dispatchCoachTurn`
 
 ## Who calls in
 
+- `src/coach/awaitTurnRead.test.ts`
 - `src/coach/chatKindContracts.test.ts`
 - `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/coachService.askReader.integration.test.ts`
@@ -111,15 +112,15 @@
 - `src/coach/dispatchCoachTurn.showLine.test.ts:75`
 
 ### `asksBeyondShowMe` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3332`
+- `src/components/Coach/CoachTeachPage.tsx:3369`
 
 ### `showLineAnswer` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3360`
+- `src/components/Coach/CoachTeachPage.tsx:3397`
 
 ### `conversationFor` (function) — 3 call sites
 - `src/coach/dispatchCoachTurn.test.ts:167`
 - `src/coach/requestExecutor.test.ts:88`
-- `src/components/Coach/CoachTeachPage.tsx:3323`
+- `src/components/Coach/CoachTeachPage.tsx:3360`
 
 ### `isStudentTurn` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -130,20 +131,29 @@
 ### `settleChatTurnRead` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `READ_BUDGET_MS` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `awaitTurnRead` (function) — 4 call sites
+- `src/coach/awaitTurnRead.test.ts:13`
+- `src/coach/awaitTurnRead.test.ts:24`
+- `src/components/Coach/CoachTeachPage.tsx:3528`
+- `src/components/Coach/CoachTeachPage.tsx:3830`
+
 ### `TurnReadHandle` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `setPendingOffer` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3374`
-- `src/components/Coach/CoachTeachPage.tsx:12276`
-- `src/components/Coach/CoachTeachPage.tsx:14346`
+- `src/components/Coach/CoachTeachPage.tsx:3411`
+- `src/components/Coach/CoachTeachPage.tsx:12389`
+- `src/components/Coach/CoachTeachPage.tsx:14468`
 
 ### `openTurnRead` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3440`
+- `src/components/Coach/CoachTeachPage.tsx:3477`
 - `src/components/Coach/GameChatPanel.tsx:474`
 
 ### `isComputedAnswer` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7514`
+- `src/components/Coach/CoachTeachPage.tsx:7574`
 
 ### `dispatchCoachTurn` (function) — 48 call sites
 - `src/coach/chatKindContracts.test.ts:391`
@@ -186,7 +196,7 @@
 - `src/components/Board/VoiceChatMic.tsx:484`
 - `src/components/Coach/CoachAnalysePage.tsx:238`
 - `src/components/Coach/CoachChatPage.tsx:284`
-- `src/components/Coach/CoachGameReview.tsx:3092`
+- `src/components/Coach/CoachGameReview.tsx:3094`
 - `src/components/Coach/ExplainPositionSessionView.tsx:247`
 - `src/components/Coach/GameChatPanel.tsx:1010`
 - `src/components/Coach/GameChatPanel.tsx:1388`
@@ -200,6 +210,7 @@
 
 ## Tests
 
+- `src/coach/awaitTurnRead.test.ts`
 - `src/coach/chatKindContracts.test.ts`
 - `src/coach/chatTurnRow.outcome.test.ts`
 - `src/coach/coachService.askReader.integration.test.ts`

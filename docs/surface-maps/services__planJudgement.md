@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**339 lines · 9 exports · 6 importers · 3 tests · 0 audits**
+**345 lines · 9 exports · 6 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,17 +39,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `placementFutureLine` (function) — 3 call sites
 - `src/services/structureJudgement.test.ts:238`
-- `src/services/structureJudgement.test.ts:241`
+- `src/services/structureJudgement.test.ts:243`
 - `src/services/structureReads.ts:106`
 
-### `smallEdges` (function) — 3 call sites
-- `src/services/structureJudgement.test.ts:245`
-- `src/services/structureJudgement.test.ts:249`
-- `src/services/structureReads.ts:112`
+### `smallEdges` (function) — 2 call sites
+- `src/services/structureJudgement.test.ts:247`
+- `src/services/structureJudgement.test.ts:251`
 
 ### `fightingLine` (function) — 3 call sites
-- `src/services/structureJudgement.test.ts:254`
-- `src/services/structureJudgement.test.ts:260`
+- `src/services/structureJudgement.test.ts:256`
+- `src/services/structureJudgement.test.ts:262`
 - `src/services/structureReads.ts:105`
 
 ### `wedgePaysLater` (function) — 4 call sites

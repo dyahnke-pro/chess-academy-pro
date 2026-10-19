@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**132 lines · 1 exports · 2 importers · 3 tests · 29 audits**
+**150 lines · 1 exports · 2 importers · 3 tests · 29 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:3127) — names `deepseek`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3243) — names `deepseek`
-- **Tech Stack (exact versions)** (CLAUDE.md:3691) — names `deepseek`
+- **⏰ Standing notes** (CLAUDE.md:3214) — names `deepseek`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3330) — names `deepseek`
+- **Tech Stack (exact versions)** (CLAUDE.md:3772) — names `deepseek`
 
 ## Who calls in
 

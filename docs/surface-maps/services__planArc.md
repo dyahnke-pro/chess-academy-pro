@@ -32,14 +32,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `aimsOf` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10468`
-- `src/components/Coach/CoachTeachPage.tsx:10472`
-- `src/services/lookaheadPlan.ts:1669`
+- `src/components/Coach/CoachTeachPage.tsx:10624`
+- `src/components/Coach/CoachTeachPage.tsx:10628`
+- `src/services/lookaheadPlan.ts:1680`
 - `src/services/planArc.phraseFrom.test.ts:30`
 - `src/services/planArc.phraseFrom.test.ts:31`
 - `src/services/planArc.test.ts:29`
-- `src/services/planChooser.ts:51`
 - `src/services/planChooser.ts:52`
+- `src/services/planChooser.ts:53`
 - `src/services/planThread.test.ts:75`
 
 ### `phraseFrom` (function) — 3 call sites
@@ -64,9 +64,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.test.ts:325`
 
 ### `stepArc` (function) — 32 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10468`
-- `src/components/Coach/CoachTeachPage.tsx:10472`
-- `src/services/lookaheadPlan.ts:1670`
+- `src/components/Coach/CoachTeachPage.tsx:10624`
+- `src/components/Coach/CoachTeachPage.tsx:10628`
+- `src/services/lookaheadPlan.ts:1681`
 - `src/services/planArc.test.ts:29`
 - `src/services/planArc.test.ts:97`
 - `src/services/planArc.test.ts:99`
@@ -98,9 +98,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.truth.test.ts:36`
 
 ### `aimWalkableNow` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10468`
-- `src/components/Coach/CoachTeachPage.tsx:10472`
-- `src/services/lookaheadPlan.ts:1669`
+- `src/components/Coach/CoachTeachPage.tsx:10624`
+- `src/components/Coach/CoachTeachPage.tsx:10628`
+- `src/services/lookaheadPlan.ts:1680`
 - `src/services/planArc.phraseFrom.test.ts:19`
 - `src/services/planArc.phraseFrom.test.ts:22`
 - `src/services/planArc.test.ts:211`
@@ -116,11 +116,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planArc.test.ts:272`
 - `src/services/planChoicePasserNow.test.ts:22`
 - `src/services/planChoicePasserNow.test.ts:23`
-- `src/services/planChooser.test.ts:54`
-- `src/services/planChooser.ts:50`
+- `src/services/planChooser.test.ts:56`
+- `src/services/planChooser.ts:51`
 
 ### `joinEmerges` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10484`
+- `src/components/Coach/CoachTeachPage.tsx:10640`
 - `src/services/planArc.test.ts:279`
 - `src/services/planArc.test.ts:286`
 

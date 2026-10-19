@@ -8,10 +8,10 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4125) — names `usePhaseNarration`
-- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4458) — names `usePhaseNarration`
-- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5277) — names `usePhaseNarration`
-- **The standard post-deploy ritual** (CLAUDE.md:6302) — names `usePhaseNarration`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4177) — names `usePhaseNarration`
+- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4510) — names `usePhaseNarration`
+- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5332) — names `usePhaseNarration`
+- **The standard post-deploy ritual** (CLAUDE.md:6389) — names `usePhaseNarration`
 
 ## Who calls in
 
@@ -29,7 +29,7 @@
 
 ### `usePhaseNarration` (function) — 5 call sites
 - `src/components/Coach/CoachGamePage.tsx:1819`
-- `src/components/Coach/CoachTeachPage.tsx:8021`
+- `src/components/Coach/CoachTeachPage.tsx:8105`
 - `src/hooks/usePhaseNarration.test.ts:121`
 - `src/hooks/usePhaseNarration.test.ts:366`
 - `src/hooks/usePhaseNarration.test.ts:383`

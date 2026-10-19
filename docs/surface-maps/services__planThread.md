@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify").** (CLAUDE.md:5355) — names `planThread`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify").** (CLAUDE.md:5394) — names `planThread`
 
 ## Who calls in
 
@@ -32,9 +32,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `newPlanThread` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10072`
+- `src/components/Coach/CoachTeachPage.tsx:10175`
 - `src/services/boardComputers.test.ts:52`
-- `src/services/coachFeatureService.ts:1421`
+- `src/services/coachFeatureService.ts:1417`
 - `src/services/planChoice.test.ts:75`
 - `src/services/planChoice.test.ts:89`
 - `src/services/planChoice.test.ts:102`
@@ -47,14 +47,14 @@
 - `src/services/planThread.test.ts:98`
 
 ### `clonePlanThread` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10073`
-- `src/services/coachFeatureService.ts:2012`
+- `src/components/Coach/CoachTeachPage.tsx:10176`
+- `src/services/coachFeatureService.ts:2016`
 - `src/services/planThread.test.ts:99`
 - `src/services/planThread.test.ts:107`
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10105`
-- `src/components/Coach/CoachTeachPage.tsx:11894`
+- `src/components/Coach/CoachTeachPage.tsx:10208`
+- `src/components/Coach/CoachTeachPage.tsx:12010`
 - `src/services/planThread.test.ts:103`
 - `src/services/planThread.test.ts:110`
 

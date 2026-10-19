@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**296 lines · 9 exports · 4 importers · 2 tests · 0 audits**
+**298 lines · 9 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,7 +25,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `methodRead` (function) — 9 call sites
 - `src/services/boardPlanFacts.ts:116`
 - `src/services/groundedAnswer.ts:3718`
-- `src/services/groundedAnswer.ts:6885`
+- `src/services/groundedAnswer.ts:6902`
 - `src/services/planChoice.test.ts:30`
 - `src/services/planChoice.test.ts:118`
 - `src/services/planChoice.test.ts:124`
@@ -67,7 +67,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planThread.ts:193`
 
 ### `weaknessLine` (function) — 1 call site
-- `src/services/groundedAnswer.ts:6886`
+- `src/services/groundedAnswer.ts:6903`
 
 ## Tests
 

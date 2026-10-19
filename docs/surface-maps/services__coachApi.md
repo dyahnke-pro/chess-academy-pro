@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7302 lines · 39 exports · 55 importers · 61 tests · 19 audits**
+**7314 lines · 39 exports · 55 importers · 61 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,9 +17,9 @@
 - **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:4020) — names `coachApi`, `voiceFacts`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4329) — names `voiceFacts`
 - **Do NOT** (CLAUDE.md:5500) — names `coachApi`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6254) — names `voiceFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6397) — names `coachApi`, `voiceFacts`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6422) — names `coachApi`, `translateToEnglish`, `voiceFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6279) — names `voiceFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6422) — names `coachApi`, `voiceFacts`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6447) — names `coachApi`, `translateToEnglish`, `voiceFacts`
 
 ## Who calls in
 
@@ -87,7 +87,7 @@
 - `src/services/coachApi.keySquares.test.ts:21`
 
 ### `warmCoachProvider` (function) — 1 call site
-- `src/App.tsx:496`
+- `src/App.tsx:498`
 
 ### `__resetProviderCooldownsForTests` (function) — 4 call sites
 - `src/services/coachApi.boardVerdict.integration.test.ts:65`
@@ -235,7 +235,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:584`
-- `src/components/Coach/CoachTeachPage.tsx:3827`
+- `src/components/Coach/CoachTeachPage.tsx:3832`
 - `src/services/coachSessionRouter.ts:120`
 - `src/services/coachSettingsAction.ts:261`
 
@@ -352,7 +352,7 @@
 - `scripts/audit-coach-master-integration.mjs:360`
 - `scripts/audit-coach-master-integration.mjs:413`
 - `src/coach/providers/deepseek.test.ts:7`
-- `src/coach/providers/deepseek.ts:74`
+- `src/coach/providers/deepseek.ts:73`
 - `src/services/coachApi.boardVerdict.integration.test.ts:69`
 - `src/services/coachApi.boardVerdict.integration.test.ts:118`
 - `src/services/coachApi.boardVerdict.integration.test.ts:132`

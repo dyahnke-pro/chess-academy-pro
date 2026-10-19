@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**877 lines · 28 exports · 7 importers · 7 tests · 0 audits**
+**908 lines · 28 exports · 7 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -99,7 +99,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:136`
 
 ### `tacticalReadFromLines` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9945`
+- `src/components/Coach/CoachTeachPage.tsx:10067`
 - `src/services/claimTruth.manual.test.ts:170`
 - `src/services/danyaBehaviors.ts:535`
 - `src/services/danyaDeviceCoverage.test.ts:73`
@@ -124,13 +124,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:641`
 
 ### `temptingTurnClause` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9960`
+- `src/components/Coach/CoachTeachPage.tsx:10082`
 - `src/services/danyaDeviceCoverage.test.ts:79`
 - `src/services/tacticalRead.test.ts:447`
 - `src/services/tacticalRead.test.ts:460`
 
-### `uncertaintyClause` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9972`
+### `uncertaintyClause` (function) — 15 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10094`
 - `src/services/claimTruth.manual.test.ts:172`
 - `src/services/danyaDeviceCoverage.test.ts:84`
 - `src/services/liveVoiceDefects.test.ts:255`
@@ -144,6 +144,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:590`
 - `src/services/tacticalRead.test.ts:591`
 - `src/services/tacticalRead.test.ts:592`
+- `src/services/tacticalRead.test.ts:649`
 
 ### `candidateCompareClause` (function) — 8 call sites
 - `src/services/danyaDeviceCoverage.test.ts:89`
@@ -156,7 +157,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:607`
 
 ### `candidateCompareRead` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9983`
+- `src/components/Coach/CoachTeachPage.tsx:10104`
 - `src/services/compareClaimsNoEdge.test.ts:12`
 
 ### `temptingFromAnalysis` (function) — 6 call sites
