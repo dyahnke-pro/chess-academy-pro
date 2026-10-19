@@ -6,6 +6,7 @@
 // the one producer (`thinkAloud.depthClauses`) as `speedrun-read` facts the one
 // door ranks. G0: nothing here decides — each says what the board shows.
 import { Chess, type Square } from 'chess.js';
+import { MATERIAL_VALUE } from './pieceValues';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { sayMoveClause } from './spokenMove';
 import { criticalityThresholds } from './criticalityScan';
@@ -373,7 +374,6 @@ export function rightPieceForHole(fen: string, me: 'w' | 'b'): Read | null {
 // compares two moves of one side, so a forced reply is new; threats → SEE). ──
 
 const cap = (t: string): string => t.replace(/^./, (c) => c.toUpperCase());
-const TAKEN_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
 /** Does any reply win something of `me` after `fenAfter` (them to move)?
  *  `took`: the move that led here captured — a piece taken back on that square
  *  is an EXCHANGE, not a loss, unless they win more than it took (Alekhine walk
@@ -385,7 +385,7 @@ const leavesSomething = (fenAfter: string, me: 'w' | 'b', took?: { square: strin
   for (const cell of b.board().flat()) {
     if (!cell || cell.color !== me || cell.type === 'k') continue;
     if (!b.attackers(cell.square, them).length) continue;
-    const gain = legalSeeGainFor(fenAfter, cell.square, them) - (took && took.square === cell.square ? TAKEN_VALUE[took.piece] ?? 0 : 0);
+    const gain = legalSeeGainFor(fenAfter, cell.square, them) - (took && took.square === cell.square ? MATERIAL_VALUE[took.piece] ?? 0 : 0);
     if (gain > 0) return cell.square;
   }
   return null;
