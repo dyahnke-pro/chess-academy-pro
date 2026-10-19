@@ -24,7 +24,7 @@ export function bestAnswerIssues(rung, q, answer, ctx) {
   if (worst >= 18) out.push(`recites a bare line (${worst} move words in a row, no why between them)`);
   if (/\bquiet move\b/i.test(answer) && /\b(?:the point of|it stops|stops your|wins)\b/i.test(answer)) out.push('calls the move quiet and gives its point');
   if (rung.check === 'second' && ctx.second && !sanRe(ctx.second).test(answer)) out.push(`never talks about ${ctx.second}, the move asked about`);
-  if (rung.check === 'why' && ctx.gapCp >= 150 && /no single reason/i.test(answer)) out.push(`no reason given for a ${ctx.gapCp}cp gap`);
+  if (rung.check === 'why' && ctx.gapCp >= 150 && /no single reason|isn't the only good move/i.test(answer)) out.push(`no reason given for a ${ctx.gapCp}cp gap`);
   // "Cover it" must say how in the SAME sentence (a move, or "by/with …").
   for (const sent of answer.split(/(?<=[.!?])\s+|⏎/)) {
     const m = /\b(?:cover it|defend it|deal with it|guard it)\b(.*)$/i.exec(sent);
