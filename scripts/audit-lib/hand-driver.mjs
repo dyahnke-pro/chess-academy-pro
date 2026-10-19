@@ -24,7 +24,10 @@ const BASE = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const PORT = Number(process.env.HAND_PORT ?? 7777);
 const listener = await startAuditListener();
 const browser = await chromium.launch({ headless: true, executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
-const ctx = await browser.newContext(sandboxContextOptions());
+// HAND_VIEWPORT=390x844 walks at phone size, so a screenshot is what the
+// student sees (David 2026-10-19: "what the app looks, sounds, and feels like").
+const vp = /^(\d+)x(\d+)$/.exec(process.env.HAND_VIEWPORT ?? '');
+const ctx = await browser.newContext({ ...sandboxContextOptions(), ...(vp ? { viewport: { width: Number(vp[1]), height: Number(vp[2]) }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 } : {}) });
 await ctx.addInitScript(({ url, secret }) => {
   try { localStorage.setItem('auditStreamUrl', url); localStorage.setItem('auditStreamSecret', secret); } catch { /* ignore */ }
 }, { url: listener.url, secret: listener.secret });
