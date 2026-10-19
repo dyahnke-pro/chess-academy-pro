@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useRef } from 'react';
+import { useKidProgress } from '../../hooks/useKidProgress';
 import { useNavigate } from 'react-router-dom';
 import { KidChessboard } from '../Chessboard/KidChessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
@@ -15,6 +16,8 @@ export function KnightSweepGame(): JSX.Element {
 
   const [gameState, setGameState] = useState<GameState>('levelSelect');
   const [currentLevelIdx, setCurrentLevelIdx] = useState(0);
+  // Levels finished are remembered across closes (persistent memory).
+  const progress = useKidProgress('knight-sweep');
   const [knightSquare, setKnightSquare] = useState('d4');
   const [remainingEnemies, setRemainingEnemies] = useState<
     Array<{ square: string; piece: string }>
@@ -129,6 +132,7 @@ export function KnightSweepGame(): JSX.Element {
 
         if (newEnemies.length === 0) {
           setGameState('won');
+          progress.complete(currentLevelIdx, newMoveCount <= level.par ? 3 : 2);
           const rating =
             newMoveCount <= level.par
               ? 'Incredible efficiency!'
@@ -162,6 +166,8 @@ export function KnightSweepGame(): JSX.Element {
       remainingEnemies,
       level,
       kidSpeak,
+      progress.complete,
+      currentLevelIdx,
     ],
   );
 
@@ -220,6 +226,7 @@ export function KnightSweepGame(): JSX.Element {
                   style={{ color: 'var(--color-text-muted)' }}
                 >
                   {l.enemyPieces.length} enemies · Par: {l.par} moves
+                  {progress.completed.has(idx) && <span data-testid={`knight-sweep-done-${l.level}`}> · ✓ {progress.stars[idx] === 3 ? 'at par' : 'done'}</span>}
                 </div>
               </div>
             </button>

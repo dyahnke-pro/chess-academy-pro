@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
+import { useKidProgress } from '../../hooks/useKidProgress';
 import { useNavigate } from 'react-router-dom';
 import { KidChessboard } from '../Chessboard/KidChessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
@@ -19,6 +20,8 @@ export function LeapFrogGame(): JSX.Element {
 
   const [gameState, setGameState] = useState<GameState>('levelSelect');
   const [currentLevelIdx, setCurrentLevelIdx] = useState(0);
+  // Levels finished are remembered across closes (persistent memory).
+  const progress = useKidProgress('leap-frog');
   const [knightSquare, setKnightSquare] = useState(KNIGHT_START_SQUARE);
   const [moveCount, setMoveCount] = useState(0);
   const [voiceOn, setVoiceOn] = useState(true);
@@ -151,6 +154,7 @@ export function LeapFrogGame(): JSX.Element {
 
       if (square === TREASURE_SQUARE) {
         setGameState('won');
+        progress.complete(currentLevelIdx);
         kidSpeak(`Amazing! You found the treasure in ${newMoveCount} moves!`);
         return;
       }
@@ -164,7 +168,7 @@ export function LeapFrogGame(): JSX.Element {
         kidSpeak('Oh no! The knight is stuck. Try again!');
       }
     },
-    [gameState, knightSquare, dangerSet, friendlySet, moveCount, kidSpeak],
+    [gameState, knightSquare, dangerSet, friendlySet, moveCount, kidSpeak, progress.complete, currentLevelIdx],
   );
 
   const handleToggleVoice = useCallback((): void => {
@@ -216,6 +220,7 @@ export function LeapFrogGame(): JSX.Element {
               <div className="flex-1">
                 <div className="font-bold text-lg">
                   Level {l.level} — {l.name}
+                  {progress.completed.has(idx) && <span data-testid={`leap-frog-done-${l.level}`}> ✓</span>}
                 </div>
                 <div
                   className="text-sm"

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { voiceService } from '../../services/voiceService';
 import { QueenVsArmy } from './QueenVsArmy';
 import { QueensGauntlet } from './QueensGauntlet';
+import { useKidProgress } from '../../hooks/useKidProgress';
 
 // Pure routing hub — every game has its own route (no setView). The two
 // gauntlet-style games and the puzzle/maze/sweep tiles all navigate.
@@ -14,6 +15,9 @@ export function QueenGamesHub(): JSX.Element {
   const [voiceOn, setVoiceOn] = useState(true);
   const [unlocked, setUnlocked] = useState(false);
   const [loading, setLoading] = useState(true);
+  // Queen-game wins are remembered (persistent memory, 2026-10-19).
+  const armyWins = useKidProgress('queen-vs-army').completed.size;
+  const gauntletWins = useKidProgress('queens-gauntlet').completed.size;
 
   useEffect(() => {
     // Kids section: Queen Games are always open (David 2026-06-19: "unlock
@@ -127,6 +131,8 @@ export function QueenGamesHub(): JSX.Element {
                 <div className="font-bold text-lg">{c.title}</div>
                 <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
                   {c.subtitle}
+                  {c.testid === 'queen-army-card' && armyWins > 0 && <span data-testid="queen-army-won"> · {armyWins} won</span>}
+                  {c.testid === 'queen-gauntlet-card' && gauntletWins > 0 && <span data-testid="queen-gauntlet-won"> · {gauntletWins} won</span>}
                 </div>
               </div>
             </motion.button>
@@ -141,10 +147,12 @@ export function QueenGamesHub(): JSX.Element {
 // navigation, so the games are deep-linkable (#9: everything routes).
 export function QueenVsArmyRoute(): JSX.Element {
   const navigate = useNavigate();
-  return <QueenVsArmy onBack={() => void navigate('/kid/queen-games')} onComplete={() => {}} />;
+  const { complete } = useKidProgress('queen-vs-army');
+  return <QueenVsArmy onBack={() => void navigate('/kid/queen-games')} onComplete={(level, won) => { if (won) complete(level); }} />;
 }
 
 export function QueensGauntletRoute(): JSX.Element {
   const navigate = useNavigate();
-  return <QueensGauntlet onBack={() => void navigate('/kid/queen-games')} />;
+  const { complete } = useKidProgress('queens-gauntlet');
+  return <QueensGauntlet onBack={() => void navigate('/kid/queen-games')} onComplete={(level, won) => { if (won) complete(level); }} />;
 }

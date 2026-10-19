@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import { useKidProgress } from '../../hooks/useKidProgress';
 import { ArrowLeft, Volume2, VolumeX, RotateCcw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { KidChessboard } from '../Chessboard/KidChessboard';
@@ -29,7 +30,7 @@ export function ColorWars({ onBack }: ColorWarsProps): JSX.Element {
   const [captureCount, setCaptureCount] = useState(0);
   const [timerRunning, setTimerRunning] = useState(false);
   const [timerKey, setTimerKey] = useState(0);
-  const [levelsCompleted, setLevelsCompleted] = useState<Set<number>>(new Set());
+  const { completed: levelsCompleted, complete: completeLevel } = useKidProgress('color-wars');
   const [starsEarned, setStarsEarned] = useState(0);
   const [voiceOn, setVoiceOn] = useState(true);
   const [boardKey, setBoardKey] = useState(0);
@@ -128,7 +129,7 @@ export function ColorWars({ onBack }: ColorWarsProps): JSX.Element {
           setTimerRunning(false);
           const stars = calculateStars(elapsedRef.current, levelConfig.timerSeconds);
           setStarsEarned(stars);
-          setLevelsCompleted((prev) => new Set([...prev, currentLevel]));
+          completeLevel(currentLevel, stars);
           setPhase('won');
           playCelebration();
           kidSpeak(
@@ -146,7 +147,7 @@ export function ColorWars({ onBack }: ColorWarsProps): JSX.Element {
     // Clear selection
     setSelectedSquare(null);
     setLegalMoves([]);
-  }, [phase, pieces, selectedSquare, legalMoves, captureCount, currentLevel, levelConfig, playMoveSound, playCelebration, kidSpeak, calculateStars]);
+  }, [phase, pieces, selectedSquare, legalMoves, captureCount, currentLevel, levelConfig, playMoveSound, playCelebration, kidSpeak, calculateStars, completeLevel]);
 
   const handleVoiceToggle = useCallback((): void => {
     if (voiceOn) voiceService.stop();
