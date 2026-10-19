@@ -169,6 +169,13 @@ function legalMove(b: Chess, san: string): { from: string; to: string } | null {
   try { const m = new Chess(b.fen()).move(san); return m ? { from: m.from, to: m.to } : null; } catch { return null; }
 }
 
+/** Would `m` be legal for `side` on this board, whoever is to move? */
+function legalForSide(fen: string, m: { from: string; to: string }, side: 'w' | 'b'): boolean {
+  const parts = fen.split(' ');
+  parts[1] = side; parts[3] = '-';
+  try { return new Chess(parts.join(' ')).moves({ verbose: true }).some((x) => x.from === m.from && x.to === m.to); } catch { return false; }
+}
+
 function castledSide(history: readonly string[], side: 'w' | 'b'): 'short' | 'long' | null {
   for (let i = side === 'w' ? 0 : 1; i < history.length; i += 2) {
     const s = history[i].replace(/[+#]/g, '');
@@ -307,8 +314,10 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   }
 
   // 8 — THE KEY BREAK, as an idea, held while it is the student's legal move.
+  // A key move the student can play right now is their next move, not an idea:
+  // it is said only while it still needs preparing.
   const brk = mastersBreakIdea(planHere(fen, name, movesAt), student, fen, holes);
-  if (brk) out.push({ beat: 'key-break', text: brk.text, squares: brk.squares, proof: squaresProof(brk.text, brk.squares) ?? NO_PROOF.description, claimKey: `story:break:${brk.move.to}`, aim: brk.aim, holdWhilePlayable: [brk.move] });
+  if (brk && !legalForSide(fen, brk.move, student)) out.push({ beat: 'key-break', text: brk.text, squares: brk.squares, proof: squaresProof(brk.text, brk.squares) ?? NO_PROOF.description, claimKey: `story:break:${brk.move.to}`, aim: brk.aim, holdWhilePlayable: [brk.move] });
 
   // 9 — WHAT THEIR MOVE GAVE AWAY: a hole on their side your knight can reach.
   if (mover === them) {
@@ -358,7 +367,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
 
 
 /** A path below this weight cannot move a break past `MIN_BREAK_SHARE`. */
-export const PLAN_PREFETCH_MIN_WEIGHT = 0.05;
+export const PLAN_PREFETCH_MIN_WEIGHT = 0.1;
 
 /**
  * LOOK THE OPENING UP BEFORE IT IS PLAYED: the next two plies of book (so the
@@ -368,5 +377,5 @@ export const PLAN_PREFETCH_MIN_WEIGHT = 0.05;
  */
 export async function prefetchOpeningStory(fen: string, surface: string, lookup?: (fen: string) => Promise<MasterPlayResult>): Promise<void> {
   await prefetchMastersTree(fen, { surface, plies: 2, branchShare: FORK_MIN_SHARE, minNodeGames: 1, minWeight: 0, maxPositions: 40, lookup });
-  await prefetchMastersTree(fen, { surface, plies: PLAN_WALK.depth, branchShare: PLAN_WALK.branchShare, minNodeGames: PLAN_WALK.minNodeGames, minWeight: PLAN_PREFETCH_MIN_WEIGHT, maxPositions: 80, lookup });
+  await prefetchMastersTree(fen, { surface, plies: PLAN_WALK.depth, branchShare: PLAN_WALK.branchShare, minNodeGames: PLAN_WALK.minNodeGames, minWeight: PLAN_PREFETCH_MIN_WEIGHT, maxPositions: 120, lookup });
 }

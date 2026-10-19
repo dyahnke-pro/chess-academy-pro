@@ -173,7 +173,7 @@ export function mastersPlanRead(fen: string, movesAt: MovesAt): MastersPlanRead 
     return pick.share >= MIN_BREAK_SHARE ? { side: pick.side, share: Math.min(1, pick.share) } : null;
   };
   const read = { games: rootGames, white, black, whitePiece: piece('w'), blackPiece: piece('b'), whiteCastle: castle('w'), blackCastle: castle('b') };
-  if (!white && !black && !read.whitePiece && !read.blackPiece) return null;
+  if (!white && !black && !read.whitePiece && !read.blackPiece && !read.whiteCastle && !read.blackCastle) return null;
   return read;
 }
 

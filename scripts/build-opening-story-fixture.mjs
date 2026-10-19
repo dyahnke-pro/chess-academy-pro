@@ -48,7 +48,7 @@ for (const line of LINES) {
   for (const s of line.split(' ')) { c.move(s); fens.push(c.fen()); }
   for (const f of fens) {
     await walk(f, { plies: 1, branchShare: 0.1, minNodeGames: 1, minWeight: 0, max: 40 });
-    await walk(f, { plies: 12, branchShare: 0.1, minNodeGames: 20, minWeight: 0.05, max: 80 });
+    await walk(f, { plies: 12, branchShare: 0.1, minNodeGames: 20, minWeight: 0.1, max: 120 });
     process.stdout.write(`\r${line.slice(0, 20)}… ${Object.keys(db).length} positions`);
   }
   console.log();
