@@ -80,6 +80,13 @@ describe('his habits of thought, computed (each checked against the existing com
     const fen = '4k3/8/8/4N3/3P4/8/8/4K3 w - - 0 1';
     expect(overprotect(fen, 'w')?.text).toMatch(/overprotect it|second guard/);
   });
+  it('overprotection keeps ONE claim across the rotated stems (Black walk 2026-10-19: d5 said on moves 13 and 14)', () => {
+    const m13 = overprotect('4k3/8/8/4N3/3P4/8/8/4K3 w - - 0 13', 'w');
+    const m14 = overprotect('4k3/8/8/4N3/3P4/8/8/4K3 w - - 0 14', 'w');
+    expect(m13?.text).not.toBe(m14?.text);
+    expect(m13?.claim).toBe('srr:overprotect:e5');
+    expect(m14?.claim).toBe(m13?.claim);
+  });
   it('the position opened: their knight steps off your bishop\'s diagonal, and you have a capture', () => {
     // …Nf5 opens the a1 bishop onto their queen on f6
     const r = positionOpened({ fenBefore: '6k1/8/5q2/8/3n4/8/8/B5K1 b - - 0 1', san: 'Nf5' }, 'w', 'Bxf6');
