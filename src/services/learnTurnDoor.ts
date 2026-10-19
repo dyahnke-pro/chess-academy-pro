@@ -38,7 +38,7 @@ export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
 /** Why the door held a lane on a turn. */
-export type HoldReason = 'mate-turn' | 'verdict-turn' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal';
+export type HoldReason = 'mate-turn' | 'verdict-turn' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts';
 
 /** The AVERAGE a Learn turn is held to (CLAUDE.md WHY standard measure 4) —
  *  the scale of the marginal bar, never a limit. */
@@ -608,9 +608,16 @@ export function decideTurn(
   // "count before you take" was held 4 of 4 and nothing said why).
   const heldWhy: Partial<Record<LearnLane, HoldReason>> = {};
   const hold = (lane: LearnLane, why: HoldReason): void => { if (!held.includes(lane)) held.push(lane); heldWhy[lane] ??= why; };
+  // "NOTHING HINGES ON YOUR NEXT MOVE" NEVER SITS BESIDE A STAKE (Alekhine
+  // walk 2026-10-19: "Watch c2 — a knight forks there in 2…" then "Nothing
+  // hinges on your next move"). Both were true — every top move met the fork —
+  // but the calm read only speaks on a turn where nothing else is at stake.
+  const calmRead = (x: { fact: VoiceFact }): boolean => !!x.fact.claims?.includes('srr:any-move-fine');
+  const somethingAtStake = survivors.some((y) => !calmRead(y) && !subsumed.has(y) && stakeOf(y.lane, y.fact.text) > 0);
   for (const x of survivors) {
     if (turnHolds(x)) { hold(x.lane, verdict && x !== verdict ? 'verdict-turn' : 'mate-turn'); continue; }
     if (dangerWaits(x)) { hold(x.lane, 'danger-waits'); continue; }
+    if (somethingAtStake && calmRead(x)) { hold(x.lane, 'contradicts'); continue; }
     // A DESCRIPTION — nothing at stake, from a lane that describes the board
     // (or an unstaked board-read riding position facts) — speaks only as
     // SUPPORT: it must touch the lead's squares AND add one of its own. "Your
