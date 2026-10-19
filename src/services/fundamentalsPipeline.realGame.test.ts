@@ -30,7 +30,8 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { analyzeGameOnWorker } from './gameAnalysisService';
-import { autoAnalyzeGameMisconceptions } from './autoAnalyzeGame';
+import { autoAnalyzeGameMisconceptions, measuredCpLoss } from './autoAnalyzeGame';
+import { slipNotFiled } from './discussionPractice';
 import { getFundamentalCounts } from './fundamentalsCatalog';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { getMisconceptionProfile } from './misconceptionService';
@@ -303,8 +304,16 @@ describe('WO-4 gate — a real game produces ATTRIBUTED fundamentals that land i
     expect(flagged.length).toBeGreaterThanOrEqual(3);
     expect(flagged.every((a) => a.bestMove)).toBe(true);
 
-    // Every flagged move was CAPTURED (one row each, all from this game).
-    expect(rows.length).toBe(flagged.length);
+    // Every flagged move the record keeps was CAPTURED (one row each, all from
+    // this game) — a slip that cost nothing or came in a decided game is not
+    // filed (`slipNotFiled`, David's record 2026-10-19).
+    const mover = (a: (typeof flagged)[number]): number => (a.color === 'white' ? 1 : -1);
+    const kept = flagged.filter((a) => !slipNotFiled({
+      cpLoss: measuredCpLoss(a) ?? undefined,
+      evalBefore: a.bestMoveEval != null && Math.abs(a.bestMoveEval) < 10000 ? a.bestMoveEval * mover(a) : undefined,
+      evalAfter: a.evaluation != null && Math.abs(a.evaluation) < 10000 ? a.evaluation * mover(a) : undefined,
+    }));
+    expect(rows.length).toBe(kept.length);
     expect(rows.every((r) => r.source === 'auto-analysis' && r.sourceGameId === `wo4-${f.id}`)).toBe(true);
 
     // ATTRIBUTION fired: rows carry a fundamentalId that is a real FundamentalId,
