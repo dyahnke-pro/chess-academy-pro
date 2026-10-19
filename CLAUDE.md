@@ -5913,6 +5913,31 @@ Two honest exceptions, both named in the report, never silently counted true:
 - a claim the walk CANNOT decide (an engine read deeper than the stored lines) is
   listed as undecided and settled by a deeper engine read, not by assumption.
 
+### 🔒🔒 AUDIT AT DAVID'S LEVEL OF DETAIL — A ROW COUNT IS NEVER THE REPORT (David 2026-10-19: "I want this locked for all future sessions")
+
+David audits by the sentence, the pixel and the feel of the device; a session's
+audits used to stop at pass/fail rows. On 2026-10-19 his record found six
+defects that weeks of green fresh-device runs had passed (a stalled coach, a
+scrambled record, a 949-game re-read under live play, two duplicate-reason
+paths, the next move named on 10 of 12 turns). Every Learn/Review audit now:
+
+1. **RUNS ON A REAL RECORD AS WELL AS A FRESH ONE.** `AUDIT_FIXTURE=<data
+   drop>` (the audit and the hand driver's `/fixture` load it). A fresh device
+   tests a stranger; the record tests the student. Grey and real-record runs
+   each hold their own contract — a quiet phase or a faded concept on a real
+   record is the record working, not a failure.
+2. **READS EVERY SPOKEN LINE IN FULL** after each run and judges it as the
+   student hears it: worth saying to THIS student (their record), or noise —
+   a one-move attack they plainly see, a reason said twice, a statistic, a
+   generic answer to "why is X best?". A line can be true, board-checked and
+   gate-clean and still be wrong.
+3. **MEASURES TRENDS ACROSS THE GAME, NOT POINTS:** board size per move (it
+   must not drift), words per turn, main-thread CPU per move, answer latency
+   from Enter to bubble, and time from the student's move to the coach's
+   reply. A per-move snapshot cannot see a slow drift or heat.
+4. **REPORTS THE LINES, NOT THE COUNT.** "38 passed" is never the report; the
+   report is what was said, what is wrong with it, and the measured trends.
+
 ### 🔒🔒 THE DETAILS A WALK MUST CATCH (David 2026-09-30: "These are the details you need to be catching. Lock in!!")
 
 Every one of these was missed by a green walk until David asked. Check each, on

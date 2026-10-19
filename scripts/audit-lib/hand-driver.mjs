@@ -42,6 +42,9 @@ const consoleLines = [];
 page.on('console', (m) => { consoleLines.push(m.text()); if (consoleLines.length > 2000) consoleLines.shift(); });
 
 const chess = new Chess();
+/** Per-turn measurements (`/turn`, `/trends`). */
+const trends = [];
+const asks = [];
 let seen = 0;
 const NOISE = /^(track A spoke|computed |coach move |opening (identified|refined)|injected |voice=|silent|throttled)/i;
 
@@ -125,6 +128,8 @@ const routes = {
     // A fresh page is a fresh game: the mirror starts over with it (a stale
     // mirror reported the previous game's moves over a new board).
     chess.reset();
+    trends.length = 0;
+    asks.length = 0;
     await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded' });
     await sleep(4000);
     const allow = page.locator('[data-testid="ai-consent-allow"]');
@@ -154,6 +159,61 @@ const routes = {
     const ok = await clickMove(page, m, chess.fen());
     if (!ok) { chess.undo(); return { error: `board did not take ${q.get('san')}`, ...(await state()) }; }
     return state();
+  },
+  /** ONE STUDENT TURN, MEASURED (David 2026-10-19: audit trends, not points).
+   *  Plays `?san=`, waits for the coach's reply and for the voice to settle,
+   *  and records: ms to the reply, the board's size, the words spoken this
+   *  turn, and the lines themselves. `/trends` returns every turn so far. */
+  async turn(q) {
+    const t0 = Date.now();
+    const plies = chess.history().length;
+    const played = await routes.move(q);
+    if (played.error) return played;
+    const lines = [...played.spoken];
+    let replyMs = null;
+    for (let t = Date.now(); Date.now() - t < 120_000; await sleep(400)) {
+      const s = await state();
+      lines.push(...s.spoken);
+      if (chess.history().length >= plies + 2) { replyMs = Date.now() - t0; break; }
+    }
+    // The voice settles: no new line for 4s (at most 60s more).
+    for (let quiet = Date.now(), t = Date.now(); Date.now() - t < 60_000 && Date.now() - quiet < 4000; await sleep(500)) {
+      const s = await state();
+      if (s.spoken.length) { lines.push(...s.spoken); quiet = Date.now(); }
+    }
+    const boardPx = await page.evaluate(() => {
+      const a = document.querySelector('[data-square="a1"]')?.getBoundingClientRect();
+      return a ? Math.round(a.width * 8) : null;
+    }).catch(() => null);
+    const words = lines.reduce((n, l) => n + l.split(/\s+/).filter(Boolean).length, 0);
+    const row = { move: q.get('san'), reply: chess.history()[plies + 1] ?? null, replyMs, boardPx, words, lines };
+    trends.push(row);
+    return { ...row, moves: chess.history().join(' ') };
+  },
+  /** A QUESTION, MEASURED: Enter to the reply bubble's text (body = the
+   *  question). The latency a student feels, recorded with the answer. */
+  async ask(_q, body) {
+    const bubbles = page.locator('[data-testid="chat-message-assistant"]');
+    const before = await bubbles.count();
+    const input = page.locator('[data-testid="chat-text-input"]:visible').first();
+    for (let t = Date.now(); Date.now() - t < 60_000 && await input.isDisabled().catch(() => false);) await sleep(300);
+    await input.pressSequentially(body, { delay: 10 });
+    await page.keyboard.press('Enter');
+    const t0 = Date.now();
+    let text = '';
+    for (; Date.now() - t0 < 60_000; await sleep(250)) {
+      if ((await bubbles.count()) <= before) continue;
+      text = (await bubbles.first().innerText().catch(() => '')).replace(/\s+/g, ' ').trim();
+      if (text.replace(/^C\s*/, '').length > 10) break;
+    }
+    const row = { ask: body, answerMs: Date.now() - t0, answer: text };
+    asks.push(row);
+    return row;
+  },
+  /** Every measured turn so far, plus the game's averages. */
+  async trends() {
+    const avg = (k) => { const v = trends.map((r) => r[k]).filter((x) => typeof x === 'number'); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length) : null; };
+    return { turns: trends.map(({ lines, ...r }) => ({ ...r, lines: lines.length })), avgReplyMs: avg('replyMs'), avgWords: avg('words'), boardPx: [...new Set(trends.map((r) => r.boardPx))], asks: asks.map((a) => ({ ask: a.ask, answerMs: a.answerMs })) };
   },
   /** Re-sync the mirror after a takeback: the move list as the board shows it. */
   async setline(q) {
