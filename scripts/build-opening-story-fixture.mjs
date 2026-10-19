@@ -3,17 +3,18 @@
 // Walks the same trees `prefetchOpeningStory` looks up: every position of each
 // test line, two plies of book after it, and the pruned plan walk from it.
 import { Chess } from 'chess.js';
-import { writeFileSync } from 'node:fs';
+import { writeFileSync, readFileSync, existsSync } from 'node:fs';
 
 const PROXY = 'https://chess-academy-pro.vercel.app/api/lichess-explorer?source=masters&fen=';
 const OUT = 'src/services/__fixtures__/opening-story-masters.json';
 const LINES = [
   'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Be7 Qd2 O-O O-O-O Nbd7 g4 b5',
-  'e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 d6 Bc4 e6 O-O Nf6 Qe2 Be7 Rd1 e5',
+  'e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 d6 Bc4 e6 O-O Nf6 Qe2 Be7 Rd1 e5 Be3',
   'b3 e5 Bb2 Nc6 e3 d5 Bb5 Bd6 f4 Qh4+ g3 Qe7 Nf3 f6',
 ];
 const key = (fen) => fen.split(' ').slice(0, 4).join(' ');
-const db = {};
+// Merges into an existing fixture: a position already fetched is not fetched again.
+const db = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')).positions : {};
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 async function movesAt(fen) {
   const k = key(fen);

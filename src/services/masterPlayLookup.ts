@@ -233,8 +233,10 @@ export function inBookCachedSync(fen: string, minGames: number): boolean | null 
  *  looked up, or the lookup had no source); `[]` = the live explorer answered
  *  and masters never reached this position. */
 export function masterMovesCachedSync(fen: string): LocalDbMove[] | null {
-  if (confirmedEmpty.has(positionFen(fen))) return [];
   const hit = masterPlayCache.get(fen);
+  // Out of book only while the live answer itself is still cached: the set
+  // never outlives the cache entry it describes.
+  if (hit && hit.source === 'none' && confirmedEmpty.has(positionFen(fen))) return [];
   if (hit && hit.source !== 'none') return hit.moves.map((m) => ({ san: m.san, games: m.games }));
   return mastersMovesSync(fen);
 }

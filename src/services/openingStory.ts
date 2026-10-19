@@ -26,6 +26,7 @@ import type { MasterPlayResult } from './masterPlayTypes';
 import { holeAccess } from './moveInsight';
 import { deriveNextPlanFacts } from './nextPlans';
 import { planAimKey } from './planThread';
+import { classifyPhase } from './gamePhaseService';
 import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
 import { NO_PROOF, squaresProof, type FactProof } from './proof';
 import { andList } from '../utils/andList';
@@ -130,7 +131,16 @@ function aimWords(name: string): string | null {
 /** The plan master games play from this board: the live walk over what is in
  *  memory, else the named line's plan computed at build time. */
 function planHere(fen: string, name: string | null, movesAt: MovesAt): MastersPlanRead | null {
+  // Past the horizon the masters plan no longer speaks — the board's does.
+  if (knownThin(fen, movesAt)) return null;
   return mastersPlanRead(fen, movesAt) ?? (name ? planStillAhead(planFor(name), fen) : null);
+}
+
+/** Masters answered here, with fewer games than "usually" can rest on. An
+ *  unknown position (nothing looked up) is never thin. */
+function knownThin(fen: string, movesAt: MovesAt): boolean {
+  const ms = movesAt(fen);
+  return ms !== null && ms.reduce((n, m) => n + m.games, 0) < MIN_ROOT_GAMES;
 }
 
 /** Can a pawn of `me` still ever cover `hole`? (One standing behind it on a
@@ -345,16 +355,22 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
     }
   }
 
-  // HORIZON — master games run out (a known thin answer, never an unknown):
-  // the board's plan takes over under the plan thread's own aim key.
-  const here = movesAt(fen);
-  const thin = here !== null && here.reduce((n, m) => n + m.games, 0) < MIN_ROOT_GAMES;
-  const prev = movesAt(fenBefore);
-  const wasBook = prev !== null && prev.reduce((n, m) => n + m.games, 0) >= MIN_ROOT_GAMES;
-  if (thin && wasBook) {
-    const top = deriveNextPlanFacts(fen, student)[0];
-    const aim = top ? planAimKey(top.kind, top.squares[0] ?? top.file ?? null) : null;
+  // HORIZON — master games have run out (a known thin answer, never an
+  // unknown) after the game was in their book: the board's plan takes over,
+  // under the plan thread's own aim key so the plan is announced once. Only
+  // past the opening — in it the plan is development (David 2026-10-19), and
+  // the plan thread is silent there for the same reason.
+  if (knownThin(fen, movesAt) && classifyPhase(fen, { ply: history.length }) !== 'opening') {
+    const c = new Chess();
+    let wasBook = false;
+    for (const s of history.slice(0, -1)) {
+      const ms = movesAt(c.fen());
+      if (ms && ms.reduce((n, m) => n + m.games, 0) >= MIN_ROOT_GAMES) { wasBook = true; break; }
+      try { c.move(s); } catch { break; }
+    }
+    const top = wasBook ? deriveNextPlanFacts(fen, student)[0] : undefined;
     if (top) {
+      const aim = planAimKey(top.kind, top.squares[0] ?? top.file ?? null);
       out.push({
         beat: 'horizon-plan', text: `The master games run out here, so the board sets the plan: ${top.goal}.`,
         squares: top.squares, proof: squaresProof(top.goal, top.squares) ?? NO_PROOF.description,
@@ -362,8 +378,17 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
       });
     }
   }
-  return out;
+  return out.sort((x, y) => BEAT_ORDER[x.beat] - BEAT_ORDER[y.beat]);
 }
+
+/** The order a strong coach tells it (lead's 7-run baseline, 2026-10-19):
+ *  fork → identity → the choice and its cost at the move they belong to →
+ *  the consequence of their choice → the coming game's character → the key
+ *  idea last before the middlegame. A new beat fails to compile until placed. */
+export const BEAT_ORDER: Record<StoryBeat, number> = {
+  fork: 0, identity: 1, 'branch-choice': 2, 'their-setup': 3, 'structure-cost': 4, 'structure-paid': 5,
+  consequence: 6, character: 7, 'key-break': 8, 'horizon-plan': 9,
+};
 
 
 /** A path below this weight cannot move a break past `MIN_BREAK_SHARE`. */
