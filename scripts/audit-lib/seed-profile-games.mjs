@@ -12,7 +12,7 @@
 // rewrote exactly those assemblers to speak their full list.
 //
 // This is deliberately SMALL and synthetic — the real fixture
-// (`audit-reports/.fixtures/david-games.json`) is gitignored and usually absent
+// (`audit-reports/.fixtures/data-drop-david.json`) is gitignored and usually absent
 // in a fresh container, so an audit that only knew how to load it would still
 // be testing the empty state most of the time. Prefer the fixture when present;
 // fall back to this.

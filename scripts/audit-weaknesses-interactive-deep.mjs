@@ -42,7 +42,7 @@ const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const PASS = Number(process.env.AUDIT_PASS ?? '1');
 const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
 const FIXTURE_PATH = process.env.AUDIT_FIXTURE
-  ?? 'audit-reports/.fixtures/david-games.json';
+  ?? 'audit-reports/.fixtures/data-drop-david.json';
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/weaknesses-interactive-deep-pass${PASS}-${stamp}`;
 

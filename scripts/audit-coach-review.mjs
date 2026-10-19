@@ -213,7 +213,7 @@ async function main() {
   // ── Fixture: David's real account data (when present) ──────────
   // See scripts/audit-lib/fixture-loader.mjs. Audits run against
   // POPULATED data instead of an empty profile when the fixture
-  // file exists at audit-reports/.fixtures/david-games.json.
+  // file exists at audit-reports/.fixtures/data-drop-david.json.
   await record('fixture-load', async () => {
     const result = await loadFixtureIntoIDB(page);
     if (result.loaded) {

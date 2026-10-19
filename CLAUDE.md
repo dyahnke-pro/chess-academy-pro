@@ -5921,11 +5921,17 @@ defects that weeks of green fresh-device runs had passed (a stalled coach, a
 scrambled record, a 949-game re-read under live play, two duplicate-reason
 paths, the next move named on 10 of 12 turns). Every Learn/Review audit now:
 
-1. **RUNS ON A REAL RECORD AS WELL AS A FRESH ONE.** `AUDIT_FIXTURE=<data
-   drop>` (the audit and the hand driver's `/fixture` load it). A fresh device
-   tests a stranger; the record tests the student. Grey and real-record runs
-   each hold their own contract — a quiet phase or a faded concept on a real
-   record is the record working, not a failure.
+1. **RUNS ON DAVID'S REAL RECORD BY DEFAULT (David 2026-10-19: "remember to
+   use the data when testing … so you dont get a fresh build").** Every test,
+   audit and hand walk loads his games, analysis and skill record first:
+   `node scripts/read-data-drop.mjs --latest` fetches his newest drop (token:
+   Vercel `BLOB_READ_WRITE_TOKEN`) to `audit-reports/.fixtures/data-drop-david.json`,
+   the default `AUDIT_FIXTURE` that `fixture-loader.mjs` and the hand driver's
+   `/fixture` load. A fresh device is a SEPARATE, named first-run probe (G7),
+   never the default — a fresh device tests a stranger; the record tests the
+   student. Grey and real-record runs each hold their own contract: a quiet
+   phase or a faded concept on a real record is the record working, not a
+   failure.
 2. **READS EVERY SPOKEN LINE IN FULL** after each run and judges it as the
    student hears it: worth saying to THIS student (their record), or noise —
    a one-move attack they plainly see, a reason said twice, a statistic, a
@@ -6233,75 +6239,32 @@ stale audit is not a passing build.
 This applies to every `scripts/audit-*.mjs` and the gate test list — they are
 maintained WITH the code, not frozen.
 
-### Real-data fixture loader (use it on every audit that touches Dexie)
+### Real-data fixture loader — EVERY audit that touches Dexie loads David's drop
 
-Every audit script that reads from IndexedDB — mistake puzzles,
-weaknesses, openings, game review, /tactics/* — should hydrate
-the page's Dexie with David's real exported data BEFORE running
-scenarios. Otherwise the audit drives against a cold-cache app
-seeding a few sample games + the 5 review samples + nothing else,
-and the per-scenario assertions become "test the empty state"
-instead of "test real-world behavior."
+His data is the default test bed (rule 1 of AUDIT AT DAVID'S LEVEL). The source
+is his "Send my data" drop, never a hand export:
 
-The fixture lives at `audit-reports/.fixtures/david-games.json`
-(gitignored, ~7MB, refreshable by re-running the DevTools export
-snippet in the prod app's console). The loader is a 2-line drop
-into any audit script:
+```bash
+BLOB_READ_WRITE_TOKEN=<Vercel env> node scripts/read-data-drop.mjs --latest
+# → audit-reports/.fixtures/data-drop-david.json (gitignored; ~950 games,
+#   their analysis, mistake rows, capability evidence, profile, meta)
+```
 
 ```js
 import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
-// ...after page.goto + first locator.waitFor settle:
-const fixture = await loadFixtureIntoIDB(page);
+// after page.goto + first locator.waitFor settle:
+const fixture = await loadFixtureIntoIDB(page);   // AUDIT_FIXTURE overrides the path
 console.log(`[fixture] ${fixture.loaded ? `${fixture.wrote} rows / ${fixture.stores} stores` : `skipped (${fixture.reason})`}`);
 ```
 
-Behavior contract (return shape — `loadFixtureIntoIDB(page, [path])`):
-
-- **Missing file** (cold-clone, fresh contributor, fixture refresh
-  pending) → returns `{ loaded: false, path, reason: 'fixture file not found' }`
-  with no side effects. The audit proceeds against whatever the
-  app seeds on its own. **Never fail the audit for a missing fixture**
-  — it's expected anytime the env doesn't have the file yet.
-- **Present file** → bulk-puts every row from `parsed.stores[name]`
-  into the matching object store. Idempotent (primary-key
-  overwrite). Returns `{ loaded: true, path, wrote, stores, perStore, skipped }`
-  where `wrote` = total rows, `stores` = COUNT of stores written
-  (a number, not an array), `perStore` = `{ storeName: rowCount }`,
-  and `skipped` = array of store names the audit browser's schema
-  didn't recognize (newer-fixture-vs-older-schema safety).
-- There's also `loadFixtureAndReload(page, reloadUrl, mountTestId,
-  [path])` — same load, then `page.goto(reloadUrl)` + waits for
-  `[data-testid="<mountTestId>"]` so React picks up the imported
-  rows. Use it when the surface caches its Dexie read on mount.
-- Refresh the fixture by pasting `scripts/devtools-export-dexie.js`
-  into the prod app's DevTools console (signed in), then dropping
-  the downloaded `david-games.json` at
-  `audit-reports/.fixtures/david-games.json`.
-
-Where this matters most:
-- `audit-weaknesses-interactive.mjs` — without fixture, /weaknesses
-  shows "you need more games" empty state every time. With fixture,
-  the patterns tab renders, opening tiles populate, mistake rows
-  appear.
-- `audit-mistakes-quality-loop.mjs` — fixture's 6 real mistake
-  puzzles cover edge cases the seed JSON misses.
-- Anything auditing /coach/review, /coach/teach intent-routing,
-  /openings drill scheduling, settings backup/export.
-
-When writing a NEW audit that touches Dexie, copy the 2-line
-pattern above into `main()` between `await page.goto(...)` and the
-first scenario. Always log the result so failures can be tied back
-to "audit ran against empty IDB" vs "audit found real bug."
-
-The DevTools snippet to refresh the fixture lives at
-`scripts/devtools-export-dexie.js` — the canonical, committed
-copy. Paste the whole file into the prod app's browser console
-(signed into David's account); it whitelists the useful stores
-(games, mistakePuzzles, classifiedTactics, setupPuzzles, profiles,
-openings, openingWeakSpots, flashcards — deliberately SKIPS the
-huge LLM-cache blobs in openingNarrations/cachedOpenings and the
-audit-log noise in meta) and downloads `david-games.json`. Drop
-that download at `audit-reports/.fixtures/david-games.json`.
+- Missing file → `{ loaded: false }`, no side effects: fetch the drop and run
+  again rather than reporting results from an empty device.
+- `loadFixtureAndReload(page, url, mountTestId)` when the surface caches its
+  Dexie read on mount.
+- Always log the result, so a finding can be tied to "ran on his record" vs
+  "ran on an empty device".
+- Grade a drop's record before writing about it:
+  `node scripts/audit-record-grid.mjs audit-reports/.fixtures/data-drop-david.json`.
 
 ### 🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").
 

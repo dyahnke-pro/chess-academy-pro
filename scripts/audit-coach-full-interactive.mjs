@@ -1086,7 +1086,7 @@ async function driveReviewSurface(page) {
     return 'coach-review-list-page visible';
   });
 
-  // Game cards. With the david-games.json fixture seeded we expect
+  // Game cards. With the data-drop fixture seeded we expect
   // many cards (882 games imported); empty is now a regression.
   const cardCount = await page.locator('[data-testid^="review-game-card-"]').count();
   await scenario(page, 'review-game-cards-present-or-empty', async () => {

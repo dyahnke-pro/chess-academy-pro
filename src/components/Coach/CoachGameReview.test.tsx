@@ -147,6 +147,7 @@ vi.mock('./ChatInput', () => ({
 
 vi.mock('../../services/accuracyService', () => ({
   calculateAccuracy: vi.fn().mockReturnValue({ white: 72.5, black: 68.3, moveCount: 10 }),
+  gameAccuracy: vi.fn().mockReturnValue({ white: 72.5, black: 68.3, moveCount: 10 }),
   getClassificationCounts: vi.fn().mockReturnValue({
     brilliant: 1, great: 2, good: 4, book: 0,
     inaccuracy: 1, mistake: 1, blunder: 0,

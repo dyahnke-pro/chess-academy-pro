@@ -1,9 +1,8 @@
 // Shared real-data fixture loader for audit-*.mjs scripts.
 //
-// David exports his Dexie store once via
-// `scripts/devtools-export-dexie.js` (pasted into the live app's
-// DevTools console). The download lands as
-// `audit-reports/.fixtures/david-games.json` (~7MB, gitignored).
+// The fixture is David's "Send my data" drop: his real games, analysis and
+// skill record. Fetch the newest with `node scripts/read-data-drop.mjs --latest`
+// (it lands at `audit-reports/.fixtures/data-drop-david.json`, gitignored).
 //
 // Audit scripts call `loadFixtureIntoIDB(page)` at the top of their
 // flow — typically right after the page mounts and any cold-cache
@@ -31,7 +30,7 @@
 import { readFile, stat } from 'node:fs/promises';
 
 const DEFAULT_FIXTURE_PATH =
-  process.env.AUDIT_FIXTURE ?? 'audit-reports/.fixtures/david-games.json';
+  process.env.AUDIT_FIXTURE ?? 'audit-reports/.fixtures/data-drop-david.json';
 
 /**
  * Load a Dexie-export fixture into the audit browser's IndexedDB.

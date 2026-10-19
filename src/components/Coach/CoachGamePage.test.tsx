@@ -124,6 +124,7 @@ vi.mock('../../services/boardUtils', () => ({
 
 vi.mock('../../services/accuracyService', () => ({
   calculateAccuracy: vi.fn().mockReturnValue({ white: 85, black: 78, moveCount: 20 }),
+  gameAccuracy: vi.fn().mockReturnValue({ white: 85, black: 78, moveCount: 20 }),
   getClassificationCounts: vi.fn().mockReturnValue({
     brilliant: 0, great: 2, good: 8, book: 0, inaccuracy: 1, mistake: 0, blunder: 0,
   }),
