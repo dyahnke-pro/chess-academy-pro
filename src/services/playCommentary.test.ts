@@ -158,6 +158,12 @@ describe('buildPriorityFirst', () => {
     expect(buildPriorityFirst({ fen, studentColor: 'white', bestUci: 'g1f3' })).toBeNull();
   });
 
+  it('a pawn still on its home square is no weak pawn (review 2026-10-19)', () => {
+    // Sveshnikov 5.Nb5: "Their pawn on a7 — it's on its own" named a home pawn.
+    expect(buildPriorityFirst({ fen: 'r1bqkbnr/pp1p1ppp/2n5/4p3/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5', studentColor: 'white', bestUci: 'd4b5' })?.targetSquare ?? null).not.toBe('a7');
+    expect(buildPriorityFirst({ fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', studentColor: 'white', bestUci: 'b1c3' })).toBeNull();
+  });
+
   it('a healthy pawn target means no priority beat', () => {
     // Black's d5 has a c6 neighbour — connected, not weak. Same knight jump.
     const fen = '6k1/pp3ppp/2p5/3p4/8/8/PP1N1PPP/1N4K1 w - - 0 20';

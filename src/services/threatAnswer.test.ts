@@ -117,6 +117,10 @@ describe('a line threat is answered only when it is on the board (Smith-Morra re
       expect(threatAnswer({ fen: smithMorra, squares: ['d6', 'd8', 'd1'], bestUci: 'd1b3', studentCp: 80, student: 'w', ply: 0, shape: 'line', namesMove })).toBeNull();
     }
   });
+  it('two of their pieces on the line: moving one cannot open it', () => {
+    // …d5 and the knight on e4 both stand between b7 and g2.
+    expect(threatAnswer({ fen: '6k1/1b3ppp/8/3pP3/4n3/6P1/5PQK/8 w - d6 0 30', squares: ['e4', 'f2', 'b7', 'g2'], bestUci: 'g2h3', studentCp: 0, student: 'w', ply: 0, shape: 'line', namesMove: false })).toBeNull();
+  });
   it('a discovery they can play next move is answered, and the answer names the piece', () => {
     const fen = '3qk3/8/8/3n4/8/8/8/3QK3 w - - 0 1';
     const held = threatAnswer({ fen, squares: ['d8', 'd1'], bestUci: 'd1b3', studentCp: 0, student: 'w', ply: 0, shape: 'line', namesMove: false });

@@ -94,4 +94,17 @@ export function lineShape(sans: readonly string[], first: LineSeat): string {
   const last = (sans.length - 1) % 2 === 0 ? first : OTHER_SEAT[first];
   return `${seatedPly(sans[0], first, false)} and, ${later === 1 ? 'a move' : `${NUMBER_WORDS[later] ?? later} moves`} later, ${seatedPly(sans[sans.length - 1], last, false)}`;
 }
+/** A LINE ONCE ITS FIRST MOVE IS ALREADY NAMED — "Qh4? Then …", "Qh4 didn't
+ *  work: …": the sentence has said the move, so the line is said from the
+ *  reply on ("you play Qh4 and they answer Nxh4 — they win a queen" → "they
+ *  answer Nxh4 — they win a queen"). One reader of the one format this file
+ *  writes; the two private copies of it drifted when the format gained its
+ *  movers (OS-8 gap 7). The text unchanged when it does not open with `san`. */
+export function lineAfterFirst(san: string, text: string): string {
+  const bare = (x: string): string => x.replace(/^…|^\.\.\./, '');
+  const esc = bare(san).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const m = new RegExp(`^(?:(?:you|they) (?:play|answer) |(?:White|Black) (?:plays|answers) )?(?:…)?${esc}(?: — |, | and, | and )`).exec(text);
+  return m ? text.slice(m[0].length) : text;
+}
+
 const NUMBER_WORDS: Record<number, string> = { 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine' };

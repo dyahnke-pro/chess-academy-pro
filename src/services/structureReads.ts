@@ -6,10 +6,11 @@
 //   · the engine's lines  — plan choices read off the MultiPV;
 //   · the game            — the trend across the student's moves.
 // Every read carries its proof (structureJudgementKit.StructureRead). Pure.
-import type { Color } from 'chess.js';
+import type { Color, Square } from 'chess.js';
 import { play, type StructureRead } from './structureJudgementKit';
 import { kingCommitted } from './splitPosition';
 import { squaresProof } from './proof';
+import { standsSafe } from './positionReadingService';
 import { rooksOnSeventh, kingToCentre, pawnForDevelopment } from './endgameMoveReads';
 import {
   givePawnBack, defendsBoth, missedDefendsBoth, knightJumpApart, mateThreatWinsMore, mateThreatCostsYou, queenTradeRead,
@@ -66,16 +67,24 @@ export function studentMoveStructure(i: StudentMoveStructureInput): StructureRea
   // purpose") stays true whatever the reply does, and so do the reads that
   // already look at the reply.
   const changed = reply ? squaresTheReplyChanged(fenBefore, san, reply) : null;
-  const standing = (r: StructureRead | null): StructureRead | null => (r && changed && r.squares.some((sq) => changed.has(sq)) ? null : r);
+  // Every square the claim rests on — the read's own and its proof's (the
+  // phalanx's cover squares, the outpost's challengers).
+  const standing = (r: StructureRead | null): StructureRead | null => {
+    if (!r || !changed) return r;
+    const rests = [...r.squares, ...(r.proof.squares ?? [])];
+    return rests.some((sq) => changed.has(sq)) ? null : r;
+  };
   const reads = [
     safe(() => rightIdeaWrongPiece(fenBefore, san, bestSan, cpLoss)),
     safe(() => keepPlanChangeRoute(fenBefore, san, bestUci, cpLoss, reply)),
     safe(() => planOverOneMove(fenBefore, san, bestSan, cpLoss)),
     safe(() => dontPlugFile(fenBefore, san, student, cpLoss, bestSan)),
     safe(() => fileOpenedForDefender(fenBefore, san, student, reply, cpLoss)),
-    standing(safe(() => enPassantStructure(fenBefore, san, student, cpLoss, bestSan))),
+    // The standing branch ("not taking keeps … shut"); the took-branch is a
+    // verdict on the move, true whatever the reply does.
+    ((r) => (r && r.key.startsWith('ep-took:') ? r : standing(r)))(safe(() => enPassantStructure(fenBefore, san, student, cpLoss, bestSan))),
     standing(safe(() => fixOnBishopColour(fenBefore, san, student))),
-    safe(() => breakTradesWeakPawn(fenBefore, san, student, cpLoss)),
+    standing(safe(() => breakTradesWeakPawn(fenBefore, san, student, cpLoss))),
     standing(safe(() => dontRepair(fenBefore, san, student, cpLoss, bestSan))),
     standing(safe(() => semiOutpost(fenBefore, san, student, cpLoss))),
     standing(safe(() => safeSquareRoute(fenBefore, san, student, bestUci, cpLoss))),
@@ -104,14 +113,22 @@ export function studentMoveStructure(i: StudentMoveStructureInput): StructureRea
 export function squaresTheReplyChanged(fenBefore: string, san: string, reply: string): Set<string> | null {
   const mid = play(fenBefore, san);
   if (!mid) return null;
+  const student = mid.mv.color;
   const after = play(mid.after.fen(), reply.replace(/^…/, ''));
   if (!after) return null;
   const out = new Set<string>();
   const a = mid.after.board();
   const b = after.after.board();
+  const foe = student === 'w' ? 'b' : 'w';
   for (let r = 0; r < 8; r++) for (let f = 0; f < 8; f++) {
+    const sq = `${'abcdefgh'[f]}${8 - r}` as Square;
     const x = a[r][f]; const y = b[r][f];
-    if ((x?.type ?? '') !== (y?.type ?? '') || (x?.color ?? '') !== (y?.color ?? '')) out.add(`${'abcdefgh'[f]}${8 - r}`);
+    if ((x?.type ?? '') !== (y?.type ?? '') || (x?.color ?? '') !== (y?.color ?? '')) { out.add(sq); continue; }
+    // A piece of the student's that stood safe and now can be WON — the
+    // reply hit it from somewhere else, and a claim that it is safe there no
+    // longer holds ("your knight on d2 is safe there" after …Bg5). A piece
+    // merely attacked and still held is not that (2.d4 Nc6 leaves d4 held).
+    if (y && y.color === student && standsSafe(mid.after.fen(), sq, foe) && !standsSafe(after.after.fen(), sq, foe)) out.add(sq);
   }
   return out;
 }

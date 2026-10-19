@@ -24,7 +24,7 @@ import { strategicWhyLed } from './moveFundamentals';
 import { ownsMoreSpace, legalSeeGainFor, seeReadsStanding } from './positionReadingService';
 import { isPinnedPiece } from './nextPlans';
 import { countKingAttack } from './kingSafety';
-import { andList, lineShape, orList, seatedLine } from '../utils/andList';
+import { andList, lineAfterFirst, lineShape, orList, seatedLine } from '../utils/andList';
 import { computeMustDefend, mateThreatsAgainst } from './threatOut';
 import { describeMoveGeometry, quietPurposePhrase } from './groundedAnswer';
 
@@ -315,10 +315,9 @@ function shortfallText(c: Candidate): string {
       // The reply opens what is left, so it is said as theirs (OS-8 gap 7).
       return `${c.san}? Then ${lineShape(c.proofSans.slice(1), 'they')} — ${c.proof.slice(c.proof.indexOf(' — ') + 3)}.`;
     }
-    const esc = c.san.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    // The proof says each move with its mover ("you play Qf5, they castle
-    // kingside and …"); the candidate's own clause is what comes off.
-    const rest = c.proof.replace(new RegExp(`^you play ${esc}(?:, | and )`), '');
+    // The proof opens with the candidate the question already named; it is
+    // said from the reply on (the one reader of the line format).
+    const rest = lineAfterFirst(c.san, c.proof);
     if (rest !== c.proof) return `${c.san}? Then ${rest}.`;
     return `${c.san}? ${openSentence(c.proof)}.`;
   }

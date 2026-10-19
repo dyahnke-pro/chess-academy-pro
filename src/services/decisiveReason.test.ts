@@ -80,7 +80,7 @@ describe('decisiveReason — what the escalating walk caught (2026-10-17)', () =
   it('a one-move win says the move once ("Qxd5 — you win a knight", never "Qxd5 wins by force: Qxd5")', () => {
     const r = decisiveReason({ fenBefore: FEN, san: 'Qxd5', seat: 'student', opponentLastSan: null, reads: reads([{ moves: ['d1d5'], evaluation: 320 }, { moves: ['a2a3'], evaluation: 0 }]) });
     expect(r?.kind).toBe('the');
-    expect(r?.text).toMatch(/^Qxd5 — you win a knight\./);
+    expect(r?.text).toMatch(/^You play Qxd5 — you win a knight\./);
     expect(r?.text).not.toMatch(/Qxd5 wins by force: Qxd5/);
   });
   it('a move outside the engine\'s lines says so and names what it prefers', () => {
@@ -99,7 +99,8 @@ describe('decisiveReason — their move is said as theirs (David 2026-10-17: com
       before: [{ rank: 1, evaluation: -500, mate: null, moves: ['d5a2'] }, { rank: 2, evaluation: 0, mate: null, moves: ['e8d7'] }], after: [], passBefore: [], passAfter: [],
     } });
     expect(r?.kind).toBe('the');
-    expect(r?.text).toMatch(/^Their …Qxa2/);
+    // Said as theirs: each move of a line names its mover (OS-8 gap 7).
+    expect(r?.text).toMatch(/^They play Qxa2/);
   });
 });
 
@@ -117,7 +118,7 @@ describe('decisiveReason — escalating walk boards (2026-10-17)', () => {
     const fen = '2Q5/p4kp1/1p3n2/5r1p/4p3/NP5P/P1P2PP1/R2R2K1 w - - 1 28';
     const r = decisiveReason({ fenBefore: fen, san: 'Qxf5', seat: 'student', opponentLastSan: 'Kf7', reads: {
       before: [{ rank: 1, evaluation: 0, mate: 14, moves: 'c8f5 f7e7 a3c4 g7g6 f5g6 f6e8 g6e4 e7f6 e4e8 a7a6'.split(' ') }, { rank: 2, evaluation: 1194, mate: null, moves: 'b3b4 f7g6 c8e6 a7a5 a3c4 f5g5 d1d8 b6b5'.split(' ') }], after: [], passBefore: [], passAfter: [] } });
-    expect(r?.text).toMatch(/^Qxf5 — you win a rook\./);
+    expect(r?.text).toMatch(/^You play Qxf5 — you win a rook\./);
     expect(r?.text).toMatch(/forced mate in 14 moves after it/);
   });
 });
@@ -127,7 +128,7 @@ describe('decisiveReason — a forced mate is a visualization test for a proven 
   const reads = { before: [{ rank: 1, evaluation: 0, mate: 14, moves: 'c8f5 f7e7 a3c4 g7g6 f5g6 f6e8 g6e4 e7f6 e4e8 a7a6'.split(' ') }, { rank: 2, evaluation: 1194, mate: null, moves: 'b3b4 f7g6 c8e6 a7a5 a3c4 f5g5 d1d8 b6b5'.split(' ') }], after: [], passBefore: [], passAfter: [] };
   it('proven: the mate is asked, never answered in the voice', () => {
     const r = decisiveReason({ fenBefore: fen, san: 'Qxf5', seat: 'student', opponentLastSan: 'Kf7', reads, asksToSee: true });
-    expect(r?.text).toMatch(/^Qxf5 — you win a rook\. And there's a forced mate in 14 moves after it — can you see it\?/);
+    expect(r?.text).toMatch(/^You play Qxf5 — you win a rook\. And there's a forced mate in 14 moves after it — can you see it\?/);
   });
   it('grey or red: the mate is stated (grey teaches)', () => {
     const r = decisiveReason({ fenBefore: fen, san: 'Qxf5', seat: 'student', opponentLastSan: 'Kf7', reads });

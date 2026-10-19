@@ -35,7 +35,7 @@ describe('buildDeliberation — the weighing from the fan', () => {
   it('renders the weighing as ordered board-true facts', () => {
     const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', opponentLastSan: null })!;
     const facts = deliberationFacts(d);
-    expect(facts).toMatch(/Nxe5\? Then Nxe5 — you come out behind on material, giving up a knight for a pawn\./);
+    expect(facts).toMatch(/Nxe5\? Then they answer Nxe5 — you come out behind on material, giving up a knight for a pawn\./);
     // d3 sits inside the coin-flip band — weighing it is the banned filler.
     expect(facts).not.toMatch(/d3/);
     expect(facts).toMatch(/The move is O-O — it castles/);
@@ -56,7 +56,7 @@ describe('buildDeliberation — the weighing from the fan', () => {
   it('alternatives-only facts drop the conclusion AND the coin-flip, keep the real fork', () => {
     const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', opponentLastSan: null })!;
     const facts = deliberationAlternativesFacts(d);
-    expect(facts).toMatch(/Nxe5\? Then Nxe5 — you come out behind on material, giving up a knight for a pawn\./); // the real fork speaks
+    expect(facts).toMatch(/Nxe5\? Then they answer Nxe5 — you come out behind on material, giving up a knight for a pawn\./); // the real fork speaks
     expect(facts).not.toMatch(/d3/); // the ~20cp coin-flip is filler — dropped, not weighed
     expect(facts).not.toMatch(/The move is/); // no conclusion — the taught move stands
   });
@@ -99,8 +99,8 @@ describe('S5 — a candidate is a lesson only with its reason', () => {
       ] } as never,
     })!;
     const alt = d.alternatives[0];
-    expect(alt.proof).toBe('Qh4 and Nxh4 — they win a queen');
-    expect(deliberationAlternativesFacts(d)).toContain('Qh4? Then Nxh4 — they win a queen.');
+    expect(alt.proof).toBe('you play Qh4 and they answer Nxh4 — they win a queen');
+    expect(deliberationAlternativesFacts(d)).toContain('Qh4? Then they answer Nxh4 — they win a queen.');
   });
 
   it('NEGATIVE CONTROL: a line that proves nothing gets no invented reason', async () => {

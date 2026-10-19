@@ -71,7 +71,9 @@ function lineIsLive(c: Chess, attackers: readonly Square[], victims: readonly Sq
     const path = between(a, v);
     const blockers = path.filter((sq) => c.get(sq));
     if (blockers.length === 0) return true;
-    if (!next || blockers.some((sq) => c.get(sq)?.color !== foe)) return false;
+    // Through THEIR piece only, and only one: with two of theirs on the line,
+    // moving one cannot open it (review 2026-10-19).
+    if (!next || blockers.length !== 1 || c.get(blockers[0])?.color !== foe) return false;
     const onLine = new Set<string>([...path, a]);
     return blockers.some((sq) => next.moves({ square: sq, verbose: true }).some((mv) => !onLine.has(mv.to)));
   });

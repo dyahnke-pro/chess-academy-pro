@@ -26,7 +26,7 @@ import { packageForRegister, type HintPackage } from './hintRegister';
 import { CAPTURE_VALUE } from './pieceValues';
 import { quietMovePoint } from './reviewMoveTeaching';
 import { settledExchange } from './exchangeLedger';
-import { captureRead } from './positionReadingService';
+import { captureRead, findWeakPawns } from './positionReadingService';
 import { seatBare } from '../utils/seatPieces';
 import { mateDescription } from './matePatterns';
 
@@ -604,19 +604,15 @@ export function buildPriorityFirst(args: {
   if (chess.turn() !== me) return null;
   const all = pieces(chess);
   const theirPawns = all.filter((p) => p.type === 'p' && p.color === them);
-  const theirFiles = new Set(theirPawns.map((p) => fileOf(p.square)));
   // A WEAK PAWN HERE IS ONE NO PAWN OF THEIRS CAN EVER GUARD — the claim the
-  // package makes ("a pawn like that cannot be defended by a pawn"). Being
-  // doubled is not that: after 2.d4 cxd4 the d4 pawn sits on the d7 pawn's
-  // file and …e5 still guards it, yet it was called "doubled — its file is a
-  // weakness" (Smith-Morra replay 2026-10-19). A pawn beside it that can still
-  // step up — on a neighbouring file, behind it — can defend it.
-  const behind = (r: number, target: number): boolean => (them === 'w' ? r < target : r > target);
-  const weakPawns = theirPawns.filter((p) => {
-    const f = fileOf(p.square);
-    const r = Number(p.square[1]);
-    return !theirPawns.some((q) => Math.abs(fileOf(q.square) - f) === 1 && behind(Number(q.square[1]), r));
-  });
+  // package makes ("a pawn like that cannot be defended by a pawn"), read off
+  // the app's one weak-pawn computer: isolated, or backward. Being doubled is
+  // not that: after 2.d4 cxd4 the d4 pawn shares the d7 pawn's file and …e5
+  // still guards it, yet it was called "doubled — its file is a weakness"
+  // (Smith-Morra replay 2026-10-19).
+  const weak = findWeakPawns(args.fen, them);
+  const weakSquares = new Set<string>([...weak.isolated, ...weak.backward]);
+  const weakPawns = theirPawns.filter((p) => weakSquares.has(p.square));
   if (weakPawns.length === 0) return null;
   try {
     const probe = new Chess(args.fen);
@@ -630,9 +626,9 @@ export function buildPriorityFirst(args: {
     const attacked = new Set(myTurn.moves({ square: moved.to, verbose: true }).map((m) => m.to));
     const target = weakPawns.find((p) => attacked.has(p.square as Square));
     if (!target) return null;
-    const flaw = !theirFiles.has(fileOf(target.square) - 1) && !theirFiles.has(fileOf(target.square) + 1)
+    const flaw = (weak.isolated as readonly string[]).includes(target.square)
       ? 'isolated — no pawn beside it can defend it'
-      : 'on its own — the pawns beside it are level with it or past it, and a pawn never steps back to guard';
+      : 'backward — the pawns beside it have gone past it, and your pawn covers the square in front of it';
     // The detail tier deliberately does NOT name the attacking piece: naming
     // it is naming the move on most boards, and the withhold below would then
     // be contradicting the package it ships with.
