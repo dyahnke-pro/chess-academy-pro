@@ -108,9 +108,28 @@ export function seeGain(chess: Chess, square: Square): number {
  * one initiating the capture. `forceTurn` can set the side to move when needed.
  */
 export function legalSeeGain(fen: string, square: Square): number {
+  const key = `${fen}|${square}`;
+  const hit = SEE_MEMO.get(key);
+  if (hit !== undefined) return hit;
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return 0; }
-  return seeCaptureValue(chess, square);
+  return remember(SEE_MEMO, key, seeCaptureValue(chess, square));
+}
+
+// ONE READ PER BOARD (David's phone, 2026-10-18: "Phone hot app slow"). The
+// same capture question — who wins the trade on this square — was asked of the
+// same board by six readers every Learn move (positionFacts, the tactics
+// detector, the hanging scan, the fundamentals, the plan reader, ply facts),
+// each paying chess.js move generation from scratch. The answer is a pure
+// function of the board, so it is computed once and shared. Bounded so a long
+// review cannot grow it without end.
+const MEMO_CAP = 4000;
+const SEE_MEMO = new Map<string, number>();
+const HANGING_MEMO = new Map<string, HangingPiece[]>();
+function remember<V>(memo: Map<string, V>, key: string, value: V): V {
+  if (memo.size >= MEMO_CAP) { const first = memo.keys().next().value; if (first !== undefined) memo.delete(first); }
+  memo.set(key, value);
+  return value;
 }
 
 /** Same pin-aware SEE as `legalSeeGain`, but for a caller that ALREADY holds a
@@ -118,7 +137,13 @@ export function legalSeeGain(fen: string, square: Square): number {
  *  that dominates the cost in per-ply/per-candidate review loops (2026-09-13
  *  perf fix). `seeCaptureValue` moves+undoes, so `chess` is restored unchanged. */
 export function legalSeeGainOn(chess: Chess, square: Square): number {
-  try { return seeCaptureValue(chess, square); } catch { return 0; }
+  // Shares the memo, but a miss computes on the Chess already in hand — no
+  // fen parse round-trip (the 2026-09-13 review-loop saving stays).
+  try {
+    const key = `${chess.fen()}|${square}`;
+    const hit = SEE_MEMO.get(key);
+    return hit !== undefined ? hit : remember(SEE_MEMO, key, seeCaptureValue(chess, square));
+  } catch { return 0; }
 }
 
 /** Negamax SEE over LEGAL captures on `square` for the side to move on `chess`.
@@ -385,6 +410,12 @@ export interface HangingPiece {
  * also flags defended pieces that lose the exchange to a cheaper attacker.
  */
 export function findHangingBySee(fen: string): HangingPiece[] {
+  const hit = HANGING_MEMO.get(fen);
+  if (hit) return hit.map((h) => ({ ...h }));
+  return remember(HANGING_MEMO, fen, findHangingBySeeUncached(fen)).map((h) => ({ ...h }));
+}
+
+function findHangingBySeeUncached(fen: string): HangingPiece[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
   const out: HangingPiece[] = [];

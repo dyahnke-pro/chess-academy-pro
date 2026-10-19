@@ -212,7 +212,10 @@ try {
         console.log(`[D] bite ${bite} kind=thinking mounted=${mounted}`);
         await page.waitForTimeout(3000);
         await page.locator('[data-testid="thinking-lesson-stop"]').click({ force: true }).catch(() => {});
-        await page.waitForTimeout(3000);
+        // Stop releases the lesson, which runs to its CLOSE — the close is what
+        // counts the bite. Leaving at once unmounted it first (2026-10-18).
+        await page.locator('[data-testid="thinking-lesson"]').waitFor({ state: 'detached', timeout: 30000 }).catch(() => {});
+        await page.waitForTimeout(6000);
         await watchBanners(3000);
         continue;
       }
