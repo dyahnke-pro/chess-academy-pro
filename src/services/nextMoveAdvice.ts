@@ -64,12 +64,27 @@ function isOpenHole(s: WeaknessSignal): boolean {
 /** Does the record hold open mistakes in THIS phase? The spine files a phase
  *  mistake under `analysis:phase:<phase>`, the opening under bucket `opening`,
  *  the endgame under `endgame` (typed endings included). */
-export function phaseHole(phase: GamePhase, weaknesses: readonly WeaknessSignal[]): WeaknessSignal | null {
-  return weaknesses.find((s) => isOpenHole(s) && (
+function holesIn(phase: GamePhase, weaknesses: readonly WeaknessSignal[]): WeaknessSignal[] {
+  return weaknesses.filter((s) => isOpenHole(s) && (
     s.clusterId === `analysis:phase:${phase}`
     || (phase === 'opening' && s.bucket === 'opening')
     || (phase === 'endgame' && s.bucket === 'endgame')
-  )) ?? null;
+  ));
+}
+
+const PHASES: readonly GamePhase[] = ['opening', 'middlegame', 'endgame'];
+
+/** Does the record say THIS phase is where the student goes wrong? Not "any
+ *  open mistake here" — a real record has some in every phase, and on one
+ *  (14.7k rows, 2026-10-19) that named the next move on 10 of 12 turns. The
+ *  phase earns it when its open mistakes are the student's most: their worst
+ *  phase, the key moments where they generally go wrong. */
+export function phaseHole(phase: GamePhase, weaknesses: readonly WeaknessSignal[]): WeaknessSignal | null {
+  const here = holesIn(phase, weaknesses);
+  if (here.length === 0) return null;
+  const open = (p: GamePhase): number => holesIn(p, weaknesses).reduce((n, s) => n + s.openCount, 0);
+  const mine = open(phase);
+  return PHASES.every((p) => p === phase || open(p) <= mine) ? here[0] : null;
 }
 
 export function nextMoveAdvice(input: {

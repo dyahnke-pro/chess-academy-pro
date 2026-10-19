@@ -38,6 +38,17 @@ describe('nextMoveAdvice', () => {
     expect(nextMoveAdvice({ tier: 'none', phase: 'middlegame', weaknesses: w, motifHole: null }).speak).toBe(false);
   });
 
+  it('a real record with mistakes in every phase hears it only in its WORST phase (2026-10-19)', () => {
+    const w = [
+      hole({ clusterId: 'analysis:phase:opening', bucket: 'opening', openCount: 3 }),
+      hole({ clusterId: 'analysis:phase:middlegame', bucket: 'middlegame', openCount: 12 }),
+      hole({ clusterId: 'analysis:phase:endgame', bucket: 'endgame', openCount: 5 }),
+    ];
+    expect(nextMoveAdvice({ tier: 'none', phase: 'middlegame', weaknesses: w, motifHole: null }).reason).toBe('phase-record');
+    expect(nextMoveAdvice({ tier: 'none', phase: 'opening', weaknesses: w, motifHole: null }).speak).toBe(false);
+    expect(nextMoveAdvice({ tier: 'none', phase: 'endgame', weaknesses: w, motifHole: null }).speak).toBe(false);
+  });
+
   it('a typed endgame hole counts for the endgame', () => {
     const w = [hole({ clusterId: 'analysis:endgame-type:rook', bucket: 'endgame' })];
     expect(phaseHole('endgame', w)).not.toBeNull();
