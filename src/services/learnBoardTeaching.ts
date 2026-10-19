@@ -17,7 +17,6 @@ import { shareAdverb } from '../utils/shareWords';
 import { lineShape } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import { Chess, type Square } from 'chess.js';
-import { dangerLevel } from './liveTacticsContext';
 import { fadeLevelOf, type FadeLevels } from './fadeText';
 import { legalSeeGainFor } from './positionReadingService';
 import { moverFault } from './accuracyService';
@@ -1261,7 +1260,7 @@ export function hangingPieceLine(piece: string, sq: string, rot: number): string
  *  "It's narrating a one move threat to me"). The piece that just moved hits
  *  one of the student's pieces directly — no discovery, no named pattern —
  *  and their record proves threat-spotting: the board marks it and the voice
- *  stays quiet (returns the arrow to mark). Grey or red still hears it; a check or a game-losing threat
+ *  stays quiet (returns the arrow to mark). Grey or red still hears it; a check or a mate threat
  *  always speaks. The record decides, never a rating. */
 export function seenOneMoveAttack(a: {
   threatKey: string;
@@ -1281,7 +1280,13 @@ export function seenOneMoveAttack(a: {
     const foe = a.student === 'w' ? 'b' : 'w';
     const mine = a.targets.filter((sq) => /^[a-h][1-8]$/.test(sq) && b.get(sq as Square)?.color === a.student);
     if (mine.length === 0 || !mine.every((sq) => b.attackers(sq as Square, foe).includes(land as Square))) return null;
-    return dangerLevel(a.fen, a.student, mine) === 'decisive' ? null : { from: land, to: mine[0] };
+    // A mate threat always speaks; an attack on any piece, the queen included,
+    // is the same visible one-move question (Learn tape 2026-10-19: "Ignore this
+    // and the game is gone — your queen on d5 is attacked" after Nc3, the move
+    // the opening is named for).
+    const them = flipSideToMove(a.fen);
+    if (them && new Chess(them).moves().some((m) => m.endsWith('#'))) return null;
+    return { from: land, to: mine[0] };
   } catch { return null; }
 }
 

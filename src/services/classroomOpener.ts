@@ -64,9 +64,12 @@ export async function ratingTrendNote(windowSize = 12): Promise<RatingTrend | nu
     const abs = Math.abs(delta);
     if (abs < 25) return null; // flat — nothing worth saying
     const direction: 'down' | 'up' = delta < 0 ? 'down' : 'up';
+    // THE TREND, NEVER THE NUMBER (RULEBOOK V3: a reason, never a statistic).
+    // The coach still tracks their history; the size of the swing only decides
+    // whether it is worth saying at all.
     const clause = direction === 'down'
-      ? `your rating's slipped about ${abs} points across your last ${elos.length} games`
-      : `you've climbed about ${abs} points across your last ${elos.length} games`;
+      ? `your rating has been slipping over your recent games`
+      : `your rating has been climbing over your recent games`;
     return { direction, deltaPts: abs, games: elos.length, clause };
   } catch { return null; }
 }

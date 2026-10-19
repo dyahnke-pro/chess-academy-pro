@@ -1,4 +1,4 @@
-import { openSentence, continueSentence } from '../utils/openSentence';
+import { continueSentence } from '../utils/openSentence';
 import { logAppAudit } from './appAuditor';
 import { countMaterial, legalSeeGain } from './positionReadingService';
 import { isScenicPawnPin } from './factStakes';
@@ -830,7 +830,7 @@ function forcedLossAfterCheck(board: Chess, squares: readonly string[]): number 
 /** Whether a threat line was opened at a LOUD level (a piece or the game at
  *  stake) — the alarms a game counts so the repeat says "Again —". */
 export function isLoudAlarm(line: string): boolean {
-  return [...DANGER_OPENERS.decisive, ...DANGER_OPENERS.piece, 'Again — '].some((o) => line.startsWith(o));
+  return [...DANGER_OPENERS.decisive, ...DANGER_OPENERS.piece, 'Again — '].some((o) => line.startsWith(o.replace(/\. $/, '')));
 }
 
 /** The opening words of a threat line, rotated on the ply (resume-safe, never
@@ -850,5 +850,9 @@ export function openThreatLine(line: string, fen: string, student: 'w' | 'b', sq
   const stems = DANGER_OPENERS[level];
   const body = line.slice(prefix.length);
   const opener = stems[ply % stems.length];
-  return opener.endsWith('. ') ? `${opener}${openSentence(body)}` : `${opener}${body}`;
+  // ONE SENTENCE, OPENER AND THREAT (Learn tape 2026-10-19, a proven record:
+  // "Watch out — this loses material if you ignore it." and nothing else). The
+  // fade keeps a proven skill's first sentence, so an opener that ended its own
+  // sentence was kept while the threat it introduced was cut.
+  return opener.endsWith('. ') ? `${opener.slice(0, -2)}: ${body}` : `${opener}${body}`;
 }

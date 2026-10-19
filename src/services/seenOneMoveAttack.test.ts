@@ -23,4 +23,8 @@ describe('seenOneMoveAttack', () => {
     const check = 'rnb1kbnr/pppp1ppp/8/4p3/4P2q/5P2/PPPP2PP/RNBQKBNR w KQkq - 1 3';
     expect(seenOneMoveAttack({ threatKey: 'hit:pf3', fen: check, lastSan: 'Qh4+', targets: ['e1'], student: 'w', green: proven })).toBeNull();
   });
+  it('marks the queen hit by the knight that just moved (the Scandinavian Nc3)', () => {
+    const fen = 'rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3';
+    expect(seenOneMoveAttack({ threatKey: 'hang:qd5', fen, lastSan: 'Nc3', targets: ['d5'], student: 'b', green: proven })).toEqual({ from: 'c3', to: 'd5' });
+  });
 });

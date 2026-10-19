@@ -29,7 +29,7 @@ describe('classroomOpener — computed opener signals (David 2026-09-13)', () =>
       expect(t!.direction).toBe('down');
       expect(t!.deltaPts).toBe(80);
       expect(t!.games).toBe(5);
-      expect(t!.clause).toMatch(/slipped about 80 points/);
+      expect(t!.clause).toMatch(/rating has been slipping/);
     });
 
     it('names an UP trend when the rating climbed', async () => {
@@ -40,7 +40,7 @@ describe('classroomOpener — computed opener signals (David 2026-09-13)', () =>
       const t = await ratingTrendNote();
       expect(t!.direction).toBe('up');
       expect(t!.deltaPts).toBe(60);
-      expect(t!.clause).toMatch(/climbed about 60 points/);
+      expect(t!.clause).toMatch(/rating has been climbing/);
     });
 
     it('returns null on a FLAT rating (no manufactured trend)', async () => {

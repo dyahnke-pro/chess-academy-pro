@@ -456,7 +456,14 @@ export function decideTurn(
     offered.push(f.lane);
     const text = fadeWhenGreen(f.lane, f.text, green ?? null, f.skill);
     if (text !== f.text && !faded.includes(f.lane)) faded.push(f.lane);
-    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims: f.claims, lines: f.lines, proof: f.proof });
+    // ONE REASON PER MOVE ACROSS BOTH WAVES (Learn tape 2026-10-19: "That's
+    // what strong players play here — it saves it from their knight on c3" in
+    // one wave, "Your queen to a5 saves it from their knight on c3" in the
+    // next). Every reason for the student's own move carries one claim for the
+    // move, so the say-once ledger lets the first wave's reason stand.
+    const ownReason = !!f.ownMoveReason || !!f.claims?.includes('strong-choice:affirm');
+    const claims = ownReason && turn && turn.kind !== 'phase' ? [...(f.claims ?? []), `own-move-reason:${turn.ply}`] : f.claims;
+    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims, lines: f.lines, proof: f.proof });
   }
   const verified = buildVoicePackage(open.map(({ kind, text, fen, squares, claims, lines }) => ({ kind, text, fen, squares, claims, lines })), alreadySaid, priorKeys);
   // Which lane each surviving fact came from (the package may trim the text).
