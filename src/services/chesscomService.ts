@@ -14,6 +14,8 @@ interface ChessComGame {
   end_time: number;
   white: { username: string; rating: number; result: string };
   black: { username: string; rating: number; result: string };
+  /** Present when the player ran chess.com's Game Review on it. */
+  accuracies?: { white: number; black: number };
 }
 
 interface ChessComResponse {
@@ -78,6 +80,7 @@ function parseChessComGame(game: ChessComGame, username: string): GameRecord {
     eco: ecoMatch ? ecoMatch[1] : null,
     whiteElo: game.white.rating,
     blackElo: game.black.rating,
+    ...(game.accuracies ? { chesscomAccuracy: { white: game.accuracies.white, black: game.accuracies.black } } : {}),
     source: 'chesscom',
     ...(termination ? { termination } : {}),
     annotations: null,
@@ -174,6 +177,10 @@ export async function importChessComGames(
         const record = parseChessComGame(game, username);
 
         const existing = await db.games.get(record.id);
+        // A game reviewed on chess.com after it was imported: take its figure.
+        if (existing && record.chesscomAccuracy && !existing.chesscomAccuracy) {
+          await db.games.update(record.id, { chesscomAccuracy: record.chesscomAccuracy });
+        }
         if (!existing) {
           if (record.pgn) {
             record.openingId = openingKeyFromPgn(record.pgn);

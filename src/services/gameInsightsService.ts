@@ -2,7 +2,7 @@ import { isComputerOpponent } from '../utils/computerOpponent';
 import { db } from '../db/schema';
 import { getRepertoireOpenings } from './openingService';
 import { reconstructMovesFromGame } from './gameReconstructionService';
-import { calculateAccuracy, getClassificationCounts, capEval } from './accuracyService';
+import { gameAccuracy, getClassificationCounts, capEval } from './accuracyService';
 import { getPhaseBreakdown } from './gamePhaseService';
 import { uciMoveToSan } from '../utils/uciToSan';
 import { countFullMovesInPgn } from '../utils/pgnMoveCount';
@@ -239,7 +239,7 @@ function statsSignature(game: GameRecord, playerColor: 'white' | 'black'): strin
     evalSum += (a.evaluation ?? 0) + (a.bestMoveEval ?? 0);
     classes += a.classification.charAt(0);
   }
-  return `${INSIGHT_STATS_REV}|${playerColor}|${game.pgn.length}|${game.white}|${game.black}|${anns.length}|${evalSum}|${classes}|${game.analysisDepth ?? ''}`;
+  return `${INSIGHT_STATS_REV}|${game.chesscomAccuracy ? `cc${game.chesscomAccuracy.white}/${game.chesscomAccuracy.black}` : ''}|${playerColor}|${game.pgn.length}|${game.white}|${game.black}|${anns.length}|${evalSum}|${classes}|${game.analysisDepth ?? ''}`;
 }
 
 /** A game's insight stats: from this session, else the stored copy, else
@@ -278,7 +278,7 @@ async function persistStats(): Promise<void> {
 
 function computeInsightStats(game: GameRecord, playerColor: 'white' | 'black', sig: string): GameInsightStats {
   const moves = reconstructMovesFromGame(game, playerColor);
-  const accuracy = calculateAccuracy(moves);
+  const accuracy = gameAccuracy(game, moves);
   const finds: GameInsightStats['finds'] = [];
   let matches = 0, total = 0;
   const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';

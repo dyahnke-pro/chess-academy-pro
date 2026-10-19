@@ -253,3 +253,13 @@ describe('calibrated to chess.com (2026-10-17)', () => {
     expect(one.white).toBeCloseTo(100, 0);
   });
 });
+
+describe('chess.com games show chess.com\'s accuracy (David 2026-10-19: "within one or two points")', () => {
+  it('uses the platform figure when the game carries it, ours otherwise', async () => {
+    const { gameAccuracy } = await import('./accuracyService');
+    const theirs = gameAccuracy({ chesscomAccuracy: { white: 81.4, black: 66.2 } }, []);
+    expect(theirs).toMatchObject({ white: 81.4, black: 66.2, source: 'chess.com' });
+    const ours = gameAccuracy({}, []);
+    expect(ours.source).toBeUndefined();
+  });
+});

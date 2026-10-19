@@ -7,7 +7,7 @@ import { getGamesByOpening } from '../../services/gameInsightsService';
 import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
 import { countFullMovesInPgn } from '../../utils/pgnMoveCount';
 import { getAllMistakePuzzles } from '../../services/mistakePuzzleService';
-import { calculateAccuracy, getClassificationCounts } from '../../services/accuracyService';
+import { gameAccuracy, getClassificationCounts } from '../../services/accuracyService';
 import { logAppAudit } from '../../services/appAuditor';
 import { useAppStore } from '../../stores/appStore';
 import { InsightsDonutChart } from './InsightsDonutChart';
@@ -107,7 +107,7 @@ export function OpeningDrilldown({ opening, onBack }: OpeningDrilldownProps): JS
         if (game.annotations && game.annotations.length > 0) {
           const moves = reconstructMovesFromGame(game, playerColor);
           if (moves.length > 0) {
-            const acc = calculateAccuracy(moves);
+            const acc = gameAccuracy(game, moves);
             accuracy = Math.round(playerColor === 'white' ? acc.white : acc.black);
             const counts = getClassificationCounts(moves, playerColor);
             blunders = counts.blunder;

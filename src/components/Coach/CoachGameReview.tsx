@@ -29,7 +29,7 @@ import { useReviewBlunderCapture } from '../../hooks/useReviewBlunderCapture';
 import { useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import { useSettings } from '../../hooks/useSettings';
-import { calculateAccuracy, getClassificationCounts, detectMisses } from '../../services/accuracyService';
+import { gameAccuracy, getClassificationCounts, detectMisses } from '../../services/accuracyService';
 import { getPhaseBreakdown, phaseScopedReviewSummary, isPhaseFocus } from '../../services/gamePhaseService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
@@ -374,6 +374,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       try {
         const game = await db.games.get(gid);
         if (cancelled || !game) return;
+        setPlatformAccuracy(game.chesscomAccuracy ?? null);
         // T3's prompted plies ride the GAME RECORD into the sweep below, which
         // reads `game.promptedPlies` itself — no state hop to the button.
         const prefs = useAppStore.getState().activeProfile?.preferences;
@@ -500,7 +501,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const theoryLectureTokenRef = useRef(0);
 
   // Pre-compute accuracy + classification counts
-  const accuracy = useMemo<GameAccuracy>(() => calculateAccuracy(moves), [moves]);
+  // chess.com's own figure when it reviewed the game (gameAccuracy).
+  const [platformAccuracy, setPlatformAccuracy] = useState<{ white: number; black: number } | null>(null);
+  const accuracy = useMemo<GameAccuracy>(() => gameAccuracy(platformAccuracy ? { chesscomAccuracy: platformAccuracy } : null, moves), [moves, platformAccuracy]);
   const classificationCounts = useMemo<MoveClassificationCounts>(
     () => getClassificationCounts(moves, playerColor),
     [moves, playerColor],

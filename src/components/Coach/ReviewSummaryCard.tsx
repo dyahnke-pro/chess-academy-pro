@@ -100,7 +100,12 @@ export function ReviewSummaryCard({
 
       {/* Hero Accuracy — only once every move is graded */}
       {gradingComplete ? (
-        <AnimatedAccuracy accuracy={playerAccuracy} />
+        <>
+          <AnimatedAccuracy accuracy={playerAccuracy} />
+          {accuracy.source === 'chess.com' && (
+            <p className="text-[11px] -mt-1" style={{ color: 'var(--color-text-muted)' }} data-testid="review-accuracy-source">chess.com accuracy</p>
+          )}
+        </>
       ) : (
         <p className="text-xs" style={{ color: 'var(--color-text-muted)' }} data-testid="review-grading-pending">
           Accuracy and move grades appear once the whole game is read.

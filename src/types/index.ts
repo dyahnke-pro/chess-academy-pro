@@ -722,6 +722,10 @@ export interface GameRecord {
   eco: string | null;
   whiteElo: number | null;
   blackElo: number | null;
+  /** chess.com's own accuracy for this game, when the player reviewed it
+   *  there (David 2026-10-19: within 1-2 points of chess.com — so for their
+   *  games we show their figure, never a near-miss of it). */
+  chesscomAccuracy?: { white: number; black: number };
   source: GameSource;
   /** How the game ended, straight from the platform: lichess `status`
    *  ("mate" / "resign" / "outoftime" / "aborted" / …) or the chess.com
@@ -2127,6 +2131,8 @@ export interface GameAccuracy {
   white: number;
   black: number;
   moveCount: number;
+  /** Set when the figure is the platform's own (chess.com reviewed the game). */
+  source?: 'chess.com';
 }
 
 export interface GameInsightStats {

@@ -358,3 +358,14 @@ export function provesOnlyMove(bestMoverCp: number, secondMoverCp: number): bool
   const w = winPercent(bestMoverCp);
   return w > 10 && w < 90 && bestMoverCp - secondMoverCp >= ONLY_MOVE_CP;
 }
+
+/** THE game accuracy, for every surface: chess.com's own figure when it
+ *  reviewed the game, else ours. Ours averages 5 points off theirs on the same
+ *  games (80 of David's, 2026-10-19) — their formula is private and their
+ *  engine deeper — so on a chess.com game we never show a number that
+ *  disagrees with the one the student sees there. */
+export function gameAccuracy(game: { chesscomAccuracy?: { white: number; black: number } } | null | undefined, moves: CoachGameMove[]): GameAccuracy {
+  const ours = calculateAccuracy(moves);
+  const theirs = game?.chesscomAccuracy;
+  return theirs ? { white: theirs.white, black: theirs.black, moveCount: ours.moveCount, source: 'chess.com' } : ours;
+}
