@@ -600,6 +600,9 @@ export function capabilityOutcomes(args: CapabilityMoveArgs): Array<{ tag: Misco
   // so the two directions can never disagree about what the board posed.
   const posed = capabilitiesPosed(args.fenBefore, args.playedSan, args.moverColor);
   for (const extra of args.alsoPosed ?? []) {
+    // The same bar as the fundamentals: a question the board barely asked is
+    // not evidence either way (it had been skipped for these extras only).
+    if (extra.posedImportance < POSED_IMPORTANCE_MIN) continue;
     if (!posed.some((p) => p.tag === extra.tag)) posed.push({ tag: extra.tag, posedImportance: extra.posedImportance });
   }
   if (posed.length === 0) return [];

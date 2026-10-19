@@ -758,7 +758,9 @@ export function positionPosed(
     if (castleByHand(fen, me)) add('king-stuck-center', 70);
     if (fileToOpen(fen, me)) add('passive-rook', 60);
     if (noRetreat(fen, me)) add('misplaced-piece', 65);
-    if ((materialPlan(fen, me)?.diff ?? 0) <= -3) add('bad-trade', 70);
+    // Behind, a trade is the question only when one is on offer (David's Learn
+    // game: 'bad trade' was counted as tested on 17 moves for being behind).
+    if ((materialPlan(fen, me)?.diff ?? 0) <= -3 && evenTradeOnOffer(fen)) add('bad-trade', 70);
     if (heavyTiedDown(fen, me)) add('passive-rook', 60);
     if (keepTension(fen, me, opts.bestSan ?? null)) add('mistimed-pawn-break', 60);
     if (castleSide(fen, me)) add('weakened-king-safety', 60);
@@ -1004,6 +1006,14 @@ export function noRetreat(fen: string, me: 'w' | 'b'): { square: string; piece: 
  * piece, keep pieces on"; "when lost, complicate"): ahead by a piece or more,
  * trade pieces; behind, keep them on and make it messy.
  */
+/** Can the side to move capture a piece of the same value as the capturer? */
+function evenTradeOnOffer(fen: string): boolean {
+  const V: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
+  try {
+    return new Chess(fen).moves({ verbose: true }).some((m) => m.captured && m.piece !== 'p' && m.piece !== 'k' && V[m.piece] === V[m.captured]);
+  } catch { return false; }
+}
+
 export function materialPlan(fen: string, me: 'w' | 'b'): { diff: number; text: string } | null {
   let board: Chess;
   try { board = new Chess(fen); } catch { return null; }

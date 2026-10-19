@@ -249,6 +249,34 @@ export interface CaptureMisconceptionResult {
  *  teach even when nothing is logged (unlearned line, or the move turned
  *  out fine). The classifier's hallucination guard means an off-vocab
  *  tag is dropped silently. */
+/** A filed cost is capped here: past ten pawns the move simply lost, and a
+ *  mate score subtracted from an eval (5602, 5004 in David's game) is not a
+ *  cost anyone can teach from. */
+export const FILED_COST_CAP = 1000;
+/** Below this the engine says the move was as good as the best one. */
+export const NOT_A_SLIP_CP = 30;
+/** One side this far ahead (mover POV, centipawns) … */
+const DECIDED_CP = 400;
+/** … and still this far ahead after the move: the result did not change. */
+const STILL_DECIDED_CP = 300;
+
+/**
+ * IS THIS A SLIP THE RECORD SHOULD KEEP (David's drops, 2026-10-19)? Half the
+ * filed mistakes in his log came from games already decided, and a dozen cost
+ * nothing at all — a weakness built from those is noise the coach then teaches
+ * to. A slip is filed when it cost something AND it was played while the game
+ * was still open, or it threw a decided game away. Null = file it; otherwise
+ * the reason it stays off the record.
+ */
+export function slipNotFiled(x: { cpLoss?: number; evalBefore?: number; evalAfter?: number }): 'no-cost' | 'decided' | null {
+  if (typeof x.cpLoss === 'number' && x.cpLoss < NOT_A_SLIP_CP) return 'no-cost';
+  const before = x.evalBefore;
+  if (typeof before !== 'number' || Math.abs(before) < DECIDED_CP) return null;
+  const after = typeof x.evalAfter === 'number' ? x.evalAfter : typeof x.cpLoss === 'number' ? before - x.cpLoss : null;
+  if (after === null) return null;
+  return Math.sign(after) === Math.sign(before) && Math.abs(after) >= STILL_DECIDED_CP ? 'decided' : null;
+}
+
 export async function captureMisconception(
   args: CaptureMisconceptionArgs,
 ): Promise<CaptureMisconceptionResult> {
@@ -269,6 +297,9 @@ export async function captureMisconception(
   if (classification.tag === 'other' && args.context.grade === 'inaccuracy') {
     return { classification, coachNote, logged: false };
   }
+  if (slipNotFiled({ cpLoss: args.context.cpLoss, evalBefore: args.classifyInput.evalBefore, evalAfter: args.classifyInput.evalAfterPlayed })) {
+    return { classification, coachNote, logged: false };
+  }
 
   // Always LOG the slip so it shows in Thinking Errors. The `counted` flag
   // carries the learned/count-against gate: an un-learned line is display-only
@@ -284,7 +315,7 @@ export async function captureMisconception(
     fen: args.context.fen,
     playedSan: args.context.playedSan,
     bestSan: args.context.bestSan,
-    cpLoss: args.context.cpLoss,
+    cpLoss: typeof args.context.cpLoss === 'number' ? Math.min(args.context.cpLoss, FILED_COST_CAP) : args.context.cpLoss,
     ...(args.context.grade ? { grade: args.context.grade } : {}),
     gamePhase: args.context.gamePhase,
     moveNumber: args.context.moveNumber,
