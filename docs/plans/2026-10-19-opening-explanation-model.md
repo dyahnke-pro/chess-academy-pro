@@ -69,3 +69,124 @@ sentences (plagiarism guard, CLAUDE.md). It sits beside the agreed opening pictu
 - Every chess fact computed (DB, masters counts, engine, the board) — the voice
   only phrases it (G0).
 - Original wording; the video is a comprehension source only.
+
+## Baseline across 7 speed runs
+
+Sources: **Naj** Najdorf (zEqoGIgzk1E, Black) · **Sco** Scotch Gambit (Y-a6cV08zDM, Black) · **QGD** Queen's Gambit Declined Exchange-Bf4 (lLkqjBOGgek, Black) · **CK** Caro-Kann Exchange (rkoC8ZlqOII, Black) · **Ala** Alapin 2…d5 (G_V3C8LQ_ik, White) · **Dan** Danish Gambit (pipfrQRET80, White) · **Cat** Catalan-type Semi-Slav (EfHnGTCO1s4, White).
+
+### 1. Beat × video
+
+| # | Beat | Naj | Sco | QGD | CK | Ala | Dan | Cat | n/7 |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | Fork with the families named | ✓ | ✓ | — | ✓ | ✓ | — | ✓ | **5** |
+| 2 | One-line identity | ✓ | ✓ᵃ | — | ✓ | ✓ | ✓ | ✓ | **6** |
+| 3 | Their system and its plan | ✓ | — | — | ✓ | — | ✓ | — | 3 |
+| 4 | Why this branch over the other main one | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | **6** |
+| 5 | Built-in cost of the structure + the move that pays it | ✓ | — | ✓ | ✓ | ✓ᵇ | ✓ | ✓ | **6** |
+| 6 | Middlegame character announced early | ✓ | ✓ᶜ | — | ✓ | ✓ | ✓ | ✓ᶜ | **6** |
+| 7 | Instinctive move first, then the concrete point | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | **7** |
+| 8 | The structural key move | ✓ | ✓ | ✓ | ✓ᵈ | ✓ᵉ | ✓ | ✓ | **7** |
+| 9 | Branches played out | ✓ | ✓ | ✓ᶠ | ✓ | ✓ | ✓ | ✓ | **7** |
+| 10 | Danger signs specific to the line | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | **6** |
+| 11 | Honest verdict on his own moves | ✓ | — | — | ✓ | ✓ | — | — | 3 |
+
+ᵃ only in the post-game review · ᵇ the cost he names is the OPPONENT's (their move shuts in a bishop or gives up a square) · ᶜ only at the hand-off to the middlegame · ᵈ late and minor; this line's defining idea is the bishop problem (beat 5) · ᵉ a piece route (Na3–b5–c7), not a pawn break · ᶠ one direction only, never both sides of a choice
+
+### 2. Order
+
+**Typical sequence** (average position across the videos):
+**1 → 2 → {5, 4, 7} → 10 → 9 → 6 → 8 → 11**
+
+- 1 and 2 open the phase (1 averages 0.03 of the way through; 2 averages 0.1 by median).
+- 5, 4 and 7 come next, mixed move by move: the cost, the choice, and the natural move he rejects, each said at the move it belongs to.
+- 10 (danger) and 9 (branches) fill the middle. They follow the opponent's threats, so they can land anywhere.
+- 6 splits two ways. It comes early once the castling sides or a queen trade are fixed (Naj, CK, Ala, Dan), or as the last line before the middlegame (Sco, Cat).
+- 8 is usually the last idea before the middlegame (QGD, CK, Ala, Cat).
+- 11 comes last, and only when a slip happened.
+
+**Exceptions**
+- **Dan** opens with 7, 10 and 8, because a gambit's tactics start at once. Its key move (the e5 push) is the immediate threat, so 8 comes early.
+- **Sco** saves identity and theory for the review, so 2 comes last.
+- **QGD** never names the fork, the identity, their system or the character. Its whole phase is about development order (7 → 4 → 5 → 10 → 9 → 8).
+- **CK** announces the character third, right after the fork.
+
+### 3. Pace
+
+| | Opening plies | Plies with teaching | Silent or bare | Where he dwells |
+|---|---|---|---|---|
+| Naj | ~27 (to …d5) | ~16 | book plies 2–7 named only; routine White moves | the fork (~45 s), the English Attack, the race, …Na6/…Nc7, …d5 |
+| Sco | 23 | ~10 | 5 book plies; forced recaptures | first real choice (>1 min); after ply 15, only the opponent's moves |
+| QGD | 21 | 6 | every book move; every White move until the hand-off | development-order choices |
+| CK | 24 | ~7 deep stops, plus a short grade on most plies | own recaptures and routine moves | bishop problem, Nf6/Bg4 order, the pin, trade on f3, Nc5 plan, g7 drawback |
+| Ala | 14 | ~5 deep stops, plus a short clause on every book ply | forced recaptures | the crossroads, the opponent's deviation, own non-obvious moves |
+| Dan | ~10 | 3 | book plies 1–4; …Nf6; e5 | Nxc3, …Bb4, …d5 |
+| Cat | 23 | ~12 entries, half of them sidelines | routine book moves on both sides | Black's fork, own setup choices, sidelines |
+
+**Pattern**
+- Book moves before the first real fork get nothing, or only the move named.
+- Forced recaptures and routine development get nothing.
+- He speaks at three kinds of moment: the first fork, the student's own non-obvious choices, and the opponent's deviation or threat.
+- Real teaching lands on about a third to half of opening plies (from 3/10 to ~16/27). Notes run 1–4 sentences.
+- He has two styles. Some videos are silent on book moves (Sco, QGD, Dan, Cat). Others give each book move a one-clause tag (Naj, CK, Ala). Neither style says more than a clause on a book move.
+- In 4 of 7 videos (Sco, CK, Ala, Dan) the full theory tree waits for a rewind after the game.
+
+### 4. Core vs situational
+
+**CORE (≥5/7). Learn must always do these:** 1, 2, 4, 5, 6, 7, 8, 9, 10.
+- **1** is skipped when the student's own first moves already fix one system (QGD, and a gambit played as White in Dan). Trigger: a real fork among named families exists.
+- **9** is used live in 7/7, but only on the opponent's actual choice and only one way. The full tree goes to the post-game rewind in 4/7.
+
+  This is the evidence for David's open decision on beat 9: the consequence form after their choice, live; the full tree in Review.
+
+**SITUATIONAL (3/7)**
+- **3 (their system):** triggered when the opponent is running a named, recurring setup with one goal (English Attack; Exchange-Bf4 aiming Nc5 to bury the bishop; the defender's …d5 return in the Danish).
+- **11 (own verdict):** triggered when his own opening move carries an engine cost, or a drawback that changes his plan (Naj …Nxd5, CK …Qc7 overloading g7, Ala Na3 vs Bb5).
+
+### 5. New beats the 11 miss
+
+**Recurring (3–4 of 7). Candidates for the core:**
+
+| Beat | Videos | Computer |
+|---|---|---|
+| Answer the student's worry, or defuse a false alarm, before it lands | QGD, CK, Ala, Cat | `falseAlarm.ts`, `ruleException.ts` (the "twice" rule should also accept `centreClosed`), `tempoCount.ts` tradeLedger, `theirMoveCost.ts`. Partial. |
+| A rule stated as a law, with its condition or exception | QGD, CK, Ala, Cat | `principleVoice.ts`, `ruleException.ts`, `kingAttackReads.ts` (its wing-vs-centre line needs widening). Partial. |
+| Theory tree walked after the game, not during it | Sco, CK, Ala, Dan | `branchExplorer.ts` + `reviewOpeningTheory.ts`; not wired as a post-game rewind |
+| Move order as the choice (which of their lines exist; when order is free) | QGD, CK, Dan | `moveOrder.ts` covers only a one-move swap costing ≥100cp. **Needs new:** a DB comparison of which branches each order allows (`openingBranches.ts` + masters data). |
+| Deny their square through the order of development | Sco, QGD, CK | `prophylaxis.ts` (pin/kick/fork kinds only) + `outpost.ts`. **Needs a new deny-square kind.** |
+| Material vs lasting assets (the menu against a gambit, giving the pawn back, valuing an imbalance) | Sco, Ala, Dan | `practicalReads.ts` givePawnBack. The menu and the asset comparison: **needs new**. |
+
+**Pairs (2 of 7):**
+
+| Beat | Videos | Computer |
+|---|---|---|
+| Practical choice vs objective best | Sco, Ala | none (no opponent-prep or playability data); the engine gap comes from `criticalityScan.ts` |
+| Thinking method said aloud (name the one threat; forcing line first; scan their checks) | Sco, Dan | `methodBeat.ts`, `thinkingForcingStep.ts`, `threatAnswer.ts` |
+| Named defensive resource | Sco, Dan | `practicalReads.ts` defendsBoth, `tacticGeometry.ts` interposeFacing |
+| Grade or credit their move (how common it is, what it intends) | CK, Ala | `theoryDeparture.ts`, `linePickerPopularity.ts`, `strongChoice.ts`, `squareRole.ts` / `keySquares.ts` |
+| Line ends with a verdict (number or label) | Dan, Ala | `evalBand.ts`, `criticalityScan.ts`, `pvPlayback.ts` |
+| Plan timing: pieces first, then the break; "not yet" | QGD, Cat | **needs new** (`planChooser.ts` is partial) |
+| One idea linked across branches or openings | CK, Ala | `motifLedger.ts` works within one game only. **Needs new.** |
+
+**Single videos:**
+- Duty parity (QGD): `exchangeIdeas.ts` dutyParity.
+- Endgame foresight from an opening trade (CK): `endgameMatchup.ts`.
+- Model-game illustration (CK): `modelGameService.ts` exists, but nothing selects a game by principle.
+- A concept defined the moment it happens (Cat): `reviewSacrifice.ts`.
+- Piece destination and the dormant piece (Cat): `squareJudgement.ts` is partial; the dormant piece **needs new**.
+- Pace habit, talking on their move and staying silent on your own reply (Sco): no computer; it is a door rule.
+
+### 6. Core beats → computers
+
+| Beat | Existing computers (`src/services/`) | Gap |
+|---|---|---|
+| 1 Fork menu | `openingBranches.ts` (branchesAt, isFork), `masterPlayLookup.ts`, `lichessExplorerService.ts`, `linePickerPopularity.ts`, `branchExplorer.ts` | wire as one fork line |
+| 2 Identity | `openingIdentity.ts` (identityFor, openingIdentityLine, definingMoveIdea), `openingAnnouncement.ts`, `openingEquivalence.ts` | none |
+| 4 Why this branch | `refutedAlternative.ts`, `theoryDeparture.ts`, `planChoice.ts` | when the alternative costs no centipawns (Be7 vs Nf6, Bg4 "overrated"), the reason is what each allows. **Needs a new allows-comparison** (openingBranches + masters score). |
+| 5 Structure cost + the move that pays it | `positionReadingService.ts` (bad bishop), `pieceQuality.ts`, `structureJudgementKit.ts`, `pawnJudgement.ts`, `outpost.ts`, `theirMoveCost.ts`, `exchangeIdeas.ts` | **needs new:** a link that ties the cost to the opening and to the move that pays it |
+| 6 Character early | `mastersPlanRead.ts` (castle sides → opposite castling), `planRace.ts`, `kingSafety.ts`, `kingAttackReads.ts`, `gamePhaseService.ts` (queens off), `development.ts`, `positionalRead.ts`, `structureSignature.ts`, `structureReads.ts`, `endgameMatchup.ts` | **needs new:** one "character of the coming game" computer; nothing reads a race against an uncastled king |
+| 7 Instinctive vs concrete | `learnTurnDoor.ts` rejectedTempting, `playCommentary.ts` buildRejectedTempting, `refutedAlternative.ts`, `deliberation.ts`, `bookMoveWhy.ts`, `speedRunReads.ts` uglyButRight, `moveOrder.ts` | development-order reasons under `ORDER_COST_CP` (100cp) are never said |
+| 8 Key move | `mastersPlanRead.ts` (PlanBreak + PieceHome), `practicalReads.ts` givePawnBack, `movePlan.ts`, `planChooser.ts` | **needs new:** an opening's signature multi-hop piece route (Ala Na3–b5–c7, QGD …Ne4 then recapture with the pawn) |
+| 9 Branches out loud | `pvPlayback.ts` computePvLine, `masterPlayLookup.ts`, `refutedAlternative.ts`, `practicalReads.ts`, `sacrificeLedger.ts`, `exchangeLedger.ts`, `speedRunReads.ts` goodInEveryBranch, `branchExplorer.ts` | computers exist; the delivery form is David's call (LEARN NAMES NO MOVE UNASKED) |
+| 10 Danger signs | `openingTrapDetector.ts` + `gambit-punish-gems.json`, `latentFork.ts`, `latentDanger.ts`, `pinGeometry.ts`, `tacticsDetector.ts`, `moveOrder.ts`, `outpost.ts`, `practicalReads.ts` mateThreatCostsYou | tie each sign to the line |
+
+Every file named above exists under `/home/user/learn-wt/src/services/`. Najdorf pace was measured from `/home/user/learn-wt/data/video-narration-voiced/zEqoGIgzk1E.json`, our own rewrite, which captions every ply, so its count of bare move names is inflated. 
