@@ -577,7 +577,7 @@ export function safeBecause(fenBefore: string, san: string, student: Side, prev:
   // because your queen is already on b8 — with it back on c7, Nxc7 would cost
   // you a queen"). The queen left c7 because the knight hit it there; putting
   // it back replays a threat already answered, and its credit was already said.
-  if (legalSeeGainFor(p.m.before, p.m.from as Square, other(student)) >= 1) return null;
+  if (legalSeeGainFor(p.m.before, p.m.from, other(student)) >= 1) return null;
   const cf = load(fenBefore);
   if (!cf) return null;
   const piece = cf.get(p.m.to);
