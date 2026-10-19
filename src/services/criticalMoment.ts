@@ -23,7 +23,7 @@
 // `positionFacts` already use, so count===1 and severity>='critical' can never
 // disagree. G0 throughout — the facts are the engine's; the phrasing pass only
 // wraps them.
-import { andList } from '../utils/andList';
+import { andList, lineAfterFirst } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { criticalityThresholds } from './criticalityScan';
@@ -371,15 +371,7 @@ export function criticalMomentAsk(read: CriticalMomentRead | null, ply: number):
  *  (Learn audit 2026-10-15: "Qxc3+ didn't work: Qxc3+ and Nxc3 — …"). A
  *  proof's line starts with the candidate itself; the reply is what refutes it. */
 export function afterCandidate(san: string, text: string): string {
-  const bare = (x: string): string => x.replace(/^…|^\.\.\./, '');
-  const head = `${bare(san)} and `;
-  const t = bare(text);
-  if (t.startsWith(`${bare(san)} — `)) return t.slice(bare(san).length + 3);
-  // The long-line shape: "Qxc3+ and, three moves later, Nxd5 — …".
-  if (t.startsWith(`${bare(san)} and, `)) return t.slice(bare(san).length + 6);
-  if (!t.startsWith(head)) return text;
-  const rest = t.slice(head.length);
-  return rest;
+  return lineAfterFirst(san, text);
 }
 
 /** THE CANDIDATES THAT FAIL — the strongest one proved out loud, the rest
