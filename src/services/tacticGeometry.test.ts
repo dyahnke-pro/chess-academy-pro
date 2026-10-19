@@ -141,6 +141,11 @@ describe('9. their usual reply is unavailable', () => {
     const r = proven(kickFails(live(fen, ['d1a4'])));
     expect(r.text).toBe("After the queen to a4, kicking it with the pawn to b5 doesn't work here: the bishop takes b5, winning a pawn.");
   });
+  it('held, it says whose piece and names no move (prod walk 2026-10-19)', () => {
+    const r = proven(kickFails(live(fen, ['d1a4'])));
+    expect(r.idea).toMatch(/^One of your pieces has a post here/);
+    expect(r.idea).not.toMatch(/a4|b5|queen/);
+  });
   it('silent when the kick works (the punishment was there before it)', () => {
     expect(kickFails(live('5rk1/p1p2ppp/8/8/7q/2N2Q2/5PPP/6K1 w - - 0 1', ['c3b5']))).toBeNull();
   });
