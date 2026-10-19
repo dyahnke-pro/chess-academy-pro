@@ -5938,6 +5938,36 @@ paths, the next move named on 10 of 12 turns). Every Learn/Review audit now:
 4. **REPORTS THE LINES, NOT THE COUNT.** "38 passed" is never the report; the
    report is what was said, what is wrong with it, and the measured trends.
 
+### 🔒🔒 AUDIT LIKE DAVID — PICTURE FIRST, INSTRUMENT SECOND, ENGINE ON EVERY CLAIM (David 2026-10-19: "learn from this audit … get as good as me. lets see some recursive self improvement")
+
+Lessons from grading his 300-row audit log, each one a mistake made first by hand:
+
+1. **START FROM WHAT HE HEARD AND WHAT WAS MISSING**, not from the rows the
+   log happens to hold. "Too much narration", "never heard a tactic alert", "it
+   got my colour wrong" are the findings; the log is evidence for or against them.
+2. **CHECK THE INSTRUMENT BEFORE THE CONTENT.** The log held 290 rows of a
+   background rebuild written in 24 s and NONE of the Learn game it was sent
+   to explain. Print coverage first: what kinds, how many spoken lines, is the
+   seat there, are turn decisions there.
+3. **NO CHESS VERDICT WITHOUT THE ENGINE.** "Missed checks filed as tempo
+   handed" was asserted off the log's own numbers; at depth 16 those checks
+   were not better (filed 299 / 167 → real 16 / 0). Every filed cost, every
+   "missed", every "better move" is re-read by Stockfish before it is reported.
+4. **ASK "IS IT ALREADY BUILT?" BEFORE "WHAT IS NEW?"** — map the computers and
+   their callers, then split the fix list into WIRING and NEW.
+5. **CROSS-CHECK ONE INSTRUMENT AGAINST ANOTHER.** The heat map said tactics
+   were PROVEN while the games showed misses: a disagreement between two
+   records is itself the defect.
+6. **PICTURE FIRST, THEN A GRID.** State how the surface should work, then grade
+   every row against it, green or red, and give the counts.
+
+**THE TOOL:** `node scripts/audit-record-grid.mjs <audit-log.md | data-drop.json>`
+does 2, 3 and 6 for the record: coverage and gaps first, then every filed
+mistake engine-graded (decided game, not a mistake, wrong cost, wrong phase,
+castling / endgame-king mislabels), then the "tested" rows ranked by share.
+Run it on every log or drop David sends before writing a word about it, and
+add a check to it whenever a new class of record error is found by hand.
+
 ### 🔒🔒 THE DETAILS A WALK MUST CATCH (David 2026-09-30: "These are the details you need to be catching. Lock in!!")
 
 Every one of these was missed by a green walk until David asked. Check each, on
