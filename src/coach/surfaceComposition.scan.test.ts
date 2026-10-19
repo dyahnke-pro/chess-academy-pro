@@ -30,7 +30,7 @@ const ROOT = 'src';
  * adding a real computer here to duck the ceiling is the same cheat as raising
  * the ceiling.
  */
-const INFRA = new Set([
+const INFRA = new Set(['learnTranscript', 
   'voiceService', 'stockfishEngine', 'stockfishCache', 'appAuditor', 'analytics',
   'analyticsService', 'dataLoader', 'puzzleService', 'db', 'storage',
   'deviceIdentity', 'gamePhaseService', 'boardUtils', 'engineConstants',

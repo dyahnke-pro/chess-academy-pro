@@ -85,6 +85,7 @@ export interface LogMisconceptionInput {
   /** See `MisconceptionTagRecord.attributionPending` — the classifier ran
    *  without a best move, so the tag must be re-attributed when one lands. */
   attributionPending?: boolean;
+  takenBack?: boolean;
 }
 
 /** Persist one tagged misconception. Rejects a tag outside the closed
@@ -116,6 +117,7 @@ export async function logMisconception(
     userReason: input.userReason?.trim() || undefined,
     coachNote: input.coachNote?.trim() || undefined,
     sourceGameId: input.sourceGameId,
+    ...(input.takenBack ? { takenBack: true as const } : {}),
     status: 'open',
     masteryHits: 0,
     dueAt: Date.now(), // due immediately on first capture

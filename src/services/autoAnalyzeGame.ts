@@ -220,6 +220,13 @@ export async function autoAnalyzeBlunders(
         ...(opts.sourceGameId ? { sourceGameId: opts.sourceGameId } : {}),
       });
     }
+    if (capabilitiesHeld > 0) void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'capabilityEvidence.recordCapabilitiesShown',
+      summary: `game ${opts.sourceGameId ?? '?'}: ${capabilitiesHeld} tested-skill rows from ${opts.capabilityPlies.length} moves`,
+      details: JSON.stringify({ origin: 'review', gameId: opts.sourceGameId ?? null, rows: capabilitiesHeld, moves: opts.capabilityPlies.length }),
+    });
   }
   return { classified, logged, capabilitiesHeld, reattributed: 0, countedUpgraded: 0 };
 }

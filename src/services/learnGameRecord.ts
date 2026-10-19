@@ -24,6 +24,7 @@ import { LIVE_ANALYSIS_DEPTH } from './coachGameAnnotations';
 import type { GameRecord, GameResult, MoveAnnotation, MoveClassification } from '../types';
 import { openingKeyFromSans } from './openingKey';
 import { saveVerdict, toVerdictLabel } from './moveVerdictStore';
+import { learnTranscriptFor } from './learnTranscript';
 
 /** What Learn knows about one STUDENT ply it graded live: the engine's read of
  *  the position before the move (best move + its eval, White POV) and what the
@@ -129,6 +130,7 @@ export function coversEveryStudentPly(input: Pick<LearnGameInput, 'plyCount' | '
  *  floor (`MIN_PERSIST_PLIES`, the same floor Play applies to every ending),
  *  so a two-move abandon never litters the library. */
 export function buildLearnGameRecord(input: LearnGameInput): GameRecord | null {
+  const transcript = learnTranscriptFor(input.gameId);
   if (!shouldPersistFinishedGame(input.plyCount)) return null;
   const annotations = [...input.liveGrades]
     .sort((a, b) => a.ply - b.ply)
@@ -160,6 +162,7 @@ export function buildLearnGameRecord(input: LearnGameInput): GameRecord | null {
     isMasterGame: false,
     openingId: openingKeyFromSans(input.sans),
     promptedPlies: [...input.promptedPlies],
+    ...(transcript ? { coachTranscript: { seat: transcript.seat, entries: [...transcript.entries] } } : {}),
   };
 }
 

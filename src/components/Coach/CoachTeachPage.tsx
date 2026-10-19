@@ -16,6 +16,7 @@ import { useBoardFit } from '../../hooks/useBoardFit';
 import { characterOf, provenTacticLive, sharpGap, stepCharacter, EMPTY_CHARACTER, SHARP_GAP_CP, type CharacterState } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
+import { startLearnTranscript, stopLearnTranscript, noteLearnEntry } from '../../services/learnTranscript';
 import { createLearnMemory, markOpeningFactsSpoken, nextStem, rememberKeptClaims, rememberKeptClauses, type LearnMemory } from '../../services/learnMemory';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
@@ -1607,6 +1608,10 @@ export function CoachTeachPage(): JSX.Element {
   // moves; eval-bar / engine-lines toggles drive the board overlays.
   const { settings, updateSetting } = useSettings();
   const [playerColor, setPlayerColor] = useState<'white' | 'black'>('white');
+  // The game's own transcript opens with the game and follows the seat, so the
+  // coach's first words (before a Black student's first move) are kept too.
+  useEffect(() => { if (learnGameLive) startLearnTranscript(learnMemRef.current.gameId, playerColor); }, [learnGameLive, playerColor]);
+  useEffect(() => () => stopLearnTranscript(), []);
   /** A CALCULATED LINE ON THE BOARD — the one shared walker (useLineWalk). */
   const lineWalk = useLineWalk(playerColor, 'teach.lineWalk');
   /** The board gives up height so the board bar stays on screen (phones). */
@@ -2373,6 +2378,7 @@ export function CoachTeachPage(): JSX.Element {
         gameRef.current.undoMove();
       }
       // A takeback is not a new game — the coach keeps its memory.
+      noteLearnEntry({ kind: 'learn-takeback', source: 'CoachTeachPage.handleTakeBack', summary: `took back ${count} ply from ply ${pliesBefore}`, fen: gameRef.current.fen });
       learnMemRef.current.rewind(pliesBefore - count);
       // Re-derive the post-takeback FEN from the live game object so
       // subsequent trips see the rolled-back state.
@@ -9555,6 +9561,8 @@ export function CoachTeachPage(): JSX.Element {
   }, [queueSpokenHint]);
 
   const handleStudentMove = useCallback((move: MoveResult): void => {
+    startLearnTranscript(learnMemRef.current.gameId, playerColor);
+    noteLearnEntry({ kind: 'learn-student-move', source: 'CoachTeachPage.handleStudentMove', summary: `ply ${move.history.length}: ${move.san} (${playerColor})`, fen: move.fen });
     // A board move DISMISSES the "Read this position" banner (clears its
     // text) — same as Play. The student answered the position by playing.
     positionNarration.cancel();
@@ -9866,6 +9874,9 @@ export function CoachTeachPage(): JSX.Element {
         // capability-parity hole in the weakness spine. Same id the saved
         // GameRecord uses, so the two join with no lookup.
         sourceGameId: learnMemRef.current.gameId,
+        // Graded 6s later: if the student took the move back meanwhile it is
+        // still a slip on the record, marked as taken back.
+        takenBack: gameRef.current.history[move.history.length - 1] !== move.san,
         // The full SAN history (incl. this move) so the captured slip is
         // attributed to its FUNDAMENTAL and lands in the scorecard + drill
         // queue, not just the coarse tag (David 2026-09-07).

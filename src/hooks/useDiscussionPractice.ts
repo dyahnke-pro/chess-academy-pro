@@ -99,6 +99,8 @@ export interface EvaluatePlayerMoveArgs {
    *  MiddlegamePractice) has no game, and `origin: 'drill'` is the right answer
    *  there — never a fabricated game id. */
   sourceGameId?: string;
+  /** The student had already taken this move back when it was graded (Learn). */
+  takenBack?: boolean;
   /** WAS THE STUDENT TOLD before they moved? REQUIRED (the capability record's
    *  own rule): Learn announces critical moments ("only one move holds") BEFORE
    *  the move, so a find right after one is not unaided evidence. Surfaces that
@@ -494,6 +496,7 @@ export function useDiscussionPractice(
         // teach. The surface knows what it said; it answers.
         prompted: args.prompted,
         sourceGameId: args.sourceGameId,
+        takenBack: args.takenBack,
         bestSan,
       });
 
@@ -554,6 +557,7 @@ export function useDiscussionPractice(
             openingId: args.openingId,
             openingName: args.openingName,
             sourceGameId: args.sourceGameId,
+            takenBack: args.takenBack,
           },
         }).catch(() => undefined);
       }

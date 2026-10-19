@@ -182,6 +182,8 @@ export interface CapabilityEvidenceRecord {
    */
   prompted: boolean;
   sourceGameId?: string;
+  /** The student took this move back (Learn): still a slip on the record, marked so an exploration reads apart from a move they kept. */
+  takenBack?: true;
   /** Present on an ANSWER row (a KNOW origin): how the student answered. */
   answer?: AnswerDetail;
 }
@@ -625,6 +627,7 @@ export async function recordCapabilityEvidence(args: CapabilityMoveArgs & {
   /** See `CapabilityEvidenceRecord.prompted` — required, never inferred. */
   prompted: boolean;
   sourceGameId?: string;
+  takenBack?: boolean;
   /** When the move was PLAYED, for evidence read from a past game (its date).
    *  Omitted = now (a live move). */
   playedAt?: number;
@@ -644,11 +647,15 @@ export async function recordCapabilityEvidence(args: CapabilityMoveArgs & {
       origin: args.origin,
       prompted: args.prompted,
       ...(args.sourceGameId ? { sourceGameId: args.sourceGameId } : {}),
+      ...(args.takenBack ? { takenBack: true as const } : {}),
     }));
     await db.capabilityEvidence.bulkAdd(rows);
     // Green/red moved: every reader of the student model refreshes now.
     emitWeaknessModelChanged();
-    void logAppAudit({
+    // A whole-game sweep (origin 'review') writes one summary row per game at
+    // its caller; a row per position flooded the 300-row log and pushed the
+    // live game out of it (David's drop, 2026-10-19: 236 of 300 rows).
+    if (args.origin !== 'review') void logAppAudit({
       kind: 'coach-surface-migrated',
       category: 'subsystem',
       source: 'capabilityEvidence.recordCapabilitiesShown',

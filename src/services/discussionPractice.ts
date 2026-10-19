@@ -231,6 +231,7 @@ export interface CaptureMisconceptionArgs {
     openingId?: string;
     openingName?: string;
     sourceGameId?: string;
+    takenBack?: boolean;
   };
 }
 
@@ -292,6 +293,7 @@ export async function captureMisconception(
     userReason: args.classifyInput.userReason,
     coachNote,
     sourceGameId: args.context.sourceGameId,
+    takenBack: args.context.takenBack,
     counted: args.shouldCount,
     attributionPending: args.attributionPending,
   });
@@ -400,6 +402,7 @@ export async function recordMoveEvidence(args: {
   origin: CapabilityOrigin;
   prompted: boolean;
   sourceGameId?: string;
+  takenBack?: boolean;
   /** The engine's best move here, when the surface has it — lets the insight
    *  computer say what the position POSED (escape square, Greek gift, double
    *  attack), so a live Learn/Play move records it both ways. */

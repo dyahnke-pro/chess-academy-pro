@@ -61,8 +61,8 @@ describe('appAuditor', () => {
     expect(await getAppAuditLog()).toEqual([]);
   });
 
-  it('caps at 300 entries (rolling window) and emits at most one truncation marker', async () => {
-    for (let i = 0; i < 310; i++) {
+  it('caps at 1500 entries (rolling window) and emits at most one truncation marker', async () => {
+    for (let i = 0; i < 1510; i++) {
       await logAppAudit({
         kind: 'bad-fen',
         category: 'subsystem',
@@ -75,7 +75,7 @@ describe('appAuditor', () => {
     // slice, storing cap+1 (301) and making every subsequent write
     // report a fresh drop forever. The stored array must never exceed
     // the cap.
-    expect(log.length).toBe(300);
+    expect(log.length).toBe(1500);
     // A rolling buffer drops one entry on every write once full, so a
     // marker-per-drop floods the log (a production export was 151/301
     // markers). Exactly one marker per session now.
@@ -84,7 +84,7 @@ describe('appAuditor', () => {
     // The newest real entry is still the last write; real entries stay
     // in insertion order.
     const real = log.filter((e) => e.kind !== 'audit-stream-truncated');
-    expect(real[real.length - 1].summary).toBe('entry 309');
+    expect(real[real.length - 1].summary).toBe('entry 1509');
     const realSummaries = real.map((e) => e.summary);
     expect(realSummaries).toEqual([...realSummaries].sort((a, b) =>
       Number(a.split(' ')[1]) - Number(b.split(' ')[1]),

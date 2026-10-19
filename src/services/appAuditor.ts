@@ -36,9 +36,10 @@ import { onDecisiveReason } from './decisiveReasonEvents';
 import { onEndgameReview } from './endgameReviewEvents';
 import { onOpponentMove } from './opponentMoveEvents';
 import { onChatTurn } from '../coach/chatTurnEvents';
+import { noteLearnEntry } from './learnTranscript';
 
 const APP_AUDIT_LOG_META_KEY = 'app-audit-log.v1';
-const APP_AUDIT_LOG_MAX_ENTRIES = 300;
+const APP_AUDIT_LOG_MAX_ENTRIES = 1500;
 
 export type AuditCategory = 'narration' | 'runtime' | 'subsystem' | 'app';
 
@@ -1285,6 +1286,14 @@ export function logAppAudit(
   // race-free (single-threaded JS) without a per-event read-modify-write.
   pendingEntries.push(filled);
   scheduleAuditFlush();
+  // The open Learn game keeps its own copy, so the shared rolling log can
+  // never push a game out of the record it is sent to explain.
+  noteLearnEntry({
+    kind: filled.kind, source: filled.source,
+    summary: filled.narrationText ?? filled.summary,
+    ...(filled.fen ? { fen: filled.fen } : {}),
+    ...(filled.details ? { details: filled.details } : {}),
+  });
   // Opt-in remote stream — used for live-watch sessions where Claude
   // polls the backend for new entries. Off by default. Independent of the
   // local write, so fire immediately.
