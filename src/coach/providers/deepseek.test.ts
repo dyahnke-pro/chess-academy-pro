@@ -90,4 +90,22 @@ describe('deepseekProvider — the turn language reaches the grounded lanes', ()
     await deepseekProvider.call(envelope);
     expect(getCoachChatResponse.mock.calls[0][9]).toBeUndefined();
   });
+
+  it('a first attempt that lands after the timeout is still the answer — the retry races it (prod walk 2026-10-19)', async () => {
+    vi.useFakeTimers();
+    try {
+      let finishFirst: (v: string) => void = () => undefined;
+      getCoachChatResponse
+        .mockImplementationOnce(() => new Promise<string>((r) => { finishFirst = r; }))
+        .mockImplementationOnce(() => new Promise<string>(() => undefined)); // the retry hangs
+      const pending = deepseekProvider.call(envelope);
+      await vi.advanceTimersByTimeAsync(30_001); // first attempt times out; retry starts
+      finishFirst('The computed answer, a little late.');
+      const res = await pending;
+      expect(res.text).toBe('The computed answer, a little late.');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 });
+

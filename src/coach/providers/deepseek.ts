@@ -70,27 +70,34 @@ async function callDeepSeek(
   // cross-provider fallback, but that only fires when a call THROWS — a
   // merely-slow call (commonly a serverless cold start) never throws, so the
   // timeout has to convert "slow" into a rejection here.
-  const attempt = (stream: boolean): Promise<string> => {
-    const promise = getCoachChatResponse(
-      [{ role: 'user', content: userMessage }],
-      systemPrompt,
-      stream ? onChunk : undefined,
-      task,
-      maxTokens,
-      'medium',
-      'deepseek',
-      options?.grounding, // WO-COACH-MASTER-INTEGRATION
-      options?.studentLanguage, // the turn's language, for the grounded lanes
-    );
-    const timeout = new Promise<string>((_, reject) =>
+  const start = (stream: boolean): Promise<string> => getCoachChatResponse(
+    [{ role: 'user', content: userMessage }],
+    systemPrompt,
+    stream ? onChunk : undefined,
+    task,
+    maxTokens,
+    'medium',
+    'deepseek',
+    options?.grounding, // WO-COACH-MASTER-INTEGRATION
+    options?.studentLanguage, // the turn's language, for the grounded lanes
+  );
+  const withTimeout = (work: Promise<string>): Promise<string> => Promise.race([
+    work,
+    new Promise<string>((_, reject) =>
       setTimeout(() => reject(new Error('coach-brain-deepseek-timeout')), PROVIDER_TIMEOUT_MS),
-    );
-    return Promise.race([promise, timeout]);
-  };
+    ),
+  ]);
 
   let raw: string;
+  // The first attempt's own work (the grounded answer is computed in code,
+  // engine reads and all) keeps running past the timeout. Its result is still
+  // the answer when it lands first, so the retry RACES it instead of throwing
+  // it away (prod walk on a real record, 2026-10-19: a stalled engine pushed
+  // a code-computed answer past 30s, and the retry started it over).
+  const first = start(true);
+  first.catch(() => undefined); // a late failure of the abandoned attempt is not an error
   try {
-    raw = await attempt(true);
+    raw = await withTimeout(first);
   } catch (err) {
     // The first call timed out / failed. Previously this surfaced a
     // "(coach-brain provider error: …)" bubble with NO retry — the outer
@@ -107,7 +114,7 @@ async function callDeepSeek(
       summary: `deepseek retry after: ${firstMessage}`,
     });
     try {
-      raw = await attempt(false);
+      raw = await firstSuccess([first, withTimeout(start(false))]);
     } catch (retryErr) {
       const message = retryErr instanceof Error ? retryErr.message : String(retryErr);
       return {
@@ -129,3 +136,14 @@ export const deepseekProvider: Provider = {
     return callDeepSeek(envelope, onChunk, options);
   },
 };
+
+/** The first of several attempts to SUCCEED; rejects with the last error only
+ *  when every one has failed. */
+function firstSuccess(attempts: readonly Promise<string>[]): Promise<string> {
+  return new Promise((resolve, reject) => {
+    let failed = 0;
+    for (const a of attempts) {
+      a.then(resolve, (e: unknown) => { failed += 1; if (failed === attempts.length) reject(e); });
+    }
+  });
+}
