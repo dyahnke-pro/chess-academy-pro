@@ -1,0 +1,29 @@
+name: Transcript pull (reference only, throwaway)
+# Reference-only research read (CLAUDE.md G9.1 step 8): prints one transcript
+# to the run log so a session blocked by YouTube's IP check can read WHICH ideas
+# and questions the teacher uses. Never committed, never artifacted, never
+# shipped. Lives on a throwaway branch that is deleted after the read.
+on:
+  push:
+    branches: [claude/transcript-pull]
+permissions:
+  contents: read
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - run: pip3 install --quiet --upgrade yt-dlp
+      - run: |
+          yt-dlp --write-auto-sub --skip-download --sub-format vtt --sub-langs en -o "t.%(ext)s" "https://www.youtube.com/watch?v=1rcEbI44WqE" || yt-dlp --extractor-args "youtube:player_client=android" --write-auto-sub --skip-download --sub-format vtt --sub-langs en -o "t.%(ext)s" "https://www.youtube.com/watch?v=1rcEbI44WqE"
+          python3 - <<'PY'
+          import re,glob
+          f=glob.glob('t*.vtt')[0]; out=[]; last=''
+          for blk in open(f).read().split('\n\n'):
+            m=re.search(r'(\d\d:\d\d:\d\d)\.\d+ -->',blk)
+            if not m: continue
+            txt=' '.join(l for l in blk.split('\n')[1:] if l and '-->' not in l)
+            txt=re.sub(r'<[^>]+>','',txt).strip()
+            if txt and txt!=last and txt not in last: out.append(m.group(1)+' '+txt); last=txt
+          print('\n'.join(out))
+          PY
