@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**102 lines · 5 exports · 2 importers · 1 tests · 0 audits**
+**106 lines · 5 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -28,7 +28,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionRulesBackfill.test.ts:66`
 
 ### `reconcileMisconceptionRules` (function) — 6 call sites
-- `src/services/dataLoader.ts:996`
+- `src/services/dataLoader.ts:1000`
 - `src/services/misconceptionRulesBackfill.test.ts:35`
 - `src/services/misconceptionRulesBackfill.test.ts:38`
 - `src/services/misconceptionRulesBackfill.test.ts:64`
