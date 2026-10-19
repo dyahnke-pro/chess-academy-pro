@@ -60,6 +60,13 @@ const INFRA = new Set(['learnTranscript',
   // analysis while a Learn game is on): a hold counter the backfills wait on.
   // It computes no chess or teaching fact — the same class as the engine.
   'foregroundActivity',
+  // `markPacing` is the TIMING of the board marks (2026-10-19, David: "all
+  // mentioned squares should appear as they are mentioned"): it finds where a
+  // square is first named in a sentence and schedules the mark there. It is a
+  // leaf with zero imports and reads no position — the same class as
+  // `narrationSegments` (sentence timing) and `arrowDoor` (what may be drawn).
+  // Listed in PHRASERS below, so a future import would fail this gate.
+  'markPacing',
   // Board THEMING and BILLING (2026-10-01): `boardColorService` and
   // `pieceSetService` pick colours and a piece set; `courseEntitlement` checks
   // a purchase. None of them reasons about a position — they were counted only
@@ -216,7 +223,7 @@ const PURE_RECORD_HELPERS = ['fixtureGames', 'studentResult'];
 /** Replay helpers: chess.js is the only import; no JUDGEMENT vocabulary. */
 const REPLAY_HELPERS = ['lastMoveOfLine', 'gamePgnReplay', 'spokenMove'];
 /** Phrasers: zero imports. */
-const PHRASERS = ['spokenSquares'];
+const PHRASERS = ['spokenSquares', 'markPacing'];
 /** The vocabulary of a chess JUDGEMENT proper — what a replay helper must
  *  never reason about (it may name pieces: it moves them). */
 const JUDGEMENT_WORDS = /\b(?:tactic|eval|centipawn|material|threat|attack|blunder|checkmate|hang|fork|pin\b|skewer|sacrific)\w*/i;

@@ -81,7 +81,7 @@ import { threatStoppedBy } from './opponentMovePurpose';
 import { trickSidestepped } from './forkTrick';
 import { gameArcs } from './lookaheadPlan';
 import { studentMoveStructure } from './structureReads';
-import { piecePoints, type FactStakes } from './factStakes';
+import { piecePoints, mateStakes, exchangeStakes, forkPoints, piecesOn, type FactStakes } from './factStakes';
 
 export interface TeachingHint {
   lane: LearnLane;
@@ -1365,4 +1365,18 @@ export function learnMoveReason(input: { fenBefore: string; san: string; reads: 
   emitDecisiveReason({ surface: 'learn', kind: reason.kind, source: reason.source, about: reason.about, gapCp: reason.gapCp, stakeCp: reason.stakeCp, posedTag: posed?.tag ?? null, outcome: posed ? 'held' : 'explained' });
   const proof = (reason.line ? lineProof(reason.line) : null) ?? squaresProof(reason.text, reason.squares) ?? NO_PROOF.description;
   return { reason, proof, posed };
+}
+
+/** WHAT A SPOKEN TACTIC WINS — its stakes, for the turn door's ranking: a
+ *  forced mate (from the `mate:N` key), else the most an exchange on the
+ *  tactic's squares wins from their pieces, else a fork's second target.
+ *  Undefined when the board shows no gain (the door then ranks it unstaked). */
+export function tacticStakesFor(fen: string, tacticKey: string, squares: readonly string[], tacticType: string | null, foe: 'w' | 'b'): FactStakes | undefined {
+  const mateN = /^mate:(\d+)$/.exec(tacticKey);
+  if (mateN) return mateStakes('you', Number(mateN[1]) * 2 - 1, true);
+  const exchange = exchangeStakes(fen, squares, foe);
+  if (exchange) return exchange;
+  if (tacticType !== 'fork') return undefined;
+  const points = forkPoints(piecesOn(fen, squares));
+  return points > 0 ? { points, plies: 1 } : undefined;
 }

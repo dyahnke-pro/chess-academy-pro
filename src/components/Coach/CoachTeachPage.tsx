@@ -39,11 +39,10 @@ import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../typ
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from '../../services/motifLedger';
 import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
-import { mateStakes, exchangeStakes, forkPoints, piecesOn } from '../../services/factStakes';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { OPENING_PLIES, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, seenOneMoveAttack, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, type TeachingHint } from '../../services/learnBoardTeaching';
+import { OPENING_PLIES, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, seenOneMoveAttack, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, type TeachingHint } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -8787,11 +8786,7 @@ export function CoachTeachPage(): JSX.Element {
         // WHAT IT WINS: a forced mate, else the most an exchange on its squares
         // wins from their pieces, else a fork's second target.
         const foe: 'w' | 'b' = studentCC === 'w' ? 'b' : 'w';
-        const mateN = /^mate:(\d+)$/.exec(tacticKey);
-        tacticStakes = mateN ? mateStakes('you', Number(mateN[1]) * 2 - 1, true)
-          : exchangeStakes(args.fenAfterReply, tacticSquares, foe)
-          ?? (myTacticType === 'fork' && forkPoints(piecesOn(args.fenAfterReply, tacticSquares)) > 0
-            ? { points: forkPoints(piecesOn(args.fenAfterReply, tacticSquares)), plies: 1 } : undefined);
+        tacticStakes = tacticStakesFor(args.fenAfterReply, tacticKey, tacticSquares, myTacticType, foe);
         markTacticSaid = () => {
           learnMemRef.current.lastTacticKey = saidKey;
           learnMemRef.current.spokenTacticLines.add(saidLine);
