@@ -8,7 +8,7 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { play, piecesOf, type StructureRead } from './structureJudgementKit';
 import { squaresProof } from './proof';
 import { legalSeeGainFor } from './positionReadingService';
-import { MATERIAL_VALUE } from './pieceValues';
+import { MATERIAL_VALUE, materialBalance } from './pieceValues';
 import { andList } from '../utils/andList';
 
 /** A move the engine counts as sound: anything costlier is a mistake to grade, not a plan to name. */
@@ -81,6 +81,8 @@ const loosePawns = (c: Chess, fen: string, student: Color): Square[] =>
  *  when the engine agrees the move is sound. */
 export function pawnForDevelopment(fenBefore: string, san: string, student: Color, cpLoss: number): StructureRead | null {
   if (cpLoss >= SOUND_CP) return null;
+  // A pawn up already, giving one back is `givePawnBack`, not a sacrifice.
+  if ((student === 'w' ? 1 : -1) * materialBalance(fenBefore) >= 1) return null;
   const before = boardOf(fenBefore);
   const r = play(fenBefore, san);
   if (!before || !r || r.mv.color !== student || r.mv.captured || r.after.inCheck()) return null;

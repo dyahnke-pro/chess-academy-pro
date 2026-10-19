@@ -12,6 +12,9 @@ import { kingCommitted } from './splitPosition';
 import { squaresProof } from './proof';
 import { rooksOnSeventh, kingToCentre, pawnForDevelopment } from './endgameMoveReads';
 import {
+  givePawnBack, defendsBoth, missedDefendsBoth, knightJumpApart, mateThreatWinsMore, mateThreatCostsYou, queenTradeRead,
+} from './practicalReads';
+import {
   secondWeakness, keyPawn, fixOnBishopColour, recaptureSealed, enPassantStructure, formation,
   breakTradesWeakPawn, dontRepair, mirroredAsymmetry, formationChoice,
 } from './pawnJudgement';
@@ -73,6 +76,11 @@ export function studentMoveStructure(i: StudentMoveStructureInput): StructureRea
     safe(() => rooksOnSeventh(fenBefore, san, student, cpLoss)),
     safe(() => kingToCentre(fenBefore, san, student, cpLoss)),
     safe(() => pawnForDevelopment(fenBefore, san, student, cpLoss)),
+    safe(() => givePawnBack(fenBefore, san, student, cpLoss)),
+    safe(() => defendsBoth(fenBefore, san, student, cpLoss)),
+    safe(() => missedDefendsBoth(fenBefore, san, student, cpLoss)),
+    safe(() => mateThreatWinsMore(fenBefore, san, student, cpLoss)),
+    safe(() => queenTradeRead(fenBefore, san, student, cpLoss)),
   ].filter((r): r is StructureRead => r !== null);
   if (i.namesBetterMove) return reads;
   // A read that names the better move carries its held form (`heldForm`);
@@ -86,6 +94,8 @@ export function theirMoveStructure(fenBefore: string, san: string, student: Colo
     safe(() => recaptureSealed(fenBefore, san, student)),
     safe(() => unmovedUnits(fenBefore, san, student)),
     safe(() => kingCommittedRead(fenBefore, san, student)),
+    safe(() => knightJumpApart(fenBefore, san, student)),
+    safe(() => mateThreatCostsYou(fenBefore, san, student)),
   ].filter((r): r is StructureRead => r !== null);
 }
 

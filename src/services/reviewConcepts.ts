@@ -117,6 +117,8 @@ function detectSimplifyWhenAhead(ctx: ConceptCtx): ConceptBeat | null {
   if (pieceCount(ctx.fenAfter) !== pieceCount(ctx.fenBefore) - 1) return null; // exactly one piece left = a clean capture/trade
   if (!/x/.test(ctx.san)) return null;                     // it was a capture
   if (!isTrade(ctx)) return null;                          // …and a TRADE, not a grab
+  // A queen trade is `practicalReads.queenTradeRead`'s claim (piece up vs pawns up).
+  try { if (new Chess(ctx.fenBefore).move(ctx.san).captured === 'q') return null; } catch { return null; }
   // The trigger requires the MOVER to be ahead. If that's the student, it's
   // their winning technique; if it's the opponent, it's the technique that was
   // beating the student (recognise it, don't help it along).

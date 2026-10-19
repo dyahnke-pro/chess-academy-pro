@@ -43,7 +43,15 @@ export type StructureAct =
   | 'king-committed'
   | 'rooks-on-seventh'
   | 'king-to-centre'
-  | 'pawn-for-development';
+  | 'pawn-for-development'
+  | 'pawn-back'
+  | 'defends-both'
+  | 'missed-defends-both'
+  | 'knight-jump-apart'
+  | 'mate-threat-wins-more'
+  | 'mate-threat-costs-you'
+  | 'queen-trade-ahead'
+  | 'queen-trade-early';
 
 /** TEACH OR DESCRIBE, per act — every structure judgement today states its
  *  consequence ("so that square stays a hole", "and if c5 drops, d6 goes with
@@ -61,6 +69,8 @@ export const STRUCTURE_ROLE: Record<StructureAct, 'teach' | 'describe'> = {
   'mutual-restriction': 'teach', 'file-opened-for-defender': 'teach', 'small-edges': 'teach',
   'fighting-line': 'teach', 'king-committed': 'teach',
   'rooks-on-seventh': 'teach', 'king-to-centre': 'teach', 'pawn-for-development': 'teach',
+  'pawn-back': 'teach', 'defends-both': 'teach', 'missed-defends-both': 'teach', 'knight-jump-apart': 'teach',
+  'mate-threat-wins-more': 'teach', 'mate-threat-costs-you': 'teach', 'queen-trade-ahead': 'teach', 'queen-trade-early': 'teach',
 };
 
 export interface StructureRead {
