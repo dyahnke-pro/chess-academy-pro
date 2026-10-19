@@ -18,7 +18,7 @@ describe('moverLossProof — a line a listener can follow', () => {
 
   it('a two-ply proof still speaks', () => {
     const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 3 3';
-    expect(moverLossProof(fen, uciOf(fen, ['Nxe5', 'Nxe5']), 'w')?.short).toMatch(/Nxe5 and Nxe5 — .*knight/);
+    expect(moverLossProof(fen, uciOf(fen, ['Nxe5', 'Nxe5']), 'w')?.short).toMatch(/you play Nxe5 and they answer Nxe5 — .*knight/);
   });
 });
 
