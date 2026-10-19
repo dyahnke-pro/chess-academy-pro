@@ -600,6 +600,8 @@ class StockfishEngine {
   }
   private worker: Worker | null = null;
   private isReady = false;
+  /** Bumped by every teardown — a call restarts the engine only if it is unchanged since the call began. */
+  private restartGen = 0;
   private pending: PendingAnalysis | null = null;
   private messageHandlers: Set<StockfishMessageHandler> = new Set();
   private statusHandlers: Set<StatusChangeHandler> = new Set();
@@ -1393,6 +1395,7 @@ class StockfishEngine {
         summary: `ios-native stalled at runtime (${reason}); demoted to asm.js for the session`,
       });
     }
+    this.restartGen += 1;
     void logAppAudit({
       kind: 'stockfish-analysis-stalled',
       category: 'subsystem',
@@ -1415,6 +1418,7 @@ class StockfishEngine {
    *  regardless of position/variant/depth. A fresh worker recovers. Same
    *  teardown as recoverStuckAnalysis; safe to call when idle (no-op-ish). */
   forceRestart(reason: string = 'caller-forced'): void {
+    this.restartGen += 1;
     const p = this.pending;
     this.pending = null;
     if (p?.hardTimeout) clearTimeout(p.hardTimeout);
@@ -2035,11 +2039,19 @@ class StockfishEngine {
         if (graceTimer) clearTimeout(graceTimer);
       }
     };
+    // ONE RESTART PER DEATH (David's phone, 2026-10-18: ten "forced worker
+    // respawn" in the same millisecond). Every queued call that saw the engine
+    // die used to restart it — each restart killing the engine the previous
+    // call had just respawned and failing the call running on it. A call
+    // restarts only if nobody has restarted since it began; otherwise it just
+    // retries on the engine that is already coming back.
+    const genAtStart = this.restartGen;
     try {
       return await runOnce();
     } catch (err) {
       // A deliberate prefetch drop is not a failure — don't retry it.
       if (err instanceof PrefetchDroppedError) throw err;
+      if (this.restartGen !== genAtStart) return await runOnce();
       // Worker died (the grace timer just reset it). Retry ONCE on a FRESH
       // worker — the asm engine analyzes any position fine when alive (David
       // 2026-07-04 node repro), so a respawn recovers instead of failing the

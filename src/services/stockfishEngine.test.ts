@@ -710,6 +710,23 @@ describe('StockfishEngine', () => {
       vi.useRealTimers();
     });
 
+    it('queued calls on a dead engine restart it once, not once each (respawn storm, 2026-10-18)', async () => {
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+      scheduleReadyButNoBestmove();
+      const restarts = vi.spyOn(stockfishEngine, 'forceRestart');
+      vi.useFakeTimers();
+      const calls = [0, 1, 2].map(() => stockfishEngine.analyzeWithBudget(STARTING_FEN, 12, 300));
+      const settled = Promise.allSettled(calls);
+      await vi.advanceTimersByTimeAsync(30_000);
+      await settled;
+      // The grace timer already tore each dead worker down; no queued call adds
+      // a second teardown on top (the old code: one per call, each killing the
+      // engine the call before had just respawned).
+      expect(restarts.mock.calls.filter((c) => c[0] === 'analyzeWithBudget retry-on-death').length).toBeLessThanOrEqual(1);
+      vi.useRealTimers();
+    });
+
     it('respawns a fresh worker after a stuck analysis is recovered', async () => {
       const { stockfishEngine } = await getEngine();
       await initEngine(stockfishEngine);
