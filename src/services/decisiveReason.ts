@@ -221,8 +221,11 @@ export function decisiveReason(input: {
     // back, and the cost is what any other move leaves them holding.
     const recapture = !!input.opponentLastSan && /x/.test(input.opponentLastSan) && /x/.test(san)
       && squareOf(input.opponentLastSan) === squareOf(san);
+    // The seat leads the sentence: "Their Nxd4 takes back" was spoken "their
+    // knight takes d4 takes back" (prod walk 2026-10-18) — a capture cannot
+    // also be the verb.
     if (recapture && matStake > 0 && nextBestSan) {
-      cands.push({ source: 'material', stake: matStake, text: `${played} takes back — anything else, like ${dot(nextBestSan, mover)}, loses ${pieceWords(fenBefore, next.moves, mover, false)} in the line that follows.`, line: { fen: fenBefore, sans: heardSans(fenBefore, next.moves) }, squares: [squareOf(san) ?? ''].filter(Boolean), alt: true });
+      cands.push({ source: 'material', stake: matStake, text: `${seat === 'student' ? 'You take' : 'They take'} back with ${played} — anything else, like ${dot(nextBestSan, mover)}, loses ${pieceWords(fenBefore, next.moves, mover, false)} in the line that follows.`, line: { fen: fenBefore, sans: heardSans(fenBefore, next.moves) }, squares: [squareOf(san) ?? ''].filter(Boolean), alt: true });
     } else if (matStake > 0) {
       const win = matOwn > 0 ? seatProof(fenBefore, sansOf(fenBefore, own.moves), mover, studentWB, 'for') : null;
       const loss = !win && matNext < 0 ? seatProof(fenBefore, sansOf(fenBefore, next.moves), mover, studentWB, 'against') : null;

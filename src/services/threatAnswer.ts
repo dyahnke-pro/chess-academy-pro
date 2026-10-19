@@ -36,7 +36,7 @@ export const THREAT_WAIT_FLOOR_CP = -50;
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
 /** Rotated, never rolled: keyed on the ply so a resume says the same thing. */
-const STEMS = ['What do you do about it?', 'How do you meet it?', 'So what is the answer?'] as const;
+const STEMS = ['What do you do about it?', 'How do you meet it?', 'How do you deal with it?'] as const;
 
 const isSq = (s: string): s is Square => /^[a-h][1-8]$/.test(s);
 

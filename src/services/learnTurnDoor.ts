@@ -563,6 +563,17 @@ export function decideTurn(
   const sharperOwn = survivors.some((x) => !fallbackOwn(x) && !subsumed.has(x) && !dangerWaits(x) && !turnHolds(x)
     && ((DNA_BEAT[x.lane] === 'affirm' && teaches(x)) || [...ownTexts].some((t) => t === x.fact.text || t.includes(x.fact.text))));
   if (sharperOwn) for (const x of survivors) if (fallbackOwn(x)) subsumed.add(x);
+  // AND ONE REASON, SAID ONCE (prod walk 2026-10-18: "That's what strong
+  // players play here — it saves it from their knight on c3, and hits it back
+  // from a5" and "Your queen to a5 saves it from their knight on c3, and hits
+  // it back from a5" in one turn). The strong-choice affirmation and a rule are
+  // both the reason for the student's own move; the more valuable one speaks.
+  const ownReasonFact = (x: { fact: VoiceFact }): boolean => ownTexts.has(x.fact.text) || !!x.fact.claims?.includes('strong-choice:affirm');
+  const ownLive = survivors.filter((x) => ownReasonFact(x) && !subsumed.has(x) && !dangerWaits(x) && !turnHolds(x));
+  if (ownLive.length > 1) {
+    const keepOwn = [...ownLive].sort((a, b) => value(b) - value(a))[0];
+    for (const x of ownLive) if (x !== keepOwn) subsumed.add(x);
+  }
   // EVERY STUDENT MOVE GETS ITS OWN REASON (David 2026-10-14). The best fact
   // about what the student's move did well ('affirm') is never an aside: on a
   // good move it was held whenever a plan or a board read led the turn, so the

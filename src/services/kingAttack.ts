@@ -94,7 +94,9 @@ export function kingAttack(fenBefore: string, san: string): KingAttackPoint | nu
     ({ kind, text, squares: [...new Set([...squares, a.king])], attackers: a.attackers.size, defenders: a.defenders.size });
 
   if (mv.captured === 'p' && shelter?.includes(mv.to)) {
-    return out('strips-shelter', `${played} takes away one of the pawns in front of their king — the cover is coming apart${tally}.`, [mv.to]);
+    // A capture is the subject's verb already ("Bxh6 takes away" is spoken
+    // "bishop takes h6 takes away", prod walk 2026-10-18): lead with the move.
+    return out('strips-shelter', `With ${played}, one of the pawns in front of their king is gone — the cover is coming apart${tally}.`, [mv.to]);
   }
   // A DEFENDER STANDS BY THE KING (walk 2026-09-30: "…Rxe4 takes off a
   // defender of their king" of a rook three squares away, that had just taken
@@ -102,7 +104,7 @@ export function kingAttack(fenBefore: string, san: string): KingAttackPoint | nu
   const nearKing = Math.max(Math.abs(mv.to.charCodeAt(0) - a.king.charCodeAt(0)), Math.abs(Number(mv.to[1]) - Number(a.king[1]))) <= 2;
   if (mv.captured && mv.captured !== 'p' && shelter && nearKing && b.defenders.has(mv.to) && a.defenders.size < b.defenders.size
     && after.attackers(mv.to, them).length === 0 && a.attackers.size >= 2) {
-    return out('removes-defender', `${played} takes off a defender of their king${tally}.`, [mv.to]);
+    return out('removes-defender', `With ${played}, a defender of their king is gone${tally}.`, [mv.to]);
   }
   if (mv.piece === 'p') {
     const kf = a.king.charCodeAt(0);

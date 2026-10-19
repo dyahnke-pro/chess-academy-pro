@@ -208,9 +208,12 @@ export function describeExchange(ledger: ExchangeLedger | null): string | null {
   if (!theirs) return `you come out ahead on material, ${mine} up`;
   if (!mine) return `you come out behind on material, ${theirs} down`;
   if (ledger.netPawns === 0) return `that trade is even, ${mine} for ${theirs}`;
+  // WHO GETS WHAT, said as a verb (prod walk 2026-10-18: "you come out behind
+  // on material, a bishop and a pawn for a queen and a knight" left the
+  // student to work out which side lost the queen).
   return ledger.netPawns > 0
-    ? `you come out ahead on material, ${mine} for ${theirs}`
-    : `you come out behind on material, ${mine} for ${theirs}`;
+    ? `you come out ahead on material, winning ${mine} for ${theirs}`
+    : `you come out behind on material, giving up ${theirs} for ${mine}`;
 }
 
 /** The ledger sentence for a projected line, or null. One call for every
