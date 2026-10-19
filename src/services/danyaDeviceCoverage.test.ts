@@ -81,7 +81,7 @@ describe('Danya device coverage — every device fires on its trigger position (
 
   it('hedge clause fires on a close runner-up', () => {
     const read = { closeAlternative: { san: 'O-O', gapCp: 20 } } as never;
-    expect(uncertaintyClause(read)).toMatch(/genuinely close|about as good/);
+    expect(uncertaintyClause(read, { namesMoves: true })).toMatch(/genuinely close|about as good/);
   });
 
   it('candidate-compare fires on a two-square decision', () => {

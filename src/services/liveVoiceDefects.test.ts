@@ -252,7 +252,7 @@ describe('L7 — a SAN in a subject slot reads as a noun phrase (#51)', () => {
       keyTactic: null, tempting: null,
       closeAlternative: { san: 'Qxd5', gapCp: 20 },
     };
-    const said = uncertaintyClause(read as never, { spoken: true });
+    const said = uncertaintyClause(read as never, { spoken: true, namesMoves: true });
     expect(said).toContain('the queen taking on d5');
     expect(said).not.toMatch(/the queen takes d5/);
   });

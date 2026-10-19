@@ -12,7 +12,7 @@ describe('the forcing-first compare claims no edge it did not compute', () => {
     const r = candidateCompareRead(FEN, [
       { moves: ['c5d4'], evaluation: 3 },
       { moves: ['h7h6'], evaluation: 60 },
-    ], 'black');
+    ], 'black', { namesMoves: true });
     expect(r).not.toBeNull();
     expect(r!.text).not.toMatch(/edge|still works/);
   });

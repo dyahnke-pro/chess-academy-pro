@@ -10494,9 +10494,13 @@ export function CoachTeachPage(): JSX.Element {
                       if (pf) {
                         priorityFirstLastPlyRef.current = plyNow;
                         captureEvent('priority_first_offered', { surface: 'coach-teach', target: pf.targetSquare });
-                        // A held move keeps its arrow back too — the arrow IS the answer.
-                        const moveHeld = learnMemRef.current.heldMove?.fen === probe.fen();
-                        queueSpokenHint(probe.fen(), packageForRegister(pf.hint, discussion.hintDial.register), 'priorityFirst', legalLineProof(probe.fen(), [`${pf.arrow.from}${pf.arrow.to}`]) ?? squaresProof(packageForRegister(pf.hint, discussion.hintDial.register), [pf.targetSquare]) ?? NO_PROOF.withheld, [pf.targetSquare], undefined, undefined, moveHeld ? undefined : [{ from: pf.arrow.from, to: pf.arrow.to, role: 'play', vouchedBy: 'engine', source: 'learn.priorityFirst' }], undefined, undefined, 'teach');
+                        // LEARN NAMES NO MOVE UNASKED — whatever the dial. The
+                        // dial may hand a beginner more of the REASON, never the
+                        // move (prod walk 2026-10-19: "Aim at it: Nf6 does." on
+                        // the student's turn), and no arrow: the arrow IS the
+                        // answer. The priority and its stakes still speak.
+                        const pfLine = packageForRegister({ ...pf.hint, detail: undefined }, discussion.hintDial.register);
+                        queueSpokenHint(probe.fen(), pfLine, 'priorityFirst', squaresProof(pfLine, [pf.targetSquare]) ?? NO_PROOF.withheld, [pf.targetSquare], undefined, undefined, undefined, undefined, undefined, 'teach');
                       }
                     }
                     // THE REJECTED TEMPTING MOVE (the speedrun's warning
