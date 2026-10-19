@@ -10091,22 +10091,20 @@ export function CoachTeachPage(): JSX.Element {
                       // verdict on the move just played, and unframed the two
                       // read as one contradiction ("that let them win a rook… it's
                       // genuinely close, don't agonise").
-                      const rawHedge = uncertaintyClause(turnRead, { spoken: true, rotation: gameRef.current.history.length });
+                      const rawHedge = uncertaintyClause(turnRead, { spoken: true, rotation: gameRef.current.history.length, namesMoves: false });
                       const hedge = rawHedge ? `As for your next move: ${rawHedge.charAt(0).toLowerCase()}${rawHedge.slice(1)}` : null;
                       // The hedge's proof is the two moves it weighs, from this
                       // board — the same pair the clause names.
-                      if (hedge && !pendingRegisterLines && turnRead.closeAlternative && turnRead.bestMoveSan) {
-                        pendingRegisterLines = [{ fen: probe.fen(), sans: [turnRead.bestMoveSan] }, { fen: probe.fen(), sans: [turnRead.closeAlternative.san] }];
-                      }
+                      // Held: the hedge names no move, so it draws none either
+                      // (a drawn move is the same answer handed over).
                       // His "X, not Y, because…" — only when there is NO but-turn
                       // (a seductive blunder outranks a fine-margin preference) and
                       // NO hedge (a genuine coin-flip is the hedge, not a compare).
                       const compareRead = (!butTurn && !hedge)
-                        ? candidateCompareRead(probe.fen(), studentBest.topLines, playerColor, { spoken: true, recaptureOn: m.captured ? m.to : null })
+                        ? candidateCompareRead(probe.fen(), studentBest.topLines, playerColor, { spoken: true, recaptureOn: m.captured ? m.to : null, namesMoves: false })
                         : null;
                       const compare = compareRead?.text ?? null;
-                      // Both moves the compare names, from this board.
-                      if (compareRead) pendingRegisterLines = [{ fen: probe.fen(), sans: [compareRead.bestSan] }, { fen: probe.fen(), sans: [compareRead.altSan] }];
+                      // Held: the compare says the habit, not the moves, so it draws none.
                       const reg = [butTurn, hedge, compare].filter(Boolean).join(' ');
                       const gradedReg = reg ? gradeNarrationText(reg, probe.fen(), 'CoachTeachPage.register')?.trim() : '';
                       pendingRegister = gradedReg || null;

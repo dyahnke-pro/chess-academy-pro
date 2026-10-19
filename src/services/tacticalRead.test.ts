@@ -450,7 +450,7 @@ describe('temptingTurnClause + uncertaintyClause (DNA register — David 2026-08
   });
 
   it('builds the honest hedge naming the close alternative', () => {
-    const c = uncertaintyClause(read)!;
+    const c = uncertaintyClause(read, { namesMoves: true })!;
     expect(c).toContain('Bc4');
     expect(c.toLowerCase()).toMatch(/close|about as good/);
   });
@@ -458,7 +458,7 @@ describe('temptingTurnClause + uncertaintyClause (DNA register — David 2026-08
   it('returns null when there is no tempting move / no close alternative', () => {
     const clear = { ...read, tempting: null, closeAlternative: null } as unknown as TacticalRead;
     expect(temptingTurnClause(clear)).toBeNull();
-    expect(uncertaintyClause(clear)).toBeNull();
+    expect(uncertaintyClause(clear, { namesMoves: true })).toBeNull();
   });
 });
 
@@ -535,7 +535,7 @@ describe('a spoken move never reads as a clause where a noun belongs', () => {
   it('the close-call hedge takes a noun phrase, not a clause', () => {
     const out = uncertaintyClause(
       { ...base, tempting: null, closeAlternative: { san: 'Qxd5', gapCp: 20 } } as TacticalRead,
-      { spoken: true },
+      { spoken: true, namesMoves: true },
     );
     expect(out, 'the hedge did not render').toBeTruthy();
     expect(out).not.toMatch(CLAUSE_IN_NOUN_SLOT);
@@ -546,7 +546,7 @@ describe('a spoken move never reads as a clause where a noun belongs', () => {
   it('a quiet runner-up still reads correctly (the case that HID the bug)', () => {
     const out = uncertaintyClause(
       { ...base, tempting: null, closeAlternative: { san: 'Nd5', gapCp: 20 } } as TacticalRead,
-      { spoken: true },
+      { spoken: true, namesMoves: true },
     );
     expect(out).toContain('the knight to d5');
     expect(out).not.toMatch(CLAUSE_IN_NOUN_SLOT);
@@ -580,16 +580,16 @@ describe('uncertaintyClause rotates its stem on a stable key (WO-STANDARD-01 D-8
     closeAlternative: { san: 'Bc4', gapCp: 20 },
   } as unknown as TacticalRead;
   it('four consecutive plies get four different sentences, all naming the alternative', () => {
-    const out = [0, 1, 2, 3].map((rotation) => uncertaintyClause(read, { rotation })!);
+    const out = [0, 1, 2, 3].map((rotation) => uncertaintyClause(read, { rotation, namesMoves: true })!);
     expect(new Set(out).size).toBe(4);
     for (const s of out) expect(s).toContain('Bc4');
     // A sentence-initial spelled move is capitalised in the spoken register.
-    expect(uncertaintyClause(read, { rotation: 1, spoken: true })).toMatch(/^The bishop to c4 is a fine alternative/);
+    expect(uncertaintyClause(read, { rotation: 1, spoken: true, namesMoves: true })).toMatch(/^The bishop to c4 is a fine alternative/);
   });
   it('is keyed, not rolled: the same ply repeats its stem, rotation 4 wraps to 0, no rotation means stem 0', () => {
-    expect(uncertaintyClause(read, { rotation: 2 })).toBe(uncertaintyClause(read, { rotation: 2 }));
-    expect(uncertaintyClause(read, { rotation: 4 })).toBe(uncertaintyClause(read, { rotation: 0 }));
-    expect(uncertaintyClause(read)).toBe(uncertaintyClause(read, { rotation: 0 }));
+    expect(uncertaintyClause(read, { rotation: 2, namesMoves: true })).toBe(uncertaintyClause(read, { rotation: 2, namesMoves: true }));
+    expect(uncertaintyClause(read, { rotation: 4, namesMoves: true })).toBe(uncertaintyClause(read, { rotation: 0, namesMoves: true }));
+    expect(uncertaintyClause(read, { namesMoves: true })).toBe(uncertaintyClause(read, { rotation: 0, namesMoves: true }));
   });
 });
 
@@ -641,3 +641,15 @@ describe('the but-turn says how a tempting capture is made to work (David 2026-1
     expect(narrateTacticalRead(read(['b5c6', 'd7c6', 'e1g1']))).not.toMatch(/Not yet, though/);
   });
 });
+
+describe('Learn holds the two moves of a close call (prod walk 2026-10-19)', () => {
+  it('the held hedge says the choice is close and names neither move', () => {
+    const read = { fen: '2kr3r/pp3ppp/2n1pn2/q4b2/2BP4/2N2N2/PPPB1PPP/R2QK2R b KQ - 3 9', bestMoveSan: 'e6', closeAlternative: { san: 'Bg6', gapCp: 12 }, tempting: null } as unknown as TacticalRead;
+    for (const rotation of [0, 1, 2]) {
+      const out = uncertaintyClause(read, { spoken: true, rotation, namesMoves: false })!;
+      expect(out).toBeTruthy();
+      expect(out).not.toMatch(/e6|g6|pawn|bishop/);
+    }
+  });
+});
+

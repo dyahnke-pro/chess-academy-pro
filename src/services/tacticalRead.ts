@@ -559,8 +559,23 @@ export function temptingTurnClause(read: TacticalRead, opts: { spoken?: boolean 
  * within a whisker of best, say so rather than feign certainty. Null when the
  * best move is clear. `gapCp` is the student-POV centipawn gap to the runner-up.
  */
-export function uncertaintyClause(read: TacticalRead, opts: { spoken?: boolean; rotation?: number } = {}): string | null {
+export function uncertaintyClause(read: TacticalRead, opts: {
+  spoken?: boolean;
+  rotation?: number;
+  /** May the clause name the two moves? Required: before the student moves in
+   *  Learn it may not (prod walk 2026-10-19: "As for your next move: the bishop
+   *  to g6 is a fine alternative to the pawn to e6" handed over the answer to
+   *  the threat it had just raised). Held, it says the decision is close. */
+  namesMoves: boolean;
+}): string | null {
   if (!read.closeAlternative) return null;
+  if (!opts.namesMoves) {
+    return [
+      'It’s genuinely close here — two moves are about as good as each other, so don’t agonise.',
+      'Two moves do the same job here; either one is fine.',
+      'Nothing to lose sleep over — there are two moves of the same worth here.',
+    ][Math.abs(opts.rotation ?? 0) % 3];
+  }
   // Every move slot in this clause is a NOUN slot, so the clause renderer is
   // genuinely unused here — which is the whole finding.
   const sayN: SayAt = (san, fen) => (opts.spoken ? sayMoveNoun(san, fen) : san);
@@ -603,9 +618,9 @@ export function candidateCompareClause(
   fen: string,
   topLines: ReadonlyArray<{ moves: string[]; evaluation: number }>,
   studentColor: 'white' | 'black',
-  opts: { spoken?: boolean; recaptureOn?: string | null } = {},
+  opts: { spoken?: boolean; recaptureOn?: string | null; namesMoves?: boolean } = {},
 ): string | null {
-  return candidateCompareRead(fen, topLines, studentColor, opts)?.text ?? null;
+  return candidateCompareRead(fen, topLines, studentColor, { ...opts, namesMoves: opts.namesMoves ?? true })?.text ?? null;
 }
 
 /** The compare clause WITH the two moves it names, so the board can draw them
@@ -614,7 +629,13 @@ export function candidateCompareRead(
   fen: string,
   topLines: ReadonlyArray<{ moves: string[]; evaluation: number }>,
   studentColor: 'white' | 'black',
-  opts: { spoken?: boolean; recaptureOn?: string | null } = {},
+  opts: {
+    spoken?: boolean;
+    recaptureOn?: string | null;
+    /** May the read name the two moves? Required (see `uncertaintyClause`).
+     *  Held, it says the habit that finds the better one, not the move. */
+    namesMoves: boolean;
+  },
 ): { text: string; bestSan: string; altSan: string } | null {
   if (topLines.length < 2) return null;
   // Comparison clauses put BOTH moves in noun slots ("X over Y", "X reads
@@ -646,7 +667,10 @@ export function candidateCompareRead(
       const atkBest = board.attackers(bestMv.to, enemy).length;
       const atkAlt = board.attackers(altMv.to, enemy).length;
       if (atkAlt > atkBest) {
-        return { text: `Prefer ${sayN(bestMv.san, fen)} to ${sayN(altMv.san, fen)} — the square is safer, less exposed to attack.`, bestSan: bestMv.san, altSan: altMv.san };
+        const text = opts.namesMoves
+          ? `Prefer ${sayN(bestMv.san, fen)} to ${sayN(altMv.san, fen)} — the square is safer, less exposed to attack.`
+          : `Your ${PIECE_NOUN[bestMv.piece] ?? 'piece'} has two good squares here — pick the one they attack less.`;
+        return { text, bestSan: bestMv.san, altSan: altMv.san };
       }
       // No grounded reason for the square → say nothing (Learn walk 2026-09-23:
       // "keeps more of the edge" fired on three consecutive plies as filler).
@@ -666,7 +690,12 @@ export function candidateCompareRead(
       // nor a closing window is computed here — only that the forcing move
       // reads 30–120cp better (clean-pass walk 2026-10-03, G2 ply 10: "while
       // the edge is there" at a level position).
-      const text = rotateStem([
+      const text = !opts.namesMoves
+        ? rotateStem([
+          'There is a forcing move here, and it comes before the quiet one.',
+          'Look for the forcing move first — it beats the quiet one here.',
+        ], Number(fen.split(' ')[5] ?? '0') || 0)
+        : rotateStem([
         `Prefer ${b} to ${q} — the forcing move comes first.`,
         `${b} before ${q}: the forcing move first.`,
         `${q} can wait — first ${b}, which forces the issue.`,
