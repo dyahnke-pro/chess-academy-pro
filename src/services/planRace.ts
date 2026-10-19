@@ -150,6 +150,10 @@ function detectStormRace(chess: Chess, studentColor: Color): StormRace | null {
   const theirKing = castledWing(chess, opp);
   if (!myKing || !theirKing || myKing === theirKing) return null;
   if (chess.inCheck()) return null;
+  // A storm is an attack on a king; with the queens off the kings walk into
+  // play instead (Alekhine walk 2026-10-19: "both kings face a pawn storm" in a
+  // queenless ending).
+  if (!chess.board().flat().some((p) => p?.type === 'q')) return null;
   const mine = stormRunner(chess, studentColor, theirKing);
   const theirs = stormRunner(chess, opp, myKing);
   if (!mine || !theirs) return null;

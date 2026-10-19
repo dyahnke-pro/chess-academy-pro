@@ -181,3 +181,11 @@ describe('a side in check makes no file race (review walk 2026-10-01, game 2 ply
     expect(detectPlanRace('3r4/1R3k1p/p1rP2p1/2P2p2/N7/1P5P/P5P1/6K1 b - - 2 34', 'b')?.kind).not.toBe('file-collision');
   });
 });
+
+describe('no pawn storm with the queens off (Alekhine walk 2026-10-19)', () => {
+  it('the queenless ending after …f6 is not a storm race', () => {
+    const c = new Chess();
+    for (const m of 'e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Nc3 Qd7 Nf3 Bg4 Be2 O-O-O c5 Nd5 Nxd5 Qxd5 Kf2 e6 h3 Bf5 Qa4 Qe4 Qa3 Qc2 b4 Be7 b5 Nb8 Qxa7 Bd3 Rhe1 Bxb5 Rab1 Qa4 Qxa4 Bxa4 Nd2 f6'.split(' ')) c.move(m);
+    expect(detectPlanRace(c.fen(), 'w')?.kind).not.toBe('storm-race');
+  });
+});

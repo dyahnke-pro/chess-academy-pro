@@ -173,7 +173,8 @@ describe('sacrifices', () => {
 });
 
 describe('the attack race across wings (planRace)', () => {
-  const STORM = 'r4rk1/1pp2ppp/8/p5P1/8/8/PPP2P1P/2KR3R w - - 0 15';
+  // Queens on: a storm is an attack on a king (no storm in a queenless ending).
+  const STORM = 'r4rk1/1pp1qppp/8/p5P1/8/8/PPPQ1P1P/2KR3R w - - 0 15';
   it('races two storms on opposite wings in pushes to contact', () => {
     const race = detectPlanRace(STORM, 'w');
     expect(race?.kind).toBe('storm-race');

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**647 lines · 17 exports · 12 importers · 4 tests · 0 audits**
+**651 lines · 17 exports · 12 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,7 +29,7 @@
 ## Exports and every call site
 
 ### `stepsToPromote` (function) — 1 call site
-- `src/services/boardPlan.ts:46`
+- `src/services/boardPlan.ts:47`
 
 ### `RaceRegister` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -50,14 +50,14 @@
 - `src/services/planRace.test.ts:62`
 - `src/services/planRace.test.ts:64`
 
-### `detectPlanRace` (function) — 20 call sites
+### `detectPlanRace` (function) — 21 call sites
 - `scripts/endgame-drills/generate.ts:311`
 - `src/data/endgameConceptDrills.test.ts:32`
 - `src/data/endgameConceptDrills.test.ts:56`
-- `src/services/boardPlan.ts:124`
-- `src/services/conceptEngine.ts:606`
-- `src/services/kingAttackReads.test.ts:178`
-- `src/services/kingAttackReads.ts:702`
+- `src/services/boardPlan.ts:129`
+- `src/services/conceptEngine.ts:607`
+- `src/services/kingAttackReads.test.ts:179`
+- `src/services/kingAttackReads.ts:705`
 - `src/services/planRace.test.ts:22`
 - `src/services/planRace.test.ts:27`
 - `src/services/planRace.test.ts:34`
@@ -71,12 +71,13 @@
 - `src/services/planRace.test.ts:165`
 - `src/services/planRace.test.ts:173`
 - `src/services/planRace.test.ts:181`
+- `src/services/planRace.test.ts:189`
 
 ### `planRaceClause` (function) — 18 call sites
-- `src/services/boardPlan.ts:125`
-- `src/services/conceptEngine.ts:608`
-- `src/services/kingAttackReads.test.ts:184`
-- `src/services/kingAttackReads.ts:704`
+- `src/services/boardPlan.ts:130`
+- `src/services/conceptEngine.ts:609`
+- `src/services/kingAttackReads.test.ts:185`
+- `src/services/kingAttackReads.ts:707`
 - `src/services/planRace.test.ts:23`
 - `src/services/planRace.test.ts:38`
 - `src/services/planRace.test.ts:39`
@@ -90,18 +91,18 @@
 - `src/services/planRace.test.ts:109`
 - `src/services/planRace.test.ts:115`
 - `src/services/planRace.test.ts:157`
-- `src/services/reviewFullData.ts:981`
+- `src/services/reviewFullData.ts:1052`
 
 ### `fileClaimed` (function) — 4 call sites
-- `src/services/learnBoardTeaching.ts:218`
+- `src/services/learnBoardTeaching.ts:238`
 - `src/services/planRace.test.ts:140`
 - `src/services/planRace.test.ts:147`
 - `src/services/planRace.test.ts:148`
 
 ### `planRaceProof` (function) — 3 call sites
-- `src/services/kingAttackReads.test.ts:185`
-- `src/services/kingAttackReads.ts:705`
-- `src/services/reviewFullData.ts:982`
+- `src/services/kingAttackReads.test.ts:186`
+- `src/services/kingAttackReads.ts:708`
+- `src/services/reviewFullData.ts:1053`
 
 ### `PawnSquareRace` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -110,23 +111,23 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pawnSquareRaces` (function) — 2 call sites
-- `src/services/orderComputers.test.ts:163`
-- `src/services/orderComputers.test.ts:172`
+- `src/services/orderComputers.test.ts:173`
+- `src/services/orderComputers.test.ts:182`
 
 ### `pawnSquareRaceRead` (function) — 3 call sites
-- `src/services/orderComputers.test.ts:165`
 - `src/services/orderComputers.test.ts:175`
-- `src/services/orderReads.ts:108`
+- `src/services/orderComputers.test.ts:185`
+- `src/services/orderReads.ts:111`
 
 ### `pawnSquareTaken` (function) — 3 call sites
-- `src/services/orderComputers.test.ts:169`
-- `src/services/orderTeaching.ts:94`
-- `src/services/reviewFullData.ts:1103`
+- `src/services/orderComputers.test.ts:179`
+- `src/services/orderTeaching.ts:97`
+- `src/services/reviewFullData.ts:1174`
 
 ### `pawnSquareRaceProof` (function) — 3 call sites
-- `src/services/orderReads.ts:110`
-- `src/services/orderTeaching.ts:96`
-- `src/services/reviewFullData.ts:1104`
+- `src/services/orderReads.ts:113`
+- `src/services/orderTeaching.ts:99`
+- `src/services/reviewFullData.ts:1175`
 
 ## Tests
 
