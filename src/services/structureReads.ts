@@ -10,6 +10,7 @@ import type { Color } from 'chess.js';
 import { play, type StructureRead } from './structureJudgementKit';
 import { kingCommitted } from './splitPosition';
 import { squaresProof } from './proof';
+import { rooksOnSeventh, kingToCentre, pawnForDevelopment } from './endgameMoveReads';
 import {
   secondWeakness, keyPawn, fixOnBishopColour, recaptureSealed, enPassantStructure, formation,
   breakTradesWeakPawn, dontRepair, mirroredAsymmetry, formationChoice,
@@ -69,6 +70,9 @@ export function studentMoveStructure(i: StudentMoveStructureInput): StructureRea
     safe(() => formationChoice(fenBefore, san, student, bestSan, cpLoss)),
     safe(() => wedgePaysLater(fenBefore, san, student, bestUci, cpLoss)),
     safe(() => closedTacticalChance(fenBefore, san, student, bestUci, cpLoss)),
+    safe(() => rooksOnSeventh(fenBefore, san, student, cpLoss)),
+    safe(() => kingToCentre(fenBefore, san, student, cpLoss)),
+    safe(() => pawnForDevelopment(fenBefore, san, student, cpLoss)),
   ].filter((r): r is StructureRead => r !== null);
   if (i.namesBetterMove) return reads;
   // A read that names the better move carries its held form (`heldForm`);
