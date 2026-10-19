@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**842 lines · 25 exports · 4 importers · 1 tests · 0 audits**
+**851 lines · 25 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -53,9 +53,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:69`
 
 ### `captureAbandonsDuty` (function) — 3 call sites
-- `src/services/capabilityEvidence.ts:482`
-- `src/services/exchangeIdeas.test.ts:249`
-- `src/services/exchangeIdeas.test.ts:250`
+- `src/services/capabilityEvidence.ts:484`
+- `src/services/exchangeIdeas.test.ts:270`
+- `src/services/exchangeIdeas.test.ts:271`
 
 ### `tradeChoice` (function) — 2 call sites
 - `src/services/exchangeIdeas.test.ts:73`
@@ -66,7 +66,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:83`
 - `src/services/exchangeIdeas.test.ts:89`
 - `src/services/exchangeIdeas.test.ts:92`
-- `src/services/exchangeIdeas.test.ts:240`
+- `src/services/exchangeIdeas.test.ts:261`
 
 ### `maintenanceTrade` (function) — 2 call sites
 - `src/services/exchangeIdeas.test.ts:97`
@@ -87,13 +87,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `previousOwnMove` (function) — 3 call sites
 - `src/services/exchangeIdeas.test.ts:143`
 - `src/services/exchangeIdeas.test.ts:144`
-- `src/services/exchangeIdeas.test.ts:288`
+- `src/services/exchangeIdeas.test.ts:309`
 
 ### `safeBecause` (function) — 4 call sites
 - `src/services/exchangeIdeas.test.ts:135`
 - `src/services/exchangeIdeas.test.ts:138`
-- `src/services/exchangeIdeas.test.ts:263`
-- `src/services/exchangeIdeas.test.ts:289`
+- `src/services/exchangeIdeas.test.ts:284`
+- `src/services/exchangeIdeas.test.ts:310`
 
 ### `wingForCentre` (function) — 2 call sites
 - `src/services/exchangeIdeas.test.ts:150`
@@ -102,22 +102,25 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `materialArithmetic` (function) — 4 call sites
 - `src/services/exchangeIdeas.test.ts:157`
 - `src/services/exchangeIdeas.test.ts:161`
-- `src/services/exchangeIdeas.test.ts:275`
-- `src/services/exchangeIdeas.test.ts:276`
+- `src/services/exchangeIdeas.test.ts:296`
+- `src/services/exchangeIdeas.test.ts:297`
 
 ### `knightReach` (function) — 4 call sites
 - `src/services/captureChoice.ts:59`
-- `src/services/moveInsight.ts:1081`
-- `src/services/moveInsight.ts:1133`
-- `src/services/speedRunReads.ts:364`
+- `src/services/moveInsight.ts:1091`
+- `src/services/moveInsight.ts:1143`
+- `src/services/speedRunReads.ts:371`
 
-### `knightSquares` (function) — 3 call sites
+### `knightSquares` (function) — 6 call sites
 - `src/services/exchangeIdeas.test.ts:165`
 - `src/services/exchangeIdeas.test.ts:168`
 - `src/services/exchangeIdeas.test.ts:171`
+- `src/services/exchangeIdeas.test.ts:185`
+- `src/services/exchangeIdeas.test.ts:193`
+- `src/services/exchangeIdeas.test.ts:198`
 
 ### `cPawnBlock` (function) — 4 call sites
-- `src/services/capabilityEvidence.ts:536`
+- `src/services/capabilityEvidence.ts:538`
 - `src/services/exchangeIdeas.test.ts:175`
 - `src/services/exchangeIdeas.test.ts:177`
 - `src/services/exchangeIdeas.test.ts:178`
@@ -125,11 +128,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ExchangeIdeasInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `exchangeIdeas` (function) — 5 call sites
-- `src/services/exchangeIdeas.test.ts:196`
-- `src/services/exchangeIdeas.test.ts:197`
-- `src/services/exchangeIdeas.test.ts:201`
-- `src/services/positionFacts.ts:1162`
+### `exchangeIdeas` (function) — 6 call sites
+- `src/services/exchangeIdeas.test.ts:187`
+- `src/services/exchangeIdeas.test.ts:217`
+- `src/services/exchangeIdeas.test.ts:218`
+- `src/services/exchangeIdeas.test.ts:222`
+- `src/services/positionFacts.ts:1169`
 - `src/services/reviewFullData.ts:984`
 
 ## Tests

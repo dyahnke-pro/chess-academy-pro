@@ -111,7 +111,7 @@
 - `src/services/chatBoardRead.ts:81`
 - `src/services/claimChecker.measure.test.ts:106`
 - `src/services/computerAccuracy.audit.test.ts:112`
-- `src/services/exchangeIdeas.test.ts:229`
+- `src/services/exchangeIdeas.test.ts:250`
 - `src/services/forkTrick.test.ts:48`
 - `src/services/latentFork.test.ts:151`
 - `src/services/liveNeedGate.test.ts:132`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**908 lines · 28 exports · 7 importers · 7 tests · 0 audits**
+**914 lines · 28 exports · 7 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -57,8 +57,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:58`
 - `src/services/tacticalRead.test.ts:184`
 - `src/services/tacticalRead.test.ts:259`
-- `src/services/tacticalRead.test.ts:313`
-- `src/services/tacticalRead.test.ts:525`
+- `src/services/tacticalRead.test.ts:314`
+- `src/services/tacticalRead.test.ts:526`
 
 ### `MaterialAtEnd` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -67,7 +67,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:107`
 - `src/services/tacticalRead.test.ts:185`
 - `src/services/tacticalRead.test.ts:260`
-- `src/services/tacticalRead.test.ts:347`
+- `src/services/tacticalRead.test.ts:348`
 
 ### `appealScore` (function) — 5 call sites
 - `src/services/tacticalRead.test.ts:64`
@@ -99,65 +99,65 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:136`
 
 ### `tacticalReadFromLines` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10067`
+- `src/components/Coach/CoachTeachPage.tsx:10100`
 - `src/services/claimTruth.manual.test.ts:170`
 - `src/services/danyaBehaviors.ts:535`
 - `src/services/danyaDeviceCoverage.test.ts:73`
 - `src/services/liveVoiceDefects.test.ts:44`
-- `src/services/tacticalRead.test.ts:359`
-- `src/services/tacticalRead.test.ts:373`
-- `src/services/tacticalRead.test.ts:387`
-- `src/services/tacticalRead.test.ts:406`
-- `src/services/tacticalRead.test.ts:408`
-- `src/services/tacticalRead.test.ts:413`
+- `src/services/tacticalRead.test.ts:360`
+- `src/services/tacticalRead.test.ts:374`
+- `src/services/tacticalRead.test.ts:388`
+- `src/services/tacticalRead.test.ts:407`
+- `src/services/tacticalRead.test.ts:409`
 - `src/services/tacticalRead.test.ts:414`
-- `src/services/tacticalRead.test.ts:420`
-- `src/services/tacticalRead.test.ts:615`
+- `src/services/tacticalRead.test.ts:415`
+- `src/services/tacticalRead.test.ts:421`
+- `src/services/tacticalRead.test.ts:616`
 
 ### `narrateTacticalRead` (function) — 7 call sites
 - `src/services/tacticalRead.test.ts:170`
 - `src/services/tacticalRead.test.ts:190`
 - `src/services/tacticalRead.test.ts:205`
 - `src/services/tacticalRead.test.ts:211`
-- `src/services/tacticalRead.test.ts:556`
-- `src/services/tacticalRead.test.ts:638`
-- `src/services/tacticalRead.test.ts:641`
+- `src/services/tacticalRead.test.ts:557`
+- `src/services/tacticalRead.test.ts:639`
+- `src/services/tacticalRead.test.ts:642`
 
 ### `temptingTurnClause` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10082`
+- `src/components/Coach/CoachTeachPage.tsx:10115`
 - `src/services/danyaDeviceCoverage.test.ts:79`
-- `src/services/tacticalRead.test.ts:447`
-- `src/services/tacticalRead.test.ts:460`
+- `src/services/tacticalRead.test.ts:448`
+- `src/services/tacticalRead.test.ts:461`
 
 ### `uncertaintyClause` (function) — 15 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10094`
+- `src/components/Coach/CoachTeachPage.tsx:10127`
 - `src/services/claimTruth.manual.test.ts:172`
 - `src/services/danyaDeviceCoverage.test.ts:84`
 - `src/services/liveVoiceDefects.test.ts:255`
-- `src/services/tacticalRead.test.ts:432`
-- `src/services/tacticalRead.test.ts:453`
-- `src/services/tacticalRead.test.ts:461`
-- `src/services/tacticalRead.test.ts:536`
-- `src/services/tacticalRead.test.ts:547`
-- `src/services/tacticalRead.test.ts:583`
-- `src/services/tacticalRead.test.ts:587`
-- `src/services/tacticalRead.test.ts:590`
+- `src/services/tacticalRead.test.ts:433`
+- `src/services/tacticalRead.test.ts:454`
+- `src/services/tacticalRead.test.ts:462`
+- `src/services/tacticalRead.test.ts:537`
+- `src/services/tacticalRead.test.ts:548`
+- `src/services/tacticalRead.test.ts:584`
+- `src/services/tacticalRead.test.ts:588`
 - `src/services/tacticalRead.test.ts:591`
 - `src/services/tacticalRead.test.ts:592`
-- `src/services/tacticalRead.test.ts:649`
+- `src/services/tacticalRead.test.ts:593`
+- `src/services/tacticalRead.test.ts:650`
 
 ### `candidateCompareClause` (function) — 8 call sites
 - `src/services/danyaDeviceCoverage.test.ts:89`
-- `src/services/tacticalRead.test.ts:465`
-- `src/services/tacticalRead.test.ts:473`
-- `src/services/tacticalRead.test.ts:483`
-- `src/services/tacticalRead.test.ts:492`
-- `src/services/tacticalRead.test.ts:499`
-- `src/services/tacticalRead.test.ts:604`
-- `src/services/tacticalRead.test.ts:607`
+- `src/services/tacticalRead.test.ts:466`
+- `src/services/tacticalRead.test.ts:474`
+- `src/services/tacticalRead.test.ts:484`
+- `src/services/tacticalRead.test.ts:493`
+- `src/services/tacticalRead.test.ts:500`
+- `src/services/tacticalRead.test.ts:605`
+- `src/services/tacticalRead.test.ts:608`
 
 ### `candidateCompareRead` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10104`
+- `src/components/Coach/CoachTeachPage.tsx:10137`
 - `src/services/compareClaimsNoEdge.test.ts:12`
 
 ### `temptingFromAnalysis` (function) — 6 call sites
@@ -174,35 +174,35 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `tacticalReadFacts` (function) — 3 call sites
 - `src/services/tacticalRead.test.ts:244`
 - `src/services/tacticalRead.test.ts:256`
-- `src/services/tacticalRead.test.ts:425`
+- `src/services/tacticalRead.test.ts:426`
 
 ### `voiceRejectsBestMove` (function) — 7 call sites
-- `src/services/tacticalRead.test.ts:277`
-- `src/services/tacticalRead.test.ts:279`
+- `src/services/tacticalRead.test.ts:278`
 - `src/services/tacticalRead.test.ts:280`
 - `src/services/tacticalRead.test.ts:281`
-- `src/services/tacticalRead.test.ts:284`
+- `src/services/tacticalRead.test.ts:282`
 - `src/services/tacticalRead.test.ts:285`
-- `src/services/tacticalRead.test.ts:288`
+- `src/services/tacticalRead.test.ts:286`
+- `src/services/tacticalRead.test.ts:289`
 
 ### `lineOutcomeClause` (function) — 7 call sites
-- `src/services/tacticalRead.test.ts:292`
-- `src/services/tacticalRead.test.ts:295`
+- `src/services/tacticalRead.test.ts:293`
 - `src/services/tacticalRead.test.ts:296`
 - `src/services/tacticalRead.test.ts:297`
 - `src/services/tacticalRead.test.ts:298`
-- `src/services/tacticalRead.test.ts:301`
+- `src/services/tacticalRead.test.ts:299`
 - `src/services/tacticalRead.test.ts:302`
+- `src/services/tacticalRead.test.ts:303`
 
 ### `groundedMoveKeys` (function) — 1 call site
-- `src/services/tacticalRead.test.ts:328`
+- `src/services/tacticalRead.test.ts:329`
 
 ### `voiceNamesUngroundedMove` (function) — 5 call sites
-- `src/services/tacticalRead.test.ts:306`
-- `src/services/tacticalRead.test.ts:316`
-- `src/services/tacticalRead.test.ts:319`
-- `src/services/tacticalRead.test.ts:322`
-- `src/services/tacticalRead.test.ts:325`
+- `src/services/tacticalRead.test.ts:307`
+- `src/services/tacticalRead.test.ts:317`
+- `src/services/tacticalRead.test.ts:320`
+- `src/services/tacticalRead.test.ts:323`
+- `src/services/tacticalRead.test.ts:326`
 
 ## Tests
 

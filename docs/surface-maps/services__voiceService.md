@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3158 lines · 19 exports · 109 importers · 100 tests · 23 audits**
+**3156 lines · 19 exports · 109 importers · 100 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,7 +17,7 @@
 - **🧒 Kids section — non-negotiables** (CLAUDE.md:3586) — names `voiceService`
 - **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3889) — names `voiceService`
 - **Shared types / services** (CLAUDE.md:5540) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6383) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6401) — names `voiceService`
 
 ## Who calls in
 
@@ -232,7 +232,7 @@
 ### `normalizePieceShorthand` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `sanitizeForTTS` (function) — 56 call sites
+### `sanitizeForTTS` (function) — 64 call sites
 - `src/components/Openings/OpeningDetailPage.tsx:687`
 - `src/components/Settings/VoiceSettingsPanel.tsx:118`
 - `src/components/Settings/VoiceSettingsPanel.tsx:160`
@@ -273,19 +273,27 @@
 - `src/services/sanitizeForTTS.test.ts:244`
 - `src/services/sanitizeForTTS.test.ts:248`
 - `src/services/sanitizeForTTS.test.ts:252`
-- `src/services/sanitizeForTTS.test.ts:256`
-- `src/services/sanitizeForTTS.test.ts:260`
+- `src/services/sanitizeForTTS.test.ts:253`
+- `src/services/sanitizeForTTS.test.ts:257`
+- `src/services/sanitizeForTTS.test.ts:258`
+- `src/services/sanitizeForTTS.test.ts:259`
+- `src/services/sanitizeForTTS.test.ts:263`
 - `src/services/sanitizeForTTS.test.ts:264`
-- `src/services/sanitizeForTTS.test.ts:265`
-- `src/services/sanitizeForTTS.test.ts:271`
-- `src/services/sanitizeForTTS.test.ts:274`
+- `src/services/sanitizeForTTS.test.ts:268`
+- `src/services/sanitizeForTTS.test.ts:272`
+- `src/services/sanitizeForTTS.test.ts:276`
 - `src/services/sanitizeForTTS.test.ts:280`
-- `src/services/sanitizeForTTS.test.ts:283`
-- `src/services/sanitizeForTTS.test.ts:290`
+- `src/services/sanitizeForTTS.test.ts:284`
+- `src/services/sanitizeForTTS.test.ts:285`
 - `src/services/sanitizeForTTS.test.ts:291`
-- `src/services/sanitizeForTTS.test.ts:295`
-- `src/services/sanitizeForTTS.test.ts:302`
-- `src/services/sanitizeForTTS.test.ts:306`
+- `src/services/sanitizeForTTS.test.ts:294`
+- `src/services/sanitizeForTTS.test.ts:300`
+- `src/services/sanitizeForTTS.test.ts:303`
+- `src/services/sanitizeForTTS.test.ts:310`
+- `src/services/sanitizeForTTS.test.ts:311`
+- `src/services/sanitizeForTTS.test.ts:315`
+- `src/services/sanitizeForTTS.test.ts:322`
+- `src/services/sanitizeForTTS.test.ts:326`
 - `src/services/voiceService.sentenceFirst.test.ts:127`
 - `src/services/voiceService.sentenceFirst.test.ts:139`
 - `src/utils/spokenWords.test.ts:5`
