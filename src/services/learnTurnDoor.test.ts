@@ -218,7 +218,8 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
   });
   it('Learn hands every line-speaking producer\'s lines to the queue, and draws on-screen and earlier boards apart', () => {
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', .*?, undefined, undefined, undefined, undefined, pendingRegisterLines\)/);
-    expect(TEACH_CODE).toMatch(/pendingRegisterLines = \[\{ fen: probe\.fen\(\), sans: \[compareRead\.bestSan\] \}/);
+    // The student's best move is never drawn before they play it (prod walk 2026-10-19).
+    expect(TEACH_CODE).not.toMatch(/sans: \[compareRead\.bestSan\]/);
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), c\.text, lane, .*?, c\.squares, c\.claim \? \[c\.claim\] : undefined, c\.gradeFen, undefined, c\.lines, c\.stakes, FACT_ROLE\[c\.kind\], c\.kind, c\.skill\)/);
     expect(TEACH_CODE).toMatch(/(?:fundamental|fund)\?\.lines[,)]/);
     expect(TEACH_CODE).toMatch(/'fundamental', NO_PROOF\.method, \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG\[fundamental\.id\] \?\? undefined\)/);
@@ -711,7 +712,9 @@ describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-1
     // One forwarder for every computed hint — arrows, stakes and role ride.
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(fen, hint\.text, hint\.lane, hint\.proof, hint\.squares, hint\.claims, gradeFen, hint\.arrows, undefined, hint\.stakes, hint\.role\)/);
     expect(TEACH_CODE).not.toMatch(/queueSpokenHint\([^,\n]*, (\w+)\.text, \1\.lane, \1\.proof, \1\.squares, \1\.claims\)/);
-    expect(TEACH_CODE).toMatch(/source: 'learn\.priorityFirst' \}\], undefined, undefined, 'teach'\)/);
+    // Priority-first speaks its reason with NO arrow: the arrow would be the answer.
+    expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), pfLine, 'priorityFirst', [^\n]*, \[pf\.targetSquare\], undefined, undefined, undefined, undefined, undefined, 'teach'\)/);
+    expect(TEACH_CODE).not.toMatch(/source: 'learn\.priorityFirst'/);
   });
 });
 
