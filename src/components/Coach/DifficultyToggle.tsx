@@ -38,7 +38,7 @@ export function DifficultyToggle({
             key={key}
             onClick={() => onChange(key)}
             disabled={disabled}
-            className="px-3 py-1 text-sm font-medium transition-all duration-200 disabled:opacity-40"
+            className="px-2 py-0.5 text-xs sm:px-3 sm:py-1 sm:text-sm font-medium transition-all duration-200 disabled:opacity-40"
             style={{
               background: active ? n.activeBg : 'var(--color-surface)',
               color: active ? 'var(--color-bg)' : 'var(--color-text-muted)',

@@ -13019,6 +13019,87 @@ export function CoachTeachPage(): JSX.Element {
     void handleSubmit(choice);
   }, [handleSubmit, walkthrough.tree]);
 
+  // Tour / Chat / Tips: in the header's second row on desktop, in the Coach
+  // bar on a phone (one header row there, so the board gets the height).
+  const teachActions = (
+    <div className="flex items-center gap-2">
+      <button
+        onClick={togglePace}
+        className="flex-shrink-0 flex items-center gap-1.5 px-2 py-1 md:px-2.5 md:py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
+        style={{
+          background: pace === 'tour' ? 'var(--color-accent)' : 'var(--color-surface)',
+          color: pace === 'tour' ? 'var(--color-bg)' : 'var(--color-text-muted)',
+          borderTop: pace === 'tour' ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
+          borderRight: pace === 'tour' ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
+          borderLeft: pace === 'tour' ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid var(--color-border)',
+          borderBottom: pace === 'tour' ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid var(--color-border)',
+        }}
+        aria-label={pace === 'tour' ? 'Switch to full lesson' : 'Switch to quick tour'}
+        aria-pressed={pace === 'tour'}
+        data-testid="teach-pace-toggle"
+      >
+        <Zap size={16} />
+        <span className="hidden sm:inline">{pace === 'tour' ? 'Tour' : 'Full'}</span>
+      </button>
+      <button
+        onClick={() => {
+          // At md+ the chat panel is ALREADY inline (right column) —
+          // opening the floating GlobalCoachDrawer there duplicated the
+          // chat AND its fixed bottom-right card sat on top of the
+          // teach-picker tiles, swallowing their clicks (found driving
+          // the surface, David-approved fix 2026-07-28). Desktop: focus
+          // the inline input. Mobile (stacked): keep the drawer sheet.
+          const mdUp = typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches;
+          if (mdUp) {
+            const el = document.querySelector<HTMLTextAreaElement>('[data-testid="chat-text-input"] textarea, [data-testid="chat-text-input"]');
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              el.focus();
+              return;
+            }
+          }
+          useAppStore.getState().setCoachDrawerOpen(true);
+        }}
+        className="flex-shrink-0 flex items-center gap-1.5 px-2 py-1 md:px-2.5 md:py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
+        style={{
+          background: 'var(--color-accent)',
+          color: 'var(--color-bg)',
+          borderTop: '1px solid rgba(201, 168, 76, 0.3)',
+          borderRight: '1px solid rgba(201, 168, 76, 0.3)',
+          borderLeft: '2px solid rgba(201, 168, 76, 0.8)',
+          borderBottom: '2px solid rgba(201, 168, 76, 0.8)',
+          boxShadow: '0 0 8px rgba(201, 168, 76, 0.6), 0 0 18px rgba(201, 168, 76, 0.35), 0 0 30px rgba(201, 168, 76, 0.2)',
+        }}
+        aria-label="Open chat"
+        data-testid="teach-chat-button"
+      >
+        <MessageCircle size={16} />
+        <span className="hidden sm:inline">Chat</span>
+      </button>
+      <button
+        onClick={() => void updateSetting('coachBoardMarkersOn', !coachTipsOn)}
+      className="flex-shrink-0 flex items-center gap-1.5 px-2 py-1 md:px-2.5 md:py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
+      style={{
+        background: coachTipsOn ? 'var(--color-accent)' : 'var(--color-surface)',
+        color: coachTipsOn ? 'var(--color-bg)' : 'var(--color-text-muted)',
+        borderTop: coachTipsOn ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
+        borderRight: coachTipsOn ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
+        borderLeft: coachTipsOn ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid rgba(234, 179, 8, 0.5)',
+        borderBottom: coachTipsOn ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid rgba(234, 179, 8, 0.5)',
+        boxShadow: coachTipsOn
+          ? '0 0 8px rgba(201, 168, 76, 0.6), 0 0 18px rgba(201, 168, 76, 0.35), 0 0 30px rgba(201, 168, 76, 0.2)'
+          : '0 0 6px rgba(234, 179, 8, 0.35), 0 0 14px rgba(234, 179, 8, 0.2), 0 0 24px rgba(234, 179, 8, 0.1)',
+      }}
+      aria-label={coachTipsOn ? 'Disable coach tips' : 'Enable coach tips'}
+      aria-pressed={coachTipsOn}
+      data-testid="coach-tips-toggle"
+    >
+      <Lightbulb size={16} />
+      <span className="hidden sm:inline">Tips</span>
+    </button>
+    </div>
+  );
+
   return (
     <div
       className="relative flex flex-col md:flex-row h-full overflow-x-hidden overflow-y-auto md:overflow-hidden pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-0"
@@ -13128,23 +13209,27 @@ export function CoachTeachPage(): JSX.Element {
         {/* Header — mirrors CoachGamePage's two-row pattern. Row 1:
             back + title + color selector + analysis toggles. Row 2:
             difficulty + coach tips. Same chrome as /coach/play. */}
-        <div className="px-3 py-2 md:p-4 border-b border-theme-border space-y-1.5">
+        <div className="px-2 py-1 md:p-4 border-b border-theme-border md:space-y-1.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 md:gap-3">
               <button
                 onClick={() => void navigate('/coach/home')}
-                className="p-2 rounded-lg hover:bg-theme-surface min-w-[44px] min-h-[44px] flex items-center justify-center"
+                className="p-1 md:p-2 rounded-lg hover:bg-theme-surface min-w-[36px] min-h-[36px] md:min-w-[44px] md:min-h-[44px] flex items-center justify-center"
                 aria-label="Back to coach hub"
               >
                 <ArrowLeft size={20} className="text-theme-text" />
               </button>
-              <div>
+              <div className="hidden md:block">
                 <h2 className="text-sm font-semibold text-theme-text">
                   Learn with Coach
                 </h2>
                 <p className="text-xs text-theme-text-muted">
                   Lessons + analysis
                 </p>
+              </div>
+              {/* Phone: the difficulty sits in the one header row. */}
+              <div className="md:hidden">
+                <DifficultyToggle value={difficulty} onChange={setDifficulty} disabled={game.history.length > 0} />
               </div>
             </div>
             <div className="flex items-center gap-1 md:gap-2">
@@ -13199,88 +13284,13 @@ export function CoachTeachPage(): JSX.Element {
               button is a permanent fixture per user request — it
               opens the global coach drawer for ad-hoc questions
               without taking the student out of the walkthrough. */}
-          <div className="flex items-center justify-between pl-12 md:pl-14">
+          <div className="hidden md:flex items-center justify-between pl-12 md:pl-14">
             <DifficultyToggle
               value={difficulty}
               onChange={setDifficulty}
               disabled={game.history.length > 0}
             />
-            <div className="flex items-center gap-2">
-              <button
-                onClick={togglePace}
-                className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
-                style={{
-                  background: pace === 'tour' ? 'var(--color-accent)' : 'var(--color-surface)',
-                  color: pace === 'tour' ? 'var(--color-bg)' : 'var(--color-text-muted)',
-                  borderTop: pace === 'tour' ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
-                  borderRight: pace === 'tour' ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
-                  borderLeft: pace === 'tour' ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid var(--color-border)',
-                  borderBottom: pace === 'tour' ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid var(--color-border)',
-                }}
-                aria-label={pace === 'tour' ? 'Switch to full lesson' : 'Switch to quick tour'}
-                aria-pressed={pace === 'tour'}
-                data-testid="teach-pace-toggle"
-              >
-                <Zap size={16} />
-                <span className="hidden sm:inline">{pace === 'tour' ? 'Tour' : 'Full'}</span>
-              </button>
-              <button
-                onClick={() => {
-                  // At md+ the chat panel is ALREADY inline (right column) —
-                  // opening the floating GlobalCoachDrawer there duplicated the
-                  // chat AND its fixed bottom-right card sat on top of the
-                  // teach-picker tiles, swallowing their clicks (found driving
-                  // the surface, David-approved fix 2026-07-28). Desktop: focus
-                  // the inline input. Mobile (stacked): keep the drawer sheet.
-                  const mdUp = typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches;
-                  if (mdUp) {
-                    const el = document.querySelector<HTMLTextAreaElement>('[data-testid="chat-text-input"] textarea, [data-testid="chat-text-input"]');
-                    if (el) {
-                      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                      el.focus();
-                      return;
-                    }
-                  }
-                  useAppStore.getState().setCoachDrawerOpen(true);
-                }}
-                className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
-                style={{
-                  background: 'var(--color-accent)',
-                  color: 'var(--color-bg)',
-                  borderTop: '1px solid rgba(201, 168, 76, 0.3)',
-                  borderRight: '1px solid rgba(201, 168, 76, 0.3)',
-                  borderLeft: '2px solid rgba(201, 168, 76, 0.8)',
-                  borderBottom: '2px solid rgba(201, 168, 76, 0.8)',
-                  boxShadow: '0 0 8px rgba(201, 168, 76, 0.6), 0 0 18px rgba(201, 168, 76, 0.35), 0 0 30px rgba(201, 168, 76, 0.2)',
-                }}
-                aria-label="Open chat"
-                data-testid="teach-chat-button"
-              >
-                <MessageCircle size={16} />
-                <span className="hidden sm:inline">Chat</span>
-              </button>
-              <button
-                onClick={() => void updateSetting('coachBoardMarkersOn', !coachTipsOn)}
-              className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
-              style={{
-                background: coachTipsOn ? 'var(--color-accent)' : 'var(--color-surface)',
-                color: coachTipsOn ? 'var(--color-bg)' : 'var(--color-text-muted)',
-                borderTop: coachTipsOn ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
-                borderRight: coachTipsOn ? '1px solid rgba(201, 168, 76, 0.3)' : '1px solid var(--color-border)',
-                borderLeft: coachTipsOn ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid rgba(234, 179, 8, 0.5)',
-                borderBottom: coachTipsOn ? '2px solid rgba(201, 168, 76, 0.8)' : '2px solid rgba(234, 179, 8, 0.5)',
-                boxShadow: coachTipsOn
-                  ? '0 0 8px rgba(201, 168, 76, 0.6), 0 0 18px rgba(201, 168, 76, 0.35), 0 0 30px rgba(201, 168, 76, 0.2)'
-                  : '0 0 6px rgba(234, 179, 8, 0.35), 0 0 14px rgba(234, 179, 8, 0.2), 0 0 24px rgba(234, 179, 8, 0.1)',
-              }}
-              aria-label={coachTipsOn ? 'Disable coach tips' : 'Enable coach tips'}
-              aria-pressed={coachTipsOn}
-              data-testid="coach-tips-toggle"
-            >
-              <Lightbulb size={16} />
-              <span className="hidden sm:inline">Tips</span>
-            </button>
-            </div>
+            {teachActions}
           </div>
         </div>
 
@@ -13292,6 +13302,11 @@ export function CoachTeachPage(): JSX.Element {
             capturedPieces={isTeachPlayerWhite ? teachCaptured.black : teachCaptured.white}
             materialAdvantage={isTeachPlayerWhite ? Math.max(0, -teachMaterialAdv) : Math.max(0, teachMaterialAdv)}
             isActive={busy}
+            // THE SILENCE SAYS WHY (David 2026-10-17): while the reply waits on
+            // the reason, the board is locked — said in the coach's bar, so the
+            // board never moves for it.
+            status={opponentThinking ? 'Thinking…' : undefined}
+            actions={<div className="md:hidden">{teachActions}</div>}
           />
         </div>
 
@@ -13471,14 +13486,6 @@ export function CoachTeachPage(): JSX.Element {
                   annotationHighlights={coachTipsOn && highlights.length > 0 ? highlights : undefined}
                 />
               )
-            )}
-            {/* THE SILENCE SAYS WHY (David 2026-10-17): while the reply waits on
-                the reason, the board is locked — say so, so a student does not
-                read the pause as nothing to hear. */}
-            {opponentThinking && (
-              <div data-testid="coach-thinking" className="text-xs text-theme-text-muted text-center mt-1 animate-pulse">
-                Thinking…
-              </div>
             )}
           </div>
         </div>
