@@ -50,7 +50,7 @@ describe('decisiveReason — never invents THE reason', () => {
     const r = run('e4');
     expect(r?.gapCp).toBeLessThan(CLOSE_GAP_CP);
     expect(r?.kind).toBe('close');
-    expect(r?.text).toMatch(/^There is no single reason here — d4 is about as good\. One thing it does: e4 /);
+    expect(r?.text).toMatch(/^One thing it does: e4 .*It isn't the only good move — d4 is about as good\.$/);
   });
   it('a real gap nothing accounts for: A reason, marked as one', () => {
     const r = run('b4');

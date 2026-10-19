@@ -309,7 +309,10 @@ export function decisiveReason(input: {
       return { ...base, kind: 'close', source: 'description', stakeCp: null, core: contrast, text: `Two plans here, about equal: ${contrast}`, line: null, squares: [] };
     }
     // A shared reason is still a reason: said first, the equal move after.
-    const closeText = stops ? `${what} ${openSentence(alt)}.` : `There is no single reason here — ${alt}.${what ? ` ${what}` : ''}`;
+    // The reason LEADS; the equal move follows (prod walk 2026-10-19: "why is
+    // that move best?" opened "There is no single reason here", answering a
+    // why with a no before saying what the move does).
+    const closeText = stops ? `${what} ${openSentence(alt)}.` : what ? `${what} It isn't the only good move — ${alt}.` : `It isn't the only good move here — ${alt}.`;
     return { ...base, kind: 'close', source: src, stakeCp: null, core: what, text: closeText, line: useQuiet ? quiet?.line ?? null : null, squares: useQuiet ? quiet?.squares ?? [] : [] };
   }
   if (top && (top.stake >= COVERS_SHARE * gapCp || covering.includes(top))) {
