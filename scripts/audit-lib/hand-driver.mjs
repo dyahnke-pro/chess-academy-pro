@@ -18,6 +18,7 @@ import { startAuditListener } from './audit-listener.mjs';
 import { autoDismissCalibration } from './auto-dismiss.mjs';
 import { muteTtsForAudit, stampAuditRunId } from './mute-tts.mjs';
 import { readPlacement, samePlacement, placementOf, clickMove, sleep } from './board-drive.mjs';
+import { loadFixtureIntoIDB } from './fixture-loader.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const PORT = Number(process.env.HAND_PORT ?? 7777);
@@ -205,6 +206,11 @@ const routes = {
     const n = Number(q.get('n') ?? 40);
     const re = q.get('grep') ? new RegExp(q.get('grep'), 'i') : null;
     return consoleLines.filter((l) => !re || re.test(l)).slice(-n);
+  },
+  /** Load a real data drop into this browser (`/fixture?path=…`, default the
+   *  standard fixture), so a walk plays with a real record. */
+  async fixture(q) {
+    return loadFixtureIntoIDB(page, q.get('path') ?? undefined);
   },
   /** Any surface, not only Learn — `/goto?path=/tactics`. Returns the page's
    *  visible text and its testids, so a walk reads what a person would. */
