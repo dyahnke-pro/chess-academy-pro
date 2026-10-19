@@ -39,7 +39,7 @@ So this file covers:
 
 | # | move | what the student heard (exact) | the fact (engine d18–20 / board) | producer | root-cause fix |
 |---|---|---|---|---|---|
-| 1 | 12.Bb3 (−0.7), 22.Rxa5 (−5.3 blunder), 26 | Bb3: chat shows "Nf6+? That drops the rook on a1. Bb3 was a mistake — it cost about a point…", but the voice says only "Checks, captures, threats: nothing of yours can be taken… find it. So the plan: break open with the pawn push that is ready now." Rxa5: the voice says only "No rush yet — if you play b4 and they answer Ra1, their rook on a1 pins your bishop on c1 against your king on g1." | The verdicts are logged `CoachTeachPage.trackA` "track A spoke" (t=139797, 259282, 305906), but no `voice-speak-invoked` / `speakCloud` event carries them: **the mistake and the blunder were never voiced.** | `CoachTeachPage.tsx:10893-10937` `speakTrackA` | It logs at enqueue. The late-wave verdict queues in `speechChainRef` behind the instant wave's long plan line, and the `trackAGenRef` check drops it on the next action (student move or typed message). On a verdict turn the verdict must lead the voice (pre-empt the instant wave's slow lanes), and "spoke" must be emitted when `voiceService` starts the line. Partly reinforced by H2, but a student who moves while the plan line is still talking loses it the same way. |
+| 1 | 12.Bb3 (−0.7), 22.Rxa5 (−5.3 blunder), 26 | Bb3: chat shows "Nf6+? That drops the rook on a1. Bb3 was a mistake — it cost about a point…", but the voice says only "Checks, captures, threats: nothing of yours can be taken… find it. So the plan: break open with the pawn push that is ready now." Rxa5: the voice says only "No rush yet — if you play b4 and they answer Ra1, their rook on a1 pins your bishop on c1 against your king on g1." | The verdicts are logged `CoachTeachPage.trackA` "track A spoke" (t=139797, 259282, 305906), but no `voice-speak-invoked` / `speakCloud` event carries them: **the mistake and the blunder were never voiced.** | `CoachTeachPage.tsx:10893-10937` `speakTrackA` — and the door: the 12.Bb3 `learn-turn-decision` row reads `spoke=[mistake,positionFacts] lead=positionFacts held={register:aside, positionFacts:verdict-turn, rejectedTempting:aside}` — on a costly turn the lead was the CCT/plan fact, not the mistake | It logs at enqueue. The late-wave verdict queues in `speechChainRef` behind the instant wave's long plan line, and the `trackAGenRef` check drops it on the next action (student move or typed message). On a verdict turn the verdict must lead the voice (pre-empt the instant wave's slow lanes), and "spoke" must be emitted when `voiceService` starts the line. Partly reinforced by H2, but a student who moves while the plan line is still talking loses it the same way. |
 | 2 | 2.Ne2, 7.Bb5, Black 1…e5 | "It's level, so make chances: one move here creates an imbalance — doubled pawns for them — and the quiet move keeps it level." | False. After 1.e4 c5 2.Ne2 Nc6 the top line is d4 cxd4 Nxd4 (+0.39): Black's d7 + d4 are "doubled" for one ply only, until Nxd4. In the Black game, 2…Nc6 3.dxe5 is undone by …Nxe5. | `planJudgement.ts:252-277` `fightingLine`; `imbalanceOf(fen, first 2 plies)` at :265-266 | Read the imbalance at the quiet end of the line, after recaptures (the gem doctrine's rule), never mid-trade. |
 | 3 | 16.Ne3 | "Knight to e3 heads for their king — knight to f5 next brings the knight to bear." | Names the student's next move, Nf5. | `kingAttack.ts:132` ('heads-for-king' puts `next.san` in the sentence) | Hold the square ("…one more knight move brings it to bear"), or make the lane take the one REQUIRED may-name flag (see #4). |
 | 4 | 16, 20, 21; Black 1…e5 | 16: "walk it to c3, by way of d2"; 20: "chase it with c3 … on c3 it would cover that square"; 21: "The order matters: rook to f2 before knight to c4."; Black 1…e5: "you almost always take on d4 … you gain time hitting it with the knight to c6" | Each names a move the student has not played: Bd2/Bc3, c3, Nc4, …exd4 and …Nc6 (the last still in book, so the theory carve-out does not apply). | `squareJudgement.ts:230` (c3); `moveOrder.ts:134` (Nc4 — and its reason sentence was dropped, so the line has no why); the opening-identity lane (`openingIdentityTeaching`, learnBoardTeaching.ts ~780); the plan route in the planArc "Here's how" body (`planThread.ts:166`) | One decision, eight flag names (`namesBetterMove` / `namesMove` / `nameMove` / `namesMoves` / `holdPlayable` / `namesBestMove` / `holdStudentMoves` / `namesStudentMoves`). `Read.namesMove` and `holdStudentMoves` are optional (`speedRunReads.ts:37`, `arrowDoor.ts:71`). Make one REQUIRED may-name field on every fact, so a producer that names a student move cannot compile without answering it. |
@@ -121,3 +121,33 @@ OUTLINE/PLAN state. Each line of a walk is graded against this, not against what
 - Average ≤ 80 heard words per turn — an average, not a limit.
 - Turn latency (move to reply) and board size per move, as trends.
 - Before calling a lane silent, check `learn-turn-decision`: held and never-fired are different bugs.
+
+
+## The games (on record)
+
+**Game 1 — White, 42 moves.** Sicilian, Keres (2.Ne2). Free-played on `main` b629e25, then replayed with the same moves on b494915. Move numbers in the table refer to this game:
+
+```
+e4 c5 Ne2 Nc6 Nbc3 e5 Ng3 Nf6 Bc4 d6 h3 Be7 Bb5 O-O O-O Nd4 Bc4 Be6 d3 Nd7 Nd5 Bh4 Bb3 Nxb3 axb3 Bxg3 fxg3 Nb8 Qh5 a5 Ne3 b6 Qh4 Nc6 Ra3 Qxh4 gxh4 Rfd8 h5 Nd4 Rf2 Ra7 Rxa5 Rxa5 Bd2 Ra7 h6 gxh6 Nf1 Kg7 Ng3 Rg8 Nh5+ Kf8 Nf6 Rg6 h4 Kg7 Ne8+ Kf8 Nxd6 Nxc2 h5 Rg8 Ne8 Kxe8 Bxh6 Ra1+ Rf1 Kd7 Rxa1 Kc6 Rf1 Kb5 Bd2 Nd4 Kh2 Nxb3 Be3 Rg4 Kg1 Rh4 Bg5 Rg4
+```
+
+Planned slips: 12.Bb3 (mistake), 22.Rxa5 (blunder), 33.Ne8 (mistake). 7.Bb5, 17.Qh4 and 28.Nf6 were small inaccuracies.
+
+**Game 2 — Black, Center Game.** Fair pace, cut at move 4 when OS-1 arrived:
+
+```
+e4 e5 d4 exd4 c3 d5 exd5 Qxd5 cxd4
+```
+
+**Game 3 — Black, French Exchange.** Fast pace (before the voice-idle fix), cut at move 7:
+
+```
+e4 e6 Nf3 d5 exd5 exd5 d4 Nf6 Bg5 Bd6 Be2 Na6 Nc3 Be6 Bxa6
+```
+
+**Unvoiced-verdict timestamps** (ms from the game start, the app's own `learnTranscript`, game 1 on b494915):
+- t=139797: 12.Bb3 verdict;
+- t=259282: 22.Rxa5 blunder verdict;
+- t=305906: the 26.Ng3 "Move it with gain…" line.
+
+None of the three is followed by a `voice-speak-invoked` / `speakCloud` event carrying its text.
