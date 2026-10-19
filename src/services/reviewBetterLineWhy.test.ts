@@ -60,7 +60,7 @@ describe('review — the better-line why on flagged moves', () => {
     });
     const text = narration.segments.find((s) => s.ply === 7)?.narration ?? '';
     expect(text).toMatch(/Ng5/);                   // the better move is still named
-    expect(text).not.toMatch(/the line runs/);     // …but no recital that proves nothing
+    expect(text).not.toMatch(/the line goes:/);     // …but no recital that proves nothing
   });
 
   it('a line that PROVES something is spoken to its result and stops', async () => {
@@ -75,7 +75,7 @@ describe('review — the better-line why on flagged moves', () => {
       moves: buildMoves(), playerColor: 'white', openingName: 'Italian Game', result: '1-0', playerRating: 1500, coachNarration: 'silent',
     });
     const text = narration.segments.find((s) => s.ply === 7)?.narration ?? '';
-    expect(text).toMatch(/Why Ng5 was better — the line runs Ng5, h6 and Nxf7 — you win a pawn/);
+    expect(text).toMatch(/Why Ng5 was better — the line goes: you play Ng5, they answer h6 and you play Nxf7 — you win a pawn/);
     expect(text).not.toMatch(/Qe7/);               // cut where the claim settled
   });
 
