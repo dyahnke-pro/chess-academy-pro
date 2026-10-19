@@ -60,6 +60,9 @@ export function discoveryRevealed(chessAfter: Chess, from: Square, to: Square, m
     if (behindPieces.length === 0) continue;
     const behind = behindPieces[0];
     if (behind.color !== movingColor) continue;
+    // A piece moving along its own line uncovers nothing — it IS the piece
+    // behind (Alekhine walk 2026-10-19: "…Rf8 reveals their rook on f8").
+    if (behind.square === to) continue;
     const diagonal = dir[0] !== 0 && dir[1] !== 0;
     const canSlide = behind.type === 'q' || (behind.type === 'b' && diagonal) || (behind.type === 'r' && !diagonal);
     if (!canSlide) continue;

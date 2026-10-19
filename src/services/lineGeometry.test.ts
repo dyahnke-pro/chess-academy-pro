@@ -22,3 +22,16 @@ describe('lineGeometry — the one discovery test', () => {
     expect(d?.target.square).toBe('d4');
   });
 });
+
+describe('a piece moving along its own line uncovers nothing (Alekhine walk 2026-10-19)', () => {
+  it('…Rf6-f8 is not a discovered attack on f3', () => {
+    const c = new Chess('7k/8/5r2/8/8/5N2/8/4K3 b - - 0 1');
+    c.move('Rf8');
+    expect(discoveryRevealed(c, 'f6', 'f8', 'b')).toBeNull();
+  });
+  it('NEGATIVE CONTROL: a knight stepping off the rook\'s file does uncover it', () => {
+    const c = new Chess('5r1k/8/5n2/8/8/5N2/8/4K3 b - - 0 1');
+    c.move('Nd5');
+    expect(discoveryRevealed(c, 'f6', 'd5', 'b')?.target.square).toBe('f3');
+  });
+});
