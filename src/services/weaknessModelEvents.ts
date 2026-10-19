@@ -20,6 +20,31 @@ export function onWeaknessModelChanged(cb: Listener): () => void {
   return () => { listeners.delete(cb); };
 }
 
+// ONE BURST, ONE RE-READ (David's phone, 2026-10-19: hot and slow in Learn).
+// A Learn move writes several evidence rows, and every write used to make each
+// RELOADING reader re-read the whole record — on a real record (9,800 evidence
+// rows) that was the game's CPU: 14 plies in 408s and a stalled reply, against
+// 49 plies in 170s on an empty one. Cache INVALIDATION stays synchronous (it is
+// free and keeps the next read correct); a reader that RELOADS subscribes to the
+// settled notice, which fires once after a burst of writes goes quiet.
+const settledListeners = new Set<Listener>();
+export const SETTLE_MS = 600;
+let settleTimer: ReturnType<typeof setTimeout> | null = null;
+
+/** Subscribe a RELOADING reader: called once after a burst of record writes.
+ *  Returns the unsubscribe. */
+export function onWeaknessModelSettled(cb: Listener): () => void {
+  settledListeners.add(cb);
+  return () => { settledListeners.delete(cb); };
+}
+
+function fireSettled(): void {
+  settleTimer = null;
+  for (const cb of [...settledListeners]) {
+    try { cb(); } catch { /* a listener's failure is its own */ }
+  }
+}
+
 /** Fire after a row that feeds the weakness spine has been WRITTEN
  *  (misconception tag, mistake puzzle). Listeners must never throw upward —
  *  a failed refresh is a stale read, not a broken write. */
@@ -27,9 +52,15 @@ export function emitWeaknessModelChanged(): void {
   for (const cb of [...listeners]) {
     try { cb(); } catch { /* a listener's failure is its own */ }
   }
+  if (settledListeners.size === 0) return;
+  if (settleTimer) clearTimeout(settleTimer);
+  settleTimer = setTimeout(fireSettled, SETTLE_MS);
 }
 
 /** Test hook — forget every listener. */
 export function __resetWeaknessModelListenersForTests(): void {
   listeners.clear();
+  settledListeners.clear();
+  if (settleTimer) clearTimeout(settleTimer);
+  settleTimer = null;
 }
