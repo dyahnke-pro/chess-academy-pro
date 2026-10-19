@@ -216,7 +216,7 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
     const d = decideTurn([{ lane: 'register', proof: NO_PROOF.stated, text, fen: FEN, lines: [{ fen: FEN, sans: ['Nxe5', 'Nxe5'] }] }], 'Your knight on f3 attacks the pawn on e5.');
     expect(d.pkg.kept[0]?.lines).toBeUndefined();
   });
-  it('Learn hands every line-speaking producer\'s lines to the queue, and draws on-screen and earlier boards apart', () => {
+  it('Learn hands every line-speaking producer\'s lines to the queue, and draws on-screen lines and never takes the board for an earlier one', () => {
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(probe\.fen\(\), registerNow, 'register', .*?, undefined, undefined, undefined, undefined, pendingRegisterLines\)/);
     // The student's best move is never drawn before they play it (prod walk 2026-10-19).
     expect(TEACH_CODE).not.toMatch(/sans: \[compareRead\.bestSan\]/);
@@ -226,7 +226,9 @@ describe('a spoken LINE draws its moves (David 2026-09-29: "I have never seen an
     expect(TEACH_CODE).toMatch(/keptLines\(hintPkg,/);
     // Their move's purpose leads over a board description (hand walk 2026-09-30, …g6).
     expect(TEACH_CODE).toMatch(/c\.kind === 'stopped' \? 'theirPurpose' as const/);
-    expect(TEACH_CODE).toMatch(/lineWalk\.hold\(showFen,/);
+    // An earlier board is spoken, never shown: showing it took the board from
+    // the student on their turn (David 2026-10-19: "never freeze for the user").
+    expect(TEACH_CODE).not.toMatch(/lineWalk\.hold\(/);
   });
 });
 

@@ -54,7 +54,7 @@ describe('development is a job the follow-up can name (Review audit 2026-10-15)'
       [33, { evaluation: -300, depth: 18, bestMove: 'e7e5', pv: ['e7e5', 'e1g1', 'f8d6'] }],
       [34, { evaluation: -300, depth: 18, bestMove: 'e1g1', pv: ['e1g1', 'f8d6', 'f2f4'] }],
     ]);
-    expect(intentsFromReads(moves, 'black', reads).get(34)?.text).toBe('You play …e5 first, so that …Bd6 can bring the bishop into the game.');
+    expect(intentsFromReads(moves, 'black', reads).get(34)?.text).toBe('You play …e5 first, to free your bishop on f8 for …Bd6.');
   });
 });
 

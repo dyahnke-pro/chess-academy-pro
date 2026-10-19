@@ -40,12 +40,16 @@ describe('isEndgameByMaterial is the one predicate', () => {
     expect(isEndgameByMaterial(START)).toBe(false);
   });
 
-  it('disagrees with a piece COUNT where it matters — queens off, 18 men', () => {
-    // R+B+N+6P a side, no queens: an ending by material, 18 men on the board.
+  it('queens off is not an ending while the rooks and minors are on (David 2026-10-19)', () => {
+    // 2R+B+N a side, no queens: a queenless MIDDLEGAME — his record had move-12
+    // and move-17 positions like this filed and narrated as "endgame".
     const queenlessButFull = 'r1b2rk1/pppp1ppp/2n5/8/8/2N5/PPPP1PPP/R1B2RK1 w - - 0 20';
-    const men = (queenlessButFull.split(' ')[0].match(/[a-zA-Z]/g) ?? []).length;
-    expect(men).toBeGreaterThan(16);       // a count says "not an endgame"
-    expect(isEndgameByMaterial(queenlessButFull)).toBe(true); // the predicate says it is
+    expect(isEndgameByMaterial(queenlessButFull)).toBe(false);
+    // R+B a side with queens off: an ending, though a count of men says 16.
+    const rookAndBishop = '2b2rk1/pppp1ppp/8/8/8/8/PPPP1PPP/2B2RK1 w - - 0 30';
+    const men = (rookAndBishop.split(' ')[0].match(/[a-zA-Z]/g) ?? []).length;
+    expect(men).toBeGreaterThanOrEqual(16);
+    expect(isEndgameByMaterial(rookAndBishop)).toBe(true);
   });
 
   it('and the other way — few men, queens still on', () => {
