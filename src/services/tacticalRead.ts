@@ -623,6 +623,8 @@ export function candidateCompareClause(
   return candidateCompareRead(fen, topLines, studentColor, { ...opts, namesMoves: opts.namesMoves ?? true })?.text ?? null;
 }
 
+const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
 /** The compare clause WITH the two moves it names, so the board can draw them
  *  (`VoiceFact.lines`) — the preferred move and the one it is preferred to. */
 export function candidateCompareRead(
