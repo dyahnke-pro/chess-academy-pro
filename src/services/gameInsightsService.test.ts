@@ -24,7 +24,7 @@ vi.mock('./gameReconstructionService', () => ({
 
 vi.mock('./accuracyService', () => ({
   calculateAccuracy: (...args: unknown[]): unknown => mockCalculateAccuracy(...args as []),
-  gameAccuracy: (_game: unknown, moves: unknown): unknown => mockCalculateAccuracy(...([moves] as [])),
+  gameAccuracy: (_game: unknown, moves: unknown): unknown => mockCalculateAccuracy(...([moves] as unknown as [])),
   getClassificationCounts: (...args: unknown[]): unknown => mockGetClassificationCounts(...args as []),
 }));
 
