@@ -41,7 +41,7 @@ describe('nextMoveAdvice', () => {
   it('a real record with mistakes in every phase hears it only in its WORST phase (2026-10-19)', () => {
     const w = [
       hole({ clusterId: 'analysis:phase:opening', bucket: 'opening', openCount: 3 }),
-      hole({ clusterId: 'analysis:phase:middlegame', bucket: 'middlegame', openCount: 12 }),
+      hole({ clusterId: 'analysis:phase:middlegame', bucket: 'positional', openCount: 12 }),
       hole({ clusterId: 'analysis:phase:endgame', bucket: 'endgame', openCount: 5 }),
     ];
     expect(nextMoveAdvice({ tier: 'none', phase: 'middlegame', weaknesses: w, motifHole: null }).reason).toBe('phase-record');
