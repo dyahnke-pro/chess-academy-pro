@@ -28,3 +28,18 @@ describe('the queen trade that throws away space', () => {
     expect(d?.alternatives.find((a) => a.san === 'O-O')?.shortfall).not.toBe('trades-queens');
   });
 });
+
+describe('no queen trade where no queens are left (Alekhine walk 2026-10-19)', () => {
+  it('a queenless ending never says a move "takes the last queen off"', () => {
+    const fen = '2k5/1pprb3/4p1r1/2P1N2p/3P2p1/7P/P5PK/1R2R3 w - - 0 38';
+    const d = buildDeliberation({ fenBefore: fen, analysis: {
+      bestMove: 'e5c4', evaluation: 250, isMate: false, mateIn: null, depth: 16, nodesPerSecond: 0,
+      topLines: [
+        { rank: 1, evaluation: 250, mate: null, moves: ['e5c4', 'g4h3'] },
+        { rank: 2, evaluation: 120, mate: null, moves: ['h3h4', 'g6g5'] },
+      ],
+    }, moverColor: 'w', opponentLastSan: 'g4' } as never);
+    expect(d?.alternatives.find((a) => a.san === 'h4')?.shortfall).not.toBe('trades-queens');
+    expect(deliberationFacts(d as never)).not.toMatch(/queen/);
+  });
+});

@@ -663,6 +663,9 @@ function moreSpace(fen: string, mover: 'w' | 'b'): boolean {
 function queensOffLine(fen: string, uci: readonly string[], plies: number): string[] | null {
   try {
     const c = new Chess(fen);
+    // No queen to trade: the line takes nothing off (Alekhine walk 2026-10-19:
+    // "h4 takes the last queen off" twenty moves after the queens went).
+    if (!c.board().flat().some((x) => x && x.type === 'q')) return null;
     const sans: string[] = [];
     for (const u of uci.slice(0, plies)) {
       sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san);
