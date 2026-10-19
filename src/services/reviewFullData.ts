@@ -1827,7 +1827,7 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
     for (const sq of ['d4', 'e4', 'd5', 'e5'] as const) {
       if (sq === to || a.get(sq)) continue;
       if (!a.attackers(sq, pc.color).includes(to)) continue;
-      const role = squareRole(a, sq, pc.color, 'the');
+      const role = squareRole(a, sq, pc.color, 'the', 'covers');
       if (!role) continue;
       fights.push(`${sq}, ${role}`); squaresOut?.push(sq);
       break;

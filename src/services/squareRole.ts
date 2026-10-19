@@ -15,7 +15,16 @@ const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: '
 /** `owner` is how the OTHER side's pieces are said from the speaker's seat:
  *  'their' to the student about the opponent, 'your' about the student, 'the'
  *  where the line names no seat. Required, so a caller decides its seat. */
-export function squareRole(chess: Chess, sq: Square, me: Color, owner: 'their' | 'your' | 'the'): string | null {
+export function squareRole(
+  chess: Chess,
+  sq: Square,
+  me: Color,
+  owner: 'their' | 'your' | 'the',
+  /** Does the piece COVER the square, or will it STAND on it? Required (prod
+   *  walk 2026-10-19: a plan route said "on g6 it would be backing your
+   *  g-pawn's push there" — a bishop standing on g6 blocks that push). */
+  piece: 'covers' | 'stands',
+): string | null {
   const them: Color = me === 'w' ? 'b' : 'w';
   // With no seat, the other side's pieces are "the enemy": "holding back the
   // d-pawn" cannot say whose.
@@ -46,7 +55,7 @@ export function squareRole(chess: Chess, sq: Square, me: Color, owner: 'their' |
   const ownStart = me === 'w' ? 2 : 7;
   // With no seat, the push says whose: a piece backs its own side's advance.
   const mine = owner === 'their' ? 'your' : owner === 'your' ? 'their' : 'the';
-  if ((own1 && own1.type === 'p' && own1.color === me) || (!own1 && own2 && own2.type === 'p' && own2.color === me && rank + 2 * fwd === ownStart)) {
+  if (piece === 'covers' && ((own1 && own1.type === 'p' && own1.color === me) || (!own1 && own2 && own2.type === 'p' && own2.color === me && rank + 2 * fwd === ownStart))) {
     return `backing ${mine} ${file}-pawn's push there`;
   }
   // A HOLE: no pawn of theirs on a neighbouring file can ever reach a square that attacks it.
@@ -73,7 +82,7 @@ export function squareRole(chess: Chess, sq: Square, me: Color, owner: 'their' |
  *  own comma ("d4, holding back their d-pawn, and e5, …"). Null when none do:
  *  a list of squares without reasons is not said. */
 export function namedSquares(chess: Chess, squares: readonly string[], me: Color, owner: 'their' | 'your' | 'the'): string | null {
-  const named = squares.flatMap((sq) => { const role = squareRole(chess, sq as Square, me, owner); return role ? [`${sq}, ${role}`] : []; });
+  const named = squares.flatMap((sq) => { const role = squareRole(chess, sq as Square, me, owner, 'covers'); return role ? [`${sq}, ${role}`] : []; });
   if (!named.length) return null;
   return named.length === 1 ? named[0] : `${named.slice(0, -1).join(', ')}, and ${named[named.length - 1]}`;
 }

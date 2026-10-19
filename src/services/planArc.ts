@@ -261,7 +261,7 @@ function routeSquareRole(aim: Aim, fen: string, color: 'w' | 'b', seat: Seat): s
   let board: Chess;
   try { board = new Chess(fen); } catch { return ''; }
   if (board.get(aim.goal as Square)) return '';
-  const role = squareRole(board, aim.goal as Square, color, seat === 'opponent' ? 'your' : 'their');
+  const role = squareRole(board, aim.goal as Square, color, seat === 'opponent' ? 'your' : 'their', 'stands');
   if (!role) return '';
   return role.startsWith('a square ') ? ` — ${aim.goal} is ${role}` : ` — on ${aim.goal} it would be ${role}`;
 }
