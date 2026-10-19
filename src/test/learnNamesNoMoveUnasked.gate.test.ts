@@ -47,4 +47,17 @@ describe('Learn names no move unasked', () => {
     // Learn reads the plan thread holding a step the student could play now.
     expect(read('components/Coach/CoachTeachPage.tsx')).toMatch(/readBoardAll\('planThread', \{[\s\S]{0,600}holdPlayable: true/);
   });
+  it('the priority line keeps the reason and holds the move and its arrow, whatever the dial (prod walk 2026-10-19)', () => {
+    const page = read('components/Coach/CoachTeachPage.tsx');
+    const call = page.match(/queueSpokenHint\(probe\.fen\(\), pfLine, 'priorityFirst'[^\n]*/)?.[0] ?? '';
+    expect(call, 'the priority-first call site moved').not.toBe('');
+    expect(page).toMatch(/packageForRegister\(\{ \.\.\.pf\.hint, detail: undefined \}/);
+    expect(call).not.toMatch(/pf\.arrow/);
+  });
+  it('a close call and a compare hold their moves in Learn', () => {
+    const page = read('components/Coach/CoachTeachPage.tsx');
+    expect(page).toMatch(/uncertaintyClause\(turnRead, \{[^}]*namesMoves: false/);
+    expect(page).toMatch(/candidateCompareRead\([^\n]{0,240}namesMoves: false/);
+  });
 });
+
