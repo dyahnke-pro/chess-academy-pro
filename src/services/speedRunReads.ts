@@ -606,7 +606,13 @@ export function queenGlue(fen: string, me: 'w' | 'b'): Read | null {
 }
 
 /** Every read for the side to move, in his order of thought. */
-export function speedRunReads(args: { fen: string; me: 'w' | 'b'; lines: Lines; lastMove?: { fenBefore: string; san: string }; lastOwnMove?: { fenBefore: string; san: string } }): Read[] {
+export function speedRunReads(args: {
+  fen: string; me: 'w' | 'b'; lines: Lines; lastMove?: { fenBefore: string; san: string }; lastOwnMove?: { fenBefore: string; san: string };
+  /** Masters play this position with real mass: theory sets the move order
+   *  here, so the move-order habit (flexible first) does not argue with it
+   *  (Learn walk 2026-10-19: "commit the pawn last" in the Scandinavian). */
+  inTheory?: boolean;
+}): Read[] {
   const bestSan = sanOf(args.fen, args.lines[0]?.moves?.[0]);
   // RELEVANCE (David 2026-10-06: "make sure all narrations are relevant"): with
   // a piece of the student's hanging, a quiet-move habit is noise — "leave the
@@ -632,7 +638,7 @@ export function speedRunReads(args: { fen: string; me: 'w' | 'b'; lines: Lines; 
     rejectedMoveLater(args.fen, args.lines),
     bestCasePlan(args.fen, args.lines),
     retreatKeepsBreak(args.fen, args.me, bestSan),
-    flexibleFirst(args.fen, args.lines),
+    args.inTheory ? null : flexibleFirst(args.fen, args.lines),
     threatStronger(args.fen, args.me, args.lines),
     secureFirst(args.fen, args.me, args.lines),
     heldByTactic(args.fen, args.me),

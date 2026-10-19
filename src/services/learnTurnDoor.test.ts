@@ -589,7 +589,7 @@ describe('a good move always gets its own reason (David 2026-10-14)', () => {
     const d = decideTurn([
       { lane: 'theirIntent', proof: NO_PROOF.stated, text: 'They play d4 first, to free their bishop on c1 for Bd2.', fen: B, squares: ['d4', 'd2'] },
       { lane: 'strongChoice', proof: NO_PROOF.description, claims: ['strong-choice:affirm'], text: "That's what strong players play here — it saves it from their knight on c3, and hits it back from a5; it also lines up an x-ray at their rook on a1.", fen: B, squares: [] },
-      { lane: 'structureJudgement', proof: NO_PROOF.stated, text: 'Your bishop on f8 looks dead, but your planned c6 and e6 open it.', fen: A, squares: ['f8'] },
+      { lane: 'structureJudgement', proof: NO_PROOF.stated, text: 'Your bishop on f8 looks dead for now, but your pawns on c7 and e7 are what block it — moving them brings it to life.', fen: A, squares: ['f8'] },
       { lane: 'positionFacts', factKind: 'rule', role: 'teach', ownMoveReason: true, proof: NO_PROOF.stated, text: 'Your Qa5 saves it from their knight on c3, and hits it back from a5.', fen: B },
     ]);
     const said = d.pkg.kept.map((f) => f.text).join(' ');

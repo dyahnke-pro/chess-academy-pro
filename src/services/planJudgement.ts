@@ -156,17 +156,23 @@ export function placementFutureLine(fen: string, student: Color, pvUci: readonly
     if (now > 4) continue;
     const c = board(fen);
     if (!c) return null;
-    const pawnMoves: string[] = [];
+    // The pawns IN THE WAY, by where they stand — never the moves that clear
+    // them (Learn walk 2026-10-19: "your planned c6 and e6" named the engine's
+    // moves before the student played, and drew an e7-e6 arrow; and the
+    // student had planned nothing). The idea is the lesson: these pawns block
+    // it, and moving them frees it.
+    const blockers: string[] = [];
     for (let i = 0; i < pv.length; i++) {
       const mv = c.move(pv[i]);
       if (mv.from === bsq || (mv.color !== student && mv.to === bsq)) break;
-      if (mv.color === student && mv.piece === 'p') pawnMoves.push(bare(mv.san));
-      if (pawnMoves.length > 0 && scope(c, bsq) - now >= 4) {
+      if (mv.color === student && mv.piece === 'p' && !blockers.includes(mv.from)) blockers.push(mv.from);
+      if (blockers.length > 0 && scope(c, bsq) - now >= 4) {
         const proof = legalLineProof(fen, pv.slice(0, i + 1));
         if (!proof) break;
+        const pawns = blockers.length === 1 ? `pawn on ${blockers[0]} is` : `pawns on ${andList(blockers)} are`;
         return {
-          act: 'placement-future-line', squares: [bsq], proof, key: `future-bishop:${bsq}`,
-          text: `Your bishop on ${bsq} looks dead, but your planned ${andList(pawnMoves)} open it.`,
+          act: 'placement-future-line', squares: [bsq, ...blockers], proof, key: `future-bishop:${bsq}`,
+          text: `Your bishop on ${bsq} looks dead for now, but your ${pawns} what block it — moving them brings it to life.`,
         };
       }
     }

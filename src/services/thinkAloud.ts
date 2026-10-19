@@ -7,6 +7,8 @@
 //   first this" → what they keep doing wrong.
 // Every computer here is a pure board read (G0); the composer only orders and
 // joins. Lines are returned as WalkableLine so every spoken line is arrowed.
+import { masterMovesCachedSync } from './masterPlayLookup';
+import { MIN_BOOK_GAMES } from './bookDeparture';
 import { openSentence } from '../utils/openSentence';
 import { Chess, type Square } from 'chess.js';
 import type { WalkableLine } from '../types';
@@ -351,7 +353,7 @@ export function depthClauses(args: {
     // His habits of thought that name no move: keep the tension, which side to
     // castle, "any move is fine". The ones that name the engine's move (the
     // ugly move, the provoked commitment) wait for nameMove below.
-    const reads = toMove === args.studentColor ? speedRunReads({ fen: args.fen, me: args.studentColor, lines: args.topLines, ...(args.lastOpponentMove ? { lastMove: args.lastOpponentMove } : {}), ...((): { lastOwnMove?: { fenBefore: string; san: string } } => { const o = ownLastMove(args.history, args.fen); return o ? { lastOwnMove: o } : {}; })() }) : [];
+    const reads = toMove === args.studentColor ? speedRunReads({ fen: args.fen, me: args.studentColor, lines: args.topLines, inTheory: (masterMovesCachedSync(args.fen) ?? []).some((m) => m.games >= MIN_BOOK_GAMES), ...(args.lastOpponentMove ? { lastMove: args.lastOpponentMove } : {}), ...((): { lastOwnMove?: { fenBefore: string; san: string } } => { const o = ownLastMove(args.history, args.fen); return o ? { lastOwnMove: o } : {}; })() }) : [];
     const push = (r: (typeof reads)[number], text: string): void => { out.push({ kind: 'speedrun-read', text, ...(r.squares && text === r.text ? { squares: r.squares } : {}), ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.claim ? { claim: r.claim } : {}), ...(r.promise ? { promise: r.promise } : {}) }); };
     // ATTACK, SACRIFICES AND KINGS (batch 4) — each read carries its proof.
     const kings = toMove === args.studentColor ? kingAttackReads({ fen: args.fen, me: args.studentColor, lines: args.topLines }) : [];

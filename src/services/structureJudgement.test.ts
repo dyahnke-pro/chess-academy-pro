@@ -236,7 +236,9 @@ describe('planJudgement', () => {
   it('a placement judged by its future line: c4 and d5 open the b2 bishop', () => {
     const fen = legal('7k/pp3p1p/6p1/8/3P4/2P5/PB3PPP/6K1 w - - 0 20');
     const r = voiced(placementFutureLine(fen, 'w', ['c3c4', 'a7a6', 'd4d5']));
-    expect(r.text).toBe('Your bishop on b2 looks dead, but your planned c4 and d5 open it.');
+    expect(r.text).toBe('Your bishop on b2 looks dead for now, but your pawns on c3 and d4 are what block it — moving them brings it to life.');
+    // It names the pawns in the way, never the moves (Learn walk 2026-10-19).
+    expect(r.text).not.toMatch(/\b(c4|d5)\b/);
     // A line that never moves those pawns: silent.
     expect(placementFutureLine(fen, 'w', ['h2h3', 'a7a6', 'g1h2'])).toBeNull();
   });
