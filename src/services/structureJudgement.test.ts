@@ -186,6 +186,10 @@ describe('squareJudgement', () => {
     expect(r.text).toBe('Their knight reaches d4 because your c-pawn hasn\'t moved: on c3 it would cover that square.');
     // A knight landing where a pawn already covers it: silent.
     expect(unmovedUnits(legal('r1bqkbnr/pppppppp/2n5/8/8/2P2N2/PP1PPPPP/RNBQKB1R b KQkq - 0 2'), 'Nd4', 'w')).toBeNull();
+    // Alekhine walk 2026-10-19: the c-pawn fix is the lesson (c4 covers d5)…
+    expect(unmovedUnits(fromSans(['e4', 'Nf6', 'e5']), 'Nd5', 'w')?.text).toMatch(/c-pawn.*c4/);
+    // …but a king-cover pawn is never offered: "on g4 it would cover f5" loosens the king's side.
+    expect(unmovedUnits(fromSans(['e4', 'Nf6', 'e5', 'Nd5', 'd4', 'd6', 'c4', 'Nb6', 'f4', 'dxe5', 'fxe5', 'Nc6', 'Be3']), 'Bf5', 'w')).toBeNull();
   });
 
   it('mutual-restriction ledger: their h5 knight blocks your e2 bishop', () => {

@@ -373,14 +373,20 @@ export function rightPieceForHole(fen: string, me: 'w' | 'b'): Read | null {
 // compares two moves of one side, so a forced reply is new; threats → SEE). ──
 
 const cap = (t: string): string => t.replace(/^./, (c) => c.toUpperCase());
-/** Does any reply win something of `me` after `fenAfter` (them to move)? */
-const leavesSomething = (fenAfter: string, me: 'w' | 'b'): string | null => {
+const TAKEN_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
+/** Does any reply win something of `me` after `fenAfter` (them to move)?
+ *  `took`: the move that led here captured — a piece taken back on that square
+ *  is an EXCHANGE, not a loss, unless they win more than it took (Alekhine walk
+ *  2026-10-19: exd6 "leaves your pawn on d6 to be taken" — pawn for pawn). */
+const leavesSomething = (fenAfter: string, me: 'w' | 'b', took?: { square: string; piece: string }): string | null => {
   let b: Chess;
   try { b = new Chess(fenAfter); } catch { return null; }
   const them = me === 'w' ? 'b' : 'w';
   for (const cell of b.board().flat()) {
     if (!cell || cell.color !== me || cell.type === 'k') continue;
-    if (b.attackers(cell.square, them).length && legalSeeGainFor(fenAfter, cell.square, them) > 0) return cell.square;
+    if (!b.attackers(cell.square, them).length) continue;
+    const gain = legalSeeGainFor(fenAfter, cell.square, them) - (took && took.square === cell.square ? TAKEN_VALUE[took.piece] ?? 0 : 0);
+    if (gain > 0) return cell.square;
   }
   return null;
 };
@@ -408,7 +414,7 @@ export function goodInEveryBranch(fen: string, me: 'w' | 'b', lines: Lines): Rea
   // A recapture works whatever they answer by nature — nothing to teach.
   if (pa.move.captured) return null;
   if (leavesSomething(pa.board.fen(), me)) return null;
-  const loose = leavesSomething(pb.board.fen(), me);
+  const loose = leavesSomething(pb.board.fen(), me, pb.move.captured ? { square: pb.move.to, piece: pb.move.captured } : undefined);
   if (!loose) return null;
   // ONCE A GAME (claim): the idea is the lesson; the third instance in one game
   // was a template, not teaching (Learn tape 2026-10-06, game 2).

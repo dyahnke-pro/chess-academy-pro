@@ -41,7 +41,7 @@ import { falseAlarm } from './falseAlarm';
 import { theirMoveCost } from './theirMoveCost';
 import { pushOrHold } from './pushOrHold';
 import { threatAnswer, type ThreatAnswer } from './threatAnswer';
-import { mastersPlanLine, mastersPlanRead, type MastersPlanRead } from './mastersPlanRead';
+import { mastersPlanLine, mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
 import { mastersMovesSync } from './masterPlayLookup';
 import { tempoCount } from './tempoCount';
 import { readTiming, timingClause } from './moveTiming';
@@ -757,7 +757,7 @@ export function threatAnswerTeaching(i: {
  *  it: that parse is the memory spike a phone kills the app for, and the plan
  *  lane was offered zero times in a Learn game while it waited on it. */
 function learnPlanRead(fen: string, openingName: string | null): MastersPlanRead | null {
-  return mastersPlanRead(fen, mastersMovesSync) ?? (openingName ? planFor(openingName) : null);
+  return mastersPlanRead(fen, mastersMovesSync) ?? (openingName ? planStillAhead(planFor(openingName), fen) : null);
 }
 
 /** THE OPENING'S PLAN, COMPUTED FROM MASTER GAMES (WO-TEACH-GAPS P2 #0): the

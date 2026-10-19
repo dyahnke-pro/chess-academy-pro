@@ -2,7 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, existsSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { mastersPlanRead, mastersPlanLine, MIN_ROOT_GAMES, type MovesAt } from './mastersPlanRead';
+import { mastersPlanRead, mastersPlanLine, planStillAhead, MIN_ROOT_GAMES, type MovesAt, type MastersPlanRead } from './mastersPlanRead';
 
 const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
 const fenOf = (line: string): string => { const c = new Chess(); line.split(' ').filter(Boolean).forEach((m) => c.move(m)); return c.fen(); };
@@ -65,4 +65,23 @@ describe('mastersPlanRead — the break master games go for', () => {
     expect(r?.black?.san).toBe('c5');
     expect(r!.black!.share).toBeGreaterThan(0.8);
   }, 120_000);
+});
+
+describe('a plan read off another board keeps only what lies ahead (Alekhine walk 2026-10-19)', () => {
+  const plan: MastersPlanRead = {
+    games: 100, white: { san: 'c4', square: 'c4', from: 'c2', share: 0.6 }, black: { san: 'd6', square: 'd6', from: 'd7', share: 0.7 },
+    whitePiece: null, blackPiece: { piece: 'n', from: 'b8', to: 'c6', san: 'Nc6', share: 0.5 }, whiteCastle: null, blackCastle: null,
+  };
+  it('drops a break already played and keeps the rest', () => {
+    const c = new Chess(); for (const m of ['e4', 'Nf6', 'e5', 'Nd5', 'd4', 'd6']) c.move(m);
+    const r = planStillAhead(plan, c.fen());
+    expect(r?.black).toBeNull();
+    expect(r?.white?.san).toBe('c4');
+    expect(r?.blackPiece?.san).toBe('Nc6');
+    expect(mastersPlanLine(r, 'w')?.text ?? '').not.toMatch(/d6/);
+  });
+  it('NEGATIVE CONTROL: before the break it still speaks', () => {
+    const c = new Chess(); for (const m of ['e4', 'Nf6', 'e5', 'Nd5', 'd4']) c.move(m);
+    expect(planStillAhead(plan, c.fen())?.black?.san).toBe('d6');
+  });
 });

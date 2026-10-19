@@ -336,8 +336,13 @@ export function unmovedUnits(fenBefore: string, san: string, student: Color): St
   if (rel < 3 || rel > 5) return null;
   const c = r.after;
   if (c.attackers(x, student).some((s) => c.get(s)?.type === 'p')) return null;
+  // Never offer a king-cover pawn as the fix (Alekhine walk 2026-10-19: "on g4
+  // it would cover f5" — g4 loosens the side the king lives on). The king's
+  // own wing: f–h with the king on e–h, a–c with it on a–d.
+  const kingFile = piecesOf(c, student, 'k')[0]?.[0] ?? 'e';
+  const coversKing = (file: string): boolean => (kingFile >= 'e' ? file >= 'f' : file <= 'c');
   for (const p of piecesOf(c, student, 'p')) {
-    if (relativeRank(p, student) !== 2) continue;
+    if (relativeRank(p, student) !== 2 || coversKing(p[0])) continue;
     const one = sqAt(fileIdx(p), rankNum(p) + fwd(student));
     const two = sqAt(fileIdx(p), rankNum(p) + 2 * fwd(student));
     for (const t of [one, two]) {

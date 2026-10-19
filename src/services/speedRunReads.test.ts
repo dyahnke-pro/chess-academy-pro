@@ -130,6 +130,10 @@ describe('his habits of thought, computed (each checked against the existing com
     const fen = '4k3/8/8/3p4/8/2N5/8/4K3 w - - 0 1';
     expect(goodInEveryBranch(fen, 'w', [line(['e1e2'], 0), line(['c3e4'], -300)])?.text).toMatch(/works whatever they answer.*e4/);
     expect(goodInEveryBranch(fen, 'w', [line(['e1e2'], 0), line(['e1d2'], 0)])).toBeNull();
+    // An even trade is not a loss (Alekhine walk 2026-10-19): after 4…d6 the next-best
+    // exd6 is recaptured pawn for pawn — "leaves your pawn on d6 to be taken" was false.
+    const alekhine = new Chess(); for (const m of ['e4', 'Nf6', 'e5', 'Nd5', 'd4', 'd6']) alekhine.move(m);
+    expect(goodInEveryBranch(alekhine.fen(), 'w', [line(['c2c4'], 30), line(['e5d6'], 0)])).toBeNull();
   });
   it('take the sting out: Ne5 blocks the rook — the bishop is neither moved nor guarded', () => {
     const fen = '4r1k1/8/8/8/4B3/5N2/8/6K1 w - - 0 1';

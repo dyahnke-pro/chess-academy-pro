@@ -10,7 +10,7 @@
 //
 // Deterministic (a fixed walk over a fixed file), grounded (every move is a
 // master move with a game count, G3), and it names nothing it cannot count.
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import type { LocalDbMove } from './masterPlayLookup';
 import { shareAdverb } from '../utils/shareWords.ts';
 import { positionOf } from '../utils/samePosition.ts';
@@ -175,6 +175,32 @@ export function mastersPlanRead(fen: string, movesAt: MovesAt): MastersPlanRead 
   const read = { games: rootGames, white, black, whitePiece: piece('w'), blackPiece: piece('b'), whiteCastle: castle('w'), blackCastle: castle('b') };
   if (!white && !black && !read.whitePiece && !read.blackPiece) return null;
   return read;
+}
+
+/**
+ * A plan read ANOTHER board (the opening's, computed at build time) keeps only
+ * what still lies ahead on THIS one: a break whose pawn still stands on its
+ * square with the landing square free of its own side, a piece still at home
+ * (Alekhine walk 2026-10-19: "their break is …d6" heard with …d6 on the board).
+ */
+export function planStillAhead(read: MastersPlanRead | null, fen: string): MastersPlanRead | null {
+  if (!read) return null;
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return null; }
+  const at = (sq: string): { type: string; color: string } | null => b.get(sq as Square) ?? null;
+  const breakAhead = (x: PlanBreak | null, side: 'w' | 'b'): PlanBreak | null => {
+    if (!x) return null;
+    const p = at(x.from);
+    const land = at(x.square);
+    return p && p.type === 'p' && p.color === side && land?.color !== side ? x : null;
+  };
+  const pieceAhead = (x: PieceHome | null, side: 'w' | 'b'): PieceHome | null => {
+    if (!x) return null;
+    const p = at(x.from);
+    return p && p.type === x.piece && p.color === side ? x : null;
+  };
+  const out = { ...read, white: breakAhead(read.white, 'w'), black: breakAhead(read.black, 'b'), whitePiece: pieceAhead(read.whitePiece, 'w'), blackPiece: pieceAhead(read.blackPiece, 'b') };
+  return out.white || out.black || out.whitePiece || out.blackPiece ? out : null;
 }
 
 /** The sentence, from the student's seat. Null when neither side has a break

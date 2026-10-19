@@ -22,34 +22,34 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `rightIdeaWrongPiece` (function) — 3 call sites
-- `src/services/structureJudgement.test.ts:212`
-- `src/services/structureJudgement.test.ts:214`
+- `src/services/structureJudgement.test.ts:216`
+- `src/services/structureJudgement.test.ts:218`
 - `src/services/structureReads.ts:54`
 
 ### `keepPlanChangeRoute` (function) — 3 call sites
-- `src/services/structureJudgement.test.ts:219`
-- `src/services/structureJudgement.test.ts:222`
+- `src/services/structureJudgement.test.ts:223`
+- `src/services/structureJudgement.test.ts:226`
 - `src/services/structureReads.ts:55`
 
 ### `planOverOneMove` (function) — 4 call sites
-- `src/services/structureJudgement.test.ts:229`
-- `src/services/structureJudgement.test.ts:231`
 - `src/services/structureJudgement.test.ts:233`
+- `src/services/structureJudgement.test.ts:235`
+- `src/services/structureJudgement.test.ts:237`
 - `src/services/structureReads.ts:56`
 
 ### `placementFutureLine` (function) — 4 call sites
-- `src/services/structureJudgement.test.ts:238`
-- `src/services/structureJudgement.test.ts:243`
-- `src/services/structureJudgement.test.ts:248`
+- `src/services/structureJudgement.test.ts:242`
+- `src/services/structureJudgement.test.ts:247`
+- `src/services/structureJudgement.test.ts:252`
 - `src/services/structureReads.ts:111`
 
 ### `smallEdges` (function) — 2 call sites
-- `src/services/structureJudgement.test.ts:253`
 - `src/services/structureJudgement.test.ts:257`
+- `src/services/structureJudgement.test.ts:261`
 
 ### `fightingLine` (function) — 3 call sites
-- `src/services/structureJudgement.test.ts:262`
-- `src/services/structureJudgement.test.ts:268`
+- `src/services/structureJudgement.test.ts:266`
+- `src/services/structureJudgement.test.ts:272`
 - `src/services/structureReads.ts:110`
 
 ### `wedgePaysLater` (function) — 4 call sites
