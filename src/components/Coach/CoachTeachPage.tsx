@@ -25,6 +25,7 @@ import type { Square } from 'chess.js';
 import { registerCoachHands } from '../../services/coachActuator';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
 import { TeachGameOverCard, type TeachGameResult } from './TeachGameOverCard';
+import { holdBackground } from '../../services/foregroundActivity';
 import { LearnRewardBar } from './LearnRewardBar';
 import { SkillLevelBar, type SkillMove } from './SkillLevelBar';
 import type { SkillRecapRow } from './TeachGameOverCard';
@@ -1088,6 +1089,13 @@ export function CoachTeachPage(): JSX.Element {
     game.fen,
     (!walkthrough.isActive || walkthrough.phase === 'paused') && !game.isGameOver,
   );
+
+  // NO BACKGROUND ANALYSIS WHILE A LEARN GAME IS ON (David 2026-10-19: "just
+  // not while playing a chess game in learn, takes too much cpu and heat").
+  // Held from the first move (or a lesson) until the game ends or Learn closes;
+  // every background pass and the batch sweep wait on it.
+  const learnGameLive = (game.history.length > 0 && !game.isGameOver) || walkthrough.isActive;
+  useEffect(() => (learnGameLive ? holdBackground() : undefined), [learnGameLive]);
 
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   // The coach's last line, read by a follow-up like "stop what?" (hand walk

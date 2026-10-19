@@ -10,6 +10,35 @@
 // Zero imports, so the engine and any backfill can both read it.
 
 let lastActivity = 0;
+/** Live holds: a Learn game on the board, a review being read. While any is
+ *  held, background work waits however long the student thinks (David
+ *  2026-10-19: "analyze in the background, just not while playing a chess game
+ *  in learn"). The engine-quiet signal alone could not see a student thinking:
+ *  the engine sits idle between moves, so 20 s later the sweep resumed mid-game. */
+let holds = 0;
+
+/** Hold background work until the returned release is called (once). */
+export function holdBackground(): () => void {
+  holds += 1;
+  let released = false;
+  return () => {
+    if (released) return;
+    released = true;
+    holds = Math.max(0, holds - 1);
+  };
+}
+
+/** Resolves once no hold is live. */
+export async function waitWhileHeld(
+  sleep: (ms: number) => Promise<void> = (ms) => new Promise((r) => { setTimeout(r, ms); }),
+): Promise<void> {
+  while (holds > 0) await sleep(500);
+}
+
+/** How many holds are live. */
+export function backgroundHolds(): number {
+  return holds;
+}
 
 /** Stamp foreground use (the engine calls this on every live analysis). */
 export function markForegroundActivity(now: number = Date.now()): void {
@@ -30,6 +59,7 @@ export async function waitForForegroundQuiet(
   sleep: (ms: number) => Promise<void> = (ms) => new Promise((r) => { setTimeout(r, ms); }),
 ): Promise<void> {
   for (;;) {
+    if (holds > 0) { await sleep(500); continue; }
     const since = msSinceForegroundActivity();
     if (since >= quietMs) return;
     await sleep(Math.max(250, quietMs - since));
@@ -39,4 +69,5 @@ export async function waitForForegroundQuiet(
 /** Test hook. */
 export function __resetForegroundActivityForTests(): void {
   lastActivity = 0;
+  holds = 0;
 }

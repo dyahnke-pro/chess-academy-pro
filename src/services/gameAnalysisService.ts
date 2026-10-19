@@ -1,4 +1,5 @@
 import { applyVerdict, getVerdicts, saveVerdict, toVerdictLabel, verdictKey, verdictOutranks, VERDICT_TRUST_DEPTH } from './moveVerdictStore';
+import { holdBackground, backgroundHolds } from './foregroundActivity';
 import { finishedBoardEval } from './finishedBoard';
 import { Capacitor } from '@capacitor/core';
 import { reviewBudget, deterministicAnalysisForAudit, DETERMINISTIC_FAN_NODES, DETERMINISTIC_FAN_WATCHDOG_MS } from './analysisDeterminism';
@@ -193,22 +194,13 @@ export function cancelBackgroundAnalysis(): void {
 // release freed the batch under the other. Each holder now takes its own
 // release, and the batch also checks the hold before EVERY position, not only
 // between games, so an in-flight game yields within one search.
-let _batchHolds = 0;
-
 /** Hold the batch sweep off the engine until the returned release is called.
- *  Idempotent per hold: calling the release twice frees one hold, once. */
-export function holdBatchAnalysis(): () => void {
-  _batchHolds += 1;
-  let released = false;
-  return () => {
-    if (released) return;
-    released = true;
-    _batchHolds = Math.max(0, _batchHolds - 1);
-  };
-}
+ *  The ONE background hold (`foregroundActivity`): a review here and a Learn
+ *  game there hold every background pass the same way. */
+export const holdBatchAnalysis = holdBackground;
 
 async function waitWhilePaused(): Promise<void> {
-  while (_batchHolds > 0 && !_abortAnalysis) {
+  while (backgroundHolds() > 0 && !_abortAnalysis) {
     await new Promise((r) => setTimeout(r, 500));
   }
 }
@@ -3290,5 +3282,5 @@ export const __testables = {
   evaluateFensPooled, drainGameQueue, POOL_SPAWN_TIMEOUT_MS, ASM_POOL_SPAWN_TIMEOUT_MS, WORKER_POOL_SIZE, resolveWorkerPoolSize,
   resetAnalysisPool, WARM_PING_TIMEOUT_MS, BATCH_SHALLOW_DEPTH, BATCH_SHALLOW_BUDGET_MS, BATCH_POSITION_BUDGET_MS,
   REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS, BATCH_GRADE_FLOOR_CP,
-  batchHolds: (): number => _batchHolds,
+  batchHolds: (): number => backgroundHolds(),
 };

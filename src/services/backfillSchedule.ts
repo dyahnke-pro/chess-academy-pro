@@ -16,7 +16,7 @@
 // A second backfill (the opening-key re-mint, A1) has the same shape; it
 // reads the same schedule so the rule cannot drift between them. One import
 // (the foreground leaf, itself import-free): a leaf any reconciler can read.
-import { waitForForegroundQuiet } from './foregroundActivity';
+import { waitForForegroundQuiet, waitWhileHeld } from './foregroundActivity';
 
 export interface BackfillSchedule {
   /** Milliseconds to wait before touching the database. */
@@ -43,7 +43,9 @@ export function idleYield(): Promise<void> {
 export const PRODUCTION_BACKFILL_SCHEDULE: BackfillSchedule = {
   startDelayMs: 8_000,
   batch: 10,
-  yieldBetweenRows: idleYield,
+  // Every row, every backfill: a Learn game on the board stops the pass
+  // between rows, not only before a whole game (the hold, foregroundActivity).
+  yieldBetweenRows: async () => { await waitWhileHeld(); await idleYield(); },
   waitForQuiet: () => waitForForegroundQuiet(),
 };
 
