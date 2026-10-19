@@ -215,6 +215,10 @@ const NOT_SCORED_ORIGINS = new Set(['lesson', 'reading']);
  *  through the record (`capabilityOutcomes`), so counting its slip row again
  *  would score one move twice and by a different rule. */
 const NOT_A_LIVE_SLIP = new Set(['lesson', 'puzzle', 'auto-analysis', 'game-review']);
+/** A slip the meters score as a live game move (see NOT_A_LIVE_SLIP). */
+export function isLiveSlip(r: Pick<SlipRow, 'source'>): boolean {
+  return !NOT_A_LIVE_SLIP.has(r.source);
+}
 
 /**
  * Turn the record into events — one per position — with difficulty from the
@@ -241,7 +245,7 @@ export function eventsFromRecord(
   };
   const byKey = new Map<string, SkillEvent>();
   for (const r of slips) {
-    if (NOT_A_LIVE_SLIP.has(r.source)) continue;
+    if (!isLiveSlip(r)) continue;
     const meter = meterOfTag(r.tag);
     if (!meter || !liveSlipBreaks(r)) continue;
     const key = `${r.fen}|${r.playedSan}`;

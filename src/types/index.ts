@@ -1682,6 +1682,11 @@ export interface MisconceptionTagRecord {
    *  never ran. Such a row is NOT a verdict — it is re-attributed by the next
    *  sweep once the deep dive lands a best move, and this clears. Absent on a
    *  row whose classification had the full input. */
+  /** The skill meters' verdict on this slip — does the board's own scoring
+   *  break its skill here (`liveSlipBreaks`)? Computed ONCE through the board
+   *  detectors and kept, valid while `key` (tag | cost | grade) still matches
+   *  the row: a re-attribution that moves the tag recomputes it. */
+  skillBreak?: { key: string; breaks: boolean };
   attributionPending?: boolean;
   /** The classifier rules revision this row's tag was computed under
    *  (`MISCONCEPTION_RULES_REV`). Absent on rows written before revisions. */
