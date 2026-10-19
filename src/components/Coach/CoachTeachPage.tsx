@@ -9359,7 +9359,7 @@ export function CoachTeachPage(): JSX.Element {
         return readBoard('lastTimeHere', { fenBefore: b.fen(), playedSan: h[h.length - 2], rows, currentGameId: learnMemRef.current.gameId });
       } catch { return null; }
     })();
-    const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp }, facts: [
+    const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, midExchange: midExchangeOn }, facts: [
       ...(gemLine ? [{ lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0]) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
       ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
@@ -10900,9 +10900,32 @@ export function CoachTeachPage(): JSX.Element {
                 pendingAnswerRef.current = null;
                 if (owed) speechChainRef.current = speakComputed(owed, { forced: true, intent: 'learn-live' }).catch(() => undefined);
               }
+              const heard = stripThink(line);
               speechChainRef.current = (speechChainRef.current ?? Promise.resolve())
                 .then(() => {
-                  if (trackAGenRef.current !== myTrackAGen) return undefined;
+                  // A LINE THE VOICE NEVER REACHED IS LOGGED AS DROPPED (OS-1
+                  // replay 2026-10-19: two verdicts logged "track A spoke" at
+                  // enqueue, never voiced — queued behind a twenty-second line,
+                  // then superseded by the next move). The audit row now says
+                  // which.
+                  if (trackAGenRef.current !== myTrackAGen) {
+                    void logAppAudit({
+                      kind: 'coach-narration-dropped',
+                      category: 'narration',
+                      source: 'CoachTeachPage.trackA',
+                      summary: `superseded before the voice reached it: "${heard.slice(0, 80)}"`,
+                      fen: liveFenRef.current,
+                    });
+                    return undefined;
+                  }
+                  // …and "spoke" is logged when the voice STARTS the line.
+                  void logAppAudit({
+                    kind: 'coach-narration-spoken',
+                    category: 'narration',
+                    source: 'CoachTeachPage.trackA',
+                    summary: `track A spoke: "${heard.slice(0, 80)}"`,
+                    fen: liveFenRef.current,
+                  });
                   // THE ONE CHOKEPOINT (G0; David 2026-09-24: "everything built
                   // needs to be deterministic, worded by the DNA, and handed to
                   // the LLM"). Learn's live lines are computed and DNA-worded in
@@ -10921,14 +10944,7 @@ export function CoachTeachPage(): JSX.Element {
                   return speakComputed(qa[0], { forced: true, intent: 'learn-live' });
                 })
                 .catch(() => undefined);
-              instantSpokenText = instantSpokenText ? `${instantSpokenText} ${stripThink(line)}` : stripThink(line);
-              void logAppAudit({
-                kind: 'coach-narration-spoken',
-                category: 'narration',
-                source: 'CoachTeachPage.trackA',
-                summary: `track A spoke: "${stripThink(line).slice(0, 80)}"`,
-                fen: liveFenRef.current,
-              });
+              instantSpokenText = instantSpokenText ? `${instantSpokenText} ${heard}` : heard;
             };
             // ── THE INSTANT UTTERANCE ──────────────────────────────────────
             // ONE clip, not three. Each fragment used to be its own TTS fetch
@@ -12037,7 +12053,7 @@ export function CoachTeachPage(): JSX.Element {
                   // the per-game novelty set, not by a number.
                   const lateDecision = coachTurn({
                     posture: 'learn',
-                    turn: { kind: 'late', ply: move.history.length, moveCostCp: studentCpLoss },
+                    turn: { kind: 'late', ply: move.history.length, moveCostCp: studentCpLoss, midExchange: pendingRecapture([...move.history, reply]) },
                     facts: pending.lines
                       // A threat alert already said a tactic is on the board;
                       // "it has turned sharp — there is a tactic" beside it is

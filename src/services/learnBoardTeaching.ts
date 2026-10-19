@@ -82,6 +82,7 @@ import { trickSidestepped } from './forkTrick';
 import { gameArcs } from './lookaheadPlan';
 import { studentMoveStructure } from './structureReads';
 import { piecePoints, mateStakes, exchangeStakes, forkPoints, piecesOn, type FactStakes } from './factStakes';
+import { threatStakes } from './threatProof';
 
 export interface TeachingHint {
   lane: LearnLane;
@@ -443,6 +444,13 @@ export function counterThreatTeaching(
   const byStudent = mover === student;
   if (byStudent && (studentMoveCostCp === null || studentMoveCostCp >= COUNTER_THREAT_HELD_CP)) return null;
   const text = counterThreatLine(c, byStudent);
+  // THEIR counter-threat is danger to the student: staked at what ignoring the
+  // hit piece costs, by the one threat computer (`threatStakes`), so the door
+  // ranks it as present danger and never as a warning that can wait.
+  let stakes: FactStakes | undefined;
+  if (!byStudent) {
+    try { const after = new Chess(fenBefore); after.move(san); stakes = threatStakes(after.fen(), student, [c.hit.square]) ?? undefined; } catch { stakes = undefined; }
+  }
   const arrows: ArrowClaim[] = [];
   if (c.line && !byStudent) {
     try {
@@ -458,7 +466,7 @@ export function counterThreatTeaching(
     // The proof is the line that punishes taking the piece left.
     lane: 'dangerLevels', proof: (c.line ? lineProof(c.line, true) : null) ?? squaresProof(text, c.squares) ?? NO_PROOF.description, text, squares: c.squares, claims: [`danger-levels:${c.left.square}>${c.hit.square}`],
     event: { name: 'coach_danger_levels_named', props: { surface: 'coach-teach', by: byStudent ? 'student' : 'opponent' } },
-    arrows, role: 'teach',
+    arrows, role: 'teach', ...(stakes ? { stakes } : {}),
   };
 }
 

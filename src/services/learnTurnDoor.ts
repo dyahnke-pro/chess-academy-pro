@@ -39,7 +39,7 @@ export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
 /** Why the door held a lane on a turn. */
-export type HoldReason = 'mate-turn' | 'verdict-turn' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase';
+export type HoldReason = 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase';
 
 /** The AVERAGE a Learn turn is held to (CLAUDE.md WHY standard measure 4) —
  *  the scale of the marginal bar, never a limit. */
@@ -595,24 +595,44 @@ export function decideTurn(
   const isMateFact = (x: { fact: VoiceFact; lane: LearnLane }): boolean => !!stakesOf(x.lane, x.fact.text)?.mate?.forced;
   const mateTurn = !!priorLead?.mateTurn || survivors.some((x) => !subsumed.has(x) && isMateFact(x));
   const verdict = survivors.find((x) => x.lane === 'mistake' && !subsumed.has(x)) ?? null;
+  // A DANGER THAT COSTS SOMETHING NOW (OS-1 replay 2026-10-19, 22.Rxa5: "No
+  // rush yet — if you play b4 and they answer Ra1, their rook pins your
+  // bishop" spoke for twenty seconds and the blunder's verdict, queued behind
+  // it, was never heard). A warning with nothing lost by force this move is
+  // not danger on a verdict turn: it waits. A danger with stakes always
+  // speaks — the stakes are the producer's own (`threatStakes`), never prose.
+  const presentDanger = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
+    DANGER_LANES.has(x.lane) && stakeOf(x.lane, x.fact.text) > 0;
   /** A move that cost a point or more makes this whole turn a verdict turn. */
   const moveCost = turn && turn.kind !== 'phase' ? turn.moveCostCp : null;
   const costTurnValue = moveCost !== null && moveCost >= VERDICT_TURN_CP ? stakeValue(costStakes(moveCost)) ?? null : null;
   // THE TURN'S HOLDS DECIDE BEFORE ITS LEAD (Learn audit 2026-10-14, LD2: a
   // lead was picked, then held by the mate rule, and the row named a lead that
   // never spoke). One predicate, read by the lead pick and the speak loop.
-  const turnHolds = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
-    (mateTurn && !DANGER_LANES.has(x.lane) && !isMateFact(x))
+  const midExchange = turn && turn.kind !== 'phase' ? turn.midExchange : null;
+  // ONE ANSWER PER HELD FACT: why it waits (the hold and its reason used to be
+  // two computations, and a costly-move hold was reported as 'mate-turn').
+  const holdWhy = (x: { fact: VoiceFact; lane: LearnLane }): HoldReason | null => {
+    if (mateTurn && !DANGER_LANES.has(x.lane) && !isMateFact(x)) return 'mate-turn';
     // A VERDICT TURN STAYS ON THE VERDICT (David 2026-10-11, the "very good"
     // bar: 35–50 words, one lead). When the student's move is graded, the
     // grade, its cost ('but' beats) and any danger speak; a plan, a route or a
     // method aside worth less than the verdict waits for a calm move.
-    || (!!verdict && x !== verdict && !DANGER_LANES.has(x.lane) && DNA_BEAT[x.lane] !== 'but'
-      && stakeOf(x.lane, x.fact.text) < stakeOf(verdict.lane, verdict.fact.text))
+    if (verdict && x !== verdict && !presentDanger(x) && DNA_BEAT[x.lane] !== 'but'
+      && stakeOf(x.lane, x.fact.text) < stakeOf(verdict.lane, verdict.fact.text)) return 'verdict-turn';
     // …AND A COSTLY MOVE IS A VERDICT TURN IN EVERY WAVE, whichever lane
     // carries the grade: the move's own cost is the verdict's weight.
-    || (!verdict && costTurnValue !== null && !DANGER_LANES.has(x.lane) && DNA_BEAT[x.lane] !== 'but'
-      && stakeOf(x.lane, x.fact.text) < costTurnValue);
+    if (!verdict && costTurnValue !== null && !presentDanger(x) && DNA_BEAT[x.lane] !== 'but'
+      && stakeOf(x.lane, x.fact.text) < costTurnValue) return 'verdict-turn';
+    // A TRADE IN PROGRESS IS A NOW TURN (Learn walk 2026-10-19, 12…Nxb3 and
+    // 13…Bxg3: "break open with the pawn push that is ready now" and
+    // "overprotect your best piece" while the recapture was owed). An idea, a
+    // plan or a board read waits until the trade is finished; danger, the
+    // verdict and a tactic still speak.
+    if (midExchange && DNA_BEAT[x.lane] === 'point' && x.lane !== 'tactic' && !isMateFact(x)) return 'mid-exchange';
+    return null;
+  };
+  const turnHolds = (x: { fact: VoiceFact; lane: LearnLane }): boolean => holdWhy(x) !== null;
   let top: { fact: VoiceFact; lane: LearnLane } | null = null;
   for (const x of survivors) {
     if (subsumed.has(x) || dangerWaits(x) || turnHolds(x)) continue;
@@ -668,7 +688,7 @@ export function decideTurn(
   const calmRead = (x: { fact: VoiceFact }): boolean => !!x.fact.claims?.includes('srr:any-move-fine');
   const somethingAtStake = survivors.some((y) => !calmRead(y) && !subsumed.has(y) && stakeOf(y.lane, y.fact.text) > 0);
   for (const x of survivors) {
-    if (turnHolds(x)) { hold(x.lane, verdict && x !== verdict ? 'verdict-turn' : 'mate-turn'); continue; }
+    { const why = holdWhy(x); if (why) { hold(x.lane, why); continue; } }
     if (dangerWaits(x)) { hold(x.lane, 'danger-waits'); continue; }
     if (somethingAtStake && calmRead(x)) { hold(x.lane, 'contradicts'); continue; }
     // A DESCRIPTION — nothing at stake, from a lane that describes the board
