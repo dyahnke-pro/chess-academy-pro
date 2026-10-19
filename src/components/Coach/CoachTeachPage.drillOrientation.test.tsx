@@ -60,6 +60,7 @@ vi.mock('../../services/stockfishEngine', () => {
       analyzeWithBudget: vi.fn().mockResolvedValue(analysis),
       isBusy: vi.fn(() => false),
       newGame: vi.fn(),
+      supersedeWaiting: vi.fn(),
     },
     resolveWorkerUrl: vi.fn(() => ({ url: '', variant: 'single', reason: 'test', workerType: 'classic' })),
   };
