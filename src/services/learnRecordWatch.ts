@@ -1,11 +1,11 @@
 /**
  * learnRecordWatch — the ONE loop a live game uses to see the student's record
  * change: snapshot when the game starts, re-read each time a record row is
- * written (`onWeaknessModelChanged`), and report what crossed. Two readers ride
+ * written (`onWeaknessModelSettled`), and report what crossed. Two readers ride
  * it: a skill turning GREEN (the FIXED chip) and a skill METER moving (the coin
  * and bar). They used to be two hooks each running its own copy of the loop.
  */
-import { onWeaknessModelChanged } from './weaknessModelEvents';
+import { onWeaknessModelSettled } from './weaknessModelEvents';
 import { loadProvenTags } from './studentRecord';
 import { claimProvenAnnouncements, markProvenAnnounced } from './provenAnnouncements';
 import { readSkillRows, metersFrom, isBackgroundRow, type SkillRows } from './skillMetersLoader';
@@ -25,7 +25,7 @@ export function watchProvenTags(onProven: (tag: string) => void): () => void {
     known = s;
     void markProvenAnnounced(s);
   }).catch(() => { known = new Set(); });
-  const off = onWeaknessModelChanged(() => {
+  const off = onWeaknessModelSettled(() => {
     void loadProvenTags().then((now) => {
       if (cancelled || !known) return;
       const crossed = [...now].filter((tag) => !known?.has(tag));
@@ -61,7 +61,7 @@ export function watchSkillMeters(onMove: (moves: SkillMeterMove[]) => void): () 
   let known: Set<string> | null = null;
   const ids = (r: SkillRows): Set<string> => new Set([...r.held.map((x) => x.id), ...r.slips.map((x) => x.id)]);
   void readSkillRows().then((r) => { if (!cancelled) known = ids(r); }).catch(() => { known = new Set(); });
-  const off = onWeaknessModelChanged(() => {
+  const off = onWeaknessModelSettled(() => {
     void readSkillRows().then((now) => {
       if (cancelled || !known) return;
       const seen = known;

@@ -15,6 +15,7 @@ import { getWeaknessLifecycle } from './weaknessLifecycle';
 import { buildWeaknessSignals, type WeaknessSignal } from './weaknessSignal';
 import { onWeaknessModelChanged } from './weaknessModelEvents';
 import { capabilityProven, getCapabilityProfile } from './capabilityEvidence';
+import { loadInaccuracyVoice } from './inaccuracyVoice';
 
 /** The tags the positive record has PROVEN — the ONE definition
  *  (`capabilityProven`), read here so the pure leaf never touches Dexie.
@@ -88,6 +89,10 @@ export async function loadProvenTags(): Promise<Set<string>> {
  *  proven, `lighter` when answered right since the last miss (a held streak)
  *  but not yet proven. Absent = full teaching (grey or red). */
 export async function loadFadeLevels(): Promise<Map<string, 'lighter' | 'short'>> {
+  // The inaccuracy tally is the other half of "how much does the record let
+  // the coach say": read with the fade, when the surface opens and when the
+  // record settles — never first on a slip, which left it unread all game.
+  void loadInaccuracyVoice();
   try {
     return fadeLevelsFrom(await getCapabilityProfile());
   } catch {

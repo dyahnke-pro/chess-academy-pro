@@ -7,7 +7,7 @@
 // student (teach), never as silence. Refreshes when the model changes.
 
 import { useEffect, useRef } from 'react';
-import { onWeaknessModelChanged } from '../services/weaknessModelEvents';
+import { onWeaknessModelSettled } from '../services/weaknessModelEvents';
 import { loadStudentRecord, type StudentRecord } from '../services/studentRecord';
 
 export function useStudentRecord(): React.RefObject<StudentRecord> {
@@ -18,7 +18,7 @@ export function useStudentRecord(): React.RefObject<StudentRecord> {
       void loadStudentRecord().then((record) => { if (alive) ref.current = record; });
     };
     load();
-    const off = onWeaknessModelChanged(load);
+    const off = onWeaknessModelSettled(load);
     return () => { alive = false; off(); };
   }, []);
   return ref;
