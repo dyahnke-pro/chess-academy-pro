@@ -27,6 +27,8 @@ const file = args.find((a) => !a.startsWith('--'));
 const opt = (k, d) => { const i = args.indexOf(`--${k}`); return i >= 0 ? args[i + 1] : d; };
 const DEPTH = Number(opt('depth', 16));
 const OUT = opt('out', null);
+/** Grade only the newest N filed mistakes (a real record holds thousands). */
+const SAMPLE = Number(opt('sample', 0));
 if (!file) { console.error('usage: audit-record-grid.mjs <log.md|drop.json> [--depth 16] [--out report.md]'); process.exit(1); }
 
 /** Below this real cost (centipawns) a filed mistake is not a mistake. */
@@ -49,8 +51,9 @@ if (text.trimStart().startsWith('{')) {
   const stores = JSON.parse(text).stores ?? {};
   for (const r of stores.misconceptionTags ?? []) {
     if (!r.fen || !r.playedSan || !r.bestSan) continue;
-    mistakes.push({ id: r.id.slice(0, 8), fen: r.fen, tag: r.tag, cp: r.cpLoss ?? null, phase: r.gamePhase ?? null, played: r.playedSan, best: r.bestSan, game: r.sourceGameId ?? null });
+    mistakes.push({ id: r.id.slice(0, 8), at: r.createdAt ?? 0, fen: r.fen, tag: r.tag, cp: r.cpLoss ?? null, phase: r.gamePhase ?? null, played: r.playedSan, best: r.bestSan, game: r.sourceGameId ?? null });
   }
+  mistakes.sort((a, b) => a.at - b.at);
   for (const r of stores.capabilityEvidence ?? []) posed.push({ fen: r.fen, tags: [r.tag], outcome: r.outcome, imp: r.posedImportance ?? null });
   for (const r of stores.meta ?? []) if (/app-audit-log/.test(r.key)) source += ' (+ audit log)';
 } else {
@@ -112,7 +115,7 @@ say('## 2. Filed mistakes');
 say('| # | played → best | filed | real | before | phase (filed / board) | tag | verdict |');
 say('|---|---|---|---|---|---|---|---|');
 const tally = { ok: 0, bad: 0, decided: 0, notMistake: 0, costWrong: 0, phase: 0, illegal: 0 };
-for (const m of mistakes) {
+for (const m of SAMPLE > 0 ? mistakes.slice(-SAMPLE) : mistakes) {
   let c; try { c = new Chess(m.fen); } catch { tally.illegal += 1; continue; }
   const before = await evalFen(m.fen);
   const a = new Chess(m.fen); const b = new Chess(m.fen);

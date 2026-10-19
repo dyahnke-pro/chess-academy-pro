@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**352 lines · 11 exports · 26 importers · 15 tests · 4 audits**
+**354 lines · 11 exports · 26 importers · 16 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6365) — names `misconceptionService`
+- **The standard post-deploy ritual** (CLAUDE.md:6422) — names `misconceptionService`
 
 ## Who calls in
 
@@ -54,7 +54,7 @@
 ### `LogMisconceptionInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `logMisconception` (function) — 56 call sites
+### `logMisconception` (function) — 57 call sites
 - `src/components/Coach/FundamentalsPage.test.tsx:92`
 - `src/components/Coach/FundamentalsPage.test.tsx:129`
 - `src/components/Coach/FundamentalsPage.test.tsx:130`
@@ -76,6 +76,7 @@
 - `src/services/fundamentalsCatalog.test.ts:48`
 - `src/services/fundamentalsCatalog.test.ts:49`
 - `src/services/fundamentalsCatalog.test.ts:53`
+- `src/services/learnTranscript.test.ts:45`
 - `src/services/misconceptionDrill.test.ts:38`
 - `src/services/misconceptionDrill.test.ts:46`
 - `src/services/misconceptionDrill.test.ts:47`
@@ -128,8 +129,8 @@
 - `src/components/Insights/MisconceptionsTab.tsx:77`
 - `src/components/Insights/MisconceptionsTab.tsx:87`
 - `src/services/bucketPipelineAudit.ts:158`
-- `src/services/coachApi.ts:1939`
-- `src/services/coachApi.ts:4850`
+- `src/services/coachApi.ts:1955`
+- `src/services/coachApi.ts:4867`
 - `src/services/fixtureGames.test.tsx:113`
 - `src/services/fixtureGames.test.tsx:122`
 - `src/services/fundamentalsPipeline.realGame.test.ts:226`
@@ -171,6 +172,7 @@
 - `src/services/fundamentalReachesDecider.test.ts`
 - `src/services/fundamentalsCatalog.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
+- `src/services/learnTranscript.test.ts`
 - `src/services/misconceptionDrill.test.ts`
 - `src/services/misconceptionRulesBackfill.test.ts`
 - `src/services/misconceptionService.test.ts`
