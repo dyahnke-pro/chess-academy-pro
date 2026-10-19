@@ -274,6 +274,17 @@ describe('syncService', () => {
       expect(restored[0].id).toBe('mp-rt');
     });
 
+    it('carries the skill record with the games (David 2026-10-19: a restored laptop started him over)', async () => {
+      await db.capabilityEvidence.put({ id: 'ev1', tag: 'hung-material', outcome: 'held', fen: 'f', playedSan: 'e4', posedImportance: 90, recordedAt: 1, origin: 'review', prompted: false, sourceGameId: 'g1' } as never);
+      await db.misconceptionTags.put({ id: 'mt1', tag: 'hung-material', fen: 'f', playedSan: 'Qxd2', createdAt: 1, source: 'auto-analysis', sourceGameId: 'g1' } as never);
+      const exported = await exportUserData();
+      await db.capabilityEvidence.clear();
+      await db.misconceptionTags.clear();
+      await importUserData(exported);
+      expect((await db.capabilityEvidence.get('ev1'))?.sourceGameId).toBe('g1');
+      expect((await db.misconceptionTags.get('mt1'))?.playedSan).toBe('Qxd2');
+    });
+
     it('round-trips the meta blob (coach memory + rolodex state) — WO-ROLODEX-UI-01 PR-4', async () => {
       // Stand in for whatever the in-app store writes: a serialized
       // coachMemory.v1 entry holding rolodex order state.

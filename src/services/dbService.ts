@@ -264,6 +264,8 @@ export async function exportUserData(): Promise<string> {
     setupPuzzles,
     openingWeakSpots,
     meta,
+    capabilityEvidence,
+    misconceptionTags,
   } = await db.transaction(
     'r',
     // Array-of-tables form (Dexie's typed overload caps at 5 individual table
@@ -279,6 +281,8 @@ export async function exportUserData(): Promise<string> {
       db.setupPuzzles,
       db.openingWeakSpots,
       db.meta,
+      db.capabilityEvidence,
+      db.misconceptionTags,
     ],
     async () => {
       const [
@@ -292,6 +296,8 @@ export async function exportUserData(): Promise<string> {
         setupPuzzles,
         openingWeakSpots,
         meta,
+        capabilityEvidence,
+        misconceptionTags,
       ] = await Promise.all([
         db.profiles.toArray(),
         db.sessions.toArray(),
@@ -312,10 +318,16 @@ export async function exportUserData(): Promise<string> {
         // favoritedAt / userOrderedFavorites, etc.) syncs across
         // devices via pushToCloud → Supabase. Previously stranded.
         db.meta.toArray(),
+        // THE SKILL RECORD TRAVELS WITH THE GAMES (David 2026-10-19: "both").
+        // It is the coach's knowledge of the student — a restored device that
+        // has the games but not the record starts the student over.
+        db.capabilityEvidence.toArray(),
+        db.misconceptionTags.toArray(),
       ]);
       return {
         profiles, sessions, openings, flashcards, games,
         mistakePuzzles, classifiedTactics, setupPuzzles, openingWeakSpots, meta,
+        capabilityEvidence, misconceptionTags,
       };
     },
   );
@@ -332,6 +344,8 @@ export async function exportUserData(): Promise<string> {
       setupPuzzles,
       openingWeakSpots,
       meta,
+      capabilityEvidence,
+      misconceptionTags,
     },
     null,
     2,

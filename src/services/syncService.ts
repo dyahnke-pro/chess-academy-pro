@@ -1,6 +1,7 @@
 import { db } from '../db/schema';
 import { DEVICE_LOCAL_META_KEYS } from './misconceptionRulesBackfill';
 import { asOpeningKey } from './openingKey';
+import type { CapabilityEvidenceRecord } from './capabilityEvidence';
 import { exportUserData } from './dbService';
 import { decryptApiKey } from './cryptoService';
 import type {
@@ -10,6 +11,7 @@ import type {
   SessionRecord,
   FlashcardRecord,
   GameRecord,
+  MisconceptionTagRecord,
   MistakePuzzle,
   ClassifiedTactic,
   SetupPuzzle,
@@ -53,6 +55,10 @@ interface ImportData {
    *  activeOpeningCardId / lastActiveRolodexColor / favoritedAt /
    *  userOrderedFavorites, etc.) for cross-device sync. */
   meta?: MetaRow[];
+  /** The skill record — every question the board posed and how it went. */
+  capabilityEvidence?: CapabilityEvidenceRecord[];
+  /** The mistakes on the record, with their causes. */
+  misconceptionTags?: MisconceptionTagRecord[];
 }
 
 /** Try-decrypt a (`{key}Encrypted`, `{key}Iv`) pair, falling back to
@@ -216,6 +222,12 @@ export async function importUserData(json: string): Promise<void> {
   }
   if (data.openingWeakSpots) {
     await db.openingWeakSpots.bulkPut(data.openingWeakSpots);
+  }
+  if (data.capabilityEvidence) {
+    await db.capabilityEvidence.bulkPut(data.capabilityEvidence);
+  }
+  if (data.misconceptionTags) {
+    await db.misconceptionTags.bulkPut(data.misconceptionTags);
   }
   if (data.meta) {
     // bulkPut by key — same shape as how the in-app writers persist.

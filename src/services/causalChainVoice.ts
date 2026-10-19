@@ -118,17 +118,22 @@ function sentenceFor(node: CausalNode, i: number, register: CausalRegister, stud
       const tsq = String(node.data.target);
       const who = subjCap(node.color, student);
       const move = String(node.data.move);
+      // Said as counted: unguarded, or attacked more often than guarded.
+      const guards = Number(node.data.guards ?? 0);
+      const outnumbered = guardsLine(Number(node.data.attackers ?? 0), guards);
       if (stance === 'missed') {
         // Frame = before the capture; the target IS still on tsq.
-        return `${who} could have won the ${tp} on ${tsq} with ${move} — nothing was guarding it.`;
+        return `${who} could have won the ${tp} on ${tsq} with ${move} — ${guards === 0 ? 'nothing was guarding it' : outnumbered}.`;
       }
       if (stance === 'allowed') {
-        return `${who} can win the ${tp} on ${tsq} with ${move} — nothing is guarding it.`;
+        return `${who} can win the ${tp} on ${tsq} with ${move} — ${guards === 0 ? 'nothing is guarding it' : outnumbered}.`;
       }
       // Played — frame-safe: tsq now holds the capturer, never "the <piece> on tsq".
+      // The counts are said once: by the cause, when the chain has one.
+      const causeSaidIt = chain.nodes.some((x) => x.kind === 'defender-removed');
       return register === 'review'
-        ? `${who} won the ${tp} — the capture on ${tsq} came for free, with nothing left guarding it.`
-        : `Nothing guards the ${tp} now — taking on ${tsq} wins it.`;
+        ? `${who} won the ${tp} on ${tsq}${guards === 0 ? ' — nothing was left guarding it' : causeSaidIt ? '' : ` — ${guardsLine(Number(node.data.attackers ?? 0), guards, true)}`}.`
+        : guards === 0 ? `Nothing guards the ${tp} now — taking on ${tsq} wins it.` : `Taking on ${tsq} wins the ${tp} — ${outnumbered}.`;
     }
     case 'defender-removed': {
       const gp = String(node.data.guardPiece);
@@ -139,6 +144,13 @@ function sentenceFor(node: CausalNode, i: number, register: CausalRegister, stud
       // Frame-safe: on the post-capture board tsq holds the capturer, so never
       // say "the <tp> on tsq". Name the guard leaving + the square it guarded.
       void tp;
+      const guards = Number(node.data.guards ?? 0);
+      if (guards > 0) {
+        const left = guardsLine(Number(node.data.attackers ?? 0), guards, register === 'review');
+        return register === 'review'
+          ? `${P} ${node.data.move} pulled the ${gp} off ${from}, one of the guards on ${tsq} — ${left}.`
+          : `${P} ${gp} leaves ${from}, one of the guards on ${tsq} — ${left}.`;
+      }
       return register === 'review'
         ? `${P} ${node.data.move} pulled the ${gp} off ${from} — the only piece guarding ${tsq}.`
         : `${P} ${gp} leaves ${from}, the only guard on ${tsq}.`;
@@ -207,4 +219,12 @@ export function renderCausalChain(chain: CausalChain | null, opts: RenderOptions
   const t = tail(chain).trim();
   if (t) out.push(t);
   return out;
+}
+
+const COUNT = ['no', 'one', 'two', 'three', 'four', 'five', 'six'];
+/** "two pieces attack it and only one guards it" — the counts the chain proved. */
+function guardsLine(attackers: number, guards: number, past = false): string {
+  const n = (k: number): string => COUNT[k] ?? String(k);
+  if (past) return `${n(attackers)} ${attackers === 1 ? 'piece' : 'pieces'} attacked it and only ${n(guards)} guarded it`;
+  return `${n(attackers)} ${attackers === 1 ? 'piece attacks' : 'pieces attack'} it and only ${n(guards)} ${guards === 1 ? 'guards' : 'guard'} it`;
 }

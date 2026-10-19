@@ -60,3 +60,16 @@ describe('renderCausalChain — David\'s game, student is Black', () => {
     expect(text.toLowerCase()).not.toMatch(/\b(we|our|us)\b/);
   });
 });
+
+describe('the guards are counted, not assumed (review 2026-10-19, chesscom-1040709576 move 14)', () => {
+  // White castled, so the king stopped guarding d2 — but the queen on d1 still
+  // did. The review said "nothing left guarding it".
+  const SANS = ["e4","c5","Nf3","Nc6","c3","d6","d4","cxd4","cxd4","Bg4","Bc4","e6","Be3","Nf6","Nc3","Nxe4","Nxe4","d5","Bd3","dxe4","Bxe4","Bb4+","Bd2","Bxf3","Bxf3","Qxd4","O-O","Qxd2"];
+  it('names the guard that left as one of two and says the count', async () => {
+    const { buildCausalChain } = await import('./causalChain');
+    const chain = buildCausalChain({ historySans: SANS, focusPly: SANS.length } as never);
+    const lines = renderCausalChain(chain, { register: 'review', studentColor: 'b', rating: 1400 } as never);
+    expect(lines.join(' ')).toContain('one of the guards on d2 — two pieces attacked it and only one guarded it');
+    expect(lines.join(' ')).not.toMatch(/nothing (was )?left guarding|the only piece guarding/);
+  });
+});

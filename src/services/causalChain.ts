@@ -243,6 +243,14 @@ function replay(historySans: readonly string[], upto: number): { chess: Chess; m
  *  (no defender). "Newly" = it was not attacked by the mover before the move, so
  *  THIS move created the attack. Returns the target + whether the moved piece is
  *  one of the attackers. Null when no such loose target. */
+/** How many of `mover`'s pieces attack `sq` and how many of the owner's guard
+ *  it — the counts behind "won", so the sentence says them instead of
+ *  assuming the guards were zero (review 2026-10-19, chesscom-1040709576:
+ *  "nothing left guarding" a bishop the queen on d1 still guarded). */
+function guardCount(c: Chess, sq: Square, mover: Color): { attackers: number; guards: number } {
+  return { attackers: c.attackers(sq, mover).length, guards: c.attackers(sq, other(mover)).length };
+}
+
 function exploitedLoosePiece(before: Chess, after: Chess, focus: Move): { target: Square; type: PieceSymbol; movedPieceAttacks: boolean } | null {
   const mover = focus.color;
   const enemy = other(mover);
@@ -435,7 +443,7 @@ function buildPrematureQueenDiscoveryChain(input: CausalChainInput): CausalChain
     : {
         kind: 'won-loose-piece', ply: focusPly, color: mover,
         squares: [focus.to, loose.target],
-        data: { move: focus.san, target: loose.target, targetPiece: PIECE_NOUN[loose.type], to: focus.to },
+        data: { move: focus.san, target: loose.target, targetPiece: PIECE_NOUN[loose.type], to: focus.to, ...guardCount(after, loose.target, mover) },
         fundamentalId: null,
         arrows: arrowIf(focus.to, loose.target, 'green'),
         highlights: [{ square: loose.target, color: 'red' }],
@@ -607,7 +615,7 @@ function buildRemovedDefenderChain(input: CausalChainInput): CausalChain | null 
   const causeNode: CausalNode = {
     kind: 'defender-removed', ply: focusPly - 1, color: enemy,
     squares: [oppMove.from, s],
-    data: { move: oppMove.san, guardPiece: PIECE_NOUN[guardType], from: oppMove.from, target: s, targetPiece: PIECE_NOUN[victimType] },
+    data: { move: oppMove.san, guardPiece: PIECE_NOUN[guardType], from: oppMove.from, target: s, targetPiece: PIECE_NOUN[victimType], ...guardCount(beforeR.chess, s, mover) },
     fundamentalId: 'loose-piece',
     tag: 'hung-material',
     arrows: [],
@@ -616,7 +624,7 @@ function buildRemovedDefenderChain(input: CausalChainInput): CausalChain | null 
   const tacticNode: CausalNode = {
     kind: 'won-loose-piece', ply: focusPly, color: mover,
     squares: [focus.to, s],
-    data: { move: focus.san, target: s, targetPiece: PIECE_NOUN[victimType], to: focus.to },
+    data: { move: focus.san, target: s, targetPiece: PIECE_NOUN[victimType], to: focus.to, ...guardCount(beforeR.chess, s, mover) },
     fundamentalId: null,
     arrows: [],
     highlights: [{ square: s, color: 'red' }],
