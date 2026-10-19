@@ -97,8 +97,8 @@
 - `src/services/reviewWalkCT.test.ts:49`
 - `src/services/reviewWalkCT.test.ts:69`
 - `src/services/reviewWalkCT.test.ts:86`
-- `src/services/tacticGeometry.test.ts:258`
 - `src/services/tacticGeometry.test.ts:263`
+- `src/services/tacticGeometry.test.ts:268`
 - `src/services/unifiedBetterMoveReason.test.ts:36`
 - `src/test/teach02Wired.test.ts:26`
 - `src/test/teach02Wired.test.ts:66`

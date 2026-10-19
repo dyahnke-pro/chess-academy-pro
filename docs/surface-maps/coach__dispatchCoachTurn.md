@@ -145,8 +145,8 @@
 
 ### `setPendingOffer` (function) — 3 call sites
 - `src/components/Coach/CoachTeachPage.tsx:3411`
-- `src/components/Coach/CoachTeachPage.tsx:12389`
-- `src/components/Coach/CoachTeachPage.tsx:14468`
+- `src/components/Coach/CoachTeachPage.tsx:12393`
+- `src/components/Coach/CoachTeachPage.tsx:14472`
 
 ### `openTurnRead` (function) — 2 call sites
 - `src/components/Coach/CoachTeachPage.tsx:3477`
