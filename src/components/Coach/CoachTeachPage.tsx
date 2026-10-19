@@ -9806,7 +9806,9 @@ export function CoachTeachPage(): JSX.Element {
           praise = null;
           // Recorded as said, so the late wave's move-point lane does not
           // repeat the reason a second later.
-          for (const k of spokenSentenceKeys({ kept: [{ kind: 'computed', text: gradeLine, fen: move.fen }] })) learnMemRef.current.spokenKeys.add(k);
+          // It is this move's reason, so it CLAIMS the move: the door's own-move
+          // lanes carry the same claim and stand down (one reason per move).
+          for (const k of spokenSentenceKeys({ kept: [{ kind: 'computed', text: gradeLine, fen: move.fen, claims: [`own-move-reason:${move.history.length}`] }] })) learnMemRef.current.spokenKeys.add(k);
           setMessages((prev) => [...prev, { id: `grade-${Date.now()}`, role: 'assistant', content: gradeLine, timestamp: Date.now() }]);
           void speakComputed(gradeLine, { forced: false, intent: 'learn' });
           captureEvent('post_move_grade_spoken', { surface: 'coach-teach', reason: grade.reason, cp_loss: Math.round(grade.cpLossCp), fault: grade.fault });
@@ -9820,6 +9822,11 @@ export function CoachTeachPage(): JSX.Element {
           : null;
         if (praise && (foundSpeaks || praiseWhy)) {
           const line = praiseWhy ? `${praise} ${praiseWhy}` : praise;
+          // A praised save is the move's reason — said here, outside the door,
+          // so it must claim the move or the late wave says it again ("Good
+          // defence. Qb8 takes your queen out of the attack." then "Your Qb8
+          // saves it from their knight on b5", prod walk 2026-10-19).
+          if (praiseWhy) for (const k of spokenSentenceKeys({ kept: [{ kind: 'computed', text: line, fen: move.fen, claims: [`own-move-reason:${move.history.length}`] }] })) learnMemRef.current.spokenKeys.add(k);
           setMessages((prev) => [...prev, { id: `praise-${Date.now()}`, role: 'assistant', content: line, timestamp: Date.now() }]);
           void speakComputed(line, { forced: false, intent: 'learn' });
         }
