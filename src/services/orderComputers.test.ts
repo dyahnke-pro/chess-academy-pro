@@ -110,9 +110,12 @@ describe('hold a resource until it bites (holdResource)', () => {
     expect(r?.sans).toEqual(['Nc3', 'Bb4']);
     expect(r?.threat).toEqual(['Bxc3+', 'bxc3']);
     expect(r?.text).toMatch(/c3/);
+    // The student's next move is held: the idea, never the move (Alekhine walk 2026-10-19).
+    expect(r?.text).not.toMatch(/Bb4|b4/);
     voice(r!.text);
     const kept = heldResource(fen, 'Nf6', 'Nf6', 0);
-    expect(kept?.text).toMatch(/^(Keeping|Bb4)/);
+    expect(kept?.text).toMatch(/^(Keeping|The bishop)/);
+    expect(kept?.text).not.toMatch(/Bb4/);
   });
   it('silent when the engine wants the check now, or the knight is already on c3', () => {
     expect(holdIdea(fen, 'b', 'Bb4+')).toBeNull();

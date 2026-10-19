@@ -139,16 +139,19 @@ export function holdIdea(fen: string, student: 'w' | 'b', bestSan: string | null
 
 function heldText(l: Omit<HeldResource, 'text'>, key: string, kept: boolean): string {
   const knightSq = l.squares[1];
-  const res = l.resource;
-  const cap = l.threat[0];
+  const what = l.check ? 'the bishop check' : 'the bishop move';
   if (kept) {
+    // Still the student's resource for a later move: the idea, never the move.
     return rotateStem([
-      `Keeping ${l.check ? `the check ${res}` : res} back is right: once their knight comes to ${knightSq}, it pins the knight, and ${cap} would leave them doubled pawns.`,
-      `${res} is still in hand — it bites once their knight is on ${knightSq}: the pin, then ${cap} doubling their pawns.`,
+      `Keeping ${what} back is right: once their knight comes to ${knightSq}, the bishop pins it, and taking it would leave them doubled pawns.`,
+      `${what[0].toUpperCase()}${what.slice(1)} is still in hand — it bites once their knight is on ${knightSq}: the pin, then the capture doubling their pawns.`,
     ], stemKeyOf(key));
   }
+  // THE STUDENT'S NEXT MOVE IS HELD (Alekhine walk 2026-10-19: "Save the
+  // check Bb5 until…" before they moved — Bb5 was legal then). The idea
+  // speaks: which piece, what it waits for, what it wins; never the move.
   return rotateStem([
-    `${l.check ? `Save the check ${res}` : `Save ${res}`} until their knight is on ${knightSq} — then it pins the knight, and ${cap} would leave them doubled pawns.`,
-    `${res} can wait: once their knight comes to ${knightSq}, the bishop pins it there, and ${cap} would double their pawns.`,
+    `Save ${what} until their knight is on ${knightSq} — then the bishop pins it, and taking it would leave them doubled pawns.`,
+    `${what[0].toUpperCase()}${what.slice(1)} can wait: once their knight comes to ${knightSq}, the bishop pins it there, and the capture would double their pawns.`,
   ], stemKeyOf(key));
 }

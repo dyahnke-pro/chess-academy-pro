@@ -143,6 +143,24 @@ export function planOverOneMove(fenBefore: string, san: string, bestSan: string 
   };
 }
 
+/** The bishop's own pawns standing on its diagonals, nearest first, up to
+ *  the first square held by anything else. */
+function pawnsOnDiagonals(c: NonNullable<ReturnType<typeof board>>, sq: string, side: Color): Set<string> {
+  const out = new Set<string>();
+  const f0 = sq.charCodeAt(0) - 97;
+  const r0 = Number(sq[1]) - 1;
+  for (const [df, dr] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+    for (let f = f0 + df, r = r0 + dr; f >= 0 && f < 8 && r >= 0 && r < 8; f += df, r += dr) {
+      const s = `${String.fromCharCode(97 + f)}${r + 1}`;
+      const p = c.get(s as Square);
+      if (!p) continue;
+      if (p.type !== 'p' || p.color !== side) break;
+      out.add(s);
+    }
+  }
+  return out;
+}
+
 /** A PLACEMENT JUDGED BY ITS FUTURE LINE — the student's bishop has almost no
  *  scope now, and the engine's line opens it with the student's own pawn moves
  *  while it stays put. `fen`: the student to move; `pvUci`: the engine line. */
@@ -161,18 +179,23 @@ export function placementFutureLine(fen: string, student: Color, pvUci: readonly
     // moves before the student played, and drew an e7-e6 arrow; and the
     // student had planned nothing). The idea is the lesson: these pawns block
     // it, and moving them frees it.
+    // A pawn blocks only if it stands on one of the bishop's diagonals
+    // (Alekhine walk 2026-10-19: "your pawns on c2 and d2" for a bishop on c1 —
+    // c2 is not on its diagonals; the engine line just happened to move it).
+    const inTheWay = pawnsOnDiagonals(c0, bsq, student);
     const blockers: string[] = [];
     for (let i = 0; i < pv.length; i++) {
       const mv = c.move(pv[i]);
       if (mv.from === bsq || (mv.color !== student && mv.to === bsq)) break;
-      if (mv.color === student && mv.piece === 'p' && !blockers.includes(mv.from)) blockers.push(mv.from);
+      if (mv.color === student && mv.piece === 'p' && inTheWay.has(mv.from) && !blockers.includes(mv.from)) blockers.push(mv.from);
       if (blockers.length > 0 && scope(c, bsq) - now >= 4) {
         const proof = legalLineProof(fen, pv.slice(0, i + 1));
         if (!proof) break;
-        const pawns = blockers.length === 1 ? `pawn on ${blockers[0]} is` : `pawns on ${andList(blockers)} are`;
+        const one = blockers.length === 1;
+        const pawns = one ? `pawn on ${blockers[0]} is what blocks it — moving it` : `pawns on ${andList(blockers)} are what block it — moving them`;
         return {
           act: 'placement-future-line', squares: [bsq, ...blockers], proof, key: `future-bishop:${bsq}`,
-          text: `Your bishop on ${bsq} looks dead for now, but your ${pawns} what block it — moving them brings it to life.`,
+          text: `Your bishop on ${bsq} looks dead for now, but your ${pawns} brings it to life.`,
         };
       }
     }

@@ -243,6 +243,12 @@ describe('planJudgement', () => {
     expect(placementFutureLine(fen, 'w', ['h2h3', 'a7a6', 'g1h2'])).toBeNull();
   });
 
+  it('names only pawns on the bishop\'s diagonals (Alekhine walk 2026-10-19: "c2 and d2" for Bc1)', () => {
+    const fen = fromSans(['e4', 'Nf6', 'e5', 'Nd5']);
+    const r = voiced(placementFutureLine(fen, 'w', ['c2c4', 'd5b6', 'd2d4', 'd7d6']));
+    expect(r.text).toBe('Your bishop on c1 looks dead for now, but your pawn on d2 is what blocks it — moving it brings it to life.');
+  });
+
   it('small edges accumulate — and stay quiet once one real mistake decides', () => {
     const r = voiced(smallEdges([
       { san: 'a3', cpLoss: 10 }, { san: 'Bd2', cpLoss: 40 }, { san: 'h3', cpLoss: 45 }, { san: 'Rb1', cpLoss: 70 },
@@ -268,9 +274,12 @@ describe('structureReads — composed by when they apply', () => {
     expect(studentMoveStructure({ fenBefore: legal('6k1/pp3ppp/8/8/3PP3/8/PP4PP/2B2RK1 w - - 0 20'), san: 'Bf4', student: 'w', cpLoss: 60, bestSan: 'e5', bestUci: ['e4e5'], reply: null, namesBetterMove: true }).map((r) => r.act)).toContain('dont-plug-file');
     expect(theirMoveStructure(legal('6k1/pp3ppp/3p4/3np3/2P1P3/8/PP3PPP/6K1 w - - 0 20'), 'exd5', 'b').map((r) => r.act)).toContain('recapture-sealed-weakness');
     expect(boardStructure(legal('3q2k1/5ppp/8/3p4/4p3/2N3P1/PP3PBP/6K1 w - - 0 20'), 'w').map((r) => r.act)).toContain('key-pawn');
-    expect(linesStructure(fromSans(['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'e3']), 'b', [
-      { moves: ['b4c3', 'b2c3'], evaluation: 20 }, { moves: ['e8g8', 'f1d3'], evaluation: 30 },
-    ]).map((r) => r.act)).toContain('fighting-line');
+    const nimzo = fromSans(['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'e3']);
+    const nimzoLines = [{ moves: ['b4c3', 'b2c3'], evaluation: 20 }, { moves: ['e8g8', 'f1d3'], evaluation: 30 }];
+    expect(linesStructure(nimzo, 'b', nimzoLines, true).map((r) => r.act)).toContain('fighting-line');
+    // Learn holds the student's next move (Alekhine walk 2026-10-19): the idea speaks, the move waits.
+    const held = linesStructure(nimzo, 'b', nimzoLines, false).find((r) => r.act === 'fighting-line');
+    expect(held?.text).not.toMatch(/Bxc3|O-O/);
     // The opening position: no structural fact to state.
     expect(boardStructure(new Chess().fen(), 'w')).toEqual([]);
   });

@@ -65,8 +65,11 @@ export function orderTeaching(i: StudentMoveInput): TeachingHint[] {
   if (hold) {
     const lp = legalLineProof(hold.fen, hold.sans);
     if (lp) {
-      const proof: Proof = { ...lp, squares: hold.squares };
-      out.push({ lane: 'holdResource', text: hold.text, proof, squares: hold.squares, claims: [`hold:${hold.resource}`], event: { name: 'coach_resource_held', props: { surface: 'coach-teach', check: hold.check } }, arrows: proofArrows(proof, 'learn.holdResource'), evidence: { tag: 'bad-trade', posedImportance: 50 } });
+      // The knight's square only, no line drawn: the bishop's square and the
+      // line are the move the text keeps in hand.
+      const marked = [hold.squares[1]];
+      const proof: Proof = { ...lp, squares: marked };
+      out.push({ lane: 'holdResource', text: hold.text, proof, squares: marked, claims: [`hold:${hold.resource}`], event: { name: 'coach_resource_held', props: { surface: 'coach-teach', check: hold.check } }, arrows: [], evidence: { tag: 'bad-trade', posedImportance: 50 } });
     }
   }
 

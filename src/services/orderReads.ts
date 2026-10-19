@@ -81,7 +81,10 @@ export function orderReads(args: {
   const hold = holdIdea(fen, student, engineBest);
   if (hold) {
     const proof = legalLineProof(hold.fen, hold.sans);
-    if (proof) out.push({ kind: 'timing', text: hold.text, proof: { ...proof, squares: hold.squares }, squares: hold.squares, claim: `hold:${hold.resource}`, lines: [{ fen: hold.fen, sans: [...hold.sans] }], namesMove: false });
+    // The knight's square only: the bishop's square and a drawn line would be
+    // the move the text holds back.
+    const marked = [hold.squares[1]];
+    if (proof) out.push({ kind: 'timing', text: hold.text, proof: { ...proof, squares: marked }, squares: marked, claim: `hold:${hold.resource}`, namesMove: false });
   }
   // A CAPTURE THAT WOULD DEVELOP THEIR PIECE FOR THEM.
   const early = captureTooEarly(fen, student, engineBest);

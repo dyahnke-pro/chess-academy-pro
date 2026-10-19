@@ -96,13 +96,20 @@ export function boardStructure(fen: string, student: Color): StructureRead[] {
   ].filter((r): r is StructureRead => r !== null);
 }
 
-/** Plan choices read off the student's MultiPV at `fen` (student to move). */
+/** Plan choices read off the student's MultiPV at `fen` (student to move).
+ *  Every read here is about the move they are ABOUT to make, so `namesMoves`
+ *  is required: false holds the move and keeps the idea (Alekhine walk
+ *  2026-10-19 — "Nf3 creates the imbalance… c4 keeps it quiet" before the
+ *  student had moved). */
 export function linesStructure(
   fen: string, student: Color,
   lines: readonly { moves: readonly string[]; evaluation: number; mate?: number | null }[],
+  namesMoves: boolean,
 ): StructureRead[] {
-  return [
+  const reads = [
     safe(() => fightingLine(fen, student, lines)),
     safe(() => (lines[0] ? placementFutureLine(fen, student, lines[0].moves) : null)),
   ].filter((r): r is StructureRead => r !== null);
+  if (namesMoves) return reads;
+  return reads.map((r) => (r.heldForm ? { ...r, text: r.heldForm.text, squares: r.heldForm.squares, proof: r.heldForm.proof, heldForm: undefined } : r));
 }

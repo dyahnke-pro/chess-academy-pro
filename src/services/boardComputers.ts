@@ -324,7 +324,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
     surfaces: { learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: { wired: 'services/groundedAnswer.ts' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK },
   },
   structureLines: {
-    read: ({ fen, student, lines }) => safe(() => linesStructure(fen, student, lines).map(structureRead)),
+    read: ({ fen, student, lines }) => safe(() => linesStructure(fen, student, lines, false).map(structureRead)),
     surfaces: { learn: LEARN, review: { not: 'Review stores one engine line per ply, not the MultiPV the fighting line compares' }, play: PLAY_ASK, chat: { not: 'chat\'s assessment has no MultiPV in hand' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK },
   },
   planThread: {
