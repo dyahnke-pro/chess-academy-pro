@@ -64,6 +64,7 @@ import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } f
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
+import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
 import { pickStudentMove } from './audit-lib/student-player.mjs';
 import { engineStudentMove, stopEngineStudent } from './audit-lib/engine-student.mjs';
 // AUDIT_STUDENT=engine: the student plays soundly (Stockfish, reduced skill), so
@@ -529,6 +530,17 @@ async function main() {
   page.on('pageerror', (e) => pageErrors.push(String(e)));
   let ttsRequests = 0;
   page.on('request', (r) => { if (/\/api\/tts/.test(r.url())) ttsRequests += 1; });
+
+  // A REAL STUDENT'S RECORD (David 2026-10-18: "I want you auditing from my
+  // account. With games analyzed so you're not auditing from a fresh account").
+  // AUDIT_FIXTURE=<path to a data drop / Dexie export> loads it before the run,
+  // so the coach narrates against a real record instead of a blank one.
+  if (process.env.AUDIT_FIXTURE) {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
+    await page.waitForTimeout(8000);
+    const fx = await loadFixtureIntoIDB(page, process.env.AUDIT_FIXTURE);
+    console.log(`[fixture] ${fx.loaded ? `${fx.wrote} rows / ${fx.stores} stores` : `skipped (${fx.reason})`}`);
+  }
 
   try {
     // ── A/B/C/D: the canonical ask ─────────────────────────────────────────
