@@ -412,7 +412,10 @@ const sayKey = (s: string): string => {
   const bare = s
     .replace(/^\s*(?:(?:watch out|careful|check|look out|heads up|remember|note)\s*[—–:,.!-]*\s*)+/i, '')
     .replace(/^\s*you (?:have|'ve got|’ve got) an? [\w -]{2,30}?:\s*/i, '')
-    .replace(/^\s*(?:the|their|your|my)\s+(?=(?:king|queen|rook|bishop|knight|pawn)\b)/i, 'the ');
+    .replace(/^\s*(?:the|their|your|my)\s+(?=(?:king|queen|rook|bishop|knight|pawn)\b)/i, 'the ')
+    // …nor before a move: "Your c4 kicks their knight…" and "c4 kicks their
+    // knight…" were both spoken (Alekhine walk 2026-10-19).
+    .replace(/^\s*[Yy]our\s+(?=(?:O-O|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8]))/, '');
   const key = bare.toLowerCase().replace(/[^a-z0-9]/g, '');
   return key.length >= 12 ? key : full;
 };

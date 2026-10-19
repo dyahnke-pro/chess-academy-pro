@@ -7,7 +7,9 @@
 //   · the game            — the trend across the student's moves.
 // Every read carries its proof (structureJudgementKit.StructureRead). Pure.
 import type { Color } from 'chess.js';
-import type { StructureRead } from './structureJudgementKit';
+import { play, type StructureRead } from './structureJudgementKit';
+import { kingCommitted } from './splitPosition';
+import { squaresProof } from './proof';
 import {
   secondWeakness, keyPawn, fixOnBishopColour, recaptureSealed, enPassantStructure, formation,
   breakTradesWeakPawn, dontRepair, mirroredAsymmetry, formationChoice,
@@ -79,7 +81,18 @@ export function theirMoveStructure(fenBefore: string, san: string, student: Colo
   return [
     safe(() => recaptureSealed(fenBefore, san, student)),
     safe(() => unmovedUnits(fenBefore, san, student)),
+    safe(() => kingCommittedRead(fenBefore, san, student)),
   ].filter((r): r is StructureRead => r !== null);
+}
+
+/** Their king castled while the student's is central: the plan changes. */
+function kingCommittedRead(fenBefore: string, san: string, student: Color): StructureRead | null {
+  const after = play(fenBefore, san);
+  if (!after) return null;
+  const k = kingCommitted(after.after.fen(), student, after.mv.san);
+  if (!k) return null;
+  const proof = squaresProof(k.text, k.squares);
+  return proof ? { act: 'king-committed', text: k.text, squares: k.squares, proof, key: `king-committed:${k.squares[0]}` } : null;
 }
 
 /** The standing structural facts of the board, from the student's seat. */

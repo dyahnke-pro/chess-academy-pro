@@ -569,3 +569,20 @@ describe('a fact said with a line is graded along that line too (scale replay 20
     expect(buildVoicePackage([{ kind: 'computed', text, fen, lines: [{ fen, sans: ['Na7+'] }] }]).spoken).toBe(text);
   });
 });
+
+describe('one sentence, one key (Alekhine walk 2026-10-19)', () => {
+  it('"Your c4 …" and "c4 …" are the same sentence', () => {
+    const pkg = buildVoicePackage([
+      fact('computed', 'Your c4 takes space on the queenside and keeps an eye on d5.'),
+      fact('computed', 'c4 takes space on the queenside and keeps an eye on d5.'),
+    ]);
+    expect(pkg.kept).toHaveLength(1);
+  });
+  it('NEGATIVE CONTROL: two different claims about the same move both speak', () => {
+    const pkg = buildVoicePackage([
+      fact('computed', 'Your c4 takes space on the queenside and keeps an eye on d5.'),
+      fact('computed', 'c4 also opens a diagonal for the queen toward a4.'),
+    ]);
+    expect(pkg.kept).toHaveLength(2);
+  });
+});

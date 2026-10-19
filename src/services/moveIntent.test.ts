@@ -167,3 +167,18 @@ describe('a retreat home is not a prepared plan (prod walk 2026-10-19)', () => {
   });
 });
 
+
+describe('a pawn that strikes a pawn is about the strike (Alekhine walk 2026-10-19)', () => {
+  const l = (moves: string[]): AnalysisLine => ({ rank: 1, evaluation: 0, moves, mate: null });
+  it('…d6 hitting e5 is not "to free their knight for …Nd7"', () => {
+    const fen = 'rnbqkb1r/pppppppp/8/3nP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3';
+    const out = moveIntent(fen, 'd6', { before: [l(['d7d6'])], after: [l(['c2c4'])], passBefore: [l(['d7d6'])], passAfter: [l(['b8d7'])] }, 'opponent');
+    expect(out?.prepares ?? null).toBeNull();
+    expect(out?.text ?? '').not.toMatch(/free their knight/);
+  });
+  it('NEGATIVE CONTROL: a quiet pawn move with no contact still names what it unblocks', () => {
+    const fen = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
+    const out = moveIntent(fen, 'd6', { before: [l(['d7d6'])], after: [l(['d2d4'])], passBefore: [l(['d7d6'])], passAfter: [l(['b8d7'])] }, 'opponent');
+    expect(out?.prepares?.san).toBe('Nd7');
+  });
+});

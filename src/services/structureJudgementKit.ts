@@ -39,7 +39,8 @@ export type StructureAct =
   | 'mutual-restriction'
   | 'file-opened-for-defender'
   | 'small-edges'
-  | 'fighting-line';
+  | 'fighting-line'
+  | 'king-committed';
 
 /** TEACH OR DESCRIBE, per act — every structure judgement today states its
  *  consequence ("so that square stays a hole", "and if c5 drops, d6 goes with
@@ -55,7 +56,7 @@ export const STRUCTURE_ROLE: Record<StructureAct, 'teach' | 'describe'> = {
   'safe-square-route': 'teach', 'masked-weakness': 'teach', 'mirrored-asymmetry': 'teach',
   'file-entry-covered': 'teach', 'dont-plug-file': 'teach', 'unmoved-units': 'teach',
   'mutual-restriction': 'teach', 'file-opened-for-defender': 'teach', 'small-edges': 'teach',
-  'fighting-line': 'teach',
+  'fighting-line': 'teach', 'king-committed': 'teach',
 };
 
 export interface StructureRead {

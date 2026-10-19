@@ -302,6 +302,11 @@ export function moveIntent(
       const hits = again ? new Chess(again).moves({ verbose: true })
         .some((m) => m.from === to && m.captured && legalSeeGainOn(new Chess(again), m.to) >= 1) : false;
       if (hits) prepares = null;
+      // A PAWN THAT STRIKES A PAWN is a lever: the strike is its point, not
+      // the piece it happens to unblock (Alekhine walk 2026-10-19: "…d6 first,
+      // to free their knight for …Nd7" — …d6 hit the pawn on e5).
+      const moved = again ? new Chess(again).get(to as Parameters<Chess['get']>[0]) : null;
+      if (moved?.type === 'p' && again && new Chess(again).moves({ verbose: true }).some((m) => m.from === to && m.captured === 'p')) prepares = null;
     } catch { /* keep */ }
   }
   // …and A PIECE SAVED IS NOT A PLAN (pass-2 walk 2026-09-30: "They play Ba2
