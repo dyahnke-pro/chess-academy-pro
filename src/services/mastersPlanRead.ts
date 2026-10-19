@@ -283,9 +283,19 @@ export function mastersBreakIdea(
 ): BreakIdea | null {
   const ahead = planStillAhead(read, fen);
   const br = ahead ? (student === 'w' ? ahead.white : ahead.black) : null;
-  if (!br) return null;
   let b: Chess;
   try { b = new Chess(fen); } catch { return null; }
+  // THE KEY MOVE CAN BE A PIECE ROUTE (lead's 7-run baseline, 2026-10-19: a
+  // knight heading for c7 is the opening's idea as often as a pawn break).
+  const home = ahead ? (student === 'w' ? ahead.whitePiece : ahead.blackPiece) : null;
+  if (!br && home) {
+    const NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+    return {
+      text: `The key piece in this structure is your ${NAME[home.piece] ?? 'piece'} on ${home.from}: master games from here ${shareAdverb(Math.round(home.share * 100))} bring it to ${home.to}.`,
+      squares: [home.to, home.from], move: { from: home.from, to: home.to }, aim: `plan-aim:route:${home.from}-${home.to}`, share: home.share,
+    };
+  }
+  if (!br) return null;
   const dot = `${student === 'b' ? '…' : ''}${br.san}`;
   const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
   const r = Number(br.square[1]) + (student === 'w' ? 1 : -1);

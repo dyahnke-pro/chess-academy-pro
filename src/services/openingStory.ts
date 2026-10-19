@@ -94,14 +94,18 @@ function forkAt(prefix: readonly string[], movesAt: MovesAt): { families: Family
   // Inside a named family the crossroads is between ITS variations: a move
   // order that transposes into another family (2…e6 in the Sicilian, a French)
   // is not a road of this opening.
-  const family = here && !isWaypointOpening(here) ? here.split(':')[0].trim() : null;
+  // Before a family exists the student's own first moves are still choosing
+  // one (baseline 2026-10-19: skip the fork while the first moves fix a
+  // system) — so a waypoint or unnamed board has no crossroads to name.
+  if (!here || isWaypointOpening(here)) return null;
+  const family = here.split(':')[0].trim();
   const seen = new Set<string>();
   const families: Family[] = [];
   for (const m of [...ms].sort((a, c) => c.games - a.games)) {
     if (m.games / total < FORK_MIN_SHARE) continue;
     const name = detectOpening([...prefix, m.san])?.name;
     if (!name || name === here || seen.has(name) || isWaypointOpening(name)) continue;
-    if (family && name.split(':')[0].trim() !== family) continue;
+    if (name.split(':')[0].trim() !== family) continue;
     seen.add(name);
     families.push({ san: m.san, games: m.games, share: m.games / total, name });
   }
