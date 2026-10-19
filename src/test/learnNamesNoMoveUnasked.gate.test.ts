@@ -57,7 +57,7 @@ describe('Learn names no move unasked', () => {
   it('a close call and a compare hold their moves in Learn', () => {
     const page = read('components/Coach/CoachTeachPage.tsx');
     expect(page).toMatch(/uncertaintyClause\(turnRead, \{[^}]*namesMoves: false/);
-    expect(page).toMatch(/candidateCompareRead\([^)]*namesMoves: false/);
+    expect(page).toMatch(/candidateCompareRead\([^\n]{0,240}namesMoves: false/);
   });
 });
 
