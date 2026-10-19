@@ -573,6 +573,11 @@ export function safeBecause(fenBefore: string, san: string, student: Side, prev:
   if (!p || !r || p.m.color !== student || r.m.color !== student) return null;
   if (p.m.captured || p.m.promotion || p.m.isKingsideCastle() || p.m.isQueensideCastle() || p.m.isEnPassant()) return null;
   if (r.m.from === p.m.to) return null; // the same piece moving again
+  // A RESCUE IS NOT A PREPARATION (prod walk 2026-10-19: "Be7 is fine only
+  // because your queen is already on b8 — with it back on c7, Nxc7 would cost
+  // you a queen"). The queen left c7 because the knight hit it there; putting
+  // it back replays a threat already answered, and its credit was already said.
+  if (legalSeeGainFor(p.m.before, p.m.from as Square, other(student)) >= 1) return null;
   const cf = load(fenBefore);
   if (!cf) return null;
   const piece = cf.get(p.m.to);
