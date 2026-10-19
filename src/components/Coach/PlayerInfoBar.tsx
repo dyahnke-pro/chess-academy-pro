@@ -1,3 +1,4 @@
+import type React from 'react';
 import { Bot, User } from 'lucide-react';
 import { pieceToUnicode } from '../../services/boardUtils';
 import { formatClock } from '../../services/chessClock';
@@ -16,6 +17,9 @@ interface PlayerInfoBarProps {
    *  never under the board: a line that comes and goes there moved the board
    *  every move (David's phone, 2026-10-18). */
   status?: string;
+  /** Controls at the bar's right edge (Learn puts its Tour / Chat / Tips here
+   *  on a phone, so the header is one row and the board gets the height). */
+  actions?: React.ReactNode;
 }
 
 export function PlayerInfoBar({
@@ -28,12 +32,13 @@ export function PlayerInfoBar({
   className = '',
   clockMs,
   status,
+  actions,
 }: PlayerInfoBarProps): JSX.Element {
   const showClock = clockMs !== undefined;
   const urgent = showClock && clockMs <= 20_000;
   return (
     <div
-      className={`flex items-center justify-between px-3 py-1.5 rounded-lg text-sm ${className}`}
+      className={`flex items-center justify-between px-3 py-1 md:py-1.5 rounded-lg text-sm ${className}`}
       style={{
         background: isActive ? 'color-mix(in srgb, var(--color-accent) 10%, var(--color-surface))' : 'var(--color-surface)',
         borderLeft: isActive ? '3px solid var(--color-accent)' : '3px solid transparent',
@@ -67,6 +72,7 @@ export function PlayerInfoBar({
 
       {/* Right: captured pieces + material advantage + clock */}
       <div className="flex items-center gap-2 flex-shrink-0">
+        {actions}
         <div className="flex items-center gap-1">
           <span className="text-xs tracking-tight" style={{ color: 'var(--color-text-muted)' }}>
             {capturedPieces.map((p, i) => (

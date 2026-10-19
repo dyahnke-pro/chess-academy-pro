@@ -68,7 +68,7 @@ export function EvalBar({
   if (horizontal) {
     return (
       <div
-        className={`relative flex flex-row h-5 w-full rounded overflow-hidden select-none ${className}`}
+        className={`relative flex flex-row h-4 md:h-5 w-full rounded overflow-hidden select-none ${className}`}
         data-testid="eval-bar"
         aria-label={`Evaluation: ${label}`}
       >
