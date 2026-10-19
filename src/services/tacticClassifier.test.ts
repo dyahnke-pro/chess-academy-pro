@@ -236,6 +236,11 @@ describe('classifyPosition — removal of guard detection', () => {
     const fenAfter = playMove(fen, 'Rxc6');
     const result = classifyPosition(fen, fenAfter, 'Rxc6', 0, -200);
     expect(hasTactic(result, 'removal_of_guard')).toBe(true);
+    // The captured piece is never named: its owner flips across the capture
+    // and a seat read after it said "their knight" of the student's (replay
+    // 2026-10-19, 11.Re1).
+    const d = result.tactics?.find((t: { type: string }) => t.type === 'removal_of_guard')?.description ?? '';
+    expect(d).toBe('Taking on c6 removes the guard of the bishop on e5');
   });
   it('NEGATIVE CONTROL: a guard removed from a piece nothing attacks is no tactic (Alekhine walk 2026-10-19)', () => {
     const fen = '4k3/8/2n5/4b3/8/8/8/2R1K3 w - - 0 1';

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**26 lines · 2 exports · 4 importers · 3 tests · 0 audits**
+**32 lines · 2 exports · 6 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,33 +12,39 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/services/conceptKey.test.ts`
 - `src/services/danyaBehaviors.ts`
+- `src/services/kingAttackReads.ts`
 - `src/services/positionFacts.ts`
 - `src/services/replayFence.alekhine1500.test.ts`
 - `src/services/replayFence.sicilianClosed1000.test.ts`
 
 ## Exports and every call site
 
-### `conceptInstanceKey` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8059`
+### `conceptInstanceKey` (function) — 13 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8785`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
-- `src/services/danyaBehaviors.ts:499`
-- `src/services/positionFacts.ts:1064`
-- `src/services/positionFacts.ts:1446`
-- `src/services/positionFacts.ts:1460`
+- `src/services/conceptKey.test.ts:6`
+- `src/services/conceptKey.test.ts:9`
+- `src/services/danyaBehaviors.ts:525`
+- `src/services/kingAttackReads.ts:650`
+- `src/services/positionFacts.ts:1319`
+- `src/services/positionFacts.ts:1756`
+- `src/services/positionFacts.ts:1774`
 - `src/services/replayFence.alekhine1500.test.ts:24`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`
 
 ### `forkThreatKey` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:353`
-- `src/services/positionFacts.ts:1319`
-- `src/services/positionFacts.ts:1332`
+- `src/services/danyaBehaviors.ts:379`
+- `src/services/positionFacts.ts:1626`
+- `src/services/positionFacts.ts:1639`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:50`
 
 ## Tests
 
+- `src/services/conceptKey.test.ts`
 - `src/services/replayFence.alekhine1500.test.ts`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts`
 - `src/services/replayFence.sicilianClosed1000.test.ts`

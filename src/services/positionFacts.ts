@@ -878,7 +878,14 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // fails the briefing.
   let concept: { id: string; source: string; full: string; short?: string; instance?: string; squares: readonly string[]; boardFen?: string; line?: string[]; pinMove?: { fen: string; san: string } } | null = null;
   try {
-    const lead = conceptForBoard(fen, { analysis, studentSide: studentColor === 'w' ? 'white' : 'black', rating, max: 1 })[0];
+    // LEARN NAMES NO MOVE UNASKED, at the source (replay 2026-10-19, 25…Kg8:
+    // "After Nhf6+, exf6, Nxf6+, your knight on f6 forks…"): on the student's
+    // own turn the concept is read off the board AS IT STANDS — the engine's
+    // line for their next move is walked only when the surface names it
+    // ("Why?", chat). A Lucena on the board is still taught; the bridge move
+    // is not given away.
+    const conceptAnalysis = studentToMove && !input.namesBestMove ? undefined : analysis;
+    const lead = conceptForBoard(fen, { analysis: conceptAnalysis, studentSide: studentColor === 'w' ? 'white' : 'black', rating, max: 1 })[0];
     // The board the concept is ABOUT travels with it — a concept found on the
     // board after the best move ("Rook on f5 forks king on f8") seats on THAT
     // board; seated on this one it came out half-owned (the rook not there yet).

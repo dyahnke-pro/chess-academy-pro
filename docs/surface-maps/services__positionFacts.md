@@ -4,17 +4,17 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1999 lines · 15 exports · 28 importers · 25 tests · 3 audits**
+**2006 lines · 15 exports · 28 importers · 26 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:43) — names `positionFacts`
 - **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:306) — names `positionFacts`
 - **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:969) — names `positionFacts`
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4038) — names `ClauseKind`, `positionFacts`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4190) — names `positionFacts`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6192) — names `positionFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6300) — names `positionFacts`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4090) — names `ClauseKind`, `positionFacts`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4242) — names `positionFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6272) — names `positionFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6380) — names `positionFacts`
 
 ## Who calls in
 
@@ -89,7 +89,7 @@
 ### `clauseText` (function) — 12 call sites
 - `src/hooks/useLiveCoach.ts:296`
 - `src/hooks/usePhaseNarration.ts:673`
-- `src/services/chatBoardRead.ts:110`
+- `src/services/chatBoardRead.ts:112`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:255`
 - `src/services/positionFacts.test.ts:256`
@@ -97,12 +97,12 @@
 - `src/services/positionFacts.test.ts:307`
 - `src/services/positionFacts.test.ts:365`
 - `src/services/positionFacts.test.ts:366`
-- `src/services/positionReadComposer.ts:155`
+- `src/services/positionReadComposer.ts:158`
 - `src/services/whyBestMove.ts:160`
 
-### `computePositionFacts` (function) — 93 call sites
+### `computePositionFacts` (function) — 94 call sites
 - `src/coach/boardTurnAnswer.ts:134`
-- `src/components/Coach/CoachTeachPage.tsx:10185`
+- `src/components/Coach/CoachTeachPage.tsx:10345`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:645`
@@ -125,6 +125,7 @@
 - `src/services/positionFacts.convertOnce.test.ts:37`
 - `src/services/positionFacts.depth.test.ts:18`
 - `src/services/positionFacts.depth.test.ts:38`
+- `src/services/positionFacts.futureConcept.test.ts:18`
 - `src/services/positionFacts.liveFundamental.test.ts:52`
 - `src/services/positionFacts.moveWhy.test.ts:21`
 - `src/services/positionFacts.pinPressure.test.ts:17`
@@ -196,10 +197,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8691`
+- `src/components/Coach/CoachTeachPage.tsx:8817`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10452`
+- `src/components/Coach/CoachTeachPage.tsx:10616`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -210,12 +211,15 @@
 - `src/services/positionFacts.afterLine.test.ts:22`
 - `src/services/positionFacts.afterLine.test.ts:25`
 
-### `conceptInstanceKey` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8672`
+### `conceptInstanceKey` (re-export) — 11 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8785`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
+- `src/services/conceptKey.test.ts:6`
+- `src/services/conceptKey.test.ts:9`
 - `src/services/conceptKey.ts:9`
 - `src/services/danyaBehaviors.ts:525`
+- `src/services/kingAttackReads.ts:650`
 - `src/services/replayFence.alekhine1500.test.ts:24`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`
@@ -236,6 +240,7 @@
 - `src/services/positionFacts.afterLine.test.ts`
 - `src/services/positionFacts.convertOnce.test.ts`
 - `src/services/positionFacts.depth.test.ts`
+- `src/services/positionFacts.futureConcept.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.moveWhy.test.ts`
 - `src/services/positionFacts.pinPressure.test.ts`

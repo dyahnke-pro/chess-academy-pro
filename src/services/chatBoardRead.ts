@@ -80,6 +80,8 @@ export async function chatBoardClauses(i: ChatBoardInput): Promise<ClauseItem[] 
     try {
       const result = await computePositionFacts({
       boardComputers: 'composer',
+        // A question was asked: the answer may name the move (LEARN NAMES NO MOVE UNASKED).
+        namesBestMove: true,
         posture: 'walk',
         fen: i.fen,
         moverColor: i.fen.split(' ')[1] === 'b' ? 'b' : 'w',

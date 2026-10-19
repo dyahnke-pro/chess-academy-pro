@@ -431,7 +431,10 @@ function detectRemovalOfGuard(
           return {
             type: 'removal_of_guard',
             involvedSquares: [toSquare, sq],
-            description: `Capturing the ${pieceName(capturedTarget.type)} on ${squareLabel(toSquare)} removes the guard of the ${pieceName(p.type)} on ${squareLabel(sq)}`,
+            // The captured piece is NOT named: its owner flips across the capture, so
+            // a seat read on the board after it says "their knight" of yours
+            // (replay 2026-10-19, 11.Re1). The guarded piece keeps its owner.
+            description: `Taking on ${squareLabel(toSquare)} removes the guard of the ${pieceName(p.type)} on ${squareLabel(sq)}`,
           };
         }
       }

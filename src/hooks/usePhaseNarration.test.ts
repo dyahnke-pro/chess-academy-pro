@@ -304,20 +304,35 @@ describe('the COMPUTED CONCEPT speaks at a phase transition (P4c — a wire that
     nodesPerSecond: 1,
   };
 
-  it('hands the fork, with its invariant, to the grounded chokepoint — and it is spoken', async () => {
+  it('a computed concept on the board is handed to the grounded chokepoint — and it is spoken', async () => {
+    noteText = '';
+    groundedMoveFeedback.mockImplementationOnce(echoComputedFacts);
+    // The student is Black, so nothing here is their own next move: the
+    // concept read off the board as it stands (rook against a minor piece) is
+    // what the phase beat voices.
+    const { result } = setup(() => FORK_FEN);
+    act(() => { void result.current.narrate({ ...FORK_EVENT, playerColor: 'black' } as PhaseTransitionEvent, 'full'); });
+    engineGate.resolve(FORK_ANALYSIS);
+    // Mock-independent proof: the concept clause reached the chokepoint's facts.
+    await vi.waitFor(() => expect(groundedMoveFeedback).toHaveBeenCalledTimes(1), { timeout: 4000 });
+    const handed = (groundedMoveFeedback.mock.calls[0][0] as { extraFacts?: string }).extraFacts ?? '';
+    expect(handed, 'the concept clause never reached the chokepoint').toMatch(/rook against a minor piece/i);
+    // …and once the chokepoint voices it, the student hears it.
+    await vi.waitFor(() => {
+      expect(spoken.join(' '), `spoken: ${spoken.join(' ')}`).toMatch(/rook against a minor piece/i);
+    }, { timeout: 4000 });
+  });
+
+  it('on the STUDENT\'s own turn the fork their next move makes is not handed over unasked (LEARN NAMES NO MOVE UNASKED, 2026-10-19)', async () => {
     noteText = '';
     groundedMoveFeedback.mockImplementationOnce(echoComputedFacts);
     const { result } = setup(() => FORK_FEN);
     act(() => { void result.current.narrate(FORK_EVENT, 'full'); });
     engineGate.resolve(FORK_ANALYSIS);
-    // Mock-independent proof: the concept clause reached the chokepoint's facts.
-    await vi.waitFor(() => expect(groundedMoveFeedback).toHaveBeenCalledTimes(1), { timeout: 4000 });
-    const handed = (groundedMoveFeedback.mock.calls[0][0] as { extraFacts?: string }).extraFacts ?? '';
-    expect(handed, 'the concept clause never reached the chokepoint').toMatch(/a fork hits two targets at once/);
-    // …and once the chokepoint voices it, the student hears it.
-    await vi.waitFor(() => {
-      expect(spoken.join(' '), `spoken: ${spoken.join(' ')}`).toMatch(/a fork hits two targets at once/);
-    }, { timeout: 4000 });
+    await new Promise((r) => setTimeout(r, 400));
+    const handed = groundedMoveFeedback.mock.calls.map((c) => (c[0] as { extraFacts?: string }).extraFacts ?? '').join(' ');
+    expect(handed).not.toMatch(/Ne5|knight to e5/);
+    expect(spoken.join(' ')).not.toMatch(/Ne5|knight to e5/);
   });
 
   it('where the turn lanes own live tactics (Learn), the phase read is handed none (second-game audit 2026-10-14)', async () => {

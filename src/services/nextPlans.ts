@@ -310,7 +310,13 @@ export function deriveNextPlanFacts(
           : blockader
             ? `plant your ${blockader.type === 'n' ? 'knight' : 'bishop'} on ${block}, in front of it, so it can never advance`
             : `control ${block}, the square in front of it, so it can never advance`;
-    add('weak-pawn', `win their weak pawn on ${weak}`, `winning their weak pawn on ${weak}`, `${blockBit ? `${blockBit}; then ` : ''}stack your heavy pieces on its file and trade off its defenders — each one is a piece of theirs tied to it${countBit(chess, weak as Square, studentColorWB)}`, [weak, block]);
+    // The pieces that win it are the ones on the board (replay 2026-10-19,
+    // 42.Nb5: "stack your heavy pieces on its file" in a knight ending).
+    const heavy = chess.board().flat().some((p) => p && p.color === studentColorWB && (p.type === 'r' || p.type === 'q'));
+    const pile = heavy
+      ? 'stack your heavy pieces on its file and trade off its defenders — each one is a piece of theirs tied to it'
+      : 'bring your king and pieces to it and trade off its defenders — each one is a piece of theirs tied to it';
+    add('weak-pawn', `win their weak pawn on ${weak}`, `winning their weak pawn on ${weak}`, `${blockBit ? `${blockBit}; then ` : ''}${pile}${countBit(chess, weak as Square, studentColorWB)}`, [weak, block]);
   }
 
   // 4. An open file you don't yet own with a heavy piece → seize it, HOW

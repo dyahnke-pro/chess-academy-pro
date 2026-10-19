@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**713 lines · 3 exports · 16 importers · 8 tests · 0 audits**
+**716 lines · 3 exports · 16 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6404) — names `tacticClassifier`
+- **The standard post-deploy ritual** (CLAUDE.md:6397) — names `tacticClassifier`
 
 ## Who calls in
 
@@ -72,15 +72,15 @@
 - `src/services/tacticClassifier.test.ts:214`
 - `src/services/tacticClassifier.test.ts:224`
 - `src/services/tacticClassifier.test.ts:237`
-- `src/services/tacticClassifier.test.ts:242`
-- `src/services/tacticClassifier.test.ts:257`
-- `src/services/tacticClassifier.test.ts:269`
-- `src/services/tacticClassifier.test.ts:283`
-- `src/services/tacticClassifier.test.ts:289`
-- `src/services/tacticClassifier.test.ts:307`
-- `src/services/tacticClassifier.test.ts:322`
-- `src/services/tacticClassifier.test.ts:331`
-- `src/services/tacticClassifier.test.ts:342`
+- `src/services/tacticClassifier.test.ts:247`
+- `src/services/tacticClassifier.test.ts:262`
+- `src/services/tacticClassifier.test.ts:274`
+- `src/services/tacticClassifier.test.ts:288`
+- `src/services/tacticClassifier.test.ts:294`
+- `src/services/tacticClassifier.test.ts:312`
+- `src/services/tacticClassifier.test.ts:327`
+- `src/services/tacticClassifier.test.ts:336`
+- `src/services/tacticClassifier.test.ts:347`
 
 ### `scanUpcomingTactics` (function) — 5 call sites
 - `src/components/Coach/CoachGamePage.tsx:2889`

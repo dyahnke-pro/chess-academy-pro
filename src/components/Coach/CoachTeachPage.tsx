@@ -8260,6 +8260,8 @@ export function CoachTeachPage(): JSX.Element {
     moveFrom: string;
     moveTo: string;
     studentColor: 'white' | 'black';
+    /** The engine's cost of the student's move (null when ungraded). */
+    moveCostCp: number | null;
   }): {
     /** The utterance AND its provenance, from one object. Callers speak
      *  `pkg.spoken` and log `pkg.kept` — never a separately-assembled string,
@@ -9362,7 +9364,7 @@ export function CoachTeachPage(): JSX.Element {
         return readBoard('lastTimeHere', { fenBefore: b.fen(), playedSan: h[h.length - 2], rows, currentGameId: learnMemRef.current.gameId });
       } catch { return null; }
     })();
-    const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1 }, facts: [
+    const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp }, facts: [
       ...(gemLine ? [{ lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0]) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
       ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
@@ -10958,6 +10960,7 @@ export function CoachTeachPage(): JSX.Element {
                   moveFrom: im.from,
                   moveTo: im.to,
                   studentColor: playerColor,
+                  moveCostCp: studentCpLoss,
                 });
                 instantLead = instant.lead;
                 for (const d of instant.deferred) queueSpokenHint(ip.fen(), d.text, d.lane, d.proof, d.squares, d.claims, undefined, d.arrows);
@@ -11732,14 +11735,14 @@ export function CoachTeachPage(): JSX.Element {
                   }
                   // DANGER LEVELS, both seats (David 2026-10-18): their reply left a
                   // piece and hit a bigger one of yours; or your move just did it to them.
-                  const counter = replySan ? counterThreatTeaching(move.fen, replySan, playerColor === 'white' ? 'w' : 'b') : null;
+                  const counter = replySan ? counterThreatTeaching(move.fen, replySan, playerColor === 'white' ? 'w' : 'b', null) : null;
                   const dangerProven = provenConceptsRef.current.has('danger_levels');
                   if (counter && !dangerProven) queueHint(fenAfterReply, counter);
                   const yourCounter = (() => {
                     try {
                       const b = new Chess();
                       for (const san of move.history.slice(0, -1)) b.move(san);
-                      return counterThreatTeaching(b.fen(), move.san, playerColor === 'white' ? 'w' : 'b');
+                      return counterThreatTeaching(b.fen(), move.san, playerColor === 'white' ? 'w' : 'b', studentCpLoss);
                     } catch { return null; }
                   })();
                   // Not when their reply took the piece you left — the moment has passed.
@@ -12039,7 +12042,7 @@ export function CoachTeachPage(): JSX.Element {
                   // the per-game novelty set, not by a number.
                   const lateDecision = coachTurn({
                     posture: 'learn',
-                    turn: { kind: 'late', ply: move.history.length },
+                    turn: { kind: 'late', ply: move.history.length, moveCostCp: studentCpLoss },
                     facts: pending.lines
                       // A threat alert already said a tactic is on the board;
                       // "it has turned sharp — there is a tactic" beside it is

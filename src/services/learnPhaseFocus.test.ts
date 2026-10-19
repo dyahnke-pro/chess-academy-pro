@@ -63,3 +63,12 @@ describe('a mate turn stays on the mate across both waves (replay 2026-10-19, 48
     expect(decideTurn([plan], '', undefined, { lane: 'tactic', squares: ['d8'] }).spoke).toContain('planArc');
   });
 });
+
+describe('a costly move is a verdict turn in every wave (replay 2026-10-19, 8.Bxf7+)', () => {
+  const FEN = 'r1bq2nr/pp2pkbp/2np2p1/8/4P3/2N2N2/PP3PPP/R1BQ1RK1 w - - 0 9';
+  it('a plan waits when the move cost three points, whichever lane gave the grade', () => {
+    const plan = { lane: 'planArc' as const, proof: NO_PROOF.stated, text: 'So the plan: put a rook on the open c-file.', fen: FEN, squares: ['a1', 'c1'] };
+    expect(decideTurn([plan], '', undefined, null, null, false, { kind: 'late', ply: 15, moveCostCp: 300 }).spoke).not.toContain('planArc');
+    expect(decideTurn([plan], '', undefined, null, null, false, { kind: 'late', ply: 15, moveCostCp: 20 }).spoke).toContain('planArc');
+  });
+});

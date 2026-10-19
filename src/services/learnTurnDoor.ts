@@ -29,7 +29,7 @@ import { emitLearnTurn, type LearnTurnTag } from './coachDecisionEvents';
 import { COMPUTER_ROLES, saidBeforeTheMove } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
 
-import { stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
+import { costStakes, stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
 import { sameClaim } from './factSelector';
 import type { FacetRole } from './reviewFacetRank';
 import { isEndgameByMaterial } from './gamePhaseService';
@@ -419,6 +419,9 @@ export const DANGER_LANES: ReadonlySet<LearnLane> = new Set<LearnLane>(['threat'
  *  forced mate spoke in it: the turn stays on the mate across BOTH waves (the
  *  replay of 2026-10-19, 48.d6: "There's a forced mate here — mate in 2" in
  *  the instant wave, then a passed-pawn plan lecture in the late one). */
+/** A move that costs this much (centipawns) makes the turn a verdict turn. */
+export const VERDICT_TURN_CP = 100;
+
 export interface TurnLead { lane: LearnLane; squares: readonly string[]; mateTurn?: true }
 
 export interface TurnDecision {
@@ -592,6 +595,9 @@ export function decideTurn(
   const isMateFact = (x: { fact: VoiceFact; lane: LearnLane }): boolean => !!stakesOf(x.lane, x.fact.text)?.mate?.forced;
   const mateTurn = !!priorLead?.mateTurn || survivors.some((x) => !subsumed.has(x) && isMateFact(x));
   const verdict = survivors.find((x) => x.lane === 'mistake' && !subsumed.has(x)) ?? null;
+  /** A move that cost a point or more makes this whole turn a verdict turn. */
+  const moveCost = turn && turn.kind !== 'phase' ? turn.moveCostCp : null;
+  const costTurnValue = moveCost !== null && moveCost >= VERDICT_TURN_CP ? stakeValue(costStakes(moveCost)) ?? null : null;
   // THE TURN'S HOLDS DECIDE BEFORE ITS LEAD (Learn audit 2026-10-14, LD2: a
   // lead was picked, then held by the mate rule, and the row named a lead that
   // never spoke). One predicate, read by the lead pick and the speak loop.
@@ -602,7 +608,11 @@ export function decideTurn(
     // grade, its cost ('but' beats) and any danger speak; a plan, a route or a
     // method aside worth less than the verdict waits for a calm move.
     || (!!verdict && x !== verdict && !DANGER_LANES.has(x.lane) && DNA_BEAT[x.lane] !== 'but'
-      && stakeOf(x.lane, x.fact.text) < stakeOf(verdict.lane, verdict.fact.text));
+      && stakeOf(x.lane, x.fact.text) < stakeOf(verdict.lane, verdict.fact.text))
+    // …AND A COSTLY MOVE IS A VERDICT TURN IN EVERY WAVE, whichever lane
+    // carries the grade: the move's own cost is the verdict's weight.
+    || (!verdict && costTurnValue !== null && !DANGER_LANES.has(x.lane) && DNA_BEAT[x.lane] !== 'but'
+      && stakeOf(x.lane, x.fact.text) < costTurnValue);
   let top: { fact: VoiceFact; lane: LearnLane } | null = null;
   for (const x of survivors) {
     if (subsumed.has(x) || dangerWaits(x) || turnHolds(x)) continue;

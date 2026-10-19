@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**226 lines · 11 exports · 8 importers · 5 tests · 1 audits**
+**230 lines · 11 exports · 8 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4088) — names `coachDecisionEvents`
-- **The standard post-deploy ritual** (CLAUDE.md:6301) — names `coachDecisionEvents`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4140) — names `coachDecisionEvents`
+- **The standard post-deploy ritual** (CLAUDE.md:6381) — names `coachDecisionEvents`
 
 ## Who calls in
 
@@ -28,20 +28,20 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onCoachDecision` (function) — 5 call sites
-- `src/services/appAuditor.ts:2252`
+- `src/services/appAuditor.ts:2268`
 - `src/services/coachDecisionEmits.test.ts:32`
 - `src/services/coachDecisionEmits.test.ts:95`
 - `src/services/proofBacklog.report.test.ts:98`
 - `src/test/computedOrderWired.test.ts:26`
 
 ### `emitCoachDecision` (function) — 1 call site
-- `src/services/coachDecider.ts:333`
+- `src/services/coachDecider.ts:345`
 
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onNeedScore` (function) — 4 call sites
-- `src/services/appAuditor.ts:2204`
+- `src/services/appAuditor.ts:2220`
 - `src/services/coachDecisionEmits.test.ts:120`
 - `src/services/coachDecisionEmits.test.ts:147`
 - `src/services/positionFacts.liveFundamental.test.ts:50`
@@ -63,12 +63,12 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onLearnTurn` (function) — 3 call sites
-- `src/services/appAuditor.ts:2278`
-- `src/services/learnTurnDoor.test.ts:554`
-- `src/services/learnTurnDoor.test.ts:567`
+- `src/services/appAuditor.ts:2294`
+- `src/services/learnTurnDoor.test.ts:566`
+- `src/services/learnTurnDoor.test.ts:579`
 
 ### `emitLearnTurn` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:671`
+- `src/services/learnTurnDoor.ts:819`
 
 ## Tests
 

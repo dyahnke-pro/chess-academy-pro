@@ -133,6 +133,9 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
         // button — the same reasoning that exempts this surface from the
         // verbosity gate (CLAUDE.md §G5, third sanctioned exemption).
         posture: 'walk',
+        // A tap is an ask (LEARN NAMES NO MOVE UNASKED): the read may walk the
+        // engine's line for the student's own move.
+        namesBestMove: true,
         fen: i.fen,
         moverColor: i.fen.split(' ')[1] === 'b' ? 'b' : 'w',
         studentColor: studentCC,

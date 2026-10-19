@@ -209,7 +209,11 @@ export interface LearnTurnRow {
 }
 
 /** A Learn door call's place in the game (required at `coachTurn`). */
-export type LearnTurnTag = { kind: 'instant' | 'late'; ply: number } | { kind: 'phase' };
+/** `moveCostCp`: the engine's cost of the student's move this turn (null when
+ *  ungraded) — REQUIRED, so every wave of a costly turn is a verdict turn
+ *  whichever lane voices the grade (replay 2026-10-19, 8.Bxf7+: the grade
+ *  spoke through a fundamental and a plan lecture rode beside it). */
+export type LearnTurnTag = { kind: 'instant' | 'late'; ply: number; moveCostCp: number | null } | { kind: 'phase' };
 
 const learnTurnListeners = new Set<(row: LearnTurnRow) => void>();
 

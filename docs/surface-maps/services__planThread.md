@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**201 lines · 8 exports · 4 importers · 2 tests · 0 audits**
+**210 lines · 8 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -31,8 +31,8 @@
 ### `PlanThread` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newPlanThread` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10175`
+### `newPlanThread` (function) — 14 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10213`
 - `src/services/boardComputers.test.ts:52`
 - `src/services/coachFeatureService.ts:1417`
 - `src/services/planChoice.test.ts:75`
@@ -45,23 +45,24 @@
 - `src/services/planThread.test.ts:51`
 - `src/services/planThread.test.ts:85`
 - `src/services/planThread.test.ts:98`
+- `src/services/planThread.test.ts:123`
 
 ### `clonePlanThread` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10176`
+- `src/components/Coach/CoachTeachPage.tsx:10214`
 - `src/services/coachFeatureService.ts:2016`
 - `src/services/planThread.test.ts:99`
 - `src/services/planThread.test.ts:107`
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10208`
-- `src/components/Coach/CoachTeachPage.tsx:12014`
+- `src/components/Coach/CoachTeachPage.tsx:10246`
+- `src/components/Coach/CoachTeachPage.tsx:12070`
 - `src/services/planThread.test.ts:103`
 - `src/services/planThread.test.ts:110`
 
 ### `PlanThreadLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `planThreadTurn` (function) — 16 call sites
+### `planThreadTurn` (function) — 17 call sites
 - `src/services/boardComputers.ts:331`
 - `src/services/planChoice.test.ts:75`
 - `src/services/planChoice.test.ts:89`
@@ -78,6 +79,7 @@
 - `src/services/planThread.test.ts:89`
 - `src/services/planThread.test.ts:100`
 - `src/services/planThread.test.ts:108`
+- `src/services/planThread.test.ts:123`
 
 ## Tests
 

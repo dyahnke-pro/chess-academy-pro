@@ -419,16 +419,29 @@ export function theirMoveTeaching(fenBefore: string, san: string, student: 'w' |
   };
 }
 
+/** A student counter-threat that cost less than this (centipawns) held. */
+export const COUNTER_THREAT_HELD_CP = 60;
+
 /** DANGER LEVELS (David 2026-10-18): a move that left an attacked piece and
  *  hit a bigger one instead. `fenBefore` is the board the move was played
  *  from. Their move: why the piece was left, and the line that punishes
  *  taking it (drawn ply by ply). The student's move: the find, named. */
-export function counterThreatTeaching(fenBefore: string, san: string, student: 'w' | 'b'): TeachingHint | null {
+export function counterThreatTeaching(
+  fenBefore: string,
+  san: string,
+  student: 'w' | 'b',
+  /** REQUIRED: the engine's cost of the STUDENT's move (null when ungraded).
+   *  The pattern is credited only when the move held: 14.Rd5 left a bishop and
+   *  hit the queen, cost two points, and was praised as "the bigger threat
+   *  comes first" (replay 2026-10-19). Ignored for their move. */
+  studentMoveCostCp: number | null,
+): TeachingHint | null {
   const c = counterThreat(fenBefore, san);
   if (!c) return null;
   let mover: 'w' | 'b';
   try { mover = new Chess(fenBefore).turn(); } catch { return null; }
   const byStudent = mover === student;
+  if (byStudent && (studentMoveCostCp === null || studentMoveCostCp >= COUNTER_THREAT_HELD_CP)) return null;
   const text = counterThreatLine(c, byStudent);
   const arrows: ArrowClaim[] = [];
   if (c.line && !byStudent) {
