@@ -728,7 +728,7 @@ describe('StockfishEngine', () => {
       // The grace timer already tore each dead worker down; no queued call adds
       // a second teardown on top (the old code: one per call, each killing the
       // engine the call before had just respawned).
-      expect(restarts.mock.calls.filter((c) => c[0] === 'analyzeWithBudget retry-on-death').length).toBeLessThanOrEqual(1);
+      expect(restarts.mock.calls.filter((c) => String(c[0]).startsWith('analyzeWithBudget retry-on-death')).length).toBeLessThanOrEqual(1);
       vi.useRealTimers();
     });
 
@@ -2455,5 +2455,35 @@ describe('a read never takes another position\'s lines', () => {
     mockWorker.emit('bestmove e2e4');
     expect((await read).bestMove).toBe('e2e4');
     expect(await move).toBe('d2d4');
+  });
+});
+
+describe('a question supersedes the reads waiting in line (Learn trace, 2026-10-19)', () => {
+  it('reads queued before supersedeWaiting reject as interrupted; reads after it run', async () => {
+    vi.resetModules();
+    const mod = await import('./stockfishEngine');
+    const engine = mod.stockfishEngine as unknown as {
+      analyzePosition: (f: string, d: number) => Promise<unknown>;
+      supersedeWaiting: () => void;
+      _dispatchAnalysis: (...a: unknown[]) => Promise<unknown>;
+    };
+    let releaseFirst!: () => void;
+    const dispatched: string[] = [];
+    engine._dispatchAnalysis = (fen: unknown) => {
+      dispatched.push(String(fen));
+      if (dispatched.length === 1) return new Promise((r) => { releaseFirst = () => r({ bestMove: 'e2e4' }); });
+      return Promise.resolve({ bestMove: 'e2e4' });
+    };
+    const FEN = (n: number): string => `8/8/8/8/8/8/8/K6k w - - 0 ${n}`;
+    const first = engine.analyzePosition(FEN(1), 9);
+    const stale = engine.analyzePosition(FEN(2), 9);
+    await Promise.resolve();
+    engine.supersedeWaiting();
+    const question = engine.analyzePosition(FEN(3), 9);
+    releaseFirst();
+    await first;
+    await expect(stale).rejects.toThrow('Analysis interrupted by new request');
+    await expect(question).resolves.toBeTruthy();
+    expect(dispatched).not.toContain(FEN(2));
   });
 });

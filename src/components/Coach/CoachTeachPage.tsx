@@ -3511,6 +3511,9 @@ export function CoachTeachPage(): JSX.Element {
       // generation counter drops every line chained before this question
       // (David 2026-09-24: "stop calculations and answer question").
       trackAGenRef.current += 1;
+      // …and the ENGINE work queued for those lines: the question's reads
+      // would otherwise wait behind all of it (Learn trace 2026-10-19: 13s).
+      stockfishEngine.supersedeWaiting();
     }
 
     // ── A REQUEST IS DONE FROM ITS STEPS (WO-CHAT-01 P1c) ───────────────────

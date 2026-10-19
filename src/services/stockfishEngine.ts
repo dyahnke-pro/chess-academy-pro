@@ -36,6 +36,17 @@ export class PrefetchDroppedError extends Error {
   }
 }
 
+/** The engine could not START (crash retries spent, or the init cooldown is
+ *  running). Restarting it from a failed call only resets the cooldown and
+ *  spins it harder (a respawn storm, Learn trace 2026-10-19) — callers give up
+ *  for this call and let the cooldown run. */
+export class EngineUnavailableError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'EngineUnavailableError';
+  }
+}
+
 /** A pending analysis set aside because a newer request took the engine.
  *  The worker is ALIVE — it was told to stop, not killed — so this is never a
  *  reason to restart it (Learn trace 2026-10-19: every question cancelled the
@@ -646,6 +657,8 @@ class StockfishEngine {
    *  on this singleton waits for it to clear, so the question — worked out on a
    *  dedicated pool worker — has the device to itself. */
   private _questionHold: Promise<void> | null = null;
+  /** Bumped by `supersedeWaiting`: reads queued before it are stale. */
+  private _supersedeEpoch = 0;
   // Sticky once the multi-thread bundle has failed at runtime in
   // this app session OR on this device in a previous session. Once
   // true, every subsequent initialize() call goes straight to the
@@ -711,10 +724,10 @@ class StockfishEngine {
 
   async initialize(): Promise<void> {
     if (this._permanentlyUnavailable) {
-      throw new Error('Stockfish engine unavailable (exhausted crash retries)');
+      throw new EngineUnavailableError('Stockfish engine unavailable (exhausted crash retries)');
     }
     if (this._initFailedAt !== null && Date.now() - this._initFailedAt < StockfishEngine.INIT_COOLDOWN_MS) {
-      throw new Error('Stockfish init cooldown — try again in a few seconds');
+      throw new EngineUnavailableError('Stockfish init cooldown — try again in a few seconds');
     }
     if (this.initPromise) return this.initPromise;
 
@@ -1553,6 +1566,9 @@ class StockfishEngine {
       }
     }
 
+    // The epoch this read joined the line in; a later `supersedeWaiting`
+    // makes it stale before it runs.
+    const epoch = this._supersedeEpoch;
     const run = async (): Promise<StockfishAnalysis> => {
       // A question is being answered: background work waits its turn.
       while (this._questionHold && !bypassQuestionHold) {
@@ -1587,6 +1603,9 @@ class StockfishEngine {
           while (this._questionHold) {
             try { await this._questionHold; } catch { /* settles either way */ }
           }
+          // Superseded while it waited in line: the student asked something,
+          // and the work this read was for has been dropped.
+          if (epoch !== this._supersedeEpoch) throw new AnalysisInterruptedError();
           onStart?.();
           return await this._dispatchAnalysis(fen, depth, options, priority);
         } finally {
@@ -1988,6 +2007,24 @@ class StockfishEngine {
     }
   }
 
+  /**
+   * The student asked a question: every read still WAITING in the brain line
+   * is stale (the surface already dropped the lines it was for), and the
+   * search in flight stops. Waiting reads reject as interrupted when they
+   * reach the front, so the question's own reads run next instead of after
+   * all of them (Learn trace 2026-10-19: 13s behind the previous turn's work).
+   */
+  supersedeWaiting(): void {
+    this._supersedeEpoch += 1;
+    // The search cut short settles at the depth it reached — never cached
+    // under the depth it asked for.
+    if (this.pending) {
+      this.pending.cacheFen = undefined;
+      this.pending.cacheDepth = undefined;
+    }
+    this.stop();
+  }
+
   /** True while a question holds the engine (tests + the audit read this). */
   isHeldForQuestion(): boolean {
     return this._questionHold !== null;
@@ -2068,14 +2105,14 @@ class StockfishEngine {
     } catch (err) {
       // A deliberate prefetch drop is not a failure — don't retry it. Nor is
       // an interrupt: a newer request took a LIVE engine.
-      if (err instanceof PrefetchDroppedError || err instanceof AnalysisInterruptedError) throw err;
+      if (err instanceof PrefetchDroppedError || err instanceof AnalysisInterruptedError || err instanceof EngineUnavailableError) throw err;
       if (this.restartGen !== genAtStart) return await runOnce();
       // Worker died (the grace timer just reset it). Retry ONCE on a FRESH
       // worker — the asm engine analyzes any position fine when alive (David
       // 2026-07-04 node repro), so a respawn recovers instead of failing the
       // grounding (calc/narration) to a cold timeout. This is the direct
       // self-heal for every budgeted grounding caller, not just via ponder.
-      this.forceRestart('analyzeWithBudget retry-on-death');
+      this.forceRestart(`analyzeWithBudget retry-on-death: ${err instanceof Error ? err.message.slice(0, 80) : String(err).slice(0, 80)}`);
       return await runOnce();
     }
   }
