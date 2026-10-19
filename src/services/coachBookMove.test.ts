@@ -64,6 +64,20 @@ describe('pickBookMove', () => {
     expect(result).toBeNull();
   });
 
+  it('most-played takes the band\'s top move every time and returns every candidate (Learn, David 2026-10-19)', async () => {
+    for (let i = 0; i < 5; i++) {
+      const result = await pickBookMove(AFTER_E4_FEN, { __explorerResultForTests: explorerStub(), pick: 'most-played', topN: 4, rng: () => 0.99 });
+      expect(result?.san).toBe('e5');
+      expect(result?.candidates.map((c) => c.san)).toEqual(['e5', 'c5', 'e6', 'c6']);
+      expect(result?.candidates[0].games).toBe(500_000);
+    }
+  });
+
+  it('weighted (Play\'s sparring partner) still samples by frequency', async () => {
+    const result = await pickBookMove(AFTER_E4_FEN, { __explorerResultForTests: explorerStub(), topN: 4, rng: () => 0.99 });
+    expect(result?.san).toBe('c6');
+  });
+
   it('returns null when the explorer has no move list', async () => {
     const result = await pickBookMove(AFTER_E4_FEN, {
       __explorerResultForTests: explorerStub({ moves: [] }),

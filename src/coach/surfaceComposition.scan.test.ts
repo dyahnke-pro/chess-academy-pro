@@ -67,6 +67,10 @@ const INFRA = new Set(['learnTranscript',
   // `narrationSegments` (sentence timing) and `arrowDoor` (what may be drawn).
   // Listed in PHRASERS below, so a future import would fail this gate.
   'markPacing',
+  // `studentMemory` is STORAGE (2026-10-19, David: "persistent memory throughout
+  // the app"): one Dexie table read and written through one door. It computes
+  // no chess or teaching fact — the same class as `db` and `storage`.
+  'studentMemory',
   // Board THEMING and BILLING (2026-10-01): `boardColorService` and
   // `pieceSetService` pick colours and a piece set; `courseEntitlement` checks
   // a purchase. None of them reasons about a position — they were counted only

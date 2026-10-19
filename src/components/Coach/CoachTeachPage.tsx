@@ -218,8 +218,10 @@ import { FUNDAMENTAL_TAG, type FundamentalId } from '../../services/principleAtt
 import { FUNDAMENTAL_LABEL } from '../../services/fundamentalsCatalog';
 import {
   noteFamilyFork, markWalked, unwalked, nextForkToOffer, progressAt,
-  type ForkLog, type Fork,
+  roadsFrom, isRoadFork, roadLabel, roadForkId,
+  type ForkLog, type Fork, type Road,
 } from '../../services/branchExplorer';
+import { remember } from '../../services/studentMemory';
 import { warmAmateurPlay, getCachedAmateurPlay } from '../../services/amateurPlayCache';
 
 // Priority-first framing needs room to breathe between firings or every quiet
@@ -1203,6 +1205,27 @@ export function CoachTeachPage(): JSX.Element {
   // positional filler that David flagged as "irrelevant or wrong".
   const behaviorSchedulerRef = useRef<BehaviorScheduler>(new BehaviorScheduler());
   const [roadsBack, setRoadsBack] = useState<{ fork: Fork; walked: number; total: number } | null>(null);
+  /** THE ADVENTURE BOOK IN FREE PLAY (David 2026-10-19: "a choose your own
+   *  adventure path so a user can have the computer play different moves at
+   *  the forks" … "default to the most popular lines, but pickers can adjust").
+   *  After the computer's reply at a fork: the other roads players at the
+   *  student's level take there, the masters' main line marked, the roads
+   *  already walked (remembered across sessions) ticked. A tap has the
+   *  computer play that road instead. Shown only while the board still stands
+   *  after the computer's move. */
+  const [theirRoads, setTheirRoads] = useState<{ afterFen: string; beforeFen: string; played: string; roads: Road[]; walked: string[] } | null>(null);
+  /** Remember a road taken at their fork and raise the chips for it. */
+  const noteTheirRoads = useCallback((beforeFen: string, played: string, roads: Road[]): void => {
+    if (!isRoadFork(roads) || !roads.some((r) => r.san === played)) { setTheirRoads(null); return; }
+    let afterFen: string;
+    try { const c = new Chess(beforeFen); c.move(played); afterFen = c.fen(); } catch { setTheirRoads(null); return; }
+    void remember('learn-forks', roadForkId(beforeFen), (prev) => ({
+      walked: [...new Set([...(prev?.walked ?? []), played])],
+      chosen: { ...(prev?.chosen ?? {}), last: played },
+    })).then((row) => {
+      setTheirRoads({ afterFen, beforeFen, played, roads, walked: row?.data.walked ?? [played] });
+    });
+  }, []);
   const [linePicker, setLinePicker] = useState<{
     canonicalName: string;
     options: LinePickerOption[];
@@ -2390,6 +2413,29 @@ export function CoachTeachPage(): JSX.Element {
       return finish({ ok: false, reason: err instanceof Error ? err.message : String(err) });
     }
   }, []);
+
+  /** SWAP THE COMPUTER'S LAST MOVE for another — ONE path for the typed
+   *  correction ("no, play Nc3 instead", David 2026-09-17) and the adventure
+   *  book's road chips (2026-10-19). Legality is checked on the position BEFORE
+   *  their move, before anything is undone, and a board that refuses gets back
+   *  what was taken: a half-finished swap would leave the student a move down. */
+  const swapLastCoachMove = useCallback((san: string): { ok: true; san: string } | { ok: false; reason: 'illegal' | 'failed'; undone: string } => {
+    const fullHistory = gameRef.current.history;
+    const undoneSan = fullHistory[fullHistory.length - 1] ?? '';
+    if (!undoneSan) return { ok: false, reason: 'failed', undone: undoneSan };
+    let legalThere: string | null = null;
+    try {
+      const probe = new Chess();
+      for (const s of fullHistory.slice(0, -1)) probe.move(s);
+      legalThere = probe.move(san)?.san ?? null;
+    } catch { legalThere = null; }
+    if (!legalThere) return { ok: false, reason: 'illegal', undone: undoneSan };
+    if (handleTakeBack(1).ok) {
+      if (playDictatedMove(legalThere)) return { ok: true, san: legalThere };
+      playDictatedMove(undoneSan);
+    }
+    return { ok: false, reason: 'failed', undone: undoneSan };
+  }, [handleTakeBack, playDictatedMove]);
 
   const handleSetBoardPosition = useCallback((newFen: string): { ok: boolean; reason?: string } => {
     const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
@@ -4282,30 +4328,16 @@ export function CoachTeachPage(): JSX.Element {
           // pre-move position is rebuilt from history and the move validated
           // there; a correction that would not be legal leaves the board exactly
           // as it was rather than taking back and then failing to replace.
-          const fullHistory = gameRef.current.history;
-          const undoneSan = fullHistory[fullHistory.length - 1];
-          const priorSans = fullHistory.slice(0, -1);
-          let legalThere: string | null = null;
-          try {
-            const probe = new Chess();
-            for (const s of priorSans) probe.move(s);
-            legalThere = probe.move(cmd.san)?.san ?? null;
-          } catch { legalThere = null; }
-          if (legalThere) {
-            if (handleTakeBack(1).ok) {
-              if (playDictatedMove(legalThere)) {
-                captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'corrected-last', san: legalThere });
-                appendTurn(`Taken back — ${sanToSpeech(legalThere)} instead. Your move.`);
-                return;
-              }
-              // The move was legal in the rebuilt position but the board refused
-              // it. Put back what was taken away before saying anything: a half-
-              // finished correction leaves the student a move down with no sign
-              // of it, which is worse than the correction simply not happening.
-              playDictatedMove(undoneSan);
-            }
+          const swapped = swapLastCoachMove(cmd.san);
+          if (swapped.ok) {
+            setTheirRoads(null);
+            captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'corrected-last', san: swapped.san });
+            appendTurn(`Taken back — ${swapped.san} instead. Your move.`);
+            return;
+          }
+          if (swapped.reason === 'failed') {
             captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'correction-failed', san: cmd.san });
-            appendTurn(`${sanToSpeech(undoneSan)} couldn't be swapped for ${sanToSpeech(cmd.san)} — the board is back as it was.`);
+            appendTurn(`${sanToSpeech(swapped.undone)} couldn't be swapped for ${sanToSpeech(cmd.san)} — the board is back as it was.`);
             return;
           }
           captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'correction-illegal', san: cmd.san });
@@ -7907,7 +7939,7 @@ export function CoachTeachPage(): JSX.Element {
       // Nc3 parked 3×, spoken 0×; PostHog confirmed no words.)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; current deps cover the live callers.
-  }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate, kickoffStatus, walkthrough, playerColor, playDictatedMove]);
+  }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate, kickoffStatus, walkthrough, playerColor, playDictatedMove, swapLastCoachMove]);
   // Keep the late-bound self handle current.
   handleSubmitRef.current = handleSubmit;
   // NEWEST-MOVE-WINS refire — runs on the render where `busy` has actually
@@ -7944,6 +7976,8 @@ export function CoachTeachPage(): JSX.Element {
     //    audit if the position moved past it.
     const dictated = pendingCoachMoveRef.current;
     learnMemRef.current.lastReplyDictated = null;
+    // A new reply: the last one's roads are gone.
+    setTheirRoads(null);
     if (dictated) {
       pendingCoachMoveRef.current = null;
       try {
@@ -8031,6 +8065,11 @@ export function CoachTeachPage(): JSX.Element {
       // number). Without these the slip lane stays off, which is the safe way
       // round for a feature that hands the student a won position.
       const adaptive = await getAdaptiveMove(fen, rating, {
+        // THE ADVENTURE BOOK (David 2026-10-19): Learn plays the move players
+        // at this level play most, and offers the other roads; Play stays the
+        // sparring partner. Still the band's move, so it never outplays a new
+        // player with theory.
+        bookPolicy: 'most-played',
         // Same source: the slip matrix asks how strong the PLAYER is, so it
         // must not disagree with the strength the opponent is set to.
         studentElo: strength.studentElo,
@@ -8046,13 +8085,32 @@ export function CoachTeachPage(): JSX.Element {
       if (adaptive.source === 'lesson-steer') lessonMomentPendingRef.current = true;
       if (adaptive.move) {
         const san = uciToSan(adaptive.move);
+        // The roads are what players AT THIS LEVEL take here: the band's own
+        // candidates, or — a home-opening steer, which answers from the
+        // student's own record before any band call — the band's moves for this
+        // board, fetched now (the same band the band layer asks) and shown when
+        // they land, unless the game has moved past this reply. A planned trap
+        // carries no roads: swapping it away would cancel the punish it sets up.
+        const historyBefore = [...gameRef.current.history];
+        if (san && adaptive.source === 'amateur-band' && adaptive.roads) {
+          noteTheirRoads(fen, san, roadsFrom(fen, historyBefore, adaptive.roads));
+        } else if (san && adaptive.source === 'home-steer') {
+          const stillHere = (): boolean => {
+            const h = gameRef.current.history;
+            return h.length <= historyBefore.length + 1 && historyBefore.every((s, i) => h[i] === s);
+          };
+          void warmAmateurPlay(fen, rating, 'coach-teach').then(() => {
+            const moves = getCachedAmateurPlay(fen)?.moves;
+            if (moves && stillHere()) noteTheirRoads(fen, san, roadsFrom(fen, historyBefore, moves));
+          });
+        }
         if (san) return san;
       }
     } catch { /* fall through */ }
     // 3) Never freeze.
     const random = getRandomLegalMove(fen);
     return random ? uciToSan(random) : null;
-  }, [walkthrough.tree?.openingName, activeProfile?.puzzleRating, activeProfile?.currentRating, difficulty, playerColor, discussion.liveRating]);
+  }, [walkthrough.tree?.openingName, activeProfile?.puzzleRating, activeProfile?.currentRating, difficulty, playerColor, discussion.liveRating, noteTheirRoads]);
 
   // "Read this position" — the SAME on-demand affordance Play carries
   // (David 2026-06-15: "You didn't like the read this position button?").
@@ -9706,6 +9764,8 @@ export function CoachTeachPage(): JSX.Element {
     setArrows([]);
     setHighlights([]);
     chainArrowsRef.current = [];
+    // The student chose to play on: the roads at their last fork close.
+    setTheirRoads(null);
     // Silent faucet: a genuine eval-worsening slip during guided play feeds
     // the bucket so it resurfaces as a drill. No panel/voice — the brain is
     // already narrating this move. DEFERRED a few seconds (2026-08-06,
@@ -14000,6 +14060,37 @@ export function CoachTeachPage(): JSX.Element {
             story-book: walk the Dragon as far as you like, then be offered the
             Najdorf you never took. Shown only when the picker is CLOSED — the
             picker is the fork; this is the memory of it. */}
+        {theirRoads && game.fen === theirRoads.afterFen && (
+          <div className="mb-3 rounded-2xl border-2 border-teal-500/30 bg-teal-500/10 p-3" data-testid="their-roads">
+            <p className="mb-2 text-sm opacity-80">Other roads here — tap one and they play it instead:</p>
+            <div className="flex flex-wrap gap-2">
+              {theirRoads.roads.filter((r) => r.san !== theirRoads.played).map((r) => {
+                const label = roadLabel(r);
+                return (
+                  <button
+                    key={r.san}
+                    type="button"
+                    data-testid={`their-road-${r.san}`}
+                    className="rounded-xl border-2 border-teal-500/40 px-3 py-2 text-sm"
+                    onClick={() => {
+                      const at = theirRoads;
+                      stopCoachNow();
+                      const swapped = swapLastCoachMove(r.san);
+                      if (!swapped.ok) return;
+                      noteTheirRoads(at.beforeFen, swapped.san, at.roads);
+                      captureEvent('learn_adventure_road_taken', { surface: 'coach-teach', san: swapped.san, main: r.main, walked_before: at.walked.includes(swapped.san) });
+                      const line = `${label !== swapped.san ? `${label}: ` : ''}${swapped.san} instead. Your move.`;
+                      setMessages((prev) => [...prev, { id: uid('road'), role: 'assistant', content: line, timestamp: Date.now() }]);
+                      void speakComputed(line, { forced: true, intent: 'learn' }).catch(() => undefined);
+                    }}
+                  >
+                    {`${label}${label !== r.san ? ` (${r.san})` : ''}${r.main ? ' · main line' : ''}${theirRoads.walked.includes(r.san) ? ' ✓' : ''}`}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
         {!linePicker && roadsBack && (
           <div className="mb-3 rounded-2xl border-2 border-indigo-500/30 bg-indigo-500/10 p-3" data-testid="roads-back">
             <p className="mb-2 text-sm opacity-80">
