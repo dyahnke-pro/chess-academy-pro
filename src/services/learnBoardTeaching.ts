@@ -1229,7 +1229,14 @@ const HIT_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', 
  *  computer (the move's point, its intent, a found move) had one (Learn audit
  *  2026-10-15: 36 of 56 turns offered no reason for the student's move at all).
  *  Null when the board teacher has nothing true to say. */
-export function boardTeacherPoint(fenBefore: string, san: string): TeachingHint | null {
+export function boardTeacherPoint(fenBefore: string, san: string, fenNow: string): TeachingHint | null {
+  // The piece the point is about must still stand where it went (Alekhine walk
+  // 2026-10-19: "The queen trains on the bishop on b5" after …Bxa4 took it).
+  try {
+    const mv = new Chess(fenBefore).move(san);
+    const there = new Chess(fenNow).get(mv.to);
+    if (!there || there.color !== mv.color || there.type !== (mv.promotion ?? mv.piece)) return null;
+  } catch { return null; }
   // The reading keeps the squares it named: a board fact about named squares
   // is proven on the board (A-plan P5); a reading that names none stays a
   // description, and says so.

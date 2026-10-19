@@ -11510,7 +11510,7 @@ export function CoachTeachPage(): JSX.Element {
                       // what the move did. The door ranks it below every sharper
                       // own-move reason, so it speaks only when they are silent.
                       if (!gambitLine && !point) {
-                        const said = boardTeacherPoint(fenBefore, move.san);
+                        const said = boardTeacherPoint(fenBefore, move.san, fenAfterReply);
                         if (said) queueHint(fenAfterReply, said, fenBefore);
                       }
                       // WHY THIS MOVE HAD TO COME FIRST (census #1: "the key move

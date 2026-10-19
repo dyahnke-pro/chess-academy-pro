@@ -10,6 +10,8 @@ import falseFx from './__fixtures__/falseAlarm-his.json';
 
 const base = { cpLoss: 0, bothCp: true, bestSan: null, bestLine: undefined, reply: null, cpAfter: null };
 
+const afterOf = (fen: string, san: string): string => { const c = new Chess(fen); c.move(san); return c.fen(); };
+
 describe('learnBoardTeaching — every lane reaches the door', () => {
   it('rule→exception comes out with its claim and event', () => {
     const p = (ruleFx as { key: string; fen: string; san: string; history: string[] }[]).find((x) => x.key === 'UVJ75kdDdt8:14')!;
@@ -149,7 +151,7 @@ describe('a hanging piece is warned in rotated words (David 2026-10-14)', () => 
 describe('every student move gets its own reason — the board teacher as fallback (David 2026-10-14)', () => {
   it('says what a quiet developing move did, with the move as its subject', async () => {
     const { boardTeacherPoint } = await import('./learnBoardTeaching');
-    const h = boardTeacherPoint('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', 'd5');
+    const h = boardTeacherPoint('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', 'd5', afterOf('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', 'd5'));
     expect(h?.lane).toBe('movePoint');
     expect(h?.text).toMatch(/^d5 /);
   });
@@ -158,14 +160,23 @@ describe('every student move gets its own reason — the board teacher as fallba
 describe('the board teacher\'s reason keeps the squares it names (A-plan P5)', () => {
   it('Nf3 against …d5: the squares named are its proof, marked on the board', async () => {
     const { boardTeacherPoint } = await import('./learnBoardTeaching');
-    const h = boardTeacherPoint('rnbqkbnr/ppp1pppp/8/3p4/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 2', 'Nf3');
+    const h = boardTeacherPoint('rnbqkbnr/ppp1pppp/8/3p4/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 2', 'Nf3', afterOf('rnbqkbnr/ppp1pppp/8/3p4/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 2', 'Nf3'));
     expect(h?.squares).toEqual(expect.arrayContaining(['d4', 'e5']));
     expect(h?.proof && typeof h.proof === 'object' && 'kind' in h.proof ? h.proof.kind : null).toBe('squares');
   });
   it('a reading that names no square stays a description (castling)', async () => {
     const { boardTeacherPoint } = await import('./learnBoardTeaching');
-    const h = boardTeacherPoint('r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5', 'O-O');
+    const h = boardTeacherPoint('r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5', 'O-O', afterOf('r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5', 'O-O'));
     expect(h?.squares ?? []).toEqual([]);
   });
 });
 
+
+describe('no point about a piece already taken (Alekhine walk 2026-10-19)', () => {
+  it('Qa4 taken by …Bxa4: the queen\'s point is not said', async () => {
+    const { boardTeacherPoint } = await import('./learnBoardTeaching');
+    const fen = '4k3/8/8/1b6/8/8/8/Q3K3 w - - 0 1';
+    const taken = (() => { const c = new Chess(fen); c.move('Qa4'); c.move('Bxa4'); return c.fen(); })();
+    expect(boardTeacherPoint(fen, 'Qa4', taken)).toBeNull();
+  });
+});
