@@ -667,18 +667,18 @@ describe('the spoken form is the student\'s, never the prompt package (2026-09-3
   ];
   it('asks "why not" first, then refutes — no instruction text', () => {
     const rt = buildRejectedTempting({ fen, studentColor: 'white', lines });
-    expect(rt?.spoken).toBe('Why not exd5? ‖ It grabs the pawn on d5, but Qxd5 refutes it.');
+    expect(rt?.spoken).toBe('Why not exd5? ‖ It grabs the pawn on d5, but Qxd5 refutes it. ‖');
     expect(rt?.spoken).not.toMatch(/Do NOT|exactly as given|TEMPTING BUT/);
     expect(rt?.refutation).toMatchObject({ from: 'd8', to: 'd5' });
   });
   it('a capture on the square their last move landed on is their BAIT', () => {
     const rt = buildRejectedTempting({ fen, studentColor: 'white', lines, baitSquare: 'd5' });
     expect(rt?.bait).toBe(true);
-    expect(rt?.spoken).toBe('Can you take the pawn on d5? ‖ No — it\'s bait: exd5 runs into Qxd5.');
+    expect(rt?.spoken).toBe('Can you take the pawn on d5? ‖ No — it\'s bait: exd5 runs into Qxd5. ‖');
   });
   it('the priority is asked, then named with the move that serves it', () => {
     const pf = buildPriorityFirst({ fen: '6k1/pp3ppp/8/3p4/8/8/PP1N1PPP/1N4K1 w - - 0 20', studentColor: 'white', bestUci: 'b1c3' });
-    expect(pf?.spoken).toMatch(/^What's the priority here\? ‖ Their pawn on d5 — it's isolated .* Nc3 does\.$/);
+    expect(pf?.spoken).toMatch(/^What's the priority here\? ‖ Their pawn on d5 — it's isolated .* Nc3 does\. ‖$/);
     expect(pf?.spoken).not.toMatch(/Do NOT|PRIORITY FIRST/);
   });
 });

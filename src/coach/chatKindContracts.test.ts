@@ -128,7 +128,7 @@ const CONTRACTS: Record<ChatKind, Contract | Owed> = {
   'faster-win': { board: 'pawns', ask: 'is there a faster win?', reading: { kind: 'faster-win' },
     must: [/\bKd3\b/], mustNot: [/much worse — it gives up/] },
   'line-outcome': { board: 'mate4', ask: 'calculate Nh6+ Kf8 Qf6+', reading: { kind: 'line-outcome', referents: [{ type: 'move', san: 'Nh6+' }, { type: 'move', san: 'Kf8' }, { type: 'move', san: 'Qf6+' }] },
-    must: [/After Nh6\+, …Kf8 and Qf6\+/] },
+    must: [/After you play Nh6\+, they answer Kf8 and you play Qf6\+/] },
   mate: { board: 'mate4', ask: 'is there a forced mate?', reading: { kind: 'mate' },
     must: [/mate in 4/, /Nh6\+/] },
   // ── the board: their side ──

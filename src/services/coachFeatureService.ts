@@ -3699,7 +3699,8 @@ async function augmentWithProjections(
       // walk the rest on the board.
       const said = proof.proof.sans.slice(0, proof.plies);
       // Each move with its mover (OS-8 gap 7).
-      const moves = lineShape(said, lineSeatAt(line.plies[0].fenBefore, studentColorWB));
+      const firstWB = line.plies[0].moverColor === 'white' ? 'w' : 'b';
+      const moves = lineShape(said, firstWB === studentColorWB ? 'you' : 'they');
       return proof.proof.mate ? `${moves} — and it's mate` : `${moves} — ${describeProofResult(proof.proof.ledger as NonNullable<typeof proof.proof.ledger>)}`;
     }
     // No material point settles: the line proves nothing a sentence can hold,

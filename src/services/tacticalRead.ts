@@ -19,7 +19,7 @@
 import { evalBand } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { preparationOf } from './speedRunReads';
-import { lineSeatAt, seatedLine } from '../utils/andList';
+import { seatedLine, type LineSeat } from '../utils/andList';
 import { settledLineEnd } from './material';
 import { boardEdgeWords } from '../utils/countWords';
 import { rotateStem } from '../utils/rotateStem';
@@ -815,7 +815,10 @@ export function tacticalReadFacts(read: TacticalRead, opts: { inGame?: boolean }
   const lineSans = read.line.slice(0, toTactic + 1).map((p) => p.san);
   // Each move with its mover (OS-8 gap 7): "you / they" live, the colours in
   // the third-person register.
-  const lineFirst = lineSeatAt(read.line[0]?.fenBefore ?? read.fen, ig ? (read.studentColor === 'white' ? 'w' : 'b') : null);
+  // The first ply's own mover decides, never a board field a caller may leave
+  // as a placeholder.
+  const firstColor = read.line[0]?.moverColor ?? read.studentColor;
+  const lineFirst: LineSeat = ig ? (firstColor === read.studentColor ? 'you' : 'they') : (firstColor === 'white' ? 'White' : 'Black');
   if (lineSans.length > 0) parts.push(`${ig ? 'The line goes' : 'The correct line is'}: ${seatedLine(lineSans, lineFirst)}.`);
   const kt = read.keyTactic;
   if (kt && kt.squares.length > 0) {
