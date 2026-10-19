@@ -286,7 +286,7 @@ import { computePositionFacts, mustKey, conceptInstanceKey, convertKey } from '.
 import { gradePlayedMove, liveMoveCost, uciOfSan } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
-import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine, isLoudAlarm } from '../../services/liveTacticsContext';
+import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine, isLoudAlarm, dangerRank, PIECE_DANGER_RANK } from '../../services/liveTacticsContext';
 import { buildCausalChain, causalChainHighlights } from '../../services/causalChain';
 import { renderCausalChain } from '../../services/causalChainVoice';
 import { seatPieceReferences } from '../../services/groundedAnswer';
@@ -8561,6 +8561,45 @@ export function CoachTeachPage(): JSX.Element {
         } catch { /* a bonus lane */ }
         return false;
       };
+      // ATTACKED BY A SMALLER PIECE, read once — the chain below both ranks it
+      // against a standing pattern and speaks it.
+      const cheaperHit = (): { sq: string; piece: string; by: string; bySq: string } | null => {
+        try {
+          const board = new Chess(args.fenAfterReply);
+          const foe: 'w' | 'b' = studentCC === 'w' ? 'b' : 'w';
+          let hit: { sq: string; piece: string; by: string; bySq: string } | null = null;
+          for (const row of board.board()) for (const cell of row) {
+            if (!cell || cell.color !== studentCC || (AV[cell.type] ?? 0) < 3) continue;
+            const low = board.attackers(cell.square, foe)
+              .map((a) => ({ a, t: board.get(a)?.type ?? 'k' }))
+              .filter((x) => x.t !== 'k' && (x.t === 'p' ? 1 : (AV[x.t] ?? 0)) < (AV[cell.type] ?? 0))
+              .sort((x, y) => (x.t === 'p' ? 1 : AV[x.t] ?? 0) - (y.t === 'p' ? 1 : AV[y.t] ?? 0))[0];
+            // …unless taking the attacker loses nothing — then the answer is
+            // to take it, not to move away. Not only when it is FREE: a
+            // defended pawn traded pawn-for-pawn answers the attack just the
+            // same (hand walk 2026-09-30, Ruy 14.d4 cxd4: "it has to move"
+            // when cxd4 simply takes back). SIGNED: a capture that loses
+            // material is no answer (6.h3 Bxh3 gxh3 silenced this warning in
+            // both Learn tapes of 2026-10-07).
+            const answeredByCapture = !!low && takingTheAttackerAnswers(args.fenAfterReply, low.a, studentCC);
+            if (low && !answeredByCapture && (!hit || (AV[cell.type] ?? 0) > (AV[hit.piece] ?? 0))) hit = { sq: cell.square, piece: cell.type, by: low.t, bySq: low.a };
+          }
+          return hit;
+        } catch { return null; }
+      };
+      // THE BIGGER DANGER TAKES THE TURN (prod walk on David's record,
+      // 2026-10-19, 11.Nb5: the knight hit the queen on c7 and the coach warned
+      // about a pin on f6 that cost nothing, because a standing pattern always
+      // went first). A loose danger — a piece attacked by a cheaper one, or a
+      // hanging piece — that costs more if ignored outranks the pattern; the
+      // levels are the same `dangerLevel` the opener reads.
+      const rankOf = (sqs: readonly string[]): number => dangerRank(args.fenAfterReply, studentCC, sqs);
+      const looseRank = ((): number => {
+        const hit = cheaperHit();
+        const hang = myHanging.length > 0 && (AV[myHanging[0].piece] ?? 0) >= 3 && !tradeOnOffer(args.fenAfterReply, myHanging[0].square, studentCC) ? myHanging[0].square : null;
+        return Math.max(hit ? rankOf([hit.sq, hit.bySq]) : 0, hang ? rankOf([hang]) : 0);
+      })();
+      const looseOutranks = (sqs: readonly string[]): boolean => looseRank > rankOf(sqs);
       // THE COST A WARNING CLAIMS, PROVEN (threatProof): the count and the
       // capture behind "this costs a piece", or the mating move.
       const proveThreat = (line: string): string => {
@@ -8578,7 +8617,7 @@ export function CoachTeachPage(): JSX.Element {
         threatSquares = trappedMine.squares;
         threatLine = trappedMine.text;
         if (isProof(trappedMine.proof)) threatFactProof = trappedMine.proof;
-      } else if (againstMe.length > 0) {
+      } else if (againstMe.length > 0 && !looseOutranks(againstMe[0].squares)) {
         const t = againstMe[0];
         // KEYED ON THE PATTERN, NOT EVERY SQUARE IN IT. A pin is the same pin
         // when the pinned piece shuffles — from the prod transcript, two plies
@@ -8623,7 +8662,7 @@ export function CoachTeachPage(): JSX.Element {
           tacticLine = tacticLine ? tacticLine.replace(/^You have a /, 'You have a different ') : null;
           tacticTailType = myTacticType;
         }
-      } else if (tctx.threats.some((t) => t.spoken && !(t.type === 'pin' && / pins pawn /i.test(t.description)))) {
+      } else if (tctx.threats.some((t) => t.spoken && !(t.type === 'pin' && / pins pawn /i.test(t.description))) && looseRank < PIECE_DANGER_RANK) {
         // (Only a threat that can be SAID takes the turn — an unspeakable one
         // fell through to nothing and hid the king-pawn warning below; fresh-
         // game walk 2026-09-27, 14.Qxh5.)
@@ -8654,7 +8693,7 @@ export function CoachTeachPage(): JSX.Element {
           threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0), learnMemRef.current.loudAlarms.size);
         threatLine = proveThreat(threatLine);
         }
-      } else if (!(myHanging.length > 0 && (AV[myHanging[0].piece] ?? 0) >= 3) && kingPawnThreat()) {
+      } else if (!(myHanging.length > 0 && (AV[myHanging[0].piece] ?? 0) >= 3) && looseRank < PIECE_DANGER_RANK && kingPawnThreat()) {
         // threatLine set above
       } else if (myHanging.length > 0 && (AV[myHanging[0].piece] ?? 0) >= 3 && !tradeOnOffer(args.fenAfterReply, myHanging[0].square, studentCC)) {
         // Only a real PIECE (minor or better) earns the interrupt. A hanging pawn
@@ -8684,25 +8723,7 @@ export function CoachTeachPage(): JSX.Element {
         // only "castle"). A defender does not help when the attacker is worth
         // less than the piece.
         try {
-          const board = new Chess(args.fenAfterReply);
-          const foe: 'w' | 'b' = studentCC === 'w' ? 'b' : 'w';
-          let hit: { sq: string; piece: string; by: string; bySq: string } | null = null;
-          for (const row of board.board()) for (const cell of row) {
-            if (!cell || cell.color !== studentCC || (AV[cell.type] ?? 0) < 3) continue;
-            const low = board.attackers(cell.square, foe)
-              .map((a) => ({ a, t: board.get(a)?.type ?? 'k' }))
-              .filter((x) => x.t !== 'k' && (x.t === 'p' ? 1 : (AV[x.t] ?? 0)) < (AV[cell.type] ?? 0))
-              .sort((x, y) => (x.t === 'p' ? 1 : AV[x.t] ?? 0) - (y.t === 'p' ? 1 : AV[y.t] ?? 0))[0];
-            // …unless taking the attacker loses nothing — then the answer is
-            // to take it, not to move away. Not only when it is FREE: a
-            // defended pawn traded pawn-for-pawn answers the attack just the
-            // same (hand walk 2026-09-30, Ruy 14.d4 cxd4: "it has to move"
-            // when cxd4 simply takes back). SIGNED: a capture that loses
-            // material is no answer (6.h3 Bxh3 gxh3 silenced this warning in
-            // both Learn tapes of 2026-10-07).
-            const answeredByCapture = !!low && takingTheAttackerAnswers(args.fenAfterReply, low.a, studentCC);
-            if (low && !answeredByCapture && (!hit || (AV[cell.type] ?? 0) > (AV[hit.piece] ?? 0))) hit = { sq: cell.square, piece: cell.type, by: low.t, bySq: low.a };
-          }
+          const hit = cheaperHit();
           if (hit) {
             threatKey = `hit:${hit.piece}${hit.sq}:${hit.bySq}`;
             threatSquares = [hit.sq, hit.bySq];

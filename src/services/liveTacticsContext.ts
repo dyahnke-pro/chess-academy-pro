@@ -522,6 +522,13 @@ export function speakDeepestLookahead(
    *  renderer attributed the whole line to the opponent. Each ply is now
    *  attributed to its seat off `ctx.fen`'s side to move. */
   studentColor: 'w' | 'b',
+  /** May the line name the STUDENT's own moves? Required (prod walk on David's
+   *  record, 2026-10-19: the Learn phase narration said "you've got a pin
+   *  coming, 3 deep: your queen to d8, then castling short, your queen taking
+   *  on d4" — three of the student's moves, unasked). False on a surface that
+   *  volunteers the line: the shot is announced and left to find. True only
+   *  where the student asked to hear the position read. */
+  namesStudentMoves: boolean,
   /** The student model (Phase 1b) — when a deep tactic's MOTIF is a hole this
    *  student keeps falling in (via the tactic-vocabulary bridge), it is PREFERRED
    *  as the one to speak, and an honest tag names the recurring pattern. Optional/
@@ -573,6 +580,9 @@ export function speakDeepestLookahead(
   // hand the student's own move to the other seat.
   const toMove = (ctx.fen.split(' ')[1] ?? 'w') as 'w' | 'b';
   const studentOpens = toMove === studentColor;
+  if (isOpportunity && !namesStudentMoves) {
+    return `Look a couple of moves ahead — there's a ${pattern} in it for you, ${pick.depthAhead} moves deep. Find it.${holeTag}`;
+  }
   if (isOpportunity) {
     // Every ply names its owner — "the bishop taking on c3, then the pawn to
     // e4" left the student to work out which moves were theirs (hand walk 2340).
@@ -802,6 +812,16 @@ export function dangerLevel(fen: string, student: 'w' | 'b', squares: readonly s
     // bishop hit by a pawn nets two (Learn tape 2026-10-07, 6.h3).
     return named.value >= 5 ? 'decisive' : named.value >= 3 ? 'piece' : named.value >= 2 ? 'material' : 'pawn';
   } catch { return null; }
+}
+
+/** A danger as a number, for choosing which warning takes the turn: the
+ *  larger is what costs more if ignored (`dangerLevel`); 0 when nothing is
+ *  lost. */
+const DANGER_RANK: Record<DangerLevel, number> = { decisive: 5, piece: 4, material: 3, pawn: 2, 'not-yet': 1 };
+export const PIECE_DANGER_RANK = DANGER_RANK.piece;
+export function dangerRank(fen: string, student: 'w' | 'b', squares: readonly string[]): number {
+  const l = dangerLevel(fen, student, squares.filter((sq) => /^[a-h][1-8]$/.test(sq)));
+  return l ? DANGER_RANK[l] : 0;
 }
 
 /** What the student loses on the warning's squares by force: every legal

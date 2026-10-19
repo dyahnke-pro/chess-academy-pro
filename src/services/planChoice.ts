@@ -157,7 +157,9 @@ const WORTH: Record<PlanKind, (p: PlanFact) => string> = {
   'open-file': (p) => `the ${p.file}-file has no pawns on it — a road into their camp, and the first rook there owns it`,
   outpost: (p) => `no pawn of theirs can chase your piece off ${p.squares[0]}, so it stays there for good`,
   'worst-piece': (p) => `a position is only as strong as its worst piece, and the one on ${p.squares[0]} is doing almost nothing`,
-  convert: () => 'you are ahead in material, and every trade makes the extra material count for more',
+  // The REASON, not the method: the how (nextPlans) already says "every trade
+  // makes it count for more", and the walk heard both back to back (2026-10-19).
+  convert: () => 'you are ahead in material, and with fewer pieces left they have less to fight back with',
   'bishop-pair': () => 'you have two bishops and they don\'t, and bishops grow stronger as the board opens',
 };
 

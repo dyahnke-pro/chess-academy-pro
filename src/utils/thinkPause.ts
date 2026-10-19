@@ -11,13 +11,24 @@
 /** Private separator — never produced by chess prose. */
 export const THINK_MARK = '‖';
 
-/** "question ‖ answer" → [question, answer]; null when there is no mark. */
+/** A question and its answer, the answer CLOSED by a second mark — so in a
+ *  turn that joins several facts, only THIS answer waits for the student's
+ *  move. An unclosed mark let every later sentence ride with it (prod walk on
+ *  David's record, 2026-10-19: "Nxc6 was one of just two moves that kept the
+ *  win" followed the answer and was heard two moves late). */
+export function askThenAnswer(question: string, answer: string): string {
+  return `${question} ${THINK_MARK} ${answer} ${THINK_MARK}`;
+}
+
+/** "question ‖ answer ‖ more" → [what is said now, what waits for the move];
+ *  null when there is no mark. Segments alternate: outside the marks is said
+ *  now, inside them is owed. */
 export function splitThink(text: string): [string, string] | null {
-  const i = text.indexOf(THINK_MARK);
-  if (i < 0) return null;
-  const q = text.slice(0, i).trim();
-  const a = text.slice(i + THINK_MARK.length).trim();
-  return q && a ? [q, a] : null;
+  if (!text.includes(THINK_MARK)) return null;
+  const parts = text.split(THINK_MARK).map((p) => p.trim());
+  const now = parts.filter((_, k) => k % 2 === 0).filter(Boolean).join(' ');
+  const owed = parts.filter((_, k) => k % 2 === 1).filter(Boolean).join(' ');
+  return now && owed ? [now, owed] : null;
 }
 
 /** The text as it is shown or logged — the mark removed. */

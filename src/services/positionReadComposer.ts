@@ -185,7 +185,7 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
   //    "you / they", so the look-ahead does too. A bundle mixing "they" and "I"
   //    for the same side left the phraser to re-seat it, and it inverted it —
   //    "you're threatening to win my bishop" to the student whose bishop it was.
-  const lookaheadLine = tactics ? speakDeepestLookahead(tactics, READ_SEAT, studentCC, i.studentWeaknesses) : null;
+  const lookaheadLine = tactics ? speakDeepestLookahead(tactics, READ_SEAT, studentCC, true, i.studentWeaknesses) : null;
 
   return [noteLine, phaseLine, positionFactsBlock, ...readLines, lookaheadLine ?? '']
     .map((t) => t.trim())

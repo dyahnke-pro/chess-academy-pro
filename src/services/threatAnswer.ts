@@ -16,7 +16,7 @@
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import type { ArrowClaim } from './arrowDoor';
 import { captureRead, legalSeeGainFor } from './positionReadingService';
-import { THINK_MARK } from '../utils/thinkPause';
+import { askThenAnswer } from '../utils/thinkPause';
 
 export type ThreatAnswerKind = 'take' | 'step-out' | 'with-gain' | 'kick' | 'block' | 'guard' | 'wait';
 
@@ -169,7 +169,7 @@ export function threatAnswer(input: {
     kind,
     san: m.san,
     // Question, a pause to think, then the answer (the Danya pattern).
-    text: `${STEMS[ply % STEMS.length]} ${THINK_MARK} ${answer}`,
+    text: askThenAnswer(STEMS[ply % STEMS.length], answer),
     arrow: input.namesMove ? { from: m.from, to: m.to, role: 'play', vouchedBy: 'engine', source: 'threatAnswer' } : null,
   };
 }

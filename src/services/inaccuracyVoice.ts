@@ -22,6 +22,7 @@
 import type { MisconceptionTagRecord } from '../types';
 import { classifyMisconceptionNow } from './misconceptionClassifier';
 import { classifyPhase } from './gamePhaseService';
+import { memoOverTable, type TableMemo } from './tableMemo';
 
 export type GamePhase = 'opening' | 'middlegame' | 'endgame';
 
@@ -70,6 +71,9 @@ export function inaccuracyVerdict(rec: InaccuracyRecord, phase: GamePhase, tag: 
 }
 
 let cached: InaccuracyRecord = tallyInaccuracies([]);
+/** The tally, kept until the mistake record is written (walk of David's record,
+ *  2026-10-19: every Learn turn re-tallied every mistake row). */
+let tallyMemo: TableMemo<InaccuracyRecord> | null = null;
 let loadedAt = 0;
 /** The record changes as games are analysed; a read older than this is redone. */
 const STALE_MS = 60_000;
@@ -92,7 +96,11 @@ export async function loadInaccuracyVoice(): Promise<void> {
   loadedAt = Date.now();
   try {
     const { db } = await import('../db/schema');
-    cached = tallyInaccuracies(await db.misconceptionTags.toArray());
+    tallyMemo ??= memoOverTable(() => db.misconceptionTags, async () => tallyInaccuracies(await db.misconceptionTags.toArray()));
+    const next = await tallyMemo.get();
+    // Unchanged record → nothing to refresh and nothing new to report.
+    if (next === cached) return;
+    cached = next;
     // One row per read, so an audit can hold the verdict to the record.
     const phases = (Object.keys(cached.phase) as GamePhase[]);
     const summary = phases.map((p) => `${p}=${inaccuracyVerdict(cached, p, null).speaks ? 'speak' : 'quiet'}(${cached.phase[p].big}/${cached.phase[p].small})`).join(' ');

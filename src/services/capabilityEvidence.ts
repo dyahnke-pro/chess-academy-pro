@@ -54,6 +54,7 @@ import { matesInOne } from './opponentMoveReads';
 import { asIfToMove } from './positionReadingService';
 import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
 import { positionOf } from '../utils/samePosition';
+import { memoOverTable, type TableMemo } from './tableMemo';
 
 /** How live the fundamental had to be on THIS board before answering it counts
  *  as evidence. `importance` is 0-100 and already rates the board, not the move,
@@ -811,9 +812,22 @@ export async function recordAnswerEvidence(args: {
  * The capability profile. ABSENT means UNKNOWN — the caller must not read a
  * missing tag as either mastery or a hole (absent ≠ silent).
  */
+/** One summary per reading, kept until the evidence table is written (walk of
+ *  David's record, 2026-10-19: ten full rebuilds of 9,761 rows per Learn move). */
+const PROFILE_MEMO: Record<EvidenceReading, TableMemo<CapabilityProfile>> = {
+  know: memoOverTable(() => db.capabilityEvidence, async () => summariseEvidence(await db.capabilityEvidence.toArray(), {}, 'know')),
+  use: memoOverTable(() => db.capabilityEvidence, async () => summariseEvidence(await db.capabilityEvidence.toArray(), {}, 'use')),
+};
+
+/** Test seam: forget the memoised profiles. */
+export function clearCapabilityProfileMemo(): void {
+  PROFILE_MEMO.know.clear();
+  PROFILE_MEMO.use.clear();
+}
+
 export async function getCapabilityProfile(reading: EvidenceReading = 'use'): Promise<CapabilityProfile> {
   try {
-    const profile = summariseEvidence(await db.capabilityEvidence.toArray(), {}, reading);
+    const profile = await PROFILE_MEMO[reading].get();
     // The heat map's emission is the USE reading's — the bar it reports is
     // the one the ranker acts on.
     if (reading === 'use') reportHeatMap(profile);

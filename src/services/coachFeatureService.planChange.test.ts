@@ -53,6 +53,6 @@ describe('review finds the plan out loud (David 2026-10-15)', () => {
     expect(first).toMatch(/So the plan: /);
     const later = all.filter((t) => /The plan changes here|The new plan is/.test(t));
     // The why may stand without its question once the question was said (say-once).
-    for (const t of later) expect(t).toMatch(/Why this one|Why it matters|so it comes before|no pawns on it|biggest target|can protect|must stand guard|for good|worst piece|count for more|grow stronger/);
+    for (const t of later) expect(t).toMatch(/Why this one|Why it matters|so it comes before|no pawns on it|biggest target|can protect|must stand guard|for good|worst piece|count for more|fight back with|grow stronger/);
   }, 120000);
 });
