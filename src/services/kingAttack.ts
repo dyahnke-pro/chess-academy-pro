@@ -68,7 +68,14 @@ function quietNextMoves(c: Chess, sq: string, me: 'w' | 'b'): { to: string; san:
   } catch { return []; }
 }
 
-export function kingAttack(fenBefore: string, san: string): KingAttackPoint | null {
+export function kingAttack(
+  fenBefore: string, san: string,
+  /** REQUIRED: may the next hop be named? Learn's live board holds the
+   *  student's next move (LEARN NAMES NO MOVE UNASKED — Black walk 2026-10-19,
+   *  16.Ne3: "knight to f5 next brings the knight to bear"); Review and chat
+   *  name it. */
+  namesStudentMoves: boolean,
+): KingAttackPoint | null {
   let before: Chess; let after: Chess; let mv;
   try {
     before = new Chess(fenBefore);
@@ -128,6 +135,8 @@ export function kingAttack(fenBefore: string, san: string): KingAttackPoint | nu
     const next = quietNextMoves(after, mv.to, me).find((n) => onWing(n.to) && bearsSafelyFrom(after, mv.to, n.to, me));
     const could = quietNextMoves(before, mv.from, me).some((n) => onWing(n.to) && bearsSafelyFrom(before, mv.from, n.to, me));
     if (next && !could) {
+      // Held: the idea, never the square — and no arrow to it.
+      if (!namesStudentMoves) return out('heads-for-king', `${played} heads for their king — one more ${NAME[mv.piece]} move brings it to bear.`, [mv.to]);
       return {
         ...out('heads-for-king', `${played} heads for their king — ${dot}${next.san} next brings the ${NAME[mv.piece]} to bear.`, [mv.to, next.to]),
         next: { san: next.san, uci: `${mv.to}${next.to}` },

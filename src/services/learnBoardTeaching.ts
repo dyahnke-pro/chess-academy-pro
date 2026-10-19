@@ -309,7 +309,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   // BRINGING PIECES TO THEIR KING — not on a move that cost a pawn; that
   // move's lesson is the cost.
   if (i.cpLoss < 100) {
-    const ka = kingAttack(i.fenBefore, i.san);
+    const ka = kingAttack(i.fenBefore, i.san, false);
     if (ka) {
       out.push({
         lane: 'kingAttack', proof: squaresProof(ka.text, ka.squares) ?? NO_PROOF.stated, text: ka.text, squares: ka.squares,

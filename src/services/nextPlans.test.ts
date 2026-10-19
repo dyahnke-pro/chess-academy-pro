@@ -13,7 +13,7 @@ describe('findWorstPlacedPiece — undeveloped is not misplaced (walk 5, 2026-09
 
 describe('the weak-pawn plan reads the board it prescribes on (walk 5, R7)', () => {
   it('does not tell the student to plant a knight on a square their own pawn holds', () => {
-    const plans = deriveNextPlans('6k1/pp4pp/2n1p3/4P3/8/8/PP4PP/6K1 b - - 0 20', 'b');
+    const plans = deriveNextPlans('6k1/pp4pp/2n1p3/4P3/8/8/PP4PP/6K1 b - - 0 20', 'b', { namesStudentMoves: true });
     const weak = plans.find((p) => /weak pawn on e5/.test(p));
     expect(weak).toBeDefined();
     expect(weak).not.toMatch(/plant your (knight|bishop)/);
@@ -21,7 +21,7 @@ describe('the weak-pawn plan reads the board it prescribes on (walk 5, R7)', () 
   });
 
   it('states no plan while a whole student piece is en prise', () => {
-    expect(deriveNextPlans('6k1/pp4pp/4pn2/4P3/8/8/PP4PP/6K1 b - - 0 20', 'b')).toEqual([]);
+    expect(deriveNextPlans('6k1/pp4pp/4pn2/4P3/8/8/PP4PP/6K1 b - - 0 20', 'b', { namesStudentMoves: true })).toEqual([]);
   });
 });
 
@@ -42,17 +42,17 @@ describe('no king attack without queens (review tape 2026-09-25)', () => {
     const { Chess } = await import('chess.js');
     const c = new Chess();
     for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 c6 Kh1 Nh5 Be3 f5 Qd2 f4 Bf2 Be5 Nc2 Ng3+ Kg1 Qh4 Bd4 Nxf1 Bxf1 Be6 Bxe5 dxe5 Qd6 Nd7 Qc7 Qd8 Qxd8 Raxd8 Kf2'.split(' ')) c.move(m);
-    const plans = deriveNextPlans(c.fen(), 'b', { studentPovCp: 200 });
+    const plans = deriveNextPlans(c.fen(), 'b', { studentPovCp: 200, namesStudentMoves: true });
     expect(plans.join(' ')).not.toMatch(/attack their king/);
   });
 });
 
 describe('the weak-pawn plan names the heavy pieces that exist (Black walk 2026-10-19, move 24)', () => {
   it('one rook is "your rook", never "your heavy pieces"', () => {
-    const one = deriveNextPlans('r5k1/pp4pp/2n1p3/4P3/8/8/PP4PP/6K1 b - - 0 20', 'b').find((p) => /weak pawn on e5/.test(p));
+    const one = deriveNextPlans('r5k1/pp4pp/2n1p3/4P3/8/8/PP4PP/6K1 b - - 0 20', 'b', { namesStudentMoves: true }).find((p) => /weak pawn on e5/.test(p));
     expect(one).toMatch(/put your rook on its file/);
     expect(one).not.toMatch(/heavy pieces/);
-    const two = deriveNextPlans('r4rk1/pp4pp/2n1p3/4P3/8/8/PP4PP/6K1 b - - 0 20', 'b').find((p) => /weak pawn on e5/.test(p));
+    const two = deriveNextPlans('r4rk1/pp4pp/2n1p3/4P3/8/8/PP4PP/6K1 b - - 0 20', 'b', { namesStudentMoves: true }).find((p) => /weak pawn on e5/.test(p));
     expect(two).toMatch(/stack your rooks on its file/);
   });
 });

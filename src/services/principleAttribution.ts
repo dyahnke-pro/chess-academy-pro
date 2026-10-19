@@ -1843,7 +1843,7 @@ const DETECTORS: Detector[] = [
     const { last, best, mover } = c;
     if (isForcing(last.san) || last.san.startsWith('O-O')) return no(c, 'no-plan', `${last.san} is forcing or castling, never planless`);
     let plans: string[];
-    try { plans = deriveNextPlans(c.before.fen(), mover); } catch { return no(c, 'no-plan', 'deriveNextPlans threw'); }
+    try { plans = deriveNextPlans(c.before.fen(), mover, { namesStudentMoves: true }); } catch { return no(c, 'no-plan', 'deriveNextPlans threw'); }
     if (plans.length === 0) return no(c, 'no-plan', 'the structure earns NO plan here — nothing to have ignored');
     const targets = planTargets(plans);
     if (targets.squares.size === 0 && targets.files.size === 0) return no(c, 'no-plan', `${plans.length} plan(s) but none names a square or file to aim at`);
@@ -2038,7 +2038,7 @@ export function attributePrinciples(
     }
   }
 
-  // A SILENCE ALWAYS NAMES ITSELF (review N900, ply 30): when no detector
+  // A SILENCE ALWAYS true ITSELF (review N900, ply 30): when no detector
   // matched and none explained its refusal, `why` came back empty — so the
   // review's "declined, and here is why" row never fired and the audit reported
   // the diagnosis BLIND. The reason is a fact: nothing covered this slip.
