@@ -28,8 +28,6 @@ export interface MemoryDataByKind {
   'variation-tab': { tabIndex: number };
   /** Book reader: the chapter and page. key = book id. */
   'book-page': { activeIdx: number; page: number };
-  /** Endgame lesson: the keystone they reached. key = lesson id. */
-  'endgame-keystone': { posIndex: number };
   /** A lesson asked for that Learn had not opened yet. key = 'current'. */
   'pending-lesson': { request: unknown };
   /** A chat thread to show again on reopen. key = surface thread id. */
@@ -41,6 +39,12 @@ export interface MemoryDataByKind {
   // ── C. settings ──
   /** A remembered choice. key = setting name. */
   setting: { value: string | number | boolean };
+  /** The hint dial — how subtle hints should be, moved by the student's own
+   *  found/missed run on every sparring surface. key = 'student'. */
+  'hint-dial': { register: 'obvious' | 'moderate' | 'subtle'; recent: boolean[] };
+  /** The opponent strength the board measured, carried into the next game
+   *  instead of restarting at the profile rating. key = 'student'. */
+  'live-strength': { rating: number; evidence: number };
   // ── E. progress ──
   /** All-time best. key = what (e.g. 'puzzle-streak'). */
   best: { value: number; at: number };
@@ -68,12 +72,13 @@ export const MEMORY_KINDS: Record<MemoryKind, { surface: MemorySurface }> = {
   'watch-beat': { surface: 'openings' },
   'variation-tab': { surface: 'openings' },
   'book-page': { surface: 'openings' },
-  'endgame-keystone': { surface: 'endgame' },
   'pending-lesson': { surface: 'learn' },
   'chat-thread': { surface: 'chat' },
   'kid-progress': { surface: 'kid' },
   'served-puzzles': { surface: 'tactics' },
   setting: { surface: 'app' },
+  'hint-dial': { surface: 'app' },
+  'live-strength': { surface: 'play' },
   best: { surface: 'app' },
   trend: { surface: 'app' },
   'learn-forks': { surface: 'learn' },
