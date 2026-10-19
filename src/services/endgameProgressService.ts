@@ -172,3 +172,14 @@ export async function recordPlay(args: {
 export async function resetLessonProgress(lessonId: string): Promise<void> {
   await db.endgameProgress.where('lessonId').equals(lessonId).delete();
 }
+
+/** Where a re-opened lesson starts, from the student's endgame record: after
+ *  the last keystone with a record, or on it while it is not mastered; 0 when
+ *  nothing was played or everything after it is done. */
+export function resumeKeystoneIndex(fens: readonly string[], mastered: Readonly<Record<string, boolean>>): number {
+  let last = -1;
+  fens.forEach((f, i) => { if (Object.hasOwn(mastered, f)) last = i; });
+  if (last < 0) return 0;
+  const at = mastered[fens[last]] ? last + 1 : last;
+  return at >= fens.length ? 0 : at;
+}

@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useRememberedThread } from '../../hooks/useRememberedThread';
 import { useNavigate } from 'react-router-dom';
 import { MessageCircle, X } from 'lucide-react';
 import { ChatMessage } from '../Coach/ChatMessage';
@@ -40,6 +41,8 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
   const walkSide: 'white' | 'black' = useCoachBoardStore.getState().studentColor ?? 'white';
   const lineWalk = useLineWalk(walkSide, 'masterclass.lineWalk');
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
+  // What they asked about this opening is shown again next visit.
+  useRememberedThread(`opening-chat:${openingId}${variationName ? `:${variationName}` : ''}`, messages, setMessages);
   const [busy, setBusy] = useState(false);
 
   const openChat = useCallback(() => {

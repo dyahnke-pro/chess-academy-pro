@@ -28,8 +28,6 @@ export interface MemoryDataByKind {
   'variation-tab': { tabIndex: number };
   /** Book reader: the chapter and page. key = book id. */
   'book-page': { activeIdx: number; page: number };
-  /** A lesson asked for that Learn had not opened yet. key = 'current'. */
-  'pending-lesson': { request: unknown };
   /** A chat thread to show again on reopen. key = surface thread id. */
   'chat-thread': { messages: StoredChatMessage[] };
   /** Kid games: levels finished and stars. key = game id. */
@@ -72,7 +70,6 @@ export const MEMORY_KINDS: Record<MemoryKind, { surface: MemorySurface }> = {
   'watch-beat': { surface: 'openings' },
   'variation-tab': { surface: 'openings' },
   'book-page': { surface: 'openings' },
-  'pending-lesson': { surface: 'learn' },
   'chat-thread': { surface: 'chat' },
   'kid-progress': { surface: 'kid' },
   'served-puzzles': { surface: 'tactics' },
@@ -206,4 +203,22 @@ export async function rememberTrendPoint(series: string, value: number, now: num
     points.push({ day, value });
     return { points };
   }, now);
+}
+
+/** How many served puzzle ids a surface keeps. A storage window, not a cap on
+ *  teaching: the oldest fall out and may be served again. */
+export const SERVED_WINDOW = 2000;
+
+/** Puzzles a surface already served in earlier sessions (surfaces whose puzzle
+ *  attempts are not on `db.puzzles`). */
+export async function recallServed(surface: string): Promise<Set<string>> {
+  return new Set((await recallData('served-puzzles', surface))?.ids ?? []);
+}
+
+export async function rememberServed(surface: string, id: string): Promise<void> {
+  await remember('served-puzzles', surface, (prev) => {
+    const ids = (prev?.ids ?? []).filter((x) => x !== id);
+    ids.push(id);
+    return { ids: ids.slice(-SERVED_WINDOW) };
+  });
 }

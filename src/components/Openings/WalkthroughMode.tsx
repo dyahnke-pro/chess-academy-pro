@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
+import { useRememberedSetting } from '../../hooks/useRememberedSetting';
 import { useAppStore } from '../../stores/appStore';
 import { Chess } from 'chess.js';
 import { motion } from 'framer-motion';
@@ -144,7 +145,8 @@ export function WalkthroughMode({
 
   // Ref for TTS boundary callback — updated per annotation
   const boundaryHandlerRef = useRef<((charIndex: number) => void) | null>(null);
-  const [autoPlaySpeed, setAutoPlaySpeed] = useState<AutoPlaySpeed>('learn');
+  const [rememberedSpeed, setAutoPlaySpeed] = useRememberedSetting<AutoPlaySpeed>('walkthrough-speed', 'learn');
+  const autoPlaySpeed: AutoPlaySpeed = (['learn', 'study', 'review', 'drill'] as const).includes(rememberedSpeed) ? rememberedSpeed : 'learn';
   const [showSpeedInfo, setShowSpeedInfo] = useState(false);
 
   // ─── Strict narration ──────────────────────────────────────────────────────

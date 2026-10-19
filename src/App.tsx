@@ -4,7 +4,7 @@ import { PageFallback } from './components/ui/PageFallback';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { registerCoachNavigate, clearCoachNavigate, registerStrengthSetter } from './services/coachActuator';
 import './services/bucketAuditBridge'; // installs window.__bucketAudit for the bucket-delivery audit (no-op for real users)
-import { useAppStore } from './stores/appStore';
+import { useAppStore, hydrateRememberedSettings } from './stores/appStore';
 import { getTargetStrength, studentPlayingRating } from './services/coachGameEngine';
 import { getOrCreateMainProfile } from './services/dbService';
 import { calibrateStrength } from './services/strengthCalibrationService';
@@ -308,6 +308,7 @@ export function App(): JSX.Element {
         applyTheme(theme);
         setActiveTheme(theme);
         setActiveProfile(profile);
+        void hydrateRememberedSettings();
 
         // Productization Phase 1 — start PostHog product analytics.
         // No-op unless VITE_POSTHOG_KEY is set; honors the per-profile

@@ -451,10 +451,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // Conversion-drill flag: when set, winning this game (started from a blown
   // winning position) marks that conversion addressed (weaknessSpine close).
   const convDrill = searchParams.get('conv') === '1';
-  const initialDifficulty: CoachDifficulty =
+  // Only a deep link seeds the difficulty; without one the page keeps the
+  // difficulty the student chose last (remembered across closes) instead of
+  // resetting it to Medium on every visit.
+  const initialDifficulty: CoachDifficulty | null =
     difficultyParam === 'easy' || difficultyParam === 'medium' || difficultyParam === 'hard'
       ? difficultyParam
-      : 'medium';
+      : null;
   const initialSide: 'white' | 'black' = sideParam === 'black' ? 'black' : 'white';
 
   // 🔒 ONE DIFFICULTY (2026-09-21). Four surfaces each held their own copy, so
@@ -467,7 +470,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   useEffect(() => {
     if (seededDifficultyRef.current) return;
     seededDifficultyRef.current = true;
-    if (initialDifficulty !== difficulty) setDifficulty(initialDifficulty);
+    if (initialDifficulty && initialDifficulty !== difficulty) setDifficulty(initialDifficulty);
     // Mount-only: a later store change is someone ASKING for it, not a re-seed.
   }, [initialDifficulty, difficulty, setDifficulty]);
   const targetStrength = getTargetStrength(playerRating, difficulty);

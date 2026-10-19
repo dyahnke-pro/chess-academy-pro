@@ -68,3 +68,15 @@ describe('studentMemory', () => {
     ]);
   });
 });
+
+describe('served puzzles', () => {
+  it('a surface remembers what it served, newest kept', async () => {
+    const { rememberServed, recallServed } = await import('./studentMemory');
+    await rememberServed('setup', 'a');
+    await rememberServed('setup', 'b');
+    await rememberServed('setup', 'a');
+    db.close(); await db.open();
+    expect([...(await recallServed('setup'))]).toEqual(['b', 'a']);
+    expect((await recallServed('endgame')).size).toBe(0);
+  });
+});

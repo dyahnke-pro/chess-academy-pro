@@ -1,4 +1,6 @@
 import { intentWithFallback } from '../../services/movePurpose';
+import { useRememberedThread } from '../../hooks/useRememberedThread';
+import { useRememberedSetting } from '../../hooks/useRememberedSetting';
 import type { ReviewIntent } from '../../services/reviewMoveIntent';
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { warmOpeningIdentity } from '../../services/openingIdentity';
@@ -307,6 +309,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // was asked at.
   const [askExpanded, setAskExpanded] = useState(false);
   const [askMessages, setAskMessages] = useState<ChatMessageType[]>([]);
+  // The ask thread for THIS game is shown again on reopen (persistent memory).
+  useRememberedThread(props.gameId ? `review:${props.gameId}` : null, askMessages, setAskMessages);
   const [isAskStreaming, setIsAskStreaming] = useState(false);
   const askAbortRef = useRef<AbortController | null>(null);
   const askStreamMsgIdRef = useRef<string | null>(null);
@@ -2317,7 +2321,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // WO-REVIEW-02b — Engine lines panel. Off by default. Analyzes every
   // position in the walk (starting position + one FEN per ply) via
   // Stockfish MultiPV once the user toggles it on.
-  const [engineLinesEnabled, setEngineLinesEnabled] = useState(false);
+  const [engineLinesEnabled, setEngineLinesEnabled] = useRememberedSetting<boolean>('review-engine-lines', false);
   const reviewFens = useMemo<string[] | null>(() => {
     if (!walkNarration || walkNarration.segments.length === 0) return null;
     const fens: string[] = [walkNarration.segments[0].fenBefore];
@@ -3054,6 +3058,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       role: 'user',
       text: question,
       fen: fenForQ,
+      ...(props.gameId ? { gameId: props.gameId } : {}),
       trigger: null,
     });
 
@@ -3160,6 +3165,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             role: 'coach',
             text: groundedAnswer,
             fen: fenForQ,
+            ...(props.gameId ? { gameId: props.gameId } : {}),
             trigger: null,
           });
           // GROUNDED TURNS DON'T STREAM — Layer B disables streaming so the

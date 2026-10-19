@@ -48,6 +48,7 @@ import { useNarration } from '../../hooks/useNarration';
 import {
   getLessonProgress,
   recordPlay,
+  resumeKeystoneIndex,
   resetLessonProgress,
 } from '../../services/endgameProgressService';
 import { EndgameRecapCard } from './EndgameRecapCard';
@@ -77,6 +78,9 @@ interface EndgameLessonTabProps {
    *  the endgame page (one read, the page's Due row uses the same list). */
   dueByLesson: Readonly<Record<string, number>>;
 }
+
+
+
 
 export function EndgameLessonTab({ lessons, tabLabel, tabSubtitle, initialLessonId, dueByLesson }: EndgameLessonTabProps): JSX.Element {
   const [selectedId, setSelectedId] = useState<string | null>(
@@ -274,6 +278,11 @@ function LessonView({ lesson, onExit }: LessonViewProps): JSX.Element {
       const out: Record<string, boolean> = {};
       for (const r of records) out[r.fen] = r.mastered;
       setMasteryByFen(out);
+      // Re-entering picks up where the RECORD says they got to (persistent
+      // memory, 2026-10-19), not keystone 1: past the last keystone played,
+      // or on it when it is not mastered yet. All mastered → from the top.
+      const resume = resumeKeystoneIndex(lesson.positions.map((p) => p.fen), out);
+      if (resume > 0) setPosIndex((i) => (i === 0 ? resume : i));
     })();
     return () => {
       cancelled = true;

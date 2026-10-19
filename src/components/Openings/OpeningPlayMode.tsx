@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useRememberedSetting } from '../../hooks/useRememberedSetting';
 import { Chess } from 'chess.js';
 import { ArrowLeft, Volume2, VolumeX, Swords, RotateCcw, MessageCircle, X, ChevronsLeft, ChevronsRight, Undo2 } from 'lucide-react';
 import { useChessGame } from '../../hooks/useChessGame';
@@ -104,7 +105,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   useBoardContext(game.fen, activePgn, game.history.length, playerColor, playTurn, ctxLastMove, game.history);
 
   const [playPhase, setPlayPhase] = useState<PlayPhase>(startFen ? 'middlegame' : 'pregame');
-  const [voiceOn, setVoiceOn] = useState(true);
+  const [voiceOn, setVoiceOn] = useRememberedSetting<boolean>('opening-play-voice', true);
   const [deviationCard, setDeviationCard] = useState<string | null>(null);
   const [result, setResult] = useState<OpeningPlayResult | null>(null);
   const [computerLastMove, setComputerLastMove] = useState<{ from: string; to: string } | null>(null);
@@ -1228,6 +1229,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
               onBoardAnnotation={handleChatBoardAnnotation}
               initialPrompt={whyPrompt}
               onInitialPromptSent={() => setWhyPrompt(null)}
+              rememberThreadKey={`opening-play:${opening.id}${customLine ? `:${customLine.name}` : ''}`}
               hideHeader
               className="h-full"
             />

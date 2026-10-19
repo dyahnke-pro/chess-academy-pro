@@ -12,6 +12,7 @@ import {
   progressIdFor,
   recordPlay,
   resetLessonProgress,
+  resumeKeystoneIndex,
 } from './endgameProgressService';
 
 beforeEach(async () => {
@@ -152,4 +153,12 @@ describe('endgameProgressService', () => {
     expect(await getLessonProgress('opposition')).toHaveLength(0);
     expect(await getLessonProgress('key-squares')).toHaveLength(1);
   });
+});
+
+describe('resumeKeystoneIndex — re-entering a lesson (persistent memory)', () => {
+  const fens = ['a', 'b', 'c', 'd'];
+  it('nothing played → keystone 1', () => { expect(resumeKeystoneIndex(fens, {})).toBe(0); });
+  it('after the last keystone mastered', () => { expect(resumeKeystoneIndex(fens, { a: true, b: true })).toBe(2); });
+  it('on the last keystone played while it is not mastered', () => { expect(resumeKeystoneIndex(fens, { a: true, b: false })).toBe(1); });
+  it('everything done → from the top', () => { expect(resumeKeystoneIndex(fens, { a: true, b: true, c: true, d: true })).toBe(0); });
 });

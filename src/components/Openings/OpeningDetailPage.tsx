@@ -208,6 +208,7 @@ import { useStarAnimationStore } from '../../stores/starAnimationStore';
 import { useCoachBoardStore } from '../../stores/coachBoardStore';
 import type { OpeningRecord, MiddlegamePlan, ModelGame } from '../../types';
 import { advanceFirstRun } from '../../services/firstRunJourney';
+import { recallData, remember } from '../../services/studentMemory';
 import {
   ArrowLeft,
   BookOpen as LearnIcon,
@@ -545,19 +546,39 @@ export function OpeningDetailPage(): JSX.Element {
   // plan, weaknesses, coach chat, etc. can deep-link a specific variation.
   // The URL is the source of truth: the handler updates it, this effect
   // syncs selectedTabIndex from it.
+  // The tab the student picked is REMEMBERED (persistent memory, 2026-10-19):
+  // reopening the opening without a `?line=` lands on the line they adjusted
+  // the picker to, not back on the main line. Restored once per opening, so a
+  // later tap on the main line is never overridden by a slower read.
+  const tabRestoredForRef = useRef<string | null>(null);
   useEffect(() => {
     if (!opening) return;
     const line = searchParams.get('line');
+    const tabs = buildVariationTabs(opening.id, opening.variations);
+    const firstSync = tabRestoredForRef.current !== opening.id;
+    tabRestoredForRef.current = opening.id;
     if (!line) {
       setSelectedTabIndex(-1);
+      if (firstSync) {
+        const openingId = opening.id;
+        void recallData('variation-tab', openingId).then((m) => {
+          const label = m && m.tabIndex >= 0 ? tabs.find((t) => t.index === m.tabIndex)?.label : undefined;
+          if (!label || tabRestoredForRef.current !== openingId) return;
+          setSearchParams((prev) => {
+            if (prev.get('line')) return prev;
+            const n = new URLSearchParams(prev);
+            n.set('line', label.toLowerCase());
+            return n;
+          }, { replace: true });
+        });
+      }
       return;
     }
-    const tabs = buildVariationTabs(opening.id, opening.variations);
     const match =
       tabs.find((t) => t.label.toLowerCase() === line.toLowerCase()) ??
       (/^\d+$/.test(line) ? tabs.find((t) => t.index === Number(line)) : undefined);
     setSelectedTabIndex(match ? match.index : -1);
-  }, [opening, searchParams]);
+  }, [opening, searchParams, setSearchParams]);
 
   const handleSelectTab = useCallback(
     (index: number): void => {
@@ -568,6 +589,7 @@ export function OpeningDetailPage(): JSX.Element {
           : undefined;
       if (label) next.set('line', label.toLowerCase());
       else next.delete('line');
+      if (opening) void remember('variation-tab', opening.id, { tabIndex: label ? index : -1 });
       setSearchParams(next, { replace: true });
     },
     [searchParams, setSearchParams, opening],

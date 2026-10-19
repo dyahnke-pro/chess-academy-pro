@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useRememberedSetting } from '../../hooks/useRememberedSetting';
 import { uid } from '../../utils/uid';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -90,7 +91,7 @@ export function CoachChatPage(): JSX.Element {
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingContent, setStreamingContent] = useState('');
   const [streamingModality, setStreamingModality] = useState<'voice' | 'text'>('text');
-  const [voiceMuted, setVoiceMuted] = useState(false);
+  const [voiceMuted, setVoiceMuted] = useRememberedSetting<boolean>('coach-chat-muted', false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const speechBufferRef = useRef('');
   const voiceMutedRef = useRef(false);
