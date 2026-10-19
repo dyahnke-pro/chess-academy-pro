@@ -250,3 +250,60 @@ export function mastersPlanLine(
   if (!parts.length) return null;
   return { text: `The plan in this structure: ${parts.join(', and ')}.`, squares, arrows };
 }
+
+/** The walk's own rules, so a prefetch can look up exactly the tree the read
+ *  walks (`prefetchMastersTree`). */
+export const PLAN_WALK = { branchShare: BRANCH_SHARE, minNodeGames: MIN_NODE_GAMES, depth: DEPTH } as const;
+
+export interface BreakIdea {
+  text: string;
+  /** The landing square, the pawn's square, and any pawn it strikes. */
+  squares: string[];
+  /** The break as a move: held by a live surface while it is legal — it is
+   *  the student's next move then (LEARN NAMES NO MOVE UNASKED). */
+  move: { from: string; to: string };
+  /** The plan arc's aim key for this break. */
+  aim: string;
+  share: number;
+}
+
+/**
+ * THE KEY BREAK AS AN IDEA (opening model beat 8, 2026-10-19): not "play …d5"
+ * but the break master games go for and WHAT IT CHANGES on this board — it
+ * takes away a hole the student's own structure left (`holes`), or it strikes
+ * at the enemy pawns it lands beside. Null when master games agree on no break
+ * for the student, or the break is already on the board.
+ */
+export function mastersBreakIdea(
+  read: MastersPlanRead | null,
+  student: 'w' | 'b',
+  fen: string,
+  /** Squares the student's structure can no longer cover with a pawn. */
+  holes: readonly string[],
+): BreakIdea | null {
+  const ahead = planStillAhead(read, fen);
+  const br = ahead ? (student === 'w' ? ahead.white : ahead.black) : null;
+  if (!br) return null;
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return null; }
+  const dot = `${student === 'b' ? '…' : ''}${br.san}`;
+  const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
+  const r = Number(br.square[1]) + (student === 'w' ? 1 : -1);
+  const struck = [-1, 1].map((df) => `${String.fromCharCode(br.square.charCodeAt(0) + df)}${r}`)
+    .filter((sq) => /^[a-h][1-8]$/.test(sq) && b.get(sq as Square)?.type === 'p' && b.get(sq as Square)?.color === them);
+  const what = holes.includes(br.square)
+    ? `a pawn on ${br.square} changes the structure and takes away the hole there`
+    : struck.length
+      ? `it strikes at their pawn${struck.length > 1 ? 's' : ''} on ${struck.join(' and ')} and changes the structure`
+      : br.san.includes('x')
+        ? `it trades a pawn and opens the position`
+        : null;
+  if (!what) return null;
+  return {
+    text: `The break that changes this structure is ${dot}: ${what}. Masters from here ${shareAdverb(Math.round(br.share * 100))} get it in.`,
+    squares: [br.square, br.from, ...struck],
+    move: { from: br.from, to: br.square },
+    aim: `plan-aim:break:${br.square}`,
+    share: br.share,
+  };
+}
