@@ -313,6 +313,7 @@ import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
 import { readBoard, readBoardAll, newPlanThread, clonePlanThread, adoptPlanTrial, type PlanThread, type BoardRead } from '../../services/boardComputers';
 import { splitThink, stripThink, THINK_MARK } from '../../utils/thinkPause';
+import { scheduleMarks } from '../../services/markPacing';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
 import { actionForCommand, actuate } from '../../services/coachActuator';
@@ -452,6 +453,9 @@ function freshTurnId(topic?: string): string {
 // un-grounded code-derived arrows appended to prior arrows duplicated a
 // square-pair and flooded "Encountered two children with the same key".
 const uniqueArrows = dedupeArrowsBySquarePair;
+
+/** The marks a spoken Learn line carries, revealed as it names them. */
+interface TrackMarks { arrows: BoardArrow[]; highlights: BoardHighlight[] }
 
 const SUGGESTIONS = [
   'Walk me through the Vienna opening',
@@ -10841,7 +10845,50 @@ export function CoachTeachPage(): JSX.Element {
             // newest line always wins (the same newest-move-wins doctrine
             // the parked-submit refire follows).
             const myTrackAGen = ++trackAGenRef.current;
-            const speakTrackA = (line: string): void => {
+            // MARKS APPEAR AS THEY ARE MENTIONED (David 2026-10-19: "they need
+            // to light up AS THEY ARE MENTIONED" … "arrows need to appear as
+            // the moves are mentioned"). A line's arrows and highlights go up
+            // on `markPacing`'s schedule from the moment that line starts
+            // speaking, never all at once when the reply lands. Paced marks
+            // are tracked so a clear removes only them — the reply's own mark
+            // and anything else on the board stay.
+            const pacedArrowKeys = new Set<string>();
+            const pacedSquares = new Set<string>();
+            const arrowKey = (a: BoardArrow): string => `${a.startSquare}${a.endSquare}`;
+            const revealMarks = (spoken: string, marks: TrackMarks): void => {
+              const items: Array<{ id: string; squares: string[] }> = [
+                ...marks.arrows.map((a, i) => ({ id: `a${i}`, squares: [a.endSquare, a.startSquare] })),
+                ...marks.highlights.map((h, i) => ({ id: `h${i}`, squares: [h.square] })),
+              ];
+              if (items.length === 0) return;
+              const boardFen = liveFenRef.current;
+              const shown = new Set<string>();
+              const paint = (): void => {
+                if (trackAGenRef.current !== myTrackAGen || liveFenRef.current !== boardFen) return;
+                const arrowsNow = marks.arrows.filter((_, i) => shown.has(`a${i}`));
+                const lightsNow = marks.highlights.filter((_, i) => shown.has(`h${i}`));
+                setArrows((prev) => {
+                  const kept = prev.filter((a) => !pacedArrowKeys.has(arrowKey(a)));
+                  pacedArrowKeys.clear();
+                  for (const a of arrowsNow) pacedArrowKeys.add(arrowKey(a));
+                  return uniqueArrows([...kept, ...arrowsNow]);
+                });
+                setHighlights((prev) => {
+                  const kept = prev.filter((h) => !pacedSquares.has(h.square));
+                  pacedSquares.clear();
+                  const add = lightsNow.filter((h) => !kept.some((k) => k.square === h.square));
+                  for (const h of add) pacedSquares.add(h.square);
+                  return [...kept, ...add];
+                });
+              };
+              for (const ev of scheduleMarks(spoken, items)) {
+                window.setTimeout(() => {
+                  if (ev.kind === 'clear') shown.clear(); else shown.add(ev.id);
+                  paint();
+                }, ev.atMs);
+              }
+            };
+            const speakTrackA = (line: string, marks?: TrackMarks): void => {
               if (trackAGenRef.current !== myTrackAGen) return;
               if (!trackAStarted) {
                 trackAStarted = true;
@@ -10871,6 +10918,7 @@ export function CoachTeachPage(): JSX.Element {
                   // work it out on the board first. Its marks belonged to this
                   // board, so they are not drawn on the next one.
                   const qa = splitThink(line);
+                  if (marks) revealMarks(stripThink(qa ? qa[0] : line), marks);
                   if (!qa) return speakComputed(line, { forced: true, intent: 'learn-live' });
                   pendingAnswerRef.current = qa[1];
                   return speakComputed(qa[0], { forced: true, intent: 'learn-live' });
@@ -10892,6 +10940,7 @@ export function CoachTeachPage(): JSX.Element {
             // had finished speaking — measured at 3.2-10.4s after the move.
             // Joined here, they cost one fetch and no boundaries, and the
             // teaching arrives with the move instead of after it.
+            const instantMarks: TrackMarks = { arrows: [], highlights: [] };
             try {
               const ip = new Chess(move.fen);
               const im = ip.move(reply);
@@ -10949,8 +10998,7 @@ export function CoachTeachPage(): JSX.Element {
                   // `alertArrow` is set in the threat branch alone (the capture
                   // that takes the student's hanging piece).
                   if (instant.alertArrow && instant.pkg.kept.some((f) => f.kind === 'threat')) {
-                    const arrow = instant.alertArrow;
-                    void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, arrow])));
+                    instantMarks.arrows.push(instant.alertArrow);
                   }
                   // The mark rides this move's whole turn — the late wave's
                   // arrows join it instead of replacing it.
@@ -11004,28 +11052,21 @@ export function CoachTeachPage(): JSX.Element {
                     noteTaughtThisTurn = true;
                   }
                 }
-                // THE KEPT FACTS' MARKS ride the same `padDone` gate as every
-                // other mark on this turn, so they land with the voice, and the
-                // same stale-turn guard.
+                // THE KEPT FACTS' MARKS go up as the voice names them, on the
+                // same stale-turn guard as the line itself.
                 if (instant.keptHighlights.length > 0) {
                   const ph = instant.keptHighlights;
-                  void padDone.then(() => {
-                    if (liveFenRef.current !== fenAfterReply) return;
-                    setHighlights((prev) => {
-                      const have = new Set(prev.map((h) => h.square));
-                      return [...prev, ...ph.filter((h) => !have.has(h.square))];
-                    });
-                    void logAppAudit({
-                      kind: 'coach-board-annotation',
-                      category: 'narration',
-                      source: 'CoachTeachPage.keptMarks',
-                      summary: `lead-the-eye on the spoken facts: ${ph.length} highlight(s) — ${ph.map((h) => h.square).join(', ')}`,
-                      fen: fenAfterReply,
-                    });
+                  instantMarks.highlights.push(...ph);
+                  void logAppAudit({
+                    kind: 'coach-board-annotation',
+                    category: 'narration',
+                    source: 'CoachTeachPage.keptMarks',
+                    summary: `lead-the-eye on the spoken facts: ${ph.length} highlight(s) — ${ph.map((h) => h.square).join(', ')}`,
+                    fen: fenAfterReply,
                   });
                 }
               }
-              if (lines.length > 0) speakTrackA(lines.join(' '));
+              if (lines.length > 0) speakTrackA(lines.join(' '), instantMarks);
             } catch { /* Track A is a bonus — the warm beat still speaks */ }
             askTurnQuestion();
             // Registered BEFORE the `await factsReady` below, so this
@@ -12041,7 +12082,6 @@ export function CoachTeachPage(): JSX.Element {
                     });
                   }
                   if (hintPkg.spoken) {
-                    speakTrackA(hintPkg.spoken);
                     // Record the late package's phrases too — the per-game set is
                     // what keeps the NEXT turn from repeating any of them.
                     for (const k of spokenSentenceKeys(hintPkg)) learnMemRef.current.spokenKeys.add(k);
@@ -12073,12 +12113,6 @@ export function CoachTeachPage(): JSX.Element {
                       for (const sq of markableSquares({ kept: [f] })) {
                         if (!owed.some((h) => h.square === sq)) owed.push({ square: sq, color: COLOR_FOR[f.kind] ?? '#f59e0b' });
                       }
-                    }
-                    if (owed.length > 0 && liveFenRef.current === fenAfterReply) {
-                      setHighlights((prev) => {
-                        const have = new Set(prev.map((h) => h.square));
-                        return [...prev, ...owed.filter((h) => !have.has(h.square))];
-                      });
                     }
                     // …AND DRAW ITS ARROWS (David 2026-09-30: "make sure arrows are
                     // firing to illustrate the ideas that are being spoken"). A
@@ -12137,7 +12171,30 @@ export function CoachTeachPage(): JSX.Element {
                     // the sentence (David 2026-10-19: "never freeze for the user").
                     const onScreen = drawnLines.filter((l) => samePlacement(l.fen, fenAfterReply));
                     if (onScreen.length > 0 && liveFenRef.current === fenAfterReply) turnArrows.push(...onScreen.flatMap(throughDoor));
-                    if (turnArrows.length > 0) setArrows(uniqueArrows([...(seenMarkRef.current ? [seenMarkRef.current] : []), ...turnArrows]));
+                    // …unless the game has already walked into it: a line from the
+                    // board before the student's move ("…Nhf6+, exf6 and Nxf6+")
+                    // whose first plies are now on the board draws the plies
+                    // still to come, on the live board (David 2026-10-19: "engine
+                    // lines stated that did not have arrows showing each move").
+                    if (liveFenRef.current === fenAfterReply) {
+                      for (const l of drawnLines) {
+                        if (onScreen.includes(l)) continue;
+                        try {
+                          const c = new Chess(l.fen);
+                          for (let k = 0; k < l.arrows.length; k++) {
+                            const a = l.arrows[k];
+                            c.move({ from: a.from, to: a.to, promotion: 'q' });
+                            if (samePlacement(c.fen(), fenAfterReply)) {
+                              if (k + 1 < l.arrows.length) turnArrows.push(...throughDoor({ fen: fenAfterReply, arrows: l.arrows.slice(k + 1) }));
+                              break;
+                            }
+                          }
+                        } catch { /* a line that leaves the game's path is spoken only */ }
+                      }
+                    }
+                    if (turnArrows.length > 0) setArrows(seenMarkRef.current ? [seenMarkRef.current] : []);
+                    // Spoken with its marks: each goes up as the voice names it.
+                    speakTrackA(hintPkg.spoken, liveFenRef.current === fenAfterReply ? { arrows: uniqueArrows(turnArrows), highlights: owed } : undefined);
                     void logAppAudit({
                       kind: 'coach-narration-spoken',
                       category: 'narration',
