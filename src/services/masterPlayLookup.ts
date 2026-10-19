@@ -340,7 +340,9 @@ function buildResultFromLichess(
   };
 }
 
-function emptyResult(fen: string): MasterPlayResult {
+/** No master data for this position — the honest answer when a lookup misses
+ *  or does not arrive in time. */
+export function emptyResult(fen: string): MasterPlayResult {
   return { fen: positionFen(fen), totalGames: 0, moves: [], source: 'none' };
 }
 

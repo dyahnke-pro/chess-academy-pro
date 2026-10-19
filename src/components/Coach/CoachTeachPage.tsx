@@ -278,7 +278,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { getFavoriteOpenings, getOpeningById, searchOpenings } from '../../services/openingService';
 import type { OpeningRecord, OpeningVariation } from '../../types';
 import type { LiveState, TacticsLiveContext, AskOrigin } from '../../coach/types';
-import { dispatchCoachTurn, openTurnRead, isComputedAnswer, conversationFor, setPendingOffer, showLineAnswer, asksBeyondShowMe, type TurnReadHandle } from '../../coach/dispatchCoachTurn';
+import { dispatchCoachTurn, openTurnRead, awaitTurnRead, isComputedAnswer, conversationFor, setPendingOffer, showLineAnswer, asksBeyondShowMe, type TurnReadHandle } from '../../coach/dispatchCoachTurn';
 import type { ResolvedStep } from '../../coach/requestSteps';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
@@ -3522,7 +3522,7 @@ export function CoachTeachPage(): JSX.Element {
     // routers and the door unchanged.
     if (turnReadRef.current && !opts?.teachIntent && !opts?.kickoff && opts?.coachReplyPlayed === undefined) {
       const handle = turnReadRef.current;
-      const r = await handle.peek();
+      const r = await awaitTurnRead(handle.peek(), text, liveFenRef.current ?? undefined);
       const v = r?.validation ?? null;
       if (v && !v.ok && v.reason === 'unknown-opening') {
         setMessages((prev) => [...prev,
@@ -3824,7 +3824,7 @@ export function CoachTeachPage(): JSX.Element {
     const askLang = detectStudentLanguage(trimmedText);
     // The reader already translated this turn (and reads short German the word
     // list misses); reuse it rather than pay for a second call (WO-CHAT-01 P2).
-    const readEnglish = turnReadRef.current ? await turnReadRef.current.peek().then((r) => (r?.language && r.language !== 'English' ? r.english : null)) : null;
+    const readEnglish = turnReadRef.current ? await awaitTurnRead(turnReadRef.current.peek(), trimmedText, liveFenRef.current ?? undefined).then((r) => (r?.language && r.language !== 'English' ? r.english : null)) : null;
     const englishText = readEnglish
       ?? (askLang.nonEnglish ? await translateToEnglish(trimmedText).catch(() => trimmedText) : trimmedText);
 

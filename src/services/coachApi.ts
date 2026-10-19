@@ -66,7 +66,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
     miss: typeof u?.prompt_cache_miss_tokens === 'number' ? u.prompt_cache_miss_tokens : null,
   };
 }
-import { lookupMasterPlay } from './masterPlayLookup';
+import { lookupMasterPlay, emptyResult as emptyMasterResult } from './masterPlayLookup';
 import { isEndgameByMaterial } from './gamePhaseService';
 import { chatBoardAnswer } from './chatBoardRead';
 import { tagSlots } from '../coach/chatTurnCodeReader';
@@ -1718,25 +1718,37 @@ async function buildLookahead(
 ): Promise<MasterPlayContext['lookahead']> {
   if (current.moves.length === 0) return [];
   const top = current.moves.slice(0, maxCandidates);
-  const out: MasterPlayContext['lookahead'][number][] = [];
-  for (const move of top) {
-    let childFen: string;
+  // IN PARALLEL, WITHIN THE ANSWER'S BUDGET (Learn trace 2026-10-19: one
+  // child lookup waited 8.4s on the masters file and the student's answer
+  // waited with it). A child that has not answered by the deadline is left
+  // out — no data, no claim.
+  const children = top.map((move) => {
     try {
       const chess = new Chess(fen);
-      const played = chess.move(move.san);
-      if (!played) continue;
-      childFen = chess.fen();
+      if (!chess.move(move.san)) return null;
+      return { san: move.san, fen: chess.fen() };
     } catch {
-      continue;
+      return null;
     }
-    const childResult = await lookupMasterPlay(childFen, {
-      triggeredBy: 'pre-injection',
-      surface,
-      sessionId,
-    });
-    out.push({ moveFromCurrent: move.san, result: childResult });
-  }
-  return out;
+  }).filter((c): c is { san: string; fen: string } => !!c);
+  const settled = await Promise.all(children.map((c) =>
+    withinBudget(lookupMasterPlay(c.fen, { triggeredBy: 'pre-injection', surface, sessionId }), MASTER_CONTEXT_BUDGET_MS)
+      .then((result) => (result ? { moveFromCurrent: c.san, result } : null))));
+  return settled.filter((x): x is MasterPlayContext['lookahead'][number] => !!x);
+}
+
+/** How long a question's answer may wait on master-games context. The answer
+ *  is computed on the board; this is side context, and a student waiting ten
+ *  seconds for it is a worse coach than one that leaves it out. */
+const MASTER_CONTEXT_BUDGET_MS = 1200;
+
+/** The value if it lands within `ms`, else null (the work keeps running and
+ *  fills the cache for next time). */
+function withinBudget<T>(p: Promise<T>, ms: number): Promise<T | null> {
+  return new Promise((resolve) => {
+    const t = setTimeout(() => resolve(null), ms);
+    p.then((v) => { clearTimeout(t); resolve(v); }, () => { clearTimeout(t); resolve(null); });
+  });
 }
 
 /** Assemble the full master-play context for the brain. Returns
@@ -1800,11 +1812,11 @@ async function buildMasterPlayContext(
   // hallucination). Off-book play/chat has only legal-move grounding,
   // where forward-looking plan SANs must NOT be gated.
   const groundedFromPlayedGame = !!(grounding.gameSans && grounding.gameSans.length > 0);
-  const current = await lookupMasterPlay(grounding.currentFen, {
+  const current = await withinBudget(lookupMasterPlay(grounding.currentFen, {
     triggeredBy: 'pre-injection',
     surface: grounding.surface,
     sessionId: grounding.sessionId,
-  });
+  }), MASTER_CONTEXT_BUDGET_MS) ?? emptyMasterResult(grounding.currentFen);
   if (current.source === 'none' || current.moves.length === 0) {
     // Honest "no master data" context — claim validator will use this
     // to reject any SAN/percentage the LLM tries to fabricate. In game

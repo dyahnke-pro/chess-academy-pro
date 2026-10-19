@@ -243,6 +243,30 @@ function describeReferent(r: Referent): string {
   }
 }
 
+/** How long a turn the code already reads (a fast-path lane) waits for the
+ *  model's reading before it is answered from the fast path. */
+export const READ_BUDGET_MS = 1500;
+
+/**
+ * THE READ NEVER HOLDS A QUESTION THE CODE ALREADY UNDERSTANDS (Learn trace
+ * 2026-10-19: "why is that move best?" — fast path why-best-move — waited
+ * 8.1s for the model's reading to time out before anything was computed).
+ * When the fast path names a lane, the reading has READ_BUDGET_MS to land;
+ * past that the turn goes on without it. Only a turn the code cannot place
+ * (`none`) waits for the reading in full.
+ */
+export function awaitTurnRead(
+  read: Promise<ParseResult | null>,
+  ask: string,
+  fen: string | undefined,
+): Promise<ParseResult | null> {
+  if (fastPathLane(ask, { fen }) === 'none') return read;
+  return new Promise((resolve) => {
+    const t = setTimeout(() => resolve(null), READ_BUDGET_MS);
+    read.then((r) => { clearTimeout(t); resolve(r); }, () => { clearTimeout(t); resolve(null); });
+  });
+}
+
 /** A read started before the surface knows whether the door will answer. */
 export interface TurnReadHandle {
   /** The door takes the read; the shadow row is then the door's to emit. */
@@ -405,7 +429,7 @@ async function dispatchCoachTurnOnce(
   if (read && serveParsedRoute) {
     // FLAG ON: wait for the reading and, when it validated and its kind has a
     // live answerer, serve the canonical question that routes to it.
-    const r = await read;
+    const r = await awaitTurnRead(read, input.ask, input.liveState.fen);
     // EVERY ANSWER THE DOOR COMPUTES LEAVES THROUGH HERE, with its row. It
     // is NOT translated here: the bubble (`useLocalizedContent`) and the voice
     // (`voiceService`) already render every answer in the conversation's
