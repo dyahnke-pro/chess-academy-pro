@@ -54,7 +54,7 @@ So this file covers:
 | 13 | 22.Rxa5 | (gate) `voicePackage.mistake.narrationGate` tripped ×3 on "That took the pawn on a5, but the pawn on b6 takes back — you lose a rook for a pawn." | That is true: …b6 does take on a5 (on `main`, "the rook on a7 takes back" also tripped). The gate stripped a true consequence. | narrationGate | Fix the gate's false positive (recapture by a pawn); a gate that fires on truth hides the lesson. |
 | 14 | 26 (chat only) | "…The natural alternative, …Kf8, fails: Kf8 and, three moves later, Kxd8 — you come out ahead on material, winning a rook and a pawn for a bishop." | False. d20 after 26.Ng3 Kf8 gives Bxh6+ Ke8 Nh5 Kd7 Nf6+ Kc8 Bg7 Ra1+ at −4.34 for the student: no Kxd8, the student is not ahead, and …Kf8 is only 0.45 off best. | `decisiveReason.ts:233` | It weighs the OPPONENT's alternative inside the reason for the student's move, and prints a loss line that isn't that board's PV. |
 | 15 | 24 | "stack your heavy pieces on its file…" | One rook, no queens. | `nextPlans.ts:314-317` (any rook counts as "heavy pieces") | Name what is there ("your rook"). |
-| 16 | 36.Rxa1 | "Taking stock as the endgame begins: you're losing…" spoken twice, 173 words in the turn | Repeat inside one turn. | `reviewPositionalAssessment.ts:307` via the phase lane | Say-once on the phase claim across both phase emitters. |
+| 16 | 36.Rxa1 | "Taking stock as the endgame begins: you're losing…" spoken twice, 157 words in the turn | Repeat inside one turn. | `reviewPositionalAssessment.ts:307` via the phase lane | Say-once on the phase claim across both phase emitters. |
 
 **Fixed on b494915 vs `main`** (same game):
 - 1.e4 no longer says "to free your bishop on f1 for Be2".
@@ -70,7 +70,7 @@ So this file covers:
 - the c3 knight touching eight squares, up from three.
 
 **Trends:**
-- **Words:** 73 heard words per turn on average (target 80 or fewer). Long turns: 120 (3.Nbc3), 146 (24.h6), 173 (36.Rxa1).
+- **Words:** 58 heard words per turn on average (target 80 or fewer), counting only voiced `speakCloud` lines and excluding the replay's own "Got it — after your move…" confirmations (an earlier draft said 73 because it counted them). Long turns: 157 (36.Rxa1), 130 (24.h6), 107 (28.Nf6), 104 (3.Nbc3).
 - **Reply time:** 3.6 s average from move to reply.
 - **Board size:** 426 px on every move, with no drift.
 
