@@ -56,6 +56,10 @@ const INFRA = new Set([
   // told about. It computes no chess or teaching fact — the bar for green is
   // `capabilityProven`, elsewhere — and replaced a diff each surface kept itself.
   'provenAnnouncements',
+  // `foregroundActivity` is a SCHEDULER (2026-10-19, David: no background
+  // analysis while a Learn game is on): a hold counter the backfills wait on.
+  // It computes no chess or teaching fact — the same class as the engine.
+  'foregroundActivity',
   // Board THEMING and BILLING (2026-10-01): `boardColorService` and
   // `pieceSetService` pick colours and a piece set; `courseEntitlement` checks
   // a purchase. None of them reasons about a position — they were counted only
