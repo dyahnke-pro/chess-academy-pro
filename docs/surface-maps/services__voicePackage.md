@@ -42,7 +42,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12061`
+- `src/components/Coach/CoachTeachPage.tsx:11325`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -53,15 +53,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `VoicePackage` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildVoicePackage` (function) — 83 call sites
-- `src/components/Coach/CoachGameReview.tsx:1929`
-- `src/components/Coach/CoachGameReview.tsx:1968`
-- `src/components/Coach/CoachGameReview.tsx:1977`
-- `src/components/Coach/CoachTeachPage.tsx:8277`
+### `buildVoicePackage` (function) — 81 call sites
+- `src/components/Coach/CoachGameReview.tsx:1940`
+- `src/components/Coach/CoachTeachPage.tsx:8383`
 - `src/hooks/usePhaseNarration.ts:440`
 - `src/hooks/usePhaseNarration.ts:893`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:2460`
+- `src/services/coachFeatureService.ts:2461`
 - `src/services/coachSurfaceScorecard.report.test.ts:116`
 - `src/services/coachSurfaceScorecard.report.test.ts:138`
 - `src/services/coachSurfaceScorecard.report.test.ts:149`
@@ -72,7 +70,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/dnaDoor.test.ts:42`
 - `src/services/dnaDoor.test.ts:49`
 - `src/services/laneReachability.test.ts:136`
-- `src/services/learnTurnDoor.ts:477`
+- `src/services/learnTurnDoor.ts:562`
 - `src/services/replayFence.najdorf1500.test.ts:50`
 - `src/services/reviewMoveBriefing.ts:405`
 - `src/services/ruleGradeFen.test.ts:9`
@@ -139,13 +137,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:582`
 
 ### `spokenSentenceKeys` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8146`
-- `src/components/Coach/CoachTeachPage.tsx:9811`
-- `src/components/Coach/CoachTeachPage.tsx:9829`
-- `src/components/Coach/CoachTeachPage.tsx:10923`
-- `src/components/Coach/CoachTeachPage.tsx:12035`
-- `src/services/coachFeatureService.ts:2467`
-- `src/services/learnTurnDoor.test.ts:605`
+- `src/components/Coach/CoachTeachPage.tsx:8250`
+- `src/components/Coach/CoachTeachPage.tsx:9941`
+- `src/components/Coach/CoachTeachPage.tsx:9959`
+- `src/components/Coach/CoachTeachPage.tsx:11148`
+- `src/components/Coach/CoachTeachPage.tsx:11299`
+- `src/services/coachFeatureService.ts:2468`
+- `src/services/learnTurnDoor.test.ts:612`
 - `src/services/reviewMoveBriefing.ts:406`
 - `src/services/voicePackage.test.ts:415`
 - `src/services/voicePackage.test.ts:424`
@@ -153,12 +151,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:514`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10910`
-- `src/components/Coach/CoachTeachPage.tsx:12136`
+- `src/components/Coach/CoachTeachPage.tsx:11135`
+- `src/components/Coach/CoachTeachPage.tsx:11414`
 - `src/services/voicePackage.test.ts:38`
 
-### `joinSpoken` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:710`
+### `joinSpoken` (function) — 3 call sites
+- `src/services/learnTurnDoor.ts:823`
+- `src/services/voicePackage.test.ts:594`
+- `src/services/voicePackage.test.ts:603`
 
 ### `LineArrow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -167,10 +167,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `keptLines` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12104`
-- `src/services/learnTurnDoor.test.ts:199`
-- `src/services/learnTurnDoor.test.ts:205`
-- `src/services/learnTurnDoor.test.ts:211`
+- `src/components/Coach/CoachTeachPage.tsx:11362`
+- `src/services/learnTurnDoor.test.ts:204`
+- `src/services/learnTurnDoor.test.ts:210`
+- `src/services/learnTurnDoor.test.ts:216`
 
 ### `stripMoveNumbers` (re-export) — 12 call sites
 - `scripts/convert-lichess-tsv.mjs:19`

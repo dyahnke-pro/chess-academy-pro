@@ -348,3 +348,14 @@ describe('discovery — a piece moving ALONG the ray uncovers nothing (walk 2026
     expect(hasTactic(result, 'discovery')).toBe(false);
   });
 });
+
+describe('classifyPosition — a king has no guard to remove (David\'s record 2026-10-19)', () => {
+  it('Rxf8+ is a check, not "removes the guard of the king"', () => {
+    // The f8 rook "defends" g8; taking it leaves the king attacked — a check.
+    const before = '5rk1/6pp/8/8/8/8/6PP/5R1K w - - 0 1';
+    const c = new Chess(before); c.move('Rxf8+');
+    const r = classifyPosition(before, c.fen(), 'Rxf8+', 0, 0);
+    expect(r.tactics.filter((t) => t.type === 'removal_of_guard')).toEqual([]);
+    expect(r.tactics.map((t) => t.description).join(' ')).not.toMatch(/guard of the king/);
+  });
+});
