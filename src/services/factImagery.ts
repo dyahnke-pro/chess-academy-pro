@@ -13,7 +13,7 @@ export type ImageryKey =
   | 'only-developed' | 'defender-trade' | 'exchange-for-attacker' | 'deny-exchange'
   | 'abandoned-duty' | 'trade-choice' | 'duty-parity' | 'maintenance-trade' | 'prepare-recapture'
   | 'threat-cost' | 'simplest-win' | 'safe-because'
-  | 'wing-for-centre' | 'material-arithmetic' | 'knight-rim' | 'knight-centre' | 'c-pawn-block'
+  | 'wing-for-centre' | 'material-arithmetic' | 'knight-rim' | 'c-pawn-block'
   | 'badbishop';
 
 export const IMAGERY: Record<ImageryKey, readonly string[]> = {
@@ -42,7 +42,6 @@ export const IMAGERY: Record<ImageryKey, readonly string[]> = {
   // knight on the rim is dim" after Nxc3, b1→c3 — a knight going TO the
   // centre). The rim image belongs to the rim fact only.
   'knight-rim': ['', 'A knight on the rim is dim.'],
-  'knight-centre': ['', 'Put a knight in the middle and it sees the whole board.'],
   'c-pawn-block': [''],
   badbishop: ['', 'A walled-in bishop bites rock.'],
 };

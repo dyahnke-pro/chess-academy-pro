@@ -25,7 +25,7 @@ const EFFECT_WHYS = [
   'Here is what you build toward: the g-file — a rook on an open file reaches their camp.',
   'Your plan from here: pushing the passed pawn on the d-file — every push brings it closer to promotion.',
   'That was a critical moment. Only one move kept you on top here, and it was knight takes e2.',
-  'You plant an outpost on d5, where no enemy pawn can chase it.',
+  'You plant an outpost on d5, where no pawn of theirs can chase it.',
   'That line still comes out behind, by a little.',
   'Your pawn reached f5 first — their f5 can never come now, so f5 is yours.',
 ];
@@ -72,6 +72,11 @@ describe('prompts and menus are not teaching lines (prod Learn 2026-10-17)', () 
   it('a question-led find prompt and the session menu are not measured', () => {
     expect(isTeaching('Are you safe? Find each of your pieces that is in danger.')).toBe(false);
     expect(isTeaching("Your games are mapped. The two patterns hurting you most are ignoring a threat and same piece twice. Want a lesson on one of them — or the full set?")).toBe(false);
+  });
+  it('the review intro is setup in every form — in, against, or no opening (prod Review 2026-10-20)', () => {
+    expect(isTeaching("Here's your game against the Sicilian Defense: Najdorf Variation, Zagreb Variation — you had White and it ended in a win.")).toBe(false);
+    expect(isTeaching("Here's your game in the Vienna Game — you had White and it ended in a loss.")).toBe(false);
+    expect(isTeaching("Here's your game — you had Black and it ended in a draw.")).toBe(false);
   });
   it('NEGATIVE CONTROL: a question followed by a lesson is still teaching', () => {
     expect(isTeaching('Why this one first? A rook on an open file reaches their camp.')).toBe(true);

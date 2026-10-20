@@ -12,7 +12,7 @@
 //            in words and only as the close to a reason, never alone.
 // Every fact comes from chess.js, the opening DB and the masters counts (G0).
 import { Chess, type Square } from 'chess.js';
-import { moveJob, MINE, THEIRS } from './bookMoveWhy';
+import { moveJob, MINE, THEIRS, type PriorCapture } from './bookMoveWhy';
 import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
 import type { LocalDbMove } from './masterPlayLookup';
 import type { MovesAt } from './mastersPlanRead';
@@ -127,14 +127,22 @@ export function roadReason(i: {
   // does against what the other move would do, from the move computer — said
   // when the pawn move's squares are not already its reason.
   const sayJob = (san: string, clause: string): string => `${dot(san, i.student)} ${clause.replace(/^it /, '')}`;
-  const mineJob = moveJob(fenBefore, i.chosenSan, i.student, MINE);
-  const altJob = moveJob(fenBefore, i.altSan, i.student, MINE);
+  // The capture the chosen move may answer (…Qxd5 takes BACK on d5).
+  const last = i.prefix.length ? i.prefix[i.prefix.length - 1] : null;
+  let prior: PriorCapture | null = null;
+  if (last && /x/.test(last)) {
+    const pb = boardAfter(i.prefix.slice(0, -1));
+    const pm = pb ? (() => { try { return pb.move(last); } catch { return null; } })() : null;
+    if (pm?.captured) prior = { to: pm.to, captured: pm.captured };
+  }
+  const mineJob = moveJob(fenBefore, i.chosenSan, i.student, MINE, prior);
+  const altJob = moveJob(fenBefore, i.altSan, i.student, MINE, prior);
   const invite = invitedAttack([...i.prefix, i.chosenSan], i.student, i.movesAt);
   if (!denied.length && mineJob && altJob && mineJob.clause !== altJob.clause) {
     parts.push(`${sayJob(i.chosenSan, mineJob.clause)}, where ${sayJob(i.altSan, altJob.clause)}${invite ? `; it invites ${dot(invite.san, them)}, which ${invite.clause.replace(/^it /, '')}` : ''}.`);
     squares.push(...mineJob.squares, ...(invite?.squares ?? []));
   } else if (invite) {
-    parts.push(`It invites ${dot(invite.san, them)}, which ${invite.clause.replace(/^it /, '')}.`);
+    parts.push(`${dot(i.chosenSan, i.student)} invites ${dot(invite.san, them)}, which ${invite.clause.replace(/^it /, '')}.`);
     squares.push(...invite.squares);
   }
   if (!parts.length) return null;

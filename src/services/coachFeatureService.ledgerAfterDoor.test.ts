@@ -52,7 +52,7 @@ describe('review — the say-once ledgers commit after the door, for spoken fact
     const later = segs.filter((s) => s.ply > 4).map((s) => s.narration ?? '').join(' ');
     expect(later).not.toContain(ALAPIN);
     setOpeningIdentity(null);
-  });
+  }, 60_000);
 
   it('BLAMES BY STATEMENT: no ledger write inside the candidate loop; the commit reads what spoke', () => {
     const src = readFileSync('src/services/coachFeatureService.ts', 'utf8');
@@ -93,13 +93,16 @@ describe('review — the opening is named with what it is (review audit 2026-10-
     try {
       const segs = buildReviewSegments(inputs(), 'white', 'Sicilian Defense: Alapin Variation', true, 1400, [], coldStudent(1400), 'g');
       const said = segs.map((s) => s.narration ?? '').join(' ');
-      // Named on the move that identifies it (c3), with what the line is FOR
-      // on the same move: the Alapin's identity is empty (c3 provokes
-      // nothing), so its reason is the masters' plan.
+      // Named on the move that identifies it (c3). What the line is FOR — the
+      // masters' plan, "your break is d4" — is ONE claim (review noise walk
+      // 2026-10-20): it rode the first name (…c5, the Sicilian), so the
+      // Alapin's refinement does not say it again.
       const c3 = segs.find((s) => s.ply === 3)?.narration ?? '';
+      const c5 = segs.find((s) => s.ply === 2)?.narration ?? '';
       expect(said.indexOf(ALAPIN)).toBeGreaterThanOrEqual(0);
       expect(c3).toContain(ALAPIN);
-      expect(c3).toMatch(/The plan in this structure: your break is d4/);
+      expect(c5).toMatch(/The plan in this structure: your break is d4/);
+      expect(said.match(/The plan in this structure: your break is d4\b/g) ?? []).toHaveLength(1);
     } finally {
       setOpeningIdentity(null);
     }

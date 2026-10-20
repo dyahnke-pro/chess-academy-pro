@@ -1026,18 +1026,20 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     if (!rows) {
       await add('NEED coverage-rows-captured', false, 'no review-need-coverage event — the N2 wire did not fire');
     } else {
-      const opening = rows.filter((r) => r.ply <= 24);
-      const owed = opening.filter((r) => r.speak);
-      // `heard` (2026-09-24): what the student actually hears, counted after
-      // every fill pass. Older bundles lack it and fall back to `source`.
+      // THE WHY STANDARD OWES EVERY STUDENT MOVE ITS OWN REASON (CLAUDE.md
+      // §THE WHY STANDARD, measure 2). The rows are the student's own plies, so
+      // every one is owed — need decides the EXTRA beats, never whether the
+      // student's own move is explained. The old rows owed only opening plies
+      // whose need cleared the bar: on a warm record that read 0/0 (vacuous),
+      // and the student's own reasons read as "spoke where need said silent".
+      const owed = rows;
       const covered = owed.filter((r) => (r.heard ?? (r.source !== null)));
-      const leaked = rows.filter((r) => !r.speak && r.spoke);
       await add('NEED coverage-rows-captured', rows.length > 0, `${rows.length} student plies scored; games=${cov.gamesPlayed} cold=${cov.gamesPlayed < 5}`);
       // `sayOnce` (2026-10-01): a quiet ply whose only lesson is a principle
       // already taught this game is silent by the say-once rule — covered, and
       // COUNTED separately so it can never hide a real gap.
       const bySayOnce = covered.filter((r) => r.sayOnce);
-      await add('NEED owed-plies-narrated', owed.length > 0 && covered.length >= Math.ceil(owed.length * 0.8), `${covered.length}/${owed.length} owed opening plies covered (${covered.length - bySayOnce.length} narrated, ${bySayOnce.length} by say-once: ${bySayOnce.map((r) => `${r.ply}=${r.sayOnce}`).join(',') || 'none'})${covered.length < owed.length ? ` — silent: ${owed.filter((r) => !covered.includes(r)).map((r) => r.ply).join(',')}` : ''}`);
+      await add('WHY student-moves-reasoned', owed.length > 0 && covered.length >= Math.ceil(owed.length * 0.7), `${covered.length}/${owed.length} student moves carry their own reason (${covered.length - bySayOnce.length} narrated, ${bySayOnce.length} by say-once: ${bySayOnce.map((r) => `${r.ply}=${r.sayOnce}`).join(',') || 'none'})${covered.length < owed.length ? ` — silent: ${owed.filter((r) => !covered.includes(r)).map((r) => r.ply).join(',')}` : ''}`);
       // THE TEACH METER (WO-TEACH-02): of the student's spoken plies, how many
       // carried a TEACHING fact rather than only a description. The target is
       // Naroditsky, where every line teaches; the bar is 70%.
@@ -1048,7 +1050,10 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       } else {
         await add('TEACH meter-captured', false, 'the coverage row carries no taught/described split — bundle predates WO-TEACH-02');
       }
-      await add('NEED silent-where-not-needed', leaked.length === 0, leaked.length ? `per-move beat on ${leaked.map((r) => r.ply).join(',')} where need said silent` : 'no per-move beat where need said silent');
+      // 'NEED silent-where-not-needed' is retired: every row is a student move,
+      // and the WHY standard owes each one a reason, so a spoken own-move is
+      // never a leak. Noise is measured where it lives: the why share and the
+      // formula count over every spoken line.
     }
   }
   // LEDGER (unified-coach N7, 2026-09-16): a projected line that trades on BOTH
@@ -1132,7 +1137,13 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       // walk 2026-10-04, G2 ply 53 false red). The plan computer proves the
       // square on its own line; this checker has no board to read it on.
       if (/\bcreate a passed\s*$/i.test(sentence)) continue;
-      const cell = (past || alternative ? posBefore : pos).get(m[2].toLowerCase());
+      // A RECAPTURE'S CONSEQUENCE IS THE BOARD AFTER THE RECAPTURE (Najdorf
+      // Zagreb, jMVMo1Ua ply 53 false red: "After Bxc5, taking back leaves
+      // their pawn on c5 isolated" — true once …dxc5 is played, and the game
+      // played it). Read it on the board one ply on.
+      const recapture = /\btaking back leaves\b/i.test(sentence);
+      const posNext = new Chess(); for (let k = 0; k < Math.min(n + 1, SANS.length); k++) posNext.move(SANS[k]);
+      const cell = (recapture ? posNext : past || alternative ? posBefore : pos).get(m[2].toLowerCase());
       if (!cell || cell.type !== PIECE[m[1].toLowerCase()]) accFails.push(`ply ${n}: "${m[1]} on ${m[2]}" but board has ${cell ? cell.type : 'empty'}`);
     }
     // SEAT — whose ply this is comes from the GAME (see `isStudentPly`), not

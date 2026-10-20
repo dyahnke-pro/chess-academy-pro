@@ -1,5 +1,6 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
-import { openingAnnouncement, spokenOpeningLabel, theirOpeningVerdict } from './openingAnnouncement';
+import { readFileSync } from 'node:fs';
+import { learnNameMaySpeak, openingAnnouncement, spokenOpeningLabel, theirOpeningVerdict } from './openingAnnouncement';
 import { bookDeparture } from './bookDeparture';
 import { __setLocalDbForTests, lookupMasterPlay } from './masterPlayLookup';
 import { masterPlayCache, positionFen } from './masterPlayCache';
@@ -239,3 +240,26 @@ describe('openingAnnouncement — a sibling line of the same opening is news', (
     expect(openingAnnouncement({ name: 'Sicilian Defense: Najdorf Variation' }, null, 'Sicilian Defense: Alapin Variation', 'b', null)).toBeNull();
   });
 });
+
+describe('Learn names an opening only when it is news, and with its idea (lead 2026-10-20)', () => {
+  const ASK = 'Scandinavian Defense: Mieses-Kotroc Variation';
+  it('the opening the student asked for, and its family, are not announced back', () => {
+    expect(learnNameMaySpeak({ name: 'Scandinavian Defense', asked: ASK, transposed: false, identityReady: true, spokenOpening: null })).toBe(false);
+    expect(learnNameMaySpeak({ name: ASK, asked: ASK, transposed: false, identityReady: true, spokenOpening: null })).toBe(false);
+  });
+  it('a deeper name the moves reach, or a transposition, is news', () => {
+    expect(learnNameMaySpeak({ name: `${ASK}, Main Line`, asked: ASK, transposed: false, identityReady: true, spokenOpening: null })).toBe(true);
+    expect(learnNameMaySpeak({ name: 'Scandinavian Defense', asked: ASK, transposed: true, identityReady: true, spokenOpening: null })).toBe(true);
+  });
+  it('the first name waits for its idea; a later one may speak alone', () => {
+    expect(learnNameMaySpeak({ name: 'Italian Game', asked: null, transposed: false, identityReady: false, spokenOpening: null })).toBe(false);
+    expect(learnNameMaySpeak({ name: 'Italian Game', asked: null, transposed: false, identityReady: true, spokenOpening: null })).toBe(true);
+    expect(learnNameMaySpeak({ name: 'Italian Game: Two Knights Defense', asked: null, transposed: false, identityReady: false, spokenOpening: 'Italian Game' })).toBe(true);
+  });
+  it('Learn\'s announcement asks it (the page calls the one rule)', () => {
+    const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    expect(src).toMatch(/const mayName = !!det && learnNameMaySpeak\(/);
+    expect(src).toMatch(/const announce = det && mayName &&/);
+  });
+});
+

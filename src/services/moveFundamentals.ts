@@ -487,7 +487,7 @@ export function computeMoveFundamentals(
       // knight at c3, a hole" left out what stood on c3).
       const sqs = andList(targets.map((sq) => { const p = after.get(sq as Square); return p && p.color === them ? `their ${PIECE_NAME[p.type] ?? 'piece'} on ${sq}` : sq; }));
       const one = targets.length === 1;
-      const what = one ? 'a square no pawn of theirs can ever cover' : 'squares no pawn of theirs can ever cover';
+      const what = one ? 'a square no pawn of theirs can cover' : 'squares no pawn of theirs can cover';
       out.push({
         id: 'outpost',
         weight: 70,
@@ -495,7 +495,7 @@ export function computeMoveFundamentals(
         // "Stays there for the whole game" is about a piece ON the hole.
         reason: null,
         selfContained: `heads for ${sqs}, ${what}`,
-        imperative: `aim the knight at ${sqs}, ${one ? 'a hole' : 'holes'} no pawn of theirs can ever cover`,
+        imperative: `aim the knight at ${sqs}, ${one ? 'a hole' : 'holes'} no pawn of theirs can cover`,
         squares: [mv.to, ...targets],
       });
     }

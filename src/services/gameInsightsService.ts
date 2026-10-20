@@ -226,7 +226,7 @@ async function readPlayerGames(): Promise<AnnotatedGame[]> {
 
 /** Bump when the per-game stats formula changes, so every stored entry
  *  recomputes on the next open. */
-const INSIGHT_STATS_REV = 1;  // bump on any change to computeInsightStats
+export const INSIGHT_STATS_REV = 2;  // bump on any change to computeInsightStats. 2 (2026-10-20): the rev fingerprint gate found stats changed with the rev at 1 — devices kept old tiles.
 
 const sessionStats = new Map<string, GameInsightStats>();
 const unsavedStats = new Map<string, GameInsightStats>();
@@ -276,7 +276,7 @@ async function persistStats(): Promise<void> {
   }
 }
 
-function computeInsightStats(game: GameRecord, playerColor: 'white' | 'black', sig: string): GameInsightStats {
+export function computeInsightStats(game: GameRecord, playerColor: 'white' | 'black', sig: string): GameInsightStats {
   const moves = reconstructMovesFromGame(game, playerColor);
   const accuracy = gameAccuracy(game, moves);
   const finds: GameInsightStats['finds'] = [];

@@ -98,7 +98,7 @@ import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalk
 import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
 import { isTheoryLine } from '../../services/bookDeparture';
 import { PLAY_OPENING_RE, readsAsQuestion, resolvePlayName } from '../../coach/ask/playName';
-import { openingAnnouncementForGame, theirOpeningVerdict, openingNameForBoard, spokenOpeningLabel, studentJustLeftBook, warmOpeningBook } from '../../services/openingAnnouncement';
+import { openingAnnouncementForGame, theirOpeningVerdict, openingNameForBoard, spokenOpeningLabel, studentJustLeftBook, warmOpeningBook, learnNameMaySpeak } from '../../services/openingAnnouncement';
 import { lastMoveCapturedOn, pendingRecapture, landingSquare } from '../../utils/justCaptured';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
@@ -9025,7 +9025,16 @@ export function CoachTeachPage(): JSX.Element {
       // Variation" read the same once the filler tail goes, and the student
       // heard "This game is the Indian Defense" twice (walk 2026-09-27).
       const queuedLabel = learnMemRef.current.queuedOpeningName ? spokenOpeningLabel(learnMemRef.current.queuedOpeningName) : null;
-      const announce = det && det.name !== learnMemRef.current.queuedOpeningName && spokenOpeningLabel(det.name) !== queuedLabel
+      // Not the opening the student asked to play, and the first name only
+      // with its idea (`learnNameMaySpeak`, lead 2026-10-20).
+      const mayName = !!det && learnNameMaySpeak({
+        name: det.name,
+        asked: useCoachMemoryStore.getState().intendedOpening?.name ?? null,
+        transposed,
+        identityReady: storyReads.some((r) => r.storyBeat === 'identity'),
+        spokenOpening: learnMemRef.current.spokenOpeningName,
+      });
+      const announce = det && mayName && det.name !== learnMemRef.current.queuedOpeningName && spokenOpeningLabel(det.name) !== queuedLabel
         ? openingAnnouncementForGame(det, history, learnMemRef.current.spokenOpeningName, playerColor === 'white' ? 'w' : 'b', transposed)
         : null;
       if (det && announce) {

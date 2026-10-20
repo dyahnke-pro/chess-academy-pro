@@ -38,19 +38,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoice.test.ts:124`
 - `src/services/planChoice.test.ts:147`
 - `src/services/planChoice.test.ts:159`
-- `src/services/planThread.ts:178`
+- `src/services/planThread.ts:182`
 - `src/test/thinkMarkClosed.gate.test.ts:61`
 
 ### `planWorth` (function) — 3 call sites
 - `src/services/planChoice.test.ts:166`
-- `src/services/planThread.ts:189`
-- `src/services/planThread.ts:190`
+- `src/services/planThread.ts:193`
+- `src/services/planThread.ts:194`
 
 ### `whyThisPlan` (function) — 4 call sites
 - `src/services/boardPlanFacts.ts:120`
 - `src/services/planChoice.test.ts:18`
 - `src/services/planChoice.test.ts:24`
-- `src/services/planThread.ts:182`
+- `src/services/planThread.ts:186`
 
 ### `RouteArrow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -61,7 +61,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/namesStudentMove.leaks.test.ts:35`
 - `src/services/planChoice.test.ts:120`
 - `src/services/planChoice.test.ts:152`
-- `src/services/planThread.ts:179`
+- `src/services/planThread.ts:183`
 
 ### `methodLine` (function) — 10 call sites
 - `src/services/boardPlanFacts.ts:123`
@@ -72,7 +72,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoice.test.ts:125`
 - `src/services/planChoice.test.ts:149`
 - `src/services/planChoice.test.ts:159`
-- `src/services/planThread.ts:195`
+- `src/services/planThread.ts:199`
 - `src/test/thinkMarkClosed.gate.test.ts:63`
 
 ### `methodAfterMove` (function) — 0 call sites
@@ -81,7 +81,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `methodSquares` (function) — 3 call sites
 - `src/services/boardPlanFacts.ts:122`
 - `src/services/planChoice.test.ts:155`
-- `src/services/planThread.ts:202`
+- `src/services/planThread.ts:206`
 
 ### `weaknessLine` (function) — 1 call site
 - `src/services/groundedAnswer.ts:6890`

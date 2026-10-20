@@ -57,9 +57,12 @@ describe('"you can take back" only when taking back holds (15.Nxh7)', () => {
     expect(f.join(' ')).not.toMatch(/you can take back/);
     expect(f.join(' ')).toMatch(/taking back would cost you more than the pawn/);
   });
-  it('NEGATIVE CONTROL: 16.dxc5 — an even recapture is still offered', () => {
+  it('NEGATIVE CONTROL: 16.dxc5 — a sound even recapture is never called costly', () => {
+    // A plain even trade is not said at all (review noise walk 2026-10-20: it
+    // restates the move); what must never appear is the cost claim.
     const f = trade('e4 c5 Nf3 d6 Bb5+ Nd7 O-O Nf6 Re1 a6 Bd3 b5 c4 g5 Nxg5 Ne5 Be2 bxc4 Na3 Rg8 Nxc4 Nxc4 d4 Nb6 Bh5 Nxh5 Qxh5 Rg7 Nxh7 Qd7', 'dxc5', ['d6c5', 'h7f8']).join(' ');
-    expect(f).toMatch(/you can take back/);
+    expect(f).not.toMatch(/would cost you more/);
+    expect(f).not.toMatch(/you can take back — a pawn trade/);
   });
 });
 
@@ -89,10 +92,11 @@ describe('the trade summary is the engine line\'s exchange, never a static swap 
       prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null, playedLineUci: line, bestLineUci: [], replyBestSan: null,
     }).filter((f) => f.startsWith('[trade]') || f.startsWith('[delta] You take')).join(' ');
   };
-  it('Nxc4 dxc4 — a knight trade, no queen', () => {
+  it('Nxc4 dxc4 — an even knight trade: no queen claimed, and no line restating it', () => {
     const f = facets(['d5c4', 'b3a3', 'c6g2', 'f4e5']);
     expect(f).not.toMatch(/queen/);
-    expect(f).toMatch(/a knight trade/);
+    // The plain even trade restates the move (review noise walk 2026-10-20).
+    expect(f).not.toMatch(/\[trade\]/);
   });
   it('no engine line — the capture only, no material claim', () => {
     const f = facets([]);

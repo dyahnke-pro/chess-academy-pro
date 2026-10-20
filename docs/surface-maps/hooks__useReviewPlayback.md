@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**699 lines · 9 exports · 2 importers · 1 tests · 1 audits**
+**742 lines · 9 exports · 2 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -41,8 +41,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `AUTO_ADVANCE_SILENT_HOLD_MS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `useReviewPlayback` (function) — 26 call sites
-- `src/components/Coach/CoachGameReview.tsx:678`
+### `useReviewPlayback` (function) — 31 call sites
+- `src/components/Coach/CoachGameReview.tsx:772`
 - `src/hooks/useReviewPlayback.test.ts:73`
 - `src/hooks/useReviewPlayback.test.ts:88`
 - `src/hooks/useReviewPlayback.test.ts:101`
@@ -51,27 +51,34 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/hooks/useReviewPlayback.test.ts:135`
 - `src/hooks/useReviewPlayback.test.ts:149`
 - `src/hooks/useReviewPlayback.test.ts:167`
-- `src/hooks/useReviewPlayback.test.ts:185`
-- `src/hooks/useReviewPlayback.test.ts:207`
-- `src/hooks/useReviewPlayback.test.ts:238`
-- `src/hooks/useReviewPlayback.test.ts:256`
-- `src/hooks/useReviewPlayback.test.ts:272`
-- `src/hooks/useReviewPlayback.test.ts:287`
-- `src/hooks/useReviewPlayback.test.ts:312`
-- `src/hooks/useReviewPlayback.test.ts:349`
+- `src/hooks/useReviewPlayback.test.ts:183`
+- `src/hooks/useReviewPlayback.test.ts:196`
+- `src/hooks/useReviewPlayback.test.ts:215`
+- `src/hooks/useReviewPlayback.test.ts:229`
+- `src/hooks/useReviewPlayback.test.ts:251`
+- `src/hooks/useReviewPlayback.test.ts:282`
+- `src/hooks/useReviewPlayback.test.ts:300`
+- `src/hooks/useReviewPlayback.test.ts:316`
+- `src/hooks/useReviewPlayback.test.ts:331`
+- `src/hooks/useReviewPlayback.test.ts:353`
 - `src/hooks/useReviewPlayback.test.ts:366`
-- `src/hooks/useReviewPlayback.test.ts:401`
-- `src/hooks/useReviewPlayback.test.ts:424`
-- `src/hooks/useReviewPlayback.test.ts:447`
-- `src/hooks/useReviewPlayback.test.ts:460`
-- `src/hooks/useReviewPlayback.test.ts:482`
-- `src/hooks/useReviewPlayback.test.ts:500`
-- `src/hooks/useReviewPlayback.test.ts:533`
-- `src/hooks/useReviewPlayback.test.ts:567`
+- `src/hooks/useReviewPlayback.test.ts:381`
+- `src/hooks/useReviewPlayback.test.ts:418`
+- `src/hooks/useReviewPlayback.test.ts:435`
+- `src/hooks/useReviewPlayback.test.ts:470`
+- `src/hooks/useReviewPlayback.test.ts:493`
+- `src/hooks/useReviewPlayback.test.ts:516`
+- `src/hooks/useReviewPlayback.test.ts:529`
+- `src/hooks/useReviewPlayback.test.ts:551`
+- `src/hooks/useReviewPlayback.test.ts:569`
+- `src/hooks/useReviewPlayback.test.ts:602`
+- `src/hooks/useReviewPlayback.test.ts:636`
 
 ## Tests
 
+- `src/components/Coach/reviewVoiceToggle.test.ts`
 - `src/hooks/useReviewPlayback.test.ts`
+- `src/services/coachLaneWiring.test.ts`
 
 ## Audits that reach it
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**149 lines · 6 exports · 2 importers · 1 tests · 0 audits**
+**157 lines · 6 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -42,7 +42,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingRoads.test.ts:39`
 - `src/services/openingRoads.test.ts:43`
 - `src/services/openingRoads.test.ts:49`
-- `src/services/openingStory.ts:357`
+- `src/services/openingStory.ts:369`
 
 ## Tests
 
