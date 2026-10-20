@@ -169,12 +169,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `legalSeeGainOn` (function) — 16 call sites
 - `src/services/bookMoveWhy.ts:145`
-- `src/services/bookMoveWhy.ts:272`
-- `src/services/bookMoveWhy.ts:273`
-- `src/services/bookMoveWhy.ts:276`
-- `src/services/bookMoveWhy.ts:343`
-- `src/services/bookMoveWhy.ts:362`
-- `src/services/coachFeatureService.ts:2918`
+- `src/services/bookMoveWhy.ts:284`
+- `src/services/bookMoveWhy.ts:285`
+- `src/services/bookMoveWhy.ts:288`
+- `src/services/bookMoveWhy.ts:355`
+- `src/services/bookMoveWhy.ts:374`
+- `src/services/coachFeatureService.ts:3055`
 - `src/services/groundedAnswer.ts:7374`
 - `src/services/moveIntent.ts:309`
 - `src/services/moveIntent.ts:326`
@@ -209,7 +209,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/checkIsNotAGuard.test.ts:26`
 - `src/services/checkIsNotAGuard.test.ts:27`
 - `src/services/checkIsNotAGuard.test.ts:28`
-- `src/services/deliberation.ts:607`
+- `src/services/deliberation.ts:610`
 - `src/services/groundedAnswer.ts:1280`
 - `src/services/moveFundamentals.ts:961`
 
@@ -249,13 +249,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/structureReads.ts:132`
 
 ### `signedCaptureRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11903`
-- `src/components/Coach/CoachTeachPage.tsx:11964`
+- `src/components/Coach/CoachTeachPage.tsx:11912`
+- `src/components/Coach/CoachTeachPage.tsx:11973`
 - `src/services/principleAttribution.ts:339`
 - `src/services/principleAttribution.ts:785`
 
 ### `legalSeeGainFor` (function) — 86 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10805`
+- `src/components/Coach/CoachTeachPage.tsx:10814`
 - `src/services/arrowDoor.ts:175`
 - `src/services/bluffDetector.ts:53`
 - `src/services/boardState.ts:42`
@@ -264,8 +264,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedMaterialTruth.corpus.test.ts:120`
 - `src/services/computedMaterialTruth.corpus.test.ts:145`
 - `src/services/deliberation.ts:49`
-- `src/services/deliberation.ts:596`
-- `src/services/deliberation.ts:597`
+- `src/services/deliberation.ts:599`
+- `src/services/deliberation.ts:600`
 - `src/services/endgameMoveReads.ts:87`
 - `src/services/exchangeIdeas.ts:142`
 - `src/services/exchangeIdeas.ts:397`
@@ -556,8 +556,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:97`
 - `src/services/positionalTruth.corpus.test.ts:102`
 - `src/services/replayFence.najdorf1500.test.ts:26`
-- `src/services/reviewFullData.ts:1037`
-- `src/services/reviewFullData.ts:1041`
+- `src/services/reviewFullData.ts:1038`
+- `src/services/reviewFullData.ts:1042`
 
 ### `MinorityAttack` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -572,8 +572,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:360`
 - `src/services/positionalTruth.corpus.test.ts:110`
 - `src/services/positionalTruth.corpus.test.ts:115`
-- `src/services/reviewFullData.ts:1033`
-- `src/services/reviewFullData.ts:1035`
+- `src/services/reviewFullData.ts:1034`
+- `src/services/reviewFullData.ts:1036`
 
 ### `pieceScope` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -784,7 +784,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `ownsMoreSpace` (function) — 3 call sites
 - `src/services/danyaBehaviors.ts:760`
-- `src/services/deliberation.ts:659`
+- `src/services/deliberation.ts:662`
 - `src/services/groundedAnswer.ts:6730`
 
 ### `computeTerritory` (function) — 2 call sites

@@ -19,13 +19,13 @@
 ## Exports and every call site
 
 ### `isReviewUncapped` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:660`
-- `src/components/Coach/CoachGameReview.tsx:1367`
-- `src/components/Coach/CoachGameReview.tsx:1696`
-- `src/components/Coach/CoachGameReview.tsx:2215`
+- `src/components/Coach/CoachGameReview.tsx:661`
+- `src/components/Coach/CoachGameReview.tsx:1368`
+- `src/components/Coach/CoachGameReview.tsx:1697`
+- `src/components/Coach/CoachGameReview.tsx:2225`
 
 ### `reviewMoveInputsFrom` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:624`
+- `src/components/Coach/CoachGameReview.tsx:625`
 - `src/services/shallowLinesNotNarrated.test.ts:17`
 
 ### `ReviewNarrationRequest` (interface) — 0 call sites
@@ -35,7 +35,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getOrBuildReviewNarration` (function) — 6 call sites
-- `src/components/Coach/CoachGameReview.tsx:673`
+- `src/components/Coach/CoachGameReview.tsx:674`
 - `src/services/reviewNarrationBuild.test.ts:38`
 - `src/services/reviewNarrationBuild.test.ts:45`
 - `src/services/reviewNarrationBuild.test.ts:47`
@@ -45,14 +45,15 @@
 ### `prebuildReviewNarration` (function) — 1 call site
 - `src/services/gameAnalysisService.ts:3145`
 
-### `spokenLedgerSeed` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:672`
+### `spokenLedgerSeed` (function) — 2 call sites
+- `src/components/Coach/CoachGameReview.tsx:673`
+- `src/components/Coach/CoachGameReview.tsx:1845`
 
 ### `ledgerAtMerge` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:713`
+- `src/components/Coach/CoachGameReview.tsx:714`
 
 ### `mergeReviewNarration` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:722`
+- `src/components/Coach/CoachGameReview.tsx:723`
 
 ## Tests
 

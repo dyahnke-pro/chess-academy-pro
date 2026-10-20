@@ -29,7 +29,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/data/modelGameMoments.test.ts:20`
 
 ### `pickStoryGame` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:1639`
+- `src/services/coachFeatureService.ts:1693`
 - `src/services/reviewStoryGame.test.ts:8`
 - `src/services/reviewStoryGame.test.ts:9`
 - `src/services/reviewStoryGame.test.ts:25`

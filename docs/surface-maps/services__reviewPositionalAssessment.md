@@ -31,12 +31,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `verdictBand` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:955`
+- `src/services/coachFeatureService.ts:987`
 - `src/services/exchangeLedger.test.ts:99`
 - `src/services/exchangeLedger.test.ts:101`
 
 ### `assessPositionalEdge` (function) — 28 call sites
-- `src/services/coachFeatureService.ts:3263`
+- `src/services/coachFeatureService.ts:3400`
 - `src/services/exchangeLedger.test.ts:68`
 - `src/services/exchangeLedger.test.ts:69`
 - `src/services/exchangeLedger.test.ts:76`
@@ -45,7 +45,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:10`
 - `src/services/planPrescriptions.test.ts:84`
 - `src/services/planPrescriptions.test.ts:91`
-- `src/services/reviewFullData.ts:932`
+- `src/services/reviewFullData.ts:933`
 - `src/services/reviewPositionalAssessment.test.ts:4`
 - `src/services/reviewPositionalAssessment.test.ts:7`
 - `src/services/reviewPositionalAssessment.test.ts:9`
@@ -90,7 +90,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:37`
 - `src/services/phaseVerdict.test.ts:39`
 - `src/services/positionFacts.ts:1047`
-- `src/services/reviewFullData.ts:1534`
+- `src/services/reviewFullData.ts:1541`
 - `src/services/reviewPositionalAssessment.test.ts:88`
 - `src/services/reviewPositionalAssessment.test.ts:93`
 

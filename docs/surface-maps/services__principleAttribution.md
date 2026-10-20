@@ -118,7 +118,7 @@
 - `src/services/claimTruth.manual.test.ts:179`
 - `src/services/claimTruth.manual.test.ts:184`
 - `src/services/claimTruth.manual.test.ts:192`
-- `src/services/coachFeatureService.ts:756`
+- `src/services/coachFeatureService.ts:788`
 - `src/services/learnWalkBlumenfeld.test.ts:66`
 - `src/services/liveFundamental.ts:145`
 - `src/services/misconceptionClassifier.ts:269`
@@ -226,10 +226,10 @@
 ### `pvUciToSan` (function) — 11 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:530`
-- `src/services/autoAnalyzeGame.ts:533`
-- `src/services/coachFeatureService.ts:761`
-- `src/services/coachFeatureService.ts:763`
+- `src/services/autoAnalyzeGame.ts:529`
+- `src/services/autoAnalyzeGame.ts:532`
+- `src/services/coachFeatureService.ts:793`
+- `src/services/coachFeatureService.ts:795`
 - `src/services/discussionPractice.ts:401`
 - `src/services/discussionPractice.ts:409`
 - `src/services/liveFundamental.ts:135`
