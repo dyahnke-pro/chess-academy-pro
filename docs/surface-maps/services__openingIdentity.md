@@ -38,8 +38,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingGenerator.ts:2468`
 
 ### `warmOpeningIdentity` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:336`
-- `src/components/Coach/CoachTeachPage.tsx:1015`
+- `src/components/Coach/CoachGameReview.tsx:337`
+- `src/components/Coach/CoachTeachPage.tsx:1014`
 - `src/services/reviewOpeningTheory.ts:251`
 
 ### `setOpeningIdentity` (function) — 8 call sites

@@ -526,9 +526,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       ['discussion-practice-panel', '[data-testid="discussion-skip"]'],
       ['review-principle-quiz', '[data-testid="principle-quiz-skip"]'],
       ['review-find-shot-reveal', '[data-testid="review-find-shot-continue"]'],
-      ['review-theory-playback', '[data-testid="review-theory-stop"]'],
       ['review-find-shot-card', '[data-testid="review-find-shot-skip"]'],
-      ['review-theory-ask', '[data-testid="review-theory-skip"]'],
       // THE CRITICAL-MOMENT CARD — its chips are named after the SAN they
       // offer (`review-critical-pick-Nf3`), because the choices are the
       // engine's own lines from that position, not a fixed choice set. A

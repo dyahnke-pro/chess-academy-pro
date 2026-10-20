@@ -47,7 +47,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `reviewPassFens` (function) — 5 call sites
 - `src/components/Coach/CoachReviewSessionPage.tsx:140`
-- `src/services/gameAnalysisService.ts:2406`
+- `src/services/gameAnalysisService.ts:2410`
 - `src/services/reviewMoveIntent.test.ts:89`
 - `src/services/reviewMoveIntent.test.ts:90`
 - `src/services/reviewReadAhead.test.ts:77`

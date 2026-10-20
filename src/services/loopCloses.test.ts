@@ -53,7 +53,7 @@ const base = (signals: readonly WeaknessSignal[]): StudentNeedContext => ({
   gamesPlayed: COLD_START_GAMES + 20,
   signals,
   bookDepartures: [],
-  capabilities: new Map(),
+  capabilities: new Map(), heat: new Map(),
   openingId: null,
   lineReps: new Array(60).fill(5),
   openingScore: 0.5,

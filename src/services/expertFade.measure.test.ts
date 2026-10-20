@@ -38,7 +38,7 @@ describe.skipIf(!HAVE)('expert fade', () => {
           rows.push({ id: `${t}`, tag: q.tag, outcome: q.outcome === 'broken' ? 'broken' : 'held', fen, playedSan: san, posedImportance: q.posedImportance, recordedAt: t++, origin: 'review', prompted: false, sourceGameId: `g${gi}` } as CapabilityEvidenceRecord);
         }
       }
-      const profile = summariseEvidence(rows);
+      const profile = summariseEvidence(rows, []);
       for (const [tag, e] of profile) if (capabilityProven(e) && !greenAfter.has(tag)) greenAfter.set(tag, gi + 1);
     });
     const all = MISCONCEPTION_TAGS.filter((x) => x.bucket !== 'uncategorized').map((x) => x.id);
@@ -67,7 +67,7 @@ describe.skipIf(!(existsSync('data/sources/acc-david/multipv-d14.json') && proce
     const cap = (l: Line | undefined): number | null => (!l ? null : l.mate !== null ? (l.mate > 0 ? 1500 : -1500) : l.cp);
     const rows: CapabilityEvidenceRecord[] = [];
     let t = 0;
-    const run = (minImportance: number | undefined, routine: boolean, bar: { minStreak?: number; minGames?: number } = {}): { flips: number; greens: number } => {
+    const run = (minImportance: number | undefined, routine: boolean): { flips: number; greens: number } => {
       let flips = 0; let greens = 0;
       const proven = new Set<string>();
       const sub: CapabilityEvidenceRecord[] = [];
@@ -77,8 +77,8 @@ describe.skipIf(!(existsSync('data/sources/acc-david/multipv-d14.json') && proce
         sub.push(r);
         if (r.outcome === 'broken' && proven.has(r.tag)) { flips += 1; proven.delete(r.tag); }
         if (r.recordedAt % 1 === 0) {
-          const e = summariseEvidence(sub, minImportance ? { minImportance } : {}).get(r.tag);
-          if (e && capabilityProven(e, bar) && !proven.has(r.tag)) { proven.add(r.tag); greens += 1; }
+          const e = summariseEvidence(sub, [], minImportance ? { minImportance } : {}).get(r.tag);
+          if (e && capabilityProven(e) && !proven.has(r.tag)) { proven.add(r.tag); greens += 1; }
         }
       }
       return { flips, greens };
@@ -111,10 +111,6 @@ describe.skipIf(!(existsSync('data/sources/acc-david/multipv-d14.json') && proce
     }
     console.log('OLD (sharp only):', JSON.stringify(run(undefined, false)));
     console.log('NEW (routine half credit):', JSON.stringify(run(undefined, true)));
-    for (const ms of [2, 4, 6, 8, 12]) for (const mg of [2, 3, 5]) {
-      const r = run(undefined, true, { minStreak: ms, minGames: mg });
-      console.log(`SWEEP streak>=${ms} games>=${mg}: greens=${r.greens} flips=${r.flips} survive=${r.greens - r.flips}`);
-    }
     expect(rows.length).toBeGreaterThan(0);
   }, 900_000);
 });

@@ -9,23 +9,32 @@
 //             and its reason;
 //   short   — proven: the point alone.
 // A slip resets the streak, so the record itself returns a skill to full.
-import { capabilityProven, type CapabilityProfile, type CapabilityProfileEntry } from './capabilityEvidence';
+//
+// READ FROM THE HOLD RATE (David 2026-10-19, "Agreed"): the heat tile's state
+// is the hold rate over the last 20 times the board posed the skill, both
+// halves of the record counted once. The fade maps it 1:1 —
+//   green (≥ 90%)  → short;  short (75–89%) → lighter;  red / grey → full.
+// So an open pile of misses (David's 1,428 hung-material slips) keeps a skill
+// in full through its rate, not through a second rule beside it.
+import type { HeatTile } from './heatMap';
 import { splitThink, stripThink, THINK_MARK } from '../utils/thinkPause';
 
 export type FadeLevel = 'lighter' | 'short';
 /** Per skill; a plain set reads as `short` for every member (proven tags). */
 export type FadeLevels = ReadonlySet<string> | ReadonlyMap<string, FadeLevel>;
 
-export function fadeLevelFor(entry: CapabilityProfileEntry | undefined): FadeLevel | null {
-  if (!entry) return null;
-  if (capabilityProven(entry)) return 'short';
-  return entry.heldStreak >= 1 ? 'lighter' : null;
+export function fadeLevelFor(tile: HeatTile | undefined): FadeLevel | null {
+  if (!tile) return null;
+  if (tile.state === 'green') return 'short';
+  return tile.state === 'short' ? 'lighter' : null;
 }
 
-export function fadeLevelsFrom(caps: CapabilityProfile | null | undefined): Map<string, FadeLevel> {
+/** Per skill, from the record's heat tiles (`StudentRecord.heat`, the
+ *  student-need context's `heat`). Absent = full teaching. */
+export function fadeLevelsFrom(heat: ReadonlyMap<string, HeatTile> | null | undefined): Map<string, FadeLevel> {
   const out = new Map<string, FadeLevel>();
-  if (!caps) return out;
-  for (const [tag, e] of caps) { const l = fadeLevelFor(e); if (l) out.set(tag, l); }
+  if (!heat) return out;
+  for (const [tag, t] of heat) { const l = fadeLevelFor(t); if (l) out.set(tag, l); }
   return out;
 }
 

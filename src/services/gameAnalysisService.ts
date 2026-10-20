@@ -1134,6 +1134,10 @@ export async function scanCriticalMoments(args: {
   return out;
 }
 
+/** Review's free-board find, beside the prompted find it parallels (the one
+ *  answer door, `answerRecord`, does the filing). */
+export { recordFreeBoardFind } from './answerRecord';
+
 /**
  * RECORD A PROMPTED FIND — THE FIRST WRITER OF `prompted: true`.
  *

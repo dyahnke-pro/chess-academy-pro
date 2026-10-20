@@ -42,7 +42,7 @@ export async function moveReason(fenBefore: string, san: string, seat: 'student'
   if (!reads) return null;
   // The student's own record decides whether a mate is posed as a test.
   const asksToSee = seat === 'student' ? await calculationProven() : false;
-  return decisiveReason({ fenBefore, san, reads, seat, opponentLastSan, asksToSee });
+  return decisiveReason({ fenBefore, san, reads, seat, opponentLastSan, asksToSee, namesPreparedMove: true });
 }
 
 /** Calculation PROVEN on the student's own record (heat map green). Lazy, so
@@ -73,6 +73,6 @@ export async function askedBestMove(fen: string, opponentLastSan: string | null)
   if (!san) return null;
   const reads = await readIntentReads(fen, san, lines);
   const asksToSee = await calculationProven();
-  const reason = reads ? decisiveReason({ fenBefore: fen, san, reads, seat: 'student', opponentLastSan, asksToSee }) : null;
+  const reason = reads ? decisiveReason({ fenBefore: fen, san, reads, seat: 'student', opponentLastSan, asksToSee, namesPreparedMove: true }) : null;
   return { uci: top.moves[0], san, evalCp: typeof top.evaluation === 'number' ? top.evaluation : null, mateIn: top.mate ?? null, pvSan, reason };
 }

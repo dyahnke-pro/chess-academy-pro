@@ -16,7 +16,7 @@ import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan } from './material';
 import { settledExchange, moverLineProof } from './exchangeLedger';
 import { threatProof } from './threatProof';
-import { openingIdentityLine, planFor } from './openingIdentity';
+import { planFor } from './openingIdentity';
 import { mastersPlanLine } from './mastersPlanRead';
 import { inFluxAfter } from './boardState';
 import { readTrade } from './tradeQuality';
@@ -1573,16 +1573,13 @@ export function computeMoveFacets(
     name && name.includes(':') ? name.split(',')[0].trim() : null;
   const named = variationOf(detectOpening(ctx.allSans.slice(0, ply))?.name ?? null);
   const settled = settledVariation(ctx.allSans, variationOf);
-  // …WITH WHAT IT IS (review audit 2026-10-14: the bare name was the walk's
-  // most common line with no reason). The identity computer says what the
-  // opening provokes, aims for or costs, from the master database — the same
-  // paragraph Learn and the theory lecture speak; absent facts stay silent.
+  // …WITH WHAT IT IS FOR (review audit 2026-10-14: the bare name was the
+  // walk's most common line with no reason): the masters' plan from it. WHAT
+  // IT IS — what it provokes, aims for, who played it — is the walk's
+  // openingStory identity beat (one producer, read against the live board);
+  // saying it here too spoke it twice on one move (2026-10-20, Fried Liver).
   if (named && named === settled) {
-    // What it IS, else what it is FOR: the masters' plan from it (the Alapin's
-    // identity is empty — c3 provokes nothing — but its plan is d4).
-    const id = studentColorWB
-      ? openingIdentityLine(named, studentColorWB, 'seat', null)?.text ?? mastersPlanLine(planFor(named), studentColorWB, null)?.text ?? null
-      : null;
+    const id = studentColorWB ? mastersPlanLine(planFor(named), studentColorWB, null)?.text ?? null : null;
     facets.push(`[opening] The line so far is the ${named}.${id ? ` ${id}` : ''}`);
   }
 

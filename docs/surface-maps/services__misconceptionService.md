@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**354 lines · 11 exports · 26 importers · 16 tests · 4 audits**
+**357 lines · 11 exports · 27 importers · 17 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6422) — names `misconceptionService`
+- **The standard post-deploy ritual** (CLAUDE.md:6444) — names `misconceptionService`
 
 ## Who calls in
 
@@ -28,6 +28,7 @@
 - `src/services/fundamentalsCatalog.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/heatMap.ts`
+- `src/services/holdRate.ts`
 - `src/services/misconceptionDrill.test.ts`
 - `src/services/misconceptionService.test.ts`
 - `src/services/puzzleMissService.ts`
@@ -46,7 +47,7 @@
 
 ### `isMisconceptionDue` (function) — 5 call sites
 - `src/services/bucketPipelineAudit.ts:253`
-- `src/services/heatMap.ts:70`
+- `src/services/heatMap.ts:69`
 - `src/services/misconceptionService.test.ts:113`
 - `src/services/misconceptionService.test.ts:148`
 - `src/services/weaknessSpine.ts:463`
@@ -62,7 +63,7 @@
 - `src/components/Coach/FundamentalsPage.test.tsx:141`
 - `src/services/bucketPipelineAudit.test.ts:64`
 - `src/services/bucketPipelineAudit.test.ts:92`
-- `src/services/discussionPractice.ts:310`
+- `src/services/discussionPractice.ts:313`
 - `src/services/drillJoinDivergence.test.ts:46`
 - `src/services/drillJoinDivergence.test.ts:55`
 - `src/services/drillJoinDivergence.test.ts:62`
@@ -133,9 +134,9 @@
 - `src/services/coachApi.ts:4867`
 - `src/services/fixtureGames.test.tsx:113`
 - `src/services/fixtureGames.test.tsx:122`
-- `src/services/fundamentalsPipeline.realGame.test.ts:226`
 - `src/services/fundamentalsPipeline.realGame.test.ts:227`
-- `src/services/fundamentalsPipeline.realGame.test.ts:334`
+- `src/services/fundamentalsPipeline.realGame.test.ts:228`
+- `src/services/fundamentalsPipeline.realGame.test.ts:343`
 - `src/services/misconceptionService.test.ts:66`
 - `src/services/misconceptionService.test.ts:77`
 - `src/services/misconceptionService.test.ts:89`
@@ -144,20 +145,23 @@
 - `src/services/weaknessAnalyzer.ts:995`
 - `src/services/weaknessSpine.ts:921`
 
-### `recordTagDrillResult` (function) — 10 call sites
-- `src/components/Puzzles/AdaptivePuzzlePage.tsx:293`
-- `src/components/Puzzles/AdaptivePuzzlePage.tsx:375`
-- `src/components/Puzzles/WeaknessTagDrillPage.tsx:65`
-- `src/services/answerRecord.ts:52`
-- `src/services/answerRecord.ts:53`
+### `recordTagDrillResult` (function) — 12 call sites
+- `src/components/Puzzles/AdaptivePuzzlePage.tsx:294`
+- `src/components/Puzzles/AdaptivePuzzlePage.tsx:378`
+- `src/components/Puzzles/WeaknessTagDrillPage.quit.test.tsx:6`
+- `src/components/Puzzles/WeaknessTagDrillPage.tsx:69`
+- `src/components/Puzzles/WeaknessTagDrillPage.tsx:77`
+- `src/services/answerRecord.ts:55`
+- `src/services/answerRecord.ts:56`
 - `src/services/misconceptionService.test.ts:106`
 - `src/services/misconceptionService.test.ts:123`
 - `src/services/misconceptionService.test.ts:129`
 - `src/services/misconceptionService.test.ts:139`
 - `src/services/misconceptionService.test.ts:143`
 
-### `slipWeight` (function) — 3 call sites
-- `src/services/heatMap.ts:72`
+### `slipWeight` (function) — 4 call sites
+- `src/services/heatMap.ts:71`
+- `src/services/holdRate.ts:112`
 - `src/services/weaknessSpine.ts:465`
 - `src/services/weaknessSpine.ts:476`
 
@@ -165,6 +169,7 @@
 
 - `src/components/Coach/FundamentalsPage.test.tsx`
 - `src/components/Puzzles/AdaptivePuzzlePage.repcap.test.tsx`
+- `src/components/Puzzles/WeaknessTagDrillPage.quit.test.tsx`
 - `src/services/bucketPipelineAudit.test.ts`
 - `src/services/discussionPractice.test.ts`
 - `src/services/drillJoinDivergence.test.ts`

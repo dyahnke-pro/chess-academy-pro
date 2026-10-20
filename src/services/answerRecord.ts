@@ -26,6 +26,8 @@ import {
 } from './capabilityEvidence';
 import { recordWrongTapMisconceptions } from './wrongTapTag';
 import { recordTagDrillResult } from './misconceptionService';
+import { positionPosed } from './moveInsight';
+import { Chess } from 'chess.js';
 
 export interface AnswerRecordResult {
   outcome: CapabilityOutcome;
@@ -81,22 +83,52 @@ export async function recordMoveQuestionAnswer(a: {
   wrongAttempts: number;
   help: AnswerDetail['help'];
   surface: string;
+  /** 'lesson' for a question the coach asked; 'reading' for a find the
+   *  student made reading back over their own game. */
+  origin?: AnswerOrigin;
 }): Promise<AnswerRecordResult | null> {
   const mover: 'white' | 'black' = a.fen.split(' ')[1] === 'b' ? 'black' : 'white';
   let tag: MisconceptionTagId | null = null;
   try {
-    const posed = capabilitiesPosed(a.fen, a.expectedSan, mover);
-    tag = [...posed].sort((x, y) => y.posedImportance - x.posedImportance)[0]?.tag ?? null;
+    // Both computers a puzzle's evidence reads: the fundamentals the move
+    // answers, and what the position itself asks (the insight computer).
+    const posed = [...capabilitiesPosed(a.fen, a.expectedSan, mover), ...positionPosed(a.fen, { bestSan: a.expectedSan })];
+    tag = posed.sort((x, y) => y.posedImportance - x.posedImportance)[0]?.tag ?? null;
   } catch { tag = null; }
   if (!tag) return null;   // the board asked no capability we own: nothing to file
   return recordAnswer({
     questionTag: tag,
     fen: a.fen,
-    origin: 'lesson',
+    origin: a.origin ?? 'lesson',
     solved: a.solved,
     answer: {
       taps: [], extras: [], wrongAttempts: a.wrongAttempts, msToFirst: null, msBetween: [],
       help: a.help, spoken: false, chainDepth: 0, wrongTags: [], typed: a.expectedSan, surface: a.surface,
     },
+  });
+}
+
+/**
+ * Review's free board: the first move the student tries from the position of
+ * their own slip, graded against the engine's better move (persistent memory,
+ * 2026-10-19 — finding it earned nothing). Prompted when the better-move arrow
+ * was showing: the arrow IS the answer, so that find counts as neither.
+ */
+export async function recordFreeBoardFind(a: {
+  fenBefore: string;
+  bestUci: string;
+  triedUci: string;
+  arrowShown: boolean;
+}): Promise<AnswerRecordResult | null> {
+  let bestSan: string | null = null;
+  try {
+    const mv = new Chess(a.fenBefore).move({ from: a.bestUci.slice(0, 2), to: a.bestUci.slice(2, 4), promotion: a.bestUci[4] ?? 'q' });
+    bestSan = mv.san;
+  } catch { bestSan = null; }
+  if (!bestSan) return null;
+  const found = a.triedUci.slice(0, 4) === a.bestUci.slice(0, 4);
+  return recordMoveQuestionAnswer({
+    fen: a.fenBefore, expectedSan: bestSan, solved: found, wrongAttempts: found ? 0 : 1,
+    help: a.arrowShown ? 'show' : 'none', surface: 'review-free-board', origin: 'reading',
   });
 }

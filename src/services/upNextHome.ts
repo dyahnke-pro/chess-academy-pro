@@ -4,7 +4,6 @@
  * coach's one gentle line per pick per day.
  */
 import { db } from '../db/schema';
-import { getCapabilityProfile } from './capabilityEvidence';
 import { mirrorHeatMap } from './heatMapMirror';
 import { heatMap } from './heatMap';
 import { weekStartKey, dayKey } from './trainingWeek';
@@ -20,12 +19,12 @@ export interface WhatGotBetter {
 }
 
 export async function loadWhatGotBetter(now: Date = new Date()): Promise<WhatGotBetter> {
-  const [profile, slips, snap] = await Promise.all([
-    getCapabilityProfile().catch(() => new Map()),
+  const [evidence, slips, snap] = await Promise.all([
+    db.capabilityEvidence.toArray().catch(() => []),
     db.misconceptionTags.toArray().catch(() => []),
     db.meta.get(WEEK_SNAPSHOT_KEY).catch(() => undefined),
   ]);
-  const tiles = heatMap(profile, slips);
+  const tiles = heatMap(evidence, slips);
   void mirrorHeatMap(tiles);
   const greenNow = tiles.filter((t) => t.state === 'green').map((t) => t.tag);
   const week = weekStartKey(now);

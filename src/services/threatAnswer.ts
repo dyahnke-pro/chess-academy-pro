@@ -272,6 +272,18 @@ function heldAnswer(kind: ThreatAnswerKind, m: Move, shape: 'line' | 'hit', piec
     case 'kick': return 'Ask the question — a pawn move hits the attacker at once.';
     case 'block': return 'Block it — a piece of yours can step in between.';
     case 'guard': return 'Guard it — one move adds a defender.';
-    case 'wait': return 'It can wait — something stronger comes first.';
+    // THE HELD "WAIT" SAYS WHAT KIND OF MOVE COMES FIRST (OS-1 g2 ply 18:
+    // "It can wait — something stronger comes first." named nothing). A
+    // forcing move is said by its kind; a quiet one has no kind the student
+    // can look for, and "not urgent yet" already rode on the threat line, so
+    // the answer stays silent rather than say nothing out loud.
+    case 'wait': {
+      const after = new Chess(fen);
+      try { after.move(m.san); } catch { return null; }
+      if (after.isCheckmate()) return null;
+      if (after.inCheck()) return 'It can wait — a check of yours comes first.';
+      if (m.captured) return `It can wait — you have a capture that comes first: their ${NAME[m.captured]} is there to take.`;
+      return null;
+    }
   }
 }

@@ -82,7 +82,7 @@ export function knowGreenSince(rows: readonly CapabilityEvidenceRecord[], tags: 
   const mine = rows.filter((r) => isKnowRow(r) && tags.includes(r.tag)).sort((a, b) => a.recordedAt - b.recordedAt);
   let since: number | null = null;
   for (let i = 0; i < mine.length; i += 1) {
-    const green = standingFromProfile(summariseEvidence(mine.slice(0, i + 1), {}, 'know'), tags) === 'green';
+    const green = standingFromProfile(summariseEvidence(mine.slice(0, i + 1), [], {}, 'know'), tags) === 'green';
     if (green && since === null) since = mine[i].recordedAt;
     if (!green) since = null;
   }
@@ -126,12 +126,13 @@ export function classifyStepTransfer(args: {
 /** Every step's verdict, in routine order. PURE. */
 export function thinkingTransfer(args: {
   evidence: readonly CapabilityEvidenceRecord[];
-  useProfile?: CapabilityProfile;
+  /** The game reading, slips included (`summariseEvidence`) — required, so
+   *  "proven in games" is never read off the answers alone. */
+  useProfile: CapabilityProfile;
   games: readonly TransferGame[];
   slips: readonly TransferSlip[];
 }): StepTransfer[] {
-  const useProfile = args.useProfile ?? summariseEvidence([...args.evidence], {}, 'use');
-  return THINKING_STEP_ORDER.map((step) => classifyStepTransfer({ step, evidence: args.evidence, useProfile, games: args.games, slips: args.slips }));
+  return THINKING_STEP_ORDER.map((step) => classifyStepTransfer({ step, evidence: args.evidence, useProfile: args.useProfile, games: args.games, slips: args.slips }));
 }
 
 /** Counts per class — the audit row's distribution. PURE. */

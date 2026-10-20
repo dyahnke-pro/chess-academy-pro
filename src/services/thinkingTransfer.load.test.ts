@@ -12,9 +12,10 @@ import { BUILT_THINKING_STEPS } from './thinkingSteps.built';
 const FENS = ['4k3/8/8/8/8/8/8/R3K3 w - - 0 1', '4k3/8/8/8/8/8/8/1R2K3 w - - 0 1'];
 const GREEN_AT = Date.UTC(2026, 0, 10);
 
+/** Eight clean lesson answers make KNOW green (the hold rate); the 8th lands at GREEN_AT. */
 const lessonRow = (i: number): CapabilityEvidenceRecord => ({
-  id: `k${i}`, tag: 'missed-tactic', outcome: 'held', fen: FENS[i], playedSan: 'a1',
-  posedImportance: 100, recordedAt: GREEN_AT - 1 + i, origin: 'lesson', prompted: false,
+  id: `k${i}`, tag: 'missed-tactic', outcome: 'held', fen: FENS[i % FENS.length], playedSan: 'a1',
+  posedImportance: 100, recordedAt: GREEN_AT - 7 + i, origin: 'lesson', prompted: false,
 });
 const game = (id: string, date: string, over: Partial<GameRecord> = {}): GameRecord =>
   ({ id, pgn: '', white: 'me', black: 'them', result: '1-0', date, event: '', eco: null, whiteElo: null, blackElo: null, source: 'lichess', isMasterGame: false, ...over }) as unknown as GameRecord;
@@ -22,7 +23,7 @@ const slipRow = (id: string, gameId: string, over: Partial<MisconceptionTagRecor
   ({ id, tag: 'missed-tactic', source: 'auto', createdAt: Date.now(), fen: FENS[0], sourceGameId: gameId, status: 'open', masteryHits: 0, ...over }) as unknown as MisconceptionTagRecord;
 
 async function seedGap(): Promise<void> {
-  await db.capabilityEvidence.bulkAdd([lessonRow(0), lessonRow(1)]);
+  await db.capabilityEvidence.bulkAdd(Array.from({ length: 8 }, (_, i) => lessonRow(i)));
   await db.games.bulkAdd([
     game('before', '2026.01.02'),
     game('after', '2026-01-20'),

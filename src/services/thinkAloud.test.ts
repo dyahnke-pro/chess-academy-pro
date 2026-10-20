@@ -51,7 +51,8 @@ describe('his game-2 read, computed (full transcript)', () => {
   const fenAt = (sans: string): string => { const c = new Chess(); for (const m of sans.split(' ')) c.move(m); return c.fen(); };
   it('"what does Black want? …Bg4. The obvious move is h3 — but h3 creates a hook"', () => {
     const fen = fenAt('e4 e5 Nf3 Nc6 Bb5 Nd4 Nxd4 exd4 O-O Bc5 d3 Qh4 Nd2 c6 Bc4 d6 Nf3 Qh5');
-    const f = obviousStopFlaw(fen, 'w');
+    // The engine ranks h3 a full pawn below its best: the obvious stop fails.
+    const f = obviousStopFlaw(fen, 'w', [{ moves: ['c2c3'], evaluation: 40, mate: null }, { moves: ['h2h3'], evaluation: -60, mate: null }]);
     expect(f?.threatSan).toBe('Bg4');
     expect(f?.stopSan).toBe('h3');
     expect(f?.text).toMatch(/hook/);

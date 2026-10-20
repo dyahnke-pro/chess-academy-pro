@@ -18,7 +18,6 @@ import {
   rankUpNext, currentPick, sectionPick, START_STEPS, THINKING_LESSON_LIVE,
   type UpNextPick, type PickHub, type UpNextInput, type StartStep, type ThinkingSignal,
 } from './upNextPicker';
-import { getCapabilityProfile } from './capabilityEvidence';
 import { heatMap, type HeatTile } from './heatMap';
 import { lessonStepForCard, loadThinkingTransfer } from './thinkingLessonStart';
 import { transferGapLine, worstGap } from './thinkingTransfer';
@@ -114,11 +113,11 @@ export function thinkingSignalFrom(choice: StepChoice | null, tiles: readonly He
 
 async function loadThinkingSignal(): Promise<ThinkingSignal | null> {
   if (!THINKING_LESSON_LIVE) return null;
-  const [profile, slips] = await Promise.all([
-    getCapabilityProfile().catch(() => new Map()),
+  const [evidence, slips] = await Promise.all([
+    db.capabilityEvidence.toArray().catch(() => []),
     db.misconceptionTags.toArray().catch(() => []),
   ]);
-  const tiles = heatMap(profile, slips);
+  const tiles = heatMap(evidence, slips);
   const transfer = await loadThinkingTransfer();
   const gap = worstGap(transfer);
   return thinkingSignalFrom(

@@ -236,3 +236,19 @@ describe('patternRule — the Mating tab hears the computed rule', () => {
     expect(patternRule(getPatternById('back-rank-mate')!)).toBeNull();
   });
 });
+
+describe('endgameService — a mating-pattern answer reaches the record (persistent memory)', () => {
+  it('finding the mate files a capability row under the computed tag', async () => {
+    const { db } = await import('../db/schema');
+    await db.capabilityEvidence.clear();
+    const p = getPatternById('back-rank-mate');
+    const r = buildMatingPatternLesson(p!, { tier: 'beginner', seed: 42, puzzleIndex: 0 });
+    expect(r?.solution.san).toBeTruthy();
+    const { recordMatingPatternAnswer } = await import('./endgameService');
+    recordMatingPatternAnswer({ fen: r!.solution.fen, san: r!.solution.san, solved: true, wrongAttempts: 0, hinted: false });
+    await new Promise((res) => setTimeout(res, 100));
+    const rows = await db.capabilityEvidence.toArray();
+    expect(rows.length).toBe(1);
+    expect(rows[0]).toMatchObject({ origin: 'lesson', outcome: 'held', fen: r!.solution.fen });
+  });
+});

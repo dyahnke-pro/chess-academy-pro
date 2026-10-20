@@ -29,7 +29,10 @@ export function countOutcomeLines(text: string): number {
   for (const l of text.split('\n')) {
     const t = l.trim();
     if (t.startsWith('//') || t.startsWith('*')) continue;
-    const lits = l.match(/`[^`]*`|'[^'\n]*'|"[^"\n]*"/g) ?? [];
+    // An inline /** … */ comment is not a sentence: two apostrophes inside it
+    // ("the engine's move … the student's move") read as a quoted string.
+    const code = l.replace(/\/\*.*?\*\//g, '');
+    const lits = code.match(/`[^`]*`|'[^'\n]*'|"[^"\n]*"/g) ?? [];
     if (lits.some((x) => OUTCOME.test(x))) n += 1;
   }
   return n;

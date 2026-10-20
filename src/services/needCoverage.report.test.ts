@@ -91,9 +91,9 @@ describe('need coverage — the number, per profile (N6)', () => {
   it('has a real corpus to measure', () => { expect(all.length).toBeGreaterThan(30); }, 300_000);
 
   const cold = coverage(() => coldStudent(1400));
-  const mastered = coverage((n) => ({ rating: 1400, gamesPlayed: COLD_START_GAMES + 20, signals: [], bookDepartures: [], capabilities: new Map(), lineReps: new Array(n).fill(FAMILIAR_REPS) }));
-  const holes = coverage((n) => ({ rating: 1400, gamesPlayed: COLD_START_GAMES + 20, signals: [forkHole, pinHole], bookDepartures: [], capabilities: new Map(), lineReps: new Array(n).fill(FAMILIAR_REPS) }));
-  const fresh = coverage((n) => ({ rating: 1400, gamesPlayed: COLD_START_GAMES + 20, signals: [], bookDepartures: [], capabilities: new Map(), lineReps: new Array(n).fill(0) }));
+  const mastered = coverage((n) => ({ rating: 1400, gamesPlayed: COLD_START_GAMES + 20, signals: [], bookDepartures: [], capabilities: new Map(), heat: new Map(), lineReps: new Array(n).fill(FAMILIAR_REPS) }));
+  const holes = coverage((n) => ({ rating: 1400, gamesPlayed: COLD_START_GAMES + 20, signals: [forkHole, pinHole], bookDepartures: [], capabilities: new Map(), heat: new Map(), lineReps: new Array(n).fill(FAMILIAR_REPS) }));
+  const fresh = coverage((n) => ({ rating: 1400, gamesPlayed: COLD_START_GAMES + 20, signals: [], bookDepartures: [], capabilities: new Map(), heat: new Map(), lineReps: new Array(n).fill(0) }));
 
   it('writes the report', () => {
     mkdirSync('audit-reports', { recursive: true });

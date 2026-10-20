@@ -220,13 +220,13 @@ describe('his habits of thought, computed (each checked against the existing com
     const pa = playAnyway(fenAt('e4 e5 Nf3 Nf6'), [line(['f1c4', 'f6e4'], 40)]);
     expect(pa?.idea).toMatch(/strongest bishop move lets them take your pawn on e4/);
     expect(pa?.idea).not.toMatch(/c4/);
+    // The flexible-move idea is a principle with no piece in it (OS-10,
+    // David's record ply 13: "Commit the pawn last — a knight move now").
     const ff = flexibleFirst(fenAt('e4 e5'), [line(['g1f3'], 30), line(['d2d4'], 20)]);
-    expect(ff?.idea).toMatch(/a knight move/);
-    expect(ff?.idea).not.toMatch(/f3/);
-    // Learn names no move unasked (David 2026-10-10): the pawn move is held too.
-    expect(ff?.idea).not.toMatch(/d4/);
+    expect(ff?.idea).toMatch(/pawn/);
+    expect(ff?.idea).not.toMatch(/knight|f3|d4/);
     const castle = flexibleFirst('r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4', [line(['e1g1'], 30), line(['d2d3'], 20)]);
-    expect(castle?.idea).toMatch(/castling/);
+    expect(castle?.idea).not.toMatch(/castl/);
   });
   it('scale-replay defects stay fixed (20 of his games)', () => {
     // play it anyway: the knight lands where they take it — never name that square

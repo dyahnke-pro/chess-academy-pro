@@ -232,6 +232,8 @@ export interface CaptureMisconceptionArgs {
     openingId?: string;
     openingName?: string;
     sourceGameId?: string;
+    /** When the move was played (the game's date + ply). */
+    playedAt?: number;
     takenBack?: boolean;
   };
 }
@@ -325,6 +327,7 @@ export async function captureMisconception(
     userReason: args.classifyInput.userReason,
     coachNote,
     sourceGameId: args.context.sourceGameId,
+    ...(args.context.playedAt !== undefined ? { playedAt: args.context.playedAt } : {}),
     takenBack: args.context.takenBack,
     counted: args.shouldCount,
     attributionPending: args.attributionPending,

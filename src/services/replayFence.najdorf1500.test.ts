@@ -4,6 +4,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { readFileSync } from 'node:fs';
+import { sameLossAsGrade } from './mistakeTurnLine';
 import { callInaccuracy } from './inaccuracyCall';
 import { readPosition } from './positionalRead';
 import { detectBehaviors } from './danyaBehaviors';
@@ -70,7 +71,10 @@ describe('one loss, one saying (Najdorf ply 48)', () => {
     expect(call?.lostSquare).toBe('b2');
   });
   it('Learn drops the fundamental line when the grade names the same square', () => {
+    // One rule, in one place (`mistakeTurnLine`): any fundamental about the
+    // square the grade says was lost keeps only its HOW.
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    expect(src).toMatch(/(?:fundamental|fund)\.square === look\.lostSquare/);
+    expect(src).toMatch(/mistakeTurnLine\(\{[\s\S]{0,120}lostSquare: look\.lostSquare/);
+    expect(sameLossAsGrade({ square: 'b2' }, 'b2')).toBe(true);
   });
 });

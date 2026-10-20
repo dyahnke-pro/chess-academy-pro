@@ -276,8 +276,8 @@
 ### `voiceFacts` (function) — 37 call sites
 - `scripts/audit-kid-static.mjs:53`
 - `scripts/audit-kid-static.mjs:64`
-- `src/components/Coach/CoachGameReview.tsx:1724`
-- `src/components/Coach/CoachGameReview.tsx:1933`
+- `src/components/Coach/CoachGameReview.tsx:1725`
+- `src/components/Coach/CoachGameReview.tsx:1934`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
 - `src/components/Puzzles/PuzzleBoard.tsx:99`
 - `src/hooks/usePhaseNarration.ts:744`
