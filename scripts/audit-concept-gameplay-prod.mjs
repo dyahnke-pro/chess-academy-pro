@@ -472,6 +472,7 @@ async function askAndPlay(page, listener, ask, label) {
     await page.locator(`[data-square="${legal.to}"]`).first().click({ timeout: 8000, force: true }).catch(() => {});
     chess.move(legal.san);
     moves.push(legal.san);
+    const studentPly = chess.history().length;
     if (chess.isGameOver()) break;
 
     // Wait for the student's move to RENDER, then for the NEXT change — that
@@ -488,6 +489,14 @@ async function askAndPlay(page, listener, ask, label) {
     }
     if (!reply) { console.log(`[stall] ${label}: no coach reply after ${moves.at(-1)} — stopping at ply ${chess.history().length}`); break; }
     moves.push(reply);
+    // A STUDENT THINKS BEFORE THEY MOVE (V6, 2026-10-20). The audit used to move
+    // ~250ms after the reply, so the turn's LATE wave — where most own-move
+    // reasons live — was dropped as the board moved on, and V6 measured the
+    // harness. Wait (bounded) for this move's late row, as a student would.
+    for (let t = Date.now(); Date.now() - t < 15_000;) {
+      if (learnTurnRows(listener).some((r) => r.turn?.kind === 'late' && r.turn?.ply === studentPly)) break;
+      await page.waitForTimeout(700);
+    }
     // Mid-game, pieces still on: the "couldn't they just move X?" probe.
     if (label === 'canonical' && chess.history().length >= 12) await pieceProbe(page, listener);
     // Stop once the concept has been voiced — the game has done its job.

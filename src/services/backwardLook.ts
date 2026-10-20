@@ -504,3 +504,14 @@ export function slipSpoken(args: Parameters<typeof moverQuality>[0] & {
   if (moverQuality(args) !== 'inaccuracy') return true;
   return inaccuracySpeaks({ fenBefore: args.fenBefore, playedSan: args.playedSan, bestSan: args.bestSan, historySans: args.historySans, ply: args.historySans.length - 1 });
 }
+
+/** Whether this move gets a SPOKEN GRADE in Learn: a mistake or a blunder, or
+ *  an inaccuracy the record earns (`slipSpoken`). A move that is no slip — a
+ *  big cp loss in a decided game grades 'good' by win% — has no verdict to
+ *  hear, so nothing may wait for one (V6, Learn on David's record 2026-10-20:
+ *  158 and 181cp moves held every lane on 'verdict-turn' and spoke nothing). */
+export function gradeSpoken(args: Parameters<typeof slipSpoken>[0]): boolean {
+  const q = moverQuality(args);
+  if (q !== 'inaccuracy' && q !== 'mistake' && q !== 'blunder') return false;
+  return slipSpoken(args);
+}

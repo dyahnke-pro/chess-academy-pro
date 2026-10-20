@@ -630,7 +630,13 @@ export function decideTurn(
       // and is not the same claim. One geometry read from two seats (a pin
       // and the discovery behind it) still collapses; danger still subsumes.
       if (!ad && !bd && (DNA_BEAT[a.lane] === 'but') !== (DNA_BEAT[b.lane] === 'but')) continue;
-      const loser = ad !== bd ? (ad ? b : a) : value(b) > value(a) ? a : b;
+      // THE STUDENT'S OWN MOVE KEEPS ITS REASON (V6, Learn on David's record
+      // 2026-10-20: "the point of your move" lost to a board read of the same
+      // squares, and the move got no reason). One claim, said once — as what
+      // the move did, unless the other seat is danger.
+      const ao = !ad && DNA_BEAT[a.lane] === 'affirm' && teaches(a);
+      const bo = !bd && DNA_BEAT[b.lane] === 'affirm' && teaches(b);
+      const loser = ad !== bd ? (ad ? b : a) : ao !== bo ? (ao ? b : a) : value(b) > value(a) ? a : b;
       subsumed.add(loser);
       if (loser === a) break;
     }

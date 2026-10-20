@@ -43,6 +43,7 @@ import { buildPositionalRead, rookReachesFile } from '../../services/positionalR
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
+import { namesPlayableStudentMove } from '../../services/studentMoveNaming';
 import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
@@ -214,7 +215,7 @@ import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead
 import { scaleGap, packageForRegister } from '../../services/hintRegister';
 import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
-import { backwardLook, slipSpoken, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf } from '../../services/backwardLook';
+import { backwardLook, gradeSpoken, slipSpoken, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf } from '../../services/backwardLook';
 import { learnFundamentalVerdict, learnHeldRecurrence, learnMistakeRecurrence } from '../../services/learnFundamentalNarration';
 import { FUNDAMENTAL_TAG, type FundamentalId } from '../../services/principleAttribution';
 import { FUNDAMENTAL_LABEL } from '../../services/fundamentalsCatalog';
@@ -273,6 +274,7 @@ import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
 import { mateContext } from '../../utils/mateContext';
+import { uciToSanAt } from '../../services/liveFundamental';
 import { speakComputed } from '../../services/speakComputed';
 import { heldVerdictText } from '../../services/deliberation';
 import { applyCoachSetting } from '../../services/coachSettingsAction';
@@ -8377,6 +8379,8 @@ export function CoachTeachPage(): JSX.Element {
     moveCostCp: number | null;
     /** The price is settled (`MovePrice.settled`); false holds every affirm. */
     priceSettled: boolean;
+    /** The move's grade is spoken (`gradeSpoken`); false releases the cost hold. */
+    gradeSpeaks: boolean;
   }): {
     /** The utterance AND its provenance, from one object. Callers speak
      *  `pkg.spoken` and log `pkg.kept` — never a separately-assembled string,
@@ -9493,7 +9497,7 @@ export function CoachTeachPage(): JSX.Element {
         return readBoard('lastTimeHere', { fenBefore: b.fen(), playedSan: h[h.length - 2], rows, currentGameId: learnMemRef.current.gameId });
       } catch { return null; }
     })();
-    const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, priceSettled: args.priceSettled, gradeSpeaks: true, midExchange: midExchangeOn }, facts: [
+    const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, priceSettled: args.priceSettled, gradeSpeaks: args.gradeSpeaks, midExchange: midExchangeOn }, facts: [
       ...(gemLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, namesStudentMove: tacticLines?.[0] ? studentMovesInLine(tacticLines[0].fen, tacticLines[0].sans, studentCC, args.fenAfterReply) : NAMES_NO_MOVE, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
       ...(threatLine ? [{ namesStudentMove: threatNames, lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
@@ -9825,8 +9829,9 @@ export function CoachTeachPage(): JSX.Element {
     // `grade` is block-scoped to the narration branch, and the capability guard
     // must NEVER read "ungraded" as "clean" — null stays null.
     let studentCpLoss: number | null = null;
-    // THE GRADE IS QUIET when the record silences this inaccuracy (`slipSpoken`,
-    // set where the verdict is judged). Every wave's cost hold reads it: a
+    // THE GRADE IS QUIET when the move gets no spoken grade (`gradeSpoken`: no
+    // slip at all, or an inaccuracy the record silences), set where the verdict
+    // is judged and at the instant wave. Every wave's cost hold reads it: a
     // verdict nobody will hear holds nothing (V6, prod Learn 2026-10-20).
     let gradeQuiet = false;
     // THE PRICE IS SETTLED (#10.Bf4): false while the one price is still
@@ -11178,6 +11183,13 @@ export function CoachTeachPage(): JSX.Element {
                 // price, so Review stores the number the door used.
                 const ply = move.history.length - 1;
                 const label = priceLabel(searched, playerColor === 'white' ? 'w' : 'b');
+                // The instant wave judges the grade on this price too, so a cost
+                // with no spoken grade holds nothing here either (V6).
+                gradeQuiet = !gradeSpoken({
+                  cpLoss: searched.costCp, scores: searched.scores ?? null, studentColor: playerColor,
+                  ...mateContext(preStudentRead, null, playerColor),
+                  fenBefore, playedSan: move.san, bestSan: uciToSanAt(fenBefore, preStudentRead?.bestMove), historySans: move.history,
+                });
                 if (label && preStudentRead && !studentMoveInBook && !liveGradesRef.current.has(ply)) {
                   const bestLine = preStudentRead.topLines?.[0]?.moves ?? [];
                   const afterBest = preStudentRead.bestMove && bestLine[0] === preStudentRead.bestMove ? bestLine.slice(1) : [];
@@ -11217,6 +11229,7 @@ export function CoachTeachPage(): JSX.Element {
                   studentColor: playerColor,
                   moveCostCp: studentCpLoss,
                   priceSettled: studentPriceSettled,
+                  gradeSpeaks: !gradeQuiet,
                 });
                 instantLead = instant.lead;
                 for (const d of instant.deferred) queueSpokenHint(ip.fen(), d.text, d.lane, d.proof, d.namesStudentMove, d.squares, d.claims, undefined, d.arrows);
@@ -11666,14 +11679,15 @@ export function CoachTeachPage(): JSX.Element {
                     // first and this one stays quiet (`inaccuracyVoice`), read
                     // for this phase and this skill first. The record still
                     // keeps it; only the voice waits.
-                    const quietSlip = cpLoss === null || !slipSpoken({
-                      cpLoss,
+                    const gradeArgs = (loss: number): Parameters<typeof gradeSpoken>[0] => ({
+                      cpLoss: loss,
                       scores: studentPrice?.scores ?? null,
                       studentColor: playerColor,
                       ...mateContext(preStudentRead, mid, playerColor),
                       fenBefore, playedSan: move.san, bestSan: studentBestSan ?? null, historySans: move.history,
                     });
-                    gradeQuiet = quietSlip;
+                    const quietSlip = cpLoss === null || !slipSpoken(gradeArgs(cpLoss));
+                    gradeQuiet = cpLoss === null || !gradeSpoken(gradeArgs(cpLoss));
                     const look = quietSlip ? null : backwardLook({
                       fenBefore,
                       fenAfter: move.fen,
@@ -11974,7 +11988,13 @@ export function CoachTeachPage(): JSX.Element {
                       const fileHeard = !!fileKey && (positionalSaidRef.current.has(fileKey) || standingRef.current.said.has(fileKey));
                       if (point && !nowLoose && !fileHeard) {
                         // A capture's point and the trade verdict are one claim about one square.
-                        queueSpokenHint(fenAfterReply, point, 'movePoint', (pointFact?.line ? lineProof(pointFact.line, lineSeatAt(pointFact.line.fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? NO_PROOF.description, pointFact?.line ? studentMovesInLine(pointFact.line.fen, pointFact.line.sans, (playerColor === 'white' ? 'w' : 'b'), fenAfterReply, 1) : NAMES_NO_MOVE, pointFact?.squares ?? [], [move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`, ...(fileKey ? [fileKey] : [])], undefined, undefined, undefined, pointFact?.stakes ?? undefined);
+                        // THE PROOF WAITS, THE REASON SPEAKS (proof guard 4; V6,
+                        // Learn on David's record 2026-10-20): the line behind
+                        // "that wins the pawn" carries the student's next move, so
+                        // the line waits for the ask and the point is said alone.
+                        const pointLineNames = pointFact?.line ? studentMovesInLine(pointFact.line.fen, pointFact.line.sans, (playerColor === 'white' ? 'w' : 'b'), fenAfterReply, 1) : NAMES_NO_MOVE;
+                        const lineWaits = namesPlayableStudentMove(pointLineNames);
+                        queueSpokenHint(fenAfterReply, point, 'movePoint', lineWaits ? NO_PROOF.withheld : (pointFact?.line ? lineProof(pointFact.line, lineSeatAt(pointFact.line.fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? NO_PROOF.description, lineWaits ? NAMES_NO_MOVE : pointLineNames, pointFact?.squares ?? [], [move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`, ...(fileKey ? [fileKey] : [])], undefined, undefined, undefined, pointFact?.stakes ?? undefined);
                         captureEvent('coach_move_point_named', { surface: 'coach-teach' });
                       }
                       // EVERY STUDENT MOVE GETS ITS OWN REASON (David 2026-10-14):

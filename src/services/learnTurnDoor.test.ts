@@ -173,7 +173,7 @@ describe('WO-1b — one lead per turn', () => {
 
 describe('WO-1b — board descriptions wait for the turn\'s one decision', () => {
   it('the instant wave carries only urgent lanes; descriptions are deferred to the late wave', () => {
-    const start = TEACH_CODE.indexOf("const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, priceSettled: args.priceSettled, gradeSpeaks: true, midExchange: midExchangeOn }, facts: [");
+    const start = TEACH_CODE.indexOf("const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, priceSettled: args.priceSettled, gradeSpeaks: args.gradeSpeaks, midExchange: midExchangeOn }, facts: [");
     const end = TEACH_CODE.indexOf('priorKeys: learnMemRef.current.spokenKeys, priorLead: null', start);
     const instantCall = TEACH_CODE.slice(start, end);
     for (const lane of ['commentary', 'behavior', 'positional', 'kingSafety']) {
