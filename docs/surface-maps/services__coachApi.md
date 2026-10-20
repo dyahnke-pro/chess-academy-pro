@@ -226,7 +226,7 @@
 - `src/hooks/useLiveCoach.ts:313`
 - `src/hooks/usePhaseNarration.door.test.ts:33`
 - `src/hooks/usePhaseNarration.test.ts:68`
-- `src/hooks/usePhaseNarration.ts:822`
+- `src/hooks/usePhaseNarration.ts:821`
 - `src/services/coachApi.computedOnly.test.ts:10`
 - `src/services/coachMoveCommentary.ts:303`
 - `src/services/groundedComputedOnly.test.ts:25`
@@ -281,7 +281,7 @@
 - `src/components/Coach/CoachGameReview.tsx:1933`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
 - `src/components/Puzzles/PuzzleBoard.tsx:99`
-- `src/hooks/usePhaseNarration.ts:809`
+- `src/hooks/usePhaseNarration.ts:808`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:260`
 - `src/services/coachApi.computedOnly.test.ts:20`

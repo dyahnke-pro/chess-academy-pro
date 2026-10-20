@@ -21,9 +21,9 @@ const AFTER_BXF7 = ((): string => { const c = new Chess(MOVE8); c.move('Bxf7+');
 
 /** The report's lines on MOVE8, as the replay heard them, typed. */
 const REPORT: PhaseFact[] = [
-  { text: 'They want the bishop to g4, pinning your knight on f3 to your queen. The obvious stop is h3 — find another way.', claims: ['prophylaxis:g4:idea'], squares: ['g4', 'f3', 'd1'], proof: NO_PROOF.description, role: 'teach' },
-  { text: 'Watch Bg4 — their bishop would pin your knight on f3 to your queen.', claims: ['pf:latent-pin:d1,f3,g4'], squares: ['d1', 'f3', 'g4'], proof: NO_PROOF.description, role: 'teach' },
-  { text: 'Spot it before it lands: ask what their next move would attack.', claims: ['method:threat-scan'], proof: NO_PROOF.method, role: 'teach' },
+  { text: 'They want the bishop to g4, pinning your knight on f3 to your queen. The obvious stop is h3 — find another way.', claims: ['prophylaxis:g4:idea'], squares: ['g4', 'f3', 'd1'], proof: NO_PROOF.description, factKind: 'stop-flaw' },
+  { text: 'Watch Bg4 — their bishop would pin your knight on f3 to your queen.', claims: ['pf:latent-pin:d1,f3,g4'], squares: ['d1', 'f3', 'g4'], proof: NO_PROOF.description, factKind: 'stop-flaw' },
+  { text: 'Spot it before it lands: ask what their next move would attack.', claims: ['method:threat-scan'], proof: NO_PROOF.method, factKind: 'method' },
 ];
 
 const rows: LearnTurnRow[] = [];
@@ -59,7 +59,7 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
   it('a costly turn holds the report behind its verdict (the phase wave sees the cost)', () => {
     listen();
     const d = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 13, moveCostCp: 350, midExchange: null },
-      facts: REPORT.map((f) => ({ lane: 'phase' as const, text: f.text, fen: MOVE8, claims: f.claims, squares: f.squares, proof: f.proof, role: f.role })),
+      facts: REPORT.map((f) => ({ lane: 'phase' as const, text: f.text, fen: MOVE8, claims: f.claims, squares: f.squares, proof: f.proof, role: 'teach' as const })),
       priorLead: null, green: null, beginner: false });
     expect(d.pkg.spoken).toBe('');
     expect(rows.at(-1)?.heldWhy.phase).toBe('verdict-turn');

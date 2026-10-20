@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2025 lines · 16 exports · 29 importers · 27 tests · 3 audits**
+**2043 lines · 17 exports · 30 importers · 27 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -28,6 +28,7 @@
 - `src/services/claimChecker.measure.test.ts`
 - `src/services/claimKeyParity.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
+- `src/services/learnTurnDoor.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
 - `src/services/positionFacts.afterLine.test.ts`
@@ -87,14 +88,17 @@
 ### `planChangedText` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `PhaseFact` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `clauseClaims` (function) — 3 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10617`
 - `src/hooks/usePhaseNarration.door.test.ts:76`
-- `src/hooks/usePhaseNarration.ts:709`
+- `src/hooks/usePhaseNarration.ts:708`
 
 ### `clauseText` (function) — 12 call sites
 - `src/hooks/useLiveCoach.ts:296`
-- `src/hooks/usePhaseNarration.ts:716`
+- `src/hooks/usePhaseNarration.ts:715`
 - `src/services/chatBoardRead.ts:112`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:255`
@@ -111,7 +115,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:10492`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
-- `src/hooks/usePhaseNarration.ts:673`
+- `src/hooks/usePhaseNarration.ts:672`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
 - `src/services/chatBoardRead.ts:81`

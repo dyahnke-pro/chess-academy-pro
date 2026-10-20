@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**641 lines · 28 exports · 18 importers · 13 tests · 24 audits**
+**641 lines · 28 exports · 17 importers · 13 tests · 24 audits**
 
 ## Locked rules that govern this surface
 
@@ -41,7 +41,6 @@
 
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/hooks/usePhaseNarration.door.test.ts`
-- `src/hooks/usePhaseNarration.ts`
 - `src/services/coachDecider.test.ts`
 - `src/services/coachDecisionEmits.test.ts`
 - `src/services/coachFeatureService.ts`
@@ -84,7 +83,7 @@
 - `src/services/learnTurnDoor.test.ts:174`
 - `src/services/learnTurnDoor.test.ts:434`
 - `src/services/learnTurnDoor.test.ts:445`
-- `src/services/positionFacts.ts:1268`
+- `src/services/positionFacts.ts:1286`
 - `src/services/puzzleMethod.ts:42`
 
 ### `StudentContext` (interface) — 0 call sites
@@ -103,7 +102,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `judgeMoment` (function) — 12 call sites
-- `src/services/positionFacts.ts:805`
+- `src/services/positionFacts.ts:823`
 - `src/test/latentForkOpensTheDoor.test.ts:47`
 - `src/test/latentForkOpensTheDoor.test.ts:51`
 - `src/test/latentForkOpensTheDoor.test.ts:55`
@@ -206,7 +205,7 @@
 - `src/services/habitJoin.test.ts:92`
 - `src/services/habitJoin.test.ts:99`
 - `src/services/habitJoin.test.ts:100`
-- `src/services/positionFacts.ts:1088`
+- `src/services/positionFacts.ts:1106`
 
 ### `habitForCluster` (function) — 16 call sites
 - `src/services/habitJoin.test.ts:17`
@@ -229,8 +228,8 @@
 ### `buildVoicePackage` (re-export) — 82 call sites
 - `src/components/Coach/CoachGameReview.tsx:1940`
 - `src/components/Coach/CoachTeachPage.tsx:8405`
-- `src/hooks/usePhaseNarration.ts:349`
-- `src/hooks/usePhaseNarration.ts:958`
+- `src/hooks/usePhaseNarration.ts:348`
+- `src/hooks/usePhaseNarration.ts:957`
 - `src/hooks/usePositionNarration.ts:323`
 - `src/services/coachFeatureService.ts:2461`
 - `src/services/coachSurfaceScorecard.report.test.ts:116`
@@ -243,7 +242,7 @@
 - `src/services/dnaDoor.test.ts:42`
 - `src/services/dnaDoor.test.ts:49`
 - `src/services/laneReachability.test.ts:136`
-- `src/services/learnTurnDoor.ts:563`
+- `src/services/learnTurnDoor.ts:565`
 - `src/services/replayFence.najdorf1500.test.ts:50`
 - `src/services/reviewMoveBriefing.ts:405`
 - `src/services/ruleGradeFen.test.ts:9`
@@ -319,7 +318,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:9576`
 - `src/components/Coach/CoachTeachPage.tsx:11319`
 - `src/components/Coach/CoachTeachPage.tsx:11441`
-- `src/services/learnTurnDoor.ts:940`
+- `src/services/learnTurnDoor.ts:926`
 
 ### `describeVoicePackage` (re-export) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:11162`
@@ -374,7 +373,7 @@
 - `src/services/learnTurnDoor.phaseWave.test.ts:49`
 - `src/services/learnTurnDoor.phaseWave.test.ts:55`
 - `src/services/learnTurnDoor.phaseWave.test.ts:71`
-- `src/services/learnTurnDoor.ts:921`
+- `src/services/learnTurnDoor.ts:906`
 
 ### `FACT_ROLE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

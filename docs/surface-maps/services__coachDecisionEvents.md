@@ -74,7 +74,7 @@
 - `src/services/learnTurnDoor.test.ts:589`
 
 ### `emitLearnTurn` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:880`
+- `src/services/learnTurnDoor.ts:882`
 
 ## Tests
 

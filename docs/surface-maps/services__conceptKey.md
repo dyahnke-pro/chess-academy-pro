@@ -29,17 +29,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/conceptKey.test.ts:9`
 - `src/services/danyaBehaviors.ts:525`
 - `src/services/kingAttackReads.ts:653`
-- `src/services/positionFacts.ts:1338`
-- `src/services/positionFacts.ts:1775`
+- `src/services/positionFacts.ts:1356`
 - `src/services/positionFacts.ts:1793`
+- `src/services/positionFacts.ts:1811`
 - `src/services/replayFence.alekhine1500.test.ts:24`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`
 
 ### `forkThreatKey` (function) — 4 call sites
 - `src/services/danyaBehaviors.ts:379`
-- `src/services/positionFacts.ts:1645`
-- `src/services/positionFacts.ts:1658`
+- `src/services/positionFacts.ts:1663`
+- `src/services/positionFacts.ts:1676`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:50`
 
 ## Tests

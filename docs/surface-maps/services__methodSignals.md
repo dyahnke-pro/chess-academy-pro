@@ -24,12 +24,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/methodSignals.test.ts:15`
 - `src/services/methodSignals.test.ts:21`
 - `src/services/methodSignals.test.ts:29`
-- `src/services/positionFacts.ts:966`
+- `src/services/positionFacts.ts:984`
 
 ### `forcingLine` (function) — 3 call sites
 - `src/services/methodSignals.test.ts:36`
 - `src/services/methodSignals.test.ts:39`
-- `src/services/positionFacts.ts:967`
+- `src/services/positionFacts.ts:985`
 
 ### `LineMark` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -37,7 +37,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `markSacrificeLine` (function) — 3 call sites
 - `src/services/methodSignals.test.ts:46`
 - `src/services/methodSignals.test.ts:50`
-- `src/services/positionFacts.ts:968`
+- `src/services/positionFacts.ts:986`
 
 ## Tests
 

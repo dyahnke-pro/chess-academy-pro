@@ -3,8 +3,7 @@ import { createStandingFactMemory, fullmoveOf, type StandingFactMemory } from '.
 import { voiceService } from '../services/voiceService';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { groundedMoveFeedback } from '../services/coachApi';
-import { computePositionFacts, clauseText, clauseClaims, type LastMoveInput } from '../services/positionFacts';
-import { FACT_ROLE, type PhaseFact } from '../services/coachDecider';
+import { computePositionFacts, clauseText, clauseClaims, type LastMoveInput, type PhaseFact } from '../services/positionFacts';
 import { NO_PROOF } from '../services/proof';
 import { useWeaknessSignals } from './useWeaknessSignals';
 import { useStudentNeed } from './useStudentNeed';
@@ -709,7 +708,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
                 text: c.text, claims: clauseClaims(pf, i, event.fen), proof: c.proof ?? NO_PROOF.description,
                 ...(c.squares ? { squares: c.squares } : {}), ...(c.stakes ? { stakes: c.stakes } : {}),
                 ...(c.lines ? { lines: c.lines } : {}), ...(c.gradeFen ? { gradeFen: c.gradeFen } : {}),
-                role: FACT_ROLE[c.kind], factKind: c.kind, ...(c.skill ? { skill: c.skill } : {}),
+                factKind: c.kind, ...(c.skill ? { skill: c.skill } : {}),
               });
             });
           } else {

@@ -475,6 +475,24 @@ function moveSquares(fen: string, san: string): string[] {
   try { const m = new Chess(fen).move(san); return [m.from, m.to]; } catch { return []; }
 }
 
+/** One fact of a phase report, typed — never a sentence — as a surface hands
+ *  it to its turn door (`decidePhaseWave`); the door reads its role off
+ *  `factKind`. REQUIRED claims:
+ *  without them the claim ledger can only match exact words, and a phase
+ *  report that restates the turn's own read gets through (root cause 5). */
+export interface PhaseFact {
+  text: string;
+  claims: readonly string[];
+  proof: FactProof;
+  squares?: readonly string[];
+  stakes?: FactStakes;
+  lines?: ReadonlyArray<{ fen: string; sans: readonly string[] }>;
+  /** The board this fact describes when it is not the report's own. */
+  gradeFen?: string;
+  factKind?: string;
+  skill?: string;
+}
+
 /** THE CLAIM KEYS of the `i`th spoken clause — the ONE answer every lane that
  *  offers a clause to a door gives, so the door's claim ledger can see that a
  *  phase report and the turn's own position-facts lane are saying ONE fact

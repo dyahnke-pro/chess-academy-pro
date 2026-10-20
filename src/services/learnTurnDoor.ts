@@ -31,7 +31,9 @@ import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type Vo
 
 import { costStakes, stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
 import { sameClaim } from './factSelector';
-import type { FacetRole } from './reviewFacetRank';
+import { FACT_ROLE, type FacetRole } from './reviewFacetRank';
+import type { PhaseFact } from './positionFacts';
+export type { PhaseFact } from './positionFacts';
 import { isEndgameByMaterial } from './gamePhaseService';
 import type { StoryBeat } from './openingStory';
 import { samePosition } from '../utils/samePosition';
@@ -881,23 +883,6 @@ export function decideTurn(
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
 }
 
-/** One fact of a phase report, typed — never a sentence. REQUIRED claims:
- *  without them the claim ledger can only match exact words, and a phase
- *  report that restates the turn's own read gets through (root cause 5). */
-export interface PhaseFact {
-  text: string;
-  claims: readonly string[];
-  proof: FactProof;
-  squares?: readonly string[];
-  stakes?: FactStakes;
-  lines?: readonly SpokenLine[];
-  /** The board this fact describes when it is not the report's own. */
-  gradeFen?: string;
-  role?: FacetRole;
-  factKind?: string;
-  skill?: string;
-}
-
 /** The turn the student is in right now, as its waves have left it. */
 export interface LiveTurn {
   /** The board the turn's waves read (the board after the coach's reply). */
@@ -929,7 +914,8 @@ export function decidePhaseWave(
     facts.map((f) => ({
       lane: 'phase' as const, text: f.text, fen: f.gradeFen ?? readFen, claims: f.claims, proof: f.proof,
       ...(f.squares ? { squares: f.squares } : {}), ...(f.stakes ? { stakes: f.stakes } : {}), ...(f.lines ? { lines: f.lines } : {}),
-      ...(f.role ? { role: f.role } : {}), ...(f.factKind ? { factKind: f.factKind } : {}), ...(f.skill ? { skill: f.skill } : {}),
+      ...(f.factKind && f.factKind in FACT_ROLE ? { role: FACT_ROLE[f.factKind as keyof typeof FACT_ROLE] } : {}),
+      ...(f.factKind ? { factKind: f.factKind } : {}), ...(f.skill ? { skill: f.skill } : {}),
     })),
     live.said, ctx.priorKeys, ctx.priorLead ?? null, ctx.green ?? null, ctx.beginner,
     { kind: 'phase', ply: live.ply, moveCostCp: live.moveCostCp, midExchange: live.midExchange },
