@@ -1,0 +1,329 @@
+{
+ "id": "dto",
+ "seat": "black",
+ "sans": [
+  "e4",
+  "e5",
+  "Nf3",
+  "Nf6",
+  "Nc3",
+  "Bc5",
+  "Bc4",
+  "d6",
+  "O-O",
+  "Bg4",
+  "d3",
+  "Nc6",
+  "Be3",
+  "Bb6",
+  "h3",
+  "Bh5",
+  "Kh2",
+  "O-O",
+  "Qd2",
+  "Bxf3",
+  "gxf3",
+  "Nh5",
+  "Rg1",
+  "Qf6",
+  "Rg4",
+  "Qxf3",
+  "Rag1"
+ ],
+ "fixture": 32189,
+ "gameStart": 1792514839551,
+ "turns": [
+  {
+   "ply": 2,
+   "san": "e5",
+   "expectedReply": "Nf3",
+   "reply": "Nf3",
+   "tStart": 1792514870325,
+   "tMove": 1792514873062,
+   "replyAt": 1792514876362,
+   "error": null
+  },
+  {
+   "ply": 4,
+   "san": "Nf6",
+   "expectedReply": "Nc3",
+   "reply": "Nc3",
+   "tStart": 1792514903627,
+   "tMove": 1792514906358,
+   "replyAt": 1792514908798,
+   "error": null
+  },
+  {
+   "ply": 6,
+   "san": "Bc5",
+   "expectedReply": "Bc4",
+   "reply": "Bc4",
+   "tStart": 1792514936805,
+   "tMove": 1792514939486,
+   "replyAt": 1792514942674,
+   "error": null
+  },
+  {
+   "ply": 8,
+   "san": "d6",
+   "expectedReply": "O-O",
+   "reply": "O-O",
+   "tStart": 1792514969542,
+   "tMove": 1792514972258,
+   "replyAt": 1792514975443,
+   "error": null
+  },
+  {
+   "ply": 10,
+   "san": "Bg4",
+   "expectedReply": "d3",
+   "reply": "d3",
+   "tStart": 1792515002581,
+   "tMove": 1792515005247,
+   "replyAt": 1792515008422,
+   "error": null
+  },
+  {
+   "ply": 12,
+   "san": "Nc6",
+   "expectedReply": "Be3",
+   "reply": "Be3",
+   "tStart": 1792515036198,
+   "tMove": 1792515038877,
+   "replyAt": 1792515041757,
+   "error": null
+  },
+  {
+   "ply": 14,
+   "san": "Bb6",
+   "expectedReply": "h3",
+   "reply": "h3",
+   "tStart": 1792515069501,
+   "tMove": 1792515072182,
+   "replyAt": 1792515075451,
+   "error": null
+  },
+  {
+   "ply": 16,
+   "san": "Bh5",
+   "expectedReply": "Kh2",
+   "reply": "Kh2",
+   "tStart": 1792515102222,
+   "tMove": 1792515104885,
+   "replyAt": 1792515107967,
+   "error": null
+  },
+  {
+   "ply": 18,
+   "san": "O-O",
+   "expectedReply": "Qd2",
+   "reply": "Qd2",
+   "tStart": 1792515135136,
+   "tMove": 1792515137841,
+   "replyAt": 1792515141232,
+   "error": null
+  },
+  {
+   "ply": 20,
+   "san": "Bxf3",
+   "expectedReply": "gxf3",
+   "reply": "gxf3",
+   "tStart": 1792515167977,
+   "tMove": 1792515170699,
+   "replyAt": 1792515173656,
+   "error": null
+  },
+  {
+   "ply": 22,
+   "san": "Nh5",
+   "expectedReply": "Rg1",
+   "reply": "Rg1",
+   "tStart": 1792515201041,
+   "tMove": 1792515203734,
+   "replyAt": 1792515207229,
+   "error": null
+  },
+  {
+   "ply": 24,
+   "san": "Qf6",
+   "expectedReply": "Rg4",
+   "reply": "Rg4",
+   "tStart": 1792515234693,
+   "tMove": 1792515237384,
+   "replyAt": 1792515241358,
+   "error": null
+  },
+  {
+   "ply": 26,
+   "san": "Qxf3",
+   "expectedReply": "Rag1",
+   "reply": "Rag1",
+   "tStart": 1792515268074,
+   "tMove": 1792515270787,
+   "replyAt": 1792515273832,
+   "error": null
+  }
+ ],
+ "errors": [],
+ "gameEnd": 1792515301704,
+ "lines": [
+  {
+   "ts": 1792514850961,
+   "text": "What's it going to be? Learn a new opening, drill your weaknesses, or review a game — your call."
+  },
+  {
+   "ts": 1792514852632,
+   "text": "The coach takes white. Pawn to e 4 — your move."
+  },
+  {
+   "ts": 1792514871834,
+   "text": "Got it — after your move, they play Knight to f 3 if it's still legal."
+  },
+  {
+   "ts": 1792514905038,
+   "text": "Got it — after your move, they play Knight to c 3 if it's still legal."
+  },
+  {
+   "ts": 1792514908584,
+   "text": "They're eyeing knight takes e5 — your pawn on e5 has no defender."
+  },
+  {
+   "ts": 1792514938152,
+   "text": "Got it — after your move, they play Bishop to c 4 if it's still legal."
+  },
+  {
+   "ts": 1792514942268,
+   "text": "The book move is the knight to c6: it adds one guard to your pawn on e5, which their knight on f3 attacks — the bishop to c5 leaves it unguarded."
+  },
+  {
+   "ts": 1792514954357,
+   "text": "Their bishop reaches c4 because your b-pawn hasn't moved: on b5 it would cover that square."
+  },
+  {
+   "ts": 1792514971030,
+   "text": "Got it — after your move, they play Castle kingside if it's still legal."
+  },
+  {
+   "ts": 1792515003790,
+   "text": "Got it — after your move, they play Pawn to d 3 if it's still legal."
+  },
+  {
+   "ts": 1792515008043,
+   "text": "With bishop to g4, your bishop on g4 pins their knight on f3 against their queen on d1. Remember — a pin freezes the piece in front: it can't move without exposing the more valuable piece behind it, so it can be piled on."
+  },
+  {
+   "ts": 1792515037773,
+   "text": "Got it — after your move, they play Bishop to e 3 if it's still legal."
+  },
+  {
+   "ts": 1792515041333,
+   "text": "You have a pin: your bishop on g4 pins their knight on f3 against their queen on d1. If their knight moves, their queen on d1 is open to your bishop."
+  },
+  {
+   "ts": 1792515071099,
+   "text": "Got it — after your move, they play Pawn to h 3 if it's still legal."
+  },
+  {
+   "ts": 1792515075045,
+   "text": "Watch out — this loses material if you ignore it: their pawn on h3 hits your bishop on g4, and a guard does not help: the pawn is worth less than your bishop. H-pawn takes g4 wins your bishop for their pawn, even after you take back."
+  },
+  {
+   "ts": 1792515103551,
+   "text": "Got it — after your move, they play King to h 2 if it's still legal."
+  },
+  {
+   "ts": 1792515136503,
+   "text": "Got it — after your move, they play Queen to d 2 if it's still legal."
+  },
+  {
+   "ts": 1792515140805,
+   "text": "Both kings on the kingside: no pawn race — pushing the pawns in front of your own king only weakens it, so the fight is in the centre and on the other wing."
+  },
+  {
+   "ts": 1792515169633,
+   "text": "Got it — after your move, they play g takes f 3 if it's still legal."
+  },
+  {
+   "ts": 1792515173217,
+   "text": "Your g-pawn can still guard f5; they can never guard f4 the same way, so that square stays a hole for them."
+  },
+  {
+   "ts": 1792515202419,
+   "text": "Got it — after your move, they play Rook to g 1 if it's still legal."
+  },
+  {
+   "ts": 1792515206799,
+   "text": "Route the knight from h5 to f4 — a square no pawn can ever chase it from."
+  },
+  {
+   "ts": 1792515236326,
+   "text": "Got it — after your move, they play Rook to g 4 if it's still legal."
+  },
+  {
+   "ts": 1792515240868,
+   "text": "Your knight on h5 is a knight on the rim — it wants f4: f4 is a strong outpost — no pawn can chase the knight off, and the e-pawn backs it up."
+  },
+  {
+   "ts": 1792515269782,
+   "text": "Got it — after your move, they play Rook a to g 1 if it's still legal."
+  },
+  {
+   "ts": 1792515273447,
+   "text": "Not urgent yet, but see it coming — their rook on g1 and their rook on g4 form a battery on the file, bearing down on your pawn on g7. Remember — a battery stacks two pieces on the same line, multiplying their pressure down it."
+  }
+ ],
+ "checkpoints": [
+  {
+   "ts": 1792514875369,
+   "san": "Nf3"
+  },
+  {
+   "ts": 1792514907851,
+   "san": "Nc3"
+  },
+  {
+   "ts": 1792514941653,
+   "san": "Bc4"
+  },
+  {
+   "ts": 1792514974490,
+   "san": "O-O"
+  },
+  {
+   "ts": 1792515006705,
+   "san": "d3"
+  },
+  {
+   "ts": 1792515040798,
+   "san": "Be3"
+  },
+  {
+   "ts": 1792515074059,
+   "san": "h3"
+  },
+  {
+   "ts": 1792515106740,
+   "san": "Kh2"
+  },
+  {
+   "ts": 1792515140104,
+   "san": "Qd2"
+  },
+  {
+   "ts": 1792515172369,
+   "san": "gxf3"
+  },
+  {
+   "ts": 1792515206133,
+   "san": "Rg1"
+  },
+  {
+   "ts": 1792515239773,
+   "san": "Rg4"
+  },
+  {
+   "ts": 1792515272420,
+   "san": "Rag1"
+  }
+ ]
+}

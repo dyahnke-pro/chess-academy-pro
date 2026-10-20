@@ -1,0 +1,867 @@
+{
+ "summary": {
+  "list": "audit-reports/acceptance/golden-speedrun.json",
+  "listWritten": "2026-10-20T16:00:23.671Z",
+  "met": 53,
+  "of": 71,
+  "perGame": {
+   "dto": {
+    "met": 53,
+    "of": 71,
+    "notReached": 0,
+    "soft": [
+     "dto-10-bg4-timing missed"
+    ],
+    "errors": []
+   }
+  },
+  "perKind": {
+   "beat": {
+    "met": 6,
+    "of": 24
+   },
+   "noLeak": {
+    "met": 11,
+    "of": 11
+   },
+   "noRepeat": {
+    "met": 12,
+    "of": 12
+   },
+   "noStat": {
+    "met": 12,
+    "of": 12
+   },
+   "boardTrue": {
+    "met": 12,
+    "of": 12
+   }
+  }
+ },
+ "items": [
+  {
+   "id": "dto-4-nf6-e4",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "2...Nf6",
+   "what": "Nf6 attacks the e4 pawn",
+   "soft": false,
+   "status": "missed",
+   "heard": [
+    "They're eyeing knight takes e5 — your pawn on e5 has no defender."
+   ],
+   "game": "dto"
+  },
+  {
+   "id": "dto-4-name",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "2...Nf6",
+   "what": "names the opening: Petrov / Three Knights",
+   "soft": false,
+   "status": "missed",
+   "heard": [
+    "They're eyeing knight takes e5 — your pawn on e5 has no defender."
+   ],
+   "game": "dto"
+  },
+  {
+   "id": "dto-4-nc3-guards-e4",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "2...Nf6",
+   "what": "their Nc3 guards e4",
+   "soft": false,
+   "status": "missed",
+   "heard": [
+    "They're eyeing knight takes e5 — your pawn on e5 has no defender."
+   ],
+   "game": "dto"
+  },
+  {
+   "id": "dto-4-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "move": "2...Nf6",
+   "what": "the next move (Bc5) before it is played — he names his own options; the app's rule (C2) holds them",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-4-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "move": "2...Nf6",
+   "what": "a sentence already heard earlier in this game",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-4-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "move": "2...Nf6",
+   "what": "a statistic",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-4-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "move": "2...Nf6",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-6-e5-loose",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "3...Bc5",
+   "what": "e5 is left to be taken (Nxe5 is possible)",
+   "soft": false,
+   "status": "met",
+   "heard": "The book move is the knight to c6: it adds one guard to your pawn on e5, which their knight on f3 attacks — the bishop to c5 leaves it unguarded.",
+   "game": "dto"
+  },
+  {
+   "id": "dto-6-bc4-f7",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "3...Bc5",
+   "what": "their Bc4 aims at f7 / e5 still hangs",
+   "soft": false,
+   "status": "met",
+   "heard": "The book move is the knight to c6: it adds one guard to your pawn on e5, which their knight on f3 attacks — the bishop to c5 leaves it unguarded.",
+   "game": "dto"
+  },
+  {
+   "id": "dto-6-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "move": "3...Bc5",
+   "what": "the next move (d6) before it is played — he names his own options; the app's rule (C2) holds them",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-6-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "move": "3...Bc5",
+   "what": "a sentence already heard earlier in this game",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-6-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "move": "3...Bc5",
+   "what": "a statistic",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-6-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "move": "3...Bc5",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-8-d6-e5",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "4...d6",
+   "what": "d6 defends the e5 pawn",
+   "soft": false,
+   "status": "missed",
+   "heard": [],
+   "game": "dto"
+  },
+  {
+   "id": "dto-8-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "move": "4...d6",
+   "what": "the next move (Bg4) before it is played — he names his own options; the app's rule (C2) holds them",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-8-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "move": "4...d6",
+   "what": "a sentence already heard earlier in this game",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-8-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "move": "4...d6",
+   "what": "a statistic",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-8-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "move": "4...d6",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-10-bg4-pin",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "5...Bg4",
+   "what": "Bg4 pins the knight on f3 (to the queen)",
+   "soft": false,
+   "status": "met",
+   "heard": "With bishop to g4, your bishop on g4 pins their knight on f3 against their queen on d1.",
+   "game": "dto"
+  },
+  {
+   "id": "dto-10-bg4-timing",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "5...Bg4",
+   "what": "before h3 takes the square away",
+   "soft": true,
+   "status": "missed",
+   "heard": [
+    "With bishop to g4, your bishop on g4 pins their knight on f3 against their queen on d1. Remember — a pin freezes the piece in front: it can't move without exposing the more valuable piece behind it, so it can be piled on."
+   ],
+   "game": "dto"
+  },
+  {
+   "id": "dto-10-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "move": "5...Bg4",
+   "what": "the next move (Nc6) before it is played — he names his own options; the app's rule (C2) holds them",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-10-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "move": "5...Bg4",
+   "what": "a sentence already heard earlier in this game",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-10-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "move": "5...Bg4",
+   "what": "a statistic",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-10-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "move": "5...Bg4",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-12-nc6-d4",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "6...Nc6",
+   "what": "the threat …Nd4 on the pinned f3 knight",
+   "soft": false,
+   "status": "missed",
+   "heard": [
+    "You have a pin: your bishop on g4 pins their knight on f3 against their queen on d1. If their knight moves, their queen on d1 is open to your bishop."
+   ],
+   "game": "dto"
+  },
+  {
+   "id": "dto-12-be3-d4-c5",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "6...Nc6",
+   "what": "their Be3 covers d4 / challenges your c5 bishop",
+   "soft": false,
+   "status": "missed",
+   "heard": [
+    "You have a pin: your bishop on g4 pins their knight on f3 against their queen on d1. If their knight moves, their queen on d1 is open to your bishop."
+   ],
+   "game": "dto"
+  },
+  {
+   "id": "dto-12-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "move": "6...Nc6",
+   "what": "the next move (Bb6) before it is played — he names his own options; the app's rule (C2) holds them",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-12-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "move": "6...Nc6",
+   "what": "a sentence already heard earlier in this game",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-12-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "move": "6...Nc6",
+   "what": "a statistic",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-12-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "move": "6...Nc6",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-14-bb6-structure",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "7...Bb6",
+   "what": "Bb6 avoids the trade on c5 that spoils the pawns / axb6 opens the a-file",
+   "soft": false,
+   "status": "missed",
+   "heard": [
+    "Watch out — this loses material if you ignore it: their pawn on h3 hits your bishop on g4, and a guard does not help: the pawn is worth less than your bishop. H-pawn takes g4 wins your bishop for their pawn, even after you take back."
+   ],
+   "game": "dto"
+  },
+  {
+   "id": "dto-14-h3-g4",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "7...Bb6",
+   "what": "their h3 attacks your bishop on g4",
+   "soft": false,
+   "status": "met",
+   "heard": "Watch out — this loses material if you ignore it: their pawn on h3 hits your bishop on g4, and a guard does not help: the pawn is worth less than your bishop.",
+   "game": "dto"
+  },
+  {
+   "id": "dto-14-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "move": "7...Bb6",
+   "what": "the next move (Bh5) before it is played — he names his own options; the app's rule (C2) holds them",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-14-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "move": "7...Bb6",
+   "what": "a sentence already heard earlier in this game",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-14-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "move": "7...Bb6",
+   "what": "a statistic",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-14-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "move": "7...Bb6",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-16-bh5-pin",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "8...Bh5",
+   "what": "Bh5 keeps the pin on f3",
+   "soft": false,
+   "status": "missed",
+   "heard": [],
+   "game": "dto"
+  },
+  {
+   "id": "dto-16-kh2-gfile",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "8...Bh5",
+   "what": "their Kh2 prepares g4 / the rook to g1 (the g-file)",
+   "soft": false,
+   "status": "missed",
+   "heard": [],
+   "game": "dto"
+  },
+  {
+   "id": "dto-16-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "move": "8...Bh5",
+   "what": "the next move (O-O) before it is played — he names his own options; the app's rule (C2) holds them",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-16-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "move": "8...Bh5",
+   "what": "a sentence already heard earlier in this game",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-16-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "move": "8...Bh5",
+   "what": "a statistic",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-16-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "move": "8...Bh5",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-18-oo-safe",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "9...O-O",
+   "what": "castling: the king is safe",
+   "soft": false,
+   "status": "missed",
+   "heard": [
+    "Both kings on the kingside: no pawn race — pushing the pawns in front of your own king only weakens it, so the fight is in the centre and on the other wing."
+   ],
+   "game": "dto"
+  },
+  {
+   "id": "dto-18-qd2-gfile",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "9...O-O",
+   "what": "their Qd2 idea: recapture on f3 with the g-pawn and use the g-file",
+   "soft": false,
+   "status": "missed",
+   "heard": [
+    "Both kings on the kingside: no pawn race — pushing the pawns in front of your own king only weakens it, so the fight is in the centre and on the other wing."
+   ],
+   "game": "dto"
+  },
+  {
+   "id": "dto-18-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "move": "9...O-O",
+   "what": "the next move (Bxf3) before it is played — he names his own options; the app's rule (C2) holds them",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-18-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "move": "9...O-O",
+   "what": "a sentence already heard earlier in this game",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-18-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "move": "9...O-O",
+   "what": "a statistic",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-18-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "move": "9...O-O",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-20-bxf3-structure",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "10...Bxf3",
+   "what": "Bxf3 damages their kingside pawn structure for good",
+   "soft": false,
+   "status": "missed",
+   "heard": [
+    "Your g-pawn can still guard f5; they can never guard f4 the same way, so that square stays a hole for them."
+   ],
+   "game": "dto"
+  },
+  {
+   "id": "dto-20-gxf3-gfile",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "10...Bxf3",
+   "what": "their gxf3 opens the g-file toward your king",
+   "soft": false,
+   "status": "missed",
+   "heard": [
+    "Your g-pawn can still guard f5; they can never guard f4 the same way, so that square stays a hole for them."
+   ],
+   "game": "dto"
+  },
+  {
+   "id": "dto-20-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "move": "10...Bxf3",
+   "what": "the next move (Nh5) before it is played — he names his own options; the app's rule (C2) holds them",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-20-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "move": "10...Bxf3",
+   "what": "a sentence already heard earlier in this game",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-20-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "move": "10...Bxf3",
+   "what": "a statistic",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-20-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "move": "10...Bxf3",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-22-nh5-kingside",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "11...Nh5",
+   "what": "Nh5 starts kingside play (eyes f4)",
+   "soft": false,
+   "status": "met",
+   "heard": "Route the knight from h5 to f4 — a square no pawn can ever chase it from.",
+   "game": "dto"
+  },
+  {
+   "id": "dto-22-rg1-g7",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "11...Nh5",
+   "what": "their Rg1 aims down the g-file at g7 / your king",
+   "soft": false,
+   "status": "missed",
+   "heard": [
+    "Route the knight from h5 to f4 — a square no pawn can ever chase it from."
+   ],
+   "game": "dto"
+  },
+  {
+   "id": "dto-22-decision",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "11...Nh5",
+   "what": "a real decision point: slow down / weigh the options (engine: Kh8 best by 1.5)",
+   "soft": false,
+   "status": "missed",
+   "heard": [
+    "Route the knight from h5 to f4 — a square no pawn can ever chase it from."
+   ],
+   "game": "dto"
+  },
+  {
+   "id": "dto-22-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "move": "11...Nh5",
+   "what": "the next move (Qf6) before it is played — he names his own options; the app's rule (C2) holds them",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-22-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "move": "11...Nh5",
+   "what": "a sentence already heard earlier in this game",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-22-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "move": "11...Nh5",
+   "what": "a statistic",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-22-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "move": "11...Nh5",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-24-qf6-f3",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "12...Qf6",
+   "what": "Qf6 hits the f3 pawn",
+   "soft": false,
+   "status": "missed",
+   "heard": [
+    "Your knight on h5 is a knight on the rim — it wants f4: f4 is a strong outpost — no pawn can chase the knight off, and the e-pawn backs it up."
+   ],
+   "game": "dto"
+  },
+  {
+   "id": "dto-24-rg4-ignores",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "12...Qf6",
+   "what": "their Rg4 leaves f3 / heads for g7 on the g-file",
+   "soft": false,
+   "status": "missed",
+   "heard": [
+    "Your knight on h5 is a knight on the rim — it wants f4: f4 is a strong outpost — no pawn can chase the knight off, and the e-pawn backs it up."
+   ],
+   "game": "dto"
+  },
+  {
+   "id": "dto-24-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "move": "12...Qf6",
+   "what": "the next move (Qxf3) before it is played — he names his own options; the app's rule (C2) holds them",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-24-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "move": "12...Qf6",
+   "what": "a sentence already heard earlier in this game",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-24-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "move": "12...Qf6",
+   "what": "a statistic",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-24-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "move": "12...Qf6",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-26-qxf3-pawn",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "13...Qxf3",
+   "what": "Qxf3 wins the f3 pawn",
+   "soft": false,
+   "status": "missed",
+   "heard": [
+    "Not urgent yet, but see it coming — their rook on g1 and their rook on g4 form a battery on the file, bearing down on your pawn on g7. Remember — a battery stacks two pieces on the same line, multiplying their pressure down it."
+   ],
+   "game": "dto"
+  },
+  {
+   "id": "dto-26-rag1-g7",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "move": "13...Qxf3",
+   "what": "their Rag1 doubles: the threat on g7 / your king",
+   "soft": false,
+   "status": "met",
+   "heard": "Not urgent yet, but see it coming — their rook on g1 and their rook on g4 form a battery on the file, bearing down on your pawn on g7.",
+   "game": "dto"
+  },
+  {
+   "id": "dto-26-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "move": "13...Qxf3",
+   "what": "a sentence already heard earlier in this game",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-26-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "move": "13...Qxf3",
+   "what": "a statistic",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  },
+  {
+   "id": "dto-26-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "move": "13...Qxf3",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "soft": false,
+   "status": "met",
+   "heard": null,
+   "game": "dto"
+  }
+ ]
+}
