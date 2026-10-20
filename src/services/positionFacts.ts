@@ -1194,7 +1194,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
         if (r.idea && !said?.has(`${r.key}:idea`)) registryClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'speedrun-read', rank: 45, text: r.idea, claim: `${r.key}:idea` });
         return;
       }
-      registryClauses.push({ kind, rank, text: r.text, squares: [...r.squares], proof: r.proof, claim: r.key, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.lines ? { lines: r.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}) });
+      registryClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind, rank, text: r.text, squares: [...r.squares], proof: r.proof, claim: r.key, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.lines ? { lines: r.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}) });
     };
     try {
       push('tactic', 84, readBoard('trapped', { fen, student: studentColor }));

@@ -314,7 +314,7 @@ import { opponentStrength } from '../../services/engineStrength';
 import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
 import { lineSeatAt } from '../../utils/andList';
-import { NAMES_NO_MOVE, namesMoves, namedSan, studentMovesInLine, type NamesStudentMove } from '../../services/studentMoveNaming';
+import { NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, studentMovesInLine, type NamesStudentMove } from '../../services/studentMoveNaming';
 import { readBoard, readBoardAll, newPlanThread, clonePlanThread, adoptPlanTrial, type PlanThread, type BoardRead } from '../../services/boardComputers';
 import { splitThink, stripThink, resolveOwed, THINK_MARK } from '../../utils/thinkPause';
 import { scheduleMarks } from '../../services/markPacing';
@@ -1946,7 +1946,7 @@ export function CoachTeachPage(): JSX.Element {
     fen: string;
     /** `squares` rides along so the board can be drawn from what SURVIVED the
      *  package rather than re-derived from its prose — see `VoiceFact.squares`. */
-    lines: Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; role?: FacetRole; factKind?: string; skill?: string; ownMoveReason?: boolean }>;
+    lines: Array<{ lane: LearnLane; kind?: VoiceFactKind; text: string; squares?: readonly string[]; claims?: readonly string[]; gradeFen?: string; arrows?: readonly ArrowClaim[]; lines?: readonly SpokenLine[]; stakes?: FactStakes; proof: FactProof; namesStudentMove: NamesStudentMove; role?: FacetRole; factKind?: string; skill?: string; ownMoveReason?: boolean }>;
   } | null>(null);
   /** The coach's own last move, captured for judging. See the callout below —
    *  the inputs are gathered while the engine work runs and the verdict is
@@ -8229,7 +8229,7 @@ export function CoachTeachPage(): JSX.Element {
       const prior = turnLeadRef.current && samePosition(turnLeadRef.current.fen, liveFenRef.current ?? fen)
         ? turnLeadRef.current.lead
         : null;
-      const d = coachTurn({ posture: 'learn', turn: { kind: 'phase' }, facts: [{ lane: 'phase', text, fen, proof: NO_PROOF.description }], priorKeys: learnMemRef.current.spokenKeys, priorLead: prior, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile) });
+      const d = coachTurn({ posture: 'learn', turn: { kind: 'phase' }, facts: [{ lane: 'phase', text, fen, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE }], priorKeys: learnMemRef.current.spokenKeys, priorLead: prior, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile) });
       // A held sentence was not spoken, so it must not ride the narration
       // kind every listener reads as speech.
       void logAppAudit(d.pkg.spoken ? {
@@ -8353,7 +8353,7 @@ export function CoachTeachPage(): JSX.Element {
      *  over it by outranking it. */
     lead: TurnDecision['lead'];
     /** Board descriptions for the late wave's one decision. */
-    deferred: Array<{ lane: LearnLane; text: string; proof: FactProof; squares?: readonly string[]; claims?: string[]; arrows?: ArrowClaim[] }>;
+    deferred: Array<{ lane: LearnLane; text: string; proof: FactProof; namesStudentMove: NamesStudentMove; squares?: readonly string[]; claims?: string[]; arrows?: ArrowClaim[] }>;
     alertArrow: BoardArrow | null;
     /** The threat that SPOKE this wave, for its answer in the late wave. */
     threatAsked: { squares: string[]; shape: 'line' | 'hit' } | null;
@@ -9039,7 +9039,7 @@ export function CoachTeachPage(): JSX.Element {
         // Scandinavian that was never named). Queue it through the same reliable
         // late-package path as the plan/structure/register so a busy turn can't
         // swallow it.
-        queueSpokenHint(args.fenAfterReply, announceLine, 'opening', NO_PROOF.name, announceSquares.length ? announceSquares : undefined, announceClaims);
+        queueSpokenHint(args.fenAfterReply, announceLine, 'opening', NO_PROOF.name, NAMES_NO_MOVE, announceSquares.length ? announceSquares : undefined, announceClaims);
         learnMemRef.current.queuedOpeningName = det.name;
         captureEvent('opening_announced', {
           surface: 'coach-teach', name: det.name, first: firstResolve, has_idea: false,
@@ -9405,9 +9405,9 @@ export function CoachTeachPage(): JSX.Element {
     // leads. Now they ride the late wave, decided together with the engine
     // lanes, so a board description can no longer take the turn from what a
     // move is FOR. Only the urgent lanes speak instantly.
-    const deferred: Array<{ lane: LearnLane; text: string; proof: FactProof; squares?: readonly string[]; claims?: string[]; arrows?: ArrowClaim[] }> = [];
-    const deferIf = (on: unknown, lane: LearnLane, text: string | null, proof: FactProof, squares?: readonly string[], claims?: string[], arrows?: ArrowClaim[]): void => {
-      if (on && text) deferred.push({ lane, text, proof, squares, claims: claims?.length ? claims : undefined, arrows: arrows?.length ? arrows : undefined });
+    const deferred: Array<{ lane: LearnLane; text: string; proof: FactProof; namesStudentMove: NamesStudentMove; squares?: readonly string[]; claims?: string[]; arrows?: ArrowClaim[] }> = [];
+    const deferIf = (on: unknown, lane: LearnLane, text: string | null, proof: FactProof, namesStudentMove: NamesStudentMove, squares?: readonly string[], claims?: string[], arrows?: ArrowClaim[]): void => {
+      if (on && text) deferred.push({ lane, text, proof, namesStudentMove, squares, claims: claims?.length ? claims : undefined, arrows: arrows?.length ? arrows : undefined });
     };
     // A recited line in the computed beat ("After Rxb2+, Bxb2, Rb8, your rook
     // pins…") is walked as arrows, the same as a curated note's (walk
@@ -9428,15 +9428,16 @@ export function CoachTeachPage(): JSX.Element {
         return readBoard('obligationLifted', { fenBefore: b.fen(), fenAfter: args.fenAfterReply, student: studentCC });
       } catch { return null; }
     })();
-    deferIf(liftLine, 'theirMoveCost', liftLine?.text ?? null, liftLine?.proof ?? NO_PROOF.description, liftLine?.squares);
+    deferIf(liftLine, 'theirMoveCost', liftLine?.text ?? null, liftLine?.proof ?? NO_PROOF.description, namesMoves(studentCC, args.fenAfterReply, liftLine?.play), liftLine?.squares);
     // CHECK THE QUEEN'S EXITS BEFORE YOU GRAB (teach-brief §3): a capture
     // that looks free and leaves the queen with no safe square after one reply.
     // The proof's detail goes to the BOARD: every exit and every guard.
     const grab = readBoard('queenGrabTrap', { fen: args.fenAfterReply });
-    deferIf(grab, 'rejectedTempting', grab?.text ?? null, grab ? grab.proof : NO_PROOF.description, grab?.squares);
-    deferIf(computedLine, 'commentary', computedLine, NO_PROOF.description, undefined, undefined, computedLineArrows);
-    deferIf(behaviorLine && !decidedByMaterial, 'behavior', behaviorLine, NO_PROOF.description, behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), behaviorClaims, behaviorArrows);
-    deferIf(positionalLine && !decidedByMaterial, positionalIsOwnKing ? 'kingSafety' : 'positional', positionalLine, NO_PROOF.description, positionalSquares, positionalClaims);
+    deferIf(grab, 'rejectedTempting', grab?.text ?? null, grab ? grab.proof : NO_PROOF.description, NAMES_NO_MOVE, grab?.squares);
+    // A recited line names the student's moves in it (OS-10).
+    deferIf(computedLine, 'commentary', computedLine, NO_PROOF.description, namesFromArrows(computedLineArrows, studentCC, args.fenAfterReply), undefined, undefined, computedLineArrows);
+    deferIf(behaviorLine && !decidedByMaterial, 'behavior', behaviorLine, NO_PROOF.description, namesFromArrows(behaviorArrows, studentCC, args.fenAfterReply), behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), behaviorClaims, behaviorArrows);
+    deferIf(positionalLine && !decidedByMaterial, positionalIsOwnKing ? 'kingSafety' : 'positional', positionalLine, NO_PROOF.description, NAMES_NO_MOVE, positionalSquares, positionalClaims);
     // THE BOOK MOVE AND ITS JOB — its own lane on the "but" beat, so the door
     // orders it as a teaching fact (David 2026-10-14: "make sure this new
     // computer routes to the dna"), never glued to the opening name.
@@ -9455,12 +9456,12 @@ export function CoachTeachPage(): JSX.Element {
       } catch { return null; }
     })();
     const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, midExchange: midExchangeOn }, facts: [
-      ...(gemLine ? [{ lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
-      ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
-      ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
-      ...(lastHereRead ? [{ lane: lastHereRead.key.startsWith('last-here:same:') ? 'sameAsLastTime' as const : 'lastTimeHere' as const, text: lastHereRead.text, fen: lastHereRead.fen ?? args.fenAfterReply, claims: [lastHereRead.key], proof: lastHereRead.proof }] : []),
-      ...(bookMoveRead ? [{ lane: 'bookMove' as const, text: bookMoveRead.text, fen: bookMoveRead.fen ?? args.fenAfterReply, squares: bookMoveRead.squares, claims: [bookMoveRead.key], role: 'teach' as const, proof: bookMoveRead.proof, skill: FUNDAMENTAL_TAG['left-book-early'] }] : []),
-      ...(announceLine ? [{ lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name, claims: announceClaims, ...(announceSquares.length ? { squares: announceSquares } : {}) }] : []),
+      ...(gemLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
+      ...(tacticLine ? [{ lane: 'tactic' as const, namesStudentMove: tacticLines?.[0] ? studentMovesInLine(tacticLines[0].fen, tacticLines[0].sans, studentCC, args.fenAfterReply) : NAMES_NO_MOVE, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
+      ...(threatLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
+      ...(lastHereRead ? [{ namesStudentMove: NAMES_NO_MOVE, lane: lastHereRead.key.startsWith('last-here:same:') ? 'sameAsLastTime' as const : 'lastTimeHere' as const, text: lastHereRead.text, fen: lastHereRead.fen ?? args.fenAfterReply, claims: [lastHereRead.key], proof: lastHereRead.proof }] : []),
+      ...(bookMoveRead ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'bookMove' as const, text: bookMoveRead.text, fen: bookMoveRead.fen ?? args.fenAfterReply, squares: bookMoveRead.squares, claims: [bookMoveRead.key], role: 'teach' as const, proof: bookMoveRead.proof, skill: FUNDAMENTAL_TAG['left-book-early'] }] : []),
+      ...(announceLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name, claims: announceClaims, ...(announceSquares.length ? { squares: announceSquares } : {}) }] : []),
       // Rate-matched Danya behavior — board-truth. MERGED with the positional
       // read into ONE board-read lane (David 2026-09-13: "computer and observation
       // can be merged"): it now speaks as `observation`, the single home for the
@@ -9472,7 +9473,7 @@ export function CoachTeachPage(): JSX.Element {
       // THE OPENING'S STORY, each beat in the lane that is its place in the turn
       // (`STORY_LANE`); the identity that rode the name is not offered twice.
       ...storyReads.flatMap((r) => (r.storyBeat && !(identityRidesName && r.storyBeat === 'identity')
-        ? [{ lane: STORY_LANE[r.storyBeat], text: r.text, fen: args.fenAfterReply, squares: r.squares, claims: [r.key, ...(r.sharedKey ? [r.sharedKey] : [])], role: 'teach' as const, proof: r.proof }]
+        ? [{ namesStudentMove: NAMES_NO_MOVE, lane: STORY_LANE[r.storyBeat], text: r.text, fen: args.fenAfterReply, squares: r.squares, claims: [r.key, ...(r.sharedKey ? [r.sharedKey] : [])], role: 'teach' as const, proof: r.proof }]
         : [])),
       // Corpus teaching reached by structure/concept transfer — BORROWED, and
       // now ranked as such. It used to ship at the same `note` rank as the
@@ -10203,7 +10204,7 @@ export function CoachTeachPage(): JSX.Element {
                   // One registry, every surface (unified 2026-10-17).
                   const cnt = readBoard('countMethod', { fen: probe.fen(), student: playerColor === 'white' ? 'w' : 'b' });
                   if (cnt) {
-                    queueSpokenHint(probe.fen(), cnt.text, 'countMethod', cnt.proof, cnt.squares, [cnt.key], undefined, undefined, undefined, cnt.stakes, cnt.role);
+                    queueSpokenHint(probe.fen(), cnt.text, 'countMethod', cnt.proof, NAMES_NO_MOVE, cnt.squares, [cnt.key], undefined, undefined, undefined, cnt.stakes, cnt.role);
                     captureEvent('coach_count_method_taught', { surface: 'coach-teach' });
                   }
                 } catch { /* a bonus, never a blocker */ }
@@ -10332,7 +10333,7 @@ export function CoachTeachPage(): JSX.Element {
                         try { openingNow = detectOpening([...move.history, m.san])?.name ?? null; } catch { openingNow = null; }
                         const transfer = structureTransfer(struct.name, openingNow);
                         const line = gradeNarrationText(`${struct.name} — ${struct.plan}.${transfer ? ` ${transfer}` : ''}`, probe.fen(), 'CoachTeachPage.structure')?.trim();
-                        if (line) queueSpokenHint(probe.fen(), line, 'structure', NO_PROOF.name, undefined, [`structure:${struct.name}`]);
+                        if (line) queueSpokenHint(probe.fen(), line, 'structure', NO_PROOF.name, NAMES_NO_MOVE, undefined, [`structure:${struct.name}`]);
                       }
                     } catch { /* the structure note is a bonus, never a blocker */ }
                     // THE STRUCTURAL PLAN, across the game (David 2026-10-07:
@@ -10369,7 +10370,7 @@ export function CoachTeachPage(): JSX.Element {
                         const line = gradeNarrationText(pl.text, probe.fen(), 'CoachTeachPage.structuralPlan')?.trim();
                         // The plan's routes, hop by hop (David 2026-10-15: "Arrows trace its route?").
                         const routeClaims: ArrowClaim[] = (pl.routeArrows ?? []).map((a) => ({ from: a.from, to: a.to, role: 'line', fen: a.fen, source: 'learn.planRoute' }));
-                        if (line) { queueSpokenHint(probe.fen(), line, 'planArc', pl.proof, pl.squares, [pl.key, ...(pl.sharedKey ? [pl.sharedKey] : [])], undefined, routeClaims.length ? routeClaims : undefined); planOffered.push(pl.key); }
+                        if (line) { queueSpokenHint(probe.fen(), line, 'planArc', pl.proof, namesFromArrows(routeClaims, (playerColor === 'white' ? 'w' : 'b'), probe.fen()), pl.squares, [pl.key, ...(pl.sharedKey ? [pl.sharedKey] : [])], undefined, routeClaims.length ? routeClaims : undefined); planOffered.push(pl.key); }
                       }
                       // Nothing produced: the trial's bookkeeping holds. Produced but
                       // every line graded away: nothing was said, so the trial is
@@ -10449,7 +10450,7 @@ export function CoachTeachPage(): JSX.Element {
                       // One idea, one saying: an unmoved piece is the
                       // development idea another lane may already have said.
                       if (q.ideaKey && (positionalSaidRef.current.has(q.ideaKey) || standingRef.current.said.has(q.ideaKey))) continue;
-                      queueSpokenHint(probe.fen(), q.text, 'pieceQuality', NO_PROOF.description, q.squares, [...(q.squares[0] ? [`piece-quality:${q.squares[0]}`] : []), ...(q.ideaKey ? [q.ideaKey] : [])], undefined, q.arrows);
+                      queueSpokenHint(probe.fen(), q.text, 'pieceQuality', NO_PROOF.description, namesFromArrows(q.arrows, (playerColor === 'white' ? 'w' : 'b'), probe.fen()), q.squares, [...(q.squares[0] ? [`piece-quality:${q.squares[0]}`] : []), ...(q.ideaKey ? [q.ideaKey] : [])], undefined, q.arrows);
                       captureEvent('piece_quality_spoken', { surface: 'coach-teach', kind: q.kind });
                     }
                   }
@@ -10549,9 +10550,9 @@ export function CoachTeachPage(): JSX.Element {
                     // TEMPTING move and its refutation; the hedge and the compare
                     // name the move that holds, which is the answer being held.
                     const registerNow = held ? pendingButTurn : countSpoken ? pendingRegisterNoHedge : pendingRegister;
-                    if (registerNow && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), registerNow, 'register', (pendingRegisterLines?.[0] ? lineProof(pendingRegisterLines[0], lineSeatAt(pendingRegisterLines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? NO_PROOF.withheld, undefined, undefined, undefined, undefined, pendingRegisterLines);
+                    if (registerNow && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), registerNow, 'register', (pendingRegisterLines?.[0] ? lineProof(pendingRegisterLines[0], lineSeatAt(pendingRegisterLines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? NO_PROOF.withheld, namesMoves((playerColor === 'white' ? 'w' : 'b'), probe.fen(), ...(pendingRegisterLines ?? []).flatMap((l) => { const n = studentMovesInLine(l.fen, l.sans, (playerColor === 'white' ? 'w' : 'b'), probe.fen()); return n === 'none' ? [] : n.moves; })), undefined, undefined, undefined, undefined, pendingRegisterLines);
                     const gapEchoed = gapEchoedByVerdict(gapPending?.san ?? null, pf.clauses, gapPending?.square ?? null);
-                    if (gapPending && moveAdviceHere?.speak && !gapEchoed) queueSpokenHint(probe.fen(), gapPending.text, 'gap', (gapPending.san ? legalLineProof(probe.fen(), [gapPending.san], lineSeatAt(probe.fen(), playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(gapPending.text, [gapPending.square]) ?? NO_PROOF.withheld, [gapPending.square], [`gap:${gapPending.square}:${probe.history().length}`]);
+                    if (gapPending && moveAdviceHere?.speak && !gapEchoed) queueSpokenHint(probe.fen(), gapPending.text, 'gap', (gapPending.san ? legalLineProof(probe.fen(), [gapPending.san], lineSeatAt(probe.fen(), playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(gapPending.text, [gapPending.square]) ?? NO_PROOF.withheld, gapPending.san ? namesMoves((playerColor === 'white' ? 'w' : 'b'), probe.fen(), namedSan(probe.fen(), gapPending.san)) : NAMES_NO_MOVE, [gapPending.square], [`gap:${gapPending.square}:${probe.history().length}`]);
                     // PROPHYLAXIS — the quiet move that stops their next pin or kick,
                     // named only where a move is earned and the engine agrees it is
                     // one of the best (its own top lines), never on a held move.
@@ -10566,13 +10567,13 @@ export function CoachTeachPage(): JSX.Element {
                     if (phRead && !(moveAdviceHere?.speak && !held) && phRead.idea) {
                       // Their target square and your piece only — the stopping
                       // square would hand over the held move.
-                      queueSpokenHint(probe.fen(), phRead.idea, 'prophylaxis', NO_PROOF.withheld, phRead.squares.slice(0, 2), [phRead.key], undefined,
+                      queueSpokenHint(probe.fen(), phRead.idea, 'prophylaxis', NO_PROOF.withheld, NAMES_NO_MOVE, phRead.squares.slice(0, 2), [phRead.key], undefined,
                         phRead.theirs ? [{ from: phRead.theirs.from, to: phRead.theirs.to, role: 'theirs', source: 'learn.prophylaxisIdea' }] : undefined);
                     }
                     if (moveAdviceHere?.speak && !held && studentBest?.topLines) {
                       const ph = phRead;
                       if (ph?.play) {
-                        queueSpokenHint(probe.fen(), ph.text, 'prophylaxis', ph.proof, ph.squares, [ph.key], undefined,
+                        queueSpokenHint(probe.fen(), ph.text, 'prophylaxis', ph.proof, namesMoves((playerColor === 'white' ? 'w' : 'b'), probe.fen(), ph.play), ph.squares, [ph.key], undefined,
                           [{ from: ph.play.from, to: ph.play.to, role: 'play', vouchedBy: 'engine', source: 'learn.prophylaxis' }]);
                       }
                       // MOVE ORDER (enablingMove): the engine's own line plays A first
@@ -10580,7 +10581,7 @@ export function CoachTeachPage(): JSX.Element {
                       const pv = studentBest.topLines[0]?.moves ?? [];
                       const order = readBoard('moveOrder', { fen: probe.fen(), pv });
                       if (order?.play) {
-                        queueSpokenHint(probe.fen(), order.text, 'moveOrder', order.proof, order.squares, [order.key], undefined,
+                        queueSpokenHint(probe.fen(), order.text, 'moveOrder', order.proof, namesMoves((playerColor === 'white' ? 'w' : 'b'), probe.fen(), order.play), order.squares, [order.key], undefined,
                           [{ from: order.play.from, to: order.play.to, role: 'play', vouchedBy: 'engine', source: 'learn.moveOrder' }]);
                       }
                     }
@@ -10600,7 +10601,7 @@ export function CoachTeachPage(): JSX.Element {
                       // Their move's purpose rides its own lane, above the
                       // board descriptions it used to lose to on offer order.
                       const lane = c.kind === 'stopped' ? 'theirPurpose' as const : 'positionFacts' as const;
-                      queueSpokenHint(probe.fen(), c.text, lane, (c.proof && isProof(c.proof) ? c.proof : null) ?? (c.lines?.[0] ? lineProof(c.lines[0], lineSeatAt(c.lines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(c.text, c.squares ?? []) ?? c.proof ?? NO_PROOF.description, c.squares, c.claim ? [c.claim] : undefined, c.gradeFen, undefined, c.lines, c.stakes, FACT_ROLE[c.kind], c.kind, c.skill);
+                      queueSpokenHint(probe.fen(), c.text, lane, (c.proof && isProof(c.proof) ? c.proof : null) ?? (c.lines?.[0] ? lineProof(c.lines[0], lineSeatAt(c.lines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(c.text, c.squares ?? []) ?? c.proof ?? NO_PROOF.description, c.namesStudentMove, c.squares, c.claim ? [c.claim] : undefined, c.gradeFen, undefined, c.lines, c.stakes, FACT_ROLE[c.kind], c.kind, c.skill);
                     }
                     if (pf.importance.speak) captureEvent('position_facts_spoken', { surface: 'coach-teach', tier: pf.importance.tier, clauses: pf.clauses.length });
                   }
@@ -10672,7 +10673,7 @@ export function CoachTeachPage(): JSX.Element {
                         // the student's turn), and no arrow: the arrow IS the
                         // answer. The priority and its stakes still speak.
                         const pfLine = packageForRegister({ ...pf.hint, detail: undefined }, discussion.hintDial.register);
-                        queueSpokenHint(probe.fen(), pfLine, 'priorityFirst', squaresProof(pfLine, [pf.targetSquare]) ?? NO_PROOF.withheld, [pf.targetSquare], undefined, undefined, undefined, undefined, undefined, 'teach');
+                        queueSpokenHint(probe.fen(), pfLine, 'priorityFirst', squaresProof(pfLine, [pf.targetSquare]) ?? NO_PROOF.withheld, namesMoves((playerColor === 'white' ? 'w' : 'b'), probe.fen(), { from: recUci.slice(0, 2), to: recUci.slice(2, 4) }), [pf.targetSquare], undefined, undefined, undefined, undefined, undefined, 'teach');
                       }
                     }
                     // THE REJECTED TEMPTING MOVE (the speedrun's warning
@@ -10694,7 +10695,7 @@ export function CoachTeachPage(): JSX.Element {
                         : null;
                       if (rt) {
                         captureEvent('rejected_tempting_offered', { surface: 'coach-teach', tempting: rt.temptingSan, refutation: rt.refutationSan });
-                        queueSpokenHint(probe.fen(), packageForRegister(rt.hint, discussion.hintDial.register), 'rejectedTempting', legalLineProof(probe.fen(), [rt.temptingSan, rt.refutationSan], lineSeatAt(probe.fen(), playerColor === 'white' ? 'w' : 'b')) ?? squaresProof(packageForRegister(rt.hint, discussion.hintDial.register), [rt.refutation.from, rt.refutation.to]) ?? NO_PROOF.description, [rt.refutation.from, rt.refutation.to], [`tempting:${rt.temptingSan}:${probe.fen().split(' ').slice(0, 2).join(' ')}`], undefined, [{ from: rt.refutation.from, to: rt.refutation.to, role: 'line', fen: rt.refutation.fenBefore, source: 'learn.rejectedTempting' }]);
+                        queueSpokenHint(probe.fen(), packageForRegister(rt.hint, discussion.hintDial.register), 'rejectedTempting', legalLineProof(probe.fen(), [rt.temptingSan, rt.refutationSan], lineSeatAt(probe.fen(), playerColor === 'white' ? 'w' : 'b')) ?? squaresProof(packageForRegister(rt.hint, discussion.hintDial.register), [rt.refutation.from, rt.refutation.to]) ?? NO_PROOF.description, NAMES_NO_MOVE, [rt.refutation.from, rt.refutation.to], [`tempting:${rt.temptingSan}:${probe.fen().split(' ').slice(0, 2).join(' ')}`], undefined, [{ from: rt.refutation.from, to: rt.refutation.to, role: 'line', fen: rt.refutation.fenBefore, source: 'learn.rejectedTempting' }]);
                       }
                     }
 
@@ -10747,7 +10748,7 @@ export function CoachTeachPage(): JSX.Element {
                       })();
                       const quietButConcrete = step.switched?.to === 'positional'
                         && ((tctxNow.immediate?.length ?? 0) > 0 || (gap !== null && gap >= SHARP_GAP_CP) || looseNow);
-                      if (step.switched && !mateOnBoard && !quietOnCheck && !quietButConcrete) queueSpokenHint(probe.fen(), step.switched.text, 'character', NO_PROOF.description, undefined, step.switched.to === 'conversion' ? ['convert-method', convertKey('trade-pieces')] : undefined);
+                      if (step.switched && !mateOnBoard && !quietOnCheck && !quietButConcrete) queueSpokenHint(probe.fen(), step.switched.text, 'character', NO_PROOF.description, NAMES_NO_MOVE, undefined, step.switched.to === 'conversion' ? ['convert-method', convertKey('trade-pieces')] : undefined);
                     } catch { /* the character read is a bonus, never a blocker */ }
 
                     // BOTH SIDES' PLANS, off the SAME engine read (David
@@ -10779,7 +10780,7 @@ export function CoachTeachPage(): JSX.Element {
                       for (const st of [
                         ...readBoardAll('structureBoard', { fen: probe.fen(), student: meS }),
                         ...readBoardAll('structureLines', { fen: probe.fen(), student: meS, lines: tl3.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate })) }),
-                      ]) queueSpokenHint(probe.fen(), st.text, 'structureJudgement', st.proof, st.squares, [st.key], undefined, undefined, undefined, st.stakes, st.role);
+                      ]) queueSpokenHint(probe.fen(), st.text, 'structureJudgement', st.proof, NAMES_NO_MOVE, st.squares, [st.key], undefined, undefined, undefined, st.stakes, st.role);
                     } catch { /* the structure read is a bonus, never a blocker */ }
                     try {
                       const pv = studentBest?.topLines?.[0]?.moves;
@@ -10823,7 +10824,7 @@ export function CoachTeachPage(): JSX.Element {
                           for (const e of arcLines) {
                             const line = gradeNarrationText(e.text, probe.fen(), 'CoachTeachPage.planArc')?.trim();
                             if (!line) continue;
-                            queueSpokenHint(probe.fen(), line, 'planArc', NO_PROOF.description, e.squares, [`plan:${e.seat}:${e.id}:${e.kind}${e.kind === 'advance' ? `:${e.step ?? 0}` : ''}`, ...(e.seat === 'student' && e.kind === 'emerge' ? [`plan-aim:${e.id}`] : [])]);
+                            queueSpokenHint(probe.fen(), line, 'planArc', NO_PROOF.description, NAMES_NO_MOVE, e.squares, [`plan:${e.seat}:${e.id}:${e.kind}${e.kind === 'advance' ? `:${e.step ?? 0}` : ''}`, ...(e.seat === 'student' && e.kind === 'emerge' ? [`plan-aim:${e.id}`] : [])]);
                             if (e.seat === 'student' && e.kind === 'emerge') planToldBoardsRef.current.add(probe.fen().split(' ').slice(0, 2).join(' '));
                           }
                         } catch { /* the arc is a bonus, never a blocker */ }
@@ -10879,7 +10880,7 @@ export function CoachTeachPage(): JSX.Element {
                         // a facts list nobody heard while its arrows still
                         // painted — marks without words (G8.5). The package now
                         // marks the squares only if the words survive.
-                        queueSpokenHint(probe.fen(), chainLines.join(' '), 'causalChain', squaresProof(chainLines.join(' '), causalChainHighlights(chain).map((h) => h.square)) ?? NO_PROOF.description, causalChainHighlights(chain).map((h) => h.square), [`causal:${causalChainHighlights(chain).map((h) => h.square).join(',')}`]);
+                        queueSpokenHint(probe.fen(), chainLines.join(' '), 'causalChain', squaresProof(chainLines.join(' '), causalChainHighlights(chain).map((h) => h.square)) ?? NO_PROOF.description, NAMES_NO_MOVE, causalChainHighlights(chain).map((h) => h.square), [`causal:${causalChainHighlights(chain).map((h) => h.square).join(',')}`]);
                         // A DIAGNOSTIC, NOT A SPOKEN LINE: the line is queued, and
                         // the package decides whether it is heard. Filed as
                         // "spoken", this summary landed in the run G tape as
@@ -11127,7 +11128,7 @@ export function CoachTeachPage(): JSX.Element {
                   moveCostCp: studentCpLoss,
                 });
                 instantLead = instant.lead;
-                for (const d of instant.deferred) queueSpokenHint(ip.fen(), d.text, d.lane, d.proof, d.squares, d.claims, undefined, d.arrows);
+                for (const d of instant.deferred) queueSpokenHint(ip.fen(), d.text, d.lane, d.proof, d.namesStudentMove, d.squares, d.claims, undefined, d.arrows);
                 turnLeadRef.current = instant.lead ? { fen: ip.fen(), lead: instant.lead } : null;
                 // THE PACKAGE IS THE UTTERANCE. This used to log `factLines`
                 // while speaking a separately-assembled `alertLine`/`teachLine`
@@ -11186,7 +11187,7 @@ export function CoachTeachPage(): JSX.Element {
                         learnMemRef.current.questionsAnswered.add(`${fenNow}|${ans.san}`);
                         // The move is held, so its proof is too — the threat's
                         // cost still proves the question.
-                        queueSpokenHint(fenNow, ans.text, 'threatAnswer', (() => { const tc = readBoard('threatCost', { line: ans.text, fen: fenNow, student: playerColor === 'white' ? 'w' : 'b', squares: asked.squares })?.proof; return (tc && isProof(tc) ? tc : null) ?? (ans.arrow ? legalLineProof(fenNow, [ans.san], lineSeatAt(fenNow, playerColor === 'white' ? 'w' : 'b')) : null) ?? tc ?? NO_PROOF.withheld; })(), asked.squares, [`threat-answer:${ans.kind}:${asked.squares.join('')}`], undefined, ans.arrow ? [ans.arrow] : undefined);
+                        queueSpokenHint(fenNow, ans.text, 'threatAnswer', (() => { const tc = readBoard('threatCost', { line: ans.text, fen: fenNow, student: playerColor === 'white' ? 'w' : 'b', squares: asked.squares })?.proof; return (tc && isProof(tc) ? tc : null) ?? (ans.arrow ? legalLineProof(fenNow, [ans.san], lineSeatAt(fenNow, playerColor === 'white' ? 'w' : 'b')) : null) ?? tc ?? NO_PROOF.withheld; })(), ans.san ? namesMoves((playerColor === 'white' ? 'w' : 'b'), fenNow, namedSan(fenNow, ans.san)) : NAMES_NO_MOVE, asked.squares, [`threat-answer:${ans.kind}:${asked.squares.join('')}`], undefined, ans.arrow ? [ans.arrow] : undefined);
                         captureEvent('threat_answer_queued', { surface: 'coach-teach', kind: ans.kind });
                       }
                     });
@@ -11271,7 +11272,7 @@ export function CoachTeachPage(): JSX.Element {
                       // when what it is doing is attacking the rook (run E walk).
                       // A live threat is the answer; the slow plan waits.
                       .filter((l) => !(l.lane === 'planArc' && /^What is their /.test(l.text) && /(?:^|\. )(?:Watch out|Careful) —/.test(instantSpokenText)))
-                      .map(({ lane, kind, text, squares, claims, gradeFen, lines, stakes, proof, role, factKind, skill, ownMoveReason }) => ({ lane, kind, text, squares, claims, lines, stakes, proof, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}), ...(ownMoveReason ? { ownMoveReason } : {}), fen: gradeFen ?? pending.fen })),
+                      .map(({ lane, kind, text, squares, claims, gradeFen, lines, stakes, proof, namesStudentMove, role, factKind, skill, ownMoveReason }) => ({ lane, kind, text, squares, claims, lines, stakes, proof, namesStudentMove, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}), ...(ownMoveReason ? { ownMoveReason } : {}), fen: gradeFen ?? pending.fen })),
                     alreadySaid: instantSpokenText,
                     priorKeys: learnMemRef.current.spokenKeys,
                     // ONE THOUGHT PER TURN (WO-1b): the late wave leads only
@@ -11541,13 +11542,13 @@ export function CoachTeachPage(): JSX.Element {
                     // pays off an idea the coach said earlier — close the loop.
                     {
                       const pay = payoffFor(learnMemRef.current, ((): { piece: string; to: string; captured?: string; san: string } | null => { try { return new Chess(fenBefore).move(move.san); } catch { return null; } })(), move.history.length);
-                      if (pay) queueSpokenHint(fenAfterReply, pay.say, 'movePoint', squaresProof(pay.say, [pay.square]) ?? NO_PROOF.description, [pay.square], [`payoff:${pay.key}`], move.fen);
+                      if (pay) queueSpokenHint(fenAfterReply, pay.say, 'movePoint', squaresProof(pay.say, [pay.square]) ?? NO_PROOF.description, NAMES_NO_MOVE, [pay.square], [`payoff:${pay.key}`], move.fen);
                     }
                     // THE TIE THE MOVE CREATED (tiedDefender): their guard now cannot
                     // leave — said only while it still holds after their reply.
                     {
                       const tie = readBoard('tiedDefender', { fenBefore, fenAfterMove: move.fen, fenAfterReply, student: playerColor === 'white' ? 'w' : 'b' });
-                      if (tie) queueSpokenHint(fenAfterReply, tie.text, 'movePoint', tie.proof, tie.squares, [tie.key]);
+                      if (tie) queueSpokenHint(fenAfterReply, tie.text, 'movePoint', tie.proof, NAMES_NO_MOVE, tie.squares, [tie.key]);
                     }
                     for (const h of studentMoveTeaching({
                       fenBefore, san: move.san, history: move.history, cpLoss, bothCp,
@@ -11562,7 +11563,7 @@ export function CoachTeachPage(): JSX.Element {
                       // THE GREEN DIRECTION OUT LOUD: the student just held a question
                       // their record says they failed in another game.
                       const heldBefore = learnHeldRecurrence(h.evidence?.tag, weaknessSignalsRef.current, learnMemRef.current.gameId, learnMemRef.current.recalled);
-                      queueSpokenHint(fenAfterReply, heldBefore ? `${h.text} ${heldBefore}` : h.text, h.lane, h.proof, h.squares, h.claims, move.fen, h.arrows, undefined, h.stakes);
+                      queueSpokenHint(fenAfterReply, heldBefore ? `${h.text} ${heldBefore}` : h.text, h.lane, h.proof, h.namesStudentMove, h.squares, h.claims, move.fen, h.arrows, undefined, h.stakes);
                       if (h.event) captureEvent(h.event.name, h.event.props);
                       // DUAL-USE (P4): the lane that teaches it also records it.
                       recordTeachingEvidence(h, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
@@ -11574,7 +11575,7 @@ export function CoachTeachPage(): JSX.Element {
                       const tr = drilledTransferLine(fenBefore, playedUci, preStudentRead.bestMove || null, drilledMotifsRef.current);
                       if (tr && !drilledSaidRef.current.has(tr.motif)) {
                         drilledSaidRef.current.add(tr.motif);
-                        queueSpokenHint(fenAfterReply, tr.text, 'foundMove', legalLineProof(fenBefore, [move.san], lineSeatAt(fenBefore, playerColor === 'white' ? 'w' : 'b'), true) ?? NO_PROOF.description, [move.to], [`drilled-transfer:${tr.motif}`]);
+                        queueSpokenHint(fenAfterReply, tr.text, 'foundMove', legalLineProof(fenBefore, [move.san], lineSeatAt(fenBefore, playerColor === 'white' ? 'w' : 'b'), true) ?? NO_PROOF.description, NAMES_NO_MOVE, [move.to], [`drilled-transfer:${tr.motif}`]);
                         captureEvent('coach_drilled_transfer', { surface: 'coach-teach', motif: tr.motif });
                       }
                     } catch { /* the transfer is a bonus, never a blocker */ }
@@ -11586,7 +11587,7 @@ export function CoachTeachPage(): JSX.Element {
                         brk.said = true;
                         const mine = move.history.filter((_, i) => i >= brk.atPly && (i % 2 === 0) === (playerColor === 'white'));
                         const line = openingSummaryLine(brk, mine, fenAfterReply);
-                        if (line) queueSpokenHint(fenAfterReply, line, 'openingIdea', NO_PROOF.description, [brk.square], [`opening-summary:${brk.san}`]);
+                        if (line) queueSpokenHint(fenAfterReply, line, 'openingIdea', NO_PROOF.description, namesMoves((playerColor === 'white' ? 'w' : 'b'), fenAfterReply, namedSan(fenAfterReply, brk.san)), [brk.square], [`opening-summary:${brk.san}`]);
                       }
                     } catch { /* the summary is a bonus, never a blocker */ }
                     // The student's eval AFTER the move, their side — one value for
@@ -11683,7 +11684,7 @@ export function CoachTeachPage(): JSX.Element {
                         // waits for Show me.
                         if (!heldNow.shown && heldMove && found) {
                           const foundText = heldVerdictText(heldNow, 'found');
-                          queueSpokenHint(fenAfterReply, foundText, 'heldMove', legalLineProof(fenBefore, [move.san], lineSeatAt(fenBefore, playerColor === 'white' ? 'w' : 'b'), true) ?? NO_PROOF.description, [move.to], [`found-${move.san}`], fenBefore);
+                          queueSpokenHint(fenAfterReply, foundText, 'heldMove', legalLineProof(fenBefore, [move.san], lineSeatAt(fenBefore, playerColor === 'white' ? 'w' : 'b'), true) ?? NO_PROOF.description, NAMES_NO_MOVE, [move.to], [`found-${move.san}`], fenBefore);
                         }
                         captureEvent('learn_move_held_answered', { surface: 'coach-teach', found, shown: heldNow.shown });
                       }
@@ -11712,7 +11713,7 @@ export function CoachTeachPage(): JSX.Element {
                             // ledger says it once (walk oct3b, 15…e5: "e5 prepares
                             // e4 …" twice in one breath).
                             const foundKeys = [`slip-found:${move.san}`, move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`];
-                            queueSpokenHint(fenAfterReply, text, 'slipAnswer', NO_PROOF.description, [answer.to], foundKeys, fenBefore);
+                            queueSpokenHint(fenAfterReply, text, 'slipAnswer', NO_PROOF.description, NAMES_NO_MOVE, [answer.to], foundKeys, fenBefore);
                           }
                         }
                         captureEvent('learn_slip_answered', { surface: 'coach-teach', found });
@@ -11791,7 +11792,7 @@ export function CoachTeachPage(): JSX.Element {
                         ? [`win-${look.square}`] : fund?.id === 'botched-conversion' ? ['convert-method'] : [`look:${look.kind}:${move.history.length}`];
                       // THE VERDICT'S PROOF is the punishing line it names (#68).
                       queueSpokenHint(fenAfterReply, line, look.kind,
-                        (!fund && look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci, lineSeatAt(look.punishLine.fen, playerColor === 'white' ? 'w' : 'b')) : fund?.lines?.[0] ? lineProof(fund.lines[0], lineSeatAt(fund.lines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(line, lookSquares) ?? NO_PROOF.description, lookSquares, winClaim, move.fen,
+                        (!fund && look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci, lineSeatAt(look.punishLine.fen, playerColor === 'white' ? 'w' : 'b')) : fund?.lines?.[0] ? lineProof(fund.lines[0], lineSeatAt(fund.lines[0].fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(line, lookSquares) ?? NO_PROOF.description, NAMES_NO_MOVE, lookSquares, winClaim, move.fen,
                         // The punishing line the words play out, drawn ply by ply.
                         !fund && look.punishLine ? lineArrowClaims(look.punishLine.fen, look.punishLine.uci, 'teach.punishLine') : undefined,
                         // The fundamental's own lines lead this sentence.
@@ -11810,7 +11811,7 @@ export function CoachTeachPage(): JSX.Element {
                       // its own; the fundamental IS the teaching here.
                       const bookSaidAlone = fundamental.id === 'left-book-early'
                         && studentJustLeftBook(move.history, playerColor === 'white' ? 'w' : 'b');
-                      queueSpokenHint(fenAfterReply, `${noteSlip(learnMemRef.current, fundamental.id)}${bookSaidAlone ? fundamental.howOnly : fundamental.verdict}`, 'fundamental', NO_PROOF.method, [], fundamental.id === 'botched-conversion' ? ['convert-method'] : undefined, move.fen, undefined, bookSaidAlone ? undefined : fundamental.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG[fundamental.id] ?? undefined);
+                      queueSpokenHint(fenAfterReply, `${noteSlip(learnMemRef.current, fundamental.id)}${bookSaidAlone ? fundamental.howOnly : fundamental.verdict}`, 'fundamental', NO_PROOF.method, NAMES_NO_MOVE, [], fundamental.id === 'botched-conversion' ? ['convert-method'] : undefined, move.fen, undefined, bookSaidAlone ? undefined : fundamental.lines, undefined, undefined, undefined, FUNDAMENTAL_TAG[fundamental.id] ?? undefined);
                       captureEvent('coach_fundamental_named', {
                         surface: 'coach-teach', fundamental: fundamental.id, cp_loss: Math.round(cpLoss),
                       });
@@ -11885,7 +11886,7 @@ export function CoachTeachPage(): JSX.Element {
                           recordTeachingEvidence(found, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
                         }
                       } catch { /* the verdict is a bonus, never a blocker */ }
-                      if (gambitLine) queueSpokenHint(fenAfterReply, gambitLine, 'movePoint', NO_PROOF.description, [], [`gambit:${move.to}`]);
+                      if (gambitLine) queueSpokenHint(fenAfterReply, gambitLine, 'movePoint', NO_PROOF.description, NAMES_NO_MOVE, [], [`gambit:${move.to}`]);
                       // The point keeps what the ledger proved (A-plan P5): a capture that
                       // wins carries its engine line as proof and its net as stake.
                       const pointFact = gambitLine ? null : studentMovePointFact(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null, preStudentRead?.topLines?.find((l) => l.moves[0] === `${move.from}${move.to}${move.promotion ?? ''}`)?.moves ?? null);
@@ -11906,7 +11907,7 @@ export function CoachTeachPage(): JSX.Element {
                       const fileHeard = !!fileKey && (positionalSaidRef.current.has(fileKey) || standingRef.current.said.has(fileKey));
                       if (point && !nowLoose && !fileHeard) {
                         // A capture's point and the trade verdict are one claim about one square.
-                        queueSpokenHint(fenAfterReply, point, 'movePoint', (pointFact?.line ? lineProof(pointFact.line, lineSeatAt(pointFact.line.fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? NO_PROOF.description, pointFact?.squares ?? [], [move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`, ...(fileKey ? [fileKey] : [])], undefined, undefined, undefined, pointFact?.stakes ?? undefined);
+                        queueSpokenHint(fenAfterReply, point, 'movePoint', (pointFact?.line ? lineProof(pointFact.line, lineSeatAt(pointFact.line.fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? NO_PROOF.description, pointFact?.line ? studentMovesInLine(pointFact.line.fen, pointFact.line.sans, (playerColor === 'white' ? 'w' : 'b'), fenAfterReply, 1) : NAMES_NO_MOVE, pointFact?.squares ?? [], [move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`, ...(fileKey ? [fileKey] : [])], undefined, undefined, undefined, pointFact?.stakes ?? undefined);
                         captureEvent('coach_move_point_named', { surface: 'coach-teach' });
                       }
                       // EVERY STUDENT MOVE GETS ITS OWN REASON (David 2026-10-14):
@@ -11936,7 +11937,7 @@ export function CoachTeachPage(): JSX.Element {
                           // The follow-up that works NOW, as the move to play.
                           // DUAL-USE (P4): the right order played is calculation answered.
                           recordHeld('calculation-depth', 80, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
-                          queueSpokenHint(fenAfterReply, order.text, 'moveOrder', squaresProof(order.text, order.squares) ?? NO_PROOF.description, order.squares, [`order:${order.followUp.uci}`, `stops:${order.answer.uci}`], undefined,
+                          queueSpokenHint(fenAfterReply, order.text, 'moveOrder', squaresProof(order.text, order.squares) ?? NO_PROOF.description, order.held ? NAMES_NO_MOVE : namesMoves((playerColor === 'white' ? 'w' : 'b'), fenAfterReply, { from: order.followUp.uci.slice(0, 2), to: order.followUp.uci.slice(2, 4) }), order.squares, [`order:${order.followUp.uci}`, `stops:${order.answer.uci}`], undefined,
                             // A held order names neither move, so it draws neither.
                             order.held ? [] : [
                               { from: order.followUp.uci.slice(0, 2), to: order.followUp.uci.slice(2, 4), role: 'play', source: 'learn.moveOrder' },
@@ -12012,7 +12013,7 @@ export function CoachTeachPage(): JSX.Element {
                           : null;
                         const theReason = learned?.reason ?? null;
                         if (theReason?.kind === 'the' && theReason.source === 'material') {
-                          queueSpokenHint(fenAfterReply, theReason.text, 'moveIntent', learned?.proof ?? NO_PROOF.description, theReason.squares, [`reason:${playedUci}`], fenBefore, undefined,
+                          queueSpokenHint(fenAfterReply, theReason.text, 'moveIntent', learned?.proof ?? NO_PROOF.description, NAMES_NO_MOVE, theReason.squares, [`reason:${playedUci}`], fenBefore, undefined,
                             theReason.line ? [theReason.line] : undefined,
                             { points: Math.min(theReason.stakeCp ?? 0, 2000) / 100, plies: 1 }, 'teach', 'reason');
                         }
@@ -12040,7 +12041,7 @@ export function CoachTeachPage(): JSX.Element {
                           const stoppedPrep = !!intent.prevents && preventsNamedIdea(learnMemRef.current.theirPrep, fenBefore, intent.prevents.uci);
                           const baseText = prepRule ? `${intent.text.replace(/\.$/, '')} — ${prepRule.text}.` : intent.text;
                           const intentText = `${stoppedPrep ? `${baseText} ${STOPPED_THEIR_IDEA}` : baseText}${reasonTail ? ` ${reasonTail}` : ''}`;
-                          queueSpokenHint(fenAfterReply, intentText, 'moveIntent', squaresProof(intentText, intent.squares) ?? NO_PROOF.description, intent.squares, [
+                          queueSpokenHint(fenAfterReply, intentText, 'moveIntent', squaresProof(intentText, intent.squares) ?? NO_PROOF.description, NAMES_NO_MOVE, intent.squares, [
                             ...(intent.prevents ? [`stops:${intent.prevents.uci}`] : []),
                             ...(intent.prepares ? [`prepares:${intent.prepares.uci}`] : []),
                             // "Bc4 clears the way to castle" and "castling is one
@@ -12140,7 +12141,7 @@ export function CoachTeachPage(): JSX.Element {
                   // leaves open — through the one registry.
                   if (replySan) {
                     for (const st of readBoardAll('structureTheirMove', { fenBefore: move.fen, san: replySan, student: playerColor === 'white' ? 'w' : 'b' })) {
-                      queueSpokenHint(fenAfterReply, st.text, 'structureJudgement', st.proof, st.squares, [st.key], undefined, undefined, undefined, st.stakes, st.role);
+                      queueSpokenHint(fenAfterReply, st.text, 'structureJudgement', st.proof, NAMES_NO_MOVE, st.squares, [st.key], undefined, undefined, undefined, st.stakes, st.role);
                     }
                   }
                   const split = splitPositionTeaching(fenAfterReply, playerColor === 'white' ? 'w' : 'b');
@@ -12193,7 +12194,7 @@ export function CoachTeachPage(): JSX.Element {
                       // A line from the board on screen walks; a stopped
                       // threat's line is evidence and stays the proof only.
                       const walk = r.line && r.line.fen === move.fen ? [r.line] : undefined;
-                      queueSpokenHint(fenAfterReply, r.text, 'theirIntent', learned.proof, r.squares, [`their-reason:${theirUci}`], move.fen, undefined,
+                      queueSpokenHint(fenAfterReply, r.text, 'theirIntent', learned.proof, NAMES_NO_MOVE, r.squares, [`their-reason:${theirUci}`], move.fen, undefined,
                         walk,
                         r.stakeCp ? { points: Math.min(r.stakeCp, 2000) / 100, plies: 1 } : undefined, 'teach', 'reason');
                       theirReasonSaid = true;
@@ -12216,7 +12217,7 @@ export function CoachTeachPage(): JSX.Element {
                       // here until now. A small preparation stays below the bar.
                       const prep = theirIntent.prepares;
                       learnMemRef.current.theirPrep = { uci: prep.uci, fen: fenAfterReply };
-                      queueSpokenHint(fenAfterReply, theirText, 'theirIntent', squaresProof(theirText, theirIntent.squares) ?? NO_PROOF.description, theirIntent.squares, [
+                      queueSpokenHint(fenAfterReply, theirText, 'theirIntent', squaresProof(theirText, theirIntent.squares) ?? NO_PROOF.description, NAMES_NO_MOVE, theirIntent.squares, [
                         `their-prepares:${prep.uci}`,
                         ...(theirIntent.prevents ? [`stops:${theirIntent.prevents.uci}`] : []),
                         ...(theirRule?.keys ?? []).map((k) => `principle:${k}`),
@@ -12272,7 +12273,7 @@ export function CoachTeachPage(): JSX.Element {
                       const dictated = learnMemRef.current.lastReplyDictated !== null;
                       const verdict = theirOpeningVerdict([...move.history, cm.playedSan], playerColor === 'white' ? 'w' : 'b', oppLoss, !dictated);
                       if (verdict) {
-                        queueSpokenHint(fenAfterReply, verdict, 'theirMoveCost', NO_PROOF.description, undefined, [`their-opening-verdict:${move.history.length + 1}`]);
+                        queueSpokenHint(fenAfterReply, verdict, 'theirMoveCost', NO_PROOF.description, NAMES_NO_MOVE, undefined, [`their-opening-verdict:${move.history.length + 1}`]);
                         captureEvent('coach_their_opening_verdict', { surface: 'coach-teach', cost: Math.round(oppLoss) });
                       }
                     }
@@ -12342,7 +12343,7 @@ export function CoachTeachPage(): JSX.Element {
                     const gemCalledIt = learnMemRef.current.gemFen !== null
                       && samePosition(learnMemRef.current.gemFen, cm.fenAfter);
                     if (look && !gemCalledIt) {
-                      queueSpokenHint(cm.fenAfter, look.line, look.kind, (look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci, lineSeatAt(look.punishLine.fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(look.line, /^[a-h][1-8]$/.test(look.square) ? [look.square] : []) ?? NO_PROOF.description, undefined, [`look:${look.kind}:coach:${cm.fenAfter.split(' ').slice(0, 2).join(' ')}`], undefined, undefined, undefined, look.stakes);
+                      queueSpokenHint(cm.fenAfter, look.line, look.kind, (look.punishLine ? lineProofFromUci(look.punishLine.fen, look.punishLine.uci, lineSeatAt(look.punishLine.fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? squaresProof(look.line, /^[a-h][1-8]$/.test(look.square) ? [look.square] : []) ?? NO_PROOF.description, NAMES_NO_MOVE, undefined, [`look:${look.kind}:coach:${cm.fenAfter.split(' ').slice(0, 2).join(' ')}`], undefined, undefined, undefined, look.stakes);
                       // The coach told the student to look — remember the board
                       // so the answer is revealed once they have moved from it.
                       learnMemRef.current.slipAnswer = look.offersStudent ? { fen: cm.fenAfter, theirSan: cm.playedSan } : null;

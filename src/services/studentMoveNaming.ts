@@ -9,8 +9,9 @@ import { Chess } from 'chess.js';
 
 export interface NamedMove { from: string; to: string }
 
-/** 'none' — the sentence names no move of the student's (a verdict on a move
- *  already played, their threat, the book move after the student left it).
+/** 'none' — the sentence names no move of the student's UNASKED (a verdict on
+ *  a move already played, their threat, the book move after the student left
+ *  it, or an answer the student asked for — Why?, Show me, a question).
  *  Otherwise: the student's moves it names, and `fen`, the board the student
  *  moves on NEXT — never the board the fact is graded on, which can be a past
  *  one (the book move is graded where the student left it). */
@@ -68,4 +69,21 @@ export function boardAfterSans(fen: string, sans: ReadonlyArray<string | null | 
     for (const s of sans) if (s) c.move(s.replace(/^…/, ''));
     return c.fen();
   } catch { return fen; }
+}
+
+/** The student's moves a producer's own arrows already point at: every 'play'
+ *  arrow (a move offered to play), and every ply of a drawn line made by the
+ *  student (its board has the student to move). Read off the arrows the
+ *  producer computed, never off the prose. */
+export function namesFromArrows(
+  arrows: ReadonlyArray<{ from: string; to: string; role?: string; fen?: string }> | null | undefined,
+  student: 'w' | 'b',
+  nowFen: string,
+): NamesStudentMove {
+  const out: NamedMove[] = [];
+  for (const a of arrows ?? []) {
+    if (a.role === 'play') { out.push({ from: a.from, to: a.to }); continue; }
+    if (a.role === 'line' && a.fen && a.fen.split(' ')[1] === student) out.push({ from: a.from, to: a.to });
+  }
+  return namesMoves(student, nowFen, ...out);
 }
