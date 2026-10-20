@@ -1137,7 +1137,13 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       // walk 2026-10-04, G2 ply 53 false red). The plan computer proves the
       // square on its own line; this checker has no board to read it on.
       if (/\bcreate a passed\s*$/i.test(sentence)) continue;
-      const cell = (past || alternative ? posBefore : pos).get(m[2].toLowerCase());
+      // A RECAPTURE'S CONSEQUENCE IS THE BOARD AFTER THE RECAPTURE (Najdorf
+      // Zagreb, jMVMo1Ua ply 53 false red: "After Bxc5, taking back leaves
+      // their pawn on c5 isolated" — true once …dxc5 is played, and the game
+      // played it). Read it on the board one ply on.
+      const recapture = /\btaking back leaves\b/i.test(sentence);
+      const posNext = new Chess(); for (let k = 0; k < Math.min(n + 1, SANS.length); k++) posNext.move(SANS[k]);
+      const cell = (recapture ? posNext : past || alternative ? posBefore : pos).get(m[2].toLowerCase());
       if (!cell || cell.type !== PIECE[m[1].toLowerCase()]) accFails.push(`ply ${n}: "${m[1]} on ${m[2]}" but board has ${cell ? cell.type : 'empty'}`);
     }
     // SEAT — whose ply this is comes from the GAME (see `isStudentPly`), not
