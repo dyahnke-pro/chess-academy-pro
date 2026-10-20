@@ -10566,8 +10566,11 @@ export function CoachTeachPage(): JSX.Element {
                     if (phRead && !(moveAdviceHere?.speak && !held) && phRead.idea) {
                       // Their target square and your piece only — the stopping
                       // square would hand over the held move.
-                      queueSpokenHint(probe.fen(), phRead.idea, 'prophylaxis', NO_PROOF.withheld, NAMES_NO_MOVE, phRead.squares.slice(0, 2), [phRead.key], undefined,
-                        phRead.theirs ? [{ from: phRead.theirs.from, to: phRead.theirs.to, role: 'theirs', source: 'learn.prophylaxisIdea' }] : undefined);
+                      // The held idea carries the THREAT's own proof, squares and
+                      // line, and the idea's claim — the same key the phase
+                      // lane's copy carries, so say-once sees one fact (OS-1).
+                      queueSpokenHint(probe.fen(), phRead.idea.text, 'prophylaxis', phRead.idea.proof, NAMES_NO_MOVE, phRead.idea.squares, [`${phRead.key}:idea`], undefined,
+                        phRead.theirs ? [{ from: phRead.theirs.from, to: phRead.theirs.to, role: 'theirs', source: 'learn.prophylaxisIdea' }] : undefined, phRead.idea.lines);
                     }
                     if (moveAdviceHere?.speak && !held && studentBest?.topLines) {
                       const ph = phRead;

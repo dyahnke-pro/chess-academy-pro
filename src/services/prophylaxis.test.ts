@@ -42,14 +42,15 @@ describe('prevent, one move early, with the move held', () => {
     const { readBoard } = await import('./boardComputers');
     const fenW = after(['e4', 'e5', 'Nf3', 'd6', 'd4', 'Nf6', 'Nc3', 'Nc6']);
     const r = readBoard('prophylaxis', { fen: fenW, engineFirstMoves: ['h2h3'] });
-    expect(r?.idea).toBe('Watch Bg4 — it would pin your knight on f3. One move stops it before it lands.');
-    expect(r?.idea).not.toMatch(/h3/);
+    expect(r?.idea?.text).toBe('Watch Bg4 — it would pin your knight on f3. One move stops it before it lands.');
+    expect(r?.idea?.text).not.toMatch(/h3/);
+    expect(r?.idea?.squares).not.toContain('h3');
     expect(r?.theirs).toEqual({ from: 'c8', to: 'g4' });
   }, 60000);
   it('Learn speaks the held idea where the move cannot be named (wiring)', async () => {
     const { readFileSync } = await import('node:fs');
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(src).toMatch(/if \(phRead && !\(moveAdviceHere\?\.speak && !held\) && phRead\.idea\) \{/);
-    expect(src).toMatch(/queueSpokenHint\(probe\.fen\(\), phRead\.idea, 'prophylaxis'/);
+    expect(src).toMatch(/queueSpokenHint\(probe\.fen\(\), phRead\.idea\.text, 'prophylaxis', phRead\.idea\.proof/);
   });
 });

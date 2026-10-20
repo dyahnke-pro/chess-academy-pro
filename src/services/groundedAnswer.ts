@@ -28,6 +28,7 @@ import { countWords } from '../utils/countWords';
 import { isSacrifice } from './factStakes';
 import { seatPieceReferences } from '../utils/seatPieces';
 import { mobilityMap } from './nextPlans';
+import { theirWantedMoves, theirWantSentence } from './prophylaxis';
 import { Chess } from 'chess.js';
 import { moverLineProof } from './exchangeLedger';
 import { isRealPin } from './pinGeometry';
@@ -666,26 +667,11 @@ function keepItClause(fen: string, sq: Square, me: 'w' | 'b'): string {
 
 /** The opponent's next-move pins and forks against `me`, as "…Bg4 would pin
  *  the knight on f3 to the queen on d1". Board geometry on their move. */
+// ONE OWNER (OS-1 root cause 1): their wanted pin, kick or fork is read by
+// `theirWantedMoves`, the computer Learn's prevention and the obvious-stop
+// verdict read — never a third scan with its own safety rule.
 export function opponentIdeas(fen: string, me: 'w' | 'b'): string[] {
-  const parts = fen.split(' ');
-  parts[1] = me === 'w' ? 'b' : 'w';
-  parts[3] = '-';
-  let theirs: Chess;
-  try { theirs = new Chess(parts.join(' ')); } catch { return []; }
-  if (theirs.inCheck()) return [];
-  const themColor: 'white' | 'black' = me === 'w' ? 'black' : 'white';
-  const out: string[] = [];
-  for (const m of theirs.moves({ verbose: true })) {
-    let geo: string | null = null;
-    try { geo = describeMoveGeometry(theirs.fen(), m.san, themColor); } catch { geo = null; }
-    if (!geo || !/^(?:pins|forks)\b/.test(geo)) continue;
-    // Lost on arrival is not an idea.
-    let lost: number | null = 0;
-    try { lost = captureRead(m.after, m.to, me); } catch { lost = null; }
-    if (lost === null || lost >= (MATERIAL_VALUE[m.piece] ?? 0)) continue;
-    out.push(`${me === 'w' ? '…' : ''}${m.san} would ${geo.replace(/^pins/, 'pin').replace(/^forks/, 'fork')}`);
-  }
-  return out;
+  return theirWantedMoves(fen, me).map((w) => theirWantSentence(w, me));
 }
 
 // ── KING SAFETY — "is my king safe?" ────────────────────────────────────────
