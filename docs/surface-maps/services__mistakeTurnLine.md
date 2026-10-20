@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**74 lines · 3 exports · 4 importers · 3 tests · 0 audits**
+**74 lines · 3 exports · 5 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,6 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/services/bxf7LostSquare.test.ts`
 - `src/services/learnBoardTeaching.ts`
 - `src/services/mistakeTurnLine.test.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
@@ -19,7 +20,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `sameLossAsGrade` (function) — 5 call sites
+### `sameLossAsGrade` (function) — 6 call sites
+- `src/services/bxf7LostSquare.test.ts:24`
 - `src/services/mistakeTurnLine.test.ts:62`
 - `src/services/mistakeTurnLine.test.ts:63`
 - `src/services/mistakeTurnLine.test.ts:64`
@@ -30,7 +32,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `mistakeTurnLine` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11969`
+- `src/components/Coach/CoachTeachPage.tsx:11971`
 - `src/services/mistakeTurnLine.test.ts:22`
 - `src/services/mistakeTurnLine.test.ts:35`
 - `src/services/mistakeTurnLine.test.ts:43`
@@ -40,6 +42,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/bxf7LostSquare.test.ts`
 - `src/services/mistakeTurnLine.test.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
 - `src/services/whyItFailed.lostSquare.test.ts`

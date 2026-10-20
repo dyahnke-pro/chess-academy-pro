@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**294 lines · 10 exports · 19 importers · 12 tests · 0 audits**
+**301 lines · 11 exports · 20 importers · 13 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,6 +19,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFeatureService.ts`
 - `src/services/learnBoardTeaching.openingPlan.test.ts`
 - `src/services/learnBoardTeaching.ts`
+- `src/services/openingAnnouncement.test.ts`
 - `src/services/openingAnnouncement.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/openingIdea.test.ts`
@@ -47,7 +48,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:1016`
 - `src/services/reviewOpeningTheory.ts:251`
 
-### `setOpeningIdentity` (function) — 19 call sites
+### `setOpeningIdentity` (function) — 23 call sites
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:39`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:54`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:92`
@@ -57,6 +58,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFeatureService.studentJob.test.ts:14`
 - `src/services/coachFeatureService.studentJob.test.ts:22`
 - `src/services/learnBoardTeaching.openingPlan.test.ts:13`
+- `src/services/openingAnnouncement.test.ts:265`
+- `src/services/openingAnnouncement.test.ts:274`
+- `src/services/openingAnnouncement.test.ts:279`
+- `src/services/openingAnnouncement.test.ts:281`
 - `src/services/openingIdea.test.ts:9`
 - `src/services/openingIdentity.test.ts:9`
 - `src/services/openingIdentity.test.ts:80`
@@ -68,19 +73,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewNarrationRev.gate.test.ts:30`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:24`
 
+### `openingIdentityStatus` (function) — 1 call site
+- `src/services/openingAnnouncement.ts:290`
+
 ### `identityFor` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2121`
+- `src/services/coachFeatureService.ts:2158`
 - `src/services/openingIdentity.test.ts:36`
 - `src/services/openingStory.ts:204`
 
 ### `planFor` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:2121`
-- `src/services/coachFeatureService.ts:2137`
+- `src/services/coachFeatureService.ts:2158`
+- `src/services/coachFeatureService.ts:2174`
 - `src/services/learnBoardTeaching.ts:781`
 - `src/services/lookaheadPlan.ts:523`
 - `src/services/lookaheadPlan.ts:1164`
 - `src/services/lookaheadPlan.ts:1165`
-- `src/services/openingAnnouncement.ts:203`
+- `src/services/openingAnnouncement.ts:204`
 - `src/services/openingIdentity.test.ts:82`
 - `src/services/openingIdentity.test.ts:87`
 - `src/services/openingStory.ts:216`
@@ -89,18 +97,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `LiveIdentityBoard` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `isWaypointOpening` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2121`
-- `src/services/openingAnnouncement.ts:87`
+### `isWaypointOpening` (function) — 8 call sites
+- `src/services/coachFeatureService.ts:2158`
+- `src/services/openingAnnouncement.ts:88`
+- `src/services/openingAnnouncement.ts:289`
 - `src/services/openingStory.ts:178`
 - `src/services/openingStory.ts:185`
 - `src/services/openingStory.ts:335`
 - `src/services/openingStory.ts:350`
 - `src/services/openingStory.ts:382`
 
-### `openingIdentityLine` (function) — 19 call sites
+### `openingIdentityLine` (function) — 20 call sites
 - `src/services/coachApi.ts:5770`
 - `src/services/coachApi.ts:6401`
+- `src/services/openingAnnouncement.ts:292`
 - `src/services/openingGenerator.ts:2438`
 - `src/services/openingIdentity.test.ts:18`
 - `src/services/openingIdentity.test.ts:20`
@@ -132,6 +142,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFeatureService.reviewNoise.test.ts`
 - `src/services/coachFeatureService.studentJob.test.ts`
 - `src/services/learnBoardTeaching.openingPlan.test.ts`
+- `src/services/openingAnnouncement.test.ts`
 - `src/services/openingIdea.test.ts`
 - `src/services/openingIdentity.test.ts`
 - `src/services/openingStory.test.ts`

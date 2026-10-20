@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**903 lines · 24 exports · 6 importers · 3 tests · 0 audits**
+**920 lines · 24 exports · 7 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/capabilityEvidence.ts`
+- `src/services/exchangeIdeas.replied.test.ts`
 - `src/services/exchangeIdeas.test.ts`
 - `src/services/goldenPositional.test.ts`
 - `src/services/learnBoardTruth.realGame.test.ts`
@@ -131,17 +132,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:187`
 - `src/services/exchangeIdeas.test.ts:188`
 
-### `exchangeIdeas` (function) — 7 call sites
+### `exchangeIdeas` (function) — 9 call sites
+- `src/services/exchangeIdeas.replied.test.ts:15`
+- `src/services/exchangeIdeas.replied.test.ts:19`
 - `src/services/exchangeIdeas.test.ts:180`
 - `src/services/exchangeIdeas.test.ts:197`
 - `src/services/exchangeIdeas.test.ts:227`
 - `src/services/exchangeIdeas.test.ts:228`
 - `src/services/exchangeIdeas.test.ts:232`
-- `src/services/positionFacts.ts:1208`
+- `src/services/positionFacts.ts:1211`
 - `src/services/reviewFullData.ts:987`
 
 ## Tests
 
+- `src/services/exchangeIdeas.replied.test.ts`
 - `src/services/exchangeIdeas.test.ts`
 - `src/services/goldenPositional.test.ts`
 - `src/services/learnBoardTruth.realGame.test.ts`

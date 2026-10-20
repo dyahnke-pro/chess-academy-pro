@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5740 lines · 30 exports · 57 importers · 71 tests · 4 audits**
+**5792 lines · 30 exports · 58 importers · 72 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -62,6 +62,7 @@
 - `src/services/reviewNarrationCache.ts`
 - `src/services/reviewNarrationRev.gate.test.ts`
 - `src/services/reviewNeedGate.test.ts`
+- `src/services/reviewOneFailureSentence.test.ts`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRefuted.test.ts`
@@ -115,8 +116,8 @@
 
 ### `foldReviewRefrains` (function) — 3 call sites
 - `src/components/Coach/CoachGameReview.tsx:1840`
-- `src/services/reviewLedgerCounters.test.ts:42`
-- `src/services/reviewLedgerCounters.test.ts:48`
+- `src/services/reviewLedgerCounters.test.ts:55`
+- `src/services/reviewLedgerCounters.test.ts:61`
 
 ### `SpokenLedgerSeed` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -150,7 +151,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegments` (function) — 103 call sites
+### `buildReviewSegments` (function) — 104 call sites
 - `src/components/Coach/CoachGameReview.tsx:1839`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
@@ -251,6 +252,7 @@
 - `src/services/reviewNeedGate.test.ts:81`
 - `src/services/reviewNeedGate.test.ts:88`
 - `src/services/reviewNeedGate.test.ts:94`
+- `src/services/reviewOneFailureSentence.test.ts:16`
 - `src/services/reviewTheirHabit.test.ts:12`
 - `src/test/computedOrderWired.test.ts:59`
 - `src/test/everySurfaceSpeaks.test.ts:94`
@@ -300,10 +302,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8315`
-- `src/components/Coach/CoachTeachPage.tsx:8411`
-- `src/components/Coach/CoachTeachPage.tsx:11096`
-- `src/components/Coach/CoachTeachPage.tsx:11486`
+- `src/components/Coach/CoachTeachPage.tsx:8316`
+- `src/components/Coach/CoachTeachPage.tsx:8412`
+- `src/components/Coach/CoachTeachPage.tsx:11098`
+- `src/components/Coach/CoachTeachPage.tsx:11488`
 - `src/services/coachFeatureService.test.ts:907`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/utils/justCaptured.test.ts:20`
@@ -429,6 +431,7 @@
 - `src/services/reviewNarrationCache.test.ts`
 - `src/services/reviewNarrationRev.gate.test.ts`
 - `src/services/reviewNeedGate.test.ts`
+- `src/services/reviewOneFailureSentence.test.ts`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRefuted.test.ts`

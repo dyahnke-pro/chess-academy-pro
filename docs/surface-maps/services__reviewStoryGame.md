@@ -20,13 +20,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isOpenableModelGame` (function) — 1 call site
-- `src/services/openingIdentity.ts:241`
+- `src/services/openingIdentity.ts:248`
 
 ### `momentVerifies` (function) — 1 call site
 - `src/data/modelGameMoments.test.ts:20`
 
 ### `pickStoryGame` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:1687`
+- `src/services/coachFeatureService.ts:1694`
 - `src/services/reviewStoryGame.test.ts:8`
 - `src/services/reviewStoryGame.test.ts:9`
 - `src/services/reviewStoryGame.test.ts:25`
