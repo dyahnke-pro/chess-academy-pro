@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1008 lines · 32 exports · 979 importers · 244 tests · 38 audits**
+**1008 lines · 32 exports · 980 importers · 244 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -727,6 +727,8 @@
 - `src/services/engineDeltaLines.ts`
 - `src/services/enginePlanContext.test.ts`
 - `src/services/enginePlanContext.ts`
+- `src/services/exploredMoveGrade.test.ts`
+- `src/services/exploredMoveGrade.ts`
 - `src/services/explorerTeachLine.test.ts`
 - `src/services/explorerTeachLine.ts`
 - `src/services/falseAlarm.test.ts`
@@ -992,7 +994,6 @@
 - `src/test/benchmarks/stockfish.perf.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 - `src/test/factories.ts`
-- `src/test/learnNamesNoMoveOs11.gate.test.ts`
 - `src/utils/arrowGrounding.ts`
 - `src/utils/coachNarration.ts`
 - `src/utils/commonMistakeLine.test.ts`
@@ -1231,6 +1232,7 @@
 - `src/services/endgameProfileService.test.ts`
 - `src/services/engineDeltaLines.test.ts`
 - `src/services/enginePlanContext.test.ts`
+- `src/services/exploredMoveGrade.test.ts`
 - `src/services/explorerTeachLine.test.ts`
 - `src/services/falseAlarm.test.ts`
 - `src/services/fixtureGames.test.tsx`
@@ -1343,7 +1345,6 @@
 - `src/test/benchmarks/dexie.perf.test.ts`
 - `src/test/benchmarks/stockfish.perf.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
-- `src/test/learnNamesNoMoveOs11.gate.test.ts`
 - `src/utils/commonMistakeLine.test.ts`
 - `src/utils/openingShelf.test.ts`
 - `src/utils/wlppLadder.test.ts`

@@ -95,8 +95,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseClaims` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10665`
-- `src/hooks/usePhaseNarration.door.test.ts:78`
+- `src/components/Coach/CoachTeachPage.tsx:10656`
+- `src/hooks/usePhaseNarration.door.test.ts:75`
 - `src/hooks/usePhaseNarration.ts:468`
 
 ### `clauseText` (function) — 11 call sites
@@ -114,7 +114,7 @@
 
 ### `computePositionFacts` (function) — 98 call sites
 - `src/coach/boardTurnAnswer.ts:135`
-- `src/components/Coach/CoachTeachPage.tsx:10539`
+- `src/components/Coach/CoachTeachPage.tsx:10530`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:268`
 - `src/hooks/usePhaseNarration.ts:432`
@@ -216,7 +216,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:8950`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10812`
+- `src/components/Coach/CoachTeachPage.tsx:10803`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 

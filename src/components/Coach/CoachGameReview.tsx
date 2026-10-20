@@ -44,7 +44,8 @@ import { computePvLine, type PvLine } from '../../services/pvPlayback';
 import { projectedLineVoice } from '../../services/projectedLineVoice';
 import { voiceFacts } from '../../services/coachApi';
 import { buildPrincipleQuiz, quizVerdictLine, type PrincipleQuiz } from '../../services/principleQuiz';
-import { holdBatchAnalysis, classifyCpLoss, scanCriticalMoments, recordPromptedFind, recordFreeBoardFind } from '../../services/gameAnalysisService';
+import { gradeExploredMove } from '../../services/exploredMoveGrade';
+import { holdBatchAnalysis, scanCriticalMoments, recordPromptedFind, recordFreeBoardFind } from '../../services/gameAnalysisService';
 import { classifyGameTheme, type GameThemeResult } from '../../services/gameThemeClassifier';
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildCriticalMomentQuestion, judgeCriticalMomentPick, type CriticalMomentQuestion } from '../../services/reviewTurningPoint';
@@ -1782,21 +1783,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       ]);
     } catch { before = null; after = null; }
     if (!alive()) return;
-    let moverIsWhite = true;
-    try { moverIsWhite = new Chess(args.fenBefore).turn() === 'w'; } catch { /* keep */ }
-    const clamp = (cp: number): number => Math.max(-1000, Math.min(1000, cp));
-    let classification: MoveClassification | null = null;
-    let bestUci: string | null = null;
-    if (before && after) {
-      const cpLoss = moverIsWhite
-        ? clamp(before.evaluation) - clamp(after.evaluation)
-        : clamp(after.evaluation) - clamp(before.evaluation);
-      classification = classifyCpLoss(cpLoss, before.evaluation, after.evaluation, moverIsWhite, args.san.includes('#'));
-      try {
-        const bp = new Chess(args.fenBefore).move({ from: before.bestMove.slice(0, 2), to: before.bestMove.slice(2, 4), promotion: before.bestMove.length > 4 ? before.bestMove[4] : undefined });
-        bestUci = bp && bp.san !== args.san ? before.bestMove : null;
-      } catch { bestUci = null; }
-    }
+    // ONE PRICE: best and played scored in one search (`gradeExploredMove`),
+    // never the read before minus a separate read after.
+    const graded = before ? await gradeExploredMove({ fenBefore: args.fenBefore, san: args.san, before, depth: EXPLORE_DEPTH }).catch(() => null) : null;
+    if (!alive()) return;
+    const classification: MoveClassification | null = graded?.classification ?? null;
+    const bestUci: string | null = graded?.bestUci ?? null;
     // The SAME segment builder the walk uses, over the whole line (game +
     // exploration), so opening naming, say-once and the fundamentals all see
     // the real history. Only the LAST segment (this move) is spoken.
@@ -1816,13 +1808,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           san: mv.san,
           isCoachMove: isCoach,
           classification: isLast ? classification : (gameMove?.classification ?? null),
-          evaluation: isLast ? (after?.evaluation ?? null) : (gameMove?.evaluation ?? null),
-          preMoveEval: isLast ? (before?.evaluation ?? null) : prevEval,
+          evaluation: isLast ? (graded?.playedWhiteCp ?? null) : (gameMove?.evaluation ?? null),
+          preMoveEval: isLast ? (graded?.bestWhiteCp ?? null) : prevEval,
           bestMove: isLast ? bestUci : (gameMove?.bestMove ?? null),
           fenAfter: c.fen(),
-          ...(!isLast && typeof gameMove?.costCp === 'number' ? { costCp: gameMove.costCp } : {}),
+          ...(isLast && graded ? { costCp: graded.costCp } : !isLast && typeof gameMove?.costCp === 'number' ? { costCp: gameMove.costCp } : {}),
         });
-        prevEval = isLast ? (after?.evaluation ?? null) : (gameMove?.evaluation ?? null);
+        prevEval = isLast ? (graded?.playedWhiteCp ?? null) : (gameMove?.evaluation ?? null);
       }
     } catch { /* an unreplayable line narrates nothing */ }
     if (inputs.length === 0 || !alive()) return;
