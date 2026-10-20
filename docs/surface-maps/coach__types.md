@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1008 lines · 32 exports · 981 importers · 242 tests · 38 audits**
+**1008 lines · 32 exports · 982 importers · 242 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -781,7 +781,6 @@
 - `src/services/inaccuracyVoice.ts`
 - `src/services/journeyService.test.ts`
 - `src/services/journeyService.ts`
-- `src/services/keyMoments.noCap.test.ts`
 - `src/services/kidPuzzleService.test.ts`
 - `src/services/kidPuzzleService.ts`
 - `src/services/kidRatingService.ts`
@@ -824,6 +823,8 @@
 - `src/services/mistakePuzzleService.test.ts`
 - `src/services/mistakePuzzleService.ts`
 - `src/services/modelGameService.ts`
+- `src/services/moveCost.keyMoments.test.ts`
+- `src/services/moveCost.ts`
 - `src/services/moveInsight.ts`
 - `src/services/moveIntent.measure.test.ts`
 - `src/services/moveIntent.takesAway.test.ts`
@@ -1256,7 +1257,6 @@
 - `src/services/homeOpeningService.test.ts`
 - `src/services/homeOpeningSteer.test.ts`
 - `src/services/journeyService.test.ts`
-- `src/services/keyMoments.noCap.test.ts`
 - `src/services/kidPuzzleService.test.ts`
 - `src/services/lichessPuzzleService.test.ts`
 - `src/services/liveTacticsContext.discoveryLookahead.test.ts`
@@ -1275,6 +1275,7 @@
 - `src/services/mistakeNarration.test.ts`
 - `src/services/mistakeProvenance.test.ts`
 - `src/services/mistakePuzzleService.test.ts`
+- `src/services/moveCost.keyMoments.test.ts`
 - `src/services/moveIntent.measure.test.ts`
 - `src/services/moveIntent.takesAway.test.ts`
 - `src/services/moveIntent.test.ts`

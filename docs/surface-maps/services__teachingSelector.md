@@ -59,7 +59,7 @@
 
 ### `selectTeaching` (function) — 16 call sites
 - `src/hooks/usePhaseNarration.ts:555`
-- `src/services/coachFeatureService.ts:1321`
+- `src/services/coachFeatureService.ts:1324`
 - `src/services/gameTurn.test.ts:43`
 - `src/services/gameTurn.test.ts:47`
 - `src/services/needCoverage.report.test.ts:60`

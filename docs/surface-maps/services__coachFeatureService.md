@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5529 lines · 32 exports · 53 importers · 57 tests · 4 audits**
+**5578 lines · 31 exports · 53 importers · 57 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -40,9 +40,9 @@
 - `src/services/gameThemeClassifier.ts`
 - `src/services/gradeGatesTeachingCost.test.ts`
 - `src/services/habitBothSeats.test.ts`
-- `src/services/keyMoments.noCap.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/loosePattern.test.ts`
+- `src/services/moveCost.keyMoments.test.ts`
 - `src/services/namedMoveArrows.test.ts`
 - `src/services/oneCostPerMove.test.ts`
 - `src/services/oneLinePerPly.test.ts`
@@ -75,7 +75,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/components/Coach/CoachGamePage.tsx:2028`
+- `src/components/Coach/CoachGamePage.tsx:2033`
 - `src/services/coachFeatureService.test.ts:204`
 - `src/services/coachFeatureService.test.ts:219`
 - `src/services/coachFeatureService.test.ts:242`
@@ -92,8 +92,8 @@
 
 ### `generateNarrativeSummary` (function) — 4 call sites
 - `src/components/Coach/CoachGameReview.tsx:570`
-- `src/services/keyMoments.noCap.test.ts:42`
-- `src/services/keyMoments.noCap.test.ts:44`
+- `src/services/moveCost.keyMoments.test.ts:43`
+- `src/services/moveCost.keyMoments.test.ts:45`
 - `src/services/recapSeat.test.ts:17`
 
 ### `recapSecondPerson` (function) — 9 call sites
@@ -144,7 +144,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegments` (function) — 88 call sites
+### `buildReviewSegments` (function) — 93 call sites
 - `src/components/Coach/CoachGameReview.tsx:1824`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
@@ -161,8 +161,8 @@
 - `src/services/coachFeatureService.learnParity.test.ts:46`
 - `src/services/coachFeatureService.learnParity.test.ts:52`
 - `src/services/coachFeatureService.learnParity.test.ts:71`
-- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:37`
-- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:88`
+- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:42`
+- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:94`
 - `src/services/coachFeatureService.oneCost.test.ts:28`
 - `src/services/coachFeatureService.oneCost.test.ts:33`
 - `src/services/coachFeatureService.openingStory.test.ts:33`
@@ -170,7 +170,12 @@
 - `src/services/coachFeatureService.openingStory.test.ts:57`
 - `src/services/coachFeatureService.openingStory.test.ts:71`
 - `src/services/coachFeatureService.openingStory.test.ts:84`
-- `src/services/coachFeatureService.openingStory.test.ts:99`
+- `src/services/coachFeatureService.openingStory.test.ts:101`
+- `src/services/coachFeatureService.openingStory.test.ts:118`
+- `src/services/coachFeatureService.openingStory.test.ts:126`
+- `src/services/coachFeatureService.openingStory.test.ts:137`
+- `src/services/coachFeatureService.openingStory.test.ts:151`
+- `src/services/coachFeatureService.openingStory.test.ts:176`
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.planChange.test.ts:36`
 - `src/services/coachFeatureService.planChange.test.ts:48`
@@ -284,7 +289,7 @@
 ### `pendingRecapture` (function) — 11 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8273`
 - `src/components/Coach/CoachTeachPage.tsx:8365`
-- `src/components/Coach/CoachTeachPage.tsx:11269`
+- `src/components/Coach/CoachTeachPage.tsx:11297`
 - `src/services/coachFeatureService.test.ts:907`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/utils/justCaptured.test.ts:20`
@@ -335,12 +340,6 @@
 - `src/services/oneLinePerPly.test.ts:38`
 - `src/services/oneLinePerPly.test.ts:39`
 
-### `findKeyMoments` (function) — 4 call sites
-- `src/components/Coach/CoachGamePage.tsx:2046`
-- `src/components/Coach/CoachGamePage.tsx:2068`
-- `src/services/keyMoments.noCap.test.ts:24`
-- `src/services/keyMoments.noCap.test.ts:31`
-
 ### `advantageWasMissed` (re-export) — 6 call sites
 - `src/services/advantageWasMissed.test.ts:8`
 - `src/services/advantageWasMissed.test.ts:11`
@@ -382,10 +381,10 @@
 - `src/services/gameThemeClassifier.test.ts`
 - `src/services/gradeGatesTeachingCost.test.ts`
 - `src/services/habitBothSeats.test.ts`
-- `src/services/keyMoments.noCap.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/loosePattern.test.ts`
 - `src/services/methodBeat.test.ts`
+- `src/services/moveCost.keyMoments.test.ts`
 - `src/services/namedMoveArrows.test.ts`
 - `src/services/oneCostPerMove.test.ts`
 - `src/services/oneLinePerPly.test.ts`
