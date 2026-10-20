@@ -237,6 +237,15 @@ export function findProphylaxis(fen: string): Prophylaxis | null {
   return null;
 }
 
+/** THE ONE KEY for "their next move lands on this square and hits your piece"
+ *  (the pin, kick or fork they want). The full read, its held idea and the
+ *  "obvious stop" that fails all make this claim, so all three carry it — the
+ *  ledger and the turn's holds then see one fact however it is worded (7.O-O
+ *  replay 2026-10-20: held as 'prophylaxis:g4', spoken as ':idea'). */
+export function prophylaxisKey(theirSquare: string): string {
+  return `prophylaxis:${theirSquare}`;
+}
+
 /** The proof: what their move would do, and why it no longer works. Exact. */
 export function prophylaxisProof(p: Prophylaxis): Proof {
   const covers = p.prevention.piece === 'p'

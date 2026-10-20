@@ -30,10 +30,16 @@ const call = async (path, body) => {
 const drop = JSON.parse(readFileSync(DROP, 'utf8'));
 const learnGames = drop.stores.games.filter((g) => g.source === 'coach' && String(g.id).startsWith('teach-'))
   .sort((a, b) => String(b.date).localeCompare(String(a.date)));
-const game = args[0] && !args[0].startsWith('--') ? drop.stores.games.find((g) => g.id === args[0]) : learnGames[0];
+// `--sans "e4 c5 …" --seat white` replays a move list that is not a saved
+// Learn game (a hand walk's free-played game), on the same record.
+const sansArg = (() => { const i = args.indexOf('--sans'); return i >= 0 ? args[i + 1] : null; })();
+const seatArg = (() => { const i = args.indexOf('--seat'); return i >= 0 ? args[i + 1] : null; })();
+const game = sansArg
+  ? { id: 'sans', studentSide: seatArg ?? 'white', pgn: sansArg }
+  : args[0] && !args[0].startsWith('--') ? drop.stores.games.find((g) => g.id === args[0]) : learnGames[0];
 if (!game) { console.error('no Learn game in the drop'); process.exit(1); }
 const seat = game.studentSide ?? 'white';
-const c = new Chess(); c.loadPgn(game.pgn);
+const c = new Chess(); if (sansArg) { for (const m of sansArg.split(/\s+/).filter(Boolean)) c.move(m); } else c.loadPgn(game.pgn);
 const sans = c.history();
 console.log(`replaying ${game.id} — ${sans.length} plies, student plays ${seat}`);
 

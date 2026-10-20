@@ -9,13 +9,15 @@
 //   sharp    — forcing rate + theory depth of the main line
 //   famous   — real over-the-board master games that reached it
 // Fetched lazily, never on the move path (the `openingPositions` pattern).
-// A LEAF: no imports beyond the move speller.
+// A LEAF: no imports beyond the move speller and the one /data/ loader
+// (dataFile reaches IndexedDB only by a lazy import).
 import { openSentence } from '../utils/openSentence';
 import { sayMoveNoun } from './spokenMove';
 import { countWords } from '../utils/countWords';
 import { shareAdverb } from '../utils/shareWords';
 import type { MastersPlanRead } from './mastersPlanRead';
 import { isOpenableModelGame } from './reviewStoryGame';
+import { loadDataJson } from './dataFile';
 
 
 export interface IdentityFacts {
@@ -47,9 +49,10 @@ let loading: Promise<void> | null = null;
 /** Load once (chat awaits it; Learn warms it and reads when ready). */
 export function loadOpeningIdentity(): Promise<void> {
   if (facts || typeof fetch !== 'function') return Promise.resolve();
-  loading ??= fetch('/data/opening-identity.json')
-    .then((r) => (r.ok ? r.json() as Promise<IdentityMap> : null))
-    .then((j) => { if (j) facts = j; })
+  // Through the one /data/ loader: the native bundle strips public/data, so
+  // a bare fetch 404s on iOS and the opening story never loads (2026-10-20).
+  loading ??= loadDataJson('/data/opening-identity.json')
+    .then((j) => { if (j) facts = j as IdentityMap; })
     .catch(() => undefined)
     .finally(() => { loading = null; });
   return loading;

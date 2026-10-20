@@ -17,7 +17,7 @@ import { sayMoveClause } from './spokenMove';
 import { countWords } from '../utils/countWords';
 import { pvSans, hookCreated, holeAccess } from './moveInsight';
 import { walkableLine, lineProof, NO_PROOF, type FactProof, type Proof } from './proof';
-import { findProphylaxis, prophylaxisThreatProof } from './prophylaxis';
+import { findProphylaxis, prophylaxisKey, prophylaxisThreatProof } from './prophylaxis';
 import { criticalityThresholds } from './criticalityScan';
 import { lineSeatAt } from '../utils/andList';
 import { kingAttackReads, type KingRead } from './kingAttackReads';
@@ -328,7 +328,7 @@ export function depthClauses(args: {
       // Never argue with the engine: the verdict on the stop is its own
       // (game 2, 10.Ng5 — the engine prefers h3, so h3 is the answer, not a flaw).
       const flaw = obviousStopFlaw(args.fen, args.studentColor, args.topLines);
-      if (flaw) out.push({ kind: 'stop-flaw', text: flaw.text, proof: flaw.proof, squares: flaw.squares, lines: flaw.lines, ...(flaw.motif ? { motif: flaw.motif } : {}) });
+      if (flaw) out.push({ kind: 'stop-flaw', text: flaw.text, proof: flaw.proof, squares: flaw.squares, lines: flaw.lines, ...(flaw.motif ? { motif: flaw.motif } : {}), claim: prophylaxisKey(flaw.threatTo) });
     }
     // READING THEIR MOVE (computers batch 2) — on the student's turn, what
     // their last move threatened quietly, needs, lifted, wrongly expected, or
@@ -378,7 +378,7 @@ export function depthClauses(args: {
       const geo = readBoardAll('tacticGeometry', { fen: args.fen, me: args.studentColor, pv: args.topLines[0]?.moves ?? [], register: 'live', ...(args.lastOpponentMove ? { lastOpponentMove: args.lastOpponentMove } : {}) });
       for (const g of geo) {
         if (g.namesMove && !args.nameMove) {
-          if (g.idea) out.push({ kind: 'speedrun-read', text: g.idea.text, proof: g.idea.proof, ...(g.idea.squares.length ? { squares: [...g.idea.squares] } : {}), claim: `${g.key}:idea` });
+          if (g.idea) out.push({ kind: 'speedrun-read', text: g.idea.text, proof: g.idea.proof, ...(g.idea.squares.length ? { squares: [...g.idea.squares] } : {}), claim: g.key });
           continue;
         }
         out.push({ kind: 'tactic', text: g.text, squares: g.squares, claim: g.key, ...('kind' in g.proof ? { proof: g.proof } : {}), ...(g.stakes ? { stakes: g.stakes } : {}), ...(g.motif ? { motif: g.motif } : {}), ...(g.lines ? { lines: g.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}) });
@@ -447,7 +447,7 @@ export function obviousStopFlaw(
   fen: string,
   me: 'w' | 'b',
   topLines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>,
-): { threatSan: string; stopSan: string; text: string; proof: Proof; squares: string[]; lines: Array<{ fen: string; sans: string[] }>; motif?: TacticType } | null {
+): { threatSan: string; threatTo: string; stopSan: string; text: string; proof: Proof; squares: string[]; lines: Array<{ fen: string; sans: string[] }>; motif?: TacticType } | null {
   let board: Chess;
   try { board = new Chess(fen); } catch { return null; }
   if (board.turn() !== me) return null;
@@ -460,6 +460,7 @@ export function obviousStopFlaw(
   const theirTurn = p.threat.line.fen;
   return {
     threatSan: p.intent.san,
+    threatTo: p.intent.to,
     stopSan: p.prevention.san,
     text: `They want ${sayMoveClause(p.intent.san, theirTurn)}, ${verb} your ${PIECE_WORD[p.victim.piece] ?? 'piece'} on ${p.victim.square}. The obvious stop is ${sayMoveClause(p.prevention.san, fen)}, but that pawn becomes a hook for their pawn on ${hook.pawn} — find another way.`,
     proof: prophylaxisThreatProof(p),

@@ -58,7 +58,8 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
   it('the plan arc is queued on its own lane (closed until WO-2 proves it true)', () => {
     // It carried kind 'plan', which the old DNA kind whitelist never listed, so
     // from 2026-09-27 to 2026-09-29 it was computed every turn and never heard.
-    expect(TEACH).toMatch(/queueSpokenHint\(probe\.fen\(\), line, 'planArc', NO_PROOF\.description, e\.squares[,)]/);
+    // (OS-10, 2026-10-20: the may-name-the-student's-move field sits before the squares.)
+    expect(TEACH).toMatch(/queueSpokenHint\(probe\.fen\(\), line, 'planArc', NO_PROOF\.description, NAMES_NO_MOVE, e\.squares[,)]/);
   });
 
   it('the coach callout is queued at the rank the model gives it', () => {
@@ -92,13 +93,17 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // already names the SAME lost square — `lossInGrade`.)
     // (2026-10-13: a mate it allowed speaks alone — `fund` is null then.)
     expect(TEACH).toMatch(/const fund = look\.stakes\?\.mate\?\.for === 'them' \? null : fundamental;/);
-    expect(TEACH).toMatch(/const line = `\$\{fund\s*\?\s*`\$\{lossInGrade \? '' : noteSlip\(learnMemRef\.current, fund\.id\)\}\$\{lossInGrade \? '' : bookSaid \? fund\.howOnly : fund\.verdict\}[\s\S]{0,160}?\$\{evidence[\s\S]{0,40}?`\.trim\(\)\s*:\s*`\$\{look\.line\}\$\{takeDefinition\(look\.pattern\)\}[\s\S]{0,80}?`\}\$\{concession \? ` \$\{concession\}` : ''\}[\s\S]{0,60}?`;/);
+    // (2026-10-20: one loss, one habit — the line is composed by
+    // `mistakeTurnLine`, whose own tests pin the order: grade, fundamental's
+    // HOW, recurrence, concession, and the slip question only when no habit
+    // was taught. Smith-Morra 8.Bxf7+.)
+    expect(TEACH).toMatch(/const line = mistakeTurnLine\(\{\s*fund, evidence, lostSquare: look\.lostSquare \?\? null, bookSaid,/);
     // (unify-the-coach B3, 2026-10-01: the grade's missed pattern carries its
     // rule once a game, from the one definition ledger.)
     expect(TEACH).toMatch(/const concession = lookConcession\(fenBefore, move\.san, cpLoss, studentEvalAfterCp\);/);
     // A fundamental with NO material drawback still speaks, on its own.
     // (Colle re-walk 2026-09-27: graded on the student-move board, `move.fen`.)
-    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, `\$\{noteSlip\(learnMemRef\.current, fundamental\.id\)\}\$\{bookSaidAlone \? fundamental\.howOnly : fundamental\.verdict\}`, 'fundamental', NO_PROOF\.method, \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines[,)]/);
+    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, `\$\{noteSlip\(learnMemRef\.current, fundamental\.id\)\}\$\{bookSaidAlone \? fundamental\.howOnly : fundamental\.verdict\}`, 'fundamental', NO_PROOF\.method, NAMES_NO_MOVE, \[\], [^,]*\? \['convert-method'\] : undefined, move\.fen, undefined, bookSaidAlone \? undefined : fundamental\.lines[,)]/);
   });
 
   it('the hint register speaks rather than only prompting', () => {
@@ -155,7 +160,10 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // …and a question-then-answer line (the think pause) speaks BOTH halves
     // through the same seam.
     expect(body).toMatch(/speakComputed\(qa\[0\], \{ forced: true, intent: 'learn-live' \}\)/);
-    expect(body).toMatch(/speakComputed\(qa\[1\], \{ forced: true, intent: 'learn-live' \}\)/);
+    // (2026-10-19: the answer half is OWED — spoken the turn after the
+    // student plays, resolved against their move — through the same seam.)
+    expect(body).toMatch(/pendingAnswerRef\.current = qa\[1\];/);
+    expect(TEACH).toMatch(/if \(owedSaid\) speechChainRef\.current = speakComputed\(owedSaid, \{ forced: true, intent: 'learn-live' \}\)/);
     expect(body).not.toMatch(/voiceService\.speak/);
   });
 });
@@ -239,15 +247,17 @@ describe('phase narration is judged against the board it was computed from', () 
   // different ones, so a sentence true when detected became "board-false"
   // because the student moved while it was being phrased and streamed.
   it('grades against event.fen, not against whatever is on screen', () => {
-    expect(PHASE).toMatch(/isSpokenSentenceGrounded\(trimmed, event\.fen/);
-    expect(PHASE, 'the sentence is graded against a board it was not computed from')
-      .not.toMatch(/isSpokenSentenceGrounded\(trimmed, judgeFen/);
+    // Each fact is graded WHOLE on the board it was computed from (its own
+    // `gradeFen`, else the transition's).
+    expect(PHASE).toMatch(/isSpokenSentenceGrounded\(p, f\.gradeFen \?\? event\.fen/);
+    expect(PHASE, 'a fact is graded against a board it was not computed from')
+      .not.toMatch(/isSpokenSentenceGrounded\([^)]*judgeFen/);
   });
 
   it('hands the package the same board the gate used', () => {
     // Handing the package a different fen than the gate is how a line passes
     // one check and fails the other.
-    expect(PHASE).toMatch(/kind: 'computed', text: trimmed, fen: event\.fen/);
+    expect(PHASE).toMatch(/speakFacts\(phaseFacts, event\.fen\)/);
   });
 
   it('decides staleness ONCE, for the whole transition', () => {
@@ -295,7 +305,9 @@ describe('the couplings that make the wiring safe', () => {
   it('both verdicts come from ONE read of the board between the two moves', () => {
     // `move.fen` is where the student's move arrived AND where the coach moves
     // from, so one analysis answers both questions and costs one search.
-    expect(TEACH).toMatch(/const midTurnRead = stockfishEngine\s*\n?\s*\.analyzeWithBudget\(move\.fen/);
+    // (OS-18: a costly turn starts the same read early — still one read of move.fen.)
+    expect(TEACH).toMatch(/const midTurnReadEarly = verdictUrgent \? stockfishEngine\.analyzeWithBudget\(move\.fen,/);
+    expect(TEACH).toMatch(/const midTurnRead = midTurnReadEarly \?\? stockfishEngine\s*\n?\s*\.analyzeWithBudget\(move\.fen/);
     expect(TEACH).toMatch(/const mid = await midTurnRead;/);
     expect(TEACH, 'the student half never reaches the backward look').toMatch(/backwardLook\(\{/);
     expect(TEACH, 'the coach half never reaches the callout').toMatch(/side: 'coach'/);
@@ -550,7 +562,7 @@ describe('the couplings that make the wiring safe', () => {
     const ANALYTICS = read('src/services/analytics.ts');
     for (const kind of [
       'phase-transition-detected', 'phase-transition-suppressed',
-      'phase-narration-latency', 'phase-narration-fallback-shown',
+      'phase-narration-latency',
     ]) {
       expect(ANALYTICS, `${kind} is emitted but mirrored nowhere`).toContain(`'${kind}':`);
     }
@@ -607,7 +619,9 @@ describe('the move verdict goes before the phase beat (Sicilian Closed ply 28, 2
   it('the phase transition waits for the verdict pass and stands down on a mistake', () => {
     // e6 lost the queen; in the same breath the phase beat took stock ("You're
     // down 2 points of material here", "Their rook on f3 is well placed").
-    expect(TEACH_CODE).toMatch(/const verdictPass = factsReady\.then\(/);
+    // (OS-18: the verdict no longer waits for the full fact bundle — it runs
+    // on the move's read and price.)
+    expect(TEACH_CODE).toMatch(/const verdictPass = Promise\.all\(\[midTurnRead, priceRead\]\)\.then\(/);
     expect(TEACH_CODE).toMatch(/if \(look \|\| fundamental\) mistakeCalledThisTurn = true;/);
     expect(TEACH_CODE).toMatch(/verdictPass\.then\([\s\S]{0,200}if \(mistakeCalledThisTurn \|\| liveFenRef\.current !== phaseFen\) return;\s*runPhaseTransition\(phaseFen/);
     // NEGATIVE: no call fires the transition straight from the move handler.

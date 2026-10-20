@@ -331,7 +331,7 @@ export function skipMiddleman(fen: string, bestSan: string | null): Read | null 
   const hit = [-1, 1].map((d) => `${String.fromCharCode(r.move.to.charCodeAt(0) + d)}${Number(r.move.to[1]) + (r.move.color === 'w' ? 1 : -1)}`)
     .find((q) => { const p = r.board.get(q as Square); return p && p.type === 'p' && p.color !== r.move.color; });
   const promise: GamePromise = { key: `break:${r.move.to}`, piece: 'p', square: r.move.to, say: `There's the ${r.move.from[0]}-pawn break we talked about${hit ? ` — it hits their pawn on ${hit}` : ''}.` };
-  return { claim: `srr:break-ready:${r.move.to}`, promise, idea: `Your ${r.move.from[0]}-pawn break${hit ? ` against their pawn on ${hit}` : ''} is ready now — no need to prepare it; every preparing move is a move they get too.`, namesMove: true, text: `The break is ready now — ${sayMoveClause(bestSan, fen)}. No need to prepare it first; every preparing move is a move they get to use too.`, squares: [r.move.to] };
+  return { claim: `srr:break-ready:${r.move.to}`, promise, idea: 'A pawn break is ready now — find it. No need to prepare it; every preparing move is a move they get too.', namesMove: true, text: `The break is ready now — ${sayMoveClause(bestSan, fen)}. No need to prepare it first; every preparing move is a move they get to use too.`, squares: [r.move.to] };
 }
 
 /** THE USEFUL WAITING MOVE: no move matters much, and the engine's is a small

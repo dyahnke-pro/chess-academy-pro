@@ -60,7 +60,10 @@ describe('the live composer calls carry the student model (B3)', () => {
   it('useLiveCoach: the opponent\'s trigger passes lastMove: null, the student\'s passes the real cost', () => {
     const src = read('src/hooks/useLiveCoach.ts');
     expect(src).toMatch(/lastMove: null,/);
-    expect(src).toMatch(/cpLoss: Math\.max\(0, \(studentBestEval \?\? studentEvalBefore\) - studentEvalAfter\)/);
+    // (One price, 2026-10-20: the student's move carries its ONE memoized price,
+    // never a read before minus a read after; unpriced stays null.)
+    expect(src).toMatch(/cpLoss: n\.price\?\.costCp \?\? null,/);
+    expect(src).not.toMatch(/cpLoss: Math\.max\(0, \(studentBestEval/);
   });
 
   it('the shapes are REQUIRED, so a new caller fails to compile rather than silently reopening this', () => {

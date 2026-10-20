@@ -4481,8 +4481,8 @@ from **19 of 20 openings to 10** and LESSON BACKGROUND from 19 to 12 — Taimano
 French, Italian, QGD, Slav, English, KID, Nimzo, Catalan and Dutch all went
 silent. All 10,022 are reachable by a live tier (6,908 by name, 3,114 by
 concept, **zero** unreachable). Before removing corpus content, measure
-`transitionTeachingForGame` and `buildDanyaTeachingBlock` coverage across ~20
-openings both ways; the position tiers alone will tell you nothing.
+`buildDanyaTeachingBlock` coverage across ~20 openings both ways; the position
+tiers alone will tell you nothing.
 
 **WHAT ELSE IS ALREADY FETCHED, so pruning it saves NO boot bytes:** every farmed
 corpus. `seedDatabase()` does not fetch them and there is zero production call
@@ -4587,10 +4587,9 @@ SPEAK ONLY WHERE… rule above), WHICH notes may speak is split by anchoring:
   surface; a floating note never does).
 
 **Use the existing retrieval, never a new one.** `teachingNoteForBoard`
-(exact position → prefix → opening family → structure → concept) and
-`transitionTeachingForGame` are the reference implementations; they are already
-board-gated. A new surface calls one of them. Reinventing retrieval is how a
-surface ends up selecting by name.
+(exact position → prefix → opening family → structure → concept) is the
+reference implementation; it is already board-gated. A new surface calls it.
+Reinventing retrieval is how a surface ends up selecting by name.
 
 **A WIRE THAT DOES NOT FIRE IS NOT A WIRE (David 2026-08-07: "I don't want to run
 an audit and find nothing working").** Every integration ships with a test that

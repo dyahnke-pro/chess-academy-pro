@@ -11,6 +11,7 @@
 import { Chess } from 'chess.js';
 import type { MoveScorer, ScoredMove } from './pvPlayback';
 import { alternativeCostCp } from './refutedAlternativeCore';
+import type { CoachGameMove, KeyMoment } from '../types';
 
 export interface CostFan {
   topLines?: ReadonlyArray<{ evaluation: number; mate: number | null; moves: readonly string[] }>;
@@ -36,6 +37,10 @@ export interface SameSearchScores { bestWhiteCp: number; playedWhiteCp: number }
 export interface MovePrice {
   costCp: number;
   scores: SameSearchScores | null;
+  /** The price no longer straddles a band within the search's own noise
+   *  (`playedMoveGrade.priceSettled`). An unsettled price may not AFFIRM a
+   *  move: the 10.Bf4 depth-14 read was 59cp (praised), depth 16 ~150. */
+  settled: boolean;
 }
 
 /** A move that walked into, or let slip, a forced mate has no centipawn price
@@ -85,19 +90,6 @@ export async function moveScoresOneSearch(input: {
   return { costCp: Math.max(0, cost), bestWhiteCp: best.evaluation, playedWhiteCp: played.evaluation };
 }
 
-/** Centipawns the played move gives up against the best one, from the mover's
- *  seat, >= 0 — `moveScoresOneSearch`'s cost. */
-export async function moveCostOneSearch(input: {
-  fenBefore: string;
-  playedUci: string;
-  fan: CostFan | null;
-  scorer: MoveScorer;
-  depth: number;
-}): Promise<number | null> {
-  const lines = (input.fan?.topLines ?? []).filter((l) => l.moves.length > 0);
-  if (lines[0]?.moves[0] && lines[0].moves[0] === input.playedUci) return 0;
-  return (await moveScoresOneSearch(input))?.costCp ?? null;
-}
 
 /** The UCI of a SAN move on `fen`, or null when it is not legal there. */
 export function uciOfSan(fen: string, san: string): string | null {
@@ -118,4 +110,30 @@ export function recordedMoveCost(
   if (typeof m.costCp === 'number') return m.costCp;
   if (m.preMoveEval == null || m.evaluation == null) return null;
   return Math.max(0, mover === 'white' ? m.preMoveEval - m.evaluation : m.evaluation - m.preMoveEval);
+}
+
+/** A move that costs two pawns is a key moment whatever the grader called it. */
+const KEY_MOMENT_COST_CP = 200;
+const KEY_MOMENT_GRADES: ReadonlySet<string> = new Set(['brilliant', 'great', 'blunder', 'mistake']);
+
+/**
+ * THE KEY MOMENTS OF A PLAY GAME — every student move that clears the bar,
+ * however many that is (G4.5: no cap; 2026-10-20 replaced a top-5 slice that
+ * dropped a sixth and seventh moment and filled a quiet game with five). The
+ * bar is the move grader's own verdict (a blunder, a mistake, a great or
+ * brilliant find) or the move's ONE price (`costCp`, never the swing between
+ * two stored evals, which charged the student for the coach's reply). A quiet
+ * game has none. In game order.
+ */
+export function findKeyMoments(moves: readonly CoachGameMove[]): KeyMoment[] {
+  return moves
+    .filter((m) => !m.isCoachMove)
+    .filter((m) => (m.classification !== null && KEY_MOMENT_GRADES.has(m.classification)) || (m.costCp ?? 0) >= KEY_MOMENT_COST_CP)
+    .map((m) => ({
+      moveNumber: m.moveNumber,
+      fen: m.fen,
+      explanation: m.commentary || `Move ${m.moveNumber}: ${m.san} — evaluation changed significantly.`,
+      type: m.classification === 'brilliant' || m.classification === 'great' ? 'brilliant' as const
+        : m.classification === 'blunder' || m.classification === 'mistake' ? 'blunder' as const : 'turning_point' as const,
+    }));
 }

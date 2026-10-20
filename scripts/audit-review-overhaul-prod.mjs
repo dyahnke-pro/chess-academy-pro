@@ -44,6 +44,7 @@ import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } f
 import { seatReattributes } from './audit-lib/seat-reattribution.mjs';
 import { judgeCriticalVoice } from './audit-lib/critical-moment-voice.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
+import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { seedWeaknessProfile } from './audit-lib/seed-weakness-profile.mjs';
@@ -311,6 +312,15 @@ const run = async () => {
   for (let i = 0; i < 4; i++) { try { await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 60000 }); break; } catch { await page.waitForTimeout(1500); } }
   await dismiss();
   await page.waitForTimeout(2500);
+
+  // David's record is the DEFAULT (2026-10-19: "use the data when testing"):
+  // the review narrates against his record, with the audited game added on
+  // top. AUDIT_FIXTURE=none runs the named fresh-device probe instead.
+  if (process.env.AUDIT_FIXTURE !== 'none') {
+    await page.waitForTimeout(6000);
+    const fx = await loadFixtureIntoIDB(page, process.env.AUDIT_FIXTURE);
+    log(`[fixture] ${fx.loaded ? `${fx.wrote} rows / ${fx.stores} stores` : `skipped (${fx.reason})`}`);
+  }
 
   // SEED — the RESOLVED game (a fresh real one unless pinned), UNANALYZED. The
   // student is identified by handle, so the seat follows whichever side the

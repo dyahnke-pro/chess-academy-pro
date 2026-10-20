@@ -24,13 +24,15 @@
  * answers to "what covers this file", drifting apart, with the stricter one
  * losing silently. Both now read this.
  *
- * TWO REACHES, because either alone misses real coverage:
+ * THREE REACHES, because any one alone misses real coverage:
  *   • PREFIX  — `principleAttribution.ts` → `principleAttributionEndgame.test.ts`,
  *     `principleAttribution.section14.test.ts`. Named after the subject, no import
  *     needed to be obvious.
  *   • IMPORT  — `section14Diagnosis.test.ts` imports `./principleAttribution`
  *     and shares no name with it at all. This is the one the basename mapping
  *     could never see, and the one that went red.
+ *   • SOURCE TEXT — `coachLaneWiring.test.ts` reads `CoachTeachPage.tsx` off
+ *     disk to fence its wiring; no name, no import (2026-10-20).
  */
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join, basename, dirname, extname } from 'node:path';
@@ -75,9 +77,16 @@ export function read(p) {
 export function testsFor(target) {
   const base = basename(target, extname(target));
   const dir = dirname(target);
+  const file = `${base}${extname(target)}`;
+  const real = existsSync(join(REPO, target));
   return allSourceFiles().filter((f) =>
     /\.test\.tsx?$/.test(f)
     && (f.startsWith(`${dir}/${base}`)
       || read(f).includes(`/${base}'`)
-      || read(f).includes(`./${base}'`)));
+      || read(f).includes(`./${base}'`)
+      // SOURCE TEXT (2026-10-20): a fence that reads the file off disk
+      // (`readFileSync('src/components/Coach/CoachTeachPage.tsx')`) neither
+      // shares its name nor imports it, so batch 2 reached main with five
+      // red coachLaneWiring fences nobody ran.
+      || (real && (read(f).includes(target) || read(f).includes(`/${file}'`)))));
 }

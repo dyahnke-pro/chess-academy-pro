@@ -19,7 +19,7 @@ import { NO_PROOF, squaresProof, type FactProof } from './proof';
 import type { FactStakes } from './factStakes';
 import type { SpokenLine } from './voicePackage';
 import { findPinBreaks, pinBreakLine, pinBreakProof } from './pinBreak';
-import { findProphylaxis, prophylaxisLine, prophylaxisIdea, prophylaxisProof } from './prophylaxis';
+import { findProphylaxis, prophylaxisKey, prophylaxisLine, prophylaxisIdea, prophylaxisProof } from './prophylaxis';
 import { findEnablingMove, enablingMoveLine, enablingMoveProof } from './enablingMove';
 import { findTiedDefenders, newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
 import { obligationLifted, obligationLiftedLine } from './obligationLifted';
@@ -205,7 +205,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
     read: ({ fen, engineFirstMoves }) => safe(() => {
       const ph = findProphylaxis(fen);
       if (!ph || !engineFirstMoves.includes(`${ph.prevention.from}${ph.prevention.to}`)) return null;
-      return { text: prophylaxisLine(ph), proof: prophylaxisProof(ph), squares: ph.squares, key: `prophylaxis:${ph.intent.to}`, play: { from: ph.prevention.from, to: ph.prevention.to }, theirs: { from: ph.intent.from, to: ph.intent.to },
+      return { text: prophylaxisLine(ph), proof: prophylaxisProof(ph), squares: ph.squares, key: prophylaxisKey(ph.intent.to), play: { from: ph.prevention.from, to: ph.prevention.to }, theirs: { from: ph.intent.from, to: ph.intent.to },
         // Held: their idea and that one move stops it — never which move
         // (easy walk 2026-10-11: "h3 first — it stops the pin" unasked).
         namesMove: true, idea: prophylaxisIdea(ph) };

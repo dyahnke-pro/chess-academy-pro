@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5613 lines · 4 exports · 4 importers · 5 tests · 9 audits**
+**5585 lines · 4 exports · 4 importers · 5 tests · 9 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5244) — names `BLUNDER_CARD_ENABLED`, `CoachGamePage`
-- **The standard post-deploy ritual** (CLAUDE.md:6388) — names `CoachGamePage`
-- **🔒🔒 THE FULL-GAME AUDIT STANDARD (David 2026-07-13, LOCKED: "Save this audit format plz. This is the new standard.")** (CLAUDE.md:6529) — names `BLUNDER_CARD_ENABLED`, `PLAY_VOLUNTEERS_COACHING`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5243) — names `BLUNDER_CARD_ENABLED`, `CoachGamePage`
+- **The standard post-deploy ritual** (CLAUDE.md:6387) — names `CoachGamePage`
+- **🔒🔒 THE FULL-GAME AUDIT STANDARD (David 2026-07-13, LOCKED: "Save this audit format plz. This is the new standard.")** (CLAUDE.md:6528) — names `BLUNDER_CARD_ENABLED`, `PLAY_VOLUNTEERS_COACHING`
 
 ## Who calls in
 

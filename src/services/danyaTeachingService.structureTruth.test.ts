@@ -11,7 +11,6 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import { Chess } from 'chess.js';
 import {
   namedPiecesExistOnBoard,
-  transitionTeachingSourceForGame,
   notesForStructure,
 } from './danyaTeachingService';
 import { loadFullCorpus } from '../test/loadFullCorpus';
@@ -44,19 +43,6 @@ describe('namedPiecesExistOnBoard', () => {
 
 describe('selection refuses notes whose SPOKEN field is false of the board', () => {
   beforeAll(async () => { await Promise.resolve(loadFullCorpus()); }, 120_000);
-
-  it('the K+P transition never selects a note that talks about absent pieces', () => {
-    // The real corpus, the real selector, the exact position class that
-    // produced the defect. Whatever is selected (including nothing — honest
-    // silence), its PLANS text must only name pieces this board still has.
-    const src = transitionTeachingSourceForGame({ historySans: [], fen: KP_ENDGAME, openingName: null });
-    if (src) {
-      expect(
-        namedPiecesExistOnBoard(src.note.plans ?? '', KP_ENDGAME),
-        `selected ${src.note.id} (${src.origin}) whose plans talk about pieces not on the board: "${src.note.plans}"`,
-      ).toBe(true);
-    }
-  });
 
   it('structure transfer filters the plans field, not just explains+teaches', () => {
     // Sweep: every structure-transferred note for the R+P ending must carry

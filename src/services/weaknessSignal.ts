@@ -250,7 +250,18 @@ export function matchClauseKind(kind: string, signals: readonly WeaknessSignal[]
 /** Match a LIVE tactic motif (TacticPatternType) to a tactic weakness, via the
  *  canonical vocabulary bridge. null when the motif has no weakness counterpart
  *  (mate_threat / battery / none) or the student has no such hole. */
-export function matchTacticPattern(pattern: TacticPatternType, signals: readonly WeaknessSignal[]): WeaknessSignal | null {
+export function matchTacticPattern(
+  pattern: TacticPatternType,
+  signals: readonly WeaknessSignal[],
+  /** WHICH SIDE OF THE MOTIF the record must be about. Required (2026-10-20):
+   *  every `analysis:tactic:*` row says the student MISSED their own shot
+   *  ('finds'). No row records falling for the opponent's ('falls-for'), so a
+   *  threat matches nothing — the threat look-ahead used to say "this is a
+   *  pattern that keeps catching you" off 130 rows of his own missed
+   *  discoveries, the opposite claim. */
+  seat: 'finds' | 'falls-for',
+): WeaknessSignal | null {
+  if (seat === 'falls-for') return null;
   const cluster = weaknessClusterForPattern(pattern);
   if (!cluster) return null;
   return bestMatch(signals, (s) => s.clusterId === cluster);

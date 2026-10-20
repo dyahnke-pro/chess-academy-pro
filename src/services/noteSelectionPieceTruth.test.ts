@@ -20,7 +20,6 @@ import { loadFullCorpus } from '../test/loadFullCorpus';
 import { loadSpokenBake } from '../test/loadSpokenBake';
 import {
   teachingSourceForBoard,
-  transitionTeachingSourceForGame,
   spokenBeatText,
   namedPiecesExistOnBoard,
   noteSpeaksOnlyPiecesOnBoard,
@@ -61,15 +60,6 @@ describe('note selection is piece-true before the gate ever sees it', () => {
     expect(
       namedPiecesExistOnBoard(spoken, fen),
       `${src.origin} tier offered: ${spoken}`,
-    ).toBe(true);
-  });
-
-  it.each(BOARDS)('the transition ritual is held to it too on %s', (fen) => {
-    const src = transitionTeachingSourceForGame({ historySans: [], fen });
-    if (!src) return;
-    expect(
-      namedPiecesExistOnBoard(spokenBeatText(src.note), fen),
-      `${src.origin} tier offered: ${spokenBeatText(src.note)}`,
     ).toBe(true);
   });
 

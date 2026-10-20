@@ -26,6 +26,7 @@
 import { andList, lineAfterFirst } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
+import { sayMoveNoun } from './spokenMove';
 import { criticalityThresholds } from './criticalityScan';
 import { moverLossProof } from './exchangeLedger';
 import { MATE_HORIZON_CP } from './engineConstants';
@@ -139,20 +140,29 @@ function stakeFor(bestCp: number): StakeId | null {
  *     you level" mixes both in one sentence.
  *  Held as a verb plus its object so a new stake cannot be added with only some
  *  of its forms. */
-const STAKE_TEXT: Record<StakeId, { verb: string; verbs: string; past: string; rest: string }> = {
-  mate: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'the forced mate' },
-  win: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'the win' },
-  'on-top': { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you on top' },
-  edge: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'your edge' },
-  level: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you level' },
-  'in-it': { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you in it' },
-  damage: { verb: 'limit', verbs: 'limits', past: 'limited', rest: 'the damage' },
+const STAKE_TEXT: Record<StakeId, { verb: string; verbs: string; past: string; rest: string; theirs: string }> = {
+  mate: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'the forced mate', theirs: 'the forced mate' },
+  win: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'the win', theirs: 'the win' },
+  'on-top': { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you on top', theirs: 'them on top' },
+  edge: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'your edge', theirs: 'their edge' },
+  level: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you level', theirs: 'them level' },
+  'in-it': { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you in it', theirs: 'them in it' },
+  damage: { verb: 'limit', verbs: 'limits', past: 'limited', rest: 'the damage', theirs: 'the damage' },
 };
 
-export function stakeText(stake: StakeId, opts: { plural?: boolean; past?: boolean } = {}): string {
+export function stakeText(stake: StakeId, opts: { plural?: boolean; past?: boolean; seat?: 'student' | 'opponent' } = {}): string {
   const t = STAKE_TEXT[stake];
   const v = opts.past ? t.past : opts.plural ? t.verb : t.verbs;
-  return `${v} ${t.rest}`;
+  return `${v} ${opts.seat === 'opponent' ? t.theirs : t.rest}`;
+}
+
+/** THE OPPONENT'S ONLY MOVE, from the same count (2026-10-20: positionFacts
+ *  said "only one move keeps them in it" off the importance tier — a second
+ *  counter of the claim, with a hard-coded stake). Null unless the read PROVES
+ *  exactly one move holds. */
+export function opponentOnlyMoveStatement(read: CriticalMomentRead | null): string | null {
+  if (!criticalMomentSpeaks(read) || read.count !== 1) return null;
+  return `They're on a knife-edge here — only one move ${stakeText(read.stake, { seat: 'opponent' })}.`;
 }
 
 /** "only one move" / "two moves" — the COUNT, which is the fact David asked for
@@ -317,22 +327,44 @@ function pick(variants: readonly string[], v: number): string {
  * August. It names the count and the stake and then gets out of the way; it
  * never names the move.
  */
-export function criticalMomentStatement(read: CriticalMomentRead | null, ply: number): string | null {
+export function criticalMomentStatement(
+  read: CriticalMomentRead | null,
+  ply: number,
+  /** THE BOARD THIS COUNT IS ABOUT — the reply that made it. Required (David's
+   *  Learn walk 2026-10-19: "Kg6 was the only move that kept the win" beside
+   *  "On this move, two moves keep the win" — two true counts about two boards,
+   *  the second heard as a claim about Kg6). With the reply the sentence opens
+   *  "After their pawn to d5, …"; with none it names the student's next move.
+   *  No stem says "this move", which attaches to whatever was spoken last. */
+  after: { san: string; fenBefore: string } | null,
+): string | null {
   if (!criticalMomentSpeaks(read)) return null;
   const one = read.count === 1;
   const s = stakeText(read.stake, { plural: !one });
+  if (after) {
+    const reply = `After their ${sayMoveNoun(after.san, after.fenBefore).replace(/^the /, '')}`;
+    return one
+      ? pick([
+        `${reply}, only one move ${s}. Slow down.`,
+        `${reply}, you're at a fork in the road: one move ${s}. Take the extra minute.`,
+        `${reply}, exactly one move ${s}. Slow down.`,
+        `${reply}, one move ${s}, and only one. Worth thinking it through.`,
+      ], ply)
+      : pick([
+        `${reply}, two moves ${s}; everything else concedes.`,
+        `${reply}, two moves ${s}. The rest give it away.`,
+        `${reply}, it's narrow — two moves ${s}; every other move costs more.`,
+        `${reply}, exactly two moves ${s} — the rest concede.`,
+      ], ply) + lookAt(read.holdingSans);
+  }
   return one
     ? pick([
-      `Critical moment now — only one move ${s}. Slow down.`,
-      `This move is the fork in the road: one move ${s}. Take the extra minute.`,
-      `Slow down — on this move, exactly one move ${s}.`,
       `Your move now: one move ${s}, and only one. Worth thinking it through.`,
+      `For your next move, exactly one move ${s}. Slow down.`,
     ], ply)
     : pick([
-      `Critical moment now — two moves ${s}; everything else concedes.`,
-      `On this move, two moves ${s}. The rest give it away.`,
-      `Narrow on this move — two moves ${s}; every other move costs more.`,
       `Your move now: exactly two moves ${s} — the rest concede.`,
+      `For your next move, two moves ${s}; everything else concedes.`,
     ], ply) + lookAt(read.holdingSans);
 }
 

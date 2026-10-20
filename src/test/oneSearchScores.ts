@@ -37,10 +37,10 @@ export function withPrice<T extends {
   let price: MovePrice | null = null;
   if (typeof costCp === 'number') {
     const best = real(before) ? before : real(after) ? after + costCp * sign : null;
-    price = { costCp, scores: best !== null ? { bestWhiteCp: best, playedWhiteCp: best - costCp * sign } : null };
+    price = { costCp, scores: best !== null ? { bestWhiteCp: best, playedWhiteCp: best - costCp * sign } : null, settled: true };
   } else if (real(before) && real(after)) {
     const cost = Math.max(0, (before - after) * sign);
-    price = { costCp: cost, scores: { bestWhiteCp: before, playedWhiteCp: after } };
+    price = { costCp: cost, scores: { bestWhiteCp: before, playedWhiteCp: after }, settled: true };
   }
   return { ...rest, price };
 }

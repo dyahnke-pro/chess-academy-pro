@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**279 lines · 12 exports · 7 importers · 5 tests · 1 audits**
+**264 lines · 11 exports · 7 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,68 +26,68 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `spokenOpeningLabel` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8986`
-- `src/components/Coach/CoachTeachPage.tsx:8996`
-- `src/services/openingAnnouncement.test.ts:140`
-- `src/services/openingAnnouncement.test.ts:143`
+- `src/components/Coach/CoachTeachPage.tsx:9019`
+- `src/components/Coach/CoachTeachPage.tsx:9020`
+- `src/services/openingAnnouncement.test.ts:139`
+- `src/services/openingAnnouncement.test.ts:142`
 
 ### `openingAnnouncement` (function) — 28 call sites
 - `src/services/computedVoiceAudit.report.test.ts:303`
-- `src/services/openingAnnouncement.test.ts:16`
-- `src/services/openingAnnouncement.test.ts:19`
-- `src/services/openingAnnouncement.test.ts:22`
-- `src/services/openingAnnouncement.test.ts:27`
-- `src/services/openingAnnouncement.test.ts:33`
-- `src/services/openingAnnouncement.test.ts:35`
+- `src/services/openingAnnouncement.test.ts:15`
+- `src/services/openingAnnouncement.test.ts:18`
+- `src/services/openingAnnouncement.test.ts:21`
+- `src/services/openingAnnouncement.test.ts:26`
+- `src/services/openingAnnouncement.test.ts:32`
+- `src/services/openingAnnouncement.test.ts:34`
+- `src/services/openingAnnouncement.test.ts:38`
 - `src/services/openingAnnouncement.test.ts:39`
-- `src/services/openingAnnouncement.test.ts:40`
-- `src/services/openingAnnouncement.test.ts:43`
+- `src/services/openingAnnouncement.test.ts:42`
+- `src/services/openingAnnouncement.test.ts:46`
 - `src/services/openingAnnouncement.test.ts:47`
-- `src/services/openingAnnouncement.test.ts:48`
+- `src/services/openingAnnouncement.test.ts:50`
 - `src/services/openingAnnouncement.test.ts:51`
 - `src/services/openingAnnouncement.test.ts:52`
-- `src/services/openingAnnouncement.test.ts:53`
-- `src/services/openingAnnouncement.test.ts:56`
-- `src/services/openingAnnouncement.test.ts:60`
-- `src/services/openingAnnouncement.test.ts:63`
-- `src/services/openingAnnouncement.test.ts:65`
-- `src/services/openingAnnouncement.test.ts:69`
+- `src/services/openingAnnouncement.test.ts:55`
+- `src/services/openingAnnouncement.test.ts:59`
+- `src/services/openingAnnouncement.test.ts:62`
+- `src/services/openingAnnouncement.test.ts:64`
+- `src/services/openingAnnouncement.test.ts:68`
+- `src/services/openingAnnouncement.test.ts:73`
 - `src/services/openingAnnouncement.test.ts:74`
-- `src/services/openingAnnouncement.test.ts:75`
-- `src/services/openingAnnouncement.test.ts:223`
-- `src/services/openingAnnouncement.test.ts:229`
-- `src/services/openingAnnouncement.test.ts:236`
-- `src/services/openingAnnouncement.test.ts:240`
+- `src/services/openingAnnouncement.test.ts:222`
+- `src/services/openingAnnouncement.test.ts:228`
+- `src/services/openingAnnouncement.test.ts:235`
+- `src/services/openingAnnouncement.test.ts:239`
 - `src/services/openingPositions.test.ts:32`
 - `src/services/walkOct2a.test.ts:71`
 
 ### `departureAgainstPlan` (function) — 3 call sites
-- `src/services/openingAnnouncement.test.ts:212`
-- `src/services/openingAnnouncement.test.ts:217`
-- `src/services/openingAnnouncement.test.ts:222`
+- `src/services/openingAnnouncement.test.ts:211`
+- `src/services/openingAnnouncement.test.ts:216`
+- `src/services/openingAnnouncement.test.ts:221`
 
 ### `openingAnnouncementForGame` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8997`
-- `src/services/coachFeatureService.ts:2060`
+- `src/components/Coach/CoachTeachPage.tsx:9021`
+- `src/services/coachFeatureService.ts:2031`
+- `src/services/openingAnnouncement.test.ts:156`
 - `src/services/openingAnnouncement.test.ts:157`
-- `src/services/openingAnnouncement.test.ts:158`
 
 ### `warmOpeningBook` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:1018`
 
 ### `studentJustLeftBook` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11810`
-- `src/components/Coach/CoachTeachPage.tsx:11860`
-- `src/services/openingAnnouncement.test.ts:163`
+- `src/components/Coach/CoachTeachPage.tsx:11802`
+- `src/components/Coach/CoachTeachPage.tsx:11852`
+- `src/services/openingAnnouncement.test.ts:162`
+- `src/services/openingAnnouncement.test.ts:171`
 - `src/services/openingAnnouncement.test.ts:172`
 - `src/services/openingAnnouncement.test.ts:173`
-- `src/services/openingAnnouncement.test.ts:174`
 
 ### `openingNameForBoard` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8978`
-- `src/services/coachFeatureService.ts:2055`
+- `src/components/Coach/CoachTeachPage.tsx:9011`
+- `src/services/coachFeatureService.ts:2026`
 - `src/services/openingPositions.test.ts:30`
-- `src/services/openingStory.ts:126`
+- `src/services/openingStory.ts:128`
 
 ### `SIDELINE_FAIR_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -96,23 +96,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `theirOpeningVerdict` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12321`
-- `src/services/coachFeatureService.ts:2208`
+- `src/components/Coach/CoachTeachPage.tsx:12317`
+- `src/services/coachFeatureService.ts:2138`
+- `src/services/openingAnnouncement.test.ts:194`
 - `src/services/openingAnnouncement.test.ts:195`
-- `src/services/openingAnnouncement.test.ts:196`
+- `src/services/openingAnnouncement.test.ts:199`
 - `src/services/openingAnnouncement.test.ts:200`
 - `src/services/openingAnnouncement.test.ts:201`
-- `src/services/openingAnnouncement.test.ts:202`
-
-### `learnNameMaySpeak` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8989`
-- `src/services/openingAnnouncement.test.ts:247`
-- `src/services/openingAnnouncement.test.ts:248`
-- `src/services/openingAnnouncement.test.ts:251`
-- `src/services/openingAnnouncement.test.ts:252`
-- `src/services/openingAnnouncement.test.ts:255`
-- `src/services/openingAnnouncement.test.ts:256`
-- `src/services/openingAnnouncement.test.ts:257`
 
 ## Tests
 

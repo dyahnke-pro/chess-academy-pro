@@ -1,9 +1,10 @@
 // audit-corpus-lazy-boot — proves the 2026-08-23 video-dump OOM fix at runtime.
 //
 // CONTRACT:
-//   1. On BOOT (dashboard), the heavy video corpora are NOT fetched — no
-//      saintlouis (28 MB), hangingpawns (9 MB), or corpus-spoken (13 MB)
-//      request. That eager boot load was the OOM crash.
+//   1. On BOOT (dashboard), the heavy fetched corpora are NOT fetched — no
+//      corpus-spoken request. That eager boot load was the
+//      OOM crash. (saintlouis and hangingpawns were removed with the other
+//      farmed creators, 2026-09-21.)
 //   2. When a COACH teaching surface runs, the tier lazy-loads — the corpora
 //      DO get requested (self-heals), proving teaching still works.
 //
@@ -19,7 +20,7 @@ const PORT = 4319;
 // dist bundle locally via vite preview.
 const EXTERNAL = process.env.AUDIT_SMOKE_URL || '';
 const BASE = EXTERNAL || `http://localhost:${PORT}`;
-const HEAVY = ['saintlouis-teachings', 'hangingpawns-teachings', 'corpus-spoken'];
+const HEAVY = ['corpus-spoken'];
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 

@@ -49,7 +49,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticAlertService.test.ts:103`
 
 ### `getCoachingMessage` (function) — 12 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:664`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:673`
 - `src/hooks/useStruggleDetection.ts:85`
 - `src/services/tacticAlertService.test.ts:116`
 - `src/services/tacticAlertService.test.ts:120`
@@ -59,16 +59,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticAlertService.test.ts:144`
 - `src/services/tacticAlertService.test.ts:159`
 - `src/services/tacticAlertService.test.ts:170`
-- `src/services/tacticTypeUnification.test.ts:216`
-- `src/services/tacticTypeUnification.test.ts:223`
+- `src/services/tacticTypeUnification.test.ts:218`
+- `src/services/tacticTypeUnification.test.ts:225`
 
 ### `GameplayTacticAlert` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getTacticLookahead` (function) — 15 call sites
-- `src/hooks/useCoachTips.ts:318`
-- `src/hooks/useCoachTips.ts:349`
-- `src/services/liveTacticsContext.ts:79`
+- `src/hooks/useCoachTips.ts:308`
+- `src/hooks/useCoachTips.ts:339`
+- `src/services/liveTacticsContext.ts:83`
 - `src/services/ratingBands.test.ts:83`
 - `src/services/tacticAlertService.test.ts:179`
 - `src/services/tacticAlertService.test.ts:183`
@@ -112,28 +112,28 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticAlertService.test.ts:364`
 
 ### `detectGameplayTactic` (function) — 5 call sites
-- `src/hooks/useCoachTips.ts:282`
+- `src/hooks/useCoachTips.ts:272`
 - `src/services/tacticAlertService.test.ts:227`
 - `src/services/tacticAlertService.test.ts:242`
 - `src/services/tacticAlertService.test.ts:258`
 - `src/services/tacticAlertService.test.ts:274`
 
 ### `scanUpcomingTactic` (function) — 2 call sites
-- `src/hooks/useCoachTips.ts:320`
-- `src/hooks/useCoachTips.ts:349`
+- `src/hooks/useCoachTips.ts:310`
+- `src/hooks/useCoachTips.ts:339`
 
 ### `tacticTypeLabel` (function) — 23 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:1056`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:1072`
 - `src/components/Puzzles/MyMistakesPage.tsx:236`
 - `src/components/Tactics/TacticCreatePage.tsx:305`
 - `src/components/Tactics/TacticCreatePage.tsx:582`
-- `src/components/Tactics/TacticSetupBoard.tsx:486`
-- `src/components/Tactics/TacticSetupPage.tsx:219`
-- `src/hooks/useCoachTips.ts:327`
-- `src/services/learnBoardTeaching.ts:774`
-- `src/services/mistakePuzzleService.ts:680`
-- `src/services/mistakePuzzleService.ts:981`
-- `src/services/mistakePuzzleService.ts:1266`
+- `src/components/Tactics/TacticSetupBoard.tsx:515`
+- `src/components/Tactics/TacticSetupPage.tsx:223`
+- `src/hooks/useCoachTips.ts:317`
+- `src/services/learnBoardTeaching.ts:916`
+- `src/services/mistakePuzzleService.ts:685`
+- `src/services/mistakePuzzleService.ts:986`
+- `src/services/mistakePuzzleService.ts:1271`
 - `src/services/tacticNarrationService.ts:82`
 - `src/services/tacticNarrationService.ts:133`
 - `src/services/tacticNarrationService.ts:153`
@@ -148,16 +148,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalProfileService.ts:7`
 
 ### `buildTacticAlertMessage` (function) — 6 call sites
-- `src/hooks/useCoachTips.ts:223`
-- `src/hooks/useCoachTips.ts:297`
+- `src/hooks/useCoachTips.ts:218`
+- `src/hooks/useCoachTips.ts:287`
 - `src/services/tacticAlertService.test.ts:282`
 - `src/services/tacticAlertService.test.ts:290`
 - `src/services/tacticAlertService.test.ts:296`
 - `src/services/tacticAlertService.test.ts:301`
 
 ### `isTacticWeakness` (function) — 5 call sites
-- `src/hooks/useCoachTips.ts:284`
-- `src/hooks/useCoachTips.ts:323`
+- `src/hooks/useCoachTips.ts:274`
+- `src/hooks/useCoachTips.ts:313`
 - `src/services/tacticAlertService.test.ts:374`
 - `src/services/tacticAlertService.test.ts:375`
 - `src/services/tacticAlertService.test.ts:377`
@@ -166,11 +166,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `recordTacticOutcome` (function) — 9 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:779`
-- `src/components/Puzzles/PuzzleBoard.tsx:470`
-- `src/components/Tactics/TacticSetupBoard.tsx:318`
-- `src/components/Tactics/TacticSetupBoard.tsx:464`
-- `src/hooks/useCoachTips.ts:230`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:795`
+- `src/components/Puzzles/PuzzleBoard.tsx:483`
+- `src/components/Tactics/TacticSetupBoard.tsx:334`
+- `src/components/Tactics/TacticSetupBoard.tsx:484`
+- `src/hooks/useCoachTips.ts:225`
 - `src/services/tacticAlertService.test.ts:312`
 - `src/services/tacticAlertService.test.ts:324`
 - `src/services/tacticAlertService.test.ts:337`

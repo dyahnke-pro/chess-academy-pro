@@ -57,13 +57,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:24`
 
 ### `identityFor` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2059`
+- `src/services/coachFeatureService.ts:2034`
 - `src/services/openingIdentity.test.ts:36`
-- `src/services/openingStory.ts:208`
+- `src/services/openingStory.ts:206`
 
-### `planFor` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:2059`
-- `src/services/coachFeatureService.ts:2075`
+### `planFor` (function) — 10 call sites
+- `src/services/coachFeatureService.ts:2034`
 - `src/services/learnBoardTeaching.ts:805`
 - `src/services/lookaheadPlan.ts:523`
 - `src/services/lookaheadPlan.ts:1164`
@@ -71,8 +70,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.ts:203`
 - `src/services/openingIdentity.test.ts:82`
 - `src/services/openingIdentity.test.ts:87`
-- `src/services/openingStory.ts:220`
-- `src/services/reviewFullData.ts:1592`
+- `src/services/openingStory.ts:218`
+- `src/services/reviewFullData.ts:1585`
 
 ### `IdentityLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -81,13 +80,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isWaypointOpening` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2059`
+- `src/services/coachFeatureService.ts:2034`
 - `src/services/openingAnnouncement.ts:87`
-- `src/services/openingStory.ts:182`
-- `src/services/openingStory.ts:189`
-- `src/services/openingStory.ts:339`
-- `src/services/openingStory.ts:354`
-- `src/services/openingStory.ts:384`
+- `src/services/openingStory.ts:180`
+- `src/services/openingStory.ts:187`
+- `src/services/openingStory.ts:337`
+- `src/services/openingStory.ts:347`
+- `src/services/openingStory.ts:372`
 
 ### `openingIdentityLine` (function) — 19 call sites
 - `src/services/coachApi.ts:5770`
@@ -106,7 +105,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingIdentity.test.ts:62`
 - `src/services/openingIdentity.test.ts:68`
 - `src/services/openingIdentity.test.ts:70`
-- `src/services/openingStory.ts:340`
+- `src/services/openingStory.ts:338`
 - `src/services/reviewOpeningTheory.ts:742`
 - `src/services/walkOct2a.test.ts:67`
 

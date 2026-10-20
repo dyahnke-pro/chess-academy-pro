@@ -6,6 +6,7 @@
 // runtime). G3: every name is a real DB entry; only the move order differs.
 import type { DetectedOpening } from '../types';
 import { positionOf } from '../utils/samePosition';
+import { loadDataJson } from './dataFile';
 
 type PositionMap = Record<string, [string, number]>;
 let positions: PositionMap | null = null;
@@ -15,9 +16,9 @@ let loading = false;
 export function warmOpeningPositions(): void {
   if (positions || loading || typeof fetch !== 'function') return;
   loading = true;
-  void fetch('/data/opening-positions.json')
-    .then((r) => (r.ok ? r.json() as Promise<PositionMap> : null))
-    .then((j) => { if (j) positions = j; })
+  // Through the one /data/ loader (the native bundle strips public/data).
+  void loadDataJson('/data/opening-positions.json')
+    .then((j) => { if (j) positions = j as PositionMap; })
     .catch(() => undefined)
     .finally(() => { loading = false; });
 }

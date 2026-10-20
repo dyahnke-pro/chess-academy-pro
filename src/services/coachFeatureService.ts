@@ -275,7 +275,7 @@ export async function generateNarrativeSummary(
   // Verbosity tie-in (Bug D-2, David's 2026-05-19 directive on /
   // weaknesses): the recap honors the user's coachNarration setting.
   // silent → no recap at all (short stub); brief → 1-2 sentences;
-  // full → the existing 2-4 moments / ~180 words. Drives both the
+  // full → every flagged moment (G4.5, 2026-10-20). Drives both the
   // prompt's word/moment budget AND the max_tokens ceiling so the
   // generated text matches what's promised AND what the user pays
   // for downstream.
@@ -343,9 +343,10 @@ export async function generateNarrativeSummary(
     ? (framedOpening.owned ? `the ${framedOpening.label}` : `the game against the ${framedOpening.label}`)
     : 'this game';
 
-  // Verbosity caps the number of moments named (brief = 1) — the SAME hard
-  // contract the old prompt tried to hint at, now enforced in code (G5).
-  const momentBudget = verbosity === 'brief' ? 1 : 3;
+  // BRIEF names one moment — the student's own switch, the one sanctioned cap
+  // (G5). FULL names every flagged moment (G4.5: the old 3 dropped the rest;
+  // each moment is its own sentence, so a long game reads as a list of them).
+  const recapMoments = verbosity === 'brief' ? keyMoments.slice(0, 1) : keyMoments;
 
   // ONE TEXT, ONE VOICE (walk 2026-09-23: the card STILL rendered "Post-game
   // recap of … (student rated about 1366). The student made 0 blunder(s)" —
@@ -356,7 +357,7 @@ export async function generateNarrativeSummary(
   // model warms it, and every fallback IS it.
   const spokenFallback = recapSecondPerson({
     outcome: result, playerColor, openingClause,
-    blunderCount, mistakeCount, inaccuracyCount, keyMoments: keyMoments.slice(0, momentBudget), totalErrors,
+    blunderCount, mistakeCount, inaccuracyCount, keyMoments: recapMoments, totalErrors,
   });
   // COMPUTED PROSE SPEAKS (2026-10-18): the recap is already second-person
   // spoken prose; no model rewrite between it and the student.
