@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**188 lines · 3 exports · 4 importers · 2 tests · 0 audits**
+**188 lines · 4 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,11 +22,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `isOpenableModelGame` (function) — 1 call site
 - `src/services/openingIdentity.ts:241`
 
+### `StoryGame` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `momentVerifies` (function) — 1 call site
 - `src/data/modelGameMoments.test.ts:20`
 
 ### `pickStoryGame` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:1632`
+- `src/services/coachFeatureService.ts:1639`
 - `src/services/reviewStoryGame.test.ts:8`
 - `src/services/reviewStoryGame.test.ts:9`
 - `src/services/reviewStoryGame.test.ts:25`

@@ -24,6 +24,7 @@ import { missedPlanClause } from './movePlan';
 import { moveScoresOneSearch, uciOfSan, type CostFan, type MovePrice } from './moveCost';
 import { SINGLETON_SCORER } from './refutedAlternative';
 import { stockfishEngine } from './stockfishEngine';
+import type { MoveScorer } from './pvPlayback';
 import { proofCut } from './exchangeLedger';
 import { gradeMove, provesOnlyMove } from './accuracyService';
 import { SEARCH_POLICY } from './searchDepth';
@@ -199,6 +200,65 @@ export type { PriceSearch } from './coachDecisionEvents';
  *  price — lives with the price, so a reader of the price imports one module. */
 export { mateSwingCostCp } from './moveCost';
 
+/** THE SETTLED PRICE OF A PLAYED MOVE — one search, deepened while the price
+ *  straddles a band within the search's own noise, so nothing is ever graded
+ *  on a band-edge number (cxd4: a blunder at depth 16, ~205cp at 20). The one
+ *  routine behind `liveMovePrice` (the live door, memoized) and the stored
+ *  record's re-price (`annotationReprice`, its own scorer). Null when it
+ *  cannot be priced (no fan, the scorer failed, a mate either way). */
+export async function settledMovePrice(args: {
+  fenBefore: string;
+  playedUci: string;
+  fan: CostFan | null;
+  depth: number;
+  budgetMs?: number;
+} & ({ scorer: MoveScorer; searchOnce?: undefined } | { searchOnce: OneSearch; scorer?: undefined })): Promise<MovePrice | null> {
+  const { fenBefore, playedUci, fan, depth } = args;
+  const budgetMs = args.budgetMs ?? PRICE_DEEPEN_BUDGET_MS;
+  // One search, from the caller's scorer or its own (the live door holds the
+  // engine for the student's question; the record re-price brings a worker).
+  const one: OneSearch = args.searchOnce ?? ((a) => moveScoresOneSearch({ ...a, scorer: args.scorer as MoveScorer }));
+  // HOW IT WAS SEARCHED, carried on the price (the Learn turn row reads it):
+  // the verdict's wait on a band edge is this deepening, and it was invisible.
+  const askedAt = Date.now();
+  const lines = (fan?.topLines ?? []).filter((l) => l.moves.length > 0);
+  const best = lines[0];
+  if (best && best.moves[0] === playedUci) {
+    // The fan's best move costs nothing; its score is quotable only from a
+    // deep enough, centipawn read. The best move never pays a deeper search.
+    const quotable = (fan?.depth ?? 0) >= depth && best.mate == null;
+    return { costCp: 0, scores: quotable ? { bestWhiteCp: best.evaluation, playedWhiteCp: best.evaluation } : null, settled: true, search: { baseDepth: depth, depthReached: fan?.depth ?? null, searchMs: Date.now() - askedAt, deepened: false } };
+  }
+  const mover: 'w' | 'b' = fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
+  const priced = (s: { costCp: number; bestWhiteCp: number; playedWhiteCp: number }): MovePrice => {
+    const p = { costCp: s.costCp, scores: { bestWhiteCp: s.bestWhiteCp, playedWhiteCp: s.playedWhiteCp }, settled: true };
+    return { ...p, settled: priceSettled(p, mover) };
+  };
+  const first = await one({ fenBefore, playedUci, fan, depth });
+  if (!first) return null;
+  let price = priced(first);
+  let depthReached = first.depth ?? depth;
+  let deepened = false;
+  // NOT SETTLED → THE SAME SEARCH, DEEPER (the adaptive-depth walk's step and
+  // ceiling), within the budget. The deeper read IS the price; the shallow
+  // number never escapes. Settled, as the walk settles: the read's band clears
+  // the noise, OR two consecutive depths grade it the same.
+  const started = Date.now();
+  const { step, maxDepth } = SEARCH_POLICY.question;
+  for (let d = depth + step; !price.settled && d <= maxDepth && Date.now() - started < budgetMs; d += step) {
+    // A fan that already holds the played move would answer again at its own
+    // depth: the deeper read is always a fresh scored search.
+    const deeper = await one({ fenBefore, playedUci, fan: fan ? { topLines: fan.topLines } : null, depth: d });
+    if (!deeper) break;
+    deepened = true;
+    depthReached = deeper.depth ?? d;
+    const was = priceLabel(price, mover);
+    price = priced(deeper);
+    if (!price.settled && was !== null && priceLabel(price, mover) === was) price = { ...price, settled: true };
+  }
+  return { ...price, search: { baseDepth: depth, depthReached, searchMs: Date.now() - askedAt, deepened } };
+}
+
 /** One price per (position, move) for the life of the page: the door, the
  *  spoken verdict and the saved record all read the SAME promise, so the
  *  engine runs one search and the three cannot disagree (Kg5: the door said 63,
@@ -235,54 +295,13 @@ export function studentMovePrice(fenBefore: string, playedUci: string, fan: Cost
   })));
 }
 
-type PriceSearch = (args: { fenBefore: string; playedUci: string; fan: CostFan | null; depth: number }) => ReturnType<typeof moveScoresOneSearch>;
+type OneSearch = (args: { fenBefore: string; playedUci: string; fan: CostFan | null; depth: number }) => ReturnType<typeof moveScoresOneSearch>;
 
-function memoPrice(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number, search: PriceSearch): Promise<MovePrice | null> {
+function memoPrice(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number, search: OneSearch): Promise<MovePrice | null> {
   const key = `${fenBefore}|${playedUci}`;
   const known = PRICE_MEMO.get(key);
   if (known) return known;
-  const run = (async (): Promise<MovePrice | null> => {
-    // HOW IT WAS SEARCHED, carried on the price (the Learn turn row reads it):
-    // the verdict's wait on a band edge is this deepening, and it was invisible.
-    const askedAt = Date.now();
-    const lines = (fan?.topLines ?? []).filter((l) => l.moves.length > 0);
-    const best = lines[0];
-    if (best && best.moves[0] === playedUci) {
-      // The fan's best move costs nothing; its score is quotable only from a
-      // deep enough, centipawn read. The best move never pays a deeper search.
-      const quotable = (fan?.depth ?? 0) >= depth && best.mate == null;
-      return { costCp: 0, scores: quotable ? { bestWhiteCp: best.evaluation, playedWhiteCp: best.evaluation } : null, settled: true, search: { baseDepth: depth, depthReached: fan?.depth ?? null, searchMs: Date.now() - askedAt, deepened: false } };
-    }
-    const mover: 'w' | 'b' = fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
-    const priced = (s: { costCp: number; bestWhiteCp: number; playedWhiteCp: number }): MovePrice => {
-      const p = { costCp: s.costCp, scores: { bestWhiteCp: s.bestWhiteCp, playedWhiteCp: s.playedWhiteCp }, settled: true };
-      return { ...p, settled: priceSettled(p, mover) };
-    };
-    const first = await search({ fenBefore, playedUci, fan, depth });
-    if (!first) return null;
-    let price = priced(first);
-    let depthReached = first.depth ?? depth;
-    let deepened = false;
-    // NOT SETTLED → THE SAME SEARCH, DEEPER (the adaptive-depth walk's step and
-    // ceiling, `SEARCH_POLICY.live`), within the verdict's budget. The deeper
-    // read IS the price under this key; the shallow number never escapes.
-    // Settled, as the walk settles: the read's band clears the noise, OR two
-    // consecutive depths grade it the same (`searchDepth.isStable`'s rule).
-    const started = Date.now();
-    const { step, maxDepth } = SEARCH_POLICY.question;
-    for (let d = depth + step; !price.settled && d <= maxDepth && Date.now() - started < PRICE_DEEPEN_BUDGET_MS; d += step) {
-      // A fan that already holds the played move would answer again at its own
-      // depth: the deeper read is always a fresh scored search.
-      const deeper = await search({ fenBefore, playedUci, fan: fan ? { topLines: fan.topLines } : null, depth: d });
-      if (!deeper) break;
-      deepened = true;
-      depthReached = deeper.depth ?? d;
-      const was = priceLabel(price, mover);
-      price = priced(deeper);
-      if (!price.settled && was !== null && priceLabel(price, mover) === was) price = { ...price, settled: true };
-    }
-    return { ...price, search: { baseDepth: depth, depthReached, searchMs: Date.now() - askedAt, deepened } };
-  })();
+  const run = settledMovePrice({ fenBefore, playedUci, fan, depth, searchOnce: search });
   // A failed search is not remembered: the next reader may price it.
   const guarded = run.catch(() => null);
   void guarded.then((p) => { if (p === null && PRICE_MEMO.get(key) === guarded) PRICE_MEMO.delete(key); });

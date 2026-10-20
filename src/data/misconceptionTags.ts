@@ -351,19 +351,28 @@ export function isMisconceptionTagId(id: string): id is MisconceptionTagId {
  *  engine reply to take it; an endgame king walk is not "king in the centre". */
 export const MISCONCEPTION_RULES_REV = '2026-10-18-slip-cause';
 
-/** Bump when analysed games must be re-read for the POSITIVE half (the heat
+/** Bump when analysed games must be re-read for the POSITIVE half
+ *  (2026-10-20: re-read from the one-price annotations, `RECORD_PRICE_REV`) (the heat
  *  map's green). 2026-10-13: green is recorded on analysis, not only review.
  *  2026-10-14: one seat resolver. 2026-10-18: the board now asks five skills
  *  that could only be failed (castle in time, the free-looking pawn, the even
  *  trade, which pawn takes, the sacrifice by the king) — each analysed game's
  *  own rows are replaced so the old games answer them too. */
-export const POSITIVE_HALF_REV = '2026-10-20-fingerprint-drift';
+export const POSITIVE_HALF_REV = '2026-10-20-one-price';
 // 2026-10-20: the rev fingerprint gate (recordRevs.gate.test.ts) found the
 // recorded held-skill rows of a real game had changed since 10-19 with this rev
-// unmoved — devices kept the old green rows. From here the gate holds it.
+// unmoved, so devices kept the old green rows; then the one-price re-price moved
+// them again. ONE bump covers both. From here the gate holds it.
 
 /** Bump when analysed games must be re-read for the INCOMING half of each
  *  motif — the opponent's fork, pin, skewer, discovery, mate threat or trap
  *  at the student's turn, held or broken (`threatAnswerEvidence`). Separate
  *  from `POSITIVE_HALF_REV` so a threat-rule change re-reads only this. */
-export const THREAT_HALF_REV = '2026-10-19-their-motifs';
+export const THREAT_HALF_REV = '2026-10-20-one-price';
+
+/** Bump when analysed games' stored annotations must be RE-PRICED (L6,
+ *  2026-10-20): a move priced as the read before minus a separate read after
+ *  is re-priced inside ONE search (`annotationReprice`) before the record is
+ *  re-read from it. The positive and threat halves were bumped with it, so the
+ *  evidence those halves record is rebuilt from the new prices. */
+export const RECORD_PRICE_REV = '2026-10-20-one-price';

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2063 lines · 16 exports · 33 importers · 38 tests · 3 audits**
+**2063 lines · 18 exports · 33 importers · 38 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -66,6 +66,9 @@
 ### `LastMoveInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `PositionFactsInput` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `PositionFactsResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -83,6 +86,9 @@
 - `src/services/positionFacts.test.ts:16`
 
 ### `ClauseItem` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `planChangedText` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `PhaseFact` (interface) — 0 call sites
@@ -104,7 +110,7 @@
 - `src/services/positionFacts.test.ts:366`
 - `src/services/positionFacts.test.ts:367`
 - `src/services/positionReadComposer.ts:158`
-- `src/services/whyBestMove.ts:151`
+- `src/services/whyBestMove.ts:160`
 
 ### `computePositionFacts` (function) — 98 call sites
 - `src/coach/boardTurnAnswer.ts:135`
@@ -194,7 +200,7 @@
 - `src/services/positionReadComposer.ts:130`
 - `src/services/speedRunReads.scale.test.ts:37`
 - `src/services/whyBestMove.needWire.test.ts:10`
-- `src/services/whyBestMove.ts:128`
+- `src/services/whyBestMove.ts:137`
 - `src/test/computedOrderWired.test.ts:32`
 - `src/test/everySurfaceSpeaks.test.ts:117`
 - `src/test/teach02Wired.test.ts:84`
