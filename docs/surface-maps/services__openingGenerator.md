@@ -153,7 +153,7 @@
 
 ### `noteArrowSourceAt` (function) — 3 call sites
 - `src/services/noteSelectionDeterminism.test.ts:124`
-- `src/services/reviewOpeningTheory.ts:1118`
+- `src/services/reviewOpeningTheory.ts:1120`
 - `src/services/teachingCoverage.report.test.ts:165`
 
 ### `MAX_GREEN_ARROWS_PER_PLY` (const) — 0 call sites
