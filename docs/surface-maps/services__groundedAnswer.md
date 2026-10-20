@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7822 lines · 166 exports · 91 importers · 62 tests · 8 audits**
+**7818 lines · 166 exports · 91 importers · 64 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,7 +13,7 @@
 - **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:961) — names `groundedAnswer`
 - **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3931) — names `describeThreatRecognition`
 - **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:4022) — names `explainBestMoveGrounded`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6294) — names `describeThreatRecognition`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6293) — names `describeThreatRecognition`
 
 ## Who calls in
 
@@ -124,7 +124,7 @@
 - `src/services/groundedAnswer.test.ts:1657`
 
 ### `evalPhrase` (function) — 1 call site
-- `src/coach/boardTurnAnswer.ts:441`
+- `src/coach/boardTurnAnswer.ts:447`
 
 ### `parsePiecePurpose` (function) — 7 call sites
 - `src/services/piecePurpose.test.ts:17`
@@ -400,8 +400,8 @@
 - `src/services/coachFeatureService.test.ts:69`
 - `src/services/coachFeatureService.test.ts:84`
 - `src/services/coachFeatureService.test.ts:91`
-- `src/services/coachFeatureService.ts:2771`
-- `src/services/coachFeatureService.ts:2782`
+- `src/services/coachFeatureService.ts:2772`
+- `src/services/coachFeatureService.ts:2783`
 - `src/services/coachMoveCommentary.ts:221`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/explainBestMoveLines.test.ts:14`
@@ -454,7 +454,7 @@
 - `src/services/inaccuracyCall.ts:914`
 
 ### `describeMoveMerit` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:989`
+- `src/services/coachFeatureService.ts:990`
 - `src/services/keySquares.test.ts:81`
 - `src/services/keySquares.test.ts:90`
 - `src/services/keySquares.test.ts:94`
@@ -467,7 +467,7 @@
 - `src/services/brilliancy.ts:130`
 - `src/services/coachFeatureService.test.ts:100`
 - `src/services/coachFeatureService.test.ts:106`
-- `src/services/coachFeatureService.ts:989`
+- `src/services/coachFeatureService.ts:990`
 
 ### `MovePurpose` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -512,7 +512,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `explainMoveOrder` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:853`
+- `src/services/coachFeatureService.ts:854`
 - `src/services/groundedAnswer.test.ts:1071`
 - `src/services/groundedAnswer.test.ts:1079`
 - `src/services/groundedAnswer.test.ts:1086`
@@ -1057,8 +1057,8 @@
 - `src/services/groundedAnswer.routerE.test.ts:219`
 
 ### `assembleSlipNarration` (function) — 4 call sites
-- `src/components/Coach/CoachGamePage.tsx:3836`
-- `src/components/Coach/CoachGamePage.tsx:4002`
+- `src/components/Coach/CoachGamePage.tsx:3804`
+- `src/components/Coach/CoachGamePage.tsx:3970`
 - `src/services/groundedAnswer.test.ts:725`
 - `src/services/groundedAnswer.test.ts:740`
 
@@ -1175,7 +1175,7 @@
 - `src/services/bluffDetector.ts:73`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/captureThreatAnswerable.test.ts:29`
-- `src/services/coachFeatureService.ts:3102`
+- `src/services/coachFeatureService.ts:3103`
 - `src/services/engineDeltaLines.ts:53`
 - `src/services/falseAlarm.ts:52`
 - `src/services/falseAlarm.ts:60`
@@ -1196,7 +1196,7 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3023`
+- `src/services/coachFeatureService.ts:3024`
 - `src/services/reviewNarrationFidelity.test.ts:109`
 - `src/services/reviewNarrationFidelity.test.ts:121`
 - `src/services/reviewNarrationFidelity.test.ts:129`
@@ -1212,7 +1212,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:3122`
+- `src/services/coachFeatureService.ts:3123`
 - `src/services/reviewNarrationFidelity.test.ts:179`
 
 ### `ComparedMove` (interface) — 0 call sites
@@ -1245,12 +1245,12 @@
 - `src/services/coachApi.ts:6309`
 
 ### `seatPieceReferences` (re-export) — 36 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8795`
-- `src/services/coachFeatureService.ts:4334`
-- `src/services/coachFeatureService.ts:4385`
-- `src/services/coachFeatureService.ts:5408`
-- `src/services/liveTacticsContext.ts:451`
-- `src/services/liveTacticsContext.ts:460`
+- `src/components/Coach/CoachTeachPage.tsx:8794`
+- `src/services/coachFeatureService.ts:4335`
+- `src/services/coachFeatureService.ts:4386`
+- `src/services/coachFeatureService.ts:5409`
+- `src/services/liveTacticsContext.ts:486`
+- `src/services/liveTacticsContext.ts:495`
 - `src/services/lookaheadPlan.ts:131`
 - `src/services/playedConcept.ts:57`
 - `src/services/reviewBoardAwareness.test.ts:47`
@@ -1346,6 +1346,8 @@
 - `src/services/theirIdeasOneOwner.os1.test.ts`
 - `src/services/weaknessBriefing.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
+- `src/test/moveIntentReads.gate.test.ts`
+- `src/test/oneWhyBest.gate.test.ts`
 
 ## Audits that reach it
 
