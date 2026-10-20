@@ -10,7 +10,8 @@ import type { Square } from 'chess.js';
 import { legalSeeGainOn } from './positionReadingService';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatPrevention } from './groundedAnswer';
 import { selectTeaching } from './teachingSelector';
-import { coldStudent, computeNeed, type StudentNeedContext, type NeedVerdict } from './needScore';
+import { coldStudent, computeNeed, fenKey, type StudentNeedContext, type NeedVerdict } from './needScore';
+import type { StoryBeat } from './openingStory';
 import { loadStudentNeedContext } from './studentNeedLoader';
 import { layerStandings } from './teachingLayers';
 import { readConversion, type ConversionStep } from './conversionMethod';
@@ -1188,6 +1189,20 @@ export function frameTeachingForOpponent(sentence: string): string {
   return `Your opponent ${continueSentence(s)}`;
 }
 
+/** A line the student has played this many times without leaving book is
+ *  proven: the story says what the opening is and stops there. */
+export const STORY_PROVEN_GAMES = 5;
+/** Every beat of the opening story is opening theory taught at its move —
+ *  the `[opening]` facet (a TEACH role, deduped by its own claim key). Not
+ *  `[plan-opening]`: that tag is a once-a-review development nag, and it would
+ *  silence the key break after the character was said. A new beat fails to
+ *  compile until it is placed here. */
+const STORY_TAG: Record<StoryBeat, FacetTag> = {
+  fork: 'opening', identity: 'opening', 'branch-choice': 'opening', 'their-setup': 'opening',
+  'structure-cost': 'opening', 'structure-paid': 'opening', consequence: 'opening',
+  character: 'opening', 'key-break': 'opening', 'horizon-plan': 'opening',
+};
+
 export function buildReviewSegments(
   moves: ReviewMoveInput[],
   /** The student's color — when provided, their silent opening moves are
@@ -1429,6 +1444,17 @@ export function buildReviewSegments(
   const refutedSaid = new Set<string>();
   // Learn-computer hints already spoken this game (A2), by claim identity.
   const hintsSaid = new Set<string>();
+  // HOW MUCH OF THE OPENING'S STORY THIS STUDENT GETS — from their own record
+  // (David 2026-10-19: "an opening they keep leaving early gets more; one they
+  // play cleanly gets a line"). Full story unless the record PROVES the line:
+  // five or more games in this opening, no departure of theirs anywhere on this
+  // game's line. A grey record (few games) gets the whole story (grey teaches).
+  const storyAll: boolean | null = ((): boolean | null => {
+    if (!studentNeed) return true;
+    const keys = studentNeed.lineFenKeys ? new Set(studentNeed.lineFenKeys) : null;
+    const leftHere = keys ? studentNeed.bookDepartures.some((r) => keys.has(fenKey(r.bookFen))) : studentNeed.bookDepartures.length > 0;
+    return leftHere || (studentNeed.openingGames ?? 0) < STORY_PROVEN_GAMES;
+  })();
   // LOOSE PIECES, BY OWNER — spoken count this game. The first is said; the
   // second names the PATTERN (the heart of the app: "what the opponent keeps
   // doing wrong — closing on the habit that finds it next time"); after that a
@@ -1937,6 +1963,27 @@ export function buildReviewSegments(
             }
           }
         } catch { /* a bonus, never a blocker */ }
+      }
+      // THE OPENING'S STORY, AS EACH MOVE IS PLAYED (David 2026-10-19: "in
+      // review, i do want the full theory and main idea of the opening
+      // explained as each move is being played. like Danya does in his post
+      // game analysis"). The SAME computer Learn reads (`openingStory`, one
+      // vocabulary): the fork and its families, what the opening is, the road
+      // the student chose and why, their setup, the structure's cost and the
+      // move that pays it, the coming game's character, the key break. Review
+      // may name the moves (the game is over). Said once a game each, through
+      // the walk's after-the-door ledger; sized by the student's own record.
+      if (studentColorWB && storyAll !== null) {
+        for (const r of readBoardAll('openingStory', { history: sansForRun.slice(0, m.ply), fen: fenPair.fenAfter, student: studentColorWB, namesStudentMoves: true })) {
+          if (!storyAll && r.storyBeat !== 'identity') continue;
+          const id = `hint:${r.key}`;
+          if (hintsSaid.has(id) || facets.some((x) => facetIdentity.get(x) === id)) continue;
+          const raw = `[${r.storyBeat ? STORY_TAG[r.storyBeat] : 'opening'}] ${r.text}`;
+          facets.push(raw);
+          facetIdentity.set(raw, id);
+          facetProofs.set(raw, r.proof);
+          if (r.squares.length) facetSquares.set(raw, r.squares);
+        }
       }
       // A VERDICT ON THEIR OPENING CHOICE — parity with Learn: their move that
       // left the masters' book, judged by the engine's cost of it.

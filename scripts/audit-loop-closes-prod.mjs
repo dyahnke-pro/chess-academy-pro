@@ -379,7 +379,7 @@ const run = async () => {
       // A turning-point question is answered by a move; forward = "I don't know".
       ['review-turning-question', '[data-testid="review-forward-btn"]'],
       ['review-find-shot-card', '[data-testid="review-find-shot-skip"]'],
-      ['review-theory-ask', '[data-testid="review-theory-skip"]'], ['review-critical-reveal', '[data-testid="review-critical-done"]'],
+      ['review-critical-reveal', '[data-testid="review-critical-done"]'],
       ['review-rewind-card', '[data-testid="review-rewind-decline"]'],
     ];
     const budgetMs = Math.min(15 * 60 * 1000, 12000 * (first.ply + 4));
