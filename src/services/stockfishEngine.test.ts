@@ -2534,3 +2534,29 @@ describe('engineLedger — the engine records its own timeline (Learn speed, 202
     expect(engineLedger().at(-1)?.outcome).toBe('shared');
   });
 });
+
+describe('analyzeBounded — a read stopped at its budget (Learn speed, 2026-10-20)', () => {
+  it('sends stop once the budget has run from the search start, and settles with what it reached', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+    const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+    pmMock.mockImplementation((msg: string) => {
+      mockWorker.postMessageCalls.push(msg);
+      if (msg === 'isready') queueMicrotask(() => mockWorker.emit('readyok'));
+      if (msg.startsWith('go')) queueMicrotask(() => mockWorker.emit('info depth 15 seldepth 20 multipv 1 score cp 30 nodes 1000 pv e2e4 e7e5'));
+      if (msg === 'stop') queueMicrotask(() => mockWorker.emit('bestmove e2e4'));
+    });
+    vi.useFakeTimers();
+    const p = stockfishEngine.analyzeBounded(STARTING_FEN, 18, { searchmoves: 'e2e4 d2d4' }, 500, true);
+    await vi.advanceTimersByTimeAsync(100);
+    expect(mockWorker.postMessageCalls.filter((m) => m === 'stop').length).toBe(0);
+    await vi.advanceTimersByTimeAsync(500);
+    // The search was told to stop at the budget: a 30 s depth-18 price search
+    // can no longer hold the engine.
+    expect(mockWorker.postMessageCalls.includes('stop')).toBe(true);
+    const r = await p;
+    vi.useRealTimers();
+    expect(r.depth).toBe(15);
+    expect(r.topLines[0]?.searchedShort).toBe(true);
+  });
+});

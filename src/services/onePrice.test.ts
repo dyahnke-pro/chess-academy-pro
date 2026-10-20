@@ -11,7 +11,7 @@ vi.mock('./refutedAlternative', async (importOriginal) => {
   return { ...real, SINGLETON_SCORER: { ...real.SINGLETON_SCORER, scoreMoves } };
 });
 
-import { gradePlayedMove, liveMovePrice, priceLabel, clearMovePriceMemo } from './playedMoveGrade';
+import { gradePlayedMove, liveMovePrice, priceLabel, clearMovePriceMemo, PRICE_DEEPEN_BUDGET_MS } from './playedMoveGrade';
 import { callInaccuracyDetailed } from './inaccuracyCall';
 import { COACH_TURN_DEPTH } from './engineConstants';
 
@@ -80,6 +80,31 @@ describe('the price says how it was searched (OS-11)', () => {
     scoreMoves.mockResolvedValue([{ evaluation: -4, mate: null, moves: ['e4e5'], depth: 12 }, { evaluation: -400, mate: null, moves: ['f4g5'], depth: 13 }]);
     const p = await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH);
     expect(p?.search?.depthReached).toBe(12);
+  });
+});
+
+describe('a deeper price search is bounded by the budget left (Learn speed, 2026-10-20)', () => {
+  // 133 sits on a band edge, so the price deepens. A depth-18 search on two
+  // moves ran 30 s under the question hold; each deeper search now carries
+  // the budget that is left, and stops there.
+  it('every deeper search carries a budget no larger than the deepening budget', async () => {
+    await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH);
+    const deeperCalls = scoreMoves.mock.calls.slice(1);
+    expect(deeperCalls.length).toBeGreaterThan(0);
+    for (const c of deeperCalls) {
+      expect(typeof c[3]).toBe('number');
+      expect(c[3]).toBeGreaterThan(0);
+      expect(c[3]).toBeLessThanOrEqual(PRICE_DEEPEN_BUDGET_MS);
+    }
+  });
+  it('a search the budget cut short that got no deeper keeps the price', async () => {
+    scoreMoves.mockReset();
+    scoreMoves.mockResolvedValueOnce(ONE_SEARCH.map((l) => ({ ...l, depth: 14 })));
+    // Asked for depth 16, stopped at 14: not a deeper read.
+    scoreMoves.mockResolvedValueOnce([{ evaluation: -4, mate: null, moves: ['e4e5'], depth: 14 }, { evaluation: -400, mate: null, moves: ['f4g5'], depth: 14 }]);
+    const p = await liveMovePrice(KG5, 'f4g5', SHALLOW_FAN, COACH_TURN_DEPTH);
+    expect(p?.costCp).toBe(133);
+    expect(p?.search).toMatchObject({ depthReached: 14, deepened: false });
   });
 });
 
