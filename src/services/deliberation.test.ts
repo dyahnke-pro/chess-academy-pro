@@ -222,10 +222,19 @@ describe('weighing the candidates (P2 #4)', () => {
 });
 
 describe('heldVerdictText — the held answer always carries its reason', async () => {
-  const { heldVerdictText } = await import('./deliberation');
+  const { heldVerdictText, heldFoundText } = await import('./deliberation');
   const v = { san: 'Nf5', why: 'eyes d4', line: null };
   it('now / found (a missed held move is not named — Learn names no move unasked, 2026-10-10)', () => {
-    expect(heldVerdictText(v, 'now')).toBe('The move is Nf5 — it eyes d4.');
-    expect(heldVerdictText(v, 'found')).toBe('That was the move here — it eyes d4.');
+    expect(heldVerdictText(v)).toBe('The move is Nf5 — it eyes d4.');
+    expect(heldFoundText(v, 0)).toBe('That was the move here — it eyes d4.');
+  });
+  it('the found credit rotates its stem — never the same one twice running (OS-11 g1: ×7)', () => {
+    const said = Array.from({ length: 7 }, (_, k) => heldFoundText(v, k));
+    for (let k = 1; k < said.length; k++) expect(said[k]).not.toBe(said[k - 1]);
+    for (const s of said) expect(s).toMatch(/eyes d4\.$/);
+    // No stem more than twice in seven (the report's formula bar).
+    const counts = new Map<string, number>();
+    for (const s of said) counts.set(s, (counts.get(s) ?? 0) + 1);
+    expect(Math.max(...counts.values())).toBeLessThanOrEqual(2);
   });
 });

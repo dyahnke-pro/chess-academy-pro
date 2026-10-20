@@ -274,7 +274,7 @@ import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
 import { mateContext } from '../../utils/mateContext';
 import { speakComputed } from '../../services/speakComputed';
-import { heldVerdictText } from '../../services/deliberation';
+import { heldFoundText, heldVerdictText } from '../../services/deliberation';
 import { applyCoachSetting } from '../../services/coachSettingsAction';
 import { detectStudentLanguage } from '../../services/spokenLanguage';
 import { translateToEnglish } from '../../services/coachApi';
@@ -11804,7 +11804,7 @@ export function CoachTeachPage(): JSX.Element {
                         // their move fell short is the error call's, and the move
                         // waits for Show me.
                         if (!heldNow.shown && heldMove && found) {
-                          const foundText = heldVerdictText(heldNow, 'found');
+                          const foundText = heldFoundText(heldNow, nextStem(learnMemRef.current, 'held-found'));
                           queueSpokenHint(fenAfterReply, foundText, 'heldMove', legalLineProof(fenBefore, [move.san], lineSeatAt(fenBefore, playerColor === 'white' ? 'w' : 'b'), true) ?? NO_PROOF.description, NAMES_NO_MOVE, [move.to], [`found-${move.san}`], fenBefore);
                         }
                         captureEvent('learn_move_held_answered', { surface: 'coach-teach', found, shown: heldNow.shown });
@@ -13227,7 +13227,7 @@ export function CoachTeachPage(): JSX.Element {
       heldNow.shown = true;
       // Shown is told: the move played from this board is prompted.
       announcedBoardsRef.current.add(fen.split(' ').slice(0, 2).join(' '));
-      const text = heldVerdictText(heldNow, 'now');
+      const text = heldVerdictText(heldNow);
       setMessages((prev) => [...prev, { id: uid('held-show'), role: 'assistant', content: text, timestamp: Date.now() }]);
       void speakComputed(text, { forced: true, intent: 'learn' }).catch(() => undefined);
       captureEvent('learn_move_held_shown', { surface: 'coach-teach' });
