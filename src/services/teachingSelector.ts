@@ -171,7 +171,7 @@ function toSegment(p: SelectorPly): TurningPointSegmentLike {
  *  of the weakness the moment's landed tactic matches, else 0. */
 export function weaknessBoostCp(tactic: string | null, signals: readonly import('./weaknessSignal').WeaknessSignal[]): number {
   if (!tactic || signals.length === 0) return 0;
-  const m = matchTacticPattern(tactic as TacticPatternType, signals);
+  const m = matchTacticPattern(tactic as TacticPatternType, signals, 'finds');
   return m ? boostFor(m) : 0;
 }
 
@@ -322,7 +322,7 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
     // the need score beneath it — so the number that RAISES the moment and the
     // number that decides whether it speaks are about the same hole.
     const hole = matchFundamental(p.fundamentalId, student?.signals ?? [])
-      ?? (tactic ? matchTacticPattern(tactic as import('../types/tacticTypes').TacticPatternType, student?.signals ?? []) : null)
+      ?? (tactic ? matchTacticPattern(tactic as import('../types/tacticTypes').TacticPatternType, student?.signals ?? [], 'finds') : null)
       ?? posedTags.map((t) => matchTag(t, student?.signals ?? [])).find((m) => m) ?? null;
     boostByPly.set(p.ply, studentMomentBoost({
       hole,

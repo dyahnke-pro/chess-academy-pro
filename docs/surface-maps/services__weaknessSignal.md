@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**275 lines · 9 exports · 42 importers · 21 tests · 1 audits**
+**286 lines · 9 exports · 47 importers · 25 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4009) — names `boostFor`, `matchClauseKind`
-- **The standard post-deploy ritual** (CLAUDE.md:6311) — names `weaknessSignal`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4104) — names `boostFor`, `matchClauseKind`
+- **The standard post-deploy ritual** (CLAUDE.md:6444) — names `weaknessSignal`
 
 ## Who calls in
 
@@ -24,6 +24,10 @@
 - `src/services/fundamentalRecurrence.ts`
 - `src/services/habitJoin.test.ts`
 - `src/services/learnFundamentalNarration.ts`
+- `src/services/learnMistakeRecurrence.test.ts`
+- `src/services/learnRecordTerms.test.ts`
+- `src/services/learnRecordTerms.ts`
+- `src/services/liveTacticsContext.discoveryLookahead.test.ts`
 - `src/services/liveTacticsContext.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/loopCloses.test.ts`
@@ -38,14 +42,15 @@
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/positionReadComposer.ts`
 - `src/services/puzzleMethod.test.ts`
-- `src/services/puzzleMethod.ts`
 - `src/services/puzzleThemeTargets.test.ts`
 - `src/services/puzzleThemeTargets.ts`
 - `src/services/reviewFacetRank.test.ts`
 - `src/services/reviewFacetRank.ts`
 - `src/services/reviewForesight.test.ts`
+- `src/services/reviewHeldMemory.test.ts`
 - `src/services/studentMomentBoost.test.ts`
 - `src/services/studentMomentBoost.ts`
+- `src/services/studentRecord.ts`
 - `src/services/tacticAlertService.ts`
 - `src/services/teachingLayers.test.ts`
 - `src/services/teachingLayers.ts`
@@ -68,56 +73,57 @@
 - `src/services/weaknessSignal.test.ts:32`
 - `src/services/weaknessSignal.test.ts:42`
 - `src/services/weaknessSignal.test.ts:47`
-- `src/services/weaknessSignal.test.ts:134`
-- `src/services/weaknessSignal.test.ts:138`
-- `src/services/weaknessSignal.test.ts:180`
+- `src/services/weaknessSignal.test.ts:137`
+- `src/services/weaknessSignal.test.ts:141`
 - `src/services/weaknessSignal.test.ts:183`
-- `src/services/weaknessSignal.test.ts:190`
-- `src/services/weaknessSignal.test.ts:196`
-- `src/services/weaknessSignalLoader.ts:62`
+- `src/services/weaknessSignal.test.ts:186`
+- `src/services/weaknessSignal.test.ts:193`
+- `src/services/weaknessSignal.test.ts:199`
+- `src/services/weaknessSignalLoader.ts:64`
 - `src/services/weaknessSpine.fundamentals.test.ts:116`
 
 ### `MAX_WEAKNESS_BOOST` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `boostFor` (function) — 26 call sites
-- `src/services/coachDecider.ts:123`
+### `boostFor` (function) — 27 call sites
+- `src/services/coachDecider.ts:134`
 - `src/services/fundamentalReachesDecider.test.ts:136`
 - `src/services/fundamentalReachesDecider.test.ts:137`
-- `src/services/needScore.ts:301`
-- `src/services/needScore.ts:315`
-- `src/services/positionFacts.ts:1260`
-- `src/services/positionFacts.ts:1282`
-- `src/services/reviewFacetRank.ts:499`
-- `src/services/reviewFacetRank.ts:547`
-- `src/services/studentMomentBoost.ts:119`
+- `src/services/learnRecordTerms.ts:286`
+- `src/services/needScore.ts:310`
+- `src/services/needScore.ts:324`
+- `src/services/positionFacts.ts:1422`
+- `src/services/positionFacts.ts:1444`
+- `src/services/reviewFacetRank.ts:527`
+- `src/services/reviewFacetRank.ts:575`
+- `src/services/studentMomentBoost.ts:128`
 - `src/services/teachingSelector.ts:175`
 - `src/services/weaknessSignal.test.ts:56`
 - `src/services/weaknessSignal.test.ts:57`
 - `src/services/weaknessSignal.test.ts:58`
 - `src/services/weaknessSignal.test.ts:64`
-- `src/services/weaknessSignal.test.ts:159`
-- `src/services/weaknessSignal.test.ts:160`
-- `src/services/weaknessSignal.test.ts:166`
-- `src/services/weaknessSignal.test.ts:172`
-- `src/services/weaknessSignal.test.ts:173`
-- `src/services/weaknessSignal.test.ts:182`
+- `src/services/weaknessSignal.test.ts:162`
+- `src/services/weaknessSignal.test.ts:163`
+- `src/services/weaknessSignal.test.ts:169`
+- `src/services/weaknessSignal.test.ts:175`
+- `src/services/weaknessSignal.test.ts:176`
 - `src/services/weaknessSignal.test.ts:185`
-- `src/services/weaknessSignalLoader.green.test.ts:58`
-- `src/services/weaknessSignalLoader.green.test.ts:64`
-- `src/services/weaknessSignalLoader.green.test.ts:71`
-- `src/services/weaknessSignalLoader.green.test.ts:81`
+- `src/services/weaknessSignal.test.ts:188`
+- `src/services/weaknessSignalLoader.green.test.ts:62`
+- `src/services/weaknessSignalLoader.green.test.ts:68`
+- `src/services/weaknessSignalLoader.green.test.ts:75`
+- `src/services/weaknessSignalLoader.green.test.ts:82`
 
 ### `clauseKindBucket` (function) — 1 call site
-- `src/services/needScore.ts:358`
+- `src/services/needScore.ts:361`
 
 ### `matchClauseKind` (function) — 13 call sites
 - `src/services/fundamentalReachesDecider.test.ts:130`
 - `src/services/fundamentalReachesDecider.test.ts:157`
-- `src/services/needScore.ts:312`
-- `src/services/positionFacts.ts:1226`
-- `src/services/reviewFacetRank.ts:498`
-- `src/services/reviewFacetRank.ts:546`
+- `src/services/needScore.ts:321`
+- `src/services/positionFacts.ts:1388`
+- `src/services/reviewFacetRank.ts:526`
+- `src/services/reviewFacetRank.ts:574`
 - `src/services/weaknessSignal.test.ts:77`
 - `src/services/weaknessSignal.test.ts:80`
 - `src/services/weaknessSignal.test.ts:83`
@@ -126,36 +132,39 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:114`
 - `src/services/weaknessSpine.fundamentals.test.ts:120`
 
-### `matchTacticPattern` (function) — 10 call sites
-- `src/services/liveTacticsContext.ts:542`
-- `src/services/needScore.ts:310`
-- `src/services/positionFacts.ts:1224`
-- `src/services/tacticAlertService.ts:605`
+### `matchTacticPattern` (function) — 11 call sites
+- `src/services/liveTacticsContext.ts:651`
+- `src/services/needScore.ts:319`
+- `src/services/positionFacts.ts:1386`
+- `src/services/tacticAlertService.ts:606`
 - `src/services/teachingSelector.ts:174`
 - `src/services/teachingSelector.ts:325`
 - `src/services/weaknessSignal.test.ts:100`
 - `src/services/weaknessSignal.test.ts:103`
 - `src/services/weaknessSignal.test.ts:104`
 - `src/services/weaknessSignal.test.ts:107`
+- `src/services/weaknessSignal.test.ts:110`
 
-### `matchTag` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:1932`
-- `src/services/needScore.ts:299`
-- `src/services/positionFacts.ts:1226`
+### `matchTag` (function) — 10 call sites
+- `src/services/fundamentalRecurrence.ts:61`
+- `src/services/learnRecordTerms.ts:71`
+- `src/services/learnRecordTerms.ts:285`
+- `src/services/needScore.ts:308`
+- `src/services/positionFacts.ts:1388`
 - `src/services/teachingSelector.ts:326`
-- `src/services/weaknessSignal.test.ts:116`
 - `src/services/weaknessSignal.test.ts:119`
-- `src/services/weaknessSignal.test.ts:120`
+- `src/services/weaknessSignal.test.ts:122`
+- `src/services/weaknessSignal.test.ts:123`
 - `src/services/weaknessSpine.fundamentals.test.ts:119`
 
 ### `matchFundamental` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:2474`
+- `src/services/coachFeatureService.ts:2514`
 - `src/services/fundamentalReachesDecider.test.ts:88`
 - `src/services/fundamentalReachesDecider.test.ts:99`
 - `src/services/fundamentalReachesDecider.test.ts:129`
-- `src/services/fundamentalRecurrence.ts:44`
+- `src/services/fundamentalRecurrence.ts:61`
 - `src/services/loopCloses.review.integration.test.ts:82`
-- `src/services/needScore.ts:309`
+- `src/services/needScore.ts:318`
 - `src/services/teachingSelector.ts:324`
 - `src/services/weaknessSpine.fundamentals.test.ts:117`
 - `src/services/weaknessSpine.fundamentals.test.ts:118`
@@ -166,6 +175,9 @@
 - `src/services/fundamentalReachesDecider.test.ts`
 - `src/services/fundamentalRecurrence.test.ts`
 - `src/services/habitJoin.test.ts`
+- `src/services/learnMistakeRecurrence.test.ts`
+- `src/services/learnRecordTerms.test.ts`
+- `src/services/liveTacticsContext.discoveryLookahead.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/loopCloses.test.ts`
 - `src/services/needCoverage.report.test.ts`
@@ -178,6 +190,7 @@
 - `src/services/puzzleThemeTargets.test.ts`
 - `src/services/reviewFacetRank.test.ts`
 - `src/services/reviewForesight.test.ts`
+- `src/services/reviewHeldMemory.test.ts`
 - `src/services/studentMomentBoost.test.ts`
 - `src/services/teachingLayers.test.ts`
 - `src/services/weaknessSignal.test.ts`

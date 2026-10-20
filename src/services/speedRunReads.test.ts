@@ -118,7 +118,9 @@ describe('his habits of thought, computed (each checked against the existing com
   it('skip the middleman: c4 hits d5 now (and survives the exchange) — no need to prepare it', () => {
     const fen = fenAt('d4 d5 Nf3 Nf6 e3 e6 Bd3 c5');
     expect(skipMiddleman(fen, 'c4')?.text).toMatch(/break is ready now/);
-    expect(skipMiddleman(fen, 'c4')?.idea).toMatch(/c-pawn break against their pawn on d5/);
+    // The held form names neither the pawn nor its target (prod 2026-10-20: LEARN NAMES NO MOVE UNASKED).
+    expect(skipMiddleman(fen, 'c4')?.idea).toMatch(/A pawn break is ready now — find it/);
+    expect(skipMiddleman(fen, 'c4')?.idea).not.toMatch(/c-pawn|d5|c4/);
     expect(skipMiddleman(fen, 'O-O')).toBeNull();
   });
   it('the useful waiting move: nothing matters much and the engine plays h3', () => {

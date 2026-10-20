@@ -137,7 +137,7 @@ import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
 import { db } from '../../db/schema';
 import { calculateAccuracy, getClassificationCounts } from '../../services/accuracyService';
 import { liveMovePrice } from '../../services/playedMoveGrade';
-import type { MovePrice } from '../../services/moveCost';
+import { findKeyMoments, type MovePrice } from '../../services/moveCost';
 import { getPhaseBreakdown, classifyPhase } from '../../services/gamePhaseService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
@@ -162,34 +162,6 @@ import { classifyMoveFull } from '../../services/moveRating';
 import { assembleSlipNarration, ownHangingLine as hangingLineFor } from '../../services/groundedAnswer';
 import { LocalizedCoachText } from './ChatMessage';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
-
-function findKeyMoments(moves: CoachGameMove[]): KeyMoment[] {
-  // The student's moves ranked by their ONE price (#2 root cause 4) — never
-  // the swing between two stored evals two plies apart, which charged the
-  // student for the coach's move in between.
-  const swings: { delta: number; move: CoachGameMove }[] = moves
-    .filter((m) => !m.isCoachMove && typeof m.costCp === 'number')
-    .map((m) => ({ delta: m.costCp as number, move: m }));
-  if (swings.length === 0) return [];
-
-  swings.sort((a, b) => b.delta - a.delta);
-
-  return swings.slice(0, 5).map((s) => {
-    const cls = s.move.classification;
-    const type: KeyMoment['type'] = cls === 'brilliant' || cls === 'great'
-      ? 'brilliant'
-      : cls === 'blunder' || cls === 'mistake'
-        ? 'blunder'
-        : s.delta > 200 ? 'turning_point' : 'turning_point';
-
-    return {
-      moveNumber: s.move.moveNumber,
-      fen: s.move.fen,
-      explanation: s.move.commentary || `Move ${s.move.moveNumber}: ${s.move.san} — evaluation changed significantly.`,
-      type,
-    };
-  });
-}
 
 function buildAnalysisSummary(
   moves: CoachGameMove[],

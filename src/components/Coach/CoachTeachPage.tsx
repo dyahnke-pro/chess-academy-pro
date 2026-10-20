@@ -292,7 +292,7 @@ import { computePositionFacts, clauseClaims, mustKey, conceptInstanceKey, conver
 import { gradePlayedMove, liveMoveCost, liveMovePrice, priceLabel, uciOfSan, type MovePrice } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
-import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine, isLoudAlarm, dangerRank, PIECE_DANGER_RANK } from '../../services/liveTacticsContext';
+import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine, isLoudAlarm, dangerRank, PIECE_DANGER_RANK, upcomingTacticSquares } from '../../services/liveTacticsContext';
 import { buildCausalChain, causalChainHighlights } from '../../services/causalChain';
 import { renderCausalChain } from '../../services/causalChainVoice';
 import { seatPieceReferences } from '../../services/groundedAnswer';
@@ -8438,6 +8438,9 @@ export function CoachTeachPage(): JSX.Element {
      *  what was computed rather than computing something new. */
     let tacticSquares: string[] = [];
     let threatSquares: string[] = [];
+    // Which of the student's moves the threat line names — only the look-ahead
+    // ("if you play …") names one; the door holds it while that move is theirs.
+    let threatNames: NamesStudentMove = NAMES_NO_MOVE;
     const AV: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
     let tacticLine: string | null = null;
     /** What the tactic wins (`factStakes`) — a tactic the detectors proved is
@@ -8842,7 +8845,8 @@ export function CoachTeachPage(): JSX.Element {
         if (up?.spoken) {
           threatKey = `soon:${up.type}:${theirs ?? ''}`;
           threatProducer = { kind: 'soon', threat: { type: up.type, description: up.description } };
-          threatSquares = (up.description.match(/\b[a-h][1-8]\b/g) ?? []).slice(0, 4);
+          threatSquares = upcomingTacticSquares(up);
+          threatNames = up.namesStudentMove;
           threatLine = `Watch out — ${up.spoken}.`;
           // The moves that build it are its proof (played from this board).
           threatFactProof = legalLineProof(args.fenAfterReply, up.line, lineSeatAt(args.fenAfterReply, studentCC));
@@ -9494,7 +9498,7 @@ export function CoachTeachPage(): JSX.Element {
     const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, midExchange: midExchangeOn }, facts: [
       ...(gemLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, namesStudentMove: tacticLines?.[0] ? studentMovesInLine(tacticLines[0].fen, tacticLines[0].sans, studentCC, args.fenAfterReply) : NAMES_NO_MOVE, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
-      ...(threatLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
+      ...(threatLine ? [{ namesStudentMove: threatNames, lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
       ...(lastHereRead ? [{ namesStudentMove: NAMES_NO_MOVE, lane: lastHereRead.key.startsWith('last-here:same:') ? 'sameAsLastTime' as const : 'lastTimeHere' as const, text: lastHereRead.text, fen: lastHereRead.fen ?? args.fenAfterReply, claims: [lastHereRead.key], proof: lastHereRead.proof }] : []),
       ...(bookMoveRead ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'bookMove' as const, text: bookMoveRead.text, fen: bookMoveRead.fen ?? args.fenAfterReply, squares: bookMoveRead.squares, claims: [bookMoveRead.key], role: 'teach' as const, proof: bookMoveRead.proof, skill: FUNDAMENTAL_TAG['left-book-early'] }] : []),
       ...(announceLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name, claims: announceClaims, ...(announceSquares.length ? { squares: announceSquares } : {}) }] : []),
@@ -12084,7 +12088,14 @@ export function CoachTeachPage(): JSX.Element {
                           const stoppedPrep = !!intent.prevents && preventsNamedIdea(learnMemRef.current.theirPrep, fenBefore, intent.prevents.uci);
                           const baseText = prepRule ? `${intent.text.replace(/\.$/, '')} — ${prepRule.text}.` : intent.text;
                           const intentText = `${stoppedPrep ? `${baseText} ${STOPPED_THEIR_IDEA}` : baseText}${reasonTail ? ` ${reasonTail}` : ''}`;
-                          queueSpokenHint(fenAfterReply, intentText, 'moveIntent', squaresProof(intentText, intent.squares) ?? NO_PROOF.description, NAMES_NO_MOVE, intent.squares, [
+                          // The prepared move, as the move to play next — and so the move
+                          // this line NAMES (OS-10): the door holds it while it is still the
+                          // student's to play ("You play O-O-O first, so that a pawn push
+                          // can hit their pawn on g4", prod 2026-10-20).
+                          const intentArrows: ArrowClaim[] = intent.prepares && !intent.prepares.san.startsWith('O-O')
+                            ? [{ from: intent.prepares.uci.slice(0, 2), to: intent.prepares.uci.slice(2, 4), role: 'play', source: 'learn.moveIntent' }]
+                            : [];
+                          queueSpokenHint(fenAfterReply, intentText, 'moveIntent', squaresProof(intentText, intent.squares) ?? NO_PROOF.description, namesFromArrows(intentArrows, playerColor === 'white' ? 'w' : 'b', fenAfterReply), intent.squares, [
                             ...(intent.prevents ? [`stops:${intent.prevents.uci}`] : []),
                             ...(intent.prepares ? [`prepares:${intent.prepares.uci}`] : []),
                             // "Bc4 clears the way to castle" and "castling is one
@@ -12095,14 +12106,9 @@ export function CoachTeachPage(): JSX.Element {
                             ...(intent.prepares && /^[a-h][1-8]$/.test(intent.prepares.san) ? [`break-${intent.prepares.san}`] : []),
                             ...(prepRule?.keys ?? []).map((k) => `principle:${k}`),
                           ], undefined,
-                          // The prepared move, as the move to play next.
-                          [
-                            ...(intent.prepares && !intent.prepares.san.startsWith('O-O')
-                              ? [{ from: intent.prepares.uci.slice(0, 2), to: intent.prepares.uci.slice(2, 4), role: 'play' as const, source: 'learn.moveIntent' }]
-                              : []),
-                            // The alternative the tail calls worse — red, on its board.
-                            ...(reasonTail && theReason ? refutedAlternativeClaims(theReason, fenBefore) : []),
-                          ],
+                          // The prepared move, as the move to play next; the alternative
+                          // the tail calls worse — red, on its board.
+                          [...intentArrows, ...(reasonTail && theReason ? refutedAlternativeClaims(theReason, fenBefore) : [])],
                           undefined, preventStakes(intent.prevents), undefined, intent.prevents ? 'stopped' : undefined);
                           captureEvent('coach_move_intent_named', {
                             surface: 'coach-teach', prevents: !!intent.prevents, prepares: !!intent.prepares,

@@ -391,6 +391,11 @@ function phrase(
   const dot = (s: string, side: 'w' | 'b'): string => (side === 'b' ? `…${s}` : s);
   const opp: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
   const played = dot(san, mover);
+  // A castle is done, not played: "You play castle queenside first" (prod
+  // 2026-10-20) reads as a garble.
+  const castles = san.startsWith('O-O') ? `castle ${san.startsWith('O-O-O') ? 'queenside' : 'kingside'}` : null;
+  const youPlay = castles ? `You ${castles}` : `You play ${played}`;
+  const theyPlay = castles ? `They ${castles}` : `They play ${played}`;
   const key = stemKeyOf(fenAfter);
   // WHOSE piece it hits, said from the student's seat (run B walk 2026-09-30:
   // "…Rad8 prepares …Qd2, to hit the queen on c1" — theirs, unsaid).
@@ -410,13 +415,13 @@ function phrase(
     if (prevents) return rotateStem([`${played} — now ${stop} doesn't work.`, `The point of ${played}: it takes ${stop} away.`], key);
     // Every stem names the seat (review audit 2026-10-15: "…e5 first, so that
     // …Bd6 can bring the bishop into the game" said whose move to no one).
-    if (does?.castle) return rotateStem([`Your ${played} clears the way to castle.`, `You play ${played} first, so you can castle next.`], key);
-    if (does?.develops && held) return rotateStem([`You play ${played} first, to free your ${does.develops.piece} on ${does.develops.from}.`, `Your ${played} frees your ${does.develops.piece} on ${does.develops.from} to come out.`], key);
-    if (does?.develops) return rotateStem([`You play ${played} first, to free your ${does.develops.piece} on ${does.develops.from} for ${prep}.`, `Your ${played} frees your ${does.develops.piece} on ${does.develops.from} to come out with ${prep}.`], key);
-    if (does && held) return rotateStem([`You play ${played} first, so that ${prep} can ${does.verb}.`, `Your ${played} gets ${prep} ready to ${does.verb}.`], key);
-    if (does) return rotateStem([`You play ${played} first, so that ${prep} can ${does.verb}.`, `Your ${played} prepares ${prep}, to ${does.verb}.`], key);
+    if (does?.castle) return rotateStem([`Your ${played} clears the way to castle.`, `${youPlay} first, so you can castle next.`], key);
+    if (does?.develops && held) return rotateStem([`${youPlay} first, to free your ${does.develops.piece} on ${does.develops.from}.`, `Your ${played} frees your ${does.develops.piece} on ${does.develops.from} to come out.`], key);
+    if (does?.develops) return rotateStem([`${youPlay} first, to free your ${does.develops.piece} on ${does.develops.from} for ${prep}.`, `Your ${played} frees your ${does.develops.piece} on ${does.develops.from} to come out with ${prep}.`], key);
+    if (does && held) return rotateStem([`${youPlay} first, so that ${prep} can ${does.verb}.`, `Your ${played} gets ${prep} ready to ${does.verb}.`], key);
+    if (does) return rotateStem([`${youPlay} first, so that ${prep} can ${does.verb}.`, `Your ${played} prepares ${prep}, to ${does.verb}.`], key);
     if (held) return `Your ${played} gets ${prep} ready.`;
-    return rotateStem([`Your ${played} prepares ${prep}.`, `You play ${played} first, so that ${prep} comes next.`], key);
+    return rotateStem([`Your ${played} prepares ${prep}.`, `${youPlay} first, so that ${prep} comes next.`], key);
   }
   const stop = prevents ? `your ${dot(prevents.san, opp)}` : '';
   const prep = prepares ? dot(prepares.san, mover) : '';
@@ -425,10 +430,10 @@ function phrase(
   if (prevents?.mate) return `Their ${played} stops ${stop.replace(/[+#]$/, '')}, which was mate.`;
   if (prevents && theirWouldDo) return `Their ${played} stops ${stop}, which would ${theirWouldDo}.`;
   if (prevents) return rotateStem([`Their ${played} stops ${stop}.`, `The point of their ${played}: it takes ${stop} away.`], key);
-  if (does?.castle) return rotateStem([`Their ${played} clears the way to castle.`, `They play ${played} first, so they can castle next.`], key);
-  if (does?.develops) return rotateStem([`They play ${played} first, to free their ${does.develops.piece} on ${does.develops.from} for ${prep}.`, `Their ${played} frees their ${does.develops.piece} on ${does.develops.from} to come out with ${prep}.`], key);
-  if (does) return rotateStem([`Their ${played} prepares ${prep}, to ${does.verb}.`, `They play ${played} first, so that ${prep} can ${does.verb}.`], key);
-  return rotateStem([`Their ${played} prepares ${prep}.`, `They play ${played} first, so that ${prep} comes next.`], key);
+  if (does?.castle) return rotateStem([`Their ${played} clears the way to castle.`, `${theyPlay} first, so they can castle next.`], key);
+  if (does?.develops) return rotateStem([`${theyPlay} first, to free their ${does.develops.piece} on ${does.develops.from} for ${prep}.`, `Their ${played} frees their ${does.develops.piece} on ${does.develops.from} to come out with ${prep}.`], key);
+  if (does) return rotateStem([`Their ${played} prepares ${prep}, to ${does.verb}.`, `${theyPlay} first, so that ${prep} can ${does.verb}.`], key);
+  return rotateStem([`Their ${played} prepares ${prep}.`, `${theyPlay} first, so that ${prep} comes next.`], key);
 }
 
 const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };

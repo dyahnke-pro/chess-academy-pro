@@ -135,7 +135,7 @@ import { naturalDefenceFails, forcingLine, markSacrificeLine } from './methodSig
 import { habitNeedFrom } from './coachDecider';
 import { computeNeed, type StudentNeedContext } from './needScore';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
-import { readCriticalMoment, criticalMomentStatement, type CriticalMomentRead } from './criticalMoment';
+import { readCriticalMoment, criticalMomentStatement, opponentOnlyMoveStatement, type CriticalMomentRead } from './criticalMoment';
 import { costStakes, exchangeStakes, forkPoints, lineTacticPoints, type FactStakes } from './factStakes';
 import { nextMoveAdvice, type MoveAdviceVerdict } from './nextMoveAdvice';
 import { depthClauses } from './thinkAloud';
@@ -1105,7 +1105,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     } catch { /* same */ }
   }
   const composedAll = applyWeaknessBoost(
-    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, trapChance, studentSeat, tradeDanger, opponentIntent, statusText, structureText, structureSquares: planFact?.squares, structureClaim: planFact?.ideaKey, fundamentalText, fundamentalClaim, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, methodProof, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: said }), ...tradeClauses],
+    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, criticalAnchor: studentToMove && input.opponentLastMove ? input.opponentLastMove : null, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, trapChance, studentSeat, tradeDanger, opponentIntent, statusText, structureText, structureSquares: planFact?.squares, structureClaim: planFact?.ideaKey, fundamentalText, fundamentalClaim, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, methodProof, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: said }), ...tradeClauses],
     input.studentWeaknesses ?? [],
   );
 
@@ -1429,7 +1429,7 @@ export function mustKey(square: string, fen: string): string {
  * (which feeds both the need score and, via its matched hole, the ranker).
  */
 function clauseHole(c: ClauseItem, signals: readonly WeaknessSignal[]): WeaknessSignal | null {
-  if (c.kind === 'concept') return c.conceptId ? matchTacticPattern(c.conceptId as TacticPatternType, signals) : null;
+  if (c.kind === 'concept') return c.conceptId ? matchTacticPattern(c.conceptId as TacticPatternType, signals, 'finds') : null;
   // A line tactic with a motif joins its own `analysis:tactic:<motif>` hole first.
   return (c.kind === 'tactic' && c.motif ? matchTag(`analysis:tactic:${c.motif}`, signals) : null) ?? matchClauseKind(c.kind, signals);
 }
@@ -1539,6 +1539,9 @@ function buildClauses(a: {
   /** THE ONE CRITICAL-MOMENT READ (`criticalMoment`) — how many moves still
    *  hold and what they hold. Null when the fan carried nothing to count. */
   criticalRead: CriticalMomentRead | null;
+  /** The reply that made the board `criticalRead` counted — the statement
+   *  names it, so its count is never heard as one about the move before. */
+  criticalAnchor: { san: string; fenBefore: string } | null;
   /** Keys the statement's stem rotation — resume-safe, never `Math.random`. */
   plyNumber: number;
   importance: ImportanceVerdict;
@@ -1884,7 +1887,7 @@ function buildClauses(a: {
   // genuine only-move outranks a critical moment outranks a two-move fork. The
   // tier comes from the door (which sees cpLoss and threats too); the TEXT
   // comes from the count.
-  const criticalStatement = criticalMomentStatement(criticalRead, plyNumber);
+  const criticalStatement = criticalMomentStatement(criticalRead, plyNumber, a.criticalAnchor);
   if (studentToMove && a.slowDownOwed && criticalStatement && criticalRead) {
     ranked.push({
       namesStudentMove: NAMES_NO_MOVE, kind: 'key-moment',
@@ -1908,8 +1911,11 @@ function buildClauses(a: {
         // not every plan's, or the set stops describing the claim.
         squares: opponentIntent.plans[0]?.squares,
       });
-    } else if (importance.tier === 'only-move') {
-      ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'opponent-intent', rank: 55, text: `They're on a knife-edge here — only one move keeps them in it.` });
+    } else if (opponentOnlyMoveStatement(criticalRead)) {
+      // The count is the one computer's, never the tier's: a tier can read
+      // "only move" off a gap the fan cannot prove (a runner-up a hair under
+      // the band, a bounded score).
+      ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'opponent-intent', rank: 55, text: opponentOnlyMoveStatement(criticalRead) as string });
     } else if (importance.tier === 'critical') {
       ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'opponent-intent', rank: 50, text: `This is where the opponent has to find something — the position is sharp for them.` });
     }
