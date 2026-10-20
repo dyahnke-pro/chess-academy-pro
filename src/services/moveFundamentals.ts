@@ -136,6 +136,10 @@ export interface MoveFundamental {
    *  (a knight that only EYES an outpost is not standing on one). Set where the
    *  fact is made, never read back off the prose. */
   reason?: string | null;
+  /** The mover's NEXT move the clause names ("fianchetto the bishop to b2"
+   *  names Bb2), set where the clause is made, so a Learn caller can hold it
+   *  (OS-11 g3: "The rule behind b3: fianchetto the bishop to b2" before 2.Bb2). */
+  names?: { from: string; to: string };
 }
 
 /**
@@ -636,6 +640,7 @@ export function computeMoveFundamentals(
           ? `fianchetto the bishop to ${fianchetto}`
           : `open the diagonal for the bishop on ${freed}`,
         squares: fianchetto ? [mv.to, fianchetto] : [mv.to, freed],
+        ...(fianchetto ? { names: { from: freed, to: fianchetto } } : {}),
       });
     }
     const guards = eyesCenter(after, mv.to, mover).filter((s) => CORE_CENTER.includes(s));
@@ -1054,6 +1059,8 @@ function openingIdeas(
         selfContained: `prepares the push to ${s} with the pawn to ${mv.to}, so the ${s[0]}-pawn arrives supported`,
         imperative: `guard ${s} before the push, so the ${s[0]}-pawn arrives supported`,
         squares: [mv.to, s, pusher],
+        // "Your d6 prepares e5" names …e5 (OS-11 g2/g3).
+        names: { from: pusher, to: s },
       });
       break;
     }
@@ -1455,7 +1462,7 @@ function ledClause(san: string, lead: MoveFundamental): string {
  */
 export function principleLine(
   fenBefore: string, san: string, mover: 'white' | 'black', taughtIds: ReadonlySet<string>, stemKey: number,
-): { id: string; text: string; squares: string[]; first: boolean } | null {
+): { id: string; text: string; squares: string[]; first: boolean; names: { from: string; to: string } | null } | null {
   // A line that carries two claims ("mg:…|mg-rule:…") is committed as one id by
   // some callers and split by others — read it the same either way.
   const taught: ReadonlySet<string> = new Set([...taughtIds].flatMap((k) => k.split('|')));
@@ -1492,17 +1499,17 @@ export function principleLine(
     const ruleKey = `mg-rule:${lead.id}`;
     const reason = reasonFor(lead);
     if (reason && !taught.has(ruleKey) && reasonHolds(lead, fenBefore, mover)) {
-      return { id: `${middlegameKey(lead)}|${ruleKey}`, text: `${ledClause(san, lead)} — ${reason}.`, squares: lead.squares, first: true };
+      return { id: `${middlegameKey(lead)}|${ruleKey}`, text: `${ledClause(san, lead)} — ${reason}.`, squares: lead.squares, first: true, names: lead.names ?? null };
     }
-    return { id: middlegameKey(lead), text: `${ledClause(san, lead)}.`, squares: lead.squares, first: true };
+    return { id: middlegameKey(lead), text: `${ledClause(san, lead)}.`, squares: lead.squares, first: true, names: lead.names ?? null };
   }
   const fresh = principleToTeach(fenBefore, san, mover, taught);
-  if (fresh) return { id: fresh.id, text: principleOnceLine(san, fresh, stemKey), squares: fresh.squares, first: true };
+  if (fresh) return { id: fresh.id, text: principleOnceLine(san, fresh, stemKey), squares: fresh.squares, first: true, names: fresh.names ?? null };
   const lead = computeMoveFundamentals(fenBefore, san, mover)
     .filter((f) => IS_OPENING_PRINCIPLE[f.id])
     .sort((a, b) => b.weight - a.weight)[0];
   if (!lead || !(REPEAT_TEACHES[lead.id] || lead.forcing)) return null;
-  return { id: lead.id, text: `${ledClause(san, lead)}.`, squares: lead.squares, first: false };
+  return { id: lead.id, text: `${ledClause(san, lead)}.`, squares: lead.squares, first: false, names: lead.names ?? null };
 }
 
 /**
@@ -1518,7 +1525,7 @@ export function principleLine(
  */
 export function principleContrastLine(
   fenBefore: string, san: string, bestSan: string | null, mover: 'white' | 'black', taughtIds: ReadonlySet<string>, stemKey: number,
-): { id: string; text: string; squares: string[]; first: boolean } | null {
+): { id: string; text: string; squares: string[]; first: boolean; names: null } | null {
   if (!bestSan) return null;
   const strip = (x: string): string => x.replace(/[+#!?]+$/, '');
   if (strip(bestSan) === strip(san)) return null;
@@ -1540,10 +1547,10 @@ export function principleContrastLine(
         `${best} was the opening move here — ${lead.imperative}: ${reason}.`,
         `The opening rule in this spot: ${lead.imperative} (${best}) — ${reason}.`,
       ], stemKey),
-      squares: lead.squares, first: true,
+      squares: lead.squares, first: true, names: null,
     };
   }
-  return { id: `contrast:${lead.id}`, text: `${best} ${lead.led} — the opening move here.`, squares: lead.squares, first: false };
+  return { id: `contrast:${lead.id}`, text: `${best} ${lead.led} — the opening move here.`, squares: lead.squares, first: false, names: null };
 }
 
 /** The opening principle a quiet move applies that was ALREADY taught this

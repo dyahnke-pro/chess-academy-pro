@@ -23,7 +23,7 @@
  * flexibility) have none and are deliberately absent (empty > invented).
  */
 import { routeVia } from '../utils/routeWords';
-import { castleRoute, castleAdvice } from './kingSafety';
+import { castleRoute } from './kingSafety';
 import { andList, fileList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import { settledLeadFor, lastMoveFromHistory, type LastMove } from './material';
@@ -298,7 +298,9 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const route = castleRoute(fen, student);
       if (mine && !mine.castled && mine.inCenter && moveNo >= 8 && mine.openFilesNearKing.length >= 1
         && !castleIsOneMoveAway(fen, student) && route && route.blockers.length <= 1) {
-        return { fact: `Your king on ${mine.square} is still in the center with lines opening. ${castleAdvice(route)}`, squares: [sq(mine.square)] };
+        // Learn only: the danger, never the cure — "Move your knight on g1,
+        // then castle short" names the student's next two moves (OS-11 g3).
+        return { fact: `Your king on ${mine.square} is still in the center with lines opening — a king left there gets caught when they open.`, squares: [sq(mine.square)] };
       }
       return null;
     },

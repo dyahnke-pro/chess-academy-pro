@@ -131,7 +131,10 @@ function stormRunner(chess: Chess, color: Color, wing: 'kingside' | 'queenside')
       if (r < 1 || r > 8) break;
       if (n > 0 && chess.get(`${cell.square[0]}${r}` as Square)) break;   // blocked: not running
       const hits = [f - 1, f + 1].some((ff) => {
-        if (ff < 0 || ff > 7) return false;
+        // Only the king's own shelter pawns: an f-pawn meeting a centre pawn
+        // on e5 is not a storm reaching the king (OS-11 g2: "one push from
+        // your king's pawns" off a Najdorf e5).
+        if (ff < 0 || ff > 7 || !files.includes(STORM_FILES[ff])) return false;
         const p = chess.get(`${STORM_FILES[ff]}${r + d}` as Square);
         return !!p && p.type === 'p' && p.color === enemy;
       });

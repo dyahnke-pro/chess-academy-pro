@@ -201,8 +201,16 @@ export function detectCentralKingDanger(fen: string, studentColor: 'w' | 'b'): C
   return { kingSquare: kingSq, aimedFrom, tensionSquare: tension, route };
 }
 
-export function centralKingDangerClause(d: CentralKingDanger): string {
-  return `Your king is still in the centre and the position is about to crack open — they already have a piece aimed down the ${d.kingSquare[0]}-file. ${castleAdvice(d.route)}`;
+export function centralKingDangerClause(
+  d: CentralKingDanger,
+  /** REQUIRED: may the line say how to get castled? The advice names the
+   *  student's next moves ("Move your knight on g1, then castle short" before
+   *  10.Nf3 and 11.O-O, OS-11 g3), so Learn says the danger and leaves the cure
+   *  to the student; review and an asked answer give it. */
+  namesMoves: boolean,
+): string {
+  const danger = `Your king is still in the centre and the position is about to crack open — they already have a piece aimed down the ${d.kingSquare[0]}-file.`;
+  return namesMoves ? `${danger} ${castleAdvice(d.route)}` : danger;
 }
 
 /** "Get castled", or the one piece in the way of it. */

@@ -12070,7 +12070,9 @@ export function CoachTeachPage(): JSX.Element {
                           : null;
                         const theReason = learned?.reason ?? null;
                         if (theReason?.kind === 'the' && theReason.source === 'material') {
-                          queueSpokenHint(fenAfterReply, theReason.text, 'moveIntent', learned?.proof ?? NO_PROOF.description, NAMES_NO_MOVE, theReason.squares, [`reason:${playedUci}`], fenBefore, refutedAlternativeClaims(theReason, fenBefore),
+                          // The forced line it draws can hold the student's next move
+                          // (OS-11 g1 21.Rg5 drew …Rf2 Nxf6): the line says what it names.
+                          queueSpokenHint(fenAfterReply, theReason.text, 'moveIntent', learned?.proof ?? NO_PROOF.description, theReason.line ? studentMovesInLine(theReason.line.fen, theReason.line.sans, playerColor === 'white' ? 'w' : 'b', fenAfterReply, 1) : NAMES_NO_MOVE, theReason.squares, [`reason:${playedUci}`], fenBefore, refutedAlternativeClaims(theReason, fenBefore),
                             theReason.line ? [theReason.line] : undefined,
                             { points: Math.min(theReason.stakeCp ?? 0, 2000) / 100, plies: 1 }, 'teach', 'reason');
                         }

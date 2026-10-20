@@ -118,7 +118,10 @@ export function methodRead(
   const breakPushes = breaks.flatMap((b): Array<[string, string]> => { const m = pushes.find((x) => x.to === b); return m ? [[m.from, m.to]] : []; });
   // A break the student can push right now IS their move: held before the move.
   const breakHeld = holdPlayable && chess.turn() === student && breakPushes.length > 0;
-  const cct = cctRead(fen, student, holdPlayable && chess.turn() === student);
+  // A capture one reply away is the student's move too (OS-11 g4 9…dxe4: "take
+  // their pawn on c3, the piece attacking your pawn" on their move, played two
+  // moves later) — held whoever is to move.
+  const cct = cctRead(fen, student, holdPlayable);
   if (!weakness && !worst && breaks.length === 0 && !cct?.step) return null;
   return { weakness, worst, breaks, breakPushes: breakHeld ? [] : breakPushes, ...(breakHeld ? { breakHeld } : {}), ...(cct ? { cct } : {}) };
 }

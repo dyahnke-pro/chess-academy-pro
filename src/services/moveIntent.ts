@@ -402,7 +402,9 @@ function phrase(
   if (does && /^hit the /.test(does.verb)) does = { ...does, verb: does.verb.replace(/^hit the /, seat === 'student' ? 'hit their ' : 'hit your ') };
   if (seat === 'student') {
     const stop = prevents ? dot(prevents.san, opp) : '';
-    const held = holdPrepared && !!prepares && !prepares.san.startsWith('O-O');
+    // A castle is a move too (OS-11: "You play Nf3 first, so you can castle
+    // next" before 7.O-O, in all four games): held like any other.
+    const held = holdPrepared && !!prepares;
     const prep = !prepares ? '' : held ? preparedPieceWords(prepares.san) : dot(prepares.san, mover);
     if (prevents && prepares && held) return `${played} does two jobs: it stops ${stop}, and ${does?.develops ? `it frees your ${does.develops.piece} on ${does.develops.from}` : does ? `it gets ${prep} ready to ${does.verb}` : `it gets ${prep} ready`}.`;
     if (prevents && prepares) return `${played} does two jobs: it stops ${stop}, and it prepares ${prep}${does?.develops ? `, freeing your ${does.develops.piece} on ${does.develops.from}` : does ? `, to ${does.verb}` : ''}.`;
@@ -415,6 +417,7 @@ function phrase(
     if (prevents) return rotateStem([`${played} — now ${stop} doesn't work.`, `The point of ${played}: it takes ${stop} away.`], key);
     // Every stem names the seat (review audit 2026-10-15: "…e5 first, so that
     // …Bd6 can bring the bishop into the game" said whose move to no one).
+    if (does?.castle && held) return `Your ${played} clears the last piece from between your king and rook.`;
     if (does?.castle) return rotateStem([`Your ${played} clears the way to castle.`, `${youPlay} first, so you can castle next.`], key);
     if (does?.develops && held) return rotateStem([`${youPlay} first, to free your ${does.develops.piece} on ${does.develops.from}.`, `Your ${played} frees your ${does.develops.piece} on ${does.develops.from} to come out.`], key);
     if (does?.develops) return rotateStem([`${youPlay} first, to free your ${does.develops.piece} on ${does.develops.from} for ${prep}.`, `Your ${played} frees your ${does.develops.piece} on ${does.develops.from} to come out with ${prep}.`], key);
