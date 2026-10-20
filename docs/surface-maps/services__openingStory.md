@@ -28,10 +28,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `heldWhilePlayable` (function) — 1 call site
-- `src/services/boardComputers.ts:247`
+- `src/services/boardComputers.ts:250`
 
 ### `openingStoryAt` (function) — 4 call sites
-- `src/services/boardComputers.ts:246`
+- `src/services/boardComputers.ts:249`
 - `src/services/holeKey.test.ts:15`
 - `src/services/openingStory.test.ts:22`
 - `src/services/openingStory.test.ts:123`

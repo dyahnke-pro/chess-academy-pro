@@ -24,7 +24,7 @@ import { findEnablingMove, enablingMoveLine, enablingMoveProof } from './enablin
 import { findTiedDefenders, newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
 import { obligationLifted, obligationLiftedLine } from './obligationLifted';
 import { findQueenGrabTraps, queenGrabTrapLine, queenGrabTrapProof } from './queenGrabTrap';
-import { provenThreatLine, threatStakes } from './threatProof';
+import { looseClaims, provenThreatLine, threatStakes } from './threatProof';
 import { trappedOnBoard } from './reviewTeachingPoints';
 import { bookDeparture } from './bookDeparture';
 import { bookMoveWhy } from './bookMoveWhy';
@@ -60,6 +60,9 @@ export interface BoardRead {
   sharedKey?: string;
   /** What the claim puts at stake, for the door's stakes-first order. */
   stakes?: FactStakes;
+  /** Further claim keys the sentence states (a loose piece it names), so
+   *  another computer saying that piece is loose is dropped as already said. */
+  claims?: string[];
   /** A route the sentence names, one arrow per step, each on its own board
    *  (the plan's piece walked hop by hop) — drawn as `line` arrows. */
   routeArrows?: Array<{ from: string; to: string; fen: string }>;
@@ -350,7 +353,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
   threatCost: {
     read: ({ line, fen, student, squares }) => safe(() => {
       const { text, proof } = provenThreatLine(line, fen, student, squares);
-      return { text, proof: proof ?? squaresProof(text, squares) ?? NO_PROOF.stated, squares: [...new Set([...squares, ...(proof?.squares ?? [])])], key: `threat:${squares.join('')}`, stakes: threatStakes(fen, student, squares) ?? undefined };
+      return { text, proof: proof ?? squaresProof(text, squares) ?? NO_PROOF.stated, squares: [...new Set([...squares, ...(proof?.squares ?? [])])], key: `threat:${squares.join('')}`, stakes: threatStakes(fen, student, squares) ?? undefined, claims: looseClaims(fen, student, squares) };
     }),
     surfaces: { learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },

@@ -38,7 +38,7 @@
 ### `usePositionNarration` (function) — 18 call sites
 - `src/components/Coach/CoachGamePage.tsx:1747`
 - `src/components/Coach/CoachGameReview.tsx:2297`
-- `src/components/Coach/CoachTeachPage.tsx:8190`
+- `src/components/Coach/CoachTeachPage.tsx:8189`
 - `src/components/Openings/OpeningPlayMode.tsx:560`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:685`
 - `src/components/Puzzles/PuzzleBoard.tsx:296`

@@ -104,7 +104,7 @@
 
 ### `applyCandidateArrows` (function) — 5 call sites
 - `src/coach/coachService.ts:2310`
-- `src/components/Coach/CoachTeachPage.tsx:7720`
+- `src/components/Coach/CoachTeachPage.tsx:7719`
 - `src/components/Openings/MiddlegamePractice.tsx:282`
 - `src/hooks/useLiveCoach.ts:357`
 - `src/services/coachAnswerGates.test.ts:157`
@@ -116,7 +116,7 @@
 - `src/services/coachAnswerGates.test.ts:171`
 
 ### `candidateHighlightMarkers` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7725`
+- `src/components/Coach/CoachTeachPage.tsx:7724`
 
 ## Tests
 

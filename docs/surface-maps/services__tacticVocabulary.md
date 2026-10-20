@@ -33,7 +33,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8649`
+- `src/components/Coach/CoachTeachPage.tsx:8648`
 - `src/services/computedVoiceAudit.report.test.ts:249`
 - `src/services/dnaLineNarrator.ts:58`
 - `src/services/groundedAnswer.ts:5470`
@@ -116,7 +116,7 @@
 - `src/services/tacticVocabulary.test.ts:88`
 
 ### `forkConsequence` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8663`
+- `src/components/Coach/CoachTeachPage.tsx:8662`
 - `src/services/reviewFullData.ts:818`
 
 ## Tests

@@ -28,7 +28,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/playedConcept.test.ts:26`
 
 ### `loadProvenConcepts` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8178`
+- `src/components/Coach/CoachTeachPage.tsx:8177`
 
 ## Tests
 

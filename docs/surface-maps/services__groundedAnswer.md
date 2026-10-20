@@ -1119,7 +1119,7 @@
 - `src/services/coachApi.ts:6309`
 
 ### `seatPieceReferences` (re-export) — 36 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8800`
+- `src/components/Coach/CoachTeachPage.tsx:8799`
 - `src/services/coachFeatureService.ts:4328`
 - `src/services/coachFeatureService.ts:4379`
 - `src/services/coachFeatureService.ts:5402`

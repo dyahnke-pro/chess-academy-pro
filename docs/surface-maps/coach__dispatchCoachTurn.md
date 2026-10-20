@@ -109,15 +109,15 @@
 - `src/coach/dispatchCoachTurn.showLine.test.ts:75`
 
 ### `asksBeyondShowMe` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3443`
+- `src/components/Coach/CoachTeachPage.tsx:3442`
 
 ### `showLineAnswer` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3471`
+- `src/components/Coach/CoachTeachPage.tsx:3470`
 
 ### `conversationFor` (function) — 3 call sites
 - `src/coach/dispatchCoachTurn.test.ts:167`
 - `src/coach/requestExecutor.test.ts:88`
-- `src/components/Coach/CoachTeachPage.tsx:3434`
+- `src/components/Coach/CoachTeachPage.tsx:3433`
 
 ### `READ_BUDGET_MS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -125,23 +125,23 @@
 ### `awaitTurnRead` (function) — 4 call sites
 - `src/coach/awaitTurnRead.test.ts:13`
 - `src/coach/awaitTurnRead.test.ts:24`
-- `src/components/Coach/CoachTeachPage.tsx:3602`
-- `src/components/Coach/CoachTeachPage.tsx:3904`
+- `src/components/Coach/CoachTeachPage.tsx:3601`
+- `src/components/Coach/CoachTeachPage.tsx:3903`
 
 ### `TurnReadHandle` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `setPendingOffer` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3485`
+- `src/components/Coach/CoachTeachPage.tsx:3484`
 - `src/components/Coach/CoachTeachPage.tsx:12717`
 - `src/components/Coach/CoachTeachPage.tsx:14827`
 
 ### `openTurnRead` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3551`
+- `src/components/Coach/CoachTeachPage.tsx:3550`
 - `src/components/Coach/GameChatPanel.tsx:480`
 
 ### `isComputedAnswer` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7641`
+- `src/components/Coach/CoachTeachPage.tsx:7640`
 
 ### `dispatchCoachTurn` (function) — 48 call sites
 - `src/coach/chatKindContracts.test.ts:391`

@@ -210,7 +210,7 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8956`
+- `src/components/Coach/CoachTeachPage.tsx:8955`
 
 ### `convertKey` (function) — 3 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10809`
@@ -228,8 +228,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `conceptInstanceKey` (re-export) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8796`
-- `src/components/Coach/CoachTeachPage.tsx:8928`
+- `src/components/Coach/CoachTeachPage.tsx:8795`
+- `src/components/Coach/CoachTeachPage.tsx:8927`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.test.ts:6`

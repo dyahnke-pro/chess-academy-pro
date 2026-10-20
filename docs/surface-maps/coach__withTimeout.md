@@ -39,7 +39,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachGamePage.tsx:2727`
 - `src/components/Coach/CoachGamePage.tsx:3135`
 - `src/components/Coach/CoachGamePage.tsx:3136`
-- `src/components/Coach/CoachTeachPage.tsx:1531`
+- `src/components/Coach/CoachTeachPage.tsx:1530`
 - `src/components/Coach/GameChatPanel.tsx:1015`
 - `src/components/Coach/GameChatPanel.tsx:1393`
 - `src/hooks/usePhaseNarration.ts:97`

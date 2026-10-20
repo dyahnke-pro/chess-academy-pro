@@ -46,7 +46,7 @@
 
 ### `useTeachWalkthrough` (function) — 23 call sites
 - `src/components/Coach/CoachEndgamePage.tsx:118`
-- `src/components/Coach/CoachTeachPage.tsx:1027`
+- `src/components/Coach/CoachTeachPage.tsx:1026`
 - `src/hooks/useTeachWalkthrough.test.tsx:85`
 - `src/hooks/useTeachWalkthrough.test.tsx:94`
 - `src/hooks/useTeachWalkthrough.test.tsx:133`

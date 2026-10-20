@@ -36,7 +36,7 @@
 - `src/services/theoryDeparture.ts:115`
 
 ### `getCachedAmateurPlay` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8120`
+- `src/components/Coach/CoachTeachPage.tsx:8119`
 - `src/components/Coach/CoachTeachPage.tsx:10582`
 - `src/components/Coach/CoachTeachPage.tsx:11620`
 - `src/services/amateurPlayCache.test.ts:37`
@@ -44,7 +44,7 @@
 - `src/services/refutedAlternative.ts:141`
 
 ### `warmAmateurPlay` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8119`
+- `src/components/Coach/CoachTeachPage.tsx:8118`
 - `src/components/Coach/CoachTeachPage.tsx:10689`
 - `src/services/masterPlayWatcher.ts:167`
 

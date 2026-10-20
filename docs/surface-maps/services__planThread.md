@@ -66,7 +66,7 @@
 - `src/services/planThread.test.ts:111`
 
 ### `planThreadTurn` (function) — 17 call sites
-- `src/services/boardComputers.ts:375`
+- `src/services/boardComputers.ts:378`
 - `src/services/planChoice.test.ts:75`
 - `src/services/planChoice.test.ts:89`
 - `src/services/planChoice.test.ts:102`

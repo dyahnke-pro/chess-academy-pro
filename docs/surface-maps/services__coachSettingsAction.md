@@ -47,7 +47,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachSettingsAction.test.ts:61`
 
 ### `applyCoachSetting` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:4467`
+- `src/components/Coach/CoachTeachPage.tsx:4466`
 - `src/services/coachSessionRouter.ts:126`
 
 ## Tests

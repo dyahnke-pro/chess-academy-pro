@@ -35,8 +35,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `conceptInstanceKey` (function) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8796`
-- `src/components/Coach/CoachTeachPage.tsx:8928`
+- `src/components/Coach/CoachTeachPage.tsx:8795`
+- `src/components/Coach/CoachTeachPage.tsx:8927`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.test.ts:6`
@@ -58,9 +58,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionFacts.ts:1692`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:51`
 
-### `looseKey` (function) — 3 call sites
-- `src/services/looseClaim.test.ts:17`
-- `src/services/looseClaim.test.ts:20`
+### `looseKey` (function) — 4 call sites
+- `src/services/looseClaim.test.ts:18`
+- `src/services/looseClaim.test.ts:21`
+- `src/services/looseClaim.test.ts:25`
 - `src/services/threatProof.ts:106`
 
 ### `outpostKey` (function) — 3 call sites
@@ -77,8 +78,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `countKey` (function) — 4 call sites
 - `src/services/boardComputers.test.ts:46`
 - `src/services/boardComputers.test.ts:48`
-- `src/services/boardComputers.ts:230`
-- `src/services/boardComputers.ts:290`
+- `src/services/boardComputers.ts:233`
+- `src/services/boardComputers.ts:293`
 
 ### `kickKey` (function) — 3 call sites
 - `src/services/kickKey.test.ts:17`

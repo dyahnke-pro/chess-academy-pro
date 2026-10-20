@@ -51,7 +51,7 @@
 - `src/services/replayFence.modern1690.test.ts:81`
 
 ### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8649`
+- `src/components/Coach/CoachTeachPage.tsx:8648`
 - `src/services/computedVoiceAudit.report.test.ts:249`
 - `src/services/dnaLineNarrator.ts:58`
 - `src/services/groundedAnswer.ts:5470`
@@ -77,15 +77,15 @@
 - `src/services/turningPoints.ts:195`
 
 ### `seatedTacticLine` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8660`
+- `src/components/Coach/CoachTeachPage.tsx:8659`
 - `src/services/seatedTacticLine.test.ts:8`
 - `src/services/seatedTacticLine.test.ts:13`
 - `src/services/seatedTacticLine.test.ts:19`
 - `src/services/seatedTacticLine.test.ts:23`
 
 ### `pinConsequence` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8666`
-- `src/components/Coach/CoachTeachPage.tsx:8803`
+- `src/components/Coach/CoachTeachPage.tsx:8665`
+- `src/components/Coach/CoachTeachPage.tsx:8802`
 - `src/services/pinConsequence.test.ts:8`
 - `src/services/pinConsequence.test.ts:12`
 - `src/services/pinConsequence.test.ts:16`
@@ -242,7 +242,7 @@
 - `src/services/walkOct1Learn.test.ts:115`
 
 ### `forkConsequence` (re-export) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8663`
+- `src/components/Coach/CoachTeachPage.tsx:8662`
 - `src/services/reviewFullData.ts:818`
 - `src/services/tacticVocabulary.ts:207`
 
