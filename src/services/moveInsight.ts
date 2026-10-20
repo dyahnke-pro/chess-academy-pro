@@ -1120,7 +1120,7 @@ export function knightReach(fen: string, target: string, c: 'w' | 'b'): { from: 
 /** WHAT A KNIGHT ON THE HOLE WOULD HIT (lead 2026-10-20: a hole is a price
  *  only when something there would hit): `victim`'s pieces a knight standing
  *  on `hole` attacks — any piece, and a pawn only when nothing guards it. */
-export function knightHitsFrom(board: Chess, hole: string, victim: 'w' | 'b'): string[] {
+function knightHitsFrom(board: Chess, hole: string, victim: 'w' | 'b'): string[] {
   const f = hole.charCodeAt(0); const r = Number(hole[1]);
   const out: string[] = [];
   for (const [df, dr] of [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]]) {

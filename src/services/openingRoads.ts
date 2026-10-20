@@ -27,7 +27,7 @@ export interface RoadReason {
 }
 
 /** A reply to the chosen road is one it invites at this share of its games. */
-export const INVITE_SHARE = MIN_ALTERNATIVE_SHARE / 100;
+const INVITE_SHARE = MIN_ALTERNATIVE_SHARE / 100;
 /** Two roads' scores differ in words only past this many points (of 100). */
 export const SCORE_GAP = 3;
 /** Fewer games than this on either road and the score says nothing. */

@@ -72,7 +72,7 @@ export const FORK_MIN_SHARE = MIN_ALTERNATIVE_SHARE / 100;
 /** A hole matters to the story when a knight is this close to it AND would hit
  *  something there (lead 2026-10-20: "three moves from it … keeping a5
  *  guarded" was a price with nothing to pay). */
-export const HOLE_REACH = 2;
+const HOLE_REACH = 2;
 
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const seatOf = (ply: number): 'w' | 'b' => (ply % 2 === 0 ? 'w' : 'b');
