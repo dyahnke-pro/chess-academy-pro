@@ -93,7 +93,7 @@ describe('review noise — Carlsen–Grischuk, Norway 2015 (lichess jMVMo1Ua), s
   };
   const text = (): string[] => run().map((s) => s.narration ?? '');
   it('every move job names whose piece it is (no bare "Takes back on c4, and the material is level again")', () => {
-    for (const n of text()) for (const f of n.split(/ (?=\[[a-z-]+\] )/)) if (f.startsWith('[move-job] ')) expect(f).toMatch(/\b(?:your|their)\b/);
+    for (const n of text()) for (const f of n.split(/ (?=\[[a-z-]+\] )/)) if (f.startsWith('[move-job] ')) expect(f).toMatch(/\b(?:your|their|you|they)\b/);
   }, 120_000);
   it('says your/their, never "the enemy" or "ever"; the opponent\'s plan never takes "their" pawn', () => {
     const w = text().join(' ');

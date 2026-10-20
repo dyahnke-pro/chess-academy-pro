@@ -2184,8 +2184,12 @@ export function buildReviewSegments(
       // PAST THE OPENING THE NEED SCORE DECIDES (lead 2026-10-20: move jobs
       // spoke on 25 middlegame plies the need score had marked silent — a
       // game with no slip after the book ran the story tail to the last move).
+      // …EXCEPT THE STUDENT'S OWN MOVE (lead 2026-10-20, the WHY standard in
+      // Review): every student move out of book is owed its own reason, so
+      // its job speaks wherever the board shows one. Their moves past the
+      // opening stay with the need score.
       const openingPly = classifyPhase(fenPair.fenBefore, { ply: m.ply - 1 }) === 'opening';
-      const inStory = openingPly || (lastBookIdx >= 0 && i < storyTailEnd && needHere?.speak === true);
+      const inStory = openingPly || moverColor === playerColor || (lastBookIdx >= 0 && i < storyTailEnd && needHere?.speak === true);
       if (storyAll && studentColorWB && !isFlagged(m.classification) && inStory) {
         const mine = moverColor === playerColor;
         const prevSan = i > 0 ? moves[i - 1].san : null;
@@ -2194,7 +2198,9 @@ export function buildReviewSegments(
           try { const pm = new Chess(fenChain[i - 1].fenBefore).move(prevSan); if (pm.captured) prior = { to: pm.to, captured: pm.captured }; } catch { prior = null; }
         }
         const job = moveJob(fenPair.fenBefore, m.san, moverColor === 'white' ? 'w' : 'b', mine ? MINE : THEIRS, prior);
-        const bare = job?.kind === 'develop' && !/castle/.test(job.clause);
+        // A check alone is the move itself ("Gives check." — the + is on the
+        // board): said only with what else it does.
+        const bare = (job?.kind === 'develop' && !/castle/.test(job.clause)) || job?.clause === 'it gives check';
         const id = `hint:move-job:${m.ply}`;
         // ONE CLAIM, ONE PRODUCER: the board-influence line ("[does] Your pawn
         // on e5 now eyes their knight on f6") states the same attack as the
