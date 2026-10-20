@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { bookMoveWhy } from './bookMoveWhy';
+import { bookMoveWhy, moveJob, MINE } from './bookMoveWhy';
 
 const fenOf = (line: string): string => { const c = new Chess(); for (const s of line.split(' ')) c.move(s); return c.fen(); };
 
@@ -157,5 +157,19 @@ describe('the hand-graded falsehoods of 2026-10-14 stay fixed (each failed on th
     expect(bookMoveWhy(fen, 'Bh5', 'Nc6', 'b')?.text).toBe('The book move is the bishop to h5: it takes your bishop out of reach of their pawn on h3 — the knight to c6 leaves it on g4 for them to take.');
     // A bishop move that also escapes is no rescue to fault.
     expect(bookMoveWhy(fen, 'Bh5', 'Bf5', 'b')?.kind).not.toBe('rescue');
+  });
+});
+
+describe('moveJob — one counter for the guards of one piece', () => {
+  it('9…c6 is the FOURTH guard of the knight on d5, never "another"', () => {
+    const fen = fenOf('e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4 O-O');
+    expect(moveJob(fen, 'c6', 'b', MINE)?.clause).toMatch(/^it adds a fourth guard to your knight on d5/);
+  });
+});
+
+describe('moveJob — a piece that faces an equal one offers the trade', () => {
+  it('10…Qf6 challenges the queen on f3, offering to trade queens (the g7 pawn guards f6)', () => {
+    const fen = fenOf('e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4 O-O c6 d4');
+    expect(moveJob(fen, 'Qf6', 'b', MINE)?.clause).toBe('it challenges their queen on f3, offering to trade queens');
   });
 });

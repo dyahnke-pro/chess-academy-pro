@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5510 lines · 31 exports · 52 importers · 56 tests · 4 audits**
+**5567 lines · 31 exports · 52 importers · 56 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -141,7 +141,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegments` (function) — 90 call sites
+### `buildReviewSegments` (function) — 92 call sites
 - `src/components/Coach/CoachGameReview.tsx:1823`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
@@ -158,8 +158,8 @@
 - `src/services/coachFeatureService.learnParity.test.ts:46`
 - `src/services/coachFeatureService.learnParity.test.ts:52`
 - `src/services/coachFeatureService.learnParity.test.ts:71`
-- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:37`
-- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:88`
+- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:38`
+- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:89`
 - `src/services/coachFeatureService.oneCost.test.ts:28`
 - `src/services/coachFeatureService.oneCost.test.ts:33`
 - `src/services/coachFeatureService.openingStory.test.ts:33`
@@ -167,9 +167,11 @@
 - `src/services/coachFeatureService.openingStory.test.ts:57`
 - `src/services/coachFeatureService.openingStory.test.ts:71`
 - `src/services/coachFeatureService.openingStory.test.ts:84`
-- `src/services/coachFeatureService.openingStory.test.ts:100`
-- `src/services/coachFeatureService.openingStory.test.ts:117`
-- `src/services/coachFeatureService.openingStory.test.ts:125`
+- `src/services/coachFeatureService.openingStory.test.ts:101`
+- `src/services/coachFeatureService.openingStory.test.ts:118`
+- `src/services/coachFeatureService.openingStory.test.ts:126`
+- `src/services/coachFeatureService.openingStory.test.ts:137`
+- `src/services/coachFeatureService.openingStory.test.ts:160`
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.planChange.test.ts:36`
 - `src/services/coachFeatureService.planChange.test.ts:48`

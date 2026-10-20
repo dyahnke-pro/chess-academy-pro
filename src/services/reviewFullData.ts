@@ -1578,9 +1578,12 @@ export function computeMoveFacets(
   // IT IS — what it provokes, aims for, who played it — is the walk's
   // openingStory identity beat (one producer, read against the live board);
   // saying it here too spoke it twice on one move (2026-10-20, Fried Liver).
-  if (named && named === settled) {
-    const id = studentColorWB ? mastersPlanLine(planFor(named), studentColorWB, null)?.text ?? null : null;
-    facets.push(`[opening] The line so far is the ${named}.${id ? ` ${id}` : ''}`);
+  // THE NAME ITSELF is the walk's announcement (`openingAnnouncementForGame`,
+  // the one Learn speaks), said as the opening is identified; this line keeps
+  // only what the settled line is FOR — the masters' plan from it.
+  if (named && named === settled && studentColorWB) {
+    const plan = mastersPlanLine(planFor(named), studentColorWB, null)?.text ?? null;
+    if (plan) facets.push(`[opening] ${plan}`);
   }
 
   // ── 11. OPPONENT READ — what the opponent's move targets + their dev lag ──
