@@ -1191,7 +1191,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     const push = (kind: ClauseKind, rank: number, r: BoardRead | null): void => {
       if (!r || said?.has(r.key)) return;
       if (r.namesMove && !input.namesBestMove) {
-        if (r.idea && !said?.has(`${r.key}:idea`)) registryClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'speedrun-read', rank: 45, text: r.idea, claim: `${r.key}:idea` });
+        // The held idea keeps its own proof, squares and line (OS-1 root cause 1).
+        if (r.idea && !said?.has(`${r.key}:idea`)) registryClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'speedrun-read', rank: 45, text: r.idea.text, proof: r.idea.proof, ...(r.idea.squares.length ? { squares: [...r.idea.squares] } : {}), ...(r.idea.lines ? { lines: r.idea.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}), ...(r.idea.motif ? { motif: r.idea.motif } : {}), claim: `${r.key}:idea` });
         return;
       }
       registryClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind, rank, text: r.text, squares: [...r.squares], proof: r.proof, claim: r.key, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.lines ? { lines: r.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}) });

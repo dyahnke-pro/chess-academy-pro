@@ -19,6 +19,8 @@ import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import type { Proof } from './proof';
+import type { SpokenLine } from './voicePackage';
+import type { TacticType } from '../types';
 import { CAPTURE_VALUE } from './pieceValues';
 import { PIECE_NAMES } from '../types/tacticTypes';
 
@@ -33,7 +35,17 @@ export interface Prophylaxis {
   /** The quiet move that stops it. */
   prevention: { san: string; from: Square; to: Square; piece: PieceSymbol };
   squares: Square[];
+  /** THEIR WANTED MOVE AS A FACT (OS-1 root cause 1): the line that plays it
+   *  from the board where they would have it now, the squares of what it hits
+   *  (attacker, victim, the piece behind a pin) and the motif. The one place
+   *  "their next move pins, kicks or forks your piece" is computed — every
+   *  sentence about it is rendered from here, so its answer cannot exist
+   *  without it, and its claim is graded on the board it is about. */
+  threat: { line: SpokenLine; squares: Square[]; motif: TacticType | null };
 }
+
+const MOTIF: Record<ProphylaxisKind, TacticType | null> = { pin: 'pin', fork: 'fork', kick: null };
+const VERB: Record<ProphylaxisKind, string> = { pin: 'pin', fork: 'fork', kick: 'hit' };
 
 const NAME = PIECE_NAMES as Readonly<Record<PieceSymbol, string>>;
 const VAL = CAPTURE_VALUE as Readonly<Record<PieceSymbol, number>>;
@@ -46,7 +58,7 @@ function withTurn(fen: string, turn: Color): Chess | null {
 
 /** The student piece their move `m` pins against the queen or king (a minor
  *  with the big piece straight behind it on the line from m.to), or null. */
-function pinVictim(after: Chess, m: Move, me: Color): { square: Square; piece: PieceSymbol } | null {
+function pinVictim(after: Chess, m: Move, me: Color): { square: Square; piece: PieceSymbol; behind: Square } | null {
   if (m.piece !== 'b' && m.piece !== 'r' && m.piece !== 'q') return null;
   const dirs = m.piece === 'b' ? [[1, 1], [1, -1], [-1, 1], [-1, -1]] : m.piece === 'r' ? [[1, 0], [-1, 0], [0, 1], [0, -1]]
     : [[1, 1], [1, -1], [-1, 1], [-1, -1], [1, 0], [-1, 0], [0, 1], [0, -1]];
@@ -64,7 +76,7 @@ function pinVictim(after: Chess, m: Move, me: Color): { square: Square; piece: P
         first = { square: sq, piece: pc.type };
         continue;
       }
-      if (pc.type === 'q' || pc.type === 'k') return first;
+      if (pc.type === 'q' || pc.type === 'k') return { ...first, behind: sq };
       break;
     }
   }
@@ -72,11 +84,12 @@ function pinVictim(after: Chess, m: Move, me: Color): { square: Square; piece: P
 }
 
 /** Their moves that would pin or kick one of the student's minors right now. */
-function intents(fen: string, me: Color): { m: Move; kind: ProphylaxisKind; victim: { square: Square; piece: PieceSymbol } }[] {
+type Intent = { m: Move; kind: ProphylaxisKind; victim: { square: Square; piece: PieceSymbol }; hits: Square[] };
+function intents(fen: string, me: Color): Intent[] {
   const them: Color = me === 'w' ? 'b' : 'w';
   const board = withTurn(fen, them);
   if (!board || board.inCheck()) return [];
-  const out: { m: Move; kind: ProphylaxisKind; victim: { square: Square; piece: PieceSymbol } }[] = [];
+  const out: Intent[] = [];
   for (const m of board.moves({ verbose: true })) {
     if (m.captured || m.san.includes('+')) continue;
     board.move(m);
@@ -93,13 +106,13 @@ function intents(fen: string, me: Color): { m: Move; kind: ProphylaxisKind; vict
         const sq = `${String.fromCharCode(97 + f + df)}${r + 1}` as Square;
         const pc = after.get(sq);
         if (pc && pc.color === me && VAL[pc.type] >= 3 && pc.type !== 'k') {
-          out.push({ m, kind: 'kick', victim: { square: sq, piece: pc.type } });
+          out.push({ m, kind: 'kick', victim: { square: sq, piece: pc.type }, hits: [sq] });
           break;
         }
       }
     } else {
       const v = pinVictim(after, m, me);
-      if (v) out.push({ m, kind: 'pin', victim: v });
+      if (v) out.push({ m, kind: 'pin', victim: { square: v.square, piece: v.piece }, hits: [v.square, v.behind] });
       else {
         // A FORK: the piece lands hitting two of the student's pieces each
         // worth more than it (or the king and one more).
@@ -111,7 +124,7 @@ function intents(fen: string, me: Color): { m: Move; kind: ProphylaxisKind; vict
         }
         if (hit.length >= 2) {
           const victim = hit.filter((h) => h.piece !== 'k').sort((a, b) => VAL[b.piece] - VAL[a.piece])[0];
-          if (victim) out.push({ m, kind: 'fork', victim });
+          if (victim) out.push({ m, kind: 'fork', victim, hits: hit.map((h) => h.square) });
         }
       }
     }
@@ -158,12 +171,16 @@ export function findProphylaxis(fen: string): Prophylaxis | null {
       // The quiet move must not hand them something worse: it is safe itself.
       if (legalSeeGainFor(after, q.to, me === 'w' ? 'b' : 'w') > 0) continue;
       if (stillWorks(after, me, w)) continue;
+      const them: Color = me === 'w' ? 'b' : 'w';
+      const lineFen = sideToMoveAs(fen, them);
+      if (!lineFen) continue;
       return {
         kind: w.kind,
         intent: { san: w.m.san, from: w.m.from, to: w.m.to, piece: w.m.piece },
         victim: w.victim,
         prevention: { san: q.san, from: q.from, to: q.to, piece: q.piece },
         squares: [w.m.to, w.victim.square, q.to],
+        threat: { line: { fen: lineFen, sans: [w.m.san] }, squares: [w.m.to, ...w.hits], motif: MOTIF[w.kind] },
       };
     }
   }
@@ -191,8 +208,23 @@ export function prophylaxisLine(p: Prophylaxis): string {
   return `${p.prevention.san} first — ${openSentence(prophylaxisProof(p).full)}.`;
 }
 
-/** The advice with the move held: their idea, and that one move stops it. */
-export function prophylaxisIdea(p: Prophylaxis): string {
-  const verb = p.kind === 'pin' ? 'pin' : p.kind === 'fork' ? 'fork' : 'hit';
-  return `Watch ${p.intent.san} — it would ${verb} your ${NAME[p.victim.piece]} on ${p.victim.square}. One move stops it before it lands.`;
+/** THE THREAT ALONE, proven: their move played out on the board where they
+ *  would have it, and the squares it hits. Exact — chess.js legality and the
+ *  pin geometry. Names no move of the student's. */
+export function prophylaxisThreatProof(p: Prophylaxis): Proof {
+  const what = `${p.intent.san} would ${VERB[p.kind]} your ${NAME[p.victim.piece]} on ${p.victim.square}`;
+  return { kind: 'line', exact: true, short: what, full: what, line: p.threat.line, squares: p.threat.squares };
+}
+
+/** The advice with the move held: their idea, and that one move stops it —
+ *  carried with the threat's proof, line and squares, never the stopping
+ *  move's (that square would hand over the held move). */
+export function prophylaxisIdea(p: Prophylaxis): { text: string; proof: Proof; squares: string[]; lines: SpokenLine[]; motif?: TacticType } {
+  return {
+    text: `Watch ${p.intent.san} — it would ${VERB[p.kind]} your ${NAME[p.victim.piece]} on ${p.victim.square}. One move stops it before it lands.`,
+    proof: prophylaxisThreatProof(p),
+    squares: [...p.threat.squares],
+    lines: [p.threat.line],
+    ...(p.threat.motif ? { motif: p.threat.motif } : {}),
+  };
 }
