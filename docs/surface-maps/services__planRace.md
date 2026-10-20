@@ -29,7 +29,7 @@
 ## Exports and every call site
 
 ### `stepsToPromote` (function) — 1 call site
-- `src/services/nextPlans.ts:581`
+- `src/services/nextPlans.ts:594`
 
 ### `RaceRegister` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -57,7 +57,7 @@
 - `src/services/conceptEngine.ts:607`
 - `src/services/kingAttackReads.test.ts:183`
 - `src/services/kingAttackReads.ts:709`
-- `src/services/nextPlans.ts:661`
+- `src/services/nextPlans.ts:674`
 - `src/services/planRace.test.ts:22`
 - `src/services/planRace.test.ts:27`
 - `src/services/planRace.test.ts:34`
@@ -78,7 +78,7 @@
 - `src/services/conceptEngine.ts:609`
 - `src/services/kingAttackReads.test.ts:189`
 - `src/services/kingAttackReads.ts:711`
-- `src/services/nextPlans.ts:662`
+- `src/services/nextPlans.ts:675`
 - `src/services/planRace.test.ts:23`
 - `src/services/planRace.test.ts:38`
 - `src/services/planRace.test.ts:39`

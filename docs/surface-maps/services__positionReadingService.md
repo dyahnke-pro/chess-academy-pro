@@ -575,8 +575,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewFullData.ts:1034`
 - `src/services/reviewFullData.ts:1036`
 
-### `pieceScope` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `pieceScope` (function) — 2 call sites
+- `src/services/nextPlans.ts:135`
+- `src/services/nextPlans.ts:139`
 
 ### `XrayNote` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
