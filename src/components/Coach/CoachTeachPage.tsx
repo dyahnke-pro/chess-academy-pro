@@ -38,11 +38,11 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from '../../services/motifLedger';
-import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
+import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { OPENING_PLIES, learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, openingIdentityTeaching, prizeTeaching, cheaperAttackerLine, hangingPieceLine, seenOneMoveAttack, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, openingPlanTeaching, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, type TeachingHint } from '../../services/learnBoardTeaching';
+import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, seenOneMoveAttack, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, type TeachingHint } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -1007,7 +1007,9 @@ export function CoachTeachPage(): JSX.Element {
   // WHAT EACH OPENING IS, loaded with the page (2026-10-14): warmed only when
   // the name was first said, it was never ready for that line — the name went
   // out bare and the departure plan (`planFor`) was missing on the same turns.
-  useEffect(() => { warmOpeningIdentity(); }, []);
+  // The opening's story reads master games synchronously: look the first
+  // plies up before move one, then ahead of every move (below).
+  useEffect(() => { warmOpeningIdentity(); warmOpeningStory(new Chess().fen()); }, []);
   useEffect(() => {
     const fullmove = Number.parseInt(game.fen.split(' ')[5] ?? '1', 10) || 1;
     if (fullmove <= 20) warmOpeningBook(game.fen, 'coach-teach');
@@ -1830,6 +1832,7 @@ export function CoachTeachPage(): JSX.Element {
     positionalSaidRef.current.clear();
     priorityFirstLastPlyRef.current = -999;
     lastBoardMoveRef.current = null;
+    seenMarkRef.current = null;
     setHeldMoveFen(null);
     learnTallyRef.current = EMPTY_TALLY;
     setLearnTally(EMPTY_TALLY);
@@ -8417,6 +8420,10 @@ export function CoachTeachPage(): JSX.Element {
     const studentCC: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
     const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
     const history = args.historyAfterReply;
+    // THE OPENING'S STORY (OS-3): one read for this board — its identity rides
+    // the spoken name, every other beat goes to the door in its own lane. A fact
+    // that would name a move the student can play now is held by the read.
+    const storyReads = readBoardAll('openingStory', { history, fen: args.fenAfterReply, student: studentCC, namesStudentMoves: false });
     // 🔒 A NEW GAME IS DETECTED FROM THE BOARD, NOT FROM A CODE PATH.
     // This runs on every ply, so it is the one place that cannot be bypassed
     // by whichever intent branch started the game. See `learnMemory.observe`
@@ -8967,14 +8974,13 @@ export function CoachTeachPage(): JSX.Element {
         // Scandinavian Defense." went out alone and the identity a turn later,
         // when the door was busy — one claim heard as two, the first with no
         // reason. When the identity is ready it rides in the same line.
-        const idWith = learnMemRef.current.identitySaid === null && history.length <= OPENING_PLIES
-          ? openingIdentityTeaching(det.name, playerColor === 'white' ? 'w' : 'b') : null;
+        const idWith = learnMemRef.current.identitySaid === null ? storyReads.find((r) => r.storyBeat === 'identity') ?? null : null;
         if (idWith) {
           announceLine = `${announce} ${idWith.text}`;
-          announceClaims = [`opening-name:${det.name}`, ...idWith.claims];
-          announceSquares = idWith.squares ?? [];
+          announceClaims = [`opening-name:${det.name}`, idWith.key];
+          announceSquares = idWith.squares;
           identityRidesName = true;
-          if (idWith.event) captureEvent(idWith.event.name, idWith.event.props);
+          captureEvent('coach_opening_identity', { surface: 'coach-teach' });
         } else {
           announceClaims = [`opening-name:${det.name}`];
         }
@@ -8999,17 +9005,8 @@ export function CoachTeachPage(): JSX.Element {
           fen: args.fenAfterReply,
         });
       }
-      // WHAT THE OPENING IS — once per game, after the name has been queued
-      // (the identity file loads lazily; until it has, this retries next turn).
-      const idName = learnMemRef.current.queuedOpeningName;
-      // Offered every turn until the student HEARS it, and only inside the
-      // opening (`markOpeningFactsSpoken` marks it from the voice).
-      if (idName && !identityRidesName && learnMemRef.current.identitySaid === null && history.length <= OPENING_PLIES) {
-        const idHint = openingIdentityTeaching(idName, playerColor === 'white' ? 'w' : 'b');
-        if (idHint) {
-          queueHint(args.fenAfterReply, idHint);
-        }
-      }
+      // WHAT THE OPENING IS, when it did not ride the name, is the story's
+      // identity read below — offered every opening move until it is heard.
     } catch { /* announcement is a bonus, never a blocker */ }
 
     // ── THE GEM — a verified punishable slip by the coach ──────────────────
@@ -9163,24 +9160,16 @@ export function CoachTeachPage(): JSX.Element {
     // want to accomplish the ideas via computer."). The opening's plan comes
     // from `mastersPlanRead` below; what a move is for, from `moveIntent`.
 
-    // ── THE OPENING'S PLAN, COMPUTED FROM MASTER GAMES (WO-TEACH-GAPS P2 #0,
-    // David 2026-09-30: "accomplish the ideas via computer") ──
-    // Once per game: the pawn break each side's master games actually go for
-    // from this board, with its share. Counted off the masters database — no
-    // hand-written note decides it.
-    let openingIdeaLine: { text: string; squares: string[] } | null = null;
+    // ── THE OPENING'S KEY IDEA is the story's key-break read (above, in the
+    // `openingIdea` lane). When it is offered, the break is kept for the
+    // opening summary — the first move out of the opening says whether it came.
     try {
-      // Marked said from the voice (`markOpeningFactsSpoken`), never here.
-      if (!learnMemRef.current.structureSaid.has('masters-plan') && history.length >= 6 && history.length <= OPENING_PLIES) {
-        const plan = openingPlanTeaching(args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b', learnMemRef.current.detectedOpeningName);
-        if (plan) {
-          openingIdeaLine = { text: plan.text, squares: plan.squares };
-          const brk = openingBreakFor(args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b', learnMemRef.current.detectedOpeningName);
-          if (brk && !openingBreakRef.current) openingBreakRef.current = { ...brk, atPly: history.length, said: false };
-          if (plan.event) captureEvent(plan.event.name, plan.event.props);
-        }
+      if (storyReads.some((r) => r.storyBeat === 'key-break')) {
+        const brk = !openingBreakRef.current ? openingBreakFor(args.fenAfterReply, studentCC, learnMemRef.current.detectedOpeningName) : null;
+        if (brk) openingBreakRef.current = { ...brk, atPly: history.length, said: false };
+        captureEvent('coach_opening_plan_named', { surface: 'coach-teach' });
       }
-    } catch { /* the masters plan is a bonus, never a blocker */ }
+    } catch { /* the summary's break is a bonus, never a blocker */ }
 
 
     // The POSITIONAL READ stays a true last resort — king safety, development,
@@ -9432,7 +9421,11 @@ export function CoachTeachPage(): JSX.Element {
       // and in a decided game (the contested gate).
       // The hand-written masterclass beat, verified before it shipped
       // (narrationAccuracy, lessonIntegrity). No corpus note rides free play.
-      ...(openingIdeaLine ? [{ lane: 'openingIdea' as const, text: openingIdeaLine.text, fen: args.fenAfterReply, squares: openingIdeaLine.squares, proof: NO_PROOF.description }] : []),
+      // THE OPENING'S STORY, each beat in the lane that is its place in the turn
+      // (`STORY_LANE`); the identity that rode the name is not offered twice.
+      ...storyReads.flatMap((r) => (r.storyBeat && !(identityRidesName && r.storyBeat === 'identity')
+        ? [{ lane: STORY_LANE[r.storyBeat], text: r.text, fen: args.fenAfterReply, squares: r.squares, claims: [r.key, ...(r.sharedKey ? [r.sharedKey] : [])], role: 'teach' as const, proof: r.proof }]
+        : [])),
       // Corpus teaching reached by structure/concept transfer — BORROWED, and
       // now ranked as such. It used to ship at the same `note` rank as the
       // exact-position tier on the grounds that both are the corpus speaking.
@@ -10550,6 +10543,7 @@ export function CoachTeachPage(): JSX.Element {
                 // cache ONLY (the rate-limit contract).
                 if (classifyPhase(probe.fen(), { ply: historyAfterReply.length }) === 'opening') {
                   void warmAmateurPlay(probe.fen(), rating, 'coach-teach');
+                  warmOpeningStory(probe.fen());
                 }
                 // The STUDENT'S recommended next move — COMPUTED in code, never the
                 // LLM's pick (G0). The coach was telling the student to "develop the
@@ -11653,14 +11647,15 @@ export function CoachTeachPage(): JSX.Element {
                         })();
                         const yRead = yFen ? await stockfishEngine.analyzeWithBudget(yFen, COACH_TURN_DEPTH, 900).catch(() => null) : null;
                         const order = yUci && xLine && yRead?.topLines?.[0]
-                          ? moveOrder(fenBefore, move.san, yUci, xLine, yRead.topLines[0], 'student')
+                          ? moveOrder(fenBefore, move.san, yUci, xLine, yRead.topLines[0], 'student', false)
                           : null;
                         if (order) {
                           // The follow-up that works NOW, as the move to play.
                           // DUAL-USE (P4): the right order played is calculation answered.
                           recordHeld('calculation-depth', 80, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
                           queueSpokenHint(fenAfterReply, order.text, 'moveOrder', squaresProof(order.text, order.squares) ?? NO_PROOF.description, order.squares, [`order:${order.followUp.uci}`, `stops:${order.answer.uci}`], undefined,
-                            [
+                            // A held order names neither move, so it draws neither.
+                            order.held ? [] : [
                               { from: order.followUp.uci.slice(0, 2), to: order.followUp.uci.slice(2, 4), role: 'play', source: 'learn.moveOrder' },
                               // …and the answer it would have run into, walked on
                               // the board where the follow-up came first (walk

@@ -33,6 +33,7 @@ import { costStakes, stakeValue, STAKED_FLOOR, type FactStakes } from './factSta
 import { sameClaim } from './factSelector';
 import type { FacetRole } from './reviewFacetRank';
 import { isEndgameByMaterial } from './gamePhaseService';
+import type { StoryBeat } from './openingStory';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
 export type { SpokenLine, DrawnLine } from './voicePackage';
 export type { VoicePackage, VoiceFactKind } from './voicePackage';
@@ -57,6 +58,12 @@ export type LearnLane =
   | 'behavior'
   | 'openingIdea'
   | 'openingIdentity'
+  // ── the opening's story (`openingStory`), one lane per place in the turn ──
+  | 'openingRoads'
+  | 'openingChoice'
+  | 'openingCost'
+  | 'openingTheirs'
+  | 'openingStory'
   | 'trapAhead'
   | 'positional'
   // ── the late wave, spoken when the engine read settles ──
@@ -154,6 +161,11 @@ const BEAT_ORDER: Record<DnaBeat, number> = { name: 0, affirm: 1, but: 2, refute
  *  compile until it does. */
 export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   opening: 'name', openingIdentity: 'name',
+  // The opening's story sits where each beat belongs in the turn: what the
+  // student chose and what it costs with their move, what they set up in their
+  // beat, the coming game's plan with the ideas, and the crossroads in front of
+  // the student last — it is about the move they are about to make.
+  openingChoice: 'affirm', openingCost: 'but', openingTheirs: 'their', openingStory: 'point', openingRoads: 'now',
   foundMove: 'affirm', heldMove: 'affirm', slipAnswer: 'affirm', movePoint: 'affirm', moveIntent: 'affirm', recapture: 'affirm', kingAttack: 'affirm',
   ruleException: 'affirm', fileRace: 'affirm', trade: 'affirm', timing: 'affirm', strongChoice: 'affirm',
   falseAlarm: 'affirm', tempo: 'affirm', pushOrHold: 'affirm',
@@ -176,6 +188,24 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
 };
 
 
+/** WHICH LANE CARRIES EACH BEAT OF THE OPENING'S STORY — the lane is the beat's
+ *  place in the turn. A new beat fails to compile until it is placed. */
+export const STORY_LANE: Record<StoryBeat, LearnLane> = {
+  fork: 'openingRoads',
+  identity: 'openingIdentity',
+  'branch-choice': 'openingChoice',
+  'structure-paid': 'openingChoice',
+  'structure-cost': 'openingCost',
+  'their-setup': 'openingTheirs',
+  consequence: 'openingTheirs',
+  character: 'openingStory',
+  'key-break': 'openingIdea',
+  'horizon-plan': 'openingStory',
+};
+/** The story's lanes — knowledge about the opening, which waits while a trade
+ *  is in progress (the spoken name is not one of them). */
+const STORY_LANES: ReadonlySet<LearnLane> = new Set(Object.values(STORY_LANE));
+
 /** WHERE A LANE BELONGS IN THE GAME (David 2026-10-19: "the computed
  *  narrations are not focused on providing specific narrations in that phase
  *  of the game"). In an ending (`isEndgameByMaterial`, the one definition) the
@@ -190,6 +220,7 @@ export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   gem: 'any', tactic: 'any', prophylaxis: 'any', threat: 'any', dangerLevels: 'any', playedConcept: 'any',
   commentary: 'not-ending', behavior: 'not-ending', positional: 'not-ending',
   openingIdea: 'not-ending', openingIdentity: 'not-ending', openingEquivalence: 'not-ending', trapAhead: 'not-ending',
+  openingRoads: 'not-ending', openingChoice: 'not-ending', openingCost: 'not-ending', openingTheirs: 'not-ending', openingStory: 'not-ending',
   opening: 'not-ending', bookMove: 'not-ending', lastTimeHere: 'not-ending', sameAsLastTime: 'not-ending',
   tempo: 'not-ending', notYetPlayed: 'not-ending', holdResource: 'not-ending',
   structure: 'not-ending', kingSafety: 'not-ending', kingAttack: 'not-ending', splitPosition: 'not-ending',
@@ -241,13 +272,22 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   behavior: { kind: 'observation', why: 'a Danya behaviour, rate-matched to his corpus', lead: 25 },
   // The opening's plan counted off master games (P2 #0): the break each side
   // actually goes for, with its share. Computed, never authored.
-  openingIdea: { kind: 'computed', why: 'the pawn break master games from here go for, with its share', lead: 61 },
+  openingIdea: { kind: 'computed', why: 'the key break master games go for, as an idea while it still needs preparing (`openingStory`), and the opening summary', lead: 61 },
+  // THE OPENING'S STORY (OS-3, `openingStory` through the board registry): on a
+  // calm opening move these are the teaching — every fact teaches (role), so
+  // none is an aside, and the turn's holds (a verdict, danger, a trade in
+  // progress) keep them for a calm move.
+  openingCost: { kind: 'computed', why: "the hole the student's own pawn move left, and their piece that can reach it", lead: 63 },
+  openingChoice: { kind: 'computed', why: 'the branch the student chose against the main road, or the move that pays their structure its price', lead: 62 },
+  openingTheirs: { kind: 'computed', why: 'the system their move chose and its master-game plan, or the hole their move gave away', lead: 60 },
+  openingStory: { kind: 'computed', why: "the coming game's character once the kings are placed, or the board's plan once master games run out", lead: 59 },
+  openingRoads: { kind: 'computed', why: 'the real crossroads in front of the student, by family name, from master games', lead: 58 },
   // What the opening IS (the identity computer): what it provokes, the
   // structure its master main line reaches, a lasting gambit, sharpness, OTB
   // master games. Said once per game, right after the name.
   // Rides with the name (walk 2026-09-30, game 1: held all game because it
   // shares no square with the move being discussed).
-  openingIdentity: { kind: 'computed', why: 'what the named opening provokes, aims for and costs — computed from the master database', lead: 44, always: true },
+  openingIdentity: { kind: 'computed', why: 'what the named opening provokes, aims for and costs — computed from the master database (`openingStory`)', lead: 44, always: true },
   // Practical lore: the student's natural move here is a known, engine-verified
   // trap (a curated gem). Said BEFORE the move; names the move to be careful
   // with, never the refutation.
@@ -629,7 +669,7 @@ export function decideTurn(
     // "overprotect your best piece" while the recapture was owed). An idea, a
     // plan or a board read waits until the trade is finished; danger, the
     // verdict and a tactic still speak.
-    if (midExchange && DNA_BEAT[x.lane] === 'point' && x.lane !== 'tactic' && !isMateFact(x)) return 'mid-exchange';
+    if (midExchange && (DNA_BEAT[x.lane] === 'point' || STORY_LANES.has(x.lane)) && x.lane !== 'tactic' && !isMateFact(x)) return 'mid-exchange';
     return null;
   };
   const turnHolds = (x: { fact: VoiceFact; lane: LearnLane }): boolean => holdWhy(x) !== null;

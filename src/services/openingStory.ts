@@ -18,7 +18,8 @@
 //                     aim keys the plan thread uses, so the plan never repeats
 // PURE given its `movesAt` reader; the caller ranks, dedupes and speaks.
 import { Chess, type Square } from 'chess.js';
-import { detectOpening } from './openingDetectionService';
+import { detectOpeningByOrder } from './openingDetectionService';
+import { openingNameForBoard } from './openingAnnouncement';
 import { isWaypointOpening, openingIdentityLine, identityFor, planFor, type IdentityFacts } from './openingIdentity';
 import { mastersPlanRead, planStillAhead, mastersBreakIdea, PLAN_WALK, MIN_ROOT_GAMES, MIN_BREAK_SHARE, type MovesAt, type MastersPlanRead } from './mastersPlanRead';
 import { masterMovesCachedSync, prefetchMastersTree } from './masterPlayLookup';
@@ -56,6 +57,10 @@ export interface OpeningStoryInput {
   /** SAN from the starting position; the board is after the last move. */
   history: readonly string[];
   student: 'w' | 'b';
+  /** REQUIRED: may a story fact name the student's next move (a route's first
+   *  square in the board's plan)? Learn's live board says no (LEARN NAMES NO
+   *  MOVE UNASKED); Review and chat say yes. */
+  namesStudentMoves: boolean;
   /** Masters moves at a position — default: what is already in memory. */
   movesAt?: MovesAt;
 }
@@ -75,6 +80,13 @@ function boardAfter(sans: readonly string[]): Chess | null {
   return c;
 }
 
+/** The opening's name after `sans` — the ONE reader the surface announces with
+ *  (`openingNameForBoard`), so a road, an identity and the spoken name agree. */
+function nameAfter(sans: readonly string[]): string | null {
+  const b = boardAfter(sans);
+  return b ? openingNameForBoard(detectOpeningByOrder([...sans]), b.fen(), sans.length).det?.name ?? null : null;
+}
+
 /** The variation's own name: "Sicilian Defense: Najdorf Variation" → "Najdorf". */
 export function familyLabel(name: string): string {
   const tail = name.includes(':') ? name.slice(name.indexOf(':') + 1).trim() : name;
@@ -91,7 +103,7 @@ function forkAt(prefix: readonly string[], movesAt: MovesAt): { families: Family
   const ms = movesAt(b.fen());
   const total = ms?.reduce((n, m) => n + m.games, 0) ?? 0;
   if (!ms || total < MIN_ROOT_GAMES) return null;
-  const here = detectOpening([...prefix])?.name ?? null;
+  const here = nameAfter(prefix);
   // Inside a named family the crossroads is between ITS variations: a move
   // order that transposes into another family (2…e6 in the Sicilian, a French)
   // is not a road of this opening.
@@ -104,7 +116,7 @@ function forkAt(prefix: readonly string[], movesAt: MovesAt): { families: Family
   const families: Family[] = [];
   for (const m of [...ms].sort((a, c) => c.games - a.games)) {
     if (m.games / total < FORK_MIN_SHARE) continue;
-    const name = detectOpening([...prefix, m.san])?.name;
+    const name = nameAfter([...prefix, m.san]);
     if (!name || name === here || seen.has(name) || isWaypointOpening(name)) continue;
     if (name.split(':')[0].trim() !== family) continue;
     seen.add(name);
@@ -179,6 +191,13 @@ function legalMove(b: Chess, san: string): { from: string; to: string } | null {
   try { const m = new Chess(b.fen()).move(san); return m ? { from: m.from, to: m.to } : null; } catch { return null; }
 }
 
+/** HELD ON THE STUDENT'S TURN: the fact would name a move the student can
+ *  play right now (LEARN NAMES NO MOVE UNASKED). `fen` is the board the fact is
+ *  spoken over. */
+export function heldWhilePlayable(f: Pick<StoryFact, 'holdWhilePlayable'>, fen: string, student: 'w' | 'b'): boolean {
+  return (f.holdWhilePlayable ?? []).some((m) => legalForSide(fen, m, student));
+}
+
 /** Would `m` be legal for `side` on this board, whoever is to move? */
 function legalForSide(fen: string, m: { from: string; to: string }, side: 'w' | 'b'): boolean {
   const parts = fen.split(' ');
@@ -213,17 +232,23 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   const before = boardAfter(history.slice(0, -1));
   if (!before) return [];
   const fenBefore = before.fen();
-  const name = detectOpening([...history])?.name ?? null;
-  const prevName = detectOpening(history.slice(0, -1))?.name ?? null;
+  // The SAME name the surface announces (`openingNameForBoard`: the move order,
+  // or the named position it transposed into), so the story never tells the
+  // identity of an opening the coach did not name.
+  const name = nameAfter(history);
+  const prevName = nameAfter(history.slice(0, -1));
   const newName = name && name !== prevName && !isWaypointOpening(name) ? name : null;
   const out: StoryFact[] = [];
 
-  // 2 — IDENTITY, the move the name changed.
-  if (newName) {
-    const id = openingIdentityLine(newName, student, 'seat');
+  // 2 — IDENTITY of the opening on the board, offered on every opening move
+  // until it is heard (the caller's claim ledger says it once): a turn that
+  // holds it — a verdict, a trade in progress — must not lose it for the game.
+  const idName = name && !isWaypointOpening(name) && classifyPhase(fen, { ply: history.length }) === 'opening' ? name : null;
+  if (idName) {
+    const id = openingIdentityLine(idName, student, 'seat');
     // The identity names the usual REPLY — the student's next move when it is
     // theirs to play (English Attack: "the usual answer is the pawn to e5").
-    const reply = identityFor(newName)?.facts.provokes?.reply ?? null;
+    const reply = identityFor(idName)?.facts.provokes?.reply ?? null;
     const held = reply && now.turn() === student ? legalMove(now, reply) : null;
     if (id) out.push({ beat: 'identity', text: id.text, squares: id.squares, proof: NO_PROOF.name, claimKey: id.key, ...(held ? { holdWhilePlayable: [held] } : {}) });
   }
@@ -368,7 +393,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
       if (ms && ms.reduce((n, m) => n + m.games, 0) >= MIN_ROOT_GAMES) { wasBook = true; break; }
       try { c.move(s); } catch { break; }
     }
-    const top = wasBook ? deriveNextPlanFacts(fen, student)[0] : undefined;
+    const top = wasBook ? deriveNextPlanFacts(fen, student, { namesStudentMoves: i.namesStudentMoves })[0] : undefined;
     if (top) {
       const aim = planAimKey(top.kind, top.squares[0] ?? top.file ?? null);
       out.push({

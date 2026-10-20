@@ -45,7 +45,7 @@ import type {
   MasterPlayResult,
   MasterPlayTopGame,
 } from './masterPlayTypes';
-import { fetchLichessExplorer } from './lichessExplorerService';
+import { fetchLichessExplorer, lichessCoolingDown } from './lichessExplorerService';
 import {
   readPersistedMasterPlay,
   writePersistedMasterPlay,
@@ -499,6 +499,8 @@ export interface TreePrefetchOptions {
   maxPositions: number;
   /** Test seam: the lookup to use. Production uses `lookupMasterPlay`. */
   lookup?: (fen: string) => Promise<MasterPlayResult>;
+  /** Test seam: is Lichess cooling down? Production uses `lichessCoolingDown`. */
+  coolingDown?: () => boolean;
 }
 
 /**
@@ -511,6 +513,7 @@ export interface TreePrefetchOptions {
  */
 export async function prefetchMastersTree(rootFen: string, o: TreePrefetchOptions): Promise<number> {
   const lookup = o.lookup ?? ((f: string) => lookupMasterPlay(f, { triggeredBy: 'opening-story', surface: o.surface, skipLocalDb: true }));
+  const coolingDown = o.coolingDown ?? lichessCoolingDown;
   const seen = new Set<string>();
   let level: Array<{ fen: string; weight: number }> = [{ fen: rootFen, weight: 1 }];
   let looked = 0;
@@ -519,8 +522,17 @@ export async function prefetchMastersTree(rootFen: string, o: TreePrefetchOption
       .sort((a, b) => b.weight - a.weight)
       .slice(0, Math.max(0, o.maxPositions - looked));
     if (batch.length === 0) break;
-    looked += batch.length;
-    const results = await Promise.all(batch.map((n) => lookup(n.fen).catch(() => emptyResult(n.fen))));
+    // ONE AT A TIME, the way Lichess asks to be called (Learn 2026-10-19: up to
+    // 160 lookups at a game's start went out at once). A burst trips its rate
+    // limit, and the cooldown shuts EVERY Lichess call off for half a minute or
+    // more — the opponent's book move and the roads with it. The walk stops
+    // while Lichess cools down; the next move's walk resumes from the cache.
+    const results: MasterPlayResult[] = [];
+    for (const n of batch) {
+      if (coolingDown()) return looked;
+      looked += 1;
+      results.push(await lookup(n.fen).catch(() => emptyResult(n.fen)));
+    }
     if (d === o.plies) break;
     const next: Array<{ fen: string; weight: number }> = [];
     batch.forEach((n, i) => {

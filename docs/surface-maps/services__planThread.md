@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**210 lines · 8 exports · 4 importers · 2 tests · 0 audits**
+**210 lines · 8 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,11 +15,13 @@
 - `src/services/boardComputers.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/learnMemory.ts`
+- `src/services/openingStory.ts`
 - `src/services/planThread.test.ts`
 
 ## Exports and every call site
 
-### `planAimKey` (function) — 4 call sites
+### `planAimKey` (function) — 5 call sites
+- `src/services/openingStory.ts:398`
 - `src/services/planThread.test.ts:71`
 - `src/services/planThread.test.ts:72`
 - `src/services/planThread.test.ts:73`
@@ -32,7 +34,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `newPlanThread` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10268`
+- `src/components/Coach/CoachTeachPage.tsx:10261`
 - `src/services/boardComputers.test.ts:52`
 - `src/services/coachFeatureService.ts:1417`
 - `src/services/planChoice.test.ts:75`
@@ -48,14 +50,14 @@
 - `src/services/planThread.test.ts:123`
 
 ### `clonePlanThread` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10269`
+- `src/components/Coach/CoachTeachPage.tsx:10262`
 - `src/services/coachFeatureService.ts:2016`
 - `src/services/planThread.test.ts:99`
 - `src/services/planThread.test.ts:107`
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10301`
-- `src/components/Coach/CoachTeachPage.tsx:12141`
+- `src/components/Coach/CoachTeachPage.tsx:10294`
+- `src/components/Coach/CoachTeachPage.tsx:12136`
 - `src/services/planThread.test.ts:103`
 - `src/services/planThread.test.ts:110`
 
@@ -63,7 +65,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `planThreadTurn` (function) — 17 call sites
-- `src/services/boardComputers.ts:331`
+- `src/services/boardComputers.ts:360`
 - `src/services/planChoice.test.ts:75`
 - `src/services/planChoice.test.ts:89`
 - `src/services/planChoice.test.ts:102`

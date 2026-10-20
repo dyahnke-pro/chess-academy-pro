@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**238 lines · 11 exports · 8 importers · 6 tests · 1 audits**
+**238 lines · 11 exports · 9 importers · 7 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@
 - `src/services/appAuditor.ts`
 - `src/services/coachDecider.ts`
 - `src/services/coachDecisionEmits.test.ts`
+- `src/services/learnTurnDoor.story.test.ts`
 - `src/services/learnTurnDoor.ts`
 - `src/services/needScore.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
@@ -62,20 +63,22 @@
 ### `LearnTurnTag` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `onLearnTurn` (function) — 5 call sites
+### `onLearnTurn` (function) — 6 call sites
 - `src/services/appAuditor.ts:2299`
 - `src/services/learnPhaseFocus.test.ts:96`
 - `src/services/learnPhaseFocus.test.ts:108`
-- `src/services/learnTurnDoor.test.ts:566`
-- `src/services/learnTurnDoor.test.ts:579`
+- `src/services/learnTurnDoor.story.test.ts:40`
+- `src/services/learnTurnDoor.test.ts:571`
+- `src/services/learnTurnDoor.test.ts:584`
 
 ### `emitLearnTurn` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:839`
+- `src/services/learnTurnDoor.ts:879`
 
 ## Tests
 
 - `src/services/coachDecisionEmits.test.ts`
 - `src/services/learnPhaseFocus.test.ts`
+- `src/services/learnTurnDoor.story.test.ts`
 - `src/services/learnTurnDoor.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/proofBacklog.report.test.ts`

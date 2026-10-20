@@ -59,4 +59,30 @@ describe('prefetchMastersTree', () => {
     const capped = await prefetchMastersTree(START, { surface: 'test', plies: 2, branchShare: 0.1, minNodeGames: 1, minWeight: 0, maxPositions: 2, lookup });
     expect(capped).toBe(2);
   });
+
+  // A burst trips Lichess's rate limit, and the cooldown shuts every Lichess
+  // call off — the opponent's book move included (Learn 2026-10-19).
+  const fanOut = (fen: string): MasterPlayResult => {
+    const moves = new Chess(fen).moves().slice(0, 4).map((san) => ({ san, games: 100, white: 0, draws: 0, black: 0, whitePct: 0, drawPct: 0, blackPct: 0 }));
+    return { fen, totalGames: 400, source: 'lichess-live', moves };
+  };
+  it('looks positions up one at a time, never in a burst', async () => {
+    let inFlight = 0; let most = 0;
+    const lookup = async (fen: string): Promise<MasterPlayResult> => {
+      inFlight += 1; most = Math.max(most, inFlight);
+      await new Promise((r) => setTimeout(r, 1));
+      inFlight -= 1;
+      return fanOut(fen);
+    };
+    const n = await prefetchMastersTree(START, { surface: 'test', plies: 2, branchShare: 0.1, minNodeGames: 1, minWeight: 0, maxPositions: 20, lookup, coolingDown: () => false });
+    expect(n).toBe(20);
+    expect(most).toBe(1);
+  });
+  it('stops while Lichess cools down', async () => {
+    let calls = 0;
+    const lookup = async (fen: string): Promise<MasterPlayResult> => { calls += 1; return fanOut(fen); };
+    const n = await prefetchMastersTree(START, { surface: 'test', plies: 2, branchShare: 0.1, minNodeGames: 1, minWeight: 0, maxPositions: 20, lookup, coolingDown: () => calls >= 3 });
+    expect(n).toBe(3);
+    expect(calls).toBe(3);
+  });
 });

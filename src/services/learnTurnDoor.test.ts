@@ -2,7 +2,7 @@ import { spokenSentenceKeys } from './voicePackage';
 import { NO_PROOF } from './proof';
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { decideTurn, LEARN_LANES, type LearnLane } from './learnTurnDoor';
+import { decideTurn, LEARN_LANES, STORY_LANE, type LearnLane } from './learnTurnDoor';
 import { costStakes, mateStakes } from './factStakes';
 import { countMethodTeaching, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA } from './learnBoardTeaching';
 import { readBoardAll } from './boardComputers';
@@ -77,9 +77,14 @@ describe('G8.5 — no lane without a live producer, no producer without a lane',
     + (/orderTeaching\(i\)/.test(readFileSync('src/services/learnBoardTeaching.ts', 'utf8')) ? readFileSync('src/services/orderTeaching.ts', 'utf8') : '');
   const pageCallsBoard = /studentMoveTeaching\(|theirMoveTeaching\(/.test(TEACH_CODE);
 
+  // The opening's story feeds every lane in `STORY_LANE` from ONE registry
+  // read — they count only while the page makes that read and places by it.
+  const viaStory = /readBoardAll\('openingStory'/.test(TEACH_CODE) && /lane: STORY_LANE\[/.test(TEACH_CODE)
+    ? new Set<LearnLane>(Object.values(STORY_LANE)) : new Set<LearnLane>();
+
   it('every lane in the table is fed by live code in CoachTeachPage', () => {
     for (const lane of Object.keys(LEARN_LANES) as LearnLane[]) {
-      if (VIA_BACKWARD_LOOK.has(lane)) continue;
+      if (VIA_BACKWARD_LOOK.has(lane) || viaStory.has(lane)) continue;
       const fed = new RegExp(`queueSpokenHint\\([^;]*'${lane}'|deferIf\\([^;]*'${lane}'|lane: '${lane}'|'${lane}' as const`).test(TEACH_CODE)
         || (pageCallsBoard && new RegExp(`lane: '${lane}'`).test(BOARD_CODE));
       expect(fed, `lane '${lane}' is in the table and nothing feeds it`).toBe(true);

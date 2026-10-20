@@ -41,8 +41,9 @@ import { falseAlarm } from './falseAlarm';
 import { theirMoveCost } from './theirMoveCost';
 import { pushOrHold } from './pushOrHold';
 import { threatAnswer, type ThreatAnswer } from './threatAnswer';
-import { mastersPlanLine, mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
-import { mastersMovesSync } from './masterPlayLookup';
+import { mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
+import { masterMovesCachedSync } from './masterPlayLookup';
+import { prefetchOpeningStory } from './openingStory';
 import { tempoCount } from './tempoCount';
 import { readTiming, timingClause } from './moveTiming';
 import { checkMethod } from './checkMethod';
@@ -66,12 +67,19 @@ import type { TacticType } from '../types';
 import { countMethod } from './countMethod';
 import { splitPosition } from './splitPosition';
 import { planChoice, type PlanChoiceLine } from './planChooser';
-import { openingIdentityLine, planFor, warmOpeningIdentity } from './openingIdentity';
+import { planFor } from './openingIdentity';
 import { buildReviewMoveTeachingFact } from './reviewMoveTeaching';
 import { withSubject } from '../utils/openSentence';
 // The Learn page reaches the opening facts through this module, never directly
 // (surfaceComposition): the warm-up and the opening's length in plies.
 export { warmOpeningIdentity } from './openingIdentity';
+
+/** WARM THE OPENING'S STORY before it is read: the next two plies of master
+ *  book and the plan tree from `fen`, into memory and the device cache. Learn's
+ *  reads are synchronous, so a position never looked up reads as unknown. */
+export function warmOpeningStory(fen: string): void {
+  void prefetchOpeningStory(fen, 'coach-teach').catch(() => undefined);
+}
 export { OPENING_PLIES } from './principleAttribution';
 import { trapAheadAt } from './gemCrushLines';
 import { noteTrapMeeting, trapSpeaks, type TrapState } from './trapLearning';
@@ -778,35 +786,7 @@ export function threatAnswerTeaching(i: {
  *  it: that parse is the memory spike a phone kills the app for, and the plan
  *  lane was offered zero times in a Learn game while it waited on it. */
 function learnPlanRead(fen: string, openingName: string | null): MastersPlanRead | null {
-  return mastersPlanRead(fen, mastersMovesSync) ?? (openingName ? planStillAhead(planFor(openingName), fen) : null);
-}
-
-/** THE OPENING'S PLAN, COMPUTED FROM MASTER GAMES (WO-TEACH-GAPS P2 #0): the
- *  pawn break each side's master games go for from this board, with its share.
- *  Warms the masters file on first call; silent until it has loaded. */
-export function openingPlanTeaching(fen: string, student: 'w' | 'b', openingName: string | null): TeachingHint | null {
-  const plan = mastersPlanLine(learnPlanRead(fen, openingName), student, fen);
-  if (!plan) return null;
-  return {
-    lane: 'openingIdea', proof: NO_PROOF.description, text: plan.text, squares: plan.squares, claims: plan.squares.map((q) => `break-${q}`),
-    event: { name: 'coach_opening_plan_named', props: { surface: 'coach-teach' } },
-    arrows: plan.arrows.map((a) => ({ from: a.from, to: a.to, role: 'play', fen, source: 'learn.openingPlan' })),
-  };
-}
-
-/** WHAT THE OPENING IS (the identity computer), from the student's seat —
- *  said once per game, right after the opening is named. Null until the
- *  identity file has loaded (it warms here), for a waypoint name, or when the
- *  master data gives this opening no signature. */
-export function openingIdentityTeaching(name: string, student: 'w' | 'b'): TeachingHint | null {
-  warmOpeningIdentity();
-  const line = openingIdentityLine(name, student, 'seat');
-  if (!line) return null;
-  return {
-    lane: 'openingIdentity', proof: NO_PROOF.name, text: line.text, squares: line.squares, claims: [line.key],
-    event: { name: 'coach_opening_identity', props: { surface: 'coach-teach' } },
-    arrows: [],
-  };
+  return mastersPlanRead(fen, masterMovesCachedSync) ?? (openingName ? planStillAhead(planFor(openingName), fen) : null);
 }
 
 const PRIZE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };

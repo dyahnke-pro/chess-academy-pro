@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**371 lines · 9 exports · 6 importers · 3 tests · 0 audits**
+**389 lines · 9 exports · 7 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,6 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/services/learnBoardTruth.realGame.test.ts`
 - `src/services/pawnJudgement.ts`
 - `src/services/planJudgement.closedSac.test.ts`
 - `src/services/planJudgement.wedge.test.ts`
@@ -24,54 +25,59 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `rightIdeaWrongPiece` (function) — 3 call sites
 - `src/services/structureJudgement.test.ts:216`
 - `src/services/structureJudgement.test.ts:218`
-- `src/services/structureReads.ts:56`
+- `src/services/structureReads.ts:60`
 
 ### `keepPlanChangeRoute` (function) — 3 call sites
 - `src/services/structureJudgement.test.ts:223`
 - `src/services/structureJudgement.test.ts:226`
-- `src/services/structureReads.ts:57`
+- `src/services/structureReads.ts:61`
 
 ### `planOverOneMove` (function) — 4 call sites
 - `src/services/structureJudgement.test.ts:233`
 - `src/services/structureJudgement.test.ts:235`
 - `src/services/structureJudgement.test.ts:237`
-- `src/services/structureReads.ts:58`
+- `src/services/structureReads.ts:62`
 
 ### `placementFutureLine` (function) — 5 call sites
 - `src/services/structureJudgement.test.ts:242`
 - `src/services/structureJudgement.test.ts:247`
 - `src/services/structureJudgement.test.ts:252`
 - `src/services/structureJudgement.test.ts:255`
-- `src/services/structureReads.ts:124`
+- `src/services/structureReads.ts:138`
 
 ### `smallEdges` (function) — 2 call sites
 - `src/services/structureJudgement.test.ts:261`
 - `src/services/structureJudgement.test.ts:265`
 
-### `fightingLine` (function) — 3 call sites
+### `fightingLine` (function) — 7 call sites
+- `src/services/learnBoardTruth.realGame.test.ts:21`
 - `src/services/structureJudgement.test.ts:270`
 - `src/services/structureJudgement.test.ts:276`
-- `src/services/structureReads.ts:123`
+- `src/services/structureJudgement.test.ts:283`
+- `src/services/structureJudgement.test.ts:289`
+- `src/services/structureJudgement.test.ts:295`
+- `src/services/structureReads.ts:137`
 
 ### `wedgePaysLater` (function) — 4 call sites
 - `src/services/planJudgement.wedge.test.ts:11`
 - `src/services/planJudgement.wedge.test.ts:15`
 - `src/services/planJudgement.wedge.test.ts:18`
-- `src/services/structureReads.ts:70`
+- `src/services/structureReads.ts:74`
 
 ### `closedTacticalChance` (function) — 4 call sites
 - `src/services/planJudgement.closedSac.test.ts:10`
 - `src/services/planJudgement.closedSac.test.ts:14`
 - `src/services/planJudgement.closedSac.test.ts:18`
-- `src/services/structureReads.ts:71`
+- `src/services/structureReads.ts:75`
 
 ### `heldOf` (function) — 3 call sites
 - `src/services/pawnJudgement.ts:167`
 - `src/services/pawnJudgement.ts:352`
-- `src/services/squareJudgement.ts:323`
+- `src/services/squareJudgement.ts:327`
 
 ## Tests
 
+- `src/services/learnBoardTruth.realGame.test.ts`
 - `src/services/planJudgement.closedSac.test.ts`
 - `src/services/planJudgement.wedge.test.ts`
 - `src/services/structureJudgement.test.ts`
