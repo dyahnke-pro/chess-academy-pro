@@ -10,7 +10,7 @@
 //   short   — proven: the point alone.
 // A slip resets the streak, so the record itself returns a skill to full.
 import { capabilityProven, type CapabilityProfile, type CapabilityProfileEntry } from './capabilityEvidence';
-import { splitThink, stripThink } from '../utils/thinkPause';
+import { splitThink, stripThink, THINK_MARK } from '../utils/thinkPause';
 
 export type FadeLevel = 'lighter' | 'short';
 /** Per skill; a plain set reads as `short` for every member (proven tags). */
@@ -37,13 +37,25 @@ export function fadeLevelOf(levels: FadeLevels | null | undefined, tag: string |
 
 /** The line at a level: short keeps the first sentence, lighter the first two.
  *  A QUESTION ("question ‖ answer") is never cut into a question with no
- *  answer: a skill they have PROVEN is not asked at all — the answer's point
- *  is said instead — and a lighter one keeps the question whole. */
+ *  answer: a skill they have PROVEN is not asked at all — the point is said
+ *  instead — and a lighter one keeps the question whole. The point is the
+ *  CONCLUSION the line draws after its answer when it draws one ("…‖ So the
+ *  plan: …"), else the answer's first sentence. */
 export function fadeText(text: string, level: FadeLevel | null): string {
   if (!level) return text;
   const qa = splitThink(text);
-  if (qa) return level === 'short' ? fadeText(stripThink(qa[1]), 'short') : text;
+  if (qa) {
+    if (level !== 'short') return text;
+    const marks = text.split(THINK_MARK);
+    const conclusion = marks.length % 2 === 1 ? stripThink(marks[marks.length - 1]) : '';
+    if (conclusion) return fadeText(cap(conclusion.replace(/^So\s+/, '')), 'short');
+    return fadeText(stripThink(qa[1]), 'short');
+  }
   const sentences = text.split(/(?<=[.!?])\s+(?=[A-Z"“…])/);
   const keep = level === 'short' ? 1 : 2;
   return sentences.length > keep ? sentences.slice(0, keep).join(' ') : text;
+}
+
+function cap(s: string): string {
+  return s ? s[0].toUpperCase() + s.slice(1) : s;
 }
