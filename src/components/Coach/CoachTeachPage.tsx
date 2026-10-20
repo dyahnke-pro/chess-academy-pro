@@ -289,7 +289,7 @@ import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighl
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
 import { gradePlayedMove, liveMoveCost, studentMoveCost, uciOfSan } from '../../services/playedMoveGrade';
-import { instantWaitsForVerdict, VERDICT_HOLD_MS } from '../../services/verdictFirst';
+import { instantWaitsForVerdict, replyWait, VERDICT_HOLD_MS } from '../../services/verdictFirst';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
 import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine, isLoudAlarm, dangerRank, PIECE_DANGER_RANK } from '../../services/liveTacticsContext';
@@ -10099,10 +10099,7 @@ export function CoachTeachPage(): JSX.Element {
               }
             })()
           : Promise.resolve();
-        const padDone = new Promise<void>((resolve) => {
-          const elapsed = Date.now() - thinkStart;
-          setTimeout(resolve, Math.max(0, minThink - elapsed));
-        }).then(() => Promise.race([reasonWarm, new Promise<void>((r) => setTimeout(r, reasonWaitMs))]));
+        const padDone = replyWait({ startedAt: thinkStart, minThinkMs: minThink, reason: reasonWarm, ceilingMs: reasonWaitMs });
         if (reply) {
           // GROUNDING COMPLETENESS (David 2026-06-15): compute what the
           // reply ACTUALLY did — captured piece + squares — from the BEFORE

@@ -30,3 +30,40 @@ describe('the instant line waits for the verdict on a mistake turn', () => {
     expect(page).toMatch(/void verdictPass\.finally\(verdictHandedOver\)/);
   });
 });
+
+describe('the reply waits for the reason for at most the ceiling, counted from the move (14.Rd5: 4.9 s)', () => {
+  it('a reason that never comes holds the reply to the ceiling, not pad + ceiling', async () => {
+    const { vi } = await import('vitest');
+    const { replyWait } = await import('./verdictFirst');
+    vi.useFakeTimers();
+    try {
+      let landed = -1;
+      const t0 = Date.now();
+      void replyWait({ startedAt: t0, minThinkMs: 2000, reason: new Promise(() => {}), ceilingMs: 2500 }).then(() => { landed = Date.now() - t0; });
+      await vi.advanceTimersByTimeAsync(2499);
+      expect(landed).toBe(-1);
+      await vi.advanceTimersByTimeAsync(1);
+      expect(landed).toBe(2500);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+  it('a quick reason still keeps the think pad', async () => {
+    const { vi } = await import('vitest');
+    const { replyWait } = await import('./verdictFirst');
+    vi.useFakeTimers();
+    try {
+      let landed = -1;
+      const t0 = Date.now();
+      void replyWait({ startedAt: t0, minThinkMs: 1500, reason: Promise.resolve(), ceilingMs: 2500 }).then(() => { landed = Date.now() - t0; });
+      await vi.advanceTimersByTimeAsync(1500);
+      expect(landed).toBe(1500);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+  it('Learn\'s reply waits through replyWait', () => {
+    const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    expect(page).toMatch(/const padDone = replyWait\(\{ startedAt: thinkStart, minThinkMs: minThink, reason: reasonWarm, ceilingMs: reasonWaitMs \}\);/);
+  });
+});
