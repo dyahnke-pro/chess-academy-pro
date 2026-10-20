@@ -42,6 +42,7 @@ import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, 
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
+import { mistakeTurnLine } from '../../services/mistakeTurnLine';
 import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
@@ -11407,6 +11408,11 @@ export function CoachTeachPage(): JSX.Element {
                     if (turnArrows.length > 0) setArrows([]);
                     // Spoken with its marks: each goes up as the voice names it.
                     speakTrackA(hintPkg.spoken, liveFenRef.current === fenAfterReply ? { arrows: uniqueArrows(turnArrows), highlights: owed } : undefined);
+                    // WHAT THIS WAVE SAID IS ALREADY SAID for the next wave of the
+                    // turn: the verdict now speaks as its own wave (OS-18), so the
+                    // wave after it must see its words, or the door judges the rest
+                    // of the turn as if nothing had been heard.
+                    instantSpokenText = [instantSpokenText, stripThink(hintPkg.spoken)].filter((t) => t.trim()).join(' ');
                     void logAppAudit({
                       kind: 'coach-narration-spoken',
                       category: 'narration',
@@ -11743,9 +11749,6 @@ export function CoachTeachPage(): JSX.Element {
                       // fundamental's "that left your rook on b2 hanging" is the
                       // same claim (Najdorf re-walk ply 48). The grade speaks —
                       // it also carries the better move.
-                      const lossInGrade = !!fund
-                        && (fund.id === 'loose-piece' || fund.id === 'ignored-threat')
-                        && !!look.lostSquare && fund.square === look.lostSquare;
                       // WHAT THE MOVE GAVE UP (capability parity with review,
                       // 2026-09-27): the lasting damage a flagged move left —
                       // king cover thinned, a passer granted, a new isolani.
@@ -11755,21 +11758,24 @@ export function CoachTeachPage(): JSX.Element {
                       // usual move; the fundamental keeps only its HOW.
                       const bookSaid = fund?.id === 'left-book-early'
                         && studentJustLeftBook(move.history, playerColor === 'white' ? 'w' : 'b');
-                      // THE QUESTION THAT CATCHES IT (David 2026-10-14: verdicts into
-                      // thinking) — the thinking-routine step this slip failed, read
-                      // off the board. Not when the threat verdict already teaches it,
-                      // nor beside a mate (the mate is the whole story).
-                      const slipQ = fund?.id === 'ignored-threat' || look.stakes?.mate
-                        ? null
-                        : slipQuestion(fenBefore, move.san, look.lostSquare, playerColor === 'white' ? 'w' : 'b', learnMemRef.current.spokenKeys, move.history.length);
                       // THE LOOP ON A PLAIN MISTAKE: the weakness the record files
                       // it under, when the student has made it in another game.
                       const mistakeRecurrence = fund ? null : learnMistakeRecurrence({
                         fenBefore, playedSan: move.san, bestSan: studentBestSan ?? null, historySans: move.history, currentGameId: learnMemRef.current.gameId,
                       }, weaknessSignalsRef.current, learnMemRef.current.recalled);
-                      const line = `${fund
-                        ? `${lossInGrade ? '' : noteSlip(learnMemRef.current, fund.id)}${lossInGrade ? '' : bookSaid ? fund.howOnly : fund.verdict}${fund.recurrence ? ` ${fund.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`.trim()
-                        : `${look.line}${takeDefinition(look.pattern)}${mistakeRecurrence ? ` ${mistakeRecurrence}` : ''}`}${concession ? ` ${concession}` : ''}${slipQ ? ` ${slipQ.text}` : ''}`;
+                      // ONE LINE, ONE LOSS, ONE HABIT (`mistakeTurnLine`): a fundamental
+                      // about the square the grade says was lost keeps only its HOW,
+                      // and the slip question (the thinking-routine step this slip
+                      // failed, David 2026-10-14) is asked only when no habit was
+                      // taught — never beside a mate (the mate is the whole story).
+                      const line = mistakeTurnLine({
+                        fund, evidence, lostSquare: look.lostSquare ?? null, bookSaid,
+                        slipPrefix: () => (fund ? noteSlip(learnMemRef.current, fund.id) : ''),
+                        plainTail: `${takeDefinition(look.pattern)}${mistakeRecurrence ? ` ${mistakeRecurrence}` : ''}`,
+                        concession,
+                        slipQuestion: () => (fund?.id === 'ignored-threat' || look.stakes?.mate ? null
+                          : slipQuestion(fenBefore, move.san, look.lostSquare, playerColor === 'white' ? 'w' : 'b', learnMemRef.current.spokenKeys, move.history.length)?.text ?? null),
+                      });
                       // "That let them win the pawn on d4" and "they're eyeing
                       // Nxd4 — it would win your pawn on d4" are one claim (run
                       // C walk 2026-09-30); the shared key lets the package keep one.
