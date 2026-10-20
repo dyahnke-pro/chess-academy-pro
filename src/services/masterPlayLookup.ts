@@ -38,6 +38,7 @@
  * grounded claims.
  */
 
+import { Chess } from 'chess.js';
 import { masterPlayCache, positionFen } from './masterPlayCache';
 import type {
   MasterPlayMove,
@@ -93,7 +94,8 @@ export type LookupTrigger =
   | 'watcher-lookahead'
   | 'watcher-walkthrough-preload'
   | 'manual'
-  | 'book-departure';
+  | 'book-departure'
+  | 'opening-story';
 
 export interface LookupOptions {
   /** Who is asking? Goes to the audit event. */
@@ -137,6 +139,13 @@ let localDbInflight: Promise<LocalDb | null> | null = null;
  *  after this long rather than never again this session. */
 const LOCAL_DB_RETRY_MS = 60_000;
 let localDbMissAt = 0;
+
+/** Positions the LIVE explorer answered with zero master games. The result is
+ *  collapsed to `source: 'none'` for the claim validator, which made a real
+ *  "masters never reached this" indistinguishable from "never looked up" — so
+ *  the cached readers could never say out of book. Kept here, beside the
+ *  answer, so `masterMovesCachedSync` returns `[]` for exactly these. */
+const confirmedEmpty = new Set<string>();
 
 async function getLocalDb(): Promise<LocalDb | null> {
   if (localDbCache === null && Date.now() - localDbMissAt > LOCAL_DB_RETRY_MS) localDbCache = undefined;
@@ -211,7 +220,11 @@ export function mastersMovesSync(fen: string): LocalDbMove[] | null {
 export function inBookCachedSync(fen: string, minGames: number): boolean | null {
   const known = masterMovesCachedSync(fen);
   if (known) return known.some((m) => m.games >= minGames);
-  return localDbCache ? false : null;
+  // A miss in the local file is NOT "out of book": the file stops ~15 plies
+  // into the popular lines (1.e4 c5 … Be3 e5 Nb3 Be6 f3 is its last Najdorf
+  // position), so a deeper theory position read as out of book whenever some
+  // other surface had loaded it. Only a live answer of zero games says so.
+  return null;
 }
 
 /** The masters moves at a position from whatever is ALREADY IN MEMORY — the
@@ -221,6 +234,9 @@ export function inBookCachedSync(fen: string, minGames: number): boolean | null 
  *  and masters never reached this position. */
 export function masterMovesCachedSync(fen: string): LocalDbMove[] | null {
   const hit = masterPlayCache.get(fen);
+  // Out of book only while the live answer itself is still cached: the set
+  // never outlives the cache entry it describes.
+  if (hit && hit.source === 'none' && confirmedEmpty.has(positionFen(fen))) return [];
   if (hit && hit.source !== 'none') return hit.moves.map((m) => ({ san: m.san, games: m.games }));
   return mastersMovesSync(fen);
 }
@@ -233,6 +249,7 @@ export function __setLocalDbForTests(db: LocalDb | null): void {
 }
 
 // ─── Resolver ──────────────────────────────────────────────────────
+
 
 function readLocal(
   db: LocalDb,
@@ -440,6 +457,7 @@ export async function lookupMasterPlay(
     try {
       const payload = await fetchLichessExplorer(key, 'masters');
       const live = buildResultFromLichess(key, payload);
+      if (live.source === 'none') confirmedEmpty.add(key);
       // Persist genuine live data so the next session skips the edge.
       // best-effort, fire-and-forget (only 'lichess-live' w/ games is
       // actually written — see masterPlayPersistence).
@@ -463,4 +481,62 @@ export async function lookupMasterPlay(
 export function __resetMasterPlayLookupForTests(): void {
   __resetLocalDbForTests();
   masterPlayCache.clear();
+  confirmedEmpty.clear();
+}
+
+export interface TreePrefetchOptions {
+  surface: string;
+  /** Plies forward from the root to look up. */
+  plies: number;
+  /** A move below this share of its position's games is not followed. */
+  branchShare: number;
+  /** A position with fewer games than this is not expanded. */
+  minNodeGames: number;
+  /** A path whose product of shares falls below this is not followed — what
+   *  it could add to any "usually" is too small to change it. */
+  minWeight: number;
+  /** Hard bound on lookups per call (the live explorer is rate-limited). */
+  maxPositions: number;
+  /** Test seam: the lookup to use. Production uses `lookupMasterPlay`. */
+  lookup?: (fen: string) => Promise<MasterPlayResult>;
+}
+
+/**
+ * LOOK THE MASTERS TREE UP AHEAD OF TIME (Learn, 2026-10-19): the readers on
+ * the move path are synchronous (`masterMovesCachedSync`), so the first plies
+ * of a game read "unknown" unless someone looked them up first. Walks the tree
+ * level by level from `rootFen`, following the same branch rule its reader
+ * uses, through memory → saved on the device → live — never the 37 MB local
+ * file (`skipLocalDb`, the iOS memory rule). Returns the positions looked up.
+ */
+export async function prefetchMastersTree(rootFen: string, o: TreePrefetchOptions): Promise<number> {
+  const lookup = o.lookup ?? ((f: string) => lookupMasterPlay(f, { triggeredBy: 'opening-story', surface: o.surface, skipLocalDb: true }));
+  const seen = new Set<string>();
+  let level: Array<{ fen: string; weight: number }> = [{ fen: rootFen, weight: 1 }];
+  let looked = 0;
+  for (let d = 0; d <= o.plies && level.length > 0; d += 1) {
+    const batch = level.filter((n) => { const k = positionFen(n.fen); if (seen.has(k)) return false; seen.add(k); return true; })
+      .sort((a, b) => b.weight - a.weight)
+      .slice(0, Math.max(0, o.maxPositions - looked));
+    if (batch.length === 0) break;
+    looked += batch.length;
+    const results = await Promise.all(batch.map((n) => lookup(n.fen).catch(() => emptyResult(n.fen))));
+    if (d === o.plies) break;
+    const next: Array<{ fen: string; weight: number }> = [];
+    batch.forEach((n, i) => {
+      const r = results[i];
+      if (r.totalGames < o.minNodeGames) return;
+      for (const m of r.moves) {
+        const w = n.weight * (m.games / r.totalGames);
+        if (m.games / r.totalGames < o.branchShare || w < o.minWeight) continue;
+        try {
+          const c = new Chess(n.fen);
+          c.move(m.san);
+          next.push({ fen: c.fen(), weight: w });
+        } catch { /* an illegal explorer move is skipped */ }
+      }
+    });
+    level = next;
+  }
+  return looked;
 }
