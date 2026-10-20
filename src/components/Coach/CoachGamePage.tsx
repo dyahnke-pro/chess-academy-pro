@@ -137,7 +137,7 @@ import { getPhaseBreakdown, classifyPhase } from '../../services/gamePhaseServic
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { detectMissedTactics } from '../../services/missedTacticService';
-import { detectBadHabitsFromGame } from '../../services/coachFeatureService';
+import { detectBadHabitsFromGame, findKeyMoments } from '../../services/coachFeatureService';
 import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
 import { autoAnalyzeGameMisconceptions } from '../../services/autoAnalyzeGame';
 import { computeWeaknessProfile } from '../../services/weaknessAnalyzer';
@@ -157,43 +157,6 @@ import { classifyMoveFull } from '../../services/moveRating';
 import { assembleSlipNarration, ownHangingLine as hangingLineFor } from '../../services/groundedAnswer';
 import { LocalizedCoachText } from './ChatMessage';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
-
-function findKeyMoments(moves: CoachGameMove[]): KeyMoment[] {
-  const evaluated = moves.filter((m) => m.evaluation !== null && !m.isCoachMove);
-  if (evaluated.length < 2) return [];
-
-  // Find largest eval swings, clamping mate evals so they don't distort deltas
-  const clampEval = (e: number): number => Math.max(-3000, Math.min(3000, e));
-
-  const swings: { index: number; delta: number; move: CoachGameMove }[] = [];
-
-  for (let i = 1; i < evaluated.length; i++) {
-    const prev = evaluated[i - 1];
-    const curr = evaluated[i];
-    if (prev.evaluation !== null && curr.evaluation !== null) {
-      const delta = Math.abs(clampEval(curr.evaluation) - clampEval(prev.evaluation));
-      swings.push({ index: i, delta, move: curr });
-    }
-  }
-
-  swings.sort((a, b) => b.delta - a.delta);
-
-  return swings.slice(0, 5).map((s) => {
-    const cls = s.move.classification;
-    const type: KeyMoment['type'] = cls === 'brilliant' || cls === 'great'
-      ? 'brilliant'
-      : cls === 'blunder' || cls === 'mistake'
-        ? 'blunder'
-        : s.delta > 200 ? 'turning_point' : 'turning_point';
-
-    return {
-      moveNumber: s.move.moveNumber,
-      fen: s.move.fen,
-      explanation: s.move.commentary || `Move ${s.move.moveNumber}: ${s.move.san} — evaluation changed significantly.`,
-      type,
-    };
-  });
-}
 
 function buildAnalysisSummary(
   moves: CoachGameMove[],

@@ -81,7 +81,7 @@ import { matchFundamental, type WeaknessSignal } from './weaknessSignal';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap, isMethodSentence } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
-import type { BadHabit, UserProfile, CoachNarration, OpeningKey, BoardArrow, HeardVerdict } from '../types';
+import type { BadHabit, UserProfile, CoachNarration, OpeningKey, BoardArrow, HeardVerdict, CoachGameMove, KeyMoment } from '../types';
 import { admitArrow, admitArrows, type ArrowClaim } from './arrowDoor';
 import { lineWins, lineArrows, mateLine } from './lineCalc';
 import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted } from './endgamePawnReads';
@@ -270,7 +270,7 @@ export async function generateNarrativeSummary(
   // Verbosity tie-in (Bug D-2, David's 2026-05-19 directive on /
   // weaknesses): the recap honors the user's coachNarration setting.
   // silent → no recap at all (short stub); brief → 1-2 sentences;
-  // full → the existing 2-4 moments / ~180 words. Drives both the
+  // full → every flagged moment (G4.5, 2026-10-20). Drives both the
   // prompt's word/moment budget AND the max_tokens ceiling so the
   // generated text matches what's promised AND what the user pays
   // for downstream.
@@ -338,9 +338,10 @@ export async function generateNarrativeSummary(
     ? (framedOpening.owned ? `the ${framedOpening.label}` : `the game against the ${framedOpening.label}`)
     : 'this game';
 
-  // Verbosity caps the number of moments named (brief = 1) — the SAME hard
-  // contract the old prompt tried to hint at, now enforced in code (G5).
-  const momentBudget = verbosity === 'brief' ? 1 : 3;
+  // BRIEF names one moment — the student's own switch, the one sanctioned cap
+  // (G5). FULL names every flagged moment (G4.5: the old 3 dropped the rest;
+  // each moment is its own sentence, so a long game reads as a list of them).
+  const recapMoments = verbosity === 'brief' ? keyMoments.slice(0, 1) : keyMoments;
 
   // ONE TEXT, ONE VOICE (walk 2026-09-23: the card STILL rendered "Post-game
   // recap of … (student rated about 1366). The student made 0 blunder(s)" —
@@ -351,7 +352,7 @@ export async function generateNarrativeSummary(
   // model warms it, and every fallback IS it.
   const spokenFallback = recapSecondPerson({
     outcome: result, playerColor, openingClause,
-    blunderCount, mistakeCount, inaccuracyCount, keyMoments: keyMoments.slice(0, momentBudget), totalErrors,
+    blunderCount, mistakeCount, inaccuracyCount, keyMoments: recapMoments, totalErrors,
   });
   // COMPUTED PROSE SPEAKS (2026-10-18): the recap is already second-person
   // spoken prose; no model rewrite between it and the student.
@@ -5489,4 +5490,39 @@ export function addVerdictReason(narration: string, bestSan: string, reason: str
   const end = at + marker.length;
   if (!/^[.;]/.test(narration.slice(end))) return narration;   // already carries a clause
   return `${narration.slice(0, end)} — ${reason}${narration.slice(end)}`;
+}
+
+/** A swing this large on the student's move is a turning point even when the
+ *  move itself was fine — the opponent's reply in between gave it away. The
+ *  same 2-pawn line the old ranking already called a turning point. */
+const TURNING_SWING_CP = 200;
+const KEY_MOMENT_GRADES: ReadonlySet<string> = new Set(['brilliant', 'great', 'blunder', 'mistake']);
+
+/**
+ * THE KEY MOMENTS OF A PLAY GAME — every student move that clears the bar,
+ * however many that is (G4.5: no cap; 2026-10-20 replaced a top-5 slice that
+ * dropped a sixth and seventh turning point, and filled a quiet game with five
+ * "evaluation changed significantly" moments that were not). The bar is the
+ * move grader's own verdict (a blunder, a mistake, a great or brilliant find)
+ * or a two-pawn swing; a quiet game has none. In game order.
+ */
+export function findKeyMoments(moves: readonly CoachGameMove[]): KeyMoment[] {
+  const clampEval = (e: number): number => Math.max(-3000, Math.min(3000, e));
+  const evaluated = moves.filter((m) => m.evaluation !== null && !m.isCoachMove);
+  const out: KeyMoment[] = [];
+  for (let i = 1; i < evaluated.length; i++) {
+    const prev = evaluated[i - 1];
+    const curr = evaluated[i];
+    const delta = Math.abs(clampEval(curr.evaluation as number) - clampEval(prev.evaluation as number));
+    const cls = curr.classification;
+    const graded = cls !== null && KEY_MOMENT_GRADES.has(cls);
+    if (!graded && delta < TURNING_SWING_CP) continue;
+    out.push({
+      moveNumber: curr.moveNumber,
+      fen: curr.fen,
+      explanation: curr.commentary || `Move ${curr.moveNumber}: ${curr.san} — evaluation changed significantly.`,
+      type: cls === 'brilliant' || cls === 'great' ? 'brilliant' : cls === 'blunder' || cls === 'mistake' ? 'blunder' : 'turning_point',
+    });
+  }
+  return out;
 }
