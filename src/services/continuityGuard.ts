@@ -35,16 +35,16 @@ import { Chess } from 'chess.js';
 import { logAppAudit } from './appAuditor';
 import type { PlayableMiddlegameLine } from '../types';
 
-export type ContinuityCode = 'illegal-move' | 'narration-misaligned';
+type ContinuityCode = 'illegal-move' | 'narration-misaligned';
 
-export interface ContinuityViolation {
+interface ContinuityViolation {
   code: ContinuityCode;
   /** Move index the violation occurred at, or -1 for whole-line issues. */
   moveIndex: number;
   detail: string;
 }
 
-export interface ContinuityContext {
+interface ContinuityContext {
   /** Component / surface that owns the line (audit `source`). */
   source: string;
   /** Optional opening id for triage (audit `context`). */

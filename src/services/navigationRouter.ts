@@ -13,7 +13,7 @@
  * "play with coach" beats "play". Parameterized routes (:id/:kind) are excluded
  * — you can't navigate to them without a resource.
  */
-export interface NavigationMatch {
+interface NavigationMatch {
   path: string;
   ack: string;
 }

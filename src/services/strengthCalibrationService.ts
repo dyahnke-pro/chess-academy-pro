@@ -34,7 +34,7 @@ const MAX_RATING = 2800;
  * not know their Elo, so we ask in plain language and map to a starting
  * rating. Keep these ordered weakest → strongest for rendering.
  */
-export interface SkillBand {
+interface SkillBand {
   id: 'newcomer' | 'beginner' | 'intermediate' | 'advanced';
   label: string;
   blurb: string;
@@ -121,7 +121,7 @@ export async function applyStrength(
  * NOTHING. A student with no imported games therefore re-estimated on every
  * boot and threw the answer away.
  */
-export type CalibrationResult =
+type CalibrationResult =
   | { calibrated: true; rating: number; source: RatingSource }
   | { calibrated: false; rating: number; source: 'no-signal' };
 

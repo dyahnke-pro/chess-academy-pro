@@ -254,7 +254,7 @@ export interface CapabilityProfileEntry {
 
 /** What a ROUTINE question (posed, below the sharp bar) is worth toward the
  *  proof: half — twice the clean answers, the same games bar. */
-export const ROUTINE_CREDIT = 0.5;
+const ROUTINE_CREDIT = 0.5;
 
 /**
  * IS THIS CAPABILITY PROVEN — the ONE definition, read by every consumer: the
@@ -348,13 +348,13 @@ export type CapabilityProfile = Map<MisconceptionTagId, CapabilityProfileEntry>;
 
 /** The KNOW reading's source key: the position, without the move counters, so
  *  the same board reached twice is one source. Null on an empty FEN. */
-export function positionSourceKey(fen: string): string | null {
+function positionSourceKey(fen: string): string | null {
   const key = positionOf(fen);
   return key.length > 0 ? key : null;
 }
 
 /** KNOW and USE for one capability, both through `capabilityProven`. */
-export interface CapabilityStanding {
+interface CapabilityStanding {
   know: boolean;
   use: boolean;
 }
@@ -560,7 +560,7 @@ const MATE_THREAT_POSED = 95;
  * and therefore the only thing that can turn it back.
  */
 /** What one move is scored on: the posing and the outcome rule, shared. */
-export interface CapabilityMoveArgs {
+interface CapabilityMoveArgs {
   fenBefore: string;
   playedSan: string;
   moverColor: 'white' | 'black';
@@ -728,14 +728,14 @@ async function writeLaneEvidence(args: LaneEvidenceArgs): Promise<boolean> {
 /** How live a question is when the coach ASKED it on a board: the board posed
  *  it by construction (the key was computed before the student was asked), so
  *  it clears the green bar the way a sharp game moment does. */
-export const ASKED_IMPORTANCE = 100;
+const ASKED_IMPORTANCE = 100;
 
 /** The origins an ANSWER row may carry — the KNOW half, by the table. */
 export type AnswerOrigin = { [O in EvidenceOrigin]: (typeof EVIDENCE_READING)[O] extends 'know' ? O : never }[EvidenceOrigin];
 
 /** Help that gives the answer away (a hint, the Show, "I don't know"). A
  *  "one more" nudge names neither a square nor the count, so it does not. */
-export function helpPrompts(h: AnswerHelp | undefined): boolean {
+function helpPrompts(h: AnswerHelp | undefined): boolean {
   return h === 'hint' || h === 'show' || h === 'dont-know';
 }
 
@@ -819,12 +819,6 @@ const PROFILE_MEMO: Record<EvidenceReading, TableMemo<CapabilityProfile>> = {
   know: memoOverTable(() => [db.capabilityEvidence, db.misconceptionTags], async () => summariseEvidence(await db.capabilityEvidence.toArray(), [], {}, 'know')),
   use: memoOverTable(() => [db.capabilityEvidence, db.misconceptionTags], async () => summariseEvidence(await db.capabilityEvidence.toArray(), await db.misconceptionTags.toArray(), {}, 'use')),
 };
-
-/** Test seam: forget the memoised profiles. */
-export function clearCapabilityProfileMemo(): void {
-  PROFILE_MEMO.know.clear();
-  PROFILE_MEMO.use.clear();
-}
 
 export async function getCapabilityProfile(reading: EvidenceReading = 'use'): Promise<CapabilityProfile> {
   try {

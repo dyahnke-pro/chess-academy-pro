@@ -26,7 +26,7 @@ import { lineSeatAt } from '../utils/andList';
 
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
-export interface NaturalDefence { target: string; defence: string; proof: Proof }
+interface NaturalDefence { target: string; defence: string; proof: Proof }
 
 /**
  * The plain defence of your attacked piece that the engine rates far below its
@@ -74,7 +74,7 @@ export function forcingLine(fen: string, top: EngineLine | undefined): Proof | n
   return legalLineProof(fen, sans, 'you');
 }
 
-export interface LineMark { mark: 'forced' | 'speculative'; proof: Proof }
+interface LineMark { mark: 'forced' | 'speculative'; proof: Proof }
 
 /**
  * When the engine's move is a sacrifice: is the line that follows forced?

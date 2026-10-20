@@ -13,7 +13,7 @@ import type { PieceSymbol } from 'chess.js';
 
 const PIECE_LABEL: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
-export interface PieceItinerary {
+interface PieceItinerary {
   /** 1-based ply where the maneuver completes (the last hop). */
   ply: number;
   pieceType: 'n' | 'b' | 'r' | 'q';

@@ -62,7 +62,7 @@ export interface QuietFact {
   by?: string;
 }
 
-export interface FactSelection {
+interface FactSelection {
   spoken: string[];
   quiet: QuietFact[];
 }
@@ -140,7 +140,7 @@ function jaccard(a: readonly string[], b: readonly string[]): number {
  *  existing caller kept compiling while passing the wrong thing. A long
  *  positional tail is a trap that springs on the NEXT person; the options
  *  object cannot mis-bind. */
-export interface FactSelectOptions {
+interface FactSelectOptions {
   /** Facts that describe something the OPPONENT is doing TO the student —
    *  coupled from the detector's `beneficiary`, never inferred from the prose.
    *  Used ONLY to break a tie inside a same-claim group (see below). */

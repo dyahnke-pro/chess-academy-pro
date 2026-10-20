@@ -26,9 +26,9 @@ import { describeStructure } from './boardStructure';
 const VAL: Readonly<Record<string, number>> = MATERIAL_VALUE;
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
-export type TradeCall = 'good' | 'bad' | 'ahead' | 'behind';
+type TradeCall = 'good' | 'bad' | 'ahead' | 'behind';
 
-export interface TradeRead {
+interface TradeRead {
   /** From the MOVER's side. */
   call: TradeCall;
   /** Spoken clause, worded from the student's seat. */
@@ -293,7 +293,7 @@ export function readTrade(
   return null;
 }
 
-export interface TradeTarget {
+interface TradeTarget {
   text: string;
   squares: string[];
   key: string;

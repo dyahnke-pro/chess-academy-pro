@@ -20,12 +20,12 @@
 import type { LearnLane } from './learnTurnDoor';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 
-export type RoleState =
+type RoleState =
   | { state: 'wired'; via: string }
   | { state: 'owed'; what: string }
   | { state: 'na'; why: string };
 
-export interface ComputerRole {
+interface ComputerRole {
   /** The computer behind the lane (module name). */
   computer: string;
   /** The student-model tag this lane's question is about, or null. */

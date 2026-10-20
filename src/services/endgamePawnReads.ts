@@ -37,7 +37,7 @@ function isPassed(sq: string, color: C, enemy: readonly string[]): boolean {
   return !enemy.some((e) => Math.abs(fileOf(e) - f) <= 1 && (color === 'w' ? rankOf(e) > r : rankOf(e) < r));
 }
 
-export interface PasserKind {
+interface PasserKind {
   square: string;
   /** Defended by one of its own pawns. */
   protected: boolean;
@@ -65,7 +65,7 @@ export function passerKinds(fen: string, color: C): PasserKind[] {
   });
 }
 
-export interface DecoyRead { passer: string; wing: string; text: string; squares: string[] }
+interface DecoyRead { passer: string; wing: string; text: string; squares: string[] }
 
 /**
  * THE OUTSIDE PASSER AS A DECOY (W0L 21-24, iyl 26, VWe 21): a pure pawn
@@ -100,7 +100,7 @@ export function outsidePasserDecoy(fen: string, color: C): DecoyRead | null {
   };
 }
 
-export interface PawnEndingTrade { text: string; verdict: 'lost' | 'won' | 'held' }
+interface PawnEndingTrade { text: string; verdict: 'lost' | 'won' | 'held' }
 
 /**
  * COUNT THE PAWN ENDING BEFORE YOU TRADE INTO IT (QUq 08, VWe 06, hUZ 06, mEZ

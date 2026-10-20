@@ -64,9 +64,9 @@ export interface SelectorPly {
 }
 
 /** What the sequence IS: a finished game, a taught line, or a live game so far. */
-export type SequenceKind = 'game' | 'line' | 'live';
+type SequenceKind = 'game' | 'line' | 'live';
 
-export interface SelectorInput {
+interface SelectorInput {
   plies: readonly SelectorPly[];
   studentColor: 'white' | 'black';
   rating?: number;
@@ -82,7 +82,7 @@ export interface SelectorInput {
   turnPly?: number;
 }
 
-export interface Moment {
+interface Moment {
   ply: number;
   /** "18… Rd8" — the review card's label, shared. */
   label: string;
@@ -97,7 +97,7 @@ export interface Moment {
   san: string;
 }
 
-export interface Thesis {
+interface Thesis {
   kind: 'turned' | 'landed' | 'plan' | 'none';
   ply: number | null;
   label: string | null;
@@ -109,7 +109,7 @@ export interface Thesis {
   chainRoot: string | null;
 }
 
-export interface TeachingPackage {
+interface TeachingPackage {
   thesis: Thesis;
   /** Biggest first. Every swing that clears the turning-point bar, plus every
    *  landed tactic that clears `landedTacticIsMoment` — never a count (G4.5). */
@@ -415,7 +415,7 @@ export function pliesFromSans(sans: readonly string[], evals?: readonly (number 
 
 /** The review walk's segments carry everything the selector needs. Structural
  *  type so the component never imports a review-only shape into the selector. */
-export interface SegmentLike {
+interface SegmentLike {
   ply: number;
   san: string;
   fenBefore: string;
@@ -442,7 +442,7 @@ export function selectTeachingForSegments(
 
 /** The serializable slice of a package a cached WalkthroughTree carries
  *  (`WalkthroughTree.teaching`): facts only, no Sets, no chain object. */
-export interface TreeTeaching {
+interface TreeTeaching {
   thesis: Thesis;
   momentPlies: number[];
   onThread: number[];

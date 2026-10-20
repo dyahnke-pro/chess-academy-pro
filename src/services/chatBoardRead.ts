@@ -18,7 +18,7 @@ import { getCachedStockfish } from '../hooks/stockfishFenCache';
 import { lastMoveIfStudent, lastMoveIfOpponent } from './lastMoveOfLine';
 import type { StockfishAnalysis } from '../types';
 
-export interface ChatBoardInput {
+interface ChatBoardInput {
   fen: string;
   studentColor: 'white' | 'black';
   history: readonly string[];

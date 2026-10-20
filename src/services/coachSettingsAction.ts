@@ -38,7 +38,7 @@ function resolveThemeId(t: string): string | null {
   return null;
 }
 
-export interface SettingsCommandResult {
+interface SettingsCommandResult {
   /** Human confirmation the coach voices ("Voice narration is on now."). */
   confirmation: string;
   /** The setting key that changed (for audit). */

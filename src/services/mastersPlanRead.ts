@@ -61,7 +61,7 @@ const DEPTH = 12;
 /** A break played in fewer than this share of games is not "the plan". */
 export const MIN_BREAK_SHARE = 0.4;
 /** A piece placement said as "usually" needs a clear majority. */
-export const MIN_PIECE_SHARE = 0.5;
+const MIN_PIECE_SHARE = 0.5;
 
 const key = (fen: string): string => positionOf(fen);
 
@@ -255,7 +255,7 @@ export function mastersPlanLine(
  *  walks (`prefetchMastersTree`). */
 export const PLAN_WALK = { branchShare: BRANCH_SHARE, minNodeGames: MIN_NODE_GAMES, depth: DEPTH } as const;
 
-export interface BreakIdea {
+interface BreakIdea {
   text: string;
   /** The landing square, the pawn's square, and any pawn it strikes. */
   squares: string[];

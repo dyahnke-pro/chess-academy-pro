@@ -194,7 +194,7 @@ export function centralPawnsResolved(fen: string): boolean {
  *  6. either side has all 4 minors out, move 10 or later;
  *  7. move 12 or later and 5+ minors developed.
  */
-export type OpeningEndRule =
+type OpeningEndRule =
   | 'development' | 'castled-connected' | 'major-captured' | 'move-15-safety'
   | 'central-pawns-resolved' | 'asymmetric-full-development' | 'early-tempo';
 

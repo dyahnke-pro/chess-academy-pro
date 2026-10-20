@@ -24,7 +24,7 @@ import { Chess } from 'chess.js';
 
 export const STANDARD_START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
-export interface PgnRepair {
+interface PgnRepair {
   /** 0-based ply index of the first move that could not be played. */
   droppedFromPly: number;
   /** The move token that failed, as stored. */
@@ -33,7 +33,7 @@ export interface PgnRepair {
   note: string;
 }
 
-export type PgnReplayResult =
+type PgnReplayResult =
   | { ok: true; startFen: string; sans: string[]; repair: PgnRepair | null }
   | { ok: false; reason: string };
 

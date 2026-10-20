@@ -33,7 +33,7 @@ import { stockfishEngine } from './stockfishEngine';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import type { NarrationArrow } from '../types/walkthroughTree';
 
-export interface PlayoutStep {
+interface PlayoutStep {
   san: string;
   /** Board-composed narration for this ply (full register). */
   idea: string;
@@ -45,7 +45,7 @@ export interface PlayoutStep {
   fen: string;
 }
 
-export interface PlayoutResult {
+interface PlayoutResult {
   steps: PlayoutStep[];
   /** Why the walk stopped — for audits, not for the student. */
   terminus: 'shown' | 'mate' | 'gameover' | 'nobest' | 'illegal' | 'ceiling' | 'dissolved' | 'budget';

@@ -42,7 +42,7 @@ export function recencyPhrase(lastPriorAt: number, now: number): string {
  *  the source cannot say (a drill has no opponent; an older record has no game
  *  link). Mirrors `WeaknessProvenance` on the spine so one shape describes
  *  "where did this come from" everywhere (CLAUDE.md capability parity). */
-export interface CallbackContext {
+interface CallbackContext {
   opponentName?: string | null;
   /** ms — when the game was PLAYED. Never the capture clock: see the note on
    *  `recencyPhrase` below. */
@@ -167,14 +167,14 @@ export function composeWeaknessCallback(w: CallbackWeakness, now: number = Date.
 // N+1. Learn passes no id (its game is live and unrecorded), so every row is
 // prior — which is exactly right.
 
-export interface RecurrenceGame {
+interface RecurrenceGame {
   gameId: string;
   opponentName?: string | null;
   playedAt?: number;
 }
 
 /** The minimal signal shape — structurally satisfied by `WeaknessSignal`. */
-export interface RecurrenceSource {
+interface RecurrenceSource {
   total?: number;
   openCount?: number;
   /** Distinct games this hole was recorded in, newest first, when the source
@@ -182,7 +182,7 @@ export interface RecurrenceSource {
   games?: readonly RecurrenceGame[];
 }
 
-export interface RecurrenceRead {
+interface RecurrenceRead {
   /** How many games this makes, INCLUDING the one being narrated; undefined
    *  when the source proves recurrence but cannot count games. */
   occurrences?: number;

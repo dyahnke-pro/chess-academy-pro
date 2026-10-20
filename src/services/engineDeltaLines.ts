@@ -122,7 +122,7 @@ export function computeRouteDelta(
  * eval-magnitude phrase — but the SEQUENCE itself (replayed on chess.js) tells us
  * whether material was actually won, which gates the fire.
  */
-export interface EnginePunishCue {
+interface EnginePunishCue {
   callout: string;
   reveal: string;
   arrows: NarrationArrow[];

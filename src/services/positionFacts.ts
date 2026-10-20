@@ -146,7 +146,7 @@ import { positionOf } from '../utils/samePosition';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
-export interface PositionFactsInput {
+interface PositionFactsInput {
   /** HOW THIS SURFACE LISTENS — required, no default (CLAUDE.md §G4.5.15).
    *
    *  `'walk'` = the student asked for this sequence or tapped to hear it
@@ -457,7 +457,7 @@ function plyNumberForPlan(fen: string): number {
   return (move - 1) * 2 + (parts[1] === 'b' ? 1 : 0);
 }
 
-export function planChangedText(text: string): string {
+function planChangedText(text: string): string {
   return `The plan changes here: ${continueSentence(text)}`;
 }
 

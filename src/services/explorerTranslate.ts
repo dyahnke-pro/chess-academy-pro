@@ -9,7 +9,7 @@
 
 import type { MasterPlayMove, MasterPlayResult } from './masterPlayTypes';
 
-export type Perspective = 'white' | 'black';
+type Perspective = 'white' | 'black';
 
 /** Popularity of a move = its share of games in the position. */
 export function translatePopularity(moveGames: number, totalGames: number): string {

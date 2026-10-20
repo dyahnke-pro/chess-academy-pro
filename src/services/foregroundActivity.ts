@@ -46,12 +46,12 @@ export function markForegroundActivity(now: number = Date.now()): void {
 }
 
 /** Milliseconds since the student last used a live surface. */
-export function msSinceForegroundActivity(now: number = Date.now()): number {
+function msSinceForegroundActivity(now: number = Date.now()): number {
   return lastActivity === 0 ? Number.POSITIVE_INFINITY : now - lastActivity;
 }
 
 /** How long the student must be quiet before background work resumes. */
-export const FOREGROUND_QUIET_MS = 20_000;
+const FOREGROUND_QUIET_MS = 20_000;
 
 /** Resolves once the student has been quiet for `quietMs`. */
 export async function waitForForegroundQuiet(

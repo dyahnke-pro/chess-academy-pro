@@ -28,7 +28,7 @@ const CENTER: readonly Square[] = ['d4', 'd5', 'e4', 'e5'];
 
 export type BookJobKind = 'rescue' | 'guard' | 'stopsPin' | 'stopsPush' | 'tempo' | 'prepares' | 'castle' | 'develop' | 'center' | 'recapture' | 'capture' | 'fork' | 'attack';
 
-export interface BookMoveWhy {
+interface BookMoveWhy {
   kind: BookJobKind;
   /** "The book move is Ne2: it adds a second guard to your knight on c3, which
    *  their bishop on b4 pins — Nf3 leaves it with one." */
@@ -115,7 +115,7 @@ function underPressure(board: Chess, student: Color): Array<{ square: Square; pi
  *  (`student` below is the side that moved); these are the words that seat
  *  is spoken with, so the student's move says "your knight" and the
  *  opponent's says "their knight" from the one phrasing. */
-export interface SeatWords { own: string; other: string; you: string }
+interface SeatWords { own: string; other: string; you: string }
 export const MINE: SeatWords = { own: 'your', other: 'their', you: 'you' };
 export const THEIRS: SeatWords = { own: 'their', other: 'your', you: 'they' };
 

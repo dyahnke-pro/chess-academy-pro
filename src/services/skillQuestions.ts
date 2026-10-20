@@ -24,7 +24,7 @@ import { MATERIAL_VALUE } from './pieceValues';
 
 const VAL = MATERIAL_VALUE;
 
-export interface SkillQuestion { tag: MisconceptionTagId; posedImportance: number }
+interface SkillQuestion { tag: MisconceptionTagId; posedImportance: number }
 
 /** At the green bar: each one is a real decision the student has to make. */
 const POSED = 80;

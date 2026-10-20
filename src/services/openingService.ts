@@ -624,7 +624,7 @@ export async function getGambitOpenings(): Promise<OpeningRecord[]> {
 /** Returns the list of openingIds that have a content manifest — these are
  *  the masterclass openings. Keys are filtered to skip the JSON's meta
  *  fields (those starting with `_`). */
-export function getMasterclassOpeningIds(): string[] {
+function getMasterclassOpeningIds(): string[] {
   return Object.keys(openingManifests).filter((k) => !k.startsWith('_'));
 }
 

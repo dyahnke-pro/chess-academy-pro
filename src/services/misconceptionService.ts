@@ -58,7 +58,7 @@ function newId(): string {
   return `mc-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
-export interface LogMisconceptionInput {
+interface LogMisconceptionInput {
   tag: string;
   source: MisconceptionSource;
   fen: string;
@@ -167,13 +167,6 @@ export async function logMisconception(
  *  these: the tag game analysis filed at a board names the habit it missed). */
 export async function getMisconceptionsForGame(gameId: string): Promise<MisconceptionTagRecord[]> {
   return db.misconceptionTags.where('sourceGameId').equals(gameId).toArray();
-}
-
-/** True when this game has already been tagged — guards Game Review /
- *  auto-analysis against double-logging the same game's blunders. */
-export async function hasMisconceptionsForGame(gameId: string): Promise<boolean> {
-  const n = await db.misconceptionTags.where('sourceGameId').equals(gameId).count();
-  return n > 0;
 }
 
 /** True when this game's slips COUNT toward the weakness profile — i.e. the

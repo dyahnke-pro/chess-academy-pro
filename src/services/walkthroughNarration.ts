@@ -258,7 +258,7 @@ export function isGenericAnnotationText(text: string | undefined): boolean {
   return GENERIC_ANNOTATION_PATTERNS.some((re) => re.test(trimmed));
 }
 
-export type NarrationLength = 'full' | 'short' | 'silent';
+type NarrationLength = 'full' | 'short' | 'silent';
 
 /**
  * Trim text to a max number of sentences. Mirrors the previous

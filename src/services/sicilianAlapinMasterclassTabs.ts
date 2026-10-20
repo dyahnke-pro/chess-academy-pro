@@ -2,7 +2,7 @@
 // (the 2...Nf6 pill) + the variation tab labels, lower-cased (must match
 // variationTabs.ts CURATED['sicilian-alapin']).
 
-export const SICILIAN_ALAPIN_TAB_PLAN_IDS: Record<string, string[]> = {
+const SICILIAN_ALAPIN_TAB_PLAN_IDS: Record<string, string[]> = {
   main: ['mp-sicilianalapin-main'],
   // Every curated tab needs an EXPLICIT entry — an unmapped tab key returns
   // null, which the detail page treats as "no filter" and renders every plan

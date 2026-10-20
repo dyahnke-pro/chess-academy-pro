@@ -71,7 +71,7 @@ export interface ReviewNarrationRequest {
   complete?: boolean;
 }
 
-export interface ReviewNarrationResult {
+interface ReviewNarrationResult {
   narration: ReviewNarration | null;
   cacheHit: boolean;
   key: string;

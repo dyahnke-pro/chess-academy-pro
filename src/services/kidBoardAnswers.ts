@@ -114,7 +114,7 @@ function allSquares(chess: Chess): Array<{ sq: Square; type: PieceSymbol; color:
  *  type (the kid's own by default, the other side's when they say "their" /
  *  name the other colour); `null` when the question names neither. An empty
  *  named square is returned as `{ empty }` so the answer can say so. */
-export type KidPieceRef =
+type KidPieceRef =
   | { kind: 'squares'; squares: Square[] }
   | { kind: 'empty'; square: Square }
   | { kind: 'missing'; color: Color; piece: PieceSymbol };
@@ -151,7 +151,7 @@ function missingLine(ref: { color: Color; piece: PieceSymbol }, kid: Color): str
 
 /** One piece's safety, every fact computed: who attacks it, who protects it,
  *  and whether an attacker is worth less than it (the trade that costs). */
-export function safetyFactsForSquare(fen: string, sq: Square, kid: Color): string {
+function safetyFactsForSquare(fen: string, sq: Square, kid: Color): string {
   const chess = load(fen);
   const piece = chess?.get(sq);
   if (!chess || !piece) return `There is no piece on ${sq} right now.`;
@@ -211,7 +211,7 @@ export function kidSafetyFacts(question: string, fen: string, kid: Color): strin
 
 /** Every square one piece can legally reach, captures named, castling named.
  *  Computed on the board with that piece's side to move. */
-export function whereFactsForSquare(fen: string, sq: Square, kid: Color): string {
+function whereFactsForSquare(fen: string, sq: Square, kid: Color): string {
   const base = load(fen);
   const piece = base?.get(sq);
   if (!base || !piece) return `There is no piece on ${sq} right now.`;
@@ -280,7 +280,7 @@ function spellMove(chess: Chess, san: string): { text: string; to: Square; type:
   }
 }
 
-export interface KidHintInput {
+interface KidHintInput {
   fen: string;
   kid: Color;
   /** The scripted next move the child should play (kid #17 — the script is the

@@ -490,7 +490,7 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
 
 /** Short tab label from a variation name: the parenthetical if present
  *  ("Closed Ruy Lopez (Breyer)" → "Breyer"), else the trimmed name. */
-export function shortLabel(name: string): string {
+function shortLabel(name: string): string {
   const paren = /\(([^)]+)\)/.exec(name);
   if (paren) return paren[1];
   return name;

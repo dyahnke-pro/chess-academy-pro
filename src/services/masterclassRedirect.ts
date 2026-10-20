@@ -96,7 +96,7 @@ const TRANSPOSITION_ALIASES: Array<{
   },
 ];
 
-export interface MasterclassRedirect {
+interface MasterclassRedirect {
   to: string;
   line: string | null;
 }

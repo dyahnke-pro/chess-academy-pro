@@ -65,7 +65,7 @@ export interface CriticalMoment {
   severity: Severity;
 }
 
-export interface CriticalityOpts {
+interface CriticalityOpts {
   /** How many engine lines to request. Default 3. */
   multiPV?: number;
   /** Explicit overrides (cp). Otherwise the band-free bars below. */

@@ -21,7 +21,7 @@ import type { DetectedOpening } from '../types';
 import type { MastersPlanRead } from './mastersPlanRead';
 import { Chess } from 'chess.js';
 
-export interface DetectedName {
+interface DetectedName {
   name: string;
 }
 
@@ -236,9 +236,9 @@ export function openingNameForBoard(
 
 /** Below this an opponent's sideline is fair — the announcement already named
  *  the usual move, and a verdict would be noise. */
-export const SIDELINE_FAIR_CP = 30;
+const SIDELINE_FAIR_CP = 30;
 /** From here their sideline is dubious, said as such. */
-export const SIDELINE_DUBIOUS_CP = 80;
+const SIDELINE_DUBIOUS_CP = 80;
 
 /**
  * A VERDICT ON THEIR OPENING CHOICE (pass-2 walk 2026-09-30, his most frequent

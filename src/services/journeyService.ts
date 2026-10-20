@@ -55,14 +55,14 @@ export async function initGameProgress(
   return progress;
 }
 
-export async function saveGameProgress(
+async function saveGameProgress(
   gameId: KidGameId,
   progress: JourneyProgress,
 ): Promise<void> {
   await db.meta.put({ key: gameMetaKey(gameId), value: JSON.stringify(progress) });
 }
 
-export async function resetGameProgress(gameId: KidGameId): Promise<void> {
+async function resetGameProgress(gameId: KidGameId): Promise<void> {
   await db.meta.delete(gameMetaKey(gameId));
 }
 
@@ -163,7 +163,7 @@ export function getGameCompletedChapterCount(
   return count;
 }
 
-export function isGameComplete(
+function isGameComplete(
   progress: JourneyProgress,
   chapterOrder: readonly JourneyChapterId[] = JOURNEY_CHAPTER_ORDER,
 ): boolean {

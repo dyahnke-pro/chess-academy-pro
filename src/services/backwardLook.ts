@@ -40,7 +40,7 @@ import { classifyMove } from './moveRating';
 import { moverFault } from './accuracyService';
 import { logAppAudit } from './appAuditor';
 
-export interface BackwardLook {
+interface BackwardLook {
   /** The spoken line. Past tense — the move has happened. */
   line: string;
   /** The square to mark, '' when there is nothing to point at. */

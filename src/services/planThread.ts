@@ -85,7 +85,7 @@ export function adoptPlanTrial(thread: PlanThread, trial: PlanThread, offeredCla
   return true;
 }
 
-export interface PlanThreadLine {
+interface PlanThreadLine {
   text: string;
   squares: string[];
   /** Say-once key for the claim ledger. */

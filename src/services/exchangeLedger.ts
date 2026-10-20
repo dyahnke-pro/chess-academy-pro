@@ -22,7 +22,7 @@ import { Chess, type Square } from 'chess.js';
 import { legalSeeGain, legalSeeGainFor } from './positionReadingService';
 import { MAX_PV_DEPTH_PLIES } from './ratingBands';
 
-export type PieceLetter = 'p' | 'n' | 'b' | 'r' | 'q';
+type PieceLetter = 'p' | 'n' | 'b' | 'r' | 'q';
 
 export interface ExchangeLedger {
   /** Enemy pieces the STUDENT captured, in capture order. */

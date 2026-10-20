@@ -361,27 +361,6 @@ export function gradeBorrowedTeaching(
   }
 }
 
-export interface CoachAnswerGateOptions {
-  /** The board FEN the prose describes (board + arrow gates need it). When
-   *  absent, those two gates are skipped — a surface with no live board
-   *  (e.g. opening Q&A) can't have its board-facts checked. */
-  fen?: string | null;
-  /** The bounded tactics context injected this turn, for the tactic gate. */
-  tactics?: TacticsLiveContext | null;
-  /** True when a player-data tool returned data this turn — when false the
-   *  player-stat gate fires (any pro stat is then ungrounded). Defaults to
-   *  false (the safe default for a surface that runs no player tools). */
-  playerDataGrounded?: boolean;
-  /** Ground-truth engine eval (White's-perspective centipawns) for the
-   *  position the prose describes. When present, the eval gate drops a
-   *  sentence whose who's-winning claim egregiously contradicts it. */
-  evalCp?: number;
-  /** Mate distance in plies (positive = White mates). Supersedes evalCp. */
-  evalMateIn?: number;
-  /** Audit-source namespace, e.g. "coachService" or "masterclassChat". */
-  source: string;
-}
-
 // groundCoachReply — DELETED (David 2026-07-09: "finish ripping"). It was the
 // runtime validate-after bandaid: run every strip gate (eval / player-stat /
 // board-claim / move-sequence / tactic / opening-name) on a FREE-composed coach

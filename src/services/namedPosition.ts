@@ -25,7 +25,7 @@
 import { getAllPatterns } from './endgameService';
 import { getAllEndgameLessons } from './endgameLessonsService';
 
-export interface NamedPositionHit {
+interface NamedPositionHit {
   /** The board, straight from the corpus. */
   readonly fen: string;
   /** The corpus entry's own name, so the coach says what the app calls it

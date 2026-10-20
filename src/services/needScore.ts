@@ -355,7 +355,7 @@ function weaknessTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: number
  *  the attributed fundamental is a `fundamental:<id>` row (positional), a
  *  landed tactic is tactical, else the clause kind's own bucket. `null` = the
  *  ply carries no claim at all. */
-export function plyClaimBucket(p: Pick<NeedPlyInput, 'fundamentalId' | 'conceptId' | 'clauseKind'>): MisconceptionBucket | null {
+function plyClaimBucket(p: Pick<NeedPlyInput, 'fundamentalId' | 'conceptId' | 'clauseKind'>): MisconceptionBucket | null {
   if (p.fundamentalId) return 'positional';
   if (p.conceptId) return 'tactical';
   return clauseKindBucket(p.clauseKind);

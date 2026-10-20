@@ -17,7 +17,7 @@
  */
 import { Chess, type Square } from 'chess.js';
 
-export type Side = 'white' | 'black';
+type Side = 'white' | 'black';
 
 interface Sq { f: number; r: number; }
 interface Piece { type: 'p' | 'n' | 'b' | 'r' | 'q' | 'k'; color: 'w' | 'b'; sq: Sq; square: Square; }
@@ -83,7 +83,7 @@ function material(board: Board, color: 'w' | 'b'): string {
 
 // ─── THE OPPOSITION ──────────────────────────────────────────────────────────
 
-export interface OppositionResult {
+interface OppositionResult {
   /** 'direct' = one square between the kings; 'distant' = 3 or 5 (odd gap). */
   kind: 'direct' | 'distant';
   /** The side that HOLDS the opposition — the one NOT to move (the mover must
@@ -118,7 +118,7 @@ export function detectOpposition(fen: string): OppositionResult | null {
 
 // ─── KEY SQUARES (K+P vs K) ──────────────────────────────────────────────────
 
-export interface KeySquaresResult {
+interface KeySquaresResult {
   side: Side;
   pawn: Square;
   /** The pawn's key squares — if the attacking king stands on one, the pawn
@@ -162,7 +162,7 @@ export function detectKeySquares(fen: string): KeySquaresResult | null {
 
 // ─── RULE OF THE SQUARE (K+P vs K, a pure race) ─────────────────────────────
 
-export interface RuleOfSquareResult {
+interface RuleOfSquareResult {
   side: Side;
   pawn: Square;
   /** The defending king can reach the promotion square in time (inside the
@@ -204,7 +204,7 @@ export function detectRuleOfSquare(fen: string): RuleOfSquareResult | null {
 
 // ─── ROOK PAWN + CORNER (K+P vs K, K+B+P vs K) ──────────────────────────────
 
-export interface RookPawnCornerResult {
+interface RookPawnCornerResult {
   side: Side;
   pawn: Square;
   corner: Square;
@@ -248,7 +248,7 @@ export function detectRookPawnCorner(fen: string): RookPawnCornerResult | null {
 
 // ─── ROOK ENDINGS: LUCENA / PHILIDOR / CUT-OFF / ROOK BEHIND THE PASSER ──────
 
-export interface LucenaResult { side: Side; pawn: Square; }
+interface LucenaResult { side: Side; pawn: Square; }
 
 /**
  * The Lucena position (R+P vs R): the pawn on its 7th rank (not a rook pawn),
@@ -279,7 +279,7 @@ export function detectLucena(fen: string): LucenaResult | null {
   return null;
 }
 
-export interface PhilidorResult {
+interface PhilidorResult {
   /** The DEFENDING side (the one holding the draw). */
   side: Side;
   pawn: Square;
@@ -319,7 +319,7 @@ export function detectPhilidor(fen: string): PhilidorResult | null {
   return null;
 }
 
-export interface BackRankDefenceResult {
+interface BackRankDefenceResult {
   /** The DEFENDING side. */
   side: Side;
   pawn: Square;
@@ -352,7 +352,7 @@ export function detectBackRankDefence(fen: string): BackRankDefenceResult | null
   return null;
 }
 
-export interface CutOffResult {
+interface CutOffResult {
   side: Side;
   rook: Square;
   /** The line the rook holds — a file ('e') or a rank ('3'). */
@@ -390,7 +390,7 @@ export function detectCutOff(fen: string): CutOffResult | null {
   return null;
 }
 
-export interface RookBehindPasserResult {
+interface RookBehindPasserResult {
   /** The side whose ROOK is behind the passer. */
   side: Side;
   rook: Square;
@@ -426,7 +426,7 @@ export function detectRookBehindPasser(fen: string): RookBehindPasserResult | nu
 
 // ─── MATING A BARE KING (the basic checkmates) ──────────────────────────────
 
-export interface BareKingMateResult {
+interface BareKingMateResult {
   /** The side with the material. */
   side: Side;
   kind: 'queen' | 'rook' | 'two-bishops' | 'bishop-knight' | 'two-knights' | 'same-colour-bishops' | 'lone-minor';
@@ -482,7 +482,7 @@ export function detectBareKingMate(fen: string): BareKingMateResult | null {
 
 // ─── TWO PAWNS AGAINST A BARE KING ──────────────────────────────────────────
 
-export interface TwoPawnsResult {
+interface TwoPawnsResult {
   side: Side;
   pawns: [Square, Square];
   /** Adjacent files, one file between them, or further apart. */

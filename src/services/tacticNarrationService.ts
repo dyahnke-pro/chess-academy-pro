@@ -56,7 +56,7 @@ export function describeMove(san: string, isWhite: boolean): string {
 }
 
 /** Determine if a move is "notable" — worth narrating during a long replay */
-export function isNotableMove(san: string, moveIndex: number, totalMoves: number): boolean {
+function isNotableMove(san: string, moveIndex: number, totalMoves: number): boolean {
   // Always narrate first and last 2 moves
   if (moveIndex <= 1 || moveIndex >= totalMoves - 2) return true;
   // Captures

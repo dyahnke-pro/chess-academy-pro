@@ -61,7 +61,7 @@ async function calculationProven(): Promise<boolean> {
  *  live read had called Qd3 best where Stockfish at depth 16 does not list it). */
 const ASKED_DEPTH = 16;
 const ASKED_BUDGET_MS = 2000;
-export interface AskedBest { uci: string; san: string; evalCp: number | null; mateIn: number | null; pvSan: string[]; reason: DecisiveReason | null }
+interface AskedBest { uci: string; san: string; evalCp: number | null; mateIn: number | null; pvSan: string[]; reason: DecisiveReason | null }
 export async function askedBestMove(fen: string, opponentLastSan: string | null): Promise<AskedBest | null> {
   let lines: AnalysisLine[] = [];
   try { lines = (await stockfishEngine.analyzeWithBudget(fen, ASKED_DEPTH, ASKED_BUDGET_MS)).topLines ?? []; } catch { return null; }

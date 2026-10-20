@@ -43,8 +43,6 @@ const KID_SURFACE_RE = /^\/kid(\/|$)/;
 
 /** How many master moves we prefetch look-ahead positions for. */
 export const LOOKAHEAD_CANDIDATES = 3;
-/** Plies of look-ahead. 1 = the position one move after current. */
-export const LOOKAHEAD_DEPTH = 1;
 
 /** OUT-OF-BOOK LIVE-FETCH CUTOFF (2026-07-11, PostHog: 13 `lichess_error`
  *  rate-limit cooldowns in ONE session). Once a game leaves master-play
@@ -72,7 +70,7 @@ export function __resetOutOfBookStreakForTests(): void {
   outOfBookStreak = 0;
 }
 
-export interface PrefetchOptions {
+interface PrefetchOptions {
   /** Route the watcher is mounted on (e.g. `/coach/chat`). Used for
    *  audit attribution AND to gate kid-route exclusion. */
   surface: string;

@@ -24,7 +24,7 @@ import { Chess } from 'chess.js';
  * coachMemory so the brain knows the capability exists.
  */
 
-export interface VerifiedLine {
+interface VerifiedLine {
   openingId: string;
   openingName: string;
   studentColor: 'white' | 'black';
@@ -123,7 +123,7 @@ function collect(): VerifiedLine[] {
 const LIBRARY: VerifiedLine[] = collect();
 
 /** Verified lines for a specific opening (by canonical name match). */
-export function getVerifiedLinesForOpening(openingName: string): VerifiedLine[] {
+function getVerifiedLinesForOpening(openingName: string): VerifiedLine[] {
   if (!openingName) return [];
   const lo = openingName.toLowerCase();
   return LIBRARY.filter(

@@ -37,7 +37,7 @@ import { gambitFile } from './inaccuracyCall';
 import { proofCut } from './exchangeLedger';
 import { Chess, type Square, type Color, type Move } from 'chess.js';
 
-export interface WhyItFailed {
+interface WhyItFailed {
   /** One sentence, past tense — the move has already been played. */
   line: string;
   /** Squares worth marking: the target, then the piece that refutes it. */
@@ -130,7 +130,7 @@ function counterWinsBack(pos: Chess, from: Square, to: Square, me: 'w' | 'b'): n
   return best;
 }
 
-export function pinnedToMore(board: Chess, sq: Square, by: 'w' | 'b'): boolean {
+function pinnedToMore(board: Chess, sq: Square, by: 'w' | 'b'): boolean {
   const piece = board.get(sq);
   if (!piece || piece.color === by) return false;
   const worth = VALUE[piece.type] ?? 0;

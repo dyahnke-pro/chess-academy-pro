@@ -51,7 +51,7 @@ export function buildDrillWrongTeaching(
   }
 }
 
-export interface DrillBetterLineStep {
+interface DrillBetterLineStep {
   /** SAN of this move in the correct continuation. */
   san: string;
   /** FEN AFTER this move — the hook sets the board to it to play the line out. */

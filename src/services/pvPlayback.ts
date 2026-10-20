@@ -315,7 +315,7 @@ export interface PvLine {
 
 // THE DEPTH TABLE LIVES IN THE LEAF `ratingBands` (a pure computer that must
 // not import the engine reads it too); re-exported so every caller is unchanged.
-export { pvDepthForRating, MAX_PV_DEPTH_PLIES } from './ratingBands';
+export { pvDepthForRating } from './ratingBands';
 
 const PIECE_WORD: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
@@ -680,7 +680,7 @@ export async function computePvLine(
 /** The outpost said as what the move did: the piece LANDED there, or a pawn
  *  move made the square safe for a piece already standing on it. `base` picks
  *  the verb form ("plant" after You/They, "plants" otherwise). */
-export function outpostPhrase(f: Pick<PlyFacts, 'outpostGained' | 'outpostPiece' | 'outpostLanded'>, owner: string, base: boolean): string {
+function outpostPhrase(f: Pick<PlyFacts, 'outpostGained' | 'outpostPiece' | 'outpostLanded'>, owner: string, base: boolean): string {
   const sq = f.outpostGained ?? '';
   if (f.outpostPiece && f.outpostLanded === false) {
     return `${base ? 'make' : 'makes'} ${sq} an outpost for ${owner} ${f.outpostPiece} — no enemy pawn can chase it from there`;

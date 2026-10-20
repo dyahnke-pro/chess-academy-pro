@@ -1,7 +1,7 @@
 // Lichess Daily Puzzle — fetches the puzzle of the day from the Lichess API.
 // Cached for 1 hour in memory to avoid hammering the API.
 
-export interface LichessDailyPuzzle {
+interface LichessDailyPuzzle {
   id: string;
   rating: number;
   themes: string[];

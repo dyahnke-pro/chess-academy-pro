@@ -23,13 +23,13 @@ const ALL_RANKS = ['1', '2', '3', '4', '5', '6', '7', '8'] as const;
 
 /** Algebraic name for every square on the board. Used to draw a
  *  random target. */
-export const ALL_SQUARES: readonly string[] = (() => {
+const ALL_SQUARES: readonly string[] = (() => {
   const out: string[] = [];
   for (const f of ALL_FILES) for (const r of ALL_RANKS) out.push(`${f}${r}`);
   return out;
 })();
 
-export interface DrawTargetOptions {
+interface DrawTargetOptions {
   /** Exclude squares already used in the current sequence so the
    *  student doesn't get the same prompt twice in a row. */
   exclude?: ReadonlySet<string>;

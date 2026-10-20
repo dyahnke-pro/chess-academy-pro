@@ -47,7 +47,7 @@ function looseAfter(fenBefore: string, san: string): Map<string, string> | null 
   return out;
 }
 
-export interface MoveContrast {
+interface MoveContrast {
   /** The move that keeps the piece defended. */
   keeps: string;
   /** The move that leaves it without a defender. */

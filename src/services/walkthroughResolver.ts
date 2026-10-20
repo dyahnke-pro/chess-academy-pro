@@ -25,12 +25,12 @@ import { fuzzyScore } from '../utils/fuzzySearch';
 import type { WalkthroughSession, WalkthroughStep } from '../types/walkthrough';
 import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation } from '../types';
 
-export interface ResolveWalkthroughOptions {
+interface ResolveWalkthroughOptions {
   subject: string;
   orientation?: 'white' | 'black';
 }
 
-export interface ResolvedWalkthroughMatch {
+interface ResolvedWalkthroughMatch {
   opening: OpeningRecord;
   variation?: OpeningVariation;
   variationIndex?: number;

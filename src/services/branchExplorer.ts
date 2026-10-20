@@ -199,8 +199,8 @@ export interface Road {
 
 /** A road is a real choice when at least 1 game in 20 at this level goes
  *  that way, over at least this many games. */
-export const ROAD_MIN_SHARE = 0.05;
-export const ROAD_MIN_GAMES = 20;
+const ROAD_MIN_SHARE = 0.05;
+const ROAD_MIN_GAMES = 20;
 
 /**
  * The roads out of this board from the band's candidates (`getAdaptiveMove`'s

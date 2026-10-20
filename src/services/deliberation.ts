@@ -68,7 +68,7 @@ const CLEARLY_WORSE_CP = 150;
  *  nothing past the band weighs to '' (silence, which the voice rules allow). */
 const MEANINGFUL_DELTA_CP = 40;
 
-export type Shortfall = 'drops-material' | 'clearly-worse' | 'less-precise' | 'trades-queens';
+type Shortfall = 'drops-material' | 'clearly-worse' | 'less-precise' | 'trades-queens';
 
 export interface Candidate {
   san: string;
@@ -400,7 +400,7 @@ export function deliberationVerdict(d: Deliberation): HeldVerdict | null {
  *  sit a meaningful gap below the best. Coin-flip moves (inside
  *  `MEANINGFUL_DELTA_CP`) are dropped: on a quiet opening spine every reasonable
  *  move is one, and weighing them is filler. */
-export function meaningfulAlternatives(d: Deliberation): Candidate[] {
+function meaningfulAlternatives(d: Deliberation): Candidate[] {
   return d.alternatives.filter(
     (a) => a.shortfall === 'drops-material' || a.deltaCp >= MEANINGFUL_DELTA_CP,
   );
@@ -511,7 +511,7 @@ function captureLead(fen: string, san: string): string | null {
  * Bf4): it adds a guard to one of your attacked pieces that was short of
  * guards, and it lines up THROUGH one piece at their queen, rook or king.
  */
-export function extraJobs(fen: string, san: string): string[] {
+function extraJobs(fen: string, san: string): string[] {
   const out: string[] = [];
   let before: Chess; let after: Chess;
   try { before = new Chess(fen); after = new Chess(fen); } catch { return out; }
@@ -686,7 +686,7 @@ function attacking(fen: string, mover: 'w' | 'b'): boolean {
 }
 
 /** MEANINGFUL_DELTA_CP, for the answer about a named move. */
-export const NAMED_SAME_AS_BEST_CP = MEANINGFUL_DELTA_CP;
+const NAMED_SAME_AS_BEST_CP = MEANINGFUL_DELTA_CP;
 
 /**
  * THE ANSWER ABOUT A MOVE THE STUDENT NAMED — the coach's own weighing, said

@@ -18,7 +18,7 @@ import type { MatchupClass, MatchupResult } from './endgameMatchup';
 import type { StockfishAnalysis } from '../types';
 import { criticalityThresholds } from './criticalityScan';
 
-export type Side = 'white' | 'black';
+type Side = 'white' | 'black';
 
 /** Side to move in a FEN. */
 export function sideToMove(fen: string): Side {
@@ -432,7 +432,7 @@ export function endgameConceptFor(fen: string): ComputedConcept | null {
   return renderMatchupConcept(m);
 }
 
-export interface ConceptForBoardOptions {
+interface ConceptForBoardOptions {
   /** The student's side, when the board is their own game (frames "you/they").
    *  Omitted on a puzzle → the solver is inferred. */
   studentSide?: Side;
@@ -539,7 +539,7 @@ import { classifyMatePattern } from './matePatterns';
 import { detectPlanRace, planRaceClause } from './planRace';
 import { Chess } from 'chess.js';
 
-export interface LineInput {
+interface LineInput {
   fen: string;
   /** The line in UCI — a puzzle's verified solution, or `topLines[0].moves`. */
   uci: string[];
@@ -753,7 +753,7 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
   return dropGenericLead(out).slice(0, input.max ?? 3);
 }
 
-export interface ConceptForSolutionOptions { studentSide?: Side; max?: number; }
+interface ConceptForSolutionOptions { studentSide?: Side; max?: number; }
 
 /** The concept behind a PUZZLE solution — `conceptForLine` over the verified
  *  solution (the solver is the side opposite the FEN's turn: Lichess convention). */

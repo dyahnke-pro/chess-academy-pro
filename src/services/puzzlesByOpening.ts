@@ -33,7 +33,7 @@
  * win is Petrov's Defense ↔ Russian_Game (49).
  */
 import puzzleData from '../data/puzzles.json';
-import { OPENING_TAG_ALIASES, getAliasedTokens } from './openingTagAliases';
+import { getAliasedTokens } from './openingTagAliases';
 import { getOpeningFamily } from './openingService';
 
 interface BundledPuzzle {
@@ -207,6 +207,3 @@ function collectPuzzleIdsForName(dbName: string): string[] {
   return [...seen].sort();
 }
 
-// Re-export so consumers don't need a second import for the alias
-// shape when wiring the rolodex row.
-export { OPENING_TAG_ALIASES };

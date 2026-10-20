@@ -37,7 +37,7 @@ export type { AlternativeCandidate, RefutedAlternative };
 
 
 
-export interface RefutedAlternativeInput {
+interface RefutedAlternativeInput {
   fenBefore: string;
   taughtSan: string;
   /** Candidate alternatives at this position, most-played first (the caller

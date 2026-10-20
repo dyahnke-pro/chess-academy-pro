@@ -144,7 +144,7 @@ export function secondaryNotesForFen(fen: string): DanyaNote[] {
 /** Build every secondary corpus's transposition index. Call from the boot
  *  prewarm: replaying ~5,400 note lines is seconds of chess.js, which belongs
  *  off the critical path rather than on whichever lookup happens to be first. */
-export async function warmSecondaryPositionIndex(): Promise<void> {
+async function warmSecondaryPositionIndex(): Promise<void> {
   for (const c of secondaryCorpora()) await c.warmFenIndex();
 }
 

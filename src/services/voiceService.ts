@@ -100,7 +100,7 @@ export function canStreamProgressivePlaybackFor(
 // coach says); the voice drives the *timbre* (who says it). Any voice
 // can deliver any personality — Ruth doing drill-sergeant, Stephen
 // doing edgy, etc.
-export const PERSONALITY_VOICE_DEFAULTS: Record<CoachPersonality, string> = {
+const PERSONALITY_VOICE_DEFAULTS: Record<CoachPersonality, string> = {
   default: 'ruth',         // generative — warm low female (David's pick 2026-06-07: Joanna reverted)
   soft: 'joanna',          // neural — warm, encouraging female
   edgy: 'stephen',         // neural — dry, sharper male
@@ -112,7 +112,7 @@ export const PERSONALITY_VOICE_DEFAULTS: Record<CoachPersonality, string> = {
  *  calls) so a different timbre cuts through the main narration.
  *  Defaults pair a contrasting timbre (different gender / engine)
  *  for each personality. WO-VOICE-LAYER-01 (b). */
-export const PERSONALITY_SECONDARY_VOICE_DEFAULTS: Record<CoachPersonality, string> = {
+const PERSONALITY_SECONDARY_VOICE_DEFAULTS: Record<CoachPersonality, string> = {
   default: 'matthew',          // generative male contrasts Ruth (default primary)
   soft: 'stephen',             // neural male contrasts Joanna
   edgy: 'kendra',              // neural female contrasts Stephen
@@ -141,7 +141,7 @@ export function resolvePollyVoice(
  *  interjections so they cut through with a different timbre). When
  *  the user hasn't picked an override, falls back to
  *  PERSONALITY_SECONDARY_VOICE_DEFAULTS. WO-VOICE-LAYER-01 (b). */
-export function resolvePollySecondaryVoice(
+function resolvePollySecondaryVoice(
   personality: CoachPersonality | undefined,
   secondaryVoices: Partial<Record<CoachPersonality, string>> | undefined,
 ): string {
@@ -177,7 +177,7 @@ const isCapacitor = isNativeApp();
 
 /** How the line is paced: `spike` lifts the decisive payoff, `critical` slows
  *  a moment the computer judged critical so the student hears it land. */
-export type ProsodyMode = 'spike' | 'critical';
+type ProsodyMode = 'spike' | 'critical';
 
 export function getTtsUrl(text: string, voice: string, useSsml = true, style?: string, prosody?: ProsodyMode): string {
   const base = isCapacitor ? VERCEL_ORIGIN : '';
@@ -389,7 +389,7 @@ export function detectSanitizerLeak(text: string): boolean {
  *  descriptive-prose shorthand ("White P on h7" → "White pawn on h7",
  *  "hanging N" → "hanging knight") is normalized.
  *  Pure function — safe to call on any string. */
-export function normalizePieceShorthand(text: string): string {
+function normalizePieceShorthand(text: string): string {
   if (!text) return text;
   let out = text;
   // Bracketed / arrowed piece-on-square shorthand: "P(f3)" → "pawn on f3".

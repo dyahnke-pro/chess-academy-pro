@@ -23,7 +23,7 @@ import { Chess } from 'chess.js';
 import type { BoardArrow } from '../types';
 import { admitArrows, namedMoveClaim, type ArrowClaim } from './arrowDoor';
 
-export interface ExtractMoveArrowsOptions {
+interface ExtractMoveArrowsOptions {
   /** FEN of the position currently on the board. Required. */
   fen: string;
   /** Cap on arrows returned. Defaults to 3. */

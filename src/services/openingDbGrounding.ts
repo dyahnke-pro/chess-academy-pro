@@ -181,7 +181,7 @@ export function extractOpeningNamesFromText(text: string): string[] {
   return out;
 }
 
-export interface BuildOpeningDbEntriesOptions {
+interface BuildOpeningDbEntriesOptions {
   /** SAN move history that produced the current position. When
    *  supplied, the position-based path resolves the current opening
    *  via `findOpeningByPgnPrefix` and pulls related sub-variations. */

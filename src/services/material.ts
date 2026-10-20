@@ -23,8 +23,6 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { MATERIAL_VALUE, materialBalance } from './pieceValues';
 import { legalSeeGainFor } from './positionReadingService';
 
-export { MATERIAL_VALUE, materialBalance };
-
 /** The move that produced the board being counted: where it landed and
  *  whether it captured. A non-capture settles nothing. */
 export interface LastMove { to: string; captured?: string | null }
@@ -141,6 +139,6 @@ export function lastMoveFromHistory(history: readonly string[] | undefined, fen:
 }
 
 /** Value of one piece letter in pawns (MATERIAL semantics, king 0). */
-export function pieceWorth(piece: string): number {
+function pieceWorth(piece: string): number {
   return MATERIAL_VALUE[piece.toLowerCase()] ?? 0;
 }

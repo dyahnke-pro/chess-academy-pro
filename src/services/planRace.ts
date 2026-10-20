@@ -23,7 +23,7 @@ export function stepsToPromote(square: string, color: Color): number {
  * ("their pawn was a move faster") and present-tense in a live game ("their pawn
  * is a move faster"); a new caller must decide which, never inherit one.
  */
-export type RaceRegister = 'review' | 'live';
+type RaceRegister = 'review' | 'live';
 
 /**
  * WHY ONLY TWO KINDS RACE (2026-09-17). `deriveNextPlans` emits eight plan
@@ -41,7 +41,7 @@ export type RaceRegister = 'review' | 'live';
  * Everything else is silent (G4.5's "empty > generic" — silence is a computed
  * verdict here, not a cap).
  */
-export interface PasserRace {
+interface PasserRace {
   kind: 'passer-race';
   yourPawn: string;
   theirPawn: string;
@@ -64,7 +64,7 @@ export interface PasserRace {
   firstQueenCovers: boolean | null;
 }
 
-export interface FileCollision {
+interface FileCollision {
   kind: 'file-collision';
   file: string;
   /** True when that side has a rook that can legally land on the file NOW. */
@@ -80,7 +80,7 @@ export interface FileCollision {
  * count (the square ahead is empty), and only pawns that have already left home
  * — a storm that has not started is not in the race.
  */
-export interface StormRace {
+interface StormRace {
   kind: 'storm-race';
   yourPawn: string;
   theirPawn: string;
@@ -95,7 +95,7 @@ export interface StormRace {
   theirWing: 'kingside' | 'queenside';
 }
 
-export type PlanRace = PasserRace | StormRace | FileCollision;
+type PlanRace = PasserRace | StormRace | FileCollision;
 
 const STORM_FILES = 'abcdefgh';
 /** The wing a king has castled to, or null in the centre / off the back ranks. */
@@ -489,7 +489,7 @@ export function planRaceProof(fen: string, studentColor: Color): Proof | null {
 // pawn in front of it. Counted in one unit (moves until the push is safe), the
 // side to move winning a tie. Anything not countable in that unit is silent.
 
-export interface PawnSquareRace {
+interface PawnSquareRace {
   /** The contested square. */
   square: string;
   /** The student's push onto it and their push, SAN on each side's turn. */
@@ -556,16 +556,6 @@ function readyIn(board: Chess, side: Color, square: string, legal: readonly Move
     if (pawnSafeOn(again, square, side)) return { ready: 1, push: pushNow.san, support: m.san };
   }
   return null;
-}
-
-/**
- * The student, to move on `fen`: a square on files c–f that a pawn of each
- * side can step onto in one move, the student's push safe now (or after one
- * supporting move), and theirs not sooner. Null when there is no such square
- * or the student is not first.
- */
-export function pawnSquareRace(fen: string, student: Color): PawnSquareRace | null {
-  return pawnSquareRaces(fen, student)[0] ?? null;
 }
 
 /** Every such race on the board (one per contested square). */

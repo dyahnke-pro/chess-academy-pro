@@ -2,7 +2,7 @@
 // (no algo). Keys: 'main' (the Spanish/Metger pill) + the 4 variation tab
 // labels, lower-cased (must match variationTabs.ts CURATED['four-knights-game']).
 
-export const FOUR_KNIGHTS_TAB_PLAN_IDS: Record<string, string[]> = {
+const FOUR_KNIGHTS_TAB_PLAN_IDS: Record<string, string[]> = {
   main: ['mp-fourknightsgame-main'],
   'scotch four knights': ['mp-fourknightsgame-scotchfk'],
   'italian four knights': ['mp-fourknightsgame-italian'],

@@ -31,7 +31,7 @@ import { homeMinorCount } from './development';
 import { findPassedPawns, findOpenFiles, computeTerritory, kingSafetyRead } from './positionReadingService';
 import { centreDistance } from '../utils/centreDistance';
 
-export interface SlipCauseInput {
+interface SlipCauseInput {
   fen: string;
   playedSan: string;
   bestSan?: string;
@@ -45,7 +45,7 @@ export interface SlipCauseInput {
   phase: 'opening' | 'middlegame' | 'endgame';
 }
 
-export interface SlipCause { tag: Exclude<MisconceptionTagId, 'other'>; coachNote: string }
+interface SlipCause { tag: Exclude<MisconceptionTagId, 'other'>; coachNote: string }
 
 /** What each concession is a lapse in — one row per kind, so a new kind fails
  *  to compile until someone files it. */

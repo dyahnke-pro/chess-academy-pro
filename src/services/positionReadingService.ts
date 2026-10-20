@@ -366,7 +366,7 @@ export function minorRouteToSquare(
   return null;
 }
 
-export interface HangingPiece {
+interface HangingPiece {
   square: Square;
   piece: PieceSymbol;
   color: Color;
@@ -683,7 +683,7 @@ export function findWeakSquares(fen: string): { white: Square[]; black: Square[]
   return out;
 }
 
-export interface ColorComplexWeakness {
+interface ColorComplexWeakness {
   /** The side whose complex is weak. */
   side: Color;
   /** The square-colour that is weak in that side's camp. */
@@ -740,7 +740,7 @@ export function findColorComplexWeakness(fen: string): ColorComplexWeakness[] {
   return out;
 }
 
-export interface MinorityAttack {
+interface MinorityAttack {
   /** The flank the minority runs on. */
   flank: 'queenside' | 'kingside';
   /** The lever push that makes contact (SAN), e.g. "b5". */
@@ -826,7 +826,7 @@ export function pieceScope(chess: Chess, sq: Square): number {
   return n;
 }
 
-export interface XrayNote {
+interface XrayNote {
   /** Your long-range piece doing the x-raying. */
   slider: Square;
   sliderPiece: PieceSymbol;
@@ -1178,7 +1178,7 @@ export function namedPawnStructure(
   return null;
 }
 
-export interface ActivePieceNote { square: Square; piece: PieceSymbol; scope: number }
+interface ActivePieceNote { square: Square; piece: PieceSymbol; scope: number }
 
 /** The most- and least-active non-pawn, non-king piece of `color` by board scope.
  *  "Strongest" / "weakest" piece, grounded as activity (G3 — not a vibe). */
@@ -1528,7 +1528,7 @@ export function bishopPair(fen: string, color: Color): boolean {
   return ours >= 2 && theirs < 2;
 }
 
-export interface OpponentIntent {
+interface OpponentIntent {
   /** The opponent's most dangerous immediate idea (their SAN). */
   san: string;
   /** SEE material it wins (0 for a non-material forcing threat like a fork). */
@@ -1637,7 +1637,7 @@ export function opponentIntentRead(fen: string, studentColor: Color | 'white' | 
   return best;
 }
 
-export interface OpenFilesInfo {
+interface OpenFilesInfo {
   /** Files with no pawns of EITHER color — fully open. */
   open: string[];
   /** Files with no WHITE pawns (may still carry black pawns) — open for White's rooks. */
@@ -1669,14 +1669,14 @@ export function findOpenFiles(fen: string): OpenFilesInfo {
   return { open, whiteSemiOpen, blackSemiOpen };
 }
 
-export interface SpaceInfo { white: number; black: number }
+interface SpaceInfo { white: number; black: number }
 
 
 /** "MORE SPACE", ONE RULE (claim harvest 2026-10-17: "You own more space" was
  *  read off a pawn-hit count (since deleted) while the weighing read territory,
  *  so the coach told White it owned more space with Black's pawns on e5, g6,
  *  h5 and f3). A side owns more space when its territory leads by the margin. */
-export const MORE_SPACE_MARGIN = 2;
+const MORE_SPACE_MARGIN = 2;
 export function ownsMoreSpace(fen: string, side: 'w' | 'b'): boolean {
   const sp = computeTerritory(fen);
   return side === 'w' ? sp.white >= sp.black + MORE_SPACE_MARGIN : sp.black >= sp.white + MORE_SPACE_MARGIN;
@@ -1733,7 +1733,7 @@ export function findAttackTargets(fen: string, attackerColor: Color): Square[] {
   return [...new Set(targets)];
 }
 
-export interface PawnGrabNote {
+interface PawnGrabNote {
   /** The enemy pawn's square (the grab target). */
   square: Square;
   /** A legal SAN that captures it. */
@@ -1814,7 +1814,7 @@ export function kingSafetyRead(fen: string, color: Color): KingSafetyNote | null
   return { square: ksq, castled, inCenter, openFilesNearKing, shieldPawns, exposed };
 }
 
-export interface MaterialCount {
+interface MaterialCount {
   white: Record<string, number>;
   black: Record<string, number>;
 }
@@ -1864,7 +1864,7 @@ export function centralPieceCount(fen: string): { white: number; black: number }
   return { white, black };
 }
 
-export interface DevelopmentNote { developedMinors: number; totalMinors: number; castled: boolean }
+interface DevelopmentNote { developedMinors: number; totalMinors: number; castled: boolean }
 
 /** Grounded DEVELOPMENT read for `color` — minor pieces off their home squares
  *  + castled. The answer key for "are you developed?" (neglected-development). */
@@ -1985,7 +1985,7 @@ export function samplePositionsFromGame(
 }
 
 /** Minimal annotation shape for mistake-sourcing (matches GameRecord.annotations). */
-export interface MistakeAnnotation {
+interface MistakeAnnotation {
   moveNumber: number;
   color: 'white' | 'black';
   classification: string | null;
@@ -2101,7 +2101,7 @@ function listOfFiles(files: readonly string[]): string {
  * Returns questions ordered tactic → threat → hanging → break → material so the
  * UI can pick a mix.
  */
-export interface ReadingQuestionOpts {
+interface ReadingQuestionOpts {
   /** Engine eval (centipawns, White-perspective) — grounds the who's-winning
    *  read. Omit when no analysis is available (the question is then skipped). */
   evalCp?: number | null;
@@ -2135,7 +2135,7 @@ export function forcingPrefix(fen: string, line: readonly string[]): string[] {
   return out;
 }
 
-export interface ForcingCandidate {
+interface ForcingCandidate {
   /** Legal SAN of the forcing try. */
   san: string;
   /** Destination square (the reliable click/short-form accept token). */

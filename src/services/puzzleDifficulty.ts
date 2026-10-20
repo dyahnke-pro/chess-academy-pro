@@ -51,7 +51,7 @@ const CONCEPT_WEIGHT: Record<string, number> = {
 /** Matchup principles (source 'matchup') — an ending with no named technique. */
 const MATCHUP_WEIGHT = 260;
 
-export interface DifficultyFeatures {
+interface DifficultyFeatures {
   solverPlies: number;
   quietFirst: boolean;
   sacrificeFirst: boolean;
@@ -61,7 +61,7 @@ export interface DifficultyFeatures {
   conceptId: string | null;
 }
 
-export interface DifficultyEstimate {
+interface DifficultyEstimate {
   rating: number;
   features: DifficultyFeatures;
 }

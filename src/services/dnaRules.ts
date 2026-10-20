@@ -21,8 +21,8 @@ export const DNA_REFUSE: ReadonlyArray<{ re: RegExp; why: string }> = [
  *  sentences through, so no other producer can praise by accident — a new
  *  line has to be added here, on purpose. Rotated by the ply, escalated by the
  *  streak (never Math.random). */
-export type PraiseKind = 'decision' | 'onlyMove' | 'saved' | 'punished';
-export const EARNED_PRAISE: Readonly<Record<PraiseKind, readonly string[]>> = {
+type PraiseKind = 'decision' | 'onlyMove' | 'saved' | 'punished';
+const EARNED_PRAISE: Readonly<Record<PraiseKind, readonly string[]>> = {
   decision: ["That's the one.", 'There it is.', 'Exactly right.', 'Well found.'],
   onlyMove: ['The only move — and you found it.', 'Only one move held, and you played it.'],
   saved: ['Good defence.', 'Threat met.'],
@@ -33,7 +33,7 @@ export function isPraiseKind(k: string | null | undefined): k is PraiseKind {
 }
 const STREAK_WORDS = ['three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
 /** "That's three in a row." — the streak's own praise, three and up. */
-export const STREAK_PRAISE: readonly string[] = STREAK_WORDS.map((w) => `That's ${w} in a row.`);
+const STREAK_PRAISE: readonly string[] = STREAK_WORDS.map((w) => `That's ${w} in a row.`);
 
 export function earnedPraise(kind: PraiseKind, streak: number, rot: number): string {
   if (streak >= 3) return STREAK_PRAISE[Math.min(streak - 3, STREAK_PRAISE.length - 1)];
@@ -52,7 +52,7 @@ export function stripMoveNumbers(text: string): string {
   return text.replace(/(?<![\w.])(?<!\b(?:in|of|by|than|about|over|under)\s)\d{1,3}\s?(?:\.\.\.|…|\.)\s?(?=(?:[NBRQK][a-h1-8x]|O-O|[a-h][1-8x]))/g, (m) => (/(?:\.\.\.|…)/.test(m) ? '…' : ''));
 }
 
-export interface DnaPassResult { text: string; refused: string[] }
+interface DnaPassResult { text: string; refused: string[] }
 
 /** The context-free DNA pass over a line about to be spoken: move numbers
  *  rephrased away, and a sentence of praise or interface talk cut — the

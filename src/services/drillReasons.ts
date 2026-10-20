@@ -112,7 +112,7 @@ const BOTH_WIN_SHARE = 0.75;
  *  engine agrees the move throws away at least this much. */
 const LOSES_CP = 150;
 
-export type AlternativeVerdict = 'accept' | 'good-but-weaker' | 'loses' | 'weaker';
+type AlternativeVerdict = 'accept' | 'good-but-weaker' | 'loses' | 'weaker';
 
 /**
  * How a move that is not the drill's answer key actually stands, from the

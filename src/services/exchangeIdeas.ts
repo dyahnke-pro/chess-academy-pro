@@ -709,7 +709,7 @@ export function materialArithmetic(fenBefore: string, san: string, student: Side
 }
 
 /** The squares a knight on `sq` touches (geometry, not legality). */
-export function knightReach(sq: string): string[] {
+function knightReach(sq: string): string[] {
   const f = sq.charCodeAt(0) - 97; const r = Number(sq[1]) - 1;
   const out: string[] = [];
   for (const [df, dr] of [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]]) {
@@ -791,7 +791,7 @@ function idea(id: ExchangeIdeaId, text: string, squares: string[], proof: Proof,
 
 // ── THE AGGREGATOR — every surface asks this one function ─────────────────
 
-export interface ExchangeIdeasInput {
+interface ExchangeIdeasInput {
   /** The board now. */
   fen: string;
   student: Side;

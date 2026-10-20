@@ -274,7 +274,7 @@ async function masterPedigreeSet(fen: string): Promise<Set<string>> {
 }
 
 /** A position the lesson walks + whose turn it is. */
-export interface WalkPosition {
+interface WalkPosition {
   fen: string;
   /** True when the OPPONENT of the taught side is to move (a slip is theirs). */
   opponentToMove: boolean;
@@ -395,7 +395,7 @@ function deserialize(value: string): Map<string, BakedGemLine[]> {
  * Cached finder: calculates once per opening (keyed by name + FINDER_REV), then
  * returns the cached map instantly. David 2026-08-24: "calculate once, cache it".
  */
-export async function findGemsForOpening(
+async function findGemsForOpening(
   openingName: string,
   positions: WalkPosition[],
   studentSide: 'white' | 'black',

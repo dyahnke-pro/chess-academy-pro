@@ -23,7 +23,7 @@ import { Chess, type Square } from 'chess.js';
 import { countKingAttack, shelterSquares } from './kingSafety';
 import { CAPTURE_VALUE } from './pieceValues';
 
-export interface KingAttackPoint {
+interface KingAttackPoint {
   kind: 'strips-shelter' | 'removes-defender' | 'adds-attacker' | 'heads-for-king' | 'opens-lines' | 'opens-file';
   text: string;
   squares: string[];

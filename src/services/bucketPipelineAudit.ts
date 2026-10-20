@@ -70,7 +70,7 @@ export type BucketAuditCode =
   | 'SRS_DUEAT_INCONSISTENT'
   | 'NEVER_GRADUATES';
 
-export interface BucketAuditViolation {
+interface BucketAuditViolation {
   code: BucketAuditCode;
   layer: 'delivery' | 'organization';
   severity: 'error' | 'warn';
@@ -79,7 +79,7 @@ export interface BucketAuditViolation {
   recordId?: string;
 }
 
-export interface BucketRollup {
+interface BucketRollup {
   bucket: string;
   /** Distinct tags/clusters filed under this bucket. */
   tags: string[];
@@ -89,7 +89,7 @@ export interface BucketRollup {
   openCount: number;
 }
 
-export interface BucketAuditReport {
+interface BucketAuditReport {
   ranAt: number;
   /** Every counted capture, with its delivery status resolved. */
   captures: {

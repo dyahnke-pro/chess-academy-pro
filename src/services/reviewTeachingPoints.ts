@@ -39,7 +39,6 @@ import { legalSeeGainOn, bishopHemmedByOwnPawns, standsSafe } from './positionRe
 import { captureHasCounterTactic, detectNewThreat, forkAlignmentClause, type DetectedThreat } from './groundedAnswer';
 import { cells, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans } from './nextPlans';
 import { trappedAt, lineTakesPiece } from './trappedPiece';
-export { lineTakesPiece };
 // Re-exported: eight callers and tests import these from here (2026-09-19 leaf move).
 export { findWorstPlacedPiece, deriveNextPlans };
 
@@ -304,7 +303,7 @@ export function buildReviewDeepestLookahead(
  *  erred. Those are two renderings of one computed fact, so they must not be two
  *  scans — a second detector is how the two registers drift into disagreeing
  *  about the same board. */
-export interface BestMoveShot {
+interface BestMoveShot {
   /** The best move in SAN, played from `fenBefore`. */
   san: string;
   /** The position AFTER the best move — the board the geometry describes. */
@@ -312,7 +311,7 @@ export interface BestMoveShot {
   threat: DetectedThreat;
 }
 
-export function scanBestMoveShot(
+function scanBestMoveShot(
   fenBefore: string,
   bestMoveUci: string | null,
   moverColorWB: 'w' | 'b',

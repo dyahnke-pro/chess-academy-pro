@@ -81,7 +81,7 @@ const TACTIC_VOCABULARY: Array<{
   },
 ];
 
-export interface TacticClaimViolation {
+interface TacticClaimViolation {
   /** Canonical tactic type the response named. */
   type: string;
   /** The substring from the response that triggered the match. */
@@ -92,7 +92,7 @@ export interface TacticClaimViolation {
   reason: 'not-in-vocabulary' | 'no-context-block';
 }
 
-export interface ValidationResult {
+interface ValidationResult {
   /** All tactic claims found in the response (whether valid or not). */
   claims: Array<{ type: string; match: string; valid: boolean }>;
   /** Subset that violate G3 (named outside the bounded vocabulary). */

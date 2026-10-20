@@ -69,7 +69,7 @@ export const PATTERN_TO_TACTIC: Record<TacticPatternType, TacticType | null> = {
  * 2026-09-22). A `Record` over the union so a new motif fails to compile until
  * someone writes its word; lowercase, mid-sentence noun phrase.
  */
-export const TACTIC_WORD: Record<TacticType, string> = {
+const TACTIC_WORD: Record<TacticType, string> = {
   fork: 'fork',
   pin: 'pin',
   skewer: 'skewer',
@@ -179,7 +179,7 @@ export function toTacticPatternType(tactic: TacticType): TacticPatternType | nul
 /** The weakness cluster-id prefix `bucketForMistake` uses for a tactic motif.
  *  Kept here so the join key has ONE definition shared by the producer
  *  (weaknessSpine) and every consumer that matches a live fact to a weakness. */
-export const TACTIC_CLUSTER_PREFIX = 'analysis:tactic:';
+const TACTIC_CLUSTER_PREFIX = 'analysis:tactic:';
 
 /**
  * The weakness cluster id a live narration motif joins to — i.e.

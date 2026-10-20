@@ -45,7 +45,7 @@ export function standingHoles(moverColor: 'white' | 'black'): ReadonlyArray<stri
  *  centre plus the opponent's standing holes. Exported so `kingZoneAmong` and
  *  its callers agree on which half of an eye-list is "central influence" and
  *  which is "pressure on the king". */
-export function positionalTargets(moverColor: 'white' | 'black'): string[] {
+function positionalTargets(moverColor: 'white' | 'black'): string[] {
   return [...CENTRAL_SQUARES, ...standingHoles(moverColor)];
 }
 

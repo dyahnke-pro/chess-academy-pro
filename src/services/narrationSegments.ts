@@ -60,7 +60,7 @@ export function splitSentences(text: string): string[] {
   return cleaned.length > 0 ? cleaned : [trimmed];
 }
 
-export interface NarrationSegment {
+interface NarrationSegment {
   /** The sentence to speak as one smooth utterance. */
   text: string;
   /** Marker squares to REVEAL when this sentence starts (cumulative reveal is
@@ -99,7 +99,7 @@ export function buildNarrationSegments(
   return segments;
 }
 
-export interface SpeakSegmentsDeps {
+interface SpeakSegmentsDeps {
   /** Speak one sentence; resolves when it finishes. */
   speak: (text: string) => Promise<void>;
   /** Warm the next sentence's audio while the current one plays (smooth seam). */

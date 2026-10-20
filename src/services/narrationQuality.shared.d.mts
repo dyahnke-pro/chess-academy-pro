@@ -25,9 +25,7 @@ export interface ClauseVerdict {
   name?: string;
 }
 
-export declare const BOARD_RE: RegExp;
 export declare const PRED_RE: RegExp;
-export declare const OPEN_REFERENCE: Readonly<Record<string, RegExp>>;
 
 /** Names a board referent AND predicates something about chess. The veto that
  *  protects real teaching from every cut rule. */

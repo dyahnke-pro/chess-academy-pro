@@ -26,7 +26,7 @@ const BACKFILL_DONE_KEY_EXPORT = BACKFILL_DONE_KEY;
 const RECORD_HEAL_KEY = 'skill-record-heal-v1';
 const BACKFILL_REVS = `${MISCONCEPTION_RULES_REV}|${POSITIVE_HALF_REV}|${THREAT_HALF_REV}`;
 
-export interface RulesBackfillResult {
+interface RulesBackfillResult {
   /** Games re-read: rows behind the rules revision, or no positive half yet. */
   games: number;
   /** Rows whose tag moved. */

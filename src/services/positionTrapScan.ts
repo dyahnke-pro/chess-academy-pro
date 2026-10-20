@@ -99,7 +99,7 @@ export async function evaluateExplorerCandidates(
   return results.filter((r): r is MoveEvaluation => r !== null);
 }
 
-export interface ScanPositionForTrapArgs {
+interface ScanPositionForTrapArgs {
   /** The position to scan. */
   fen: string;
   /** Side to move — the trap is a popular-but-losing move BY this side. */

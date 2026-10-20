@@ -16,7 +16,7 @@ type Color = 'w' | 'b';
 
 const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] as const;
 
-export interface PawnStructureFacts {
+interface PawnStructureFacts {
   /** Pawn files per side, e.g. { w: ['a','b','c','f','g','h'], b: [...] }. */
   pawnFiles: Record<Color, string[]>;
   /** Number of pawn islands per side (contiguous file groups). */
@@ -34,14 +34,14 @@ export interface PawnStructureFacts {
   isolatedPawns: Record<Color, string[]>;
 }
 
-export interface OutpostFacts {
+interface OutpostFacts {
   /** Knights/bishops sitting on a square defended by their own pawn that no
    *  enemy pawn can EVER attack (no enemy pawn on an adjacent file that is
    *  behind-or-level and could advance to attack it). */
   outposts: Array<{ color: Color; piece: 'n' | 'b'; square: string }>;
 }
 
-export interface KingFacts {
+interface KingFacts {
   kingSquare: Record<Color, string>;
   /** 'kingside' | 'queenside' | 'center' by king file. */
   kingWing: Record<Color, 'kingside' | 'queenside' | 'center'>;
@@ -52,7 +52,7 @@ export interface KingFacts {
   shieldPawns: Record<Color, number>;
 }
 
-export interface MaterialFacts {
+interface MaterialFacts {
   /** Material balance in points, positive = White ahead. */
   balance: number;
   /** Non-pawn material total (both sides) — phase signal. */
@@ -63,7 +63,7 @@ export interface MaterialFacts {
   endgameType: string | null;
 }
 
-export interface StructureFacts {
+interface StructureFacts {
   pawns: PawnStructureFacts;
   outposts: OutpostFacts['outposts'];
   kings: KingFacts;
@@ -286,7 +286,7 @@ export function describeStructure(fen: string): StructureFacts | null {
  * Compact comparable signature for structure MATCHING: the
  * salient features a teacher would call "the same kind of position".
  */
-export interface StructureSignature {
+interface StructureSignature {
   outpostSquares: string[];
   oppositeWings: boolean;
   openFiles: string[];

@@ -35,7 +35,6 @@ import type {
   GamePhase,
   TacticType,
   GameRecord,
-  MoveClassification,
 } from '../types';
 
 // ─── Structured emit payloads ────────────────────────────────────────
@@ -44,11 +43,11 @@ import type {
 // of these into the AuditEntry.details field. Stable across surfaces
 // so the joins in this service Just Work.
 
-export type HintRevealReason = 'student-tap' | 'auto-reveal' | 'coach-initiative';
-export type MoveMethod = 'drag' | 'click' | 'unknown';
-export type DwellExitReason = 'moved' | 'navigated' | 'session-end';
+type HintRevealReason = 'student-tap' | 'auto-reveal' | 'coach-initiative';
+type MoveMethod = 'drag' | 'click' | 'unknown';
+type DwellExitReason = 'moved' | 'navigated' | 'session-end';
 
-export interface MoveAttemptPayload {
+interface MoveAttemptPayload {
   surface: string;          // 'puzzle' | 'walkthrough-findmove' | 'endgame' | 'coach-play' | ...
   fen: string;
   attemptedSan: string;
@@ -61,7 +60,7 @@ export interface MoveAttemptPayload {
   phase?: GamePhase;
 }
 
-export interface HintRevealedPayload {
+interface HintRevealedPayload {
   surface: string;
   reason: HintRevealReason;
   tier: 0 | 1 | 2 | 3;
@@ -73,22 +72,12 @@ export interface HintRevealedPayload {
   sourceId?: string;
 }
 
-export interface PositionDwellPayload {
+interface PositionDwellPayload {
   surface: string;
   fen: string;
   dwellMs: number;
   exitReason: DwellExitReason;
   phase?: GamePhase;
-}
-
-export interface InsightsTabSwitchedPayload {
-  fromTab: string;
-  toTab: string;
-}
-
-export interface EngineLinesDwellPayload {
-  durationMs: number;
-  gameId?: string;
 }
 
 // ─── Window + helpers ──────────────────────────────────────────────────
@@ -142,7 +131,7 @@ export interface HintActivitySummary {
   effectivenessPct: number;
 }
 
-export async function recentHintActivity(w: AnalyticsWindow): Promise<HintActivitySummary> {
+async function recentHintActivity(w: AnalyticsWindow): Promise<HintActivitySummary> {
   const log = await readLogCached();
   const hints = log.filter(
     (e) => e.kind === 'hint-revealed' && withinWindow(e, w),
@@ -210,7 +199,7 @@ export interface DwellByPhase {
   endgame: { avgMs: number; samples: number };
 }
 
-export async function positionDwellByPhase(w: AnalyticsWindow): Promise<DwellByPhase> {
+async function positionDwellByPhase(w: AnalyticsWindow): Promise<DwellByPhase> {
   const log = await readLogCached();
   const rows = log.filter(
     (e) => e.kind === 'position-dwell' && withinWindow(e, w),
@@ -255,7 +244,7 @@ export interface MoveAttemptsSummary {
   firstTryCorrectPct: number;
 }
 
-export async function moveAttemptsPerPuzzle(w: AnalyticsWindow): Promise<MoveAttemptsSummary> {
+async function moveAttemptsPerPuzzle(w: AnalyticsWindow): Promise<MoveAttemptsSummary> {
   const log = await readLogCached();
   const rows = log.filter(
     (e) => e.kind === 'move-attempt' && withinWindow(e, w),
@@ -335,7 +324,7 @@ export async function moveAttemptsPerPuzzle(w: AnalyticsWindow): Promise<MoveAtt
 // the data flow" view. Surface = `entry.source` string (the
 // convention every logAppAudit call already follows).
 
-export interface SurfaceCoverageRow {
+interface SurfaceCoverageRow {
   surface: string;
   kindsEmitted: number;
   totalEvents: number;
@@ -355,7 +344,7 @@ export interface SurfaceCoverage {
 /** The surfaces we expect to emit at least one event per active
  *  session. Used to flag "this surface is silent" warnings in the
  *  coverage view. Keep in sync with ANALYTICS_AUDIT.md §3. */
-export const EXPECTED_SURFACES: readonly string[] = [
+const EXPECTED_SURFACES: readonly string[] = [
   'CoachGamePage',
   'CoachTeachPage',
   'CoachReviewSessionPage',
@@ -366,7 +355,7 @@ export const EXPECTED_SURFACES: readonly string[] = [
   'AnalyticsAuditPanel',
 ];
 
-export async function surfaceCoverage(w: AnalyticsWindow): Promise<SurfaceCoverage> {
+async function surfaceCoverage(w: AnalyticsWindow): Promise<SurfaceCoverage> {
   const log = await readLogCached();
   const rows = log.filter((e) => withinWindow(e, w));
 
@@ -418,7 +407,7 @@ export interface KindFrequencyRow {
   lastSeen: number | null;
 }
 
-export async function kindFrequency(w: AnalyticsWindow): Promise<KindFrequencyRow[]> {
+async function kindFrequency(w: AnalyticsWindow): Promise<KindFrequencyRow[]> {
   const log = await readLogCached();
   const bins = new Map<AuditKind, { count: number; lastSeen: number }>();
   for (const r of log) {
@@ -454,7 +443,7 @@ export interface DeadCaptureProbe {
   fixHint: string;
 }
 
-export function deadCaptureProbes(): DeadCaptureProbe[] {
+function deadCaptureProbes(): DeadCaptureProbe[] {
   return [
     {
       label: 'db.sessions',
@@ -828,7 +817,7 @@ export interface FirstTryMastery {
   overallPct: number;
 }
 
-export async function firstTryMasteryAggregate(): Promise<FirstTryMastery> {
+async function firstTryMasteryAggregate(): Promise<FirstTryMastery> {
   const [endgames, mistakes] = await Promise.all([
     db.endgameProgress.toArray(),
     db.mistakePuzzles.toArray(),
@@ -957,7 +946,7 @@ export interface RepeatMistakeStats {
   byTactic: Partial<Record<TacticType, number>>;
 }
 
-export async function repeatMistakes(): Promise<RepeatMistakeStats> {
+async function repeatMistakes(): Promise<RepeatMistakeStats> {
   const mistakes = await db.mistakePuzzles.toArray();
   const unsolved = mistakes.filter((m) => m.status === 'unsolved');
   const repeated = unsolved.filter((m) => m.attempts >= 2);
@@ -1170,7 +1159,7 @@ export async function personalRecords(): Promise<PersonalRecords> {
 // games + unfinished '*'), scoped by opening family or opponent name.
 // G0: the numbers are computed here in code; the LLM only voices them.
 
-export interface OpeningVsRecord {
+interface OpeningVsRecord {
   /** Canonical family label resolved from the user's query. */
   openingName: string;
   games: number;
@@ -1237,7 +1226,7 @@ function openingSans(pgn: string, n: number): string[] {
   return out;
 }
 
-export interface OpponentVsRecord {
+interface OpponentVsRecord {
   /** The matched opponent's display name (most-frequent exact name). */
   opponentName: string;
   games: number;
@@ -1525,7 +1514,7 @@ export async function openingProficiencyMatrix(topN = 10): Promise<OpeningProfic
 // (oldest-leftmost) · cells: avg accuracy in that phase that month.
 // Answers "strongest part of the game" PLUS trend.
 
-export interface PhaseStrengthCell {
+interface PhaseStrengthCell {
   phase: GamePhase;
   monthLabel: string;       // "Mar 2026"
   monthKey: string;         // "2026-03" — sort key
@@ -1719,6 +1708,3 @@ export async function engagementSummary(): Promise<EngagementSummary> {
   };
 }
 
-/** Useful for `MoveClassification` consumers that don't want to
- *  re-import the type. Re-export keeps the API surface clean. */
-export type { MoveClassification };

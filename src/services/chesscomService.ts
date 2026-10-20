@@ -118,7 +118,7 @@ function mapTimeControl(tc: ChessComTimeControl): TimeControlStats {
  *   2 so a biweekly run covers the 14-day window without re-pulling
  *   years of history every boot.
  */
-export interface ImportChessComOptions {
+interface ImportChessComOptions {
   skipPostProcessing?: boolean;
   maxArchives?: number;
 }

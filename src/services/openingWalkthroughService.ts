@@ -40,7 +40,7 @@ const FETCH_TIMEOUT_MS = 6_000;
  *  while still rescuing edge cases. */
 const BRIDGE_MAX_DEPTH = 4;
 
-export interface OpeningWalkthroughResult {
+interface OpeningWalkthroughResult {
   /** SAN move list from the starting position to the puzzle's pre-state.
    *  Empty when the lookup failed. */
   sans: string[];

@@ -14,7 +14,7 @@
  */
 import { db } from '../db/schema';
 
-export interface TranscriptEntry {
+interface TranscriptEntry {
   /** ms since the game started. */
   t: number;
   kind: string;
@@ -24,7 +24,7 @@ export interface TranscriptEntry {
   details?: string;
 }
 
-export interface LearnTranscript {
+interface LearnTranscript {
   gameId: string;
   seat: 'white' | 'black';
   startedAt: number;
@@ -32,7 +32,7 @@ export interface LearnTranscript {
 }
 
 /** The live game's transcript, persisted so a quit mid-game keeps it. */
-export const LEARN_TRANSCRIPT_KEY = 'learn-transcript.current';
+const LEARN_TRANSCRIPT_KEY = 'learn-transcript.current';
 /** A long game with a talkative coach stays well under this; it bounds a runaway loop, not a game. */
 const MAX_ENTRIES = 6000;
 /** Kinds that say nothing about the game being played. */

@@ -23,7 +23,7 @@ import type { ReviewMoveInput, ReviewNarration } from './coachFeatureService';
  *  inputs (a new facet, a reordered cascade, a template change). */
 export const REVIEW_NARRATION_REV = 6; // 6: review walk 2026-10-01 — missed-win vs recapture, one plan claim, seat of the opponent's idea, say-once coverage
 
-export interface ReviewNarrationCacheEntry {
+interface ReviewNarrationCacheEntry {
   rev: number;
   key: string;
   narration: ReviewNarration;
@@ -38,7 +38,7 @@ function hash(s: string): string {
   return (h >>> 0).toString(36);
 }
 
-export interface ReviewNarrationKeyInput {
+interface ReviewNarrationKeyInput {
   moves: readonly ReviewMoveInput[];
   playerColor: 'white' | 'black';
   openingName: string | null;

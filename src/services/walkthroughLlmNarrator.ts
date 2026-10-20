@@ -28,7 +28,7 @@ import { isGenericAnnotationText } from './walkthroughNarration';
 import { lessonBeat, newLessonVoice, type LessonVoice } from './reviewMoveBriefing';
 import { prevCaptureOf, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
 
-export interface WalkthroughNarrationInput {
+interface WalkthroughNarrationInput {
   openingName: string;
   /** Variation name, if this walkthrough is for a specific sub-line. */
   variationName?: string;
@@ -52,7 +52,7 @@ export interface WalkthroughNarrationInput {
   studentSide?: 'white' | 'black';
 }
 
-export interface WalkthroughNarrationResult {
+interface WalkthroughNarrationResult {
   /** One narration per move, indexed by ply (0-based). Empty string when
    *  the move genuinely did nothing nameable (kept silent). */
   narrations: string[];
@@ -136,7 +136,7 @@ function buildPerMoveContext(startFen: string, sanMoves: string[]): PerMoveConte
 /** The computed fill for one ply — board-true by construction (chess.js
  *  replay), seat-stamped when the seat is known. '' when the move did
  *  nothing nameable: silence is allowed, filler is not. */
-export function computeFill(ctx: PerMoveContext, studentSide: 'white' | 'black' | undefined, voice: LessonVoice): string {
+function computeFill(ctx: PerMoveContext, studentSide: 'white' | 'black' | undefined, voice: LessonVoice): string {
   try {
     return lessonBeat({
       fenBefore: ctx.fenBefore,

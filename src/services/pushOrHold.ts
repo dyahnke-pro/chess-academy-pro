@@ -10,14 +10,14 @@
 // (`conversionMethod`), a lost one is not a lesson in holding.
 import { classifyMatchup, type MatchupClass } from './endgameMatchup';
 
-export interface PushOrHold {
+interface PushOrHold {
   text: string;
   cls: MatchupClass;
   side: 'up' | 'down';
 }
 
 /** Better but not won / worse but not lost, centipawns from the student's side. */
-export const PUSH_HOLD_BAND = { min: 40, max: 250 } as const;
+const PUSH_HOLD_BAND = { min: 40, max: 250 } as const;
 
 type Lines = Partial<Record<MatchupClass, { up: string; down: string; pawns: readonly number[] }>>;
 

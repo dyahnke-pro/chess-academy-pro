@@ -153,14 +153,14 @@ export function targetsWrongTapLine(fen: string, sq: Square): string {
 // keeps the ordinary targets question.
 
 /** The pin this board's question is about, or null for an ordinary board. */
-export function pinFormFor(fen: string): PinPressure | null {
+function pinFormFor(fen: string): PinPressure | null {
   const p = findPinPressure(fen)[0];
   if (!p) return null;
   const squares = new Set(p.moves.map((m) => m.to));
   return squares.size >= 1 && squares.size <= 4 ? p : null;
 }
 
-export function pinPressureKey(fen: string): FairKey | null {
+function pinPressureKey(fen: string): FairKey | null {
   const p = pinFormFor(fen);
   return p ? { key: [...new Set(p.moves.map((m) => m.to))], nearMiss: [] } : null;
 }
@@ -171,14 +171,14 @@ function pinnedLabel(fen: string, p: PinPressure): string {
   return `their ${name(p.pinnedPiece)} on ${p.pinned}, pinned${behind}`;
 }
 
-export function pinPressurePrompt(rot: number, p: PinPressure): string {
+function pinPressurePrompt(rot: number, p: PinPressure): string {
   return rotateStem([
     `Their ${name(p.pinnedPiece)} on ${p.pinned} is pinned. Tap every square where you can attack it again and win it.`,
     `The ${name(p.pinnedPiece)} on ${p.pinned} cannot run. Where can you pile on? Tap each square.`,
   ], rot);
 }
 
-export function pinPressureReason(fen: string, sq: Square): string | null {
+function pinPressureReason(fen: string, sq: Square): string | null {
   const p = pinFormFor(fen);
   const m = p?.moves.find((x) => x.to === sq);
   if (!p || !m) return null;
@@ -186,14 +186,14 @@ export function pinPressureReason(fen: string, sq: Square): string | null {
   return `${openSentence(said)} attacks the pinned ${name(p.pinnedPiece)} again${m.byPawn ? ' with a pawn' : ''} — it cannot step away.`;
 }
 
-export function pinPressureShowLine(fen: string, key: readonly Square[], rot: number): string {
+function pinPressureShowLine(fen: string, key: readonly Square[], rot: number): string {
   const p = pinFormFor(fen);
   if (!p) return targetsShowLine(fen, key, rot);
   const reasons = key.map((sq) => pinPressureReason(fen, sq)).filter((r): r is string => !!r);
   return [rotateStem([...PIN_PRESSURE_PRINCIPLE], rot), `Here: ${pinnedLabel(fen, p)}.`, ...reasons].join(' ');
 }
 
-export function pinPressureWrongTapLine(fen: string, sq: Square): string {
+function pinPressureWrongTapLine(fen: string, sq: Square): string {
   const p = pinFormFor(fen);
   if (!p) return targetsWrongTapLine(fen, sq);
   return `Nothing of yours can go to ${sq} and attack the pinned ${name(p.pinnedPiece)} safely — look for the piece that can hit it again.`;

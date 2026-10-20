@@ -141,7 +141,7 @@ export function createAdaptiveEndgameState(initialUserRating?: number): Adaptive
   };
 }
 
-export interface AdaptiveEndgameOutcome {
+interface AdaptiveEndgameOutcome {
   /** Did the student solve the puzzle on the FIRST try (no hint,
    *  no reveal, no wrong move)? */
   firstTryPerfect: boolean;
@@ -211,7 +211,7 @@ export function applyAdaptiveOutcome(
 /** Return the student's weakest theme — lowest accuracy among
  *  themes encountered ≥ 2 times. Returns null until the student
  *  has built up enough history to surface a meaningful gap. */
-export function getWeakestTheme(state: AdaptiveEndgameState): string | null {
+function getWeakestTheme(state: AdaptiveEndgameState): string | null {
   const entries = Object.entries(state.themesEncountered).filter(
     ([, stats]) => stats.total >= 2,
   );

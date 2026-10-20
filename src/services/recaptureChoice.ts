@@ -12,7 +12,7 @@ import { Chess, type Move, type Square } from 'chess.js';
 import { rookReachesFile } from './positionalRead';
 import { pawnsOf } from './boardStructure';
 
-export interface RecaptureFacts {
+interface RecaptureFacts {
   san: string;
   /** Good points of this recapture. */
   plus: string[];
@@ -52,7 +52,7 @@ function hitWithTempo(c: Chess, sq: string, them: 'w' | 'b', skip: string | null
   return null;
 }
 
-export function readRecapture(fenBefore: string, m: Move, me: 'w' | 'b', theirReply: string | null = null): RecaptureFacts {
+function readRecapture(fenBefore: string, m: Move, me: 'w' | 'b', theirReply: string | null = null): RecaptureFacts {
   const plus: string[] = []; const minus: string[] = [];
   const after = new Chess(fenBefore); after.move(m.san);
   const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';

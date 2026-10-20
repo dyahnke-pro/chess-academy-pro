@@ -29,7 +29,7 @@ import { detectTactics } from './tacticsDetector';
 import { sayMoveClause, sayMoveNoun } from './spokenMove';
 import type { TacticPattern } from '../types/tacticTypes';
 
-export type VerdictKind = 'mate' | 'winning' | 'edge' | 'equal';
+type VerdictKind = 'mate' | 'winning' | 'edge' | 'equal';
 
 export interface ReadVerdict {
   kind: VerdictKind;
@@ -132,7 +132,7 @@ export function summarizeVerdict(
 /** The student's settled material at a line's end (points, + = ahead), with
  *  the board that names it — the board-fact that licenses a material claim in
  *  the verdict. Null when no ply carries a resolvable fenAfter. */
-export interface MaterialAtEnd { pawns: number; fen: string; side: 'w' | 'b' }
+interface MaterialAtEnd { pawns: number; fen: string; side: 'w' | 'b' }
 
 function terminalMaterialDelta(line: PvPly[], studentColor: 'white' | 'black'): MaterialAtEnd | null {
   // SETTLED (WO-MATERIAL-01): a line cut mid-recapture is not a material win.
@@ -202,7 +202,7 @@ export function appealScore(mv: {
  *  board the natural move IS the recapture, and "you'd love to play the knight
  *  to e4" beside it (question walk 2026-09-27, 13.Nxe5 and 27.Rxc5) described
  *  a temptation no student feels. */
-export function bestMoveAppeal(fen: string, bestUci: string | undefined): number {
+function bestMoveAppeal(fen: string, bestUci: string | undefined): number {
   if (!bestUci || bestUci.length < 4) return 0;
   try {
     const mv = new Chess(fen).move({ from: bestUci.slice(0, 2), to: bestUci.slice(2, 4), promotion: bestUci.length > 4 ? bestUci.slice(4) : undefined });
@@ -214,7 +214,7 @@ export function bestMoveAppeal(fen: string, bestUci: string | undefined): number
  *  that is clearly inferior to best (≥ `dropThresholdCp` worse, student POV). */
 /** A tempting move that still leaves the student this far ahead has not
  *  fallen apart, however much better the engine's best move was. */
-export const STILL_WINNING_CP = 200;
+const STILL_WINNING_CP = 200;
 
 export function pickTempting(
   candidates: Array<{ san: string; uci: string; appeal: string; appealScore: number; studentCp: number }>,

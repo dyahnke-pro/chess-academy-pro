@@ -49,7 +49,7 @@ import { decideTurn, type LaneFact, type LearnLane, type TurnDecision } from './
 // The Learn turn's vocabulary travels through the door, so a surface imports
 // ONE deciding module (one coach P1).
 export { buildVoicePackage, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP } from './learnTurnDoor';
-export type { FactStakes, LaneFact, LearnLane, SpokenLine, TurnDecision, VoicePackage, VoiceFactKind } from './learnTurnDoor';
+export type { FactStakes, LearnLane, SpokenLine, TurnDecision, VoicePackage, VoiceFactKind } from './learnTurnDoor';
 // The phase report's wave of a turn — the same door, one call per report.
 export { decidePhaseWave } from './learnTurnDoor';
 export type { LiveTurn, PhaseFact } from './learnTurnDoor';
@@ -82,15 +82,15 @@ export type SurfacePosture = 'walk' | 'interrupt' | 'asked';
  *  the turn grammar) runs here and answers the same proof ledger.
  *  `Record` over the postures, so a new one fails to compile until someone
  *  says which rule decides it. */
-export type DoorPosture = SurfacePosture | 'learn';
-export interface MomentRequest {
+type DoorPosture = SurfacePosture | 'learn';
+interface MomentRequest {
   posture: SurfacePosture;
   signals: ImportanceSignals;
   student: StudentContext;
   bundle: FactBundle;
   method?: MethodContext;
 }
-export interface LearnTurnRequest {
+interface LearnTurnRequest {
   posture: 'learn';
   facts: readonly LaneFact[];
   alreadySaid?: string;
@@ -105,7 +105,7 @@ export interface LearnTurnRequest {
    *  claim one wave held no later wave of the turn speaks. */
   turnHolds: Set<string>;
 }
-export type DoorRequest = MomentRequest | LearnTurnRequest;
+type DoorRequest = MomentRequest | LearnTurnRequest;
 const DOOR_RULE: Record<DoorPosture, 'moment' | 'learn-turn'> = { walk: 'moment', interrupt: 'moment', asked: 'moment', learn: 'learn-turn' };
 export function coachTurn(req: LearnTurnRequest): TurnDecision;
 export function coachTurn(req: MomentRequest): CoachDecision;
@@ -118,7 +118,7 @@ export function coachTurn(req: DoorRequest): TurnDecision | CoachDecision {
 }
 
 /** What this student brings to the board. */
-export interface StudentContext {
+interface StudentContext {
   /** STRENGTH, never volume (B6): the door does not read this for WHETHER a
    *  moment speaks — the bars are band-free. Carried for the depth-scaled
    *  computers a surface composes around the decision. */
@@ -192,7 +192,7 @@ export const GREEN_QUIET_BELOW = STAKED_FLOOR + 150;
 
 /** The facts a surface computed at this moment, with the geometry coupled from
  *  the computers that produced them (never scraped from the prose). */
-export interface FactBundle {
+interface FactBundle {
   facts: readonly string[];
   /** THE BOARD THE FACTS ARE ABOUT — required, so no surface can forget it
    *  (David 2026-09-25: "Root cause fixes this time"). A standing claim on a
@@ -244,7 +244,7 @@ export interface FactBundle {
 
 /** What the student should have DONE differently in their head. Optional: a
  *  surface that cannot supply these simply gets no method beat. */
-export type MethodContext = Omit<MethodSignals, 'tier' | 'coveredHabits'> & {
+type MethodContext = Omit<MethodSignals, 'tier' | 'coveredHabits'> & {
   ply?: number;
   /** A fact the caller handed in that teaches a habit (keyed by the exact fact
    *  string — identity, never a read of its prose). When that fact speaks, the
@@ -263,7 +263,7 @@ export type MethodContext = Omit<MethodSignals, 'tier' | 'coveredHabits'> & {
  *  This is NOT a second door: it is the first step of the same one, and
  *  `decide` runs it internally. A surface may read the verdict; only `decide`
  *  decides. */
-export interface MomentVerdict {
+interface MomentVerdict {
   importance: ImportanceVerdict;
   /** Does this moment speak at all, given the surface's posture? On a `'walk'`
    *  it always does — the student asked for the sequence. */
@@ -281,7 +281,7 @@ export function judgeMoment(
   return { importance, speaks: posture !== 'interrupt' || importance.speak };
 }
 
-export interface CoachDecision {
+interface CoachDecision {
   /** Does this moment speak at all? */
   speak: boolean;
   /** Why it does or does not — the observability trail. */

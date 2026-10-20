@@ -28,9 +28,9 @@ import {
   wedgePaysLater, closedTacticalChance,
 } from './planJudgement';
 
-export type { StructureRead, StructureAct } from './structureJudgementKit';
+export type { StructureRead } from './structureJudgementKit';
 
-export interface StudentMoveStructureInput {
+interface StudentMoveStructureInput {
   fenBefore: string;
   /** The student's move, SAN. */
   san: string;

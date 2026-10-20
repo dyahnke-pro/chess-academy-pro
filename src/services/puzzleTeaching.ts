@@ -32,7 +32,7 @@ export type PuzzleLineRead = readonly string[] | { moves: readonly string[]; cpW
 export type PuzzleLineAnalyser = (fen: string) => Promise<PuzzleLineRead | null>;
 
 /** Below this (solver's view, after the wrong move) the win is gone. */
-export const CHANCE_GONE_CP = 150;
+const CHANCE_GONE_CP = 150;
 
 export interface WrongTryRefutation {
   /** mate / material / geometry: what their reply wins. chance-gone: the

@@ -25,7 +25,7 @@ import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import type { BoardArrow, WalkableLine } from '../types';
 import { admitArrows, lineClaims } from './arrowDoor';
 
-export interface WhyBestMoveInput {
+interface WhyBestMoveInput {
   fen: string;
   /** The side to move — the student who tapped "Why?". */
   studentColor: 'white' | 'black';

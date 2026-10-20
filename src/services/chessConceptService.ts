@@ -49,7 +49,7 @@ export interface ConceptEntry {
   fallbackKind?: 'modern-definition';
 }
 
-export interface OpeningDefinition {
+interface OpeningDefinition {
   description: string;
   character: string | null;
   keyIdeas: string[];
@@ -449,13 +449,13 @@ export function getCoverageSummary(): {
 // surfaces the ones relevant to a given opening, with a small universal
 // fallback so the section is never empty for an opening that resolves.
 
-export interface ConceptBookItem {
+interface ConceptBookItem {
   conceptId: string;
   name: string;
   passage: BookPassage;
 }
 
-export interface ConceptBookGroup {
+interface ConceptBookGroup {
   /** "Middlegame" or "Endgame". */
   label: string;
   items: ConceptBookItem[];

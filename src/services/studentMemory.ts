@@ -106,7 +106,7 @@ export interface StudentMemoryRecord<K extends MemoryKind = MemoryKind> {
   data: MemoryDataByKind[K];
 }
 
-export function memoryId(kind: MemoryKind, key: string): string {
+function memoryId(kind: MemoryKind, key: string): string {
   return `${kind}:${key}`;
 }
 
@@ -210,7 +210,7 @@ export async function rememberTrendPoint(series: string, value: number, now: num
 
 /** How many served puzzle ids a surface keeps. A storage window, not a cap on
  *  teaching: the oldest fall out and may be served again. */
-export const SERVED_WINDOW = 2000;
+const SERVED_WINDOW = 2000;
 
 /** Puzzles a surface already served in earlier sessions (surfaces whose puzzle
  *  attempts are not on `db.puzzles`). */

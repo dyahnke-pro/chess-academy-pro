@@ -20,7 +20,7 @@ export interface PlanPly {
   event: PlanEvent;
 }
 
-export interface PlanState {
+interface PlanState {
   /** The plan currently in force, or null. */
   plan: string | null;
   /** Its stable identity — what "the same plan" actually means. */

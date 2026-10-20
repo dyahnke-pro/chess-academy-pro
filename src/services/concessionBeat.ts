@@ -34,7 +34,7 @@ export type DrawbackKind =
   | 'pawn-weakened'
   | 'outpost-conceded';
 
-export interface Concession {
+interface Concession {
   kind: DrawbackKind;
   /** The square the student should be looking at. */
   square: string;

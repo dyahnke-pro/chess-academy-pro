@@ -26,7 +26,7 @@ const KEY_MOMENT_CLASSIFICATIONS: ReadonlySet<MoveClassification> = new Set<Move
   'great',
 ]);
 
-export type CommentaryVerbosity = NonNullable<UserProfile['preferences']['coachCommentaryVerbosity']>;
+type CommentaryVerbosity = NonNullable<UserProfile['preferences']['coachCommentaryVerbosity']>;
 
 /**
  * Resolve the effective verbosity, defaulting to 'key-moments' for

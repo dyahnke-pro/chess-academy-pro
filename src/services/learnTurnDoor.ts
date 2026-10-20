@@ -39,16 +39,16 @@ import type { StoryBeat } from './openingStory';
 import { namesPlayableStudentMove, type NamesStudentMove } from './studentMoveNaming';
 import { samePosition } from '../utils/samePosition';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
-export type { SpokenLine, DrawnLine } from './voicePackage';
+export type { SpokenLine } from './voicePackage';
 export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
 /** Why the door held a lane on a turn. */
-export type HoldReason = 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled';
+type HoldReason = 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled';
 
 /** The AVERAGE a Learn turn is held to (CLAUDE.md WHY standard measure 4) —
  *  the scale of the marginal bar, never a limit. */
-export const TURN_WORD_TARGET = 80;
+const TURN_WORD_TARGET = 80;
 
 export type LearnLane =
   // ── the instant wave, spoken with the coach's reply ──
@@ -135,13 +135,13 @@ export type LearnLane =
 /** Lanes at or below this lead DESCRIBE the board (commentary, behaviour,
  *  the positional read, structure, piece quality) — the tier the scoreboard
  *  found we over-say. */
-export const DESCRIPTION_LEAD = 40;
+const DESCRIPTION_LEAD = 40;
 
 /** The habit that catches a slip — said AFTER the verdict it explains, in the
  *  same beat, never as the turn's opener (METHOD comes last, G4.5.15). */
 const HABIT_AFTER_VERDICT: ReadonlySet<LearnLane> = new Set<LearnLane>(['blunderCheck']);
 
-export interface LaneRule {
+interface LaneRule {
   /** The kind the package ranks it as. */
   kind: VoiceFactKind;
   /** What the lane teaches, in one line. */
@@ -158,7 +158,7 @@ export interface LaneRule {
 }
 
 /** A lane's place in the DNA beat. */
-export type DnaBeat = 'name' | 'affirm' | 'but' | 'refute' | 'their' | 'point' | 'verdict' | 'now';
+type DnaBeat = 'name' | 'affirm' | 'but' | 'refute' | 'their' | 'point' | 'verdict' | 'now';
 const BEAT_ORDER: Record<DnaBeat, number> = { name: 0, affirm: 1, but: 2, refute: 3, their: 4, point: 5, verdict: 6, now: 7 };
 
 /** Every lane answers where it sits in the DNA beat — a new lane fails to
@@ -219,7 +219,7 @@ const STORY_LANES: ReadonlySet<LearnLane> = new Set(Object.values(STORY_LANE));
  *  lane fails to compile until it does.
  *  - `any`: true in every phase;
  *  - `not-ending`: opening and middlegame only. */
-export type LanePhase = 'any' | 'not-ending';
+type LanePhase = 'any' | 'not-ending';
 export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   gem: 'any', tactic: 'any', prophylaxis: 'any', threat: 'any', dangerLevels: 'any', playedConcept: 'any',
   commentary: 'not-ending', behavior: 'not-ending', positional: 'not-ending',
@@ -502,7 +502,7 @@ export interface TurnDecision {
  *  answer itself or is said before the move (its skill proven elsewhere); a
  *  line about a slip just made never fades. */
 /** GRADUAL and per skill — the one rule in `fadeText` (every surface). */
-export type { FadeLevel, FadeLevels } from './fadeText';
+export type { FadeLevels } from './fadeText';
 export function fadeWhenGreen(lane: LearnLane, text: string, green: FadeLevels | null, skill?: string): string {
   if (!green || green.size === 0) return text;
   const role = COMPUTER_ROLES[lane];
@@ -517,7 +517,7 @@ export function fadeWhenGreen(lane: LearnLane, text: string, green: FadeLevels |
 }
 
 /** Lanes that always ride for a beginner: the principle, said every time. */
-export const BEGINNER_ALWAYS: ReadonlySet<LearnLane> = new Set<LearnLane>(['fundamental', 'ruleException']);
+const BEGINNER_ALWAYS: ReadonlySet<LearnLane> = new Set<LearnLane>(['fundamental', 'ruleException']);
 
 /** The door. Every Learn free-play utterance is assembled here. */
 export function decideTurn(

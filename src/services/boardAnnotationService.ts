@@ -77,7 +77,7 @@ function parseHighlightData(data: string): BoardHighlight[] {
   return highlights;
 }
 
-export interface ParseBoardResult {
+interface ParseBoardResult {
   cleanText: string;
   commands: BoardAnnotationCommand[];
 }

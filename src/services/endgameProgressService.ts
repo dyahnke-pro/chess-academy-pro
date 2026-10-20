@@ -61,7 +61,7 @@ export async function getMasteredCount(): Promise<number> {
 // A clean play (no wrong move) climbs a rung; a play with mistakes falls back
 // to the bottom, so what you got wrong comes back tomorrow and what you know
 // spaces out. A position never "graduates out"; it resurfaces less often.
-export const ENDGAME_REVIEW_INTERVALS_MS: readonly number[] = [
+const ENDGAME_REVIEW_INTERVALS_MS: readonly number[] = [
   1 * 24 * 60 * 60 * 1000, //  rung 0 → 1 day
   3 * 24 * 60 * 60 * 1000, //  rung 1 → 3 days
   7 * 24 * 60 * 60 * 1000, //  rung 2 → 1 week
@@ -77,7 +77,7 @@ export function reviewStepOf(rec: Pick<EndgameProgressRecord, 'reviewStep' | 'ti
 }
 
 /** The rung after a play: up one when clean, back to the bottom otherwise. */
-export function nextReviewStep(stepBefore: number, clean: boolean): number {
+function nextReviewStep(stepBefore: number, clean: boolean): number {
   return clean ? Math.min(stepBefore + 1, TOP_RUNG) : 0;
 }
 
@@ -107,11 +107,6 @@ export async function getDueEndgameLessons(): Promise<{ lessonId: string; dueCou
     });
   }
   return Array.from(byLesson.entries()).map(([lessonId, v]) => ({ lessonId, ...v }));
-}
-
-/** Count of distinct endgame lessons with positions due for review now. */
-export async function getDueEndgameCount(): Promise<number> {
-  return (await getDueEndgameLessons()).length;
 }
 
 /** Record a completed playout. Updates the existing record (if any)

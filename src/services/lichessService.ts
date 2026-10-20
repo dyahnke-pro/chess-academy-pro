@@ -55,7 +55,7 @@ const MAX_LICHESS_GAMES = 200;
  * the biweekly background sync doesn't queue hundreds of games into
  * Stockfish while the student is on /coach/teach.
  */
-export interface ImportLichessOptions {
+interface ImportLichessOptions {
   skipPostProcessing?: boolean;
 }
 
@@ -231,7 +231,7 @@ export async function importLichessStats(
 
 // ─── Puzzle Stream ───────────────────────────────────────────────────────────
 
-export interface LichessStreamPuzzle {
+interface LichessStreamPuzzle {
   id: string;
   rating: number;
   themes: string[];

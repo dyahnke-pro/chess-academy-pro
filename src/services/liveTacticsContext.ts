@@ -580,7 +580,7 @@ function rolesClause(
  *  the coach's own plan in the third person (prod tape, 2026-09-19). A new
  *  caller must say which seat it speaks from; `spectator` has no "you" and is
  *  deliberately not a member. */
-export type LookaheadSeat = Extract<PerspectiveMode, 'student' | 'coach-is-opponent'>;
+type LookaheadSeat = Extract<PerspectiveMode, 'student' | 'coach-is-opponent'>;
 
 /** The threat-branch stem per seat — a Record so a new seat fails to compile
  *  until someone writes its sentence. The opportunity branch is the STUDENT's
@@ -892,9 +892,9 @@ export function formatTacticsSubBlock(
 // student loses by force if they ignore it (`computeMustDefend`, the same
 // net the importance model reads) — and only when the piece at risk is one
 // the warning itself names, so a level is never pinned to the wrong threat.
-export type DangerLevel = 'decisive' | 'piece' | 'material' | 'pawn' | 'not-yet';
+type DangerLevel = 'decisive' | 'piece' | 'material' | 'pawn' | 'not-yet';
 
-export const DANGER_OPENERS: Record<DangerLevel, readonly string[]> = {
+const DANGER_OPENERS: Record<DangerLevel, readonly string[]> = {
   // CONDITIONAL, like every other level (Learn tape 2026-10-15: "Drop
   // everything — your queen on d5 is attacked" on a book move the queen simply
   // steps away from). The level is what IGNORING it costs, so it says so.

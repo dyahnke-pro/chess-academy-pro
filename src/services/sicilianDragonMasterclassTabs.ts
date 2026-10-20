@@ -2,7 +2,7 @@
 // (no algo). Keys: 'main' (the Yugoslav pill) + the variation tab labels,
 // lower-cased (must match variationTabs.ts CURATED['sicilian-dragon']).
 
-export const SICILIAN_DRAGON_TAB_PLAN_IDS: Record<string, string[]> = {
+const SICILIAN_DRAGON_TAB_PLAN_IDS: Record<string, string[]> = {
   main: ['mp-siciliandragon-main'],
   soltis: ['mp-siciliandragon-soltis'],
   'chinese dragon': ['mp-siciliandragon-chinese'],

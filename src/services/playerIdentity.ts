@@ -29,7 +29,7 @@ export interface PlayerIdentity {
 }
 
 export type PlayerColor = 'white' | 'black';
-export type GameOutcome = 'win' | 'loss' | 'draw';
+type GameOutcome = 'win' | 'loss' | 'draw';
 
 const ENGINE_NAME_RE = /\b(coach|bot|stockfish|engine|computer)\b/i;
 

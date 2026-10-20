@@ -30,12 +30,12 @@ import { captureRead, findWeakPawns } from './positionReadingService';
 import { seatBare } from '../utils/seatPieces';
 import { mateDescription } from './matePatterns';
 
-export type CommentaryKind =
+type CommentaryKind =
   | 'tactic'
   | 'seeding-observation'
   | 'improving-move';
 
-export interface PlayCommentary {
+interface PlayCommentary {
   kind: CommentaryKind;
   /** Stable identity of the OBSERVATION — kind plus the square(s) it is about.
    *
@@ -984,7 +984,7 @@ export function studentMovePoint(
  *  material the settled exchange nets (its stake) and the engine line it was
  *  read off (its proof). A quiet move's point carries none — it is a
  *  description, and says so. */
-export interface MovePointFact {
+interface MovePointFact {
   text: string;
   squares: string[];
   stakes: { points: number; plies: number } | null;

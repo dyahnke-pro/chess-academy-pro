@@ -13,7 +13,7 @@
 // instead of falling through to "show every plan" (playbook §3:
 // empty > generic).
 
-export const PIRC_TAB_PLAN_IDS: Record<string, string[]> = {
+const PIRC_TAB_PLAN_IDS: Record<string, string[]> = {
   main: [],
   'austrian attack': ['mp-pircdefence-austrian'],
   'classical system': ['mp-pircdefence-classical'],

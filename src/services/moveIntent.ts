@@ -78,7 +78,7 @@ export interface MoveIntent {
 /** A real threat costs the side that passes at least this much. */
 export const THREAT_CP = 100;
 /** A follow-up is "prepared" when it gained at least this much. */
-export const PREPARE_CP = 50;
+const PREPARE_CP = 50;
 /** A reply counts as gone when it now scores this much worse than their best. */
 const GONE_CP = 60;
 
@@ -483,7 +483,7 @@ export function stopReason(fenAfter: string, stoppedUci: string, mover: 'w' | 'b
   return `the ${PIECE_NAME[m.piece]} would just be taken on ${m.to}`;
 }
 
-export interface PreparedPoint {
+interface PreparedPoint {
   verb: string;
   castle: boolean;
   /** A minor piece leaving home: the pawn move FREED it. Said as "to free

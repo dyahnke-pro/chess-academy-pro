@@ -28,7 +28,7 @@ import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import { readBoardUrgency } from './boardUrgency';
 import { askThenAnswer, type PlayedMove } from '../utils/thinkPause';
 
-export interface MethodRead {
+interface MethodRead {
   /** Their weakness, as a phrase ("their king, still on e8", "their isolated pawn on d5"). */
   weakness: { phrase: string; square: string; kind: 'king' | 'isolated' | 'hole'; step: string | null; to: string[]; route?: string[] } | null;
   /** The student's worst-placed piece — and, when it has one, the step that
@@ -301,7 +301,7 @@ export function methodLine(read: MethodRead, fen: string): string {
  *  move, David 2026-10-18): about the board it was asked on, in the past
  *  tense, crediting what they found. A move from another board resolves
  *  nothing (Black walk 2026-10-19: the 11…Bh4 answer heard after 12…Nxb3). */
-export function methodAfterMove(read: MethodRead, fen: string, m: PlayedMove): string | null {
+function methodAfterMove(read: MethodRead, fen: string, m: PlayedMove): string | null {
   const key = (f: string): string => f.split(' ').slice(0, 2).join(' ');
   if (key(m.fenBefore) !== key(fen)) return null;
   let mv: ReturnType<Chess['move']> | null = null;

@@ -32,7 +32,7 @@ export const DEFAULT_PUZZLE_RATING = 800;
 
 /** The profile fields this module reads — a structural slice, so a test (or a
  *  caller holding a partial profile) never has to fabricate a whole one. */
-export interface PuzzleRatingProfile {
+interface PuzzleRatingProfile {
   puzzleRating?: number | null;
   preferences?: {
     reachState?: ReachState;
@@ -55,7 +55,7 @@ export function studentPuzzleRating(profile: PuzzleRatingProfile | null | undefi
 export type PuzzleDifficulty = StrengthDifficulty;
 export { DIFFICULTY_OFFSET };
 
-export interface PuzzleTargetOptions {
+interface PuzzleTargetOptions {
   /** Master Level rides its own elite ladder. */
   master?: boolean;
   /** Signed offset from the ladder (DIFFICULTY_OFFSET). */
