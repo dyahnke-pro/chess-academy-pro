@@ -73,14 +73,14 @@
 - `src/services/learnTurnDoor.test.ts:177`
 - `src/services/learnTurnDoor.test.ts:437`
 - `src/services/learnTurnDoor.test.ts:448`
-- `src/services/positionFacts.ts:1290`
+- `src/services/positionFacts.ts:1292`
 - `src/services/puzzleMethod.ts:42`
 
 ### `GREEN_QUIET_BELOW` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `judgeMoment` (function) — 12 call sites
-- `src/services/positionFacts.ts:826`
+- `src/services/positionFacts.ts:828`
 - `src/test/latentForkOpensTheDoor.test.ts:47`
 - `src/test/latentForkOpensTheDoor.test.ts:51`
 - `src/test/latentForkOpensTheDoor.test.ts:55`
@@ -180,7 +180,7 @@
 - `src/services/habitJoin.test.ts:92`
 - `src/services/habitJoin.test.ts:99`
 - `src/services/habitJoin.test.ts:100`
-- `src/services/positionFacts.ts:1108`
+- `src/services/positionFacts.ts:1110`
 
 ### `habitForCluster` (function) — 16 call sites
 - `src/services/habitJoin.test.ts:17`

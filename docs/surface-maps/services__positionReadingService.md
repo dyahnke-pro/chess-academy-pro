@@ -405,7 +405,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/boardUrgency.ts:59`
 - `src/services/groundedAnswer.ts:643`
 - `src/services/methodSignals.ts:46`
-- `src/services/positionFacts.ts:1723`
+- `src/services/positionFacts.ts:1728`
 - `src/services/takingTheAttacker.test.ts:17`
 - `src/services/takingTheAttacker.test.ts:22`
 - `src/services/takingTheAttacker.test.ts:26`

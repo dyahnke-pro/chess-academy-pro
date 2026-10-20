@@ -220,6 +220,65 @@ export function turningReveal(tp: TurningPoint, found: boolean): string {
   return `${head}${allowed}${cause}`;
 }
 
+/** The segment fields the ONE turn ranking reads (both sides' moves). */
+export interface RankableSegment {
+  ply: number;
+  san: string;
+  playerColor: 'white' | 'black';
+  evalBefore?: number | null;
+  evalAfter?: number | null;
+  classification?: string | null;
+}
+
+/** One move of either side, ranked by the winning chance it cost its mover. */
+export interface RankedTurn {
+  ply: number;
+  san: string;
+  playerColor: 'white' | 'black';
+  /** Winning chance (0–100) before and after, the mover's side. */
+  before: number;
+  after: number;
+  /** Points of winning chance the move cost its mover. */
+  swing: number;
+}
+
+/** Why a move is not on the list, or null when it is. */
+function turnSkip(seg: RankableSegment): { before?: number; after?: number; skip: TurningTrace['skip'] } {
+  if (seg.evalBefore == null || seg.evalAfter == null) return { skip: 'no-eval-or-best' };
+  const sign = seg.playerColor === 'white' ? 1 : -1;
+  const before = winChance(seg.evalBefore * sign);
+  const after = winChance(seg.evalAfter * sign);
+  const swing = before - after;
+  // The classifier's own word decides eligibility: a mistake or a blunder is a
+  // moment worth asking about (KID audit 2026-10-06: Qh4 over Nxf1, a free
+  // rook, moved the winning chance nine points, and a bare swing bar silenced
+  // the one question the game was about). The swing RANKS; it gates only the
+  // rest.
+  const costly = seg.classification === 'mistake' || seg.classification === 'blunder';
+  if (swing <= 0 || (!costly && swing < TURNING_MIN_SWING)) return { before, after, skip: 'small-swing' };
+  // Decided either side of the move: still clearly winning, or lost before it.
+  if (after >= DECIDED_CHANCE || before <= 100 - DECIDED_CHANCE) return { before, after, skip: 'decided' };
+  return { before, after, skip: null };
+}
+
+/**
+ * THE ONE TURN RANKING (OS-11 census 5, lead call 2026-10-20): every move of
+ * BOTH sides, ranked by the winning chance it cost its mover. A swing inside a
+ * decided game costs no winning chance, so no second "contested" gate is
+ * needed. The game's thesis takes the top entry; the review's questions take
+ * the student's entries from the same list — so the two can name different
+ * moments only when the turn was the opponent's, and then the thesis says so.
+ */
+export function rankTurns(segments: ReadonlyArray<RankableSegment>): RankedTurn[] {
+  const out: RankedTurn[] = [];
+  for (const seg of segments) {
+    const r = turnSkip(seg);
+    if (r.skip || r.before === undefined || r.after === undefined) continue;
+    out.push({ ply: seg.ply, san: seg.san, playerColor: seg.playerColor, before: r.before, after: r.after, swing: r.before - r.after });
+  }
+  return out.sort((a, b) => b.swing - a.swing || a.ply - b.ply);
+}
+
 /**
  * The turning points of one game, from the review's segments: the student's
  * flagged moves ranked by the winning chance they cost, the biggest
@@ -232,7 +291,6 @@ export function selectTurningPoints(
   asked: number = TURNING_POINTS_ASKED,
   trace?: TurningTrace[],
 ): Map<number, TurningPoint> {
-  const sign = playerColor === 'white' ? 1 : -1;
   const ordered = [...segments].sort((a, b) => a.ply - b.ply);
   const tally = new Map<string, number>();
   const all: TurningPoint[] = [];
@@ -244,23 +302,15 @@ export function selectTurningPoints(
     const cause = turningCause(seg, next);
     const causeCount = cause ? (tally.get(cause.id) ?? 0) + 1 : 0;
     if (cause) tally.set(cause.id, causeCount);
-    if (seg.evalBefore == null || seg.evalAfter == null || !seg.bestMoveSan || !seg.bestMoveUci || seg.bestMoveSan === seg.san) {
+    if (!seg.bestMoveSan || !seg.bestMoveUci || seg.bestMoveSan === seg.san) {
       trace?.push({ ply: seg.ply, skip: 'no-eval-or-best' });
       continue;
     }
-    const before = winChance(seg.evalBefore * sign);
-    const after = winChance(seg.evalAfter * sign);
-    const swing = before - after;
-    const at = { ply: seg.ply, before: Math.round(before), after: Math.round(after) };
-    // The classifier's own word decides eligibility: a mistake or a blunder is
-    // a moment worth asking about (KID audit 2026-10-06: Qh4 over Nxf1, a free
-    // rook, scored 148cp and moved the winning chance 58→67 — nine points, and a
-    // bare swing bar silenced the one question the game was about). The swing
-    // RANKS; it gates only an inaccuracy.
-    const costly = seg.classification === 'mistake' || seg.classification === 'blunder';
-    if (swing <= 0 || (!costly && swing < TURNING_MIN_SWING)) { trace?.push({ ...at, skip: 'small-swing' }); continue; }
-    // Decided either side of the move: still clearly winning, or lost before it.
-    if (after >= DECIDED_CHANCE || before <= 100 - DECIDED_CHANCE) { trace?.push({ ...at, skip: 'decided' }); continue; }
+    // The ONE ranking decides eligibility (`rankTurns`), never a copy of it.
+    const r = turnSkip(seg);
+    const at = { ply: seg.ply, ...(r.before !== undefined ? { before: Math.round(r.before) } : {}), ...(r.after !== undefined ? { after: Math.round(r.after) } : {}) };
+    if (r.skip || r.before === undefined || r.after === undefined) { trace?.push({ ...at, skip: r.skip }); continue; }
+    const swing = r.before - r.after;
     trace?.push({ ...at, skip: null });
     const mover: 'w' | 'b' = seg.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
     const prev = ordered[i - 1];
@@ -308,56 +358,22 @@ interface GameTurn {
   san: string;
   /** The move's cost to its mover, in pawns (null without evals). */
   swingPawns: number | null;
-  /** 'asked': the student's biggest turning point, the one the review asked
-   *  about. 'swing': no question was asked, so the biggest contested swing
-   *  either side played. */
-  source: 'asked' | 'swing';
-}
-
-/** The segment fields `gameTurn` reads. */
-interface GameTurnSegment {
-  ply: number;
-  san: string;
-  evalBefore?: number | null;
-  evalAfter?: number | null;
-  playerColor: 'white' | 'black';
+  /** Whose move it was — the review's questions are the student's, so a turn
+   *  that was the opponent's is said as theirs. */
+  mover: 'white' | 'black';
 }
 
 /**
- * THE ONE TURNING POINT OF A GAME (unity U1, the 52-error walk: three "this is
- * where the game turned" questions on the student's moves, then a closing line
- * naming a different move — the opponent's — because a second computer ranked
- * by raw pawn swing over both sides).
- *
- * When the review asked turning-point questions, the game turned at the
- * biggest of THOSE: the closing, the thesis and the theme all name it. Only a
- * game that asked nothing falls back to the biggest contested swing, measured
- * the same way — winning chance lost by the mover, decided games excluded.
+ * THE ONE TURNING POINT OF A GAME: the top of the ONE ranking (`rankTurns`),
+ * either side (OS-11 census 5). The review's questions are the student's
+ * entries of the same list, so the closing line and the questions can name
+ * different moves only when the game turned on the opponent's move.
  */
-export function gameTurn(
-  plan: ReadonlyMap<number, TurningPoint>,
-  segments: ReadonlyArray<GameTurnSegment>,
-): GameTurn | null {
-  const pawnCost = (s: GameTurnSegment): number | null => {
-    if (s.evalBefore == null || s.evalAfter == null) return null;
-    const cost = (s.evalBefore - s.evalAfter) * (s.playerColor === 'white' ? 1 : -1);
-    return cost > 0 ? cost / 100 : null;
-  };
-  const asked = [...plan.values()].sort((a, b) => b.swing - a.swing || a.ply - b.ply)[0];
-  if (asked) {
-    const seg = segments.find((s) => s.ply === asked.ply);
-    return { ply: asked.ply, san: asked.playedSan, swingPawns: seg ? pawnCost(seg) : null, source: 'asked' };
-  }
-  let best: { seg: (typeof segments)[number]; swing: number } | null = null;
-  for (const s of segments) {
-    if (s.evalBefore == null || s.evalAfter == null) continue;
-    const sign = s.playerColor === 'white' ? 1 : -1;
-    const before = winChance(s.evalBefore * sign);
-    const after = winChance(s.evalAfter * sign);
-    const swing = before - after;
-    if (swing < TURNING_MIN_SWING) continue;
-    if (after >= DECIDED_CHANCE || before <= 100 - DECIDED_CHANCE) continue;
-    if (!best || swing > best.swing) best = { seg: s, swing };
-  }
-  return best ? { ply: best.seg.ply, san: best.seg.san, swingPawns: pawnCost(best.seg), source: 'swing' } : null;
+export function gameTurn(segments: ReadonlyArray<RankableSegment>): GameTurn | null {
+  const top = rankTurns(segments)[0];
+  if (!top) return null;
+  const seg = segments.find((s) => s.ply === top.ply);
+  const cost = seg && seg.evalBefore != null && seg.evalAfter != null
+    ? ((seg.evalBefore - seg.evalAfter) * (seg.playerColor === 'white' ? 1 : -1)) / 100 : null;
+  return { ply: top.ply, san: top.san, swingPawns: cost !== null && cost > 0 ? cost : null, mover: top.playerColor };
 }

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**741 lines · 3 exports · 16 importers · 8 tests · 0 audits**
+**741 lines · 6 exports · 16 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -31,6 +31,15 @@
 
 ## Exports and every call site
 
+### `detectPin` (function) — 1 call site
+- `src/services/missedTacticService.ts:674`
+
+### `detectSkewer` (function) — 1 call site
+- `src/services/missedTacticService.ts:679`
+
+### `detectDiscovery` (function) — 1 call site
+- `src/services/missedTacticService.ts:684`
+
 ### `findHangingPieces` (function) — 14 call sites
 - `src/data/patternRegistry.ts:113`
 - `src/services/coachGameEngine.ts:301`
@@ -49,7 +58,7 @@
 
 ### `classifyPosition` (function) — 34 call sites
 - `src/components/Coach/CoachGamePage.tsx:3310`
-- `src/services/missedTacticService.ts:623`
+- `src/services/missedTacticService.ts:537`
 - `src/services/oneSkewerRule.test.ts:16`
 - `src/services/pvPlayback.ts:425`
 - `src/services/tacticClassifier.test.ts:32`

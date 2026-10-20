@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**221 lines · 7 exports · 5 importers · 2 tests · 0 audits**
+**221 lines · 7 exports · 7 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,15 +17,19 @@
 - `src/services/learnMemory.ts`
 - `src/services/openingStory.ts`
 - `src/services/planThread.test.ts`
+- `src/services/positionFacts.ts`
+- `src/services/raceAimOneVoice.test.ts`
 
 ## Exports and every call site
 
-### `planAimKey` (function) — 5 call sites
+### `planAimKey` (function) — 7 call sites
 - `src/services/openingStory.ts:507`
 - `src/services/planThread.test.ts:72`
 - `src/services/planThread.test.ts:73`
 - `src/services/planThread.test.ts:74`
 - `src/services/planThread.test.ts:75`
+- `src/services/positionFacts.ts:1354`
+- `src/services/raceAimOneVoice.test.ts:20`
 
 ### `PLAN_THREAD_HOLD_PLIES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -84,6 +88,7 @@
 
 - `src/services/planChoice.test.ts`
 - `src/services/planThread.test.ts`
+- `src/services/raceAimOneVoice.test.ts`
 
 ## Audits that reach it
 

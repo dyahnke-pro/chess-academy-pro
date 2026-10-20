@@ -70,7 +70,7 @@
 - `src/services/pvPlayback.ts:839`
 - `src/services/reviewMoveBriefing.ts:263`
 - `src/services/tacticVocabulary.ts:95`
-- `src/services/teachingSelector.ts:367`
+- `src/services/teachingSelector.ts:383`
 - `src/services/turningPoints.ts:170`
 - `src/services/turningPoints.ts:172`
 - `src/services/turningPoints.ts:175`

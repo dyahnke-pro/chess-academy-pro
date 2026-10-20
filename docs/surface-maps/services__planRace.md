@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**689 lines · 13 exports · 14 importers · 5 tests · 0 audits**
+**689 lines · 13 exports · 15 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,6 +25,7 @@
 - `src/services/orderReads.ts`
 - `src/services/orderTeaching.ts`
 - `src/services/planRace.test.ts`
+- `src/services/positionFacts.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/reviewStrategicOrientation.ts`
 

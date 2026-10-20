@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { selectTeaching, renderThesis, pliesFromSans, summarizeTeaching, landedTacticIsMoment, type SelectorPly } from './teachingSelector';
-import { turningPointCandidates } from './reviewTurningPoint';
+import { rankTurns } from './turningPoints';
 
 function pliesFrom(sans: readonly string[], evals?: readonly (number | null)[]): SelectorPly[] {
   const c = new Chess();
@@ -52,11 +52,11 @@ describe('teachingSelector — the ONE game-level read (unified-coach N1)', () =
     expect(pkg.thesis.kind).toBe('turned');
     // B10 (2026-09-22): no MAX_MOMENTS. Every swing the turning-point bar
     // admitted is a moment; a count could not know what it was deleting.
-    const q0 = turningPointCandidates(plies.map((p) => ({ ...p, moveNumber: Math.ceil(p.ply / 2), evalBefore: p.evalBefore ?? null, evalAfter: p.evalAfter ?? null, classification: null })));
+    const q0 = rankTurns(plies.map((p) => ({ ...p, evalBefore: p.evalBefore ?? null, evalAfter: p.evalAfter ?? null, classification: null })));
     for (const c of q0) expect(pkg.moments.map((m) => m.ply), `swing at ply ${c.ply} must be a moment`).toContain(c.ply);
     // With no turn handed in, the biggest swing leads.
     expect(pkg.thesis.ply).toBe(q0[0].ply);
-    // The +900 → +650 blowout never "turned" (contested gate).
+    // The +900 → +650 blowout costs no winning chance, so it never "turned".
     expect(pkg.moments.map((m) => m.ply)).not.toContain(19);
     expect(pkg.moments.map((m) => m.ply)).toEqual(expect.arrayContaining([8, 13]));
     expect(renderThesis(pkg.thesis, 'retrospective')).toMatch(/^The game turned at .* — it cost /);
@@ -126,7 +126,7 @@ describe('N5 — the student\'s holes re-rank comparable moments', () => {
     clusterId: 'analysis:tactic:fork', capabilityTag: null, proven: false, bucket: 'tactical' as const, label: 'Forks', openCount: 4, total: 4, severity: 70,
     lifecycleStatus: 'persistent' as const, trend: 'worsening' as const, puzzleThemes: ['fork'],
   };
-  const swings = [{ ply: 8, label: '4… x', swingPawns: 2.0 }, { ply: 13, label: '7. y', swingPawns: 2.0 }];
+  const swings = [{ ply: 8, label: '4… x', swing: 20 }, { ply: 13, label: '7. y', swing: 20 }];
   const landed = new Map<number, string>([[13, 'fork']]);
   it('equal swings: the moment that lands the student\'s hole leads', async () => {
     const { rankSwingCandidates, weaknessBoostCp } = await import('./teachingSelector');
@@ -138,9 +138,9 @@ describe('N5 — the student\'s holes re-rank comparable moments', () => {
     const { rankSwingCandidates } = await import('./teachingSelector');
     expect(rankSwingCandidates(swings, landed, []).map((c) => c.ply)).toEqual([8, 13]);
   });
-  it('a hole never vaults a subtlety over a real blunder (boost ≤ 0.3 pawns)', async () => {
+  it('a hole never vaults a subtlety over a real blunder (boost ≤ 3 points of winning chance)', async () => {
     const { rankSwingCandidates } = await import('./teachingSelector');
-    const big = [{ ply: 8, label: 'a', swingPawns: 3.0 }, { ply: 13, label: 'b', swingPawns: 1.0 }];
+    const big = [{ ply: 8, label: 'a', swing: 30 }, { ply: 13, label: 'b', swing: 10 }];
     expect(rankSwingCandidates(big, landed, [forkHole]).map((c) => c.ply)).toEqual([8, 13]);
   });
 });

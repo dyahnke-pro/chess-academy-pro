@@ -44,9 +44,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/danyaBehaviors.ts:525`
 - `src/services/kingAttackReads.ts:653`
 - `src/services/learnBoardTeaching.ts:514`
-- `src/services/positionFacts.ts:1360`
-- `src/services/positionFacts.ts:1806`
-- `src/services/positionFacts.ts:1828`
+- `src/services/positionFacts.ts:1365`
+- `src/services/positionFacts.ts:1811`
+- `src/services/positionFacts.ts:1833`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`
@@ -54,8 +54,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `forkThreatKey` (function) — 4 call sites
 - `src/services/danyaBehaviors.ts:379`
-- `src/services/positionFacts.ts:1672`
-- `src/services/positionFacts.ts:1687`
+- `src/services/positionFacts.ts:1677`
+- `src/services/positionFacts.ts:1692`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:51`
 
 ### `looseKey` (function) — 3 call sites
@@ -65,7 +65,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `outpostKey` (function) — 3 call sites
 - `src/services/outpostOneTest.test.ts:33`
-- `src/services/positionFacts.ts:1772`
+- `src/services/positionFacts.ts:1777`
 - `src/services/reviewMoveTeaching.ts:462`
 
 ### `holeKey` (function) — 4 call sites
@@ -83,7 +83,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `kickKey` (function) — 3 call sites
 - `src/services/kickKey.test.ts:17`
 - `src/services/playCommentary.ts:921`
-- `src/services/positionFacts.ts:1772`
+- `src/services/positionFacts.ts:1777`
 
 ## Tests
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**137 lines · 8 exports · 17 importers · 3 tests · 1 audits**
+**137 lines · 8 exports · 16 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,7 +27,6 @@
 - `src/services/refutedAlternative.ts`
 - `src/services/refutedAlternativeCore.ts`
 - `src/services/reviewFullData.ts`
-- `src/services/reviewTurningPoint.ts`
 - `src/services/skillScaling.test.ts`
 - `src/services/speedRunReads.ts`
 - `src/services/studentNeedLoader.ts`
@@ -50,15 +49,14 @@
 ### `CriticalMoment` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `criticalityThresholds` (function) — 18 call sites
+### `criticalityThresholds` (function) — 17 call sites
 - `src/services/conceptEngine.ts:576`
 - `src/services/criticalMoment.ts:194`
 - `src/services/criticalityScan.test.ts:20`
 - `src/services/narrationImportance.ts:139`
-- `src/services/positionFacts.ts:542`
+- `src/services/positionFacts.ts:544`
 - `src/services/refutedAlternative.ts:100`
 - `src/services/refutedAlternativeCore.ts:239`
-- `src/services/reviewTurningPoint.ts:55`
 - `src/services/skillScaling.test.ts:98`
 - `src/services/speedRunReads.ts:77`
 - `src/services/speedRunReads.ts:165`

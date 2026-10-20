@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2063 lines · 16 exports · 33 importers · 38 tests · 3 audits**
+**2068 lines · 16 exports · 34 importers · 39 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -45,6 +45,7 @@
 - `src/services/positionFactsCache.ts`
 - `src/services/positionFactsRegistry.test.ts`
 - `src/services/positionReadComposer.ts`
+- `src/services/raceAimOneVoice.test.ts`
 - `src/services/reviewFacetRank.ts`
 - `src/services/speedRunReads.scale.test.ts`
 - `src/services/whyBestMove.ts`
@@ -88,10 +89,11 @@
 ### `PhaseFact` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `clauseClaims` (function) — 3 call sites
+### `clauseClaims` (function) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10662`
 - `src/hooks/usePhaseNarration.door.test.ts:75`
 - `src/hooks/usePhaseNarration.ts:468`
+- `src/services/raceAimOneVoice.test.ts:19`
 
 ### `clauseText` (function) — 11 call sites
 - `src/hooks/useLiveCoach.ts:300`
@@ -106,7 +108,7 @@
 - `src/services/positionReadComposer.ts:158`
 - `src/services/whyBestMove.ts:151`
 
-### `computePositionFacts` (function) — 98 call sites
+### `computePositionFacts` (function) — 99 call sites
 - `src/coach/boardTurnAnswer.ts:135`
 - `src/components/Coach/CoachTeachPage.tsx:10536`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
@@ -192,6 +194,7 @@
 - `src/services/positionFacts.weakness.test.ts:63`
 - `src/services/positionFactsRegistry.test.ts:9`
 - `src/services/positionReadComposer.ts:130`
+- `src/services/raceAimOneVoice.test.ts:16`
 - `src/services/speedRunReads.scale.test.ts:37`
 - `src/services/whyBestMove.needWire.test.ts:10`
 - `src/services/whyBestMove.ts:128`
@@ -270,6 +273,7 @@
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/positionFactsRegistry.test.ts`
+- `src/services/raceAimOneVoice.test.ts`
 - `src/services/speedRunReads.scale.test.ts`
 - `src/services/studentMomentBoost.test.ts`
 - `src/services/whyBestMove.needWire.test.ts`

@@ -202,7 +202,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.horizon.test.ts:36`
 - `src/services/exchangeLedger.test.ts:254`
 - `src/services/groundedAnswer.ts:1987`
-- `src/services/positionFacts.ts:636`
+- `src/services/positionFacts.ts:638`
 - `src/services/reviewFullData.ts:792`
 
 ## Tests

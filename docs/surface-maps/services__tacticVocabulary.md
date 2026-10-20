@@ -52,7 +52,7 @@
 - `src/services/pvPlayback.ts:728`
 - `src/services/pvPlayback.ts:839`
 - `src/services/reviewMoveBriefing.ts:263`
-- `src/services/teachingSelector.ts:367`
+- `src/services/teachingSelector.ts:383`
 - `src/services/turningPoints.ts:170`
 - `src/services/turningPoints.ts:172`
 - `src/services/turningPoints.ts:175`
@@ -79,7 +79,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `toTacticType` (function) — 10 call sites
-- `src/services/missedTacticService.ts:669`
+- `src/services/missedTacticService.ts:583`
 - `src/services/tacticTypeUnification.test.ts:61`
 - `src/services/tacticVocabulary.test.ts:45`
 - `src/services/tacticVocabulary.test.ts:46`

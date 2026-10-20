@@ -118,9 +118,9 @@
 - `src/services/planJudgement.ts:47`
 - `src/services/planJudgement.ts:91`
 - `src/services/planJudgement.ts:140`
-- `src/services/positionFacts.ts:1619`
-- `src/services/positionFacts.ts:1767`
-- `src/services/positionFacts.ts:1897`
+- `src/services/positionFacts.ts:1624`
+- `src/services/positionFacts.ts:1772`
+- `src/services/positionFacts.ts:1902`
 - `src/services/reviewFullData.ts:664`
 - `src/services/reviewFullData.ts:688`
 - `src/services/reviewFullData.ts:1262`
@@ -140,7 +140,7 @@
 - `src/services/factStakes.test.ts:33`
 - `src/services/learnBoardTeaching.tacticStakes.test.ts:14`
 - `src/services/learnBoardTeaching.ts:1397`
-- `src/services/positionFacts.ts:1827`
+- `src/services/positionFacts.ts:1832`
 - `src/services/reviewFullData.ts:827`
 - `src/services/reviewFullData.ts:868`
 - `src/services/reviewFullData.ts:902`
@@ -154,7 +154,7 @@
 - `src/services/learnBoardTeaching.ts:1400`
 - `src/services/opponentMoveReads.ts:204`
 - `src/services/opponentMoveReads.ts:206`
-- `src/services/positionFacts.ts:1689`
+- `src/services/positionFacts.ts:1694`
 - `src/services/reviewFullData.ts:820`
 - `src/services/reviewFullData.ts:923`
 
@@ -168,8 +168,8 @@
 - `src/services/factStakes.test.ts:44`
 - `src/services/factStakes.test.ts:45`
 - `src/services/factStakes.test.ts:46`
-- `src/services/positionFacts.ts:1636`
-- `src/services/positionFacts.ts:1647`
+- `src/services/positionFacts.ts:1641`
+- `src/services/positionFacts.ts:1652`
 
 ### `isScenicPawnPin` (function) — 5 call sites
 - `src/services/factStakes.test.ts:112`

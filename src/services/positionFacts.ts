@@ -20,6 +20,8 @@ import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan, lastMoveFromHistory } from './material';
 import { readTrade, findTradeTarget } from './tradeQuality';
 import { conceptInstanceKey, forkThreatKey, outpostKey, kickKey } from './conceptKey';
+import { OPPOSITE_WINGS_CLAIM } from './planRace';
+import { planAimKey } from './planThread';
 import { layerStandings } from './teachingLayers';
 import { seatBare } from '../utils/seatPieces';
 import { detectBluff, bluffClause, type Bluff } from './bluffDetector';
@@ -1347,6 +1349,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const rememberFor = (c: (typeof clauses)[number]): string[] => [
     ...(SAY_ONCE_KINDS.has(c.kind) ? [c.text] : []),
     ...(c.kind === 'method' && methodKey ? [methodKey] : []),
+    // THE RACE IS THE KING-ATTACK PLAN (OS-11 item 6a): the opposite-wings race
+    // carries the plan thread's aim too, so the door keeps one of the two.
+    ...(c.kind === 'king-read' && c.claim === OPPOSITE_WINGS_CLAIM ? [planAimKey('king-attack', null) as string] : []),
     ...(c.kind === 'trade' && c.rank === 34 && tradeTargetKey ? [tradeTargetKey] : []),
     // A batch-5 read is said once a game, keyed on its own claim.
     ...((c.kind === 'trade-idea' || c.kind === 'defence-idea' || c.kind === 'nugget') && c.claim ? [c.claim] : []),

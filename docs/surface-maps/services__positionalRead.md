@@ -54,7 +54,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lookaheadPlan.ts:1527`
 - `src/services/narrationAdversarial.test.ts:85`
 - `src/services/narrationAdversarial.test.ts:176`
-- `src/services/positionFacts.ts:1097`
+- `src/services/positionFacts.ts:1099`
 - `src/services/positionReadComposer.ts:177`
 - `src/services/positionalRead.race.test.ts:10`
 - `src/services/positionalRead.test.ts:28`
