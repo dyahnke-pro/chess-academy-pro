@@ -48,7 +48,7 @@ function twoReadCost(ann: MoveAnnotation): number | null {
 }
 
 /** Does this annotation still carry the old two-read price? */
-export function needsReprice(ann: MoveAnnotation, playerColor: 'white' | 'black'): boolean {
+function needsReprice(ann: MoveAnnotation, playerColor: 'white' | 'black'): boolean {
   return ann.color === playerColor && typeof ann.costCp !== 'number' && !!ann.bestMove;
 }
 
