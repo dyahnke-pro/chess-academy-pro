@@ -20,7 +20,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachsCall.test.ts:65`
 
 ### `computeCoachsCall` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:13008`
+- `src/components/Coach/CoachTeachPage.tsx:13047`
 - `src/services/coachsCall.test.ts:32`
 - `src/services/coachsCall.test.ts:42`
 - `src/services/coachsCall.test.ts:52`

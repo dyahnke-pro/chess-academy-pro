@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1008 lines · 32 exports · 980 importers · 245 tests · 38 audits**
+**1008 lines · 32 exports · 980 importers · 249 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -85,11 +85,8 @@
 - `src/coach/tools/cerebrum/startWalkthroughForOpening.ts`
 - `src/coach/tools/cerebrum/takeBackMove.ts`
 - `src/coach/tools/registry.ts`
-- `src/components/Academy/AcademyCourseCard.tsx`
 - `src/components/Academy/CourseSyllabusPage.tsx`
 - `src/components/Academy/CourseTrainerPage.tsx`
-- `src/components/Analysis/OpeningExplorerPanel.tsx`
-- `src/components/Board/BoardPageLayout.tsx`
 - `src/components/Board/BoardQuestionBox.tsx`
 - `src/components/Board/ChessBoard.tsx`
 - `src/components/Board/ControlledChessBoard.tsx`
@@ -238,7 +235,6 @@
 - `src/components/Openings/WalkthroughIntegration.test.tsx`
 - `src/components/Openings/WalkthroughMode.test.tsx`
 - `src/components/Openings/WalkthroughMode.tsx`
-- `src/components/Play/OpeningChallenge.tsx`
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx`
 - `src/components/Puzzles/DeepRunPage.rating.test.tsx`
 - `src/components/Puzzles/DeepRunPage.tsx`
@@ -644,6 +640,7 @@
 - `src/services/adaptivePuzzleService.test.ts`
 - `src/services/adaptivePuzzleService.ts`
 - `src/services/analyticsService.ts`
+- `src/services/annotationReprice.ts`
 - `src/services/annotationService.ts`
 - `src/services/arrowDoor.ts`
 - `src/services/arrowEngine.ts`
@@ -692,7 +689,6 @@
 - `src/services/coachPlayPersistence.test.ts`
 - `src/services/coachPlayPersistence.ts`
 - `src/services/coachPlaySession.ts`
-- `src/services/coachPrompts.test.ts`
 - `src/services/coachPrompts.ts`
 - `src/services/coachPrompts.verbosity.test.ts`
 - `src/services/coachSessionRouter.ts`
@@ -718,7 +714,9 @@
 - `src/services/dbService.ts`
 - `src/services/decisiveReason.recapture.test.ts`
 - `src/services/decisiveReason.ts`
+- `src/services/decisiveReason.turnDepth.test.ts`
 - `src/services/deliberation.ts`
+- `src/services/demotedRows.ts`
 - `src/services/discussionPractice.ts`
 - `src/services/drillVocabulary.test.ts`
 - `src/services/endgameProfileService.test.ts`
@@ -727,13 +725,14 @@
 - `src/services/engineDeltaLines.ts`
 - `src/services/enginePlanContext.test.ts`
 - `src/services/enginePlanContext.ts`
+- `src/services/exploredMoveGrade.test.ts`
+- `src/services/exploredMoveGrade.ts`
 - `src/services/explorerTeachLine.test.ts`
 - `src/services/explorerTeachLine.ts`
 - `src/services/falseAlarm.test.ts`
 - `src/services/falseAlarm.ts`
 - `src/services/findSquareService.ts`
 - `src/services/fixtureGames.test.tsx`
-- `src/services/flashcardService.ts`
 - `src/services/fromYourGamesService.test.ts`
 - `src/services/fromYourGamesService.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
@@ -755,7 +754,6 @@
 - `src/services/gamePhaseService.ts`
 - `src/services/gameReviewService.test.ts`
 - `src/services/gameStyleClassifier.ts`
-- `src/services/gamesService.ts`
 - `src/services/gemCrushLines.ts`
 - `src/services/groundedAnswer.engineReasoning.test.ts`
 - `src/services/groundedAnswer.teaching.test.ts`
@@ -862,6 +860,7 @@
 - `src/services/pieceOptions.ts`
 - `src/services/pieceRaceService.ts`
 - `src/services/pieceSweepService.ts`
+- `src/services/planArcFade.test.ts`
 - `src/services/playedMoveGrade.ts`
 - `src/services/playerIdentity.ts`
 - `src/services/playerRatingService.ts`
@@ -892,6 +891,9 @@
 - `src/services/pvPlayback.test.ts`
 - `src/services/pvPlayback.ts`
 - `src/services/ratingIdempotence.test.ts`
+- `src/services/recordReprice.measure.test.ts`
+- `src/services/recordReprice.test.ts`
+- `src/services/recordReprice.ts`
 - `src/services/recordRevs.gate.test.ts`
 - `src/services/refutedAlternative.test.ts`
 - `src/services/reviewFullData.ts`
@@ -923,6 +925,7 @@
 - `src/services/stockfishEngine.ts`
 - `src/services/streamingSpeaker.ts`
 - `src/services/strengthCalibrationService.ts`
+- `src/services/studentMovePrice.test.ts`
 - `src/services/studentNeedLoader.test.ts`
 - `src/services/studentNeedLoader.ts`
 - `src/services/studentRecord.ts`
@@ -948,7 +951,6 @@
 - `src/services/tacticVocabulary.test.ts`
 - `src/services/tacticVocabulary.ts`
 - `src/services/tacticalProfileService.ts`
-- `src/services/tacticalRead.test.ts`
 - `src/services/tacticsContextIdentity.test.ts`
 - `src/services/tacticsContextIdentity.ts`
 - `src/services/tacticsDetector.ts`
@@ -969,9 +971,6 @@
 - `src/services/voiceService.ts`
 - `src/services/walkthroughAdapter.test.ts`
 - `src/services/walkthroughAdapter.ts`
-- `src/services/walkthroughNarration.test.ts`
-- `src/services/walkthroughNarration.ts`
-- `src/services/walkthroughResolver.ts`
 - `src/services/weakSpotService.ts`
 - `src/services/weaknessAnalyzer.test.ts`
 - `src/services/weaknessAnalyzer.ts`
@@ -979,6 +978,7 @@
 - `src/services/weaknessLifecycle.ts`
 - `src/services/weaknessProvenance.test.ts`
 - `src/services/weaknessSignalLoader.green.test.ts`
+- `src/services/weaknessSpine.endingOnce.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/services/weaknessSpine.ts`
 - `src/services/whyBestMove.test.ts`
@@ -1217,7 +1217,6 @@
 - `src/services/coachGameEngine.test.ts`
 - `src/services/coachMemoryService.test.ts`
 - `src/services/coachPlayPersistence.test.ts`
-- `src/services/coachPrompts.test.ts`
 - `src/services/coachPrompts.verbosity.test.ts`
 - `src/services/coachTemplates.test.ts`
 - `src/services/coachTrainingService.test.ts`
@@ -1228,10 +1227,12 @@
 - `src/services/criticalMoment.frame.test.ts`
 - `src/services/criticalMoment.oneCount.test.ts`
 - `src/services/decisiveReason.recapture.test.ts`
+- `src/services/decisiveReason.turnDepth.test.ts`
 - `src/services/drillVocabulary.test.ts`
 - `src/services/endgameProfileService.test.ts`
 - `src/services/engineDeltaLines.test.ts`
 - `src/services/enginePlanContext.test.ts`
+- `src/services/exploredMoveGrade.test.ts`
 - `src/services/explorerTeachLine.test.ts`
 - `src/services/falseAlarm.test.ts`
 - `src/services/fixtureGames.test.tsx`
@@ -1288,6 +1289,7 @@
 - `src/services/openingVolumeFloor.test.ts`
 - `src/services/phaseScopedReview.test.ts`
 - `src/services/pieceOptions.test.ts`
+- `src/services/planArcFade.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/positionReadComposer.withhold.test.ts`
@@ -1300,6 +1302,8 @@
 - `src/services/puzzleService.test.ts`
 - `src/services/pvPlayback.test.ts`
 - `src/services/ratingIdempotence.test.ts`
+- `src/services/recordReprice.measure.test.ts`
+- `src/services/recordReprice.test.ts`
 - `src/services/recordRevs.gate.test.ts`
 - `src/services/refutedAlternative.test.ts`
 - `src/services/searchDepth.test.ts`
@@ -1312,6 +1316,7 @@
 - `src/services/srsOpeningService.test.ts`
 - `src/services/stockfishCache.test.ts`
 - `src/services/stockfishEngine.test.ts`
+- `src/services/studentMovePrice.test.ts`
 - `src/services/studentNeedLoader.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
 - `src/services/syncService.test.ts`
@@ -1323,7 +1328,6 @@
 - `src/services/tacticTypeBackfill.test.ts`
 - `src/services/tacticTypeUnification.test.ts`
 - `src/services/tacticVocabulary.test.ts`
-- `src/services/tacticalRead.test.ts`
 - `src/services/tacticsContextIdentity.test.ts`
 - `src/services/teachingEffectService.test.ts`
 - `src/services/themeService.test.ts`
@@ -1333,11 +1337,11 @@
 - `src/services/timeTroubleDetector.test.ts`
 - `src/services/variationTabs.hiddenLines.test.ts`
 - `src/services/walkthroughAdapter.test.ts`
-- `src/services/walkthroughNarration.test.ts`
 - `src/services/weaknessAnalyzer.test.ts`
 - `src/services/weaknessLifecycle.test.ts`
 - `src/services/weaknessProvenance.test.ts`
 - `src/services/weaknessSignalLoader.green.test.ts`
+- `src/services/weaknessSpine.endingOnce.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/services/whyBestMove.test.ts`
 - `src/services/wrongTryRefutation.test.ts`

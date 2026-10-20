@@ -26,7 +26,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `threatAnswer` (function) — 18 call sites
 - `src/services/deferredAnswers.realGame.test.ts:44`
 - `src/services/deferredAnswers.realGame.test.ts:48`
-- `src/services/learnBoardTeaching.ts:796`
+- `src/services/learnBoardTeaching.ts:783`
 - `src/services/threatAnswer.test.ts:9`
 - `src/services/threatAnswer.test.ts:82`
 - `src/services/threatAnswer.test.ts:95`

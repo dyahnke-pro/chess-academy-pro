@@ -22,7 +22,7 @@
 ## Exports and every call site
 
 ### `buildReviewMoveBriefing` (function) — 15 call sites
-- `src/services/coachFeatureService.ts:1799`
+- `src/services/coachFeatureService.ts:1798`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:11`
 - `src/services/reviewMoveBriefing.test.ts:23`

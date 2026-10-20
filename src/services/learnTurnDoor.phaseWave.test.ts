@@ -42,29 +42,29 @@ const ctx = { priorKeys: new Set<string>(), priorLead: null, green: null, beginn
 describe('decidePhaseWave — one door call per report, inside its turn', () => {
   it('decides the whole report once, as a phase wave of the live turn', () => {
     listen();
-    const d = decidePhaseWave(REPORT, MOVE8, { fen: MOVE8, ply: 13, moveCostCp: 0, priceSettled: true, price: null, midExchange: null, said: '', holds: new Set<string>() }, ctx);
+    const d = decidePhaseWave(REPORT, MOVE8, { fen: MOVE8, ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null, said: '', holds: new Set<string>() }, ctx);
     expect(d).not.toBeNull();
     expect(rows).toHaveLength(1);
-    expect(rows[0].turn).toEqual({ kind: 'phase', ply: 13, moveCostCp: 0, priceSettled: true, price: null, midExchange: null });
+    expect(rows[0].turn).toEqual({ kind: 'phase', ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null });
     // The pin and its stop are ONE claim about g4/f3/d1: one of them speaks.
     const pinLines = d!.pkg.kept.filter((f) => /pin/.test(f.text));
     expect(pinLines).toHaveLength(1);
   });
 
   it('a claim this game already spoke is not said again by the report', () => {
-    const d = decidePhaseWave(REPORT, MOVE8, { fen: MOVE8, ply: 13, moveCostCp: 0, priceSettled: true, price: null, midExchange: null, said: '', holds: new Set<string>() },
+    const d = decidePhaseWave(REPORT, MOVE8, { fen: MOVE8, ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null, said: '', holds: new Set<string>() },
       { ...ctx, priorKeys: new Set(['claim:prophylaxis:g4:idea', 'claim:pf:latent-pin:d1,f3,g4']) });
     expect(d!.pkg.kept.some((f) => /pin/.test(f.text))).toBe(false);
   });
 
   it('on the Bxf7+ turn the move-8 report is over: nothing of it speaks', () => {
-    const d = decidePhaseWave(REPORT, MOVE8, { fen: AFTER_BXF7, ply: 15, moveCostCp: 350, priceSettled: true, price: null, midExchange: null, said: 'Bxf7+ was a mistake.', holds: new Set<string>() }, ctx);
+    const d = decidePhaseWave(REPORT, MOVE8, { fen: AFTER_BXF7, ply: 15, slipCp: 350, priceSettled: true, price: null, midExchange: null, said: 'Bxf7+ was a mistake.', holds: new Set<string>() }, ctx);
     expect(d).toBeNull();
   });
 
   it('a costly turn holds the report behind its verdict (the phase wave sees the cost)', () => {
     listen();
-    const d = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 13, moveCostCp: 350, priceSettled: true, price: null, midExchange: null },
+    const d = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 13, slipCp: 350, priceSettled: true, price: null, midExchange: null },
       facts: REPORT.map((f) => ({ lane: 'phase' as const, text: f.text, fen: MOVE8, claims: f.claims, squares: f.squares, proof: f.proof, namesStudentMove: NAMES_NO_MOVE, role: 'teach' as const })),
       priorLead: null, green: null, beginner: false, turnHolds: new Set() });
     expect(d.pkg.spoken).toBe('');
@@ -74,7 +74,7 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
   it('the turn\'s own words count toward its average', () => {
     listen();
     const said = Array.from({ length: 85 }, () => 'word').join(' ');
-    const d = decidePhaseWave([REPORT[2]], MOVE8, { fen: MOVE8, ply: 13, moveCostCp: 0, priceSettled: true, price: null, midExchange: null, said, holds: new Set<string>() },
+    const d = decidePhaseWave([REPORT[2]], MOVE8, { fen: MOVE8, ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null, said, holds: new Set<string>() },
       { ...ctx, priorLead: { lane: 'threat', squares: ['e5'] } });
     expect(d!.pkg.spoken).toBe('');
     expect(rows.at(-1)?.heldWhy.phase).toBe('marginal');
@@ -96,7 +96,7 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
     const holds = new Set<string>();
     listen();
     // The late wave: a danger on the same squares leads, so the idea is held.
-    const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 13, moveCostCp: 49, priceSettled: true, price: null, midExchange: null }, facts: [
+    const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null }, facts: [
       { lane: 'threat', text: 'Their bishop can come to g4 and pin your knight on f3 to your queen.', fen: MOVE8, squares: ph!.squares, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE },
       { lane: 'prophylaxis', text: prophylaxisIdea(ph!).text, fen: MOVE8, squares: ph!.squares, claims: [read!.key], proof: NO_PROOF.withheld, namesStudentMove: NAMES_NO_MOVE },
     ], priorLead: null, green: null, beginner: false, turnHolds: holds });
@@ -104,12 +104,12 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
     expect(holds.has(prophylaxisKey('g4'))).toBe(true);
     // The phase wave of the same turn offers the stop-flaw clause: held.
     const d = decidePhaseWave([{ text: flaw!.text, claims: [prophylaxisKey(flaw!.threatTo)], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'stop-flaw' }],
-      MOVE8, { fen: MOVE8, ply: 13, moveCostCp: 49, priceSettled: true, price: null, midExchange: null, said: late.pkg.spoken, holds }, ctx);
+      MOVE8, { fen: MOVE8, ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null, said: late.pkg.spoken, holds }, ctx);
     expect(d!.pkg.spoken).toBe('');
     expect(rows.at(-1)?.heldWhy.phase).toBe('held-this-turn');
     // A new turn starts a fresh set, so the claim is free again.
     const next = decidePhaseWave([{ text: flaw!.text, claims: [prophylaxisKey(flaw!.threatTo)], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'stop-flaw' }],
-      MOVE8, { fen: MOVE8, ply: 13, moveCostCp: 0, priceSettled: true, price: null, midExchange: null, said: '', holds: new Set<string>() }, ctx);
+      MOVE8, { fen: MOVE8, ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null, said: '', holds: new Set<string>() }, ctx);
     expect(next!.pkg.spoken).not.toBe('');
   });
 
@@ -123,15 +123,15 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
     const fact = (text: string): PhaseFact => ({ text, claims, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'stock' });
     // Within one report: the sheet offered twice (two emitters) speaks once.
     const once = decidePhaseWave([fact(sheet!), fact(sheet!.replace(/^Taking stock as the endgame begins/, 'The endgame starts here, so take stock'))], fen,
-      { fen, ply: 71, moveCostCp: 0, priceSettled: true, price: null, midExchange: null, said: '', holds: new Set<string>() }, ctx);
+      { fen, ply: 71, slipCp: null, priceSettled: true, price: null, midExchange: null, said: '', holds: new Set<string>() }, ctx);
     expect(once!.pkg.kept).toHaveLength(1);
     // Across waves: the turn's late wave already said it — the phase copy drops.
-    const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 71, moveCostCp: 0, priceSettled: true, price: null, midExchange: null },
+    const late = coachTurn({ posture: 'learn', turn: { kind: 'late', ply: 71, slipCp: null, priceSettled: true, price: null, midExchange: null },
       facts: [{ lane: 'positionFacts', text: sheet!, fen, claims, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE }],
       priorLead: null, green: null, beginner: false, turnHolds: new Set() });
     expect(late.pkg.spoken).toContain('endgame');
     const prior = new Set(spokenSentenceKeys(late.pkg));
-    const again = decidePhaseWave([fact(sheet!)], fen, { fen, ply: 71, moveCostCp: 0, priceSettled: true, price: null, midExchange: null, said: late.pkg.spoken, holds: new Set<string>() }, { ...ctx, priorKeys: prior });
+    const again = decidePhaseWave([fact(sheet!)], fen, { fen, ply: 71, slipCp: null, priceSettled: true, price: null, midExchange: null, said: late.pkg.spoken, holds: new Set<string>() }, { ...ctx, priorKeys: prior });
     expect(again!.pkg.spoken).toBe('');
   });
 });

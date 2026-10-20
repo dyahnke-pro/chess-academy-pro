@@ -22,8 +22,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `openingFamily` (function) — 9 call sites
 - `src/components/Debug/OpeningBlundersPage.tsx:883`
-- `src/services/coachFeatureService.ts:3442`
-- `src/services/coachFeatureService.ts:3783`
+- `src/services/coachFeatureService.ts:3432`
+- `src/services/coachFeatureService.ts:3773`
 - `src/services/homeOpening.ts:114`
 - `src/services/homeOpening.ts:194`
 - `src/services/openingKey.test.ts:50`

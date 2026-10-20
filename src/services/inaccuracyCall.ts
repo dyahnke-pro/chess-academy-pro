@@ -232,7 +232,7 @@ const IRREGULAR_BASE: Record<string, string> = { has: 'have', is: 'be', does: 'd
  *  protect e5" — every clause-leading verb of a why-best reason, in the base
  *  form a conditional takes. Only a word that opens a clause and reads as a
  *  third-person verb changes; nouns ("the king and rook") are left alone. */
-function conditionalJobs(reason: string): string {
+export function conditionalJobs(reason: string): string {
   const base = (w: string): string => IRREGULAR_BASE[w]
     ?? (/(?:ch|sh|ss|x|z)es$/.test(w) ? w.slice(0, -2) : /[^s]s$/.test(w) ? w.slice(0, -1) : w);
   const VERB = /^(takes|wins|attacks|develops|repositions|grabs|protects|saves|forks|opens|pins|stakes|pushes|brings|marches|eyes|steps|lands|completes|castles|swings|prepares|supports|guards|breaks|checks|fights|puts|owns|goes|gives|promotes|plants|keeps|ends|piles|lines|starts|trades|threatens|covers|defends|adds|blocks|frees|clears|creates|removes|traps|skewers|delivers|hits|stops|has|is|does|makes|seizes|doubles|reroutes|retreats|recaptures|unpins|connects|activates|centralizes|improves|walks|kicks|chases)\b/;

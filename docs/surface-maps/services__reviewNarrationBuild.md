@@ -22,7 +22,7 @@
 - `src/components/Coach/CoachGameReview.tsx:662`
 - `src/components/Coach/CoachGameReview.tsx:1369`
 - `src/components/Coach/CoachGameReview.tsx:1698`
-- `src/components/Coach/CoachGameReview.tsx:2223`
+- `src/components/Coach/CoachGameReview.tsx:2217`
 
 ### `reviewMoveInputsFrom` (function) — 2 call sites
 - `src/components/Coach/CoachGameReview.tsx:626`

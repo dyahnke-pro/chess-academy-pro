@@ -3999,7 +3999,7 @@ export function studentOutpacesOpponentBuild(
 /** THE MATING PLY'S BEAT — one producer for every review builder. The
  *  student's own mate is named and explained; a mate against them points at
  *  the net. `studentMated` = the student delivered it. */
-function deliveredMateNarration(fenAfterMate: string, studentMated: boolean): string {
+export function deliveredMateNarration(fenAfterMate: string, studentMated: boolean): string {
   const head = studentMated
     ? 'And there it is — checkmate. You finished the game.'
     : "And that's checkmate — the game ends here. This is the position to sit with: trace the mating net back and find the move where it became unavoidable.";

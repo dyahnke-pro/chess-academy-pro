@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**146 lines · 6 exports · 5 importers · 6 tests · 0 audits**
+**145 lines · 6 exports · 5 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,7 +26,7 @@
 
 ### `refutedAlternative` (function) — 8 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/coachFeatureService.ts:3956`
+- `src/services/coachFeatureService.ts:3946`
 - `src/services/openingGenerator.ts:2115`
 - `src/services/refutedAlternative.test.ts:66`
 - `src/services/refutedAlternative.test.ts:92`
@@ -35,7 +35,7 @@
 - `src/services/refutedAlternative.test.ts:139`
 
 ### `candidatesForPosition` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3938`
+- `src/services/coachFeatureService.ts:3928`
 - `src/services/openingGenerator.ts:2112`
 - `src/services/refutedAlternative.test.ts:156`
 - `src/services/refutedAlternative.test.ts:158`

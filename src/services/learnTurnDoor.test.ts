@@ -6,8 +6,8 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { decideTurn, LEARN_LANES, STORY_LANE, type LearnLane } from './learnTurnDoor';
 import { costStakes, mateStakes } from './factStakes';
-import { countMethodTeaching, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA } from './learnBoardTeaching';
-import { readBoardAll } from './boardComputers';
+import { preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA } from './learnBoardTeaching';
+import { readBoard, readBoardAll } from './boardComputers';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 const TEACH = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
@@ -173,7 +173,7 @@ describe('WO-1b — one lead per turn', () => {
 
 describe('WO-1b — board descriptions wait for the turn\'s one decision', () => {
   it('the instant wave carries only urgent lanes; descriptions are deferred to the late wave', () => {
-    const start = TEACH_CODE.indexOf("const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, priceSettled: args.priceSettled, price: args.priceSearch, midExchange: midExchangeOn }, facts: [");
+    const start = TEACH_CODE.indexOf("const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, slipCp: args.slipCp, priceSettled: args.priceSettled, price: args.priceSearch, midExchange: midExchangeOn }, facts: [");
     const end = TEACH_CODE.indexOf('priorKeys: learnMemRef.current.spokenKeys, priorLead: null', start);
     const instantCall = TEACH_CODE.slice(start, end);
     for (const lane of ['commentary', 'behavior', 'positional', 'kingSafety']) {
@@ -444,7 +444,7 @@ describe('ONE DOOR — Learn is a posture of coachTurn (one coach P1, 2026-10-07
   it('the door decides exactly what the Learn ranking decided — nothing changed on the way in', async () => {
     const { coachTurn } = await import('./coachDecider');
     for (const beginner of [false, true]) {
-      const viaDoor = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 1, moveCostCp: null, priceSettled: true, price: null, midExchange: null }, facts: facts(), priorLead: null, green: null, beginner, turnHolds: new Set() });
+      const viaDoor = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 1, slipCp: null, priceSettled: true, price: null, midExchange: null }, facts: facts(), priorLead: null, green: null, beginner, turnHolds: new Set() });
       const direct = decideTurn(facts(), undefined, undefined, null, null, beginner);
       expect(viaDoor).toEqual(direct);
     }
@@ -615,12 +615,12 @@ describe('a good move always gets its own reason (David 2026-10-14)', () => {
     const B = 'rnb1kbnr/ppp1pppp/8/q7/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4';
     const first = decideTurn([
       { lane: 'strongChoice', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.description, claims: ['strong-choice:affirm'], text: "That's what strong players play here — it saves it from their knight on c3, and hits it back from a5.", fen: B, squares: [] },
-    ], undefined, undefined, null, null, false, { kind: 'late', ply: 6, moveCostCp: null, priceSettled: true, price: null, midExchange: null });
+    ], undefined, undefined, null, null, false, { kind: 'late', ply: 6, slipCp: null, priceSettled: true, price: null, midExchange: null });
     const prior = new Set(spokenSentenceKeys(first.pkg));
     const second = decideTurn([
       { lane: 'theirIntent', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'They play d4 first, to free their bishop on c1 for Bd2.', fen: B, squares: ['d4', 'd2'] },
       { lane: 'positionFacts', factKind: 'rule', role: 'teach', ownMoveReason: true, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'Your queen to a5 saves it from their knight on c3, and hits it back from a5.', fen: B },
-    ], undefined, prior, null, null, false, { kind: 'instant', ply: 6, moveCostCp: null, priceSettled: true, price: null, midExchange: null });
+    ], undefined, prior, null, null, false, { kind: 'instant', ply: 6, slipCp: null, priceSettled: true, price: null, midExchange: null });
     expect(first.pkg.kept.map((f) => f.text).join(' ')).toMatch(/saves it from their knight on c3/);
     expect(second.pkg.kept.map((f) => f.text).join(' ')).not.toMatch(/saves it from/);
     expect(second.pkg.kept.map((f) => f.text).join(' ')).toMatch(/free their bishop/);
@@ -708,8 +708,8 @@ describe('a plan trial whose lines were all graded away is not adopted (prod Lea
 describe('the choices speak by what they decide (A-plan P1, prod Learn 2026-10-17: choices 1 of 67 turns)', () => {
   const lead = { lane: 'movePoint' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'That gets your last piece into the game, so your rooks can connect.', fen: FEN, squares: ['c1', 'd2'] };
   it('count-before-you-take carries the exchange net and speaks beside an unrelated lead', () => {
-    const hint = countMethodTeaching('4k3/8/2p1p3/3n4/2P1PN2/8/8/4K3 w - - 0 1', 'w');
-    const cnt = hint ? { lane: hint.lane, namesStudentMove: NAMES_NO_MOVE, proof: hint.proof, text: hint.text, fen: FEN, squares: hint.squares, stakes: hint.stakes } : null;
+    const read = readBoard('countMethod', { fen: '4k3/8/2p1p3/3n4/2P1PN2/8/8/4K3 w - - 0 1', student: 'w' });
+    const cnt = read ? { lane: 'countMethod' as const, namesStudentMove: NAMES_NO_MOVE, proof: read.proof, text: read.text, fen: FEN, squares: read.squares, stakes: read.stakes } : null;
     expect(cnt?.stakes?.points).toBeGreaterThanOrEqual(1);
     expect(decideTurn([lead, cnt!]).spoke).toContain('countMethod');
   });

@@ -23,7 +23,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `threatProof` (function) — 7 call sites
-- `src/services/positionFacts.ts:1749`
+- `src/services/positionFacts.ts:1747`
 - `src/services/reviewFullData.ts:793`
 - `src/services/threatProof.test.ts:8`
 - `src/services/threatProof.test.ts:17`
@@ -32,14 +32,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/mateSaidOnce.gate.test.ts:30`
 
 ### `provenThreatLine` (function) — 3 call sites
-- `src/services/boardComputers.ts:344`
-- `src/services/boardComputers.ts:351`
+- `src/services/boardComputers.ts:345`
+- `src/services/boardComputers.ts:352`
 - `src/services/threatProof.test.ts:24`
 
 ### `threatStakes` (function) — 4 call sites
-- `src/services/boardComputers.ts:345`
-- `src/services/boardComputers.ts:352`
-- `src/services/coachDecider.ts:671`
+- `src/services/boardComputers.ts:346`
+- `src/services/boardComputers.ts:353`
+- `src/services/coachDecider.ts:674`
 - `src/services/learnBoardTeaching.ts:477`
 
 ## Tests

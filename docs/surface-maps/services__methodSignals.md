@@ -21,17 +21,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/methodSignals.test.ts:15`
 - `src/services/methodSignals.test.ts:21`
 - `src/services/methodSignals.test.ts:29`
-- `src/services/positionFacts.ts:985`
+- `src/services/positionFacts.ts:988`
 
 ### `forcingLine` (function) — 3 call sites
 - `src/services/methodSignals.test.ts:36`
 - `src/services/methodSignals.test.ts:39`
-- `src/services/positionFacts.ts:986`
+- `src/services/positionFacts.ts:989`
 
 ### `markSacrificeLine` (function) — 3 call sites
 - `src/services/methodSignals.test.ts:46`
 - `src/services/methodSignals.test.ts:50`
-- `src/services/positionFacts.ts:987`
+- `src/services/positionFacts.ts:990`
 
 ## Tests
 

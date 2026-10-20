@@ -583,19 +583,6 @@ export function splitPositionTeaching(fen: string, student: 'w' | 'b'): Teaching
   };
 }
 
-/** Count before you take (P3): an exchange square the count decides. */
-export function countMethodTeaching(fen: string, student: 'w' | 'b'): TeachingHint | null {
-  const m = countMethod(fen, student);
-  if (!m) return null;
-  return {
-    lane: 'countMethod', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.method, text: m.text, squares: [m.square], claims: ['count-method'],
-    // What the count decides, now: the exchange's net either way (A-plan P1 —
-    // unstaked, the door held it as an aside 4 of 4 times).
-    stakes: { points: Math.abs(m.net), plies: 0 },
-    event: { name: 'coach_count_method_taught', props: { surface: 'coach-teach' } },
-    arrows: [],
-  };
-}
 
 /** EVERY MOVE A LINE NAMES GETS ITS ARROW (G6; the walk 2026-09-30 drew
  *  arrows on 7 of 64 plies, and on 2026-10-02 still 60 of 143 named moves —
@@ -1080,7 +1067,7 @@ export function dangerAnswerLines(fen: string, student: 'w' | 'b', bestUci: stri
   if (st) out.push(st.text);
   const cm = checkMethodTeaching(fen, student, bestUci);
   if (cm) out.push(cm.text);
-  const cnt = countMethodTeaching(fen, student);
+  const cnt = countMethod(fen, student);
   if (cnt) out.push(cnt.text);
   const sp = splitPositionTeaching(fen, student);
   if (sp) out.push(sp.text);
@@ -1273,8 +1260,10 @@ export function boardTeacherPoint(fenBefore: string, san: string, fenNow: string
 /** A piece of yours under attack with no guard — rotated by move so the
  *  formula is never said three times running (David 2026-10-14). Every stem
  *  carries its reason: nothing guards it, so taking it costs them nothing. */
-export function hangingPieceLine(piece: string, sq: string, rot: number): string {
+export function hangingPieceLine(piece: string, sq: string, rot: number, still: boolean): string {
   const name = HIT_NAME[piece] ?? 'piece';
+  // Said once more after the student moved and left it (`looseClaim`).
+  if (still) return `Your ${name} on ${sq} is still hanging — nothing guards it yet.`;
   const stems = [
     `Careful — your ${name} on ${sq} is attacked and nothing's defending it.`,
     `Careful — your ${name} on ${sq} hangs: nothing guards it, so taking it costs them nothing.`,

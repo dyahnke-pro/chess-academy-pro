@@ -220,10 +220,12 @@ export interface LearnTurnRow {
 export interface PriceSearch { baseDepth: number; depthReached: number | null; searchMs: number; deepened: boolean }
 
 /** A Learn door call's place in the game (required at `coachTurn`). */
-/** `moveCostCp`: the engine's cost of the student's move this turn (null when
- *  ungraded) — REQUIRED, so every wave of a costly turn is a verdict turn
- *  whichever lane voices the grade (replay 2026-10-19, 8.Bxf7+: the grade
- *  spoke through a fundamental and a plan lecture rode beside it). */
+/** `slipCp`: the cost of the student's slip this turn SAYS (`saidSlipCp` —
+ *  the one graded, settled price), null when the grade is quiet — REQUIRED,
+ *  so every wave of a verdict turn holds behind the verdict whichever lane
+ *  voices it (replay 2026-10-19, 8.Bxf7+), and no wave holds for a verdict
+ *  the grade never says (OS-11 C4, 21.Rg5: raw 127cp held three lanes for a
+ *  verdict that never came). */
 export type LearnTurnTag = {
   /** A PHASE report is a wave of the turn it was read on, never a turn of its
    *  own (Smith-Morra replay 2026-10-19: decided sentence by sentence with no
@@ -231,7 +233,7 @@ export type LearnTurnTag = {
    *  turn's ply, cost and trade, so the verdict and trade holds see it. */
   kind: 'instant' | 'late' | 'phase';
   ply: number;
-  moveCostCp: number | null;
+  slipCp: number | null;
   /** REQUIRED: the move's one price is SETTLED (`MovePrice.settled`) — false
    *  while it straddles a band within the search's noise and is still
    *  deepening. An affirm never speaks on an unsettled price (10.Bf4: the

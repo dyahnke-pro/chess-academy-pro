@@ -38,7 +38,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from '../../services/motifLedger';
-import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, decidePhaseWave, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP, instantWaitsForVerdict, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
+import { FACT_ROLE, looseClaim, nextLooseSpells, plyOfFen, type FacetRole, buildVoicePackage, coachTurn, decidePhaseWave, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP, instantWaitsForVerdict, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
@@ -214,7 +214,7 @@ import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead
 import { scaleGap, packageForRegister } from '../../services/hintRegister';
 import { aimsOf, aimWalkableNow, joinEmerges, stepArc, EMPTY_ARC, type ArcState, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence } from '../../services/lookaheadPlan';
 import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
-import { backwardLook, slipSpoken, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf } from '../../services/backwardLook';
+import { backwardLook, saidSlipCp, slipSpoken, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf } from '../../services/backwardLook';
 import { learnFundamentalVerdict, learnHeldRecurrence, learnMistakeRecurrence } from '../../services/learnFundamentalNarration';
 import { FUNDAMENTAL_TAG, type FundamentalId } from '../../services/principleAttribution';
 import { FUNDAMENTAL_LABEL } from '../../services/fundamentalsCatalog';
@@ -288,7 +288,7 @@ import { dispatchCoachTurn, openTurnRead, awaitTurnRead, isComputedAnswer, conve
 import type { ResolvedStep } from '../../coach/requestSteps';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { computePositionFacts, clauseClaims, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
+import { computePositionFacts, clauseClaims, conceptInstanceKey, convertKey } from '../../services/positionFacts';
 import { gradePlayedMove, liveMovePrice, priceLabel, studentMovePrice, uciOfSan, type MovePrice, type PriceSearch } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
@@ -8210,7 +8210,7 @@ export function CoachTeachPage(): JSX.Element {
   /** The student move's turn as its waves stand: the board they read, its
    *  cost, its trade and what they have said — read by the phase wave, which
    *  is one more wave of this turn, never a turn of its own. */
-  const liveTurnRef = useRef<{ fen: string; ply: number; midExchange: string | null; cost: () => number | null; settled: () => boolean; price: () => PriceSearch | null; said: () => string } | null>(null);
+  const liveTurnRef = useRef<{ fen: string; ply: number; midExchange: string | null; slip: () => number | null; settled: () => boolean; price: () => PriceSearch | null; said: () => string } | null>(null);
   /** THE TURN'S HOLDS (`decideTurn`): one set per turn board, shared by the
    *  instant, late and phase waves; a new board starts a new turn and a fresh
    *  set, so a held claim is free again once the turn moves on. */
@@ -8244,7 +8244,7 @@ export function CoachTeachPage(): JSX.Element {
       // The turn the report was read on must still be the turn the student is
       // in: once they have moved, its board is gone and so is its wave.
       const live = t && samePosition(t.fen, liveFenRef.current ?? '')
-        ? { fen: t.fen, ply: t.ply, moveCostCp: t.cost(), priceSettled: t.settled(), price: t.price(), midExchange: t.midExchange, said: t.said(), holds: turnHoldsFor(t.fen) }
+        ? { fen: t.fen, ply: t.ply, slipCp: t.slip(), priceSettled: t.settled(), price: t.price(), midExchange: t.midExchange, said: t.said(), holds: turnHoldsFor(t.fen) }
         : null;
       const d = decidePhaseWave(facts, fen, live, { priorKeys: learnMemRef.current.spokenKeys, priorLead: prior, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile) });
       if (!d) {
@@ -8281,7 +8281,16 @@ export function CoachTeachPage(): JSX.Element {
       const boardNow = liveFenRef.current ?? fen;
       const lineArrows = keptLineArrows(keptLines(d.pkg, playerColor === 'white' ? 'w' : 'b'), boardNow, playerColor);
       if (lineArrows.length > 0) setArrows((prev) => (liveFenRef.current === boardNow ? uniqueArrows([...prev, ...lineArrows]) : prev));
-      await voiceService.speakPackage(d.pkg);
+      // QUEUED ON THE ONE SPEECH CHAIN, never over the line playing (OS-11 #7:
+      // the phase wave called the voice directly and `speakForced` cut a 50-word
+      // line after 0.18 s). A turn that is over by the time the chain reaches it
+      // is not spoken — its board is gone.
+      const turnBoard = live?.fen ?? fen;
+      const spoken = speechChainRef.current
+        .then(() => (samePosition(liveFenRef.current ?? '', turnBoard) ? voiceService.speakPackage(d.pkg) : undefined))
+        .catch(() => undefined);
+      speechChainRef.current = spoken;
+      await spoken;
       return d.pkg.spoken;
     },
     onReport: (text) => setMessages((prev) => [...prev, {
@@ -8373,8 +8382,8 @@ export function CoachTeachPage(): JSX.Element {
     moveFrom: string;
     moveTo: string;
     studentColor: 'white' | 'black';
-    /** The engine's cost of the student's move (null when ungraded). */
-    moveCostCp: number | null;
+    /** The slip this turn says (`saidSlipCp`), null when the grade is quiet. */
+    slipCp: number | null;
     /** The price is settled (`MovePrice.settled`); false holds every affirm. */
     priceSettled: boolean;
     /** How the price was searched (`MovePrice.search`), null before it lands. */
@@ -8455,6 +8464,13 @@ export function CoachTeachPage(): JSX.Element {
     let tacticLines: SpokenLine[] | undefined;
     /** The claim the tactic line makes — keys the speak-time ledger. */
     let tacticClaim: string | null = null;
+    /** THE LOOSE PIECES THE TACTIC AND THE THREAT LINES STATE (`looseKey`):
+     *  one claim per square, so "the only defender … can be taken" and
+     *  "your bishop on f4 is attacked and nothing's defending it" are one
+     *  fact to say-once, across waves and turns (duplicate map #3). */
+    const tacticLoose: string[] = [];
+    const threatClaims: string[] = [];
+    const loosePly = plyOfFen(args.fenAfterReply);
     /** The tactic whose definition may ride on `tacticLine` — attached only
      *  when no threat on the same move already carries one (one lecture per move). */
     let tacticTailType: string | null = null;
@@ -8559,6 +8575,12 @@ export function CoachTeachPage(): JSX.Element {
       const theirHanging = ((): Array<{ square: string; piece: string }> => {
         try { return findHangingBySee(args.fenAfterReply).filter((h) => h.color !== studentCC && AV[h.piece] !== undefined); } catch { return []; }
       })();
+      // THE SPELLS OF YOUR LOOSE PIECES (#4): undefended, or lost to the
+      // exchange (the must-defend read) — what `looseClaim` keys every warning on.
+      learnMemRef.current.looseSpells = nextLooseSpells(learnMemRef.current.looseSpells, [
+        ...myHanging,
+        ...((): Array<{ square: string; piece: string }> => { try { return findHangingBySee(args.fenAfterReply).filter((h) => h.color === studentCC); } catch { return []; } })(),
+      ], loosePly);
       // A tactic against the student outranks one loose piece — but not when
       // the piece DELIVERING it is itself hanging (his e2 queen "forking"
       // two pieces while en prise: the lesson is take it, not fear it).
@@ -8865,10 +8887,12 @@ export function CoachTeachPage(): JSX.Element {
         // bishop on b5 is attacked and nothing's defending it" — a trade on
         // offer, not a hanging piece). Same rule as the hit alert below.
         const worst = myHanging[0];
-        threatKey = `hang:${worst.piece}${worst.square}`;
+        const loose = looseClaim(worst.square, loosePly, learnMemRef.current.looseSpells);
+        threatKey = loose.key;
+        threatClaims.push(loose.key);
         threatProducer = { kind: 'hanging', square: worst.square };
         threatSquares = [worst.square];
-        threatLine = hangingPieceLine(worst.piece, worst.square, nextStem(learnMemRef.current, 'hanging'));
+        threatLine = hangingPieceLine(worst.piece, worst.square, nextStem(learnMemRef.current, 'hanging'), loose.still);
             threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0), learnMemRef.current.loudAlarms.size);
         const flip = args.fenAfterReply.split(' ');
         flip[1] = studentCC === 'w' ? 'b' : 'w';
@@ -8922,6 +8946,7 @@ export function CoachTeachPage(): JSX.Element {
         // is not followed by "their king on g8 has no escape square" in the
         // late package (1200 walk 2026-09-27, ply 37).
         if (myTacticType && tacticSquares.length > 0) tacticClaim = conceptInstanceKey(myTacticType, tacticSquares);
+        for (const sq of tacticSquares) if (myHanging.some((h) => h.square === sq)) tacticLoose.push(looseClaim(sq, loosePly, learnMemRef.current.looseSpells).key);
         const claimSaid = tacticClaim;
         // WHAT IT WINS: a forced mate, else the most an exchange on its squares
         // wins from their pieces, else a fork's second target.
@@ -8947,10 +8972,9 @@ export function CoachTeachPage(): JSX.Element {
       // MATE OUTRANKS EVERY THREAT: "Careful — your bishop on f4 is attacked"
       // beside a mate in one (hand walk 1200) sent the student to defend.
       if (tacticKey.startsWith('mate:')) { mateNamedThisTurn = true; threatLine = null; alertArrow = null; threatSquares = []; }
-      // The piece-under-fire warning shares ONE key with the composer's
-      // must-defend clause, so the two packages never say it twice (F28).
-      const mustHere = threatKey.startsWith('hang:') ? mustKey(threatSquares[0] ?? '', args.fenAfterReply) : null;
-      if (threatLine && (threatKey === learnMemRef.current.lastThreatKey || learnMemRef.current.spokenThreatLines.has(threatLine) || learnMemRef.current.spokenThreatLines.has(threatKey) || (mustHere !== null && standingRef.current.said.has(mustHere)))) {
+      // The piece-under-fire warning shares ONE claim with the composer's
+      // must-defend clause (`looseClaim`), so the door says it once (F28).
+      if (threatLine && (threatKey === learnMemRef.current.lastThreatKey || learnMemRef.current.spokenThreatLines.has(threatLine) || learnMemRef.current.spokenThreatLines.has(threatKey))) {
         threatLine = null;
         alertArrow = null;
         threatSquares = [];
@@ -8959,7 +8983,6 @@ export function CoachTeachPage(): JSX.Element {
         learnMemRef.current.spokenThreatLines.add(threatLine);
         learnMemRef.current.spokenThreatLines.add(threatKey);
         if (isLoudAlarm(threatLine)) learnMemRef.current.loudAlarms.add(threatKey);
-        if (mustHere) standingRef.current.remember(mustHere);
         // THE RECORD DECIDES HOW LOUD (OS-4): red or grey speaks in full; green
         // + simple is SILENT — no voice and no arrow (David 2026-10-20: "if it's
         // something I should already know to identify, like a simple one move
@@ -9512,10 +9535,10 @@ export function CoachTeachPage(): JSX.Element {
         return readBoard('lastTimeHere', { fenBefore: b.fen(), playedSan: h[h.length - 2], rows, currentGameId: learnMemRef.current.gameId });
       } catch { return null; }
     })();
-    const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, priceSettled: args.priceSettled, price: args.priceSearch, midExchange: midExchangeOn }, facts: [
+    const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, slipCp: args.slipCp, priceSettled: args.priceSettled, price: args.priceSearch, midExchange: midExchangeOn }, facts: [
       ...(gemLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
-      ...(tacticLine ? [{ lane: 'tactic' as const, namesStudentMove: tacticLines?.[0] ? studentMovesInLine(tacticLines[0].fen, tacticLines[0].sans, studentCC, args.fenAfterReply) : NAMES_NO_MOVE, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
-      ...(threatLine ? [{ namesStudentMove: threatNames, lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
+      ...(tacticLine ? [{ lane: 'tactic' as const, namesStudentMove: tacticLines?.[0] ? studentMovesInLine(tacticLines[0].fen, tacticLines[0].sans, studentCC, args.fenAfterReply) : NAMES_NO_MOVE, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim || tacticLoose.length ? [...(tacticClaim ? [tacticClaim] : []), ...tacticLoose] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
+      ...(threatLine ? [{ namesStudentMove: threatNames, lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), ...(threatClaims.length ? { claims: threatClaims } : {}), stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
       ...(lastHereRead ? [{ namesStudentMove: NAMES_NO_MOVE, lane: lastHereRead.key.startsWith('last-here:same:') ? 'sameAsLastTime' as const : 'lastTimeHere' as const, text: lastHereRead.text, fen: lastHereRead.fen ?? args.fenAfterReply, claims: [lastHereRead.key], proof: lastHereRead.proof }] : []),
       ...(bookMoveRead ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'bookMove' as const, text: bookMoveRead.text, fen: bookMoveRead.fen ?? args.fenAfterReply, squares: bookMoveRead.squares, claims: [bookMoveRead.key], role: 'teach' as const, proof: bookMoveRead.proof, skill: FUNDAMENTAL_TAG['left-book-early'] }] : []),
       ...(announceLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name, claims: announceClaims, ...(announceSquares.length ? { squares: announceSquares } : {}) }] : []),
@@ -9848,6 +9871,13 @@ export function CoachTeachPage(): JSX.Element {
     // deepening a read near a band edge — the door holds every affirm until
     // it is (an affirm can wait; the verdict speaks on the settled number).
     let studentPriceSettled = true;
+    // THE SLIP THIS TURN SAYS (OS-11 C4): the one graded, settled price's cost
+    // when the coach voices it (`saidSlipCp`), else null. Every wave's door
+    // reads this — never the raw cost — so no wave holds for a verdict the
+    // grade never says. Cleared once the late wave has decided no verdict.
+    let turnSlipCp: number | null = null;
+    // Whether the pre-move fan graded the move a fault (the early-read cue).
+    let studentGradeFault = false;
     // A found move's earned praise, said inside the found-move lane's own
     // sentence when that lane speaks (`placePraise`) — never on its own.
     let foundPraise: string | null = null;
@@ -9914,7 +9944,7 @@ export function CoachTeachPage(): JSX.Element {
           studentColor: playerColor === 'white' ? 'w' : 'b',
           depth: COACH_TURN_DEPTH,
         });
-        if (grade) studentCpLoss = grade.cpLossCp;
+        if (grade) { studentCpLoss = grade.cpLossCp; studentGradeFault = grade.fault; }
         // Off the fan, or unsettled there: the price decides, and until it
         // lands nothing affirms the move.
         else if (!preStudentRead.isMate) studentPriceSettled = false;
@@ -10121,7 +10151,7 @@ export function CoachTeachPage(): JSX.Element {
         const priceRead: Promise<MovePrice | null> = preStudentRead && !preStudentRead.isMate
           ? studentMovePrice(fenBefore, `${move.from}${move.to}${move.promotion ?? ''}`, preStudentRead, COACH_TURN_DEPTH)
           : Promise.resolve(null);
-        const verdictUrgent = !!preStudentRead && !studentMoveInBook && (studentCpLoss === null || studentCpLoss >= VERDICT_TURN_CP);
+        const verdictUrgent = !!preStudentRead && !studentMoveInBook && (studentCpLoss === null || studentGradeFault);
         // THE BOARD BETWEEN THE TWO MOVES, read once and used twice (see below),
         // sent BEFORE the post-reply warm read on every turn (Learn speed,
         // 2026-10-20). It used to wait behind the 2.5 s warm read unless the move
@@ -10617,6 +10647,9 @@ export function CoachTeachPage(): JSX.Element {
                       // The positional read's ideas count as said too — one
                       // passer, one claim (fresh-game walk 2026-09-27).
                       alreadySaid: new Set([...standingRef.current.said, ...positionalSaidRef.current]),
+                      // The spells of the student's loose pieces — the must-defend
+                      // clause keys on them like the threat line (`looseClaim`).
+                      looseSpells: learnMemRef.current.looseSpells,
                       // The coach's reply that produced this board — so the
                       // composer can tell a real threat from a bluff.
                       ...(m ? { opponentLastMove: { fenBefore: move.fen, san: m.san } } : {}),
@@ -11056,7 +11089,7 @@ export function CoachTeachPage(): JSX.Element {
             // This turn, for the phase wave (`liveTurnRef`).
             liveTurnRef.current = {
               fen: fenAfterReply, ply: move.history.length, midExchange: pendingRecapture([...move.history, reply]),
-              cost: () => studentCpLoss, settled: () => studentPriceSettled, price: () => studentPriceSearch, said: () => instantSpokenText,
+              slip: () => turnSlipCp, settled: () => studentPriceSettled, price: () => studentPriceSearch, said: () => instantSpokenText,
             };
             /** The claims of what this turn SPOKE — the book chip reads them. */
             const spokenClaims: string[] = [];
@@ -11212,6 +11245,7 @@ export function CoachTeachPage(): JSX.Element {
               if (searched !== null) {
                 studentCpLoss = searched.costCp;
                 studentPriceSettled = searched.settled;
+                turnSlipCp = studentMoveInBook ? null : saidSlipCp(searched, { studentColor: playerColor, fenBefore, playedSan: move.san, bestSan: preStudentRead?.bestMove ? uciMoveToSan(preStudentRead.bestMove, fenBefore) : null, historySans: move.history });
                 studentPriceSearch = searched.search ?? null;
                 // A fan too shallow to grade the move (`gradePlayedMove`) left
                 // the live grade and the heard verdict unwritten: they take the
@@ -11276,7 +11310,7 @@ export function CoachTeachPage(): JSX.Element {
                     moveFrom: im.from,
                     moveTo: im.to,
                     studentColor: playerColor,
-                    moveCostCp: studentCpLoss,
+                    slipCp: turnSlipCp,
                     priceSettled: studentPriceSettled,
                     priceSearch: studentPriceSearch,
                   });
@@ -11421,12 +11455,18 @@ export function CoachTeachPage(): JSX.Element {
                 // The late wave speaks on the price as it SETTLED (deepened
                 // within the verdict's budget), never the instant wave's guess.
                 const settledPrice = await priceRead;
-                if (settledPrice) { studentCpLoss = settledPrice.costCp; studentPriceSettled = settledPrice.settled; studentPriceSearch = settledPrice.search ?? null; }
+                if (settledPrice) {
+                  studentCpLoss = settledPrice.costCp; studentPriceSettled = settledPrice.settled; studentPriceSearch = settledPrice.search ?? null;
+                  turnSlipCp = studentMoveInBook ? null : saidSlipCp(settledPrice, { studentColor: playerColor, fenBefore, playedSan: move.san, bestSan: preStudentRead?.bestMove ? uciMoveToSan(preStudentRead.bestMove, fenBefore) : null, historySans: move.history });
+                }
                 if (liveFenRef.current !== fenAfterReply) return;
                 // ONE LATE WAVE, SPOKEN (OS-18): the door decides it and the voice says it
                 // with its marks. Called for the verdict the moment it is built, then for
                 // everything else once the turn's reads are in.
                 const speakLateWave = (pending: NonNullable<typeof pendingVoiceRef.current>, lines: NonNullable<typeof pendingVoiceRef.current>['lines']): void => {
+                  // The verdict is decided by now: a turn that called none holds
+                  // nothing behind one, in this wave or the phase wave after it.
+                  if (!mistakeCalledThisTurn) turnSlipCp = null;
                   // `instantSpokenText` is everything Track A has said on this
                   // turn — the event line and the instant package. Handing it
                   // over is what stops the late package repeating a sentence the
@@ -11438,7 +11478,7 @@ export function CoachTeachPage(): JSX.Element {
                   // the per-game novelty set, not by a number.
                   const lateDecision = coachTurn({
                     posture: 'learn',
-                    turn: { kind: 'late', ply: move.history.length, moveCostCp: studentCpLoss, priceSettled: studentPriceSettled, price: studentPriceSearch, midExchange: pendingRecapture([...move.history, reply]) },
+                    turn: { kind: 'late', ply: move.history.length, slipCp: turnSlipCp, priceSettled: studentPriceSettled, price: studentPriceSearch, midExchange: pendingRecapture([...move.history, reply]) },
                     facts: lines
                       // A threat alert already said a tactic is on the board;
                       // "it has turned sharp — there is a tactic" beside it is

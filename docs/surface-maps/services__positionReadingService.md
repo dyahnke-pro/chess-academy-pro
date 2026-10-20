@@ -174,7 +174,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/bookMoveWhy.ts:288`
 - `src/services/bookMoveWhy.ts:355`
 - `src/services/bookMoveWhy.ts:374`
-- `src/services/coachFeatureService.ts:3058`
+- `src/services/coachFeatureService.ts:3048`
 - `src/services/groundedAnswer.ts:7375`
 - `src/services/moveIntent.ts:310`
 - `src/services/moveIntent.ts:327`
@@ -235,8 +235,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakeNarration.ts:587`
 - `src/services/opponentMovePurpose.ts:23`
 - `src/services/playCommentary.ts:895`
-- `src/services/pvPlayback.ts:449`
-- `src/services/pvPlayback.ts:498`
+- `src/services/pvPlayback.ts:447`
+- `src/services/pvPlayback.ts:496`
 - `src/services/thinkingExchangeChain.ts:115`
 - `src/services/threatAnswer.ts:167`
 
@@ -249,13 +249,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/structureReads.ts:132`
 
 ### `signedCaptureRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11996`
-- `src/components/Coach/CoachTeachPage.tsx:12057`
+- `src/components/Coach/CoachTeachPage.tsx:12035`
+- `src/components/Coach/CoachTeachPage.tsx:12096`
 - `src/services/principleAttribution.ts:341`
 - `src/services/principleAttribution.ts:804`
 
 ### `legalSeeGainFor` (function) — 86 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10833`
+- `src/components/Coach/CoachTeachPage.tsx:10865`
 - `src/services/arrowDoor.ts:175`
 - `src/services/bluffDetector.ts:53`
 - `src/services/boardState.ts:42`
@@ -286,8 +286,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/kickMap.ts:54`
 - `src/services/kingAttackReads.ts:145`
 - `src/services/kingAttackReads.ts:501`
-- `src/services/learnBoardTeaching.ts:841`
-- `src/services/learnBoardTeaching.ts:1210`
+- `src/services/learnBoardTeaching.ts:828`
+- `src/services/learnBoardTeaching.ts:1197`
 - `src/services/learnTurnDoor.test.ts:264`
 - `src/services/learnWalkOct3c.test.ts:60`
 - `src/services/material.ts:44`
@@ -369,7 +369,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `signedLegalSeeFor` (function) — 28 call sites
 - `src/components/Coach/CoachTeachPage.tsx:869`
-- `src/components/Coach/CoachTeachPage.tsx:8708`
+- `src/components/Coach/CoachTeachPage.tsx:8730`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -398,11 +398,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tradeQuality.ts:173`
 
 ### `takingTheAttackerAnswers` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8740`
+- `src/components/Coach/CoachTeachPage.tsx:8762`
 - `src/services/boardUrgency.ts:59`
 - `src/services/groundedAnswer.ts:643`
 - `src/services/methodSignals.ts:46`
-- `src/services/positionFacts.ts:1726`
+- `src/services/positionFacts.ts:1722`
 - `src/services/takingTheAttacker.test.ts:17`
 - `src/services/takingTheAttacker.test.ts:22`
 - `src/services/takingTheAttacker.test.ts:26`
@@ -437,9 +437,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:964`
 - `src/services/theirMoveCost.ts:35`
 
-### `findHangingBySee` (function) — 25 call sites
+### `findHangingBySee` (function) — 26 call sites
 - `src/coach/chatTurnAnswers.ts:172`
-- `src/components/Coach/CoachTeachPage.tsx:8560`
+- `src/components/Coach/CoachTeachPage.tsx:8576`
+- `src/components/Coach/CoachTeachPage.tsx:8582`
 - `src/services/computedMaterialTruth.corpus.test.ts:216`
 - `src/services/computedMaterialTruth.corpus.test.ts:226`
 - `src/services/conversionMethod.ts:64`
@@ -612,7 +613,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `structureTransfer` (function) — 7 call sites
 - `src/services/groundedAnswer.ts:6929`
-- `src/services/learnBoardTeaching.ts:1439`
+- `src/services/learnBoardTeaching.ts:1428`
 - `src/services/positionReadingService.test.ts:972`
 - `src/services/positionReadingService.test.ts:973`
 - `src/services/positionReadingService.test.ts:974`

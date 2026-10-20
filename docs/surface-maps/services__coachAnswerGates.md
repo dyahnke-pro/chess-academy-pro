@@ -61,13 +61,13 @@
 - `src/services/openingGenerator.ts:802`
 
 ### `gradeNarrationText` (function) — 43 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10364`
-- `src/components/Coach/CoachTeachPage.tsx:10366`
-- `src/components/Coach/CoachTeachPage.tsx:10372`
-- `src/components/Coach/CoachTeachPage.tsx:10394`
-- `src/components/Coach/CoachTeachPage.tsx:10417`
-- `src/components/Coach/CoachTeachPage.tsx:10452`
-- `src/components/Coach/CoachTeachPage.tsx:10912`
+- `src/components/Coach/CoachTeachPage.tsx:10393`
+- `src/components/Coach/CoachTeachPage.tsx:10395`
+- `src/components/Coach/CoachTeachPage.tsx:10401`
+- `src/components/Coach/CoachTeachPage.tsx:10423`
+- `src/components/Coach/CoachTeachPage.tsx:10446`
+- `src/components/Coach/CoachTeachPage.tsx:10481`
+- `src/components/Coach/CoachTeachPage.tsx:10944`
 - `src/services/authoredOpeningNotes.test.ts:257`
 - `src/services/coachAnswerGates.test.ts:107`
 - `src/services/coachAnswerGates.test.ts:117`
@@ -99,11 +99,11 @@
 - `src/services/selectedNotes.report.test.ts:92`
 - `src/services/selectedNotes.report.test.ts:200`
 - `src/services/viennaNarrationExample.report.test.ts:107`
-- `src/services/voicePackage.ts:302`
-- `src/services/voicePackage.ts:304`
-- `src/services/voicePackage.ts:318`
-- `src/services/voicePackage.ts:332`
-- `src/services/voicePackage.ts:341`
+- `src/services/voicePackage.ts:307`
+- `src/services/voicePackage.ts:309`
+- `src/services/voicePackage.ts:323`
+- `src/services/voicePackage.ts:337`
+- `src/services/voicePackage.ts:346`
 
 ### `applyCandidateArrows` (function) — 5 call sites
 - `src/coach/coachService.ts:2310`

@@ -217,7 +217,7 @@ export async function settledMovePrice(args: {
   const budgetMs = args.budgetMs ?? PRICE_DEEPEN_BUDGET_MS;
   // One search, from the caller's scorer or its own (the live door holds the
   // engine for the student's question; the record re-price brings a worker).
-  const one: OneSearch = args.searchOnce ?? ((a) => moveScoresOneSearch({ ...a, scorer: args.scorer as MoveScorer }));
+  const one: OneSearch = args.searchOnce ?? ((a) => moveScoresOneSearch({ ...a, scorer: args.scorer }));
   // HOW IT WAS SEARCHED, carried on the price (the Learn turn row reads it):
   // the verdict's wait on a band edge is this deepening, and it was invisible.
   const askedAt = Date.now();

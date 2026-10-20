@@ -123,8 +123,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `proofCut` (function) — 40 call sites
-- `src/services/coachFeatureService.ts:4085`
-- `src/services/coachFeatureService.ts:4088`
+- `src/services/coachFeatureService.ts:4075`
+- `src/services/coachFeatureService.ts:4078`
 - `src/services/gemCrushLines.ts:266`
 - `src/services/gemFinder.ts:244`
 - `src/services/giftedMaterialIsNotWon.test.ts:14`
@@ -171,7 +171,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/giftedMaterialIsNotWon.test.ts:57`
 
 ### `describeProofResult` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:4057`
+- `src/services/coachFeatureService.ts:4047`
 - `src/services/decisiveReason.ts:133`
 - `src/services/lineProof.test.ts:27`
 - `src/services/pieceOptions.ts:137`
@@ -203,7 +203,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.horizon.test.ts:36`
 - `src/services/exchangeLedger.test.ts:254`
 - `src/services/groundedAnswer.ts:1987`
-- `src/services/positionFacts.ts:633`
+- `src/services/positionFacts.ts:636`
 - `src/services/reviewFullData.ts:793`
 
 ## Tests

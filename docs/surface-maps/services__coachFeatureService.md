@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5734 lines · 29 exports · 56 importers · 70 tests · 4 audits**
+**5724 lines · 30 exports · 56 importers · 70 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -149,7 +149,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegments` (function) — 102 call sites
+### `buildReviewSegments` (function) — 101 call sites
 - `src/components/Coach/CoachGameReview.tsx:1839`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
@@ -181,8 +181,7 @@
 - `src/services/coachFeatureService.openingStory.test.ts:138`
 - `src/services/coachFeatureService.openingStory.test.ts:152`
 - `src/services/coachFeatureService.openingStory.test.ts:177`
-- `src/services/coachFeatureService.openingStory.test.ts:208`
-- `src/services/coachFeatureService.openingStory.test.ts:224`
+- `src/services/coachFeatureService.openingStory.test.ts:204`
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.planChange.test.ts:36`
 - `src/services/coachFeatureService.planChange.test.ts:48`
@@ -268,6 +267,9 @@
 - `src/services/opponentBuildMoot.test.ts:20`
 - `src/services/opponentBuildMoot.test.ts:21`
 
+### `deliveredMateNarration` (function) — 1 call site
+- `src/test/mateSaidOnce.gate.test.ts:69`
+
 ### `frameOpeningForStudent` (function) — 9 call sites
 - `src/components/Coach/CoachGameReview.tsx:4276`
 - `src/services/coachFeatureService.test.ts:792`
@@ -295,10 +297,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8306`
-- `src/components/Coach/CoachTeachPage.tsx:8402`
-- `src/components/Coach/CoachTeachPage.tsx:11058`
-- `src/components/Coach/CoachTeachPage.tsx:11441`
+- `src/components/Coach/CoachTeachPage.tsx:8315`
+- `src/components/Coach/CoachTeachPage.tsx:8411`
+- `src/components/Coach/CoachTeachPage.tsx:11090`
+- `src/components/Coach/CoachTeachPage.tsx:11480`
 - `src/services/coachFeatureService.test.ts:907`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/utils/justCaptured.test.ts:20`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**196 lines · 13 exports · 29 importers · 6 tests · 1 audits**
+**196 lines · 13 exports · 30 importers · 7 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -41,6 +41,7 @@
 - `src/services/teachingLayers.test.ts`
 - `src/services/thinkAloud.ts`
 - `src/services/threatProof.ts`
+- `src/services/verdictTurnGrade.test.ts`
 
 ## Exports and every call site
 
@@ -54,14 +55,14 @@
 - `src/services/backwardLook.ts:188`
 - `src/services/backwardLook.ts:367`
 - `src/services/backwardLook.ts:406`
-- `src/services/coachFeatureService.ts:2081`
+- `src/services/coachFeatureService.ts:2080`
 - `src/services/exchangeIdeas.ts:290`
 - `src/services/exchangeIdeas.ts:556`
 - `src/services/gameEndReads.ts:114`
 - `src/services/gameEndReads.ts:282`
 - `src/services/kingAttackReads.ts:153`
 - `src/services/learnBoardTeaching.tacticStakes.test.ts:7`
-- `src/services/learnBoardTeaching.ts:1421`
+- `src/services/learnBoardTeaching.ts:1410`
 - `src/services/learnPhaseFocus.test.ts:40`
 - `src/services/learnPhaseFocus.test.ts:59`
 - `src/services/learnTurnDoor.test.ts:491`
@@ -91,11 +92,11 @@
 - `src/services/factStakes.test.ts:51`
 - `src/services/factStakes.test.ts:52`
 - `src/services/factStakes.test.ts:55`
-- `src/services/learnTurnDoor.ts:603`
-- `src/services/learnTurnDoor.ts:668`
+- `src/services/learnTurnDoor.ts:605`
+- `src/services/learnTurnDoor.ts:671`
 - `src/services/reviewFacetRank.ts:523`
 
-### `costStakes` (function) — 39 call sites
+### `costStakes` (function) — 40 call sites
 - `src/services/backwardLook.ts:189`
 - `src/services/backwardLook.ts:407`
 - `src/services/factStakes.test.ts:61`
@@ -113,16 +114,16 @@
 - `src/services/learnTurnDoor.test.ts:667`
 - `src/services/learnTurnDoor.test.ts:848`
 - `src/services/learnTurnDoor.test.ts:858`
-- `src/services/learnTurnDoor.ts:668`
+- `src/services/learnTurnDoor.ts:671`
 - `src/services/orderReads.ts:103`
 - `src/services/pawnJudgement.ts:165`
 - `src/services/pawnJudgement.ts:350`
 - `src/services/planJudgement.ts:47`
 - `src/services/planJudgement.ts:91`
 - `src/services/planJudgement.ts:140`
-- `src/services/positionFacts.ts:1622`
-- `src/services/positionFacts.ts:1770`
-- `src/services/positionFacts.ts:1900`
+- `src/services/positionFacts.ts:1618`
+- `src/services/positionFacts.ts:1768`
+- `src/services/positionFacts.ts:1898`
 - `src/services/reviewFullData.ts:665`
 - `src/services/reviewFullData.ts:689`
 - `src/services/reviewFullData.ts:1263`
@@ -135,14 +136,15 @@
 - `src/services/squareJudgement.ts:428`
 - `src/services/teachingLayers.test.ts:104`
 - `src/services/teachingLayers.test.ts:107`
+- `src/services/verdictTurnGrade.test.ts:27`
 
 ### `exchangeStakes` (function) — 11 call sites
 - `src/services/factStakes.test.ts:26`
 - `src/services/factStakes.test.ts:29`
 - `src/services/factStakes.test.ts:33`
 - `src/services/learnBoardTeaching.tacticStakes.test.ts:14`
-- `src/services/learnBoardTeaching.ts:1422`
-- `src/services/positionFacts.ts:1830`
+- `src/services/learnBoardTeaching.ts:1411`
+- `src/services/positionFacts.ts:1828`
 - `src/services/reviewFullData.ts:828`
 - `src/services/reviewFullData.ts:869`
 - `src/services/reviewFullData.ts:903`
@@ -153,15 +155,15 @@
 - `src/services/factStakes.test.ts:37`
 - `src/services/factStakes.test.ts:38`
 - `src/services/factStakes.test.ts:39`
-- `src/services/learnBoardTeaching.ts:1425`
+- `src/services/learnBoardTeaching.ts:1414`
 - `src/services/opponentMoveReads.ts:205`
 - `src/services/opponentMoveReads.ts:207`
-- `src/services/positionFacts.ts:1692`
+- `src/services/positionFacts.ts:1688`
 - `src/services/reviewFullData.ts:821`
 - `src/services/reviewFullData.ts:924`
 
 ### `piecesOn` (function) — 3 call sites
-- `src/services/learnBoardTeaching.ts:1425`
+- `src/services/learnBoardTeaching.ts:1414`
 - `src/services/reviewFullData.ts:821`
 - `src/services/reviewFullData.ts:924`
 
@@ -170,8 +172,8 @@
 - `src/services/factStakes.test.ts:44`
 - `src/services/factStakes.test.ts:45`
 - `src/services/factStakes.test.ts:46`
-- `src/services/positionFacts.ts:1639`
-- `src/services/positionFacts.ts:1650`
+- `src/services/positionFacts.ts:1635`
+- `src/services/positionFacts.ts:1646`
 
 ### `isScenicPawnPin` (function) — 5 call sites
 - `src/services/factStakes.test.ts:112`
@@ -181,7 +183,7 @@
 - `src/services/reviewFullData.ts:833`
 
 ### `isSacrifice` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:4276`
+- `src/services/coachFeatureService.ts:4266`
 - `src/services/factStakes.test.ts:131`
 - `src/services/factStakes.test.ts:133`
 - `src/services/factStakes.test.ts:141`
@@ -199,6 +201,7 @@
 - `src/services/learnTurnDoor.test.ts`
 - `src/services/mateStakesSeat.gate.test.ts`
 - `src/services/teachingLayers.test.ts`
+- `src/services/verdictTurnGrade.test.ts`
 
 ## Audits that reach it
 

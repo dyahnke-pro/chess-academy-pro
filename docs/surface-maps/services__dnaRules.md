@@ -42,7 +42,7 @@
 - `src/services/dnaDoor.test.ts:12`
 - `src/services/dnaRules.test.ts:45`
 - `src/services/dnaRules.test.ts:48`
-- `src/services/voicePackage.ts:311`
+- `src/services/voicePackage.ts:316`
 
 ### `dnaPass` (function) — 9 call sites
 - `src/coach/coachService.ts:2451`

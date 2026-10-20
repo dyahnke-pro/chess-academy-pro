@@ -32,7 +32,7 @@ import { Chess } from 'chess.js';
 import { findConcession, findStudentDrawback } from './concessionBeat';
 import { inaccuracySpeaks } from './inaccuracyVoice';
 import { callInaccuracy, callInaccuracyDetailed, errorWhyFor, type InaccuracyDecline, type PriorMove } from './inaccuracyCall';
-import type { SameSearchScores } from './moveCost';
+import type { MovePrice, SameSearchScores } from './moveCost';
 export { priorMoveLeadingTo } from './inaccuracyCall';
 import { describeConcessions } from './reviewTeachingPoints';
 import { INACCURACY_CP, BLUNDER_CP } from './engineConstants';
@@ -503,4 +503,20 @@ export function slipSpoken(args: Parameters<typeof moverQuality>[0] & {
 }): boolean {
   if (moverQuality(args) !== 'inaccuracy') return true;
   return inaccuracySpeaks({ fenBefore: args.fenBefore, playedSan: args.playedSan, bestSan: args.bestSan, historySans: args.historySans, ply: args.historySans.length - 1 });
+}
+
+/** THE SLIP THIS TURN SAYS, AS ONE NUMBER (OS-11 C4, 2026-10-20). The cost of
+ *  the student's move when its ONE price is settled and grades to a slip the
+ *  coach voices (`slipSpoken`); null when it is not a slip, the record keeps
+ *  an inaccuracy quiet, or the price is unsettled or unpriced. The turn door
+ *  weighs a verdict turn by this and nothing else: a raw "cost >= 100" held
+ *  lanes for a verdict the grade never said (21.Rg5: 127cp at -4 grades quiet,
+ *  and the turn spoke nothing). */
+export function saidSlipCp(price: MovePrice | null, ctx: {
+  studentColor: 'white' | 'black'; fenBefore: string; playedSan: string; bestSan: string | null; historySans: readonly string[];
+}): number | null {
+  if (!price || !price.settled || !price.scores || price.costCp <= 0) return null;
+  const quality = moverQuality({ cpLoss: price.costCp, scores: price.scores, studentColor: ctx.studentColor });
+  if (quality !== 'inaccuracy' && quality !== 'mistake' && quality !== 'blunder') return null;
+  return slipSpoken({ cpLoss: price.costCp, scores: price.scores, ...ctx }) ? price.costCp : null;
 }

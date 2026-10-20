@@ -62,14 +62,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:24`
 
 ### `identityFor` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2121`
+- `src/services/coachFeatureService.ts:2120`
 - `src/services/openingIdentity.test.ts:36`
 - `src/services/openingStory.ts:208`
 
 ### `planFor` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:2121`
-- `src/services/coachFeatureService.ts:2137`
-- `src/services/learnBoardTeaching.ts:806`
+- `src/services/coachFeatureService.ts:2120`
+- `src/services/coachFeatureService.ts:2136`
+- `src/services/learnBoardTeaching.ts:793`
 - `src/services/lookaheadPlan.ts:523`
 - `src/services/lookaheadPlan.ts:1164`
 - `src/services/lookaheadPlan.ts:1165`
@@ -83,7 +83,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isWaypointOpening` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2121`
+- `src/services/coachFeatureService.ts:2120`
 - `src/services/openingAnnouncement.ts:87`
 - `src/services/openingStory.ts:182`
 - `src/services/openingStory.ts:189`
