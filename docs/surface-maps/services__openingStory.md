@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**548 lines · 11 exports · 5 importers · 1 tests · 0 audits**
+**544 lines · 10 exports · 5 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,9 +32,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `FORK_MIN_SHARE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `HOLE_REACH` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `familyLabel` (function) — 9 call sites
 - `src/components/Debug/OpeningBlundersPage.tsx:884`
 - `src/services/openingBlunderService.labels.test.ts:6`
@@ -47,10 +44,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingBlunderService.ts:219`
 
 ### `heldWhilePlayable` (function) — 1 call site
-- `src/services/boardComputers.ts:237`
+- `src/services/boardComputers.ts:235`
 
 ### `openingStoryAt` (function) — 3 call sites
-- `src/services/boardComputers.ts:236`
+- `src/services/boardComputers.ts:234`
 - `src/services/openingStory.test.ts:20`
 - `src/services/openingStory.test.ts:121`
 

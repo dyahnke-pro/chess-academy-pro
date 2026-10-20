@@ -601,6 +601,28 @@ function challengeJob(mv: NonNullable<ReturnType<typeof after>>, mover: Color, w
   return null;
 }
 
+const TIMES = ['', 'once', 'twice', 'three times', 'four times'];
+/**
+ * WHAT A MOVE NOW ASKS OF THE OTHER SIDE (lead 2026-10-20: 4.Ng5 after the
+ * story already said Ng5 joins the bishop against f7 — say what it asks, not
+ * the claim again): the target is hit more often than it is guarded, so it
+ * needs an answer this move. Null when it does not.
+ */
+export function whatItAsks(fenAfter: string, target: string, mover: Color, w: SeatWords): string | null {
+  let b: Chess;
+  try { b = new Chess(fenAfter); } catch { return null; }
+  const x = b.get(target as Square);
+  const them: Color = mover === 'w' ? 'b' : 'w';
+  if (!x || x.color !== them) return null;
+  const hit = b.attackers(target as Square, mover).length;
+  const guards = b.attackers(target as Square, them);
+  if (hit <= guards.length) return null;
+  const by = guards.map((g) => NAME[b.get(g)?.type ?? 'p']);
+  const guarded = guards.length === 0 ? 'not guarded at all'
+    : `guarded ${TIMES[guards.length] ?? `${guards.length} times`}, by ${w.other} ${by.join(' and ')}`;
+  return `Now ${w.other} ${NAME[x.type]} on ${target} is attacked ${TIMES[hit] ?? `${hit} times`} and ${guarded} — it needs an answer this move`;
+}
+
 /** "it guards d5" + "it gets out of reach" → one clause, in that order. */
 const andThen = (first: string, second: string): string => `${first}, and ${second.replace(/^it /, '')}`;
 

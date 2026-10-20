@@ -27,7 +27,7 @@ import { detectConcept } from './reviewConcepts';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded, mastersMovesSync, masterMovesCachedSync } from './masterPlayLookup';
-import { moveJob, MINE, THEIRS, type PriorCapture } from './bookMoveWhy';
+import { moveJob, whatItAsks, MINE, THEIRS, type PriorCapture } from './bookMoveWhy';
 import { refutedAlternative, candidatesForPosition, SINGLETON_SCORER, type RefutedAlternative } from './refutedAlternative';
 import { recordedMoveCost } from './moveCost';
 import { findWorstPlacedPiece } from './nextPlans';
@@ -1484,6 +1484,10 @@ export function buildReviewSegments(
   let standingSaid: 'main' | 'side' | null = null;
   let spokenOpening: string | null = null;
   const jobsSaid = new Set<string>();
+  // The story lines the walk has SPOKEN: a move job one of them already
+  // claimed ("it invites Ng5, which joins their bishop on c4 against your
+  // pawn on f7") is not said again when the move lands.
+  const storySaid: string[] = [];
   const contextSaid = new Set<string>();
   const storyAll: boolean | null = ((): boolean | null => {
     if (!studentNeed) return true;
@@ -2015,7 +2019,7 @@ export function buildReviewSegments(
       // the walk's after-the-door ledger; sized by the student's own record.
       if (studentColorWB && storyAll !== null) {
         let storyNames: string | null = null;
-        const reads = readBoardAll('openingStory', { history: sansForRun.slice(0, m.ply), fen: fenPair.fenAfter, student: studentColorWB, namesStudentMoves: true, famousGames: false });
+        const reads = readBoardAll('openingStory', { history: sansForRun.slice(0, m.ply), fen: fenPair.fenAfter, student: studentColorWB, namesStudentMoves: true });
         // THE OPENING NAMED AS IT IS IDENTIFIED — the SAME announcement Learn
         // speaks (`openingAnnouncementForGame`: the first name, each
         // refinement while in book, the departure), never a second namer.
@@ -2054,7 +2058,8 @@ export function buildReviewSegments(
           facetIdentity.set(raw, id);
           facetProofs.set(raw, r.proof);
           if (r.squares.length) facetSquares.set(raw, r.squares);
-          if (storyNames) { const said = storyNames; facetCommits.set(raw, () => { spokenOpening = said; }); }
+          const told = r.text; const named = storyNames;
+          facetCommits.set(raw, () => { storySaid.push(told); if (named) spokenOpening = named; });
         }
       }
       // EACH OPENING MOVE, BOTH SIDES, WITH ITS JOB (BACKLOG §6, David: "the
@@ -2091,7 +2096,19 @@ export function buildReviewSegments(
         // it with its reason; the bare job would say it twice.
         const told = !!job && facets.some((f) => (facetIdentity.get(f) ?? '').startsWith('hint:story:') && f.includes(job.clause.replace(/^it /, '')));
         if (told && sameClaim >= 0) facets.splice(sameClaim, 1);
-        if (job && job.clause && !bare && !told && !hintsSaid.has(id)) {
+        // ONE CLAIM, SAID ONCE (lead 2026-10-20): a job a spoken story line
+        // already claimed says what the move now ASKS instead, or nothing.
+        const heard = !!job && storySaid.some((t) => t.includes(job.clause.replace(/^it /, '')));
+        if (job && heard && !told && !hintsSaid.has(id) && moverColor !== playerColor && job.kind === 'attack' && job.squares[1]) {
+          const ask = whatItAsks(fenPair.fenAfter, job.squares[1], moverColor === 'white' ? 'w' : 'b', THEIRS);
+          if (ask) {
+            const raw = `[move-job] ${ask}.`;
+            facets.push(raw);
+            facetIdentity.set(raw, id);
+            facetSquares.set(raw, job.squares);
+          }
+        }
+        if (job && job.clause && !bare && !told && !heard && !hintsSaid.has(id)) {
           if (sameClaim >= 0) facets.splice(sameClaim, 1);
           const masters = masterMovesCachedSync(fenPair.fenBefore);
           const sorted = masters ? [...masters].sort((x, y) => y.games - x.games) : [];

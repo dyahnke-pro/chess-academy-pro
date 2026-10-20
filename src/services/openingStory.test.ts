@@ -17,7 +17,7 @@ const NAJDORF = 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Be7 Qd2 
 const SMITH_MORRA = 'e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 d6 Bc4 e6 O-O Nf6 Qe2 Be7 Rd1 e5 Be3'.split(' ');
 const LARSEN = 'b3 e5 Bb2 Nc6 e3 d5 Bb5 Bd6 f4 Qh4+ g3 Qe7 Nf3 f6'.split(' ');
 
-const story = (line: string[], plies: number, student: 'w' | 'b'): StoryFact[] => openingStoryAt({ history: line.slice(0, plies), student, namesStudentMoves: false, famousGames: true, movesAt });
+const story = (line: string[], plies: number, student: 'w' | 'b'): StoryFact[] => openingStoryAt({ history: line.slice(0, plies), student, namesStudentMoves: false, movesAt });
 const beat = (facts: StoryFact[], b: StoryFact['beat']): StoryFact | undefined => facts.find((f) => f.beat === b);
 
 beforeAll(() => { setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8'))); });
@@ -118,7 +118,7 @@ describe('openingStory — past the masters horizon', () => {
     expect(beat(story(LARSEN, LARSEN.length, 'w'), 'horizon-plan')).toBeUndefined();
   });
   it('unknown is never the horizon: no masters data in memory says nothing', () => {
-    const facts = openingStoryAt({ history: LARSEN, student: 'w', namesStudentMoves: false, famousGames: true, movesAt: () => null });
+    const facts = openingStoryAt({ history: LARSEN, student: 'w', namesStudentMoves: false, movesAt: () => null });
     expect(beat(facts, 'horizon-plan')).toBeUndefined();
   });
 });
