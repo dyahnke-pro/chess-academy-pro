@@ -16,8 +16,8 @@
 - **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3409) — names `voiceService`
 - **🧒 Kids section — non-negotiables** (CLAUDE.md:3586) — names `voiceService`
 - **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3889) — names `voiceService`
-- **Shared types / services** (CLAUDE.md:5540) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6401) — names `voiceService`
+- **Shared types / services** (CLAUDE.md:5548) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6409) — names `voiceService`
 
 ## Who calls in
 

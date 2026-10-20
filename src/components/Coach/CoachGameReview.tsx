@@ -50,7 +50,7 @@ import { computeTurningPointHinge } from '../../services/reviewHinge';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { selectTeachingForSegments, renderThesis } from '../../services/teachingSelector';
 import { registerFor } from '../../coach/surfaceContract';
-import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, enrichLectureWithEngine, warmLectureSources, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
+import { buildOpeningTheoryLecture, buildTheoryLectureBeats, lectureSequence, lectureNoteSelector, loadLectureCorpus, resolveCuratedOpeningIdeas, enrichLectureWithEngine, warmLectureSources, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
 import { reviewTheoryLookup } from '../../services/reviewOpeningsSource';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { shareAdverb, topMoveShare } from '../../utils/shareWords';
@@ -498,6 +498,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // didn't work"). Surface each beat's text as an on-screen caption so it visibly
   // plays without depending on audio.
   const [theoryCaption, setTheoryCaption] = useState<string | null>(null);
+  // THE THEORY IS OFFERED ONCE, WHERE THE OPENING ENDS (David 2026-10-19: the
+  // full tree stays on the Theory button, offered once at the end of the
+  // opening phase). The ply the lecture's book walk ended on; the offer shows
+  // when the walk reaches it and is gone once taken or dismissed.
+  const [theoryEndPly, setTheoryEndPly] = useState<number | null>(null);
+  const [theoryOfferDone, setTheoryOfferDone] = useState(false);
   const theoryLectureTokenRef = useRef(0);
 
   // Pre-compute accuracy + classification counts
@@ -1865,14 +1871,21 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   narrateExploredMoveRef.current = narrateExploredMove;
 
   // Play the OPENING THEORY LECTURE — the masters-DB tour of the mainline,
-  // sidelines, best moves, and where the game left theory. Each beat sits the
-  // board on the game's position, arrows the theory move, and speaks the
-  // grounded fact through the house voice (batch-warmed, paced on real audio).
+  // sidelines, best moves, and where the game left theory. Each move is made
+  // on the board first, then the grounded line about it is said (paced on
+  // real audio) — `lectureSequence` is the one order.
   const playOpeningTheory = useCallback(async (): Promise<void> => {
     const beats = theoryBeats;
     if (!beats || beats.length === 0 || theoryLecturePlaying) return;
     const token = ++theoryLectureTokenRef.current;
     setTheoryLecturePlaying(true);
+    setTheoryOfferDone(true);
+    // THE LECTURE OWNS THE VOICE: the walk's own narration stops first, or its
+    // next ply talks over the lecture and its advance cancels it (probe on
+    // David's Vienna 2026-10-19: the walk's "d3 follows a rule…" between
+    // theory beats, and the lecture cut off at its fourth beat).
+    walkPlayback.pause('theory');
+    voiceService.stop();
     const waitIdle = async (maxMs = 12000): Promise<void> => {
       const start = performance.now();
       while (voiceService.isPlaying() && performance.now() - start < maxMs) {
@@ -1881,117 +1894,59 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       }
     };
     // IMMEDIATE feedback (David 2026-07-21: "the pieces never moved on the
-    // board"). The house-voice warm below is a blocking LLM call that can take
-    // 10-30s on a phone — during which the old code showed NOTHING: no board
-    // change, no text, a button that looked dead. Show the first beat's position
-    // + its raw (board-true) fact right away; the warm only rewords the register.
+    // board"). Show the first position + its line at once, so the button never
+    // looks dead while the first line is prepared.
     if (beats[0]) {
       setWalkExplorationFen(beats[0].fenBefore);
       setWalkExplorationArrows(null);
       setTheoryCaption(beats[0].fact);
     }
-    // Warm the beat facts AND every dive step's why in ONE house-voice batch —
-    // dive whys are keyed 1000*(beatIdx+1)+stepIdx so both registers come back
-    // from a single call (no per-step LLM racing during playback).
-    const warmed = new Map<number, string>();
-    try {
-      // kind:'theory' tells the warmer this is an OPENING LECTURE — here it may
-      // name the move (Danya says "Bishop to B5") and MUST keep the game counts +
-      // percentages, unlike the per-move review register that suppresses the move
-      // name (David 2026-07-23: "make the spoken narrations match Danya's").
-      const warmInput: Array<{ id: number; fact: string; kind?: string }> = beats.map((b, i) => ({ id: i, fact: b.fact, kind: 'theory' }));
-      beats.forEach((b, i) => {
-        (b.dive ?? []).forEach((step, j) => {
-          if (step.why) warmInput.push({ id: 1000 * (i + 1) + j, fact: step.why, kind: 'theory' });
-        });
-      });
-      for (const w of warmInput) {
-        if (!w.fact || w.fact.length === 0) continue;
-        const spoken = await voiceFacts(w.fact, { preferRaw: true, intent: 'review-theory' });
-        if (spoken && spoken.trim().length > 0) warmed.set(w.id, spoken);
-      }
-    } catch { /* raw */ }
-    for (let i = 0; i < beats.length; i++) {
+    // ONE SEQUENCE, MOVE THEN WORDS (David 2026-10-19: "the narrations behind
+    // the theory button are mostly spoken before a move is even made"). The
+    // lecture is performed in the order `lectureSequence` computes: a move is
+    // on the board before any line about it is said, each line voice-gated.
+    const steps = lectureSequence(beats);
+    for (const step of steps) {
       if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) break;
-      const b = beats[i];
-      setWalkExplorationFen(b.fenBefore);
-      if (b.showUci) {
-        setWalkExplorationArrows(lineArrow(b.fenBefore, b.showUci, playerColor));
-      } else {
+      if (step.kind === 'position') {
+        setWalkExplorationFen(step.fen);
+        setWalkExplorationSan(null);
         setWalkExplorationArrows(null);
+        continue;
       }
-      await waitIdle();
-      if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) break;
-      const line = warmed.get(i) ?? b.fact;
-      setTheoryCaption(line); // visible even if voice is muted (David 2026-07-21)
-      const beatStart = performance.now();
-      // PACKAGED. This is the densest board-claim path in the app — a beat per
-      // ply, each one about a specific position — and `b.fenBefore` is that
-      // exact position, so the claim is judged against the board it describes
-      // rather than trusted because it came from a warmed cache.
-      try { await voiceService.speakPackage(buildVoicePackage([{ kind: 'computed', text: line, fen: b.fenBefore }])); } catch { /* voice off */ }
-      await waitIdle();
-      // MUTED-DEVICE PACING: with voice off, speakForced resolves ~instantly and
-      // the whole lecture used to race by in a blink — board positions flashing
-      // too fast to register ("pieces never moved"). Hold each beat long enough
-      // to READ its caption and see the position before advancing.
-      const elapsed = performance.now() - beatStart;
-      const minDwell = Math.min(4500, 1200 + line.length * 22);
-      if (elapsed < minDwell) {
-        await new Promise((r) => setTimeout(r, minDwell - elapsed));
+      if (step.kind === 'move') {
+        await waitIdle();
         if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) break;
+        setWalkExplorationArrows(lineArrow(step.fenBefore, step.uci, playerColor));
+        setWalkExplorationFen(step.fenAfter);
+        setWalkExplorationSan(step.san);
+        playMoveSound(step.san);
+        await new Promise((r) => setTimeout(r, 600));
+        continue;
       }
-      // DIVE DOWN the line (Danya's "let's see the next couple of moves"): play
-      // out the masters continuation on the board — arrow the move, SPEAK its
-      // computed why, and hold until the words land (David 2026-07-21: "the
-      // lines are played out too quickly with no narration, so my brain has no
-      // time to absorb the moves"). Voice-gated per step, never a fixed rush.
-      if (b.dive && b.diveFromFen && b.dive.length > 0) {
-        let prevFen = b.diveFromFen;
-        setWalkExplorationFen(prevFen);
-        setWalkExplorationArrows(null);
-        await new Promise((r) => setTimeout(r, 700));
-        for (let j = 0; j < b.dive.length; j++) {
-          const step = b.dive[j];
-          if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) break;
-          try {
-            const cc = new Chess(prevFen);
-            const m = cc.move(step.san);
-            if (m) setWalkExplorationArrows(lineArrow(prevFen, `${m.from}${m.to}`, playerColor));
-          } catch { /* arrow is a bonus */ }
-          setWalkExplorationFen(step.fenAfter);
-          playMoveSound(step.san);
-          prevFen = step.fenAfter;
-          const stepWhy = warmed.get(1000 * (i + 1) + j) ?? step.why;
-          if (stepWhy) {
-            setTheoryCaption(`${step.san} — ${stepWhy}`);
-            const stepStart = performance.now();
-            // THE MOVE IS SAID, then its why (Danya walks theory out loud:
-            // "bishop b5, a6, bishop a4…"), judged on the board it produced.
-            try { await voiceService.speakPackage(buildVoicePackage([{ kind: 'computed', text: `${sanToSpeech(step.san)}. ${stepWhy}`, fen: step.fenAfter }])); } catch { /* voice off */ }
-            await waitIdle();
-            const stepElapsed = performance.now() - stepStart;
-            const stepDwell = Math.min(4000, 1000 + stepWhy.length * 22);
-            if (stepElapsed < stepDwell) await new Promise((r) => setTimeout(r, stepDwell - stepElapsed));
-          } else {
-            // A quiet step with no computed point: the move is still said.
-            setTheoryCaption(step.san);
-            const stepStart = performance.now();
-            try { await voiceService.speakPackage(buildVoicePackage([{ kind: 'computed', text: `${sanToSpeech(step.san)}.`, fen: step.fenAfter }])); } catch { /* voice off */ }
-            await waitIdle();
-            const left = 1400 - (performance.now() - stepStart);
-            if (left > 0) await new Promise((r) => setTimeout(r, left));
-          }
-        }
-        await new Promise((r) => setTimeout(r, 400));
-      }
+      // A walked move is said by name, then its why (Danya walks theory out
+      // loud: "bishop b5, a6, bishop a4…").
+      const raw = step.text ? await voiceFacts(step.text, { preferRaw: true, intent: 'review-theory' }).catch(() => step.text) : '';
+      const words = (raw && raw.trim()) || step.text;
+      const spoken = step.moveSan ? `${sanToSpeech(step.moveSan)}.${words ? ` ${words}` : ''}` : words;
+      if (!spoken) continue;
+      setTheoryCaption(step.moveSan ? `${step.moveSan}${words ? ` — ${words}` : ''}` : words);
+      const t0 = performance.now();
+      // PACKAGED, judged against the board it is said on (the move is made).
+      try { await voiceService.speakPackage(buildVoicePackage([{ kind: 'computed', text: spoken, fen: step.fen }])); } catch { /* voice off */ }
+      await waitIdle();
+      // MUTED-DEVICE PACING: with voice off the speak resolves at once, so
+      // hold long enough to read the caption and see the position.
+      const dwell = Math.min(4500, (step.moveSan && !step.text ? 1400 : 1200) + spoken.length * 22);
+      const elapsed = performance.now() - t0;
+      if (elapsed < dwell) await new Promise((r) => setTimeout(r, dwell - elapsed));
     }
     setWalkExplorationFen(null);
     setWalkExplorationSan(null);
     setWalkExplorationArrows(null);
     setTheoryCaption(null);
     setTheoryLecturePlaying(false);
-  }, [theoryBeats, theoryLecturePlaying, playMoveSound]);
+  }, [theoryBeats, theoryLecturePlaying, playMoveSound, walkPlayback]);
 
   const stopOpeningTheory = useCallback((): void => {
     theoryLectureTokenRef.current += 1;
@@ -2595,13 +2550,22 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       void buildOpeningTheoryLecture(reviewFens, sans, openingName ?? 'this opening', { lookup: reviewTheoryLookup, gameReads, studentColor: playerColor })
         .then((lec) => {
           if (cancelled || !lec) return;
+          setTheoryEndPly(lec.departurePly ?? lec.branches[lec.branches.length - 1]?.ply ?? null);
+          setTheoryOfferDone(false);
+          // The voiced corpus teaches the moves it has a note for (exact
+          // position, seat-checked, board-graded — the walkthrough's own
+          // selector); each note at most once per lecture.
+          const build = (): TheoryLectureBeat[] => buildTheoryLectureBeats(
+            lec, resolveCuratedOpeningIdeas(openingName, playerColor) ?? [], playerColor, lectureNoteSelector(openingName, playerColor));
           // Phase 1: show the DB-built lecture immediately (button appears fast).
-          setTheoryBeats(buildTheoryLectureBeats(lec, resolveOpeningIdeas(openingName), playerColor));
+          setTheoryBeats(build());
+          // The corpus is fetched, not bundled: rebuild once it is in memory.
+          void loadLectureCorpus().then(() => { if (!cancelled) setTheoryBeats(build()); }).catch(() => undefined);
           // Phase 2: NON-blocking — let Stockfish weigh in on a few key branches,
           // then re-derive so the beats gain the engine's voice ("the fish likes
           // Knight d4"). Never blocks the button; a slow/absent engine is fine.
           void enrichLectureWithEngine(lec, { analyzePosition: (f, d) => stockfishEngine.analyzeWithBudget(f, d, 2500) })
-            .then(() => { if (!cancelled) setTheoryBeats(buildTheoryLectureBeats(lec, resolveOpeningIdeas(openingName), playerColor)); })
+            .then(() => { if (!cancelled) setTheoryBeats(build()); })
             .catch(() => { /* engine optional */ });
         })
         .catch(() => { /* DB down — no lecture, no crash */ });
@@ -3954,6 +3918,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   {theoryCaption ?? walkPlayback.currentText ?? walkPlayback.currentSegment?.san ?? ''}
                 </p>
               </div>
+              {!theoryOfferDone && !theoryLecturePlaying && theoryBeats && theoryBeats.length > 0 && theoryEndPly !== null
+                && walkPlayback.currentPly >= theoryEndPly && walkPlayback.currentPly <= theoryEndPly + 4 && (
+                <div className="mt-1.5 flex items-center gap-2" data-testid="walk-theory-offer">
+                  <button onClick={() => { void playOpeningTheory(); }} className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-md border border-sky-500/40 bg-sky-500/10" style={{ color: 'var(--color-text)' }} data-testid="walk-theory-offer-yes"><BookOpen size={12} />Want the theory of this line?</button>
+                  <button onClick={() => setTheoryOfferDone(true)} className="text-[11px] px-2 py-1 rounded-md border border-theme-border" style={{ color: 'var(--color-text-muted)' }} data-testid="walk-theory-offer-no">Not now</button>
+                </div>
+              )}
               {/* THE CLOSING BEAT SHOWS THE RESULT (WO-STANDARD-01 D-13, prod
                   tape 2026-09-22: the walk ended on "Ply 28/27" over the
                   STARTING position with nothing saying who won). The board is

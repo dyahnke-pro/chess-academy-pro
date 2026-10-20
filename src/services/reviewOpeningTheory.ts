@@ -25,10 +25,15 @@ import { costWords } from './engineConstants';
 import { trapAheadAt, warmGemIndexes } from './gemCrushLines';
 import { openingIdentityLine, warmOpeningIdentity } from './openingIdentity';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
-import { withSubject } from '../utils/openSentence';
+import { withSubject, openSentence } from '../utils/openSentence';
 import { identifyingTokens } from './danyaTeachingService';
 import { explainTemptingCapture } from './reviewTeachingPoints';
 import repertoire from '../data/repertoire.json';
+import { bookMoveWhy } from './bookMoveWhy';
+import { mastersPlanRead, mastersPlanLine, planStillAhead, type MastersPlanRead, type MovesAt } from './mastersPlanRead';
+import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
+import { noteArrowSourceAt } from './openingGenerator';
+import { loadFarmedCorpora } from './farmedCorpusData';
 
 /** A candidate move at a branch point, with its master-DB frequency + score. */
 export interface TheoryMove {
@@ -92,6 +97,9 @@ export interface TheoryBranch {
   engineBest?: { san: string; evalCp: number } | null;
   /** The move the GAME played here, SAN (also when it left the book). */
   gameSan: string;
+  /** The game's moves BEFORE this branch — the key the opening DB names each
+   *  alternative's family by (`branchesAt`). */
+  prefixSans: string[];
   /** What the game's move cost its own side by the review's engine read,
    *  centipawns; null when the review has no read for this ply. */
   playedCost: number | null;
@@ -130,25 +138,10 @@ export interface OpeningTheoryLecture {
   departurePly: number | null;
   /** Master games at the root — the size of the theory the opening rests on. */
   startGames: number;
-}
-
-/** Universal opening principles — the grounded floor for openings NOT in the
- *  curated repertoire (modern lines like the Pirc/Modern/KID that postdate the
- *  classical corpus). These are the public-domain principles Naroditsky reduces
- *  theory to for intermediate players ("keep developing, fight for the centre").
- *  Not opening-specific theory — the honest general layer, per CLAUDE.md's
- *  "verify universal principles" rule for modern openings. */
-const UNIVERSAL_OPENING_IDEAS: string[] = [
-  'control the centre and develop your pieces toward it',
-  'get your king safe early, then look for your pawn break',
-  "don't move the same piece twice in the opening without a concrete reason",
-];
-
-/** The opening's grounded key ideas — the curated repertoire keyIdeas when the
- *  opening is in the corpus (classical set), else the universal principles.
- *  Never invents opening-specific theory (G3). Exported for tests. */
-export function resolveOpeningIdeas(openingName: string | null): string[] {
-  return resolveCuratedOpeningIdeas(openingName) ?? UNIVERSAL_OPENING_IDEAS;
+  /** THE PLAN THE OPENING WAS HEADING FOR — `mastersPlanRead` at the deepest
+   *  position on the game's own path with enough master games: each side's
+   *  break, piece home and castling side. Null when the book is too thin. */
+  planRead: MastersPlanRead | null;
 }
 
 /** The CURATED, opening-SPECIFIC key ideas — repertoire keyIdeas ONLY, never the
@@ -157,7 +150,14 @@ export function resolveOpeningIdeas(openingName: string | null): string[] {
  *  "only universal principles apply" (David 2026-07-20: the dev-plan beat must
  *  be SPECIFIC to the opening played, not the same 'develop the knights' every
  *  game). G3 — never invents theory. */
-export function resolveCuratedOpeningIdeas(openingName: string | null): string[] | null {
+export function resolveCuratedOpeningIdeas(
+  openingName: string | null,
+  /** REQUIRED — the student's seat. A repertoire entry's ideas are written for
+   *  ITS colour ("Develop the light-squared bishop to f5 before …e6" is the
+   *  Scandinavian player's plan), so they never reach the other seat (David's
+   *  Scandinavian as White, 2026-10-19, heard Black's plan as his takeaway). */
+  seat: 'white' | 'black',
+): string[] | null {
   if (!openingName) return null;
   // Match by IDENTIFYING-token overlap, not a bidirectional full-name substring
   // (deep-dive D#2). The old substring match drifted two ways: a short entry
@@ -172,11 +172,15 @@ export function resolveCuratedOpeningIdeas(openingName: string | null): string[]
   if (queryTokens.size === 0) return null;
   let entry: { name?: string; keyIdeas?: string[]; shortOverview?: string } | null = null;
   let bestOverlap = 0;
-  for (const r of repertoire as Array<{ name?: string; keyIdeas?: string[]; shortOverview?: string }>) {
-    if (typeof r.name !== 'string') continue;
+  for (const r of repertoire as Array<{ name?: string; color?: string; keyIdeas?: string[]; shortOverview?: string }>) {
+    if (typeof r.name !== 'string' || r.color !== seat) continue;
     const nameTokens = identifyingTokens(r.name);
+    // EVERY identifying token of the entry must be in the game's name: one
+    // shared token is a family, not this line (David's Old Sicilian was told
+    // the Najdorf's "…a6 prevents Bb5+" off the lone token "sicilian").
     let overlap = 0;
     for (const t of nameTokens) if (queryTokens.has(t)) overlap += 1;
+    if (overlap < nameTokens.size) continue;
     if (overlap > bestOverlap) { bestOverlap = overlap; entry = r; }
   }
   if (bestOverlap === 0 || !entry) return null;
@@ -275,7 +279,14 @@ export async function buildOpeningTheoryLecture(
   fens: string[],
   sans: string[],
   openingName: string,
-  opts: { lookup?: (fen: string) => Promise<MasterPlayResult>; gameReads?: ReadonlyArray<LectureGameRead | null>; studentColor: 'white' | 'black' | undefined },
+  opts: {
+    lookup?: (fen: string) => Promise<MasterPlayResult>;
+    gameReads?: ReadonlyArray<LectureGameRead | null>;
+    studentColor: 'white' | 'black' | undefined;
+    /** The masters file read synchronously, for the plan walk. Absent → the
+     *  app's loaded copy (`mastersMovesSync`, warmed here). */
+    movesAt?: MovesAt;
+  },
 ): Promise<OpeningTheoryLecture | null> {
   if (fens.length < 2 || sans.length < 1) return null;
   const lookup =
@@ -333,6 +344,7 @@ export async function buildOpeningTheoryLecture(
         exploreLines: [],
         engineBest: null,
         gameSan: sans[i],
+        prefixSans: sans.slice(0, i),
         ...gameReadFor(fenBefore, sans[i], mover, opts.gameReads?.[i] ?? null),
       });
     }
@@ -388,8 +400,10 @@ export async function buildOpeningTheoryLecture(
   // dives so the coach marches them on the board with narration.
   const c8Candidate = branches
     .filter((b) => b.ply >= 3 && !b.isSideline && !b.leftBook && b.played != null && b.sidelines.some((s) => s.games > 0))
-    .map((b) => ({ b, weight: b.sidelines.reduce((s, m) => s + m.pct, 0) }))
-    .sort((a, b) => b.weight - a.weight)[0]?.b;
+    .map((b) => ({ b, own: b.moverColor === opts.studentColor ? 1 : 0, weight: b.sidelines.reduce((s, m) => s + m.pct, 0) }))
+    // The STUDENT's own forks first (the tree walked after the game is theirs
+    // to learn), then the strongest alternatives.
+    .sort((a, b) => b.own - a.own || b.weight - a.weight)[0]?.b;
   if (c8Candidate) {
     const alts = c8Candidate.sidelines.filter((s) => s.games > 0).slice(0, 2);
     for (const alt of alts) {
@@ -427,7 +441,28 @@ export async function buildOpeningTheoryLecture(
   const namingBranch = branches.find((b) => b.variationName === openingName);
   const deepestInBook = [...branches].reverse().find((b) => !b.leftBook);
   startGames = (namingBranch ?? deepestInBook ?? branches[0]).totalGames;
-  return { openingName, branches, departurePly, startGames };
+  return { openingName, branches, departurePly, startGames, planRead: await planOnGamePath(fens, departurePly != null ? departurePly - 1 : limit, opts.movesAt) };
+}
+
+/** The masters' plan for the opening the game played: read at the deepest
+ *  position on the game's own path with enough games to say "usually"
+ *  (`MIN_ROOT_GAMES`), keeping only what still lies ahead on the board where
+ *  the game's book ended (`planStillAhead`) — a plan read before the game's
+ *  bishop left f1 must not send that bishop somewhere from f1 (David's Vienna,
+ *  2026-10-19: "your bishop on f1 usually goes to b5" with it on c4). */
+async function planOnGamePath(fens: readonly string[], endIdx: number, movesAt: MovesAt | undefined): Promise<MastersPlanRead | null> {
+  let at = movesAt;
+  if (!at) {
+    try { await ensureMastersDbLoaded(); } catch { return null; }
+    at = mastersMovesSync;
+  }
+  const end = Math.min(endIdx, fens.length - 1);
+  if (end < 0) return null;
+  for (let i = end; i >= 0; i--) {
+    const ahead = planStillAhead(mastersPlanRead(fens[i], at), fens[end]);
+    if (ahead) return ahead;
+  }
+  return null;
 }
 
 /** Minimal engine seam for the theory lecture — matches
@@ -519,15 +554,15 @@ function lineCompareClause(
   if (mainline.scoreForMover != null && played.scoreForMover != null) {
     const diff = mainline.scoreForMover - played.scoreForMover;
     if (diff >= 0.03) {
-      parts.push(`In master play the main line scores better than ${lineWord} — that's its pro; ${lineWord}'s pro is that opponents prepare for it less.`);
+      parts.push(`In master play the main line scores better than ${lineWord}.`);
     } else if (diff <= -0.03) {
       parts.push(`Interestingly, ${sideWord} actually scores a touch BETTER in master play — it's less common, not worse.`);
     } else {
-      parts.push('The two score about the same in master play — the choice is a matter of style.');
+      parts.push('The two score about the same in master play.');
     }
-  } else {
-    parts.push(`The main line is the more travelled road; ${lineWord}'s upside is surprise — opponents prepare for it less.`);
   }
+  // No result split → nothing to compare but popularity, which the share
+  // already said. ("Opponents prepare for it less" was a guess, never data.)
   // "Forcing" is measured on the MAINLINE dive only — we never dove the
   // sideline, so a comparative "sharper of the two" / "both are quiet" claim
   // has no data on one of the two (board-awareness sweep, 2026-07-22). Speak
@@ -590,28 +625,77 @@ function uciFor(fen: string, san: string): string | null {
   }
 }
 
-/** The alternatives, named — how often in words for a lone one (V8). */
-function sidelineClause(sidelines: TheoryMove[]): string {
-  const named = sidelines.filter((s) => s.games > 0);
+/** THE ROAD A MOVE TAKES, BY NAME (his beat 1: the fork is a choice between
+ *  families of positions, not between bare moves). The opening DB's name for
+ *  the position `san` reaches from this branch, said relative to the opening the
+ *  game is in ("the Mieses Variation", not "Vienna Game: Mieses Variation").
+ *  Null when the DB names no road there, or the road IS the current opening. */
+export function familyName(prefixSans: readonly string[], san: string, current: string): string | null {
+  // The name of the position the move REACHES, never a deeper line under it
+  // (3…Bc5 is not "the Meitner-Mieses Gambit" until White's Qg4 is played).
+  const after = detectOpeningTranspositional([...prefixSans, san])?.name;
+  const here = detectOpeningTranspositional([...prefixSans])?.name ?? current;
+  return after && after !== here ? nameRelativeTo(after, here) : null;
+}
+
+/** An opening name said relative to the one the game is in: the family part
+ *  dropped when shared ("the Mieses Variation"), with its article. Null when
+ *  it is the current opening itself. */
+function nameRelativeTo(name: string, current: string): string | null {
+  const n = name.trim();
+  let base = current.trim();
+  if (!n || n === base) return null;
+  // The longest part of the current name the new one extends: "Vienna Game:
+  // Stanley Variation, Meitner-Mieses Gambit" under "Vienna Game: Stanley
+  // Variation" is "the Meitner-Mieses Gambit".
+  let short = n;
+  for (;;) {
+    if (n.startsWith(`${base},`) || n.startsWith(`${base}:`)) { short = n.slice(base.length + 1).trim(); break; }
+    const cut = Math.max(base.lastIndexOf(','), base.lastIndexOf(':'));
+    if (cut <= 0) break;
+    base = base.slice(0, cut).trim();
+  }
+  // The road's own name is its last part ("Stanley Variation, Three Knights
+  // Variation" → "Three Knights Variation").
+  short = short.split(',').pop()?.trim() ?? '';
+  if (!short) return null;
+  // A bare adjective is said with its family ("Closed" → "Closed Sicilian").
+  if (!/(?:Variation|Defen[cs]e|Gambit|Attack|System|Line|Opening|Game|Countergambit|Trap)$/i.test(short)) {
+    const head = n.split(':')[0].replace(/\s+(?:Defen[cs]e|Opening|Game)$/i, '').trim();
+    if (head && !short.split(/\s+/).includes(head)) short = `${short} ${head}`;
+  }
+  return /^\S+['’]s\b/.test(short) ? short : `the ${short}`;
+}
+
+/** Moves listed with the family each one commits to, when the DB names one
+ *  and the names tell the moves apart. */
+function namedMoves(prefixSans: readonly string[], sans: readonly string[], current: string): string {
+  const names = sans.map((san) => familyName(prefixSans, san, current));
+  const distinct = new Set(names.filter(Boolean)).size === names.filter(Boolean).length;
+  return andList(sans.map((san, i) => (distinct && names[i] ? `${san} (${names[i]})` : san)));
+}
+
+/** The alternatives, named — how often in words for a lone one (V8), and the
+ *  road each one takes. */
+function sidelineClause(b: TheoryBranch, current: string): string {
+  const named = b.sidelines.filter((s) => s.games > 0);
   if (named.length === 0) return '';
   // An alternative is never "usually" played — the main line out-plays it.
   const adverb = shareAdverb(named[0].pct * 100);
-  if (named.length === 1) return ` The main alternative is ${named[0].san}, which masters ${adverb === 'sometimes' ? 'sometimes' : 'often'} play.`;
-  return ` The other main tries are ${andList(named.map((s) => s.san))}.`;
+  const list = namedMoves(b.prefixSans, named.map((s) => s.san), current);
+  if (named.length === 1) return ` The main alternative is ${list}, which masters ${adverb === 'sometimes' ? 'sometimes' : 'often'} play.`;
+  return ` The other main tries are ${list}.`;
 }
 
 
 /** WHY the main line is the main line — grounded in the DATA (§3 gap). The main
  *  move is always the most-PLAYED (that's how it's picked); the extra insight is
  *  whether it ALSO scores best. Both → that's why it's main; if a sideline scores
- *  higher, say so honestly (popularity ≠ always the top score). */
+ *  higher, say so honestly (popularity ≠ always the top score). With no result
+ *  split there is nothing beyond popularity, which the share already said. */
 function whyMainClause(mainline: TheoryMove, sidelines: TheoryMove[]): string {
   const named = sidelines.filter((s) => s.games > 0);
-  if (named.length === 0) return '';
-  // No result split → speak popularity only, never a fabricated score claim.
-  if (mainline.scoreForMover == null) {
-    return ' It\'s the most-played move here — the well-trodden main road.';
-  }
+  if (named.length === 0 || mainline.scoreForMover == null) return '';
   const bestSide = Math.max(...named.map((s) => s.scoreForMover ?? 0));
   if (mainline.scoreForMover >= bestSide) {
     return ' It leads the pack on BOTH counts — most-played and best-scoring — which is exactly why it earns the "main line" label.';
@@ -619,10 +703,22 @@ function whyMainClause(mainline: TheoryMove, sidelines: TheoryMove[]): string {
   return ' Interestingly it\'s the most POPULAR without being the top-scorer here — a practical, well-trodden choice more than a proven edge.';
 }
 
+/** THE CHARACTER OF THE GAME THE OPENING WAS HEADING FOR (his beat 6), from
+ *  where masters castle in it: opposite wings make the middlegame a race of
+ *  pawn storms. Same-wing castling is no announcement, so it is not said. */
+function characterLine(read: MastersPlanRead | null, student: 'w' | 'b'): string | null {
+  const w = read?.whiteCastle;
+  const b = read?.blackCastle;
+  if (!w || !b || w.share < 0.5 || b.share < 0.5 || w.side === b.side) return null;
+  const mine = student === 'w' ? w : b;
+  const theirs = student === 'w' ? b : w;
+  return `Masters castle on opposite wings here — you ${mine.side}, they ${theirs.side} — so the middlegame is a race: each side throws its pawns at the other king.`;
+}
+
 /**
  * Turn a lecture into playable, grounded beats. `ideas` (optional) are the
- * opening's known key ideas (from repertoire.json / the concept corpus) — when
- * present, the intro weaves one in; the frequencies always stand on their own.
+ * opening's curated key ideas for the student's seat — the closing line when
+ * the masters' plan says nothing; the frequencies always stand on their own.
  */
 export function buildTheoryLectureBeats(
   lecture: OpeningTheoryLecture,
@@ -632,13 +728,21 @@ export function buildTheoryLectureBeats(
    *  2026-07-22). Absent → neutral "your" (back-compat for callers/tests that
    *  don't thread it). */
   studentColor?: 'white' | 'black',
+  /** THE VIDEO CORPUS LEADS WHERE IT HAS SOMETHING (David 2026-10-19: "it
+   *  needs to match the video corpus we have"). A voiced note at the exact
+   *  position a beat's move reaches — seat-checked and board-graded by the
+   *  caller (`noteArrowSourceAt`) — is that move's teaching; the computed why
+   *  fills positions with no note. Absent → computed only. */
+  noteAt?: (historySans: string[], fenAfter: string) => string | null,
 ): TheoryLectureBeat[] {
   const beats: TheoryLectureBeat[] = [];
   const first = lecture.branches[0];
   // WHAT THE OPENING IS (the one identity computer Learn and chat read):
   // what it provokes, what it aims at — said before the numbers.
   const identity = openingIdentityLine(lecture.openingName, studentColor === 'black' ? 'b' : 'w', studentColor ? 'seat' : 'demo', null);
-  const ideaClause = (identity ? ` ${identity.text}` : '') + (ideas.length > 0 ? ` At its heart: ${ideas[0]}` : '');
+  // The identity is computed and seat-aware; the key idea waits for the
+  // outro, where the masters' plan says it from the game's own position.
+  const ideaClause = identity ? ` ${identity.text}` : '';
   beats.push({
     fenBefore: first.fenBefore,
     showUci: null,
@@ -657,8 +761,10 @@ export function buildTheoryLectureBeats(
     lastNamed = name;
     return ` This is the ${name}.`;
   };
-  const mainlineNameClause = (name: string | null): string =>
-    !name || name === lastNamed ? '' : ` — the ${name}`;
+  const mainlineNameClause = (name: string | null, prefixSans: readonly string[]): string => {
+    const said = name && name !== lastNamed ? nameRelativeTo(name, detectOpeningTranspositional([...prefixSans])?.name ?? lecture.openingName) : null;
+    return said ? ` — ${said}` : '';
+  };
 
   // G5 — a WHY sentence is spoken at most ONCE across the lecture. The same
   // developing move recurs ("the knight bears down on d4 and e5" on Nc3, Nf3,
@@ -672,6 +778,31 @@ export function buildTheoryLectureBeats(
     if (seenWhy.has(k)) return '';
     seenWhy.add(k);
     return ` ${w}`;
+  };
+
+  // The teaching for a move: the voiced note at the board it reaches, else the
+  // computed why (deduped as above).
+  const teach = (prefixSans: readonly string[], fenBefore: string, san: string): string => {
+    if (noteAt) {
+      try {
+        const c = new Chess(fenBefore);
+        c.move(san);
+        const note = noteAt([...prefixSans, san], c.fen());
+        if (note) return ` ${note.trim()}`;
+      } catch { /* no note — computed */ }
+    }
+    return freshWhy(fenBefore, san);
+  };
+
+  // The masters line walked from the book move, each step's teaching the
+  // voiced note at the board it reaches when there is one.
+  const diveWithNotes = (b: TheoryBranch): Array<{ san: string; fenAfter: string; why: string | null }> => {
+    const prefix = [...b.prefixSans, b.mainline.san];
+    return b.mainlineDive.map((st) => {
+      prefix.push(st.san);
+      const note = noteAt ? noteAt([...prefix], st.fenAfter) : null;
+      return note ? { ...st, why: note.trim() } : st;
+    });
   };
 
   // Stock explanatory clauses (whyMain, fast-forward tail) are spoken at most
@@ -785,13 +916,12 @@ export function buildTheoryLectureBeats(
       const san = b.played?.san ?? b.mainline.san;
       try { const c = new Chess(prev); const m = c.move(san); if (!m) break; dive.push({ san, fenAfter: c.fen(), why: null }); prev = c.fen(); } catch { break; }
     }
-    const sanList = dive.map((d) => d.san).join(', ');
     // Vary the tail so back-to-back fast-forwards don't read identically (G5).
     const tail = oncePhrase(' — normal development, both sides fighting for the centre') || ' — standard development, played quickly';
     beats.push({
       fenBefore: first.fenBefore, showUci: null, showSan: null,
       moveNumber: first.moveNumber, moverColor: first.moverColor, kind: 'mainline',
-      fact: `The next moves are standard theory — ${sanList}${tail}.`,
+      fact: `That's standard theory so far${tail}.`,
       diveFromFen: dive.length >= 2 ? first.fenBefore : undefined,
       dive: dive.length >= 2 ? dive : undefined,
     });
@@ -823,7 +953,7 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'mainline',
-        fact: `And there it is — ${nSan}, and that's the ${lecture.openingName}.${freshWhy(b.fenBefore, nSan)}${engineClause(b)}${modelClause(b)}`,
+        fact: `And there it is — ${nSan}, and that's the ${lecture.openingName}.${teach(b.prefixSans, b.fenBefore, nSan)}${engineClause(b)}${modelClause(b)}`,
       });
       continue;
     }
@@ -833,8 +963,30 @@ export function buildTheoryLectureBeats(
     // The grounded WHY of the mainline move — Danya states the move, THEN the
     // reason as its own sentence ("Nf3. The knight bears down on d4 and e5.").
     // Board-computed (buildReviewMoveTeaching, G3); may be null. Deduped (G5).
-    const whySentence = freshWhy(b.fenBefore, b.mainline.san);
-    if (b.leftBook) {
+    const whySentence = teach(b.prefixSans, b.fenBefore, b.mainline.san);
+    // THE STUDENT'S OWN DEPARTURE GETS THE BOOK MOVE'S JOB (bookMoveWhy, the
+    // one computer Learn uses): what the book move does on the board and what
+    // the move played left undone. Review may name it — the game is over. The
+    // opponent's departures keep the plain move reason: bookMoveWhy speaks to
+    // the side that moved.
+    const own = studentColor != null && b.moverColor === studentColor;
+    const bookWhy = own && !b.isMainline
+      ? bookMoveWhy(b.fenBefore, b.mainline.san, b.gameSan, studentColor === 'white' ? 'w' : 'b')
+      : null;
+    const share = `${openSentence(topMoveShare(b.mainline.pct * 100))}${scoreClause(b.mainline, b.moverColor, studentColor)}.`;
+    if (b.leftBook && bookWhy) {
+      beats.push({
+        fenBefore: b.fenBefore,
+        showUci: uciFor(b.fenBefore, b.mainline.san),
+        showSan: b.mainline.san,
+        moveNumber: b.moveNumber,
+        moverColor: b.moverColor,
+        kind: 'departure',
+        fact: `Here's where you stepped out of book, with ${b.gameSan}. ${bookWhy.text} ${share}${costClause(b)}${trapClause(b.fenBefore)}${sidelineClause(b, lecture.openingName)}${b.mainlineDive.length >= 2 ? ' Let me show you how the book line runs.' : ''}`,
+        diveFromFen: b.diveFromFen ?? undefined,
+        dive: b.mainlineDive.length >= 2 ? diveWithNotes(b) : undefined,
+      });
+    } else if (b.leftBook) {
       beats.push({
         fenBefore: b.fenBefore,
         showUci: uciFor(b.fenBefore, b.mainline.san),
@@ -844,15 +996,32 @@ export function buildTheoryLectureBeats(
         kind: 'departure',
         // Danya's departure shape: name where book is, what it is, then the
         // anti-sideline recipe ("when in doubt, keep developing").
-        fact: `Here's where the game steps out of book. The main road for ${side} is ${b.mainline.san}${mainlineNameClause(b.mainlineName)} — ${topMoveShare(b.mainline.pct * 100)}${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${costClause(b)}${trapClause(b.fenBefore)}${sidelineClause(b.sidelines)}${b.mainlineDive.length >= 2 ? ' Let me show you how it runs from here.' : ' Past this point you\'re on your own — keep developing and fight for the centre.'}`,
+        fact: `Here's where the game steps out of book. The main road for ${side} is ${b.mainline.san}${mainlineNameClause(b.mainlineName, b.prefixSans)} — ${topMoveShare(b.mainline.pct * 100)}${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${costClause(b)}${trapClause(b.fenBefore)}${sidelineClause(b, lecture.openingName)}${b.mainlineDive.length >= 2 ? ' Let me show you how it runs from here.' : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
-        dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
+        dive: b.mainlineDive.length >= 2 ? diveWithNotes(b) : undefined,
       });
+    } else if (b.isSideline && b.played && bookWhy) {
+      beats.push({
+        fenBefore: b.fenBefore,
+        // The board shows the BOOK move the beat is about (and the dive
+        // continues from it); the game's own move is named in the words.
+        showUci: uciFor(b.fenBefore, b.mainline.san),
+        showSan: b.mainline.san,
+        moveNumber: b.moveNumber,
+        moverColor: b.moverColor,
+        kind: 'sideline',
+        fact: `${bookWhy.text} ${share} ${b.played.san} is ${b.played.pct < 0.05 ? 'a rare' : 'a known'} sideline${b.variationName && b.variationName !== lastNamed && nameRelativeTo(b.variationName, lecture.openingName) ? `, ${nameRelativeTo(b.variationName, lecture.openingName)}` : ''}.${costClause(b)}${lineCompareClause(b.mainline, b.played, b.mainlineDive, 'your')}${engineClause(b)}${modelClause(b)}${b.mainlineDive.length >= 2 ? ` Let me walk down ${b.mainline.san} so you can compare.` : ''}`,
+        diveFromFen: b.diveFromFen ?? undefined,
+        dive: b.mainlineDive.length >= 2 ? diveWithNotes(b) : undefined,
+      });
+      if (b.variationName) lastNamed = b.variationName;
     } else if (b.isSideline && b.played) {
       beats.push({
         fenBefore: b.fenBefore,
-        showUci: uciFor(b.fenBefore, b.played.san),
-        showSan: b.played.san,
+        // The board shows the BOOK move the beat is about (and the dive
+        // continues from it); the game's own move is named in the words.
+        showUci: uciFor(b.fenBefore, b.mainline.san),
+        showSan: b.mainline.san,
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'sideline',
@@ -862,7 +1031,7 @@ export function buildTheoryLectureBeats(
         // being compared (David 2026-07-21: "what was the main line? Show me").
         fact: `The main line here is ${b.mainline.san} — ${topMoveShare(b.mainline.pct * 100)}${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence} This game went ${b.played.san} instead, ${b.played.pct < 0.05 ? 'a rare' : 'a known'} sideline.${costClause(b)}${lineCompareClause(b.mainline, b.played, b.mainlineDive, studentColor && b.moverColor !== studentColor ? "your opponent's" : 'your')}${engineClause(b)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ` Let me walk down ${b.mainline.san} so you can compare.` : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
-        dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
+        dive: b.mainlineDive.length >= 2 ? diveWithNotes(b) : undefined,
       });
     } else {
       beats.push({
@@ -872,9 +1041,9 @@ export function buildTheoryLectureBeats(
         moveNumber: b.moveNumber,
         moverColor: b.moverColor,
         kind: 'mainline',
-        fact: `${b.mainline.san} is ${side}'s main line here — ${topMoveShare(b.mainline.pct * 100)}${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${trapClause(b.fenBefore)}${oncePhrase(whyMainClause(b.mainline, b.sidelines))}${engineClause(b)}${sidelineClause(b.sidelines)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
+        fact: `${b.mainline.san} is ${side}'s main line here — ${topMoveShare(b.mainline.pct * 100)}${scoreClause(b.mainline, b.moverColor, studentColor)}.${whySentence}${trapClause(b.fenBefore)}${oncePhrase(whyMainClause(b.mainline, b.sidelines))}${engineClause(b)}${b.exploreLines.length > 0 ? '' : sidelineClause(b, lecture.openingName)}${modelClause(b)}${nameClause(b.variationName)}${b.mainlineDive.length >= 2 ? ' Let me show you where it leads.' : ''}`,
         diveFromFen: b.diveFromFen ?? undefined,
-        dive: b.mainlineDive.length >= 2 ? b.mainlineDive : undefined,
+        dive: b.mainlineDive.length >= 2 ? diveWithNotes(b) : undefined,
       });
     }
   }
@@ -896,7 +1065,8 @@ export function buildTheoryLectureBeats(
     // the student taps "Explore a6" to see it played out, or skips (David
     // 2026-07-23: don't force more theory on someone who doesn't want it). The
     // playable lines ride in `explore`, rendered as chips, not auto-marched.
-    const list = andList(c8.exploreLines.map((e) => e.san));
+    const list = namedMoves(c8.prefixSans, c8.exploreLines.map((e) => e.san), lecture.openingName);
+    const whose = studentColor ? (c8.moverColor === studentColor ? 'you' : 'they') : (c8.moverColor === 'white' ? 'White' : 'Black');
     beats.push({
       fenBefore: c8.fenBefore,
       showUci: uciFor(c8.fenBefore, c8.exploreLines[0].san),
@@ -904,15 +1074,23 @@ export function buildTheoryLectureBeats(
       moveNumber: c8.moveNumber,
       moverColor: c8.moverColor,
       kind: 'mainline',
-      fact: `That isn't the only way to play it — the other main tries here are ${list}.`,
+      fact: `At move ${c8.moveNumber} ${whose} had ${c8.exploreLines.length === 1 ? 'another main road' : 'other main roads'}: ${list}.`,
       explore: c8.exploreLines,
     });
   }
 
   // Closing PLAN beat — Danya always lands on the middlegame idea ("march the
-  // queenside pawns, 2v1" / "e5 vs c5 breaks"). Use a second key idea if there
-  // is one distinct from the intro's, so the lecture ends on the plan, not stats.
-  const planIdea = ideas.find((x) => x !== ideas[0]) ?? ideas[0];
+  // queenside pawns, 2v1" / "e5 vs c5 breaks"). COMPUTED from the masters'
+  // games at the deepest book position the game reached (each side's break,
+  // where the pieces go, where the kings live — his beats 6 and 8). Review may
+  // name the moves: the game is over. The curated idea (seat-matched by the
+  // caller) speaks only when the masters' data says nothing.
+  const seat: 'w' | 'b' = studentColor === 'black' ? 'b' : 'w';
+  const planText = studentColor ? mastersPlanLine(lecture.planRead, seat, null)?.text ?? null : null;
+  const character = studentColor ? characterLine(lecture.planRead, seat) : null;
+  const computed = [planText, character].filter(Boolean).join(' ');
+  const curated = ideas[0] ? `The takeaway for this opening: ${ideas[0].replace(/[.!?]?\s*$/, '.')}` : '';
+  const planIdea = computed || curated;
   if (planIdea) {
     const last = lecture.branches[lecture.branches.length - 1];
     beats.push({
@@ -922,9 +1100,76 @@ export function buildTheoryLectureBeats(
       moveNumber: last.moveNumber,
       moverColor: last.moverColor,
       kind: 'outro',
-      fact: `The takeaway for this opening: ${planIdea}`,
+      fact: planIdea,
     });
   }
 
   return beats;
+}
+
+/** The lecture's voiced-corpus selector: the walkthrough's own exact-position,
+ *  seat-checked, board-graded pick (`noteArrowSourceAt`), each note at most once
+ *  per lecture. Build one per lecture build. */
+export function lectureNoteSelector(
+  openingName: string | null,
+  seat: 'white' | 'black',
+): (historySans: string[], fenAfter: string) => string | null {
+  const seen = new Set<string>();
+  return (prefix, fen) => noteArrowSourceAt(prefix, fen, seen, openingName, seat);
+}
+
+/** The corpus is fetched, not bundled: resolves once it is in memory. */
+export function loadLectureCorpus(): Promise<unknown> {
+  return loadFarmedCorpora();
+}
+
+/** One step of the lecture as it is PERFORMED: a move made on the board, or a
+ *  line said about the board as it stands. */
+export type LectureStep =
+  | { kind: 'position'; fen: string }
+  | { kind: 'move'; fenBefore: string; san: string; uci: string; fenAfter: string }
+  | { kind: 'say'; text: string; fen: string; /** set on a line walked move by move: said before the why */ moveSan?: string };
+
+/**
+ * THE LECTURE AS ONE SEQUENCE — every line is said AFTER the move it is about
+ * is on the board (David 2026-10-19: "the narrations behind the theory button
+ * are mostly spoken before a move is even made"). The runner used to sit each
+ * beat on the position BEFORE its move, arrow the move and speak about it, and
+ * the fast-forward beat named a list of moves before playing them. Here a beat
+ * with a move plays it first; a walked line plays each move, then says it; a
+ * fast-forward says its summary only once its moves are made.
+ */
+export function lectureSequence(beats: readonly TheoryLectureBeat[]): LectureStep[] {
+  const out: LectureStep[] = [];
+  const walk = (from: string, steps: ReadonlyArray<{ san: string; fenAfter: string; why: string | null }>): void => {
+    out.push({ kind: 'position', fen: from });
+    let prev = from;
+    for (const st of steps) {
+      const uci = uciFor(prev, st.san);
+      if (!uci) break;
+      out.push({ kind: 'move', fenBefore: prev, san: st.san, uci, fenAfter: st.fenAfter });
+      out.push({ kind: 'say', text: st.why ?? '', fen: st.fenAfter, moveSan: st.san });
+      prev = st.fenAfter;
+    }
+  };
+  for (const b of beats) {
+    if (!b.showUci && b.dive && b.diveFromFen) {
+      walk(b.diveFromFen, b.dive);
+      out.push({ kind: 'say', text: b.fact, fen: b.dive[b.dive.length - 1].fenAfter });
+      continue;
+    }
+    out.push({ kind: 'position', fen: b.fenBefore });
+    let sayFen = b.fenBefore;
+    if (b.showUci && b.showSan) {
+      try {
+        const c = new Chess(b.fenBefore);
+        c.move(b.showSan);
+        out.push({ kind: 'move', fenBefore: b.fenBefore, san: b.showSan, uci: b.showUci, fenAfter: c.fen() });
+        sayFen = c.fen();
+      } catch { /* no move — the line stands on the position */ }
+    }
+    out.push({ kind: 'say', text: b.fact, fen: sayFen });
+    if (b.dive && b.diveFromFen && b.dive.length > 0) walk(b.diveFromFen, b.dive);
+  }
+  return out;
 }

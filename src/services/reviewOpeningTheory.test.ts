@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, resolveCuratedOpeningIdeas, enrichLectureWithEngine } from './reviewOpeningTheory';
+import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveCuratedOpeningIdeas, enrichLectureWithEngine, familyName, lectureSequence } from './reviewOpeningTheory';
 import type { MasterPlayResult, MasterPlayMove } from './masterPlayTypes';
 
 function mv(san: string, games: number, w = 0.4, d = 0.3, b = 0.3): MasterPlayMove {
@@ -76,49 +76,29 @@ describe('buildOpeningTheoryLecture — grounded masters tour (David 2026-07-20)
   });
 });
 
-describe('resolveOpeningIdeas — grounded, never invented', () => {
-  it('returns the curated keyIdeas for an opening in the repertoire (classical)', () => {
-    const ideas = resolveOpeningIdeas('Italian Game');
-    expect(ideas.length).toBeGreaterThan(0);
-    // real repertoire ideas mention concrete Italian themes.
-    expect(ideas.join(' ').toLowerCase()).toMatch(/f7|center|centre|d4|develop|bishop/);
-  });
-
-  it('falls back to universal principles for a modern opening not in the corpus (Pirc)', () => {
-    const ideas = resolveOpeningIdeas('Pirc Defense');
-    expect(ideas.length).toBeGreaterThan(0);
-    expect(ideas.join(' ').toLowerCase()).toMatch(/centre|center|develop|king/);
-  });
-
-  it('never returns empty (a lecture always has a plan to land on)', () => {
-    expect(resolveOpeningIdeas(null).length).toBeGreaterThan(0);
-    expect(resolveOpeningIdeas('Totally Made Up Opening XYZ').length).toBeGreaterThan(0);
-  });
-});
-
 describe('resolveCuratedOpeningIdeas — identifying-token match, not substring drift (D#2)', () => {
   it('picks the entry sharing the MOST identifying tokens, not a single-token collision', () => {
     // "…English Attack" is a Najdorf, NOT the English Opening. It shares one token
     // (english) with "English Opening" but two (sicilian, najdorf) with the
     // Najdorf entry — best-overlap must resolve to the Najdorf's ideas.
-    const ideas = resolveCuratedOpeningIdeas('Sicilian Defense: Najdorf Variation, English Attack');
-    const najdorf = resolveCuratedOpeningIdeas('Sicilian: Najdorf');
+    const ideas = resolveCuratedOpeningIdeas('Sicilian Defense: Najdorf Variation, English Attack', 'black');
+    const najdorf = resolveCuratedOpeningIdeas('Sicilian: Najdorf', 'black');
     expect(ideas).not.toBeNull();
     expect(ideas).toEqual(najdorf); // resolved to Najdorf, never English Opening
-    const english = resolveCuratedOpeningIdeas('English Opening');
+    const english = resolveCuratedOpeningIdeas('English Opening', 'white');
     expect(ideas).not.toEqual(english);
   });
 
   it('normalizes punctuation so a colon/"Defense" spelling still matches (old substring MISSED this)', () => {
     // The old raw-lowercase substring failed on "Sicilian Defense: Najdorf" vs the
     // entry "Sicilian: Najdorf" (punctuation differs); token match resolves it.
-    expect(resolveCuratedOpeningIdeas('Sicilian Defense: Najdorf')).not.toBeNull();
+    expect(resolveCuratedOpeningIdeas('Sicilian Defense: Najdorf', 'black')).not.toBeNull();
   });
 
   it('returns null when only GENERIC scaffolding words are shared', () => {
     // "Made-Up Defense" shares only the generic "defense" with real entries → no
     // identifying token in common → no curated ideas (universal fallback upstream).
-    expect(resolveCuratedOpeningIdeas('Made-Up Defense')).toBeNull();
+    expect(resolveCuratedOpeningIdeas('Made-Up Defense', 'black')).toBeNull();
   });
 });
 
@@ -166,7 +146,8 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     const beats = buildTheoryLectureBeats(lec!, ['fight for the centre and develop with tempo']);
     expect(beats[0].kind).toBe('intro');
     expect(beats[0].fact).toMatch(/King's Pawn/);
-    expect(beats[0].fact).toMatch(/at its heart/i); // the idea was woven in
+    // The seat-blind curated idea no longer opens the lecture; the plan closes it.
+    expect(beats[0].fact).not.toMatch(/at its heart/i);
     // the departure beat names the book move + says you left theory.
     const dep = beats.find((b) => b.kind === 'departure');
     expect(dep).toBeTruthy();
@@ -257,7 +238,7 @@ describe('buildTheoryLectureBeats — grounded playable beats', () => {
     const beats = buildTheoryLectureBeats(lec!, ['fight for the centre'], 'white');
     const offer = beats.find((b) => (b.explore?.length ?? 0) > 0);
     expect(offer).toBeTruthy();
-    expect(offer!.fact).toMatch(/other main tries here are/i);
+    expect(offer!.fact).toBe("At move 2 you had other main roads: Bc4 (Bishop's Opening) and Nc3 (the Vienna Game).");
     expect(offer!.fact).not.toMatch(/\btap\b|\bwe\b/i);
     expect(offer!.dive).toBeUndefined(); // not auto-played
     expect(offer!.explore![0].steps[0].san).toBe('Bc4'); // the alt move rides in the chip's line
@@ -388,5 +369,108 @@ describe('a known trap on the walked line is named with its punishment', () => {
     for (let i = 0; i < 200 && !trapAheadAt(vf[7]); i++) await new Promise((r) => setTimeout(r, 25));
     expect(trapAheadAt(vf[7]), 'index never warmed').not.toBeNull();
     expect(trapAheadAt(fens[6])).toBeNull();
+  });
+});
+
+describe('the review opening section in his style (David 2026-10-19)', () => {
+  it('curated ideas reach only their own seat and their own line (David\'s Old Sicilian heard the Najdorf\'s idea)', () => {
+    expect(resolveCuratedOpeningIdeas('Sicilian Defense: Old Sicilian', 'black')).toBeNull();
+    expect(resolveCuratedOpeningIdeas('Scandinavian Defense: Valencian Variation', 'white')).toBeNull();
+    expect(resolveCuratedOpeningIdeas('Scandinavian Defense: Valencian Variation', 'black')).not.toBeNull();
+  });
+
+  it('names the families at the fork, by the name of the position each move reaches', async () => {
+    const { fens, sans } = chain(['e4', 'c5', 'Nf3', 'd6']);
+    const byPrefix: Record<string, MasterPlayMove[]> = {
+      'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w': [mv('e4', 600), mv('d4', 400)],
+      'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b': [mv('c5', 500), mv('e5', 400)],
+      'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w': [mv('Nf3', 600), mv('Nc3', 200), mv('c3', 150)],
+      'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b': [mv('d6', 600), mv('Nc6', 400), mv('e6', 300)],
+    };
+    const lookup = async (fen: string): Promise<MasterPlayResult> => {
+      const key = Object.keys(byPrefix).find((p) => fen.startsWith(p));
+      return res(fen, key ? byPrefix[key] : []);
+    };
+    const lec = await buildOpeningTheoryLecture(fens, sans, 'Sicilian Defense: Modern Variations', { lookup, studentColor: 'black', movesAt: () => null });
+    const offer = buildTheoryLectureBeats(lec!, [], 'black').find((b) => (b.explore?.length ?? 0) > 0);
+    // The student's own fork is the one walked out; each road by its name.
+    expect(offer?.fact).toBe('At move 2 you had other main roads: Nc6 (the Old Sicilian) and e6 (the French Variation).');
+    // The opponent's fork still names its roads, a bare adjective with its family.
+    expect(familyName(['e4', 'c5'], 'Nc3', 'Sicilian Defense')).toBe('the Closed Sicilian');
+    expect(familyName(['e4', 'c5'], 'c3', 'Sicilian Defense')).toBe('the Alapin Variation');
+    // A move that only leads TOWARD a named line is not called by it (3…Bc5 is
+    // not the Meitner-Mieses Gambit until White's Qg4).
+    expect(familyName(['e4', 'e5', 'Nc3', 'Nc6', 'Bc4'], 'Bc5', 'Vienna Game: Stanley Variation')).toBeNull();
+  });
+
+  it("the student's own departure says the book move's JOB and what their move left undone (bookMoveWhy)", async () => {
+    const { fens, sans } = chain(['e4', 'c5', 'Nf3', 'Nc6', 'c3', 'd6']);
+    const byPrefix: Record<string, MasterPlayMove[]> = {
+      'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w': [mv('e4', 600, 0, 0, 0), mv('d4', 400, 0, 0, 0)],
+      'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b': [mv('c5', 500, 0, 0, 0), mv('e5', 400, 0, 0, 0)],
+      'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w': [mv('Nf3', 600, 0, 0, 0), mv('Nc3', 200, 0, 0, 0)],
+      'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b': [mv('Nc6', 500, 0, 0, 0), mv('d6', 400, 0, 0, 0)],
+      'r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w': [mv('d4', 500, 0, 0, 0), mv('Bb5', 300, 0, 0, 0), mv('c3', 100, 0, 0, 0)],
+      'r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R b': [mv('Nf6', 500, 0, 0, 0), mv('d5', 200, 0, 0, 0), mv('d6', 60, 0, 0, 0)],
+    };
+    const lookup = async (fen: string): Promise<MasterPlayResult> => {
+      const key = Object.keys(byPrefix).find((p) => fen.startsWith(p));
+      return res(fen, key ? byPrefix[key] : []);
+    };
+    const lec = await buildOpeningTheoryLecture(fens, sans, 'Sicilian Defense: Old Sicilian', { lookup, studentColor: 'black', movesAt: () => null });
+    const beats = buildTheoryLectureBeats(lec!, [], 'black');
+    const own = beats.find((b) => b.kind === 'sideline' && b.showSan === 'Nf6');
+    expect(own?.fact).toMatch(/^The book move is the knight to f6: it fights for the centre — it covers d5 and e4 — the pawn to d6 leaves d5 and e4 to them\./);
+    // No result split → no invented comparison ("opponents prepare for it less").
+    for (const b of beats) expect(b.fact).not.toMatch(/prepare for it less|matter of style/i);
+  });
+
+  it('closes on the masters\' plan from the game\'s seat, and announces an opposite-castling race', async () => {
+    const { fens, sans } = chain(['e4', 'e5', 'Nf3']);
+    const lookup = async (fen: string): Promise<MasterPlayResult> => {
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w')) return res(fen, [mv('e4', 600), mv('d4', 400)]);
+      if (fen.startsWith('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b')) return res(fen, [mv('e5', 500), mv('c5', 500)]);
+      if (fen.startsWith('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w')) return res(fen, [mv('Nf3', 500), mv('Bc4', 300)]);
+      return res(fen, []);
+    };
+    const lec = await buildOpeningTheoryLecture(fens, sans, "King's Knight Opening", { lookup, studentColor: 'black', movesAt: () => null });
+    lec!.planRead = {
+      games: 500, white: { san: 'd4', square: 'd4', from: 'd2', share: 0.6 }, black: { san: 'f5', square: 'f5', from: 'f7', share: 0.5 },
+      whitePiece: null, blackPiece: null, whiteCastle: { side: 'long', share: 0.7 }, blackCastle: { side: 'short', share: 0.8 },
+    };
+    const outro = buildTheoryLectureBeats(lec!, ['a seat-blind curated idea'], 'black').find((b) => b.kind === 'outro');
+    expect(outro?.fact).toBe('The plan in this structure: your break is …f5 — masters from here usually play it, and theirs is d4. Masters castle on opposite wings here — you short, they long — so the middlegame is a race: each side throws its pawns at the other king.');
+  });
+});
+
+describe('the lecture is performed move first, then words (David 2026-10-19: "spoken before a move is even made")', () => {
+  it('every line about a move is said only after that move is on the board', async () => {
+    const { fens, sans } = chain(['e4', 'c5', 'Nf3', 'Nc6', 'c3', 'd6']);
+    const byPrefix: Record<string, MasterPlayMove[]> = {
+      'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w': [mv('e4', 600), mv('d4', 400)],
+      'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b': [mv('c5', 900), mv('e5', 100)],
+      'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w': [mv('Nf3', 900), mv('Nc3', 100)],
+      'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b': [mv('Nc6', 500), mv('d6', 400)],
+      'r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w': [mv('d4', 500), mv('Bb5', 300), mv('c3', 100)],
+      'r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R b': [mv('Nf6', 500), mv('d5', 200), mv('d6', 60)],
+    };
+    const lookup = async (fen: string): Promise<MasterPlayResult> => {
+      const key = Object.keys(byPrefix).find((p) => fen.startsWith(p));
+      return res(fen, key ? byPrefix[key] : []);
+    };
+    const lec = await buildOpeningTheoryLecture(fens, sans, 'Sicilian Defense: Old Sicilian', { lookup, studentColor: 'black', movesAt: () => null });
+    const beats = buildTheoryLectureBeats(lec!, [], 'black');
+    const seq = lectureSequence(beats);
+    // Old order: the fast-forward said "e4, c5, Nf3" before any of them was played.
+    const ffSay = seq.findIndex((s) => s.kind === 'say' && /standard theory so far/.test(s.text));
+    expect(ffSay).toBeGreaterThan(seq.findIndex((s) => s.kind === 'move' && s.san === 'Nf3'));
+    // Every beat about a move: its line is said on the board AFTER the move.
+    for (const b of beats.filter((x) => x.showSan)) {
+      const sayAt = seq.findIndex((s) => s.kind === 'say' && s.text === b.fact);
+      const prev = seq[sayAt - 1];
+      expect(prev.kind).toBe('move');
+      expect(prev.kind === 'move' && prev.san).toBe(b.showSan);
+      expect(seq[sayAt].kind === 'say' && seq[sayAt].fen).toBe(prev.kind === 'move' ? prev.fenAfter : '');
+    }
   });
 });

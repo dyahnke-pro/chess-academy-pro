@@ -4502,17 +4502,25 @@ own game the computed facts are the teaching.
   hand-authored lesson prose, not corpus, and stay on the live Learn board.
 - **REMOVED:** **Learn free play** — the live reply narration, the play-out after
   a walkthrough ("this is now free play"), fork talk, think-aloud, and Learn's
-  mounts of read-position and phase-change narration; and **post-game review**.
+  mounts of read-position and phase-change narration; and the **post-game
+  review WALK** (it stays computed).
+- **KEPT, the review's THEORY lecture (David 2026-10-19: "it needs to match the
+  video corpus we have").** The student asked for it by tapping Theory, so it is
+  a lesson: where the voiced corpus has a note at a position on the lecture's
+  line (exact position, seat-checked, board-graded — `noteArrowSourceAt`, the
+  walkthrough's own selector), that note is the move's teaching; computed
+  reasons fill the rest.
 - **Play** is out of this change: its mounts pass `corpusNotes: true`, and Play
   stays silent until the student asks (its own locked rule).
 
 **Made unreopenable, not just removed.** `usePositionNarration`,
 `usePhaseNarration` and `composePositionRead` take a REQUIRED `corpusNotes:
 boolean` — no default a new mount can inherit — and Learn passes `false`. Gate:
-`src/test/corpusScope.test.ts` fails if review, Learn free play, fork talk or
-think-aloud calls any corpus retrieval (scanned by statement, comments
+`src/test/corpusScope.test.ts` fails if the review walk, Learn free play, fork
+talk or think-aloud calls any corpus retrieval (scanned by statement, comments
 stripped), and holds POSITIVE controls so it cannot pass by deleting too much:
-the walkthrough still splices its notes and chat still gets its block.
+the walkthrough still splices its notes, chat still gets its block, and the
+Theory lecture speaks a real voiced note at a real position.
 
 ### 🔒🔒 THE VOICED-NARRATION PIPELINE — its own locked playbook (David 2026-08-24).
 
