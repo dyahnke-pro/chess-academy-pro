@@ -28,7 +28,6 @@ import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGround
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded, mastersMovesSync, masterMovesCachedSync } from './masterPlayLookup';
 import { moveJob, MINE, THEIRS, type PriorCapture } from './bookMoveWhy';
-import { sayMoveNoun } from './spokenMove';
 import { refutedAlternative, candidatesForPosition, SINGLETON_SCORER, type RefutedAlternative } from './refutedAlternative';
 import { recordedMoveCost } from './moveCost';
 import { findWorstPlacedPiece } from './nextPlans';
@@ -2035,9 +2034,13 @@ export function buildReviewSegments(
           const masters = masterMovesCachedSync(fenPair.fenBefore);
           const sorted = masters ? [...masters].sort((x, y) => y.games - x.games) : [];
           const book = sorted.find((x) => x.san === m.san && x.games >= BOOK_JOB_MIN_GAMES);
-          const tag = book ? (sorted[0] === book ? ", the masters' main move here" : ', a book move here') : '';
-          const noun = sayMoveNoun(m.san, fenPair.fenBefore);
-          const text = mine ? `You play ${noun}${tag}: ${job.clause}.` : `They play ${noun}${tag}: ${job.clause}.`;
+          // THE POINT, NEVER THE MOVE (David 2026-10-20: "You play the knight
+          // to b4 — redundant"): the move is on the board and in the move list
+          // (Narration Voice Rule 3). The clause's own pronouns say whose move
+          // it is. Book standing leads only where the masters' file knows it.
+          const standing = book ? (sorted[0] === book ? "The masters' main move here" : 'A book move here') : null;
+          const point = job.clause.replace(/^it /, '');
+          const text = standing ? `${standing}: ${job.clause}.` : `${point.charAt(0).toUpperCase()}${point.slice(1)}.`;
           const raw = `[move-job] ${text}`;
           facets.push(raw);
           facetIdentity.set(raw, id);
