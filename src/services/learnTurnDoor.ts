@@ -40,7 +40,7 @@ export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
 /** Why the door held a lane on a turn. */
-export type HoldReason = 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase';
+export type HoldReason = 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled';
 
 /** The AVERAGE a Learn turn is held to (CLAUDE.md WHY standard measure 4) —
  *  the scale of the marginal bar, never a limit. */
@@ -650,9 +650,13 @@ export function decideTurn(
   // lead was picked, then held by the mate rule, and the row named a lead that
   // never spoke). One predicate, read by the lead pick and the speak loop.
   const midExchange = turn && turn.kind !== 'phase' ? turn.midExchange : null;
+  const priceUnsettled = !!turn && turn.kind !== 'phase' && !turn.priceSettled;
   // ONE ANSWER PER HELD FACT: why it waits (the hold and its reason used to be
   // two computations, and a costly-move hold was reported as 'mate-turn').
   const holdWhy = (x: { fact: VoiceFact; lane: LearnLane }): HoldReason | null => {
+    // AN AFFIRM NEVER SPEAKS ON AN UNSETTLED PRICE: it can wait a turn; a
+    // move praised at depth 14 and a mistake at 16 is the coach lying twice.
+    if (priceUnsettled && DNA_BEAT[x.lane] === 'affirm') return 'price-unsettled';
     if (mateTurn && !DANGER_LANES.has(x.lane) && !isMateFact(x)) return 'mate-turn';
     // A VERDICT TURN STAYS ON THE VERDICT (David 2026-10-11, the "very good"
     // bar: 35–50 words, one lead). When the student's move is graded, the

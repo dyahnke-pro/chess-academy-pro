@@ -8341,6 +8341,8 @@ export function CoachTeachPage(): JSX.Element {
     studentColor: 'white' | 'black';
     /** The engine's cost of the student's move (null when ungraded). */
     moveCostCp: number | null;
+    /** The price is settled (`MovePrice.settled`); false holds every affirm. */
+    priceSettled: boolean;
   }): {
     /** The utterance AND its provenance, from one object. Callers speak
      *  `pkg.spoken` and log `pkg.kept` — never a separately-assembled string,
@@ -9449,7 +9451,7 @@ export function CoachTeachPage(): JSX.Element {
         return readBoard('lastTimeHere', { fenBefore: b.fen(), playedSan: h[h.length - 2], rows, currentGameId: learnMemRef.current.gameId });
       } catch { return null; }
     })();
-    const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, midExchange: midExchangeOn }, facts: [
+    const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, priceSettled: args.priceSettled, midExchange: midExchangeOn }, facts: [
       ...(gemLine ? [{ lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
       ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
@@ -9778,6 +9780,10 @@ export function CoachTeachPage(): JSX.Element {
     // `grade` is block-scoped to the narration branch, and the capability guard
     // must NEVER read "ungraded" as "clean" — null stays null.
     let studentCpLoss: number | null = null;
+    // THE PRICE IS SETTLED (#10.Bf4): false while the one price is still
+    // deepening a read near a band edge — the door holds every affirm until
+    // it is (an affirm can wait; the verdict speaks on the settled number).
+    let studentPriceSettled = true;
     // ONE READ PER POSITION (clean-pass walk 2026-10-03, G1 ply 61: "There's a
     // forced mate here, starting with Qa7+" from the coach-turn probe, then
     // "Qa7+ was cleaner — it would win the queen for a pawn" from the 5-second
@@ -9841,6 +9847,9 @@ export function CoachTeachPage(): JSX.Element {
           depth: COACH_TURN_DEPTH,
         });
         if (grade) studentCpLoss = grade.cpLossCp;
+        // Off the fan, or unsettled there: the price decides, and until it
+        // lands nothing affirms the move.
+        else if (!preStudentRead.isMate) studentPriceSettled = false;
         // File the live evaluation so the saved record carries it (C7). The
         // engine read is White-POV centipawns; `move.history` includes this
         // move, so its index is the ply.
@@ -11102,6 +11111,7 @@ export function CoachTeachPage(): JSX.Element {
               const searched = await Promise.race([priceRead, new Promise<null>((r) => { setTimeout(() => r(null), COST_WAIT_MS); })]);
               if (searched !== null) {
                 studentCpLoss = searched.costCp;
+                studentPriceSettled = searched.settled;
                 // A fan too shallow to grade the move (`gradePlayedMove`) left
                 // the live grade and the heard verdict unwritten: they take the
                 // price, so Review stores the number the door used.
@@ -11145,6 +11155,7 @@ export function CoachTeachPage(): JSX.Element {
                   moveTo: im.to,
                   studentColor: playerColor,
                   moveCostCp: studentCpLoss,
+                  priceSettled: studentPriceSettled,
                 });
                 instantLead = instant.lead;
                 for (const d of instant.deferred) queueSpokenHint(ip.fen(), d.text, d.lane, d.proof, d.squares, d.claims, undefined, d.arrows);
@@ -11263,6 +11274,10 @@ export function CoachTeachPage(): JSX.Element {
             let mistakeCalledThisTurn = false;
             const verdictPass = Promise.all([midTurnRead, costRead]).then(async () => {
               try {
+                // The late wave speaks on the price as it SETTLED (deepened
+                // within the verdict's budget), never the instant wave's guess.
+                const settledPrice = await priceRead;
+                if (settledPrice) { studentCpLoss = settledPrice.costCp; studentPriceSettled = settledPrice.settled; }
                 if (liveFenRef.current !== fenAfterReply) return;
                 // ONE LATE WAVE, SPOKEN (OS-18): the door decides it and the voice says it
                 // with its marks. Called for the verdict the moment it is built, then for
@@ -11279,7 +11294,7 @@ export function CoachTeachPage(): JSX.Element {
                   // the per-game novelty set, not by a number.
                   const lateDecision = coachTurn({
                     posture: 'learn',
-                    turn: { kind: 'late', ply: move.history.length, moveCostCp: studentCpLoss, midExchange: pendingRecapture([...move.history, reply]) },
+                    turn: { kind: 'late', ply: move.history.length, moveCostCp: studentCpLoss, priceSettled: studentPriceSettled, midExchange: pendingRecapture([...move.history, reply]) },
                     facts: lines
                       // A threat alert already said a tactic is on the board;
                       // "it has turned sharp — there is a tactic" beside it is

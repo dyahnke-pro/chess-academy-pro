@@ -42,7 +42,7 @@ const analysis = {
 
 const reads = {
   historySans: SANS.slice(0, 12), bestMoveUci: 'e7e6', bestPvUci: ['e7e6'], playedPvUci: [] as string[],
-  price: { costCp: 120, scores: { bestWhiteCp: -30, playedWhiteCp: 90 } }, missedMate: null, allowedMate: null,
+  price: { costCp: 120, scores: { bestWhiteCp: -30, playedWhiteCp: 90 }, settled: true }, missedMate: null, allowedMate: null,
 };
 
 async function needRows(withReads: boolean): Promise<NeedScoreRow[]> {

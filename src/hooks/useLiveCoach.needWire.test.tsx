@@ -52,7 +52,7 @@ const FEN_AFTER = 'rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1';
 const move = (ply: number): PlayerMoveNotification => ({
   ply, san: 'Nf3', fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER,
   evalBefore: 20, evalAfter: 120, bestMoveEval: 130, bestMoveSan: 'Nf3',
-  price: { costCp: 10, scores: { bestWhiteCp: 130, playedWhiteCp: 120 } },
+  price: { costCp: 10, scores: { bestWhiteCp: 130, playedWhiteCp: 120 }, settled: true },
   isBestMove: false, bestMoveWasTactical: true, hasHangingPiece: false,
   historySans: ['Nf3'], bestMoveUci: 'g1f3', bestPvUci: ['g1f3', 'g8f6'], replyPvUci: ['g8f6', 'd2d4'],
 });
@@ -97,7 +97,7 @@ describe('useLiveCoach hands the composer the student model (B3)', () => {
     const seen = computePositionFacts.mock.calls[0][0] as Seen;
     expect(seen.lastMove?.reads).toEqual({
       historySans: ['Nf3'], bestMoveUci: 'g1f3', bestPvUci: ['g1f3', 'g8f6'], playedPvUci: ['g8f6', 'd2d4'],
-      price: { costCp: 10, scores: { bestWhiteCp: 130, playedWhiteCp: 120 } }, missedMate: null, allowedMate: null,
+      price: { costCp: 10, scores: { bestWhiteCp: 130, playedWhiteCp: 120 }, settled: true }, missedMate: null, allowedMate: null,
     });
   });
 
