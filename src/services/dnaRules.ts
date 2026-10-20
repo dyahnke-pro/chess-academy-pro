@@ -41,6 +41,15 @@ export function earnedPraise(kind: PraiseKind, streak: number, rot: number): str
   return stems[((rot % stems.length) + stems.length) % stems.length];
 }
 
+/** THE MOVE THE STUDENT FOUND, AFFIRMED WITH ITS REASON — the ONE table,
+ *  rotated (OS-11 smaller sets: the database affirmation and the held move's
+ *  reveal each had one unrotated stem; "That was the move here — it …" was
+ *  heard seven times in one game). Never bare: the reason rides every stem. */
+const AFFIRM_STEMS: readonly string[] = ['That was the move here', 'That is the move this position asks for', 'You found it', 'That move does the job here'];
+export function affirmMove(why: string, key: number): string {
+  return `${AFFIRM_STEMS[Math.abs(Math.trunc(key)) % AFFIRM_STEMS.length]} — it ${why}.`;
+}
+
 const PRAISE_ALLOWED = new Set<string>([...Object.values(EARNED_PRAISE).flat(), ...STREAK_PRAISE]);
 
 /** DNA rule 7 — no move-number prefixes ("12.Nf3" is read "twelve"). A

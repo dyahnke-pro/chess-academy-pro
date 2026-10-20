@@ -22,8 +22,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `openingFamily` (function) — 9 call sites
 - `src/components/Debug/OpeningBlundersPage.tsx:883`
-- `src/services/coachFeatureService.ts:3432`
-- `src/services/coachFeatureService.ts:3773`
+- `src/services/coachFeatureService.ts:3448`
+- `src/services/coachFeatureService.ts:3789`
 - `src/services/homeOpening.ts:114`
 - `src/services/homeOpening.ts:194`
 - `src/services/openingKey.test.ts:50`
@@ -34,7 +34,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `OTHER_FAMILY` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `familyLabel` (function) — 13 call sites
+### `familyLabel` (function) — 7 call sites
 - `src/components/Debug/OpeningBlundersPage.tsx:884`
 - `src/services/openingBlunderService.labels.test.ts:6`
 - `src/services/openingBlunderService.labels.test.ts:7`
@@ -42,12 +42,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingBlunderService.labels.test.ts:20`
 - `src/services/openingBlunderService.labels.test.ts:21`
 - `src/services/openingBlunderService.labels.test.ts:22`
-- `src/services/openingStory.ts:160`
-- `src/services/openingStory.ts:199`
-- `src/services/openingStory.ts:371`
-- `src/services/openingStory.ts:374`
-- `src/services/openingStory.ts:375`
-- `src/services/openingStory.ts:510`
 
 ### `OpeningBlunderFamily` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

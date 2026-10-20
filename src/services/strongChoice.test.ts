@@ -8,10 +8,14 @@ const fen = (() => { const c = new Chess(); c.move('e4'); c.move('c6'); return c
 
 afterEach(() => __resetHisPlayDbForTests());
 
+import { affirmMove } from './dnaRules';
+import { stemKeyOf } from '../utils/rotateStem';
+
 describe('strongChoice — his games, depersonalized', () => {
   it('confirms the student played the strong choice, and never names another move (Learn names no move unasked, 2026-10-19)', () => {
     __setHisPlayDbForTests({ [positionFen(fen)]: { total: 30, moves: [{ san: 'd4', games: 24, w: 14, d: 6, l: 4 }, { san: 'Nc3', games: 6, w: 2, d: 2, l: 2 }] } });
-    expect(strongChoice(fen, 'd4')?.text).toBe("That's what strong players play here — it stakes out the center and grabs space.");
+    // The one affirmation table (dnaRules.affirmMove), rotated by the board.
+    expect(strongChoice(fen, 'd4')?.text).toBe(affirmMove('stakes out the center and grabs space', stemKeyOf(fen)));
     // David's replay, 2.d4: "Strong players play Nf3 here" was heard as his next move.
     expect(strongChoice(fen, 'Nf3')).toBeNull();
   });
@@ -19,7 +23,7 @@ describe('strongChoice — his games, depersonalized', () => {
     __setHisPlayDbForTests({ [positionFen(fen)]: { total: 24, moves: [{ san: 'd4', games: 13, w: 4, d: 3, l: 6 }, { san: 'Nc3', games: 9, w: 5, d: 1, l: 3 }, { san: 'c4', games: 2, w: 1, d: 0, l: 1 }] } });
     expect(strongChoice(fen, 'd4')).toBeNull(); // a better-scoring move exists: not named, not affirmed
     const t = strongChoice(fen, 'Nc3')?.text ?? '';
-    expect(t).toMatch(/^That's what strong players play here — it /);
+    expect(t).toMatch(/ — it /);
     expect(t.replace(/[a-h][1-8]/g, '')).not.toMatch(/\d/);
   });
   it('never names a person', () => {

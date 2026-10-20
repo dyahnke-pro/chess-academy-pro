@@ -53,14 +53,15 @@ describe('the leaks on David\'s record', () => {
     expect(refuted && namesPlayableStudentMove(refuted.namesStudentMove)).toBe(true);
   });
 
-  it('a free piece is said without its square, and nothing is marked (move 28: "Their bishop on g4 has nothing defending it")', () => {
+  it('a free piece is said without its square, and only the prize is marked (move 28: "Their bishop on g4 has nothing defending it")', () => {
     // After 27…Kf8 the bishop on g4 hangs to Nxg4 (his next move).
     const fen = F[54];
     for (const stem of [0, 1, 2]) {
       const p = prizeTeaching(fen, 'g4', 'w', stem);
       expect(p).not.toBeNull();
       expect(p?.text).not.toMatch(/g4|f6/);
-      expect(p?.squares).toEqual([]);
+      // The prize is marked; the taker (the knight on f6) never is.
+      expect(p?.squares).toEqual(['g4']);
     }
   });
 

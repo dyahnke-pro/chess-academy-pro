@@ -39,7 +39,9 @@ describe('#3 — the loose bishop on f4 is one claim across turns', () => {
     expect(TEACH).toMatch(/const loose = looseClaim\(worst\.square, loosePly, learnMemRef\.current\.looseSpells\);\s*threatKey = loose\.key;\s*threatClaims\.push\(loose\.key\);/);
     expect(TEACH).toMatch(/for \(const sq of tacticSquares\) if \(myHanging\.some\(\(h\) => h\.square === sq\)\) tacticLoose\.push\(looseClaim\(sq, loosePly, learnMemRef\.current\.looseSpells\)\.key\);/);
     expect(looseStillKey('f4', 26)).not.toBe(looseKey('f4', 26));
-    expect(TEACH).toMatch(/\.\.\.\(threatClaims\.length \? \{ claims: threatClaims \} : \{\}\)/);
+    // The threat lane carries its loose keys beside the tactic's own key and the
+    // threat-cost computer's claims (batch 4 merge of #4 + #5).
+    expect(TEACH).toMatch(/claims: \[\.\.\.new Set\(\[\.\.\.\(threatClaim \? \[threatClaim\] : \[\]\), \.\.\.threatClaims, \.\.\.\(threatCostRead\?\.claims \?\? \[\]\)\]\)\]/);
   });
 });
 

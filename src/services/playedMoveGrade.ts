@@ -245,11 +245,19 @@ export async function settledMovePrice(args: {
   // the noise, OR two consecutive depths grade it the same.
   const started = Date.now();
   const { step, maxDepth } = SEARCH_POLICY.question;
-  for (let d = depth + step; !price.settled && d <= maxDepth && Date.now() - started < budgetMs; d += step) {
+  // EACH DEEPER SEARCH IS BOUNDED BY THE BUDGET LEFT (Learn speed,
+  // 2026-10-20): the budget used to gate only the START of a depth, and a
+  // depth-18 search on two moves ran 30 s under the question hold while every
+  // other read of the turn waited. A search the budget cut short that got no
+  // deeper than the price already is keeps the price as it was.
+  for (let d = depth + step; !price.settled && d <= maxDepth; d += step) {
+    const left = budgetMs - (Date.now() - started);
+    if (left <= 0) break;
     // A fan that already holds the played move would answer again at its own
     // depth: the deeper read is always a fresh scored search.
-    const deeper = await one({ fenBefore, playedUci, fan: fan ? { topLines: fan.topLines } : null, depth: d });
+    const deeper = await one({ fenBefore, playedUci, fan: fan ? { topLines: fan.topLines } : null, depth: d, budgetMs: left });
     if (!deeper) break;
+    if (deeper.depth !== null && deeper.depth <= depthReached) break;
     deepened = true;
     depthReached = deeper.depth ?? d;
     const was = priceLabel(price, mover);
@@ -287,15 +295,15 @@ export function studentMovePrice(fenBefore: string, playedUci: string, fan: Cost
   return memoPrice(fenBefore, playedUci, fan, depth, (args) => stockfishEngine.holdForQuestion((engine) => moveScoresOneSearch({
     ...args,
     scorer: {
-      async scoreMoves(fen, ucis, d) {
-        const r = await engine.analyzePosition(fen, d, { searchmoves: ucis.join(' ') });
+      async scoreMoves(fen, ucis, d, budgetMs) {
+        const r = await engine.analyzePosition(fen, d, { searchmoves: ucis.join(' ') }, budgetMs);
         return r.topLines.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves, depth: l.depth ?? r.depth }));
       },
     },
   })));
 }
 
-type OneSearch = (args: { fenBefore: string; playedUci: string; fan: CostFan | null; depth: number }) => ReturnType<typeof moveScoresOneSearch>;
+type OneSearch = (args: { fenBefore: string; playedUci: string; fan: CostFan | null; depth: number; budgetMs?: number }) => ReturnType<typeof moveScoresOneSearch>;
 
 function memoPrice(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number, search: OneSearch): Promise<MovePrice | null> {
   const key = `${fenBefore}|${playedUci}`;

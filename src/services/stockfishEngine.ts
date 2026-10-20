@@ -2025,6 +2025,37 @@ class StockfishEngine {
     }
   }
 
+  /** A READ WITH A TIME BOUND, stopped `budgetMs` after its search starts —
+   *  the depth it reached is what it returns (`searchedShort` marks the rest).
+   *  Needed wherever a search runs under the question hold, since nothing else
+   *  can run while it does: Learn's price deepened to depth 18 on two moves
+   *  and searched 30 s (the hard timeout), and every read of the turn — and of
+   *  the turns after it — queued behind it (Learn speed, 2026-10-20).
+   *  The ONE budgeted search (`analyzeWithBudget` runs on it too): the budget
+   *  and its grace arm when the search STARTS, never when it is asked for. */
+  async analyzeBounded(
+    fen: string,
+    depth: number,
+    options: Record<string, string | number> | undefined,
+    budgetMs: number,
+    bypassQuestionHold = false,
+  ): Promise<StockfishAnalysis> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let graceTimer: ReturnType<typeof setTimeout> | undefined;
+    const promise = this.analyzePosition(fen, depth, options, 'brain', () => {
+      timer = setTimeout(() => this.stop(), Math.max(0, budgetMs));
+      graceTimer = setTimeout(() => {
+        this.recoverStuckAnalysis('budget grace exceeded (engine not responding to stop)');
+      }, Math.max(0, budgetMs) + ANALYSIS_BUDGET_GRACE_MS);
+    }, bypassQuestionHold);
+    try {
+      return await promise;
+    } finally {
+      if (timer) clearTimeout(timer);
+      if (graceTimer) clearTimeout(graceTimer);
+    }
+  }
+
   /**
    * Run `work` — what the student is waiting on: their question, or the price
    * of the move they just played — with this engine held: the search in
@@ -2033,7 +2064,7 @@ class StockfishEngine {
    * is done. `work` gets an engine whose reads pass through the hold. The hold
    * is released however `work` ends.
    */
-  async holdForQuestion<T>(work: (engine: { analyzePosition(fen: string, depth: number, options?: Record<string, string | number>): Promise<StockfishAnalysis> }) => Promise<T>): Promise<T> {
+  async holdForQuestion<T>(work: (engine: { analyzePosition(fen: string, depth: number, options?: Record<string, string | number>, budgetMs?: number): Promise<StockfishAnalysis> }) => Promise<T>): Promise<T> {
     let release!: () => void;
     const hold = new Promise<void>((r) => { release = r; });
     this._questionHold = hold;
@@ -2048,8 +2079,8 @@ class StockfishEngine {
     // The question's own reads go THROUGH the hold, on this same warm engine —
     // no cold worker to spawn (the pool cost ~14s on a first question).
     const questionEngine = {
-      analyzePosition: (fen: string, depth: number, options?: Record<string, string | number>): Promise<StockfishAnalysis> =>
-        this.analyzePosition(fen, depth, options, 'brain', undefined, true),
+      analyzePosition: (fen: string, depth: number, options?: Record<string, string | number>, budgetMs?: number): Promise<StockfishAnalysis> =>
+        (budgetMs !== undefined ? this.analyzeBounded(fen, depth, options, budgetMs, true) : this.analyzePosition(fen, depth, options, 'brain', undefined, true)),
     };
     try {
       return await work(questionEngine);
@@ -2129,22 +2160,7 @@ class StockfishEngine {
     // replied to the student's move (prod audit 2026-09-07, EXPL red under
     // load). Arming on dispatch makes the budget mean what it says for every
     // caller, however many are queued.
-    const runOnce = async (): Promise<StockfishAnalysis> => {
-      let timer: ReturnType<typeof setTimeout> | undefined;
-      let graceTimer: ReturnType<typeof setTimeout> | undefined;
-      const promise = this.analyzePosition(fen, depth, undefined, 'brain', () => {
-        timer = setTimeout(() => this.stop(), budgetMs);
-        graceTimer = setTimeout(() => {
-          this.recoverStuckAnalysis('budget grace exceeded (engine not responding to stop)');
-        }, budgetMs + ANALYSIS_BUDGET_GRACE_MS);
-      });
-      try {
-        return await promise;
-      } finally {
-        if (timer) clearTimeout(timer);
-        if (graceTimer) clearTimeout(graceTimer);
-      }
-    };
+    const runOnce = (): Promise<StockfishAnalysis> => this.analyzeBounded(fen, depth, undefined, budgetMs);
     // ONE RESTART PER DEATH (David's phone, 2026-10-18: ten "forced worker
     // respawn" in the same millisecond). Every queued call that saw the engine
     // die used to restart it — each restart killing the engine the previous

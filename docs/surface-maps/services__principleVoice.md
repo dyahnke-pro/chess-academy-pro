@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**932 lines · 6 exports · 23 importers · 19 tests · 3 audits**
+**933 lines · 6 exports · 23 importers · 19 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,7 +39,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:5145`
+- `src/services/coachFeatureService.ts:5161`
 - `src/services/learnFundamentalNarration.ts:141`
 
 ### `fundamentalHow` (function) — 10 call sites
@@ -60,7 +60,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `renderFundamentalVerdict` (function) — 54 call sites
 - `src/services/blockedOwnRetreat.test.ts:32`
-- `src/services/coachFeatureService.ts:2880`
+- `src/services/coachFeatureService.ts:2896`
 - `src/services/forcingStemNoDecisive.test.ts:17`
 - `src/services/forcingStemNoDecisive.test.ts:22`
 - `src/services/fundLeadStems.test.ts:59`
@@ -115,12 +115,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/walkOct2a.test.ts:155`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2891`
+- `src/services/coachFeatureService.ts:2907`
 - `src/services/principleVoice.test.ts:39`
 - `src/services/principleVoice.test.ts:41`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:5621`
+- `src/services/coachFeatureService.ts:5637`
 - `src/services/principleVoice.test.ts:49`
 - `src/services/principleVoice.test.ts:54`
 - `src/services/principleVoice.test.ts:58`

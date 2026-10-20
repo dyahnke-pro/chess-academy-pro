@@ -85,7 +85,7 @@
 - `src/services/verdictTurnGrade.test.ts:65`
 
 ### `emitLearnTurn` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:939`
+- `src/services/learnTurnDoor.ts:938`
 
 ## Tests
 

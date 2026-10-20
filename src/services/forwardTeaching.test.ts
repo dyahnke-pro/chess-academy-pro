@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { computePieceRoute, isKnightOutpost } from './forwardTeaching';
+import { computePieceRoute } from './forwardTeaching';
+import { isOutpost } from './outpost';
 
 describe('computePieceRoute (Phase 1 — knight → supported outpost)', () => {
   it('routes a knight to a supported hole (b1 → c3 → d5, backed by e4)', () => {
@@ -34,12 +35,12 @@ describe('computePieceRoute (Phase 1 — knight → supported outpost)', () => {
   it('rejects a square an enemy pawn can still challenge (not a hole)', () => {
     // d5 is defended by e4, but a Black c-pawn on c7 can play ...c6 to hit d5.
     const chess = new Chess('4k3/2p2p2/8/8/4P3/8/8/1N2K3 w - - 0 1');
-    expect(isKnightOutpost(chess, 'd5', 'w')).toBe(false);
+    expect(isOutpost(chess, 'd5', 'w', true)).toBe(false);
   });
 
   it('accepts a genuine supported hole', () => {
     const chess = new Chess('4k3/p4p2/8/8/4P3/8/8/1N2K3 w - - 0 1');
-    expect(isKnightOutpost(chess, 'd5', 'w')).toBe(true);
+    expect(isOutpost(chess, 'd5', 'w', true)).toBe(true);
   });
 
   it('works symmetrically for Black (…d4 outpost backed by …e5)', () => {

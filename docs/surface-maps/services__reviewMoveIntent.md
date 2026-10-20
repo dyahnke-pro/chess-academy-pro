@@ -60,7 +60,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveIntent.test.ts:87`
 
 ### `moveIntentsForGame` (function) — 1 call site
-- `src/services/coachFeatureService.ts:5416`
+- `src/services/coachFeatureService.ts:5432`
 
 ## Tests
 

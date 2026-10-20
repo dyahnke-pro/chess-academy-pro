@@ -1,60 +1,17 @@
 import { describe, it, expect } from 'vitest';
 import {
-  minSwingPawns,
-  turningPointCandidates,
   buildCriticalMomentQuestion,
   judgeCriticalMomentPick,
   type TurningPointSegmentLike,
   type CriticalMomentRead,
 } from './reviewTurningPoint';
+import { rankTurns } from './turningPoints';
 import { readCriticalMoment, type CriticalFanLine } from './criticalMoment';
 
 // The end-of-review "where did this game turn?" question (David 2026-07-11).
 // Candidates + the answer are COMPUTED from the eval record — the student
 // self-assesses, the board grades (G0).
 
-function seg(o: Partial<TurningPointSegmentLike> & { ply: number }): TurningPointSegmentLike {
-  return {
-    moveNumber: Math.ceil(o.ply / 2),
-    san: 'Nf3',
-    playerColor: o.ply % 2 === 1 ? 'white' : 'black',
-    evalBefore: 0,
-    evalAfter: 0,
-    classification: null,
-    ...o,
-  };
-}
-
-describe('the importance model — band-free + contested (B6, 2026-09-22)', () => {
-  it('a 1.2-pawn pair turns the game for every student — the bar takes no rating', () => {
-    const segs = [
-      seg({ ply: 9, playerColor: 'white', evalBefore: 60, evalAfter: -60 }),   // 1.2p
-      seg({ ply: 15, playerColor: 'white', evalBefore: 20, evalAfter: -100 }), // 1.2p
-    ];
-    expect(minSwingPawns()).toBeCloseTo(1.0);
-    expect(minSwingPawns.length).toBe(0);
-    expect(turningPointCandidates(segs).map((c) => c.ply)).toEqual([9, 15]); // both clear 1.0
-  });
-
-  it('contested gate: a blowout that stays a blowout is NOT a turning point', () => {
-    const segs = [
-      // Huge RAW swing (2.5p) but both endpoints decided for White — never turned.
-      seg({ ply: 7, playerColor: 'white', evalBefore: 900, evalAfter: 650 }),
-      seg({ ply: 11, playerColor: 'white', evalBefore: 300, evalAfter: -50 }),  // 3.5p, real
-      seg({ ply: 15, playerColor: 'black', evalBefore: -40, evalAfter: 260 }),  // 3.0p, real
-    ];
-    const c = turningPointCandidates(segs);
-    expect(c.map((x) => x.ply)).toEqual([11, 15]); // ply 7 excluded, biggest first
-  });
-
-  it('throwing a won game IS a turning point (decided → contested is kept)', () => {
-    const segs = [
-      seg({ ply: 9, playerColor: 'white', evalBefore: 800, evalAfter: -200 }), // threw the win
-      seg({ ply: 13, playerColor: 'white', evalBefore: -50, evalAfter: -350 }),
-    ];
-    expect(turningPointCandidates(segs).map((c) => c.ply)).toContain(9);
-  });
-});
 
 describe('the critical moment, asked — review’s second register', () => {
   const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -72,7 +29,7 @@ describe('the critical moment, asked — review’s second register', () => {
 
   it('asks at a ply the SWING card can never reach — a found only-move costs nothing', () => {
     const segments = [seg()];                     // evalBefore === evalAfter → zero swing
-    expect(turningPointCandidates(segments)).toHaveLength(0);
+    expect(rankTurns(segments)).toHaveLength(0);
     const q = buildCriticalMomentQuestion(segments, new Map([[21, readAt(1)]]), 'white');
     expect(q?.ply).toBe(21);
     expect(q?.found).toBe(true);
@@ -128,19 +85,6 @@ describe('the critical moment, asked — review’s second register', () => {
     expect(judgeCriticalMomentPick(q, 'Nf3')).toBe(false);
   });
 
-  it('THE SWING CARD IS UNCHANGED — the new register adds, it does not retarget', () => {
-    // `teachingSelector` (N1) shares `turningPointCandidates`; this pins that
-    // the shared computer still returns exactly what it did before.
-    const segments: TurningPointSegmentLike[] = [
-      seg({ ply: 9, evalBefore: 40, evalAfter: -260, san: 'Nd2' }),
-      seg({ ply: 21, evalBefore: -260, evalAfter: -110, san: 'e4' }),
-      seg({ ply: 31, evalBefore: -110, evalAfter: -420, san: 'Qh5' }),
-    ];
-    const got = turningPointCandidates(segments);
-    expect(got.map((c) => c.ply)).toEqual([31, 9]);   // biggest swing first
-    expect(got[0].swingPawns).toBeCloseTo(3.1, 5);
-    expect(got[1].swingPawns).toBeCloseTo(3.0, 5);
-  });
 });
 
 describe('the critical moment — the three registers', () => {

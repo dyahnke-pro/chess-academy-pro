@@ -23,9 +23,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `sacrificeCompensation` (function) — 17 call sites
+### `sacrificeCompensation` (function) — 19 call sites
 - `src/data/patternRegistry.ts:133`
-- `src/services/coachFeatureService.ts:3070`
+- `src/services/coachFeatureService.ts:3086`
 - `src/services/reviewFullData.ts:1073`
 - `src/services/reviewSacrifice.test.ts:14`
 - `src/services/reviewSacrifice.test.ts:18`
@@ -34,36 +34,38 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewSacrifice.test.ts:38`
 - `src/services/reviewSacrifice.test.ts:39`
 - `src/services/reviewSacrifice.test.ts:40`
-- `src/services/reviewSacrifice.test.ts:44`
-- `src/services/reviewSacrifice.test.ts:81`
-- `src/services/reviewSacrifice.test.ts:83`
-- `src/services/reviewSacrifice.test.ts:87`
-- `src/services/reviewSacrifice.test.ts:88`
-- `src/services/reviewSacrifice.test.ts:94`
+- `src/services/reviewSacrifice.test.ts:46`
+- `src/services/reviewSacrifice.test.ts:48`
+- `src/services/reviewSacrifice.test.ts:52`
+- `src/services/reviewSacrifice.test.ts:89`
+- `src/services/reviewSacrifice.test.ts:91`
+- `src/services/reviewSacrifice.test.ts:95`
+- `src/services/reviewSacrifice.test.ts:96`
+- `src/services/reviewSacrifice.test.ts:102`
 - `src/services/reviewWalk2065.test.ts:39`
 
 ### `enemyKingStuckInCenter` (function) — 13 call sites
-- `src/services/coachFeatureService.ts:3364`
-- `src/services/coachFeatureService.ts:3390`
-- `src/services/coachFeatureService.ts:3414`
-- `src/services/nextPlans.ts:279`
+- `src/services/coachFeatureService.ts:3380`
+- `src/services/coachFeatureService.ts:3406`
+- `src/services/coachFeatureService.ts:3430`
+- `src/services/nextPlans.ts:280`
 - `src/services/planChoice.ts:77`
 - `src/services/planStopped.ts:52`
 - `src/services/reviewConcepts.ts:220`
 - `src/services/reviewFullData.ts:967`
 - `src/services/reviewFullData.ts:1559`
 - `src/services/reviewFullData.ts:1685`
-- `src/services/reviewSacrifice.test.ts:106`
-- `src/services/reviewSacrifice.test.ts:116`
-- `src/services/reviewSacrifice.test.ts:120`
+- `src/services/reviewSacrifice.test.ts:114`
+- `src/services/reviewSacrifice.test.ts:124`
+- `src/services/reviewSacrifice.test.ts:128`
 
 ### `describeSacBreaksKingShield` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3101`
+- `src/services/coachFeatureService.ts:3117`
 - `src/services/reviewFullData.ts:1091`
-- `src/services/reviewSacrifice.test.ts:53`
-- `src/services/reviewSacrifice.test.ts:58`
-- `src/services/reviewSacrifice.test.ts:70`
-- `src/services/reviewSacrifice.test.ts:74`
+- `src/services/reviewSacrifice.test.ts:61`
+- `src/services/reviewSacrifice.test.ts:66`
+- `src/services/reviewSacrifice.test.ts:78`
+- `src/services/reviewSacrifice.test.ts:82`
 - `src/services/reviewWalk2065.test.ts:38`
 
 ## Tests

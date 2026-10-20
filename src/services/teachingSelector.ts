@@ -32,7 +32,8 @@ import type { CoachSurface } from '../coach/types';
 import { computeNeed, coldStudent, type StudentNeedContext, type NeedVerdict } from './needScore';
 import { matchFundamental, matchTacticPattern, matchTag, boostFor } from './weaknessSignal';
 import type { TacticPatternType } from '../types/tacticTypes';
-import { turningPointCandidates, moveLabel, spokenMoveLabel, type TurningPointSegmentLike } from './reviewTurningPoint';
+import { moveLabel, spokenMoveLabel, type TurningPointSegmentLike } from './reviewTurningPoint';
+import { rankTurns } from './turningPoints';
 import { landedTacticTeaching } from './dnaLineNarrator';
 import { buildCausalChain, type CausalChain } from './causalChain';
 import { structurePlan } from './nextPlans';
@@ -107,6 +108,8 @@ interface Thesis {
   plan: string | null;
   /** The root-cause node kind of the causal chain, when one links the moments. */
   chainRoot: string | null;
+  /** The turn was the OPPONENT's move — said as theirs (OS-11 census 5). */
+  theirs?: boolean;
 }
 
 interface TeachingPackage {
@@ -177,13 +180,15 @@ export function weaknessBoostCp(tactic: string | null, signals: readonly import(
 
 /** Swing candidates re-ranked by swing + the student's hole (N5). Pure;
  *  an empty profile returns the input order. */
-export function rankSwingCandidates<T extends { ply: number; swingPawns: number }>(
+export function rankSwingCandidates<T extends { ply: number; swing: number }>(
   swings: readonly T[],
   landedByPly: ReadonlyMap<number, string>,
   signals: readonly import('./weaknessSignal').WeaknessSignal[],
 ): T[] {
   if (signals.length === 0) return [...swings];
-  const score = (c: T): number => c.swingPawns * 100 + weaknessBoostCp(landedByPly.get(c.ply) ?? null, signals);
+  // Winning chance lost ranks; the hole (0–30 cp) re-orders comparable moments
+  // by at most three points, never vaulting a subtlety over a real blunder.
+  const score = (c: T): number => c.swing + weaknessBoostCp(landedByPly.get(c.ply) ?? null, signals) / 10;
   return [...swings].sort((a, b) => score(b) - score(a));
 }
 
@@ -208,8 +213,18 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
     } catch { /* an illegal ply is not a moment */ }
   }
 
-  // 2. Swing moments — the review card's own candidates, biggest first…
-  const swingsRaw = turningPointCandidates(plies.map(toSegment));
+  // 2. Swing moments — the review card's own ranking, biggest first…
+  // THE ONE TURN RANKING (OS-11 census 5): winning chance lost, either side.
+  const segs = plies.map(toSegment);
+  const pawnCost = (sg: TurningPointSegmentLike): number | null => {
+    if (sg.evalBefore == null || sg.evalAfter == null) return null;
+    const cost = ((sg.evalBefore - sg.evalAfter) * (sg.playerColor === 'white' ? 1 : -1)) / 100;
+    return cost > 0 ? cost : null;
+  };
+  const swingsRaw = rankTurns(segs).map((t) => {
+    const sg = segs.find((x) => x.ply === t.ply) as TurningPointSegmentLike;
+    return { ply: t.ply, swing: t.swing, label: moveLabel(sg), swingPawns: pawnCost(sg) };
+  });
   // …RE-RANKED BY THE STUDENT'S HOLES (unified-coach N5): a moment whose landed
   // tactic is a hole this student keeps falling in outranks a moment of EQUAL
   // criticality that is not. The boost is `boostFor` (0–30, lifecycle-keyed,
@@ -271,7 +286,8 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
   // 5. The thesis — one computed fact the whole package serves.
   let thesis: Thesis = NONE;
   if (top && top.kind === 'swing') {
-    thesis = { kind: 'turned', ply: top.ply, label: top.label, swingPawns: top.swingPawns, tactic: top.tactic, plan: null, chainRoot: chain?.nodes[0]?.kind ?? null };
+    const theirs = byPly.get(top.ply)?.playerColor !== input.studentColor;
+    thesis = { kind: 'turned', ply: top.ply, label: top.label, swingPawns: top.swingPawns, tactic: top.tactic, plan: null, chainRoot: chain?.nodes[0]?.kind ?? null, ...(theirs ? { theirs } : {}) };
   } else if (top) {
     thesis = { kind: 'landed', ply: top.ply, label: top.label, swingPawns: null, tactic: top.tactic, plan: null, chainRoot: chain?.nodes[0]?.kind ?? null };
   } else if (kind === 'line') {
@@ -376,7 +392,7 @@ export function renderThesis(t: Thesis, register: ThesisRegister): string {
         : t.swingPawns > 15 ? ' — that move decided the game'
           : ` — it cost ${costWords(t.swingPawns * 100)}`;
       return register === 'retrospective'
-        ? `The game turned at ${label}${swing}${word ? `; a ${word} landed there` : ''}.`
+        ? `The game turned at ${t.theirs ? 'their move, ' : ''}${label}${swing}${word ? `; a ${word} landed there` : ''}.`
         : `This turns at ${label}${swing}${word ? ` — the ${word} lands there` : ''}.`;
     }
     case 'landed':

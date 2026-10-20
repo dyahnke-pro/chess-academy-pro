@@ -37,16 +37,16 @@
 - `src/services/planMemory.test.ts:36`
 - `src/services/planMemory.test.ts:37`
 - `src/services/planMemory.test.ts:42`
-- `src/services/positionFacts.ts:863`
+- `src/services/positionFacts.ts:864`
 
 ### `foldPlans` (function) — 3 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
 - `src/services/planMemory.test.ts:62`
-- `src/services/teachingSelector.ts:354`
+- `src/services/teachingSelector.ts:370`
 
 ### `planChangeSentence` (function) — 2 call sites
 - `src/services/planThread.ts:164`
-- `src/services/positionFacts.ts:871`
+- `src/services/positionFacts.ts:872`
 
 ## Tests
 

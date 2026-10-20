@@ -47,9 +47,14 @@ export async function readBoardPosition(page) {
 }
 
 export async function readWalkPly(page) {
-  const t = await page.locator('[data-testid="coach-game-review-walk"]').first().innerText({ timeout: 2000 }).catch(() => '');
-  const m = t.match(/Ply\s+(\d+)\s*\/\s*(\d+)/i);
-  return m ? { n: Number(m[1]), total: Number(m[2]) } : null;
+  // A busy page (seven engine workers) can take longer than 2s to answer an
+  // innerText — and a null read used to become "ply 0" at the caller. Retry.
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const t = await page.locator('[data-testid="coach-game-review-walk"]').first().innerText({ timeout: 5000 }).catch(() => '');
+    const m = t.match(/Ply\s+(\d+)\s*\/\s*(\d+)/i);
+    if (m) return { n: Number(m[1]), total: Number(m[2]) };
+  }
+  return null;
 }
 
 export async function boardSignature(page) {

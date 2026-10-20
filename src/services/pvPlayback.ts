@@ -242,7 +242,9 @@ export interface ScoredMove { evaluation: number; mate: number | null; moves: st
  *  move one: "d4 gives away 0.6" where one search scores the pair 12cp apart).
  *  White-POV evaluations, one entry per move the engine reached. */
 export interface MoveScorer {
-  scoreMoves(fen: string, ucis: readonly string[], depth: number): Promise<ScoredMove[]>;
+  /** `budgetMs`: stop the search that long after it starts (a bounded
+   *  deepening); the depth it reached rides on each `ScoredMove`. */
+  scoreMoves(fen: string, ucis: readonly string[], depth: number, budgetMs?: number): Promise<ScoredMove[]>;
 }
 
 /** English for a tacticsDetector type. The detector enums are snake_case program

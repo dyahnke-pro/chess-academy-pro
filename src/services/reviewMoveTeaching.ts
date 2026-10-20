@@ -21,6 +21,7 @@ import type { Move } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
 import { namedSquares } from './squareRole';
+import { outpostKey } from './conceptKey';
 
 // Q1 — OCCUPATION. A pawn reaching one of these has staked the centre.
 const CENTER = new Set(CORE_CENTER);
@@ -383,7 +384,7 @@ function centerFight(phrases: PhraseMemory | null, chess: Chess, color: 'w' | 'b
 }
 
 /** A move's teaching and the squares it names (see `buildReviewMoveTeachingFact`). */
-interface MoveTeachingFact { text: string; squares: string[] }
+interface MoveTeachingFact { text: string; squares: string[]; claim?: string }
 
 export function buildReviewMoveTeaching(
   fenBefore: string,
@@ -538,7 +539,7 @@ export function buildReviewMoveTeachingFact(
         // ever challenge it (that's what the detector guarantees).
         // A pawn move only makes the square safe for the piece already there —
         // name that piece (review tape 2026-10-15: "plant an outpost" of e6).
-        return out(`Makes ${newOutpost.square} an outpost for the ${PIECE_NOUN[newOutpost.piece] ?? 'piece'} — no enemy pawn can ever challenge it.`, [newOutpost.square]);
+        { const f = out(`Makes ${newOutpost.square} an outpost for the ${PIECE_NOUN[newOutpost.piece] ?? 'piece'} — no enemy pawn can ever challenge it.`, [newOutpost.square]); return f ? { ...f, claim: outpostKey(newOutpost.square) } : null; }
       }
       if (target) {
         // A pawn move that created a weakness without opening a file / outpost

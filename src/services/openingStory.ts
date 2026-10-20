@@ -26,7 +26,8 @@ import { mastersPlanRead, planStillAhead, mastersBreakIdea, PLAN_WALK, MIN_ROOT_
 import { masterMovesCachedSync, prefetchMastersTree } from './masterPlayLookup';
 import type { MasterPlayResult } from './masterPlayTypes';
 import { holeAccess } from './moveInsight';
-import { roadReason } from './openingRoads';
+import { holeKey } from './conceptKey';
+import { roadReason, variationLabel } from './openingRoads';
 import { deriveNextPlanFacts } from './nextPlans';
 import { planAimKey } from './nextPlans';
 import { classifyPhase } from './gamePhaseService';
@@ -156,11 +157,6 @@ function namedAtPly(history: readonly string[], name: string): number | null {
   return k > 0 ? k - 1 : null;
 }
 
-/** The variation's own name: "Sicilian Defense: Najdorf Variation" → "Najdorf". */
-function familyLabel(name: string): string {
-  const tail = name.includes(':') ? name.slice(name.indexOf(':') + 1).trim() : name;
-  return tail.replace(/ Variation\b/g, '').trim();
-}
 
 interface Family { san: string; games: number; share: number; name: string }
 
@@ -196,7 +192,7 @@ function forkAt(prefix: readonly string[], movesAt: MovesAt): { families: Family
 
 const countProof = (short: string, families: readonly Family[]): FactProof => ({
   kind: 'count', exact: true, short,
-  full: families.map((f) => `${familyLabel(f.name)}: ${f.games.toLocaleString('en-US')} master games`).join('; '),
+  full: families.map((f) => `${variationLabel(f.name)}: ${f.games.toLocaleString('en-US')} master games`).join('; '),
 });
 
 const AIM_WORDS: Record<IdentityFacts['aims'][number]['kind'], string> = {
@@ -367,12 +363,14 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
       // the reason is what the chosen move does (`roadReason`), and the
       // structure said is the student's own. Neither → no line.
       const reason = roadReason({ prefix, chosenSan, altSan: alt.san, altName: alt.name, student, movesAt });
-      const mine = aimWords(sNew);
-      const aims = mine && mine !== aimWords(alt.name) ? ` The ${familyLabel(sNew)} is built around ${mine}.` : '';
+      // Said only when BOTH roads have a computed aim (prod audit 2026-10-20:
+      // one road's aim compared against nothing is no reason).
+      const mine = aimWords(sNew); const theirs = aimWords(alt.name);
+      const aims = mine && theirs && mine !== theirs ? ` The ${variationLabel(sNew)} is built around ${mine}.` : '';
       if (reason || aims) out.push({
         beat: 'branch-choice',
-        text: `You chose the ${familyLabel(sNew)}${reason ? `: ${reason.text}` : '.'}${aims}`,
-        squares: reason?.squares ?? [], proof: reason?.proof ?? countProof(`masters split between the ${familyLabel(sNew)} and the ${familyLabel(alt.name)}`, fork.families),
+        text: `You chose the ${variationLabel(sNew)}${reason ? `: ${reason.text}` : '.'}${aims}`,
+        squares: reason?.squares ?? [], proof: reason?.proof ?? countProof(`masters split between the ${variationLabel(sNew)} and the ${variationLabel(alt.name)}`, fork.families),
         claimKey: `story:branch:${positionOf(fork.fen)}`,
       });
     }
@@ -458,13 +456,11 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   // heard, from whichever move set it).
   const myCastle = castledSide(history, student);
   const theirCastle = castledSide(history, them);
+  // Opposite wings is the race, said once by its one owner
+  // (`planRace.oppositeWingsRace`, claim `race:opposite-wings`), never here.
   if (myCastle && theirCastle) {
-    const opposite = myCastle !== theirCastle;
-    const theirWing = theirCastle === 'short' ? 'kingside' : 'queenside';
     const myWing = myCastle === 'short' ? 'kingside' : 'queenside';
-    out.push(opposite
-      ? { beat: 'character', text: `Kings on opposite wings: this is a race. Your pawns can storm the ${theirWing} without opening your own king, and theirs will storm the ${myWing} — every tempo counts.`, squares: [], proof: NO_PROOF.description, claimKey: 'story:character', aim: 'plan-aim:king-attack' }
-      : { beat: 'character', text: `Both kings on the ${myWing}: no pawn race — pushing the pawns in front of your own king only weakens it, so the fight is in the centre and on the other wing.`, squares: [], proof: NO_PROOF.description, claimKey: 'story:character' });
+    if (myCastle === theirCastle) out.push({ beat: 'character', text: `Both kings on the ${myWing}: no pawn race — pushing the pawns in front of your own king only weakens it, so the fight is in the centre and on the other wing.`, squares: [], proof: NO_PROOF.description, claimKey: 'story:character' });
   } else if (myCastle || theirCastle) {
     // One side castled: master games say where the other king goes.
     const waiting: 'w' | 'b' = myCastle ? them : student;
@@ -497,7 +493,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
         beat: 'consequence',
         text: `${dot(history[t.ply], them)} has a cost for them: no pawn of theirs can cover ${h.hole} again, and ${knightDistance('your', h.from, h.moves)}; ${h.moves === 0 ? 'it hits' : 'from there it would hit'} ${hitWords(now, 'their', h.hits)}.`,
         squares: [h.hole, h.from], proof: squaresProof(`${h.hole} has no pawn of theirs to cover it`, [h.hole, h.from]) ?? NO_PROOF.description,
-        claimKey: `story:gift:${h.hole}`, aim: `plan-aim:outpost:${h.hole}`,
+        claimKey: holeKey(h.hole), aim: `plan-aim:outpost:${h.hole}`,
         ...(h.moves === 1 ? { holdWhilePlayable: [{ from: h.from, to: h.hole }] } : {}),
       });
     }
@@ -507,7 +503,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   if (now.turn() === student) {
     const fork = forkAt(history, movesAt);
     if (fork) {
-      const labels = fork.families.map((f) => `the ${familyLabel(f.name)}`);
+      const labels = fork.families.map((f) => `the ${variationLabel(f.name)}`);
       out.push({
         beat: 'fork', text: `A real crossroads: from here master games split into ${andList(labels)} — each its own kind of position.`,
         squares: [], proof: countProof(`master games split ${fork.families.length} ways`, fork.families), claimKey: `story:fork:${positionOf(fork.fen)}`,

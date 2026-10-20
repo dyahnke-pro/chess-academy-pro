@@ -71,7 +71,7 @@
 ### `getOpeningById` (function) — 19 call sites
 - `src/components/Academy/CourseSyllabusPage.tsx:38`
 - `src/components/Academy/CourseTrainerPage.tsx:47`
-- `src/components/Coach/CoachTeachPage.tsx:12792`
+- `src/components/Coach/CoachTeachPage.tsx:12794`
 - `src/components/Openings/OpeningDetailPage.tsx:366`
 - `src/components/Openings/OpeningDetailPage.tsx:373`
 - `src/components/Openings/OpeningDetailPage.tsx:381`

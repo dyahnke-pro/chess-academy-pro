@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**641 lines · 9 exports · 8 importers · 5 tests · 1 audits**
+**640 lines · 9 exports · 8 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,7 +24,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `buildOpeningMoveDetail` (function) — 1 call site
-- `src/services/coachFeatureService.ts:3511`
+- `src/services/coachFeatureService.ts:3527`
 
 ### `PlanArrow` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -41,7 +41,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planBeatShape.test.ts:78`
 
 ### `buildOpeningDevelopmentPlan` (function) — 12 call sites
-- `src/services/coachFeatureService.ts:3345`
+- `src/services/coachFeatureService.ts:3361`
 - `src/services/planPrescriptions.test.ts:53`
 - `src/services/planPrescriptions.test.ts:61`
 - `src/services/planPrescriptions.test.ts:74`
@@ -55,19 +55,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewStrategicOrientation.test.ts:120`
 
 ### `buildHisGroundedPlanBeat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3343`
+- `src/services/coachFeatureService.ts:3359`
 - `src/services/groundedPlanBeat.test.ts:21`
 - `src/services/groundedPlanBeat.test.ts:31`
 - `src/services/groundedPlanBeat.test.ts:55`
 
 ### `buildMastersGroundedPlanBeat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3344`
+- `src/services/coachFeatureService.ts:3360`
 - `src/services/groundedPlanBeat.test.ts:41`
 - `src/services/groundedPlanBeat.test.ts:49`
 - `src/services/groundedPlanBeat.test.ts:56`
 
 ### `buildMiddlegameOrientation` (function) — 16 call sites
-- `src/services/coachFeatureService.ts:3366`
+- `src/services/coachFeatureService.ts:3382`
 - `src/services/reviewFullData.ts:1560`
 - `src/services/reviewStrategicOrientation.test.ts:4`
 - `src/services/reviewStrategicOrientation.test.ts:8`

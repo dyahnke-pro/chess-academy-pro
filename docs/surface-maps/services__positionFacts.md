@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2067 lines · 15 exports · 35 importers · 40 tests · 3 audits**
+**2071 lines · 15 exports · 36 importers · 41 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -46,6 +46,7 @@
 - `src/services/positionFactsCache.ts`
 - `src/services/positionFactsRegistry.test.ts`
 - `src/services/positionReadComposer.ts`
+- `src/services/raceAimOneVoice.test.ts`
 - `src/services/reviewFacetRank.ts`
 - `src/services/speedRunReads.scale.test.ts`
 - `src/services/whyBestMove.ts`
@@ -90,10 +91,11 @@
 ### `PhaseFact` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `clauseClaims` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10722`
+### `clauseClaims` (function) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10728`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:468`
+- `src/services/raceAimOneVoice.test.ts:19`
 
 ### `clauseText` (function) — 11 call sites
 - `src/hooks/useLiveCoach.ts:300`
@@ -108,9 +110,9 @@
 - `src/services/positionReadComposer.ts:158`
 - `src/services/whyBestMove.ts:151`
 
-### `computePositionFacts` (function) — 100 call sites
+### `computePositionFacts` (function) — 101 call sites
 - `src/coach/boardTurnAnswer.ts:136`
-- `src/components/Coach/CoachTeachPage.tsx:10593`
+- `src/components/Coach/CoachTeachPage.tsx:10599`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:268`
 - `src/hooks/usePhaseNarration.ts:432`
@@ -195,6 +197,7 @@
 - `src/services/positionFacts.weakness.test.ts:63`
 - `src/services/positionFactsRegistry.test.ts:9`
 - `src/services/positionReadComposer.ts:130`
+- `src/services/raceAimOneVoice.test.ts:16`
 - `src/services/speedRunReads.scale.test.ts:37`
 - `src/services/whyBestMove.needWire.test.ts:10`
 - `src/services/whyBestMove.ts:128`
@@ -211,7 +214,7 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10870`
+- `src/components/Coach/CoachTeachPage.tsx:10876`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -225,8 +228,9 @@
 ### `NAMES_NO_MOVE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `conceptInstanceKey` (re-export) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8948`
+### `conceptInstanceKey` (re-export) — 16 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8818`
+- `src/components/Coach/CoachTeachPage.tsx:8952`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:30`
@@ -235,10 +239,12 @@
 - `src/services/conceptKey.ts:9`
 - `src/services/danyaBehaviors.ts:526`
 - `src/services/kingAttackReads.ts:653`
+- `src/services/learnBoardTeaching.ts:514`
 - `src/services/looseStill.test.ts:36`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`
+- `src/services/tacticClaimOneKey.test.ts:15`
 
 ## Tests
 
@@ -271,6 +277,7 @@
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/positionFactsRegistry.test.ts`
+- `src/services/raceAimOneVoice.test.ts`
 - `src/services/speedRunReads.scale.test.ts`
 - `src/services/studentMomentBoost.test.ts`
 - `src/services/whyBestMove.needWire.test.ts`
