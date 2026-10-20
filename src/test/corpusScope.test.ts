@@ -63,14 +63,12 @@ describe('corpus notes stay where David put them', () => {
     expect(code('src/services/openingGenerator.ts')).toMatch(/\bnoteArrowSourceAt\(/);
   });
   it('the review Theory lecture speaks the voiced corpus — and only the lecture', () => {
-    const review = code('src/components/Coach/CoachGameReview.tsx');
-    expect(review).toMatch(/buildTheoryLectureBeats\([\s\S]{0,200}noteArrowSourceAt\(/);
-    expect((review.match(/\bnoteArrowSourceAt\(/g) ?? []).length).toBe(1);
+    expect(code('src/components/Coach/CoachGameReview.tsx')).toMatch(/buildTheoryLectureBeats\([\s\S]{0,200}lectureNoteSelector\(/);
+    expect(code('src/services/reviewOpeningTheory.ts')).toMatch(/\bnoteArrowSourceAt\(/);
   });
   it('the lecture gets a real voiced note at a real position (e4 c5 Nf3 Nc6, Black\'s seat)', async () => {
-    loadFullCorpus();
-    const { buildOpeningTheoryLecture, buildTheoryLectureBeats } = await import('../services/reviewOpeningTheory');
-    const { noteArrowSourceAt } = await import('../services/openingGenerator');
+    expect(loadFullCorpus().reduce((n, c) => n + c.notes, 0)).toBeGreaterThan(10_000);
+    const { buildOpeningTheoryLecture, buildTheoryLectureBeats, lectureNoteSelector } = await import('../services/reviewOpeningTheory');
     const c = new Chess();
     const sans = ['e4', 'c5', 'Nf3', 'Nc6'];
     const fens = [c.fen()];
@@ -82,9 +80,7 @@ describe('corpus notes stay where David put them', () => {
       return { fen, totalGames: moves.reduce((n, m) => n + m.games, 0), moves, source: 'local' as const };
     };
     const lec = await buildOpeningTheoryLecture(fens, sans, 'Sicilian Defense: Old Sicilian', { lookup, studentColor: 'black', movesAt: () => null });
-    const seen = new Set<string>();
-    const beats = buildTheoryLectureBeats(lec!, [], 'black', (p, f) => noteArrowSourceAt(p, f, seen, 'Sicilian Defense: Old Sicilian', 'black'));
-    expect(seen.size).toBeGreaterThan(0);
+    const beats = buildTheoryLectureBeats(lec!, [], 'black', lectureNoteSelector('Sicilian Defense: Old Sicilian', 'black'));
     expect(beats.some((b) => /\bc5\b/.test(b.fact) && /knight to c6/.test(b.fact))).toBe(true);
   }, 60_000);
   it('coach chat still gets its corpus block', () => {

@@ -89,7 +89,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `generateNarrativeSummary` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:566`
+- `src/components/Coach/CoachGameReview.tsx:570`
 - `src/services/recapSeat.test.ts:17`
 
 ### `recapSecondPerson` (function) — 9 call sites
@@ -107,7 +107,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `segmentNamedArrows` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:3400`
+- `src/components/Coach/CoachGameReview.tsx:3404`
 - `src/services/namedMoveArrows.test.ts:54`
 - `src/services/namedMoveArrows.test.ts:58`
 
@@ -124,7 +124,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewCitations` (function) — 8 call sites
-- `src/components/Coach/CoachGameReview.tsx:626`
+- `src/components/Coach/CoachGameReview.tsx:630`
 - `src/services/coachFeatureService.test.ts:722`
 - `src/services/coachFeatureService.test.ts:730`
 - `src/services/coachFeatureService.test.ts:762`
@@ -138,7 +138,7 @@
 - `src/services/coachFeatureService.test.ts:24`
 
 ### `buildReviewSegments` (function) — 82 call sites
-- `src/components/Coach/CoachGameReview.tsx:1832`
+- `src/components/Coach/CoachGameReview.tsx:1836`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -243,7 +243,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4463`
+- `src/components/Coach/CoachGameReview.tsx:4474`
 - `src/services/coachFeatureService.test.ts:792`
 - `src/services/coachFeatureService.test.ts:795`
 - `src/services/coachFeatureService.test.ts:802`
@@ -285,8 +285,8 @@
 - `src/services/reviewWalk1500.test.ts:17`
 
 ### `openingNameForKey` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:249`
-- `src/services/reviewOpeningTheory.davidGames.measure.test.ts:43`
+- `src/components/Coach/CoachGameReview.tsx:247`
+- `src/services/reviewOpeningTheory.davidGames.measure.test.ts:42`
 
 ### `generateReviewNarration` (function) — 16 call sites
 - `src/services/proofBacklog.report.test.ts:104`

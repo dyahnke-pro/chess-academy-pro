@@ -2,13 +2,12 @@
 // drop) against the real masters file. A READING instrument, not a gate: it
 // prints every opening line the coach would say so it can be graded by hand.
 //   THEORY_MEASURE=1 npx vitest run src/services/reviewOpeningTheory.davidGames.measure.test.ts
-import { it } from 'vitest';
+import { it, expect } from 'vitest';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { buildOpeningTheoryLecture, buildTheoryLectureBeats, lectureSequence, resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
+import { buildOpeningTheoryLecture, buildTheoryLectureBeats, lectureNoteSelector, lectureSequence, resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
 import { setOpeningIdentity } from './openingIdentity';
 import { openingNameForKey } from './coachFeatureService';
-import { noteArrowSourceAt } from './openingGenerator';
 import { loadFullCorpus } from '../test/loadFullCorpus';
 
 const DROP = 'audit-reports/.fixtures/data-drop-david.json';
@@ -20,7 +19,7 @@ interface Ann { evaluation: number | null }
 interface G { id: string; pgn: string; white: string; black: string; openingId?: string; annotations?: Ann[] }
 
 it.runIf(process.env.THEORY_MEASURE === '1' && existsSync(DROP) && existsSync(MASTERS))('theory lecture on David\'s games', async () => {
-  loadFullCorpus();
+  expect(loadFullCorpus().reduce((n, c) => n + c.notes, 0)).toBeGreaterThan(10_000);
   const db = JSON.parse(readFileSync(MASTERS, 'utf8'));
   setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')));
   const games = (JSON.parse(readFileSync(DROP, 'utf8')).stores.games as G[]).filter((g) => GAMES.includes(g.id));
@@ -47,9 +46,7 @@ it.runIf(process.env.THEORY_MEASURE === '1' && existsSync(DROP) && existsSync(MA
     const lec = await buildOpeningTheoryLecture(fens, sans, name, { lookup, gameReads, studentColor, movesAt });
     out.push(`\n=== ${g.id} — ${name} — David is ${studentColor} — ${sans.slice(0, 16).join(' ')}`);
     if (!lec) { out.push('(no lecture)'); continue; }
-    const seen = new Set<string>();
-    const beats = buildTheoryLectureBeats(lec, resolveCuratedOpeningIdeas(name, studentColor) ?? [], studentColor,
-      (prefix, fen) => noteArrowSourceAt(prefix, fen, seen, name, studentColor));
+    const beats = buildTheoryLectureBeats(lec, resolveCuratedOpeningIdeas(name, studentColor) ?? [], studentColor, lectureNoteSelector(name, studentColor));
     // THE TAPE, as performed: each line with the move it is said on.
     let onMove = '(no move)';
     for (const st of lectureSequence(beats)) {

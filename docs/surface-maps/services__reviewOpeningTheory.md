@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1158 lines · 15 exports · 4 importers · 3 tests · 0 audits**
+**1176 lines · 17 exports · 4 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -35,9 +35,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolveCuratedOpeningIdeas` (function) — 11 call sites
-- `src/components/Coach/CoachGameReview.tsx:2547`
+- `src/components/Coach/CoachGameReview.tsx:2553`
 - `src/services/coachFeatureService.ts:1233`
-- `src/services/reviewOpeningTheory.davidGames.measure.test.ts:51`
+- `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
 - `src/services/reviewOpeningTheory.test.ts:84`
 - `src/services/reviewOpeningTheory.test.ts:85`
 - `src/services/reviewOpeningTheory.test.ts:88`
@@ -48,11 +48,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:379`
 
 ### `warmLectureSources` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:2531`
+- `src/components/Coach/CoachGameReview.tsx:2536`
 
 ### `buildOpeningTheoryLecture` (function) — 19 call sites
-- `src/components/Coach/CoachGameReview.tsx:2539`
-- `src/services/reviewOpeningTheory.davidGames.measure.test.ts:47`
+- `src/components/Coach/CoachGameReview.tsx:2544`
+- `src/services/reviewOpeningTheory.davidGames.measure.test.ts:46`
 - `src/services/reviewOpeningTheory.test.ts:35`
 - `src/services/reviewOpeningTheory.test.ts:64`
 - `src/services/reviewOpeningTheory.test.ts:75`
@@ -69,13 +69,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:420`
 - `src/services/reviewOpeningTheory.test.ts:436`
 - `src/services/reviewOpeningTheory.test.ts:461`
-- `src/test/corpusScope.test.ts:84`
+- `src/test/corpusScope.test.ts:82`
 
 ### `TheoryEngine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `enrichLectureWithEngine` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:2557`
+- `src/components/Coach/CoachGameReview.tsx:2561`
 - `src/services/reviewOpeningTheory.test.ts:260`
 
 ### `TheoryLectureBeat` (interface) — 0 call sites
@@ -87,8 +87,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:403`
 
 ### `buildTheoryLectureBeats` (function) — 16 call sites
-- `src/components/Coach/CoachGameReview.tsx:2547`
-- `src/services/reviewOpeningTheory.davidGames.measure.test.ts:51`
+- `src/components/Coach/CoachGameReview.tsx:2552`
+- `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
 - `src/services/reviewOpeningTheory.test.ts:129`
 - `src/services/reviewOpeningTheory.test.ts:146`
 - `src/services/reviewOpeningTheory.test.ts:184`
@@ -102,14 +102,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:421`
 - `src/services/reviewOpeningTheory.test.ts:441`
 - `src/services/reviewOpeningTheory.test.ts:462`
-- `src/test/corpusScope.test.ts:86`
+- `src/test/corpusScope.test.ts:83`
+
+### `lectureNoteSelector` (function) — 3 call sites
+- `src/components/Coach/CoachGameReview.tsx:2553`
+- `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
+- `src/test/corpusScope.test.ts:83`
+
+### `loadLectureCorpus` (function) — 1 call site
+- `src/components/Coach/CoachGameReview.tsx:2557`
 
 ### `LectureStep` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `lectureSequence` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:1897`
-- `src/services/reviewOpeningTheory.davidGames.measure.test.ts:55`
+- `src/components/Coach/CoachGameReview.tsx:1902`
+- `src/services/reviewOpeningTheory.davidGames.measure.test.ts:52`
 - `src/services/reviewOpeningTheory.test.ts:463`
 
 ## Tests

@@ -32,6 +32,8 @@ import repertoire from '../data/repertoire.json';
 import { bookMoveWhy } from './bookMoveWhy';
 import { mastersPlanRead, mastersPlanLine, planStillAhead, type MastersPlanRead, type MovesAt } from './mastersPlanRead';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
+import { noteArrowSourceAt } from './openingGenerator';
+import { loadFarmedCorpora } from './farmedCorpusData';
 
 /** A candidate move at a branch point, with its master-DB frequency + score. */
 export interface TheoryMove {
@@ -1103,6 +1105,22 @@ export function buildTheoryLectureBeats(
   }
 
   return beats;
+}
+
+/** The lecture's voiced-corpus selector: the walkthrough's own exact-position,
+ *  seat-checked, board-graded pick (`noteArrowSourceAt`), each note at most once
+ *  per lecture. Build one per lecture build. */
+export function lectureNoteSelector(
+  openingName: string | null,
+  seat: 'white' | 'black',
+): (historySans: string[], fenAfter: string) => string | null {
+  const seen = new Set<string>();
+  return (prefix, fen) => noteArrowSourceAt(prefix, fen, seen, openingName, seat);
+}
+
+/** The corpus is fetched, not bundled: resolves once it is in memory. */
+export function loadLectureCorpus(): Promise<unknown> {
+  return loadFarmedCorpora();
 }
 
 /** One step of the lecture as it is PERFORMED: a move made on the board, or a

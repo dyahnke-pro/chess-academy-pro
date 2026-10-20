@@ -50,10 +50,8 @@ import { computeTurningPointHinge } from '../../services/reviewHinge';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { selectTeachingForSegments, renderThesis } from '../../services/teachingSelector';
 import { registerFor } from '../../coach/surfaceContract';
-import { buildOpeningTheoryLecture, buildTheoryLectureBeats, lectureSequence, resolveCuratedOpeningIdeas, enrichLectureWithEngine, warmLectureSources, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
+import { buildOpeningTheoryLecture, buildTheoryLectureBeats, lectureSequence, lectureNoteSelector, loadLectureCorpus, resolveCuratedOpeningIdeas, enrichLectureWithEngine, warmLectureSources, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
 import { reviewTheoryLookup } from '../../services/reviewOpeningsSource';
-import { noteArrowSourceAt } from '../../services/openingGenerator';
-import { loadFarmedCorpora } from '../../services/farmedCorpusData';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { shareAdverb, topMoveShare } from '../../utils/shareWords';
 import { captureEvent } from '../../services/analytics';
@@ -500,6 +498,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // didn't work"). Surface each beat's text as an on-screen caption so it visibly
   // plays without depending on audio.
   const [theoryCaption, setTheoryCaption] = useState<string | null>(null);
+  // THE THEORY IS OFFERED ONCE, WHERE THE OPENING ENDS (David 2026-10-19: the
+  // full tree stays on the Theory button, offered once at the end of the
+  // opening phase). The ply the lecture's book walk ended on; the offer shows
+  // when the walk reaches it and is gone once taken or dismissed.
+  const [theoryEndPly, setTheoryEndPly] = useState<number | null>(null);
+  const [theoryOfferDone, setTheoryOfferDone] = useState(false);
   const theoryLectureTokenRef = useRef(0);
 
   // Pre-compute accuracy + classification counts
@@ -1875,6 +1879,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (!beats || beats.length === 0 || theoryLecturePlaying) return;
     const token = ++theoryLectureTokenRef.current;
     setTheoryLecturePlaying(true);
+    setTheoryOfferDone(true);
     const waitIdle = async (maxMs = 12000): Promise<void> => {
       const start = performance.now();
       while (voiceService.isPlaying() && performance.now() - start < maxMs) {
@@ -2539,18 +2544,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       void buildOpeningTheoryLecture(reviewFens, sans, openingName ?? 'this opening', { lookup: reviewTheoryLookup, gameReads, studentColor: playerColor })
         .then((lec) => {
           if (cancelled || !lec) return;
+          setTheoryEndPly(lec.departurePly ?? lec.branches[lec.branches.length - 1]?.ply ?? null);
+          setTheoryOfferDone(false);
           // The voiced corpus teaches the moves it has a note for (exact
           // position, seat-checked, board-graded — the walkthrough's own
           // selector); each note at most once per lecture.
-          const build = (): TheoryLectureBeat[] => {
-            const seen = new Set<string>();
-            return buildTheoryLectureBeats(lec, resolveCuratedOpeningIdeas(openingName, playerColor) ?? [], playerColor,
-              (prefix, fen) => noteArrowSourceAt(prefix, fen, seen, openingName, playerColor));
-          };
+          const build = (): TheoryLectureBeat[] => buildTheoryLectureBeats(
+            lec, resolveCuratedOpeningIdeas(openingName, playerColor) ?? [], playerColor, lectureNoteSelector(openingName, playerColor));
           // Phase 1: show the DB-built lecture immediately (button appears fast).
           setTheoryBeats(build());
           // The corpus is fetched, not bundled: rebuild once it is in memory.
-          void loadFarmedCorpora().then(() => { if (!cancelled) setTheoryBeats(build()); }).catch(() => undefined);
+          void loadLectureCorpus().then(() => { if (!cancelled) setTheoryBeats(build()); }).catch(() => undefined);
           // Phase 2: NON-blocking — let Stockfish weigh in on a few key branches,
           // then re-derive so the beats gain the engine's voice ("the fish likes
           // Knight d4"). Never blocks the button; a slow/absent engine is fine.
@@ -3908,6 +3912,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   {theoryCaption ?? walkPlayback.currentText ?? walkPlayback.currentSegment?.san ?? ''}
                 </p>
               </div>
+              {!theoryOfferDone && !theoryLecturePlaying && theoryBeats && theoryBeats.length > 0 && theoryEndPly !== null
+                && walkPlayback.currentPly >= theoryEndPly && walkPlayback.currentPly <= theoryEndPly + 4 && (
+                <div className="mt-1.5 flex items-center gap-2" data-testid="walk-theory-offer">
+                  <button onClick={() => { void playOpeningTheory(); }} className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-md border border-sky-500/40 bg-sky-500/10" style={{ color: 'var(--color-text)' }} data-testid="walk-theory-offer-yes"><BookOpen size={12} />Want the theory of this line?</button>
+                  <button onClick={() => setTheoryOfferDone(true)} className="text-[11px] px-2 py-1 rounded-md border border-theme-border" style={{ color: 'var(--color-text-muted)' }} data-testid="walk-theory-offer-no">Not now</button>
+                </div>
+              )}
               {/* THE CLOSING BEAT SHOWS THE RESULT (WO-STANDARD-01 D-13, prod
                   tape 2026-09-22: the walk ended on "Ply 28/27" over the
                   STARTING position with nothing saying who won). The board is
