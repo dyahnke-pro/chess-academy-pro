@@ -4,9 +4,9 @@ import { StockfishNative } from 'capacitor-stockfish-native';
 import type { StockfishAnalysis, AnalysisLine } from '../types';
 import { mateEvalFor, limitStrengthElo } from './engineConstants';
 import { stockfishCache } from './stockfishCache';
-import { logAppAudit, isAuditMarkedPage } from './appAuditor';
+import { logAppAudit } from './appAuditor';
 import { finishedBoardEval } from './finishedBoard';
-import { ledgerAsk, ledgerStart, ledgerDone, engineLedger, type EngineLedgerEntry } from './engineLedger';
+import { ledgerAsk, ledgerStart, ledgerDone, type EngineLedgerEntry } from './engineLedger';
 
 /** THE LINES MEASURED AGAINST THE ASK THEY ANSWER: each line short of
  *  `askedDepth` is marked `searchedShort`. Stamped where a read is handed out —
@@ -2464,11 +2464,6 @@ class StockfishEngine {
 
 // Singleton
 export const stockfishEngine = new StockfishEngine();
-// The audit driver reads the engine's timeline (`engineLedger`) on audit
-// pages only — the coach never reads it.
-if (typeof window !== 'undefined' && isAuditMarkedPage()) {
-  (window as unknown as { __engineLedger?: typeof engineLedger }).__engineLedger = engineLedger;
-}
 
 // App-resume recovery — when the app returns to the foreground, the iOS
 // WebView's Web Worker may have been killed while backgrounded; the stale
