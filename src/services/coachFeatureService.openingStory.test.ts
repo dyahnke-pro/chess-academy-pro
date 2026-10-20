@@ -93,3 +93,20 @@ describe('review walk — both seats, captures included (BACKLOG §6)', () => {
     expect(at(16)).toMatch(/You play the knight to b4.*: it adds a third guard to your knight on d5, which their bishop on c4 pins\./);
   }, 30_000);
 });
+
+describe('review walk — a move job is ranked by what the move changes', () => {
+  const line = 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6'.split(' ');
+  const walk = (): string[] => { const chess = new Chess(); return buildReviewSegments(line.map((san, i) => {
+    chess.move(san);
+    return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
+  }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? ''); };
+  it('4.Ng5: a new attack outranks a guard — the knight joins the c4 bishop against f7', () => {
+    expect(walk()[6]).toMatch(/They play the knight to g5.*: it joins their bishop on c4 against your pawn on f7\./);
+  }, 30_000);
+  it('7.Qf3+: a check is always said, first', () => {
+    expect(walk()[12]).toMatch(/They play the queen to f3.*: it gives check and joins their bishop on c4 against your knight on d5\./);
+  }, 30_000);
+  it('7…Ke6: a king says the square it holds first, then the escape', () => {
+    expect(walk()[13]).toMatch(/You play the king to e6.*: it adds a second guard to your knight on d5, which their bishop on c4 pins, and takes your king out of reach of their queen on f3\./);
+  }, 30_000);
+});

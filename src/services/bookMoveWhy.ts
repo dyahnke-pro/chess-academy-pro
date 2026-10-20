@@ -504,17 +504,21 @@ export interface PriorCapture { to: Square; captured: PieceSymbol }
 
 /** Their pieces the moved piece now hits that matter: one worth more than
  *  it, or one hit more often than it is guarded. */
-function hitTargets(board: Chess, from: Square, mover: Color): Array<{ square: Square; piece: PieceSymbol; attackers: number }> {
+function hitTargets(board: Chess, from: Square, mover: Color, pawns = false): Array<{ square: Square; piece: PieceSymbol; attackers: number; with: Square[] }> {
   const me = board.get(from);
   if (!me) return [];
   const them: Color = mover === 'w' ? 'b' : 'w';
-  const out: Array<{ square: Square; piece: PieceSymbol; attackers: number }> = [];
+  const out: Array<{ square: Square; piece: PieceSymbol; attackers: number; with: Square[] }> = [];
   for (const row of board.board()) for (const c of row) {
-    if (!c || c.color !== them || c.type === 'k' || c.type === 'p') continue;
+    if (!c || c.color !== them || c.type === 'k') continue;
     const by = board.attackers(c.square, mover);
     if (!by.includes(from)) continue;
     const guards = board.attackers(c.square, them).length;
-    if (CAPTURE_VALUE[c.type] > CAPTURE_VALUE[me.type] || by.length > guards) out.push({ square: c.square, piece: c.type, attackers: by.length });
+    // A PAWN is a target only when this move JOINS an attack on it that now
+    // outnumbers its guards (4.Ng5: knight and bishop against f7, the king
+    // alone guarding it) — one piece hitting a guarded pawn is no attack.
+    if (c.type === 'p' && !(pawns && by.length >= 2 && by.length > guards)) continue;
+    if (CAPTURE_VALUE[c.type] > CAPTURE_VALUE[me.type] || by.length > guards) out.push({ square: c.square, piece: c.type, attackers: by.length, with: by.filter((x) => x !== from) });
   }
   return out;
 }
@@ -551,10 +555,20 @@ const withArticle = (noun: string): string => (/^[aeiou]/.test(noun) ? `an ${nou
 /** ADDS AN ATTACKER — the moved piece joins the attack on a piece of theirs
  *  that was already under fire, or hits one worth more than itself. */
 function attackJob(mv: NonNullable<ReturnType<typeof after>>, mover: Color, w: SeatWords): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string }) | null {
-  const t = hitTargets(mv.board, mv.to, mover)[0];
+  // The dearest target first: a piece over a pawn.
+  const t = hitTargets(mv.board, mv.to, mover, true).sort((x, y) => CAPTURE_VALUE[y.piece] - CAPTURE_VALUE[x.piece])[0];
   if (!t) return null;
-  return { kind: 'attack', squares: [mv.to, t.square], clause: t.attackers >= 2 ? `it adds ${times(t.attackers)} attacker on ${w.other} ${NAME[t.piece]} on ${t.square}` : `it attacks ${w.other} ${NAME[t.piece]} on ${t.square}` };
+  const mate = t.with.length === 1 ? mv.board.get(t.with[0]) : null;
+  const clause = t.attackers === 1
+    ? `it attacks ${w.other} ${NAME[t.piece]} on ${t.square}`
+    : mate
+      ? `it joins ${w.own} ${NAME[mate.type]} on ${t.with[0]} against ${w.other} ${NAME[t.piece]} on ${t.square}`
+      : `it adds ${times(t.attackers)} attacker on ${w.other} ${NAME[t.piece]} on ${t.square}`;
+  return { kind: 'attack', squares: [mv.to, t.square, ...t.with], clause };
 }
+
+/** "it guards d5" + "it gets out of reach" → one clause, in that order. */
+const andThen = (first: string, second: string): string => `${first}, and ${second.replace(/^it /, '')}`;
 
 /**
  * WHAT A MOVE DOES, WITH NO RIVAL (BACKLOG §6: the review walk says each
@@ -571,23 +585,38 @@ export function moveJob(fen: string, san: string, mover: Color, w: SeatWords, pr
   const them: Color = mover === 'w' ? 'b' : 'w';
   const pass = asIfTheirMove(before, them);
   if (!pass) return null;
+  const job = rankedMoveJob(fen, san, mv, before, pass, mover, w, prior);
+  // A CHECK IS ALWAYS SAID — it is what the move forces first.
+  if (/\+$/.test(san)) {
+    return job ? { ...job, clause: `it gives check and ${job.clause.replace(/^it /, '')}` } : { kind: 'attack', squares: [mv.to], clause: 'it gives check' };
+  }
+  return job;
+}
+
+/** The job, ranked by what the move CHANGES (lead 2026-10-20): a capture's
+ *  own point, then a new attack, then the defence of a threatened piece, then
+ *  development and the centre. A king's step that guards a piece says the
+ *  guard first and the escape after. */
+function rankedMoveJob(fen: string, san: string, mv: NonNullable<ReturnType<typeof after>>, before: Chess, pass: Chess, mover: Color, w: SeatWords, prior: PriorCapture | null): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string }) | null {
   if (/x/.test(san)) return captureJob(fen, mv, mover, w, prior);
   if (/^O-O/.test(san)) return { kind: 'castle', squares: [], clause: castlesClause(san, w) };
   const home = mover === 'w' ? '1' : '8';
   const develops = (mv.piece === 'n' || mv.piece === 'b') && mv.from[1] === home
     ? { kind: 'develop' as const, squares: [mv.to], clause: `it brings ${w.own} ${NAME[mv.piece]} out` } : null;
   const castlesNext = castleJob(mv.board, pass, mover, mv.from, mv.piece, w);
-  const job = rescueJob(before, mv, pass, mover, w)
-    ?? guardJob(mv.board, pass, mover, mv.to, w)
+  const rescue = rescueJob(before, mv, pass, mover, w);
+  const guard = guardJob(mv.board, pass, mover, mv.to, w);
+  if (mv.piece === 'k' && guard) return { ...guard, squares: [...guard.squares, ...(rescue?.squares ?? [])], clause: rescue ? andThen(guard.clause, rescue.clause) : guard.clause };
+  return attackJob(mv, mover, w)
+    ?? rescue
+    ?? guard
     ?? stopsJob(mv.board, pass, mover, before, w)
     ?? prophylaxisJob(fen, mv, { ...mv, board: pass }, mover, w)
     ?? stopsPushJob(mv.board, pass, mover, before, w)
-    ?? attackJob(mv, mover, w)
     ?? (develops && castlesNext ? { ...develops, clause: `${develops.clause} and clears the way to castle next move` } : null)
     ?? clearsRoadJob(fen, san, w)
     ?? preparesJob(mv.board, pass, mover, w)
     ?? castlesNext
     ?? develops
     ?? centerJob(mv.board, pass, mover, mv.to);
-  return job ? { kind: job.kind, squares: job.squares, clause: job.clause } : null;
 }

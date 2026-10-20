@@ -141,7 +141,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegments` (function) — 87 call sites
+### `buildReviewSegments` (function) — 88 call sites
 - `src/components/Coach/CoachGameReview.tsx:1823`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
@@ -167,6 +167,7 @@
 - `src/services/coachFeatureService.openingStory.test.ts:57`
 - `src/services/coachFeatureService.openingStory.test.ts:71`
 - `src/services/coachFeatureService.openingStory.test.ts:84`
+- `src/services/coachFeatureService.openingStory.test.ts:99`
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.planChange.test.ts:36`
 - `src/services/coachFeatureService.planChange.test.ts:48`
