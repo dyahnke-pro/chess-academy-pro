@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { db } from '../db/schema';
 import { medianBookDepth, noteTrapMeeting, resetTrapRecord, trapDecision, trapSpeaks, warmTrapRecord, type TrapMeeting } from './trapLearning';
 
@@ -58,7 +58,9 @@ describe('the trap record round-trips through the evidence store', () => {
     expect(noteTrapMeeting({ fen: FEN, playedSan: 'Bb4', slipSan: 'Nxd4', warned: false, confirmed: true, gameId: 'g3' })).toBe('held');
     expect(trapSpeaks(FEN, 10).state).toBe('green');
     // …and the rows reached the store the heat map reads.
-    await new Promise((r) => setTimeout(r, 20));
+    // The writes are fire-and-forget: wait for the rows, never a fixed sleep
+    // (a 20 ms sleep lost the third row under a loaded full-suite run).
+    await vi.waitFor(async () => { expect(await db.capabilityEvidence.where('tag').equals('missed-opponents-threat').count()).toBe(3); });
     resetTrapRecord();
     await warmTrapRecord();
     expect(trapSpeaks(FEN, 10).state).toBe('green');

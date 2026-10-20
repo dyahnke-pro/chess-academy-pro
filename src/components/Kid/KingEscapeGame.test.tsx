@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { db } from '../../db/schema';
 import { render, screen, fireEvent, waitFor, act } from '../../test/utils';
 import { KingEscapeGame } from './KingEscapeGame';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -36,7 +37,9 @@ vi.mock('../../services/voiceService', async () => {
 });
 
 describe('KingEscapeGame', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
+    // Levels won are remembered (persistent memory): each test starts fresh.
+    await db.studentMemory.clear();
     capturedOnMove = undefined;
   });
 

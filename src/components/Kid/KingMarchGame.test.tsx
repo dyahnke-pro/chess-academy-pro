@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor, act } from '../../test/utils';
 import { KingMarchGame } from './KingMarchGame';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { buildMoveResult } from '../../test/factories';
+import { db } from '../../db/schema';
 
 let capturedOnMove: ((move: MoveResult) => void) | undefined;
 
@@ -35,9 +36,12 @@ vi.mock('../../services/voiceService', async () => {
 });
 
 describe('KingMarchGame', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     capturedOnMove = undefined;
     vi.useRealTimers();
+    // Levels won are remembered (persistent memory): each test starts a
+    // fresh student, or a level won in the last test opens this one on level 2.
+    await db.studentMemory.clear();
   });
 
   afterEach(() => {

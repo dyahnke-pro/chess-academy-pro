@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { db } from '../../db/schema';
 import { render, screen, fireEvent, waitFor } from '../../test/utils';
 import { QueenGamesHub } from './QueenGamesHub';
 import { getGameProgress } from '../../services/journeyService';
@@ -33,7 +34,9 @@ function unlock(): void {
 }
 
 describe('QueenGamesHub', () => {
-  beforeEach(() => { vi.clearAllMocks(); });
+  beforeEach(async () => {
+    // Levels won are remembered (persistent memory): each test starts fresh.
+    await db.studentMemory.clear(); vi.clearAllMocks(); });
 
   it('shows the game cards when unlocked', async () => {
     unlock();
