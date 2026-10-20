@@ -78,9 +78,14 @@ async function playGame(id, outDir) {
   const g = list.games[id];
   const sans = g.sans; const seat = g.seat;
   console.log(`\n[${id}] ${seat}, ${sans.length} plies`);
-  await call('/open');
-  const fx = await call('/fixture');
-  console.log(`[${id}] fixture ${fx.loaded ? `${fx.wrote} rows` : `NOT LOADED (${fx.reason})`}`);
+  // David's record is the test bed: retry the load, and never play without it.
+  let fx = null;
+  for (let a = 1; a <= 3 && !fx?.loaded; a += 1) {
+    await call('/open');
+    fx = await call('/fixture');
+    console.log(`[${id}] fixture ${fx.loaded ? `${fx.wrote} rows` : `NOT LOADED (${fx.reason ?? fx.error ?? JSON.stringify(fx).slice(0, 200)}) — attempt ${a}`}`);
+  }
+  if (!fx?.loaded) throw new Error('fixture did not load — game not played');
   // The fixture's profile carries David's own stream settings; clear them so
   // the page reports to this run's listener only.
   await call('/js', `${IDB} return await new Promise((res) => { const tx = db.transaction('profiles','readwrite'); const st = tx.objectStore('profiles'); const q = st.getAll(); q.onsuccess = () => { for (const p of q.result) { p.preferences = p.preferences || {}; p.preferences.auditStreamUrl = null; p.preferences.auditStreamSecret = null; st.put(p); } tx.oncomplete = () => res(q.result.length); }; });`);
