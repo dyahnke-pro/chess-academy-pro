@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**257 lines · 12 exports · 13 importers · 10 tests · 1 audits**
+**261 lines · 12 exports · 13 importers · 10 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,7 +13,6 @@
 
 ## Who calls in
 
-- `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/appAuditor.ts`
 - `src/services/coachDecider.ts`
 - `src/services/coachDecisionEmits.test.ts`
@@ -22,6 +21,7 @@
 - `src/services/learnTurnDoor.ts`
 - `src/services/moveCost.ts`
 - `src/services/needScore.ts`
+- `src/services/playedMoveGrade.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/proofBacklog.report.test.ts`
 - `src/services/settledPrice.bf4.test.ts`
@@ -81,7 +81,7 @@
 - `src/services/settledPrice.bf4.test.ts:73`
 
 ### `emitLearnTurn` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:935`
+- `src/services/learnTurnDoor.ts:936`
 
 ## Tests
 

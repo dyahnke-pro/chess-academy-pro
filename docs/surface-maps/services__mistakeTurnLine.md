@@ -36,7 +36,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `mistakeTurnLine` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11908`
+- `src/components/Coach/CoachTeachPage.tsx:11907`
 - `src/services/mistakeTurnLine.test.ts:18`
 - `src/services/mistakeTurnLine.test.ts:31`
 - `src/services/mistakeTurnLine.test.ts:39`
