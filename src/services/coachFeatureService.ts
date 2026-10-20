@@ -1229,7 +1229,8 @@ export function buildReviewSegments(
   intentByPly: ReadonlyMap<number, ReviewIntent> = new Map(),
 ): ReviewMoveSegment[] {
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
-  const curatedOpeningIdeas = resolveCuratedOpeningIdeas(openingName ?? null);
+  // The repertoire's ideas are written for ONE colour — only the student's seat reads them.
+  const curatedOpeningIdeas = playerColor ? resolveCuratedOpeningIdeas(openingName ?? null, playerColor) : null;
   // WHERE THIS STUDENT STANDS PER TEACHING LAYER (WO-LAYERS-01), once per
   // review — the same record every ply of the walk is judged against.
   const layers = layerStandings(studentWeaknesses ?? [], studentNeed?.capabilities);

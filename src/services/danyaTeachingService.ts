@@ -154,7 +154,7 @@ const normName = (s: string): string => {
 // perfect 1.0 score. A match must agree on something that actually identifies
 // the opening.
 const GENERIC_TOKENS = new Set([
-  'opening', 'defense', 'game', 'attack', 'variation', 'system', 'gambit',
+  'opening', 'defense', 'defence', 'game', 'attack', 'variation', 'system', 'gambit',
   'line', 'setup', 'declined', 'accepted', 'main', 'modern', 'classical',
 ]);
 
