@@ -1,14 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { db } from '../db/schema';
 import { buildMistakePuzzle } from '../test/factories';
-import {
-  positionTouchesThread,
-  threadCallbackFor,
-  threadEvidenceClause,
-  resetThreadCallbacks,
-  threadCallbackAlreadySpoken,
-  type CoachingThread,
-} from './coachThread';
+import { positionTouchesThread, threadCallbackFor, threadEvidenceClause, resetThreadCallbacks, type CoachingThread } from './coachThread';
 
 const thread: CoachingThread = {
   tag: 'removal-of-guard',
@@ -45,7 +38,6 @@ describe('threadCallbackFor — earned + say-once', () => {
 
   it('says it at most ONCE per session (never nags)', () => {
     expect(threadCallbackFor(thread, ['fork'])).not.toBe('');
-    expect(threadCallbackAlreadySpoken('removal-of-guard')).toBe(true);
     // A second touch in the same session is silent.
     expect(threadCallbackFor(thread, ['hangingPiece'])).toBe('');
   });

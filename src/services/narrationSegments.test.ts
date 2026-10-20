@@ -1,10 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import {
-  squaresInText,
-  splitSentences,
-  buildNarrationSegments,
-  speakSegments,
-} from './narrationSegments';
+import { squaresInText, splitSentences, buildNarrationSegments } from './narrationSegments';
 
 describe('squaresInText', () => {
   it('finds bare and piece-token squares', () => {
@@ -71,31 +66,6 @@ describe('buildNarrationSegments', () => {
   });
 });
 
-describe('speakSegments', () => {
-  it('reveals before speaking, prefetches the next, and plays in order', async () => {
-    const order: string[] = [];
-    const segs = buildNarrationSegments('Play d5. Then c7 falls.', ['d5', 'c7']);
-    await speakSegments(segs, {
-      speak: async (t) => { order.push(`speak:${t}`); },
-      prefetch: (t) => { order.push(`prefetch:${t}`); },
-      reveal: (sq) => { order.push(`reveal:${sq.join(',')}`); },
-    });
-    // First segment: reveal d5, prefetch the 2nd sentence, then speak the 1st.
-    expect(order[0]).toBe('reveal:d5');
-    expect(order[1]).toBe('prefetch:Then c7 falls.');
-    expect(order[2]).toBe('speak:Play d5.');
-    // Second segment: reveal c7, no further prefetch, speak.
-    expect(order[3]).toBe('reveal:c7');
-    expect(order[4]).toBe('speak:Then c7 falls.');
-  });
-
-  it('bails out when cancelled', async () => {
-    const speak = vi.fn().mockResolvedValue(undefined);
-    const segs = buildNarrationSegments('A. B. C.', []);
-    await speakSegments(segs, { speak, reveal: () => {}, cancelled: () => true });
-    expect(speak).not.toHaveBeenCalled();
-  });
-});
 
 describe('splitSentences keeps a tried move with its answer (Learn audit 2026-10-14)', () => {
   it('does not split "Rd8? Then …"', async () => {

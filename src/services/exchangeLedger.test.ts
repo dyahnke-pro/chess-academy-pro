@@ -2,7 +2,7 @@
 // capture as a subjectless "winning the X". Boards are the real ones the
 // defect came from (David's Alapin, 2026-09-16).
 import { describe, it, expect } from 'vitest';
-import { computeExchangeLedger, describeExchange, exchangeNetForLine } from './exchangeLedger';
+import { computeExchangeLedger, describeExchange } from './exchangeLedger';
 import { betterMoveReason } from './inaccuracyCall';
 
 // After 15.Nc7+ — Black (the student) to move, forked king and rook.
@@ -21,18 +21,18 @@ describe('exchangeLedger — the net of a forced sequence, from the student\'s s
   });
 
   it('reads from the OPPONENT\'s seat as the mirror image', () => {
-    const text = exchangeNetForLine(PLY29, ['Kxd7', 'Nxa8', 'Nexd4'], 'w');
+    const text = describeExchange(computeExchangeLedger(PLY29, ['Kxd7', 'Nxa8', 'Nexd4'], 'w'));
     expect(text).toBe('you come out ahead on material, winning a rook for a knight and a pawn');
   });
 
   it('stays SILENT on a one-sided win — the line already said it', () => {
     // Only the student captures: nothing to confuse, no ledger.
-    expect(exchangeNetForLine(PLY29, ['Kxd7'], 'b')).toBeNull();
+    expect(describeExchange(computeExchangeLedger(PLY29, ['Kxd7'], 'b'))).toBeNull();
   });
 
   it('stays SILENT on a plain recapture — the student watched it happen', () => {
     const c = 'rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
-    expect(exchangeNetForLine(c, ['Nxe5', 'Nxe4'], 'w')).toBeNull(); // knight for knight
+    expect(describeExchange(computeExchangeLedger(c, ['Nxe5', 'Nxe4'], 'w'))).toBeNull(); // knight for knight
   });
 
   it('names an even but UNLIKE trade instead of going silent', () => {
@@ -202,13 +202,12 @@ describe('uncapped projections are POOLED, never serialized (G4.6)', () => {
 
 describe('the ledger speaks only a SETTLED trade (walk 6, R7)', () => {
   it('stays silent when the line ends with the recapture still pending', async () => {
-    const { exchangeNetForLine } = await import('./exchangeLedger');
     const start = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
     // Black's queen takes White's on f3 and the line stops before Nxf3.
     const pending = ['e4', 'd5', 'exd5', 'Qxd5', 'Qf3', 'Qxf3'];
-    expect(exchangeNetForLine(start, pending, 'w')).toBeNull();
+    expect(describeExchange(computeExchangeLedger(start, pending, 'w'))).toBeNull();
     // The same trade completed is settled.
-    const { computeExchangeLedger } = await import('./exchangeLedger');
+
     expect(computeExchangeLedger(start, pending, 'w')?.settled).toBe(false);
     expect(computeExchangeLedger(start, [...pending, 'Nxf3'], 'w')?.settled).toBe(true);
   });

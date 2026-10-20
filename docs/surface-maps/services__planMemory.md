@@ -4,15 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**85 lines · 7 exports · 2 importers · 1 tests · 0 audits**
+**80 lines · 6 exports · 3 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5318) — names `planMemory`
+- **The standard post-deploy ritual** (CLAUDE.md:6434) — names `planMemory`
 
 ## Who calls in
 
 - `src/services/planMemory.test.ts`
+- `src/services/positionFacts.ts`
 - `src/services/teachingSelector.ts`
 
 ## Exports and every call site
@@ -29,7 +30,7 @@
 ### `EMPTY_PLAN_STATE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `stepPlan` (function) — 8 call sites
+### `stepPlan` (function) — 9 call sites
 - `src/services/planMemory.test.ts:12`
 - `src/services/planMemory.test.ts:15`
 - `src/services/planMemory.test.ts:18`
@@ -38,15 +39,12 @@
 - `src/services/planMemory.test.ts:36`
 - `src/services/planMemory.test.ts:37`
 - `src/services/planMemory.test.ts:42`
+- `src/services/positionFacts.ts:863`
 
 ### `foldPlans` (function) — 3 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
 - `src/services/planMemory.test.ts:62`
-- `src/services/teachingSelector.ts:250`
-
-### `planProgressText` (function) — 2 call sites
-- `src/services/planMemory.test.ts:71`
-- `src/services/planMemory.test.ts:72`
+- `src/services/teachingSelector.ts:354`
 
 ## Tests
 
@@ -54,4 +52,8 @@
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

@@ -77,8 +77,3 @@ export function foldPlans(
   return out;
 }
 
-/** The one-line progress reference for a carried plan — spoken instead of a
- *  re-announcement when a beat wants to mention the plan again. */
-export function planProgressText(state: PlanState): string {
-  return state.plan ? 'Same plan as before — keep building toward it.' : '';
-}

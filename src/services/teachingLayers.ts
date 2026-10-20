@@ -121,12 +121,6 @@ export function layerStandings(
   return out;
 }
 
-/** The layer this student is taught FIRST: the lowest one not yet green. */
-export function leadLayer(s: LayerStandings): TeachingLayer | null {
-  for (const layer of LAYER_ORDER) if (s[layer] !== 'green') return layer;
-  return null;
-}
-
 /** HOW MUCH A FACT'S LAYER RAISES IT, on the same scale as the tie order
  *  (0–100). Every non-green layer keeps the bottom-up order (safety before
  *  principle before plan — a plan is useless to someone who drops pieces), and

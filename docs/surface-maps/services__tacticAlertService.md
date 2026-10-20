@@ -89,7 +89,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isCriticalThreat` (function) — 21 call sites
-- `src/components/Coach/CoachGamePage.tsx:2907`
+- `src/components/Coach/CoachGamePage.tsx:2858`
 - `src/services/computedMaterialTruth.corpus.test.ts:248`
 - `src/services/computedMaterialTruth.corpus.test.ts:257`
 - `src/services/tacticAlertService.criticalThreat.test.ts:26`
@@ -122,7 +122,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/hooks/useCoachTips.ts:310`
 - `src/hooks/useCoachTips.ts:339`
 
-### `tacticTypeLabel` (function) — 23 call sites
+### `tacticTypeLabel` (function) — 19 call sites
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:1072`
 - `src/components/Puzzles/MyMistakesPage.tsx:236`
 - `src/components/Tactics/TacticCreatePage.tsx:305`
@@ -134,17 +134,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.ts:685`
 - `src/services/mistakePuzzleService.ts:986`
 - `src/services/mistakePuzzleService.ts:1271`
-- `src/services/tacticNarrationService.ts:82`
-- `src/services/tacticNarrationService.ts:133`
-- `src/services/tacticNarrationService.ts:153`
-- `src/services/tacticNarrationService.ts:164`
-- `src/services/tacticNarrationService.ts:178`
-- `src/services/tacticNarrationService.ts:217`
-- `src/services/tacticNarrationService.ts:229`
-- `src/services/tacticNarrationService.ts:238`
-- `src/services/tacticNarrationService.ts:243`
-- `src/services/tacticNarrationService.ts:306`
-- `src/services/tacticNarrationService.ts:317`
+- `src/services/tacticNarrationService.ts:121`
+- `src/services/tacticNarrationService.ts:160`
+- `src/services/tacticNarrationService.ts:172`
+- `src/services/tacticNarrationService.ts:181`
+- `src/services/tacticNarrationService.ts:186`
+- `src/services/tacticNarrationService.ts:249`
+- `src/services/tacticNarrationService.ts:260`
 - `src/services/tacticalProfileService.ts:7`
 
 ### `buildTacticAlertMessage` (function) — 6 call sites

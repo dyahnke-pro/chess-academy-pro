@@ -485,29 +485,7 @@ export function bookMoveWhy(fen: string, mainSan: string, playedSan: string, stu
       : `The book move is ${sayMoveNoun(mainSan, fen)}; ${sayMoveNoun(playedSan, fen)} ${late.short}.`,
   };
 }
-/** Every job a move does against the board BEFORE it (no rival move) — the
- *  read the measurement scores against his explanations of the same move. */
-export function moveJobs(fen: string, san: string, student: Color): BookJobKind[] {
-  const mv = after(fen, san);
-  if (!mv) return [];
-  let before: Chess;
-  try { before = new Chess(fen); } catch { return []; }
-  const them: Color = student === 'w' ? 'b' : 'w';
-  const pass = asIfTheirMove(before, them);
-  if (!pass) return [];
-  const out: BookJobKind[] = [];
-  if (guardJob(mv.board, pass, student, mv.to)) out.push('guard');
-  if (stopsJob(mv.board, pass, student, before)) out.push('stopsPin');
-  if (stopsPushJob(mv.board, pass, student, before)) out.push('stopsPush');
-  const home = student === 'w' ? '1' : '8';
-  if ((mv.piece === 'n' || mv.piece === 'b') && mv.from[1] === home) out.push('develop');
-  if (preparesJob(mv.board, pass, student) || clearsRoadJob(fen, san)) out.push('prepares');
-  const ph = findProphylaxis(fen);
-  if (ph && ph.prevention.from === mv.from && ph.prevention.to === mv.to) out.push(ph.kind === 'pin' ? 'stopsPin' : 'stopsPush');
-  if (/^O-O/.test(san) || castleJob(mv.board, pass, student, mv.from, mv.piece)) out.push('castle');
-  if (centerJob(mv.board, pass, student, mv.to)) out.push('center');
-  return out;
-}
+
 
 /** The capture the move before this one made, so a recapture can be said as
  *  one ("they took a pawn on f7; you take back a knight"). */

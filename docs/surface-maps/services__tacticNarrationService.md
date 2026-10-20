@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**327 lines · 18 exports · 3 importers · 2 tests · 0 audits**
+**270 lines · 14 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,80 +19,68 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `describeMove` (function) — 1 call site
-- `src/services/tacticNarrationService.test.ts:49`
+- `src/services/tacticNarrationService.test.ts:30`
 
 ### `isNotableMove` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `drillIntro` (function) — 1 call site
-- `src/services/tacticNarrationService.test.ts:40`
-
-### `drillTransition` (function) — 1 call site
-- `src/services/tacticNarrationService.test.ts:37`
-
-### `drillCorrect` (function) — 1 call site
-- `src/services/tacticNarrationService.test.ts:37`
-
-### `drillIncorrect` (function) — 1 call site
-- `src/services/tacticNarrationService.test.ts:40`
-
 ### `setupIntro` (function) — 4 call sites
-- `src/components/Tactics/TacticSetupBoard.tsx:220`
-- `src/services/tacticNarrationService.test.ts:37`
-- `src/services/tacticNarrationService.test.ts:70`
-- `src/services/tacticNarrationService.test.ts:77`
+- `src/components/Tactics/TacticSetupBoard.tsx:277`
+- `src/services/tacticNarrationService.test.ts:19`
+- `src/services/tacticNarrationService.test.ts:51`
+- `src/services/tacticNarrationService.test.ts:58`
 
 ### `setupHintIdea` (function) — 5 call sites
-- `src/components/Tactics/TacticSetupBoard.tsx:188`
-- `src/services/tacticNarrationService.test.ts:42`
-- `src/services/tacticNarrationService.test.ts:85`
-- `src/services/tacticNarrationService.test.ts:90`
-- `src/services/tacticNarrationService.test.ts:91`
+- `src/components/Tactics/TacticSetupBoard.tsx:245`
+- `src/services/tacticNarrationService.test.ts:23`
+- `src/services/tacticNarrationService.test.ts:66`
+- `src/services/tacticNarrationService.test.ts:71`
+- `src/services/tacticNarrationService.test.ts:72`
 
 ### `setupHintPiece` (function) — 4 call sites
-- `src/components/Tactics/TacticSetupBoard.tsx:200`
-- `src/services/tacticNarrationService.test.ts:43`
-- `src/services/tacticNarrationService.test.ts:95`
-- `src/services/tacticNarrationService.test.ts:99`
+- `src/components/Tactics/TacticSetupBoard.tsx:257`
+- `src/services/tacticNarrationService.test.ts:24`
+- `src/services/tacticNarrationService.test.ts:76`
+- `src/services/tacticNarrationService.test.ts:80`
 
 ### `setupPrepPlanted` (function) — 2 call sites
-- `src/components/Tactics/TacticSetupBoard.tsx:310`
-- `src/services/tacticNarrationService.test.ts:41`
+- `src/components/Tactics/TacticSetupBoard.tsx:387`
+- `src/services/tacticNarrationService.test.ts:22`
 
 ### `setupRevealComplete` (function) — 3 call sites
-- `src/components/Tactics/TacticSetupBoard.tsx:252`
-- `src/components/Tactics/TacticSetupBoard.tsx:378`
-- `src/services/tacticNarrationService.test.ts:41`
+- `src/components/Tactics/TacticSetupBoard.tsx:326`
+- `src/components/Tactics/TacticSetupBoard.tsx:476`
+- `src/services/tacticNarrationService.test.ts:22`
 
 ### `setupIncorrect` (function) — 2 call sites
-- `src/components/Tactics/TacticSetupBoard.tsx:347`
-- `src/services/tacticNarrationService.test.ts:41`
+- `src/components/Tactics/TacticSetupBoard.tsx:435`
+- `src/services/tacticNarrationService.test.ts:22`
 
 ### `createIntro` (function) — 3 call sites
-- `src/components/Tactics/TacticCreatePage.tsx:165`
-- `src/services/tacticNarrationService.test.ts:44`
-- `src/services/tacticNarrationService.test.ts:60`
+- `src/components/Tactics/TacticCreatePage.tsx:169`
+- `src/services/tacticNarrationService.test.ts:25`
+- `src/services/tacticNarrationService.test.ts:41`
 
 ### `createReplayNarration` (function) — 2 call sites
-- `src/components/Tactics/TacticCreatePage.tsx:133`
-- `src/services/tacticNarrationService.test.ts:49`
+- `src/components/Tactics/TacticCreatePage.tsx:137`
+- `src/services/tacticNarrationService.test.ts:30`
 
 ### `createTransition` (function) — 2 call sites
-- `src/components/Tactics/TacticCreatePage.tsx:149`
-- `src/services/tacticNarrationService.test.ts:37`
+- `src/components/Tactics/TacticCreatePage.tsx:153`
+- `src/services/tacticNarrationService.test.ts:19`
 
 ### `createCorrect` (function) — 2 call sites
-- `src/components/Tactics/TacticCreatePage.tsx:220`
-- `src/services/tacticNarrationService.test.ts:45`
+- `src/components/Tactics/TacticCreatePage.tsx:224`
+- `src/services/tacticNarrationService.test.ts:26`
 
 ### `createIncorrect` (function) — 3 call sites
-- `src/components/Tactics/TacticCreatePage.tsx:232`
-- `src/services/tacticNarrationService.test.ts:45`
-- `src/services/tacticNarrationService.test.ts:61`
+- `src/components/Tactics/TacticCreatePage.tsx:236`
+- `src/services/tacticNarrationService.test.ts:26`
+- `src/services/tacticNarrationService.test.ts:42`
 
 ### `createDepthIncrease` (function) — 2 call sites
-- `src/components/Tactics/TacticCreatePage.tsx:221`
-- `src/services/tacticNarrationService.test.ts:46`
+- `src/components/Tactics/TacticCreatePage.tsx:225`
+- `src/services/tacticNarrationService.test.ts:27`
 
 ## Tests
 

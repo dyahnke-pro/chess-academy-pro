@@ -354,6 +354,9 @@ const GATE_TESTS = [
   // Every accumulating ref in a component/hook declares its lifetime
   // (per-board / per-game / persisted) — persistent-memory plan, 2026-10-19.
   'src/services/memoryLifetimes.gate.test.ts',
+  // G8.5: no exported value is read only by tests — a new one fails, the
+  // backlog baseline only shrinks (old-code removal, 2026-10-20).
+  'src/test/testOnlyExports.gate.test.ts',
   'src/test/oneLineReader.gate.test.ts',
   'src/test/oneCoachDoor.gate.test.ts',
   'src/test/coachFirstPerson.gate.test.ts',

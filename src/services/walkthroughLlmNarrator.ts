@@ -1,8 +1,8 @@
 /**
  * walkthroughLlmNarrator
  * ----------------------
- * Per-move narration for the legacy opening walkthrough (WalkthroughMode /
- * walkthroughResolver — the ~3,000 DB-only openings with no curated lesson).
+ * Per-move narration for the legacy opening walkthrough (WalkthroughMode —
+ * the ~3,000 DB-only openings with no curated lesson).
  * Fills in a real teaching line wherever the curated annotation JSON either
  * has no entry for a move or has one of the auto-generated filler templates
  * (suppressed via isGenericAnnotationText).
@@ -47,7 +47,7 @@ export interface WalkthroughNarrationInput {
    * computed fill is seat-stamped — "You play Nf3, …" / "They play …e5, …"
    * (CLAUDE.md ONE PERSPECTIVE); without it the fill is seat-free ("Nf3: …"),
    * which is the honest register for a caller that does not know whose line
-   * this is (walkthroughResolver's fill).
+   * this is.
    */
   studentSide?: 'white' | 'black';
 }
