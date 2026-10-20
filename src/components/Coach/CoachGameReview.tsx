@@ -44,7 +44,6 @@ import { computePvLine, type PvLine } from '../../services/pvPlayback';
 import { projectedLineVoice } from '../../services/projectedLineVoice';
 import { voiceFacts } from '../../services/coachApi';
 import { buildPrincipleQuiz, quizVerdictLine, type PrincipleQuiz } from '../../services/principleQuiz';
-import { findTheoryDeparture, walkBookLine, type TheoryDeparture, type BookLinePly } from '../../services/theoryDeparture';
 import { holdBatchAnalysis, classifyCpLoss, scanCriticalMoments, recordPromptedFind, recordFreeBoardFind } from '../../services/gameAnalysisService';
 import { classifyGameTheme, type GameThemeResult } from '../../services/gameThemeClassifier';
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
@@ -56,7 +55,6 @@ import { registerFor } from '../../coach/surfaceContract';
 import { buildOpeningTheoryLecture, buildTheoryLectureBeats, lectureSequence, lectureNoteSelector, loadLectureCorpus, resolveCuratedOpeningIdeas, enrichLectureWithEngine, warmLectureSources, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
 import { reviewTheoryLookup } from '../../services/reviewOpeningsSource';
 import { sanToSpeech } from '../../utils/sanToSpeech';
-import { shareAdverb, topMoveShare } from '../../utils/shareWords';
 import { captureEvent } from '../../services/analytics';
 import { reward } from '../../services/rewardService';
 import { detectMissedTactics } from '../../services/missedTacticService';
@@ -177,9 +175,6 @@ const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 // The principle "device" quiz is hidden from the UI for now (David 2026-07-20);
 // the arming/build/show code + service stay intact behind this flag.
 const PRINCIPLE_QUIZ_ENABLED: boolean = false;
-// The in-walk theory-departure CARD is hidden (redundant with the 📖 Opening
-// Theory button, which stays). Code kept behind the flag.
-const THEORY_DEPARTURE_CARD_ENABLED: boolean = false;
 
 // ship-4: PLAYED_MOVE_ARROW_COLORS + sanToSquares + AUTO_REVIEW_* pacing
 // + CLASSIFICATION_BORDER_COLORS removed alongside the analysis-phase
@@ -1062,13 +1057,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       if (walkPlayback.isAutoPlaying) walkPlayback.goForward();
     });
   }, [reviewSay, walkPlayback]);
-  /** Mirror of the theory-departure card state (Phase 4 block below). */
-  const theoryStateRef = useRef<{ stage: 'ask' | 'playback' } | null>(null);
-  /** Late-bound canceller for the cards declared BELOW handleWalkForward
-   *  (sequence / theory). Populated by an effect once those cancel
-   *  helpers exist, so forward can DISMISS them (escape-hatch) instead of
-   *  no-op'ing — the "board frozen behind the card" bug (David 2026-07-19). */
-  const dismissLateCardsRef = useRef<(() => void) | null>(null);
 
   // BLUNDER REWIND (David 2026-07-11: "return to the last moment you had a
   // choice"). After a blunder's question resolves, offer to jump the board
@@ -1180,11 +1168,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // rewind uses its in-scope setter and seq/theory go through the
     // late-bound canceller ref.
     if (rewindOffer) { setRewindOffer(null); walkPlayback.goForward(); return { advanced: true }; }
-    if (theoryStateRef.current) {
-      dismissLateCardsRef.current?.();
-      walkPlayback.goForward();
-      return { advanced: true };
-    }
     // 🔴 THE COMMENT HERE READ "device quiz (hidden) — never opens" AND IT WAS
     // FALSE (2026-09-21). `finishFaucetResume` calls `setPrincipleQuizState(quiz)`
     // and the card renders with testid `review-principle-quiz`. A wrong comment
@@ -2292,27 +2275,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     principleQuizShownRef.current = false;
   }, [props.gameId]);
 
-  // ── THEORY DEPARTURE (Phase 4, David 2026-07-18) ─────────────────────────
-  // Danya quizzes theory before telling: at the ply where the game left
-  // known master practice, the card first ASKS "what's the main move
-  // here?" (board answer, Hint reveals), THEN plays the book line with
-  // masters + your-level stats. Everything is a database aggregate
-  // (theoryDeparture service — G0/G3); self-hides when the game never
-  // left book or the data is thin.
-  interface TheoryState {
-    dep: TheoryDeparture;
-    bookLine: BookLinePly[];
-    stage: 'ask' | 'playback';
-  }
-  const [theoryState, setTheoryState] = useState<TheoryState | null>(null);
-  useEffect(() => { theoryStateRef.current = theoryState; }, [theoryState]);
 
   // ── THE ONE BOARD BAR's Read / Why / Play line (David 2026-10-07: "Keep the
   // boards identical"). The same computers Learn and Play use: the position
   // read (`usePositionNarration`, no corpus notes in review) and the why
   // computer (`computeWhyBestMoveDetail`). An open question withholds both —
   // its answer is the point of the question.
-  const questionOpen = !!shotState || !!theoryState;
+  const questionOpen = !!shotState;
   /** The board gives up height so the board bar stays on screen (phones). */
   const boardFit = useBoardFit(walkPlayback.currentPly);
   // THE ONE LINE WALKER: a line an answer proved plays out on the review
@@ -2405,7 +2374,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // their temporal dead zone.)
   useEffect(() => {
     if (walkExplorationFen !== null || walkShowMeActive) return; // a walkout owns the board
-    if (shotState || theoryState) return; // a card owns the board
+    if (shotState) return; // a card owns the board
     const seg = walkPlayback.currentSegment;
     const arrows = seg?.spokenLineArrows;
     // Clear ONLY when the ply changed — a fresh ply starts with a clean board.
@@ -2458,83 +2427,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         setWalkExplorationArrows([...painted]);
       }, Math.round(step * (i + 1)));
     });
-  }, [walkPlayback.currentPly, walkPlayback.currentSegment, walkPlayback.narrationState, walkExplorationFen, walkShowMeActive, shotState, theoryState]);
+  }, [walkPlayback.currentPly, walkPlayback.currentSegment, walkPlayback.narrationState, walkExplorationFen, walkShowMeActive, shotState]);
 
-  const theoryFoundRef = useRef<{ dep: TheoryDeparture; bookLine: BookLinePly[] } | null>(null);
-  const theoryScanDoneRef = useRef(false);
-  const theoryShownRef = useRef(false);
-  const theoryRunTokenRef = useRef(0);
-  const theoryAttemptsRef = useRef(0);
-
-  useEffect(() => {
-    setTheoryState(null);
-    theoryFoundRef.current = null;
-    theoryScanDoneRef.current = false;
-    theoryShownRef.current = false;
-    theoryRunTokenRef.current += 1;
-    theoryAttemptsRef.current = 0;
-  }, [props.gameId]);
-
-  // One departure scan per game, deferred; the book-line playback is
-  // prefetched with it so Watch never waits on the network.
-  useEffect(() => {
-    if (theoryScanDoneRef.current || !reviewFens || reviewFens.length < 2) return;
-    theoryScanDoneRef.current = true;
-    const fens = reviewFens;
-    const sans = moves.map((m) => m.san);
-    const t = window.setTimeout(() => {
-      const diag: { reason?: string } = {};
-      void findTheoryDeparture(fens, sans, { studentRating: playerRating ?? null, diag })
-        .then(async (dep) => {
-          let outcome = diag.reason ?? 'unknown';
-          if (dep) {
-            const bookLine = await walkBookLine(dep.bookFen);
-            if (bookLine.length === 0) {
-              outcome = 'found-but-no-book-line';
-            } else {
-              theoryFoundRef.current = { dep, bookLine };
-            }
-          }
-          // Observability (David 2026-07-19: the departure moment failed
-          // SILENTLY on his real game) — every scan outcome is auditable.
-          void logAppAudit({
-            kind: 'coach-surface-migrated',
-            category: 'subsystem',
-            source: 'CoachGameReview.theoryScan',
-            summary: `theory-departure scan: ${outcome}`,
-            details: JSON.stringify({ outcome, plies: fens.length }),
-          });
-        })
-        .catch((err: unknown) => {
-          void logAppAudit({
-            kind: 'coach-surface-migrated',
-            category: 'subsystem',
-            source: 'CoachGameReview.theoryScan',
-            summary: `theory-departure scan THREW: ${err instanceof Error ? err.message : String(err)}`,
-          });
-        });
-    }, 400);
-    return () => window.clearTimeout(t);
-  }, [reviewFens, moves, playerRating]);
-
-  const cancelTheory = useCallback((): void => {
-    theoryRunTokenRef.current += 1;
-    if (theoryStateRef.current) {
-      setTheoryState(null);
-      setWalkExplorationFen(null);
-      setWalkExplorationSan(null);
-    }
-  }, []);
-
-  // Wire the late-bound canceller so handleWalkForward (declared ABOVE these
-  // cards) can DISMISS the sequence / theory cards + advance, instead of
-  // freezing the board behind them (the ply-21 stall the audit caught).
-  useEffect(() => {
-    dismissLateCardsRef.current = (): void => {
-      cancelTheory();
-    };
-    return () => { dismissLateCardsRef.current = null; };
-  }, [cancelTheory]);
 
   // Build the opening-theory lecture once per game (masters-DB tour of the
   // mainline / sidelines / best moves / departure), deferred off the mount path.
@@ -2578,98 +2472,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     return () => { cancelled = true; window.clearTimeout(t); };
   }, [reviewFens, moves, openingName]);
 
-  /** The computed book line — how firmly masters back the main move, and what
-   *  players at your level pick — said in words, never as numbers (V8). */
-  const theoryStatsLine = useCallback((dep: TheoryDeparture): string => {
-    let line = `The book move here is ${dep.mainMove.san} — ${topMoveShare(dep.mainMove.pct * 100)}.`;
-    if (dep.yourLevel && dep.yourLevel.san !== dep.mainMove.san) {
-      line += ` At your level, players ${shareAdverb(dep.yourLevel.pct * 100)} pick ${dep.yourLevel.san} instead.`;
-    } else if (dep.yourLevel) {
-      line += ' Players at your level pick it too.';
-    }
-    return line;
-  }, []);
-
-  /** Book-line playback: board jumps to the book position and the masters'
-   *  main line plays out silently (the board is the lesson), stats spoken
-   *  at the start, a short hand-back at the end. */
-  const runTheoryPlayback = useCallback(async (state: TheoryState): Promise<void> => {
-    const token = ++theoryRunTokenRef.current;
-    setTheoryState({ ...state, stage: 'playback' });
-    setWalkExplorationFen(state.dep.bookFen);
-    setWalkExplorationSan(null);
-    try {
-      await reviewSay(`${theoryStatsLine(state.dep)} Watch the book line.`);
-    } catch { /* voice off */ }
-    if (theoryRunTokenRef.current !== token || !walkMountedRef.current) return;
-    for (const p of state.bookLine) {
-      await new Promise((r) => setTimeout(r, 1100));
-      if (theoryRunTokenRef.current !== token || !walkMountedRef.current) return;
-      setWalkExplorationFen(p.fenAfter);
-      setWalkExplorationSan(p.san);
-      playMoveSound(p.san);
-    }
-    await new Promise((r) => setTimeout(r, 900));
-    if (theoryRunTokenRef.current !== token || !walkMountedRef.current) return;
-    try {
-      await reviewSay('That is where the book goes — back to your game.');
-    } catch { /* ignore */ }
-    if (theoryRunTokenRef.current !== token || !walkMountedRef.current) return;
-    setTheoryState(null);
-    setWalkExplorationFen(null);
-    setWalkExplorationSan(null);
-    captureEvent('review_theory_playback_done', { plies: state.bookLine.length });
-  }, [playMoveSound, theoryStatsLine]);
-
-  /** Board answer during the ask — judged against the masters' book. */
-  const handleTheoryMove = useCallback((san: string): void => {
-    const state = theoryStateRef.current as TheoryState | null;
-    if (!state || state.stage !== 'ask') return;
-    const dep = state.dep;
-    if (san === dep.mainMove.san) {
-      captureEvent('review_theory_result', { outcome: 'main', attempts: theoryAttemptsRef.current + 1 });
-      void reviewSay(`${san} — you know the book.`, { prosodySpike: true }).catch(() => undefined);
-      void runTheoryPlayback(state);
-      return;
-    }
-    if (dep.topMoves.some((m) => m.san === san)) {
-      captureEvent('review_theory_result', { outcome: 'book-alt', attempts: theoryAttemptsRef.current + 1 });
-      void reviewSay(`${san} is book too — the main move is ${dep.mainMove.san}.`).catch(() => undefined);
-      void runTheoryPlayback(state);
-      return;
-    }
-    theoryAttemptsRef.current += 1;
-    setShotBoardEpoch((e) => e + 1); // snap the guess back
-    if (theoryAttemptsRef.current >= 2) {
-      captureEvent('review_theory_result', { outcome: 'revealed', attempts: theoryAttemptsRef.current });
-      void runTheoryPlayback(state);
-      return;
-    }
-    captureEvent('review_theory_result', { outcome: 'retry', attempts: theoryAttemptsRef.current });
-    void reviewSay('Not that one — look again.').catch(() => undefined);
-  }, [runTheoryPlayback]);
-
-  // Fire ONCE, when the walk reaches the departure ply and no other card
-  // is open. Hidden from the UI (David 2026-07-20: "remove 3 and 4" — the
-  // in-walk theory-departure CARD is redundant with the 📖 Opening Theory
-  // button, which stays). Code kept behind the flag; the button is separate.
-  useEffect(() => {
-    if (!THEORY_DEPARTURE_CARD_ENABLED) return;
-    if (theoryShownRef.current) return;
-    const found = theoryFoundRef.current;
-    if (!found) return;
-    if (walkPlayback.currentPly < found.dep.departurePly) return;
-    if (walkPlayback.currentPly >= moves.length) return;
-    if (shotState || shotReveal || rewindOffer || principleQuizStateRef.current) return;
-    theoryShownRef.current = true;
-    setTheoryState({ dep: found.dep, bookLine: found.bookLine, stage: 'ask' });
-    setWalkExplorationFen(found.dep.bookFen); // the ask happens AT the book position
-    setWalkExplorationSan(null);
-    captureEvent('review_theory_offered', { ply: found.dep.departurePly, total_games: found.dep.totalGames });
-    void voiceService
-      .speakForced(`Book ended here — ${found.dep.departedSan} left known practice. What's the main move in this position?`)
-      .catch(() => undefined);
-  }, [walkPlayback.currentPly, shotState, shotReveal, rewindOffer, moves.length]);
 
   // ── THEME OF THE GAME (Phase 5, David 2026-07-18) ────────────────────────
   // The theme EMERGES — never promised up front. Classified once from the
@@ -2713,7 +2515,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (!theme) return;
     if (walkPlayback.currentPly < theme.peakPly) return;
     // Non-blocking, but never talk over an open question or playback.
-    if (shotState || shotReveal || rewindOffer || theoryStateRef.current || principleQuizStateRef.current) return;
+    if (shotState || shotReveal || rewindOffer || principleQuizStateRef.current) return;
     themeSpokenRef.current = true;
     captureEvent('review_theme_named', { theme: theme.theme, at_ply: walkPlayback.currentPly });
     void reviewSay(theme.line).catch(() => undefined);
@@ -2724,7 +2526,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // and the walk "froze"). Whenever any question/playback card opens,
   // scroll the first present one into view.
   const anyCardOpen = Boolean(
-    shotState || shotReveal || criticalCard || criticalReveal || rewindOffer || theoryState || principleQuizState || faucetPhase !== 'idle',
+    shotState || shotReveal || criticalCard || criticalReveal || rewindOffer || principleQuizState || faucetPhase !== 'idle',
   );
   useEffect(() => {
     if (!anyCardOpen) return;
@@ -2737,8 +2539,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           '[data-testid="review-find-shot-reveal"]',
           '[data-testid="review-turning-question"]',
           '[data-testid="review-turning-reveal"]',
-          '[data-testid="review-theory-ask"]',
-          '[data-testid="review-theory-playback"]',
           '[data-testid="review-principle-quiz"]',
           '[data-testid="review-rewind-card"]',
           '[data-testid="discussion-practice-panel"]',
@@ -2768,7 +2568,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // card follows another, `anyCardOpen` never transitions, so the second card
     // (the find-shot prompt) opened below the fold as a border-sliver (David
     // 2026-07-21, IMG_4581: "that thin purple line below the board").
-  }, [anyCardOpen, shotState, shotReveal, turningRevealText, criticalCard, criticalReveal, rewindOffer, theoryState, principleQuizState, faucetPhase]);
+  }, [anyCardOpen, shotState, shotReveal, turningRevealText, criticalCard, criticalReveal, rewindOffer, principleQuizState, faucetPhase]);
 
   // ship-4: `currentMove` removed — only the deleted analysis-phase
   // board read it. Walk render uses `walkPlayback.currentSegment` and
@@ -3400,7 +3200,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         // NEVER paint the better-move arrow while a find-the-shot question is
         // open — the arrow IS the answer (honesty contract rule 1). Same for
         // the spot-the-sequence ask: an arrow would leak the next ply.
-        if (shotState || theoryState) return undefined;
+        if (shotState) return undefined;
         // Better-line PLAYOUT arrows: the board is on the exploration FEN and each
         // played ply paints a green lead-the-eye arrow on the move being narrated
         // (David 2026-07-19: the stronger line "has no arrows"). Take precedence
@@ -3452,7 +3252,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // THE BOARD IS FREE on every ply (David 2026-09-05). Only a playout that
       // drives the board itself (show-me / sequence / theory) locks it —
       // no mid-animation drags. Everywhere else a piece moved = exploring.
-      const walkBoardInteractive = !(walkShowMeActive || theoryState?.stage === 'playback' || lineWalk.walkFen);
+      const walkBoardInteractive = !(walkShowMeActive || lineWalk.walkFen);
       // During a find-the-shot the board MUST sit on the shot's own position
       // (the pre-move FEN where the better move is legal) — otherwise it shows
       // the position AFTER the played move and the answer can't be played at
@@ -3695,16 +3495,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   // advances (the review's "next phrase"), and stand down while a
                   // card/walkout/exploration owns the board so nothing double-marks.
                   annotationHighlights={(() => {
-                    if (walkExplorationFen || walkShowMeActive || shotState || theoryState) return undefined;
+                    if (walkExplorationFen || walkShowMeActive || shotState) return undefined;
                     const ks = seg?.keySquares;
                     return ks && ks.length ? ks.map((square) => ({ square, color: '#eab308' })) : undefined;
                   })()}
-                  onMove={theoryState?.stage === 'ask' ? (moveResult) => {
-                    // THEORY QUIZ answer (Phase 4) — the board move is the
-                    // student's "main move" guess at the book position.
-                    playMoveSound(moveResult.san);
-                    handleTheoryMove(moveResult.san);
-                  } : shotState ? (moveResult) => {
+                  onMove={shotState ? (moveResult) => {
                     // FIND-THE-SHOT answer attempt — the board move IS the
                     // student's answer. Found → reveal + the shot stays on
                     // the board. Wrong → remount snaps the move back
@@ -4042,40 +3837,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               </div>
             )}
 
-            {/* THEORY DEPARTURE (Phase 4) — book ended here: quiz the main
-                move on the board, then play the book line with stats. */}
-            {theoryState?.stage === 'ask' && (
-              <div data-testid="review-theory-ask" className="mx-3 my-1 rounded-xl border-2 border-sky-500/40 bg-sky-500/10 px-3 py-2">
-                <div className="text-sm text-sky-100">
-                  Book ended here — {theoryState.dep.departedSan} left known practice
-                  ({theoryState.dep.totalGames} master games reached this position).
-                  What's the main move? Play it on the board.
-                </div>
-                <div className="mt-1.5 flex gap-2">
-                  <button type="button" data-testid="review-theory-hint"
-                    onClick={() => { const s = theoryStateRef.current as TheoryState | null; if (s) { captureEvent('review_theory_result', { outcome: 'hint', attempts: theoryAttemptsRef.current }); void runTheoryPlayback(s); } }}
-                    className="rounded-lg border border-sky-400/50 px-2.5 py-1 text-xs font-semibold text-sky-200 hover:bg-sky-500/20">
-                    Show me
-                  </button>
-                  <button type="button" data-testid="review-theory-skip"
-                    onClick={() => { cancelTheory(); }}
-                    className="rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
-                    Skip
-                  </button>
-                </div>
-              </div>
-            )}
-            {theoryState?.stage === 'playback' && (
-              <div data-testid="review-theory-playback" className="mx-3 my-1 rounded-xl border-2 border-sky-500/40 bg-sky-500/10 px-3 py-2">
-                <div className="text-sm text-sky-100">The book line — {theoryState.dep.mainMove.san} and on…</div>
-                <button type="button" data-testid="review-theory-stop"
-                  onClick={() => { cancelTheory(); }}
-                  className="mt-1.5 rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
-                  Back to my game
-                </button>
-              </div>
-            )}
-
             {/* THE DEVICE QUIZ (Phase 3.3) — apply the principle on the spot:
                 which of these candidate moves passes the device? */}
             {principleQuizState && (
@@ -4326,7 +4087,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 <KeyMomentNav
                   moves={moves}
                   currentIndex={walkMoveIndex}
-                  onNavigate={(idx: number) => { cancelTheory(); setPrincipleQuizState(null); walkPlayback.jumpToPly(idx + 1); }}
+                  onNavigate={(idx: number) => { setPrincipleQuizState(null); walkPlayback.jumpToPly(idx + 1); }}
                   className=""
                   extraIndices={walkPlayback.hintPlies.map((ply) => ply - 1)}
                 />
@@ -4336,7 +4097,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   moves={moves}
                   openingName={openingName}
                   currentMoveIndex={walkMoveIndex >= 0 ? walkMoveIndex : null}
-                  onMoveClick={(idx: number) => { cancelTheory(); setPrincipleQuizState(null); walkPlayback.jumpToPly(idx + 1); }}
+                  onMoveClick={(idx: number) => { setPrincipleQuizState(null); walkPlayback.jumpToPly(idx + 1); }}
                   className="h-full"
                 />
               </div>
@@ -4348,7 +4109,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 tapping jumps the main board to that ply. */}
             <ReviewCitationPreviews
               citations={reviewCitations}
-              onJumpToPly={(ply: number) => { cancelTheory(); setPrincipleQuizState(null); walkPlayback.jumpToPly(ply); }}
+              onJumpToPly={(ply: number) => { setPrincipleQuizState(null); walkPlayback.jumpToPly(ply); }}
             />
 
             {/* Missed tactics — ship-1 made this non-empty for every

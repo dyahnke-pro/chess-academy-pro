@@ -240,7 +240,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       }))),
     surfaces: {
       learn: LEARN,
-      review: { not: 'owed — the review walk carries the opening theory through reviewOpeningTheory (session 8 merges the beats inline)' },
+      review: { wired: 'services/coachFeatureService.ts' },
       play: PLAY_ASK,
       chat: { not: 'owed — chat answers "what is this opening" through openingIdentityQuery' },
       tactics: { not: 'a puzzle has no opening story' },
