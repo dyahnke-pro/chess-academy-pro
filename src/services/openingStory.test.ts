@@ -32,6 +32,10 @@ describe('openingStory — Najdorf, English Attack (student Black)', () => {
     // What each road ALLOWS, never "a different kind of position" (lead 2026-10-20).
     expect(beat(story(NAJDORF, 10, 'b'), 'branch-choice')?.text).toBe('You chose the Najdorf: …a6 takes b5 away from their knights on d4 and c3, and their bishop on f1.');
   });
+  it('the road not taken is never described alone (prod 2026-10-20: "The Moscow is a position built around a locked centre.")', () => {
+    // 3.d4: White's road has no computed aim and no reason — no beat, not half a comparison.
+    expect(beat(story(NAJDORF, 5, 'w'), 'branch-choice')).toBeUndefined();
+  });
   it('their fork is not named by family: after Nc3 a6, White\'s choice is theirs', () => {
     expect(beat(story(NAJDORF, 10, 'b'), 'fork')).toBeUndefined();
   });

@@ -507,8 +507,16 @@ export function buildVoicePackage(
     // as a repeat, it goes too (walk 2026-09-30, game 2: the pin definition
     // spoken a move after the pin, on its own).
     let prevKept = false;
+    // A FACT SPEAKS WITH ITS HEAD OR NOT AT ALL (prod Learn audit 2026-10-20:
+    // "You chose the Modern: …" was a repeat and went, and the student heard
+    // its tail alone — "The Modern is a position built around a fianchettoed
+    // bishop…"). Later sentences lean on the first; when the first is a
+    // repeat, the rest is a repeat too or an orphan.
+    let first = true;
     for (const s of sentencesOf(result.text)) {
       const k = sayKey(s);
+      if (!first && fresh.length === 0) break;
+      first = false;
       if (DEPENDENT.test(s) && !prevKept) { why.add('duplicate'); continue; }
       prevKept = false;
       if (seen.has(k)) { why.add(saidEarlier.has(k) ? 'already said this turn' : 'duplicate'); continue; }

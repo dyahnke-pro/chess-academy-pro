@@ -154,10 +154,17 @@ function namedAtPly(history: readonly string[], name: string): number | null {
   return k > 0 ? k - 1 : null;
 }
 
-/** The variation's own name: "Sicilian Defense: Najdorf Variation" → "Najdorf". */
+/** Variation names that are ordinary words: without "Variation" they read as
+ *  an adjective ("you chose the Modern") or another opening (the Modern
+ *  Defense), so they keep it. */
+const PLAIN_WORD_VARIATION = /^(?:Modern|Main|Normal|Old|New|Open|Closed|Quiet|Fianchetto)$/;
+
+/** The variation's own name: "Sicilian Defense: Najdorf Variation" → "Najdorf";
+ *  "…: Modern Variation" stays "Modern Variation". */
 export function familyLabel(name: string): string {
   const tail = name.includes(':') ? name.slice(name.indexOf(':') + 1).trim() : name;
-  return tail.replace(/ Variation\b/g, '').trim();
+  const bare = tail.replace(/ Variation\b/g, '').trim();
+  return PLAIN_WORD_VARIATION.test(bare) && / Variation\b/.test(tail) ? `${bare} Variation` : bare;
 }
 
 interface Family { san: string; games: number; share: number; name: string }
@@ -356,7 +363,9 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
       // "a different kind of position", which is a description with no reason.
       const reason = roadReason({ prefix, chosenSan, altSan: alt.san, altName: alt.name, student, movesAt });
       const mine = aimWords(sNew); const theirs = aimWords(alt.name);
-      const aims = theirs && theirs !== mine ? ` The ${familyLabel(alt.name)} is a position built around ${theirs}${mine ? `; yours is built around ${mine}` : ''}.` : '';
+      // Both roads, or neither: the road not taken described alone is not a
+      // comparison, and it is what the student heard when their own had none.
+      const aims = theirs && mine && theirs !== mine ? ` The ${familyLabel(alt.name)} is a position built around ${theirs}; yours is built around ${mine}.` : '';
       if (reason || aims) out.push({
         beat: 'branch-choice',
         text: `You chose the ${familyLabel(sNew)}${reason ? `: ${reason.text}` : '.'}${aims}`,
@@ -401,7 +410,9 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
         beat: 'structure-cost',
         text: `That's the price of ${dot(san, student)}: no pawn of yours can cover ${h.hole} again, and ${knightDistance('their', h.from, h.moves)}; ${h.moves === 0 ? 'it hits' : 'from there it would hit'} ${hitWords(now, 'your', h.hits)}. Keeping ${h.hole} guarded is part of this structure from here.`,
         squares: [h.hole, h.from], proof: squaresProof(`${h.hole} has no pawn to cover it`, [h.hole, h.from]) ?? NO_PROOF.description,
-        claimKey: `story:cost:${h.hole}`,
+        // ONE HOLE, ONE KEY (dup map #5): every computer that names this hole
+        // says it under `hole:<sq>`, so a second reading of it is dropped.
+        claimKey: `hole:${h.hole}`,
       });
     } else if (beforeFen) {
       const before = new Chess(beforeFen);
@@ -468,7 +479,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
         beat: 'consequence',
         text: `${dot(history[t.ply], them)} has a cost for them: no pawn of theirs can cover ${h.hole} again, and ${knightDistance('your', h.from, h.moves)}; ${h.moves === 0 ? 'it hits' : 'from there it would hit'} ${hitWords(now, 'their', h.hits)}.`,
         squares: [h.hole, h.from], proof: squaresProof(`${h.hole} has no pawn of theirs to cover it`, [h.hole, h.from]) ?? NO_PROOF.description,
-        claimKey: `story:gift:${h.hole}`, aim: `plan-aim:outpost:${h.hole}`,
+        claimKey: `hole:${h.hole}`, aim: `plan-aim:outpost:${h.hole}`,
         ...(h.moves === 1 ? { holdWhilePlayable: [{ from: h.from, to: h.hole }] } : {}),
       });
     }
