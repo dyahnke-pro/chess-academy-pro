@@ -497,3 +497,13 @@ describe('one claim, one clause — the passer said once (one thread per move, 2
     expect(r.remember).toContain('student-passer-d');
   });
 });
+
+describe('the threat habit names what it asks about (OS-1 g3, 15.c5 Nc6)', () => {
+  it('after …Nc6 hits the knight on b4, the habit says "your knight on b4", never the bare question', async () => {
+    const fen = 'r2qr1k1/1bb2ppp/p1n2n2/1pPpp3/1N6/3PPN2/PB2BPPP/2RQ1RK1 w - - 1 16';
+    const r = await computePositionFacts({ boardComputers: 'surface', posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis: flat });
+    const method = r.clauses.find((c) => c.kind === 'method');
+    if (method && /threat|threatening|last move doing/i.test(method.text)) expect(method.text).toMatch(/your knight on b4/);
+    expect(r.clauses.map((c) => c.text).join(' ')).not.toMatch(/what are they threatening\? Deal with the answer/);
+  });
+});
