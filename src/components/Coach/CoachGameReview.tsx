@@ -1,4 +1,5 @@
 import { intentWithFallback } from '../../services/movePurpose';
+import { positionOf } from '../../utils/samePosition';
 import { useRememberedThread } from '../../hooks/useRememberedThread';
 import { useRememberedSetting } from '../../hooks/useRememberedSetting';
 import type { ReviewIntent } from '../../services/reviewMoveIntent';
@@ -44,7 +45,7 @@ import { projectedLineVoice } from '../../services/projectedLineVoice';
 import { voiceFacts } from '../../services/coachApi';
 import { buildPrincipleQuiz, quizVerdictLine, type PrincipleQuiz } from '../../services/principleQuiz';
 import { findTheoryDeparture, walkBookLine, type TheoryDeparture, type BookLinePly } from '../../services/theoryDeparture';
-import { holdBatchAnalysis, classifyCpLoss, scanCriticalMoments, recordPromptedFind } from '../../services/gameAnalysisService';
+import { holdBatchAnalysis, classifyCpLoss, scanCriticalMoments, recordPromptedFind, recordFreeBoardFind } from '../../services/gameAnalysisService';
 import { classifyGameTheme, type GameThemeResult } from '../../services/gameThemeClassifier';
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildCriticalMomentQuestion, judgeCriticalMomentPick, type CriticalMomentQuestion } from '../../services/reviewTurningPoint';
@@ -3751,6 +3752,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                     setWalkExplorationSan(moveResult.san);
                     setWalkExplorationArrows(null);
                     walkExplorationPlyRef.current = walkPlayback.currentPly;
+                    // A FIND reaches the record (persistent memory, 2026-10-19):
+                    // the first move tried from the position of a slip the
+                    // student made, graded against the engine's better move.
+                    // Prompted when the better-move arrow was on the board.
+                    if (walkExploreSansRef.current.length === 0 && showBest && seg?.bestMoveUci
+                      && seg.playerColor === playerColor && positionOf(fromFen) === positionOf(seg.fenBefore)) {
+                      void recordFreeBoardFind({
+                        fenBefore: seg.fenBefore, bestUci: seg.bestMoveUci,
+                        triedUci: `${moveResult.from}${moveResult.to}${moveResult.promotion ?? ''}`,
+                        arrowShown: hasArrow,
+                      });
+                    }
                     walkExploreSansRef.current = [...walkExploreSansRef.current, moveResult.san];
                     playMoveSound(moveResult.san);
                     void logAppAudit({
