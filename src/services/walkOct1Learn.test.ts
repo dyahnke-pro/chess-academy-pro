@@ -74,10 +74,10 @@ describe('Learn walk 2026-10-01 — games 2 and 3', () => {
     const g = gradePlayedMove({
       fenBefore: '6k1/4pp2/3p3p/3P2pP/4P1P1/r4PK1/r1b3B1/8 b - - 3 39', playedUci: 'c2e4',
       fenAfter: '6k1/4pp2/3p3p/3P2pP/4b1P1/r4PK1/r5B1/8 w - - 0 40',
-      analysisBefore: { bestMove: 'c2e4', topLines: [
+      analysisBefore: { bestMove: 'c2e4', depth: 14, topLines: [
         { rank: 1, evaluation: 0, mate: -5, moves: ['c2e4', 'g3h2'] },
         { rank: 2, evaluation: -900, mate: null, moves: ['c2d3', 'e4e5'] },
-      ] } as never, studentColor: 'b' });
+      ] } as never, studentColor: 'b', depth: 14 });
     expect(g?.reason).not.toBe('only-move');
   });
 

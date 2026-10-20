@@ -39,6 +39,8 @@ import { getMisconceptionTag } from '../data/misconceptionTags';
 import { principleFor } from '../data/principles';
 import type { MisconceptionSource } from '../types';
 import { COACH_TURN_DEPTH } from '../services/engineConstants';
+import { liveMovePrice, uciOfSan } from '../services/playedMoveGrade';
+import { mateSwingCostCp } from '../services/moveCost';
 import { gemMoveSignal, warmGemIndexes, type GemMoveSignal } from '../services/gemCrushLines';
 
 /** Sentinel the panel's Hint button submits — the hook treats it as an honest
@@ -447,6 +449,8 @@ export function useDiscussionPractice(
        *  the rear-facing PV. Already computed for the eval; it was being
        *  discarded. See `whatItAllowed`. */
       let replyPvUci: string[] = [];
+      /** The before-read's fan — the price's first reader may be this hook. */
+      let beforeRead: Awaited<ReturnType<typeof stockfishEngine.analyzePosition>> | null = null;
       try {
         const [before, after] = await Promise.all([
           stockfishEngine.analyzePosition(args.fenBefore, ANALYSIS_DEPTH),
@@ -465,14 +469,32 @@ export function useDiscussionPractice(
         bestLineMate = before.isMate ? before.mateIn : null;
         afterIsMate = after.isMate;
         replyPvUci = after.topLines?.[0]?.moves ?? (after.bestMove ? [after.bestMove] : []);
+        beforeRead = before;
       } catch {
         return; // engine down → never guess (G0/G3)
       }
 
       const moverSign = args.playerColor === 'white' ? 1 : -1;
-      const evalBeforeMover = evalBeforeW * moverSign;
-      const evalAfterMover = evalAfterW * moverSign;
-      const cpLoss = evalBeforeMover - evalAfterMover;
+      // THE ONE PRICE (#2 root cause 4, 2026-10-20). The cost is the played
+      // move against the best one in ONE search — memoized per (fen, move), so
+      // on Learn this is the very search the door and the spoken verdict read.
+      // It used to be the read before minus a separate read after, both served
+      // from budget-cut searches cached as depth 14: Kg5 was 63 at the door and
+      // 115 in the record. A mate either way has no centipawn price: the two
+      // reads' mate sentinels carry that story, as before. Anything else the
+      // engine could not price is not recorded at all — unpriced is not clean.
+      const playedUci = uciOfSan(args.fenBefore, args.playedSan);
+      const mateInvolved = beforeRead?.isMate || afterIsMate;
+      const price = playedUci && !mateInvolved
+        ? await liveMovePrice(args.fenBefore, playedUci, beforeRead, ANALYSIS_DEPTH)
+        : null;
+      if (!price && !mateInvolved) return;
+      const readBeforeMover = evalBeforeW * moverSign;
+      const evalBeforeMover = price?.scores ? price.scores.bestWhiteCp * moverSign : readBeforeMover;
+      const evalAfterMover = price
+        ? (price.scores ? price.scores.playedWhiteCp * moverSign : evalBeforeMover - price.costCp)
+        : evalAfterW * moverSign;
+      const cpLoss = price ? price.costCp : mateSwingCostCp(evalBeforeMover, evalAfterMover);
       const moverChar: 'w' | 'b' = args.playerColor === 'white' ? 'w' : 'b';
       const bestSan = uciToSan(args.fenBefore, bestUci);
 
@@ -504,6 +526,7 @@ export function useDiscussionPractice(
         inBook: args.inBook,
         bookMoveSan: args.bookMoveSan,
         playedSan: args.playedSan,
+        cpLoss,
         evalBeforeCp: evalBeforeMover,
         evalAfterCp: evalAfterMover,
         learned: args.learned,

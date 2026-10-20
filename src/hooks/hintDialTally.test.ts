@@ -54,12 +54,26 @@ const move = (over: Record<string, unknown> = {}) => ({
 
 /** White-perspective evals. Black to move at 0; `after` is what White is worth
  *  once Black has moved, so `after` cp IS Black's loss. */
-const evalsShedding = (cp: number) => async (fen: string) => (fen === BEFORE
-  ? { evaluation: 0, bestMove: 'b8c6', isMate: false, topLines: [{ moves: ['b8c6'] }] }
-  : { evaluation: cp, bestMove: 'f3e5', isMate: false, topLines: [{ moves: ['f3e5'] }] });
+/** A `searchmoves` ask (the move's ONE-search price) scores the best move at
+ *  the read before and the played move at the read after. */
+const evalsShedding = (cp: number) => async (fen: string, _depth?: number, o?: { searchmoves?: string }) => {
+  if (o?.searchmoves) {
+    const [best, played] = o.searchmoves.split(' ');
+    return { evaluation: 0, bestMove: best, isMate: false, depth: 99, topLines: [
+      { rank: 1, moves: [best], evaluation: 0, mate: null },
+      { rank: 2, moves: [played], evaluation: cp, mate: null },
+    ] };
+  }
+  return fen === BEFORE
+    ? { evaluation: 0, bestMove: 'b8c6', isMate: false, depth: 99, topLines: [{ rank: 1, moves: ['b8c6'], evaluation: 0, mate: null }] }
+    : { evaluation: cp, bestMove: 'f3e5', isMate: false, depth: 99, topLines: [{ rank: 1, moves: ['f3e5'], evaluation: cp, mate: null }] };
+};
 
 describe('the hint dial reads every evaluated move', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    (await import('../services/playedMoveGrade')).clearMovePriceMemo();
+  });
 
   it('backs off for a student who keeps finding the move — with no card ever shown', async () => {
     analyze.mockImplementation(evalsShedding(0)); // best move every time

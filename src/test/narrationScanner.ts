@@ -72,7 +72,9 @@ export interface Violation { game: string; ply: number; san: string; rule: strin
  *   CAPTURE clause on the move's own landing square ("It won the pawn on d4"
  *   after Nxd4) names the piece that stood there until the move took it, so it
  *   is judged on the board before the move — the same piece type must have
- *   been there. PAST tense only: "win their weak pawn on d5" is a PLAN about
+ *   been there. Past tense, or the third-person present that describes the
+ *   move just played ("Takes your pawn on d4" after …exd4). A bare "win" /
+ *   "take" is a PLAN: "win their weak pawn on d5" is a PLAN about
  *   the board after, and reading it on the board before is a false seat error. Every other claim is judged on the board after, as always.
  */
 export function scanLine(line: string, fenAfter: string, studentWB: Color, ctx: Omit<Violation, 'rule' | 'detail'>, fenBefore?: string): Violation[] {
@@ -113,7 +115,7 @@ export function scanLine(line: string, fenAfter: string, studentWB: Color, ctx: 
     const type = WANT[m[2].toLowerCase()];
     const sq = m[3].toLowerCase();
     const captureClause = before !== null && sq === landing
-      && /\b(won|took|captured|grabbed|picked up)\s*$/i.test(head.slice(0, m.index));
+      && /\b(won|took|captured|grabbed|picked up|takes|captures)\s*$/i.test(head.slice(0, m.index));
     const cell = (captureClause && before ? before : board).get(sq as Parameters<typeof board.get>[0]);
     if (!cell || cell.type !== type) { add('phantom-piece', `"${m[0].trim()}" — board has ${cell ? cell.type : 'empty'} on ${sq}`); continue; }
     if (poss === 'your' && cell.color !== studentWB) add('seat-error', `"${m[0].trim()}" — that ${m[2]} is the opponent's`);

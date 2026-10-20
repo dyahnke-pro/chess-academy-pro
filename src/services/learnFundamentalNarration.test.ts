@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { learnFundamentalVerdict, fundamentalLines, LEARN_FUNDAMENTAL_CP_FLOOR, type LearnFundamentalInput } from './learnFundamentalNarration';
 import type { FundamentalId } from './principleAttribution';
+import { withPrice, type WithLegacyCost } from '../test/oneSearchScores';
 
 // Build #3 (David 2026-09-07: "Learn it needs to be added into the narration").
 // The Learn board names the fundamental the just-played move neglected, LIVE —
@@ -18,7 +19,7 @@ const fenBefore = (ply: number): string => { const c = new Chess(); for (const s
 
 // Ply 12 = 6...Nb6 (Black's flagged move). Black slightly better before, worse
 // after → a flagged mover-POV loss (white-POV: −30 → +90).
-const NB6: LearnFundamentalInput = {
+const NB6: WithLegacyCost<LearnFundamentalInput> = {
   currentGameId: 'live-now',
   namesBetterMove: false,
   replySan: null,
@@ -33,12 +34,12 @@ const NB6: LearnFundamentalInput = {
 
 describe('learnFundamentalVerdict', () => {
   it('returns null when there is no best move to compare against', () => {
-    expect(learnFundamentalVerdict({ ...NB6, bestSan: null }, new Set())).toBeNull();
+    expect(learnFundamentalVerdict(withPrice({ ...NB6, bestSan: null }), new Set())).toBeNull();
   });
 
   it('returns null for a near-best move under the centipawn floor', () => {
-    const out = learnFundamentalVerdict(
-      { ...NB6, evalBeforeWhiteCp: -30, evalAfterWhiteCp: -20 }, // +30 → +20, only 10cp
+    const out = learnFundamentalVerdict(withPrice(
+      { ...NB6, evalBeforeWhiteCp: -30, evalAfterWhiteCp: -20 }), // +30 → +20, only 10cp
       new Set(),
     );
     expect(out).toBeNull();
@@ -46,7 +47,7 @@ describe('learnFundamentalVerdict', () => {
 
   it('names a fundamental and returns a spoken-ready verdict on a real slip', () => {
     const seen = new Set<FundamentalId>();
-    const out = learnFundamentalVerdict(NB6, seen);
+    const out = learnFundamentalVerdict(withPrice(NB6), seen);
     expect(out).not.toBeNull();
     // The attributor is the authority on WHICH fundamental; David's read of this
     // exact move was "moved the same piece twice", and the review fixture proves
@@ -59,22 +60,22 @@ describe('learnFundamentalVerdict', () => {
 
   it('shortens a repeat of the same fundamental within one game (seen set)', () => {
     const seen = new Set<FundamentalId>();
-    const first = learnFundamentalVerdict(NB6, seen);
+    const first = learnFundamentalVerdict(withPrice(NB6), seen);
     expect(first).not.toBeNull();
-    const second = learnFundamentalVerdict(NB6, seen);
+    const second = learnFundamentalVerdict(withPrice(NB6), seen);
     if (second && second.id === first!.id) expect(second.verdict).not.toBe(first!.verdict);
   });
 
   it('treats a mate swing as flagged even when centipawns are unavailable', () => {
-    const out = learnFundamentalVerdict(
-      { ...NB6, evalBeforeWhiteCp: undefined, evalAfterWhiteCp: undefined, allowedMate: 3 },
+    const out = learnFundamentalVerdict(withPrice(
+      { ...NB6, evalBeforeWhiteCp: undefined, evalAfterWhiteCp: undefined, allowedMate: 3 }),
       new Set(),
     );
     expect(out === null || typeof out.verdict === 'string').toBe(true);
   });
 
   it('is silent on an empty history (no move context to attribute)', () => {
-    expect(learnFundamentalVerdict({ ...NB6, historySans: [] }, new Set())).toBeNull();
+    expect(learnFundamentalVerdict(withPrice({ ...NB6, historySans: [] }), new Set())).toBeNull();
   });
 
   it('exposes the centipawn floor as a shared constant', () => {
@@ -91,18 +92,18 @@ describe('learnFundamentalVerdict — recurrence (WO-LOOP-01)', () => {
     games: [{ gameId: 'prior-1', opponentName: 'Rossi, Anna', playedAt: Date.now() - 9 * DAY }],
   }];
   it('a recorded prior game → the present-tense clause rides with the verdict', () => {
-    const r = learnFundamentalVerdict(NB6, new Set(), spine);
+    const r = learnFundamentalVerdict(withPrice(NB6), new Set(), spine);
     expect(r?.id).toBe('same-piece-twice');
     expect(r?.recurrence).toBe("You've walked into this before — moving the same piece twice, the second game now — the last one was against Rossi, Anna 9 days ago.");
   });
   it('negative control: a cold student hears the verdict and no recurrence', () => {
-    const r = learnFundamentalVerdict(NB6, new Set());
+    const r = learnFundamentalVerdict(withPrice(NB6), new Set());
     expect(r?.verdict).toBeTruthy();
     expect(r?.recurrence).toBeNull();
   });
   it('a repeat within THIS game gets the short stem and no second recurrence clause', () => {
     const seen = new Set<FundamentalId>(['same-piece-twice']);
-    const r = learnFundamentalVerdict(NB6, seen, spine);
+    const r = learnFundamentalVerdict(withPrice(NB6), seen, spine);
     expect(r?.recurrence).toBeNull();
   });
 });
@@ -121,13 +122,13 @@ describe('learnFundamentalVerdict — recurrence excludes the game being played 
   });
 
   it('NEGATIVE CONTROL: a spine whose only recorded game IS this game → no "again"', () => {
-    const r = learnFundamentalVerdict(NB6, new Set(), [row('live-now')]);
+    const r = learnFundamentalVerdict(withPrice(NB6), new Set(), [row('live-now')]);
     expect(r?.id).toBe('same-piece-twice');
     expect(r?.recurrence).toBeNull();
   });
 
   it('the same row under ANOTHER game id → the clause speaks', () => {
-    const r = learnFundamentalVerdict(NB6, new Set(), [row('prior-1')]);
+    const r = learnFundamentalVerdict(withPrice(NB6), new Set(), [row('prior-1')]);
     expect(r?.recurrence).toMatch(/^You've walked into this before/);
   });
 
@@ -142,7 +143,7 @@ describe('learnFundamentalVerdict — recurrence excludes the game being played 
 describe('a hung piece they did not take is a miss, not free material (re-walk 1380, 24.Bg5 f4)', () => {
   // 1.e4 d5 2.Bc4?? — dxc4 wins the bishop.
   const c = new Chess(); c.move('e4'); c.move('d5');
-  const BC4: LearnFundamentalInput = {
+  const BC4: WithLegacyCost<LearnFundamentalInput> = {
     namesBetterMove: false,
     currentGameId: 'live-now', replySan: null, fenBefore: c.fen(), historySans: ['e4', 'd5', 'Bc4'],
     playedSan: 'Bc4', bestSan: 'exd5', studentColor: 'white', costCp: null, evalBeforeWhiteCp: 30, evalAfterWhiteCp: -300,
@@ -150,12 +151,12 @@ describe('a hung piece they did not take is a miss, not free material (re-walk 1
     playedPvUci: ['d5c4', 'b1a3', 'g8f6', 'd1e2', 'b8c6', 'a3c4', 'e7e5', 'g1f3'],
   };
   it('names the miss when their reply does not take', () => {
-    const out = learnFundamentalVerdict({ ...BC4, replySan: 'Nf6' }, new Set());
+    const out = learnFundamentalVerdict(withPrice({ ...BC4, replySan: 'Nf6' }), new Set());
     expect(out?.verdict ?? '').toMatch(/they missed it/);
     expect(out?.verdict ?? '').not.toMatch(/free material/);
   });
   it('keeps the plain verdict when they take it', () => {
-    const out = learnFundamentalVerdict({ ...BC4, replySan: 'dxc4' }, new Set());
+    const out = learnFundamentalVerdict(withPrice({ ...BC4, replySan: 'dxc4' }), new Set());
     expect(out).not.toBeNull();
     expect(out?.verdict ?? '').not.toMatch(/missed/);
   });

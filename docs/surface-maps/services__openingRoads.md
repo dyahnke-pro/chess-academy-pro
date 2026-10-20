@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**138 lines · 7 exports · 2 importers · 1 tests · 0 audits**
+**149 lines · 7 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,7 +20,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `RoadReason` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `MAIN_REPLY_SHARE` (const) — 0 call sites
+### `INVITE_SHARE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `SCORE_GAP` (const) — 0 call sites
@@ -30,20 +30,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `deniedSquares` (function) — 3 call sites
-- `src/services/openingRoads.test.ts:40`
-- `src/services/openingRoads.test.ts:41`
-- `src/services/openingRoads.test.ts:44`
+- `src/services/openingRoads.test.ts:55`
+- `src/services/openingRoads.test.ts:56`
+- `src/services/openingRoads.test.ts:59`
 
-### `mainReplyLine` (function) — 1 call site
-- `src/services/openingRoads.test.ts:47`
+### `invitedAttack` (function) — 1 call site
+- `src/services/openingRoads.test.ts:33`
 
-### `roadReason` (function) — 6 call sites
+### `roadReason` (function) — 8 call sites
 - `src/services/openingRoads.test.ts:17`
 - `src/services/openingRoads.test.ts:21`
-- `src/services/openingRoads.test.ts:24`
-- `src/services/openingRoads.test.ts:28`
-- `src/services/openingRoads.test.ts:34`
-- `src/services/openingStory.ts:350`
+- `src/services/openingRoads.test.ts:31`
+- `src/services/openingRoads.test.ts:36`
+- `src/services/openingRoads.test.ts:39`
+- `src/services/openingRoads.test.ts:43`
+- `src/services/openingRoads.test.ts:49`
+- `src/services/openingStory.ts:361`
 
 ## Tests
 

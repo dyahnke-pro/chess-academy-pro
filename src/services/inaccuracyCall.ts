@@ -35,6 +35,7 @@ import { toObserverSeat, captureHasCounterTactic } from './groundedAnswer';
 import { Chess, type Square } from 'chess.js';
 import { planFromUci, isCostClause } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
+import type { SameSearchScores } from './moveCost';
 import { MISTAKE_CP, BLUNDER_CP, costWords, GRADE_WORD, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 export { costWords };
 import { MATERIAL_VALUE } from './pieceValues';
@@ -562,6 +563,10 @@ export function callInaccuracyDetailed(args: {
    *  read, a large positive number when the mover now has a forced mate, and
    *  null/absent when unknown or when the mate is against them. */
   moverEvalAfterCp?: number | null;
+  /** The best and played moves' scores from the ONE search that priced the
+   *  move (`MovePrice.scores`) — what the band is graded from. REQUIRED; null
+   *  when unknown (a mate, an unquotable read): the centipawn ladder then. */
+  scores: SameSearchScores | null;
   /** Whose move it was. */
   side: 'student' | 'coach';
   /** A coach-side move the STUDENT dictated: said of them, not owned by the
@@ -596,12 +601,10 @@ export function callInaccuracyDetailed(args: {
   // plus what it cost IS the eval before it, so the evals are in hand — hand
   // them over and `classifyMove` uses the review's bands. A mate score is not a
   // centipawn read; that case keeps the centipawn ladder.
-  const moverAfter = args.moverEvalAfterCp;
-  const evals = typeof moverAfter === 'number' && Math.abs(moverAfter) < 10_000
-    ? (() => {
-      const sign = args.moverColor === 'white' ? 1 : -1;
-      return { evalBefore: (moverAfter + args.cpLoss) * sign, evalAfter: moverAfter * sign, isWhiteMove: args.moverColor === 'white' };
-    })()
+  // The band reads the two scores the COST came from (#2 root cause 4): never
+  // "after + cost", which glued a separate read to the price.
+  const evals = args.scores
+    ? { evalBefore: args.scores.bestWhiteCp, evalAfter: args.scores.playedWhiteCp, isWhiteMove: args.moverColor === 'white' }
     : {};
   const quality = classifyMove({
     wasBest,

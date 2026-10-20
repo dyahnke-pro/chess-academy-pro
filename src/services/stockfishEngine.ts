@@ -2368,8 +2368,14 @@ class StockfishEngine {
         hashfull: this.pending.hashfull ?? null,
       };
 
+      // CACHED UNDER THE DEPTH THE SEARCH REACHED, never the depth it was asked
+      // for (#2 root cause 4, 2026-10-20): a budget `stop()` ends a depth-14 ask
+      // at depth 6, and filed as depth 14 that read later answered the record's
+      // own depth-14 ask — Kg5's 115 came from two cut-short reads. A shallow
+      // read can now only answer asks at or below what it actually searched.
       if (this.pending.cacheFen !== undefined && this.pending.cacheDepth !== undefined) {
-        stockfishCache.set(this.pending.cacheFen, this.pending.cacheDepth, analysis);
+        const reached = Math.min(this.pending.cacheDepth, this.pending.depth || 0);
+        if (reached > 0) stockfishCache.set(this.pending.cacheFen, reached, analysis);
       }
 
       if (this.pending.hardTimeout) clearTimeout(this.pending.hardTimeout);

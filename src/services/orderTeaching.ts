@@ -42,7 +42,7 @@ export function proofArrows(proof: Proof, source: string): ArrowClaim[] {
 
 /** Everything batch 1 can teach about the student's move. `i.reply` is their
  *  answer when it is on the board. */
-export function orderTeaching(i: StudentMoveInput): TeachingHint[] {
+export function orderTeaching(i: StudentMoveInput & { cpLoss: number }): TeachingHint[] {
   const out: TeachingHint[] = [];
   let me: 'w' | 'b';
   try { me = new Chess(i.fenBefore).turn(); } catch { return out; }
