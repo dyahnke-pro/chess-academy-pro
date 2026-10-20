@@ -50,7 +50,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `habitIsOwed` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:2681`
+- `src/services/coachFeatureService.ts:2714`
 - `src/services/positionFacts.ts:1072`
 
 ### `methodBeatFor` (function) — 45 call sites
@@ -139,7 +139,7 @@
 - `src/services/positionFacts.ts:938`
 
 ### `liveMethodBeatFor` (function) — 24 call sites
-- `src/services/groundedAnswer.ts:3789`
+- `src/services/groundedAnswer.ts:3775`
 - `src/services/methodBeat.live.test.ts:15`
 - `src/services/methodBeat.live.test.ts:19`
 - `src/services/methodBeat.live.test.ts:20`

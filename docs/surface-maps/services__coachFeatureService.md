@@ -81,7 +81,7 @@
 - `src/services/coachFeatureService.test.ts:261`
 - `src/services/coachFeatureService.test.ts:281`
 - `src/services/coachFeatureService.test.ts:293`
-- `src/services/gameAnalysisService.ts:2368`
+- `src/services/gameAnalysisService.ts:2372`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -90,7 +90,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `generateNarrativeSummary` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:569`
+- `src/components/Coach/CoachGameReview.tsx:570`
 - `src/services/recapSeat.test.ts:17`
 
 ### `recapSecondPerson` (function) — 9 call sites
@@ -108,7 +108,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `segmentNamedArrows` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:3216`
+- `src/components/Coach/CoachGameReview.tsx:3217`
 - `src/services/namedMoveArrows.test.ts:54`
 - `src/services/namedMoveArrows.test.ts:58`
 
@@ -125,7 +125,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewCitations` (function) — 8 call sites
-- `src/components/Coach/CoachGameReview.tsx:629`
+- `src/components/Coach/CoachGameReview.tsx:630`
 - `src/services/coachFeatureService.test.ts:722`
 - `src/services/coachFeatureService.test.ts:730`
 - `src/services/coachFeatureService.test.ts:762`
@@ -142,7 +142,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewSegments` (function) — 88 call sites
-- `src/components/Coach/CoachGameReview.tsx:1823`
+- `src/components/Coach/CoachGameReview.tsx:1824`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -253,7 +253,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4247`
+- `src/components/Coach/CoachGameReview.tsx:4260`
 - `src/services/coachFeatureService.test.ts:792`
 - `src/services/coachFeatureService.test.ts:795`
 - `src/services/coachFeatureService.test.ts:802`
@@ -279,9 +279,9 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8272`
-- `src/components/Coach/CoachTeachPage.tsx:8364`
-- `src/components/Coach/CoachTeachPage.tsx:11254`
+- `src/components/Coach/CoachTeachPage.tsx:8273`
+- `src/components/Coach/CoachTeachPage.tsx:8365`
+- `src/components/Coach/CoachTeachPage.tsx:11265`
 - `src/services/coachFeatureService.test.ts:907`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/utils/justCaptured.test.ts:20`
@@ -296,7 +296,7 @@
 - `src/services/reviewWalk1500.test.ts:17`
 
 ### `openingNameForKey` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:244`
+- `src/components/Coach/CoachGameReview.tsx:245`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:42`
 
 ### `generateReviewNarration` (function) — 16 call sites

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2019 lines · 15 exports · 29 importers · 27 tests · 3 audits**
+**2020 lines · 15 exports · 29 importers · 27 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -103,7 +103,7 @@
 
 ### `computePositionFacts` (function) — 96 call sites
 - `src/coach/boardTurnAnswer.ts:134`
-- `src/components/Coach/CoachTeachPage.tsx:10480`
+- `src/components/Coach/CoachTeachPage.tsx:10478`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:645`
@@ -169,16 +169,16 @@
 - `src/services/positionFacts.test.ts:401`
 - `src/services/positionFacts.test.ts:407`
 - `src/services/positionFacts.test.ts:416`
-- `src/services/positionFacts.test.ts:425`
-- `src/services/positionFacts.test.ts:438`
-- `src/services/positionFacts.test.ts:451`
-- `src/services/positionFacts.test.ts:464`
-- `src/services/positionFacts.test.ts:467`
-- `src/services/positionFacts.test.ts:478`
-- `src/services/positionFacts.test.ts:482`
-- `src/services/positionFacts.test.ts:486`
-- `src/services/positionFacts.test.ts:494`
-- `src/services/positionFacts.test.ts:504`
+- `src/services/positionFacts.test.ts:426`
+- `src/services/positionFacts.test.ts:439`
+- `src/services/positionFacts.test.ts:452`
+- `src/services/positionFacts.test.ts:465`
+- `src/services/positionFacts.test.ts:468`
+- `src/services/positionFacts.test.ts:479`
+- `src/services/positionFacts.test.ts:483`
+- `src/services/positionFacts.test.ts:487`
+- `src/services/positionFacts.test.ts:495`
+- `src/services/positionFacts.test.ts:505`
 - `src/services/positionFacts.weakness.test.ts:22`
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`
@@ -200,10 +200,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8913`
+- `src/components/Coach/CoachTeachPage.tsx:8911`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10752`
+- `src/components/Coach/CoachTeachPage.tsx:10753`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -215,7 +215,7 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8885`
+- `src/components/Coach/CoachTeachPage.tsx:8883`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.test.ts:6`
