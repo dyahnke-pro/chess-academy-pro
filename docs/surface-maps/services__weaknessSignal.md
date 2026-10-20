@@ -133,7 +133,7 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:120`
 
 ### `matchTacticPattern` (function) — 11 call sites
-- `src/services/liveTacticsContext.ts:607`
+- `src/services/liveTacticsContext.ts:617`
 - `src/services/needScore.ts:311`
 - `src/services/positionFacts.ts:1392`
 - `src/services/tacticAlertService.ts:606`
