@@ -54,23 +54,23 @@
 - `src/services/backwardLook.ts:188`
 - `src/services/backwardLook.ts:367`
 - `src/services/backwardLook.ts:406`
-- `src/services/coachFeatureService.ts:2112`
-- `src/services/exchangeIdeas.ts:290`
-- `src/services/exchangeIdeas.ts:556`
+- `src/services/coachFeatureService.ts:2080`
+- `src/services/exchangeIdeas.ts:287`
+- `src/services/exchangeIdeas.ts:553`
 - `src/services/gameEndReads.ts:114`
 - `src/services/gameEndReads.ts:282`
 - `src/services/kingAttackReads.ts:153`
 - `src/services/learnBoardTeaching.tacticStakes.test.ts:7`
-- `src/services/learnBoardTeaching.ts:1421`
+- `src/services/learnBoardTeaching.ts:1400`
 - `src/services/learnPhaseFocus.test.ts:40`
 - `src/services/learnPhaseFocus.test.ts:59`
-- `src/services/learnTurnDoor.test.ts:491`
-- `src/services/learnTurnDoor.test.ts:527`
-- `src/services/learnTurnDoor.test.ts:541`
+- `src/services/learnTurnDoor.test.ts:492`
+- `src/services/learnTurnDoor.test.ts:528`
+- `src/services/learnTurnDoor.test.ts:542`
 - `src/services/opponentMoveReads.ts:163`
 - `src/services/reviewFullData.ts:922`
 - `src/services/reviewFullData.ts:1549`
-- `src/services/threatProof.ts:95`
+- `src/services/threatProof.ts:96`
 
 ### `STAKED_FLOOR` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -84,15 +84,15 @@
 - `src/services/speedRunReads.ts:48`
 - `src/services/speedRunReads.ts:223`
 - `src/services/speedRunReads.ts:314`
-- `src/services/speedRunReads.ts:622`
+- `src/services/speedRunReads.ts:628`
 
 ### `stakeValue` (function) — 7 call sites
 - `src/services/factStakes.test.ts:50`
 - `src/services/factStakes.test.ts:51`
 - `src/services/factStakes.test.ts:52`
 - `src/services/factStakes.test.ts:55`
-- `src/services/learnTurnDoor.ts:603`
-- `src/services/learnTurnDoor.ts:668`
+- `src/services/learnTurnDoor.ts:602`
+- `src/services/learnTurnDoor.ts:667`
 - `src/services/reviewFacetRank.ts:523`
 
 ### `costStakes` (function) — 39 call sites
@@ -102,35 +102,35 @@
 - `src/services/factStakes.test.ts:62`
 - `src/services/factStakes.test.ts:63`
 - `src/services/learnPhaseFocus.test.ts:37`
-- `src/services/learnTurnDoor.test.ts:540`
-- `src/services/learnTurnDoor.test.ts:566`
-- `src/services/learnTurnDoor.test.ts:642`
+- `src/services/learnTurnDoor.test.ts:541`
+- `src/services/learnTurnDoor.test.ts:567`
 - `src/services/learnTurnDoor.test.ts:643`
 - `src/services/learnTurnDoor.test.ts:644`
 - `src/services/learnTurnDoor.test.ts:645`
-- `src/services/learnTurnDoor.test.ts:653`
-- `src/services/learnTurnDoor.test.ts:666`
+- `src/services/learnTurnDoor.test.ts:646`
+- `src/services/learnTurnDoor.test.ts:654`
 - `src/services/learnTurnDoor.test.ts:667`
-- `src/services/learnTurnDoor.test.ts:848`
-- `src/services/learnTurnDoor.test.ts:858`
-- `src/services/learnTurnDoor.ts:668`
+- `src/services/learnTurnDoor.test.ts:668`
+- `src/services/learnTurnDoor.test.ts:849`
+- `src/services/learnTurnDoor.test.ts:859`
+- `src/services/learnTurnDoor.ts:667`
 - `src/services/orderReads.ts:103`
-- `src/services/pawnJudgement.ts:165`
-- `src/services/pawnJudgement.ts:350`
-- `src/services/planJudgement.ts:47`
-- `src/services/planJudgement.ts:91`
-- `src/services/planJudgement.ts:140`
-- `src/services/positionFacts.ts:1622`
-- `src/services/positionFacts.ts:1770`
-- `src/services/positionFacts.ts:1900`
+- `src/services/pawnJudgement.ts:166`
+- `src/services/pawnJudgement.ts:351`
+- `src/services/planJudgement.ts:48`
+- `src/services/planJudgement.ts:92`
+- `src/services/planJudgement.ts:141`
+- `src/services/positionFacts.ts:1626`
+- `src/services/positionFacts.ts:1774`
+- `src/services/positionFacts.ts:1904`
 - `src/services/reviewFullData.ts:665`
 - `src/services/reviewFullData.ts:689`
 - `src/services/reviewFullData.ts:1263`
 - `src/services/speedRunReads.ts:176`
-- `src/services/speedRunReads.ts:431`
-- `src/services/speedRunReads.ts:492`
-- `src/services/speedRunReads.ts:542`
-- `src/services/speedRunReads.ts:693`
+- `src/services/speedRunReads.ts:437`
+- `src/services/speedRunReads.ts:498`
+- `src/services/speedRunReads.ts:548`
+- `src/services/speedRunReads.ts:699`
 - `src/services/squareJudgement.ts:325`
 - `src/services/squareJudgement.ts:428`
 - `src/services/teachingLayers.test.ts:104`
@@ -141,8 +141,8 @@
 - `src/services/factStakes.test.ts:29`
 - `src/services/factStakes.test.ts:33`
 - `src/services/learnBoardTeaching.tacticStakes.test.ts:14`
-- `src/services/learnBoardTeaching.ts:1422`
-- `src/services/positionFacts.ts:1830`
+- `src/services/learnBoardTeaching.ts:1401`
+- `src/services/positionFacts.ts:1834`
 - `src/services/reviewFullData.ts:828`
 - `src/services/reviewFullData.ts:869`
 - `src/services/reviewFullData.ts:903`
@@ -153,15 +153,15 @@
 - `src/services/factStakes.test.ts:37`
 - `src/services/factStakes.test.ts:38`
 - `src/services/factStakes.test.ts:39`
-- `src/services/learnBoardTeaching.ts:1425`
+- `src/services/learnBoardTeaching.ts:1404`
 - `src/services/opponentMoveReads.ts:205`
 - `src/services/opponentMoveReads.ts:207`
-- `src/services/positionFacts.ts:1692`
+- `src/services/positionFacts.ts:1696`
 - `src/services/reviewFullData.ts:821`
 - `src/services/reviewFullData.ts:924`
 
 ### `piecesOn` (function) — 3 call sites
-- `src/services/learnBoardTeaching.ts:1425`
+- `src/services/learnBoardTeaching.ts:1404`
 - `src/services/reviewFullData.ts:821`
 - `src/services/reviewFullData.ts:924`
 
@@ -170,8 +170,8 @@
 - `src/services/factStakes.test.ts:44`
 - `src/services/factStakes.test.ts:45`
 - `src/services/factStakes.test.ts:46`
-- `src/services/positionFacts.ts:1639`
-- `src/services/positionFacts.ts:1650`
+- `src/services/positionFacts.ts:1643`
+- `src/services/positionFacts.ts:1654`
 
 ### `isScenicPawnPin` (function) — 5 call sites
 - `src/services/factStakes.test.ts:112`
@@ -181,14 +181,14 @@
 - `src/services/reviewFullData.ts:833`
 
 ### `isSacrifice` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:4308`
+- `src/services/coachFeatureService.ts:4266`
 - `src/services/factStakes.test.ts:131`
 - `src/services/factStakes.test.ts:133`
 - `src/services/factStakes.test.ts:141`
 - `src/services/factStakes.test.ts:142`
 - `src/services/groundedAnswer.ts:3194`
 - `src/services/methodSignals.ts:90`
-- `src/services/planJudgement.ts:376`
+- `src/services/planJudgement.ts:377`
 - `src/services/reviewFullData.ts:1066`
 
 ## Tests

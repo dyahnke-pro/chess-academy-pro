@@ -18,6 +18,7 @@
 // in full through its rate, not through a second rule beside it.
 import type { HeatTile } from './heatMap';
 import { splitThink, stripThink, THINK_MARK } from '../utils/thinkPause';
+import { openSentence } from '../utils/openSentence';
 
 export type FadeLevel = 'lighter' | 'short';
 /** Per skill; a plain set reads as `short` for every member (proven tags). */
@@ -66,5 +67,5 @@ export function fadeText(text: string, level: FadeLevel | null): string {
 }
 
 function cap(s: string): string {
-  return s ? s[0].toUpperCase() + s.slice(1) : s;
+  return openSentence(s);
 }

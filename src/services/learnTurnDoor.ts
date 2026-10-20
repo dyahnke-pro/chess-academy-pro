@@ -108,7 +108,6 @@ export type LearnLane =
   | 'fileRace'
   | 'stalemate'
   | 'countMethod'
-  | 'splitPosition'
   | 'timing'
   | 'checkMethod'
   | 'trade'
@@ -181,7 +180,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   moveOrder: 'refute', causalChain: 'refute',
   theirPurpose: 'their', theirIntent: 'their', theirMoveCost: 'their', coachMistake: 'their', gap: 'their',
   tactic: 'point', playedConcept: 'point', planArc: 'point', structureJudgement: 'point', openingIdea: 'point', structure: 'point', pieceQuality: 'point',
-  positionFacts: 'point', commentary: 'point', positional: 'point', kingSafety: 'point', splitPosition: 'point',
+  positionFacts: 'point', commentary: 'point', positional: 'point', kingSafety: 'point',
   behavior: 'point',
   phase: 'verdict', character: 'verdict',
   threat: 'now', dangerLevels: 'now', threatAnswer: 'now', prophylaxis: 'now', gem: 'now', trapAhead: 'now', priorityFirst: 'now', countMethod: 'now',
@@ -227,7 +226,7 @@ export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   openingRoads: 'not-ending', openingChoice: 'not-ending', openingCost: 'not-ending', openingTheirs: 'not-ending', openingStory: 'not-ending',
   opening: 'not-ending', bookMove: 'not-ending', lastTimeHere: 'not-ending', sameAsLastTime: 'not-ending',
   tempo: 'not-ending', notYetPlayed: 'not-ending', holdResource: 'not-ending',
-  structure: 'not-ending', kingSafety: 'not-ending', kingAttack: 'not-ending', splitPosition: 'not-ending',
+  structure: 'not-ending', kingSafety: 'not-ending', kingAttack: 'not-ending',
   pieceQuality: 'any', register: 'any', gap: 'any', positionFacts: 'any', priorityFirst: 'any', rejectedTempting: 'any',
   planArc: 'any', drawback: 'any', mistake: 'any', coachMistake: 'any', fundamental: 'any', movePoint: 'any',
   foundMove: 'any', heldMove: 'any', slipAnswer: 'any', moveIntent: 'any', moveOrder: 'any', theirMoveCost: 'any',
@@ -402,7 +401,6 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // STALEMATE WATCH (P2 #9): the one move that throws away a won game.
   // Count before you take (P3 how-to-calculate): a real exchange square, the count said.
   // Split the position (P3 method beat): opposite-side castling, two races.
-  splitPosition: { kind: 'computed', why: 'the kings are on opposite wings — the board is two races', lead: 66 },
   countMethod: { kind: 'computed', why: 'an exchange is on — count attackers against defenders before you take', lead: 77 },
   stalemate: { kind: 'computed', why: 'you are winning and one of your moves would stalemate them', lead: 81 },
   phase: { kind: 'computed', why: 'the game has changed phase — take stock of what the position is about now', lead: 72 },
@@ -466,7 +464,9 @@ export const DANGER_LANES: ReadonlySet<LearnLane> = new Set<LearnLane>(['threat'
  *  forced mate spoke in it: the turn stays on the mate across BOTH waves (the
  *  replay of 2026-10-19, 48.d6: "There's a forced mate here — mate in 2" in
  *  the instant wave, then a passed-pawn plan lecture in the late one). */
-/** A move that costs this much (centipawns) makes the turn a verdict turn. */
+/** A price this high (centipawns) may carry a verdict, so the instant line
+ *  waits for it (`instantWaitsForVerdict`, `nextBoardGate`). Whether the turn
+ *  IS a verdict turn is the voiced slip (`LearnTurnTag.slipCp`), not this bar. */
 export const VERDICT_TURN_CP = 100;
 
 export interface TurnLead { lane: LearnLane; squares: readonly string[]; mateTurn?: true }
@@ -577,9 +577,10 @@ export function decideTurn(
     const ownReason = !!f.ownMoveReason || !!f.claims?.includes('strong-choice:affirm');
     const claims = ownReason && turn && turn.kind !== 'phase' ? [...(f.claims ?? []), `own-move-reason:${turn.ply}`] : f.claims;
     if (f.ownMoveReason) ownOpenTexts.add(text);
-    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims, lines: f.lines, proof: f.proof });
+    // A story beat speaks whole or not at all (prod audit 2026-10-20).
+    open.push({ lane: f.lane, kind: f.kind ?? LEARN_LANES[f.lane].kind, text, fen: f.fen, squares: f.squares, claims, lines: f.lines, proof: f.proof, whole: STORY_LANES.has(f.lane) });
   }
-  const verified = buildVoicePackage(open.map(({ kind, text, fen, squares, claims, lines }) => ({ kind, text, fen, squares, claims, lines })), alreadySaid, priorKeys);
+  const verified = buildVoicePackage(open.map(({ kind, text, fen, squares, claims, lines, whole }) => ({ kind, text, fen, squares, claims, lines, whole })), alreadySaid, priorKeys);
   // Which lane each surviving fact came from (the package may trim the text).
   const laneOf = (k: VoiceFact): LearnLane | undefined =>
     open.find((o) => o.text === k.text || (k.text.length > 0 && o.text.includes(k.text)))?.lane;
@@ -663,9 +664,10 @@ export function decideTurn(
   // speaks — the stakes are the producer's own (`threatStakes`), never prose.
   const presentDanger = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
     DANGER_LANES.has(x.lane) && stakeOf(x.lane, x.fact.text) > 0;
-  /** A move that cost a point or more makes this whole turn a verdict turn. */
-  const moveCost = turn ? turn.moveCostCp : null;
-  const costTurnValue = moveCost !== null && moveCost >= VERDICT_TURN_CP ? stakeValue(costStakes(moveCost)) ?? null : null;
+  /** A slip the turn SAYS makes this whole turn a verdict turn, weighed by
+   *  its own price — the one grade, never a raw-cp bar beside it. */
+  const slipCp = turn ? turn.slipCp : null;
+  const costTurnValue = slipCp !== null ? stakeValue(costStakes(slipCp)) ?? null : null;
   // THE TURN'S HOLDS DECIDE BEFORE ITS LEAD (Learn audit 2026-10-14, LD2: a
   // lead was picked, then held by the mate rule, and the row named a lead that
   // never spoke). One predicate, read by the lead pick and the speak loop.
@@ -942,7 +944,8 @@ export interface LiveTurn {
   /** The board the turn's waves read (the board after the coach's reply). */
   fen: string;
   ply: number;
-  moveCostCp: number | null;
+  /** The slip this turn says (`LearnTurnTag.slipCp`). */
+  slipCp: number | null;
   /** The move's price is settled (`MovePrice.settled`). */
   priceSettled: boolean;
   /** How the move's price was searched, once it has landed. */
@@ -978,7 +981,7 @@ export function decidePhaseWave(
       ...(f.factKind ? { factKind: f.factKind } : {}), ...(f.skill ? { skill: f.skill } : {}),
     })),
     live.said, ctx.priorKeys, ctx.priorLead ?? null, ctx.green ?? null, ctx.beginner,
-    { kind: 'phase', ply: live.ply, moveCostCp: live.moveCostCp, priceSettled: live.priceSettled, price: live.price, midExchange: live.midExchange },
+    { kind: 'phase', ply: live.ply, slipCp: live.slipCp, priceSettled: live.priceSettled, price: live.price, midExchange: live.midExchange },
     live.holds,
   );
 }

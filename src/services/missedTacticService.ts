@@ -1,15 +1,14 @@
 import { inBetweenMove } from './inBetweenMove';
 import { trappedAt } from './trappedPiece';
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
-import { isRealPin, isRealSkewer } from './pinGeometry';
 import type { CoachGameMove, MissedTactic, TacticType } from '../types';
 import type { TacticPatternType } from '../types/tacticTypes';
 import { capEval } from './accuracyService';
 import { conceptForLine } from './conceptEngine';
-import { classifyPosition } from './tacticClassifier';
+import { classifyPosition, detectPin, detectSkewer, detectDiscovery } from './tacticClassifier';
 import { toTacticType } from './tacticVocabulary';
 import { geometryMotif } from './tacticGeometry';
-import { BISHOP_DIRS, ROOK_DIRS, coordsToSquare, traceRay, discoveryRevealed } from './lineGeometry';
+import { BISHOP_DIRS, ROOK_DIRS, coordsToSquare, traceRay } from './lineGeometry';
 
 /** Minimum centipawn swing to qualify as a missed tactic */
 const MIN_EVAL_SWING = 100;
@@ -125,93 +124,8 @@ function countDefenders(chess: Chess, square: Square, byColor: Color): number {
 
 // ─── Tactic Detectors ─────────────────────────────────────────────────────────
 
-/**
- * Detect pin: a piece is blocking an attack on a more valuable piece behind it.
- * After the best move, check if the moved piece creates a pin along a ray.
- */
-function detectPin(chess: Chess, to: Square, movingColor: Color): boolean {
-  const piece = chess.get(to);
-  if (!piece) return false;
 
-  // Only sliding pieces (bishop, rook, queen) can pin
-  if (piece.type !== 'b' && piece.type !== 'r' && piece.type !== 'q') return false;
 
-  const dirs = piece.type === 'b' ? BISHOP_DIRS
-    : piece.type === 'r' ? ROOK_DIRS
-    : [...BISHOP_DIRS, ...ROOK_DIRS];
-
-  for (const dir of dirs) {
-    const piecesOnRay = traceRay(chess, to, dir);
-    if (piecesOnRay.length < 2) continue;
-
-    const first = piecesOnRay[0];
-    const second = piecesOnRay[1];
-
-    // Pin: first piece is enemy, second piece is also enemy — and the ONE
-    // shared test decides (escape + value + bite, `pinGeometry`). This
-    // detector was the third copy of geometry-and-value only (D-2 sweep).
-    if (
-      first.color === oppositeColor(movingColor) &&
-      second.color === oppositeColor(movingColor) &&
-      isRealPin({
-        chess,
-        dir,
-        attacker: to,
-        pinned: first.square,
-        behind: second.square,
-        frontValue: pieceValue(first.type),
-        behindValue: pieceValue(second.type),
-      })
-    ) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-/**
- * Detect skewer: attacking a valuable piece that must move, exposing a piece behind it.
- */
-function detectSkewer(chess: Chess, to: Square, movingColor: Color): boolean {
-  const piece = chess.get(to);
-  if (!piece) return false;
-
-  if (piece.type !== 'b' && piece.type !== 'r' && piece.type !== 'q') return false;
-
-  const dirs = piece.type === 'b' ? BISHOP_DIRS
-    : piece.type === 'r' ? ROOK_DIRS
-    : [...BISHOP_DIRS, ...ROOK_DIRS];
-
-  for (const dir of dirs) {
-    const piecesOnRay = traceRay(chess, to, dir);
-    if (piecesOnRay.length < 2) continue;
-
-    const first = piecesOnRay[0];
-    const second = piecesOnRay[1];
-
-    // THE ONE SKEWER RULE (pinGeometry.isRealSkewer) — this was a port of
-    // the detector's rule that had drifted once already (2026-09-12 #C2).
-    if (
-      first.color === oppositeColor(movingColor) &&
-      second.color === oppositeColor(movingColor) &&
-      isRealSkewer(chess, to, first.square, second.square)
-    ) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-/**
- * Detect discovered attack: the moving piece uncovers an attack from a friendly piece behind it.
- */
-function detectDiscoveredAttack(chess: Chess, from: Square, to: Square, movingColor: Color): boolean {
-  // The one discovery test (lineGeometry.discoveryRevealed) — this copy once
-  // read straight through a piece that moved along its own line.
-  return discoveryRevealed(chess, from, to, movingColor) !== null;
-}
 
 
 /**
@@ -757,17 +671,17 @@ export function legacyTacticGeometry(fen: string, bestMoveUci: string): TacticTy
     }
 
     // 4. Pin
-    if (detectPin(chessAfter, to, movingColor)) {
+    if (detectPin(chessAfter, to, movingColor) !== null) {
       return 'pin';
     }
 
     // 5. Skewer
-    if (detectSkewer(chessAfter, to, movingColor)) {
+    if (detectSkewer(chessAfter, to, movingColor) !== null) {
       return 'skewer';
     }
 
     // 6. Discovered attack
-    if (detectDiscoveredAttack(chessAfter, from, to, movingColor)) {
+    if (detectDiscovery(chessAfter, from, to, movingColor) !== null) {
       return 'discovered_attack';
     }
 

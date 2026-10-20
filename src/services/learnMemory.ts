@@ -49,6 +49,7 @@
  *  first gap test passes. */
 import type { PlanThread } from './planThread';
 import type { Proof } from './proof';
+import type { LooseSpells } from './conceptKey';
 
 export const NEVER_FIRED = -999;
 
@@ -107,6 +108,9 @@ export interface LearnMemory {
    *  reset forgets them like everything else. */
   lastTacticKey: string;
   lastThreatKey: string;
+  /** The student's pieces loose now, each with the ply its spell began —
+   *  `looseClaim` reads it to say a loose piece once, then once "still". */
+  looseSpells: LooseSpells;
   /** Loud alarms (a piece or the game at stake) said this game: the first is
    *  said with full weight, later ones as "Again —", so the alarm keeps its
    *  meaning (live tape 2026-10-06: seven "Drop everything" in one game). */
@@ -274,6 +278,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     motifLastSpoken,
     lastTacticKey: '',
     lastThreatKey: '',
+    looseSpells: new Map(),
     loudAlarms,
     questionsAnswered,
     spokenTacticLines,
@@ -318,6 +323,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       spokenThreatLines.clear();
       mem.lastTacticKey = '';
       mem.lastThreatKey = '';
+      mem.looseSpells = new Map();
       loudAlarms.clear();
       questionsAnswered.clear();
       mem.gemSeen = null;

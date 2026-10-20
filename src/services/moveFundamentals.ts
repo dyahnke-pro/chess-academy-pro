@@ -34,6 +34,7 @@ import { findPinPressure } from './pinPressure';
 import { findGuardRemovals } from './guardRemoval';
 import { isPassedPawnAt } from './boardStructure';
 import { pawnHit } from './trappedPiece';
+import { openSentence } from '../utils/openSentence';
 
 export type MoveFundamentalId =
   | 'king-safety'
@@ -1446,7 +1447,7 @@ function middlegameKey(f: MoveFundamental): string {
  *  castle kingside castles your king" (review tape 2026-10-14). Castling is
  *  said as itself: "Castling gets your king to safety …". */
 function ledClause(san: string, lead: MoveFundamental): string {
-  if (/^O-O/.test(san)) return lead.selfContained.charAt(0).toUpperCase() + lead.selfContained.slice(1);
+  if (/^O-O/.test(san)) return openSentence(lead.selfContained);
   return `Your ${san} ${lead.led}`;
 }
 

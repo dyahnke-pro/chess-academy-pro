@@ -37,15 +37,15 @@
 
 ### `getCachedAmateurPlay` (function) — 6 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8119`
-- `src/components/Coach/CoachTeachPage.tsx:10609`
-- `src/components/Coach/CoachTeachPage.tsx:11702`
+- `src/components/Coach/CoachTeachPage.tsx:10614`
+- `src/components/Coach/CoachTeachPage.tsx:11707`
 - `src/services/amateurPlayCache.test.ts:37`
 - `src/services/coachApi.ts:1872`
 - `src/services/refutedAlternative.ts:141`
 
 ### `warmAmateurPlay` (function) — 3 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8118`
-- `src/components/Coach/CoachTeachPage.tsx:10716`
+- `src/components/Coach/CoachTeachPage.tsx:10721`
 - `src/services/masterPlayWatcher.ts:167`
 
 ### `__clearAmateurPlayCache` (function) — 3 call sites

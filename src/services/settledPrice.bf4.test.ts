@@ -71,11 +71,11 @@ describe('an affirm never speaks on an unsettled price', () => {
     const fact = (t: string): LaneFact => ({ lane: affirm.lane, text: t, fen: BF4_AFTER, squares: ['f4'], role: 'teach', proof: NO_PROOF.stated, ownMoveReason: true, namesStudentMove: NAMES_NO_MOVE });
     const rows: LearnTurnRow[] = [];
     const off = onLearnTurn((r) => rows.push(r));
-    const held = decideTurn([fact(affirm.text)], '', undefined, null, null, false, { kind: 'instant', ply: 19, moveCostCp: null, priceSettled: false, price: null, midExchange: null });
+    const held = decideTurn([fact(affirm.text)], '', undefined, null, null, false, { kind: 'instant', ply: 19, slipCp: null, priceSettled: false, price: null, midExchange: null });
     off();
     expect(held.spoke).not.toContain(affirm.lane);
     expect(rows[0]?.heldWhy?.[affirm.lane]).toBe('price-unsettled');
-    const spoke = decideTurn([fact(affirm.text)], '', undefined, null, null, false, { kind: 'instant', ply: 19, moveCostCp: 0, priceSettled: true, price: null, midExchange: null });
+    const spoke = decideTurn([fact(affirm.text)], '', undefined, null, null, false, { kind: 'instant', ply: 19, slipCp: null, priceSettled: true, price: null, midExchange: null });
     expect(spoke.spoke).toContain(affirm.lane);
   });
 });

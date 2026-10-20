@@ -5,6 +5,8 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { openingStoryAt, prefetchOpeningStory, BEAT_ORDER, type StoryFact } from './openingStory';
 import { setOpeningIdentity } from './openingIdentity';
+import { oppositeWingsRace } from './planRace';
+import { Chess } from 'chess.js';
 import type { MovesAt } from './mastersPlanRead';
 import type { LocalDbMove } from './masterPlayLookup';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -25,12 +27,12 @@ beforeAll(() => { setOpeningIdentity(JSON.parse(readFileSync('public/data/openin
 describe('openingStory — Najdorf, English Attack (student Black)', () => {
   it('names the families at the student\'s fork, by name, never by move', () => {
     const f = beat(story(NAJDORF, 9, 'b'), 'fork');
-    expect(f?.text).toMatch(/^A real crossroads: from here master games split into the Najdorf, the Classical and the Dragon/);
+    expect(f?.text).toMatch(/^A real crossroads: from here master games split into the Najdorf Variation, the Classical Variation and the Dragon Variation/);
     expect(f?.text).not.toMatch(/\ba6\b|Nc6|g6/);
   });
   it('explains the branch chosen against the main alternative, by what each road allows', () => {
     // What each road ALLOWS, never "a different kind of position" (lead 2026-10-20).
-    expect(beat(story(NAJDORF, 10, 'b'), 'branch-choice')?.text).toBe('You chose the Najdorf: …a6 takes b5 away from their knights on d4 and c3, and their bishop on f1.');
+    expect(beat(story(NAJDORF, 10, 'b'), 'branch-choice')?.text).toBe('You chose the Najdorf Variation: …a6 takes b5 away from their knights on d4 and c3, and their bishop on f1.');
   });
   it('their fork is not named by family: after Nc3 a6, White\'s choice is theirs', () => {
     expect(beat(story(NAJDORF, 10, 'b'), 'fork')).toBeUndefined();
@@ -62,9 +64,6 @@ describe('openingStory — Najdorf, English Attack (student Black)', () => {
     // 14…Be6 15.f3: …Be6 pays it.
     expect(beat(story(NAJDORF, 15, 'b'), 'structure-paid')?.text).toBe('…Be6 pays that price: your bishop now guards d5.');
   });
-  it('a one-ply beat stays offered until heard: the race is still there two moves after castling', () => {
-    expect(beat(story(NAJDORF, 21, 'b'), 'character')?.text).toMatch(/Kings on opposite wings/);
-  });
   it('…e5 names its built-in cost, and …Be6 pays it', () => {
     expect(beat(story(NAJDORF, 12, 'b'), 'structure-cost')?.text).toBe("That's the price of …e5: no pawn of yours can cover d5 again, and their knight on c3 is one move from it; from there it would hit your knight on f6. Keeping d5 guarded is part of this structure from here.");
     expect(beat(story(NAJDORF, 14, 'b'), 'structure-paid')?.text).toBe('…Be6 pays that price: your bishop now guards d5.');
@@ -81,10 +80,12 @@ describe('openingStory — Najdorf, English Attack (student Black)', () => {
   it('master games race in the English Attack and never agree on …d5 — no key break is invented', () => {
     for (let n = 12; n <= NAJDORF.length; n += 1) expect(beat(story(NAJDORF, n, 'b'), 'key-break')).toBeUndefined();
   });
-  it('opposite-side castling announces the race under the plan arc\'s king-attack aim', () => {
-    const c = beat(story(NAJDORF, 19, 'b'), 'character');
-    expect(c?.text).toMatch(/^Kings on opposite wings: this is a race\. Your pawns can storm the queenside/);
-    expect(c?.aim).toBe('plan-aim:king-attack');
+  it('opposite-side castling is NOT the story\'s to say: the race has one owner (OS-11 item 6a)', () => {
+    for (const n of [19, 20, 21]) {
+      expect(beat(story(NAJDORF, n, 'b'), 'character')).toBeUndefined();
+      const c = new Chess(); for (const m of NAJDORF.slice(0, n)) c.move(m);
+      expect(oppositeWingsRace(c.fen(), 'b', 'live')?.text).toMatch(/^The kings are on opposite wings, so it is a race: your pawns go after their king on the queenside/);
+    }
   });
 });
 
@@ -145,7 +146,7 @@ describe('openingStory — the branch says YOUR road (lead 2026-10-20, Learn Sca
   const branch = (n: number): string => openingStoryAt({ history: SCANDI.slice(0, n), student: 'b', namesStudentMoves: false, movesAt: realMoves })
     .filter((f) => f.beat === 'branch-choice').map((f) => f.text).join(' ');
   it('…Qxd5: what the student\'s road invites, never the other road\'s idea', () => {
-    expect(branch(4)).toBe('You chose the Mieses-Kotroc: …Qxd5 invites Nc3, which attacks your queen on d5.');
+    expect(branch(4)).toBe('You chose the Mieses-Kotroc Variation: …Qxd5 invites Nc3, which attacks your queen on d5.');
   }, 60_000);
   it('no line built on the road not taken, on any move of the line', () => {
     for (let n = 2; n <= SCANDI.length; n += 1) expect(branch(n)).not.toMatch(/is a position built around|other main road|mostly met by/);

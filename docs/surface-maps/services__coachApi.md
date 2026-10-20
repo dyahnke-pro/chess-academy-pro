@@ -282,8 +282,8 @@
 - `src/services/coachApi.computedOnly.test.ts:20`
 - `src/services/coachChatText.ts:221`
 - `src/services/coachFeatureService.ts:364`
-- `src/services/coachFeatureService.ts:5473`
-- `src/services/coachFeatureService.ts:5623`
+- `src/services/coachFeatureService.ts:5431`
+- `src/services/coachFeatureService.ts:5581`
 - `src/services/coachLaneWiring.test.ts:154`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`

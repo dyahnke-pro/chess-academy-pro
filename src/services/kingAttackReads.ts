@@ -39,7 +39,7 @@ import { sayMoveClause } from './spokenMove';
 import { legalLineProof, squaresProof, type Proof } from './proof';
 import { mateStakes, piecePoints, type FactStakes } from './factStakes';
 import { legalSeeGainFor } from './positionReadingService';
-import { detectPlanRace, planRaceClause, planRaceProof } from './planRace';
+import { oppositeWingsRace, OPPOSITE_WINGS_CLAIM } from './planRace';
 import { conceptInstanceKey } from './conceptKey';
 import { lineSeatAt } from '../utils/andList';
 
@@ -703,18 +703,12 @@ export function kingDiagonalWalk(fen: string, me: Color, bestSan: string | null)
 
 // ── THE ATTACK RACE ACROSS WINGS ─────────────────────────────────────────────
 
-/** The live half of `planRace`'s storm race — the one race computer, said in
- *  the present tense on the student's move. Said once per pair of pawns. */
+/** The opposite-wings race, from its one owner (`planRace.oppositeWingsRace`):
+ *  the claim with its storm count as the proof. Said once a game. */
 export function stormRace(fen: string, me: Color): KingRead | null {
-  const race = detectPlanRace(fen, me);
-  if (!race || race.kind !== 'storm-race') return null;
-  const clause = planRaceClause(fen, me, 'live');
-  const proof = planRaceProof(fen, me);
-  if (!clause || !proof) return null;
-  return {
-    id: 'storm-race', text: `${cap(clause)}.`, squares: [race.yourPawn, race.theirPawn], proof, namesMove: false,
-    claim: `kr:storm:${race.yourPawn}${race.theirPawn}`,
-  };
+  const race = oppositeWingsRace(fen, me, 'live');
+  if (!race) return null;
+  return { id: 'storm-race', text: race.text, squares: race.squares, proof: race.proof, namesMove: false, claim: OPPOSITE_WINGS_CLAIM };
 }
 
 // ── THE PRODUCER ─────────────────────────────────────────────────────────────

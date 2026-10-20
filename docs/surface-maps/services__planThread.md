@@ -26,8 +26,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `newPlanThread` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10428`
-- `src/services/boardComputers.test.ts:52`
+- `src/components/Coach/CoachTeachPage.tsx:10433`
+- `src/services/boardComputers.test.ts:55`
 - `src/services/coachFeatureService.ts:1483`
 - `src/services/planChoice.test.ts:75`
 - `src/services/planChoice.test.ts:89`
@@ -42,19 +42,19 @@
 - `src/services/planThread.test.ts:124`
 
 ### `clonePlanThread` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10429`
-- `src/services/coachFeatureService.ts:2388`
+- `src/components/Coach/CoachTeachPage.tsx:10434`
+- `src/services/coachFeatureService.ts:2356`
 - `src/services/planThread.test.ts:100`
 - `src/services/planThread.test.ts:108`
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10461`
-- `src/components/Coach/CoachTeachPage.tsx:11466`
+- `src/components/Coach/CoachTeachPage.tsx:10466`
+- `src/components/Coach/CoachTeachPage.tsx:11471`
 - `src/services/planThread.test.ts:104`
 - `src/services/planThread.test.ts:111`
 
 ### `planThreadTurn` (function) — 17 call sites
-- `src/services/boardComputers.ts:374`
+- `src/services/boardComputers.ts:378`
 - `src/services/planChoice.test.ts:75`
 - `src/services/planChoice.test.ts:89`
 - `src/services/planChoice.test.ts:102`

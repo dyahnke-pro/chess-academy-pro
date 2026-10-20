@@ -90,6 +90,7 @@ import { admitArrow, admitArrows, type ArrowClaim } from './arrowDoor';
 import { lineWins, lineArrows, mateLine } from './lineCalc';
 import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted } from './endgamePawnReads';
 import { theirOpeningVerdict, openingAnnouncementForGame, openingNameForBoard } from './openingAnnouncement';
+import { bookDeparture } from './bookDeparture';
 import { isWaypointOpening, identityFor, planFor } from './openingIdentity';
 import { departureRecordSentence, openingRecordClause } from './openingRecordBeat';
 import { ecoOfKey, openingEntryForKey, openingFamily, openingKeyFromSans } from './openingKey';
@@ -2172,7 +2173,13 @@ export function buildReviewSegments(
             // On the same move the name carries it: the bare plan facet goes.
             if (planText) { const dup = facets.findIndex((x) => facetIdentity.get(x) === `once:plan:${planText}`); if (dup >= 0) facets.splice(dup, 1); }
             const teaching = idRead?.text ?? planText;
-            if (teaching || spokenOpening) {
+            // THEIR DEPARTURE WITH NOTHING TO TEACH IS HELD (lead 2026-10-20,
+            // Najdorf Zagreb: "They left the book with the bishop to b7." is a
+            // description). The student's own departure carries its book move
+            // and job through the bookMove computer.
+            const dep = bookDeparture(history);
+            const theirBareDeparture = !teaching && !!dep && dep.mover !== studentColorWB && history.length - dep.ply <= 1;
+            if ((teaching || spokenOpening) && !theirBareDeparture) {
               const raw = `[opening] ${announce}${teaching ? ` ${teaching}` : ''}`;
               facets.push(raw);
               facetIdentity.set(raw, idRead ? `hint:${idRead.key}` : `hint:opening-name:${det.name}`);
@@ -2209,8 +2216,12 @@ export function buildReviewSegments(
       // PAST THE OPENING THE NEED SCORE DECIDES (lead 2026-10-20: move jobs
       // spoke on 25 middlegame plies the need score had marked silent — a
       // game with no slip after the book ran the story tail to the last move).
+      // …EXCEPT THE STUDENT'S OWN MOVE (lead 2026-10-20, the WHY standard in
+      // Review): every student move out of book is owed its own reason, so
+      // its job speaks wherever the board shows one. Their moves past the
+      // opening stay with the need score.
       const openingPly = classifyPhase(fenPair.fenBefore, { ply: m.ply - 1 }) === 'opening';
-      const inStory = openingPly || (lastBookIdx >= 0 && i < storyTailEnd && needHere?.speak === true);
+      const inStory = openingPly || moverColor === playerColor || (lastBookIdx >= 0 && i < storyTailEnd && needHere?.speak === true);
       if (storyAll && studentColorWB && !isFlagged(m.classification) && inStory) {
         const mine = moverColor === playerColor;
         const prevSan = i > 0 ? moves[i - 1].san : null;
@@ -2219,7 +2230,9 @@ export function buildReviewSegments(
           try { const pm = new Chess(fenChain[i - 1].fenBefore).move(prevSan); if (pm.captured) prior = { to: pm.to, captured: pm.captured }; } catch { prior = null; }
         }
         const job = moveJob(fenPair.fenBefore, m.san, moverColor === 'white' ? 'w' : 'b', mine ? MINE : THEIRS, prior);
-        const bare = job?.kind === 'develop' && !/castle/.test(job.clause);
+        // A check alone is the move itself ("Gives check." — the + is on the
+        // board): said only with what else it does.
+        const bare = (job?.kind === 'develop' && !/castle/.test(job.clause)) || job?.clause === 'it gives check';
         const id = `hint:move-job:${m.ply}`;
         // ONE CLAIM, ONE PRODUCER: the board-influence line ("[does] Your pawn
         // on e5 now eyes their knight on f6") states the same attack as the
@@ -2272,31 +2285,34 @@ export function buildReviewSegments(
         // is said once, never once per move. The walk's say-once state commits
         // only if the line SPOKE.
         const nextStanding = book && i !== lastBookIdx ? (!main || standingSaid === 'side' ? 'side' : 'main') : standingSaid;
-        if (job && job.clause && !bare && !told && !heard && !hintsSaid.has(id)) {
+        // THEIR ATTACK SAYS WHAT IT ASKS (lead 2026-10-20, Najdorf Zagreb:
+        // "Attacks your pawn on e4." is a one-move attack he can see). Their
+        // attack on a target that now needs an answer says so; a PLAIN attack
+        // that asks nothing is held. Checks and joined attacks keep their own
+        // clause either way.
+        const theirAttack = !!job && moverColor !== playerColor && job.kind === 'attack' && !!job.squares[1];
+        const asks = theirAttack && job ? whatItAsks(fenPair.fenAfter, job.squares[1], moverColor === 'white' ? 'w' : 'b', THEIRS) !== null : false;
+        const plainAttackAsksNothing = theirAttack && !asks && !!job && /^it attacks /.test(job.clause);
+        if (job && job.clause && !bare && !told && !heard && !hintsSaid.has(id) && !plainAttackAsksNothing) {
           if (sameClaim >= 0) facets.splice(sameClaim, 1);
-          const clause = job.contextKey && job.compact && contextSaid.has(job.contextKey) ? job.compact : job.clause;
+          const clause = `${job.contextKey && job.compact && contextSaid.has(job.contextKey) ? job.compact : job.clause}${asks ? ', and it needs an answer this move' : ''}`;
           const point = clause.replace(/^it /, '');
           // THE SAME JOB ON A NEW MOVE IS SAID AS A REPEAT ("attacks their
           // bishop on c4" from d5, then from b5): the words were heard, the
           // move is new — the door must not drop it as said already.
           const again = jobsSaid.has(point) ? ' again' : '';
-          const text = standing ? `${standing}: ${clause}${again}.` : `${point.charAt(0).toUpperCase()}${point.slice(1)}${again}.`;
+          const text = standing ? `${standing}: ${clause}${again}.` : `${openSentence(point)}${again}.`;
           const ctx = job.contextKey;
           const raw = `[move-job] ${text}`;
           facets.push(raw);
           facetIdentity.set(raw, id);
           if (job.squares.length) facetSquares.set(raw, job.squares);
           facetCommits.set(raw, () => { standingSaid = nextStanding; jobsSaid.add(point); if (ctx) contextSaid.add(ctx); });
-        } else if (standing && (!main || i === lastBookIdx) && !hintsSaid.has(id)) {
-          // A MOVE WITH NO JOB TO SAY STILL CARRIES THE THEORY: where the game
-          // leaves the main line, or the masters' file ends, is said on its own
-          // (a centre pawn's squares are the board line's; 1…d5 still leaves
-          // the main line). Being ON the main line alone is not news.
-          const raw = `[move-job] ${standing}.`;
-          facets.push(raw);
-          facetIdentity.set(raw, id);
-          facetCommits.set(raw, () => { standingSaid = nextStanding; });
         }
+        // A STANDING WITH NO JOB IS HELD (lead 2026-10-20, Najdorf Zagreb: "A
+        // rare book move — the game leaves the main line here." on its own is
+        // a description). The standing rides only as the lead of a move's own
+        // job, where it comes with the reason the move was played.
       }
       // A VERDICT ON THEIR OPENING CHOICE — parity with Learn: their move that
       // left the masters' book, judged by the engine's cost of it.
@@ -4031,7 +4047,7 @@ export function studentOutpacesOpponentBuild(
 /** THE MATING PLY'S BEAT — one producer for every review builder. The
  *  student's own mate is named and explained; a mate against them points at
  *  the net. `studentMated` = the student delivered it. */
-function deliveredMateNarration(fenAfterMate: string, studentMated: boolean): string {
+export function deliveredMateNarration(fenAfterMate: string, studentMated: boolean): string {
   const head = studentMated
     ? 'And there it is — checkmate. You finished the game.'
     : "And that's checkmate — the game ends here. This is the position to sit with: trace the mating net back and find the move where it became unavoidable.";

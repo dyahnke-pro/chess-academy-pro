@@ -51,12 +51,15 @@ import { threatStakes } from './threatProof';
 // The Learn turn's vocabulary travels through the door, so a surface imports
 // ONE deciding module (one coach P1).
 export { buildVoicePackage, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP } from './learnTurnDoor';
-export type { FactStakes, LearnLane, SpokenLine, TurnDecision, VoicePackage, VoiceFactKind } from './learnTurnDoor';
+export type { FactStakes, LaneFact, LearnLane, SpokenLine, TurnDecision, VoicePackage, VoiceFactKind } from './learnTurnDoor';
 // The phase report's wave of a turn — the same door, one call per report.
 export { decidePhaseWave } from './learnTurnDoor';
 export type { LiveTurn, PhaseFact } from './learnTurnDoor';
 // A fact's role (teach / describe) — surfaces read it through this door, never reviewFacetRank directly.
 export { FACT_ROLE } from './reviewFacetRank';
+// A claim's key is the door's vocabulary — surfaces attach it through the door.
+export { looseClaim, nextLooseSpells, plyOfFen } from './conceptKey';
+export type { LooseSpells } from './conceptKey';
 export type { FacetRole } from './reviewFacetRank';
 
 /** HOW A SURFACE LISTENS — and it is not cosmetic, it decides what silence MEANS.

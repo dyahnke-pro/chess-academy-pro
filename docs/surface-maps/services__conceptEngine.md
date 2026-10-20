@@ -119,7 +119,7 @@
 - `src/services/conceptEngine.test.ts:206`
 - `src/services/conceptEngine.test.ts:224`
 - `src/services/liveTacticsContext.ts:123`
-- `src/services/positionFacts.ts:927`
+- `src/services/positionFacts.ts:928`
 
 ### `conceptForLine` (function) — 12 call sites
 - `src/services/conceptEngine.futureTechnique.test.ts:12`
@@ -129,7 +129,7 @@
 - `src/services/conceptEngine.test.ts:296`
 - `src/services/conceptEngine.test.ts:303`
 - `src/services/endgameDrillService.test.ts:163`
-- `src/services/missedTacticService.ts:661`
+- `src/services/missedTacticService.ts:575`
 - `src/services/puzzleConceptExplanation.ts:142`
 - `src/services/puzzleConceptHint.ts:108`
 - `src/services/refutedAlternative.ts:112`
@@ -153,10 +153,10 @@
 - `src/components/Coach/CoachTeachPage.tsx:8182`
 - `src/components/Coach/CoachTeachPage.tsx:8186`
 - `src/services/learnWalkBlumenfeld.test.ts:138`
-- `src/services/positionFacts.ts:1359`
-- `src/services/positionFacts.ts:1361`
-- `src/services/positionFacts.ts:1820`
+- `src/services/positionFacts.ts:1363`
+- `src/services/positionFacts.ts:1365`
 - `src/services/positionFacts.ts:1824`
+- `src/services/positionFacts.ts:1828`
 - `src/services/reviewFullData.ts:672`
 - `src/services/reviewFullData.ts:675`
 
@@ -226,7 +226,7 @@
 - `src/services/narratedContinuation.test.ts:20`
 - `src/services/opponentMoveReads.ts:441`
 - `src/services/pieceValues.ts:46`
-- `src/services/positionReadingService.ts:1767`
+- `src/services/positionReadingService.ts:1768`
 - `src/services/practicalReads.ts:30`
 - `src/services/sideMaterial.test.ts:12`
 - `src/test/onePieceValueTable.test.ts:46`

@@ -24,6 +24,8 @@ import { phaseOfFen } from './boardConcepts';
 import { packageForRegister, type HintPackage } from './hintRegister';
 import { CAPTURE_VALUE } from './pieceValues';
 import { quietMovePoint } from './reviewMoveTeaching';
+import { pawnHit } from './trappedPiece';
+import { kickKey } from './conceptKey';
 import { settledExchange } from './exchangeLedger';
 import { captureRead, findWeakPawns } from './positionReadingService';
 import { seatBare } from '../utils/seatPieces';
@@ -845,6 +847,8 @@ interface MovePointFact {
   squares: string[];
   stakes: { points: number; plies: number } | null;
   line: { fen: string; sans: string[] } | null;
+  /** The claim the point makes, when it is a fact another lane also states. */
+  claim?: string;
 }
 export function studentMovePointFact(
   fenBefore: string,
@@ -913,7 +917,10 @@ export function studentMovePointFact(
   // and the queen eyes f2" was queued behind "what is their last move doing?"
   // and read as its answer. A verb-first point says whose move it is.
   const point = quietMovePoint(fenBefore, san);
-  return point ? { text: `${san} ${continueSentence(point)}`, squares: [], stakes: null, line: null } : null;
+  if (!point) return null;
+  // A pawn kick is the principle's fact too: one key, so it is said once.
+  const hit = mv.piece === 'p' ? pawnHit(after.fen(), mv) : null;
+  return { text: `${san} ${continueSentence(point)}`, squares: [], stakes: null, line: null, ...(hit ? { claim: kickKey(hit.square) } : {}) };
 }
 
 /** THEIR SLIP IS YOUR CHANCE — the one wording, Learn and Review (David

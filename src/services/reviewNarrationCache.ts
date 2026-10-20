@@ -21,7 +21,7 @@ import type { ReviewMoveInput, ReviewNarration } from './coachFeatureService';
 
 /** Bump whenever the narration ENGINE changes what it would say for the same
  *  inputs (a new facet, a reordered cascade, a template change). */
-export const REVIEW_NARRATION_REV = 10; // 10: every say-once ledger and flag rides the seed. 9: a flagged beat says what the move left once (the better move's reason no longer repeats errorWhy). 8: the loose-piece count, motif transfer and refrains ride the ledger seed (rf:/l:/m: keys). 7: review noise walk 2026-10-20 — formulas said once, threat voice reads the record, plain trades and placements cut, ledgerKeys on every segment (a rev-6 entry has none, so a walk could not be seeded from it). 6: review walk 2026-10-01
+export const REVIEW_NARRATION_REV = 11; // 11: learn-rootcauses-2-3 — every say-once ledger and flag rides the swap seed (book standing, spoken opening, shown flags), a flagged beat says what the move left once, the seed carries the loose count / motif / refrain keys. 10: batch 4 + learn-dedupe + review-noise 2026-10-20 (one turning-point ranking, one owner per claim, the loose piece keyed by its spell; the student's own move says its job past the opening, a bare check is held). 8a: the loose-piece count, motif transfer and refrains ride the ledger seed (rf:/l:/m: keys). 8b: Najdorf Zagreb review 2026-10-20 — their attack says what it asks, bare departures and bare standings held, a sac that only holds says nothing. 7: review noise walk 2026-10-20 — formulas said once, threat voice reads the record, plain trades and placements cut, ledgerKeys on every segment (a rev-6 entry has none, so a walk could not be seeded from it). 6: review walk 2026-10-01
 
 interface ReviewNarrationCacheEntry {
   rev: number;

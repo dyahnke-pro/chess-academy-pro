@@ -79,7 +79,7 @@
 - `src/services/coachFeatureService.reviewNoise.test.ts:28`
 - `src/services/coachFeatureService.trade.test.ts:19`
 - `src/services/coachFeatureService.ts:1361`
-- `src/services/coachFeatureService.ts:5442`
+- `src/services/coachFeatureService.ts:5400`
 - `src/services/fundamentalReachesDecider.test.ts:62`
 - `src/services/needCoverage.report.test.ts:93`
 - `src/services/needScore.test.ts:36`
@@ -95,7 +95,7 @@
 - `src/services/reviewNeedGate.test.ts:58`
 - `src/services/reviewNeedGate.test.ts:80`
 - `src/services/studentNeedLoader.ts:274`
-- `src/services/teachingSelector.ts:287`
+- `src/services/teachingSelector.ts:303`
 - `src/services/whyBestMove.needWire.test.ts:21`
 - `src/test/computedOrderWired.test.ts:59`
 
@@ -128,7 +128,7 @@
 - `scripts/catalog-sweep/sweep-matrix.test.ts:46`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:47`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:116`
-- `src/services/coachFeatureService.ts:1542`
+- `src/services/coachFeatureService.ts:1540`
 - `src/services/homeOpeningSteer.ts:83`
 - `src/services/homeOpeningSteer.ts:97`
 - `src/services/homeSteerCache.ts:24`
@@ -205,8 +205,8 @@
 - `src/services/oneOpeningKey.test.ts:141`
 - `src/services/oneOpeningKey.test.ts:143`
 - `src/services/positionFacts.liveFundamental.test.ts:80`
-- `src/services/positionFacts.ts:1260`
-- `src/services/teachingSelector.ts:332`
+- `src/services/positionFacts.ts:1261`
+- `src/services/teachingSelector.ts:348`
 
 ## Tests
 

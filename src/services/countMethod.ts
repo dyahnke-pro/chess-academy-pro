@@ -4,8 +4,8 @@
 // makes the count matter: the student is to move and a square holding one of
 // their pieces' targets is hit at least twice and defended at least twice. Said
 // ONLY when the raw count and the legal exchange (pins and all) agree, so the
-// count never teaches a wrong answer. Names the square, never the move. Once
-// per game (claim `count-method`).
+// count never teaches a wrong answer. Names the square, never the move. Said
+// once per square (claim `countKey(square)`, shared with the tied defender).
 //
 // A LEAF: chess.js + the legal SEE.
 import { Chess, type Color } from 'chess.js';

@@ -100,7 +100,13 @@ function piecesWords(ps: ReadonlyArray<{ piece: string; from: string }>): string
   return [...byKind].map(([k, sqs]) => `${PIECE[k]}${sqs.length > 1 ? 's' : ''} on ${andList(sqs)}`).join(', and their ');
 }
 
-const label = (name: string): string => (name.includes(':') ? name.slice(name.indexOf(':') + 1).trim() : name).replace(/ Variation\b/g, '').trim();
+/** THE one name for a road: the variation's own name, whole — "Sicilian
+ *  Defense: Modern Variation" → "Modern Variation". Its "Variation" stays
+ *  (prod audit 2026-10-20: "the Modern" named no position a student could look
+ *  up). openingStory reads this one; a second copy reopens the split. */
+export function variationLabel(name: string): string {
+  return (name.includes(':') ? name.slice(name.indexOf(':') + 1) : name).trim();
+}
 const dot = (san: string, side: 'w' | 'b'): string => `${side === 'b' ? '…' : ''}${san}`;
 
 /**
@@ -150,7 +156,7 @@ export function roadReason(i: {
   const mine = scoreFor(ms.find((m) => m.san === i.chosenSan), i.student);
   const alt = scoreFor(ms.find((m) => m.san === i.altSan), i.student);
   if (mine !== null && alt !== null && Math.abs(mine - alt) >= SCORE_GAP) {
-    parts.push(mine > alt ? `In master games your road has held up better.` : `In master games the ${label(i.altName)} has held up a little better.`);
+    parts.push(mine > alt ? `In master games your road has held up better.` : `In master games the ${variationLabel(i.altName)} has held up a little better.`);
   }
   return { text: parts.join(' '), squares, proof: squaresProof(parts[0], squares) ?? NO_PROOF.description };
 }

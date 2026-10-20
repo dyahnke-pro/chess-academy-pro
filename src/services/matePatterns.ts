@@ -18,6 +18,7 @@ import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import matingPatternsData from '../data/mating-patterns.json';
 import { andList } from '../utils/andList';
 import type { MatingPattern } from '../types/matingPattern';
+import { openSentence } from '../utils/openSentence';
 
 interface MatePatternResult {
   /** `mating-patterns.json` id, e.g. "anastasias-mate". */
@@ -412,7 +413,7 @@ export function explainMate(fen: string): string | null {
   if (blocked.length) parts.push(`its own ${blocked.length === 1 ? 'piece blocks' : 'pieces block'} ${andList(blocked)}`);
   if (covered.length) parts.push(`${andList(covered)} ${covered.length === 1 ? 'is' : 'are'} covered`);
   const text = parts.join('; ');
-  return `${text.charAt(0).toUpperCase()}${text.slice(1)}.`;
+  return `${openSentence(text)}.`;
 }
 
 /** THE MATE, NAMED — its pattern (when it has one) and why the king has no

@@ -44,7 +44,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `layerStandings` (function) — 9 call sites
 - `src/services/coachFeatureService.ts:1296`
-- `src/services/positionFacts.ts:1310`
+- `src/services/positionFacts.ts:1311`
 - `src/services/puzzleMethod.ts:51`
 - `src/services/teachingLayers.test.ts:21`
 - `src/services/teachingLayers.test.ts:28`

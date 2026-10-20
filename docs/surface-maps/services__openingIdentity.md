@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**294 lines · 10 exports · 17 importers · 10 tests · 0 audits**
+**294 lines · 10 exports · 18 importers · 11 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,6 +24,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingIdentity.test.ts`
 - `src/services/openingStory.test.ts`
 - `src/services/openingStory.ts`
+- `src/services/openingStoryWholeBeat.test.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/reviewNarrationRev.gate.test.ts`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
@@ -45,7 +46,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:1015`
 - `src/services/reviewOpeningTheory.ts:251`
 
-### `setOpeningIdentity` (function) — 14 call sites
+### `setOpeningIdentity` (function) — 17 call sites
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:39`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:54`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:92`
@@ -56,40 +57,43 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingIdea.test.ts:9`
 - `src/services/openingIdentity.test.ts:9`
 - `src/services/openingIdentity.test.ts:80`
-- `src/services/openingStory.test.ts:23`
+- `src/services/openingStory.test.ts:25`
+- `src/services/openingStoryWholeBeat.test.ts:36`
+- `src/services/openingStoryWholeBeat.test.ts:47`
+- `src/services/openingStoryWholeBeat.test.ts:60`
 - `src/services/reviewNarrationRev.gate.test.ts:16`
 - `src/services/reviewNarrationRev.gate.test.ts:30`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:24`
 
 ### `identityFor` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2152`
+- `src/services/coachFeatureService.ts:2120`
 - `src/services/openingIdentity.test.ts:36`
-- `src/services/openingStory.ts:208`
+- `src/services/openingStory.ts:204`
 
 ### `planFor` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:2152`
-- `src/services/coachFeatureService.ts:2168`
-- `src/services/learnBoardTeaching.ts:806`
+- `src/services/coachFeatureService.ts:2120`
+- `src/services/coachFeatureService.ts:2136`
+- `src/services/learnBoardTeaching.ts:781`
 - `src/services/lookaheadPlan.ts:523`
 - `src/services/lookaheadPlan.ts:1164`
 - `src/services/lookaheadPlan.ts:1165`
 - `src/services/openingAnnouncement.ts:203`
 - `src/services/openingIdentity.test.ts:82`
 - `src/services/openingIdentity.test.ts:87`
-- `src/services/openingStory.ts:220`
+- `src/services/openingStory.ts:216`
 - `src/services/reviewFullData.ts:1592`
 
 ### `LiveIdentityBoard` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isWaypointOpening` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2152`
+- `src/services/coachFeatureService.ts:2120`
 - `src/services/openingAnnouncement.ts:87`
-- `src/services/openingStory.ts:182`
-- `src/services/openingStory.ts:189`
-- `src/services/openingStory.ts:339`
-- `src/services/openingStory.ts:354`
-- `src/services/openingStory.ts:384`
+- `src/services/openingStory.ts:178`
+- `src/services/openingStory.ts:185`
+- `src/services/openingStory.ts:335`
+- `src/services/openingStory.ts:350`
+- `src/services/openingStory.ts:382`
 
 ### `openingIdentityLine` (function) — 19 call sites
 - `src/services/coachApi.ts:5770`
@@ -108,7 +112,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingIdentity.test.ts:62`
 - `src/services/openingIdentity.test.ts:68`
 - `src/services/openingIdentity.test.ts:70`
-- `src/services/openingStory.ts:340`
+- `src/services/openingStory.ts:336`
 - `src/services/reviewOpeningTheory.ts:742`
 - `src/services/walkOct2a.test.ts:67`
 
@@ -127,6 +131,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingIdea.test.ts`
 - `src/services/openingIdentity.test.ts`
 - `src/services/openingStory.test.ts`
+- `src/services/openingStoryWholeBeat.test.ts`
 - `src/services/reviewNarrationRev.gate.test.ts`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/walkOct2a.test.ts`

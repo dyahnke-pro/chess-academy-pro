@@ -25,7 +25,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `sacrificeCompensation` (function) — 17 call sites
 - `src/data/patternRegistry.ts:133`
-- `src/services/coachFeatureService.ts:3112`
+- `src/services/coachFeatureService.ts:3070`
 - `src/services/reviewFullData.ts:1073`
 - `src/services/reviewSacrifice.test.ts:14`
 - `src/services/reviewSacrifice.test.ts:18`
@@ -43,10 +43,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalk2065.test.ts:39`
 
 ### `enemyKingStuckInCenter` (function) — 13 call sites
-- `src/services/coachFeatureService.ts:3406`
-- `src/services/coachFeatureService.ts:3432`
-- `src/services/coachFeatureService.ts:3456`
-- `src/services/nextPlans.ts:279`
+- `src/services/coachFeatureService.ts:3364`
+- `src/services/coachFeatureService.ts:3390`
+- `src/services/coachFeatureService.ts:3414`
+- `src/services/nextPlans.ts:280`
 - `src/services/planChoice.ts:77`
 - `src/services/planStopped.ts:52`
 - `src/services/reviewConcepts.ts:220`
@@ -58,7 +58,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewSacrifice.test.ts:120`
 
 ### `describeSacBreaksKingShield` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3143`
+- `src/services/coachFeatureService.ts:3101`
 - `src/services/reviewFullData.ts:1091`
 - `src/services/reviewSacrifice.test.ts:53`
 - `src/services/reviewSacrifice.test.ts:58`

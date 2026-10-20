@@ -28,6 +28,7 @@
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { describeStructure } from './boardStructure';
+import { oppositeWingsRace } from './planRace';
 import { phaseOfFen } from './boardConcepts';
 import { hisGroundedPlanSync, lookupHisPlaySync, HIS_PLAN_MIN_GAMES } from './hisPlayLookup';
 import { mastersMovesSync, type LocalDbMove } from './masterPlayLookup';
@@ -592,9 +593,7 @@ export function buildMiddlegameOrientation(
   // the storming side still owns two pawns on the enemy king's wing.
   const enemyKingWingNow = struct.kings.kingWing[enemyWB] === 'queenside' ? 'queenside' : 'kingside';
   const oppositeCastling =
-    struct.kings.oppositeWings &&
-    struct.kings.kingWing[studentColorWB] !== 'center' &&
-    struct.kings.kingWing[enemyWB] !== 'center' &&
+    oppositeWingsRace(fen, studentColorWB, 'review') !== null &&
     phaseOfFen(fen) === 'middlegame' &&
     counts[studentColorWB][enemyKingWingNow] >= 2;
   if (oppositeCastling && seat !== 'opponent') {

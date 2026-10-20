@@ -19,7 +19,8 @@ import { evalBand } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan, lastMoveFromHistory } from './material';
 import { readTrade, findTradeTarget } from './tradeQuality';
-import { conceptInstanceKey, forkThreatKey } from './conceptKey';
+import { conceptInstanceKey, forkThreatKey, looseClaim, plyOfFen, outpostKey, kickKey, type LooseSpells } from './conceptKey';
+import { OPPOSITE_WINGS_CLAIM } from './planRace';
 import { layerStandings } from './teachingLayers';
 import { seatBare } from '../utils/seatPieces';
 import { detectBluff, bluffClause, type Bluff } from './bluffDetector';
@@ -58,7 +59,7 @@ import { MATERIAL_VALUE } from './pieceValues';
 import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause, type LatentDanger, type TradeDanger } from './latentDanger';
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
-import { structurePlanFact } from './nextPlans';
+import { planAimKey, structurePlanFact } from './nextPlans';
 import { readBoard, type BoardRead } from './boardComputers';
 import { detectTactics } from './tacticsDetector';
 import { stepPlan, EMPTY_PLAN_STATE, planChangeSentence } from './planMemory';
@@ -167,6 +168,9 @@ interface PositionFactsInput {
    *  these surfaces actually suffer from — not duplicate geometry. Omit it and
    *  nothing is suppressed (the wire is inert until a caller keeps the set). */
   alreadySaid?: ReadonlySet<string>;
+  /** The spells of the student's loose pieces (Learn keeps them a game): the
+   *  must-defend clause says a piece once, then once "still" (`looseClaim`). */
+  looseSpells?: LooseSpells | null;
   fen: string;
   /** The side to move at `fen`. Decision-leverage belongs to this side. */
   moverColor: 'w' | 'b';
@@ -1104,7 +1108,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     } catch { /* same */ }
   }
   const composedAll = applyWeaknessBoost(
-    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, names: ruleHere.names && !input.namesBestMove ? namesMoves(studentColor, input.fen, ruleHere.names) : NAMES_NO_MOVE, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, criticalAnchor: studentToMove && input.opponentLastMove ? input.opponentLastMove : null, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, trapChance, studentSeat, tradeDanger, opponentIntent, statusText, structureText, structureSquares: planFact?.squares, structureClaim: planFact?.ideaKey, fundamentalText, fundamentalNames: fundamentalText && bestSanHere && !input.namesBestMove ? namesMoves(studentColor, fen, namedSan(fen, bestSanHere)) : NAMES_NO_MOVE, fundamentalClaim, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, namesMoves: !!input.namesBestMove, concept, methodBeat, methodProof, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: said }), ...tradeClauses],
+    [...buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, names: ruleHere.names && !input.namesBestMove ? namesMoves(studentColor, input.fen, ruleHere.names) : NAMES_NO_MOVE, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, criticalAnchor: studentToMove && input.opponentLastMove ? input.opponentLastMove : null, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, trapChance, studentSeat, tradeDanger, opponentIntent, statusText, structureText, structureSquares: planFact?.squares, structureClaim: planFact?.ideaKey, fundamentalText, fundamentalNames: fundamentalText && bestSanHere && !input.namesBestMove ? namesMoves(studentColor, fen, namedSan(fen, bestSanHere)) : NAMES_NO_MOVE, fundamentalClaim, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, namesMoves: !!input.namesBestMove, concept, methodBeat, methodProof, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: said, looseSpells: input.looseSpells ?? null }), ...tradeClauses],
     input.studentWeaknesses ?? [],
   );
 
@@ -1346,6 +1350,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const rememberFor = (c: (typeof clauses)[number]): string[] => [
     ...(SAY_ONCE_KINDS.has(c.kind) ? [c.text] : []),
     ...(c.kind === 'method' && methodKey ? [methodKey] : []),
+    // THE RACE IS THE KING-ATTACK PLAN (OS-11 item 6a): the opposite-wings race
+    // carries the plan thread's aim too, so the door keeps one of the two.
+    ...(c.kind === 'king-read' && c.claim === OPPOSITE_WINGS_CLAIM ? [planAimKey('king-attack', null) as string] : []),
     ...(c.kind === 'trade' && c.rank === 34 && tradeTargetKey ? [tradeTargetKey] : []),
     // A batch-5 read is said once a game, keyed on its own claim.
     ...((c.kind === 'trade-idea' || c.kind === 'defence-idea' || c.kind === 'nugget') && c.claim ? [c.claim] : []),
@@ -1388,14 +1395,6 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
 /** The say-once key for one tactic INSTANCE — its type on its squares. */
 export { conceptInstanceKey };
 
-/** The say-once key for "this piece must be answered", shared by every lane
- *  that warns about a piece under fire (instant alert + composer). Keyed to
- *  the BOARD as well as the square: two lanes on one position say it once, and
- *  a piece still hanging on the next move says so again (urgency is not a
- *  standing fact). */
-export function mustKey(square: string, fen: string): string {
-  return `must:${square}:${fen.split(' ')[0]}`;
-}
 
 /**
  * Re-rank the briefing by the STUDENT'S holes — the Phase-1 selector wire. A
@@ -1528,6 +1527,7 @@ function buildClauses(a: {
   /** What the student already heard — a conversion STEP is said once (its
    *  text changes with the edge: "a rook up" → "a piece up"). */
   alreadySaid?: ReadonlySet<string>;
+  looseSpells?: LooseSpells | null;
   /** Does this student's own record still owe them the slow-down teaching?
    *  Computed by the caller from the weakness lifecycle (`habitNeedFrom`), not
    *  re-derived here — one door, one answer. False when the one move that holds
@@ -1707,13 +1707,13 @@ function buildClauses(a: {
   // intent, and the student's must-defend). Board-true, named. This is the ONE
   // fact that speaks in the opening: a genuinely dropped piece is worth saying
   // even on move two.
-  // ONE CLAIM, ONE KEY (Blumenfeld walk F28): the instant lane's "Careful —
-  // your rook on c8 is attacked" and this clause are the same warning. The
-  // instant lane speaks first and records `must:<square>:<board>`; this clause
-  // stands aside on that board. It never records the key itself — a piece
-  // still hanging must be able to say so again.
-  if (mustDefend.net >= 3 && mustDefend.pieces[0] && !a.alreadySaid?.has(mustKey(mustDefend.pieces[0].square, a.fen))) {
+  // ONE CLAIM, ONE KEY (Blumenfeld walk F28; #4 2026-10-20): the instant
+  // lane's "Careful — your rook on c8 is attacked" and this clause are one
+  // warning (`looseClaim`): said once, and if the student moves and leaves the
+  // piece, once more as "still" — the door's say-once decides, by the claim.
+  if (mustDefend.net >= 3 && mustDefend.pieces[0]) {
     const p = mustDefend.pieces[0];
+    const loose = looseClaim(p.square, plyOfFen(a.fen), a.looseSpells);
     // PROPHYLAXIS FRAMING (§9 "ignored threat / prophylaxis"): the material fact
     // is the same standing threat, but when the student is clearly WINNING the
     // teaching shifts from "you must survive" to "don't let them punch back in"
@@ -1735,10 +1735,12 @@ function buildClauses(a: {
         // A board fact like the rest, never the order "take it first" (the
         // best move sometimes ignores the threat; WO-OUTCOME-01 C).
         const hit = `${p.attacker ? `their ${PNAME[p.attacker]}${takeable ? ` on ${p.attackerSquare}` : ''}` : 'they'} ${p.attacker ? 'attacks' : 'attack'} your ${PNAME[p.piece.toLowerCase()]} on ${p.square}${p.defenders === 0 ? ', and nothing defends it' : ''}${takeable ? ' — and you can take the attacker without losing material' : ''}`;
+        if (loose.still) return `Still — ${hit}.`;
         return winning
           ? `You're on top — watch the counterpunch: ${hit}.`
           : `${openSentence(hit)}.`;
       })(),
+      claim: loose.key,
       // The attacker's square is part of the claim whenever the words name it
       // (geometry coupled at emission, never read back out of the prose).
       squares: takeable && p.attackerSquare ? [p.square, p.attackerSquare] : [p.square],
@@ -1772,7 +1774,7 @@ function buildClauses(a: {
   // A rook or queen principle about a FILE claims that file — the key the
   // positional read's "owns the open d-file" writes too, so one file is one
   // saying across lanes (hand walk 2026-09-27, Rad8: said twice in one turn).
-  if (a.rule) ranked.push({ namesStudentMove: a.rule.names, kind: 'rule', rank: 29, text: a.rule.text, squares: [...a.rule.squares], ...(a.rule.gradeFen ? { gradeFen: a.rule.gradeFen } : {}), ...(ruleSkill(a.rule.id) ? { skill: ruleSkill(a.rule.id) } : {}), claim: /open-file|semi-open/.test(a.rule.id) && a.rule.squares[0] ? `file-${a.rule.squares[0][0]}` : undefined });
+  if (a.rule) ranked.push({ namesStudentMove: a.rule.names, kind: 'rule', rank: 29, text: a.rule.text, squares: [...a.rule.squares], ...(a.rule.gradeFen ? { gradeFen: a.rule.gradeFen } : {}), ...(ruleSkill(a.rule.id) ? { skill: ruleSkill(a.rule.id) } : {}), claim: /open-file|semi-open/.test(a.rule.id) && a.rule.squares[0] ? `file-${a.rule.squares[0][0]}` : /(^|:)outpost(:|$)/.test(a.rule.id) && a.rule.squares[0] ? outpostKey(a.rule.squares[0]) : /(^|:)tempo(:|$)/.test(a.rule.id) && a.rule.squares[1] ? kickKey(a.rule.squares[1]) : undefined });
   for (const st of a.stopped) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'stopped', rank: 27, text: st.text, squares: [...st.squares], lines: st.lines, proof: st.lines?.[0] ? lineProof(st.lines[0], lineSeatAt(st.lines[0].fen, studentSeat === 'white' ? 'w' : 'b')) ?? undefined : undefined });
   if (a.stock) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'stock', rank: 35, text: a.stock });
   // §9 delayed-castling — speaks IN the opening too (the "castle now" moment),

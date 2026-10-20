@@ -15,6 +15,7 @@
 // Doc: docs/plans/2026-08-26-coach-my-weakness-focus-lens.md §4.0.
 import { capturedSquare } from '../utils/capturedSquare';
 import { openSentence } from '../utils/openSentence';
+import { affirmMove } from './dnaRules';
 import { Chess, type Square } from 'chess.js';
 import type { StockfishAnalysis, WalkableLine } from '../types';
 import { walkableLine } from './proof';
@@ -660,14 +661,8 @@ export function heldVerdictText(v: HeldVerdict): string {
  *  "That was the move here — it …" seven times in one game). `stem` is the
  *  per-game count of found credits (`learnMemory.nextStem`), REQUIRED so a
  *  caller cannot fall back to one stem. */
-const FOUND_STEMS: readonly ((why: string) => string)[] = [
-  (why) => `That was the move here — it ${why}.`,
-  (why) => `You found it: it ${why}.`,
-  (why) => `The move the position asked for — it ${why}.`,
-  (why) => `That one does the job: it ${why}.`,
-];
 export function heldFoundText(v: HeldVerdict, stem: number): string {
-  return FOUND_STEMS[Math.abs(Math.trunc(stem)) % FOUND_STEMS.length](v.why);
+  return affirmMove(v.why, stem);
 }
 
 /** The mover's pawns have claimed more room behind them (`computeTerritory`). */

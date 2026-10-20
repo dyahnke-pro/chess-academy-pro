@@ -68,6 +68,8 @@ export async function moveScoresOneSearch(input: {
   fan: CostFan | null;
   scorer: MoveScorer;
   depth: number;
+  /** Stop the scored search this long after it starts (`MoveScorer`). */
+  budgetMs?: number;
 }): Promise<{ costCp: number; bestWhiteCp: number; playedWhiteCp: number; /** The depth the scores came from. */ depth: number | null } | null> {
   const lines = (input.fan?.topLines ?? []).filter((l) => l.moves.length > 0);
   const bestUci = lines[0]?.moves[0];
@@ -83,7 +85,7 @@ export async function moveScoresOneSearch(input: {
   if (inFan) {
     scored = lines.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: [...l.moves] }));
   } else {
-    try { scored = await input.scorer.scoreMoves(input.fenBefore, [bestUci, input.playedUci], input.depth); } catch { return null; }
+    try { scored = await input.scorer.scoreMoves(input.fenBefore, [bestUci, input.playedUci], input.depth, input.budgetMs); } catch { return null; }
   }
   const best = scored.find((l) => l.moves[0] === bestUci);
   const played = scored.find((l) => l.moves[0] === input.playedUci);

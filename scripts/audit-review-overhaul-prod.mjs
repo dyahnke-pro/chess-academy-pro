@@ -453,7 +453,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // win the queen and a piece for a rook") can only be checked against the
     // line the app read it off, and depth-12 lines differ from any re-search.
     const lines = flagged.map((a) => ({ ply: anns.indexOf(a) + 1, san: a.san, best: a.bestMove, afterBest: a.pv?.afterBest ?? [], afterPlayed: a.pv?.afterPlayed ?? [], costCp: a.costCp ?? null, eval: a.evaluation, bestEval: a.bestMoveEval }));
-    return { depth: g?.analysisDepth, fully: g?.fullyAnalyzed, rows, total: anns.length, nullEval, nullBest, flagged: flagged.length, flaggedWithPv, lines };
+    return { depth: g?.analysisDepth, fully: g?.fullyAnalyzed, rows, total: anns.length, nullEval, nullBest, flagged: flagged.length, flaggedWithPv, lines, classes: anns.map((a) => a.classification ?? null) };
   }, GID).catch((e) => ({ error: String(e) }));
   log(`  [engine] depth=${annots.depth} fullyAnalyzed=${annots.fully}`);
   (annots.rows ?? []).forEach((r) => log(`  [engine] ${r}`));
@@ -691,7 +691,13 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   const exploreSpoke = await until(() => spoken().length > spokenBeforeExplore, 45000, 500);
   const exploreLine = exploreSpoke ? spoken().slice(spokenBeforeExplore).map((s) => s.text).join(' | ') : '';
   const exploredEvent = events().some((e) => e.kind === 'review-walk-explored');
-  await add('EXPL explored-move-narrated+engine-reply', ex.ok && exploreSpoke && ex.reply && exploredEvent, `spoke="${exploreLine.slice(0, 140)}" engineReply=${ex.reply} auditEvent=${exploredEvent}`);
+  // WHERE A SLOW REPLY SPENT ITS TIME: the click (the board's own
+  // review-walk-explored row) → the graded read (narrateExploredMove's row).
+  const explRows = events().filter((e) => e.kind === 'review-walk-explored');
+  const tClick = explRows.find((e) => e.source === 'CoachGameReview.walkExplore')?.timestamp;
+  const tRead = explRows.find((e) => e.source === 'CoachGameReview.narrateExploredMove')?.timestamp;
+  const readMs = tClick && tRead ? tRead - tClick : null;
+  await add('EXPL explored-move-narrated+engine-reply', ex.ok && exploreSpoke && ex.reply && exploredEvent, `spoke="${exploreLine.slice(0, 140)}" engineReply=${ex.reply} auditEvent=${exploredEvent} readMs=${readMs}`);
 
   // ── EXIT (G.3) — Back exits exploration; Play restarts ──────────────────
   await page.locator('[data-testid="review-back-btn"]').first().click({ timeout: 2000, force: true }).catch(() => undefined);
@@ -1034,14 +1040,19 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       // student's own move is explained. The old rows owed only opening plies
       // whose need cleared the bar: on a warm record that read 0/0 (vacuous),
       // and the student's own reasons read as "spoke where need said silent".
-      const owed = rows;
+      // …IN REVIEW, OUT OF BOOK (lead 2026-10-20): the need standard
+      // (2026-09-15, review "says too much in opening book moves") makes a book
+      // ply the need gate holds on a warm record the CORRECT silence. Owed:
+      // every student move out of book, and any book ply where need spoke.
+      const isBook = (ply) => annots?.classes?.[ply - 1] === 'book';
+      const owed = rows.filter((r) => !isBook(r.ply) || r.speak);
       const covered = owed.filter((r) => (r.heard ?? (r.source !== null)));
       await add('NEED coverage-rows-captured', rows.length > 0, `${rows.length} student plies scored; games=${cov.gamesPlayed} cold=${cov.gamesPlayed < 5}`);
       // `sayOnce` (2026-10-01): a quiet ply whose only lesson is a principle
       // already taught this game is silent by the say-once rule — covered, and
       // COUNTED separately so it can never hide a real gap.
       const bySayOnce = covered.filter((r) => r.sayOnce);
-      await add('WHY student-moves-reasoned', owed.length > 0 && covered.length >= Math.ceil(owed.length * 0.7), `${covered.length}/${owed.length} student moves carry their own reason (${covered.length - bySayOnce.length} narrated, ${bySayOnce.length} by say-once: ${bySayOnce.map((r) => `${r.ply}=${r.sayOnce}`).join(',') || 'none'})${covered.length < owed.length ? ` — silent: ${owed.filter((r) => !covered.includes(r)).map((r) => r.ply).join(',')}` : ''}`);
+      await add('WHY student-moves-reasoned', owed.length > 0 && covered.length >= Math.ceil(owed.length * 0.7), `${covered.length}/${owed.length} student moves out of book (or owed by need) carry their own reason (${covered.length - bySayOnce.length} narrated, ${bySayOnce.length} by say-once: ${bySayOnce.map((r) => `${r.ply}=${r.sayOnce}`).join(',') || 'none'})${covered.length < owed.length ? ` — silent: ${owed.filter((r) => !covered.includes(r)).map((r) => r.ply).join(',')}` : ''}`);
       // THE TEACH METER (WO-TEACH-02): of the student's spoken plies, how many
       // carried a TEACHING fact rather than only a description. The target is
       // Naroditsky, where every line teaches; the bar is 70%.

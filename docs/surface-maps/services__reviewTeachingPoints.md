@@ -76,7 +76,7 @@
 - `src/services/reviewTeachingPoints.test.ts:71`
 
 ### `buildReviewDeepestLookahead` (function) — 13 call sites
-- `src/services/coachFeatureService.ts:3228`
+- `src/services/coachFeatureService.ts:3186`
 - `src/services/reviewTeachingPoints.test.ts:298`
 - `src/services/reviewTeachingPoints.test.ts:301`
 - `src/services/reviewTeachingPoints.test.ts:302`
@@ -91,7 +91,7 @@
 - `src/services/reviewTeachingPoints.test.ts:407`
 
 ### `buildMissedShotSignal` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2990`
+- `src/services/coachFeatureService.ts:2948`
 - `src/services/reviewTeachingPoints.test.ts:370`
 - `src/services/reviewTeachingPoints.test.ts:383`
 - `src/services/reviewTeachingPoints.test.ts:392`
@@ -114,14 +114,14 @@
 - `src/services/reviewTeachingPoints.test.ts:488`
 
 ### `describeNotableMove` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:3568`
+- `src/services/coachFeatureService.ts:3526`
 - `src/services/reviewTeachingPoints.test.ts:182`
 - `src/services/reviewTeachingPoints.test.ts:189`
 - `src/services/reviewTeachingPoints.test.ts:203`
 - `src/services/reviewTeachingPoints.test.ts:213`
 
 ### `describeSimplifyingTrade` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3247`
+- `src/services/coachFeatureService.ts:3205`
 - `src/services/plyFactsDialing.test.ts:75`
 - `src/services/plyFactsDialing.test.ts:81`
 - `src/services/plyFactsDialing.test.ts:82`
@@ -130,12 +130,12 @@
 - `src/services/plyFactsDialing.test.ts:91`
 
 ### `describeTradeConsequence` (function) — 1 call site
-- `src/services/coachFeatureService.ts:3256`
+- `src/services/coachFeatureService.ts:3214`
 
 ### `describeConcessions` (function) — 9 call sites
 - `src/services/backwardLook.ts:453`
-- `src/services/coachFeatureService.ts:2925`
-- `src/services/coachFeatureService.ts:3003`
+- `src/services/coachFeatureService.ts:2893`
+- `src/services/coachFeatureService.ts:2961`
 - `src/services/concessionInFlux.test.ts:13`
 - `src/services/concessionInFlux.test.ts:18`
 - `src/services/reviewTeachingPoints.test.ts:217`
@@ -144,8 +144,8 @@
 - `src/services/theirMoveCost.ts:142`
 
 ### `findTrappedPiece` (function) — 12 call sites
-- `src/services/coachFeatureService.ts:3581`
-- `src/services/coachFeatureService.ts:3582`
+- `src/services/coachFeatureService.ts:3539`
+- `src/services/coachFeatureService.ts:3540`
 - `src/services/moveInsight.ts:393`
 - `src/services/reviewFullData.ts:975`
 - `src/services/reviewFullData.ts:977`
@@ -158,19 +158,20 @@
 - `src/services/reviewTeachingPoints.test.ts:294`
 
 ### `trappedOnBoard` (function) — 3 call sites
-- `src/services/boardComputers.ts:340`
+- `src/services/boardComputers.ts:344`
 - `src/services/queenGrabTrap.ts:57`
 - `src/services/reviewTeachingPoints.test.ts:291`
 
-### `findWorstPlacedPiece` (re-export) — 13 call sites
+### `findWorstPlacedPiece` (re-export) — 14 call sites
 - `src/services/badPieceOncePerPly.test.ts:15`
-- `src/services/coachFeatureService.ts:4802`
+- `src/services/coachFeatureService.ts:4760`
 - `src/services/moveInsight.ts:333`
 - `src/services/nextPlans.test.ts:10`
 - `src/services/nextPlans.test.ts:34`
-- `src/services/nextPlans.ts:85`
-- `src/services/nextPlans.ts:134`
-- `src/services/nextPlans.ts:385`
+- `src/services/nextPlans.ts:86`
+- `src/services/nextPlans.ts:135`
+- `src/services/nextPlans.ts:386`
+- `src/services/outpostOneTest.test.ts:19`
 - `src/services/planChoice.ts:98`
 - `src/services/planStopped.ts:126`
 - `src/services/reviewNarrationDefects.test.ts:34`
@@ -187,7 +188,7 @@
 - `src/services/nextPlans.test.ts:45`
 - `src/services/nextPlans.test.ts:52`
 - `src/services/nextPlans.test.ts:55`
-- `src/services/nextPlans.ts:202`
+- `src/services/nextPlans.ts:203`
 - `src/services/planPrescriptions.test.ts:93`
 - `src/services/planPrescriptions.test.ts:102`
 - `src/services/planPrescriptions.test.ts:111`
