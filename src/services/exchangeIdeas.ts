@@ -39,7 +39,7 @@ export type ExchangeIdeaId =
   | 'only-developed' | 'defender-trade' | 'exchange-for-attacker' | 'deny-exchange'
   | 'abandoned-duty' | 'trade-choice' | 'duty-parity' | 'maintenance-trade' | 'prepare-recapture'
   | 'threat-cost' | 'simplest-win' | 'safe-because'
-  | 'wing-for-centre' | 'material-arithmetic' | 'knight-squares' | 'c-pawn-block';
+  | 'wing-for-centre' | 'material-arithmetic' | 'knight-squares' | 'c-pawn-block' | 'spoil-their-pawns';
 
 /** The fact kind each read speaks as through the one door — one name on both
  *  sides (review `[tag]` and live clause kind). Exhaustive: a new read fails to
@@ -52,6 +52,7 @@ export const IDEA_KIND: Record<ExchangeIdeaId, ExchangeIdeaKind> = {
   'deny-exchange': 'trade-idea',
   'abandoned-duty': 'trade-idea',
   'trade-choice': 'trade-idea',
+  'spoil-their-pawns': 'trade-idea',
   'duty-parity': 'trade-idea',
   'maintenance-trade': 'trade-idea',
   'prepare-recapture': 'trade-idea',
@@ -357,6 +358,27 @@ export function tradeChoice(fenBefore: string, san: string, student: Side): Exch
   if (!proof) return null;
   const text = `You offer the ${NAME[r.m.piece]} trade, but the choice is theirs: if they take on ${r.m.to}, you must take back with the ${backs[0].from[0]}-pawn and double your pawns.`;
   return idea('trade-choice', text, [take.from, r.m.to, backs[0].from], proof, `trade-choice:${r.m.to}`);
+}
+
+/** THE TRADE THAT SPOILS THEIR PAWNS (golden replay 2026-10-20, 10…Bxf3): the
+ *  student's minor takes a minor of theirs, and every way back is a pawn that
+ *  doubles their pawns — the damage stays for the rest of the game. The mirror
+ *  of `tradeChoice`, from the side that gives the minor. */
+export function spoilTheirPawns(fenBefore: string, san: string, student: Side): ExchangeIdea | null {
+  const r = play(fenBefore, san);
+  if (!r || r.m.color !== student || (r.m.piece !== 'n' && r.m.piece !== 'b') || (r.m.captured !== 'n' && r.m.captured !== 'b')) return null;
+  const after = r.c.fen();
+  const backs = r.c.moves({ verbose: true }).filter((m) => m.to === r.m.to && m.captured);
+  if (backs.length === 0 || !backs.every((m) => pawnRecaptureDoubles(after, m))) return null;
+  const back = backs[0];
+  const proof = legalLineProof(fenBefore, [san, back.san], lineSeatAt(fenBefore, student), true);
+  if (!proof) return null;
+  const king = r.c.board().flat().find((x) => x?.type === 'k' && x.color !== student)?.square;
+  const side = (f: string): 'kingside' | 'queenside' | null => (f >= 'f' ? 'kingside' : f <= 'c' ? 'queenside' : null);
+  const wing = side(r.m.to[0]);
+  const where = wing && king && side(king[0]) === wing ? `their ${wing} pawns` : 'their pawns';
+  const text = `You give your ${NAME[r.m.piece]} for their ${NAME[r.m.captured]} on ${r.m.to}, and the only way back is with the ${back.from[0]}-pawn: ${where} end up doubled, and that damage is for good.`;
+  return idea('spoil-their-pawns', text, [r.m.to, back.from], proof, `spoil-their-pawns:${r.m.to}`);
 }
 
 /** Duty parity, read on the board with the student to move: one guard of
@@ -784,7 +806,7 @@ export function cPawnBlock(fenBefore: string, san: string, student: Side, bestSa
 }
 
 function idea(id: ExchangeIdeaId, text: string, squares: string[], proof: Proof, claim: string, imagery?: ImageryKey | null): ExchangeIdea {
-  return { id, kind: IDEA_KIND[id], text, squares: [...new Set(squares)], proof, claim, imagery: imagery !== undefined ? imagery : (id === 'knight-squares' ? null : id) };
+  return { id, kind: IDEA_KIND[id], text, squares: [...new Set(squares)], proof, claim, imagery: imagery !== undefined ? imagery : (id === 'knight-squares' || id === 'spoil-their-pawns' ? null : id) };
 }
 
 // ── THE AGGREGATOR — every surface asks this one function ─────────────────
@@ -824,6 +846,7 @@ export function exchangeIdeas(input: ExchangeIdeasInput): ExchangeIdea[] {
     push(safe(() => denyExchange(fb, san, s, costCp)));
     push(safe(() => abandonedDuty(fb, san, s)));
     push(safe(() => tradeChoice(fb, san, s)));
+    push(safe(() => spoilTheirPawns(fb, san, s)));
     push(safe(() => maintenanceTrade(fb, san, s, costCp)));
     push(safe(() => prepareRecapture(fb, san, s, costCp)));
     push(safe(() => threatCost(fb, san, s)));

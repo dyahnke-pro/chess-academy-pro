@@ -65,9 +65,10 @@
 - `src/services/liveTacticsContext.ts:641`
 - `src/services/lookaheadPlan.ts:653`
 
-### `patternWord` (function) — 3 call sites
+### `patternWord` (function) — 4 call sites
 - `src/services/liveTacticsContext.ts:661`
-- `src/services/playedConcept.ts:48`
+- `src/services/playedConcept.ts:53`
+- `src/services/playedConcept.ts:56`
 - `src/services/pvPlayback.ts:256`
 
 ### `patternAim` (function) — 3 call sites

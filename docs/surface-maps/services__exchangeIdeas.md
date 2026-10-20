@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**859 lines · 23 exports · 5 importers · 2 tests · 0 audits**
+**882 lines · 24 exports · 6 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/capabilityEvidence.ts`
 - `src/services/exchangeIdeas.test.ts`
+- `src/services/goldenPositional.test.ts`
 - `src/services/learnBoardTruth.realGame.test.ts`
 - `src/services/positionFacts.ts`
 - `src/services/reviewFullData.ts`
@@ -61,6 +62,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `tradeChoice` (function) — 2 call sites
 - `src/services/exchangeIdeas.test.ts:73`
 - `src/services/exchangeIdeas.test.ts:76`
+
+### `spoilTheirPawns` (function) — 2 call sites
+- `src/services/goldenPositional.test.ts:26`
+- `src/services/goldenPositional.test.ts:29`
 
 ### `dutyParity` (function) — 5 call sites
 - `src/services/exchangeIdeas.test.ts:80`
@@ -136,6 +141,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/services/exchangeIdeas.test.ts`
+- `src/services/goldenPositional.test.ts`
 - `src/services/learnBoardTruth.realGame.test.ts`
 
 ## Audits that reach it
