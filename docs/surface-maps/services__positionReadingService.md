@@ -238,8 +238,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakeNarration.ts:587`
 - `src/services/opponentMovePurpose.ts:23`
 - `src/services/playCommentary.ts:1041`
-- `src/services/pvPlayback.ts:447`
-- `src/services/pvPlayback.ts:496`
+- `src/services/pvPlayback.ts:449`
+- `src/services/pvPlayback.ts:498`
 - `src/services/thinkingExchangeChain.ts:115`
 - `src/services/threatAnswer.ts:167`
 
@@ -252,13 +252,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/structureReads.ts:132`
 
 ### `signedCaptureRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11979`
-- `src/components/Coach/CoachTeachPage.tsx:12040`
+- `src/components/Coach/CoachTeachPage.tsx:11980`
+- `src/components/Coach/CoachTeachPage.tsx:12041`
 - `src/services/principleAttribution.ts:341`
 - `src/services/principleAttribution.ts:804`
 
 ### `legalSeeGainFor` (function) — 86 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10816`
+- `src/components/Coach/CoachTeachPage.tsx:10817`
 - `src/services/arrowDoor.ts:175`
 - `src/services/bluffDetector.ts:53`
 - `src/services/boardState.ts:42`
@@ -625,7 +625,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:130`
 
 ### `structureTransfer` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10399`
+- `src/components/Coach/CoachTeachPage.tsx:10400`
 - `src/services/groundedAnswer.ts:6933`
 - `src/services/positionReadingService.test.ts:975`
 - `src/services/positionReadingService.test.ts:976`
@@ -634,7 +634,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:979`
 
 ### `namedPawnStructure` (function) — 22 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10392`
+- `src/components/Coach/CoachTeachPage.tsx:10393`
 - `src/services/claimTruth.manual.test.ts:74`
 - `src/services/claimTruth.manual.test.ts:76`
 - `src/services/danyaBehaviors.ts:398`

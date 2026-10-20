@@ -77,7 +77,7 @@
 
 ### `coachTurn` (function) — 12 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9498`
-- `src/components/Coach/CoachTeachPage.tsx:11422`
+- `src/components/Coach/CoachTeachPage.tsx:11423`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
 - `src/services/coachFeatureService.ts:2478`
 - `src/services/learnTurnDoor.phaseWave.test.ts:67`
@@ -229,8 +229,8 @@
 - `src/services/thinkingSteps.test.ts:44`
 
 ### `instantWaitsForVerdict` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11235`
-- `src/components/Coach/CoachTeachPage.tsx:11267`
+- `src/components/Coach/CoachTeachPage.tsx:11236`
+- `src/components/Coach/CoachTeachPage.tsx:11268`
 - `src/services/verdictLeads.test.ts:15`
 - `src/services/verdictLeads.test.ts:16`
 - `src/services/verdictLeads.test.ts:19`
@@ -327,27 +327,27 @@
 - `src/components/Coach/CoachTeachPage.tsx:8266`
 - `src/components/Coach/CoachTeachPage.tsx:8273`
 - `src/components/Coach/CoachTeachPage.tsx:9600`
-- `src/components/Coach/CoachTeachPage.tsx:11463`
-- `src/components/Coach/CoachTeachPage.tsx:11549`
+- `src/components/Coach/CoachTeachPage.tsx:11464`
+- `src/components/Coach/CoachTeachPage.tsx:11550`
 - `src/services/learnTurnDoor.ts:987`
 
 ### `describeVoicePackage` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11287`
-- `src/components/Coach/CoachTeachPage.tsx:11549`
+- `src/components/Coach/CoachTeachPage.tsx:11288`
+- `src/components/Coach/CoachTeachPage.tsx:11550`
 - `src/services/voicePackage.test.ts:38`
 - `src/services/voicePackage.ts:600`
 
 ### `keptLines` (re-export) — 7 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8282`
-- `src/components/Coach/CoachTeachPage.tsx:11316`
-- `src/components/Coach/CoachTeachPage.tsx:11536`
+- `src/components/Coach/CoachTeachPage.tsx:11317`
+- `src/components/Coach/CoachTeachPage.tsx:11537`
 - `src/services/learnTurnDoor.test.ts:211`
 - `src/services/learnTurnDoor.test.ts:217`
 - `src/services/learnTurnDoor.test.ts:223`
 - `src/services/voicePackage.ts:643`
 
 ### `markableSquares` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11496`
+- `src/components/Coach/CoachTeachPage.tsx:11497`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -360,8 +360,8 @@
 - `src/components/Coach/CoachTeachPage.tsx:8278`
 - `src/components/Coach/CoachTeachPage.tsx:10002`
 - `src/components/Coach/CoachTeachPage.tsx:10022`
-- `src/components/Coach/CoachTeachPage.tsx:11300`
-- `src/components/Coach/CoachTeachPage.tsx:11470`
+- `src/components/Coach/CoachTeachPage.tsx:11301`
+- `src/components/Coach/CoachTeachPage.tsx:11471`
 - `src/services/coachFeatureService.ts:2679`
 - `src/services/learnTurnDoor.phaseWave.test.ts:133`
 - `src/services/learnTurnDoor.test.ts:619`
