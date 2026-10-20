@@ -1018,7 +1018,11 @@ class ChessAcademyDB extends Dexie {
     // whole, so no reader of the live stores can count it and
     // `recordReprice.restoreDemoted` can put it back. Additive store, no
     // migration — the reprice backfill fills it.
-    this.version(41).stores({ demotedRows: 'id, store, demotedAt' });
+    this.version(41).stores({ demotedRows: 'id, store, demotedAt' }).upgrade(async () => {
+      // Nothing moves at upgrade: demotion needs a settled engine price per
+      // move, which the scheduled reprice backfill (`misconceptionRulesBackfill`,
+      // late start, yield per row, persist per game) computes after boot.
+    });
   }
 }
 
