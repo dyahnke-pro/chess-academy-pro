@@ -39,6 +39,7 @@ import { STRUCTURE_ROLE } from './structureJudgementKit';
 import { countMethod } from './countMethod';
 import { buildPriorityFirst } from './playCommentary';
 import { openingStoryAt, heldWhilePlayable, type StoryBeat } from './openingStory';
+import { packageForRegister } from './hintRegister';
 
 export type CoachSurface = 'learn' | 'review' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
@@ -284,7 +285,9 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       if (!pf) return null;
       // The spoken package names the move; the idea is the priority without it
       // (Learn names no move unasked).
-      const idea = [pf.hint.anchor, pf.hint.stakes].filter(Boolean).join(' ');
+      // The question and its answer as ONE closed span — the stakes are part
+      // of the answer, so they wait with it.
+      const idea = packageForRegister({ ...pf.hint, detail: undefined }, 'obvious');
       return { text: pf.spoken, proof: squaresProof(pf.spoken, [pf.targetSquare]) ?? NO_PROOF.method, squares: [pf.targetSquare], key: `priority:${pf.targetSquare}`, namesMove: true, idea, role: 'teach' as const, play: pf.arrow };
     }),
     surfaces: { learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },

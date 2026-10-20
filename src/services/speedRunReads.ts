@@ -21,6 +21,7 @@ import { computeMustDefend, flipSideToMove } from './threatOut';
 import { computePieceRoute } from './forwardTeaching';
 import { knightReach } from './moveInsight';
 import type { GamePromise } from './learnBoardTeaching';
+import { countWord } from '../utils/andList';
 
 const name = (p: string): string => PIECE_NAMES[p] ?? 'piece';
 /** PHRASING ROTATES, NEVER ROLLS (CLAUDE.md §THE FOUNDATION): keyed on the
@@ -250,10 +251,15 @@ export function positionOpened(lastMove: { fenBefore: string; san: string } | un
       // "Forcing moves now" names what to look at — counted (52-errors #44),
       // and never said when there are none.
       const forcing = (() => { try { return new Chess(after.board.fen()).moves({ verbose: true }); } catch { return []; } })();
-      const checks = forcing.filter((m) => /[+#]$/.test(m.san)).length;
-      const takes = forcing.filter((m) => m.captured && !/[+#]$/.test(m.san)).length;
+      // A promotion is ONE move to look at, not four (bxa8=Q/R/B/N): counted
+      // by where the piece goes.
+      const distinct = (ms: typeof forcing): number => new Set(ms.map((m) => `${m.from}${m.to}`)).size;
+      const checks = distinct(forcing.filter((m) => /[+#]$/.test(m.san)));
+      const takes = distinct(forcing.filter((m) => m.captured && !/[+#]$/.test(m.san)));
       if (checks + takes === 0) return null;
-      const count = [checks ? (checks === 1 ? 'one check' : `${checks} checks`) : '', takes ? (takes === 1 ? 'one capture' : `${takes} captures`) : ''].filter(Boolean).join(' and ');
+      // Counts are words, both of them (Smith-Morra replay 2026-10-19: "one
+      // check and 2 captures" mixed the two styles in one sentence).
+      const count = [checks ? `${countWord(checks)} check${checks === 1 ? '' : 's'}` : '', takes ? `${countWord(takes)} capture${takes === 1 ? '' : 's'}` : ''].filter(Boolean).join(' and ');
       return { claim: `srr:opened:${at}`, text: `Their move opened your ${name(p.type)}'s line — the position just opened up, so hit the gas: you have ${count} to look at, before they can close it again.`, squares: [...(sq.get(t) ?? [])] };
     }
   }

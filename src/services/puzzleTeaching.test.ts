@@ -12,7 +12,7 @@ describe('refuteWrongTry — a wrong puzzle move is answered by their line', () 
       analyse: fixed(['h5f7']),
     });
     expect(r?.kind).toBe('mate');
-    expect(r?.text).toBe('Nf6? Then Qxf7# — they mate you.');
+    expect(r?.text).toBe('Nf6? Then they play Qxf7# — they mate you.');
     expect(r?.arrows.map((a) => `${a.from}${a.to}`)).toEqual(['h5f7']);
   });
   it('a move that drops material: the line to where it lands', async () => {
@@ -22,7 +22,7 @@ describe('refuteWrongTry — a wrong puzzle move is answered by their line', () 
       analyse: fixed(['a8a1', 'd1e2', 'h8g7']),
     });
     expect(r?.kind).toBe('material');
-    expect(r?.text).toBe("Kd1? Then …Rxa1+ — they come out a rook up.");
+    expect(r?.text).toBe("Kd1? Then they play Rxa1+ — they come out a rook up.");
   });
   it('the line starts with THEIR reply — the right answer is never named', async () => {
     const r = await refuteWrongTry({

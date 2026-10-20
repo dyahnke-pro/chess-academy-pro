@@ -266,7 +266,8 @@ describe('tacticalReadFacts (facts for the voice model, not prose)', () => {
     });
     expect(facts).toContain('Nxf3+');            // tempting move stated
     expect(facts).toContain('fails to Nxf3');    // refutation stated
-    expect(facts).toContain('Ng4+, Kh1 and Nxe3');    // the line stated
+    // the line stated, each move with its mover (OS-8 gap 7)
+    expect(facts).toContain('Black plays Ng4+, White answers Kh1 and Black plays Nxe3');
     expect(facts.toLowerCase()).toContain('fork'); // named tactic
     expect(facts).toContain('up a piece');       // verdict
     // it is FACTS, not the frozen template prose

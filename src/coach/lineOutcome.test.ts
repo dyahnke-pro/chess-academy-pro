@@ -41,14 +41,14 @@ describe('a named line', () => {
     expect(v.ok).toBe(true);
     const out: { lines?: WalkableLine[] } = {};
     const text = await lineOutcomeAnswer(v.ok ? v.turn : (null as never), board(AFTER_NXH5), out);
-    expect(text).toBe("After Rxh5, …gxh5 and Qxh5, you come out a pawn down. Then their best reply is …e6, and you're slightly better.");
+    expect(text).toBe("After you play Rxh5, they answer gxh5 and you play Qxh5, you come out a pawn down. Then their best reply is …e6, and you're slightly better.");
     expect(out.lines?.[0].plies.map((p) => p.san)).toEqual(['Rxh5', 'gxh5', 'Qxh5', 'e6']);
   });
 
   it('a line that ends in mate says so', async () => {
     const BEFORE_QG7 = '2r4k/pp5p/2q1P3/7N/4p3/4P1Q1/bPPr1P2/2K3N1 w - - 0 24';
     const text = await lineOutcomeAnswer({ kind: 'line-outcome', referents: [{ type: 'move', san: 'Qg7#', played: false }], seat: null, topic: null }, board(BEFORE_QG7));
-    expect(text).toBe("After Qg7#, it's mate — you win.");
+    expect(text).toBe("After you play Qg7#, it's mate — you win.");
   });
 });
 
@@ -57,7 +57,7 @@ describe('the board walks only a line that starts on it (re-walk 2026-10-11)', (
     setBoardEngineForTests({ analysis: async () => null, candidate: async () => null });
     const out: { lines?: WalkableLine[] } = {};
     const text = await lineOutcomeAnswer({ kind: 'line-outcome', referents: [{ type: 'move', san: 'c5', played: false }, { type: 'move', san: 'dxc5', played: false }], seat: null, topic: null }, board(AFTER_NF6), out);
-    expect(text).toMatch(/^After …c5 and dxc5/);
+    expect(text).toMatch(/^After they play c5 and you answer dxc5/);
     expect(out.lines).toBeUndefined();
   });
 });

@@ -115,7 +115,7 @@ describe('re-walk 2026-10-11 — Q5, Q14, Q16', () => {
   } as never, { maxToolRoundTrips: 1 });
   it('Q5: the second half — the line — is answered too', async () => {
     const a = await askAt('Was h4 sound? What after Nh5, can g4 kick it?', 10);
-    expect(a.text).toMatch(/After …Nh5 and g4/);
+    expect(a.text).toMatch(/After they play Nh5 and you answer g4/); // each move with its mover (OS-8 gap 7)
   }, 60_000);
   it('Q14: a played move is never "not legal here"', async () => {
     const a = await askAt('Was Bxc7 safe? What if Nxc3 first — calculate Nxc3 bxc3 Qxd5.', 28);

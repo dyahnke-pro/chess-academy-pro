@@ -19,7 +19,7 @@
 import { evalBand } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { preparationOf } from './speedRunReads';
-import { andList } from '../utils/andList';
+import { seatedLine, type LineSeat } from '../utils/andList';
 import { settledLineEnd } from './material';
 import { boardEdgeWords } from '../utils/countWords';
 import { rotateStem } from '../utils/rotateStem';
@@ -813,7 +813,13 @@ export function tacticalReadFacts(read: TacticalRead, opts: { inGame?: boolean }
   }
   const toTactic = read.keyTactic ? read.keyTactic.atPly : Math.min(read.line.length - 1, 2);
   const lineSans = read.line.slice(0, toTactic + 1).map((p) => p.san);
-  if (lineSans.length > 0) parts.push(`${ig ? 'The line goes' : 'The correct line is'} ${andList(lineSans)}.`);
+  // Each move with its mover (OS-8 gap 7): "you / they" live, the colours in
+  // the third-person register.
+  // The first ply's own mover decides, never a board field a caller may leave
+  // as a placeholder.
+  const firstColor = read.line[0]?.moverColor ?? read.studentColor;
+  const lineFirst: LineSeat = ig ? (firstColor === read.studentColor ? 'you' : 'they') : (firstColor === 'white' ? 'White' : 'Black');
+  if (lineSans.length > 0) parts.push(`${ig ? 'The line goes' : 'The correct line is'}: ${seatedLine(lineSans, lineFirst)}.`);
   const kt = read.keyTactic;
   if (kt && kt.squares.length > 0) {
     parts.push(kt.description.endsWith('.') ? kt.description : `${kt.description}.`);

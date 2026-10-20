@@ -25,25 +25,25 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `rightIdeaWrongPiece` (function) — 3 call sites
 - `src/services/structureJudgement.test.ts:216`
 - `src/services/structureJudgement.test.ts:218`
-- `src/services/structureReads.ts:60`
+- `src/services/structureReads.ts:78`
 
 ### `keepPlanChangeRoute` (function) — 3 call sites
 - `src/services/structureJudgement.test.ts:223`
 - `src/services/structureJudgement.test.ts:226`
-- `src/services/structureReads.ts:61`
+- `src/services/structureReads.ts:79`
 
 ### `planOverOneMove` (function) — 4 call sites
 - `src/services/structureJudgement.test.ts:233`
 - `src/services/structureJudgement.test.ts:235`
 - `src/services/structureJudgement.test.ts:237`
-- `src/services/structureReads.ts:62`
+- `src/services/structureReads.ts:80`
 
 ### `placementFutureLine` (function) — 5 call sites
 - `src/services/structureJudgement.test.ts:242`
 - `src/services/structureJudgement.test.ts:247`
 - `src/services/structureJudgement.test.ts:252`
 - `src/services/structureJudgement.test.ts:255`
-- `src/services/structureReads.ts:138`
+- `src/services/structureReads.ts:183`
 
 ### `smallEdges` (function) — 2 call sites
 - `src/services/structureJudgement.test.ts:261`
@@ -56,19 +56,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/structureJudgement.test.ts:283`
 - `src/services/structureJudgement.test.ts:289`
 - `src/services/structureJudgement.test.ts:295`
-- `src/services/structureReads.ts:137`
+- `src/services/structureReads.ts:182`
 
 ### `wedgePaysLater` (function) — 4 call sites
 - `src/services/planJudgement.wedge.test.ts:11`
 - `src/services/planJudgement.wedge.test.ts:15`
 - `src/services/planJudgement.wedge.test.ts:18`
-- `src/services/structureReads.ts:74`
+- `src/services/structureReads.ts:94`
 
 ### `closedTacticalChance` (function) — 4 call sites
 - `src/services/planJudgement.closedSac.test.ts:10`
 - `src/services/planJudgement.closedSac.test.ts:14`
 - `src/services/planJudgement.closedSac.test.ts:18`
-- `src/services/structureReads.ts:75`
+- `src/services/structureReads.ts:95`
 
 ### `heldOf` (function) — 3 call sites
 - `src/services/pawnJudgement.ts:167`

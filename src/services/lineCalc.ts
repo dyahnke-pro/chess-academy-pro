@@ -5,7 +5,8 @@
 // computer: an engine line, walked, stopped at its LAST capture (the exchanges
 // are over there, so what is left is what was won — never a peak the
 // recaptures hand back). The outcome is the ONE ledger rule (exchangeLedger.proofCut).
-import { andList } from '../utils/andList';
+import { seatedLine } from '../utils/andList';
+import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { countWords } from '../utils/countWords';
 import type { ArrowClaim } from './arrowDoor';
@@ -183,12 +184,15 @@ export function mateLine(fen: string, lineUci: readonly string[], side: 'w' | 'b
   // A long mate is said as its length and first move; the whole line is drawn
   // (proof guard 2 — "a forced mate in 3, starting with Nxe5").
   const short = sans.length <= 3;
-  const tail = short ? ` ${andList(sans)}.` : '';
+  // Each move with its mover (OS-8 gap 7). The text speaks to the side that
+  // mates — the student, on every caller that says it.
+  const said = seatedLine(sans, plies[0].color === side ? 'you' : 'they');
+  const tail = short ? ` ${openSentence(said)}.` : '';
   const text = quiet && taken.length
     ? `No check yet — the quiet ${sans[0]} comes first: it takes ${list(taken)} from their king, and ${mateSan} is mate.${tail}`
     : quiet
       ? `No check yet — the quiet ${sans[0]} comes first, and ${mateSan} is mate.${tail}`
-      : short ? `It is a forced mate: ${andList(sans)}.` : `It is a forced mate in ${Math.ceil(sans.length / 2)}, starting with ${sans[0]}.`;
+      : short ? `It is a forced mate: ${said}.` : `It is a forced mate in ${Math.ceil(sans.length / 2)}, starting with ${sans[0]}.`;
   return { sans, plies, quiet, taken, text };
 }
 

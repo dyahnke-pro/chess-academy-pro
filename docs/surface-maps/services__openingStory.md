@@ -43,10 +43,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingBlunderService.ts:219`
 
 ### `heldWhilePlayable` (function) — 1 call site
-- `src/services/boardComputers.ts:234`
+- `src/services/boardComputers.ts:235`
 
 ### `openingStoryAt` (function) — 3 call sites
-- `src/services/boardComputers.ts:233`
+- `src/services/boardComputers.ts:234`
 - `src/services/openingStory.test.ts:20`
 - `src/services/openingStory.test.ts:94`
 

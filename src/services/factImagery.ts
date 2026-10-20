@@ -13,7 +13,7 @@ export type ImageryKey =
   | 'only-developed' | 'defender-trade' | 'exchange-for-attacker' | 'deny-exchange'
   | 'abandoned-duty' | 'trade-choice' | 'duty-parity' | 'maintenance-trade' | 'prepare-recapture'
   | 'threat-cost' | 'simplest-win' | 'safe-because'
-  | 'wing-for-centre' | 'material-arithmetic' | 'knight-squares' | 'c-pawn-block'
+  | 'wing-for-centre' | 'material-arithmetic' | 'knight-rim' | 'knight-centre' | 'c-pawn-block'
   | 'badbishop';
 
 export const IMAGERY: Record<ImageryKey, readonly string[]> = {
@@ -38,7 +38,11 @@ export const IMAGERY: Record<ImageryKey, readonly string[]> = {
   'safe-because': [''],
   'wing-for-centre': ['', 'A side street for the main road.'],
   'material-arithmetic': ['', 'Count the wood, not the names on it.'],
-  'knight-squares': ['', 'A knight on the rim is dim.', 'Put a knight in the middle and it sees the whole board.'],
+  // ONE IMAGE PER FACT, not per read (Smith-Morra replay 2026-10-19: "A
+  // knight on the rim is dim" after Nxc3, b1→c3 — a knight going TO the
+  // centre). The rim image belongs to the rim fact only.
+  'knight-rim': ['', 'A knight on the rim is dim.'],
+  'knight-centre': ['', 'Put a knight in the middle and it sees the whole board.'],
   'c-pawn-block': [''],
   badbishop: ['', 'A walled-in bishop bites rock.'],
 };

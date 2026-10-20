@@ -89,11 +89,30 @@ export function openingAnnouncement(
       if (newFamily === spokenFamily || !newFamily.includes(spokenFamily)) return null;
       return `It's the ${newFamily}.`;
     }
-    const tail = det.name.slice(spokenName.length).replace(/^[\s:,]+/, '').trim();
+    // THE TAIL STARTS AT A NAME BOUNDARY (":" or ","), never mid-word:
+    // "Smith-Morra Gambit" → "Smith-Morra Gambit Accepted" sliced to the bare
+    // word "Accepted" — "It's the Accepted of the Sicilian Defense"
+    // (Smith-Morra replay 2026-10-19).
+    const rest = det.name.slice(spokenName.length);
+    if (!/^\s*[:,]/.test(rest)) {
+      // THE FAMILY ITSELF GREW ("Queen's Gambit" → "Queen's Gambit Accepted",
+      // "King's Gambit" → "King's Gambit Declined: Petrov's Defense"): the
+      // new name is said whole, with its own family — never a sub-variation
+      // hung on the old one ("the Petrov's Defense of the King's Gambit").
+      if (newFamily !== spokenFamily) return `It's the ${spoken(det.name)}.`;
+    }
+    // Each part of the tail is weighed on its own, the way `spoken` weighs
+    // them: a filler part ("Normal Variation, Deferred Fianchetto") goes and
+    // the real one after it stays. A part the spoken name only extended
+    // ("Smith-Morra Gambit Accepted") is said whole.
+    const tailParts = /^\s*[:,]/.test(rest)
+      ? rest.split(/[:,]/).map((x) => x.trim())
+      : spoken(det.name).slice(newFamily.length).split(/[:,]/).map((x) => x.trim());
+    const tail = tailParts.filter((x) => x && !GENERIC_TAIL.test(x)).join(', ');
     // "Main Line" names nothing the student can look up — the family is enough.
     // (nor do the DB's filler labels — "Normal Variation", "Rare Defenses",
     // hand walk 2026-09-25).
-    if (!tail || GENERIC_TAIL.test(tail)) return null;
+    if (!tail) return null;
     // WITH ITS FAMILY: a bare tail can name another opening outright — after
     // "This game is the Sicilian Defense", "It's the French Variation" was
     // heard as the French (live walk 2026-10-08).
