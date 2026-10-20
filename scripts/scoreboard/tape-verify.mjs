@@ -376,7 +376,7 @@ function checkSentence(s, ctx) {
     res.push([walkLine(sans), `line ${sans.join(' ')} is illegal`]);
   }
   // PLAYED-OUT LINES (lineCalc, 2026-09-30): "That wins a pawn: Nxd5 cxd5 …",
-  // "The line: … — they come out X up.", "The engine punishes f6: …",
+  // "The line: … — they win X.", "The engine punishes f6: …",
   // "It is a forced mate: …". Walked IN ORDER from a board the line can start
   // on; a "wins N" claim is checked against the material the walk actually
   // changes hands, and a mate line must end in checkmate.

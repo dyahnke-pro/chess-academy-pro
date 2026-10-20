@@ -1151,8 +1151,8 @@ export function errorWhy(args: {
       if (w) {
         // The voice says the shape; the board walks the line (proof guard 2).
         tail = w.sans.length <= 3
-          ? ` The line: ${lineShape(w.sans, 'they')} — they come out ${w.what} up.`
-          : ` The line starts with ${w.sans[0]}, and they come out ${w.what} up.`;
+          ? ` The line: ${lineShape(w.sans, 'they')} — they win ${w.what}.`
+          : ` The line starts with ${w.sans[0]}, and they win ${w.what}.`;
         line = { fen: b.fen(), uci: replyLineUci.slice(0, w.plies.length) };
       }
     } catch { /* no line — the consequence stands */ }
