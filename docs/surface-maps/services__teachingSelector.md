@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**463 lines · 10 exports · 8 importers · 5 tests · 1 audits**
+**479 lines · 10 exports · 8 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -43,8 +43,8 @@
 ### `selectTeaching` (function) — 16 call sites
 - `src/hooks/usePhaseNarration.ts:346`
 - `src/services/coachFeatureService.ts:1364`
-- `src/services/gameTurn.test.ts:43`
-- `src/services/gameTurn.test.ts:47`
+- `src/services/gameTurn.test.ts:42`
+- `src/services/gameTurn.test.ts:48`
 - `src/services/needCoverage.report.test.ts:60`
 - `src/services/openingGenerator.ts:532`
 - `src/services/openingGenerator.ts:2422`
@@ -61,11 +61,12 @@
 ### `ThesisRegister` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `renderThesis` (function) — 11 call sites
+### `renderThesis` (function) — 12 call sites
 - `src/coach/surfaceContract.scan.test.ts:50`
 - `src/components/Coach/CoachGameReview.tsx:1548`
 - `src/hooks/usePhaseNarration.ts:350`
-- `src/services/gameTurn.test.ts:45`
+- `src/services/gameTurn.test.ts:44`
+- `src/services/gameTurn.test.ts:50`
 - `src/services/openingGenerator.ts:2424`
 - `src/services/teachingSelector.test.ts:45`
 - `src/services/teachingSelector.test.ts:46`

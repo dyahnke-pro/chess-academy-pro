@@ -85,7 +85,7 @@
 - `src/components/Coach/CoachGamePage.tsx:1742`
 - `src/components/Coach/CoachGamePage.tsx:3284`
 - `src/components/Coach/CoachGamePage.tsx:3372`
-- `src/components/Coach/CoachTeachPage.tsx:10443`
+- `src/components/Coach/CoachTeachPage.tsx:10418`
 - `src/services/coachFeatureService.ts:3008`
 - `src/services/coachFeatureService.ts:3431`
 - `src/services/computedVoiceAudit.report.test.ts:295`
@@ -108,11 +108,11 @@
 - `src/services/reviewFullData.ts:1889`
 
 ### `detectOpeningByOrder` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9039`
+- `src/components/Coach/CoachTeachPage.tsx:9020`
 - `src/services/coachFeatureService.ts:2116`
 - `src/services/openingPositions.test.ts:27`
 - `src/services/openingPositions.test.ts:37`
-- `src/services/openingStory.ts:126`
+- `src/services/openingStory.ts:127`
 
 ### `detectOpeningTranspositional` (function) — 11 call sites
 - `src/services/coachApi.ts:5759`
@@ -145,8 +145,8 @@
 - `src/components/Coach/CoachGamePage.tsx:1078`
 - `src/components/Coach/CoachTeachPage.tsx:5363`
 - `src/components/Coach/CoachTeachPage.tsx:6081`
-- `src/components/Coach/CoachTeachPage.tsx:12856`
-- `src/components/Coach/CoachTeachPage.tsx:14959`
+- `src/components/Coach/CoachTeachPage.tsx:12817`
+- `src/components/Coach/CoachTeachPage.tsx:14920`
 - `src/data/voicedWalkthroughs.test.ts:100`
 - `src/data/voicedWalkthroughs.ts:160`
 - `src/services/coachApi.ts:6396`
@@ -380,8 +380,8 @@
 
 ### `studentSideForPlay` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:5953`
-- `src/components/Coach/CoachTeachPage.tsx:14533`
-- `src/components/Coach/CoachTeachPage.tsx:14583`
+- `src/components/Coach/CoachTeachPage.tsx:14494`
+- `src/components/Coach/CoachTeachPage.tsx:14544`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:59`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:60`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:64`

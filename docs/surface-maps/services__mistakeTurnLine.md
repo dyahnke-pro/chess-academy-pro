@@ -20,22 +20,23 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `sameLossAsGrade` (function) — 5 call sites
-- `src/services/mistakeTurnLine.test.ts:58`
-- `src/services/mistakeTurnLine.test.ts:59`
-- `src/services/mistakeTurnLine.test.ts:60`
+- `src/services/mistakeTurnLine.test.ts:62`
+- `src/services/mistakeTurnLine.test.ts:63`
+- `src/services/mistakeTurnLine.test.ts:64`
 - `src/services/replayFence.najdorf1500.test.ts:79`
 - `src/services/whyItFailed.lostSquare.test.ts:23`
 
 ### `MistakeTurn` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `mistakeTurnLine` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11963`
-- `src/services/mistakeTurnLine.test.ts:18`
-- `src/services/mistakeTurnLine.test.ts:31`
-- `src/services/mistakeTurnLine.test.ts:39`
-- `src/services/mistakeTurnLine.test.ts:46`
-- `src/services/mistakeTurnLine.test.ts:52`
+### `mistakeTurnLine` (function) — 7 call sites
+- `src/components/Coach/CoachTeachPage.tsx:11928`
+- `src/services/mistakeTurnLine.test.ts:22`
+- `src/services/mistakeTurnLine.test.ts:35`
+- `src/services/mistakeTurnLine.test.ts:43`
+- `src/services/mistakeTurnLine.test.ts:50`
+- `src/services/mistakeTurnLine.test.ts:56`
+- `src/services/mistakeTurnLine.test.ts:85`
 
 ## Tests
 

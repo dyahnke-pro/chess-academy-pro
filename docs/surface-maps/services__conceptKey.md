@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**85 lines · 10 exports · 11 importers · 6 tests · 0 audits**
+**72 lines · 7 exports · 19 importers · 10 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,118 +12,92 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/services/boardComputers.test.ts`
 - `src/services/boardComputers.ts`
-- `src/services/claimKeysLooseCount.test.ts`
-- `src/services/coachDecider.ts`
 - `src/services/conceptKey.test.ts`
 - `src/services/danyaBehaviors.ts`
+- `src/services/holeKey.test.ts`
+- `src/services/kickKey.test.ts`
 - `src/services/kingAttackReads.ts`
-- `src/services/learnMemory.ts`
-- `src/services/looseStill.test.ts`
+- `src/services/learnBoardTeaching.ts`
+- `src/services/looseClaim.test.ts`
+- `src/services/openingStory.ts`
+- `src/services/outpostOneTest.test.ts`
+- `src/services/pawnJudgement.ts`
+- `src/services/playCommentary.ts`
 - `src/services/positionFacts.ts`
 - `src/services/replayFence.alekhine1500.test.ts`
 - `src/services/replayFence.sicilianClosed1000.test.ts`
+- `src/services/reviewMoveTeaching.ts`
+- `src/services/tacticClaimOneKey.test.ts`
+- `src/services/threatProof.ts`
 
 ## Exports and every call site
 
-### `conceptInstanceKey` (function) — 15 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8948`
+### `conceptInstanceKey` (function) — 16 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8796`
+- `src/components/Coach/CoachTeachPage.tsx:8928`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
-- `src/services/claimKeysLooseCount.test.ts:30`
 - `src/services/conceptKey.test.ts:6`
 - `src/services/conceptKey.test.ts:9`
 - `src/services/danyaBehaviors.ts:526`
 - `src/services/kingAttackReads.ts:653`
-- `src/services/looseStill.test.ts:36`
-- `src/services/positionFacts.ts:1362`
-- `src/services/positionFacts.ts:1807`
-- `src/services/positionFacts.ts:1829`
+- `src/services/learnBoardTeaching.ts:514`
+- `src/services/positionFacts.ts:1363`
+- `src/services/positionFacts.ts:1813`
+- `src/services/positionFacts.ts:1835`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`
+- `src/services/tacticClaimOneKey.test.ts:15`
 
 ### `forkThreatKey` (function) — 4 call sites
 - `src/services/danyaBehaviors.ts:380`
-- `src/services/positionFacts.ts:1671`
-- `src/services/positionFacts.ts:1686`
+- `src/services/positionFacts.ts:1679`
+- `src/services/positionFacts.ts:1694`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:51`
 
-### `looseKey` (function) — 3 call sites
-- `src/services/claimKeysLooseCount.test.ts:30`
-- `src/services/claimKeysLooseCount.test.ts:34`
-- `src/services/claimKeysLooseCount.test.ts:41`
+### `looseKey` (function) — 4 call sites
+- `src/services/looseClaim.test.ts:18`
+- `src/services/looseClaim.test.ts:21`
+- `src/services/looseClaim.test.ts:25`
+- `src/services/threatProof.ts:107`
 
-### `looseStillKey` (function) — 1 call site
-- `src/services/claimKeysLooseCount.test.ts:41`
+### `outpostKey` (function) — 3 call sites
+- `src/services/outpostOneTest.test.ts:33`
+- `src/services/positionFacts.ts:1779`
+- `src/services/reviewMoveTeaching.ts:462`
 
-### `LooseSpell` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `LooseSpells` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `plyOfFen` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8473`
-- `src/services/autoAnalyzeGame.ts:170`
-- `src/services/capabilityDateRepair.test.ts:17`
-- `src/services/capabilityDateRepair.test.ts:18`
-- `src/services/capabilityDateRepair.test.ts:19`
-- `src/services/capabilityDateRepair.ts:27`
-- `src/services/capabilityDateRepair.ts:78`
-- `src/services/holdRate.ts:106`
-- `src/services/holdRate.ts:112`
-- `src/services/looseStill.test.ts:23`
-- `src/services/looseStill.test.ts:30`
-- `src/services/looseStill.test.ts:31`
-- `src/services/looseStill.test.ts:34`
-- `src/services/looseStill.test.ts:43`
-- `src/services/looseStill.test.ts:49`
-- `src/services/looseStill.test.ts:52`
-- `src/services/looseStill.test.ts:60`
-- `src/services/looseStill.test.ts:65`
-- `src/services/looseStill.test.ts:66`
-- `src/services/looseStill.test.ts:67`
-- `src/services/looseStill.test.ts:69`
-- `src/services/misconceptionService.ts:100`
-- `src/services/positionFacts.ts:1712`
-- `src/utils/plyOfFen.ts:3`
-
-### `nextLooseSpells` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8580`
-- `src/services/looseStill.test.ts:30`
-- `src/services/looseStill.test.ts:31`
-- `src/services/looseStill.test.ts:50`
-- `src/services/looseStill.test.ts:65`
-- `src/services/looseStill.test.ts:66`
-
-### `looseClaim` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8890`
-- `src/components/Coach/CoachTeachPage.tsx:8949`
-- `src/services/looseStill.test.ts:23`
-- `src/services/looseStill.test.ts:34`
-- `src/services/looseStill.test.ts:43`
-- `src/services/looseStill.test.ts:51`
-- `src/services/looseStill.test.ts:52`
-- `src/services/looseStill.test.ts:60`
-- `src/services/looseStill.test.ts:67`
-- `src/services/looseStill.test.ts:69`
-- `src/services/positionFacts.ts:1712`
+### `holeKey` (function) — 4 call sites
+- `src/services/holeKey.test.ts:17`
+- `src/services/holeKey.test.ts:21`
+- `src/services/openingStory.ts:496`
+- `src/services/pawnJudgement.ts:324`
 
 ### `countKey` (function) — 4 call sites
-- `src/services/boardComputers.ts:230`
-- `src/services/boardComputers.ts:290`
-- `src/services/claimKeysLooseCount.test.ts:53`
-- `src/services/claimKeysLooseCount.test.ts:54`
+- `src/services/boardComputers.test.ts:46`
+- `src/services/boardComputers.test.ts:48`
+- `src/services/boardComputers.ts:233`
+- `src/services/boardComputers.ts:293`
+
+### `kickKey` (function) — 3 call sites
+- `src/services/kickKey.test.ts:17`
+- `src/services/playCommentary.ts:923`
+- `src/services/positionFacts.ts:1779`
 
 ## Tests
 
-- `src/services/claimKeysLooseCount.test.ts`
+- `src/services/boardComputers.test.ts`
 - `src/services/conceptKey.test.ts`
-- `src/services/looseStill.test.ts`
+- `src/services/holeKey.test.ts`
+- `src/services/kickKey.test.ts`
+- `src/services/looseClaim.test.ts`
+- `src/services/outpostOneTest.test.ts`
 - `src/services/replayFence.alekhine1500.test.ts`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts`
 - `src/services/replayFence.sicilianClosed1000.test.ts`
+- `src/services/tacticClaimOneKey.test.ts`
 
 ## Audits that reach it
 

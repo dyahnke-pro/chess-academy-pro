@@ -94,8 +94,8 @@
 ### `isBeginnerMode` (function) — 14 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2645`
 - `src/components/Coach/CoachTeachPage.tsx:8249`
-- `src/components/Coach/CoachTeachPage.tsx:9580`
-- `src/components/Coach/CoachTeachPage.tsx:11500`
+- `src/components/Coach/CoachTeachPage.tsx:9562`
+- `src/components/Coach/CoachTeachPage.tsx:11465`
 - `src/services/beginnerMode.test.ts:8`
 - `src/services/beginnerMode.test.ts:9`
 - `src/services/beginnerMode.test.ts:12`

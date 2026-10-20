@@ -891,7 +891,7 @@ export function computeMoveFacets(
         const said = lost
           ? `${many ? 'have' : 'has'} lost ${many ? 'their' : 'its'} last defender`
           : `${many ? 'are' : 'is'} now hanging`;
-        const line = `${desc.charAt(0).toUpperCase()}${desc.slice(1)} ${said}.`;
+        const line = `${openSentence(desc)} ${said}.`;
         const sqs = group.map((h) => h.square);
         // YOUR pieces with you to move: the threat Learn warns of, with the
         // same proof and stakes (`threatCost`, the one registry).

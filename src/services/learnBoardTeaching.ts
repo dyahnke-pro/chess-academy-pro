@@ -67,13 +67,13 @@ import { strongChoice, warmStrongChoice } from './strongChoice';
 import { stalemateWatch } from './stalemateWatch';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
 import { SAID_BEFORE_MOVE } from './computerRoles';
-import { fileClaimed } from './planRace';
+import { fileClaimed, oppositeWingsRace } from './planRace';
+import { conceptInstanceKey } from './conceptKey';
 import { sayMoveNoun } from './spokenMove';
 import { detectTacticType } from './missedTacticService';
 import { tacticTypeLabel } from './tacticAlertService';
 import type { TacticType } from '../types';
 import { countMethod } from './countMethod';
-import { splitPosition } from './splitPosition';
 import { planChoice, type PlanChoiceLine } from './planChooser';
 import { planFor } from './openingIdentity';
 import { buildReviewMoveTeachingFact } from './reviewMoveTeaching';
@@ -511,7 +511,7 @@ export function playedConceptTeaching(
   return {
     concept: c,
     hint: {
-      lane: 'playedConcept', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(text, squares) ?? NO_PROOF.description, text, squares, claims: [`played-concept:${c.type}:${squares.join('')}`],
+      lane: 'playedConcept', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(text, squares) ?? NO_PROOF.description, text, squares, claims: [conceptInstanceKey(c.type, squares)],
       event: { name: 'coach_played_concept_named', props: { surface: 'coach-teach', concept: c.type, by: c.mover === student ? 'student' : 'opponent' } },
       arrows: [], role: 'teach',
     },
@@ -571,18 +571,6 @@ export function planChoiceTeaching(
     arrows: [],
   };
 }
-
-/** Split the position (P3): opposite-side castling with queens on. */
-export function splitPositionTeaching(fen: string, student: 'w' | 'b'): TeachingHint | null {
-  const sp = splitPosition(fen, student);
-  if (!sp) return null;
-  return {
-    lane: 'splitPosition', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(sp.text, sp.squares) ?? NO_PROOF.stated, text: sp.text, squares: sp.squares, claims: ['split-position'],
-    event: { name: 'coach_split_position_taught', props: { surface: 'coach-teach' } },
-    arrows: [],
-  };
-}
-
 
 /** EVERY MOVE A LINE NAMES GETS ITS ARROW (G6; the walk 2026-09-30 drew
  *  arrows on 7 of 64 plies, and on 2026-10-02 still 60 of 143 named moves —
@@ -811,8 +799,10 @@ const times = (n: number): string => (n === 1 ? 'once' : n === 2 ? 'twice' : `${
  * THE SQUARE IS WITHHELD (OS-10, David's record 2026-10-19, move 27: "Their
  * bishop on g4 has nothing defending it, so taking it costs you nothing back"
  * — the square is the capture, said before he played it). Like the gem lane,
- * it names the opportunity and the piece, never the square or the taker, and
- * marks nothing: finding it is the student's. Null when the exchange does not actually win anything.
+ * it names the opportunity and the piece, never the square or the taker in
+ * words. The board marks the prize's square only (prod audit 2026-10-20: "Their
+ * rook is guarded, but a cheaper piece of yours hits it" pointed at nothing) —
+ * never the taker, so the move is still the student's to find. Null when the exchange does not actually win anything.
  */
 export function prizeTeaching(fen: string, square: string, student: 'w' | 'b',
   /** The per-game occurrence (`nextStem(mem, 'prize')`) — REQUIRED, so the
@@ -827,6 +817,8 @@ export function prizeTeaching(fen: string, square: string, student: 'w' | 'b',
   if (!piece || piece.color === student || piece.type === 'k') return null;
   if (legalSeeGainFor(fen, square as Square, student) <= 0) return null;
   const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
+  // The prize is marked; the taker never is (lead 2026-10-20, option b).
+  const target = [square];
   const name = PRIZE_NAME[piece.type] ?? 'piece';
   const value = PRIZE_VALUE[piece.type] ?? 0;
   const takers = board.moves({ verbose: true }).filter((m) => m.to === square && m.captured)
@@ -846,17 +838,17 @@ export function prizeTeaching(fen: string, square: string, student: 'w' | 'b',
       `Nothing guards one of their pieces — whatever takes it is not taken back.`,
       `A ${name} of theirs is unguarded: win it and nothing recaptures.`,
     ];
-    return { text: `${stems[stem % stems.length]} ${caution}`, squares: [] };
+    return { text: `${stems[stem % stems.length]} ${caution}`, squares: target };
   }
   const cheap = takers[0];
   if ((PRIZE_VALUE[cheap.piece] ?? 0) < value) {
-    return { text: `Their ${name} is guarded, but a cheaper piece of yours hits it — a guard does not save it. ${caution}`, squares: [] };
+    return { text: `Their ${name} is guarded, but a cheaper piece of yours hits it — a guard does not save it. ${caution}`, squares: target };
   }
   const hitters = [...new Set(takers.map((m) => m.from))];
   if (hitters.length > guards) {
-    return { text: `One of their pieces is hit ${times(hitters.length)} and guarded only ${times(guards)} — you win it in the trades. ${caution}`, squares: [] };
+    return { text: `One of their pieces is hit ${times(hitters.length)} and guarded only ${times(guards)} — you win it in the trades. ${caution}`, squares: target };
   }
-  return { text: `Their ${name} can be won — its guard is not enough. ${caution}`, squares: [] };
+  return { text: `Their ${name} can be won — its guard is not enough. ${caution}`, squares: target };
 }
 
 /** The student's own master-game break at `fen` (the one `openingPlanTeaching`
@@ -1069,8 +1061,8 @@ export function dangerAnswerLines(fen: string, student: 'w' | 'b', bestUci: stri
   if (cm) out.push(cm.text);
   const cnt = countMethod(fen, student);
   if (cnt) out.push(cnt.text);
-  const sp = splitPositionTeaching(fen, student);
-  if (sp) out.push(sp.text);
+  const race = oppositeWingsRace(fen, student, 'live');
+  if (race) out.push(race.text);
   return out;
 }
 
@@ -1251,7 +1243,7 @@ export function boardTeacherPoint(fenBefore: string, san: string, fenNow: string
   if (!fact) return null;
   const text = withSubject(fact.text, san);
   return {
-    lane: 'movePoint', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(text, fact.squares) ?? NO_PROOF.description, text, squares: fact.squares, claims: [`board-teacher:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`],
+    lane: 'movePoint', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(text, fact.squares) ?? NO_PROOF.description, text, squares: fact.squares, claims: [`board-teacher:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`, ...(fact.claim ? [fact.claim] : [])],
     event: { name: 'coach_move_point_named', props: { surface: 'coach-teach', source: 'board-teacher' } },
     arrows: [],
   };

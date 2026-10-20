@@ -20,8 +20,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `findPinBreaks` (function) — 13 call sites
-- `src/services/boardComputers.ts:189`
-- `src/services/boardComputers.ts:198`
+- `src/services/boardComputers.ts:192`
+- `src/services/boardComputers.ts:201`
 - `src/services/pinBreak.test.ts:18`
 - `src/services/pinBreak.test.ts:22`
 - `src/services/pinBreak.test.ts:25`
@@ -35,8 +35,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleAttribution.ts:1033`
 
 ### `pinBreakLine` (function) — 8 call sites
-- `src/services/boardComputers.ts:192`
-- `src/services/boardComputers.ts:201`
+- `src/services/boardComputers.ts:195`
+- `src/services/boardComputers.ts:204`
 - `src/services/pinBreak.test.ts:33`
 - `src/services/pinBreak.test.ts:34`
 - `src/services/pinBreak.test.ts:37`
@@ -45,8 +45,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinBreak.test.ts:41`
 
 ### `pinBreakProof` (function) — 3 call sites
-- `src/services/boardComputers.ts:191`
-- `src/services/boardComputers.ts:200`
+- `src/services/boardComputers.ts:194`
+- `src/services/boardComputers.ts:203`
 - `src/services/pinBreak.test.ts:40`
 
 ## Tests

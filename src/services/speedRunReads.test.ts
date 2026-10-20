@@ -274,3 +274,24 @@ describe('preparationOf — the held "doesn\'t work yet" says what the preparati
     expect(preparationOf(RUY, 'Nxe5', ['d2d3', 'd7d6'])).toBeNull();
   });
 });
+
+describe('one criticality: "any move is fine" and "good in every branch" never share a board (OS-11 #9)', () => {
+  // g3 after 8…Re8, real depth-16 evals for d3 / a3 / Nh3: three moves inside a
+  // hair. Old code said both "no big decision here" and "one pawn move answers
+  // no — the next-best leaves your pawn on b3 to be taken".
+  const FEN = 'r1bqr1k1/1ppp1ppp/p2b1n2/n3p3/2P5/1P2P3/PBNPBPPP/R2QK1NR w KQ - 3 9';
+  const lines = [
+    { moves: ['d2d3'], evaluation: -8, mate: null },
+    { moves: ['a2a3'], evaluation: -20, mate: null },
+    { moves: ['g1h3'], evaluation: -30, mate: null },
+  ];
+  it('the quiet board says only that nothing hinges on the move', () => {
+    expect(anyMoveFine(FEN, lines)).not.toBeNull();
+    expect(goodInEveryBranch(FEN, 'w', lines)).toBeNull();
+  });
+  it('a next-best that really costs still earns the every-branch read', () => {
+    const costly = [lines[0], { ...lines[1], evaluation: -250 }, { ...lines[2], evaluation: -260 }];
+    expect(goodInEveryBranch(FEN, 'w', costly)?.claim).toBe('srr:every-branch');
+    expect(anyMoveFine(FEN, costly)).toBeNull();
+  });
+});

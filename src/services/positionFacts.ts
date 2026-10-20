@@ -19,7 +19,8 @@ import { evalBand } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan, lastMoveFromHistory } from './material';
 import { readTrade, findTradeTarget } from './tradeQuality';
-import { conceptInstanceKey, forkThreatKey, looseClaim, plyOfFen, type LooseSpells } from './conceptKey';
+import { conceptInstanceKey, forkThreatKey, looseClaim, plyOfFen, outpostKey, kickKey, type LooseSpells } from './conceptKey';
+import { OPPOSITE_WINGS_CLAIM } from './planRace';
 import { layerStandings } from './teachingLayers';
 import { seatBare } from '../utils/seatPieces';
 import { detectBluff, bluffClause, type Bluff } from './bluffDetector';
@@ -58,7 +59,7 @@ import { MATERIAL_VALUE } from './pieceValues';
 import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause, type LatentDanger, type TradeDanger } from './latentDanger';
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
-import { structurePlanFact } from './nextPlans';
+import { planAimKey, structurePlanFact } from './nextPlans';
 import { readBoard, type BoardRead } from './boardComputers';
 import { detectTactics } from './tacticsDetector';
 import { stepPlan, EMPTY_PLAN_STATE, planChangeSentence } from './planMemory';
@@ -1349,6 +1350,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const rememberFor = (c: (typeof clauses)[number]): string[] => [
     ...(SAY_ONCE_KINDS.has(c.kind) ? [c.text] : []),
     ...(c.kind === 'method' && methodKey ? [methodKey] : []),
+    // THE RACE IS THE KING-ATTACK PLAN (OS-11 item 6a): the opposite-wings race
+    // carries the plan thread's aim too, so the door keeps one of the two.
+    ...(c.kind === 'king-read' && c.claim === OPPOSITE_WINGS_CLAIM ? [planAimKey('king-attack', null) as string] : []),
     ...(c.kind === 'trade' && c.rank === 34 && tradeTargetKey ? [tradeTargetKey] : []),
     // A batch-5 read is said once a game, keyed on its own claim.
     ...((c.kind === 'trade-idea' || c.kind === 'defence-idea' || c.kind === 'nugget') && c.claim ? [c.claim] : []),
@@ -1770,7 +1774,7 @@ function buildClauses(a: {
   // A rook or queen principle about a FILE claims that file — the key the
   // positional read's "owns the open d-file" writes too, so one file is one
   // saying across lanes (hand walk 2026-09-27, Rad8: said twice in one turn).
-  if (a.rule) ranked.push({ namesStudentMove: a.rule.names, kind: 'rule', rank: 29, text: a.rule.text, squares: [...a.rule.squares], ...(a.rule.gradeFen ? { gradeFen: a.rule.gradeFen } : {}), ...(ruleSkill(a.rule.id) ? { skill: ruleSkill(a.rule.id) } : {}), claim: /open-file|semi-open/.test(a.rule.id) && a.rule.squares[0] ? `file-${a.rule.squares[0][0]}` : undefined });
+  if (a.rule) ranked.push({ namesStudentMove: a.rule.names, kind: 'rule', rank: 29, text: a.rule.text, squares: [...a.rule.squares], ...(a.rule.gradeFen ? { gradeFen: a.rule.gradeFen } : {}), ...(ruleSkill(a.rule.id) ? { skill: ruleSkill(a.rule.id) } : {}), claim: /open-file|semi-open/.test(a.rule.id) && a.rule.squares[0] ? `file-${a.rule.squares[0][0]}` : /(^|:)outpost(:|$)/.test(a.rule.id) && a.rule.squares[0] ? outpostKey(a.rule.squares[0]) : /(^|:)tempo(:|$)/.test(a.rule.id) && a.rule.squares[1] ? kickKey(a.rule.squares[1]) : undefined });
   for (const st of a.stopped) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'stopped', rank: 27, text: st.text, squares: [...st.squares], lines: st.lines, proof: st.lines?.[0] ? lineProof(st.lines[0], lineSeatAt(st.lines[0].fen, studentSeat === 'white' ? 'w' : 'b')) ?? undefined : undefined });
   if (a.stock) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'stock', rank: 35, text: a.stock });
   // §9 delayed-castling — speaks IN the opening too (the "castle now" moment),

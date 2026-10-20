@@ -11,6 +11,7 @@
  * narration accuracy gates can verify every spoken reference.
  */
 import { Chess } from 'chess.js';
+import { isOutpost } from './outpost';
 
 type Color = 'w' | 'b';
 
@@ -151,41 +152,12 @@ function computePawnFacts(all: Located[]): PawnStructureFacts {
   return { pawnFiles, islands, openFiles, halfOpenFiles, passedPawns, doubledFiles, isolatedPawns };
 }
 
-function computeOutposts(all: Located[]): OutpostFacts['outposts'] {
-  const out: OutpostFacts['outposts'] = [];
-  const pawnsByColor: Record<Color, Located[]> = { w: [], b: [] };
-  for (const p of all) if (p.type === 'p') pawnsByColor[p.color].push(p);
-
-  for (const piece of all) {
-    if (piece.type !== 'n' && piece.type !== 'b') continue;
-    const c = piece.color;
-    const enemy: Color = c === 'w' ? 'b' : 'w';
-    const fi = fileIndex(fileOf(piece.square));
-    const r = rankOf(piece.square);
-    // Must be in the opponent's half (real outposts live there).
-    if (c === 'w' ? r < 4 : r > 5) continue;
-    // Defended by an own pawn (pawn diagonally behind).
-    const defended = pawnsByColor[c].some((p) => {
-      const pfi = fileIndex(fileOf(p.square));
-      const pr = rankOf(p.square);
-      return Math.abs(pfi - fi) === 1 && (c === 'w' ? pr === r - 1 : pr === r + 1);
-    });
-    if (!defended) continue;
-    // No enemy pawn on an adjacent file can ever advance to attack it: an
-    // attacker would have to reach rank r±1 on file fi±1 from in front.
-    const attackable = pawnsByColor[enemy].some((p) => {
-      const pfi = fileIndex(fileOf(p.square));
-      if (Math.abs(pfi - fi) !== 1) return false;
-      const pr = rankOf(p.square);
-      // Enemy pawns move toward the piece: for a white piece on rank r,
-      // black pawns attack from rank r+1; a black pawn at pr > r on that
-      // file can still advance down to r+1.
-      return c === 'w' ? pr > r : pr < r;
-    });
-    if (attackable) continue;
-    out.push({ color: c, piece: piece.type, square: piece.square });
-  }
-  return out;
+/** Every minor on an outpost — the ONE test (`outpost.isOutpost`, pawn
+ *  support required), never a copy of it (OS-11 #4). */
+function computeOutposts(chess: Chess, all: Located[]): OutpostFacts['outposts'] {
+  return all
+    .filter((p): p is Located & { type: 'n' | 'b' } => (p.type === 'n' || p.type === 'b') && isOutpost(chess, p.square, p.color, true))
+    .map((p) => ({ color: p.color, piece: p.type, square: p.square }));
 }
 
 function computeKingFacts(all: Located[]): KingFacts {
@@ -276,7 +248,7 @@ export function describeStructure(fen: string): StructureFacts | null {
   const all = pieces(chess);
   return {
     pawns: computePawnFacts(all),
-    outposts: computeOutposts(all),
+    outposts: computeOutposts(chess, all),
     kings: computeKingFacts(all),
     material: computeMaterialFacts(all),
   };

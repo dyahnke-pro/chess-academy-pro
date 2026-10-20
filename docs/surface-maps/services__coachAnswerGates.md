@@ -61,13 +61,13 @@
 - `src/services/openingGenerator.ts:802`
 
 ### `gradeNarrationText` (function) — 43 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10393`
-- `src/components/Coach/CoachTeachPage.tsx:10395`
-- `src/components/Coach/CoachTeachPage.tsx:10401`
-- `src/components/Coach/CoachTeachPage.tsx:10423`
-- `src/components/Coach/CoachTeachPage.tsx:10446`
-- `src/components/Coach/CoachTeachPage.tsx:10481`
-- `src/components/Coach/CoachTeachPage.tsx:10944`
+- `src/components/Coach/CoachTeachPage.tsx:10368`
+- `src/components/Coach/CoachTeachPage.tsx:10370`
+- `src/components/Coach/CoachTeachPage.tsx:10376`
+- `src/components/Coach/CoachTeachPage.tsx:10398`
+- `src/components/Coach/CoachTeachPage.tsx:10421`
+- `src/components/Coach/CoachTeachPage.tsx:10456`
+- `src/components/Coach/CoachTeachPage.tsx:10916`
 - `src/services/authoredOpeningNotes.test.ts:257`
 - `src/services/coachAnswerGates.test.ts:107`
 - `src/services/coachAnswerGates.test.ts:117`

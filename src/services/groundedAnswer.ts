@@ -515,7 +515,7 @@ export function assembleBoardPlanAnswer(
   const keep = (x: string): boolean => !taken || !new RegExp(`\\b${taken}\\b`).test(x);
   // HOW IT WAS FOUND, AND WHY THIS ONE (David 2026-10-15): the three
   // questions and their answers lead, the reason the first plan comes first follows.
-  const why = pf.why && withMethod.length ? ` ${pf.ordered ? 'Why that one first?' : 'Why it matters:'} ${pf.why.charAt(0).toUpperCase()}${pf.why.slice(1)}.` : '';
+  const why = pf.why && withMethod.length ? ` ${pf.ordered ? 'Why that one first?' : 'Why it matters:'} ${openSentence(pf.why)}.` : '';
   const headPlans = [trump, ...withMethod].filter((x): x is string => !!x && keep(x)).join(' ');
   // THE METHOD'S ANSWERS ARE THE PLAN (David 2026-10-15: "That doesn't line
   // up"): the method carries its own plan and order, so the plan computer's

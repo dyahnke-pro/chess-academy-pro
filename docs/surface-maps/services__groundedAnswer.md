@@ -400,7 +400,7 @@
 - `src/hooks/useHintSystem.ts:357`
 - `src/services/computedVoiceGrounding.test.ts:53`
 - `src/services/computedVoiceGrounding.test.ts:111`
-- `src/services/deliberation.ts:452`
+- `src/services/deliberation.ts:453`
 - `src/services/groundedAnswer.test.ts:1119`
 - `src/services/groundedAnswer.test.ts:1126`
 - `src/services/groundedAnswer.test.ts:1134`
@@ -417,7 +417,7 @@
 - `src/services/reviewBoardAwareness.test.ts:23`
 
 ### `quietPurposePhrase` (function) — 1 call site
-- `src/services/deliberation.ts:458`
+- `src/services/deliberation.ts:459`
 
 ### `toObserverSeat` (function) — 5 call sites
 - `src/coach/chatTurnAnswers.ts:637`
@@ -1119,7 +1119,7 @@
 - `src/services/coachApi.ts:6309`
 
 ### `seatPieceReferences` (re-export) — 36 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8818`
+- `src/components/Coach/CoachTeachPage.tsx:8800`
 - `src/services/coachFeatureService.ts:4466`
 - `src/services/coachFeatureService.ts:4517`
 - `src/services/coachFeatureService.ts:5538`

@@ -9,6 +9,8 @@
 // counts and the score are the DB's.
 import { bestPlanMove, getHisPlayDb, HIS_PLAN_MIN_GAMES, lookupHisPlaySync } from './hisPlayLookup';
 import { moveWhy } from './deliberation';
+import { affirmMove } from './dnaRules';
+import { stemKeyOf } from '../utils/rotateStem';
 
 /** Start loading the DB (fire and forget); lookups are silent until it lands. */
 export function warmStrongChoice(): void { void getHisPlayDb(); }
@@ -36,5 +38,5 @@ export function strongChoice(fenBefore: string, playedSan: string): { text: stri
   // UNASKED); a book departure names the book move through `bookMove`, with
   // its job. So this computer speaks only to confirm the student's own move.
   if (!same) return null;
-  return { text: `That's what strong players play here — it ${why}.`, san: best.san, same };
+  return { text: affirmMove(why, stemKeyOf(fenBefore)), san: best.san, same };
 }

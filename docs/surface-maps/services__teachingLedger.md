@@ -19,7 +19,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `recordTeachingVisit` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:13502`
+- `src/components/Coach/CoachTeachPage.tsx:13463`
 - `src/hooks/useTeachWalkthrough.ts:867`
 - `src/services/coachsCall.test.ts:31`
 - `src/services/coachsCall.test.ts:41`
@@ -42,7 +42,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/teachingLedger.test.ts:80`
 
 ### `getTeachingVisits` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:15236`
+- `src/components/Coach/CoachTeachPage.tsx:15197`
 - `src/hooks/useTeachWalkthrough.ts:1844`
 - `src/services/coachsCall.ts:170`
 - `src/services/teachingLedger.test.ts:64`
@@ -51,7 +51,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/teachingLedger.test.ts:82`
 
 ### `planTeachingVisit` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:15235`
+- `src/components/Coach/CoachTeachPage.tsx:15196`
 - `src/hooks/useTeachWalkthrough.ts:1663`
 - `src/hooks/useTeachWalkthrough.ts:1766`
 - `src/services/teachingLedger.test.ts:38`

@@ -31,9 +31,9 @@ afterAll(() => { __setLocalDbForTests(null); });
 describe('review walk — the opening explained as it is played', () => {
   it('a student with no record hears the branch they chose, on the move they chose it', () => {
     const segs = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Najdorf Variation', true, 1400);
-    expect(segs[9].narration ?? '').toMatch(/You chose the Najdorf: …a6 takes b5 away/);
+    expect(segs[9].narration ?? '').toMatch(/You chose the Najdorf Variation: …a6 takes b5 away/);
     // Said once: the same beat never comes back on a later move.
-    expect(opening(segs).match(/You chose the Najdorf/g)?.length).toBe(1);
+    expect(opening(segs).match(/You chose the Najdorf Variation/g)?.length).toBe(1);
     // The structure's cost on …e5, and the move that pays it on …Be6.
     expect(segs[11].narration ?? '').toMatch(/That's the price of …e5: no pawn of yours can cover d5 again/);
     expect(segs[13].narration ?? '').toMatch(/…Be6 pays that price: your bishop now guards d5/);

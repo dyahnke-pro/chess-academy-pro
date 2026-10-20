@@ -11,6 +11,7 @@ import { legalSeeGainFor } from './positionReadingService';
 import { materialBalance } from './pieceValues';
 import { andList, countWord } from '../utils/andList';
 import { isEndgameByMaterial } from './gamePhaseService';
+import { homeMinorCount } from './development';
 
 /** A move the engine counts as sound: anything costlier is a mistake to grade, not a plan to name. */
 const SOUND_CP = 50;
@@ -76,8 +77,7 @@ export function kingToCentre(fenBefore: string, san: string, student: Color, cpL
 
 /** Developing moves made: minors off their home squares, plus castling. */
 function developed(c: Chess, side: Color): number {
-  const home: Square[] = side === 'w' ? ['b1', 'c1', 'f1', 'g1'] : ['b8', 'c8', 'f8', 'g8'];
-  const out = home.filter((sq) => { const p = c.get(sq); return !(p && p.color === side && (p.type === 'n' || p.type === 'b')); }).length;
+  const out = 4 - homeMinorCount(c, side);
   const king = piecesOf(c, side, 'k').at(0);
   return out + (king && ['g1', 'c1', 'g8', 'c8'].includes(king) ? 1 : 0);
 }

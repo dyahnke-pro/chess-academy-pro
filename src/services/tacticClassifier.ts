@@ -178,7 +178,7 @@ function detectFork(
 /**
  * Detect pin: a sliding piece pins an enemy piece against a more valuable piece behind it.
  */
-function detectPin(
+export function detectPin(
   chessAfter: Chess,
   toSquare: Square,
   movingColor: Color,
@@ -229,7 +229,7 @@ function detectPin(
 /**
  * Detect skewer: attacking a valuable piece that must move, exposing a less valuable piece behind.
  */
-function detectSkewer(
+export function detectSkewer(
   chessAfter: Chess,
   toSquare: Square,
   movingColor: Color,
@@ -272,7 +272,7 @@ function detectSkewer(
 /**
  * Detect discovered attack: the moving piece uncovers an attack from a friendly piece behind it.
  */
-function detectDiscovery(
+export function detectDiscovery(
   chessAfter: Chess,
   fromSquare: Square,
   toSquare: Square,

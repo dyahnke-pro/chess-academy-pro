@@ -22,7 +22,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `openingPositionsLoaded` (function) — 2 call sites
 - `src/services/openingEquivalence.ts:160`
-- `src/services/openingStory.ts:128`
+- `src/services/openingStory.ts:129`
 
 ### `setOpeningPositions` (function) — 2 call sites
 - `src/services/openingPositions.test.ts:12`

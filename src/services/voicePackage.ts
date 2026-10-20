@@ -110,6 +110,11 @@ export interface VoiceFact {
    *  A fact whose claim is already in the game ledger is dropped; a kept fact
    *  writes its claims there. Bookkeeping on keys, never a read of prose (G0). */
   claims?: readonly string[];
+  /** A BEAT THAT SPEAKS WHOLE OR NOT AT ALL (prod audit 2026-10-20: the
+   *  branch-choice beat lost "You chose the …" as a repeat and its second
+   *  sentence, "The Modern is a position built around …", was spoken alone).
+   *  When any sentence is cut as already said, the whole fact is dropped. */
+  whole?: boolean;
   /** Spoken VERBATIM. If it cannot be said to a student out loud, it does not
    *  belong in a package — put it in the caller's own prompt/log instead. */
   text: string;
@@ -502,6 +507,7 @@ export function buildVoicePackage(
     if (f.claims?.some((c) => seen.has(claimKey(c)))) { dropped.push({ fact: f, reason: 'claim already said' }); continue; }
     const result = verify(f);
     if ('reason' in result) { dropped.push({ fact: f, reason: result.reason }); continue; }
+    if (f.whole && sentencesOf(result.text).length < sentencesOf(stripMoveNumbers(f.text.trim())).length) { dropped.push({ fact: f, reason: 'part failed board grading' }); continue; }
     // Same sentence from two producers is one sentence to the ear — and the two
     // producers are often the two PACKAGES of one turn, which is why `seen` is
     // seeded above rather than starting empty.
@@ -513,6 +519,9 @@ export function buildVoicePackage(
     // spoken a move after the pin, on its own).
     let prevKept = false;
     let first = true;
+    // Added to `seen` only once the fact is kept, so a whole beat that is
+    // refused leaves no sentence of its behind.
+    const mine = new Set<string>();
     for (const s of sentencesOf(result.text)) {
       const k = sayKey(s);
       const afterDrop = !first && !prevKept;
@@ -520,7 +529,7 @@ export function buildVoicePackage(
       if (DEPENDENT.test(s) && !prevKept) { why.add('duplicate'); continue; }
       if (afterDrop && ANAPHOR.test(s)) { why.add('duplicate'); continue; }
       prevKept = false;
-      if (seen.has(k)) { why.add(saidEarlier.has(k) ? 'already said this turn' : 'duplicate'); continue; }
+      if (seen.has(k) || mine.has(k)) { why.add(saidEarlier.has(k) ? 'already said this turn' : 'duplicate'); continue; }
       const near = [...seen].find((prior) => {
         const n = sharedPrefix(prior, k);
         return n >= TWIN_PREFIX && /[a-h][1-8]/.test(k.slice(0, n));
@@ -529,10 +538,12 @@ export function buildVoicePackage(
         why.add(saidEarlier.has(near) ? 'already said this turn' : 'same observation, different moral');
         continue;
       }
-      seen.add(k);
+      mine.add(k);
       fresh.push(s);
       prevKept = true;
     }
+    if (f.whole && why.size > 0) { dropped.push({ fact: f, reason: 'part already said' }); continue; }
+    for (const k of mine) seen.add(k);
     if (fresh.length === 0) {
       // Whole-fact refusals report the STRONGEST cause, so a fact that lost one
       // sentence to a twin and one to the earlier package reads as the twin —

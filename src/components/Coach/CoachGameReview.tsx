@@ -1537,9 +1537,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (!walkNarration || moves.length === 0) return;
     if (walkPlayback.currentPly !== moves.length) return;
     turningAskedRef.current = true; // once per game
-    // THE ONE TURNING POINT (unity U1): the biggest of the moments the review
-    // ASKED about, else the biggest contested swing — never a second ranking.
-    const turn = gameTurn(questionPlan, walkNarration.segments);
+    // THE ONE TURNING POINT (OS-11 census 5): the top of the one win-chance
+    // ranking, either side — the questions are the student's entries of it.
+    const turn = gameTurn(walkNarration.segments);
     if (!turn) return; // clean game — nothing turned, nothing to say
     const turnSeg = walkNarration.segments.find((sg) => sg.ply === turn.ply);
     let thesis = '';
@@ -1550,7 +1550,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         kind: 'coach-surface-migrated',
         category: 'subsystem',
         source: 'CoachGameReview.teachingSelector',
-        summary: `selector read the game: thesis=${pkg.thesis.kind}@${pkg.thesis.ply ?? '-'} turn=${turn.ply}(${turn.source}) moments=[${pkg.moments.map((m) => m.ply).join(',')}] thread=[${[...pkg.onThread].join(',')}]`,
+        summary: `selector read the game: thesis=${pkg.thesis.kind}@${pkg.thesis.ply ?? '-'} turn=${turn.ply}(${turn.mover}) moments=[${pkg.moments.map((m) => m.ply).join(',')}] thread=[${[...pkg.onThread].join(',')}]`,
       });
     } catch { thesis = ''; }
     if (!thesis) return; // the selector could not read the turn — silence over a guess
@@ -2507,7 +2507,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (themeRef.current || !walkNarration || walkNarration.segments.length === 0) return;
     // The theme reads the whole game's trace — never a part read so far.
     if (!gradingComplete) return;
-    themeRef.current = classifyGameTheme(walkNarration.segments, playerColor, gameTurn(questionPlan, walkNarration.segments)?.ply);
+    themeRef.current = classifyGameTheme(walkNarration.segments, playerColor, gameTurn(walkNarration.segments)?.ply);
     if (themeRef.current) {
       captureEvent('review_theme_classified', {
         theme: themeRef.current.theme,

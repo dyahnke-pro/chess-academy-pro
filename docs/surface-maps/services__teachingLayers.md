@@ -44,7 +44,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `layerStandings` (function) — 9 call sites
 - `src/services/coachFeatureService.ts:1296`
-- `src/services/positionFacts.ts:1313`
+- `src/services/positionFacts.ts:1311`
 - `src/services/puzzleMethod.ts:51`
 - `src/services/teachingLayers.test.ts:21`
 - `src/services/teachingLayers.test.ts:28`
@@ -54,7 +54,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/teachingLayers.test.ts:49`
 
 ### `layerBonus` (function) — 5 call sites
-- `src/services/coachDecider.ts:453`
+- `src/services/coachDecider.ts:450`
 - `src/services/teachingLayers.test.ts:23`
 - `src/services/teachingLayers.test.ts:24`
 - `src/services/teachingLayers.test.ts:32`

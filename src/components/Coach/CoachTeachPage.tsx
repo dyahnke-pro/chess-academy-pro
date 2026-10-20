@@ -43,7 +43,7 @@ import { buildPositionalRead, rookReachesFile } from '../../services/positionalR
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
-import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, structureNamingLine, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -8475,6 +8475,10 @@ export function CoachTeachPage(): JSX.Element {
      *  when no threat on the same move already carries one (one lecture per move). */
     let tacticTailType: string | null = null;
     let threatLine: string | null = null;
+    // A tactic on the board has ONE claim (`conceptInstanceKey`), whichever
+    // lane states it — the threat warning, the tactic lane, the played concept
+    // — so a later wave knows it was said (OS-11 item 6c).
+    let threatClaim: string | null = null;
     // Each branch below sets the proof its own computer hands it; a geometry
     // claim with nothing better rests on its squares (resolved where the facts
     // are offered). No line speaks on the "stated" escape (one coach P3).
@@ -8644,10 +8648,9 @@ export function CoachTeachPage(): JSX.Element {
           // states the fact and the question; the engine lane names the move.
           : (() => {
             const pz = prizeTeaching(args.fenAfterReply, prize.square, studentCC, nextStem(learnMemRef.current, 'prize'));
-            // The square is the find: withheld from the words AND the marks
-            // (OS-10) — this branch never sets the tactic's squares; its
-            // stakes still read the square below.
-            if (pz) tacticFactProof = NO_PROOF.withheld;
+            // The square is the find: withheld from the words (OS-10); the board
+            // marks the prize only, never the taker (the producer's squares).
+            if (pz) { tacticFactProof = NO_PROOF.withheld; tacticSquares = pz.squares; }
             return pz?.text ?? null;
           })();
       } else {
@@ -8812,6 +8815,7 @@ export function CoachTeachPage(): JSX.Element {
         threatKey = `vs:${t.type}:${aimedAt}`;
         threatProducer = { kind: 'tactic', tactic: { type: t.type, squares: t.squares } };
         threatSquares = t.squares.filter((sq) => /^[a-h][1-8]$/.test(sq));
+        threatClaim = conceptInstanceKey(t.type, threatSquares);
         // SEATED: the detector's description names pieces bare ("queen on e1
         // pins bishop on c3 against queen on a5"); whose each piece is, is the
         // board's fact and the whole point of a warning.
@@ -9535,10 +9539,11 @@ export function CoachTeachPage(): JSX.Element {
         return readBoard('lastTimeHere', { fenBefore: b.fen(), playedSan: h[h.length - 2], rows, currentGameId: learnMemRef.current.gameId });
       } catch { return null; }
     })();
+    const threatCostRead = threatLine ? readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares }) : null;
     const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, slipCp: args.slipCp, priceSettled: args.priceSettled, price: args.priceSearch, midExchange: midExchangeOn }, facts: [
       ...(gemLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, namesStudentMove: tacticLines?.[0] ? studentMovesInLine(tacticLines[0].fen, tacticLines[0].sans, studentCC, args.fenAfterReply) : NAMES_NO_MOVE, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim || tacticLoose.length ? [...(tacticClaim ? [tacticClaim] : []), ...tacticLoose] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
-      ...(threatLine ? [{ namesStudentMove: threatNames, lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), ...(threatClaims.length ? { claims: threatClaims } : {}), stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
+      ...(threatLine ? [{ namesStudentMove: threatNames, lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), claims: [...new Set([...(threatClaim ? [threatClaim] : []), ...threatClaims, ...(threatCostRead?.claims ?? [])])], stakes: threatCostRead?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
       ...(lastHereRead ? [{ namesStudentMove: NAMES_NO_MOVE, lane: lastHereRead.key.startsWith('last-here:same:') ? 'sameAsLastTime' as const : 'lastTimeHere' as const, text: lastHereRead.text, fen: lastHereRead.fen ?? args.fenAfterReply, claims: [lastHereRead.key], proof: lastHereRead.proof }] : []),
       ...(bookMoveRead ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'bookMove' as const, text: bookMoveRead.text, fen: bookMoveRead.fen ?? args.fenAfterReply, squares: bookMoveRead.squares, claims: [bookMoveRead.key], role: 'teach' as const, proof: bookMoveRead.proof, skill: FUNDAMENTAL_TAG['left-book-early'] }] : []),
       ...(announceLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name, claims: announceClaims, ...(announceSquares.length ? { squares: announceSquares } : {}) }] : []),
@@ -11979,7 +11984,7 @@ export function CoachTeachPage(): JSX.Element {
                       // trading down" is the same claim (run I, 4GIsh ply 32).
                       // Every square the words name lights up (David 2026-10-11).
                       const lookSquares = (look.squares ?? [look.square]).filter((q) => /^[a-h][1-8]$/.test(q));
-                      const winClaim = !fund && /^That let them win /.test(look.line) && /^[a-h][1-8]$/.test(look.square)
+                      const winClaim: string[] = !fund && /^That let them win /.test(look.line) && /^[a-h][1-8]$/.test(look.square)
                         ? [`win-${look.square}`] : fund?.id === 'botched-conversion' ? ['convert-method'] : [`look:${look.kind}:${move.history.length}`];
                       // The habit this line teaches holds any other habit this turn (one method a turn).
                       if (turnLine.teachesMethod) winClaim.push('method:mistake-turn');
@@ -12104,7 +12109,7 @@ export function CoachTeachPage(): JSX.Element {
                       const fileHeard = !!fileKey && (positionalSaidRef.current.has(fileKey) || standingRef.current.said.has(fileKey));
                       if (point && !nowLoose && !fileHeard) {
                         // A capture's point and the trade verdict are one claim about one square.
-                        queueSpokenHint(fenAfterReply, point, 'movePoint', (pointFact?.line ? lineProof(pointFact.line, lineSeatAt(pointFact.line.fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? NO_PROOF.description, pointFact?.line ? studentMovesInLine(pointFact.line.fen, pointFact.line.sans, (playerColor === 'white' ? 'w' : 'b'), fenAfterReply, 1) : NAMES_NO_MOVE, pointFact?.squares ?? [], [move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`, ...(fileKey ? [fileKey] : [])], undefined, undefined, undefined, pointFact?.stakes ?? undefined);
+                        queueSpokenHint(fenAfterReply, point, 'movePoint', (pointFact?.line ? lineProof(pointFact.line, lineSeatAt(pointFact.line.fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? NO_PROOF.description, pointFact?.line ? studentMovesInLine(pointFact.line.fen, pointFact.line.sans, (playerColor === 'white' ? 'w' : 'b'), fenAfterReply, 1) : NAMES_NO_MOVE, pointFact?.squares ?? [], [move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`, ...(fileKey ? [fileKey] : []), ...(pointFact?.claim ? [pointFact.claim] : [])], undefined, undefined, undefined, pointFact?.stakes ?? undefined);
                         captureEvent('coach_move_point_named', { surface: 'coach-teach' });
                       }
                       // EVERY STUDENT MOVE GETS ITS OWN REASON (David 2026-10-14):
@@ -12349,10 +12354,6 @@ export function CoachTeachPage(): JSX.Element {
                     for (const st of readBoardAll('structureTheirMove', { fenBefore: move.fen, san: replySan, student: playerColor === 'white' ? 'w' : 'b' })) {
                       queueSpokenHint(fenAfterReply, st.text, 'structureJudgement', st.proof, NAMES_NO_MOVE, st.squares, [st.key], undefined, undefined, undefined, st.stakes, st.role);
                     }
-                  }
-                  const split = splitPositionTeaching(fenAfterReply, playerColor === 'white' ? 'w' : 'b');
-                  if (split) {
-                    queueHint(fenAfterReply, split);
                   }
                   const stale = stalemateTeaching(fenAfterReply, playerColor === 'white' ? 'w' : 'b');
                   if (stale) {

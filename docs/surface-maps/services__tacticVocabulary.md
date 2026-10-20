@@ -33,7 +33,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8668`
+- `src/components/Coach/CoachTeachPage.tsx:8649`
 - `src/services/computedVoiceAudit.report.test.ts:249`
 - `src/services/dnaLineNarrator.ts:58`
 - `src/services/groundedAnswer.ts:5466`
@@ -52,7 +52,7 @@
 - `src/services/pvPlayback.ts:730`
 - `src/services/pvPlayback.ts:841`
 - `src/services/reviewMoveBriefing.ts:263`
-- `src/services/teachingSelector.ts:367`
+- `src/services/teachingSelector.ts:383`
 - `src/services/turningPoints.ts:170`
 - `src/services/turningPoints.ts:172`
 - `src/services/turningPoints.ts:175`
@@ -79,7 +79,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `toTacticType` (function) — 10 call sites
-- `src/services/missedTacticService.ts:669`
+- `src/services/missedTacticService.ts:583`
 - `src/services/tacticTypeUnification.test.ts:61`
 - `src/services/tacticVocabulary.test.ts:45`
 - `src/services/tacticVocabulary.test.ts:46`
@@ -116,7 +116,7 @@
 - `src/services/tacticVocabulary.test.ts:88`
 
 ### `forkConsequence` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8682`
+- `src/components/Coach/CoachTeachPage.tsx:8663`
 - `src/services/reviewFullData.ts:819`
 
 ## Tests

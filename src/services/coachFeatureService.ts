@@ -2263,7 +2263,7 @@ export function buildReviewSegments(
           // bishop on c4" from d5, then from b5): the words were heard, the
           // move is new — the door must not drop it as said already.
           const again = jobsSaid.has(point) ? ' again' : '';
-          const text = standing ? `${standing}: ${clause}${again}.` : `${point.charAt(0).toUpperCase()}${point.slice(1)}${again}.`;
+          const text = standing ? `${standing}: ${clause}${again}.` : `${openSentence(point)}${again}.`;
           const ctx = job.contextKey;
           const raw = `[move-job] ${text}`;
           facets.push(raw);

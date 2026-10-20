@@ -95,7 +95,7 @@
 - `src/services/reviewNeedGate.test.ts:58`
 - `src/services/reviewNeedGate.test.ts:80`
 - `src/services/studentNeedLoader.ts:274`
-- `src/services/teachingSelector.ts:287`
+- `src/services/teachingSelector.ts:303`
 - `src/services/whyBestMove.needWire.test.ts:21`
 - `src/test/computedOrderWired.test.ts:59`
 
@@ -205,8 +205,8 @@
 - `src/services/oneOpeningKey.test.ts:141`
 - `src/services/oneOpeningKey.test.ts:143`
 - `src/services/positionFacts.liveFundamental.test.ts:80`
-- `src/services/positionFacts.ts:1263`
-- `src/services/teachingSelector.ts:332`
+- `src/services/positionFacts.ts:1261`
+- `src/services/teachingSelector.ts:348`
 
 ## Tests
 

@@ -46,7 +46,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFeatureService.ts:3364`
 - `src/services/coachFeatureService.ts:3390`
 - `src/services/coachFeatureService.ts:3414`
-- `src/services/nextPlans.ts:279`
+- `src/services/nextPlans.ts:280`
 - `src/services/planChoice.ts:77`
 - `src/services/planStopped.ts:52`
 - `src/services/reviewConcepts.ts:220`

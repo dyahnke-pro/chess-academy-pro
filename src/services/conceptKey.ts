@@ -82,3 +82,26 @@ export function looseClaim(square: string, ply: number, spells?: LooseSpells | n
 export function countKey(square: string): string {
   return `count:${square}`;
 }
+
+/** THE KEY FOR ONE OUTPOST — a square no enemy pawn can attack, held by a
+ *  minor. "Your Nf6 lands on the f6 outpost" and "g5 makes f6 an outpost for
+ *  the knight" are one fact (OS-11 #4, g1 29.Nf6 → 31.g5). */
+export function outpostKey(square: string): string {
+  return `outpost:${square}`;
+}
+
+/** THE KEY FOR ONE HOLE IN THEIR CAMP — a square no pawn of theirs can cover
+ *  again. The story's "c5 has a cost for them: no pawn of theirs can cover d5"
+ *  and the pawn read's "that square stays a hole for them" are one fact
+ *  (OS-11 #5, g3 10.Nf3 → 11.O-O). */
+export function holeKey(square: string): string {
+  return `hole:${square}`;
+}
+
+/** THE KEY FOR ONE PAWN KICK — the piece on this square chased by a pawn.
+ *  "e5 kicks their knight off d4" (the move's point) and "The rule behind e5:
+ *  kick their knight off d4" (the principle) read one `pawnHit` (OS-11 smaller
+ *  sets, g2). */
+export function kickKey(square: string): string {
+  return `kick:${square}`;
+}

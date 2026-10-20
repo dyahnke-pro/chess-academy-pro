@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**76 lines · 5 exports · 5 importers · 1 tests · 0 audits**
+**85 lines · 6 exports · 8 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,8 +13,11 @@
 ## Who calls in
 
 - `src/coach/coachService.ts`
+- `src/services/deliberation.ts`
 - `src/services/dnaRules.test.ts`
 - `src/services/learnReward.ts`
+- `src/services/strongChoice.test.ts`
+- `src/services/strongChoice.ts`
 - `src/services/voicePackage.ts`
 - `src/services/voiceService.ts`
 
@@ -31,7 +34,14 @@
 - `src/services/dnaRules.test.ts:55`
 - `src/services/learnReward.ts:102`
 
-### `stripMoveNumbers` (function) — 11 call sites
+### `affirmMove` (function) — 5 call sites
+- `src/services/deliberation.ts:665`
+- `src/services/dnaRules.test.ts:62`
+- `src/services/dnaRules.test.ts:64`
+- `src/services/strongChoice.test.ts:18`
+- `src/services/strongChoice.ts:41`
+
+### `stripMoveNumbers` (function) — 12 call sites
 - `scripts/convert-lichess-tsv.mjs:19`
 - `scripts/convert-lichess-tsv.mjs:45`
 - `scripts/danya-corpus/merge-corpus.mjs:36`
@@ -43,6 +53,7 @@
 - `src/services/dnaRules.test.ts:45`
 - `src/services/dnaRules.test.ts:48`
 - `src/services/voicePackage.ts:316`
+- `src/services/voicePackage.ts:505`
 
 ### `dnaPass` (function) — 9 call sites
 - `src/coach/coachService.ts:2451`
@@ -53,11 +64,12 @@
 - `src/services/dnaRules.test.ts:20`
 - `src/services/dnaRules.test.ts:53`
 - `src/services/dnaRules.test.ts:54`
-- `src/services/voiceService.ts:1449`
+- `src/services/voiceService.ts:1450`
 
 ## Tests
 
 - `src/services/dnaRules.test.ts`
+- `src/services/strongChoice.test.ts`
 
 ## Audits that reach it
 
