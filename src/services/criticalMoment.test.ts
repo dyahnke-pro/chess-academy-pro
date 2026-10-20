@@ -61,7 +61,7 @@ describe('criticalMoment — the count IS the trigger', () => {
     expect(r?.resolved).toBe(false);
     expect(r?.unresolvedReason).toBe('count-fills-fan');
     expect(criticalMomentSpeaks(r)).toBe(false);
-    expect(criticalMomentStatement(r, 7)).toBeNull();
+    expect(criticalMomentStatement(r, 7, null)).toBeNull();
   });
 
   it('NEGATIVE CONTROL — a 2-wide fan whose both lines hold never claims "two"', () => {
@@ -121,10 +121,10 @@ describe('criticalMoment — the stake is computed, never templated', () => {
 
   it('"keeps equality" is FALSE when they are winning and when they are lost', () => {
     expect(criticalMomentStatement(
-      readCriticalMoment({ topLines: fan(600, 100, -200), moverColor: 'w' }), 4,
+      readCriticalMoment({ topLines: fan(600, 100, -200), moverColor: 'w' }), 4, null,
     )).toContain('keeps the win');
     expect(criticalMomentStatement(
-      readCriticalMoment({ topLines: fan(-500, -900, -1400), moverColor: 'w' }), 4,
+      readCriticalMoment({ topLines: fan(-500, -900, -1400), moverColor: 'w' }), 4, null,
     )).toContain('limits the damage');
   });
 
@@ -137,7 +137,7 @@ describe('criticalMoment — the stake is computed, never templated', () => {
     const r = readCriticalMoment({ topLines: lines, moverColor: 'w' });
     expect(r?.count).toBe(1);
     expect(r?.stake).toBe('mate');
-    expect(criticalMomentStatement(r, 2)).toContain('keeps the forced mate');
+    expect(criticalMomentStatement(r, 2, null)).toContain('keeps the forced mate');
   });
 
   it('several mating moves = nothing hinges (flat mate scoring), so it stays silent', () => {
@@ -152,7 +152,7 @@ describe('criticalMoment — the stake is computed, never templated', () => {
     const r = readCriticalMoment({ topLines: lines, moverColor: 'w' });
     expect(r?.stake).toBeNull();
     expect(criticalMomentSpeaks(r)).toBe(false);
-    expect(criticalMomentStatement(r, 3)).toBeNull();
+    expect(criticalMomentStatement(r, 3, null)).toBeNull();
     expect(criticalMomentAsk(r, 3)).toBeNull();
   });
 
@@ -177,7 +177,7 @@ describe('criticalMoment — two registers, one claim', () => {
 
   it('LEARN states, and never asks', () => {
     for (let ply = 1; ply <= 12; ply += 1) {
-      const t = criticalMomentStatement(one, ply);
+      const t = criticalMomentStatement(one, ply, null);
       expect(t).toBeTruthy();
       expect(t).not.toContain('?');
     }
@@ -192,20 +192,20 @@ describe('criticalMoment — two registers, one claim', () => {
   });
 
   it('agrees grammatically with the count it just computed', () => {
-    expect(criticalMomentStatement(one, 0)).toContain('keeps you level');
-    expect(criticalMomentStatement(two, 0)).toContain('keep you level');
-    expect(criticalMomentStatement(two, 0)).not.toMatch(/two moves keeps/);
+    expect(criticalMomentStatement(one, 0, null)).toContain('keeps you level');
+    expect(criticalMomentStatement(two, 0, null)).toContain('keep you level');
+    expect(criticalMomentStatement(two, 0, null)).not.toMatch(/two moves keeps/);
     expect(criticalMomentAsk(two, 0)).not.toMatch(/two moves keeps/);
   });
 
   it('rotates the STEM on the ply and never the CLAIM — and never Math.random', () => {
     const texts = new Set<string>();
-    for (let ply = 0; ply < 8; ply += 1) texts.add(criticalMomentStatement(one, ply) as string);
+    for (let ply = 0; ply < 8; ply += 1) texts.add(criticalMomentStatement(one, ply, null) as string);
     expect(texts.size).toBeGreaterThan(1);
     for (const t of texts) expect(t).toContain('keeps you level');
     // Deterministic: the same ply always produces the same stem.
-    expect(criticalMomentStatement(one, 5)).toBe(criticalMomentStatement(one, 5));
-    expect(criticalMomentStatement(one, -5)).toBe(criticalMomentStatement(one, 5));
+    expect(criticalMomentStatement(one, 5, null)).toBe(criticalMomentStatement(one, 5, null));
+    expect(criticalMomentStatement(one, -5, null)).toBe(criticalMomentStatement(one, 5, null));
   });
 
   it('the REVEAL names the move — the first time it is stated', () => {
@@ -237,8 +237,8 @@ describe('criticalMoment — two registers, one claim', () => {
   });
 
   it('LEARN speaks in the present, REVIEW in the retrospective (the two registers)', () => {
-    expect(criticalMomentStatement(one, 0)).toContain('keeps you level');
-    expect(criticalMomentStatement(one, 0)).not.toContain('kept you level');
+    expect(criticalMomentStatement(one, 0, null)).toContain('keeps you level');
+    expect(criticalMomentStatement(one, 0, null)).not.toContain('kept you level');
     expect(criticalMomentAsk(one, 0)).toContain('kept you level');
     expect(criticalMomentReveal(one)).toContain('kept you level');
   });
@@ -246,7 +246,7 @@ describe('criticalMoment — two registers, one claim', () => {
   it('EVERY register names the COUNT — that is the fact this computer exists for', () => {
     for (const r of [one, two]) {
       const n = r!.count === 1 ? /one move/i : /two moves/i;
-      expect(criticalMomentStatement(r, 3)).toMatch(n);
+      expect(criticalMomentStatement(r, 3, null)).toMatch(n);
       expect(criticalMomentAsk(r, 3)).toMatch(n);
       expect(criticalMomentReveal(r)).toMatch(n);
     }
@@ -314,12 +314,12 @@ describe('a failed candidate is named once (Learn audit 2026-10-15)', () => {
 });
 
 describe('each critical line names its board (replay 2026-10-19, 46.Kg6)', () => {
-  it('the forward read says "now"/"this move", the verdict on the played move never says "here"', () => {
+  it('the forward read names the student\'s next move, never "this move" or "here" (2026-10-20: "this move" was heard as Kg6)', () => {
     for (let ply = 0; ply < 8; ply++) {
       for (const lines of [fan(600, 100, -200), fan(600, 550, -200)]) {
-        const said = criticalMomentStatement(readCriticalMoment({ topLines: lines, moverColor: 'w' }), ply) ?? '';
-        expect(said).toMatch(/\b(now|this move)\b/i);
-        expect(said).not.toMatch(/\bhere\b/);
+        const said = criticalMomentStatement(readCriticalMoment({ topLines: lines, moverColor: 'w' }), ply, null) ?? '';
+        expect(said).toMatch(/^(Your move now|For your next move)\b/);
+        expect(said).not.toMatch(/\bthis move\b|\bhere\b/i);
       }
     }
   });

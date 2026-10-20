@@ -26,6 +26,7 @@
 import { andList, lineAfterFirst } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
+import { sayMoveNoun } from './spokenMove';
 import { criticalityThresholds } from './criticalityScan';
 import { moverLossProof } from './exchangeLedger';
 import { MATE_HORIZON_CP } from './engineConstants';
@@ -315,22 +316,44 @@ function pick(variants: readonly string[], v: number): string {
  * August. It names the count and the stake and then gets out of the way; it
  * never names the move.
  */
-export function criticalMomentStatement(read: CriticalMomentRead | null, ply: number): string | null {
+export function criticalMomentStatement(
+  read: CriticalMomentRead | null,
+  ply: number,
+  /** THE BOARD THIS COUNT IS ABOUT — the reply that made it. Required (David's
+   *  Learn walk 2026-10-19: "Kg6 was the only move that kept the win" beside
+   *  "On this move, two moves keep the win" — two true counts about two boards,
+   *  the second heard as a claim about Kg6). With the reply the sentence opens
+   *  "After their pawn to d5, …"; with none it names the student's next move.
+   *  No stem says "this move", which attaches to whatever was spoken last. */
+  after: { san: string; fenBefore: string } | null,
+): string | null {
   if (!criticalMomentSpeaks(read)) return null;
   const one = read.count === 1;
   const s = stakeText(read.stake, { plural: !one });
+  if (after) {
+    const reply = `After their ${sayMoveNoun(after.san, after.fenBefore).replace(/^the /, '')}`;
+    return one
+      ? pick([
+        `${reply}, only one move ${s}. Slow down.`,
+        `${reply}, you're at a fork in the road: one move ${s}. Take the extra minute.`,
+        `${reply}, exactly one move ${s}. Slow down.`,
+        `${reply}, one move ${s}, and only one. Worth thinking it through.`,
+      ], ply)
+      : pick([
+        `${reply}, two moves ${s}; everything else concedes.`,
+        `${reply}, two moves ${s}. The rest give it away.`,
+        `${reply}, it's narrow — two moves ${s}; every other move costs more.`,
+        `${reply}, exactly two moves ${s} — the rest concede.`,
+      ], ply) + lookAt(read.holdingSans);
+  }
   return one
     ? pick([
-      `Critical moment now — only one move ${s}. Slow down.`,
-      `This move is the fork in the road: one move ${s}. Take the extra minute.`,
-      `Slow down — on this move, exactly one move ${s}.`,
       `Your move now: one move ${s}, and only one. Worth thinking it through.`,
+      `For your next move, exactly one move ${s}. Slow down.`,
     ], ply)
     : pick([
-      `Critical moment now — two moves ${s}; everything else concedes.`,
-      `On this move, two moves ${s}. The rest give it away.`,
-      `Narrow on this move — two moves ${s}; every other move costs more.`,
       `Your move now: exactly two moves ${s} — the rest concede.`,
+      `For your next move, two moves ${s}; everything else concedes.`,
     ], ply) + lookAt(read.holdingSans);
 }
 
