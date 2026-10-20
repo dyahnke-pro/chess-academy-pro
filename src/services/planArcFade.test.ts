@@ -14,7 +14,8 @@ import { decideTurn } from './learnTurnDoor';
 import { newPlanThread, planThreadTurn } from './planThread';
 import { NO_PROOF } from './proof';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
-import type { CapabilityEvidenceRecord, MisconceptionTagRecord } from '../types';
+import type { CapabilityEvidenceRecord } from './capabilityEvidence';
+import type { MisconceptionTagRecord } from '../types';
 
 /** David's no-plan rows from his 2026-10-20 drop (evidence + game slips). */
 const DAVID = JSON.parse(readFileSync('src/test/fixtures/david-no-plan-record.json', 'utf8')) as {
