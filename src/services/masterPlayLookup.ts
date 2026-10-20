@@ -237,7 +237,7 @@ export function masterMovesCachedSync(fen: string): LocalDbMove[] | null {
   // Out of book only while the live answer itself is still cached: the set
   // never outlives the cache entry it describes.
   if (hit && hit.source === 'none' && confirmedEmpty.has(positionFen(fen))) return [];
-  if (hit && hit.source !== 'none') return hit.moves.map((m) => ({ san: m.san, games: m.games }));
+  if (hit && hit.source !== 'none') return hit.moves.map((m) => ({ san: m.san, games: m.games, white: m.white, draws: m.draws, black: m.black }));
   return mastersMovesSync(fen);
 }
 
