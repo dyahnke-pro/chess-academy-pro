@@ -4,8 +4,9 @@ import { StockfishNative } from 'capacitor-stockfish-native';
 import type { StockfishAnalysis, AnalysisLine } from '../types';
 import { mateEvalFor, limitStrengthElo } from './engineConstants';
 import { stockfishCache } from './stockfishCache';
-import { logAppAudit } from './appAuditor';
+import { logAppAudit, isAuditMarkedPage } from './appAuditor';
 import { finishedBoardEval } from './finishedBoard';
+import { ledgerAsk, ledgerStart, ledgerDone, engineLedger, type EngineLedgerEntry } from './engineLedger';
 
 /** THE LINES MEASURED AGAINST THE ASK THEY ANSWER: each line short of
  *  `askedDepth` is marked `searchedShort`. Stamped where a read is handed out —
@@ -1484,6 +1485,27 @@ class StockfishEngine {
     /** Internal: the question holding the engine runs through the hold. */
     bypassQuestionHold = false,
   ): Promise<StockfishAnalysis> {
+    // THE ENGINE'S TIMELINE (`engineLedger`): asked, searched, answered.
+    const led = ledgerAsk('read', fen, depth, typeof options?.searchmoves === 'string' ? options.searchmoves : null, priority);
+    try {
+      const r = await this._analyzePosition(fen, depth, options, priority, onStart, bypassQuestionHold, led);
+      ledgerDone(led, led.startedAt === null ? 'shared' : 'done', r.depth);
+      return r;
+    } catch (err) {
+      ledgerDone(led, err instanceof AnalysisInterruptedError ? 'interrupted' : 'error');
+      throw err;
+    }
+  }
+
+  private async _analyzePosition(
+    fen: string,
+    depth: number,
+    options: Record<string, string | number> | undefined,
+    priority: AnalysisPriority,
+    onStart: (() => void) | undefined,
+    bypassQuestionHold: boolean,
+    led: EngineLedgerEntry,
+  ): Promise<StockfishAnalysis> {
     // The singleton works only for a surface the student is using: background
     // backfills wait while it is busy (`foregroundActivity`).
     markForegroundActivity();
@@ -1592,7 +1614,7 @@ class StockfishEngine {
       // directly on the engine the hold has already stopped.
       if (bypassQuestionHold) {
         onStart?.();
-        return this._dispatchAnalysis(fen, depth, options, priority);
+        return this._dispatchAnalysis(fen, depth, options, priority, led);
       }
       if (priority === 'brain') {
         // Append to the brain serialization chain. The previous entry
@@ -1620,13 +1642,13 @@ class StockfishEngine {
           // and the work this read was for has been dropped.
           if (epoch !== this._supersedeEpoch) throw new AnalysisInterruptedError();
           onStart?.();
-          return await this._dispatchAnalysis(fen, depth, options, priority);
+          return await this._dispatchAnalysis(fen, depth, options, priority, led);
         } finally {
           release();
         }
       }
       onStart?.();
-      return this._dispatchAnalysis(fen, depth, options, priority);
+      return this._dispatchAnalysis(fen, depth, options, priority, led);
     };
 
     // Only the cacheable path is shareable — an `options` call carries
@@ -1639,6 +1661,7 @@ class StockfishEngine {
     depth: number,
     options: Record<string, string | number> | undefined,
     priority: AnalysisPriority,
+    led?: EngineLedgerEntry,
   ): Promise<StockfishAnalysis> {
     await this.initialize();
     // A read never opens while the coach's move search owns the worker.
@@ -1748,6 +1771,7 @@ class StockfishEngine {
           const only = typeof opts.searchmoves === 'string' && opts.searchmoves ? ` searchmoves ${opts.searchmoves}` : '';
           this.send(budgetMs ? `go depth ${depth} movetime ${budgetMs}${only}` : `go depth ${depth}${only}`);
           this._analysisStarted = true;
+          ledgerStart(led);
           // Stall watchdog: if THIS analysis is still pending after the
           // window (no bestmove came back), screen the dead engine to the
           // audit stream. Self-guarding — if pending resolved or was
@@ -1878,6 +1902,18 @@ class StockfishEngine {
      *  never leak into a hint or a best-move lookup. */
     targetElo?: number,
   ): Promise<string> {
+    const led = ledgerAsk('bestmove', fen, null, null, 'move');
+    try {
+      const move = await this._getBestMove(fen, moveTimeMs, skill, targetElo, led);
+      ledgerDone(led, 'done');
+      return move;
+    } catch (err) {
+      ledgerDone(led, 'error');
+      throw err;
+    }
+  }
+
+  private async _getBestMove(fen: string, moveTimeMs: number, skill: number, targetElo: number | undefined, led: EngineLedgerEntry): Promise<string> {
     await this.initialize();
     // 🔒 ONE SEARCH AT A TIME ON THE ONE WORKER (walk 2026-10-07). This search
     // used to go straight to the worker while a read was open, and the read
@@ -1885,6 +1921,7 @@ class StockfishEngine {
     // flipped, and the coach could play the READ's move instead of its own.
     // Wait for the open read to finish and hold the worker until this one does.
     const release = await this.acquireExclusive();
+    ledgerStart(led);
 
     return new Promise<string>((resolve, reject) => {
       // 🔒 THE ENGINE MUST NEVER HANG (David 2026-09-07 freeze report).
@@ -2427,6 +2464,11 @@ class StockfishEngine {
 
 // Singleton
 export const stockfishEngine = new StockfishEngine();
+// The audit driver reads the engine's timeline (`engineLedger`) on audit
+// pages only — the coach never reads it.
+if (typeof window !== 'undefined' && isAuditMarkedPage()) {
+  (window as unknown as { __engineLedger?: typeof engineLedger }).__engineLedger = engineLedger;
+}
 
 // App-resume recovery — when the app returns to the foreground, the iOS
 // WebView's Web Worker may have been killed while backgrounded; the stale

@@ -548,6 +548,7 @@ export function decideTurn(
    *  for each turn, so a held claim is free again once the turn moves on. */
   heldThisTurn: Set<string> | null = null,
 ): TurnDecision {
+  const decideStart = Date.now();
   const offered: LearnLane[] = [];
   const faded: LearnLane[] = [];
   const open: Array<VoiceFact & { lane: LearnLane }> = [];
@@ -932,7 +933,7 @@ export function decideTurn(
     const k = facts.find((x) => x.lane === l && (x.text === f.text || x.text.includes(f.text) || f.text.includes(x.text)))?.factKind;
     return k ? [k] : [];
   });
-  if (offered.length > 0) emitLearnTurn({ spokeKinds, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, ownMove, ownLanes, ownProven, turn });
+  if (offered.length > 0) emitLearnTurn({ spokeKinds, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, ownMove, ownLanes, ownProven, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
 }
 

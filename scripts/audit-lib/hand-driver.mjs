@@ -35,6 +35,17 @@ await ctx.addInitScript(({ url, secret }) => {
 await ctx.addInitScript(autoDismissCalibration);
 await ctx.addInitScript(muteTtsForAudit);
 await ctx.addInitScript(stampAuditRunId(`hand-${Math.random().toString(36).slice(2, 8)}`));
+// MAIN-THREAD LONG TASKS, per turn (Learn speed, 2026-10-20): what blocked
+// the page, without a full profile on every ply.
+await ctx.addInitScript(() => {
+  window.__longTasks = [];
+  try {
+    new PerformanceObserver((list) => {
+      for (const e of list.getEntries()) window.__longTasks.push({ at: performance.timeOrigin + e.startTime, ms: e.duration });
+      if (window.__longTasks.length > 4000) window.__longTasks.splice(0, 2000);
+    }).observe({ entryTypes: ['longtask'] });
+  } catch { /* no long-task timing in this browser */ }
+});
 const page = await ctx.newPage();
 const errors = [];
 page.on('pageerror', (e) => errors.push(String(e)));
@@ -213,7 +224,24 @@ const routes = {
       .map((e) => { let d = {}; try { d = JSON.parse(String(e.details ?? '{}')); } catch { d = {}; } return { at: Number(d.startedAt), text: (e.narrationText ?? '').slice(0, 60) }; })
       .filter((x) => Number.isFinite(x.at) && x.at >= t0)
       .map((x) => ({ ms: x.at - t0, text: x.text }));
-    const row = { move: q.get('san'), reply: chess.history()[plies + 1] ?? null, replyMs, boardPx, words, lines, timeline, onAir };
+    // THE TURN'S STAGES (Learn speed, 2026-10-20), each read off the app's own
+    // record: the reply's commit, the engine's timeline (`engineLedger`), the
+    // door's decisions with their price, and the main thread's long tasks.
+    const events = listener.getCapturedEvents();
+    const replyAt = events.find((e) => e.kind === 'coach-turn-checkpoint' && (e.timestamp ?? 0) >= t0 && /move-committed/.test(e.summary ?? ''))?.timestamp ?? null;
+    const door = events.filter((e) => e.kind === 'learn-turn-decision')
+      .flatMap((e) => { try { return JSON.parse(String(e.details ?? '{}')).rows ?? []; } catch { return []; } })
+      .filter((r) => (r.decidedAt ?? 0) >= t0)
+      .map((r) => ({ kind: r.turn?.kind ?? null, at: r.decidedAt - t0, ms: r.decideMs, price: r.turn?.price ?? null, spoke: r.spoke }));
+    const engine = await page.evaluate((from) => {
+      const l = window.__engineLedger;
+      // Searches asked this turn, and any still running when it began (a
+      // search the last turn queued holds this one's behind it).
+      return l ? l().filter((e) => e.askedAt >= from || e.doneAt === null || e.doneAt >= from).map((e) => ({ ...e, carried: e.askedAt < from })) : null;
+    }, t0).catch(() => null);
+    const longTasks = await page.evaluate((from) => (window.__longTasks ?? []).filter((x) => x.at >= from).map((x) => ({ at: Math.round(x.at - from), ms: Math.round(x.ms) })), t0).catch(() => []);
+    const stages = { t0, replyMs: replyAt ? replyAt - t0 : null, firstWordMs: onAir[0]?.ms ?? null, engine, door, longTasks };
+    const row = { move: q.get('san'), reply: chess.history()[plies + 1] ?? null, replyMs, boardPx, words, lines, timeline, onAir, stages };
     trends.push(row);
     return { ...row, moves: chess.history().join(' ') };
   },

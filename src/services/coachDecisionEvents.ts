@@ -206,6 +206,10 @@ export interface LearnTurnRow {
    *  the history length after the student's move) for its instant and late
    *  waves, or a phase line. Null from a caller that predates it. */
   turn: LearnTurnTag | null;
+  /** When the door decided (ms epoch) and how long the decision took — the
+   *  door's own share of a turn's wait (Learn speed, 2026-10-20). */
+  decidedAt: number;
+  decideMs: number;
 }
 
 /** HOW A MOVE'S ONE PRICE WAS SEARCHED (`playedMoveGrade.memoPrice`): the
