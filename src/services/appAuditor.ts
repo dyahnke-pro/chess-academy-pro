@@ -321,6 +321,10 @@ export type AuditKind =
    *  finds do: clear-best, only-move, a parried threat, a punish, a gem).
    *  David 2026-10-01. */
   | 'learn-reward'
+  /** The read a Learn move was judged from, taken when the student moved:
+   *  the coach-turn probe, the eval bar's, or none (then the move goes
+   *  ungraded — no verdict, no reason, no reward). iOS engine reads 2026-10-20. */
+  | 'learn-move-read'
   /** The Weaknesses heat map rendered: red / green / grey per skill and which
    *  turned green since the last visit (David 2026-10-01). */
   | 'heat-map-shown'

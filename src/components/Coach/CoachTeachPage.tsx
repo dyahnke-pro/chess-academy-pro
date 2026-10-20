@@ -9918,6 +9918,16 @@ export function CoachTeachPage(): JSX.Element {
     const preStudentRead = probeRead ?? (latestEvalRef.current?.fen === fenBefore
       ? latestEvalRef.current.analysis ?? null
       : null);
+    // WHICH READ THIS MOVE IS JUDGED FROM — the ungraded move is a measured
+    // event, not an absence (iPhone 2026-10-20: 20 of 21 moves had none).
+    void logAppAudit({
+      kind: 'learn-move-read',
+      category: 'subsystem',
+      source: 'CoachTeachPage.handleStudentMove',
+      summary: `${move.san}: ${probeRead ? 'probe' : preStudentRead ? 'eval-bar' : 'none'}`,
+      details: JSON.stringify({ ply: move.history.length - 1, san: move.san, read: probeRead ? 'probe' : preStudentRead ? 'eval-bar' : 'none', depth: preStudentRead?.depth ?? null }),
+      fen: fenBefore,
+    });
     // An open "why did you play that?" is closed by playing on — the coach
     // lets it go and the slip is captured silently for review/drills (David
     // 2026-07-11: never a stale card over a live board).
