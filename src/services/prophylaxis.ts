@@ -185,8 +185,10 @@ export function prophylaxisProof(p: Prophylaxis): Proof {
 
 /** The advice, with its proof. */
 export function prophylaxisLine(p: Prophylaxis): string {
-  const what = `the ${p.kind} with ${p.intent.san}`;
-  return `${p.prevention.san} first — it stops ${what} before it lands. ${(() => { const f = prophylaxisProof(p).full; return `${openSentence(f)}.`; })()}`;
+  // THE THREAT ONCE, THEN WHAT STOPS IT (OS-1 g2 ply 12: "h6 first — it
+  // stops the pin with bishop to g5 before it lands. Bishop to g5 would pin
+  // your knight on f6, and after h6 the pawn covers g5" said the pin twice).
+  return `${p.prevention.san} first — ${openSentence(prophylaxisProof(p).full)}.`;
 }
 
 /** The advice with the move held: their idea, and that one move stops it. */

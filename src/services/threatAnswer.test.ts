@@ -157,3 +157,17 @@ describe('a held "take it" never hands over the capture (Smith-Morra walk 2026-1
     expect(held?.text).not.toMatch(/hxg3|h2/);
   });
 });
+
+describe('a held "it can wait" says what comes first, or nothing (OS-1 g2 ply 18)', () => {
+  it('the d-file battery on d6 after 10.O-O-O, met by the quiet a5: silent, never "something stronger comes first"', () => {
+    const fen = 'rn1q1rk1/1p2bppp/p2pbn2/4p3/4P3/1NN1BP2/PPPQ2PP/2KR1B1R b - - 7 10';
+    const at = (namesMove: boolean) => threatAnswer({ fen, squares: ['d1', 'd2', 'd6'], bestUci: 'a6a5', studentCp: 0, student: 'b', ply: 18, shape: 'line', namesMove });
+    expect(at(true)?.kind).toBe('wait');
+    expect(at(false)).toBeNull();
+  });
+  it('a capture first is said by its kind, the move held', () => {
+    const a = threatAnswer({ fen: 'r2qk2r/pp1n1ppp/8/2bp4/4n3/2P2N2/PP3PPP/RNBQR1K1 w kq - 2 13', squares: ['c5', 'f2', 'g1'], bestUci: 'd1d5', studentCp: 259, student: 'w', ply: 0, shape: 'line', namesMove: false });
+    expect(stripThink(a?.text ?? '')).toMatch(/It can wait — you have a capture that comes first: their pawn is there to take\.$/);
+    expect(a?.text).not.toMatch(/Qxd5|d5/);
+  });
+});
