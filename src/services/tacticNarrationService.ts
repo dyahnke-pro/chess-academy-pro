@@ -74,25 +74,6 @@ function isNotableMove(san: string, moveIndex: number, totalMoves: number): bool
 
 // ─── Layer 2: Drill Narration ─────────────────────────────────────────────
 
-export function drillIntro(
-  tacticType: TacticType,
-  opponentName: string | null,
-  openingName: string | null,
-): string {
-  const tacticLabel = tacticTypeLabel(tacticType).toLowerCase();
-  const parts: string[] = [];
-
-  if (opponentName) {
-    parts.push(`From your game against ${opponentName}.`);
-  }
-  if (openingName) {
-    parts.push(`In the ${openingName}.`);
-  }
-  parts.push(`Watch the buildup to this missed ${tacticLabel}.`);
-
-  return parts.join(' ');
-}
-
 /** Position setup phrases by tactic type — gives a sense of why the tactic exists here */
 const POSITION_SETUPS: Partial<Record<TacticType, string[]>> = {
   fork: [
@@ -126,44 +107,6 @@ const POSITION_SETUPS: Partial<Record<TacticType, string[]>> = {
     'The pawn structure creates an opportunity.',
   ],
 };
-
-/** @param key  STABLE rotation key (puzzle index, attempt count) — REQUIRED so
- *   the caller decides what is stable about this moment. */
-export function drillTransition(tacticType: TacticType, key: number): string {
-  const tacticLabel = tacticTypeLabel(tacticType).toLowerCase();
-  const setups = POSITION_SETUPS[tacticType];
-  if (setups && setups.length > 0) {
-    const setup = rotateStem(setups, key);
-    return `${setup} Now find the ${tacticLabel}.`;
-  }
-  return `Study the position carefully. Now find the ${tacticLabel}.`;
-}
-
-/**
- * @param key  STABLE rotation key — see `drillTransition`.
- *
- * ⚠️ ZERO production callers (measured 2026-09-19), and that is load-bearing
- * here: its stems are "Well spotted!", "Excellent." — per-solve ACKNOWLEDGMENT,
- * which Narration Voice Rule 5 bans outright ("the position changing in the
- * student's favor IS the acknowledgment"). It is left in place rather than
- * rewritten because nothing speaks it; wiring it up means rewriting the stems
- * first, not just passing a key.
- */
-export function drillCorrect(tacticType: TacticType, key: number): string {
-  const tacticLabel = tacticTypeLabel(tacticType).toLowerCase();
-  const phrases = [
-    `Well spotted! That's the ${tacticLabel}.`,
-    `Excellent. You found the ${tacticLabel}.`,
-    `That's it — the ${tacticLabel} wins material.`,
-    `Sharp eyes. The ${tacticLabel} was the key move.`,
-  ];
-  return rotateStem(phrases, key);
-}
-
-export function drillIncorrect(tacticType: TacticType): string {
-  const tacticLabel = tacticTypeLabel(tacticType).toLowerCase();
-  return `The ${tacticLabel} was available here. Study the position.`;
-}
 
 // ─── Layer 3: Setup Narration ─────────────────────────────────────────────
 

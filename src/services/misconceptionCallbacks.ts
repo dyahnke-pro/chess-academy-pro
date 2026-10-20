@@ -136,26 +136,6 @@ export interface CallbackWeakness {
   positions: ReadonlyArray<{ from?: { opponentName?: string | null; playedAt?: number } }>;
 }
 
-/**
- * The callback line for ANY weakness cluster — analysis or coach. Reads the
- * PRIOR occurrence's provenance (positions are newest-first, so [1] is the one
- * before this), which is why the spine had to carry provenance first.
- *
- * Null when the cluster is a generic placeholder, or when there is nothing to
- * call back to.
- */
-export function composeWeaknessCallback(w: CallbackWeakness, now: number = Date.now()): string | null {
-  if (GENERIC_CLUSTERS.has(w.tag)) return null;
-  const prior = w.positions[1]?.from;
-  // The PLAY clock when the source knows it; the row's own lastSeenAt otherwise.
-  // Never `createdAt` — on an imported archive that is the day they hit Import.
-  const lastPriorAt = prior?.playedAt ?? w.lastSeenAt;
-  return composeFrom(w.label, w.total, lastPriorAt, now, {
-    opponentName: prior?.opponentName,
-    playedAt: prior?.playedAt,
-  });
-}
-
 // ── THE RECURRENCE READ — counted in GAMES, honest about THIS game ───────────
 // WO-LOOP-01 (2026-09-20). Two defects in the way the in-flow clause counted:
 // (1) `total` counts ROWS, so two loose pieces in ONE game read as "the second

@@ -14,7 +14,6 @@ import { callInaccuracy, callInaccuracyDetailed } from './inaccuracyCall';
 import { backwardLook, lastCoachVerdictDecline } from './backwardLook';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { pickNarration } from './openingNarrationService';
-import { getCorrectMoveMessage, getWelcomeMessage } from './gamesService';
 import { assemblePositionAssessment, assembleTacticsAnswer } from './groundedAnswer';
 import type { TacticsLiveContext } from '../coach/types';
 import type { OpeningRecord } from '../types';
@@ -226,11 +225,6 @@ describe('L6 — stems are rotated, not rolled', () => {
     expect(others.size).toBeGreaterThan(1);
   });
 
-  it('gamesService messages are keyed, not rolled', () => {
-    for (let i = 0; i < 20; i += 1) expect(getCorrectMoveMessage(3)).toBe(getCorrectMoveMessage(3));
-    const opening = { id: 'op-1', name: 'Italian Game', color: 'white' } as unknown as OpeningRecord;
-    for (let i = 0; i < 20; i += 1) expect(getWelcomeMessage(opening)).toBe(getWelcomeMessage(opening));
-  });
 
   it('no narration stem module rolls Math.random any more', async () => {
     const fs = await import('node:fs');

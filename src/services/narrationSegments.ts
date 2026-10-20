@@ -110,21 +110,3 @@ interface SpeakSegmentsDeps {
   cancelled?: () => boolean;
 }
 
-/**
- * Play segments in order: reveal a segment's squares, prefetch the next
- * segment's audio, then speak the current segment to completion. Resolves when
- * the last sentence finishes — that resolution is what gates beat-advance, so
- * the existing voice-gated runtime is unchanged (it just awaits this).
- */
-export async function speakSegments(
-  segments: readonly NarrationSegment[],
-  deps: SpeakSegmentsDeps,
-): Promise<void> {
-  for (let i = 0; i < segments.length; i++) {
-    if (deps.cancelled?.()) return;
-    deps.reveal(segments[i].revealSquares);
-    const nextText = segments[i + 1]?.text;
-    if (nextText && deps.prefetch) deps.prefetch(nextText);
-    await deps.speak(segments[i].text);
-  }
-}

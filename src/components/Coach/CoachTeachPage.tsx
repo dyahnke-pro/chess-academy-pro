@@ -2501,8 +2501,8 @@ export function CoachTeachPage(): JSX.Element {
    * + "this is a unified coach, so all changes get made to all surfaces").
    *
    * Learn does NOT render the shared GameChatPanel — it owns its chat inline —
-   * so the registration that panel performs for its six host surfaces
-   * (BoardPageLayout, CoachGamePage, GlobalCoachDrawer, LessonScaffold,
+   * so the registration that panel performs for its five host surfaces
+   * (CoachGamePage, GlobalCoachDrawer, LessonScaffold,
    * MiddlegamePractice, OpeningPlayMode) does not reach here. Any surface with
    * its own chat registers for itself, which is what makes "all surfaces" a
    * fact you can grep rather than a hope.

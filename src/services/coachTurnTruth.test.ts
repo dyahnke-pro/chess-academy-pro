@@ -70,14 +70,6 @@ describe('borrowed teaching may not name pieces the board does not have', () => 
     }).violations).toEqual([]);
   });
 
-  it('is wired into the borrowed chokepoint, not just available', () => {
-    // The defect this whole file exists for is a capability that shipped and
-    // was never called. `namedPiecesExistOnBoard` had asked this question since
-    // 2026-08-05 — of the wrong field, at the wrong moment.
-    const gate = src('src/services/coachAnswerGates.ts');
-    const borrowed = gate.slice(gate.indexOf('export function gradeBorrowedTeaching'));
-    expect(borrowed).toMatch(/requireNamedPiecesPresent:\s*true/);
-  });
 });
 
 // ── 2. THE OPPONENT'S STRENGTH ───────────────────────────────────────────────

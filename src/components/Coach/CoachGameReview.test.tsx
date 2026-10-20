@@ -105,9 +105,6 @@ vi.mock('../../services/coachFeatureService', () => ({
 }));
 
 vi.mock('../../services/coachPrompts', () => ({
-  buildChessContextMessage: vi.fn().mockReturnValue('Position (FEN): test-fen'),
-  POSITION_ANALYSIS_ADDITION: 'Test position analysis prompt',
-  INTERACTIVE_REVIEW_ADDITION: 'Test interactive review prompt',
 }));
 
 // The Ask transport — mocked so the unified-chat test can assert the

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1008 lines · 32 exports · 978 importers · 242 tests · 38 audits**
+**1008 lines · 32 exports · 972 importers · 243 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -85,11 +85,8 @@
 - `src/coach/tools/cerebrum/startWalkthroughForOpening.ts`
 - `src/coach/tools/cerebrum/takeBackMove.ts`
 - `src/coach/tools/registry.ts`
-- `src/components/Academy/AcademyCourseCard.tsx`
 - `src/components/Academy/CourseSyllabusPage.tsx`
 - `src/components/Academy/CourseTrainerPage.tsx`
-- `src/components/Analysis/OpeningExplorerPanel.tsx`
-- `src/components/Board/BoardPageLayout.tsx`
 - `src/components/Board/BoardQuestionBox.tsx`
 - `src/components/Board/ChessBoard.tsx`
 - `src/components/Board/ControlledChessBoard.tsx`
@@ -238,7 +235,6 @@
 - `src/components/Openings/WalkthroughIntegration.test.tsx`
 - `src/components/Openings/WalkthroughMode.test.tsx`
 - `src/components/Openings/WalkthroughMode.tsx`
-- `src/components/Play/OpeningChallenge.tsx`
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx`
 - `src/components/Puzzles/DeepRunPage.rating.test.tsx`
 - `src/components/Puzzles/DeepRunPage.tsx`
@@ -755,7 +751,6 @@
 - `src/services/gamePhaseService.ts`
 - `src/services/gameReviewService.test.ts`
 - `src/services/gameStyleClassifier.ts`
-- `src/services/gamesService.ts`
 - `src/services/gemCrushLines.ts`
 - `src/services/groundedAnswer.engineReasoning.test.ts`
 - `src/services/groundedAnswer.teaching.test.ts`
@@ -970,7 +965,6 @@
 - `src/services/walkthroughAdapter.ts`
 - `src/services/walkthroughNarration.test.ts`
 - `src/services/walkthroughNarration.ts`
-- `src/services/walkthroughResolver.ts`
 - `src/services/weakSpotService.ts`
 - `src/services/weaknessAnalyzer.test.ts`
 - `src/services/weaknessAnalyzer.ts`
@@ -1110,6 +1104,7 @@
 - `src/coach/providers/deepseek.test.ts`
 - `src/coach/sources/personalities.test.ts`
 - `src/coach/sources/playerGames.test.ts`
+- `src/coach/surfaceContract.scan.test.ts`
 - `src/coach/tools/cerebellum/lookupPlayerGames.test.ts`
 - `src/coach/tools/cerebrum/setBoardPosition.provenance.test.ts`
 - `src/components/Board/GhostPieceOverlay.test.tsx`

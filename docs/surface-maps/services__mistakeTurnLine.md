@@ -31,7 +31,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/replayFence.najdorf1500.test.ts:79`
 
 ### `mistakeTurnLine` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11813`
+- `src/components/Coach/CoachTeachPage.tsx:11831`
 - `src/services/mistakeTurnLine.test.ts:18`
 - `src/services/mistakeTurnLine.test.ts:29`
 - `src/services/mistakeTurnLine.test.ts:37`

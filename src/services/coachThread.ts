@@ -80,11 +80,6 @@ export function resetThreadCallbacks(): void {
   spokenThreads.clear();
 }
 
-/** Test/observability hook — has this thread's callback already fired this session. */
-export function threadCallbackAlreadySpoken(tag: string): boolean {
-  return spokenThreads.has(tag);
-}
-
 /** Does the current position TOUCH the active thread — its detected pattern tags
  *  overlap the thread's pattern (or name its tag)? Pure, no side effects. */
 export function positionTouchesThread(thread: CoachingThread | null, detectedTags: readonly string[]): boolean {

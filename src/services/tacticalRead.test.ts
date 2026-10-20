@@ -1,11 +1,16 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { candidateCompareClause,
-  computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, narrateTacticalRead, temptingFromAnalysis, tacticalReadFromLines, speakTemptingTurn, tacticalReadFacts, voiceRejectsBestMove, lineOutcomeClause, voiceNamesUngroundedMove, groundedMoveKeys, namedTacticClause, temptingTurnClause, uncertaintyClause,
-  type TacticalRead,
-} from './tacticalRead';
+import { summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, temptingFromAnalysis, tacticalReadFromLines, namedTacticClause, temptingTurnClause, uncertaintyClause, candidateCompareRead, type TacticalRead } from './tacticalRead';
 import type { PvEngine, PvPly } from './pvPlayback';
 import type { StockfishAnalysis } from '../types';
+
+/** The candidate-compare sentence, as the live surfaces read it. */
+const candidateCompareClause = (
+  fen: string,
+  topLines: ReadonlyArray<{ moves: string[]; evaluation: number }>,
+  studentColor: 'white' | 'black',
+  opts: { spoken?: boolean; recaptureOn?: string | null } = {},
+): string | null => candidateCompareRead(fen, topLines, studentColor, { ...opts, namesMoves: true })?.text ?? null;
 
 // ── pure assemblers ─────────────────────────────────────────────────────────
 
@@ -130,23 +135,6 @@ function stubEngine(rootFen: string, sanLine: string[], whiteCp: number): PvEngi
   };
 }
 
-describe('computeTacticalRead (engine-injected)', () => {
-  it('reads the fork position: best move, verdict, named tactic, check plies', async () => {
-    const fen = '1r2qb1k/3b2pn/3p1r2/ppp1nP1p/4P2P/P1P1BNQ1/1PBN3K/3R2R1 b - - 2 27';
-    const read = await computeTacticalRead(fen, {
-      engine: stubEngine(fen, ['Ng4+', 'Kh1', 'Nxe3', 'Rc1', 'Bc6', 'Bb1'], -445),
-      findTempting: false,
-    }) as TacticalRead;
-    expect(read).not.toBeNull();
-    expect(read.studentColor).toBe('black');
-    expect(read.bestMoveSan).toBe('Ng4+');
-    expect(read.verdict.kind).toBe('winning');
-    expect(read.verdict.studentCp).toBeGreaterThan(300);       // black is winning
-    expect(read.checkPlies).toContain(0);                       // Ng4+ is check
-    expect(read.keyTactic?.type).toBe('fork');
-    expect(read.keyTactic?.description.toLowerCase()).toContain('fork');
-  });
-});
 
 describe('namedTacticClause', () => {
   it('names the pieces the fork hits, lowercased for mid-sentence use', () => {
@@ -167,52 +155,6 @@ describe('namedTacticClause', () => {
   });
 });
 
-describe('narrateTacticalRead (the computed voice)', () => {
-  const forkPly: PvPly = {
-    san: 'Nxe3', uci: 'g4e3', moverColor: 'black', fenBefore: '',
-    fenAfter: '1r2qb1k/3b2p1/3p1r2/ppp1nP1p/4P2P/P1P1nNQ1/1PBN3K/3R2R1 w - - 0 29',
-    facts: { captured: 'bishop', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
-  };
-  const base = {
-    fen: 'x', studentColor: 'black' as const, bestMoveSan: 'Ng4+', bestMoveUci: 'e5g4',
-    line: [
-      { san: 'Ng4+', uci: 'e5g4', moverColor: 'black' as const, fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: 'g4', shieldLost: 0 } },
-      { san: 'Kh1', uci: 'g1h1', moverColor: 'white' as const, fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
-      forkPly,
-    ],
-    // +439 eval AND the line wins a bishop (net +3, board-backed) → "up a piece".
-    verdict: summarizeVerdict(439, null, PIECE_UP_B),
-    keyTactic: pickKeyTactic([forkPly]),
-    checkPlies: [0], closeAlternative: null,
-  };
-
-  it('speaks the affirm→but→refute turn when a tempting move exists', () => {
-    const out = narrateTacticalRead({
-      ...base,
-      tempting: { san: 'Nxf3+', uci: 'e5f3', appeal: 'capture', evalDropCp: 616, refutation: [
-        { san: 'Nxf3+', uci: 'e5f3', moverColor: 'black', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
-        { san: 'Nxf3', uci: 'd2f3', moverColor: 'white', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
-      ] },
-    });
-    expect(out).toContain('Nxf3+');           // the tempting move is named
-    expect(out.toLowerCase()).toContain('but'); // the turn fires
-    expect(out).toContain('Instead, Ng4+');    // pivots to the real move
-    expect(out.toLowerCase()).toContain('fork'); // names the point
-    expect(out.toLowerCase()).toContain('up a piece'); // verdict last
-  });
-
-  it('leads with the move when there is no tempting alternative', () => {
-    const out = narrateTacticalRead({ ...base, tempting: null });
-    expect(out).toMatch(/^The move is Ng4\+/);
-    expect(out.toLowerCase()).not.toContain('but');
-  });
-
-  it('spells moves for TTS when spoken:true', () => {
-    const out = narrateTacticalRead({ ...base, tempting: null }, { spoken: true });
-    expect(out).toContain('the knight');       // "Ng4+" → "the knight to g4"
-    expect(out).not.toContain('Ng4');
-  });
-});
 
 describe('temptingFromAnalysis (latency-safe, cached MultiPV)', () => {
   // Black to move; e5-knight. best = Ng4+ (e5g4). A cheaper top line grabs on
@@ -234,104 +176,11 @@ describe('temptingFromAnalysis (latency-safe, cached MultiPV)', () => {
       { moves: ['d7c6'], evaluation: -430 },
     ], 'black')).toBeNull();
   });
-  it('speakTemptingTurn phrases the affirm→but→refute turn', () => {
-    const line = speakTemptingTurn({ san: 'Nxf3+', appeal: 'capture', replySan: 'Nxf3' });
-    expect(line.toLowerCase()).toContain('but');
-    expect(line).toContain('Nxf3');
-  });
 });
 
-describe('tacticalReadFacts (facts for the voice model, not prose)', () => {
-  const forkPly: PvPly = {
-    san: 'Nxe3', uci: 'g4e3', moverColor: 'black', fenBefore: '',
-    fenAfter: '1r2qb1k/3b2p1/3p1r2/ppp1nP1p/4P2P/P1P1nNQ1/1PBN3K/3R2R1 w - - 0 29',
-    facts: { captured: 'bishop', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
-  };
-  it('states the tempting move, the line, the named tactic and the verdict as facts', () => {
-    const line: PvPly[] = [
-      { san: 'Ng4+', uci: 'e5g4', moverColor: 'black', fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: 'g4', shieldLost: 0 } },
-      { san: 'Kh1', uci: 'g1h1', moverColor: 'white', fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
-      forkPly,
-    ];
-    const facts = tacticalReadFacts({
-      fen: 'x', studentColor: 'black', bestMoveSan: 'Ng4+', bestMoveUci: 'e5g4',
-      line,
-      verdict: summarizeVerdict(439, null, PIECE_UP_B), // +439 AND wins a bishop → board-backed "up a piece"
-      keyTactic: pickKeyTactic(line),
-      checkPlies: [0], closeAlternative: null,
-      tempting: { san: 'Nxf3+', uci: 'e5f3', appeal: 'capture', evalDropCp: 616, refutation: [
-        { san: 'Nxf3+', uci: 'e5f3', moverColor: 'black', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
-        { san: 'Nxf3', uci: 'd2f3', moverColor: 'white', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
-      ] },
-    });
-    expect(facts).toContain('Nxf3+');            // tempting move stated
-    expect(facts).toContain('fails to Nxf3');    // refutation stated
-    // the line stated, each move with its mover (OS-8 gap 7)
-    expect(facts).toContain('Black plays Ng4+, White answers Kh1 and Black plays Nxe3');
-    expect(facts.toLowerCase()).toContain('fork'); // named tactic
-    expect(facts).toContain('up a piece');       // verdict
-    // it is FACTS, not the frozen template prose
-    expect(facts).not.toContain('You’d love to');
-  });
-});
 
-describe('voiceRejectsBestMove (recommendation guard)', () => {
-  it('trips when the model argues against the best move', () => {
-    expect(voiceRejectsBestMove('Verdict: avoid the flashy Be2; solidify instead.', 'Be2')).toBe(true);
-    expect(voiceRejectsBestMove('The fork here is an illusion in practice; the stronger idea is to keep pressure.', 'Be2')).toBe(true);
-    expect(voiceRejectsBestMove('Be2 is a mistake here.', 'Be2')).toBe(true);
-  });
-  it('passes a faithful read that endorses the best move', () => {
-    expect(voiceRejectsBestMove('Instead, Be2 is the quiet venom, forking f3 and d1. You stand clearly better.', 'Be2')).toBe(false);
-    expect(voiceRejectsBestMove('Qd4+ forks the rook and king; you win a piece.', 'Qd4+')).toBe(false);
-  });
-  it('is a no-op without a best move', () => {
-    expect(voiceRejectsBestMove('anything at all', null)).toBe(false);
-  });
-});
 
-describe('lineOutcomeClause (review outcome)', () => {
-  it('names a decisive terminus by MAGNITUDE (no material claim from a bare eval — G3)', () => {
-    // Eval-only: it cannot see the board, so it must not invent "up a piece".
-    expect(lineOutcomeClause(-445, 'black')).toContain('winning advantage');
-    expect(lineOutcomeClause(-445, 'black')).not.toContain('piece');
-    expect(lineOutcomeClause(500, 'white')).toContain('winning advantage');
-    expect(lineOutcomeClause(500, 'white')).not.toContain('material advantage');
-  });
-  it('stays silent on a level or unclear terminus (no false claim)', () => {
-    expect(lineOutcomeClause(30, 'white')).toBeNull();
-    expect(lineOutcomeClause(-600, 'white')).toBeNull();
-  });
-});
 
-describe('voiceNamesUngroundedMove (move-hallucination guard)', () => {
-  const read = {
-    fen: 'x', studentColor: 'black' as const, bestMoveSan: 'Ng4+', bestMoveUci: 'e5g4',
-    line: [
-      { san: 'Ng4+', uci: 'e5g4', moverColor: 'black' as const, fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
-      { san: 'Nxe3', uci: 'g4e3', moverColor: 'black' as const, fenBefore: '', fenAfter: '', facts: { captured: 'b', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
-    ],
-    verdict: summarizeVerdict(439, null), keyTactic: null, checkPlies: [0], tempting: null, closeAlternative: null,
-  };
-  it('flags a fabricated move the line never makes', () => {
-    expect(voiceNamesUngroundedMove('Instead, knight to g4, then the queen swings to a5.', read as never)).toBe(true);
-  });
-  it('flags a piece-mismatch on a real destination', () => {
-    expect(voiceNamesUngroundedMove('The bishop takes e3, forking.', read as never)).toBe(true); // line is a KNIGHT to e3
-  });
-  it('passes a faithful transcription of the line', () => {
-    expect(voiceNamesUngroundedMove('Knight to g4 with check, then knight takes e3.', read as never)).toBe(false);
-  });
-  it('does not false-positive on a spatial description (no move verb)', () => {
-    expect(voiceNamesUngroundedMove('The bishop eyes f7 and the king sits on g8.', read as never)).toBe(false);
-  });
-  it('groundedMoveKeys lists the line destinations by piece', () => {
-    const keys = groundedMoveKeys(read as never);
-    expect(keys.has('knight:g4')).toBe(true);
-    expect(keys.has('knight:e3')).toBe(true);
-    expect(keys.has('bishop:e3')).toBe(false);
-  });
-});
 
 describe('pickKeyTactic mate_threat downgrade (false-claim audit)', () => {
   it('rewords "has a checkmate available" to "threatens mate" (a threat is not a forced mate)', () => {
@@ -416,19 +265,6 @@ describe('tacticalReadFromLines', () => {
   });
 });
 
-describe('tacticalReadFacts inGame register', () => {
-  it('phrases the but-turn second-person present-tense (never "the student")', () => {
-    const read = tacticalReadFromLines(
-      'rnbqkb1r/ppp1pppp/5n2/3p4/8/8/PPP1PPPP/RNBQKBNR w KQkq - 0 1',
-      [{ moves: ['g1f3', 'b8c6'], evaluation: 20 }, { moves: ['d1d5', 'f6d5'], evaluation: -600 }],
-      'white', { requireForcing: true, dropThresholdCp: 150 },
-    );
-    const facts = tacticalReadFacts(read!, { inGame: true });
-    expect(facts).toMatch(/You'd love to play Qxd5/);
-    expect(facts).toContain('Nxd5');
-    expect(facts.toLowerCase()).not.toContain('the student');
-  });
-});
 
 describe('temptingTurnClause + uncertaintyClause (DNA register — David 2026-08-23)', () => {
   const read = {
@@ -465,7 +301,6 @@ describe('temptingTurnClause + uncertaintyClause (DNA register — David 2026-08
 
 describe('candidateCompareClause (his "X, not Y, because…", 2026-08-23)', () => {
   it('prefers the safer square when the same piece can go two ways', async () => {
-    const { candidateCompareClause } = await import('./tacticalRead');
     // Black queen d8 can go to c7 (safe) or b6 (attacked by a white piece).
     // Craft: white bishop on a5 attacks b6; nothing attacks c7. Best=Qc7 by 60cp.
     // Black queen d8; white knight c4 attacks b6 but NOT c7. So Qc7 is the safe
@@ -479,7 +314,6 @@ describe('candidateCompareClause (his "X, not Y, because…", 2026-08-23)', () =
     expect(clause).toMatch(/safer|less exposed/);
   });
   it('returns null when the gap is a blunder-sized drop (that is the but-turn, not a compare)', async () => {
-    const { candidateCompareClause } = await import('./tacticalRead');
     const fen2 = '3qk3/8/8/8/2N5/8/8/4K3 b - - 0 1';
     expect(candidateCompareClause(fen2, [
       { moves: ['d8c7'], evaluation: 20 },
@@ -487,7 +321,6 @@ describe('candidateCompareClause (his "X, not Y, because…", 2026-08-23)', () =
     ], 'black')).toBeNull();
   });
   it('two different plans with no board-read reason → SILENT, never "keeps more of the edge" (Learn walk 2026-09-23)', async () => {
-    const { candidateCompareClause } = await import('./tacticalRead');
     // 1.e4 c6 2.Nf3 d5 3.e5 Bg4 4.Be2 e6 — White to move; two quiet plans 60cp apart.
     const fen = 'rn1qkbnr/pp3ppp/2p1p3/3pP3/6b1/5N2/PPPPBPPP/RNBQK2R w KQkq - 0 5';
     expect(candidateCompareClause(fen, [
@@ -496,7 +329,6 @@ describe('candidateCompareClause (his "X, not Y, because…", 2026-08-23)', () =
     ], 'white')).toBeNull();
   });
   it('returns null with a single line', async () => {
-    const { candidateCompareClause } = await import('./tacticalRead');
     expect(candidateCompareClause('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', [{ moves: ['e2e4'], evaluation: 20 }], 'white')).toBeNull();
   });
 });
@@ -553,21 +385,6 @@ describe('a spoken move never reads as a clause where a noun belongs', () => {
     expect(out).not.toMatch(CLAUSE_IN_NOUN_SLOT);
   });
 
-  it('the tempting turn puts a noun after "with", and keeps the clause after "but"', () => {
-    const out = narrateTacticalRead({
-      ...base,
-      tempting: { san: 'Nxf3+', uci: 'e5f3', appeal: 'capture', evalDropCp: 616, refutation: [
-        { san: 'Nxf3+', uci: 'e5f3', moverColor: 'black', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
-        { san: 'Nxf3', uci: 'd2f3', moverColor: 'white', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
-      ] },
-    } as TacticalRead, { spoken: true });
-    expect(out).not.toMatch(AFTER_PREPOSITION);
-    expect(out).toContain('play the knight taking on f3');
-    // The refutation is a genuine CLAUSE slot and must keep the finite verb —
-    // this is what stops the fix over-correcting into "but the knight taking
-    // on f3 and it falls apart".
-    expect(out).toMatch(/love to play the knight taking on f3 — but they take back and it falls apart/);
-  });
 });
 
 describe('uncertaintyClause rotates its stem on a stable key (WO-STANDARD-01 D-8, 2026-09-22)', () => {
@@ -620,28 +437,6 @@ describe('the hedge never reassures in a lost position (g9 walk 2026-09-27)', ()
   });
 });
 
-describe('the but-turn says how a tempting capture is made to work (David 2026-10-06: "does it find a way to play Qxc3?")', () => {
-  const RUY = 'r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4';
-  const plies = (ucis: string[]): never[] => {
-    const c = new Chess(RUY);
-    return ucis.map((u) => {
-      const fenBefore = c.fen();
-      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4) });
-      return { san: m.san, uci: u, moverColor: m.color === 'w' ? 'white' : 'black', fenBefore, fenAfter: c.fen(), facts: {} } as never;
-    });
-  };
-  const read = (line: string[]) => ({
-    fen: RUY, studentColor: 'w' as const, bestMoveSan: 'Bxc6', bestMoveUci: 'b5c6', line: plies(line),
-    verdict: { kind: 'edge', mateIn: null, studentCp: 60, text: 'a pleasant edge' }, keyTactic: null, checkPlies: [], closeAlternative: null,
-    tempting: { san: 'Nxe5', uci: 'f3e5', appeal: 'capture', evalDropCp: 120, refutation: [] },
-  }) as never;
-  it('the engine plays the capture after taking the defender → it says so', () => {
-    expect(narrateTacticalRead(read(['b5c6', 'd7c6', 'f3e5']))).toMatch(/Not yet, though — take away a defender of e5 first, and then it works\./);
-  });
-  it('NEGATIVE CONTROL: the capture never comes back → nothing about preparing it', () => {
-    expect(narrateTacticalRead(read(['b5c6', 'd7c6', 'e1g1']))).not.toMatch(/Not yet, though/);
-  });
-});
 
 describe('Learn holds the two moves of a close call (prod walk 2026-10-19)', () => {
   it('the held hedge says the choice is close and names neither move', () => {

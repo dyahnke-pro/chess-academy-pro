@@ -199,30 +199,6 @@ export async function updateDrillProgress(
   await db.openings.update(id, updates);
 }
 
-/**
- * Updates Woodpecker Method tracking fields after a full drill-through of the
- * main line.
- */
-export async function updateWoodpecker(
-  id: string,
-  timeSeconds: number,
-): Promise<void> {
-  const opening = await db.openings.get(id);
-  if (!opening) return;
-
-  const reps = opening.woodpeckerReps + 1;
-  const prevSpeed = opening.woodpeckerSpeed;
-  // Rolling average speed
-  const newSpeed =
-    prevSpeed === null ? timeSeconds : (prevSpeed * (reps - 1) + timeSeconds) / reps;
-
-  await db.openings.update(id, {
-    woodpeckerReps: reps,
-    woodpeckerSpeed: newSpeed,
-    woodpeckerLastDate: new Date().toISOString().split('T')[0],
-  });
-}
-
 // ─── Analytics ────────────────────────────────────────────────────────────────
 
 /**
@@ -330,25 +306,6 @@ export async function getMostPlayedOpenings(
     .sort((a, b) => b.drillAttempts - a.drillAttempts)
     .slice(0, limit)
     .map((opening) => ({ opening, games: 0 }));
-}
-
-/**
- * Returns openings due for Woodpecker review — those not drilled in the
- * last N days or never drilled.
- */
-export async function getWoodpeckerDue(
-  daysSince: number = 7,
-  color?: 'white' | 'black',
-): Promise<OpeningRecord[]> {
-  const repertoire = await getRepertoireOpenings(color);
-  const cutoff = new Date();
-  cutoff.setDate(cutoff.getDate() - daysSince);
-  const cutoffStr = cutoff.toISOString().split('T')[0];
-
-  return repertoire.filter(
-    (o) =>
-      o.woodpeckerLastDate === null || o.woodpeckerLastDate <= cutoffStr,
-  );
 }
 
 // ─── Mastery ─────────────────────────────────────────────────────────────────

@@ -216,16 +216,6 @@ export function describeExchange(ledger: ExchangeLedger | null): string | null {
     : `you come out behind on material, giving up ${theirs} for ${mine}`;
 }
 
-/** The ledger sentence for a projected line, or null. One call for every
- *  projection pass (punishment / better-line / threat) — invariant 1. */
-export function exchangeNetForLine(
-  fenBefore: string,
-  sans: readonly string[],
-  studentColorWB: 'w' | 'b',
-): string | null {
-  return describeExchange(computeExchangeLedger(fenBefore, sans, studentColorWB));
-}
-
 /** Whether the exchange in `sans` is FINISHED after its first `k` moves — the
  *  one rule for "where does a line's trade end". Inside the line the engine's
  *  choice decides: finished when the next move does not take back on the last

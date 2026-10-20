@@ -58,15 +58,6 @@ function bestSan(fen: string, uci: string | null): string | null {
   } catch { return null; }
 }
 
-/**
- * A board-true, spoken-ready answer to "why is the best move best, and why are
- * the alternatives worse?" — composed entirely from computed facts. Returns ''
- * when nothing concrete is computable (silence beats a generic guess).
- */
-export async function computeWhyBestMove(input: WhyBestMoveInput): Promise<string> {
-  return (await computeWhyBestMoveDetail(input)).text;
-}
-
 /** The same answer plus the line it speaks, so the surface can arrow every ply
  *  (David 2026-10-05: "When we speak lines we also draw arrows!"). */
 export async function computeWhyBestMoveDetail(input: WhyBestMoveInput): Promise<{ text: string; lines: WalkableLine[]; arrows: BoardArrow[] }> {

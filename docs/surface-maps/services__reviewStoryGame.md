@@ -20,7 +20,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isOpenableModelGame` (function) — 1 call site
-- `src/services/openingIdentity.ts:238`
+- `src/services/openingIdentity.ts:241`
 
 ### `StoryGame` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

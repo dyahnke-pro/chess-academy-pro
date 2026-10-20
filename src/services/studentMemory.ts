@@ -159,16 +159,6 @@ export async function recallData<K extends MemoryKind>(kind: K, key: string): Pr
   return (await recall(kind, key))?.data ?? null;
 }
 
-/** Every row of one kind, newest first. */
-export async function recallKind<K extends MemoryKind>(kind: K): Promise<Array<StudentMemoryRecord<K>>> {
-  try {
-    const rows = await db.studentMemory.where('kind').equals(kind).toArray();
-    return (rows as Array<StudentMemoryRecord<K>>).sort((a, b) => b.lastAt - a.lastAt);
-  } catch {
-    return [];
-  }
-}
-
 /** Forget one key, or every key of a kind when `key` is omitted. */
 export async function forget(kind: MemoryKind, key?: string): Promise<void> {
   try {

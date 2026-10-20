@@ -164,15 +164,6 @@ vi.mock('../Coach/GameChatPanel', () => ({
   GameChatPanel: vi.fn(() => <div data-testid="game-chat-panel">Chat</div>),
 }));
 
-vi.mock('../../hooks/useResizableDivider', () => ({
-  useResizableDivider: () => ({
-    chatPercent: 60,
-    rightColumnRef: { current: null },
-    dividerProps: {
-      onPointerDown: vi.fn(),
-    },
-  }),
-}));
 
 vi.mock('../../hooks/useIsMobile', () => ({
   useIsMobile: () => false,

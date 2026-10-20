@@ -182,14 +182,6 @@ export function getConcept(conceptId: string): ConceptEntry | null {
   return CONCEPT_BY_ID.get(conceptId) ?? null;
 }
 
-/** Best single passage for an opening (highest-quality, shortest
- *  source — already pre-ranked at build time). Returns null if no
- *  passage matched the opening during parsing. */
-export function getBestOpeningPassage(name: string): BookPassage | null {
-  const list = getOpeningPassages(name);
-  return list[0] ?? null;
-}
-
 // ── THEORY SEARCH (P-II.1, 2026-09-01) ──────────────────────────────────────
 //
 // A general STRATEGY / how-to ask ("how do I play against an isolated queen
@@ -323,52 +315,6 @@ function formatPassage(p: BookPassage, maxChars: number = 320): string {
   return `[${cite}] ${text}`;
 }
 
-/** Build a system-prompt block for opening narration. Caller injects
- *  this into the LLM's system prompt so per-move narration grounds in
- *  Capablanca / Lasker / Staunton prose rather than inventing.
- *
- *  Budget: at most 1 opening passage + 2 concept passages, capped to
- *  ~700 chars per passage — total injection ≤ ~2k chars (~500 tokens).
- *  Empty string if we have nothing to add (caller skips injection). */
-export function buildOpeningNarrationContext(
-  openingName: string,
-  conceptIds: string[] = [],
-): string {
-  const lines: string[] = [];
-  const seenPassages = new Set<string>();
-
-  const opPassage = getBestOpeningPassage(openingName);
-  if (opPassage) {
-    lines.push(formatPassage(opPassage, 600));
-    seenPassages.add(`${opPassage.bookSlug}::${opPassage.section ?? ''}`);
-  }
-
-  for (const cid of conceptIds.slice(0, 3)) {
-    const c = getConcept(cid);
-    if (!c) continue;
-    if (c.passages.length > 0) {
-      const p = c.passages[0];
-      const key = `${p.bookSlug}::${p.section ?? ''}`;
-      if (seenPassages.has(key)) continue;
-      lines.push(formatPassage(p, 500));
-      seenPassages.add(key);
-    } else if (c.fallbackDefinition) {
-      lines.push(`[${c.name} — modern definition] ${c.fallbackDefinition}`);
-    }
-    if (lines.length >= 4) break;
-  }
-
-  if (lines.length === 0) return '';
-  return [
-    '═══ REFERENCE PASSAGES FROM CHESS CLASSICS ═══',
-    'Draw on these to ground your narration in authentic chess ideas.',
-    'DO NOT quote verbatim. Use the IDEAS to shape your prose.',
-    '',
-    ...lines,
-    '═══════════════════════════════════════════════',
-  ].join('\n');
-}
-
 /** Build a system-prompt block for coach chat. Same idea as the
  *  narration version but the trigger is the latest USER MESSAGE —
  *  passages are pulled for any opening + concept named in what the
@@ -408,34 +354,6 @@ export function buildCoachChatContext(latestUserText: string): string {
     ...lines,
     '═════════════════════════════════════',
   ].join('\n');
-}
-
-/** Total sources count + provenance — used by UI cards on the
- *  opening detail page so users see attribution. */
-export function getSourceManifest(): { slug: string; title: string; author: string; gutenbergId: number }[] {
-  return DATA.sources;
-}
-
-/** Coverage summary — used in tests / debugging. */
-export function getCoverageSummary(): {
-  concepts: { total: number; bookBacked: number; fallbackBacked: number };
-  openings: { total: number; withPassages: number };
-  totalPassages: number;
-} {
-  const bookBacked = DATA.concepts.filter(c => c.passages.length > 0).length;
-  const fallbackBacked = DATA.concepts.filter(c => c.fallbackDefinition).length;
-  return {
-    concepts: {
-      total: DATA.concepts.length,
-      bookBacked,
-      fallbackBacked,
-    },
-    openings: {
-      total: Object.keys(DATA.openings).length,
-      withPassages: Object.values(DATA.openings).filter(p => p.length > 0).length,
-    },
-    totalPassages: DATA.totalTaggedPassages,
-  };
 }
 
 // ─── Middlegame & Endgame "From the Books" ──────────────────────────────────
