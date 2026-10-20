@@ -35,7 +35,7 @@ import type { TacticPatternType } from '../types/tacticTypes';
 import { turningPointCandidates, moveLabel, spokenMoveLabel, type TurningPointSegmentLike } from './reviewTurningPoint';
 import { landedTacticTeaching } from './dnaLineNarrator';
 import { buildCausalChain, type CausalChain } from './causalChain';
-import { structurePlan } from './boardPlan';
+import { structurePlan } from './nextPlans';
 import { foldPlans, type PlanPly } from './planMemory';
 import { tacticWord } from './pvPlayback';
 import { capabilitiesPosed, movePlayedCleanly } from './capabilityEvidence';

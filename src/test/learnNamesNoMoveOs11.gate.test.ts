@@ -115,9 +115,9 @@ describe('each producer, on the g3 board, names no move it declares it does not'
   });
 });
 
-/** The four OS-11 games as played (audit-reports/os11-games, from the auditor). */
+/** The four OS-11 games as played (src/test/__fixtures__/os11-games, from the auditor). */
 const GAMES = ['os11-g1-smith-morra', 'os11-g2-najdorf-english-attack', 'os11-g3-nimzo-larsen', 'os11-g4-ruy-lopez-qf6'].map((name) => {
-  const pgn = readFileSync(`audit-reports/os11-games/${name}.pgn`, 'utf8');
+  const pgn = readFileSync(`src/test/__fixtures__/os11-games/${name}.pgn`, 'utf8');
   const side = /\[StudentSide "(white|black)"\]/.exec(pgn)?.[1] === 'black' ? 'b' as const : 'w' as const;
   const c = new Chess();
   c.loadPgn(pgn);

@@ -3,7 +3,7 @@
 // 2026-09-27). The plan fact carries the positional read's key for the same
 // idea so the say-once memory treats them as one claim.
 import { describe, it, expect } from 'vitest';
-import { structurePlanFact } from './boardPlan';
+import { structurePlanFact } from './nextPlans';
 import { readPosition } from './positionalRead';
 
 describe('the structure plan and the positional read share one passer key', () => {

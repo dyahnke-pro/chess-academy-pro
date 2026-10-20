@@ -14,7 +14,7 @@ import { Chess } from 'chess.js';
 import { deriveNextPlanFacts, worstPieceNote } from './nextPlans';
 import { methodRead, methodPlanSentence, whyThisPlan } from './planChoice';
 import { stripThink } from '../utils/thinkPause';
-import { structurePlan } from './boardPlan';
+import { structurePlan } from './nextPlans';
 import { findPawnBreaks, findOpenFiles } from './positionReadingService';
 import { findWeakSquares } from './positionReadingService';
 import { isUndevelopedInOpening } from '../utils/undeveloped';

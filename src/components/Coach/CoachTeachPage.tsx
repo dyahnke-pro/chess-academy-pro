@@ -304,7 +304,8 @@ import { admitArrow, admitArrows, keptLineArrows, lineClaims, narrationArrowsThr
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidateCompareRead } from '../../services/tacticalRead';
-import { findHangingBySee, legalSeeGainFor, namedPawnStructure, structureTransfer, signedLegalSeeFor, signedCaptureRead, takingTheAttackerAnswers } from '../../services/positionReadingService';
+import { namedPawnStructure } from '../../services/nextPlans';
+import { findHangingBySee, legalSeeGainFor, structureTransfer, signedLegalSeeFor, signedCaptureRead, takingTheAttackerAnswers } from '../../services/positionReadingService';
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';

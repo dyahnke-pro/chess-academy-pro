@@ -9,7 +9,7 @@
 // (silent), or changed. G0: the plan text is `structurePlan`'s; this only
 // decides WHEN it is spoken again.
 import type { Color } from 'chess.js';
-import { structurePlanFact, type StructurePlanFact } from './boardPlan';
+import { structurePlanFact, type StructurePlanFact } from './nextPlans';
 import { continueSentence } from '../utils/openSentence';
 
 export type PlanEvent = 'announce' | 'carry' | 'changed' | 'none';

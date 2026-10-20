@@ -4,7 +4,7 @@ import {
   temptingTurnClause, uncertaintyClause, candidateCompareClause,
   namedTacticClause, tacticalReadFromLines,
 } from './tacticalRead';
-import { namedPawnStructure } from './positionReadingService';
+import { namedPawnStructure } from './nextPlans';
 
 /**
  * THE 100% DEVICE-COVERAGE GATE (David 2026-08-23, autonomy mode: "don't stop

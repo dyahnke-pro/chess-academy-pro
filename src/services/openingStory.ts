@@ -28,7 +28,7 @@ import type { MasterPlayResult } from './masterPlayTypes';
 import { holeAccess } from './moveInsight';
 import { roadReason } from './openingRoads';
 import { deriveNextPlanFacts } from './nextPlans';
-import { planAimKey } from './planThread';
+import { planAimKey } from './nextPlans';
 import { classifyPhase } from './gamePhaseService';
 import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
 import { NO_PROOF, squaresProof, type FactProof } from './proof';

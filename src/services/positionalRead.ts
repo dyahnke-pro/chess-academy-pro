@@ -29,6 +29,7 @@ import { sideToMoveAs } from './threatOut';
 import { openSentence } from '../utils/openSentence';
 import { describeStructure } from './boardStructure';
 import { homeMinorCount } from './development';
+import { isolaniStructure, passerTrumpSentence } from './nextPlans';
 import { Chess, type Color, type Square } from 'chess.js';
 import {
   kingSafetyRead,
@@ -42,7 +43,6 @@ import {
   findPassedPawns,
   findOpenFiles,
   bishopBlockingPawns,
-  namedPawnStructure,
   goodPieceIdeaKey,
 } from './positionReadingService';
 
@@ -307,7 +307,7 @@ function observationsFor(
   // An isolated d-pawn IS the isolani — the structure lane names it with its
   // plan ("you hold the isolated queen's pawn…"), so this read stays off it
   // (hand walk 2340: both said it on one move).
-  const isolani = /isolated queen/i.test(namedPawnStructure(fen, color)?.name ?? '');
+  const isolani = !!isolaniStructure(fen, color);
   if (isolani) weak.isolated = weak.isolated.filter((sq) => sq[0] !== 'd');
   // A passed pawn is a runner, not a long-term target — the passer read owns it.
   // (An ADVANCED one — four squares or fewer to queen; a passer still at home
@@ -374,12 +374,9 @@ function observationsFor(
     out.push({
       key: `${side}-passer-${passers[0][0]}`, side, kind: 'passer', rank: rank('passer'),
       squares: [passers[0]],
-      text: own
-        ? `Your passed pawn on ${passers[0]} is a long-term trump — every trade that clears its path makes it stronger.`
-        // WORD FOR WORD the structure plan's sentence (boardPlan), so the two
-        // lanes that both read this passer are one claim to the dedupe — they
-        // were heard back to back in two wordings (hand walk 1200).
-        : `Their passed pawn on ${passers[0]} is the danger — get a piece in front of it and blockade before it runs.`,
+      // The sentence is the structure plan's own (nextPlans), so the two lanes
+      // that read this passer say one claim in one wording (hand walk 1200).
+      text: passerTrumpSentence(passers[0], own),
     });
   }
 

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { detectPlanRace, planRaceClause, pushesToPromote } from './planRace';
-import { structurePlan } from './boardPlan';
+import { structurePlan } from './nextPlans';
 import { Chess } from 'chess.js';
 
 // Every FEN below was measured with a probe before being pinned here — this

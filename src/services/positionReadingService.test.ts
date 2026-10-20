@@ -1,3 +1,4 @@
+import { namedPawnStructure } from './nextPlans';
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { findMinorityAttack,
@@ -36,7 +37,6 @@ import { findMinorityAttack,
   findFianchetto,
   findRookLift,
   findBlockade,
-  namedPawnStructure,
 } from './positionReadingService';
 import type { WeaknessCategory } from '../types';
 import type { TacticsLiveContext } from '../coach/types';

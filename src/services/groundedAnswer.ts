@@ -27,7 +27,7 @@ import { settledLeadFor, type LastMove } from './material';
 import { countWords } from '../utils/countWords';
 import { isSacrifice } from './factStakes';
 import { seatPieceReferences } from '../utils/seatPieces';
-import { mobilityMap, worstPieceNote } from './nextPlans';
+import { mobilityMap, worstPieceNote, namedPawnStructure } from './nextPlans';
 import { theirWantedMoves, theirWantSentence } from './prophylaxis';
 import { Chess } from 'chess.js';
 import { moverLineProof } from './exchangeLedger';
@@ -38,7 +38,7 @@ import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
   legalSeeGain, legalSeeGainOn, movesThatKeep, landingIsSafe, capturesWinMaterial, legalSeeGainFor, takingTheAttackerAnswers, seeReadsStanding, captureRead, signedLegalSeeFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
   strongestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
-  namedPawnStructure, structureTransfer, findXrays, findKnightReroute, findRookLift, findFianchetto,
+  structureTransfer, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
   bishopPair, computeTerritory, ownsMoreSpace, findPassedPawns, findForcingCandidates, findHangingBySee, minorRouteToSquare,
 } from './positionReadingService';
@@ -46,7 +46,7 @@ import type { PressureCount } from './positionReadingService';
 import { gradeMove } from './accuracyService';
 import { readPosition } from './positionalRead';
 import { boardPlanFacts } from './boardPlanFacts';
-import { structurePlan } from './boardPlan';
+import { structurePlan } from './nextPlans';
 import { structureSignature } from './boardStructure';
 import { boardStructure } from './structureReads';
 import { materialEdgeWords } from './reviewPositionalAssessment';

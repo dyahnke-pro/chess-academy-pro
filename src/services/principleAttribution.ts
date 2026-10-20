@@ -33,7 +33,7 @@ import { signedLegalSeeFor, bishopHemmedByOwnPawns, signedCaptureRead } from './
 import { settledLeadFor } from './material';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { findContinuationsAtPly } from './openingDetectionService';
-import { deriveNextPlans } from './nextPlans';
+import { deriveNextPlanFacts, type PlanFact } from './nextPlans';
 import { winPercent, bandForWinPctLost } from './accuracyService';
 import { MAX_PV_DEPTH_PLIES } from './ratingBands';
 import { BLUNDER_CP } from './engineConstants';
@@ -1842,20 +1842,20 @@ const DETECTORS: Detector[] = [
     if (c.opening) return no(c, 'no-plan', `ply ${c.plyIndex} is still the opening — development owns it`);
     const { last, best, mover } = c;
     if (isForcing(last.san) || last.san.startsWith('O-O')) return no(c, 'no-plan', `${last.san} is forcing or castling, never planless`);
-    let plans: string[];
-    try { plans = deriveNextPlans(c.before.fen(), mover, { namesStudentMoves: true }); } catch { return no(c, 'no-plan', 'deriveNextPlans threw'); }
+    let plans: PlanFact[];
+    try { plans = deriveNextPlanFacts(c.before.fen(), mover, { namesStudentMoves: true }); } catch { return no(c, 'no-plan', 'deriveNextPlanFacts threw'); }
     if (plans.length === 0) return no(c, 'no-plan', 'the structure earns NO plan here — nothing to have ignored');
-    const targets = planTargets(plans);
+    const targets = planTargets(plans.map((p) => p.text));
     if (targets.squares.size === 0 && targets.files.size === 0) return no(c, 'no-plan', `${plans.length} plan(s) but none names a square or file to aim at`);
     const serves = (sq: string): boolean => targets.squares.has(sq) || targets.files.has(sq[0]);
-    if (serves(last.to) || serves(last.from)) return no(c, 'no-plan', `${last.san} DOES serve the plan (${planHeadline(plans[0])})`);
+    if (serves(last.to) || serves(last.from)) return no(c, 'no-plan', `${last.san} DOES serve the plan (${plans[0].goal})`);
     // The best move must SERVE the plan — the sentence says "${best} goes
     // there". A forcing best move that lands elsewhere means the position was
     // about the tactic, not the plan (re-walk 1380, 30.Qe2: "the target was to
     // get your passed pawn on e5 promoting; hxg6 goes there" — hxg6 is a
     // capture on the other wing).
     if (!serves(best.to)) return no(c, 'no-plan', `the best move ${best.san} does not serve the plan either — the plan is not what this position was about`);
-    const headline = planHeadline(plans[0]);
+    const headline = plans[0].goal;
     return att('no-plan', 1, { squares: [best.to], moves: [best.san], pvMoves: [] }, { played: last.san, better: best.san, plan: headline });
   },
 ];
@@ -1873,11 +1873,6 @@ export function planTargets(plans: readonly string[]): { squares: Set<string>; f
   return { squares, files };
 }
 
-/** "the plan from here is to seize the open c-file. Here's how: …" → "seize the open c-file". */
-export function planHeadline(plan: string): string {
-  const m = /the plan from here is to ([^.]+)\./.exec(plan);
-  return (m ? m[1] : plan.split('.')[0]).trim();
-}
 
 function isFlagged(classification: string | null): boolean {
   return classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder' || classification === 'miss';

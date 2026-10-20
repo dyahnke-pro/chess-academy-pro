@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { structurePlan } from './boardPlan';
+import { structurePlan } from './nextPlans';
 
 describe('structurePlan — structure→plan (conservative, board-true)', () => {
   it('names the push plan for the student’s own passed pawn', () => {

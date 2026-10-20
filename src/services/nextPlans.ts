@@ -16,6 +16,8 @@ import { isKnightOutpost, computePieceRoute, computeSliderRoute } from './forwar
 import { routeVia } from '../utils/routeWords';
 import { legalSeeGainFor } from './positionReadingService';
 import { enemyKingStuckInCenter } from './reviewSacrifice';
+import { openSentence } from '../utils/openSentence';
+import { detectPlanRace, planRaceClause, stepsToPromote } from './planRace';
 
 export const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -514,4 +516,266 @@ export function mobilityMap(chess: Chess, color: Color): Map<string, number> {
     }
   } catch { /* leave empty */ }
   return out;
+}
+
+/** The plan's goal in the plan arc's own id form (`aimsOf`): a passer and a
+ *  file by their file, an outpost by its square, the king attack as one. Null
+ *  for a plan the arc has no aim for. */
+export function planAimKey(kind: string, at: string | null): string | null {
+  if (kind === 'king-attack') return 'plan-aim:king-attack';
+  if (!at) return null;
+  if (kind === 'passer') return `plan-aim:passer:${at[0]}`;
+  if (kind === 'open-file') return `plan-aim:file:${at[0]}`;
+  if (kind === 'outpost') return `plan-aim:outpost:${at}`;
+  return null;
+}
+
+/** The trump clause itself, for a list of reasons ("Your passed pawn on d5 is a
+ *  long-term trump"); `owner` is the seated possessive. */
+export function passerTrumpClause(owner: string, square: string): string {
+  return `${owner} passed pawn on ${square} is a long-term trump`;
+}
+
+/** A passer as the structure's long-term fact: yours a trump, theirs the danger. */
+export function passerTrumpSentence(square: string, own: boolean): string {
+  return own
+    ? `${passerTrumpClause('Your', square)} — every trade that clears its path makes it stronger.`
+    : `Their passed pawn on ${square} is the danger — get a piece in front of it and blockade before it runs.`;
+}
+
+// ── THE STRUCTURE'S PLAN (census 9, 2026-10-20) ─────────────────────────────
+// One file owns every sentence that says what a pawn structure asks of you:
+// the trump (a passer, its blockade, the race), the isolani and the named
+// skeletons. They moved here from boardPlan.ts and positionReadingService.ts,
+// which each had their own copy of the isolani.
+
+
+const STRUCT_PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/** The square directly in front of a pawn (toward promotion), or null off-board. */
+function frontSquare(square: string, color: Color): string | null {
+  const file = square[0];
+  const rank = Number.parseInt(square[1] ?? '0', 10);
+  const nr = color === 'w' ? rank + 1 : rank - 1;
+  if (nr < 1 || nr > 8) return null;
+  return `${file}${nr}`;
+}
+
+/** What blocks a passer's advance: 'clear' (front empty, push it), 'enemy' (a
+ *  blockader sits in front — the push is stopped), or 'friendly' (self-blocked).
+ *  Board-true via chess.js so the plan never says "push it" on a pawn that can't
+ *  move (B#4). Returns the blocker's piece letter when occupied. */
+function passerBlock(fen: string, square: string, color: Color): { kind: 'clear' | 'enemy' | 'friendly'; piece?: string } {
+  const front = frontSquare(square, color);
+  if (!front) return { kind: 'clear' }; // already on the promotion rank — nothing ahead
+  try {
+    const occ = new Chess(fen).get(front as Square);
+    if (!occ) return { kind: 'clear' };
+    return { kind: occ.color === color ? 'friendly' : 'enemy', piece: occ.type };
+  } catch { return { kind: 'clear' }; }
+}
+
+/** The most advanced pawn square in a list, for the given colour. */
+function mostAdvanced(squares: string[], color: Color): string | null {
+  if (squares.length === 0) return null;
+  return [...squares].sort((a, b) => stepsToPromote(a, color) - stepsToPromote(b, color))[0];
+}
+
+
+/**
+ * The plan the structure dictates for the STUDENT, or null when the structure
+ * has no canonical single plan. Priority: a passed pawn (yours = push, theirs =
+ * blockade) outranks an isolani read, because a passer is the more forcing
+ * feature.
+ */
+/**
+ * A plan's TEXT and its stable IDENTITY.
+ *
+ * `planMemory.stepPlan` decided "has the plan changed?" by comparing the
+ * rendered SENTENCE, so every plan that names a square which MOVES re-announced
+ * itself on each push — "your passed pawn on b5" became "on b6" and read as a
+ * brand-new plan. Comparing rendered prose to establish identity is the same
+ * anti-pattern as scraping squares back out of a sentence. The `id` names the
+ * plan KIND (and the race VERDICT, because a flip genuinely is a new plan); it
+ * deliberately omits the square, so advancing the pawn you were told to advance
+ * is not a change of plan.
+ */
+export interface StructurePlanFact {
+  text: string;
+  id: string;
+  /** The plan arc's aim key for the same goal (`planAimKey`), so the structure
+   *  trump and the plan thread are one claim (census 9). */
+  aim?: string;
+  /** The positional read's key for the same idea (`positionalRead` passer
+   *  key), so the two lanes that both read one passer are one claim to the
+   *  say-once memory (fresh-game walk 2026-09-27: "their passed pawn on h2"
+   *  spoken at move 18 by one, at move 21 by the other). */
+  ideaKey?: string;
+  /** The squares the plan is about (the passer), coupled at emission so the
+   *  decider can see "push your d3 pawn" and "escort the d3 pawn" are one
+   *  claim (one thread per move, probe 2026-10-17). */
+  squares?: string[];
+}
+
+/** The text alone — the shape four existing callers want. */
+export function structurePlan(fen: string, studentColor: Color): string | null {
+  return structurePlanFact(fen, studentColor)?.text ?? null;
+}
+
+export function structurePlanFact(fen: string, studentColor: Color): StructurePlanFact | null {
+  const s = describeStructure(fen);
+  if (!s) return null;
+  const opp: Color = studentColor === 'w' ? 'b' : 'w';
+
+  // Passed pawns — the most forcing structural feature. But "push it" is only
+  // honest when the pawn can actually advance (B#4): a blockaded passer needs the
+  // blockader challenged first, and a self-blocked one needs its path cleared.
+  const mine = mostAdvanced(s.pawns.passedPawns[studentColor], studentColor);
+  if (mine) {
+    const block = passerBlock(fen, mine, studentColor);
+    if (block.kind === 'enemy') {
+      return { id: 'passer-blockaded-enemy', aim: `plan-aim:passer:${mine[0]}`, ideaKey: `student-passer-${mine[0]}`, squares: [mine], text: `Your passed pawn on ${mine} is a trump, but their ${STRUCT_PIECE_NOUN[block.piece ?? 'p']} blockades it — challenge or dislodge that blockader before it can run.` };
+    }
+    if (block.kind === 'friendly') {
+      return { id: 'passer-blockaded-friendly', aim: `plan-aim:passer:${mine[0]}`, ideaKey: `student-passer-${mine[0]}`, squares: [mine], text: `Your passed pawn on ${mine} is a trump, but your own ${STRUCT_PIECE_NOUN[block.piece ?? 'p']} sits in its path — clear the way before it can advance.` };
+    }
+    // 🚨 THE ELSE-CHAIN DEFECT (found reading the code, 2026-09-17). Everything
+    // below used to be unreachable whenever the student had a passer of their
+    // own, so with runners on BOTH wings the coach said "push it and make them
+    // deal with the promotion" and never once checked whether THEIRS queens
+    // first. That is the coach telling you to run a race it has not looked at.
+    // The race clause carries its own instruction (push, or stop theirs first),
+    // so it REPLACES the bare push rather than sitting beside it.
+    //
+    // The register is pinned to 'live' by THIS function's own prose — every
+    // sentence here is present tense ("is the trump here"), so the caller does
+    // not get to choose it. Review gets the retrospective wording through the
+    // `[plan-race]` facet instead.
+    // ONLY a PASSER race may stand in for the passer plan. Reading real games
+    // caught this: at Karpov–Kasparov move 14 White has a passed d-pawn, and an
+    // unfiltered race handed back the FILE-collision clause — so the student was
+    // told about the c-file and the passed pawn was never mentioned at all. A
+    // race replaces this plan only when it is about the very thing this plan is
+    // about; the file collision reaches review through its own `[plan-race]`
+    // facet, where it sits BESIDE the plan instead of deleting it.
+    const race = detectPlanRace(fen, studentColor);
+    const raceText = race?.kind === 'passer-race' ? planRaceClause(fen, studentColor, 'live') : null;
+    if (race?.kind === 'passer-race' && raceText) {
+      return {
+        id: `passer-race:${race.youQueenFirst ? 'you' : 'them'}`,
+        text: `${openSentence(raceText)}.`,
+      };
+    }
+    return { id: 'passer-mine', aim: `plan-aim:passer:${mine[0]}`, ideaKey: `student-passer-${mine[0]}`, squares: [mine], text: `Your passed pawn on ${mine} is the trump here — push it and make them deal with the promotion.` };
+  }
+  const theirs = mostAdvanced(s.pawns.passedPawns[opp], opp);
+  if (theirs) {
+    return { id: 'passer-theirs', ideaKey: `opponent-passer-${theirs[0]}`, squares: [theirs], text: passerTrumpSentence(theirs, false) };
+  }
+
+  // THE ISOLANI — one definition and one sentence, shared with the named
+  // structure (census 9: this branch had its own "central isolated pawn"
+  // reading, any rank, and its own plan text beside namedPawnStructure's).
+  const iso = isolaniStructure(fen, studentColor);
+  if (iso) return { id: iso.mine ? 'iqp-mine' : 'iqp-theirs', ideaKey: `structure:${iso.name}`, squares: [iso.square], text: `${openSentence(iso.name)} — ${iso.plan}.` };
+
+  return null;
+}
+
+/** A NAMED PAWN STRUCTURE + its standing plan — Naroditsky's closing lesson
+ *  ("catalogue the typical structures from your openings and their plans"). This
+ *  is the deterministic proxy for his "we've move-ordered into a French" teaching:
+ *  the pawn SKELETON, not the move order, names the family. Recognises the few
+ *  clearest, highest-frequency skeletons; returns null otherwise (empty > vague).
+ *  Pure pawn geometry (G3). */
+export function namedPawnStructure(
+  fen: string,
+  /** The student's seat — REQUIRED: "you hold the isolani" is seat-relative, and
+   *  it used to be hardcoded to White (a Black student was told they held
+   *  White's pawn). */
+  studentColor: Color,
+): { name: string; plan: string } | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const wp = new Set<string>(); const bp = new Set<string>();
+  for (const row of chess.board()) for (const cell of row) {
+    if (cell && cell.type === 'p') (cell.color === 'w' ? wp : bp).add(cell.square);
+  }
+  const w = (s: string): boolean => wp.has(s);
+  const b = (s: string): boolean => bp.has(s);
+  const fileCount = (set: Set<string>, file: string): number => [...set].filter((s) => s[0] === file).length;
+  // FRENCH / ADVANCE CHAIN — White d4+e5 vs Black d5+e6, the locked chain.
+  if (w('d4') && w('e5') && b('d5') && b('e6')) {
+    // SEATED (hand walk 1600, Caro-Kann as Black: "Black hits d4 with …c5").
+    return studentColor === 'w'
+      ? { name: 'French-type pawn chain', plan: 'the break comes at the base of the chain — they hit d4 with …c5 and …f6; you defend the head on e5 and play on the kingside' }
+      : { name: 'French-type pawn chain', plan: 'the break comes at the base of the chain — you hit d4 with …c5 and …f6; they defend the head on e5 and play on the kingside' };
+  }
+  // CLOSED CENTRE — White d5+e4 vs Black d6+e5. Named by the STRUCTURE, never
+  // by an opening: the same chain arises from the Damiano, the Philidor and the
+  // Old Indian, and "King's-Indian" in a Damiano (1000 walk 2026-09-27, 4.d5)
+  // named an opening the student was not playing. The plan is the chain's own.
+  if (w('d5') && w('e4') && b('d6') && b('e5')) {
+    // The queenside break is c5 only while c5 is free: with Black's own pawn
+    // already on c5 (the Benoni/Czech chain) White breaks with b4 (manual claim
+    // check 2026-09-30, item 160: "you break on the queenside with c5" there).
+    const qBreak = b('c5') ? 'b4' : 'c5';
+    return studentColor === 'w'
+      ? { name: 'Closed centre', plan: `the wings decide: they storm the kingside with …f5-f4 and a pawn avalanche; you break on the queenside with ${qBreak}` }
+      : { name: 'Closed centre', plan: `the wings decide: you storm the kingside with …f5-f4 and a pawn avalanche; they break on the queenside with ${qBreak}` };
+  }
+  const iso = isolaniStructure(fen, studentColor);
+  if (iso) return { name: iso.name, plan: iso.plan };
+  // HANGING PAWNS — c- and d-pawns abreast on the 4th/5th with no b/e neighbours.
+  if (w('c4') && w('d4') && fileCount(wp, 'b') === 0 && fileCount(wp, 'e') === 0) {
+    return studentColor === 'w'
+      ? { name: 'You have the hanging pawns', plan: 'they grip the centre and can lunge with d5 or c5 — but if they’re fixed and blockaded they turn into two weaknesses' }
+      : { name: 'They have the hanging pawns', plan: 'they grip the centre and threaten a d5 or c5 lunge — provoke and blockade them to make them targets' };
+  }
+  if (b('c5') && b('d5') && fileCount(bp, 'b') === 0 && fileCount(bp, 'e') === 0) {
+    return studentColor === 'w'
+      ? { name: 'They have the hanging pawns', plan: 'they grip the centre and threaten a …d4 or …c4 lunge — provoke and blockade them to make them targets' }
+      : { name: 'You have the hanging pawns', plan: 'they grip the centre and can lunge with …d4 or …c4 — but if they’re fixed and blockaded they turn into two weaknesses' };
+  }
+  return null;
+}
+
+/** THE ISOLATED QUEEN'S PAWN — the one definition (a lone d-pawn on d4/d5 with
+ *  no friendly c- or e-pawn and no enemy d-pawn), its seated name and plan. Read
+ *  by the named structure AND the structure trump, so both say one sentence. */
+export function isolaniStructure(fen: string, studentColor: Color): { name: string; plan: string; square: string; mine: boolean } | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const wp = new Set<string>(); const bp = new Set<string>();
+  for (const row of chess.board()) for (const cell of row) {
+    if (cell && cell.type === 'p') (cell.color === 'w' ? wp : bp).add(cell.square);
+  }
+  const fileCount = (set: Set<string>, file: string): number => [...set].filter((s) => s[0] === file).length;
+  // ISOLATED QUEEN’S PAWN — a d-pawn with no friendly c- or e-pawns.
+  const holder = (white: boolean): string => ((white ? 'w' : 'b') === studentColor ? 'You hold' : 'They hold');
+  for (const [set, white] of [[wp, true], [bp, false]] as const) {
+    // An isolani is a d4/d5 pawn — its whole plan is the d4/d5 outpost and the
+    // central files (Sicilian walk 2026-09-27: "the isolated queen's pawn … the
+    // d5/d4 outpost" about a pawn on d3 in a rook ending).
+    const dRank = [...set].find((s) => s === (white ? 'd4' : 'd5') || s === (white ? 'd5' : 'd4'));
+    // A true isolani: no friendly c/e-pawn, and no enemy d-pawn on the file.
+    const enemy = white ? bp : wp;
+    // …and exactly ONE d-pawn, standing in the centre (4th or 5th rank): doubled
+    // d-pawns on d6 and d4 are not the isolani this plan describes (hand walk
+    // 2026-09-30, Ruy 15…exd4), and a pawn still on d6 is not its outpost story.
+    const oneCentral = fileCount(set, 'd') === 1 && !!dRank && (dRank[1] === '4' || dRank[1] === '5');
+    if (dRank && oneCentral && fileCount(set, 'c') === 0 && fileCount(set, 'e') === 0 && fileCount(enemy, 'd') === 0) {
+      // SEATED, AND WHAT TO DO (walk 2026-09-30: "the owner attacks, the
+      // blockader trades down" never said which one the student is).
+      const front = `${dRank[0]}${Number(dRank[1]) + (white ? 1 : -1)}`;
+      const mine = (white ? 'w' : 'b') === studentColor;
+      return {
+        name: `${holder(white)} the isolated queen’s pawn`, square: dRank, mine,
+        plan: mine
+          ? `play actively while pieces are on — the isolani gives you open files and the outposts beside it, but every trade makes it weaker, so avoid simplifying`
+          : `blockade it on ${front}, ideally with a knight, and trade pieces — every trade makes the pawn weaker, and in the endgame it becomes a target`,
+      };
+    }
+  }
+  return null;
 }
