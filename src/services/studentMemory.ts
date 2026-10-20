@@ -26,6 +26,8 @@ export interface MemoryDataByKind {
   'watch-beat': { beatIndex: number; beatCount: number };
   /** Opening page: the variation tab they picked. key = opening id. */
   'variation-tab': { tabIndex: number };
+  /** Opening checkpoint quiz: the question reached, or done. key = opening id. */
+  'quiz-progress': { index: number; completed: boolean };
   /** Book reader: the chapter and page. key = book id. */
   'book-page': { activeIdx: number; page: number };
   /** A chat thread to show again on reopen. key = surface thread id. */
@@ -70,6 +72,7 @@ export const MEMORY_KINDS: Record<MemoryKind, { surface: MemorySurface }> = {
   'watch-beat': { surface: 'openings' },
   'variation-tab': { surface: 'openings' },
   'book-page': { surface: 'openings' },
+  'quiz-progress': { surface: 'openings' },
   'chat-thread': { surface: 'chat' },
   'kid-progress': { surface: 'kid' },
   'served-puzzles': { surface: 'tactics' },

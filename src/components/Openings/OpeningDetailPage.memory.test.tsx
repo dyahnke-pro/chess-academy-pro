@@ -124,6 +124,15 @@ function renderWithRoute(openingId: string = 'test-opening'): void {
   );
 }
 
+vi.mock('../../data/checkpoint-quizzes.json', () => ({
+  default: {
+    'test-opening': [
+      { fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', type: 'plan', question: 'Q1?', choices: ['a', 'b'], correctIndex: 0, hint: 'h', concept: 'c' },
+      { fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1', type: 'plan', question: 'Q2?', choices: ['a', 'b'], correctIndex: 1, hint: 'h', concept: 'c' },
+    ],
+  },
+}));
+
 // ─── Tests ───────────────────────────────────────────────────────────────────
 
 describe('OpeningDetailPage — the picked variation tab survives a close (persistent memory)', () => {
@@ -147,6 +156,22 @@ describe('OpeningDetailPage — the picked variation tab survives a close (persi
     await db.open();
     renderWithRoute();
     await waitFor(() => expect(screen.getByTestId('variation-tab-1')).toHaveAttribute('aria-selected', 'true'));
+  });
+
+  it('the checkpoint quiz picks up at the question the student reached', async () => {
+    const { remember } = await import('../../services/studentMemory');
+    await remember('quiz-progress', 'test-opening', { index: 1, completed: false });
+    renderWithRoute();
+    await waitFor(() => expect(screen.getByTestId('checkpoint-quiz').textContent).toContain('Q2?'));
+  });
+
+  it('a finished checkpoint quiz stays finished', async () => {
+    const { remember } = await import('../../services/studentMemory');
+    await remember('quiz-progress', 'test-opening', { index: 1, completed: true });
+    renderWithRoute();
+    await waitFor(() => expect(screen.getByTestId('variation-tabs')).toBeInTheDocument());
+    await new Promise((r) => setTimeout(r, 100));
+    expect(screen.queryByTestId('checkpoint-quiz')).toBeNull();
   });
 
   it('nothing remembered lands on the main line', async () => {

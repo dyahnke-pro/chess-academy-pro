@@ -338,6 +338,24 @@ export function OpeningDetailPage(): JSX.Element {
   const [selectedTabIndex, setSelectedTabIndex] = useState(-1);
   const [quizIndex, setQuizIndex] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(false);
+  // The checkpoint quiz picks up where the student left it, and stays done
+  // once finished (persistent memory, 2026-10-19).
+  const quizRestoredForRef = useRef<string | null>(null);
+  useEffect(() => {
+    const id = opening?.id;
+    if (!id || quizRestoredForRef.current === id) return;
+    void recallData('quiz-progress', id).then((m) => {
+      quizRestoredForRef.current = id;
+      if (!m) return;
+      setQuizIndex(m.index);
+      setQuizCompleted(m.completed);
+    });
+  }, [opening?.id]);
+  useEffect(() => {
+    const id = opening?.id;
+    if (!id || quizRestoredForRef.current !== id) return;
+    void remember('quiz-progress', id, { index: quizIndex, completed: quizCompleted });
+  }, [opening?.id, quizIndex, quizCompleted]);
   const [quizPlayFen, setQuizPlayFen] = useState<string | null>(null);
   const [srsEnrolled, setSrsEnrolled] = useState<boolean>(false);
   const [srsBusy, setSrsBusy] = useState<boolean>(false);
