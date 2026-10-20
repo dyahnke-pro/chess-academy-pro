@@ -8210,7 +8210,7 @@ export function CoachTeachPage(): JSX.Element {
   /** The student move's turn as its waves stand: the board they read, its
    *  cost, its trade and what they have said — read by the phase wave, which
    *  is one more wave of this turn, never a turn of its own. */
-  const liveTurnRef = useRef<{ fen: string; ply: number; midExchange: string | null; cost: () => number | null; settled: () => boolean; said: () => string } | null>(null);
+  const liveTurnRef = useRef<{ fen: string; ply: number; midExchange: string | null; cost: () => number | null; settled: () => boolean; gradeSpeaks: () => boolean; said: () => string } | null>(null);
   /** THE TURN'S HOLDS (`decideTurn`): one set per turn board, shared by the
    *  instant, late and phase waves; a new board starts a new turn and a fresh
    *  set, so a held claim is free again once the turn moves on. */
@@ -8244,7 +8244,7 @@ export function CoachTeachPage(): JSX.Element {
       // The turn the report was read on must still be the turn the student is
       // in: once they have moved, its board is gone and so is its wave.
       const live = t && samePosition(t.fen, liveFenRef.current ?? '')
-        ? { fen: t.fen, ply: t.ply, moveCostCp: t.cost(), priceSettled: t.settled(), midExchange: t.midExchange, said: t.said(), holds: turnHoldsFor(t.fen) }
+        ? { fen: t.fen, ply: t.ply, moveCostCp: t.cost(), priceSettled: t.settled(), gradeSpeaks: t.gradeSpeaks(), midExchange: t.midExchange, said: t.said(), holds: turnHoldsFor(t.fen) }
         : null;
       const d = decidePhaseWave(facts, fen, live, { priorKeys: learnMemRef.current.spokenKeys, priorLead: prior, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile) });
       if (!d) {
@@ -9493,7 +9493,7 @@ export function CoachTeachPage(): JSX.Element {
         return readBoard('lastTimeHere', { fenBefore: b.fen(), playedSan: h[h.length - 2], rows, currentGameId: learnMemRef.current.gameId });
       } catch { return null; }
     })();
-    const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, priceSettled: args.priceSettled, midExchange: midExchangeOn }, facts: [
+    const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, priceSettled: args.priceSettled, gradeSpeaks: true, midExchange: midExchangeOn }, facts: [
       ...(gemLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, namesStudentMove: tacticLines?.[0] ? studentMovesInLine(tacticLines[0].fen, tacticLines[0].sans, studentCC, args.fenAfterReply) : NAMES_NO_MOVE, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
       ...(threatLine ? [{ namesStudentMove: threatNames, lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
@@ -9825,6 +9825,10 @@ export function CoachTeachPage(): JSX.Element {
     // `grade` is block-scoped to the narration branch, and the capability guard
     // must NEVER read "ungraded" as "clean" — null stays null.
     let studentCpLoss: number | null = null;
+    // THE GRADE IS QUIET when the record silences this inaccuracy (`slipSpoken`,
+    // set where the verdict is judged). Every wave's cost hold reads it: a
+    // verdict nobody will hear holds nothing (V6, prod Learn 2026-10-20).
+    let gradeQuiet = false;
     // THE PRICE IS SETTLED (#10.Bf4): false while the one price is still
     // deepening a read near a band edge — the door holds every affirm until
     // it is (an affirm can wait; the verdict speaks on the settled number).
@@ -10092,8 +10096,12 @@ export function CoachTeachPage(): JSX.Element {
         // before the post-reply warm, so the verdict is built as soon as it can be.
         // THE ONE PRICE (#2 root cause 4): memoized per (fen, move), so the
         // record (`evaluatePlayerMove`) reads this same search, not its own.
+        // The reply's reads go first on the one engine: an unsettled price
+        // deepens once the reply is on the board (or after 6 s at most).
+        let releaseDeepen: () => void = () => undefined;
+        const replyCommitted = new Promise<void>((r) => { releaseDeepen = r; setTimeout(r, 6000); });
         const priceRead: Promise<MovePrice | null> = preStudentRead && !preStudentRead.isMate
-          ? liveMovePrice(fenBefore, `${move.from}${move.to}${move.promotion ?? ''}`, preStudentRead, COACH_TURN_DEPTH)
+          ? liveMovePrice(fenBefore, `${move.from}${move.to}${move.promotion ?? ''}`, preStudentRead, COACH_TURN_DEPTH, { deepenAfter: replyCommitted })
           : Promise.resolve(null);
         const verdictUrgent = !!preStudentRead && !studentMoveInBook && (studentCpLoss === null || studentCpLoss >= VERDICT_TURN_CP);
         const midTurnReadEarly = verdictUrgent ? stockfishEngine.analyzeWithBudget(move.fen, COACH_TURN_DEPTH, 1500).catch(() => null) : null;
@@ -10963,6 +10971,7 @@ export function CoachTeachPage(): JSX.Element {
           // above have been computing underneath it the whole time.
           await padDone;
           const played = handlePlayMove(reply);
+          releaseDeepen();
           // THE TURN'S QUESTION is asked AFTER the turn's instant decision
           // (below), so it can see what this turn already TOLD them: a danger
           // lead's squares on this very board. A question asking for exactly
@@ -11021,7 +11030,7 @@ export function CoachTeachPage(): JSX.Element {
             // This turn, for the phase wave (`liveTurnRef`).
             liveTurnRef.current = {
               fen: fenAfterReply, ply: move.history.length, midExchange: pendingRecapture([...move.history, reply]),
-              cost: () => studentCpLoss, settled: () => studentPriceSettled, said: () => instantSpokenText,
+              cost: () => studentCpLoss, settled: () => studentPriceSettled, gradeSpeaks: () => !gradeQuiet, said: () => instantSpokenText,
             };
             /** The claims of what this turn SPOKE — the book chip reads them. */
             const spokenClaims: string[] = [];
@@ -11349,7 +11358,7 @@ export function CoachTeachPage(): JSX.Element {
                   // the per-game novelty set, not by a number.
                   const lateDecision = coachTurn({
                     posture: 'learn',
-                    turn: { kind: 'late', ply: move.history.length, moveCostCp: studentCpLoss, priceSettled: studentPriceSettled, midExchange: pendingRecapture([...move.history, reply]) },
+                    turn: { kind: 'late', ply: move.history.length, moveCostCp: studentCpLoss, priceSettled: studentPriceSettled, gradeSpeaks: !gradeQuiet, midExchange: pendingRecapture([...move.history, reply]) },
                     facts: lines
                       // A threat alert already said a tactic is on the board;
                       // "it has turned sharp — there is a tactic" beside it is
@@ -11664,6 +11673,7 @@ export function CoachTeachPage(): JSX.Element {
                       ...mateContext(preStudentRead, mid, playerColor),
                       fenBefore, playedSan: move.san, bestSan: studentBestSan ?? null, historySans: move.history,
                     });
+                    gradeQuiet = quietSlip;
                     const look = quietSlip ? null : backwardLook({
                       fenBefore,
                       fenAfter: move.fen,

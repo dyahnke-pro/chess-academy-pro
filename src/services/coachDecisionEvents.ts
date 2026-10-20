@@ -226,6 +226,12 @@ export type LearnTurnTag = {
    *  deepening. An affirm never speaks on an unsettled price (10.Bf4: the
    *  depth-14 59cp was praised; deeper it is a mistake). */
   priceSettled: boolean;
+  /** REQUIRED: the move's grade is SPOKEN this turn (`slipSpoken` — a mistake
+   *  or a blunder always; an inaccuracy only where the record earns it). A
+   *  costly move holds the turn for its verdict only when there is one to hear
+   *  (V6, prod Learn 2026-10-20: 107cp on a quiet record held every lane, the
+   *  grade never spoke, and the move got nothing). Unjudged yet → true. */
+  gradeSpeaks: boolean;
   /** REQUIRED: the square of a trade still in progress — the opponent just
    *  captured and the student can take back there (`pendingRecapture`, the
    *  one in-flux definition) — or null. Plans and ideas wait until it is done. */

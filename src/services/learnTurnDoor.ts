@@ -664,7 +664,7 @@ export function decideTurn(
     DANGER_LANES.has(x.lane) && stakeOf(x.lane, x.fact.text) > 0;
   /** A move that cost a point or more makes this whole turn a verdict turn. */
   const moveCost = turn ? turn.moveCostCp : null;
-  const costTurnValue = moveCost !== null && moveCost >= VERDICT_TURN_CP ? stakeValue(costStakes(moveCost)) ?? null : null;
+  const costTurnValue = moveCost !== null && moveCost >= VERDICT_TURN_CP && !!turn?.gradeSpeaks ? stakeValue(costStakes(moveCost)) ?? null : null;
   // THE TURN'S HOLDS DECIDE BEFORE ITS LEAD (Learn audit 2026-10-14, LD2: a
   // lead was picked, then held by the mate rule, and the row named a lead that
   // never spoke). One predicate, read by the lead pick and the speak loop.
@@ -922,6 +922,8 @@ export interface LiveTurn {
   moveCostCp: number | null;
   /** The move's price is settled (`MovePrice.settled`). */
   priceSettled: boolean;
+  /** The move's grade is spoken (`LearnTurnTag.gradeSpeaks`). */
+  gradeSpeaks: boolean;
   midExchange: string | null;
   /** Everything the turn's earlier waves said out loud. */
   said: string;
@@ -953,7 +955,7 @@ export function decidePhaseWave(
       ...(f.factKind ? { factKind: f.factKind } : {}), ...(f.skill ? { skill: f.skill } : {}),
     })),
     live.said, ctx.priorKeys, ctx.priorLead ?? null, ctx.green ?? null, ctx.beginner,
-    { kind: 'phase', ply: live.ply, moveCostCp: live.moveCostCp, priceSettled: live.priceSettled, midExchange: live.midExchange },
+    { kind: 'phase', ply: live.ply, moveCostCp: live.moveCostCp, priceSettled: live.priceSettled, gradeSpeaks: live.gradeSpeaks, midExchange: live.midExchange },
     live.holds,
   );
 }

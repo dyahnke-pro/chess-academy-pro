@@ -71,11 +71,25 @@ describe('an affirm never speaks on an unsettled price', () => {
     const fact = (t: string): LaneFact => ({ lane: affirm.lane, text: t, fen: BF4_AFTER, squares: ['f4'], role: 'teach', proof: NO_PROOF.stated, ownMoveReason: true, namesStudentMove: NAMES_NO_MOVE });
     const rows: LearnTurnRow[] = [];
     const off = onLearnTurn((r) => rows.push(r));
-    const held = decideTurn([fact(affirm.text)], '', undefined, null, null, false, { kind: 'instant', ply: 19, moveCostCp: null, priceSettled: false, midExchange: null });
+    const held = decideTurn([fact(affirm.text)], '', undefined, null, null, false, { kind: 'instant', ply: 19, moveCostCp: null, priceSettled: false, gradeSpeaks: true, midExchange: null });
     off();
     expect(held.spoke).not.toContain(affirm.lane);
     expect(rows[0]?.heldWhy?.[affirm.lane]).toBe('price-unsettled');
-    const spoke = decideTurn([fact(affirm.text)], '', undefined, null, null, false, { kind: 'instant', ply: 19, moveCostCp: 0, priceSettled: true, midExchange: null });
+    const spoke = decideTurn([fact(affirm.text)], '', undefined, null, null, false, { kind: 'instant', ply: 19, moveCostCp: 0, priceSettled: true, gradeSpeaks: true, midExchange: null });
     expect(spoke.spoke).toContain(affirm.lane);
+  });
+});
+
+describe('the deeper search waits for the reply (hand walk 2026-10-20: 10.Bf4 reply 3.5 s → 8.2 s)', () => {
+  it('no deeper search runs until the gate opens; then the price settles as before', async () => {
+    let open: () => void = () => undefined;
+    const gate = new Promise<void>((r) => { open = r; });
+    const pending = liveMovePrice(BF4, 'c1f4', FAN_D14, COACH_TURN_DEPTH, { deepenAfter: gate });
+    await new Promise((r) => setTimeout(r, 20));
+    expect(scoreMoves).not.toHaveBeenCalled();
+    open();
+    const p = await pending;
+    expect(scoreMoves).toHaveBeenCalled();
+    expect(p?.costCp).toBe(149);
   });
 });

@@ -210,7 +210,15 @@ export function clearMovePriceMemo(): void { PRICE_MEMO.clear(); }
 /** THE PRICE OF THE PLAYED MOVE, FROM ONE SEARCH — memoized per (fen, move).
  *  Null when it cannot be priced (no fan, the scorer failed, a mate either
  *  way): unpriced is never "free". */
-export function liveMovePrice(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number): Promise<MovePrice | null> {
+export interface LivePriceOptions {
+  /** The deeper search an unsettled price needs waits for this — Learn passes
+   *  the reply's commit, so the single serialized engine reads the reply's own
+   *  positions first (hand walk 2026-10-20: queued ahead of them, the deepening
+   *  held 10.Bf4's reply from 3.5 s to 8.2 s). The budget starts after it. */
+  deepenAfter?: Promise<unknown>;
+}
+
+export function liveMovePrice(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number, opts: LivePriceOptions = {}): Promise<MovePrice | null> {
   const key = `${fenBefore}|${playedUci}`;
   const known = PRICE_MEMO.get(key);
   if (known) return known;
@@ -231,6 +239,7 @@ export function liveMovePrice(fenBefore: string, playedUci: string, fan: CostFan
     const first = await moveScoresOneSearch({ fenBefore, playedUci, fan, scorer: SINGLETON_SCORER, depth });
     if (!first) return null;
     let price = priced(first);
+    if (!price.settled && opts.deepenAfter) await opts.deepenAfter.catch(() => undefined);
     // NOT SETTLED → THE SAME SEARCH, DEEPER (the adaptive-depth walk's step and
     // ceiling, `SEARCH_POLICY.live`), within the verdict's budget. The deeper
     // read IS the price under this key; the shallow number never escapes.
