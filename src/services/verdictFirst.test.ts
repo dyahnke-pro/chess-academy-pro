@@ -23,6 +23,17 @@ describe('the instant line waits for the verdict on a mistake turn', () => {
     expect(instantWaitsForVerdict({ ...base, moveCostCp: 185, fenAfterReply: MATE_THREAT })).toBe(false);
     expect(instantWaitsForVerdict({ ...base, moveCostCp: 185, mateTurn: true })).toBe(false);
   });
+  it('a mate in one for the student goes first', () => {
+    // White to move: Rh8 is mate (the king on b6 takes a7, b7 and b8's escape).
+    expect(instantWaitsForVerdict({ ...base, moveCostCp: 185, fenAfterReply: 'k7/8/1K6/8/8/8/8/7R w - - 0 1' })).toBe(false);
+  });
+  it('on a turn whose verdict leads, Learn builds the instant wave once the verdict is playing (14.Rd5: the wave cost the verdict ~0.9 s)', () => {
+    const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    expect(page).toMatch(/const verdictLeads = \(\(\): boolean => \{[\s\S]{0,400}?return instantWaitsForVerdict\(/);
+    expect(page).toMatch(/if \(verdictLeads\) void nextBoardReads\.then\(runInstantWave\);\n\s*else runInstantWave\(\);/);
+    // …and a wave built after the verdict does not replace the verdict's lead.
+    expect(page).toMatch(/if \(!verdictLed\) turnLeadRef\.current = instant\.lead/);
+  });
   it('Learn holds the instant line on the verdict, and releases it when the verdict is handed over', () => {
     const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(page).toMatch(/if \(instantWaits\) void Promise\.race\(\[verdictHeard, [^\n]*VERDICT_HOLD_MS[^\n]*\.then\(sayInstant\)/);

@@ -4,8 +4,14 @@
 // attacked"). The live voice is one queue in the order lines are handed to it,
 // so the instant line waits for the verdict to be handed over first — unless
 // it is about a mate, which nothing outranks.
+import { Chess } from 'chess.js';
 import { threatStakes } from './threatProof';
 import { VERDICT_TURN_CP } from './learnTurnDoor';
+
+/** The side to move (the student, after the reply) mates in one. */
+function mateInOne(fen: string): boolean {
+  try { return new Chess(fen).moves().some((m) => m.endsWith('#')); } catch { return false; }
+}
 
 /** Past this the instant line speaks anyway: a slow engine must never cost the
  *  student the warning. */
@@ -24,6 +30,7 @@ export function instantWaitsForVerdict(input: {
 }): boolean {
   if (input.mateTurn) return false;
   if (threatStakes(input.fenAfterReply, input.student, [])?.mate) return false;
+  if (mateInOne(input.fenAfterReply)) return false;
   return input.moveCostCp !== null ? input.moveCostCp >= VERDICT_TURN_CP : input.verdictUrgent;
 }
 

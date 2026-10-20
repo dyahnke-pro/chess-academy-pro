@@ -11114,139 +11114,162 @@ export function CoachTeachPage(): JSX.Element {
               const searched = await Promise.race([costRead, new Promise<null>((r) => { setTimeout(() => r(null), COST_WAIT_MS); })]);
               if (searched !== null) studentCpLoss = searched;
             }
-            const instantMarks: TrackMarks = { arrows: [], highlights: [] };
-            try {
-              const ip = new Chess(move.fen);
-              const im = ip.move(reply);
-              const lines: string[] = [];
-              const eventLine = im
-                ? buildInstantReplyLine({ san: im.san, captured: im.captured, isCheckmate: ip.isCheckmate(), isCheck: ip.isCheck(), fenAfter: ip.fen() })
-                : null;
-              // Only a mate is announced here; a bare check or capture restates
-              // the board — the why / threat lanes carry what it does.
-              if (eventLine) lines.push(eventLine);
-              if (im) {
-                const instant = computeInstantTeaching({
-                  fenBeforeReply: move.fen,
-                  fenAfterReply: ip.fen(),
-                  historyAfterReply: [...move.history, im.san],
-                  moveFrom: im.from,
-                  moveTo: im.to,
-                  studentColor: playerColor,
-                  moveCostCp: studentCpLoss,
-                });
-                instantLead = instant.lead;
-                instantWaits = instantWaitsForVerdict({
-                  moveCostCp: studentCpLoss, verdictUrgent, fenAfterReply: ip.fen(),
+            // A COSTLY MOVE'S VERDICT IS BUILT FIRST (OS-18, 14.Rd5 on David's
+            // record, 2026-10-20: the instant wave spent ~0.9 s of main thread
+            // building a line the verdict holds back anyway, and the verdict
+            // waited behind it). On a turn whose verdict leads, the wave is built
+            // once the verdict is playing — and then knows what the verdict said.
+            const verdictLeads = ((): boolean => {
+              try {
+                const p = new Chess(move.fen);
+                if (!p.move(reply)) return false;
+                const engineMate = pendingEngineMateRef.current;
+                return instantWaitsForVerdict({
+                  moveCostCp: studentCpLoss, verdictUrgent, fenAfterReply: p.fen(),
                   student: playerColor === 'white' ? 'w' : 'b',
-                  mateTurn: !!instant.lead?.mateTurn || ip.isCheckmate(),
+                  mateTurn: p.isCheckmate() || (!!engineMate && samePosition(engineMate.fen, p.fen())),
                 });
-                for (const d of instant.deferred) queueSpokenHint(ip.fen(), d.text, d.lane, d.proof, d.namesStudentMove, d.squares, d.claims, undefined, d.arrows);
-                turnLeadRef.current = instant.lead ? { fen: ip.fen(), lead: instant.lead } : null;
-                // THE PACKAGE IS THE UTTERANCE. This used to log `factLines`
-                // while speaking a separately-assembled `alertLine`/`teachLine`
-                // pair — two truths for one turn, so the audit could report
-                // "Coaching note for the pin on the board" while the voice said
-                // a bare, unverified sentence. Both now come from `instant.pkg`,
-                // which was verified fact-by-fact against the board it was
-                // computed from.
-                void logAppAudit({
-                  kind: 'coach-narration-spoken',
-                  category: 'subsystem',
-                  source: 'CoachTeachPage.voicePackage',
-                  summary: `${describeVoicePackage(instant.pkg)} · ${instant.lanes} — ${instant.pkg.spoken.slice(0, 240)}`,
-                  narrationText: instant.pkg.spoken,
-                  fen: ip.fen(),
-                  // BOARD TAG per fact (plan 1.6): the checker reads the board a
-                  // claim was graded on instead of guessing among three.
-                  details: JSON.stringify({ facts: instant.pkg.kept.map((f) => ({ text: f.text, fen: f.fen })) }),
-                });
-                if (instant.pkg.spoken) {
-                  lines.push(instant.pkg.spoken);
-                  for (const f of instant.pkg.kept) spokenClaims.push(...(f.claims ?? []));
-                  noteSpokenProofs(instant.pkg.kept);
-                  // Feed what was actually SPOKEN into the per-game novelty set so
-                  // no later turn (or the late package below) repeats it.
-                  for (const k of spokenSentenceKeys(instant.pkg)) learnMemRef.current.spokenKeys.add(k);
-                  // R1 OF THE ARC IS MARKED BY THE VOICE, NOT BY THE QUEUE. The
-                  // opening fact reached here only if it survived ranking and the
-                  // novelty set, so this is the first moment it is true that the
-                  // student has heard the name.
-                  noteOpeningFactsHeard(instant.pkg.kept);
-                  // The arrow rides only when the THREAT actually SURVIVED
-                  // into the utterance — an arrow pointing at a claim the
-                  // package refused is the same lie drawn instead of said.
-                  // `alertArrow` is set in the threat branch alone (the capture
-                  // that takes the student's hanging piece).
-                  if (instant.alertArrow && instant.pkg.kept.some((f) => f.kind === 'threat')) {
-                    instantMarks.arrows.push(instant.alertArrow);
-                  }
-                  // THE THREAT'S ANSWER (census T4, David 2026-09-30: "describing
-                  // the board is what we do not want"). The warning speaks now;
-                  // what to do about it needs the engine's read of this board, so
-                  // it rides the late wave — question first, then the answer.
-                  const asked = instant.pkg.kept.some((f) => f.kind === 'threat') ? instant.threatAsked : null;
-                  if (asked) {
-                    const fenNow = ip.fen();
-                    void factsReady.then(() => {
-                      const read = studentBestReadRef.current;
-                      if (!read || !samePosition(read.fen, fenNow)) return;
-                      const ans = threatAnswerTeaching({
-                        fen: fenNow, squares: asked.squares, shape: asked.shape,
-                        bestUci: read.bestUci, whiteCp: read.whiteCp,
-                        student: playerColor === 'white' ? 'w' : 'b', ply: nextStem(learnMemRef.current, 'threat-answer'),
+              } catch { return false; }
+            })();
+            const runInstantWave = (): void => {
+              const instantMarks: TrackMarks = { arrows: [], highlights: [] };
+              try {
+                const ip = new Chess(move.fen);
+                const im = ip.move(reply);
+                const lines: string[] = [];
+                const eventLine = im
+                  ? buildInstantReplyLine({ san: im.san, captured: im.captured, isCheckmate: ip.isCheckmate(), isCheck: ip.isCheck(), fenAfter: ip.fen() })
+                  : null;
+                // Only a mate is announced here; a bare check or capture restates
+                // the board — the why / threat lanes carry what it does.
+                if (eventLine) lines.push(eventLine);
+                if (im) {
+                  const instant = computeInstantTeaching({
+                    fenBeforeReply: move.fen,
+                    fenAfterReply: ip.fen(),
+                    historyAfterReply: [...move.history, im.san],
+                    moveFrom: im.from,
+                    moveTo: im.to,
+                    studentColor: playerColor,
+                    moveCostCp: studentCpLoss,
+                  });
+                  instantLead = instant.lead;
+                  instantWaits = instantWaitsForVerdict({
+                    moveCostCp: studentCpLoss, verdictUrgent, fenAfterReply: ip.fen(),
+                    student: playerColor === 'white' ? 'w' : 'b',
+                    mateTurn: !!instant.lead?.mateTurn || ip.isCheckmate(),
+                  });
+                  for (const d of instant.deferred) queueSpokenHint(ip.fen(), d.text, d.lane, d.proof, d.namesStudentMove, d.squares, d.claims, undefined, d.arrows);
+                  // A wave built after a leading verdict does not replace its lead.
+                const verdictLed = verdictLeads && !!turnLeadRef.current && samePosition(turnLeadRef.current.fen, ip.fen());
+                if (!verdictLed) turnLeadRef.current = instant.lead ? { fen: ip.fen(), lead: instant.lead } : null;
+                  // THE PACKAGE IS THE UTTERANCE. This used to log `factLines`
+                  // while speaking a separately-assembled `alertLine`/`teachLine`
+                  // pair — two truths for one turn, so the audit could report
+                  // "Coaching note for the pin on the board" while the voice said
+                  // a bare, unverified sentence. Both now come from `instant.pkg`,
+                  // which was verified fact-by-fact against the board it was
+                  // computed from.
+                  void logAppAudit({
+                    kind: 'coach-narration-spoken',
+                    category: 'subsystem',
+                    source: 'CoachTeachPage.voicePackage',
+                    summary: `${describeVoicePackage(instant.pkg)} · ${instant.lanes} — ${instant.pkg.spoken.slice(0, 240)}`,
+                    narrationText: instant.pkg.spoken,
+                    fen: ip.fen(),
+                    // BOARD TAG per fact (plan 1.6): the checker reads the board a
+                    // claim was graded on instead of guessing among three.
+                    details: JSON.stringify({ facts: instant.pkg.kept.map((f) => ({ text: f.text, fen: f.fen })) }),
+                  });
+                  if (instant.pkg.spoken) {
+                    lines.push(instant.pkg.spoken);
+                    for (const f of instant.pkg.kept) spokenClaims.push(...(f.claims ?? []));
+                    noteSpokenProofs(instant.pkg.kept);
+                    // Feed what was actually SPOKEN into the per-game novelty set so
+                    // no later turn (or the late package below) repeats it.
+                    for (const k of spokenSentenceKeys(instant.pkg)) learnMemRef.current.spokenKeys.add(k);
+                    // R1 OF THE ARC IS MARKED BY THE VOICE, NOT BY THE QUEUE. The
+                    // opening fact reached here only if it survived ranking and the
+                    // novelty set, so this is the first moment it is true that the
+                    // student has heard the name.
+                    noteOpeningFactsHeard(instant.pkg.kept);
+                    // The arrow rides only when the THREAT actually SURVIVED
+                    // into the utterance — an arrow pointing at a claim the
+                    // package refused is the same lie drawn instead of said.
+                    // `alertArrow` is set in the threat branch alone (the capture
+                    // that takes the student's hanging piece).
+                    if (instant.alertArrow && instant.pkg.kept.some((f) => f.kind === 'threat')) {
+                      instantMarks.arrows.push(instant.alertArrow);
+                    }
+                    // THE THREAT'S ANSWER (census T4, David 2026-09-30: "describing
+                    // the board is what we do not want"). The warning speaks now;
+                    // what to do about it needs the engine's read of this board, so
+                    // it rides the late wave — question first, then the answer.
+                    const asked = instant.pkg.kept.some((f) => f.kind === 'threat') ? instant.threatAsked : null;
+                    if (asked) {
+                      const fenNow = ip.fen();
+                      void factsReady.then(() => {
+                        const read = studentBestReadRef.current;
+                        if (!read || !samePosition(read.fen, fenNow)) return;
+                        const ans = threatAnswerTeaching({
+                          fen: fenNow, squares: asked.squares, shape: asked.shape,
+                          bestUci: read.bestUci, whiteCp: read.whiteCp,
+                          student: playerColor === 'white' ? 'w' : 'b', ply: nextStem(learnMemRef.current, 'threat-answer'),
+                        });
+                        if (ans) {
+                          learnMemRef.current.questionsAnswered.add(`${fenNow}|${ans.san}`);
+                          // The move is held, so its proof is too — the threat's
+                          // cost still proves the question.
+                          queueSpokenHint(fenNow, ans.text, 'threatAnswer', (() => { const tc = readBoard('threatCost', { line: ans.text, fen: fenNow, student: playerColor === 'white' ? 'w' : 'b', squares: asked.squares })?.proof; return (tc && isProof(tc) ? tc : null) ?? (ans.arrow ? legalLineProof(fenNow, [ans.san], lineSeatAt(fenNow, playerColor === 'white' ? 'w' : 'b')) : null) ?? tc ?? NO_PROOF.withheld; })(), ans.san ? namesMoves((playerColor === 'white' ? 'w' : 'b'), fenNow, namedSan(fenNow, ans.san)) : NAMES_NO_MOVE, asked.squares, [`threat-answer:${ans.kind}:${asked.squares.join('')}`], undefined, ans.arrow ? [ans.arrow] : undefined);
+                          captureEvent('threat_answer_queued', { surface: 'coach-teach', kind: ans.kind });
+                        }
                       });
-                      if (ans) {
-                        learnMemRef.current.questionsAnswered.add(`${fenNow}|${ans.san}`);
-                        // The move is held, so its proof is too — the threat's
-                        // cost still proves the question.
-                        queueSpokenHint(fenNow, ans.text, 'threatAnswer', (() => { const tc = readBoard('threatCost', { line: ans.text, fen: fenNow, student: playerColor === 'white' ? 'w' : 'b', squares: asked.squares })?.proof; return (tc && isProof(tc) ? tc : null) ?? (ans.arrow ? legalLineProof(fenNow, [ans.san], lineSeatAt(fenNow, playerColor === 'white' ? 'w' : 'b')) : null) ?? tc ?? NO_PROOF.withheld; })(), ans.san ? namesMoves((playerColor === 'white' ? 'w' : 'b'), fenNow, namedSan(fenNow, ans.san)) : NAMES_NO_MOVE, asked.squares, [`threat-answer:${ans.kind}:${asked.squares.join('')}`], undefined, ans.arrow ? [ans.arrow] : undefined);
-                        captureEvent('threat_answer_queued', { surface: 'coach-teach', kind: ans.kind });
-                      }
+                    }
+                    // "We said something beyond a bare callout." The two callout
+                    // kinds were one `alert` before the split, so both are named.
+                    // 🚨 A NOTE, NOT "ANYTHING" (found reading the code, 2026-09-18).
+                    // This used to read `some(f => f.kind !== 'threat' && f.kind
+                    // !== 'tactic')` under the name `hasInstantTeaching`, and the
+                    // consumer's own comment described it as "a farmed corpus note
+                    // taught this turn". The name and the comment meant NOTE; the
+                    // code meant ANY substantive fact — an observation, a computed
+                    // register line, a drawback. So on most turns the whole late
+                    // queue was discarded wholesale, which is the code-side cut G4.5
+                    // bans: a branch deciding what the student loses, in place of the
+                    // ranking computer. Repetition — the thing the stand-down exists
+                    // to prevent — is already handled properly one call below, where
+                    // `buildVoicePackage` is handed `instantSpokenText` and the
+                    // per-game novelty set. David's rule is verbatim note-scoped:
+                    // "if I'm hearing a note I shouldn't be hearing the computed
+                    // narrations". So the flag now means what it is named.
+                    if (instant.pkg.kept.some((f) => f.kind === 'note')) {
+                      noteTaughtThisTurn = true;
+                    }
+                  }
+                  // THE KEPT FACTS' MARKS go up as the voice names them, on the
+                  // same stale-turn guard as the line itself.
+                  if (instant.keptHighlights.length > 0) {
+                    const ph = instant.keptHighlights;
+                    instantMarks.highlights.push(...ph);
+                    void logAppAudit({
+                      kind: 'coach-board-annotation',
+                      category: 'narration',
+                      source: 'CoachTeachPage.keptMarks',
+                      summary: `lead-the-eye on the spoken facts: ${ph.length} highlight(s) — ${ph.map((h) => h.square).join(', ')}`,
+                      fen: fenAfterReply,
                     });
                   }
-                  // "We said something beyond a bare callout." The two callout
-                  // kinds were one `alert` before the split, so both are named.
-                  // 🚨 A NOTE, NOT "ANYTHING" (found reading the code, 2026-09-18).
-                  // This used to read `some(f => f.kind !== 'threat' && f.kind
-                  // !== 'tactic')` under the name `hasInstantTeaching`, and the
-                  // consumer's own comment described it as "a farmed corpus note
-                  // taught this turn". The name and the comment meant NOTE; the
-                  // code meant ANY substantive fact — an observation, a computed
-                  // register line, a drawback. So on most turns the whole late
-                  // queue was discarded wholesale, which is the code-side cut G4.5
-                  // bans: a branch deciding what the student loses, in place of the
-                  // ranking computer. Repetition — the thing the stand-down exists
-                  // to prevent — is already handled properly one call below, where
-                  // `buildVoicePackage` is handed `instantSpokenText` and the
-                  // per-game novelty set. David's rule is verbatim note-scoped:
-                  // "if I'm hearing a note I shouldn't be hearing the computed
-                  // narrations". So the flag now means what it is named.
-                  if (instant.pkg.kept.some((f) => f.kind === 'note')) {
-                    noteTaughtThisTurn = true;
-                  }
                 }
-                // THE KEPT FACTS' MARKS go up as the voice names them, on the
-                // same stale-turn guard as the line itself.
-                if (instant.keptHighlights.length > 0) {
-                  const ph = instant.keptHighlights;
-                  instantMarks.highlights.push(...ph);
-                  void logAppAudit({
-                    kind: 'coach-board-annotation',
-                    category: 'narration',
-                    source: 'CoachTeachPage.keptMarks',
-                    summary: `lead-the-eye on the spoken facts: ${ph.length} highlight(s) — ${ph.map((h) => h.square).join(', ')}`,
-                    fen: fenAfterReply,
-                  });
+                if (lines.length > 0) {
+                  const sayInstant = (): void => speakTrackA(lines.join(' '), instantMarks);
+                  if (instantWaits) void Promise.race([verdictHeard, new Promise<void>((r) => { setTimeout(r, VERDICT_HOLD_MS); })]).then(sayInstant);
+                  else sayInstant();
                 }
-              }
-              if (lines.length > 0) {
-                const sayInstant = (): void => speakTrackA(lines.join(' '), instantMarks);
-                if (instantWaits) void Promise.race([verdictHeard, new Promise<void>((r) => { setTimeout(r, VERDICT_HOLD_MS); })]).then(sayInstant);
-                else sayInstant();
-              }
-            } catch { /* Track A is a bonus — the warm beat still speaks */ }
-            askTurnQuestion();
+              } catch { /* Track A is a bonus — the warm beat still speaks */ }
+              askTurnQuestion();
+            };
+            if (verdictLeads) void nextBoardReads.then(runInstantWave);
+            else runInstantWave();
             // It starts on the two reads the verdict needs — the move's cost and
             // the board between the moves — never on the next board's facts
             // (OS-18: chained on those, the verdict started 14–18s after the
