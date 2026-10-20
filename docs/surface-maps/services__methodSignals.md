@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**107 lines · 5 exports · 2 importers · 1 tests · 0 audits**
+**108 lines · 5 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,12 +24,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/methodSignals.test.ts:15`
 - `src/services/methodSignals.test.ts:21`
 - `src/services/methodSignals.test.ts:29`
-- `src/services/positionFacts.ts:947`
+- `src/services/positionFacts.ts:948`
 
 ### `forcingLine` (function) — 3 call sites
 - `src/services/methodSignals.test.ts:36`
 - `src/services/methodSignals.test.ts:39`
-- `src/services/positionFacts.ts:948`
+- `src/services/positionFacts.ts:949`
 
 ### `LineMark` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -37,7 +37,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `markSacrificeLine` (function) — 3 call sites
 - `src/services/methodSignals.test.ts:46`
 - `src/services/methodSignals.test.ts:50`
-- `src/services/positionFacts.ts:949`
+- `src/services/positionFacts.ts:950`
 
 ## Tests
 

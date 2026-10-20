@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6421) — names `useDiscussionPractice`
+- **The standard post-deploy ritual** (CLAUDE.md:6429) — names `useDiscussionPractice`
 
 ## Who calls in
 
@@ -53,8 +53,8 @@
 
 ### `useDiscussionPractice` (function) — 36 call sites
 - `src/components/Coach/CoachGamePage.tsx:597`
-- `src/components/Coach/CoachGameReview.tsx:1009`
-- `src/components/Coach/CoachTeachPage.tsx:1672`
+- `src/components/Coach/CoachGameReview.tsx:1015`
+- `src/components/Coach/CoachTeachPage.tsx:1698`
 - `src/components/Openings/MiddlegamePractice.tsx:160`
 - `src/components/Openings/OpeningPlayMode.tsx:298`
 - `src/components/Openings/PlayableLinePlayer.tsx:210`

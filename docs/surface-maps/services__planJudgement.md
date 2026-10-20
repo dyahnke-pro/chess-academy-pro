@@ -43,7 +43,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/structureJudgement.test.ts:247`
 - `src/services/structureJudgement.test.ts:252`
 - `src/services/structureJudgement.test.ts:255`
-- `src/services/structureReads.ts:183`
+- `src/services/structureReads.ts:184`
 
 ### `smallEdges` (function) — 2 call sites
 - `src/services/structureJudgement.test.ts:261`
@@ -56,7 +56,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/structureJudgement.test.ts:283`
 - `src/services/structureJudgement.test.ts:289`
 - `src/services/structureJudgement.test.ts:295`
-- `src/services/structureReads.ts:182`
+- `src/services/structureReads.ts:183`
 
 ### `wedgePaysLater` (function) — 4 call sites
 - `src/services/planJudgement.wedge.test.ts:11`

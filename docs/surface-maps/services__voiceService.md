@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3156 lines · 19 exports · 109 importers · 100 tests · 24 audits**
+**3156 lines · 19 exports · 108 importers · 102 tests · 24 audits**
 
 ## Locked rules that govern this surface
 
@@ -129,7 +129,6 @@
 - `src/services/walkthroughRunner.test.ts`
 - `src/services/walkthroughRunner.ts`
 - `src/utils/descriptiveNotation.test.ts`
-- `src/utils/spokenWords.test.ts`
 
 ## Exports and every call site
 
@@ -175,7 +174,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolvePollyVoice` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:3693`
+- `src/components/Coach/CoachGamePage.tsx:3725`
 
 ### `resolvePollySecondaryVoice` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -232,8 +231,8 @@
 ### `normalizePieceShorthand` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `sanitizeForTTS` (function) — 64 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:687`
+### `sanitizeForTTS` (function) — 63 call sites
+- `src/components/Openings/OpeningDetailPage.tsx:727`
 - `src/components/Settings/VoiceSettingsPanel.tsx:118`
 - `src/components/Settings/VoiceSettingsPanel.tsx:160`
 - `src/hooks/useProseReader.ts:66`
@@ -296,7 +295,6 @@
 - `src/services/sanitizeForTTS.test.ts:326`
 - `src/services/voiceService.sentenceFirst.test.ts:127`
 - `src/services/voiceService.sentenceFirst.test.ts:139`
-- `src/utils/spokenWords.test.ts:5`
 
 ### `voiceService` (const) — 1 call site
 - `src/services/dnaRules.test.ts:24`
@@ -309,6 +307,7 @@
 - `src/components/Board/VoiceChatMic.test.tsx`
 - `src/components/Coach/CoachAnalysePage.test.tsx`
 - `src/components/Coach/CoachChatPage.test.tsx`
+- `src/components/Coach/CoachGamePage.abandon.test.tsx`
 - `src/components/Coach/CoachGamePage.test.tsx`
 - `src/components/Coach/CoachGameReview.test.tsx`
 - `src/components/Coach/CoachSessionPage.test.tsx`
@@ -343,7 +342,9 @@
 - `src/components/Kid/RookGamesPage.test.tsx`
 - `src/components/Kid/RookMazePage.test.tsx`
 - `src/components/Kid/RowClearerPage.test.tsx`
+- `src/components/Openings/BookReader.memory.test.tsx`
 - `src/components/Openings/DrillMode.test.tsx`
+- `src/components/Openings/LessonPlayer.resume.test.tsx`
 - `src/components/Openings/LessonPlayer.test.tsx`
 - `src/components/Openings/LessonPlayer.voice.test.tsx`
 - `src/components/Openings/MiddlegamePlanStudy.test.tsx`
@@ -402,7 +403,6 @@
 - `src/services/voiceServiceLegacyPref.test.ts`
 - `src/services/walkthroughRunner.test.ts`
 - `src/utils/descriptiveNotation.test.ts`
-- `src/utils/spokenWords.test.ts`
 
 ## Audits that reach it
 

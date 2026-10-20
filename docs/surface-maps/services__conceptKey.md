@@ -22,24 +22,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `conceptInstanceKey` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8862`
+- `src/components/Coach/CoachTeachPage.tsx:8863`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.test.ts:6`
 - `src/services/conceptKey.test.ts:9`
 - `src/services/danyaBehaviors.ts:525`
-- `src/services/kingAttackReads.ts:652`
-- `src/services/positionFacts.ts:1319`
-- `src/services/positionFacts.ts:1756`
-- `src/services/positionFacts.ts:1774`
+- `src/services/kingAttackReads.ts:653`
+- `src/services/positionFacts.ts:1320`
+- `src/services/positionFacts.ts:1757`
+- `src/services/positionFacts.ts:1775`
 - `src/services/replayFence.alekhine1500.test.ts:24`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`
 
 ### `forkThreatKey` (function) — 4 call sites
 - `src/services/danyaBehaviors.ts:379`
-- `src/services/positionFacts.ts:1626`
-- `src/services/positionFacts.ts:1639`
+- `src/services/positionFacts.ts:1627`
+- `src/services/positionFacts.ts:1640`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:50`
 
 ## Tests

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**286 lines · 11 exports · 13 importers · 6 tests · 0 audits**
+**286 lines · 11 exports · 14 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,6 +23,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingStory.test.ts`
 - `src/services/openingStory.ts`
 - `src/services/reviewFullData.ts`
+- `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/reviewOpeningTheory.ts`
 - `src/services/walkOct2a.test.ts`
 
@@ -37,11 +38,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingGenerator.ts:2468`
 
 ### `warmOpeningIdentity` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:332`
-- `src/components/Coach/CoachTeachPage.tsx:1012`
-- `src/services/reviewOpeningTheory.ts:247`
+- `src/components/Coach/CoachGameReview.tsx:336`
+- `src/components/Coach/CoachTeachPage.tsx:1013`
+- `src/services/reviewOpeningTheory.ts:251`
 
-### `setOpeningIdentity` (function) — 7 call sites
+### `setOpeningIdentity` (function) — 8 call sites
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:86`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:97`
 - `src/services/learnBoardTeaching.openingPlan.test.ts:13`
@@ -49,10 +50,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingIdentity.test.ts:9`
 - `src/services/openingIdentity.test.ts:73`
 - `src/services/openingStory.test.ts:23`
+- `src/services/reviewOpeningTheory.davidGames.measure.test.ts:24`
 
 ### `identityFor` (function) — 2 call sites
 - `src/services/openingIdentity.test.ts:36`
-- `src/services/openingStory.ts:189`
+- `src/services/openingStory.ts:199`
 
 ### `planFor` (function) — 9 call sites
 - `src/services/learnBoardTeaching.ts:788`
@@ -62,8 +64,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.ts:190`
 - `src/services/openingIdentity.test.ts:75`
 - `src/services/openingIdentity.test.ts:80`
-- `src/services/openingStory.ts:201`
-- `src/services/reviewFullData.ts:1582`
+- `src/services/openingStory.ts:211`
+- `src/services/reviewFullData.ts:1584`
 
 ### `IdentityLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -74,11 +76,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `isWaypointOpening` (function) — 7 call sites
 - `src/services/openingAnnouncement.ts:87`
 - `src/services/openingRoads.ts:80`
-- `src/services/openingStory.ts:163`
-- `src/services/openingStory.ts:170`
-- `src/services/openingStory.ts:319`
-- `src/services/openingStory.ts:329`
-- `src/services/openingStory.ts:354`
+- `src/services/openingStory.ts:173`
+- `src/services/openingStory.ts:180`
+- `src/services/openingStory.ts:330`
+- `src/services/openingStory.ts:340`
+- `src/services/openingStory.ts:365`
 
 ### `openingIdentityLine` (function) — 18 call sites
 - `src/services/coachApi.ts:5770`
@@ -95,9 +97,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingIdentity.test.ts:47`
 - `src/services/openingIdentity.test.ts:55`
 - `src/services/openingIdentity.test.ts:62`
-- `src/services/openingStory.ts:320`
-- `src/services/reviewFullData.ts:1582`
-- `src/services/reviewOpeningTheory.ts:640`
+- `src/services/openingStory.ts:331`
+- `src/services/reviewFullData.ts:1584`
+- `src/services/reviewOpeningTheory.ts:742`
 - `src/services/walkOct2a.test.ts:67`
 
 ### `definingMoveIdea` (function) — 4 call sites
@@ -113,6 +115,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingIdea.test.ts`
 - `src/services/openingIdentity.test.ts`
 - `src/services/openingStory.test.ts`
+- `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/walkOct2a.test.ts`
 
 ## Audits that reach it

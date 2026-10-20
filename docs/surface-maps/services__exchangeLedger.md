@@ -64,7 +64,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `computeExchangeLedger` (function) — 14 call sites
 - `src/coach/chatTurnAnswers.ts:409`
-- `src/services/exchangeIdeas.ts:615`
+- `src/services/exchangeIdeas.ts:616`
 - `src/services/exchangeLedger.test.ts:13`
 - `src/services/exchangeLedger.test.ts:51`
 - `src/services/exchangeLedger.test.ts:52`
@@ -81,7 +81,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `netPieceWords` (function) — 8 call sites
 - `src/coach/chatTurnAnswers.ts:411`
 - `src/services/decisiveReason.ts:104`
-- `src/services/exchangeIdeas.ts:617`
+- `src/services/exchangeIdeas.ts:618`
 - `src/services/lineCalc.ts:202`
 - `src/services/patternFails.ts:129`
 - `src/services/reviewPositionalAssessment.ts:141`
@@ -109,10 +109,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveComparison.ts:184`
 - `src/services/moveInsight.lineAudit.test.ts:49`
 - `src/services/moveInsight.ts:389`
-- `src/services/thinkAloud.ts:101`
+- `src/services/thinkAloud.ts:102`
 
 ### `settledExchange` (function) — 5 call sites
-- `src/services/playCommentary.ts:1013`
+- `src/services/playCommentary.ts:1027`
 - `src/services/reviewConcepts.ts:93`
 - `src/services/reviewFullData.ts:387`
 - `src/services/reviewWalkOct2a.test.ts:15`
@@ -201,8 +201,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.horizon.test.ts:36`
 - `src/services/exchangeLedger.test.ts:255`
 - `src/services/groundedAnswer.ts:2001`
-- `src/services/positionFacts.ts:594`
-- `src/services/reviewFullData.ts:790`
+- `src/services/positionFacts.ts:595`
+- `src/services/reviewFullData.ts:792`
 
 ## Tests
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**301 lines · 9 exports · 5 importers · 3 tests · 0 audits**
+**333 lines · 10 exports · 6 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/boardPlanFacts.ts`
+- `src/services/deferredAnswers.realGame.test.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/planChoice.test.ts`
 - `src/services/planThread.ts`
@@ -23,8 +24,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `MethodRead` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `methodRead` (function) — 10 call sites
+### `methodRead` (function) — 12 call sites
 - `src/services/boardPlanFacts.ts:116`
+- `src/services/deferredAnswers.realGame.test.ts:12`
+- `src/services/deferredAnswers.realGame.test.ts:26`
 - `src/services/groundedAnswer.ts:3718`
 - `src/services/groundedAnswer.ts:6902`
 - `src/services/planChoice.test.ts:30`
@@ -33,7 +36,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoice.test.ts:147`
 - `src/services/planChoice.test.ts:159`
 - `src/services/planThread.ts:178`
-- `src/test/thinkMarkClosed.gate.test.ts:60`
+- `src/test/thinkMarkClosed.gate.test.ts:61`
 
 ### `planWorth` (function) — 3 call sites
 - `src/services/planChoice.test.ts:166`
@@ -55,15 +58,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoice.test.ts:152`
 - `src/services/planThread.ts:179`
 
-### `methodLine` (function) — 8 call sites
+### `methodLine` (function) — 9 call sites
 - `src/services/boardPlanFacts.ts:123`
+- `src/services/deferredAnswers.realGame.test.ts:12`
 - `src/services/groundedAnswer.ts:3720`
 - `src/services/planChoice.test.ts:32`
 - `src/services/planChoice.test.ts:125`
 - `src/services/planChoice.test.ts:149`
 - `src/services/planChoice.test.ts:159`
 - `src/services/planThread.ts:195`
-- `src/test/thinkMarkClosed.gate.test.ts:62`
+- `src/test/thinkMarkClosed.gate.test.ts:63`
+
+### `methodAfterMove` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `methodSquares` (function) — 3 call sites
 - `src/services/boardPlanFacts.ts:122`
@@ -75,6 +82,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/deferredAnswers.realGame.test.ts`
 - `src/services/planChoice.test.ts`
 - `src/services/planChoicePasserNow.test.ts`
 - `src/test/thinkMarkClosed.gate.test.ts`

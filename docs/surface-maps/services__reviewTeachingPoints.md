@@ -33,7 +33,7 @@
 ## Exports and every call site
 
 ### `attackerDefenderCount` (function) — 7 call sites
-- `src/services/reviewFullData.ts:1004`
+- `src/services/reviewFullData.ts:1006`
 - `src/services/reviewNarrationDefects.test.ts:86`
 - `src/services/reviewNarrationDefects.test.ts:95`
 - `src/services/reviewTeachingPoints.test.ts:21`
@@ -47,29 +47,29 @@
 - `src/services/reviewTeachingPoints.test.ts:447`
 
 ### `royalDefenderTarget` (function) — 3 call sites
-- `src/services/reviewFullData.ts:1006`
+- `src/services/reviewFullData.ts:1008`
 - `src/services/reviewNarrationFidelity.test.ts:71`
 - `src/services/reviewTeachingPoints.test.ts:39`
 
 ### `rookOnSeventh` (function) — 2 call sites
-- `src/services/reviewFullData.ts:1008`
+- `src/services/reviewFullData.ts:1010`
 - `src/services/reviewTeachingPoints.test.ts:47`
 
 ### `badEnemyBishop` (function) — 5 call sites
-- `src/services/reviewFullData.ts:1010`
+- `src/services/reviewFullData.ts:1012`
 - `src/services/reviewTeachingPoints.test.ts:52`
 - `src/services/reviewTeachingPoints.test.ts:53`
 - `src/services/reviewTeachingPoints.test.ts:474`
 - `src/services/reviewTeachingPoints.test.ts:478`
 
 ### `worstPlacedFriendlyPiece` (function) — 4 call sites
-- `src/services/reviewFullData.ts:1015`
+- `src/services/reviewFullData.ts:1017`
 - `src/services/reviewNarrationDefects.test.ts:33`
 - `src/services/reviewNarrationDefects.test.ts:51`
 - `src/services/reviewTeachingPoints.test.ts:75`
 
 ### `passedPawnPush` (function) — 5 call sites
-- `src/services/reviewFullData.ts:1022`
+- `src/services/reviewFullData.ts:1024`
 - `src/services/reviewTeachingPoints.test.ts:57`
 - `src/services/reviewTeachingPoints.test.ts:63`
 - `src/services/reviewTeachingPoints.test.ts:66`
@@ -159,8 +159,8 @@
 - `src/services/coachFeatureService.ts:3198`
 - `src/services/coachFeatureService.ts:3199`
 - `src/services/moveInsight.ts:393`
-- `src/services/reviewFullData.ts:972`
 - `src/services/reviewFullData.ts:974`
+- `src/services/reviewFullData.ts:976`
 - `src/services/reviewTeachingPoints.test.ts:259`
 - `src/services/reviewTeachingPoints.test.ts:265`
 - `src/services/reviewTeachingPoints.test.ts:276`
@@ -175,7 +175,7 @@
 - `src/services/reviewTeachingPoints.test.ts:291`
 
 ### `lineTakesPiece` (re-export) — 2 call sites
-- `src/services/positionFacts.ts:593`
+- `src/services/positionFacts.ts:594`
 - `src/services/trappedPiece.ts:96`
 
 ### `findWorstPlacedPiece` (re-export) — 12 call sites

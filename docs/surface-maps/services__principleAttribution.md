@@ -233,8 +233,8 @@
 - `src/services/autoAnalyzeGame.ts:506`
 - `src/services/coachFeatureService.ts:757`
 - `src/services/coachFeatureService.ts:759`
-- `src/services/discussionPractice.ts:397`
-- `src/services/discussionPractice.ts:405`
+- `src/services/discussionPractice.ts:398`
+- `src/services/discussionPractice.ts:406`
 - `src/services/liveFundamental.ts:143`
 - `src/services/liveFundamental.ts:150`
 - `src/services/principleAttribution.test.ts:46`

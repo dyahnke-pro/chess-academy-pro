@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2006 lines · 15 exports · 28 importers · 26 tests · 3 audits**
+**2007 lines · 15 exports · 28 importers · 26 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -102,7 +102,7 @@
 
 ### `computePositionFacts` (function) — 94 call sites
 - `src/coach/boardTurnAnswer.ts:134`
-- `src/components/Coach/CoachTeachPage.tsx:10422`
+- `src/components/Coach/CoachTeachPage.tsx:10423`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:645`
@@ -197,10 +197,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8890`
+- `src/components/Coach/CoachTeachPage.tsx:8891`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10694`
+- `src/components/Coach/CoachTeachPage.tsx:10695`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -212,14 +212,14 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8862`
+- `src/components/Coach/CoachTeachPage.tsx:8863`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.test.ts:6`
 - `src/services/conceptKey.test.ts:9`
 - `src/services/conceptKey.ts:9`
 - `src/services/danyaBehaviors.ts:525`
-- `src/services/kingAttackReads.ts:652`
+- `src/services/kingAttackReads.ts:653`
 - `src/services/replayFence.alekhine1500.test.ts:24`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`

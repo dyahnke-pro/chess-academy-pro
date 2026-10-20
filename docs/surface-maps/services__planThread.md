@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**210 lines · 8 exports · 5 importers · 2 tests · 0 audits**
+**221 lines · 8 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify").** (CLAUDE.md:5394) — names `planThread`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify").** (CLAUDE.md:5402) — names `planThread`
 
 ## Who calls in
 
@@ -21,11 +21,11 @@
 ## Exports and every call site
 
 ### `planAimKey` (function) — 5 call sites
-- `src/services/openingStory.ts:485`
-- `src/services/planThread.test.ts:71`
+- `src/services/openingStory.ts:496`
 - `src/services/planThread.test.ts:72`
 - `src/services/planThread.test.ts:73`
 - `src/services/planThread.test.ts:74`
+- `src/services/planThread.test.ts:75`
 
 ### `PLAN_THREAD_HOLD_PLIES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -34,32 +34,32 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `newPlanThread` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10290`
+- `src/components/Coach/CoachTeachPage.tsx:10291`
 - `src/services/boardComputers.test.ts:52`
-- `src/services/coachFeatureService.ts:1417`
+- `src/services/coachFeatureService.ts:1418`
 - `src/services/planChoice.test.ts:75`
 - `src/services/planChoice.test.ts:89`
 - `src/services/planChoice.test.ts:102`
 - `src/services/planChoice.test.ts:132`
-- `src/services/planThread.test.ts:17`
-- `src/services/planThread.test.ts:33`
-- `src/services/planThread.test.ts:42`
-- `src/services/planThread.test.ts:51`
-- `src/services/planThread.test.ts:85`
-- `src/services/planThread.test.ts:98`
-- `src/services/planThread.test.ts:123`
+- `src/services/planThread.test.ts:18`
+- `src/services/planThread.test.ts:34`
+- `src/services/planThread.test.ts:43`
+- `src/services/planThread.test.ts:52`
+- `src/services/planThread.test.ts:86`
+- `src/services/planThread.test.ts:99`
+- `src/services/planThread.test.ts:124`
 
 ### `clonePlanThread` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10291`
-- `src/services/coachFeatureService.ts:2016`
-- `src/services/planThread.test.ts:99`
-- `src/services/planThread.test.ts:107`
+- `src/components/Coach/CoachTeachPage.tsx:10292`
+- `src/services/coachFeatureService.ts:2017`
+- `src/services/planThread.test.ts:100`
+- `src/services/planThread.test.ts:108`
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10323`
-- `src/components/Coach/CoachTeachPage.tsx:11232`
-- `src/services/planThread.test.ts:103`
-- `src/services/planThread.test.ts:110`
+- `src/components/Coach/CoachTeachPage.tsx:10324`
+- `src/components/Coach/CoachTeachPage.tsx:11238`
+- `src/services/planThread.test.ts:104`
+- `src/services/planThread.test.ts:111`
 
 ### `PlanThreadLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -70,18 +70,18 @@
 - `src/services/planChoice.test.ts:89`
 - `src/services/planChoice.test.ts:102`
 - `src/services/planChoice.test.ts:136`
-- `src/services/planThread.test.ts:18`
-- `src/services/planThread.test.ts:27`
-- `src/services/planThread.test.ts:36`
-- `src/services/planThread.test.ts:43`
+- `src/services/planThread.test.ts:19`
+- `src/services/planThread.test.ts:28`
+- `src/services/planThread.test.ts:37`
 - `src/services/planThread.test.ts:44`
-- `src/services/planThread.test.ts:55`
-- `src/services/planThread.test.ts:58`
-- `src/services/planThread.test.ts:61`
-- `src/services/planThread.test.ts:89`
-- `src/services/planThread.test.ts:100`
-- `src/services/planThread.test.ts:108`
-- `src/services/planThread.test.ts:123`
+- `src/services/planThread.test.ts:45`
+- `src/services/planThread.test.ts:56`
+- `src/services/planThread.test.ts:59`
+- `src/services/planThread.test.ts:62`
+- `src/services/planThread.test.ts:90`
+- `src/services/planThread.test.ts:101`
+- `src/services/planThread.test.ts:109`
+- `src/services/planThread.test.ts:124`
 
 ## Tests
 
