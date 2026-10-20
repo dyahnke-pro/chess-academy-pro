@@ -1,0 +1,16 @@
+[Event "OS-1 g3 Learn replay (David's record loaded)"]
+[Site "localhost Learn, build b494915"]
+[Date "2026.10.19"]
+[White "Student (dictated replay)"]
+[Black "Coach (moves dictated)"]
+[Opening "Nimzo-Larsen Attack"]
+[Result "*"]
+[Annotator "learn-audit-black"]
+[FENAfter15c5 "r2qr1k1/1bb2ppp/p4n2/npPpp3/1N6/3PPN2/PB2BPPP/2RQ1RK1 b - - 0 15"]
+[FENBefore15c5 "r2qr1k1/1bb2ppp/p4n2/np1pp3/1NP5/3PPN2/PB2BPPP/2RQ1RK1 w - - 0 15"]
+
+1. b3 e5 2. Bb2 Nc6 3. e3 Nf6 4. Bb5 Bd6 5. Na3 Na5 6. Be2 a6 7. c4 O-O
+8. Nc2 Re8 9. d3 b5 10. Nf3 c5 11. O-O Bc7 12. b4 cxb4 13. Nxb4 Bb7 14. Rc1 d5
+15. c5 {ply 29: late decision offered=[countMethod,behavior,positional,
+positionFacts x3,structureJudgement x2,movePoint,moveIntent], spoke=[positionFacts,
+moveIntent], no threat lane offered} Nc6 16. a3 a5 *
