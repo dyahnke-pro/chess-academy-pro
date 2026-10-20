@@ -22,6 +22,7 @@ import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { attachVoiceListener, LISTENER_LAUNCH_ARGS } from './audit-lib/review-voice-listener.mjs';
+import { until } from './audit-lib/wedge-watch.mjs';
 
 const BASE = (process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app').replace(/\/$/, '');
 const DROP = process.env.AUDIT_FIXTURE || 'audit-reports/.fixtures/data-drop-david.json';
@@ -64,15 +65,10 @@ for (const g of games) {
   out.push(`\n=== ${g.id} (${g.eco}) — David is ${seat}`);
   await page.goto(`${BASE}/coach/review/${g.id}`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   const startBtn = page.locator('[data-testid="start-walk-btn"]').first();
-  const t0 = Date.now();
-  while (Date.now() - t0 < 180000) {
-    if ((await startBtn.count()) > 0 && (await startBtn.getAttribute('disabled').catch(() => 'x')) === null) break;
-    await page.waitForTimeout(1500);
-  }
+  await until(async () => (await startBtn.count()) > 0 && (await startBtn.getAttribute('disabled').catch(() => 'x')) === null, 180000, 1500);
   await startBtn.click({ timeout: 5000 }).catch(() => undefined);
   const theory = page.locator('[data-testid="walk-theory-btn"]').first();
-  const t1 = Date.now();
-  while (Date.now() - t1 < 150000 && (await theory.count()) === 0) await page.waitForTimeout(1000);
+  await until(async () => (await theory.count()) > 0, 150000, 1000);
   if ((await theory.count()) === 0) { add(`${g.id} theory-button`, false, 'Theory never appeared'); continue; }
   // Pause the walk's own narration so only the lecture is read.
   const pp = page.locator('[data-testid="review-play-pause-btn"]').first();
@@ -86,13 +82,12 @@ for (const g of games) {
   const t2 = Date.now();
   await page.waitForTimeout(3000);
   let lastCap = '';
-  while (Date.now() - t2 < 240000) {
+  await until(async () => {
     const label = (await theory.textContent().catch(() => '')) ?? '';
     const cap = ((await page.locator('[data-testid="review-narration-banner"]').first().textContent().catch(() => '')) ?? '').slice(0, 70);
     if (process.env.THEORY_TRACE === '1' && cap !== lastCap) { console.log(`  [${((Date.now() - t2) / 1000).toFixed(0)}s] ${label.trim()} | ${cap}`); lastCap = cap; }
-    if (!/Stop theory/.test(label)) break;
-    await page.waitForTimeout(1500);
-  }
+    return !/Stop theory/.test(label);
+  }, 240000, 1500);
   // The page and the voice each log one utterance: one line, said once.
   const lines = spoken().slice(before).filter((l, i, a) => i === 0 || l.replace(/\s+/g, ' ') !== a[i - 1].replace(/\s+/g, ' '));
   for (const l of lines) out.push(`  • ${l}`);
