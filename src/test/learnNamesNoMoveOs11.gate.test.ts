@@ -27,7 +27,18 @@ const g3At = (n: number): string => { const c = new Chess(); for (const s of G3.
 /** The student's moves a sentence names on `fen` (the student to move there):
  *  a SAN token, "<piece> to/takes <square>", castling while it is legal or one
  *  piece away, or a lone-move pawn named as "the pawn on X … moving it". */
-function namedMoves(text: string, fen: string, student: 'w' | 'b'): string[] {
+function namedMoves(text0: string, fen: string, student: 'w' | 'b'): string[] {
+  // Not a move offered to the student: one weighed and ruled out ("Nd5? Then
+  // they play…" — the weighing is said, LEARN NAMES NO MOVE UNASKED), the slow
+  // plan tested and found wanting, their move ("they play …Qg4", or any
+  // "…X" when the student is White), and castling said to be impossible.
+  const text = text0
+    .replace(/(?:^|\s)…?[A-Za-z0-9=+#-]+\?(?:\s[^.]*)?(?:\.|$)/g, ' ')
+    .replace(/\bplan with \S+ by its best case/g, '')
+    .replace(/\blike \S+, (?:gives up|lets the mate go|loses)/g, '')
+    .replace(/\bthey (?:play|answer|go ahead with) \S+/g, '')
+    .replace(student === 'w' ? /…\S+/g : /(?!)/g, '')
+    .replace(/\bcan't castle\b/gi, '');
   const parts = fen.split(' ');
   parts[1] = student; parts[3] = '-';
   const c = new Chess(parts.join(' '));
@@ -215,15 +226,20 @@ describe('every student move of the six games: the engine-backed producers name 
         // What the move was for — the intent and the reason, on Learn's reads.
         const intentReads = { before: pre.topLines, after: mid.topLines, passBefore: readOf(nullMoveFen(before))?.topLines ?? [], passAfter: readOf(nullMoveFen(afterMove))?.topLines ?? [], reply: `${reply.from}${reply.to}${reply.promotion ?? ''}` };
         if (intentReads.passBefore.length) {
+          const playedUci = ((): string => { const m = new Chess(before).move(san); return `${m.from}${m.to}${m.promotion ?? ''}`; })();
           const intent = intentWithFallback(before, san, intentReads, 'student', false, false);
           if (intent) {
             const arrows = intent.prepares && !intent.prepares.san.startsWith('O-O') ? [{ from: intent.prepares.uci.slice(0, 2), to: intent.prepares.uci.slice(2, 4), role: 'play' as const, source: 'gate' }] : [];
             check('moveIntent', i + 1, san, intent.text, namesFromArrows(arrows, g.side, next), next);
           }
-          const learned = learnMoveReason({ fenBefore: before, san, reads: intentReads, seat: 'student', opponentLastSan: i > 0 ? g.sans[i - 1] : null });
+          // Learn asks the reason only of the engine's own move.
+          const learned = pre.topLines[0]?.moves[0] === playedUci && learnMoveReason({ fenBefore: before, san, reads: intentReads, seat: 'student', opponentLastSan: i > 0 ? g.sans[i - 1] : null });
           if (learned) {
+            // What Learn SAYS of it: a material reason in full, any other only
+            // its tail (the worse move, named as the weighing).
             const r = learned.reason;
-            check('reason', i + 1, san, r.text, r.line ? studentMovesInLine(r.line.fen, r.line.sans, g.side, next, 1) : NAMES_NO_MOVE, next);
+            if (r.kind === 'the' && r.source === 'material') check('reason', i + 1, san, r.text, r.line ? studentMovesInLine(r.line.fen, r.line.sans, g.side, next, 1) : NAMES_NO_MOVE, next);
+            else if (r.kind === 'the' && r.tail) check('reason-tail', i + 1, san, r.tail, NAMES_NO_MOVE, next);
           }
         }
         // The composer on the board the student moves on next.
@@ -237,7 +253,8 @@ describe('every student move of the six games: the engine-backed producers name 
           for (const cl of pf.clauses) check(`facts/${cl.kind}`, i + 1, san, cl.text, cl.namesStudentMove, next);
         }
       }
-      expect(checked).toBeGreaterThan(0);
+      // Not vacuous: at least one producer line read per student move.
+      expect(checked).toBeGreaterThanOrEqual(Math.floor(g.sans.length / 2));
       expect(leaks).toEqual([]);
     }, 120_000);
   }
