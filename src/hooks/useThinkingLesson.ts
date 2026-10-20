@@ -10,13 +10,13 @@ import {
   type LessonPositionCandidate, type LessonUsernames, type PlannedLesson, type StepKit,
 } from '../services/thinkingLessonStart';
 
-export type { StepKit, PlannedLesson, LessonView };
+export type { StepKit, LessonView };
 
-export interface UseThinkingLessonDeps {
+interface UseThinkingLessonDeps {
   say: (text: string) => Promise<void>;
 }
 
-export interface UseThinkingLesson {
+interface UseThinkingLesson {
   view: LessonView;
   /** Choose this student's step (null = no fair board yet). */
   plan: (opts: { usernames: LessonUsernames; rating: number; beginner?: boolean }) => Promise<PlannedLesson | null>;

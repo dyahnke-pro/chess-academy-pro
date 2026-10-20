@@ -73,7 +73,7 @@ export function boardAccentRgb(boardGlowRgb: string | undefined): string {
   return !boardGlowRgb || boardGlowRgb === 'none' ? '0, 229, 255' : boardGlowRgb;
 }
 
-export interface BoardTheme {
+interface BoardTheme {
   scheme: BoardColorScheme;
   darkSquareStyle: { backgroundColor: string };
   lightSquareStyle: { backgroundColor: string };

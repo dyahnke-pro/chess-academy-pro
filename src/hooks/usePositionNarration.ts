@@ -17,7 +17,7 @@ import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 import { useStudentNeed } from './useStudentNeed';
 import { composePositionRead, READ_SEAT } from '../services/positionReadComposer';
 
-export interface UsePositionNarrationArgs {
+interface UsePositionNarrationArgs {
   fen: string;
   pgn: string;
   moveNumber: number;
@@ -37,7 +37,7 @@ export interface UsePositionNarrationArgs {
   withhold: string | null;
 }
 
-export interface UsePositionNarrationResult {
+interface UsePositionNarrationResult {
   narrate: () => Promise<void>;
   cancel: () => void;
   isNarrating: boolean;

@@ -11,7 +11,7 @@
 // Every entry is re-checked against the book text (`bookChips.test.ts`), so a
 // re-ingested book that moves a page fails the build instead of misleading.
 
-export interface BookChip {
+interface BookChip {
   bookId: string;
   page: number;
   /** The chip's words: who, on what. */

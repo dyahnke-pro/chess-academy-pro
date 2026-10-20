@@ -7,18 +7,18 @@ import { liveMovePrice } from '../services/playedMoveGrade';
 /** The depth a practice answer is read and priced at. */
 const PRACTICE_DEPTH = 16;
 
-export interface PracticePositionState {
+interface PracticePositionState {
   fen: string;
   label: string;
 }
 
-export interface PracticeResult {
+interface PracticeResult {
   type: 'correct' | 'wrong' | 'reveal';
   message: string;
   bestMoveUci?: string;
 }
 
-export interface UsePracticePositionReturn {
+interface UsePracticePositionReturn {
   practicePosition: PracticePositionState | null;
   practiceAttempts: number;
   handlePracticeMove: (moveResult: MoveResult) => Promise<PracticeResult>;

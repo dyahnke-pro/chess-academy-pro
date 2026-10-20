@@ -106,10 +106,10 @@ export const WEAPONS_LOCK_HINT = 'Complete Play to unlock this line’s weapons'
 // is that the ladder can't be defeated by clicking "I'm an expert" everywhere
 // — you get exactly two skips, and you spend them deliberately.
 
-export type WeaponUnlockColor = 'white' | 'black';
-export type WeaponUnlockPasses = Partial<Record<WeaponUnlockColor, string>>;
+type WeaponUnlockColor = 'white' | 'black';
+type WeaponUnlockPasses = Partial<Record<WeaponUnlockColor, string>>;
 
-export type UnlockBudgetState =
+type UnlockBudgetState =
   | { allowed: true; reason: 'available' | 'already-here' }
   | { allowed: false; reason: 'spent-elsewhere'; spentOn: string };
 

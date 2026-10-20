@@ -16,7 +16,7 @@ import type { WalkthroughSession, WalkthroughStep } from '../types/walkthrough';
 const DEFAULT_START_FEN =
   'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
-export interface UseWalkthroughRunnerReturn {
+interface UseWalkthroughRunnerReturn {
   /** The step currently shown on the board (null before any step plays). */
   currentStep: WalkthroughStep | null;
   /** 0-based index of the current step; -1 before the first step. */

@@ -62,7 +62,7 @@ export interface CachedOpening {
  *  (David 2026-06-17 — Vercel Hobby edge-request fair-use). Only
  *  genuine live results with data are persisted; transient empties /
  *  the bundled local-DB hits are not (see masterPlayPersistence). */
-export interface MasterPlayCacheRecord {
+interface MasterPlayCacheRecord {
   /** Normalized 4-field position-FEN — primary key. */
   fen: string;
   /** The resolved, immutable master-play statistics. */

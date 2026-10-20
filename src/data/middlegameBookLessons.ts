@@ -10,7 +10,7 @@
 //   principle  →  position  →  play the technique  →  distill the rule
 // which maps onto Watch → Learn → Practice → Play.
 
-export interface BookSource {
+interface BookSource {
   /** Stable slug, matches chess-concepts.json source manifest. */
   readonly bookSlug: string;
   readonly bookTitle: string;
@@ -23,7 +23,7 @@ export interface BookSource {
   readonly locationLabel: string;
 }
 
-export interface BookLessonMove {
+interface BookLessonMove {
   /** SAN, validated legal from the running position by chess.js. */
   readonly san: string;
   /** Full Watch-register prose for this move. */
@@ -36,7 +36,7 @@ export interface BookLessonMove {
   readonly highlights?: ReadonlyArray<{ square: string; color: 'yellow' | 'blue' }>;
 }
 
-export interface MiddlegameBookLesson {
+interface MiddlegameBookLesson {
   readonly id: string;
   /** The theme tab this lesson lives under. */
   readonly themeId: string;
@@ -59,7 +59,7 @@ export interface MiddlegameBookLesson {
   readonly sources: ReadonlyArray<string>;
 }
 
-export interface MiddlegameBookTheme {
+interface MiddlegameBookTheme {
   readonly id: string;
   readonly title: string;
   readonly blurb: string;

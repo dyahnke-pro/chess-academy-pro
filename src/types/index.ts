@@ -1719,18 +1719,6 @@ export interface ReviewState {
   whatIfStartFen: string | null;
 }
 
-export interface CriticalMoment {
-  moveNumber: number;
-  fen: string;
-  playerMove: string;
-  bestMove: string;
-  evaluation: number;
-  bestEvaluation: number;
-  explanation: string;
-  type: 'blunder' | 'mistake' | 'inaccuracy' | 'brilliant' | 'turning_point';
-  relatedWeakness: string | null;
-}
-
 // ─── Game Phase Analysis ─────────────────────────────────────────────────────
 
 export type GamePhase = 'opening' | 'middlegame' | 'endgame';
@@ -1941,14 +1929,6 @@ export interface ClassifiedTactic {
   createdAt: string;
 }
 
-export interface TacticMotifStats {
-  tacticType: TacticType;
-  missedInGames: number;
-  puzzleAttempts: number;
-  puzzleAccuracy: number;
-  gameAwareness: number;
-}
-
 // ─── Tactics Training Program ────────────────────────────────────────────────
 
 export type SetupPuzzleDifficulty = 1 | 2 | 3;
@@ -1977,27 +1957,6 @@ export interface SetupPuzzle {
   createdAt: string;
 }
 
-export interface TacticTypeStats {
-  tacticType: TacticType;
-  puzzleAccuracy: number;
-  puzzleAttempts: number;
-  gameMissCount: number;
-  gameSpotCount: number;
-  gameTotalOccurrences: number;
-  gameSpotRate: number;
-  gap: number;
-  byPhase: Record<MistakeGamePhase, number>;
-  byOpening: Record<string, number>;
-}
-
-export interface TacticalProfile {
-  computedAt: string;
-  stats: TacticTypeStats[];
-  totalGamesMissed: number;
-  totalGamesAnalyzed: number;
-  weakestTypes: TacticType[];
-}
-
 // ─── Theme ───────────────────────────────────────────────────────────────────
 
 export interface AppTheme {
@@ -2021,14 +1980,6 @@ export interface AppTheme {
 // ─── Kid Mode ────────────────────────────────────────────────────────────────
 
 export type ChessPiece = 'king' | 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn';
-
-export interface KidLesson {
-  piece: ChessPiece;
-  title: string;
-  description: string;
-  fen: string;
-  highlightSquares: string[];
-}
 
 // ─── Pawn's Journey ──────────────────────────────────────────────────────────
 
@@ -2286,12 +2237,6 @@ export interface GuidedGame {
   /** The player's color in this game */
   playerColor: 'w' | 'b';
   moves: GuidedMove[];
-}
-
-export interface GuidedGameProgress {
-  completed: boolean;
-  stars: number;
-  bestTime: number | null;
 }
 
 // ─── Lichess Opening Explorer ────────────────────────────────────────────────

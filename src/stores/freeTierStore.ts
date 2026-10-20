@@ -21,7 +21,7 @@ import {
   type ClaimResult,
 } from '../services/freeTierService';
 
-export interface FreeTierState {
+interface FreeTierState {
   /** Current ledger snapshot (puzzlesSolved / freeOpeningId / kidFirstAccessAt /
    *  coachLessonsUsed / coachChatTurnsUsed). */
   row: FreeTierRecord;

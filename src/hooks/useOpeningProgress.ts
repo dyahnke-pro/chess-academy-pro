@@ -34,7 +34,7 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import { db } from '../db/schema';
-import { getCompletedStages, type ProgressStage } from '../services/openingProgress';
+import { getCompletedStages } from '../services/openingProgress';
 import { getPuzzlesProgress, type PuzzlesProgress } from '../services/puzzlesByOpening';
 
 /** Five-stage walkthrough taxonomy from `openingProgress.ts`:
@@ -46,7 +46,7 @@ const WALKTHROUGH_TOTAL_STAGES = 5;
 
 /** Shape returned by the four data-tracking hooks (walkthrough,
  *  lines, traps, mistakes). */
-export interface OpeningProgressTracked {
+interface OpeningProgressTracked {
   completed: number;
   total: number;
   loading: boolean;
@@ -55,7 +55,7 @@ export interface OpeningProgressTracked {
 /** Shape returned by the placeholder hook. Distinct from the
  *  tracked shape so the UI can render "—" + nudge copy without
  *  branching on count values. */
-export interface OpeningProgressPlaceholder {
+interface OpeningProgressPlaceholder {
   status: 'not-tracked-yet';
 }
 
@@ -261,6 +261,3 @@ export function useOpeningProgressPlaceholder(): OpeningProgressPlaceholder {
   return { status: 'not-tracked-yet' };
 }
 
-// Re-export the stage type so the rolodex UI consuming the
-// walkthrough hook has a single import surface.
-export type { ProgressStage };

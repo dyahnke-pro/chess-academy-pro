@@ -25,7 +25,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { voiceService } from '../services/voiceService';
 
-export interface UseNarrationOptions {
+interface UseNarrationOptions {
   /** Text to speak. Empty string / null / undefined = silence. */
   text: string | null | undefined;
   /** When false, the hook is inert — no speak, no stop. Use for
@@ -33,7 +33,7 @@ export interface UseNarrationOptions {
   enabled?: boolean;
 }
 
-export interface UseNarrationReturn {
+interface UseNarrationReturn {
   /** Re-trigger speak for the current text. No-op when text is empty. */
   replay: () => void;
   /** Stop any in-flight speech immediately. */

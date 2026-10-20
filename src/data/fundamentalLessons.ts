@@ -18,7 +18,7 @@
 
 import type { FundamentalId } from '../services/principleAttribution';
 
-export interface FundamentalLesson {
+interface FundamentalLesson {
   /** The teaching, voiced verbatim through the coach spine (DNA register). */
   facts: string;
   /** Resolvable grounding refs (concept ids from chess-concepts.json). */

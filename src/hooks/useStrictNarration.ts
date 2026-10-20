@@ -18,7 +18,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { voiceService } from '../services/voiceService';
 
-export interface UseStrictNarrationOptions {
+interface UseStrictNarrationOptions {
   /** Total number of steps in the lesson. */
   stepCount: number;
   /** Apply the board state for `stepIndex` (synchronous). */
@@ -41,7 +41,7 @@ export interface UseStrictNarrationOptions {
   initialAutoPlay?: boolean;
 }
 
-export interface UseStrictNarrationReturn {
+interface UseStrictNarrationReturn {
   currentStep: number;
   isAutoPlaying: boolean;
   isSpeaking: boolean;
