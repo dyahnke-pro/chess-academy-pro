@@ -42,7 +42,7 @@
 - `src/services/oneHanging.test.ts:11`
 - `src/services/oneHanging.test.ts:16`
 - `src/services/oneHanging.test.ts:20`
-- `src/services/playedMoveGrade.ts:141`
+- `src/services/playedMoveGrade.ts:142`
 - `src/services/searchDepth.ts:69`
 - `src/services/tacticsDetector.ts:721`
 - `src/test/kingIsNeverHanging.test.ts:56`
