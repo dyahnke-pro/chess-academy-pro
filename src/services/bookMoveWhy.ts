@@ -35,6 +35,11 @@ export interface BookMoveWhy {
   text: string;
   /** The squares the sentence names, for the board. */
   squares: Square[];
+  /** The book move's job alone ("it adds one guard to your pawn on e5, which
+   *  their knight on f3 attacks"), true of the move whatever the rival — what
+   *  Review says when the student PLAYED the book move. Null when the job is
+   *  only the rival's cost (a tempo handed over). */
+  job: string | null;
 }
 
 function after(fen: string, san: string): { board: Chess; to: Square; from: Square; piece: PieceSymbol } | null {
@@ -109,7 +114,7 @@ function underPressure(board: Chess, student: Color): Array<{ square: Square; pi
 const times = (n: number): string => (n === 1 ? 'one' : n === 2 ? 'a second' : n === 3 ? 'a third' : 'another');
 
 
-type Job = Omit<BookMoveWhy, 'text'> & { clause: string; short: string };
+type Job = Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string };
 
 /** Safe for the side to move to play `san` on this board — legal, and the
  *  piece is not simply lost on its new square. */
@@ -244,7 +249,7 @@ function clearsRoadJob(fen: string, mainSan: string): Job | null {
  *  where it stood; the book move takes it somewhere safe and the student's
  *  move leaves it there to be taken (audit 2026-10-14: h3 hits the bishop on
  *  g4, the book is Bh5, the student played Nc6 and the coach said nothing). */
-function rescueJob(before: Chess, mainMv: NonNullable<ReturnType<typeof after>>, played: Chess, student: Color): Omit<BookMoveWhy, 'text'> & { clause: string; short: string } | null {
+function rescueJob(before: Chess, mainMv: NonNullable<ReturnType<typeof after>>, played: Chess, student: Color): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
   const them: Color = student === 'w' ? 'b' : 'w';
   const pass = asIfTheirMove(before, them);
   if (!pass || legalSeeGainOn(pass, mainMv.from) <= 0) return null;
@@ -267,7 +272,7 @@ function rescueJob(before: Chess, mainMv: NonNullable<ReturnType<typeof after>>,
 
 /** 1. GUARD — the book move adds a defender to a piece under pressure and the
  *  student's move does not. */
-function guardJob(main: Chess, played: Chess, student: Color, mainTo: Square): Omit<BookMoveWhy, 'text'> & { clause: string; short: string } | null {
+function guardJob(main: Chess, played: Chess, student: Color, mainTo: Square): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
   for (const p of underPressure(main, student)) {
     // THE BOOK MOVE ITSELF IS THE NEW GUARD — not a count that rose because
     // the student's move took a guard away (hand grade 2026-10-14: "c6 adds a
@@ -292,7 +297,7 @@ function guardJob(main: Chess, played: Chess, student: Color, mainTo: Square): O
 /** 2. STOPS A PIN / A TEMPO — a move the opponent has after the student's move
  *  (a pin on a student piece, or a cheaper piece hitting a dearer one) is
  *  illegal or loses material after the book move. */
-function stopsJob(main: Chess, played: Chess, student: Color, before: Chess): Omit<BookMoveWhy, 'text'> & { clause: string; short: string } | null {
+function stopsJob(main: Chess, played: Chess, student: Color, before: Chess): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
   const them: Color = student === 'w' ? 'b' : 'w';
   const p2 = asIfTheirMove(played, them);
   const m2 = asIfTheirMove(main, them);
@@ -349,7 +354,7 @@ function stopsJob(main: Chess, played: Chess, student: Color, before: Chess): Om
 }
 
 /** 3. CASTLE — the book move clears the way to castle and the student's does not. */
-function castleJob(main: Chess, played: Chess, student: Color, mainFrom: Square, mainPiece: PieceSymbol): Omit<BookMoveWhy, 'text'> & { clause: string; short: string } | null {
+function castleJob(main: Chess, played: Chess, student: Color, mainFrom: Square, mainPiece: PieceSymbol): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
   // ONLY A PIECE THAT STOOD IN THE WAY clears the way (sample 2026-10-14: "the
   // pawn to d4 clears the last piece between your king and rook").
   const rank = student === 'w' ? '1' : '8';
@@ -369,7 +374,7 @@ function castleJob(main: Chess, played: Chess, student: Color, mainFrom: Square,
 
 /** 4. DEVELOP — the book move brings a minor piece out from home while the
  *  student's move pushes a wing pawn or moves a piece that was already out. */
-function developJob(mainMv: NonNullable<ReturnType<typeof after>>, playedMv: NonNullable<ReturnType<typeof after>>, student: Color): Omit<BookMoveWhy, 'text'> & { clause: string; short: string } | null {
+function developJob(mainMv: NonNullable<ReturnType<typeof after>>, playedMv: NonNullable<ReturnType<typeof after>>, student: Color): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
   const home = student === 'w' ? '1' : '8';
   const developsNew = (mainMv.piece === 'n' || mainMv.piece === 'b') && mainMv.from[1] === home;
   if (!developsNew) return null;
@@ -385,7 +390,7 @@ function developJob(mainMv: NonNullable<ReturnType<typeof after>>, playedMv: Non
 }
 
 /** 5. CENTRE — the book move hits more of d4/d5/e4/e5 than the student's. */
-function centerJob(main: Chess, played: Chess, student: Color, mainTo: Square): Omit<BookMoveWhy, 'text'> & { clause: string; short: string } | null {
+function centerJob(main: Chess, played: Chess, student: Color, mainTo: Square): Omit<BookMoveWhy, 'text' | 'job'> & { clause: string; short: string } | null {
   const hit = (b: Chess): Square[] => CENTER.filter((s) => b.attackers(s, student).length > 0 || b.get(s)?.color === student);
   // THE SQUARES ARE THE BOOK PIECE'S OWN — it stands there or hits them (hand
   // grade 2026-10-14: "f4 covers d5 and e4", squares the departing knight
@@ -446,6 +451,7 @@ export function bookMoveWhy(fen: string, mainSan: string, playedSan: string, stu
   return {
     kind: late.kind,
     squares: late.squares,
+    job: late.clause || null,
     // A job with no clause of its own (no tempo handed over) is said as the
     // student's move's cost: "The book move is X; Y lets them chase…".
     text: late.clause

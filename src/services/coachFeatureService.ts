@@ -26,7 +26,9 @@ import { detectConcept } from './reviewConcepts';
 // floating tactic-pattern note; that teaching lives on the tactics drill.)
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
-import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
+import { ensureMastersDbLoaded, mastersMovesSync, masterMovesCachedSync } from './masterPlayLookup';
+import { bookMoveWhy } from './bookMoveWhy';
+import { sayMoveNoun } from './spokenMove';
 import { refutedAlternative, candidatesForPosition, SINGLETON_SCORER, type RefutedAlternative } from './refutedAlternative';
 import { recordedMoveCost } from './moveCost';
 import { findWorstPlacedPiece } from './nextPlans';
@@ -1192,6 +1194,8 @@ export function frameTeachingForOpponent(sentence: string): string {
 /** A line the student has played this many times without leaving book is
  *  proven: the story says what the opening is and stops there. */
 export const STORY_PROVEN_GAMES = 5;
+/** A move is book here when masters played it at least this often. */
+const BOOK_JOB_MIN_GAMES = 20;
 /** Every beat of the opening story is opening theory taught at its move —
  *  the `[opening]` facet (a TEACH role, deduped by its own claim key). Not
  *  `[plan-opening]`: that tag is a once-a-review development nag, and it would
@@ -1983,6 +1987,31 @@ export function buildReviewSegments(
           facetIdentity.set(raw, id);
           facetProofs.set(raw, r.proof);
           if (r.squares.length) facetSquares.set(raw, r.squares);
+        }
+      }
+      // EACH OF THE STUDENT'S BOOK MOVES, WITH ITS JOB (lead 2026-10-20, on
+      // the Fried Liver walk: book from 5.exd5 to 11…b5 and not a word). When
+      // the student played the masters' first choice, what that move DOES
+      // that their next choice does not — the same computer that names the
+      // book move after a departure (`bookMoveWhy`: the guard, the pin it
+      // stops, the castling it clears, the piece it develops, the centre).
+      // Only the job is said: the rival is book too, so its "cost" is not a
+      // fault. No job on the board → no line. Said to the mover only: the
+      // sentence is in the student's seat.
+      if (storyAll && studentColorWB && moverColor === playerColor) {
+        const masters = [...(masterMovesCachedSync(fenPair.fenBefore) ?? [])].sort((x, y) => y.games - x.games);
+        const alt = masters[0]?.san === m.san && masters[0].games >= BOOK_JOB_MIN_GAMES ? masters[1]?.san : undefined;
+        const job = alt ? bookMoveWhy(fenPair.fenBefore, m.san, alt, studentColorWB) : null;
+        const id = `hint:book-job:${m.ply}`;
+        // A bare "it brings your knight out" restates the board (Narration
+        // rule 3); development speaks only with its consequence (castling).
+        const bare = job?.kind === 'develop' && !/castle/.test(job.job ?? '');
+        if (job?.job && !bare && !hintsSaid.has(id)) {
+          const why = { text: `${sayMoveNoun(m.san, fenPair.fenBefore)} is the masters' main move here: ${job.job}.`, squares: job.squares };
+          const raw = `[opening] ${why.text.charAt(0).toUpperCase()}${why.text.slice(1)}`;
+          facets.push(raw);
+          facetIdentity.set(raw, id);
+          if (why.squares.length) facetSquares.set(raw, why.squares);
         }
       }
       // A VERDICT ON THEIR OPENING CHOICE — parity with Learn: their move that
