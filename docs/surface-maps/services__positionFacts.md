@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2020 lines · 15 exports · 29 importers · 27 tests · 3 audits**
+**2026 lines · 15 exports · 31 importers · 29 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,6 +27,8 @@
 - `src/services/claimChecker.measure.test.ts`
 - `src/services/claimKeyParity.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
+- `src/services/criticalMoment.frame.test.ts`
+- `src/services/criticalMoment.oneCount.test.ts`
 - `src/services/learnNamesNoMove.os10.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
@@ -101,9 +103,9 @@
 - `src/services/positionReadComposer.ts:158`
 - `src/services/whyBestMove.ts:160`
 
-### `computePositionFacts` (function) — 96 call sites
-- `src/coach/boardTurnAnswer.ts:134`
-- `src/components/Coach/CoachTeachPage.tsx:10478`
+### `computePositionFacts` (function) — 98 call sites
+- `src/coach/boardTurnAnswer.ts:135`
+- `src/components/Coach/CoachTeachPage.tsx:10482`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:645`
@@ -112,6 +114,8 @@
 - `src/services/chatBoardRead.ts:81`
 - `src/services/claimChecker.measure.test.ts:106`
 - `src/services/computerAccuracy.audit.test.ts:112`
+- `src/services/criticalMoment.frame.test.ts:24`
+- `src/services/criticalMoment.oneCount.test.ts:25`
 - `src/services/exchangeIdeas.test.ts:260`
 - `src/services/forkTrick.test.ts:48`
 - `src/services/latentFork.test.ts:151`
@@ -200,10 +204,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8911`
+- `src/components/Coach/CoachTeachPage.tsx:8915`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10753`
+- `src/components/Coach/CoachTeachPage.tsx:10757`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -215,7 +219,7 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8883`
+- `src/components/Coach/CoachTeachPage.tsx:8887`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.test.ts:6`
@@ -235,6 +239,8 @@
 - `src/services/claimChecker.measure.test.ts`
 - `src/services/claimKeyParity.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
+- `src/services/criticalMoment.frame.test.ts`
+- `src/services/criticalMoment.oneCount.test.ts`
 - `src/services/exchangeIdeas.test.ts`
 - `src/services/forkTrick.test.ts`
 - `src/services/latentFork.test.ts`

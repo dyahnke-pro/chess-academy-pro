@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**998 lines · 32 exports · 973 importers · 239 tests · 38 audits**
+**1008 lines · 32 exports · 980 importers · 241 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -243,6 +243,7 @@
 - `src/components/Play/OpeningChallenge.tsx`
 - `src/components/Play/OpeningSpeedrun.tsx`
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx`
+- `src/components/Puzzles/DeepRunPage.rating.test.tsx`
 - `src/components/Puzzles/DeepRunPage.tsx`
 - `src/components/Puzzles/LichessDashboardPage.test.tsx`
 - `src/components/Puzzles/LichessDashboardPage.tsx`
@@ -640,6 +641,7 @@
 - `src/hooks/useStudentNeed.test.tsx`
 - `src/hooks/useStudentNeed.ts`
 - `src/hooks/useWrongTryRefutation.ts`
+- `src/services/__fixtures__/davidRecord.ts`
 - `src/services/accuracyService.test.ts`
 - `src/services/accuracyService.ts`
 - `src/services/adaptivePuzzleService.test.ts`
@@ -662,6 +664,9 @@
 - `src/services/bucketPipelineAudit.test.ts`
 - `src/services/bucketPipelineAudit.ts`
 - `src/services/calculationSkillMatch.ts`
+- `src/services/capabilityDateRepair.test.ts`
+- `src/services/capabilityDateRepair.ts`
+- `src/services/capabilityEvidence.ts`
 - `src/services/chatBoardRead.ts`
 - `src/services/chesscomService.ts`
 - `src/services/claimChecker.measure.test.ts`
@@ -762,6 +767,8 @@
 - `src/services/groundedAnswer.ts`
 - `src/services/heatMap.test.ts`
 - `src/services/heatMap.ts`
+- `src/services/holdRate.test.ts`
+- `src/services/holdRate.ts`
 - `src/services/homeOpening.test.ts`
 - `src/services/homeOpening.ts`
 - `src/services/homeOpeningPlan.test.ts`
@@ -779,7 +786,6 @@
 - `src/services/kidRatingService.ts`
 - `src/services/learnBoardTeaching.ts`
 - `src/services/learnGameRecord.ts`
-- `src/services/learnRecordTerms.test.ts`
 - `src/services/learnRecordTerms.ts`
 - `src/services/lichessExplorerService.ts`
 - `src/services/lichessPuzzleService.test.ts`
@@ -877,6 +883,7 @@
 - `src/services/proRepertoireService.ts`
 - `src/services/promptedFind.wire.test.ts`
 - `src/services/proof.ts`
+- `src/services/prophylaxis.ts`
 - `src/services/puzzleDepth.ts`
 - `src/services/puzzleMethod.ts`
 - `src/services/puzzleMissService.ts`
@@ -1158,6 +1165,7 @@
 - `src/components/Openings/TrainMode.test.tsx`
 - `src/components/Openings/WalkthroughIntegration.test.tsx`
 - `src/components/Openings/WalkthroughMode.test.tsx`
+- `src/components/Puzzles/DeepRunPage.rating.test.tsx`
 - `src/components/Puzzles/LichessDashboardPage.test.tsx`
 - `src/components/Puzzles/MyMistakesPage.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.deepRun.test.tsx`
@@ -1196,6 +1204,7 @@
 - `src/services/autoAnalyzeGame.reason.test.ts`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts`
 - `src/services/bucketPipelineAudit.test.ts`
+- `src/services/capabilityDateRepair.test.ts`
 - `src/services/claimChecker.measure.test.ts`
 - `src/services/coachAnswerGates.test.ts`
 - `src/services/coachBookMove.test.ts`
@@ -1240,13 +1249,13 @@
 - `src/services/groundedAnswer.teaching.test.ts`
 - `src/services/groundedAnswer.test.ts`
 - `src/services/heatMap.test.ts`
+- `src/services/holdRate.test.ts`
 - `src/services/homeOpening.test.ts`
 - `src/services/homeOpeningPlan.test.ts`
 - `src/services/homeOpeningService.test.ts`
 - `src/services/homeOpeningSteer.test.ts`
 - `src/services/journeyService.test.ts`
 - `src/services/kidPuzzleService.test.ts`
-- `src/services/learnRecordTerms.test.ts`
 - `src/services/lichessPuzzleService.test.ts`
 - `src/services/liveTacticsContext.discoveryLookahead.test.ts`
 - `src/services/liveTacticsContext.playable.test.ts`

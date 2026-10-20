@@ -89,13 +89,13 @@
 - `src/services/coachDecider.ts:134`
 - `src/services/fundamentalReachesDecider.test.ts:136`
 - `src/services/fundamentalReachesDecider.test.ts:137`
-- `src/services/learnRecordTerms.ts:292`
-- `src/services/needScore.ts:302`
-- `src/services/needScore.ts:316`
-- `src/services/positionFacts.ts:1428`
-- `src/services/positionFacts.ts:1450`
-- `src/services/reviewFacetRank.ts:518`
-- `src/services/reviewFacetRank.ts:566`
+- `src/services/learnRecordTerms.ts:286`
+- `src/services/needScore.ts:310`
+- `src/services/needScore.ts:324`
+- `src/services/positionFacts.ts:1431`
+- `src/services/positionFacts.ts:1453`
+- `src/services/reviewFacetRank.ts:527`
+- `src/services/reviewFacetRank.ts:575`
 - `src/services/studentMomentBoost.ts:128`
 - `src/services/teachingSelector.ts:175`
 - `src/services/weaknessSignal.test.ts:56`
@@ -109,21 +109,21 @@
 - `src/services/weaknessSignal.test.ts:176`
 - `src/services/weaknessSignal.test.ts:185`
 - `src/services/weaknessSignal.test.ts:188`
-- `src/services/weaknessSignalLoader.green.test.ts:58`
-- `src/services/weaknessSignalLoader.green.test.ts:64`
-- `src/services/weaknessSignalLoader.green.test.ts:71`
-- `src/services/weaknessSignalLoader.green.test.ts:81`
+- `src/services/weaknessSignalLoader.green.test.ts:62`
+- `src/services/weaknessSignalLoader.green.test.ts:68`
+- `src/services/weaknessSignalLoader.green.test.ts:75`
+- `src/services/weaknessSignalLoader.green.test.ts:82`
 
 ### `clauseKindBucket` (function) — 1 call site
-- `src/services/needScore.ts:359`
+- `src/services/needScore.ts:361`
 
 ### `matchClauseKind` (function) — 13 call sites
 - `src/services/fundamentalReachesDecider.test.ts:130`
 - `src/services/fundamentalReachesDecider.test.ts:157`
-- `src/services/needScore.ts:313`
-- `src/services/positionFacts.ts:1394`
-- `src/services/reviewFacetRank.ts:517`
-- `src/services/reviewFacetRank.ts:565`
+- `src/services/needScore.ts:321`
+- `src/services/positionFacts.ts:1397`
+- `src/services/reviewFacetRank.ts:526`
+- `src/services/reviewFacetRank.ts:574`
 - `src/services/weaknessSignal.test.ts:77`
 - `src/services/weaknessSignal.test.ts:80`
 - `src/services/weaknessSignal.test.ts:83`
@@ -133,9 +133,9 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:120`
 
 ### `matchTacticPattern` (function) — 11 call sites
-- `src/services/liveTacticsContext.ts:617`
-- `src/services/needScore.ts:311`
-- `src/services/positionFacts.ts:1392`
+- `src/services/liveTacticsContext.ts:651`
+- `src/services/needScore.ts:319`
+- `src/services/positionFacts.ts:1395`
 - `src/services/tacticAlertService.ts:606`
 - `src/services/teachingSelector.ts:174`
 - `src/services/teachingSelector.ts:325`
@@ -148,9 +148,9 @@
 ### `matchTag` (function) — 10 call sites
 - `src/services/fundamentalRecurrence.ts:61`
 - `src/services/learnRecordTerms.ts:71`
-- `src/services/learnRecordTerms.ts:291`
-- `src/services/needScore.ts:300`
-- `src/services/positionFacts.ts:1394`
+- `src/services/learnRecordTerms.ts:285`
+- `src/services/needScore.ts:308`
+- `src/services/positionFacts.ts:1397`
 - `src/services/teachingSelector.ts:326`
 - `src/services/weaknessSignal.test.ts:119`
 - `src/services/weaknessSignal.test.ts:122`
@@ -158,13 +158,13 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:119`
 
 ### `matchFundamental` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:2321`
+- `src/services/coachFeatureService.ts:2430`
 - `src/services/fundamentalReachesDecider.test.ts:88`
 - `src/services/fundamentalReachesDecider.test.ts:99`
 - `src/services/fundamentalReachesDecider.test.ts:129`
 - `src/services/fundamentalRecurrence.ts:61`
 - `src/services/loopCloses.review.integration.test.ts:82`
-- `src/services/needScore.ts:310`
+- `src/services/needScore.ts:318`
 - `src/services/teachingSelector.ts:324`
 - `src/services/weaknessSpine.fundamentals.test.ts:117`
 - `src/services/weaknessSpine.fundamentals.test.ts:118`

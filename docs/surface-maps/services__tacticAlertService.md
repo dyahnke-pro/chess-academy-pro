@@ -68,7 +68,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `getTacticLookahead` (function) — 15 call sites
 - `src/hooks/useCoachTips.ts:318`
 - `src/hooks/useCoachTips.ts:349`
-- `src/services/liveTacticsContext.ts:81`
+- `src/services/liveTacticsContext.ts:83`
 - `src/services/ratingBands.test.ts:83`
 - `src/services/tacticAlertService.test.ts:179`
 - `src/services/tacticAlertService.test.ts:183`
@@ -130,7 +130,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Tactics/TacticSetupBoard.tsx:515`
 - `src/components/Tactics/TacticSetupPage.tsx:223`
 - `src/hooks/useCoachTips.ts:327`
-- `src/services/learnBoardTeaching.ts:901`
+- `src/services/learnBoardTeaching.ts:911`
 - `src/services/mistakePuzzleService.ts:685`
 - `src/services/mistakePuzzleService.ts:986`
 - `src/services/mistakePuzzleService.ts:1271`

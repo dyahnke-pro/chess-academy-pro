@@ -43,7 +43,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11336`
+- `src/components/Coach/CoachTeachPage.tsx:11340`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -139,10 +139,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `spokenSentenceKeys` (function) — 12 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8251`
-- `src/components/Coach/CoachTeachPage.tsx:9949`
-- `src/components/Coach/CoachTeachPage.tsx:9967`
-- `src/components/Coach/CoachTeachPage.tsx:11159`
-- `src/components/Coach/CoachTeachPage.tsx:11310`
+- `src/components/Coach/CoachTeachPage.tsx:9953`
+- `src/components/Coach/CoachTeachPage.tsx:9971`
+- `src/components/Coach/CoachTeachPage.tsx:11163`
+- `src/components/Coach/CoachTeachPage.tsx:11314`
 - `src/services/coachFeatureService.ts:2577`
 - `src/services/learnTurnDoor.test.ts:614`
 - `src/services/reviewMoveBriefing.ts:406`
@@ -152,8 +152,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:514`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11146`
-- `src/components/Coach/CoachTeachPage.tsx:11430`
+- `src/components/Coach/CoachTeachPage.tsx:11150`
+- `src/components/Coach/CoachTeachPage.tsx:11434`
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 3 call sites
@@ -168,7 +168,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `keptLines` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11373`
+- `src/components/Coach/CoachTeachPage.tsx:11377`
 - `src/services/learnTurnDoor.test.ts:206`
 - `src/services/learnTurnDoor.test.ts:212`
 - `src/services/learnTurnDoor.test.ts:218`

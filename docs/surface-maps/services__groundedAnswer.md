@@ -124,7 +124,7 @@
 - `src/services/groundedAnswer.test.ts:1657`
 
 ### `evalPhrase` (function) — 1 call site
-- `src/coach/boardTurnAnswer.ts:441`
+- `src/coach/boardTurnAnswer.ts:447`
 
 ### `parsePiecePurpose` (function) — 7 call sites
 - `src/services/piecePurpose.test.ts:17`
@@ -1245,12 +1245,12 @@
 - `src/services/coachApi.ts:6309`
 
 ### `seatPieceReferences` (re-export) — 36 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8756`
+- `src/components/Coach/CoachTeachPage.tsx:8759`
 - `src/services/coachFeatureService.ts:4233`
 - `src/services/coachFeatureService.ts:4284`
 - `src/services/coachFeatureService.ts:5307`
-- `src/services/liveTacticsContext.ts:451`
-- `src/services/liveTacticsContext.ts:460`
+- `src/services/liveTacticsContext.ts:486`
+- `src/services/liveTacticsContext.ts:495`
 - `src/services/lookaheadPlan.ts:131`
 - `src/services/playedConcept.ts:57`
 - `src/services/reviewBoardAwareness.test.ts:47`
