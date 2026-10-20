@@ -105,6 +105,20 @@ ranking computer:
   the student ANSWERED it — both halves computed). The ranker may go QUIET here.
 - **GREY** — never asked. NOT the same as green; absent ≠ mastered.
 
+🔒🔒 **THE STATE IS A HOLD RATE OVER RECENT GAMES (David 2026-10-20: "It needs
+to stay above a certain percentage to remain green" → 90/75 → "Agreed").** One
+computer, read by the heat map, the fade and the threat voice alike: the hold
+rate over the LAST 20 times the board posed the skill (held vs missed, each miss
+counted once — a `capabilityEvidence` broken row and a `misconceptionTags` slip
+for the same game and ply are one miss), with at least 8 posed.
+- **≥ 90% → GREEN:** quiet. A simple threat gets NO voice and NO arrow (an
+  arrow is a hint, and a hinted find is not proof).
+- **75–89% → one short line.**
+- **< 75% → RED:** full callout.
+- **< 8 posed → GREY:** taught in full.
+This replaces "green once proven, whatever comes after": on his record, 715
+threats held against 259 missed is ~73%, so the coach calls them out.
+
 🚨 **GREY MEANS TEACH IT — AN UNRATED PLAYER GETS THE FULL CAPABILITIES OF THE
 DETECTORS (David 2026-09-18, correcting a session that had grey as "lower
 urgency than red"): "An unrated player gets treated with the full capabilities
