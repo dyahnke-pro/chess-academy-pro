@@ -26,8 +26,7 @@ import { scoreNarration } from './narrationQuality.shared.mjs';
 import { validateBoardClaims } from './boardClaimValidator';
 import { secondarySupportNotes, secondaryNotesForPosition, secondaryNotesForFen } from './secondaryCorpora';
 import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
-import { boardConcepts, phaseOfFen } from './boardConcepts';
-import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope, noteSuitsStudentSide, noteSeatMatches, noteIsWholeSentence } from './noteAnchorIntegrity';
+import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope, noteSeatMatches, noteIsWholeSentence } from './noteAnchorIntegrity';
 import { bakedSpoken, loadSpokenBake } from './spokenNoteBake';
 import { getFarmedCorporaSync, onFarmedCorpusLoaded, primeFarmedCorporaLazily } from './farmedCorpusData';
 import { falseConfigurationClaim } from './configurationClaims';
@@ -95,8 +94,8 @@ const RAW_DATA = teachingsData as unknown as TeachingsBundle;
 // touching the derivation itself.
 // 🔒 THE SOURCE-META FILTER RUNS AT LOAD, NOT AT THE CALL SITE (2026-09-19).
 // `noteTeachesChessNotItsSource` existed and was called in exactly THREE
-// places — `supportNoteForPly`, `noteAtPosition`,
-// `transitionTeachingSourceForGame`. Every tier a FLOATING note is actually
+// places — `supportNoteForPly`, `noteAtPosition` and the transition
+// ritual (since deleted). Every tier a FLOATING note is actually
 // reached by had none: `spokenTacticNote`, `endgameNoteForLesson`,
 // `conceptNotesFor`, `buildDanyaTeachingBlock`, `notesForOpening`. So
 // "The speaker expresses gratitude for community support and plans to continue
@@ -774,16 +773,12 @@ export function teachingNoteForBoard(
  * register changes. A note taught at this very position needs no frame at all.
  */
 export function generalizedTeaching(
-  origin: TeachingOrigin | TransitionOrigin,
+  origin: TeachingOrigin,
   text: string,
 ): string {
   switch (origin) {
     case 'position':
       return text;
-    // Anchored a few plies back on THIS line — near enough to be about the run
-    // of play, so it is framed as continuation rather than as generalization.
-    case 'recent-path':
-      return `Following on from the line so far: ${text}`;
     case 'opening-family':
       return `A general idea in this opening: ${text}`;
     case 'structure':
@@ -848,139 +843,6 @@ export function planNoteForPath(historySans: string[], fen?: string): DanyaNote 
   return notes.find(hasPlan) ?? null;
 }
 
-/** The TRANSITION teaching for the current game — Danya's opening→middlegame
- *  ritual is structure → idea → plan, so this returns the whole note, chosen
- *  by tightening circles (David 2026-07-12 "make the phase transitions match
- *  more closely to his teachings"):
- *    1. exact position (FEN, transposition-safe),
- *    2. recent path prefix (≤12 plies back),
- *    3. the OPENING FAMILY's middlegame teaching — most real games have left
- *       book by the transition, but his middlegame notes for the family still
- *       apply (the structure family is what he teaches from).
- *  Board-false specifics in a family-level note are dropped downstream by the
- *  per-sentence spoken gate; the structural teaching survives. */
-export type TransitionOrigin = 'position' | 'recent-path' | 'opening-family' | 'structure';
-
-export interface TransitionTeaching {
-  note: DanyaNote;
-  origin: TransitionOrigin;
-}
-
-/** The transition teaching WITH its provenance — which decides how much of the
- *  note may be spoken.
- *
- *  Only tier 1 is authored at the board the student is looking at. The caller
- *  used to speak every tier's `explains` + `teaches` + `plans` verbatim into the
- *  transition sentence, so a family-level note's description of ITS position was
- *  narrated as a description of THIS one. `plans` is the exception and the
- *  reason the lower tiers still earn their place: it is forward-looking — where
- *  this kind of position is heading — which stays true when borrowed. See
- *  `usePhaseNarration`, which speaks the full ritual only for `'position'`. */
-export function transitionTeachingSourceForGame(args: {
-  historySans: string[];
-  fen?: string;
-  openingName?: string | null;
-  /** The side the student is playing, so the ritual never coaches their
-   *  opponent. See `noteSuitsStudentSide`. */
-  studentSide?: 'white' | 'black' | null;
-}): TransitionTeaching | null {
-  // The opening-name and concept tiers live in the FETCHED floating half, so
-  // ask for it here. Fire-and-forget: this call stays synchronous and simply
-  // sees the wider tier once it lands.
-  primeFloatingTeaching();
-  // WHICH phase's teaching this transition wants. Hardcoded to 'middlegame'
-  // until 2026-08-05, which was invisible while the caller only ran this on the
-  // opening→middlegame boundary. The moment the endgame transition started
-  // using it, that hardcoding would have handed a student entering a rook
-  // ending a middlegame plan.
-  const wantPhase = (args.fen ? phaseOfFen(args.fen) : null) ?? 'middlegame';
-  // SCOPE IS NOT OPTIONAL ON THIS PATH EITHER. Every other selection site asks
-  // `noteStaysInScope`; this one never did, and a full Sicilian game on prod
-  // was told "the critical moment is when white plays Ba4; black must choose
-  // between ...Ra6 and ...d5" — the Ruy Lopez, named move for named move, at a
-  // phase transition in a Dragon. The honest "a general idea in this opening"
-  // framing makes it worse, not better: it presents another opening's theory
-  // as this one's.
-  const usable = (n: DanyaNote): boolean =>
-    Boolean(n.plans?.trim())
-    && noteTeachesChessNotItsSource(n)
-    && noteStaysInScope(n, args.openingName)
-    && noteSuitsStudentSide(n, args.studentSide);
-  const exact = args.fen ? notesForFen(args.fen).find(usable) : undefined;
-  if (exact) return { note: exact, origin: 'position' };
-  const recent = notesForPrefix(args.historySans, Infinity, 12).find(usable);
-  if (recent) return { note: recent, origin: 'recent-path' };
-  if (args.openingName) {
-    const family = notesForOpening(args.openingName)
-      .filter((n) => n.phase === wantPhase && usable(n));
-    // Deepest-keyed first — the most specific middlegame teaching for the family.
-    family.sort((a, b) => b.lineSan.length - a.lineSan.length);
-    if (family[0]) return { note: family[0], origin: 'opening-family' };
-  }
-  // 4. GAP TIER — the transition ritual on an opening the primary corpus never
-  //    covers. Ahead of structure transfer for the reason given on
-  //    `teachingNoteForBoard`: a real plan for THIS opening beats a borrowed
-  //    plan from another one. Any primary opening-level coverage suppresses it.
-  if (args.openingName) {
-    const support = secondarySupportNotes({
-      historySans: args.historySans,
-      openingName: args.openingName,
-      maxNotes: 1,
-      accept: (n) => n.phase === wantPhase && usable(n),
-    })[0];
-    if (support) return { note: support, origin: 'opening-family' };
-  }
-  // 5. STRUCTURE TRANSFER — teaching from ANY opening whose structure provably
-  //    matches this board (and whose claims survive the live truth filter), so
-  //    past book the transition teaching no longer goes quiet.
-  if (args.fen) {
-    const transferred = notesForStructure(args.fen).find((n) => n.phase === wantPhase && usable(n));
-    if (transferred) return { note: transferred, origin: 'structure' };
-    // CONCEPT tier — the endgame's own teaching lives here (king activity, the
-    // rook behind the passed pawn), keyed off what the board plainly shows.
-    // Without it a transition into an ending the corpus has no opening-tagged
-    // note for goes quiet, which is most of them: only 97 endgame notes carry a
-    // position at all.
-    const derived = boardConcepts(args.fen);
-    if (derived) {
-      // Concept notes are keyed off IDEAS, not positions — so the tier must
-      // still refuse a note whose spoken text names pieces this board no
-      // longer has (the K+P/"trade rooks" class), and whose claims fail the
-      // same live truth filter the structure tier applies. Selection owns
-      // this; the caller's grade is the backup that should never fire.
-      const boardFen = args.fen;
-      const concept = conceptNotesFor({
-        phase: derived.phase,
-        concepts: derived.concepts,
-        limit: 5,
-        accept: (n) => {
-          if (!usable(n)) return false;
-          if (!namedPiecesExistOnBoard(n.plans ?? '', boardFen)) return false;
-          if (!noteSpeaksOnlyPiecesOnBoard(n, boardFen)) return false;
-          try {
-            return validateBoardClaims(`${n.explains} ${n.teaches} ${n.plans}`, boardFen).violations.length === 0;
-          } catch { return false; }
-        },
-      })[0];
-      if (concept) return { note: concept, origin: 'structure' };
-    }
-  }
-  return null;
-}
-
-/** Back-compat shim for callers that need only the note. Anything that SPEAKS
- *  the note must use `transitionTeachingSourceForGame` and honour the origin. */
-export function transitionTeachingForGame(args: {
-  historySans: string[];
-  fen?: string;
-  openingName?: string | null;
-}): DanyaNote | null {
-  // The opening-name and concept tiers live in the FETCHED floating half, so
-  // ask for it here. Fire-and-forget: this call stays synchronous and simply
-  // sees the wider tier once it lands.
-  primeFloatingTeaching();
-  return transitionTeachingSourceForGame(args)?.note ?? null;
-}
 
 /** Render notes as a compact system-prompt grounding block (the slot the
  *  book-passage block used to fill). Returns '' when nothing matches. */

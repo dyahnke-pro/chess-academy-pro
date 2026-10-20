@@ -87,7 +87,7 @@ describe('assembleTacticsAnswer — Phase 2 (voice the engine-computed tactics)'
     expect(assembleTacticsAnswer(tactics({ fen: empty, hanging: [{ square: 'b4', piece: 'b', color: 'w' }] }), 'white')).toBeNull();
   });
   it('falls to the top threat when nothing immediate', () => {
-    const a = assembleTacticsAnswer(tactics({ threats: [{ spoken: 'if they play Nxe4, their knight takes on e4', type: 'fork', description: 'Black threatens Nxe4', depthAhead: 2, line: ['Nxe4'] }] }), 'white');
+    const a = assembleTacticsAnswer(tactics({ threats: [{ spoken: 'if they play Nxe4, their knight takes on e4', type: 'fork', description: 'Black threatens Nxe4', depthAhead: 2, line: ['Nxe4'], squares: [], tacticFen: '', roles: null, collects: true, namesStudentMove: 'none' }] }), 'white');
     expect(a!.facts).toContain('Watch out');
   });
   it('returns null when there is no concrete tactic (caller falls back)', () => {

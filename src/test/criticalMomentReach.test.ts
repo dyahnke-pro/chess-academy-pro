@@ -40,7 +40,10 @@ describe('critical-moment scan reaches the flagged plies', () => {
     // What this test is FOR is unchanged and is what the two lines below pin:
     // the ply is yielded, and the yield is decided BEFORE the ask register runs
     // — never two stops on one ply.
-    expect(after).toContain('if (!questionPlan.has(atPly)) {');
-    expect(after.indexOf('if (!questionPlan.has(atPly)) {')).toBeLessThan(after.indexOf("register === 'ask'"));
+    // The questions themselves sit behind REVIEW_ASKS_QUESTIONS; whenever they
+    // are on, the planned card still owns its ply.
+    const guard = 'if (!(REVIEW_ASKS_QUESTIONS && questionPlan.has(atPly))) {';
+    expect(after).toContain(guard);
+    expect(after.indexOf(guard)).toBeLessThan(after.indexOf("register === 'ask'"));
   });
 });

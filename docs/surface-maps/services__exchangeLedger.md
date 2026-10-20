@@ -78,13 +78,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/patternFails.ts:128`
 - `src/services/threatProof.ts:56`
 
-### `netPieceWords` (function) — 9 call sites
+### `netPieceWords` (function) — 8 call sites
 - `src/coach/chatTurnAnswers.ts:411`
 - `src/services/decisiveReason.ts:104`
 - `src/services/exchangeIdeas.ts:618`
 - `src/services/lineCalc.ts:202`
 - `src/services/patternFails.ts:129`
-- `src/services/principleAttribution.ts:790`
 - `src/services/reviewPositionalAssessment.ts:141`
 - `src/services/tacticGeometry.ts:529`
 - `src/services/whyItFailed.ts:258`
@@ -133,11 +132,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/giftedMaterialIsNotWon.test.ts:56`
 - `src/services/inaccuracyCall.ts:342`
 - `src/services/inaccuracyCall.ts:400`
-- `src/services/inaccuracyCall.ts:918`
-- `src/services/inaccuracyCall.ts:1393`
-- `src/services/inaccuracyCall.ts:1459`
-- `src/services/inaccuracyCall.ts:1554`
-- `src/services/inaccuracyCall.ts:1605`
+- `src/services/inaccuracyCall.ts:906`
+- `src/services/inaccuracyCall.ts:1381`
+- `src/services/inaccuracyCall.ts:1447`
+- `src/services/inaccuracyCall.ts:1542`
+- `src/services/inaccuracyCall.ts:1593`
 - `src/services/lineProof.test.ts:13`
 - `src/services/lineProof.test.ts:24`
 - `src/services/lineProof.test.ts:32`
@@ -147,13 +146,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveOrder.ts:133`
 - `src/services/openingGenerator.ts:3524`
 - `src/services/pieceOptions.ts:123`
-- `src/services/playedMoveGrade.ts:112`
-- `src/services/principleAttribution.ts:463`
-- `src/services/principleAttribution.ts:527`
-- `src/services/principleAttribution.ts:742`
-- `src/services/principleAttribution.ts:745`
-- `src/services/principleAttribution.ts:755`
-- `src/services/principleAttribution.ts:758`
+- `src/services/playedMoveGrade.ts:111`
+- `src/services/principleAttribution.ts:461`
+- `src/services/principleAttribution.ts:525`
+- `src/services/principleAttribution.ts:724`
+- `src/services/principleAttribution.ts:727`
+- `src/services/principleAttribution.ts:737`
+- `src/services/principleAttribution.ts:740`
 - `src/services/projectedLineVoice.report.test.ts:108`
 - `src/services/projectedLineVoice.ts:68`
 - `src/services/punishCountsPlayedMove.test.ts:16`
@@ -202,7 +201,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.horizon.test.ts:36`
 - `src/services/exchangeLedger.test.ts:255`
 - `src/services/groundedAnswer.ts:1987`
-- `src/services/positionFacts.ts:591`
+- `src/services/positionFacts.ts:636`
 - `src/services/reviewFullData.ts:792`
 
 ## Tests

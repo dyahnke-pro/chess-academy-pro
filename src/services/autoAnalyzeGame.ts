@@ -23,6 +23,7 @@ import {
   buildMistakePuzzleFromCapture,
   mistakeProvenanceFromGame,
   type MistakePuzzleProvenance,
+  generateMistakePuzzlesFromGame,
 } from './mistakePuzzleService';
 import { classifyPhase } from './gamePhaseService';
 import { pvUciToSan } from './principleAttribution';
@@ -34,7 +35,7 @@ import { isMisconceptionTagId, MISCONCEPTION_RULES_REV, POSITIVE_HALF_REV, THREA
 import { THREAT_MOTIF_TAGS } from './learnRecordTerms';
 import { threatAnswersForGame, type ThreatPly } from './threatAnswerEvidence';
 import { positionPosed } from './moveInsight';
-import type { GameRecord, MisconceptionTagRecord, MistakePuzzle, MoveAnnotation } from '../types';
+import type { GameRecord, MisconceptionTagRecord, MistakePuzzle, MoveAnnotation, UserProfile } from '../types';
 
 export interface BlunderForAnalysis {
   /** Position BEFORE the move (FEN). */
@@ -305,6 +306,27 @@ function usernameForGame(game: GameRecord): string | undefined {
  * so most plies yield nothing and that is correct. `cpLoss` is Stockfish's
  * own number or null (an unmeasurable ply is never read as clean).
  */
+/** A FINISHED game's whole record: the bad-habit scan, its drillable
+ *  puzzles, the weakness profile they feed, and the slip/capability record
+ *  from its annotations. One entry, owned here, so a surface that saves a game composes
+ *  none of the record itself (the surface-composition ceiling). Fire and
+ *  forget: each step swallows its own failure — the next sweep catches up. */
+export function recordFinishedGame(
+  gameId: string,
+  profile: UserProfile,
+  sweep: SweepOptions,
+  /** The game's graded moves as played, for the bad-habit scan. */
+  moves: ReadonlyArray<{ classification: string | null; san: string }>,
+): void {
+  // Dynamic: the coach feature service is heavy and needed only here.
+  void import('./coachFeatureService').then((m) => m.detectBadHabitsFromGame([...moves], profile)).catch(() => undefined);
+  void generateMistakePuzzlesFromGame(gameId)
+    // Dynamic: the weakness analyzer is a full-library scan, needed only here.
+    .then(() => import('./weaknessAnalyzer').then((m) => m.computeWeaknessProfile(profile)))
+    .catch(() => undefined);
+  void autoAnalyzeGameMisconceptions(gameId, undefined, sweep).catch(() => undefined);
+}
+
 /** THE reason the engine's move beat the one played, read off the two lines a
  *  flagged ply keeps (best line vs played line, each with its eval), as the
  *  skill it posed — or null when the ply kept no lines, the student played the

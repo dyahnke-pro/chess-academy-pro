@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2011 lines · 15 exports · 29 importers · 27 tests · 3 audits**
+**2057 lines · 18 exports · 31 importers · 28 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,7 @@
 - `src/coach/boardTurnAnswer.ts`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/hooks/useLiveCoach.ts`
+- `src/hooks/usePhaseNarration.door.test.ts`
 - `src/hooks/usePhaseNarration.ts`
 - `src/services/chatBoardRead.test.ts`
 - `src/services/chatBoardRead.ts`
@@ -28,6 +29,7 @@
 - `src/services/claimKeyParity.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/learnNamesNoMove.os10.test.ts`
+- `src/services/learnTurnDoor.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
 - `src/services/positionFacts.afterLine.test.ts`
@@ -87,9 +89,16 @@
 ### `planChangedText` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `clauseText` (function) — 12 call sites
+### `PhaseFact` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `clauseClaims` (function) — 3 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10644`
+- `src/hooks/usePhaseNarration.door.test.ts:75`
+- `src/hooks/usePhaseNarration.ts:468`
+
+### `clauseText` (function) — 11 call sites
 - `src/hooks/useLiveCoach.ts:301`
-- `src/hooks/usePhaseNarration.ts:673`
 - `src/services/chatBoardRead.ts:112`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:256`
@@ -103,10 +112,10 @@
 
 ### `computePositionFacts` (function) — 96 call sites
 - `src/coach/boardTurnAnswer.ts:134`
-- `src/components/Coach/CoachTeachPage.tsx:10495`
+- `src/components/Coach/CoachTeachPage.tsx:10518`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:269`
-- `src/hooks/usePhaseNarration.ts:645`
+- `src/hooks/usePhaseNarration.ts:432`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
 - `src/services/chatBoardRead.ts:81`
@@ -200,10 +209,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8912`
+- `src/components/Coach/CoachTeachPage.tsx:8944`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10768`
+- `src/components/Coach/CoachTeachPage.tsx:10791`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -214,8 +223,11 @@
 - `src/services/positionFacts.afterLine.test.ts:22`
 - `src/services/positionFacts.afterLine.test.ts:25`
 
+### `NAMES_NO_MOVE` (re-export) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `conceptInstanceKey` (re-export) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8884`
+- `src/components/Coach/CoachTeachPage.tsx:8916`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/conceptKey.test.ts:6`
@@ -230,6 +242,7 @@
 ## Tests
 
 - `src/hooks/useLiveCoach.needWire.test.tsx`
+- `src/hooks/usePhaseNarration.door.test.ts`
 - `src/services/bluffDetector.test.ts`
 - `src/services/chatBoardRead.test.ts`
 - `src/services/claimChecker.measure.test.ts`

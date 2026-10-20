@@ -603,7 +603,7 @@ export function buildTacticAlertMessage(
 export async function isTacticWeakness(tacticType: TacticType): Promise<boolean> {
   const pattern = toTacticPatternType(tacticType);
   if (!pattern) return false;
-  return matchTacticPattern(pattern, await loadWeaknessSignals()) !== null;
+  return matchTacticPattern(pattern, await loadWeaknessSignals(), 'finds') !== null;
 }
 
 // ─── Session Tracking ─────────────────────────────────────────────────────────

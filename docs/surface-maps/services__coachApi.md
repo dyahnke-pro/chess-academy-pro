@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7314 lines · 39 exports · 55 importers · 62 tests · 19 audits**
+**7314 lines · 39 exports · 54 importers · 62 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -38,7 +38,6 @@
 - `src/components/Puzzles/MistakePuzzleBoard.tsx`
 - `src/components/Puzzles/PuzzleBoard.tsx`
 - `src/hooks/useLiveCoach.ts`
-- `src/hooks/usePhaseNarration.ts`
 - `src/hooks/usePositionNarration.ts`
 - `src/services/coachApi.attemptComparison.test.ts`
 - `src/services/coachApi.banterContract.test.ts`
@@ -219,13 +218,12 @@
 ### `MoveMoment` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `groundedMoveFeedback` (function) — 12 call sites
+### `groundedMoveFeedback` (function) — 11 call sites
 - `src/components/Openings/MiddlegamePractice.tsx:267`
 - `src/hooks/useLiveCoach.needWire.test.tsx:15`
 - `src/hooks/useLiveCoach.test.tsx:13`
 - `src/hooks/useLiveCoach.ts:318`
-- `src/hooks/usePhaseNarration.test.ts:68`
-- `src/hooks/usePhaseNarration.ts:757`
+- `src/hooks/usePhaseNarration.door.test.ts:33`
 - `src/services/coachApi.computedOnly.test.ts:10`
 - `src/services/coachMoveCommentary.ts:303`
 - `src/services/groundedComputedOnly.test.ts:25`
@@ -235,7 +233,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:584`
-- `src/components/Coach/CoachTeachPage.tsx:3906`
+- `src/components/Coach/CoachTeachPage.tsx:3905`
 - `src/services/coachSessionRouter.ts:120`
 - `src/services/coachSettingsAction.ts:261`
 
@@ -273,14 +271,13 @@
 - `src/services/coachApi.speakableFacts.test.ts:52`
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
-### `voiceFacts` (function) — 37 call sites
+### `voiceFacts` (function) — 36 call sites
 - `scripts/audit-kid-static.mjs:53`
 - `scripts/audit-kid-static.mjs:64`
 - `src/components/Coach/CoachGameReview.tsx:1708`
 - `src/components/Coach/CoachGameReview.tsx:1917`
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
 - `src/components/Puzzles/PuzzleBoard.tsx:99`
-- `src/hooks/usePhaseNarration.ts:744`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:260`
 - `src/services/coachApi.computedOnly.test.ts:20`
@@ -404,7 +401,7 @@
 - `src/components/Tactics/TacticSetupBoard.test.tsx`
 - `src/hooks/useLiveCoach.needWire.test.tsx`
 - `src/hooks/useLiveCoach.test.tsx`
-- `src/hooks/usePhaseNarration.test.ts`
+- `src/hooks/usePhaseNarration.door.test.ts`
 - `src/hooks/usePositionNarration.degrade.test.ts`
 - `src/hooks/usePositionNarration.test.ts`
 - `src/services/coachApi.attemptComparison.test.ts`

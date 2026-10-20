@@ -175,7 +175,7 @@
 - `src/services/reviewTeachingPoints.test.ts:291`
 
 ### `lineTakesPiece` (re-export) — 2 call sites
-- `src/services/positionFacts.ts:590`
+- `src/services/positionFacts.ts:635`
 - `src/services/trappedPiece.ts:96`
 
 ### `findWorstPlacedPiece` (re-export) — 12 call sites
@@ -208,7 +208,7 @@
 - `src/services/planPrescriptions.test.ts:111`
 - `src/services/planPrescriptions.test.ts:119`
 - `src/services/principleAttribution.section14.test.ts:152`
-- `src/services/principleAttribution.ts:1865`
+- `src/services/principleAttribution.ts:1846`
 - `src/services/reviewNarrationDefects.test.ts:35`
 - `src/services/reviewNarrationDefects.test.ts:45`
 - `src/services/reviewNarrationDefects.test.ts:52`

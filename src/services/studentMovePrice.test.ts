@@ -4,7 +4,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { stockfishEngine } from './stockfishEngine';
-import { clearMovePriceMemo, liveMoveCost, liveMovePrice, studentMovePrice } from './playedMoveGrade';
+import { clearMovePriceMemo, liveMovePrice, studentMovePrice } from './playedMoveGrade';
 import type { StockfishAnalysis } from '../types';
 
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -67,7 +67,7 @@ describe('the student\'s move price leads the engine queue', () => {
   it('the old door waits its turn in the line — the defect this replaces', async () => {
     await withBusyEngine(async () => {
       const cost = await Promise.race([
-        liveMoveCost(START, 'a2a3', FAN, 14),
+        liveMovePrice(START, 'a2a3', FAN, 14),
         new Promise<'waited'>((r) => setTimeout(() => r('waited'), 300)),
       ]);
       expect(cost).toBe('waited');
@@ -77,6 +77,5 @@ describe('the student\'s move price leads the engine queue', () => {
   it('Learn prices the student\'s move through the leading door', () => {
     const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(page).toMatch(/const priceRead[^\n]*\n\s*\? studentMovePrice\(fenBefore/);
-    expect(page).toMatch(/const costRead: Promise<number \| null> = priceRead\.then/);
   });
 });

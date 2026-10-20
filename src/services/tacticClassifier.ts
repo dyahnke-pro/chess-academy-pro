@@ -284,6 +284,11 @@ function detectDiscovery(
   return {
     type: 'discovery',
     involvedSquares: [fromSquare, d.behind.square, d.target.square],
+    roles: {
+      mover: { piece: chessAfter.get(toSquare)?.type ?? '', from: fromSquare, to: toSquare },
+      unmasked: { piece: d.behind.type, square: d.behind.square },
+      targets: [{ piece: d.target.type, square: d.target.square }],
+    },
     description: `Moving from ${squareLabel(fromSquare)} to ${squareLabel(toSquare)} reveals ${pieceName(d.behind.type)} on ${squareLabel(d.behind.square)} attacking ${pieceName(d.target.type)} on ${squareLabel(d.target.square)}`,
   };
 }
@@ -613,6 +618,7 @@ export function scanUpcomingTactics(
       const chess = new Chess(fen);
       const lineDepth = Math.min(line.moves.length, maxDepth);
       const sanLine: string[] = [];
+      const pv = uciLineToSan(fen, line.moves);
 
       for (let i = 0; i < lineDepth; i++) {
         const uci = line.moves[i];
@@ -653,6 +659,7 @@ export function scanUpcomingTactics(
             pattern,
             fen: fenAfter,
             line: [...sanLine],
+            pv,
             lineEval: line.evaluation,
             lineMate: line.mate,
           });
@@ -664,6 +671,20 @@ export function scanUpcomingTactics(
   }
 
   return upcoming;
+}
+
+/** The engine line in SAN, as far as it stays legal. */
+function uciLineToSan(fen: string, moves: readonly string[]): string[] {
+  const out: string[] = [];
+  try {
+    const chess = new Chess(fen);
+    for (const uci of moves) {
+      const m = chess.move({ from: uci.slice(0, 2) as Square, to: uci.slice(2, 4) as Square, promotion: uci.length > 4 ? uci[4] : undefined });
+      if (!m) break;
+      out.push(m.san);
+    }
+  } catch { /* the legal prefix */ }
+  return out;
 }
 
 /**

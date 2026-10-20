@@ -28,7 +28,7 @@ import { voiceService } from '../services/voiceService';
 import { splitSpeakableSentences } from '../utils/sentenceSplit';
 import { logAppAudit } from '../services/appAuditor';
 import { useAppStore } from '../stores/appStore';
-import { computePositionFacts, clauseText, type LastMoveInput } from '../services/positionFacts';
+import { computePositionFacts, clauseText, type LastMoveInput, type LiveMoveReads } from '../services/positionFacts';
 import { rememberSpokenSquares } from '../services/spokenSquares';
 import { actuate } from '../services/coachActuator';
 import { useWeaknessSignals } from './useWeaknessSignals';
@@ -44,7 +44,6 @@ import {
 } from '../services/liveCoachTriggers';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
-import type { MovePrice } from '../services/moveCost';
 
 export interface UseLiveCoachArgs {
   gameId: string;
@@ -86,7 +85,7 @@ export interface PlayerMoveNotification {
   /** The move's ONE price (`liveMovePrice`): its cost against the best move
    *  and both scores from the same search. REQUIRED — `null` when it could not
    *  be priced — so the composer never rebuilds a cost from two reads. */
-  price: MovePrice | null;
+  price: LiveMoveReads['price'];
   /** SAN of the engine's best move from the pre-move position, used
    *  in the LLM context block for "missed tactic" and "great move"
    *  prompts. */

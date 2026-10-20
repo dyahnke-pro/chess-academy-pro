@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3176 lines · 19 exports · 109 importers · 105 tests · 24 audits**
+**3156 lines · 19 exports · 109 importers · 104 tests · 24 audits**
 
 ## Locked rules that govern this surface
 
@@ -175,7 +175,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolvePollyVoice` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:3730`
+- `src/components/Coach/CoachGamePage.tsx:3683`
 
 ### `resolvePollySecondaryVoice` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -381,7 +381,7 @@
 - `src/hooks/useLiveCoach.needWire.test.tsx`
 - `src/hooks/useLiveCoach.test.tsx`
 - `src/hooks/useNarration.test.tsx`
-- `src/hooks/usePhaseNarration.test.ts`
+- `src/hooks/usePhaseNarration.door.test.ts`
 - `src/hooks/usePositionNarration.degrade.test.ts`
 - `src/hooks/usePositionNarration.test.ts`
 - `src/hooks/useReviewPlayback.test.ts`
@@ -402,7 +402,6 @@
 - `src/services/voiceService.speakWhenIdle.test.ts`
 - `src/services/voiceService.stopWhileWaiting.test.ts`
 - `src/services/voiceService.test.ts`
-- `src/services/voiceService.untilOnAir.test.ts`
 - `src/services/voiceService.untilQuiet.test.ts`
 - `src/services/voiceServiceLegacyPref.test.ts`
 - `src/services/walkthroughRunner.test.ts`

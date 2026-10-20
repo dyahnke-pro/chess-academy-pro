@@ -40,7 +40,10 @@ import type { BoardArrow } from '../types';
 import { MATERIAL_VALUE } from './pieceValues';
 import { legalSeeGainFor } from './positionReadingService';
 
-export type ArrowRole = 'play' | 'theirs' | 'threat' | 'line' | 'vision' | 'played' | 'missed';
+/** `refuted`: a move the sentence says FAILS ("anything else, like b4, gives
+ *  up half a point") — drawn red on its own board, never green (hand walk
+ *  2026-10-19 #12: the rejected alternative was drawn as a move to play). */
+export type ArrowRole = 'play' | 'theirs' | 'threat' | 'line' | 'vision' | 'played' | 'missed' | 'refuted';
 
 export interface ArrowClaim {
   from: string;
@@ -141,9 +144,14 @@ export function refusalFor(claim: ArrowClaim, ctx: ArrowDoorContext): ArrowRefus
   if (role === 'played') return base.get(to as Square) && !base.get(from as Square) ? null : 'not-played';
   const piece = base.get(from as Square);
   if (!piece) return 'no-piece';
+  const student: 'w' | 'b' = ctx.studentColor === 'white' ? 'w' : 'b';
+  // A sight line or a "missed" arrow of the student's piece that IS one of
+  // their legal moves on the board on screen shows that move all the same
+  // (hand walk 2026-10-19 #12: "backing your f-pawn's push" drew f2–f4,
+  // "d3 opens the diagonal" drew d2–d3) — held like a named move.
+  if (ctx.holdStudentMoves && piece.color === student && (role === 'vision' || role === 'missed') && isLegalOnScreen(ctx.fen, from, to, student)) return 'unasked';
   if (role === 'vision') return sees(base, from, to) ? null : 'no-sight';
 
-  const student: 'w' | 'b' = ctx.studentColor === 'white' ? 'w' : 'b';
   if (ctx.holdStudentMoves && piece.color === student && (role === 'play' || role === 'line') && fen.split(' ')[0] === ctx.fen.split(' ')[0]) return 'unasked';
   if (role === 'play' && piece.color !== student) return 'wrong-side';
   if ((role === 'threat' || role === 'theirs') && piece.color === student) return 'wrong-side';
@@ -155,7 +163,7 @@ export function refusalFor(claim: ArrowClaim, ctx: ArrowDoorContext): ArrowRefus
   let moved;
   try { moved = b.move({ from, to, promotion: 'q' }); } catch { return 'illegal'; }
   if (!moved) return 'illegal';
-  if (role === 'line') return null;
+  if (role === 'line' || role === 'refuted') return null;
   if (role === 'missed') {
     let shown: Chess;
     try { shown = new Chess(ctx.fen); } catch { return 'bad-fen'; }
@@ -178,6 +186,7 @@ function colourFor(claim: ArrowClaim, ctx: ArrowDoorContext): string {
   if (claim.role === 'threat' || claim.role === 'theirs') return ARROW_COLOR.theirs;
   if (claim.role === 'played') return ARROW_COLOR.played;
   if (claim.role === 'missed') return ARROW_COLOR.mine;
+  if (claim.role === 'refuted') return ARROW_COLOR.theirs;
   if (claim.role === 'play') return (claim.rank && RANK_SHADE[claim.rank]) || ARROW_COLOR.mine;
   // line and vision: by whose piece it is — theirs reads "coming at you".
   try {
@@ -211,6 +220,52 @@ export function withAdmitted(prev: readonly BoardArrow[], admitted: readonly Boa
   const byPair = new Map<string, BoardArrow>();
   for (const a of [...prev, ...admitted]) byPair.set(`${a.startSquare}-${a.endSquare}`, a);
   return [...byPair.values()];
+}
+
+/** Is from→to a legal move of `side` on the board on screen? */
+function isLegalOnScreen(fen: string, from: string, to: string, side: 'w' | 'b'): boolean {
+  const b = boardAs(fen, side);
+  if (!b) return false;
+  try { return b.moves({ square: from as Square, verbose: true }).some((m) => m.to === to); } catch { return false; }
+}
+
+/** EVERY WAVE DRAWS ITS KEPT LINES ONE WAY (hand walk 2026-10-19 #12: 12 of 42
+ *  turns drew an arrow, because only the late wave drew a fact's line). Each
+ *  kept fact's own line, replayed from the board it starts on: a line on the
+ *  board on screen draws there; one from an earlier board draws the plies the
+ *  game has not yet played. Through the door with the student's moves held. */
+export function keptLineArrows(
+  lines: ReadonlyArray<{ fen: string; arrows: ReadonlyArray<{ from: string; to: string }> }>,
+  boardFen: string,
+  studentColor: 'white' | 'black',
+): BoardArrow[] {
+  const placement = (f: string): string => f.split(' ')[0];
+  const throughDoor = (l: { fen: string; arrows: ReadonlyArray<{ from: string; to: string }> }): BoardArrow[] => {
+    const claims: ArrowClaim[] = [];
+    try {
+      const c = new Chess(l.fen);
+      for (const a of l.arrows) {
+        claims.push({ from: a.from, to: a.to, role: 'line', fen: c.fen(), source: 'teach.keptLines' });
+        c.move({ from: a.from, to: a.to, promotion: 'q' });
+      }
+    } catch { /* the plies replayed so far still draw */ }
+    return admitArrows(claims, { fen: l.fen, studentColor, holdStudentMoves: true }).arrows;
+  };
+  const out: BoardArrow[] = [];
+  for (const l of lines) {
+    if (placement(l.fen) === placement(boardFen)) { out.push(...throughDoor(l)); continue; }
+    try {
+      const c = new Chess(l.fen);
+      for (let k = 0; k < l.arrows.length; k++) {
+        c.move({ from: l.arrows[k].from, to: l.arrows[k].to, promotion: 'q' });
+        if (placement(c.fen()) === placement(boardFen)) {
+          if (k + 1 < l.arrows.length) out.push(...throughDoor({ fen: boardFen, arrows: l.arrows.slice(k + 1) }));
+          break;
+        }
+      }
+    } catch { /* a line that leaves the game's path is spoken only */ }
+  }
+  return out;
 }
 
 /** One claim through the door — the arrow, or null when it is refused. */

@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf, type StandingFactMemory } from '../services/standingFactMemory';
 import { voiceService } from '../services/voiceService';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
-import { groundedMoveFeedback } from '../services/coachApi';
-import { computePositionFacts, clauseText, type LastMoveInput } from '../services/positionFacts';
+import { computePositionFacts, clauseClaims, type LastMoveInput, type PhaseFact, NAMES_NO_MOVE } from '../services/positionFacts';
+import { NO_PROOF } from '../services/proof';
 import { useWeaknessSignals } from './useWeaknessSignals';
 import { useStudentNeed } from './useStudentNeed';
 import { lastMoveIfStudent, sansOfPgn } from '../services/lastMoveOfLine';
@@ -11,13 +11,10 @@ import { logAppAudit } from '../services/appAuditor';
 
 import { db } from '../db/schema';
 import { getCachedStockfish, setCachedStockfish } from './stockfishFenCache';
-import { isSpokenSentenceGrounded, gradeNarrationText } from '../services/coachAnswerGates';
+import { isSpokenSentenceGrounded } from '../services/coachAnswerGates';
 import { buildFedTacticsContext, speakDeepestLookahead } from '../services/liveTacticsContext';
-import { transitionTeachingSourceForGame } from '../services/danyaTeachingService';
 import { selectTeaching, renderThesis, pliesFromSans } from '../services/teachingSelector';
 import { registerFor } from '../coach/surfaceContract';
-import { buildVoicePackage } from '../services/voicePackage';
-import { detectOpening } from '../services/openingDetectionService';
 import { splitSpeakableSentences } from '../utils/sentenceSplit';
 import type { PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
 import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
@@ -54,20 +51,6 @@ export interface UsePhaseNarrationArgs {
    *  a transient banner that pops up then disappears). Called once with the
    *  final report text when the narration content is finalized. */
   onReport?: (text: string) => void;
-  /** May a corpus note ride the transition ritual? REQUIRED, no default, so a
-   *  new mount has to decide (2026-09-23: David removed corpus notes from Learn
-   *  free play and review — "teach me X opening" keeps them). Learn passes
-   *  false; Play decides for itself. */
-  corpusNotes: boolean;
-  /** Whether this surface's per-move turn lanes already own the LIVE tactics
-   *  (the pin, the fork, the hanging piece — with their rule, arrows and
-   *  proof). Required, so a new mount decides. Learn passes true: the phase
-   *  read then states the transition, the structure and the plan, never a live
-   *  tactic, so a pin is said once and with its rule (second-game audit
-   *  2026-10-14: the phase said "your queen on a5 pins their knight" bare, and
-   *  the tactic lane's copy — the one carrying "a pin freezes the piece in
-   *  front" — was dropped as its duplicate). */
-  tacticsOwnedByTurn: boolean;
   /** The page's say-once memory for THIS game, or null to keep the hook's own.
    *  Required so a surface decides: Learn passes its memory, so the balance
    *  sheet at the phase turn and the page's positional read are ONE ledger
@@ -75,11 +58,13 @@ export interface UsePhaseNarrationArgs {
    *  centre" and "a3 is isolated" said on three moves through two lanes that
    *  each kept their own memory). */
   getStanding: (() => StandingFactMemory) | null;
-  /** How a sentence that passed this hook's board gate reaches the voice.
-   *  REQUIRED, so a surface decides: Learn routes each one through its turn
-   *  door (one thought per turn, WO-1b); a surface without a door passes null
-   *  and the hook speaks the sentence as its own package. */
-  speakSentence: ((text: string, fen: string) => Promise<void>) | null;
+  /** The surface's turn door — REQUIRED. The report is handed over ONCE, as
+   *  typed facts carrying their claim keys, and decided as one wave of the
+   *  turn it was read on, never sentence by sentence (root causes 5 and 6,
+   *  Smith-Morra replay 2026-10-19). Resolves with what was actually spoken,
+   *  which is what the report keeps. There is no other path: a surface that
+   *  narrates a transition does it through its door (G8.5). */
+  speakFacts: (facts: readonly PhaseFact[], fen: string) => Promise<string>;
 }
 
 export interface UsePhaseNarrationResult {
@@ -107,27 +92,7 @@ const PHASE_REPORT_PLY_GRACE = 3;
  *  regardless, so the engine contributes only eval direction + top
  *  lines — not something that benefits from deeper search here. */
 const STOCKFISH_DEPTH = 10;
-// WO-NARR-POLICY-04: bumped 30s → 12s. With max_tokens dropped to
-// 600 the real LLM response returns in ~3-5s; the old 30s timeout
-// existed because phase prose used to be 4000 tokens of streaming
-// narration. A tighter timeout means the deterministic fallback
-// fires faster on a true outage instead of letting the student wait
-// 30s with no audio at all.
-const NARRATION_API_TIMEOUT_MS = 12_000;
 const NARRATION_SPEAK_TIMEOUT_MS = 60_000;
-
-/** WO-REAL-FIXES — when the phase-narration LLM call times out
- *  (production audit cycle 6 Finding 43 reproduced this) we used to
- *  render NOTHING and the student silently saw / heard nothing at
- *  the transition. These templates are deterministic, local, and
- *  prefixed with `* ` so the banner subtly flags it as a fallback
- *  rather than a tailored read. */
-const PHASE_FALLBACK_TEMPLATES: Record<'opening-to-middlegame' | 'middlegame-to-endgame', string> = {
-  'opening-to-middlegame':
-    "* You're entering the middlegame. The opening is set, now it's about plans and piece coordination.",
-  'middlegame-to-endgame':
-    "* Endgame territory. King activity and pawn structure decide it from here.",
-};
 
 function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
   return new Promise<T>((resolve, reject) => {
@@ -236,94 +201,61 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       fen: event.fen,
     });
 
-    let fullText = '';
-    let apiResponse = '';
-    let apiTimedOut = false;
-    // The final display text to persist as a chat message (David 2026-07-01).
-    let reportText = '';
-
     try {
-      // ── THE TEACHING GOES OUT BEFORE THE ENGINE IS ASKED ANYTHING ────────
-      //
-      // 🔒 THIS IS WHY THE COACH WENT QUIET AT TRANSITIONS (David 2026-08-11:
-      // the PostHog sweep that found this gate dropping true claims, and the
-      // register entry that called the latency the real defect).
-      //
-      // The corpus note is a JSON lookup on the history and the FEN. It needs
-      // no engine, no model, and no network — it is ready in milliseconds. It
-      // was nevertheless computed AFTER an `analyzeWithBudget` (1.2s on
-      // desktop, 5s on the iOS asm build) and a tactics scan, so the 90% of
-      // the teaching queued behind the 10% that needs a search.
-      //
-      // And the report is abandoned WHOLE when the board moves past it — which
-      // is correct, and which is exactly what kept happening: the student plays
-      // their next move inside five seconds, so the note that was ready almost
-      // immediately was thrown away having never been spoken. Silence, on the
-      // one moment in the game the corpus was written for.
-      //
-      // So the note now speaks first and the engine's look-ahead follows it.
-      // Nothing is loosened: the note is still board-graded against the
-      // transition position before a word of it is spoken, and the look-ahead
-      // is still abandoned if the board has moved by the time it lands. What
-      // changes is that losing the race now costs the look-ahead instead of
-      // costing the teaching.
-      //
-      // `phaseTactics` is read by `dispatchSentence` at CALL time, so the note
-      // dispatched here is board-checked only — right for curated prose that
-      // was already graded — while everything after the engine also gets the
-      // tactic-vocabulary half.
-      // Explicitly undefined until the engine lands. `prefer-const` reads a
-      // bare `let x;` with one later assignment as a const candidate — it does
-      // not count the reads inside `dispatchSentence`, which is the whole point
-      // of the declaration sitting up here.
+      /** The tactics read of `event.fen`, once the engine lands — the whole-
+       *  fact grade below reads it. */
       let phaseTactics: Awaited<ReturnType<typeof buildFedTacticsContext>> | undefined = undefined;
-      /** Whether the search had landed by the time a sentence went out.
-       *
-       *  🔒 A PLAIN FLAG, NOT A READ OF `stockfishAnalysis`. The latency audit
-       *  used to report `stockfishAnalysis !== null` — fine when every dispatch
-       *  happened after the engine, and a temporal-dead-zone ReferenceError the
-       *  moment one happens before it. That throw landed in the corpus block's
-       *  catch, which swallows by design, so the note simply never spoke and
-       *  nothing was logged: the exact silent-failure shape this hook keeps
-       *  producing. It is also the more useful number now — 'did the teaching
-       *  beat the search' is the question the reorder exists to answer. */
+      /** Whether the search had landed by the first fact (latency audit). */
       let engineResolved = false;
-      /** True once a corpus note has been spliced. NOTHING is spoken without
-       *  one — see the silence rule below. */
-      let ritualSpoken = false;
-      let transitionSentence = '';
       let pfConcrete = false; // positionFacts produced a real board-truth clause
-
-      let sentenceBuffer = '';
-      let speechChain: Promise<void> = Promise.resolve();
       let sentenceCount = 0;
-      // The sentences that SURVIVED the gate — what chat may persist. The
-      // message used to store the raw `fullText`, so a sentence dropped from
-      // speech as board-false still landed in the transcript in writing.
-      // One gate, one truth: what was speakable is what is kept.
-      const keptSentences: string[] = [];
-      /** Every sentence already spoken on this transition, normalised.
-       *
-       *  🔒 THE CORPUS NOTE ARRIVES TWICE BY DESIGN. It is spoken the moment
-       *  it is computed — that head start is the entire fix — and it ALSO
-       *  rides into `extraFacts`, so it comes back inside the grounded text
-       *  and would be read out a second time. Keeping it in `extraFacts` is
-       *  deliberate: the chat report should read as one whole thing. So the
-       *  voice dedupes instead, which is the same rule the turn packages
-       *  already follow — a sentence the student has heard is not said again. */
+      /** Every fact already offered on this transition, normalised. */
       const spokenKeys = new Set<string>();
       const sayKey = (s: string): string => s.toLowerCase().replace(/[^a-z0-9]/g, '');
-      // Abandon-once bookkeeping for the staleness decision below.
       let staleLogged = false;
-      /** Same POSITION, ignoring the clocks. A halfmove counter ticking is not
-       *  the board moving, and comparing whole FENs would abandon a perfectly
-       *  current report — the same guard shape `CoachTeachPage.samePosition`
-       *  uses for its pending speech. */
+      /** Same POSITION, ignoring the clocks — a halfmove counter ticking is
+       *  not the board moving. */
       const samePhasePosition = (a: string, b: string): boolean =>
         positionOf(a) === positionOf(b);
-      const dispatchSentence = (sentence: string): void => {
-        const trimmed = sentence.trim();
-        if (!trimmed) return;
+      /** The report's facts, typed, in the order they were computed. ONE door
+       *  call decides them as a wave of the turn they were read on (root
+       *  causes 5 and 6, Smith-Morra replay 2026-10-19). */
+      const phaseFacts: PhaseFact[] = [];
+      /** ONE FACT, GRADED WHOLE, for the door. If any sentence of it is
+       *  refused the whole fact is refused, so an answer is never heard
+       *  without the claim it answers. */
+      const offerFact = (f: PhaseFact): void => {
+        const text = f.text.trim();
+        if (!text || reportOutrun()) return;
+        const { sentences, rest } = splitSpeakableSentences(text);
+        const parts = rest.trim() ? [...sentences, rest.trim()] : sentences;
+        if (!parts.every((p) => isSpokenSentenceGrounded(p, f.gradeFen ?? event.fen, 'usePhaseNarration', phaseTactics))) return;
+        const key = sayKey(text);
+        if (key && spokenKeys.has(key)) return;
+        if (key) spokenKeys.add(key);
+        phaseFacts.push({ ...f, text });
+      };
+      const noteFirstDispatch = (chars: number): void => {
+        sentenceCount += 1;
+        if (sentenceCount === 1) {
+          const firstDispatchMs = Date.now() - detectedTs;
+          void logAppAudit({
+            kind: 'phase-narration-latency',
+            category: 'subsystem',
+            source: 'usePhaseNarration',
+            summary: `detection-to-first-dispatch ${firstDispatchMs}ms (${event.kind})`,
+            details: JSON.stringify({
+              tapToFirstDispatchMs: firstDispatchMs,
+              firstSentenceChars: chars,
+              stockfishResolved: engineResolved,
+              transitionKind: event.kind,
+            }),
+            fen: event.fen,
+          });
+        }
+      };
+      /** Has the game moved too far past this report for it to speak? */
+      const reportOutrun = (): boolean => {
         // Per-sentence spoken gate — this surface streams sentences to
         // Polly as they arrive (before the spine's final-text gate), so a
         // board-false OR out-of-vocab-tactic sentence must be dropped HERE,
@@ -399,155 +331,14 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
               fen: event.fen,
             });
           }
-          return;
+          return true;
         }
-        if (!isSpokenSentenceGrounded(trimmed, event.fen, 'usePhaseNarration', phaseTactics)) return;
-        const key = sayKey(trimmed);
-        if (key && spokenKeys.has(key)) return; // already said on this transition
-        if (key) spokenKeys.add(key);
-        keptSentences.push(trimmed);
-        sentenceCount += 1;
-        if (sentenceCount === 1) {
-          const firstDispatchMs = Date.now() - detectedTs;
-          void logAppAudit({
-            kind: 'phase-narration-latency',
-            category: 'subsystem',
-            source: 'usePhaseNarration',
-            summary: `detection-to-first-dispatch ${firstDispatchMs}ms (${event.kind})`,
-            details: JSON.stringify({
-              tapToFirstDispatchMs: firstDispatchMs,
-              firstSentenceChars: trimmed.length,
-              stockfishResolved: engineResolved,
-              transitionKind: event.kind,
-            }),
-            fen: event.fen,
-          });
-        }
-        // PACKAGED, not handed over raw. This surface measured 2 of 4 lines
-        // board-false on 2026-08-08 while every one of them went straight to
-        // TTS as a string — nothing downstream could check them, because a
-        // string carries no board. Through the package the same lines score
-        // zero. `event.fen` is the position the line was computed from, which
-        // is the board it must be judged against.
-        speechChain = speechChain
-          .then(() => {
-            // The surface's door, when it has one (Learn); otherwise its own
-            // package. Either way the SAME board the gate used — the board the
-            // sentence was computed from.
-            const via = argsRef.current.speakSentence;
-            return via
-              ? via(trimmed, event.fen)
-              : voiceService.speakPackage(buildVoicePackage([{ kind: 'computed', text: trimmed, fen: event.fen }]));
-          })
-          .catch(() => undefined);
+        return false;
       };
-      // The splitter lives in `sentenceSplit` — extracted because the regex it
-      // replaces shipped a defect a unit test would have caught in a second
-      // (a lone "7 points)." spoken out loud; see that module's header).
-      const flushCompletedSentences = (): void => {
-        const { sentences, rest } = splitSpeakableSentences(sentenceBuffer);
-        for (const s of sentences) dispatchSentence(s);
-        if (sentences.length > 0) sentenceBuffer = rest;
-      };
-
-      // TEACHING at the transition (David 2026-07-12: "make the phase
-      // transitions match more closely to danya's teachings"): his
-      // opening→middlegame ritual is structure → idea → plan, so the whole
-      // teaching note rides in — chosen by tightening circles (exact
-      // position → recent path → the opening FAMILY's middlegame teaching,
-      // since most real games have left book by the transition). Curated
-      // note, code-selected; the model still only phrases (G0), and the
-      // per-sentence board gate drops any family-level specific that isn't
-      // true on this exact board.
-      // BOTH transitions, not just the first (David 2026-08-05: "need middle
-      // and endgame notes"). The splice used to sit inside an
-      // `opening-to-middlegame` guard, so the endgame transition got the
-      // computed lookahead and nothing else — 7,120 endgame notes in the
-      // corpus and not one reachable, because the code that fetches them never
-      // ran on that branch.
-      {
-        try {
-          const sans = (argsRef.current.getPgn() ?? '').split(/\s+/).filter((t) => t && !/^\d+\.$/.test(t));
-          const openingName = argsRef.current.getOpeningName?.() ?? detectOpening(sans)?.name ?? null;
-          // The transition event knows whose game it is, so the ritual can
-          // stop handing the student their opponent's plan.
-          const source = argsRef.current.corpusNotes
-            ? transitionTeachingSourceForGame({
-              historySans: sans,
-              fen: event.fen,
-              openingName,
-              studentSide: event.playerColor,
-            })
-            : null;
-          if (source) {
-            // HOW MUCH of the note may be spoken depends on WHERE it came from
-            // (2026-08-04). Only the exact-position tier was authored at the
-            // board the student is looking at; the recent-path, opening-family
-            // and structure-transfer tiers describe a DIFFERENT position, and
-            // speaking their `explains`/`teaches` narrated that position as if
-            // it were this one. `plans` survives the move — it says where this
-            // kind of position is heading, which is the point of a transition
-            // ritual and stays true when the note is borrowed.
-            const { note, origin } = source;
-            // 🔒 POSITION-ONLY on the play/learn surface (David 2026-08-26:
-            // "make sure I hear no floating notes in the play surfaces"). Only
-            // the exact-position tier was authored at the board the student is
-            // looking at; the borrowed tiers (recent-path / opening-family /
-            // structure) describe a DIFFERENT position and are silenced here.
-            // Floating teaching lives on tactics + endgame now.
-            const rawRitual = origin === 'position'
-              ? [note.explains, note.teaches, note.plans ? `The plan: ${note.plans}` : '']
-                  .filter((s) => s && s.trim())
-                  .join(' ')
-              : '';
-            // THE BACKUP THAT SHOULD NEVER FIRE (G0). Selection now refuses a
-            // note whose spoken text names pieces this board no longer has —
-            // but this text is about to ride into the model's package as
-            // grounding, and grounding must be board-true by construction.
-            // Every other splice site grades before speaking; this one did
-            // not, which is how a "trade rooks" plan reached a king-and-pawn
-            // ending (David's K+P sample, 2026-08-05). A trip here logs under
-            // `usePhaseNarration.transitionNote.narrationGate` — expect ZERO.
-            // A BORROWED tier is graded strictly: its hypothetical clauses are
-            // about the game it came from, not a board one move from this one,
-            // so "White should snap off the bishop on d6" must not ride through
-            // on the word "should". The position tier keeps the ordinary gate,
-            // which is right for prose about the line actually being played.
-            const ritual = !rawRitual.trim()
-              ? ''
-              : (gradeNarrationText(rawRitual, event.fen, 'usePhaseNarration.transitionNote') ?? '');
-            if (ritual.trim()) {
-              transitionSentence += ` ${ritual}`;
-              ritualSpoken = true;
-              // ── SPEAK IT NOW, NOT AFTER THE SEARCH ───────────────────────
-              //
-              // The whole point of hoisting this block. It is graded, it is
-              // about the board the student is looking at, and it is ready —
-              // so it goes out while that is still true, instead of waiting on
-              // an engine budget that is 1.2s on desktop and 5s on the iOS asm
-              // build and then being abandoned as stale.
-              //
-              // Through the ordinary sentence pipeline, so the split, the
-              // per-sentence gate, the staleness check and the packaging are
-              // all exactly as they were — this is a change of WHEN, not of
-              // what may be said.
-              sentenceBuffer += ` ${ritual}`;
-              flushCompletedSentences();
-              // A note that ends without terminal punctuation would sit in the
-              // buffer behind the look-ahead and lose the head start entirely.
-              if (sentenceBuffer.trim()) {
-                dispatchSentence(sentenceBuffer);
-                sentenceBuffer = '';
-              }
-            }
-          }
-        } catch { /* corpus is a bonus, never a blocker */ }
-      }
-
       // THE ONE SELECTOR reads the live game so far (unified-coach N1): the
       // thesis — the tactic the game has turned on — is a computed DNA-register
-      // sentence in the present register, dispatched through the same sentence
-      // pipeline as the corpus note (split, gate, staleness, packaging). Silent
+      // sentence in the present register, offered to the door like every
+      // other fact of the report. Silent
       // when nothing has turned yet; a phase transition is a beat, and this is
       // the one game-level fact it may carry.
       try {
@@ -557,11 +348,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         // change; a pin that merely "landed" — here a bishop retreat keeping an
         // old pin — is a detector event, not the story of the game.
         const thesis = pkg.thesis.kind === 'turned' ? renderThesis(pkg.thesis, registerFor('phase-narration')) : '';
-        if (thesis) {
-          sentenceBuffer += ` ${thesis}`;
-          flushCompletedSentences();
-          if (sentenceBuffer.trim()) { dispatchSentence(sentenceBuffer); sentenceBuffer = ''; }
-        }
+        if (thesis) offerFact({ text: thesis, claims: [`thesis:${sayKey(thesis)}`], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE });
       } catch { /* the selector is a bonus here, never a blocker */ }
 
       // WO-PHASE-LAG-02: check the shared Stockfish FEN cache first.
@@ -670,273 +457,60 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             phaseTurn: event.kind === 'opening-to-middlegame' ? 'middlegame' : 'endgame',
           });
           for (const t of pf.remember) standingRef.current.said.add(t);
-          const cl = clauseText(pf.clauses, ['key-moment', 'convert']);
-          if (cl.length) { transitionSentence += ` ${cl.join(' ')}`; pfConcrete = true; }
+          // EVERY CLAUSE AS ITSELF, carrying the claim keys the turn's own
+          // position-facts lane gives the same clause (`clauseClaims`), so
+          // the door's ledger sees one fact where both lanes say it.
+          {
+            pf.clauses.forEach((c, i) => {
+              if (c.kind === 'key-moment' || c.kind === 'convert' || !c.text.trim()) return;
+              pfConcrete = true;
+              offerFact({
+                text: c.text, claims: clauseClaims(pf, i, event.fen), proof: c.proof ?? NO_PROOF.description, namesStudentMove: c.namesStudentMove,
+                ...(c.squares ? { squares: c.squares } : {}), ...(c.stakes ? { stakes: c.stakes } : {}),
+                ...(c.lines ? { lines: c.lines } : {}), ...(c.gradeFen ? { gradeFen: c.gradeFen } : {}),
+                factKind: c.kind, ...(c.skill ? { skill: c.skill } : {}),
+              });
+            });
+          }
         }
       } catch { /* the position-facts lane is a bonus, never a blocker */ }
       if (token !== activeTokenRef.current) return;
 
-      const transitionLabel = event.kind === 'opening-to-middlegame'
-        ? 'Opening → Middlegame'
-        : 'Middlegame → Endgame';
-
-      // Verbosity is not a length knob here — a phase transition is a rich
-      // moment. Kept as a param for API compatibility.
-      void verbosity;
-      void transitionLabel;
-      // GROUNDED framing (David 2026-07-09 + the 2026-07-06 voice law):
-      // in-game narration VOICES facts computed in code and DECIDES nothing.
-      // The transition label is the ONLY authored framing; the tactics that
-      // follow are code-computed. The engine best move + eval are no longer
-      // read out here (David 2026-08-23: "strip that") — a phase transition is
-      // a beat, not a decision point, so it never hands over "the best move is
-      // O-O" or "winning ~3 points".
-
-
-      // P5 — GUARANTEED deep look-ahead (David 2026-07-26: "add it to the package
-      // gen to the llm — it will have no choice but to speak the words"). The
-      // deepest foresight (phaseTactics' PV scan) rode into the prompt only as
-      // context, so the model could skip it. PRE-COMPOSE the exact spoken line in
-      // code (G0) and fold it into extraFacts, which the grounded path VOICES —
-      // so entering the middlegame the coach states what's coming as computed
-      // fact, not an LLM afterthought. Null on a quiet position.
+      // P5 — GUARANTEED deep look-ahead (David 2026-07-26): the deepest
+      // foresight, pre-composed in code (G0), offered as a fact of the report.
       const phaseLookahead = phaseTactics ? speakDeepestLookahead(phaseTactics, 'student', event.playerColor === 'white' ? 'w' : 'b', false, weaknessRef.current) : null;
-      if (phaseLookahead) transitionSentence += ` ${phaseLookahead}`;
-
+      if (phaseLookahead) offerFact({ text: phaseLookahead, claims: [`phase-lookahead:${sayKey(phaseLookahead)}`], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE });
 
       // ── NOTHING CONCRETE, NOTHING SPOKEN ───────────────────────────────────
       // David 2026-08-08: "phase narration stays silent if no notes are
       // available", and the label it used to open with is "just useless noise".
-      // What is left after removing those two is exactly his 90/10: the corpus
-      // note is the teaching, the look-ahead is the threat detection, and
-      // NEITHER of them is a status announcement or an eval readout.
-      //
-      // Both count. Gating the whole transition on the corpus alone was too
-      // blunt — it silenced a real three-move threat, named with its pattern,
-      // its depth and its moves, whenever the corpus happened to have nothing
-      // for that position. That line is the most concrete thing the coach can
-      // say (voice rule 1) and it comes from the engine, not the corpus.
-      //
-      // Returning here also skips the engine read and the timeout templates,
-      // which is the point: "* We're entering the middlegame" is the same noise
-      // with an asterisk on it.
-      if (!ritualSpoken && !phaseLookahead && !pfConcrete) {
+      // A status announcement is never offered; only a computed fact is.
+      if (!phaseLookahead && !pfConcrete && phaseFacts.length === 0) {
         void logAppAudit({
           kind: 'coach-surface-migrated',
           category: 'subsystem',
           source: 'usePhaseNarration.silent',
-          summary: `nothing concrete at this ${event.kind} (no note, no look-ahead) — staying silent`,
+          summary: `nothing concrete at this ${event.kind} (no fact, no look-ahead) — staying silent`,
           fen: event.fen,
         });
-        if (token === activeTokenRef.current) setIsNarrating(false);
         return;
       }
 
-      // Sentence-buffered streaming TTS. Every sentence chains through
-      // speakForced so each Polly call awaits the previous one's
-      // audio. Single-engine consistency: no Polly+Web-Speech overlap,
-      // no dropped sentences from the dead speakQueuedForced path.
-
-      void logAppAudit({
-        kind: 'coach-surface-migrated',
-        category: 'subsystem',
-        source: 'usePhaseNarration',
-        summary: `surface=phase-narration grounded=voiceFacts (G0 in-game narration, David 2026-07-09)`,
-        fen: event.fen,
-      });
+      // ── THROUGH THE DOOR, ONCE ──────────────────────────────────────────
+      // The whole report is one wave of its turn: the door decides it with
+      // the turn's cost, what the turn already said and its lead, and what it
+      // spoke is what the report keeps.
+      if (phaseFacts.length === 0 || token !== activeTokenRef.current) return;
+      noteFirstDispatch(phaseFacts[0].text.length);
+      let spoken = '';
       try {
-        // GROUNDED (David 2026-07-09 + the 2026-07-06 voice law): compute the
-        // transition read — engine eval + the board-verified tactics computed
-        // above — and phrase it WARMLY through the ONE voiceFacts chokepoint
-        // via `groundedMoveFeedback`. NO coachService.ask: that routes to the
-        // Q&A grounding seal (a one-line default) AND would let the LLM
-        // free-compose the board read, the exact G0 violation this build rips
-        // out. The transition label rides in as `extraFacts` so the warm voice
-        // leads with "we're into the middlegame" truthfully.
-        const grounded = await withTimeout(
-          groundedMoveFeedback({
-            fen: event.fen,
-            // BEST-MOVE + EVAL READOUT STRIPPED (David 2026-08-23: "strip that").
-            // A phase transition is a "here's where we are" beat, not a decision
-            // point — "the best move is O-O" hands over the move unprompted
-            // (honesty contract) and "Black is winning ~3 points" is the numeric
-            // readout he flagged as noise. Passing neither drops both lines; the
-            // transition beat ("we're into the middlegame"), the board-verified
-            // tactics and the corpus note still speak. Applies to Play too — the
-            // one narration Play allows stays a phase beat, never an eval dump.
-            mateIn: stockfishAnalysis?.mateIn,
-            tactics: argsRef.current.tacticsOwnedByTurn ? undefined : phaseTactics,
-            studentColor: event.playerColor,
-            surface: 'phase-narration',
-            extraFacts: transitionSentence,
-            warm: true,
-            // NO PHRASING CALL. Everything above this line is already computed:
-            // the transition label, the engine read, the board-verified tactics,
-            // and the corpus note — which is now BAKED, so it arrives in its
-            // final spoken form rather than as written prose needing a rewrite.
-            // The model was rewording text that the speakable-facts law already
-            // requires be speakable, and charging 3,648ms to first dispatch for
-            // it (measured, David's game) — after which the line was dropped as
-            // overlapping anyway, so the whole call bought silence.
-            computedOnly: true,
-          }),
-          NARRATION_API_TIMEOUT_MS,
-          'phase-narration-api',
-        );
-        apiResponse = grounded ?? '';
-        // Feed the grounded text through the SAME streaming sentence pipeline so
-        // the per-sentence TTS pacing (Polly chain) is unchanged. The per-
-        // sentence board gate still runs (defense in depth) but can't drop a
-        // computed sentence about the real position.
-        if (token === activeTokenRef.current && apiResponse) {
-          fullText = apiResponse;
-          setCurrentText(fullText);
-          sentenceBuffer = apiResponse;
-          flushCompletedSentences();
-        }
+        spoken = await withTimeout(argsRef.current.speakFacts(phaseFacts, event.fen), NARRATION_SPEAK_TIMEOUT_MS, 'phase-narration-speak');
       } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : String(err);
-        setError(msg);
-        if (msg.endsWith('-timeout')) {
-          apiTimedOut = true;
-          void logAppAudit({
-            kind: 'llm-error',
-            category: 'subsystem',
-            source: 'usePhaseNarration',
-            summary: `phase narration compute timed out (${event.kind})`,
-            details: msg,
-            fen: event.fen,
-          });
-        }
+        setError(err instanceof Error ? err.message : String(err));
       }
-
-      if (token !== activeTokenRef.current) return;
-
-      // Flush any tail text that didn't end with a sentence terminator
-      // (e.g. stream truncated mid-sentence — still speakable).
-      if (sentenceBuffer.trim()) {
-        dispatchSentence(sentenceBuffer);
-        sentenceBuffer = '';
-      }
-      // Persist the GATED text, not the raw response — a sentence the board
-      // gate refused to speak must not survive in writing either. Falls back
-      // to fullText only when nothing was dispatched at all (the non-streaming
-      // fallback below re-checks that case on its own path).
-      if (keptSentences.length > 0) reportText = keptSentences.join(' ');
-      else if (fullText.trim()) reportText = fullText.trim();
-
-      // Fallback: if nothing streamed and nothing dispatched but the
-      // API returned a usable response (non-streaming provider, rare),
-      // dispatch that as a single speak.
-      let fallbackPath = false;
-      if (sentenceCount === 0) {
-        const apiTrimmed = apiResponse.trim();
-        if (apiTrimmed && !apiTrimmed.startsWith('⚠️')) {
-          setCurrentText(apiTrimmed);
-          reportText = apiTrimmed;
-          dispatchSentence(apiTrimmed);
-        } else if (staleLogged) {
-          // ── ABANDONED MEANS ABANDONED ────────────────────────────────────
-          //
-          // 🔒 THE FALLBACK WAS RESURRECTING THE NOISE. When the board moves
-          // past the transition, every sentence is dropped — correctly — which
-          // leaves the grounded text empty, which looked identical to an API
-          // outage. So the branch below fired and spoke "We're entering the
-          // middlegame. The opening is set…": the exact status announcement
-          // David had removed as "just useless noise", now also describing a
-          // position the student had already left.
-          //
-          // A stale report is a decision to say nothing, not a failure to
-          // produce something. The fallback stays for genuine outages.
-          void logAppAudit({
-            kind: 'coach-surface-migrated',
-            category: 'subsystem',
-            source: 'usePhaseNarration.staleNoFallback',
-            summary: `board moved past this ${event.kind} — staying silent rather than serving the template`,
-            fen: event.fen,
-          });
-          return;
-        } else if (apiTimedOut || apiTrimmed.startsWith('⚠️') || !apiTrimmed) {
-          // WO-REAL-FIXES — render the deterministic template so the
-          // user sees / hears SOMETHING for the transition. Audio
-          // uses the local text — no API round-trip. Fire-and-forget
-          // speak so a dead Polly device can't hold isNarrating=true
-          // for the full 60s NARRATION_SPEAK_TIMEOUT_MS (which would
-          // freeze the board's interactive prop and produce a
-          // perceived "board reset").
-          fallbackPath = true;
-          const fallback = PHASE_FALLBACK_TEMPLATES[event.kind];
-          const reason = apiTimedOut
-            ? 'api-timeout'
-            : apiTrimmed.startsWith('⚠️')
-              ? 'api-warning'
-              : 'empty-response';
-          void logAppAudit({
-            kind: 'phase-narration-fallback-shown',
-            category: 'subsystem',
-            source: 'usePhaseNarration',
-            summary: `transition=${event.kind} reason=${reason}`,
-            fen: event.fen,
-          });
-          setCurrentText(fallback);
-          reportText = fallback;
-          // Strip the leading `* ` before TTS — the asterisk is a
-          // chat-banner affordance flagging the fallback path; Polly
-          // reads the literal "asterisk" out loud otherwise (production
-          // audit, build e2a96ed: voice spoke "* Endgame territory.
-          // King activity..."). Chat keeps the prefix; voice gets the
-          // bare prose.
-          const spokenFallback = fallback.replace(/^\s*\*\s*/, '');
-          // The fallback path speaks too, so it is packaged too — an escape
-          // hatch that skips verification is where the untrue line comes out.
-          voiceService.speakPackage(
-            buildVoicePackage([{ kind: 'computed', text: spokenFallback, fen: event.fen }]),
-          ).catch(() => {
-            /* swallow — TTS hangs / device failures audit elsewhere */
-          });
-        } else {
-          return;
-        }
-      }
-      // Persist the finished report as a chat message so it lives in the
-      // messages under the board instead of a transient banner that pops up
-      // then disappears (David 2026-07-01). Fires once for BOTH the streamed
-      // and fallback paths; the voice is handled separately, so this is
-      // text-only (the chat panel's inject path mutes re-speaking).
-      if (reportText.trim() && token === activeTokenRef.current) {
-        argsRef.current.onReport?.(reportText.trim());
-      }
-
-      // Fallback path: don't await Polly — we already kicked it off
-      // fire-and-forget above. Awaiting firstSpeakPromise (which is
-      // null on this branch since we didn't go through dispatchSentence)
-      // would no-op anyway, but the explicit return documents the
-      // intent so a future reader doesn't reintroduce the freeze.
-      if (fallbackPath) return;
-
-      // Block isNarrating true until the speech chain drains —
-      // preserves the "board frozen while main voice speaks"
-      // invariant. Single-engine Polly chain plays under this gate.
-      try {
-        await withTimeout(
-          speechChain,
-          NARRATION_SPEAK_TIMEOUT_MS,
-          'phase-narration-speak',
-        );
-      } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : String(err);
-        setError(msg);
-        if (msg.endsWith('-timeout')) {
-          voiceService.stop();
-          void logAppAudit({
-            kind: 'tts-failure',
-            category: 'subsystem',
-            source: 'usePhaseNarration',
-            summary: 'phase narration TTS playback timed out',
-            details: msg,
-            fen: event.fen,
-          });
-        }
+      if (spoken.trim() && token === activeTokenRef.current) {
+        setCurrentText(spoken);
+        argsRef.current.onReport?.(spoken.trim());
       }
     } finally {
       if (token === activeTokenRef.current) {

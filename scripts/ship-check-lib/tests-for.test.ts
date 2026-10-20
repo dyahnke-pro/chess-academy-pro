@@ -33,6 +33,15 @@ describe('testsFor — one derivation of what covers a source file', () => {
     expect(basenameOnly(SUBJECT)).not.toContain('src/services/section14Diagnosis.test.ts');
   });
 
+  it('reaches a fence that reads the subject OFF DISK, with no name or import (2026-10-20)', () => {
+    // coachLaneWiring.test.ts fences CoachTeachPage's wiring by reading its
+    // text; batch 2 reached main with five of its fences red because a change
+    // to the page never ran it.
+    const page = 'src/components/Coach/CoachTeachPage.tsx';
+    expect(testsFor(page)).toContain('src/services/coachLaneWiring.test.ts');
+    expect(basenameOnly(page)).not.toContain('src/services/coachLaneWiring.test.ts');
+  });
+
   it('reaches sibling tests named after the subject but not equal to it', () => {
     const got = testsFor(SUBJECT);
     for (const sibling of [

@@ -64,7 +64,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternative.ts:143`
 
 ### `candidatesFromAmateur` (function) — 2 call sites
-- `src/services/positionFacts.ts:955`
+- `src/services/positionFacts.ts:1000`
 - `src/services/refutedAlternative.ts:142`
 
 ### `FanLine` (interface) — 0 call sites
@@ -79,11 +79,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternative.ts:99`
 
 ### `refutedFromFan` (function) — 2 call sites
-- `src/services/positionFacts.ts:955`
+- `src/services/positionFacts.ts:1000`
 - `src/services/refutedAlternativeCore.test.ts:14`
 
 ### `refutedAltProof` (function) — 2 call sites
-- `src/services/positionFacts.ts:1063`
+- `src/services/positionFacts.ts:1108`
 - `src/services/reviewFullData.ts:1260`
 
 ## Tests

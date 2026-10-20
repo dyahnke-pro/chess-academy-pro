@@ -21,25 +21,27 @@ const at = (needle: string | RegExp): number => {
 
 describe('Learn: the verdict is not queued behind the next board', () => {
   it('the cost is one search, started at the reply, before the board between the moves is read', () => {
-    const cost = at(/const costRead: Promise<number \| null> = preStudentRead[\s\S]{0,120}liveMoveCost\(fenBefore/);
+    const cost = at(/const priceRead: Promise<MovePrice \| null> = preStudentRead[\s\S]{0,120}studentMovePrice\(fenBefore/);
     expect(cost).toBeLessThan(at('const midTurnRead = midTurnReadEarly ??'));
     expect(cost).toBeGreaterThan(at('const reply = await resolveCoachReplyMove(move.fen);'));
   });
 
   it('the instant wave waits a moment for the cost, so a costly move is never praised', () => {
-    const wait = at(/await Promise\.race\(\[costRead,/);
+    const wait = at(/await Promise\.race\(\[priceRead,/);
     expect(wait).toBeLessThan(at(/const instant = computeInstantTeaching\(/));
   });
 
   it('the verdict pass starts on its own reads, not on the next board\'s facts', () => {
     expect(src).not.toMatch(/const verdictPass = factsReady\.then/);
-    expect(src).toMatch(/const verdictPass = Promise\.all\(\[midTurnRead, costRead\]\)\.then/);
-    // …and reads the same cost, never a second search when the first answered.
-    expect(src).toMatch(/\(\(await costRead\) \?\? \(await liveMoveCost\(fenBefore/);
+    expect(src).toMatch(/const verdictPass = Promise\.all\(\[midTurnRead, priceRead\]\)\.then/);
+    // …and reads the same price — one memoized search, never a second one,
+    // and an unpriced move stays unpriced (#2 root cause 4: no `?? 0`).
+    expect(src).toMatch(/const studentPrice = bothCp \? await priceRead : null/);
+    expect(src).not.toMatch(/liveMoveCost\(/);
   });
 
   it('a costly move\'s verdict is spoken as its own wave before the pass waits for the facts', () => {
-    const pass = at('const verdictPass = Promise.all([midTurnRead, costRead]).then');
+    const pass = at('const verdictPass = Promise.all([midTurnRead, priceRead]).then');
     const early = at('speakLateWave(p, verdictLines);');
     const facts = src.indexOf('await factsReady;', pass);
     expect(early).toBeGreaterThan(pass);

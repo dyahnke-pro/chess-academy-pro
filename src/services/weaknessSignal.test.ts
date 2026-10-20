@@ -97,14 +97,17 @@ describe('matchTacticPattern — via the vocabulary bridge', () => {
     { clusterId: 'analysis:tactic:discovered_attack', capabilityTag: null, proven: false, bucket: 'tactical' as MisconceptionBucket, label: 'misses discoveries', openCount: 4, total: 4, severity: 65, lifecycleStatus: 'persistent', trend: 'worsening', puzzleThemes: [] },
   ];
   it('a live "discovery" fact matches the "discovered_attack" weakness (the silent-mismatch bug, now fixed)', () => {
-    expect(matchTacticPattern('discovery', signals)?.clusterId).toBe('analysis:tactic:discovered_attack');
+    expect(matchTacticPattern('discovery', signals, 'finds')?.clusterId).toBe('analysis:tactic:discovered_attack');
   });
   it('a motif with no weakness counterpart never matches', () => {
-    expect(matchTacticPattern('mate_threat', signals)).toBeNull();
-    expect(matchTacticPattern('battery', signals)).toBeNull();
+    expect(matchTacticPattern('mate_threat', signals, 'finds')).toBeNull();
+    expect(matchTacticPattern('battery', signals, 'finds')).toBeNull();
   });
   it('no such hole → null', () => {
-    expect(matchTacticPattern('fork', signals)).toBeNull();
+    expect(matchTacticPattern('fork', signals, 'finds')).toBeNull();
+  });
+  it('the opponent\'s discovery never joins a record of the student missing their own (2026-10-20)', () => {
+    expect(matchTacticPattern('discovery', signals, 'falls-for')).toBeNull();
   });
 });
 

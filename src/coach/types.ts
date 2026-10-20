@@ -622,6 +622,23 @@ export interface TacticsLiveContext {
      *  piece on a4). Computed at the one build site; never re-seat the bare
      *  `description` against the current board. */
     spoken: string | null;
+    /** Squares the detector named (parity with `immediate`). */
+    squares: string[];
+    /** The board the tactic happens on. */
+    tacticFen: string;
+    /** Who does what, from the detector — null for a pattern whose detector
+     *  does not record roles yet. Never scraped back out of `description`. */
+    roles: import('../types/tacticTypes').TacticRoles | null;
+    /** COMPUTED: does the engine line go on to win for the side the tactic
+     *  favours (mate, or material settled by the one ledger)? A pattern whose
+     *  name claims material may be said only when this is true
+     *  (WO-OUTCOME-01). */
+    collects: boolean;
+    /** WHICH OF THE STUDENT'S MOVES `spoken` NAMES — REQUIRED, like every Learn
+     *  fact (OS-10): "if you play Nce4 and they answer Qxb2" names his Nce4,
+     *  so a surface that volunteers it must let the door hold it while that
+     *  move is still his to play. */
+    namesStudentMove: import('../services/studentMoveNaming').NamesStudentMove;
   }>;
   /** Tactics in the student's principal variation — OPPORTUNITIES
    *  the student should aim for. */
@@ -637,6 +654,23 @@ export interface TacticsLiveContext {
      *  piece on a4). Computed at the one build site; never re-seat the bare
      *  `description` against the current board. */
     spoken: string | null;
+    /** Squares the detector named (parity with `immediate`). */
+    squares: string[];
+    /** The board the tactic happens on. */
+    tacticFen: string;
+    /** Who does what, from the detector — null for a pattern whose detector
+     *  does not record roles yet. Never scraped back out of `description`. */
+    roles: import('../types/tacticTypes').TacticRoles | null;
+    /** COMPUTED: does the engine line go on to win for the side the tactic
+     *  favours (mate, or material settled by the one ledger)? A pattern whose
+     *  name claims material may be said only when this is true
+     *  (WO-OUTCOME-01). */
+    collects: boolean;
+    /** WHICH OF THE STUDENT'S MOVES `spoken` NAMES — REQUIRED, like every Learn
+     *  fact (OS-10): "if you play Nce4 and they answer Qxb2" names his Nce4,
+     *  so a surface that volunteers it must let the door hold it while that
+     *  move is still his to play. */
+    namesStudentMove: import('../services/studentMoveNaming').NamesStudentMove;
   }>;
   /** Half-move depth the PV scan covered (rating-adaptive via
    *  `getTacticLookahead`). The brain must not claim a tactic

@@ -535,10 +535,14 @@ async function main() {
   // account. With games analyzed so you're not auditing from a fresh account").
   // AUDIT_FIXTURE=<path to a data drop / Dexie export> loads it before the run,
   // so the coach narrates against a real record instead of a blank one.
-  if (process.env.AUDIT_FIXTURE) {
+  // David's record is the DEFAULT (2026-10-19: "use the data when testing");
+  // AUDIT_FIXTURE=none runs the named fresh-device probe instead.
+  let realRecord = false;
+  if (process.env.AUDIT_FIXTURE !== 'none') {
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
     await page.waitForTimeout(8000);
     const fx = await loadFixtureIntoIDB(page, process.env.AUDIT_FIXTURE);
+    realRecord = fx.loaded;
     console.log(`[fixture] ${fx.loaded ? `${fx.wrote} rows / ${fx.stores} stores` : `skipped (${fx.reason})`}`);
   }
 
@@ -557,7 +561,7 @@ async function main() {
     // its point alone (the fade), so the concept's invariant clause may be
     // the part left out. There the contract is the fade's own: no invariant
     // spoke ONLY because the door faded the lanes that carry it.
-    const REAL_RECORD = !!process.env.AUDIT_FIXTURE;
+    const REAL_RECORD = realRecord;
     const fadedTurns = learnTurnRows(listener).filter((r) => (r.faded ?? []).length > 0).length;
     record('C. a SPOKEN line carries a computed concept INVARIANT (the concept was voiced mid-GAME)',
       !!hit || (REAL_RECORD && fadedTurns > 0),
@@ -921,7 +925,7 @@ async function main() {
       'IV1. the inaccuracy-voice verdict was read on mount, and a fresh record speaks in every phase',
       // A real record (AUDIT_FIXTURE) may be quiet where it has the evidence;
       // the verdict itself is held by inaccuracyVoice's unit tests.
-      ivRows.length > 0 && (!!process.env.AUDIT_FIXTURE || ivRows.every((e) => !/quiet/.test(String(e.summary ?? '')))),
+      ivRows.length > 0 && (realRecord || ivRows.every((e) => !/quiet/.test(String(e.summary ?? '')))),
       ivRows.length ? String(ivRows[ivRows.length - 1].summary) : 'no inaccuracyVoice row',
     );
 

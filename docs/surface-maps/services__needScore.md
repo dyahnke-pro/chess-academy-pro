@@ -77,7 +77,7 @@
 - `src/services/coachFeatureService.openingStory.test.ts:49`
 - `src/services/coachFeatureService.trade.test.ts:18`
 - `src/services/coachFeatureService.ts:1320`
-- `src/services/coachFeatureService.ts:5248`
+- `src/services/coachFeatureService.ts:5265`
 - `src/services/fundamentalReachesDecider.test.ts:62`
 - `src/services/needCoverage.report.test.ts:93`
 - `src/services/needScore.test.ts:36`
@@ -126,7 +126,7 @@
 - `scripts/catalog-sweep/sweep-matrix.test.ts:46`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:47`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:116`
-- `src/services/coachFeatureService.ts:1491`
+- `src/services/coachFeatureService.ts:1495`
 - `src/services/homeOpeningSteer.ts:84`
 - `src/services/homeOpeningSteer.ts:98`
 - `src/services/homeSteerCache.ts:24`
@@ -206,7 +206,7 @@
 - `src/services/oneOpeningKey.test.ts:141`
 - `src/services/oneOpeningKey.test.ts:143`
 - `src/services/positionFacts.liveFundamental.test.ts:80`
-- `src/services/positionFacts.ts:1215`
+- `src/services/positionFacts.ts:1261`
 - `src/services/teachingSelector.ts:332`
 
 ## Tests
