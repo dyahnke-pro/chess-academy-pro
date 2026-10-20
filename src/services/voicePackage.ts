@@ -267,6 +267,11 @@ export interface VoicePackage {
  *  directive out loud. A law with no check is a comment. */
 /** Sentences that explain the one before them and cannot open an utterance. */
 const DEPENDENT = /^(?:Remember —|Here's how:|The habit that fixes it:|Next time:)/;
+/** A sentence that points back at the one before it ("One move stops IT before
+ *  it lands.", "Spot it before it lands."): when that one was dropped as a
+ *  repeat, this one has no referent and goes too (OS-11 #7 — the tails spoke
+ *  alone and cut the line playing). */
+const ANAPHOR = /\b(?:it|its|them|this|that|these|those)\b/i;
 
 const NOT_SPEAKABLE: Array<{ re: RegExp; why: string }> = [
   { re: /\n/, why: 'multi-line block, not an utterance' },
@@ -507,9 +512,13 @@ export function buildVoicePackage(
     // as a repeat, it goes too (walk 2026-09-30, game 2: the pin definition
     // spoken a move after the pin, on its own).
     let prevKept = false;
+    let first = true;
     for (const s of sentencesOf(result.text)) {
       const k = sayKey(s);
+      const afterDrop = !first && !prevKept;
+      first = false;
       if (DEPENDENT.test(s) && !prevKept) { why.add('duplicate'); continue; }
+      if (afterDrop && ANAPHOR.test(s)) { why.add('duplicate'); continue; }
       prevKept = false;
       if (seen.has(k)) { why.add(saidEarlier.has(k) ? 'already said this turn' : 'duplicate'); continue; }
       const near = [...seen].find((prior) => {

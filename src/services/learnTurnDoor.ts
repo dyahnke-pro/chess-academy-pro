@@ -466,9 +466,6 @@ export const DANGER_LANES: ReadonlySet<LearnLane> = new Set<LearnLane>(['threat'
  *  forced mate spoke in it: the turn stays on the mate across BOTH waves (the
  *  replay of 2026-10-19, 48.d6: "There's a forced mate here — mate in 2" in
  *  the instant wave, then a passed-pawn plan lecture in the late one). */
-/** A move that costs this much (centipawns) makes the turn a verdict turn. */
-export const VERDICT_TURN_CP = 100;
-
 export interface TurnLead { lane: LearnLane; squares: readonly string[]; mateTurn?: true }
 
 export interface TurnDecision {
@@ -662,9 +659,10 @@ export function decideTurn(
   // speaks — the stakes are the producer's own (`threatStakes`), never prose.
   const presentDanger = (x: { fact: VoiceFact; lane: LearnLane }): boolean =>
     DANGER_LANES.has(x.lane) && stakeOf(x.lane, x.fact.text) > 0;
-  /** A move that cost a point or more makes this whole turn a verdict turn. */
-  const moveCost = turn ? turn.moveCostCp : null;
-  const costTurnValue = moveCost !== null && moveCost >= VERDICT_TURN_CP ? stakeValue(costStakes(moveCost)) ?? null : null;
+  /** A slip the turn SAYS makes this whole turn a verdict turn, weighed by
+   *  its own price — the one grade, never a raw-cp bar beside it. */
+  const slipCp = turn ? turn.slipCp : null;
+  const costTurnValue = slipCp !== null ? stakeValue(costStakes(slipCp)) ?? null : null;
   // THE TURN'S HOLDS DECIDE BEFORE ITS LEAD (Learn audit 2026-10-14, LD2: a
   // lead was picked, then held by the mate rule, and the row named a lead that
   // never spoke). One predicate, read by the lead pick and the speak loop.
@@ -919,7 +917,8 @@ export interface LiveTurn {
   /** The board the turn's waves read (the board after the coach's reply). */
   fen: string;
   ply: number;
-  moveCostCp: number | null;
+  /** The slip this turn says (`LearnTurnTag.slipCp`). */
+  slipCp: number | null;
   /** The move's price is settled (`MovePrice.settled`). */
   priceSettled: boolean;
   midExchange: string | null;
@@ -953,7 +952,7 @@ export function decidePhaseWave(
       ...(f.factKind ? { factKind: f.factKind } : {}), ...(f.skill ? { skill: f.skill } : {}),
     })),
     live.said, ctx.priorKeys, ctx.priorLead ?? null, ctx.green ?? null, ctx.beginner,
-    { kind: 'phase', ply: live.ply, moveCostCp: live.moveCostCp, priceSettled: live.priceSettled, midExchange: live.midExchange },
+    { kind: 'phase', ply: live.ply, slipCp: live.slipCp, priceSettled: live.priceSettled, midExchange: live.midExchange },
     live.holds,
   );
 }

@@ -48,7 +48,7 @@ import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { decideTurn, type LaneFact, type LearnLane, type TurnDecision } from './learnTurnDoor';
 // The Learn turn's vocabulary travels through the door, so a surface imports
 // ONE deciding module (one coach P1).
-export { buildVoicePackage, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP } from './learnTurnDoor';
+export { buildVoicePackage, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT } from './learnTurnDoor';
 export type { FactStakes, LaneFact, LearnLane, SpokenLine, TurnDecision, VoicePackage, VoiceFactKind } from './learnTurnDoor';
 // The phase report's wave of a turn — the same door, one call per report.
 export { decidePhaseWave } from './learnTurnDoor';

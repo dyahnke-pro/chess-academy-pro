@@ -69,8 +69,8 @@ describe('a costly move is a verdict turn in every wave (replay 2026-10-19, 8.Bx
   const FEN = 'r1bq2nr/pp2pkbp/2np2p1/8/4P3/2N2N2/PP3PPP/R1BQ1RK1 w - - 0 9';
   it('a plan waits when the move cost three points, whichever lane gave the grade', () => {
     const plan = { lane: 'planArc' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'So the plan: put a rook on the open c-file.', fen: FEN, squares: ['a1', 'c1'] };
-    expect(decideTurn([plan], '', undefined, null, null, false, { kind: 'late', ply: 15, moveCostCp: 300, priceSettled: true, midExchange: null }).spoke).not.toContain('planArc');
-    expect(decideTurn([plan], '', undefined, null, null, false, { kind: 'late', ply: 15, moveCostCp: 20, priceSettled: true, midExchange: null }).spoke).toContain('planArc');
+    expect(decideTurn([plan], '', undefined, null, null, false, { kind: 'late', ply: 15, slipCp: 300, priceSettled: true, midExchange: null }).spoke).not.toContain('planArc');
+    expect(decideTurn([plan], '', undefined, null, null, false, { kind: 'late', ply: 15, slipCp: null, priceSettled: true, midExchange: null }).spoke).toContain('planArc');
   });
 });
 
@@ -79,12 +79,12 @@ describe('a warning that costs nothing yet waits behind a costly move (OS-1 repl
   // verdict queued behind it was never heard.
   const notYet = { lane: 'threat' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'No rush yet — keep an eye on the long diagonal.', fen: MIDDLEGAME, squares: ['a1', 'h8'] };
   it('is held on a verdict turn and said on a calm one', () => {
-    expect(decideTurn([notYet], '', undefined, null, null, false, { kind: 'instant', ply: 43, moveCostCp: 450, priceSettled: true, midExchange: null }).spoke).not.toContain('threat');
-    expect(decideTurn([notYet], '', undefined, null, null, false, { kind: 'instant', ply: 43, moveCostCp: 20, priceSettled: true, midExchange: null }).spoke).toContain('threat');
+    expect(decideTurn([notYet], '', undefined, null, null, false, { kind: 'instant', ply: 43, slipCp: 450, priceSettled: true, midExchange: null }).spoke).not.toContain('threat');
+    expect(decideTurn([notYet], '', undefined, null, null, false, { kind: 'instant', ply: 43, slipCp: null, priceSettled: true, midExchange: null }).spoke).toContain('threat');
   });
   it('a danger that costs something now still speaks on the verdict turn', () => {
     const now = { ...notYet, text: 'Watch out — your rook is attacked.', stakes: { points: 5, plies: 1 } };
-    expect(decideTurn([now], '', undefined, null, null, false, { kind: 'instant', ply: 43, moveCostCp: 450, priceSettled: true, midExchange: null }).spoke).toContain('threat');
+    expect(decideTurn([now], '', undefined, null, null, false, { kind: 'instant', ply: 43, slipCp: 450, priceSettled: true, midExchange: null }).spoke).toContain('threat');
   });
 });
 
@@ -96,19 +96,19 @@ describe('a trade in progress is a now turn (Learn walk 2026-10-19, 12…Nxb3 / 
     const rows: Array<{ heldWhy?: Record<string, string> }> = [];
     const off = onLearnTurn((r) => rows.push(r as { heldWhy?: Record<string, string> }));
     try {
-      const d = decideTurn([plan, tactic], '', undefined, null, null, false, { kind: 'instant', ply: 23, moveCostCp: 0, priceSettled: true, midExchange: 'b3' });
+      const d = decideTurn([plan, tactic], '', undefined, null, null, false, { kind: 'instant', ply: 23, slipCp: null, priceSettled: true, midExchange: 'b3' });
       expect(d.spoke).not.toContain('planArc');
       expect(d.spoke).toContain('tactic');
       expect(rows.at(-1)?.heldWhy?.planArc).toBe('mid-exchange');
     } finally { off(); }
-    expect(decideTurn([plan], '', undefined, null, null, false, { kind: 'instant', ply: 23, moveCostCp: 0, priceSettled: true, midExchange: null }).spoke).toContain('planArc');
+    expect(decideTurn([plan], '', undefined, null, null, false, { kind: 'instant', ply: 23, slipCp: null, priceSettled: true, midExchange: null }).spoke).toContain('planArc');
   });
   it('a costly-move hold is reported as a verdict turn, never as a mate turn', async () => {
     const { onLearnTurn } = await import('./coachDecisionEvents');
     const rows: Array<{ heldWhy?: Record<string, string> }> = [];
     const off = onLearnTurn((r) => rows.push(r as { heldWhy?: Record<string, string> }));
     try {
-      decideTurn([plan], '', undefined, null, null, false, { kind: 'late', ply: 15, moveCostCp: 300, priceSettled: true, midExchange: null });
+      decideTurn([plan], '', undefined, null, null, false, { kind: 'late', ply: 15, slipCp: 300, priceSettled: true, midExchange: null });
       expect(rows.at(-1)?.heldWhy?.planArc).toBe('verdict-turn');
     } finally { off(); }
   });
