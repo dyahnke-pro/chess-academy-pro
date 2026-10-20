@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5577 lines · 31 exports · 52 importers · 56 tests · 4 audits**
+**5594 lines · 31 exports · 52 importers · 56 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -141,7 +141,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegments` (function) — 93 call sites
+### `buildReviewSegments` (function) — 94 call sites
 - `src/components/Coach/CoachGameReview.tsx:1823`
 - `src/services/batch2Wiring.test.ts:73`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
@@ -173,6 +173,7 @@
 - `src/services/coachFeatureService.openingStory.test.ts:137`
 - `src/services/coachFeatureService.openingStory.test.ts:151`
 - `src/services/coachFeatureService.openingStory.test.ts:176`
+- `src/services/coachFeatureService.openingStory.test.ts:203`
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.planChange.test.ts:36`
 - `src/services/coachFeatureService.planChange.test.ts:48`

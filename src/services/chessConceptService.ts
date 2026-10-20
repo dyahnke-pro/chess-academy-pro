@@ -115,7 +115,7 @@ const OPENING_NAME_MAP: { id: string; patterns: RegExp[] }[] = [
   { id: 'english-opening', patterns: [/english opening/i, /english game/i] },
   { id: 'reti-opening', patterns: [/r[eé]ti/i, /zukertort/i] },
   { id: 'kings-indian-attack', patterns: [/king'?s indian attack/i, /\bkia\b/i] },
-  { id: 'birds-opening', patterns: [/bird'?s opening/i] },
+  { id: 'birds-opening', patterns: [/bird'?s? opening/i] },
 ];
 
 const CONCEPT_BY_ID = new Map(DATA.concepts.map(c => [c.id, c]));

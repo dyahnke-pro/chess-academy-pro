@@ -63,10 +63,6 @@ export interface OpeningStoryInput {
    *  square in the board's plan)? Learn's live board says no (LEARN NAMES NO
    *  MOVE UNASKED); Review and chat say yes. */
   namesStudentMoves: boolean;
-  /** REQUIRED: may the identity name top-level games? Only where the student
-   *  can open them; Review's walk says no (lead 2026-10-20: "It has been
-   *  played at the top level — Karthikeyan against Grebnev" teaches nothing). */
-  famousGames: boolean;
   /** Masters moves at a position — default: what is already in memory. */
   movesAt?: MovesAt;
 }
@@ -308,7 +304,7 @@ function castledSide(history: readonly string[], side: 'w' | 'b'): 'short' | 'lo
  * Ordered by the model's beats; the caller's door ranks and says once.
  */
 export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
-  const { history, student, famousGames } = i;
+  const { history, student } = i;
   const movesAt = i.movesAt ?? masterMovesCachedSync;
   const now = boardAfter(history);
   if (!now || history.length === 0) return [];
@@ -339,7 +335,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   // that names a move of the student's still to come holds the line, one the
   // board has made false is dropped (`openingIdentityLine`).
   if (name && !isWaypointOpening(name) && inOpening) {
-    const id = openingIdentityLine(name, student, 'seat', liveBoard(now), { famousGames });
+    const id = openingIdentityLine(name, student, 'seat', liveBoard(now));
     if (id) out.push({ beat: 'identity', text: id.text, squares: id.squares, proof: NO_PROOF.name, claimKey: id.key });
   }
 
