@@ -1271,15 +1271,14 @@ export function hangingPieceLine(piece: string, sq: string, rot: number): string
  *  line — `seenOneMoveAttack` (quiet on a merely-answered skill, blind to
  *  long lines and pins) is gone. A threat the student would miss (red or
  *  grey on their record) speaks in full; green + simple (the piece that just
- *  moved hits a loose piece, in plain sight) is marked, not said; green +
+ *  moved hits a loose piece, in plain sight) is silent — no voice and no
+ *  arrow, so the board asks the question unprompted (David 2026-10-20); green +
  *  hidden speaks short — `skill` names the tag that decided, so the door's
  *  fade shortens it. A check or a mate in one is never simple. */
 export interface ThreatVoiceDecision {
   voice: ThreatVoice;
   /** The heat tag whose record decided — the fact's `skill` for the fade. */
   skill: MisconceptionTagId;
-  /** The attack to draw when the voice stays quiet. */
-  mark: { from: string; to: string } | null;
   term: RecordTerm;
   visibility: VisibilityTerm;
   pattern: ThreatPattern;
@@ -1293,11 +1292,9 @@ export function learnThreatVoice(
   const term = recordTermForThreat(input.pattern, record);
   const visibility = threatVisibility(input.sighting);
   const { voice } = threatVoice(term.state, visibility.visibility);
-  const target = input.sighting.targets[0];
   return {
     voice,
     skill: term.skill,
-    mark: input.sighting.attacker && target ? { from: input.sighting.attacker, to: target } : null,
     term,
     visibility,
     pattern: input.pattern,

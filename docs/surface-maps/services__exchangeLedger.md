@@ -143,7 +143,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lineProof.test.ts:37`
 - `src/services/lookaheadPlan.ts:648`
 - `src/services/lookaheadPlan.ts:710`
-- `src/services/moveOrder.ts:129`
+- `src/services/moveOrder.ts:133`
 - `src/services/openingGenerator.ts:3524`
 - `src/services/pieceOptions.ts:123`
 - `src/services/playedMoveGrade.ts:106`

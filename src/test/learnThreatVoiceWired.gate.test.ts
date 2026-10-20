@@ -26,3 +26,15 @@ describe('Learn threat voice is wired both ways', () => {
     }
   });
 });
+
+// A simple threat the student has PROVEN they see: no voice AND no arrow
+// (David 2026-10-20). The decision carries no mark, and the page has no path
+// that draws one for a quiet threat.
+describe('a quiet threat draws nothing', () => {
+  it('no mark on the decision, no quiet-mark path on the page', () => {
+    const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    const lbt = readFileSync('src/services/learnBoardTeaching.ts', 'utf8');
+    expect(page).not.toMatch(/markOnlyArrow|seenMarkRef|teach\.seenAttack/);
+    expect(lbt).not.toMatch(/\bmark: input\.sighting/);
+  });
+});

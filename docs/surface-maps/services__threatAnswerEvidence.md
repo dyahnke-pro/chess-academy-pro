@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**230 lines · 15 exports · 3 importers · 2 tests · 0 audits**
+**230 lines · 15 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/autoAnalyzeGame.ts`
+- `src/services/learnBoardTeaching.ts`
 - `src/services/threatAnswerEvidence.measure.test.ts`
 - `src/services/threatAnswerEvidence.test.ts`
 
@@ -64,13 +65,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `StandingThreat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newThreatsAtTurn` (function) — 3 call sites
+### `newThreatsAtTurn` (function) — 4 call sites
+- `src/services/learnBoardTeaching.ts:1318`
 - `src/services/threatAnswerEvidence.measure.test.ts:58`
 - `src/services/threatAnswerEvidence.test.ts:38`
 - `src/services/threatAnswerEvidence.test.ts:42`
 
-### `recordThreatAnswer` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `recordThreatAnswer` (function) — 1 call site
+- `src/services/learnBoardTeaching.ts:1319`
 
 ## Tests
 

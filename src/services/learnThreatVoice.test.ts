@@ -25,12 +25,13 @@ const GREEN = record(13, 6);
 const ANSWERED_ONCE = record(1, 1);
 
 describe('learnThreatVoice', () => {
-  it('green + the piece that just moved hitting a loose piece: marked, not said', () => {
+  it('green + the piece that just moved hitting a loose piece: silent — no voice, no arrow (David 2026-10-20)', () => {
     const v = learnThreatVoice({ kind: 'hanging', square: 'c4' }, NA5, GREEN);
-    expect(v).toMatchObject({ voice: 'quiet', mark: { from: 'a5', to: 'c4' }, skill: 'missed-opponents-threat' });
+    expect(v).toMatchObject({ voice: 'quiet', skill: 'missed-opponents-threat' });
+    expect(v).not.toHaveProperty('mark');
   });
   it('the queen hit by the knight that just moved goes quiet for a proven student too', () => {
-    expect(learnThreatVoice({ kind: 'cheaper-hit', hit: { sq: 'd5', bySq: 'c3' } }, NC3, GREEN)).toMatchObject({ voice: 'quiet', mark: { from: 'c3', to: 'd5' } });
+    expect(learnThreatVoice({ kind: 'cheaper-hit', hit: { sq: 'd5', bySq: 'c3' } }, NC3, GREEN)).toMatchObject({ voice: 'quiet' });
   });
   it('an empty record (grey) hears it in full', () => {
     expect(learnThreatVoice({ kind: 'hanging', square: 'c4' }, NA5, EMPTY_STUDENT_RECORD).voice).toBe('full');

@@ -405,3 +405,35 @@ point a student needs: when two of their valuable pieces (king and queen, queen
 and rook) stand co-linear, look for the piece of yours that can reach that line.
 Like static/dynamic, this is a word for facts the detectors already compute
 (pins, skewers, x-rays, batteries), not a new detector.
+
+**Also parked (David 2026-10-20): the opening's CONCEPTS.** The story
+(`openingStory.ts`) computes the opening's structure from the board and the
+master counts: the crossroads, what the defining move provokes, a gambit's
+length, sharp/quiet, three structure aims (locked centre, isolated d-pawn,
+fianchetto), the hole a pawn move leaves and the move that pays for it, the
+castling race, the masters' key break. It does NOT compute the conceptual why:
+the trade an opening is built on (the Sicilian gives a wing pawn for a centre
+pawn: the half-open c-file and an extra centre pawn), the typical exchanges
+(which minor piece each side wants off), the minority attack, space, a good or
+bad bishop for the structure, static vs dynamic. Measured 2026-10-20: on the
+Najdorf, once …e5 is played, the identity has only "it has been played at the
+top level" left to say. Build as WORDS for facts the board computers already
+find (half-open files, pawn majorities, bishop vs pawn colour), not new
+detectors.
+
+## 6. Review explains the opening's theory and main idea AS EACH MOVE IS PLAYED (David 2026-10-20: "in review, i do want the full theory and main idea of the opening explained as each move is being played. like Danya does in his post game analysis")
+
+**Status: wanted, not built.** Today the theory lives in a separate Theory
+lecture you tap (session #8, `review-opening-theory`, merged 2026-10-20: each
+move goes on the board, then its line; the masters' plan and the forks; the
+voiced corpus inside the lecture only). The review WALK itself still says the
+opening through the old departure card (`theoryDeparture`).
+
+**Remaining:** on the review walk, every opening move carries its theory and
+the opening's main idea as it is played — what the move is for, what the
+masters play here and why, the fork and the road the game took, the structure
+it builds, the plan it leads to — the way his post-game reviews do. One
+producer, through the review door, sized by the student's record, reading the
+same `openingStory` beats Learn reads (one coach on every surface). Session
+#8's unfinished spec item 1 ("inline opening beats in the walk") is this item.
+Depends on the CONCEPTS note above for the main idea to be more than structure.

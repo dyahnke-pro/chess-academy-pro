@@ -1327,8 +1327,6 @@ export function CoachTeachPage(): JSX.Element {
   // markers from the prose; the parsed annotations get rendered on
   // the board until the next coach turn clears them.
   const [arrows, setArrows] = useState<BoardArrow[]>([]);
-  /** A one-move attack the student sees, marked for this move's turn (`learnThreatVoice` quiet). */
-  const seenMarkRef = useRef<BoardArrow | null>(null);
   const [highlights, setHighlights] = useState<BoardHighlight[]>([]);
   // "Hint" button — Stockfish computes the best move for the current
   // position and we lead the eye to it with an arrow. The engine decides
@@ -1834,7 +1832,6 @@ export function CoachTeachPage(): JSX.Element {
     positionalSaidRef.current.clear();
     priorityFirstLastPlyRef.current = -999;
     lastBoardMoveRef.current = null;
-    seenMarkRef.current = null;
     setHeldMoveFen(null);
     learnTallyRef.current = EMPTY_TALLY;
     setLearnTally(EMPTY_TALLY);
@@ -8356,7 +8353,6 @@ export function CoachTeachPage(): JSX.Element {
     /** Board descriptions for the late wave's one decision. */
     deferred: Array<{ lane: LearnLane; text: string; proof: FactProof; squares?: readonly string[]; claims?: string[]; arrows?: ArrowClaim[] }>;
     alertArrow: BoardArrow | null;
-    markOnlyArrow: BoardArrow | null;
     /** The threat that SPOKE this wave, for its answer in the late wave. */
     threatAsked: { squares: string[]; shape: 'line' | 'hit' } | null;
     /** Lead-the-eye for the lanes that SPOKE — each kept fact's squares.
@@ -8383,7 +8379,7 @@ export function CoachTeachPage(): JSX.Element {
       const over = new Chess(args.fenAfterReply);
       if (over.isGameOver()) {
         return {
-          pkg: buildVoicePackage([]), lanes: '', lead: null, deferred: [], alertArrow: null, markOnlyArrow: null, threatAsked: null,
+          pkg: buildVoicePackage([]), lanes: '', lead: null, deferred: [], alertArrow: null, threatAsked: null,
           keptHighlights: [],
         };
       }
@@ -8431,8 +8427,6 @@ export function CoachTeachPage(): JSX.Element {
      *  not announce it a second time in other words. */
     let mateNamedThisTurn = false;
     let alertArrow: BoardArrow | null = null;
-    /** A threat the student has proven they see: drawn, not said. */
-    let markOnlyArrow: BoardArrow | null = null;
     /** The heat tag that decided the threat line's voice — its fade reads it (`learnThreatVoice`). */
     let threatSkill: string | undefined;
     let announceLine: string | null = null;
@@ -8921,14 +8915,17 @@ export function CoachTeachPage(): JSX.Element {
         if (isLoudAlarm(threatLine)) learnMemRef.current.loudAlarms.add(threatKey);
         if (mustHere) standingRef.current.remember(mustHere);
         // THE RECORD DECIDES HOW LOUD (OS-4): red or grey speaks in full; green
-        // + simple is marked, not said; green + hidden speaks short (the fact
-        // carries the deciding skill, so the door's fade shortens it).
+        // + simple is SILENT — no voice and no arrow (David 2026-10-20: "if it's
+        // something I should already know to identify, like a simple one move
+        // threat, it should have no narration and no arrow calling it out"; an
+        // arrow is a hint, and a hinted find is not proof); green + hidden
+        // speaks short (the fact carries the deciding skill, so the door's fade
+        // shortens it).
         const opponentSan = args.historyAfterReply[args.historyAfterReply.length - 1];
         const loud = threatProducer && opponentSan
           ? learnThreatVoice(threatProducer, { fenBefore: args.fenBeforeReply, opponentSan }, studentRecordRef.current)
           : null;
         if (loud?.voice === 'quiet') {
-          markOnlyArrow = loud.mark ? admitArrow({ from: loud.mark.from, to: loud.mark.to, role: 'threat', source: 'teach.seenAttack' }, { fen: args.fenAfterReply, studentColor: studentCC === 'w' ? 'white' : 'black' }) : null;
           threatLine = null; alertArrow = null; threatSquares = [];
         } else {
           // Always the deciding tag: a red motif under a green general skill
@@ -9557,7 +9554,6 @@ export function CoachTeachPage(): JSX.Element {
       lead: instantDecision.lead,
       deferred,
       alertArrow,
-      markOnlyArrow,
       threatAsked: threatLine
         ? { squares: [...threatSquares], shape: threatShape }
         : null,
@@ -11162,13 +11158,6 @@ export function CoachTeachPage(): JSX.Element {
                   if (instant.alertArrow && instant.pkg.kept.some((f) => f.kind === 'threat')) {
                     instantMarks.arrows.push(instant.alertArrow);
                   }
-                  // The mark rides this move's whole turn — the late wave's
-                  // arrows join it instead of replacing it.
-                  seenMarkRef.current = instant.markOnlyArrow;
-                  if (instant.markOnlyArrow) {
-                    const arrow = instant.markOnlyArrow;
-                    void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, arrow])));
-                  }
                   // THE THREAT'S ANSWER (census T4, David 2026-09-30: "describing
                   // the board is what we do not want"). The warning speaks now;
                   // what to do about it needs the engine's read of this board, so
@@ -11414,7 +11403,7 @@ export function CoachTeachPage(): JSX.Element {
                         } catch { /* a line that leaves the game's path is spoken only */ }
                       }
                     }
-                    if (turnArrows.length > 0) setArrows(seenMarkRef.current ? [seenMarkRef.current] : []);
+                    if (turnArrows.length > 0) setArrows([]);
                     // Spoken with its marks: each goes up as the voice names it.
                     speakTrackA(hintPkg.spoken, liveFenRef.current === fenAfterReply ? { arrows: uniqueArrows(turnArrows), highlights: owed } : undefined);
                     void logAppAudit({
