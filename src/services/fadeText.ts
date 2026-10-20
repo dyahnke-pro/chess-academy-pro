@@ -9,23 +9,36 @@
 //             and its reason;
 //   short   — proven: the point alone.
 // A slip resets the streak, so the record itself returns a skill to full.
-import { capabilityProven, type CapabilityProfile, type CapabilityProfileEntry } from './capabilityEvidence';
+//
+// READ FROM THE WHOLE RECORD — the heat tiles (OS-1 §C1, 2026-10-19). This read
+// only the capability profile, so the student's RECORDED MISSES never reached
+// it: David's record held 1,428 open hung-material slips and the fade still
+// said "short" for it, and 19 of 20 skills. A skill whose tile still carries
+// an open miss (weight ≥ 1, the heat map's own red bar) is taught in full,
+// whatever its held streak says.
+import type { HeatTile } from './heatMap';
 import { splitThink, stripThink } from '../utils/thinkPause';
 
 export type FadeLevel = 'lighter' | 'short';
 /** Per skill; a plain set reads as `short` for every member (proven tags). */
 export type FadeLevels = ReadonlySet<string> | ReadonlyMap<string, FadeLevel>;
 
-export function fadeLevelFor(entry: CapabilityProfileEntry | undefined): FadeLevel | null {
-  if (!entry) return null;
-  if (capabilityProven(entry)) return 'short';
-  return entry.heldStreak >= 1 ? 'lighter' : null;
+/** A recorded miss still open — the record says teach it, in full. */
+export const OPEN_MISS_WEIGHT = 1;
+
+export function fadeLevelFor(tile: HeatTile | undefined): FadeLevel | null {
+  if (!tile) return null;
+  if (tile.openWeight >= OPEN_MISS_WEIGHT) return null;
+  if (tile.state === 'green') return 'short';
+  return tile.state !== 'red' && tile.heldStreak >= 1 ? 'lighter' : null;
 }
 
-export function fadeLevelsFrom(caps: CapabilityProfile | null | undefined): Map<string, FadeLevel> {
+/** Per skill, from the record's heat tiles (`StudentRecord.heat`, the
+ *  student-need context's `heat`). Absent = full teaching. */
+export function fadeLevelsFrom(heat: ReadonlyMap<string, HeatTile> | null | undefined): Map<string, FadeLevel> {
   const out = new Map<string, FadeLevel>();
-  if (!caps) return out;
-  for (const [tag, e] of caps) { const l = fadeLevelFor(e); if (l) out.set(tag, l); }
+  if (!heat) return out;
+  for (const [tag, t] of heat) { const l = fadeLevelFor(t); if (l) out.set(tag, l); }
   return out;
 }
 

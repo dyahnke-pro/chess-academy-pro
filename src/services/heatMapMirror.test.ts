@@ -7,7 +7,7 @@ import { mirrorHeatMap, heatMapEventProps } from './heatMapMirror';
 import type { HeatTile } from './heatMap';
 
 const tile = (tag: string, state: HeatTile['state'], open = 0): HeatTile => ({
-  tag: tag as HeatTile['tag'], label: tag, state, openCount: open, held: 0, broken: 0, heldStreak: 0, streakGames: 0, progress: 0,
+  tag: tag as HeatTile['tag'], label: tag, state, openCount: open, openWeight: open, held: 0, broken: 0, heldStreak: 0, streakGames: 0, progress: 0,
 });
 
 describe('heat map mirror', () => {

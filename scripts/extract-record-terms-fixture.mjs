@@ -5,7 +5,7 @@
 //   node scripts/extract-record-terms-fixture.mjs [drop.json]
 import { readFileSync, writeFileSync } from 'node:fs';
 
-const TAGS = ['missed-opponents-threat', 'king-stuck-center'];
+const TAGS = ['missed-opponents-threat', 'king-stuck-center', 'hung-material', 'missed-tactic'];
 const src = process.argv[2] ?? 'audit-reports/.fixtures/data-drop-david.json';
 const d = JSON.parse(readFileSync(src, 'utf8'));
 // Compact tuples (the test expands them): game ids become indexes into `games`.

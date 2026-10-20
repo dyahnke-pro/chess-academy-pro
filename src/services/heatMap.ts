@@ -36,6 +36,9 @@ export interface HeatTile {
   state: HeatState;
   /** Open slips in the weakness spine for this skill. */
   openCount: number;
+  /** Their WEIGHT (an inaccuracy is half a slip, `slipWeight`): one or more
+   *  means the record still holds a miss to teach — the fade reads this. */
+  openWeight: number;
   held: number;
   broken: number;
   heldStreak: number;
@@ -91,6 +94,7 @@ export function heatMap(profile: CapabilityProfile, slips: readonly Misconceptio
         label: t.label,
         state,
         openCount,
+        openWeight: weight.get(tag) ?? 0,
         held: e?.held ?? 0,
         broken: e?.broken ?? 0,
         heldStreak: e?.heldStreak ?? 0,

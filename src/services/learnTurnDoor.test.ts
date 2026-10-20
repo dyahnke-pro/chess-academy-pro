@@ -1,5 +1,6 @@
 import { spokenSentenceKeys } from './voicePackage';
 import { NO_PROOF } from './proof';
+import type { HeatTile as HeatTileT } from './heatMap';
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { decideTurn, LEARN_LANES, STORY_LANE, type LearnLane } from './learnTurnDoor';
@@ -769,13 +770,18 @@ describe('the fade is gradual (2026-10-17): lighter while learning, short once p
     expect(fadeWhenGreen('trade', THREE, new Map([['bad-trade', 'short' as const]]))).toBe('That trade gives up your better minor piece.');
     expect(fadeWhenGreen('trade', THREE, new Map([['hung-material', 'short' as const]]))).toBe(THREE);
   });
-  it('the record decides the level: proven is short, a held streak is lighter, nothing is full', async () => {
+  it('the record decides the level: proven is short, a held streak is lighter, nothing is full — and an open miss is full', async () => {
     const { fadeLevelFor } = await import('./fadeText');
-    expect(fadeLevelFor({ held: 9, broken: 0, heldStreak: 9, streakGames: 9 })).toBe('short');
-    expect(fadeLevelFor({ held: 1, broken: 2, heldStreak: 1, streakGames: 1 })).toBe('lighter');
-    expect(fadeLevelFor({ held: 1, broken: 2, heldStreak: 0, streakGames: 0 })).toBeNull();
+    const t = (state: 'red' | 'grey' | 'green', heldStreak: number, openWeight = 0): HeatTileT =>
+      ({ tag: 'hung-material', label: 'x', state, openCount: openWeight, openWeight, held: heldStreak, broken: 1, heldStreak, streakGames: heldStreak, progress: 0 });
+    expect(fadeLevelFor(t('green', 9))).toBe('short');
+    expect(fadeLevelFor(t('grey', 1))).toBe('lighter');
+    expect(fadeLevelFor(t('grey', 0))).toBeNull();
+    expect(fadeLevelFor(t('red', 3))).toBeNull();
+    // §C1: proven by answers, but recorded misses still open → taught in full.
+    expect(fadeLevelFor(t('green', 9, 4))).toBeNull();
     expect(fadeLevelFor(undefined)).toBeNull();
-    expect(readFileSync('src/services/weaknessSignalLoader.ts', 'utf8')).toMatch(/fadeLevelsFrom\(await getCapabilityProfile\(\)\)/);
+    expect(readFileSync('src/services/weaknessSignalLoader.ts', 'utf8')).toMatch(/fadeLevelsFrom\(\(await loadStudentRecord\(\)\)\.heat\)/);
     expect(TEACH_CODE).toMatch(/const provenTagsRef = useFadeLevels\(\);/);
   });
 });

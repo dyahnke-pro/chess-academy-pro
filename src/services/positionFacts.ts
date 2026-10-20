@@ -1269,7 +1269,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // The student's standing per teaching layer — the same record that
       // feeds the boost above, read as layers (WO-LAYERS-01).
       layers: layerStandings(input.studentWeaknesses ?? [], input.studentNeedContext?.capabilities),
-      fade: fadeLevelsFrom(input.studentNeedContext?.capabilities),
+      fade: fadeLevelsFrom(input.studentNeedContext?.heat),
     }, bundle: {
       facts: composed.map((c) => c.text),
       skillOf: new Map(composed.flatMap((c) => (c.skill ? [[c.text, c.skill] as const] : []))),

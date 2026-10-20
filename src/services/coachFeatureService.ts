@@ -1235,7 +1235,7 @@ export function buildReviewSegments(
   // review — the same record every ply of the walk is judged against.
   const layers = layerStandings(studentWeaknesses ?? [], studentNeed?.capabilities);
   // The fade per skill, from the same record (one rule with Learn).
-  const fade = fadeLevelsFrom(studentNeed?.capabilities);
+  const fade = fadeLevelsFrom(studentNeed?.heat);
   // Package-completion once-per-game beats (David 2026-07-24: "complete the
   // package"): the simplify-when-ahead trade idea fires at most once.
   let tradeIdeaSpoken = false;

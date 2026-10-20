@@ -22,13 +22,14 @@
 
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
+import { studentRecordFrom } from './studentRecord';
 import { useAppStore } from '../stores/appStore';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { getCachedBookDepartureRows } from './bookDeparturePrecompute';
 import { resolvePlayerColor } from './conversionDetector';
 import { criticalityThresholds } from './criticalityScan';
 import { coldStudent, type StudentNeedContext } from './needScore';
-import type { GameRecord, OpeningKey, UserPreferences } from '../types';
+import type { GameRecord, MisconceptionTagRecord, OpeningKey, UserPreferences } from '../types';
 import { getCapabilityProfile } from './capabilityEvidence';
 import { onWeaknessModelChanged } from './weaknessModelEvents';
 import { openingEntryForKey, openingFamily, sameOpeningFamily } from './openingKey';
@@ -61,6 +62,7 @@ export interface StudentNeedBase {
   signals: StudentNeedContext['signals'];
   bookDepartures: StudentNeedContext['bookDepartures'];
   capabilities: StudentNeedContext['capabilities'];
+  heat: StudentNeedContext['heat'];
   /** Every non-master, non-fixture game (scores). */
   games: readonly GameRecord[];
   /** The analysed subset (familiarity needs evaluations). */
@@ -228,6 +230,10 @@ export async function loadStudentNeedBase(q: BaseQuery): Promise<StudentNeedBase
     // the weakness signals because they are two halves of ONE student model,
     // and a surface must never be able to load one without the other.
     const capabilities = await getCapabilityProfile().catch(() => new Map());
+    // THE WHOLE RECORD PER SKILL (§C1): the heat tiles over every slip and the
+    // capabilities — the same builder the student record uses.
+    const slips = await db.misconceptionTags.toArray().catch((): MisconceptionTagRecord[] => []);
+    const { heat } = studentRecordFrom(signals, capabilities, slips);
     const base: StudentNeedBase = {
       rating: q.rating,
       studentColor: q.studentColor,
@@ -238,6 +244,7 @@ export async function loadStudentNeedBase(q: BaseQuery): Promise<StudentNeedBase
       signals,
       bookDepartures,
       capabilities,
+      heat,
       games,
       analysed,
       inOpening,
@@ -271,6 +278,7 @@ export function contextForLine(base: StudentNeedBase | null, sans: readonly stri
     signals: base.signals,
     bookDepartures: base.bookDepartures,
     capabilities: base.capabilities,
+    heat: base.heat,
     openingId: base.openingId,
     openingGames: base.openingGames,
     homeOpening: base.homeOpening,

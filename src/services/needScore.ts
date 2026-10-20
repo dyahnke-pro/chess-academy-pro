@@ -33,6 +33,7 @@
 // this same function (invariant: one computer set).
 
 import type { WeaknessSignal } from './weaknessSignal';
+import type { HeatTile } from './heatMap';
 import { sameOpeningFamily } from './openingKey';
 import type { OpeningKey } from '../types';
 import { matchClauseKind, matchFundamental, matchTacticPattern, matchTag, boostFor, clauseKindBucket, MAX_WEAKNESS_BOOST } from './weaknessSignal';
@@ -90,12 +91,19 @@ export interface StudentNeedContext {
    * ABSENT FROM THE MAP MEANS UNKNOWN — never mastery, never a hole.
    */
   capabilities: CapabilityProfile;
+  /**
+   * THE WHOLE RECORD PER SKILL — the heat tiles (red / grey / green) over the
+   * student's slips AND capabilities (`studentRecordFrom`). REQUIRED: the fade
+   * reads it (`fadeLevelsFrom`), and a context without it would fade a skill
+   * whose misses it never saw (OS-1 §C1). Empty = every skill grey.
+   */
+  heat: ReadonlyMap<MisconceptionTagId, HeatTile>;
 }
 
 /** The empty context — a brand-new student. Every data term is zero; the
  *  cold-start prior carries the coach. */
 export function coldStudent(rating = DEFAULT_STUDENT_RATING): StudentNeedContext {
-  return { rating, gamesPlayed: 0, signals: [], bookDepartures: [], capabilities: new Map() };
+  return { rating, gamesPlayed: 0, signals: [], bookDepartures: [], capabilities: new Map(), heat: new Map() };
 }
 
 export interface NeedPlyInput {

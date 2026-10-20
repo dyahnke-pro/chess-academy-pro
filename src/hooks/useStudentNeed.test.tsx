@@ -27,7 +27,7 @@ const game = (sans: readonly string[]) => ({
 });
 const BASE: StudentNeedBase = {
   rating: 1200, studentColor: 'white', openingId: null, gamesPlayed: 5, openingGames: 0, homeOpening: false,
-  signals: [], bookDepartures: [], capabilities: new Map(),
+  signals: [], bookDepartures: [], capabilities: new Map(), heat: new Map(),
   games: [], analysed: Array.from({ length: 5 }, () => game([...LINE, 'Ba4'])), inOpening: [],
   names: { lichessUsername: 'alex', chessComUsername: undefined },
 };
