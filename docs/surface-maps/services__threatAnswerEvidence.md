@@ -66,13 +66,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `newThreatsAtTurn` (function) — 4 call sites
-- `src/services/learnBoardTeaching.ts:1334`
+- `src/services/learnBoardTeaching.ts:1321`
 - `src/services/threatAnswerEvidence.measure.test.ts:58`
 - `src/services/threatAnswerEvidence.test.ts:38`
 - `src/services/threatAnswerEvidence.test.ts:42`
 
 ### `recordThreatAnswer` (function) — 1 call site
-- `src/services/learnBoardTeaching.ts:1335`
+- `src/services/learnBoardTeaching.ts:1322`
 
 ## Tests
 

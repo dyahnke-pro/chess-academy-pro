@@ -95,7 +95,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseClaims` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10672`
+- `src/components/Coach/CoachTeachPage.tsx:10681`
 - `src/hooks/usePhaseNarration.door.test.ts:75`
 - `src/hooks/usePhaseNarration.ts:468`
 
@@ -114,7 +114,7 @@
 
 ### `computePositionFacts` (function) — 98 call sites
 - `src/coach/boardTurnAnswer.ts:135`
-- `src/components/Coach/CoachTeachPage.tsx:10546`
+- `src/components/Coach/CoachTeachPage.tsx:10555`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:268`
 - `src/hooks/usePhaseNarration.ts:432`
@@ -213,10 +213,10 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `mustKey` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:8959`
+- `src/components/Coach/CoachTeachPage.tsx:8968`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10819`
+- `src/components/Coach/CoachTeachPage.tsx:10828`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -230,10 +230,11 @@
 ### `NAMES_NO_MOVE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `conceptInstanceKey` (re-export) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8931`
+### `conceptInstanceKey` (re-export) — 12 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8939`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
+- `src/services/claimKeysLooseCount.test.ts:30`
 - `src/services/conceptKey.test.ts:6`
 - `src/services/conceptKey.test.ts:9`
 - `src/services/conceptKey.ts:9`

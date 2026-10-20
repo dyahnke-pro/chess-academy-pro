@@ -289,6 +289,7 @@ import type { ResolvedStep } from '../../coach/requestSteps';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, clauseClaims, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
+import { looseKey } from '../../services/conceptKey';
 import { gradePlayedMove, liveMovePrice, priceLabel, uciOfSan, type MovePrice } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
@@ -8462,6 +8463,12 @@ export function CoachTeachPage(): JSX.Element {
     let tacticLines: SpokenLine[] | undefined;
     /** The claim the tactic line makes — keys the speak-time ledger. */
     let tacticClaim: string | null = null;
+    /** THE LOOSE PIECES THE TACTIC AND THE THREAT LINES STATE (`looseKey`):
+     *  one claim per square, so "the only defender … can be taken" and
+     *  "your bishop on f4 is attacked and nothing's defending it" are one
+     *  fact to say-once, across waves and turns (duplicate map #3). */
+    const tacticLoose: string[] = [];
+    const threatClaims: string[] = [];
     /** The tactic whose definition may ride on `tacticLine` — attached only
      *  when no threat on the same move already carries one (one lecture per move). */
     let tacticTailType: string | null = null;
@@ -8873,6 +8880,7 @@ export function CoachTeachPage(): JSX.Element {
         // offer, not a hanging piece). Same rule as the hit alert below.
         const worst = myHanging[0];
         threatKey = `hang:${worst.piece}${worst.square}`;
+        threatClaims.push(looseKey(worst.square));
         threatProducer = { kind: 'hanging', square: worst.square };
         threatSquares = [worst.square];
         threatLine = hangingPieceLine(worst.piece, worst.square, nextStem(learnMemRef.current, 'hanging'));
@@ -8929,6 +8937,7 @@ export function CoachTeachPage(): JSX.Element {
         // is not followed by "their king on g8 has no escape square" in the
         // late package (1200 walk 2026-09-27, ply 37).
         if (myTacticType && tacticSquares.length > 0) tacticClaim = conceptInstanceKey(myTacticType, tacticSquares);
+        for (const sq of tacticSquares) if (myHanging.some((h) => h.square === sq)) tacticLoose.push(looseKey(sq));
         const claimSaid = tacticClaim;
         // WHAT IT WINS: a forced mate, else the most an exchange on its squares
         // wins from their pieces, else a fork's second target.
@@ -9504,8 +9513,8 @@ export function CoachTeachPage(): JSX.Element {
     })();
     const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, slipCp: args.slipCp, priceSettled: args.priceSettled, midExchange: midExchangeOn }, facts: [
       ...(gemLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
-      ...(tacticLine ? [{ lane: 'tactic' as const, namesStudentMove: tacticLines?.[0] ? studentMovesInLine(tacticLines[0].fen, tacticLines[0].sans, studentCC, args.fenAfterReply) : NAMES_NO_MOVE, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
-      ...(threatLine ? [{ namesStudentMove: threatNames, lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
+      ...(tacticLine ? [{ lane: 'tactic' as const, namesStudentMove: tacticLines?.[0] ? studentMovesInLine(tacticLines[0].fen, tacticLines[0].sans, studentCC, args.fenAfterReply) : NAMES_NO_MOVE, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim || tacticLoose.length ? [...(tacticClaim ? [tacticClaim] : []), ...tacticLoose] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
+      ...(threatLine ? [{ namesStudentMove: threatNames, lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), ...(threatClaims.length ? { claims: threatClaims } : {}), stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
       ...(lastHereRead ? [{ namesStudentMove: NAMES_NO_MOVE, lane: lastHereRead.key.startsWith('last-here:same:') ? 'sameAsLastTime' as const : 'lastTimeHere' as const, text: lastHereRead.text, fen: lastHereRead.fen ?? args.fenAfterReply, claims: [lastHereRead.key], proof: lastHereRead.proof }] : []),
       ...(bookMoveRead ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'bookMove' as const, text: bookMoveRead.text, fen: bookMoveRead.fen ?? args.fenAfterReply, squares: bookMoveRead.squares, claims: [bookMoveRead.key], role: 'teach' as const, proof: bookMoveRead.proof, skill: FUNDAMENTAL_TAG['left-book-early'] }] : []),
       ...(announceLine ? [{ namesStudentMove: NAMES_NO_MOVE, lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name, claims: announceClaims, ...(announceSquares.length ? { squares: announceSquares } : {}) }] : []),

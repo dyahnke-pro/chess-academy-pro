@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**32 lines · 2 exports · 6 importers · 4 tests · 0 audits**
+**47 lines · 4 exports · 9 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,6 +12,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/boardComputers.ts`
+- `src/services/claimKeysLooseCount.test.ts`
 - `src/services/conceptKey.test.ts`
 - `src/services/danyaBehaviors.ts`
 - `src/services/kingAttackReads.ts`
@@ -21,10 +24,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `conceptInstanceKey` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8931`
+### `conceptInstanceKey` (function) — 14 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8939`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
+- `src/services/claimKeysLooseCount.test.ts:30`
 - `src/services/conceptKey.test.ts:6`
 - `src/services/conceptKey.test.ts:9`
 - `src/services/danyaBehaviors.ts:525`
@@ -42,8 +46,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionFacts.ts:1687`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:51`
 
+### `looseKey` (function) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8883`
+- `src/components/Coach/CoachTeachPage.tsx:8940`
+- `src/services/claimKeysLooseCount.test.ts:30`
+- `src/services/claimKeysLooseCount.test.ts:34`
+
+### `countKey` (function) — 4 call sites
+- `src/services/boardComputers.ts:230`
+- `src/services/boardComputers.ts:290`
+- `src/services/claimKeysLooseCount.test.ts:52`
+- `src/services/claimKeysLooseCount.test.ts:53`
+
 ## Tests
 
+- `src/services/claimKeysLooseCount.test.ts`
 - `src/services/conceptKey.test.ts`
 - `src/services/replayFence.alekhine1500.test.ts`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts`

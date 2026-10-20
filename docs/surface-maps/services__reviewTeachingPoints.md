@@ -170,7 +170,7 @@
 - `src/services/reviewTeachingPoints.test.ts:294`
 
 ### `trappedOnBoard` (function) — 3 call sites
-- `src/services/boardComputers.ts:340`
+- `src/services/boardComputers.ts:341`
 - `src/services/queenGrabTrap.ts:57`
 - `src/services/reviewTeachingPoints.test.ts:291`
 

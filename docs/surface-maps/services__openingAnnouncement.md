@@ -26,8 +26,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `spokenOpeningLabel` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9034`
-- `src/components/Coach/CoachTeachPage.tsx:9035`
+- `src/components/Coach/CoachTeachPage.tsx:9043`
+- `src/components/Coach/CoachTeachPage.tsx:9044`
 - `src/services/openingAnnouncement.test.ts:139`
 - `src/services/openingAnnouncement.test.ts:142`
 
@@ -67,24 +67,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.test.ts:221`
 
 ### `openingAnnouncementForGame` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9036`
+- `src/components/Coach/CoachTeachPage.tsx:9045`
 - `src/services/coachFeatureService.ts:2036`
 - `src/services/openingAnnouncement.test.ts:156`
 - `src/services/openingAnnouncement.test.ts:157`
 
 ### `warmOpeningBook` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:1018`
+- `src/components/Coach/CoachTeachPage.tsx:1019`
 
 ### `studentJustLeftBook` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11843`
-- `src/components/Coach/CoachTeachPage.tsx:11893`
+- `src/components/Coach/CoachTeachPage.tsx:11852`
+- `src/components/Coach/CoachTeachPage.tsx:11902`
 - `src/services/openingAnnouncement.test.ts:162`
 - `src/services/openingAnnouncement.test.ts:171`
 - `src/services/openingAnnouncement.test.ts:172`
 - `src/services/openingAnnouncement.test.ts:173`
 
 ### `openingNameForBoard` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9026`
+- `src/components/Coach/CoachTeachPage.tsx:9035`
 - `src/services/coachFeatureService.ts:2031`
 - `src/services/openingPositions.test.ts:30`
 - `src/services/openingStory.ts:124`
@@ -96,7 +96,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `theirOpeningVerdict` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12360`
+- `src/components/Coach/CoachTeachPage.tsx:12369`
 - `src/services/coachFeatureService.ts:2156`
 - `src/services/openingAnnouncement.test.ts:194`
 - `src/services/openingAnnouncement.test.ts:195`

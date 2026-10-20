@@ -42,7 +42,7 @@ describe('boardComputers — the one registry', () => {
     expect(order?.play).toEqual({ from: 'e2', to: 'e3' });
 
     const tie = readBoard('tiedDefender', { fenBefore: '4k3/3n4/8/4p3/8/8/8/R5NK w - - 0 1', fenAfterMove: '4k3/3n4/8/4p3/8/8/8/4R1NK b - - 1 1', fenAfterReply: '4k3/3n4/8/4p3/8/8/8/4R1NK b - - 1 1', student: 'w' });
-    expect(tie?.key).toBe('tied:d7>e5');
+    expect(tie?.key).toBe('count:e5');
 
     const grab = readBoard('queenGrabTrap', { fen: 'r2q1r1k/pppnn1p1/3p3p/1P1Qp3/8/P1N2N1P/5PP1/R1B1R1K1 w - - 1 17' });
     expect(grab && isProof(grab.proof)).toBe(true);

@@ -40,6 +40,7 @@ import { countMethod } from './countMethod';
 import { buildPriorityFirst } from './playCommentary';
 import { openingStoryAt, heldWhilePlayable, type StoryBeat } from './openingStory';
 import { packageForRegister } from './hintRegister';
+import { countKey } from './conceptKey';
 
 export type CoachSurface = 'learn' | 'review' | 'play' | 'chat' | 'tactics' | 'weaknesses';
 
@@ -226,7 +227,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
       if (!tie) return null;
       const holds = findTiedDefenders(fenAfterReply, student).some((t) => t.defender.square === tie.defender.square && t.target.square === tie.target.square);
       if (!holds) return null;
-      return { text: tiedDefenderLine(tie), proof: tiedDefenderProof(tie), squares: [tie.defender.square, tie.target.square], key: `tied:${tie.defender.square}>${tie.target.square}` };
+      return { text: tiedDefenderLine(tie), proof: tiedDefenderProof(tie), squares: [tie.defender.square, tie.target.square], key: countKey(tie.target.square) };
     }),
     surfaces: { learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
@@ -286,7 +287,7 @@ export const BOARD_COMPUTERS: { [K in ComputerId]: ComputerSpec<BoardContexts[K]
     read: ({ fen, student }) => safe(() => {
       const m = countMethod(fen, student);
       if (!m) return null;
-      return { text: m.text, proof: NO_PROOF.method, squares: [m.square], key: `count-method:${m.square}`, stakes: { points: Math.abs(m.net), plies: 0 }, role: 'teach' as const };
+      return { text: m.text, proof: NO_PROOF.method, squares: [m.square], key: countKey(m.square), stakes: { points: Math.abs(m.net), plies: 0 }, role: 'teach' as const };
     }),
     surfaces: { learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED },
   },
