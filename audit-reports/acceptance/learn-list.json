@@ -1818,11 +1818,35 @@
    "say": "MUST SAY",
    "what": "after their Kf7: the threat Kxg6 on your rook on g6 (passing costs 707cp at depth 20)",
    "window": "afterReply",
-   "anyOf": [
-    "\\bg6\\b",
-    "\\byour rook\\b"
+   "theirMove": "Kxg6",
+   "rules": [
+    {
+     "allOf": [
+      "\\bg6\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\byour rook\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    }
    ],
-   "theirMove": "Kxg6"
+   "controls": {
+    "pass": [
+     "Their move attacks your rook on g6.",
+     "Your rook on g6 is hanging."
+    ],
+    "fail": [
+     "Your rook on g6 is well placed.",
+     "Your rook guards e4."
+    ]
+   }
   },
   {
    "game": "g1",
@@ -2205,11 +2229,35 @@
    "say": "MUST SAY",
    "what": "after their Kg8: the threat Kxh7 on your knight on h7 (passing costs 480cp at depth 20)",
    "window": "afterReply",
-   "anyOf": [
-    "\\bh7\\b",
-    "\\byour knight\\b"
+   "theirMove": "Kxh7",
+   "rules": [
+    {
+     "allOf": [
+      "\\bh7\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\byour knight\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    }
    ],
-   "theirMove": "Kxh7"
+   "controls": {
+    "pass": [
+     "Their move attacks your knight on h7.",
+     "Your knight on h7 is hanging."
+    ],
+    "fail": [
+     "Your knight on h7 is well placed.",
+     "Your knight guards e4."
+    ]
+   }
   },
   {
    "game": "g1",
@@ -4038,9 +4086,17 @@
    "say": "MUST SAY",
    "what": "the opening's name — the Smith-Morra Gambit (3.c3); DB name at that ply: \"Sicilian Defense: Smith-Morra Gambit Accepted\"",
    "window": "byPly",
-   "anyOf": [
-    "\\bMorra\\b"
-   ]
+   "rules": [
+    {
+     "anyOf": [
+      "\\bMorra\\b"
+     ]
+    }
+   ],
+   "controls": {
+    "pass": [],
+    "fail": []
+   }
   },
   {
    "game": "g2",
@@ -5085,9 +5141,17 @@
    "say": "MUST SAY",
    "what": "the opening's name — the Najdorf (5…a6); DB name at that ply: \"Sicilian Defense: Najdorf Variation\"",
    "window": "byPly",
-   "anyOf": [
-    "\\bNajdorf\\b"
-   ]
+   "rules": [
+    {
+     "anyOf": [
+      "\\bNajdorf\\b"
+     ]
+    }
+   ],
+   "controls": {
+    "pass": [],
+    "fail": []
+   }
   },
   {
    "game": "g3",
@@ -6220,11 +6284,35 @@
    "say": "MUST SAY",
    "what": "after their Nc6: the threat Nxb4 on your knight on b4 (passing costs 449cp at depth 20)",
    "window": "afterReply",
-   "anyOf": [
-    "\\bb4\\b",
-    "\\byour knight\\b"
+   "theirMove": "Nxb4",
+   "rules": [
+    {
+     "allOf": [
+      "\\bb4\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\byour knight\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    }
    ],
-   "theirMove": "Nxb4"
+   "controls": {
+    "pass": [
+     "Their move attacks your knight on b4.",
+     "Your knight on b4 is hanging."
+    ],
+    "fail": [
+     "Your knight on b4 is well placed.",
+     "Your knight guards e4."
+    ]
+   }
   },
   {
    "game": "g3",
@@ -6294,11 +6382,35 @@
    "say": "MUST SAY",
    "what": "after their a5: the threat axb4 on your knight on b4 (passing costs 465cp at depth 20)",
    "window": "afterReply",
-   "anyOf": [
-    "\\bb4\\b",
-    "\\byour knight\\b"
+   "theirMove": "axb4",
+   "rules": [
+    {
+     "allOf": [
+      "\\bb4\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\byour knight\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    }
    ],
-   "theirMove": "axb4"
+   "controls": {
+    "pass": [
+     "Their move attacks your knight on b4.",
+     "Your knight on b4 is hanging."
+    ],
+    "fail": [
+     "Your knight on b4 is well placed.",
+     "Your knight guards e4."
+    ]
+   }
   },
   {
    "game": "g3",
@@ -6309,9 +6421,17 @@
    "say": "MUST SAY",
    "what": "the opening's name — the Nimzo-Larsen Attack (1.b3); DB name at that ply: \"Nimzo-Larsen Attack: Modern Variation\"",
    "window": "byPly",
-   "anyOf": [
-    "\\bLarsen\\b"
-   ]
+   "rules": [
+    {
+     "anyOf": [
+      "\\bLarsen\\b"
+     ]
+    }
+   ],
+   "controls": {
+    "pass": [],
+    "fail": []
+   }
   },
   {
    "game": "g4",
@@ -7516,11 +7636,35 @@
    "say": "MUST SAY",
    "what": "after their Qxb7: the threat Qxa8+ on your rook on a8 (passing costs 864cp at depth 20)",
    "window": "afterReply",
-   "anyOf": [
-    "\\ba8\\b",
-    "\\byour rook\\b"
+   "theirMove": "Qxa8+",
+   "rules": [
+    {
+     "allOf": [
+      "\\ba8\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\byour rook\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    }
    ],
-   "theirMove": "Qxa8+"
+   "controls": {
+    "pass": [
+     "Their move attacks your rook on a8.",
+     "Your rook on a8 is hanging."
+    ],
+    "fail": [
+     "Your rook on a8 is well placed.",
+     "Your rook guards e4."
+    ]
+   }
   },
   {
    "game": "g4",
@@ -7531,10 +7675,18 @@
    "say": "MUST SAY",
    "what": "the opening's name — the Ruy Lopez (3.Bb5); DB name at that ply: \"Ruy Lopez\"",
    "window": "byPly",
-   "anyOf": [
-    "\\bRuy Lopez\\b",
-    "\\bSpanish\\b"
-   ]
+   "rules": [
+    {
+     "anyOf": [
+      "\\bRuy Lopez\\b",
+      "\\bSpanish\\b"
+     ]
+    }
+   ],
+   "controls": {
+    "pass": [],
+    "fail": []
+   }
   },
   {
    "game": "dB",
@@ -8144,11 +8296,35 @@
    "say": "MUST SAY",
    "what": "after their Qxd3: the threat Qxd6 on your bishop on d6 (passing costs 526cp at depth 20)",
    "window": "afterReply",
-   "anyOf": [
-    "\\bd6\\b",
-    "\\byour bishop\\b"
+   "theirMove": "Qxd6",
+   "rules": [
+    {
+     "allOf": [
+      "\\bd6\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\byour bishop\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    }
    ],
-   "theirMove": "Qxd6"
+   "controls": {
+    "pass": [
+     "Their move attacks your bishop on d6.",
+     "Your bishop on d6 is hanging."
+    ],
+    "fail": [
+     "Your bishop on d6 is well placed.",
+     "Your bishop guards e4."
+    ]
+   }
   },
   {
    "game": "dB",
@@ -8459,11 +8635,35 @@
    "say": "MUST SAY",
    "what": "after their h3: the threat hxg4 on your knight on g4 (passing costs 505cp at depth 20)",
    "window": "afterReply",
-   "anyOf": [
-    "\\bg4\\b",
-    "\\byour knight\\b"
+   "theirMove": "hxg4",
+   "rules": [
+    {
+     "allOf": [
+      "\\bg4\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\byour knight\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    }
    ],
-   "theirMove": "hxg4"
+   "controls": {
+    "pass": [
+     "Their move attacks your knight on g4.",
+     "Your knight on g4 is hanging."
+    ],
+    "fail": [
+     "Your knight on g4 is well placed.",
+     "Your knight guards e4."
+    ]
+   }
   },
   {
    "game": "dB",
@@ -9456,10 +9656,18 @@
    "say": "MUST SAY",
    "what": "the opening's name — the Sicilian, Rossolimo (3.Bb5); DB name at that ply: \"Sicilian Defense: Nyezhmetdinov-Rossolimo Attack\"",
    "window": "byPly",
-   "anyOf": [
-    "\\bRossolimo\\b",
-    "\\bSicilian\\b"
-   ]
+   "rules": [
+    {
+     "anyOf": [
+      "\\bRossolimo\\b",
+      "\\bSicilian\\b"
+     ]
+    }
+   ],
+   "controls": {
+    "pass": [],
+    "fail": []
+   }
   },
   {
    "game": "dW",
@@ -10514,11 +10722,35 @@
    "say": "MUST SAY",
    "what": "after their Be7: the threat Qxd4 on your knight on d4 (passing costs 499cp at depth 20)",
    "window": "afterReply",
-   "anyOf": [
-    "\\bd4\\b",
-    "\\byour knight\\b"
+   "theirMove": "Qxd4",
+   "rules": [
+    {
+     "allOf": [
+      "\\bd4\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\byour knight\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    }
    ],
-   "theirMove": "Qxd4"
+   "controls": {
+    "pass": [
+     "Their move attacks your knight on d4.",
+     "Your knight on d4 is hanging."
+    ],
+    "fail": [
+     "Your knight on d4 is well placed.",
+     "Your knight guards e4."
+    ]
+   }
   },
   {
    "game": "dW",
@@ -10912,11 +11144,35 @@
    "say": "MUST SAY",
    "what": "after their Qh4: the threat Qxe4 on your queen on e4 (passing costs 704cp at depth 20)",
    "window": "afterReply",
-   "anyOf": [
-    "\\be4\\b",
-    "\\byour queen\\b"
+   "theirMove": "Qxe4",
+   "rules": [
+    {
+     "allOf": [
+      "\\be4\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\byour queen\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    }
    ],
-   "theirMove": "Qxe4"
+   "controls": {
+    "pass": [
+     "Their move attacks your queen on e4.",
+     "Your queen on e4 is hanging."
+    ],
+    "fail": [
+     "Your queen on e4 is well placed.",
+     "Your queen guards d5."
+    ]
+   }
   },
   {
    "game": "dW",
@@ -11060,11 +11316,35 @@
    "say": "MUST SAY",
    "what": "after their f5: the threat fxe4 on your queen on e4 (passing costs 1346cp at depth 20)",
    "window": "afterReply",
-   "anyOf": [
-    "\\be4\\b",
-    "\\byour queen\\b"
+   "theirMove": "fxe4",
+   "rules": [
+    {
+     "allOf": [
+      "\\be4\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\byour queen\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    }
    ],
-   "theirMove": "fxe4"
+   "controls": {
+    "pass": [
+     "Their move attacks your queen on e4.",
+     "Your queen on e4 is hanging."
+    ],
+    "fail": [
+     "Your queen on e4 is well placed.",
+     "Your queen guards d5."
+    ]
+   }
   },
   {
    "game": "dW",
@@ -11135,11 +11415,35 @@
    "say": "MUST SAY",
    "what": "after their Rde8: the threat Rxe4 on your queen on e4 (passing costs 1177cp at depth 20)",
    "window": "afterReply",
-   "anyOf": [
-    "\\be4\\b",
-    "\\byour queen\\b"
+   "theirMove": "Rxe4",
+   "rules": [
+    {
+     "allOf": [
+      "\\be4\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\byour queen\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    }
    ],
-   "theirMove": "Rxe4"
+   "controls": {
+    "pass": [
+     "Their move attacks your queen on e4.",
+     "Your queen on e4 is hanging."
+    ],
+    "fail": [
+     "Your queen on e4 is well placed.",
+     "Your queen guards d5."
+    ]
+   }
   },
   {
    "game": "dW",
@@ -11224,11 +11528,35 @@
    "say": "MUST SAY",
    "what": "after their Qf2: the threat Qxg2 on your queen on g2 (passing costs 1275cp at depth 20)",
    "window": "afterReply",
-   "anyOf": [
-    "\\bg2\\b",
-    "\\byour queen\\b"
+   "theirMove": "Qxg2",
+   "rules": [
+    {
+     "allOf": [
+      "\\bg2\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\byour queen\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|threat|threatens?|threatening|eyes?|aims? at|targets?|goes after|go after|after your|hangs?|hanging|loose|undefended|en prise|can be taken|take|takes|win|wins|lose|loses|drop|drops|trapped|danger|kick|kicks|chase|chases|under fire)\\b"
+     ]
+    }
    ],
-   "theirMove": "Qxg2"
+   "controls": {
+    "pass": [
+     "Their move attacks your queen on g2.",
+     "Your queen on g2 is hanging."
+    ],
+    "fail": [
+     "Your queen on g2 is well placed.",
+     "Your queen guards e4."
+    ]
+   }
   },
   {
    "game": "dW",
@@ -11447,9 +11775,17 @@
    "say": "MUST SAY",
    "what": "the opening's name — the Vienna Game (2.Nc3); DB name at that ply: \"Vienna Game: Max Lange Defense\"",
    "window": "byPly",
-   "anyOf": [
-    "\\bVienna\\b"
-   ]
+   "rules": [
+    {
+     "anyOf": [
+      "\\bVienna\\b"
+     ]
+    }
+   ],
+   "controls": {
+    "pass": [],
+    "fail": []
+   }
   },
   {
    "game": "g2",
@@ -11460,17 +11796,32 @@
    "say": "MUST SAY",
    "what": "the price of …e5: d5 can no longer be covered by a pawn (structure cost)",
    "window": "turn",
-   "allOf": [
-    "\\bd5\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\bd5\\b"
+     ],
+     "anyOf": [
+      "\\bcover",
+      "\\bhole\\b",
+      "\\bweak",
+      "\\bprice\\b",
+      "\\boutpost\\b",
+      "\\bcan(?:'|no)t (?:be )?(?:guard|cover|defend)",
+      "\\bno pawn\\b"
+     ]
+    }
    ],
-   "anyOf": [
-    "\\bcover",
-    "\\bhole\\b",
-    "\\bweak",
-    "\\bprice\\b",
-    "\\boutpost\\b",
-    "\\bguard"
-   ]
+   "controls": {
+    "pass": [
+     "That is the price of e5: no pawn of yours can cover d5 again.",
+     "d5 becomes a hole."
+    ],
+    "fail": [
+     "Their knight could go to d5.",
+     "You may push d5 later."
+    ]
+   }
   },
   {
    "game": "g2",
@@ -11481,9 +11832,33 @@
    "say": "MUST SAY",
    "what": "…Be6 pays that price: the bishop guards d5",
    "window": "turn",
-   "anyOf": [
-    "\\bd5\\b"
-   ]
+   "rules": [
+    {
+     "allOf": [
+      "\\bd5\\b"
+     ],
+     "anyOf": [
+      "\\bguard",
+      "\\bcover",
+      "\\bcontrol",
+      "\\bdefend",
+      "\\bprotect",
+      "\\bpays\\b",
+      "\\bwatch",
+      "\\bhold",
+      "\\bfights? for\\b"
+     ]
+    }
+   ],
+   "controls": {
+    "pass": [
+     "Your bishop on e6 now guards d5."
+    ],
+    "fail": [
+     "Their knight wants d5.",
+     "d5 is a hole."
+    ]
+   }
   },
   {
    "game": "g2",
@@ -11494,11 +11869,23 @@
    "say": "MUST SAY",
    "what": "kings on opposite wings: the middlegame is a race (after 9.O-O-O)",
    "window": "byPly",
-   "anyOf": [
-    "\\bopposite (?:wings|sides)\\b",
-    "\\brace\\b",
-    "\\bpawn storm\\b"
-   ]
+   "rules": [
+    {
+     "anyOf": [
+      "\\bopposite (?:wings|sides)\\b",
+      "\\b(?:a|the) race\\b",
+      "\\bpawn storms?\\b"
+     ]
+    }
+   ],
+   "controls": {
+    "pass": [
+     "Kings on opposite wings: this is a race."
+    ],
+    "fail": [
+     "They race the clock."
+    ]
+   }
   },
   {
    "game": "g3",
@@ -11509,9 +11896,30 @@
    "say": "MUST SAY",
    "what": "2.Bb2 puts the bishop on the long diagonal",
    "window": "turn",
-   "anyOf": [
-    "\\bdiagonal\\b"
-   ]
+   "rules": [
+    {
+     "allOf": [
+      "\\bdiagonal\\b"
+     ],
+     "anyOf": [
+      "\\blong\\b",
+      "\\bb2\\b",
+      "\\ba1\\b",
+      "\\bh8\\b",
+      "\\baim",
+      "\\bopen",
+      "\\balong\\b"
+     ]
+    }
+   ],
+   "controls": {
+    "pass": [
+     "You put the bishop on b2, on the long diagonal."
+    ],
+    "fail": [
+     "Their bishop is on a short diagonal."
+    ]
+   }
   },
   {
    "game": "g2",
@@ -11642,5 +12050,9 @@
   "dW 8.d4 → Bb4: d16 threat Bxc3+ pc 385; d20 Nxe4 pc 413 (not plain) — no danger item",
   "dW 21.b4: d18 cost 177, d22 cost 137 — no verdict item",
   "dW 24.Qxf2 → Bxf2: d16 threat cxd5 pc 983; d20 cxd5 pc 1017 (reply took a piece) — no danger item"
- ]
+ ],
+ "revised": {
+  "at": "2026-10-20T15:40:17.319Z",
+  "why": "lead review: a MUST SAY item needs the square AND the relation in ONE sentence; danger and beat items tightened, controls added. Item set unchanged (753)."
+ }
 }

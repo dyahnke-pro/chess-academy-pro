@@ -1,6 +1,6 @@
 {
  "version": 1,
- "written": "2026-10-20T15:36:51.286Z",
+ "written": "2026-10-20T15:39:59.852Z",
  "video": {
   "id": "DO28z1MTaC8",
   "url": "https://www.youtube.com/watch?v=DO28z1MTaC8",
@@ -52,9 +52,26 @@
    "say": "MUST COVER",
    "what": "Nf6 attacks the e4 pawn",
    "window": "turn",
-   "anyOf": [
-    "\\be4\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\be4\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Your knight on f6 attacks the pawn on e4.",
+     "The knight hits e4 right away."
+    ],
+    "fail": [
+     "Their pawn on e4 is defended by the knight on c3.",
+     "They push e4 to claim the centre."
+    ]
+   },
    "soft": false
   },
   {
@@ -66,12 +83,24 @@
    "say": "MUST COVER",
    "what": "names the opening: Petrov / Three Knights",
    "window": "turn",
-   "anyOf": [
-    "\\bThree Knights\\b",
-    "\\bPetrov\\b",
-    "\\bPetroff\\b",
-    "\\bRussian\\b"
+   "rules": [
+    {
+     "anyOf": [
+      "\\bThree Knights (?:Game|Opening|Variation)\\b",
+      "\\bPetrov\\b",
+      "\\bPetroff\\b",
+      "\\bRussian (?:Game|Defen[cs]e)\\b"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "It's the Three Knights Game."
+    ],
+    "fail": [
+     "Three knights are out."
+    ]
+   },
    "soft": false
   },
   {
@@ -83,16 +112,26 @@
    "say": "MUST COVER",
    "what": "their Nc3 guards e4",
    "window": "afterReply",
-   "anyOf": [
-    "\\bguard",
-    "\\bdefend",
-    "\\bprotect",
-    "\\bcover",
-    "\\bsupport"
+   "rules": [
+    {
+     "allOf": [
+      "\\be4\\b"
+     ],
+     "anyOf": [
+      "\\b(?:guard|guards|guarded|guarding|defend|defends|defended|defending|protect|protects|protected|support|supports|cover|covers|covering|holds?|backs? up)\\b"
+     ]
+    }
    ],
-   "allOf": [
-    "\\be4\\b"
-   ],
+   "controls": {
+    "pass": [
+     "Their knight on c3 guards e4.",
+     "Nc3 defends the pawn on e4."
+    ],
+    "fail": [
+     "Your knight attacks e4.",
+     "e4 is loose for a moment."
+    ]
+   },
    "soft": false
   },
   {
@@ -160,9 +199,29 @@
    "say": "MUST COVER",
    "what": "e5 is left to be taken (Nxe5 is possible)",
    "window": "turn",
-   "anyOf": [
-    "\\be5\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\be5\\b"
+     ],
+     "anyOf": [
+      "\\b(?:loose|undefended|unprotected|hangs?|hanging|en prise|can be taken|free|grab|grabs|snatch|take it|takes it|take that pawn|for the taking|nothing (?:defends|guards|protects)|isn't (?:defended|guarded|protected)|not (?:defended|guarded|protected))\\b",
+      "\\b(?:knight|they) (?:can )?takes? (?:on )?e5\\b",
+      "\\bgambit\\b"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Your pawn on e5 is loose now.",
+     "Their knight can take on e5.",
+     "Nothing defends e5, so they can grab it."
+    ],
+    "fail": [
+     "Your pawn on e5 holds the centre.",
+     "d6 defends e5."
+    ]
+   },
    "soft": false
   },
   {
@@ -174,10 +233,35 @@
    "say": "MUST COVER",
    "what": "their Bc4 aims at f7 / e5 still hangs",
    "window": "afterReply",
-   "anyOf": [
-    "\\bf7\\b",
-    "\\be5\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\bf7\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\be5\\b"
+     ],
+     "anyOf": [
+      "\\b(?:loose|undefended|unprotected|hangs?|hanging|en prise|can be taken|free|grab|grabs|snatch|take it|takes it|take that pawn|for the taking|nothing (?:defends|guards|protects)|isn't (?:defended|guarded|protected)|not (?:defended|guarded|protected))\\b",
+      "\\btakes? (?:on )?e5\\b"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Their bishop on c4 aims at f7.",
+     "Your pawn on e5 still hangs."
+    ],
+    "fail": [
+     "Your king guards f7.",
+     "Your pawn on e5 is solid."
+    ]
+   },
    "soft": false
   },
   {
@@ -248,17 +332,26 @@
    "say": "MUST COVER",
    "what": "d6 defends the e5 pawn",
    "window": "turn",
-   "anyOf": [
-    "\\bdefend",
-    "\\bguard",
-    "\\bprotect",
-    "\\bsupport",
-    "\\bhold",
-    "\\bback"
+   "rules": [
+    {
+     "allOf": [
+      "\\be5\\b"
+     ],
+     "anyOf": [
+      "\\b(?:guard|guards|guarded|guarding|defend|defends|defended|defending|protect|protects|protected|support|supports|cover|covers|covering|holds?|backs? up)\\b"
+     ]
+    }
    ],
-   "allOf": [
-    "\\be5\\b"
-   ],
+   "controls": {
+    "pass": [
+     "d6 defends the pawn on e5.",
+     "Your pawn on d6 guards e5."
+    ],
+    "fail": [
+     "Their knight attacks e5.",
+     "Your pawn on e5 is loose."
+    ]
+   },
    "soft": false
   },
   {
@@ -329,9 +422,26 @@
    "say": "MUST COVER",
    "what": "Bg4 pins the knight on f3 (to the queen)",
    "window": "turn",
-   "anyOf": [
-    "\\bpin"
+   "rules": [
+    {
+     "allOf": [
+      "\\bpin(?:s|ned|ning)?\\b"
+     ],
+     "anyOf": [
+      "\\bf3\\b",
+      "\\bknight\\b"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Your bishop on g4 pins their knight on f3 to the queen."
+    ],
+    "fail": [
+     "Your bishop on g4 attacks the knight on f3.",
+     "There is a pin on the e-file."
+    ]
+   },
    "soft": false
   },
   {
@@ -343,11 +453,30 @@
    "say": "MUST COVER",
    "what": "before h3 takes the square away",
    "window": "turn",
-   "anyOf": [
-    "\\bh3\\b",
-    "\\bbefore\\b",
-    "\\bwhile you can\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\bh3\\b"
+     ],
+     "anyOf": [
+      "\\bbefore\\b",
+      "\\bstop",
+      "\\bprevent",
+      "\\bkick",
+      "\\bchase",
+      "\\bwhile you can\\b",
+      "\\bin time\\b"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Pin it now, before h3 stops it."
+    ],
+    "fail": [
+     "Their pawn on h3 is weak."
+    ]
+   },
    "soft": true
   },
   {
@@ -418,10 +547,41 @@
    "say": "MUST COVER",
    "what": "the threat …Nd4 on the pinned f3 knight",
    "window": "turn",
-   "anyOf": [
-    "\\bd4\\b",
-    "\\bpinned\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\bd4\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\bjump",
+      "\\bland",
+      "\\bcome to\\b",
+      "\\bgoes? to\\b",
+      "\\bheads? (?:for|to)\\b",
+      "\\bnext\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\bpinned\\b"
+     ],
+     "anyOf": [
+      "\\bf3\\b",
+      "\\bknight\\b"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Your knight eyes d4, a second hit on the pinned knight.",
+     "The pinned knight on f3 is under more pressure now."
+    ],
+    "fail": [
+     "Their pawn guards d4.",
+     "Their knight on d4 is strong."
+    ]
+   },
    "soft": false
   },
   {
@@ -433,10 +593,42 @@
    "say": "MUST COVER",
    "what": "their Be3 covers d4 / challenges your c5 bishop",
    "window": "afterReply",
-   "anyOf": [
-    "\\bd4\\b",
-    "\\bc5\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\bd4\\b"
+     ],
+     "anyOf": [
+      "\\b(?:guard|guards|guarded|guarding|defend|defends|defended|defending|protect|protects|protected|support|supports|cover|covers|covering|holds?|backs? up)\\b",
+      "\\bcontrol",
+      "\\bmeet",
+      "\\btake (?:back )?on d4\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\bc5\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\bchallenge",
+      "\\btrade",
+      "\\bexchange",
+      "\\boffer",
+      "\\btakes? (?:on )?c5\\b"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Their bishop on e3 covers d4.",
+     "Their bishop on e3 challenges your bishop on c5."
+    ],
+    "fail": [
+     "Your bishop on c5 is active.",
+     "You could play to d4 later."
+    ]
+   },
    "soft": false
   },
   {
@@ -507,12 +699,62 @@
    "say": "MUST COVER",
    "what": "Bb6 avoids the trade on c5 that spoils the pawns / axb6 opens the a-file",
    "window": "turn",
-   "anyOf": [
-    "\\bc5\\b",
-    "\\ba-file\\b",
-    "\\bdoubled\\b",
-    "\\bstructure\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\bc5\\b"
+     ],
+     "anyOf": [
+      "\\btrade",
+      "\\bexchange",
+      "\\btakes? (?:on )?c5\\b",
+      "\\bstructure\\b",
+      "\\bpawns?\\b",
+      "\\bdoubl",
+      "\\bruin",
+      "\\bspoil"
+     ]
+    },
+    {
+     "allOf": [
+      "\\ba-file\\b"
+     ],
+     "anyOf": [
+      "\\bopen"
+     ]
+    },
+    {
+     "allOf": [
+      "\\bdoubled\\b"
+     ],
+     "anyOf": [
+      "\\bpawns?\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\bstructure\\b"
+     ],
+     "anyOf": [
+      "\\bkeep",
+      "\\bspoil",
+      "\\bruin",
+      "\\bdamage",
+      "\\bavoid",
+      "\\bintact\\b"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Bb6 keeps the bishop so a trade on c5 cannot spoil your pawns.",
+     "If they take, axb6 opens the a-file."
+    ],
+    "fail": [
+     "Your bishop was on c5.",
+     "The a-file is closed."
+    ]
+   },
    "soft": false
   },
   {
@@ -524,10 +766,47 @@
    "say": "MUST COVER",
    "what": "their h3 attacks your bishop on g4",
    "window": "afterReply",
-   "anyOf": [
-    "\\bg4\\b",
-    "\\byour bishop\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\bg4\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\bkick",
+      "\\bchase",
+      "\\basks?\\b",
+      "\\bquestion",
+      "\\bchallenge",
+      "\\bdecide",
+      "\\bretreat",
+      "\\btrap"
+     ]
+    },
+    {
+     "allOf": [
+      "\\byour bishop\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\bkick",
+      "\\bchase",
+      "\\basks?\\b",
+      "\\bdecide",
+      "\\bretreat"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Their h3 attacks your bishop on g4.",
+     "h3 asks your bishop on g4 to decide."
+    ],
+    "fail": [
+     "Your bishop on g4 pins the knight.",
+     "g4 is a good square."
+    ]
+   },
    "soft": false
   },
   {
@@ -598,10 +877,30 @@
    "say": "MUST COVER",
    "what": "Bh5 keeps the pin on f3",
    "window": "turn",
-   "anyOf": [
-    "\\bpin",
-    "\\bf3\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\bpin(?:s|ned|ning)?\\b"
+     ],
+     "anyOf": [
+      "\\bf3\\b",
+      "\\bknight\\b",
+      "\\bkeep",
+      "\\bstill\\b",
+      "\\bhold",
+      "\\bmaintain"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Bh5 keeps the pin on the knight on f3."
+    ],
+    "fail": [
+     "Your bishop retreats to h5.",
+     "The knight on f3 is strong."
+    ]
+   },
    "soft": false
   },
   {
@@ -613,11 +912,55 @@
    "say": "MUST COVER",
    "what": "their Kh2 prepares g4 / the rook to g1 (the g-file)",
    "window": "afterReply",
-   "anyOf": [
-    "\\bg-file\\b",
-    "\\bg4\\b",
-    "\\bg1\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\bg-file\\b"
+     ],
+     "anyOf": [
+      "\\bopen",
+      "\\buse",
+      "\\battack",
+      "\\brook",
+      "\\bplan",
+      "\\bprepar",
+      "\\btoward",
+      "\\bdown\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\bg4\\b"
+     ],
+     "anyOf": [
+      "\\bpush",
+      "\\bprepar",
+      "\\bplan",
+      "\\bcoming\\b",
+      "\\bnext\\b",
+      "\\bgo(?:es)? for\\b",
+      "\\bthreat"
+     ]
+    },
+    {
+     "allOf": [
+      "\\bg1\\b"
+     ],
+     "anyOf": [
+      "\\brook\\b"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Their king on h2 prepares the push g4.",
+     "They want the rook on g1 and the g-file."
+    ],
+    "fail": [
+     "Their king steps to h2.",
+     "Your bishop was on g4."
+    ]
+   },
    "soft": false
   },
   {
@@ -688,10 +1031,40 @@
    "say": "MUST COVER",
    "what": "castling: the king is safe",
    "window": "turn",
-   "anyOf": [
-    "\\bcastl",
-    "\\byour king\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\bcastl"
+     ],
+     "anyOf": [
+      "\\bsafe",
+      "\\bshelter",
+      "\\btuck",
+      "\\bking\\b",
+      "\\brook\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\byour king\\b"
+     ],
+     "anyOf": [
+      "\\bsafe",
+      "\\bshelter",
+      "\\btucked\\b"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Castling gets your king safe.",
+     "Your king is safe on g8."
+    ],
+    "fail": [
+     "They castled.",
+     "Your king is in the centre."
+    ]
+   },
    "soft": false
   },
   {
@@ -703,12 +1076,63 @@
    "say": "MUST COVER",
    "what": "their Qd2 idea: recapture on f3 with the g-pawn and use the g-file",
    "window": "afterReply",
-   "anyOf": [
-    "\\bg-file\\b",
-    "\\bf3\\b",
-    "\\bkingside pawns\\b",
-    "\\bstructure\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\bg-file\\b"
+     ],
+     "anyOf": [
+      "\\bopen",
+      "\\brook",
+      "\\buse",
+      "\\battack",
+      "\\bplan",
+      "\\btoward",
+      "\\bdown\\b",
+      "\\bwant"
+     ]
+    },
+    {
+     "allOf": [
+      "\\bf3\\b"
+     ],
+     "anyOf": [
+      "\\brecapture",
+      "\\btake back",
+      "\\bg-pawn\\b",
+      "\\bstructure",
+      "\\bdoubl",
+      "\\bweak",
+      "\\bdamage",
+      "\\bwreck",
+      "\\bruin"
+     ]
+    },
+    {
+     "allOf": [
+      "\\b(?:kingside pawns|pawn structure|structure)\\b"
+     ],
+     "anyOf": [
+      "\\bdamage",
+      "\\bweaken",
+      "\\bdoubl",
+      "\\bwreck",
+      "\\bbreak",
+      "\\bruin",
+      "\\bspoil"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "After a trade on f3 they take back with the g-pawn and use the g-file.",
+     "Their queen move lets you damage their kingside pawns."
+    ],
+    "fail": [
+     "Their knight on f3 is pinned.",
+     "The g-file is closed."
+    ]
+   },
    "soft": false
   },
   {
@@ -776,16 +1200,30 @@
    "say": "MUST COVER",
    "what": "Bxf3 damages their kingside pawn structure for good",
    "window": "turn",
-   "anyOf": [
-    "\\bdoubled\\b",
-    "\\bstructure\\b",
-    "\\bweak",
-    "\\bpermanent",
-    "\\bbroken\\b",
-    "\\bdamage",
-    "\\bwreck",
-    "\\bkingside pawns\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\b(?:doubled|structure|weak\\w*|permanent\\w*|broken|damage\\w*|wreck\\w*|ruin\\w*|spoil\\w*)\\b"
+     ],
+     "anyOf": [
+      "\\bpawns?\\b",
+      "\\bf-pawns?\\b",
+      "\\bf3\\b",
+      "\\bf2\\b",
+      "\\bkingside\\b"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Taking on f3 leaves them with doubled pawns.",
+     "That damages their kingside pawns for good."
+    ],
+    "fail": [
+     "You take on f3.",
+     "Their knight on f3 was pinned."
+    ]
+   },
    "soft": false
   },
   {
@@ -797,9 +1235,32 @@
    "say": "MUST COVER",
    "what": "their gxf3 opens the g-file toward your king",
    "window": "afterReply",
-   "anyOf": [
-    "\\bg-file\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\bg-file\\b"
+     ],
+     "anyOf": [
+      "\\bopen",
+      "\\btoward",
+      "\\baim",
+      "\\battack",
+      "\\brook",
+      "\\byour king\\b",
+      "\\bdown\\b",
+      "\\buse",
+      "\\bpressure"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "That opens the g-file toward your king."
+    ],
+    "fail": [
+     "The g-file is closed."
+    ]
+   },
    "soft": false
   },
   {
@@ -867,10 +1328,49 @@
    "say": "MUST COVER",
    "what": "Nh5 starts kingside play (eyes f4)",
    "window": "turn",
-   "anyOf": [
-    "\\bkingside\\b",
-    "\\bf4\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\bkingside\\b"
+     ],
+     "anyOf": [
+      "\\bclaim",
+      "\\bplay\\b",
+      "\\battack",
+      "\\boperation",
+      "\\bpressure",
+      "\\binitiative",
+      "\\bchances?\\b",
+      "\\bstart",
+      "\\bgo(?:es)? to work\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\bf4\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\bjump",
+      "\\bhead",
+      "\\broute",
+      "\\bland",
+      "\\boutpost",
+      "\\bgoes? to\\b",
+      "\\bcome to\\b"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Nh5 starts your kingside play.",
+     "The knight on h5 eyes f4."
+    ],
+    "fail": [
+     "Their kingside is weak.",
+     "Their bishop covers f4."
+    ]
+   },
    "soft": false
   },
   {
@@ -882,10 +1382,42 @@
    "say": "MUST COVER",
    "what": "their Rg1 aims down the g-file at g7 / your king",
    "window": "afterReply",
-   "anyOf": [
-    "\\bg-file\\b",
-    "\\bg7\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\bg-file\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\btoward",
+      "\\byour king\\b",
+      "\\bpin",
+      "\\bopen",
+      "\\bdown\\b",
+      "\\brook"
+     ]
+    },
+    {
+     "allOf": [
+      "\\bg7\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\bpin",
+      "\\bpinned\\b"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Their rook on g1 aims down the g-file at your king.",
+     "Their rook pins your pawn on g7."
+    ],
+    "fail": [
+     "Your pawn on g7 guards f6.",
+     "The g-file is closed for now."
+    ]
+   },
    "soft": false
   },
   {
@@ -897,14 +1429,28 @@
    "say": "MUST COVER",
    "what": "a real decision point: slow down / weigh the options (engine: Kh8 best by 1.5)",
    "window": "afterReply",
-   "anyOf": [
-    "\\bslow down\\b",
-    "\\bcritical\\b",
-    "\\bdecision\\b",
-    "\\bonly move\\b",
-    "\\btake your time\\b",
-    "\\bthink\\b"
+   "rules": [
+    {
+     "anyOf": [
+      "\\bslow down\\b",
+      "\\bcritical\\b",
+      "\\bdecision\\b",
+      "\\bonly move\\b",
+      "\\btake your time\\b",
+      "\\bthink (?:hard|carefully|twice)\\b",
+      "\\bbig moment\\b",
+      "\\bfork in the road\\b"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Slow down — this is a critical moment."
+    ],
+    "fail": [
+     "They think the rook belongs on g1."
+    ]
+   },
    "soft": false
   },
   {
@@ -972,9 +1518,29 @@
    "say": "MUST COVER",
    "what": "Qf6 hits the f3 pawn",
    "window": "turn",
-   "anyOf": [
-    "\\bf3\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\bf3\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\bwin",
+      "\\btake",
+      "\\bgrab",
+      "\\bpick up"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Your queen on f6 hits the pawn on f3."
+    ],
+    "fail": [
+     "Their pawn on f3 guards e4.",
+     "Your bishop took on f3."
+    ]
+   },
    "soft": false
   },
   {
@@ -986,12 +1552,60 @@
    "say": "MUST COVER",
    "what": "their Rg4 leaves f3 / heads for g7 on the g-file",
    "window": "afterReply",
-   "anyOf": [
-    "\\bf3\\b",
-    "\\bg-file\\b",
-    "\\bg7\\b",
-    "\\bdoubl"
+   "rules": [
+    {
+     "allOf": [
+      "\\bf3\\b"
+     ],
+     "anyOf": [
+      "\\bleave",
+      "\\bignor",
+      "\\bgive",
+      "\\bdrop",
+      "\\bhang",
+      "\\bundefended\\b",
+      "\\bloose\\b",
+      "\\bsacrific",
+      "\\boffer",
+      "\\blets? you\\b",
+      "\\bfor free\\b",
+      "\\btake"
+     ]
+    },
+    {
+     "allOf": [
+      "\\bg-file\\b"
+     ],
+     "anyOf": [
+      "\\bdoubl",
+      "\\brook",
+      "\\battack",
+      "\\bpressure",
+      "\\btoward",
+      "\\bpile"
+     ]
+    },
+    {
+     "allOf": [
+      "\\bg7\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\bdoubl",
+      "\\bpile"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Their rook on g4 leaves f3 to be taken.",
+     "They double on the g-file against g7."
+    ],
+    "fail": [
+     "Their pawn on f3 is defended.",
+     "Their rook is on g4."
+    ]
+   },
    "soft": false
   },
   {
@@ -1059,10 +1673,34 @@
    "say": "MUST COVER",
    "what": "Qxf3 wins the f3 pawn",
    "window": "turn",
-   "anyOf": [
-    "\\bf3\\b",
-    "\\bpawn\\b"
+   "rules": [
+    {
+     "allOf": [
+      "\\bf3\\b"
+     ],
+     "anyOf": [
+      "\\btakes?\\b",
+      "\\btook\\b",
+      "\\bwins?\\b",
+      "\\bwon\\b",
+      "\\bgrab",
+      "\\bcapture",
+      "\\bcollect",
+      "\\bpick",
+      "\\bpawn up\\b"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Your queen takes the pawn on f3.",
+     "You win the pawn on f3."
+    ],
+    "fail": [
+     "Your queen on f3 is active.",
+     "Their pawn on f3 is weak."
+    ]
+   },
    "soft": false
   },
   {
@@ -1074,11 +1712,44 @@
    "say": "MUST COVER",
    "what": "their Rag1 doubles: the threat on g7 / your king",
    "window": "afterReply",
-   "anyOf": [
-    "\\bg7\\b",
-    "\\bg-file\\b",
-    "\\bdoubl"
+   "rules": [
+    {
+     "allOf": [
+      "\\bg7\\b"
+     ],
+     "anyOf": [
+      "\\b(?:attack|attacks|attacked|attacking|hits?|hitting|pressure|pressures|threat|threatens?|threatening|eyes?|eyeing|aims?|aiming|targets?|goes after|go after|bears? down on|x-ray)\\b",
+      "\\bpile",
+      "\\bdoubl",
+      "\\bmate\\b",
+      "\\bpinned\\b"
+     ]
+    },
+    {
+     "allOf": [
+      "\\bg-file\\b"
+     ],
+     "anyOf": [
+      "\\bdoubl",
+      "\\btwo rooks\\b",
+      "\\bboth rooks\\b",
+      "\\bpile",
+      "\\bstack",
+      "\\battack",
+      "\\byour king\\b"
+     ]
+    }
    ],
+   "controls": {
+    "pass": [
+     "Both their rooks now hit g7.",
+     "They double rooks on the g-file against your king."
+    ],
+    "fail": [
+     "Your pawn on g7 is solid.",
+     "The g-file is quiet."
+    ]
+   },
    "soft": false
   },
   {

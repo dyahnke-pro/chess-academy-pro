@@ -4,6 +4,9 @@ Written 2026-10-20T15:21:14.160Z, before any acceptance run. 753 items over six 
 
 Board facts: Stockfish 16, depth 18 per student move (cost = best − played, from the student's side); every verdict re-checked at depth 22 and every threat at depth 20 from the null-move board. Only items I am sure of are in; borderline ones are listed at the end as left out.
 
+
+**Revised after the lead's review (before scoring):** a MUST SAY item is met only by ONE sentence carrying the square AND the relation together (e.g. the threatened square + attack / hang / take; d5 + cover / hole / guard). Every threat and beat item now has controls: a sentence that names the square with the wrong relation must FAIL it (`node scripts/audit-acceptance-list.mjs --selftest`, 59 of 59 hold). The 753 items are unchanged.
+
 ## How each kind is checked
 
 Every spoken line (`voiceService.speakCloud` only) is placed in the window of the student move it follows: from that move to the student's next move. The dictation's "Got it — after your move, they play …" is the instrument and is dropped. Squares spoken as "g 4" are read as g4.

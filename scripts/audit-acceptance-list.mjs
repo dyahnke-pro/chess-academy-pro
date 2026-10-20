@@ -125,6 +125,26 @@ const PIECE = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king
 const CLAIM = /\b(your|their)\s+(pawn|knight|bishop|rook|queen|king)\s+on\s+([a-h][1-8])\b/gi;
 const HYPOTHETICAL = /\b(if|would|could|after|once|when|then|line|was|were|had|used to|until)\b/i;
 
+/** A MUST COVER item is met by ONE sentence that carries the square AND the
+ *  relation together: every pattern of `allOf` and at least one of `anyOf`,
+ *  for one of the item's `rules` (an item without rules is one rule). */
+function coverRules(it) { return it.rules ?? [{ allOf: it.allOf ?? [], anyOf: it.anyOf ?? [] }]; }
+function coverMatch(it, sentence) {
+  const s = norm(sentence);
+  return coverRules(it).some((r) => (r.allOf ?? []).every((x) => new RegExp(x, 'i').test(s)) && ((r.anyOf ?? []).length === 0 || r.anyOf.some((x) => new RegExp(x, 'i').test(s))));
+}
+/** --selftest: every item's controls — `pass` sentences must meet it, `fail`
+ *  sentences (the square with the wrong relation) must not. */
+function selftest() {
+  let bad = 0; let n = 0;
+  for (const it of list.items) for (const [want, arr] of [[true, it.controls?.pass ?? []], [false, it.controls?.fail ?? []]]) for (const c of arr) {
+    n += 1; const got = coverMatch(it, c);
+    if (got !== want) { bad += 1; console.log(`CONTROL ${want ? 'PASS' : 'FAIL'} broken — ${it.id}: "${c}"`); }
+  }
+  console.log(`${n - bad} of ${n} controls hold`);
+  return bad === 0;
+}
+
 function windowsOf(tape) {
   const turns = tape.turns;
   const lines = tape.lines.filter((l) => !INSTRUMENT.test(l.text));
@@ -160,8 +180,7 @@ function scoreGame(id, tape) {
       const heard = [...intro, ...[...byPly.entries()].filter(([p]) => p <= it.ply).flatMap(([, x]) => x.lines)];
       const maxPly = Math.max(0, ...byPly.keys());
       if (!(maxPly >= it.ply || (maxPly > 0 && tape.errors.length === 0))) { results.push({ ...res, status: 'not-reached' }); continue; }
-      const re = rx(it.anyOf);
-      const hit = heard.flatMap((l) => sentences(l.text)).find((s) => re.some((r) => r.test(s)));
+      const hit = heard.flatMap((l) => sentences(l.text)).find((s) => coverMatch(it, s));
       results.push({ ...res, status: hit ? 'met' : 'missed', heard: hit ?? null });
       continue;
     }
@@ -177,8 +196,7 @@ function scoreGame(id, tape) {
         break;
       }
       case 'verdict': case 'danger': case 'beat': {
-        const any = rx(it.anyOf ?? []); const all = rx(it.allOf ?? []);
-        const hit = sens.find(({ s }) => all.every((r) => r.test(s)) && (any.length === 0 || any.some((r) => r.test(s))));
+        const hit = sens.find(({ s }) => coverMatch(it, s));
         results.push({ ...res, status: hit ? 'met' : 'missed', heard: hit ? hit.s : show() });
         break;
       }
@@ -252,6 +270,7 @@ function report(dir, games) {
 }
 
 // ── main ────────────────────────────────────────────────────────────────────
+if (args.includes('--selftest')) process.exit(selftest() ? 0 : 1);
 const games = (opt('games') ?? Object.keys(list.games).join(',')).split(',');
 if (opt('score')) {
   const dir = opt('score');
