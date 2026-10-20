@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2007 lines · 15 exports · 28 importers · 26 tests · 3 audits**
+**1998 lines · 15 exports · 28 importers · 26 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -87,7 +87,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 12 call sites
-- `src/hooks/useLiveCoach.ts:296`
+- `src/hooks/useLiveCoach.ts:301`
 - `src/hooks/usePhaseNarration.ts:673`
 - `src/services/chatBoardRead.ts:112`
 - `src/services/computerAccuracy.audit.test.ts:113`
@@ -102,14 +102,14 @@
 
 ### `computePositionFacts` (function) — 94 call sites
 - `src/coach/boardTurnAnswer.ts:134`
-- `src/components/Coach/CoachTeachPage.tsx:10470`
+- `src/components/Coach/CoachTeachPage.tsx:10477`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
-- `src/hooks/useLiveCoach.ts:264`
+- `src/hooks/useLiveCoach.ts:269`
 - `src/hooks/usePhaseNarration.ts:645`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
 - `src/services/chatBoardRead.ts:81`
-- `src/services/claimChecker.measure.test.ts:106`
+- `src/services/claimChecker.measure.test.ts:107`
 - `src/services/computerAccuracy.audit.test.ts:112`
 - `src/services/exchangeIdeas.test.ts:260`
 - `src/services/forkTrick.test.ts:48`
@@ -200,7 +200,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:8907`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10742`
+- `src/components/Coach/CoachTeachPage.tsx:10747`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -220,8 +220,8 @@
 - `src/services/conceptKey.ts:9`
 - `src/services/danyaBehaviors.ts:525`
 - `src/services/kingAttackReads.ts:653`
-- `src/services/replayFence.alekhine1500.test.ts:24`
 - `src/services/replayFence.alekhine1500.test.ts:25`
+- `src/services/replayFence.alekhine1500.test.ts:26`
 - `src/services/replayFence.sicilianClosed1000.test.ts:26`
 
 ## Tests

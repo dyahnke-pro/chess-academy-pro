@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**496 lines · 5 exports · 3 importers · 2 tests · 1 audits**
+**497 lines · 5 exports · 3 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1314) — names `useLiveCoach`
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4124) — names `useLiveCoach`
-- **The standard post-deploy ritual** (CLAUDE.md:6302) — names `useLiveCoach`
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1328) — names `useLiveCoach`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4190) — names `useLiveCoach`
+- **The standard post-deploy ritual** (CLAUDE.md:6404) — names `useLiveCoach`
 
 ## Who calls in
 
@@ -32,15 +32,16 @@
 ### `UseLiveCoachResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `useLiveCoach` (function) — 8 call sites
-- `src/components/Coach/CoachGamePage.tsx:1056`
-- `src/hooks/useLiveCoach.needWire.test.tsx:68`
-- `src/hooks/useLiveCoach.needWire.test.tsx:81`
+### `useLiveCoach` (function) — 9 call sites
+- `src/components/Coach/CoachGamePage.tsx:1058`
+- `src/hooks/useLiveCoach.needWire.test.tsx:69`
+- `src/hooks/useLiveCoach.needWire.test.tsx:82`
 - `src/hooks/useLiveCoach.needWire.test.tsx:93`
-- `src/hooks/useLiveCoach.test.tsx:73`
-- `src/hooks/useLiveCoach.test.tsx:82`
-- `src/hooks/useLiveCoach.test.tsx:91`
-- `src/hooks/useLiveCoach.test.tsx:112`
+- `src/hooks/useLiveCoach.needWire.test.tsx:105`
+- `src/hooks/useLiveCoach.test.tsx:74`
+- `src/hooks/useLiveCoach.test.tsx:83`
+- `src/hooks/useLiveCoach.test.tsx:92`
+- `src/hooks/useLiveCoach.test.tsx:113`
 
 ## Tests
 
