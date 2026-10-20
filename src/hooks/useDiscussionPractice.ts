@@ -24,12 +24,13 @@
 // it (rule 3, G0).
 
 import { startLiveStrength, updateLiveStrength, type LiveStrength } from '../services/liveStrength';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { detectSlip, slipWarrantsInterjection, isNearBest, slipSeverityLabel, type SlipSeverity } from '../services/slipDetector';
-import { startDial, recordAttempt, type HintDial } from '../services/hintRegister';
-import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, engineLinesForCapture, findMoverTactic, recordMoveEvidence, withReasonLead, type CapabilityOrigin } from '../services/discussionPractice';
+import { startDial, recordAttempt, WINDOW, type HintDial } from '../services/hintRegister';
+import { recallData, remember } from '../services/studentMemory';
+import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, engineLinesForCapture, findMoverTactic, recordMoveEvidence, recordMoveQuizAnswer, withReasonLead, type CapabilityOrigin } from '../services/discussionPractice';
 import { buildMisconceptionCallback } from '../services/misconceptionCallbacks';
 import { buildMoveReasonOptions } from '../services/moveReasonOptions';
 import { voiceService } from '../services/voiceService';
@@ -187,6 +188,9 @@ export interface UseDiscussionPracticeResult {
    * grade must keep using `evaluatePlayerMove`.
    */
   recordGradedMove: (args: GradedMoveArgs) => void;
+  /** A "find the move" question the coach asked was answered (Play's quiz):
+   *  filed through `recordMoveQuestionAnswer`, the one answer door. */
+  recordMoveAnswer: (args: Parameters<typeof recordMoveQuizAnswer>[0]) => void;
   /** THE OPPONENT'S STRENGTH, MATCHED LIVE (WO-LAYERS-01 step 8) — moved by
    *  the same graded moves `recordGradedMove` records (one detector, two
    *  consumers). Per game: a new `gameId` re-seeds from `seed`. */
@@ -328,6 +332,29 @@ export function useDiscussionPractice(
    *  because the rating arrives per-move rather than at construction. */
   const [hintDial, setHintDial] = useState<HintDial>(() => startDial(undefined));
   const dialSeededRef = useRef(false);
+  // ONE DIAL ACROSS SURFACES AND SESSIONS (persistent memory, 2026-10-19). It
+  // used to live per mount: Play and the WLPP Play rung moved it and threw it
+  // away on exit, and every visit re-seeded from the rating. Now each surface
+  // starts from the dial the student's last moves left, and every move it
+  // grades moves the same remembered dial that Learn reads.
+  const dialHydratedRef = useRef(false);
+  useEffect(() => {
+    let live = true;
+    void recallData('hint-dial', 'student').then((d) => {
+      if (!live) return;
+      if (d && !dialSeededRef.current) {
+        dialSeededRef.current = true;
+        setHintDial({ register: d.register, recent: d.recent.slice(-WINDOW) });
+      }
+      dialHydratedRef.current = true;
+    });
+    return () => { live = false; };
+  }, []);
+  useEffect(() => {
+    if (!dialHydratedRef.current && !dialSeededRef.current) return;
+    if (hintDial.recent.length === 0 && !dialSeededRef.current) return;
+    void remember('hint-dial', 'student', { register: hintDial.register, recent: hintDial.recent });
+  }, [hintDial]);
 
   // TWO different switches, deliberately separated (David 2026-08-05).
   //
@@ -356,9 +383,22 @@ export function useDiscussionPractice(
   // now advances it too, off the cpLoss it computes anyway (never a second
   // analysis), so every sparring surface reads the same live number.
   const liveRef = useRef<{ gameId: string; s: LiveStrength } | null>(null);
+  // The strength the board measured in the LAST game is where the next one
+  // starts (persistent memory, 2026-10-19) — a strong player is not
+  // under-matched again every game, and the estimate keeps narrowing across
+  // games instead of restarting at the profile rating.
+  const carriedRef = useRef<LiveStrength | null>(null);
+  useEffect(() => {
+    let live = true;
+    void recallData('live-strength', 'student').then((d) => {
+      if (live && d && d.evidence > 0) carriedRef.current = d;
+    });
+    return () => { live = false; };
+  }, []);
   const liveFor = useCallback((gameId: string, seed: number): { gameId: string; s: LiveStrength } => {
     if (!liveRef.current || liveRef.current.gameId !== gameId) {
-      liveRef.current = { gameId, s: startLiveStrength(seed) };
+      const carried = liveRef.current?.s.evidence ? liveRef.current.s : carriedRef.current;
+      liveRef.current = { gameId, s: carried ? startLiveStrength(carried.rating) : startLiveStrength(seed) };
       // Gem hits feed the strength; build their index now, in chunks, so it is
       // warm well before the first gem position of the game.
       warmGemIndexes();
@@ -374,8 +414,18 @@ export function useDiscussionPractice(
     const live = liveFor(gameId, seed);
     let gem: GemMoveSignal | null = null;
     try { gem = gemMoveSignal(move.fenBefore, move.playedSan); } catch { gem = null; }
+    const before = live.s;
     live.s = updateLiveStrength(live.s, { fenBefore: move.fenBefore, san: move.playedSan, moverColor: move.moverColor, cpLoss: move.cpLoss, gem });
+    if (live.s !== before && live.s.evidence > before.evidence) {
+      const carried = carriedRef.current?.evidence ?? 0;
+      void remember('live-strength', 'student', { rating: live.s.rating, evidence: carried + live.s.evidence });
+    }
   }, [liveFor]);
+
+  const recordMoveAnswer = useCallback((args: Parameters<typeof recordMoveQuizAnswer>[0]): void => {
+    if (!recording) return;
+    recordMoveQuizAnswer(args);
+  }, [recording]);
 
   const evaluatePlayerMove = useCallback(
     async (args: EvaluatePlayerMoveArgs): Promise<void> => {
@@ -868,6 +918,7 @@ export function useDiscussionPractice(
     hintDial,
     evaluatePlayerMove,
     recordGradedMove,
+    recordMoveAnswer,
     raiseSlipPrompt,
     submitReason,
     skip,

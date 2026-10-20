@@ -58,10 +58,10 @@ export interface UseHintSystemConfig {
    *  from the concept corpus (`conceptIdeaForThemes`) so a hint is "not just an
    *  arrow, but an explanation of the concepts" (David 2026-09-14). */
   puzzleThemes?: string[];
-  /** Optional context fields used to enrich the memory record so
-   *  cross-game queries can filter / surface in review. Falls back to
-   *  empty string + 0 when omitted, preserving back-compat. */
-  gameId?: string;
+  /** The game this hint was asked in, so review can join a hint to its game
+   *  (persistent memory, 2026-10-19). REQUIRED: a surface with no game (a
+   *  Lichess puzzle, a drill) says `null` instead of silently storing ''. */
+  gameId: string | null;
   moveNumber?: number;
   ply?: number;
   /** The student's rating, used to size the live-tactics lookahead

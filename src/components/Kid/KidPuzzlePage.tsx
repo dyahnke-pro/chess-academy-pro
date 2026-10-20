@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useRememberedSetting } from '../../hooks/useRememberedSetting';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
@@ -31,7 +32,10 @@ export function KidPuzzlePage(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
 
   const [phase, setPhase] = useState<KidPuzzlePhase>('select');
-  const [difficulty, setDifficulty] = useState<CoachDifficulty>('easy');
+  // The level the kid picked is remembered (persistent memory, 2026-10-19),
+  // so Puzzle Quest no longer resets to easy every visit.
+  const [rememberedLevel, setDifficulty] = useRememberedSetting<CoachDifficulty>('kid-puzzle-level', 'easy');
+  const difficulty: CoachDifficulty = rememberedLevel === 'medium' || rememberedLevel === 'hard' ? rememberedLevel : 'easy';
   const [puzzles, setPuzzles] = useState<PuzzleRecord[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [solvedCount, setSolvedCount] = useState(0);

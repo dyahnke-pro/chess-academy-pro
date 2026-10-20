@@ -1,4 +1,5 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import { useKidProgress, firstOpenLevel } from '../../hooks/useKidProgress';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, RotateCcw, Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -32,6 +33,20 @@ export function PairArmyGame({ levels, pairName, hubRoute, rootTestId }: Props):
   const [state, setState] = useState<ArmyState>(() => initArmyState(level));
   const [selected, setSelected] = useState<number | null>(null);
   const [voiceOn, setVoiceOn] = useState(true);
+  // Levels won are REMEMBERED (persistent memory, 2026-10-19): the game opens
+  // on the first level not yet won instead of always on level 1.
+  const progress = useKidProgress(rootTestId);
+  const resumedRef = useRef(false);
+  useEffect(() => {
+    if (!progress.loaded || resumedRef.current) return;
+    resumedRef.current = true;
+    const open = firstOpenLevel(progress.completed, levels.length);
+    if (open > 0) {
+      setLevelIndex(open);
+      setState(initArmyState(levels[open]));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [progress.loaded]);
 
   const kidSpeak = useCallback((text: string): void => {
     if (voiceOn) void voiceService.speak(text);
@@ -82,11 +97,12 @@ export function PairArmyGame({ levels, pairName, hubRoute, rootTestId }: Props):
     setState(next);
     setSelected(null);
     if (next.status === 'won') {
+      progress.complete(levelIndex);
       kidSpeak('You caught them all!');
     } else if (next.status === 'lost') {
       kidSpeak('A pawn slipped through. Try again — keep them surrounded.');
     }
-  }, [state, selected, heroSquares, kidSpeak]);
+  }, [state, selected, heroSquares, kidSpeak, progress.complete, levelIndex]);
 
   const reset = useCallback((): void => {
     setState(initArmyState(level));

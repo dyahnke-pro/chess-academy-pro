@@ -509,3 +509,19 @@ describe('useCoachMemoryStore.appendConversationMessage', () => {
     expect(stored.timestamp).toBe(1_700_000_000_000);
   });
 });
+
+describe('pendingWalkthrough survives a close (persistent memory)', () => {
+  it('a lesson queued before the app closed is still owed after hydrate', async () => {
+    useCoachMemoryStore.getState().queueWalkthrough({ opening: 'Caro-Kann Defense', requestedFromSurface: 'chat' });
+    await __flushCoachMemoryPersistForTests();
+    __resetCoachMemoryStoreForTests();
+    useCoachMemoryStore.setState({ hydrated: false });
+    await useCoachMemoryStore.getState().hydrate();
+    expect(useCoachMemoryStore.getState().takePendingWalkthrough()?.opening).toBe('Caro-Kann Defense');
+    await __flushCoachMemoryPersistForTests();
+    __resetCoachMemoryStoreForTests();
+    useCoachMemoryStore.setState({ hydrated: false });
+    await useCoachMemoryStore.getState().hydrate();
+    expect(useCoachMemoryStore.getState().pendingWalkthrough).toBeNull();
+  });
+});

@@ -28,6 +28,11 @@ vi.mock('../../hooks/useSettings', () => ({
   useSettings: () => ({ settings: { voiceEnabled: true } }),
 }));
 
+// Nothing remembered: the Watch starts at beat 1 (resume is LessonPlayer.resume.test).
+vi.mock('../../services/studentMemory', () => ({
+  recallData: () => Promise.resolve(null), remember: () => Promise.resolve(null), forget: () => Promise.resolve(),
+}));
+
 import { LessonPlayer } from './LessonPlayer';
 
 const START = new Chess().fen();

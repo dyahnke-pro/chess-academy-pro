@@ -65,5 +65,25 @@ describe('useAdaptiveEndgameSession — the surface gate reaches every pick', ()
       expect(result.current.currentDrill?.title).not.toBe('From your game');
       act(() => result.current.recordOutcome(true));
     }
+    // Four full picks over the puzzle corpus: CPU-bound, ~2s alone and well
+    // past the 5s default when the pre-commit typecheck runs beside it.
+  }, 20000);
+});
+
+describe('useAdaptiveEndgameSession — never re-serves across sessions (persistent memory)', () => {
+  it('a puzzle played last session is not the first one served next session', async () => {
+    const { db } = await import('../db/schema');
+    const { waitFor } = await import('@testing-library/react');
+    db.close(); await db.delete(); await db.open();
+    useAppStore.getState().setActiveProfile(buildUserProfile({ puzzleRating: 1358 }));
+    const a = renderHook(() => useAdaptiveEndgameSession(null, { themes: ['mate'] }));
+    const first = a.result.current.currentDrill?.fen;
+    expect(first).toBeTruthy();
+    act(() => a.result.current.recordOutcome(true));
+    const { recallServed } = await import('../services/studentMemory');
+    await waitFor(async () => expect((await recallServed('endgame')).size).toBe(1));
+    a.unmount();
+    const b = renderHook(() => useAdaptiveEndgameSession(null, { themes: ['mate'] }));
+    await waitFor(() => expect(b.result.current.currentDrill?.fen).not.toBe(first));
   });
 });

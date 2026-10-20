@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { useRememberedThread } from '../../hooks/useRememberedThread';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
@@ -62,6 +63,9 @@ function extractCoachChoices(raw: string): string[] | null {
 
 interface GameChatPanelProps {
   fen: string;
+  /** When set, this thread is shown again on reopen (persistent memory):
+   *  a key naming the thread, e.g. `opening-play:<openingId>`. */
+  rememberThreadKey?: string;
   /** Walk a line an answer proved on this screen's board (the answer's
    *  `lines`). Absent: the screen has no board to walk it on. */
   onWalkLine?: (line: WalkableLine) => void;
@@ -231,6 +235,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       onInitialPromptSent,
       hideHeader,
       initialMessages,
+      rememberThreadKey,
       onMessagesUpdate,
     },
     ref,
@@ -277,6 +282,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       onStartDrill, onSetViewMode]);
 
     const [messages, setMessagesInternal] = useState<ChatMessageType[]>(initialMessages ?? []);
+    useRememberedThread(rememberThreadKey ?? null, messages, setMessagesInternal);
     const [isStreaming, setIsStreaming] = useState(false);
     const initialPromptSentRef = useRef(false);
     const [streamingContent, setStreamingContent] = useState('');

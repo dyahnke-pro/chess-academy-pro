@@ -58,6 +58,18 @@ export function WeaknessTagDrillPage(): JSX.Element {
     return () => { cancelled = true; };
   }, [tag, customLabel]);
 
+  // Quitting mid-drill still updates the tag's spacing from the answers
+  // given so far (persistent memory, 2026-10-19) — it used to update only
+  // when the last puzzle was finished, so leaving early recorded nothing.
+  const answeredRef = useRef({ correct: 0, total: 0 });
+  useEffect(() => () => {
+    const { correct: c, total } = answeredRef.current;
+    if (tag && !spacedRef.current && total > 0) {
+      spacedRef.current = true;
+      void recordTagDrillResult(tag, c / total >= 0.6);
+    }
+  }, [tag]);
+
   const finishSession = useCallback((finalCorrect: number, total: number): void => {
     if (tag && !spacedRef.current) {
       spacedRef.current = true;
@@ -81,6 +93,7 @@ export function WeaknessTagDrillPage(): JSX.Element {
     resolvedRef.current = null;
     const nextCorrect = correct + (wasCorrect ? 1 : 0);
     setCorrect(nextCorrect);
+    answeredRef.current = { correct: nextCorrect, total: index + 1 };
     if (index + 1 >= puzzles.length) {
       finishSession(nextCorrect, puzzles.length);
     } else {
@@ -90,6 +103,7 @@ export function WeaknessTagDrillPage(): JSX.Element {
 
   const restart = useCallback((): void => {
     spacedRef.current = false;
+    answeredRef.current = { correct: 0, total: 0 };
     setIndex(0);
     setCorrect(0);
     setPhase(puzzles.length > 0 ? 'solving' : 'empty');

@@ -27,6 +27,7 @@
  * still be a training session the student completed — every call swallows its
  * error and returns, so a ledger write can never break a lesson.
  */
+import { db } from '../db/schema';
 import { createSession } from './dbService';
 import { completeSession } from './sessionGenerator';
 import { logAppAudit } from './appAuditor';
@@ -129,4 +130,34 @@ export async function finishTrainingSession(
   } catch {
     /* a session the student finished is not undone by a failed write */
   }
+}
+
+/**
+ * Write what the student has done SO FAR onto the open row, without closing
+ * it (persistent memory, 2026-10-19). A session left mid-way — the app closed,
+ * the page left — used to stay a 0-item row, so the weakness profile and the
+ * week ring never saw that training. Call after every graded item.
+ */
+export async function recordTrainingProgress(
+  open: OpenTrainingSession | null | undefined,
+  result: TrainingSessionResult,
+): Promise<void> {
+  if (!open || result.itemsCompleted <= 0) return;
+  try {
+    await db.sessions.update(open.id, {
+      puzzlesSolved: result.itemsCompleted,
+      puzzleAccuracy: result.itemsCorrect / result.itemsCompleted,
+      durationMinutes: Math.max(1, Math.round((Date.now() - open.startedAt) / 60_000)),
+    });
+  } catch { /* the ledger never gates training */ }
+}
+
+/** Drop an open row the student left before doing anything — a session with
+ *  nothing in it is not training. A row with progress is kept as it is. */
+export async function abandonTrainingSession(open: OpenTrainingSession | null | undefined): Promise<void> {
+  if (!open) return;
+  try {
+    const row = await db.sessions.get(open.id);
+    if (row && !row.completed && row.puzzlesSolved === 0) await db.sessions.delete(open.id);
+  } catch { /* best-effort */ }
 }

@@ -13,6 +13,7 @@ import { useLocalizedBeats } from '../../services/narrationI18n';
 import { useCoachBoardStore } from '../../stores/coachBoardStore';
 import type { LessonScript, LessonBeat } from '../../types';
 import { admitArrow, narrationArrowsThroughDoor } from '../../services/arrowDoor';
+import { forget, recallData, remember } from '../../services/studentMemory';
 
 interface LessonPlayerProps {
   script: LessonScript;
@@ -48,7 +49,32 @@ function moveSquares(prefix: string[], move: string): { from: string; to: string
  * via the voice-gated useStrictNarration runtime. Used by the openings
  * walkthrough surface whenever a LessonScript exists for the opening.
  */
-export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: LessonPlayerProps): JSX.Element {
+/** One key per lesson: variation lessons share an opening id, so the title
+ *  keeps them apart. */
+function watchBeatKey(script: Pick<LessonScript, 'openingId' | 'title'>): string {
+  return `${script.openingId}::${script.title}`;
+}
+
+/** Watch resumes at the beat the student left (persistent memory, 2026-10-19):
+ *  a student who closed the app 12 beats into a 20-beat Watch picks up at beat
+ *  12 instead of hearing it all again. A finished lesson starts from the top. */
+export function LessonPlayer(props: LessonPlayerProps): JSX.Element | null {
+  const key = watchBeatKey(props.script);
+  const [startAt, setStartAt] = useState<{ key: string; beat: number } | null>(null);
+  useEffect(() => {
+    let live = true;
+    void recallData('watch-beat', key).then((m) => {
+      if (!live) return;
+      const beat = m && m.beatCount === props.script.beats.length && m.beatIndex > 0 && m.beatIndex < m.beatCount - 1 ? m.beatIndex : 0;
+      setStartAt({ key, beat });
+    });
+    return () => { live = false; };
+  }, [key, props.script.beats.length]);
+  if (!startAt || startAt.key !== key) return null;
+  return <LessonPlayerAt key={key} {...props} startBeat={startAt.beat} memoryKey={key} />;
+}
+
+function LessonPlayerAt({ script, onExit, onComplete, onContinueToNext, startBeat, memoryKey }: LessonPlayerProps & { startBeat: number; memoryKey: string }): JSX.Element {
   const { settings } = useSettings();
   const voiceEnabled = settings.voiceEnabled;
 
@@ -59,7 +85,7 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
   const beats = useLocalizedBeats(script.openingId, script.beats);
   const fens = useMemo(() => beats.map((b) => fenForMoves(b.moves)), [beats]);
 
-  const [beatIndex, setBeatIndex] = useState(0);
+  const [beatIndex, setBeatIndex] = useState(startBeat);
   // Bumped on every applyStep so the animation effect re-runs even when the
   // beat index is UNCHANGED (pause→resume re-applies the same step). Without
   // this, applyStep arms a fresh animPromiseRef that the animation effect
@@ -92,7 +118,7 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
   // narrates once they've settled — David 2026-06-26: "a silent walk through of
   // the pieces ... so users can see the moves played out again on the board",
   // then teach.
-  const appliedIdxRef = useRef(0);
+  const appliedIdxRef = useRef(startBeat);
   // The animation effect runs once on mount, and the narration runtime's first
   // applyStep re-applies beat 0. If that first applyStep bumped applyNonce it
   // would force a SECOND effect run whose cleanup tears down the just-scheduled
@@ -122,7 +148,7 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
   // accumulates; the board shows a marker only once revealed AND settled.
   const [revealedSquares, setRevealedSquares] = useState<Set<string>>(new Set());
   const playTokenRef = useRef(0);
-  const beatRef = useRef<LessonBeat | undefined>(beats[0]);
+  const beatRef = useRef<LessonBeat | undefined>(beats[startBeat]);
   const voiceEnabledRef = useRef(voiceEnabled);
   const revealTimersRef = useRef<number[]>([]);
   useEffect(() => { voiceEnabledRef.current = voiceEnabled; }, [voiceEnabled]);
@@ -156,11 +182,12 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
     // Voice off → no narration to pace the reveal, so show every marker now.
     setRevealedSquares(voiceEnabledRef.current ? new Set() : new Set(beatSquares(b)));
     setBeatIndex(i);
+    void remember('watch-beat', memoryKey, { beatIndex: i, beatCount: beats.length });
     // Skip the nonce bump on the FIRST apply so it doesn't force a second
     // effect run that would snap the first beat instead of building it.
     if (firstApplyDoneRef.current) setApplyNonce((n) => n + 1);
     firstApplyDoneRef.current = true;
-  }, [beats, beatSquares, clearRevealTimers]);
+  }, [beats, beatSquares, clearRevealTimers, memoryKey]);
   const getNarration = useCallback((i: number) => beats[i]?.say ?? '', [beats]);
 
   const { isAutoPlaying, isFinished, next, prev, goToStep, toggleAutoPlay } = useStrictNarration({
@@ -213,6 +240,7 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
     },
     // The story plays itself — beats auto-advance as each line finishes.
     initialAutoPlay: true,
+    initialStepIndex: startBeat,
   });
 
   const idx = beatIndex;
@@ -229,9 +257,10 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
   useEffect(() => {
     if (!completedRef.current && isFinished && idx >= beats.length - 1) {
       completedRef.current = true;
+      void forget('watch-beat', memoryKey);
       onComplete?.();
     }
-  }, [isFinished, idx, beats.length, onComplete]);
+  }, [isFinished, idx, beats.length, onComplete, memoryKey]);
 
   // Audit-only deterministic completion hook — gated behind the `auditMoveHook`
   // flag (mirrors PlayableLinePlayer's window.__playMove). The full-play audit

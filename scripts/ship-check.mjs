@@ -351,6 +351,9 @@ const GATE_TESTS = [
   // wording composed from a swap count makes ship-check RED; the baseline only
   // shrinks. Pairs with the one-line-reader gate.
   'src/test/outcomeSentences.gate.test.ts',
+  // Every accumulating ref in a component/hook declares its lifetime
+  // (per-board / per-game / persisted) — persistent-memory plan, 2026-10-19.
+  'src/services/memoryLifetimes.gate.test.ts',
   'src/test/oneLineReader.gate.test.ts',
   'src/test/oneCoachDoor.gate.test.ts',
   'src/test/coachFirstPerson.gate.test.ts',

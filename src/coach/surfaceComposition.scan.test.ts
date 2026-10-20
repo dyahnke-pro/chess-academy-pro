@@ -60,6 +60,10 @@ const INFRA = new Set(['learnTranscript',
   // analysis while a Learn game is on): a hold counter the backfills wait on.
   // It computes no chess or teaching fact — the same class as the engine.
   'foregroundActivity',
+  // `studentMemory` is STORAGE (2026-10-19, persistent memory): the one door
+  // to the table that remembers where the student was and what they chose. It
+  // computes no chess or teaching fact; evidence lives in the record, not here.
+  'studentMemory',
   // `markPacing` is the TIMING of the board marks (2026-10-19, David: "all
   // mentioned squares should appear as they are mentioned"): it finds where a
   // square is first named in a sentence and schedules the mark there. It is a

@@ -148,7 +148,7 @@ import type {
   CoachGameState, CoachGameMove, KeyMoment, DetectedOpening,
   CoachDifficulty,
   StockfishAnalysis, GameAnalysisSummary, GameRecord, AnalysisLine,
-  GameResult, BoardArrow, BoardHighlight, BoardAnnotationCommand,
+  GameResult, CoachGameResult, BoardArrow, BoardHighlight, BoardAnnotationCommand,
   ChatMessage,
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -199,7 +199,7 @@ function buildAnalysisSummary(
   moves: CoachGameMove[],
   keyMoments: KeyMoment[],
   playerColor: 'white' | 'black',
-  result: 'win' | 'loss' | 'draw',
+  result: CoachGameResult,
 ): GameAnalysisSummary {
   const accuracy = calculateAccuracy(moves);
   const classificationCounts = getClassificationCounts(moves, playerColor);
@@ -451,10 +451,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // Conversion-drill flag: when set, winning this game (started from a blown
   // winning position) marks that conversion addressed (weaknessSpine close).
   const convDrill = searchParams.get('conv') === '1';
-  const initialDifficulty: CoachDifficulty =
+  // Only a deep link seeds the difficulty; without one the page keeps the
+  // difficulty the student chose last (remembered across closes) instead of
+  // resetting it to Medium on every visit.
+  const initialDifficulty: CoachDifficulty | null =
     difficultyParam === 'easy' || difficultyParam === 'medium' || difficultyParam === 'hard'
       ? difficultyParam
-      : 'medium';
+      : null;
   const initialSide: 'white' | 'black' = sideParam === 'black' ? 'black' : 'white';
 
   // 🔒 ONE DIFFICULTY (2026-09-21). Four surfaces each held their own copy, so
@@ -467,7 +470,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   useEffect(() => {
     if (seededDifficultyRef.current) return;
     seededDifficultyRef.current = true;
-    if (initialDifficulty !== difficulty) setDifficulty(initialDifficulty);
+    if (initialDifficulty && initialDifficulty !== difficulty) setDifficulty(initialDifficulty);
     // Mount-only: a later store change is someone ASKING for it, not a re-seed.
   }, [initialDifficulty, difficulty, setDifficulty]);
   const targetStrength = getTargetStrength(playerRating, difficulty);
@@ -1036,6 +1039,9 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     playerColor,
     playerRating,
     enabled: gameState.status === 'playing' && isPlayersTurn && !game.isGameOver,
+    gameId: gameState.gameId,
+    ply: gameState.moves.length,
+    moveNumber: Math.floor(gameState.moves.length / 2) + 1,
   });
 
   // Mirror the hint's resolved best move into a ref so the (long-lived) player-
@@ -1619,7 +1625,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     return ok;
   }, [game]);
 
+  /** Saves the game on the board when it is left unfinished (see persistPlayGame). */
+  const saveUnfinishedRef = useRef<() => void>(() => undefined);
   const handleRestart = useCallback((opts?: { keepRequestedOpening?: boolean }) => {
+    saveUnfinishedRef.current();
     // David 2026-05-31: board-reset-mid-game diagnosis. A reset that
     // fires while moves are on the board is almost certainly a bug
     // (only the explicit Restart button / a chat reset_board / a color
@@ -1691,6 +1700,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       summary: `reset via color change → ${color} — liveHalfMoves=${moveCountRef.current}`,
       details: (new Error('reset-trace').stack ?? '').split('\n').slice(0, 9).join('\n'),
     });
+    saveUnfinishedRef.current();
     setPlayerColor(color);
     game.resetGame();
     stockfishEngine.newGame(); // fresh game → clear the transposition table
@@ -1978,46 +1988,14 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // Finalize a finished game (checkmate/stalemate OR flag-on-time) — shared by
   // the chess.js game-over effect and the clock's onFlag so both paths persist
   // identically. `endReason` distinguishes a time-out for the saved tags.
-  const finalizeGame = useCallback((result: 'win' | 'loss' | 'draw', endReason?: 'time' | 'resign'): void => {
-    if (gameState.status !== 'playing') return;
-    savedForReviewRef.current = null;
-
-    // Conversion-drill close: if this game was launched from a blown winning
-    // position and the student won it, that conversion is addressed.
-    if (result === 'win' && convDrill && initialGameFen) {
-      void addAddressedConversion(initialGameFen);
-    }
-
-    // Rating harvest (David 2026-07-14): beating the coach in a real game (past
-    // the trivial-game ply floor) is a genuine "win" moment — arm the review
-    // prompt at peak delight ("Yes" requests the store review). Wins
-    // only; losses/draws are never counted (the happiness gate + these positive-
-    // only triggers keep the public rating honest).
-    if (result === 'win' && shouldPersistFinishedGame(gameState.moves.length)) {
-      void recordPositiveMoment('coach-game-won');
-    }
-
-    const keyMoments = findKeyMoments(gameState.moves);
-
-    // THE FUNNEL'S MISSING STEP (2026-10-02): a finished Play game emitted
-    // nothing, so "how many players reach the auto-review" was unanswerable —
-    // Play page views and review events, with no way to join them.
-    captureEvent('coach_game_finished', {
-      result, end_reason: endReason ?? 'board', plies: gameState.moves.length, player_color: playerColor,
-    });
-
-    // Show the final board position with game-over overlay before transitioning
-    setGameState((prev) => ({
-      ...prev,
-      status: 'gameover',
-      result,
-      keyMoments,
-    }));
-
-    // Save game to DB
+  // ONE SAVE PATH for a Play game: a finished game, AND a game left mid-way
+  // by Restart or a colour swap (persistent memory, 2026-10-19 — those used
+  // to vanish, so their slips never reached My Mistakes). An unfinished game
+  // is saved with result '*'.
+  const persistPlayGame = useCallback((result: 'win' | 'loss' | 'draw' | 'ongoing', endReason: 'time' | 'resign' | undefined, keyMoments: KeyMoment[]): void => {
     const playerWon = result === 'win';
     const playerLost = result === 'loss';
-    const pgnResult: GameResult = playerColor === 'white'
+    const pgnResult: GameResult = result === 'ongoing' ? '*' : playerColor === 'white'
       ? (playerWon ? '1-0' : playerLost ? '0-1' : '1/2-1/2')
       : (playerWon ? '0-1' : playerLost ? '1-0' : '1/2-1/2');
     const tags: string[] = [
@@ -2025,6 +2003,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       gameState.hintsUsed === 0 ? 'NoHints' : '',
       endReason === 'time' ? 'Time' : '',
       endReason === 'resign' ? 'Resign' : '',
+      result === 'ongoing' ? 'Unfinished' : '',
     ].filter(Boolean);
 
     const annotations = movesToAnnotations(gameState.moves, playerColor);
@@ -2095,7 +2074,53 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       // game-end (deterministic, idempotent per game).
       void autoAnalyzeGameMisconceptions(gameRecord.id, undefined, { reportEffects: 'play-finished', prepareReview: true });
     });
-  }, [gameState.status, gameState.moves, gameState.hintsUsed, gameState.gameId, playerColor, difficulty, game.history, activeProfile, playerRating, targetStrength, detectedOpening, timeControl, convDrill, initialGameFen]);
+  }, [gameState.moves, gameState.hintsUsed, gameState.gameId, playerColor, difficulty, game.history, activeProfile, playerRating, targetStrength, detectedOpening, timeControl]);
+
+  // Restart and the colour swap are declared above this; they reach the save
+  // through a ref that always holds THIS render's game.
+  saveUnfinishedRef.current = (): void => {
+    if (gameState.status !== 'playing' || !shouldPersistFinishedGame(gameState.moves.length)) return;
+    persistPlayGame('ongoing', undefined, findKeyMoments(gameState.moves));
+  };
+
+  const finalizeGame = useCallback((result: 'win' | 'loss' | 'draw', endReason?: 'time' | 'resign'): void => {
+    if (gameState.status !== 'playing') return;
+    savedForReviewRef.current = null;
+
+    // Conversion-drill close: if this game was launched from a blown winning
+    // position and the student won it, that conversion is addressed.
+    if (result === 'win' && convDrill && initialGameFen) {
+      void addAddressedConversion(initialGameFen);
+    }
+
+    // Rating harvest (David 2026-07-14): beating the coach in a real game (past
+    // the trivial-game ply floor) is a genuine "win" moment — arm the review
+    // prompt at peak delight ("Yes" requests the store review). Wins
+    // only; losses/draws are never counted (the happiness gate + these positive-
+    // only triggers keep the public rating honest).
+    if (result === 'win' && shouldPersistFinishedGame(gameState.moves.length)) {
+      void recordPositiveMoment('coach-game-won');
+    }
+
+    const keyMoments = findKeyMoments(gameState.moves);
+
+    // THE FUNNEL'S MISSING STEP (2026-10-02): a finished Play game emitted
+    // nothing, so "how many players reach the auto-review" was unanswerable —
+    // Play page views and review events, with no way to join them.
+    captureEvent('coach_game_finished', {
+      result, end_reason: endReason ?? 'board', plies: gameState.moves.length, player_color: playerColor,
+    });
+
+    // Show the final board position with game-over overlay before transitioning
+    setGameState((prev) => ({
+      ...prev,
+      status: 'gameover',
+      result,
+      keyMoments,
+    }));
+
+    persistPlayGame(result, endReason, keyMoments);
+  }, [gameState.status, gameState.moves, gameState.hintsUsed, activeProfile, convDrill, initialGameFen, playerColor, persistPlayGame]);
 
   // Resign — route through finalizeGame so a resigned game is SAVED and
   // ANALYSED like any other loss (David 2026-06-01: resigned games carry the
@@ -3094,6 +3119,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         cur.resolve(result);
         quizStateRef.current = { active: false };
         setQuizState({ active: false });
+        // The answer reaches the record (persistent memory, 2026-10-19): it
+        // used to end at this audit row, so the coach could re-quiz a move the
+        // student had already got right or wrong.
+        discussion.recordMoveAnswer({
+          fen: game.fen, expectedSan: cur.expectedSan, solved: accepted,
+          wrongAttempts: accepted ? 0 : 1, surface: 'play-quiz',
+        });
         void logAppAudit({
           kind: 'quiz-resolved',
           category: 'subsystem',

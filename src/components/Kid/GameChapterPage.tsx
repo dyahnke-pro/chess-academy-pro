@@ -129,6 +129,7 @@ export function GameChapterPage({ config }: GameChapterPageProps): JSX.Element {
     playerColor: 'white',
     enabled: phase === 'puzzle' && !puzzlesLoading,
     knownMove: kidKnownMove,
+    gameId: null,
   });
 
   // Generate AI puzzles when entering puzzle phase

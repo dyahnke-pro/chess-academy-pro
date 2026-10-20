@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import { useKidProgress, firstOpenLevel } from '../../hooks/useKidProgress';
 import { useNavigate } from 'react-router-dom';
 import { Chess, type Square } from 'chess.js';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -25,6 +26,19 @@ export function KingMarchGame(): JSX.Element {
   const feedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const level = KING_MARCH_LEVELS[levelIndex];
+  // Levels finished are REMEMBERED (persistent memory, 2026-10-19): the game
+  // opens on the first level not yet won instead of always on level 1.
+  const progress = useKidProgress('king-march');
+  const resumedRef = useRef(false);
+  useEffect(() => {
+    if (!progress.loaded || resumedRef.current) return;
+    resumedRef.current = true;
+    if (phase !== 'intro') return;
+    const open = firstOpenLevel(progress.completed, KING_MARCH_LEVELS.length);
+    setLevelIndex(open);
+    setCurrentFen(KING_MARCH_LEVELS[open].fen);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [progress.loaded]);
 
   useEffect(() => {
     return () => {
@@ -115,6 +129,7 @@ export function KingMarchGame(): JSX.Element {
       // Check if king reached the goal
       if (move.to === level.goalSquare) {
         setLevelsWon((prev) => prev + 1);
+        progress.complete(levelIndex);
         setPhase('success');
         kidSpeak('The king made it! Well done!');
         return;
@@ -131,7 +146,7 @@ export function KingMarchGame(): JSX.Element {
       setCurrentFen(newFen);
       setBoardKey((prev) => prev + 1);
     },
-    [currentFen, level.goalSquare, kidSpeak],
+    [currentFen, level.goalSquare, kidSpeak, progress.complete, levelIndex],
   );
 
   const handleNextLevel = useCallback((): void => {
@@ -354,7 +369,7 @@ export function KingMarchGame(): JSX.Element {
               data-testid="march-complete"
             >
               <h1 className="text-3xl font-bold">All Levels Complete!</h1>
-              <StarDisplay earned={levelsWon} total={KING_MARCH_LEVELS.length} size="lg" />
+              <StarDisplay earned={Math.max(levelsWon, progress.completed.size)} total={KING_MARCH_LEVELS.length} size="lg" />
               <p className="text-lg" style={{ color: 'var(--color-text-muted)' }}>
                 You marched the king through {levelsWon} level{levelsWon !== 1 ? 's' : ''}!
               </p>

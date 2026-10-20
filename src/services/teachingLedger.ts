@@ -68,6 +68,18 @@ export async function recordTeachingVisit(
   await write(blob);
 }
 
+/** Remove every visit recorded under these names. Cleans the pattern
+ *  lessons that were written here as if they were openings (fixed at the
+ *  producer 2026-10-19 — pattern trees are `derived`). */
+export async function forgetTeachingVisits(names: readonly string[]): Promise<number> {
+  const blob = await read();
+  const drop = new Set(names.map(keyFor));
+  const kept = Object.fromEntries(Object.entries(blob).filter(([k]) => !drop.has(k)));
+  const removed = Object.keys(blob).length - Object.keys(kept).length;
+  if (removed > 0) await write(kept);
+  return removed;
+}
+
 export async function getTeachingVisits(openingName: string): Promise<TeachingVisit[]> {
   const blob = await read();
   return blob[keyFor(openingName)] ?? [];

@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import { useKidProgress } from '../../hooks/useKidProgress';
 import { ArrowLeft, Volume2, VolumeX, RotateCcw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { KidChessboard } from '../Chessboard/KidChessboard';
@@ -28,7 +29,7 @@ export function BishopVsPawns({ onBack }: BishopVsPawnsProps): JSX.Element {
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
   const [legalMoves, setLegalMoves] = useState<string[]>([]);
   const [movesPlayed, setMovesPlayed] = useState(0);
-  const [levelsCompleted, setLevelsCompleted] = useState<Set<number>>(new Set());
+  const { completed: levelsCompleted, complete: completeLevel } = useKidProgress('bishop-vs-pawns');
   const [voiceOn, setVoiceOn] = useState(true);
   const [boardKey, setBoardKey] = useState(0);
   const [animating, setAnimating] = useState(false);
@@ -101,7 +102,7 @@ export function BishopVsPawns({ onBack }: BishopVsPawnsProps): JSX.Element {
       if (countBlackPawns(newPieces) === 0) {
         setAnimating(false);
         setPhase('won');
-        setLevelsCompleted((prev) => new Set([...prev, currentLevel]));
+        completeLevel(currentLevel);
         playCelebration();
         kidSpeak('Amazing! You caught all the pawns!');
         return;
@@ -127,7 +128,7 @@ export function BishopVsPawns({ onBack }: BishopVsPawnsProps): JSX.Element {
     // Clear selection if clicking elsewhere
     setSelectedSquare(null);
     setLegalMoves([]);
-  }, [phase, animating, pieces, selectedSquare, legalMoves, currentLevel, playMoveSound, playCelebration, playEncouragement, kidSpeak]);
+  }, [phase, animating, pieces, selectedSquare, legalMoves, currentLevel, playMoveSound, playCelebration, playEncouragement, kidSpeak, completeLevel]);
 
   const handleVoiceToggle = useCallback((): void => {
     if (voiceOn) voiceService.stop();

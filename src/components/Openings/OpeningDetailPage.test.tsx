@@ -392,8 +392,10 @@ describe('OpeningDetailPage', () => {
 
       fireEvent.click(screen.getByTestId('listenable-overview-play'));
 
-      // After click, playback starts and the toggle flips to pause.
-      expect(screen.getByTestId('listenable-overview-play')).toHaveAttribute('aria-label', 'Pause reading');
+      // After click, playback starts and the toggle flips to pause. Awaited:
+      // the page can still be committing its async reads (the remembered
+      // variation tab) when the click lands under a loaded CPU.
+      await waitFor(() => expect(screen.getByTestId('listenable-overview-play')).toHaveAttribute('aria-label', 'Pause reading'));
     });
   });
 

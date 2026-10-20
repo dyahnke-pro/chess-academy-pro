@@ -1,4 +1,5 @@
 import { PageHelp } from '../Layout/PageHelp';
+import { recallServed, rememberServed } from '../../services/studentMemory';
 import { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -60,7 +61,9 @@ export function TacticSetupPage(): JSX.Element {
     await seedPuzzles();
 
     const baseRating = studentPuzzleRating(activeProfile);
+    // Puzzles served in earlier visits are not served again (persistent memory).
     const session = createSetupSession(d, baseRating);
+    for (const id of await recallServed('setup')) session.seenIds.add(id);
     sessionRef.current = session;
     setDisplayRating(session.targetRating);
 
@@ -92,6 +95,7 @@ export function TacticSetupPage(): JSX.Element {
       playerRating,
     );
     sessionRef.current = nextSession;
+    void rememberServed('setup', current.puzzle.id);
     setDisplayRating(nextSession.targetRating);
 
     // Persist the adapted puzzle rating (consistent with AdaptivePuzzlePage).

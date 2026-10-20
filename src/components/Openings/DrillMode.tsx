@@ -316,7 +316,7 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
         setWrongSquare(null);
         // Close the loop: mark any weak-spot at this position as drilled so it
         // spaces out of the unified weakness profile (no-op if none recorded).
-        void markWeakSpotDrilled(`${opening.id}-${currentMoveIndex}`);
+        void markWeakSpotDrilled(opening.id, currentFen, expectedMoves[currentMoveIndex].san);
         setTimeout(() => {
           setShowCorrectFlash(false);
           setCorrectSquare(null);

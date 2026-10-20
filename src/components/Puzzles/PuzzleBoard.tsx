@@ -349,6 +349,7 @@ export function PuzzleBoard({
     enabled: settings.showHints && state === 'playing',
     knownMove,
     puzzleThemes: puzzle.themes,
+    gameId: null,
   });
 
   // Track hint usage

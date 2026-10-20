@@ -1,4 +1,5 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import { useKidProgress, firstOpenLevel } from '../../hooks/useKidProgress';
 import { useNavigate } from 'react-router-dom';
 import { Chess, type Square } from 'chess.js';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -20,6 +21,18 @@ export function KingEscapeGame(): JSX.Element {
   const [levelsWon, setLevelsWon] = useState(0);
 
   const level = KING_ESCAPE_LEVELS[levelIndex];
+  // Levels finished are REMEMBERED (persistent memory, 2026-10-19): the game
+  // opens on the first level not yet won instead of always on level 1.
+  const progress = useKidProgress('king-escape');
+  const resumedRef = useRef(false);
+  useEffect(() => {
+    if (!progress.loaded || resumedRef.current) return;
+    resumedRef.current = true;
+    if (phase !== 'intro') return;
+    const open = firstOpenLevel(progress.completed, KING_ESCAPE_LEVELS.length);
+    setLevelIndex(open);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [progress.loaded]);
 
   const kidSpeak = useCallback(
     (text: string): void => {
@@ -83,10 +96,11 @@ export function KingEscapeGame(): JSX.Element {
     (): void => {
       // Any legal move escapes check — chess.js only allows legal moves
       setLevelsWon((prev) => prev + 1);
+      progress.complete(levelIndex);
       setPhase('success');
       kidSpeak('Great job! The king is safe!');
     },
-    [kidSpeak],
+    [kidSpeak, progress.complete, levelIndex],
   );
 
   const handleNextLevel = useCallback((): void => {
@@ -252,7 +266,7 @@ export function KingEscapeGame(): JSX.Element {
               data-testid="escape-complete"
             >
               <h1 className="text-3xl font-bold">All Levels Complete!</h1>
-              <StarDisplay earned={levelsWon} total={KING_ESCAPE_LEVELS.length} size="lg" />
+              <StarDisplay earned={Math.max(levelsWon, progress.completed.size)} total={KING_ESCAPE_LEVELS.length} size="lg" />
               <p className="text-lg" style={{ color: 'var(--color-text-muted)' }}>
                 You saved the king {levelsWon} time{levelsWon !== 1 ? 's' : ''}!
               </p>

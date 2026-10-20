@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**157 lines · 6 exports · 3 importers · 2 tests · 0 audits**
+**169 lines · 7 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,8 +21,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `TeachingVisit` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `recordTeachingVisit` (function) — 15 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12870`
+### `recordTeachingVisit` (function) — 17 call sites
+- `src/components/Coach/CoachTeachPage.tsx:13101`
 - `src/hooks/useTeachWalkthrough.ts:867`
 - `src/services/coachsCall.test.ts:31`
 - `src/services/coachsCall.test.ts:41`
@@ -30,36 +30,44 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachsCall.test.ts:51`
 - `src/services/coachsCall.test.ts:63`
 - `src/services/coachsCall.test.ts:64`
-- `src/services/teachingLedger.test.ts:43`
-- `src/services/teachingLedger.test.ts:51`
+- `src/services/teachingLedger.test.ts:44`
 - `src/services/teachingLedger.test.ts:52`
-- `src/services/teachingLedger.test.ts:55`
-- `src/services/teachingLedger.test.ts:61`
+- `src/services/teachingLedger.test.ts:53`
+- `src/services/teachingLedger.test.ts:56`
 - `src/services/teachingLedger.test.ts:62`
-- `src/services/teachingLedger.test.ts:69`
-
-### `getTeachingVisits` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:14570`
-- `src/hooks/useTeachWalkthrough.ts:1844`
-- `src/services/coachsCall.ts:170`
 - `src/services/teachingLedger.test.ts:63`
 - `src/services/teachingLedger.test.ts:70`
+- `src/services/teachingLedger.test.ts:78`
+- `src/services/teachingLedger.test.ts:79`
+
+### `forgetTeachingVisits` (function) — 2 call sites
+- `src/App.tsx:315`
+- `src/services/teachingLedger.test.ts:80`
+
+### `getTeachingVisits` (function) — 7 call sites
+- `src/components/Coach/CoachTeachPage.tsx:14804`
+- `src/hooks/useTeachWalkthrough.ts:1844`
+- `src/services/coachsCall.ts:170`
+- `src/services/teachingLedger.test.ts:64`
+- `src/services/teachingLedger.test.ts:71`
+- `src/services/teachingLedger.test.ts:81`
+- `src/services/teachingLedger.test.ts:82`
 
 ### `RevisitPlan` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `planTeachingVisit` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:14569`
+- `src/components/Coach/CoachTeachPage.tsx:14803`
 - `src/hooks/useTeachWalkthrough.ts:1663`
 - `src/hooks/useTeachWalkthrough.ts:1766`
-- `src/services/teachingLedger.test.ts:37`
-- `src/services/teachingLedger.test.ts:44`
-- `src/services/teachingLedger.test.ts:53`
-- `src/services/teachingLedger.test.ts:56`
+- `src/services/teachingLedger.test.ts:38`
+- `src/services/teachingLedger.test.ts:45`
+- `src/services/teachingLedger.test.ts:54`
+- `src/services/teachingLedger.test.ts:57`
 
 ### `takeawayForTree` (function) — 2 call sites
 - `src/hooks/useTeachWalkthrough.ts:867`
-- `src/services/teachingLedger.test.ts:43`
+- `src/services/teachingLedger.test.ts:44`
 
 ## Tests
 

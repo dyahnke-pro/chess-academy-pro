@@ -213,6 +213,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
     playerColor: puzzle.playerColor === 'black' ? 'black' : 'white',
     enabled: settings.showHints && boardState === 'thinking' && isPlayerTurn,
     knownMove,
+    gameId: null,
   });
 
   const clearLadder = useCallback((): void => {

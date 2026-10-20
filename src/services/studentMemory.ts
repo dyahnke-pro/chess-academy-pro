@@ -26,12 +26,10 @@ export interface MemoryDataByKind {
   'watch-beat': { beatIndex: number; beatCount: number };
   /** Opening page: the variation tab they picked. key = opening id. */
   'variation-tab': { tabIndex: number };
+  /** Opening checkpoint quiz: the question reached, or done. key = opening id. */
+  'quiz-progress': { index: number; completed: boolean };
   /** Book reader: the chapter and page. key = book id. */
   'book-page': { activeIdx: number; page: number };
-  /** Endgame lesson: the keystone they reached. key = lesson id. */
-  'endgame-keystone': { posIndex: number };
-  /** A lesson asked for that Learn had not opened yet. key = 'current'. */
-  'pending-lesson': { request: unknown };
   /** A chat thread to show again on reopen. key = surface thread id. */
   'chat-thread': { messages: StoredChatMessage[] };
   /** Kid games: levels finished and stars. key = game id. */
@@ -41,6 +39,12 @@ export interface MemoryDataByKind {
   // ── C. settings ──
   /** A remembered choice. key = setting name. */
   setting: { value: string | number | boolean };
+  /** The hint dial — how subtle hints should be, moved by the student's own
+   *  found/missed run on every sparring surface. key = 'student'. */
+  'hint-dial': { register: 'obvious' | 'moderate' | 'subtle'; recent: boolean[] };
+  /** The opponent strength the board measured, carried into the next game
+   *  instead of restarting at the profile rating. key = 'student'. */
+  'live-strength': { rating: number; evidence: number };
   // ── E. progress ──
   /** All-time best. key = what (e.g. 'puzzle-streak'). */
   best: { value: number; at: number };
@@ -68,12 +72,13 @@ export const MEMORY_KINDS: Record<MemoryKind, { surface: MemorySurface }> = {
   'watch-beat': { surface: 'openings' },
   'variation-tab': { surface: 'openings' },
   'book-page': { surface: 'openings' },
-  'endgame-keystone': { surface: 'endgame' },
-  'pending-lesson': { surface: 'learn' },
+  'quiz-progress': { surface: 'openings' },
   'chat-thread': { surface: 'chat' },
   'kid-progress': { surface: 'kid' },
   'served-puzzles': { surface: 'tactics' },
   setting: { surface: 'app' },
+  'hint-dial': { surface: 'app' },
+  'live-strength': { surface: 'play' },
   best: { surface: 'app' },
   trend: { surface: 'app' },
   'learn-forks': { surface: 'learn' },
@@ -201,4 +206,22 @@ export async function rememberTrendPoint(series: string, value: number, now: num
     points.push({ day, value });
     return { points };
   }, now);
+}
+
+/** How many served puzzle ids a surface keeps. A storage window, not a cap on
+ *  teaching: the oldest fall out and may be served again. */
+export const SERVED_WINDOW = 2000;
+
+/** Puzzles a surface already served in earlier sessions (surfaces whose puzzle
+ *  attempts are not on `db.puzzles`). */
+export async function recallServed(surface: string): Promise<Set<string>> {
+  return new Set((await recallData('served-puzzles', surface))?.ids ?? []);
+}
+
+export async function rememberServed(surface: string, id: string): Promise<void> {
+  await remember('served-puzzles', surface, (prev) => {
+    const ids = (prev?.ids ?? []).filter((x) => x !== id);
+    ids.push(id);
+    return { ids: ids.slice(-SERVED_WINDOW) };
+  });
 }

@@ -18,6 +18,7 @@
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import {
   answerEvidenceOutcome,
+  capabilitiesPosed,
   recordAnswerEvidence,
   type AnswerDetail,
   type AnswerOrigin,
@@ -63,4 +64,39 @@ export async function recordAnswer(a: {
       })
     : [];
   return { outcome, prompted, evidence, wrongTagsWritten };
+}
+
+/**
+ * A "find the move" question (the opening checkpoint quiz, Play's quiz):
+ * the question's capability is COMPUTED from the board — the leading
+ * fundamental the expected move answers (`capabilitiesPosed`), never a
+ * hand-written tag — and the answer goes through `recordAnswer` like every
+ * other question (persistent memory, 2026-10-19: these answers used to end
+ * at an audit row and never reached the record).
+ */
+export async function recordMoveQuestionAnswer(a: {
+  fen: string;
+  expectedSan: string;
+  solved: boolean;
+  wrongAttempts: number;
+  help: AnswerDetail['help'];
+  surface: string;
+}): Promise<AnswerRecordResult | null> {
+  const mover: 'white' | 'black' = a.fen.split(' ')[1] === 'b' ? 'black' : 'white';
+  let tag: MisconceptionTagId | null = null;
+  try {
+    const posed = capabilitiesPosed(a.fen, a.expectedSan, mover);
+    tag = [...posed].sort((x, y) => y.posedImportance - x.posedImportance)[0]?.tag ?? null;
+  } catch { tag = null; }
+  if (!tag) return null;   // the board asked no capability we own: nothing to file
+  return recordAnswer({
+    questionTag: tag,
+    fen: a.fen,
+    origin: 'lesson',
+    solved: a.solved,
+    answer: {
+      taps: [], extras: [], wrongAttempts: a.wrongAttempts, msToFirst: null, msBetween: [],
+      help: a.help, spoken: false, chainDepth: 0, wrongTags: [], typed: a.expectedSan, surface: a.surface,
+    },
+  });
 }

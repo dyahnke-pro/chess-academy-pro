@@ -407,6 +407,9 @@ export const useCoachMemoryStore = create<CoachMemoryState & CoachMemoryActions>
         ...(next.pgn ? { pgn: next.pgn } : {}),
       };
       set({ pendingWalkthrough: queued });
+      // Persisted (2026-10-19): a lesson asked for just before the app closed
+      // is still owed when it reopens.
+      schedulePersist(get);
       void logAppAudit({
         kind: 'coach-memory-intent-set',
         category: 'subsystem',
@@ -418,7 +421,7 @@ export const useCoachMemoryStore = create<CoachMemoryState & CoachMemoryActions>
     takePendingWalkthrough: () => {
       // Read and clear together — a remount must not re-run the same lesson.
       const pending = get().pendingWalkthrough;
-      if (pending) set({ pendingWalkthrough: null });
+      if (pending) { set({ pendingWalkthrough: null }); schedulePersist(get); }
       return pending;
     },
 
@@ -704,6 +707,7 @@ export const useCoachMemoryStore = create<CoachMemoryState & CoachMemoryActions>
       if (restored) {
         set({
           intendedOpening: restored.intendedOpening,
+          pendingWalkthrough: get().pendingWalkthrough ?? restored.pendingWalkthrough ?? null,
           trainingFocus: restored.trainingFocus ?? null,
           conversationHistory: restored.conversationHistory ?? [],
           preferences: restored.preferences ?? DEFAULT_STATE.preferences,
@@ -733,6 +737,7 @@ export const useCoachMemoryStore = create<CoachMemoryState & CoachMemoryActions>
 
 interface PersistedShape {
   intendedOpening: IntendedOpening | null;
+  pendingWalkthrough: PendingWalkthrough | null;
   trainingFocus: TrainingFocus | null;
   conversationHistory: CoachMessage[];
   preferences: CoachPreferences;
@@ -760,6 +765,7 @@ function schedulePersist(get: () => CoachMemoryState): void {
 async function writePersisted(state: CoachMemoryState): Promise<void> {
   const payload: PersistedShape = {
     intendedOpening: state.intendedOpening,
+    pendingWalkthrough: state.pendingWalkthrough,
     trainingFocus: state.trainingFocus,
     conversationHistory: state.conversationHistory,
     preferences: state.preferences,

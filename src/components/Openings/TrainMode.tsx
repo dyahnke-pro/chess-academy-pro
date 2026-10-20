@@ -203,7 +203,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
           setTimeout(() => setMoveFlash(null), 600);
         }
         setTimeout(() => setShowCorrectFlash(false), 400);
-        void markWeakSpotDrilled(`${opening.id}-${currentMoveIndex}`);
+        void markWeakSpotDrilled(opening.id, currentFen, expectedMoves[currentMoveIndex].san);
         setCurrentMoveIndex((prev) => prev + 1);
       } else {
         // Wrong — reset to start of line after undo

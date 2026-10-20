@@ -7,7 +7,7 @@
 // reading an empty table and quietly getting nothing.
 import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
-import { beginTrainingSession, finishTrainingSession } from './trainingSessionLedger';
+import { beginTrainingSession, finishTrainingSession, recordTrainingProgress, abandonTrainingSession } from './trainingSessionLedger';
 import { useAppStore } from '../stores/appStore';
 import { buildUserProfile } from '../test/factories';
 
@@ -81,5 +81,29 @@ describe('trainingSessionLedger', () => {
     // the row is worthless to the loop if it can't be ordered by date.
     const recent = await db.sessions.orderBy('date').reverse().limit(10).toArray();
     expect(recent.map((s) => s.id)).toContain(open!.id);
+  });
+});
+
+describe('a session left mid-way keeps what was done (persistent memory)', () => {
+  beforeEach(async () => {
+    await db.sessions.clear();
+    useAppStore.setState({ activeProfile: buildUserProfile({ id: 'main' }) });
+  });
+
+  it('progress is on the row before the session is finished', async () => {
+    const open = await beginTrainingSession({ blockType: 'opening_review' });
+    await recordTrainingProgress(open, { itemsCompleted: 3, itemsCorrect: 2 });
+    db.close(); await db.open();
+    const row = await db.sessions.get(open!.id);
+    expect(row).toMatchObject({ puzzlesSolved: 3, completed: false });
+    expect(row?.puzzleAccuracy).toBeCloseTo(2 / 3);
+    await abandonTrainingSession(open);
+    expect(await db.sessions.get(open!.id)).toBeDefined();
+  });
+
+  it('a session left before any item leaves no empty row', async () => {
+    const open = await beginTrainingSession({ blockType: 'opening_review' });
+    await abandonTrainingSession(open);
+    expect(await db.sessions.get(open!.id)).toBeUndefined();
   });
 });

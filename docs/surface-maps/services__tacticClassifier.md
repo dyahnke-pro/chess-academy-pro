@@ -48,7 +48,7 @@
 - `src/test/kingIsNeverHanging.test.ts:56`
 
 ### `classifyPosition` (function) — 33 call sites
-- `src/components/Coach/CoachGamePage.tsx:3352`
+- `src/components/Coach/CoachGamePage.tsx:3384`
 - `src/services/missedTacticService.ts:623`
 - `src/services/oneSkewerRule.test.ts:16`
 - `src/services/pvPlayback.ts:425`
@@ -83,7 +83,7 @@
 - `src/services/tacticClassifier.test.ts:347`
 
 ### `scanUpcomingTactics` (function) — 5 call sites
-- `src/components/Coach/CoachGamePage.tsx:2889`
+- `src/components/Coach/CoachGamePage.tsx:2914`
 - `src/services/liveTacticsContext.ts:95`
 - `src/services/tacticClassifier.skewer.test.ts:13`
 - `src/services/tacticClassifier.skewer.test.ts:15`

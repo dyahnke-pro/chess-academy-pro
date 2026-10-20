@@ -58,7 +58,7 @@ import {
 } from '../../services/srsOpeningService';
 import { getOpeningById } from '../../services/openingService';
 import { logAppAudit } from '../../services/appAuditor';
-import { beginTrainingSession, finishTrainingSession, type OpenTrainingSession } from '../../services/trainingSessionLedger';
+import { beginTrainingSession, finishTrainingSession, recordTrainingProgress, abandonTrainingSession, type OpenTrainingSession } from '../../services/trainingSessionLedger';
 import { recordPositiveMoment } from '../../services/reviewPromptService';
 import type { OpeningRecord, SrsOpeningCard } from '../../types';
 
@@ -176,6 +176,17 @@ export function SrsTrainerPage(): JSX.Element {
   const lineResultsRef = useRef<Map<string, boolean>>(new Map());
   const [linesPerfected, setLinesPerfected] = useState<number>(0);
   const [linesAttempted, setLinesAttempted] = useState<number>(0);
+
+  // The session's progress is on its row as it happens (persistent memory,
+  // 2026-10-19): closing mid-session keeps the cards and lines done; leaving
+  // before any drops the empty row.
+  useEffect(() => {
+    const cards = cardCorrect + cardWrong;
+    const items = cards > 0 ? cards : linesAttempted;
+    const correctItems = cards > 0 ? cardCorrect : linesPerfected;
+    void recordTrainingProgress(openSessionRef.current, { itemsCompleted: items, itemsCorrect: correctItems });
+  }, [cardCorrect, cardWrong, linesAttempted, linesPerfected]);
+  useEffect(() => () => { void abandonTrainingSession(openSessionRef.current); }, []);
   const [lineMistakes, setLineMistakes] = useState<number>(0);
   const [lineFlash, setLineFlash] = useState<MoveQuality>(null);
 

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { db } from '../db/schema';
+import { recallSetting, rememberSetting } from '../services/studentMemory';
 import type {
   UserProfile, AppTheme,
   CoachGameState, ChatMessage, WeaknessProfile,
@@ -344,7 +345,13 @@ export const useAppStore = create<AppState & AppActions>()(
 
     toggleCoachTips: () => set((state) => ({ coachTipsOn: !state.coachTipsOn })),
 
-    setCoachDifficulty: (coachDifficulty: CoachDifficulty) => set({ coachDifficulty }),
+    // The difficulty the student chose is REMEMBERED (persistent memory,
+    // 2026-10-19): reopening the app keeps Hard on Hard. Restored at boot by
+    // `hydrateRememberedSettings`.
+    setCoachDifficulty: (coachDifficulty: CoachDifficulty) => {
+      set({ coachDifficulty });
+      void rememberSetting('coach-difficulty', coachDifficulty);
+    },
 
     togglePuzzleShowTacticName: () => set((state) => {
       const next = !state.puzzleShowTacticName;
@@ -415,4 +422,10 @@ export function selectFreshBoardSnapshot(
   if (!snapshot) return null;
   if (nowMs - snapshot.timestamp > LAST_BOARD_SNAPSHOT_TTL_MS) return null;
   return snapshot;
+}
+
+/** Boot: put the settings the student chose back (persistent memory). */
+export async function hydrateRememberedSettings(): Promise<void> {
+  const d = await recallSetting<string>('coach-difficulty', '');
+  if (d === 'easy' || d === 'medium' || d === 'hard') useAppStore.setState({ coachDifficulty: d });
 }

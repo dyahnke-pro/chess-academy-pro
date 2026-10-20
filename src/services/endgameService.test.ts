@@ -160,6 +160,8 @@ describe('endgameService — buildMatingPatternLesson', () => {
     expect(r!.tree.studentSide).toMatch(/^(white|black)$/);
     // Root has fork children (the find-the-mate menu).
     expect(r!.tree.root.children.length).toBeGreaterThanOrEqual(2); // correct + ≥1 distractor
+    // A pattern lesson is a one-shot, never an opening for the teaching ledger.
+    expect(r!.tree.derived).toBe(true);
   });
 
   it('puzzleIndex wraps around past the corpus size', () => {
