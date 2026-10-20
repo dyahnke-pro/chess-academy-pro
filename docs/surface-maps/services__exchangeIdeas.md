@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**876 lines · 23 exports · 6 importers · 3 tests · 0 audits**
+**903 lines · 24 exports · 6 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,8 +13,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/capabilityEvidence.ts`
-- `src/services/exchangeIdeas.replied.test.ts`
 - `src/services/exchangeIdeas.test.ts`
+- `src/services/goldenPositional.test.ts`
 - `src/services/learnBoardTruth.realGame.test.ts`
 - `src/services/positionFacts.ts`
 - `src/services/reviewFullData.ts`
@@ -46,9 +46,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:53`
 - `src/services/exchangeIdeas.test.ts:54`
 
-### `denyExchange` (function) — 2 call sites
+### `denyExchange` (function) — 4 call sites
 - `src/services/exchangeIdeas.test.ts:58`
 - `src/services/exchangeIdeas.test.ts:61`
+- `src/services/goldenPositional.test.ts:43`
+- `src/services/goldenPositional.test.ts:46`
 
 ### `abandonedDuty` (function) — 2 call sites
 - `src/services/exchangeIdeas.test.ts:65`
@@ -62,6 +64,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `tradeChoice` (function) — 2 call sites
 - `src/services/exchangeIdeas.test.ts:73`
 - `src/services/exchangeIdeas.test.ts:76`
+
+### `spoilTheirPawns` (function) — 2 call sites
+- `src/services/goldenPositional.test.ts:27`
+- `src/services/goldenPositional.test.ts:30`
 
 ### `dutyParity` (function) — 5 call sites
 - `src/services/exchangeIdeas.test.ts:80`
@@ -125,21 +131,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:187`
 - `src/services/exchangeIdeas.test.ts:188`
 
-### `exchangeIdeas` (function) — 9 call sites
-- `src/services/exchangeIdeas.replied.test.ts:15`
-- `src/services/exchangeIdeas.replied.test.ts:19`
+### `exchangeIdeas` (function) — 7 call sites
 - `src/services/exchangeIdeas.test.ts:180`
 - `src/services/exchangeIdeas.test.ts:197`
 - `src/services/exchangeIdeas.test.ts:227`
 - `src/services/exchangeIdeas.test.ts:228`
 - `src/services/exchangeIdeas.test.ts:232`
-- `src/services/positionFacts.ts:1211`
+- `src/services/positionFacts.ts:1208`
 - `src/services/reviewFullData.ts:987`
 
 ## Tests
 
-- `src/services/exchangeIdeas.replied.test.ts`
 - `src/services/exchangeIdeas.test.ts`
+- `src/services/goldenPositional.test.ts`
 - `src/services/learnBoardTruth.realGame.test.ts`
 
 ## Audits that reach it

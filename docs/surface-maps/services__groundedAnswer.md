@@ -1126,7 +1126,7 @@
 - `src/services/liveTacticsContext.ts:486`
 - `src/services/liveTacticsContext.ts:495`
 - `src/services/lookaheadPlan.ts:131`
-- `src/services/playedConcept.ts:57`
+- `src/services/playedConcept.ts:77`
 - `src/services/reviewBoardAwareness.test.ts:47`
 - `src/services/reviewBoardAwareness.test.ts:51`
 - `src/services/reviewBoardAwareness.test.ts:55`

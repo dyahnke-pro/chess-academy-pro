@@ -39,7 +39,7 @@ export type ExchangeIdeaId =
   | 'only-developed' | 'defender-trade' | 'exchange-for-attacker' | 'deny-exchange'
   | 'abandoned-duty' | 'trade-choice' | 'duty-parity' | 'maintenance-trade' | 'prepare-recapture'
   | 'threat-cost' | 'simplest-win' | 'safe-because'
-  | 'wing-for-centre' | 'material-arithmetic' | 'knight-squares' | 'c-pawn-block';
+  | 'wing-for-centre' | 'material-arithmetic' | 'knight-squares' | 'c-pawn-block' | 'spoil-their-pawns';
 
 /** The fact kind each read speaks as through the one door — one name on both
  *  sides (review `[tag]` and live clause kind). Exhaustive: a new read fails to
@@ -52,6 +52,7 @@ export const IDEA_KIND: Record<ExchangeIdeaId, ExchangeIdeaKind> = {
   'deny-exchange': 'trade-idea',
   'abandoned-duty': 'trade-idea',
   'trade-choice': 'trade-idea',
+  'spoil-their-pawns': 'trade-idea',
   'duty-parity': 'trade-idea',
   'maintenance-trade': 'trade-idea',
   'prepare-recapture': 'trade-idea',
@@ -245,6 +246,23 @@ function doublingCapture(fen: string, sq: string): { take: Move; back: Move } | 
   return { take, back: backs[0] };
 }
 
+/** After their capture `take` (on `fen`, them to move), a pawn recapture of
+ *  the student's that leaves its own file with no pawn of theirs while their
+ *  rook stands on it — the file opens for that rook. */
+function fileOpenedForRook(fen: string, take: Move, student: Side): { san: string; file: string } | null {
+  const r = play(fen, take.san);
+  if (!r) return null;
+  for (const back of r.c.moves({ verbose: true }).filter((m) => m.to === take.to && m.captured && m.piece === 'p')) {
+    const b = play(r.c.fen(), back.san);
+    if (!b) continue;
+    const file = back.from[0];
+    if (pawnsOnFile(b.c, file, student) > 0) continue;
+    const rookOn = b.c.board().flat().some((x) => x?.type === 'r' && x.color === student && x.square[0] === file);
+    if (rookOn) return { san: back.san, file };
+  }
+  return null;
+}
+
 /** "The knight to a4 stops the exchange on c3 the defence relies on": the
  *  student's piece leaves the square where their minor could take it and
  *  force a pawn recapture that doubles the student's pawns. */
@@ -256,9 +274,13 @@ export function denyExchange(fenBefore: string, san: string, student: Side, cost
   if (!asIf) return null;
   const denied = doublingCapture(asIf, r.m.from);
   if (!denied) return null;
-  // The same damage must not be waiting on the piece's new square.
-  if (doublingCapture(r.c.fen(), r.m.to)) return null;
-  const text = `Your ${NAME[r.m.piece]} leaves ${r.m.from}, so their ${NAME[denied.take.piece]} can no longer take it there and double your pawns.`;
+  // The same damage must not be waiting on the piece's new square — unless
+  // taking back there opens a file for your rook (golden replay 2026-10-20,
+  // 7…Bb6: "if Bxb6, axb6 opens the a-file", so those doubled pawns cost nothing).
+  const waiting = doublingCapture(r.c.fen(), r.m.to);
+  const opens = waiting ? fileOpenedForRook(r.c.fen(), waiting.take, student) : null;
+  if (waiting && !opens) return null;
+  const text = `Your ${NAME[r.m.piece]} leaves ${r.m.from}, so their ${NAME[denied.take.piece]} can no longer take it there and double your pawns${opens ? `; if they take on ${r.m.to}, ${opens.san} opens the ${opens.file}-file for your rook` : ''}.`;
   const sq = [denied.take.from, r.m.from, denied.back.from];
   const proof = squaresProof(text, sq);
   if (!proof) return null;
@@ -357,6 +379,27 @@ export function tradeChoice(fenBefore: string, san: string, student: Side): Exch
   if (!proof) return null;
   const text = `You offer the ${NAME[r.m.piece]} trade, but the choice is theirs: if they take on ${r.m.to}, you must take back with the ${backs[0].from[0]}-pawn and double your pawns.`;
   return idea('trade-choice', text, [take.from, r.m.to, backs[0].from], proof, `trade-choice:${r.m.to}`);
+}
+
+/** THE TRADE THAT SPOILS THEIR PAWNS (golden replay 2026-10-20, 10…Bxf3): the
+ *  student's minor takes a minor of theirs, and every way back is a pawn that
+ *  doubles their pawns — the damage stays for the rest of the game. The mirror
+ *  of `tradeChoice`, from the side that gives the minor. */
+export function spoilTheirPawns(fenBefore: string, san: string, student: Side): ExchangeIdea | null {
+  const r = play(fenBefore, san);
+  if (!r || r.m.color !== student || (r.m.piece !== 'n' && r.m.piece !== 'b') || (r.m.captured !== 'n' && r.m.captured !== 'b')) return null;
+  const after = r.c.fen();
+  const backs = r.c.moves({ verbose: true }).filter((m) => m.to === r.m.to && m.captured);
+  if (backs.length === 0 || !backs.every((m) => pawnRecaptureDoubles(after, m))) return null;
+  const back = backs[0];
+  const proof = legalLineProof(fenBefore, [san, back.san], lineSeatAt(fenBefore, student), true);
+  if (!proof) return null;
+  const king = r.c.board().flat().find((x) => x?.type === 'k' && x.color !== student)?.square;
+  const side = (f: string): 'kingside' | 'queenside' | null => (f >= 'f' ? 'kingside' : f <= 'c' ? 'queenside' : null);
+  const wing = side(r.m.to[0]);
+  const where = wing && king && side(king[0]) === wing ? `their ${wing} pawns` : 'their pawns';
+  const text = `You give your ${NAME[r.m.piece]} for their ${NAME[r.m.captured]} on ${r.m.to}, and the only way back is with the ${back.from[0]}-pawn: ${where} end up doubled, and that damage is for good.`;
+  return idea('spoil-their-pawns', text, [r.m.to, back.from], proof, `spoil-their-pawns:${r.m.to}`);
 }
 
 /** Duty parity, read on the board with the student to move: one guard of
@@ -784,7 +827,7 @@ export function cPawnBlock(fenBefore: string, san: string, student: Side, bestSa
 }
 
 function idea(id: ExchangeIdeaId, text: string, squares: string[], proof: Proof, claim: string, imagery?: ImageryKey | null): ExchangeIdea {
-  return { id, kind: IDEA_KIND[id], text, squares: [...new Set(squares)], proof, claim, imagery: imagery !== undefined ? imagery : (id === 'knight-squares' ? null : id) };
+  return { id, kind: IDEA_KIND[id], text, squares: [...new Set(squares)], proof, claim, imagery: imagery !== undefined ? imagery : (id === 'knight-squares' || id === 'spoil-their-pawns' ? null : id) };
 }
 
 // ── THE AGGREGATOR — every surface asks this one function ─────────────────
@@ -841,6 +884,7 @@ export function exchangeIdeas(input: ExchangeIdeasInput): ExchangeIdea[] {
     studentPush(safe(() => denyExchange(fb, san, s, costCp)));
     studentPush(safe(() => abandonedDuty(fb, san, s)));
     studentPush(safe(() => tradeChoice(fb, san, s)));
+    studentPush(safe(() => spoilTheirPawns(fb, san, s)));
     studentPush(safe(() => maintenanceTrade(fb, san, s, costCp)));
     studentPush(safe(() => prepareRecapture(fb, san, s, costCp)));
     studentPush(safe(() => threatCost(fb, san, s)));
