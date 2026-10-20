@@ -46,7 +46,7 @@
 - `src/services/openingGenerator.ts:1317`
 
 ### `buildNarrationSegments` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7833`
+- `src/components/Coach/CoachTeachPage.tsx:7832`
 - `src/components/Openings/LessonPlayer.tsx:208`
 - `src/services/narrationSegments.test.ts:49`
 - `src/services/narrationSegments.test.ts:57`

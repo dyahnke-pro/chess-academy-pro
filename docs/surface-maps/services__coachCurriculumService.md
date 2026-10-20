@@ -52,17 +52,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachCurriculumService.test.ts:138`
 
 ### `getCoachCurriculum` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2912`
-- `src/components/Coach/CoachTeachPage.tsx:13024`
-- `src/components/Coach/CoachTeachPage.tsx:13092`
+- `src/components/Coach/CoachTeachPage.tsx:2911`
+- `src/components/Coach/CoachTeachPage.tsx:13023`
+- `src/components/Coach/CoachTeachPage.tsx:13091`
 - `src/services/studentDossier.ts:157`
 
 ### `syncCoachCurriculum` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2898`
-- `src/components/Coach/CoachTeachPage.tsx:2976`
+- `src/components/Coach/CoachTeachPage.tsx:2897`
+- `src/components/Coach/CoachTeachPage.tsx:2975`
 
 ### `curriculumArcLine` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:13092`
+- `src/components/Coach/CoachTeachPage.tsx:13091`
 - `src/services/coachCurriculumService.test.ts:133`
 - `src/services/coachCurriculumService.test.ts:137`
 - `src/services/coachCurriculumService.test.ts:141`

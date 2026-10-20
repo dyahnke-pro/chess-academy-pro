@@ -78,7 +78,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:132`
 
 ### `tacticalReadFromLines` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10359`
+- `src/components/Coach/CoachTeachPage.tsx:10358`
 - `src/services/claimTruth.manual.test.ts:170`
 - `src/services/danyaBehaviors.ts:536`
 - `src/services/danyaDeviceCoverage.test.ts:76`
@@ -93,13 +93,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:413`
 
 ### `temptingTurnClause` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10374`
+- `src/components/Coach/CoachTeachPage.tsx:10373`
 - `src/services/danyaDeviceCoverage.test.ts:82`
 - `src/services/tacticalRead.test.ts:265`
 - `src/services/tacticalRead.test.ts:278`
 
 ### `uncertaintyClause` (function) — 15 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10386`
+- `src/components/Coach/CoachTeachPage.tsx:10385`
 - `src/services/claimTruth.manual.test.ts:172`
 - `src/services/danyaDeviceCoverage.test.ts:87`
 - `src/services/liveVoiceDefects.test.ts:249`
@@ -116,7 +116,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:425`
 
 ### `candidateCompareRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10396`
+- `src/components/Coach/CoachTeachPage.tsx:10395`
 - `src/services/compareClaimsNoEdge.test.ts:12`
 - `src/services/danyaDeviceCoverage.test.ts:11`
 - `src/services/tacticalRead.test.ts:12`

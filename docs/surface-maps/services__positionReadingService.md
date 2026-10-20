@@ -177,7 +177,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/bookMoveWhy.ts:288`
 - `src/services/bookMoveWhy.ts:355`
 - `src/services/bookMoveWhy.ts:374`
-- `src/services/coachFeatureService.ts:3116`
+- `src/services/coachFeatureService.ts:3120`
 - `src/services/groundedAnswer.ts:7375`
 - `src/services/moveIntent.ts:310`
 - `src/services/moveIntent.ts:327`
@@ -252,13 +252,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/structureReads.ts:132`
 
 ### `signedCaptureRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12043`
-- `src/components/Coach/CoachTeachPage.tsx:12104`
+- `src/components/Coach/CoachTeachPage.tsx:12042`
+- `src/components/Coach/CoachTeachPage.tsx:12103`
 - `src/services/principleAttribution.ts:341`
 - `src/services/principleAttribution.ts:804`
 
 ### `legalSeeGainFor` (function) — 86 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10873`
+- `src/components/Coach/CoachTeachPage.tsx:10872`
 - `src/services/arrowDoor.ts:175`
 - `src/services/bluffDetector.ts:53`
 - `src/services/boardState.ts:42`
@@ -371,8 +371,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/thinkingExchangeChain.ts:59`
 
 ### `signedLegalSeeFor` (function) — 28 call sites
-- `src/components/Coach/CoachTeachPage.tsx:870`
-- `src/components/Coach/CoachTeachPage.tsx:8734`
+- `src/components/Coach/CoachTeachPage.tsx:869`
+- `src/components/Coach/CoachTeachPage.tsx:8733`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -401,7 +401,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tradeQuality.ts:173`
 
 ### `takingTheAttackerAnswers` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8766`
+- `src/components/Coach/CoachTeachPage.tsx:8765`
 - `src/services/boardUrgency.ts:59`
 - `src/services/groundedAnswer.ts:643`
 - `src/services/methodSignals.ts:46`
@@ -442,8 +442,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `findHangingBySee` (function) — 26 call sites
 - `src/coach/chatTurnAnswers.ts:172`
-- `src/components/Coach/CoachTeachPage.tsx:8581`
-- `src/components/Coach/CoachTeachPage.tsx:8587`
+- `src/components/Coach/CoachTeachPage.tsx:8580`
+- `src/components/Coach/CoachTeachPage.tsx:8586`
 - `src/services/computedMaterialTruth.corpus.test.ts:216`
 - `src/services/computedMaterialTruth.corpus.test.ts:226`
 - `src/services/conversionMethod.ts:64`

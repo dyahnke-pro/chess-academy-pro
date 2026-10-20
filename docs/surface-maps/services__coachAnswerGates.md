@@ -61,13 +61,13 @@
 - `src/services/openingGenerator.ts:802`
 
 ### `gradeNarrationText` (function) — 43 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10401`
-- `src/components/Coach/CoachTeachPage.tsx:10403`
-- `src/components/Coach/CoachTeachPage.tsx:10409`
-- `src/components/Coach/CoachTeachPage.tsx:10431`
-- `src/components/Coach/CoachTeachPage.tsx:10454`
-- `src/components/Coach/CoachTeachPage.tsx:10489`
-- `src/components/Coach/CoachTeachPage.tsx:10952`
+- `src/components/Coach/CoachTeachPage.tsx:10400`
+- `src/components/Coach/CoachTeachPage.tsx:10402`
+- `src/components/Coach/CoachTeachPage.tsx:10408`
+- `src/components/Coach/CoachTeachPage.tsx:10430`
+- `src/components/Coach/CoachTeachPage.tsx:10453`
+- `src/components/Coach/CoachTeachPage.tsx:10488`
+- `src/components/Coach/CoachTeachPage.tsx:10951`
 - `src/services/authoredOpeningNotes.test.ts:257`
 - `src/services/coachAnswerGates.test.ts:107`
 - `src/services/coachAnswerGates.test.ts:117`
@@ -107,7 +107,7 @@
 
 ### `applyCandidateArrows` (function) — 5 call sites
 - `src/coach/coachService.ts:2310`
-- `src/components/Coach/CoachTeachPage.tsx:7720`
+- `src/components/Coach/CoachTeachPage.tsx:7719`
 - `src/components/Openings/MiddlegamePractice.tsx:282`
 - `src/hooks/useLiveCoach.ts:357`
 - `src/services/coachAnswerGates.test.ts:157`
@@ -119,7 +119,7 @@
 - `src/services/coachAnswerGates.test.ts:171`
 
 ### `candidateHighlightMarkers` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:7725`
+- `src/components/Coach/CoachTeachPage.tsx:7724`
 
 ## Tests
 

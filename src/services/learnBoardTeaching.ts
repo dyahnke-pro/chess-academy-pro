@@ -32,7 +32,7 @@ export type { ThreatProducer } from './learnRecordTerms';
 // The Learn page reads these through this module (one facade, not one more
 // direct import per computer — surfaceComposition's ceiling).
 export { mistakeTurnLine } from './mistakeTurnLine';
-export { NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, studentMovesInLine, type NamesStudentMove } from './studentMoveNaming';
+export { NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from './studentMoveNaming';
 import { stepForMethodClaim, THINKING_STEPS } from './thinkingSteps';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import type { AnalysisLine } from '../types';

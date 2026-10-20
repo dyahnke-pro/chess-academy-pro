@@ -232,7 +232,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:583`
-- `src/components/Coach/CoachTeachPage.tsx:3906`
+- `src/components/Coach/CoachTeachPage.tsx:3905`
 - `src/services/coachSessionRouter.ts:119`
 - `src/services/coachSettingsAction.ts:261`
 
@@ -282,8 +282,8 @@
 - `src/services/coachApi.computedOnly.test.ts:20`
 - `src/services/coachChatText.ts:221`
 - `src/services/coachFeatureService.ts:365`
-- `src/services/coachFeatureService.ts:5499`
-- `src/services/coachFeatureService.ts:5649`
+- `src/services/coachFeatureService.ts:5503`
+- `src/services/coachFeatureService.ts:5653`
 - `src/services/coachLaneWiring.test.ts:154`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`

@@ -27,7 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewForcedSequence.test.ts:26`
 
 ### `explainMatingSacMechanism` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3158`
+- `src/services/coachFeatureService.ts:3162`
 - `src/services/reviewForcedSequence.test.ts:30`
 - `src/services/reviewForcedSequence.test.ts:33`
 - `src/services/reviewForcedSequence.test.ts:43`

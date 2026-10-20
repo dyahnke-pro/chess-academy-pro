@@ -18,7 +18,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `openingRecordClause` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:3842`
+- `src/services/coachFeatureService.ts:3846`
 - `src/services/openingRecordBeat.test.ts:20`
 - `src/services/openingRecordBeat.test.ts:22`
 - `src/services/openingRecordBeat.test.ts:24`
@@ -26,7 +26,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingRecordBeat.test.ts:29`
 
 ### `departureRecordSentence` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3843`
+- `src/services/coachFeatureService.ts:3847`
 - `src/services/openingRecordBeat.test.ts:37`
 - `src/services/openingRecordBeat.test.ts:42`
 - `src/services/openingRecordBeat.test.ts:46`

@@ -33,7 +33,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:101`
 
 ### `assessPositionalEdge` (function) — 28 call sites
-- `src/services/coachFeatureService.ts:3461`
+- `src/services/coachFeatureService.ts:3465`
 - `src/services/exchangeLedger.test.ts:68`
 - `src/services/exchangeLedger.test.ts:69`
 - `src/services/exchangeLedger.test.ts:76`

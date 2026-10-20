@@ -79,7 +79,7 @@
 - `src/services/coachFeatureService.reviewNoise.test.ts:28`
 - `src/services/coachFeatureService.trade.test.ts:19`
 - `src/services/coachFeatureService.ts:1367`
-- `src/services/coachFeatureService.ts:5468`
+- `src/services/coachFeatureService.ts:5472`
 - `src/services/fundamentalReachesDecider.test.ts:62`
 - `src/services/needCoverage.report.test.ts:93`
 - `src/services/needScore.test.ts:36`

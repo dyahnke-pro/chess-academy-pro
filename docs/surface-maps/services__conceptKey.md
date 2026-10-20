@@ -39,8 +39,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `conceptInstanceKey` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8819`
-- `src/components/Coach/CoachTeachPage.tsx:8953`
+- `src/components/Coach/CoachTeachPage.tsx:8818`
+- `src/components/Coach/CoachTeachPage.tsx:8952`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:30`
@@ -83,7 +83,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `plyOfFen` (function) — 28 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8474`
+- `src/components/Coach/CoachTeachPage.tsx:8473`
 - `src/services/autoAnalyzeGame.ts:170`
 - `src/services/capabilityDateRepair.test.ts:17`
 - `src/services/capabilityDateRepair.test.ts:18`
@@ -113,7 +113,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/utils/plyOfFen.ts:3`
 
 ### `nextLooseSpells` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8585`
+- `src/components/Coach/CoachTeachPage.tsx:8584`
 - `src/services/looseStill.test.ts:30`
 - `src/services/looseStill.test.ts:31`
 - `src/services/looseStill.test.ts:50`
@@ -121,8 +121,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/looseStill.test.ts:66`
 
 ### `looseClaim` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8895`
-- `src/components/Coach/CoachTeachPage.tsx:8954`
+- `src/components/Coach/CoachTeachPage.tsx:8894`
+- `src/components/Coach/CoachTeachPage.tsx:8953`
 - `src/services/looseStill.test.ts:23`
 - `src/services/looseStill.test.ts:34`
 - `src/services/looseStill.test.ts:43`

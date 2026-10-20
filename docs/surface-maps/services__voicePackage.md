@@ -47,7 +47,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11560`
+- `src/components/Coach/CoachTeachPage.tsx:11559`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -60,9 +60,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `buildVoicePackage` (function) — 85 call sites
 - `src/components/Coach/CoachGameReview.tsx:1940`
-- `src/components/Coach/CoachTeachPage.tsx:8431`
+- `src/components/Coach/CoachTeachPage.tsx:8430`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:2860`
+- `src/services/coachFeatureService.ts:2864`
 - `src/services/coachSurfaceScorecard.report.test.ts:116`
 - `src/services/coachSurfaceScorecard.report.test.ts:138`
 - `src/services/coachSurfaceScorecard.report.test.ts:149`
@@ -146,13 +146,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:582`
 
 ### `spokenSentenceKeys` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8279`
-- `src/components/Coach/CoachTeachPage.tsx:10056`
-- `src/components/Coach/CoachTeachPage.tsx:10076`
-- `src/components/Coach/CoachTeachPage.tsx:11358`
-- `src/components/Coach/CoachTeachPage.tsx:11534`
+- `src/components/Coach/CoachTeachPage.tsx:8278`
+- `src/components/Coach/CoachTeachPage.tsx:10055`
+- `src/components/Coach/CoachTeachPage.tsx:10075`
+- `src/components/Coach/CoachTeachPage.tsx:11357`
+- `src/components/Coach/CoachTeachPage.tsx:11533`
 - `src/services/claimKeysLooseCount.test.ts:33`
-- `src/services/coachFeatureService.ts:2867`
+- `src/services/coachFeatureService.ts:2871`
 - `src/services/holeOneKey.test.ts:26`
 - `src/services/learnTurnDoor.phaseWave.test.ts:133`
 - `src/services/learnTurnDoor.test.ts:619`
@@ -168,8 +168,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:514`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11345`
-- `src/components/Coach/CoachTeachPage.tsx:11613`
+- `src/components/Coach/CoachTeachPage.tsx:11344`
+- `src/components/Coach/CoachTeachPage.tsx:11612`
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 3 call sites
@@ -178,9 +178,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:603`
 
 ### `keptLines` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8283`
-- `src/components/Coach/CoachTeachPage.tsx:11374`
-- `src/components/Coach/CoachTeachPage.tsx:11600`
+- `src/components/Coach/CoachTeachPage.tsx:8282`
+- `src/components/Coach/CoachTeachPage.tsx:11373`
+- `src/components/Coach/CoachTeachPage.tsx:11599`
 - `src/services/learnTurnDoor.test.ts:211`
 - `src/services/learnTurnDoor.test.ts:217`
 - `src/services/learnTurnDoor.test.ts:223`

@@ -71,7 +71,7 @@
 ### `getOpeningById` (function) — 19 call sites
 - `src/components/Academy/CourseSyllabusPage.tsx:38`
 - `src/components/Academy/CourseTrainerPage.tsx:47`
-- `src/components/Coach/CoachTeachPage.tsx:12802`
+- `src/components/Coach/CoachTeachPage.tsx:12801`
 - `src/components/Openings/OpeningDetailPage.tsx:366`
 - `src/components/Openings/OpeningDetailPage.tsx:373`
 - `src/components/Openings/OpeningDetailPage.tsx:381`
@@ -99,8 +99,8 @@
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:74`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:50`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:55`
-- `src/components/Coach/CoachTeachPage.tsx:3678`
-- `src/components/Coach/CoachTeachPage.tsx:6380`
+- `src/components/Coach/CoachTeachPage.tsx:3677`
+- `src/components/Coach/CoachTeachPage.tsx:6379`
 - `src/components/Openings/OpeningExplorerPage.tsx:96`
 - `src/services/coachApi.ts:4618`
 - `src/services/coachApi.ts:6395`
@@ -219,7 +219,7 @@
 
 ### `toggleFavorite` (function) — 5 call sites
 - `src/coach/tools/cerebrum/favoriteOpening.ts:100`
-- `src/components/Coach/CoachTeachPage.tsx:3682`
+- `src/components/Coach/CoachTeachPage.tsx:3681`
 - `src/components/Openings/OpeningDetailPage.tsx:708`
 - `src/components/Openings/OpeningExplorerPage.tsx:142`
 - `src/components/Openings/ProPlayerPage.tsx:28`
@@ -228,7 +228,7 @@
 - `src/coach/tools/cerebrum/saveOpeningToRepertoire.ts:64`
 
 ### `getFavoriteOpenings` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1183`
+- `src/components/Coach/CoachTeachPage.tsx:1182`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:261`
 
 ### `getUnlearnedFavoriteOpenings` (function) — 2 call sites

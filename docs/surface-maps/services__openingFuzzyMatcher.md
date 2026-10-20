@@ -24,8 +24,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `fuzzyMatchOpening` (function) — 32 call sites
 - `src/coach/ask/playName.ts:56`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:65`
-- `src/components/Coach/CoachTeachPage.tsx:4500`
-- `src/components/Coach/CoachTeachPage.tsx:5691`
+- `src/components/Coach/CoachTeachPage.tsx:4499`
+- `src/components/Coach/CoachTeachPage.tsx:5690`
 - `src/services/coachApi.ts:2067`
 - `src/services/openingFuzzyMatcher.test.ts:6`
 - `src/services/openingFuzzyMatcher.test.ts:22`

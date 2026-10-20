@@ -23,8 +23,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `spokenOpeningLabel` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9055`
-- `src/components/Coach/CoachTeachPage.tsx:9066`
+- `src/components/Coach/CoachTeachPage.tsx:9054`
+- `src/components/Coach/CoachTeachPage.tsx:9065`
 - `src/services/openingAnnouncement.test.ts:143`
 - `src/services/openingAnnouncement.test.ts:146`
 
@@ -64,31 +64,31 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.test.ts:225`
 
 ### `openingAnnouncementForGame` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9067`
+- `src/components/Coach/CoachTeachPage.tsx:9066`
 - `src/services/coachFeatureService.ts:2159`
 - `src/services/openingAnnouncement.test.ts:160`
 - `src/services/openingAnnouncement.test.ts:161`
 
 ### `warmOpeningBook` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:1019`
+- `src/components/Coach/CoachTeachPage.tsx:1018`
 
 ### `studentJustLeftBook` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11960`
-- `src/components/Coach/CoachTeachPage.tsx:12013`
+- `src/components/Coach/CoachTeachPage.tsx:11959`
+- `src/components/Coach/CoachTeachPage.tsx:12012`
 - `src/services/openingAnnouncement.test.ts:166`
 - `src/services/openingAnnouncement.test.ts:175`
 - `src/services/openingAnnouncement.test.ts:176`
 - `src/services/openingAnnouncement.test.ts:177`
 
 ### `openingNameForBoard` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9047`
+- `src/components/Coach/CoachTeachPage.tsx:9046`
 - `src/services/coachFeatureService.ts:2154`
 - `src/services/openingPositions.test.ts:30`
 - `src/services/openingStory.ts:127`
 
 ### `theirOpeningVerdict` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12497`
-- `src/services/coachFeatureService.ts:2332`
+- `src/components/Coach/CoachTeachPage.tsx:12496`
+- `src/services/coachFeatureService.ts:2336`
 - `src/services/openingAnnouncement.test.ts:198`
 - `src/services/openingAnnouncement.test.ts:199`
 - `src/services/openingAnnouncement.test.ts:203`
@@ -96,7 +96,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.test.ts:205`
 
 ### `learnNameMaySpeak` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9058`
+- `src/components/Coach/CoachTeachPage.tsx:9057`
 - `src/services/openingAnnouncement.test.ts:250`
 - `src/services/openingAnnouncement.test.ts:251`
 - `src/services/openingAnnouncement.test.ts:254`
@@ -108,7 +108,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.test.ts:278`
 
 ### `openingIdeaCanCome` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9063`
+- `src/components/Coach/CoachTeachPage.tsx:9062`
 - `src/services/openingAnnouncement.test.ts:269`
 - `src/services/openingAnnouncement.test.ts:277`
 - `src/services/openingAnnouncement.test.ts:280`
