@@ -58,7 +58,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `prefetchOpeningStory` (function) — 2 call sites
-- `src/services/learnBoardTeaching.ts:88`
+- `src/services/learnBoardTeaching.ts:89`
 - `src/services/openingStory.test.ts:134`
 
 ## Tests

@@ -130,7 +130,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Tactics/TacticSetupBoard.tsx:515`
 - `src/components/Tactics/TacticSetupPage.tsx:223`
 - `src/hooks/useCoachTips.ts:317`
-- `src/services/learnBoardTeaching.ts:916`
+- `src/services/learnBoardTeaching.ts:917`
 - `src/services/mistakePuzzleService.ts:685`
 - `src/services/mistakePuzzleService.ts:986`
 - `src/services/mistakePuzzleService.ts:1271`

@@ -17,7 +17,8 @@ import { shareAdverb } from '../utils/shareWords';
 import { lineShape, lineSeatAt } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import { Chess, type Square } from 'chess.js';
-import { legalSeeGainFor } from './positionReadingService';
+import { legalSeeGainFor, structureTransfer } from './positionReadingService';
+import { namedPawnStructure } from './nextPlans';
 import { moverFault } from './accuracyService';
 import { lineWins, lineArrows, mateLine, type MateLine } from './lineCalc';
 /** A line as board arrows, ply by ply (one door for the page). */
@@ -1423,4 +1424,18 @@ export function tacticStakesFor(fen: string, tacticKey: string, squares: readonl
   if (tacticType !== 'fork') return undefined;
   const points = forkPoints(piecesOn(fen, squares));
   return points > 0 ? { points, plies: 1 } : undefined;
+}
+
+/** THE STRUCTURE, NAMED the moment it crystallises: its name, its plan and,
+ *  when it came from another opening's home, where it is usually met. One
+ *  composition for the Learn lane; the owner is `nextPlans.namedPawnStructure`. */
+export function structureNamingLine(
+  fen: string,
+  student: 'w' | 'b',
+  openingName: string | null,
+): { text: string; claim: string } | null {
+  const struct = namedPawnStructure(fen, student);
+  if (!struct) return null;
+  const transfer = structureTransfer(struct.name, openingName);
+  return { text: `${struct.name} — ${struct.plan}.${transfer ? ` ${transfer}` : ''}`, claim: `structure:${struct.name}` };
 }

@@ -43,7 +43,7 @@ import { buildPositionalRead, rookReachesFile } from '../../services/positionalR
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
-import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, structureNamingLine, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -304,8 +304,7 @@ import { admitArrow, admitArrows, keptLineArrows, lineClaims, narrationArrowsThr
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidateCompareRead } from '../../services/tacticalRead';
-import { namedPawnStructure } from '../../services/nextPlans';
-import { findHangingBySee, legalSeeGainFor, structureTransfer, signedLegalSeeFor, signedCaptureRead, takingTheAttackerAnswers } from '../../services/positionReadingService';
+import { findHangingBySee, legalSeeGainFor, signedLegalSeeFor, signedCaptureRead, takingTheAttackerAnswers } from '../../services/positionReadingService';
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
@@ -10381,16 +10380,15 @@ export function CoachTeachPage(): JSX.Element {
                     // behaviour scheduler that shadowed it: the family is stable, so
                     // it is announced once as it appears and then referred back to.
                     try {
-                      const struct = namedPawnStructure(probe.fen(), playerColor === 'white' ? 'w' : 'b');
                       // Said once by its CLAIM (`structure:<name>`), written to the
                       // ledger only when the door keeps it — a structure held on a
                       // busy turn is offered again, never marked said unheard.
+                      let openingNow: string | null = null;
+                      try { openingNow = detectOpening([...move.history, m.san])?.name ?? null; } catch { openingNow = null; }
+                      const struct = structureNamingLine(probe.fen(), playerColor === 'white' ? 'w' : 'b', openingNow);
                       if (struct) {
-                        let openingNow: string | null = null;
-                        try { openingNow = detectOpening([...move.history, m.san])?.name ?? null; } catch { openingNow = null; }
-                        const transfer = structureTransfer(struct.name, openingNow);
-                        const line = gradeNarrationText(`${struct.name} — ${struct.plan}.${transfer ? ` ${transfer}` : ''}`, probe.fen(), 'CoachTeachPage.structure')?.trim();
-                        if (line) queueSpokenHint(probe.fen(), line, 'structure', NO_PROOF.name, NAMES_NO_MOVE, undefined, [`structure:${struct.name}`]);
+                        const line = gradeNarrationText(struct.text, probe.fen(), 'CoachTeachPage.structure')?.trim();
+                        if (line) queueSpokenHint(probe.fen(), line, 'structure', NO_PROOF.name, NAMES_NO_MOVE, undefined, [struct.claim]);
                       }
                     } catch { /* the structure note is a bonus, never a blocker */ }
                     // THE STRUCTURAL PLAN, across the game (David 2026-10-07:

@@ -40,7 +40,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `warmOpeningIdentity` (function) — 3 call sites
 - `src/components/Coach/CoachGameReview.tsx:332`
-- `src/components/Coach/CoachTeachPage.tsx:1016`
+- `src/components/Coach/CoachTeachPage.tsx:1015`
 - `src/services/reviewOpeningTheory.ts:251`
 
 ### `setOpeningIdentity` (function) — 11 call sites
@@ -63,7 +63,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `planFor` (function) — 10 call sites
 - `src/services/coachFeatureService.ts:2035`
-- `src/services/learnBoardTeaching.ts:805`
+- `src/services/learnBoardTeaching.ts:806`
 - `src/services/lookaheadPlan.ts:523`
 - `src/services/lookaheadPlan.ts:1164`
 - `src/services/lookaheadPlan.ts:1165`
