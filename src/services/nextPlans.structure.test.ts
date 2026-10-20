@@ -43,8 +43,11 @@ describe('structurePlan — structure→plan (conservative, board-true)', () => 
     const plan = structurePlan(fen, 'w');
     expect(plan).toMatch(/isolated queen’s pawn/i);
     expect(plan).toMatch(/play actively while pieces are on/i);
-    // A d-pawn still facing their d-pawn is not the isolani this plan is about.
-    expect(structurePlan('rnbqkbnr/pppppppp/8/8/3P4/8/PP3PPP/RNBQKBNR w KQkq - 0 1', 'w')).toBeNull();
+    // A d-pawn still facing their d-pawn is not the named isolani, but it is
+    // still an isolated central pawn with its own plan.
+    const broad = structurePlan('rnbqkbnr/pppppppp/8/8/3P4/8/PP3PPP/RNBQKBNR w KQkq - 0 1', 'w');
+    expect(broad).toMatch(/isolated pawn on d4/i);
+    expect(broad).toMatch(/keep pieces on/i);
   });
 
   it('returns null when there is no canonical single plan', () => {

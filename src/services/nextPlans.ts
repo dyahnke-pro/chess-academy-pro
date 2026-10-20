@@ -678,6 +678,18 @@ export function structurePlanFact(fen: string, studentColor: Color): StructurePl
   // reading, any rank, and its own plan text beside namedPawnStructure's).
   const iso = isolaniStructure(fen, studentColor);
   if (iso) return { id: iso.mine ? 'iqp-mine' : 'iqp-theirs', ideaKey: `structure:${iso.name}`, squares: [iso.square], text: `${openSentence(iso.name)} — ${iso.plan}.` };
+  // Any OTHER isolated d- or e-pawn (an enemy d-pawn still on the file, a pawn
+  // on the 3rd/6th rank, an e-pawn): not the named isolani with its outposts,
+  // but still a pawn no pawn can guard — keep pieces on, or trade toward it.
+  const centralFile = (sq: string): boolean => sq[0] === 'd' || sq[0] === 'e';
+  const myIso = s.pawns.isolatedPawns[studentColor].filter(centralFile)[0];
+  if (myIso) {
+    return { id: 'iqp-mine', squares: [myIso], text: `You're playing with the isolated pawn on ${myIso} — keep pieces on and use the open lines for activity; don't drift into the endgame where it's a target.` };
+  }
+  const theirIso = s.pawns.isolatedPawns[opp].filter(centralFile)[0];
+  if (theirIso) {
+    return { id: 'iqp-theirs', squares: [theirIso], text: `They have the isolated pawn on ${theirIso} — trade pieces and pile onto it; the endgame is where it falls.` };
+  }
 
   return null;
 }
