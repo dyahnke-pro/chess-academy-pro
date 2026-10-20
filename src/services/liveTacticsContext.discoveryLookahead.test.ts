@@ -4,7 +4,9 @@
  * Both boards are his.
  */
 import { describe, it, expect } from 'vitest';
-import { buildTacticsLiveContext, speakDeepestLookahead } from './liveTacticsContext';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { join } from 'node:path';
+import { buildTacticsLiveContext, speakDeepestLookahead, upcomingTacticSquares } from './liveTacticsContext';
 import type { StockfishAnalysis } from '../types';
 import type { WeaknessSignal } from './weaknessSignal';
 
@@ -55,5 +57,29 @@ describe('Case B — chesscom-1034830120 move 18: a discovery that wins the exch
     expect(say).toMatch(/their queen taking on b2, uncovering their bishop on c5 onto your rook on f2/);
     expect(say).toMatch(/on their next move/);
     expect(say).not.toMatch(/knight to e4|if you play|moves away/);
+  });
+});
+
+describe('the squares marked for an upcoming tactic come from the detector, never the prose', () => {
+  it('a discovery marks where the mover lands, the uncovered piece and its target', () => {
+    const FEN = 'r1b1rknQ/1pp3p1/p1n1pp2/2b3N1/3q1P2/2N5/PPPB1RPP/R5K1 w - - 2 18';
+    const ctx = buildTacticsLiveContext(FEN, analysis('c3e4 d4b2 a1f1 c5d4 d2c1 d4f2 g1f2 b2a2', -237), 'w', 1414);
+    const d = ctx.threats.find((t) => t.type === 'discovery')!;
+    // The description's first square is d4, which the queen LEAVES.
+    expect(upcomingTacticSquares(d)).toEqual(['b2', 'c5', 'f2']);
+  });
+
+  it('no surface scrapes squares out of a tactic description', () => {
+    const files: string[] = [];
+    const walk = (dir: string): void => {
+      for (const f of readdirSync(dir)) {
+        const p = join(dir, f);
+        if (statSync(p).isDirectory()) walk(p);
+        else if (/\.tsx?$/.test(f) && !/\.test\./.test(f)) files.push(p);
+      }
+    };
+    walk('src/components'); walk('src/hooks');
+    const offenders = files.filter((f) => /\.description\.match\(\/\\b\[a-h\]\[1-8\]/.test(readFileSync(f, 'utf8')));
+    expect(offenders).toEqual([]);
   });
 });

@@ -436,6 +436,16 @@ function upcomingToEntry(
   };
 }
 
+/** THE SQUARES TO MARK for an upcoming tactic, from the detector — where the
+ *  pieces stand when it lands (the mover's arrival square, the piece it
+ *  uncovers, what that piece hits), or the detector's own squares when it
+ *  records no roles. Never read back out of `description`: a discovery's
+ *  first named square is the one the mover LEAVES (2026-10-20). */
+export function upcomingTacticSquares(entry: Pick<TacticsLiveContext['threats'][number], 'roles' | 'squares'>): string[] {
+  if (entry.roles) return [entry.roles.mover.to, entry.roles.unmasked.square, ...entry.roles.targets.map((t) => t.square)];
+  return entry.squares.filter((sq) => /^[a-h][1-8]$/.test(sq));
+}
+
 /** Does the engine line WIN for `side` — mate delivered by `side`, or material
  *  settled in its favour by the one ledger (`proofCut`)? The same reading the
  *  plan line uses (`lookaheadPlan`'s collect check). */

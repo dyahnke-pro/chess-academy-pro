@@ -291,7 +291,7 @@ import { computePositionFacts, mustKey, conceptInstanceKey, convertKey } from '.
 import { gradePlayedMove, liveMoveCost, uciOfSan } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
-import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine, isLoudAlarm, dangerRank, PIECE_DANGER_RANK } from '../../services/liveTacticsContext';
+import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine, isLoudAlarm, dangerRank, PIECE_DANGER_RANK, upcomingTacticSquares } from '../../services/liveTacticsContext';
 import { buildCausalChain, causalChainHighlights } from '../../services/causalChain';
 import { renderCausalChain } from '../../services/causalChainVoice';
 import { seatPieceReferences } from '../../services/groundedAnswer';
@@ -8801,7 +8801,7 @@ export function CoachTeachPage(): JSX.Element {
         if (up?.spoken) {
           threatKey = `soon:${up.type}:${theirs ?? ''}`;
           threatProducer = { kind: 'soon', threat: { type: up.type, description: up.description } };
-          threatSquares = (up.description.match(/\b[a-h][1-8]\b/g) ?? []).slice(0, 4);
+          threatSquares = upcomingTacticSquares(up);
           threatLine = `Watch out — ${up.spoken}.`;
           // The moves that build it are its proof (played from this board).
           threatFactProof = legalLineProof(args.fenAfterReply, up.line, lineSeatAt(args.fenAfterReply, studentCC));
