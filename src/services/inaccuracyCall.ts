@@ -218,6 +218,12 @@ export function betterMoveReason(
   // The LINE half: what the better move's whole line wins, checks first.
   const f = betterMoveFact(fenBefore, playedSan, bestSan, bestLineUci, moverColor, priorMove);
   if (f) return phraseBetterMove(f);
+  return boardHalfReason(fenBefore, bestSan, moverColor, priorMove);
+}
+
+/** The BOARD half of the better move's reason: what the move does on the board
+ *  it is played on, worded as a conditional. */
+function boardHalfReason(fenBefore: string, bestSan: string, moverColor: 'white' | 'black', priorMove: PriorMove): string | null {
   // The BOARD half is the one why-best computer every surface reads
   // (2026-10-10 unification) — never a private reader.
   const board = bestMoveReason(fenBefore, bestSan, moverColor === 'white' ? 'w' : 'b', { mateIn: null, opponentLastSan: priorMove?.san ?? null });
@@ -1049,7 +1055,19 @@ export function errorWhy(args: {
       ? 'it would stop the mate'
       : args.bestMate !== null
         ? mateReason(args.fenBefore, bestSan, args.bestMate === 'forced' ? null : args.bestMate)
-        : args.bestLineUci?.length ? betterMoveReason(args.fenBefore, args.playedSan, bestSan, args.bestLineUci, args.moverColor, args.priorMove, false) : null;
+        // A MATE ALLOWED IS ANSWERED BY THE MATE STOPPED, OR NOT AT ALL (hard
+        // walk 2026-10-11, 21.e6: "Nge2 was the move — it would complete your
+        // development"). A reason that is not about the mate tells the student
+        // the problem was something else; unproven, the better move is held.
+        : args.allowedMate !== null
+          ? null
+          : (() => {
+            // The line half first: what the better move's own line wins.
+            const fact = args.bestLineUci?.length ? betterMoveFact(args.fenBefore, args.playedSan, bestSan, args.bestLineUci, args.moverColor, args.priorMove) : null;
+            if (fact) return phraseBetterMove(fact);
+            return betterGuardsTheLine(args.fenBefore, args.playedSan, bestSan, replyLineUci, args.moverColor)
+              ?? (args.bestLineUci?.length ? boardHalfReason(args.fenBefore, bestSan, args.moverColor, args.priorMove) : null);
+          })();
   // NAMED WITH ITS REASON, OR NOT NAMED (Learn walk, fresh Nimzo game,
   // 2026-09-26: "exd5 was a mistake. e5 was the move." — nothing said why).
   const should = reason && bestSan ? `${bestSan} was the move — ${reason}.` : '';
@@ -1450,6 +1468,40 @@ function moverLostOverLine(
 
 /** The better move's own engine line avoids the mate the played move walked
  *  into (see the long note in `callInaccuracyDetailed`). */
+/** WHAT THE BETTER MOVE DID ABOUT IT (David 2026-10-20, "what Bc3 allowed
+ *  … what the better move did"): the better move guards a square the line
+ *  after the played move uses for a check or a capture — "Nge2 was the move —
+ *  it would guard c1, where their rook gives check in that line" (hard walk
+ *  2026-10-11, 20.Qg3+). Board-true: the moved piece covers the square after
+ *  the better move and did not from where it stood. A capture's reason is its
+ *  capture, so a capturing better move is left to the other readers. */
+function betterGuardsTheLine(
+  fenBefore: string, playedSan: string, bestSan: string, replyLineUci: readonly string[], moverColor: 'white' | 'black',
+): string | null {
+  if (!replyLineUci.length) return null;
+  const mc: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
+  try {
+    const before = new Chess(fenBefore);
+    const best = new Chess(fenBefore);
+    const bm = best.move(bestSan);
+    if (!bm || bm.captured) return null;
+    const line = new Chess(fenBefore);
+    if (!line.move(playedSan)) return null;
+    // Six moves each: the 20.Qg3+ hunt reaches its rook check on the ninth ply.
+    for (const uci of replyLineUci.slice(0, 12)) {
+      const mv = line.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4, 5) || undefined });
+      if (!mv) return null;
+      if (mv.color === mc || mv.to === bm.to) continue;
+      const checks = mv.san.includes('+') || mv.san.includes('#');
+      if (!checks && !mv.captured) continue;
+      if (!best.attackers(mv.to as Square, mc).includes(bm.to)) continue;
+      if (before.attackers(mv.to as Square, mc).includes(bm.from)) continue;
+      return `it would guard ${mv.to}, where their ${PIECE_NAME[mv.piece]} ${checks ? 'gives check' : 'takes'} in that line`;
+    }
+  } catch { /* an illegal line proves nothing */ }
+  return null;
+}
+
 function betterStopsMate(
   fenBefore: string, bestLineUci: readonly string[] | null, allowedMate: number | null, moverColor: 'white' | 'black',
 ): boolean {

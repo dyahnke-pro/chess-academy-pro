@@ -96,7 +96,7 @@ describe('the book question is posed from the openings DB (heat map, 2026-10-20)
     const annotations = sans.map((san, i) => {
       c.move(san);
       fens.push(c.fen());
-      return { moveNumber: Math.floor(i / 2) + 1, color: (i % 2 === 0 ? 'white' : 'black'), san, evaluation: 20, bestMove: null, bestMoveEval: null, classification: 'book' as const, comment: null };
+      return { moveNumber: Math.floor(i / 2) + 1, color: (i % 2 === 0 ? 'white' as const : 'black' as const), san, evaluation: 20, bestMove: null, bestMoveEval: null, classification: 'book' as const, comment: null };
     });
     const plies = capabilityPliesFromAnnotations(annotations, 'white', fens);
     const asked = (ply: number): boolean => !!plies.find((p) => p.fenBefore === fens[ply])?.alsoPosed?.some((q) => q.tag === 'left-book-early');
