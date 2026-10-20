@@ -12,24 +12,31 @@
 
 The four game PGNs are in `audit-reports/os11-games/`. The four sets already given in `os11-item6-duplicate-producers-map.md` (race, king plan, pin claim key, Bxf7+ verdict) are not repeated here, only ranked.
 
+> **Status against `origin/dead-exports` d71562b6d (checked 2026-10-20, read-only).** The knip sweep removed `export` keywords and three symbols with NO reference at all, tests included (`capabilityEvidence.clearCapabilityProfileMemo`, `endgameProgressService.getDueEndgameCount`, `gamesService.getGuessPositions` — none on these maps). Knip counts a test import as a use, so it could not see test-only producers, and it does not judge duplicate behaviour. Every file this map names changed only in `export` keywords, except planRace.ts (`pawnSquareRace` deleted at ~:567, below every line cited here). **Line numbers below hold on dead-exports.**
+
+**Marks:** OPEN = untouched by the sweep, still to code. PARTIAL = part done. DONE = the sweep removed it.
+- Top 10: #1–#9 **OPEN**; #10 **OPEN** (the 4 modules and all ~50 listed functions are still there and still exported).
+- Smaller sets: all **OPEN**.
+- Of the 213 own-file-only exports in the scratchpad census: 3 DELETED by the sweep, 0 unexported, 210 still exported.
+
 ## Top 10
 
-| # | claim said by several producers | heard on the tapes | producers (file:line) | one owner → delete |
-|---|---|---|---|---|
-| 1 | Opposite-castling race | g2: 3 producers, 3 wordings | see item-6 map (a) | planRace on boardStructure.kings → delete `splitPosition()` and openingStory.ts:437 |
-| 2 | Where the king goes vs "storm their king" | g3 7.c4 vs 9.d3, g4 4…Nge7 | item-6 map (b); plus castling-claim stems in moveIntent.ts:413, positionalRead.ts:200, kingSafety.ts:212 | `castleRoute` (kingSafety.ts:225) answers it; `kingCommitted` reads it |
-| 3 | A piece is loose / a tactic is on — said by up to five producers, with no shared claim key | g1 13.Rad1→14.Rd5: the bishop on f4 three times in two turns | see section 3 | one claim key per (fact, squares), attached by every producer; delete `hangingPieceLine`'s separate copy of the loose fact |
-| 4 | Outpost — four sentence producers and a copy-paste definition | g1 29.Nf6 → 31.g5 (and 24.Kxg2's plan): three outpost sentences in five plies | moveFundamentals.ts:447-454; pvPlayback.ts:683-686; reviewMoveTeaching.ts:461; reviewMoveBriefing.ts:280; definitions `forwardTeaching.isKnightOutpost` ≡ `outpost.isOutpost(…, true)` | `outpost.isOutpost` + one phrase function → delete `isKnightOutpost` |
-| 5 | Hole / weak square — four computers | g3 10.Nf3 (+2.8s) and 11.O-O (+17.0s): the d5 hole twice; g4 10…Bf5 "the hole on d3" | openingStory.ts:247-262 holesLeft + :469; pawnJudgement ("stays a hole"); planChoice method ("Their weakness was the hole on X"); positionReadingService.ts:652 findWeakSquares; moveInsight.ts:1144 holeAccess | `moveInsight.holeAccess` over `findWeakSquares` → the others read it, one key `hole:<sq>` |
-| 6 | Attackers vs defenders on one square — the same count twice in one turn | g3 10.Nf3 (+15.7s): "Count before you take on e5: two attackers against two defenders" + "Their rook on e8 is tied down now: you hit the pawn on e5 twice and it is guarded twice" | countMethod.ts:33-36; tiedDefender.ts:75-77 (via boardComputers.ts:229, reviewFullData.ts:1463); threatProof.ts:47-75 | one count per square (the exchange ledger / SEE already behind threatProof) → countMethod and tiedDefender become two readings of one fact with one key `count:<sq>` |
-| 7 | The plan — the method+plan line is built in two files, and the plan computers are still five (census 9, open) | g4 9…dxe4 (+4.4s) "So the plan: take their pawn on c3 …", then 12…Bxe4 (+4.8s) "The plan changes here — now it's to win their weak pawn on c3" | planThread.ts:195 and boardPlanFacts.ts:123 (the same template); planThread.ts:170; positionFacts.ts:461; nextPlans.deriveNextPlans:161; boardPlan.structurePlan:84; positionReadingService.namedPawnStructure:1060; mastersPlanRead:83; movePlan.classifyPlan:57 | planThread as the voice; delete boardPlanFacts.ts:123's copy of the line; the census-9 merge is still owed |
-| 8 | The opening's name, twice in one breath | g2 5…a6 "It's the Najdorf Variation of the Sicilian Defense. You chose the Najdorf: …"; g4 2…Nc6 "It's the Ruy Lopez. They've gone for the Ruy Lopez: …" | openingAnnouncement.ts:70-103 (the name); openingStory.ts:362 (`You chose the X`); openingStory.ts:385 (`They've gone for the X`) | the announcement owns the name; openingStory's beats speak the CHOICE and its reason without re-naming — one claim key `opening-name:<family>` |
-| 9 | "How many moves hold here" — four computers, two in one file, contradicting | g3 8.Nc2: "One pawn move here answers no" vs "Your next move is not a big decision — several are about equally good", 6ms apart; g1/g2 "Nothing hinges" beside "grab it" | speedRunReads.ts:84 (srr:any-move-fine); speedRunReads.ts:431 (srr:every-branch); criticalMoment.ts (only-move count); countMethod | the one criticality (`criticalityScan` gapCp, per CLAUDE.md) → both speedRun reads read it; same claim key `criticality:<fen>` |
-| 10 | Built but not wired — four dead modules and ~50 narration functions only tests call | — | see section C | delete (list below) |
+| # | status | claim said by several producers | heard on the tapes | producers (file:line) | one owner → delete |
+|---|---|---|---|---|---|
+| 1 | OPEN | Opposite-castling race | g2: 3 producers, 3 wordings | see item-6 map (a) | planRace on boardStructure.kings → delete `splitPosition()` and openingStory.ts:437 |
+| 2 | OPEN | Where the king goes vs "storm their king" | g3 7.c4 vs 9.d3, g4 4…Nge7 | item-6 map (b); plus castling-claim stems in moveIntent.ts:413, positionalRead.ts:200, kingSafety.ts:212 | `castleRoute` (kingSafety.ts:225) answers it; `kingCommitted` reads it |
+| 3 | OPEN | A piece is loose / a tactic is on — said by up to five producers, with no shared claim key | g1 13.Rad1→14.Rd5: the bishop on f4 three times in two turns | see section 3 | one claim key per (fact, squares), attached by every producer; delete `hangingPieceLine`'s separate copy of the loose fact |
+| 4 | OPEN | Outpost — four sentence producers and a copy-paste definition | g1 29.Nf6 → 31.g5 (and 24.Kxg2's plan): three outpost sentences in five plies | moveFundamentals.ts:447-454; pvPlayback.ts:683-686; reviewMoveTeaching.ts:461; reviewMoveBriefing.ts:280; definitions `forwardTeaching.isKnightOutpost` ≡ `outpost.isOutpost(…, true)` | `outpost.isOutpost` + one phrase function → delete `isKnightOutpost` |
+| 5 | OPEN | Hole / weak square — four computers | g3 10.Nf3 (+2.8s) and 11.O-O (+17.0s): the d5 hole twice; g4 10…Bf5 "the hole on d3" | openingStory.ts:247-262 holesLeft + :469; pawnJudgement ("stays a hole"); planChoice method ("Their weakness was the hole on X"); positionReadingService.ts:652 findWeakSquares; moveInsight.ts:1144 holeAccess | `moveInsight.holeAccess` over `findWeakSquares` → the others read it, one key `hole:<sq>` |
+| 6 | OPEN | Attackers vs defenders on one square — the same count twice in one turn | g3 10.Nf3 (+15.7s): "Count before you take on e5: two attackers against two defenders" + "Their rook on e8 is tied down now: you hit the pawn on e5 twice and it is guarded twice" | countMethod.ts:33-36; tiedDefender.ts:75-77 (via boardComputers.ts:229, reviewFullData.ts:1463); threatProof.ts:47-75 | one count per square (the exchange ledger / SEE already behind threatProof) → countMethod and tiedDefender become two readings of one fact with one key `count:<sq>` |
+| 7 | OPEN | The plan — the method+plan line is built in two files, and the plan computers are still five (census 9, open) | g4 9…dxe4 (+4.4s) "So the plan: take their pawn on c3 …", then 12…Bxe4 (+4.8s) "The plan changes here — now it's to win their weak pawn on c3" | planThread.ts:195 and boardPlanFacts.ts:123 (the same template); planThread.ts:170; positionFacts.ts:461; nextPlans.deriveNextPlans:161; boardPlan.structurePlan:84; positionReadingService.namedPawnStructure:1060; mastersPlanRead:83; movePlan.classifyPlan:57 | planThread as the voice; delete boardPlanFacts.ts:123's copy of the line; the census-9 merge is still owed |
+| 8 | OPEN | The opening's name, twice in one breath | g2 5…a6 "It's the Najdorf Variation of the Sicilian Defense. You chose the Najdorf: …"; g4 2…Nc6 "It's the Ruy Lopez. They've gone for the Ruy Lopez: …" | openingAnnouncement.ts:70-103 (the name); openingStory.ts:362 (`You chose the X`); openingStory.ts:385 (`They've gone for the X`) | the announcement owns the name; openingStory's beats speak the CHOICE and its reason without re-naming — one claim key `opening-name:<family>` |
+| 9 | OPEN | "How many moves hold here" — four computers, two in one file, contradicting | g3 8.Nc2: "One pawn move here answers no" vs "Your next move is not a big decision — several are about equally good", 6ms apart; g1/g2 "Nothing hinges" beside "grab it" | speedRunReads.ts:84 (srr:any-move-fine); speedRunReads.ts:431 (srr:every-branch); criticalMoment.ts (only-move count); countMethod | the one criticality (`criticalityScan` gapCp, per CLAUDE.md) → both speedRun reads read it; same claim key `criticality:<fen>` |
+| 10 | OPEN | Built but not wired — four dead modules and ~50 narration functions only tests call | — | see section C | delete (list below) |
 
 ## A. Claims said by more than one producer — evidence and test designs
 
-### 3. Loose piece / tactic
+### 3. Loose piece / tactic — OPEN on dead-exports
 
 g1 13.Rad1 Ng4 → 14.Rd5 Qb4. The bishop on f4 was said loose three times in two turns, by four templates:
 - (+7.1s) "Danger — a whole piece is at stake: your bishop on f4 is the only defender of your knight on g5 — and it can be taken." — liveTacticsContext.ts:902 stake prefix + tacticsDetector.ts:573 description.
@@ -48,7 +55,7 @@ The fact had not changed (the bishop was still loose). The pin in g2 is the same
 
 The facts the Learn producers build for f4 on both boards must carry the same claim key, and the second turn's loose line must be dropped as said. Old code: the threat lane has no key, so the test fails.
 
-### 4. Outpost
+### 4. Outpost — OPEN on dead-exports
 
 The tape (g1):
 - 29.Nf6 (+…): "Your knight to f6 lands on the f6 outpost, a square none of their pawns can attack — a piece no pawn can chase stays there for the whole game." — moveFundamentals.ts:452, the "led" stem;
@@ -67,7 +74,7 @@ The same f6 outpost, two producers, unchanged. 24.Kxg2 also spoke moveFundamenta
 
 **Failing test:** g1 after 31.g5, `r7/pp3k2/3p1N2/6P1/3nP3/1P6/6K1/5R2 b - - 0 31`, plus the board after 29.Nf6. Across the two turns the outpost fact on f6 carries one key `outpost:f6`, and the second is dropped. Old code says it twice.
 
-### 5. Hole
+### 5. Hole — OPEN on dead-exports
 
 The tape (g3):
 - 10.Nf3 (+2.8s): "c5 has a cost for them: no pawn of theirs can cover d5 again, and your knight on c2 is two moves from it." — openingStory.ts:469;
@@ -85,7 +92,7 @@ g4 10…Bf5: "Their weakness was the hole on d3 that no pawn of theirs can guard
 
 **Failing test:** g3 after 10…c5, `r1bqr1k1/3p1ppp/p2b1n2/npp1p3/2P5/1P1PPN2/PBN1BPPP/R2QK2R w KQ - 0 11`, then after 11…Bc7, `r1bqr1k1/2bp1ppp/p4n2/npp1p3/2P5/1P1PPN2/PBN1BPPP/R2Q1RK1 w - - 2 12`. The d5-hole facts from openingStory and pawnJudgement carry one key, and the second turn's is dropped. Old code says both.
 
-### 6. One square, counted twice
+### 6. One square, counted twice — OPEN on dead-exports
 
 g3 10.Nf3, one line:
 - "Count before you take on e5: two attackers against two defenders. Not enough — start the trades there and you come out behind." — countMethod.ts:36;
@@ -97,7 +104,7 @@ Both are TRUE, and both are one count.
 
 **Failing test:** g3 after 10…c5 (above). `countMethodTeaching` and the tied-defender read on e5 share one claim key. Old code: `count-method` vs `tied:<…>`.
 
-### 7. The plan
+### 7. The plan — OPEN on dead-exports
 
 g4:
 - 9…dxe4 (+4.4s): "How do you find a plan? … So the plan: take their pawn on c3, the piece attacking your pawn; put a rook on the open e-file; bring your knight on e7 to d3 …";
@@ -111,7 +118,7 @@ The plan COMPUTERS are still the census-9 five: `nextPlans.deriveNextPlans`, `bo
 
 **Failing test:** g4 after 10.Bxe4, `r1b1kb1r/pp2nppp/2p2q2/8/3pB3/2P5/PP1PNPPP/R1BQ1RK1 b kq - 0 10`, and after 13.dxe4, `r3kb1r/pp2nppp/2p2q2/8/4P3/2P5/P3NPPP/R1BQ1RK1 b kq - 0 13`. The c3-pawn plan is one claim across the turns (the second says only what CHANGED). Old code repeats it with a new frame.
 
-### 8. Opening name
+### 8. Opening name — OPEN on dead-exports
 
 - g2 5…a6: "It's the Najdorf Variation of the Sicilian Defense. You chose the Najdorf: a6 takes b5 away …"
 - g4 2…Nc6: "It's the Ruy Lopez. They've gone for the Ruy Lopez: in master games from here …"
@@ -126,7 +133,7 @@ The producers are openingAnnouncement (the name) and openingStory.ts:362 / :385 
 
 The instant wave's text names the family once. Old code names it twice.
 
-### 9. How many moves hold
+### 9. How many moves hold — OPEN on dead-exports
 
 - g3 8.Nc2, 6ms apart: "One pawn move here answers no, whatever they reply" (speedRunReads.ts:431, srr:every-branch) and "Your next move is not a big decision — several are about equally good" (speedRunReads.ts:84, srr:any-move-fine).
 - g1 7.O-O and g2 8.Be3: "Nothing hinges on your next move" in the same wave as a look-ahead "grab it" / "spot it".
@@ -135,14 +142,14 @@ The instant wave's text names the family once. Old code names it twice.
 
 **Failing test:** g3 after 8…Re8, `r1bqr1k1/1ppp1ppp/p2b1n2/n3p3/2P5/1P2P3/PBNPBPPP/R2QK1NR w KQ - 3 9`. Both speedRun reads on this board cannot both be offered. Old code offers both.
 
-### Smaller sets (not in the top 10)
+### Smaller sets (not in the top 10) — OPEN on dead-exports
 - **Praise of the played move, three producers:** strongChoice.ts:39 ("That's what strong players play here — it …"), deliberation.ts:653 ("That was the move here — it …", ×7 in g1, unrotated) and dnaRules.ts:26 EARNED_PRAISE. One praise table, rotated by ply.
 - **A rule restating its fact:** moveFundamentals.ts:1353 "The rule behind e5: kick their knight off d4 …" after movePoint said "e5 kicks their knight off d4" (g2), and as a plan in g3 ("kick their knight off a5 with a pawn").
 - **Isolated pawns:** `positionReadingService.findWeakPawns(…).isolated` ≡ `describeStructure(…).pawns.isolatedPawns` — **0 disagreements in 386 sets**. A copy census 10 did not list; read describeStructure.
 - **Census 3** (skewer/discovery) still has three implementations: tacticsDetector.ts:222/472, tacticClassifier.ts:232/275, missedTacticService.ts:176/210.
 - **Census 5** (turning point) still has two on one Review page: turningPoints.ts:229 (CoachGameReview.tsx:842) and reviewTurningPoint.ts:88 (teachingSelector.ts:212).
 
-## C. Built but not wired (test-only or no caller)
+## C. Built but not wired (test-only or no caller) — OPEN on dead-exports
 
 **Whole modules no production file imports** (checked for side-effect and dynamic imports):
 - `walkthroughResolver.ts` (224 lines; only comments mention it; 3 test files);

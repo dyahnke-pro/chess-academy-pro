@@ -4,7 +4,11 @@
 
 **What's here:** for each duplicate set, every producer with `file:line`, its claim key and surface; the one owner it should become; what to delete; and a test on a real OS-11 board that FAILS on the current code. Line numbers are on batch3 b7d7093.
 
-## (a) The opposite-castling race — four producers, three definitions of the fact
+> **Status against `origin/dead-exports` d71562b6d (checked 2026-10-20, read-only).** The knip sweep removed `export` keywords and three symbols with NO reference at all, tests included (`capabilityEvidence.clearCapabilityProfileMemo`, `endgameProgressService.getDueEndgameCount`, `gamesService.getGuessPositions` — none on these maps). Knip counts a test import as a use, so it could not see test-only producers, and it does not judge duplicate behaviour. Every file this map names changed only in `export` keywords, except planRace.ts (`pawnSquareRace` deleted at ~:567, below every line cited here). **Line numbers below hold on dead-exports.**
+
+**Marks:** (a) OPEN · (b) OPEN · (c) OPEN · (d) OPEN — none of the four is touched by the sweep; #4 codes them.
+
+## (a) The opposite-castling race — four producers, three definitions of the fact — OPEN on dead-exports
 
 The fact: the kings are castled on opposite wings with queens on. It is DEFINED three times:
 - `boardStructure.describeStructure(fen).kings.oppositeWings` — the one king-wing fact. splitPosition says it reads this, and so does reviewStrategicOrientation.
@@ -44,7 +48,7 @@ It is SAID by four producers:
 - (1) Collect the race text from every Learn producer: openingStoryAt (history to ply 21), splitPosition, kingAttackReads.stormRace. Expect exactly one fact carrying the race claim, with claim key `race:opposite-wings`. Old code: three producers can say it, each with its own key.
 - (2) The storm count for White's f3 must not count Black's e5. Old code: `theirPushes === 1`.
 
-## (b) "Push f/g/h toward their king" vs "castle short" — two plans for one king
+## (b) "Push f/g/h toward their king" vs "castle short" — two plans for one king — OPEN on dead-exports
 
 | producer | text | heard |
 |---|---|---|
@@ -61,7 +65,7 @@ It is SAID by four producers:
 - g3 after 7…O-O, `r1bq1rk1/1ppp1ppp/p2b1n2/n3p3/2P5/NP2P3/PB1PBPPP/R2QK1NR w KQ - 1 8`, student White. `castleRoute` gives short (blocker g1); `kingCommitted` must be null. Old code returns the f2/g2/h2 storm text.
 - g4 after 5.O-O, `r1b1kb1r/ppppnppp/2n2q2/1B2p3/4P3/2N2N2/PPPP1PPP/R1BQ1RK1 b kq - 7 5`, student Black. The route is short (blocker f8); `kingCommitted` must be null. Old code says f7/g7/h7.
 
-## (c) A pin said twice in one turn — the threat line carries no claim key
+## (c) A pin said twice in one turn — the threat line carries no claim key — OPEN on dead-exports
 
 g2 12…Nc7 13.Bb6:
 - the instant wave (+2.0s): "Watch out — their bishop on b6 pins your knight on c7 against your queen on d8. Remember — a pin freezes …"
@@ -81,7 +85,7 @@ g2 12…Nc7 13.Bb6:
 
 **Failing test** (g2 after 13.Bb6, `r2q1rk1/1pn1bppp/1B1pbn2/pB2p3/4P3/1NN2P2/PPPQ2PP/1K1R3R b - - 5 13`, student Black): the threat-lane fact and `playedConceptTeaching(fenBefore, 'Bb6', 'b', …)` carry the same claim key. Old code: the threat fact has no claims, so the test fails.
 
-## (d) The 8.Bxf7+ verdict said twice — the batch-2 fix is in the build and did not take
+## (d) The 8.Bxf7+ verdict said twice — the batch-2 fix is in the build and did not take — OPEN on dead-exports
 
 `mistakeTurnLine` (de450346, "a mistake turn says the loss once") was written for exactly this line, and it IS an ancestor of b7ab6d3. The OS-11 replay still heard the full fundamental verdict, then the recurrence, then the grade's evidence, then the slip question (decision row: spoke=[mistake, blunderCheck], lead=blunderCheck):
 
