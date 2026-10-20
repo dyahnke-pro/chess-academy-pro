@@ -21,11 +21,18 @@ const PALETTES: readonly (readonly string[])[] = [
   ['#ff3df2', '#b06bff', '#00e5ff', '#ffffff'],
 ];
 const GOLD: readonly string[] = ['#ffd400', '#ffe55c', '#fff3b0', '#ffb300', '#ffffff'];
+/** THE GOLD SPARKLE FIELD (David 2026-10-20, an iMessage screenshot: "Like this
+ *  for the confetti") — soft out-of-focus gold orbs, every size, drifting and
+ *  twinkling across the whole screen. The jackpot and a checkmate get it. */
+const BOKEH: readonly string[] = ['255,233,168', '255,211,107', '255,193,77', '255,246,220', '255,179,71'];
+const BOKEH_COUNT = 260;
 const PARTICLES: Record<0 | 1 | 2 | 3 | 4, number> = { 0: 0, 1: 16, 2: 40, 3: 80, 4: 170 };
 
 interface Particle {
   x: number; y: number; vx: number; vy: number;
   life: number; max: number; color: string; r: number; confetti: boolean; spin: number;
+  /** A sparkle-field orb: `color` is an "r,g,b" triple, `phase` its twinkle. */
+  bokeh: boolean; phase: number;
 }
 
 /** Deterministic pseudo-random stream from a seed (mulberry32). */
@@ -55,6 +62,9 @@ export function RewardLayer(): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particles = useRef<Particle[]>([]);
   const flash = useRef<{ alpha: number; color: string }>({ alpha: 0, color: '#00ff88' });
+  /** The warm dark veil the sparkle field glows against (the iMessage look):
+   *  it eases in under the orbs and fades over ~3s. */
+  const veil = useRef(0);
   const raf = useRef<number | null>(null);
   const reduced = usePrefersReducedMotion();
   const [banner, setBanner] = useState<{ text: string; key: number; big: boolean; gold: boolean } | null>(null);
@@ -66,6 +76,12 @@ export function RewardLayer(): JSX.Element {
       const ctx = cv?.getContext('2d');
       if (!cv || !ctx) { raf.current = null; return; }
       ctx.clearRect(0, 0, cv.width, cv.height);
+      if (veil.current > 0.01) {
+        ctx.globalAlpha = veil.current;
+        ctx.fillStyle = 'rgb(36,15,2)';
+        ctx.fillRect(0, 0, cv.width, cv.height);
+        veil.current *= 0.988;
+      }
       if (flash.current.alpha > 0.01) {
         ctx.globalAlpha = flash.current.alpha;
         ctx.fillStyle = flash.current.color;
@@ -76,6 +92,33 @@ export function RewardLayer(): JSX.Element {
       for (const p of particles.current) {
         p.life += 1;
         if (p.life > p.max) continue;
+        if (p.bokeh) {
+          // Staggered in (negative life = not yet), drifting, twinkling, fading.
+          if (p.life < 0) { alive.push(p); continue; }
+          p.x += p.vx;
+          p.y += p.vy;
+          const env = Math.min(1, p.life / 24) * Math.min(1, (p.max - p.life) / 50);
+          const twinkle = 0.5 + 0.5 * Math.sin(p.life * 0.11 + p.phase);
+          ctx.globalAlpha = Math.max(0, env * (0.4 + 0.6 * twinkle) * (p.r > 12 ? 0.6 : 1));
+          const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+          g.addColorStop(0, 'rgba(255,252,240,1)');
+          g.addColorStop(0.3, `rgba(${p.color},0.95)`);
+          g.addColorStop(1, `rgba(${p.color},0)`);
+          ctx.fillStyle = g;
+          ctx.shadowBlur = 0;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+          // A small orb is a sharp sparkle: a hot pinpoint at its heart.
+          if (p.r < 6) {
+            ctx.fillStyle = 'rgba(255,255,245,1)';
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, Math.max(0.8, p.r * 0.35), 0, Math.PI * 2);
+            ctx.fill();
+          }
+          alive.push(p);
+          continue;
+        }
         p.vy += p.confetti ? 0.06 : 0.12;
         p.vx *= 0.985;
         p.x += p.vx;
@@ -100,7 +143,7 @@ export function RewardLayer(): JSX.Element {
       ctx.globalAlpha = 1;
       ctx.shadowBlur = 0;
       particles.current = alive;
-      raf.current = alive.length > 0 || flash.current.alpha > 0.01 ? requestAnimationFrame(tick) : null;
+      raf.current = alive.length > 0 || flash.current.alpha > 0.01 || veil.current > 0.01 ? requestAnimationFrame(tick) : null;
     };
 
     const off = onReward((e) => {
@@ -122,7 +165,8 @@ export function RewardLayer(): JSX.Element {
       const rnd = stream(e.seed ?? (e.step ?? 0) + 17);
       // The jackpot and a checkmate pay out in GOLD (David 2026-10-20: "gold
       // glowing. Like a slot machine!!").
-      const palette = e.kind === 'jackpot' || e.kind === 'checkmate' ? GOLD : PALETTES[(e.seed ?? e.step ?? 0) % PALETTES.length];
+      const gold = e.kind === 'jackpot' || e.kind === 'checkmate';
+      const palette = gold ? GOLD : PALETTES[(e.seed ?? e.step ?? 0) % PALETTES.length];
       const { x, y } = originOf(e);
       const n = PARTICLES[size];
       const speed = 2.2 + size * 1.3;
@@ -133,14 +177,29 @@ export function RewardLayer(): JSX.Element {
           x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - size * 0.6,
           life: 0, max: 34 + size * 10 + Math.floor(rnd() * 16),
           color: palette[i % palette.length], r: 1.6 + rnd() * (1 + size * 0.6), confetti: false, spin: 0,
+          bokeh: false, phase: 0,
         });
       }
-      if (size === 4) {
+      if (gold) {
+        veil.current = Math.max(veil.current, 0.5);
+        // The sparkle field: orbs everywhere, mostly small, a few big and soft.
+        for (let i = 0; i < BOKEH_COUNT; i++) {
+          const k = rnd();
+          particles.current.push({
+            x: rnd() * window.innerWidth, y: rnd() * window.innerHeight,
+            vx: (rnd() - 0.5) * 0.4, vy: -0.12 - rnd() * 0.4,
+            life: -Math.floor(rnd() * 45), max: 150 + Math.floor(rnd() * 110),
+            color: BOKEH[i % BOKEH.length], r: 1.8 + k * k * 22, confetti: false, spin: 0,
+            bokeh: true, phase: rnd() * Math.PI * 2,
+          });
+        }
+      } else if (size === 4) {
         for (let i = 0; i < 140; i++) {
           particles.current.push({
             x: rnd() * window.innerWidth, y: -20 - rnd() * 200, vx: (rnd() - 0.5) * 2, vy: 1 + rnd() * 2.5,
             life: 0, max: 160 + Math.floor(rnd() * 60), color: palette[i % palette.length],
             r: 4 + rnd() * 3, confetti: true, spin: (rnd() - 0.5) * 0.3,
+            bokeh: false, phase: 0,
           });
         }
       }
