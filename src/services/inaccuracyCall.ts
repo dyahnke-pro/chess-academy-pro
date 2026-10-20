@@ -84,6 +84,10 @@ interface InaccuracyCall {
    *  to find ("look for it") — so the caller can reveal the
    *  answer after the student moves. Structured, never read off the prose. */
   offersStudent?: true;
+  /** The square (or piece) the moved piece stopped guarding, when that is why
+   *  the move failed (`errorWhy.guardLeft`) — so the caller can teach the
+   *  habit that finds it ("what was it guarding?"). */
+  guardLeft?: string;
 }
 
 /** Only the three that are worth stopping for. `good` and above stay silent —
@@ -622,7 +626,13 @@ export function callInaccuracyDetailed(args: {
   // exactly the same point it always did. Mate is exempt: walking into one is
   // worth saying whatever the centipawns read.
   const forcedMate = (args.missedMate ?? null) !== null || (args.allowedMate ?? null) !== null;
-  if (!forcedMate && Math.max(0, args.cpLoss) < MISTAKE_CP) return { call: null, declined: 'under-the-floor' };
+  // THE FLOOR SKIPS WOBBLES, NOT LESSONS (David's Learn game 2026-10-20,
+  // 13.Bc3: 0.9 of a pawn, so the coach said nothing — and the move had taken
+  // the bishop off e3, a knight-fork square). Below a mistake's cost the call
+  // speaks only when the move failed by a MECHANISM the board shows
+  // (`errorWhy.failed`), never on a bare cost or the better move alone.
+  const underFloor = !forcedMate && Math.max(0, args.cpLoss) < MISTAKE_CP;
+  if (underFloor && args.side === 'coach') return { call: null, declined: 'under-the-floor' };
   if (!args.bestSan) return { call: null, declined: 'no-better-move-supplied' };
   // SHADOWED, and kept as a precondition rather than a live path: `classifyMove`
   // already returns 'best' when `wasBest`, so the quality guard above answers
@@ -770,7 +780,20 @@ export function callInaccuracyDetailed(args: {
   // the king" — never came up). When the pushed pawn can be taken and taking
   // it opens a file beside their king, name the idea first and the engine's
   // preference second. A blunder is still called a blunder.
-  const gambit = quality === 'blunder' ? null : gambitFile(args.fenBefore, args.playedSan, args.moverColor);
+  // THE WHY AND ITS PROOF — the ONE computer every surface grades errors
+  // through (David 2026-10-10: "Any error … same in review and everywhere
+  // else. Unity!"). Read once, when it is needed.
+  let ewRead: ErrorWhy | undefined;
+  const ewOf = (): ErrorWhy => (ewRead ??= errorWhy({
+    fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor,
+    bestSan: args.bestSan, bestLineUci: args.bestLineUci ?? null, replyLineUci: args.replyLineUci,
+    missedMate: args.missedMate ?? null, allowedMate: args.allowedMate ?? null, bestMate: args.bestMate ?? null,
+    quality: quality as SpokenGradeLabel, priorMove: args.priorMove,
+    replySan: args.replySan, replyKeptWin: args.replyKeptWin ?? null,
+    namesBetterMove: args.namesBetterMove,
+  }));
+  if (underFloor && !ewOf().failed) return { call: null, declined: 'under-the-floor' };
+  const gambit = quality === 'blunder' || underFloor ? null : gambitFile(args.fenBefore, args.playedSan, args.moverColor);
   if (gambit) {
     const b = args.namesBetterMove ? better() : null;
     const said = args.namesBetterMove
@@ -795,7 +818,7 @@ export function callInaccuracyDetailed(args: {
   // Bxc5 went +3.1 → +1.9 and was graded "a mistake" where he said "knocking
   // on the door of victory"). Still clearly on top: the teaching is the cleaner
   // way. "Wins" only where the eval says so.
-  if (typeof after === 'number' && after >= STILL_BETTER_CP && quality !== 'blunder' && (args.allowedMate ?? null) === null) {
+  if (!underFloor && typeof after === 'number' && after >= STILL_BETTER_CP && quality !== 'blunder' && (args.allowedMate ?? null) === null) {
     const stands = after >= BLUNDER_CP ? 'still wins' : 'keeps you clearly on top';
     const named = args.namesBetterMove ? reason() : null;
     // WHERE THE SURFACE WITHHOLDS THE BETTER MOVE (Learn), the comparison is
@@ -808,7 +831,7 @@ export function callInaccuracyDetailed(args: {
       : `${args.playedSan} ${stands}.`;
     return { call: { quality, side: 'student', cost, said, square: named ? better()?.square ?? '' : '', ...(named ? { namesBetter: args.bestSan } : {}) } };
   }
-  if (typeof after === 'number' && after >= BLUNDER_CP && (args.allowedMate ?? null) === null) {
+  if (!underFloor && typeof after === 'number' && after >= BLUNDER_CP && (args.allowedMate ?? null) === null) {
     if (!args.namesBetterMove) return { call: null, declined: 'no-why' };
     const named = reason();
     const said = named
@@ -816,17 +839,8 @@ export function callInaccuracyDetailed(args: {
       : `${args.playedSan} still wins.`;
     return { call: { quality, side: 'student', cost, said, square: named ? better()?.square ?? '' : '', ...(named ? { namesBetter: args.bestSan } : {}) } };
   }
-  // THE WHY AND ITS PROOF — the ONE computer every surface grades errors
-  // through (David 2026-10-10: "Any error … same in review and everywhere
-  // else. Unity!"). No why → the grade is not said.
-  const ew = errorWhy({
-    fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor,
-    bestSan: args.bestSan, bestLineUci: args.bestLineUci ?? null, replyLineUci: args.replyLineUci,
-    missedMate: args.missedMate ?? null, allowedMate: args.allowedMate ?? null, bestMate: args.bestMate ?? null,
-    quality: quality as SpokenGradeLabel, priorMove: args.priorMove,
-    replySan: args.replySan, replyKeptWin: args.replyKeptWin ?? null,
-    namesBetterMove: args.namesBetterMove,
-  });
+  // No why → the grade is not said.
+  const ew = ewOf();
   const graded = errorGradeSentence(ew, quality as SpokenGradeLabel, cost);
   if (graded === `${GRADE_WORD[quality as SpokenGradeLabel]}.`) return { call: null, declined: 'no-why' };
   const said = `${args.playedSan} was ${graded}`;
@@ -837,7 +851,7 @@ export function callInaccuracyDetailed(args: {
   // A cost said with its line draws that line (A-plan P6).
   const costShown = !ew.line && ew.costLine && ew.costTail && said.includes(ew.costTail.trim()) ? ew.costLine : null;
   const costProof = costShown ? lineProofFromUci(costShown.fen, costShown.uci, lineSeatAt(costShown.fen, args.moverColor === 'white' ? 'w' : 'b')) : null;
-  return { call: { quality, side: 'student', cost, said, square: mark, ...(named.length ? { squares: named } : {}), ...(ew.proof ? { proof: ew.proof } : costProof ? { proof: costProof } : {}), ...(costShown ? { line: costShown } : {}), ...(ew.lostSquare ? { lostSquare: ew.lostSquare } : {}), ...(ew.namesBetter ? { namesBetter: ew.namesBetter } : {}), ...(ew.line ? { line: ew.line } : {}), ...(ew.pattern ? { pattern: ew.pattern } : {}) } };
+  return { call: { quality, side: 'student', cost, said, square: mark, ...(named.length ? { squares: named } : {}), ...(ew.proof ? { proof: ew.proof } : costProof ? { proof: costProof } : {}), ...(costShown ? { line: costShown } : {}), ...(ew.lostSquare ? { lostSquare: ew.lostSquare } : {}), ...(ew.namesBetter ? { namesBetter: ew.namesBetter } : {}), ...(ew.line ? { line: ew.line } : {}), ...(ew.pattern ? { pattern: ew.pattern } : {}), ...(ew.guardLeft ? { guardLeft: ew.guardLeft } : {}) } };
 }
 
 /**
@@ -975,6 +989,9 @@ interface ErrorWhy {
   lostSquare?: string;
   namesBetter?: string;
   pattern?: string;
+  /** The square or piece the moved piece stopped guarding, when the mechanism
+   *  is a guard it left (`whyItFailed` 'abandoned-square' / 'abandoned-defender'). */
+  guardLeft?: string;
 }
 
 /** NO LINE KNOWN: the board's own answer to the played move — the capture of
@@ -1227,7 +1244,39 @@ export function errorWhy(args: {
     ...(punishment?.lostSquare ?? failedLost ?? replyTaken ? { lostSquare: punishment?.lostSquare ?? failedLost ?? replyTaken } : {}),
     ...((should || mateSaid) && bestSan ? { namesBetter: bestSan } : {}),
     ...(pattern ? { pattern } : {}),
+    ...(failed && (failedRead?.kind === 'abandoned-square' || failedRead?.kind === 'abandoned-defender') && failedRead.squares[0] ? { guardLeft: failedRead.squares[0] } : {}),
   };
+}
+
+/** MAY A LIVE BOARD NAME THE BETTER MOVE? (David 2026-10-20, his 13.Bc3: "You
+ *  should hear what Bc3 allowed …, what the better move did, and the habit that
+ *  catches it next time".) The move the student should have played is a moment
+ *  already past, and naming it with its job is the lesson — unless it is still
+ *  THEIRS TO FIND: playable on the board they move on next AND the engine's
+ *  best move for them there. Their reply is the one played when known, else
+ *  the engine's; a still-playable move is named only when the engine's line
+ *  says what they should play next and it is another move. Matched by
+ *  COORDINATES (G4.5.2). Every unknown holds the move. */
+export function pastBetterNameable(
+  fenBefore: string, playedSan: string, bestSan: string | null,
+  replyLineUci: readonly string[] | null, replySan: string | null,
+): boolean {
+  if (!bestSan) return false;
+  try {
+    const best = new Chess(fenBefore).move(bestSan);
+    if (!best) return false;
+    const c = new Chess(fenBefore);
+    if (!c.move(playedSan)) return false;
+    const predicted = replyLineUci?.[0] ?? null;
+    const reply = replySan
+      ? c.move(replySan.replace(/^…/, ''))
+      : predicted ? c.move({ from: predicted.slice(0, 2), to: predicted.slice(2, 4), promotion: predicted[4] }) : null;
+    if (!reply) return false;
+    if (!c.moves({ verbose: true }).some((m) => m.from === best.from && m.to === best.to)) return true;
+    const onLine = !!predicted && `${reply.from}${reply.to}` === predicted.slice(0, 4);
+    const next = onLine ? replyLineUci?.[1] ?? null : null;
+    return !!next && !(next.slice(0, 2) === best.from && next.slice(2, 4) === best.to);
+  } catch { return false; }
 }
 
 /** Did the played move CAUSE their reply's point? Their reply, played from

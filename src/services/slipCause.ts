@@ -26,6 +26,7 @@ import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { AnalysisLine } from '../types';
 import { decisiveReason } from './decisiveReason';
 import { findStudentDrawback, type DrawbackKind } from './concessionBeat';
+import { errorWhy } from './inaccuracyCall';
 import { bestMoveReason } from './deliberation';
 import { homeMinorCount } from './development';
 import { findPassedPawns, findOpenFiles, computeTerritory, kingSafetyRead } from './positionReadingService';
@@ -165,6 +166,27 @@ export function slipCause(input: SlipCauseInput): SlipCause | null {
     try {
       const c = findStudentDrawback({ fen: input.fen, playedSan: input.playedSan, bestSan: input.bestSan, studentColor: mover === 'w' ? 'white' : 'black' });
       if (c) return { tag: CONCESSION_TAG[c.kind], coachNote: c.said };
+    } catch { /* fall through */ }
+  }
+
+  // 2b. THE GUARD IT LEFT — the one error computer's mechanism (`errorWhy`): the
+  //     moved piece was guarding a square their knight now forks from, or a
+  //     piece they now win (David's 13.Bc3, 2026-10-20, filed as "your pieces
+  //     reach fewer squares" while the bishop had left e3 to a knight fork).
+  //     The same reader Learn speaks the mistake with, so the record and the
+  //     voice name one lesson.
+  if (input.pvAfterPlayed?.length) {
+    try {
+      const uci: string[] = [];
+      const c = new Chess(played.fen());
+      for (const s of input.pvAfterPlayed.slice(0, 2)) { const m = c.move(s); uci.push(`${m.from}${m.to}${m.promotion ?? ''}`); }
+      const ew = errorWhy({
+        fenBefore: input.fen, playedSan: input.playedSan, moverColor: mover === 'w' ? 'white' : 'black',
+        bestSan: input.bestSan ?? null, bestLineUci: null, replyLineUci: uci,
+        missedMate: null, allowedMate: null, bestMate: null, quality: 'inaccuracy', priorMove: null,
+        replySan: null, namesBetterMove: false,
+      });
+      if (ew.guardLeft && ew.failed) return { tag: 'missed-opponents-threat', coachNote: ew.failed };
     } catch { /* fall through */ }
   }
 

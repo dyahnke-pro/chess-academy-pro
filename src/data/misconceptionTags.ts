@@ -348,8 +348,10 @@ export function isMisconceptionTagId(id: string): id is MisconceptionTagId {
 /** THE RULES REVISION OF A CLASSIFIED ROW. Bump when the classifier's rules
  *  change in a way stored rows must follow; rows behind it are re-attributed
  *  by `misconceptionRulesBackfill`. 2026-10-13: hung material requires the
- *  engine reply to take it; an endgame king walk is not "king in the centre". */
-export const MISCONCEPTION_RULES_REV = '2026-10-18-slip-cause';
+ *  engine reply to take it; an endgame king walk is not "king in the centre".
+ *  2026-10-20: a slip whose piece left the guard of a fork square (or of a
+ *  piece) is filed as their threat, not "fewer squares" (David's 13.Bc3). */
+export const MISCONCEPTION_RULES_REV = '2026-10-20-guard-left';
 
 /** Bump when analysed games must be re-read for the POSITIVE half
  *  (2026-10-20: re-read from the one-price annotations, `RECORD_PRICE_REV`) (the heat
@@ -357,8 +359,10 @@ export const MISCONCEPTION_RULES_REV = '2026-10-18-slip-cause';
  *  2026-10-14: one seat resolver. 2026-10-18: the board now asks five skills
  *  that could only be failed (castle in time, the free-looking pawn, the even
  *  trade, which pawn takes, the sacrifice by the king) — each analysed game's
- *  own rows are replaced so the old games answer them too. */
-export const POSITIVE_HALF_REV = '2026-10-20-one-price';
+ *  own rows are replaced so the old games answer them too. 2026-10-20b: four
+ *  more that could only be failed (the queen's poisoned pawn, the pawn that
+ *  runs alone, the trade with the material unbalanced, still in the book). */
+export const POSITIVE_HALF_REV = '2026-10-20-four-questions';
 // 2026-10-20: the rev fingerprint gate (recordRevs.gate.test.ts) found the
 // recorded held-skill rows of a real game had changed since 10-19 with this rev
 // unmoved, so devices kept the old green rows; then the one-price re-price moved

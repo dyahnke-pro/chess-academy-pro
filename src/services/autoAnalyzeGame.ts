@@ -27,7 +27,8 @@ import {
   generateMistakePuzzlesFromGame,
 } from './mistakePuzzleService';
 import { classifyPhase } from './gamePhaseService';
-import { pvUciToSan } from './principleAttribution';
+import { BOOK_FROM_PLY, OPENING_PLIES, pvUciToSan } from './principleAttribution';
+import { findContinuationsAtPly } from './openingDetectionService';
 import { costWords, isMateEval, storedMate } from './engineConstants';
 import { decisiveReason, reasonPosed } from './decisiveReason';
 import { capEval } from './accuracyService';
@@ -350,6 +351,17 @@ function reasonPosedFromAnnotation(fen: string, ann: MoveAnnotation, lastSan: st
   return reasonPosed(r);
 }
 
+/** A book question is a real decision: at the green bar. */
+const BOOK_POSED = 80;
+
+/** The openings DB has a continuation from the game's position before ply
+ *  `fenIndex` (its moves are `sanAt` 0..fenIndex-1). */
+function inBook(sanAt: ReadonlyMap<number, string>, fenIndex: number): boolean {
+  const prefix: string[] = [];
+  for (let k = 0; k < fenIndex; k += 1) { const sn = sanAt.get(k); if (!sn) return false; prefix.push(sn); }
+  try { return findContinuationsAtPly(prefix).size > 0; } catch { return false; }
+}
+
 export function capabilityPliesFromAnnotations(
   annotations: readonly MoveAnnotation[],
   playerColor: 'white' | 'black',
@@ -384,12 +396,19 @@ export function capabilityPliesFromAnnotations(
     // question this board posed — held when they found it, broken when they
     // did not (`recordCapabilityEvidence` decides from the cost).
     const reasonAsked = reasonPosedFromAnnotation(fens[fenIndex], ann, fenIndex > 0 ? sanAt.get(fenIndex - 1) ?? null : null);
+    // STILL IN THE BOOK (2026-10-20, David's heat map: "Left theory early"
+    // could only be failed): the position is in the openings DB, so the board
+    // asked whether the student knows a book move — the SAME question the
+    // record's left-book-early detector asks (`findContinuationsAtPly`, the
+    // same window). Held or broken from the cost.
+    const bookAsked = fenIndex >= BOOK_FROM_PLY && fenIndex < OPENING_PLIES && inBook(sanAt, fenIndex)
+      ? { tag: 'left-book-early' as const, posedImportance: BOOK_POSED } : null;
     out.push({
       fenBefore: fens[fenIndex],
       playedSan: ann.san,
       cpLoss: measuredCpLoss(ann),
       prompted: prompted.has(fenIndex + 1),
-      alsoPosed: [...(reasonAsked ? [reasonAsked] : []), ...positionPosed(fens[fenIndex], {
+      alsoPosed: [...(reasonAsked ? [reasonAsked] : []), ...(bookAsked ? [bookAsked] : []), ...positionPosed(fens[fenIndex], {
         bestSan: ann.bestMove ? uciToSan(fens[fenIndex], ann.bestMove) || undefined : undefined,
         ...(ann.pv?.afterBest?.length ? { bestLine: ann.pv.afterBest } : {}),
         lastMove: fenIndex > 0 && sanAt.has(fenIndex - 1)
@@ -701,8 +720,12 @@ async function stampPositiveHalf(gameId: string): Promise<void> {
   await db.games.update(gameId, { positiveHalfRev: POSITIVE_HALF_REV }).catch(() => undefined);
 }
 
+/** The game already holds its HELD half (live play or an earlier sweep). The
+ *  incoming-motif rows are their own half (`recordThreatHalf`) and never stand
+ *  in for it: a game re-read after a re-price kept its motif rows and would
+ *  otherwise skip its held half for good. */
 async function hasCapabilityEvidenceForGame(gameId: string): Promise<boolean> {
-  return (await db.capabilityEvidence.filter((r) => r.sourceGameId === gameId).count()) > 0;
+  return (await db.capabilityEvidence.filter((r) => r.sourceGameId === gameId && !THREAT_MOTIF_TAGS.has(r.tag)).count()) > 0;
 }
 
 /** The positive half of an analysed game, ONCE per game, through the one

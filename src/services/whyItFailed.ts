@@ -33,6 +33,7 @@
  */
 import { netPieceWords } from './exchangeLedger';
 import { sideToMoveAs } from './threatOut';
+import { detectLatentFork } from './latentFork';
 import { gambitFile } from './inaccuracyCall';
 import { proofCut } from './exchangeLedger';
 import { Chess, type Square, type Color, type Move } from 'chess.js';
@@ -57,6 +58,7 @@ interface WhyItFailed {
     | 'answered-by-tactic'  // an in-between check hits the attacker
     | 'lost-the-piece'      // the moved piece itself is taken for too little
     | 'abandoned-defender'  // moving it undefended one of your own pieces
+    | 'abandoned-square'    // moving it left a square their knight forks from
     | 'walks-into-fork';    // the move let a reply hit two of your pieces
 }
 
@@ -338,6 +340,44 @@ export function whyItFailed(args: {
         ? `Your ${NAME[mv.piece]} was the only thing guarding the ${NAME[worstAbandon.type]} on ${worstAbandon.sq} — once it left, their ${NAME[worstAbandon.attacker.type]} could take it from ${worstAbandon.attacker.sq}.`
         : `Your ${NAME[mv.piece]} was holding the ${NAME[worstAbandon.type]} on ${worstAbandon.sq} together — once it left, their ${NAME[worstAbandon.attacker.type]} could win it from ${worstAbandon.attacker.sq}.`,
     };
+  }
+
+  // ── ABANDONED A SQUARE (the move took the guard off a fork square) ─────────
+  //
+  // David's Learn game, 2026-10-20, 13.Bc3: the bishop on d2 guarded e3. After
+  // their reply …Ne5 the knight was two moves from e3, where it forks the queen
+  // on d1 and the rook on f1 — and with the bishop still on d2 the same …Ne5
+  // forks nothing. Both boards are read by the one fork-foresight computer
+  // (`detectLatentFork`); their engine reply is the trigger, so no line, no
+  // claim. Material lost outranks it (the defender block above).
+  const firstReply = args.playedLineUci?.[0];
+  if (firstReply && firstReply.length >= 4 && mv.piece !== 'k') {
+    const forkAfterReply = (fen: string | null): { fork: ReturnType<typeof detectLatentFork>; san: string } | null => {
+      if (!fen) return null;
+      try {
+        const c = new Chess(fen);
+        const r = c.move({ from: firstReply.slice(0, 2), to: firstReply.slice(2, 4), promotion: firstReply[4] });
+        return r ? { fork: detectLatentFork(c.fen(), them === 'w' ? 'white' : 'black'), san: r.san } : null;
+      } catch { return null; }
+    };
+    const now = forkAfterReply(after.fen());
+    const fork = now?.fork ?? null;
+    if (now && fork) {
+      const sq = fork.square as Square;
+      let guarded = false;
+      try { guarded = before.attackers(sq, me).includes(mv.from) && !after.attackers(sq, me).includes(mv.to); } catch { guarded = false; }
+      const home = guarded ? forkAfterReply(sideToMoveAs(before.fen(), them)) : null;
+      if (guarded && home?.fork?.square !== fork.square) {
+        const hit = fork.targets.map((t) => `your ${NAME[t.piece]} on ${t.square}`);
+        const list = hit.length > 1 ? `${hit.slice(0, -1).join(', ')} and ${hit[hit.length - 1]}` : hit[0];
+        return {
+          kind: 'abandoned-square',
+          squares: [fork.square, fork.from, ...fork.targets.map((t) => t.square)],
+          lost: null,
+          line: `Your ${NAME[mv.piece]} was guarding ${fork.square} — once it left, ${them === 'b' ? '…' : ''}${now.san} puts their knight two moves from ${fork.square}, where it forks ${list}.`,
+        };
+      }
+    }
   }
 
   // The rest of the geometry keys off what the move NEWLY hits. A piece the

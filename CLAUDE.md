@@ -5375,7 +5375,7 @@ should never have had. Gate: `learnSilentCapture.test.ts`.
 PLAY staying a pure playing surface. What changed is only the delivery:
 commentary, not cards.
 
-### 🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify").
+### 🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).
 
 🔴 **This REPLACES the 2026-09-24 "LEARN NAMES THE MOVE — WITH ITS REASON"
 section, which is DELETED rather than annotated (the Lake Butler rule).** On
@@ -5398,8 +5398,11 @@ What still speaks:
 1. **The why of every mistake** — yours and theirs at the same detail (David
    2026-10-10), from the ONE error computer `errorWhy`: what the move allowed,
    with the line on the board. `namesBetterMove` is REQUIRED at every call;
-   Learn, tactics and My Mistakes pass `false`. No why and no fitting cost →
-   the grade is held, never said bare.
+   tactics and My Mistakes pass `false`, Learn passes `pastBetterNameable`
+   (carve-out 3). No why and no fitting cost → the grade is held, never said
+   bare. Under a mistake's cost (an inaccuracy) the grade speaks only on a
+   MECHANISM the board shows (`errorWhy.failed`) — the floor skips wobbles,
+   not lessons.
 2. **The weighing** — the bad moves ruled out loud. The move itself is HELD
    wherever `nextMoveAdvice` earns the weighing (the board's fork in the road
    OR the student's own record), and said on Show me. A held move the student
@@ -5414,9 +5417,22 @@ is named with its why (`backwardLook` coach side, `namesBetterMove: true`).
 Before the student's move, a plan step that IS a legal move right now is held
 too (`planThreadTurn` `holdPlayable`, the two-plans line's waypoints).
 
+🔄 **CARVE-OUT 3 — THE STUDENT'S BETTER MOVE, ONCE IT IS PAST (David
+2026-10-20, his 13.Bc3: "You should hear what Bc3 allowed (Ne5 and the fork
+threat on e3), what the better move did, and the habit that catches it next
+time").** A mistake turn is three things: what the move allowed, what the
+better move DID (named, with its job — "a4 was the move — it would prepare a5
+to kick their queen off b6 and free your pawn on d4 from the pin"), and the
+habit that catches it ("before a piece moves, what is it guarding?"). The
+better move is named only when it is no longer the student's to find:
+`pastBetterNameable` holds it whenever it is still playable AND the engine's
+best move for them on the next board, and whenever the reply is unknown. The
+rule still protects the student's NEXT move; a moment already past is the
+lesson.
+
 **Review names the better move** (the game is over); **chat names it** (you
 asked). Gates: `learnNamesNoMoveUnasked.gate.test.ts`,
-`oneErrorComputer.gate.test.ts`.
+`oneErrorComputer.gate.test.ts`, `teachMistakeWhy.test.ts`.
 
 **KEPT in Learn** because none of them stop the board: in-place drills, live
 gem detection (names the opportunity, withholds the square), fork-in-the-road

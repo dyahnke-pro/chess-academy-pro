@@ -1180,7 +1180,24 @@ export function slipQuestion(
   student: 'w' | 'b',
   said: Set<string>,
   stemKey: number,
+  /** The square or piece the moved piece stopped guarding, when that is why the
+   *  move failed (`BackwardLook.guardLeft`). REQUIRED — `null` when it is not —
+   *  so every caller answers: a guard left is caught by its own question. */
+  guardLeft: string | null,
 ): { text: string; key: string } | null {
+  // WHAT WAS IT GUARDING? (David's 13.Bc3, 2026-10-20: the bishop left e3 to a
+  // knight fork, and the habit that catches it is asked before the piece moves.)
+  if (guardLeft && /^[a-h][1-8]$/.test(guardLeft)) {
+    const key = 'claim:method:what-it-guarded';
+    if (said.has(key)) return null;
+    said.add(key);
+    // The square is the grade's to name ("Your bishop was guarding e3"); the
+    // habit is the question, said once.
+    return { text: rotateStem([
+      'The question that catches this: before a piece moves, ask what it is guarding.',
+      'Ask it before every move: what does this piece guard right now?',
+    ], stemKey), key };
+  }
   if (!lostSquare || !/^[a-h][1-8]$/.test(lostSquare)) return null;
   let before: Chess;
   try { before = new Chess(fenBefore); } catch { return null; }

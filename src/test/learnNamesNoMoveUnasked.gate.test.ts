@@ -54,6 +54,15 @@ describe('Learn names no move unasked', () => {
     expect(page).toMatch(/packageForRegister\(\{ \.\.\.pf\.hint, detail: undefined \}/);
     expect(call).not.toMatch(/pf\.arrow/);
   });
+  it('the better move after a slip is named only when it is past (David 2026-10-20)', () => {
+    // CARVE-OUT 3: the one decider holds it whenever it is still the student's
+    // to find — behaviour proven in `teachMistakeWhy.test.ts`; here, that the
+    // grade's only naming decision is that function.
+    const look = read('services/backwardLook.ts');
+    const decisions = [...look.matchAll(/namesBetterMove:\s*([^,\n]+(?:\([^)]*\))?)/g)].map((m) => m[1].trim());
+    for (const d of decisions) expect(d, d).toMatch(/^(?:true|false|pastBetterNameable\()/);
+    expect(decisions.some((d) => d.startsWith('pastBetterNameable('))).toBe(true);
+  });
   it('a close call and a compare hold their moves in Learn', () => {
     const page = read('components/Coach/CoachTeachPage.tsx');
     expect(page).toMatch(/uncertaintyClause\(turnRead, \{[^}]*namesMoves: false/);

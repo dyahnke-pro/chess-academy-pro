@@ -11993,7 +11993,7 @@ export function CoachTeachPage(): JSX.Element {
                         plainTail: `${takeDefinition(look.pattern)}${mistakeRecurrence ? ` ${mistakeRecurrence}` : ''}`,
                         concession,
                         slipQuestion: () => (fund?.id === 'ignored-threat' || look.stakes?.mate ? null
-                          : slipQuestion(fenBefore, move.san, look.lostSquare, playerColor === 'white' ? 'w' : 'b', learnMemRef.current.spokenKeys, move.history.length)?.text ?? null),
+                          : slipQuestion(fenBefore, move.san, look.lostSquare, playerColor === 'white' ? 'w' : 'b', learnMemRef.current.spokenKeys, move.history.length, look.guardLeft ?? null)?.text ?? null),
                       });
                       const line = turnLine.text;
                       // "That let them win the pawn on d4" and "they're eyeing

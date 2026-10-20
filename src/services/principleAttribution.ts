@@ -213,7 +213,9 @@ export interface AttributionInput {
 
 export const ATTRIBUTION_MAX = 3;
 /** The opening window in plies — the one source for "still in the opening". */
-const OPENING_PLIES = 24;
+export const OPENING_PLIES = 24;
+/** Not before this ply: everyone leaves "book" at 1.e4. */
+export const BOOK_FROM_PLY = 6;
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -1839,7 +1841,7 @@ const DETECTORS: Detector[] = [
   // representative line. Not before ply 4: everyone leaves "book" at 1.e4.
   (c) => {
     if (!c.opening) return no(c, 'left-book-early', `ply ${c.plyIndex} is past the ${OPENING_PLIES}-ply opening window`);
-    if (c.plyIndex < 6) return no(c, 'left-book-early', `ply ${c.plyIndex} is too early to be "out of book"`);
+    if (c.plyIndex < BOOK_FROM_PLY) return no(c, 'left-book-early', `ply ${c.plyIndex} is too early to be "out of book"`);
     const { last, best } = c;
     const prefix = c.history.slice(0, -1).map((m) => m.san);
     let book: Map<string, { name: string; eco: string }>;

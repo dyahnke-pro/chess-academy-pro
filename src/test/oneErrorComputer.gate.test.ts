@@ -70,19 +70,23 @@ describe('one error computer', () => {
     }
   });
 
-  it('Learn free play, tactics and My Mistakes never name the better move', () => {
+  it('tactics and My Mistakes never name the better move; Learn names it only when it is past', () => {
     // `errorWhyFor` (tactics) never names it — checked at its own body.
     expect(read('services/inaccuracyCall.ts')).toMatch(/export function errorWhyFor\([\s\S]*?errorWhy\(\{[\s\S]*?namesBetterMove:\s*false[\s\S]*?\}\)/);
-    for (const f of ['services/backwardLook.ts', 'services/mistakeNarration.ts']) {
+    // CARVE-OUT 2 (David 2026-10-18): THEIR better move is a moment already
+    // past and is named; the rule protects the STUDENT's next move. Only a
+    // call on the opponent's side may pass true.
+    // CARVE-OUT 3 (David 2026-10-20, 13.Bc3: "what the better move did"): the
+    // student's better move is named in Learn exactly when `pastBetterNameable`
+    // says it is no longer theirs to find — never a literal true.
+    const decide = /namesBetterMove:\s*(?:false|pastBetterNameable\(args\.fenBefore, args\.playedSan, args\.bestSan \?\? null, args\.replyPvUci \?\? null, args\.replySan \?\? null\))/;
+    for (const [f, allowed] of [['services/backwardLook.ts', decide], ['services/mistakeNarration.ts', /namesBetterMove:\s*false/]] as const) {
       const src = read(f);
       const calls = [...src.matchAll(/\b(?:errorWhy|callInaccuracy(?:Detailed)?)\(\{[\s\S]*?\}\)/g)].map((m) => m[0]);
       expect(calls.length, `${f} has no error call`).toBeGreaterThan(0);
-      // CARVE-OUT 2 (David 2026-10-18): THEIR better move is a moment already
-      // past and is named; the rule protects the STUDENT's next move. Only a
-      // call on the opponent's side may pass true.
       for (const c of calls) {
         if (/side:\s*'coach'/.test(c)) continue;
-        expect(c, `${f}: an error call that may name the better move`).toMatch(/namesBetterMove:\s*false/);
+        expect(c, `${f}: an error call that may name the better move`).toMatch(allowed);
       }
     }
   });

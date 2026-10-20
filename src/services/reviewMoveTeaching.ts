@@ -22,6 +22,7 @@ import { describeStructure } from './boardStructure';
 import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
 import { namedSquares } from './squareRole';
 import { outpostKey } from './conceptKey';
+import { kickBreaksPin, pawnKickNext, pinsAgainst } from './pawnKickNext';
 
 // Q1 — OCCUPATION. A pawn reaching one of these has staked the centre.
 const CENTER = new Set(CORE_CENTER);
@@ -143,58 +144,12 @@ function pieceEyes(chess: Chess, sq: string, type: string, mover: 'w' | 'b'): { 
   return { enemies, controlled };
 }
 
-/** Squares of `color` pieces PINNED by an enemy slider — absolute (to the king)
- *  OR relative (to a MORE-VALUABLE friendly piece behind them, e.g. a knight
- *  pinned to the queen). Board-true (chess.js): walking out from each enemy
- *  rook/bishop/queen, the first piece is a friendly A and the next is a friendly
- *  of greater value (or the king) with nothing between → A is pinned. Used to
- *  detect an UNPIN — a developing move whose real point is freeing a pinned
- *  friend (David 2026-09-14: the review said Be7 "covers f8, getting into the
- *  game" and missed that it unpinned the knight). */
+/** Squares of `color` pieces PINNED by an enemy slider (`pawnKickNext.pinsAgainst`,
+ *  the one pin walker). Used to detect an UNPIN — a developing move whose real
+ *  point is freeing a pinned friend (David 2026-09-14: the review said Be7
+ *  "covers f8, getting into the game" and missed that it unpinned the knight). */
 function pinnedSquares(fen: string, color: 'w' | 'b'): Set<string> {
-  const out = new Set<string>();
-  let chess: Chess;
-  try { chess = new Chess(fen); } catch { return out; }
-  const enemy: 'w' | 'b' = color === 'w' ? 'b' : 'w';
-  const val = (t: string): number => (t === 'k' ? 100 : (PIECE_VAL[t] ?? 0));
-  const RAYS: Record<string, number[][]> = {
-    r: [[1, 0], [-1, 0], [0, 1], [0, -1]],
-    b: [[1, 1], [1, -1], [-1, 1], [-1, -1]],
-    q: [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]],
-  };
-  for (const row of chess.board()) {
-    for (const cell of row) {
-      if (!cell || cell.color !== enemy || !RAYS[cell.type]) continue;
-      const f0 = cell.square.charCodeAt(0) - 97;
-      const r0 = Number(cell.square[1]) - 1;
-      for (const [df, dr] of RAYS[cell.type]) {
-        let f = f0 + df;
-        let r = r0 + dr;
-        let a: { sq: string; val: number } | null = null;
-        while (f >= 0 && f <= 7 && r >= 0 && r <= 7) {
-          const s = `${String.fromCharCode(97 + f)}${r + 1}`;
-          const pc = chess.get(s as Sq);
-          if (pc) {
-            if (!a) {
-              if (pc.color === color && pc.type !== 'k') a = { sq: s, val: val(pc.type) };
-              else break; // enemy piece, or our king as the first piece → no pin starts here
-            } else {
-              // A pinned to a costlier friend (incl. king) — and the pin must
-              // COST something: the rear piece is the king, worth more than the
-              // pinner, or undefended. "Nf6 unpins your pawn on f7" was a pawn
-              // in front of a defended knight on g8 (walk 2026-09-27).
-              const rearCosts = pc.type === 'k' || val(pc.type) > val(cell.type) || chess.attackers(s as Sq, color).length === 0;
-              if (pc.color === color && val(pc.type) > a.val && rearCosts) out.add(a.sq);
-              break; // the second piece resolves the line
-            }
-          }
-          f += df;
-          r += dr;
-        }
-      }
-    }
-  }
-  return out;
+  return new Set(pinsAgainst(fen, color).map((p) => p.pinned));
 }
 
 /** UNPIN — a friendly piece pinned before the move and free after it (still on
@@ -236,31 +191,16 @@ function pawnKickPoint(chessAfter: Chess, mv: Move, moverIsStudent: boolean): st
  *  next square is safe for the pawn: no enemy pawn covers it and it is
  *  defended at least as often as it is attacked. */
 function pawnKickNextPoint(chessAfter: Chess, mv: Move, moverIsStudent: boolean): string | null {
-  if (mv.piece !== 'p' || mv.captured || mv.promotion) return null;
-  const dir = mv.color === 'w' ? 1 : -1;
-  const next = `${mv.to[0]}${Number(mv.to[1]) + dir}`;
-  if (Number(next[1]) < 2 || Number(next[1]) > 7 || chessAfter.get(next as Sq)) return null;
-  const them = mv.color === 'w' ? 'b' : 'w';
-  // Counted with the pawn already on the next square — the file behind it
-  // opens (h4-h5 lets the h1 rook defend h5).
-  const pushed = new Chess(chessAfter.fen());
-  pushed.remove(mv.to);
-  pushed.put({ type: 'p', color: mv.color }, next as Sq);
-  const attackers = pushed.attackers(next as Sq, them);
-  if (attackers.some((s) => pushed.get(s)?.type === 'p')) return null;
-  if (pushed.attackers(next as Sq, mv.color).length < attackers.length) return null;
-  const VALUE: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
-  const r = Number(next[1]) + dir;
-  let hit: { sq: string; type: string } | null = null;
-  for (const df of [-1, 1]) {
-    const file = String.fromCharCode(next.charCodeAt(0) + df);
-    if (file < 'a' || file > 'h') continue;
-    const sq = `${file}${r}`;
-    const c = chessAfter.get(sq as Sq);
-    if (!c || c.color === mv.color || !(c.type in VALUE)) continue;
-    if (!hit || VALUE[c.type] > VALUE[hit.type]) hit = { sq, type: c.type };
-  }
-  return hit ? `Prepares ${next}, which would kick ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[hit.type]} off ${hit.sq}.` : null;
+  const kick = pawnKickNext(chessAfter, mv);
+  if (!kick) return null;
+  const base = `Prepares ${kick.next}, which would kick ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[kick.target.type]} off ${kick.target.sq}`;
+  // THE KICK THAT BREAKS A PIN (David's 13th move, 2026-10-20: a4 prepared
+  // a5 against the queen on b6 that pinned his d4 pawn to his king).
+  const pin = kickBreaksPin(chessAfter, kick, mv.color);
+  const pinned = pin ? chessAfter.get(pin.pinned as Sq) : null;
+  return pin && pinned
+    ? `${base} — the ${PIECE_NOUN[kick.target.type]} pinning ${moverIsStudent ? 'your' : 'their'} ${PIECE_NOUN[pinned.type]} on ${pin.pinned}.`
+    : `${base}.`;
 }
 
 /** THE QUEEN STOPS GUARDING A PIECE THE ENEMY CAN TAKE, SO A PAWN TAKES BACK
@@ -609,7 +549,7 @@ export function buildReviewMoveTeachingFact(
   // 2026-09-07 fail: false "pressure" on a defended knight/pawn).
   if (winnableTarget) {
     const p = PIECE_NOUN[mv.piece]; const t = `${PIECE_NOUN[winnableTarget.type]} on ${winnableTarget.sq}`;
-    return out(sayIdea(phrases, 'pressure', [`The ${p} trains on the ${t} — pressure they have to answer.`, `The ${p} hits the ${t}.`, `The ${p} goes after the ${t}.`]), [mv.to, winnableTarget.sq]);
+    return out(sayIdea(phrases, 'pressure', [`The ${p} trains on the ${t} — pressure ${moverIsStudent ? 'they' : 'you'} have to answer.`, `The ${p} hits the ${t}.`, `The ${p} goes after the ${t}.`]), [mv.to, winnableTarget.sq]);
   }
   // (c) A rook or queen seizing a file.
   if (mv.piece === 'r' || mv.piece === 'q') {

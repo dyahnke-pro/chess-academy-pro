@@ -28,6 +28,7 @@ import { countKingAttack } from './kingSafety';
 import { andList, lineAfterFirst, lineShape, orList, seatedLine } from '../utils/andList';
 import { computeMustDefend, mateThreatsAgainst } from './threatOut';
 import { describeMoveGeometry, quietPurposePhrase } from './groundedAnswer';
+import { kickBreaksPin, pawnKickNext } from './pawnKickNext';
 
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
@@ -477,11 +478,30 @@ function mateThreatWhy(fenBefore: string, san: string, mover: 'w' | 'b'): string
   } catch { return null; }
 }
 
+/** THE KICK THAT FREES A PIN — a pawn step whose next step hits the piece
+ *  pinning one of yours (David's Learn game, 2026-10-20: the move he should
+ *  have played at 13, a4, was "it would grab space on the queenside"; its job
+ *  was a5 against the queen on b6 that pinned his d4 pawn to his king). The
+ *  one pin walker and the one prepared-kick reader (`pawnKickNext`). */
+function pinKickWhy(fenBefore: string, san: string, mover: 'w' | 'b'): string | null {
+  try {
+    const c = new Chess(fenBefore);
+    const m = c.move(san);
+    if (!m || m.color !== mover) return null;
+    const kick = pawnKickNext(c, m);
+    const pin = kick ? kickBreaksPin(c, kick, mover) : null;
+    const pinned = pin ? c.get(pin.pinned as Square) : null;
+    if (!kick || !pin || !pinned) return null;
+    return `prepares ${kick.next} to kick their ${PIECE_WORD[kick.target.type]} off ${kick.target.sq} and free your ${PIECE_WORD[pinned.type]} on ${pin.pinned} from the pin`;
+  } catch { return null; }
+}
+
 export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentLastSan: string | null): string | null {
   const first = mateThreatWhy(fenBefore, san, mover)
     ?? materialWhy(fenBefore, san, mover, opponentLastSan)
     ?? threatAnswerWhy(fenBefore, san, mover)
-    ?? threatMadeWhy(fenBefore, san, mover);
+    ?? threatMadeWhy(fenBefore, san, mover)
+    ?? pinKickWhy(fenBefore, san, mover);
   if (first) return first;
   // A CAPTURE SAYS WHAT IT TAKES (walk 4: "Bxc6+ — it lines up an x-ray at
   // their rook on a8", the knight it takes and the check never named). An even

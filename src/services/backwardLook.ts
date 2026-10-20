@@ -31,7 +31,7 @@ import { mateStakes, costStakes, type FactStakes } from './factStakes';
 import { Chess } from 'chess.js';
 import { findConcession, findStudentDrawback } from './concessionBeat';
 import { inaccuracySpeaks } from './inaccuracyVoice';
-import { callInaccuracy, callInaccuracyDetailed, errorWhyFor, type InaccuracyDecline, type PriorMove } from './inaccuracyCall';
+import { callInaccuracy, callInaccuracyDetailed, errorWhyFor, pastBetterNameable, type InaccuracyDecline, type PriorMove } from './inaccuracyCall';
 import type { MovePrice, SameSearchScores } from './moveCost';
 export { priorMoveLeadingTo } from './inaccuracyCall';
 import { describeConcessions } from './reviewTeachingPoints';
@@ -71,6 +71,10 @@ interface BackwardLook {
   namesBetter?: string;
   /** The coach's slip left the student something to find (`InaccuracyCall.offersStudent`). */
   offersStudent?: true;
+  /** The square or piece the student's moved piece stopped guarding
+   *  (`InaccuracyCall.guardLeft`) — the habit that finds it is "what was it
+   *  guarding?". */
+  guardLeft?: string;
 }
 
 /**
@@ -329,9 +333,9 @@ export function backwardLook(args: {
       if (args.bestSan) {
         try {
           const call = callInaccuracy({
-        // LEARN FREE PLAY NEVER NAMES THE BETTER MOVE UNASKED (David
-        // 2026-10-10): the why of the error, and the move only when asked.
-        namesBetterMove: false,
+            // THE BETTER MOVE IS NAMED WITH ITS JOB, unless it is still the
+            // student's to find (`pastBetterNameable`, David 2026-10-20).
+            namesBetterMove: pastBetterNameable(args.fenBefore, args.playedSan, args.bestSan ?? null, args.replyPvUci ?? null, args.replySan ?? null),
             fenBefore: args.fenBefore,
             playedSan: args.playedSan,
             bestSan: args.bestSan,
@@ -382,9 +386,9 @@ export function backwardLook(args: {
   if (args.bestSan) {
     try {
       const call = callInaccuracy({
-        // LEARN FREE PLAY NEVER NAMES THE BETTER MOVE UNASKED (David
-        // 2026-10-10): the why of the error, and the move only when asked.
-        namesBetterMove: false,
+        // THE BETTER MOVE IS NAMED WITH ITS JOB, unless it is still the
+        // student's to find (`pastBetterNameable`, David 2026-10-20).
+        namesBetterMove: pastBetterNameable(args.fenBefore, args.playedSan, args.bestSan ?? null, args.replyPvUci ?? null, args.replySan ?? null),
         fenBefore: args.fenBefore,
         playedSan: args.playedSan,
         bestSan: args.bestSan,
@@ -405,7 +409,7 @@ export function backwardLook(args: {
       const stakes = (args.allowedMate ?? null) !== null
         ? mateStakes('them', Math.max(0, Math.abs(args.allowedMate as number) * 2 - 1), true)
         : costStakes(args.cpLoss) ?? undefined;
-      if (call) return { ...(stakes ? { stakes } : {}), line: call.said, square: call.square, kind: 'mistake', ...(call.pattern ? { pattern: call.pattern } : {}), ...(call.lostSquare ? { lostSquare: call.lostSquare } : {}), ...(call.namesBetter ? { namesBetter: call.namesBetter } : {}), ...(call.line ? { punishLine: call.line } : {}), ...(call.squares ? { squares: call.squares } : {}) };
+      if (call) return { ...(stakes ? { stakes } : {}), line: call.said, square: call.square, kind: 'mistake', ...(call.pattern ? { pattern: call.pattern } : {}), ...(call.lostSquare ? { lostSquare: call.lostSquare } : {}), ...(call.namesBetter ? { namesBetter: call.namesBetter } : {}), ...(call.line ? { punishLine: call.line } : {}), ...(call.squares ? { squares: call.squares } : {}), ...(call.guardLeft ? { guardLeft: call.guardLeft } : {}) };
     } catch { /* fall through */ }
   }
 

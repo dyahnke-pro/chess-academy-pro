@@ -15,6 +15,7 @@ import { logAppAudit } from './appAuditor';
 import { MISCONCEPTION_RULES_REV, RECORD_PRICE_REV, THREAT_HALF_REV } from '../data/misconceptionTags';
 import { THREAT_MOTIF_TAGS } from './learnRecordTerms';
 import { isFixtureGame } from './fixtureGames';
+import { gameDateMs } from '../utils/gameDate';
 import { PRODUCTION_BACKFILL_SCHEDULE, sleep, type BackfillSchedule } from './backfillSchedule';
 
 export { POSITIVE_HALF_REV } from '../data/misconceptionTags';
@@ -62,7 +63,14 @@ export async function gamesBehindPositiveHalf(): Promise<string[]> {
     .filter((g) => !g.isMasterGame && !!g.fullyAnalyzed && (g.annotations?.length ?? 0) > 0
       && !isFixtureGame(g) && (g.positiveHalfRev !== POSITIVE_HALF_REV || !recorded.has(g.id)))
     .toArray();
-  return games.map((g) => g.id);
+  return newestFirst(games);
+}
+
+/** Newest game first, so the heat map's recent weeks fill before the old ones. */
+function newestFirst(games: ReadonlyArray<{ id: string; date?: string | null }>): string[] {
+  return [...games]
+    .sort((a, b) => (gameDateMs(b.date) ?? 0) - (gameDateMs(a.date) ?? 0))
+    .map((g) => g.id);
 }
 
 /** Analysed games not yet read for the incoming half of each motif under
@@ -76,7 +84,7 @@ export async function gamesBehindThreatHalf(): Promise<string[]> {
     .filter((g) => !g.isMasterGame && !!g.fullyAnalyzed && (g.annotations?.length ?? 0) > 0
       && !isFixtureGame(g) && (g.threatHalfRev !== THREAT_HALF_REV || (!withRows.has(g.id) && !readHere.has(g.id))))
     .toArray();
-  return games.map((g) => g.id);
+  return newestFirst(games);
 }
 
 /** Games this device's skill record holds rows for. */
@@ -137,7 +145,8 @@ export async function reconcileMisconceptionRules(
   const { gamesBehindPrice, repriceGameRecord } = await import('./recordReprice');
   const behindPrice = new Set(await gamesBehindPrice());
   const behindOther = new Set([...await gamesBehindRules(), ...await gamesBehindPositiveHalf()]);
-  const games = [...new Set([...behindPrice, ...behindOther, ...await gamesBehindThreatHalf()])];
+  const behindThreat = await gamesBehindThreatHalf();
+  const games = [...new Set([...behindPrice, ...behindOther, ...behindThreat])];
   r.games = games.length;
   if (games.length === 0) {
     await db.meta.put({ key: BACKFILL_DONE_KEY, value: BACKFILL_REVS });
@@ -145,32 +154,21 @@ export async function reconcileMisconceptionRules(
   }
   // Dynamic: autoAnalyzeGame pulls in the classifier and the engine helpers.
   const { autoAnalyzeGameMisconceptions, recordThreatHalfForGame } = await import('./autoAnalyzeGame');
-  // The engine that prices a stored move in ONE search (the same singleton
-  // scorer Learn and the review price with) — loaded only when a game needs it.
-  const scorer = behindPrice.size > 0 ? (await import('./refutedAlternative')).SINGLETON_SCORER : null;
-  let first = true;
-  let n = 0;
   const readHere = await readOnThisDevice();
-  setProgress({ done: 0, total: games.length });
-  for (const gameId of games) {
-    setProgress({ done: n++, total: games.length });
+  let first = true;
+  const pace = async (): Promise<void> => {
     if (!first) await schedule.yieldBetweenRows();
     first = false;
     // THE STUDENT FIRST (David's phone, 2026-10-19): a live game's coach waited
     // behind this pass and the phone heated. Each game waits until the student
     // has been away from a live board for a while.
     await schedule.waitForQuiet?.();
-    // Each game persists its own rows as it goes — a killed app keeps every
-    // finished game and re-reads only the rest.
-    // A game behind only the threat half reads only that — the other halves
-    // are current and re-reading them would cost a whole sweep for nothing.
-    // ONE PRICE FIRST (L6): the record below re-reads the annotations, so they
-    // are re-priced before it reads them. Persisted per game (stamped).
-    if (scorer && behindPrice.has(gameId)) {
-      const priced = await repriceGameRecord(gameId, { scorer, yieldBetween: schedule.yieldBetweenRows }).catch(() => null);
-      if (priced) { r.repriced += 1; r.repricedRows += priced.rowsRelabeled; }
-    }
-    const res = behindOther.has(gameId) || behindPrice.has(gameId) ? await autoAnalyzeGameMisconceptions(gameId).catch(() => null) : null;
+  };
+  // ONE GAME'S RECORD, read off its stored analysis — the classifier, the held
+  // half and the incoming-motif half. Board only: no engine. Each game persists
+  // its own rows as it goes, so a killed app keeps every finished game.
+  const readRecord = async (gameId: string): Promise<void> => {
+    const res = await autoAnalyzeGameMisconceptions(gameId).catch(() => null);
     r.reattributed += res?.reattributed ?? 0;
     r.held += res?.capabilitiesHeld ?? 0;
     r.threats += await recordThreatHalfForGame(gameId).catch(() => 0);
@@ -183,11 +181,44 @@ export async function reconcileMisconceptionRules(
       .modify({ rulesRev: MISCONCEPTION_RULES_REV });
     await db.games.update(gameId, { positiveHalfRev: POSITIVE_HALF_REV });
     readHere.add(gameId);
+  };
+
+  // PASS 1 — THE BOARD, NEWEST GAME FIRST, NO ENGINE (David's phone,
+  // 2026-10-20: "Still not filled in!"). The one-price revision put all 344 of
+  // his analysed games behind an engine re-price, and every game's board-only
+  // halves waited behind its re-price — on a phone engine that stalls, so 0
+  // incoming-motif rows were ever recorded and eleven skills read grey. The
+  // record is read from the stored analysis first, for every game; the price
+  // refines it after.
+  const boardGames = [...new Set([...behindThreat, ...behindOther])];
+  let n = 0;
+  setProgress({ done: 0, total: boardGames.length });
+  for (const gameId of boardGames) {
+    setProgress({ done: n++, total: boardGames.length });
+    await pace();
+    await readRecord(gameId);
     if (n % 25 === 0) await rememberRead(readHere);
   }
   await rememberRead(readHere);
-  // Every game was visited and stamped: the pass is done for these revisions.
   setProgress(null);
+
+  // PASS 2 — ONE PRICE (L6): each move re-priced in one search, then the
+  // game's record read again under the new price (its halves re-recorded, the
+  // stamps cleared so they are). Persisted per game (stamped), so a killed app
+  // re-prices only the rest. The engine that prices a stored move in ONE
+  // search is the same singleton scorer Learn and the review price with.
+  const scorer = behindPrice.size > 0 ? (await import('./refutedAlternative')).SINGLETON_SCORER : null;
+  for (const gameId of scorer ? behindPrice : []) {
+    await pace();
+    const priced = await repriceGameRecord(gameId, { scorer: scorer as NonNullable<typeof scorer>, yieldBetween: schedule.yieldBetweenRows }).catch(() => null);
+    if (!priced) continue;
+    r.repriced += 1;
+    r.repricedRows += priced.rowsRelabeled;
+    await db.games.update(gameId, { positiveHalfRev: undefined, threatHalfRev: undefined });
+    await readRecord(gameId);
+  }
+  await rememberRead(readHere);
+  // Every game was visited and stamped: the pass is done for these revisions.
   await db.meta.put({ key: BACKFILL_DONE_KEY, value: BACKFILL_REVS });
   void logAppAudit({
     kind: 'coach-surface-migrated',

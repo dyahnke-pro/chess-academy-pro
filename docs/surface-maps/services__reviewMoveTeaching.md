@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**845 lines · 5 exports · 16 importers · 7 tests · 0 audits**
+**785 lines · 5 exports · 18 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,25 +21,28 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewFullData.ts`
 - `src/services/reviewMoveBriefing.ts`
 - `src/services/reviewMoveTeaching.denied.test.ts`
+- `src/services/reviewMoveTeaching.pressureSeat.test.ts`
 - `src/services/reviewMoveTeaching.test.ts`
 - `src/services/reviewMoveTeaching.unpin.test.ts`
 - `src/services/reviewNarrationDefects.test.ts`
 - `src/services/reviewOpeningTheory.ts`
 - `src/services/reviewWalkOct1.test.ts`
 - `src/services/squareRole.test.ts`
+- `src/services/teachMistakeWhy.test.ts`
 - `src/services/walkOct1Learn.test.ts`
 
 ## Exports and every call site
 
-### `quietMovePoint` (function) — 6 call sites
+### `quietMovePoint` (function) — 7 call sites
 - `src/services/playCommentary.ts:919`
 - `src/services/reviewMoveTeaching.unpin.test.ts:11`
 - `src/services/reviewMoveTeaching.unpin.test.ts:15`
 - `src/services/reviewWalkOct1.test.ts:70`
 - `src/services/reviewWalkOct1.test.ts:76`
+- `src/services/teachMistakeWhy.test.ts:46`
 - `src/services/walkOct1Learn.test.ts:85`
 
-### `buildReviewMoveTeaching` (function) — 33 call sites
+### `buildReviewMoveTeaching` (function) — 35 call sites
 - `src/services/coachFeatureService.ts:1054`
 - `src/services/coachFeatureService.ts:3727`
 - `src/services/discussionPractice.ts:172`
@@ -49,6 +52,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveBriefing.ts:300`
 - `src/services/reviewMoveTeaching.denied.test.ts:8`
 - `src/services/reviewMoveTeaching.denied.test.ts:14`
+- `src/services/reviewMoveTeaching.pressureSeat.test.ts:12`
+- `src/services/reviewMoveTeaching.pressureSeat.test.ts:17`
 - `src/services/reviewMoveTeaching.test.ts:12`
 - `src/services/reviewMoveTeaching.test.ts:14`
 - `src/services/reviewMoveTeaching.test.ts:26`
@@ -75,8 +80,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/squareRole.test.ts:43`
 
 ### `buildReviewMoveTeachingFact` (function) — 2 call sites
-- `src/services/learnBoardTeaching.ts:1242`
-- `src/services/learnBoardTeaching.ts:1265`
+- `src/services/learnBoardTeaching.ts:1257`
+- `src/services/learnBoardTeaching.ts:1280`
 
 ### `nameEndgamePhase` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:3638`
@@ -99,11 +104,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/services/reviewMoveTeaching.denied.test.ts`
+- `src/services/reviewMoveTeaching.pressureSeat.test.ts`
 - `src/services/reviewMoveTeaching.test.ts`
 - `src/services/reviewMoveTeaching.unpin.test.ts`
 - `src/services/reviewNarrationDefects.test.ts`
 - `src/services/reviewWalkOct1.test.ts`
 - `src/services/squareRole.test.ts`
+- `src/services/teachMistakeWhy.test.ts`
 - `src/services/walkOct1Learn.test.ts`
 
 ## Audits that reach it
