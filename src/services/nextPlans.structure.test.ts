@@ -37,11 +37,14 @@ describe('structurePlan — structure→plan (conservative, board-true)', () => 
   });
 
   it('names the IQP plan when the student has an isolated central pawn', () => {
-    // White d4 pawn, no white c/e pawns → isolated queen's pawn.
-    const fen = 'rnbqkbnr/pppppppp/8/8/3P4/8/PP3PPP/RNBQKBNR w KQkq - 0 1';
+    // A real isolani (no friendly c/e-pawn, no enemy d-pawn) — the one
+    // definition the named structure uses too (census 9).
+    const fen = 'r1bq1rk1/pp2bppp/2n1pn2/8/3P4/2NB1N2/PP3PPP/R1BQ1RK1 w - - 0 10';
     const plan = structurePlan(fen, 'w');
-    expect(plan).toMatch(/isolated pawn on d4/i);
-    expect(plan).toMatch(/keep pieces on|activity/i);
+    expect(plan).toMatch(/isolated queen’s pawn/i);
+    expect(plan).toMatch(/play actively while pieces are on/i);
+    // A d-pawn still facing their d-pawn is not the isolani this plan is about.
+    expect(structurePlan('rnbqkbnr/pppppppp/8/8/3P4/8/PP3PPP/RNBQKBNR w KQkq - 0 1', 'w')).toBeNull();
   });
 
   it('returns null when there is no canonical single plan', () => {
