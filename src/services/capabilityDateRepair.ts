@@ -10,18 +10,15 @@ import { logAppAudit } from './appAuditor';
 import { gamePlayedAt } from './autoAnalyzeGame';
 import { PRODUCTION_BACKFILL_SCHEDULE, sleep, type BackfillSchedule } from './backfillSchedule';
 import type { CapabilityEvidenceRecord } from './capabilityEvidence';
+import type { MisconceptionTagRecord } from '../types';
+import { plyOfFen } from '../utils/plyOfFen';
+
+export { plyOfFen };
 
 const DONE_KEY = 'capability-date-repair';
 const DONE_REV = '2026-10-19';
 /** A row more than this long after its game was stamped by a later re-read. */
 const RE_READ_GAP_MS = 86_400_000;
-
-/** The ply a position was played from, read off its own FEN. */
-export function plyOfFen(fen: string): number {
-  const parts = fen.split(' ');
-  const full = Number(parts[5] ?? 1);
-  return (Math.max(1, Number.isFinite(full) ? full : 1) - 1) * 2 + (parts[1] === 'b' ? 1 : 0);
-}
 
 /** The rows of one game that were stamped by a re-read, re-dated in move order. */
 export function redateGameRows(rows: readonly CapabilityEvidenceRecord[], playedAt: number): CapabilityEvidenceRecord[] {
@@ -64,6 +61,56 @@ export async function repairCapabilityDates(
     category: 'subsystem',
     source: 'capabilityDateRepair.repairCapabilityDates',
     summary: `re-dated ${out.rows} evidence row(s) from ${out.games} game(s) to the day they were played`,
+  });
+  return out;
+}
+
+// ─── The other half: slips (the lead, 2026-10-20) ───────────────────────────
+// A slip from an imported game was logged when the game was ANALYSED, so the
+// hold rate's "last 20 times" read it after every answer from the same game.
+// New slips carry `playedAt`; this stamps the ones already on disk, once.
+
+const SLIP_DONE_KEY = 'slip-date-repair';
+const SLIP_DONE_REV = '2026-10-20';
+
+/** The slips of one game with no played date, dated by the game in move order. */
+export function dateGameSlips(rows: readonly MisconceptionTagRecord[], playedAt: number): MisconceptionTagRecord[] {
+  return rows.filter((r) => r.playedAt === undefined).map((r) => ({ ...r, playedAt: playedAt + plyOfFen(r.fen) }));
+}
+
+export async function repairSlipDates(
+  schedule: BackfillSchedule = PRODUCTION_BACKFILL_SCHEDULE,
+): Promise<{ games: number; rows: number }> {
+  const out = { games: 0, rows: 0 };
+  const done = await db.meta.get(SLIP_DONE_KEY).catch(() => undefined);
+  if (done?.value === SLIP_DONE_REV) return out;
+  if (schedule.startDelayMs > 0) await sleep(schedule.startDelayMs);
+  const games = await db.games.filter((g) => !g.isMasterGame).toArray();
+  const byGame = new Map<string, MisconceptionTagRecord[]>();
+  for (const r of await db.misconceptionTags.toArray()) {
+    if (!r.sourceGameId || r.playedAt !== undefined) continue;
+    const list = byGame.get(r.sourceGameId) ?? [];
+    list.push(r);
+    byGame.set(r.sourceGameId, list);
+  }
+  for (const game of games) {
+    const playedAt = gamePlayedAt(game);
+    const rows = byGame.get(game.id);
+    if (playedAt === undefined || !rows) continue;
+    const fixed = dateGameSlips(rows, playedAt);
+    if (fixed.length === 0) continue;
+    await schedule.waitForQuiet?.();
+    await db.misconceptionTags.bulkPut(fixed);
+    out.games += 1;
+    out.rows += fixed.length;
+    await schedule.yieldBetweenRows();
+  }
+  await db.meta.put({ key: SLIP_DONE_KEY, value: SLIP_DONE_REV });
+  void logAppAudit({
+    kind: 'coach-surface-migrated',
+    category: 'subsystem',
+    source: 'capabilityDateRepair.repairSlipDates',
+    summary: `dated ${out.rows} slip(s) from ${out.games} game(s) by the day they were played`,
   });
   return out;
 }

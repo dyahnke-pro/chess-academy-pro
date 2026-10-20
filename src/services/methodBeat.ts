@@ -330,16 +330,15 @@ export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: R
   // …unless the student has mate: "their threat first, your idea second" was
   // said with Qxd6# on the board (hand walk 1200). Mate answers every threat.
   const mateOnBoard = (s.bestSan ?? '').endsWith('#');
-  if (s.threatStanding && !mateOnBoard && owed('opponent-threat')) {
+  // THE QUESTION GOES OUT WITH ITS ANSWER (OS-1 g3 15.c5: "Run the question
+  // now — what are they threatening?" and the threat on b4 never named).
+  // With no target to name, the habit stays quiet.
+  if (s.threatStanding && s.threatTarget && !mateOnBoard && owed('opponent-threat')) {
     const t = s.threatTarget;
-    return beat('opponent-threat', t ? [
+    return beat('opponent-threat', [
       `Before you pick a move: what is their last move doing? Here it hits ${t} — answer that first, every time.`,
       `Run the question now — what are they threatening? They're after ${t}. Deal with that before your own plan.`,
       `Order of operations: their threat first — ${t} — your idea second.`,
-    ] : [
-      'Before you pick a move: what is their last move doing? Answer that first, every time — their idea comes before yours.',
-      'Run the question now — what are they threatening? Deal with the answer before you look at your own plan.',
-      'The habit here is order of operations: their threat first, your idea second. Never the other way round.',
     ], plyForVariety);
   }
 

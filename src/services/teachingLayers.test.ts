@@ -14,7 +14,7 @@ const hole = (clusterId: string, openCount = 2): WeaknessSignal => ({
   clusterId, bucket: 'tactical', label: clusterId, openCount, severity: 60, puzzleThemes: [], total: openCount,
 } as unknown as WeaknessSignal);
 const proven = (...tags: MisconceptionTagId[]): CapabilityProfile =>
-  new Map(tags.map((t) => [t, { held: 4, broken: 0, heldStreak: 3, streakGames: 3 }]));
+  new Map(tags.map((t) => [t, { held: 20, broken: 0, heldStreak: 20, streakGames: 3, hold: { posed: 20, held: 20, missed: 0, rate: 1 } }]));
 
 describe('layer standings come from the record, never the rating', () => {
   it('a fresh install is all grey, and grey is taught bottom-up', () => {

@@ -21,6 +21,7 @@
  * we randomly shuffle so re-entry feels fresh — same difficulty
  * curve, different positions each session.
  */
+import { recordMoveQuestionAnswer } from './answerRecord';
 import { Chess } from 'chess.js';
 import matingPatternsData from '../data/mating-patterns.json';
 import puzzlesData from '../data/puzzles.json';
@@ -323,7 +324,7 @@ function pickDistractors(fen: string, correctSan: string): string[] {
 export function buildMatingPatternLesson(
   pattern: MatingPattern,
   options: BuildLessonOptions = {},
-): { tree: WalkthroughTree; puzzleIndex: number; totalAvailable: number; rating: number; movesToMate: number } | null {
+): { tree: WalkthroughTree; puzzleIndex: number; totalAvailable: number; rating: number; movesToMate: number; solution: { fen: string; san: string } } | null {
   const tier = options.tier ?? 'beginner';
   const seed = options.seed ?? Date.now();
   const puzzleIndex = options.puzzleIndex ?? 0;
@@ -493,6 +494,9 @@ export function buildMatingPatternLesson(
     totalAvailable: candidates.length,
     rating: puzzle.rating,
     movesToMate: puzzle.movesToMate,
+    // The question the lesson asks: the start position and the first move of
+    // the mate — what `recordMatingPatternAnswer` files.
+    solution: { fen: puzzle.startFen, san: puzzle.studentSans[0] },
   };
 }
 
@@ -527,3 +531,23 @@ export function getPracticePuzzleCount(pattern: MatingPattern): number {
 /** Why a mated board is mate — the mate computer, exposed through the endgame
  *  door so surfaces read it here rather than importing the computer. */
 export { explainMate } from './matePatterns';
+
+/**
+ * A mating-pattern lesson was answered: the student found the mate, or left
+ * after missing it (persistent memory, 2026-10-19 — a find or a miss left no
+ * trace, so the coach could never know they already know Anastasia's mate).
+ * Filed through the one answer door, under the capability the board computes
+ * for the mating move.
+ */
+export function recordMatingPatternAnswer(a: {
+  fen: string;
+  san: string;
+  solved: boolean;
+  wrongAttempts: number;
+  hinted: boolean;
+}): void {
+  void recordMoveQuestionAnswer({
+    fen: a.fen, expectedSan: a.san, solved: a.solved, wrongAttempts: a.wrongAttempts,
+    help: a.hinted ? 'hint' : 'none', surface: 'mating-pattern',
+  });
+}

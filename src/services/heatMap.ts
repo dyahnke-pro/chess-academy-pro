@@ -1,41 +1,44 @@
 /**
- * heatMap — the student's skills as RED / GREEN / GREY, the thing the
- * Foundation says the app is going toward (CLAUDE.md § THE HEAT MAP) and that
- * no screen showed until 2026-10-01 (David: "Does weakness tab show the users
- * heatmap?" — it did not; green lived only inside the coach's brain).
+ * heatMap — the student's skills as RED / SHORT / GREEN / GREY, the thing the
+ * Foundation says the app is going toward (CLAUDE.md § THE HEAT MAP).
  *
- * PURE: two reads in, one verdict per skill out. No second "proven" bar —
- * GREEN is `capabilityProven`, the one definition every consumer reads.
+ * ONE COMPUTER, THE HOLD RATE (David 2026-10-19, "Agreed"). A skill's state is
+ * how often the student HELD it over the last `HOLD_WINDOW` times the board
+ * POSED it. Both halves of the record count as one: a held/broken
+ * capability-evidence row, and a recorded slip — and a miss is counted ONCE
+ * (a `broken` row and a slip on the same game + ply + skill are one miss).
  *
- *   GREEN — proven held (the board asked and the student answered, across
- *           games). Wins over an old open hole: proof is newer than the slip
- *           it outlived, and the coach already goes quiet on it.
- *   RED   — an open hole in the weakness spine, or a recent break with no held
- *           streak since.
- *   GREY  — not proven either way: never asked, or answered but not yet
- *           across enough games. NOT mastered (absent ≠ silent) — shown as
- *           "not tested yet" or "being tested", never as good news.
+ *   GREEN — ≥ 90% held over the last 20, with at least 8 posed.
+ *   SHORT — 75–89%: nearly held; the coach says it in one short line.
+ *   RED   — under 75%: the full lesson.
+ *   GREY  — fewer than 8 posed: not proven either way. Grey TEACHES.
  *
- * `progress` is honest partial credit toward green (held streak / the bar),
- * so a red tile can show it is on its way without claiming it has arrived.
+ * This REPLACES "green wins over open slips": David's record held 1,428 open
+ * hung-material slips while its streak said proven. The heat map, the fade and
+ * the threat voice all read this one state.
  */
-import { MISCONCEPTION_TAGS, isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
+import { MISCONCEPTION_TAGS, type MisconceptionTagId } from '../data/misconceptionTags';
 import type { MisconceptionTagRecord } from '../types';
 import { isMisconceptionDue, slipWeight } from './misconceptionService';
-import { isFixtureDerived } from './fixtureGames';
+import { summariseEvidence, type CapabilityEvidenceRecord, type EvidenceReading } from './capabilityEvidence';
 import {
-  capabilityProven, HELD_FOR_PROVEN, PROVEN_MIN_GAMES,
-  type CapabilityProfile,
-} from './capabilityEvidence';
+  holdState, isGameSlip, NEVER_POSED, HOLD_GREEN, HOLD_MIN_POSED,
+  type HeatState, type HoldRecord,
+} from './holdRate';
 
-export type HeatState = 'red' | 'green' | 'grey';
+export type { HeatState, HoldRecord } from './holdRate';
+export { holdRecords, holdState, HOLD_WINDOW, HOLD_MIN_POSED, HOLD_GREEN, HOLD_SHORT } from './holdRate';
 
 export interface HeatTile {
   tag: MisconceptionTagId;
   label: string;
   state: HeatState;
+  /** The hold rate that decided the state. */
+  hold: HoldRecord;
   /** Open slips in the weakness spine for this skill. */
   openCount: number;
+  /** Their WEIGHT (an inaccuracy is half a slip, `slipWeight`). */
+  openWeight: number;
   held: number;
   broken: number;
   heldStreak: number;
@@ -44,32 +47,29 @@ export interface HeatTile {
   progress: number;
 }
 
-/** Rows that are not a game slip: a lesson tap is the KNOW reading (its own
- *  tile, `knowLine`), and a missed Lichess puzzle is not the student's game. */
-const NOT_A_GAME_SLIP = new Set(['lesson', 'puzzle']);
-
 /**
  * THE HEAT MAP READS EVERY SLIP (David 2026-10-13: "my heat map is not filling
- * in. Despite having 300 games analyzed"). It used to read the ranked weakness
- * list, whose tag rows are COUNTED rows only — and batch analysis writes every
- * imported game's slips `counted: false` until the student reviews that game,
- * a guard against double-counting the TALLY. The heat map is not a tally; it
- * is the state of each skill. So a skill failed in 50 imported games read GREY
- * ("never asked") — the one reading the Foundation says it must never be.
- * Taking the rows themselves makes the counted-only view impossible to pass.
+ * in. Despite having 300 games analyzed") — the rows themselves, never the
+ * counted-only weakness list, so an imported game's slips count. The state is
+ * the profile's hold rate (`holdRate`, read through `summariseEvidence`) — the
+ * same one `capabilityProven` reads.
  */
-export function heatMap(profile: CapabilityProfile, slips: readonly MisconceptionTagRecord[], now: number = Date.now()): HeatTile[] {
+export function heatMap(
+  evidence: readonly CapabilityEvidenceRecord[],
+  slips: readonly MisconceptionTagRecord[],
+  opts: { now?: number; reading?: EvidenceReading } = {},
+): HeatTile[] {
+  const now = opts.now ?? Date.now();
+  const reading = opts.reading ?? 'use';
+  const profile = summariseEvidence(evidence, slips, {}, reading);
   const open = new Map<string, number>();
-  // The WEIGHT of the open slips, beside their count: one inaccuracy is half a
-  // slip (`slipWeight`), so it alone never paints a skill red.
   const weight = new Map<string, number>();
-  for (const r of slips) {
-    if (NOT_A_GAME_SLIP.has(r.source) || isFixtureDerived(r)) continue;
-    if (!isMisconceptionTagId(r.tag) || r.tag === 'other') continue;
-    // The one definition of "open" the weakness spine uses: due today.
-    if (!isMisconceptionDue(r, now)) continue;
-    open.set(r.tag, (open.get(r.tag) ?? 0) + 1);
-    weight.set(r.tag, (weight.get(r.tag) ?? 0) + slipWeight(r));
+  if (reading === 'use') {
+    for (const r of slips) {
+      if (!isGameSlip(r) || !isMisconceptionDue(r, now)) continue;
+      open.set(r.tag, (open.get(r.tag) ?? 0) + 1);
+      weight.set(r.tag, (weight.get(r.tag) ?? 0) + slipWeight(r));
+    }
   }
   // `other` is the catch-all review queue, not a skill — never a tile.
   return MISCONCEPTION_TAGS
@@ -77,28 +77,23 @@ export function heatMap(profile: CapabilityProfile, slips: readonly Misconceptio
     .map((t) => {
       const tag: MisconceptionTagId = t.id;
       const e = profile.get(tag);
-      const openCount = open.get(tag) ?? 0;
-      const green = capabilityProven(e);
-      // Held but not yet proven is NOT failing: it stays grey, with progress
-      // toward green. Red is only an open hole or a fresh break.
-      const state: HeatState = green
-        ? 'green'
-        : (weight.get(tag) ?? 0) >= 1 || (!!e && e.broken > 0 && e.heldStreak === 0)
-          ? 'red'
-          : 'grey';
+      const hold = e?.hold ?? NEVER_POSED;
+      const state = holdState(hold);
       return {
         tag,
         label: t.label,
         state,
-        openCount,
+        hold,
+        openCount: open.get(tag) ?? 0,
+        openWeight: weight.get(tag) ?? 0,
         held: e?.held ?? 0,
         broken: e?.broken ?? 0,
         heldStreak: e?.heldStreak ?? 0,
         streakGames: e?.streakGames ?? 0,
-        // Both halves of the bar: the held streak AND the distinct games.
-        progress: green ? 1 : Math.min(0.95,
-          (e?.streakCredit ?? e?.heldStreak ?? 0) / HELD_FOR_PROVEN,
-          (e?.streakGames ?? 0) / PROVEN_MIN_GAMES),
+        // Both halves of the bar: the rate toward 90% AND the posed count toward 8.
+        progress: state === 'green' ? 1 : Math.min(0.95,
+          (hold.rate ?? 0) / HOLD_GREEN,
+          hold.posed / HOLD_MIN_POSED),
       };
     });
 }

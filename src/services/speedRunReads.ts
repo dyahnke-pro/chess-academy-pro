@@ -5,6 +5,7 @@
 // §BUILD QUEUE). Pure board reads, each one of his habits of thought, handed to
 // the one producer (`thinkAloud.depthClauses`) as `speedrun-read` facts the one
 // door ranks. G0: nothing here decides — each says what the board shows.
+import type { NamedMove } from './studentMoveNaming';
 import { Chess, type Square } from 'chess.js';
 import { MATERIAL_VALUE } from './pieceValues';
 import { PIECE_NAMES } from '../types/tacticTypes';
@@ -35,7 +36,7 @@ const sanOf = (fen: string, uci: string | undefined): string | null => {
   try { return new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san; } catch { return null; }
 };
 
-export interface Read { text: string; squares?: string[]; /** It names the engine's move — speaks only where the move may be named. */ namesMove?: boolean; /** What rides on it (factStakes) — the ranker orders by this. */ stakes?: FactStakes; /** The IDEA without the move — spoken when the move is held back (named only where earned). */ idea?: string; /** REQUIRED: the once-per-game claim, keyed by the fact and its square (the voice package drops a repeat under any stem — Black walk 2026-10-19, "overprotect d5" said on two moves). */ claim: string; /** What would pay this idea off, and the line that closes the loop (the thread across moves). */ promise?: GamePromise }
+export interface Read { text: string; squares?: string[]; /** It names the engine's move — speaks only where the move may be named. */ namesMove?: boolean; /** What rides on it (factStakes) — the ranker orders by this. */ stakes?: FactStakes; /** The IDEA without the move — spoken when the move is held back (named only where earned). */ idea?: string; /** REQUIRED: the once-per-game claim, keyed by the fact and its square (the voice package drops a repeat under any stem — Black walk 2026-10-19, "overprotect d5" said on two moves). */ claim: string; /** What would pay this idea off, and the line that closes the loop (the thread across moves). */ promise?: GamePromise; /** The student's move the IDEA points at by its piece ("your knight has a forcing move" with one knight move that forces it) — the door holds the idea while that move is theirs to play (OS-10). */ ideaNames?: NamedMove }
 type Lines = ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>;
 const seatCp = (fen: string, l: { evaluation: number; mate: number | null }): number => {
   const white = l.mate != null ? (l.mate > 0 ? 100000 : -100000) : l.evaluation;
@@ -287,7 +288,7 @@ export function awkwardBlock(fen: string, lines: Lines): Read | null {
     freeMoves = b.moves({ square: r.move.to }).length;
   } catch { return null; }
   if (freeMoves > 2) return null;
-  return { claim: `srr:awkward-block:${r.move.to}`, idea: `Your ${name(a.move.piece)} has a check that drives their ${name(r.move.piece)} to an awkward square — the point of a check can be the square it forces.`, namesMove: true, text: `The check forces them to block with the ${name(r.move.piece)}, and there it is stuck — the point of the check is the awkward square it drives that piece to.`, squares: [r.move.to] };
+  return { claim: `srr:awkward-block:${r.move.to}`, ideaNames: { from: a.move.from, to: a.move.to }, idea: `Your ${name(a.move.piece)} has a check that drives their ${name(r.move.piece)} to an awkward square — the point of a check can be the square it forces.`, namesMove: true, text: `The check forces them to block with the ${name(r.move.piece)}, and there it is stuck — the point of the check is the awkward square it drives that piece to.`, squares: [r.move.to] };
 }
 
 // ── batch 3 (checked first: breaks → findPawnBreaks; knight routes →
@@ -317,7 +318,7 @@ export function playAnyway(fen: string, lines: Lines): Read | null {
   const hits = replySan.includes('+') ? 'lets them check your king'
     : rTo?.captured && rTo.to === a.move.to ? `offers the ${name(rTo.captured)}` // naming the square would give the move away
       : rTo?.captured ? `lets them take your ${name(rTo.captured)} on ${rTo.to}` : 'allows a scary-looking reply';
-  return { claim: `srr:play-anyway:${a.move.to}`, idea: `Your strongest ${name(a.move.piece)} move ${hits} — ${rot(fen, 'look one move past it: nothing follows for them.', 'check what happens next — the scare is empty.', 'follow it one more move and the danger disappears.')}`, namesMove: true, text: `${sayMoveClause(bestSan, fen).replace(/^./, (c) => c.toUpperCase())} allows ${what} — ${sayMoveClause(replySan, a.board.fen())} — and you play it anyway: look one move past the scary reply and nothing follows for them.` };
+  return { claim: `srr:play-anyway:${a.move.to}`, ideaNames: { from: a.move.from, to: a.move.to }, idea: `Your strongest ${name(a.move.piece)} move ${hits} — ${rot(fen, 'look one move past it: nothing follows for them.', 'check what happens next — the scare is empty.', 'follow it one more move and the danger disappears.')}`, namesMove: true, text: `${sayMoveClause(bestSan, fen).replace(/^./, (c) => c.toUpperCase())} allows ${what} — ${sayMoveClause(replySan, a.board.fen())} — and you play it anyway: look one move past the scary reply and nothing follows for them.` };
 }
 
 /** SKIP THE MIDDLEMAN: the break is there and the engine plays it now rather
@@ -558,7 +559,7 @@ export function forceConcession(fen: string, lines: Lines): Read | null {
   const rights = (f: string): string => f.split(' ')[2];
   const theirs = (f: string): string => rights(f).replace(them === 'w' ? /[kq]/g : /[KQ]/g, '').replace('-', '');
   if (r.move.piece === 'k' && !replySan.startsWith('O-O') && theirs(a.board.fen()) && !theirs(r.board.fen())) {
-    return { claim: 'srr:concession:castle', idea: `Your ${name(a.move.piece)} has a forcing move that costs their king the right to castle — ${rot(fen, 'find it.', 'look at the checks first.', 'can you see it?')}`, namesMove: true, text: `${cap(sayMoveClause(bestSan, fen))} forces a concession — their best answer is ${replySan}, and their king loses the right to castle.`, squares: [r.move.to] };
+    return { claim: 'srr:concession:castle', ideaNames: { from: a.move.from, to: a.move.to }, idea: `Your ${name(a.move.piece)} has a forcing move that costs their king the right to castle — ${rot(fen, 'find it.', 'look at the checks first.', 'can you see it?')}`, namesMove: true, text: `${cap(sayMoveClause(bestSan, fen))} forces a concession — their best answer is ${replySan}, and their king loses the right to castle.`, squares: [r.move.to] };
   }
   // Only a STRUCTURAL weakness the reply itself made: an isolated or doubled
   // pawn of theirs that stands there, after a reply that moved or took a pawn.
@@ -577,7 +578,7 @@ export function forceConcession(fen: string, lines: Lines): Read | null {
   // the pawn before the reply moved it.
   const pawnFile = (r.move.to === fresh && r.move.piece === 'p' ? r.move.from : fresh)[0];
   if (!fresh) return null;
-  return { claim: `srr:concession:${pawnFile}`, idea: `Your ${name(a.move.piece)} has a forcing move that leaves their ${pawnFile}-pawn weak for good — ${rot(fen, 'find it.', 'look at the forcing moves first.', 'can you see it?')}`, namesMove: true, text: `${cap(sayMoveClause(bestSan, fen))} forces a concession — their best answer is ${replySan}, and it leaves their ${pawnFile}-pawn weak for good.`, squares: [fresh] };
+  return { claim: `srr:concession:${pawnFile}`, ideaNames: { from: a.move.from, to: a.move.to }, idea: `Your ${name(a.move.piece)} has a forcing move that leaves their ${pawnFile}-pawn weak for good — ${rot(fen, 'find it.', 'look at the forcing moves first.', 'can you see it?')}`, namesMove: true, text: `${cap(sayMoveClause(bestSan, fen))} forces a concession — their best answer is ${replySan}, and it leaves their ${pawnFile}-pawn weak for good.`, squares: [fresh] };
 }
 
 /** FLEXIBLE MOVES FIRST: a piece move and a pawn move are about equal — play
@@ -587,7 +588,6 @@ export function flexibleFirst(fen: string, lines: Lines): Read | null {
   const a = sanOf(fen, lines[0].moves[0]);
   const pa = a ? play(fen, a) : null;
   if (!pa || !a || pa.move.piece === 'p' || pa.move.captured || a.includes('+')) return null;
-  const what = a.startsWith('O-O') ? 'castling' : `a ${name(pa.move.piece)} move`;
   for (const l of lines.slice(1)) {
     if (seatCp(fen, lines[0]) - seatCp(fen, l) >= criticalityThresholds().notable) continue;
     const s2 = sanOf(fen, l.moves[0]);
@@ -596,7 +596,10 @@ export function flexibleFirst(fen: string, lines: Lines): Read | null {
     // No payoff line: "And now h4 — the way it should be" praised the pawn move
     // whenever it came, with no why and even when the engine rated it worse
     // (re-walk 2026-10-11, 5.h4).
-    return { idea: rot(fen, `Make the flexible move first — ${what} keeps your options; the pawn move can always come later, but a pawn can never go back.`, `Keep your options open — ${what} first; the pawn move will still be there, and a pawn move can't be taken back.`, `Commit the pawn last — ${what} now, the pawn later if you still want it.`), claim: 'srr:flexible-first', namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
+    // THE IDEA NAMES NO PIECE (OS-10, David's record 2026-10-19, ply 13:
+    // "Commit the pawn last — a knight move now" said before his move — the
+    // piece to move IS the answer). The principle stands alone.
+    return { idea: rot(fen, 'Make the flexible move first — the pawn move can always come later, but a pawn can never go back.', "Keep your options open — the pawn move will still be there later, and a pawn move can't be taken back.", 'Commit the pawn last — a pawn move is the one you can never take back.'), claim: 'srr:flexible-first', namesMove: true, text: `${a} and ${s2} are about equal — make the flexible move first. ${a} keeps your options; the pawn move can always come later, but it can never go back.` };
   }
   return null;
 }

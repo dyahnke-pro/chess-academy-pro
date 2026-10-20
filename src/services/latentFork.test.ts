@@ -102,12 +102,12 @@ describe('it SPEAKS on a real latent fork', () => {
     expect(latentForkClause(mine, 'black')).toMatch(/Watch .* forks your/);
   });
 
-  it('names the route — Learn names the move (walk 1500, 38.Ne3: "the route is yours to find")', () => {
+  it('names the square, withholds the route — LEARN NAMES NO MOVE UNASKED (OS-10, David\'s move 27: "via b5, then c7")', () => {
     const mine = detectLatentFork(FEN, 'white')!;
     const said = latentForkClause(mine, 'white');
     expect(said).toContain(mine.square);
-    expect(said).toContain(`via ${mine.via}`);
-    expect(said).not.toMatch(/yours to find/);
+    expect(said).not.toContain(`via ${mine.via}`);
+    expect(said).not.toContain(mine.via);
   });
 });
 

@@ -108,7 +108,6 @@ const run = async () => {
     'discussion-prompt', 'discussion-reason-picker',
     'review-find-shot-card', 'review-find-shot-reveal',
     'review-rewind-card', 'review-turning-point-card', 'review-turning-point-reveal',
-    'review-theory-ask', 'review-theory-playback',
     'review-principle-quiz', 'review-sequence-ask', 'review-sequence-playback',
     'review-capture-teach', 'review-capture-continue',
   ];
@@ -179,10 +178,6 @@ const run = async () => {
         }
       }
       // SPOT-THE-SEQUENCE card is gone — no card to answer.
-      // THEORY-DEPARTURE: skip (ask) or stop (playback).
-      for (const sel of ['[data-testid="review-theory-skip"]', '[data-testid="review-theory-stop"]']) {
-        if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); }
-      }
       // TURNING-POINT / CAPTURE / REWIND — done/continue/decline (never accept:
       // accept hijacks the walk into practice, per the full-game standard).
       for (const sel of [

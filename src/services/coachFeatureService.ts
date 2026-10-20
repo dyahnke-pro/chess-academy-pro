@@ -10,7 +10,8 @@ import type { Square } from 'chess.js';
 import { legalSeeGainOn } from './positionReadingService';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatPrevention } from './groundedAnswer';
 import { selectTeaching } from './teachingSelector';
-import { coldStudent, computeNeed, type StudentNeedContext, type NeedVerdict } from './needScore';
+import { coldStudent, computeNeed, fenKey, type StudentNeedContext, type NeedVerdict } from './needScore';
+import type { StoryBeat } from './openingStory';
 import { loadStudentNeedContext } from './studentNeedLoader';
 import { layerStandings } from './teachingLayers';
 import { readConversion, type ConversionStep } from './conversionMethod';
@@ -25,7 +26,8 @@ import { detectConcept } from './reviewConcepts';
 // floating tactic-pattern note; that teaching lives on the tactics drill.)
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
-import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
+import { ensureMastersDbLoaded, mastersMovesSync, masterMovesCachedSync } from './masterPlayLookup';
+import { moveJob, MINE, THEIRS, type PriorCapture } from './bookMoveWhy';
 import { refutedAlternative, candidatesForPosition, SINGLETON_SCORER, type RefutedAlternative } from './refutedAlternative';
 import { recordedMoveCost } from './moveCost';
 import { findWorstPlacedPiece } from './nextPlans';
@@ -1188,6 +1190,22 @@ export function frameTeachingForOpponent(sentence: string): string {
   return `Your opponent ${continueSentence(s)}`;
 }
 
+/** A line the student has played this many times without leaving book is
+ *  proven: the story says what the opening is and stops there. */
+export const STORY_PROVEN_GAMES = 5;
+/** A move is book here when masters played it at least this often. */
+const BOOK_JOB_MIN_GAMES = 20;
+/** Every beat of the opening story is opening theory taught at its move —
+ *  the `[opening]` facet (a TEACH role, deduped by its own claim key). Not
+ *  `[plan-opening]`: that tag is a once-a-review development nag, and it would
+ *  silence the key break after the character was said. A new beat fails to
+ *  compile until it is placed here. */
+const STORY_TAG: Record<StoryBeat, FacetTag> = {
+  fork: 'opening', identity: 'opening', 'branch-choice': 'opening', 'their-setup': 'opening',
+  'structure-cost': 'opening', 'structure-paid': 'opening', consequence: 'opening',
+  character: 'opening', 'key-break': 'opening', 'horizon-plan': 'opening',
+};
+
 export function buildReviewSegments(
   moves: ReviewMoveInput[],
   /** The student's color — when provided, their silent opening moves are
@@ -1235,7 +1253,7 @@ export function buildReviewSegments(
   // review — the same record every ply of the walk is judged against.
   const layers = layerStandings(studentWeaknesses ?? [], studentNeed?.capabilities);
   // The fade per skill, from the same record (one rule with Learn).
-  const fade = fadeLevelsFrom(studentNeed?.capabilities);
+  const fade = fadeLevelsFrom(studentNeed?.heat);
   // Package-completion once-per-game beats (David 2026-07-24: "complete the
   // package"): the simplify-when-ahead trade idea fires at most once.
   let tradeIdeaSpoken = false;
@@ -1429,6 +1447,37 @@ export function buildReviewSegments(
   const refutedSaid = new Set<string>();
   // Learn-computer hints already spoken this game (A2), by claim identity.
   const hintsSaid = new Set<string>();
+  // HOW MUCH OF THE OPENING'S STORY THIS STUDENT GETS — from their own record
+  // (David 2026-10-19: "an opening they keep leaving early gets more; one they
+  // play cleanly gets a line"). Full story unless the record PROVES the line:
+  // five or more games in this opening, no departure of theirs anywhere on this
+  // game's line. A grey record (few games) gets the whole story (grey teaches).
+  // WHERE THE OPENING'S STORY ENDS (BACKLOG §6). The masters' file runs out
+  // before most openings are over (the Fried Liver's book ends at ply 17,
+  // mid-attack), so the move jobs keep going past it — read off the board,
+  // claiming no theory — until the game's first flagged move, where the
+  // game's own story (the error lane) takes over. Within the opening phase
+  // they always run.
+  const lastBookIdx = ((): number => {
+    let last = -1;
+    for (let k = 0; k < moves.length; k += 1) {
+      const known = masterMovesCachedSync(fenChain[k].fenBefore);
+      if (!known || !known.some((x) => x.san === moves[k].san && x.games >= BOOK_JOB_MIN_GAMES)) break;
+      last = k;
+    }
+    return last;
+  })();
+  const isFlagged = (c: ReviewMoveInput['classification']): boolean => c === 'inaccuracy' || c === 'mistake' || c === 'blunder' || c === 'miss';
+  const storyTailEnd = ((): number => {
+    for (let k = Math.max(0, lastBookIdx + 1); k < moves.length; k += 1) if (isFlagged(moves[k].classification)) return k;
+    return moves.length;
+  })();
+  const storyAll: boolean | null = ((): boolean | null => {
+    if (!studentNeed) return true;
+    const keys = studentNeed.lineFenKeys ? new Set(studentNeed.lineFenKeys) : null;
+    const leftHere = keys ? studentNeed.bookDepartures.some((r) => keys.has(fenKey(r.bookFen))) : studentNeed.bookDepartures.length > 0;
+    return leftHere || (studentNeed.openingGames ?? 0) < STORY_PROVEN_GAMES;
+  })();
   // LOOSE PIECES, BY OWNER — spoken count this game. The first is said; the
   // second names the PATTERN (the heart of the app: "what the opponent keeps
   // doing wrong — closing on the habit that finds it next time"); after that a
@@ -1937,6 +1986,66 @@ export function buildReviewSegments(
             }
           }
         } catch { /* a bonus, never a blocker */ }
+      }
+      // THE OPENING'S STORY, AS EACH MOVE IS PLAYED (David 2026-10-19: "in
+      // review, i do want the full theory and main idea of the opening
+      // explained as each move is being played. like Danya does in his post
+      // game analysis"). The SAME computer Learn reads (`openingStory`, one
+      // vocabulary): the fork and its families, what the opening is, the road
+      // the student chose and why, their setup, the structure's cost and the
+      // move that pays it, the coming game's character, the key break. Review
+      // may name the moves (the game is over). Said once a game each, through
+      // the walk's after-the-door ledger; sized by the student's own record.
+      if (studentColorWB && storyAll !== null) {
+        for (const r of readBoardAll('openingStory', { history: sansForRun.slice(0, m.ply), fen: fenPair.fenAfter, student: studentColorWB, namesStudentMoves: true })) {
+          if (!storyAll && r.storyBeat !== 'identity') continue;
+          const id = `hint:${r.key}`;
+          if (hintsSaid.has(id) || facets.some((x) => facetIdentity.get(x) === id)) continue;
+          const raw = `[${r.storyBeat ? STORY_TAG[r.storyBeat] : 'opening'}] ${r.text}`;
+          facets.push(raw);
+          facetIdentity.set(raw, id);
+          facetProofs.set(raw, r.proof);
+          if (r.squares.length) facetSquares.set(raw, r.squares);
+        }
+      }
+      // EACH OPENING MOVE, BOTH SIDES, WITH ITS JOB (BACKLOG §6, David: "the
+      // full theory and main idea of the opening explained as each move is
+      // being played. like Danya does in his post game analysis"). What the
+      // move DOES on the board — the guard, the pin it stops, the castling it
+      // clears, the capture taken back, the fork it lands, the piece it piles
+      // on — from `moveJob`, the same computer that names the book move after
+      // a departure, said in the mover's seat. Where the masters' file knows
+      // the position the line says so ("the masters' main move"); past it the
+      // job is still read off the board and no theory is claimed. A flagged
+      // move is the error lane's; a bare "brings your knight out" restates the
+      // board (rule 3) and stays quiet.
+      const inStory = classifyPhase(fenPair.fenBefore, { ply: m.ply - 1 }) === 'opening' || (lastBookIdx >= 0 && i < storyTailEnd);
+      if (storyAll && studentColorWB && !isFlagged(m.classification) && inStory) {
+        const mine = moverColor === playerColor;
+        const prevSan = i > 0 ? moves[i - 1].san : null;
+        let prior: PriorCapture | null = null;
+        if (prevSan && /x/.test(prevSan)) {
+          try { const pm = new Chess(fenChain[i - 1].fenBefore).move(prevSan); if (pm.captured) prior = { to: pm.to, captured: pm.captured }; } catch { prior = null; }
+        }
+        const job = moveJob(fenPair.fenBefore, m.san, moverColor === 'white' ? 'w' : 'b', mine ? MINE : THEIRS, prior);
+        const bare = job?.kind === 'develop' && !/castle/.test(job.clause);
+        const id = `hint:move-job:${m.ply}`;
+        if (job && job.clause && !bare && !hintsSaid.has(id)) {
+          const masters = masterMovesCachedSync(fenPair.fenBefore);
+          const sorted = masters ? [...masters].sort((x, y) => y.games - x.games) : [];
+          const book = sorted.find((x) => x.san === m.san && x.games >= BOOK_JOB_MIN_GAMES);
+          // THE POINT, NEVER THE MOVE (David 2026-10-20: "You play the knight
+          // to b4 — redundant"): the move is on the board and in the move list
+          // (Narration Voice Rule 3). The clause's own pronouns say whose move
+          // it is. Book standing leads only where the masters' file knows it.
+          const standing = book ? (sorted[0] === book ? "The masters' main move here" : 'A book move here') : null;
+          const point = job.clause.replace(/^it /, '');
+          const text = standing ? `${standing}: ${job.clause}.` : `${point.charAt(0).toUpperCase()}${point.slice(1)}.`;
+          const raw = `[move-job] ${text}`;
+          facets.push(raw);
+          facetIdentity.set(raw, id);
+          if (job.squares.length) facetSquares.set(raw, job.squares);
+        }
       }
       // A VERDICT ON THEIR OPENING CHOICE — parity with Learn: their move that
       // left the masters' book, judged by the engine's cost of it.

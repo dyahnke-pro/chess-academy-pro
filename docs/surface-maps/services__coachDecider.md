@@ -224,7 +224,7 @@
 - `src/services/thinkingSteps.test.ts:44`
 
 ### `buildVoicePackage` (re-export) — 82 call sites
-- `src/components/Coach/CoachGameReview.tsx:1940`
+- `src/components/Coach/CoachGameReview.tsx:1941`
 - `src/components/Coach/CoachTeachPage.tsx:8383`
 - `src/hooks/usePhaseNarration.ts:440`
 - `src/hooks/usePhaseNarration.ts:893`
@@ -305,7 +305,7 @@
 - `src/services/voicePackage.test.ts:569`
 - `src/services/voicePackage.test.ts:575`
 - `src/services/voicePackage.test.ts:582`
-- `src/services/voicePackage.ts:427`
+- `src/services/voicePackage.ts:428`
 
 ### `DANGER_LANES` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -322,7 +322,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:11135`
 - `src/components/Coach/CoachTeachPage.tsx:11414`
 - `src/services/voicePackage.test.ts:38`
-- `src/services/voicePackage.ts:599`
+- `src/services/voicePackage.ts:600`
 
 ### `keptLines` (re-export) — 5 call sites
 - `src/components/Coach/CoachTeachPage.tsx:11362`
@@ -339,7 +339,7 @@
 - `src/services/voicePackage.test.ts:335`
 - `src/services/voicePackage.test.ts:342`
 - `src/services/voicePackage.test.ts:401`
-- `src/services/voicePackage.ts:166`
+- `src/services/voicePackage.ts:167`
 
 ### `spokenSentenceKeys` (re-export) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8250`
@@ -354,7 +354,7 @@
 - `src/services/voicePackage.test.ts:424`
 - `src/services/voicePackage.test.ts:436`
 - `src/services/voicePackage.test.ts:514`
-- `src/services/voicePackage.ts:588`
+- `src/services/voicePackage.ts:589`
 
 ### `STORY_LANE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

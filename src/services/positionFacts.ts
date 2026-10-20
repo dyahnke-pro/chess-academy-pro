@@ -13,6 +13,7 @@
 //  • `computeCriticality` is the sharpness SCORE (from the same analysis);
 //    `computeImportance` is the speak/rank verdict. One analysis, both reads.
 //  • Perturbation (expensive) runs ONLY when importance says the moment matters.
+import { NAMES_NO_MOVE, namesMoves, namedSan, type NamesStudentMove } from './studentMoveNaming';
 import { fadeLevelsFrom, fadeText } from './fadeText';
 import { evalBand } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
@@ -393,6 +394,8 @@ export interface ClauseItem {
   kind: ClauseKind;
   rank: number;
   text: string;
+  /** WHICH OF THE STUDENT'S MOVES IT NAMES — REQUIRED (OS-10). */
+  namesStudentMove: NamesStudentMove;
   /** The proof this clause rests on, from the computer that produced it
    *  (one-coach P3). A conclusion kind without one is counted at the door. */
   proof?: FactProof;
@@ -935,10 +938,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     const mb = liveMethodBeat({
       bestSan: bestSanHere,
       threatStanding: mustDefend.net > 0,
-      // Only where the must-defend clause stays quiet (below a piece's worth):
-      // above it, that clause names the threat and the habit teaches only the
-      // routine.
-      threatTarget: mustDefend.net < 3 && mustDefend.pieces[0] ? `your ${PNAME[mustDefend.pieces[0].piece.toLowerCase()]} on ${mustDefend.pieces[0].square}` : null,
+      // Always the piece it hits, whatever its worth: the habit's question is
+      // never asked without its answer (OS-1 g3 15.c5).
+      threatTarget: mustDefend.pieces[0] ? `your ${PNAME[mustDefend.pieces[0].piece.toLowerCase()]} on ${mustDefend.pieces[0].square}` : null,
       isStudentMove: studentToMove,
       realChoice: !!deliberation?.isRealChoice,
       tier: importance.tier,
@@ -1024,18 +1026,18 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     if (lm) {
       const t = readTrade(lm.fenBefore, lm.san, studentColor, gradedLoss(lm, studentColor),
         lastMoveFromHistory(lm.historySans?.slice(0, -1), lm.fenBefore));
-      if (t) tradeClauses.push({ kind: 'trade', rank: 36, text: t.text, squares: t.squares });
+      if (t) tradeClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'trade', rank: 36, text: t.text, squares: t.squares });
     }
     if (input.opponentLastMove) {
       const t = readTrade(input.opponentLastMove.fenBefore, input.opponentLastMove.san, studentColor, null,
         lm ? priorLeadingTo(lm, input.opponentLastMove.fenBefore) : null);
-      if (t) tradeClauses.push({ kind: 'trade', rank: 36, text: t.text, squares: t.squares });
+      if (t) tradeClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'trade', rank: 36, text: t.text, squares: t.squares });
     }
     if (studentToMove) {
       const tt = findTradeTarget(fen, studentColor);
       if (tt && !(said?.has(tt.key))) {
         tradeTargetKey = tt.key;
-        tradeClauses.push({ kind: 'trade', rank: 34, text: tt.text, squares: tt.squares });
+        tradeClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'trade', rank: 34, text: tt.text, squares: tt.squares });
       }
     }
   } catch { /* the trade read is a bonus, never a blocker */ }
@@ -1047,22 +1049,22 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   if (asked) {
     const pf = boardPlanFacts(fen, studentColor === 'w' ? 'white' : 'black');
     if (pf) {
-      if (pf.trump && !structureText) askedPlanClauses.push({ kind: 'structure-plan', rank: 36, text: pf.trump });
-      for (const p of pf.plans) askedPlanClauses.push({ kind: 'structure-plan', rank: 34, text: p });
+      if (pf.trump && !structureText) askedPlanClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'structure-plan', rank: 36, text: pf.trump });
+      for (const p of pf.plans) askedPlanClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'structure-plan', rank: 34, text: p });
       const levers = leverSentence(pf.levers);
-      if (levers) askedPlanClauses.push({ kind: 'structure-plan', rank: 33, text: levers, squares: pf.levers.flatMap((l) => l.squares) });
+      if (levers) askedPlanClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'structure-plan', rank: 33, text: levers, squares: pf.levers.flatMap((l) => l.squares) });
     }
     // THE POSITIONAL READ AND THE STRUCTURE JUDGEMENTS — the computers chat's
     // "how do I stand?" answered from, for both sides. Every one goes in; the
     // ranking decides (G4.5 — the old answer stopped after two).
     try {
       for (const o of readPosition(fen, studentColor === 'w' ? 'white' : 'black')) {
-        askedPlanClauses.push({ kind: 'structure-plan', rank: 30, text: o.text, squares: [...(o.squares ?? [])] });
+        askedPlanClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'structure-plan', rank: 30, text: o.text, squares: [...(o.squares ?? [])] });
       }
     } catch { /* a read is a bonus, never a blocker */ }
     try {
       for (const r of boardStructure(fen, studentColor)) {
-        askedPlanClauses.push({ kind: 'structure-plan', rank: 31, text: r.text, squares: [...r.squares] });
+        askedPlanClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'structure-plan', rank: 31, text: r.text, squares: [...r.squares] });
       }
     } catch { /* same */ }
   }
@@ -1159,7 +1161,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     nameMove: !!input.namesBestMove,
     ...(input.lastMove ? { lastStudentMove: { fenBefore: input.lastMove.fenBefore, san: input.lastMove.san } } : {}),
     ...(input.opponentLastMove ? { lastOpponentMove: input.opponentLastMove } : {}),
-  }).map((d) => ({ kind: d.kind, rank: d.kind === 'not-yet' ? 90 : d.kind === 'tactic' ? 84 : d.kind === 'refuted' || d.kind === 'capture-choice' ? 80 : d.kind === 'king-read' ? 76 : d.kind === 'their-read' ? 75 : d.kind === 'stop-flaw' ? 70 : d.kind === 'line' || d.kind === 'kick' || d.kind === 'plan-race' ? 60 : d.kind === 'timing' ? 55 : d.kind === 'hole-access' ? 50 : d.kind === 'speedrun-read' ? 45 : d.kind === 'prevent-test' ? 44 : d.kind === 'attack-pattern' ? 42 : 40, text: d.text, ...(d.proof ? { proof: d.proof } : {}), ...(d.motif ? { motif: d.motif } : {}), ...(d.squares ? { squares: d.squares } : {}), ...(d.lines ? { lines: d.lines } : {}), ...(d.stakes ? { stakes: d.stakes } : {}), ...(d.claim ? { claim: d.claim } : {}), ...(d.promise ? { promise: d.promise } : {}) }));
+  }).map((d) => ({ namesStudentMove: d.namesStudentMove ?? NAMES_NO_MOVE, kind: d.kind, rank: d.kind === 'not-yet' ? 90 : d.kind === 'tactic' ? 84 : d.kind === 'refuted' || d.kind === 'capture-choice' ? 80 : d.kind === 'king-read' ? 76 : d.kind === 'their-read' ? 75 : d.kind === 'stop-flaw' ? 70 : d.kind === 'line' || d.kind === 'kick' || d.kind === 'plan-race' ? 60 : d.kind === 'timing' ? 55 : d.kind === 'hole-access' ? 50 : d.kind === 'speedrun-read' ? 45 : d.kind === 'prevent-test' ? 44 : d.kind === 'attack-pattern' ? 42 : 40, text: d.text, ...(d.proof ? { proof: d.proof } : {}), ...(d.motif ? { motif: d.motif } : {}), ...(d.squares ? { squares: d.squares } : {}), ...(d.lines ? { lines: d.lines } : {}), ...(d.stakes ? { stakes: d.stakes } : {}), ...(d.claim ? { claim: d.claim } : {}), ...(d.promise ? { promise: d.promise } : {}) }));
   // TRADES, DEFENCE AND CONVERSION, PRINCIPLES (computers batch 5) — every
   // read carries its proof and its say-once claim; a read that names the
   // student's next move speaks only where the move is earned, like the depth.
@@ -1176,7 +1178,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       nameMove: !!input.namesBestMove,
     })) {
       if (said?.has(x.claim)) continue;
-      ideaClauses.push({ kind: x.kind, rank: x.kind === 'nugget' ? 30 : 55, text: x.text, squares: x.squares, proof: x.proof, claim: x.claim, ...(x.stakes ? { stakes: x.stakes } : {}) });
+      ideaClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: x.kind, rank: x.kind === 'nugget' ? 30 : 55, text: x.text, squares: x.squares, proof: x.proof, claim: x.claim, ...(x.stakes ? { stakes: x.stakes } : {}) });
     }
   } catch { /* a read is a bonus, never a blocker */ }
   // THE BOARD COMPUTERS Learn speaks, through the one registry, for every
@@ -1188,10 +1190,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     const push = (kind: ClauseKind, rank: number, r: BoardRead | null): void => {
       if (!r || said?.has(r.key)) return;
       if (r.namesMove && !input.namesBestMove) {
-        if (r.idea && !said?.has(`${r.key}:idea`)) registryClauses.push({ kind: 'speedrun-read', rank: 45, text: r.idea, claim: `${r.key}:idea` });
+        // The held idea keeps its own proof, squares and line (OS-1 root cause 1).
+        if (r.idea && !said?.has(`${r.key}:idea`)) registryClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'speedrun-read', rank: 45, text: r.idea.text, proof: r.idea.proof, ...(r.idea.squares.length ? { squares: [...r.idea.squares] } : {}), ...(r.idea.lines ? { lines: r.idea.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}), ...(r.idea.motif ? { motif: r.idea.motif } : {}), claim: `${r.key}:idea` });
         return;
       }
-      registryClauses.push({ kind, rank, text: r.text, squares: [...r.squares], proof: r.proof, claim: r.key, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.lines ? { lines: r.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}) });
+      registryClauses.push({ namesStudentMove: NAMES_NO_MOVE, kind, rank, text: r.text, squares: [...r.squares], proof: r.proof, claim: r.key, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.lines ? { lines: r.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}) });
     };
     try {
       push('tactic', 84, readBoard('trapped', { fen, student: studentColor }));
@@ -1269,7 +1272,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // The student's standing per teaching layer — the same record that
       // feeds the boost above, read as layers (WO-LAYERS-01).
       layers: layerStandings(input.studentWeaknesses ?? [], input.studentNeedContext?.capabilities),
-      fade: fadeLevelsFrom(input.studentNeedContext?.capabilities),
+      fade: fadeLevelsFrom(input.studentNeedContext?.heat),
     }, bundle: {
       facts: composed.map((c) => c.text),
       skillOf: new Map(composed.flatMap((c) => (c.skill ? [[c.text, c.skill] as const] : []))),
@@ -1566,7 +1569,7 @@ function buildClauses(a: {
   // THE STATUS LINE LEADS the briefing (the general's opening read) — highest
   // rank, above the weighing. Only present on a real band-change out of the
   // opening (gated at computePositionFacts).
-  if (statusText) ranked.push({ kind: 'status', rank: 96, text: statusText });
+  if (statusText) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'status', rank: 96, text: statusText });
 
   // THE WEIGHING LEADS (David 2026-08-26, the keystone) — narrate the choice, not
   // just the winner: the tempting alternatives + why each falls short, then the
@@ -1576,7 +1579,7 @@ function buildClauses(a: {
     const text = deliberationFacts(deliberation);
     // The choice is worth what the tempting alternative would cost.
     const worst = Math.max(0, ...deliberation.alternatives.map((c) => c.deltaCp));
-    if (text) ranked.push({ kind: 'deliberation', rank: 95, text, stakes: costStakes(worst) ?? undefined });
+    if (text) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'deliberation', rank: 95, text, stakes: costStakes(worst) ?? undefined });
   }
 
   // The prevention layer — a pin/skewer on your own king/queen, guide-don't-tell.
@@ -1584,7 +1587,7 @@ function buildClauses(a: {
   // otherwise the standing-alignment warning. Only one, never both.
   if (tradeDanger) {
     ranked.push({
-      kind: 'latent-danger', rank: 82, text: tradeDangerClause(tradeDanger),
+      namesStudentMove: NAMES_NO_MOVE, kind: 'latent-danger', rank: 82, text: tradeDangerClause(tradeDanger),
       // Said about the board AFTER the capture ("before you trade on e4: that
       // lines your bishop on e4 up…") — graded there, or it reads false now
       // (scale replay: the most-dropped line across 3,752 positions).
@@ -1601,7 +1604,7 @@ function buildClauses(a: {
     // knight" followed by "your knight on f3 and your queen share that diagonal
     // — that diagonal is a pin". One fact once.
     ranked.push({
-      kind: 'latent-danger', rank: 80, text: latentDangerClause(latentDanger),
+      namesStudentMove: NAMES_NO_MOVE, kind: 'latent-danger', rank: 80, text: latentDangerClause(latentDanger),
       squares: [latentDanger.enemySquare, latentDanger.frontSquare, latentDanger.backSquare, ...(latentDanger.shieldSquare ? [latentDanger.shieldSquare] : [])],
       // A LATENT line needs their piece to arrive first.
       stakes: { points: lineTacticPoints(latentDanger.frontPiece, latentDanger.backPiece), plies: 3 },
@@ -1620,6 +1623,8 @@ function buildClauses(a: {
       // Above the trade warning (82): a piece won now outranks a pin that only
       // opens if you choose to trade.
       kind: 'latent-chance', rank: 84,
+      // The trapping move is the student's own next move.
+      namesStudentMove: namesMoves(studentSeat === 'white' ? 'w' : 'b', a.fen, namedSan(a.fen, trapChance.san)),
       // The outcome is the ledger's, over the engine's line (outcome gate):
       // the board fact alone when the line proves nothing countable.
       text: `${trapChance.san} traps their ${NAME[trapChance.type] ?? 'piece'} on ${trapChance.square} — it has no safe square to run to${trapChance.proof ? `: ${trapChance.proof}` : ''}.`,
@@ -1636,6 +1641,8 @@ function buildClauses(a: {
       // `matchClauseKind` (which joined a fork the student can PLAY to a "you
       // get pinned" hole), and the importance signal. One root, one fix.
       kind: latentFork.forker === studentSeat ? 'latent-chance' : 'latent-danger',
+      // The route is withheld from the words (OS-10): the clause names no move.
+      namesStudentMove: NAMES_NO_MOVE,
       rank: 70, text: latentForkClause(latentFork, studentSeat),
       // The destination and both targets ARE the claim — so a tactic clause
       // about the same geometry subsumes this one rather than stacking on it.
@@ -1651,7 +1658,7 @@ function buildClauses(a: {
   // plan. Uses the 'latent-danger' kind (same prophylactic family).
   if (kingExposure) {
     ranked.push({
-      kind: 'latent-danger', rank: 78, text: kingExposureClause(kingExposure),
+      namesStudentMove: NAMES_NO_MOVE, kind: 'latent-danger', rank: 78, text: kingExposureClause(kingExposure),
       squares: [kingExposure.kingSquare, ...kingExposure.attackerSquares],
     });
   }
@@ -1678,7 +1685,7 @@ function buildClauses(a: {
     // their attacker can simply be taken without losing material, say so.
     const takeable = !!(studentToMove && p.attackerSquare && takingTheAttackerAnswers(a.fen, p.attackerSquare as Square, studentSeat === 'white' ? 'w' : 'b'));
     ranked.push({
-      kind: 'must-defend',
+      namesStudentMove: NAMES_NO_MOVE, kind: 'must-defend',
       rank: 75,
       // THE BOARD FACT, NOT THE OUTCOME OR THE ORDER (WO-OUTCOME-01 C): the
       // probe is a static swap count with no engine line, so it may name the
@@ -1709,7 +1716,7 @@ function buildClauses(a: {
     const bluff = a.bluff;
     {
       ranked.push({
-        kind: 'bluff', rank: 72,
+        namesStudentMove: NAMES_NO_MOVE, kind: 'bluff', rank: 72,
         text: `${bluffClause(bluff, openingPhase)}.`,
         squares: [bluff.square, ...bluff.targets.map((t) => t.square)],
       });
@@ -1718,20 +1725,22 @@ function buildClauses(a: {
   // WO-TEACH-02 — the same four teaching facts review carries as `[refuted]`,
   // `[rule]`, `[stopped]` and `[stock]`, ranked where their review twins sit.
   if (a.refuted) {
-    ranked.push({ kind: 'refuted', rank: 82, text: a.refuted.fact.text, stakes: costStakes(a.refuted.fact.costCp) ?? undefined, squares: [...a.refuted.squares], proof: a.refuted.proof ?? undefined });
+    // The alternative names a move of the student's: held while it is theirs to play (OS-10,
+    // David's record move 4: "Bishop to c4 is a common try here" before his Bc4).
+    ranked.push({ kind: 'refuted', rank: 82, namesStudentMove: a.refuted.squares.length >= 2 ? namesMoves(studentSeat === 'white' ? 'w' : 'b', a.fen, { from: a.refuted.squares[0], to: a.refuted.squares[1] }) : NAMES_NO_MOVE, text: a.refuted.fact.text, stakes: costStakes(a.refuted.fact.costCp) ?? undefined, squares: [...a.refuted.squares], proof: a.refuted.proof ?? undefined });
   }
   // A rook or queen principle about a FILE claims that file — the key the
   // positional read's "owns the open d-file" writes too, so one file is one
   // saying across lanes (hand walk 2026-09-27, Rad8: said twice in one turn).
-  if (a.rule) ranked.push({ kind: 'rule', rank: 29, text: a.rule.text, squares: [...a.rule.squares], ...(a.rule.gradeFen ? { gradeFen: a.rule.gradeFen } : {}), ...(ruleSkill(a.rule.id) ? { skill: ruleSkill(a.rule.id) } : {}), claim: /open-file|semi-open/.test(a.rule.id) && a.rule.squares[0] ? `file-${a.rule.squares[0][0]}` : undefined });
-  for (const st of a.stopped) ranked.push({ kind: 'stopped', rank: 27, text: st.text, squares: [...st.squares], lines: st.lines, proof: st.lines?.[0] ? lineProof(st.lines[0], lineSeatAt(st.lines[0].fen, studentSeat === 'white' ? 'w' : 'b')) ?? undefined : undefined });
-  if (a.stock) ranked.push({ kind: 'stock', rank: 35, text: a.stock });
+  if (a.rule) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'rule', rank: 29, text: a.rule.text, squares: [...a.rule.squares], ...(a.rule.gradeFen ? { gradeFen: a.rule.gradeFen } : {}), ...(ruleSkill(a.rule.id) ? { skill: ruleSkill(a.rule.id) } : {}), claim: /open-file|semi-open/.test(a.rule.id) && a.rule.squares[0] ? `file-${a.rule.squares[0][0]}` : undefined });
+  for (const st of a.stopped) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'stopped', rank: 27, text: st.text, squares: [...st.squares], lines: st.lines, proof: st.lines?.[0] ? lineProof(st.lines[0], lineSeatAt(st.lines[0].fen, studentSeat === 'white' ? 'w' : 'b')) ?? undefined : undefined });
+  if (a.stock) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'stock', rank: 35, text: a.stock });
   // §9 delayed-castling — speaks IN the opening too (the "castle now" moment),
   // ranked just under a live hanging threat. Its gate (central king + tension +
   // aligned enemy heavy) is tight enough to stay off calm development.
   if (centralKingDanger) {
     ranked.push({
-      kind: 'latent-danger', rank: 74, text: centralKingDangerClause(centralKingDanger),
+      namesStudentMove: NAMES_NO_MOVE, kind: 'latent-danger', rank: 74, text: centralKingDangerClause(centralKingDanger),
       squares: [centralKingDanger.kingSquare, centralKingDanger.aimedFrom, centralKingDanger.tensionSquare],
     });
   }
@@ -1754,12 +1763,16 @@ function buildClauses(a: {
   // The passer is ONE claim across the plan, the conversion and the
   // positional read: `<seat>-passer-<file>` (the file, so a pawn that advances
   // is the same idea), and its square, so the decider collapses the two.
-  else if (conversion) ranked.push({ kind: 'convert', rank: 36, text: conversion.text, ...(conversion.step === 'escort-passer' && conversion.passer ? { claim: `student-passer-${conversion.passer[0]}`, squares: [conversion.passer] } : { claim: convertKey(conversion.step) }) });
-  else if (importance.tier === 'convert') ranked.push({ kind: 'convert', rank: 20, text: `This is technique now — convert it cleanly, no heroics.` });
+  else if (conversion) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'convert', rank: 36, text: conversion.text, ...(conversion.step === 'escort-passer' && conversion.passer ? { claim: `student-passer-${conversion.passer[0]}`, squares: [conversion.passer] } : { claim: convertKey(conversion.step) }) });
+  else if (importance.tier === 'convert') ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'convert', rank: 20, text: `This is technique now — convert it cleanly, no heroics.` });
   const pushConcept = (): void => {
     if (!concept || (concept.source === 'tactic' && a.alreadySaid?.has(conceptInstanceKey(concept.id, concept.squares)))) return;
     const rank = concept.source === 'tactic' ? 70 : 39;
+    // The pile-on move of a pin of the student's is their own next move.
+    const pinMover = ((): 'w' | 'b' | null => { try { return concept.pinMove ? new Chess(concept.pinMove.fen).turn() : null; } catch { return null; } })();
+    const studentWB: 'w' | 'b' = studentSeat === 'white' ? 'w' : 'b';
     ranked.push({
+      namesStudentMove: concept.pinMove && pinMover === studentWB ? namesMoves(studentWB, a.fen, namedSan(concept.pinMove.fen, concept.pinMove.san)) : NAMES_NO_MOVE,
       // SEATED — the detector's instance names bare pieces (hand walk
       // 2026-09-24: "Bishop on h5 pins knight on e2 against queen on d1").
       // The definition is taught once a game (`definitionKey`); after that the
@@ -1840,7 +1853,7 @@ function buildClauses(a: {
   const criticalStatement = criticalMomentStatement(criticalRead, plyNumber, a.criticalAnchor);
   if (studentToMove && a.slowDownOwed && criticalStatement && criticalRead) {
     ranked.push({
-      kind: 'key-moment',
+      namesStudentMove: NAMES_NO_MOVE, kind: 'key-moment',
       rank: importance.tier === 'only-move' ? 85 : criticalRead.count === 1 ? 65 : 60,
       text: criticalStatement,
       // The decision is now; missing it costs the gap the fan measured.
@@ -1856,7 +1869,7 @@ function buildClauses(a: {
     // fall back to the generic sharpness line when there's no concrete move.
     if (opponentIntent) {
       ranked.push({
-        kind: 'opponent-intent', rank: 55, text: opponentIntentFacts(opponentIntent),
+        namesStudentMove: NAMES_NO_MOVE, kind: 'opponent-intent', rank: 55, text: opponentIntentFacts(opponentIntent),
         // The idea the sentence actually names is plan[0] — couple ITS squares,
         // not every plan's, or the set stops describing the claim.
         squares: opponentIntent.plans[0]?.squares,
@@ -1865,19 +1878,19 @@ function buildClauses(a: {
       // The count is the one computer's, never the tier's: a tier can read
       // "only move" off a gap the fan cannot prove (a runner-up a hair under
       // the band, a bounded score).
-      ranked.push({ kind: 'opponent-intent', rank: 55, text: opponentOnlyMoveStatement(criticalRead) as string });
+      ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'opponent-intent', rank: 55, text: opponentOnlyMoveStatement(criticalRead) as string });
     } else if (importance.tier === 'critical') {
-      ranked.push({ kind: 'opponent-intent', rank: 50, text: `This is where the opponent has to find something — the position is sharp for them.` });
+      ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'opponent-intent', rank: 50, text: `This is where the opponent has to find something — the position is sharp for them.` });
     }
   }
   // The campaign — the student's asset, and the opponent's (with the counter).
   if (leansOn) ranked.push({
-    kind: 'student-leans', rank: 40,
+    namesStudentMove: NAMES_NO_MOVE, kind: 'student-leans', rank: 40,
     text: `Your ${leansOn.piece} on ${leansOn.square} does its work because your ${leansOn.leansOn.piece} on ${leansOn.leansOn.square} holds it there — keep that ${leansOn.leansOn.piece} in place.`,
     squares: [leansOn.square, leansOn.leansOn.square],
   });
   if (opponentLeansOn) ranked.push({
-    kind: 'opponent-leans', rank: 45,
+    namesStudentMove: NAMES_NO_MOVE, kind: 'opponent-leans', rank: 45,
     text: `Their ${opponentLeansOn.piece} on ${opponentLeansOn.square} is their best piece — but it leans on the ${opponentLeansOn.leansOn.piece} on ${opponentLeansOn.leansOn.square}; take that away and it's ordinary.`,
     squares: [opponentLeansOn.square, opponentLeansOn.leansOn.square],
   });
@@ -1887,9 +1900,9 @@ function buildClauses(a: {
   // ready" makes — one key, so the ledger says it once.
   // Likewise "take the half-open b-file" claims that file. Computed from the
   // fundamental, never read back out of the sentence.
-  if (fundamentalText) ranked.push({ kind: 'fundamental', rank: 38, text: fundamentalText, claim: a.fundamentalClaim ?? undefined });
+  if (fundamentalText) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'fundamental', rank: 38, text: fundamentalText, claim: a.fundamentalClaim ?? undefined });
   // The campaign's structural plan — the textbook idea the pawn structure sets.
-  if (structureText) ranked.push({ kind: 'structure-plan', rank: 35, text: structureText, ...(a.structureSquares?.length ? { squares: a.structureSquares } : {}), ...(a.structureClaim ? { claim: a.structureClaim } : {}) });
+  if (structureText) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'structure-plan', rank: 35, text: structureText, ...(a.structureSquares?.length ? { squares: a.structureSquares } : {}), ...(a.structureClaim ? { claim: a.structureClaim } : {}) });
   // Convert-mode — decided game, one beat.
   // THE METHOD, last (David 2026-09-16: "Calling out pins and forks isn't
   // teaching. Future moves, how to think, threat identification, that is
@@ -1898,7 +1911,7 @@ function buildClauses(a: {
   // purpose so it CLOSES the beat — the board fact, then the idea, then the
   // routine that finds it next time. Gated on the same computed signals as the
   // retrospective register, so it is never generic advice on a quiet board.
-  if (a.methodBeat) ranked.push({ kind: 'method', rank: 10, text: a.methodBeat, ...(a.methodProof ? { proof: a.methodProof } : {}) });
+  if (a.methodBeat) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'method', rank: 10, text: a.methodBeat, ...(a.methodProof ? { proof: a.methodProof } : {}) });
 
   // ONE CLAIM, ONE CLAUSE (one thread per move): two clauses that make the same
   // claim — the plan's "push your d3 pawn" and the conversion's "escort it" —

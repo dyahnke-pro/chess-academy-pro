@@ -46,6 +46,7 @@ import type { TacticPattern, UpcomingTactic, TacticPatternType } from '../types/
 import { matchTacticPattern, type WeaknessSignal } from './weaknessSignal';
 import { conceptForBoard } from './conceptEngine';
 import { sayLine } from './spokenMove';
+import { countWord } from '../utils/andList';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences } from '../utils/seatPieces';
 import { computeMustDefend, flipSideToMove } from './threatOut';
@@ -481,9 +482,29 @@ export function spokenUpcoming(
   const desc = seatPieceReferences(continueSentence(description).replace(/[.!]$/, ''), tacticFen, student);
   const first = rootFen.split(' ')[1] === student ? 'you' : 'they';
   const second = first === 'you' ? 'they' : 'you';
+  // A THREAT YOUR MOVE DOES NOT CAUSE IS THEIRS NOW (OS-1 g2 ply 12: "if you
+  // play Nc6 and they answer Bg5, their bishop on g5 pins your knight on f6"
+  // — Bg5 pins that knight whatever you play). When their reply builds the
+  // same pattern on today's board, the warning is about their move alone.
+  if (line.length === 2 && first === 'you') {
+    const now = theirReplyNow(rootFen, line[1], description);
+    if (now) return `if they play ${line[1]}, ${seatPieceReferences(continueSentence(description).replace(/[.!]$/, ''), now, student)}`;
+  }
   return line.length === 1
     ? `if ${first} play ${line[0]}, ${desc}`
     : `if ${first} play ${line[0]} and ${second} answer ${line[1]}, ${desc}`;
+}
+
+/** The board after `reply` played straight away on `rootFen` (their move,
+ *  yours skipped), when it already carries the pattern `description` names. */
+function theirReplyNow(rootFen: string, reply: string, description: string): string | null {
+  const flipped = flipSideToMove(rootFen);
+  if (!flipped) return null;
+  try {
+    const b = new Chess(flipped);
+    b.move(reply);
+    return detectTactics(b.fen()).tactics.some((t) => t.description === description) ? b.fen() : null;
+  } catch { return null; }
 }
 
 /** Map a single-letter piece type to its full word for prose. */
@@ -560,6 +581,15 @@ export type LookaheadSeat = Extract<PerspectiveMode, 'student' | 'coach-is-oppon
 /** The threat-branch stem per seat — a Record so a new seat fails to compile
  *  until someone writes its sentence. The opportunity branch is the STUDENT's
  *  own shot in both seats ("you've got a … coming"), so it does not vary. */
+/** HOW FAR AWAY A LOOKAHEAD TACTIC IS, IN THE MOVES OF THE SIDE IT FAVOURS.
+ *  `depthAhead` counts PLIES and the last of them lands it, so that side is
+ *  ceil(plies / 2) of its own moves away (Smith-Morra replay 2026-10-20, move
+ *  8: "a pin is 4 moves away" over two of their moves). */
+export function movesAway(plies: number, owner: 'your' | 'their'): string {
+  const n = Math.ceil(plies / 2);
+  return n <= 1 ? `on ${owner} next move` : `in ${countWord(n)} of ${owner} moves`;
+}
+
 const THREAT_STEM: Record<LookaheadSeat, (pattern: string, when: string, line: string) => string> = {
   student: (pattern, when, line) => `Look ahead — they're lining up a ${pattern} ${when}: ${line} — spot it before it lands.`,
   // The coach playing the opponent is still "they" (RULEBOOK V1/V2, 2026-10-07).
@@ -654,10 +684,7 @@ export function speakDeepestLookahead(
   const studentOpens = toMove === studentColor;
   // COUNTED IN THE BENEFICIARY'S MOVES, never plies: "a discovery is 4 moves
   // away" was two of theirs and two of the student's.
-  const benefOpens = isOpportunity === studentOpens;
-  const benefMoves = walk.filter((_, i) => (i % 2 === 0) === benefOpens).length;
-  const owner = isOpportunity ? 'your' : 'their';
-  const when = benefMoves <= 1 ? `on ${owner} next move` : `in ${benefMoves} of ${owner} moves`;
+  const when = movesAway(pick.depthAhead, isOpportunity ? 'your' : 'their');
   if (isOpportunity && !namesStudentMoves) {
     return `Look a couple of moves ahead — there's a ${pattern} in it for you, ${when}. Find it.${holeTag}`;
   }

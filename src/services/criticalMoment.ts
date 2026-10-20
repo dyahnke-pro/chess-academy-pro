@@ -275,6 +275,8 @@ export function readCriticalMoment(input: {
   let bestReason: CriticalMomentRead['bestReason'];
   if (input.fen && holdingSans[0] && input.seat) {
     const r = decisiveReason({
+      // Only a material reason is used here; the prepared move stays held.
+      namesPreparedMove: false,
       fenBefore: input.fen, san: holdingSans[0], seat: input.seat, opponentLastSan: null,
       reads: { before: lines.map((l) => ({ rank: l.rank, evaluation: l.evaluation, mate: l.mate ?? null, moves: [...(l.moves ?? [])] }) as AnalysisLine), after: [], passBefore: [], passAfter: [] },
     });

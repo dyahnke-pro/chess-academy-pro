@@ -19,7 +19,7 @@
 // Pure: the engine reads are handed in (`IntentReads`); no engine call here.
 import { Chess } from 'chess.js';
 import type { AnalysisLine } from '../types';
-import { moveIntent, nullMoveFen, type IntentReads, THREAT_CP } from './moveIntent';
+import { moveIntent, DEFAULT_INTENT, nullMoveFen, type IntentReads, THREAT_CP } from './moveIntent';
 import { heardHorizon, heardProofCut, describeProofResult, settledNetForLine, netPieceWords } from './exchangeLedger';
 import { lineSeatAt, lineShape } from '../utils/andList';
 import { bestMoveReason } from './deliberation';
@@ -159,6 +159,12 @@ export function decisiveReason(input: {
    *  test — "can you see it?" — with the line on the board, never answered in
    *  the voice. Grey or red: the mate is stated (grey teaches). */
   asksToSee?: boolean;
+  /** REQUIRED (OS-10): may the reason name the move the explained move
+   *  PREPARES? Learn, before the student's next move, says it by its piece
+   *  ("to free your bishop on f1"), never by the move ("for Be2") — LEARN
+   *  NAMES NO MOVE UNASKED (David's record, 2026-10-19, 1.e4). Review, chat
+   *  and the Why button name it. */
+  namesPreparedMove: boolean;
 }): DecisiveReason | null {
   const { fenBefore, san, reads, seat } = input;
   let mover: 'w' | 'b';
@@ -263,7 +269,7 @@ export function decisiveReason(input: {
   // Each carries its evidence as a line the board can show: the threat played
   // as if the mover had passed, or the follow-up played as if the other side
   // had — the move the reason names, from the board it is true on.
-  const mi = moveIntent(fenBefore, san, reads, seat);
+  const mi = moveIntent(fenBefore, san, reads, seat, { ...DEFAULT_INTENT, holdPrepared: !input.namesPreparedMove });
   const shown = (fen: string | null, moveSan: string): DecisiveReason['line'] => {
     if (!fen) return null;
     try { new Chess(fen).move(moveSan); return { fen, sans: [moveSan] }; } catch { return null; }
