@@ -86,10 +86,16 @@ async function dictate(san) {
       if (st.inputBusy === false || st.inputBusy == null) break;
     }
     const t0 = Date.now();
+    const before = (await call('/state')).moves ?? '';
     await call('/type', `play ${san}`);
     for (let t = Date.now(); Date.now() - t < 10000; await sleep(500)) {
       const acks = (await call(`/events?n=50&t=1&grep=${encodeURIComponent('Got it')}`)).filter((r) => Number(r.split(' | ')[0]) >= t0 - 200);
       if (acks.length) return true;
+      // The coach can play the move from its own book before the typed
+      // dictation is read: a board that already shows it IS the answer —
+      // never retype then, or the text is read as a question.
+      const now = (await call('/state')).moves ?? '';
+      if (now !== before && now.split(' ').filter(Boolean).at(-1)?.replace(/[+#]$/, '') === san.replace(/[+#]$/, '')) return true;
     }
     console.log(`[dictate] no acknowledgement for "play ${san}" (attempt ${attempt})`);
   }
@@ -130,9 +136,12 @@ async function playGame(id, outDir) {
     if (tape.turns.length >= MAX_TURNS) break;
     const reply = sans[i + 1] ?? null;
     const tStart = Date.now();
-    if (reply && !(await dictate(reply))) tape.errors.push(`ply ${i + 2}: dictation of ${reply} not acknowledged`);
+    const heard = reply ? await dictate(reply) : true;
     const tMove = Date.now();
     const r = await call(`/turn?san=${encodeURIComponent(sans[i])}`);
+    // An unacknowledged dictation is only an error if the coach then played
+    // something else (a matching reply means it was taken after all).
+    if (!heard && r.reply && r.reply !== reply) tape.errors.push(`ply ${i + 2}: dictation of ${reply} not acknowledged`);
     // No reply in the driver's window: dictate again and wait for the board.
     if (!r.error && reply && !r.reply) {
       console.log(`[${id}] no reply after ${sans[i]} — dictating ${reply} again`);
