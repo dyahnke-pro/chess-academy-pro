@@ -23,6 +23,7 @@ import { findHangingPieces } from './tacticClassifier';
 import { missedPlanClause } from './movePlan';
 import { moveCostOneSearch, uciOfSan, type CostFan } from './moveCost';
 import { SINGLETON_SCORER } from './refutedAlternative';
+import { stockfishEngine } from './stockfishEngine';
 import { proofCut } from './exchangeLedger';
 import { gradeMove, provesOnlyMove } from './accuracyService';
 
@@ -181,5 +182,22 @@ export function gradePlayedMove(input: {
  *  a read before minus a separate read after misjudged costs by a pawn). */
 export function liveMoveCost(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number): Promise<number | null> {
   return moveCostOneSearch({ fenBefore, playedUci, fan, scorer: SINGLETON_SCORER, depth });
+}
+
+/** THE PRICE OF THE MOVE THE STUDENT JUST PLAYED LEADS THE ENGINE (OS-18,
+ *  Smith-Morra replay 2026-10-20, move 14: the price joined the back of the
+ *  line and the verdict was built 6.7 s after a costly move). The one search
+ *  runs through the engine's hold — the search in flight stops, background
+ *  reads wait — because the student is waiting on its answer. */
+export function studentMoveCost(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number): Promise<number | null> {
+  return stockfishEngine.holdForQuestion((engine) => moveCostOneSearch({
+    fenBefore, playedUci, fan, depth,
+    scorer: {
+      async scoreMoves(fen, ucis, d) {
+        const r = await engine.analyzePosition(fen, d, { searchmoves: ucis.join(' ') });
+        return r.topLines.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves }));
+      },
+    },
+  }));
 }
 export { uciOfSan };

@@ -288,7 +288,8 @@ import type { ResolvedStep } from '../../coach/requestSteps';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
-import { gradePlayedMove, liveMoveCost, uciOfSan } from '../../services/playedMoveGrade';
+import { gradePlayedMove, liveMoveCost, studentMoveCost, uciOfSan } from '../../services/playedMoveGrade';
+import { instantWaitsForVerdict, VERDICT_HOLD_MS } from '../../services/verdictFirst';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
 import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine, isLoudAlarm, dangerRank, PIECE_DANGER_RANK } from '../../services/liveTacticsContext';
@@ -10036,7 +10037,7 @@ export function CoachTeachPage(): JSX.Element {
         // pre-move fan, or a costly one), the board between the moves is read
         // before the post-reply warm, so the verdict is built as soon as it can be.
         const costRead: Promise<number | null> = preStudentRead && !preStudentRead.isMate
-          ? liveMoveCost(fenBefore, `${move.from}${move.to}${move.promotion ?? ''}`, preStudentRead, COACH_TURN_DEPTH).catch(() => null)
+          ? studentMoveCost(fenBefore, `${move.from}${move.to}${move.promotion ?? ''}`, preStudentRead, COACH_TURN_DEPTH).catch(() => null)
           : Promise.resolve(null);
         const verdictUrgent = !!preStudentRead && !studentMoveInBook && (studentCpLoss === null || studentCpLoss >= VERDICT_TURN_CP);
         const midTurnReadEarly = verdictUrgent ? stockfishEngine.analyzeWithBudget(move.fen, COACH_TURN_DEPTH, 1500).catch(() => null) : null;
@@ -11082,6 +11083,11 @@ export function CoachTeachPage(): JSX.Element {
                 .catch(() => undefined);
               instantSpokenText = instantSpokenText ? `${instantSpokenText} ${heard}` : heard;
             };
+            // Resolved once the verdict pass has handed its verdict to the voice
+            // (or found none): a mistake turn's instant line waits on it.
+            let verdictHandedOver!: () => void;
+            const verdictHeard = new Promise<void>((r) => { verdictHandedOver = r; });
+            let instantWaits = false;
             // ── THE INSTANT UTTERANCE ──────────────────────────────────────
             // ONE clip, not three. Each fragment used to be its own TTS fetch
             // (~1s) queued behind the previous fragment's FULL playback, so
@@ -11119,6 +11125,11 @@ export function CoachTeachPage(): JSX.Element {
                   moveCostCp: studentCpLoss,
                 });
                 instantLead = instant.lead;
+                instantWaits = instantWaitsForVerdict({
+                  moveCostCp: studentCpLoss, verdictUrgent, fenAfterReply: ip.fen(),
+                  student: playerColor === 'white' ? 'w' : 'b',
+                  mateTurn: !!instant.lead?.mateTurn || ip.isCheckmate(),
+                });
                 for (const d of instant.deferred) queueSpokenHint(ip.fen(), d.text, d.lane, d.proof, d.squares, d.claims, undefined, d.arrows);
                 turnLeadRef.current = instant.lead ? { fen: ip.fen(), lead: instant.lead } : null;
                 // THE PACKAGE IS THE UTTERANCE. This used to log `factLines`
@@ -11218,7 +11229,11 @@ export function CoachTeachPage(): JSX.Element {
                   });
                 }
               }
-              if (lines.length > 0) speakTrackA(lines.join(' '), instantMarks);
+              if (lines.length > 0) {
+                const sayInstant = (): void => speakTrackA(lines.join(' '), instantMarks);
+                if (instantWaits) void Promise.race([verdictHeard, new Promise<void>((r) => { setTimeout(r, VERDICT_HOLD_MS); })]).then(sayInstant);
+                else sayInstant();
+              }
             } catch { /* Track A is a bonus — the warm beat still speaks */ }
             askTurnQuestion();
             // It starts on the two reads the verdict needs — the move's cost and
@@ -11516,7 +11531,7 @@ export function CoachTeachPage(): JSX.Element {
                     // against the best one in the same tree — never a read
                     // before minus a time-boxed read after.
                     const cpLoss = bothCp
-                      ? ((await costRead) ?? (await liveMoveCost(fenBefore, `${move.from}${move.to}${move.promotion ?? ''}`, preStudentRead, COACH_TURN_DEPTH)) ?? 0)
+                      ? ((await costRead) ?? (await studentMoveCost(fenBefore, `${move.from}${move.to}${move.promotion ?? ''}`, preStudentRead, COACH_TURN_DEPTH)) ?? 0)
                       : 0;
                     const studentBestSan = uciSanAt(fenBefore, preStudentRead.bestMove);
                     // THE BOARD-LEVEL TEACHING of the student's move — recapture
@@ -12070,6 +12085,7 @@ export function CoachTeachPage(): JSX.Element {
                     }
                   }
                 }
+                verdictHandedOver();
                 // The rest of the turn reads the next board's facts.
                 await factsReady;
                 if (liveFenRef.current !== fenAfterReply) return;
@@ -12392,6 +12408,8 @@ export function CoachTeachPage(): JSX.Element {
                 }
               } catch { /* bonus */ }
             });
+            // Every way out of the pass releases a held instant line too.
+            void verdictPass.finally(verdictHandedOver).catch(() => undefined);
             // PHASE TRANSITION on the settled position. Keyed off the
             // STUDENT's move (the detector ignores coach moves), fired here
             // so the board has stopped moving before the coach speaks.

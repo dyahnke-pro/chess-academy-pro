@@ -1975,13 +1975,14 @@ class StockfishEngine {
   }
 
   /**
-   * Run `work` (a student's question) with this engine held: the search in
+   * Run `work` — what the student is waiting on: their question, or the price
+   * of the move they just played — with this engine held: the search in
    * flight is stopped — it settles with the depth it reached, uncached — and
    * every background analysis that arrives meanwhile waits until the answer
    * is done. `work` gets an engine whose reads pass through the hold. The hold
    * is released however `work` ends.
    */
-  async holdForQuestion<T>(work: (engine: { analyzePosition(fen: string, depth: number): Promise<StockfishAnalysis> }) => Promise<T>): Promise<T> {
+  async holdForQuestion<T>(work: (engine: { analyzePosition(fen: string, depth: number, options?: Record<string, string | number>): Promise<StockfishAnalysis> }) => Promise<T>): Promise<T> {
     let release!: () => void;
     const hold = new Promise<void>((r) => { release = r; });
     this._questionHold = hold;
@@ -1996,8 +1997,8 @@ class StockfishEngine {
     // The question's own reads go THROUGH the hold, on this same warm engine —
     // no cold worker to spawn (the pool cost ~14s on a first question).
     const questionEngine = {
-      analyzePosition: (fen: string, depth: number): Promise<StockfishAnalysis> =>
-        this.analyzePosition(fen, depth, undefined, 'brain', undefined, true),
+      analyzePosition: (fen: string, depth: number, options?: Record<string, string | number>): Promise<StockfishAnalysis> =>
+        this.analyzePosition(fen, depth, options, 'brain', undefined, true),
     };
     try {
       return await work(questionEngine);
