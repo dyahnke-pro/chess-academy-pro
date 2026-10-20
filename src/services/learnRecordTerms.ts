@@ -282,6 +282,11 @@ export const THREAT_SKILL: Record<ThreatPattern, ThreatSkill> = {
   'king-pawn': { tag: 'missed-opponents-threat', motif: null, motifTag: null },
 };
 
+/** Every motif's own tag — the rows `threatAnswerEvidence` writes. */
+export const THREAT_MOTIF_TAGS: ReadonlySet<MisconceptionTagId> = new Set(
+  Object.values(THREAT_SKILL).map((s) => s.motifTag).filter((t): t is MisconceptionTagId => t !== null),
+);
+
 export function skillForThreat(pattern: ThreatPattern): ThreatSkill {
   return THREAT_SKILL[pattern];
 }

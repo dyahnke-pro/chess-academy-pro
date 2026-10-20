@@ -358,3 +358,9 @@ export const MISCONCEPTION_RULES_REV = '2026-10-18-slip-cause';
  *  trade, which pawn takes, the sacrifice by the king) — each analysed game's
  *  own rows are replaced so the old games answer them too. */
 export const POSITIVE_HALF_REV = '2026-10-18-own-skill-breaks';
+
+/** Bump when analysed games must be re-read for the INCOMING half of each
+ *  motif — the opponent's fork, pin, skewer, discovery, mate threat or trap
+ *  at the student's turn, held or broken (`threatAnswerEvidence`). Separate
+ *  from `POSITIVE_HALF_REV` so a threat-rule change re-reads only this. */
+export const THREAT_HALF_REV = '2026-10-19-their-motifs';

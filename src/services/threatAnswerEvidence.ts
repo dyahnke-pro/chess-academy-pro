@@ -31,6 +31,14 @@ export const THREAT_PAWN_IMPORTANCE = 60;
 export const THREAT_MATE_IMPORTANCE = 100;
 /** The least a motif must win (pawns) for the board to have posed it. */
 export const THREAT_MIN_GAIN = 1;
+/** With an engine grade: a game already this far gone either way (cp, the
+ *  mover's seat) poses no motif question — nothing is at stake. */
+export const THREAT_DECIDED_CP = 500;
+/** With an engine grade: a "landed" motif must cost the reply at least this
+ *  (cp). Measured on David's 83 broken pin rows at depth 16: 26 real, 28
+ *  where the engine line holds, 29 in decided games — the board's static
+ *  count alone over-files misses three to one. */
+export const THREAT_REAL_LOSS_CP = 100;
 
 const MATE_PATTERNS: ReadonlySet<ThreatPattern> = new Set<ThreatPattern>(['mate_threat', 'back_rank']);
 
@@ -51,6 +59,9 @@ export interface ThreatAnswerArgs {
   pattern: ThreatPattern;
   /** The student's pieces the motif hits. */
   targets: readonly string[];
+  /** The engine's grade of the reply, mover's seat, when one exists (an
+   *  analysed game's annotation, Learn's live grade). Null fields = unknown. */
+  engine?: { evalBeforeCp: number | null; cpLoss: number | null };
 }
 
 function bestGain(fen: string, squares: readonly string[], foe: Color): number {
@@ -68,6 +79,8 @@ export function threatAnswerOutcome(a: ThreatAnswerArgs): ThreatAnswer | null {
   let board: Chess;
   try { board = new Chess(a.fen); } catch { return null; }
   if (board.inCheck()) return null;            // the check is the question, not the motif
+  const ev = a.engine;
+  if (ev?.evalBeforeCp != null && Math.abs(ev.evalBeforeCp) >= THREAT_DECIDED_CP) return null;
   const student = board.turn();
   const foe: Color = student === 'w' ? 'b' : 'w';
   let played: ReturnType<Chess['move']>;
@@ -109,6 +122,9 @@ export function threatAnswerOutcome(a: ThreatAnswerArgs): ThreatAnswer | null {
   const parried = gainAfter < THREAT_MIN_GAIN
     || start.moves().some((san) => san !== played.san && (gainAfterMove(san) ?? THREAT_MIN_GAIN) < THREAT_MIN_GAIN);
   if (!parried) return null;
+  // The engine overrules the static count: a motif that "lands" while the
+  // reply costs under a pawn did not really win — no question was posed.
+  if (gainAfter >= THREAT_MIN_GAIN && ev?.cpLoss != null && ev.cpLoss < THREAT_REAL_LOSS_CP) return null;
   return {
     tag,
     outcome: gainAfter >= THREAT_MIN_GAIN ? 'broken' : 'held',
@@ -116,6 +132,37 @@ export function threatAnswerOutcome(a: ThreatAnswerArgs): ThreatAnswer | null {
     gainBefore,
     gainAfter,
   };
+}
+
+/** One student move of a game, with what the reader needs. */
+export interface ThreatPly {
+  fen: string;
+  /** The student's previous turn, so a standing motif is asked once. */
+  prevFen: string | null;
+  playedSan: string;
+  engine?: ThreatAnswerArgs['engine'];
+  prompted: boolean;
+}
+
+export interface GameThreatAnswer extends ThreatAnswer {
+  fen: string;
+  playedSan: string;
+  prompted: boolean;
+  /** Index of the ply in the input, for ordering rows inside the game. */
+  ply: number;
+}
+
+/** Every motif question a game posed and how the student answered — the
+ *  pure half of the backfill (`autoAnalyzeGame.recordThreatHalf`). */
+export function threatAnswersForGame(plies: readonly ThreatPly[]): GameThreatAnswer[] {
+  const out: GameThreatAnswer[] = [];
+  plies.forEach((p, ply) => {
+    for (const t of newThreatsAtTurn(p.fen, p.prevFen)) {
+      const v = threatAnswerOutcome({ fen: p.fen, playedSan: p.playedSan, pattern: t.pattern, targets: t.targets, ...(p.engine ? { engine: p.engine } : {}) });
+      if (v) out.push({ ...v, fen: p.fen, playedSan: p.playedSan, prompted: p.prompted, ply });
+    }
+  });
+  return out;
 }
 
 /** A motif the opponent has standing at the student's turn. */
