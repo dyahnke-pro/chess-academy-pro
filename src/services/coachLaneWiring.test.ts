@@ -306,12 +306,12 @@ describe('the couplings that make the wiring safe', () => {
   it('both verdicts come from ONE read of the board between the two moves', () => {
     // `move.fen` is where the student's move arrived AND where the coach moves
     // from, so one analysis answers both questions and costs one search.
-    // One read of move.fen, sent before the warm read of the post-reply board on
-    // every turn (Learn speed, 2026-10-20: the late package and the reply's
-    // reason wait both read it; behind the warm read it queued 753 ms median).
-    expect(TEACH).toMatch(/const midTurnRead = stockfishEngine\.analyzeWithBudget\(move\.fen, COACH_TURN_DEPTH, 1500\)/);
-    expect(TEACH.indexOf('const midTurnRead = stockfishEngine.analyzeWithBudget(move.fen'))
-      .toBeLessThan(TEACH.indexOf('void stockfishEngine.analyzeWithBudget(warmProbe.fen()'));
+    // One read of move.fen. (Its old rival, the warm read of the post-reply
+    // board, is gone: that board's one read is the next-board hold, sent first
+    // — `learnNextBoardRead.gate.test.ts`, iOS engine reads 2026-10-20.)
+    // …and it is the TURN's read: a new move cancels it (iOS engine reads,
+    // 2026-10-20 — reads for a board the game has left are dropped).
+    expect(TEACH).toMatch(/const midTurnRead = stockfishEngine\.analyzeWithBudget\(move\.fen, COACH_TURN_DEPTH, 1500, \{ signal: turnSignal \}\)/);
     expect(TEACH).toMatch(/const mid = await midTurnRead;/);
     expect(TEACH, 'the student half never reaches the backward look').toMatch(/backwardLook\(\{/);
     expect(TEACH, 'the coach half never reaches the callout').toMatch(/side: 'coach'/);

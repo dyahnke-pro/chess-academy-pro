@@ -201,7 +201,8 @@ describe('the 12s stall log carries its own diagnosis', () => {
     expect(summary).toMatch(/hidden=(true|false)/);
     // asm carries a movetime budget; a stall DESPITE a budget means the worker
     // is not executing, which is a different bug from an unbounded search.
-    expect(summary).toMatch(/budget=5000/);
+    // The asm clock is 2 s since the iOS engine reads fix (2026-10-20).
+    expect(summary).toMatch(/budget=2000/);
     expect(summary).toContain('variant=asm');
   });
 
