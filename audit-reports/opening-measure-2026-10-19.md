@@ -22,8 +22,82 @@ Each game's tables were filled by a reader and then corrected by an adversarial 
 |---|---|---|---|
 | g1 | David's Smith-Morra, `teach-mvfhdihq-7i8vk5` (50 moves, to mate) | White | done |
 | g2 | Naroditsky's Najdorf English Attack line, to 14…d5 | Black | done |
-| g3 | 1.b3 Nimzo-Larsen; masters book to 10.Nf3, then engine | White | re-running (a container restart cut it at move 6) |
-| g4 | Ruy Lopez with the student's deviation 3…Qf6?!, then engine | Black | queued |
+| g3 | 1.b3 Nimzo-Larsen; masters book to 10.Nf3, then engine | White | done (16 moves) |
+| g4 | Ruy Lopez with the student's deviation 3…Qf6?!, then engine | Black | **not run.** The lead stopped the replays at 7:33 PM CT, when David took over auditing |
+
+
+
+## SUMMARY ACROSS THE THREE GAMES (read this first)
+
+### A. The 11 beats
+
+Status per game is listed as g1 / g2 / g3. Every verdict in the per-game sections below carries a quote and move, or a decision row.
+
+| # | beat | g1 Smith-Morra | g2 Najdorf (his own line) | g3 1.b3 (no curated lesson) | what the computers do today |
+|---|---|---|---|---|---|
+| 1 | the fork, with alternatives named | PARTIAL | PARTIAL | PARTIAL | Only the name is said at each step: "It's the Najdorf Variation…", "This game is the Nimzo-Larsen Attack: Modern Variation." **No family menu is ever named.** `openingIdentity` / `openingIdea` had **0 offers** in all three games. |
+| 2 | one-line identity | PARTIAL | PARTIAL | PARTIAL | g1 "It offers a pawn, and they almost always take it on d4…" is the only real identity. The origin is never given. In g1 the name was re-announced 4×, once garbled ("It's the Accepted of the Sicilian Defense"). |
+| 3 | their setup and its plan | PARTIAL | PARTIAL | MISSING | Move-by-move intent only (`theirIntent`): "They play f3 first, so that g4 comes next." The English Attack is never named; the same g2 turn named "Sicilian Defense: Prins Variation". |
+| 4 | why this branch vs the main alternative | PARTIAL | PARTIAL | MISSING | g1's alternative is scored by an eval ("Bc4 … costs you about half a point"), not by what it leads to. g2: …e5 is never compared with …e6. |
+| 5 | your structure's cost and the move that pays it | PARTIAL | PARTIAL | PARTIAL | g2: **the d5 hole is never said**, and …Be6 is read as preparing a push. The holes named are mostly the opponent's. |
+| 6 | the middlegame's character, early | PARTIAL | PARTIAL | PARTIAL | g2 has the race ("their storm arrives first — slow it down") at ply 20 and the full split-board line at ply 26. `splitPosition` was held 4× first: off-topic / aside / aside / off-topic. |
+| 7 | instinctive move first, then the concrete point | PARTIAL | PARTIAL | PARTIAL | g2 …Na6: "completes your development" (generic); the c7/b5 point arrives one move late. `rejectedTempting` was held "aside" or not offered. |
+| 8 | the structural key move (the break) | PARTIAL | PARTIAL | MISSING | g2 …d5: the explicit sentence "d5 is the direct way to get rid of your weak d6 pawn…" was **blocked twice by the narrationGate** (claim-validator-trip, ply 28). In g1/g3 the break is never named as an idea; only "where is your pawn break?" / "one is ready to push right now — find it" is said. |
+| 9 | branches walked out loud | PARTIAL | PARTIAL | MISSING | One branch, after the fact ("Anything else, like …, gives up about a point"). The model marks this David's open decision. |
+| 10 | danger signs specific to the line | PARTIAL | PARTIAL | WORKS | Real board dangers, none tied to the line. g1's line-typical **Bg4 pin was dropped by `usePhaseNarration.spokenSentenceGate`**, while its answer ("the obvious stop is h3…") was still heard. |
+| 11 | honest self-judgement | PARTIAL | not exercised | PARTIAL | Verdicts with a why exist. Two costly g1 moves (O-O 69cp, Bf4 112cp) got none. `coachMistake` only from ply 37. |
+
+**The shape:** the opening is NAMED (every game) but not EXPLAINED. Beats 1–4 and 8 are the gap. The lanes that would carry them (`openingIdentity`, `openingIdea`) had **zero offers** across all three games. Where a carrying sentence existed (g2 …d5, g1 Bg4 pin), a gate removed it.
+
+### B. Threats
+
+- **Heard threats were simple or two-move hidden:**
+  - g1: the discovered-attack look-ahead at ply 19;
+  - g2: the Bg5 pin, said **three times** in one turn (ply 12), the d-file battery, Bb6 pinning Nc7;
+  - g3: the …Ne5–Nxc4 guard-removal line, the e-file x-ray.
+- **Not offered, in any game:** `dangerLevels`, `trapAhead`.
+- **Held / dropped:** `prophylaxis` held "aside" (g1 13, g3 19/21); the g1 Bg4 warning was gate-dropped.
+- **g1 ply 13 look-ahead** ("a discovery is 4 moves away: their knight to e5 and then their knight taking on c4") **never says what is discovered.**
+- **Faded threat answers can be empty:** g2 ply 18, "It can wait — something stronger comes first."
+- **Threats named only afterwards:** g3 15.c5 "Run the question now — what are they threatening?". The actual threat (…Nc6 hitting Nb4) was never named and no threat lane was offered; next turn: "Threat met."
+
+### C. The record (green / red)
+
+1. **His green reaches Learn, but it is computed from a record that almost never sees his misses.** Measured in his drop:
+
+   | source | rows |
+   |---|---|
+   | `capabilityEvidence`, review origin, held | 20,393 |
+   | `capabilityEvidence`, review origin, broken | 914 |
+   | `capabilityEvidence`, learn origin | 94 held, 2 broken |
+   | `misconceptionTags` (his recorded misses), auto-analysis | 5,433 of them (+8 game-review, +17 discussion-practice) |
+
+   | skill | recorded misses | evidence held / posed |
+   |---|---|---|
+   | hung-material | 1,428 | 446 / 463 |
+   | missed-tactic | 451 | — |
+   | missed-opponents-threat | 259 | 715 / 767 |
+
+   `loadFadeLevels` → `fadeLevelsFrom(getCapabilityProfile())` (`weaknessSignalLoader.ts:91-99`, `fadeText.ts:25`) reads only `capabilityEvidence` (`summariseEvidence`, `capabilityEvidence.ts:305`). So **19 of 20 skills are "short", including his three most-missed ones.** The misses recorded by the auto-analysis sweep do not reach the evidence store as `broken` rows: the two record types are not reconciled (the capability-parity rule).
+
+   Effect in Learn: threat and threatAnswer lines speak in the one-sentence register. g2 ply 18's answer is reduced to "It can wait — something stronger comes first."
+
+   Faded lanes per game: g1 on 16 plies (threat, threatAnswer, countMethod, foundMove, moveIntent, tactic, playedConcept, fundamental); g2 on 2 plies (threat, threatAnswer); g3 none.
+2. **Nothing was raised by his red.** `lastTimeHere`, `sameAsLastTime` and `fundamental` (as a raise) had 0 offers in g2/g3. No decision row's lead traces to his record, which confirms the lead's expectation that the red raise isn't wired. The one record callback heard was in the g1 blunder verdict ("This is a pattern that keeps catching you").
+3. **The plan method never fades.** `planArc` carries `held: na` (`computerRoles.ts:111`), so "How do you find a plan? First the forcing scan…" speaks in full every time while no-plan is "short".
+
+### D. Words
+
+| game | avg heard words / turn (deduplicated) | longest turns |
+|---|---|---|
+| g1 | 71 | 13.O-O 180 (method + 6-row phase package, +6.6 s → +58.5 s); 8.Bxf7+ 202 (the ply-13 plan tail + a 139-word verdict package); 21.Rg5 152 |
+| g2 | 64 | a5 114, e5 100 (five lanes, the pin said 3×), d5 94 |
+| g3 | 71 | 11.O-O 132, 7.c4 95, 10.Nf3 95 |
+
+- **Repeats inside one turn:** g1 13 "Nothing hinges on your next move" at +6.6 s and +19.5 s; g2 14, the same.
+- **Silent turns:** none in any game.
+- **Instrument note:** phase lines are logged twice (`speakPackage` + `speakCloud`, ~1 ms apart). Counts above are de-duplicated.
+- **Verdict lag (g1):** the student's own costly-move verdict starts **14–18 s** after the move.
 
 
 ---
@@ -330,3 +404,126 @@ Offered lanes that were not spoken, not held and not faded (the row gives no rea
   - The gate entry contradicted A8 (A8 called the blocked sentence the desired one). It now states both possibilities.
   - Added the White-to-move point to the ply-28 cost entry.
   - Added the "You play X first, so" repeat and the doubtful f3 race fact.
+
+
+---
+
+## OS-1 · g3 Nimzo-Larsen (1.b3, White) · David's record loaded
+
+Sources: `/tmp/claude-0/-home-user-chess-academy-pro/78aa15cf-9515-5135-9736-99a1720b46f1/scratchpad/os1/g3.prep.md`, `/tmp/claude-0/-home-user-chess-academy-pro/78aa15cf-9515-5135-9736-99a1720b46f1/scratchpad/opening-model.md`, `/home/user/cap-branch/src/services/learnTurnDoor.ts` (lines 178-370, 459-528) and `/home/user/cap-branch/src/services/computerRoles.ts`. The build hash in the draft (b494915) does not appear in the prep, so it is unverified.
+
+**What the computers do with no curated lesson:** the opening got its name and nothing more. Only the `opening` lane was offered from the opening-level set (2 offers, both on ply 1). None of the other opening-level lanes was offered on any of the 20 DECISION rows: `openingIdentity`, `openingEquivalence`, `openingIdea`, `structure`, `character`, `splitPosition`, `trapAhead`, `rejectedTempting` and `bookMove` all show 0. Every teaching line came from the general per-move computers. Offer counts: `positionFacts` 26, `structureJudgement` 22, `movePoint` 15, `behavior` 13, `positional` 9, `countMethod` 7, `theirIntent` 6, `moveIntent` 5, `planArc` 4, `strongChoice` 2, `prophylaxis` 2, `pieceQuality` 2, `phase` 2, `opening` 2, `threat` 1, `theirMoveCost` 1, `kingSafety` 1. The prep has **0 CHAT-ONLY lines**.
+
+### A. The 11 beats
+
+| # | Beat | Verdict | Evidence |
+|---|---|---|---|
+| 1 | Fork, with the alternatives named | **PARTIAL**: the name was said, with no alternatives | 1.b3 (+2687ms): "This game is the Nimzo-Larsen Attack: Modern Variation." No other family was named. `openingIdentity` and `openingEquivalence` had 0 offers. On ply 1 the `opening` lane spoke in the instant wave. Its late offer was neither spoken nor held, and the row gives no reason. Two `claim-validator-trip` events on `voicePackage.opening.narrationGate` that same ply ("You put the bishop on b2…") are the likely cause, but the row does not say so. |
+| 2 | One-line identity | **PARTIAL**: name plus the b2 fianchetto, said as a general rule; no origin, nothing on what it provokes or aims for | 1.b3 (+6228ms): "The rule behind b3: fianchetto the bishop to b2, because a bishop shut in behind its own pawns is a spectator." This is the setup's core, but it is given as a rule and not tied to the name. `openingIdentity` had 0 offers. |
+| 3 | Their setup and its plan | **MISSING as heard. Possibly held: NO DATA** | Black's system is never named. `theirIntent` speaks one move at a time: ply 7 "Their bishop to d6 does two jobs…"; ply 11 "Their a6 does two jobs…"; ply 25 "They play bishop to b7 first, so that rook to c8 can take the half-open c-file." `structure` and `openingIdea` had 0 offers. A possible carrier was offered and not heard: `planArc` was held "marginal" on ply 19 (its spoken twin there was the plan method) and dropped with no reason on ply 25. The rows carry no text, so whether either was their plan is unknown. |
+| 4 | Why this branch, against the main alternative | **MISSING** | 2.Bb2: "That's what strong players play here — it develops into the game…" This is `strongChoice` approving the move on authority, with no alternative named. `strongChoice` was offered again on ply 9 and dropped with no reason. `rejectedTempting` and `register`, the lanes that could carry the comparison, had 0 offers. |
+| 5 | Your structure's cost, and the move that pays it | **PARTIAL**: late (moves 11–12) and not tied to the opening | 12.b4: "Your bishop on e2 looks dead for now, but your pawns on c4 and d3 are what block it — moving them brings it to life." 11.O-O: "Your worst piece: your bishop on e2." The holes that were named are **theirs**: d5 (ply 21) and c6 at 14.Rc1 ("Their d5 costs them c6"). |
+| 6 | The middlegame's character, announced early | **PARTIAL**, and contradicted | 7.c4: "Their king went kingside, and yours is still in the centre — so the plan changes: your pawns on f2, g2 and h2 now face it. Pushed, they pry open files toward their king." This came before the phase EVENT on ply 15 ("opening-to-middlegame … move=Nc2"). No character type was named, and `character` and `splitPosition` had 0 offers. Two moves later, 9.d3 advised "castle short", the plan was never raised again, and White castled into that wing. On ply 15 there are two `phase` rows: one spoke nothing and holds nothing, the other spoke=[phase]. Which heard line the phase lane produced: NO DATA. |
+| 7 | The instinctive move first, then the concrete point | **PARTIAL**: the full shape for a played move appears only at move 16 | 7.c4: "c4 is fine only because your bishop is already on e2 — with it back on b5, a-pawn takes b5 would cost you a bishop for a pawn." This gives the concrete point, with no instinctive alternative. 5.Na3, the clearest non-obvious move, got its point ("The knight bears down on c4…") but no natural alternative, and the rim rule was applied to *their* knight (see E). At 6.Be2 the tempting Nc4 is named and refuted, but as a warning about a future move. 16.a3: "a4? Then knight takes b4 and, three moves later, e-pawn takes d4 — you come out behind on material". `rejectedTempting` had 0 offers. |
+| 8 | The structural key move (the break) | **MISSING** at opening level | `openingIdea` and `breakRace` had 0 offers. The closest lines are move-level: "Your e3 prepares d4" (ply 5) and "Your d3 prepares e4" (ply 17). At 11.O-O the break is withheld: "Your pawn break: one is ready to push right now — find it." It is never said which break or what it changes. `structureJudgement` was held aside on plies 1, 13 and 17 and "marginal" on 19, with no text recorded; it is not a break lane. |
+| 9 | Branches walked out loud, both ways | **MISSING** (the model marks this an open decision for David, so it is not a defect yet) | Only one-branch lines were heard: 6.Be2 "if you play knight to c4 and they answer knight takes c4…"; 16.a3 "a4? Then knight takes b4…". `causalChain` and `kickMap` had 0 offers. |
+| 10 | Danger signs specific to the line | **WORKS**, as board reads not framed as features of the Larsen | 9.d3: "Your king is still in the centre and the position is about to crack open — they already have a piece aimed down the e-file." (…Re8 against Ke1, with the remedy given.) 6.Be2 (`threat`): "…taking on c4 removes the guard of your bishop on b2." |
+| 11 | Honest self-judgement | **PARTIAL**: verdicts with a why on the student's moves; the coach's own weak moves are given a cost but never what should have been played | Own-move values are only affirm or null. `drawback`, `mistake`, `coachMistake` and `fundamental` had 0 offers. Heard approvals: 2.Bb2 "That's what strong players play here"; 16.a3 "On this move, two moves keep you level. The rest give it away." The coach's own moves were judged: …Na5 "A knight on the rim is dim" (ply 9), and …d5 "costs them c6" (ply 27, `theirMoveCost`). No alternative was given for either. |
+
+### B. Threats
+
+| Move | Line | Lane | Status | Type |
+|---|---|---|---|---|
+| 2.Bb2 | "Their bishop is still on f8, so nothing hits your bishop on b2 yet — it doesn't need a guard" | `positionFacts` or `strongChoice` (the row does not say) | spoken | simple (no threat yet) |
+| 5.Na3 | "They play knight to a5 first, so that c6 can hit your bishop on b5" | `theirIntent` (likely; ply 9 spoke positionFacts, movePoint, theirIntent) | spoken | simple (pawn kick coming) |
+| 6.Be2 | "No rush yet — if you play knight to c4 and they answer knight takes c4, taking on c4 removes the guard of your bishop on b2." | `threat`, instant wave | spoken at +3041ms | hidden (two-move line) |
+| 7.c4 | "with it back on b5, a-pawn takes b5 would cost you a bishop for a pawn" | `positionFacts`, `movePoint` or `structureJudgement` | spoken | simple (hypothetical) |
+| 9.d3 | "they already have a piece aimed down the e-file" | `positionFacts` (the only lane spoken) | spoken | hidden (x-ray through e5, e3, Be2) |
+| 10.Nf3 | "Count before you take on e5: 2 attackers against 2 defenders. Not enough…" | `countMethod` | spoken | hidden (a capture chain; a warning about the student's own capture) |
+| 11.O-O | "That wins a knight for a pawn: castle kingside and, three moves later, queen takes d3." | NO DATA (four lanes spoke; this follows the `theirIntent` sentence) | spoken | hidden (4+ moves); starts with the move just played (see E) |
+| 15.c5 | "Run the question now — what are they threatening?" | `positionFacts` or `moveIntent` | spoken | the threat itself (…Nc6 hitting Nb4) is **never named**, and no threat lane was offered on the ply-29 row |
+| 16.a3 | "Threat met. a3 keeps your knight on b4 safe." | NO DATA (+417ms; the instant wave has no row) | spoken after the fact | simple |
+
+- **Offered but held:** `prophylaxis` was held "aside" on plies 19 and 21. The text is not in the prep.
+- **Never offered on any of the 20 rows:** `dangerLevels`, `threatAnswer`, `trapAhead`, `checkMethod`. The ply-31 instant line has no row, so its lane is unknown.
+- **Dropped with no reason recorded (in the voice package, learnTurnDoor.ts:522-528):**
+  - `countMethod` on plies 21, 23, 25, 27, 29 and 31;
+  - `kingSafety` on ply 19, while the king was still on e1.
+
+### C. Record terms
+
+1. **The fade never changed a line.** The header lists 19 levels: 16 "short" and 3 "lighter" (misplaced-piece, king-stuck-center, calculation-depth). All 20 rows show `faded=[]`. Whether the door received these levels: NO DATA. What the code explains, given that `short` keeps 1 sentence and `lighter` keeps 2 (fadeText.ts):
+   - The threat line at 6.Be2 is one sentence, so its short form is the same line.
+   - The count at 10.Nf3 is two sentences, so the "lighter" level leaves it unchanged.
+   - The "blunder check" at 8.Nc2 came from `positionFacts` or `moveIntent`, not `blunderCheck` (0 offers). It is one sentence.
+   - **The one real gap:** the multi-sentence plan method (10.Nf3, 11.O-O) spoke in full while no-plan is "short". `planArc` cannot fade by its lane tag, because its `held` is `na` and it is not said before the move (computerRoles.ts:111, learnTurnDoor.ts:466).
+
+   The green direction was written to the record: "held [no-plan] from learn" appears on plies 5, 15, 19, 29 and 31.
+2. **No sign of a raise from a red tag.** `sameAsLastTime`, `lastTimeHere` and `fundamental` had 0 offers, and no heard line mentions another game. The prep holds no red tags and no ranking data, so a hidden raise cannot be ruled out.
+3. **Contradiction: NO DATA.** The prep holds no record of his misses, so whether the green tags contradict it cannot be checked. The draft's "spoke in full" evidence belongs under item 1 and, apart from the plan method, is explained by sentence counts.
+
+### D. Words
+
+- Average 71 heard words over 16 turns (matches the header).
+- The four longest turns (which sentence came from which lane is inferred, not recorded):
+  - **11.O-O, 132 words.** Two waves (+4964ms, +18546ms). Lanes spoken: `planArc`, `structureJudgement`, `movePoint`, `theirIntent`. Nothing was held "marginal".
+  - **7.c4, 95 words.** Lanes spoken: `positionFacts`, `movePoint`, `structureJudgement`.
+  - **10.Nf3, 95 words.** Lanes spoken: `countMethod`, `planArc`, `movePoint`. The only turn where the marginal bar fired: `planArc`, `structureJudgement` and `positionFacts` were held "marginal".
+  - **12.b4, 91 words.** Lanes spoken: `movePoint` and `structureJudgement` (offered 3 times; the heard text fits three such facts).
+- **Silent turns: none** of the 16. The slot before the first move has 0 words and no row.
+- Time to first voice: 2.7–5.7 s, except 16.a3 at 0.4 s.
+- Second waves: +6.2 s (ply 1), +15.5 s (ply 11), +18.1 s (ply 15, a verbatim repeat), +18.5 s (ply 21) and +5.4 s (ply 31).
+
+### E. Defects seen in passing
+
+- **The student's next move named before it was played:**
+  - 1.b3: "fianchetto the bishop to b2" (Bb2 came on ply 3). On the same turn, the narration gate tripped twice on the `opening` sentence "You put the bishop on b2, on the long diagonal." Likely cause: it was claimed before Bb2 was played.
+  - 6.Be2: "The bishop bears down on c4, backing your c-pawn's push there". c4 was the next move (ply 13), and ply 9 had already said the same about the knight.
+  - 9.d3: "Move your knight on g1, then castle short before the centre opens." 10.Nf3 and 11.O-O followed.
+  - Implicit only: 8.Nc2 "gets a pawn push ready to hit their knight on a5" (b4 came on ply 23).
+  - Done right: 11.O-O withholds the break ("find it").
+- **Lines read off a different board:**
+  - 11.O-O: "castle kingside and, three moves later, queen takes d3". The line starts with the move the student just played, so it reads as a future instruction. Both kings had castled. Whose knight is won is never said.
+  - 12.b4: "b4 kicks their knight off a5, gaining time" is the board before Black's reply. The next sentence ("no pawn can come up to back up b4 — and you are already hitting b4") is the board after …cxb4. The knight never left a5.
+- **Double standard:** at 5.Na3 the student's rim knight is affirmed ("bears down on c4"), while in the same turn their knight on a5 gets "touches only four squares … A knight on the rim is dim". The student's a3 knight also touches only four squares.
+- **A plan contradicted:** 7.c4 "your pawns on f2, g2 and h2 now face it. Pushed, they pry open files toward their king". Then 9.d3 says "castle short", the storm is never raised again, and White castles into that wing.
+- **Repeats within one turn:**
+  - 8.Nc2: "Your next move is not a big decision…" twice, verbatim (+4566ms and +18114ms), after 7.c4's "Nothing hinges on your next move…".
+  - 11.O-O: the d5 hole named three times.
+  - 16.a3: b4 kept safe, said twice.
+  - 5.Na3: the rim knight said three ways.
+- **The same template on different turns:**
+  - "bears down on c4, backing your c-pawn's push there" (plies 9, 11);
+  - "sits in front of their own … pawn … you are already hitting …" (plies 23, 27);
+  - "does two jobs: it stops …, and it prepares …" (plies 7, 11);
+  - "prepares d4/e4 — when the … pawn goes forward, it will be supported" (plies 5, 17);
+  - "X first, to/so that …" (plies 1, 5, 9, 25).
+- **CHAT-ONLY verdict on a costly move:** none. There are 0 CHAT-ONLY lines. The highest move cost on any row is 1 (`moveCostCp`, centipawns, on plies 27 and 31), and no own move was graded mistake or drawback.
+
+### Checker notes
+
+- **Summary:** "none of the opening-level lanes were offered" was wrong, because `opening` was offered twice. Added `bookMove` to the zero list and the full offer counts.
+- **Build hash:** flagged as not in the prep.
+- **A1:** linked the dropped late `opening` offer to the two narration-gate trips on the same ply, as a likely cause only.
+- **A2:** the fianchetto rule is the setup's core. The gap is that it is not tied to the name and has no origin or aim, so the reason was reworded.
+- **A3:** MISSING → "MISSING as heard; possibly held". A carrying lane (`planArc`) was offered and held "marginal" on ply 19 and dropped on 25, with no text recorded.
+- **A6:** added that the 7.c4 storm plan was contradicted at 9.d3 and dropped.
+- **A7:** added Na3 (point given, no alternative) and the 6.Be2 Nc4 refutation, which is said about a future move.
+- **A8:** noted that the `structureJudgement` holds have no text. `breakRace` also had 0 offers.
+- **A9:** noted the model calls this an open decision for David.
+- **A10:** kept WORKS, with the caveat that the reads are not tied to the Larsen.
+- **A11:** added that the coach's own …Na5 and …d5 were given costs, with no alternative.
+- **B:**
+  - Added the missed 5.Na3 threat (…c6 hitting Bb5).
+  - 11.O-O lane changed to NO DATA; the row does not attribute sentences.
+  - Added `kingSafety`, dropped on ply 19.
+  - Scoped "never offered" to the 20 rows, because the ply-31 instant line has no row.
+- **C1:** "Green does not reach Learn" was over-claimed. Rewritten from the fade code: the cited lessons were already at or under their fade length. The real gap is that `planArc` cannot fade by lane.
+- **C2:** "confirmed" softened, because the prep has no red tags or ranking data.
+- **C3:** the draft's evidence did not show a contradiction; changed to NO DATA.
+- **D:** added the second waves on ply 1 (+6.2 s) and ply 31 (+5.4 s). Marked sentence-to-lane attributions as inferred. The numbers match the header.
+- **E:**
+  - Reworded the 11.O-O defect: the line starts with the just-played move.
+  - Clarified the 12.b4 defect as two boards in one turn.
+  - Added the Na3 double standard, the contradicted storm plan, and the "X first" template.
+  - Cost is `moveCostCp` in centipawns (max 1).
