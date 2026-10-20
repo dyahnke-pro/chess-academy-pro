@@ -23,9 +23,10 @@ import { spawn } from 'node:child_process';
 import { Chess } from 'chess.js';
 import { isWhy, isTeachingLine } from './audit-lib/why-count.mjs';
 
-const LIST = 'audit-reports/acceptance/learn-list.json';
 const args = process.argv.slice(2);
 const opt = (k) => { const i = args.indexOf(`--${k}`); return i >= 0 ? args[i + 1] : null; };
+// --list picks the answer key: the six-game list (default) or the golden speedrun.
+const LIST = opt('list') ?? 'audit-reports/acceptance/learn-list.json';
 const list = JSON.parse(readFileSync(LIST, 'utf8'));
 const PORT = Number(process.env.HAND_PORT ?? 7777);
 const DRIVER = `http://localhost:${PORT}`;
@@ -154,7 +155,7 @@ function scoreGame(id, tape) {
   }
   for (const it of items) {
     const w = byPly.get(it.ply);
-    const res = { id: it.id, kind: it.kind, say: it.say, move: it.move, what: it.what };
+    const res = { id: it.id, kind: it.kind, say: it.say, move: it.move, what: it.what, soft: !!it.soft };
     if (it.window === 'byPly') {
       const heard = [...intro, ...[...byPly.entries()].filter(([p]) => p <= it.ply).flatMap(([, x]) => x.lines)];
       const maxPly = Math.max(0, ...byPly.keys());
@@ -229,10 +230,11 @@ function report(dir, games) {
     const tape = JSON.parse(readFileSync(f, 'utf8'));
     const r = scoreGame(id, tape);
     all.push(...r.map((x) => ({ ...x, game: id })));
-    const scored = r.filter((x) => x.status === 'met' || x.status === 'missed');
+    const scored = r.filter((x) => (x.status === 'met' || x.status === 'missed') && !x.soft);
     perGame[id] = { met: scored.filter((x) => x.status === 'met').length, of: scored.length, notReached: r.length - scored.length, errors: tape.errors };
   }
-  const scored = all.filter((x) => x.status === 'met' || x.status === 'missed');
+  // A soft item is reported but does not count toward the score.
+  const scored = all.filter((x) => (x.status === 'met' || x.status === 'missed') && !x.soft);
   const perKind = {};
   for (const x of scored) { const k = (perKind[x.kind] ??= { met: 0, of: 0 }); k.of += 1; if (x.status === 'met') k.met += 1; }
   const summary = { list: LIST, listWritten: list.written, met: scored.filter((x) => x.status === 'met').length, of: scored.length, perGame, perKind };

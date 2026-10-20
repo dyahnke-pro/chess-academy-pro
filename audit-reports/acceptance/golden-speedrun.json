@@ -1,0 +1,1127 @@
+{
+ "version": 1,
+ "written": "2026-10-20T15:36:51.286Z",
+ "video": {
+  "id": "DO28z1MTaC8",
+  "url": "https://www.youtube.com/watch?v=DO28z1MTaC8",
+  "title": "Master Class | Three Knights Game | Chess Speedrun | Grandmaster Naroditsky"
+ },
+ "window": "plies 4–27 (2…Nf6 to 14.Rag1); scored to the end of 13…Qxf3's window",
+ "games": {
+  "dto": {
+   "seat": "black",
+   "sans": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nc3",
+    "Bc5",
+    "Bc4",
+    "d6",
+    "O-O",
+    "Bg4",
+    "d3",
+    "Nc6",
+    "Be3",
+    "Bb6",
+    "h3",
+    "Bh5",
+    "Kh2",
+    "O-O",
+    "Qd2",
+    "Bxf3",
+    "gxf3",
+    "Nh5",
+    "Rg1",
+    "Qf6",
+    "Rg4",
+    "Qxf3",
+    "Rag1"
+   ],
+   "file": "voiced corpus yt:DO28z1MTaC8"
+  }
+ },
+ "items": [
+  {
+   "game": "dto",
+   "ply": 4,
+   "move": "2...Nf6",
+   "id": "dto-4-nf6-e4",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "Nf6 attacks the e4 pawn",
+   "window": "turn",
+   "anyOf": [
+    "\\be4\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 4,
+   "move": "2...Nf6",
+   "id": "dto-4-name",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "names the opening: Petrov / Three Knights",
+   "window": "turn",
+   "anyOf": [
+    "\\bThree Knights\\b",
+    "\\bPetrov\\b",
+    "\\bPetroff\\b",
+    "\\bRussian\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 4,
+   "move": "2...Nf6",
+   "id": "dto-4-nc3-guards-e4",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "their Nc3 guards e4",
+   "window": "afterReply",
+   "anyOf": [
+    "\\bguard",
+    "\\bdefend",
+    "\\bprotect",
+    "\\bcover",
+    "\\bsupport"
+   ],
+   "allOf": [
+    "\\be4\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 4,
+   "move": "2...Nf6",
+   "id": "dto-4-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "what": "the next move (Bc5) before it is played — he names his own options; the app's rule (C2) holds them",
+   "window": "turn",
+   "ban": [
+    "\\bBc5\\b",
+    "\\bbishop (?:to|takes|takes on|captures on|goes to|on to) c5\\b"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 4,
+   "move": "2...Nf6",
+   "id": "dto-4-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "what": "a sentence already heard earlier in this game",
+   "window": "turn"
+  },
+  {
+   "game": "dto",
+   "ply": 4,
+   "move": "2...Nf6",
+   "id": "dto-4-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "what": "a statistic",
+   "window": "turn",
+   "ban": [
+    "\\d+(?:\\.\\d+)?\\s?%",
+    "\\bper ?cent\\b",
+    "\\b(?:in|of|from) [\\d,]{2,} (?:master |rated )?games\\b",
+    "\\bwin(?:ning)? rate\\b",
+    "\\bscores? \\d"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 4,
+   "move": "2...Nf6",
+   "id": "dto-4-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "window": "turn",
+   "boards": [
+    "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+    "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+    "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 6,
+   "move": "3...Bc5",
+   "id": "dto-6-e5-loose",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "e5 is left to be taken (Nxe5 is possible)",
+   "window": "turn",
+   "anyOf": [
+    "\\be5\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 6,
+   "move": "3...Bc5",
+   "id": "dto-6-bc4-f7",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "their Bc4 aims at f7 / e5 still hangs",
+   "window": "afterReply",
+   "anyOf": [
+    "\\bf7\\b",
+    "\\be5\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 6,
+   "move": "3...Bc5",
+   "id": "dto-6-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "what": "the next move (d6) before it is played — he names his own options; the app's rule (C2) holds them",
+   "window": "turn",
+   "ban": [
+    "\\b(?:[a-h]-)?pawn (?:to|takes|takes on|captures on) d6\\b",
+    "\\bpush(?:es|ing)? (?:the (?:[a-h]-)?pawn )?(?:to )?d6\\b",
+    "\\bcastle next\\b",
+    "\\bso you can castle\\b",
+    "\\bthen castle\\b"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 6,
+   "move": "3...Bc5",
+   "id": "dto-6-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "what": "a sentence already heard earlier in this game",
+   "window": "turn"
+  },
+  {
+   "game": "dto",
+   "ply": 6,
+   "move": "3...Bc5",
+   "id": "dto-6-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "what": "a statistic",
+   "window": "turn",
+   "ban": [
+    "\\d+(?:\\.\\d+)?\\s?%",
+    "\\bper ?cent\\b",
+    "\\b(?:in|of|from) [\\d,]{2,} (?:master |rated )?games\\b",
+    "\\bwin(?:ning)? rate\\b",
+    "\\bscores? \\d"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 6,
+   "move": "3...Bc5",
+   "id": "dto-6-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "window": "turn",
+   "boards": [
+    "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+    "rnbqk2r/pppp1ppp/5n2/2b1p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+    "rnbqk2r/pppp1ppp/5n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 8,
+   "move": "4...d6",
+   "id": "dto-8-d6-e5",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "d6 defends the e5 pawn",
+   "window": "turn",
+   "anyOf": [
+    "\\bdefend",
+    "\\bguard",
+    "\\bprotect",
+    "\\bsupport",
+    "\\bhold",
+    "\\bback"
+   ],
+   "allOf": [
+    "\\be5\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 8,
+   "move": "4...d6",
+   "id": "dto-8-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "what": "the next move (Bg4) before it is played — he names his own options; the app's rule (C2) holds them",
+   "window": "turn",
+   "ban": [
+    "\\bBg4\\b",
+    "\\bbishop (?:to|takes|takes on|captures on|goes to|on to) g4\\b",
+    "\\bcastle next\\b",
+    "\\bso you can castle\\b",
+    "\\bthen castle\\b"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 8,
+   "move": "4...d6",
+   "id": "dto-8-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "what": "a sentence already heard earlier in this game",
+   "window": "turn"
+  },
+  {
+   "game": "dto",
+   "ply": 8,
+   "move": "4...d6",
+   "id": "dto-8-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "what": "a statistic",
+   "window": "turn",
+   "ban": [
+    "\\d+(?:\\.\\d+)?\\s?%",
+    "\\bper ?cent\\b",
+    "\\b(?:in|of|from) [\\d,]{2,} (?:master |rated )?games\\b",
+    "\\bwin(?:ning)? rate\\b",
+    "\\bscores? \\d"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 8,
+   "move": "4...d6",
+   "id": "dto-8-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "window": "turn",
+   "boards": [
+    "rnbqk2r/pppp1ppp/5n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4",
+    "rnbqk2r/ppp2ppp/3p1n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 5",
+    "rnbqk2r/ppp2ppp/3p1n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQ1RK1 b kq - 1 5"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 10,
+   "move": "5...Bg4",
+   "id": "dto-10-bg4-pin",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "Bg4 pins the knight on f3 (to the queen)",
+   "window": "turn",
+   "anyOf": [
+    "\\bpin"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 10,
+   "move": "5...Bg4",
+   "id": "dto-10-bg4-timing",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "before h3 takes the square away",
+   "window": "turn",
+   "anyOf": [
+    "\\bh3\\b",
+    "\\bbefore\\b",
+    "\\bwhile you can\\b"
+   ],
+   "soft": true
+  },
+  {
+   "game": "dto",
+   "ply": 10,
+   "move": "5...Bg4",
+   "id": "dto-10-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "what": "the next move (Nc6) before it is played — he names his own options; the app's rule (C2) holds them",
+   "window": "turn",
+   "ban": [
+    "\\bNc6\\b",
+    "\\bknight (?:to|takes|takes on|captures on|goes to|on to) c6\\b",
+    "\\bcastle next\\b",
+    "\\bso you can castle\\b",
+    "\\bthen castle\\b"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 10,
+   "move": "5...Bg4",
+   "id": "dto-10-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "what": "a sentence already heard earlier in this game",
+   "window": "turn"
+  },
+  {
+   "game": "dto",
+   "ply": 10,
+   "move": "5...Bg4",
+   "id": "dto-10-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "what": "a statistic",
+   "window": "turn",
+   "ban": [
+    "\\d+(?:\\.\\d+)?\\s?%",
+    "\\bper ?cent\\b",
+    "\\b(?:in|of|from) [\\d,]{2,} (?:master |rated )?games\\b",
+    "\\bwin(?:ning)? rate\\b",
+    "\\bscores? \\d"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 10,
+   "move": "5...Bg4",
+   "id": "dto-10-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "window": "turn",
+   "boards": [
+    "rnbqk2r/ppp2ppp/3p1n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQ1RK1 b kq - 1 5",
+    "rn1qk2r/ppp2ppp/3p1n2/2b1p3/2B1P1b1/2N2N2/PPPP1PPP/R1BQ1RK1 w kq - 2 6",
+    "rn1qk2r/ppp2ppp/3p1n2/2b1p3/2B1P1b1/2NP1N2/PPP2PPP/R1BQ1RK1 b kq - 0 6"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 12,
+   "move": "6...Nc6",
+   "id": "dto-12-nc6-d4",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "the threat …Nd4 on the pinned f3 knight",
+   "window": "turn",
+   "anyOf": [
+    "\\bd4\\b",
+    "\\bpinned\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 12,
+   "move": "6...Nc6",
+   "id": "dto-12-be3-d4-c5",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "their Be3 covers d4 / challenges your c5 bishop",
+   "window": "afterReply",
+   "anyOf": [
+    "\\bd4\\b",
+    "\\bc5\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 12,
+   "move": "6...Nc6",
+   "id": "dto-12-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "what": "the next move (Bb6) before it is played — he names his own options; the app's rule (C2) holds them",
+   "window": "turn",
+   "ban": [
+    "\\bBb6\\b",
+    "\\bbishop (?:to|takes|takes on|captures on|goes to|on to) b6\\b",
+    "\\bcastle next\\b",
+    "\\bso you can castle\\b",
+    "\\bthen castle\\b"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 12,
+   "move": "6...Nc6",
+   "id": "dto-12-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "what": "a sentence already heard earlier in this game",
+   "window": "turn"
+  },
+  {
+   "game": "dto",
+   "ply": 12,
+   "move": "6...Nc6",
+   "id": "dto-12-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "what": "a statistic",
+   "window": "turn",
+   "ban": [
+    "\\d+(?:\\.\\d+)?\\s?%",
+    "\\bper ?cent\\b",
+    "\\b(?:in|of|from) [\\d,]{2,} (?:master |rated )?games\\b",
+    "\\bwin(?:ning)? rate\\b",
+    "\\bscores? \\d"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 12,
+   "move": "6...Nc6",
+   "id": "dto-12-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "window": "turn",
+   "boards": [
+    "rn1qk2r/ppp2ppp/3p1n2/2b1p3/2B1P1b1/2NP1N2/PPP2PPP/R1BQ1RK1 b kq - 0 6",
+    "r2qk2r/ppp2ppp/2np1n2/2b1p3/2B1P1b1/2NP1N2/PPP2PPP/R1BQ1RK1 w kq - 1 7",
+    "r2qk2r/ppp2ppp/2np1n2/2b1p3/2B1P1b1/2NPBN2/PPP2PPP/R2Q1RK1 b kq - 2 7"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 14,
+   "move": "7...Bb6",
+   "id": "dto-14-bb6-structure",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "Bb6 avoids the trade on c5 that spoils the pawns / axb6 opens the a-file",
+   "window": "turn",
+   "anyOf": [
+    "\\bc5\\b",
+    "\\ba-file\\b",
+    "\\bdoubled\\b",
+    "\\bstructure\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 14,
+   "move": "7...Bb6",
+   "id": "dto-14-h3-g4",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "their h3 attacks your bishop on g4",
+   "window": "afterReply",
+   "anyOf": [
+    "\\bg4\\b",
+    "\\byour bishop\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 14,
+   "move": "7...Bb6",
+   "id": "dto-14-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "what": "the next move (Bh5) before it is played — he names his own options; the app's rule (C2) holds them",
+   "window": "turn",
+   "ban": [
+    "\\bBh5\\b",
+    "\\bbishop (?:to|takes|takes on|captures on|goes to|on to) h5\\b",
+    "\\bcastle next\\b",
+    "\\bso you can castle\\b",
+    "\\bthen castle\\b"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 14,
+   "move": "7...Bb6",
+   "id": "dto-14-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "what": "a sentence already heard earlier in this game",
+   "window": "turn"
+  },
+  {
+   "game": "dto",
+   "ply": 14,
+   "move": "7...Bb6",
+   "id": "dto-14-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "what": "a statistic",
+   "window": "turn",
+   "ban": [
+    "\\d+(?:\\.\\d+)?\\s?%",
+    "\\bper ?cent\\b",
+    "\\b(?:in|of|from) [\\d,]{2,} (?:master |rated )?games\\b",
+    "\\bwin(?:ning)? rate\\b",
+    "\\bscores? \\d"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 14,
+   "move": "7...Bb6",
+   "id": "dto-14-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "window": "turn",
+   "boards": [
+    "r2qk2r/ppp2ppp/2np1n2/2b1p3/2B1P1b1/2NPBN2/PPP2PPP/R2Q1RK1 b kq - 2 7",
+    "r2qk2r/ppp2ppp/1bnp1n2/4p3/2B1P1b1/2NPBN2/PPP2PPP/R2Q1RK1 w kq - 3 8",
+    "r2qk2r/ppp2ppp/1bnp1n2/4p3/2B1P1b1/2NPBN1P/PPP2PP1/R2Q1RK1 b kq - 0 8"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 16,
+   "move": "8...Bh5",
+   "id": "dto-16-bh5-pin",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "Bh5 keeps the pin on f3",
+   "window": "turn",
+   "anyOf": [
+    "\\bpin",
+    "\\bf3\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 16,
+   "move": "8...Bh5",
+   "id": "dto-16-kh2-gfile",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "their Kh2 prepares g4 / the rook to g1 (the g-file)",
+   "window": "afterReply",
+   "anyOf": [
+    "\\bg-file\\b",
+    "\\bg4\\b",
+    "\\bg1\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 16,
+   "move": "8...Bh5",
+   "id": "dto-16-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "what": "the next move (O-O) before it is played — he names his own options; the app's rule (C2) holds them",
+   "window": "turn",
+   "ban": [
+    "\\bO-O\\b",
+    "\\bcastl\\w* (?:kingside|short)\\b",
+    "\\bcastle next\\b",
+    "\\bso you can castle\\b",
+    "\\bthen castle\\b"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 16,
+   "move": "8...Bh5",
+   "id": "dto-16-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "what": "a sentence already heard earlier in this game",
+   "window": "turn"
+  },
+  {
+   "game": "dto",
+   "ply": 16,
+   "move": "8...Bh5",
+   "id": "dto-16-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "what": "a statistic",
+   "window": "turn",
+   "ban": [
+    "\\d+(?:\\.\\d+)?\\s?%",
+    "\\bper ?cent\\b",
+    "\\b(?:in|of|from) [\\d,]{2,} (?:master |rated )?games\\b",
+    "\\bwin(?:ning)? rate\\b",
+    "\\bscores? \\d"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 16,
+   "move": "8...Bh5",
+   "id": "dto-16-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "window": "turn",
+   "boards": [
+    "r2qk2r/ppp2ppp/1bnp1n2/4p3/2B1P1b1/2NPBN1P/PPP2PP1/R2Q1RK1 b kq - 0 8",
+    "r2qk2r/ppp2ppp/1bnp1n2/4p2b/2B1P3/2NPBN1P/PPP2PP1/R2Q1RK1 w kq - 1 9",
+    "r2qk2r/ppp2ppp/1bnp1n2/4p2b/2B1P3/2NPBN1P/PPP2PPK/R2Q1R2 b kq - 2 9"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 18,
+   "move": "9...O-O",
+   "id": "dto-18-oo-safe",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "castling: the king is safe",
+   "window": "turn",
+   "anyOf": [
+    "\\bcastl",
+    "\\byour king\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 18,
+   "move": "9...O-O",
+   "id": "dto-18-qd2-gfile",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "their Qd2 idea: recapture on f3 with the g-pawn and use the g-file",
+   "window": "afterReply",
+   "anyOf": [
+    "\\bg-file\\b",
+    "\\bf3\\b",
+    "\\bkingside pawns\\b",
+    "\\bstructure\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 18,
+   "move": "9...O-O",
+   "id": "dto-18-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "what": "the next move (Bxf3) before it is played — he names his own options; the app's rule (C2) holds them",
+   "window": "turn",
+   "ban": [
+    "\\bBxf3\\b",
+    "\\bbishop (?:to|takes|takes on|captures on|goes to|on to) f3\\b"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 18,
+   "move": "9...O-O",
+   "id": "dto-18-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "what": "a sentence already heard earlier in this game",
+   "window": "turn"
+  },
+  {
+   "game": "dto",
+   "ply": 18,
+   "move": "9...O-O",
+   "id": "dto-18-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "what": "a statistic",
+   "window": "turn",
+   "ban": [
+    "\\d+(?:\\.\\d+)?\\s?%",
+    "\\bper ?cent\\b",
+    "\\b(?:in|of|from) [\\d,]{2,} (?:master |rated )?games\\b",
+    "\\bwin(?:ning)? rate\\b",
+    "\\bscores? \\d"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 18,
+   "move": "9...O-O",
+   "id": "dto-18-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "window": "turn",
+   "boards": [
+    "r2qk2r/ppp2ppp/1bnp1n2/4p2b/2B1P3/2NPBN1P/PPP2PPK/R2Q1R2 b kq - 2 9",
+    "r2q1rk1/ppp2ppp/1bnp1n2/4p2b/2B1P3/2NPBN1P/PPP2PPK/R2Q1R2 w - - 3 10",
+    "r2q1rk1/ppp2ppp/1bnp1n2/4p2b/2B1P3/2NPBN1P/PPPQ1PPK/R4R2 b - - 4 10"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 20,
+   "move": "10...Bxf3",
+   "id": "dto-20-bxf3-structure",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "Bxf3 damages their kingside pawn structure for good",
+   "window": "turn",
+   "anyOf": [
+    "\\bdoubled\\b",
+    "\\bstructure\\b",
+    "\\bweak",
+    "\\bpermanent",
+    "\\bbroken\\b",
+    "\\bdamage",
+    "\\bwreck",
+    "\\bkingside pawns\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 20,
+   "move": "10...Bxf3",
+   "id": "dto-20-gxf3-gfile",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "their gxf3 opens the g-file toward your king",
+   "window": "afterReply",
+   "anyOf": [
+    "\\bg-file\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 20,
+   "move": "10...Bxf3",
+   "id": "dto-20-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "what": "the next move (Nh5) before it is played — he names his own options; the app's rule (C2) holds them",
+   "window": "turn",
+   "ban": [
+    "\\bNh5\\b",
+    "\\bknight (?:to|takes|takes on|captures on|goes to|on to) h5\\b"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 20,
+   "move": "10...Bxf3",
+   "id": "dto-20-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "what": "a sentence already heard earlier in this game",
+   "window": "turn"
+  },
+  {
+   "game": "dto",
+   "ply": 20,
+   "move": "10...Bxf3",
+   "id": "dto-20-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "what": "a statistic",
+   "window": "turn",
+   "ban": [
+    "\\d+(?:\\.\\d+)?\\s?%",
+    "\\bper ?cent\\b",
+    "\\b(?:in|of|from) [\\d,]{2,} (?:master |rated )?games\\b",
+    "\\bwin(?:ning)? rate\\b",
+    "\\bscores? \\d"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 20,
+   "move": "10...Bxf3",
+   "id": "dto-20-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "window": "turn",
+   "boards": [
+    "r2q1rk1/ppp2ppp/1bnp1n2/4p2b/2B1P3/2NPBN1P/PPPQ1PPK/R4R2 b - - 4 10",
+    "r2q1rk1/ppp2ppp/1bnp1n2/4p3/2B1P3/2NPBb1P/PPPQ1PPK/R4R2 w - - 0 11",
+    "r2q1rk1/ppp2ppp/1bnp1n2/4p3/2B1P3/2NPBP1P/PPPQ1P1K/R4R2 b - - 0 11"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 22,
+   "move": "11...Nh5",
+   "id": "dto-22-nh5-kingside",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "Nh5 starts kingside play (eyes f4)",
+   "window": "turn",
+   "anyOf": [
+    "\\bkingside\\b",
+    "\\bf4\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 22,
+   "move": "11...Nh5",
+   "id": "dto-22-rg1-g7",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "their Rg1 aims down the g-file at g7 / your king",
+   "window": "afterReply",
+   "anyOf": [
+    "\\bg-file\\b",
+    "\\bg7\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 22,
+   "move": "11...Nh5",
+   "id": "dto-22-decision",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "a real decision point: slow down / weigh the options (engine: Kh8 best by 1.5)",
+   "window": "afterReply",
+   "anyOf": [
+    "\\bslow down\\b",
+    "\\bcritical\\b",
+    "\\bdecision\\b",
+    "\\bonly move\\b",
+    "\\btake your time\\b",
+    "\\bthink\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 22,
+   "move": "11...Nh5",
+   "id": "dto-22-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "what": "the next move (Qf6) before it is played — he names his own options; the app's rule (C2) holds them",
+   "window": "turn",
+   "ban": [
+    "\\bQf6\\b",
+    "\\bqueen (?:to|takes|takes on|captures on|goes to|on to) f6\\b"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 22,
+   "move": "11...Nh5",
+   "id": "dto-22-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "what": "a sentence already heard earlier in this game",
+   "window": "turn"
+  },
+  {
+   "game": "dto",
+   "ply": 22,
+   "move": "11...Nh5",
+   "id": "dto-22-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "what": "a statistic",
+   "window": "turn",
+   "ban": [
+    "\\d+(?:\\.\\d+)?\\s?%",
+    "\\bper ?cent\\b",
+    "\\b(?:in|of|from) [\\d,]{2,} (?:master |rated )?games\\b",
+    "\\bwin(?:ning)? rate\\b",
+    "\\bscores? \\d"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 22,
+   "move": "11...Nh5",
+   "id": "dto-22-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "window": "turn",
+   "boards": [
+    "r2q1rk1/ppp2ppp/1bnp1n2/4p3/2B1P3/2NPBP1P/PPPQ1P1K/R4R2 b - - 0 11",
+    "r2q1rk1/ppp2ppp/1bnp4/4p2n/2B1P3/2NPBP1P/PPPQ1P1K/R4R2 w - - 1 12",
+    "r2q1rk1/ppp2ppp/1bnp4/4p2n/2B1P3/2NPBP1P/PPPQ1P1K/R5R1 b - - 2 12"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 24,
+   "move": "12...Qf6",
+   "id": "dto-24-qf6-f3",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "Qf6 hits the f3 pawn",
+   "window": "turn",
+   "anyOf": [
+    "\\bf3\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 24,
+   "move": "12...Qf6",
+   "id": "dto-24-rg4-ignores",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "their Rg4 leaves f3 / heads for g7 on the g-file",
+   "window": "afterReply",
+   "anyOf": [
+    "\\bf3\\b",
+    "\\bg-file\\b",
+    "\\bg7\\b",
+    "\\bdoubl"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 24,
+   "move": "12...Qf6",
+   "id": "dto-24-noleak",
+   "kind": "noLeak",
+   "say": "MUST NOT SAY",
+   "what": "the next move (Qxf3) before it is played — he names his own options; the app's rule (C2) holds them",
+   "window": "turn",
+   "ban": [
+    "\\bQxf3\\b",
+    "\\bqueen (?:to|takes|takes on|captures on|goes to|on to) f3\\b"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 24,
+   "move": "12...Qf6",
+   "id": "dto-24-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "what": "a sentence already heard earlier in this game",
+   "window": "turn"
+  },
+  {
+   "game": "dto",
+   "ply": 24,
+   "move": "12...Qf6",
+   "id": "dto-24-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "what": "a statistic",
+   "window": "turn",
+   "ban": [
+    "\\d+(?:\\.\\d+)?\\s?%",
+    "\\bper ?cent\\b",
+    "\\b(?:in|of|from) [\\d,]{2,} (?:master |rated )?games\\b",
+    "\\bwin(?:ning)? rate\\b",
+    "\\bscores? \\d"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 24,
+   "move": "12...Qf6",
+   "id": "dto-24-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "window": "turn",
+   "boards": [
+    "r2q1rk1/ppp2ppp/1bnp4/4p2n/2B1P3/2NPBP1P/PPPQ1P1K/R5R1 b - - 2 12",
+    "r4rk1/ppp2ppp/1bnp1q2/4p2n/2B1P3/2NPBP1P/PPPQ1P1K/R5R1 w - - 3 13",
+    "r4rk1/ppp2ppp/1bnp1q2/4p2n/2B1P1R1/2NPBP1P/PPPQ1P1K/R7 b - - 4 13"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 26,
+   "move": "13...Qxf3",
+   "id": "dto-26-qxf3-pawn",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "Qxf3 wins the f3 pawn",
+   "window": "turn",
+   "anyOf": [
+    "\\bf3\\b",
+    "\\bpawn\\b"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 26,
+   "move": "13...Qxf3",
+   "id": "dto-26-rag1-g7",
+   "kind": "beat",
+   "say": "MUST COVER",
+   "what": "their Rag1 doubles: the threat on g7 / your king",
+   "window": "afterReply",
+   "anyOf": [
+    "\\bg7\\b",
+    "\\bg-file\\b",
+    "\\bdoubl"
+   ],
+   "soft": false
+  },
+  {
+   "game": "dto",
+   "ply": 26,
+   "move": "13...Qxf3",
+   "id": "dto-26-norepeat",
+   "kind": "noRepeat",
+   "say": "MUST NOT SAY",
+   "what": "a sentence already heard earlier in this game",
+   "window": "turn"
+  },
+  {
+   "game": "dto",
+   "ply": 26,
+   "move": "13...Qxf3",
+   "id": "dto-26-nostat",
+   "kind": "noStat",
+   "say": "MUST NOT SAY",
+   "what": "a statistic",
+   "window": "turn",
+   "ban": [
+    "\\d+(?:\\.\\d+)?\\s?%",
+    "\\bper ?cent\\b",
+    "\\b(?:in|of|from) [\\d,]{2,} (?:master |rated )?games\\b",
+    "\\bwin(?:ning)? rate\\b",
+    "\\bscores? \\d"
+   ]
+  },
+  {
+   "game": "dto",
+   "ply": 26,
+   "move": "13...Qxf3",
+   "id": "dto-26-true",
+   "kind": "boardTrue",
+   "say": "MUST NOT SAY",
+   "what": "a false \"your/their <piece> on <square>\"",
+   "window": "turn",
+   "boards": [
+    "r4rk1/ppp2ppp/1bnp1q2/4p2n/2B1P1R1/2NPBP1P/PPPQ1P1K/R7 b - - 4 13",
+    "r4rk1/ppp2ppp/1bnp4/4p2n/2B1P1R1/2NPBq1P/PPPQ1P1K/R7 w - - 0 14",
+    "r4rk1/ppp2ppp/1bnp4/4p2n/2B1P1R1/2NPBq1P/PPPQ1P1K/6R1 b - - 1 14"
+   ]
+  }
+ ]
+}
