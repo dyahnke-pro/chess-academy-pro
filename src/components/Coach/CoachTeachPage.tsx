@@ -9295,6 +9295,7 @@ export function CoachTeachPage(): JSX.Element {
     let behaviorArrows: ArrowClaim[] = [];
     let behaviorSquares: string[] = [];
     let positionalLine: string | null = null;
+    let positionalNames: NamesStudentMove = NAMES_NO_MOVE;
     let positionalClaims: string[] = [];
     let positionalSquares: readonly string[] = [];
     let positionalIsOwnKing = false;
@@ -9416,6 +9417,13 @@ export function CoachTeachPage(): JSX.Element {
           standingRef.current.remember(pr.key);
           positionalLine = pr.text;
           positionalSquares = prSquares;
+          // "castling is one move away — tuck it in" is the castle: it says so,
+          // and the door holds it while it is the student's move (OS-11 item 6 b).
+          if (pr.key === 'student-king-centre') {
+            const k = studentCC === 'w' ? 'e1' : 'e8';
+            const r = studentCC === 'w' ? '1' : '8';
+            positionalNames = namesMoves(studentCC, args.fenAfterReply, { from: k, to: `g${r}` }, { from: k, to: `c${r}` });
+          }
           // The same claim keys the composer's clauses carry, so one idea is
           // one saying across the two passes (hand walk 2026-09-27, Alekhine:
           // "castling is ready" then "The plan here: castle").
@@ -9475,7 +9483,7 @@ export function CoachTeachPage(): JSX.Element {
     // A recited line names the student's moves in it (OS-10).
     deferIf(computedLine, 'commentary', computedLine, NO_PROOF.description, namesFromArrows(computedLineArrows, studentCC, args.fenAfterReply), undefined, undefined, computedLineArrows);
     deferIf(behaviorLine && !decidedByMaterial, 'behavior', behaviorLine, NO_PROOF.description, namesFromArrows(behaviorArrows, studentCC, args.fenAfterReply), behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)), behaviorClaims, behaviorArrows);
-    deferIf(positionalLine && !decidedByMaterial, positionalIsOwnKing ? 'kingSafety' : 'positional', positionalLine, NO_PROOF.description, NAMES_NO_MOVE, positionalSquares, positionalClaims);
+    deferIf(positionalLine && !decidedByMaterial, positionalIsOwnKing ? 'kingSafety' : 'positional', positionalLine, NO_PROOF.description, positionalNames, positionalSquares, positionalClaims);
     // THE BOOK MOVE AND ITS JOB — its own lane on the "but" beat, so the door
     // orders it as a teaching fact (David 2026-10-14: "make sure this new
     // computer routes to the dna"), never glued to the opening name.

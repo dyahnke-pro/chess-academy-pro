@@ -10,7 +10,7 @@
 // both surfaces. Nothing here imports a surface module; keep it that way.
 import { reachWords } from '../utils/reachWords';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
-import { Chess, type Color, type Square } from 'chess.js';
+import { Chess, type Color, type Square, type PieceSymbol } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { isKnightOutpost, computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import { routeVia } from '../utils/routeWords';
@@ -115,6 +115,16 @@ export function findWorstPlacedPiece(
     if (!worst || m < worst.m) worst = { sq: c.square, type: c.type, m };
   }
   return worst && worst.m <= 1 ? worst : null;
+}
+
+/** THE WORST PIECE, as a note — the one answer to "which of your pieces is
+ *  worst" (census 8, OS-11 duplicate map: `strongestWeakestPiece` had its own
+ *  scope-only answer that named undeveloped pieces and back-rank rooks). */
+export function worstPieceNote(fen: string, color: Color): { square: Square; piece: PieceSymbol; scope: number } | null {
+  try {
+    const w = findWorstPlacedPiece(new Chess(fen), color);
+    return w ? { square: w.sq as Square, piece: w.type as PieceSymbol, scope: w.m } : null;
+  } catch { return null; }
 }
 
 export function isPinnedPiece(chess: Chess, sq: Square, color: Color): boolean {

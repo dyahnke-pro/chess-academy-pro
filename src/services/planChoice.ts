@@ -27,6 +27,7 @@ import { orList } from '../utils/andList';
 import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import { readBoardUrgency } from './boardUrgency';
 import { askThenAnswer, type PlayedMove } from '../utils/thinkPause';
+import { openSentence } from '../utils/openSentence';
 
 export interface MethodRead {
   /** Their weakness, as a phrase ("their king, still on e8", "their isolated pawn on d5"). */
@@ -287,6 +288,20 @@ export function methodPlan(read: MethodRead, fen?: string): { steps: string[]; t
     ...(read.breakPushes ?? []).flatMap(([f, t]) => routeArrows(fen, [f, t])),
   ] : [];
   return { steps, text, why, whyAsk, squares: [...new Set(squares)].filter((x) => /^[a-h][1-8]$/.test(x)), arrows };
+}
+
+/** THE METHOD AND THE PLAN ITS ANSWERS MAKE, as one sentence — the one
+ *  producer (OS-11 duplicate map #7: planThread and boardPlanFacts each built
+ *  "… So the plan: …" from the same template). Null when the answers make no
+ *  plan. `fen`: the board the method was read on. */
+export function methodPlanSentence(read: MethodRead, fen: string): { text: string; squares: string[]; arrows: RouteArrow[] } | null {
+  const mp = methodPlan(read, fen);
+  if (!mp) return null;
+  return {
+    text: `${methodLine(read, fen)} So the plan: ${mp.text}.${mp.why ? ` ${mp.whyAsk} ${openSentence(mp.why)}.` : ''}`,
+    squares: [...new Set([...methodSquares(read), ...mp.squares])],
+    arrows: mp.arrows,
+  };
 }
 
 /** The method spoken as a question and its answer: the student thinks first.

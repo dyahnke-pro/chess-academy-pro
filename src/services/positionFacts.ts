@@ -61,7 +61,7 @@ import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from '.
 import { structurePlanFact } from './boardPlan';
 import { readBoard, type BoardRead } from './boardComputers';
 import { detectTactics } from './tacticsDetector';
-import { stepPlan, EMPTY_PLAN_STATE } from './planMemory';
+import { stepPlan, EMPTY_PLAN_STATE, planChangeSentence } from './planMemory';
 import { matchClauseKind, matchTacticPattern, matchTag, boostFor, type WeaknessSignal } from './weaknessSignal';
 import { studentMomentBoost, isGreyDecision } from './studentMomentBoost';
 import { capabilitiesPosed, movePlayedCleanly } from './capabilityEvidence';
@@ -457,9 +457,6 @@ function plyNumberForPlan(fen: string): number {
   return (move - 1) * 2 + (parts[1] === 'b' ? 1 : 0);
 }
 
-export function planChangedText(text: string): string {
-  return `The plan changes here: ${continueSentence(text)}`;
-}
 
 const SAY_ONCE_KINDS: ReadonlySet<ClauseKind> = new Set<ClauseKind>(['their-habit', 'your-habit', 'hole-access', 
   'structure-plan', 'latent-danger', 'student-leans', 'opponent-leans',
@@ -866,7 +863,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const planKey = planFact && !planIdeaHeard && (planEvent === 'announce' || planEvent === 'changed') ? `plan:${planFact.id}#${(lastPlan?.n ?? 0) + 1}` : null;
   const structureText = planIdeaHeard ? ''
     : planFact && planEvent === 'announce' ? planFact.text
-    : planFact && planEvent === 'changed' ? planChangedText(planFact.text)
+    : planFact && planEvent === 'changed' ? planChangeSentence(planFact.text, 'statement')
       : '';
 
   // FUNDAMENTAL — the teaching idea the STUDENT's best move serves (development /

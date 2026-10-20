@@ -38,7 +38,6 @@ import { tacticalReadFromLines, namedTacticClause } from './tacticalRead';
 import { phaseOfFen, type Phase } from './boardConcepts';
 import { homeMinorCount } from './development';
 import {
-  strongestWeakestPiece,
   kingSafetyRead,
   findWeakPawns,
   namedPawnStructure,
@@ -66,6 +65,7 @@ import {
   rookBehindPasser,
   oppositionRead,
 } from './positionReadingService';
+import { worstPieceNote } from './nextPlans';
 
 /** Where a passive piece wants to go and how (census #15): a knight's outpost
  *  route, or a bishop's long diagonal / a rook's pawnless file, at most one
@@ -245,7 +245,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         return null;
       }
       // Fallback: a genuinely passive MINOR (never the queen/king/rook).
-      const { weakest } = strongestWeakestPiece(fen, student);
+      const weakest = worstPieceNote(fen, student);
       if (weakest && (weakest.piece === 'n' || weakest.piece === 'b') && weakest.scope <= 1) {
         const route = wishRoute(fen, weakest.square);
         if (route) {
