@@ -62,7 +62,7 @@ describe.skipIf(!RUN)('L6 — David\'s record re-priced with one search', () => 
   it('prices every student move of the shard and checkpoints per game', async () => {
     const [shard, of] = (process.env.SHARD ?? '0/1').split('/').map(Number);
     const raw = JSON.parse(readFileSync(DROP, 'utf8')) as { stores?: Record<string, unknown[]> } & Record<string, unknown[]>;
-    const t = (raw.stores ?? raw) as Record<string, unknown[]>;
+    const t = (raw.stores ?? raw);
     const games = (t.games as GameRecord[]).filter((g) => g.fullyAnalyzed && (g.annotations?.length ?? 0) > 0);
     const user = ((t.profiles as Array<{ preferences?: { chessComUsername?: string } }>)[0]?.preferences?.chessComUsername) ?? undefined;
     if (!existsSync('audit-reports/record-reprice')) mkdirSync('audit-reports/record-reprice', { recursive: true });
