@@ -134,10 +134,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/inaccuracyCall.ts:341`
 - `src/services/inaccuracyCall.ts:399`
 - `src/services/inaccuracyCall.ts:917`
-- `src/services/inaccuracyCall.ts:1392`
-- `src/services/inaccuracyCall.ts:1458`
-- `src/services/inaccuracyCall.ts:1553`
-- `src/services/inaccuracyCall.ts:1604`
+- `src/services/inaccuracyCall.ts:1397`
+- `src/services/inaccuracyCall.ts:1463`
+- `src/services/inaccuracyCall.ts:1558`
+- `src/services/inaccuracyCall.ts:1609`
 - `src/services/lineProof.test.ts:13`
 - `src/services/lineProof.test.ts:24`
 - `src/services/lineProof.test.ts:32`

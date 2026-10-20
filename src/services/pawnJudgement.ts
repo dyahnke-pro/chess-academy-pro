@@ -208,7 +208,9 @@ export function formation(fenBefore: string, san: string, student: Color): Struc
       if (!proof) continue;
       return {
         act: 'formation', squares: [base, mid, head], proof, key: `formation:chain:${base}${head}`,
-        text: `${base}, ${mid} and ${head} form a chain: ${base} is its base, the one pawn nothing else guards, so that is the pawn to look after.`,
+        // "The one pawn nothing else guards" was false whenever a piece guards it
+        // (Keres 10.d3: the queen on d1 guards c2) — the base is the pawn NO PAWN guards.
+        text: `${base}, ${mid} and ${head} form a chain: ${base} is its base, the one pawn no other pawn guards, so that is the pawn to look after.`,
       };
     }
   }

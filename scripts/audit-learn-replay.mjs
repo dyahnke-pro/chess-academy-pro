@@ -92,6 +92,9 @@ for (let i = 0; i < sans.length; i += 1) {
   const moveNo = Math.floor(i / 2) + 1;
   if (moveNo < FROM || moveNo > TO) continue;
   const reply = sans[i + 1];
+  // A student does not type between moves: let the turn's late wave land
+  // before the next dictation, or the typed line cuts it (REPLAY_SETTLE_MS).
+  if (turns.length) await new Promise((r) => setTimeout(r, Number(process.env.REPLAY_SETTLE_MS ?? 0)));
   if (reply) await call('/type', `play ${reply}`);
   const profiling = moveNo === PROFILE;
   const movedAt = Date.now();

@@ -39,8 +39,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `conceptInstanceKey` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8818`
-- `src/components/Coach/CoachTeachPage.tsx:8952`
+- `src/components/Coach/CoachTeachPage.tsx:8819`
+- `src/components/Coach/CoachTeachPage.tsx:8953`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:30`
@@ -83,7 +83,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `plyOfFen` (function) — 28 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8473`
+- `src/components/Coach/CoachTeachPage.tsx:8474`
 - `src/services/autoAnalyzeGame.ts:170`
 - `src/services/capabilityDateRepair.test.ts:17`
 - `src/services/capabilityDateRepair.test.ts:18`
@@ -113,7 +113,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/utils/plyOfFen.ts:3`
 
 ### `nextLooseSpells` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8584`
+- `src/components/Coach/CoachTeachPage.tsx:8585`
 - `src/services/looseStill.test.ts:30`
 - `src/services/looseStill.test.ts:31`
 - `src/services/looseStill.test.ts:50`
@@ -121,8 +121,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/looseStill.test.ts:66`
 
 ### `looseClaim` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8894`
-- `src/components/Coach/CoachTeachPage.tsx:8953`
+- `src/components/Coach/CoachTeachPage.tsx:8895`
+- `src/components/Coach/CoachTeachPage.tsx:8954`
 - `src/services/looseStill.test.ts:23`
 - `src/services/looseStill.test.ts:34`
 - `src/services/looseStill.test.ts:43`
@@ -146,11 +146,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionFacts.ts:1777`
 - `src/services/reviewMoveTeaching.ts:462`
 
-### `holeKey` (function) — 4 call sites
+### `holeKey` (function) — 5 call sites
 - `src/services/holeKey.test.ts:17`
 - `src/services/holeKey.test.ts:21`
-- `src/services/openingStory.ts:496`
-- `src/services/pawnJudgement.ts:324`
+- `src/services/openingStory.ts:419`
+- `src/services/openingStory.ts:498`
+- `src/services/pawnJudgement.ts:326`
 
 ### `kickKey` (function) — 3 call sites
 - `src/services/kickKey.test.ts:17`

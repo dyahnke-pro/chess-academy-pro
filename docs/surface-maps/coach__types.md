@@ -820,6 +820,7 @@
 - `src/services/moveCost.keyMoments.test.ts`
 - `src/services/moveCost.ts`
 - `src/services/moveInsight.ts`
+- `src/services/moveIntent.castleHeld.test.ts`
 - `src/services/moveIntent.measure.test.ts`
 - `src/services/moveIntent.takesAway.test.ts`
 - `src/services/moveIntent.test.ts`
@@ -1275,6 +1276,7 @@
 - `src/services/mistakeProvenance.test.ts`
 - `src/services/mistakePuzzleService.test.ts`
 - `src/services/moveCost.keyMoments.test.ts`
+- `src/services/moveIntent.castleHeld.test.ts`
 - `src/services/moveIntent.measure.test.ts`
 - `src/services/moveIntent.takesAway.test.ts`
 - `src/services/moveIntent.test.ts`

@@ -587,6 +587,8 @@ export function decideTurn(
   const survivors = verified.kept
     .map((k) => ({ fact: k, lane: laneOf(k) }))
     .filter((x): x is { fact: VoiceFact; lane: LearnLane } => x.lane !== undefined);
+  const refusedWhy: Partial<Record<LearnLane, string>> = {};
+  for (const d of verified.dropped) { const l = laneOf(d.fact); if (l && !survivors.some((x) => x.lane === l)) refusedWhy[l] ??= d.reason; }
 
   // ONE ORDER, NO HOLD (David 2026-10-05: "If there are 5 important facts or a
   // plan that comes from the move then the user needs to hear it"). The door
@@ -632,7 +634,13 @@ export function decideTurn(
       // and is not the same claim. One geometry read from two seats (a pin
       // and the discovery behind it) still collapses; danger still subsumes.
       if (!ad && !bd && (DNA_BEAT[a.lane] === 'but') !== (DNA_BEAT[b.lane] === 'but')) continue;
-      const loser = ad !== bd ? (ad ? b : a) : value(b) > value(a) ? a : b;
+      // THE STUDENT'S OWN MOVE KEEPS ITS REASON (V6, Learn on David's record
+      // 2026-10-20: "the point of your move" lost to a board read of the same
+      // squares, and the move got no reason). One claim, said once — as what
+      // the move did, unless the other seat is danger.
+      const ao = !ad && DNA_BEAT[a.lane] === 'affirm' && teaches(a);
+      const bo = !bd && DNA_BEAT[b.lane] === 'affirm' && teaches(b);
+      const loser = ad !== bd ? (ad ? b : a) : ao !== bo ? (ao ? b : a) : value(b) > value(a) ? a : b;
       subsumed.add(loser);
       if (loser === a) break;
     }
@@ -935,7 +943,7 @@ export function decideTurn(
     const k = facts.find((x) => x.lane === l && (x.text === f.text || x.text.includes(f.text) || f.text.includes(x.text)))?.factKind;
     return k ? [k] : [];
   });
-  if (offered.length > 0) emitLearnTurn({ spokeKinds, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, ownMove, ownLanes, ownProven, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
+  if (offered.length > 0) emitLearnTurn({ spokeKinds, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, refusedWhy: { ...refusedWhy }, ownMove, ownLanes, ownProven, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
 }
 

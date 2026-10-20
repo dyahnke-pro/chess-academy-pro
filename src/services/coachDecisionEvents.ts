@@ -190,6 +190,10 @@ export interface LearnTurnRow {
   /** Why each held lane was held (the door's own reason: verdict-turn,
    *  mate-turn, danger-waits, subsumed, restates, off-topic, aside). */
   heldWhy: Record<string, string>;
+  /** Lanes the voice package REFUSED before the door decided (a repeat, a
+   *  claim already said, a sentence untrue on the board), with its reason —
+   *  so no offered lane goes silent without a named cause. */
+  refusedWhy?: Record<string, string>;
   /** The kinds of the facts that spoke, where the producer named one (the
    *  position-facts clauses: deliberation, your-habit, …). */
   spokeKinds?: string[];

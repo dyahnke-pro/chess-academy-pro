@@ -19,9 +19,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `parseCoachMoveCommand` (function) — 36 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3744`
-- `src/components/Coach/CoachTeachPage.tsx:4294`
-- `src/components/Coach/CoachTeachPage.tsx:8012`
+- `src/components/Coach/CoachTeachPage.tsx:3745`
+- `src/components/Coach/CoachTeachPage.tsx:4295`
+- `src/components/Coach/CoachTeachPage.tsx:8013`
 - `src/services/coachMoveCommand.test.ts:11`
 - `src/services/coachMoveCommand.test.ts:18`
 - `src/services/coachMoveCommand.test.ts:24`

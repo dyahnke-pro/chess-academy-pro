@@ -18,7 +18,7 @@
 ## Exports and every call site
 
 ### `inferMatchupColor` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:5577`
+- `src/components/Coach/CoachTeachPage.tsx:5578`
 - `src/services/openingMatchup.test.ts:7`
 - `src/services/openingMatchup.test.ts:8`
 - `src/services/openingMatchup.test.ts:9`
@@ -27,7 +27,7 @@
 - `src/services/openingMatchup.test.ts:14`
 
 ### `planOpeningMatchup` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:5559`
+- `src/components/Coach/CoachTeachPage.tsx:5560`
 - `src/services/openingMatchup.test.ts:20`
 - `src/services/openingMatchup.test.ts:21`
 - `src/services/openingMatchup.test.ts:25`
@@ -41,7 +41,7 @@
 - `src/services/openingMatchup.test.ts:82`
 
 ### `buildMatchupLine` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:5608`
+- `src/components/Coach/CoachTeachPage.tsx:5609`
 - `src/services/openingMatchup.test.ts:40`
 - `src/services/openingMatchup.test.ts:59`
 - `src/services/openingMatchup.test.ts:73`

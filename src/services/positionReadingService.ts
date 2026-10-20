@@ -28,7 +28,7 @@ import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { developedMinorCount, totalMinorCount } from './development';
 import { isOutpost } from './outpost';
 import { MATERIAL_VALUE, materialBalance } from './pieceValues';
-import { describeStructure } from './boardStructure';
+import { describeStructure, pawnsOf } from './boardStructure';
 import { shieldCount } from './kingSafety';
 import { worstPieceNote } from './nextPlans';
 import { unmarked } from '../utils/sanMark';

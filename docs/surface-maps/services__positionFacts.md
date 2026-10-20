@@ -92,7 +92,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10728`
+- `src/components/Coach/CoachTeachPage.tsx:10729`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:468`
 - `src/services/raceAimOneVoice.test.ts:19`
@@ -101,18 +101,18 @@
 - `src/hooks/useLiveCoach.ts:300`
 - `src/services/chatBoardRead.ts:112`
 - `src/services/computerAccuracy.audit.test.ts:113`
-- `src/services/positionFacts.test.ts:256`
-- `src/services/positionFacts.test.ts:257`
-- `src/services/positionFacts.test.ts:298`
-- `src/services/positionFacts.test.ts:308`
-- `src/services/positionFacts.test.ts:366`
-- `src/services/positionFacts.test.ts:367`
+- `src/services/positionFacts.test.ts:259`
+- `src/services/positionFacts.test.ts:260`
+- `src/services/positionFacts.test.ts:301`
+- `src/services/positionFacts.test.ts:311`
+- `src/services/positionFacts.test.ts:369`
+- `src/services/positionFacts.test.ts:370`
 - `src/services/positionReadComposer.ts:158`
 - `src/services/whyBestMove.ts:151`
 
 ### `computePositionFacts` (function) — 101 call sites
 - `src/coach/boardTurnAnswer.ts:136`
-- `src/components/Coach/CoachTeachPage.tsx:10599`
+- `src/components/Coach/CoachTeachPage.tsx:10600`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:268`
 - `src/hooks/usePhaseNarration.ts:432`
@@ -149,48 +149,48 @@
 - `src/services/positionFacts.test.ts:66`
 - `src/services/positionFacts.test.ts:72`
 - `src/services/positionFacts.test.ts:78`
-- `src/services/positionFacts.test.ts:90`
-- `src/services/positionFacts.test.ts:96`
-- `src/services/positionFacts.test.ts:105`
-- `src/services/positionFacts.test.ts:112`
-- `src/services/positionFacts.test.ts:117`
-- `src/services/positionFacts.test.ts:122`
-- `src/services/positionFacts.test.ts:129`
-- `src/services/positionFacts.test.ts:138`
-- `src/services/positionFacts.test.ts:147`
-- `src/services/positionFacts.test.ts:156`
-- `src/services/positionFacts.test.ts:166`
-- `src/services/positionFacts.test.ts:183`
-- `src/services/positionFacts.test.ts:195`
-- `src/services/positionFacts.test.ts:205`
-- `src/services/positionFacts.test.ts:211`
-- `src/services/positionFacts.test.ts:224`
-- `src/services/positionFacts.test.ts:233`
+- `src/services/positionFacts.test.ts:91`
+- `src/services/positionFacts.test.ts:97`
+- `src/services/positionFacts.test.ts:108`
+- `src/services/positionFacts.test.ts:115`
+- `src/services/positionFacts.test.ts:120`
+- `src/services/positionFacts.test.ts:125`
+- `src/services/positionFacts.test.ts:132`
+- `src/services/positionFacts.test.ts:141`
+- `src/services/positionFacts.test.ts:150`
+- `src/services/positionFacts.test.ts:159`
+- `src/services/positionFacts.test.ts:169`
+- `src/services/positionFacts.test.ts:186`
+- `src/services/positionFacts.test.ts:198`
+- `src/services/positionFacts.test.ts:208`
+- `src/services/positionFacts.test.ts:214`
+- `src/services/positionFacts.test.ts:227`
 - `src/services/positionFacts.test.ts:236`
-- `src/services/positionFacts.test.ts:247`
-- `src/services/positionFacts.test.ts:262`
-- `src/services/positionFacts.test.ts:278`
-- `src/services/positionFacts.test.ts:294`
-- `src/services/positionFacts.test.ts:304`
-- `src/services/positionFacts.test.ts:312`
-- `src/services/positionFacts.test.ts:321`
-- `src/services/positionFacts.test.ts:344`
-- `src/services/positionFacts.test.ts:365`
-- `src/services/positionFacts.test.ts:381`
-- `src/services/positionFacts.test.ts:389`
-- `src/services/positionFacts.test.ts:401`
-- `src/services/positionFacts.test.ts:407`
-- `src/services/positionFacts.test.ts:416`
-- `src/services/positionFacts.test.ts:426`
-- `src/services/positionFacts.test.ts:439`
-- `src/services/positionFacts.test.ts:452`
-- `src/services/positionFacts.test.ts:465`
+- `src/services/positionFacts.test.ts:239`
+- `src/services/positionFacts.test.ts:250`
+- `src/services/positionFacts.test.ts:265`
+- `src/services/positionFacts.test.ts:281`
+- `src/services/positionFacts.test.ts:297`
+- `src/services/positionFacts.test.ts:307`
+- `src/services/positionFacts.test.ts:315`
+- `src/services/positionFacts.test.ts:324`
+- `src/services/positionFacts.test.ts:347`
+- `src/services/positionFacts.test.ts:368`
+- `src/services/positionFacts.test.ts:384`
+- `src/services/positionFacts.test.ts:392`
+- `src/services/positionFacts.test.ts:404`
+- `src/services/positionFacts.test.ts:410`
+- `src/services/positionFacts.test.ts:419`
+- `src/services/positionFacts.test.ts:429`
+- `src/services/positionFacts.test.ts:442`
+- `src/services/positionFacts.test.ts:455`
 - `src/services/positionFacts.test.ts:468`
-- `src/services/positionFacts.test.ts:479`
-- `src/services/positionFacts.test.ts:483`
-- `src/services/positionFacts.test.ts:487`
-- `src/services/positionFacts.test.ts:495`
-- `src/services/positionFacts.test.ts:505`
+- `src/services/positionFacts.test.ts:471`
+- `src/services/positionFacts.test.ts:482`
+- `src/services/positionFacts.test.ts:486`
+- `src/services/positionFacts.test.ts:490`
+- `src/services/positionFacts.test.ts:498`
+- `src/services/positionFacts.test.ts:508`
 - `src/services/positionFacts.weakness.test.ts:22`
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`
@@ -214,7 +214,7 @@
 - `src/test/teach02Wired.test.ts:138`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10876`
+- `src/components/Coach/CoachTeachPage.tsx:10877`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -229,8 +229,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `conceptInstanceKey` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8818`
-- `src/components/Coach/CoachTeachPage.tsx:8952`
+- `src/components/Coach/CoachTeachPage.tsx:8819`
+- `src/components/Coach/CoachTeachPage.tsx:8953`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:30`

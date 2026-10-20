@@ -44,7 +44,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `warmOpeningIdentity` (function) — 3 call sites
 - `src/components/Coach/CoachGameReview.tsx:334`
-- `src/components/Coach/CoachTeachPage.tsx:1015`
+- `src/components/Coach/CoachTeachPage.tsx:1016`
 - `src/services/reviewOpeningTheory.ts:251`
 
 ### `setOpeningIdentity` (function) — 19 call sites

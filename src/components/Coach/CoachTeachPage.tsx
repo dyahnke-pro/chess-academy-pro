@@ -42,6 +42,7 @@ import { FACT_ROLE, looseClaim, nextLooseSpells, plyOfFen, type FacetRole, build
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
+import { namesPlayableStudentMove } from '../../services/studentMoveNaming';
 import { mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
 import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, refutedAlternativeClaims, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
@@ -12110,7 +12111,13 @@ export function CoachTeachPage(): JSX.Element {
                       const fileHeard = !!fileKey && (positionalSaidRef.current.has(fileKey) || standingRef.current.said.has(fileKey));
                       if (point && !nowLoose && !fileHeard) {
                         // A capture's point and the trade verdict are one claim about one square.
-                        queueSpokenHint(fenAfterReply, point, 'movePoint', (pointFact?.line ? lineProof(pointFact.line, lineSeatAt(pointFact.line.fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? NO_PROOF.description, pointFact?.line ? studentMovesInLine(pointFact.line.fen, pointFact.line.sans, (playerColor === 'white' ? 'w' : 'b'), fenAfterReply, 1) : NAMES_NO_MOVE, pointFact?.squares ?? [], [move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`, ...(fileKey ? [fileKey] : []), ...(pointFact?.claim ? [pointFact.claim] : [])], undefined, undefined, undefined, pointFact?.stakes ?? undefined);
+                        // THE PROOF WAITS, THE REASON SPEAKS (proof guard 4; V6,
+                        // Learn on David's record 2026-10-20): the line behind
+                        // "that wins the pawn" carries the student's next move, so
+                        // the line waits for the ask and the point is said alone.
+                        const pointLineNames = pointFact?.line ? studentMovesInLine(pointFact.line.fen, pointFact.line.sans, (playerColor === 'white' ? 'w' : 'b'), fenAfterReply, 1) : NAMES_NO_MOVE;
+                        const lineWaits = namesPlayableStudentMove(pointLineNames);
+                        queueSpokenHint(fenAfterReply, point, 'movePoint', lineWaits ? NO_PROOF.withheld : (pointFact?.line ? lineProof(pointFact.line, lineSeatAt(pointFact.line.fen, playerColor === 'white' ? 'w' : 'b')) : null) ?? NO_PROOF.description, lineWaits ? NAMES_NO_MOVE : pointLineNames, pointFact?.squares ?? [], [move.san.includes('x') ? `capture:${move.to}:${move.history.length}` : `point:${move.history.length}`, ...(fileKey ? [fileKey] : []), ...(pointFact?.claim ? [pointFact.claim] : [])], undefined, undefined, undefined, pointFact?.stakes ?? undefined);
                         captureEvent('coach_move_point_named', { surface: 'coach-teach' });
                       }
                       // EVERY STUDENT MOVE GETS ITS OWN REASON (David 2026-10-14):

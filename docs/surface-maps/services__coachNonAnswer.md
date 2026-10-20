@@ -19,7 +19,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isMoveReport` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3970`
+- `src/components/Coach/CoachTeachPage.tsx:3971`
 - `src/services/coachNonAnswer.test.ts:95`
 - `src/services/coachNonAnswer.test.ts:100`
 
@@ -34,7 +34,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachNonAnswer.test.ts:82`
 
 ### `reportCoachReask` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3993`
+- `src/components/Coach/CoachTeachPage.tsx:3994`
 
 ### `reportCoachNonAnswer` (function) — 3 call sites
 - `src/components/Coach/CoachChatPage.tsx:360`

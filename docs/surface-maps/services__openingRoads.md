@@ -31,7 +31,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingStory.ts:369`
 - `src/services/openingStory.ts:372`
 - `src/services/openingStory.ts:373`
-- `src/services/openingStory.ts:506`
+- `src/services/openingStory.ts:508`
 - `src/services/openingStoryWholeBeat.test.ts:41`
 - `src/services/openingStoryWholeBeat.test.ts:42`
 

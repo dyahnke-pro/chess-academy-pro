@@ -72,7 +72,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `heldOf` (function) — 3 call sites
 - `src/services/pawnJudgement.ts:168`
-- `src/services/pawnJudgement.ts:353`
+- `src/services/pawnJudgement.ts:355`
 - `src/services/squareJudgement.ts:327`
 
 ## Tests

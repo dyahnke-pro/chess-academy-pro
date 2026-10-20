@@ -113,3 +113,13 @@ describe('a trade in progress is a now turn (Learn walk 2026-10-19, 12…Nxb3 / 
     } finally { off(); }
   });
 });
+
+describe('the student\'s own move keeps its reason on a shared claim (V6, 2026-10-20)', () => {
+  const FEN = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4';
+  it('a board read of the same squares does not subsume what the move did', () => {
+    const own = { lane: 'movePoint' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'Your knight on f3 now hits e5, the pawn their knight on c6 guards.', fen: FEN, squares: ['f3', 'e5', 'c6'] };
+    const read = { lane: 'countMethod' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'Count before you take on e5: one attacker, one defender.', fen: FEN, squares: ['f3', 'e5', 'c6'] };
+    const d = decideTurn([own, read], '', undefined, null, null, false, { kind: 'late', ply: 7, slipCp: null, priceSettled: true, price: null, midExchange: null });
+    expect(d.spoke).toContain('movePoint');
+  });
+});

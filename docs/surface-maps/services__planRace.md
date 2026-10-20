@@ -100,7 +100,7 @@
 ### `oppositeWingsRace` (function) — 5 call sites
 - `src/services/kingAttackReads.ts:709`
 - `src/services/learnBoardTeaching.ts:1064`
-- `src/services/openingStory.test.ts:87`
+- `src/services/openingStory.test.ts:91`
 - `src/services/planRace.test.ts:199`
 - `src/services/reviewStrategicOrientation.ts:596`
 

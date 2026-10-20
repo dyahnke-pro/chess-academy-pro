@@ -92,8 +92,8 @@
 - `src/services/factStakes.test.ts:51`
 - `src/services/factStakes.test.ts:52`
 - `src/services/factStakes.test.ts:55`
-- `src/services/learnTurnDoor.ts:604`
-- `src/services/learnTurnDoor.ts:670`
+- `src/services/learnTurnDoor.ts:606`
+- `src/services/learnTurnDoor.ts:678`
 - `src/services/reviewFacetRank.ts:523`
 
 ### `costStakes` (function) — 40 call sites
@@ -114,10 +114,10 @@
 - `src/services/learnTurnDoor.test.ts:667`
 - `src/services/learnTurnDoor.test.ts:848`
 - `src/services/learnTurnDoor.test.ts:858`
-- `src/services/learnTurnDoor.ts:670`
+- `src/services/learnTurnDoor.ts:678`
 - `src/services/orderReads.ts:103`
 - `src/services/pawnJudgement.ts:166`
-- `src/services/pawnJudgement.ts:351`
+- `src/services/pawnJudgement.ts:353`
 - `src/services/planJudgement.ts:48`
 - `src/services/planJudgement.ts:92`
 - `src/services/planJudgement.ts:141`

@@ -810,6 +810,9 @@ interface ExchangeIdeasInput {
 
 /** Every read that holds on this board, imagery appended where a fact has one.
  *  No cap: the door ranks and the floor sweeps. */
+/** The placement + side to move — the board a line starts on. */
+const boardKey = (fen: string): string => fen.split(' ').slice(0, 2).join(' ');
+
 export function exchangeIdeas(input: ExchangeIdeasInput): ExchangeIdea[] {
   const out: ExchangeIdea[] = [];
   const push = (x: ExchangeIdea | null): void => { if (x) out.push(x); };
@@ -818,19 +821,33 @@ export function exchangeIdeas(input: ExchangeIdeasInput): ExchangeIdea[] {
   const sm = input.studentMove ?? null;
   if (sm) {
     const { fenBefore: fb, san, costCp } = sm;
-    push(safe(() => onlyDevelopedTrade(fb, san, s)));
-    push(safe(() => defenderTrade(fb, san, s)));
-    push(safe(() => exchangeForAttacker(fb, san, s, costCp)));
-    push(safe(() => denyExchange(fb, san, s, costCp)));
-    push(safe(() => abandonedDuty(fb, san, s)));
-    push(safe(() => tradeChoice(fb, san, s)));
-    push(safe(() => maintenanceTrade(fb, san, s, costCp)));
-    push(safe(() => prepareRecapture(fb, san, s, costCp)));
-    push(safe(() => threatCost(fb, san, s)));
-    push(safe(() => safeBecause(fb, san, s, sm.history ? previousOwnMove(sm.history, fb) : null)));
-    push(safe(() => materialArithmetic(fb, san, s)));
-    push(safe(() => knightSquares(fb, san, s, costCp, input.fen)));
-    push(safe(() => cPawnBlock(fb, san, s, sm.bestSan)));
+    // A READ OF THEIR REPLY IS HISTORY ONCE THEY HAVE REPLIED (hand walk
+    // 2026-10-20, 14.Rd5: "if they go ahead with Rxf4 anyway, you take their
+    // queen on a5" — said after their queen went to b4). Each idea below proves
+    // itself with a line that opens with THEIR move on the board right after
+    // the student's. When the board now is past that (they replied), the line
+    // is either wrong (they played something else) or its next move is the
+    // student's own (naming it): the idea is read on the board it was about only.
+    const afterStudent = load(fb);
+    const studentBoard = afterStudent && afterStudent.move(san) ? afterStudent.fen() : null;
+    const replied = !!studentBoard && boardKey(studentBoard) !== boardKey(input.fen);
+    const studentPush = (x: ExchangeIdea | null): void => {
+      if (x && replied && x.proof.line && studentBoard && boardKey(x.proof.line.fen) === boardKey(studentBoard)) return;
+      push(x);
+    };
+    studentPush(safe(() => onlyDevelopedTrade(fb, san, s)));
+    studentPush(safe(() => defenderTrade(fb, san, s)));
+    studentPush(safe(() => exchangeForAttacker(fb, san, s, costCp)));
+    studentPush(safe(() => denyExchange(fb, san, s, costCp)));
+    studentPush(safe(() => abandonedDuty(fb, san, s)));
+    studentPush(safe(() => tradeChoice(fb, san, s)));
+    studentPush(safe(() => maintenanceTrade(fb, san, s, costCp)));
+    studentPush(safe(() => prepareRecapture(fb, san, s, costCp)));
+    studentPush(safe(() => threatCost(fb, san, s)));
+    studentPush(safe(() => safeBecause(fb, san, s, sm.history ? previousOwnMove(sm.history, fb) : null)));
+    studentPush(safe(() => materialArithmetic(fb, san, s)));
+    studentPush(safe(() => knightSquares(fb, san, s, costCp, input.fen)));
+    studentPush(safe(() => cPawnBlock(fb, san, s, sm.bestSan)));
   }
   const om = input.opponentMove ?? null;
   if (om) {

@@ -150,8 +150,8 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8182`
-- `src/components/Coach/CoachTeachPage.tsx:8186`
+- `src/components/Coach/CoachTeachPage.tsx:8183`
+- `src/components/Coach/CoachTeachPage.tsx:8187`
 - `src/services/learnWalkBlumenfeld.test.ts:138`
 - `src/services/positionFacts.ts:1366`
 - `src/services/positionFacts.ts:1368`
@@ -161,7 +161,7 @@
 - `src/services/reviewFullData.ts:675`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8183`
+- `src/components/Coach/CoachTeachPage.tsx:8184`
 - `src/services/dnaLineNarrator.ts:56`
 - `src/services/projectedLineVoice.ts:99`
 - `src/services/puzzleConceptExplanation.ts:131`

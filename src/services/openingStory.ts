@@ -414,7 +414,9 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
         beat: 'structure-cost',
         text: `That's the price of ${dot(san, student)}: no pawn of yours can cover ${h.hole} again, and ${knightDistance('their', h.from, h.moves)}; ${h.moves === 0 ? 'it hits' : 'from there it would hit'} ${hitWords(now, 'your', h.hits)}. Keeping ${h.hole} guarded is part of this structure from here.`,
         squares: [h.hole, h.from], proof: squaresProof(`${h.hole} has no pawn to cover it`, [h.hole, h.from]) ?? NO_PROOF.description,
-        claimKey: `story:cost:${h.hole}`,
+        // ONE HOLE, ONE KEY (dup map #5): every computer that names this hole
+        // says it under `hole:<sq>`, so a second reading of it is dropped.
+        claimKey: holeKey(h.hole),
       });
     } else if (beforeFen) {
       // A PRICE IS PAID ONLY WHERE IT WAS NAMED (OS-11: "…pays that price" at

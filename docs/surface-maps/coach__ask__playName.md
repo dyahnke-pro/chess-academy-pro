@@ -26,15 +26,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/ask/playName.test.ts:11`
 - `src/coach/ask/playName.test.ts:17`
 - `src/coach/ask/readsAsQuestion.test.ts:23`
-- `src/components/Coach/CoachTeachPage.tsx:5397`
-- `src/components/Coach/CoachTeachPage.tsx:5919`
+- `src/components/Coach/CoachTeachPage.tsx:5398`
+- `src/components/Coach/CoachTeachPage.tsx:5920`
 - `src/services/firstRunPickers.test.ts:17`
 
 ### `readsAsQuestion` (function) — 4 call sites
 - `src/coach/ask/readsAsQuestion.test.ts:10`
 - `src/coach/ask/readsAsQuestion.test.ts:15`
 - `src/coach/ask/readsAsQuestion.test.ts:24`
-- `src/components/Coach/CoachTeachPage.tsx:5513`
+- `src/components/Coach/CoachTeachPage.tsx:5514`
 
 ## Tests
 

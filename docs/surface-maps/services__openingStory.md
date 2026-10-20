@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**569 lines · 6 exports · 7 importers · 3 tests · 0 audits**
+**571 lines · 6 exports · 7 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -35,10 +35,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/boardComputers.ts:249`
 - `src/services/holeKey.test.ts:15`
 - `src/services/openingStory.test.ts:22`
-- `src/services/openingStory.test.ts:122`
-- `src/services/openingStory.test.ts:146`
-- `src/services/openingStory.test.ts:157`
-- `src/services/openingStory.test.ts:168`
+- `src/services/openingStory.test.ts:126`
+- `src/services/openingStory.test.ts:150`
+- `src/services/openingStory.test.ts:161`
+- `src/services/openingStory.test.ts:172`
 - `src/services/openingStoryWholeBeat.test.ts:26`
 
 ### `BEAT_ORDER` (const) — 0 call sites
@@ -46,11 +46,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `prefetchOpeningStory` (function) — 2 call sites
 - `src/services/learnBoardTeaching.ts:89`
-- `src/services/openingStory.test.ts:135`
+- `src/services/openingStory.test.ts:139`
 
 ## Tests
 
 - `src/services/holeKey.test.ts`
+- `src/services/holeOneKey.test.ts`
 - `src/services/openingStory.test.ts`
 - `src/services/openingStoryWholeBeat.test.ts`
 
