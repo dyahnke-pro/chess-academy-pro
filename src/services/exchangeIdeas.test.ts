@@ -165,8 +165,8 @@ describe('nuggets', () => {
     const opp = wellFormed(knightSquares(fa('e4 e5 Nf3 Nc6 Bb5'), 'Na5', 'w', null, fa('e4 e5 Nf3 Nc6 Bb5 Na5')));
     expect(opp.text).toMatch(/^On a5 their knight touches only four squares; in the centre it would touch eight/);
     expect(opp.proof.squares).toHaveLength(5);
-    const back = wellFormed(knightSquares(fa('Na3 e5'), 'Nc4', 'w', 0, fa('Na3 e5 Nc4')));
-    expect(back.text).toMatch(/Your knight on c4 now touches eight squares, up from four on a3/);
+    // A knight developed to the centre is a statistic, never said.
+    expect(knightSquares(fa('Na3 e5'), 'Nc4', 'w', 0, fa('Na3 e5 Nc4'))).toBeNull();
     // The student's own rim move that cost nothing is never criticised.
     expect(knightSquares(fa('Nc3 e5'), 'Na4', 'w', 10, fa('Nc3 e5 Na4'))).toBeNull();
   });
@@ -192,8 +192,8 @@ describe('nuggets', () => {
 describe('the image matches the fact the read proved (Smith-Morra replay 2026-10-19)', () => {
   it('a knight going TO the centre never hears "a knight on the rim is dim"', () => {
     // 4.Nxc3: b1 → c3, three squares to eight. Not a rim move.
-    const x = wellFormed(knightSquares(fa('e4 c5 d4 cxd4 c3 dxc3'), 'Nxc3', 'w', 0, fa('e4 c5 d4 cxd4 c3 dxc3 Nxc3')));
-    for (let stem = 0; stem < 12; stem++) expect(x.imagery ? imageryFor(x.imagery, stem) ?? '' : '').not.toMatch(/rim/);
+    // A knight developed to the centre is not said at all (a statistic).
+    expect(knightSquares(fa('e4 c5 d4 cxd4 c3 dxc3'), 'Nxc3', 'w', 0, fa('e4 c5 d4 cxd4 c3 dxc3 Nxc3'))).toBeNull();
     const said = exchangeIdeas({ fen: fa('e4 c5 d4 cxd4 c3 dxc3 Nxc3'), student: 'w', lines: [], nameMove: false,
       studentMove: { fenBefore: fa('e4 c5 d4 cxd4 c3 dxc3'), san: 'Nxc3', costCp: 0, bestSan: null, history: null } });
     for (const r of said) expect(r.text).not.toMatch(/rim/);

@@ -190,7 +190,7 @@ describe('one renderer for a move in a line (review audit 2026-10-14)', () => {
   const quiet = { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 };
   it('names its mover and speaks in sentences — never "The move e6 outpost established on d5"', async () => {
     const { plyFactsSentence } = await import('./pvPlayback');
-    expect(plyFactsSentence({ ...quiet, outpostGained: 'd5' }, 'e6', true)).toBe('You plant an outpost on d5, where no enemy pawn can chase it.');
+    expect(plyFactsSentence({ ...quiet, outpostGained: 'd5' }, 'e6', true)).toBe('You plant an outpost on d5, where no pawn of theirs can chase it.');
     expect(plyFactsSentence({ ...quiet, isMate: true, isCheck: true }, 'Qxf7#', true)).toMatch(/checkmate/);
   });
   it('a bare capture that wins nothing says nothing, and a quiet ply is silent', async () => {

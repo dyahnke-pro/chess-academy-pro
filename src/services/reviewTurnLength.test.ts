@@ -14,7 +14,7 @@ describe('the review line renderer says a long line as its shape (proof guard 2)
   it('past three moves: the first move and the result', async () => {
     const { readFileSync } = await import('node:fs');
     const src = readFileSync('src/services/coachFeatureService.ts', 'utf8');
-    expect(src).toMatch(/const moves = lineShape\(said\);/);
+    expect(src).toMatch(/const moves = lineShape\(said, /);
   });
 });
 

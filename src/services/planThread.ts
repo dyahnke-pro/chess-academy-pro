@@ -124,9 +124,13 @@ export function planThreadTurn(
   },
 ): PlanThreadLine[] {
   const out: PlanThreadLine[] = [];
+  // Did their move end the plan? Read first: a plan whose target just left is
+  // not credited a step (Review noise walk 2026-10-20: "Your queen to c3 was a
+  // step of the plan … Their pawn moved from c5 to c4 … That plan is off").
+  const stopProof = t.stated ? planStoppedProof(t.stated.fact, args.fenBefore, args.fenAfter, args.student) : null;
   // THE STUDENT'S MOVE AS A STEP OF THE PLAN — credited before anything else,
   // while the plan they heard still stands.
-  if (t.stated && args.studentMove) {
+  if (t.stated && args.studentMove && !stopProof) {
     const step = planStepLine(t.stated.fact, args.studentMove.fenBefore, args.studentMove.san, args.student);
     // Its proof is the board: the squares the step landed on and the target it serves.
     if (step) out.push({ text: step.text, squares: step.squares, claim: `plan:step:${t.stated.fact.id}:${args.ply}`, proof: { kind: 'squares', exact: true, short: step.text, full: step.text, squares: step.squares } });
@@ -134,7 +138,7 @@ export function planThreadTurn(
   // A plan that held long enough means they were not shutting plans down.
   if (t.stated && args.ply - t.stated.ply >= PLAN_THREAD_HOLD_PLIES * 2) t.stoppedInRow = 0;
   if (t.stated) {
-    const proof = planStoppedProof(t.stated.fact, args.fenBefore, args.fenAfter, args.student);
+    const proof = stopProof;
     if (proof) {
       t.stoppedInRow += 1;
       out.push({ text: planStoppedLine(proof, t.stoppedInRow, args.fenAfter, args.student), squares: t.stated.fact.squares, claim: `plan:stopped:${t.stated.fact.id}:${args.ply}`, proof: { kind: 'squares', exact: true, short: proof, full: proof, squares: t.stated.fact.squares } });

@@ -15,7 +15,7 @@ describe('squareRole', () => {
   it('a hole no pawn of theirs can reach is a reason', () => {
     // Black's c- and e-pawns are gone: d5 can never be covered by a black pawn.
     const c = new Chess('4k3/pp3ppp/8/8/8/8/PPPPPPPP/4K3 w - - 0 1');
-    expect(squareRole(c, 'd5', 'w', 'their', 'covers')).toBe('a square no pawn of theirs can ever cover');
+    expect(squareRole(c, 'd5', 'w', 'their', 'covers')).toBe('a square no pawn of theirs can cover');
   });
   it('a square with no role is not named', () => {
     // Bare kings plus pawns that cover d5 and nothing of theirs wants it.

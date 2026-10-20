@@ -3,7 +3,7 @@
 // away"). "The knight now fights for d5" says what a piece touches; the
 // teaching is why that square matters, read on the board:
 //   - their pawn's next step       → "holding back their d-pawn"
-//   - a hole no pawn of theirs can ever cover → "a square no pawn of theirs can ever cover"
+//   - a hole no pawn of theirs can cover → "a square no pawn of theirs can cover"
 //   - a square their piece wants   → "keeping their knight off it"
 //   - your own pawn's next step     → "backing your d-pawn's push there"
 // No role → no clause: a square without a reason is scenery, and is not said.
@@ -26,9 +26,10 @@ export function squareRole(
   piece: 'covers' | 'stands',
 ): string | null {
   const them: Color = me === 'w' ? 'b' : 'w';
-  // With no seat, the other side's pieces are "the enemy": "holding back the
-  // d-pawn" cannot say whose.
-  const other = owner === 'the' ? 'the enemy' : owner;
+  // WITH NO SEAT the piece is named by its square ("holding back the pawn on
+  // d7"), which the seat stamper turns into your/their — never "the enemy"
+  // (lead 2026-10-20, Review noise walk: say your/their).
+  const theirPawn = (at: string): string => (owner === 'the' ? `the pawn on ${at}` : `${owner} ${file}-pawn`);
   const file = sq[0];
   const rank = Number(sq[1]);
   // AN ENEMY PIECE ON IT is the reason itself (ship #72: "Nf3 attacks the
@@ -42,11 +43,11 @@ export function squareRole(
   const back = them === 'w' ? -1 : 1;
   const one = `${file}${rank + back}` as Square;
   const p1 = chess.get(one);
-  if (p1 && p1.type === 'p' && p1.color === them) return `holding back ${other} ${file}-pawn`;
+  if (p1 && p1.type === 'p' && p1.color === them) return `holding back ${theirPawn(one)}`;
   const two = `${file}${rank + 2 * back}` as Square;
   const p2 = chess.get(two);
   const startRank = them === 'w' ? 2 : 7;
-  if (!p1 && p2 && p2.type === 'p' && p2.color === them && Number(two[1]) === startRank) return `holding back ${other} ${file}-pawn`;
+  if (!p1 && p2 && p2.type === 'p' && p2.color === them && Number(two[1]) === startRank) return `holding back ${theirPawn(two)}`;
   // YOUR PAWN'S PUSH: a square your own pawn steps to next (one step, or two
   // from its start rank) — a piece covering it backs the advance.
   const fwd = me === 'w' ? -1 : 1;
@@ -71,10 +72,12 @@ export function squareRole(
   }
   // A hole is a square in the middle of the board: the back ranks are never
   // covered by pawns, and saying so teaches nothing.
-  if (!coverable && rank >= 3 && rank <= 6) return owner === 'your' ? 'a square no pawn of yours can ever cover' : owner === 'their' ? 'a square no pawn of theirs can ever cover' : 'a square no enemy pawn can ever cover';
+  // A hole has no square to name its owner by, so with no seat it is not said.
+  if (!coverable && rank >= 3 && rank <= 6 && owner !== 'the') return `a square no pawn of ${owner === 'your' ? 'yours' : 'theirs'} can cover`;
   // A SQUARE THEIR PIECE WANTS: one of their minor or major pieces reaches it.
-  const wants = chess.attackers(sq, them).map((s) => chess.get(s)).find((p) => p && p.type !== 'p' && p.type !== 'k');
-  if (wants) return `keeping ${other} ${NAME[wants.type]} off it`;
+  const wantsAt = chess.attackers(sq, them).find((s) => { const p = chess.get(s); return !!p && p.type !== 'p' && p.type !== 'k'; });
+  const wants = wantsAt ? chess.get(wantsAt) : null;
+  if (wants && wantsAt) return owner === 'the' ? `keeping the ${NAME[wants.type]} on ${wantsAt} off it` : `keeping ${owner} ${NAME[wants.type]} off it`;
   return null;
 }
 

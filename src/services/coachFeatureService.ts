@@ -2,6 +2,10 @@ import { capabilitiesPosed } from './capabilityEvidence';
 import { fadeLevelsFrom, fadeText } from './fadeText';
 import { moveIntentsForGame, type ReviewIntent } from './reviewMoveIntent';
 import { openSentence, continueSentence } from '../utils/openSentence';
+import { reasonFormula } from '../utils/reasonFormula';
+import { mastersPlanLine } from './mastersPlanRead';
+import { recordTermForThreat, threatInputFor, threatVisibility, threatVoice } from './learnRecordTerms';
+import type { StudentRecord } from './studentRecord';
 import { lastMoveFromSan } from './material';
 import { Chess } from 'chess.js';
 import { gameArcs, type ArcEvent } from './lookaheadPlan';
@@ -1203,6 +1207,13 @@ const MAIN_LINE_SHARE = 0.15;
  *  `[plan-opening]`: that tag is a once-a-review development nag, and it would
  *  silence the key break after the character was said. A new beat fails to
  *  compile until it is placed here. */
+/** The description and teaching lanes whose reason formula speaks once a game
+ *  (`reasonFormula`); the verdict lanes are per-move facts and repeat. */
+const FORMULA_ONCE: ReadonlySet<string> = new Set<FacetTag>([
+  'point', 'judgement', 'delta', 'does', 'opp-target', 'defence-idea', 'trade-idea',
+  'their-cost', 'their-read', 'rule', 'nugget', 'loose', 'bluff', 'plan-arc', 'timing',
+]);
+
 const STORY_TAG: Record<StoryBeat, FacetTag> = {
   fork: 'opening', identity: 'opening', 'branch-choice': 'opening', 'their-setup': 'opening',
   'structure-cost': 'opening', 'structure-paid': 'opening', consequence: 'opening',
@@ -1257,6 +1268,8 @@ export function buildReviewSegments(
   const layers = layerStandings(studentWeaknesses ?? [], studentNeed?.capabilities);
   // The fade per skill, from the same record (one rule with Learn).
   const fade = fadeLevelsFrom(studentNeed?.heat);
+  // The record the threat voice reads (the same shape Learn's door reads).
+  const reviewRecord: StudentRecord = { weaknesses: studentWeaknesses ?? [], capabilities: studentNeed?.capabilities ?? null, heat: studentNeed?.heat ?? new Map() };
   // Package-completion once-per-game beats (David 2026-07-24: "complete the
   // package"): the simplify-when-ahead trade idea fires at most once.
   let tradeIdeaSpoken = false;
@@ -1488,6 +1501,7 @@ export function buildReviewSegments(
   // claimed ("it invites Ng5, which joins their bishop on c4 against your
   // pawn on f7") is not said again when the move lands.
   const storySaid: string[] = [];
+  const formulasSaid = new Set<string>();
   const contextSaid = new Set<string>();
   const storyAll: boolean | null = ((): boolean | null => {
     if (!studentNeed) return true;
@@ -1869,6 +1883,17 @@ export function buildReviewSegments(
         allSans: sansForRun,
         forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
       }, facetSquares, facetIncoming, facetStakes, facetIdentity, verdictReasonOut, facetProofs);
+      // ONE THREAT VOICE WITH LEARN (David's locked table, 2026-10-19): a
+      // simple one-move threat on a skill the student has PROVEN is quiet —
+      // "Watch out — that bishop attacks your rook" is said to a student who
+      // does not yet see those, and to no one else.
+      for (let k = facets.length - 1; k >= 0; k -= 1) {
+        const sq = /^opp-threat:hanging:([a-h][1-8])$/.exec(facetIdentity.get(facets[k]) ?? '')?.[1];
+        if (!sq) continue;
+        const input = threatInputFor({ kind: 'hanging', square: sq }, { fenBefore: fenPair.fenBefore, opponentSan: m.san });
+        const voice = threatVoice(recordTermForThreat(input.pattern, reviewRecord).state, threatVisibility(input.sighting).visibility).voice;
+        if (voice === 'quiet') facets.splice(k, 1);
+      }
       // The game looked back on (batch 2) — each read once a game, through the
       // `hint:` say-once ledger the Learn computers already ride.
       for (const r of endReadsAt.get(i) ?? []) {
@@ -2041,12 +2066,22 @@ export function buildReviewSegments(
           if (det && announce && namedByStory) storyNames = det.name;
           if (det && announce && !namedByStory) {
             const idRead = reads.find((r) => r.storyBeat === 'identity' && !hintsSaid.has(`hint:${r.key}`)) ?? null;
-            const raw = `[opening] ${announce}${idRead ? ` ${idRead.text}` : ''}`;
-            facets.push(raw);
-            facetIdentity.set(raw, idRead ? `hint:${idRead.key}` : `hint:opening-name:${det.name}`);
-            if (idRead?.squares.length) facetSquares.set(raw, idRead.squares);
-            const said = det.name;
-            facetCommits.set(raw, () => { spokenOpening = said; });
+            // THE FIRST NAME IS SAID WITH WHAT IT TEACHES (lead 2026-10-20:
+            // "This game is the Sicilian Defense." alone is a name with no
+            // teaching): the identity when it is ready, else the masters' plan
+            // from it, else not yet — the next move that carries one names it.
+            // A REFINEMENT of a family already taught (the Fried Liver of the
+            // Two Knights) names the line the student is now in.
+            const planText = idRead ? null : mastersPlanLine(planFor(det.name), studentColorWB, null)?.text ?? null;
+            const teaching = idRead?.text ?? planText;
+            if (teaching || spokenOpening) {
+              const raw = `[opening] ${announce}${teaching ? ` ${teaching}` : ''}`;
+              facets.push(raw);
+              facetIdentity.set(raw, idRead ? `hint:${idRead.key}` : `hint:opening-name:${det.name}`);
+              if (idRead?.squares.length) facetSquares.set(raw, idRead.squares);
+              const said = det.name;
+              facetCommits.set(raw, () => { spokenOpening = said; });
+            }
           }
         } catch { /* naming is a bonus, never a blocker */ }
         for (const r of reads) {
@@ -2073,7 +2108,11 @@ export function buildReviewSegments(
       // job is still read off the board and no theory is claimed. A flagged
       // move is the error lane's; a bare "brings your knight out" restates the
       // board (rule 3) and stays quiet.
-      const inStory = classifyPhase(fenPair.fenBefore, { ply: m.ply - 1 }) === 'opening' || (lastBookIdx >= 0 && i < storyTailEnd);
+      // PAST THE OPENING THE NEED SCORE DECIDES (lead 2026-10-20: move jobs
+      // spoke on 25 middlegame plies the need score had marked silent — a
+      // game with no slip after the book ran the story tail to the last move).
+      const openingPly = classifyPhase(fenPair.fenBefore, { ply: m.ply - 1 }) === 'opening';
+      const inStory = openingPly || (lastBookIdx >= 0 && i < storyTailEnd && needHere?.speak === true);
       if (storyAll && studentColorWB && !isFlagged(m.classification) && inStory) {
         const mine = moverColor === playerColor;
         const prevSan = i > 0 ? moves[i - 1].san : null;
@@ -2094,7 +2133,13 @@ export function buildReviewSegments(
         // A STORY LINE ON THIS MOVE THAT ALREADY SAYS THE JOB ("You chose the
         // Two Knights Defense: …Nf6 attacks their pawn on e4, where …") carries
         // it with its reason; the bare job would say it twice.
-        const told = !!job && facets.some((f) => (facetIdentity.get(f) ?? '').startsWith('hint:story:') && f.includes(job.clause.replace(/^it /, '')));
+        const told = !!job && (facets.some((f) => (facetIdentity.get(f) ?? '').startsWith('hint:story:') && f.includes(job.clause.replace(/^it /, '')))
+          // ONE CLAIM, ONE PRODUCER (lead 2026-10-20: "Attacks their bishop on
+          // b6." beside "c5 kicks their bishop off b6, gaining time"): an
+          // attack another line on this move already names, with its reason,
+          // is not said again as a bare job.
+          || (job.kind === 'attack' && job.squares.length === 2 && facets.some((f) => /^\[(?:rule|point|judgement)\] /.test(f)
+            && new RegExp(`\\b(?:kicks?|attacks?|hits?|chases?|goes after)\\b[^.]*\\b(?:on|off) ${job.squares[1]}\\b`).test(f))));
         if (told && sameClaim >= 0) facets.splice(sameClaim, 1);
         // ONE CLAIM, SAID ONCE (lead 2026-10-20): a job a spoken story line
         // already claimed says what the move now ASKS instead, or nothing.
@@ -2108,26 +2153,29 @@ export function buildReviewSegments(
             facetSquares.set(raw, job.squares);
           }
         }
+        // THE BOOK STANDING — said where the walk enters the main line, first
+        // leaves it, and on the last book move (THE POINT, NEVER THE MOVE —
+        // David 2026-10-20: the move is on the board; the clause's pronouns
+        // say whose it is). THE MAIN LINE IS EVERY MOVE WITH A REAL SHARE of
+        // the masters' games here, not the single top move (1…e5 was called
+        // "less common" because 1…c5 outnumbers it). The bar is read off the
+        // data: the main lines of the openings taught measure 16% (4.Ng5), 20%
+        // (3.Bc4), 25% (1…e5) and 44% (3…Nf6) of their position's games.
+        const masters = masterMovesCachedSync(fenPair.fenBefore);
+        const sorted = masters ? [...masters].sort((x, y) => y.games - x.games) : [];
+        const book = sorted.find((x) => x.san === m.san && x.games >= BOOK_JOB_MIN_GAMES);
+        const total = sorted.reduce((n, x) => n + x.games, 0);
+        const main = !!book && total > 0 && book.games / total >= MAIN_LINE_SHARE;
+        const standing = !book ? null
+          : i === lastBookIdx ? "The last book move — the masters' file ends here"
+          : !main ? (standingSaid !== 'side' ? 'A rare book move — the game leaves the main line here' : null)
+          : standingSaid === null ? "The game is on the masters' main line" : null;
+        // Once off the main line the game stays on its side road: that change
+        // is said once, never once per move. The walk's say-once state commits
+        // only if the line SPOKE.
+        const nextStanding = book && i !== lastBookIdx ? (!main || standingSaid === 'side' ? 'side' : 'main') : standingSaid;
         if (job && job.clause && !bare && !told && !heard && !hintsSaid.has(id)) {
           if (sameClaim >= 0) facets.splice(sameClaim, 1);
-          const masters = masterMovesCachedSync(fenPair.fenBefore);
-          const sorted = masters ? [...masters].sort((x, y) => y.games - x.games) : [];
-          const book = sorted.find((x) => x.san === m.san && x.games >= BOOK_JOB_MIN_GAMES);
-          // THE POINT, NEVER THE MOVE (David 2026-10-20: "You play the knight
-          // to b4 — redundant"): the move is on the board and in the move list
-          // (Narration Voice Rule 3). The clause's own pronouns say whose move
-          // it is. Book standing leads only where the masters' file knows it.
-          // THE MAIN LINE IS EVERY MOVE WITH A REAL SHARE of the masters' games
-          // here, not the single top move (1…e5 was called "less common"
-          // because 1…c5 outnumbers it). The bar is read off the data: the
-          // main lines of the openings taught measure 16% (4.Ng5), 20%
-          // (3.Bc4), 25% (1…e5) and 44% (3…Nf6) of their position's games.
-          const total = sorted.reduce((n, x) => n + x.games, 0);
-          const main = !!book && total > 0 && book.games / total >= MAIN_LINE_SHARE;
-          const standing = !book ? null
-            : i === lastBookIdx ? "The last book move — the masters' file ends here"
-            : !main ? (standingSaid !== 'side' ? 'A rare book move — the game leaves the main line here' : null)
-            : standingSaid === null ? "The game is on the masters' main line" : null;
           const clause = job.contextKey && job.compact && contextSaid.has(job.contextKey) ? job.compact : job.clause;
           const point = clause.replace(/^it /, '');
           // THE SAME JOB ON A NEW MOVE IS SAID AS A REPEAT ("attacks their
@@ -2135,16 +2183,21 @@ export function buildReviewSegments(
           // move is new — the door must not drop it as said already.
           const again = jobsSaid.has(point) ? ' again' : '';
           const text = standing ? `${standing}: ${clause}${again}.` : `${point.charAt(0).toUpperCase()}${point.slice(1)}${again}.`;
-          // Once off the main line the game stays on its side road: that
-          // change is said once, never once per move. All four of these are
-          // the walk's say-once state, so they commit only if this line SPOKE.
-          const nextStanding = book && i !== lastBookIdx ? (!main || standingSaid === 'side' ? 'side' : 'main') : standingSaid;
           const ctx = job.contextKey;
           const raw = `[move-job] ${text}`;
           facets.push(raw);
           facetIdentity.set(raw, id);
           if (job.squares.length) facetSquares.set(raw, job.squares);
           facetCommits.set(raw, () => { standingSaid = nextStanding; jobsSaid.add(point); if (ctx) contextSaid.add(ctx); });
+        } else if (standing && (!main || i === lastBookIdx) && !hintsSaid.has(id)) {
+          // A MOVE WITH NO JOB TO SAY STILL CARRIES THE THEORY: where the game
+          // leaves the main line, or the masters' file ends, is said on its own
+          // (a centre pawn's squares are the board line's; 1…d5 still leaves
+          // the main line). Being ON the main line alone is not news.
+          const raw = `[move-job] ${standing}.`;
+          facets.push(raw);
+          facetIdentity.set(raw, id);
+          facetCommits.set(raw, () => { standingSaid = nextStanding; });
         }
       }
       // A VERDICT ON THEIR OPENING CHOICE — parity with Learn: their move that
@@ -2215,7 +2268,18 @@ export function buildReviewSegments(
       const claimedThisPly = new Set<string>();
       const commitByRaw = new Map<string, () => void>();
       const claim = (key: string): boolean => { if (claimedThisPly.has(key)) return false; claimedThisPly.add(key); return true; };
-      const keep = (raw: string, commit?: () => void): void => { keptRaw.push(raw); if (commit) commitByRaw.set(raw, commit); };
+      // A REASON FORMULA IS SAID ONCE A GAME (lead 2026-10-20, Review noise
+      // walk): "X is tied down now: you hit …", "Watch out — that … attacks
+      // your …", "stand a knight's jump apart" — the second time on a new board
+      // is the same lesson again. The verdict lanes (quality, tactic, threat,
+      // the principle and its method) are per-move facts and stay.
+      const keep = (raw: string, commit?: () => void): void => {
+        const tm = /^\[([a-z-]+)\] (.*)$/.exec(raw);
+        const formula = tm && FORMULA_ONCE.has(tm[1]) ? reasonFormula(tm[2]) : null;
+        if (formula && formulasSaid.has(formula)) return;
+        keptRaw.push(raw);
+        if (commit || formula) commitByRaw.set(raw, () => { commit?.(); if (formula) formulasSaid.add(formula); });
+      };
       let verdictWordThisPly: string | null = null;
       // THE ONE PLAN THREAD — the same `planThreadTurn` Learn runs, on their
       // move: the stop with its proof, then at most one plan, held while it
