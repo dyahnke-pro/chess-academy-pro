@@ -239,15 +239,17 @@ describe('phase narration is judged against the board it was computed from', () 
   // different ones, so a sentence true when detected became "board-false"
   // because the student moved while it was being phrased and streamed.
   it('grades against event.fen, not against whatever is on screen', () => {
-    expect(PHASE).toMatch(/isSpokenSentenceGrounded\(trimmed, event\.fen/);
-    expect(PHASE, 'the sentence is graded against a board it was not computed from')
-      .not.toMatch(/isSpokenSentenceGrounded\(trimmed, judgeFen/);
+    // Each fact is graded WHOLE on the board it was computed from (its own
+    // `gradeFen`, else the transition's).
+    expect(PHASE).toMatch(/isSpokenSentenceGrounded\(p, f\.gradeFen \?\? event\.fen/);
+    expect(PHASE, 'a fact is graded against a board it was not computed from')
+      .not.toMatch(/isSpokenSentenceGrounded\([^)]*judgeFen/);
   });
 
   it('hands the package the same board the gate used', () => {
     // Handing the package a different fen than the gate is how a line passes
     // one check and fails the other.
-    expect(PHASE).toMatch(/kind: 'computed', text: trimmed, fen: event\.fen/);
+    expect(PHASE).toMatch(/speakFacts\(phaseFacts, event\.fen\)/);
   });
 
   it('decides staleness ONCE, for the whole transition', () => {
@@ -550,7 +552,7 @@ describe('the couplings that make the wiring safe', () => {
     const ANALYTICS = read('src/services/analytics.ts');
     for (const kind of [
       'phase-transition-detected', 'phase-transition-suppressed',
-      'phase-narration-latency', 'phase-narration-fallback-shown',
+      'phase-narration-latency',
     ]) {
       expect(ANALYTICS, `${kind} is emitted but mirrored nowhere`).toContain(`'${kind}':`);
     }

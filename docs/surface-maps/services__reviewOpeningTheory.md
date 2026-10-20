@@ -69,7 +69,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:420`
 - `src/services/reviewOpeningTheory.test.ts:436`
 - `src/services/reviewOpeningTheory.test.ts:461`
-- `src/test/corpusScope.test.ts:82`
+- `src/test/corpusScope.test.ts:85`
 
 ### `TheoryEngine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -102,12 +102,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.test.ts:421`
 - `src/services/reviewOpeningTheory.test.ts:441`
 - `src/services/reviewOpeningTheory.test.ts:462`
-- `src/test/corpusScope.test.ts:83`
+- `src/test/corpusScope.test.ts:86`
 
 ### `lectureNoteSelector` (function) — 3 call sites
 - `src/components/Coach/CoachGameReview.tsx:2458`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
-- `src/test/corpusScope.test.ts:83`
+- `src/test/corpusScope.test.ts:86`
 
 ### `loadLectureCorpus` (function) — 1 call site
 - `src/components/Coach/CoachGameReview.tsx:2462`

@@ -65,10 +65,10 @@
 - `src/services/ratingBands.test.ts:62`
 
 ### `getRandomLegalMove` (function) — 7 call sites
-- `src/components/Coach/CoachGamePage.tsx:2736`
-- `src/components/Coach/CoachGamePage.tsx:2751`
-- `src/components/Coach/CoachGamePage.tsx:3038`
-- `src/components/Coach/CoachGamePage.tsx:3076`
+- `src/components/Coach/CoachGamePage.tsx:2689`
+- `src/components/Coach/CoachGamePage.tsx:2704`
+- `src/components/Coach/CoachGamePage.tsx:2991`
+- `src/components/Coach/CoachGamePage.tsx:3029`
 - `src/components/Coach/CoachTeachPage.tsx:8127`
 - `src/components/Openings/OpeningPlayMode.tsx:765`
 - `src/components/Openings/OpeningPlayMode.tsx:790`
@@ -93,22 +93,22 @@
 - `src/services/coachGameEngine.test.ts:589`
 - `src/services/coachGameEngine.test.ts:591`
 - `src/services/coachGameEngine.test.ts:597`
-- `src/services/coachLaneWiring.test.ts:377`
-- `src/services/coachLaneWiring.test.ts:378`
+- `src/services/coachLaneWiring.test.ts:379`
+- `src/services/coachLaneWiring.test.ts:380`
 
 ### `TeachingReplySource` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `prewarmTeachingReplies` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:488`
+- `src/components/Coach/CoachGamePage.tsx:487`
 
 ### `LessonSteerOpt` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pickTeachingReply` (function) — 3 call sites
-- `src/components/Coach/CoachGamePage.tsx:2485`
-- `src/services/coachLaneWiring.test.ts:363`
-- `src/services/coachLaneWiring.test.ts:376`
+- `src/components/Coach/CoachGamePage.tsx:2438`
+- `src/services/coachLaneWiring.test.ts:365`
+- `src/services/coachLaneWiring.test.ts:378`
 
 ### `AdaptiveMoveOpts` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -120,7 +120,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getAdaptiveMove` (function) — 33 call sites
-- `src/components/Coach/CoachGamePage.tsx:2550`
+- `src/components/Coach/CoachGamePage.tsx:2503`
 - `src/components/Coach/CoachTeachPage.tsx:8083`
 - `src/components/Openings/OpeningPlayMode.tsx:753`
 - `src/services/coachGameEngine.test.ts:72`
@@ -156,9 +156,9 @@
 
 ### `getTargetStrength` (function) — 14 call sites
 - `src/App.tsx:166`
-- `src/components/Coach/CoachGamePage.tsx:472`
-- `src/components/Coach/CoachGamePage.tsx:2487`
-- `src/components/Coach/CoachGamePage.tsx:2550`
+- `src/components/Coach/CoachGamePage.tsx:471`
+- `src/components/Coach/CoachGamePage.tsx:2440`
+- `src/components/Coach/CoachGamePage.tsx:2503`
 - `src/components/Coach/CoachTeachPage.tsx:8077`
 - `src/components/Openings/OpeningPlayMode.tsx:87`
 - `src/services/coachGameEngine.test.ts:195`
@@ -172,11 +172,11 @@
 
 ### `studentPlayingRating` (re-export) — 22 call sites
 - `src/App.tsx:167`
-- `src/components/Coach/CoachGamePage.tsx:424`
+- `src/components/Coach/CoachGamePage.tsx:423`
 - `src/components/Coach/CoachTeachPage.tsx:8076`
 - `src/components/Coach/CoachTeachPage.tsx:10045`
-- `src/components/Coach/CoachTeachPage.tsx:13042`
-- `src/components/Coach/CoachTeachPage.tsx:14182`
+- `src/components/Coach/CoachTeachPage.tsx:13008`
+- `src/components/Coach/CoachTeachPage.tsx:14148`
 - `src/components/Openings/OpeningPlayMode.tsx:63`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:970`
 - `src/hooks/useEndgamePlayout.ts:388`
@@ -195,7 +195,7 @@
 - `src/services/engineStrength.ts:165`
 
 ### `opponentStrength` (re-export) — 10 call sites
-- `src/components/Coach/CoachGamePage.tsx:2436`
+- `src/components/Coach/CoachGamePage.tsx:2389`
 - `src/components/Coach/CoachTeachPage.tsx:8076`
 - `src/components/Openings/OpeningPlayMode.tsx:752`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:970`
@@ -207,9 +207,9 @@
 - `src/services/engineStrength.ts:111`
 
 ### `emitOpponentStrength` (re-export) — 6 call sites
-- `src/components/Coach/CoachGamePage.tsx:2446`
-- `src/components/Coach/CoachGamePage.tsx:2496`
-- `src/components/Coach/CoachGamePage.tsx:2520`
+- `src/components/Coach/CoachGamePage.tsx:2399`
+- `src/components/Coach/CoachGamePage.tsx:2449`
+- `src/components/Coach/CoachGamePage.tsx:2473`
 - `src/services/coachPlaySession.ts:193`
 - `src/services/engineStrength.test.ts:96`
 - `src/services/engineStrength.ts:139`

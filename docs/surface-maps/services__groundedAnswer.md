@@ -1057,8 +1057,8 @@
 - `src/services/groundedAnswer.routerE.test.ts:219`
 
 ### `assembleSlipNarration` (function) — 4 call sites
-- `src/components/Coach/CoachGamePage.tsx:3883`
-- `src/components/Coach/CoachGamePage.tsx:4049`
+- `src/components/Coach/CoachGamePage.tsx:3836`
+- `src/components/Coach/CoachGamePage.tsx:4002`
 - `src/services/groundedAnswer.test.ts:725`
 - `src/services/groundedAnswer.test.ts:740`
 

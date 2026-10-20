@@ -31,7 +31,6 @@ import { PlayerInfoBar } from './PlayerInfoBar';
 import { MoveListPanel } from './MoveListPanel';
 import { ResignButton } from './ResignButton';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
-import { usePhaseNarration } from '../../hooks/usePhaseNarration';
 import { useStudentNeed } from '../../hooks/useStudentNeed';
 import { useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import { useNarration } from '../../hooks/useNarration';
@@ -46,7 +45,7 @@ import {
 import { logAppAudit } from '../../services/appAuditor';
 import { unwrapSpineError, SENTENCE_END_RE } from '../../services/sanitizeCoachText';
 import { createStreamingSpeaker } from '../../services/streamingSpeaker';
-import type { PhaseNarrationVerbosity, MoveClassification, WalkableLine } from '../../types';
+import type { MoveClassification, WalkableLine } from '../../types';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useAppStore } from '../../stores/appStore';
@@ -124,7 +123,7 @@ function withFetchTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   ]);
 }
 import { resolveVerbosity, shouldCallLlmForMove } from '../../services/coachCommentaryPolicy';
-import { resolvePhaseNarrationVerbosity, resolveLlmNarrationDensity } from '../../utils/coachNarration';
+import { resolveLlmNarrationDensity } from '../../utils/coachNarration';
 import { BLUNDER_ALERT_ADDITION, EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { limitStrengthElo } from '../../services/engineConstants';
@@ -1822,25 +1821,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
    *  gate on `phase-transition-suppressed` (WO-STANDARD-01 H5). Reset with the
    *  phase ledger so a new game writes its first row again. */
   const phaseNoFireSigRef = useRef<string | null>(null);
-  const phaseNarration = usePhaseNarration({
-    getPgn: () => game.history.join(' '),
-    playerColor,
-    getOpeningName: () => detectedOpening?.name ?? null,
-    getLiveFen: () => game.fen,
-    // Play is out of scope for the 2026-09-23 corpus removal — unchanged.
-    corpusNotes: true,
-    // Play has no per-move tactic lane (it volunteers nothing); its phase
-    // read, when asked, keeps the tactics.
-    tacticsOwnedByTurn: false,
-    // Play keeps the hook's own ledger (it volunteers nothing, 2026-09-23).
-    getStanding: null,
-    // Play has no turn door; the hook speaks its own package.
-    speakFacts: null,
-    // Persist the phase-transition report in the chat messages under the board
-    // (David 2026-07-01) instead of the transient narration banner that pops
-    // up then disappears. Voice still plays live via the hook.
-    onReport: (text) => gameChatRef.current?.injectAssistantMessage(text),
-  });
 
   // Fire phase-transition narration when the student's move completes a
   // phase boundary. Gates (WO-PHASE-NARRATION-01):
@@ -1891,44 +1871,17 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       return;
     }
 
-    const verbosity: PhaseNarrationVerbosity = resolvePhaseNarrationVerbosity(
-      useAppStore.getState().activeProfile?.preferences,
-    );
-    const blunderActive =
-      gameState.status === 'blunder_pause' || blunderPause !== null;
-
-    if (!PLAY_VOLUNTEERS_COACHING || verbosity === 'off' || blunderActive || positionNarration.isNarrating) {
-      const reason = !PLAY_VOLUNTEERS_COACHING
-        ? 'play-silent'
-        : verbosity === 'off'
-        ? 'verbosity-off'
-        : blunderActive
-          ? 'blunder-priority'
-          : 'position-narration-active';
-      void logAppAudit({
-        kind: 'phase-transition-suppressed',
-        category: 'subsystem',
-        source: 'CoachGamePage.phaseTransition',
-        summary: `suppressed: ${event.kind} (${reason})`,
-        details: JSON.stringify({ ...event, reason, verbosity }),
-        fen: event.fen,
-      });
-      return;
-    }
-
-    // Detection success — dedicated kind so Dave can filter the audit
-    // log for 'phase-transition-detected' and see exactly when/where
-    // each boundary fired. Narration voice is traced separately via
-    // the 'voice-speak-invoked' audit from WO-LEGACY-VOICE-01.
+    // PLAY VOLUNTEERS NOTHING (David 2026-09-23): a detected boundary is
+    // recorded, never narrated — there is no phase voice on Play to mount.
+    // Re-enabling one goes through a turn door (Learn's `usePhaseNarration`).
     void logAppAudit({
-      kind: 'phase-transition-detected',
+      kind: 'phase-transition-suppressed',
       category: 'subsystem',
       source: 'CoachGamePage.phaseTransition',
-      summary: `${event.kind} at move ${event.moveNumber} ${event.triggeringMoveSan}`,
-      details: JSON.stringify({ ...event, verbosity }),
+      summary: `suppressed: ${event.kind} (play-silent)`,
+      details: JSON.stringify({ ...event, reason: 'play-silent' }),
       fen: event.fen,
     });
-    void phaseNarration.narrate(event, verbosity);
     // Dependencies: we watch moves.length so this fires exactly once
     // per new move. blunderPause + status are read inside the effect
     // via live reads — deliberate, so the guard always reflects the

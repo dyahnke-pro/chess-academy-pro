@@ -10,10 +10,10 @@
 // and spoken "undefined" mid-game.
 import { describe, it, expect } from 'vitest';
 import { generalizedTeaching } from './danyaTeachingService';
-import type { TeachingOrigin, TransitionOrigin } from './danyaTeachingService';
+import type { TeachingOrigin } from './danyaTeachingService';
 
-const ALL: Array<TeachingOrigin | TransitionOrigin> = [
-  'position', 'recent-path', 'opening-family', 'structure', 'concept',
+const ALL: TeachingOrigin[] = [
+  'position', 'opening-family', 'structure', 'concept',
 ];
 
 describe('spoken framing for a borrowed note', () => {

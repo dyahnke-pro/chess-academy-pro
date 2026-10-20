@@ -57,7 +57,7 @@
 
 ### `adoptPlanTrial` (function) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:10416`
-- `src/components/Coach/CoachTeachPage.tsx:11357`
+- `src/components/Coach/CoachTeachPage.tsx:11360`
 - `src/services/planThread.test.ts:104`
 - `src/services/planThread.test.ts:111`
 

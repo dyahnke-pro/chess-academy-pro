@@ -8229,12 +8229,8 @@ export function CoachTeachPage(): JSX.Element {
       ?? useCoachMemoryStore.getState().intendedOpening?.name
       ?? null,
     getLiveFen: () => liveFenRef.current,
-    // Learn free play carries no corpus notes (David 2026-09-23).
-    corpusNotes: false,
     // ONE say-once ledger for the game: the phase turn's balance sheet and the
     // positional read below share it.
-    // The per-move lanes own live tactics here (pin + its rule, said once).
-    tacticsOwnedByTurn: true,
     getStanding: () => standingRef.current,
     // THROUGH THE DOOR (WO-1b). A phase transition is one more wave of the
     // turn: its sentences compete with the lead the turn already spoke, so

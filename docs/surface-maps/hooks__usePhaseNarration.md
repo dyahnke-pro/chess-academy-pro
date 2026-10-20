@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1014 lines · 3 exports · 4 importers · 2 tests · 2 audits**
+**524 lines · 3 exports · 2 importers · 1 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,10 +15,8 @@
 
 ## Who calls in
 
-- `src/components/Coach/CoachGamePage.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/hooks/usePhaseNarration.door.test.ts`
-- `src/hooks/usePhaseNarration.test.ts`
 
 ## Exports and every call site
 
@@ -28,18 +26,14 @@
 ### `UsePhaseNarrationResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `usePhaseNarration` (function) — 6 call sites
-- `src/components/Coach/CoachGamePage.tsx:1825`
+### `usePhaseNarration` (function) — 3 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8225`
-- `src/hooks/usePhaseNarration.door.test.ts:62`
-- `src/hooks/usePhaseNarration.test.ts:121`
-- `src/hooks/usePhaseNarration.test.ts:381`
-- `src/hooks/usePhaseNarration.test.ts:398`
+- `src/hooks/usePhaseNarration.door.test.ts:61`
+- `src/hooks/usePhaseNarration.door.test.ts:87`
 
 ## Tests
 
 - `src/hooks/usePhaseNarration.door.test.ts`
-- `src/hooks/usePhaseNarration.test.ts`
 
 ## Audits that reach it
 

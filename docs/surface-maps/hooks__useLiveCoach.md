@@ -33,7 +33,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `useLiveCoach` (function) — 9 call sites
-- `src/components/Coach/CoachGamePage.tsx:1058`
+- `src/components/Coach/CoachGamePage.tsx:1057`
 - `src/hooks/useLiveCoach.needWire.test.tsx:69`
 - `src/hooks/useLiveCoach.needWire.test.tsx:82`
 - `src/hooks/useLiveCoach.needWire.test.tsx:93`
