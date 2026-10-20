@@ -90,7 +90,7 @@ describe('review walk — both seats, captures included (BACKLOG §6)', () => {
     expect(at(9)).not.toMatch(/and you can take back/);
     expect(at(11)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes on f7 and hits your queen on d8 and your rook on h8 at once\./);
     expect(at(12)).toMatch(/\[move-job\] (?:[^:.]+: it t|T)akes back on f7: you get a knight for the pawn they took, but your king has left its back rank to do it, out in the open — that is what they gave the knight for\./);
-    expect(at(15)).toMatch(/\[move-job\] (?:[^:.]+: it a|A)dds a third attacker on your knight on d5\./);
+    expect(at(15)).toMatch(/\[move-job\] (?:[^:.]+: it a|A)dds a third attacker on your knight on d5, and it needs an answer this move\./);
     // The pin was said with 7…Ke6's guard; 8…Nb4 says only its own guard.
     // 8…Nb4 hits c2 AND holds the pinned knight: both halves.
     expect(at(16)).toMatch(/\[move-job\] (?:[^:.]+: it a|A)ttacks their pawn on c2, and adds a third guard to your knight on d5\./);
@@ -104,10 +104,10 @@ describe('review walk — a move job is ranked by what the move changes', () => 
     return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
   }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? ''); };
   it('4.Ng5: a new attack outranks a guard — the knight joins the c4 bishop against f7', () => {
-    expect(walk()[6]).toMatch(/\[move-job\] (?:[^:.]+: it j|J)oins their bishop on c4 against your pawn on f7\./);
+    expect(walk()[6]).toMatch(/\[move-job\] (?:[^:.]+: it j|J)oins their bishop on c4 against your pawn on f7, and it needs an answer this move\./);
   }, 30_000);
   it('7.Qf3+: a check is always said, first', () => {
-    expect(walk()[12]).toMatch(/\[move-job\] (?:[^:.]+: it g|G)ives check and joins their bishop on c4 against your knight on d5\./);
+    expect(walk()[12]).toMatch(/\[move-job\] (?:[^:.]+: it g|G)ives check and joins their bishop on c4 against your knight on d5, and it needs an answer this move\./);
   }, 30_000);
   it('7…Ke6: a king says the square it holds first, then the escape', () => {
     expect(walk()[13]).toMatch(/\[move-job\] (?:[^:.]+: it a|A)dds a second guard to your knight on d5, which their bishop on c4 pins, and gets your king out of the check from their queen on f3\./);
@@ -140,7 +140,7 @@ describe('review walk — the Fried Liver tape, second pass (lead 2026-10-20)', 
     return { ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: i % 2 === 0, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput;
   }), 'black', 'Italian Game: Two Knights Defense', true, 1400).map((s) => s.narration ?? ''); };
   it('2.Nf3 says its attack on e5 — the fact 2…Nc6 answers', () => {
-    expect(walk()[2]).toMatch(/\[move-job\] (?:[^:.]+: it a|A)ttacks your pawn on e5\./);
+    expect(walk()[2]).toMatch(/\[move-job\] (?:[^:.]+: it a|A)ttacks your pawn on e5, and it needs an answer this move\./);
   }, 30_000);
   it('the opening is named as it is identified — the Fried Liver at 6.Nxf7', () => {
     expect(walk()[10]).toMatch(/It's the Fried Liver Attack of the Two Knights Defense\./);
@@ -183,6 +183,10 @@ describe('review walk — the main line is every move with a real share', () => 
     __setLocalDbForTests(db({ c5: 600, e5: 300, d5: 30 }) as never);
     expect(walk('d5')).toMatch(/A rare book move — the game leaves the main line here/);
   }, 30_000);
+  it('a rare book move with no job of its own says nothing bare (Najdorf Zagreb, 2026-10-20)', () => {
+    __setLocalDbForTests(db({ c5: 600, e5: 300, a6: 30 }) as never);
+    expect(walk('a6')).not.toMatch(/A rare book move/);
+  }, 30_000);
   afterAll(() => { __setLocalDbForTests({ positions: fixture.positions } as never); });
 });
 
@@ -209,4 +213,31 @@ describe('review walk — one claim said once (lead 2026-10-20)', () => {
     expect(walk.join(' ').match(/joins their bishop on c4 against your pawn on f7/g)?.length).toBe(1);
     expect(walk[6]).toMatch(/\[move-job\] Now your pawn on f7 is attacked twice and guarded once, by your king — it needs an answer this move\./);
   }, 30_000);
+});
+
+describe('review walk — their moves are said by what they ask (lead 2026-10-20, Najdorf Zagreb)', () => {
+  const k = (sans: string[]): string => { const c = new Chess(); sans.forEach((m) => c.move(m)); return c.fen().split(' ').slice(0, 4).join(' '); };
+  const row = (san: string, games: number): LocalDbMove => ({ san, games, white: 0, draws: 0, black: 0 } as LocalDbMove);
+  const LINE = 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2'.split(' ');
+  const walk = (): string[] => {
+    const c = new Chess();
+    return buildReviewSegments(LINE.map((san, i) => { c.move(san); return { ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 1, classification: 'book', preMoveEval: 0, evaluation: 0, bestMove: null } as unknown as ReviewMoveInput; }), 'white', null, true, 1400).map((s) => s.narration ?? '');
+  };
+  beforeAll(() => {
+    // The masters' file: book through 5.Nc3, where only …g6 is played — so
+    // …a6 leaves the book.
+    const positions: Record<string, LocalDbMove[]> = {};
+    LINE.slice(0, 9).forEach((san, i) => { positions[k(LINE.slice(0, i))] = [row(san, 900 - i * 50)]; });
+    positions[k(LINE.slice(0, 9))] = [row('g6', 400)];
+    __setLocalDbForTests({ positions } as never);
+  });
+  afterAll(() => { __setLocalDbForTests({ positions: fixture.positions } as never); });
+  it('…Nf6 hitting an unguarded e4 says what it asks, never bare', () => {
+    const plies = walk();
+    expect(plies[7]).toMatch(/attacks your pawn on e4, and it needs an answer this move/i);
+    expect(plies.join(' ')).not.toMatch(/Attacks your pawn on e4\./);
+  }, 60_000);
+  it('their departure with nothing to teach is held — no bare "They left the book"', () => {
+    expect(walk()[9]).not.toMatch(/They left the book/);
+  }, 60_000);
 });

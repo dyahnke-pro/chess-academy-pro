@@ -36,6 +36,19 @@ const WHY = new RegExp([
   String.raw`\bcosts? (?:a little|about|more than|three or four|five) (?:half a |a |two )?points?\b`, String.raw`\bhas no (?:defender|guard)\b`,
   String.raw`\bswings the game by\b`, String.raw`\bit (?:forks|pins|skewers)\b`, String.raw`\bcosts? (?:them|you) (?:the |a |an )?\w+`,
   String.raw`\blet (?:them|you) in\b`, String.raw`\bis open to (?:your|their) \w+`, String.raw`\bcannot move at all\b`,
+  // THE FILE TAKEN AND THE SQUARE NO PAWN CAN TOUCH (lead 2026-10-20, Najdorf
+  // Zagreb): "Your Qb3 takes the open b-file", "c3 is a square no pawn of
+  // theirs can cover" — the gain is named, and it is the reason.
+  // WHAT A MOVE ASKS, OPENS UP OR LEAVES (lead 2026-10-20, Najdorf Zagreb —
+  // the review's own consequence forms): "it needs an answer this move",
+  // "clears the way to castle", "leaves it with no guard", "where …Nc6 hits
+  // it", "wins time", "2 of your pieces on it against 1 defender".
+  String.raw`\bneeds an answer\b`, String.raw`\bclears the way to\b`, String.raw`\bleaves (?:it|them) with no guard\b`,
+  String.raw`\bwhere [^,.;]+ (?:hits|attacks|takes|forks|pins|checks) (?:it|them)\b`, String.raw`\bwins time\b`,
+  String.raw`\b\d+ of (?:your|their) pieces on it against \d+ defenders?\b`, String.raw`\bthe more (?:they|you) \w+, the more\b`,
+  String.raw`\btrades help the side\b`, String.raw`\breach either wing\b`, String.raw`\bout of reach of (?:your|their) \w+`,
+  String.raw`\bgaining time\b`, String.raw`\bcannot join the fight\b`, String.raw`\brips open the [a-h]-file\b`,
+  String.raw`\btakes the (?:open|half-open) [a-h]-file\b`, String.raw`\bsquare (?:no pawn of (?:theirs|yours)|none of (?:their|your) pawns) can (?:cover|attack|chase)\b`,
   String.raw`\breach(?:es)? (?:their|your) camp\b`, String.raw`\bcloser to (?:a queen|promotion)\b`, String.raw`\bis open to attack\b`, String.raw`\bpawn can chase a piece off\b`,
   String.raw`\bkept (?:you|it) (?:on top|level|in it|alive)\b`, String.raw`\bfighting for the cent(?:er|re)\b`, String.raw`\bcomes? out (?:ahead|behind)\b`, String.raw`\bwins material\b`, String.raw`\bno (?:enemy )?pawn(?: of (?:theirs|yours))? can chase\b`,
   String.raw`\b(?:is|are) safe now\b`, String.raw`\bthe guard that holds\b`, String.raw`\bsaves (?:the \w+|it) from (?:your|their|the) \w+`,

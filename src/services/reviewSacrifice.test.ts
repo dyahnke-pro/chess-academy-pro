@@ -40,6 +40,14 @@ describe('sacrificeCompensation (David 2026-07-20 — teach the sac, don\'t asse
     expect(sacrificeCompensation(fenAfter(OPERA), 'w', -470, true, null).some((c) => /holds up/i.test(c))).toBe(false);
   });
 
+  it('a sac that only HOLDS names nothing it bought — said nothing (Najdorf Zagreb, 2026-10-20)', () => {
+    // The starting board has no stuck king and no development lead; at an even
+    // eval the old code still said "the position holds up completely".
+    expect(sacrificeCompensation(new Chess().fen(), 'w', 0, true, null)).toEqual([]);
+    // NEGATIVE CONTROL: a sac that PUT the mover on top still says so.
+    expect(sacrificeCompensation(new Chess().fen(), 'w', 150, true, 0)).toEqual(["you're already on top here"]);
+  });
+
   it('every clause is a plain string with no move/piece/square invented (G0 shape)', () => {
     const clauses = sacrificeCompensation(fenAfter(OPERA), 'w', 60, true, null);
     // The clauses never mention a specific SAN or "engine" (voice rules).
