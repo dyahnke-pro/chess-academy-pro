@@ -175,7 +175,7 @@
 - `src/services/reviewTeachingPoints.test.ts:291`
 
 ### `lineTakesPiece` (re-export) — 2 call sites
-- `src/services/positionFacts.ts:630`
+- `src/services/positionFacts.ts:632`
 - `src/services/trappedPiece.ts:96`
 
 ### `findWorstPlacedPiece` (re-export) — 12 call sites

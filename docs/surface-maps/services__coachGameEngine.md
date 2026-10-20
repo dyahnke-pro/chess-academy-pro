@@ -174,9 +174,9 @@
 - `src/App.tsx:167`
 - `src/components/Coach/CoachGamePage.tsx:428`
 - `src/components/Coach/CoachTeachPage.tsx:8075`
-- `src/components/Coach/CoachTeachPage.tsx:10025`
-- `src/components/Coach/CoachTeachPage.tsx:12982`
-- `src/components/Coach/CoachTeachPage.tsx:14122`
+- `src/components/Coach/CoachTeachPage.tsx:10036`
+- `src/components/Coach/CoachTeachPage.tsx:12994`
+- `src/components/Coach/CoachTeachPage.tsx:14134`
 - `src/components/Openings/OpeningPlayMode.tsx:63`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:970`
 - `src/hooks/useEndgamePlayout.ts:388`

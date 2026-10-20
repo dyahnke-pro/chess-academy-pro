@@ -8210,6 +8210,17 @@ export function CoachTeachPage(): JSX.Element {
    *  cost, its trade and what they have said — read by the phase wave, which
    *  is one more wave of this turn, never a turn of its own. */
   const liveTurnRef = useRef<{ fen: string; ply: number; midExchange: string | null; cost: () => number | null; said: () => string } | null>(null);
+  /** THE TURN'S HOLDS (`decideTurn`): one set per turn board, shared by the
+   *  instant, late and phase waves; a new board starts a new turn and a fresh
+   *  set, so a held claim is free again once the turn moves on. */
+  const turnHoldsRef = useRef<{ fen: string; holds: Set<string> } | null>(null);
+  const turnHoldsFor = useCallback((fen: string): Set<string> => {
+    const cur = turnHoldsRef.current;
+    if (cur && samePosition(cur.fen, fen)) return cur.holds;
+    const holds = new Set<string>();
+    turnHoldsRef.current = { fen, holds };
+    return holds;
+  }, []);
   const phaseNarration = usePhaseNarration({
     getPgn: () => game.history.join(' '),
     playerColor,
@@ -8236,7 +8247,7 @@ export function CoachTeachPage(): JSX.Element {
       // The turn the report was read on must still be the turn the student is
       // in: once they have moved, its board is gone and so is its wave.
       const live = t && samePosition(t.fen, liveFenRef.current ?? '')
-        ? { fen: t.fen, ply: t.ply, moveCostCp: t.cost(), midExchange: t.midExchange, said: t.said() }
+        ? { fen: t.fen, ply: t.ply, moveCostCp: t.cost(), midExchange: t.midExchange, said: t.said(), holds: turnHoldsFor(t.fen) }
         : null;
       const d = decidePhaseWave(facts, fen, live, { priorKeys: learnMemRef.current.spokenKeys, priorLead: prior, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile) });
       if (!d) {
@@ -9513,7 +9524,7 @@ export function CoachTeachPage(): JSX.Element {
       // priorKeys = every phrase spoken EARLIER this game, so no lane repeats a
       // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
       // (the late package's `alreadySaid`); this is the cross-turn guarantee.
-    ], priorKeys: learnMemRef.current.spokenKeys, priorLead: null, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile) });
+    ], priorKeys: learnMemRef.current.spokenKeys, priorLead: null, green: provenTagsRef.current, beginner: isBeginnerMode(useAppStore.getState().activeProfile), turnHolds: turnHoldsFor(args.fenAfterReply) });
     // Every lane's speak/silent answer is the door's lane table now
     // (`learnTurnDoor.LEARN_LANES`), not a kind whitelist applied after the
     // fact. NO COUNT CAP (David 2026-09-13) still holds — repetition is caught
@@ -11292,6 +11303,7 @@ export function CoachTeachPage(): JSX.Element {
                       .filter((l) => !(l.lane === 'planArc' && /^What is their /.test(l.text) && /(?:^|\. )(?:Watch out|Careful) —/.test(instantSpokenText)))
                       .map(({ lane, kind, text, squares, claims, gradeFen, lines, stakes, proof, role, factKind, skill, ownMoveReason }) => ({ lane, kind, text, squares, claims, lines, stakes, proof, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}), ...(ownMoveReason ? { ownMoveReason } : {}), fen: gradeFen ?? pending.fen })),
                     alreadySaid: instantSpokenText,
+                    turnHolds: turnHoldsFor(fenAfterReply),
                     priorKeys: learnMemRef.current.spokenKeys,
                     // ONE THOUGHT PER TURN (WO-1b): the late wave leads only
                     // if it outranks what the instant wave led with.

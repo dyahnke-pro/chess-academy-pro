@@ -26,8 +26,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `spokenOpeningLabel` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9004`
-- `src/components/Coach/CoachTeachPage.tsx:9005`
+- `src/components/Coach/CoachTeachPage.tsx:9015`
+- `src/components/Coach/CoachTeachPage.tsx:9016`
 - `src/services/openingAnnouncement.test.ts:139`
 - `src/services/openingAnnouncement.test.ts:142`
 
@@ -65,7 +65,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.test.ts:221`
 
 ### `openingAnnouncementForGame` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9006`
+- `src/components/Coach/CoachTeachPage.tsx:9017`
 - `src/services/openingAnnouncement.test.ts:156`
 - `src/services/openingAnnouncement.test.ts:157`
 
@@ -73,15 +73,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:1017`
 
 ### `studentJustLeftBook` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11784`
-- `src/components/Coach/CoachTeachPage.tsx:11831`
+- `src/components/Coach/CoachTeachPage.tsx:11796`
+- `src/components/Coach/CoachTeachPage.tsx:11843`
 - `src/services/openingAnnouncement.test.ts:162`
 - `src/services/openingAnnouncement.test.ts:171`
 - `src/services/openingAnnouncement.test.ts:172`
 - `src/services/openingAnnouncement.test.ts:173`
 
 ### `openingNameForBoard` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8996`
+- `src/components/Coach/CoachTeachPage.tsx:9007`
 - `src/services/openingPositions.test.ts:30`
 - `src/services/openingStory.ts:122`
 
@@ -92,7 +92,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `theirOpeningVerdict` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12292`
+- `src/components/Coach/CoachTeachPage.tsx:12304`
 - `src/services/coachFeatureService.ts:1946`
 - `src/services/openingAnnouncement.test.ts:194`
 - `src/services/openingAnnouncement.test.ts:195`

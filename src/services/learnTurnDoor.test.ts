@@ -442,7 +442,7 @@ describe('ONE DOOR — Learn is a posture of coachTurn (one coach P1, 2026-10-07
   it('the door decides exactly what the Learn ranking decided — nothing changed on the way in', async () => {
     const { coachTurn } = await import('./coachDecider');
     for (const beginner of [false, true]) {
-      const viaDoor = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 1, moveCostCp: null, midExchange: null }, facts: facts(), priorLead: null, green: null, beginner });
+      const viaDoor = coachTurn({ posture: 'learn', turn: { kind: 'phase', ply: 1, moveCostCp: null, midExchange: null }, facts: facts(), priorLead: null, green: null, beginner, turnHolds: new Set() });
       const direct = decideTurn(facts(), undefined, undefined, null, null, beginner);
       expect(viaDoor).toEqual(direct);
     }

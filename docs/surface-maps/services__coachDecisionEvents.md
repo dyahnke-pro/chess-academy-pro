@@ -37,7 +37,7 @@
 - `src/test/computedOrderWired.test.ts:26`
 
 ### `emitCoachDecision` (function) — 1 call site
-- `src/services/coachDecider.ts:348`
+- `src/services/coachDecider.ts:351`
 
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -68,13 +68,13 @@
 - `src/services/appAuditor.ts:2299`
 - `src/services/learnPhaseFocus.test.ts:96`
 - `src/services/learnPhaseFocus.test.ts:108`
-- `src/services/learnTurnDoor.phaseWave.test.ts:31`
+- `src/services/learnTurnDoor.phaseWave.test.ts:34`
 - `src/services/learnTurnDoor.story.test.ts:40`
 - `src/services/learnTurnDoor.test.ts:576`
 - `src/services/learnTurnDoor.test.ts:589`
 
 ### `emitLearnTurn` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:882`
+- `src/services/learnTurnDoor.ts:900`
 
 ## Tests
 

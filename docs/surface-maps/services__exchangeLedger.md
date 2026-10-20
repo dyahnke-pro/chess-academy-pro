@@ -109,7 +109,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveComparison.ts:184`
 - `src/services/moveInsight.lineAudit.test.ts:49`
 - `src/services/moveInsight.ts:389`
-- `src/services/thinkAloud.ts:102`
+- `src/services/thinkAloud.ts:103`
 
 ### `settledExchange` (function) — 5 call sites
 - `src/services/playCommentary.ts:1027`
@@ -201,7 +201,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.horizon.test.ts:36`
 - `src/services/exchangeLedger.test.ts:255`
 - `src/services/groundedAnswer.ts:2001`
-- `src/services/positionFacts.ts:631`
+- `src/services/positionFacts.ts:633`
 - `src/services/reviewFullData.ts:792`
 
 ## Tests

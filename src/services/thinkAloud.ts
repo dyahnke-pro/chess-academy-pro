@@ -32,6 +32,7 @@ import { readBoardAll } from './boardComputers';
 import type { TacticType } from '../types';
 import { orderReads } from './orderReads';
 import { inBetweenMove } from './inBetweenMove';
+import { prophylaxisKey } from './prophylaxis';
 
 const cap = (s: string): string => openSentence(s);
 const NUM = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
@@ -323,7 +324,7 @@ export function depthClauses(args: {
       const flaw = obviousStopFlaw(args.fen, args.studentColor);
       // Never argue with the engine: when the "obvious stop" IS its best move
       // (game 2, 10.Ng5 — the engine prefers h3), the human preference is not a fact.
-      if (flaw && flaw.stopSan !== engineBest) out.push({ kind: 'stop-flaw', text: flaw.text });
+      if (flaw && flaw.stopSan !== engineBest) out.push({ kind: 'stop-flaw', text: flaw.text, claim: prophylaxisKey(flaw.threatTo) });
     }
     // READING THEIR MOVE (computers batch 2) — on the student's turn, what
     // their last move threatened quietly, needs, lifted, wrongly expected, or
@@ -373,7 +374,7 @@ export function depthClauses(args: {
       const geo = readBoardAll('tacticGeometry', { fen: args.fen, me: args.studentColor, pv: args.topLines[0]?.moves ?? [], register: 'live', ...(args.lastOpponentMove ? { lastOpponentMove: args.lastOpponentMove } : {}) });
       for (const g of geo) {
         if (g.namesMove && !args.nameMove) {
-          if (g.idea) out.push({ kind: 'speedrun-read', text: g.idea, claim: `${g.key}:idea` });
+          if (g.idea) out.push({ kind: 'speedrun-read', text: g.idea, claim: g.key });
           continue;
         }
         out.push({ kind: 'tactic', text: g.text, squares: g.squares, claim: g.key, ...('kind' in g.proof ? { proof: g.proof } : {}), ...(g.stakes ? { stakes: g.stakes } : {}), ...(g.motif ? { motif: g.motif } : {}), ...(g.lines ? { lines: g.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}) });
@@ -429,7 +430,7 @@ export function depthClauses(args: {
  * their bishop can land on a square that pins your knight to your queen or
  * king; the pawn move that takes that square away hands them a hook.
  */
-export function obviousStopFlaw(fen: string, me: 'w' | 'b'): { threatSan: string; stopSan: string; text: string } | null {
+export function obviousStopFlaw(fen: string, me: 'w' | 'b'): { threatSan: string; threatTo: string; stopSan: string; text: string } | null {
   const them = me === 'w' ? 'b' : 'w';
   let theirTurn: Chess;
   try { theirTurn = new Chess([fen.split(' ')[0], them, '-', '-', '0', '1'].join(' ')); } catch { return null; }
@@ -463,6 +464,7 @@ export function obviousStopFlaw(fen: string, me: 'w' | 'b'): { threatSan: string
       if (!hook) continue;
       return {
         threatSan: t.san,
+        threatTo: t.to,
         stopSan: s.san,
         text: `They want ${sayMoveClause(t.san, theirTurn.fen())}, pinning your knight. The obvious stop is ${sayMoveClause(s.san, mine.fen())}, but that pawn becomes a hook for their pawn on ${hook.pawn} — find another way.`,
       };

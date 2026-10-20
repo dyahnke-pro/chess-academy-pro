@@ -507,7 +507,9 @@ export function clauseClaims(pf: Pick<PositionFactsResult, 'clauses' | 'remember
   return [...new Set([
     ...(c.claim ? [c.claim] : []),
     ...(pf.rememberByClause[i]?.keys ?? []),
-    `pf:${c.kind}:${where}@${fen.split(' ').slice(0, 2).join(' ')}`,
+    // A clause with no claim of its own is keyed by kind and squares on this
+    // board; one that names its claim is that claim and nothing else.
+    ...(c.claim ? [] : [`pf:${c.kind}:${where}@${fen.split(' ').slice(0, 2).join(' ')}`]),
   ])];
 }
 
@@ -1224,7 +1226,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     const push = (kind: ClauseKind, rank: number, r: BoardRead | null): void => {
       if (!r || said?.has(r.key)) return;
       if (r.namesMove && !input.namesBestMove) {
-        if (r.idea && !said?.has(`${r.key}:idea`)) registryClauses.push({ kind: 'speedrun-read', rank: 45, text: r.idea, claim: `${r.key}:idea` });
+        // The held idea IS the read's claim, the move withheld — one key.
+        if (r.idea) registryClauses.push({ kind: 'speedrun-read', rank: 45, text: r.idea, claim: r.key });
         return;
       }
       registryClauses.push({ kind, rank, text: r.text, squares: [...r.squares], proof: r.proof, claim: r.key, ...(r.stakes ? { stakes: r.stakes } : {}), ...(r.lines ? { lines: r.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}) });

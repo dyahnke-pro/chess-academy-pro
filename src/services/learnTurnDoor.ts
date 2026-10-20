@@ -43,7 +43,7 @@ export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
 /** Why the door held a lane on a turn. */
-export type HoldReason = 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase';
+export type HoldReason = 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'aside' | 'marginal' | 'contradicts' | 'out-of-phase';
 
 /** The AVERAGE a Learn turn is held to (CLAUDE.md WHY standard measure 4) —
  *  the scale of the marginal bar, never a limit. */
@@ -537,6 +537,12 @@ export function decideTurn(
   /** Which turn this wave belongs to — emitted on the row so an audit can
    *  join a student move's waves. */
   turn: LearnTurnTag | null = null,
+  /** THE TURN'S HOLDS — claims an earlier wave of THIS turn kept quiet, for
+   *  any reason. A later wave may not speak them (7.O-O replay 2026-10-20: the
+   *  late wave held the Bg4 idea as an aside and the phase wave said it). The
+   *  door reads it and writes what it holds; the caller starts a fresh set
+   *  for each turn, so a held claim is free again once the turn moves on. */
+  heldThisTurn: Set<string> | null = null,
 ): TurnDecision {
   const offered: LearnLane[] = [];
   const faded: LearnLane[] = [];
@@ -546,10 +552,12 @@ export function decideTurn(
    *  shortened, and its long text never matched; Learn walk 2026-10-19). */
   const ownOpenTexts = new Set<string>();
   const phaseHeld: LearnLane[] = [];
+  const heldEarlier: LearnLane[] = [];
   for (const f of facts) {
     if (!f.text.trim()) continue;
     offered.push(f.lane);
-    if (laneOutOfPhase(f.lane, f.fen)) { if (!phaseHeld.includes(f.lane)) phaseHeld.push(f.lane); continue; }
+    if (laneOutOfPhase(f.lane, f.fen)) { if (!phaseHeld.includes(f.lane)) phaseHeld.push(f.lane); for (const c of f.claims ?? []) heldThisTurn?.add(c); continue; }
+    if (heldThisTurn && f.claims?.some((c) => heldThisTurn.has(c))) { if (!heldEarlier.includes(f.lane)) heldEarlier.push(f.lane); continue; }
     const text = fadeWhenGreen(f.lane, f.text, green ?? null, f.skill);
     if (text !== f.text && !faded.includes(f.lane)) faded.push(f.lane);
     // ONE REASON PER MOVE ACROSS BOTH WAVES (Learn tape 2026-10-19: "That's
@@ -724,6 +732,7 @@ export function decideTurn(
   const heldWhy: Partial<Record<LearnLane, HoldReason>> = {};
   const hold = (lane: LearnLane, why: HoldReason): void => { if (!held.includes(lane)) held.push(lane); heldWhy[lane] ??= why; };
   for (const l of phaseHeld) hold(l, 'out-of-phase');
+  for (const l of heldEarlier) hold(l, 'held-this-turn');
   // "NOTHING HINGES ON YOUR NEXT MOVE" NEVER SITS BESIDE A STAKE (Alekhine
   // walk 2026-10-19: "Watch c2 — a knight forks there in 2…" then "Nothing
   // hinges on your next move"). Both were true — every top move met the fork —
@@ -822,6 +831,15 @@ export function decideTurn(
   const habitLast = (f: VoiceFact): number => { const lane = laneFor(f); return lane && HABIT_AFTER_VERDICT.has(lane) ? 1 : 0; };
   const worth = (f: VoiceFact): number => { const lane = laneFor(f); return lane ? value({ fact: f, lane }) : 0; };
   keep.sort((a, b) => tier(a) - tier(b) || beatOf(a) - beatOf(b) || habitLast(a) - habitLast(b) || worth(b) - worth(a));
+  // What this wave held joins the turn's holds — the producer's own claims,
+  // never the per-move reason marker (a held reason must not silence the
+  // reason a later wave gives the same move).
+  if (heldThisTurn) {
+    for (const x of survivors) {
+      if (keep.includes(x.fact)) continue;
+      for (const c of x.fact.claims ?? []) if (!c.startsWith('own-move-reason:')) heldThisTurn.add(c);
+    }
+  }
   const pkg: VoicePackage = {
     spoken: joinSpoken(keep),
     kept: keep,
@@ -892,6 +910,8 @@ export interface LiveTurn {
   midExchange: string | null;
   /** Everything the turn's earlier waves said out loud. */
   said: string;
+  /** The turn's holds (`decideTurn`'s `turnHolds`). */
+  holds: Set<string>;
 }
 
 /** THE PHASE REPORT IS ONE MORE WAVE OF THE TURN IT WAS READ ON (root cause 6,
@@ -919,6 +939,7 @@ export function decidePhaseWave(
     })),
     live.said, ctx.priorKeys, ctx.priorLead ?? null, ctx.green ?? null, ctx.beginner,
     { kind: 'phase', ply: live.ply, moveCostCp: live.moveCostCp, midExchange: live.midExchange },
+    live.holds,
   );
 }
 
