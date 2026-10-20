@@ -42,7 +42,7 @@ import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, 
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, seenOneMoveAttack, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, type TeachingHint } from '../../services/learnBoardTeaching';
+import { learnMoveReason, learnReasonDue, learnReasonWaitMs, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, trapAnswered, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, splitPositionTeaching, drilledTransferLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, hangingPieceLine, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, trapAheadTeaching, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, threatAnswerTeaching, tacticStakesFor, type TeachingHint, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, gainedBishopPair, slipAnswerText } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -82,6 +82,7 @@ import { usePhaseNarration } from '../../hooks/usePhaseNarration';
 import { useStudentNeed } from '../../hooks/useStudentNeed';
 import { DEFAULT_STUDENT_RATING, isBeginnerMode } from '../../services/ratingBands';
 import { useFadeLevels, useWeaknessSignals } from '../../hooks/useWeaknessSignals';
+import { useStudentRecord } from '../../hooks/useStudentRecord';
 import {
   createPhaseTransitionState,
   detectPhaseTransition,
@@ -1325,7 +1326,7 @@ export function CoachTeachPage(): JSX.Element {
   // markers from the prose; the parsed annotations get rendered on
   // the board until the next coach turn clears them.
   const [arrows, setArrows] = useState<BoardArrow[]>([]);
-  /** A one-move attack the student sees, marked for this move's turn (`seenOneMoveAttack`). */
+  /** A one-move attack the student sees, marked for this move's turn (`learnThreatVoice` quiet). */
   const seenMarkRef = useRef<BoardArrow | null>(null);
   const [highlights, setHighlights] = useState<BoardHighlight[]>([]);
   // "Hint" button — Stockfish computes the best move for the current
@@ -8129,6 +8130,14 @@ export function CoachTeachPage(): JSX.Element {
   const weaknessSignalsRef = useWeaknessSignals();
   // Proven skills — the Learn door fades their lanes to the short phrasing.
   const provenTagsRef = useFadeLevels();
+  /** The student's whole record (weaknesses, capabilities, heat) — the threat
+   *  voice reads it (`learnThreatVoice`); refreshed when the model settles. */
+  const studentRecordRef = useStudentRecord();
+  /** The threat the coach SPOKE on the board the student now answers — a motif
+   *  touching it is a prompted answer (`recordThreatAnswersAtMove`). */
+  const threatSaidRef = useRef<{ fen: string; squares: readonly string[] } | null>(null);
+  /** The student's previous turn, so a motif standing since then is one question. */
+  const prevStudentTurnFenRef = useRef<string | null>(null);
   // …AND THE OTHER HALF OF IT (N2). Weaknesses say which holes they keep falling
   // in and RAISE what leads; need says whether this student needs teaching HERE
   // AT ALL — book departures in this opening, weakness match for what the ply
@@ -8315,6 +8324,8 @@ export function CoachTeachPage(): JSX.Element {
    * had before.
    */
   const computeInstantTeaching = useCallback((args: {
+    /** The board BEFORE the opponent's reply (after the student's move). */
+    fenBeforeReply: string;
     fenAfterReply: string;
     historyAfterReply: string[];
     moveFrom: string;
@@ -8412,6 +8423,8 @@ export function CoachTeachPage(): JSX.Element {
     let alertArrow: BoardArrow | null = null;
     /** A threat the student has proven they see: drawn, not said. */
     let markOnlyArrow: BoardArrow | null = null;
+    /** The heat tag that decided the threat line's voice — its fade reads it (`learnThreatVoice`). */
+    let threatSkill: string | undefined;
     let announceLine: string | null = null;
     let announceClaims: string[] = [];
     let announceSquares: readonly string[] = [];
@@ -8460,6 +8473,8 @@ export function CoachTeachPage(): JSX.Element {
       let tacticKey = '';
       let pendingMotif: { type: string; instance: string; moveNo: number } | null = null;
       let threatKey = '';
+      /** What the chosen threat branch computed, for the record's voice decision. */
+      let threatProducer: ThreatProducer | null = null;
       /** The tactic type the STUDENT has available, so the threat lane can tell
        *  when both lanes are about to describe the same shape. */
       let myTacticType: string | null = null;
@@ -8640,6 +8655,7 @@ export function CoachTeachPage(): JSX.Element {
             if (signedLegalSeeFor(args.fenAfterReply, c.square, foe) > 0) {
               const n = b.attackers(c.square, foe).length;
               threatKey = `kingpawn:${c.square}`;
+              threatProducer = { kind: 'king-pawn', pawnSquare: c.square };
               threatSquares = [c.square, kSq];
               threatLine = `Careful — your pawn on ${c.square} guards your king, and they hit it ${n === 1 ? 'once' : n === 2 ? 'twice' : n === 3 ? 'three times' : `${n} times`} — it falls unless you cover it.`;
               return true;
@@ -8701,6 +8717,7 @@ export function CoachTeachPage(): JSX.Element {
       const trappedMine = readBoard('trapped', { fen: args.fenAfterReply, student: studentCC });
       if (trappedMine) {
         threatKey = trappedMine.key;
+        if (trappedMine.squares.length >= 2) threatProducer = { kind: 'trapped', trapped: { square: trappedMine.squares[0], attackerSquare: trappedMine.squares[1] } };
         threatSquares = trappedMine.squares;
         threatLine = trappedMine.text;
         if (isProof(trappedMine.proof)) threatFactProof = trappedMine.proof;
@@ -8718,6 +8735,7 @@ export function CoachTeachPage(): JSX.Element {
         // is AIMED AT identifies it; it is said once a game.
         const aimedAt = t.squares[t.squares.length - 1] ?? '';
         threatKey = `vs:${t.type}:${aimedAt}`;
+        threatProducer = { kind: 'tactic', tactic: { type: t.type, squares: t.squares } };
         threatSquares = t.squares.filter((sq) => /^[a-h][1-8]$/.test(sq));
         // SEATED: the detector's description names pieces bare ("queen on e1
         // pins bishop on c3 against queen on a5"); whose each piece is, is the
@@ -8773,6 +8791,7 @@ export function CoachTeachPage(): JSX.Element {
         const theirs = up?.line?.[up.line.length - 1];
         if (up?.spoken) {
           threatKey = `soon:${up.type}:${theirs ?? ''}`;
+          threatProducer = { kind: 'soon', threat: { type: up.type, description: up.description } };
           threatSquares = (up.description.match(/\b[a-h][1-8]\b/g) ?? []).slice(0, 4);
           threatLine = `Watch out — ${up.spoken}.`;
           // The moves that build it are its proof (played from this board).
@@ -8793,6 +8812,7 @@ export function CoachTeachPage(): JSX.Element {
         // offer, not a hanging piece). Same rule as the hit alert below.
         const worst = myHanging[0];
         threatKey = `hang:${worst.piece}${worst.square}`;
+        threatProducer = { kind: 'hanging', square: worst.square };
         threatSquares = [worst.square];
         threatLine = hangingPieceLine(worst.piece, worst.square, nextStem(learnMemRef.current, 'hanging'));
             threatLine = openThreatLine(threatLine, args.fenAfterReply, studentCC, threatSquares, Number(args.fenAfterReply.split(' ')[5] ?? 0), learnMemRef.current.loudAlarms.size);
@@ -8813,6 +8833,7 @@ export function CoachTeachPage(): JSX.Element {
           const hit = cheaperHit();
           if (hit) {
             threatKey = `hit:${hit.piece}${hit.sq}:${hit.bySq}`;
+            threatProducer = { kind: 'cheaper-hit', hit: { sq: hit.sq, bySq: hit.bySq } };
             threatSquares = [hit.sq, hit.bySq];
             // No instruction here: this is said before the engine has read the
             // board, and "it has to move" was contradicted by the answer that
@@ -8885,12 +8906,22 @@ export function CoachTeachPage(): JSX.Element {
         learnMemRef.current.spokenThreatLines.add(threatKey);
         if (isLoudAlarm(threatLine)) learnMemRef.current.loudAlarms.add(threatKey);
         if (mustHere) standingRef.current.remember(mustHere);
-        // A one-move attack the student has PROVEN they see is marked, not said.
-        const seen = seenOneMoveAttack({ threatKey, fen: args.fenAfterReply, lastSan: args.historyAfterReply[args.historyAfterReply.length - 1], targets: threatSquares, student: studentCC, green: provenTagsRef.current });
-        if (seen) {
-          markOnlyArrow = admitArrow({ from: seen.from, to: seen.to, role: 'threat', source: 'teach.seenAttack' }, { fen: args.fenAfterReply, studentColor: studentCC === 'w' ? 'white' : 'black' });
+        // THE RECORD DECIDES HOW LOUD (OS-4): red or grey speaks in full; green
+        // + simple is marked, not said; green + hidden speaks short (the fact
+        // carries the deciding skill, so the door's fade shortens it).
+        const opponentSan = args.historyAfterReply[args.historyAfterReply.length - 1];
+        const loud = threatProducer && opponentSan
+          ? learnThreatVoice(threatProducer, { fenBefore: args.fenBeforeReply, opponentSan }, studentRecordRef.current)
+          : null;
+        if (loud?.voice === 'quiet') {
+          markOnlyArrow = loud.mark ? admitArrow({ from: loud.mark.from, to: loud.mark.to, role: 'threat', source: 'teach.seenAttack' }, { fen: args.fenAfterReply, studentColor: studentCC === 'w' ? 'white' : 'black' }) : null;
           threatLine = null; alertArrow = null; threatSquares = [];
-        } else captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: threatKey });
+        } else {
+          // Always the deciding tag: a red motif under a green general skill
+          // must not borrow the general skill's fade (the lane's default tag).
+          if (loud) threatSkill = loud.skill;
+          captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: threatKey });
+        }
       }
       // A threat that was only a REPEAT must not hide a fresh danger to the king
       // (fresh-game walk 2026-09-27, 14.Qxh5: the f7 pin was said last move,
@@ -9409,7 +9440,7 @@ export function CoachTeachPage(): JSX.Element {
     const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, moveCostCp: args.moveCostCp, midExchange: midExchangeOn }, facts: [
       ...(gemLine ? [{ lane: 'gem' as const, text: gemLine, fen: args.fenAfterReply, proof: NO_PROOF.withheld }] : []),
       ...(tacticLine ? [{ lane: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim ? [tacticClaim] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0]) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
-      ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
+      ...(threatLine ? [{ lane: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), stakes: readBoard('threatCost', { line: threatLine, fen: args.fenAfterReply, student: studentCC, squares: threatSquares })?.stakes, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
       ...(lastHereRead ? [{ lane: lastHereRead.key.startsWith('last-here:same:') ? 'sameAsLastTime' as const : 'lastTimeHere' as const, text: lastHereRead.text, fen: lastHereRead.fen ?? args.fenAfterReply, claims: [lastHereRead.key], proof: lastHereRead.proof }] : []),
       ...(bookMoveRead ? [{ lane: 'bookMove' as const, text: bookMoveRead.text, fen: bookMoveRead.fen ?? args.fenAfterReply, squares: bookMoveRead.squares, claims: [bookMoveRead.key], role: 'teach' as const, proof: bookMoveRead.proof, skill: FUNDAMENTAL_TAG['left-book-early'] }] : []),
       ...(announceLine ? [{ lane: 'opening' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name, claims: announceClaims, ...(announceSquares.length ? { squares: announceSquares } : {}) }] : []),
@@ -9455,6 +9486,7 @@ export function CoachTeachPage(): JSX.Element {
     // by the in-turn twin gate and the per-game novelty set.
     const pkg = instantDecision.pkg;
     if (instantDecision.spoke.includes('tactic')) markTacticSaid?.();
+    threatSaidRef.current = { fen: args.fenAfterReply, squares: instantDecision.spoke.includes('threat') ? [...threatSquares] : [] };
     if (announcesTheMove(instantDecision.spoke)) announcedBoardsRef.current.add(args.fenAfterReply.split(' ').slice(0, 2).join(' '));
 
     // ── LEAD THE EYE ON THE COMPUTED LANES ─────────────────────────────────
@@ -9915,6 +9947,24 @@ export function CoachTeachPage(): JSX.Element {
         }
       }
     } catch { /* the grade is a bonus, never a blocker */ }
+    // THEIR MOTIFS, ANSWERED (OS-4): every opponent fork, pin, skewer,
+    // discovery, mate threat or trap standing at this turn is a question, and
+    // this move is the answer — recorded held or broken whether the coach said
+    // it or kept quiet (the record is not the UI). The engine's grade of the
+    // move rides along so a "landed" motif must really cost.
+    try {
+      const sign = playerColor === 'white' ? 1 : -1;
+      const evalBefore = preStudentRead && !preStudentRead.isMate ? Math.round(preStudentRead.evaluation * sign) : null;
+      recordThreatAnswersAtMove({
+        fen: fenBefore,
+        prevFen: prevStudentTurnFenRef.current,
+        playedSan: move.san,
+        engine: { evalBeforeCp: evalBefore, cpLoss: studentCpLoss },
+        said: threatSaidRef.current,
+        gameId: learnMemRef.current.gameId,
+      });
+    } catch { /* the record is a bonus, never a blocker */ }
+    prevStudentTurnFenRef.current = fenBefore;
     setTimeout(() => {
       void discussion.evaluatePlayerMove({
         fenBefore,
@@ -11020,6 +11070,7 @@ export function CoachTeachPage(): JSX.Element {
               if (eventLine) lines.push(eventLine);
               if (im) {
                 const instant = computeInstantTeaching({
+                  fenBeforeReply: move.fen,
                   fenAfterReply: ip.fen(),
                   historyAfterReply: [...move.history, im.san],
                   moveFrom: im.from,

@@ -230,8 +230,8 @@
 ### `pvUciToSan` (function) — 11 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
-- `src/services/autoAnalyzeGame.ts:498`
-- `src/services/autoAnalyzeGame.ts:501`
+- `src/services/autoAnalyzeGame.ts:503`
+- `src/services/autoAnalyzeGame.ts:506`
 - `src/services/coachFeatureService.ts:757`
 - `src/services/coachFeatureService.ts:759`
 - `src/services/discussionPractice.ts:397`

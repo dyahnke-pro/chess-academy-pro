@@ -17,7 +17,6 @@ import { shareAdverb } from '../utils/shareWords';
 import { lineShape } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import { Chess, type Square } from 'chess.js';
-import { fadeLevelOf, type FadeLevels } from './fadeText';
 import { legalSeeGainFor } from './positionReadingService';
 import { moverFault } from './accuracyService';
 import { lineWins, lineArrows, mateLine, type MateLine } from './lineCalc';
@@ -25,6 +24,10 @@ import { lineWins, lineArrows, mateLine, type MateLine } from './lineCalc';
 export { lineArrows as lineArrowClaims };
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { recordLaneEvidence } from './capabilityEvidence';
+import { recordTermForThreat, threatInputFor, threatVisibility, threatVoice, type RecordTerm, type ThreatPattern, type ThreatProducer, type ThreatVoice, type VisibilityTerm } from './learnRecordTerms';
+import { newThreatsAtTurn, recordThreatAnswer } from './threatAnswerEvidence';
+import type { StudentRecord } from './studentRecord';
+export type { ThreatProducer } from './learnRecordTerms';
 import { stepForMethodClaim, THINKING_STEPS } from './thinkingSteps';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import type { AnalysisLine } from '../types';
@@ -1264,40 +1267,67 @@ export function hangingPieceLine(piece: string, sq: string, rot: number): string
   return stems[((rot % stems.length) + stems.length) % stems.length];
 }
 
-/** A ONE-MOVE ATTACK THE STUDENT HAS PROVEN THEY SEE (David 2026-10-19:
- *  "It's narrating a one move threat to me"). The piece that just moved hits
- *  one of the student's pieces directly — no discovery, no named pattern —
- *  and their record shows they answer these (held since their last miss): the board marks it and the voice
- *  stays quiet (returns the arrow to mark). Grey or red still hears it; a check or a mate threat
- *  always speaks. The record decides, never a rating. */
-export function seenOneMoveAttack(a: {
-  threatKey: string;
+/** THE RECORD DECIDES HOW LOUD A THREAT IS (OS-4, David 2026-10-19: "It's
+ *  narrating a one move threat to me"). The ONE decider for Learn's threat
+ *  line — `seenOneMoveAttack` (quiet on a merely-answered skill, blind to
+ *  long lines and pins) is gone. A threat the student would miss (red or
+ *  grey on their record) speaks in full; green + simple (the piece that just
+ *  moved hits a loose piece, in plain sight) is marked, not said; green +
+ *  hidden speaks short — `skill` names the tag that decided, so the door's
+ *  fade shortens it. A check or a mate in one is never simple. */
+export interface ThreatVoiceDecision {
+  voice: ThreatVoice;
+  /** The heat tag whose record decided — the fact's `skill` for the fade. */
+  skill: MisconceptionTagId;
+  /** The attack to draw when the voice stays quiet. */
+  mark: { from: string; to: string } | null;
+  term: RecordTerm;
+  visibility: VisibilityTerm;
+  pattern: ThreatPattern;
+}
+export function learnThreatVoice(
+  producer: ThreatProducer,
+  move: { fenBefore: string; opponentSan: string },
+  record: StudentRecord,
+): ThreatVoiceDecision {
+  const input = threatInputFor(producer, move);
+  const term = recordTermForThreat(input.pattern, record);
+  const visibility = threatVisibility(input.sighting);
+  const { voice } = threatVoice(term.state, visibility.visibility);
+  const target = input.sighting.targets[0];
+  return {
+    voice,
+    skill: term.skill,
+    mark: input.sighting.attacker && target ? { from: input.sighting.attacker, to: target } : null,
+    term,
+    visibility,
+    pattern: input.pattern,
+  };
+}
+
+/** THE OTHER HALF — every opponent motif standing at the student's turn is a
+ *  question, and their move is the answer, recorded held or broken whether the
+ *  coach said it or stayed quiet (the record is not the UI). `said` = the
+ *  threat the coach spoke on this board, if any: a motif touching its squares
+ *  is PROMPTED (being told proves nothing). Fire-and-forget. */
+export function recordThreatAnswersAtMove(a: {
   fen: string;
-  lastSan: string | undefined;
-  targets: readonly string[];
-  student: 'w' | 'b';
-  green: FadeLevels | null;
-}): { from: string; to: string } | null {
-  // Answered right since the last miss (lighter) or proven (short): they see
-  // these. Red (the last answer was a miss) and grey still hear it.
-  if (fadeLevelOf(a.green, 'missed-opponents-threat') === null) return null;
-  if (!/^(hang:|hit:|vs:hanging_piece:)/.test(a.threatKey)) return null;
-  const land = a.lastSan?.replace(/[+#?!]+$/, '').match(/([a-h][1-8])(=[QRBN])?$/)?.[1];
-  if (!land) return null;
-  try {
-    const b = new Chess(a.fen);
-    if (b.inCheck()) return null;
-    const foe = a.student === 'w' ? 'b' : 'w';
-    const mine = a.targets.filter((sq) => /^[a-h][1-8]$/.test(sq) && b.get(sq as Square)?.color === a.student);
-    if (mine.length === 0 || !mine.every((sq) => b.attackers(sq as Square, foe).includes(land as Square))) return null;
-    // A mate threat always speaks; an attack on any piece, the queen included,
-    // is the same visible one-move question (Learn tape 2026-10-19: "Ignore this
-    // and the game is gone — your queen on d5 is attacked" after Nc3, the move
-    // the opening is named for).
-    const them = flipSideToMove(a.fen);
-    if (them && new Chess(them).moves().some((m) => m.endsWith('#'))) return null;
-    return { from: land, to: mine[0] };
-  } catch { return null; }
+  prevFen: string | null;
+  playedSan: string;
+  engine?: { evalBeforeCp: number | null; cpLoss: number | null };
+  said: { fen: string; squares: readonly string[] } | null;
+  gameId: string | null;
+}): void {
+  const said = a.said && a.said.fen.split(' ').slice(0, 4).join(' ') === a.fen.split(' ').slice(0, 4).join(' ') ? new Set(a.said.squares) : new Set<string>();
+  for (const t of newThreatsAtTurn(a.fen, a.prevFen)) {
+    void recordThreatAnswer({
+      fen: a.fen, playedSan: a.playedSan, pattern: t.pattern, targets: t.targets,
+      prompted: t.targets.some((sq) => said.has(sq)) || said.has(t.attacker),
+      origin: 'learn',
+      ...(a.engine ? { engine: a.engine } : {}),
+      ...(a.gameId ? { sourceGameId: a.gameId } : {}),
+    });
+  }
 }
 
 /** A piece of yours attacked by a CHEAPER one, said with why it matters (Learn

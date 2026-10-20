@@ -54,6 +54,9 @@ export interface RecordTerm {
   raise: number;
   /** Which reading decided the state — for the door's turn row. */
   reason: string;
+  /** The heat tag whose record decided (a motif's own tag, or the general
+   *  skill) — what a spoken fact names as its `skill` so the fade reads it. */
+  skill: MisconceptionTagId;
 }
 
 /** The skill's heat state and raise. A skill absent from the record is GREY —
@@ -77,7 +80,7 @@ export function recordTermFor(skillTag: MisconceptionTagId, record: StudentRecor
       : state === 'red'
         ? `red: ${tile.openCount} open slips, ${tile.broken} broken`
         : `grey: not yet proven (held ${tile.held}, broken ${tile.broken})`;
-  return { state, raise, reason };
+  return { state, raise, reason, skill: skillTag };
 }
 
 // ─── 2. Threat visibility ───────────────────────────────────────────────────
@@ -296,6 +299,7 @@ export function recordTermForThreat(pattern: ThreatPattern, record: StudentRecor
       state: 'red',
       raise: Math.max(base.raise, motif?.raise ?? 0, holeBoost),
       reason: `red: open ${skill.motif} hole (${hole?.openCount ?? 0} open)`,
+      skill: skill.motifTag ?? skill.tag,
     };
   }
   if (motif) return { ...motif, reason: `${skill.motifTag} ${motif.reason}` };
