@@ -32,7 +32,7 @@ import { isTheoryLine } from './bookDeparture';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { trickSidestepped } from './forkTrick';
-import { phaseVerdictLine, phaseVerdictKeys } from './reviewPositionalAssessment';
+import { phaseVerdictLine, phaseVerdictKeys, phaseStockKey } from './reviewPositionalAssessment';
 import { stemKeyOf, rotateStem } from '../utils/rotateStem';
 import { findPinPressure, PIN_PRESSURE_PRINCIPLE, PIN_PRESSURE_WARNING, pieceName, type PinPressure } from './pinPressure';
 import { findGuardRemovals, GUARD_REMOVAL_PRINCIPLE, GUARD_REMOVAL_WARNING, type GuardRemoval } from './guardRemoval';
@@ -1009,7 +1009,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     ? phaseVerdictLine(fen, studentColor, evalCpWhitePov * sSign, input.phaseTurn, said ?? new Set(), fenMove)
     : null;
   const stockKeys = stockHere
-    ? phaseVerdictKeys(fen, studentColor, evalCpWhitePov * sSign, said ?? new Set(), fenMove)
+    ? [...phaseVerdictKeys(fen, studentColor, evalCpWhitePov * sSign, said ?? new Set(), fenMove), ...(input.phaseTurn ? [phaseStockKey(input.phaseTurn)] : [])]
     : [];
 
   // TRADES, JUDGED (David 2026-09-27: "how well the trade benefits the

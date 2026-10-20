@@ -420,6 +420,16 @@ export function criticalMomentReveal(read: CriticalMomentRead | null): string | 
   return `${lead} ${stake} here — ${sans[0]} and ${sans[1]}. Everything else conceded.${why}${fails}`;
 }
 
+/** The played move takes back on the square the opponent's last move captured
+ *  on — the trade they started, finished. The same reading `deliberation`
+ *  gives "takes back the …". */
+export function finishesTrade(opponentLastSan: string | null, playedSan: string | null): boolean {
+  if (!opponentLastSan || !playedSan) return false;
+  const theirs = /x([a-h][1-8])/.exec(opponentLastSan);
+  const mine = /x([a-h][1-8])/.exec(playedSan);
+  return !!theirs && !!mine && theirs[1] === mine[1];
+}
+
 /** Did the student play one of the moves that held? Coordinate-free comparison
  *  is impossible here (the reveal is SAN-only), so the caller passes the SAN the
  *  walk recorded, which came from the same chess.js render as `holdingSans`. */
@@ -435,8 +445,16 @@ export function criticalMomentHeld(read: CriticalMomentRead | null, playedSan: s
  * No praise word — the fact is the verdict: how few moves held, that this was
  * one, and why the tempting others failed (each proved by its own line).
  */
-export function criticalMomentFound(read: CriticalMomentRead | null, playedSan: string | null): string | null {
+export function criticalMomentFound(
+  read: CriticalMomentRead | null, playedSan: string | null,
+  /** REQUIRED: the opponent's move just before — null when unknown. Taking
+   *  back on the square they just captured on finishes THEIR trade; it is not
+   *  a find (Black walk 2026-10-19: "F-pawn takes g3 was the only move that
+   *  kept you level" after …Bxg3, "g-pawn takes h4" after …Qxh4). */
+  opponentLastSan: string | null,
+): string | null {
   if (!criticalMomentHeld(read, playedSan) || !read) return null;
+  if (finishesTrade(opponentLastSan, playedSan)) return null;
   const stake = stakeText(read.stake as StakeId, { plural: false, past: true });
   const fails = failedCandidates(read.discardedProofs ?? []);
   // The reason is the BEST move's: said only when that is the move they played.

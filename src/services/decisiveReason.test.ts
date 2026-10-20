@@ -167,3 +167,22 @@ describe('two plans, about equal — the close call (David 2026-10-18)', () => {
     expect(twoPlans('forks the king on e1 and the knight on c3', 'saves it from their knight')).toBe(false);
   });
 });
+
+describe('an alternative "fails" only when the engine says so (Black walk 2026-10-19, move 26)', () => {
+  it('a line that drops material but sits 45cp off best is not "the natural alternative fails"', () => {
+    // 1.e4 e5 2.Nf3 Nc6: the second line's Nxe5 Nxe5 counts as a knight lost,
+    // but its own eval is only 45cp behind the best — the count is an artifact.
+    const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+    const reads = (gap: number): IntentReads => ({
+      before: [
+        { rank: 1, evaluation: 40, mate: null, moves: ['f1b5', 'a7a6', 'b5a4', 'g8f6'] },
+        { rank: 2, evaluation: 40 - gap, mate: null, moves: ['f3e5', 'c6e5', 'd2d4', 'e5c6', 'd4d5', 'c6e7'] },
+      ] as IntentReads['before'],
+      after: [], passBefore: [], passAfter: [],
+    });
+    const small = decisiveReason({ fenBefore: fen, san: 'Bb5', reads: reads(45), seat: 'student', opponentLastSan: null });
+    expect(small?.text ?? '').not.toMatch(/natural alternative, Nxe5, (fails|comes out)/);
+    const big = decisiveReason({ fenBefore: fen, san: 'Bb5', reads: reads(300), seat: 'student', opponentLastSan: null });
+    expect(big?.text ?? '').toMatch(/natural alternative, Nxe5/);
+  });
+});

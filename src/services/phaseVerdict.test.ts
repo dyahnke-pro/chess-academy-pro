@@ -28,3 +28,14 @@ describe('phaseVerdictLine', () => {
     expect(phaseVerdictLine('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'w', 10, 'middlegame', new Set())).toBeNull();
   });
 });
+
+describe('the balance sheet is said once per phase (Black walk 2026-10-19, 36.Rxa1)', () => {
+  it('a second read of the same phase, after the first is heard, is silent', async () => {
+    const { phaseStockKey } = await import('./reviewPositionalAssessment');
+    const FEN = 'rnbqk2r/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 8';
+    expect(phaseVerdictLine(FEN, 'w', 300, 'endgame', new Set())).toMatch(/endgame/);
+    expect(phaseVerdictLine(FEN, 'w', 300, 'endgame', new Set([phaseStockKey('endgame')]))).toBeNull();
+    // The middlegame sheet is its own claim.
+    expect(phaseVerdictLine(FEN, 'w', 300, 'middlegame', new Set([phaseStockKey('endgame')]))).toMatch(/middlegame/);
+  });
+});

@@ -69,7 +69,7 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   const your = voice === 'you' ? 'your' : 'their';
   const trump = voice === 'you' ? structurePlan(fen, myC) : null;
   // Stacked plans vary the stem after the first (question walk 2026-09-27).
-  const facts = voice === 'you' ? deriveNextPlanFacts(fen, myC) : [];
+  const facts = voice === 'you' ? deriveNextPlanFacts(fen, myC, { namesStudentMoves: true }) : [];
   const plans = facts.map((p) => cap(p.text))
     .map((p, i) => (i === 0 ? p : p.replace(/^The plan from here is to /, STEMS[(i - 1) % STEMS.length])))
     .map((p) => (/[.!?]$/.test(p.trim()) ? p.trim() : `${p.trim()}.`));

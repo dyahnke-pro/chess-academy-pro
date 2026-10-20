@@ -302,10 +302,14 @@ export function depthClauses(args: {
   const out: DepthClause[] = [];
   try {
     const habit = opponentHabits(args.history, args.studentColor === 'w' ? 'b' : 'w')[0];
-    if (habit) out.push({ kind: 'their-habit', text: habit.text });
+    // A HABIT IS SAID ONCE A GAME (Black walk 2026-10-19: "you keep pushing the
+    // pawns in front of your own king — two… three… four so far" on every
+    // move). The claim is keyed by the habit, never by its count, so the
+    // rising number cannot slip a repeat past the say-once ledger.
+    if (habit) out.push({ kind: 'their-habit', text: habit.text, claim: `habit:their:${habit.kind}` });
     // …and the student's own, read by the same computer (A-plan P4).
     const mine = habitsOf(args.history, args.studentColor, 'your')[0];
-    if (mine) out.push({ kind: 'your-habit', text: mine.text });
+    if (mine) out.push({ kind: 'your-habit', text: mine.text, claim: `habit:your:${mine.kind}` });
     if (args.lastStudentMove) {
       const h = holeAccess(args.lastStudentMove.fenBefore, args.lastStudentMove.san);
       if (h) out.push({ kind: 'hole-access', text: h.text, squares: [h.hole, ...(h.from ? [h.from] : [])] });

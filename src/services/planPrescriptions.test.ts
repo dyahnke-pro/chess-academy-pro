@@ -90,7 +90,7 @@ describe('durability words only on verified-durable facts', () => {
     for (const fen of probes) {
       const a = assessPositionalEdge(fen, 'w', 20);
       expect(a.reasons.join(' ')).not.toMatch(/lasting/i);
-      for (const p of deriveNextPlans(fen, 'w')) expect(p).not.toMatch(/lasting/i);
+      for (const p of deriveNextPlans(fen, 'w', { namesStudentMoves: true })) expect(p).not.toMatch(/lasting/i);
     }
   });
 });
@@ -99,7 +99,7 @@ describe('composed nouns match the actual material surplus', () => {
   it('two extra pawns are never called "the extra piece"', () => {
     // White is up exactly two PAWNS — equal pieces both sides.
     const fen = '4k3/5p2/8/8/8/8/PP3P2/4K3 w - - 0 30';
-    const plans = deriveNextPlans(fen, 'w');
+    const plans = deriveNextPlans(fen, 'w', { namesStudentMoves: true });
     const convert = plans.find((p) => p.includes('convert your extra material'));
     expect(convert).toBeTruthy();
     expect(convert).not.toMatch(/extra piece/);
@@ -108,7 +108,7 @@ describe('composed nouns match the actual material surplus', () => {
 
   it('a genuine extra piece is still called the extra piece', () => {
     const fen = '4k3/5ppp/8/8/8/8/N4PPP/4K3 w - - 0 30';
-    const convert = deriveNextPlans(fen, 'w').find((p) => p.includes('convert your extra material'));
+    const convert = deriveNextPlans(fen, 'w', { namesStudentMoves: true }).find((p) => p.includes('convert your extra material'));
     expect(convert).toMatch(/extra piece/);
   });
 });
@@ -116,7 +116,7 @@ describe('composed nouns match the actual material surplus', () => {
 describe('plan prescriptions never name a piece the student does not have', () => {
   for (const probe of PROBES) {
     it(probe.name, () => {
-      const plans = deriveNextPlans(probe.fen, probe.student);
+      const plans = deriveNextPlans(probe.fen, probe.student, { namesStudentMoves: true });
       for (const plan of plans) {
         for (const { word, type } of PIECE_WORDS) {
           if (!word.test(plan)) continue;

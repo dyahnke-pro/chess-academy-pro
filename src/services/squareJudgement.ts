@@ -228,6 +228,9 @@ export function maskedWeakness(fen: string, student: Color): StructureRead | nul
     return {
       act: 'masked-weakness', squares: [s, ...holes], proof, key: `masked:${s}`,
       text: `Their weak ${andList(holes)} hide behind the ${noun} on ${s}; chase it with ${push.san} and those squares open up again.`,
+      // Held on Learn's live board: the idea, never the push (LEARN NAMES NO
+      // MOVE UNASKED — Black walk 2026-10-19, "chase it with c3").
+      heldForm: { text: `Their weak ${andList(holes)} hide behind the ${noun} on ${s}; a pawn push of yours can chase it, and those squares open up again.`, squares: [s, ...holes], proof: squaresProof('their weak squares hide behind the piece covering them', [s, ...holes]) ?? proof },
     };
   }
   return null;
@@ -258,6 +261,7 @@ export function safeSquareRoute(fenBefore: string, san: string, student: Color, 
   return {
     act: 'safe-square-route', squares: [x, on.mv.to], proof, key: `safe-route:${x}`,
     text: `Your ${PIECE_NOUN[r.mv.piece]} on ${x} is safe there, since nothing of theirs can hit it, and it can swing to ${on.mv.to} next.`,
+    heldForm: { text: `Your ${PIECE_NOUN[r.mv.piece]} on ${x} is safe there, since nothing of theirs can hit it, and it has somewhere useful to go next.`, squares: [x], proof: squaresProof(`nothing of theirs can hit ${x}`, [x]) ?? proof },
   };
 }
 
@@ -353,6 +357,8 @@ export function unmovedUnits(fenBefore: string, san: string, student: Color): St
       return {
         act: 'unmoved-units', squares: [x, p, t], proof, key: `unmoved:${x}`,
         text: `Their ${PIECE_NOUN[r.mv.piece]} reaches ${x} because your ${p[0]}-pawn hasn't moved: on ${t} it would cover that square.`,
+        // Held: why the square was free, never the pawn move that fixes it.
+        heldForm: { text: `Their ${PIECE_NOUN[r.mv.piece]} reaches ${x} because no pawn of yours covers that square yet.`, squares: [x], proof: squaresProof(`no pawn of yours covers ${x}`, [x]) ?? proof },
       };
     }
   }

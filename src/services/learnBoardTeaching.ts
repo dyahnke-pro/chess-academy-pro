@@ -310,7 +310,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
   // BRINGING PIECES TO THEIR KING — not on a move that cost a pawn; that
   // move's lesson is the cost.
   if (i.cpLoss < 100) {
-    const ka = kingAttack(i.fenBefore, i.san);
+    const ka = kingAttack(i.fenBefore, i.san, false);
     if (ka) {
       out.push({
         lane: 'kingAttack', proof: squaresProof(ka.text, ka.squares) ?? NO_PROOF.stated, text: ka.text, squares: ka.squares,
@@ -925,7 +925,7 @@ export function drilledTransferLine(
  *  before the move, the student played one of the only moves that held. */
 export function foundMoveTeaching(fenBefore: string, san: string, preLines: readonly CriticalFanLine[] | undefined, student: 'w' | 'b', to: string, history: readonly string[]): TeachingHint | null {
   if (!preLines || preLines.length < 2) return null;
-  const found = criticalMomentFound(readCriticalMoment({ topLines: preLines, moverColor: student, fen: fenBefore }), san);
+  const found = criticalMomentFound(readCriticalMoment({ topLines: preLines, moverColor: student, fen: fenBefore }), san, priorFromHistory(history, fenBefore)?.san ?? null);
   if (!found) return null;
   // THE LINE THAT MAKES IT WORK (pass-2 walk 2026-09-30: "Nxd5 was the only
   // move that kept you on top" — he says why: it wins a pawn, because …Bxc3+
