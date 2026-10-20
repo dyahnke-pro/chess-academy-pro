@@ -229,3 +229,13 @@ describe('the departure says what it does to the line\'s plan (David 2026-10-13:
     expect(t).not.toMatch(/plan|break/);
   });
 });
+
+describe('openingAnnouncement — a sibling line of the same opening is news', () => {
+  it('Knight Attack → Fried Liver Attack: said with the variation it belongs to', () => {
+    expect(openingAnnouncement({ name: 'Italian Game: Two Knights Defense, Fried Liver Attack' }, null, 'Italian Game: Two Knights Defense, Knight Attack', 'b', null))
+      .toBe("It's the Fried Liver Attack of the Two Knights Defense.");
+  });
+  it('a jump to an unrelated line of the same family stays quiet (only the family shared)', () => {
+    expect(openingAnnouncement({ name: 'Sicilian Defense: Najdorf Variation' }, null, 'Sicilian Defense: Alapin Variation', 'b', null)).toBeNull();
+  });
+});

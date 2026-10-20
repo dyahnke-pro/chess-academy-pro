@@ -13,7 +13,7 @@ function fensAfter(sans: string[]): string[] {
 const SICILIAN_IQP = ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'd5', 'exd5', 'exd5', 'Be2', 'Be7', 'O-O', 'O-O', 'Bg5', 'Be6', 'Re1', 'Nc6', 'Nxc6', 'bxc6', 'Bf3', 'Qd6'];
 
 describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)', () => {
-  it('emits multiple board-true facets on one move (verdict, structure, opening)', () => {
+  it('emits multiple board-true facets on one move (verdict, structure)', () => {
     const fens = fensAfter(SICILIAN_IQP);
     const ply = 19; // Re1 — White owns the open e-file, Black has the isolated d5
     const facets = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
@@ -38,7 +38,8 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
     expect(all).toMatch(/clearly better/i);
     expect(all).toMatch(/\[structure\]/);
     expect(all).toMatch(/open files e/i);
-    expect(all).toMatch(/\[opening\]/);
+    // The opening's NAME is the walk's announcement now (one namer with Learn,
+    // `coachFeatureService.openingStory.test`), not a facet of this move.
   });
 
   it('THE RACE COMES OUT of the review surface as a [plan-race] facet', () => {
