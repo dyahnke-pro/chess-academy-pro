@@ -585,6 +585,8 @@ export function decideTurn(
   const survivors = verified.kept
     .map((k) => ({ fact: k, lane: laneOf(k) }))
     .filter((x): x is { fact: VoiceFact; lane: LearnLane } => x.lane !== undefined);
+  const refusedWhy: Partial<Record<LearnLane, string>> = {};
+  for (const d of verified.dropped) { const l = laneOf(d.fact); if (l && !survivors.some((x) => x.lane === l)) refusedWhy[l] ??= d.reason; }
 
   // ONE ORDER, NO HOLD (David 2026-10-05: "If there are 5 important facts or a
   // plan that comes from the move then the user needs to hear it"). The door
@@ -916,7 +918,7 @@ export function decideTurn(
     const k = facts.find((x) => x.lane === l && (x.text === f.text || x.text.includes(f.text) || f.text.includes(x.text)))?.factKind;
     return k ? [k] : [];
   });
-  if (offered.length > 0) emitLearnTurn({ spokeKinds, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, ownMove, ownLanes, ownProven, turn });
+  if (offered.length > 0) emitLearnTurn({ spokeKinds, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, refusedWhy: { ...refusedWhy }, ownMove, ownLanes, ownProven, turn });
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes };
 }
 
