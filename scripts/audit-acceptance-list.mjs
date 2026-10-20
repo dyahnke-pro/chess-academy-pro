@@ -127,7 +127,7 @@ const key = (s) => s.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, '
 const rx = (srcs) => srcs.map((s) => new RegExp(s, 'i'));
 const PIECE = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k' };
 const CLAIM = /\b(your|their)\s+(pawn|knight|bishop|rook|queen|king)\s+on\s+([a-h][1-8])\b/gi;
-const HYPOTHETICAL = /\b(if|would|could|after|once|when|then|line|was|were|had|used to|until)\b/i;
+const HYPOTHETICAL = /\b(if|would|could|after|once|when|then|line|was|were|had|used to|until|next-best)\b/i;
 
 /** A MUST COVER item is met by ONE sentence that carries the square AND the
  *  relation together: every pattern of `allOf` and at least one of `anyOf`,
@@ -141,11 +141,14 @@ function coverMatch(it, sentence) {
  *  the repo's why-reader, or an effect that names what it acts on ("kicks
  *  their bishop", "holding back their d-pawn", "steps out of the attack").
  *  Neither branch takes a sentence about THEIR move. */
-const EFFECT = /\b(?:kicks?|kicking|chases?|chasing|attacks?|attacking|hits?|hitting|pins?|pinning|forks?|guards?|guarding|defends?|defending|covers?|covering|controls?|controlling|stops?|stopping|prevents?|preventing|prepares?|preparing|frees?|freeing|opens?|opening|blocks?|blocking|supports?|supporting|fights? for|fighting for|holds? back|holding back|undermines?|challenges?|challenging|threatens?|threatening|eyes?|eyeing|targets?|targeting|bears? down on)\s+(?:up\s+)?(?:your|their|the|its|a|an|[a-h][1-8])\b/i;
-const STANDALONE = /\b(?:steps? out of (?:the )?(?:attack|pin)|gets? out of (?:the )?(?:attack|pin)|out of danger|to safety|gain(?:s|ing)? (?:time|a tempo|space))\b/i;
+const EFFECT = /\b(?:kicks?|kicking|chases?|chasing|attacks?|attacking|hits?|hitting|pins?|pinning|forks?|guards?|guarding|defends?|defending|covers?|covering|controls?|controlling|stops?|stopping|prevents?|preventing|prepares?|preparing|frees?|freeing|opens?|opening|blocks?|blocking|supports?|supporting|fights? for|fighting for|holds? back|holding back|undermines?|challenges?|challenging|threatens?|threatening|eyes?|eyeing|targets?|targeting|bears? down on|forces?|forcing|unpins?|unpinning|trains? on|heads? (?:for|toward|towards)|aims? at|activates?|activating)\s+(?:up\s+)?(?:your|their|the|its|a|an|[a-h][1-8])\b/i;
+const STANDALONE = /\b(?:steps? out of (?:the )?(?:attack|pin)|gets? out of (?:the )?(?:attack|pin)|out of danger|(?:to|into) safety|stakes? a claim|seiz(?:es|ing) the initiative|opens? (?:lines|files?|diagonals?)|becomes? a fighting piece|pressure they have to answer|gain(?:s|ing)? (?:time|a tempo|space))\b/i;
 function reasonMatch(it, sentence) {
   const s = norm(sentence);
-  if (!rx(it.refers).some((r) => r.test(s))) return false;
+  // A sentence that opens on the moved piece ("The knight …", never "The knight on c3",
+  // which names a piece by its square) refers to the move.
+  const opensOnPiece = it.piece && new RegExp(`^the ${it.piece}\\b(?! on [a-h][1-8])`, 'i').test(s);
+  if (!opensOnPiece && !rx(it.refers).some((r) => r.test(s))) return false;
   // A sentence about THEIR move is not the student's reason, either branch.
   if (/^(?:[A-Za-z ,—-]{0,25}— )?(?:their|they)\b/i.test(s)) return false;
   return isWhy(s) || EFFECT.test(s) || STANDALONE.test(s);

@@ -352,7 +352,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g1",
@@ -427,7 +428,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g1",
@@ -502,7 +504,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g1",
@@ -577,7 +580,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g1",
@@ -651,7 +655,8 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "g1",
@@ -725,7 +730,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g1",
@@ -804,7 +810,8 @@
     "^(?:that|this)\\b",
     "\\bcastl",
     "\\byour king\\b"
-   ]
+   ],
+   "piece": "king"
   },
   {
    "game": "g1",
@@ -864,7 +871,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "g1",
@@ -958,7 +966,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g1",
@@ -1032,7 +1041,8 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "g1",
@@ -1106,7 +1116,8 @@
     "\\byour rook\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "rook"
   },
   {
    "game": "g1",
@@ -1180,7 +1191,8 @@
     "\\byour queen\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "queen"
   },
   {
    "game": "g1",
@@ -1254,7 +1266,8 @@
     "\\byour rook\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "rook"
   },
   {
    "game": "g1",
@@ -1313,7 +1326,8 @@
     "\\byour rook\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "rook"
   },
   {
    "game": "g1",
@@ -1387,7 +1401,8 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "g1",
@@ -1462,7 +1477,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g1",
@@ -1539,7 +1555,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g1",
@@ -1598,7 +1615,8 @@
     "\\byour rook\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "rook"
   },
   {
    "game": "g1",
@@ -1675,7 +1693,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g1",
@@ -1750,7 +1769,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "rook"
   },
   {
    "game": "g1",
@@ -1863,7 +1883,8 @@
     "\\byour rook\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "rook"
   },
   {
    "game": "g1",
@@ -1937,7 +1958,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g1",
@@ -2012,7 +2034,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "rook"
   },
   {
    "game": "g1",
@@ -2087,7 +2110,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "king"
   },
   {
    "game": "g1",
@@ -2161,7 +2185,8 @@
     "\\byour rook\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "rook"
   },
   {
    "game": "g1",
@@ -2274,7 +2299,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g1",
@@ -2349,7 +2375,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g1",
@@ -2424,7 +2451,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g1",
@@ -2498,7 +2526,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g1",
@@ -2573,7 +2602,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g1",
@@ -2648,7 +2678,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g1",
@@ -2722,7 +2753,17 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight",
+   "controls": {
+    "pass": [
+     "Knight to d5 with check forces the king to react, seizing the initiative."
+    ],
+    "fail": [
+     "Their knight on d5 is strong.",
+     "There is a forced mate here — mate in 3."
+    ]
+   }
   },
   {
    "game": "g1",
@@ -2796,7 +2837,8 @@
     "\\byour rook\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "rook"
   },
   {
    "game": "g1",
@@ -2870,7 +2912,8 @@
     "\\byour king\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "king"
   },
   {
    "game": "g1",
@@ -2945,7 +2988,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "rook"
   },
   {
    "game": "g1",
@@ -3020,7 +3064,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g1",
@@ -3094,7 +3139,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g1",
@@ -3168,7 +3214,8 @@
     "\\byour king\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "king"
   },
   {
    "game": "g1",
@@ -3227,7 +3274,8 @@
     "\\byour king\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "king"
   },
   {
    "game": "g1",
@@ -3301,7 +3349,8 @@
     "\\byour king\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "king"
   },
   {
    "game": "g1",
@@ -3376,7 +3425,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g1",
@@ -3450,7 +3500,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g1",
@@ -3524,7 +3575,8 @@
     "\\byour king\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "king"
   },
   {
    "game": "g1",
@@ -3599,7 +3651,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "king"
   },
   {
    "game": "g1",
@@ -3674,7 +3727,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g1",
@@ -3748,7 +3802,8 @@
     "\\byour king\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "king"
   },
   {
    "game": "g1",
@@ -3825,7 +3880,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g1",
@@ -3900,7 +3956,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g1",
@@ -3975,7 +4032,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g1",
@@ -4113,7 +4171,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g2",
@@ -4188,7 +4247,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g2",
@@ -4265,7 +4325,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g2",
@@ -4339,7 +4400,16 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight",
+   "controls": {
+    "pass": [
+     "The knight trains on the pawn on e4 — pressure they have to answer."
+    ],
+    "fail": [
+     "The knight on c3 guards e4."
+    ]
+   }
   },
   {
    "game": "g2",
@@ -4414,7 +4484,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g2",
@@ -4489,7 +4560,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g2",
@@ -4563,7 +4635,8 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "g2",
@@ -4637,7 +4710,8 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "g2",
@@ -4716,7 +4790,8 @@
     "^(?:that|this)\\b",
     "\\bcastl",
     "\\byour king\\b"
-   ]
+   ],
+   "piece": "king"
   },
   {
    "game": "g2",
@@ -4791,7 +4866,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g2",
@@ -4865,7 +4941,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g2",
@@ -4939,7 +5016,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g2",
@@ -5013,7 +5091,16 @@
     "\\byour queen\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "queen",
+   "controls": {
+    "pass": [
+     "Queen to b8 unpins your knight on c7, freeing it to join the game."
+    ],
+    "fail": [
+     "Their bishop pins your knight on c7."
+    ]
+   }
   },
   {
    "game": "g2",
@@ -5088,7 +5175,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g2",
@@ -5168,7 +5256,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g3",
@@ -5242,7 +5331,8 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "g3",
@@ -5317,7 +5407,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g3",
@@ -5391,7 +5482,8 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "g3",
@@ -5465,7 +5557,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g3",
@@ -5539,7 +5632,16 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "bishop",
+   "controls": {
+    "pass": [
+     "The bishop bears down on c4, backing your c-pawn's push there."
+    ],
+    "fail": [
+     "The bishop on b7 is strong."
+    ]
+   }
   },
   {
    "game": "g3",
@@ -5614,7 +5716,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g3",
@@ -5688,7 +5791,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g3",
@@ -5763,7 +5867,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g3",
@@ -5837,7 +5942,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g3",
@@ -5916,7 +6022,16 @@
     "^(?:that|this)\\b",
     "\\bcastl",
     "\\byour king\\b"
-   ]
+   ],
+   "piece": "king",
+   "controls": {
+    "pass": [
+     "That was the move here — it castles your king into safety and swings the rook toward the center."
+    ],
+    "fail": [
+     "Both kings on the kingside: no pawn race."
+    ]
+   }
   },
   {
    "game": "g3",
@@ -5991,7 +6106,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g3",
@@ -6066,7 +6182,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g3",
@@ -6140,7 +6257,8 @@
     "\\byour rook\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "rook"
   },
   {
    "game": "g3",
@@ -6215,7 +6333,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g3",
@@ -6329,7 +6448,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g3",
@@ -6448,7 +6568,16 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn",
+   "controls": {
+    "pass": [
+     "e5 stakes a claim in the center and opens lines for the pieces."
+    ],
+    "fail": [
+     "This game is the King's Knight Opening."
+    ]
+   }
   },
   {
    "game": "g4",
@@ -6522,7 +6651,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g4",
@@ -6596,7 +6726,8 @@
     "\\byour queen\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "queen"
   },
   {
    "game": "g4",
@@ -6670,7 +6801,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g4",
@@ -6744,7 +6876,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g4",
@@ -6821,7 +6954,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g4",
@@ -6896,7 +7030,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g4",
@@ -6971,7 +7106,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g4",
@@ -7048,7 +7184,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g4",
@@ -7122,7 +7259,8 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "g4",
@@ -7202,7 +7340,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "g4",
@@ -7280,7 +7419,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "g4",
@@ -7354,7 +7494,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "g4",
@@ -7428,7 +7569,8 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "g4",
@@ -7505,7 +7647,8 @@
     "\\byour queen\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "queen"
   },
   {
    "game": "g4",
@@ -7583,7 +7726,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "queen"
   },
   {
    "game": "g4",
@@ -7714,7 +7858,8 @@
      "You play c5.",
      "Your pawn is on c5."
     ]
-   }
+   },
+   "piece": "pawn"
   },
   {
    "game": "dB",
@@ -7788,7 +7933,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "dB",
@@ -7863,7 +8009,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "dB",
@@ -7938,7 +8085,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "dB",
@@ -8022,7 +8170,8 @@
      "Their bishop on a4 eyes b5.",
      "b5 — your move."
     ]
-   }
+   },
+   "piece": "pawn"
   },
   {
    "game": "dB",
@@ -8097,7 +8246,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "dB",
@@ -8171,7 +8321,8 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "dB",
@@ -8248,7 +8399,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "dB",
@@ -8369,7 +8521,8 @@
     "fail": [
      "Their rook on e1 eyes your bishop on b8."
     ]
-   }
+   },
+   "piece": "bishop"
   },
   {
    "game": "dB",
@@ -8443,7 +8596,8 @@
     "\\byour queen\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "queen"
   },
   {
    "game": "dB",
@@ -8517,7 +8671,16 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight",
+   "controls": {
+    "pass": [
+     "Knight to f6 heads for their king — one more knight move brings it to bear."
+    ],
+    "fail": [
+     "Their knight heads for your king."
+    ]
+   }
   },
   {
    "game": "dB",
@@ -8594,7 +8757,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "dB",
@@ -8708,7 +8872,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "dB",
@@ -8816,7 +8981,8 @@
     "fail": [
      "Their knight to d4 wins by force: they win a pawn — it lands three moves later with bishop takes g4."
     ]
-   }
+   },
+   "piece": "pawn"
   },
   {
    "game": "dB",
@@ -8893,7 +9059,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "dB",
@@ -8970,7 +9137,8 @@
     "\\byour queen\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "queen"
   },
   {
    "game": "dB",
@@ -9048,7 +9216,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "dB",
@@ -9126,7 +9295,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "dB",
@@ -9201,7 +9371,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "dB",
@@ -9299,7 +9470,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "dB",
@@ -9381,7 +9553,8 @@
     "fail": [
      "Their e5 does two jobs: it stops your king takes f6, and it prepares queen to e4, to hit your rook on a8."
     ]
-   }
+   },
+   "piece": "king"
   },
   {
    "game": "dB",
@@ -9455,7 +9628,8 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "dB",
@@ -9514,7 +9688,8 @@
     "\\byour rook\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "rook"
   },
   {
    "game": "dB",
@@ -9588,7 +9763,8 @@
     "\\byour king\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "king"
   },
   {
    "game": "dB",
@@ -9647,7 +9823,8 @@
     "\\byour king\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "king"
   },
   {
    "game": "dB",
@@ -9728,7 +9905,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "dW",
@@ -9802,7 +9980,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "dW",
@@ -9876,7 +10055,8 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "dW",
@@ -9951,7 +10131,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "dW",
@@ -10026,7 +10207,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "dW",
@@ -10103,7 +10285,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "dW",
@@ -10177,7 +10360,8 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "dW",
@@ -10236,7 +10420,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "dW",
@@ -10295,7 +10480,8 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "dW",
@@ -10390,7 +10576,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "dW",
@@ -10467,7 +10654,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "dW",
@@ -10526,7 +10714,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "dW",
@@ -10621,7 +10810,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "dW",
@@ -10695,7 +10885,8 @@
     "\\byour queen\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "queen"
   },
   {
    "game": "dW",
@@ -10813,7 +11004,8 @@
     "^(?:that|this)\\b",
     "\\bcastl",
     "\\byour king\\b"
-   ]
+   ],
+   "piece": "king"
   },
   {
    "game": "dW",
@@ -10887,7 +11079,8 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "dW",
@@ -10947,7 +11140,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "dW",
@@ -11041,7 +11235,8 @@
     "\\byour queen\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "queen"
   },
   {
    "game": "dW",
@@ -11100,7 +11295,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "dW",
@@ -11233,7 +11429,8 @@
     "\\byour bishop\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "bishop"
   },
   {
    "game": "dW",
@@ -11292,7 +11489,8 @@
     "\\byour pawn\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "pawn"
   },
   {
    "game": "dW",
@@ -11406,7 +11604,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "dW",
@@ -11504,7 +11703,8 @@
     "\\byour queen\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "queen"
   },
   {
    "game": "dW",
@@ -11618,7 +11818,8 @@
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b",
     "\\b(?:take|takes|took|capture\\w*)\\b"
-   ]
+   ],
+   "piece": "queen"
   },
   {
    "game": "dW",
@@ -11692,7 +11893,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "dW",
@@ -11766,7 +11968,8 @@
     "\\byour knight\\b",
     "\\b(?:this|that|the) move\\b",
     "^(?:that|this)\\b"
-   ]
+   ],
+   "piece": "knight"
   },
   {
    "game": "dW",
