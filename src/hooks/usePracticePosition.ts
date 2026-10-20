@@ -2,6 +2,10 @@ import { useState, useCallback } from 'react';
 import { stockfishEngine } from '../services/stockfishEngine';
 import type { MoveResult } from './useChessGame';
 import type { BoardAnnotationCommand } from '../types';
+import { liveMovePrice } from '../services/playedMoveGrade';
+
+/** The depth a practice answer is read and priced at. */
+const PRACTICE_DEPTH = 16;
 
 export interface PracticePositionState {
   fen: string;
@@ -59,8 +63,7 @@ export function usePracticePosition(): UsePracticePositionReturn {
 
     try {
       // Analyze the position BEFORE the player's move to get the best eval
-      const analysisBefore = await stockfishEngine.analyzePosition(practicePosition.fen, 16);
-      const bestEval = analysisBefore.evaluation;
+      const analysisBefore = await stockfishEngine.analyzePosition(practicePosition.fen, PRACTICE_DEPTH);
       const bestMoveUci = analysisBefore.bestMove;
       const playerUci = `${moveResult.from}${moveResult.to}${moveResult.promotion ?? ''}`;
 
@@ -73,26 +76,13 @@ export function usePracticePosition(): UsePracticePositionReturn {
         return { type: 'correct', message: 'Correct! Great find! Well done!', bestMoveUci };
       }
 
-      // Player didn't play a top line — evaluate their actual move
-      try {
-        const { Chess } = await import('chess.js');
-        const tempChess = new Chess(practicePosition.fen);
-        tempChess.move({
-          from: moveResult.from,
-          to: moveResult.to,
-          promotion: moveResult.promotion as 'q' | 'r' | 'b' | 'n' | undefined,
-        });
-
-        const analysisAfter = await stockfishEngine.analyzePosition(tempChess.fen(), 16);
-        const playerMoveEval = -analysisAfter.evaluation;
-        const evalLoss = bestEval - playerMoveEval;
-
-        if (evalLoss < 150) {
-          exitPractice();
-          return { type: 'correct', message: 'Correct! That\'s a strong move! Well done!', bestMoveUci };
-        }
-      } catch {
-        // Move was invalid on the practice position — fall through to wrong answer
+      // Player didn't play a top line — price their actual move against the
+      // best one in ONE search (#2 root cause 4), never the read before minus a
+      // separate read after. An unpriced move is not "correct".
+      const price = await liveMovePrice(practicePosition.fen, playerUci, analysisBefore, PRACTICE_DEPTH);
+      if (price && price.costCp < 150) {
+        exitPractice();
+        return { type: 'correct', message: 'Correct! That\'s a strong move! Well done!', bestMoveUci };
       }
 
       // Move is significantly worse — wrong answer

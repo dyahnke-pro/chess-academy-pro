@@ -5,6 +5,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { checksFirst, callInaccuracy } from './inaccuracyCall';
+import { withOneSearch } from '../test/oneSearchScores';
 
 const LINE = 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6 Rd1 Qe8 Nd5 c6 Nc3 Bb4 h3 Bxf3 Rxf3 Rd8 g4 f5 Rxd8 Qe7'.split(' ');
 const fen = (): string => { const c = new Chess(); for (const s of LINE) c.move(s); return c.fen(); };
@@ -15,10 +16,10 @@ describe('checks first — the move order is the reason', () => {
     expect(checksFirst(fen(), 'gxh5', 'Rxf8+', BEST_LINE)).toEqual({ best: 'Rxf8+', reply: 'Kxf8', played: 'gxh5' });
   });
   it('the still-wins verdict speaks the order, not "it would land a fork"', () => {
-    const said = callInaccuracy({ namesBetterMove: true,
+    const said = callInaccuracy(withOneSearch({ namesBetterMove: true,
       fenBefore: fen(), playedSan: 'gxh5', bestSan: 'Rxf8+', bestLineUci: BEST_LINE,
       cpLoss: 261, moverEvalAfterCp: 418, side: 'student', moverColor: 'white',
-    } as never)?.said ?? '';
+    }) as never)?.said ?? '';
     expect(said).toBe("gxh5 still wins, but Rxf8+ was cleaner — checks first: Rxf8+, Kxf8, and gxh5 would still have been there — both moves, not one.");
   });
   it('negative controls: not a check, or the capture does not come back', () => {

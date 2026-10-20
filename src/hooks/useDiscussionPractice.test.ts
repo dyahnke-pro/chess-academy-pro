@@ -52,6 +52,7 @@ import { recordMoveEvidence } from '../services/discussionPractice';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { voiceService } from '../services/voiceService';
 import { captureEvent } from '../services/analytics';
+import { clearMovePriceMemo } from '../services/playedMoveGrade';
 
 const FEN_BEFORE = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 const FEN_AFTER = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
@@ -63,9 +64,21 @@ const FEN_AFTER = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
 function setEvals(beforeCp: number, afterCp: number): void {
   const analyze = vi.mocked(stockfishEngine.analyzePosition);
   analyze.mockReset();
-  analyze
-    .mockResolvedValueOnce({ evaluation: beforeCp, bestMove: 'd2d4' } as never)
-    .mockResolvedValueOnce({ evaluation: afterCp, bestMove: 'e7e5' } as never);
+  // The record prices the move in ONE search (#2 root cause 4): the read
+  // before names the best move; a `searchmoves` ask scores best and played
+  // together — best at the read before, played at the read after.
+  analyze.mockImplementation(((fen: string, _depth: number, o?: { searchmoves?: string }) => {
+    if (o?.searchmoves) {
+      const [best, played] = o.searchmoves.split(' ');
+      return Promise.resolve({ evaluation: beforeCp, bestMove: best, isMate: false, mateIn: null, depth: 99, topLines: [
+        { rank: 1, moves: [best], evaluation: beforeCp, mate: null },
+        { rank: 2, moves: [played], evaluation: afterCp, mate: null },
+      ] });
+    }
+    return Promise.resolve(fen === FEN_BEFORE
+      ? { evaluation: beforeCp, bestMove: 'd2d4', isMate: false, mateIn: null, depth: 99, topLines: [{ rank: 1, moves: ['d2d4'], evaluation: beforeCp, mate: null }] }
+      : { evaluation: afterCp, bestMove: 'e7e5', isMate: false, mateIn: null, depth: 99, topLines: [] });
+  }) as never);
 }
 
 beforeEach(() => {
@@ -73,6 +86,7 @@ beforeEach(() => {
   vi.mocked(voiceService.speakForced).mockClear();
   vi.mocked(stockfishEngine.analyzePosition).mockReset();
   vi.mocked(recordMoveEvidence).mockClear();
+  clearMovePriceMemo();
 });
 
 describe('useDiscussionPractice — Play stays pure (non-interruptive)', () => {

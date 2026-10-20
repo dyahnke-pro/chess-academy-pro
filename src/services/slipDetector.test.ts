@@ -5,7 +5,7 @@ describe('detectSlip', () => {
   it('following the book move is never a slip', () => {
     const r = detectSlip({
       inBook: true, bookMoveSan: 'Nf3', playedSan: 'Nf3',
-      evalBeforeCp: 20, evalAfterCp: 20, learned: true,
+      evalBeforeCp: 20, evalAfterCp: 20, cpLoss: (20) - (20), learned: true,
     });
     expect(r.isSlip).toBe(false);
   });
@@ -13,7 +13,7 @@ describe('detectSlip', () => {
   it('leaving book into a worse move fires with reason left-book', () => {
     const r = detectSlip({
       inBook: true, bookMoveSan: 'Ba4', playedSan: 'Bxc6',
-      evalBeforeCp: 30, evalAfterCp: 30 - SLIP_CP.mistake, learned: true,
+      evalBeforeCp: 30, evalAfterCp: 30 - SLIP_CP.mistake, cpLoss: (30) - (30 - SLIP_CP.mistake), learned: true,
     });
     expect(r.isSlip).toBe(true);
     expect(r.reason).toBe('left-book');
@@ -26,7 +26,7 @@ describe('detectSlip', () => {
   it('an eval drop while already off-book fires with reason eval-drop', () => {
     const r = detectSlip({
       inBook: false, playedSan: 'h3',
-      evalBeforeCp: 50, evalAfterCp: 50 - SLIP_CP.blunder, learned: true,
+      evalBeforeCp: 50, evalAfterCp: 50 - SLIP_CP.blunder, cpLoss: (50) - (50 - SLIP_CP.blunder), learned: true,
     });
     expect(r.isSlip).toBe(true);
     expect(r.reason).toBe('eval-drop');
@@ -36,7 +36,7 @@ describe('detectSlip', () => {
   it('a small eval wobble below the inaccuracy floor is not a slip', () => {
     const r = detectSlip({
       inBook: false, playedSan: 'Re1',
-      evalBeforeCp: 40, evalAfterCp: 40 - (SLIP_CP.inaccuracy - 1), learned: true,
+      evalBeforeCp: 40, evalAfterCp: 40 - (SLIP_CP.inaccuracy - 1), cpLoss: (40) - (40 - (SLIP_CP.inaccuracy - 1)), learned: true,
     });
     expect(r.isSlip).toBe(false);
   });
@@ -44,7 +44,7 @@ describe('detectSlip', () => {
   it('a slip on an unlearned line is real but should NOT count (gate)', () => {
     const r = detectSlip({
       inBook: false, playedSan: 'Qh5',
-      evalBeforeCp: 0, evalAfterCp: -SLIP_CP.mistake, learned: false,
+      evalBeforeCp: 0, evalAfterCp: -SLIP_CP.mistake, cpLoss: (0) - (-SLIP_CP.mistake), learned: false,
     });
     expect(r.isSlip).toBe(true);
     expect(r.shouldCount).toBe(false);
@@ -53,7 +53,7 @@ describe('detectSlip', () => {
   it('an improving move (negative cpLoss) is never a slip', () => {
     const r = detectSlip({
       inBook: false, playedSan: 'Nxe5',
-      evalBeforeCp: 10, evalAfterCp: 120, learned: true,
+      evalBeforeCp: 10, evalAfterCp: 120, cpLoss: (10) - (120), learned: true,
     });
     expect(r.isSlip).toBe(false);
   });
@@ -63,7 +63,7 @@ describe('detectSlip', () => {
     // noise between the before/after reads filed it as "misplaced-piece".
     const r = detectSlip({
       inBook: false, playedSan: 'Nh4', bestMoveSan: 'Nh4',
-      evalBeforeCp: 40, evalAfterCp: 40 - SLIP_CP.mistake, learned: true,
+      evalBeforeCp: 40, evalAfterCp: 40 - SLIP_CP.mistake, cpLoss: (40) - (40 - SLIP_CP.mistake), learned: true,
     });
     expect(r.isSlip).toBe(false);
   });
@@ -71,7 +71,7 @@ describe('detectSlip', () => {
   it('best-move guard ignores check/mate suffixes ("Nf3+" == "Nf3")', () => {
     const r = detectSlip({
       inBook: false, playedSan: 'Nf3+', bestMoveSan: 'Nf3',
-      evalBeforeCp: 0, evalAfterCp: -SLIP_CP.blunder, learned: true,
+      evalBeforeCp: 0, evalAfterCp: -SLIP_CP.blunder, cpLoss: (0) - (-SLIP_CP.blunder), learned: true,
     });
     expect(r.isSlip).toBe(false);
   });
@@ -79,7 +79,7 @@ describe('detectSlip', () => {
   it('a genuinely different worse move still fires with the guard present', () => {
     const r = detectSlip({
       inBook: false, playedSan: 'h3', bestMoveSan: 'Nf3',
-      evalBeforeCp: 50, evalAfterCp: 50 - SLIP_CP.blunder, learned: true,
+      evalBeforeCp: 50, evalAfterCp: 50 - SLIP_CP.blunder, cpLoss: (50) - (50 - SLIP_CP.blunder), learned: true,
     });
     expect(r.isSlip).toBe(true);
     expect(r.severity).toBe('blunder');

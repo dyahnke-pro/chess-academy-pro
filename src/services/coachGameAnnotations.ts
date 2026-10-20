@@ -62,6 +62,9 @@ export function movesToAnnotations(moves: CoachGameMove[], playerColor: 'white' 
       // is 0 plies" — the live classifier had the lines in hand and dropped
       // them at this boundary.
       ...(m.pv ? { pv: m.pv } : {}),
+      // The move's ONE price (#2 root cause 4) — the record and review read
+      // it (`recordedMoveCost`) instead of rebuilding a cost from two evals.
+      ...(typeof m.costCp === 'number' ? { costCp: m.costCp } : {}),
     });
   }
   return out;

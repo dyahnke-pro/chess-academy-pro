@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { callInaccuracy } from './inaccuracyCall';
+import { withOneSearch } from '../test/oneSearchScores';
 
 // David's Smith-Morra Learn game (2026-10-19 replay), move 25: after 25.Rf1+
 // Kg8 the coach said "Nhf6+ comes with check … After Nhf6+, exf6, Nxf6+, your
@@ -11,11 +12,11 @@ describe("their slip names what it lets you do, never your move (Learn names no 
   it('25…Kg8: the grade and a pointer, no Nhf6+ line', () => {
     const c = new Chess(); for (const s of SANS) c.move(s);
     const fenBefore = c.fen();
-    const said = callInaccuracy({
+    const said = callInaccuracy(withOneSearch({
       namesBetterMove: true, priorMove: null, fenBefore, playedSan: 'Kg8', bestSan: 'Kg7',
       bestLineUci: ['f7g7'], cpLoss: 160, side: 'coach', moverColor: 'black',
       replyLineUci: ['h7f6', 'e7f6', 'd5f6', 'g8g7', 'f6g4'], replySan: null, moverEvalAfterCp: -160,
-    })?.said ?? '';
+    }))?.said ?? '';
     expect(said).toMatch(/^Their Kg8 is/);
     expect(said).not.toMatch(/Nhf6|Nxf6|knight to f6|exf6/);
   });

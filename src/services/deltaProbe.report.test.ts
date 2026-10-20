@@ -19,6 +19,7 @@ import { Chess } from 'chess.js';
 import { backwardLook } from './backwardLook';
 import { classifyMove } from './moveRating';
 import { gradeNarrationText } from './coachAnswerGates';
+import { withOneSearch } from '../test/oneSearchScores';
 
 const DEPTH = 14;
 
@@ -133,7 +134,7 @@ describe('delta probe', () => {
         allowedMate: after.mate,
       });
 
-      const look = backwardLook({ priorMove: null, replySan: null,
+      const look = backwardLook(withOneSearch({ priorMove: null, replySan: null,
         fenBefore,
         fenAfter,
         playedSan: played.san,
@@ -144,7 +145,7 @@ describe('delta probe', () => {
         studentColor: c.student,
         missedMate: before.mate,
         allowedMate: after.mate,
-      });
+      }));
 
       // Does the sentence go past naming the move? `whyBetter` appends an
       // "— it would …" / ", to …" clause; without it the callout stops at the

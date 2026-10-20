@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { allowedReply, callInaccuracyDetailed, causedByTheMove } from './inaccuracyCall';
 import { replyPunishment } from './moveAllowed';
+import { withOneSearch } from '../test/oneSearchScores';
 
 // Learn walk on prod, 2026-10-10 (Scandinavian, Black): the error call said
 // "knight takes e4 was imprecise — it let them play bishop takes a5, which
@@ -25,9 +26,9 @@ describe('what a move allowed is what they NET', () => {
 
 describe('a grade with nothing beside it is held (the walk heard "Bd6 was imprecise.")', () => {
   it('no why, no cost that fits → no call', () => {
-    const v = callInaccuracyDetailed({ namesBetterMove: false, priorMove: null, replyLineUci: [], replySan: null,
+    const v = callInaccuracyDetailed(withOneSearch({ namesBetterMove: false, priorMove: null, replyLineUci: [], replySan: null,
       side: 'student', moverColor: 'black', cpLoss: 210, moverEvalAfterCp: -800,
-      fenBefore: '3r4/2R4p/p1rP2p1/2Pk1p2/NP6/7P/P5P1/6K1 b - - 2 36', playedSan: 'Rc8', bestSan: 'Rcxd6' });
+      fenBefore: '3r4/2R4p/p1rP2p1/2Pk1p2/NP6/7P/P5P1/6K1 b - - 2 36', playedSan: 'Rc8', bestSan: 'Rcxd6' }));
     expect(v.call).toBeNull();
     expect(v.declined).toBe('no-why');
   });

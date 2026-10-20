@@ -9,6 +9,7 @@ import { Chess } from 'chess.js';
 import { attributePrinciples } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
 import { whyItFailed } from './whyItFailed';
+import { withOneSearch } from '../test/oneSearchScores';
 
 const GAME = 'e4 c5 Nf3 d6 c3 Nc6 d4 cxd4 cxd4 Bg4 Be2 Nf6 Nc3 Bxf3 Bxf3 e6 Qa4 Qd7 Be3 Be7 O-O O-O Rad1 Qc8 Qc2 a6 e5 dxe5 Be4 Nxe4 Nxe4 exd4 Bxd4 e5 Bc5 Bxc5 Nxc5'.split(' ');
 
@@ -73,13 +74,13 @@ describe('ply 47 — 24.Nf6+ Kg7: a forced king move is not what the check "let 
   it('the grade does not say "let them in with Kg7"', async () => {
     const { callInaccuracyDetailed } = await import('./inaccuracyCall');
     const c = new Chess(); for (const m of [...GAME, 'Rd8', 'Rfe1', 'g6', 'h3', 'b6', 'Ne4', 'Rxd1', 'Rxd1', 'Nd4']) c.move(m);
-    const v = callInaccuracyDetailed({ namesBetterMove: true, priorMove: null,
+    const v = callInaccuracyDetailed(withOneSearch({ namesBetterMove: true, priorMove: null,
       fenBefore: c.fen(), playedSan: 'Nf6+', bestSan: 'Qd3',
       bestLineUci: ['c2d3', 'c8e6', 'd1c1', 'e6a2', 'e4f6', 'g8g7'],
       cpLoss: 150, side: 'student', moverColor: 'white', // graded a mistake in the live walk
       replyLineUci: ['g8g7', 'c2c8', 'a8c8', 'f6g4', 'f7f6', 'g1f1'],
       replySan: 'Kg7',
-    });
+    }));
     expect(v.call).toBeTruthy();
     expect(v.call?.said ?? '').not.toMatch(/in with Kg7/);
   });

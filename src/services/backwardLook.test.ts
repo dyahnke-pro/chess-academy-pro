@@ -7,6 +7,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { backwardLook } from './backwardLook';
+import { withOneSearch } from '../test/oneSearchScores';
 
 /** SAN-shaped token — what the honesty contract forbids in a probe. */
 const MOVE_RE = /\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/;
@@ -29,37 +30,37 @@ const HUNG: { before: string; played: string; best: string } = (() => {
 describe('it speaks only when a move really cost something', () => {
   it('says nothing about a move that lost nothing', () => {
     const fen = after(['e4', 'e5', 'Nf3']);
-    expect(backwardLook({ priorMove: null, replySan: null,
+    expect(backwardLook(withOneSearch({ priorMove: null, replySan: null,
       fenBefore: fen,
       fenAfter: after(['e4', 'e5', 'Nf3', 'Nc6']),
       playedSan: 'Nc6',
       bestSan: 'Nc6',
       cpLoss: 4,
       studentColor: 'black',
-    }), 'a best move got a backward look').toBeNull();
+    })), 'a best move got a backward look').toBeNull();
   });
 
   it('says nothing when the engine offered no alternative', () => {
     const fen = after(['e4', 'e5', 'Nf3']);
-    expect(backwardLook({ priorMove: null, replySan: null,
+    expect(backwardLook(withOneSearch({ priorMove: null, replySan: null,
       fenBefore: fen,
       fenAfter: after(['e4', 'e5', 'Nf3', 'Nc6']),
       playedSan: 'Nc6',
       bestSan: null,
       cpLoss: 300,
       studentColor: 'black',
-    })).toBeNull();
+    }))).toBeNull();
   });
 
   it('calls a real blunder, and names what should have been played', () => {
-    const look = backwardLook({ priorMove: null, replySan: null,
+    const look = backwardLook(withOneSearch({ priorMove: null, replySan: null,
       fenBefore: HUNG.before,
       fenAfter: (() => { const b = new Chess(HUNG.before); b.move(HUNG.played); return b.fen(); })(),
       playedSan: HUNG.played,
       bestSan: HUNG.best,
       cpLoss: 420,
       studentColor: 'black',
-    });
+    }));
     expect(look, 'a 420-centipawn move produced no backward look at all').not.toBeNull();
     // NAMED WITH ITS REASON, OR NOT NAMED (Learn walk, Nimzo, 2026-09-26): with
     // no engine line there is no reason, so the grade stands and Nf6 is not
@@ -70,14 +71,14 @@ describe('it speaks only when a move really cost something', () => {
 });
 
 describe('the register', () => {
-  const look = backwardLook({ priorMove: null, replySan: null,
+  const look = backwardLook(withOneSearch({ priorMove: null, replySan: null,
     fenBefore: HUNG.before,
     fenAfter: (() => { const b = new Chess(HUNG.before); b.move(HUNG.played); return b.fen(); })(),
     playedSan: HUNG.played,
     bestSan: HUNG.best,
     cpLoss: 420,
     studentColor: 'black',
-  })!;
+  }))!;
 
   it('is past tense — the move has already happened', () => {
     expect(look.line).not.toMatch(/\bYou want to\b|\bThey want to\b/);
@@ -110,7 +111,7 @@ describe('mate is carried in its own field, never as centipawns', () => {
     const b = new Chess();
     for (const s of ['e4', 'e5', 'Bc4', 'Nc6', 'Qh5', 'Nf6']) b.move(s);
     const fenBefore = (() => { const c = new Chess(); for (const s of ['e4', 'e5', 'Bc4', 'Nc6', 'Qh5']) c.move(s); return c.fen(); })();
-    const look = backwardLook({ priorMove: null, replySan: null,
+    const look = backwardLook(withOneSearch({ priorMove: null, replySan: null,
       fenBefore,
       fenAfter: b.fen(),
       playedSan: 'Nf6',
@@ -118,36 +119,36 @@ describe('mate is carried in its own field, never as centipawns', () => {
       cpLoss: 0,
       studentColor: 'black',
       allowedMate: 1,
-    });
+    }));
     expect(look, 'walking into mate in one produced no backward look').not.toBeNull();
   });
 });
 
 describe('it survives whatever the engine hands it', () => {
   it('a best move that is not legal on this board says nothing', () => {
-    expect(backwardLook({ priorMove: null, replySan: null,
+    expect(backwardLook(withOneSearch({ priorMove: null, replySan: null,
       fenBefore: after(['e4', 'e5']),
       fenAfter: after(['e4', 'e5', 'Nf3']),
       playedSan: 'Nf3',
       bestSan: 'Qh8',
       cpLoss: 300,
       studentColor: 'white',
-    })).toBeNull();
+    }))).toBeNull();
   });
 
   it('a broken FEN never throws', () => {
-    expect(() => backwardLook({ priorMove: null, replySan: null,
+    expect(() => backwardLook(withOneSearch({ priorMove: null, replySan: null,
       fenBefore: 'not a fen',
       fenAfter: 'also not a fen',
       playedSan: 'e4',
       bestSan: 'd4',
       cpLoss: 200,
       studentColor: 'white',
-    })).not.toThrow();
+    }))).not.toThrow();
   });
 
   it('an empty engine line never throws and never invents', () => {
-    const look = backwardLook({ priorMove: null, replySan: null,
+    const look = backwardLook(withOneSearch({ priorMove: null, replySan: null,
       fenBefore: after(['e4', 'e5']),
       fenAfter: after(['e4', 'e5', 'Nf3']),
       playedSan: 'Nf3',
@@ -156,7 +157,7 @@ describe('it survives whatever the engine hands it', () => {
       replyPvUci: [],
       cpLoss: 150,
       studentColor: 'white',
-    });
+    }));
     if (look) expect(look.line.length).toBeGreaterThan(0);
   });
 });
@@ -165,7 +166,7 @@ describe('the coach side runs the same model, in the first person', () => {
   // The coach may NAME its own move — it is already on the board, so hiding it
   // would be coyness. The honesty contract withholds the STUDENT's move, which
   // is a different rule for a different reason.
-  const coachCall = backwardLook({ priorMove: null, replySan: null,
+  const coachCall = backwardLook(withOneSearch({ priorMove: null, replySan: null,
     fenBefore: HUNG.before,
     fenAfter: (() => { const b = new Chess(HUNG.before); b.move(HUNG.played); return b.fen(); })(),
     playedSan: HUNG.played,
@@ -173,7 +174,7 @@ describe('the coach side runs the same model, in the first person', () => {
     cpLoss: 420,
     studentColor: 'black',
     side: 'coach',
-  });
+  }));
 
   it('fires at all — the lane was dead for a whole build', () => {
     expect(coachCall, 'the coach never judges its own move').not.toBeNull();
@@ -206,7 +207,7 @@ describe('the coach side runs the same model, in the first person', () => {
   });
 
   it('is silent when the coach played well', () => {
-    expect(backwardLook({ priorMove: null, replySan: null,
+    expect(backwardLook(withOneSearch({ priorMove: null, replySan: null,
       fenBefore: HUNG.before,
       fenAfter: (() => { const b = new Chess(HUNG.before); b.move(HUNG.best); return b.fen(); })(),
       playedSan: HUNG.best,
@@ -214,7 +215,7 @@ describe('the coach side runs the same model, in the first person', () => {
       cpLoss: 0,
       studentColor: 'black',
       side: 'coach',
-    })).toBeNull();
+    }))).toBeNull();
   });
 });
 
@@ -233,14 +234,14 @@ describe('the honesty contract holds across a whole game', () => {
       const alt = legal.find((m) => m !== sans[i]);
       b.move(sans[i]);
       if (!alt) continue;
-      const look = backwardLook({ priorMove: null, replySan: null,
+      const look = backwardLook(withOneSearch({ priorMove: null, replySan: null,
         fenBefore,
         fenAfter: b.fen(),
         playedSan: sans[i],
         bestSan: alt,
         cpLoss: 250,
         studentColor: i % 2 === 0 ? 'white' : 'black',
-      });
+      }));
       if (!look) continue;
       seen += 1;
       const moves = look.line.match(new RegExp(MOVE_RE, 'g')) ?? [];
@@ -267,7 +268,7 @@ describe('nothing is called against a move the engine says gained', () => {
   // decides. Which is the point: the fix is the sign test, not the position.
   const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5';
 
-  const at = (cpLoss: number, side: 'student' | 'coach'): string => backwardLook({ priorMove: null, replySan: null,
+  const at = (cpLoss: number, side: 'student' | 'coach'): string => backwardLook(withOneSearch({ priorMove: null, replySan: null,
     fenBefore: FEN,
     fenAfter: FEN,
     playedSan: 'g4',
@@ -275,7 +276,7 @@ describe('nothing is called against a move the engine says gained', () => {
     cpLoss,
     studentColor: 'white',
     side,
-  })?.line ?? '';
+  }))?.line ?? '';
 
   it('the coach is silent about its own move when that move gained', () => {
     expect(at(-819, 'coach'), 'the -819 line from his transcript').toBe('');
@@ -293,7 +294,7 @@ describe('nothing is called against a move the engine says gained', () => {
   });
 
   it('the coach\'s own slip carries what it gives the student as its stake (prod Learn 2026-10-16: held as an aside)', () => {
-    const look = backwardLook({ priorMove: null, replySan: null, fenBefore: FEN, fenAfter: FEN, playedSan: 'g4', bestSan: 'O-O', cpLoss: 400, studentColor: 'white', side: 'coach' });
+    const look = backwardLook(withOneSearch({ priorMove: null, replySan: null, fenBefore: FEN, fenAfter: FEN, playedSan: 'g4', bestSan: 'O-O', cpLoss: 400, studentColor: 'white', side: 'coach' }));
     expect(look?.kind).toBe('coachMistake');
     expect(look?.stakes).toEqual({ points: 4, plies: 0 });
   });
@@ -321,14 +322,14 @@ describe('why the move failed complements what it cost', () => {
     // tempting swap; a rook or queen for a pawn is never named) — the geometry lane fires, and
     // the sentence has to START there: the cost sounds arbitrary until the
     // reason for paying it has been said.
-    const out = backwardLook({ priorMove: null, replySan: null,
+    const out = backwardLook(withOneSearch({ priorMove: null, replySan: null,
       fenBefore: '4k3/8/2p5/3p4/8/8/4BK2/8 w - - 0 1',
       fenAfter: '4k3/8/2p5/3p4/8/5B2/5K2/8 b - - 1 1',
       playedSan: 'Bf3',
       bestSan: 'Ke3',
       cpLoss: 120,
       studentColor: 'white',
-    });
+    }));
     expect(out, 'the geometry lane never fired').not.toBeNull();
     // The mechanism is the error call's own why now (one error computer,
     // 2026-10-10), so it rides the callout: the grade, then why it failed.
@@ -343,14 +344,14 @@ describe('why the move failed complements what it cost', () => {
     // A move that GAINED is not a failed idea, whatever it happens to attack.
     // Without this gate every developing move that eyes a guarded pawn would
     // collect a sentence explaining why it "fails".
-    const out = backwardLook({ priorMove: null, replySan: null,
+    const out = backwardLook(withOneSearch({ priorMove: null, replySan: null,
       fenBefore: '4k3/8/2p5/3p4/8/8/4K3/R7 w - - 0 1',
       fenAfter: '4k3/8/2p5/R2p4/8/8/4K3/8 b - - 1 1',
       playedSan: 'Ra5',
       bestSan: 'Kd3',
       cpLoss: -400,          // the engine says this improved things
       studentColor: 'white',
-    });
+    }));
     if (out) expect(out.kind).not.toBe('drawback');
   });
 
@@ -358,7 +359,7 @@ describe('why the move failed complements what it cost', () => {
     // The geometry prose is second person ("your rook"), so the coach cannot
     // use it to describe its OWN move without saying something false about
     // whose piece it is. The coach branch must not reach this lane at all.
-    const out = backwardLook({ priorMove: null, replySan: null,
+    const out = backwardLook(withOneSearch({ priorMove: null, replySan: null,
       fenBefore: '4k3/8/2p5/3p4/8/8/4K3/R7 w - - 0 1',
       fenAfter: '4k3/8/2p5/R2p4/8/8/4K3/8 b - - 1 1',
       playedSan: 'Ra5',
@@ -366,7 +367,7 @@ describe('why the move failed complements what it cost', () => {
       cpLoss: 120,
       studentColor: 'white',
       side: 'coach',
-    });
+    }));
     if (out) expect(out.line).not.toContain('your rook');
   });
 
@@ -374,14 +375,14 @@ describe('why the move failed complements what it cost', () => {
     // The concession lane keeps working exactly as it did — this is an
     // addition, not a replacement, and a quiet giveaway with no attack in it
     // must still be named.
-    const out = backwardLook({ priorMove: null, replySan: null,
+    const out = backwardLook(withOneSearch({ priorMove: null, replySan: null,
       fenBefore: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
       fenAfter: 'rnbqkbnr/pppppppp/8/8/8/7P/PPPPPPP1/RNBQKBNR b KQkq - 0 1',
       playedSan: 'h3',
       bestSan: 'e4',
       cpLoss: 60,
       studentColor: 'white',
-    });
+    }));
     // Either lane may answer or neither may; what must NOT happen is a
     // geometry sentence about a move that attacks nothing.
     if (out) expect(out.line).not.toContain('is holding it');
@@ -394,7 +395,7 @@ describe('a static swap count never overrules the engine (hand walk 2026-09-25)'
     for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2'.split(' ')) c.move(m);
     const fenBefore = c.fen();
     c.move('e5');
-    const look = backwardLook({ priorMove: null, replySan: null, fenBefore, fenAfter: c.fen(), playedSan: 'e5', bestSan: 'e5', cpLoss: 0, studentColor: 'black' });
+    const look = backwardLook(withOneSearch({ priorMove: null, replySan: null, fenBefore, fenAfter: c.fen(), playedSan: 'e5', bestSan: 'e5', cpLoss: 0, studentColor: 'black' }));
     expect(look?.line ?? '').not.toMatch(/hanging/);
   });
 });
@@ -407,8 +408,8 @@ describe('a hung piece is what the engine line takes (WO-OUTCOME-01)', () => {
     const c = new Chess();
     for (const m of 'e4 c5 Nf3 d6 c3 Nf6 e5 dxe5 Nxe5 Nbd7 Nxd7 Bxd7 Bc4 Bc6 O-O e6 Na3 a6 Bb3 b5 Nc2 Bd6 c4 h5 d4 bxc4 Bxc4 Ng4 h3 Qc7 Ne3 Bh2+ Kh1'.split(' ')) c.move(m);
     const fenBefore = c.fen(); c.move('Bg1');
-    const line = backwardLook({ priorMove: null, fenBefore, fenAfter: c.fen(), playedSan: 'Bg1', bestSan: null, cpLoss: 250, studentColor: 'black',
-      replySan: 'Nxg4', replyPvUci: ['e3g4', 'h5g4', 'h1g1', 'g4h3', 'd4d5', 'h3g2', 'g1g2', 'c7h2'] })?.line ?? '';
+    const line = backwardLook(withOneSearch({ priorMove: null, fenBefore, fenAfter: c.fen(), playedSan: 'Bg1', bestSan: null, cpLoss: 250, studentColor: 'black',
+      replySan: 'Nxg4', replyPvUci: ['e3g4', 'h5g4', 'h1g1', 'g4h3', 'd4d5', 'h3g2', 'g1g2', 'c7h2'] }))?.line ?? '';
     expect(line).toMatch(/bishop on g1 hanging — the king on h1 just takes it/);
     expect(line).not.toMatch(/rook on f1|missed/);
   });
@@ -416,11 +417,11 @@ describe('a hung piece is what the engine line takes (WO-OUTCOME-01)', () => {
   const c = new Chess(fenBefore); c.move('Qd2');
   const base = { fenBefore, fenAfter: c.fen(), playedSan: 'Qd2', bestSan: null, cpLoss: 800, studentColor: 'white' as const, replyPvUci: ['c3d2', 'e1d2'] };
   it('says they missed it when the reply went elsewhere', () => {
-    const line = backwardLook({ priorMove: null, ...base, replySan: 'Ke7' })?.line ?? '';
+    const line = backwardLook(withOneSearch({ priorMove: null, ...base, replySan: 'Ke7' }))?.line ?? '';
     expect(line).toMatch(/hanging to the pawn on c3 — they missed it/);
     expect(line).not.toMatch(/just takes it/);
   });
   it('keeps "just takes it" while the reply is unknown', () => {
-    expect(backwardLook({ priorMove: null, ...base, replySan: null })?.line ?? '').toMatch(/just takes it/);
+    expect(backwardLook(withOneSearch({ priorMove: null, ...base, replySan: null }))?.line ?? '').toMatch(/just takes it/);
   });
 });

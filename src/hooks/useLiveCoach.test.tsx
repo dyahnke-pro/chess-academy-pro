@@ -53,6 +53,7 @@ const move = (ply: number): PlayerMoveNotification => ({
   evalBefore: 20,
   evalAfter: 120,
   bestMoveEval: 130,
+  price: null,
   bestMoveSan: 'Nf3',
   isBestMove: true,
   bestMoveWasTactical: true,
