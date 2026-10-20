@@ -246,6 +246,23 @@ function doublingCapture(fen: string, sq: string): { take: Move; back: Move } | 
   return { take, back: backs[0] };
 }
 
+/** After their capture `take` (on `fen`, them to move), a pawn recapture of
+ *  the student's that leaves its own file with no pawn of theirs while their
+ *  rook stands on it — the file opens for that rook. */
+function fileOpenedForRook(fen: string, take: Move, student: Side): { san: string; file: string } | null {
+  const r = play(fen, take.san);
+  if (!r) return null;
+  for (const back of r.c.moves({ verbose: true }).filter((m) => m.to === take.to && m.captured && m.piece === 'p')) {
+    const b = play(r.c.fen(), back.san);
+    if (!b) continue;
+    const file = back.from[0];
+    if (pawnsOnFile(b.c, file, student) > 0) continue;
+    const rookOn = b.c.board().flat().some((x) => x?.type === 'r' && x.color === student && x.square[0] === file);
+    if (rookOn) return { san: back.san, file };
+  }
+  return null;
+}
+
 /** "The knight to a4 stops the exchange on c3 the defence relies on": the
  *  student's piece leaves the square where their minor could take it and
  *  force a pawn recapture that doubles the student's pawns. */
@@ -257,9 +274,13 @@ export function denyExchange(fenBefore: string, san: string, student: Side, cost
   if (!asIf) return null;
   const denied = doublingCapture(asIf, r.m.from);
   if (!denied) return null;
-  // The same damage must not be waiting on the piece's new square.
-  if (doublingCapture(r.c.fen(), r.m.to)) return null;
-  const text = `Your ${NAME[r.m.piece]} leaves ${r.m.from}, so their ${NAME[denied.take.piece]} can no longer take it there and double your pawns.`;
+  // The same damage must not be waiting on the piece's new square — unless
+  // taking back there opens a file for your rook (golden replay 2026-10-20,
+  // 7…Bb6: "if Bxb6, axb6 opens the a-file", so those doubled pawns cost nothing).
+  const waiting = doublingCapture(r.c.fen(), r.m.to);
+  const opens = waiting ? fileOpenedForRook(r.c.fen(), waiting.take, student) : null;
+  if (waiting && !opens) return null;
+  const text = `Your ${NAME[r.m.piece]} leaves ${r.m.from}, so their ${NAME[denied.take.piece]} can no longer take it there and double your pawns${opens ? `; if they take on ${r.m.to}, ${opens.san} opens the ${opens.file}-file for your rook` : ''}.`;
   const sq = [denied.take.from, r.m.from, denied.back.from];
   const proof = squaresProof(text, sq);
   if (!proof) return null;

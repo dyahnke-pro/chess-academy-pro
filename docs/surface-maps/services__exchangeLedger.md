@@ -62,7 +62,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `computeExchangeLedger` (function) — 18 call sites
 - `src/coach/chatTurnAnswers.ts:410`
-- `src/services/exchangeIdeas.ts:636`
+- `src/services/exchangeIdeas.ts:657`
 - `src/services/exchangeLedger.test.ts:13`
 - `src/services/exchangeLedger.test.ts:24`
 - `src/services/exchangeLedger.test.ts:30`
@@ -83,7 +83,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `netPieceWords` (function) — 9 call sites
 - `src/coach/chatTurnAnswers.ts:412`
 - `src/services/decisiveReason.ts:109`
-- `src/services/exchangeIdeas.ts:638`
+- `src/services/exchangeIdeas.ts:659`
 - `src/services/lineCalc.ts:203`
 - `src/services/patternFails.ts:129`
 - `src/services/principleAttribution.ts:790`

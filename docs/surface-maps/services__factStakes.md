@@ -55,8 +55,8 @@
 - `src/services/backwardLook.ts:367`
 - `src/services/backwardLook.ts:406`
 - `src/services/coachFeatureService.ts:2080`
-- `src/services/exchangeIdeas.ts:288`
-- `src/services/exchangeIdeas.ts:575`
+- `src/services/exchangeIdeas.ts:309`
+- `src/services/exchangeIdeas.ts:596`
 - `src/services/gameEndReads.ts:114`
 - `src/services/gameEndReads.ts:282`
 - `src/services/kingAttackReads.ts:153`

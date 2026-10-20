@@ -148,13 +148,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedVoiceGrounding.test.ts:31`
 - `src/services/computedVoiceGrounding.test.ts:74`
 - `src/services/enginePlanContext.ts:223`
-- `src/services/exchangeIdeas.ts:334`
-- `src/services/exchangeIdeas.ts:335`
-- `src/services/exchangeIdeas.ts:487`
-- `src/services/exchangeIdeas.ts:506`
-- `src/services/exchangeIdeas.ts:513`
-- `src/services/exchangeIdeas.ts:518`
-- `src/services/exchangeIdeas.ts:674`
+- `src/services/exchangeIdeas.ts:355`
+- `src/services/exchangeIdeas.ts:356`
+- `src/services/exchangeIdeas.ts:508`
+- `src/services/exchangeIdeas.ts:527`
+- `src/services/exchangeIdeas.ts:534`
+- `src/services/exchangeIdeas.ts:539`
+- `src/services/exchangeIdeas.ts:695`
 - `src/services/exchangeLedger.ts:431`
 - `src/services/factStakes.ts:188`
 - `src/services/groundedAnswer.ts:2027`
@@ -268,8 +268,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/deliberation.ts:601`
 - `src/services/endgameMoveReads.ts:87`
 - `src/services/exchangeIdeas.ts:141`
-- `src/services/exchangeIdeas.ts:417`
-- `src/services/exchangeIdeas.ts:605`
+- `src/services/exchangeIdeas.ts:438`
+- `src/services/exchangeIdeas.ts:626`
 - `src/services/exchangeLedger.ts:124`
 - `src/services/exchangeLedger.ts:360`
 - `src/services/exchangeLedger.ts:430`
@@ -344,14 +344,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `asIfToMove` (function) — 23 call sites
 - `src/services/capabilityEvidence.ts:456`
-- `src/services/exchangeIdeas.ts:256`
-- `src/services/exchangeIdeas.ts:325`
-- `src/services/exchangeIdeas.ts:329`
-- `src/services/exchangeIdeas.ts:351`
-- `src/services/exchangeIdeas.ts:392`
-- `src/services/exchangeIdeas.ts:460`
-- `src/services/exchangeIdeas.ts:500`
-- `src/services/exchangeIdeas.ts:613`
+- `src/services/exchangeIdeas.ts:273`
+- `src/services/exchangeIdeas.ts:346`
+- `src/services/exchangeIdeas.ts:350`
+- `src/services/exchangeIdeas.ts:372`
+- `src/services/exchangeIdeas.ts:413`
+- `src/services/exchangeIdeas.ts:481`
+- `src/services/exchangeIdeas.ts:521`
+- `src/services/exchangeIdeas.ts:634`
 - `src/services/gameEndReads.ts:71`
 - `src/services/gameEndReads.ts:164`
 - `src/services/gameEndReads.ts:215`
@@ -421,7 +421,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `seeSequence` (function) — 5 call sites
 - `src/services/exchangeIdeas.ts:195`
-- `src/services/exchangeIdeas.ts:635`
+- `src/services/exchangeIdeas.ts:656`
 - `src/services/positionReadingService.test.ts:590`
 - `src/services/positionReadingService.test.ts:596`
 - `src/services/reviewFullData.ts:450`

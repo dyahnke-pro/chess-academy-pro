@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**882 lines · 24 exports · 6 importers · 3 tests · 0 audits**
+**903 lines · 24 exports · 6 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -46,9 +46,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:53`
 - `src/services/exchangeIdeas.test.ts:54`
 
-### `denyExchange` (function) — 2 call sites
+### `denyExchange` (function) — 4 call sites
 - `src/services/exchangeIdeas.test.ts:58`
 - `src/services/exchangeIdeas.test.ts:61`
+- `src/services/goldenPositional.test.ts:43`
+- `src/services/goldenPositional.test.ts:46`
 
 ### `abandonedDuty` (function) — 2 call sites
 - `src/services/exchangeIdeas.test.ts:65`
@@ -64,8 +66,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:76`
 
 ### `spoilTheirPawns` (function) — 2 call sites
-- `src/services/goldenPositional.test.ts:26`
-- `src/services/goldenPositional.test.ts:29`
+- `src/services/goldenPositional.test.ts:27`
+- `src/services/goldenPositional.test.ts:30`
 
 ### `dutyParity` (function) — 5 call sites
 - `src/services/exchangeIdeas.test.ts:80`
