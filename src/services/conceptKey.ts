@@ -33,9 +33,47 @@ export function forkThreatKey(landing: string, targets: readonly string[]): stri
 /** A PIECE IS LOOSE ON THIS SQUARE (duplicate map #3, 2026-10-20: g1 14.Rd5,
  *  the bishop on f4 said loose three times in two turns by four templates).
  *  Every producer that states the fact attaches it, so say-once sees one claim
- *  across waves and turns. */
-export function looseKey(square: string): string {
-  return `loose:${square}`;
+ *  across waves and turns. `since` is the ply its spell of being loose began. */
+export function looseKey(square: string, since: number): string {
+  return `loose:${square}:${since}`;
+}
+
+/** …and the one re-say after the student moved and left it loose: its own
+ *  key, so it is said once ("still"), never again that spell (#4, 2026-10-20). */
+export function looseStillKey(square: string, since: number): string {
+  return `loose-still:${square}:${since}`;
+}
+
+/** One spell of a piece being loose: which piece, from which ply. */
+export interface LooseSpell { readonly piece: string; readonly since: number }
+export type LooseSpells = ReadonlyMap<string, LooseSpell>;
+
+/** The ply of a board (0 = the start), read off its FEN. */
+export function plyOfFen(fen: string): number {
+  const p = fen.split(' ');
+  return ((Number(p[5]) || 1) - 1) * 2 + (p[1] === 'b' ? 1 : 0);
+}
+
+/** The spells after this board: a piece loose on a square it was loose on
+ *  before keeps its spell; a new one starts one; a square no longer loose
+ *  ends it. A spell that starts after this ply (a takeback) is forgotten. */
+export function nextLooseSpells(prev: LooseSpells, loose: ReadonlyArray<{ square: string; piece: string }>, ply: number): Map<string, LooseSpell> {
+  const out = new Map<string, LooseSpell>();
+  for (const { square, piece } of loose) {
+    const was = prev.get(square);
+    out.set(square, was && was.piece === piece && was.since <= ply ? was : { piece, since: ply });
+  }
+  return out;
+}
+
+/** THE ONE RULE FOR A LOOSE PIECE (#4, 2026-10-20). Within a turn and across
+ *  its waves: one warning (`loose`). Across turns the sentence never repeats;
+ *  if the student moved and left it loose, it is said once more in its
+ *  "still" form (`loose-still`), and then not again that spell. */
+export function looseClaim(square: string, ply: number, spells?: LooseSpells | null): { key: string; still: boolean } {
+  const spell = spells?.get(square);
+  if (spell && spell.since < ply) return { key: looseStillKey(square, spell.since), still: true };
+  return { key: looseKey(square, spell?.since ?? ply), still: false };
 }
 
 /** ATTACKERS AGAINST DEFENDERS ON ONE SQUARE (duplicate map #6: "count before
