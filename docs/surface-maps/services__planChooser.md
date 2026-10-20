@@ -22,7 +22,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `planChoice` (function) — 10 call sites
-- `src/services/learnBoardTeaching.ts:565`
+- `src/services/learnBoardTeaching.ts:566`
 - `src/services/planChoicePasserNow.test.ts:13`
 - `src/services/planChooser.test.ts:14`
 - `src/services/planChooser.test.ts:20`

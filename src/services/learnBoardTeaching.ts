@@ -30,7 +30,7 @@ import type { StudentRecord } from './studentRecord';
 export type { ThreatProducer } from './learnRecordTerms';
 // The Learn page reads these through this module (one facade, not one more
 // direct import per computer — surfaceComposition's ceiling).
-export { mistakeTurnLine } from './mistakeTurnLine';
+export { mistakeTurnLine, turnHabitClaim } from './mistakeTurnLine';
 export { NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, studentMovesInLine, type NamesStudentMove } from './studentMoveNaming';
 import { stepForMethodClaim, THINKING_STEPS } from './thinkingSteps';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -66,13 +66,14 @@ import { strongChoice, warmStrongChoice } from './strongChoice';
 import { stalemateWatch } from './stalemateWatch';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
 import { SAID_BEFORE_MOVE } from './computerRoles';
-import { fileClaimed } from './planRace';
+import { fileClaimed, oppositeWingsRace } from './planRace';
+import { conceptInstanceKey } from './conceptKey';
+import { turnHabitClaim } from './mistakeTurnLine';
 import { sayMoveNoun } from './spokenMove';
 import { detectTacticType } from './missedTacticService';
 import { tacticTypeLabel } from './tacticAlertService';
 import type { TacticType } from '../types';
 import { countMethod } from './countMethod';
-import { splitPosition } from './splitPosition';
 import { planChoice, type PlanChoiceLine } from './planChooser';
 import { planFor } from './openingIdentity';
 import { buildReviewMoveTeachingFact } from './reviewMoveTeaching';
@@ -278,7 +279,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingHint[] {
       out.push({
         lane: 'blunderCheck', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.method, text: bc, squares: lost ? [lost.square] : [],
         // The callback carries its own move's claim: said once per blunder.
-        claims: [again ? `method:blunder-check:${i.history.length}` : 'method:blunder-check'],
+        claims: [again ? `method:blunder-check:${i.history.length}` : 'method:blunder-check', turnHabitClaim(i.history.length)],
         event: { name: 'coach_blunder_check_taught', props: { surface: 'coach-teach' } }, arrows: [],
         ...(lost ? { stakes: { points: piecePoints(lost.piece), plies: 1 } } : {}),
       });
@@ -510,7 +511,7 @@ export function playedConceptTeaching(
   return {
     concept: c,
     hint: {
-      lane: 'playedConcept', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(text, squares) ?? NO_PROOF.description, text, squares, claims: [`played-concept:${c.type}:${squares.join('')}`],
+      lane: 'playedConcept', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(text, squares) ?? NO_PROOF.description, text, squares, claims: [conceptInstanceKey(c.type, squares)],
       event: { name: 'coach_played_concept_named', props: { surface: 'coach-teach', concept: c.type, by: c.mover === student ? 'student' : 'opponent' } },
       arrows: [], role: 'teach',
     },
@@ -567,31 +568,6 @@ export function planChoiceTeaching(
   return {
     lane: 'planArc', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.description, text: pc.text, squares: [], claims: ['plan-choice', pc.key],
     event: { name: 'coach_plan_choice_named', props: { surface: 'coach-teach' } },
-    arrows: [],
-  };
-}
-
-/** Split the position (P3): opposite-side castling with queens on. */
-export function splitPositionTeaching(fen: string, student: 'w' | 'b'): TeachingHint | null {
-  const sp = splitPosition(fen, student);
-  if (!sp) return null;
-  return {
-    lane: 'splitPosition', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(sp.text, sp.squares) ?? NO_PROOF.stated, text: sp.text, squares: sp.squares, claims: ['split-position'],
-    event: { name: 'coach_split_position_taught', props: { surface: 'coach-teach' } },
-    arrows: [],
-  };
-}
-
-/** Count before you take (P3): an exchange square the count decides. */
-export function countMethodTeaching(fen: string, student: 'w' | 'b'): TeachingHint | null {
-  const m = countMethod(fen, student);
-  if (!m) return null;
-  return {
-    lane: 'countMethod', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.method, text: m.text, squares: [m.square], claims: ['count-method'],
-    // What the count decides, now: the exchange's net either way (A-plan P1 —
-    // unstaked, the door held it as an aside 4 of 4 times).
-    stakes: { points: Math.abs(m.net), plies: 0 },
-    event: { name: 'coach_count_method_taught', props: { surface: 'coach-teach' } },
     arrows: [],
   };
 }
@@ -1079,10 +1055,10 @@ export function dangerAnswerLines(fen: string, student: 'w' | 'b', bestUci: stri
   if (st) out.push(st.text);
   const cm = checkMethodTeaching(fen, student, bestUci);
   if (cm) out.push(cm.text);
-  const cnt = countMethodTeaching(fen, student);
+  const cnt = countMethod(fen, student);
   if (cnt) out.push(cnt.text);
-  const sp = splitPositionTeaching(fen, student);
-  if (sp) out.push(sp.text);
+  const race = oppositeWingsRace(fen, student, 'live');
+  if (race) out.push(race.text);
   return out;
 }
 
@@ -1263,7 +1239,7 @@ export function boardTeacherPoint(fenBefore: string, san: string, fenNow: string
   if (!fact) return null;
   const text = withSubject(fact.text, san);
   return {
-    lane: 'movePoint', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(text, fact.squares) ?? NO_PROOF.description, text, squares: fact.squares, claims: [`board-teacher:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`],
+    lane: 'movePoint', namesStudentMove: NAMES_NO_MOVE, proof: squaresProof(text, fact.squares) ?? NO_PROOF.description, text, squares: fact.squares, claims: [`board-teacher:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`, ...(fact.claim ? [fact.claim] : [])],
     event: { name: 'coach_move_point_named', props: { surface: 'coach-teach', source: 'board-teacher' } },
     arrows: [],
   };

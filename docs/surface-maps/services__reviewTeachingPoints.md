@@ -158,19 +158,20 @@
 - `src/services/reviewTeachingPoints.test.ts:294`
 
 ### `trappedOnBoard` (function) — 3 call sites
-- `src/services/boardComputers.ts:340`
+- `src/services/boardComputers.ts:341`
 - `src/services/queenGrabTrap.ts:57`
 - `src/services/reviewTeachingPoints.test.ts:291`
 
-### `findWorstPlacedPiece` (re-export) — 12 call sites
+### `findWorstPlacedPiece` (re-export) — 13 call sites
 - `src/services/badPieceOncePerPly.test.ts:15`
 - `src/services/coachFeatureService.ts:4622`
 - `src/services/moveInsight.ts:333`
 - `src/services/nextPlans.test.ts:10`
 - `src/services/nextPlans.test.ts:34`
-- `src/services/nextPlans.ts:83`
-- `src/services/nextPlans.ts:360`
-- `src/services/planChoice.ts:97`
+- `src/services/nextPlans.ts:84`
+- `src/services/nextPlans.ts:361`
+- `src/services/outpostOneTest.test.ts:19`
+- `src/services/planChoice.ts:98`
 - `src/services/planStopped.ts:126`
 - `src/services/reviewNarrationDefects.test.ts:34`
 - `src/services/reviewNarrationDefects.test.ts:43`
@@ -186,7 +187,7 @@
 - `src/services/nextPlans.test.ts:45`
 - `src/services/nextPlans.test.ts:52`
 - `src/services/nextPlans.test.ts:55`
-- `src/services/nextPlans.ts:177`
+- `src/services/nextPlans.ts:178`
 - `src/services/planPrescriptions.test.ts:93`
 - `src/services/planPrescriptions.test.ts:102`
 - `src/services/planPrescriptions.test.ts:111`

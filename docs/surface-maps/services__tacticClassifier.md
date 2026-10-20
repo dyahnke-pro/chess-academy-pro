@@ -34,7 +34,7 @@
 ### `findHangingPieces` (function) — 14 call sites
 - `src/data/patternRegistry.ts:113`
 - `src/services/coachGameEngine.ts:301`
-- `src/services/deliberation.ts:150`
+- `src/services/deliberation.ts:152`
 - `src/services/hangingIgnoresCheck.test.ts:10`
 - `src/services/hangingIgnoresCheck.test.ts:11`
 - `src/services/liveTacticsContext.ts:379`

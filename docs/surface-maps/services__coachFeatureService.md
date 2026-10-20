@@ -159,17 +159,17 @@
 - `src/services/coachFeatureService.oneCost.test.ts:28`
 - `src/services/coachFeatureService.oneCost.test.ts:33`
 - `src/services/coachFeatureService.openingStory.test.ts:33`
-- `src/services/coachFeatureService.openingStory.test.ts:50`
-- `src/services/coachFeatureService.openingStory.test.ts:57`
-- `src/services/coachFeatureService.openingStory.test.ts:71`
-- `src/services/coachFeatureService.openingStory.test.ts:84`
-- `src/services/coachFeatureService.openingStory.test.ts:101`
-- `src/services/coachFeatureService.openingStory.test.ts:118`
-- `src/services/coachFeatureService.openingStory.test.ts:126`
-- `src/services/coachFeatureService.openingStory.test.ts:137`
-- `src/services/coachFeatureService.openingStory.test.ts:151`
-- `src/services/coachFeatureService.openingStory.test.ts:176`
-- `src/services/coachFeatureService.openingStory.test.ts:203`
+- `src/services/coachFeatureService.openingStory.test.ts:52`
+- `src/services/coachFeatureService.openingStory.test.ts:59`
+- `src/services/coachFeatureService.openingStory.test.ts:73`
+- `src/services/coachFeatureService.openingStory.test.ts:86`
+- `src/services/coachFeatureService.openingStory.test.ts:103`
+- `src/services/coachFeatureService.openingStory.test.ts:120`
+- `src/services/coachFeatureService.openingStory.test.ts:128`
+- `src/services/coachFeatureService.openingStory.test.ts:139`
+- `src/services/coachFeatureService.openingStory.test.ts:153`
+- `src/services/coachFeatureService.openingStory.test.ts:178`
+- `src/services/coachFeatureService.openingStory.test.ts:205`
 - `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.planChange.test.ts:36`
 - `src/services/coachFeatureService.planChange.test.ts:48`
@@ -275,10 +275,10 @@
 - `src/services/coachFeatureService.test.ts:625`
 
 ### `pendingRecapture` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8306`
-- `src/components/Coach/CoachTeachPage.tsx:8400`
-- `src/components/Coach/CoachTeachPage.tsx:11023`
-- `src/components/Coach/CoachTeachPage.tsx:11352`
+- `src/components/Coach/CoachTeachPage.tsx:8307`
+- `src/components/Coach/CoachTeachPage.tsx:8401`
+- `src/components/Coach/CoachTeachPage.tsx:11029`
+- `src/components/Coach/CoachTeachPage.tsx:11358`
 - `src/services/coachFeatureService.test.ts:907`
 - `src/services/coachFeatureService.test.ts:908`
 - `src/utils/justCaptured.test.ts:20`

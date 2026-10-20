@@ -43,7 +43,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11424`
+- `src/components/Coach/CoachTeachPage.tsx:11430`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -56,7 +56,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `buildVoicePackage` (function) — 78 call sites
 - `src/components/Coach/CoachGameReview.tsx:1924`
-- `src/components/Coach/CoachTeachPage.tsx:8419`
+- `src/components/Coach/CoachTeachPage.tsx:8420`
 - `src/hooks/usePositionNarration.ts:323`
 - `src/services/coachFeatureService.ts:2665`
 - `src/services/coachSurfaceScorecard.report.test.ts:116`
@@ -68,7 +68,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/dnaDoor.test.ts:43`
 - `src/services/dnaDoor.test.ts:50`
 - `src/services/laneReachability.test.ts:137`
-- `src/services/learnTurnDoor.ts:581`
+- `src/services/learnTurnDoor.ts:579`
 - `src/services/replayFence.najdorf1500.test.ts:52`
 - `src/services/reviewMoveBriefing.ts:405`
 - `src/services/ruleGradeFen.test.ts:9`
@@ -135,14 +135,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:582`
 
 ### `spokenSentenceKeys` (function) — 13 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8278`
-- `src/components/Coach/CoachTeachPage.tsx:9996`
-- `src/components/Coach/CoachTeachPage.tsx:10014`
-- `src/components/Coach/CoachTeachPage.tsx:11239`
-- `src/components/Coach/CoachTeachPage.tsx:11398`
+- `src/components/Coach/CoachTeachPage.tsx:8279`
+- `src/components/Coach/CoachTeachPage.tsx:10002`
+- `src/components/Coach/CoachTeachPage.tsx:10020`
+- `src/components/Coach/CoachTeachPage.tsx:11245`
+- `src/components/Coach/CoachTeachPage.tsx:11404`
 - `src/services/coachFeatureService.ts:2672`
 - `src/services/learnTurnDoor.phaseWave.test.ts:133`
-- `src/services/learnTurnDoor.test.ts:619`
+- `src/services/learnTurnDoor.test.ts:620`
 - `src/services/reviewMoveBriefing.ts:406`
 - `src/services/voicePackage.test.ts:415`
 - `src/services/voicePackage.test.ts:424`
@@ -150,22 +150,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:514`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11226`
-- `src/components/Coach/CoachTeachPage.tsx:11477`
+- `src/components/Coach/CoachTeachPage.tsx:11232`
+- `src/components/Coach/CoachTeachPage.tsx:11483`
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 3 call sites
-- `src/services/learnTurnDoor.ts:857`
+- `src/services/learnTurnDoor.ts:855`
 - `src/services/voicePackage.test.ts:594`
 - `src/services/voicePackage.test.ts:603`
 
 ### `keptLines` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8282`
-- `src/components/Coach/CoachTeachPage.tsx:11255`
-- `src/components/Coach/CoachTeachPage.tsx:11464`
-- `src/services/learnTurnDoor.test.ts:211`
-- `src/services/learnTurnDoor.test.ts:217`
-- `src/services/learnTurnDoor.test.ts:223`
+- `src/components/Coach/CoachTeachPage.tsx:8283`
+- `src/components/Coach/CoachTeachPage.tsx:11261`
+- `src/components/Coach/CoachTeachPage.tsx:11470`
+- `src/services/learnTurnDoor.test.ts:212`
+- `src/services/learnTurnDoor.test.ts:218`
+- `src/services/learnTurnDoor.test.ts:224`
 
 ### `stripMoveNumbers` (re-export) — 12 call sites
 - `scripts/convert-lichess-tsv.mjs:19`
@@ -178,8 +178,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/dnaDoor.test.ts:12`
 - `src/services/dnaRules.test.ts:45`
 - `src/services/dnaRules.test.ts:48`
-- `src/services/dnaRules.ts:48`
-- `src/services/dnaRules.ts:65`
+- `src/services/dnaRules.ts:57`
+- `src/services/dnaRules.ts:74`
 
 ## Tests
 

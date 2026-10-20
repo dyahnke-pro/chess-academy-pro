@@ -50,7 +50,7 @@
 ### `CriticalMoment` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `criticalityThresholds` (function) — 17 call sites
+### `criticalityThresholds` (function) — 18 call sites
 - `src/services/conceptEngine.ts:576`
 - `src/services/criticalMoment.ts:194`
 - `src/services/criticalityScan.test.ts:20`
@@ -62,10 +62,11 @@
 - `src/services/skillScaling.test.ts:98`
 - `src/services/speedRunReads.ts:77`
 - `src/services/speedRunReads.ts:165`
-- `src/services/speedRunReads.ts:489`
-- `src/services/speedRunReads.ts:527`
-- `src/services/speedRunReads.ts:592`
-- `src/services/speedRunReads.ts:686`
+- `src/services/speedRunReads.ts:426`
+- `src/services/speedRunReads.ts:495`
+- `src/services/speedRunReads.ts:533`
+- `src/services/speedRunReads.ts:598`
+- `src/services/speedRunReads.ts:692`
 - `src/services/studentNeedLoader.ts:130`
 - `src/services/thinkAloud.ts:486`
 

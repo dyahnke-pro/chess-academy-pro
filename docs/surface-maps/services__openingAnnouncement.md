@@ -23,8 +23,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `spokenOpeningLabel` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9025`
-- `src/components/Coach/CoachTeachPage.tsx:9026`
+- `src/components/Coach/CoachTeachPage.tsx:9031`
+- `src/components/Coach/CoachTeachPage.tsx:9032`
 - `src/services/openingAnnouncement.test.ts:139`
 - `src/services/openingAnnouncement.test.ts:142`
 
@@ -64,30 +64,30 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingAnnouncement.test.ts:221`
 
 ### `openingAnnouncementForGame` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9027`
+- `src/components/Coach/CoachTeachPage.tsx:9033`
 - `src/services/coachFeatureService.ts:2029`
 - `src/services/openingAnnouncement.test.ts:156`
 - `src/services/openingAnnouncement.test.ts:157`
 
 ### `warmOpeningBook` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:1018`
+- `src/components/Coach/CoachTeachPage.tsx:1019`
 
 ### `studentJustLeftBook` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11820`
-- `src/components/Coach/CoachTeachPage.tsx:11870`
+- `src/components/Coach/CoachTeachPage.tsx:11826`
+- `src/components/Coach/CoachTeachPage.tsx:11877`
 - `src/services/openingAnnouncement.test.ts:162`
 - `src/services/openingAnnouncement.test.ts:171`
 - `src/services/openingAnnouncement.test.ts:172`
 - `src/services/openingAnnouncement.test.ts:173`
 
 ### `openingNameForBoard` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9017`
+- `src/components/Coach/CoachTeachPage.tsx:9023`
 - `src/services/coachFeatureService.ts:2024`
 - `src/services/openingPositions.test.ts:30`
-- `src/services/openingStory.ts:124`
+- `src/services/openingStory.ts:125`
 
 ### `theirOpeningVerdict` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12337`
+- `src/components/Coach/CoachTeachPage.tsx:12340`
 - `src/services/coachFeatureService.ts:2149`
 - `src/services/openingAnnouncement.test.ts:194`
 - `src/services/openingAnnouncement.test.ts:195`

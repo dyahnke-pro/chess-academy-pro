@@ -26,6 +26,7 @@ import { mastersPlanRead, planStillAhead, mastersBreakIdea, PLAN_WALK, MIN_ROOT_
 import { masterMovesCachedSync, prefetchMastersTree } from './masterPlayLookup';
 import type { MasterPlayResult } from './masterPlayTypes';
 import { holeAccess } from './moveInsight';
+import { holeKey } from './conceptKey';
 import { roadReason } from './openingRoads';
 import { deriveNextPlanFacts } from './nextPlans';
 import { planAimKey } from './planThread';
@@ -359,7 +360,10 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
       const aims = theirs && theirs !== mine ? ` The ${familyLabel(alt.name)} is a position built around ${theirs}${mine ? `; yours is built around ${mine}` : ''}.` : '';
       if (reason || aims) out.push({
         beat: 'branch-choice',
-        text: `You chose the ${familyLabel(sNew)}${reason ? `: ${reason.text}` : '.'}${aims}`,
+        // THE NAME IS THE ANNOUNCEMENT'S (OS-11 #8): the move that made the family
+        // is the move the announcement names it on ("It's the Najdorf…"), so the
+        // choice says what it does and never names it a second time.
+        text: reason ? `What that choice does: ${reason.text}${aims}` : aims.trim(),
         squares: reason?.squares ?? [], proof: reason?.proof ?? countProof(`masters split between the ${familyLabel(sNew)} and the ${familyLabel(alt.name)}`, fork.families),
         claimKey: `story:branch:${positionOf(fork.fen)}`,
       });
@@ -382,7 +386,9 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
       if (parts.length) {
         out.push({
           beat: 'their-setup',
-          text: `They've gone for the ${familyLabel(name)}: in master games from here ${andList(parts)}.`,
+          // Named by their move just played, the announcement names it this
+          // turn (OS-11 #8); a later offer reminds the student which setup.
+          text: at === history.length - 1 ? `In master games from here ${andList(parts)}.` : `They've gone for the ${familyLabel(name)}: in master games from here ${andList(parts)}.`,
           squares, proof: squaresProof(`their plan from master games`, squares) ?? NO_PROOF.description,
           claimKey: `story:setup:${name}`,
         });
@@ -429,13 +435,11 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
   // heard, from whichever move set it).
   const myCastle = castledSide(history, student);
   const theirCastle = castledSide(history, them);
+  // Opposite wings is the race, said once by its one owner
+  // (`planRace.oppositeWingsRace`, claim `race:opposite-wings`), never here.
   if (myCastle && theirCastle) {
-    const opposite = myCastle !== theirCastle;
-    const theirWing = theirCastle === 'short' ? 'kingside' : 'queenside';
     const myWing = myCastle === 'short' ? 'kingside' : 'queenside';
-    out.push(opposite
-      ? { beat: 'character', text: `Kings on opposite wings: this is a race. Your pawns can storm the ${theirWing} without opening your own king, and theirs will storm the ${myWing} — every tempo counts.`, squares: [], proof: NO_PROOF.description, claimKey: 'story:character', aim: 'plan-aim:king-attack' }
-      : { beat: 'character', text: `Both kings on the ${myWing}: no pawn race — pushing the pawns in front of your own king only weakens it, so the fight is in the centre and on the other wing.`, squares: [], proof: NO_PROOF.description, claimKey: 'story:character' });
+    if (myCastle === theirCastle) out.push({ beat: 'character', text: `Both kings on the ${myWing}: no pawn race — pushing the pawns in front of your own king only weakens it, so the fight is in the centre and on the other wing.`, squares: [], proof: NO_PROOF.description, claimKey: 'story:character' });
   } else if (myCastle || theirCastle) {
     // One side castled: master games say where the other king goes.
     const waiting: 'w' | 'b' = myCastle ? them : student;
@@ -468,7 +472,7 @@ export function openingStoryAt(i: OpeningStoryInput): StoryFact[] {
         beat: 'consequence',
         text: `${dot(history[t.ply], them)} has a cost for them: no pawn of theirs can cover ${h.hole} again, and ${knightDistance('your', h.from, h.moves)}; ${h.moves === 0 ? 'it hits' : 'from there it would hit'} ${hitWords(now, 'their', h.hits)}.`,
         squares: [h.hole, h.from], proof: squaresProof(`${h.hole} has no pawn of theirs to cover it`, [h.hole, h.from]) ?? NO_PROOF.description,
-        claimKey: `story:gift:${h.hole}`, aim: `plan-aim:outpost:${h.hole}`,
+        claimKey: holeKey(h.hole), aim: `plan-aim:outpost:${h.hole}`,
         ...(h.moves === 1 ? { holdWhilePlayable: [{ from: h.from, to: h.hole }] } : {}),
       });
     }

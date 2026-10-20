@@ -1247,7 +1247,9 @@ export function findWeakPawns(fen: string, color: Color): { isolated: Square[]; 
       squareByFileRank[`${f}:${r}`] = cell.square;
     }
   }
-  const isolated: Square[] = [];
+  // ISOLATED IS THE STRUCTURE'S FACT (`describeStructure`), never a second
+  // count of it (OS-11 smaller sets: two copies, 0 disagreements in 386 sets).
+  const isolated = (describeStructure(fen)?.pawns.isolatedPawns[color] ?? []) as Square[];
   const doubled: Square[] = [];
   const backward: Square[] = [];
   const enemy: Color = color === 'w' ? 'b' : 'w';
@@ -1257,7 +1259,6 @@ export function findWeakPawns(fen: string, color: Color): { isolated: Square[]; 
     const ranks = byFile[f];
     if (ranks.length >= 2) doubled.push(...ranks.map((r) => squareByFileRank[`${f}:${r}`]));
     const hasNeighbor = !!byFile[f - 1] || !!byFile[f + 1];
-    if (!hasNeighbor) isolated.push(...ranks.map((r) => squareByFileRank[`${f}:${r}`]));
 
     for (const r of ranks) {
       // No neighbour at all is ISOLATED, never backward — backward means the

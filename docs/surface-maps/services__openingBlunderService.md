@@ -34,7 +34,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `OTHER_FAMILY` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `familyLabel` (function) — 14 call sites
+### `familyLabel` (function) — 13 call sites
 - `src/components/Debug/OpeningBlundersPage.tsx:884`
 - `src/services/openingBlunderService.labels.test.ts:6`
 - `src/services/openingBlunderService.labels.test.ts:7`
@@ -42,13 +42,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingBlunderService.labels.test.ts:20`
 - `src/services/openingBlunderService.labels.test.ts:21`
 - `src/services/openingBlunderService.labels.test.ts:22`
-- `src/services/openingStory.ts:158`
-- `src/services/openingStory.ts:197`
-- `src/services/openingStory.ts:359`
-- `src/services/openingStory.ts:362`
-- `src/services/openingStory.ts:363`
-- `src/services/openingStory.ts:385`
-- `src/services/openingStory.ts:481`
+- `src/services/openingStory.ts:159`
+- `src/services/openingStory.ts:198`
+- `src/services/openingStory.ts:360`
+- `src/services/openingStory.ts:367`
+- `src/services/openingStory.ts:391`
+- `src/services/openingStory.ts:485`
 
 ### `OpeningBlunderFamily` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

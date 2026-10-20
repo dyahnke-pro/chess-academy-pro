@@ -12,7 +12,8 @@ import { reachWords } from '../utils/reachWords';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
-import { isKnightOutpost, computePieceRoute, computeSliderRoute } from './forwardTeaching';
+import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
+import { isOutpost } from './outpost';
 import { routeVia } from '../utils/routeWords';
 import { legalSeeGainFor } from './positionReadingService';
 import { enemyKingStuckInCenter } from './reviewSacrifice';
@@ -107,7 +108,7 @@ export function findWorstPlacedPiece(
     try { if (chess.attackers(c.square as Square, enemy).length > 0) continue; } catch { /* keep the candidate */ }
     // A minor on a real OUTPOST is doing a job — one board cannot call the same
     // knight an outpost and the worst piece.
-    if ((c.type === 'n' || c.type === 'b') && isKnightOutpost(chess, c.square as Square, studentColorWB)) continue;
+    if ((c.type === 'n' || c.type === 'b') && isOutpost(chess, c.square, studentColorWB, true)) continue;
     // A PINNED piece is immobile because of the pin, not because it is badly
     // placed; the lesson there is the pin, not a reroute.
     if (mob.get(c.square) === 0 && isPinnedPiece(chess, c.square as Square, studentColorWB)) continue;

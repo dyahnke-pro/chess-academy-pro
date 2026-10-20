@@ -48,7 +48,12 @@ export function sameLossAsGrade(fund: Pick<MistakeTurnFundamental, 'square'> | n
   return !!fund?.square && !!lostSquare && fund.square === lostSquare;
 }
 
-export function mistakeTurnLine(a: MistakeTurnInput): string {
+/** The turn's ONE habit claim: the mistake line that teaches a habit and the
+ *  blunder-check lane carry it, so the turn teaches one (OS-11 item 6d — the
+ *  8.Bxf7+ replay heard the fundamental's HOW and then the blunder check). */
+export function turnHabitClaim(ply: number): string { return `turn-habit:${ply}`; }
+
+export function mistakeTurnLine(a: MistakeTurnInput): { text: string; habitTaught: boolean } {
   const join = (...parts: Array<string | null | undefined>): string => parts.filter((p) => !!p && p.trim()).join(' ').trim();
   let body: string;
   let habitTaught: boolean;
@@ -64,5 +69,5 @@ export function mistakeTurnLine(a: MistakeTurnInput): string {
     body = join(`${a.slipPrefix()}${a.bookSaid ? a.fund.howOnly : a.fund.verdict}`, a.fund.recurrence, a.evidence);
     habitTaught = !!a.fund.howOnly;
   }
-  return join(body, a.concession, habitTaught ? null : a.slipQuestion());
+  return { text: join(body, a.concession, habitTaught ? null : a.slipQuestion()), habitTaught };
 }

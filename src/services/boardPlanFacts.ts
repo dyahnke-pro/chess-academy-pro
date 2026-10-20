@@ -12,7 +12,7 @@
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { deriveNextPlanFacts } from './nextPlans';
-import { methodRead, methodLine, methodPlan, methodSquares, whyThisPlan } from './planChoice';
+import { methodRead, methodPlan, methodPlanLine, methodSquares, whyThisPlan } from './planChoice';
 import { stripThink } from '../utils/thinkPause';
 import { structurePlan } from './boardPlan';
 import { findPawnBreaks, findOpenFiles, strongestWeakestPiece } from './positionReadingService';
@@ -120,7 +120,7 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
     why: whyThisPlan(facts),
     ordered: facts.some((p) => p.kind !== facts[0]?.kind),
     methodSquares: read && mp ? [...new Set([...methodSquares(read), ...mp.squares])] : [],
-    method: read && mp ? stripThink(`${methodLine(read, fen)} So the plan: ${mp.text}.${mp.why ? ` ${mp.whyAsk} ${cap(mp.why)}.` : ''}`) : null,
+    method: read && mp ? stripThink(methodPlanLine(read, mp, fen)) : null,
   };
 }
 

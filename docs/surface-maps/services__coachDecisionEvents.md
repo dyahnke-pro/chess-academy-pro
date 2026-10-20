@@ -71,12 +71,12 @@
 - `src/services/learnPhaseFocus.test.ts:109`
 - `src/services/learnTurnDoor.phaseWave.test.ts:37`
 - `src/services/learnTurnDoor.story.test.ts:41`
-- `src/services/learnTurnDoor.test.ts:578`
-- `src/services/learnTurnDoor.test.ts:591`
+- `src/services/learnTurnDoor.test.ts:579`
+- `src/services/learnTurnDoor.test.ts:592`
 - `src/services/settledPrice.bf4.test.ts:73`
 
 ### `emitLearnTurn` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:913`
+- `src/services/learnTurnDoor.ts:911`
 
 ## Tests
 

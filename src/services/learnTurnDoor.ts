@@ -108,7 +108,6 @@ export type LearnLane =
   | 'fileRace'
   | 'stalemate'
   | 'countMethod'
-  | 'splitPosition'
   | 'timing'
   | 'checkMethod'
   | 'trade'
@@ -181,7 +180,7 @@ export const DNA_BEAT: Record<LearnLane, DnaBeat> = {
   moveOrder: 'refute', causalChain: 'refute',
   theirPurpose: 'their', theirIntent: 'their', theirMoveCost: 'their', coachMistake: 'their', gap: 'their',
   tactic: 'point', playedConcept: 'point', planArc: 'point', structureJudgement: 'point', openingIdea: 'point', structure: 'point', pieceQuality: 'point',
-  positionFacts: 'point', commentary: 'point', positional: 'point', kingSafety: 'point', splitPosition: 'point',
+  positionFacts: 'point', commentary: 'point', positional: 'point', kingSafety: 'point',
   behavior: 'point',
   phase: 'verdict', character: 'verdict',
   threat: 'now', dangerLevels: 'now', threatAnswer: 'now', prophylaxis: 'now', gem: 'now', trapAhead: 'now', priorityFirst: 'now', countMethod: 'now',
@@ -227,7 +226,7 @@ export const LANE_PHASE: Record<LearnLane, LanePhase> = {
   openingRoads: 'not-ending', openingChoice: 'not-ending', openingCost: 'not-ending', openingTheirs: 'not-ending', openingStory: 'not-ending',
   opening: 'not-ending', bookMove: 'not-ending', lastTimeHere: 'not-ending', sameAsLastTime: 'not-ending',
   tempo: 'not-ending', notYetPlayed: 'not-ending', holdResource: 'not-ending',
-  structure: 'not-ending', kingSafety: 'not-ending', kingAttack: 'not-ending', splitPosition: 'not-ending',
+  structure: 'not-ending', kingSafety: 'not-ending', kingAttack: 'not-ending',
   pieceQuality: 'any', register: 'any', gap: 'any', positionFacts: 'any', priorityFirst: 'any', rejectedTempting: 'any',
   planArc: 'any', drawback: 'any', mistake: 'any', coachMistake: 'any', fundamental: 'any', movePoint: 'any',
   foundMove: 'any', heldMove: 'any', slipAnswer: 'any', moveIntent: 'any', moveOrder: 'any', theirMoveCost: 'any',
@@ -402,7 +401,6 @@ export const LEARN_LANES: Record<LearnLane, LaneRule> = {
   // STALEMATE WATCH (P2 #9): the one move that throws away a won game.
   // Count before you take (P3 how-to-calculate): a real exchange square, the count said.
   // Split the position (P3 method beat): opposite-side castling, two races.
-  splitPosition: { kind: 'computed', why: 'the kings are on opposite wings — the board is two races', lead: 66 },
   countMethod: { kind: 'computed', why: 'an exchange is on — count attackers against defenders before you take', lead: 77 },
   stalemate: { kind: 'computed', why: 'you are winning and one of your moves would stalemate them', lead: 81 },
   phase: { kind: 'computed', why: 'the game has changed phase — take stock of what the position is about now', lead: 72 },

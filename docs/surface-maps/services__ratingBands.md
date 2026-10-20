@@ -92,10 +92,10 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isBeginnerMode` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2645`
-- `src/components/Coach/CoachTeachPage.tsx:8249`
-- `src/components/Coach/CoachTeachPage.tsx:9538`
-- `src/components/Coach/CoachTeachPage.tsx:11372`
+- `src/components/Coach/CoachTeachPage.tsx:2646`
+- `src/components/Coach/CoachTeachPage.tsx:8250`
+- `src/components/Coach/CoachTeachPage.tsx:9544`
+- `src/components/Coach/CoachTeachPage.tsx:11378`
 - `src/services/beginnerMode.test.ts:8`
 - `src/services/beginnerMode.test.ts:9`
 - `src/services/beginnerMode.test.ts:12`

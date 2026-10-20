@@ -16,6 +16,7 @@ import { withProof, type Proof } from './proof';
 import { mateStakes, type FactStakes } from './factStakes';
 import { CAPTURE_VALUE } from './pieceValues';
 import { PIECE_NAMES } from '../types/tacticTypes';
+import { looseKey } from './conceptKey';
 
 const COUNT = ['no', 'once', 'twice', 'three times', 'four times', 'five times'];
 const times = (n: number): string => COUNT[n] ?? `${n} times`;
@@ -94,4 +95,13 @@ export function threatStakes(fen: string, student: 'w' | 'b', squares: readonly 
   try { if (new Chess(them).moves().some((m) => m.endsWith('#'))) return mateStakes('them', 1, false); } catch { return null; }
   const named = computeMustDefend(fen, student).pieces.find((p) => squares.includes(p.square));
   return named && named.value > 0 ? { points: named.value, plies: 1 } : null;
+}
+
+/** THE LOOSE-PIECE CLAIMS a threat on `squares` makes: each of the student's
+ *  pieces there that is attacked and unguarded, read off the same exchange
+ *  computer as the proof (`computeMustDefend`), keyed `loose:<sq>` (OS-11 #3). */
+export function looseClaims(fen: string, student: 'w' | 'b', squares: readonly string[]): string[] {
+  return computeMustDefend(fen, student).pieces
+    .filter((p) => squares.includes(p.square) && p.defenders === 0 && !!p.attacker)
+    .map((p) => looseKey(p.square));
 }

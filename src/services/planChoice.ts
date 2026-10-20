@@ -27,6 +27,7 @@ import { orList } from '../utils/andList';
 import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
 import { readBoardUrgency } from './boardUrgency';
 import { askThenAnswer, type PlayedMove } from '../utils/thinkPause';
+import { openSentence } from '../utils/openSentence';
 
 interface MethodRead {
   /** Their weakness, as a phrase ("their king, still on e8", "their isolated pawn on d5"). */
@@ -295,6 +296,12 @@ export function methodLine(read: MethodRead, fen: string): string {
   if (read.worst) parts.push(`Your worst piece: ${read.worst.phrase}.`);
   if (read.breaks.length) parts.push(read.breakHeld ? 'Your pawn break: one is ready to push right now — find it.' : `Your pawn break: the push to ${orList(read.breaks)}.`);
   return askThenAnswer('How do you find a plan? First the forcing scan — checks, captures, threats. Then three things: where is their weakness, which of your pieces is worst, where is your pawn break?', parts.join(' '), (m) => methodAfterMove(read, fen, m));
+}
+
+/** THE METHOD AND THE PLAN ITS ANSWERS MAKE, as one line — the ONE template
+ *  (OS-11 #7: planThread and boardPlanFacts each built it). */
+export function methodPlanLine(read: MethodRead, mp: NonNullable<ReturnType<typeof methodPlan>>, fen: string): string {
+  return `${methodLine(read, fen)} So the plan: ${mp.text}.${mp.why ? ` ${mp.whyAsk} ${openSentence(mp.why)}.` : ''}`;
 }
 
 /** THE METHOD'S ANSWER AFTER THE STUDENT MOVED (the answer waits for the

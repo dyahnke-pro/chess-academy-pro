@@ -19,7 +19,7 @@ import { evalBand } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { lastMoveFromSan, lastMoveFromHistory } from './material';
 import { readTrade, findTradeTarget } from './tradeQuality';
-import { conceptInstanceKey, forkThreatKey } from './conceptKey';
+import { conceptInstanceKey, forkThreatKey, outpostKey, kickKey } from './conceptKey';
 import { layerStandings } from './teachingLayers';
 import { seatBare } from '../utils/seatPieces';
 import { detectBluff, bluffClause, type Bluff } from './bluffDetector';
@@ -1769,7 +1769,7 @@ function buildClauses(a: {
   // A rook or queen principle about a FILE claims that file — the key the
   // positional read's "owns the open d-file" writes too, so one file is one
   // saying across lanes (hand walk 2026-09-27, Rad8: said twice in one turn).
-  if (a.rule) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'rule', rank: 29, text: a.rule.text, squares: [...a.rule.squares], ...(a.rule.gradeFen ? { gradeFen: a.rule.gradeFen } : {}), ...(ruleSkill(a.rule.id) ? { skill: ruleSkill(a.rule.id) } : {}), claim: /open-file|semi-open/.test(a.rule.id) && a.rule.squares[0] ? `file-${a.rule.squares[0][0]}` : undefined });
+  if (a.rule) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'rule', rank: 29, text: a.rule.text, squares: [...a.rule.squares], ...(a.rule.gradeFen ? { gradeFen: a.rule.gradeFen } : {}), ...(ruleSkill(a.rule.id) ? { skill: ruleSkill(a.rule.id) } : {}), claim: /open-file|semi-open/.test(a.rule.id) && a.rule.squares[0] ? `file-${a.rule.squares[0][0]}` : /(^|:)outpost(:|$)/.test(a.rule.id) && a.rule.squares[0] ? outpostKey(a.rule.squares[0]) : /(^|:)tempo(:|$)/.test(a.rule.id) && a.rule.squares[1] ? kickKey(a.rule.squares[1]) : undefined });
   for (const st of a.stopped) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'stopped', rank: 27, text: st.text, squares: [...st.squares], lines: st.lines, proof: st.lines?.[0] ? lineProof(st.lines[0], lineSeatAt(st.lines[0].fen, studentSeat === 'white' ? 'w' : 'b')) ?? undefined : undefined });
   if (a.stock) ranked.push({ namesStudentMove: NAMES_NO_MOVE, kind: 'stock', rank: 35, text: a.stock });
   // §9 delayed-castling — speaks IN the opening too (the "castle now" moment),

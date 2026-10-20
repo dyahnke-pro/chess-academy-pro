@@ -61,16 +61,16 @@
 - `src/services/gameEndReads.ts:282`
 - `src/services/kingAttackReads.ts:153`
 - `src/services/learnBoardTeaching.tacticStakes.test.ts:7`
-- `src/services/learnBoardTeaching.ts:1420`
+- `src/services/learnBoardTeaching.ts:1396`
 - `src/services/learnPhaseFocus.test.ts:40`
 - `src/services/learnPhaseFocus.test.ts:59`
-- `src/services/learnTurnDoor.test.ts:491`
-- `src/services/learnTurnDoor.test.ts:527`
-- `src/services/learnTurnDoor.test.ts:541`
+- `src/services/learnTurnDoor.test.ts:492`
+- `src/services/learnTurnDoor.test.ts:528`
+- `src/services/learnTurnDoor.test.ts:542`
 - `src/services/opponentMoveReads.ts:162`
 - `src/services/reviewFullData.ts:921`
 - `src/services/reviewFullData.ts:1542`
-- `src/services/threatProof.ts:94`
+- `src/services/threatProof.ts:95`
 
 ### `STAKED_FLOOR` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -80,19 +80,19 @@
 - `src/services/kingAttackReads.ts:146`
 - `src/services/kingAttackReads.ts:178`
 - `src/services/kingAttackReads.ts:191`
-- `src/services/learnBoardTeaching.ts:283`
+- `src/services/learnBoardTeaching.ts:284`
 - `src/services/speedRunReads.ts:48`
 - `src/services/speedRunReads.ts:223`
 - `src/services/speedRunReads.ts:314`
-- `src/services/speedRunReads.ts:622`
+- `src/services/speedRunReads.ts:628`
 
 ### `stakeValue` (function) — 7 call sites
 - `src/services/factStakes.test.ts:50`
 - `src/services/factStakes.test.ts:51`
 - `src/services/factStakes.test.ts:52`
 - `src/services/factStakes.test.ts:55`
-- `src/services/learnTurnDoor.ts:602`
-- `src/services/learnTurnDoor.ts:667`
+- `src/services/learnTurnDoor.ts:600`
+- `src/services/learnTurnDoor.ts:665`
 - `src/services/reviewFacetRank.ts:523`
 
 ### `costStakes` (function) — 37 call sites
@@ -102,19 +102,19 @@
 - `src/services/factStakes.test.ts:62`
 - `src/services/factStakes.test.ts:63`
 - `src/services/learnPhaseFocus.test.ts:37`
-- `src/services/learnTurnDoor.test.ts:540`
-- `src/services/learnTurnDoor.test.ts:566`
-- `src/services/learnTurnDoor.test.ts:642`
+- `src/services/learnTurnDoor.test.ts:541`
+- `src/services/learnTurnDoor.test.ts:567`
 - `src/services/learnTurnDoor.test.ts:643`
 - `src/services/learnTurnDoor.test.ts:644`
 - `src/services/learnTurnDoor.test.ts:645`
-- `src/services/learnTurnDoor.test.ts:653`
-- `src/services/learnTurnDoor.test.ts:666`
+- `src/services/learnTurnDoor.test.ts:646`
+- `src/services/learnTurnDoor.test.ts:654`
 - `src/services/learnTurnDoor.test.ts:667`
-- `src/services/learnTurnDoor.ts:667`
+- `src/services/learnTurnDoor.test.ts:668`
+- `src/services/learnTurnDoor.ts:665`
 - `src/services/orderReads.ts:103`
-- `src/services/pawnJudgement.ts:165`
-- `src/services/pawnJudgement.ts:350`
+- `src/services/pawnJudgement.ts:166`
+- `src/services/pawnJudgement.ts:351`
 - `src/services/planJudgement.ts:47`
 - `src/services/planJudgement.ts:91`
 - `src/services/planJudgement.ts:140`
@@ -125,10 +125,10 @@
 - `src/services/reviewFullData.ts:688`
 - `src/services/reviewFullData.ts:1262`
 - `src/services/speedRunReads.ts:176`
-- `src/services/speedRunReads.ts:431`
-- `src/services/speedRunReads.ts:492`
-- `src/services/speedRunReads.ts:542`
-- `src/services/speedRunReads.ts:693`
+- `src/services/speedRunReads.ts:437`
+- `src/services/speedRunReads.ts:498`
+- `src/services/speedRunReads.ts:548`
+- `src/services/speedRunReads.ts:699`
 - `src/services/squareJudgement.ts:325`
 - `src/services/squareJudgement.ts:428`
 - `src/services/teachingLayers.test.ts:104`
@@ -139,7 +139,7 @@
 - `src/services/factStakes.test.ts:29`
 - `src/services/factStakes.test.ts:33`
 - `src/services/learnBoardTeaching.tacticStakes.test.ts:14`
-- `src/services/learnBoardTeaching.ts:1421`
+- `src/services/learnBoardTeaching.ts:1397`
 - `src/services/positionFacts.ts:1827`
 - `src/services/reviewFullData.ts:827`
 - `src/services/reviewFullData.ts:868`
@@ -151,7 +151,7 @@
 - `src/services/factStakes.test.ts:37`
 - `src/services/factStakes.test.ts:38`
 - `src/services/factStakes.test.ts:39`
-- `src/services/learnBoardTeaching.ts:1424`
+- `src/services/learnBoardTeaching.ts:1400`
 - `src/services/opponentMoveReads.ts:204`
 - `src/services/opponentMoveReads.ts:206`
 - `src/services/positionFacts.ts:1689`
@@ -159,7 +159,7 @@
 - `src/services/reviewFullData.ts:923`
 
 ### `piecesOn` (function) — 3 call sites
-- `src/services/learnBoardTeaching.ts:1424`
+- `src/services/learnBoardTeaching.ts:1400`
 - `src/services/reviewFullData.ts:820`
 - `src/services/reviewFullData.ts:923`
 

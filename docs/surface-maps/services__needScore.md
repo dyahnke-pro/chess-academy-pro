@@ -74,7 +74,7 @@
 - `src/services/coachFeatureService.learnParity.test.ts:71`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:41`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:94`
-- `src/services/coachFeatureService.openingStory.test.ts:49`
+- `src/services/coachFeatureService.openingStory.test.ts:51`
 - `src/services/coachFeatureService.trade.test.ts:18`
 - `src/services/coachFeatureService.ts:1314`
 - `src/services/coachFeatureService.ts:5259`

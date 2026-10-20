@@ -18,7 +18,7 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { deriveNextPlanFacts, type PlanFact, type PlanKind } from './nextPlans';
 import { planStoppedProof, planStoppedLine } from './planStopped';
 import { NO_PROOF, type FactProof } from './proof';
-import { methodRead, methodLine, methodSquares, methodPlan, whyThisPlan, planWorth, type RouteArrow } from './planChoice';
+import { methodRead, methodSquares, methodPlan, methodPlanLine, whyThisPlan, planWorth, type RouteArrow } from './planChoice';
 import { planStepLine } from './planStep';
 import { askThenAnswer } from '../utils/thinkPause';
 import { classifyPhase } from './gamePhaseService';
@@ -192,7 +192,7 @@ export function planThreadTurn(
   // THE ANSWERS MAKE THE PLAN (planChoice.methodPlan): the steps the three
   // questions found, in the order a strong player plays them, and why that order.
   const text = read && mp
-    ? `${methodLine(read, args.fenAfter)} So the plan: ${mp.text}.${mp.why ? ` ${mp.whyAsk} ${cap(mp.why)}.` : ''}`
+    ? methodPlanLine(read, mp, args.fenAfter)
     : `${said}${whyText}`;
   if (!(read && mp) && why && !read && alt) t.whyAsked.add(alt.goalIng);
   if (read && mp) t.methodSaid = true;

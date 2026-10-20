@@ -33,7 +33,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingRoads.test.ts:39`
 - `src/services/openingRoads.test.ts:43`
 - `src/services/openingRoads.test.ts:49`
-- `src/services/openingStory.ts:357`
+- `src/services/openingStory.ts:358`
 
 ## Tests
 

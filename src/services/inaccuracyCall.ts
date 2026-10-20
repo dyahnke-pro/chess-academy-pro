@@ -1193,9 +1193,9 @@ export function errorWhy(args: {
   }
   const proof = line ? lineProofFromUci(line.fen, line.uci, lineSeatAt(line.fen, args.moverColor === 'white' ? 'w' : 'b')) ?? undefined : undefined;
   const pattern = should && !mateSaid && bestSan ? landedTacticFor(args.fenBefore, bestSan) : null;
-  // The piece a mechanism left to be taken is the lost square too, so a
-  // fundamental naming the same hung piece stays quiet (one fact once).
-  const failedLost = failedRead && (failedRead.kind === 'lost-the-piece' || failedRead.kind === 'abandoned-defender') ? failedRead.squares[0] : undefined;
+  // The piece a mechanism lost is the lost square too, so a fundamental naming
+  // the same loss stays quiet (one fact once). The read says it (`lost`).
+  const failedLost = failedRead?.lost;
   return {
     consequence,
     tail,

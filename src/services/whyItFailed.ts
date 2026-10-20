@@ -46,6 +46,11 @@ interface WhyItFailed {
    *  (walk 900, 17…Bg1 — "the rook on f1 just takes it" after they played
    *  Nxg4). The caller that knows the reply chooses. */
   missed?: string;
+  /** The square where the student's own piece was lost, when the read is that
+   *  loss (a capture taken back for more, a piece left hanging, a defender
+   *  walked away from). The grade's `lostSquare`, so a fundamental naming the
+   *  same loss stays quiet (OS-11 item 6d). Absent on a would-be loss. */
+  lost?: string;
   kind:
     | 'held-by-defender'    // the capture loses the exchange after recaptures
     | 'answered-by-tactic'  // an in-between check hits the attacker
@@ -261,6 +266,7 @@ export function whyItFailed(args: {
         return {
           kind: 'held-by-defender',
           squares: [mv.to, recap.sq],
+          lost: mv.to,
           line: `That took the ${NAME[mv.captured]} on ${mv.to}, but the ${NAME[recap.type]} on ${recap.sq} takes back${named ? ` — you lose ${named}` : ` and you come out ${pts} down`}.`,
         };
       }
@@ -272,6 +278,7 @@ export function whyItFailed(args: {
       return {
         kind: 'lost-the-piece',
         squares: [mv.to, recap.sq],
+        lost: mv.to,
         line: `That left your ${NAME[mv.piece]} on ${mv.to} hanging — the ${NAME[recap.type]} on ${recap.sq} just takes it.`,
         missed: `That left your ${NAME[mv.piece]} on ${mv.to} hanging to the ${NAME[recap.type]} on ${recap.sq} — they missed it this time.`,
       };
@@ -322,6 +329,7 @@ export function whyItFailed(args: {
     return {
       kind: 'abandoned-defender',
       squares: [worstAbandon.sq, worstAbandon.attacker.sq],
+      lost: worstAbandon.sq,
       line: after.attackers(worstAbandon.sq, me).length === 0
         // "their queen could take it FROM a5", never "the queen on a5 takes it":
         // the line is often heard after the capture, when a5 is empty (claim

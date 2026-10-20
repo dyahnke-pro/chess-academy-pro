@@ -96,8 +96,8 @@
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:8103`
-- `src/components/Coach/CoachTeachPage.tsx:8128`
+- `src/components/Coach/CoachTeachPage.tsx:8104`
+- `src/components/Coach/CoachTeachPage.tsx:8129`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -108,12 +108,12 @@
 - `src/services/autoAnalyzeGame.ts:402`
 - `src/services/autoAnalyzeGame.ts:467`
 - `src/services/computerAccuracy.audit.test.ts:107`
-- `src/services/deliberation.ts:126`
-- `src/services/deliberation.ts:206`
-- `src/services/deliberation.ts:213`
-- `src/services/deliberation.ts:243`
+- `src/services/deliberation.ts:128`
+- `src/services/deliberation.ts:208`
+- `src/services/deliberation.ts:215`
 - `src/services/deliberation.ts:245`
-- `src/services/deliberation.ts:293`
+- `src/services/deliberation.ts:247`
+- `src/services/deliberation.ts:295`
 - `src/services/endgameDrillService.ts:103`
 - `src/services/endgameDrillService.ts:139`
 - `src/services/endgameDrillService.ts:144`
@@ -254,7 +254,7 @@
 - `src/services/mistakePuzzleService.test.ts:582`
 
 ### `gradeMistakePuzzle` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2724`
+- `src/components/Coach/CoachTeachPage.tsx:2725`
 - `src/components/Puzzles/MyMistakesPage.tsx:289`
 - `src/components/Tactics/TacticCreatePage.tsx:199`
 - `src/services/conceptSchedule.test.ts:41`
@@ -270,7 +270,7 @@
 - `src/services/mistakePuzzleService.test.ts:530`
 
 ### `loadDrilledMotifs` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1918`
+- `src/components/Coach/CoachTeachPage.tsx:1919`
 - `src/services/conceptSchedule.test.ts:58`
 
 ### `deleteMistakePuzzle` (function) — 2 call sites

@@ -5,7 +5,7 @@
 // their pieces' targets is hit at least twice and defended at least twice. Said
 // ONLY when the raw count and the legal exchange (pins and all) agree, so the
 // count never teaches a wrong answer. Names the square, never the move. Once
-// per game (claim `count-method`).
+// per square (claim `count:<sq>`, shared with the tied-defender read).
 //
 // A LEAF: chess.js + the legal SEE.
 import { Chess, type Color } from 'chess.js';

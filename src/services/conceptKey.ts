@@ -29,3 +29,43 @@ export function conceptInstanceKey(id: string, squares: readonly string[]): stri
 export function forkThreatKey(landing: string, targets: readonly string[]): string {
   return `fork-threat:${landing}:${[...targets].sort().join('')}`;
 }
+
+/** THE KEY FOR ONE LOOSE PIECE — a piece of the student's attacked and unguarded
+ *  on this square. The tactic warning's proof ("nothing guards it: Rxf4"), the
+ *  hanging-piece line and the danger stake all state it; one key lets the
+ *  say-once ledger keep one (OS-11 #3, g1 13.Rad1 → 14.Rd5: the bishop on f4
+ *  said loose three times in two turns). */
+export function looseKey(square: string): string {
+  return `loose:${square}`;
+}
+
+/** THE KEY FOR ONE OUTPOST — a square no enemy pawn can attack, held by a
+ *  minor. "Your Nf6 lands on the f6 outpost" and "g5 makes f6 an outpost for
+ *  the knight" are one fact (OS-11 #4, g1 29.Nf6 → 31.g5). */
+export function outpostKey(square: string): string {
+  return `outpost:${square}`;
+}
+
+/** THE KEY FOR ONE HOLE IN THEIR CAMP — a square no pawn of theirs can cover
+ *  again. The story's "c5 has a cost for them: no pawn of theirs can cover d5"
+ *  and the pawn read's "that square stays a hole for them" are one fact
+ *  (OS-11 #5, g3 10.Nf3 → 11.O-O). */
+export function holeKey(square: string): string {
+  return `hole:${square}`;
+}
+
+/** THE KEY FOR ONE COUNT ON ONE SQUARE — attackers against defenders. "Count
+ *  before you take on e5: two attackers against two defenders" and "their rook
+ *  is tied down: you hit e5 twice and it is guarded twice" read one count
+ *  (OS-11 #6, g3 10.Nf3). */
+export function countKey(square: string): string {
+  return `count:${square}`;
+}
+
+/** THE KEY FOR ONE PAWN KICK — the piece on this square chased by a pawn.
+ *  "e5 kicks their knight off d4" (the move's point) and "The rule behind e5:
+ *  kick their knight off d4" (the principle) read one `pawnHit` (OS-11 smaller
+ *  sets, g2). */
+export function kickKey(square: string): string {
+  return `kick:${square}`;
+}

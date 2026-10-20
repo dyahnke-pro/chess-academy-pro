@@ -15,6 +15,8 @@
 // Doc: docs/plans/2026-08-26-coach-my-weakness-focus-lens.md §4.0.
 import { capturedSquare } from '../utils/capturedSquare';
 import { openSentence } from '../utils/openSentence';
+import { stemKeyOf } from '../utils/rotateStem';
+import { affirmMove } from './dnaRules';
 import { Chess, type Square } from 'chess.js';
 import type { StockfishAnalysis, WalkableLine } from '../types';
 import { walkableLine } from './proof';
@@ -650,7 +652,7 @@ export function threatMadeWhy(fenBefore: string, san: string, mover: 'w' | 'b'):
  */
 export function heldVerdictText(v: HeldVerdict, when: 'now' | 'found'): string {
   const line = v.line ? ` ${openSentence(v.line)}.` : '';
-  if (when === 'found') return `That was the move here — it ${v.why}.`;
+  if (when === 'found') return affirmMove(v.why, stemKeyOf(`${v.san} ${v.why}`));
   return `The move is ${v.san} — it ${v.why}.${line}`;
 }
 

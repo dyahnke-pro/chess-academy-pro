@@ -418,6 +418,12 @@ export function finishStarted(lastOwn: { fenBefore: string; san: string } | unde
  *  wins anything of yours; after the next-best, one does. */
 export function goodInEveryBranch(fen: string, me: 'w' | 'b', lines: Lines): Read | null {
   if (lines.length < 2) return null;
+  // ONE CRITICALITY (OS-11 #9): "the next-best leaves a piece to be taken" is a
+  // real decision only where the engine prices the next-best as costing — the
+  // same bar `anyMoveFine` reads for "no big decision here", so the two can
+  // never both be said of one board (g3 8.Nc2, 6 ms apart).
+  const gap = choiceGap(fen, lines);
+  if (gap === null || gap < criticalityThresholds().notable) return null;
   const a = sanOf(fen, lines[0].moves[0]); const b2 = sanOf(fen, lines[1].moves[0]);
   const pa = a ? play(fen, a) : null; const pb = b2 ? play(fen, b2) : null;
   if (!pa || !pb || !a || !b2 || pa.move.color !== me) return null;

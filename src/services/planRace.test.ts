@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { detectPlanRace, planRaceClause, pushesToPromote } from './planRace';
+import { detectPlanRace, planRaceClause, pushesToPromote, oppositeWingsRace, OPPOSITE_WINGS_CLAIM } from './planRace';
+import { stormRace as stormRaceRead } from './kingAttackReads';
 import { structurePlan } from './boardPlan';
 import { Chess } from 'chess.js';
 
@@ -187,5 +188,20 @@ describe('no pawn storm with the queens off (Alekhine walk 2026-10-19)', () => {
     const c = new Chess();
     for (const m of 'e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Nc3 Qd7 Nf3 Bg4 Be2 O-O-O c5 Nd5 Nxd5 Qxd5 Kf2 e6 h3 Bf5 Qa4 Qe4 Qa3 Qc2 b4 Be7 b5 Nb8 Qxa7 Bd3 Rhe1 Bxb5 Rab1 Qa4 Qxa4 Bxa4 Nd2 f6'.split(' ')) c.move(m);
     expect(detectPlanRace(c.fen(), 'w')?.kind).not.toBe('storm-race');
+  });
+});
+
+describe('the opposite-wings race has ONE owner (OS-11 item 6a)', () => {
+  // g2 after 11.Bb5: kings g8/c1, queens on. Old code: three producers said it
+  // in four moves, and the f3 "storm" counted contact with Black's e5 pawn.
+  const G2 = 'rn1q1rk1/1p2bppp/3pbn2/pB2p3/4P3/1NN1BP2/PPPQ2PP/2KR3R b - - 1 11';
+  it('one fact, one claim key, from the student seat', () => {
+    const r = oppositeWingsRace(G2, 'b', 'live');
+    expect(r?.text).toBe('The kings are on opposite wings, so it is a race: your pawns go after their king on the queenside, theirs come at yours on the kingside, and a tempo matters more than a pawn.');
+    expect(OPPOSITE_WINGS_CLAIM).toBe('race:opposite-wings');
+    expect(stormRaceRead(G2, 'b')?.claim).toBe(OPPOSITE_WINGS_CLAIM);
+  });
+  it('a storm counts contact only on the king\'s shelter files — e5 is not g8\'s shelter', () => {
+    expect(detectPlanRace(G2, 'b')).toBeNull();
   });
 });
