@@ -116,6 +116,10 @@ export function moveOrder(
 
   // What R wins, counted by exchange on its square (their gain, in pawns).
   let cost: string | null = null;
+  // One wording for the drop, said by both forms (WO-OUTCOME-01: an outcome
+  // is worded once per producer, from the ledger's count).
+  const DROPPED = 'would simply have dropped';
+  let drops = false;
   if (mates) cost = 'and it would have been mate';
   else if (r.captured) {
     // What R's LINE nets them, settled by the ledger (WO-OUTCOME-01 B) — the
@@ -129,7 +133,7 @@ export function moveOrder(
     const proof = sans.length ? proofCut(yFen, sans, opp) : null;
     const net = proof && !proof.mate && proof.ledger ? proof.ledger.netPawns : 0;
     const piece = NAME[r.captured] ?? 'piece';
-    if (net >= (MATERIAL_VALUE[r.captured] ?? 0)) cost = `and the ${piece} on ${r.to} would simply have dropped`;
+    if (net >= (MATERIAL_VALUE[r.captured] ?? 0)) { cost = `and the ${piece} on ${r.to} ${DROPPED}`; drops = true; }
     else if (net > 0) cost = `and it would have cost material on ${r.to}`;
   }
   if (!cost) return null;
@@ -141,7 +145,7 @@ export function moveOrder(
   // Held: ONE sentence with its reason — the follow-up by its piece, the cost
   // without the square it lands on (the square would name the move). The
   // two-sentence stem lost its reason sentence on the live board.
-  const heldCost = mates ? 'would have run into mate' : cost.startsWith('and the ') && r.captured ? `would have dropped your ${NAME[r.captured] ?? 'piece'}` : 'would have cost material';
+  const heldCost = mates ? 'would have run into mate' : drops && r.captured ? `${DROPPED} your ${NAME[r.captured] ?? 'piece'}` : 'would have cost material';
   const text = held
     ? `${X} first, and the order matters: moving your ${NAME[y.piece] ?? 'piece'} straight away ${heldCost}.`
     : seat === 'student'

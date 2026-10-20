@@ -51,7 +51,9 @@ export async function loadStudentRecord(): Promise<StudentRecord> {
   const [weaknesses, capabilities, slips] = await Promise.all([
     loadWeaknessSignals().catch(() => []),
     getCapabilityProfile().catch((): CapabilityProfile => new Map()),
-    db.misconceptionTags.toArray().catch((): MisconceptionTagRecord[] => []),
+    // Read inside the promise: a store that cannot be opened (or is missing)
+    // reads as empty instead of throwing out of the one door.
+    Promise.resolve().then(() => db.misconceptionTags.toArray()).catch((): MisconceptionTagRecord[] => []),
   ]);
   return studentRecordFrom(weaknesses, capabilities, slips);
 }

@@ -60,7 +60,7 @@ describe('moveOrder — his "this first, because…"', () => {
     const named = run(at('1rcEbI44WqE', 13));
     const held = run(at('1rcEbI44WqE', 13), 'student', false);
     expect(held?.held).toBe(true);
-    expect(held?.text).toBe('Be3 first, and the order matters: moving your knight straight away would have dropped your pawn.');
+    expect(held?.text).toBe('Be3 first, and the order matters: moving your knight straight away would simply have dropped your pawn.');
     expect(held?.text).not.toMatch(/Nc3|Qxd4|d4/);
     expect(held?.squares).not.toContain('c3');
     expect(named?.held).toBe(false);
