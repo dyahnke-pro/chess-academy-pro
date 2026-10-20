@@ -1483,19 +1483,19 @@ function betterGuardsTheLine(
   try {
     const before = new Chess(fenBefore);
     const best = new Chess(fenBefore);
+    // chess.js throws on an illegal move, so a bad line lands in the catch.
     const bm = best.move(bestSan);
-    if (!bm || bm.captured) return null;
+    if (bm.captured) return null;
     const line = new Chess(fenBefore);
-    if (!line.move(playedSan)) return null;
+    line.move(playedSan);
     // Six moves each: the 20.Qg3+ hunt reaches its rook check on the ninth ply.
     for (const uci of replyLineUci.slice(0, 12)) {
       const mv = line.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4, 5) || undefined });
-      if (!mv) return null;
       if (mv.color === mc || mv.to === bm.to) continue;
       const checks = mv.san.includes('+') || mv.san.includes('#');
       if (!checks && !mv.captured) continue;
-      if (!best.attackers(mv.to as Square, mc).includes(bm.to)) continue;
-      if (before.attackers(mv.to as Square, mc).includes(bm.from)) continue;
+      if (!best.attackers(mv.to, mc).includes(bm.to)) continue;
+      if (before.attackers(mv.to, mc).includes(bm.from)) continue;
       return `it would guard ${mv.to}, where their ${PIECE_NAME[mv.piece]} ${checks ? 'gives check' : 'takes'} in that line`;
     }
   } catch { /* an illegal line proves nothing */ }
