@@ -1880,6 +1880,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const token = ++theoryLectureTokenRef.current;
     setTheoryLecturePlaying(true);
     setTheoryOfferDone(true);
+    // THE LECTURE OWNS THE VOICE: the walk's own narration stops first, or its
+    // next ply talks over the lecture and its advance cancels it (probe on
+    // David's Vienna 2026-10-19: the walk's "d3 follows a rule…" between
+    // theory beats, and the lecture cut off at its fourth beat).
+    walkPlayback.pause('theory');
+    voiceService.stop();
     const waitIdle = async (maxMs = 12000): Promise<void> => {
       const start = performance.now();
       while (voiceService.isPlaying() && performance.now() - start < maxMs) {
@@ -1940,7 +1946,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setWalkExplorationArrows(null);
     setTheoryCaption(null);
     setTheoryLecturePlaying(false);
-  }, [theoryBeats, theoryLecturePlaying, playMoveSound]);
+  }, [theoryBeats, theoryLecturePlaying, playMoveSound, walkPlayback]);
 
   const stopOpeningTheory = useCallback((): void => {
     theoryLectureTokenRef.current += 1;

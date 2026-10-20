@@ -72,7 +72,7 @@ for (const g of games) {
   await startBtn.click({ timeout: 5000 }).catch(() => undefined);
   const theory = page.locator('[data-testid="walk-theory-btn"]').first();
   const t1 = Date.now();
-  while (Date.now() - t1 < 60000 && (await theory.count()) === 0) await page.waitForTimeout(1000);
+  while (Date.now() - t1 < 150000 && (await theory.count()) === 0) await page.waitForTimeout(1000);
   if ((await theory.count()) === 0) { add(`${g.id} theory-button`, false, 'Theory never appeared'); continue; }
   // Pause the walk's own narration so only the lecture is read.
   const pp = page.locator('[data-testid="review-play-pause-btn"]').first();
@@ -80,15 +80,21 @@ for (const g of games) {
   await page.waitForTimeout(2000);
   const before = spoken().length;
   await theory.click({ timeout: 5000 }).catch(() => undefined);
+  await page.waitForTimeout(800);
+  add(`${g.id} lecture-started`, /Stop theory/.test((await theory.textContent().catch(() => '')) ?? ''), 'the button flipped to Stop theory');
   // The lecture ends when the button flips back to "Theory".
   const t2 = Date.now();
   await page.waitForTimeout(3000);
+  let lastCap = '';
   while (Date.now() - t2 < 240000) {
     const label = (await theory.textContent().catch(() => '')) ?? '';
+    const cap = ((await page.locator('[data-testid="review-narration-banner"]').first().textContent().catch(() => '')) ?? '').slice(0, 70);
+    if (process.env.THEORY_TRACE === '1' && cap !== lastCap) { console.log(`  [${((Date.now() - t2) / 1000).toFixed(0)}s] ${label.trim()} | ${cap}`); lastCap = cap; }
     if (!/Stop theory/.test(label)) break;
     await page.waitForTimeout(1500);
   }
-  const lines = spoken().slice(before);
+  // The page and the voice each log one utterance: one line, said once.
+  const lines = spoken().slice(before).filter((l, i, a) => i === 0 || l.replace(/\s+/g, ' ') !== a[i - 1].replace(/\s+/g, ' '));
   for (const l of lines) out.push(`  • ${l}`);
   add(`${g.id} lecture-spoke`, lines.length >= 2, `${lines.length} lines`);
   const otherSeat = seat === 'white' ? /Develop the light-squared bishop to f5 BEFORE playing \.\.\.e6|Recapture on d5 with the queen/ : /\.\.\.a6 prevents Bb5\+/;
