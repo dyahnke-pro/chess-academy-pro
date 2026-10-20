@@ -4,26 +4,26 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2132 lines · 8 exports · 61 importers · 51 tests · 4 audits**
+**2686 lines · 13 exports · 71 importers · 69 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.6 THE REVIEW-PREP LAG IS SERIALIZED ENGINE CALLS, NOT THE TIMEOUT (David 2026-09-16: "we need to fix that seven second lag").** (CLAUDE.md:1077) — names `stockfishEngine`
-- **Mocking Conventions** (CLAUDE.md:4883) — names `stockfishEngine`
-- **Do NOT** (CLAUDE.md:4938) — names `stockfishEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:5683) — names `stockfishEngine`
+- **G4.6 THE REVIEW-PREP LAG IS SERIALIZED ENGINE CALLS, NOT THE TIMEOUT (David 2026-09-16: "we need to fix that seven second lag").** (CLAUDE.md:1205) — names `stockfishEngine`
+- **Mocking Conventions** (CLAUDE.md:5467) — names `stockfishEngine`
+- **Do NOT** (CLAUDE.md:5522) — names `stockfishEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6390) — names `stockfishEngine`
 
 ## Who calls in
 
 - `src/App.tsx`
+- `src/coach/boardTurnAnswer.ts`
+- `src/coach/coachService.ts`
 - `src/coach/tools/cerebellum/stockfishClassifyMove.ts`
 - `src/coach/tools/cerebellum/stockfishEval.ts`
-- `src/components/Analysis/AnalysisBoardPage.tsx`
 - `src/components/Board/VoiceChatMic.tsx`
 - `src/components/Coach/CoachAnalysePage.tsx`
 - `src/components/Coach/CoachGamePage.tsx`
 - `src/components/Coach/CoachGameReview.tsx`
-- `src/components/Coach/CoachPlaySessionView.tsx`
 - `src/components/Coach/CoachTeachPage.test.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Coach/ExplainPositionSessionView.tsx`
@@ -52,32 +52,48 @@
 - `src/hooks/usePositionNarration.ts`
 - `src/hooks/usePracticePosition.ts`
 - `src/hooks/useReviewEngineLines.ts`
+- `src/hooks/useWrongTryRefutation.ts`
 - `src/services/coachAnswerGates.ts`
-- `src/services/coachContextEnricher.ts`
 - `src/services/coachGameEngine.test.ts`
 - `src/services/coachGameEngine.ts`
 - `src/services/coachPlaySession.test.ts`
 - `src/services/coachPlaySession.ts`
+- `src/services/decisiveReason.turnDepth.test.ts`
 - `src/services/endgameRecapService.test.ts`
 - `src/services/endgameRecapService.ts`
+- `src/services/engineLifecycle.ts`
 - `src/services/enginePlanContext.ts`
+- `src/services/gameAnalysisService.poolEngine.test.ts`
 - `src/services/gameAnalysisService.test.ts`
 - `src/services/gameAnalysisService.ts`
 - `src/services/gemFinder.test.ts`
 - `src/services/gemFinder.ts`
 - `src/services/liveTacticsContext.ts`
+- `src/services/middlegamePlanner.pvNarration.test.ts`
 - `src/services/middlegamePlanner.test.ts`
 - `src/services/middlegamePlanner.ts`
 - `src/services/mistakePuzzleService.ts`
+- `src/services/movePurposeEngine.ts`
 - `src/services/moveRating.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/openingMatchup.ts`
+- `src/services/playedMoveGrade.ts`
 - `src/services/punishPlayout.ts`
 - `src/services/pvPlayback.ts`
 - `src/services/refutedAlternative.ts`
 - `src/services/reviewBetterLineWhy.test.ts`
+- `src/services/stockfishEngine.questionHold.test.ts`
+- `src/services/studentMovePrice.test.ts`
+- `src/services/thinkingCandidatesStep.ts`
+- `src/services/wrongTryRefutation.ts`
 
 ## Exports and every call site
+
+### `stampAsked` (function) — 4 call sites
+- `src/services/decisiveReason.turnDepth.test.ts:18`
+- `src/services/decisiveReason.turnDepth.test.ts:58`
+- `src/services/decisiveReason.turnDepth.test.ts:62`
+- `src/services/decisiveReason.turnDepth.test.ts:65`
 
 ### `AnalysisPriority` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -85,49 +101,69 @@
 ### `PrefetchDroppedError` (class) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `EngineUnavailableError` (class) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `AnalysisInterruptedError` (class) — 1 call site
+- `src/services/stockfishEngine.test.ts:763`
+
+### `ReadControl` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `uciBelongsToSideToMove` (function) — 7 call sites
+- `src/services/stockfishEngine.test.ts:2412`
+- `src/services/stockfishEngine.test.ts:2413`
+- `src/services/stockfishEngine.test.ts:2414`
+- `src/services/stockfishEngine.test.ts:2415`
+- `src/services/stockfishEngine.test.ts:2416`
+- `src/services/stockfishEngine.test.ts:2417`
+- `src/services/stockfishEngine.test.ts:2418`
+
 ### `StockfishVariant` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ResolvedWorker` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `isIosSafari` (function) — 1 call site
-- `src/services/gameAnalysisService.ts:93`
+### `isIosSafari` (function) — 2 call sites
+- `src/services/gameAnalysisService.ts:82`
+- `src/services/gameAnalysisService.ts:108`
 
 ### `wasmSimdSupported` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolveWorkerUrl` (function) — 16 call sites
-- `src/hooks/usePhaseNarration.ts:556`
-- `src/hooks/usePositionNarration.ts:185`
-- `src/services/gameAnalysisService.poolEngine.test.ts:68`
-- `src/services/gameAnalysisService.ts:655`
-- `src/services/gameAnalysisService.ts:730`
-- `src/services/stockfishEngine.test.ts:1392`
-- `src/services/stockfishEngine.test.ts:1404`
-- `src/services/stockfishEngine.test.ts:1419`
-- `src/services/stockfishEngine.test.ts:1439`
-- `src/services/stockfishEngine.test.ts:1450`
-- `src/services/stockfishEngine.test.ts:1467`
-- `src/services/stockfishEngine.test.ts:1480`
-- `src/services/stockfishEngine.test.ts:1501`
-- `src/services/stockfishEngine.test.ts:1514`
-- `src/services/stockfishEngine.test.ts:2234`
-- `src/services/stockfishEngine.test.ts:2235`
+- `src/hooks/usePhaseNarration.ts:391`
+- `src/hooks/usePositionNarration.ts:209`
+- `src/services/gameAnalysisService.poolEngine.test.ts:72`
+- `src/services/gameAnalysisService.ts:794`
+- `src/services/gameAnalysisService.ts:869`
+- `src/services/stockfishEngine.test.ts:1510`
+- `src/services/stockfishEngine.test.ts:1522`
+- `src/services/stockfishEngine.test.ts:1537`
+- `src/services/stockfishEngine.test.ts:1557`
+- `src/services/stockfishEngine.test.ts:1568`
+- `src/services/stockfishEngine.test.ts:1585`
+- `src/services/stockfishEngine.test.ts:1598`
+- `src/services/stockfishEngine.test.ts:1619`
+- `src/services/stockfishEngine.test.ts:1632`
+- `src/services/stockfishEngine.test.ts:2388`
+- `src/services/stockfishEngine.test.ts:2389`
 
 ### `stockfishEngine` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 
-- `src/components/Analysis/AnalysisBoardPage.test.tsx`
-- `src/components/Board/BoardPageLayout.test.tsx`
+- `src/coach/chatKindContracts.test.ts`
 - `src/components/Board/VoiceChatMic.test.tsx`
 - `src/components/Coach/CoachAnalysePage.test.tsx`
+- `src/components/Coach/CoachGamePage.abandon.test.tsx`
 - `src/components/Coach/CoachGamePage.test.tsx`
 - `src/components/Coach/CoachGameReview.test.tsx`
 - `src/components/Coach/CoachTeachPage.drillOrientation.test.tsx`
 - `src/components/Coach/CoachTeachPage.test.tsx`
+- `src/components/Coach/ExplainPositionSessionView.test.tsx`
 - `src/components/Kid/FairyTaleChapterPage.test.tsx`
 - `src/components/Kid/GameChapterPage.test.tsx`
 - `src/components/Kid/JourneyChapterPage.test.tsx`
@@ -144,37 +180,60 @@
 - `src/hooks/useDiscussionPractice.test.ts`
 - `src/hooks/useEnginePonder.test.ts`
 - `src/hooks/useHintSystem.test.ts`
+- `src/hooks/useLiveCoach.needWire.test.tsx`
 - `src/hooks/useLiveCoach.test.tsx`
-- `src/hooks/usePhaseNarration.test.ts`
+- `src/hooks/usePhaseNarration.door.test.ts`
+- `src/hooks/usePositionNarration.degrade.test.ts`
 - `src/hooks/usePositionNarration.test.ts`
 - `src/hooks/useReviewEngineLines.test.ts`
+- `src/services/analysisDeterminism.pool.test.ts`
 - `src/services/analysisTelemetry.test.ts`
 - `src/services/coachGameEngine.test.ts`
 - `src/services/coachPlaySession.test.ts`
+- `src/services/coachTurnTruth.test.ts`
+- `src/services/decisiveReason.turnDepth.test.ts`
 - `src/services/endgameRecapService.test.ts`
+- `src/services/engineLifecycle.test.ts`
 - `src/services/enginePlanContext.test.ts`
+- `src/services/finishedBoard.test.ts`
 - `src/services/gameAnalysisPool.test.ts`
 - `src/services/gameAnalysisService.poolEngine.test.ts`
 - `src/services/gameAnalysisService.test.ts`
 - `src/services/gameAnalysisTwoPass.test.ts`
 - `src/services/gemFinder.test.ts`
+- `src/services/middlegamePlanner.pvNarration.test.ts`
 - `src/services/middlegamePlanner.test.ts`
 - `src/services/mistakePuzzleService.sequence.test.ts`
 - `src/services/mistakePuzzleService.test.ts`
+- `src/services/moveRating.at.test.ts`
 - `src/services/moveRating.test.ts`
+- `src/services/proofBacklog.report.test.ts`
 - `src/services/punishPlayout.test.ts`
 - `src/services/reviewBetterLineWhy.test.ts`
 - `src/services/reviewCorpusSweep.test.ts`
+- `src/services/reviewDeepIdeaStake.test.ts`
 - `src/services/reviewDeepThreat.test.ts`
 - `src/services/reviewFullGameNarration.harness.test.ts`
+- `src/services/reviewReadAhead.test.ts`
+- `src/services/reviewRealSweep.test.ts`
+- `src/services/reviewRefuted.test.ts`
 - `src/services/stockfishEngine.native.test.ts`
+- `src/services/stockfishEngine.questionHold.test.ts`
+- `src/services/stockfishEngine.silentSingle.test.ts`
 - `src/services/stockfishEngine.test.ts`
 - `src/services/stockfishSuspendGuard.test.ts`
+- `src/services/studentMovePrice.test.ts`
 - `src/test/benchmarks/stockfish.perf.test.ts`
 
 ## Audits that reach it
 
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
 - `scripts/audit-analysis-pool-engine-prod.mjs`
 - `scripts/audit-coach-full-games.mjs`
 - `scripts/audit-coach-play.mjs`
+- `scripts/audit-learn-ios-engine.mjs`
+- `scripts/audit-review-overhaul-prod.mjs`
 - `scripts/audit-weaknesses-interactive-deep.mjs`
