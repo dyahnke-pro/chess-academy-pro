@@ -187,6 +187,9 @@ export function gradePlayedMove(input: {
  *  the tree the cost came from. Null scores: the played move was the fan's best
  *  (cost 0 by definition) on a read too shallow or mate-scored to quote. */
 export type { MovePrice } from './moveCost';
+/** The one exception to the one price — a mate on the board has no centipawn
+ *  price — lives with the price, so a reader of the price imports one module. */
+export { mateSwingCostCp } from './moveCost';
 
 /** One price per (position, move) for the life of the page: the door, the
  *  spoken verdict and the saved record all read the SAME promise, so the
@@ -239,8 +242,4 @@ export function priceLabel(price: MovePrice | null, mover: 'w' | 'b'): MoveLabel
   return gradeMove({ beforeCp: price.scores.bestWhiteCp * sign, afterCp: price.scores.playedWhiteCp * sign }) ?? 'good';
 }
 
-/** The price's cost alone — `liveMovePrice`'s number. */
-export async function liveMoveCost(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number): Promise<number | null> {
-  return (await liveMovePrice(fenBefore, playedUci, fan, depth))?.costCp ?? null;
-}
 export { uciOfSan };

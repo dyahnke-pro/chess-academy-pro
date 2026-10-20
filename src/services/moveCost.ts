@@ -86,19 +86,6 @@ export async function moveScoresOneSearch(input: {
   return { costCp: Math.max(0, cost), bestWhiteCp: best.evaluation, playedWhiteCp: played.evaluation };
 }
 
-/** Centipawns the played move gives up against the best one, from the mover's
- *  seat, >= 0 — `moveScoresOneSearch`'s cost. */
-export async function moveCostOneSearch(input: {
-  fenBefore: string;
-  playedUci: string;
-  fan: CostFan | null;
-  scorer: MoveScorer;
-  depth: number;
-}): Promise<number | null> {
-  const lines = (input.fan?.topLines ?? []).filter((l) => l.moves.length > 0);
-  if (lines[0]?.moves[0] && lines[0].moves[0] === input.playedUci) return 0;
-  return (await moveScoresOneSearch(input))?.costCp ?? null;
-}
 
 /** The UCI of a SAN move on `fen`, or null when it is not legal there. */
 export function uciOfSan(fen: string, san: string): string | null {

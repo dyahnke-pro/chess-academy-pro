@@ -75,7 +75,11 @@ describe('one price for a move — no live surface subtracts two reads', () => {
     const teach = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     const play = readFileSync('src/components/Coach/CoachGamePage.tsx', 'utf8');
     const record = readFileSync('src/hooks/useDiscussionPractice.ts', 'utf8');
-    for (const [name, src] of [['Learn', teach], ['Play', play], ['the record', record]] as const) {
+    // Play reads it through moveRating's one entry (price + label), which reads liveMovePrice.
+    const rating = readFileSync('src/services/moveRating.ts', 'utf8');
+    expect(rating, 'moveRating\'s entry reads the one price').toMatch(/\bliveMovePrice\(/);
+    expect(play, 'Play prices moves through priceAndClassifyLiveMove').toMatch(/\bpriceAndClassifyLiveMove\(/);
+    for (const [name, src] of [['Learn', teach], ['the record', record]] as const) {
       expect(src, `${name} prices moves with liveMovePrice`).toMatch(/\bliveMovePrice\(/);
     }
   });
