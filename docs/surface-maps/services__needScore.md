@@ -8,10 +8,10 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4020) — names `COLD_START_GAMES`, `familiarity`, `needScore`
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4101) — names `computeNeed`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4257) — names `familiarity`
-- **The standard post-deploy ritual** (CLAUDE.md:6341) — names `needScore`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4086) — names `COLD_START_GAMES`, `familiarity`, `needScore`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4167) — names `computeNeed`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4323) — names `familiarity`
+- **The standard post-deploy ritual** (CLAUDE.md:6443) — names `needScore`
 
 ## Who calls in
 
@@ -76,8 +76,8 @@
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:36`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:88`
 - `src/services/coachFeatureService.trade.test.ts:18`
-- `src/services/coachFeatureService.ts:1319`
-- `src/services/coachFeatureService.ts:5028`
+- `src/services/coachFeatureService.ts:1299`
+- `src/services/coachFeatureService.ts:5055`
 - `src/services/fundamentalReachesDecider.test.ts:62`
 - `src/services/needCoverage.report.test.ts:93`
 - `src/services/needScore.test.ts:36`
@@ -85,7 +85,7 @@
 - `src/services/needScore.test.ts:69`
 - `src/services/needScore.test.ts:79`
 - `src/services/oneStudentRating.test.ts:84`
-- `src/services/openingGenerator.ts:2173`
+- `src/services/openingGenerator.ts:2137`
 - `src/services/reviewLastTimeHere.test.ts:25`
 - `src/services/reviewLastTimeHere.test.ts:31`
 - `src/services/reviewNeedGate.test.ts:30`
@@ -173,7 +173,7 @@
 - `src/services/coachDecisionEmits.test.ts:134`
 - `src/services/coachDecisionEmits.test.ts:142`
 - `src/services/coachDecisionEmits.test.ts:148`
-- `src/services/coachFeatureService.ts:1319`
+- `src/services/coachFeatureService.ts:1299`
 - `src/services/fundamentalReachesDecider.test.ts:140`
 - `src/services/fundamentalReachesDecider.test.ts:154`
 - `src/services/fundamentalReachesDecider.test.ts:165`
@@ -207,7 +207,7 @@
 - `src/services/oneOpeningKey.test.ts:141`
 - `src/services/oneOpeningKey.test.ts:143`
 - `src/services/positionFacts.liveFundamental.test.ts:80`
-- `src/services/positionFacts.ts:1192`
+- `src/services/positionFacts.ts:1221`
 - `src/services/teachingSelector.ts:332`
 
 ### `HELD_FOR_PROVEN` (re-export) — 0 call sites

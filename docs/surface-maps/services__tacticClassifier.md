@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**716 lines · 3 exports · 16 importers · 8 tests · 0 audits**
+**737 lines · 3 exports · 16 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -37,7 +37,7 @@
 - `src/services/deliberation.ts:150`
 - `src/services/hangingIgnoresCheck.test.ts:10`
 - `src/services/hangingIgnoresCheck.test.ts:11`
-- `src/services/liveTacticsContext.ts:375`
+- `src/services/liveTacticsContext.ts:377`
 - `src/services/moveReason.ts:136`
 - `src/services/oneHanging.test.ts:11`
 - `src/services/oneHanging.test.ts:16`
@@ -84,7 +84,7 @@
 
 ### `scanUpcomingTactics` (function) — 5 call sites
 - `src/components/Coach/CoachGamePage.tsx:2914`
-- `src/services/liveTacticsContext.ts:95`
+- `src/services/liveTacticsContext.ts:97`
 - `src/services/tacticClassifier.skewer.test.ts:13`
 - `src/services/tacticClassifier.skewer.test.ts:15`
 - `src/services/tacticClassifier.skewer.test.ts:22`
