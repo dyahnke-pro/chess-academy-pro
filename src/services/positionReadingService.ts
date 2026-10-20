@@ -31,6 +31,7 @@ import { MATERIAL_VALUE, materialBalance } from './pieceValues';
 import { describeStructure } from './boardStructure';
 import { shieldCount } from './kingSafety';
 import { worstPieceNote } from './nextPlans';
+import { unmarked } from '../utils/sanMark';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -2105,7 +2106,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
       answerMode: 'any',
       id: 'mate', type: 'mate', bucket: 'tactics',
       prompt: `${sideToMove === 'white' ? 'White' : 'Black'} to move — is there a forced mate in one? If so, what is it?`,
-      answer: `Yes — ${facts.mateInOne} is mate.`,
+      answer: `Yes — ${unmarked(facts.mateInOne)} is mate.`,
       acceptTokens: [sq(facts.mateInOne), 'mate', 'checkmate', 'yes'],
       answerMoves: [facts.mateInOne],
       negative: false,

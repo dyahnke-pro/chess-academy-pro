@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**569 lines · 16 exports · 41 importers · 9 tests · 0 audits**
+**574 lines · 16 exports · 42 importers · 11 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,6 +29,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/inaccuracyCall.ts`
 - `src/services/lineCalc.ts`
 - `src/services/lineProof.test.ts`
+- `src/services/liveTacticsContext.ts`
 - `src/services/lookaheadPlan.ts`
 - `src/services/moveComparison.ts`
 - `src/services/moveInsight.lineAudit.test.ts`
@@ -63,8 +64,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `computeExchangeLedger` (function) — 14 call sites
-- `src/coach/chatTurnAnswers.ts:409`
-- `src/services/exchangeIdeas.ts:616`
+- `src/coach/chatTurnAnswers.ts:410`
+- `src/services/exchangeIdeas.ts:617`
 - `src/services/exchangeLedger.test.ts:13`
 - `src/services/exchangeLedger.test.ts:51`
 - `src/services/exchangeLedger.test.ts:52`
@@ -76,17 +77,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:246`
 - `src/services/gemCrushLines.ts:275`
 - `src/services/patternFails.ts:128`
-- `src/services/threatProof.ts:56`
+- `src/services/threatProof.ts:57`
 
-### `netPieceWords` (function) — 8 call sites
-- `src/coach/chatTurnAnswers.ts:411`
-- `src/services/decisiveReason.ts:104`
-- `src/services/exchangeIdeas.ts:618`
-- `src/services/lineCalc.ts:202`
+### `netPieceWords` (function) — 9 call sites
+- `src/coach/chatTurnAnswers.ts:412`
+- `src/services/decisiveReason.ts:109`
+- `src/services/exchangeIdeas.ts:619`
+- `src/services/lineCalc.ts:203`
 - `src/services/patternFails.ts:129`
+- `src/services/principleAttribution.ts:790`
 - `src/services/reviewPositionalAssessment.ts:141`
 - `src/services/tacticGeometry.ts:529`
-- `src/services/whyItFailed.ts:258`
+- `src/services/whyItFailed.ts:264`
 
 ### `describeExchange` (function) — 5 call sites
 - `src/services/exchangeLedger.test.ts:19`
@@ -102,9 +104,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:209`
 
 ### `settledNetForLine` (function) — 8 call sites
-- `src/services/decisiveReason.ts:91`
-- `src/services/decisiveReason.ts:258`
-- `src/services/decisiveReason.ts:259`
+- `src/services/decisiveReason.ts:96`
+- `src/services/decisiveReason.ts:273`
+- `src/services/decisiveReason.ts:274`
 - `src/services/moveComparison.ts:183`
 - `src/services/moveComparison.ts:184`
 - `src/services/moveInsight.lineAudit.test.ts:49`
@@ -112,7 +114,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/thinkAloud.ts:105`
 
 ### `settledExchange` (function) — 5 call sites
-- `src/services/playCommentary.ts:1027`
+- `src/services/playCommentary.ts:1029`
 - `src/services/reviewConcepts.ts:93`
 - `src/services/reviewFullData.ts:387`
 - `src/services/reviewWalkOct2a.test.ts:15`
@@ -121,9 +123,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `LineProof` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `proofCut` (function) — 39 call sites
-- `src/services/coachFeatureService.ts:3926`
-- `src/services/coachFeatureService.ts:3929`
+### `proofCut` (function) — 40 call sites
+- `src/services/coachFeatureService.ts:3944`
+- `src/services/coachFeatureService.ts:3947`
 - `src/services/gemCrushLines.ts:266`
 - `src/services/gemFinder.ts:244`
 - `src/services/giftedMaterialIsNotWon.test.ts:14`
@@ -132,27 +134,28 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/giftedMaterialIsNotWon.test.ts:56`
 - `src/services/inaccuracyCall.ts:342`
 - `src/services/inaccuracyCall.ts:400`
-- `src/services/inaccuracyCall.ts:906`
-- `src/services/inaccuracyCall.ts:1381`
-- `src/services/inaccuracyCall.ts:1447`
-- `src/services/inaccuracyCall.ts:1542`
-- `src/services/inaccuracyCall.ts:1593`
+- `src/services/inaccuracyCall.ts:918`
+- `src/services/inaccuracyCall.ts:1393`
+- `src/services/inaccuracyCall.ts:1459`
+- `src/services/inaccuracyCall.ts:1554`
+- `src/services/inaccuracyCall.ts:1605`
 - `src/services/lineProof.test.ts:13`
 - `src/services/lineProof.test.ts:24`
 - `src/services/lineProof.test.ts:32`
 - `src/services/lineProof.test.ts:37`
+- `src/services/liveTacticsContext.ts:459`
 - `src/services/lookaheadPlan.ts:648`
 - `src/services/lookaheadPlan.ts:710`
 - `src/services/moveOrder.ts:133`
 - `src/services/openingGenerator.ts:3524`
-- `src/services/pieceOptions.ts:123`
-- `src/services/playedMoveGrade.ts:111`
-- `src/services/principleAttribution.ts:461`
-- `src/services/principleAttribution.ts:525`
-- `src/services/principleAttribution.ts:724`
-- `src/services/principleAttribution.ts:727`
-- `src/services/principleAttribution.ts:737`
-- `src/services/principleAttribution.ts:740`
+- `src/services/pieceOptions.ts:124`
+- `src/services/playedMoveGrade.ts:117`
+- `src/services/principleAttribution.ts:463`
+- `src/services/principleAttribution.ts:527`
+- `src/services/principleAttribution.ts:742`
+- `src/services/principleAttribution.ts:745`
+- `src/services/principleAttribution.ts:755`
+- `src/services/principleAttribution.ts:758`
 - `src/services/projectedLineVoice.report.test.ts:108`
 - `src/services/projectedLineVoice.ts:68`
 - `src/services/punishCountsPlayedMove.test.ts:16`
@@ -160,7 +163,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternativeCore.ts:181`
 - `src/services/reviewWalkOct2a.test.ts:24`
 - `src/services/reviewWalkOct2a.test.ts:26`
-- `src/services/whyItFailed.ts:211`
+- `src/services/whyItFailed.ts:217`
 
 ### `lineGiftIndex` (function) — 4 call sites
 - `src/services/giftedMaterialIsNotWon.test.ts:19`
@@ -169,25 +172,25 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/giftedMaterialIsNotWon.test.ts:57`
 
 ### `describeProofResult` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:3898`
-- `src/services/decisiveReason.ts:128`
+- `src/services/coachFeatureService.ts:3916`
+- `src/services/decisiveReason.ts:133`
 - `src/services/lineProof.test.ts:27`
-- `src/services/pieceOptions.ts:136`
+- `src/services/pieceOptions.ts:137`
 - `src/services/refutedAlternativeCore.ts:189`
-- `src/services/threatProof.ts:57`
+- `src/services/threatProof.ts:58`
 
 ### `heardHorizon` (function) — 2 call sites
-- `src/services/decisiveReason.ts:90`
-- `src/services/decisiveReason.ts:110`
+- `src/services/decisiveReason.ts:95`
+- `src/services/decisiveReason.ts:115`
 
 ### `heardProofCut` (function) — 4 call sites
-- `src/services/decisiveReason.ts:101`
-- `src/services/decisiveReason.ts:116`
-- `src/services/decisiveReason.ts:212`
-- `src/services/lineCalc.ts:51`
+- `src/services/decisiveReason.ts:106`
+- `src/services/decisiveReason.ts:121`
+- `src/services/decisiveReason.ts:227`
+- `src/services/lineCalc.ts:52`
 
 ### `moverLossProof` (function) — 6 call sites
-- `src/services/criticalMoment.ts:256`
+- `src/services/criticalMoment.ts:266`
 - `src/services/deliberation.ts:231`
 - `src/services/deliberation.ts:258`
 - `src/services/exchangeLedger.horizon.test.ts:16`
@@ -195,7 +198,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/hardWalk.mates.test.ts:43`
 
 ### `moverLineProof` (function) — 8 call sites
-- `src/coach/boardTurnAnswer.ts:322`
+- `src/coach/boardTurnAnswer.ts:324`
 - `src/services/deliberation.ts:281`
 - `src/services/exchangeLedger.horizon.test.ts:30`
 - `src/services/exchangeLedger.horizon.test.ts:36`
@@ -215,6 +218,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/projectedLineVoice.report.test.ts`
 - `src/services/punishCountsPlayedMove.test.ts`
 - `src/services/reviewWalkOct2a.test.ts`
+- `src/test/oneLineReader.gate.test.ts`
+- `src/test/outcomeSentences.gate.test.ts`
 
 ## Audits that reach it
 

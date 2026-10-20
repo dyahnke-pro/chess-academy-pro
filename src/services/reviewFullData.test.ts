@@ -644,7 +644,7 @@ describe('the punishing line is played out in review, as in Learn and chat (2026
     });
     const q = facets.find((f) => f.startsWith('[quality]')) ?? '';
     expect(q).toMatch(/win a pawn/);
-    expect(q).toMatch(/The line starts with exd5, and they come out a pawn up\./);
+    expect(q).toMatch(/The line starts with exd5, and they win a pawn\./);
   });
 });
 

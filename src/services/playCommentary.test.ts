@@ -107,6 +107,13 @@ describe('buildRejectedTempting', () => {
     expect(rt?.facts).not.toContain('e5 '); // the best move stays unnamed
   });
 
+  it('a cut line gives no amount: the gap was not searched to the turn depth (OS-11)', () => {
+    const lines = [{ uci: 'e4e5', replyUci: 'c7c5', evalCp: 40 }, { uci: 'e4d5', replyUci: 'd8d5', evalCp: -140 }];
+    expect(buildRejectedTempting({ fen, studentColor: 'white', lines })?.hint.detail).toMatch(/gives up/);
+    const cut = buildRejectedTempting({ fen, studentColor: 'white', lines: lines.map((l, i) => (i === 1 ? { ...l, searchedShort: true } : l)) });
+    expect(cut?.hint.detail).toBe('That line falls short of the best move.');
+  });
+
   it('a quiet alternative is not "tempting" — silence', () => {
     // Second line is a quiet knight move, not a capture or check.
     const rt = buildRejectedTempting({

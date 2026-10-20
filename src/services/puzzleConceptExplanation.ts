@@ -32,6 +32,7 @@ import type { DnaLinePly } from './dnaLineNarrator';
 import { andList, countWord } from '../utils/andList';
 import { getConcept } from './chessConceptService';
 import { conceptForLine, tacticInvariant, type ComputedConcept } from './conceptEngine';
+import { unmarked } from '../utils/sanMark';
 
 /** Lichess puzzle theme → chess-concepts.json concept id (the IDEA passage).
  *  Only patterns the corpus actually teaches; a theme with no concept still
@@ -261,7 +262,7 @@ function asSentence(clause: string): string {
  *  move what the line won. No per-ply commentary — the motif sentence carries
  *  the WHY, once. */
 function studentClause(p: ReadPly, opts: { first: boolean; last: boolean; result: string | null }): string {
-  if (p.san.endsWith('#')) return opts.first ? `${p.san} is checkmate` : `and ${p.san} is checkmate`;
+  if (p.san.endsWith('#')) return opts.first ? `${unmarked(p.san)} is checkmate` : `and ${unmarked(p.san)} is checkmate`;
   const lead = opts.first ? p.san : `then ${p.san}`;
   if (opts.last && opts.result) return `${lead}, and you win ${opts.result}`;
   if (p.promotion) return p.promotion === 'q' ? `${lead} — the pawn queens` : `${lead} — the pawn becomes a ${PIECE_NAME[p.promotion] ?? 'piece'}`;

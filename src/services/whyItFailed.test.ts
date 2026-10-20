@@ -316,3 +316,24 @@ describe('an outcome is what the engine line does (WO-OUTCOME-01)', () => {
     expect(out?.kind).not.toBe('abandoned-defender');
   });
 });
+
+describe('the failure is what the line wins, not what the move eyed (prod Learn audit 2026-10-20)', () => {
+  // Black's bishop on g4 hangs to h3; Black plays …Nc6, eyeing d4, and the
+  // engine's line simply takes the bishop (Stockfish 18, depth 14). The coach
+  // said "That eyed the pawn on d4, but the … holds it" — a side-description —
+  // while the move's real cost was the bishop.
+  const FEN = 'rn1q1rk1/ppp2ppp/4p3/3p4/3P2b1/4PN1P/PPP2PP1/R2Q1RK1 b - - 0 10';
+  const LINE = ['h3g4', 'f8e8', 'd1d3', 'e6e5', 'd4e5', 'c6e5', 'f3e5', 'e8e5'];
+  it('a line that wins a piece elsewhere is not explained by the eyed target', () => {
+    const w = whyItFailed({ fenBefore: FEN, playedSan: 'Nc6', studentColor: 'black', playedLineUci: LINE });
+    expect(w?.line ?? '').not.toMatch(/eyed/);
+    expect(w?.kind).not.toBe('held-by-defender');
+  });
+  it('with no loss in the line, the eyed target is still the teaching', () => {
+    // Same move, the bishop no longer hanging (no h3 pawn): the idea …Nc6 had
+    // was the d4 pawn, and taking it loses the knight.
+    const quiet = 'rn1q1rk1/ppp2ppp/4p3/3p4/3P2b1/4PN2/PPP2PPP/R2Q1RK1 b - - 0 10';
+    const w = whyItFailed({ fenBefore: quiet, playedSan: 'Nc6', studentColor: 'black', playedLineUci: ['f1e1', 'f8e8'] });
+    expect(w?.line).toMatch(/^That eyed the pawn on d4/);
+  });
+});

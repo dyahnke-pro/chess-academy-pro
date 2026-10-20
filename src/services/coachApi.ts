@@ -2756,7 +2756,7 @@ async function computeLiveBoardVerdict(
     try {
       if (new Chess(fen).isCheckmate()) {
         const why = explainMate(fen);
-        return await voice(`${why ?? "It's checkmate."}${named(fen)}`, 'mate');
+        return await voice(`${why ? `It's checkmate. ${why}` : "It's checkmate."}${named(fen)}`, 'mate');
       }
     } catch { /* not a board */ }
     const mateNow = (fen.split(' ')[1] === 'w') === (sc === 'white') ? mateInOneMoveOnBoard(fen) : null;
@@ -6306,7 +6306,7 @@ export async function getCoachChatResponse(
                 ? await moveReason(bestFen, bestMoveSanHere, 'student', lastHere).catch(() => null)
                 : null;
             if (bestReason) emitDecisiveReason({ surface: 'chat', kind: bestReason.kind, source: bestReason.source, about: bestReason.about, gapCp: bestReason.gapCp, stakeCp: bestReason.stakeCp, posedTag: null, outcome: 'explained' });
-            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, askedPiece: grounding.askedPiece ?? null, prevCapture: bestFen === grounding.currentFen ? lastCaptureOf(grounding.moveHistory) : null, pvSan: askedHere ? askedHere.pvSan : bestFen === grounding.currentFen ? grounding.enginePlan?.pvSan ?? null : null, opponentLastSan: lastHere, theReason: bestReason?.kind === 'the' ? bestReason.text : bestReason?.kind === 'close' ? bestReason.core : null, closeAlt: bestReason?.kind === 'close' ? bestReason.nextBestSan : null });
+            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, askedPiece: grounding.askedPiece ?? null, prevCapture: bestFen === grounding.currentFen ? lastCaptureOf(grounding.moveHistory) : null, pvSan: askedHere ? askedHere.pvSan : bestFen === grounding.currentFen ? grounding.enginePlan?.pvSan ?? null : null, opponentLastSan: lastHere, theReason: bestReason?.kind === 'the' ? bestReason.text : bestReason?.kind === 'close' ? bestReason.core : null, closeAlt: bestReason?.kind === 'close' && bestReason.gapEarned ? bestReason.nextBestSan : null });
             if (answer) {
               const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
               if (voiced) {

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7818 lines · 166 exports · 91 importers · 64 tests · 8 audits**
+**7823 lines · 166 exports · 91 importers · 64 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -124,7 +124,7 @@
 - `src/services/groundedAnswer.test.ts:1657`
 
 ### `evalPhrase` (function) — 1 call site
-- `src/coach/boardTurnAnswer.ts:447`
+- `src/coach/boardTurnAnswer.ts:448`
 
 ### `parsePiecePurpose` (function) — 7 call sites
 - `src/services/piecePurpose.test.ts:17`
@@ -175,7 +175,7 @@
 - `src/services/computedVoiceGrounding.test.ts:85`
 
 ### `assembleThreatAnswer` (function) — 7 call sites
-- `src/coach/chatTurnAnswers.ts:262`
+- `src/coach/chatTurnAnswers.ts:263`
 - `src/coach/dispatchCoachTurn.ts:580`
 - `src/coach/handWalk1009.test.ts:320`
 - `src/services/groundedAnswer.threatTake.test.ts:8`
@@ -417,11 +417,11 @@
 - `src/services/whyBestMove.ts:107`
 
 ### `captureHasCounterTactic` (function) — 2 call sites
-- `src/services/inaccuracyCall.ts:987`
+- `src/services/inaccuracyCall.ts:999`
 - `src/services/reviewTeachingPoints.ts:104`
 
 ### `describeMoveGeometry` (function) — 21 call sites
-- `src/coach/chatTurnAnswers.ts:635`
+- `src/coach/chatTurnAnswers.ts:636`
 - `src/components/Puzzles/PuzzleBoard.tsx:246`
 - `src/components/Tactics/TacticSetupBoard.tsx:155`
 - `src/hooks/useHintSystem.ts:357`
@@ -447,11 +447,11 @@
 - `src/services/deliberation.ts:458`
 
 ### `toObserverSeat` (function) — 5 call sites
-- `src/coach/chatTurnAnswers.ts:636`
+- `src/coach/chatTurnAnswers.ts:637`
 - `src/coach/handWalk1009.test.ts:173`
 - `src/coach/handWalk1009.test.ts:175`
 - `src/services/coachApi.ts:5780`
-- `src/services/inaccuracyCall.ts:914`
+- `src/services/inaccuracyCall.ts:926`
 
 ### `describeMoveMerit` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:990`
@@ -1245,7 +1245,7 @@
 - `src/services/coachApi.ts:6309`
 
 ### `seatPieceReferences` (re-export) — 36 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8794`
+- `src/components/Coach/CoachTeachPage.tsx:8796`
 - `src/services/coachFeatureService.ts:4335`
 - `src/services/coachFeatureService.ts:4386`
 - `src/services/coachFeatureService.ts:5409`

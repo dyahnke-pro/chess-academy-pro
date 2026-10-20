@@ -648,10 +648,23 @@ export function threatMadeWhy(fenBefore: string, san: string, mover: 'w' | 'b'):
  * moving; `found` — they played it; `missed` — they played something else and
  * nothing before this named the move. The reason always rides with the move.
  */
-export function heldVerdictText(v: HeldVerdict, when: 'now' | 'found'): string {
+export function heldVerdictText(v: HeldVerdict): string {
   const line = v.line ? ` ${openSentence(v.line)}.` : '';
-  if (when === 'found') return `That was the move here — it ${v.why}.`;
   return `The move is ${v.san} — it ${v.why}.${line}`;
+}
+
+/** THE HELD MOVE, FOUND — credit with its reason, the stem ROTATED (OS-11 g1:
+ *  "That was the move here — it …" seven times in one game). `stem` is the
+ *  per-game count of found credits (`learnMemory.nextStem`), REQUIRED so a
+ *  caller cannot fall back to one stem. */
+const FOUND_STEMS: readonly ((why: string) => string)[] = [
+  (why) => `That was the move here — it ${why}.`,
+  (why) => `You found it: it ${why}.`,
+  (why) => `The move the position asked for — it ${why}.`,
+  (why) => `That one does the job: it ${why}.`,
+];
+export function heldFoundText(v: HeldVerdict, stem: number): string {
+  return FOUND_STEMS[Math.abs(Math.trunc(stem)) % FOUND_STEMS.length](v.why);
 }
 
 /** The mover's pawns have claimed more room behind them (`computeTerritory`). */

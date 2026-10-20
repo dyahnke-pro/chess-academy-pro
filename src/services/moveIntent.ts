@@ -21,6 +21,7 @@ import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { legalSeeGainFor, legalSeeGainOn, standsSafe } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
 import { isOnHomeSquare } from './development';
+import { unmarked } from '../utils/sanMark';
 
 export interface IntentReads {
   /** Mover to move at the board BEFORE the move (the ordinary read). */
@@ -411,7 +412,7 @@ function phrase(
     // "doesn't work", never "isn't possible" — the stopped move is still
     // LEGAL, it just loses (walk 2026-09-30: said five times in one game).
     const wouldDo = threatDid && !threatDid.castle ? threatDid.verb.replace(/^hit the /, 'hit your ') : null;
-    if (prevents?.mate) { const m = stop.replace(/[+#]$/, ''); return rotateStem([`${played} stops ${m}, which was mate.`, `The point of ${played}: ${m} was mate, and now it isn't.`], key); }
+    if (prevents?.mate) { const m = unmarked(stop); return rotateStem([`${played} stops ${m}, which was mate.`, `The point of ${played}: ${m} was mate, and now it isn't.`], key); }
     if (prevents && why) return `${played} — now ${stop} doesn't work: ${why}.`;
     if (prevents && wouldDo) return `${played} — ${stop} would ${wouldDo}, and now it doesn't work.`;
     if (prevents) return rotateStem([`${played} — now ${stop} doesn't work.`, `The point of ${played}: it takes ${stop} away.`], key);

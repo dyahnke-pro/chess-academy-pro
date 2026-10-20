@@ -327,7 +327,7 @@ describe('the departure judged — cost and the punishing line (Danya reviews, 2
   };
   it('a departure that drops material plays the refutation to its last capture', async () => {
     const f = await departure({ cpLoss: 120, replyLineUci: ['f3e5', 'f6e5', 'd1h5', 'g7g6', 'h5e5', 'd8e7', 'e5h8'] });
-    expect(f).toMatch(/The engine punishes f6: you play Nxe5 and, \w+ moves? later, (?:you|they) play \S+ — you come out [^.]+ up\./);
+    expect(f).toMatch(/The engine punishes f6: you play Nxe5 and, \w+ moves? later, (?:you|they) play \S+ — you win [^.]+\./);
   });
   it('a costly departure without a forced win says what it costs', async () => {
     expect(await departure({ cpLoss: 45, replyLineUci: [] })).toContain('By the engine\'s count f6 costs about half a point.');

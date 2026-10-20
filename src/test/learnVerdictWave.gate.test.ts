@@ -21,7 +21,7 @@ const at = (needle: string | RegExp): number => {
 
 describe('Learn: the verdict is not queued behind the next board', () => {
   it('the cost is one search, started at the reply, before the board between the moves is read', () => {
-    const cost = at(/const priceRead: Promise<MovePrice \| null> = preStudentRead[\s\S]{0,120}liveMovePrice\(fenBefore/);
+    const cost = at(/const priceRead: Promise<MovePrice \| null> = preStudentRead[\s\S]{0,120}studentMovePrice\(fenBefore/);
     expect(cost).toBeLessThan(at('const midTurnRead = midTurnReadEarly ??'));
     expect(cost).toBeGreaterThan(at('const reply = await resolveCoachReplyMove(move.fen);'));
   });

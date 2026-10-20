@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6444) — names `misconceptionService`
+- **The standard post-deploy ritual** (CLAUDE.md:6443) — names `misconceptionService`
 
 ## Who calls in
 
@@ -143,7 +143,7 @@
 - `src/services/misconceptionService.test.ts:97`
 - `src/services/misconceptionService.test.ts:115`
 - `src/services/weaknessAnalyzer.ts:995`
-- `src/services/weaknessSpine.ts:921`
+- `src/services/weaknessSpine.ts:934`
 
 ### `recordTagDrillResult` (function) — 12 call sites
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx:294`

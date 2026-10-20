@@ -101,7 +101,7 @@ export async function refuteWrongTry(args: {
       const uci = line.slice(0, w.plies.length);
       return {
         kind: 'material',
-        text: `${san}? Then ${lineShape(w.sans, 'they')} — they come out ${w.what} up.`,
+        text: `${san}? Then ${lineShape(w.sans, 'they')} — they win ${w.what}.`,
         fenAfter, uci: [...uci], arrows: lineArrows(fenAfter, uci, 'puzzleTeaching.refute'),
       };
     }

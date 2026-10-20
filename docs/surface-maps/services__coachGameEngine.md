@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1138 lines · 19 exports · 8 importers · 8 tests · 2 audits**
+**1138 lines · 19 exports · 8 importers · 11 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -65,10 +65,10 @@
 - `src/services/ratingBands.test.ts:62`
 
 ### `getRandomLegalMove` (function) — 7 call sites
-- `src/components/Coach/CoachGamePage.tsx:2689`
-- `src/components/Coach/CoachGamePage.tsx:2704`
-- `src/components/Coach/CoachGamePage.tsx:2991`
-- `src/components/Coach/CoachGamePage.tsx:3029`
+- `src/components/Coach/CoachGamePage.tsx:2654`
+- `src/components/Coach/CoachGamePage.tsx:2669`
+- `src/components/Coach/CoachGamePage.tsx:2961`
+- `src/components/Coach/CoachGamePage.tsx:2999`
 - `src/components/Coach/CoachTeachPage.tsx:8127`
 - `src/components/Openings/OpeningPlayMode.tsx:765`
 - `src/components/Openings/OpeningPlayMode.tsx:790`
@@ -93,22 +93,22 @@
 - `src/services/coachGameEngine.test.ts:589`
 - `src/services/coachGameEngine.test.ts:591`
 - `src/services/coachGameEngine.test.ts:597`
-- `src/services/coachLaneWiring.test.ts:379`
-- `src/services/coachLaneWiring.test.ts:380`
+- `src/services/coachLaneWiring.test.ts:389`
+- `src/services/coachLaneWiring.test.ts:390`
 
 ### `TeachingReplySource` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `prewarmTeachingReplies` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:487`
+- `src/components/Coach/CoachGamePage.tsx:454`
 
 ### `LessonSteerOpt` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pickTeachingReply` (function) — 3 call sites
-- `src/components/Coach/CoachGamePage.tsx:2438`
-- `src/services/coachLaneWiring.test.ts:365`
-- `src/services/coachLaneWiring.test.ts:378`
+- `src/components/Coach/CoachGamePage.tsx:2399`
+- `src/services/coachLaneWiring.test.ts:375`
+- `src/services/coachLaneWiring.test.ts:388`
 
 ### `AdaptiveMoveOpts` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -120,7 +120,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getAdaptiveMove` (function) — 33 call sites
-- `src/components/Coach/CoachGamePage.tsx:2503`
+- `src/components/Coach/CoachGamePage.tsx:2464`
 - `src/components/Coach/CoachTeachPage.tsx:8083`
 - `src/components/Openings/OpeningPlayMode.tsx:753`
 - `src/services/coachGameEngine.test.ts:72`
@@ -156,9 +156,9 @@
 
 ### `getTargetStrength` (function) — 14 call sites
 - `src/App.tsx:166`
-- `src/components/Coach/CoachGamePage.tsx:471`
-- `src/components/Coach/CoachGamePage.tsx:2440`
-- `src/components/Coach/CoachGamePage.tsx:2503`
+- `src/components/Coach/CoachGamePage.tsx:438`
+- `src/components/Coach/CoachGamePage.tsx:2401`
+- `src/components/Coach/CoachGamePage.tsx:2464`
 - `src/components/Coach/CoachTeachPage.tsx:8077`
 - `src/components/Openings/OpeningPlayMode.tsx:87`
 - `src/services/coachGameEngine.test.ts:195`
@@ -172,11 +172,11 @@
 
 ### `studentPlayingRating` (re-export) — 22 call sites
 - `src/App.tsx:167`
-- `src/components/Coach/CoachGamePage.tsx:423`
+- `src/components/Coach/CoachGamePage.tsx:390`
 - `src/components/Coach/CoachTeachPage.tsx:8076`
-- `src/components/Coach/CoachTeachPage.tsx:10045`
-- `src/components/Coach/CoachTeachPage.tsx:13008`
-- `src/components/Coach/CoachTeachPage.tsx:14148`
+- `src/components/Coach/CoachTeachPage.tsx:10058`
+- `src/components/Coach/CoachTeachPage.tsx:13097`
+- `src/components/Coach/CoachTeachPage.tsx:14237`
 - `src/components/Openings/OpeningPlayMode.tsx:63`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:970`
 - `src/hooks/useEndgamePlayout.ts:388`
@@ -195,7 +195,7 @@
 - `src/services/engineStrength.ts:165`
 
 ### `opponentStrength` (re-export) — 10 call sites
-- `src/components/Coach/CoachGamePage.tsx:2389`
+- `src/components/Coach/CoachGamePage.tsx:2350`
 - `src/components/Coach/CoachTeachPage.tsx:8076`
 - `src/components/Openings/OpeningPlayMode.tsx:752`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:970`
@@ -207,9 +207,9 @@
 - `src/services/engineStrength.ts:111`
 
 ### `emitOpponentStrength` (re-export) — 6 call sites
-- `src/components/Coach/CoachGamePage.tsx:2399`
-- `src/components/Coach/CoachGamePage.tsx:2449`
-- `src/components/Coach/CoachGamePage.tsx:2473`
+- `src/components/Coach/CoachGamePage.tsx:2360`
+- `src/components/Coach/CoachGamePage.tsx:2410`
+- `src/components/Coach/CoachGamePage.tsx:2434`
 - `src/services/coachPlaySession.ts:193`
 - `src/services/engineStrength.test.ts:96`
 - `src/services/engineStrength.ts:139`
@@ -222,6 +222,9 @@
 - `src/components/Openings/OpeningPlayMode.punishCallout.test.tsx`
 - `src/components/Openings/OpeningPlayMode.test.tsx`
 - `src/services/coachGameEngine.test.ts`
+- `src/services/coachLaneWiring.test.ts`
+- `src/services/coachPlaySession.test.ts`
+- `src/services/coachTurnTruth.test.ts`
 - `src/services/engineStrength.test.ts`
 - `src/services/ratingBands.test.ts`
 

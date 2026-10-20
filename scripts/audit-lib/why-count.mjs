@@ -17,7 +17,7 @@ const WHY = new RegExp([
   String.raw`\bif (?:you|they|it|the|your|their)\b`, String.raw`\bonce (?:it|they|you)\b`, String.raw`\bbefore (?:it|they|you)\b`,
   String.raw`\bnothing'?s? (?:is )?defending\b`, String.raw`\bnothing (?:defends|guards)\b`, String.raw`\bundefended\b`, String.raw`\bhangs?\b`,
   String.raw`\b(?:a|the) rule\b`, String.raw`\bremember\b`,
-  String.raw`\byou come out (?:ahead|behind)\b`, String.raw`\bthe price\b`, String.raw`\bthe danger\b`, String.raw`\bso while\b`,
+  String.raw`\byou come out (?:ahead|behind)\b`, String.raw`\b(?:you|they) give up (?:a|an|the|two|three)\b`, String.raw`\bthe price\b`, String.raw`\bthe danger\b`, String.raw`\bso while\b`,
   String.raw`\bcan'?t be (?:taken back|undone)\b`,
   String.raw`\bmatters? more than\b`, String.raw`\bwould (?:just )?be taken\b`, String.raw`\bdoesn'?t work\b`, String.raw`\b(?:often )?decides\b`,
   String.raw`\bgives? up (?:its|their|your) guard\b`, String.raw`\bonly (?:one|a single) \w+ (?:shields|guards|defends)\b`, String.raw`\bcan be taken\b`,

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**247 lines · 11 exports · 11 importers · 10 tests · 1 audits**
+**261 lines · 12 exports · 13 importers · 10 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,7 +19,9 @@
 - `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/learnTurnDoor.story.test.ts`
 - `src/services/learnTurnDoor.ts`
+- `src/services/moveCost.ts`
 - `src/services/needScore.ts`
+- `src/services/playedMoveGrade.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/proofBacklog.report.test.ts`
 - `src/services/settledPrice.bf4.test.ts`
@@ -31,20 +33,20 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onCoachDecision` (function) — 5 call sites
-- `src/services/appAuditor.ts:2272`
+- `src/services/appAuditor.ts:2279`
 - `src/services/coachDecisionEmits.test.ts:32`
 - `src/services/coachDecisionEmits.test.ts:95`
 - `src/services/proofBacklog.report.test.ts:98`
 - `src/test/computedOrderWired.test.ts:26`
 
 ### `emitCoachDecision` (function) — 1 call site
-- `src/services/coachDecider.ts:351`
+- `src/services/coachDecider.ts:353`
 
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onNeedScore` (function) — 4 call sites
-- `src/services/appAuditor.ts:2224`
+- `src/services/appAuditor.ts:2231`
 - `src/services/coachDecisionEmits.test.ts:120`
 - `src/services/coachDecisionEmits.test.ts:147`
 - `src/services/positionFacts.liveFundamental.test.ts:50`
@@ -62,11 +64,14 @@
 ### `LearnTurnRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `PriceSearch` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `LearnTurnTag` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onLearnTurn` (function) — 8 call sites
-- `src/services/appAuditor.ts:2298`
+- `src/services/appAuditor.ts:2305`
 - `src/services/learnPhaseFocus.test.ts:97`
 - `src/services/learnPhaseFocus.test.ts:109`
 - `src/services/learnTurnDoor.phaseWave.test.ts:37`
@@ -76,7 +81,7 @@
 - `src/services/settledPrice.bf4.test.ts:73`
 
 ### `emitLearnTurn` (function) — 1 call site
-- `src/services/learnTurnDoor.ts:913`
+- `src/services/learnTurnDoor.ts:936`
 
 ## Tests
 

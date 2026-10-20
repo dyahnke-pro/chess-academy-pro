@@ -16,7 +16,9 @@
  * a short stem — the walk accumulates, it does not nag (G.4).
  */
 import { costWords } from './engineConstants';
+import { lineShape } from '../utils/andList';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
+import { unmarked } from '../utils/sanMark';
 
 const ORD = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth'];
 const nth = (n: number): string => ORD[n] ?? `${n}th`;
@@ -220,7 +222,7 @@ const VERDICT_WITHOUT_BETTER: Partial<Record<FundamentalId, (f: Facts) => string
   'ignored-threat': (f) => (f.line && f.threat
     // The line opens WITH the threat move — name it once (Learn tape
     // 2026-10-15: "queen to g8, check was already on — queen to g8, check, …").
-    ? `Their threat came first: ${f.line} was already on, and the ${f.piece} on ${f.square} goes — this move doesn't stop it.`
+    ? `Their threat came first — ${f.line} — and your ${f.piece} on ${f.square} goes; this move doesn't stop it.`
     : `Their threat first: the ${f.piece} on ${f.square} was already attacked, and this move doesn't deal with it — they take it next.`),
 };
 
@@ -399,10 +401,13 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
         ];
         return m[v % m.length];
       }
-      const lost = f.piece ? `the ${f.piece} on ${f.square}` : 'material';
+      // The line's SHAPE and what it wins, never a bare list of moves (the
+      // proof rule; 14.Rd5 2026-10-20: "hands them the line Bxc3, Rxa5, Bxe1,
+      // Bg3, Nxa5, and the rook on a5 goes" was refused by the gate).
+      const won = f.wins ?? (f.piece ? `your ${f.piece} on ${f.square}` : 'material');
       const s = [
-        `That walks into a tactic: it lets them start with ${f.blow}, and ${f.line} wins ${lost}${f.better ? `. ${f.better} gave them nothing of the kind` : ''}.`,
-        `This move hands them the line ${f.line}, and ${lost} goes.`,
+        `That walks into a tactic: ${f.line} — they win ${won}${f.better ? `. ${f.better} gave them nothing of the kind` : ''}.`,
+        `This move hands them a tactic: ${f.line}, and it wins them ${won}.`,
       ];
       return s[v % s.length];
     }
@@ -459,8 +464,8 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       // rook was already attacked".
       if (f.line) {
         const t = [
-          `Their threat came first: ${f.line} was already on, and the ${f.piece} on ${f.square} goes — this move doesn't stop it${f.better ? `; ${f.better} does` : ''}.`,
-          `Before your own plan, answer theirs: ${f.line} was waiting, it wins the ${f.piece} on ${f.square}, and this move leaves it on${f.better ? ` — ${f.better} takes it away` : ''}.`,
+          `Their threat came first — ${f.line} — and your ${f.piece} on ${f.square} goes; this move doesn't stop it${f.better ? `, ${f.better} does` : ''}.`,
+          `Before your own plan, answer theirs: ${f.line}, and your ${f.piece} on ${f.square} goes. This move leaves it on${f.better ? ` — ${f.better} takes it away` : ''}.`,
         ];
         return t[v % t.length];
       }
@@ -476,7 +481,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     case 'passive-when-forcing-existed': {
       if (f.played) {
         const t = [
-          `${f.played} forces something, but not a win — ${f.better} ${f.gain === 'mate' ? 'was mate' : 'won material by force'}.`,
+          `${f.played} forces something, but not a win — ${f.gain === 'mate' ? `${unmarked(String(f.better))} was mate` : `${f.better} won material by force`}.`,
           `Of the forcing moves, ${f.better} was the one that ${f.gain === 'mate' ? 'mates' : 'wins'}; ${f.played} wins nothing.`,
         ];
         return t[v % t.length];
@@ -487,7 +492,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
         // "Decisive" claimed a result the detector never measures — it proves a
         // forced material win, nothing more (clean-pass walk 2026-10-03, ply 29:
         // "axb4 was decisive" at +1.76).
-        `Always run the forcing moves first: ${f.better} ${f.gain === 'mate' ? 'was mate' : 'won material by force'}, and this doesn't force anything.`,
+        `Always run the forcing moves first: ${f.gain === 'mate' ? `${unmarked(String(f.better))} was mate` : `${f.better} won material by force`}, and this doesn't force anything.`,
       ];
       return s[v % s.length];
     }
@@ -825,7 +830,7 @@ function missedPunish(a: PrincipleAttribution, replySan: string | null): string 
   const line = cap.split(' ');
   if (line.length > 1) {
     if (replySan.replace(/[+#]+$/, '') === line[0].replace(/[+#]+$/, '')) return null;
-    return `That left your ${a.facts.piece} on ${sq} open to ${line.join(', ')} — they missed it this time.`;
+    return `That left your ${a.facts.piece} on ${sq} open — ${lineShape(line, 'they')} — and they missed it this time.`;
   }
   return `That left your ${a.facts.piece} on ${sq} ${guarded(a.facts) ? 'open' : 'hanging'} to ${cap} — they missed it this time.`;
 }

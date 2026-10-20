@@ -234,7 +234,7 @@ export interface PvEngine {
 }
 
 /** One move's score from a search restricted to the moves being compared. */
-export interface ScoredMove { evaluation: number; mate: number | null; moves: string[] }
+export interface ScoredMove { evaluation: number; mate: number | null; moves: string[]; /** The depth the search reached on this move. */ depth?: number | null }
 
 /** SCORES EXACTLY THESE MOVES IN ONE SEARCH (UCI `searchmoves`) — the only
  *  honest way to say what one move costs against another. Two separate

@@ -633,6 +633,18 @@ async function main() {
     if (turns.length > 0) {
       const bad = turns.filter((t) => t.spoke.some((l) => !t.offered.includes(l)) || (t.lead !== null && !t.spoke.includes(t.lead)));
       record('LD2. every spoken lane was offered, and the lead spoke', bad.length === 0, `${bad.length} malformed of ${turns.length}`);
+      // THE PRICE SEARCH (OS-11, 2026-10-20): the verdict's wait on a band edge
+      // is the price deepening, and the row now says how the price was searched.
+      // A deepened price went past the depth it was asked for, and every price
+      // reports its ms — a priced turn with neither is an instrument gone blind.
+      const priced = turns.filter((t) => t.turn?.price);
+      const deepened = priced.filter((t) => t.turn.price.deepened);
+      const shallowDeep = deepened.filter((t) => !(typeof t.turn.price.depthReached === 'number' && t.turn.price.depthReached > t.turn.price.baseDepth));
+      const noMs = priced.filter((t) => typeof t.turn.price.searchMs !== 'number');
+      const msList = priced.map((t) => t.turn.price.searchMs).filter((n) => typeof n === 'number').sort((a, b) => a - b);
+      record('LD5. THE PRICE SEARCH reported on the turn row: a deepened price went past its base depth, every price says its ms',
+        priced.length > 0 && shallowDeep.length === 0 && noMs.length === 0,
+        `${priced.length} priced turns, ${deepened.length} deepened (${shallowDeep.length} not past base) — ms median ${msList[Math.floor(msList.length / 2)] ?? '?'}, max ${msList.at(-1) ?? '?'}`);
       // THE GRADE, MEASURED (A-plan P0, David 2026-10-16: "I want a full plan to
       // get all A's"). Per lane: how often it was offered, spoke, or was held;
       // then the teaching categories the grade is read in. REPORTED — the A bar

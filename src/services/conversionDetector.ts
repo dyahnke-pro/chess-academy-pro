@@ -141,11 +141,34 @@ export function detectConversionFailure(game: GameRecord, names: ConversionUsern
 }
 
 /** Detect conversion failures across a set of games, newest first. */
+/** ONE SCAN PER GAME (OS-18 replay 2026-10-20, 14.Rd5 on David's record: the
+ *  weakness profile re-ran this detector over every one of his 949 games in the
+ *  middle of a Learn turn — about half a second of main thread — after a slip
+ *  row was written that changes nothing here). A game is scanned once; a write
+ *  to its record that changes what the scan reads (re-analysis, a result, the
+ *  seat) changes its print, and only then is it scanned again. */
+const scanned = new Map<string, { print: string; out: ConversionFailure | null }>();
+let scannedFor = '';
+
+/** Everything `detectConversionFailure` reads from the game, as one string. */
+function scanPrint(g: GameRecord): string {
+  let evals = 0;
+  for (const a of g.annotations ?? []) evals = (Math.imul(evals, 31) + Math.round(a.evaluation ?? 0x7fff)) | 0;
+  return [g.fullyAnalyzed ? 1 : 0, g.result, g.studentSide ?? '', g.source ?? '', g.white, g.black, g.openingId ?? '', g.date ?? '', g.annotations?.length ?? 0, evals].join('|');
+}
+
 export function detectConversionFailures(games: GameRecord[], names: ConversionUsernames): ConversionFailure[] {
+  const who = `${names.lichessUsername ?? ''}|${names.chessComUsername ?? ''}|${names.username ?? ''}`;
+  if (who !== scannedFor) { scanned.clear(); scannedFor = who; }
   const out: ConversionFailure[] = [];
   for (const g of games) {
-    const f = detectConversionFailure(g, names);
-    if (f) out.push(f);
+    const print = scanPrint(g);
+    let hit = scanned.get(g.id);
+    if (!hit || hit.print !== print) {
+      hit = { print, out: detectConversionFailure(g, names) };
+      scanned.set(g.id, hit);
+    }
+    if (hit.out) out.push(hit.out);
   }
   out.sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
   return out;

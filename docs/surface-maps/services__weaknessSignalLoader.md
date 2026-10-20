@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**116 lines · 4 exports · 8 importers · 4 tests · 0 audits**
+**116 lines · 4 exports · 8 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6444) — names `weaknessSignalLoader`
+- **The standard post-deploy ritual** (CLAUDE.md:6443) — names `weaknessSignalLoader`
 
 ## Who calls in
 
@@ -26,7 +26,7 @@
 ### `loadWeaknessSignals` (function) — 9 call sites
 - `src/components/Openings/OpeningPlayMode.tsx:79`
 - `src/hooks/useWeaknessSignals.ts:22`
-- `src/services/coachFeatureService.ts:5273`
+- `src/services/coachFeatureService.ts:5274`
 - `src/services/loopCloses.review.integration.test.ts:81`
 - `src/services/puzzleService.ts:355`
 - `src/services/studentNeedLoader.ts:215`
@@ -48,6 +48,7 @@
 
 ## Tests
 
+- `src/services/learnTurnDoor.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/oneOpeningKey.test.ts`
 - `src/services/tacticAlertService.test.ts`

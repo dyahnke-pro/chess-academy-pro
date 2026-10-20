@@ -32,6 +32,7 @@ import { inFluxAfter } from './boardState';
 import { stemKeyOf } from '../utils/rotateStem';
 import { lineSeatAt } from '../utils/andList';
 import { imageryFor, type ImageryKey } from './factImagery';
+import { unmarked } from '../utils/sanMark';
 
 export type ExchangeIdeaId =
   | 'only-developed' | 'defender-trade' | 'exchange-for-attacker' | 'deny-exchange'
@@ -285,7 +286,7 @@ export function abandonedDuty(fenBefore: string, san: string, student: Side): Ex
     if (!proof) return null;
     const backRank = them === 'w' ? '1' : '8';
     const post = retake.from[1] === backRank && retake.to[1] !== backRank ? 'leaves the back rank' : 'leaves its post';
-    const text = `If they take back with the ${NAME[retake.piece]}, it ${post}, and ${mate.san.replace(/[+#]$/, '')} is mate.`;
+    const text = `If they take back with the ${NAME[retake.piece]}, it ${post}, and ${unmarked(mate.san)} is mate.`;
     return { ...idea('abandoned-duty', text, [retake.from, r.m.to, mate.to], proof, `abandoned-duty:${retake.from}${r.m.to}`), stakes: mateStakes('you', 2, false) };
   }
   // A piece the recapturer guarded that now falls.
@@ -601,7 +602,7 @@ export function safeBecause(fenBefore: string, san: string, student: Side, prev:
   if (cfMate) {
     const proof = legalLineProof(cfFen, [san, cfMate.san], lineSeatAt(cfFen, student), true);
     if (!proof) return null;
-    const text = `${san} is fine only because your ${where} — ${back}, ${cfMate.san.replace(/[+#]$/, '')} would be mate.`;
+    const text = `${san} is fine only because your ${where} — ${back}, ${unmarked(cfMate.san)} would be mate.`;
     return idea('safe-because', text, [p.m.to, p.m.from, cfMate.to], proof, `safe-because:${san}`);
   }
   // What their best grab SETTLES at, proven over the line by the ledger — on

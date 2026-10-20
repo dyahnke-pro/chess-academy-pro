@@ -508,7 +508,7 @@ export function buildRejectedTempting(args: {
   studentColor: 'white' | 'black';
   /** Engine multipv lines, best first: first move + its reply (UCI), eval
    *  from the STUDENT's perspective in centipawns. */
-  lines: Array<{ uci: string; replyUci?: string | null; evalCp: number }>;
+  lines: Array<{ uci: string; replyUci?: string | null; evalCp: number; searchedShort?: boolean }>;
   /** Where the opponent's last move landed. A tempting capture ON it is
    *  their BAIT (census #48: "f4 invites exf4, then Bxf4+"). */
   baitSquare?: string | null;
@@ -563,7 +563,9 @@ export function buildRejectedTempting(args: {
         anchor: bait
           ? `No — it's bait: ${tempting.san} runs into ${refutation.san}.`
           : `${openSentence(why)}, but ${refutation.san} refutes it.`,
-        detail: `That line gives up ${costWords(bestEval - line.evalCp)} against the best move.`,
+        detail: args.lines[0].searchedShort || line.searchedShort
+          ? 'That line falls short of the best move.'
+          : `That line gives up ${costWords(bestEval - line.evalCp)} against the best move.`,
         stakes: 'Before trusting a tempting move, calculate their most forcing reply.',
         // After the student's move: the bait taken is the verdict's to say;
         // left alone, the reason is said of the board it was asked on.

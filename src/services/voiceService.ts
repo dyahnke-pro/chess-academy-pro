@@ -14,7 +14,7 @@ import { useAppStore } from '../stores/appStore';
 import { resolveCoachNarration, applyBriefVoiceCap } from '../utils/coachNarration';
 import { localizeSpokenText, spokenLanguageName } from './spokenLanguage';
 import { dnaPass } from './dnaRules';
-import { SAN_MOVE_RE, PAWN_CAPTURE_RE, CASTLE_KING_RE, CASTLE_QUEEN_RE, SAN_SUFFIX_RE, spokenMark } from '../utils/spokenWords';
+import { SAN_MOVE_RE, PAWN_CAPTURE_RE, PROMOTION_RE, CASTLE_KING_RE, CASTLE_QUEEN_RE, SAN_SUFFIX_RE, spokenMark } from '../utils/spokenWords';
 
 /** Shape of `window.ManagedMediaSource` on iOS Safari 17.1+. Not in
  *  lib.dom.d.ts yet, so we describe just the surface we use:
@@ -526,6 +526,11 @@ export function sanitizeForTTS(text: string): string {
     pieceExpansions.push({ san, spoken });
     return spoken;
   });
+  // A PROMOTION IS WORDS TOO (prod Learn audit 2026-10-20: "G-pawn takes
+  // h8=N wins your rook" — the pawn patterns stop at the square, so the "=N"
+  // was read raw). The pawn reaches the square and makes the piece; a check
+  // mark after it stays on the clause for the pass below.
+  out = out.replace(PROMOTION_RE, (_m, sq: string, piece: string) => `${sq} and makes a ${PIECE_LETTER_NAMES[piece]}`);
   // CHECK AND MATE ARE WORDS, NOT PUNCTUATION. The SAN patterns above stop at
   // the destination square, so the `+`/`#` a real SAN carries survived into the
   // spoken string — David's 2026-08-11 game, from his own phone transcript:
@@ -537,9 +542,6 @@ export function sanitizeForTTS(text: string): string {
   // "Bh7+", and anchored on a square or a castle so ordinary prose punctuation
   // is untouched. Comma before the word: TTS gives it the beat a check deserves.
   out = out.replace(SAN_SUFFIX_RE, (_m, move: string, mark: string, rest: string | undefined) => spokenMark(move, mark, rest));
-  // A sentence that already SAYS it is mate does not get the word twice
-  // (Blumenfeld walk F38: "rook takes d1, checkmate is mate").
-  out = out.replace(/, checkmate (is|would be|was) (?:check)?mate\b/g, ' $1 checkmate');
   // A MOVE THAT OPENS A SENTENCE OPENS IT CAPITALISED (review of
   // chesscom-1040709576, 2026-10-13: "knight to c6 follows a rule worth
   // keeping"). The expansion above writes the piece name in lower case, so a
@@ -1369,6 +1371,26 @@ class VoiceService {
    * `graceMs` covers a line a just-rendered effect is about to start. The wait
    * is bounded so a wedged voice can never strand the screen.
    */
+  /**
+   * THE LINE ON ITS WAY REACHES THE SPEAKER FIRST (OS-18 replay 2026-10-20,
+   * 14.Rd5: the verdict was handed to the voice at +4.7 s and started at
+   * +9.2 s — every step between was a task queued behind seconds of the turn's
+   * synchronous reads). Resolves once no line is between `speak` and its first
+   * sound, so a caller can hold heavy work until the student is already
+   * hearing. Waits a task first, so a line handed over in this tick has
+   * entered the voice. Bounded so a wedged voice never strands the caller.
+   */
+  async untilOnAir(maxWaitMs: number): Promise<void> {
+    const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+    const deadline = Date.now() + maxWaitMs;
+    await sleep(0);
+    // One line plays at a time; any other line in flight is still on its way
+    // (a line waiting behind an earlier one was let go as "on air" while the
+    // earlier one played — 14.Rd5 replay, 2026-10-20).
+    const onItsWay = (): boolean => this.utterancesInFlight > (this.isPlaying() || speechService.isSpeaking ? 1 : 0);
+    while (onItsWay() && Date.now() < deadline) await sleep(50);
+  }
+
   async untilQuiet(opts?: { maxWaitMs?: number; breathMs?: number; graceMs?: number }): Promise<void> {
     const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
     const deadline = Date.now() + (opts?.maxWaitMs ?? 25_000);
@@ -2187,6 +2209,8 @@ class VoiceService {
     voice: string,
     prefs: NonNullable<typeof this.cachedPrefs>,
   ): Promise<void> {
+    // When the voice took the line, before the awaits below (8.Bxf7+ replay: 1.1 s late).
+    const startedAt = Date.now();
     try {
       const { logAppAudit } = await import('./appAuditor');
       // Re-read full prefs from the live store so we can include the
@@ -2223,6 +2247,7 @@ class VoiceService {
           flirt: p?.coachFlirt ?? 'none',
           textLength: text.length,
           textPreview: text.slice(0, 120),
+          startedAt,
         }),
       });
     } catch {

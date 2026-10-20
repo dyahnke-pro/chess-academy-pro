@@ -17,12 +17,12 @@ describe('exchangeLedger — the net of a forced sequence, from the student\'s s
     expect(l?.isExchange).toBe(true);
     expect(l?.netPawns).toBe(-1); // knight + pawn (4) vs rook (5)
     const text = describeExchange(l);
-    expect(text).toBe('you come out behind on material, giving up a rook for a knight and a pawn');
+    expect(text).toBe('you give up a rook for a knight and a pawn');
   });
 
   it('reads from the OPPONENT\'s seat as the mirror image', () => {
     const text = exchangeNetForLine(PLY29, ['Kxd7', 'Nxa8', 'Nexd4'], 'w');
-    expect(text).toBe('you come out ahead on material, winning a rook for a knight and a pawn');
+    expect(text).toBe('you win a rook for a knight and a pawn');
   });
 
   it('stays SILENT on a one-sided win — the line already said it', () => {
@@ -43,7 +43,7 @@ describe('exchangeLedger — the net of a forced sequence, from the student\'s s
 
   it('groups repeats in piece names, never a point total', () => {
     const l = { studentWon: ['n' as const, 'n' as const], opponentWon: ['r' as const], netPawns: 1, isExchange: true, settled: true };
-    expect(describeExchange(l)).toBe('you come out ahead on material, winning two knights for a rook');
+    expect(describeExchange(l)).toBe('you win two knights for a rook');
     expect(describeExchange(l)).not.toMatch(/\d/);
   });
 

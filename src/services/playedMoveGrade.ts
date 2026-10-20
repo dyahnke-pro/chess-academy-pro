@@ -23,6 +23,7 @@ import { findHangingPieces } from './tacticClassifier';
 import { missedPlanClause } from './movePlan';
 import { moveScoresOneSearch, uciOfSan, type CostFan, type MovePrice } from './moveCost';
 import { SINGLETON_SCORER } from './refutedAlternative';
+import { stockfishEngine } from './stockfishEngine';
 import { proofCut } from './exchangeLedger';
 import { gradeMove, provesOnlyMove } from './accuracyService';
 import { SEARCH_POLICY } from './searchDepth';
@@ -192,6 +193,8 @@ export function gradePlayedMove(input: {
  *  the tree the cost came from. Null scores: the played move was the fan's best
  *  (cost 0 by definition) on a read too shallow or mate-scored to quote. */
 export type { MovePrice } from './moveCost';
+/** How the price was searched (`MovePrice.search`). */
+export type { PriceSearch } from './coachDecisionEvents';
 /** The one exception to the one price — a mate on the board has no centipawn
  *  price — lives with the price, so a reader of the price imports one module. */
 export { mateSwingCostCp } from './moveCost';
@@ -211,26 +214,55 @@ export function clearMovePriceMemo(): void { PRICE_MEMO.clear(); }
  *  Null when it cannot be priced (no fan, the scorer failed, a mate either
  *  way): unpriced is never "free". */
 export function liveMovePrice(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number): Promise<MovePrice | null> {
+  return memoPrice(fenBefore, playedUci, fan, depth, (args) => moveScoresOneSearch({ ...args, scorer: SINGLETON_SCORER }));
+}
+
+/** THE PRICE OF THE MOVE THE STUDENT JUST PLAYED LEADS THE ENGINE (OS-18,
+ *  Smith-Morra replay 2026-10-20, move 14: the price joined the back of the
+ *  line and the verdict was built 6.7 s after a costly move). The same one
+ *  price as `liveMovePrice` — one memo, so the record reads this search — run
+ *  through the engine's hold: the search in flight stops and background reads
+ *  wait, because the student is waiting on its answer. */
+export function studentMovePrice(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number): Promise<MovePrice | null> {
+  return memoPrice(fenBefore, playedUci, fan, depth, (args) => stockfishEngine.holdForQuestion((engine) => moveScoresOneSearch({
+    ...args,
+    scorer: {
+      async scoreMoves(fen, ucis, d) {
+        const r = await engine.analyzePosition(fen, d, { searchmoves: ucis.join(' ') });
+        return r.topLines.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves, depth: l.depth ?? r.depth }));
+      },
+    },
+  })));
+}
+
+type PriceSearch = (args: { fenBefore: string; playedUci: string; fan: CostFan | null; depth: number }) => ReturnType<typeof moveScoresOneSearch>;
+
+function memoPrice(fenBefore: string, playedUci: string, fan: CostFan | null, depth: number, search: PriceSearch): Promise<MovePrice | null> {
   const key = `${fenBefore}|${playedUci}`;
   const known = PRICE_MEMO.get(key);
   if (known) return known;
   const run = (async (): Promise<MovePrice | null> => {
+    // HOW IT WAS SEARCHED, carried on the price (the Learn turn row reads it):
+    // the verdict's wait on a band edge is this deepening, and it was invisible.
+    const askedAt = Date.now();
     const lines = (fan?.topLines ?? []).filter((l) => l.moves.length > 0);
     const best = lines[0];
     if (best && best.moves[0] === playedUci) {
       // The fan's best move costs nothing; its score is quotable only from a
       // deep enough, centipawn read. The best move never pays a deeper search.
       const quotable = (fan?.depth ?? 0) >= depth && best.mate == null;
-      return { costCp: 0, scores: quotable ? { bestWhiteCp: best.evaluation, playedWhiteCp: best.evaluation } : null, settled: true };
+      return { costCp: 0, scores: quotable ? { bestWhiteCp: best.evaluation, playedWhiteCp: best.evaluation } : null, settled: true, search: { baseDepth: depth, depthReached: fan?.depth ?? null, searchMs: Date.now() - askedAt, deepened: false } };
     }
     const mover: 'w' | 'b' = fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
     const priced = (s: { costCp: number; bestWhiteCp: number; playedWhiteCp: number }): MovePrice => {
       const p = { costCp: s.costCp, scores: { bestWhiteCp: s.bestWhiteCp, playedWhiteCp: s.playedWhiteCp }, settled: true };
       return { ...p, settled: priceSettled(p, mover) };
     };
-    const first = await moveScoresOneSearch({ fenBefore, playedUci, fan, scorer: SINGLETON_SCORER, depth });
+    const first = await search({ fenBefore, playedUci, fan, depth });
     if (!first) return null;
     let price = priced(first);
+    let depthReached = first.depth ?? depth;
+    let deepened = false;
     // NOT SETTLED → THE SAME SEARCH, DEEPER (the adaptive-depth walk's step and
     // ceiling, `SEARCH_POLICY.live`), within the verdict's budget. The deeper
     // read IS the price under this key; the shallow number never escapes.
@@ -241,13 +273,15 @@ export function liveMovePrice(fenBefore: string, playedUci: string, fan: CostFan
     for (let d = depth + step; !price.settled && d <= maxDepth && Date.now() - started < PRICE_DEEPEN_BUDGET_MS; d += step) {
       // A fan that already holds the played move would answer again at its own
       // depth: the deeper read is always a fresh scored search.
-      const deeper = await moveScoresOneSearch({ fenBefore, playedUci, fan: fan ? { topLines: fan.topLines } : null, scorer: SINGLETON_SCORER, depth: d });
+      const deeper = await search({ fenBefore, playedUci, fan: fan ? { topLines: fan.topLines } : null, depth: d });
       if (!deeper) break;
+      deepened = true;
+      depthReached = deeper.depth ?? d;
       const was = priceLabel(price, mover);
       price = priced(deeper);
       if (!price.settled && was !== null && priceLabel(price, mover) === was) price = { ...price, settled: true };
     }
-    return price;
+    return { ...price, search: { baseDepth: depth, depthReached, searchMs: Date.now() - askedAt, deepened } };
   })();
   // A failed search is not remembered: the next reader may price it.
   const guarded = run.catch(() => null);
