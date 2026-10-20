@@ -102,7 +102,7 @@
 
 ### `computePositionFacts` (function) — 94 call sites
 - `src/coach/boardTurnAnswer.ts:134`
-- `src/components/Coach/CoachTeachPage.tsx:10393`
+- `src/components/Coach/CoachTeachPage.tsx:10409`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:645`
@@ -200,7 +200,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:8877`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10665`
+- `src/components/Coach/CoachTeachPage.tsx:10681`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 

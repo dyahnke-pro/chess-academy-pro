@@ -38,7 +38,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from '../../services/motifLedger';
-import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
+import { FACT_ROLE, type FacetRole, buildVoicePackage, coachTurn, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP, type FactStakes, type LearnLane, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind } from '../../services/coachDecider';
 import { buildPositionalRead, rookReachesFile } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
@@ -9660,6 +9660,10 @@ export function CoachTeachPage(): JSX.Element {
     // needs the position the student moved FROM.
     const fenBefore = liveFenRef.current;
     const priorMove = fenBefore ? priorMoveLeadingTo(lastBoardMoveRef.current, fenBefore) : null;
+    // The held move of the board the student moved FROM, read at the move: the
+    // next board's facts replace it before the reveal runs, so a found held move
+    // was never credited (OS-18 review, 2026-10-19).
+    const heldAtMove = learnMemRef.current.heldMove;
     if (fenBefore) lastBoardMoveRef.current = { fenBefore, san: move.san };
     if (fenBefore && announcedBoardsRef.current.has(fenBefore.split(' ').slice(0, 2).join(' '))) announcedPliesRef.current.add(move.history.length);
     // A KNOWN TRAP, ANSWERED (David 2026-09-30): whether it was warned or held
@@ -9963,6 +9967,18 @@ export function CoachTeachPage(): JSX.Element {
         // so a genuinely slow engine call doesn't stack an extra wait on top.
         const thinkStart = Date.now();
         const reply = await resolveCoachReplyMove(move.fen);
+        // THE VERDICT'S READS GO FIRST (OS-18, David's Smith-Morra 2026-10-19:
+        // Bf4 cost 112cp and was praised; Bxf7+ was called a mistake eighteen
+        // seconds after the move). The move's cost is ONE search, started here
+        // and read by the instant wave and the verdict alike — one number for the
+        // move. When the move may have cost something (no cheap grade from the
+        // pre-move fan, or a costly one), the board between the moves is read
+        // before the post-reply warm, so the verdict is built as soon as it can be.
+        const costRead: Promise<number | null> = preStudentRead && !preStudentRead.isMate
+          ? liveMoveCost(fenBefore, `${move.from}${move.to}${move.promotion ?? ''}`, preStudentRead, COACH_TURN_DEPTH).catch(() => null)
+          : Promise.resolve(null);
+        const verdictUrgent = !!preStudentRead && !studentMoveInBook && (studentCpLoss === null || studentCpLoss >= VERDICT_TURN_CP);
+        const midTurnReadEarly = verdictUrgent ? stockfishEngine.analyzeWithBudget(move.fen, COACH_TURN_DEPTH, 1500).catch(() => null) : null;
         // PRE-WARM THE POST-REPLY ANALYSIS DURING THE THINK PAD (David
         // 2026-08-07: ride the always-watching layer). The reply is chosen;
         // the 1-2s pad below is dead time — spend it analyzing the position
@@ -9995,7 +10011,7 @@ export function CoachTeachPage(): JSX.Element {
         // position — and the FEN guard at the verdict site, doing its job,
         // therefore refused every single turn. The coach's own mistake callout
         // was wired end to end and could not fire once.
-        const midTurnRead = stockfishEngine
+        const midTurnRead = midTurnReadEarly ?? stockfishEngine
           .analyzeWithBudget(move.fen, COACH_TURN_DEPTH, 1500)
           .catch(() => null);
         // THE PAD IS THEATER, NOT A PIPELINE STAGE (David 2026-08-07: "The
@@ -11007,6 +11023,14 @@ export function CoachTeachPage(): JSX.Element {
             // had finished speaking — measured at 3.2-10.4s after the move.
             // Joined here, they cost one fetch and no boundaries, and the
             // teaching arrives with the move instead of after it.
+            // THE INSTANT WAVE KNOWS WHAT THE MOVE COST (OS-18): a move the
+            // pre-move fan did not grade was praised before its cost was known.
+            // The one search started at the reply is waited for a moment here.
+            {
+              const COST_WAIT_MS = 1500;
+              const searched = await Promise.race([costRead, new Promise<null>((r) => { setTimeout(() => r(null), COST_WAIT_MS); })]);
+              if (searched !== null) studentCpLoss = searched;
+            }
             const instantMarks: TrackMarks = { arrows: [], highlights: [] };
             try {
               const ip = new Chess(move.fen);
@@ -11137,9 +11161,10 @@ export function CoachTeachPage(): JSX.Element {
               if (lines.length > 0) speakTrackA(lines.join(' '), instantMarks);
             } catch { /* Track A is a bonus — the warm beat still speaks */ }
             askTurnQuestion();
-            // Registered BEFORE the `await factsReady` below, so this
-            // callback runs first when the facts settle — handleSubmit
-            // always sees the complete instantSpokenText.
+            // It starts on the two reads the verdict needs — the move's cost and
+            // the board between the moves — never on the next board's facts
+            // (OS-18: chained on those, the verdict started 14–18s after the
+            // move). The facts are awaited inside, once the verdict is spoken.
             //
             // THE VERDICT GOES FIRST (David 2026-09-27, ply 28 of the Sicilian
             // Closed walk: e6 lost the queen, and in the same breath the phase
@@ -11148,9 +11173,195 @@ export function CoachTeachPage(): JSX.Element {
             // A move called a mistake IS the lesson of that turn; the phase
             // beat waits for this pass and stands down when it called one.
             let mistakeCalledThisTurn = false;
-            const verdictPass = factsReady.then(async () => {
+            const verdictPass = Promise.all([midTurnRead, costRead]).then(async () => {
               try {
                 if (liveFenRef.current !== fenAfterReply) return;
+                // ONE LATE WAVE, SPOKEN (OS-18): the door decides it and the voice says it
+                // with its marks. Called for the verdict the moment it is built, then for
+                // everything else once the turn's reads are in.
+                const speakLateWave = (pending: NonNullable<typeof pendingVoiceRef.current>, lines: NonNullable<typeof pendingVoiceRef.current>['lines']): void => {
+                  // `instantSpokenText` is everything Track A has said on this
+                  // turn — the event line and the instant package. Handing it
+                  // over is what stops the late package repeating a sentence the
+                  // student heard eight seconds ago; see the parameter's note in
+                  // `voicePackage`.
+                  // THE DOOR (WO-COACH-TEACHER WO-1). The lane table decides
+                  // what may speak; the package orders and dedupes. NO COUNT CAP
+                  // (David 2026-09-13) — repetition is caught by the twin gate and
+                  // the per-game novelty set, not by a number.
+                  const lateDecision = coachTurn({
+                    posture: 'learn',
+                    turn: { kind: 'late', ply: move.history.length, moveCostCp: studentCpLoss, midExchange: pendingRecapture([...move.history, reply]) },
+                    facts: lines
+                      // A threat alert already said a tactic is on the board;
+                      // "it has turned sharp — there is a tactic" beside it is
+                      // the same fact, and it landed between the question and
+                      // its answer (run D walk 2026-09-30).
+                      .filter((l) => !(l.lane === 'character' && /tactic/.test(l.text) && /(?:^|\. )(?:Watch out|Careful) —/.test(instantSpokenText)))
+                      // "What is their bishop on c3 doing? It's another step toward
+                      // the c-file" — right after "your rook on a1 is attacked",
+                      // when what it is doing is attacking the rook (run E walk).
+                      // A live threat is the answer; the slow plan waits.
+                      .filter((l) => !(l.lane === 'planArc' && /^What is their /.test(l.text) && /(?:^|\. )(?:Watch out|Careful) —/.test(instantSpokenText)))
+                      .map(({ lane, kind, text, squares, claims, gradeFen, lines, stakes, proof, role, factKind, skill, ownMoveReason }) => ({ lane, kind, text, squares, claims, lines, stakes, proof, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}), ...(ownMoveReason ? { ownMoveReason } : {}), fen: gradeFen ?? pending.fen })),
+                    alreadySaid: instantSpokenText,
+                    priorKeys: learnMemRef.current.spokenKeys,
+                    // ONE THOUGHT PER TURN (WO-1b): the late wave leads only
+                    // if it outranks what the instant wave led with.
+                    priorLead: instantLead,
+                    green: provenTagsRef.current,
+                    beginner: isBeginnerMode(useAppStore.getState().activeProfile),
+                  });
+                  const hintPkg = lateDecision.pkg;
+                  // The plan thread adopts its tried turn only if a line of it spoke.
+                  const planTry = planTrialRef.current;
+                  if (planTry && samePosition(planTry.fen, pending.fen)) {
+                    adoptPlanTrial(planTry.live, planTry.trial, planTry.offered, hintPkg.kept.flatMap((f) => f.claims ?? []));
+                    planTrialRef.current = null;
+                  }
+                  if (announcesTheMove(lateDecision.spoke)) announcedBoardsRef.current.add(pending.fen.split(' ').slice(0, 2).join(' '));
+                  if (lateDecision.lead) turnLeadRef.current = { fen: pending.fen, lead: lateDecision.lead };
+                  // A wave that held everything said nothing — but what it held
+                  // must still be visible, or a lane that loses every turn looks
+                  // exactly like a lane that never fires.
+                  if (!hintPkg.spoken && lateDecision.held.length > 0) {
+                    void logAppAudit({
+                      kind: 'coach-surface-migrated',
+                      category: 'subsystem',
+                      source: 'CoachTeachPage.hintRegister.held',
+                      summary: describeTurnDecision(lateDecision),
+                      fen: pending.fen,
+                    });
+                  }
+                  if (hintPkg.spoken) {
+                    // Record the late package's phrases too — the per-game set is
+                    // what keeps the NEXT turn from repeating any of them.
+                    for (const k of spokenSentenceKeys(hintPkg)) learnMemRef.current.spokenKeys.add(k);
+                    rememberKeptClaims(hintPkg.kept, (k) => {
+                      // A principle taught with its line ("— that is why …") is taught once.
+                      if (k.startsWith('principle:')) { learnMemRef.current.principleTaught.add(k.slice('principle:'.length)); return; }
+                      positionalSaidRef.current.add(k); standingRef.current.remember(k);
+                    });
+                    const pfRem = pfRememberRef.current;
+                    if (pfRem && samePosition(pfRem.fen, pending.fen)) rememberKeptClauses(hintPkg.kept, pfRem.byClause, (k) => standingRef.current.remember(k));
+                    noteSpokenProofs(hintPkg.kept);
+                  // Same promotion as the instant pass — whichever package
+                  // actually carried the name is the one that spent the flag.
+                  markOpeningFactsSpoken(learnMemRef.current, hintPkg.kept);
+                    // AND MARK WHAT SURVIVED. The squares came in on the facts,
+                    // so the board draws the ones belonging to lanes the package
+                    // KEPT — a refused claim takes its marks away with it, which
+                    // is the whole coupling and needs no check of its own.
+                    // Amber throughout: everything queued here is retrospective
+                    // (a cost already paid), never a threat arriving.
+                    // Coloured by the kind that spoke — the same table the
+                    // instant wave uses, now that board reads ride this wave
+                    // too. A kind with no colour of its own is retrospective
+                    // (a cost already paid): amber.
+                    const owed: BoardHighlight[] = [];
+                    for (const f of hintPkg.kept) {
+                      // A question's marks are its answer: they wait for the move.
+                      if (f.text.includes(THINK_MARK)) continue;
+                      for (const sq of markableSquares({ kept: [f] })) {
+                        if (!owed.some((h) => h.square === sq)) owed.push({ square: sq, color: COLOR_FOR[f.kind] ?? '#f59e0b' });
+                      }
+                    }
+                    // …AND DRAW ITS ARROWS (David 2026-09-30: "make sure arrows are
+                    // firing to illustrate the ideas that are being spoken"). A
+                    // kept fact finds its queued line by its first claim; the
+                    // arrows go through the one door, on the live board.
+                    const owedArrows: ArrowClaim[] = [];
+                    for (const f of hintPkg.kept) {
+                      // A question's arrows are its answer: they wait for the move,
+                      // and by then they belong to a board that is gone.
+                      if (f.text.includes(THINK_MARK)) continue;
+                      const key = f.claims?.[0];
+                      // Without a claim, by text — and a kept line may be its queued line with
+                      // a sentence the ledger had already heard taken out.
+                      const src = key ? pending.lines.find((l) => l.claims?.[0] === key) : pending.lines.find((l) => l.text === f.text || l.text.includes(f.text));
+                      if (src?.arrows?.length) owedArrows.push(...src.arrows);
+                    }
+                    // THE NEW IDEA'S ARROWS REPLACE THE OLD ONES (David 2026-10-18:
+                    // "they just needed to give way to the new moves the coach
+                    // stated"). Appending left the last turn's arrows on the board
+                    // while this turn spoke of other moves, so nothing looked new.
+                    const turnArrows: BoardArrow[] = [];
+                    if (owedArrows.length > 0 && liveFenRef.current === fenAfterReply) {
+                      turnArrows.push(...admitArrows(owedArrows, { fen: fenAfterReply, studentColor: playerColor, holdStudentMoves: true }).arrows);
+                    }
+                    // …AND DRAW THE LINES IT SPOKE (David 2026-09-29: "Make sure
+                    // arrows populate when talking about multiple move lines").
+                    // Every move a kept fact named, replayed from its own board:
+                    // yours green, their answer red — the same colours the
+                    // line-walk board uses.
+                    // A line on the board on screen draws there; a line that
+                    // starts on an EARLIER board ("a5 holds … after b5, Nb6,
+                    // Nxb6 breaks it") shows that board while it is spoken,
+                    // then the game comes back — the same static line-walk
+                    // board a chat answer uses, never played into the game.
+                    const drawnLines = keptLines(hintPkg, playerColor === 'white' ? 'w' : 'b');
+                    // THROUGH THE ARROW DOOR, like every coach arrow: a line's ply is
+                    // a `line` claim on the board before it, coloured by whose piece
+                    // moves (yours green, theirs red).
+                    const throughDoor = (l: { fen: string; arrows: readonly { from: string; to: string }[] }): BoardArrow[] => {
+                      const claims: ArrowClaim[] = [];
+                      try {
+                        const c = new Chess(l.fen);
+                        for (const a of l.arrows) {
+                          const before = c.fen();
+                          claims.push({ from: a.from, to: a.to, role: 'line', fen: before, source: 'teach.keptLines' });
+                          c.move({ from: a.from, to: a.to, promotion: 'q' });
+                        }
+                      } catch { /* the plies replayed so far still draw */ }
+                      return admitArrows(claims, { fen: l.fen, studentColor: playerColor, holdStudentMoves: true }).arrows;
+                    };
+                    // By PLACEMENT: a threat is drawn on its board with the
+                    // other side to move, and it is still the same picture.
+                    const samePlacement = (x: string, y: string): boolean => x.split(' ')[0] === y.split(' ')[0];
+                    // A line from an EARLIER board is spoken, never shown: showing it
+                    // took the board away on the student's turn for the length of
+                    // the sentence (David 2026-10-19: "never freeze for the user").
+                    const onScreen = drawnLines.filter((l) => samePlacement(l.fen, fenAfterReply));
+                    if (onScreen.length > 0 && liveFenRef.current === fenAfterReply) turnArrows.push(...onScreen.flatMap(throughDoor));
+                    // …unless the game has already walked into it: a line from the
+                    // board before the student's move ("…Nhf6+, exf6 and Nxf6+")
+                    // whose first plies are now on the board draws the plies
+                    // still to come, on the live board (David 2026-10-19: "engine
+                    // lines stated that did not have arrows showing each move").
+                    if (liveFenRef.current === fenAfterReply) {
+                      for (const l of drawnLines) {
+                        if (onScreen.includes(l)) continue;
+                        try {
+                          const c = new Chess(l.fen);
+                          for (let k = 0; k < l.arrows.length; k++) {
+                            const a = l.arrows[k];
+                            c.move({ from: a.from, to: a.to, promotion: 'q' });
+                            if (samePlacement(c.fen(), fenAfterReply)) {
+                              if (k + 1 < l.arrows.length) turnArrows.push(...throughDoor({ fen: fenAfterReply, arrows: l.arrows.slice(k + 1) }));
+                              break;
+                            }
+                          }
+                        } catch { /* a line that leaves the game's path is spoken only */ }
+                      }
+                    }
+                    if (turnArrows.length > 0) setArrows(seenMarkRef.current ? [seenMarkRef.current] : []);
+                    // Spoken with its marks: each goes up as the voice names it.
+                    speakTrackA(hintPkg.spoken, liveFenRef.current === fenAfterReply ? { arrows: uniqueArrows(turnArrows), highlights: owed } : undefined);
+                    void logAppAudit({
+                      kind: 'coach-narration-spoken',
+                      category: 'narration',
+                      source: 'CoachTeachPage.hintRegister',
+                      summary: `${describeVoicePackage(hintPkg)} · ${describeTurnDecision(lateDecision)} — ${stripThink(hintPkg.spoken).slice(0, 200)}`,
+                      narrationText: stripThink(hintPkg.spoken),
+                      fen: pending.fen,
+                      // BOARD TAG per fact (plan 1.6): a late fact may be graded on
+                      // the board BEFORE the move (`gradeFen`), not the turn's.
+                      details: JSON.stringify({ facts: hintPkg.kept.map((f) => ({ text: stripThink(f.text), fen: f.fen })) }),
+                    });
+                  }
+                  // The next wave of this turn leads only if it outranks this one.
+                  if (lateDecision.lead) instantLead = lateDecision.lead;
+                };
                 // The alert and the taught note already spoke WITH the move
                 // (the instant pass above). All that is left here is the
                 // engine-derived recommendation, and it stays quiet when the
@@ -11245,7 +11456,7 @@ export function CoachTeachPage(): JSX.Element {
                     // against the best one in the same tree — never a read
                     // before minus a time-boxed read after.
                     const cpLoss = bothCp
-                      ? (await liveMoveCost(fenBefore, `${move.from}${move.to}${move.promotion ?? ''}`, preStudentRead, COACH_TURN_DEPTH) ?? 0)
+                      ? ((await costRead) ?? (await liveMoveCost(fenBefore, `${move.from}${move.to}${move.promotion ?? ''}`, preStudentRead, COACH_TURN_DEPTH)) ?? 0)
                       : 0;
                     const studentBestSan = uciSanAt(fenBefore, preStudentRead.bestMove);
                     // THE BOARD-LEVEL TEACHING of the student's move — recapture
@@ -11386,12 +11597,16 @@ export function CoachTeachPage(): JSX.Element {
                     // COORDINATES, never SAN string (G4.5.2).
                     let heldRevealedHere = false;
                     try {
-                      const heldNow = learnMemRef.current.heldMove;
+                      const heldNow = heldAtMove;
                       const boardOf = (f: string): string => positionOf(f);
                       if (heldNow && boardOf(heldNow.fen) === boardOf(fenBefore)) {
                         heldRevealedHere = true;
-                        learnMemRef.current.heldMove = null;
-                        setHeldMoveFen(null);
+                        // Cleared only while it is still this board's: the next
+                        // board's held move may already be set.
+                        if (learnMemRef.current.heldMove === heldAtMove) {
+                          learnMemRef.current.heldMove = null;
+                          setHeldMoveFen(null);
+                        }
                         const heldMove = new Chess(fenBefore).move(heldNow.san);
                         const found = !!heldMove && heldMove.from === move.from && heldMove.to === move.to;
                         // FOUND is praise for their own move. MISSED is not said:
@@ -11782,6 +11997,22 @@ export function CoachTeachPage(): JSX.Element {
                     }
                   }
                 } catch { /* the backward look is a bonus, never a blocker */ }
+                // THE VERDICT IS HEARD NOW (OS-18): a move called a mistake speaks its
+                // verdict — and the 'but' beats with it, its cost — the moment they
+                // are built, not after the rest of the turn's reads.
+                if (mistakeCalledThisTurn && !noteTaughtThisTurn) {
+                  const p = pendingVoiceRef.current;
+                  if (p && samePosition(p.fen, fenAfterReply)) {
+                    const verdictLines = p.lines.filter((l) => DNA_BEAT[l.lane] === 'but');
+                    if (verdictLines.length > 0) {
+                      p.lines = p.lines.filter((l) => !verdictLines.includes(l));
+                      speakLateWave(p, verdictLines);
+                    }
+                  }
+                }
+                // The rest of the turn reads the next board's facts.
+                await factsReady;
+                if (liveFenRef.current !== fenAfterReply) return;
 
                 // ── WHAT THEIR MOVE COST THEM (census #5) ──────────────────
                 // "…e6 opens a square your knight jumps into", "the passive
@@ -12097,185 +12328,7 @@ export function CoachTeachPage(): JSX.Element {
                 if (pending && !noteTaughtThisTurn
                     && samePosition(pending.fen, fenAfterReply) && pending.lines.length > 0) {
                   pendingVoiceRef.current = null;
-                  // `instantSpokenText` is everything Track A has said on this
-                  // turn — the event line and the instant package. Handing it
-                  // over is what stops the late package repeating a sentence the
-                  // student heard eight seconds ago; see the parameter's note in
-                  // `voicePackage`.
-                  // THE DOOR (WO-COACH-TEACHER WO-1). The lane table decides
-                  // what may speak; the package orders and dedupes. NO COUNT CAP
-                  // (David 2026-09-13) — repetition is caught by the twin gate and
-                  // the per-game novelty set, not by a number.
-                  const lateDecision = coachTurn({
-                    posture: 'learn',
-                    turn: { kind: 'late', ply: move.history.length, moveCostCp: studentCpLoss, midExchange: pendingRecapture([...move.history, reply]) },
-                    facts: pending.lines
-                      // A threat alert already said a tactic is on the board;
-                      // "it has turned sharp — there is a tactic" beside it is
-                      // the same fact, and it landed between the question and
-                      // its answer (run D walk 2026-09-30).
-                      .filter((l) => !(l.lane === 'character' && /tactic/.test(l.text) && /(?:^|\. )(?:Watch out|Careful) —/.test(instantSpokenText)))
-                      // "What is their bishop on c3 doing? It's another step toward
-                      // the c-file" — right after "your rook on a1 is attacked",
-                      // when what it is doing is attacking the rook (run E walk).
-                      // A live threat is the answer; the slow plan waits.
-                      .filter((l) => !(l.lane === 'planArc' && /^What is their /.test(l.text) && /(?:^|\. )(?:Watch out|Careful) —/.test(instantSpokenText)))
-                      .map(({ lane, kind, text, squares, claims, gradeFen, lines, stakes, proof, role, factKind, skill, ownMoveReason }) => ({ lane, kind, text, squares, claims, lines, stakes, proof, ...(role ? { role } : {}), ...(factKind ? { factKind } : {}), ...(skill ? { skill } : {}), ...(ownMoveReason ? { ownMoveReason } : {}), fen: gradeFen ?? pending.fen })),
-                    alreadySaid: instantSpokenText,
-                    priorKeys: learnMemRef.current.spokenKeys,
-                    // ONE THOUGHT PER TURN (WO-1b): the late wave leads only
-                    // if it outranks what the instant wave led with.
-                    priorLead: instantLead,
-                    green: provenTagsRef.current,
-                    beginner: isBeginnerMode(useAppStore.getState().activeProfile),
-                  });
-                  const hintPkg = lateDecision.pkg;
-                  // The plan thread adopts its tried turn only if a line of it spoke.
-                  const planTry = planTrialRef.current;
-                  if (planTry && samePosition(planTry.fen, pending.fen)) {
-                    adoptPlanTrial(planTry.live, planTry.trial, planTry.offered, hintPkg.kept.flatMap((f) => f.claims ?? []));
-                    planTrialRef.current = null;
-                  }
-                  if (announcesTheMove(lateDecision.spoke)) announcedBoardsRef.current.add(pending.fen.split(' ').slice(0, 2).join(' '));
-                  if (lateDecision.lead) turnLeadRef.current = { fen: pending.fen, lead: lateDecision.lead };
-                  // A wave that held everything said nothing — but what it held
-                  // must still be visible, or a lane that loses every turn looks
-                  // exactly like a lane that never fires.
-                  if (!hintPkg.spoken && lateDecision.held.length > 0) {
-                    void logAppAudit({
-                      kind: 'coach-surface-migrated',
-                      category: 'subsystem',
-                      source: 'CoachTeachPage.hintRegister.held',
-                      summary: describeTurnDecision(lateDecision),
-                      fen: pending.fen,
-                    });
-                  }
-                  if (hintPkg.spoken) {
-                    // Record the late package's phrases too — the per-game set is
-                    // what keeps the NEXT turn from repeating any of them.
-                    for (const k of spokenSentenceKeys(hintPkg)) learnMemRef.current.spokenKeys.add(k);
-                    rememberKeptClaims(hintPkg.kept, (k) => {
-                      // A principle taught with its line ("— that is why …") is taught once.
-                      if (k.startsWith('principle:')) { learnMemRef.current.principleTaught.add(k.slice('principle:'.length)); return; }
-                      positionalSaidRef.current.add(k); standingRef.current.remember(k);
-                    });
-                    const pfRem = pfRememberRef.current;
-                    if (pfRem && samePosition(pfRem.fen, pending.fen)) rememberKeptClauses(hintPkg.kept, pfRem.byClause, (k) => standingRef.current.remember(k));
-                    noteSpokenProofs(hintPkg.kept);
-                  // Same promotion as the instant pass — whichever package
-                  // actually carried the name is the one that spent the flag.
-                  markOpeningFactsSpoken(learnMemRef.current, hintPkg.kept);
-                    // AND MARK WHAT SURVIVED. The squares came in on the facts,
-                    // so the board draws the ones belonging to lanes the package
-                    // KEPT — a refused claim takes its marks away with it, which
-                    // is the whole coupling and needs no check of its own.
-                    // Amber throughout: everything queued here is retrospective
-                    // (a cost already paid), never a threat arriving.
-                    // Coloured by the kind that spoke — the same table the
-                    // instant wave uses, now that board reads ride this wave
-                    // too. A kind with no colour of its own is retrospective
-                    // (a cost already paid): amber.
-                    const owed: BoardHighlight[] = [];
-                    for (const f of hintPkg.kept) {
-                      // A question's marks are its answer: they wait for the move.
-                      if (f.text.includes(THINK_MARK)) continue;
-                      for (const sq of markableSquares({ kept: [f] })) {
-                        if (!owed.some((h) => h.square === sq)) owed.push({ square: sq, color: COLOR_FOR[f.kind] ?? '#f59e0b' });
-                      }
-                    }
-                    // …AND DRAW ITS ARROWS (David 2026-09-30: "make sure arrows are
-                    // firing to illustrate the ideas that are being spoken"). A
-                    // kept fact finds its queued line by its first claim; the
-                    // arrows go through the one door, on the live board.
-                    const owedArrows: ArrowClaim[] = [];
-                    for (const f of hintPkg.kept) {
-                      // A question's arrows are its answer: they wait for the move,
-                      // and by then they belong to a board that is gone.
-                      if (f.text.includes(THINK_MARK)) continue;
-                      const key = f.claims?.[0];
-                      // Without a claim, by text — and a kept line may be its queued line with
-                      // a sentence the ledger had already heard taken out.
-                      const src = key ? pending.lines.find((l) => l.claims?.[0] === key) : pending.lines.find((l) => l.text === f.text || l.text.includes(f.text));
-                      if (src?.arrows?.length) owedArrows.push(...src.arrows);
-                    }
-                    // THE NEW IDEA'S ARROWS REPLACE THE OLD ONES (David 2026-10-18:
-                    // "they just needed to give way to the new moves the coach
-                    // stated"). Appending left the last turn's arrows on the board
-                    // while this turn spoke of other moves, so nothing looked new.
-                    const turnArrows: BoardArrow[] = [];
-                    if (owedArrows.length > 0 && liveFenRef.current === fenAfterReply) {
-                      turnArrows.push(...admitArrows(owedArrows, { fen: fenAfterReply, studentColor: playerColor, holdStudentMoves: true }).arrows);
-                    }
-                    // …AND DRAW THE LINES IT SPOKE (David 2026-09-29: "Make sure
-                    // arrows populate when talking about multiple move lines").
-                    // Every move a kept fact named, replayed from its own board:
-                    // yours green, their answer red — the same colours the
-                    // line-walk board uses.
-                    // A line on the board on screen draws there; a line that
-                    // starts on an EARLIER board ("a5 holds … after b5, Nb6,
-                    // Nxb6 breaks it") shows that board while it is spoken,
-                    // then the game comes back — the same static line-walk
-                    // board a chat answer uses, never played into the game.
-                    const drawnLines = keptLines(hintPkg, playerColor === 'white' ? 'w' : 'b');
-                    // THROUGH THE ARROW DOOR, like every coach arrow: a line's ply is
-                    // a `line` claim on the board before it, coloured by whose piece
-                    // moves (yours green, theirs red).
-                    const throughDoor = (l: { fen: string; arrows: readonly { from: string; to: string }[] }): BoardArrow[] => {
-                      const claims: ArrowClaim[] = [];
-                      try {
-                        const c = new Chess(l.fen);
-                        for (const a of l.arrows) {
-                          const before = c.fen();
-                          claims.push({ from: a.from, to: a.to, role: 'line', fen: before, source: 'teach.keptLines' });
-                          c.move({ from: a.from, to: a.to, promotion: 'q' });
-                        }
-                      } catch { /* the plies replayed so far still draw */ }
-                      return admitArrows(claims, { fen: l.fen, studentColor: playerColor, holdStudentMoves: true }).arrows;
-                    };
-                    // By PLACEMENT: a threat is drawn on its board with the
-                    // other side to move, and it is still the same picture.
-                    const samePlacement = (x: string, y: string): boolean => x.split(' ')[0] === y.split(' ')[0];
-                    // A line from an EARLIER board is spoken, never shown: showing it
-                    // took the board away on the student's turn for the length of
-                    // the sentence (David 2026-10-19: "never freeze for the user").
-                    const onScreen = drawnLines.filter((l) => samePlacement(l.fen, fenAfterReply));
-                    if (onScreen.length > 0 && liveFenRef.current === fenAfterReply) turnArrows.push(...onScreen.flatMap(throughDoor));
-                    // …unless the game has already walked into it: a line from the
-                    // board before the student's move ("…Nhf6+, exf6 and Nxf6+")
-                    // whose first plies are now on the board draws the plies
-                    // still to come, on the live board (David 2026-10-19: "engine
-                    // lines stated that did not have arrows showing each move").
-                    if (liveFenRef.current === fenAfterReply) {
-                      for (const l of drawnLines) {
-                        if (onScreen.includes(l)) continue;
-                        try {
-                          const c = new Chess(l.fen);
-                          for (let k = 0; k < l.arrows.length; k++) {
-                            const a = l.arrows[k];
-                            c.move({ from: a.from, to: a.to, promotion: 'q' });
-                            if (samePlacement(c.fen(), fenAfterReply)) {
-                              if (k + 1 < l.arrows.length) turnArrows.push(...throughDoor({ fen: fenAfterReply, arrows: l.arrows.slice(k + 1) }));
-                              break;
-                            }
-                          }
-                        } catch { /* a line that leaves the game's path is spoken only */ }
-                      }
-                    }
-                    if (turnArrows.length > 0) setArrows(seenMarkRef.current ? [seenMarkRef.current] : []);
-                    // Spoken with its marks: each goes up as the voice names it.
-                    speakTrackA(hintPkg.spoken, liveFenRef.current === fenAfterReply ? { arrows: uniqueArrows(turnArrows), highlights: owed } : undefined);
-                    void logAppAudit({
-                      kind: 'coach-narration-spoken',
-                      category: 'narration',
-                      source: 'CoachTeachPage.hintRegister',
-                      summary: `${describeVoicePackage(hintPkg)} · ${describeTurnDecision(lateDecision)} — ${stripThink(hintPkg.spoken).slice(0, 200)}`,
-                      narrationText: stripThink(hintPkg.spoken),
-                      fen: pending.fen,
-                      // BOARD TAG per fact (plan 1.6): a late fact may be graded on
-                      // the board BEFORE the move (`gradeFen`), not the turn's.
-                      details: JSON.stringify({ facts: hintPkg.kept.map((f) => ({ text: stripThink(f.text), fen: f.fen })) }),
-                    });
-                  }
+                  speakLateWave(pending, pending.lines);
                 }
               } catch { /* bonus */ }
             });

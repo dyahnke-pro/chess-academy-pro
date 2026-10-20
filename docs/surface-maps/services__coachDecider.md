@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**638 lines · 25 exports · 15 importers · 11 tests · 24 audits**
+**638 lines · 27 exports · 15 importers · 11 tests · 24 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,7 +19,7 @@
 - **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1118) — names `coachDecider`
 - **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1303) — names `decide`
 - **G8.5 NOTHING BUILT-BUT-UNWIRED, NO ORPHANS LEFT BEHIND (David 2026-09-29, LOCKED: "You need to FULLY understand ALL code related to your builds. No more leaving things built but not wired, or changes made but leaving orphan components." → "Yes. Lock that in").** (CLAUDE.md:1471) — names `decide`
-- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2375) — names `decide`
+- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2365) — names `DNA_BEAT`, `decide`
 - **🔒🔒 EVERY SPOKEN CONCLUSION CARRIES ITS PROOF — the proof is the thinking out loud (David 2026-10-07: "Anything that gets proven is stated out loud?" → "Yes. I have a feeling it will backfire but I think a decent starting spot.")** (CLAUDE.md:2392) — names `decide`
 - **🚫🚫 NO YES-MAN — PUSH BACK, IMPROVE HIS LOGIC, EVERY TIME (David 2026-08-26, emphatic, ALL CAPS: "DO NOT BE A YES MAN! PUSH BACK! IMPROVE ON MY LOGIC, IDEA, OR TRAIN OF THOUGHT!").** (CLAUDE.md:2447) — names `decide`
 - **⏰ Standing notes** (CLAUDE.md:3092) — names `decide`
@@ -75,7 +75,7 @@
 ### `coachTurn` (function) — 10 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8214`
 - `src/components/Coach/CoachTeachPage.tsx:9409`
-- `src/components/Coach/CoachTeachPage.tsx:12109`
+- `src/components/Coach/CoachTeachPage.tsx:11192`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
 - `src/services/coachFeatureService.ts:2267`
 - `src/services/learnTurnDoor.test.ts:169`
@@ -316,25 +316,25 @@
 - `src/components/Coach/CoachTeachPage.tsx:8221`
 - `src/components/Coach/CoachTeachPage.tsx:8228`
 - `src/components/Coach/CoachTeachPage.tsx:9510`
-- `src/components/Coach/CoachTeachPage.tsx:12149`
-- `src/components/Coach/CoachTeachPage.tsx:12271`
+- `src/components/Coach/CoachTeachPage.tsx:11232`
+- `src/components/Coach/CoachTeachPage.tsx:11354`
 - `src/services/learnTurnDoor.ts:884`
 
 ### `describeVoicePackage` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11044`
-- `src/components/Coach/CoachTeachPage.tsx:12271`
+- `src/components/Coach/CoachTeachPage.tsx:11068`
+- `src/components/Coach/CoachTeachPage.tsx:11354`
 - `src/services/voicePackage.test.ts:38`
 - `src/services/voicePackage.ts:599`
 
 ### `keptLines` (re-export) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12219`
+- `src/components/Coach/CoachTeachPage.tsx:11302`
 - `src/services/learnTurnDoor.test.ts:204`
 - `src/services/learnTurnDoor.test.ts:210`
 - `src/services/learnTurnDoor.test.ts:216`
 - `src/services/voicePackage.ts:643`
 
 ### `markableSquares` (re-export) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12182`
+- `src/components/Coach/CoachTeachPage.tsx:11265`
 - `src/services/voicePackage.test.ts:309`
 - `src/services/voicePackage.test.ts:318`
 - `src/services/voicePackage.test.ts:328`
@@ -345,10 +345,10 @@
 
 ### `spokenSentenceKeys` (re-export) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8233`
-- `src/components/Coach/CoachTeachPage.tsx:9894`
-- `src/components/Coach/CoachTeachPage.tsx:9912`
-- `src/components/Coach/CoachTeachPage.tsx:11057`
-- `src/components/Coach/CoachTeachPage.tsx:12156`
+- `src/components/Coach/CoachTeachPage.tsx:9898`
+- `src/components/Coach/CoachTeachPage.tsx:9916`
+- `src/components/Coach/CoachTeachPage.tsx:11081`
+- `src/components/Coach/CoachTeachPage.tsx:11239`
 - `src/services/coachFeatureService.ts:2467`
 - `src/services/learnTurnDoor.test.ts:612`
 - `src/services/reviewMoveBriefing.ts:406`
@@ -359,6 +359,12 @@
 - `src/services/voicePackage.ts:588`
 
 ### `STORY_LANE` (re-export) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `DNA_BEAT` (re-export) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `VERDICT_TURN_CP` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `FACT_ROLE` (re-export) — 0 call sites
