@@ -11,7 +11,7 @@ import { andList } from '../utils/andList';
 import { describeStructure } from './boardStructure';
 import { castleRoute } from './kingSafety';
 
-export interface SplitPosition { text: string; squares: string[] }
+interface SplitPosition { text: string; squares: string[] }
 
 export function splitPosition(fen: string, student: Color): SplitPosition | null {
   const s = describeStructure(fen);

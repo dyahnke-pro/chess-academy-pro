@@ -25,7 +25,7 @@
   "src/data/lessons/proNaroditskyCaroKann.ts": 1,
   "src/data/lessons/sicilianAlapinVariations.ts": 1,
   "src/data/lessons/sicilianSveshnikov.ts": 1,
-  "src/services/coachPrompts.ts": 6,
+  "src/services/coachPrompts.ts": 5,
   "src/services/moveReasonOptions.ts": 1,
   "src/services/perspectiveRule.ts": 2,
   "src/services/smartSearchService.ts": 1,

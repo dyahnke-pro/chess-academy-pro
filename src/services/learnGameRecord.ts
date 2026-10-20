@@ -80,12 +80,12 @@ export function annotationFromLiveGrade(g: LearnLiveGrade): MoveAnnotation {
 
 /** How the Learn game ended. `ended` = the student pressed End Lesson with a
  *  game in progress: result `*`, never a resignation — nobody lost. */
-export type LearnGameEnding =
+type LearnGameEnding =
   | { kind: 'checkmate'; winner: 'white' | 'black' }
   | { kind: 'draw' }
   | { kind: 'ended' };
 
-export interface LearnGameInput {
+interface LearnGameInput {
   /** The id `learnMemory` minted when the game began — the same id every
    *  slip captured during the game carries, so the two join with no lookup. */
   gameId: string;

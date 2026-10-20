@@ -16,7 +16,7 @@ import { countWords } from '../utils/countWords';
 
 type Line = { moves: readonly string[]; evaluation: number; mate: number | null };
 
-export interface PatternFail {
+interface PatternFail {
   text: string;
   /** The tempting move, SAN. */
   tempting: string;
@@ -33,7 +33,7 @@ export interface PatternFail {
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 /** The tempting line must cost at least this much against the best line. */
-export const PATTERN_FAIL_GAP_CP = 150;
+const PATTERN_FAIL_GAP_CP = 150;
 
 function seatCp(fen: string, l: Line): number {
   const white = l.mate != null ? (l.mate > 0 ? 100000 : -100000) : l.evaluation;

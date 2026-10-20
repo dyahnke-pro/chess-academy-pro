@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**847 lines · 20 exports · 27 importers · 10 tests · 30 audits**
+**847 lines · 16 exports · 26 importers · 10 tests · 12 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:43) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6270) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6401) — names `conceptEngine`
 
 ## Who calls in
 
@@ -33,7 +33,6 @@
 - `src/services/projectedLineVoice.ts`
 - `src/services/puzzleConceptExplanation.ts`
 - `src/services/puzzleConceptHint.ts`
-- `src/services/puzzleDifficulty.ts`
 - `src/services/refutedAlternative.ts`
 - `src/services/refutedAlternativeCore.ts`
 - `src/services/reviewFullData.ts`
@@ -42,9 +41,6 @@
 - `src/test/auditConceptGameplayCues.test.ts`
 
 ## Exports and every call site
-
-### `Side` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `sideToMove` (function) — 14 call sites
 - `src/components/Coach/ExplainPositionSessionView.tsx:158`
@@ -59,8 +55,8 @@
 - `src/services/conceptEngine.test.ts:13`
 - `src/services/groundedMoveWhy.ts:76`
 - `src/services/groundedMoveWhy.ts:102`
-- `src/services/material.ts:45`
-- `src/services/mistakeNarration.ts:380`
+- `src/services/material.ts:43`
+- `src/services/mistakeNarration.ts:367`
 
 ### `solvingSide` (function) — 2 call sites
 - `src/services/conceptEngine.test.ts:19`
@@ -104,16 +100,13 @@
 - `src/services/conceptEngine.test.ts:280`
 - `src/services/conceptEngine.test.ts:284`
 - `src/services/conceptEngine.test.ts:285`
-- `src/services/endgameService.ts:90`
+- `src/services/endgameService.ts:91`
 - `src/services/endgameTablebaseService.ts:275`
 - `src/services/endgameTechnique.test.ts:61`
 - `src/services/endgameTechnique.test.ts:74`
 - `src/services/endgameTechnique.test.ts:224`
-- `src/services/groundedAnswer.ts:4104`
-- `src/services/groundedAnswer.ts:6855`
-
-### `ConceptForBoardOptions` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/services/groundedAnswer.ts:4121`
+- `src/services/groundedAnswer.ts:7002`
 
 ### `conceptForBoard` (function) — 11 call sites
 - `src/services/claimKeyParity.test.ts:24`
@@ -125,11 +118,8 @@
 - `src/services/conceptEngine.test.ts:170`
 - `src/services/conceptEngine.test.ts:206`
 - `src/services/conceptEngine.test.ts:224`
-- `src/services/liveTacticsContext.ts:119`
-- `src/services/positionFacts.ts:863`
-
-### `LineInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/services/liveTacticsContext.ts:123`
+- `src/services/positionFacts.ts:928`
 
 ### `conceptForLine` (function) — 12 call sites
 - `src/services/conceptEngine.futureTechnique.test.ts:12`
@@ -139,14 +129,11 @@
 - `src/services/conceptEngine.test.ts:296`
 - `src/services/conceptEngine.test.ts:303`
 - `src/services/endgameDrillService.test.ts:163`
-- `src/services/missedTacticService.ts:796`
+- `src/services/missedTacticService.ts:661`
 - `src/services/puzzleConceptExplanation.ts:141`
-- `src/services/puzzleConceptHint.ts:110`
+- `src/services/puzzleConceptHint.ts:108`
 - `src/services/refutedAlternative.ts:112`
 - `src/services/tacticTypeUnification.test.ts:57`
-
-### `ConceptForSolutionOptions` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `conceptForSolution` (function) — 7 call sites
 - `src/services/conceptCoverage.report.test.ts:61`
@@ -163,27 +150,27 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7976`
-- `src/components/Coach/CoachTeachPage.tsx:7980`
+- `src/components/Coach/CoachTeachPage.tsx:8182`
+- `src/components/Coach/CoachTeachPage.tsx:8186`
 - `src/services/learnWalkBlumenfeld.test.ts:138`
-- `src/services/positionFacts.ts:1234`
-- `src/services/positionFacts.ts:1237`
-- `src/services/positionFacts.ts:1646`
-- `src/services/positionFacts.ts:1650`
-- `src/services/reviewFullData.ts:607`
-- `src/services/reviewFullData.ts:610`
+- `src/services/positionFacts.ts:1360`
+- `src/services/positionFacts.ts:1362`
+- `src/services/positionFacts.ts:1817`
+- `src/services/positionFacts.ts:1821`
+- `src/services/reviewFullData.ts:671`
+- `src/services/reviewFullData.ts:674`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7977`
+- `src/components/Coach/CoachTeachPage.tsx:8183`
 - `src/services/dnaLineNarrator.ts:56`
 - `src/services/projectedLineVoice.ts:99`
 - `src/services/puzzleConceptExplanation.ts:130`
-- `src/services/reviewFullData.ts:606`
+- `src/services/reviewFullData.ts:670`
 - `src/services/tacticAlertService.ts:143`
-- `src/services/tacticTypeUnification.test.ts:212`
+- `src/services/tacticTypeUnification.test.ts:214`
 - `src/test/auditConceptGameplayCues.test.ts:24`
 
-### `materialBalance` (re-export) — 57 call sites
+### `materialBalance` (re-export) — 59 call sites
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:41`
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:90`
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:94`
@@ -224,12 +211,12 @@
 - `scripts/pro-repertoire/mine-ruy-traps.mjs:90`
 - `scripts/pro-repertoire/mine-ruy-traps.mjs:94`
 - `scripts/pro-repertoire/mine-ruy-traps.mjs:103`
-- `src/services/coachPrompts.ts:611`
 - `src/services/conceptEngine.test.ts:24`
 - `src/services/conceptEngine.test.ts:26`
 - `src/services/conceptEngine.test.ts:28`
-- `src/services/material.ts:43`
-- `src/services/material.ts:59`
+- `src/services/endgameMoveReads.ts:94`
+- `src/services/material.ts:41`
+- `src/services/material.ts:57`
 - `src/services/materialClaimValidator.test.ts:24`
 - `src/services/materialClaimValidator.test.ts:25`
 - `src/services/materialClaimValidator.ts:36`
@@ -237,9 +224,11 @@
 - `src/services/narratedContinuation.test.ts:16`
 - `src/services/narratedContinuation.test.ts:18`
 - `src/services/narratedContinuation.test.ts:20`
-- `src/services/opponentMoveReads.ts:435`
+- `src/services/opponentMoveReads.ts:440`
 - `src/services/pieceValues.ts:46`
-- `src/services/positionReadingService.ts:1831`
+- `src/services/positionReadingService.ts:1846`
+- `src/services/practicalReads.ts:30`
+- `src/services/sideMaterial.test.ts:12`
 - `src/test/onePieceValueTable.test.ts:46`
 
 ## Tests
@@ -261,33 +250,15 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
-- `scripts/audit-chat-surfaces-prod.mjs`
 - `scripts/audit-coach-move-grounding.mjs`
-- `scripts/audit-coach-plan.mjs`
-- `scripts/audit-coach-player-games.mjs`
-- `scripts/audit-coach-teach-gaps.mjs`
 - `scripts/audit-concept-engine-prod.mjs`
 - `scripts/audit-concept-gameplay-prod.mjs`
 - `scripts/audit-endgame-results.mjs`
-- `scripts/audit-engine-worker-census-prod.mjs`
 - `scripts/audit-engine.mjs`
 - `scripts/audit-hanging-pieces.mjs`
-- `scripts/audit-kid-puzzles-static.mjs`
-- `scripts/audit-learn-live-game-prod.mjs`
-- `scripts/audit-lib/env.mjs`
-- `scripts/audit-lib/narrationAuditor.ts`
-- `scripts/audit-lib/source-real-game.mjs`
 - `scripts/audit-lichess-lines.mjs`
 - `scripts/audit-llm-claims.mjs`
-- `scripts/audit-loop-closes-prod.mjs`
-- `scripts/audit-loop-green-prod.mjs`
-- `scripts/audit-model-games-cluster.mjs`
 - `scripts/audit-openings-narration.mjs`
-- `scripts/audit-reading-upgrades-loop.mjs`
 - `scripts/audit-repertoire-orientation.mjs`
-- `scripts/audit-review-overhaul-prod.mjs`
-- `scripts/audit-review-prep-timing.mjs`
-- `scripts/audit-teach-bridge-prod.mjs`
-- `scripts/audit-teach-play-picker-prod.mjs`
 - `scripts/audit-trap-orientation.mjs`
 - `scripts/audit-traps-stockfish.mjs`

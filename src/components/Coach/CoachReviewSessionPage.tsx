@@ -32,7 +32,6 @@ import type { GameRecord } from '../../types';
 
 // Re-exported for callers and tests that import the adapter from the page.
 export { adaptGameRecordExplained, adaptGameRecord, describeGameForStudent } from '../../services/reviewGameAdapter';
-export type { AdaptOutcome } from '../../services/reviewGameAdapter';
 
 /** How many plies the walk is graded through before it may start. The rest are
  *  read while the student listens (the walk spends ~17 s a move; a phone reads

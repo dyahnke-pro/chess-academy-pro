@@ -13,7 +13,7 @@ import { Chess, type Square } from 'chess.js';
 import { homeSquaresOf } from './development';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
-export interface HeldResource {
+interface HeldResource {
   text: string;
   /** Their knight's development and the bishop's pin, SAN, from `fen` (their
    *  turn). */
@@ -51,7 +51,7 @@ function withTurn(fen: string, color: 'w' | 'b'): Chess | null {
  * bishop taking on T can only be met by pawn recaptures that leave them
  * doubled pawns. That threat is the bite. Every move is legal on its board.
  */
-export function heldResourceLine(fen: string): Omit<HeldResource, 'text' | 'check'> | null {
+function heldResourceLine(fen: string): Omit<HeldResource, 'text' | 'check'> | null {
   let board: Chess;
   try { board = new Chess(fen); } catch { return null; }
   const them = board.turn();

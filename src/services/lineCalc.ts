@@ -12,10 +12,11 @@ import { countWords } from '../utils/countWords';
 import type { ArrowClaim } from './arrowDoor';
 import { heardProofCut, netPieceWords } from './exchangeLedger';
 import { MATERIAL_VALUE } from './pieceValues';
+import { unmarked } from '../utils/sanMark';
 
 
 export interface LinePly { from: string; to: string; color: 'w' | 'b'; fen: string; san: string }
-export interface LineWin { net: number; what: string; sans: string[]; plies: LinePly[] }
+interface LineWin { net: number; what: string; sans: string[]; plies: LinePly[] }
 
 /**
  * `lineUci` from `fen`; `side` is who the gain is counted for. When `firstSan`
@@ -179,7 +180,7 @@ export function mateLine(fen: string, lineUci: readonly string[], side: 'w' | 'b
   if (!mated || !first || plies.length < (opts.minPlies ?? 3)) return null;
   const sans = plies.map((p) => `${p.color === 'b' ? '…' : ''}${p.san}`);
   const quiet = !first.check && !first.capture;
-  const mateSan = sans[sans.length - 1].replace(/[+#]$/, '');
+  const mateSan = unmarked(sans[sans.length - 1]);
   const list = (xs: string[]): string => xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`;
   // A long mate is said as its length and first move; the whole line is drawn
   // (proof guard 2 — "a forced mate in 3, starting with Nxe5").

@@ -1,7 +1,7 @@
 import type { PieceRenderObject } from 'react-chessboard';
 import { logAppAudit } from './appAuditor';
 
-export interface PieceSetConfig {
+interface PieceSetConfig {
   id: string;
   name: string;
   /** Lichess piece set directory name for CDN loading. null = use react-chessboard defaults. */
@@ -52,7 +52,7 @@ export const LICHESS_CDN =
  *  with a cache-bust query that DEFEATED jsdelivr's edge cache and
  *  forced another cold fetch. The fallback path now tries a wholly
  *  different CDN before surrendering to the alt-text fallback. */
-export const LICHESS_CDN_FALLBACK =
+const LICHESS_CDN_FALLBACK =
   'https://raw.githack.com/lichess-org/lila/master/public/piece';
 
 /** Bundled last-resort pieces (cburnett, CC0) served from our own
@@ -62,9 +62,9 @@ export const LICHESS_CDN_FALLBACK =
  *  2026-07-12 loop audit surfaced 145 asset-load-error events with
  *  no final tier; the piece SET falls back to cburnett but the
  *  board never goes blank. 12 SVGs, ~7.5 KB total. */
-export const LOCAL_PIECE_PATH = '/pieces/cburnett';
+const LOCAL_PIECE_PATH = '/pieces/cburnett';
 
-export interface PieceFilterOptions {
+interface PieceFilterOptions {
   whitePieceFilter?: string;
   blackPieceFilter?: string;
 }

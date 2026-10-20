@@ -18,14 +18,14 @@ import type { AnalysisLine } from '../types';
 import { detectNewThreat, type DetectedThreat } from './groundedAnswer';
 import { legalSeeGainFor } from './positionReadingService';
 
-export interface FalseAlarm {
+interface FalseAlarm {
   text: string;
   threat: DetectedThreat;
   squares: string[];
 }
 
 /** The student must not be worse than this (centipawns, student POV). */
-export const FALSE_ALARM_FLOOR_CP = -50;
+const FALSE_ALARM_FLOOR_CP = -50;
 
 const moveOf = (u: string): { from: string; to: string; promotion?: string } =>
   ({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.slice(4, 5) || undefined });

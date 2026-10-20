@@ -7,7 +7,7 @@ import { GAMBIT_GEM_NARRATION } from './lessons/gambitGemNarration';
 import { ALL_GEMS, gemId } from './lessons/punishGems';
 import type { LessonScript, MiddlegamePlan } from '../types';
 
-export interface BoardClaimRow {
+interface BoardClaimRow {
   source: string;
   unit: string;
   claim: string;
@@ -22,7 +22,7 @@ function isLesson(v: unknown): v is LessonScript {
 }
 
 /** Every LessonScript exported from src/data/lessons, deduped by identity. */
-export function allLessonScripts(): Array<{ file: string; lesson: LessonScript }> {
+function allLessonScripts(): Array<{ file: string; lesson: LessonScript }> {
   const mods: Record<string, Record<string, unknown>> = import.meta.glob(['./lessons/*.ts', '!./lessons/*.test.ts'], { eager: true });
   const seen = new Set<LessonScript>();
   const out: Array<{ file: string; lesson: LessonScript }> = [];

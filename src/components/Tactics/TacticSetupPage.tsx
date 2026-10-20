@@ -26,7 +26,7 @@ type Phase = 'select' | 'loading' | 'solving' | 'summary';
 /** WHY the summary is showing — each has its own honest message. Before this,
  *  tapping End session with zero attempts printed "No setup positions found",
  *  which only a null pick can truthfully say (hand walk 2026-10-03). */
-export type SummaryReason = 'none-found' | 'ended' | 'complete';
+type SummaryReason = 'none-found' | 'ended' | 'complete';
 
 const SESSION_LENGTH = 10;
 

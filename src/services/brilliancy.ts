@@ -32,15 +32,15 @@ import { Chess } from 'chess.js';
 import { describeSacrifice } from './groundedAnswer';
 
 /** Given up ≤ this vs the engine's best still counts as "near-best". */
-export const NEAR_BEST_CP = 30;
+const NEAR_BEST_CP = 30;
 /** After the sacrifice the student must be at least roughly level (not losing).
  *  A forced mate for the student is favourable regardless. */
-export const FAVORABLE_FLOOR_CP = -50;
+const FAVORABLE_FLOOR_CP = -50;
 /** Already ahead by more than this BEFORE the move → a sac is just cleanup, which
  *  chess.com grades great/best, not brilliant. chess.com's exact cutoff is
  *  proprietary; +3 pawns is a faithful, conservative approximation of "already
  *  winning". */
-export const ALREADY_WINNING_CP = 300;
+const ALREADY_WINNING_CP = 300;
 
 export interface Brilliancy {
   brilliant: boolean;

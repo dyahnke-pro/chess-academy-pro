@@ -487,7 +487,7 @@ async function speakPaced(text: string, stillCurrent?: () => boolean): Promise<v
   await waitInterruptibly(remaining, stillCurrent);
 }
 
-export type WalkthroughPhase =
+type WalkthroughPhase =
   | 'idle'
   | 'choose-mode'  // returning student: chooser between walkthrough + stages
   | 'narrating'
@@ -503,9 +503,9 @@ export type WalkthroughPhase =
   | 'drill';      // woodpecker — interactive board, play the line
 
 /** Which post-walkthrough stage the user is currently in. */
-export type StageKind = 'concepts' | 'findMove' | 'drill' | 'punish';
+type StageKind = 'concepts' | 'findMove' | 'drill' | 'punish';
 
-export interface UseTeachWalkthroughReturn {
+interface UseTeachWalkthroughReturn {
   /** Current state-machine phase. */
   phase: WalkthroughPhase;
   /** True iff phase !== 'idle'. */

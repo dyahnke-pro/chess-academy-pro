@@ -94,9 +94,9 @@ function pawnIsAttackable(chess: Chess, sq: Square, by: Color): boolean {
 }
 
 /** A single engine PV line, as the coach turn already has it in hand. */
-export interface BehaviorLine { moves: string[]; evaluation: number }
+interface BehaviorLine { moves: string[]; evaluation: number }
 
-export interface BehaviorContext {
+interface BehaviorContext {
   fen: string;
   studentColor: Color | 'white' | 'black';
   /** Already-computed MultiPV lines for this FEN (latency-safe reuse). */
@@ -149,7 +149,7 @@ function theirMoveArrow(fen: string, san: string, student: Color): ArrowClaim[] 
   } catch { return []; }
 }
 
-export interface Behavior {
+interface Behavior {
   id: string;
   /** Corpus note count — the target relative firing rate. */
   weight: number;

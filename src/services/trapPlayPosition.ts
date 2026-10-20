@@ -23,7 +23,7 @@ import { Chess } from 'chess.js';
 import { stripSanAnnotations } from '../data/openingWalkthroughs/validate';
 import type { PunishLesson } from '../types/walkthroughTree';
 
-export interface TrapPlayPosition {
+interface TrapPlayPosition {
   /** Position with the STUDENT to move, the opponent's mistake already on the
    *  board. The punishment is the move they are looking for. */
   fen: string;

@@ -63,7 +63,7 @@ describe('explainMate — why this board is mate', () => {
   it("Damiano's: the queen on h7, protected by the g6 pawn", async () => {
     const { explainMate } = await import('./matePatterns');
     const t = explainMate('5rk1/6pQ/6P1/8/8/8/8/6K1 b - - 0 1');
-    expect(t).toContain('the queen on h7 checks the king on g8');
+    expect(t).toMatch(/^The queen on h7 checks the king on g8/);
     expect(t).toContain('protected by the pawn on g6');
     expect(t).toContain('its own pieces block f8 and g7');
     expect(t).toContain('f7 and h8 are covered');

@@ -3,7 +3,7 @@
  *  score on whole tokens, so a shorthand like "scandi" scores nothing against
  *  "Scandinavian Defense". Whole-word only, case-insensitive. Extend as testers
  *  surface more shorthand. (David 2026-07-16.) */
-export const OPENING_ABBREV: Record<string, string> = {
+const OPENING_ABBREV: Record<string, string> = {
   scandi: 'scandinavian',
   najdorff: 'najdorf',
   kid: "king's indian",

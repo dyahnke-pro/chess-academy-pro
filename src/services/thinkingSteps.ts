@@ -36,9 +36,9 @@ export type ThinkingStep =
   | 'is-my-move-safe';
 
 /** 1 · See the board · 2 · Force it · 3 · Combine and calculate · 4 · Think like a player. */
-export type ThinkingTier = 1 | 2 | 3 | 4;
+type ThinkingTier = 1 | 2 | 3 | 4;
 
-export interface ThinkingStepDef {
+interface ThinkingStepDef {
   /** 1–10, the fixed order of the routine. */
   order: number;
   /** As a coach says it — the question the student asks themself. */
@@ -209,7 +209,7 @@ export const LIVE_HABIT_STEP: Record<LiveHabit, ThinkingStep> = {
 };
 
 /** The Learn lanes' method claims (`method:<id>` in learnBoardTeaching). */
-export type LearnMethodClaim = 'knee-jerk' | 'blunder-check' | 'autopilot' | 'spare-tempo' | 'pawn-ending-trade' | 'keep-pressing';
+type LearnMethodClaim = 'knee-jerk' | 'blunder-check' | 'autopilot' | 'spare-tempo' | 'pawn-ending-trade' | 'keep-pressing';
 
 export const LEARN_METHOD_CLAIM_STEP: Record<LearnMethodClaim, ThinkingStep> = {
   // "before taking back, ask whether something stronger comes first"

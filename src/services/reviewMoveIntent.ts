@@ -13,7 +13,7 @@ import { intentWithFallback, nullMoveFen } from './movePurpose';
 import { preventsNamedIdea, STOPPED_THEIR_IDEA } from './moveIntent';
 import { storedMate } from './engineConstants';
 
-export interface IntentMoveInput {
+interface IntentMoveInput {
   ply: number;
   san: string;
   fenAfter: string;

@@ -27,7 +27,7 @@ import {
 } from './holdRate';
 
 export type { HeatState, HoldRecord } from './holdRate';
-export { holdRecords, holdState, HOLD_WINDOW, HOLD_MIN_POSED, HOLD_GREEN, HOLD_SHORT } from './holdRate';
+export { holdRecords, holdState, HOLD_WINDOW, HOLD_MIN_POSED } from './holdRate';
 
 export interface HeatTile {
   tag: MisconceptionTagId;

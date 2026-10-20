@@ -29,7 +29,7 @@ function isServerLedger(v: unknown): v is ServerLedger {
 
 /** Read the server's ledger for this install and fold it in. Returns whether
  *  anything was learned. */
-export async function pullFreeTier(): Promise<boolean> {
+async function pullFreeTier(): Promise<boolean> {
   try {
     const device = await getDeviceId();
     const res = await fetch(withWebOrigin(`${API}?device=${encodeURIComponent(device)}&cb=${Date.now()}`), { cache: 'no-store' });
@@ -45,7 +45,7 @@ export async function pullFreeTier(): Promise<boolean> {
 }
 
 /** Send this install's current ledger. */
-export async function pushFreeTier(): Promise<boolean> {
+async function pushFreeTier(): Promise<boolean> {
   try {
     const device = await getDeviceId();
     const ledger = toServerLedger(await loadFreeTier());

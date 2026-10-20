@@ -8,8 +8,8 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-export interface EvalCp { cp: number | null; mate: number | null; depth: number }
-export interface GroundingItem {
+interface EvalCp { cp: number | null; mate: number | null; depth: number }
+interface GroundingItem {
   cat: 'line' | 'mistake' | 'trap' | 'warning' | 'gem' | 'lesson' | 'plan';
   id?: string;
   openingId?: string;

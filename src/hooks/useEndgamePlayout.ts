@@ -38,7 +38,7 @@ function stripSan(san: string): string {
   return san.replace(/[+#!?]+$/, '').replace(/=Q$|=R$|=B$|=N$/, '');
 }
 
-export interface EndgamePlayoutOptions {
+interface EndgamePlayoutOptions {
   /** Starting position. Side-to-move in this FEN is the student. */
   startFen: string;
   /** Curated alternating SAN sequence. Index 0 = first student
@@ -98,14 +98,14 @@ export interface EndgamePlayoutOptions {
   studentSide?: 'white' | 'black';
 }
 
-export type PlayoutPhase =
+type PlayoutPhase =
   | 'idle'                   // No active playout (before start, after reset)
   | 'student-to-move'        // Waiting for the student's piece drop
   | 'opponent-replying'      // Opponent's curated/engine move is being animated
   | 'complete'               // Full sequence played successfully
   | 'failed';                // Reserved for future "give up" state
 
-export interface EndgamePlayoutState {
+interface EndgamePlayoutState {
   /** Current FEN displayed on the board. */
   fen: string;
   /** Side the student is playing. Computed from startFen. */
@@ -174,7 +174,7 @@ export interface StudentMoveRecord {
   curated: boolean;
 }
 
-export interface EndgamePlayoutControls {
+interface EndgamePlayoutControls {
   /** Wire to ConsistentChessboard.onPieceDrop. Returns true when
    *  the drop is the correct move (board updates), false otherwise
    *  (board snaps back, red flash fires). */
@@ -200,7 +200,7 @@ export interface EndgamePlayoutControls {
 
 /** The hook return shape — state + controls. Components destructure
  *  what they need. */
-export type EndgamePlayoutResult = EndgamePlayoutState & EndgamePlayoutControls;
+type EndgamePlayoutResult = EndgamePlayoutState & EndgamePlayoutControls;
 
 /** Multi-ply endgame playout runner.
  *

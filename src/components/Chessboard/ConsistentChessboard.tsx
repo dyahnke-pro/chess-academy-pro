@@ -33,7 +33,6 @@ import { useSettings } from '../../hooks/useSettings';
 import { useBoardReloadHold } from '../../hooks/useBoardReloadHold';
 
 export type BoardArrow = { startSquare: string; endSquare: string; color: string };
-export type BoardHighlight = { square: string; color: string };
 
 interface ControlledModeProps extends ControlledChessBoardProps {
   /** Controlled mode marker — `game` is required by ControlledChessBoardProps. */
@@ -78,7 +77,7 @@ interface StaticModeProps {
   showCoordinates?: boolean;
 }
 
-export type ConsistentChessboardProps = ControlledModeProps | StaticModeProps;
+type ConsistentChessboardProps = ControlledModeProps | StaticModeProps;
 
 function isControlled(props: ConsistentChessboardProps): props is ControlledModeProps {
   return 'game' in props && props.game !== undefined;

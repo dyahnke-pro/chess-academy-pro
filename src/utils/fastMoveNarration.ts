@@ -24,9 +24,9 @@ import type { TacticPattern, HangingPiece } from '../types/tacticTypes';
  *                  concrete happened (tactic / hanging / blunder / check)
  *  - everything else ('unlimited', 'standard', …) → full: also dictate
  *    routine moves so full-narration users hear every move. */
-export type FastNarrationDensity = 'none' | 'fast' | (string & {});
+type FastNarrationDensity = 'none' | 'fast' | (string & {});
 
-export interface FastMoveLineInput {
+interface FastMoveLineInput {
   /** SAN of the move that was just played (may carry +/#). */
   san: string;
   /** True when the side that just moved is White. */

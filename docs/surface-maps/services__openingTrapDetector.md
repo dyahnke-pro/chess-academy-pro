@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**135 lines · 5 exports · 5 importers · 1 tests · 0 audits**
+**135 lines · 4 exports · 5 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,9 +26,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `TrapSignal` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `DetectTrapInput` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `detectTrapInPosition` (function) — 6 call sites
 - `src/services/openingTrapDetector.test.ts:34`
 - `src/services/openingTrapDetector.test.ts:42`
@@ -38,8 +35,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionTrapScan.ts:148`
 
 ### `formatTrapForPrompt` (function) — 3 call sites
-- `src/coach/envelope.ts:764`
-- `src/components/Coach/CoachGamePage.tsx:3568`
+- `src/coach/envelope.ts:768`
+- `src/components/Coach/CoachGamePage.tsx:3558`
 - `src/services/openingTrapDetector.test.ts:100`
 
 ## Tests

@@ -15,7 +15,7 @@ export interface CourseAccess {
 }
 
 /** How many leading chapters are free when a course is preview-only. */
-export const FREE_PREVIEW_CHAPTERS = 1;
+const FREE_PREVIEW_CHAPTERS = 1;
 
 /** Pure resolver — testable without the build flag / store.
  *  PAYWALLS REMOVED (David 2026-06-17): everything is unlocked for everyone —

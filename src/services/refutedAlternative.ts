@@ -37,7 +37,7 @@ export type { AlternativeCandidate, RefutedAlternative };
 
 
 
-export interface RefutedAlternativeInput {
+interface RefutedAlternativeInput {
   fenBefore: string;
   taughtSan: string;
   /** Candidate alternatives at this position, most-played first (the caller
@@ -58,7 +58,7 @@ export const SINGLETON_SCORER: PvEngine & MoveScorer = {
   analyzePosition: (fen, depth) => stockfishEngine.analyzePosition(fen, depth),
   async scoreMoves(fen, ucis, depth) {
     const r = await stockfishEngine.analyzePosition(fen, depth, { searchmoves: ucis.join(' ') });
-    return r.topLines.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves }));
+    return r.topLines.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves, depth: l.depth ?? r.depth }));
   },
 };
 

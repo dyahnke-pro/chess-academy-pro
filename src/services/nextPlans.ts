@@ -21,7 +21,7 @@ import { detectPlanRace, planRaceClause, stepsToPromote } from './planRace';
 
 export const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
-export interface Cell { type: string; color: Color; square: string; }
+interface Cell { type: string; color: Color; square: string; }
 
 export function cells(chess: Chess): Cell[] {
   const out: Cell[] = [];
@@ -191,7 +191,7 @@ export function isPinnedPiece(chess: Chess, sq: Square, color: Color): boolean {
  * applies (not just the top one), so the student hears the full agenda. Empty when
  * nothing concrete stands out.
  */
-export interface NextPlanOpts {
+interface NextPlanOpts {
   studentPovCp?: number | null;
   /** REQUIRED: may a plan name the student's next move — the first square of
    *  a route? Learn's live board holds it (LEARN NAMES NO MOVE UNASKED; Black

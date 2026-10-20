@@ -13,7 +13,7 @@ import { MATERIAL_VALUE } from './pieceValues';
 import { signedLegalSeeFor } from './positionReadingService';
 import { countWord } from '../utils/andList';
 
-export interface CountMethod { text: string; square: string; /** The exchange's net for the student, in points (signed SEE). */ net: number }
+interface CountMethod { text: string; square: string; /** The exchange's net for the student, in points (signed SEE). */ net: number }
 
 export function countMethod(fen: string, student: Color): CountMethod | null {
   let c: Chess;

@@ -39,7 +39,6 @@ import { legalSeeGainOn, bishopHemmedByOwnPawns, standsSafe } from './positionRe
 import { captureHasCounterTactic, detectNewThreat, forkAlignmentClause, type DetectedThreat } from './groundedAnswer';
 import { cells, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans } from './nextPlans';
 import { trappedAt, lineTakesPiece } from './trappedPiece';
-export { lineTakesPiece };
 // Re-exported: eight callers and tests import these from here (2026-09-19 leaf move).
 export { findWorstPlacedPiece, deriveNextPlans };
 
@@ -257,12 +256,6 @@ export function passedPawnPush(fen: string, studentColorWB: Color, passedSquare:
 }
 
 
-/** Back-compat single-plan helper (the top-priority plan), retained for callers
- *  that want just one. */
-export function deriveNextPlan(fen: string, studentColorWB: Color): string | null {
-  return deriveNextPlans(fen, studentColorWB, { namesStudentMoves: true })[0] ?? null;
-}
-
 /**
  * REVIEW DEEPEST LOOK-AHEAD (David 2026-07-26 — the Review-register peer of the
  * live `speakDeepestLookahead`). The live narration surfaces speak the deepest
@@ -304,7 +297,7 @@ export function buildReviewDeepestLookahead(
  *  erred. Those are two renderings of one computed fact, so they must not be two
  *  scans — a second detector is how the two registers drift into disagreeing
  *  about the same board. */
-export interface BestMoveShot {
+interface BestMoveShot {
   /** The best move in SAN, played from `fenBefore`. */
   san: string;
   /** The position AFTER the best move — the board the geometry describes. */
@@ -312,7 +305,7 @@ export interface BestMoveShot {
   threat: DetectedThreat;
 }
 
-export function scanBestMoveShot(
+function scanBestMoveShot(
   fenBefore: string,
   bestMoveUci: string | null,
   moverColorWB: 'w' | 'b',

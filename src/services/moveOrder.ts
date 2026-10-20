@@ -26,12 +26,12 @@ import { MATERIAL_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 /** Y-first must cost at least this much, in centipawns, against X. */
-export const ORDER_COST_CP = 100;
+const ORDER_COST_CP = 100;
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 const MATE = 100_000;
 
-export interface MoveOrderPoint {
+interface MoveOrderPoint {
   text: string;
   /** X's landing square, Y's from/to, and R's squares — never empty. */
   squares: string[];

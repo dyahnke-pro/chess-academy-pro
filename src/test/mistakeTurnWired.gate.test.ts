@@ -8,7 +8,9 @@ const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
 
 describe('Learn: the mistake turn', () => {
   it('composes the grade, the fundamental and the habit through mistakeTurnLine', () => {
-    expect(src).toMatch(/const line = mistakeTurnLine\(\{/);
+    expect(src).toMatch(/const turnLine = mistakeTurnLine\(\{/);
+    // …and its habit joins the turn's one-habit rule (`method:` claim).
+    expect(src).toMatch(/if \(turnLine\.teachesMethod\) winClaim\.push\('method:mistake-turn'\);/);
     // The old inline rule recognised only two fundamentals as the grade's loss.
     expect(src).not.toMatch(/lossInGrade/);
   });

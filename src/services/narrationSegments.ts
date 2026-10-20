@@ -60,7 +60,7 @@ export function splitSentences(text: string): string[] {
   return cleaned.length > 0 ? cleaned : [trimmed];
 }
 
-export interface NarrationSegment {
+interface NarrationSegment {
   /** The sentence to speak as one smooth utterance. */
   text: string;
   /** Marker squares to REVEAL when this sentence starts (cumulative reveal is
@@ -99,32 +99,3 @@ export function buildNarrationSegments(
   return segments;
 }
 
-export interface SpeakSegmentsDeps {
-  /** Speak one sentence; resolves when it finishes. */
-  speak: (text: string) => Promise<void>;
-  /** Warm the next sentence's audio while the current one plays (smooth seam). */
-  prefetch?: (text: string) => void;
-  /** Reveal the squares this segment introduces (called BEFORE its speak). */
-  reveal: (squares: string[]) => void;
-  /** Bail out early if this returns true (e.g. a newer step superseded us). */
-  cancelled?: () => boolean;
-}
-
-/**
- * Play segments in order: reveal a segment's squares, prefetch the next
- * segment's audio, then speak the current segment to completion. Resolves when
- * the last sentence finishes — that resolution is what gates beat-advance, so
- * the existing voice-gated runtime is unchanged (it just awaits this).
- */
-export async function speakSegments(
-  segments: readonly NarrationSegment[],
-  deps: SpeakSegmentsDeps,
-): Promise<void> {
-  for (let i = 0; i < segments.length; i++) {
-    if (deps.cancelled?.()) return;
-    deps.reveal(segments[i].revealSquares);
-    const nextText = segments[i + 1]?.text;
-    if (nextText && deps.prefetch) deps.prefetch(nextText);
-    await deps.speak(segments[i].text);
-  }
-}

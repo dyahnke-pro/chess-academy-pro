@@ -10,7 +10,7 @@
 import { useEntitlementStore, isPaywallGateEnabled, trialDaysLeft } from '../stores/entitlementStore';
 import type { EntitlementSource, EntitlementStatus } from '../stores/entitlementStore';
 
-export interface UseEntitlement {
+interface UseEntitlement {
   isPro: boolean;
   status: EntitlementStatus;
   source: EntitlementSource;

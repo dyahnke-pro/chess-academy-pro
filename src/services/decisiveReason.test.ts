@@ -110,7 +110,7 @@ describe('decisiveReason — escalating walk boards (2026-10-17)', () => {
     const r = decisiveReason({ namesPreparedMove: true, fenBefore: fen, san: 'Bxc5+', seat: 'student', opponentLastSan: 'c5', reads: {
       before: [{ rank: 1, evaluation: 592, mate: null, moves: 'b4c5 e7e6 g6f5 e6f7 f5g4 c8g4 d1d3 f8c5 d3c4 g4e6 c4c5'.split(' ') }, { rank: 2, evaluation: 331, mate: null, moves: 'd1g4 f6g4 b4c5 e7f6 c5f8 h8f8 g6h5 g7g6 h5g4 c8g4'.split(' ') }], after: [], passBefore: [], passAfter: [] } });
     expect(r?.kind).toBe('the');
-    expect(r?.text).toMatch(/^Bxc5\+ wins by force: you come out ahead on material, winning a queen/);
+    expect(r?.text).toMatch(/^Bxc5\+ wins by force: you win a queen/);
     expect(r?.text).toMatch(/lands two moves later with Bxg4\./);
     expect(r?.text).not.toMatch(/…Bxg4/);
   });

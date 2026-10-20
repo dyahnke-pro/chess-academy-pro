@@ -103,15 +103,9 @@ vi.mock('../../services/coachTemplates', () => ({
 vi.mock('../../services/coachPrompts', () => ({
   EXPLORE_REACTION_ADDITION: 'Test explore reaction prompt',
   SYSTEM_PROMPT: 'Test system prompt',
-  buildChessContextMessage: vi.fn().mockReturnValue('test context'),
   // LIVE-COACH-01 system-prompt additions consumed by useLiveCoach.
   // Render-only tests don't exercise these branches, but the module
   // import has to resolve.
-  LIVE_COACH_GREAT_MOVE_ADDITION: 'great move',
-  LIVE_COACH_MISSED_TACTIC_ADDITION: 'missed tactic',
-  LIVE_COACH_OPPONENT_BLUNDER_ADDITION: 'opp blunder',
-  LIVE_COACH_EVAL_SWING_WRONG_ADDITION: 'eval swing',
-  LIVE_COACH_RECOVERY_ADDITION: 'recovery',
 }));
 
 vi.mock('../../services/openingDetectionService', () => ({

@@ -42,7 +42,7 @@ export function recencyPhrase(lastPriorAt: number, now: number): string {
  *  the source cannot say (a drill has no opponent; an older record has no game
  *  link). Mirrors `WeaknessProvenance` on the spine so one shape describes
  *  "where did this come from" everywhere (CLAUDE.md capability parity). */
-export interface CallbackContext {
+interface CallbackContext {
   opponentName?: string | null;
   /** ms — when the game was PLAYED. Never the capture clock: see the note on
    *  `recencyPhrase` below. */
@@ -116,16 +116,6 @@ function composeFrom(label: string, occurrences: number, lastPriorAt: number, no
   return `You've seen this before — ${label.toLowerCase()}. That's the ${ordinal(occurrences)} time this pattern has come up; the last one was${who} ${recencyPhrase(lastPriorAt, now)}.`;
 }
 
-/** Cluster ids whose label is a PLACEHOLDER, not a pattern. Calling back on
- *  "mistakes in the middlegame" is the `other`-tag dilution in a different
- *  costume: it counts unrelated slips as one recurring thing and teaches
- *  nothing. `bucketForMistake` calls these the vaguest buckets itself. */
-const GENERIC_CLUSTERS = new Set([
-  'analysis:phase:opening',
-  'analysis:phase:middlegame',
-  'analysis:phase:endgame',
-]);
-
 /** The minimal weakness shape this needs — structurally satisfied by
  *  `UnifiedWeakness`, without importing it (keeps this a leaf). */
 export interface CallbackWeakness {
@@ -134,26 +124,6 @@ export interface CallbackWeakness {
   total: number;
   lastSeenAt: number;
   positions: ReadonlyArray<{ from?: { opponentName?: string | null; playedAt?: number } }>;
-}
-
-/**
- * The callback line for ANY weakness cluster — analysis or coach. Reads the
- * PRIOR occurrence's provenance (positions are newest-first, so [1] is the one
- * before this), which is why the spine had to carry provenance first.
- *
- * Null when the cluster is a generic placeholder, or when there is nothing to
- * call back to.
- */
-export function composeWeaknessCallback(w: CallbackWeakness, now: number = Date.now()): string | null {
-  if (GENERIC_CLUSTERS.has(w.tag)) return null;
-  const prior = w.positions[1]?.from;
-  // The PLAY clock when the source knows it; the row's own lastSeenAt otherwise.
-  // Never `createdAt` — on an imported archive that is the day they hit Import.
-  const lastPriorAt = prior?.playedAt ?? w.lastSeenAt;
-  return composeFrom(w.label, w.total, lastPriorAt, now, {
-    opponentName: prior?.opponentName,
-    playedAt: prior?.playedAt,
-  });
 }
 
 // ── THE RECURRENCE READ — counted in GAMES, honest about THIS game ───────────
@@ -167,14 +137,14 @@ export function composeWeaknessCallback(w: CallbackWeakness, now: number = Date.
 // N+1. Learn passes no id (its game is live and unrecorded), so every row is
 // prior — which is exactly right.
 
-export interface RecurrenceGame {
+interface RecurrenceGame {
   gameId: string;
   opponentName?: string | null;
   playedAt?: number;
 }
 
 /** The minimal signal shape — structurally satisfied by `WeaknessSignal`. */
-export interface RecurrenceSource {
+interface RecurrenceSource {
   total?: number;
   openCount?: number;
   /** Distinct games this hole was recorded in, newest first, when the source
@@ -182,7 +152,7 @@ export interface RecurrenceSource {
   games?: readonly RecurrenceGame[];
 }
 
-export interface RecurrenceRead {
+interface RecurrenceRead {
   /** How many games this makes, INCLUDING the one being narrated; undefined
    *  when the source proves recurrence but cannot count games. */
   occurrences?: number;

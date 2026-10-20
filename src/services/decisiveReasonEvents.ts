@@ -12,7 +12,7 @@
 // the covering share would be the computer naming a reason that does not
 // explain the move — the failure this exists to make visible.
 
-export interface DecisiveReasonRow {
+interface DecisiveReasonRow {
   /** Which surface used the verdict. */
   surface: 'learn' | 'review' | 'chat';
   kind: 'the' | 'a' | 'close';

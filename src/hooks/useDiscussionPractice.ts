@@ -74,7 +74,7 @@ export interface DiscussionPrompt {
   severity?: SlipSeverity;
 }
 
-export interface EvaluatePlayerMoveArgs {
+interface EvaluatePlayerMoveArgs {
   fenBefore: string;
   fenAfter: string;
   playedSan: string;
@@ -123,7 +123,7 @@ export interface EvaluatePlayerMoveArgs {
   liveSessionId?: string;
 }
 
-export interface RaiseSlipPromptArgs {
+interface RaiseSlipPromptArgs {
   fenBefore: string;
   fenAfter: string;
   playedSan: string;
@@ -143,12 +143,12 @@ export interface RaiseSlipPromptArgs {
  *  "do we need the picker on good moves? I don't think so"). The coach speaks
  *  `line` and this transient signal lets the surface flash it; it never opens
  *  the blocking picker. Cleared on the next evaluated move or reset. */
-export interface GoodMoveRecognition {
+interface GoodMoveRecognition {
   line: string;
   playedSan: string;
 }
 
-export interface UseDiscussionPracticeResult {
+interface UseDiscussionPracticeResult {
   phase: DiscussionPhase;
   prompt: DiscussionPrompt | null;
   teach: string | null;
@@ -207,7 +207,7 @@ export interface UseDiscussionPracticeResult {
 
 /** A move the calling surface has ALREADY graded. `cpLoss` is theirs; this
  *  hook never analyses to obtain it. */
-export interface GradedMoveArgs {
+interface GradedMoveArgs {
   fenBefore: string;
   playedSan: string;
   moverColor: 'white' | 'black';
@@ -221,7 +221,7 @@ export interface GradedMoveArgs {
   seedRating: number;
 }
 
-export interface UseDiscussionPracticeOptions {
+interface UseDiscussionPracticeOptions {
   silent?: boolean;
   surface?: string;
   /** Opt-in to the blocking "why did you play that?" picker. LEARN sets this;

@@ -23,7 +23,7 @@ import type { ReviewMoveInput, ReviewNarration } from './coachFeatureService';
  *  inputs (a new facet, a reordered cascade, a template change). */
 export const REVIEW_NARRATION_REV = 8; // 8: the loose-piece count, motif transfer and refrains ride the ledger seed (rf:/l:/m: keys). 7: review noise walk 2026-10-20 — formulas said once, threat voice reads the record, plain trades and placements cut, ledgerKeys on every segment (a rev-6 entry has none, so a walk could not be seeded from it). 6: review walk 2026-10-01
 
-export interface ReviewNarrationCacheEntry {
+interface ReviewNarrationCacheEntry {
   rev: number;
   key: string;
   narration: ReviewNarration;
@@ -38,7 +38,7 @@ function hash(s: string): string {
   return (h >>> 0).toString(36);
 }
 
-export interface ReviewNarrationKeyInput {
+interface ReviewNarrationKeyInput {
   moves: readonly ReviewMoveInput[];
   playerColor: 'white' | 'black';
   openingName: string | null;

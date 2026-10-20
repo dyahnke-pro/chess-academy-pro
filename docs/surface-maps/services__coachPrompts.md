@@ -4,19 +4,18 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**804 lines · 24 exports · 7 importers · 5 tests · 1 audits**
+**403 lines · 7 exports · 6 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1257) — names `coachPrompts`
-- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3923) — names `coachPrompts`
+- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1271) — names `coachPrompts`
+- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3989) — names `coachPrompts`
 
 ## Who calls in
 
 - `scripts/generate-subline-annotations.ts`
 - `src/coach/envelope.ts`
 - `src/components/Coach/CoachGamePage.tsx`
-- `src/hooks/useHintSystem.test.ts`
 - `src/services/coachApi.ts`
 - `src/services/coachPrompts.test.ts`
 - `src/services/coachPrompts.verbosity.test.ts`
@@ -24,7 +23,7 @@
 ## Exports and every call site
 
 ### `getVerbosityInstruction` (function) — 7 call sites
-- `src/services/coachApi.ts:957`
+- `src/services/coachApi.ts:961`
 - `src/services/coachPrompts.verbosity.test.ts:23`
 - `src/services/coachPrompts.verbosity.test.ts:24`
 - `src/services/coachPrompts.verbosity.test.ts:26`
@@ -38,19 +37,7 @@
 ### `WALKTHROUGH_PROMISE_CONTRACT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `GAME_NARRATION_ADDITION` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `INTERACTIVE_REVIEW_ADDITION` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `POSITION_ANALYSIS_ADDITION` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `BLUNDER_ALERT_ADDITION` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `REVIEW_MOVE_SEGMENT_ADDITION` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `PHASE_NARRATION_ADDITION` (const) — 0 call sites
@@ -62,67 +49,11 @@
 ### `OPENING_ANNOTATION_ADDITION` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `openingAnnotationPrompt` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `buildOpeningAnnotationContext` (function) — 5 call sites
-- `src/services/coachPrompts.test.ts:123`
-- `src/services/coachPrompts.test.ts:137`
-- `src/services/coachPrompts.test.ts:149`
-- `src/services/coachPrompts.test.ts:161`
-- `src/services/coachPrompts.test.ts:173`
-
-### `computeMaterialBalance` (function) — 5 call sites
-- `src/services/coachPrompts.test.ts:180`
-- `src/services/coachPrompts.test.ts:182`
-- `src/services/coachPrompts.test.ts:186`
-- `src/services/coachPrompts.test.ts:190`
-- `src/services/coachPrompts.test.ts:193`
-
-### `buildChessContextMessage` (function) — 10 call sites
-- `src/services/coachPrompts.test.ts:210`
-- `src/services/coachPrompts.test.ts:225`
-- `src/services/coachPrompts.test.ts:242`
-- `src/services/coachPrompts.test.ts:259`
-- `src/services/coachPrompts.test.ts:275`
-- `src/services/coachPrompts.test.ts:302`
-- `src/services/coachPrompts.test.ts:329`
-- `src/services/coachPrompts.test.ts:345`
-- `src/services/coachPrompts.test.ts:362`
-- `src/services/coachPrompts.test.ts:379`
-
-### `HINT_TIER_1_ADDITION` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `HINT_TIER_2_ADDITION` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `HINT_TIER_3_ADDITION` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `REVIEW_HINT_CALLOUT_ADDITION` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `LIVE_COACH_GREAT_MOVE_ADDITION` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `LIVE_COACH_MISSED_TACTIC_ADDITION` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `LIVE_COACH_OPPONENT_BLUNDER_ADDITION` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `LIVE_COACH_EVAL_SWING_WRONG_ADDITION` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `LIVE_COACH_RECOVERY_ADDITION` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ## Tests
 
+- `src/components/Coach/CoachGamePage.abandon.test.tsx`
 - `src/components/Coach/CoachGamePage.test.tsx`
 - `src/components/Coach/CoachGameReview.test.tsx`
-- `src/hooks/useHintSystem.test.ts`
 - `src/services/coachPrompts.test.ts`
 - `src/services/coachPrompts.verbosity.test.ts`
 

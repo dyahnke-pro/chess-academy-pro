@@ -104,7 +104,7 @@ const ABOUT_THE_FLUX_SQUARE: ReadonlySet<FactKind> = new Set<FactKind>([
   'move-job',
 ]);
 
-export type BoardVeto = 'in-flux' | 'beside-mate';
+type BoardVeto = 'in-flux' | 'beside-mate';
 
 /** Why the board forbids this claim here, or null when it may be said. A fact
  *  of unknown kind is never vetoed — silence must never be a guess. `squares`

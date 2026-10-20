@@ -25,7 +25,7 @@ import { pickBookMove, bookMoveToSquares, isBookMoveLegal } from './coachBookMov
 import { targetStrength, emitOpponentStrength, type OpponentStrength } from './engineStrength';
 import type { RequestedDifficulty } from '../types';
 
-export interface PlaySessionConfig {
+interface PlaySessionConfig {
   /** Stockfish skill level 0–20. */
   skill: number;
   /** Move time in ms. Higher = stronger. */
@@ -138,7 +138,7 @@ export function resolveConfig(
   };
 }
 
-export interface CoachMoveResult {
+interface CoachMoveResult {
   /** UCI move string, e.g. "e2e4" or "e7e8q". */
   uci: string;
   /** Source + target squares parsed from UCI. */
@@ -243,7 +243,7 @@ async function chooseCoachMove(
  * call multiple times — idempotent if the skill is unchanged.
  */
 let _currentSkill: number | null = null;
-export async function setSkill(skill: number): Promise<void> {
+async function setSkill(skill: number): Promise<void> {
   if (_currentSkill === skill) return;
   const engine = stockfishEngine as unknown as {
     initialize: () => Promise<void>;

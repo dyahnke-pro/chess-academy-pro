@@ -170,6 +170,8 @@ describe('"what is the name of this mating pattern?" (hard walk 2026-10-11)', ()
       [{ role: 'user', content: `[Ask]\n${q}` }], '', undefined, 'chat_response', 1024, undefined, undefined,
       { currentFen: MATED, surface: '/coach/teach', cleanAsk: q, studentColor: 'white' },
     );
-    expect(r).toMatch(/^Mate: the queen on g7 checks the king on h8.*It's a Dovetail Mate\.$/);
+    // Mate is said once, by the head; the reason follows (prod Learn audit
+    // 2026-10-20: "Checkmate. Mate: …").
+    expect(r).toMatch(/^It's checkmate\. The queen on g7 checks the king on h8.*It's a Dovetail Mate\.$/);
   });
 });

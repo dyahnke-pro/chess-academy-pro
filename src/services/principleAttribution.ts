@@ -38,7 +38,9 @@ import { winPercent, bandForWinPctLost } from './accuracyService';
 import { MAX_PV_DEPTH_PLIES } from './ratingBands';
 import { BLUNDER_CP } from './engineConstants';
 import { developedMinorCount, homeMinorCount, isMinorAtHome, minorsAtHome } from './development';
-import { proofCut } from './exchangeLedger';
+import { netPieceWords, proofCut } from './exchangeLedger';
+import { lineShape } from '../utils/andList';
+import { countWords } from '../utils/countWords';
 import { findPinPressure } from './pinPressure';
 import { findGuardRemovals } from './guardRemoval';
 import { findPinBreaks } from './pinBreak';
@@ -211,7 +213,7 @@ export interface AttributionInput {
 
 export const ATTRIBUTION_MAX = 3;
 /** The opening window in plies — the one source for "still in the opening". */
-export const OPENING_PLIES = 24;
+const OPENING_PLIES = 24;
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -620,6 +622,24 @@ function att(id: FundamentalId, weight: number, evidence: Omit<PrincipleEvidence
   return { id, weight, evidence: { ...evidence, counterfactualClean: true }, facts };
 }
 
+/** A PIECE TAKEN INSIDE A LINE, NAMED WHERE IT STANDS NOW. The square it falls
+ *  on is inside the line, and said of the board the student sees it is false
+ *  (Smith-Morra replay 2026-10-20, 14.Rd5: "…Bxc3, Rxa5, Bxe1, Bg3, Nxa5, and
+ *  the rook on a5 goes" of the rook on d5 — refused by the narration gate).
+ *  `pick` sees each capture with the square its victim stood on before the
+ *  line; the first move a line cannot play ends the walk. */
+function capturesInLine(fen: string, line: readonly string[], pick: (m: Move, stoodOn: string) => void): void {
+  const cameFrom = new Map<string, string>();
+  const b = new Chess(fen);
+  for (const san of line) {
+    const m = b.move(san);
+    if (!m) break;
+    if (m.captured) pick(m, cameFrom.get(m.to) ?? m.to);
+    cameFrom.set(m.to, cameFrom.get(m.from) ?? m.from);
+    cameFrom.delete(m.from);
+  }
+}
+
 /** THE LINE PROVES THE LOSS (WO-OUTCOME-01 B). "The knight on f6 hangs — Nxf6
  *  wins it outright" is an outcome, and a swap count on one square is not a
  *  proof of it. The engine's own line must take that piece, and the ledger
@@ -663,17 +683,15 @@ function comboThreatIgnored(c: Ctx): ReturnType<typeof att> | null {
   const shown = line.slice(0, after.plies);
   let victim: { type: PieceSymbol; square: string } | null = null;
   try {
-    const b = new Chess(c.after.fen());
-    for (const san of shown) {
-      const m = b.move(san);
-      if (m?.captured && m.color === c.opp && (!victim || VAL[m.captured] > VAL[victim.type])) victim = { type: m.captured, square: m.to };
-    }
+    capturesInLine(c.after.fen(), shown, (m, stoodOn) => {
+      if (m.captured && m.color === c.opp && (!victim || VAL[m.captured] > VAL[victim.type])) victim = { type: m.captured, square: stoodOn };
+    });
   } catch { return null; }
   const v = victim as { type: PieceSymbol; square: string } | null;
   if (!v) return null;
   return att('ignored-threat', 3, {
     squares: [v.square], moves: [shown.join(' ')], pvMoves: pvHas(c.pvP, (s) => s === line[0]),
-  }, { piece: PNAME[v.type], square: v.square, threat: line[0], line: shown.join(', '), better: c.best.san });
+  }, { piece: PNAME[v.type], square: v.square, threat: line[0], line: lineShape(shown, 'they'), better: c.best.san });
 }
 
 /** WALKED INTO A TACTIC (2026-10-18). The move itself HANDS the opponent a
@@ -753,22 +771,23 @@ function walkedIntoTactic(c: Ctx): ReturnType<typeof att> | null {
     const top = gained.sort((a, b) => VAL[b] - VAL[a])[0];
     if (top && VAL[top] >= 3) {
       try {
-        const b = new Chess(startFen(c.after.fen()));
-        for (const san of shown) {
-          const m = b.move(san);
-          if (m?.captured === top && m.color === c.opp) v = { type: top, square: m.to };
-        }
+        capturesInLine(startFen(c.after.fen()), shown, (m, stoodOn) => {
+          if (m.captured === top && m.color === c.opp) v = { type: top, square: stoodOn };
+        });
       } catch { v = null; }
     }
   }
-  const target = v;
+  const target = v as { type: PieceSymbol; square: string } | null;
   return att('walked-into-tactic', 3, {
     squares: target ? [target.square, first.to] : [first.to],
     moves: [shown.join(' ')],
     pvMoves: pvHas(c.pvP, (s) => s === line[0]),
   }, {
     blow: first.san,
-    line: shown.join(', '),
+    // The voice says the line's SHAPE and what it wins; the board walks the
+    // detail (the proof rule) — never a bare list of moves.
+    line: lineShape(shown, 'they'),
+    ...(proof.ledger ? { wins: netPieceWords(proof.ledger.studentWon, proof.ledger.opponentWon) ?? countWords(proof.ledger.netPawns, { unit: true }) } : {}),
     mate: proof.mate ? 1 : 0,
     ...(target ? { piece: PNAME[target.type], square: target.square } : {}),
     better: c.best.san,

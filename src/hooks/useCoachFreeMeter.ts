@@ -22,7 +22,7 @@ import {
 } from '../services/freeTierService';
 import { trackFreeCoachLimitReached } from '../services/billingAnalytics';
 
-export interface CoachFreeMeter {
+interface CoachFreeMeter {
   /** True when metering is live (gate on + non-Pro). When false, everything is
    *  unlimited and the consume calls no-op. */
   active: boolean;

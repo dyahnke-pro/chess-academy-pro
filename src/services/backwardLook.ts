@@ -40,7 +40,7 @@ import { classifyMove } from './moveRating';
 import { moverFault } from './accuracyService';
 import { logAppAudit } from './appAuditor';
 
-export interface BackwardLook {
+interface BackwardLook {
   /** The spoken line. Past tense — the move has happened. */
   line: string;
   /** The square to mark, '' when there is nothing to point at. */
@@ -433,7 +433,7 @@ export function backwardLook(args: {
     }
     // THE MOVE IS THE SUBJECT (hard-question walk 2026-10-11: "It let them
     // play …e5" — with no grade before it, "it" pointed at nothing).
-    const said = w ? w.line.replace(/^It /, `${args.playedSan} `) : '';
+    const said = w ? w.line.replace(/^It /, `Your ${args.playedSan} `) : '';
     return w ? { line: said, square: w.squares[0] ?? '', kind: 'drawback', ...(w.squares.length ? { squares: w.squares } : {}), ...(w.proofLine ? { punishLine: w.proofLine } : {}) } : null;
   } catch { return null; }
 }

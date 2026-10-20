@@ -17,7 +17,7 @@ import { legalSeeGainFor } from './positionReadingService';
 import { withProof, type Proof, type ProofSize } from './proof';
 import { PIECE_NAMES } from '../types/tacticTypes';
 
-export interface QueenGrabTrap {
+interface QueenGrabTrap {
   /** The tempting capture. */
   san: string;
   from: Square;

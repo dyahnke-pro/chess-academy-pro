@@ -197,7 +197,7 @@ export const EXCELLENT_WIN_PCT = 2;
  *  search runs.
  */
 export const ENGINE_ELO_MIN = 1320;
-export const ENGINE_ELO_MAX = 3190;
+const ENGINE_ELO_MAX = 3190;
 export function limitStrengthElo(targetElo: number): number {
   return Math.max(ENGINE_ELO_MIN, Math.min(ENGINE_ELO_MAX, Math.round(targetElo)));
 }

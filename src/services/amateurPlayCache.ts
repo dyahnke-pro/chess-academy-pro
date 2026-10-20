@@ -13,7 +13,7 @@ import { fetchLichessExplorer } from './lichessExplorerService';
 import { positionFen } from './masterPlayCache';
 import { explorerBandFor } from './ratingBands';
 
-export interface AmateurPlayEntry {
+interface AmateurPlayEntry {
   /** The ratings buckets queried (e.g. "1400,1600"). */
   band: string;
   /** Human band label for narration ("around 1400–1600"). */

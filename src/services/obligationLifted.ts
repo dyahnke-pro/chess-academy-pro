@@ -12,7 +12,7 @@ import { computeMustDefend } from './threatOut';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { positionOf } from '../utils/samePosition';
 
-export interface ObligationLifted {
+interface ObligationLifted {
   /** The student's piece that no longer has to be guarded. */
   square: Square;
   piece: PieceSymbol;

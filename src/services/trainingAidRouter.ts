@@ -34,7 +34,7 @@
 import { TACTICAL_THEMES } from './puzzleService';
 import { isTransferGapQuestion, isMatePatternNameQuestion } from '../coach/questionIntents';
 
-export interface TrainingAidRoute {
+interface TrainingAidRoute {
   /** Relative route (starts with `/`) to navigate to. */
   path: string;
   /** Short coach acknowledgement shown/spoken before navigating. */

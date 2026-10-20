@@ -20,9 +20,9 @@ import { detectTactics } from './tacticsDetector';
 import { withProof, type Proof, type ProofSize } from './proof';
 import { CAPTURE_VALUE, sideMaterial } from './pieceValues';
 
-export type PinBreakHow = 'check' | 'threat' | 'discovery';
+type PinBreakHow = 'check' | 'threat' | 'discovery';
 
-export interface PinBreak {
+interface PinBreak {
   /** The side whose piece is pinned (and who breaks the pin). */
   side: Color;
   pinner: Square;

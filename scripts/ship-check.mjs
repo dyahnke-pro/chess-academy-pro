@@ -24,6 +24,7 @@ import { testsFor } from './ship-check-lib/tests-for.mjs';
 import { createGreenMemory, STEP_READS, stepNeedsRun, pickTests } from './ship-check-lib/green-memory.mjs';
 import { spawn, spawnSync } from 'node:child_process';
 import { loadavg, cpus } from 'node:os';
+import { sweepVitestTmp } from './ship-check-lib/vitest-tmp-sweep.mjs';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -354,6 +355,9 @@ const GATE_TESTS = [
   // Every accumulating ref in a component/hook declares its lifetime
   // (per-board / per-game / persisted) — persistent-memory plan, 2026-10-19.
   'src/services/memoryLifetimes.gate.test.ts',
+  // G8.5: no exported value is read only by tests — a new one fails, the
+  // backlog baseline only shrinks (old-code removal, 2026-10-20).
+  'src/test/testOnlyExports.gate.test.ts',
   'src/test/oneLineReader.gate.test.ts',
   'src/test/oneCoachDoor.gate.test.ts',
   'src/test/coachFirstPerson.gate.test.ts',
@@ -690,6 +694,12 @@ const GATE_TESTS = [
     process.exit(1);
   }
   process.stdout.write(`✓ 0.0s :: load ${load1.toFixed(1)} on ${cores} cores (cap ${cap}${ignore ? ', ignored' : ''})\n`);
+}
+// A killed vitest run leaves its ~100 MB temp folder behind, and enough of them
+// fill the disk: the next run then dies with ENOSPC and reads as failed gates.
+{
+  const removed = sweepVitestTmp();
+  if (removed) process.stdout.write(`  • tmp sweep   ... ✓ removed ${removed} temp folder(s) left by killed vitest runs\n`);
 }
 // ── THE DOCS LANE (2026-09-20, David: "anything you can do to streamline this
 // process, especially getting things to main without cutting critical corners")

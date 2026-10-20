@@ -12,7 +12,7 @@ import type { GameRecord, GameResult } from '../types';
 import { shouldPersistFinishedGame } from '../utils/coachGamePersistence';
 import { openingKeyFromSans } from './openingKey';
 
-export interface OpeningPlayGameArgs {
+interface OpeningPlayGameArgs {
   /** The Play-rung session id — also the id its hints were stamped with. */
   id: string;
   openingName: string;

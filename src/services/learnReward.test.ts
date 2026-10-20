@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { learnRewardFor, tallyMove, EMPTY_TALLY, LEARN_REWARD } from './learnReward';
+import { learnRewardFor, tallyMove, EMPTY_TALLY, LEARN_REWARD, placePraise } from './learnReward';
 
 describe('learnReward', () => {
   it('only skill earns a reward — best/solid on a calm board and every fault stay silent', () => {
@@ -46,5 +46,19 @@ describe('a save names what it saved (praise never bare)', () => {
   });
   it('says nothing when the move saves nothing', () => {
     expect(savedWhy(FEN, 'Kf2', 'w')).toBeNull();
+  });
+});
+
+describe('placePraise — earned praise is never said bare (prod Learn audit 2026-10-20)', () => {
+  it('a found move\'s praise rides the found-move lane, never alone', () => {
+    // "Exactly right." was spoken on its own, ahead of a why that came later or not at all.
+    expect(placePraise('Exactly right.', { saved: null, foundSpeaks: true })).toEqual({ now: null, onFound: 'Exactly right.' });
+  });
+  it('a save speaks now, with what it saved', () => {
+    expect(placePraise('Good defence.', { saved: 'Qb8 takes your queen out of the attack.', foundSpeaks: false }).now)
+      .toBe('Good defence. Qb8 takes your queen out of the attack.');
+  });
+  it('no why, no praise', () => {
+    expect(placePraise('Exactly right.', { saved: null, foundSpeaks: false })).toEqual({ now: null, onFound: null });
   });
 });

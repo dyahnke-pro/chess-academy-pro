@@ -1,7 +1,7 @@
 // WO-LAYERS-01 — the teaching layers, from the student's record, through the door.
 import { CALM_BOARD } from './boardState';
 import { describe, it, expect } from 'vitest';
-import { layerStandings, leadLayer, layerBonus, ALL_GREY, TAG_LAYER } from './teachingLayers';
+import { layerStandings, layerBonus, ALL_GREY, TAG_LAYER } from './teachingLayers';
 import { decide, GREEN_QUIET_BELOW } from './coachDecider';
 import { NO_BOOST } from './studentMomentBoost';
 import type { WeaknessSignal } from './weaknessSignal';
@@ -20,7 +20,6 @@ describe('layer standings come from the record, never the rating', () => {
   it('a fresh install is all grey, and grey is taught bottom-up', () => {
     const s = layerStandings([], null);
     expect(s).toEqual(ALL_GREY);
-    expect(leadLayer(s)).toBe('safety');
     expect(layerBonus('safety', s)).toBeGreaterThan(layerBonus('principle', s));
     expect(layerBonus('principle', s)).toBeGreaterThan(layerBonus('plan', s));
   });
@@ -38,7 +37,6 @@ describe('layer standings come from the record, never the rating', () => {
     expect(layerStandings([], proven('hung-material')).safety).toBe('grey');
     const s = layerStandings([], proven('hung-material', 'missed-opponents-threat'));
     expect(s.safety).toBe('green');
-    expect(leadLayer(s)).toBe('principle');
   });
 
   it('red beats green — a proof never hides an open hole beside it', () => {

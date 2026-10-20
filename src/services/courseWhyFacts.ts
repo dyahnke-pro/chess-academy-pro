@@ -10,9 +10,9 @@ import { scoreWords } from './explorerTranslate';
 // The voice says it in WORDS, never a percentage or a game count (RULEBOOK V8);
 // the numbers stay on the structured fact for the cards that show them.
 
-export type FrequencyTier = 'dominant' | 'common' | 'minor' | 'rare';
+type FrequencyTier = 'dominant' | 'common' | 'minor' | 'rare';
 
-export interface WhyFact {
+interface WhyFact {
   /** Voice-ready, grounded reason — or '' when the frequency isn't worth voicing
    *  (the selective rule). Never invented: derived from master-game counts. */
   text: string;

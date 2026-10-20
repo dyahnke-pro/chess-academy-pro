@@ -7,7 +7,7 @@
 // Keys: 'main' (the Closed main line, the showcase) + the 7 variation
 // tab labels, lower-cased. Values are exact ids from middlegame-plans.json.
 
-export const RUY_TAB_PLAN_IDS: Record<string, string[]> = {
+const RUY_TAB_PLAN_IDS: Record<string, string[]> = {
   main: ['mp-ruylopez-d4'],
   berlin: ['mp-ruylopez-berlin', 'mp-ruylopez-berlin-endgame'],
   open: ['mp-ruylopez-open'],

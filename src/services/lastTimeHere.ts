@@ -22,7 +22,7 @@ const COSTLY_CP = 50;
 
 const bare = (san: string): string => san.replace(/[+#!?]+$/, '');
 
-export interface LastTimeHere {
+interface LastTimeHere {
   text: string;
   /** The game it happened in. */
   gameId: string;

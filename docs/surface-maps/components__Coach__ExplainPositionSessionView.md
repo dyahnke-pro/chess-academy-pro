@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**388 lines · 2 exports · 2 importers · 2 tests · 0 audits**
+**388 lines · 1 exports · 2 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,9 +17,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `ExplainPositionSessionViewProps` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `ExplainPositionSessionView` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -27,6 +24,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/components/Coach/CoachSessionPage.test.tsx`
 - `src/components/Coach/ExplainPositionSessionView.test.tsx`
+- `src/test/oneCoachDoor.gate.test.ts`
 
 ## Audits that reach it
 

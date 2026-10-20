@@ -7,7 +7,7 @@
 import { Chess, type Square } from 'chess.js';
 import { PIECE_NAMES } from '../types/tacticTypes';
 
-export interface BookMoveAnswer {
+interface BookMoveAnswer {
   from: Square;
   to: Square;
   san: string;
@@ -25,7 +25,7 @@ export function bookMoveAnswer(fen: string, moves: readonly string[]): BookMoveA
   } catch { return null; }
 }
 
-export type BookMoveTry = 'right' | 'wrong' | 'illegal';
+type BookMoveTry = 'right' | 'wrong' | 'illegal';
 
 /** Grade one try by coordinates. A promotion counts by its squares (the book
  *  line carries the piece). */

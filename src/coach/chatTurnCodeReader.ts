@@ -37,10 +37,10 @@ const PIECE_WORD: Record<string, PieceLetter> = {
   rook: 'r', rooks: 'r', castle: 'r', queen: 'q', king: 'k',
 };
 
-export type Ask = 'why' | 'whether' | 'which' | 'what-if' | 'how-good' | 'none';
-export type Action = 'capture' | 'push' | 'sacrifice' | 'castle' | 'move' | 'none';
+type Ask = 'why' | 'whether' | 'which' | 'what-if' | 'how-good' | 'none';
+type Action = 'capture' | 'push' | 'sacrifice' | 'castle' | 'move' | 'none';
 
-export interface Slots {
+interface Slots {
   ask: Ask;
   action: Action;
   /** The move was already made (past tense, "was that", "did I"). */
@@ -303,7 +303,7 @@ const LINE_CUE_RE = /\b(?:calculate|calc|line|if|after|then|and|what happens|tak
 const MAIN_LINE_ASK_RE = /\b(?:the\s+)?(?:main|engine'?s?|principal)\s+(?:line|variation)\b|\bhow\s+(?:does|would|will)\s+(?:it|this|the\s+game|the\s+position)\s+(?:go|continue|play\s+out)\b|\bcalculate\b[^?]*\b(?:moves?|plies)\s+deep\b/i;
 const NUMBER_WORD: Record<string, number> = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
 /** "six moves deep" → 12 plies; "8 plies deep" → 8; unsaid → 10 plies. */
-export function mainLinePlies(text: string): number {
+function mainLinePlies(text: string): number {
   const m = /\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(moves?|plies)\s+deep\b/i.exec(text);
   if (!m) return 10;
   const n = /^\d+$/.test(m[1]) ? Number(m[1]) : NUMBER_WORD[m[1].toLowerCase()] ?? 5;

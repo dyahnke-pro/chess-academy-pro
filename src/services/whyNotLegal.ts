@@ -166,7 +166,7 @@ const LETTER: Record<string, PieceSymbol> = { K: 'k', Q: 'q', R: 'r', B: 'b', N:
 
 /** A named line played out: where it starts (the other side may move first)
  *  and the moves in clean SAN. */
-export interface PlayedNamedLine { startFen: string; sans: string[]; endFen: string }
+interface PlayedNamedLine { startFen: string; sans: string[]; endFen: string }
 
 /**
  * THE MOVES A SENTENCE NAMES, PLAYED AS A LINE — the one reader of whether

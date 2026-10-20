@@ -11,7 +11,7 @@
 import { andList } from '../utils/andList';
 import { Chess, type Square } from 'chess.js';
 
-export type ChessRule =
+type ChessRule =
   | 'en-passant' | 'castling' | 'stalemate' | 'promotion' | 'repetition'
   | 'fifty-move' | 'insufficient-material' | 'checkmate' | 'check';
 
@@ -131,7 +131,7 @@ function fiftyNow(fen: string): string | null {
   return `On this board ${Math.floor(half / 2)} moves each have passed without a capture or pawn move.`;
 }
 
-export interface RuleAnswer { rule: ChessRule; facts: string }
+interface RuleAnswer { rule: ChessRule; facts: string }
 
 /** The rule in plain words, then what it means on this board. */
 export function answerRuleQuestion(ask: string, fen: string | null, student: 'w' | 'b'): RuleAnswer | null {

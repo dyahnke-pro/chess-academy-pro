@@ -10,7 +10,7 @@
 // so it never invents a vague "you should have had a better plan".
 import { Chess } from 'chess.js';
 
-export type PlanClass = 'castle' | 'center-break' | 'other';
+type PlanClass = 'castle' | 'center-break' | 'other';
 
 const FILES = 'abcdefgh';
 const CENTER_FILES = new Set([2, 3, 4, 5]); // c d e f

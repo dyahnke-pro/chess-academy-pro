@@ -501,18 +501,3 @@ export interface PunishDistractor {
   explanation: string;
 }
 
-/** Result of resolving a branch path through the tree. Used by the
- *  runtime to track "where am I now" and "how did I get here." */
-export interface WalkthroughTreePosition {
-  /** The current node in the tree (the position the board shows). */
-  node: WalkthroughTreeNode;
-  /** SANs played from root to reach this node — useful for FEN
-   *  computation, audit trails, and leaf-outro lookup. */
-  pathSans: string[];
-  /** Path of nodes from root to current. `path[0]` is always root. */
-  pathNodes: WalkthroughTreeNode[];
-  /** Index of the most recent ancestor that was a fork (children
-   *  length > 1), or -1 if no fork on the path. Used for
-   *  "back up to last fork" navigation. */
-  lastForkIndex: number;
-}

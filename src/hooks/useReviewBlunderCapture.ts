@@ -14,9 +14,9 @@
 
 import { useCallback } from 'react';
 
-export type ReviewCapturePhase = 'idle' | 'asking' | 'thinking' | 'teaching';
+type ReviewCapturePhase = 'idle' | 'asking' | 'thinking' | 'teaching';
 
-export interface ReviewCapturePrompt {
+interface ReviewCapturePrompt {
   ply: number;
   fen: string;
   playedSan: string;
@@ -26,7 +26,7 @@ export interface ReviewCapturePrompt {
   moveNumber: number;
 }
 
-export interface UseReviewBlunderCaptureArgs {
+interface UseReviewBlunderCaptureArgs {
   moves: unknown[];
   playerColor: 'white' | 'black';
   openingName?: string | null;
@@ -35,7 +35,7 @@ export interface UseReviewBlunderCaptureArgs {
   learned?: boolean;
 }
 
-export interface UseReviewBlunderCaptureResult {
+interface UseReviewBlunderCaptureResult {
   phase: ReviewCapturePhase;
   prompt: ReviewCapturePrompt | null;
   teach: string | null;

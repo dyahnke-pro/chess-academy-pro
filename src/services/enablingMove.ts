@@ -15,7 +15,7 @@ import { Chess, type PieceSymbol, type Square } from 'chess.js';
 import type { Proof } from './proof';
 import { PIECE_NAMES } from '../types/tacticTypes';
 
-export interface EnablingMove {
+interface EnablingMove {
   first: { san: string; from: Square; to: Square };
   then: { san: string; from: Square; to: Square; piece: PieceSymbol };
   /** The square A vacated that B's path runs through. */

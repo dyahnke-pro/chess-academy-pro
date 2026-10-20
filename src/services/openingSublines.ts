@@ -29,7 +29,7 @@ const reachesMiddlegame = reachesMiddlegameImpl as (pgn: string) => {
 // structural floor — the grounded "why" per move (computeWhyFacts) and the
 // sound-vs-blunder classification layer on top.
 
-export interface Subline {
+interface Subline {
   /** The opponent move that triggers this subline (the deviation), in SAN. */
   triggerMove: string;
   /** Short label for the subline (the DB sub-variation name). */

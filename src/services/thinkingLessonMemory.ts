@@ -24,7 +24,7 @@ export interface LessonResume {
   at: string;
 }
 
-export interface ThinkingLessonMemory {
+interface ThinkingLessonMemory {
   /** step id → board identities already used for it. */
   seen: Record<string, string[]>;
   /** The step the last lesson was on, and when. */

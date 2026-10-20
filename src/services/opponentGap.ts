@@ -19,7 +19,7 @@ import { uciToSanAt } from './liveFundamental';
 /** A gift of at least this many pawns (student POV) is worth pointing at. */
 const GIFT_CP = 120;
 
-export interface OpponentGap {
+interface OpponentGap {
   /** How much the opponent's actual move gave the student, in cp (student POV). */
   gainCp: number;
   /** The student's best move now (UCI) — the opportunity, for the lead-the-eye
@@ -83,7 +83,7 @@ export function detectOpponentGap(input: {
  *  "That was a blunder from me … He let you off" in ONE utterance
  *  (WO-STANDARD-01 D-9): the verdict spoke as the coach and the nudge spoke
  *  about a third person. */
-export type GapSeat = 'student' | 'coach-is-opponent' | 'dictated';
+type GapSeat = 'student' | 'coach-is-opponent' | 'dictated';
 
 const GAP_STEM: Record<GapSeat, string> = {
   // The coach playing the opponent is still "they" (RULEBOOK V1/V2, 2026-10-07).

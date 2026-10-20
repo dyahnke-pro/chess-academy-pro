@@ -21,7 +21,7 @@ export type GameStyle =
   | 'sharp'
   | 'unanalyzed';
 
-export interface GameStyleResult {
+interface GameStyleResult {
   style: GameStyle;
   reason: string;
 }

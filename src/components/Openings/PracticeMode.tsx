@@ -34,7 +34,7 @@ import {
   Trophy,
 } from 'lucide-react';
 
-export interface PracticeModeProps {
+interface PracticeModeProps {
   opening: OpeningRecord;
   variationIndex?: number;
   customLine?: OpeningVariation;

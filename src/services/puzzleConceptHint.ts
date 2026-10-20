@@ -70,8 +70,6 @@ const HINT_ENTRIES: Array<readonly [string, string]> = [
   ['perpetualCheck', 'Force perpetual check'],
 ];
 
-const HINT_MAP = new Map(HINT_ENTRIES);
-
 /** Pick the best concept-hint for a puzzle given its theme array.
  *  Returns null when no themes match the curated map. Caller can
  *  fall back to lesson-level guidance (e.g., `lesson.narration.rule`). */
@@ -114,5 +112,3 @@ export function conceptHintForPuzzle(args: {
   return pickConceptHint(args.themes);
 }
 
-/** Test-only export — the mapping itself, for snapshot/coverage. */
-export const _internals = { HINT_MAP, HINT_ENTRIES };

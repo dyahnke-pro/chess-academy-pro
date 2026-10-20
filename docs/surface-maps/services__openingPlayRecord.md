@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**68 lines · 3 exports · 2 importers · 1 tests · 0 audits**
+**68 lines · 2 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,9 +16,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingPlayRecord.test.ts`
 
 ## Exports and every call site
-
-### `OpeningPlayGameArgs` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildOpeningPlayGame` (function) — 2 call sites
 - `src/services/openingPlayRecord.test.ts:20`

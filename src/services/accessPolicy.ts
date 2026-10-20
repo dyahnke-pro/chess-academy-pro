@@ -15,7 +15,7 @@ import { hasPuzzlesLeft, kidWindowActive, hasCoachAccessLeft } from './freeTierS
 
 /** Which premium surface a wall/meter is for — drives the paywall's contextual
  *  copy and analytics. */
-export type GatedFeature =
+type GatedFeature =
   | 'opening' // a walled opening (2nd opening / pro-rep / gambit / SRS)
   | 'puzzles' // puzzle-solving beyond the free bucket
   | 'coach' // any /coach/* surface
@@ -23,7 +23,7 @@ export type GatedFeature =
   | 'kid' // /kid/* after the 7-day window
   | 'app'; // catch-all
 
-export type AccessDecision =
+type AccessDecision =
   | { decision: 'allow' }
   | { decision: 'meter'; feature: 'puzzles' | 'coach' } // mount, surface self-walls when spent
   | { decision: 'wall'; feature: GatedFeature };

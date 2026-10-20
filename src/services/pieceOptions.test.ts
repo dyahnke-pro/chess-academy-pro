@@ -175,7 +175,7 @@ describe('a finished board is read off the board, never the engine (Learn walk 2
     expect(a).not.toBeNull();
     expect(a!.playedSan).toBe('Qd8#');
     expect(a!.facts).not.toMatch(/So yes/);
-    expect(a!.facts).toMatch(/Qd8# was checkmate/);
+    expect(a!.facts).toMatch(/Qd8 was checkmate/);
   });
 });
 

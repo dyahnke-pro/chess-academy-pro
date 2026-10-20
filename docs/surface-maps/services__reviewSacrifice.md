@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**204 lines · 5 exports · 5 importers · 2 tests · 0 audits**
+**204 lines · 3 exports · 8 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,22 +14,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/coachFeatureService.ts`
 - `src/services/nextPlans.ts`
+- `src/services/planChoice.ts`
+- `src/services/planStopped.ts`
+- `src/services/reviewConcepts.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/reviewSacrifice.test.ts`
 - `src/services/reviewWalk2065.test.ts`
 
 ## Exports and every call site
 
-### `NO_COMPENSATION_BELOW_CP` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `SAC_COST_BAR_CP` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `sacrificeCompensation` (function) — 17 call sites
 - `src/data/patternRegistry.ts:133`
-- `src/services/coachFeatureService.ts:2680`
-- `src/services/reviewFullData.ts:1031`
+- `src/services/coachFeatureService.ts:2933`
+- `src/services/reviewFullData.ts:1072`
 - `src/services/reviewSacrifice.test.ts:14`
 - `src/services/reviewSacrifice.test.ts:18`
 - `src/services/reviewSacrifice.test.ts:22`
@@ -45,21 +42,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewSacrifice.test.ts:94`
 - `src/services/reviewWalk2065.test.ts:39`
 
-### `enemyKingStuckInCenter` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:2974`
-- `src/services/coachFeatureService.ts:3000`
-- `src/services/coachFeatureService.ts:3024`
-- `src/services/nextPlans.ts:238`
-- `src/services/reviewFullData.ts:916`
-- `src/services/reviewFullData.ts:1430`
-- `src/services/reviewFullData.ts:1528`
+### `enemyKingStuckInCenter` (function) — 13 call sites
+- `src/services/coachFeatureService.ts:3227`
+- `src/services/coachFeatureService.ts:3253`
+- `src/services/coachFeatureService.ts:3277`
+- `src/services/nextPlans.ts:254`
+- `src/services/planChoice.ts:76`
+- `src/services/planStopped.ts:52`
+- `src/services/reviewConcepts.ts:220`
+- `src/services/reviewFullData.ts:966`
+- `src/services/reviewFullData.ts:1552`
+- `src/services/reviewFullData.ts:1664`
 - `src/services/reviewSacrifice.test.ts:106`
 - `src/services/reviewSacrifice.test.ts:116`
 - `src/services/reviewSacrifice.test.ts:120`
 
 ### `describeSacBreaksKingShield` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2711`
-- `src/services/reviewFullData.ts:1049`
+- `src/services/coachFeatureService.ts:2964`
+- `src/services/reviewFullData.ts:1090`
 - `src/services/reviewSacrifice.test.ts:53`
 - `src/services/reviewSacrifice.test.ts:58`
 - `src/services/reviewSacrifice.test.ts:70`

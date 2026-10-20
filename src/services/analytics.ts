@@ -771,7 +771,7 @@ export function resetAnalytics(): void {
 }
 
 /** Honor a user's analytics opt-out (Settings privacy toggle, Phase 2+). */
-export function setAnalyticsOptOut(next: boolean): void {
+function setAnalyticsOptOut(next: boolean): void {
   optedOut = next;
   try {
     if (!client) return;

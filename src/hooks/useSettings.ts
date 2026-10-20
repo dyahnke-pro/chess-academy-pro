@@ -3,7 +3,7 @@ import { useAppStore } from '../stores/appStore';
 import { db } from '../db/schema';
 import type { UserPreferences, PieceAnimationSpeed, CoachVerbosity, MoveMethod } from '../types';
 
-export interface EffectiveSettings {
+interface EffectiveSettings {
   theme: string;
   boardColor: string;
   pieceSet: string;
@@ -45,7 +45,7 @@ export interface EffectiveSettings {
   blackPieceGlowColor: string;
 }
 
-export interface UseSettingsReturn {
+interface UseSettingsReturn {
   settings: EffectiveSettings;
   raw: UserPreferences | null;
   updateSetting: <K extends keyof UserPreferences>(

@@ -32,7 +32,7 @@ export type PuzzleLineRead = readonly string[] | { moves: readonly string[]; cpW
 export type PuzzleLineAnalyser = (fen: string) => Promise<PuzzleLineRead | null>;
 
 /** Below this (solver's view, after the wrong move) the win is gone. */
-export const CHANCE_GONE_CP = 150;
+const CHANCE_GONE_CP = 150;
 
 export interface WrongTryRefutation {
   /** mate / material / geometry: what their reply wins. chance-gone: the
@@ -101,7 +101,7 @@ export async function refuteWrongTry(args: {
       const uci = line.slice(0, w.plies.length);
       return {
         kind: 'material',
-        text: `${san}? Then ${lineShape(w.sans, 'they')} — they come out ${w.what} up.`,
+        text: `${san}? Then ${lineShape(w.sans, 'they')} — they win ${w.what}.`,
         fenAfter, uci: [...uci], arrows: lineArrows(fenAfter, uci, 'puzzleTeaching.refute'),
       };
     }

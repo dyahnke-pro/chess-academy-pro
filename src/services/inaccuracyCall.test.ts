@@ -631,8 +631,8 @@ describe('their mistake gets the same detail as yours (David 2026-10-10)', () =>
     expect(call?.proof?.line).toBeUndefined();
   });
   it('every pronoun flips when their error is said to you', () => {
-    expect(seatTheirErrorForStudent('it let them take your rook on e5, and they missed it. The line: Nxe5 — they come out a piece up.'))
-      .toBe('it let you take their rook on e5, and you missed it. The line: Nxe5 — you come out a piece up.');
+    expect(seatTheirErrorForStudent('it let them take your rook on e5, and they missed it. The line: Nxe5 — they win a knight.'))
+      .toBe('it let you take their rook on e5, and you missed it. The line: Nxe5 — you win a knight.');
   });
 });
 

@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**287 lines · 3 exports · 4 importers · 3 tests · 0 audits**
+**287 lines · 1 exports · 4 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3808) — names `useStrictNarration`
+- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3903) — names `useStrictNarration`
 
 ## Who calls in
 
@@ -19,15 +19,9 @@
 
 ## Exports and every call site
 
-### `UseStrictNarrationOptions` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `UseStrictNarrationReturn` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `useStrictNarration` (function) — 12 call sites
-- `src/components/Openings/LessonPlayer.tsx:166`
-- `src/components/Openings/WalkthroughMode.tsx:258`
+- `src/components/Openings/LessonPlayer.tsx:193`
+- `src/components/Openings/WalkthroughMode.tsx:260`
 - `src/hooks/useStrictNarration.finished.test.ts:23`
 - `src/hooks/useStrictNarration.finished.test.ts:36`
 - `src/hooks/useStrictNarration.test.tsx:54`
@@ -41,6 +35,7 @@
 
 ## Tests
 
+- `src/components/Openings/LessonPlayer.resume.test.tsx`
 - `src/components/Openings/LessonPlayer.test.tsx`
 - `src/hooks/useStrictNarration.finished.test.ts`
 - `src/hooks/useStrictNarration.test.tsx`

@@ -22,8 +22,8 @@ import { GameChatPanel } from '../Coach/GameChatPanel';
  * fully `customControls` node; the visual frame stays identical regardless.
  */
 
-export type ProgressTone = 'accent' | 'green';
-export type NarrationTone = 'default' | 'warning' | 'success' | 'accent';
+type ProgressTone = 'accent' | 'green';
+type NarrationTone = 'default' | 'warning' | 'success' | 'accent';
 
 /**
  * Grounding context for the inline coach chat (David 2026-06-18: "add a chat
@@ -32,7 +32,7 @@ export type NarrationTone = 'default' | 'warning' | 'success' | 'accent';
  * derives turn / move number and mounts the SAME `GameChatPanel` that
  * `/coach/teach` + `/coach/play` use — Q&A grounded on the live board (no
  * move-mutation handlers, so the lesson board is never hijacked). */
-export interface LessonChatContext {
+interface LessonChatContext {
   /** The position currently shown on the board (FEN). */
   fen: string;
   /** Full PGN / move text for grounding. Falls back to `history.join(' ')`. */
@@ -106,7 +106,7 @@ const NARRATION_TONE_CLASS: Record<NarrationTone, string> = {
 
 /** The progress bar — exported so surfaces that don't use the full scaffold
  *  (legacy WalkthroughMode, MiddlegamePlanStudy) can match it exactly. */
-export function LessonProgress({
+function LessonProgress({
   current,
   total,
   tone = 'accent',
@@ -139,7 +139,7 @@ export function LessonProgress({
 
 /** The shared prev / play-pause / next control row. Exported for the same
  *  reason as LessonProgress — surfaces with their own layout can drop it in. */
-export function LessonControls({
+function LessonControls({
   onPrev,
   onNext,
   onTogglePlay,

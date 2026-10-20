@@ -49,7 +49,7 @@ export function mateStakes(side: 'you' | 'them', plies: number, forced: boolean)
 /** Each ply of distance keeps 80%: a knight hanging next move (1 ply, 240)
  *  outranks a pawn in two moves, and a queen skewer three plies away (461)
  *  outranks the knight. */
-export const STAKE_DISCOUNT = 0.8;
+const STAKE_DISCOUNT = 0.8;
 /** Staked facts score above this; unstaked ones stay on the tie table's
  *  0–100 scale, so any fact with real stakes outranks any fact without. */
 export const STAKED_FLOOR = 1000;

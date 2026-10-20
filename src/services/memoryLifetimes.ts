@@ -13,9 +13,9 @@
  *
  * Key: `<path>::<ref name>`.
  */
-export type MemoryLifetime = 'per-board' | 'per-game' | 'persisted';
+type MemoryLifetime = 'per-board' | 'per-game' | 'persisted';
 
-export interface MemoryLifetimeRow {
+interface MemoryLifetimeRow {
   lifetime: MemoryLifetime;
   what: string;
   /** Required for `persisted`: the store that keeps it. */

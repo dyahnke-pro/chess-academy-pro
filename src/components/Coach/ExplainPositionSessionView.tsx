@@ -42,7 +42,7 @@ const START_FEN =
   'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 const ANALYSIS_DEPTH = 18;
 
-export interface ExplainPositionSessionViewProps {
+interface ExplainPositionSessionViewProps {
   fen?: string;
   orientation: 'white' | 'black';
   onExit: () => void;

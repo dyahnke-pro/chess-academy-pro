@@ -11,6 +11,7 @@
  *   curl -s localhost:7777/state                      fen, last chat, new spoken lines
  */
 import http from 'node:http';
+import { writeFileSync } from 'node:fs';
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './chromium.mjs';
@@ -34,6 +35,17 @@ await ctx.addInitScript(({ url, secret }) => {
 await ctx.addInitScript(autoDismissCalibration);
 await ctx.addInitScript(muteTtsForAudit);
 await ctx.addInitScript(stampAuditRunId(`hand-${Math.random().toString(36).slice(2, 8)}`));
+// MAIN-THREAD LONG TASKS, per turn (Learn speed, 2026-10-20): what blocked
+// the page, without a full profile on every ply.
+await ctx.addInitScript(() => {
+  window.__longTasks = [];
+  try {
+    new PerformanceObserver((list) => {
+      for (const e of list.getEntries()) window.__longTasks.push({ at: performance.timeOrigin + e.startTime, ms: e.duration });
+      if (window.__longTasks.length > 4000) window.__longTasks.splice(0, 2000);
+    }).observe({ entryTypes: ['longtask'] });
+  } catch { /* no long-task timing in this browser */ }
+});
 const page = await ctx.newPage();
 const errors = [];
 page.on('pageerror', (e) => errors.push(String(e)));
@@ -49,6 +61,9 @@ const chess = new Chess();
 const trends = [];
 const asks = [];
 let seen = 0;
+/** The CDP session `/profile` samples the page through, and when it began. */
+let profiler = null;
+let profileStart = 0;
 const NOISE = /^(track A spoke|computed |coach move |opening (identified|refined)|injected |voice=|silent|throttled)/i;
 
 /** Board truth: follow whatever the app's board now shows by finding the one
@@ -201,7 +216,32 @@ const routes = {
       return a ? Math.round(a.width * 8) : null;
     }).catch(() => null);
     const words = lines.reduce((n, l) => n + l.split(/\s+/).filter(Boolean).length, 0);
-    const row = { move: q.get('san'), reply: chess.history()[plies + 1] ?? null, replyMs, boardPx, words, lines, timeline };
+    // WHEN EACH LINE STARTED, read off the voice's own stamp (`startedAt`, set
+    // before the event's awaits) — the poll above sees a line only once its
+    // event is written, which on a busy turn is a second late (8.Bxf7+ replay).
+    const onAir = listener.getCapturedEvents()
+      .filter((e) => e.kind === 'coach-narration-spoken' && /speakCloud|speakWebSpeech/.test(e.source ?? ''))
+      .map((e) => { let d = {}; try { d = JSON.parse(String(e.details ?? '{}')); } catch { d = {}; } return { at: Number(d.startedAt), text: (e.narrationText ?? '').slice(0, 60) }; })
+      .filter((x) => Number.isFinite(x.at) && x.at >= t0)
+      .map((x) => ({ ms: x.at - t0, text: x.text }));
+    // THE TURN'S STAGES (Learn speed, 2026-10-20), each read off the app's own
+    // record: the reply's commit, the engine's timeline (`engineLedger`), the
+    // door's decisions with their price, and the main thread's long tasks.
+    const events = listener.getCapturedEvents();
+    const replyAt = events.find((e) => e.kind === 'coach-turn-checkpoint' && (e.timestamp ?? 0) >= t0 && /move-committed/.test(e.summary ?? ''))?.timestamp ?? null;
+    const door = events.filter((e) => e.kind === 'learn-turn-decision')
+      .flatMap((e) => { try { return JSON.parse(String(e.details ?? '{}')).rows ?? []; } catch { return []; } })
+      .filter((r) => (r.decidedAt ?? 0) >= t0)
+      .map((r) => ({ kind: r.turn?.kind ?? null, at: r.decidedAt - t0, ms: r.decideMs, price: r.turn?.price ?? null, spoke: r.spoke }));
+    const engine = await page.evaluate((from) => {
+      const l = window.__engineLedger;
+      // Searches asked this turn, and any still running when it began (a
+      // search the last turn queued holds this one's behind it).
+      return l ? l().filter((e) => e.askedAt >= from || e.doneAt === null || e.doneAt >= from).map((e) => ({ ...e, carried: e.askedAt < from })) : null;
+    }, t0).catch(() => null);
+    const longTasks = await page.evaluate((from) => (window.__longTasks ?? []).filter((x) => x.at >= from).map((x) => ({ at: Math.round(x.at - from), ms: Math.round(x.ms) })), t0).catch(() => []);
+    const stages = { t0, replyMs: replyAt ? replyAt - t0 : null, firstWordMs: onAir[0]?.ms ?? null, engine, door, longTasks };
+    const row = { move: q.get('san'), reply: chess.history()[plies + 1] ?? null, replyMs, boardPx, words, lines, timeline, onAir, stages };
     trends.push(row);
     return { ...row, moves: chess.history().join(' ') };
   },
@@ -305,6 +345,57 @@ const routes = {
     await loc.first().click({ force: true }).catch((e) => errors.push(String(e)));
     await sleep(Number(q.get('ms') ?? 1500));
     return routes.page(q);
+  },
+  /** What held the page's main thread — `/profile?action=start`, then
+   *  `/profile?action=stop`. Returns, per 250 ms window (wall clock), the app
+   *  frames that ran most, so a stall is named rather than guessed (OS-18
+   *  replay 2026-10-20: a verdict sat 3 s between the speech chain and the
+   *  voice with nothing logged). Saves the raw .cpuprofile beside the report. */
+  async profile(q) {
+    if (q.get('action') === 'start') {
+      profiler = profiler ?? await page.context().newCDPSession(page);
+      await profiler.send('Profiler.enable');
+      await profiler.send('Profiler.setSamplingInterval', { interval: Number(q.get('us') ?? 1000) });
+      await profiler.send('Profiler.start');
+      profileStart = Date.now();
+      return { started: profileStart };
+    }
+    const { profile } = await profiler.send('Profiler.stop');
+    const out = q.get('out') ?? '/tmp/hand-profile.cpuprofile';
+    writeFileSync(out, JSON.stringify(profile));
+    const parent = new Map();
+    const byId = new Map(profile.nodes.map((n) => [n.id, n]));
+    for (const n of profile.nodes) for (const c of n.children ?? []) parent.set(c, n.id);
+    const appFrames = (id) => {
+      const chain = [];
+      for (let cur = id; cur !== undefined; cur = parent.get(cur)) {
+        const f = byId.get(cur).callFrame;
+        if (/\/src\//.test(f.url)) chain.push(`${f.functionName || '(anon)'}@${f.url.replace(/^.*\/src\//, '').replace(/\?.*$/, '')}:${f.lineNumber + 1}`);
+        if (chain.length >= Number(q.get('depth') ?? 4)) break;
+      }
+      return chain.join(' < ');
+    };
+    const windows = new Map();
+    let at = 0;
+    profile.samples.forEach((id, k) => {
+      at += profile.timeDeltas[k] ?? 0;
+      const leaf = byId.get(id).callFrame.functionName;
+      if (leaf === '(idle)' || leaf === '(program)' || leaf === '(garbage collector)') return;
+      const w = Math.floor(at / 1000 / 250) * 250;
+      const key = appFrames(id) || `(${leaf || 'native'})`;
+      const m = windows.get(w) ?? new Map();
+      m.set(key, (m.get(key) ?? 0) + (profile.timeDeltas[k + 1] ?? 0) / 1000);
+      windows.set(w, m);
+    });
+    return {
+      startedAt: profileStart,
+      out,
+      windows: [...windows.entries()].sort((a, b) => a[0] - b[0]).map(([w, m]) => ({
+        at: profileStart + w,
+        busyMs: Math.round([...m.values()].reduce((s, v) => s + v, 0)),
+        top: [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k, v]) => `${Math.round(v)}ms ${k}`),
+      })),
+    };
   },
   /** Run a snippet in the page (diagnosis only) — body = an async arrow's body. */
   async js(_q, body) {

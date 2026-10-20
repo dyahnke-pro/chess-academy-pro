@@ -318,7 +318,7 @@ function centerFight(phrases: PhraseMemory | null, chess: Chess, color: 'w' | 'b
 }
 
 /** A move's teaching and the squares it names (see `buildReviewMoveTeachingFact`). */
-export interface MoveTeachingFact { text: string; squares: string[] }
+interface MoveTeachingFact { text: string; squares: string[] }
 
 export function buildReviewMoveTeaching(
   fenBefore: string,

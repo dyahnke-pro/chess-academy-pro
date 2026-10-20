@@ -23,7 +23,7 @@ import { Chess, type Square } from 'chess.js';
 import type { NarrationArrow } from '../types/walkthroughTree';
 import { computeThreatDelta } from './engineDeltaLines';
 
-export interface MoveNarration {
+interface MoveNarration {
   /** Full spoken line for this move. Never empty. */
   say: string;
   /** ≤ 8-word cue for Brief verbosity. */

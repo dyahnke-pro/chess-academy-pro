@@ -26,14 +26,13 @@ import type { PlayerColor, PlayerIdentity } from './playerIdentity';
 import type { GameRecord } from '../types';
 
 export { invalidateHomeSteer } from './homeSteerCache';
-export type { SteerIndex } from './homeSteerCache';
 
 /** Games that must have reached a position before the steer follows it. */
 export const STEER_MIN_GAMES = 3;
 /** Only the opening is steered; past this ply the trie thins to nothing anyway. */
 export const STEER_MAX_PLY = 24;
 
-export interface HomeSteerPick {
+interface HomeSteerPick {
   san: string;
   uci: string;
   /** Games in which the opponent played this move here. */

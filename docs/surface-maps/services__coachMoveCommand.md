@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**149 lines · 2 exports · 3 importers · 2 tests · 3 audits**
+**149 lines · 1 exports · 3 importers · 2 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,13 +18,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `CoachMoveCommand` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `parseCoachMoveCommand` (function) — 36 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3594`
-- `src/components/Coach/CoachTeachPage.tsx:4144`
-- `src/components/Coach/CoachTeachPage.tsx:7839`
+- `src/components/Coach/CoachTeachPage.tsx:3744`
+- `src/components/Coach/CoachTeachPage.tsx:4294`
+- `src/components/Coach/CoachTeachPage.tsx:8012`
 - `src/services/coachMoveCommand.test.ts:11`
 - `src/services/coachMoveCommand.test.ts:18`
 - `src/services/coachMoveCommand.test.ts:24`

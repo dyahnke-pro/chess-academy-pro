@@ -1,0 +1,11 @@
+// Types for the test-only-exports scanner (G8.5 gate: src/test/testOnlyExports.gate.test.ts).
+
+/** A src/ module comment-stripped for word counting. */
+export declare function stripComments(src: string): string;
+
+/** Every exported value in src/ no production code reads, and every src/
+ *  module no production file imports. */
+export declare function scan(): {
+  unused: Array<{ file: string; name: string }>;
+  deadModules: string[];
+};

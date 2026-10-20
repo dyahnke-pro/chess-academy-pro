@@ -18,11 +18,6 @@ const PIECE_VALUES: Record<string, number> = {
   p: 1, P: 1,
 };
 
-/** @deprecated Calibrated as though `countMaterial` excluded pawns; it does
- *  not, so this can barely fire. Kept only so an external caller does not break
- *  on the symbol — use `isEndgameByMaterial`. */
-export const ENDGAME_MATERIAL_THRESHOLD = 13;
-
 /** Opening cutoff — moves at or below this number are considered opening */
 
 /**
@@ -46,7 +41,7 @@ export function countMaterial(fen: string): number {
  *  which this function then halved again: move 17 read as move 9, so
  *  mistakes on moves 17–20 were filed under "Opening" (hand walk 2026-10-01,
  *  M5). Naming the unit at every call makes that impossible to repeat. */
-export type GamePosition = { ply: number } | { fullMove: number };
+type GamePosition = { ply: number } | { fullMove: number };
 
 function fullMoveOf(at: GamePosition): number {
   return 'ply' in at ? Math.ceil(at.ply / 2) : at.fullMove;
@@ -249,7 +244,7 @@ export function queensOff(fen: string): boolean {
 }
 
 /** Per-side piece material (no pawns, no king) under which a queenless game is an ending: two rooks and a minor. */
-export const ENDGAME_SIDE_CAP = 13;
+const ENDGAME_SIDE_CAP = 13;
 
 export function isEndgameByMaterial(fen: string): boolean {
   const board = fen.split(' ')[0] ?? '';

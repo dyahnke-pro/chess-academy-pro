@@ -111,7 +111,7 @@ export function sanitizeKidCoachText(raw: string, maxChars = 240): string {
   return text;
 }
 
-export interface KidMoveNarrationInput {
+interface KidMoveNarrationInput {
   /** FEN BEFORE the move was played. */
   fenBefore: string;
   /** The scripted SAN that was just played (source of truth — kid #17). */
@@ -150,7 +150,7 @@ export function kidMoveNarration(input: KidMoveNarrationInput): string {
   return `${capitalise(move)}.${concept}`;
 }
 
-export interface KidInstructionInput {
+interface KidInstructionInput {
   /** FEN of the position the child is about to move in. */
   fenBefore: string;
   /** The scripted SAN the child should play (source of truth — kid #17). */
@@ -189,7 +189,7 @@ export function kidMoveInstruction(input: KidInstructionInput): string {
   return `Now ${instruction}.${concept}`;
 }
 
-export interface KidWrongMoveInput {
+interface KidWrongMoveInput {
   /** FEN BEFORE the kid's wrong attempt (the position they should move in). */
   fenBefore: string;
   /** The scripted SAN the kid SHOULD play next (source of truth). */
@@ -310,7 +310,7 @@ export async function getKidGroundedResponse(
   return null;
 }
 
-export interface KidGameQuestionInput {
+interface KidGameQuestionInput {
   /** The child's typed/spoken question. */
   question: string;
   /** Current board FEN (for computed board facts). */
@@ -325,7 +325,7 @@ export interface KidGameQuestionInput {
   nextTeachingConcept?: string;
 }
 
-export interface KidGameAnswer {
+interface KidGameAnswer {
   text: string;
   kind: KidAnswerKind;
 }

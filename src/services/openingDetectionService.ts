@@ -674,7 +674,7 @@ const SPINE_EXTENSION_MAX_PLIES = 20;
  *  different (more-specific) names. Returns null when no entry
  *  extends the base, or when the extension cap is already at the
  *  threshold (same as the base, no real extension). */
-export function findLongestPgnExtending(basePgn: string): string | null {
+function findLongestPgnExtending(basePgn: string): string | null {
   const entries = openingsData;
   const basePrefix = basePgn + ' ';
   let best: { pgn: string; plies: number } | null = null;
@@ -1664,7 +1664,7 @@ export function resolveCuratedVariation(
  *
  *  Keys returned MUST exist in neonColors.STYLE_COLORS so the UI
  *  can look them up via getNeonColor(). */
-export function classifyVariationStyle(name: string): string {
+function classifyVariationStyle(name: string): string {
   const lower = name.toLowerCase();
   // Hardcoded mappings for major variations whose keyword would
   // misfire on the heuristic below.

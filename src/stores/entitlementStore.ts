@@ -34,7 +34,7 @@ export type EntitlementSource =
 
 export type EntitlementStatus = 'unknown' | 'pro' | 'free';
 
-export interface EntitlementState {
+interface EntitlementState {
   /** Resolved access flag the whole app gates on. */
   isPro: boolean;
   status: EntitlementStatus;

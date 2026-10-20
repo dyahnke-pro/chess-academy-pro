@@ -1,4 +1,4 @@
-export interface NeonColor {
+interface NeonColor {
   rgb: string;
   border: string;
   borderHover: string;

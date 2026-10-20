@@ -107,7 +107,7 @@ export function sqOn(f: number, r: number): Square {
 export function fwd(c: Color): 1 | -1 { return c === 'w' ? 1 : -1; }
 export function other(c: Color): Color { return c === 'w' ? 'b' : 'w'; }
 /** a1 is dark. */
-export function isDark(sq: string): boolean { return (fileIdx(sq) + rankNum(sq) - 1) % 2 === 0; }
+function isDark(sq: string): boolean { return (fileIdx(sq) + rankNum(sq) - 1) % 2 === 0; }
 export function shade(sq: string): 'dark' | 'light' { return isDark(sq) ? 'dark' : 'light'; }
 
 export function board(fen: string): Chess | null {

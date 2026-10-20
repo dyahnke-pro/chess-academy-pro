@@ -124,3 +124,30 @@ describe('detectConversionFailures', () => {
     expect(res.map((r) => r.gameId)).toEqual(['new', 'old']);
   });
 });
+
+// ONE SCAN PER GAME (OS-18 replay 2026-10-20, 14.Rd5): the weakness profile
+// re-scanned every one of David's 949 games mid-turn after a slip row was
+// written that changes nothing here. A game is scanned once; a write to its
+// record that changes what the scan reads makes it scanned again.
+describe('detectConversionFailures reads each game once', () => {
+  const thrown = [20, -10, 40, 30, 350, 340, 200, 100, 60, 50];
+  it('an unchanged game is not scanned again — the same reading comes back', () => {
+    const g = game({ id: 'memo-1' }, thrown);
+    const [first] = detectConversionFailures([g], {});
+    const [again] = detectConversionFailures([{ ...g, annotations: g.annotations?.map((a) => ({ ...a })) ?? null }], {});
+    expect(first).toBeTruthy();
+    expect(again).toBe(first);
+  });
+  it('a re-analysed game is scanned again', () => {
+    const g = game({ id: 'memo-2' }, thrown);
+    const [first] = detectConversionFailures([g], {});
+    const held = game({ id: 'memo-2' }, [20, -10, 40, 30, 350, 340, 330, 320, 310, 300]);
+    expect(first).toBeTruthy();
+    expect(detectConversionFailures([held], {})).toEqual([]);
+  });
+  it('a game whose result changed is scanned again', () => {
+    const g = game({ id: 'memo-3' }, thrown);
+    expect(detectConversionFailures([g], {})).toHaveLength(1);
+    expect(detectConversionFailures([{ ...g, result: '1-0' }], {})).toEqual([]);
+  });
+});

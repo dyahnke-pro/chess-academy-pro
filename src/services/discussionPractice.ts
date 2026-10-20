@@ -209,7 +209,7 @@ export function withReasonLead(reveal: string, reason: string, mode: 'chip' | 't
   return `${lead}${body}`;
 }
 
-export interface CaptureMisconceptionArgs {
+interface CaptureMisconceptionArgs {
   classifyInput: ClassifyMisconceptionInput;
   source: MisconceptionSource;
   /** The slip's learned/count-against gate. When false we still teach
@@ -238,7 +238,7 @@ export interface CaptureMisconceptionArgs {
   };
 }
 
-export interface CaptureMisconceptionResult {
+interface CaptureMisconceptionResult {
   classification: MisconceptionClassification | null;
   /** The one-line teach to speak/show (empty when classification failed). */
   coachNote: string;
@@ -257,7 +257,7 @@ export interface CaptureMisconceptionResult {
  *  cost anyone can teach from. */
 export const FILED_COST_CAP = 1000;
 /** Below this the engine says the move was as good as the best one. */
-export const NOT_A_SLIP_CP = 30;
+const NOT_A_SLIP_CP = 30;
 /** One side this far ahead (mover POV, centipawns) … */
 const DECIDED_CP = 400;
 /** … and still this far ahead after the move: the result did not change. */

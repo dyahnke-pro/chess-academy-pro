@@ -48,7 +48,7 @@ export interface ProjectedLinePly {
   facts: PlyFacts;
 }
 
-export interface ProjectedLineVoiceOptions {
+interface ProjectedLineVoiceOptions {
   /** A quiet student move (no capture, check, tactic or structure fact) still
    *  gets the board-true positional teacher. The stronger-line walk wants it
    *  ("every move in the shown line gets a why"); the shot sequence, which

@@ -25,7 +25,7 @@ import { shelterSquares } from './kingSafety';
 import { CAPTURE_VALUE } from './pieceValues';
 import { homeMinorCount } from './development';
 
-export interface RuleException {
+interface RuleException {
   rule: 'twice' | 'shield-pawn' | 'early-queen';
   text: string;
   squares: string[];

@@ -24,13 +24,13 @@ import { classifyMisconceptionNow } from './misconceptionClassifier';
 import { classifyPhase } from './gamePhaseService';
 import { memoOverTable, type TableMemo } from './tableMemo';
 
-export type GamePhase = 'opening' | 'middlegame' | 'endgame';
+type GamePhase = 'opening' | 'middlegame' | 'endgame';
 
 /** Below this many recorded slips a level has nothing to say. */
 export const MIN_SLIPS = 6;
 
-export interface Tally { small: number; big: number }
-export interface InaccuracyRecord {
+interface Tally { small: number; big: number }
+interface InaccuracyRecord {
   phase: Record<GamePhase, Tally>;
   /** Keyed `${phase}|${tag}`. */
   skill: Map<string, Tally>;
@@ -59,7 +59,7 @@ export function tallyInaccuracies(
   return out;
 }
 
-export interface InaccuracyVerdict { speaks: boolean; level: 'skill' | 'phase' | 'grey' }
+interface InaccuracyVerdict { speaks: boolean; level: 'skill' | 'phase' | 'grey' }
 
 /** Whether an inaccuracy in `phase`, filed under `tag`, is spoken. */
 export function inaccuracyVerdict(rec: InaccuracyRecord, phase: GamePhase, tag: string | null): InaccuracyVerdict {

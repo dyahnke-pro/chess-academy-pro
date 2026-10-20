@@ -14,7 +14,7 @@ import { legalSeeGainFor } from './positionReadingService';
 const TIMES = ['no times', 'once', 'twice', 'three times', 'four times'];
 const times = (n: number): string => TIMES[n] ?? `${n} times`;
 
-export interface PlanStep { text: string; squares: string[] }
+interface PlanStep { text: string; squares: string[] }
 
 export function planStepLine(plan: PlanFact, fenBefore: string, san: string, student: Color): PlanStep | null {
   let before: Chess; let after: Chess;

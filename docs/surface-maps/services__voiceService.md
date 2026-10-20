@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3156 lines · 19 exports · 109 importers · 104 tests · 24 audits**
+**3156 lines · 14 exports · 109 importers · 105 tests · 24 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,8 +16,8 @@
 - **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3423) — names `voiceService`
 - **🧒 Kids section — non-negotiables** (CLAUDE.md:3600) — names `voiceService`
 - **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3903) — names `voiceService`
-- **Shared types / services** (CLAUDE.md:5562) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6423) — names `voiceService`
+- **Shared types / services** (CLAUDE.md:5561) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6422) — names `voiceService`
 
 ## Who calls in
 
@@ -168,20 +168,8 @@
 - `src/services/voiceService.test.ts:327`
 - `src/services/voiceService.test.ts:332`
 
-### `PERSONALITY_VOICE_DEFAULTS` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `PERSONALITY_SECONDARY_VOICE_DEFAULTS` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `resolvePollyVoice` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:3683`
-
-### `resolvePollySecondaryVoice` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `ProsodyMode` (type) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+- `src/components/Coach/CoachGamePage.tsx:3651`
 
 ### `getTtsUrl` (function) — 4 call sites
 - `src/components/Settings/VoiceSettingsPanel.tsx:119`
@@ -228,9 +216,6 @@
 - `src/services/sanitizeForTTS.test.ts:141`
 - `src/services/sanitizeForTTS.test.ts:159`
 - `src/utils/descriptiveNotation.test.ts:32`
-
-### `normalizePieceShorthand` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `sanitizeForTTS` (function) — 63 call sites
 - `src/components/Openings/OpeningDetailPage.tsx:727`
@@ -303,7 +288,6 @@
 ## Tests
 
 - `src/coach/coachStopEvents.test.ts`
-- `src/components/Board/BoardPageLayout.test.tsx`
 - `src/components/Board/BoardQuestionBox.test.tsx`
 - `src/components/Board/VoiceChatMic.test.tsx`
 - `src/components/Coach/CoachAnalysePage.test.tsx`
@@ -390,6 +374,7 @@
 - `src/hooks/useTeachWalkthrough.test.tsx`
 - `src/hooks/useWalkthroughRunner.test.tsx`
 - `src/services/coachAgentRunner.test.ts`
+- `src/services/dnaRules.test.ts`
 - `src/services/sanitizeForTTS.test.ts`
 - `src/services/streamingSpeaker.test.ts`
 - `src/services/ttsProsody.test.ts`
@@ -405,6 +390,7 @@
 - `src/services/voiceService.untilQuiet.test.ts`
 - `src/services/voiceServiceLegacyPref.test.ts`
 - `src/services/walkthroughRunner.test.ts`
+- `src/test/mocks/voiceServiceMock.test.ts`
 - `src/utils/descriptiveNotation.test.ts`
 
 ## Audits that reach it

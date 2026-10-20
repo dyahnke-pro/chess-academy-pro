@@ -44,10 +44,10 @@ export interface EngineEval {
  *  mock keyed by FEN. Always returns white-POV cp. */
 export type Evaluate = (fen: string) => Promise<EngineEval>;
 
-export type DeltaKind = 'material' | 'passed-pawn' | 'none';
+type DeltaKind = 'material' | 'passed-pawn' | 'none';
 
 /** A reason that SURVIVED verification — every field is a measured fact. */
-export interface VerifiedDelta {
+interface VerifiedDelta {
   kind: DeltaKind;
   /** Grounded, board-true phrase for the voice layer (LLM only rewords it). */
   text: string;
@@ -57,7 +57,7 @@ export interface VerifiedDelta {
   ablation?: { full: number; ablated: number; worse: number };
 }
 
-export interface Comparison {
+interface Comparison {
   /** Which of the two moves the engine prefers (for the mover). */
   better: 'A' | 'B' | 'equal';
   sanBetter: string | null;
@@ -108,7 +108,7 @@ function pvToSan(fen: string, pv: string[], max = 8): string[] {
   return out;
 }
 
-export interface CompareOpts {
+interface CompareOpts {
   /** Below this mover-POV cp gap the two moves are "about the same". */
   gapThresholdCp?: number;
   /** A candidate must explain at least this fraction of the gap to be spoken. */

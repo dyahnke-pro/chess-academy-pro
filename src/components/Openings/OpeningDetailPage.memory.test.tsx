@@ -24,7 +24,6 @@ vi.mock('../../services/openingService', () => ({
   getTotalLines: (o: OpeningRecord) => o.variations?.length ?? 0,
   toggleFavorite: (...args: unknown[]): unknown => mockToggleFavorite(...args),
   updateDrillProgress: vi.fn().mockResolvedValue(undefined),
-  updateWoodpecker: vi.fn().mockResolvedValue(undefined),
   recordDrillAttempt: vi.fn().mockResolvedValue(undefined),
   updateVariationProgress: vi.fn().mockResolvedValue(undefined),
   markLineDiscovered: vi.fn().mockResolvedValue(undefined),

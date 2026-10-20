@@ -32,7 +32,7 @@ export type RolodexRowKey =
   | 'practice-from-start'
   | 'practice-middlegame';
 
-export interface RolodexRowDef {
+interface RolodexRowDef {
   key: RolodexRowKey;
   label: string;
   Icon: ComponentType<{ size?: number; className?: string; 'aria-hidden'?: boolean }>;

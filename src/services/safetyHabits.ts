@@ -19,8 +19,8 @@ import { legalSeeGainFor } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
-export const BLUNDER_CHECK_CP = 150;
-export const AUTOPILOT_CP = 100;
+const BLUNDER_CHECK_CP = 150;
+const AUTOPILOT_CP = 100;
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
@@ -88,7 +88,7 @@ export function autopilotGuard(san: string, cpLoss: number, popularTopSan: strin
  *  time. Earned when the student is still winning after the move (>= 300cp),
  *  the engine's move was a check or a capture, and the played move was neither
  *  and cost >= 100cp. Teaches the habit only; the grade names the better move. */
-export const KEEP_PRESSING_WIN_CP = 300;
+const KEEP_PRESSING_WIN_CP = 300;
 export function keepPressing(fenBefore: string, san: string, bestSan: string | null, cpLoss: number, cpAfter: number | null): string | null {
   if (!bestSan || cpAfter === null || cpAfter < KEEP_PRESSING_WIN_CP || cpLoss < AUTOPILOT_CP) return null;
   const forcing = (x: string): boolean => /x|[+#]$/.test(x);

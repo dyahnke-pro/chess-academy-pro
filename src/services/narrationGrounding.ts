@@ -55,7 +55,7 @@ import {
 } from '../coach/envelope';
 import { logAppAudit } from './appAuditor';
 
-export interface NarrationGroundingArgs {
+interface NarrationGroundingArgs {
   /** User-typed text or task ask. The book-grounding loader keys
    *  concept detection off this string (e.g. "isolated pawn",
    *  "Italian Game"). When empty, only opening-name + move-history
@@ -78,7 +78,7 @@ export interface NarrationGroundingArgs {
   auditSource?: string;
 }
 
-export interface NarrationGroundingResult {
+interface NarrationGroundingResult {
   /** Concatenated text block ready to paste into a system prompt.
    *  Empty string when nothing matched. */
   block: string;

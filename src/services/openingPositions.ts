@@ -13,7 +13,7 @@ let positions: PositionMap | null = null;
 let loading = false;
 
 /** Fetch the index once, off the move path. */
-export function warmOpeningPositions(): void {
+function warmOpeningPositions(): void {
   if (positions || loading || typeof fetch !== 'function') return;
   loading = true;
   // Through the one /data/ loader (the native bundle strips public/data).

@@ -1,0 +1,242 @@
+{
+ "_note": "Real Stockfish 18 reads (MultiPV 3, one thread). 'full' = go depth 14 (the Learn turn depth); 'cut' = a movetime search stopped short of it, each line carrying the depth it reached. OS-11, 2026-10-20.",
+ "rg5": {
+  "fen": "r1b5/pp2pk1N/2np2R1/8/4P1n1/1PN3P1/1r4P1/4R1K1 w - - 1 21",
+  "san": "Rg5",
+  "full": [
+   {
+    "rank": 1,
+    "evaluation": -398,
+    "mate": null,
+    "moves": [
+     "g6g5",
+     "c8d7",
+     "e4e5",
+     "c6e5",
+     "e1f1",
+     "b2f2",
+     "f1f2",
+     "g4f2",
+     "g1f2",
+     "a8h8",
+     "g5h5",
+     "f7g7",
+     "f2e3",
+     "h8h7",
+     "h5h7",
+     "g7h7"
+    ],
+    "depth": 14
+   },
+   {
+    "rank": 2,
+    "evaluation": -473,
+    "mate": null,
+    "moves": [
+     "h7f8",
+     "f7f8",
+     "c3d5",
+     "b2f2",
+     "g6g4",
+     "c8g4",
+     "g1f2",
+     "f8g7",
+     "f2e3",
+     "a8h8",
+     "e1c1",
+     "e7e5",
+     "e3d2",
+     "g4d7",
+     "c1f1",
+     "h8f8",
+     "f1c1",
+     "g7g6"
+    ],
+    "depth": 14
+   },
+   {
+    "rank": 3,
+    "evaluation": -522,
+    "mate": null,
+    "moves": [
+     "g6e6",
+     "f7e6",
+     "e1f1",
+     "e6d7",
+     "c3d5",
+     "g4e5",
+     "b3b4",
+     "b2b4"
+    ],
+    "depth": 14
+   }
+  ],
+  "cut": [
+   {
+    "rank": 1,
+    "evaluation": -387,
+    "mate": null,
+    "moves": [
+     "g6g5",
+     "c8d7",
+     "c3a4",
+     "a8h8",
+     "a4b2",
+     "h8h7",
+     "e1f1",
+     "g4f6",
+     "g5b5",
+     "d7c8",
+     "b2d1",
+     "f7g6",
+     "d1e3",
+     "f6e4"
+    ],
+    "depth": 13
+   },
+   {
+    "rank": 2,
+    "evaluation": -497,
+    "mate": null,
+    "moves": [
+     "h7f8",
+     "b2f2",
+     "g6g4",
+     "c8g4",
+     "g1f2",
+     "a8f8",
+     "c3d5",
+     "f7g7",
+     "f2e3"
+    ],
+    "depth": 13
+   },
+   {
+    "rank": 3,
+    "evaluation": -523,
+    "mate": null,
+    "moves": [
+     "g6g4",
+     "c8g4",
+     "e1f1",
+     "f7g6",
+     "f1f4",
+     "g6h7",
+     "f4g4",
+     "c6e5",
+     "g4h4",
+     "h7g8"
+    ],
+    "depth": 13
+   }
+  ]
+ },
+ "bg7": {
+  "fen": "r1bqkbnr/pp2pp1p/2np2p1/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 b kq - 1 7",
+  "san": "Bg7",
+  "full": [
+   {
+    "rank": 1,
+    "evaluation": -55,
+    "mate": null,
+    "moves": [
+     "f8g7",
+     "f3g5",
+     "c6e5",
+     "c4b5",
+     "c8d7",
+     "d1b3",
+     "d7b5",
+     "b3b5",
+     "d8d7"
+    ],
+    "depth": 14
+   },
+   {
+    "rank": 2,
+    "evaluation": 42,
+    "mate": null,
+    "moves": [
+     "c8d7",
+     "d1b3",
+     "e7e6",
+     "c4e2",
+     "f8e7",
+     "f1d1",
+     "g8f6",
+     "c1f4",
+     "e6e5",
+     "f4h6",
+     "f6g4",
+     "h6g7"
+    ],
+    "depth": 14
+   },
+   {
+    "rank": 3,
+    "evaluation": 71,
+    "mate": null,
+    "moves": [
+     "g8h6",
+     "c1f4",
+     "f8g7",
+     "h2h3",
+     "c8e6",
+     "c3d5",
+     "h6g8",
+     "f3g5",
+     "d8d7",
+     "a1c1",
+     "g8f6",
+     "g5e6",
+     "f7e6",
+     "d5f6",
+     "g7f6",
+     "b2b4",
+     "e8f7",
+     "b4b5",
+     "c6e5",
+     "f4e5",
+     "f6e5"
+    ],
+    "depth": 14
+   }
+  ],
+  "cut": [
+   {
+    "rank": 1,
+    "evaluation": -2,
+    "mate": null,
+    "moves": [
+     "f8g7",
+     "d1b3"
+    ],
+    "depth": 11
+   },
+   {
+    "rank": 2,
+    "evaluation": 28,
+    "mate": null,
+    "moves": [
+     "c8d7",
+     "d1b3",
+     "e7e6",
+     "c4e2",
+     "g8f6",
+     "c1f4",
+     "f8e7"
+    ],
+    "depth": 11
+   },
+   {
+    "rank": 3,
+    "evaluation": 84,
+    "mate": null,
+    "moves": [
+     "g8h6"
+    ],
+    "depth": 11
+   }
+  ]
+ }
+}

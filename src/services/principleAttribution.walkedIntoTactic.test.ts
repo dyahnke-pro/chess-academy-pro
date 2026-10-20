@@ -34,7 +34,9 @@ describe('walked-into-tactic', () => {
     expect(a?.id).toBe('walked-into-tactic');
     const said = renderFundamentalVerdict([a], { ply: 42, seen: new Set(), replySan: 'Nc6' });
     expect(said).toMatch(/Nc6/);
-    expect(said).toMatch(/rook on b8/);
+    // What the line wins, in words (the proof rule, 2026-10-20): the rook for
+    // the knight that took it.
+    expect(said).toMatch(/they win the exchange/);
     expect(said).not.toMatch(/\b(I|we|our)\b/);
   });
 

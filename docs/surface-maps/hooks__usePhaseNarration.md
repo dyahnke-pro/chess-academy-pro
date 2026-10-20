@@ -28,8 +28,8 @@
 
 ### `usePhaseNarration` (function) — 3 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8225`
-- `src/hooks/usePhaseNarration.door.test.ts:64`
-- `src/hooks/usePhaseNarration.door.test.ts:90`
+- `src/hooks/usePhaseNarration.door.test.ts:61`
+- `src/hooks/usePhaseNarration.door.test.ts:87`
 
 ## Tests
 

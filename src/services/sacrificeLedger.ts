@@ -30,7 +30,7 @@ function studentPov(m: ScoredMove, student: 'w' | 'b'): number {
 }
 
 /** Words for where a branch leaves the student, or null when it leaves them worse. */
-export function ledgerBand(cp: number): string | null {
+function ledgerBand(cp: number): string | null {
   // The one ladder (evalBand, census 2026-10-10) — this kept 100/300.
   const band = evalBand(cp);
   if (band === 'level') return 'about level';

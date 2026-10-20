@@ -35,7 +35,6 @@ const mockMarkLinePerfected = vi.fn().mockResolvedValue(undefined);
 vi.mock('../../services/openingService', () => ({
   recordDrillAttempt: (...args: unknown[]): unknown => mockRecordDrillAttempt(...args),
   updateDrillProgress: vi.fn().mockResolvedValue(undefined),
-  updateWoodpecker: vi.fn().mockResolvedValue(undefined),
   updateVariationProgress: (...args: unknown[]): unknown => mockUpdateVariationProgress(...args),
   markLinePerfected: (...args: unknown[]): unknown => mockMarkLinePerfected(...args),
 }));

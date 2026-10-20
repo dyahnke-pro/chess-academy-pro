@@ -2515,3 +2515,22 @@ describe('a budget-cut read is cached under the depth it reached', () => {
     expect(engineCache.get(KG5, 6)?.depth).toBe(6);
   });
 });
+
+describe('engineLedger — the engine records its own timeline (Learn speed, 2026-10-20)', () => {
+  it('a search records asked, started, done and the depth it reached; a repeat is shared', async () => {
+    const { stockfishEngine } = await getEngine();
+    const { engineLedger } = await import('./engineLedger');
+    await initEngine(stockfishEngine);
+    scheduleAnalysisResponse({ lines: [{ multipv: 1, cp: 30, pv: 'e2e4 e7e5' }], bestmove: 'e2e4' });
+    await stockfishEngine.analyzePosition(STARTING_FEN, 18);
+    const e = engineLedger().at(-1);
+    expect(e?.kind).toBe('read');
+    expect(e?.outcome).toBe('done');
+    expect(e?.startedAt).not.toBeNull();
+    expect((e?.doneAt ?? 0) >= (e?.startedAt ?? Infinity)).toBe(true);
+    expect(e?.depthReached).toBe(18);
+    // The same read again is answered from the cache: no search of its own.
+    await stockfishEngine.analyzePosition(STARTING_FEN, 18);
+    expect(engineLedger().at(-1)?.outcome).toBe('shared');
+  });
+});

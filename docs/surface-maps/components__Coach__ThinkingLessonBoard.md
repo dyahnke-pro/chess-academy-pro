@@ -4,15 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**97 lines · 3 exports · 6 importers · 1 tests · 0 audits**
+**97 lines · 2 exports · 5 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6171) — names `ThinkingLessonBoard`
+- **The standard post-deploy ritual** (CLAUDE.md:6448) — names `ThinkingLessonBoard`
 
 ## Who calls in
 
-- `src/components/Coach/CoachGameReview.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Coach/CoachesLibraryPage.tsx`
 - `src/components/Coach/ThinkingLessonBoard.test.tsx`
@@ -20,9 +19,6 @@
 - `src/components/Tactics/TacticSetupBoard.tsx`
 
 ## Exports and every call site
-
-### `ThinkingLessonBoardProps` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `lessonSquareStyles` (function) — 2 call sites
 - `src/components/Coach/ThinkingLessonBoard.test.tsx:14`

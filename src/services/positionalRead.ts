@@ -59,14 +59,14 @@ const NAME: Record<string, string> = {
  * it could describe half a chess position. Every rung now runs for both
  * colours, and each observation carries whose it is.
  */
-export type ObservationKind =
+type ObservationKind =
   | 'plan' | 'king' | 'development' | 'piece' | 'structure' | 'lever'
   // WIDENED BOARD AWARENESS (David 2026-09-13: "increased scope … our strongest
   // narration tool"). Each is a concrete, board-provable feature, ranked by how
   // much it should lead a quiet-position read.
   | 'minority' | 'passer' | 'complex' | 'file';
 
-export interface PositionalObservation {
+interface PositionalObservation {
   /** Dedupe key for the caller's said-set — keyed on the IDEA, never on a
    *  square a piece is standing on (fresh-game walk 2026-09-27: "your rook on
    *  g8 / g7 / g6 has the half-open g-file" four times as the rook slid down
