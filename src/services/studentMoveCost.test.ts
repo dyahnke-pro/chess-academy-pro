@@ -27,7 +27,7 @@ async function withBusyEngine(run: (released: () => boolean) => Promise<void>): 
       return analysis([
         { rank: 1, moves: ['e2e4'], evaluation: 50, mate: null, depth: 14 },
         { rank: 2, moves: ['a2a3'], evaluation: -150, mate: null, depth: 14 },
-      ] as StockfishAnalysis['topLines']);
+      ] as unknown as StockfishAnalysis['topLines']);
     }
     await running;
     return analysis([]);

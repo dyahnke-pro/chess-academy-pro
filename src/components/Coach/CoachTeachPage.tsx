@@ -289,7 +289,7 @@ import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighl
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, mustKey, conceptInstanceKey, convertKey } from '../../services/positionFacts';
 import { gradePlayedMove, liveMoveCost, studentMoveCost, uciOfSan } from '../../services/playedMoveGrade';
-import { instantWaitsForVerdict, replyWait, VERDICT_HOLD_MS } from '../../services/verdictFirst';
+import { instantWaitsForVerdict, nextBoardGate, replyWait, VERDICT_HOLD_MS } from '../../services/verdictFirst';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../services/opponentGap';
 import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine, isLoudAlarm, dangerRank, PIECE_DANGER_RANK } from '../../services/liveTacticsContext';
@@ -10123,6 +10123,12 @@ export function CoachTeachPage(): JSX.Element {
           // now speaks from the SYNCHRONOUS instant pass, ahead of this
           // engine wait — a danger the student can see is not worth a
           // 1.2s search before it is named.
+          // Resolved once the verdict pass has handed its verdict to the voice
+          // (or found none): a mistake turn's instant line waits on it, and so
+          // do the next board's reads, until the verdict is playing.
+          let verdictHandedOver!: () => void;
+          const verdictHeard = new Promise<void>((r) => { verdictHandedOver = r; });
+          const nextBoardReads = nextBoardGate({ verdictUrgent, price: costRead, verdictHeard, untilOnAir: (ms) => voiceService.untilOnAir(ms) });
           const factsReady = (async () => {
             try {
               const probe = new Chess(move.fen);
@@ -10158,6 +10164,7 @@ export function CoachTeachPage(): JSX.Element {
                 studentBestReadRef.current = studentBest
                   ? { fen: probe.fen(), bestUci: studentBest.bestMove || null, whiteCp: studentBest.isMate ? null : studentBest.evaluation, analysis: studentBest }
                   : null;
+                await nextBoardReads;
                 // THREE WAYS TO MEET CHECK (WO-TEACH-GAPS P3) — before the student moves.
                 try {
                   const cm = checkMethodTeaching(probe.fen(), playerColor === 'white' ? 'w' : 'b', studentBest?.bestMove || null);
@@ -11080,10 +11087,6 @@ export function CoachTeachPage(): JSX.Element {
                 .catch(() => undefined);
               instantSpokenText = instantSpokenText ? `${instantSpokenText} ${heard}` : heard;
             };
-            // Resolved once the verdict pass has handed its verdict to the voice
-            // (or found none): a mistake turn's instant line waits on it.
-            let verdictHandedOver!: () => void;
-            const verdictHeard = new Promise<void>((r) => { verdictHandedOver = r; });
             let instantWaits = false;
             // ── THE INSTANT UTTERANCE ──────────────────────────────────────
             // ONE clip, not three. Each fragment used to be its own TTS fetch

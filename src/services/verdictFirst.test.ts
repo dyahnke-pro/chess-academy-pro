@@ -67,3 +67,76 @@ describe('the reply waits for the reason for at most the ceiling, counted from t
     expect(page).toMatch(/const padDone = replyWait\(\{ startedAt: thinkStart, minThinkMs: minThink, reason: reasonWarm, ceilingMs: reasonWaitMs \}\);/);
   });
 });
+
+describe('the next board is read once the verdict is on the air (14.Rd5: handed over +4.7 s, heard +9.2 s)', () => {
+  const settle = async (p: Promise<void>): Promise<() => boolean> => {
+    let done = false;
+    void p.then(() => { done = true; });
+    return () => done;
+  };
+  const deferred = <T,>(): { p: Promise<T>; go: (v: T) => void } => {
+    let go!: (v: T) => void;
+    const p = new Promise<T>((r) => { go = r; });
+    return { p, go };
+  };
+
+  it('a move that cannot be a mistake reads the next board at once', async () => {
+    const { vi } = await import('vitest');
+    const { nextBoardGate } = await import('./verdictFirst');
+    vi.useFakeTimers();
+    try {
+      const done = await settle(nextBoardGate({ verdictUrgent: false, price: new Promise(() => {}), verdictHeard: new Promise(() => {}), untilOnAir: () => new Promise(() => {}) }));
+      await vi.advanceTimersByTimeAsync(0);
+      expect(done()).toBe(true);
+    } finally { vi.useRealTimers(); }
+  });
+
+  it('a price under the bar lets the reads go; a costly one holds them until the verdict is playing', async () => {
+    const { vi } = await import('vitest');
+    const { nextBoardGate } = await import('./verdictFirst');
+    vi.useFakeTimers();
+    try {
+      const cheap = deferred<number | null>();
+      const cheapDone = await settle(nextBoardGate({ verdictUrgent: true, price: cheap.p, verdictHeard: new Promise(() => {}), untilOnAir: () => new Promise(() => {}) }));
+      cheap.go(30);
+      await vi.advanceTimersByTimeAsync(0);
+      expect(cheapDone()).toBe(true);
+
+      const heard = deferred<undefined>();
+      const onAir = deferred<undefined>();
+      let askedOnAir = false;
+      const costlyDone = await settle(nextBoardGate({
+        verdictUrgent: true, price: Promise.resolve(185), verdictHeard: heard.p.then(() => undefined),
+        untilOnAir: () => { askedOnAir = true; return onAir.p.then(() => undefined); },
+      }));
+      await vi.advanceTimersByTimeAsync(2000);
+      expect(costlyDone()).toBe(false);   // the verdict is still being built
+      heard.go(undefined);
+      await vi.advanceTimersByTimeAsync(0);
+      expect(askedOnAir).toBe(true);
+      expect(costlyDone()).toBe(false);   // handed over, not yet heard
+      onAir.go(undefined);
+      await vi.advanceTimersByTimeAsync(0);
+      expect(costlyDone()).toBe(true);
+    } finally { vi.useRealTimers(); }
+  });
+
+  it('a stalled verdict never holds the next board past the hold', async () => {
+    const { vi } = await import('vitest');
+    const { nextBoardGate, NEXT_BOARD_HOLD_MS } = await import('./verdictFirst');
+    vi.useFakeTimers();
+    try {
+      const done = await settle(nextBoardGate({ verdictUrgent: true, price: Promise.resolve(null), verdictHeard: new Promise(() => {}), untilOnAir: () => new Promise(() => {}) }));
+      await vi.advanceTimersByTimeAsync(NEXT_BOARD_HOLD_MS - 1);
+      expect(done()).toBe(false);
+      await vi.advanceTimersByTimeAsync(1);
+      expect(done()).toBe(true);
+    } finally { vi.useRealTimers(); }
+  });
+
+  it('Learn reads the next board through the gate, after the read is stored', () => {
+    const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    expect(page).toMatch(/const nextBoardReads = nextBoardGate\(\{ verdictUrgent, price: costRead, verdictHeard, untilOnAir: \(ms\) => voiceService\.untilOnAir\(ms\) \}\);\n\s*const factsReady = /);
+    expect(page).toMatch(/studentBestReadRef\.current = studentBest\n[^\n]*\n[^\n]*\n\s*await nextBoardReads;/);
+  });
+});

@@ -1369,6 +1369,23 @@ class VoiceService {
    * `graceMs` covers a line a just-rendered effect is about to start. The wait
    * is bounded so a wedged voice can never strand the screen.
    */
+  /**
+   * THE LINE ON ITS WAY REACHES THE SPEAKER FIRST (OS-18 replay 2026-10-20,
+   * 14.Rd5: the verdict was handed to the voice at +4.7 s and started at
+   * +9.2 s — every step between was a task queued behind seconds of the turn's
+   * synchronous reads). Resolves once no line is between `speak` and its first
+   * sound, so a caller can hold heavy work until the student is already
+   * hearing. Waits a task first, so a line handed over in this tick has
+   * entered the voice. Bounded so a wedged voice never strands the caller.
+   */
+  async untilOnAir(maxWaitMs: number): Promise<void> {
+    const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+    const deadline = Date.now() + maxWaitMs;
+    await sleep(0);
+    const onItsWay = (): boolean => this.utterancesInFlight > 0 && !this.isPlaying() && !speechService.isSpeaking;
+    while (onItsWay() && Date.now() < deadline) await sleep(50);
+  }
+
   async untilQuiet(opts?: { maxWaitMs?: number; breathMs?: number; graceMs?: number }): Promise<void> {
     const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
     const deadline = Date.now() + (opts?.maxWaitMs ?? 25_000);
