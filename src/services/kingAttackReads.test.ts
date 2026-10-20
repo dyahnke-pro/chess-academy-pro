@@ -87,6 +87,10 @@ describe('the probing check', () => {
     expect(r?.id).toBe('probing-check');
     expect(r?.text).toMatch(/See where it goes/);
     expect(r?.proof.squares?.length).toBeGreaterThan(2);
+    // Held, it is silent: "there is a check worth giving first" names the move
+    // when there are one or two checks (Smith-Morra walk 2026-10-19, ply 47).
+    expect(r?.namesMove).toBe(true);
+    expect(r?.idea).toBeUndefined();
   });
   it('silent when the line is a mate (that is the mate read)', () => {
     expect(probingCheck(fen, 'w', [line(['d1a4', 'e8f7'], 5)])).toBeNull();

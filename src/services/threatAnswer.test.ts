@@ -141,3 +141,18 @@ describe('Learn holds the move (hard-question walk 2026-10-11)', () => {
     expect(held.arrow).toBeNull();
   });
 });
+
+describe('a held "take it" never hands over the capture (Smith-Morra walk 2026-10-19)', () => {
+  it('one capture of the attacker on the board: the held answer is silent', () => {
+    // Their bishop on g3 hits the rook on f2; only hxg3 takes it.
+    const fen = '6k1/5ppp/8/8/8/6b1/5R1P/6K1 w - - 0 31';
+    expect(threatAnswer({ fen, squares: ['g3', 'f2'], bestUci: 'h2g3', studentCp: 300, student: 'w', ply: 0, shape: 'hit', namesMove: true })?.kind).toBe('take');
+    expect(threatAnswer({ fen, squares: ['g3', 'f2'], bestUci: 'h2g3', studentCp: 300, student: 'w', ply: 0, shape: 'hit', namesMove: false })).toBeNull();
+  });
+  it('several captures: which one matters, never "any will do"', () => {
+    const fen = '6k1/5ppp/8/8/8/6b1/4NR1P/6K1 w - - 0 31';
+    const held = threatAnswer({ fen, squares: ['g3', 'f2'], bestUci: 'h2g3', studentCp: 300, student: 'w', ply: 0, shape: 'hit', namesMove: false });
+    expect(stripThink(held?.text ?? '')).toMatch(/Take it — but with the right piece: check what each capture of the bishop allows before you choose\.$/);
+    expect(held?.text).not.toMatch(/hxg3|h2/);
+  });
+});

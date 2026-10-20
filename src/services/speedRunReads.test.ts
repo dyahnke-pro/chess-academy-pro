@@ -31,10 +31,10 @@ describe('his habits of thought, computed (each checked against the existing com
     const fen = '4k3/8/8/8/8/2n5/1PP5/4K3 w - - 0 1';
     expect(uglyButRight(fen, 'bxc3')?.text).toMatch(/looks ugly — it doubles your own pawns/);
     expect(uglyButRight(fen, 'Kd1')).toBeNull();
-    // The held idea is two sentences, never three dashes (Learn tape 2026-10-15).
-    const idea = uglyButRight(fen, 'bxc3')?.idea ?? '';
-    expect(idea).toMatch(/\. [A-Z]/);
-    expect(idea.match(/ — /g)?.length ?? 0).toBeLessThanOrEqual(1);
+    // No held idea: "an ugly pawn move — it doubles your own pawns" picks out
+    // bxc3 (Smith-Morra walk 2026-10-19, ply 35, next move axb3).
+    expect(uglyButRight(fen, 'bxc3')?.idea).toBeUndefined();
+    expect(uglyButRight(fen, 'bxc3')?.namesMove).toBe(true);
   });
   it('which side to castle: the intact wing', () => {
     expect(castleSide('r3k2r/pppppppp/8/8/8/8/P4PPP/R3K2R w KQkq - 0 1', 'w')?.text).toMatch(/[Cc]astle short/);
