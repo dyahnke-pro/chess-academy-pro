@@ -168,6 +168,13 @@ export function isSetupShape(puzzle: PuzzleRecord, level: SetupPuzzleDifficulty)
  * `solutionMoves` is the full alternating line the student plays through
  * (their moves on even indices, opponent replies auto-play on odd).
  */
+/** The one id a setup puzzle carries — what `recordSetupResult` puts in
+ *  `seenIds` and what `pickSetupPuzzle` checks. They used to differ (`sp_<id>`
+ *  stored, the raw id checked), so nothing was ever excluded. */
+export function setupPuzzleId(recordId: string): string {
+  return `sp_${recordId}`;
+}
+
 export function buildSetupPuzzle(record: PuzzleRecord): SetupPuzzle {
   const list = record.moves.split(' ').filter(Boolean);
   const chess = new Chess(record.fen);
@@ -195,7 +202,7 @@ export function buildSetupPuzzle(record: PuzzleRecord): SetupPuzzle {
   const srs = createDefaultSrsFields();
 
   return {
-    id: `sp_${record.id}`,
+    id: setupPuzzleId(record.id),
     setupFen,
     solutionMoves: line.join(' '),
     tacticFen,
@@ -280,7 +287,7 @@ export async function pickSetupPuzzle(
       await db.puzzles.where('rating').between(min, max).toArray(),
     );
     for (const p of candidates) {
-      if (session.seenIds.has(p.id)) continue;
+      if (session.seenIds.has(setupPuzzleId(p.id))) continue;
       if (!isSetupShape(p, session.level)) continue;
       return { puzzle: buildSetupPuzzle(p), rating: p.rating };
     }

@@ -125,6 +125,16 @@ describe('setupTrainerService — adaptive selection', () => {
     expect(item?.rating).toBe(1490);
   });
 
+  it('a puzzle already served (its setup id in seenIds) is not served again', async () => {
+    const fen = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1';
+    await db.puzzles.bulkAdd([
+      makePuzzle({ id: 'good', fen, moves: 'e4e5 b8c6 g1f3 g8f6', themes: ['fork'], rating: 1490 }),
+    ]);
+    const session = createSetupSession(1, 1500);
+    session.seenIds.add('sp_good');
+    expect(await pickSetupPuzzle(session)).toBeNull();
+  });
+
   it('recordSetupResult drifts the target up on a solve and down on a miss', () => {
     let session = createSetupSession(1, 1500);
 

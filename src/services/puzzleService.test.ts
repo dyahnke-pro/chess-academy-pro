@@ -17,6 +17,7 @@ import {
   getPuzzleStats,
   getKidPuzzles,
   getPuzzleForOpeningAtRating,
+  getPuzzleForThemeAtRating,
   _resetOpeningPuzzleCacheForTest,
   KID_DIFFICULTY_BRACKETS,
   THEME_MAP,
@@ -758,5 +759,16 @@ describe('puzzleService', () => {
         expect(next.id).not.toBe(result.id);
       }
     });
+  });
+});
+
+describe('getPuzzleForThemeAtRating — never re-serves across visits (persistent memory)', () => {
+  beforeEach(async () => { await db.delete(); await db.open(); });
+  it('prefers a puzzle never attempted over one tried last visit', async () => {
+    await db.puzzles.bulkPut([
+      makePuzzle({ id: 'tried', rating: 1200, themes: ['fork'], attempts: 3 }),
+      makePuzzle({ id: 'fresh', rating: 1250, themes: ['fork'], attempts: 0 }),
+    ]);
+    for (let i = 0; i < 8; i++) expect((await getPuzzleForThemeAtRating(['fork'], 1200, new Set()))?.id).toBe('fresh');
   });
 });

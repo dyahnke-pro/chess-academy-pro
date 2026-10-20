@@ -186,6 +186,23 @@ describe('adaptivePuzzleService', () => {
       expect(['p1', 'p2']).toContain(puzzle?.id);
     });
 
+    it('never re-serves a puzzle tried in an earlier session while a fresh one is in band', async () => {
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 'tried', rating: 1000, attempts: 1, successes: 1 }),
+        makePuzzle({ id: 'fresh', rating: 1010 }),
+      ]);
+      for (let i = 0; i < 10; i++) {
+        const puzzle = await getNextAdaptivePuzzle(createAdaptiveSession('easy'), new Set());
+        expect(puzzle?.id).toBe('fresh');
+      }
+    });
+
+    it('serves a tried puzzle again only when the band has nothing fresh', async () => {
+      await db.puzzles.bulkPut([makePuzzle({ id: 'tried', rating: 1000, attempts: 2 })]);
+      const puzzle = await getNextAdaptivePuzzle(createAdaptiveSession('easy'), new Set());
+      expect(puzzle?.id).toBe('tried');
+    });
+
     it('excludes seen puzzle IDs', async () => {
       await db.puzzles.bulkPut([
         makePuzzle({ id: 'p1', rating: 1000 }),

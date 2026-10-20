@@ -393,6 +393,13 @@ export async function getPuzzlesByTheme(
   return all;
 }
 
+/** The puzzles the student never attempted, or all of them when every one has
+ *  been. Shared by every puzzle picker that reads `db.puzzles`. */
+export function preferUnattempted<T extends { attempts?: number }>(puzzles: T[]): T[] {
+  const fresh = puzzles.filter((p) => !p.attempts);
+  return fresh.length > 0 ? fresh : puzzles;
+}
+
 /**
  * Returns a single puzzle matching any of the given themes near the target rating.
  * Uses rating index for efficiency, then filters by theme.
@@ -413,8 +420,9 @@ export async function getPuzzleForThemeAtRating(
       .between(targetRating - bw, targetRating + bw)
       .toArray();
     // Filter to matching themes, unseen, sort by closeness to target
-    const matched = candidates
-      .filter((p) => !seenIds.has(p.id) && p.themes.some((t) => themeSet.has(t)))
+    // Never re-serve across visits: puzzles never attempted first.
+    const matched = preferUnattempted(candidates
+      .filter((p) => !seenIds.has(p.id) && p.themes.some((t) => themeSet.has(t))))
       .sort((a, b) => Math.abs(a.rating - targetRating) - Math.abs(b.rating - targetRating));
     if (matched.length > 0) {
       // Pick randomly from top 5 closest to avoid always getting the exact same puzzle
@@ -427,7 +435,7 @@ export async function getPuzzleForThemeAtRating(
     .where('rating')
     .between(targetRating - 600, targetRating + 600)
     .toArray();
-  const unseen = any.filter((p) => !seenIds.has(p.id));
+  const unseen = preferUnattempted(any.filter((p) => !seenIds.has(p.id)));
   if (unseen.length > 0) {
     const sorted = unseen.sort((a, b) => Math.abs(a.rating - targetRating) - Math.abs(b.rating - targetRating));
     return sorted[Math.floor(Math.random() * Math.min(5, sorted.length))];
@@ -480,8 +488,8 @@ export async function getPuzzleForOpeningAtRating(
       .where('rating')
       .between(targetRating - bw, targetRating + bw)
       .toArray();
-    const matched = candidates
-      .filter((p) => !seenIds.has(p.id) && idSet.has(p.id))
+    const matched = preferUnattempted(candidates
+      .filter((p) => !seenIds.has(p.id) && idSet.has(p.id)))
       .sort((a, b) => Math.abs(a.rating - targetRating) - Math.abs(b.rating - targetRating));
     if (matched.length > 0) {
       const pool = matched.slice(0, 5);
@@ -493,7 +501,7 @@ export async function getPuzzleForOpeningAtRating(
     .where('rating')
     .between(targetRating - 600, targetRating + 600)
     .toArray();
-  const unseen = any.filter((p) => !seenIds.has(p.id) && idSet.has(p.id));
+  const unseen = preferUnattempted(any.filter((p) => !seenIds.has(p.id) && idSet.has(p.id)));
   if (unseen.length > 0) {
     const sorted = unseen.sort(
       (a, b) => Math.abs(a.rating - targetRating) - Math.abs(b.rating - targetRating),

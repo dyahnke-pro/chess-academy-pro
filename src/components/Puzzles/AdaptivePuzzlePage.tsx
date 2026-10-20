@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { rememberTrendPoint } from '../../services/studentMemory';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Brain, BookOpen, AlertTriangle, Crown } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
@@ -352,6 +353,8 @@ export function AdaptivePuzzlePage({ master = false, length }: { master?: boolea
       setActiveProfile(updatedProfile);
       void db.profiles.update(activeProfile.id, { puzzleRating: newRating });
     }
+    // One reading per day, so the summary can show the trend across days.
+    void rememberTrendPoint('puzzle-rating', newRating);
 
     // Capped rep drill (from a Dashboard rep): once the cap is hit, mark the
     // rep done for today, space its misconception tag, and offer to continue

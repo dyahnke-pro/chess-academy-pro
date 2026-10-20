@@ -22,6 +22,7 @@ import {
   type RawPuzzle,
 } from '../services/adaptiveEndgameService';
 import { db } from '../db/schema';
+import { recallServed, rememberServed } from '../services/studentMemory';
 import { useAppStore } from '../stores/appStore';
 import type { EndgameLesson, EndgameLessonPosition } from '../types/endgameLesson';
 
@@ -135,6 +136,22 @@ export function useAdaptiveEndgameSession(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lesson?.id]);
 
+  // Puzzles played in earlier sessions are not served again (persistent
+  // memory, 2026-10-19): the session's `playedIds` only covered itself.
+  useEffect(() => {
+    let live = true;
+    void recallServed('endgame').then((served) => {
+      if (!live || served.size === 0) return;
+      setState((cur) => {
+        const merged = { ...cur, playedIds: new Set([...served, ...cur.playedIds]) };
+        setCurrentRaw((raw) => (raw && merged.playedIds.has(raw.id) ? pickAdaptivePuzzle(merged, pickOptions()) : raw));
+        return merged;
+      });
+    });
+    return () => { live = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lesson?.id]);
+
   const currentDrill = useMemo<EndgameLessonPosition | null>(() => {
     if (!currentRaw) return null;
     return adaptivePuzzleToLessonPosition(currentRaw, lesson ?? undefined);
@@ -151,6 +168,7 @@ export function useAdaptiveEndgameSession(
       });
       setState(next);
       setCurrentRaw(pickAdaptivePuzzle(next, pickOptions()));
+      void rememberServed('endgame', currentRaw.id);
       // Persist the new user rating to the active profile + Dexie.
       if (activeProfile) {
         const updated = { ...activeProfile, endgameRating: next.userRating };

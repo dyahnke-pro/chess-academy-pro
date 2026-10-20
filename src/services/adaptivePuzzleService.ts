@@ -1,5 +1,5 @@
 import { db } from '../db/schema';
-import { getWeakestThemes, puzzleForeground } from './puzzleService';
+import { getWeakestThemes, puzzleForeground, preferUnattempted } from './puzzleService';
 import { safeRatingKey } from '../utils/ratingKey';
 import type { PuzzleRecord } from '../types';
 import { solverMoves, ONE_MOVER_CEILING } from './puzzleDepth';
@@ -344,6 +344,13 @@ async function findPuzzleInBand(
   }
 
   if (puzzles.length === 0) return null;
+
+  // NEVER RE-SERVE ACROSS SESSIONS (persistent memory, 2026-10-19). `seenIds`
+  // only holds what THIS session served; the record (`attempts`, written by
+  // `recordAttempt`) holds every puzzle the student ever tried. Prefer the
+  // ones they never met; fall back to the whole band only when the band is
+  // exhausted, so selection never starves.
+  puzzles = preferUnattempted(puzzles);
 
   // FAVOR multi-move sequences (David 2026-09-14 / 2026-10-01: "no one likes
   // simple one movers") — when a healthy multi-move pool exists in-band, draw

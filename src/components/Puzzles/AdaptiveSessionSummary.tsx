@@ -2,6 +2,8 @@ import { LineChart, Line, ResponsiveContainer, YAxis, XAxis, Tooltip } from 'rec
 import { Trophy, Target, Flame, Clock, TrendingUp, TrendingDown } from 'lucide-react';
 import type { AdaptiveSessionSummary as SummaryData } from '../../services/adaptivePuzzleService';
 import { formatThemeName } from '../../services/lichessPuzzleService';
+import { useEffect, useState } from 'react';
+import { rememberBest, recallData } from '../../services/studentMemory';
 
 interface AdaptiveSessionSummaryProps {
   summary: SummaryData;
@@ -23,6 +25,16 @@ export function AdaptiveSessionSummary({
 }: AdaptiveSessionSummaryProps): JSX.Element {
   const ratingDelta = summary.endRating - summary.startRating;
   const chartData = summary.ratingHistory.map((rating, i) => ({ puzzle: i, rating }));
+  // Progress that outlives the session (persistent memory, 2026-10-19): the
+  // all-time best streak, and the rating one reading per day across days.
+  const [bestEver, setBestEver] = useState<number | null>(null);
+  const [days, setDays] = useState<Array<{ day: string; value: number }>>([]);
+  useEffect(() => {
+    let live = true;
+    void rememberBest('puzzle-streak', summary.bestStreak).then((b) => { if (live) setBestEver(b); });
+    void recallData('trend', 'puzzle-rating').then((t) => { if (live) setDays(t?.points ?? []); });
+    return () => { live = false; };
+  }, [summary.bestStreak]);
 
   return (
     <div className="flex flex-col items-center gap-6 max-w-lg mx-auto" data-testid="session-summary">
@@ -68,6 +80,11 @@ export function AdaptiveSessionSummary({
           <div className="text-xs text-theme-text-muted">Best Streak</div>
         </div>
       </div>
+      {bestEver !== null && (
+        <p className="text-xs text-theme-text-muted -mt-3" data-testid="summary-best-ever">
+          {bestEver > summary.bestStreak ? `All-time best streak: ${bestEver}` : 'A new all-time best streak!'}
+        </p>
+      )}
 
       {/* Rating Change */}
       <div className="bg-theme-surface rounded-lg p-4 w-full">
@@ -116,6 +133,18 @@ export function AdaptiveSessionSummary({
           </div>
         )}
       </div>
+
+      {/* Rating across days */}
+      {days.length > 1 && (
+        <div className="bg-theme-surface rounded-lg p-4 w-full" data-testid="summary-days">
+          <h3 className="text-sm font-semibold text-theme-text mb-2">Puzzle rating across days</h3>
+          <div className="flex flex-wrap gap-2 text-xs text-theme-text-muted">
+            {days.map((d) => (
+              <span key={d.day}>{d.day.slice(5)}: <span className="text-theme-text font-semibold">{d.value}</span></span>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Weak Themes */}
       {summary.weakestThemes.length > 0 && (
